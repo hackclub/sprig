@@ -166,22 +166,10 @@ const drawGrid = (canvas) => {
 	}
 }
 
-function drawSquare(x, y, color) {
-	const [ w, h, ctx ] = readCanvas(state.canvas);
-	const [ gridW, gridH ] = state.gridSize;
-	const xSize = w/gridW;
-	const ySize = h/gridH;
-    ctx.fillStyle = color;
-    ctx.fillRect(x*xSize-0.5, y*ySize-0.5, xSize+0.5, ySize+0.5);
-}
-
 const tools_mousedown = {
 	"draw": (x, y) => {
-		// const [ gridW, gridH ] = state.gridSize;
 		const [ gridW, gridH ] = state.defaultGridArraySize;
 		state.gridColors[gridW*y+x] = state.color;
-		// drawCanvas(state.canvas);
-		drawSquare(x, y, state.color);
 	},
 	"bucket": (x, y) => {
 		// const [ gridW, gridH ] = state.gridSize;
@@ -227,12 +215,18 @@ const tools_mousedown = {
 const tools_mousemove = {
 	"draw": (x, y) => {
 		if (!state.mousedown) return;
-		// const [ gridW, gridH ] = state.gridSize;
 		const [ gridW, gridH ] = state.defaultGridArraySize;
 
-		state.gridColors[gridW*y+x] = state.color;
-		// drawCanvas(state.canvas);
-		// drawSquare(x, y, state.color);
+		const from = { x: state.currentPt[0], y: state.currentPt[1] };
+		const to = { x: state.mousedownPt[0], y: state.mousedownPt[1] };
+
+		const pts = line(from, to);
+
+		pts.forEach(({ x, y }) => {
+			state.tempGridColors[gridW*y+x] = state.color;
+		})
+
+		state.mousedownPt = state.currentPt;
 	},
 	"rectangle": (x, y) => {
 		state.tempGridColors = state.tempGridColors.fill(null);
@@ -344,6 +338,23 @@ const setCanvasSize = c => {
 	ctx.translate(0.5, 0.5);
 }
 
+function getPoint(e) {
+	const c = document.querySelector(".drawing-canvas");
+	const rect = c.getBoundingClientRect();
+  	const rawX = e.clientX - rect.left;
+  	const rawY = e.clientY - rect.top;
+
+  	const [ w, h, ctx ] = readCanvas(c);
+	const [ gridW, gridH ] = state.gridSize;
+	const xSize = w/gridW;
+	const ySize = h/gridH;
+
+  	const x = Math.floor(rawX/xSize);
+  	const y = Math.floor(rawY/ySize);
+
+  	return [ x, y ];
+}
+
 const init = state => {
 	render(document.body, view(state));
 	const c = document.querySelector(".drawing-canvas");
@@ -360,42 +371,16 @@ const init = state => {
 	animate();
 
 	c.addEventListener("mousedown", (e) => {
-		const rect = c.getBoundingClientRect();
-	  	const rawX = e.clientX - rect.left;
-	  	const rawY = e.clientY - rect.top;
-
-	  	const [ w, h, ctx ] = readCanvas(c);
-		const [ gridW, gridH ] = state.gridSize;
-		const xSize = w/gridW;
-		const ySize = h/gridH;
-
-	  	const x = Math.floor(rawX/xSize);
-	  	const y = Math.floor(rawY/ySize);
-
-	  	console.log(x, y);
-
 	  	state.mousedown = true;
-	  	state.mousedownPt = [x, y];
-
-	  	if (state.tool in tools_mousedown) tools_mousedown[state.tool](x, y);
+	  	const pt = getPoint(e);
+	  	state.mousedownPt = pt;
+	  	if (state.tool in tools_mousedown) tools_mousedown[state.tool](...pt);
 	})
 
 	c.addEventListener("mousemove", (e) => {
-		const rect = c.getBoundingClientRect();
-	  	const rawX = e.clientX - rect.left;
-	  	const rawY = e.clientY - rect.top;
-
-	  	const [ w, h, ctx ] = readCanvas(c);
-		const [ gridW, gridH ] = state.gridSize;
-		const xSize = w/gridW;
-		const ySize = h/gridH;
-
-	  	const x = Math.floor(rawX/xSize);
-	  	const y = Math.floor(rawY/ySize);
-
-	  	state.currentPt = [x, y];
-
-	  	if (state.tool in tools_mousemove) tools_mousemove[state.tool](x, y);
+		const pt = getPoint(e);
+	  	state.currentPt = pt;
+	  	if (state.tool in tools_mousemove) tools_mousemove[state.tool](...pt);
 	})
 
 	c.addEventListener("mouseup", (e) => {
