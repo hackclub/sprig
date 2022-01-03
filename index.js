@@ -43,7 +43,6 @@ const view = state => html`
 				@input=${e => { 
 					state.gridSize[0] = Math.min(Math.max(Number(e.target.value), 1), state.defaultGridArraySize[0]);
 					setCanvasSize(state.canvas);
-					drawCanvas(state.canvas); 
 				}}/>
 			<span>y:</span>
 			<input 
@@ -55,7 +54,6 @@ const view = state => html`
 				@input=${e => { 
 					state.gridSize[1] = Math.min(Math.max(Number(e.target.value), 1), state.defaultGridArraySize[1]);
 					setCanvasSize(state.canvas);
-					drawCanvas(state.canvas); 
 				}}/>
 		</div>
 
@@ -76,7 +74,6 @@ const view = state => html`
 
 const r = () => {
 	render(document.body, view(state));
-	drawCanvas(state.canvas);
 }
 
 const readCanvas = canvas => {
@@ -301,26 +298,25 @@ const drawCanvas = canvas => {
 		else return color; 
 	})
 
-	gridBackground(canvas);
-	fillGrid(canvas, grid);
-	drawGrid(canvas);
+	// gridBackground(canvas);
+	// fillGrid(canvas, grid);
+	// drawGrid(canvas);
 
-	// const [ w, h ] = readCanvas(canvas);
-	// const [ gridW, gridH ] = state.gridSize;
-	// const xSize = w/gridW;
-	// const ySize = h/gridH;
+	const [ w, h ] = readCanvas(canvas);
+	const [ gridW, gridH ] = state.gridSize;
+	const xSize = w/gridW;
+	const ySize = h/gridH;
 
-	// for (let i = 0; i < gridW * gridH; i++) {
-	// 	const x = i%gridW;
-	//     const y = Math.floor(i/gridW);
+	grid.forEach((color, i) => {
+		const x = i%state.defaultGridArraySize[0];
+	    const y = Math.floor(i/state.defaultGridArraySize[1]);
 
-	//     ctx.fillStyle = (x%2 === 0 && y%2 === 1) || (x%2 === 1 && y%2 === 0) ? "#b4e2fc87" : "#e3e3e34a";
- //    	ctx.fillRect(x*xSize, y*ySize, xSize, ySize);
-
- //    	ctx.fillStyle = grid[i];
- //    	ctx.fillRect(x*xSize, y*ySize, xSize, ySize);
-
-	// }
+	    ctx.fillStyle = (x%2 === 0 && y%2 === 1) || (x%2 === 1 && y%2 === 0) ? "#b4e2fc87" : "#e3e3e34a";
+	    ctx.fillRect(x*xSize, y*ySize, xSize, ySize);
+		
+		ctx.fillStyle = color;
+	    ctx.fillRect(x*xSize-0.5, y*ySize-0.5, xSize+0.5, ySize+0.5);
+	})
 }
 
 const setCanvasSize = c => {
@@ -366,8 +362,6 @@ const init = state => {
 	state.gridColors = new Array(state.defaultGridArraySize[0] * state.defaultGridArraySize[1]).fill("#00000000");
 	state.tempGridColors = new Array(state.defaultGridArraySize[0] * state.defaultGridArraySize[1]).fill(null);
 
-	// drawCanvas(c);
-	// gridBackground(c);
 	animate();
 
 	c.addEventListener("mousedown", (e) => {
