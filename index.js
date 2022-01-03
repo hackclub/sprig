@@ -114,23 +114,23 @@ const gridBackground = (canvas) => {
 }
 
 function line(from, to) {
-  let points = [];
-  if (Math.abs(from.x - to.x) > Math.abs(from.y - to.y)) {
-    if (from.x > to.x) [from, to] = [to, from];
-    let slope = (to.y - from.y) / (to.x - from.x);
-    for (let { x, y } = from; x <= to.x; x++) {
-      points.push({ x: x, y: Math.round(y) });
-      y += slope;
-    }
-  } else {
-    if (from.y > to.y) [from, to] = [to, from];
-    let slope = (to.x - from.x) / (to.y - from.y);
-    for (let {x, y} = from; y <= to.y; y++) {
-      points.push({ x: Math.round(x), y: y });
-      x += slope;
-    }
-  }
-  return points;
+	const points = [];
+	if (Math.abs(from[0] - to[0]) > Math.abs(from[1] - to[1])) {
+		if (from[0] > to[0]) [from, to] = [to, from];
+		let slope = (to[1] - from[1]) / (to[0] - from[0]);
+		for (let [x, y] = from; x <= to[0]; x++) {
+			points.push({ x: x, y: Math.round(y) });
+			y += slope;
+		}
+	} else {
+		if (from[1] > to[1]) [from, to] = [to, from];
+		let slope = (to[0] - from[0]) / (to[1] - from[1]);
+		for (let [x, y] = from; y <= to[1]; y++) {
+			points.push({ x: Math.round(x), y: y });
+			x += slope;
+		}
+	}
+	return points;
 }
 
 const drawGrid = (canvas) => {
@@ -169,7 +169,6 @@ const tools_mousedown = {
 		state.gridColors[gridW*y+x] = state.color;
 	},
 	"bucket": (x, y) => {
-		// const [ gridW, gridH ] = state.gridSize;
 		const [ gridW, gridH ] = state.defaultGridArraySize;
 
 		const startColor = state.gridColors[gridW*y+x];
@@ -214,10 +213,7 @@ const tools_mousemove = {
 		if (!state.mousedown) return;
 		const [ gridW, gridH ] = state.defaultGridArraySize;
 
-		const from = { x: state.currentPt[0], y: state.currentPt[1] };
-		const to = { x: state.mousedownPt[0], y: state.mousedownPt[1] };
-
-		const pts = line(from, to);
+		const pts = line(state.currentPt, state.mousedownPt);
 
 		pts.forEach(({ x, y }) => {
 			state.tempGridColors[gridW*y+x] = state.color;
@@ -238,10 +234,8 @@ const tools_mousemove = {
 		for (let x = xMin; x <= xMax; x++) {
 			for (let y = yMin; y <= yMax; y++) {
 				state.tempGridColors[gridW*y+x] = state.color;
-				// drawSquare(x, y, state.color);
 			}
 		}
-		// drawCanvas(state.canvas);
 	},
 	"line": (x, y) => {
 		state.tempGridColors = state.tempGridColors.fill(null);
@@ -249,22 +243,16 @@ const tools_mousemove = {
 
 		const [ gridW, gridH ] = state.defaultGridArraySize;
 
-		const from = { x: state.currentPt[0], y: state.currentPt[1] };
-		const to = { x: state.mousedownPt[0], y: state.mousedownPt[1] };
-
-		const pts = line(from, to);
+		const pts = line(state.currentPt, state.mousedownPt);
 
 		pts.forEach(({ x, y }) => {
 			state.tempGridColors[gridW*y+x] = state.color;
 		})
-
-		// drawCanvas(state.canvas);
 	},
 	"circle": (x, y) => {
 		state.tempGridColors = state.tempGridColors.fill(null);
 		if (!state.mousedown) return;
 
-		// const [ gridW, gridH ] = state.gridSize;
 		const [ gridW, gridH ] = state.defaultGridArraySize;
 
 		const xMin = Math.min(state.currentPt[0], state.mousedownPt[0]);
@@ -280,11 +268,9 @@ const tools_mousemove = {
 			for (let y = yMin; y <= yMax; y++) {
 				if (inCircle(x,y)) {
 					state.tempGridColors[gridW*y+x] = state.color;
-					// drawSquare(x, y, state.color);
 				}
 			}
 		}
-		// drawCanvas(state.canvas);
 	}
 }
 
