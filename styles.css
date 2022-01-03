@@ -41,3 +41,9 @@ html, body {
 .gridsize {
   width: 50px;
 }
+
+.view-window {
+  background: lightgrey;
+  padding: 5px;
+  border: 2px solid black;
+}
