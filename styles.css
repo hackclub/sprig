@@ -1,0 +1,43 @@
+html, body {
+  margin: 0px;
+}
+
+.canvas-container {
+  display: grid;
+  background: grey;
+  width: 100vw;
+  height: 100vh;
+  place-content: center;
+}
+
+.drawing-canvas {
+  background: white;
+  border: 2px black solid;
+}
+
+.toolbox {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid black;
+  padding: 5px;
+  background: lightgrey;
+}
+
+.toolbox > * {
+  margin-bottom: 5px;
+}
+
+.colors {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.gridsize {
+  width: 50px;
+}
