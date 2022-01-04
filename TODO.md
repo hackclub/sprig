@@ -7,7 +7,7 @@
 -[] export image
 -[] upload image
 -[] clear full grid
--[] line
+-[x] line
 -[] zoom/pan
 
 

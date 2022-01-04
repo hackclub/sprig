@@ -1,19 +1,20 @@
-import { render, html, svg } from 'https://unpkg.com/uhtml?module';
+import { render, html, svg } from './uhtml.js';
 
 const state = {
 	canvas: null,
 	gridColors: [],
 	tempGridColors: [],
-	gridSize: [32, 32],
+	gridSize: [64, 64],
 	canvasSize: [500, 500],
 	maxCanvasSize: 500,
+	selected: [],
 	tool: "draw",
 	color: "#000000",
 	mousedown: false,
 	mousedownPt: [0, 0],
 	currentPt: [0, 0],
 	showGrid: false,
-	defaultGridArraySize: [32, 32],
+	defaultGridArraySize: [64, 64],
 	// hoveredCell: null,
 }
 
@@ -27,7 +28,7 @@ const view = state => html`
 		<button @click=${() => state.tool = "rectangle"}>rectangle</button>
 		<button @click=${() => state.tool = "line"}>line</button>
 		<button @click=${() => state.tool = "bucket"}>bucket</button>
-		<button @click=${() => state.tool = "select"}>TODO select</button>
+		<button @click=${() => state.tool = "select"}>select</button>
 		<button @click=${() => state.tool = "copy"}>TODO copy</button>
 		<button @click=${() => state.tool = "paste"}>TODO paste</button>
 		<button @click=${() => state.tool = "move"}>TODO move</button>
@@ -63,6 +64,7 @@ const view = state => html`
 	</div>
 
 	<div class="colors">
+		<button>+ add color</button>
 		<input 
 			type="color" 
 			.value=${state.color} 
@@ -204,7 +206,40 @@ const tools_mousedown = {
 		}
 
 		// floodFill(state.gridColors[gridW*y+x], state.color, x, y, state.gridColors)
-	}
+	},
+	"select": (x, y) => {
+		const [ gridW, gridH ] = state.defaultGridArraySize;
+		const grid = state.gridColors;
+
+		const seen = [];
+
+		const checkValidity = (x, y) => {
+			const color = grid[gridW*y+x];
+			return (x >= 0 && y >= 0 && x < gridW && y < gridH) && color !== "#00000000" && !seen.includes(y*gridW+x);
+		}
+
+		const q = [];
+
+		const add = (x, y) => {
+			q.push([x, y]);
+			seen.push(y*gridW+x);
+		}
+
+		q.push([x, y]);
+		while (q.length > 0) {
+			const [ x1, y1 ] = q.pop();
+			if (checkValidity(x1+1,y1)) add(x1+1, y1);
+			if (checkValidity(x1+1,y1+1)) add(x1+1, y1+1);
+			if (checkValidity(x1-1,y1)) add(x1-1, y1);
+			if (checkValidity(x1-1,y1-1)) add(x1-1,y1-1);
+			if (checkValidity(x1,y1+1)) add(x1, y1+1);
+			if (checkValidity(x1-1,y1+1)) add(x1-1,y1+1);
+			if (checkValidity(x1,y1-1)) add(x1, y1-1);
+			if (checkValidity(x1+1,y1-1)) add(x1+1,y1-1);
+		}
+
+		state.selected = seen;
+	},
 }
 
 const tools_mousemove = {
@@ -213,7 +248,7 @@ const tools_mousemove = {
 		const [ gridW, gridH ] = state.defaultGridArraySize;
 
 		const pts = line(state.currentPt, state.mousedownPt);
-		console.log(pts);
+
 		pts.forEach(([ x, y ]) => {
 			state.tempGridColors[gridW*y+x] = state.color;
 		})
@@ -301,6 +336,13 @@ const drawCanvas = canvas => {
 		
 		ctx.fillStyle = color;
 	    ctx.fillRect(x*xSize-0.5, y*ySize-0.5, xSize+0.5, ySize+0.5);
+	})
+
+	state.selected.forEach(i => {
+		const x = i%state.defaultGridArraySize[0];
+	    const y = Math.floor(i/state.defaultGridArraySize[1]);
+		ctx.fillStyle = "#aaaaaaaa";
+		ctx.fillRect(x*xSize-0.5, y*ySize-0.5, xSize+0.5, ySize+0.5);
 	})
 }
 

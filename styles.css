@@ -36,6 +36,12 @@ html, body {
   bottom: 10px;
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.colors > * {
+  margin-right: 5px;
 }
 
 .gridsize {
