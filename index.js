@@ -308,7 +308,7 @@ const tools_mousemove = {
 	}
 }
 
-const drawCanvas = canvas => {
+const drawCanvas = (canvas, main = true) => {
 	const ctx = canvas.getContext("2d");
 	ctx.fillStyle = "white";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -323,7 +323,7 @@ const drawCanvas = canvas => {
 	// drawGrid(canvas);
 
 	const [ w, h ] = readCanvas(canvas);
-	const [ gridW, gridH ] = state.gridSize;
+	const [ gridW, gridH ] = main ? state.gridSize : state.defaultGridArraySize;
 	const xSize = w/gridW;
 	const ySize = h/gridH;
 
@@ -431,7 +431,7 @@ const init = state => {
 
 const animate = () => {
 	drawCanvas(state.canvas);
-	drawCanvas(document.querySelector(".preview-canvas"));
+	drawCanvas(document.querySelector(".preview-canvas"), false);
 	window.requestAnimationFrame(animate);
 }
 
