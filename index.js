@@ -4,7 +4,7 @@ const state = {
 	canvas: null,
 	gridColors: [],
 	tempGridColors: [],
-	gridSize: [128, 128],
+	gridSize: [32, 32],
 	canvasSize: [500, 500],
 	maxCanvasSize: 500,
 	tool: "draw",
@@ -13,7 +13,7 @@ const state = {
 	mousedownPt: [0, 0],
 	currentPt: [0, 0],
 	showGrid: false,
-	defaultGridArraySize: [128, 128],
+	defaultGridArraySize: [32, 32],
 	// hoveredCell: null,
 }
 
@@ -119,14 +119,14 @@ function line(from, to) {
 		if (from[0] > to[0]) [from, to] = [to, from];
 		let slope = (to[1] - from[1]) / (to[0] - from[0]);
 		for (let [x, y] = from; x <= to[0]; x++) {
-			points.push({ x: x, y: Math.round(y) });
+			points.push([ x, Math.round(y) ]);
 			y += slope;
 		}
 	} else {
 		if (from[1] > to[1]) [from, to] = [to, from];
 		let slope = (to[0] - from[0]) / (to[1] - from[1]);
 		for (let [x, y] = from; y <= to[1]; y++) {
-			points.push({ x: Math.round(x), y: y });
+			points.push([ Math.round(x), y ]);
 			x += slope;
 		}
 	}
@@ -195,7 +195,7 @@ const tools_mousedown = {
 		const q = [];
 		q.push([x, y]);
 		while (q.length > 0) {
-			const [ x1, y1] = q.pop();
+			const [ x1, y1 ] = q.pop();
 			grid[gridW*y1+x1] = newColor;
 			if (checkValidity(x1+1,y1)) q.push([ x1+1, y1 ])
 			if (checkValidity(x1-1,y1)) q.push([ x1-1, y1 ])
@@ -204,7 +204,6 @@ const tools_mousedown = {
 		}
 
 		// floodFill(state.gridColors[gridW*y+x], state.color, x, y, state.gridColors)
-		// drawCanvas(state.canvas);
 	}
 }
 
@@ -214,8 +213,8 @@ const tools_mousemove = {
 		const [ gridW, gridH ] = state.defaultGridArraySize;
 
 		const pts = line(state.currentPt, state.mousedownPt);
-
-		pts.forEach(({ x, y }) => {
+		console.log(pts);
+		pts.forEach(([ x, y ]) => {
 			state.tempGridColors[gridW*y+x] = state.color;
 		})
 
@@ -245,7 +244,7 @@ const tools_mousemove = {
 
 		const pts = line(state.currentPt, state.mousedownPt);
 
-		pts.forEach(({ x, y }) => {
+		pts.forEach(([ x, y ]) => {
 			state.tempGridColors[gridW*y+x] = state.color;
 		})
 	},
@@ -371,6 +370,8 @@ const init = state => {
 		state.tempGridColors.forEach((c, i) => {
 			if (c !== null) state.gridColors[i] = c;
 		})
+
+		state.tempGridColors.fill(null);
 	})
 
 	c.addEventListener("mouseleave", (e) => {
@@ -381,6 +382,8 @@ const init = state => {
 		state.tempGridColors.forEach((c, i) => {
 			if (c !== null) state.gridColors[i] = c;
 		})
+
+		state.tempGridColors.fill(null);
 	})
 }
 
