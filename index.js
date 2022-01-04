@@ -58,7 +58,7 @@ const view = state => html`
 		</div>
 
 		<div class="view-window">
-			TODO: view window
+			<canvas id="view-window-canvas"></canvas>
 		</div>
 	</div>
 
@@ -387,8 +387,25 @@ const init = state => {
 	})
 }
 
+const drawPreview = ({ gridColors, gridSize: [w, h] }) => {
+    const pixels = new Uint8ClampedArray(
+        gridColors.reduce((acc, x) => {
+			const [ r, g, b, a = 255 ] = x
+				.match(/\w\w/g)
+				.map(x => parseInt(x, 16));
+			return [...acc, r, g, b, a];
+		}, [])
+    );
+	const preview = document.getElementById("view-window-canvas");
+	const pctx = preview.getContext('2d');
+	preview.width = w;
+	preview.height = h;
+	pctx.putImageData(new ImageData(pixels, w, h), w, h);
+}
+
 const animate = () => {
 	drawCanvas(state.canvas);
+    drawPreview(state);
 	window.requestAnimationFrame(animate);
 }
 
