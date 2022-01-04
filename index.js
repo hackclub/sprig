@@ -59,7 +59,7 @@ const view = state => html`
 		</div>
 
 		<div class="view-window">
-			TODO: view window
+			<canvas width="100" height="100" class="preview-canvas"></canvas>
 		</div>
 	</div>
 
@@ -431,6 +431,7 @@ const init = state => {
 
 const animate = () => {
 	drawCanvas(state.canvas);
+	drawCanvas(document.querySelector(".preview-canvas"));
 	window.requestAnimationFrame(animate);
 }
 
