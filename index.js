@@ -25,8 +25,6 @@ function RGBA_to_hex([r,g,b,a]) {
   return "#" + r + g + b + a;
 }
 
-let seen = false;
-
 const state = {
 	canvas: null,
 	gridColors: [],
