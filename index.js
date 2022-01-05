@@ -196,7 +196,7 @@ const tools_mousedown = {
 		q.push([x, y]);
 		while (q.length > 0) {
 			const [ x1, y1 ] = q.pop();
-			grid[gridW*y1+x1] = newColor;
+			grid[gridW*y1+x1] = state.color;
 			if (checkValidity(x1+1,y1)) q.push([ x1+1, y1 ])
 			if (checkValidity(x1-1,y1)) q.push([ x1-1, y1 ])
 			if (checkValidity(x1,y1+1)) q.push([ x1, y1+1 ])
@@ -345,11 +345,6 @@ const drawCanvas = (canvas, main = true) => {
 	 	pixels[index+2] = color[2];
 	 	pixels[index+3] = color[3];
 	})
-
-	if (!seen) {
-		console.log({ grid, pixels, gridW, gridH, w, h })
-		seen = true
-	}
 
 	tempCanvas.width = gridW;
 	tempCanvas.height = gridH;
