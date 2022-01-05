@@ -17,7 +17,7 @@ function RGBA_to_hex(orig) {
     (rgb[3] | 1 << 8).toString(16).slice(1) : orig;
   
     if (alpha !== "") { a = alpha; }
-    else { a = 01; }
+    else { a = 1; }
     hex = hex + a;
   
     return hex;
@@ -405,8 +405,74 @@ function getPoint(e) {
   	return [ x, y ];
 }
 
+const viewState = {
+	min: { x: 16,  y: 16 },
+	max: { x: 48,  y: 48 },
+	cornerIndex: null,
+};
+const viewCorners = () => {
+	const { min, max } = viewState;
+	return [
+		[min.x, max.y],
+		[max.x, max.y],
+		[max.x, min.y],
+		[min.x, min.y],
+	];
+}
+
+const drawView = (canvas) => {
+	const ctx = canvas.getContext('2d');
+	const { min, max } = viewState;
+
+	ctx.beginPath();
+	ctx.strokeStyle = 'yellow';
+	ctx.lineWidth = '2px';
+	ctx.moveTo(min.x, min.y);
+	ctx.fillStyle = 'orange';
+	viewCorners().forEach((corner, i) => {
+		if (i == viewState.cornerIndex)
+			ctx.fillRect(...corner.map(x => x - 4), 4, 4);
+		ctx.lineTo(...corner);
+	});
+	ctx.stroke();
+}
+
+const initView = (canvas) => {
+	const localMousePos = ev => {
+		const { x: bX, y: bY } = canvas.getBoundingClientRect();
+		return [ev.pageX - bX, ev.pageY - bY].map(v => clamp(v, 0, 100));
+	}
+
+	const mouseInput = canvas.onmousemove = ev => {
+		if (viewState.cornerIndex == null) return;
+		const [x, y] = localMousePos(ev);
+
+		const [cornerX, cornerY] = viewCorners()[viewState.cornerIndex];
+		viewState[cornerX == viewState.min.x ? 'min' : 'max'].x = x;
+		viewState[cornerY == viewState.min.y ? 'min' : 'max'].y = y;
+	}
+	
+	const distance = (x0, y0, x1, y1) => Math.sqrt((x0 - x1)*(x0 - x1) + (y0 - y1)*(y0 - y1));
+	canvas.onmousedown = ev => {
+		const clickDist = xy => distance(...localMousePos(ev), ...xy);
+		const { i, dist } = viewCorners()
+			.map((xy, i) => ({ dist: clickDist(xy), i }))
+			.sort((a, b) => a.dist - b.dist)
+			.splice(0, 1)[0];
+
+		/* have to be at least this close to grab the corner ... */
+		if (dist < 8) viewState.cornerIndex = i;
+
+		mouseInput(ev);
+	}
+	window.addEventListener('mouseup', ev => (mouseInput(ev), viewState.cornerIndex = null));
+}
+
 const init = state => {
 	render(document.body, view(state));
+
+	initView(document.querySelector(".preview-canvas"));
+
 	const c = document.querySelector(".drawing-canvas");
 	state.canvas = c;
 
@@ -458,7 +524,9 @@ const init = state => {
 
 const animate = () => {
 	drawCanvas(state.canvas);
-	drawCanvas(document.querySelector(".preview-canvas"), false);
+	const previewC = document.querySelector(".preview-canvas");
+	drawCanvas(previewC, false);
+	drawView(previewC);
 	window.requestAnimationFrame(animate);
 }
 
