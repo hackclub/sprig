@@ -7,20 +7,22 @@ const hexToRGBA = hex => {
 	return [r, g, b, a]
 }
 
-function RGBA_to_hex(orig) {
-    var a, isPercent,
-    rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
-    alpha = (rgb && rgb[4] || "").trim(),
-    hex = rgb ?
-    (rgb[1] | 1 << 8).toString(16).slice(1) +
-    (rgb[2] | 1 << 8).toString(16).slice(1) +
-    (rgb[3] | 1 << 8).toString(16).slice(1) : orig;
-  
-    if (alpha !== "") { a = alpha; }
-    else { a = 01; }
-    hex = hex + a;
-  
-    return hex;
+function RGBA_to_hex([r,g,b,a]) {
+  r = r.toString(16);
+  g = g.toString(16);
+  b = b.toString(16);
+  a = Math.round(a * 255).toString(16);
+
+  if (r.length == 1)
+    r = "0" + r;
+  if (g.length == 1)
+    g = "0" + g;
+  if (b.length == 1)
+    b = "0" + b;
+  if (a.length == 1)
+    a = "0" + a;
+
+  return "#" + r + g + b + a;
 }
 
 let seen = false;
@@ -169,12 +171,12 @@ const tools_mousedown = {
 	"bucket": (x, y) => {
 		const [ gridW, gridH ] = state.defaultGridArraySize;
 
-		const startColor = state.gridColors[gridW*y+x];
-		const newColor = state.color;
+		const startColor = RGBA_to_hex(state.gridColors[gridW*y+x]);
+		const newColor = RGBA_to_hex(state.color);
 		const grid = state.gridColors;
 
 		const checkValidity = (x, y) => {
-			return (x >= 0 && y >= 0 && x < gridW && y < gridH) && grid[gridW*y+x] === startColor && startColor !== newColor;
+			return (x >= 0 && y >= 0 && x < gridW && y < gridH) && RGBA_to_hex(grid[gridW*y+x]) === startColor && startColor !== newColor;
 		}
 
 		// const floodFill = (startColor, newColor, x, y, grid) => {
@@ -210,7 +212,7 @@ const tools_mousedown = {
 		const seen = [];
 
 		const checkValidity = (x, y) => {
-			const color = grid[gridW*y+x];
+			const color = RGBA_to_hex(grid[gridW*y+x]);
 			return (x >= 0 && y >= 0 && x < gridW && y < gridH) && color !== "#00000000" && !seen.includes(y*gridW+x);
 		}
 
