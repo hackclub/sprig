@@ -1,5 +1,12 @@
 import { render, html, svg } from './uhtml.js';
 
+const hexToRGBA = hex => {
+	let [r, g, b, a = 255] = hex
+		.match(/\w\w/g)
+		.map(x => parseInt(x, 16));
+	return [r, g, b, a]
+}
+
 const state = {
 	canvas: null,
 	gridColors: [],
@@ -9,7 +16,7 @@ const state = {
 	maxCanvasSize: 500,
 	selected: [],
 	tool: "draw",
-	color: "#000000",
+	color: hexToRGBA("#000000"),
 	mousedown: false,
 	mousedownPt: [0, 0],
 	currentPt: [0, 0],
@@ -68,9 +75,9 @@ const view = state => html`
 		<input 
 			type="color" 
 			.value=${state.color} 
-			@input=${e => state.color = e.target.value}
-			@click=${e => state.color = e.target.value}/>
-		<button @click=${() => state.color = "#00000000"}>clear</button>
+			@input=${e => state.color = hexToRGBA(e.target.value)}
+			@click=${e => state.color = hexToRGBA(e.target.value)}/>
+		<button @click=${() => state.color = hexToRGBA("#00000000")}>clear</button>
 	</div>
 `
 
@@ -79,8 +86,8 @@ const r = () => {
 }
 
 const readCanvas = canvas => {
-	const w = canvas.width;
-	const h = canvas.height;
+	const w = parseInt(canvas.style.width);
+	const h = parseInt(canvas.style.height);
 	const ctx = canvas.getContext("2d");
 
 	return [w, h, ctx]
@@ -308,6 +315,8 @@ const tools_mousemove = {
 	}
 }
 
+const BACKGROUND_BLUE = hexToRGBA("#b4e2fc87");
+const BACKGROUND_WHITE = hexToRGBA("#e3e3e34a");
 const drawCanvas = (canvas, main = true) => {
 	const ctx = canvas.getContext("2d");
 	ctx.fillStyle = "white";
@@ -327,16 +336,32 @@ const drawCanvas = (canvas, main = true) => {
 	const xSize = w/gridW;
 	const ySize = h/gridH;
 
-	grid.forEach((color, i) => {
-		const x = i%state.defaultGridArraySize[0];
-	    const y = Math.floor(i/state.defaultGridArraySize[1]);
+	const pixels = new Uint8ClampedArray(
+		grid
+			.map((color, i) => {
+				if (color[3] < 255) {
+					const x = i%state.defaultGridArraySize[0];
+					const y = Math.floor(i/state.defaultGridArraySize[1]);
+					color = (x%2 === 0 && y%2 === 1) || (x%2 === 1 && y%2 === 0)
+						? BACKGROUND_BLUE
+						: BACKGROUND_WHITE;
+				}
+				return color
+			})
+			.flat()
+	);
+	// ctx.putImageData(new ImageData(pixels, gridW, gridH), 0, 0, 0, 0, w, h);
+	ctx.putImageData(new ImageData(pixels, gridW, gridH), 0, 0);
+	// grid.forEach((color, i) => {
+	// 	const x = i%state.defaultGridArraySize[0];
+	//     const y = Math.floor(i/state.defaultGridArraySize[1]);
 
-	    ctx.fillStyle = (x%2 === 0 && y%2 === 1) || (x%2 === 1 && y%2 === 0) ? "#b4e2fc87" : "#e3e3e34a";
-	    ctx.fillRect(x*xSize, y*ySize, xSize, ySize);
-		
-		ctx.fillStyle = color;
-	    ctx.fillRect(x*xSize-0.5, y*ySize-0.5, xSize+0.5, ySize+0.5);
-	})
+	//     ctx.fillStyle = (x%2 === 0 && y%2 === 1) || (x%2 === 1 && y%2 === 0) ? "#b4e2fc87" : "#e3e3e34a";
+	//     ctx.fillRect(x*xSize, y*ySize, xSize, ySize);
+	// 	
+	// 	ctx.fillStyle = color;
+	//     ctx.fillRect(x*xSize-0.5, y*ySize-0.5, xSize+0.5, ySize+0.5);
+	// })
 
 	state.selected.forEach(i => {
 		const x = i%state.defaultGridArraySize[0];
@@ -355,8 +380,10 @@ const setCanvasSize = c => {
 		state.canvasSize[1] = state.gridSize[1]/state.gridSize[0]*state.maxCanvasSize;
 	}
 
-	c.width = state.canvasSize[0];
-	c.height = state.canvasSize[1];
+	c.width = state.gridSize[0];
+	c.height = state.gridSize[1];
+	c.style.width = state.canvasSize[0] + 'px';
+	c.style.height = state.canvasSize[1] + 'px';
 	const ctx = c.getContext("2d");
 	ctx.translate(0.5, 0.5);
 }
@@ -386,7 +413,7 @@ const init = state => {
 	setCanvasSize(c);
 	// init canvas data
 	const [ gridW, gridH ] = state.gridSize;
-	state.gridColors = new Array(state.defaultGridArraySize[0] * state.defaultGridArraySize[1]).fill("#00000000");
+	state.gridColors = new Array(state.defaultGridArraySize[0] * state.defaultGridArraySize[1]).fill(hexToRGBA("#00000000"));
 	state.tempGridColors = new Array(state.defaultGridArraySize[0] * state.defaultGridArraySize[1]).fill(null);
 
 	animate();
