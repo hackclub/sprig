@@ -7,6 +7,24 @@ const hexToRGBA = hex => {
 	return [r, g, b, a]
 }
 
+function RGBA_to_hex(orig) {
+    var a, isPercent,
+    rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
+    alpha = (rgb && rgb[4] || "").trim(),
+    hex = rgb ?
+    (rgb[1] | 1 << 8).toString(16).slice(1) +
+    (rgb[2] | 1 << 8).toString(16).slice(1) +
+    (rgb[3] | 1 << 8).toString(16).slice(1) : orig;
+  
+    if (alpha !== "") { a = alpha; }
+    else { a = 01; }
+    hex = hex + a;
+  
+    return hex;
+}
+
+let seen = false;
+
 const state = {
 	canvas: null,
 	gridColors: [],
@@ -86,40 +104,11 @@ const r = () => {
 }
 
 const readCanvas = canvas => {
-	const w = parseInt(canvas.style.width);
-	const h = parseInt(canvas.style.height);
+	const w = canvas.width;
+	const h = canvas.height;
 	const ctx = canvas.getContext("2d");
 
 	return [w, h, ctx]
-}
-
-const fillGrid = (canvas, colors) => {
-	const [ w, h, ctx ] = readCanvas(canvas);
-	const [ gridW, gridH ] = state.gridSize;
-	const xSize = w/gridW;
-	const ySize = h/gridH;
-	
-	colors.forEach((color, i) => {
-		if (color === null) return;
-	    const x = i%state.defaultGridArraySize[0];
-	    const y = Math.floor(i/state.defaultGridArraySize[1]);
-	    ctx.fillStyle = color;
-	    ctx.fillRect(x*xSize-0.5, y*ySize-0.5, xSize+0.5, ySize+0.5);
-	})
-}
-
-const gridBackground = (canvas) => {
-	const [ w, h, ctx ] = readCanvas(canvas);
-	const [ gridW, gridH ] = state.gridSize;
-	const xSize = w/gridW;
-	const ySize = h/gridH;
-
-	for (let i = 0; i < gridW * gridH; i++) {
-		const x = i%gridW;
-	    const y = Math.floor(i/gridW);
-		ctx.fillStyle = (x%2 === 0 && y%2 === 1) || (x%2 === 1 && y%2 === 0) ? "#b4e2fc87" : "#e3e3e34a";
-	    ctx.fillRect(x*xSize, y*ySize, xSize, ySize);
-	}
 }
 
 function line(from, to) {
@@ -265,7 +254,6 @@ const tools_mousemove = {
 	"rectangle": (x, y) => {
 		state.tempGridColors = state.tempGridColors.fill(null);
 		if (!state.mousedown) return;
-		// const [ gridW, gridH ] = state.gridSize;
 		const [ gridW, gridH ] = state.defaultGridArraySize;
 
 		const xMin = Math.min(state.currentPt[0], state.mousedownPt[0]);
@@ -317,6 +305,11 @@ const tools_mousemove = {
 
 const BACKGROUND_BLUE = hexToRGBA("#b4e2fc87");
 const BACKGROUND_WHITE = hexToRGBA("#e3e3e34a");
+const tempCanvas = document.createElement("canvas");
+tempCanvas.getContext("2d").webkitImageSmoothingEnabled = false;
+tempCanvas.getContext("2d").mozImageSmoothingEnabled = false;
+tempCanvas.getContext("2d").imageSmoothingEnabled = false;
+
 const drawCanvas = (canvas, main = true) => {
 	const ctx = canvas.getContext("2d");
 	ctx.fillStyle = "white";
@@ -327,48 +320,52 @@ const drawCanvas = (canvas, main = true) => {
 		else return color; 
 	})
 
-	// gridBackground(canvas);
-	// fillGrid(canvas, grid);
-	// drawGrid(canvas);
-
 	const [ w, h ] = readCanvas(canvas);
 	const [ gridW, gridH ] = main ? state.gridSize : state.defaultGridArraySize;
-	const xSize = w/gridW;
-	const ySize = h/gridH;
+	// const xSize = w/gridW;
+	// const ySize = h/gridH;
 
-	const pixels = new Uint8ClampedArray(
-		grid
-			.map((color, i) => {
-				if (color[3] < 255) {
-					const x = i%state.defaultGridArraySize[0];
-					const y = Math.floor(i/state.defaultGridArraySize[1]);
-					color = (x%2 === 0 && y%2 === 1) || (x%2 === 1 && y%2 === 0)
-						? BACKGROUND_BLUE
-						: BACKGROUND_WHITE;
-				}
-				return color
-			})
-			.flat()
-	);
-	// ctx.putImageData(new ImageData(pixels, gridW, gridH), 0, 0, 0, 0, w, h);
-	ctx.putImageData(new ImageData(pixels, gridW, gridH), 0, 0);
-	// grid.forEach((color, i) => {
-	// 	const x = i%state.defaultGridArraySize[0];
-	//     const y = Math.floor(i/state.defaultGridArraySize[1]);
+	const pixels = new Uint8ClampedArray(state.defaultGridArraySize[0]*state.defaultGridArraySize[1]*4);
 
-	//     ctx.fillStyle = (x%2 === 0 && y%2 === 1) || (x%2 === 1 && y%2 === 0) ? "#b4e2fc87" : "#e3e3e34a";
-	//     ctx.fillRect(x*xSize, y*ySize, xSize, ySize);
-	// 	
-	// 	ctx.fillStyle = color;
-	//     ctx.fillRect(x*xSize-0.5, y*ySize-0.5, xSize+0.5, ySize+0.5);
-	// })
+	grid.forEach((color, i) => {
+
+		if (color[3] < 255) {
+			const x = i%state.defaultGridArraySize[0];
+			const y = Math.floor(i/state.defaultGridArraySize[1]);
+			color = (x%2 === 0 && y%2 === 1) || (x%2 === 1 && y%2 === 0)
+				? BACKGROUND_BLUE
+				: BACKGROUND_WHITE;
+		}
+
+	 	let index = i*4;
+	 	pixels[index] = color[0];
+	 	pixels[index+1] = color[1];
+	 	pixels[index+2] = color[2];
+	 	pixels[index+3] = color[3];
+	})
+
+	if (!seen) {
+		console.log({ grid, pixels, gridW, gridH, w, h })
+		seen = true
+	}
+
+	tempCanvas.width = gridW;
+	tempCanvas.height = gridH;
+
+	const image = new ImageData(pixels, state.defaultGridArraySize[0], state.defaultGridArraySize[1]);
+	tempCanvas.getContext("2d").putImageData(image, 0, 0);
 
 	state.selected.forEach(i => {
 		const x = i%state.defaultGridArraySize[0];
 	    const y = Math.floor(i/state.defaultGridArraySize[1]);
-		ctx.fillStyle = "#aaaaaaaa";
-		ctx.fillRect(x*xSize-0.5, y*ySize-0.5, xSize+0.5, ySize+0.5);
+		tempCanvas.getContext("2d").fillStyle = "#aaaaaaaa";
+		tempCanvas.getContext("2d").fillRect(x, y, 1, 1);
 	})
+
+	ctx.webkitImageSmoothingEnabled = false;
+	ctx.mozImageSmoothingEnabled = false;
+	ctx.imageSmoothingEnabled = false;
+	ctx.drawImage(tempCanvas, 0, 0, w, h);
 }
 
 const setCanvasSize = c => {
@@ -380,13 +377,13 @@ const setCanvasSize = c => {
 		state.canvasSize[1] = state.gridSize[1]/state.gridSize[0]*state.maxCanvasSize;
 	}
 
-	c.width = state.gridSize[0];
-	c.height = state.gridSize[1];
-	c.style.width = state.canvasSize[0] + 'px';
-	c.style.height = state.canvasSize[1] + 'px';
+	c.width = state.canvasSize[0];
+	c.height = state.canvasSize[1];
 	const ctx = c.getContext("2d");
-	ctx.translate(0.5, 0.5);
+	// ctx.translate(0.5, 0.5);
 }
+
+const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
 function getPoint(e) {
 	const c = document.querySelector(".drawing-canvas");
@@ -399,8 +396,11 @@ function getPoint(e) {
 	const xSize = w/gridW;
 	const ySize = h/gridH;
 
-  	const x = Math.floor(rawX/xSize);
-  	const y = Math.floor(rawY/ySize);
+  	let x = Math.floor(rawX/xSize);
+  	let y = Math.floor(rawY/ySize);
+
+  	// x = clamp(x, 0, state.defaultGridArraySize[0] - 1);
+  	// y = clamp(y, 0, state.defaultGridArraySize[1] - 1);
 
   	return [ x, y ];
 }
