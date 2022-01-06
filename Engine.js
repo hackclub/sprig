@@ -206,13 +206,13 @@ class Object {
 		if (canMoveInY) this._y += dy; 
 	}
 
-	draw(obj, ctx) {
+	draw(obj) {
 		// draw sprite with sprite scale
 		if (this.sprite !== null) {
-			ctx.drawImage(this.sprite, this._x, this._y);
+			this.engine.ctx.drawImage(this.sprite, this._x, this._y);
 		}
 
-		this._draw(obj, ctx);
+		this._draw(obj);
 	}
 
 	set x(val) { this.translate(val - this._x, 0); }
@@ -315,7 +315,7 @@ class Engine {
 				let ogX = obj.x;
 				let ogY = obj.y;
 
-				if (obj.draw !== null) obj.draw(obj, this.ctx);
+				if (obj.draw !== null) obj.draw(obj);
 				this._onDraw.forEach(f => f(obj));
 
 				obj.vx += obj.ax;
