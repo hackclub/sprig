@@ -119,7 +119,17 @@ class Object {
 	constructor(params, engine) {
 		this.engine = engine;
 		this.tags = params.tags ?? [];
-		this.sprite = params.sprite ?? null;
+		if (params.sprite) {
+			const canv = document.createElement('canvas');
+			canv.getContext('2d').putImageData(
+				new ImageData(new Uint8ClampedArray(params.sprite.flat()), 32, 32),
+				0,
+				0
+			);
+			this.sprite = canv;
+		} else {
+			this.sprite = null;
+		}
 		this.spriteScale = params.sprite ?? 1;
 		this._x = params.x ?? 0;
 		this._y = params.y ?? 0;
@@ -190,7 +200,7 @@ class Object {
 	draw(obj, ctx) {
 		// draw sprite with sprite scale
 		if (this.sprite !== null) {
-			
+			ctx.drawImage(this.sprite, this._x, this._y);
 		}
 
 		this._draw(obj, ctx);

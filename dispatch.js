@@ -55,8 +55,10 @@ const ACTIONS = {
 				URL.revokeObjectURL(blob);
 			});
 		} else {
-	  	const included = { html, render, svg, Engine, ...state.sprites }; // these only work if no other imports
-	  	(new Function(...Object.keys(included), string))(...Object.values(included));
+			const included = { html, render, svg, Engine, ...state.sprites }; // these only work if no other imports
+			// try { 
+				(new Function(...Object.keys(included), string))(...Object.values(included));
+			// } catch(e) { console.error(e) } 
 		}
 
 	},
