@@ -1,4 +1,4 @@
-import { html, render, svg } from "/uhtml.js";
+import { html, render, svg } from "./uhtml.js";
 import lzutf8 from "https://cdn.skypack.dev/lzutf8";
 import { view } from "./view.js";
 import { init } from "./init.js";
