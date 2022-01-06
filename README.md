@@ -1,11 +1,4 @@
-- make demo code tutorial
-- markdown annotations
-- "slide" making
-- last/next
-- add json files as tutorials
-- add last/next as url params
+## Hack Club Game Lab
 
-## Done
-- add vertical bar location as url param
-- replace ftdomdelegate
-- add run and share button
+sort of like a fantasy console, really just js
+

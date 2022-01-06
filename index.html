@@ -1,11 +1,22 @@
 <!doctype html>
+
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
   <title>HTML Editor</title>
-  <link rel="stylesheet" href="./styles.css"></link>
-  <script type="module" defer src="./index.js"></script>
+  <link rel="stylesheet" href="./editor.css"></link>
+<!--   <script type="importmap">
+  {
+    "imports": {
+      "lit-html": "https://unpkg.com/lit-html@2.0.1/lit-html.js",
+      "lit-html-classMap": "https://unpkg.com/lit-html@2.0.1/directives/class-map.js",
+      "lzutf8": "https://cdn.skypack.dev/lzutf8"
+    }
+  }
+  </script> -->
 </head>
-<body></body>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script type="module" src="./main.js"></script>
 </html>

@@ -40,7 +40,6 @@ export function view(state) {
 
 			.pixel-editor-container {
 				display: flex;
-				flex-direction: column;
 				background: green;
 				width: 100%;
 				flex: 1;
@@ -56,6 +55,7 @@ export function view(state) {
 			}
 
 			.pixel-editor {
+				overflow: scroll;
 				flex: 1;
 			}
 
@@ -93,7 +93,7 @@ export function view(state) {
 			<div class="game-output">game output</div>
 			<div class="pixel-editor-container">
 				<div class="list-of-sprites">list of sprites</div>
-				<div class="pixel-editor">pixel editor</div>
+				<div class="pixel-editor"></div>
 			</div>
 			<div class="horizontal-bar"></div>
 		</div>

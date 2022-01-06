@@ -1,5 +1,6 @@
 import { events } from "./events.js";
 import { defaultProg } from "./defaultProg.js";
+import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
 import lzutf8 from "https://cdn.skypack.dev/lzutf8";
 
 export function init(state) {
@@ -20,6 +21,7 @@ export function init(state) {
 	if (shareType) state.shareType = shareType;
 
 	dispatch("RENDER");
+	createPixelEditor(document.querySelector(".pixel-editor"));
 	state.codemirror = document.querySelector("#code-editor");
 	events(state);
 
