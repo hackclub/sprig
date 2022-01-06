@@ -59,6 +59,8 @@ export const pixelStyles = html`
   }
 
   .view-window {
+    display: flex;
+    justify-content: center;
     background: lightgrey;
     padding: 5px;
     border: 2px solid black;

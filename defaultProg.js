@@ -11,8 +11,8 @@ const e = new Engine(canvas);
 e.add({
   x: 30,
   y: 30,
-    sprite: sprite_aht,
-    scale: 1,
+  // sprite: sprite_aht,
+  scale: 1,
   draw: (obj) => {
 
   },
