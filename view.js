@@ -57,6 +57,7 @@ export function view(state) {
 
 			.pixel-editor {
 				overflow: scroll;
+				position: relative;
 				flex: 1;
 			}
 

@@ -26,7 +26,7 @@ export const pixelStyles = html`
   }
 
   .toolbox {
-    position: fixed;
+    position: absolute;
     right: 10px;
     top: 10px;
     display: flex;
@@ -41,7 +41,7 @@ export const pixelStyles = html`
   }
 
   .colors {
-    position: fixed;
+    position: absolute;
     right: 10px;
     bottom: 10px;
     display: flex;
