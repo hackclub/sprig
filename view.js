@@ -44,6 +44,7 @@ export function view(state) {
 				width: 100%;
 				flex: 1;
 				z-index: 9;
+				overflow: hidden;
 			}
 
 			.list-of-sprites {
