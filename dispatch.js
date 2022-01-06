@@ -29,6 +29,7 @@ const STATE = {
 	name: "name-here",
 	pixelEditor: undefined,
 	sprites: {},
+	selected_sprite: "",
 	lastSaved: {
 		name: "",
 		text: "",
@@ -134,18 +135,24 @@ const ACTIONS = {
 	    return result;
 		}
 
-		const grid = new Array(128*128).fill([0, 0, 0, 0]);
-		state.sprites["sprite_" + randString(3)] = grid;
+		const grid = state.pixelEditor.createEmptyGrid();
+		const name = "sprite_" + randString(3);
+		state.sprites[name] = grid;
 		state.pixelEditor.setGridColors(grid);
+		state.selected_sprite = name;
 		dispatch("RENDER");
 	},
 	SELECT_SPRITE({ name }, state) {
 		const grid = state.sprites[name];
+		state.selected_sprite = name;
 		state.pixelEditor.setGridColors(grid);
+		dispatch("RENDER");
 	},
 	DELETE_SPRITE({ name }, state) { // TODO
-		// const grid = state.sprites[name];
-		// state.pixelEditor.setGridColors(grid);
+		delete state.sprites[name];
+		if (state.selected_sprite === name) state.selected_sprite = "";
+		dispatch("RENDER");
+		dispatch("RUN");
 	},
 	RENDER() {
 		console.log("rendered");

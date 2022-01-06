@@ -31,7 +31,7 @@ export function createPixelEditor(target) {
 		canvas: null,
 		gridColors: [],
 		tempGridColors: [],
-		gridSize: [128, 128],
+		gridSize: [32, 32],
 		canvasSize: [500, 500],
 		maxCanvasSize: 500,
 		selected: [],
@@ -41,7 +41,7 @@ export function createPixelEditor(target) {
 		mousedownPt: [0, 0],
 		currentPt: [0, 0],
 		showGrid: false,
-		defaultGridArraySize: [128, 128],
+		defaultGridArraySize: [32, 32],
 		// hoveredCell: null,
 	}
 
@@ -67,7 +67,7 @@ export function createPixelEditor(target) {
 					class="gridsize" 
 					type="number" 
 					min="1"
-					max="128"
+					max=${state.defaultGridArraySize[0]}
 					.value=${state.gridSize[0]}
 					@input=${e => { 
 						state.gridSize[0] = Math.min(Math.max(Number(e.target.value), 1), state.defaultGridArraySize[0]);
@@ -78,7 +78,7 @@ export function createPixelEditor(target) {
 					class="gridsize" 
 					type="number" 
 					min="1"
-					max="128"
+					max=${state.defaultGridArraySize[1]}
 					.value=${state.gridSize[1]}
 					@input=${e => { 
 						state.gridSize[1] = Math.min(Math.max(Number(e.target.value), 1), state.defaultGridArraySize[1]);
@@ -487,6 +487,7 @@ export function createPixelEditor(target) {
 		setGridColors: (grid) => { 
 			state.gridColors = grid; 
 		},
+		createEmptyGrid: () => new Array(state.defaultGridArraySize[0] * state.defaultGridArraySize[1]).fill([0, 0, 0, 0]),
 		gridColors: () => state.gridColors
 	};
 }

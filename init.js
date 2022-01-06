@@ -62,13 +62,20 @@ export function init(state) {
 		}
 	} else { 
 		const saved = JSON.parse(window.localStorage.getItem("hc-game-lab"));
-		const prog = saved.prog;
-		state.codemirror.view.dispatch({
-			changes: { from: 0, insert: !prog ? defaultProg.trim() : prog }
-		});
+		if (!saved) {
+			state.codemirror.view.dispatch({
+				changes: { from: 0, insert: defaultProg.trim() }
+			});
+		} else {
+			const prog = saved.prog;
+			state.codemirror.view.dispatch({
+				changes: { from: 0, insert: !prog ? defaultProg.trim() : prog }
+			});
 
-		state.sprites = saved.sprites;
-		
+			state.sprites = saved.sprites;
+		}
+
+
 		dispatch("RENDER");
 		dispatch("RUN");
 

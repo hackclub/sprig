@@ -85,12 +85,37 @@ export function view(state) {
 				cursor: row-resize;
 			}
 
+			.sprite-entry {
+				display: flex;
+				box-sizing: border-box;
+				border: 2px solid #ffffff00;
+				padding: 3px;
+			}
+
 			.sprite-name {
 				cursor: pointer;
+				flex: 3;
+				padding-right: 10px;
 			}
 
 			.sprite-name:hover {
 				background: yellow;
+			}
+
+			.sprite-delete {
+				display: flex;
+				justify-content: flex-end;
+				color: red;
+				flex: 1;
+				cursor: pointer;
+			}
+
+			.sprite-delete:hover {
+				color: yellow;
+			}
+
+			.selected-sprite {
+				border: 2px solid blue;
 			}
 
 
@@ -112,7 +137,10 @@ export function view(state) {
 			<div class="pixel-editor-container">
 				<div class="list-of-sprites">
 					${Object.keys(state.sprites).map(x => html`
-						<div class="sprite-name" @mousedown=${() => dispatch("SELECT_SPRITE", { name: x })}>${x}</div>
+						<div class=${["sprite-entry", x === state.selected_sprite ? "selected-sprite" : ""].join(" ")}>
+							<div class="sprite-name" @mousedown=${() => dispatch("SELECT_SPRITE", { name: x })}>${x}</div>
+							<div class="sprite-delete" @mousedown=${() => dispatch("DELETE_SPRITE", { name: x })}>x</div>
+						</div>
 					`)}
 					<button @click=${() => dispatch("CREATE_SPRITE")}>add</button>
 				</div>

@@ -1,29 +1,24 @@
 export const defaultProg = `
-<script type="module">
-  // javascript goes here
-</script>
+const output = document.querySelector(".game-output");
+output.innerHTML = \`<canvas></canvas>\`;
+const canvas = document.querySelector("canvas");
+const { width, height } = output.getBoundingClientRect();
+canvas.width = width;
+canvas.height = height;
 
-<style>
-  /* css go here */
+const e = new Engine(canvas);
 
-  body {
-    margin: 0px;
-  }
+e.add({
+  x: 30,
+  y: 30,
+    sprite: sprite_aht,
+    scale: 1,
+  draw: (obj) => {
 
-  .hello {
-    display: grid;
-    place-content: center;
-    background: coral;
-    height: 100vh;
-    width: 100vw;
-  }
-</style>
+  },
+})
 
-<main>
-  <!-- html goes here -->
-  <div class="hello">Hello there!</div>
-</main>
-
+e.start();
 
 
 `
