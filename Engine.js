@@ -139,7 +139,8 @@ class Object {
 
 
 		// need width and height
-		const bounds = { x:0, y:0, maxX:100, maxY:100, width:100, height:100 };
+		const bounds = this.updateBoundingBox();
+		
 		this.width = bounds.width;
 		this.height = bounds.height;
 	}
@@ -154,6 +155,14 @@ class Object {
 		})
 
 		return collided;
+	}
+
+	updateBoundingBox() {
+		this.engine.ctx.fillStyle = "white";
+    	this.engine.ctx.fillRect(0, 0, this.engine.width, this.engine.height);
+    	this.draw(this);
+
+    	return contextBoundingBox(this.engine.ctx, this.engine.width, this.engine.height);
 	}
 
 	translate(dx, dy) {
@@ -190,7 +199,7 @@ class Object {
 	draw(obj, ctx) {
 		// draw sprite with sprite scale
 		if (this.sprite !== null) {
-			
+
 		}
 
 		this._draw(obj, ctx);
