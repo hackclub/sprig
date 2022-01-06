@@ -89,7 +89,7 @@ export function view(state) {
 
 
 			.horizontal-bar:hover {
-				background: red;
+				background: black;
 				cursor: row-resize;
 			}
 
