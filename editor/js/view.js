@@ -39,11 +39,25 @@ export function view(state) {
 				height: var(--horizontal-bar);
 			}
 
-			.pixel-editor {
+			.pixel-editor-container {
+				display: flex;
+				flex-direction: column;
 				background: green;
 				width: 100%;
 				flex: 1;
 				z-index: 9;
+			}
+
+			.list-of-sprites {
+				background: orange;
+				min-height: 100%;
+				max-height: 100%;
+				height: 100%;
+				width: 80px;
+			}
+
+			.pixel-editor {
+				flex: 1;
 			}
 
 			.horizontal-bar {
@@ -78,7 +92,10 @@ export function view(state) {
 		</div>
 		<div class="right-pane">
 			<div class="game-output">game output</div>
-			<div class="pixel-editor">pixel editor</div>
+			<div class="pixel-editor-container">
+				<div class="list-of-sprites">list of sprites</div>
+				<div class="pixel-editor">pixel editor</div>
+			</div>
 			<div class="horizontal-bar"></div>
 		</div>
 		<div id="vertical-bar"></div>
