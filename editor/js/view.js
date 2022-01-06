@@ -1,5 +1,4 @@
-import { html } from "https://unpkg.com/lit-html@2.0.1/lit-html.js";
-import { classMap } from "https://unpkg.com/lit-html@2.0.1/directives/class-map.js";
+import { html } from "/uhtml.js";
 import "./codemirror/codemirror-html.js";
 import "./codemirror/codemirror-js.js";
 

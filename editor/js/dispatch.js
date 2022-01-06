@@ -1,4 +1,4 @@
-import { html, render, svg } from "https://unpkg.com/lit-html@2.0.1/lit-html.js";
+import { html, render, svg } from "/uhtml.js";
 import lzutf8 from "https://cdn.skypack.dev/lzutf8";
 import { view } from "./view.js";
 import { init } from "./init.js";
@@ -123,7 +123,7 @@ const ACTIONS = {
 	},
 	RENDER() {
 		console.log("rendered");
-		render(view(STATE), document.getElementById("root"));
+		render(document.getElementById("root"), view(STATE));
 	}
 }
 
