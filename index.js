@@ -303,6 +303,13 @@ const tools_mousemove = {
 	}
 }
 
+const i_to_xy = (i) => {
+	const x = i%state.defaultGridArraySize[0];
+	const y = Math.floor(i/state.defaultGridArraySize[1]);
+
+	return [x, y];
+}
+
 const BACKGROUND_BLUE = hexToRGBA("#b4e2fc87");
 const BACKGROUND_WHITE = hexToRGBA("#e3e3e34a");
 const tempCanvas = document.createElement("canvas");
@@ -330,8 +337,7 @@ const drawCanvas = (canvas, main = true) => {
 	grid.forEach((color, i) => {
 
 		if (color[3] < 255) {
-			const x = i%state.defaultGridArraySize[0];
-			const y = Math.floor(i/state.defaultGridArraySize[1]);
+			const [x, y] = i_to_xy(i);
 			color = (x%2 === 0 && y%2 === 1) || (x%2 === 1 && y%2 === 0)
 				? BACKGROUND_BLUE
 				: BACKGROUND_WHITE;
@@ -351,8 +357,7 @@ const drawCanvas = (canvas, main = true) => {
 	tempCanvas.getContext("2d").putImageData(image, 0, 0);
 
 	state.selected.forEach(i => {
-		const x = i%state.defaultGridArraySize[0];
-	    const y = Math.floor(i/state.defaultGridArraySize[1]);
+		const [x, y] = i_to_xy(i);
 		tempCanvas.getContext("2d").fillStyle = "#aaaaaaaa";
 		tempCanvas.getContext("2d").fillRect(x, y, 1, 1);
 	})
@@ -361,6 +366,22 @@ const drawCanvas = (canvas, main = true) => {
 	ctx.mozImageSmoothingEnabled = false;
 	ctx.imageSmoothingEnabled = false;
 	ctx.drawImage(tempCanvas, 0, 0, w, h);
+
+	const avg = (array) => array.reduce((a, b) => a + b) / array.length;
+
+	if (state.selected.length > 0) {
+		let xs = [];
+		let ys = [];
+
+		const xy_selected = state.selected.forEach(i => {
+			const [x, y] = i_to_xy(i);
+			xs.push(x);
+			ys.push(y);
+		});
+
+		console.log(xs, ys);
+
+	}
 }
 
 const setCanvasSize = c => {
