@@ -1,4 +1,4 @@
-import { render, html, svg } from '/uhtml.js';
+import { render, html, svg } from '../uhtml.js';
 import { pixelStyles } from "./pixel-styles.js";
 
 const hexToRGBA = hex => {

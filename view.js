@@ -1,4 +1,4 @@
-import { html } from "/uhtml.js";
+import { html } from "./uhtml.js";
 import "./codemirror/codemirror-html.js";
 import "./codemirror/codemirror-js.js";
 
