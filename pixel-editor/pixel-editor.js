@@ -42,8 +42,14 @@ export function createPixelEditor(target) {
 		currentPt: [0, 0],
 		showGrid: false,
 		defaultGridArraySize: [32, 32],
+		undoRedoStack: [],
 		// hoveredCell: null,
 	}
+
+	// <button @click=${() => state.tool = "copy"}>TODO: copy</button>
+	// <button @click=${() => state.tool = "paste"}>TODO: paste</button>
+	// <button @click=${() => state.tool = "move"}>TODO: move</button>
+	// <button @click=${() => {}}>TODO: export</button>
 
 	const view = state => html`
 		${pixelStyles}
@@ -57,10 +63,13 @@ export function createPixelEditor(target) {
 			<button @click=${() => state.tool = "line"}>line</button>
 			<button @click=${() => state.tool = "bucket"}>bucket</button>
 			<button @click=${() => state.tool = "select"}>select</button>
-			<button @click=${() => state.tool = "copy"}>TODO: copy</button>
-			<button @click=${() => state.tool = "paste"}>TODO: paste</button>
-			<button @click=${() => state.tool = "move"}>TODO: move</button>
-			<button @click=${() => {}}>TODO: export</button>
+			<button @click=${() => {
+				if (state.undoRedoStack.length === 0) return;
+				const grid = JSON.parse(state.undoRedoStack.pop());
+				state.gridColors.forEach((arr, i) => {
+					state.gridColors[i] = grid[i];
+				})
+			}}>undo</button>
 			<div>
 				<span>w:</span>
 				<input 
@@ -92,7 +101,7 @@ export function createPixelEditor(target) {
 		</div>
 
 		<div class="colors">
-			<button>TODO: + add color</button>
+			<!-- <button>TODO: + add color</button> -->
 			<input 
 				type="color" 
 				.value=${state.color} 
@@ -407,21 +416,21 @@ export function createPixelEditor(target) {
 	function getPoint(e) {
 		const c = document.querySelector(".drawing-canvas");
 		const rect = c.getBoundingClientRect();
-	  	const rawX = e.clientX - rect.left;
-	  	const rawY = e.clientY - rect.top;
+		const rawX = e.clientX - rect.left;
+		const rawY = e.clientY - rect.top;
 
-	  	const [ w, h, ctx ] = readCanvas(c);
+		const [ w, h, ctx ] = readCanvas(c);
 		const [ gridW, gridH ] = state.gridSize;
 		const xSize = w/gridW;
 		const ySize = h/gridH;
 
-	  	let x = Math.floor(rawX/xSize);
-	  	let y = Math.floor(rawY/ySize);
+		let x = Math.floor(rawX/xSize);
+		let y = Math.floor(rawY/ySize);
 
-	  	x = clamp(x, 0, state.defaultGridArraySize[0] - 1);
-	  	y = clamp(y, 0, state.defaultGridArraySize[1] - 1);
+		x = clamp(x, 0, state.defaultGridArraySize[0] - 1);
+		y = clamp(y, 0, state.defaultGridArraySize[1] - 1);
 
-	  	return [ x, y ];
+		return [ x, y ];
 	}
 
 	const init = state => {
@@ -438,6 +447,9 @@ export function createPixelEditor(target) {
 		animate();
 
 		c.addEventListener("mousedown", (e) => {
+				state.undoRedoStack.push(JSON.stringify(state.gridColors));
+				if (state.undoRedoStack.length > 15) state.undoRedoStack.unshift();
+
 		  	state.mousedown = true;
 		  	const pt = getPoint(e);
 		  	state.mousedownPt = pt;
@@ -460,6 +472,7 @@ export function createPixelEditor(target) {
 			})
 
 			state.tempGridColors.fill(null);
+
 		})
 
 		c.addEventListener("mouseleave", (e) => {
