@@ -41,7 +41,7 @@ export function view(state) {
 				display: flex;
 				justify-content: center;
     		align-items: center;
-				background: blue;
+				background: #000067;
 				width: 100%;
 				height: var(--horizontal-bar);
 			}
