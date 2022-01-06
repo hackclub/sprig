@@ -2,6 +2,7 @@ import { html, render, svg } from "https://unpkg.com/lit-html@2.0.1/lit-html.js"
 import lzutf8 from "https://cdn.skypack.dev/lzutf8";
 import { view } from "./view.js";
 import { init } from "./init.js";
+import { Engine } from "./Engine.js";
 
 function copy(str) {
 	const inp = document.createElement('input');
@@ -50,7 +51,7 @@ const ACTIONS = {
 				URL.revokeObjectURL(blob);
 			});
 		} else {
-	  	const included = { html, render, svg }; // these only work if no other imports
+	  	const included = { html, render, svg, Engine }; // these only work if no other imports
 	  	(new Function(...Object.keys(included), string))(...Object.values(included));
 		}
 

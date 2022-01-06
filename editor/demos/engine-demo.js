@@ -1,7 +1,5 @@
-import { Engine } from "http://127.0.0.1:8080/editor/Engine.js"
-
-const output = document.querySelector(".game-output")
-output.innerHTML = `<canvas></canvas>`
+const output = document.querySelector(".game-output");
+output.innerHTML = `<canvas></canvas>`;
 const canvas = document.querySelector("canvas");
 const { width, height } = output.getBoundingClientRect();
 canvas.width = width;
@@ -16,6 +14,7 @@ e.add({
     x: 50,
     y: 50,
     // sprite: name,
+    // scale: 1,
     draw: (obj) => {
         ctx.fillStyle = "blue";
         ctx.fillRect(obj.x, obj.y, 20, 20);
