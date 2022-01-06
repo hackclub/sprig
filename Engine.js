@@ -23,14 +23,10 @@ const getLimits = (obj, [dx, dy] = [0, 0]) => {
 	}
 }
 
-const make_px_at = (w, h, data) => (x, y) => 
-	(data[(w*y+x)*4] !== 255) ||
-	(data[(w*y+x)*4+1] !== 255) ||
-	(data[(w*y+x)*4+2] !== 255) ||
-	(data[(w*y+x)*4+3] !== 255);
+const make_px_at = (w, h, data) => (x, y) => data[(w*y+x)*4+3] > 0;
 
-function contextBoundingBox(ctx, w, h) {
-    var data = ctx.getImageData(0, 0, w, h).data;
+function contextBoundingBox(imgData) {
+	const { data, width: w, height: h } = imgData;
     const pxAt = make_px_at(w, h, data);
 
     let x, y, minX, minY, maxX, maxY;
@@ -119,18 +115,23 @@ class Object {
 	constructor(params, engine) {
 		this.engine = engine;
 		this.tags = params.tags ?? [];
+
+		let bounds = { x: 0, y: 0, maxX: 16, maxY: 16, width: 16, height: 16 }
 		if (params.sprite) {
-			const canv = document.createElement('canvas');
-			canv.getContext('2d').putImageData(
-				new ImageData(new Uint8ClampedArray(params.sprite.flat()), 32, 32),
-				0,
-				0
-			);
-			this.sprite = canv;
+			this.imageData = new ImageData(new Uint8ClampedArray(params.sprite.flat()), 32, 32);
+			bounds = contextBoundingBox(this.imageData);
+
+			this.spriteOffsetX = bounds.x;
+			this.spriteOffsetY = bounds.y;
+			this.unscaledWidth = this.width = bounds.width;
+			this.unscaledHeight = this.height = bounds.height;
+
+			this.sprite = document.createElement('canvas');
+			this.updateCanvas();
 		} else {
 			this.sprite = null;
 		}
-		this.spriteScale = params.sprite ?? 1;
+		this.scale = params.scale ?? 1;
 		this._x = params.x ?? 0;
 		this._y = params.y ?? 0;
 		this._vx = params.vx ?? 0;
@@ -146,13 +147,13 @@ class Object {
 		this.dy = 0;
 
 		this.id = Math.random();
+	}
 
-
-		// need width and height
-		const bounds = this.updateBoundingBox();
-		
-		this.width = bounds.width;
-		this.height = bounds.height;
+	updateCanvas() {
+		this.sprite.width = this.width+1;
+		this.sprite.height = this.height+1;
+		this.sprite.getContext('2d').putImageData(this.imageData, -this.spriteOffsetX, -this.spriteOffsetY);
+		this.sprite = this.sprite;
 	}
 
 	collides(query, buffer = 0) { // buffer could be obj { left, right, top, bottom }
@@ -165,14 +166,6 @@ class Object {
 		})
 
 		return collided;
-	}
-
-	updateBoundingBox() {
-		this.engine.ctx.fillStyle = "white";
-    	this.engine.ctx.fillRect(0, 0, this.engine.width, this.engine.height);
-    	this.draw(this);
-
-    	return contextBoundingBox(this.engine.ctx, this.engine.width, this.engine.height);
 	}
 
 	translate(dx, dy) {
@@ -206,13 +199,18 @@ class Object {
 		if (canMoveInY) this._y += dy; 
 	}
 
-	draw(obj, ctx) {
+	set scale(factor) {
+		this.width = this.unscaledWidth * factor;
+		this.height = this.unscaledHeight * factor;
+	}
+
+	draw(obj) {
 		// draw sprite with sprite scale
 		if (this.sprite !== null) {
-			ctx.drawImage(this.sprite, this._x, this._y);
+			obj.engine.ctx.drawImage(this.sprite, this._x, this._y, this.width, this.height);
 		}
 
-		this._draw(obj, ctx);
+		this._draw(obj);
 	}
 
 	set x(val) { this.translate(val - this._x, 0); }
@@ -235,6 +233,9 @@ class Engine {
 	constructor(canvas) {
 		this.canvas = canvas;
 		this.ctx = canvas.getContext("2d");
+		this.ctx.webkitImageSmoothingEnabled = false;
+		this.ctx.mozImageSmoothingEnabled = false;
+		this.ctx.imageSmoothingEnabled = false;
 		this.objects = [];
 		this.drawing = false;
 		this.step = 0; 
