@@ -81,12 +81,12 @@ export function init(state) {
 
 	}
 
-	(async () => {
-	    const url = `https://api2.hackclub.com/v0.1/Saved Projects/Live Editor Projects/?select={"filterByFormula": "{Public}=TRUE()"}`;            
-        const json = await fetch(url, { mode: "cors" }).then(res => res.json());
-        state.examples = json.map(x => x.fields);
-        dispatch("RENDER");
-    })() 
+	// (async () => {
+	//     const url = `https://api2.hackclub.com/v0.1/Saved Projects/Live Editor Projects/?select={"filterByFormula": "{Public}=TRUE()"}`;            
+ //        const json = await fetch(url, { mode: "cors" }).then(res => res.json());
+ //        state.examples = json.map(x => x.fields);
+ //        dispatch("RENDER");
+ //    })() 
 }
 
 

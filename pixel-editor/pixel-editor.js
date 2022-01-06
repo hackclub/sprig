@@ -1,4 +1,4 @@
-import { render, html, svg } from '/uhtml.js';
+import { render, html, svg } from '../uhtml.js';
 import { pixelStyles } from "./pixel-styles.js";
 
 const hexToRGBA = hex => {
@@ -33,7 +33,7 @@ export function createPixelEditor(target) {
 		tempGridColors: [],
 		gridSize: [32, 32],
 		canvasSize: [500, 500],
-		maxCanvasSize: 500,
+		maxCanvasSize: 350,
 		selected: [],
 		tool: "draw",
 		color: hexToRGBA("#000000"),

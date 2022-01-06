@@ -92,7 +92,7 @@ body {
 
 #vertical-bar:hover {
   cursor: col-resize;
-  background: grey;
+  background: black;
 }
 
 .CodeMirror {

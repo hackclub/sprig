@@ -1,4 +1,4 @@
-import { render, html, svg } from '/uhtml.js';
+import { render, html, svg } from '../uhtml.js';
 
 export const pixelStyles = html`
 <style>

@@ -230,7 +230,7 @@ class Object {
 }
 
 class Engine {
-	constructor(canvas) {
+	constructor(canvas, width, height) {
 		this.canvas = canvas;
 		this.ctx = canvas.getContext("2d");
 		this.ctx.webkitImageSmoothingEnabled = false;
@@ -240,7 +240,8 @@ class Engine {
 		this.drawing = false;
 		this.step = 0; 
 		
-		const { width, height } = canvas.getBoundingClientRect();
+		canvas.width = width;
+		canvas.height = height;
 		this._width = width;
 		this._height = height; 
 		this._mouseX = 0;
@@ -316,7 +317,7 @@ class Engine {
 				let ogX = obj.x;
 				let ogY = obj.y;
 
-				if (obj.draw !== null) obj.draw(obj, this.ctx);
+				if (obj.draw !== null) obj.draw(obj);
 				this._onDraw.forEach(f => f(obj));
 
 				obj.vx += obj.ax;
