@@ -2,15 +2,15 @@ import { html } from "/uhtml.js";
 import "./codemirror/codemirror-html.js";
 import "./codemirror/codemirror-js.js";
 
+// <button @click=${() => dispatch("SHARE", { type: "link" })}>link</button>
 function shareOptions(state) {
   return html`
     <div class="expand-menu menu-option menu-choice">
-      share
+      save
       <div class="menu-choices">
       	<input type="text" .placeholder=${state.name} @keyup=${e => { 
       		state.name = e.target.value === "" ? "anon" : e.target.value 
       	}}></input>
-        <button @click=${() => dispatch("SHARE", { type: "link" })}>link</button>
         <button @click=${() => dispatch("SHARE", { type: "file" })}>file</button>
       </div>
     </div>
@@ -18,6 +18,9 @@ function shareOptions(state) {
 }
 
 const toggleHide = (className) => document.querySelector(`.${className}`).classList.toggle("hide");
+
+// <button class="menu-option" @click=${() => toggleHide("examples")}>examples</button>
+// <button class="menu-option" @click=${() => toggleHide("options")}>options</button>
 
 export function view(state) {
 	return html`
@@ -128,8 +131,6 @@ export function view(state) {
 			<div class="menu">
 				<button class="menu-option" @click=${() => dispatch("RUN")}>run (shift + enter)</button>
 				${shareOptions(state)}
-				<button class="menu-option" @click=${() => toggleHide("examples")}>examples</button>
-				<button class="menu-option" @click=${() => toggleHide("options")}>options</button>
 			</div>
 		</div>
 		<div class="right-pane">

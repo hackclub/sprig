@@ -101,21 +101,24 @@ const ACTIONS = {
 		}
 
 		if (type === "file") {
-			downloadText(`${state.name}.${state.editorType}`,string);
+			downloadText(`${state.name}.json`, JSON.stringify({
+				sprites: state.sprites,
+				prog: string
+			}));
 		}	
 
 	},
-	RENDERER_TYPE(args, state) {
-		dispatch("RENDER");
-		dispatch("RUN");
-	},
-	EDITOR_TYPE(args, state) {
-		const string = state.codemirror.view.state.doc.toString();
-		dispatch("RENDER");
-		state.codemirror = document.querySelector("#code-editor");
+	UPLOAD({ saved }, state) {
+		const newProg = saved.prog;
+		const currentProg = state.codemirror.view.state.doc.toString();
+
 		state.codemirror.view.dispatch({
-			changes: { from: 0, insert: string }
+			changes: { from: 0, to: currentProg.length, insert: newProg }
 		});
+
+		state.sprites = saved.sprites;
+
+		dispatch("RENDER");
 		dispatch("RUN");
 	},
 	LOAD_EXAMPLE({ content }, state) {

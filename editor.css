@@ -77,7 +77,7 @@ body {
 }
 
 .menu-option {
-  width: calc(100%/3);
+  flex: 1;
 }
 
 #vertical-bar {

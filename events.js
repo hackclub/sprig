@@ -34,9 +34,11 @@ function readFile(file) {
   reader.readAsText(file);
 
   reader.onloadend = event => {
-    let text = reader.result;
+    let raw = reader.result;
 
-    console.log(text);
+    const saved = JSON.parse(raw);
+
+		dispatch("UPLOAD", { saved });
   };
 }
 
