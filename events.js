@@ -200,18 +200,11 @@ export function events(state) {
 		const prog = state.codemirror.view.state.doc.toString();
     window.localStorage.setItem("hc-game-lab", JSON.stringify({ prog, sprites: state.sprites }));
     
-		// console.log(code, event);
 		if (code === "Enter" && event.shiftKey) {
 		  event.preventDefault();
 		  dispatch("RUN");
 		}
 	});
-
-	// bodyListener("mousedown", "", (e) => {
-	// 	if (!e.target.matches(".examples > *, .examples")) {
- //        dispatch("EXAMPLES", { show: false });
- //    }
-	// })
 
 	addVerticalBarDrag(state, bodyListener);
 	addHorzBarDrag(state, bodyListener);
