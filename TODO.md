@@ -1,5 +1,8 @@
 ## Real TODO
 
+-[] set fixed game window size
+    -[] add option to go full screen
+
 -[] palette of colors
 -[] icons for menus
 -[] hot keys for color palette
