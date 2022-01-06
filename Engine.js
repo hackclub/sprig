@@ -232,6 +232,8 @@ class Object {
 class Engine {
 	constructor(canvas, width, height) {
 		this.canvas = canvas;
+		canvas.width = width;
+		canvas.height = height;
 		this.ctx = canvas.getContext("2d");
 		this.ctx.webkitImageSmoothingEnabled = false;
 		this.ctx.mozImageSmoothingEnabled = false;
@@ -240,8 +242,6 @@ class Engine {
 		this.drawing = false;
 		this.step = 0; 
 		
-		canvas.width = width;
-		canvas.height = height;
 		this._width = width;
 		this._height = height; 
 		this._mouseX = 0;
