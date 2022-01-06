@@ -3,23 +3,6 @@ import lzutf8 from "https://cdn.skypack.dev/lzutf8";
 import { view } from "./view.js";
 import { init } from "./init.js";
 
-
-function setInnerHTML(elm, html) {
-  elm.innerHTML = html;
-  Array.from(elm.querySelectorAll("script")).forEach( oldScript => {
-  	const text = oldScript.innerHTML;
-  	eval(text);
-  	// (new Function("dom", text))(elm); // need to make imports work, this messes up document methods
-
-
-  	// const newScript = document.createElement("script");
-    // Array.from(oldScript.attributes)
-    //   .forEach( attr => newScript.setAttribute(attr.name, attr.value) );
-    // newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-    // oldScript.parentNode.replaceChild(newScript, oldScript);
-  });
-}
-
 function copy(str) {
 	const inp = document.createElement('input');
 	document.body.appendChild(inp);
@@ -49,25 +32,6 @@ const STATE = {
 		link: "",
 	}
 };
-
-// window.onerror = () => {
-// 	console.log("test")
-// }
-
-window.addEventListener("message", e => {
-	if (e.data === "error") STATE.error = true;
-	else {
-		STATE.logs = [...STATE.logs, ...e.data];
-	}
-	dispatch("RENDER");
-
-	const obj = document.querySelector(".log");
-
-	// if (obj.scrollTop - (obj.scrollHeight - obj.offsetHeight) > -20) {
-	// 		obj.scrollTop = obj.scrollHeight - obj.offsetHeight;
-	// }
-});
-
 
 const ACTIONS = {
 	INIT(args, state) {
