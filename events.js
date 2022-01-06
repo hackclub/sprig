@@ -196,7 +196,7 @@ export function events(state) {
 		let code = event.code;
 
 		const prog = state.codemirror.view.state.doc.toString();
-    window.localStorage.setItem("cm-prog", prog);
+    window.localStorage.setItem("hc-game-lab", JSON.stringify({ prog, sprites: state.sprites }));
     
 		// console.log(code, event);
 		if (code === "Enter" && event.shiftKey) {

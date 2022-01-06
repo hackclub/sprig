@@ -21,7 +21,7 @@ export function init(state) {
 	if (shareType) state.shareType = shareType;
 
 	dispatch("RENDER");
-	createPixelEditor(document.querySelector(".pixel-editor"));
+	state.pixelEditor = createPixelEditor(document.querySelector(".pixel-editor"));
 	state.codemirror = document.querySelector("#code-editor");
 	events(state);
 
@@ -61,12 +61,17 @@ export function init(state) {
 				}));
 		}
 	} else { 
-		const saved = window.localStorage.getItem("cm-prog")
+		const saved = JSON.parse(window.localStorage.getItem("hc-game-lab"));
+		const prog = saved.prog;
 		state.codemirror.view.dispatch({
-			changes: { from: 0, insert: !saved ? defaultProg.trim() : saved }
+			changes: { from: 0, insert: !prog ? defaultProg.trim() : prog }
 		});
 
+		state.sprites = saved.sprites;
+		
+		dispatch("RENDER");
 		dispatch("RUN");
+
 	}
 
 	(async () => {

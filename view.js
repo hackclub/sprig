@@ -48,11 +48,19 @@ export function view(state) {
 			}
 
 			.list-of-sprites {
+				display: flex;
+				flex-direction: column;
 				background: orange;
 				min-height: 100%;
 				max-height: 100%;
 				height: 100%;
-				width: 80px;
+				min-width: 40px;
+				width: max-content;
+				padding: 5px;
+			}
+
+			.list-of-sprites > * {
+				padding-bottom: 3px;
 			}
 
 			.pixel-editor {
@@ -77,6 +85,14 @@ export function view(state) {
 				cursor: row-resize;
 			}
 
+			.sprite-name {
+				cursor: pointer;
+			}
+
+			.sprite-name:hover {
+				background: yellow;
+			}
+
 
 		</style>
 		<div class="left-pane">
@@ -94,7 +110,12 @@ export function view(state) {
 		<div class="right-pane">
 			<div class="game-output">game output</div>
 			<div class="pixel-editor-container">
-				<div class="list-of-sprites">list of sprites</div>
+				<div class="list-of-sprites">
+					${Object.keys(state.sprites).map(x => html`
+						<div class="sprite-name" @mousedown=${() => dispatch("SELECT_SPRITE", { name: x })}>${x}</div>
+					`)}
+					<button @click=${() => dispatch("CREATE_SPRITE")}>add</button>
+				</div>
 				<div class="pixel-editor"></div>
 			</div>
 			<div class="horizontal-bar"></div>

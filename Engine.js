@@ -119,6 +119,8 @@ class Object {
 	constructor(params, engine) {
 		this.engine = engine;
 		this.tags = params.tags ?? [];
+		this.sprite = params.sprite ?? null;
+		this.spriteScale = params.sprite ?? 1;
 		this._x = params.x ?? 0;
 		this._y = params.y ?? 0;
 		this._vx = params.vx ?? 0;
@@ -129,7 +131,7 @@ class Object {
 		// this.solidTo = params.solidTo ?? [];
 		this.solid = params.solid ?? false;
 		this.click = params.click ?? null;
-		this.draw = params.draw ?? null;
+		this._draw = params.draw ?? null;
 		this.dx = 0;
 		this.dy = 0;
 
@@ -137,7 +139,7 @@ class Object {
 
 
 		// need width and height
-		const bounds = this.updateBoundingBox();
+		const bounds = { x:0, y:0, maxX:100, maxY:100, width:100, height:100 };
 		this.width = bounds.width;
 		this.height = bounds.height;
 	}
@@ -152,14 +154,6 @@ class Object {
 		})
 
 		return collided;
-	}
-
-	updateBoundingBox() {
-		this.engine.ctx.fillStyle = "white";
-    	this.engine.ctx.fillRect(0, 0, this.engine.width, this.engine.height);
-    	this.draw(this);
-
-    	return contextBoundingBox(this.engine.ctx, this.engine.width, this.engine.height);
 	}
 
 	translate(dx, dy) {
@@ -191,6 +185,15 @@ class Object {
 
 		if (canMoveInX) this._x += dx; 
 		if (canMoveInY) this._y += dy; 
+	}
+
+	draw(obj, ctx) {
+		// draw sprite with sprite scale
+		if (this.sprite !== null) {
+			
+		}
+
+		this._draw(obj, ctx);
 	}
 
 	set x(val) { this.translate(val - this._x, 0); }
@@ -293,7 +296,7 @@ class Engine {
 				let ogX = obj.x;
 				let ogY = obj.y;
 
-				if (obj.draw !== null) obj.draw(obj);
+				if (obj.draw !== null) obj.draw(obj, this.ctx);
 				this._onDraw.forEach(f => f(obj));
 
 				obj.vx += obj.ax;

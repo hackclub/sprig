@@ -27,12 +27,15 @@ const STATE = {
 	error: false,
 	logs: [],
 	name: "name-here",
+	pixelEditor: undefined,
+	sprites: {},
 	lastSaved: {
 		name: "",
 		text: "",
 		link: "",
 	}
 };
+
 
 const ACTIONS = {
 	INIT(args, state) {
@@ -51,7 +54,7 @@ const ACTIONS = {
 				URL.revokeObjectURL(blob);
 			});
 		} else {
-	  	const included = { html, render, svg, Engine }; // these only work if no other imports
+	  	const included = { html, render, svg, Engine, ...state.sprites }; // these only work if no other imports
 	  	(new Function(...Object.keys(included), string))(...Object.values(included));
 		}
 
@@ -120,6 +123,29 @@ const ACTIONS = {
 			changes: { from: 0, to: string.length, insert: content }
 		});
 		dispatch("RUN");
+	},
+	CREATE_SPRITE(args, state) {
+		function randString(length) {
+	    var randomChars = 'abcdefghijklmnopqrstuvwxyz';
+	    var result = '';
+	    for ( var i = 0; i < length; i++ ) {
+	        result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+	    }
+	    return result;
+		}
+
+		const grid = new Array(128*128).fill([0, 0, 0, 0]);
+		state.sprites["sprite_" + randString(3)] = grid;
+		state.pixelEditor.setGridColors(grid);
+		dispatch("RENDER");
+	},
+	SELECT_SPRITE({ name }, state) {
+		const grid = state.sprites[name];
+		state.pixelEditor.setGridColors(grid);
+	},
+	DELETE_SPRITE({ name }, state) { // TODO
+		// const grid = state.sprites[name];
+		// state.pixelEditor.setGridColors(grid);
 	},
 	RENDER() {
 		console.log("rendered");

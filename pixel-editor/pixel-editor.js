@@ -31,7 +31,7 @@ export function createPixelEditor(target) {
 		canvas: null,
 		gridColors: [],
 		tempGridColors: [],
-		gridSize: [64, 64],
+		gridSize: [128, 128],
 		canvasSize: [500, 500],
 		maxCanvasSize: 500,
 		selected: [],
@@ -41,7 +41,7 @@ export function createPixelEditor(target) {
 		mousedownPt: [0, 0],
 		currentPt: [0, 0],
 		showGrid: false,
-		defaultGridArraySize: [64, 64],
+		defaultGridArraySize: [128, 128],
 		// hoveredCell: null,
 	}
 
@@ -57,12 +57,12 @@ export function createPixelEditor(target) {
 			<button @click=${() => state.tool = "line"}>line</button>
 			<button @click=${() => state.tool = "bucket"}>bucket</button>
 			<button @click=${() => state.tool = "select"}>select</button>
-			<button @click=${() => state.tool = "copy"}>TODO copy</button>
-			<button @click=${() => state.tool = "paste"}>TODO paste</button>
-			<button @click=${() => state.tool = "move"}>TODO move</button>
-			<button @click=${() => {}}>TODO export</button>
+			<button @click=${() => state.tool = "copy"}>TODO: copy</button>
+			<button @click=${() => state.tool = "paste"}>TODO: paste</button>
+			<button @click=${() => state.tool = "move"}>TODO: move</button>
+			<button @click=${() => {}}>TODO: export</button>
 			<div>
-				<span>x:</span>
+				<span>w:</span>
 				<input 
 					class="gridsize" 
 					type="number" 
@@ -73,7 +73,7 @@ export function createPixelEditor(target) {
 						state.gridSize[0] = Math.min(Math.max(Number(e.target.value), 1), state.defaultGridArraySize[0]);
 						setCanvasSize(state.canvas);
 					}}/>
-				<span>y:</span>
+				<span>h:</span>
 				<input 
 					class="gridsize" 
 					type="number" 
@@ -92,7 +92,7 @@ export function createPixelEditor(target) {
 		</div>
 
 		<div class="colors">
-			<button>+ add color</button>
+			<button>TODO: + add color</button>
 			<input 
 				type="color" 
 				.value=${state.color} 
@@ -482,6 +482,13 @@ export function createPixelEditor(target) {
 	}
 
 	init(state);
+
+	return {
+		setGridColors: (grid) => { 
+			state.gridColors = grid; 
+		},
+		gridColors: () => state.gridColors
+	};
 }
 
 
