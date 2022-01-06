@@ -232,14 +232,15 @@ class Object {
 }
 
 class Engine {
-	constructor(canvas) {
+	constructor(canvas, width, height) {
 		this.canvas = canvas;
 		this.ctx = canvas.getContext("2d");
 		this.objects = [];
 		this.drawing = false;
 		this.step = 0; 
 		
-		const { width, height } = canvas.getBoundingClientRect();
+		canvas.width = width;
+		canvas.height = height;
 		this._width = width;
 		this._height = height; 
 		this._mouseX = 0;

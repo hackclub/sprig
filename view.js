@@ -32,10 +32,15 @@ export function view(state) {
 			.right-pane {
 				display: flex;
 				flex-direction: column;
+				overflow: hidden;
+				width: 100%;
 				flex: 1;
 			}
 
 			.game-output {
+				display: flex;
+				justify-content: center;
+    		align-items: center;
 				background: blue;
 				width: 100%;
 				height: var(--horizontal-bar);
@@ -134,7 +139,9 @@ export function view(state) {
 			</div>
 		</div>
 		<div class="right-pane">
-			<div class="game-output">game output</div>
+			<div class="game-output">
+				<canvas class="game-canvas"></canvas>
+			</div>
 			<div class="pixel-editor-container">
 				<div class="list-of-sprites">
 					${Object.keys(state.sprites).map(x => html`
