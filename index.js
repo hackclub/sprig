@@ -333,8 +333,8 @@ const drawCanvas = (canvas, main = true) => {
 
 	let iPixel = 0;
 	grid.forEach((color, i) => {
-		const x = i % gridW;
-		const y = Math.floor(i / gridH);
+		const x = i % state.defaultGridArraySize[0];
+		const y = Math.floor(i / state.defaultGridArraySize[1]);
 
 		if (x >= gridW || y >= gridH) return;
 
@@ -364,8 +364,8 @@ const drawCanvas = (canvas, main = true) => {
 	tempCanvas.getContext("2d").putImageData(image, 0, 0);
 
 	state.selected.forEach(i => {
-		const x = i % gridW;
-		const y = Math.floor(i / gridH);
+		const x = i % state.defaultGridArraySize[0];
+		const y = Math.floor(i / state.defaultGridArraySize[1]);
 		tempCanvas.getContext("2d").fillStyle = "#aaaaaaaa";
 		tempCanvas.getContext("2d").fillRect(x, y, 1, 1);
 	})
