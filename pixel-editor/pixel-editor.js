@@ -194,8 +194,10 @@ export function createPixelEditor(target) {
 			const seen = [];
 
 			const checkValidity = (x, y) => {
+				if (x < 0 || y < 0 || x > gridW-1 || y > gridH-1) return false;
+
 				const color = RGBA_to_hex(grid[gridW*y+x]);
-				return (x >= 0 && y >= 0 && x < gridW && y < gridH) && color !== "#00000000" && !seen.includes(y*gridW+x);
+				return color !== "#00000000" && !seen.includes(y*gridW+x);
 			}
 
 			const q = [];
@@ -297,9 +299,7 @@ export function createPixelEditor(target) {
 	const BACKGROUND_BLUE = hexToRGBA("#b4e2fc87");
 	const BACKGROUND_WHITE = hexToRGBA("#e3e3e34a");
 	const tempCanvas = document.createElement("canvas");
-	tempCanvas.getContext("2d").webkitImageSmoothingEnabled = false;
-	tempCanvas.getContext("2d").mozImageSmoothingEnabled = false;
-	tempCanvas.getContext("2d").imageSmoothingEnabled = false;
+	const tempCtx = tempCanvas.getContext("2d");
 
 	const drawCanvas = (canvas, main = true) => {
 		const ctx = canvas.getContext("2d");
@@ -336,19 +336,22 @@ export function createPixelEditor(target) {
 
 		tempCanvas.width = gridW;
 		tempCanvas.height = gridH;
-
-		const image = new ImageData(pixels, state.defaultGridArraySize[0], state.defaultGridArraySize[1]);
-		tempCanvas.getContext("2d").putImageData(image, 0, 0);
-
-		state.selected.forEach(i => {
-			const [x, y] = i_to_xy(i);
-			tempCanvas.getContext("2d").fillStyle = "#aaaaaaaa";
-			tempCanvas.getContext("2d").fillRect(x, y, 1, 1);
-		})
-
 		ctx.webkitImageSmoothingEnabled = false;
 		ctx.mozImageSmoothingEnabled = false;
 		ctx.imageSmoothingEnabled = false;
+		// tempCtx.webkitImageSmoothingEnabled = false;
+		// tempCtx.mozImageSmoothingEnabled = false;
+		// tempCtx.imageSmoothingEnabled = false;
+
+		const image = new ImageData(pixels, state.defaultGridArraySize[0], state.defaultGridArraySize[1]);
+		tempCtx.putImageData(image, 0, 0);
+
+		state.selected.forEach(i => {
+			const [x, y] = i_to_xy(i);
+			tempCtx.fillStyle = "#aaaaaaaa";
+			tempCtx.fillRect(x, y, 1, 1);
+		})
+
 		ctx.drawImage(tempCanvas, 0, 0, w, h);
 
 		const avg = (array) => array.reduce((a, b) => a + b) / array.length;
@@ -363,7 +366,16 @@ export function createPixelEditor(target) {
 				ys.push(y);
 			});
 
-			console.log(xs, ys);
+			const avgX = avg(xs)+0.5;
+			const avgY = avg(ys)+0.5;
+
+			const x = avgX/tempCanvas.width*canvas.width;
+			const y = avgY/tempCanvas.height*canvas.height;
+
+			ctx.fillStyle = "yellow";
+			ctx.beginPath();
+			ctx.arc(x, y, 10, 0, 2 * Math.PI);
+			ctx.fill();
 
 		}
 	}
