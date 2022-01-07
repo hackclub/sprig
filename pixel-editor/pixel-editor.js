@@ -39,8 +39,7 @@ export function createPixelEditor(target) {
     undoRedoStack: [],
     selectHandle: {
       clicked: false,
-      hovered: false,
-      pos: [0, 0],
+      dragged: false,
     }
     // hoveredCell: null,
   };
@@ -63,7 +62,7 @@ export function createPixelEditor(target) {
       <canvas class="drawing-canvas"></canvas>
     </div>
     <div class="toolbox">
-      ${["draw", "circle", "rectangle", "line", "bucket", "select"].map(
+      ${["draw", "circle", "rectangle", "line", "bucket", "move"].map(
         (name) => renderTool(name, state)
       )}
       <button
@@ -202,7 +201,7 @@ export function createPixelEditor(target) {
         if (checkValidity(x1, y1 - 1)) q.push([x1, y1 - 1]);
       }
     },
-    select: (x, y) => {
+    move: (x, y) => {
       const [gridW, gridH] = state.defaultGridArraySize;
       const grid = state.gridColors;
 
@@ -236,6 +235,12 @@ export function createPixelEditor(target) {
       }
 
       state.selected = seen;
+
+      const avg = (array) => array.reduce((a, b) => a + b) / array.length;
+
+      if (state.selected.length > 0) {
+        state.selectHandle.clicked = true;
+      }
     },
   };
 
@@ -377,32 +382,6 @@ export function createPixelEditor(target) {
     });
 
     ctx.drawImage(tempCanvas, 0, 0, w, h);
-
-    const avg = (array) => array.reduce((a, b) => a + b) / array.length;
-
-    if (state.selected.length > 0) {
-      let xs = [];
-      let ys = [];
-
-      const xy_selected = state.selected.forEach((i) => {
-        const [x, y] = i_to_xy(i);
-        xs.push(x);
-        ys.push(y);
-      });
-
-      const avgX = avg(xs) + 0.5;
-      const avgY = avg(ys) + 0.5;
-
-      const x = (avgX / tempCanvas.width) * canvas.width;
-      const y = (avgY / tempCanvas.height) * canvas.height;
-
-      ctx.fillStyle = state.selectHandle.hovered || state.selectHandle.clicked ? "red" : "yellow";
-      ctx.beginPath();
-      ctx.arc(x, y, 10, 0, 2 * Math.PI);
-      ctx.fill();
-
-      state.selectHandle.pos = [x, y];
-    }
   };
 
   const setCanvasSize = (c) => {
@@ -444,10 +423,6 @@ export function createPixelEditor(target) {
     return [x, y];
   }
 
-  const dist = (p0, p1) => Math.sqrt((p0[1] - p1[1])**2 + (p0[0] - p1[0])**2);
-
-  const mouseoverSelectCircle = (x, y) => dist([x, y], state.selectHandle.pos) < 10;
-
   const init = (state) => {
     render(target, view(state));
     const c = document.querySelector(".drawing-canvas");
@@ -473,9 +448,7 @@ export function createPixelEditor(target) {
       const pt = getPoint(e);
       state.mousedownPt = pt;
       
-      if (mouseoverSelectCircle(e.offsetX, e.offsetY, c)) {
-        state.selectHandle.clicked = true;
-      } else if (state.tool in tools_mousedown) tools_mousedown[state.tool](...pt);
+      if (state.tool in tools_mousedown) tools_mousedown[state.tool](...pt);
 
     });
 
@@ -483,8 +456,6 @@ export function createPixelEditor(target) {
       const pt = getPoint(e);
       state.currentPt = pt;
       if (state.tool in tools_mousemove) tools_mousemove[state.tool](...pt);
-
-      state.selectHandle.hovered = mouseoverSelectCircle(e.offsetX, e.offsetY);
 
       if (state.selectHandle.clicked) {
         state.tempGridColors.fill(null);
@@ -508,23 +479,26 @@ export function createPixelEditor(target) {
           state.tempGridColors[newI] = currentColor;
  
         });
+
+        state.selectHandle.dragged = true;
       } 
     });
 
-    const resetDrawing = () => {
+    const resetDrawing = (e) => {
       state.mousedown = false;
       state.mousedownPt = [0, 0];
       state.currentPt = [0, 0];
 
-      if (state.selectHandle.clicked) {
+      if (state.selectHandle.dragged) {
         state.selected.forEach(i => {
           state.gridColors[i] = [0, 0, 0, 0];
         });
 
-        state.selectHandle.clicked = false;
-
         state.selected = [];
       }
+
+      state.selectHandle.clicked = false;
+      state.selectHandle.dragged = false;
 
       state.tempGridColors.forEach((c, i) => {
         if (c !== null) state.gridColors[i] = c;
