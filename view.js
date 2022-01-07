@@ -132,9 +132,6 @@ export function view(state) {
 				position: absolute;
 				bottom: calc(100% - var(--horizontal-bar));
 				right: 5px;
-
-				/* text-align: end; */
-				/* vertical-align: text-bottom; */
 			}
 
 
