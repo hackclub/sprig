@@ -40,7 +40,7 @@ export function view(state) {
 			.game-output {
 				display: flex;
 				justify-content: center;
-    		align-items: center;
+				align-items: center;
 				background: #000067;
 				width: 100%;
 				height: var(--horizontal-bar);
@@ -126,6 +126,17 @@ export function view(state) {
 				border: 2px solid blue;
 			}
 
+			.mouse-display {
+				color: white;
+
+				position: absolute;
+				bottom: calc(100% - var(--horizontal-bar));
+				right: 5px;
+
+				/* text-align: end; */
+				/* vertical-align: text-bottom; */
+			}
+
 
 		</style>
 		<div class="left-pane">
@@ -141,6 +152,9 @@ export function view(state) {
 		<div class="right-pane">
 			<div class="game-output">
 				<canvas class="game-canvas"></canvas>
+				<h3 class="mouse-display">
+					mouse: ${state.mouseX} x, ${state.mouseY} y
+				</h3>
 			</div>
 			<div class="pixel-editor-container">
 				<div class="list-of-sprites">

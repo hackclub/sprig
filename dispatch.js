@@ -29,6 +29,8 @@ const STATE = {
 	name: "name-here",
 	pixelEditor: undefined,
 	sprites: {},
+	mouseX: 0,
+	mouseY: 0,
 	selected_sprite: "",
 	lastSaved: {
 		name: "",
@@ -129,6 +131,11 @@ const ACTIONS = {
 			changes: { from: 0, to: string.length, insert: content }
 		});
 		dispatch("RUN");
+	},
+	CANVAS_MOUSE_MOVE({ content: { mouseX, mouseY } }, state) {
+		state.mouseX = mouseX;
+		state.mouseY = mouseY;
+		dispatch("RENDER");
 	},
 	CREATE_SPRITE(args, state) {
 		function randString(length) {
