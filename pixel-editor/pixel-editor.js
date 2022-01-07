@@ -205,14 +205,14 @@ export function createPixelEditor(target) {
       const [gridW, gridH] = state.defaultGridArraySize;
       const grid = state.gridColors;
 
-      const seen = [];
-
       const checkValidity = (x, y) => {
         if (x < 0 || y < 0 || x > gridW - 1 || y > gridH - 1) return false;
 
         const color = RGBA_to_hex(grid[gridW * y + x]);
         return color !== "#00000000" && !seen.includes(y * gridW + x);
       };
+
+      const seen = [];
 
       const q = [];
 
@@ -221,7 +221,8 @@ export function createPixelEditor(target) {
         seen.push(y * gridW + x);
       };
 
-      q.push([x, y]);
+      if (checkValidity(x, y)) q.push([x, y]);
+      
       while (q.length > 0) {
         const [x1, y1] = q.pop();
         if (checkValidity(x1 + 1, y1)) add(x1 + 1, y1);
@@ -234,7 +235,8 @@ export function createPixelEditor(target) {
         if (checkValidity(x1 + 1, y1 - 1)) add(x1 + 1, y1 - 1);
       }
 
-      state.selected = seen;
+      const newSelected = new Set([ ...state.selected, ...seen ])
+      state.selected = seen.length > 0 ? [ ...newSelected ] : [];
 
       const avg = (array) => array.reduce((a, b) => a + b) / array.length;
 

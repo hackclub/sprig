@@ -90,12 +90,13 @@ class Object {
     this.tags = params.tags ?? [];
 
     let bounds = { x: 0, y: 0, maxX: 16, maxY: 16, width: 16, height: 16 };
-    if (params.sprite) {
+    if (Array.isArray(params.sprite)) {
       this.imageData = new ImageData(
         new Uint8ClampedArray(params.sprite.flat()),
         32,
         32
       );
+
       bounds = contextBoundingBox(params.sprite, 32, 32);
 
       this.spriteOffsetX = bounds.x;
@@ -105,9 +106,22 @@ class Object {
 
       this.sprite = document.createElement("canvas");
       this.updateCanvas();
+    } else if (typeof params.sprite === "string") {
+      this.sprite = document.createElement("canvas");
+      const spriteCtx = this.sprite.getContext("2d")
+       
+      spriteCtx.fillText(params.sprite, 0, 0);
+
+      const text = spriteCtx.measureText(params.sprite);
+      bounds.width = text.width;
+      bounds.width = text.height;
+      this.unscaledWidth = this.width = bounds.width;
+      this.unscaledHeight = this.height = bounds.height;
+
     } else {
       this.sprite = null;
     }
+
     this.scale = params.scale ?? 1;
     this.rotation = params.rotation ?? 0;
     this._x = params.x ?? 0;
@@ -133,7 +147,6 @@ class Object {
     this.sprite
       .getContext("2d")
       .putImageData(this.imageData, -this.spriteOffsetX, -this.spriteOffsetY);
-    this.sprite = this.sprite;
   }
 
   collides(query, buffer = 0) {
