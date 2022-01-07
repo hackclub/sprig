@@ -72,7 +72,12 @@ export function init(state) {
 				changes: { from: 0, insert: !prog ? defaultProg.trim() : prog }
 			});
 
-			state.sprites = saved.sprites;
+			if (Object.keys(saved.sprites).length === 0) dispatch("CREATE_SPRITE");
+			else {
+				state.sprites = saved.sprites;
+				const name = Object.keys(saved.sprites)[0];
+				dispatch("SELECT_SPRITE", { name });
+			}
 		}
 
 
