@@ -189,19 +189,6 @@ export function createPixelEditor(target) {
 				return (x >= 0 && y >= 0 && x < gridW && y < gridH) && RGBA_to_hex(grid[gridW*y+x]) === startColor && startColor !== newColor;
 			}
 
-			// const floodFill = (startColor, newColor, x, y, grid) => {
-			// 	if (x < 0 || y < 0 || x >= gridW || y >= gridH) return;
-
-	 	// 		if (grid[gridW*y+x] === startColor && startColor !== newColor) {
-			// 		grid[gridW*y+x] = newColor;
-			// 		floodFill(startColor, newColor, x+1, y, grid);
-			// 		floodFill(startColor, newColor, x-1, y, grid);
-			// 		floodFill(startColor, newColor, x, y+1, grid);
-			// 		floodFill(startColor, newColor, x, y-1, grid);
-			// 	}
-				
-			// }
-
 			const q = [];
 			q.push([x, y]);
 			while (q.length > 0) {
@@ -212,8 +199,6 @@ export function createPixelEditor(target) {
 				if (checkValidity(x1,y1+1)) q.push([ x1, y1+1 ])
 				if (checkValidity(x1,y1-1)) q.push([ x1, y1-1 ])
 			}
-
-			// floodFill(state.gridColors[gridW*y+x], state.color, x, y, state.gridColors)
 		},
 		"select": (x, y) => {
 			const [ gridW, gridH ] = state.defaultGridArraySize;
