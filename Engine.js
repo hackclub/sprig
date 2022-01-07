@@ -189,15 +189,15 @@ class Object {
   draw(obj) {
     const { ctx } = obj.engine;
     ctx.save();
-    ctx.translate(this._x+this.width/2, this._y+this.height/2);
+    ctx.translate(this._x + this.width / 2, this._y + this.height / 2);
     ctx.rotate(this.rotation);
 
     // draw sprite with sprite scale
     if (this.sprite !== null) {
       ctx.drawImage(
         this.sprite,
-        this.width/-2,
-        this.height/-2,
+        this.width / -2,
+        this.height / -2,
         this.width,
         this.height
       );
