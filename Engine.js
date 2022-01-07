@@ -111,28 +111,6 @@ class Object {
         .getContext("2d")
         .putImageData(this.imageData, -this.spriteOffsetX, -this.spriteOffsetY);
 
-    } else if (typeof params.sprite === "string") {
-      this.sprite = document.createElement("canvas");
-      this.sprite.width = 100;
-      this.sprite.height = 100;
-      const spriteCtx = this.sprite.getContext("2d")
-      const text = spriteCtx.measureText(params.sprite);
-      console.log(params.sprite, text);
-      const w = this.sprite.width;
-      const h = this.sprite.height;
-      // const w = text.width;
-      // const h = text.actualBoundingBoxAscent;
-      bounds.width = w;
-      bounds.height = h;
-      this.width = w;
-      this.height = h;
-      this.unscaledWidth = w;
-      this.unscaledHeight = h;
-
-      console.log(w, h);
-      spriteCtx.fillText(params.sprite, 1, 10);
-      this.sprite.style = `position: absolute; left: 100px; top: 10px; width: 100px; height: 100px; background: white;`
-      document.body.append(this.sprite);
     } else {
       this.sprite = null;
     }
@@ -266,6 +244,34 @@ class Object {
   }
 }
 
+class Text {
+  constructor(str, x, y, color = "black", container) {
+    this._text = str;
+    this.x = x;
+    this.y = y;
+
+    const span = document.createElement("span");
+    span.style = `
+      position: absolute;
+      left: ${x}px;
+      top: ${y}px;
+      color: ${color};
+    `
+    span.innerText = str;
+
+    this.el = span;
+
+    container.append(span);
+  }
+
+  set text(val) {
+    this._text = val;
+    this.el.innerText = this._text;
+
+    return this;
+  }
+}
+
 class Engine {
   constructor(canvas, width, height) {
     this.canvas = canvas;
@@ -288,6 +294,11 @@ class Engine {
 
     this._heldKeys = new Set();
     this._pressedKeys = new Set();
+
+
+    const parent = canvas.parentNode;
+    parent.querySelectorAll(".text-container > *").forEach( x => x.remove() );
+    this.textContainer = parent.querySelector(".text-container");
 
     canvas.setAttribute("tabindex", "1");
 
@@ -394,6 +405,10 @@ class Engine {
 
   end() {
     this.drawing = false;
+  }
+
+  addText(str, x, y, color) {
+    return new Text(str, x, y, color, this.textContainer);
   }
 
   heldKey(key) {

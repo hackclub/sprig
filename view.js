@@ -127,9 +127,21 @@ export function view(state) {
         border: 2px solid blue;
       }
 
+      .game-container {
+        position: relative;
+      }
+
+      .text-container {
+        width: 1px;
+        height: 1px;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        overflow: show;
+      }
+
       .mouse-display {
         color: white;
-
         margin: 0px;
         height: 1em;
         font-family: monospace;
@@ -158,15 +170,18 @@ export function view(state) {
     </div>
     <div class="right-pane">
       <div class="game-output">
-        <canvas
-          @mousemove=${(e) => {
-            dispatch("CANVAS_MOUSE_MOVE", {
-              content: { mouseX: e.offsetX, mouseY: e.offsetY },
-            });
-          }}
-          class="game-canvas"
-        >
-        </canvas>
+        <div class="game-container">
+          <canvas
+            @mousemove=${(e) => {
+              dispatch("CANVAS_MOUSE_MOVE", {
+                content: { mouseX: e.offsetX, mouseY: e.offsetY },
+              });
+            }}
+            class="game-canvas"
+          >
+          </canvas>
+          <div class="text-container"></div>
+        </div>
         <pre class="mouse-display">
           ${(() => {
             const canv = document.querySelector(".game-canvas") ?? {
