@@ -169,14 +169,22 @@ export function view(state) {
         </canvas>
         <pre class="mouse-display">
           ${(() => {
-            const canv = document.querySelector('.game-canvas') ?? { width: 100, height: 100 };
-            const widthChars = ('' + canv.width).length;
-            const heightChars = ('' + canv.height).length;
-            return 'mouse: ' +
-              ('' + state.mouseX).padStart( widthChars) + ' x, ' +
-              ('' + state.mouseY).padStart(heightChars) + ' y';
+            const canv = document.querySelector(".game-canvas") ?? {
+              width: 100,
+              height: 100,
+            };
+            const widthChars = ("" + canv.width).length;
+            const heightChars = ("" + canv.height).length;
+            return (
+              "mouse: " +
+              ("" + state.mouseX).padStart(widthChars) +
+              " x, " +
+              ("" + state.mouseY).padStart(heightChars) +
+              " y"
+            );
           })()}
-        </pre>
+        </pre
+        >
       </div>
       <div class="pixel-editor-container">
         <div class="list-of-sprites">
