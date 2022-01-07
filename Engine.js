@@ -186,8 +186,12 @@ class Object {
     this.height = this.unscaledHeight * factor;
   }
 
-  get rotate() { return this._rotate / Math.PI * 180; }
-  set rotate(x) { this._rotate = x / 180 * Math.PI; }
+  get rotate() {
+    return (this._rotate / Math.PI) * 180;
+  }
+  set rotate(x) {
+    this._rotate = (x / 180) * Math.PI;
+  }
 
   draw(obj) {
     const { ctx } = obj.engine;
