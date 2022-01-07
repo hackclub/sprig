@@ -148,7 +148,12 @@ export function view(state) {
 		</div>
 		<div class="right-pane">
 			<div class="game-output">
-				<canvas class="game-canvas"></canvas>
+				<canvas 
+					@mousemove=${e => {
+						dispatch('CANVAS_MOUSE_MOVE', { content: { mouseX: e.offsetX, mouseY: e.offsetY } });
+					}} 
+					class="game-canvas">
+				</canvas>
 				<h3 class="mouse-display">
 					mouse: ${state.mouseX} x, ${state.mouseY} y
 				</h3>

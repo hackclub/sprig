@@ -241,11 +241,6 @@ class Engine {
 		this.objects = [];
 		this.drawing = false;
 		this.step = 0; 
-
-		canvas.addEventListener('mousemove', ev => dispatch(
-			'CANVAS_MOUSE_MOVE',
-			{ content: { mouseX: ev.offsetX, mouseY: ev.offsetY } }
-		));
 		
 		this._width = width;
 		this._height = height; 
