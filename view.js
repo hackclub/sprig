@@ -8,16 +8,18 @@ function shareOptions(state) {
     <div class="expand-menu menu-option menu-choice">
       save
       <div class="menu-choices">
-        <input type="text" .placeholder=${state.name} @keyup=${e => { 
-          state.name = e.target.value === "" ? "anon" : e.target.value 
-        }}></input>
-        <button @click=${() => dispatch("SHARE", { type: "file" })}>file</button>
+        <input type="text" .placeholder=${state.name} @keyup=${(e) => {
+    state.name = e.target.value === "" ? "anon" : e.target.value;
+  }}></input>
+        <button @click=${() =>
+          dispatch("SHARE", { type: "file" })}>file</button>
       </div>
     </div>
-  `
+  `;
 }
 
-const toggleHide = (className) => document.querySelector(`.${className}`).classList.toggle("hide");
+const toggleHide = (className) =>
+  document.querySelector(`.${className}`).classList.toggle("hide");
 
 // <button class="menu-option" @click=${() => toggleHide("examples")}>examples</button>
 // <button class="menu-option" @click=${() => toggleHide("options")}>options</button>
@@ -87,7 +89,6 @@ export function view(state) {
         z-index: 10;
       }
 
-
       .horizontal-bar:hover {
         background: black;
         cursor: row-resize;
@@ -133,26 +134,35 @@ export function view(state) {
         bottom: calc(100% - var(--horizontal-bar));
         right: 5px;
       }
-
-
     </style>
     <div class="left-pane">
       <codemirror-js id="code-editor"></codemirror-js>
-      <div class=${["log", state.error ? "error" : "", state.logs.length === 0 ? "shrink" : ""].join(" ")}>
-        ${state.logs.map(x => html`<div>${JSON.stringify(x)}</div>`)}
+      <div
+        class=${[
+          "log",
+          state.error ? "error" : "",
+          state.logs.length === 0 ? "shrink" : "",
+        ].join(" ")}
+      >
+        ${state.logs.map((x) => html`<div>${JSON.stringify(x)}</div>`)}
       </div>
       <div class="menu">
-        <button class="menu-option" @click=${() => dispatch("RUN")}>run (shift + enter)</button>
+        <button class="menu-option" @click=${() => dispatch("RUN")}>
+          run (shift + enter)
+        </button>
         ${shareOptions(state)}
       </div>
     </div>
     <div class="right-pane">
       <div class="game-output">
-        <canvas 
-          @mousemove=${e => {
-            dispatch('CANVAS_MOUSE_MOVE', { content: { mouseX: e.offsetX, mouseY: e.offsetY } });
-          }} 
-          class="game-canvas">
+        <canvas
+          @mousemove=${(e) => {
+            dispatch("CANVAS_MOUSE_MOVE", {
+              content: { mouseX: e.offsetX, mouseY: e.offsetY },
+            });
+          }}
+          class="game-canvas"
+        >
         </canvas>
         <h3 class="mouse-display">
           mouse: ${state.mouseX} x, ${state.mouseY} y
@@ -160,12 +170,29 @@ export function view(state) {
       </div>
       <div class="pixel-editor-container">
         <div class="list-of-sprites">
-          ${Object.keys(state.sprites).map(x => html`
-            <div class=${["sprite-entry", x === state.selected_sprite ? "selected-sprite" : ""].join(" ")}>
-              <div class="sprite-name" @mousedown=${() => dispatch("SELECT_SPRITE", { name: x })}>${x}</div>
-              <div class="sprite-delete" @mousedown=${() => dispatch("DELETE_SPRITE", { name: x })}>x</div>
-            </div>
-          `)}
+          ${Object.keys(state.sprites).map(
+            (x) => html`
+              <div
+                class=${[
+                  "sprite-entry",
+                  x === state.selected_sprite ? "selected-sprite" : "",
+                ].join(" ")}
+              >
+                <div
+                  class="sprite-name"
+                  @mousedown=${() => dispatch("SELECT_SPRITE", { name: x })}
+                >
+                  ${x}
+                </div>
+                <div
+                  class="sprite-delete"
+                  @mousedown=${() => dispatch("DELETE_SPRITE", { name: x })}
+                >
+                  x
+                </div>
+              </div>
+            `
+          )}
           <button @click=${() => dispatch("CREATE_SPRITE")}>add</button>
         </div>
         <div class="pixel-editor"></div>
@@ -173,48 +200,46 @@ export function view(state) {
       <div class="horizontal-bar"></div>
     </div>
     <div id="vertical-bar"></div>
-    ${renderExamples(state)}
-    ${renderOptions(state)}
-    ${renderShared(state)}
-  `
+    ${renderExamples(state)} ${renderOptions(state)} ${renderShared(state)}
+  `;
 }
 
-const renderShared = state => html`
-  <div class="shared-modal hide">
-    Sharing link copied to clip board.
-  </div>
-`
+const renderShared = (state) => html`
+  <div class="shared-modal hide">Sharing link copied to clip board.</div>
+`;
 
 const renderExamples = (state) => html`
   <div class="examples hide">
-    ${state.examples.map((x, i) => html`
-      <span 
-        class="example" 
-        @click=${() => dispatch("LOAD_EXAMPLE", { content: x["Content"] })}>
-        ${x["Name"]}
-      </span>
-    `)}
+    ${state.examples.map(
+      (x, i) => html`
+        <span
+          class="example"
+          @click=${() => dispatch("LOAD_EXAMPLE", { content: x["Content"] })}
+        >
+          ${x["Name"]}
+        </span>
+      `
+    )}
     <button class="close" @click=${() => toggleHide("examples")}>close</button>
   </div>
-`
+`;
 
-const renderOptions = (state) => { 
+
+const renderOptions = (state) => {
 
   return html`
     <div class="options hide">
       <div class="option">
         <span>Link Share Method:</span>
-        <select 
-          @change=${(e) => dispatch("SHARE_TYPE", { type: e.target.value})}
-          .value=${state.shareType}>
+        <select
+          @change=${(e) => dispatch("SHARE_TYPE", { type: e.target.value })}
+          .value=${state.shareType}
+        >
           <option value="binary-url">Binary URL</option>
           <option value="airtable">Airtable</option>
         </select>
       </div>
       <button class="close" @click=${() => toggleHide("options")}>close</button>
     </div>
-  `
-}
-
-
-
+  `;
+};
