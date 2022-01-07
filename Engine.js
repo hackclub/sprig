@@ -27,57 +27,57 @@ const make_px_at = (w, h, data) => (x, y) => data[(w*y+x)*4+3] > 0;
 
 function contextBoundingBox(imgData) {
 	const { data, width: w, height: h } = imgData;
-    const pxAt = make_px_at(w, h, data);
+		const pxAt = make_px_at(w, h, data);
 
-    let x, y, minX, minY, maxX, maxY;
+		let x, y, minX, minY, maxX, maxY;
 
-    loop0: 
-    for (y = h - 1; y > 0; y--) {
-    	for (x = w - 1; x > 0; x--) {
-    		if (pxAt(x,y)) {
-    			maxY = y;
-    			break loop0;
-    		} 
-    	}	 
-    }  
+		loop0: 
+		for (y = h - 1; y > 0; y--) {
+			for (x = w - 1; x > 0; x--) {
+				if (pxAt(x,y)) {
+					maxY = y;
+					break loop0;
+				} 
+			}	 
+		}  
 
-    if (maxY === undefined) {
-    	console.log("No bounding box.")
-    	return { minX: 0, minY: 0, maxX: 0, maxY: 0, width: 0, height: 0 }
-    }
+		if (maxY === undefined) {
+			console.log("No bounding box.")
+			return { minX: 0, minY: 0, maxX: 0, maxY: 0, width: 0, height: 0 }
+		}
 
-    loop1: 
-    for (x = w - 1; x > 0; x--) {
-    	for (y = 0; y < maxY; y++) {
-    		if (pxAt(x,y)) {
-    			maxX = x;
-    			break loop1;
-    		} 
-    	}	 
-    }    
+		loop1: 
+		for (x = w - 1; x > 0; x--) {
+			for (y = 0; y < maxY; y++) {
+				if (pxAt(x,y)) {
+					maxX = x;
+					break loop1;
+				} 
+			}	 
+		}    
 
 
-    loop2: 
-    for (x = 0; x < maxX; x++) {
-    	for (y = 0; y < maxY; y++) {
-    		if (pxAt(x,y)) {
-    			minX = x;
-    			break loop2;
-    		} 
-    	}	 
-    } 
+		loop2: 
+		for (x = 0; x < maxX; x++) {
+			for (y = 0; y < maxY; y++) {
+				if (pxAt(x,y)) {
+					minX = x;
+					break loop2;
+				} 
+			}	 
+		} 
 
-    loop3: 
-    for (y = 0; y < maxY; y++) {
-    	for (x = 0; x < maxX; x++) {
-    		if (pxAt(x,y)) {
-    			minY = y;
-    			break loop3;
-    		} 
-    	}	 
-    } 
+		loop3: 
+		for (y = 0; y < maxY; y++) {
+			for (x = 0; x < maxX; x++) {
+				if (pxAt(x,y)) {
+					minY = y;
+					break loop3;
+				} 
+			}	 
+		} 
 
-    return { x:minX, y:minY, maxX:maxX, maxY:maxY, width:maxX-minX, height:maxY-minY };
+		return { x:minX, y:minY, maxX:maxX, maxY:maxY, width:maxX-minX, height:maxY-minY };
 }
 
 function overlap(obj0, obj1, movement = [0, 0]) {
@@ -104,10 +104,10 @@ function haveCollided(obj0, obj1, buffer = 0) {
 		top = buffer;
 	}
 
-    return obj0.x < obj1.x + obj1.width + left &&
-           obj0.x + obj0.width + right > obj1.x &&
-           obj0.y < obj1.y + obj1.height + top &&
-           obj0.height + obj0.y + bottom > obj1.y;
+		return obj0.x < obj1.x + obj1.width + left &&
+					 obj0.x + obj0.width + right > obj1.x &&
+					 obj0.y < obj1.y + obj1.height + top &&
+					 obj0.height + obj0.y + bottom > obj1.y;
 }
 
 
@@ -176,22 +176,22 @@ class Object {
 			const [ogx, ogy] = overlap(this, otherObj);
 
 			if (otherObj.solid && this.solid) {
-			   const [x, y] = overlap(this, otherObj, [ dx, dy ]);
-			   if (x <= 0 || y <= 0) return;
+				 const [x, y] = overlap(this, otherObj, [ dx, dy ]);
+				 if (x <= 0 || y <= 0) return;
 
-			   if (x > 0 && ogx <= 0) {
-			   	canMoveInX = false;
-			   	this._ax = 0;
-			   	this._vx = -this.bounce*this._vx;
-			   	this._x -= ogx < -1.5 ? ogx : 0; 
-			   }
+				 if (x > 0 && ogx <= 0) {
+					canMoveInX = false;
+					this._ax = 0;
+					this._vx = -this.bounce*this._vx;
+					this._x -= ogx < -1.5 ? ogx : 0; 
+				 }
 
-			   if (y > 0 && ogy <= 0) {
-			   	canMoveInY = false;
-			   	this._ay = 0;
-			   	this._vy = -this.bounce*this._vy;
-			   	this._y -= ogy < -1.5 ? ogy : 0; 
-			   }
+				 if (y > 0 && ogy <= 0) {
+					canMoveInY = false;
+					this._ay = 0;
+					this._vy = -this.bounce*this._vy;
+					this._y -= ogy < -1.5 ? ogy : 0; 
+				 }
 			}
 		})
 
@@ -260,27 +260,27 @@ class Engine {
 		canvas.setAttribute("tabindex", "1");
 
 		canvas.addEventListener("keydown", e => {
-		  const key = e.key;
+			const key = e.key;
 
-		  if (this._heldKeys.has(key)) return;
+			if (this._heldKeys.has(key)) return;
 
-		  this._heldKeys.add(key);
-		  this._pressedKeys.add(key);
+			this._heldKeys.add(key);
+			this._pressedKeys.add(key);
 
-		  e.preventDefault();
+			e.preventDefault();
 		})
 
 		canvas.addEventListener("keyup", e => {
-		  const key = e.key;
-		  this._heldKeys.delete(key);
-		  this._pressedKeys.delete(key);
+			const key = e.key;
+			this._heldKeys.delete(key);
+			this._pressedKeys.delete(key);
 
-		  e.preventDefault()
+			e.preventDefault()
 		})
 
 		canvas.addEventListener("mousemove", e => {
-		  this._mouseX = e.clientX;
-		  this._mouseY = e.clientY;
+			this._mouseX = e.clientX;
+			this._mouseY = e.clientY;
 		})
 
 		// canvas.addEventListener("click", e => {
@@ -316,7 +316,7 @@ class Engine {
 	start() {
 		const draw = () => {
 			this.ctx.fillStyle = "white";
-    		this.ctx.fillRect(0, 0, this.width, this.height);
+				this.ctx.fillRect(0, 0, this.width, this.height);
 
 			this.objects.forEach(obj => {
 				let ogX = obj.x;

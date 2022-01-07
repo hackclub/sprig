@@ -4,17 +4,17 @@ import "./codemirror/codemirror-js.js";
 
 // <button @click=${() => dispatch("SHARE", { type: "link" })}>link</button>
 function shareOptions(state) {
-  return html`
-    <div class="expand-menu menu-option menu-choice">
-      save
-      <div class="menu-choices">
-      	<input type="text" .placeholder=${state.name} @keyup=${e => { 
-      		state.name = e.target.value === "" ? "anon" : e.target.value 
-      	}}></input>
-        <button @click=${() => dispatch("SHARE", { type: "file" })}>file</button>
-      </div>
-    </div>
-  `
+	return html`
+		<div class="expand-menu menu-option menu-choice">
+			save
+			<div class="menu-choices">
+				<input type="text" .placeholder=${state.name} @keyup=${e => { 
+					state.name = e.target.value === "" ? "anon" : e.target.value 
+				}}></input>
+				<button @click=${() => dispatch("SHARE", { type: "file" })}>file</button>
+			</div>
+		</div>
+	`
 }
 
 const toggleHide = (className) => document.querySelector(`.${className}`).classList.toggle("hide");
@@ -26,7 +26,7 @@ export function view(state) {
 	return html`
 		<style>
 			:root {
-			  --horizontal-bar: 60%;
+				--horizontal-bar: 60%;
 			}
 
 			.right-pane {
@@ -79,12 +79,12 @@ export function view(state) {
 
 			.horizontal-bar {
 				position: absolute;
-			  left: var(--vertical-bar);
-			  top: calc(var(--horizontal-bar) - 5px);
-			  background: none;
-			  height: 10px;
-			  width: 100%;
-			  z-index: 10;
+				left: var(--vertical-bar);
+				top: calc(var(--horizontal-bar) - 5px);
+				background: none;
+				height: 10px;
+				width: 100%;
+				z-index: 10;
 			}
 
 
@@ -203,8 +203,8 @@ const renderOptions = (state) => {
 				<select 
 					@change=${(e) => dispatch("SHARE_TYPE", { type: e.target.value})}
 					.value=${state.shareType}>
-				  <option value="binary-url">Binary URL</option>
-				  <option value="airtable">Airtable</option>
+					<option value="binary-url">Binary URL</option>
+					<option value="airtable">Airtable</option>
 				</select>
 			</div>
 			<button class="close" @click=${() => toggleHide("options")}>close</button>

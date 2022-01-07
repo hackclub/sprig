@@ -9,37 +9,37 @@ export const createListener = (target) => (eventName, selectorString, event) => 
 }
 
 function pauseEvent(e) {
-    if(e.stopPropagation) e.stopPropagation();
-    if(e.preventDefault) e.preventDefault();
-    e.cancelBubble=true;
-    e.returnValue=false;
-    return false;
+		if(e.stopPropagation) e.stopPropagation();
+		if(e.preventDefault) e.preventDefault();
+		e.cancelBubble=true;
+		e.returnValue=false;
+		return false;
 }
 
 function upload(files, extensions = []) {
-  let file = files[0];
-  let fileName = file.name.split(".");
-  let name = fileName[0];
-  const extension = fileName[fileName.length - 1];
+	let file = files[0];
+	let fileName = file.name.split(".");
+	let name = fileName[0];
+	const extension = fileName[fileName.length - 1];
 
-  if (extensions.length > 0 && extensions.includes(enxtension)) throw "Extension not recongized: " + fileName;
+	if (extensions.length > 0 && extensions.includes(enxtension)) throw "Extension not recongized: " + fileName;
 
-  readFile(file);
-  // if (["json"].includes(extension)) readFile(file);
-  // else console.log("Unknown extension:", extension);
+	readFile(file);
+	// if (["json"].includes(extension)) readFile(file);
+	// else console.log("Unknown extension:", extension);
 };
 
 function readFile(file) {
-  var reader = new FileReader();
-  reader.readAsText(file);
+	var reader = new FileReader();
+	reader.readAsText(file);
 
-  reader.onloadend = event => {
-    let raw = reader.result;
+	reader.onloadend = event => {
+		let raw = reader.result;
 
-    const saved = JSON.parse(raw);
+		const saved = JSON.parse(raw);
 
 		dispatch("UPLOAD", { saved });
-  };
+	};
 }
 
 function addDropUpload(state, bodyListener) {
@@ -172,7 +172,7 @@ function addNumberDragging(state, bodyListener) {
 			const newValue = `${num}`;
 
 			state.codemirror.view.dispatch({
-			  changes: {from: pos_start, to: pos_start + selectedText.length, insert: newValue}
+				changes: {from: pos_start, to: pos_start + selectedText.length, insert: newValue}
 			});
 
 			selectedText = newValue;
@@ -198,11 +198,11 @@ export function events(state) {
 		let code = event.code;
 
 		const prog = state.codemirror.view.state.doc.toString();
-    window.localStorage.setItem("hc-game-lab", JSON.stringify({ prog, sprites: state.sprites }));
-    
+		window.localStorage.setItem("hc-game-lab", JSON.stringify({ prog, sprites: state.sprites }));
+		
 		if (code === "Enter" && event.shiftKey) {
-		  event.preventDefault();
-		  dispatch("RUN");
+			event.preventDefault();
+			dispatch("RUN");
 		}
 	});
 

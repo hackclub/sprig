@@ -9,21 +9,21 @@ const hexToRGBA = hex => {
 }
 
 function RGBA_to_hex([r,g,b,a]) {
-  r = r.toString(16);
-  g = g.toString(16);
-  b = b.toString(16);
-  a = Math.round(a * 255).toString(16);
+	r = r.toString(16);
+	g = g.toString(16);
+	b = b.toString(16);
+	a = Math.round(a * 255).toString(16);
 
-  if (r.length == 1)
-    r = "0" + r;
-  if (g.length == 1)
-    g = "0" + g;
-  if (b.length == 1)
-    b = "0" + b;
-  if (a.length == 1)
-    a = "0" + a;
+	if (r.length == 1)
+		r = "0" + r;
+	if (g.length == 1)
+		g = "0" + g;
+	if (b.length == 1)
+		b = "0" + b;
+	if (a.length == 1)
+		a = "0" + a;
 
-  return "#" + r + g + b + a;
+	return "#" + r + g + b + a;
 }
 
 export function createPixelEditor(target) {
@@ -46,10 +46,16 @@ export function createPixelEditor(target) {
 		// hoveredCell: null,
 	}
 
-	// <button @click=${() => state.tool = "copy"}>TODO: copy</button>
-	// <button @click=${() => state.tool = "paste"}>TODO: paste</button>
-	// <button @click=${() => state.tool = "move"}>TODO: move</button>
-	// <button @click=${() => {}}>TODO: export</button>
+	const renderTool = (toolName, state) => html`
+		<button 
+			class=${[state.tool === toolName ? "selected-tool" : ""].join(" ")} 
+			@click=${() => {
+				state.tool = toolName;
+				r();
+			}}>
+			${toolName}
+		</button>
+	`
 
 	const view = state => html`
 		${pixelStyles}
@@ -57,12 +63,7 @@ export function createPixelEditor(target) {
 			<canvas class="drawing-canvas"></canvas>
 		</div>
 		<div class="toolbox">
-			<button @click=${() => state.tool = "draw"}>draw</button>
-			<button @click=${() => state.tool = "circle"}>circle</button>
-			<button @click=${() => state.tool = "rectangle"}>rectangle</button>
-			<button @click=${() => state.tool = "line"}>line</button>
-			<button @click=${() => state.tool = "bucket"}>bucket</button>
-			<button @click=${() => state.tool = "select"}>select</button>
+			${["draw", "circle", "rectangle", "line", "bucket", "select"].map(name => renderTool(name, state))}
 			<button @click=${() => {
 				if (state.undoRedoStack.length === 0) return;
 				const grid = JSON.parse(state.undoRedoStack.pop());
@@ -70,44 +71,30 @@ export function createPixelEditor(target) {
 					state.gridColors[i] = grid[i];
 				})
 			}}>undo</button>
-			<div>
-				<span>w:</span>
-				<input 
-					class="gridsize" 
-					type="number" 
-					min="1"
-					max=${state.defaultGridArraySize[0]}
-					.value=${state.gridSize[0]}
-					@input=${e => { 
-						state.gridSize[0] = Math.min(Math.max(Number(e.target.value), 1), state.defaultGridArraySize[0]);
-						setCanvasSize(state.canvas);
-					}}/>
-				<span>h:</span>
-				<input 
-					class="gridsize" 
-					type="number" 
-					min="1"
-					max=${state.defaultGridArraySize[1]}
-					.value=${state.gridSize[1]}
-					@input=${e => { 
-						state.gridSize[1] = Math.min(Math.max(Number(e.target.value), 1), state.defaultGridArraySize[1]);
-						setCanvasSize(state.canvas);
-					}}/>
-			</div>
-
-			<div class="view-window">
-				<canvas width="100" height="100" class="preview-canvas"></canvas>
-			</div>
 		</div>
 
 		<div class="colors">
 			<!-- <button>TODO: + add color</button> -->
 			<input 
+				class=${RGBA_to_hex(state.color) !== "#00000000" ? "selected-tool" : ""}
 				type="color" 
-				.value=${state.color} 
-				@input=${e => state.color = hexToRGBA(e.target.value)}
-				@click=${e => state.color = hexToRGBA(e.target.value)}/>
-			<button @click=${() => state.color = hexToRGBA("#00000000")}>clear</button>
+				value=${RGBA_to_hex(state.color)} 
+				@input=${e => { 
+						state.color = hexToRGBA(e.target.value);
+						r();
+				}}
+				@click=${e => { 
+						state.color = hexToRGBA(e.target.value);
+						r();
+				}}/>
+			<button 
+				class=${RGBA_to_hex(state.color) === "#00000000" ? "selected-tool" : ""} 
+				@click=${() => { 
+					state.color = hexToRGBA("#00000000"); 
+					r();
+				}}>
+				clear
+			</button>
 		</div>
 	`
 
@@ -151,25 +138,25 @@ export function createPixelEditor(target) {
 		const ySize = h/gridH;
 
 		for (let i = 0; i < gridW; i++) {
-		    const x = i*xSize;
-		    if (x === 0) continue;
-		    ctx.strokeStyle = `black`;
-		    ctx.lineWidth = xSize/20;
-		    ctx.beginPath();
-		    ctx.moveTo(x, 0);
-		    ctx.lineTo(x, h);
-		    ctx.stroke();
+				const x = i*xSize;
+				if (x === 0) continue;
+				ctx.strokeStyle = `black`;
+				ctx.lineWidth = xSize/20;
+				ctx.beginPath();
+				ctx.moveTo(x, 0);
+				ctx.lineTo(x, h);
+				ctx.stroke();
 		}
 
 		for (let i = 0; i < gridH; i++) {
-		    const y = i*ySize;
-		    if (y === 0) continue;
-		   	ctx.strokeStyle = `black`;
-		   	ctx.lineWidth = xSize/20;
-		    ctx.beginPath();
-		    ctx.moveTo(0, y);
-		    ctx.lineTo(w, y);
-		    ctx.stroke();
+				const y = i*ySize;
+				if (y === 0) continue;
+				ctx.strokeStyle = `black`;
+				ctx.lineWidth = xSize/20;
+				ctx.beginPath();
+				ctx.moveTo(0, y);
+				ctx.lineTo(w, y);
+				ctx.stroke();
 		}
 	}
 
@@ -189,19 +176,6 @@ export function createPixelEditor(target) {
 				return (x >= 0 && y >= 0 && x < gridW && y < gridH) && RGBA_to_hex(grid[gridW*y+x]) === startColor && startColor !== newColor;
 			}
 
-			// const floodFill = (startColor, newColor, x, y, grid) => {
-			// 	if (x < 0 || y < 0 || x >= gridW || y >= gridH) return;
-
-	 	// 		if (grid[gridW*y+x] === startColor && startColor !== newColor) {
-			// 		grid[gridW*y+x] = newColor;
-			// 		floodFill(startColor, newColor, x+1, y, grid);
-			// 		floodFill(startColor, newColor, x-1, y, grid);
-			// 		floodFill(startColor, newColor, x, y+1, grid);
-			// 		floodFill(startColor, newColor, x, y-1, grid);
-			// 	}
-				
-			// }
-
 			const q = [];
 			q.push([x, y]);
 			while (q.length > 0) {
@@ -212,8 +186,6 @@ export function createPixelEditor(target) {
 				if (checkValidity(x1,y1+1)) q.push([ x1, y1+1 ])
 				if (checkValidity(x1,y1-1)) q.push([ x1, y1-1 ])
 			}
-
-			// floodFill(state.gridColors[gridW*y+x], state.color, x, y, state.gridColors)
 		},
 		"select": (x, y) => {
 			const [ gridW, gridH ] = state.defaultGridArraySize;
@@ -222,8 +194,10 @@ export function createPixelEditor(target) {
 			const seen = [];
 
 			const checkValidity = (x, y) => {
+				if (x < 0 || y < 0 || x > gridW-1 || y > gridH-1) return false;
+
 				const color = RGBA_to_hex(grid[gridW*y+x]);
-				return (x >= 0 && y >= 0 && x < gridW && y < gridH) && color !== "#00000000" && !seen.includes(y*gridW+x);
+				return color !== "#00000000" && !seen.includes(y*gridW+x);
 			}
 
 			const q = [];
@@ -325,9 +299,7 @@ export function createPixelEditor(target) {
 	const BACKGROUND_BLUE = hexToRGBA("#b4e2fc87");
 	const BACKGROUND_WHITE = hexToRGBA("#e3e3e34a");
 	const tempCanvas = document.createElement("canvas");
-	tempCanvas.getContext("2d").webkitImageSmoothingEnabled = false;
-	tempCanvas.getContext("2d").mozImageSmoothingEnabled = false;
-	tempCanvas.getContext("2d").imageSmoothingEnabled = false;
+	const tempCtx = tempCanvas.getContext("2d");
 
 	const drawCanvas = (canvas, main = true) => {
 		const ctx = canvas.getContext("2d");
@@ -355,28 +327,31 @@ export function createPixelEditor(target) {
 					: BACKGROUND_WHITE;
 			}
 
-		 	let index = i*4;
-		 	pixels[index] = color[0];
-		 	pixels[index+1] = color[1];
-		 	pixels[index+2] = color[2];
-		 	pixels[index+3] = color[3];
+			let index = i*4;
+			pixels[index] = color[0];
+			pixels[index+1] = color[1];
+			pixels[index+2] = color[2];
+			pixels[index+3] = color[3];
 		})
 
 		tempCanvas.width = gridW;
 		tempCanvas.height = gridH;
-
-		const image = new ImageData(pixels, state.defaultGridArraySize[0], state.defaultGridArraySize[1]);
-		tempCanvas.getContext("2d").putImageData(image, 0, 0);
-
-		state.selected.forEach(i => {
-			const [x, y] = i_to_xy(i);
-			tempCanvas.getContext("2d").fillStyle = "#aaaaaaaa";
-			tempCanvas.getContext("2d").fillRect(x, y, 1, 1);
-		})
-
 		ctx.webkitImageSmoothingEnabled = false;
 		ctx.mozImageSmoothingEnabled = false;
 		ctx.imageSmoothingEnabled = false;
+		// tempCtx.webkitImageSmoothingEnabled = false;
+		// tempCtx.mozImageSmoothingEnabled = false;
+		// tempCtx.imageSmoothingEnabled = false;
+
+		const image = new ImageData(pixels, state.defaultGridArraySize[0], state.defaultGridArraySize[1]);
+		tempCtx.putImageData(image, 0, 0);
+
+		state.selected.forEach(i => {
+			const [x, y] = i_to_xy(i);
+			tempCtx.fillStyle = "#aaaaaaaa";
+			tempCtx.fillRect(x, y, 1, 1);
+		})
+
 		ctx.drawImage(tempCanvas, 0, 0, w, h);
 
 		const avg = (array) => array.reduce((a, b) => a + b) / array.length;
@@ -391,7 +366,16 @@ export function createPixelEditor(target) {
 				ys.push(y);
 			});
 
-			console.log(xs, ys);
+			const avgX = avg(xs)+0.5;
+			const avgY = avg(ys)+0.5;
+
+			const x = avgX/tempCanvas.width*canvas.width;
+			const y = avgY/tempCanvas.height*canvas.height;
+
+			ctx.fillStyle = "yellow";
+			ctx.beginPath();
+			ctx.arc(x, y, 10, 0, 2 * Math.PI);
+			ctx.fill();
 
 		}
 	}
@@ -450,16 +434,16 @@ export function createPixelEditor(target) {
 				state.undoRedoStack.push(JSON.stringify(state.gridColors));
 				if (state.undoRedoStack.length > 15) state.undoRedoStack.unshift();
 
-		  	state.mousedown = true;
-		  	const pt = getPoint(e);
-		  	state.mousedownPt = pt;
-		  	if (state.tool in tools_mousedown) tools_mousedown[state.tool](...pt);
+				state.mousedown = true;
+				const pt = getPoint(e);
+				state.mousedownPt = pt;
+				if (state.tool in tools_mousedown) tools_mousedown[state.tool](...pt);
 		})
 
 		c.addEventListener("mousemove", (e) => {
 			const pt = getPoint(e);
-		  	state.currentPt = pt;
-		  	if (state.tool in tools_mousemove) tools_mousemove[state.tool](...pt);
+				state.currentPt = pt;
+				if (state.tool in tools_mousemove) tools_mousemove[state.tool](...pt);
 		})
 
 		c.addEventListener("mouseup", (e) => {
@@ -490,7 +474,6 @@ export function createPixelEditor(target) {
 
 	const animate = () => {
 		drawCanvas(state.canvas);
-		drawCanvas(document.querySelector(".preview-canvas"), false);
 		window.requestAnimationFrame(animate);
 	}
 
