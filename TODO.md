@@ -1,6 +1,6 @@
 ## Real TODO
 
--[] set fixed game window size
+-[x] set fixed game window size
     -[] add option to go full screen
 
 -[] palette of colors

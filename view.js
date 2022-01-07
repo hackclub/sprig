@@ -199,7 +199,6 @@ const renderExamples = (state) => html`
 `
 
 const renderOptions = (state) => { 
-  const rendererClasses = { option: true, hide: state.editorType !== "html" };
 
   return html`
     <div class="options hide">
