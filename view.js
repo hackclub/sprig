@@ -224,9 +224,7 @@ const renderExamples = (state) => html`
   </div>
 `;
 
-
 const renderOptions = (state) => {
-
   return html`
     <div class="options hide">
       <div class="option">
