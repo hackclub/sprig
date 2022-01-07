@@ -9,21 +9,21 @@ const hexToRGBA = hex => {
 }
 
 function RGBA_to_hex([r,g,b,a]) {
-  r = r.toString(16);
-  g = g.toString(16);
-  b = b.toString(16);
-  a = Math.round(a * 255).toString(16);
+	r = r.toString(16);
+	g = g.toString(16);
+	b = b.toString(16);
+	a = Math.round(a * 255).toString(16);
 
-  if (r.length == 1)
-    r = "0" + r;
-  if (g.length == 1)
-    g = "0" + g;
-  if (b.length == 1)
-    b = "0" + b;
-  if (a.length == 1)
-    a = "0" + a;
+	if (r.length == 1)
+		r = "0" + r;
+	if (g.length == 1)
+		g = "0" + g;
+	if (b.length == 1)
+		b = "0" + b;
+	if (a.length == 1)
+		a = "0" + a;
 
-  return "#" + r + g + b + a;
+	return "#" + r + g + b + a;
 }
 
 export function createPixelEditor(target) {
@@ -151,25 +151,25 @@ export function createPixelEditor(target) {
 		const ySize = h/gridH;
 
 		for (let i = 0; i < gridW; i++) {
-		    const x = i*xSize;
-		    if (x === 0) continue;
-		    ctx.strokeStyle = `black`;
-		    ctx.lineWidth = xSize/20;
-		    ctx.beginPath();
-		    ctx.moveTo(x, 0);
-		    ctx.lineTo(x, h);
-		    ctx.stroke();
+				const x = i*xSize;
+				if (x === 0) continue;
+				ctx.strokeStyle = `black`;
+				ctx.lineWidth = xSize/20;
+				ctx.beginPath();
+				ctx.moveTo(x, 0);
+				ctx.lineTo(x, h);
+				ctx.stroke();
 		}
 
 		for (let i = 0; i < gridH; i++) {
-		    const y = i*ySize;
-		    if (y === 0) continue;
-		   	ctx.strokeStyle = `black`;
-		   	ctx.lineWidth = xSize/20;
-		    ctx.beginPath();
-		    ctx.moveTo(0, y);
-		    ctx.lineTo(w, y);
-		    ctx.stroke();
+				const y = i*ySize;
+				if (y === 0) continue;
+				ctx.strokeStyle = `black`;
+				ctx.lineWidth = xSize/20;
+				ctx.beginPath();
+				ctx.moveTo(0, y);
+				ctx.lineTo(w, y);
+				ctx.stroke();
 		}
 	}
 
@@ -340,11 +340,11 @@ export function createPixelEditor(target) {
 					: BACKGROUND_WHITE;
 			}
 
-		 	let index = i*4;
-		 	pixels[index] = color[0];
-		 	pixels[index+1] = color[1];
-		 	pixels[index+2] = color[2];
-		 	pixels[index+3] = color[3];
+			let index = i*4;
+			pixels[index] = color[0];
+			pixels[index+1] = color[1];
+			pixels[index+2] = color[2];
+			pixels[index+3] = color[3];
 		})
 
 		tempCanvas.width = gridW;
@@ -435,16 +435,16 @@ export function createPixelEditor(target) {
 				state.undoRedoStack.push(JSON.stringify(state.gridColors));
 				if (state.undoRedoStack.length > 15) state.undoRedoStack.unshift();
 
-		  	state.mousedown = true;
-		  	const pt = getPoint(e);
-		  	state.mousedownPt = pt;
-		  	if (state.tool in tools_mousedown) tools_mousedown[state.tool](...pt);
+				state.mousedown = true;
+				const pt = getPoint(e);
+				state.mousedownPt = pt;
+				if (state.tool in tools_mousedown) tools_mousedown[state.tool](...pt);
 		})
 
 		c.addEventListener("mousemove", (e) => {
 			const pt = getPoint(e);
-		  	state.currentPt = pt;
-		  	if (state.tool in tools_mousemove) tools_mousemove[state.tool](...pt);
+				state.currentPt = pt;
+				if (state.tool in tools_mousemove) tools_mousemove[state.tool](...pt);
 		})
 
 		c.addEventListener("mouseup", (e) => {
