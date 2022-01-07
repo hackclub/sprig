@@ -23,62 +23,25 @@ const getLimits = (obj, [dx, dy] = [0, 0]) => {
   };
 };
 
-const make_px_at = (w, h, data) => (x, y) => data[(w * y + x) * 4 + 3] > 0;
 
-function contextBoundingBox(imgData) {
-  const { data, width: w, height: h } = imgData;
-  const pxAt = make_px_at(w, h, data);
+function contextBoundingBox(sprite, w, h) {
+  const occupiedPixel = pixel => pixel[3] > 0;
 
-  let x, y, minX, minY, maxX, maxY;
-
-  loop0: for (y = h - 1; y > 0; y--) {
-    for (x = w - 1; x > 0; x--) {
-      if (pxAt(x, y)) {
-        maxY = y;
-        break loop0;
-      }
-    }
-  }
-
-  if (maxY === undefined) {
-    console.log("No bounding box.");
-    return { minX: 0, minY: 0, maxX: 0, maxY: 0, width: 0, height: 0 };
-  }
-
-  loop1: for (x = w - 1; x > 0; x--) {
-    for (y = 0; y < maxY; y++) {
-      if (pxAt(x, y)) {
-        maxX = x;
-        break loop1;
-      }
-    }
-  }
-
-  loop2: for (x = 0; x < maxX; x++) {
-    for (y = 0; y < maxY; y++) {
-      if (pxAt(x, y)) {
-        minX = x;
-        break loop2;
-      }
-    }
-  }
-
-  loop3: for (y = 0; y < maxY; y++) {
-    for (x = 0; x < maxX; x++) {
-      if (pxAt(x, y)) {
-        minY = y;
-        break loop3;
-      }
-    }
-  }
+  const ascending = (a, b) => a - b;
+  const xs = sprite
+    .reduce((a, p, i) => (p[3] == 0) ? a : [...a, i % w], [])
+    .sort(ascending);
+  const ys = sprite
+    .reduce((a, p, i) => (p[3] == 0) ? a : [...a, Math.floor(i / h)], [])
+    .sort(ascending);
 
   return {
-    x: minX,
-    y: minY,
-    maxX: maxX,
-    maxY: maxY,
-    width: maxX - minX,
-    height: maxY - minY,
+    x: xs[0],
+    y: ys[0],
+    maxX: xs[xs.length - 1],
+    maxY: ys[ys.length - 1],
+    width: xs[xs.length - 1] - xs[0],
+    height: ys[ys.length - 1] - ys[0],
   };
 }
 
@@ -134,7 +97,7 @@ class Object {
         32,
         32
       );
-      bounds = contextBoundingBox(this.imageData);
+      bounds = contextBoundingBox(params.sprite, 32, 32);
 
       this.spriteOffsetX = bounds.x;
       this.spriteOffsetY = bounds.y;
