@@ -37,6 +37,11 @@ export function createPixelEditor(target) {
     showGrid: false,
     defaultGridArraySize: [32, 32],
     undoRedoStack: [],
+    selectHandle: {
+      clicked: false,
+      hovered: false,
+      pos: [0, 0],
+    }
     // hoveredCell: null,
   };
 
@@ -391,10 +396,12 @@ export function createPixelEditor(target) {
       const x = (avgX / tempCanvas.width) * canvas.width;
       const y = (avgY / tempCanvas.height) * canvas.height;
 
-      ctx.fillStyle = "yellow";
+      ctx.fillStyle = state.selectHandle.hovered || state.selectHandle.clicked ? "red" : "yellow";
       ctx.beginPath();
       ctx.arc(x, y, 10, 0, 2 * Math.PI);
       ctx.fill();
+
+      state.selectHandle.pos = [x, y];
     }
   };
 
@@ -437,6 +444,10 @@ export function createPixelEditor(target) {
     return [x, y];
   }
 
+  const dist = (p0, p1) => Math.sqrt((p0[1] - p1[1])**2 + (p0[0] - p1[0])**2);
+
+  const mouseoverSelectCircle = (x, y) => dist([x, y], state.selectHandle.pos) < 10;
+
   const init = (state) => {
     render(target, view(state));
     const c = document.querySelector(".drawing-canvas");
@@ -461,37 +472,72 @@ export function createPixelEditor(target) {
       state.mousedown = true;
       const pt = getPoint(e);
       state.mousedownPt = pt;
-      if (state.tool in tools_mousedown) tools_mousedown[state.tool](...pt);
+      
+      if (mouseoverSelectCircle(e.offsetX, e.offsetY, c)) {
+        state.selectHandle.clicked = true;
+      } else if (state.tool in tools_mousedown) tools_mousedown[state.tool](...pt);
+
     });
 
     c.addEventListener("mousemove", (e) => {
       const pt = getPoint(e);
       state.currentPt = pt;
       if (state.tool in tools_mousemove) tools_mousemove[state.tool](...pt);
+
+      state.selectHandle.hovered = mouseoverSelectCircle(e.offsetX, e.offsetY);
+
+      if (state.selectHandle.clicked) {
+        state.tempGridColors.fill(null);
+
+        state.selected.forEach(i => {
+          const [ x, y ] = i_to_xy(i);
+          const dx = pt[0] - state.mousedownPt[0];
+          const dy = pt[1] - state.mousedownPt[1];
+          const newX = x + dx;
+          const newY = y + dy;
+          if (
+            newX < 0 || 
+            newX >= state.defaultGridArraySize[0] || 
+            newY < 0 || 
+            newY >= state.defaultGridArraySize[1]
+            ) return;
+          
+          const newI = state.defaultGridArraySize[0]*newY + newX;
+
+          const currentColor = state.gridColors[i];
+          state.tempGridColors[newI] = currentColor;
+ 
+        });
+      } 
     });
 
-    c.addEventListener("mouseup", (e) => {
+    const resetDrawing = () => {
       state.mousedown = false;
       state.mousedownPt = [0, 0];
       state.currentPt = [0, 0];
 
+      if (state.selectHandle.clicked) {
+        state.selected.forEach(i => {
+          state.gridColors[i] = [0, 0, 0, 0];
+        });
+
+        state.selectHandle.clicked = false;
+
+        state.selected = [];
+      }
+
       state.tempGridColors.forEach((c, i) => {
         if (c !== null) state.gridColors[i] = c;
       });
-
       state.tempGridColors.fill(null);
+    }
+
+    c.addEventListener("mouseup", (e) => {
+      resetDrawing();
     });
 
     c.addEventListener("mouseleave", (e) => {
-      state.mousedown = false;
-      state.mousedownPt = [0, 0];
-      state.currentPt = [0, 0];
-
-      state.tempGridColors.forEach((c, i) => {
-        if (c !== null) state.gridColors[i] = c;
-      });
-
-      state.tempGridColors.fill(null);
+      resetDrawing();
     });
   };
 
