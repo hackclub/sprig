@@ -130,6 +130,9 @@ export function view(state) {
       .mouse-display {
         color: white;
 
+        margin: 0px;
+        height: 1em;
+        font-family: monospace;
         position: absolute;
         bottom: calc(100% - var(--horizontal-bar));
         right: 5px;
@@ -164,9 +167,16 @@ export function view(state) {
           class="game-canvas"
         >
         </canvas>
-        <h3 class="mouse-display">
-          mouse: ${state.mouseX} x, ${state.mouseY} y
-        </h3>
+        <pre class="mouse-display">
+          ${(() => {
+            const canv = document.querySelector('.game-canvas') ?? { width: 100, height: 100 };
+            const widthChars = ('' + canv.width).length;
+            const heightChars = ('' + canv.height).length;
+            return 'mouse: ' +
+              ('' + state.mouseX).padStart( widthChars) + ' x, ' +
+              ('' + state.mouseY).padStart(heightChars) + ' y';
+          })()}
+        </pre>
       </div>
       <div class="pixel-editor-container">
         <div class="list-of-sprites">
