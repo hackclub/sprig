@@ -5,40 +5,41 @@ import { init } from "./init.js";
 import { Engine } from "./Engine.js";
 
 function copy(str) {
-  const inp = document.createElement('input');
+  const inp = document.createElement("input");
   document.body.appendChild(inp);
   inp.value = str;
   inp.select();
-  document.execCommand('copy', false);
+  document.execCommand("copy", false);
   inp.remove();
 }
 
 function showShared() {
   document.querySelector(".shared-modal").classList.toggle("hide");
-  setTimeout(() => document.querySelector(".shared-modal").classList.toggle("hide"), 3000);
+  setTimeout(
+    () => document.querySelector(".shared-modal").classList.toggle("hide"),
+    3000
+  );
 }
 
-
 const STATE = {
-	codemirror: undefined,
-	url: undefined,
-	shareType: "airtable",
-	examples: [],
-	error: false,
-	logs: [],
-	name: "name-here",
-	pixelEditor: undefined,
-	sprites: {},
-	mouseX: 0,
-	mouseY: 0,
-	selected_sprite: "",
-	lastSaved: {
-		name: "",
-		text: "",
-		link: "",
-	}
+  codemirror: undefined,
+  url: undefined,
+  shareType: "airtable",
+  examples: [],
+  error: false,
+  logs: [],
+  name: "name-here",
+  pixelEditor: undefined,
+  sprites: {},
+  mouseX: 0,
+  mouseY: 0,
+  selected_sprite: "",
+  lastSaved: {
+    name: "",
+    text: "",
+    link: "",
+  },
 };
-
 
 const ACTIONS = {
   INIT(args, state) {
@@ -50,67 +51,78 @@ const ACTIONS = {
     const hasImport = /import\s/.test(string);
     if (hasImport) {
       // how to inject included into this scope?
-      const blob = URL.createObjectURL(new Blob([string], {type: 'text/javascript'}));
-      import(blob).then(res => {
+      const blob = URL.createObjectURL(
+        new Blob([string], { type: "text/javascript" })
+      );
+      import(blob).then((res) => {
         // console.log(imported);
         // TODO: these are accumulating how can I clear them out?
         URL.revokeObjectURL(blob);
       });
     } else {
       const included = { html, render, svg, Engine, ...state.sprites }; // these only work if no other imports
-      // try { 
-        (new Function(...Object.keys(included), string))(...Object.values(included));
-      // } catch(e) { console.error(e) } 
+      // try {
+      new Function(...Object.keys(included), string)(
+        ...Object.values(included)
+      );
+      // } catch(e) { console.error(e) }
     }
-
   },
   SHARE_TYPE({ type }, state) {
     state.shareType = type;
     dispatch("RENDER");
   },
-  SHARE({type}, state) {
+  SHARE({ type }, state) {
     const string = state.codemirror.view.state.doc.toString();
 
     if (state.shareType === "binary-url" && type === "link") {
-      const encoded = lzutf8.compress(string, { outputEncoding: "StorageBinaryString" });
+      const encoded = lzutf8.compress(string, {
+        outputEncoding: "StorageBinaryString",
+      });
       const address = `${window.location.origin}${window.location.pathname}?code=${encoded}`;
       copy(address);
       showShared();
     }
 
     if (state.shareType === "airtable" && type === "link") {
-      if (state.lastSaved.name === state.name && state.lastSaved.text === string) {
+      if (
+        state.lastSaved.name === state.name &&
+        state.lastSaved.text === string
+      ) {
         copy(state.lastSaved.link);
         showShared();
         return;
       }
 
-      const url = 'https://airbridge.hackclub.com/v0.2/Saved%20Projects/Live%20Editor%20Projects/?authKey=reczbhVzrrkChMMiN1635964782lucs2mn97s';
+      const url =
+        "https://airbridge.hackclub.com/v0.2/Saved%20Projects/Live%20Editor%20Projects/?authKey=reczbhVzrrkChMMiN1635964782lucs2mn97s";
       (async () => {
         const res = await fetch(url, {
           method: "POST",
-          headers: {'Content-Type': 'application/json'},
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            "Content": string,
-            "Name": state.name,
-          })
-        }).then(r => r.json())
+            Content: string,
+            Name: state.name,
+          }),
+        }).then((r) => r.json());
 
         copy(res.fields["Link"]);
         showShared();
         state.lastSaved.name = state.name;
         state.lastSaved.text = string;
         state.lastSaved.link = res.fields["Link"];
-      })()
+      })();
     }
 
     if (type === "file") {
-      downloadText(`${state.name}.json`, JSON.stringify({
-        sprites: state.sprites,
-        prog: string
-      }));
-    } 
-
+      downloadText(
+        `${state.name}.json`,
+        JSON.stringify({
+          sprites: state.sprites,
+          prog: string,
+        })
+      );
+    }
   },
   CANVAS_MOUSE_MOVE({ content: { mouseX, mouseY } }, state) {
     state.mouseX = mouseX;
@@ -122,7 +134,7 @@ const ACTIONS = {
     const currentProg = state.codemirror.view.state.doc.toString();
 
     state.codemirror.view.dispatch({
-      changes: { from: 0, to: currentProg.length, insert: newProg }
+      changes: { from: 0, to: currentProg.length, insert: newProg },
     });
 
     state.sprites = saved.sprites;
@@ -140,16 +152,18 @@ const ACTIONS = {
   LOAD_EXAMPLE({ content }, state) {
     const string = state.codemirror.view.state.doc.toString();
     state.codemirror.view.dispatch({
-      changes: { from: 0, to: string.length, insert: content }
+      changes: { from: 0, to: string.length, insert: content },
     });
     dispatch("RUN");
   },
   CREATE_SPRITE(args, state) {
     function randString(length) {
-      var randomChars = 'abcdefghijklmnopqrstuvwxyz';
-      var result = '';
-      for ( var i = 0; i < length; i++ ) {
-          result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+      var randomChars = "abcdefghijklmnopqrstuvwxyz";
+      var result = "";
+      for (var i = 0; i < length; i++) {
+        result += randomChars.charAt(
+          Math.floor(Math.random() * randomChars.length)
+        );
       }
       return result;
     }
@@ -169,11 +183,14 @@ const ACTIONS = {
   },
   DELETE_SPRITE({ name }, state) {
     delete state.sprites[name];
-    if (state.selected_sprite === name && Object.keys(state.sprites).length > 0) {
+    if (
+      state.selected_sprite === name &&
+      Object.keys(state.sprites).length > 0
+    ) {
       const name = Object.keys(state.sprites)[0];
       dispatch("SELECT_SPRITE", { name });
     }
-    
+
     if (Object.keys(state.sprites).length === 0) dispatch("CREATE_SPRITE");
 
     dispatch("RENDER");
@@ -182,8 +199,8 @@ const ACTIONS = {
   RENDER() {
     console.log("rendered");
     render(document.getElementById("root"), view(STATE));
-  }
-}
+  },
+};
 
 export function dispatch(action, args = {}) {
   const trigger = ACTIONS[action];
