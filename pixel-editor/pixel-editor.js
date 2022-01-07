@@ -46,10 +46,16 @@ export function createPixelEditor(target) {
 		// hoveredCell: null,
 	}
 
-	// <button @click=${() => state.tool = "copy"}>TODO: copy</button>
-	// <button @click=${() => state.tool = "paste"}>TODO: paste</button>
-	// <button @click=${() => state.tool = "move"}>TODO: move</button>
-	// <button @click=${() => {}}>TODO: export</button>
+	const renderTool = (toolName, state) => html`
+		<button 
+			class=${[state.tool === toolName ? "selected-tool" : ""].join(" ")} 
+			@click=${() => {
+				state.tool = toolName;
+				r();
+			}}>
+			${toolName}
+		</button>
+	`
 
 	const view = state => html`
 		${pixelStyles}
@@ -57,12 +63,7 @@ export function createPixelEditor(target) {
 			<canvas class="drawing-canvas"></canvas>
 		</div>
 		<div class="toolbox">
-			<button @click=${() => state.tool = "draw"}>draw</button>
-			<button @click=${() => state.tool = "circle"}>circle</button>
-			<button @click=${() => state.tool = "rectangle"}>rectangle</button>
-			<button @click=${() => state.tool = "line"}>line</button>
-			<button @click=${() => state.tool = "bucket"}>bucket</button>
-			<button @click=${() => state.tool = "select"}>select</button>
+			${["draw", "circle", "rectangle", "line", "bucket", "select"].map(name => renderTool(name, state))}
 			<button @click=${() => {
 				if (state.undoRedoStack.length === 0) return;
 				const grid = JSON.parse(state.undoRedoStack.pop());
@@ -70,44 +71,30 @@ export function createPixelEditor(target) {
 					state.gridColors[i] = grid[i];
 				})
 			}}>undo</button>
-			<div>
-				<span>w:</span>
-				<input 
-					class="gridsize" 
-					type="number" 
-					min="1"
-					max=${state.defaultGridArraySize[0]}
-					.value=${state.gridSize[0]}
-					@input=${e => { 
-						state.gridSize[0] = Math.min(Math.max(Number(e.target.value), 1), state.defaultGridArraySize[0]);
-						setCanvasSize(state.canvas);
-					}}/>
-				<span>h:</span>
-				<input 
-					class="gridsize" 
-					type="number" 
-					min="1"
-					max=${state.defaultGridArraySize[1]}
-					.value=${state.gridSize[1]}
-					@input=${e => { 
-						state.gridSize[1] = Math.min(Math.max(Number(e.target.value), 1), state.defaultGridArraySize[1]);
-						setCanvasSize(state.canvas);
-					}}/>
-			</div>
-
-			<div class="view-window">
-				<canvas width="100" height="100" class="preview-canvas"></canvas>
-			</div>
 		</div>
 
 		<div class="colors">
 			<!-- <button>TODO: + add color</button> -->
 			<input 
+				class=${RGBA_to_hex(state.color) !== "#00000000" ? "selected-tool" : ""}
 				type="color" 
-				.value=${state.color} 
-				@input=${e => state.color = hexToRGBA(e.target.value)}
-				@click=${e => state.color = hexToRGBA(e.target.value)}/>
-			<button @click=${() => state.color = hexToRGBA("#00000000")}>clear</button>
+				value=${RGBA_to_hex(state.color)} 
+				@input=${e => { 
+						state.color = hexToRGBA(e.target.value);
+						r();
+				}}
+				@click=${e => { 
+						state.color = hexToRGBA(e.target.value);
+						r();
+				}}/>
+			<button 
+				class=${RGBA_to_hex(state.color) === "#00000000" ? "selected-tool" : ""} 
+				@click=${() => { 
+					state.color = hexToRGBA("#00000000"); 
+					r();
+				}}>
+				clear
+			</button>
 		</div>
 	`
 
@@ -475,7 +462,6 @@ export function createPixelEditor(target) {
 
 	const animate = () => {
 		drawCanvas(state.canvas);
-		drawCanvas(document.querySelector(".preview-canvas"), false);
 		window.requestAnimationFrame(animate);
 	}
 

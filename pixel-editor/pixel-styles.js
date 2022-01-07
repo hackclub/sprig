@@ -65,5 +65,9 @@ export const pixelStyles = html`
 		padding: 5px;
 		border: 2px solid black;
 	}
+
+	.selected-tool {
+		border: 2px solid yellow;
+	}
 </style>
 `
