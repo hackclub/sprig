@@ -109,6 +109,7 @@ class Object {
       this.sprite = null;
     }
     this.scale = params.scale ?? 1;
+    this.rotation = params.rotation ?? 0;
     this._x = params.x ?? 0;
     this._y = params.y ?? 0;
     this._vx = params.vx ?? 0;
@@ -186,18 +187,24 @@ class Object {
   }
 
   draw(obj) {
+    const { ctx } = obj.engine;
+    ctx.save();
+    ctx.translate(this._x + this.width / 2, this._y + this.height / 2);
+    ctx.rotate(this.rotation);
+
     // draw sprite with sprite scale
     if (this.sprite !== null) {
-      obj.engine.ctx.drawImage(
+      ctx.drawImage(
         this.sprite,
-        this._x,
-        this._y,
+        this.width / -2,
+        this.height / -2,
         this.width,
         this.height
       );
     }
 
     this._draw(obj);
+    ctx.restore();
   }
 
   set x(val) {
