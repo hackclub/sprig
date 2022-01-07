@@ -167,7 +167,7 @@ const ACTIONS = {
     state.pixelEditor.setGridColors(grid);
     dispatch("RENDER");
   },
-  DELETE_SPRITE({ name }, state) { // TODO
+  DELETE_SPRITE({ name }, state) {
     delete state.sprites[name];
     if (state.selected_sprite === name && Object.keys(state.sprites).length > 0) {
       const name = Object.keys(state.sprites)[0];
