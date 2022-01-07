@@ -105,19 +105,34 @@ class Object {
       this.unscaledHeight = this.height = bounds.height;
 
       this.sprite = document.createElement("canvas");
-      this.updateCanvas();
+      this.sprite.width = this.width + 1;
+      this.sprite.height = this.height + 1;
+      this.sprite
+        .getContext("2d")
+        .putImageData(this.imageData, -this.spriteOffsetX, -this.spriteOffsetY);
+
     } else if (typeof params.sprite === "string") {
       this.sprite = document.createElement("canvas");
+      this.sprite.width = 100;
+      this.sprite.height = 100;
       const spriteCtx = this.sprite.getContext("2d")
-       
-      spriteCtx.fillText(params.sprite, 0, 0);
-
       const text = spriteCtx.measureText(params.sprite);
-      bounds.width = text.width;
-      bounds.width = text.height;
-      this.unscaledWidth = this.width = bounds.width;
-      this.unscaledHeight = this.height = bounds.height;
+      console.log(params.sprite, text);
+      const w = this.sprite.width;
+      const h = this.sprite.height;
+      // const w = text.width;
+      // const h = text.actualBoundingBoxAscent;
+      bounds.width = w;
+      bounds.height = h;
+      this.width = w;
+      this.height = h;
+      this.unscaledWidth = w;
+      this.unscaledHeight = h;
 
+      console.log(w, h);
+      spriteCtx.fillText(params.sprite, 1, 10);
+      this.sprite.style = `position: absolute; left: 100px; top: 10px; width: 100px; height: 100px; background: white;`
+      document.body.append(this.sprite);
     } else {
       this.sprite = null;
     }
@@ -139,14 +154,6 @@ class Object {
     this.dy = 0;
 
     this.id = Math.random();
-  }
-
-  updateCanvas() {
-    this.sprite.width = this.width + 1;
-    this.sprite.height = this.height + 1;
-    this.sprite
-      .getContext("2d")
-      .putImageData(this.imageData, -this.spriteOffsetX, -this.spriteOffsetY);
   }
 
   collides(query, buffer = 0) {

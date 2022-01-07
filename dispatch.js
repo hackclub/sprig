@@ -197,7 +197,7 @@ const ACTIONS = {
     dispatch("RUN");
   },
   RENDER() {
-    console.log("rendered");
+    // console.log("rendered");
     render(document.getElementById("root"), view(STATE));
   },
 };
