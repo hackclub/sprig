@@ -23,16 +23,15 @@ const getLimits = (obj, [dx, dy] = [0, 0]) => {
   };
 };
 
-
 function contextBoundingBox(sprite, w, h) {
-  const occupiedPixel = pixel => pixel[3] > 0;
+  const occupiedPixel = (pixel) => pixel[3] > 0;
 
   const ascending = (a, b) => a - b;
   const xs = sprite
-    .reduce((a, p, i) => (p[3] == 0) ? a : [...a, i % w], [])
+    .reduce((a, p, i) => (p[3] == 0 ? a : [...a, i % w]), [])
     .sort(ascending);
   const ys = sprite
-    .reduce((a, p, i) => (p[3] == 0) ? a : [...a, Math.floor(i / h)], [])
+    .reduce((a, p, i) => (p[3] == 0 ? a : [...a, Math.floor(i / h)]), [])
     .sort(ascending);
 
   return {
