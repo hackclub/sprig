@@ -116,7 +116,7 @@ class Object {
     }
 
     this.scale = params.scale ?? 1;
-    this.rotation = params.rotation ?? 0;
+    this.rotate = params.rotate ?? 0;
     this._x = params.x ?? 0;
     this._y = params.y ?? 0;
     this._vx = params.vx ?? 0;
@@ -184,11 +184,18 @@ class Object {
     this.height = this.unscaledHeight * factor;
   }
 
+  get rotate() {
+    return (this._rotate / Math.PI) * 180;
+  }
+  set rotate(x) {
+    this._rotate = (x / 180) * Math.PI;
+  }
+
   draw(obj) {
     const { ctx } = obj.engine;
     ctx.save();
     ctx.translate(this._x + this.width / 2, this._y + this.height / 2);
-    ctx.rotate(this.rotation);
+    ctx.rotate(this._rotate);
 
     // draw sprite with sprite scale
     if (this.sprite !== null) {
