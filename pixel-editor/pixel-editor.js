@@ -221,8 +221,8 @@ export function createPixelEditor(target) {
         seen.push(y * gridW + x);
       };
 
-      if (checkValidity(x, y)) q.push([x, y]);
-      
+      if (checkValidity(x, y)) add(x, y);
+
       while (q.length > 0) {
         const [x1, y1] = q.pop();
         if (checkValidity(x1 + 1, y1)) add(x1 + 1, y1);

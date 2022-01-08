@@ -60,12 +60,27 @@ const ACTIONS = {
         URL.revokeObjectURL(blob);
       });
     } else {
-      const included = { html, render, svg, Engine, ...state.sprites }; // these only work if no other imports
-      // try {
-      new Function(...Object.keys(included), string)(
-        ...Object.values(included)
-      );
-      // } catch(e) { console.error(e) }
+      state.error = false;
+      state.logs = [];
+      const included = { _state: state, html, render, svg, Engine, ...state.sprites }; // these only work if no other imports
+      try {
+        new Function(...Object.keys(included), `{
+            console.log = (...args) => {
+              _state.logs.push(...args); 
+              // console.log(...args);
+            }
+          }
+          ${string}
+        `)(
+          ...Object.values(included)
+        );
+      } catch(e) { 
+        console.log(e);
+        state.error = true;
+        const str = JSON.stringify(e, Object.getOwnPropertyNames(e));
+        state.logs.push(str);
+      }
+      dispatch("RENDER");
     }
   },
   SHARE_TYPE({ type }, state) {
