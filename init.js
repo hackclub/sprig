@@ -66,6 +66,7 @@ export function init(state) {
     }
   } else {
     const saved = JSON.parse(window.localStorage.getItem("hc-game-lab"));
+
     if (!saved) {
       state.codemirror.view.dispatch({
         changes: { from: 0, insert: defaultProg.trim() },
@@ -78,6 +79,11 @@ export function init(state) {
 
       if (Object.keys(saved.sprites).length === 0) dispatch("CREATE_SPRITE");
       else {
+        if (Array.isArray(Object.values(saved.sprites)[0]))
+          saved.sprites = Object.fromEntries(
+            Object.entries(saved.sprites)
+              .map(([name, colors]) => [name, { size: [32, 32], colors }])
+          );
         state.sprites = saved.sprites;
         const name = Object.keys(saved.sprites)[0];
         dispatch("SELECT_SPRITE", { name });

@@ -503,13 +503,17 @@ export function createPixelEditor(target) {
   init(state);
 
   return {
-    setGridColors: (grid) => {
-      state.gridColors = grid;
+    setGridColors: ({ colors, size }) => {
+      state.gridColors = colors;
+      state.defaultGridArraySize = size;
+      state.gridSize = size;
     },
-    createEmptyGrid: () =>
-      new Array(
+    createEmptyGrid: () => ({
+      size: state.defaultGridArraySize,
+      colors: new Array(
         state.defaultGridArraySize[0] * state.defaultGridArraySize[1]
       ).fill([0, 0, 0, 0]),
+    }),
     gridColors: () => state.gridColors,
   };
 }
