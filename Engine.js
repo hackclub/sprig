@@ -110,7 +110,6 @@ class Object {
       this.sprite
         .getContext("2d")
         .putImageData(this.imageData, -this.spriteOffsetX, -this.spriteOffsetY);
-
     } else {
       this.sprite = null;
     }
@@ -263,7 +262,7 @@ class Text {
       left: ${x}px;
       top: ${y}px;
       color: ${color};
-    `
+    `;
     span.innerText = str;
 
     this.el = span;
@@ -302,9 +301,8 @@ class Engine {
     this._heldKeys = new Set();
     this._pressedKeys = new Set();
 
-
     const parent = canvas.parentNode;
-    parent.querySelectorAll(".text-container > *").forEach( x => x.remove() );
+    parent.querySelectorAll(".text-container > *").forEach((x) => x.remove());
     this.textContainer = parent.querySelector(".text-container");
 
     canvas.setAttribute("tabindex", "1");
