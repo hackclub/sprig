@@ -70,6 +70,7 @@ export function init(state) {
       state.codemirror.view.dispatch({
         changes: { from: 0, insert: defaultProg.trim() },
       });
+      dispatch("CREATE_SPRITE");
     } else {
       const prog = saved.prog;
       state.codemirror.view.dispatch({

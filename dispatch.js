@@ -64,12 +64,15 @@ const ACTIONS = {
       state.logs = [];
       const included = { _state: state, html, render, svg, Engine, ...state.sprites }; // these only work if no other imports
       try {
-        new Function(...Object.keys(included), `{
+        new Function(...Object.keys(included), `
+          {
+            const _log = console.log;
             console.log = (...args) => {
               _state.logs.push(...args); 
-              // console.log(...args);
+              _log(...args);
             }
           }
+
           ${string}
         `)(
           ...Object.values(included)
@@ -77,7 +80,7 @@ const ACTIONS = {
       } catch(e) { 
         console.log(e);
         state.error = true;
-        const str = JSON.stringify(e, Object.getOwnPropertyNames(e));
+        const str = JSON.stringify(e, Object.getOwnPropertyNames(e), 2);
         state.logs.push(str);
       }
       dispatch("RENDER");
