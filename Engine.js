@@ -1,6 +1,7 @@
 const getLimits = (obj, [dx, dy] = [0, 0]) => {
-  const x = obj.x + dx;
-  const y = obj.y + dy;
+  const [ ox, oy ] = [obj.width * obj.origin[0], obj.height * obj.origin[1]];
+  const x = obj.x + dx - ox;
+  const y = obj.y + dy - oy;
   const xMin = x;
   const xMax = x + obj.width;
   const yMin = y;
@@ -97,10 +98,10 @@ class Object {
     this.scale = params.scale ?? 1;
     this.rotate = params.rotate ?? 0;
     this.origin = params.origin ?? [0, 0];
-    // this._x = params.x ?? 0;
-    // this._y = params.y ?? 0;
-    this._x = (params.x ?? 0) - this.width * this.origin[0];
-    this._y = (params.y ?? 0) - this.height * this.origin[1];
+    this._x = params.x ?? 0;
+    this._y = params.y ?? 0;
+    // this._x = (params.x ?? 0) - this.width * this.origin[0];
+    // this._y = (params.y ?? 0) - this.height * this.origin[1];
     this._vx = params.vx ?? 0;
     this._vy = params.vy ?? 0;
     this._ax = params.ax ?? 0;
@@ -172,7 +173,7 @@ class Object {
     const { ctx } = obj.engine;
     ctx.save();
     const [ ox, oy ] = [this.width * this.origin[0], this.height * this.origin[1]];
-    ctx.translate(this._x + ox, this._y + oy);
+    ctx.translate(this._x, this._y);
     ctx.rotate(this._rotate);
 
     // draw sprite with sprite scale
@@ -187,7 +188,7 @@ class Object {
 
 
     ctx.strokeStyle = "grey";
-    ctx.strokeRect(this.x, this.y, this.width, this.height);
+    ctx.strokeRect(this.x - ox, this.y - oy, this.width, this.height);
   }
 
   set x(val) {
