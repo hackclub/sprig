@@ -44,6 +44,7 @@ const STATE = {
   },
 };
 
+let currentEngine;
 const ACTIONS = {
   INIT(args, state) {
     init(state);
@@ -73,7 +74,12 @@ const ACTIONS = {
         html,
         render,
         svg,
-        Engine,
+        createEngine(...args) {
+          if (currentEngine)
+            cancelAnimationFrame(currentEngine._animId);
+          currentEngine = new Engine(...args);
+          return currentEngine;
+        },
         Muse,
         ...state.sprites,
       }; // these only work if no other imports
