@@ -2,7 +2,6 @@ import { html } from "./uhtml.js";
 import "./codemirror/codemirror-html.js";
 import "./codemirror/codemirror-js.js";
 
-// <button @click=${() => dispatch("SHARE", { type: "link" })}>link</button>
 function shareOptions(state) {
   return html`
     <div class="expand-menu menu-option menu-choice">
@@ -12,7 +11,10 @@ function shareOptions(state) {
     state.name = e.target.value === "" ? "anon" : e.target.value;
   }}></input>
         <button @click=${() =>
-          dispatch("SHARE", { type: "file" })}>file</button>
+          dispatch("SAVE", { type: "file" })}>
+          file
+        </button>
+        <button @click=${() => dispatch("SAVE", { type: "link" })}>link</button>
       </div>
     </div>
   `;

@@ -97,7 +97,24 @@ class Object {
 
     this.scale = params.scale ?? 1;
     this.rotate = params.rotate ?? 0;
-    this.origin = params.origin ?? [0, 0];
+
+    const origins = {
+      "left top": [0, 0],
+      "left center": [0, 0.5],
+      "left bottom": [0, 1],
+      "center top": [0.5, 0],
+      "center center": [0.5, 0.5],
+      "center": [0.5, 0.5],
+      "center bottom": [0.5, 1],
+      "right top": [1, 0],
+      "right center": [1, 0.5],
+      "right bottom": [1, 1],
+    }
+
+    this.origin = typeof params.origin === "string" && params.origin in origins 
+      ? origins[params.origin] 
+      : Array.isArray(params.origin) ? params.origin 
+      : [0, 0];
     this._x = params.x ?? 0;
     this._y = params.y ?? 0;
     // this._x = (params.x ?? 0) - this.width * this.origin[0];
@@ -110,7 +127,7 @@ class Object {
     // this.solidTo = params.solidTo ?? [];
     this.solid = params.solid ?? false;
     this.click = params.click ?? null;
-    this._draw = params.draw ?? null;
+    this._update = params.update ?? null;
     this._collides = params.collides ?? null;
     this.drawBounds = params.drawBounds ?? false;
     this.dx = 0;
@@ -186,7 +203,7 @@ class Object {
     ctx.fillStyle = "red";
     ctx.fillRect(-2, -2, 4, 4);
 
-    this._draw(obj);
+    this._update(obj);
     ctx.restore();
 
     ctx.strokeStyle = "grey";

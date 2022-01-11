@@ -208,10 +208,9 @@ export function events(state) {
   bodyListener("keydown", "", function (event) {
     let code = event.code;
 
-    const prog = state.codemirror.view.state.doc.toString();
     window.localStorage.setItem(
       "hc-game-lab",
-      JSON.stringify({ prog, sprites: state.sprites })
+      dispatch("GET_SAVE_STATE")
     );
 
     if (code === "Enter" && event.shiftKey) {

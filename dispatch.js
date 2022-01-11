@@ -35,6 +35,7 @@ const STATE = {
   mouseX: 0,
   mouseY: 0,
   selected_sprite: "",
+  name: "name-here",
   lastSaved: {
     name: "",
     text: "",
@@ -102,46 +103,38 @@ const ACTIONS = {
     state.shareType = type;
     dispatch("RENDER");
   },
-  SHARE({ type }, state) {
-    const string = state.codemirror.view.state.doc.toString();
+  GET_SAVE_STATE(args, state) {
+    const prog = state.codemirror.view.state.doc.toString();
+    return JSON.stringify({ prog, sprites: state.sprites, name: state.name });
+  },
+  SAVE({ type }, state) {
+    const saveStateObj = JSON.parse(dispatch("GET_SAVE_STATE"));
 
-    if (state.shareType === "binary-url" && type === "link") {
-      const encoded = lzutf8.compress(string, {
-        outputEncoding: "StorageBinaryString",
-      });
-      const address = `${window.location.origin}${window.location.pathname}?code=${encoded}`;
-      copy(address);
-      showShared();
-    }
-
-    if (state.shareType === "airtable" && type === "link") {
+    if (type === "link") {
       if (
-        state.lastSaved.name === state.name &&
-        state.lastSaved.text === string
+        state.lastSaved.name === saveStateObj.name &&
+        state.lastSaved.prog === saveStateObj.prog
       ) {
         copy(state.lastSaved.link);
         showShared();
         return;
       }
 
-      const url =
-        "https://airbridge.hackclub.com/v0.2/Saved%20Projects/Live%20Editor%20Projects/?authKey=reczbhVzrrkChMMiN1635964782lucs2mn97s";
-      (async () => {
-        const res = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            Content: string,
-            Name: state.name,
-          }),
-        }).then((r) => r.json());
+      // const url =
+      //   "https://airbridge.hackclub.com/v0.2/Saved%20Projects/Live%20Editor%20Projects/?authKey=reczbhVzrrkChMMiN1635964782lucs2mn97s";
+      // (async () => {
+      //   const res = await fetch(url, {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: dispatch("GET_SAVE_STATE"),
+      //   }).then((r) => r.json());
 
-        copy(res.fields["Link"]);
-        showShared();
-        state.lastSaved.name = state.name;
-        state.lastSaved.text = string;
-        state.lastSaved.link = res.fields["Link"];
-      })();
+      //   copy(res.fields["Link"]);
+      //   showShared();
+      //   state.lastSaved.name = saveStateObj.name;
+      //   state.lastSaved.prog = saveStateObj.prog;
+      //   state.lastSaved.link = res.fields["Link"];
+      // })();
     }
 
     if (type === "file") {
@@ -238,6 +231,7 @@ const ACTIONS = {
     state.sprites[newName] = sprite;
     delete state.sprites[oldName];
     state.selected_sprite = newName;
+    dispatch("RUN");
     dispatch("RENDER");
   },
   SELECT_SPRITE({ name }, state) {
@@ -269,8 +263,11 @@ const ACTIONS = {
 
 export function dispatch(action, args = {}) {
   const trigger = ACTIONS[action];
-  if (trigger) trigger(args, STATE);
-  else console.log("Action not recongnized:", action);
+  if (trigger) return trigger(args, STATE);
+  else {
+    console.log("Action not recongnized:", action);
+    return null;
+  }
 }
 
 function downloadText(filename, text) {
