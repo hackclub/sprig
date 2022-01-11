@@ -118,10 +118,8 @@ class Object {
         ? params.origin
         : [0, 0];
 
-    // this._x = params.x ?? 0;
-    // this._y = params.y ?? 0;
-    this._x = (params.x ?? 0) - this.width * this.origin[0];
-    this._y = (params.y ?? 0) - this.height * this.origin[1];
+    this._x = params.x ?? 0;
+    this._y = params.y ?? 0;
     this._vx = params.vx ?? 0;
     this._vy = params.vy ?? 0;
     this._ax = params.ax ?? 0;
