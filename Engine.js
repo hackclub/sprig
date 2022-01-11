@@ -411,7 +411,7 @@ class Engine {
 
       this.step += 1;
 
-      if (this.drawing) window.requestAnimationFrame(draw);
+      if (this.drawing) this._animId = window.requestAnimationFrame(draw);
     };
 
     // setInterval(draw, 1000/10)
