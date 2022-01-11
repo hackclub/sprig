@@ -115,6 +115,8 @@ class Object {
       ? origins[params.origin] 
       : Array.isArray(params.origin) ? params.origin 
       : [0, 0];
+
+      
     this._x = params.x ?? 0;
     this._y = params.y ?? 0;
     // this._x = (params.x ?? 0) - this.width * this.origin[0];
@@ -250,10 +252,17 @@ class Object {
 }
 
 class Text {
-  constructor(str, x, y, color = "black", container) {
+  constructor(str, x, y, ops, container) {
+
     this._text = str;
     this.x = x;
     this.y = y;
+
+    const color = ops.color ?? "black";
+    const size = ops.size ?? 12;
+    const font = ops.font ?? "Times New Roman";
+    const rotate = ops.rotate ?? 0;
+    const scale = ops.scale ?? 1;
 
     const span = document.createElement("span");
     span.style = `
@@ -261,6 +270,9 @@ class Text {
       left: ${x}px;
       top: ${y}px;
       color: ${color};
+      font-family: ${font};
+      font-size: ${size}px;
+      transform: rotate(${rotate}deg) scale(${scale});
     `;
     span.innerText = str;
 
@@ -408,8 +420,8 @@ class Engine {
     this.drawing = false;
   }
 
-  addText(str, x, y, color) {
-    return new Text(str, x, y, color, this.textContainer);
+  addText(str, x, y, ops = {}) {
+    return new Text(str, x, y, ops, this.textContainer);
   }
 
   heldKey(key) {
