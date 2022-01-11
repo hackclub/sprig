@@ -69,15 +69,15 @@ class Object {
     this.tags = params.tags ?? [];
 
     let bounds = { x: 0, y: 0, maxX: 16, maxY: 16, width: 16, height: 16 };
-    if (Array.isArray(params.sprite)) {
+
+    if (typeof params.sprite === "object") {
+      const [ w, h ] = params.sprite.size;
+
       this.imageData = new ImageData(
         new Uint8ClampedArray(params.sprite.colors.flat()),
-        32,
-        32
+        w,
+        h
       );
-
-      bounds = contextBoundingBox(params.sprite, 32, 32);
-
 
       this.spriteOffsetX = params.sprite.bounds.x;
       this.spriteOffsetY = params.sprite.bounds.y;
