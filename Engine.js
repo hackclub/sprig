@@ -23,27 +23,6 @@ const getLimits = (obj, [dx, dy] = [0, 0]) => {
   };
 };
 
-function contextBoundingBox(sprite, w, h) {
-  const occupiedPixel = (pixel) => pixel[3] > 0;
-
-  const ascending = (a, b) => a - b;
-  const xs = sprite
-    .reduce((a, p, i) => (p[3] == 0 ? a : [...a, i % w]), [])
-    .sort(ascending);
-  const ys = sprite
-    .reduce((a, p, i) => (p[3] == 0 ? a : [...a, Math.floor(i / h)]), [])
-    .sort(ascending);
-
-  return {
-    x: xs[0],
-    y: ys[0],
-    maxX: xs[xs.length - 1],
-    maxY: ys[ys.length - 1],
-    width: xs[xs.length - 1] - xs[0],
-    height: ys[ys.length - 1] - ys[0],
-  };
-}
-
 function overlap(obj0, obj1, movement = [0, 0]) {
   const obj0Lims = getLimits(obj0, movement);
   const obj1Lims = getLimits(obj1);
@@ -92,17 +71,18 @@ class Object {
     let bounds = { x: 0, y: 0, maxX: 16, maxY: 16, width: 16, height: 16 };
     if (Array.isArray(params.sprite)) {
       this.imageData = new ImageData(
-        new Uint8ClampedArray(params.sprite.flat()),
+        new Uint8ClampedArray(params.sprite.colors.flat()),
         32,
         32
       );
 
       bounds = contextBoundingBox(params.sprite, 32, 32);
 
-      this.spriteOffsetX = bounds.x;
-      this.spriteOffsetY = bounds.y;
-      this.unscaledWidth = this.width = bounds.width;
-      this.unscaledHeight = this.height = bounds.height;
+
+      this.spriteOffsetX = params.sprite.bounds.x;
+      this.spriteOffsetY = params.sprite.bounds.y;
+      this.unscaledWidth = this.width = params.sprite.bounds.width;
+      this.unscaledHeight = this.height = params.sprite.bounds.height;
 
       this.sprite = document.createElement("canvas");
       this.sprite.width = this.width + 1;
@@ -116,8 +96,11 @@ class Object {
 
     this.scale = params.scale ?? 1;
     this.rotate = params.rotate ?? 0;
-    this._x = params.x ?? 0;
-    this._y = params.y ?? 0;
+    this.origin = params.origin ?? [0, 0];
+    // this._x = params.x ?? 0;
+    // this._y = params.y ?? 0;
+    this._x = (params.x ?? 0) - this.width * this.origin[0];
+    this._y = (params.y ?? 0) - this.height * this.origin[1];
     this._vx = params.vx ?? 0;
     this._vy = params.vy ?? 0;
     this._ax = params.ax ?? 0;
@@ -188,23 +171,22 @@ class Object {
   draw(obj) {
     const { ctx } = obj.engine;
     ctx.save();
-    ctx.translate(this._x + this.width / 2, this._y + this.height / 2);
+    const [ ox, oy ] = [this.width * this.origin[0], this.height * this.origin[1]];
+    ctx.translate(this._x + ox, this._y + oy);
     ctx.rotate(this._rotate);
 
     // draw sprite with sprite scale
-    if (this.sprite !== null) {
-      ctx.drawImage(
-        this.sprite,
-        this.width / -2,
-        this.height / -2,
-        this.width,
-        this.height
-      );
-    }
+    if (this.sprite !== null)
+      ctx.drawImage(this.sprite, -ox, -oy, this.width, this.height);
+    
+    ctx.fillStyle = "red";
+    ctx.fillRect(-2, -2, 4, 4);
 
     this._draw(obj);
     ctx.restore();
 
+
+    ctx.strokeStyle = "grey";
     ctx.strokeRect(this.x, this.y, this.width, this.height);
   }
 
@@ -301,6 +283,9 @@ class Engine {
     const parent = canvas.parentNode;
     parent.querySelectorAll(".text-container > *").forEach((x) => x.remove());
     this.textContainer = parent.querySelector(".text-container");
+
+    /* let's make sure we know how big all the sprites are before we do any game logic */
+    dispatch('SIZE_UP_SPRITES')
 
     canvas.setAttribute("tabindex", "1");
 

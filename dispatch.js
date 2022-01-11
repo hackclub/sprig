@@ -159,6 +159,31 @@ const ACTIONS = {
     state.mouseY = mouseY;
     dispatch("RENDER");
   },
+  SIZE_UP_SPRITES({}, state) {
+    function contextBoundingBox(sprite, w, h) {
+      const occupiedPixel = (pixel) => pixel[3] > 0;
+
+      const ascending = (a, b) => a - b;
+      const xs = sprite
+        .reduce((a, p, i) => (p[3] == 0 ? a : [...a, i % w]), [])
+        .sort(ascending);
+      const ys = sprite
+        .reduce((a, p, i) => (p[3] == 0 ? a : [...a, Math.floor(i / h)]), [])
+        .sort(ascending);
+
+      return {
+        x: xs[0],
+        y: ys[0],
+        maxX: xs[xs.length - 1],
+        maxY: ys[ys.length - 1],
+        width: xs[xs.length - 1] - xs[0],
+        height: ys[ys.length - 1] - ys[0],
+      };
+    }
+
+    for (const sprite of Object.values(state.sprites))
+      sprite.bounds = contextBoundingBox(sprite.colors, 32, 32);
+  },
   UPLOAD({ saved }, state) {
     const newProg = saved.prog;
     const currentProg = state.codemirror.view.state.doc.toString();
