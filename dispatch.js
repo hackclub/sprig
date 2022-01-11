@@ -75,8 +75,7 @@ const ACTIONS = {
         render,
         svg,
         createEngine(...args) {
-          if (currentEngine)
-            cancelAnimationFrame(currentEngine._animId);
+          if (currentEngine) cancelAnimationFrame(currentEngine._animId);
           currentEngine = new Engine(...args);
           return currentEngine;
         },
