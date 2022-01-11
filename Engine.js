@@ -277,6 +277,7 @@ class Text {
       font-family: ${font};
       font-size: ${size}px;
       transform: rotate(${rotate}deg) scale(${scale});
+      width: max-content;
     `;
     span.innerText = str;
 
