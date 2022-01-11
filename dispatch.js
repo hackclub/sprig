@@ -140,10 +140,7 @@ const ACTIONS = {
     if (type === "file") {
       downloadText(
         `${state.name}.json`,
-        JSON.stringify({
-          sprites: state.sprites,
-          prog: string,
-        })
+        JSON.stringify(saveStateObj)
       );
     }
   },
