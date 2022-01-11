@@ -208,8 +208,8 @@ export function view(state) {
           }}
           class="output-overlay toggle-show-origin"
         >
-	  ${state.show.origin ? "[x]" : "[ ]"} show origin
-	</p>
+          ${state.show.origin ? "[x]" : "[ ]"} show origin
+        </p>
         <p
           @click=${(e) => {
             state.show.hitbox = !state.show.hitbox;
@@ -218,7 +218,7 @@ export function view(state) {
           class="output-overlay toggle-show-hitbox"
         >
           ${state.show.hitbox ? "[x]" : "[ ]"} show hitbox
-	</p>
+        </p>
         <pre class="output-overlay mouse-display">
           ${(() => {
             const canv = document.querySelector(".game-canvas") ?? {
