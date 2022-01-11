@@ -1,11 +1,13 @@
 ## TODO, Jan 10, 2022
 - [] communicate brush color better
 - [] pick color from canvas
+- [] tile sprites
+- [] set sprite
 - [] empty canvas bug
 - [x] collision overhaul
 - [] port to webgl
 - [] fix small 1x sprite bug
-- [] name sprites
+- [x] name sprites
 
 ## TODO, Jan 3, 2022
 
