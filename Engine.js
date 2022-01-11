@@ -104,19 +104,20 @@ class Object {
       "left bottom": [0, 1],
       "center top": [0.5, 0],
       "center center": [0.5, 0.5],
-      "center": [0.5, 0.5],
+      center: [0.5, 0.5],
       "center bottom": [0.5, 1],
       "right top": [1, 0],
       "right center": [1, 0.5],
       "right bottom": [1, 1],
-    }
+    };
 
-    this.origin = typeof params.origin === "string" && params.origin in origins 
-      ? origins[params.origin] 
-      : Array.isArray(params.origin) ? params.origin 
-      : [0, 0];
+    this.origin =
+      typeof params.origin === "string" && params.origin in origins
+        ? origins[params.origin]
+        : Array.isArray(params.origin)
+        ? params.origin
+        : [0, 0];
 
-      
     this._x = params.x ?? 0;
     this._y = params.y ?? 0;
     // this._x = (params.x ?? 0) - this.width * this.origin[0];
