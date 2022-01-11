@@ -128,24 +128,16 @@ class Object {
     this.solid = params.solid ?? false;
     this.click = params.click ?? null;
     this._draw = params.draw ?? null;
+    this._collides = params.collides ?? null;
+    this.drawBounds = params.drawBounds ?? false;
     this.dx = 0;
     this.dy = 0;
 
     this.id = Math.random();
   }
 
-  collides(query, buffer = 0) {
-    // buffer could be obj { left, right, top, bottom }
-
-    if (typeof query === "object") return haveCollided(this, query, buffer);
-
-    let collided = false;
-    this.engine.objects.forEach((obj) => {
-      if (obj.tags.includes(query) && haveCollided(this, obj, buffer))
-        collided = true;
-    });
-
-    return collided;
+  hasTag(tag) {
+    return this.tags.includes(tag);
   }
 
   translate(dx, dy) {
@@ -154,9 +146,9 @@ class Object {
 
     this.engine.objects.forEach((otherObj) => {
       const [ogx, ogy] = overlap(this, otherObj);
+      const [x, y] = overlap(this, otherObj, [dx, dy]);
 
       if (otherObj.solid && this.solid) {
-        const [x, y] = overlap(this, otherObj, [dx, dy]);
         if (x <= 0 || y <= 0) return;
 
         if (x > 0 && ogx <= 0) {
@@ -173,6 +165,9 @@ class Object {
           this._y -= ogy < -1.5 ? ogy : 0;
         }
       }
+
+      if ((x >= 0 && y >= 0) && this._collides !== null) this._collides(this, otherObj);
+
     });
 
     if (canMoveInX) this._x += dx;
@@ -210,6 +205,8 @@ class Object {
 
     this._draw(obj);
     ctx.restore();
+
+    ctx.strokeRect(this.x, this.y, this.width, this.height);
   }
 
   set x(val) {
@@ -370,11 +367,6 @@ class Engine {
       this.objects = this.objects.filter((x) => !x.tags.includes(query));
   }
 
-  onDraw(f) {
-    // not doced
-    this._onDraw.push(f);
-  }
-
   start() {
     const draw = () => {
       this.ctx.fillStyle = "white";
@@ -385,7 +377,6 @@ class Engine {
         let ogY = obj.y;
 
         if (obj.draw !== null) obj.draw(obj);
-        this._onDraw.forEach((f) => f(obj));
 
         obj.vx += obj.ax;
         obj.vy += obj.ay;

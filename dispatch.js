@@ -3,6 +3,7 @@ import lzutf8 from "https://cdn.skypack.dev/lzutf8";
 import { view } from "./view.js";
 import { init } from "./init.js";
 import { Engine } from "./Engine.js";
+import { Muse } from "https://hackclub.github.io/muse/exports.js";
 
 function copy(str) {
   const inp = document.createElement("input");
@@ -62,7 +63,7 @@ const ACTIONS = {
     } else {
       state.error = false;
       state.logs = [];
-      const included = { _state: state, html, render, svg, Engine, ...state.sprites }; // these only work if no other imports
+      const included = { _state: state, html, render, svg, Engine, Muse, ...state.sprites }; // these only work if no other imports
       try {
         new Function(...Object.keys(included), `
           {

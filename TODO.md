@@ -1,4 +1,13 @@
-## Real TODO
+## TODO, Jan 10, 2022
+- [] communicate brush color better
+- [] pick color from canvas
+- [] empty canvas bug
+- [x] collision overhaul
+- [] port to webgl
+- [] fix small 1x sprite bug
+- [] name sprites
+
+## TODO, Jan 3, 2022
 
 -[x] set fixed game window size
     -[] add option to go full screen
