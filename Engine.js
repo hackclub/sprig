@@ -1,5 +1,5 @@
 const getLimits = (obj, [dx, dy] = [0, 0]) => {
-  const [ ox, oy ] = [obj.width * obj.origin[0], obj.height * obj.origin[1]];
+  const [ox, oy] = [obj.width * obj.origin[0], obj.height * obj.origin[1]];
   const x = obj.x + dx - ox;
   const y = obj.y + dy - oy;
   const xMin = x;
@@ -72,7 +72,7 @@ class Object {
     let bounds = { x: 0, y: 0, maxX: 16, maxY: 16, width: 16, height: 16 };
 
     if (typeof params.sprite === "object") {
-      const [ w, h ] = params.sprite.size;
+      const [w, h] = params.sprite.size;
 
       this.imageData = new ImageData(
         new Uint8ClampedArray(params.sprite.colors.flat()),
@@ -172,20 +172,22 @@ class Object {
   draw(obj) {
     const { ctx } = obj.engine;
     ctx.save();
-    const [ ox, oy ] = [this.width * this.origin[0], this.height * this.origin[1]];
+    const [ox, oy] = [
+      this.width * this.origin[0],
+      this.height * this.origin[1],
+    ];
     ctx.translate(this._x, this._y);
     ctx.rotate(this._rotate);
 
     // draw sprite with sprite scale
     if (this.sprite !== null)
       ctx.drawImage(this.sprite, -ox, -oy, this.width, this.height);
-    
+
     ctx.fillStyle = "red";
     ctx.fillRect(-2, -2, 4, 4);
 
     this._draw(obj);
     ctx.restore();
-
 
     ctx.strokeStyle = "grey";
     ctx.strokeRect(this.x - ox, this.y - oy, this.width, this.height);
@@ -286,7 +288,7 @@ class Engine {
     this.textContainer = parent.querySelector(".text-container");
 
     /* let's make sure we know how big all the sprites are before we do any game logic */
-    dispatch('SIZE_UP_SPRITES')
+    dispatch("SIZE_UP_SPRITES");
 
     canvas.setAttribute("tabindex", "1");
 

@@ -82,8 +82,10 @@ export function init(state) {
       else {
         if (Array.isArray(Object.values(saved.sprites)[0]))
           saved.sprites = Object.fromEntries(
-            Object.entries(saved.sprites)
-              .map(([name, colors]) => [name, { size: [32, 32], colors }])
+            Object.entries(saved.sprites).map(([name, colors]) => [
+              name,
+              { size: [32, 32], colors },
+            ])
           );
         state.sprites = saved.sprites;
         const name = Object.keys(saved.sprites)[0];
