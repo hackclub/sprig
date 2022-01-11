@@ -254,7 +254,6 @@ class Object {
 
 class Text {
   constructor(str, x, y, ops, container) {
-
     this._text = str;
     this.x = x;
     this.y = y;
