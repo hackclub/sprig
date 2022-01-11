@@ -165,8 +165,8 @@ class Object {
         }
       }
 
-      if ((x >= 0 && y >= 0) && this._collides !== null) this._collides(this, otherObj);
-
+      if (x >= 0 && y >= 0 && this._collides !== null)
+        this._collides(this, otherObj);
     });
 
     if (canMoveInX) this._x += dx;

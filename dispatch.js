@@ -64,7 +64,15 @@ const ACTIONS = {
       state.error = false;
       state.logs = [];
 
-      const included = { _state: state, html, render, svg, Engine, Muse, ...state.sprites }; // these only work if no other imports
+      const included = {
+        _state: state,
+        html,
+        render,
+        svg,
+        Engine,
+        Muse,
+        ...state.sprites,
+      }; // these only work if no other imports
 
       try {
         new Function(
