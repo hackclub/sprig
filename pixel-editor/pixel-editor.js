@@ -53,7 +53,7 @@ export function createPixelEditor(target) {
       }}
       style="height: 40px;"
     >
-      <img src=${`../assets/${toolName}.png`} width="25px"/>
+      <img src=${`../assets/${toolName}.png`} width="25px" />
     </button>
   `;
 
@@ -76,7 +76,7 @@ export function createPixelEditor(target) {
         }}
         style="height: 40px;"
       >
-        <img src="../assets/undo.png" width="25px"/>
+        <img src="../assets/undo.png" width="25px" />
       </button>
     </div>
 
@@ -104,7 +104,7 @@ export function createPixelEditor(target) {
         }}
         style="height: 35px;"
       >
-        <img src="../assets/clear.png" width="25px"/>
+        <img src="../assets/clear.png" width="25px" />
       </button>
     </div>
   `;
