@@ -194,7 +194,7 @@ class Object {
       this.width * this.origin[0],
       this.height * this.origin[1],
     ];
-    ctx.translate(this._x + ox, this._y + oy);
+    ctx.translate(this._x, this._y);
     ctx.rotate(this._rotate);
 
     // draw sprite with sprite scale
@@ -211,7 +211,7 @@ class Object {
 
     if (Engine.show.hitbox) {
       ctx.strokeStyle = "grey";
-      ctx.strokeRect(this.x, this.y, this.width, this.height);
+      ctx.strokeRect(this.x - ox, this.y - oy, this.width, this.height);
     }
   }
 
