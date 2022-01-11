@@ -211,7 +211,7 @@ export function view(state) {
       <div class="pixel-editor-container">
         <div class="list-of-sprites">
           ${Object.keys(state.sprites).map(
-            (x, i) => html.for({x})`
+            (x, i) => html.for({ x })`
               <div
                 class=${[
                   "sprite-entry",
@@ -239,16 +239,21 @@ export function view(state) {
   `;
 }
 
-const renderSpriteName = (name, state) => state.selected_sprite === name 
-  ? html`<input 
+const renderSpriteName = (name, state) =>
+  state.selected_sprite === name
+    ? html`<input 
           .value=${name} 
-          @change=${(e) => dispatch("CHANGE_SPRITE_NAME", { oldName: name, newName: e.target.value })}></input>`
-  : html`<div
-            class="sprite-name"
-            @mousedown=${() => dispatch("SELECT_SPRITE", { name })}
-          >
-            ${name}
-          </div> `
+          @change=${(e) =>
+            dispatch("CHANGE_SPRITE_NAME", {
+              oldName: name,
+              newName: e.target.value,
+            })}></input>`
+    : html`<div
+        class="sprite-name"
+        @mousedown=${() => dispatch("SELECT_SPRITE", { name })}
+      >
+        ${name}
+      </div> `;
 
 const renderShared = (state) => html`
   <div class="shared-modal hide">Sharing link copied to clip board.</div>
