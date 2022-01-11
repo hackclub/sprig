@@ -138,10 +138,7 @@ const ACTIONS = {
     }
 
     if (type === "file") {
-      downloadText(
-        `${state.name}.json`,
-        JSON.stringify(saveStateObj)
-      );
+      downloadText(`${state.name}.json`, JSON.stringify(saveStateObj));
     }
   },
   CANVAS_MOUSE_MOVE({ content: { mouseX, mouseY } }, state) {
