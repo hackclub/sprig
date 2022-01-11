@@ -51,8 +51,9 @@ export function createPixelEditor(target) {
         state.tool = toolName;
         r();
       }}
+      style="height: 40px;"
     >
-      ${toolName}
+      <img src=${`../assets/${toolName}.png`} width="25px"/>
     </button>
   `;
 
@@ -73,8 +74,9 @@ export function createPixelEditor(target) {
             state.gridColors[i] = grid[i];
           });
         }}
+        style="height: 40px;"
       >
-        undo
+        <img src="../assets/undo.png" width="25px"/>
       </button>
     </div>
 
@@ -92,6 +94,7 @@ export function createPixelEditor(target) {
           state.color = hexToRGBA(e.target.value);
           r();
         }}
+        style="height: 35px;"
       />
       <button
         class=${RGBA_to_hex(state.color) === "#00000000" ? "selected-tool" : ""}
@@ -99,8 +102,9 @@ export function createPixelEditor(target) {
           state.color = hexToRGBA("#00000000");
           r();
         }}
+        style="height: 35px;"
       >
-        clear
+        <img src="../assets/clear.png" width="25px"/>
       </button>
     </div>
   `;

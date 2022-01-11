@@ -60,7 +60,7 @@ export function view(state) {
       .list-of-sprites {
         display: flex;
         flex-direction: column;
-        background: orange;
+        background: #d3d3d3;
         min-height: 100%;
         max-height: 100%;
         height: 100%;
@@ -99,6 +99,7 @@ export function view(state) {
         box-sizing: border-box;
         border: 2px solid #ffffff00;
         padding: 3px;
+        border-radius: 5px;
       }
 
       .sprite-name {
@@ -107,8 +108,8 @@ export function view(state) {
         padding-right: 10px;
       }
 
-      .sprite-name:hover {
-        background: yellow;
+      .sprite-entry:hover {
+        border: 2px solid yellow;
       }
 
       .sprite-delete {
@@ -120,7 +121,7 @@ export function view(state) {
       }
 
       .sprite-delete:hover {
-        color: yellow;
+        color: orange;
       }
 
       .selected-sprite {
@@ -148,6 +149,10 @@ export function view(state) {
         position: absolute;
         bottom: calc(100% - var(--horizontal-bar));
         right: 5px;
+      }
+
+      .sprite-entry input {
+        width: min-content;
       }
     </style>
     <div class="left-pane">
@@ -204,19 +209,14 @@ export function view(state) {
       <div class="pixel-editor-container">
         <div class="list-of-sprites">
           ${Object.keys(state.sprites).map(
-            (x) => html`
+            (x, i) => html.for({x})`
               <div
                 class=${[
                   "sprite-entry",
                   x === state.selected_sprite ? "selected-sprite" : "",
                 ].join(" ")}
               >
-                <div
-                  class="sprite-name"
-                  @mousedown=${() => dispatch("SELECT_SPRITE", { name: x })}
-                >
-                  ${x}
-                </div>
+                ${renderSpriteName(x, state)}
                 <div
                   class="sprite-delete"
                   @mousedown=${() => dispatch("DELETE_SPRITE", { name: x })}
@@ -236,6 +236,17 @@ export function view(state) {
     ${renderExamples(state)} ${renderOptions(state)} ${renderShared(state)}
   `;
 }
+
+const renderSpriteName = (name, state) => state.selected_sprite === name 
+  ? html`<input 
+          .value=${name} 
+          @change=${(e) => dispatch("CHANGE_SPRITE_NAME", { oldName: name, newName: e.target.value })}></input>`
+  : html`<div
+            class="sprite-name"
+            @mousedown=${() => dispatch("SELECT_SPRITE", { name })}
+          >
+            ${name}
+          </div> `
 
 const renderShared = (state) => html`
   <div class="shared-modal hide">Sharing link copied to clip board.</div>

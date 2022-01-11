@@ -230,6 +230,16 @@ const ACTIONS = {
     state.selected_sprite = name;
     dispatch("RENDER");
   },
+  CHANGE_SPRITE_NAME({ oldName, newName }, state) {
+    // check name is valid, not duplicate or blank
+    if (newName in state.sprites) return;
+    
+    const sprite = state.sprites[oldName];
+    state.sprites[newName] = sprite;
+    delete state.sprites[oldName];
+    state.selected_sprite = newName;
+    dispatch("RENDER");
+  },
   SELECT_SPRITE({ name }, state) {
     const grid = state.sprites[name];
     state.selected_sprite = name;
