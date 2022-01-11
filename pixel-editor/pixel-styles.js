@@ -1,15 +1,15 @@
 import { render, html, svg } from "../uhtml.js";
 
-    // canvas {
-    //   image-rendering: optimizeSpeed;
-    //   image-rendering: -moz-crisp-edges;
-    //   image-rendering: -o-crisp-edges;
-    //   image-rendering: -webkit-optimize-contrast;
-    //   image-rendering: optimize-contrast;
-    //   image-rendering: crisp-edges;
-    //   image-rendering: pixelated;
-    //   -ms-interpolation-mode: nearest-neighbor;
-    // }
+// canvas {
+//   image-rendering: optimizeSpeed;
+//   image-rendering: -moz-crisp-edges;
+//   image-rendering: -o-crisp-edges;
+//   image-rendering: -webkit-optimize-contrast;
+//   image-rendering: optimize-contrast;
+//   image-rendering: crisp-edges;
+//   image-rendering: pixelated;
+//   -ms-interpolation-mode: nearest-neighbor;
+// }
 
 export const pixelStyles = html`
   <style>

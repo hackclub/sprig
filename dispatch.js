@@ -63,9 +63,13 @@ const ACTIONS = {
     } else {
       state.error = false;
       state.logs = [];
+
       const included = { _state: state, html, render, svg, Engine, Muse, ...state.sprites }; // these only work if no other imports
+
       try {
-        new Function(...Object.keys(included), `
+        new Function(
+          ...Object.keys(included),
+          `
           {
             const _log = console.log;
             console.log = (...args) => {
@@ -75,10 +79,9 @@ const ACTIONS = {
           }
 
           ${string}
-        `)(
-          ...Object.values(included)
-        );
-      } catch(e) { 
+        `
+        )(...Object.values(included));
+      } catch (e) {
         console.log(e);
         state.error = true;
         const str = JSON.stringify(e, Object.getOwnPropertyNames(e), 2);
