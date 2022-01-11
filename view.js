@@ -10,8 +10,7 @@ function shareOptions(state) {
         <input type="text" .placeholder=${state.name} @keyup=${(e) => {
     state.name = e.target.value === "" ? "anon" : e.target.value;
   }}></input>
-        <button @click=${() =>
-          dispatch("SAVE", { type: "file" })}>
+        <button @click=${() => dispatch("SAVE", { type: "file" })}>
           file
         </button>
         <button @click=${() => dispatch("SAVE", { type: "link" })}>link</button>
