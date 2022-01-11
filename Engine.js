@@ -118,10 +118,10 @@ class Object {
         ? params.origin
         : [0, 0];
 
-    this._x = params.x ?? 0;
-    this._y = params.y ?? 0;
-    // this._x = (params.x ?? 0) - this.width * this.origin[0];
-    // this._y = (params.y ?? 0) - this.height * this.origin[1];
+    // this._x = params.x ?? 0;
+    // this._y = params.y ?? 0;
+    this._x = (params.x ?? 0) - this.width * this.origin[0];
+    this._y = (params.y ?? 0) - this.height * this.origin[1];
     this._vx = params.vx ?? 0;
     this._vy = params.vy ?? 0;
     this._ax = params.ax ?? 0;
@@ -196,21 +196,25 @@ class Object {
       this.width * this.origin[0],
       this.height * this.origin[1],
     ];
-    ctx.translate(this._x, this._y);
+    ctx.translate(this._x + ox, this._y + oy);
     ctx.rotate(this._rotate);
 
     // draw sprite with sprite scale
     if (this.sprite !== null)
       ctx.drawImage(this.sprite, -ox, -oy, this.width, this.height);
 
-    ctx.fillStyle = "red";
-    ctx.fillRect(-2, -2, 4, 4);
+    if (Engine.show.origin) {
+      ctx.fillStyle = "red";
+      ctx.fillRect(-2, -2, 4, 4);
+    }
 
     this._update(obj);
     ctx.restore();
 
-    ctx.strokeStyle = "grey";
-    ctx.strokeRect(this.x - ox, this.y - oy, this.width, this.height);
+    if (Engine.show.hitbox) {
+      ctx.strokeStyle = "grey";
+      ctx.strokeRect(this.x, this.y, this.width, this.height);
+    }
   }
 
   set x(val) {

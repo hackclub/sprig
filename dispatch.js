@@ -26,6 +26,7 @@ const STATE = {
   codemirror: undefined,
   url: undefined,
   shareType: "airtable",
+  show: { origin: false, hitbox: false },
   examples: [],
   error: false,
   logs: [],
@@ -64,6 +65,8 @@ const ACTIONS = {
     } else {
       state.error = false;
       state.logs = [];
+
+      Engine.show = state.show;
 
       const included = {
         _state: state,
