@@ -25,6 +25,7 @@ const STATE = {
   codemirror: undefined,
   url: undefined,
   shareType: "airtable",
+  show: { origin: false, hitbox: false },
   examples: [],
   error: false,
   logs: [],
@@ -60,6 +61,7 @@ const ACTIONS = {
         URL.revokeObjectURL(blob);
       });
     } else {
+      Engine.show = state.show;
       const included = { html, render, svg, Engine, ...state.sprites }; // these only work if no other imports
       // try {
       new Function(...Object.keys(included), string)(

@@ -35,48 +35,48 @@ const push = (obj, { x, y }, aco) => {
   obj.vx += x*aco, obj.vy += y*aco;
 }
 
-e.add({ 
-	tags: ["player"],
-	solid: true,
-	x: 50,
-	y: 50,
-	sprite: sprite_qsr,
-    rotate: (90 + 180) / 2,
-	scale: 2,
-    origin: [0.5, 0.5],
-	draw(obj) {
-      if (gameOver) return;
-      
-  	  if (e.heldKey("ArrowLeft")) obj.rotate -= 3;
-      if (e.heldKey("ArrowRight")) obj.rotate += 3;
-      if (e.heldKey("ArrowUp")) push(obj, Vec2.fromDeg(obj.rotate).mulf( 4), 0.08);
-      if (e.heldKey("ArrowDown")) push(obj, Vec2.fromDeg(obj.rotate).mulf(-4), 0.08);
-      if (e.pressedKey(" ")) {
-        // push(obj, Vec2.fromDeg(obj.rotate).mulf(-10), 0.6);
-        const { x, y } = new Vec2(obj.x, obj.y)
-          .add(Vec2.fromDeg(obj.rotate).mulf(obj.height*1.2));
-        e.add({
-          tags: ["bullet"],
-          solid: true,
-          x, y,
-          rotate: obj.rotate,
-          sprite: sprite_tle,
-          scale: 2,
-          origin: [0.5, 0.5],
-          draw(obj) {
-            obj.speed = obj.speed ? obj.speed * 0.93 : 10;
-            // if (obj.speed < 0.04) e.remove(obj);
-            const { x, y } = Vec2.fromDeg(obj.rotate).mulf(obj.speed);
-            // obj.x += x, obj.y += y;
-          }
-        })
-      }
-      obj.vx *= 0.93; obj.vy *= 0.93;
-	},
-    collide(me, them) {
-      if (them.tags.includes("meteor"))
-        e.remove(me), e.remove(them), gameOver = true;
+e.add({
+  tags: ["player"],
+  solid: true,
+  x: 50,
+  y: 50,
+  sprite: sprite_qsr,
+  rotate: (90 + 180) / 2,
+  scale: 2,
+  origin: [0.5, 0.5],
+  draw(obj) {
+    if (gameOver) return;
+
+    if (e.heldKey("ArrowLeft")) obj.rotate -= 3;
+    if (e.heldKey("ArrowRight")) obj.rotate += 3;
+    if (e.heldKey("ArrowUp")) push(obj, Vec2.fromDeg(obj.rotate).mulf( 4), 0.08);
+    if (e.heldKey("ArrowDown")) push(obj, Vec2.fromDeg(obj.rotate).mulf(-4), 0.08);
+    if (e.pressedKey(" ")) {
+      // push(obj, Vec2.fromDeg(obj.rotate).mulf(-10), 0.6);
+      const { x, y } = new Vec2(obj.x, obj.y)
+        .add(Vec2.fromDeg(obj.rotate).mulf(obj.height*1.2));
+      e.add({
+        tags: ["bullet"],
+        solid: true,
+        x, y,
+        rotate: obj.rotate,
+        sprite: sprite_tle,
+        scale: 2,
+        origin: [0.5, 0.5],
+        draw(obj) {
+          obj.speed = obj.speed ? obj.speed * 0.93 : 10;
+          // if (obj.speed < 0.04) e.remove(obj);
+          const { x, y } = Vec2.fromDeg(obj.rotate).mulf(obj.speed);
+          // obj.x += x, obj.y += y;
+        }
+      })
     }
+    obj.vx *= 0.93; obj.vy *= 0.93;
+  },
+  collide(me, them) {
+    if (them.tags.includes("meteor"))
+      e.remove(me), e.remove(them), gameOver = true;
+  }
 })
 
 e.start();

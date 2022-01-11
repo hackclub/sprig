@@ -127,14 +127,26 @@ export function view(state) {
         border: 2px solid blue;
       }
 
-      .mouse-display {
+      .output-overlay {
         color: white;
 
         margin: 0px;
         height: 1em;
+        font-size: 20px;
         font-family: monospace;
         position: absolute;
+        user-select: none;
+      }
+      .mouse-display {
         bottom: calc(100% - var(--horizontal-bar));
+        right: 5px;
+      }
+      .toggle-show-origin {
+        bottom: calc(100% - var(--horizontal-bar) + 20px);
+        right: 5px;
+      }
+      .toggle-show-hitbox {
+        bottom: calc(100% - var(--horizontal-bar) + 40px);
         right: 5px;
       }
     </style>
@@ -167,7 +179,25 @@ export function view(state) {
           class="game-canvas"
         >
         </canvas>
-        <pre class="mouse-display">
+        <p
+          @click=${(e) => {
+            state.show.origin = !state.show.origin;
+            dispatch("RENDER");
+          }}
+          class="output-overlay toggle-show-origin"
+        >
+	  ${state.show.origin ? "[x]" : "[ ]"} show origin
+	</p>
+        <p
+          @click=${(e) => {
+            state.show.hitbox = !state.show.hitbox;
+            dispatch("RENDER");
+          }}
+          class="output-overlay toggle-show-hitbox"
+        >
+          ${state.show.hitbox ? "[x]" : "[ ]"} show hitbox
+	</p>
+        <pre class="output-overlay mouse-display">
           ${(() => {
             const canv = document.querySelector(".game-canvas") ?? {
               width: 100,

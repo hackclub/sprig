@@ -167,28 +167,39 @@ class Object {
     this.height = this.unscaledHeight * factor;
   }
 
-  get rotate() { return this._rotate / Math.PI * 180; }
-  set rotate(x) { this._rotate = x / 180 * Math.PI; }
+  get rotate() {
+    return (this._rotate / Math.PI) * 180;
+  }
+  set rotate(x) {
+    this._rotate = (x / 180) * Math.PI;
+  }
 
   draw(obj) {
     const { ctx } = obj.engine;
     ctx.save();
-    const [ ox, oy ] = [this.width * this.origin[0], this.height * this.origin[1]];
+    const [ox, oy] = [
+      this.width * this.origin[0],
+      this.height * this.origin[1],
+    ];
     ctx.translate(this._x + ox, this._y + oy);
     ctx.rotate(this._rotate);
 
     // draw sprite with sprite scale
     if (this.sprite !== null)
       ctx.drawImage(this.sprite, -ox, -oy, this.width, this.height);
-    
-    ctx.fillStyle = "red";
-    ctx.fillRect(-2, -2, 4, 4);
+
+    if (Engine.show.origin) {
+      ctx.fillStyle = "red";
+      ctx.fillRect(-2, -2, 4, 4);
+    }
 
     this._draw(obj);
     ctx.restore();
 
-    ctx.strokeStyle = "grey";
-    ctx.strokeRect(this.x, this.y, this.width, this.height);
+    if (Engine.show.hitbox) {
+      ctx.strokeStyle = "grey";
+      ctx.strokeRect(this.x, this.y, this.width, this.height);
+    }
   }
 
   set x(val) {
@@ -254,7 +265,7 @@ class Engine {
     this._pressedKeys = new Set();
 
     /* let's make sure we know how big all the sprites are before we do any game logic */
-    dispatch('SIZE_UP_SPRITES')
+    dispatch("SIZE_UP_SPRITES");
 
     canvas.setAttribute("tabindex", "1");
 
