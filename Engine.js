@@ -206,7 +206,7 @@ class Object {
       ctx.fillRect(-2, -2, 4, 4);
     }
 
-    this._update(obj);
+    if (this._update !== null) this._update(obj);
     ctx.restore();
 
     if (Engine.show.hitbox) {

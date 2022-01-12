@@ -105,6 +105,7 @@ const ACTIONS = {
         state.logs.push(str);
       }
       dispatch("RENDER");
+      document.querySelector(".game-canvas").focus();
     }
   },
   SHARE_TYPE({ type }, state) {
