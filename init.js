@@ -29,13 +29,11 @@ export function init(state) {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       }).then((res) =>
-        res
-          .json()
-          .then(json => {
-            console.log(json);
-            const saved = JSON.parse(json[0].fields["JSON"]);
-            dispatch("UPLOAD", { saved });
-          })
+        res.json().then((json) => {
+          console.log(json);
+          const saved = JSON.parse(json[0].fields["JSON"]);
+          dispatch("UPLOAD", { saved });
+        })
       );
     } else {
       // if (!file.startsWith("http")) file = `examples/${file}`;
