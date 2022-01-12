@@ -29,13 +29,9 @@ export function init(state) {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       }).then((res) =>
-        res.json().then((json) => {
-          console.log(json);
-          // state.codemirror.view.dispatch({
-          //   changes: { from: 0, insert: json[0].fields["Content"] },
-          // });
-          // dispatch("RUN");
-        })
+        res
+          .json()
+          .then(saved => dispatch("UPLOAD", { saved }))
       );
     } else {
       // if (!file.startsWith("http")) file = `examples/${file}`;
