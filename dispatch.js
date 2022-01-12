@@ -84,10 +84,9 @@ const ACTIONS = {
       }; // these only work if no other imports
 
       try {
-        new Function(
-          ...Object.keys(included),
-          `${string}`
-        )(...Object.values(included));
+        new Function(...Object.keys(included), `${string}`)(
+          ...Object.values(included)
+        );
       } catch (e) {
         console.log(e);
         state.error = true;
