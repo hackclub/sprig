@@ -135,8 +135,10 @@ const ACTIONS = {
         const res = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: { Name: saveStateObj.name, JSON: JSON.stringify(saveStateObj) },
+          body: JSON.stringify({ Name: saveStateObj.name, JSON: dispatch("GET_SAVE_STATE") }),
         }).then((r) => r.json());
+
+        console.log(res);
 
         copy(res.fields["Link"]);
         showShared();

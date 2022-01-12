@@ -24,18 +24,19 @@ export function init(state) {
     let file_url = file;
 
     if (file.startsWith("rec")) {
-      // const url = `https://api2.hackclub.com/v0.1/Saved Projects/Live Editor Projects/?select={"filterByFormula": "RECORD_ID()='${file}'"}`;
-      // fetch(url, {
-      //   method: "GET",
-      //   headers: { "Content-Type": "application/json" },
-      // }).then((res) =>
-      //   res.json().then((json) => {
-      //     state.codemirror.view.dispatch({
-      //       changes: { from: 0, insert: json[0].fields["Content"] },
-      //     });
-      //     dispatch("RUN");
-      //   })
-      // );
+      const url = `https://api2.hackclub.com/v0.1/Saved Projects/Game Lab/?select={"filterByFormula": "RECORD_ID()='${file}'"}`;
+      fetch(url, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }).then((res) =>
+        res.json().then((json) => {
+          console.log(json);
+          // state.codemirror.view.dispatch({
+          //   changes: { from: 0, insert: json[0].fields["Content"] },
+          // });
+          // dispatch("RUN");
+        })
+      );
     } else {
       // if (!file.startsWith("http")) file = `examples/${file}`;
       // fetch(file_url, { mode: "cors" }).then((file) =>
