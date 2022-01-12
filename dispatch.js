@@ -129,8 +129,7 @@ const ACTIONS = {
       }
 
       const super_secret_authToken = "recbyefY9mTqsIsu316420036201n7omgg1e3s"; // DO NOT USE PLEASE!!!
-      const url =
-        `https://airbridge.hackclub.com/v0.2/Saved%20Projects/Game%20Lab/?authKey=${super_secret_authToken}`;
+      const url = `https://airbridge.hackclub.com/v0.2/Saved%20Projects/Game%20Lab/?authKey=${super_secret_authToken}`;
       (async () => {
         const res = await fetch(url, {
           method: "POST",
