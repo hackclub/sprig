@@ -86,17 +86,7 @@ const ACTIONS = {
       try {
         new Function(
           ...Object.keys(included),
-          `
-          {
-            const _log = console.log;
-            console.log = (...args) => {
-              _state.logs.push(...args); 
-              _log(...args);
-            }
-          }
-
-          ${string}
-        `
+          `${string}`
         )(...Object.values(included));
       } catch (e) {
         console.log(e);

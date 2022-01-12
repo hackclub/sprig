@@ -101,6 +101,8 @@ export function view(state) {
         border: 2px solid #ffffff00;
         padding: 3px;
         border-radius: 5px;
+        font-family: monospace;
+        font-size: .8rem;
       }
 
       .sprite-name {
@@ -117,7 +119,6 @@ export function view(state) {
         display: flex;
         justify-content: flex-end;
         color: red;
-        flex: 1;
         cursor: pointer;
       }
 
@@ -166,7 +167,10 @@ export function view(state) {
       }
 
       .sprite-entry input {
-        width: min-content;
+        background: none;
+        outline: none;
+        border: none;
+        font-family: monospace;
       }
     </style>
     <div class="left-pane">

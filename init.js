@@ -24,14 +24,14 @@ export function init(state) {
     let file_url = file;
 
     if (file.startsWith("rec")) {
-      const url = `http://api2.hackclub.com/v0.2/Saved%20Projects/Game%20Lab/?select={%22filterByFormula%22:%22RECORD_ID()=%27${file}%27%22}&authKey=recbyefY9mTqsIsu316420036201n7omgg1e3s`;
+      const url = `https://api2.hackclub.com/v0.2/Saved%20Projects/Game%20Lab/${file}/?authKey=recbyefY9mTqsIsu316420036201n7omgg1e3s`;
       fetch(url, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       }).then((res) =>
         res.json().then((json) => {
           console.log(json);
-          const saved = JSON.parse(json[0].fields["JSON"]);
+          const saved = JSON.parse(json.fields["JSON"]);
           dispatch("UPLOAD", { saved });
         })
       );
