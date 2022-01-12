@@ -37,7 +37,6 @@ export function createPixelEditor(target) {
     showGrid: false,
     defaultGridArraySize: [32, 32],
     undoRedoStack: [],
-    showColorPicker: false,
     selectHandle: {
       clicked: false,
       dragged: false,
@@ -82,30 +81,16 @@ export function createPixelEditor(target) {
     </div>
 
     <div class="colors">
-      <button
-        @mouseover=${() => { state.showColorPicker = true; r(); console.log(state.color, RGBA_to_hex(state.color)) } }
-        @mouseleave=${() => { state.showColorPicker = false; r(); } }
+      <input
+        type="color"
+        @input=${(e) => { state.color = hexToRGBA(e.target.value); r(); } }
+        @click=${(e) => { state.color = hexToRGBA(e.target.value); r(); } }
         class=${RGBA_to_hex(state.color) !== "#00000000" ? "selected-tool" : ""}
         style=${`
           height: 35px; 
           width: 35px; 
-          position: relative; 
-          background:${document.querySelector("color-picker")?.hex8 ?? "black"};
         `}
-      >
-        ${state.showColorPicker ? html`<color-picker
-          @input=${(e) => {
-            state.color = hexToRGBA(e.target.hex8);
-            r();
-          }}
-          @click=${(e) => {
-            state.color = hexToRGBA(e.target.hex8);
-            r();
-          }}
-          style="position: absolute; bottom: 100%; right: 0px;"></color-picker>`
-          : ""
-        }
-      </button>
+      />
       <button
         class=${RGBA_to_hex(state.color) === "#00000000" ? "selected-tool" : ""}
         @click=${() => {
