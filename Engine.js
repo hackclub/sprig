@@ -1,13 +1,15 @@
 const getLimits = (obj, [dx, dy] = [0, 0]) => {
-  const [ox, oy] = [obj.width * obj.origin[0], obj.height * obj.origin[1]];
+  const w = obj.width;
+  const h = obj.height;
+  const [ox, oy] = [w * obj.origin[0], h * obj.origin[1]];
   const x = obj.x + dx - ox;
   const y = obj.y + dy - oy;
   const xMin = x;
-  const xMax = x + obj.width;
+  const xMax = x + w;
   const yMin = y;
-  const yMax = y + obj.height;
-  const xCenter = (x + x + obj.width) / 2;
-  const yCenter = (y + y + obj.height) / 2;
+  const yMax = y + h;
+  const xCenter = (x + x + w) / 2;
+  const yCenter = (y + y + h) / 2;
 
   return {
     min: [xMin, yMin],
@@ -19,8 +21,8 @@ const getLimits = (obj, [dx, dy] = [0, 0]) => {
     yMax,
     xCenter,
     yCenter,
-    width: obj.width,
-    height: obj.height,
+    width: w,
+    height: h,
   };
 };
 
@@ -64,6 +66,32 @@ function haveCollided(obj0, obj1, buffer = 0) {
   );
 }
 
+function initSprite(spriteData, that) {
+  if (typeof spriteData === "object") {
+      const [w, h] = spriteData.size;
+
+      that.imageData = new ImageData(
+        new Uint8ClampedArray(spriteData.colors.flat()),
+        w,
+        h
+      );
+
+      const dx = spriteData.bounds.x;
+      const dy = spriteData.bounds.y;
+      that._width = spriteData.bounds.width;
+      that._height = spriteData.bounds.height;
+
+      that._sprite = document.createElement("canvas");
+      that._sprite.width = that._width + 1;
+      that._sprite.height = that._height + 1;
+      that._sprite
+        .getContext("2d")
+        .putImageData(that.imageData, -dx, -dy);
+    } else {
+      that._sprite = null;
+    }
+}
+
 class Object {
   constructor(params, engine) {
     this.engine = engine;
@@ -71,32 +99,13 @@ class Object {
 
     let bounds = { x: 0, y: 0, maxX: 16, maxY: 16, width: 16, height: 16 };
 
-    if (typeof params.sprite === "object") {
-      const [w, h] = params.sprite.size;
-
-      this.imageData = new ImageData(
-        new Uint8ClampedArray(params.sprite.colors.flat()),
-        w,
-        h
-      );
-
-      this.spriteOffsetX = params.sprite.bounds.x;
-      this.spriteOffsetY = params.sprite.bounds.y;
-      this.unscaledWidth = this.width = params.sprite.bounds.width;
-      this.unscaledHeight = this.height = params.sprite.bounds.height;
-
-      this.sprite = document.createElement("canvas");
-      this.sprite.width = this.width + 1;
-      this.sprite.height = this.height + 1;
-      this.sprite
-        .getContext("2d")
-        .putImageData(this.imageData, -this.spriteOffsetX, -this.spriteOffsetY);
-    } else {
-      this.sprite = null;
-    }
-
+    this._sprite = null;
+    this._width = null;
+    this._height = null;
+    this.sprite = params.sprite;
     this.scale = params.scale ?? 1;
     this.rotate = params.rotate ?? 0;
+
 
     const origins = {
       "left top": [0, 0],
@@ -137,6 +146,15 @@ class Object {
     this.id = Math.random();
   }
 
+  get sprite() {
+    return this._sprite;
+  }
+
+  set sprite(spriteData) { // scaling doesn't work here
+    initSprite(spriteData, this);
+    // this.scale = this.scale;
+  }
+
   hasTag(tag) {
     return this.tags.includes(tag);
   }
@@ -175,9 +193,12 @@ class Object {
     if (canMoveInY) this._y += dy;
   }
 
-  set scale(factor) {
-    this.width = this.unscaledWidth * factor;
-    this.height = this.unscaledHeight * factor;
+  get width() {
+    return this._width * this.scale;
+  }
+
+  get height() {
+    return this._height * this.scale;
   }
 
   get rotate() {
@@ -189,17 +210,19 @@ class Object {
 
   draw(obj) {
     const { ctx } = obj.engine;
+    const w = this.width;
+    const h = this.height;
     ctx.save();
     const [ox, oy] = [
-      this.width * this.origin[0],
-      this.height * this.origin[1],
+      w * this.origin[0],
+      h * this.origin[1],
     ];
     ctx.translate(this._x, this._y);
     ctx.rotate(this._rotate);
 
     // draw sprite with sprite scale
     if (this.sprite !== null)
-      ctx.drawImage(this.sprite, -ox, -oy, this.width, this.height);
+      ctx.drawImage(this.sprite, -ox, -oy, w, h);
 
     if (Engine.show.origin) {
       ctx.fillStyle = "red";
@@ -211,7 +234,7 @@ class Object {
 
     if (Engine.show.hitbox) {
       ctx.strokeStyle = "grey";
-      ctx.strokeRect(this.x - ox, this.y - oy, this.width, this.height);
+      ctx.strokeRect(this.x - ox, this.y - oy, w, h);
     }
   }
 
@@ -289,6 +312,10 @@ class Text {
     this.el.innerText = this._text;
 
     return this;
+  }
+
+  remove() {
+    this.el.remove();
   }
 }
 
