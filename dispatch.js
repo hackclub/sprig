@@ -128,21 +128,22 @@ const ACTIONS = {
         return;
       }
 
-      // const url =
-      //   "https://airbridge.hackclub.com/v0.2/Saved%20Projects/Live%20Editor%20Projects/?authKey=reczbhVzrrkChMMiN1635964782lucs2mn97s";
-      // (async () => {
-      //   const res = await fetch(url, {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/json" },
-      //     body: dispatch("GET_SAVE_STATE"),
-      //   }).then((r) => r.json());
+      const super_secret_authToken = "recbyefY9mTqsIsu316420036201n7omgg1e3s"; // DO NOT USE PLEASE!!!
+      const url =
+        `https://airbridge.hackclub.com/v0.2/Saved%20Projects/Game%20Lab/?authKey=${super_secret_authToken}`;
+      (async () => {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: { Name: saveStateObj.name, JSON: JSON.stringify(saveStateObj) },
+        }).then((r) => r.json());
 
-      //   copy(res.fields["Link"]);
-      //   showShared();
-      //   state.lastSaved.name = saveStateObj.name;
-      //   state.lastSaved.prog = saveStateObj.prog;
-      //   state.lastSaved.link = res.fields["Link"];
-      // })();
+        copy(res.fields["Link"]);
+        showShared();
+        state.lastSaved.name = saveStateObj.name;
+        state.lastSaved.prog = saveStateObj.prog;
+        state.lastSaved.link = res.fields["Link"];
+      })();
     }
 
     if (type === "file") {
