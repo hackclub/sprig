@@ -83,8 +83,14 @@ export function createPixelEditor(target) {
     <div class="colors">
       <input
         type="color"
-        @input=${(e) => { state.color = hexToRGBA(e.target.value); r(); } }
-        @click=${(e) => { state.color = hexToRGBA(e.target.value); r(); } }
+        @input=${(e) => {
+          state.color = hexToRGBA(e.target.value);
+          r();
+        }}
+        @click=${(e) => {
+          state.color = hexToRGBA(e.target.value);
+          r();
+        }}
         class=${RGBA_to_hex(state.color) !== "#00000000" ? "selected-tool" : ""}
         style=${`
           height: 35px; 
