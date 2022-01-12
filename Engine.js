@@ -274,7 +274,7 @@ class Text {
       color: ${color};
       font-family: ${font};
       font-size: ${size}px;
-      transform: rotate(${rotate}deg) scale(${scale});
+      transform: rotate(${rotate}deg) scale(${scale}) translate(-50%, -50%);
       width: max-content;
     `;
     span.innerText = str;
@@ -309,8 +309,6 @@ class Engine {
     this._height = height;
     this._mouseX = 0;
     this._mouseY = 0;
-
-    this._onDraw = [];
 
     this._heldKeys = new Set();
     this._pressedKeys = new Set();
@@ -421,6 +419,7 @@ class Engine {
 
   end() {
     this.drawing = false;
+    window.cancelAnimationFrame(this._animId);
   }
 
   addText(str, x, y, ops = {}) {
@@ -437,15 +436,3 @@ class Engine {
 }
 
 export { Engine };
-
-// should I add concept of ground and gravity
-// should it just be solid and not with layers
-// platforms should be able to carry you
-// can you push things around
-
-// removed acceleration
-// elastic collisions
-// layers/selective contact
-
-// add dt to engine
-// add dx dy to objs

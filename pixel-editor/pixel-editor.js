@@ -10,7 +10,7 @@ function RGBA_to_hex([r, g, b, a]) {
   r = r.toString(16);
   g = g.toString(16);
   b = b.toString(16);
-  a = Math.round(a * 255).toString(16);
+  a = a.toString(16);
 
   if (r.length == 1) r = "0" + r;
   if (g.length == 1) g = "0" + g;
@@ -37,6 +37,7 @@ export function createPixelEditor(target) {
     showGrid: false,
     defaultGridArraySize: [32, 32],
     undoRedoStack: [],
+    showColorPicker: false,
     selectHandle: {
       clicked: false,
       dragged: false,
@@ -81,21 +82,30 @@ export function createPixelEditor(target) {
     </div>
 
     <div class="colors">
-      <!-- <button>TODO: + add color</button> -->
-      <input
+      <button
+        @mouseover=${() => { state.showColorPicker = true; r(); console.log(state.color, RGBA_to_hex(state.color)) } }
+        @mouseleave=${() => { state.showColorPicker = false; r(); } }
         class=${RGBA_to_hex(state.color) !== "#00000000" ? "selected-tool" : ""}
-        type="color"
-        value=${RGBA_to_hex(state.color)}
-        @input=${(e) => {
-          state.color = hexToRGBA(e.target.value);
-          r();
-        }}
-        @click=${(e) => {
-          state.color = hexToRGBA(e.target.value);
-          r();
-        }}
-        style="height: 35px;"
-      />
+        style=${`
+          height: 35px; 
+          width: 35px; 
+          position: relative; 
+          background:${document.querySelector("color-picker")?.hex8 ?? "black"};
+        `}
+      >
+        ${state.showColorPicker ? html`<color-picker
+          @input=${(e) => {
+            state.color = hexToRGBA(e.target.hex8);
+            r();
+          }}
+          @click=${(e) => {
+            state.color = hexToRGBA(e.target.hex8);
+            r();
+          }}
+          style="position: absolute; bottom: 100%; right: 0px;"></color-picker>`
+          : ""
+        }
+      </button>
       <button
         class=${RGBA_to_hex(state.color) === "#00000000" ? "selected-tool" : ""}
         @click=${() => {
@@ -350,7 +360,7 @@ export function createPixelEditor(target) {
     );
 
     grid.forEach((color, i) => {
-      if (color[3] < 255) {
+      if (color[3] === 0) {
         const [x, y] = i_to_xy(i);
         color =
           (x % 2 === 0 && y % 2 === 1) || (x % 2 === 1 && y % 2 === 0)

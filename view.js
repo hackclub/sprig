@@ -152,25 +152,33 @@ export function view(state) {
         position: absolute;
         user-select: none;
       }
+
       .mouse-display {
-        bottom: calc(100% - var(--horizontal-bar));
-        right: 5px;
+        bottom: calc(100% - var(--horizontal-bar) + 5px);
+        right: 10px;
       }
 
       .toggle-show-origin {
-        bottom: calc(100% - var(--horizontal-bar) + 20px);
-        right: 5px;
+        bottom: calc(100% - var(--horizontal-bar) + 25px);
+        right: 10px;
       }
       .toggle-show-hitbox {
-        bottom: calc(100% - var(--horizontal-bar) + 40px);
-        right: 5px;
+        bottom: calc(100% - var(--horizontal-bar) + 45px);
+        right: 10px;
       }
 
-      .sprite-entry input {
-        background: none;
-        outline: none;
-        border: none;
+      .sprite-entry-input {
+        font-size: 13px;
         font-family: monospace;
+        border: none;
+        background-image:none;
+        background-color:transparent;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+        outline: none;
+        padding: 0;
+        width: 110px;
       }
     </style>
     <div class="left-pane">
@@ -276,6 +284,7 @@ export function view(state) {
 const renderSpriteName = (name, state) =>
   state.selected_sprite === name
     ? html`<input 
+          class="sprite-entry-input"
           .value=${name} 
           @change=${(e) =>
             dispatch("CHANGE_SPRITE_NAME", {
