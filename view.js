@@ -171,8 +171,8 @@ export function view(state) {
         font-size: 13px;
         font-family: monospace;
         border: none;
-        background-image:none;
-        background-color:transparent;
+        background-image: none;
+        background-color: transparent;
         -webkit-box-shadow: none;
         -moz-box-shadow: none;
         box-shadow: none;
