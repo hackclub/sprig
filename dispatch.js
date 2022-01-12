@@ -134,7 +134,10 @@ const ACTIONS = {
         const res = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ Name: saveStateObj.name, JSON: dispatch("GET_SAVE_STATE") }),
+          body: JSON.stringify({
+            Name: saveStateObj.name,
+            JSON: dispatch("GET_SAVE_STATE"),
+          }),
         }).then((r) => r.json());
 
         console.log(res);
