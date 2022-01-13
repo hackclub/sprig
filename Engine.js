@@ -68,28 +68,26 @@ function haveCollided(obj0, obj1, buffer = 0) {
 
 function initSprite(spriteData, that) {
   if (typeof spriteData === "object") {
-      const [w, h] = spriteData.size;
+    const [w, h] = spriteData.size;
 
-      that.imageData = new ImageData(
-        new Uint8ClampedArray(spriteData.colors.flat()),
-        w,
-        h
-      );
+    that.imageData = new ImageData(
+      new Uint8ClampedArray(spriteData.colors.flat()),
+      w,
+      h
+    );
 
-      const dx = spriteData.bounds.x;
-      const dy = spriteData.bounds.y;
-      that._width = spriteData.bounds.width;
-      that._height = spriteData.bounds.height;
+    const dx = spriteData.bounds.x;
+    const dy = spriteData.bounds.y;
+    that._width = spriteData.bounds.width;
+    that._height = spriteData.bounds.height;
 
-      that._sprite = document.createElement("canvas");
-      that._sprite.width = that._width + 1;
-      that._sprite.height = that._height + 1;
-      that._sprite
-        .getContext("2d")
-        .putImageData(that.imageData, -dx, -dy);
-    } else {
-      that._sprite = null;
-    }
+    that._sprite = document.createElement("canvas");
+    that._sprite.width = that._width + 1;
+    that._sprite.height = that._height + 1;
+    that._sprite.getContext("2d").putImageData(that.imageData, -dx, -dy);
+  } else {
+    that._sprite = null;
+  }
 }
 
 class Object {
@@ -105,7 +103,6 @@ class Object {
     this.sprite = params.sprite;
     this.scale = params.scale ?? 1;
     this.rotate = params.rotate ?? 0;
-
 
     const origins = {
       "left top": [0, 0],
@@ -150,7 +147,8 @@ class Object {
     return this._sprite;
   }
 
-  set sprite(spriteData) { // scaling doesn't work here
+  set sprite(spriteData) {
+    // scaling doesn't work here
     initSprite(spriteData, this);
     // this.scale = this.scale;
   }
@@ -213,16 +211,12 @@ class Object {
     const w = this.width;
     const h = this.height;
     ctx.save();
-    const [ox, oy] = [
-      w * this.origin[0],
-      h * this.origin[1],
-    ];
+    const [ox, oy] = [w * this.origin[0], h * this.origin[1]];
     ctx.translate(this._x, this._y);
     ctx.rotate(this._rotate);
 
     // draw sprite with sprite scale
-    if (this.sprite !== null)
-      ctx.drawImage(this.sprite, -ox, -oy, w, h);
+    if (this.sprite !== null) ctx.drawImage(this.sprite, -ox, -oy, w, h);
 
     if (Engine.show.origin) {
       ctx.fillStyle = "red";
