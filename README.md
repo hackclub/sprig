@@ -16,7 +16,7 @@ const e = createEngine(canvas, 300, 300);
 
 ```js
 const canvas = document.querySelector(".game-canvas");
-const e = createEngine(canvas, 409, 246);
+const e = createEngine(canvas, 300, 300);
 
 e.add({
   tags: ["test"],
