@@ -300,3 +300,10 @@ e.add({
 [Pong-ish](https://hackclub.github.io/game-lab/?file=recZMaBjgnNXgZsUK)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149371012-faf3e45f-9d3a-47d4-831b-566d9171d2bd.gif">
+
+---
+
+[Crappy Birds](https://hackclub.github.io/game-lab/?file=recJX7dAboz7v1OFG)
+
+<img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149380918-a1855ab3-cc2d-4a9a-adc0-d5316d6f17ba.gif">
+
