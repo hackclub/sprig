@@ -4,7 +4,7 @@ sort of like a fantasy console, really just js
 
 <img width="500" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149387903-eec65489-6a8d-4779-adde-2b6e35c7273a.gif">
 
-[Superb Macedonian Plumber Bro](https://hackclub.github.io/hack-genesis/?file=recxJ4Z4C3U0WbSIT)
+[Superb Macedonian Plumber Bro](https://hackclub.github.io/game-lab/?file=recxJ4Z4C3U0WbSIT)
 
 ## Minimal Examples
 
@@ -16,7 +16,7 @@ const e = createEngine(canvas, 300, 300);
 
 ---
 
-[make a character](https://hackclub.github.io/hack-genesis/?file=recUlLLmfEksmALAM)
+[make a character](https://hackclub.github.io/game-lab/?file=recUlLLmfEksmALAM)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149362983-6f82a61c-c3d5-40b7-920f-f673c3ff2646.png">
 
@@ -37,7 +37,7 @@ e.start();
 
 ---
 
-[add floor with gravity](https://hackclub.github.io/hack-genesis/?file=recMIYxXueSz8tXQs)
+[add floor with gravity](https://hackclub.github.io/game-lab/?file=recMIYxXueSz8tXQs)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149363706-453a45e8-d0d4-44a3-acc3-09e4bb577392.gif">
 
@@ -71,7 +71,7 @@ e.start();
 
 ---
 
-[add movement](https://hackclub.github.io/hack-genesis/?file=rec7bKM7Iiq7f6vFF)
+[add movement](https://hackclub.github.io/game-lab/?file=rec7bKM7Iiq7f6vFF)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149365452-7b042996-2beb-40a8-866e-f5748b5631da.gif">
 
@@ -105,7 +105,7 @@ e.start();
 
 ---
 
-[add jump](https://hackclub.github.io/hack-genesis/?file=rec75TEodfPebIzlc)
+[add jump](https://hackclub.github.io/game-lab/?file=rec75TEodfPebIzlc)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149366181-588ae196-03dd-4268-9907-9477caa8a834.gif">
 
@@ -147,7 +147,7 @@ e.start();
 
 ---
 
-[platforms](https://hackclub.github.io/hack-genesis/?file=recBW6ApDr7xzlhxz)
+[platforms](https://hackclub.github.io/game-lab/?file=recBW6ApDr7xzlhxz)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149367516-7edb2780-edbd-4977-9a07-dcfbf47fcf93.gif">
 
@@ -201,7 +201,7 @@ e.start();
 
 ---
 
-[add background](https://hackclub.github.io/hack-genesis/?file=recEy698LbPNQlL1G)
+[add background](https://hackclub.github.io/game-lab/?file=recEy698LbPNQlL1G)
 
 <img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149368356-c343a214-0d31-4d5f-a2d4-d0575b18047b.png">
 
@@ -221,7 +221,7 @@ e.start();
 
 ---
 
-[collision](https://hackclub.github.io/hack-genesis/?file=recC0NfXt8DIWQU3H)
+[collision](https://hackclub.github.io/game-lab/?file=recC0NfXt8DIWQU3H)
 
 <img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149369879-7d384b3a-2f15-4816-a59e-76b56bb9a944.gif">
 
@@ -301,13 +301,13 @@ e.add({
 
 ## Tiny Games
 
-[Pong-ish](https://hackclub.github.io/hack-genesis/?file=recZMaBjgnNXgZsUK)
+[Pong-ish](https://hackclub.github.io/game-lab/?file=recZMaBjgnNXgZsUK)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149371012-faf3e45f-9d3a-47d4-831b-566d9171d2bd.gif">
 
 ---
 
-[Crappy Birds](https://hackclub.github.io/hack-genesis/?file=recJX7dAboz7v1OFG)
+[Crappy Birds](https://hackclub.github.io/game-lab/?file=recJX7dAboz7v1OFG)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149380918-a1855ab3-cc2d-4a9a-adc0-d5316d6f17ba.gif">
 
