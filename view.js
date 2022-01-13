@@ -103,6 +103,7 @@ export function view(state) {
         border-radius: 5px;
         font-family: monospace;
         font-size: 0.8rem;
+        justify-content: space-between;
       }
 
       .sprite-name {
