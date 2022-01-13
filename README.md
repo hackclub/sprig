@@ -10,6 +10,8 @@ const canvas = document.querySelector(".game-canvas");
 const e = createEngine(canvas, 300, 300);
 ```
 
+---
+
 [make a character](https://hackclub.github.io/game-lab/?file=recUlLLmfEksmALAM)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149362983-6f82a61c-c3d5-40b7-920f-f673c3ff2646.png">
@@ -28,6 +30,8 @@ e.add({
 
 e.start();
 ```
+
+---
 
 [add floor with gravity](https://hackclub.github.io/game-lab/?file=recMIYxXueSz8tXQs)
 
@@ -61,6 +65,8 @@ e.add({
 e.start();
 ```
 
+---
+
 [add movement](https://hackclub.github.io/game-lab/?file=rec7bKM7Iiq7f6vFF)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149365452-7b042996-2beb-40a8-866e-f5748b5631da.gif">
@@ -92,6 +98,8 @@ e.add({
 
 e.start();
 ```
+
+---
 
 [add jump](https://hackclub.github.io/game-lab/?file=rec75TEodfPebIzlc)
 
@@ -132,6 +140,8 @@ e.add({
 
 e.start();
 ```
+
+---
 
 [platforms](https://hackclub.github.io/game-lab/?file=recBW6ApDr7xzlhxz)
 
@@ -185,6 +195,8 @@ addPlatform(20, 100);
 e.start();
 ```
 
+---
+
 [add background](https://hackclub.github.io/game-lab/?file=recEy698LbPNQlL1G)
 
 <img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149368356-c343a214-0d31-4d5f-a2d4-d0575b18047b.png">
@@ -202,6 +214,9 @@ e.add({
 
 e.start();
 ```
+
+---
+
 [collision](https://hackclub.github.io/game-lab/?file=recC0NfXt8DIWQU3H)
 
 <img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149369879-7d384b3a-2f15-4816-a59e-76b56bb9a944.gif">
@@ -236,6 +251,8 @@ e.add({
 
 e.start();
 ```
+
+---
 
 ## all available object properties
 
