@@ -2,7 +2,7 @@
 
 sort of like a fantasy console, really just js
 
-### Minimal Examples
+## Minimal Examples
 
 initialize engine
 ```js
@@ -237,7 +237,8 @@ e.add({
 e.start();
 ```
 
-all available object properties
+## all available object properties
+
 ```js
 e.add({
   tags: ["tag-name"],
@@ -278,5 +279,7 @@ e.add({
 ```
 
 ## Tiny Games
+
+<img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149371012-faf3e45f-9d3a-47d4-831b-566d9171d2bd.gif">
 
 [Pong-ish](https://hackclub.github.io/game-lab/?file=recZMaBjgnNXgZsUK)
