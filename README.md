@@ -19,11 +19,11 @@ const canvas = document.querySelector(".game-canvas");
 const e = createEngine(canvas, 409, 246);
 
 e.add({
-	tags: ["test"],
-	x: 188,
-	y: 69,
-    sprite: test_sprite,
-    scale: 4,
+  tags: ["test"],
+  x: 188,
+  y: 69,
+  sprite: test_sprite,
+  scale: 4,
 })
 
 e.start();
