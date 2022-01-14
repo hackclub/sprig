@@ -181,6 +181,15 @@ export function view(state) {
         padding: 0;
         width: 110px;
       }
+
+      .a-to-button {
+        text-decoration: none;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--text-color);
+      }
     </style>
     <div class="left-pane">
       <codemirror-js id="code-editor"></codemirror-js>
@@ -198,6 +207,7 @@ export function view(state) {
           run (shift + enter)
         </button>
         ${shareOptions(state)}
+        <a class="a-to-button menu-choice" target="_blank" href="https://github.com/hackclub/game-lab">GitHub</a>
       </div>
     </div>
     <div class="right-pane">
