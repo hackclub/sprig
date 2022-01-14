@@ -179,8 +179,8 @@ const ACTIONS = {
           maxX: 0,
           maxY: 0,
           width: 1,
-          height: 1
-        }
+          height: 1,
+        };
       }
     }
   },
