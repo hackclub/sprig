@@ -1,7 +1,6 @@
 import { events } from "./events.js";
 import { defaultProg } from "./defaultProg.js";
 import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
-import lzutf8 from "https://cdn.skypack.dev/lzutf8";
 
 export function init(state) {
   const url = new URL(window.location.href);

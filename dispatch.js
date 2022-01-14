@@ -1,5 +1,4 @@
 import { html, render, svg } from "./uhtml.js";
-import lzutf8 from "https://cdn.skypack.dev/lzutf8";
 import { view } from "./view.js";
 import { init } from "./init.js";
 import { Engine } from "./Engine.js";
@@ -158,7 +157,7 @@ const ACTIONS = {
         .reduce((a, p, i) => (p[3] == 0 ? a : [...a, i % w]), [])
         .sort(ascending);
       const ys = sprite
-        .reduce((a, p, i) => (p[3] == 0 ? a : [...a, Math.floor(i / h)]), [])
+        .reduce((a, p, i) => (p[3] == 0 ? a : [...a, Math.floor(i / w)]), [])
         .sort(ascending);
 
       return {
@@ -166,13 +165,24 @@ const ACTIONS = {
         y: ys[0],
         maxX: xs[xs.length - 1],
         maxY: ys[ys.length - 1],
-        width: xs[xs.length - 1] - xs[0],
-        height: ys[ys.length - 1] - ys[0],
+        width: xs[xs.length - 1] - xs[0] + 1,
+        height: ys[ys.length - 1] - ys[0] + 1,
       };
     }
 
-    for (const sprite of Object.values(state.sprites))
+    for (const sprite of Object.values(state.sprites)) {
       sprite.bounds = contextBoundingBox(sprite.colors, 32, 32);
+      if (sprite.bounds.x === undefined) {
+        sprite.bounds = {
+          x: 0,
+          y: 0,
+          maxX: 0,
+          maxY: 0,
+          width: 1,
+          height: 1
+        }
+      }
+    }
   },
   UPLOAD({ saved }, state) {
     const newProg = saved.prog;

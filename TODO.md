@@ -1,13 +1,18 @@
 ## TODO, Jan 10, 2022
+- [] image compression
+- [] image upload
+- [] size indicator
+
+- [] port to webgl
 - [] communicate brush color better
 - [] pick color from canvas
 - [] tile sprites
-- [] set sprite
-- [] empty canvas bug
-- [x] collision overhaul
-- [] port to webgl
-- [] fix small 1x sprite bug
+
+- [x] fix small 1x sprite bug
 - [x] name sprites
+- [x] set sprite
+- [x] empty canvas bug
+- [x] collision overhaul
 
 ## TODO, Jan 3, 2022
 

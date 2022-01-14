@@ -82,8 +82,8 @@ function initSprite(spriteData, that) {
     that._height = spriteData.bounds.height;
 
     that._sprite = document.createElement("canvas");
-    that._sprite.width = that._width + 1;
-    that._sprite.height = that._height + 1;
+    that._sprite.width = that._width;
+    that._sprite.height = that._height;
     that._sprite.getContext("2d").putImageData(that.imageData, -dx, -dy);
   } else {
     that._sprite = null;
