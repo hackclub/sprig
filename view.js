@@ -207,7 +207,12 @@ export function view(state) {
           run (shift + enter)
         </button>
         ${shareOptions(state)}
-        <a class="a-to-button menu-choice" target="_blank" href="https://github.com/hackclub/game-lab">GitHub</a>
+        <a
+          class="a-to-button menu-choice"
+          target="_blank"
+          href="https://github.com/hackclub/game-lab"
+          >GitHub</a
+        >
       </div>
     </div>
     <div class="right-pane">
