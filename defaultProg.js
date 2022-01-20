@@ -1,7 +1,7 @@
 export const defaultProg = `
 const canvas = document.querySelector(".game-canvas");
 
-const e = new Engine(canvas, 300, 300);
+const e = createEngine(canvas, 300, 300);
 
 
 e.add({
@@ -11,7 +11,7 @@ e.add({
 	y: 50,
 	// sprite: sprite_jeb,
 	// scale: 2,
-	draw: (obj) => {
+	update(obj) {
 		obj.rotation += 0.019;
 		if (e.heldKey("ArrowLeft")) obj.x -= 3;
 		if (e.heldKey("ArrowRight")) obj.x += 3;
