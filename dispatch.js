@@ -83,13 +83,13 @@ const ACTIONS = {
       }; // these only work if no other imports
 
       try {
-        new Function(...Object.keys(included), `${string}`)(
+        new Function(...Object.keys(included), string)(
           ...Object.values(included)
         );
       } catch (e) {
         console.log(e);
         state.error = true;
-        const str = JSON.stringify(e, Object.getOwnPropertyNames(e), 2);
+        const str = e.stack;
         state.logs.push(str);
       }
       dispatch("RENDER");
