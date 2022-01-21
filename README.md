@@ -1,6 +1,6 @@
 ## Hack Club Game Lab
 
-sort of like a fantasy console, really just js
+sort of like a fantasy console, really just js. join `#gamelab-dev` on the hack club slack for the dev chat!
 
 <img width="500" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149387903-eec65489-6a8d-4779-adde-2b6e35c7273a.gif">
 
