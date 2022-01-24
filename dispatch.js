@@ -2,7 +2,7 @@ import { html, render, svg } from "./uhtml.js";
 import { view } from "./view.js";
 import { init } from "./init.js";
 import { Engine } from "./Engine.js";
-import { Muse } from "https://hackclub.github.io/muse/exports.js";
+// import { Muse } from "https://hackclub.github.io/muse/exports.js";
 
 function copy(str) {
   const inp = document.createElement("input");
@@ -78,7 +78,7 @@ const ACTIONS = {
           currentEngine = new Engine(...args);
           return currentEngine;
         },
-        Muse,
+        // Muse,
         ...state.sprites,
       }; // these only work if no other imports
 
