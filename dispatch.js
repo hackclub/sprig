@@ -74,6 +74,7 @@ const ACTIONS = {
         html,
         render,
         svg,
+        Muse,
         createEngine(...args) {
           if (currentEngine) cancelAnimationFrame(currentEngine._animId);
           currentEngine = new Engine(...args);
