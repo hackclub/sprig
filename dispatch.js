@@ -2,7 +2,8 @@ import { html, render, svg } from "./uhtml.js";
 import { view } from "./view.js";
 import { init } from "./init.js";
 import { Engine } from "./Engine.js";
-// import { Muse } from "https://hackclub.github.io/muse/exports.js";
+import { Muse } from "https://muse.hackclub.com/exports.js";
+
 
 function copy(str) {
   const inp = document.createElement("input");
@@ -83,13 +84,13 @@ const ACTIONS = {
       }; // these only work if no other imports
 
       try {
-        new Function(...Object.keys(included), `${string}`)(
+        new Function(...Object.keys(included), string)(
           ...Object.values(included)
         );
       } catch (e) {
         console.log(e);
         state.error = true;
-        const str = JSON.stringify(e, Object.getOwnPropertyNames(e), 2);
+        const str = e.stack;
         state.logs.push(str);
       }
       dispatch("RENDER");

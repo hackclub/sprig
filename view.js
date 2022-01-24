@@ -200,7 +200,9 @@ export function view(state) {
           state.logs.length === 0 ? "shrink" : "",
         ].join(" ")}
       >
-        ${state.logs.map((x) => html`<div>${JSON.stringify(x)}</div>`)}
+        ${state.logs.map(
+          (x) => html`<div style="white-space: pre-wrap">${x}</div>`
+        )}
       </div>
       <div class="menu">
         <button class="menu-option" @click=${() => dispatch("RUN")}>

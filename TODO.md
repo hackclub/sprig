@@ -1,3 +1,9 @@
+## TODO, Jan 20, 2022
+- [] weird sprite renaming error
+- [] add sprite to default example
+- [x] fix default example
+- [] actually render errors properly
+
 ## TODO, Jan 10, 2022
 - [] image compression
 - [] image upload
