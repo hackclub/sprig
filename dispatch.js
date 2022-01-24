@@ -4,7 +4,6 @@ import { init } from "./init.js";
 import { Engine } from "./Engine.js";
 import { Muse } from "https://muse.hackclub.com/exports.js";
 
-
 function copy(str) {
   const inp = document.createElement("input");
   document.body.appendChild(inp);
