@@ -37,6 +37,12 @@ async function loadFromStorage({state}) {
     dispatch("RUN");
 }
 
+function removeParam(key) {
+  const url = new URL(window.location)
+  url.searchParams.delete(key)
+  window.history.pushState({}, null, url)
+}
+
 async function loadFromAirtable() {
       const url = `https://api2.hackclub.com/v0.2/Saved%20Projects/Game%20Lab/${file}/?authKey=recbyefY9mTqsIsu316420036201n7omgg1e3s`;
       fetch(url, {
@@ -83,9 +89,11 @@ export async function init(state) {
 
   if (file) {
     loadFromAirtable(file)
+    removeParam('file')
   }
   if (id) {
     loadFromS3({id, state})
+    removeParam('id')
   }
   if (!id && !file) {
     loadFromStorage({state})
