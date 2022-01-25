@@ -379,10 +379,12 @@ class Engine {
     return this._height;
   }
   get mouseX() {
-    return this._mouseX;
+    const rect = this.canvas.getBoundingClientRect();
+    return this._mouseX - rect.left;
   } // not doced
   get mouseY() {
-    return this._mouseY;
+    const rect = this.canvas.getBoundingClientRect();
+    return this._mouseY - rect.top;
   } // not doced
 
   add(params) {
