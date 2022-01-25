@@ -1,5 +1,4 @@
 import { events } from "./events.js";
-import { defaultProg } from "./defaultProg.js";
 import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
 import { Cartridge } from "./cartridge.js";
 import { dispatch } from "./dispatch.js";
@@ -7,15 +6,12 @@ import { dispatch } from "./dispatch.js";
 async function loadFromStorage({state}) {
     const saved = JSON.parse(window.localStorage.getItem("hc-game-lab"));
 
-    if (!saved) {
-      state.codemirror.view.dispatch({
-        changes: { from: 0, insert: defaultProg.trim() },
-      });
-      dispatch("CREATE_SPRITE");
+    if (!saved || !saved.prog) {
+      loadFromS3({state})
     } else {
       const prog = saved.prog;
       state.codemirror.view.dispatch({
-        changes: { from: 0, insert: !prog ? defaultProg.trim() : prog },
+        changes: { from: 0, insert: prog },
       });
 
       if (Object.keys(saved.sprites).length === 0) dispatch("CREATE_SPRITE");
