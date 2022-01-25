@@ -3,6 +3,7 @@ import { view } from "./view.js";
 import { init } from "./init.js";
 import { Engine } from "./Engine.js";
 import { Muse } from "https://muse.hackclub.com/exports.js";
+import { Cartridge } from "./cartridge.js";
 
 function copy(str) {
   const inp = document.createElement("input");
@@ -142,6 +143,15 @@ const ACTIONS = {
 
     if (type === "file") {
       downloadText(`${state.name}.json`, JSON.stringify(saveStateObj));
+    }
+
+    if (type === "s3") {
+      (async () => {
+        state.cartridge.content = JSON.stringify(saveStateObj)
+        await state.cartridge.upload()
+        copy(await state.cartridge.shareLink())
+        showShared()
+      })()
     }
   },
   CANVAS_MOUSE_MOVE({ content: { mouseX, mouseY } }, state) {

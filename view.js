@@ -14,6 +14,7 @@ function shareOptions(state) {
           file
         </button>
         <button @click=${() => dispatch("SAVE", { type: "link" })}>link</button>
+        <button @click=${() => dispatch("SAVE", { type: "s3" })}>S3</button>
       </div>
     </div>
   `;

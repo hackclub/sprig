@@ -1,49 +1,10 @@
 import { events } from "./events.js";
 import { defaultProg } from "./defaultProg.js";
 import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
+import { Cartridge } from "./cartridge.js";
+import { dispatch } from "./dispatch.js";
 
-export function init(state) {
-  const url = new URL(window.location.href);
-
-  const search = window.location.search;
-  const file = new URLSearchParams(search).get("file");
-  const vert = new URLSearchParams(search).get("vert");
-
-  if (vert)
-    document.documentElement.style.setProperty("--vertical-bar", `${vert}%`);
-
-  dispatch("RENDER");
-  state.pixelEditor = createPixelEditor(
-    document.querySelector(".pixel-editor")
-  );
-  state.codemirror = document.querySelector("#code-editor");
-  events(state);
-
-  if (file) {
-    let file_url = file;
-
-    if (file.startsWith("rec")) {
-      const url = `https://api2.hackclub.com/v0.2/Saved%20Projects/Game%20Lab/${file}/?authKey=recbyefY9mTqsIsu316420036201n7omgg1e3s`;
-      fetch(url, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      }).then((res) =>
-        res.json().then((json) => {
-          console.log(json);
-          const saved = JSON.parse(json.fields["JSON"]);
-          dispatch("UPLOAD", { saved });
-        })
-      );
-    } else {
-      // if (!file.startsWith("http")) file = `examples/${file}`;
-      // fetch(file_url, { mode: "cors" }).then((file) =>
-      //   file.text().then((txt) => {
-      //     state.codemirror.view.dispatch({ changes: { from: 0, insert: txt } });
-      //     dispatch("RUN");
-      //   })
-      // );
-    }
-  } else {
+async function loadFromStorage({state}) {
     const saved = JSON.parse(window.localStorage.getItem("hc-game-lab"));
 
     if (!saved) {
@@ -74,12 +35,63 @@ export function init(state) {
 
     dispatch("RENDER");
     dispatch("RUN");
+}
+
+async function loadFromAirtable() {
+      const url = `https://api2.hackclub.com/v0.2/Saved%20Projects/Game%20Lab/${file}/?authKey=recbyefY9mTqsIsu316420036201n7omgg1e3s`;
+      fetch(url, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }).then((res) =>
+        res.json().then((json) => {
+          console.log(json);
+          const saved = JSON.parse(json.fields["JSON"]);
+          dispatch("UPLOAD", { saved });
+        })
+      );
+
+}
+
+async function loadFromS3({id, state}) {
+  console.log({id})
+  state.cartridge = new Cartridge({id})
+  await state.cartridge.download()
+  window.cart = state.cartridge
+  const saved = JSON.parse(state.cartridge.content)
+  dispatch("UPLOAD", {saved})
+}
+
+export async function init(state) {
+  const url = new URL(window.location.href);
+
+  const search = window.location.search;
+  const file = new URLSearchParams(search).get("file");
+  const vert = new URLSearchParams(search).get("vert");
+  const id = new URLSearchParams(search).get("id");
+  console.log({id})
+
+  if (vert) {
+    document.documentElement.style.setProperty("--vertical-bar", `${vert}%`);
   }
 
-  // (async () => {
-  //     const url = `https://api2.hackclub.com/v0.1/Saved Projects/Live Editor Projects/?select={"filterByFormula": "{Public}=TRUE()"}`;
-  //        const json = await fetch(url, { mode: "cors" }).then(res => res.json());
-  //        state.examples = json.map(x => x.fields);
-  //        dispatch("RENDER");
-  //    })()
+  dispatch("RENDER");
+  state.pixelEditor = createPixelEditor(
+    document.querySelector(".pixel-editor")
+  );
+  state.codemirror = document.querySelector("#code-editor");
+  events(state);
+
+  if (file) {
+    loadFromAirtable(file)
+  }
+  if (id) {
+    loadFromS3({id, state})
+  }
+  if (!id && !file) {
+    loadFromStorage({state})
+  }
+  if (!state.cartridge) {
+    // we should always have a cartridge
+    state.cartridge = new Cartridge()
+  }
 }
