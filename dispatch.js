@@ -1,11 +1,10 @@
 import { html, render, svg } from "./uhtml.js";
-import lzutf8 from "https://cdn.skypack.dev/lzutf8";
 import { view } from "./view.js";
 import { init } from "./init.js";
 import { Engine } from "./Engine.js";
-
 import { Muse } from "https://muse.hackclub.com/exports.js";
 import { size_up_sprites } from "./size_up_sprites.js";
+
 
 function copy(str) {
   const inp = document.createElement("input");
@@ -28,6 +27,7 @@ const STATE = {
   codemirror: undefined,
   url: undefined,
   shareType: "airtable",
+  show: { origin: false, hitbox: false },
   examples: [],
   error: false,
   logs: [],
@@ -37,6 +37,7 @@ const STATE = {
   mouseX: 0,
   mouseY: 0,
   selected_sprite: "",
+  name: "name-here",
   lastSaved: {
     name: "",
     text: "",
@@ -44,6 +45,7 @@ const STATE = {
   },
 };
 
+let currentEngine;
 const ACTIONS = {
   INIT(args, state) {
     init(state);
@@ -66,7 +68,6 @@ const ACTIONS = {
       state.error = false;
       state.logs = [];
 
-
       Engine.show = state.show;
 
       size_up_sprites(state.sprites);
@@ -76,89 +77,75 @@ const ACTIONS = {
         html,
         render,
         svg,
-        Engine,
         Muse,
+        createEngine(...args) {
+          if (currentEngine) cancelAnimationFrame(currentEngine._animId);
+          currentEngine = new Engine(...args);
+          return currentEngine;
+        },
+        // Muse,
         ...state.sprites,
       }; // these only work if no other imports
 
       try {
-        new Function(
-          ...Object.keys(included),
-          `
-          {
-            const _log = console.log;
-            console.log = (...args) => {
-              _state.logs.push(...args); 
-              _log(...args);
-            }
-          }
-
-          ${string}
-        `
-        )(...Object.values(included));
+        new Function(...Object.keys(included), string)(
+          ...Object.values(included)
+        );
       } catch (e) {
         console.log(e);
         state.error = true;
-        const str = JSON.stringify(e, Object.getOwnPropertyNames(e), 2);
+        const str = e.stack;
         state.logs.push(str);
       }
       dispatch("RENDER");
+      document.querySelector(".game-canvas").focus();
     }
   },
   SHARE_TYPE({ type }, state) {
     state.shareType = type;
     dispatch("RENDER");
   },
-  SHARE({ type }, state) {
-    const string = state.codemirror.view.state.doc.toString();
+  GET_SAVE_STATE(args, state) {
+    const prog = state.codemirror.view.state.doc.toString();
+    return JSON.stringify({ prog, sprites: state.sprites, name: state.name });
+  },
+  SAVE({ type }, state) {
+    const saveStateObj = JSON.parse(dispatch("GET_SAVE_STATE"));
 
-    if (state.shareType === "binary-url" && type === "link") {
-      const encoded = lzutf8.compress(string, {
-        outputEncoding: "StorageBinaryString",
-      });
-      const address = `${window.location.origin}${window.location.pathname}?code=${encoded}`;
-      copy(address);
-      showShared();
-    }
-
-    if (state.shareType === "airtable" && type === "link") {
+    if (type === "link") {
       if (
-        state.lastSaved.name === state.name &&
-        state.lastSaved.text === string
+        state.lastSaved.name === saveStateObj.name &&
+        state.lastSaved.prog === saveStateObj.prog
       ) {
         copy(state.lastSaved.link);
         showShared();
         return;
       }
 
-      const url =
-        "https://airbridge.hackclub.com/v0.2/Saved%20Projects/Live%20Editor%20Projects/?authKey=reczbhVzrrkChMMiN1635964782lucs2mn97s";
+      const super_secret_authToken = "recbyefY9mTqsIsu316420036201n7omgg1e3s"; // DO NOT USE PLEASE!!!
+      const url = `https://airbridge.hackclub.com/v0.2/Saved%20Projects/Game%20Lab/?authKey=${super_secret_authToken}`;
       (async () => {
         const res = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            Content: string,
-            Name: state.name,
+            Name: saveStateObj.name,
+            JSON: dispatch("GET_SAVE_STATE"),
           }),
         }).then((r) => r.json());
 
+        console.log(res);
+
         copy(res.fields["Link"]);
         showShared();
-        state.lastSaved.name = state.name;
-        state.lastSaved.text = string;
+        state.lastSaved.name = saveStateObj.name;
+        state.lastSaved.prog = saveStateObj.prog;
         state.lastSaved.link = res.fields["Link"];
       })();
     }
 
     if (type === "file") {
-      downloadText(
-        `${state.name}.json`,
-        JSON.stringify({
-          sprites: state.sprites,
-          prog: string,
-        })
-      );
+      downloadText(`${state.name}.json`, JSON.stringify(saveStateObj));
     }
   },
   CANVAS_MOUSE_MOVE({ content: { mouseX, mouseY } }, state) {
@@ -212,6 +199,17 @@ const ACTIONS = {
     state.selected_sprite = name;
     dispatch("RENDER");
   },
+  CHANGE_SPRITE_NAME({ oldName, newName }, state) {
+    // check name is valid, not duplicate or blank
+    if (newName in state.sprites) return;
+
+    const sprite = state.sprites[oldName];
+    state.sprites[newName] = sprite;
+    delete state.sprites[oldName];
+    state.selected_sprite = newName;
+    dispatch("RUN");
+    dispatch("RENDER");
+  },
   SELECT_SPRITE({ name }, state) {
     const grid = state.sprites[name];
     state.selected_sprite = name;
@@ -241,8 +239,11 @@ const ACTIONS = {
 
 export function dispatch(action, args = {}) {
   const trigger = ACTIONS[action];
-  if (trigger) trigger(args, STATE);
-  else console.log("Action not recongnized:", action);
+  if (trigger) return trigger(args, STATE);
+  else {
+    console.log("Action not recongnized:", action);
+    return null;
+  }
 }
 
 function downloadText(filename, text) {

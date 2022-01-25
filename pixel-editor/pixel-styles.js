@@ -13,6 +13,10 @@ import { render, html, svg } from "../uhtml.js";
 
 export const pixelStyles = html`
   <style>
+    :root {
+      --dark-grey: #434343;
+    }
+
     .canvas-container {
       display: grid;
       background: grey;
@@ -37,6 +41,7 @@ export const pixelStyles = html`
     }
 
     .toolbox > * {
+      background: lightgrey;
       margin-bottom: 5px;
     }
 

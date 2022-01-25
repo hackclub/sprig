@@ -3,7 +3,6 @@ import { dispatch } from "./dispatch.js";
 import "./codemirror/codemirror-html.js";
 import "./codemirror/codemirror-js.js";
 
-// <button @click=${() => dispatch("SHARE", { type: "link" })}>link</button>
 function shareOptions(state) {
   return html`
     <div class="expand-menu menu-option menu-choice">
@@ -12,8 +11,10 @@ function shareOptions(state) {
         <input type="text" .placeholder=${state.name} @keyup=${(e) => {
     state.name = e.target.value === "" ? "anon" : e.target.value;
   }}></input>
-        <button @click=${() =>
-          dispatch("SHARE", { type: "file" })}>file</button>
+        <button @click=${() => dispatch("SAVE", { type: "file" })}>
+          file
+        </button>
+        <button @click=${() => dispatch("SAVE", { type: "link" })}>link</button>
       </div>
     </div>
   `;
@@ -61,7 +62,7 @@ export function view(state) {
       .list-of-sprites {
         display: flex;
         flex-direction: column;
-        background: orange;
+        background: #d3d3d3;
         min-height: 100%;
         max-height: 100%;
         height: 100%;
@@ -100,6 +101,10 @@ export function view(state) {
         box-sizing: border-box;
         border: 2px solid #ffffff00;
         padding: 3px;
+        border-radius: 5px;
+        font-family: monospace;
+        font-size: 0.8rem;
+        justify-content: space-between;
       }
 
       .sprite-name {
@@ -108,20 +113,19 @@ export function view(state) {
         padding-right: 10px;
       }
 
-      .sprite-name:hover {
-        background: yellow;
+      .sprite-entry:hover {
+        border: 2px solid yellow;
       }
 
       .sprite-delete {
         display: flex;
         justify-content: flex-end;
         color: red;
-        flex: 1;
         cursor: pointer;
       }
 
       .sprite-delete:hover {
-        color: yellow;
+        color: orange;
       }
 
       .selected-sprite {
@@ -141,14 +145,51 @@ export function view(state) {
         overflow: show;
       }
 
-      .mouse-display {
+      .output-overlay {
         color: white;
         margin: 0px;
         height: 1em;
+        font-size: 20px;
         font-family: monospace;
         position: absolute;
-        bottom: calc(100% - var(--horizontal-bar));
-        right: 5px;
+        user-select: none;
+      }
+
+      .mouse-display {
+        bottom: calc(100% - var(--horizontal-bar) + 5px);
+        right: 10px;
+      }
+
+      .toggle-show-origin {
+        bottom: calc(100% - var(--horizontal-bar) + 25px);
+        right: 10px;
+      }
+      .toggle-show-hitbox {
+        bottom: calc(100% - var(--horizontal-bar) + 45px);
+        right: 10px;
+      }
+
+      .sprite-entry-input {
+        font-size: 13px;
+        font-family: monospace;
+        border: none;
+        background-image: none;
+        background-color: transparent;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+        outline: none;
+        padding: 0;
+        width: 110px;
+      }
+
+      .a-to-button {
+        text-decoration: none;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--text-color);
       }
     </style>
     <div class="left-pane">
@@ -160,13 +201,21 @@ export function view(state) {
           state.logs.length === 0 ? "shrink" : "",
         ].join(" ")}
       >
-        ${state.logs.map((x) => html`<div>${JSON.stringify(x)}</div>`)}
+        ${state.logs.map(
+          (x) => html`<div style="white-space: pre-wrap">${x}</div>`
+        )}
       </div>
       <div class="menu">
         <button class="menu-option" @click=${() => dispatch("RUN")}>
           run (shift + enter)
         </button>
         ${shareOptions(state)}
+        <a
+          class="a-to-button menu-choice"
+          target="_blank"
+          href="https://github.com/hackclub/game-lab"
+          >GitHub</a
+        >
       </div>
     </div>
     <div class="right-pane">
@@ -183,7 +232,25 @@ export function view(state) {
           </canvas>
           <div class="text-container"></div>
         </div>
-        <pre class="mouse-display">
+        <p
+          @click=${(e) => {
+            state.show.origin = !state.show.origin;
+            dispatch("RENDER");
+          }}
+          class="output-overlay toggle-show-origin"
+        >
+          ${state.show.origin ? "[x]" : "[ ]"} show origin
+        </p>
+        <p
+          @click=${(e) => {
+            state.show.hitbox = !state.show.hitbox;
+            dispatch("RENDER");
+          }}
+          class="output-overlay toggle-show-hitbox"
+        >
+          ${state.show.hitbox ? "[x]" : "[ ]"} show hitbox
+        </p>
+        <pre class="output-overlay mouse-display">
           ${(() => {
             const canv = document.querySelector(".game-canvas") ?? {
               width: 100,
@@ -205,19 +272,14 @@ export function view(state) {
       <div class="pixel-editor-container">
         <div class="list-of-sprites">
           ${Object.keys(state.sprites).map(
-            (x) => html`
+            (x, i) => html.for({ x })`
               <div
                 class=${[
                   "sprite-entry",
                   x === state.selected_sprite ? "selected-sprite" : "",
                 ].join(" ")}
               >
-                <div
-                  class="sprite-name"
-                  @mousedown=${() => dispatch("SELECT_SPRITE", { name: x })}
-                >
-                  ${x}
-                </div>
+                ${renderSpriteName(x, state)}
                 <div
                   class="sprite-delete"
                   @mousedown=${() => dispatch("DELETE_SPRITE", { name: x })}
@@ -237,6 +299,23 @@ export function view(state) {
     ${renderExamples(state)} ${renderOptions(state)} ${renderShared(state)}
   `;
 }
+
+const renderSpriteName = (name, state) =>
+  state.selected_sprite === name
+    ? html`<input 
+          class="sprite-entry-input"
+          .value=${name} 
+          @change=${(e) =>
+            dispatch("CHANGE_SPRITE_NAME", {
+              oldName: name,
+              newName: e.target.value,
+            })}></input>`
+    : html`<div
+        class="sprite-name"
+        @mousedown=${() => dispatch("SELECT_SPRITE", { name })}
+      >
+        ${name}
+      </div> `;
 
 const renderShared = (state) => html`
   <div class="shared-modal hide">Sharing link copied to clip board.</div>

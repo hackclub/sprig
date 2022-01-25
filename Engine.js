@@ -1,15 +1,17 @@
 import { dispatch } from "./dispatch.js";
 
 const getLimits = (obj, [dx, dy] = [0, 0]) => {
-  const [ ox, oy ] = [obj.width * obj.origin[0], obj.height * obj.origin[1]];
+  const w = obj.width;
+  const h = obj.height;
+  const [ox, oy] = [w * obj.origin[0], h * obj.origin[1]];
   const x = obj.x + dx - ox;
   const y = obj.y + dy - oy;
   const xMin = x;
-  const xMax = x + obj.width;
+  const xMax = x + w;
   const yMin = y;
-  const yMax = y + obj.height;
-  const xCenter = (x + x + obj.width) / 2;
-  const yCenter = (y + y + obj.height) / 2;
+  const yMax = y + h;
+  const xCenter = (x + x + w) / 2;
+  const yCenter = (y + y + h) / 2;
 
   return {
     min: [xMin, yMin],
@@ -21,8 +23,8 @@ const getLimits = (obj, [dx, dy] = [0, 0]) => {
     yMax,
     xCenter,
     yCenter,
-    width: obj.width,
-    height: obj.height,
+    width: w,
+    height: h,
   };
 };
 
@@ -66,6 +68,30 @@ function haveCollided(obj0, obj1, buffer = 0) {
   );
 }
 
+function initSprite(spriteData, that) {
+  if (typeof spriteData === "object") {
+    const [w, h] = spriteData.size;
+
+    that.imageData = new ImageData(
+      new Uint8ClampedArray(spriteData.colors.flat()),
+      w,
+      h
+    );
+
+    const dx = spriteData.bounds.x;
+    const dy = spriteData.bounds.y;
+    that._width = spriteData.bounds.width;
+    that._height = spriteData.bounds.height;
+
+    that._sprite = document.createElement("canvas");
+    that._sprite.width = that._width;
+    that._sprite.height = that._height;
+    that._sprite.getContext("2d").putImageData(that.imageData, -dx, -dy);
+  } else {
+    that._sprite = null;
+  }
+}
+
 class Object {
   constructor(params, engine) {
     this.engine = engine;
@@ -73,37 +99,35 @@ class Object {
 
     let bounds = { x: 0, y: 0, maxX: 16, maxY: 16, width: 16, height: 16 };
 
-    if (typeof params.sprite === "object") {
-      const [ w, h ] = params.sprite.size;
-
-      this.imageData = new ImageData(
-        new Uint8ClampedArray(params.sprite.colors.flat()),
-        w,
-        h
-      );
-
-      this.spriteOffsetX = params.sprite.bounds.x;
-      this.spriteOffsetY = params.sprite.bounds.y;
-      this.unscaledWidth = this.width = params.sprite.bounds.width;
-      this.unscaledHeight = this.height = params.sprite.bounds.height;
-
-      this.sprite = document.createElement("canvas");
-      this.sprite.width = this.width + 1;
-      this.sprite.height = this.height + 1;
-      this.sprite
-        .getContext("2d")
-        .putImageData(this.imageData, -this.spriteOffsetX, -this.spriteOffsetY);
-    } else {
-      this.sprite = null;
-    }
-
+    this._sprite = null;
+    this._width = null;
+    this._height = null;
+    this.sprite = params.sprite;
     this.scale = params.scale ?? 1;
     this.rotate = params.rotate ?? 0;
-    this.origin = params.origin ?? [0, 0];
+
+    const origins = {
+      "left top": [0, 0],
+      "left center": [0, 0.5],
+      "left bottom": [0, 1],
+      "center top": [0.5, 0],
+      "center center": [0.5, 0.5],
+      center: [0.5, 0.5],
+      "center bottom": [0.5, 1],
+      "right top": [1, 0],
+      "right center": [1, 0.5],
+      "right bottom": [1, 1],
+    };
+
+    this.origin =
+      typeof params.origin === "string" && params.origin in origins
+        ? origins[params.origin]
+        : Array.isArray(params.origin)
+        ? params.origin
+        : [0, 0];
+
     this._x = params.x ?? 0;
     this._y = params.y ?? 0;
-    // this._x = (params.x ?? 0) - this.width * this.origin[0];
-    // this._y = (params.y ?? 0) - this.height * this.origin[1];
     this._vx = params.vx ?? 0;
     this._vy = params.vy ?? 0;
     this._ax = params.ax ?? 0;
@@ -112,13 +136,23 @@ class Object {
     // this.solidTo = params.solidTo ?? [];
     this.solid = params.solid ?? false;
     this.click = params.click ?? null;
-    this._draw = params.draw ?? null;
+    this._update = params.update ?? null;
     this._collides = params.collides ?? null;
     this.drawBounds = params.drawBounds ?? false;
     this.dx = 0;
     this.dy = 0;
 
     this.id = Math.random();
+  }
+
+  get sprite() {
+    return this._sprite;
+  }
+
+  set sprite(spriteData) {
+    // scaling doesn't work here
+    initSprite(spriteData, this);
+    // this.scale = this.scale;
   }
 
   hasTag(tag) {
@@ -159,9 +193,12 @@ class Object {
     if (canMoveInY) this._y += dy;
   }
 
-  set scale(factor) {
-    this.width = this.unscaledWidth * factor;
-    this.height = this.unscaledHeight * factor;
+  get width() {
+    return this._width * this.scale;
+  }
+
+  get height() {
+    return this._height * this.scale;
   }
 
   get rotate() {
@@ -173,24 +210,28 @@ class Object {
 
   draw(obj) {
     const { ctx } = obj.engine;
+    const w = this.width;
+    const h = this.height;
     ctx.save();
-    const [ ox, oy ] = [this.width * this.origin[0], this.height * this.origin[1]];
+    const [ox, oy] = [w * this.origin[0], h * this.origin[1]];
     ctx.translate(this._x, this._y);
     ctx.rotate(this._rotate);
 
     // draw sprite with sprite scale
-    if (this.sprite !== null)
-      ctx.drawImage(this.sprite, -ox, -oy, this.width, this.height);
-    
-    ctx.fillStyle = "red";
-    ctx.fillRect(-2, -2, 4, 4);
+    if (this.sprite !== null) ctx.drawImage(this.sprite, -ox, -oy, w, h);
 
-    this._draw(obj);
+    if (Engine.show.origin) {
+      ctx.fillStyle = "red";
+      ctx.fillRect(-2, -2, 4, 4);
+    }
+
+    if (this._update !== null) this._update(obj);
     ctx.restore();
 
-
-    ctx.strokeStyle = "grey";
-    ctx.strokeRect(this.x - ox, this.y - oy, this.width, this.height);
+    if (Engine.show.hitbox) {
+      ctx.strokeStyle = "grey";
+      ctx.strokeRect(this.x - ox, this.y - oy, w, h);
+    }
   }
 
   set x(val) {
@@ -233,10 +274,16 @@ class Object {
 }
 
 class Text {
-  constructor(str, x, y, color = "black", container) {
+  constructor(str, x, y, ops, container) {
     this._text = str;
     this.x = x;
     this.y = y;
+
+    const color = ops.color ?? "black";
+    const size = ops.size ?? 12;
+    const font = ops.font ?? "Times New Roman";
+    const rotate = ops.rotate ?? 0;
+    const scale = ops.scale ?? 1;
 
     const span = document.createElement("span");
     span.style = `
@@ -244,6 +291,10 @@ class Text {
       left: ${x}px;
       top: ${y}px;
       color: ${color};
+      font-family: ${font};
+      font-size: ${size}px;
+      transform: rotate(${rotate}deg) scale(${scale}) translate(-50%, -50%);
+      width: max-content;
     `;
     span.innerText = str;
 
@@ -257,6 +308,10 @@ class Text {
     this.el.innerText = this._text;
 
     return this;
+  }
+
+  remove() {
+    this.el.remove();
   }
 }
 
@@ -277,8 +332,6 @@ class Engine {
     this._height = height;
     this._mouseX = 0;
     this._mouseY = 0;
-
-    this._onDraw = [];
 
     this._heldKeys = new Set();
     this._pressedKeys = new Set();
@@ -325,10 +378,12 @@ class Engine {
     return this._height;
   }
   get mouseX() {
-    return this._mouseX;
+    const rect = this.canvas.getBoundingClientRect();
+    return this._mouseX - rect.left;
   } // not doced
   get mouseY() {
-    return this._mouseY;
+    const rect = this.canvas.getBoundingClientRect();
+    return this._mouseY - rect.top;
   } // not doced
 
   add(params) {
@@ -375,7 +430,7 @@ class Engine {
 
       this.step += 1;
 
-      if (this.drawing) window.requestAnimationFrame(draw);
+      if (this.drawing) this._animId = window.requestAnimationFrame(draw);
     };
 
     // setInterval(draw, 1000/10)
@@ -386,10 +441,11 @@ class Engine {
 
   end() {
     this.drawing = false;
+    window.cancelAnimationFrame(this._animId);
   }
 
-  addText(str, x, y, color) {
-    return new Text(str, x, y, color, this.textContainer);
+  addText(str, x, y, ops = {}) {
+    return new Text(str, x, y, ops, this.textContainer);
   }
 
   heldKey(key) {
@@ -402,15 +458,3 @@ class Engine {
 }
 
 export { Engine };
-
-// should I add concept of ground and gravity
-// should it just be solid and not with layers
-// platforms should be able to carry you
-// can you push things around
-
-// removed acceleration
-// elastic collisions
-// layers/selective contact
-
-// add dt to engine
-// add dx dy to objs

@@ -1,11 +1,24 @@
+## TODO, Jan 20, 2022
+- [] weird sprite renaming error
+- [] add sprite to default example
+- [x] fix default example
+- [] actually render errors properly
+
 ## TODO, Jan 10, 2022
+- [] image compression
+- [] image upload
+- [] size indicator
+
+- [] port to webgl
 - [] communicate brush color better
 - [] pick color from canvas
-- [] empty canvas bug
+- [] tile sprites
+
+- [x] fix small 1x sprite bug
+- [x] name sprites
+- [x] set sprite
+- [x] empty canvas bug
 - [x] collision overhaul
-- [] port to webgl
-- [] fix small 1x sprite bug
-- [] name sprites
 
 ## TODO, Jan 3, 2022
 

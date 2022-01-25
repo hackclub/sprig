@@ -10,7 +10,7 @@ function RGBA_to_hex([r, g, b, a]) {
   r = r.toString(16);
   g = g.toString(16);
   b = b.toString(16);
-  a = Math.round(a * 255).toString(16);
+  a = a.toString(16);
 
   if (r.length == 1) r = "0" + r;
   if (g.length == 1) g = "0" + g;
@@ -51,8 +51,9 @@ export function createPixelEditor(target) {
         state.tool = toolName;
         r();
       }}
+      style="height: 40px;"
     >
-      ${toolName}
+      <img src=${`./assets/${toolName}.png`} width="25px" />
     </button>
   `;
 
@@ -73,17 +74,15 @@ export function createPixelEditor(target) {
             state.gridColors[i] = grid[i];
           });
         }}
+        style="height: 40px;"
       >
-        undo
+        <img src="./assets/undo.png" width="25px" />
       </button>
     </div>
 
     <div class="colors">
-      <!-- <button>TODO: + add color</button> -->
       <input
-        class=${RGBA_to_hex(state.color) !== "#00000000" ? "selected-tool" : ""}
         type="color"
-        value=${RGBA_to_hex(state.color)}
         @input=${(e) => {
           state.color = hexToRGBA(e.target.value);
           r();
@@ -92,6 +91,11 @@ export function createPixelEditor(target) {
           state.color = hexToRGBA(e.target.value);
           r();
         }}
+        class=${RGBA_to_hex(state.color) !== "#00000000" ? "selected-tool" : ""}
+        style=${`
+          height: 35px; 
+          width: 35px; 
+        `}
       />
       <button
         class=${RGBA_to_hex(state.color) === "#00000000" ? "selected-tool" : ""}
@@ -99,8 +103,9 @@ export function createPixelEditor(target) {
           state.color = hexToRGBA("#00000000");
           r();
         }}
+        style="height: 35px;"
       >
-        clear
+        <img src="./assets/clear.png" width="25px" />
       </button>
     </div>
   `;
@@ -346,7 +351,7 @@ export function createPixelEditor(target) {
     );
 
     grid.forEach((color, i) => {
-      if (color[3] < 255) {
+      if (color[3] === 0) {
         const [x, y] = i_to_xy(i);
         color =
           (x % 2 === 0 && y % 2 === 1) || (x % 2 === 1 && y % 2 === 0)
