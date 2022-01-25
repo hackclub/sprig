@@ -14,6 +14,8 @@ class Cartridge {
     this.needsToInitialize = id != null
     this.engineVersion = engineVersion
     this.projectType = "game-lab"
+
+    return this.initialize()
   }
 
   async initialize() {
