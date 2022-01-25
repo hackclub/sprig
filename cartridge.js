@@ -46,7 +46,7 @@ class Cartridge {
   async generateUploadURL() {
     const result = await fetch(`https://vt4x133ukg.execute-api.eu-west-1.amazonaws.com/default/getPresignedURL?id=${await this.id()}`).then(r => r.json())
 
-    // { uploadURL, jsonFilename, id }
+    // { exists, uploadURL, jsonFilename, id }
     return result
   }
 
@@ -66,8 +66,12 @@ class Cartridge {
 
   async upload() {
     try {
-      const { uploadURL, _jsonFilename, _id } = await this.generateUploadURL()
+      const { exists, uploadURL, _jsonFilename, _id } = await this.generateUploadURL()
 
+      if (exists == true) {
+        // the file already exists on s3, skip uploading
+        return this
+      }
       await fetch(uploadURL, {
         mode: 'cors',
         headers: {
