@@ -51,7 +51,7 @@ class Cartridge {
   }
 
   async shareLink(id = this.id()) {
-    return window.location.href+`?${await id}`
+    return `${window.location}?id=${await id}`
   }
 
   async serialize(includeID = false) {
