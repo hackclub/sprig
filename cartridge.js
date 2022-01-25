@@ -48,6 +48,10 @@ class Cartridge {
     return result
   }
 
+  async generateDownloadURL() {
+    return `https://project-bucket-hackclub.s3.eu-west-1.amazonaws.com/${this.initialID || await this.id()}.json`
+  }
+
   async shareLink(id = this.id()) {
     return `${window.location}?id=${await id}`
   }
@@ -88,7 +92,7 @@ class Cartridge {
   }
 
   async download() {
-    const json = await fetch(`https://project-bucket-hackclub.s3.eu-west-1.amazonaws.com/${this.initialID || await this.id()}.json`, { mode: 'cors' }).then(r => r.json())
+    const json = await fetch(await this.generateDownloadURL(), { mode: 'cors' }).then(r => r.json())
 
     this.content = json.content
     this.previousID = json.id
