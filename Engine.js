@@ -1,3 +1,5 @@
+import { dispatch } from "./dispatch.js";
+
 const getLimits = (obj, [dx, dy] = [0, 0]) => {
   const [ ox, oy ] = [obj.width * obj.origin[0], obj.height * obj.origin[1]];
   const x = obj.x + dx - ox;
@@ -284,9 +286,6 @@ class Engine {
     const parent = canvas.parentNode;
     parent.querySelectorAll(".text-container > *").forEach((x) => x.remove());
     this.textContainer = parent.querySelector(".text-container");
-
-    /* let's make sure we know how big all the sprites are before we do any game logic */
-    dispatch('SIZE_UP_SPRITES')
 
     canvas.setAttribute("tabindex", "1");
 

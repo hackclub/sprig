@@ -1,3 +1,5 @@
+import { dispatch } from "./dispatch.js";
+
 const trigger = (e) => e.composedPath()[0];
 const matchesTrigger = (e, selectorString) =>
   trigger(e).matches(selectorString);

@@ -3,7 +3,9 @@ import lzutf8 from "https://cdn.skypack.dev/lzutf8";
 import { view } from "./view.js";
 import { init } from "./init.js";
 import { Engine } from "./Engine.js";
-import { Muse } from "https://hackclub.github.io/muse/exports.js";
+
+import { Muse } from "https://muse.hackclub.com/exports.js";
+import { size_up_sprites } from "./size_up_sprites.js";
 
 function copy(str) {
   const inp = document.createElement("input");
@@ -63,6 +65,11 @@ const ACTIONS = {
     } else {
       state.error = false;
       state.logs = [];
+
+
+      Engine.show = state.show;
+
+      size_up_sprites(state.sprites);
 
       const included = {
         _state: state,
@@ -158,31 +165,6 @@ const ACTIONS = {
     state.mouseX = mouseX;
     state.mouseY = mouseY;
     dispatch("RENDER");
-  },
-  SIZE_UP_SPRITES({}, state) {
-    function contextBoundingBox(sprite, w, h) {
-      const occupiedPixel = (pixel) => pixel[3] > 0;
-
-      const ascending = (a, b) => a - b;
-      const xs = sprite
-        .reduce((a, p, i) => (p[3] == 0 ? a : [...a, i % w]), [])
-        .sort(ascending);
-      const ys = sprite
-        .reduce((a, p, i) => (p[3] == 0 ? a : [...a, Math.floor(i / h)]), [])
-        .sort(ascending);
-
-      return {
-        x: xs[0],
-        y: ys[0],
-        maxX: xs[xs.length - 1],
-        maxY: ys[ys.length - 1],
-        width: xs[xs.length - 1] - xs[0],
-        height: ys[ys.length - 1] - ys[0],
-      };
-    }
-
-    for (const sprite of Object.values(state.sprites))
-      sprite.bounds = contextBoundingBox(sprite.colors, 32, 32);
   },
   UPLOAD({ saved }, state) {
     const newProg = saved.prog;

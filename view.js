@@ -1,4 +1,5 @@
 import { html } from "./uhtml.js";
+import { dispatch } from "./dispatch.js";
 import "./codemirror/codemirror-html.js";
 import "./codemirror/codemirror-js.js";
 
