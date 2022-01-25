@@ -36,11 +36,7 @@ class Cartridge {
 
   async id() {
     // an md5 of the whole project, that DOES NOT INCLUDE ID
-    return md5(await this.serialize(false))
-  }
-
-  update() {
-    return this.upload(arguments)
+    return md5(JSON.stringify(await this.serialize(false)))
   }
 
   async generateUploadURL() {
