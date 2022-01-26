@@ -234,6 +234,7 @@ const ACTIONS = {
   CHANGE_SPRITE_NAME({ oldName, newName }, state) {
     // check name is valid, not duplicate or blank
     if (newName in state.sprites) return;
+    if (oldName == newName) return;
 
     const sprite = state.sprites[oldName];
     state.sprites[newName] = sprite;
