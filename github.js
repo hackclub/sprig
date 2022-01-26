@@ -7,38 +7,41 @@
 const STORAGE_KEY = 'latest-engine-version'
 
 async function getFromGH() {
+  let sha = null
   try {
     const commits = await fetch('https://api.github.com/repos/hackclub/game-lab/commits?branch=main&per_page=1').then(r => r.json())
     const [ latestCommit ] = commits
-    const { sha } = latestCommit
+    sha = latestCommit.sha
 
-    window.localStorage.setItem(STORAGE_KEY, sha)
-
-    return sha
-  } finally {
-    return null
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ ts: Date.now(), sha }))
+  } catch (e) {
+    console.log(e)
   }
+  return sha
 }
 
-async function getFromStorage({force=false}={}) {
+function getFromStorage({force=false}={}) {
+  let sha = null
   try {
     const json = window.localStorage.getItem(STORAGE_KEY)
     const data = JSON.parse(json)
     const { ts, sha } = data
 
-    const cutoff = 1000 * 60 // 1 minute in milliseconds
+    const cutoff = 1000 * 60 * 30 // 30 minutes in milliseconds
     if (force || ts + cutoff > Date.now()) {
       return sha
     }
-  } finally {
-    return null
+  } catch (e) {
+    console.log(e)
   }
+  return sha
 }
 
 export async function latestEngineVersion() {
   // without an API token we can quickly get rate-limited... let's use localstorage caching to help out
 
-  return getFromStorage() || // try grabbing from recent local storage
-         getFromGH() || // try grabbing from github
-         getFromStorage({force: true}) // try grabby anything from local storage (even over a minute old)
+  const vs = getFromStorage() || // try grabbing from recent local storage
+             await getFromGH() || // try grabbing from github
+             getFromStorage({force: true}) // try grabby anything from local storage (even over a minute old)
+  return vs
 }
