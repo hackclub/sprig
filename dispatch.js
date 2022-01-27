@@ -23,6 +23,21 @@ function showShared() {
   );
 }
 
+// tune is 
+
+function play(tune, n = 0) { // if array of tunes then play at once
+  if (n === 0) { // play forever
+
+  } else { // loop n times
+
+  }
+ 
+  return { 
+    play,
+    end
+  }
+}
+
 const STATE = {
   codemirror: undefined,
   url: undefined,
@@ -34,6 +49,7 @@ const STATE = {
   name: "name-here",
   pixelEditor: undefined,
   sprites: {},
+  midis: {}, // what should audio files from the sequencer be
   mouseX: 0,
   mouseY: 0,
   selected_sprite: "",
@@ -72,12 +88,15 @@ const ACTIONS = {
 
       size_up_sprites(state.sprites);
 
+      const gameCanvas = document.querySelector(".game-canvas");
+
       const included = {
         _state: state,
         html,
         render,
         svg,
         Muse,
+        gameCanvas,
         createEngine(...args) {
           if (currentEngine) cancelAnimationFrame(currentEngine._animId);
           currentEngine = new Engine(...args);
@@ -85,6 +104,7 @@ const ACTIONS = {
         },
         // Muse,
         ...state.sprites,
+        ...state.midis,
       }; // these only work if no other imports
 
       try {

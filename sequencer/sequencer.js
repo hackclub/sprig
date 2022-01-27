@@ -7,7 +7,6 @@ import styles from "./sequencer-styles.js";
 // length selection
 // line/drag drawing
 // line/drag erasing
-// length selection
 // percussion
 
 // need to improve audio context handling
@@ -35,6 +34,53 @@ const noteMap = {
   1: "a5",
   0: "b5",
 }
+
+export async function playCells({ cells, bpm, numBeats }, n = 0) {
+  // if n === 0 then loop else play n times
+
+  const beatTime = (1000*60)/bpm;
+
+  let ended = false;
+
+  for (let i = 0; i < numBeats; i++) {
+    if (ended) break;
+
+    playCellsOnBeat(cells, bpm, i);
+    // await one beat
+    await setTimeout(() => {}, beatTime);
+  }
+
+  ended = true;
+
+  return {
+    play({ cells, bpm, numBeats }) {
+
+    },
+    end() {
+      ended = true;
+    }
+  }
+}
+
+export function playCellsOnBeat(cells, bpm, beat) {
+  // notes :: note[]
+  const notes = [];
+  // note :: [ pitch, instrument]
+
+  Object
+    .entries(cells)
+    .forEach(([ k, v ]) => {
+      const [x, y] = k.split("_").map(Number);
+      if (x === beat) notes.push([ y, v ]);
+    })
+
+  notes.forEach(([note, instrument]) => {
+    const n = noteMap[note];
+    const d = (1000*60)/bpm;
+    playNote(n, d, instrument)
+  })
+}
+
 
 function line(from, to) {
   const points = [];
@@ -174,7 +220,10 @@ export function createSequencer(target) {
           border: ${state.instrument === instrument ? "2px solid black" : "none"};
           box-sizing: border-box;
           `} 
-        @click=${() => state.instrument = instrument}>
+        @click=${() => { 
+          state.instrument = instrument;
+          r();
+        }}>
         ${instrument}
         </div>
     `
@@ -224,6 +273,14 @@ export function createSequencer(target) {
         justify-content: center;
         align-items: center;
       }
+
+      .bpm-control {
+        cursor: pointer;
+      }
+
+      .bpm-control:hover {
+        color: orange;
+      }
     </style>
     <div class="container">
       <svg 
@@ -245,28 +302,36 @@ export function createSequencer(target) {
               state.interval = play();
             }
           }}>play/pause</button>
+          <button>export midi</button>
         </div>
         <div class="bpm">
-          <div style="padding-right: 10px;">BPM</div>
-          <div style="padding-right: 5px;" @click=${() => {
-            state.bpm = Math.max(state.bpm - 1, 1);
-            clearInterval(state.interval);
-            state.interval = play();
-            r();
-          }}>-</div>
+          <div style="padding-right: 10px;">BPM:</div>
+          <div 
+            class="bpm-control" 
+            style="padding-right: 5px;" 
+            @click=${() => {
+              state.bpm = Math.max(state.bpm - 1, 1);
+              clearInterval(state.interval);
+              state.interval = play();
+              r();
+            }}>-</div>
           <input @input=${(e) => {
-            state.bpm = e.target.value;
+            state.bpm = Number(e.target.value);
             clearInterval(state.interval);
             state.interval = play();
             r();
-          }} type="range" min="1" max="2000" .value=${state.bpm}/>
-          <span>${state.bpm}</span>
-          <div style="padding-left: 5px;" @click=${() => {
-            state.bpm = Math.min(state.bpm + 1, 2000);
-            clearInterval(state.interval);
-            state.interval = play();
-            r();
-          }}>+</div>
+          }} type="range" min="1" max="2000" .value=${state.bpm}>
+          </input>
+          <span style="width: 30px;">${state.bpm}</span>
+          <div 
+            class="bpm-control" 
+            style="padding-left: 5px;" 
+            @click=${() => {
+              state.bpm = Math.min(state.bpm + 1, 2000);
+              clearInterval(state.interval);
+              state.interval = play();
+              r();
+            }}>+</div>
         </div>
         <div class="instruments">
           ${Object
@@ -348,24 +413,12 @@ export function createSequencer(target) {
     render(target, view(state));
   };
 
+
   const play = () => setInterval(() => {
     state.beat = (state.beat+1) % (state.numberX);
     // play song
-    const notes = [];
-    // note :: [ pitch, instrument]
+    playCellsOnBeat(state.cells, state.bpm, state.beat);
 
-    Object
-      .entries(state.cells)
-      .forEach(([ k, v ]) => {
-        const [x, y] = k.split("_").map(Number);
-        if (x === state.beat) notes.push([ y, v ]);
-      })
-
-    notes.forEach(([note, instrument]) => {
-      const n = noteMap[note];
-      const d = (1000*60)/state.bpm;
-      playNote(n, d, instrument)
-    })
 
     r();
   }, (1000*60)/state.bpm)
