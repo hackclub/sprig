@@ -19,18 +19,35 @@ exports.handler = async (event) => {
     return result
 }
 
-
-const getUploadURL = async function(event) {
-    const id = event?.queryStringParameters?.id || parseInt(Math.random()*10000000000)
-    
+const checkFileExists = async function(filename) {
     const s3Params = {
         Bucket: process.env.UploadBucket,
-        Key: `${id}.json`,
+        Key: filename
+    }
+    const result = await new Promise(resolve => {
+        s3.headObject(s3Params, resolve)
+    })
+    // this is weird, but this returns "null" when the file exists
+    return result == null
+}
+
+const createUploadURL = async function(filename) {
+    console.log('generating uploadURL')
+    const s3Params = {
+        Bucket: process.env.UploadBucket,
+        Key: filename,
         ContentType: 'application/json',
         ACL: 'public-read'
     }
-    
-    console.log('getUploadURL: ', s3Params)
+    return await s3.getSignedUrl('putObject', s3Params)
+}
+
+const getUploadURL = async function(event) {
+    const id = event?.queryStringParameters?.id || parseInt(Math.random()*10000000000)
+    const filename = `${id}.json`
+
+    const exists = await checkFileExists(filename)
+    const uploadUrl = await createUploadURL(filename)
     return new Promise((resolve, reject) => {
         // Get signed URL
         resolve({
@@ -40,9 +57,10 @@ const getUploadURL = async function(event) {
                 "Access-Control-Allow-Origin": "*"
             },
             "body": JSON.stringify({
-                "uploadURL": s3.getSignedUrl('putObject', s3Params),
-                "jsonFilename": `${id}.json`,
-                "id": id
+                "uploadURL": exists ? undefined : uploadUrl,
+                "jsonFilename": filename,
+                "id": id,
+                "exists": exists
             })
         })
     })

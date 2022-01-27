@@ -44,7 +44,7 @@ function readFile(file) {
 
     const saved = JSON.parse(raw);
 
-    dispatch("UPLOAD", { saved });
+    dispatch("LOAD_CARTRIDGE", { saved });
   };
 }
 

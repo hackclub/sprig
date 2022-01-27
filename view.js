@@ -297,7 +297,8 @@ export function view(state) {
       <div class="horizontal-bar"></div>
     </div>
     <div id="vertical-bar"></div>
-    ${renderExamples(state)} ${renderOptions(state)} ${renderShared(state)}
+    ${renderOptions(state)}
+    <div id="notification-container"></div>
   `;
 }
 
@@ -317,26 +318,6 @@ const renderSpriteName = (name, state) =>
       >
         ${name}
       </div> `;
-
-const renderShared = (state) => html`
-  <div class="shared-modal hide">Sharing link copied to clip board.</div>
-`;
-
-const renderExamples = (state) => html`
-  <div class="examples hide">
-    ${state.examples.map(
-      (x, i) => html`
-        <span
-          class="example"
-          @click=${() => dispatch("LOAD_EXAMPLE", { content: x["Content"] })}
-        >
-          ${x["Name"]}
-        </span>
-      `
-    )}
-    <button class="close" @click=${() => toggleHide("examples")}>close</button>
-  </div>
-`;
 
 const renderOptions = (state) => {
   return html`
