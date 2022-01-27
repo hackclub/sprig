@@ -1,3 +1,7 @@
 <div id="root"></div>
 
-<script type="module" defer src="./sequencer.js"></script>
+<script type="module" defer>
+  import { createSequencer } from "./sequencer.js";
+
+  createSequencer(document.body);
+</script>

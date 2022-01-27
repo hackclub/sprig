@@ -6,6 +6,8 @@ import { Engine } from "./Engine.js";
 import { Muse } from "https://muse.hackclub.com/exports.js";
 import { size_up_sprites } from "./size_up_sprites.js";
 import { latestEngineVersion } from "./github.js";
+import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
+import { createSequencer } from "./sequencer/sequencer.js";
 
 
 const STATE = {
@@ -15,15 +17,13 @@ const STATE = {
   examples: [],
   error: false,
   logs: [],
-  pixelEditor: undefined,
-  sequencer: undefined,
-  sprites: {},
-  midis: {}, // what should audio files from the sequencer be
+  assetEditor: undefined, // type :: pixelEditor | sequencer which have different interfaces
+  assets: [],
   mouseX: 0,
   mouseY: 0,
   engineVersion: null, // TODO: actually start loading data depending on this value
   previousID: null, // TODO: start setting this correctly on cartridge load
-  selected_sprite: "",
+  selected_sprite: -1,
   name: "name-here",
   lastSaved: {
     name: "",
@@ -57,7 +57,9 @@ const ACTIONS = {
 
       Engine.show = state.show;
 
-      size_up_sprites(state.sprites);
+      const sprites = state.assets.filter(a => a.type === "sprite").map(a => a.data);
+
+      size_up_sprites(sprites);
 
       const gameCanvas = document.querySelector(".game-canvas");
 
@@ -73,10 +75,12 @@ const ACTIONS = {
           currentEngine = new Engine(...args);
           return currentEngine;
         },
-        // Muse,
-        ...state.sprites,
-        ...state.midis,
+        // Muse
       }; // these only work if no other imports
+
+      state.assets.forEach(asset => {
+        included[asset.name] = asset.data;
+      })
 
       try {
         new Function(...Object.keys(included), string)(
@@ -92,15 +96,11 @@ const ACTIONS = {
       document.querySelector(".game-canvas").focus();
     }
   },
-  SHARE_TYPE({ type }, state) {
-    state.shareType = type;
-    dispatch("RENDER");
-  },
   GET_SAVE_STATE(args, state) {
     const prog = state.codemirror.view.state.doc.toString();
     return JSON.stringify({
       prog,
-      sprites: state.sprites,
+      assets: state.assets,
       name: state.name,
       previousID: state.previousID,
       engineVersion: state.engineVersion
@@ -122,15 +122,16 @@ const ACTIONS = {
       changes: { from: 0, to: currentProg.length, insert: newProg },
     });
 
-    state.sprites = saved.sprites;
+    state.assets = saved.assets || [];
 
-    if (Object.keys(saved.sprites).length === 0) {
-      dispatch("CREATE_SPRITE")
-    } else {
-      state.sprites = saved.sprites;
-      const name = Object.keys(saved.sprites)[0];
-      dispatch("SELECT_SPRITE", { name });
-    }
+    // TODO: do we need to select default
+
+    // if (saved.assets.length === 0) {
+    //   dispatch("CREATE_ASSET", { assetType: "sprite" })
+    // } else {
+    //   state.assets = saved.assets;
+    //   dispatch("SELECT_ASSET", { index: 0 });
+    // }
 
     if (!state.engineVersion) {
       state.engineVersion = await latestEngineVersion()
@@ -139,7 +140,9 @@ const ACTIONS = {
     dispatch("RENDER");
     dispatch("RUN");
   },
-  CREATE_SPRITE(args, state) {
+  CREATE_ASSET({ assetType }, state) {
+    if (state.assetEditor && state.assetEditor.endTune) state.assetEditor.endTune();
+    
     function randString(length) {
       var randomChars = "abcdefghijklmnopqrstuvwxyz";
       var result = "";
@@ -151,43 +154,90 @@ const ACTIONS = {
       return result;
     }
 
-    const grid = state.pixelEditor.createEmptyGrid();
-    const name = "sprite_" + randString(3);
-    state.sprites[name] = grid;
-    state.pixelEditor.setGridColors(grid);
-    state.selected_sprite = name;
+    if (assetType === "sprite") {
+      state.assetEditor = createPixelEditor(
+        document.querySelector(".asset-editor")
+      )
+      const grid = state.assetEditor.createEmptyGrid();
+      state.assetEditor.setGridColors(grid);
+
+      const name = "sprite_" + randString(3);
+      state.assets.push({
+        name,
+        type: "sprite",
+        data: grid
+      })
+
+      state.selected_asset = state.assets.length - 1;
+    } else if (assetType === "tune") {
+      state.assetEditor = createSequencer(
+        document.querySelector(".asset-editor")
+      )
+
+      // const grid = state.assetEditor.createEmptyGrid();
+      const name = "tune_" + randString(3);
+      const tune = state.assetEditor.getTune();
+      state.assets.push({
+        name,
+        type: "tune",
+        data: tune
+      })
+      state.assetEditor.setTune(tune);
+      state.selected_asset = state.assets.length - 1;
+    }
+
     dispatch("RENDER");
   },
-  CHANGE_SPRITE_NAME({ oldName, newName }, state) {
-    // check name is valid, not duplicate or blank
-    if (newName in state.sprites) return;
+  CHANGE_ASSET_NAME({ index, newName }, state) {
+    const usedNames = state.assets.map(x => x.name);
+    if (usedNames.includes(newName)) return;
+    else {
+      state.assets[index].name = newName;
+      state.selected_asset = index;
+    }
 
-    const sprite = state.sprites[oldName];
-    state.sprites[newName] = sprite;
-    delete state.sprites[oldName];
-    state.selected_sprite = newName;
     dispatch("RUN");
     dispatch("RENDER");
   },
-  SELECT_SPRITE({ name }, state) {
-    const grid = state.sprites[name];
-    state.selected_sprite = name;
-    state.pixelEditor.setGridColors(grid);
-    dispatch("RENDER");
-  },
-  DELETE_SPRITE({ name }, state) {
-    delete state.sprites[name];
-    if (
-      state.selected_sprite === name &&
-      Object.keys(state.sprites).length > 0
-    ) {
-      const name = Object.keys(state.sprites)[0];
-      dispatch("SELECT_SPRITE", { name });
+  SELECT_ASSET({ index }, state) {
+    if (state.assetEditor && state.assetEditor.endTune) state.assetEditor.endTune();
+
+    const assetType = state.assets[index].type;
+
+    if (assetType === "sprite") {
+      state.assetEditor = createPixelEditor(
+        document.querySelector(".asset-editor")
+      )
+
+      const grid = state.assets[index].data;
+      state.assetEditor.setGridColors(grid);
+    } else if (assetType === "tune") {
+      state.assetEditor = createSequencer(
+        document.querySelector(".asset-editor")
+      )
+      const tune = state.assets[index].data;
+      state.assetEditor.setTune(tune);
     }
 
-    if (Object.keys(state.sprites).length === 0) dispatch("CREATE_SPRITE");
-
+    state.selected_asset = index;
     dispatch("RENDER");
+  },
+  DELETE_ASSET({ index }, state) { // TODO this is broken
+    const assetType = state.assets[index].type;
+    state.selected_asset = index;
+
+    state.assets = state.assets.filter((x, i) => i !== index);
+
+    if (state.selected_asset >= state.assets.length) {
+      state.selected_asset = state.assets.length - 1
+    }
+
+    if (state.selected_asset !== -1) dispatch("SELECT_ASSET", { index: state.selected_asset });
+    else {
+      if (state.assetEditor && state.assetEditor.endTune) state.assetEditor.endTune();
+      document.querySelector(".asset-editor").innerHTML = "<div>go ahead and make some assets</div>";
+    }
+
     dispatch("RUN");
   },
   RENDER() {
@@ -196,6 +246,7 @@ const ACTIONS = {
 };
 
 export function dispatch(action, args = {}) {
+  console.log(action);
   const trigger = ACTIONS[action];
   if (trigger) return trigger(args, STATE);
   else {

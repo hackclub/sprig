@@ -431,8 +431,9 @@ export function createPixelEditor(target) {
   }
 
   const init = (state) => {
-    render(target, view(state));
-    const c = document.querySelector(".drawing-canvas");
+    r();
+    const c = target.querySelector(".drawing-canvas");
+
     state.canvas = c;
 
     setCanvasSize(c);

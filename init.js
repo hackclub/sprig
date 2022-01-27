@@ -1,6 +1,6 @@
 import { events } from "./events.js";
-import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
 import { dispatch } from "./dispatch.js";
+import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
 import { createSequencer } from "./sequencer/sequencer.js";
 import { latestEngineVersion } from "./github.js";
 
@@ -62,12 +62,6 @@ export async function init(state) {
   initVert()
 
   dispatch("RENDER");
-  state.pixelEditor = createPixelEditor(
-    document.querySelector(".pixel-editor")
-  );
-  
-  state.sequencer = createSequencer(document.querySelector(".sequencer"));
-
   state.codemirror = document.querySelector("#code-editor");
   events(state);
 
@@ -76,6 +70,7 @@ export async function init(state) {
                 await loadFromStorage() ||
                 await loadFromDefault()
   
+  console.log(saved);
 
   dispatch("LOAD_CARTRIDGE", { saved })
 }

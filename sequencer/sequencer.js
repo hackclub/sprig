@@ -112,6 +112,7 @@ export function createSequencer(target) {
     lastPt: [0, 0],
     drawing: false,
     erasing: false,
+    data: null, // this is to pass bpm by reference from the game-lab
   };
 
   function upload(files, extensions = []) {
@@ -356,12 +357,14 @@ export function createSequencer(target) {
             style="padding-right: 5px;" 
             @click=${() => {
               state.bpm = Math.max(state.bpm - 1, 1);
+              state.data.bpm = state.bpm;
               clearInterval(state.interval);
               state.interval = play();
               r();
             }}>-</div>
           <input @input=${(e) => {
             state.bpm = Number(e.target.value);
+            state.data.bpm = state.bpm;
             clearInterval(state.interval);
             state.interval = play();
             r();
@@ -373,6 +376,7 @@ export function createSequencer(target) {
             style="padding-left: 5px;" 
             @click=${() => {
               state.bpm = Math.min(state.bpm + 1, 2000);
+              state.data.bpm = state.bpm;
               clearInterval(state.interval);
               state.interval = play();
               r();
@@ -464,12 +468,23 @@ export function createSequencer(target) {
     window.addEventListener("resize", r);
     addDropUpload();
 
-    state.interval = play();
   }
 
   init(state);
 
   return {
-    
+    endTune() {
+      if (state.interval) clearInterval(state.interval);
+    },
+    setTune(data) {
+      const { cells, bpm } = data;
+      state.cells = cells;
+      state.bpm = bpm;
+      state.data = data;
+      r();
+    },
+    getTune() {
+      return { cells: state.cells, bpm: state.bpm }
+    }
   };
 }
