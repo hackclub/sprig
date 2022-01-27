@@ -16,6 +16,21 @@ Join `#gamelab-dev` on the [Hack Club Slack](https://hackclub.com/slack/) to joi
 
 Check out a minimal example game: [Superb Macedonian Plumber Bro](https://hackclub.github.io/game-lab/?file=recxJ4Z4C3U0WbSIT)
 
+## Development
+
+The Hack Club Game Lab requires a local HTTP server to run in development. Here's how to get it running on your own machine.
+
+Clone repo:
+
+    $ git clone https://github.com/hackclub/game-lab
+
+Start a local HTTP server inside the repo:
+
+    $ cd game-lab/
+    $ python3 -m http.server 3000
+
+And then go to http://localhost:3000 in your web browser, and it should work!
+
 ## Minimal Examples
 
 initialize engine
