@@ -292,6 +292,7 @@ export function view(state) {
           <button @click=${() => dispatch("CREATE_SPRITE")}>add</button>
         </div>
         <div class="pixel-editor"></div>
+        <div class="sequencer"></div>
       </div>
       <div class="horizontal-bar"></div>
     </div>

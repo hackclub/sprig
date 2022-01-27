@@ -2,6 +2,7 @@ import { events } from "./events.js";
 import { defaultProg } from "./defaultProg.js";
 import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
 import { dispatch } from "./dispatch.js";
+import { createSequencer } from "./sequencer/sequencer.js";
 
 
 export function init(state) {
@@ -18,6 +19,9 @@ export function init(state) {
   state.pixelEditor = createPixelEditor(
     document.querySelector(".pixel-editor")
   );
+  
+  state.sequencer = createSequencer(document.querySelector(".sequencer"));
+
   state.codemirror = document.querySelector("#code-editor");
   events(state);
 

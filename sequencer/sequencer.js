@@ -276,6 +276,7 @@ export function createSequencer(target) {
         width: 100%;
         height: 100%;
         flex: 1;
+        background: white;
       }
 
       .container {
@@ -285,7 +286,7 @@ export function createSequencer(target) {
         height: 100%;
       }
 
-      .toolbox {
+      .sequencer-toolbox {
         display: flex;
         min-height: 80px;
         max-height: 80px;
@@ -300,6 +301,9 @@ export function createSequencer(target) {
 
       .instruments {
         display: flex;
+        flex-wrap: wrap;
+        min-width: 140px;
+        justify-content: flex-end;
       }
 
       .instrument {
@@ -329,7 +333,7 @@ export function createSequencer(target) {
         ${state.svg ? drawBeat(state) : ""}
         ${state.svg ? drawGrid(state.numberX, state.numberY, state.svg) : ""}
       </svg>
-      <div class="toolbox">
+      <div class="sequencer-toolbox">
         <div class="play-pause">
           <button @click=${() => {
             if (state.interval) {
@@ -469,6 +473,3 @@ export function createSequencer(target) {
     
   };
 }
-
-
-createSequencer(document.body);

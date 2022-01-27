@@ -23,21 +23,6 @@ function showShared() {
   );
 }
 
-// tune is 
-
-function play(tune, n = 0) { // if array of tunes then play at once
-  if (n === 0) { // play forever
-
-  } else { // loop n times
-
-  }
- 
-  return { 
-    play,
-    end
-  }
-}
-
 const STATE = {
   codemirror: undefined,
   url: undefined,
@@ -48,6 +33,7 @@ const STATE = {
   logs: [],
   name: "name-here",
   pixelEditor: undefined,
+  sequencer: undefined,
   sprites: {},
   midis: {}, // what should audio files from the sequencer be
   mouseX: 0,
