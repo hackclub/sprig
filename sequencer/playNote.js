@@ -39,11 +39,19 @@ function playNoteHelper(frequency, duration, instrument) {
   o.type = instrument ?? 'sine';
   o.connect(g)
   g.connect(audioCtx.destination)
-  o.start()
+  o.start();
+
+  const endTime = audioCtx.currentTime + duration*2/1000;
+  o.stop(endTime)
+  
   g.gain.setValueAtTime(0, audioCtx.currentTime);
   g.gain.linearRampToValueAtTime(.2, audioCtx.currentTime + duration/5/1000);
   g.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration/1000)
   g.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration*2/1000) // does this ramp from the last ramp
+  // await audioCtx.close();
+  o.onended = () => {
+    g.disconnect();
+  };
 }
 
 // instrument :: sine | triangle | square | sawtooth

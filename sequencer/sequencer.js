@@ -5,11 +5,12 @@ import styles from "./sequencer-styles.js";
 // could add
 // scale selection -> chromatic, minor, pentatonic
 // length selection
-// line/drag drawing
-// line/drag erasing
 // percussion
 
+// done
 // need to improve audio context handling
+// line/drag drawing
+// line/drag erasing
 
 const instrumentColorMap = {
   "sine": "red",
@@ -35,33 +36,6 @@ const noteMap = {
   0: "b5",
 }
 
-export async function playCells({ cells, bpm, numBeats }, n = 0) {
-  // if n === 0 then loop else play n times
-
-  const beatTime = (1000*60)/bpm;
-
-  let ended = false;
-
-  for (let i = 0; i < numBeats; i++) {
-    if (ended) break;
-
-    playCellsOnBeat(cells, bpm, i);
-    // await one beat
-    await setTimeout(() => {}, beatTime);
-  }
-
-  ended = true;
-
-  return {
-    play({ cells, bpm, numBeats }) {
-
-    },
-    end() {
-      ended = true;
-    }
-  }
-}
-
 export function playCellsOnBeat(cells, bpm, beat) {
   // notes :: note[]
   const notes = [];
@@ -79,6 +53,29 @@ export function playCellsOnBeat(cells, bpm, beat) {
     const d = (1000*60)/bpm;
     playNote(n, d, instrument)
   })
+}
+
+function downloadText(filename, text) {
+  const blob = new Blob([text], { type: "text/plain" });
+
+  var link = document.createElement("a"); // Or maybe get it from the current document
+  link.href = URL.createObjectURL(blob);
+  link.download = `${filename}`;
+  link.click();
+  URL.revokeObjectURL(link);
+}
+
+function getSong(cells, bpm, length, noteMap) {
+
+  const song = [];
+  for (let i = 0; i < length; i++) song.push([]);
+
+  for (const k in cells) {
+    const [x, y] = k.split("_").map(Number);
+    song[x].push([noteMap[y], 1000*60/bpm, cells[k]]);
+  }
+
+  return song;
 }
 
 
@@ -113,10 +110,58 @@ export function createSequencer(target) {
     bpm: 120,
     interval: null,
     lastPt: [0, 0],
-    tempNotes: [],
     drawing: false,
     erasing: false,
   };
+
+  function upload(files, extensions = []) {
+    let file = files[0];
+    let fileName = file.name.split(".");
+    let name = fileName[0];
+    const extension = fileName[fileName.length - 1];
+
+    if (extensions.length > 0 && extensions.includes(enxtension))
+      throw "Extension not recongized: " + fileName;
+
+    readFile(file);
+  }
+
+  function readFile(file) {
+    var reader = new FileReader();
+    reader.readAsText(file);
+
+    reader.onloadend = (event) => {
+      let raw = reader.result;
+
+      const json = JSON.parse(raw);
+      const { song, cells, bpm } = json;
+
+      state.cells = cells;
+      state.bpm = bpm;
+      r();
+    };
+  }
+
+  function addDropUpload() {
+    window.addEventListener("drop", (e) => {
+      let dt = e.dataTransfer;
+      let files = dt.files;
+
+      upload(files);
+
+      if (e.stopPropagation) e.stopPropagation();
+      if (e.preventDefault) e.preventDefault();
+      e.cancelBubble = true;
+      e.returnValue = false;
+    });
+
+    window.addEventListener("dragover", (e) => {
+      if (e.stopPropagation) e.stopPropagation();
+      if (e.preventDefault) e.preventDefault();
+      e.cancelBubble = true;
+      e.returnValue = false;
+    });
+  }
 
   const ptsToD = pts => {
     const reducer = (acc, cur, i) => `${acc} ${i === 0 ? "M" : "L"} ${cur.join(",")}`;
@@ -198,14 +243,6 @@ export function createSequencer(target) {
       const color = instrumentColorMap[cells[key]];
       cellsToDraw.push([ x, y, color ])
     }
-
-    state.tempNotes.forEach(tn => {
-      const [key, instrument] = tn;
-      const [x, y] = key.split("_").map(Number);
-      const color = instrumentColorMap[instrument] ?? "white";
-
-      cellsToDraw.push([ x, y, color ])
-    })
 
     return cellsToDraw.map(drawCell);
   }
@@ -302,7 +339,11 @@ export function createSequencer(target) {
               state.interval = play();
             }
           }}>play/pause</button>
-          <button>export midi</button>
+          <button @click=${() => {
+            const song = getSong(state.cells, state.bpm, state.numberX, noteMap);
+
+            downloadText("jam.json", JSON.stringify({ song, cells: state.cells, bpm: state.bpm }));
+          }}>export</button>
         </div>
         <div class="bpm">
           <div style="padding-right: 10px;">BPM:</div>
@@ -369,40 +410,27 @@ export function createSequencer(target) {
     }
 
     state.lastPt = [x, y];
-    state.tempNotes = [];
 
     r();
   }
 
   const onMoveSVG = e => {
     const currentPt = getSVGPos(e);
-    const tempNotes = [];
 
     if (state.drawing || state.erasing) {
       const pts = line(state.lastPt, currentPt);
       pts.forEach(([x, y]) => {
         const key = `${x}_${y}`
-        tempNotes.push([key, state.drawing ? state.instrument : "empty"])
+        if (state.erasing) delete state.cells[key]
+        else state.cells[key] = state.instrument;
       })
     }
 
     state.lastPt = currentPt;
-    state.tempNotes = [...state.tempNotes, ...tempNotes];
     r();
   }
 
   const onUpSVG = e => {
-    if (state.drawing) {
-      state.tempNotes.forEach(x => {
-        state.cells[x[0]] = x[1];
-      })
-    } else if (state.erasing) {
-      state.tempNotes.forEach(x => {
-        delete state.cells[x[0]];
-      })
-    }
-
-    state.tempNotes = [];
     state.erasing = false;
     state.drawing = false;
 
@@ -430,6 +458,7 @@ export function createSequencer(target) {
     r();
     // add events
     window.addEventListener("resize", r);
+    addDropUpload();
 
     state.interval = play();
   }
@@ -437,7 +466,7 @@ export function createSequencer(target) {
   init(state);
 
   return {
-    test: true
+    
   };
 }
 
