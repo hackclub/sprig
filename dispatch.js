@@ -1,40 +1,25 @@
 import { html, render, svg } from "./uhtml.js";
 import { view } from "./view.js";
 import { init } from "./init.js";
+import { save } from "./save.js";
 import { Engine } from "./Engine.js";
 import { Muse } from "https://muse.hackclub.com/exports.js";
-import { Cartridge } from "./cartridge.js";
+import { latestEngineVersion } from "./github.js";
 
-function copy(str) {
-  const inp = document.createElement("input");
-  document.body.appendChild(inp);
-  inp.value = str;
-  inp.select();
-  document.execCommand("copy", false);
-  inp.remove();
-}
-
-function showShared() {
-  document.querySelector(".shared-modal").classList.toggle("hide");
-  setTimeout(
-    () => document.querySelector(".shared-modal").classList.toggle("hide"),
-    3000
-  );
-}
 
 const STATE = {
   codemirror: undefined,
   url: undefined,
-  shareType: "airtable",
   show: { origin: false, hitbox: false },
   examples: [],
   error: false,
   logs: [],
-  name: "name-here",
   pixelEditor: undefined,
   sprites: {},
   mouseX: 0,
   mouseY: 0,
+  engineVersion: null, // TODO: actually start loading data depending on this value
+  previousID: null, // TODO: start setting this correctly on cartridge load
   selected_sprite: "",
   name: "name-here",
   lastSaved: {
@@ -104,55 +89,16 @@ const ACTIONS = {
   },
   GET_SAVE_STATE(args, state) {
     const prog = state.codemirror.view.state.doc.toString();
-    return JSON.stringify({ prog, sprites: state.sprites, name: state.name });
+    return JSON.stringify({
+      prog,
+      sprites: state.sprites,
+      name: state.name,
+      previousID: state.previousID,
+      engineVersion: state.engineVersion
+    });
   },
-  SAVE({ type }, state) {
-    const saveStateObj = JSON.parse(dispatch("GET_SAVE_STATE"));
-
-    if (type === "link") {
-      if (
-        state.lastSaved.name === saveStateObj.name &&
-        state.lastSaved.prog === saveStateObj.prog
-      ) {
-        copy(state.lastSaved.link);
-        showShared();
-        return;
-      }
-
-      const super_secret_authToken = "recbyefY9mTqsIsu316420036201n7omgg1e3s"; // DO NOT USE PLEASE!!!
-      const url = `https://airbridge.hackclub.com/v0.2/Saved%20Projects/Game%20Lab/?authKey=${super_secret_authToken}`;
-      (async () => {
-        const res = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            Name: saveStateObj.name,
-            JSON: dispatch("GET_SAVE_STATE"),
-          }),
-        }).then((r) => r.json());
-
-        console.log(res);
-
-        copy(res.fields["Link"]);
-        showShared();
-        state.lastSaved.name = saveStateObj.name;
-        state.lastSaved.prog = saveStateObj.prog;
-        state.lastSaved.link = res.fields["Link"];
-      })();
-    }
-
-    if (type === "file") {
-      downloadText(`${state.name}.json`, JSON.stringify(saveStateObj));
-    }
-
-    if (type === "s3") {
-      (async () => {
-        state.cartridge.content = JSON.stringify(saveStateObj)
-        await state.cartridge.upload()
-        copy(await state.cartridge.shareLink())
-        showShared()
-      })()
-    }
+  SAVE: async ({ type }, state) => {
+    await save(type, state)
   },
   CANVAS_MOUSE_MOVE({ content: { mouseX, mouseY } }, state) {
     state.mouseX = mouseX;
@@ -195,7 +141,7 @@ const ACTIONS = {
       }
     }
   },
-  UPLOAD({ saved }, state) {
+  LOAD_CARTRIDGE: async ({ saved }, state) => {
     const newProg = saved.prog;
     const currentProg = state.codemirror.view.state.doc.toString();
 
@@ -205,21 +151,19 @@ const ACTIONS = {
 
     state.sprites = saved.sprites;
 
-    if (Object.keys(saved.sprites).length === 0) dispatch("CREATE_SPRITE");
-    else {
+    if (Object.keys(saved.sprites).length === 0) {
+      dispatch("CREATE_SPRITE")
+    } else {
       state.sprites = saved.sprites;
       const name = Object.keys(saved.sprites)[0];
       dispatch("SELECT_SPRITE", { name });
     }
 
+    if (!state.engineVersion) {
+      state.engineVersion = await latestEngineVersion()
+    }
+
     dispatch("RENDER");
-    dispatch("RUN");
-  },
-  LOAD_EXAMPLE({ content }, state) {
-    const string = state.codemirror.view.state.doc.toString();
-    state.codemirror.view.dispatch({
-      changes: { from: 0, to: string.length, insert: content },
-    });
     dispatch("RUN");
   },
   CREATE_SPRITE(args, state) {
@@ -274,7 +218,6 @@ const ACTIONS = {
     dispatch("RUN");
   },
   RENDER() {
-    // console.log("rendered");
     render(document.getElementById("root"), view(STATE));
   },
 };
@@ -286,14 +229,4 @@ export function dispatch(action, args = {}) {
     console.log("Action not recongnized:", action);
     return null;
   }
-}
-
-function downloadText(filename, text) {
-  const blob = new Blob([text], { type: "text/plain" });
-
-  var link = document.createElement("a"); // Or maybe get it from the current document
-  link.href = URL.createObjectURL(blob);
-  link.download = `${filename}`;
-  link.click();
-  URL.revokeObjectURL(link);
 }

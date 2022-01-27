@@ -1,36 +1,13 @@
 import { events } from "./events.js";
 import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
-import { Cartridge } from "./cartridge.js";
 import { dispatch } from "./dispatch.js";
+import { latestEngineVersion } from "./github.js";
 
-async function loadFromStorage({state}) {
-    const saved = JSON.parse(window.localStorage.getItem("hc-game-lab"));
+const DEFAULT_CARTRIDGE = '3449c9e5e332f1dbb81505cd739fbf3f'
 
-    if (!saved || !saved.prog) {
-      loadFromS3({state})
-    } else {
-      const prog = saved.prog;
-      state.codemirror.view.dispatch({
-        changes: { from: 0, insert: prog },
-      });
-
-      if (Object.keys(saved.sprites).length === 0) dispatch("CREATE_SPRITE");
-      else {
-        if (Array.isArray(Object.values(saved.sprites)[0]))
-          saved.sprites = Object.fromEntries(
-            Object.entries(saved.sprites).map(([name, colors]) => [
-              name,
-              { size: [32, 32], colors },
-            ])
-          );
-        state.sprites = saved.sprites;
-        const name = Object.keys(saved.sprites)[0];
-        dispatch("SELECT_SPRITE", { name });
-      }
-    }
-
-    dispatch("RENDER");
-    dispatch("RUN");
+function getParam(key) {
+  const search = new URLSearchParams(window.location.search);
+  return search.get(key)
 }
 
 function removeParam(key) {
@@ -39,42 +16,49 @@ function removeParam(key) {
   window.history.pushState({}, null, url)
 }
 
-async function loadFromAirtable() {
-      const url = `https://api2.hackclub.com/v0.2/Saved%20Projects/Game%20Lab/${file}/?authKey=recbyefY9mTqsIsu316420036201n7omgg1e3s`;
-      fetch(url, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      }).then((res) =>
-        res.json().then((json) => {
-          console.log(json);
-          const saved = JSON.parse(json.fields["JSON"]);
-          dispatch("UPLOAD", { saved });
-        })
-      );
-
+function loadFromDefault() {
+  return loadFromS3(DEFAULT_CARTRIDGE)
 }
 
-async function loadFromS3({id, state}) {
-  console.log({id})
-  state.cartridge = new Cartridge({id})
-  await state.cartridge.download()
-  window.cart = state.cartridge
-  const saved = JSON.parse(state.cartridge.content)
-  dispatch("UPLOAD", {saved})
+async function loadFromStorage() {
+  const storedData = window.localStorage.getItem("hc-game-lab")
+  if (!storedData) { return null }
+  const saved = JSON.parse(storedData)
+  return saved
+}
+
+async function loadFromAirtable() {
+  const file = getParam('file')
+  removeParam('file')
+  if (!file) { return null }
+  const url = `https://api2.hackclub.com/v0.2/Saved%20Projects/Game%20Lab/${file}/?authKey=recbyefY9mTqsIsu316420036201n7omgg1e3s`;
+  const result = await fetch(url, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  }).then(r => r.json())
+  const saved = JSON.parse(result.fields["JSON"])
+
+  return saved
+}
+
+async function loadFromS3(id=getParam('id')) {
+  removeParam('id')
+  if (!id) { return null }
+  const url = `https://project-bucket-hackclub.s3.eu-west-1.amazonaws.com/${id}.json`
+  const saved = await fetch(url, { mode: 'cors' }).then(r => r.json())
+
+  return saved
+}
+
+function initVert() {
+  const vert = getParam('vert')
+  if (vert) {
+    document.documentElement.style.setProperty("--vertical-bar", `${vert}%`)
+  }
 }
 
 export async function init(state) {
-  const url = new URL(window.location.href);
-
-  const search = window.location.search;
-  const file = new URLSearchParams(search).get("file");
-  const vert = new URLSearchParams(search).get("vert");
-  const id = new URLSearchParams(search).get("id");
-  console.log({id})
-
-  if (vert) {
-    document.documentElement.style.setProperty("--vertical-bar", `${vert}%`);
-  }
+  initVert()
 
   dispatch("RENDER");
   state.pixelEditor = createPixelEditor(
@@ -83,19 +67,11 @@ export async function init(state) {
   state.codemirror = document.querySelector("#code-editor");
   events(state);
 
-  if (file) {
-    loadFromAirtable(file)
-    removeParam('file')
-  }
-  if (id) {
-    loadFromS3({id, state})
-    removeParam('id')
-  }
-  if (!id && !file) {
-    loadFromStorage({state})
-  }
-  if (!state.cartridge) {
-    // we should always have a cartridge
-    state.cartridge = new Cartridge()
-  }
+  const saved = await loadFromAirtable() ||
+                await loadFromS3() ||
+                await loadFromStorage() ||
+                await loadFromDefault()
+  
+
+  dispatch("LOAD_CARTRIDGE", { saved })
 }
