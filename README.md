@@ -1,10 +1,20 @@
 ## Hack Club Game Lab
 
-sort of like a fantasy console, really just js. join `#gamelab-dev` on the hack club slack for the dev chat!
+The Hack Club Game Lab is Hack Club's version of a [fantasy console](https://en.wikipedia.org/wiki/Fantasy_video_game_console) (ex. [PICO-8](https://www.lexaloffle.com/pico-8.php)), and designed to help run engaging Hack Club meetings!
+
+Inspired by [constuctionism](https://en.wikipedia.org/wiki/Constructionism_(learning_theory)), the idea behind Game Lab is to create a "microworld" where new club members are able to quickly build meaningful, engaging games through tinkering and with minimal prior coding or JavaScript knowledge.
+
+Design goals:
+
+- A new coder without any prior coding experience should be able to figure out how to build a game like Pong within an hour from looking at examples and tinkering
+- New coders will generate ideas for their own games they feel they can build with Game Lab through looking at examples
+- Experienced coders should have fun making games in Game Lab too!
+
+Join `#gamelab-dev` on the [Hack Club Slack](https://hackclub.com/slack/) to join the develpoment discussion!
 
 <img width="500" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149387903-eec65489-6a8d-4779-adde-2b6e35c7273a.gif">
 
-[Superb Macedonian Plumber Bro](https://hackclub.github.io/game-lab/?file=recxJ4Z4C3U0WbSIT)
+Check out a minimal example game: [Superb Macedonian Plumber Bro](https://hackclub.github.io/game-lab/?file=recxJ4Z4C3U0WbSIT)
 
 ## Minimal Examples
 
@@ -317,3 +327,7 @@ e.add({
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/150606449-5b73d7fe-f2d3-432f-9cc5-346c20919ec8.gif">
 
+
+## License
+
+The Hack Club Game Lab is open source and licensed under the [MIT License](./LICENSE). Fork, remix, and make it your own! Pull requests and other contributions greatly appreciated.
