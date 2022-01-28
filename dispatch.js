@@ -69,6 +69,11 @@ const ACTIONS = {
       const gameCanvas = document.querySelector(".game-canvas");
 
       const included = {
+        // blacklist
+        document: null,
+        window: null,
+        localStorage: null,
+        // end of blacklist
         _state: state,
         playTune() {
           const tunePlayer = playTune(...arguments);
@@ -207,7 +212,7 @@ const ACTIONS = {
     dispatch("RUN");
   },
   SELECT_ASSET({ index }, state) {
-    // need to clear asset editor
+    // need to clear asset editor container to render template fresh
     const el = document.querySelector(".asset-editor");
     render(el, html``);
 

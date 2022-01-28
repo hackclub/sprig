@@ -2,19 +2,10 @@
   html, body {
     margin: 0px;
   }
-
-  div {
-    height: 30%;
-    padding: 10px;
-  }
 </style>
-<div class="e1"></div>
-<div class="e2"></div>
 
 <script type="module" defer>
   import { createSequencer } from "./sequencer.js";
 
-  // createSequencer(document.body);
-  createSequencer(document.body.querySelector(".e1"));
-  createSequencer(document.body.querySelector(".e2"));
+  createSequencer(document.body);
 </script>

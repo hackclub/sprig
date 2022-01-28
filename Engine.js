@@ -1,5 +1,3 @@
-import { dispatch } from "./dispatch.js";
-
 const getLimits = (obj, [dx, dy] = [0, 0]) => {
   const w = obj.width;
   const h = obj.height;
