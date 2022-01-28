@@ -4,21 +4,26 @@ import "./codemirror/codemirror-html.js";
 import "./codemirror/codemirror-js.js";
 import { dispatch } from "./dispatch.js";
 
-function shareOptions(state) {
+function saveFile(state) {
   return html`
-    <div class="expand-menu menu-option menu-choice" @mouseenter=${() => dispatch("SOUND", "hover")}>
-      save
-      <div class="menu-choices">
-        <input type="text" .placeholder=${state.name} @keyup=${(e) => {
-    state.name = e.target.value === "" ? "anon" : e.target.value;
-  }}></input>
-        <button @click=${() => dispatch("SAVE", { type: "file" })} @mouseenter=${() => dispatch("SOUND", "hover")}>
-          file
-        </button>
-        <button @click=${() => dispatch("SAVE", { type: "link" })} @mouseenter=${() => dispatch("SOUND", "hover")}>link</button>
-      </div>
-    </div>
-  `;
+    <button @click=${() => dispatch("SAVE", { type: "file" })}
+            @mouseenter=${() => dispatch("SOUND", "hover")}
+            @click=${() => dispatch("SOUND", "click")}
+            >
+      <img src="./assets/download.png" width="32px" />
+    </button>
+  `
+}
+
+function saveLink(state) {
+  return html`
+    <button @click=${() => dispatch("SAVE", { type: "link" })}
+            @mouseenter=${() => dispatch("SOUND", "hover")}
+            @click=${() => dispatch("SOUND", "click")}
+            >
+      <img src="./assets/upload.png" width="32px" />
+    </button>
+  `
 }
 
 const toggleHide = (className) =>
@@ -275,8 +280,9 @@ export function view(state) {
         <button class="menu-option" @click=${() => dispatch("RUN")} @mouseenter=${() => dispatch("SOUND", "hover")}>
           run (shift + enter)
         </button>
-        ${shareOptions(state)}
         <button class="menu-option" @click=${toggleDocs}>docs</button>
+        ${saveLink(state)}
+        ${saveFile(state)}
         <a
           class="a-to-button menu-choice"
           @mouseenter=${() => dispatch("SOUND", "hover")}
