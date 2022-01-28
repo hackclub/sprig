@@ -8,7 +8,7 @@ import { size_up_sprites } from "./size_up_sprites.js";
 import { latestEngineVersion } from "./github.js";
 import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
 import { createSequencer } from "./sequencer/sequencer.js";
-
+import { playTune, loopTune } from "./tunePlayers.js";
 
 const STATE = {
   codemirror: undefined,
@@ -23,6 +23,7 @@ const STATE = {
   mouseY: 0,
   engineVersion: null, // TODO: actually start loading data depending on this value
   previousID: null, // TODO: start setting this correctly on cartridge load
+  tunePlayers: [],
   selected_asset: -1,
   name: "name-here",
   lastSaved: {
@@ -54,6 +55,10 @@ const ACTIONS = {
     } else {
       state.error = false;
       state.logs = [];
+      if (state.tunePlayers.length > 0) {
+        state.tunePlayers.forEach(x => x.end()); 
+        state.tunePlayers = [];
+      }
 
       Engine.show = state.show;
 
@@ -65,24 +70,32 @@ const ACTIONS = {
 
       const included = {
         _state: state,
-        html,
-        render,
-        svg,
-        Muse,
+        playTune() {
+          const tunePlayer = playTune(...arguments);
+          state.tunePlayers.push(tunePlayer);
+
+          return tunePlayer;
+        },
+        
+        loopTune() {
+          const tunePlayer = loopTune(...arguments);
+          state.tunePlayers.push(tunePlayer);
+
+          return tunePlayer;
+        },
         gameCanvas,
         createEngine(...args) {
           if (currentEngine) cancelAnimationFrame(currentEngine._animId);
           currentEngine = new Engine(...args);
           return currentEngine;
         },
-        // Muse
-      }; // these only work if no other imports
+      };
 
       state.assets.forEach(asset => {
         included[asset.name] = asset.data;
       })
 
-      try {
+      try { // TODO can we run this in an iframe?
         new Function(...Object.keys(included), string)(
           ...Object.values(included)
         );
@@ -155,7 +168,6 @@ const ACTIONS = {
     }
 
     if (assetType === "sprite") {
-      console.log(state);
       state.assetEditor = createPixelEditor(
         document.querySelector(".asset-editor")
       )
@@ -175,7 +187,6 @@ const ACTIONS = {
         document.querySelector(".asset-editor")
       )
 
-      // const grid = state.assetEditor.createEmptyGrid();
       const name = "tune_" + randString(3);
       const tune = state.assetEditor.getTune();
       state.assets.push({

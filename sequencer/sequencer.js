@@ -358,15 +358,20 @@ export function createSequencer(target) {
             @click=${() => {
               state.bpm = Math.max(state.bpm - 1, 1);
               state.data.bpm = state.bpm;
-              clearInterval(state.interval);
-              state.interval = play();
+              if (state.interval) {
+                clearInterval(state.interval);
+                state.interval = play();
+              }
+
               r();
             }}>-</div>
           <input @input=${(e) => {
             state.bpm = Number(e.target.value);
             state.data.bpm = state.bpm;
-            clearInterval(state.interval);
-            state.interval = play();
+            if (state.interval) {
+              clearInterval(state.interval);
+              state.interval = play();
+            }
             r();
           }} type="range" min="1" max="2000" .value=${state.bpm}>
           </input>
@@ -377,8 +382,10 @@ export function createSequencer(target) {
             @click=${() => {
               state.bpm = Math.min(state.bpm + 1, 2000);
               state.data.bpm = state.bpm;
-              clearInterval(state.interval);
-              state.interval = play();
+              if (state.interval) {
+                clearInterval(state.interval);
+                state.interval = play();
+              }
               r();
             }}>+</div>
         </div>
