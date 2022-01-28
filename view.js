@@ -308,6 +308,12 @@ const renderSpriteName = (name, index, state) =>
     ? html`<input 
           class="sprite-entry-input"
           .value=${name} 
+          @blur=${(e) => {
+            dispatch("CHANGE_SPRITE_NAME", {
+              oldName: name,
+              newName: e.target.value,
+            });
+          }}
           @change=${(e) =>
             dispatch("CHANGE_ASSET_NAME", {
               index,

@@ -207,9 +207,7 @@ const ACTIONS = {
       state.assets[index].name = newName;
       state.selected_asset = index;
     }
-
     dispatch("RUN");
-    dispatch("RENDER");
   },
   SELECT_ASSET({ index }, state) {
     if (state.assetEditor && state.assetEditor.end) state.assetEditor.end();
