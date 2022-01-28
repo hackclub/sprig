@@ -37,6 +37,7 @@ export function createPixelEditor(target) {
     showGrid: false,
     defaultGridArraySize: [32, 32],
     undoRedoStack: [],
+    animationId: null,
     selectHandle: {
       clicked: false,
       dragged: false,
@@ -524,7 +525,7 @@ export function createPixelEditor(target) {
 
   const animate = () => {
     drawCanvas(state.canvas);
-    window.requestAnimationFrame(animate);
+    state.animationId = window.requestAnimationFrame(animate); // need to cancel this animation frame
   };
 
   init(state);
@@ -542,5 +543,8 @@ export function createPixelEditor(target) {
       ).fill([0, 0, 0, 0]),
     }),
     gridColors: () => state.gridColors,
+    end() {
+      if (state.animationId) window.cancelAnimationFrame(state.animationId);
+    }
   };
 }

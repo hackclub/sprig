@@ -23,7 +23,7 @@ const STATE = {
   mouseY: 0,
   engineVersion: null, // TODO: actually start loading data depending on this value
   previousID: null, // TODO: start setting this correctly on cartridge load
-  selected_sprite: -1,
+  selected_asset: -1,
   name: "name-here",
   lastSaved: {
     name: "",
@@ -141,7 +141,7 @@ const ACTIONS = {
     dispatch("RUN");
   },
   CREATE_ASSET({ assetType }, state) {
-    if (state.assetEditor && state.assetEditor.endTune) state.assetEditor.endTune();
+    if (state.assetEditor && state.assetEditor.end) state.assetEditor.end();
     
     function randString(length) {
       var randomChars = "abcdefghijklmnopqrstuvwxyz";
@@ -155,6 +155,7 @@ const ACTIONS = {
     }
 
     if (assetType === "sprite") {
+      console.log(state);
       state.assetEditor = createPixelEditor(
         document.querySelector(".asset-editor")
       )
@@ -200,7 +201,7 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   SELECT_ASSET({ index }, state) {
-    if (state.assetEditor && state.assetEditor.endTune) state.assetEditor.endTune();
+    if (state.assetEditor && state.assetEditor.end) state.assetEditor.end();
 
     const assetType = state.assets[index].type;
 
@@ -234,8 +235,9 @@ const ACTIONS = {
 
     if (state.selected_asset !== -1) dispatch("SELECT_ASSET", { index: state.selected_asset });
     else {
-      if (state.assetEditor && state.assetEditor.endTune) state.assetEditor.endTune();
-      document.querySelector(".asset-editor").innerHTML = "<div>go ahead and make some assets</div>";
+      if (state.assetEditor && state.assetEditor.end) state.assetEditor.end();
+      const el = document.querySelector(".asset-editor");
+      render(el, html``);
     }
 
     dispatch("RUN");

@@ -9,3 +9,8 @@
 - user can click 'previous' button and goes to previous version
     - user can save to filesystem, reopen file, and previous button still works
     - user can save to cloud, save to filesystem, then cloud again & previous button still works
+
+
+- sandbox the game-lab instance
+    - send program to iframe
+    

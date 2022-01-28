@@ -70,7 +70,5 @@ export async function init(state) {
                 await loadFromStorage() ||
                 await loadFromDefault()
   
-  console.log(saved);
-
   dispatch("LOAD_CARTRIDGE", { saved })
 }

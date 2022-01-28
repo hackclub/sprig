@@ -112,7 +112,7 @@ export function createSequencer(target) {
     lastPt: [0, 0],
     drawing: false,
     erasing: false,
-    data: null, // this is to pass bpm by reference from the game-lab
+    data: {}, // this is to pass bpm by reference from the game-lab
   };
 
   function upload(files, extensions = []) {
@@ -473,7 +473,7 @@ export function createSequencer(target) {
   init(state);
 
   return {
-    endTune() {
+    end() {
       if (state.interval) clearInterval(state.interval);
     },
     setTune(data) {
