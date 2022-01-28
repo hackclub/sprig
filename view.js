@@ -309,8 +309,8 @@ const renderSpriteName = (name, index, state) =>
           class="sprite-entry-input"
           .value=${name} 
           @blur=${(e) => {
-            dispatch("CHANGE_SPRITE_NAME", {
-              oldName: name,
+            dispatch("CHANGE_ASSET_NAME", {
+              index,
               newName: e.target.value,
             });
           }}

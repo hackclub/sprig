@@ -17,6 +17,12 @@ export const pixelStyles = html`
       --dark-grey: #434343;
     }
 
+    .pixel-editor-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
     .canvas-container {
       display: grid;
       background: grey;

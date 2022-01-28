@@ -1,0 +1,21 @@
+<style>
+  html, body {
+    margin: 0px;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .e1, .e2 {
+    padding: 10px;
+    flex: 1;
+  }
+</style>
+<div class="e1"></div>
+<div class="e2"></div>
+<script type="module" defer>
+  import { createPixelEditor } from "./pixel-editor.js";
+
+  createPixelEditor(document.body.querySelector(".e1"));
+  createPixelEditor(document.body.querySelector(".e2"));
+</script>

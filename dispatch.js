@@ -137,14 +137,7 @@ const ACTIONS = {
 
     state.assets = saved.assets || [];
 
-    // TODO: do we need to select default
-
-    // if (saved.assets.length === 0) {
-    //   dispatch("CREATE_ASSET", { assetType: "sprite" })
-    // } else {
-    //   state.assets = saved.assets;
-    //   dispatch("SELECT_ASSET", { index: 0 });
-    // }
+    // TODO: do we need to select default asset? maybe not
 
     if (!state.engineVersion) {
       state.engineVersion = await latestEngineVersion()
@@ -154,6 +147,10 @@ const ACTIONS = {
     dispatch("RUN");
   },
   CREATE_ASSET({ assetType }, state) {
+    // need to clear asset editor
+    const el = document.querySelector(".asset-editor");
+    render(el, html``);
+
     if (state.assetEditor && state.assetEditor.end) state.assetEditor.end();
     
     function randString(length) {
@@ -210,6 +207,10 @@ const ACTIONS = {
     dispatch("RUN");
   },
   SELECT_ASSET({ index }, state) {
+    // need to clear asset editor
+    const el = document.querySelector(".asset-editor");
+    render(el, html``);
+
     if (state.assetEditor && state.assetEditor.end) state.assetEditor.end();
 
     const assetType = state.assets[index].type;

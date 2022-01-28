@@ -54,60 +54,62 @@ export function createPixelEditor(target) {
       }}
       style="height: 40px;"
     >
-      <img src=${`./assets/${toolName}.png`} width="25px" />
+      <img src=${`./assets/${toolName}.png`} alt=${toolName} width="25px" />
     </button>
   `;
 
   const view = (state) => html`
     ${pixelStyles}
-    <div class="canvas-container">
-      <canvas class="drawing-canvas"></canvas>
-    </div>
-    <div class="toolbox">
-      ${["draw", "circle", "rectangle", "line", "bucket", "move"].map((name) =>
-        renderTool(name, state)
-      )}
-      <button
-        @click=${() => {
-          if (state.undoRedoStack.length === 0) return;
-          const grid = JSON.parse(state.undoRedoStack.pop());
-          state.gridColors.forEach((arr, i) => {
-            state.gridColors[i] = grid[i];
-          });
-        }}
-        style="height: 40px;"
-      >
-        <img src="./assets/undo.png" width="25px" />
-      </button>
-    </div>
+    <div class="pixel-editor-container">
+      <div class="canvas-container">
+        <canvas class="drawing-canvas"></canvas>
+      </div>
+      <div class="toolbox">
+        ${["draw", "circle", "rectangle", "line", "bucket", "move"].map((name) =>
+          renderTool(name, state)
+        )}
+        <button
+          @click=${() => {
+            if (state.undoRedoStack.length === 0) return;
+            const grid = JSON.parse(state.undoRedoStack.pop());
+            state.gridColors.forEach((arr, i) => {
+              state.gridColors[i] = grid[i];
+            });
+          }}
+          style="height: 40px;"
+        >
+          <img src="./assets/undo.png" alt="undo" width="25px" />
+        </button>
+      </div>
 
-    <div class="colors">
-      <input
-        type="color"
-        @input=${(e) => {
-          state.color = hexToRGBA(e.target.value);
-          r();
-        }}
-        @click=${(e) => {
-          state.color = hexToRGBA(e.target.value);
-          r();
-        }}
-        class=${RGBA_to_hex(state.color) !== "#00000000" ? "selected-tool" : ""}
-        style=${`
-          height: 35px; 
-          width: 35px; 
-        `}
-      />
-      <button
-        class=${RGBA_to_hex(state.color) === "#00000000" ? "selected-tool" : ""}
-        @click=${() => {
-          state.color = hexToRGBA("#00000000");
-          r();
-        }}
-        style="height: 35px;"
-      >
-        <img src="./assets/clear.png" width="25px" />
-      </button>
+      <div class="colors">
+        <input
+          type="color"
+          @input=${(e) => {
+            state.color = hexToRGBA(e.target.value);
+            r();
+          }}
+          @click=${(e) => {
+            state.color = hexToRGBA(e.target.value);
+            r();
+          }}
+          class=${RGBA_to_hex(state.color) !== "#00000000" ? "selected-tool" : ""}
+          style=${`
+            height: 35px; 
+            width: 35px; 
+          `}
+        />
+        <button
+          class=${RGBA_to_hex(state.color) === "#00000000" ? "selected-tool" : ""}
+          @click=${() => {
+            state.color = hexToRGBA("#00000000");
+            r();
+          }}
+          style="height: 35px;"
+        >
+          <img src="./assets/clear.png" width="25px" />
+        </button>
+      </div>
     </div>
   `;
 
@@ -412,7 +414,7 @@ export function createPixelEditor(target) {
   const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
   function getPoint(e) {
-    const c = document.querySelector(".drawing-canvas");
+    const c = target.querySelector(".drawing-canvas");
     const rect = c.getBoundingClientRect();
     const rawX = e.clientX - rect.left;
     const rawY = e.clientY - rect.top;
