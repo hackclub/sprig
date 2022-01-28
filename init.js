@@ -3,6 +3,7 @@ import { dispatch } from "./dispatch.js";
 import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
 import { createSequencer } from "./sequencer/sequencer.js";
 import { latestEngineVersion } from "./github.js";
+import { dispatch } from "./dispatch.js";
 
 const DEFAULT_CARTRIDGE = '3449c9e5e332f1dbb81505cd739fbf3f'
 
@@ -71,4 +72,5 @@ export async function init(state) {
                 await loadFromDefault()
   
   dispatch("LOAD_CARTRIDGE", { saved })
+  dispatch("SOUND", "bootup")
 }
