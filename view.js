@@ -273,7 +273,7 @@ export function view(state) {
         <div class="list-of-sprites">
           ${state.assets.map(
             (x, i) => {
-              return html.for({ x })`
+              return html.for(x)`
               <div
                 class=${[
                   "sprite-entry",
@@ -314,11 +314,7 @@ const renderSpriteName = (name, index, state) =>
               newName: e.target.value,
             });
           }}
-          @change=${(e) =>
-            dispatch("CHANGE_ASSET_NAME", {
-              index,
-              newName: e.target.value,
-            })}></input>`
+          ></input>`
     : html`<div
         class="sprite-name"
         @mousedown=${() => dispatch("SELECT_ASSET", { index })}
