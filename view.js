@@ -2,19 +2,20 @@ import { html } from "./uhtml.js";
 import { dispatch } from "./dispatch.js";
 import "./codemirror/codemirror-html.js";
 import "./codemirror/codemirror-js.js";
+import { dispatch } from "./dispatch.js";
 
 function shareOptions(state) {
   return html`
-    <div class="expand-menu menu-option menu-choice">
+    <div class="expand-menu menu-option menu-choice" @mouseenter=${() => dispatch("SOUND", "hover")}>
       save
       <div class="menu-choices">
         <input type="text" .placeholder=${state.name} @keyup=${(e) => {
     state.name = e.target.value === "" ? "anon" : e.target.value;
   }}></input>
-        <button @click=${() => dispatch("SAVE", { type: "file" })}>
+        <button @click=${() => dispatch("SAVE", { type: "file" })} @mouseenter=${() => dispatch("SOUND", "hover")}>
           file
         </button>
-        <button @click=${() => dispatch("SAVE", { type: "link" })}>link</button>
+        <button @click=${() => dispatch("SAVE", { type: "link" })} @mouseenter=${() => dispatch("SOUND", "hover")}>link</button>
       </div>
     </div>
   `;
@@ -206,12 +207,14 @@ export function view(state) {
         )}
       </div>
       <div class="menu">
-        <button class="menu-option" @click=${() => dispatch("RUN")}>
+        <button class="menu-option" @click=${() => dispatch("RUN")} @mouseenter=${() => dispatch("SOUND", "hover")}>
           run (shift + enter)
         </button>
         ${shareOptions(state)}
         <a
           class="a-to-button menu-choice"
+          @mouseenter=${() => dispatch("SOUND", "hover")}
+          @click=${() => dispatch("SOUND", "yes")}
           target="_blank"
           href="https://github.com/hackclub/game-lab"
           >GitHub</a

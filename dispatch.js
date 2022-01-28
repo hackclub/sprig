@@ -9,6 +9,24 @@ import { latestEngineVersion } from "./github.js";
 import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
 import { createSequencer } from "./sequencer/sequencer.js";
 import { playTune, loopTune } from "./tunePlayers.js";
+import uiSounds from "./assets/ui-sounds.js";
+
+function copy(str) {
+  const inp = document.createElement("input");
+  document.body.appendChild(inp);
+  inp.value = str;
+  inp.select();
+  document.execCommand("copy", false);
+  inp.remove();
+}
+
+function showShared() {
+  document.querySelector(".shared-modal").classList.toggle("hide");
+  setTimeout(
+    () => document.querySelector(".shared-modal").classList.toggle("hide"),
+    3000
+  );
+}
 
 const STATE = {
   codemirror: undefined,
@@ -113,6 +131,13 @@ const ACTIONS = {
       dispatch("RENDER");
       document.querySelector(".game-canvas").focus();
     }
+  },
+  SHARE_TYPE({ type }, state) {
+    state.shareType = type;
+    dispatch("RENDER");
+  },
+  SOUND(arg, state) {
+    uiSounds[arg]()
   },
   GET_SAVE_STATE(args, state) {
     const prog = state.codemirror.view.state.doc.toString();

@@ -1,6 +1,7 @@
 ## TODO, Jan 20, 2022
 - [] weird sprite renaming error
-- [] add sprite to default example
+- [] I can't close the last sprite
+- [x] add sprite to default example
 - [x] fix default example
 - [] actually render errors properly
 
