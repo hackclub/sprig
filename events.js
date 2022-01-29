@@ -40,7 +40,12 @@ function readFile(file) {
   reader.onloadend = (event) => {
     let raw = reader.result;
 
-    const saved = JSON.parse(raw);
+    try {
+      const saved = JSON.parse(raw);
+    } catch (err) {
+
+      dispatch("SET_DROPPED_IMAGE", { file });
+    }
 
     dispatch("UPLOAD", { saved });
   };

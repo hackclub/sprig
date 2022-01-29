@@ -48,6 +48,10 @@ const ACTIONS = {
   INIT(args, state) {
     init(state);
   },
+  SET_DROPPED_IMAGE({ file }, state) {
+    dispatch("CREATE_SPRITE");
+    state.pixelEditor.setImageData(file);
+  },
   RUN(args, state) {
     const string = state.codemirror.view.state.doc.toString();
 

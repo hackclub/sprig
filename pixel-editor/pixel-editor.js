@@ -44,6 +44,32 @@ export function createPixelEditor(target) {
     // hoveredCell: null,
   };
 
+  const setImageData = (file) => {
+    let reader = new FileReader();
+    reader.onload = (event) => {
+      const dataURL = event.target.result;
+      const canvas = document.getElementById('offscreen-canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const image = new Image();
+      image.onload = () => {
+        ctx.drawImage(image, 0, 0, 32, 32);
+        const imageData = ctx.getImageData(0, 0, 32, 32);
+        for (let i = 0; i < state.gridColors.length; i++) {
+          state.gridColors[i] = [
+            imageData.data[i * 4],
+            imageData.data[i * 4 + 1],
+            imageData.data[i * 4 + 2],
+            imageData.data[i * 4 + 3]
+          ];
+        }
+      };
+      image.src = dataURL;
+    };
+    reader.readAsDataURL(file);
+
+  }
+
   const renderTool = (toolName, state) => html`
     <button
       class=${[state.tool === toolName ? "selected-tool" : ""].join(" ")}
@@ -60,7 +86,15 @@ export function createPixelEditor(target) {
   const view = (state) => html`
     ${pixelStyles}
     <div class="canvas-container">
-      <canvas class="drawing-canvas"></canvas>
+      <canvas
+        class="offscreen-canvas"
+        id="offscreen-canvas"
+        width="32"
+        height="32"
+      ></canvas>
+      <canvas
+        class="drawing-canvas"
+      ></canvas>
     </div>
     <div class="toolbox">
       ${["draw", "circle", "rectangle", "line", "bucket", "move"].map((name) =>
@@ -541,5 +575,6 @@ export function createPixelEditor(target) {
       ).fill([0, 0, 0, 0]),
     }),
     gridColors: () => state.gridColors,
+    setImageData: setImageData
   };
 }

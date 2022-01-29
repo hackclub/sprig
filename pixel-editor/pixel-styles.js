@@ -29,6 +29,10 @@ export const pixelStyles = html`
       background: white;
     }
 
+    .offscreen-canvas {
+      display: none;
+    }
+
     .toolbox {
       position: absolute;
       right: 10px;
