@@ -1,4 +1,5 @@
 import { html } from "./uhtml.js";
+import { dispatch } from "./dispatch.js";
 import "./codemirror/codemirror-html.js";
 import "./codemirror/codemirror-js.js";
 
@@ -74,7 +75,7 @@ export function view(state) {
         padding-bottom: 3px;
       }
 
-      .pixel-editor {
+      .asset-editor {
         overflow: scroll;
         position: relative;
         flex: 1;
@@ -270,71 +271,56 @@ export function view(state) {
       </div>
       <div class="pixel-editor-container">
         <div class="list-of-sprites">
-          ${Object.keys(state.sprites).map(
-            (x, i) => html.for({ x })`
+          ${state.assets.map(
+            (x, i) => {
+              return html.for(x)`
               <div
                 class=${[
                   "sprite-entry",
-                  x === state.selected_sprite ? "selected-sprite" : "",
+                  i === state.selected_asset ? "selected-sprite" : "",
                 ].join(" ")}
               >
-                ${renderSpriteName(x, state)}
+                ${renderSpriteName(x.name, i, state)}
                 <div
                   class="sprite-delete"
-                  @mousedown=${() => dispatch("DELETE_SPRITE", { name: x })}
+                  @mousedown=${() => dispatch("DELETE_ASSET", { index: i })}
                 >
                   x
                 </div>
               </div>
             `
-          )}
-          <button @click=${() => dispatch("CREATE_SPRITE")}>add</button>
+          })}
+          <button @click=${() => dispatch("CREATE_ASSET", { assetType: "sprite" })}>add sprite</button>
+          <button @click=${() => dispatch("CREATE_ASSET", { assetType: "tune" })}>add tune</button>
         </div>
-        <div class="pixel-editor"></div>
+        <div class="asset-editor"></div>
       </div>
       <div class="horizontal-bar"></div>
     </div>
     <div id="vertical-bar"></div>
-    ${renderExamples(state)} ${renderOptions(state)} ${renderShared(state)}
+    ${renderOptions(state)}
+    <div id="notification-container"></div>
   `;
 }
 
-const renderSpriteName = (name, state) =>
-  state.selected_sprite === name
+const renderSpriteName = (name, index, state) =>
+  state.selected_asset === index
     ? html`<input 
           class="sprite-entry-input"
           .value=${name} 
-          @change=${(e) =>
-            dispatch("CHANGE_SPRITE_NAME", {
-              oldName: name,
+          @blur=${(e) => {
+            dispatch("CHANGE_ASSET_NAME", {
+              index,
               newName: e.target.value,
-            })}></input>`
+            });
+          }}
+          ></input>`
     : html`<div
         class="sprite-name"
-        @mousedown=${() => dispatch("SELECT_SPRITE", { name })}
+        @mousedown=${() => dispatch("SELECT_ASSET", { index })}
       >
         ${name}
       </div> `;
-
-const renderShared = (state) => html`
-  <div class="shared-modal hide">Sharing link copied to clip board.</div>
-`;
-
-const renderExamples = (state) => html`
-  <div class="examples hide">
-    ${state.examples.map(
-      (x, i) => html`
-        <span
-          class="example"
-          @click=${() => dispatch("LOAD_EXAMPLE", { content: x["Content"] })}
-        >
-          ${x["Name"]}
-        </span>
-      `
-    )}
-    <button class="close" @click=${() => toggleHide("examples")}>close</button>
-  </div>
-`;
 
 const renderOptions = (state) => {
   return html`
