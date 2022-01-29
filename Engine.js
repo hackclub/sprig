@@ -338,9 +338,6 @@ class Engine {
     parent.querySelectorAll(".text-container > *").forEach((x) => x.remove());
     this.textContainer = parent.querySelector(".text-container");
 
-    /* let's make sure we know how big all the sprites are before we do any game logic */
-    dispatch("SIZE_UP_SPRITES");
-
     canvas.setAttribute("tabindex", "1");
 
     canvas.addEventListener("keydown", (e) => {

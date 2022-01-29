@@ -1,3 +1,5 @@
+import { dispatch } from "./dispatch.js";
+
 const trigger = (e) => e.composedPath()[0];
 const matchesTrigger = (e, selectorString) =>
   trigger(e).matches(selectorString);
@@ -42,12 +44,12 @@ function readFile(file) {
 
     try {
       const saved = JSON.parse(raw);
+      dispatch("LOAD_CARTRIDGE", { saved });
+      
     } catch (err) {
 
       dispatch("SET_DROPPED_IMAGE", { file });
     }
-
-    dispatch("UPLOAD", { saved });
   };
 }
 
