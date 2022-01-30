@@ -11,7 +11,8 @@ const sounds = {
   bootdown: `[a#5;--d6;--g6;--d#6+]-`,
   click: `[b5;--d6;--]--`,
   confirm: `[a#5;--d6;]-`,
-  hover: `[d6-;-]--`,
+  // hover: `[d6-;-]--`,
+  hover: '',
   no: `[g6;--d#6+]-`,
   yes: `[b6;--g6+]-`,
 }
