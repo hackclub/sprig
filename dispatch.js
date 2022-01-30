@@ -96,10 +96,6 @@ const ACTIONS = {
     state.logs = [...state.logs, err.stack];
     dispatch("RENDER");
   },
-  SHARE_TYPE({ type }, state) {
-    state.shareType = type;
-    dispatch("RENDER");
-  },
   SOUND(arg, state) {
     uiSounds[arg]()
   },
