@@ -3,28 +3,9 @@ import { dispatch } from "./dispatch.js";
 import "./codemirror/codemirror-html.js";
 import "./codemirror/codemirror-js.js";
 import { dispatch } from "./dispatch.js";
-
-function saveFile(state) {
-  return html`
-    <button @click=${() => dispatch("SAVE", { type: "file" })}
-            @mouseenter=${() => dispatch("SOUND", "hover")}
-            @click=${() => dispatch("SOUND", "click")}
-            >
-      <img src="./assets/download.png" width="32px" />
-    </button>
-  `
-}
-
-function saveLink(state) {
-  return html`
-    <button @click=${() => dispatch("SAVE", { type: "link" })}
-            @mouseenter=${() => dispatch("SOUND", "hover")}
-            @click=${() => dispatch("SOUND", "click")}
-            >
-      <img src="./assets/upload.png" width="32px" />
-    </button>
-  `
-}
+import githubLink from "./components/githubLink.js";
+import saveFile from "./components/saveFile.js";
+import saveLink from "./components/saveLink.js";
 
 const toggleHide = (className) =>
   document.querySelector(`.${className}`).classList.toggle("hide");
@@ -113,6 +94,11 @@ export function view(state) {
     <style>
       :root {
         --horizontal-bar: 60%;
+      }
+
+      .hoverable:hover {
+        transform: translateY(-5px);
+        border: solid red !important;
       }
 
       .right-pane {
@@ -283,14 +269,7 @@ export function view(state) {
         <button class="menu-option" @click=${toggleDocs}>docs</button>
         ${saveLink(state)}
         ${saveFile(state)}
-        <a
-          class="a-to-button menu-choice"
-          @mouseenter=${() => dispatch("SOUND", "hover")}
-          @click=${() => dispatch("SOUND", "yes")}
-          target="_blank"
-          href="https://github.com/hackclub/game-lab"
-          >GitHub</a
-        >
+        ${githubLink(state)}
       </div>
     </div>
     <div class="right-pane">
