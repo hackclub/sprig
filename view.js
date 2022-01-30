@@ -2,7 +2,6 @@ import { html } from "./uhtml.js";
 import { dispatch } from "./dispatch.js";
 import "./codemirror/codemirror-html.js";
 import "./codemirror/codemirror-js.js";
-import { dispatch } from "./dispatch.js";
 import bugReport from "./components/bugReport.js";
 import githubLink from "./components/githubLink.js";
 import saveFile from "./components/saveFile.js";
