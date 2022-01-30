@@ -154,6 +154,7 @@ const ACTIONS = {
       state.engineVersion = await latestEngineVersion()
     }
 
+    state.runStatus = 'ready'
     dispatch("RENDER");
     dispatch("RUN");
   },

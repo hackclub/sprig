@@ -61,6 +61,7 @@ function initVert() {
 export async function init(state) {
   initVert()
 
+  state.runStatus = 'loading'
   dispatch("RENDER");
   state.codemirror = document.querySelector("#code-editor");
   events(state);
