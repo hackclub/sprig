@@ -287,7 +287,6 @@ export function view(state) {
       <div class="horizontal-bar"></div>
     </div>
     <div id="vertical-bar"></div>
-    ${renderOptions(state)}
     <div id="notification-container"></div>
   `;
 }
@@ -310,21 +309,3 @@ const renderSpriteName = (name, index, state) =>
       >
         ${name}
       </div> `;
-
-const renderOptions = (state) => {
-  return html`
-    <div class="options hide">
-      <div class="option">
-        <span>Link Share Method:</span>
-        <select
-          @change=${(e) => dispatch("SHARE_TYPE", { type: e.target.value })}
-          .value=${state.shareType}
-        >
-          <option value="binary-url">Binary URL</option>
-          <option value="airtable">Airtable</option>
-        </select>
-      </div>
-      <button class="close" @click=${() => toggleHide("options")}>close</button>
-    </div>
-  `;
-};

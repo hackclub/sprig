@@ -135,10 +135,6 @@ const ACTIONS = {
       document.querySelector(".game-canvas").focus();
     }
   },
-  SHARE_TYPE({ type }, state) {
-    state.shareType = type;
-    dispatch("RENDER");
-  },
   SOUND(arg, state) {
     uiSounds[arg]()
   },
