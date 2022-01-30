@@ -49,16 +49,21 @@ async function saveToFile({ content, state }) {
 
 export async function save(type, state) {
   state.runStatus = 'loading';
-  console.log('loading');
   dispatch("RENDER");
   const content = JSON.parse(dispatch("GET_SAVE_STATE"));
 
-  switch (type) {
-    case "link":
+  switch(type) {
+    case 'link':
+      state.saveLinkStatus = "loading";
+      dispatch("RENDER");
       await saveToS3({ content, state });
+      state.saveLinkStatus = "ready";
       break;
-    case "file":
+    case 'file':
+      state.saveFileStatus = "loading";
+      dispatch("RENDER");
       await saveToFile({ content, state });
+      state.saveFileStatus = 'ready';
       break;
     default:
       throw new Error("Sharing type", type, "does not exist");
