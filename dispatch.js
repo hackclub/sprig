@@ -3,7 +3,6 @@ import { view } from "./view.js";
 import { init } from "./init.js";
 import { save } from "./save.js";
 import { Engine } from "./Engine.js";
-import { Muse } from "https://muse.hackclub.com/exports.js";
 import { size_up_sprites } from "./size_up_sprites.js";
 import { latestEngineVersion } from "./github.js";
 import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
@@ -11,23 +10,6 @@ import { createSequencer } from "./sequencer/sequencer.js";
 import { playTune, loopTune } from "./tunePlayers.js";
 import { createEval } from "./evalGameScript.js";
 import uiSounds from "./assets/ui-sounds.js";
-
-function copy(str) {
-  const inp = document.createElement("input");
-  document.body.appendChild(inp);
-  inp.value = str;
-  inp.select();
-  document.execCommand("copy", false);
-  inp.remove();
-}
-
-function showShared() {
-  document.querySelector(".shared-modal").classList.toggle("hide");
-  setTimeout(
-    () => document.querySelector(".shared-modal").classList.toggle("hide"),
-    3000
-  );
-}
 
 const STATE = {
   codemirror: undefined,
