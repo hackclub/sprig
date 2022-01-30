@@ -122,6 +122,7 @@ const ACTIONS = {
 
     state.selected_asset = -1;
 
+    state.runStatus = 'ready'
     dispatch("RENDER");
     // dispatch("RUN");
   },
