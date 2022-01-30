@@ -7,6 +7,7 @@ import githubLink from "./components/githubLink.js";
 import saveFile from "./components/saveFile.js";
 import saveLink from "./components/saveLink.js";
 import runButton from "./components/runButton.js";
+import addAssetButton from "./components/addAssetButton.js";
 
 const toggleHide = (className) =>
   document.querySelector(`.${className}`).classList.toggle("hide");
@@ -259,6 +260,8 @@ export function view(state) {
       </div>
       <div class="pixel-editor-container">
         <div class="list-of-sprites">
+          ${addAssetButton(state, 'tune')}
+          ${addAssetButton(state, 'sprite')}
           ${state.assets.map(
             (x, i) => {
               return html.for(x)`
@@ -278,8 +281,6 @@ export function view(state) {
               </div>
             `
           })}
-          <button @click=${() => dispatch("CREATE_ASSET", { assetType: "sprite" })}>add sprite</button>
-          <button @click=${() => dispatch("CREATE_ASSET", { assetType: "tune" })}>add tune</button>
         </div>
         <div class="asset-editor"></div>
       </div>
