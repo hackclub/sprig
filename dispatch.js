@@ -44,6 +44,9 @@ const STATE = {
   tunePlayers: [],
   selected_asset: -1,
   name: "name-here",
+  saveLinkStatus: "ready",
+  saveFileStatus: "ready",
+  runStatus: "loading",
   lastSaved: {
     name: "",
     text: "",
