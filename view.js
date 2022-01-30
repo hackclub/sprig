@@ -7,6 +7,7 @@ import bugReport from "./components/bugReport.js";
 import githubLink from "./components/githubLink.js";
 import saveFile from "./components/saveFile.js";
 import saveLink from "./components/saveLink.js";
+import runButton from "./components/runButton.js";
 
 const toggleHide = (className) =>
   document.querySelector(`.${className}`).classList.toggle("hide");
@@ -264,10 +265,7 @@ export function view(state) {
         )}
       </div>
       <div class="menu">
-        <button class="menu-option" @click=${() => dispatch("RUN")} @mouseenter=${() => dispatch("SOUND", "hover")}>
-          run (shift + enter)
-        </button>
-        <button class="menu-option" @click=${toggleDocs}>docs</button>
+        ${runButton(state)}
         ${saveLink(state)}
         ${saveFile(state)}
         ${githubLink(state)}
