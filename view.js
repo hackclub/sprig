@@ -3,6 +3,7 @@ import { dispatch } from "./dispatch.js";
 import "./codemirror/codemirror-html.js";
 import "./codemirror/codemirror-js.js";
 import { dispatch } from "./dispatch.js";
+import bugReport from "./components/bugReport.js";
 import githubLink from "./components/githubLink.js";
 import saveFile from "./components/saveFile.js";
 import saveLink from "./components/saveLink.js";
@@ -204,6 +205,7 @@ export function view(state) {
         ${saveLink(state)}
         ${saveFile(state)}
         ${githubLink(state)}
+        ${bugReport(state)}
       </div>
     </div>
     <div class="right-pane">
