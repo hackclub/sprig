@@ -156,11 +156,10 @@ const ACTIONS = {
     notification({
       message: "Generating a bug report... (3/3)"
     });
-    let querystring = '';
+    const url = new URL('https://airtable.com/shrpcDFA5f9wEOSIm')
     for (const key in report) {
-      querystring += `&prefill_${encodeURIComponent(key)}=${encodeURIComponent(report[key])}`;
+      url.searchParams.append(`prefill_${encodeURIComponent(key)}`, encodeURIComponent(report[key]))
     }
-    const url = `https://airtable.com/shrpcDFA5f9wEOSIm?${querystring.substring(1)}`;
     window.open(url, '_blank');
   },
   GET_SAVE_STATE(args, state) {
