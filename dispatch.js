@@ -254,8 +254,9 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   SET_NAME({ name }, state) {
-    state.name = name
-    console.log(state.name)
+    state.name = name.trim().replace(/\s+/g,'-')
+
+    return state.name
   },
   CHANGE_ASSET_NAME({ index, newName }, state) {
     const usedNames = state.assets.map(x => x.name);
