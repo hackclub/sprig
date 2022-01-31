@@ -1,0 +1,17 @@
+- shift buttons up (run,save,github) -- i couldn't see them starting out
+- add icons to different buttons
+- use the hackclub theme & colors
+- choose color for editor
+- sharing link for playing + sharing link for editing
+- project name should show (maybe heading of preview & `<title>` tags)
+- what if the README/documentation was a game?
+- docs should be accessible in the engine itself
+- game-lab logo should be up at the top
+- what's the name? what's the logo?
+  - logo works similar to "powered by hcb"-- logo goes good with other stuff
+- have a logo sprite & when sharing, the logo sprite loads first
+- make error section clearer & less scary
+  - use hack club red
+
+- question: will it be good to run with just these things?
+- 
