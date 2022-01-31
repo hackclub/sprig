@@ -7,7 +7,6 @@ const save = (e) => {
   dispatch("RENDER")
 }
 const input = (e) => {
-  console.log({e})
   if (e.inputType === "insertParagraph") {
     dispatch("SOUND", "yes")
     e.target.blur()
