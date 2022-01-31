@@ -9,6 +9,7 @@ import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
 import { createSequencer } from "./sequencer/sequencer.js";
 import { playTune, loopTune } from "./tunePlayers.js";
 import uiSounds from "./assets/ui-sounds.js";
+import notification from "./utils/notification.js";
 
 const STATE = {
   codemirror: undefined,
@@ -17,6 +18,7 @@ const STATE = {
   examples: [],
   error: false,
   logs: [],
+  dispatchLogs: [], // Logs for dispatch functions called
   assetEditor: undefined, // type :: pixelEditor | sequencer which have different interfaces
   assets: [],
   mouseX: 0,
@@ -120,6 +122,47 @@ const ACTIONS = {
   SOUND(arg, state) {
     uiSounds[arg]()
   },
+  REPORT_BUG: async (args, state) => {
+    notification({
+      message: "Generating a bug report... (1/3)"
+    });
+    const report = {};
+    report['Engine Version'] = state.engineVersion;
+    await dispatch("SAVE", { type: 'link', copyUrl: false });
+    report['Project Link'] = state.lastSaved.link;
+    notification({
+      message: "Generating a bug report... (2/3)"
+    });
+    function truncate (string, length, ending) {
+      return (string.length > length ? string.substring(0, length - ending.length) + ending : string);
+    }
+    report['IP Address'] = await fetch('https://ifconfig.me/ip').then(response => response.text());
+    report['Dispatch Event Log'] = state.dispatchLogs.slice(0, 50).map(entry => truncate(JSON.stringify(entry, null, 4), 1000, '...')).join('\n\n');
+    report['Error Log'] = state.logs.slice(0, 50).map(entry => truncate(entry.stack || JSON.stringify(entry, null, 4), 1000, '...')).join('\n\n');
+    report['User Agent'] = await fetch('https://ifconfig.me/ua').then(response => response.text());
+    report['State'] = truncate(JSON.stringify({
+      url: state.url,
+      show: state.show,
+      examples: state.examples,
+      error: state.error,
+      mouseX: state.mouseX,
+      mouseY: state.mouseY,
+      engineVersion: state.engineVersion,
+      previousID: state.previousID,
+      selected_asset: state.selected_asset,
+      name: state.name,
+      lastSaved: state.lastSaved,
+    }, null, 4), 50000, '...');
+    notification({
+      message: "Generating a bug report... (3/3)"
+    });
+    let querystring = '';
+    for (const key in report) {
+      querystring += `&prefill_${encodeURIComponent(key)}=${encodeURIComponent(report[key])}`;
+    }
+    const url = `https://airtable.com/shrpcDFA5f9wEOSIm?${querystring.substring(1)}`;
+    window.open(url, '_blank');
+  },
   GET_SAVE_STATE(args, state) {
     const prog = state.codemirror.view.state.doc.toString();
     return JSON.stringify({
@@ -130,8 +173,8 @@ const ACTIONS = {
       engineVersion: state.engineVersion
     });
   },
-  SAVE: async ({ type }, state) => {
-    await save(type, state)
+  SAVE: async ({ type, copyUrl }, state) => {
+    await save(type, state, copyUrl);
   },
   CANVAS_MOUSE_MOVE({ content: { mouseX, mouseY } }, state) {
     state.mouseX = mouseX;
@@ -272,6 +315,7 @@ const ACTIONS = {
 export function dispatch(action, args = {}) {
   console.log(action);
   const trigger = ACTIONS[action];
+  STATE.dispatchLogs.unshift({ action, args, timestamp: Date.now() });
   if (trigger) return trigger(args, STATE);
   else {
     console.log("Action not recongnized:", action);
