@@ -6,7 +6,6 @@ const click = () => {
   dispatch("SOUND", "click")
   dispatch("SAVE", { type: "link" })
 }
-
 const image = (state) => {
   switch (state.saveLinkStatus) {
     case 'loading':
@@ -17,11 +16,27 @@ const image = (state) => {
       return './assets/err.png'
   }
 }
+const klass = (state) => {
+  let k = "hoverable tooltipped "
+  switch(state.saveLinkStatus) {
+    case 'loading':
+      k += 'cursor-progress'
+      break
+    case 'ready':
+      k += 'cursor-pointer'
+      break
+    default:
+      k += 'cursor-help'
+      break
+  }
+  return k
+}
+
 export default (state) => (
   html`
     <button @click=${click}
             @mouseenter=${mouseEnter}
-            class="hoverable tooltipped"
+            class="${klass(state)}"
             >
       <span class="tooltipped-text">Save online</span>
       <img src="${image(state)}" width="32px" />

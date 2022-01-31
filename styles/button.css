@@ -5,7 +5,7 @@
   background: var(--light);
   border: 5px solid var(--lighter);
   border-radius: 12px;
-  transition-duration: 0.5s;
+  transition-duration: 0.01s;
 }
 
 .button:hover {

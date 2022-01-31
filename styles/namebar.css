@@ -16,7 +16,9 @@
 }
 
 .name-bar h1 {
-  /* display: inline-block; */
   margin: 0;
   color: var(--smoke);
+}
+.name-bar h1:focus {
+  background: var(--dark);
 }

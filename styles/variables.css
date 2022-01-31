@@ -20,8 +20,10 @@
   --light: #DDDAC7;
   --lightless: #CAC4B0;
 
+  /* dark colors from bank are a little too dark for this theme, let's make our own colors */
   /* --darkless: #252429; */
+  /* --dark: #17171d; */
   --darkless: #535352;
-  --dark: #17171d;
+  --dark: #3E4040;
   --darker: #121217;
 }
