@@ -23,7 +23,7 @@ export function view(state) {
       }
 
       .hoverable:hover {
-        transform: translateY(-5px);
+        transform: translateY(5px);
         border: solid red !important;
       }
 
@@ -187,6 +187,13 @@ export function view(state) {
       }
     </style>
     <div class="left-pane">
+      <div class="menu">
+        ${runButton(state)}
+        ${saveLink(state)}
+        ${saveFile(state)}
+        ${githubLink(state)}
+        ${bugReport(state)}
+      </div>
       <codemirror-js id="code-editor"></codemirror-js>
       <div
         class=${[
@@ -198,13 +205,6 @@ export function view(state) {
         ${state.logs.map(
           (x) => html`<div style="white-space: pre-wrap">${x}</div>`
         )}
-      </div>
-      <div class="menu">
-        ${runButton(state)}
-        ${saveLink(state)}
-        ${saveFile(state)}
-        ${githubLink(state)}
-        ${bugReport(state)}
       </div>
     </div>
     <div class="right-pane">
