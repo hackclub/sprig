@@ -48,15 +48,22 @@ function readFile(file) {
       
     } catch (err) {
 
-      dispatch("SET_DROPPED_IMAGE", { file });
     }
   };
 }
 
 function addDropUpload(state, bodyListener) {
   bodyListener("drop", "", function (evt) {
+
     let dt = evt.dataTransfer;
     let files = dt.files;
+
+    if (evt.path.some(el => el.matches && el.matches(".asset-editor"))) {
+      console.log(files);
+      pauseEvent(evt);
+      return;
+    };
+
 
     upload(files);
 

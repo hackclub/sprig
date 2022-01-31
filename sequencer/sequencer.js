@@ -144,7 +144,9 @@ export function createSequencer(target) {
   }
 
   function addDropUpload() {
-    window.addEventListener("drop", (e) => {
+    const container = target.querySelector(".container");
+    
+    container.addEventListener("drop", (e) => {
       let dt = e.dataTransfer;
       let files = dt.files;
 
@@ -156,7 +158,7 @@ export function createSequencer(target) {
       e.returnValue = false;
     });
 
-    window.addEventListener("dragover", (e) => {
+    container.addEventListener("dragover", (e) => {
       if (e.stopPropagation) e.stopPropagation();
       if (e.preventDefault) e.preventDefault();
       e.cancelBubble = true;

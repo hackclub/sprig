@@ -38,10 +38,6 @@ const ACTIONS = {
   INIT(args, state) {
     init(state);
   },
-  SET_DROPPED_IMAGE({ file }, state) {
-    dispatch("CREATE_ASSET", { assetType: 'sprite' });
-    state.assetEditor.setImageData(file);
-  },
   RUN(args, state) {
     const string = state.codemirror.view.state.doc.toString();
 
@@ -213,7 +209,7 @@ const ACTIONS = {
       state.assets[index].name = newName;
       state.selected_asset = index;
     }
-    dispatch("RUN");
+    // dispatch("RUN");
   },
   SELECT_ASSET({ index }, state) {
     // need to clear asset editor container to render template fresh
@@ -259,7 +255,7 @@ const ACTIONS = {
       render(el, html``);
     }
 
-    dispatch("RUN");
+    dispatch("RENDER");
   },
   RENDER() {
     render(document.getElementById("root"), view(STATE));

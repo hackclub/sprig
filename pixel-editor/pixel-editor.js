@@ -20,6 +20,8 @@ function RGBA_to_hex([r, g, b, a]) {
   return "#" + r + g + b + a;
 }
 
+
+
 export function createPixelEditor(target) {
   const state = {
     canvas: null,
@@ -44,6 +46,58 @@ export function createPixelEditor(target) {
     },
     // hoveredCell: null,
   };
+
+  function upload(files, extensions = []) {
+    let file = files[0];
+    let fileName = file.name.split(".");
+    let name = fileName[0];
+    const extension = fileName[fileName.length - 1];
+
+    if (extensions.length > 0 && extensions.includes(enxtension))
+      throw "Extension not recongized: " + fileName;
+
+    readFile(file);
+  }
+
+  function readFile(file) {
+    var reader = new FileReader();
+    reader.readAsText(file);
+
+    reader.onloadend = (event) => {
+      let raw = reader.result;
+
+      // const json = JSON.parse(raw);
+      // const { song, cells, bpm } = json;
+
+      // state.cells = cells;
+      // state.bpm = bpm;
+      setImageData(file);
+      r();
+    };
+  }
+
+  function addDropUpload() {
+    const container = target.querySelector(".pixel-editor-container");
+    
+    container.addEventListener("drop", (e) => {
+      let dt = e.dataTransfer;
+      let files = dt.files;
+
+      upload(files);
+
+      if (e.stopPropagation) e.stopPropagation();
+      if (e.preventDefault) e.preventDefault();
+      e.cancelBubble = true;
+      e.returnValue = false;
+    });
+
+    container.addEventListener("dragover", (e) => {
+      if (e.stopPropagation) e.stopPropagation();
+      if (e.preventDefault) e.preventDefault();
+      e.cancelBubble = true;
+      e.returnValue = false;
+    });
+  }
 
   const setImageData = (file) => {
     let reader = new FileReader();
@@ -482,6 +536,8 @@ export function createPixelEditor(target) {
     ).fill(null);
 
     animate();
+
+    addDropUpload();
 
     c.addEventListener("mousedown", (e) => {
       state.undoRedoStack.push(JSON.stringify(state.gridColors));

@@ -1,8 +1,15 @@
+## Jan 31, 2022
+
+- [] export Mp3
+- [] export png
+- [] import assets
+
+
 ## TODO, Jan 20, 2022
-- [] weird sprite renaming error
-- [] add sprite to default example
+- [x] weird sprite renaming error
+- [x] add sprite to default example
 - [x] fix default example
-- [] actually render errors properly
+- [x] actually render errors properly
 
 ## TODO, Jan 10, 2022
 - [] image compression
