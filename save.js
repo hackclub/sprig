@@ -16,7 +16,10 @@ async function saveToS3({ content, state, copyUrl }) {
       body: JSON.stringify(content)
     })
   }
-  const link = `localhost:5500/?id=${id}`
+
+  const link = new URL(window.location.hostname)
+  link.searchParams.append('id', id)
+
   if (copyUrl) copy(link)
   if (copyUrl) notification({
     message: "Sharing link copied to clipboard!"
