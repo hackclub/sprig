@@ -8,6 +8,7 @@ import saveFile from "./components/saveFile.js";
 import saveLink from "./components/saveLink.js";
 import runButton from "./components/runButton.js";
 import addAssetButton from "./components/addAssetButton.js";
+import nameBar from "./components/nameBar.js";
 
 const toggleHide = (className) =>
   document.querySelector(`.${className}`).classList.toggle("hide");
@@ -187,6 +188,7 @@ export function view(state) {
       }
     </style>
     <div class="left-pane">
+    ${nameBar(state)}
       <div class="menu">
         ${runButton(state)}
         ${saveLink(state)}
