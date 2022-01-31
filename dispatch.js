@@ -31,6 +31,7 @@ const STATE = {
   saveLinkStatus: "ready",
   saveFileStatus: "ready",
   runStatus: "loading",
+  bugReportStatus: "ready",
   lastSaved: {
     name: "",
     text: "",
@@ -123,6 +124,7 @@ const ACTIONS = {
     uiSounds[arg]()
   },
   REPORT_BUG: async (args, state) => {
+    state.bugReportStatus = "loading"
     notification({
       message: "Generating a bug report... (1/3)"
     });
@@ -161,6 +163,8 @@ const ACTIONS = {
       url.searchParams.append(`prefill_${encodeURIComponent(key)}`, encodeURIComponent(report[key]))
     }
     window.open(url, '_blank');
+    state.bugReportStatus = "ready"
+    dispatch("RENDER")
   },
   GET_SAVE_STATE(args, state) {
     const prog = state.codemirror.view.state.doc.toString();

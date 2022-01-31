@@ -8,6 +8,17 @@ const click = () => {
   dispatch("REPORT_BUG");
 }
 
+const image = (state) => {
+  switch(state.bugReportStatus) {
+    case 'loading':
+      return './assets/loading.gif'
+    case 'ready':
+      return './assets/bug.png'
+    default:
+      return './assets/err.png'
+  }
+}
+
 export default (state) => (
   html`
     <button
@@ -16,7 +27,7 @@ export default (state) => (
       @click=${click}
       >
       <span class="tooltipped-text">Submit a bug report</span>
-      <img src="./assets/bug.png" width="32px" />
+      <img src="${image(state)}" width="32px" />
     </button>
   `
 )
