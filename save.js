@@ -3,11 +3,9 @@ import md5 from "https://cdn.skypack.dev/md5";
 import copy from "./utils/copy.js";
 import notification from "./utils/notification.js";
 
-async function saveToS3({ content, state }) {
-  const uniqueID = md5(JSON.stringify(content));
-  const { exists, uploadURL, jsonFilename, id } = await fetch(
-    `https://vt4x133ukg.execute-api.eu-west-1.amazonaws.com/default/getPresignedURL?id=${uniqueID}`
-  ).then((r) => r.json());
+async function saveToS3({ content, state, copyUrl }) {
+  const uniqueID = md5(JSON.stringify(content))
+  const { exists, uploadURL, jsonFilename, id } = await fetch(`https://vt4x133ukg.execute-api.eu-west-1.amazonaws.com/default/getPresignedURL?id=${uniqueID}`).then(r => r.json())
   if (!exists) {
     await fetch(uploadURL, {
       mode: "cors",
@@ -18,11 +16,11 @@ async function saveToS3({ content, state }) {
       body: JSON.stringify(content),
     });
   }
-  const link = `localhost:5500/?id=${id}`;
-  copy(link);
-  notification({
-    message: "Sharing link copied to clipboard!",
-  });
+  const link = `localhost:5500/?id=${id}`
+  if (copyUrl) copy(link)
+  if (copyUrl) notification({
+    message: "Sharing link copied to clipboard!"
+  })
 
   state.lastSaved.name = content.name;
   state.lastSaved.prog = content.prog;
@@ -47,18 +45,18 @@ async function saveToFile({ content, state }) {
   });
 }
 
-export async function save(type, state) {
-  state.runStatus = 'loading';
-  dispatch("RENDER");
-  const content = JSON.parse(dispatch("GET_SAVE_STATE"));
+export async function save(type, state, copyUrl = true) {
+  state.runStatus = 'loading'
+  dispatch("RENDER")
+  const content = JSON.parse(dispatch("GET_SAVE_STATE"))
 
   switch(type) {
     case 'link':
-      state.saveLinkStatus = "loading";
-      dispatch("RENDER");
-      await saveToS3({ content, state });
-      state.saveLinkStatus = "ready";
-      break;
+      state.saveLinkStatus = "loading"
+      dispatch("RENDER")
+      await saveToS3({ content, state, copyUrl })
+      state.saveLinkStatus = "ready"
+      break
     case 'file':
       state.saveFileStatus = "loading";
       dispatch("RENDER");
