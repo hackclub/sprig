@@ -18,11 +18,26 @@ const image = (state) => {
       return './assets/err.png'
   }
 }
+const klass = (state) => {
+  let k = "hoverable tooltipped "
+  switch(state.bugReportStatus) {
+    case 'loading':
+      k += 'cursor-progress'
+      break
+    case 'ready':
+      k += 'cursor-pointer'
+      break
+    default:
+      k += 'cursor-help'
+      break
+  }
+  return k
+}
 
 export default (state) => (
   html`
     <button
-      class="hoverable tooltipped"
+      class="${klass(state)}"
       @mouseenter=${mouseEnter}
       @click=${click}
       >

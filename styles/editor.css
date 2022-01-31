@@ -67,11 +67,8 @@ body {
 }
 
 .menu {
-  /*overflow: hidden;*/
   width: 100%;
   min-height: 30px;
-  height: 30px;
-  max-height: 30px;
   background: grey;
   display: flex;
 }

@@ -8,13 +8,12 @@ const click = () => dispatch("SOUND", "confirm")
 export default (state) => (
   html`
     <a
-      class="hoverable tooltipped"
       @mouseenter=${mouseEnter}
       @click=${click}
       target="_blank"
       href="https://github.com/hackclub/game-lab"
       >
-      <button>
+      <button class="hoverable tooltipped cursor-pointer">
         <span class="tooltipped-text">View repo</span>
         <img src="./assets/github.png" width="32px" />
       </button>
