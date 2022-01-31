@@ -226,7 +226,7 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   SET_NAME({ name }, state) {
-    state.name = name.trim().replace(/\s+/g,'-')
+    state.name = name.trim().replace(/\s+/g,'-') || "project-name"
 
     return state.name
   },
