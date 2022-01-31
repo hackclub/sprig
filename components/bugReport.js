@@ -4,7 +4,8 @@ import { html } from "../uhtml.js";
 const mouseEnter = () => dispatch("SOUND", "hover")
 
 const click = () => {
-  dispatch("SOUND", "confirm")
+  dispatch("SOUND", "confirm");
+  dispatch("REPORT_BUG");
 }
 
 export default (state) => (
