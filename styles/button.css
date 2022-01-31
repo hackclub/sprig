@@ -1,0 +1,14 @@
+@import url('./variables.css');
+
+.button {
+  color: var(--darkless);
+  background: var(--light);
+  border: 5px solid var(--lighter);
+  border-radius: 12px;
+  transition-duration: 0.5s;
+}
+
+.button:hover {
+  background: var(--lightless);
+  border: 5px solid var(--light);
+}

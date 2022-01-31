@@ -16,7 +16,12 @@
   --blue: #338eda;
   --purple: #a633d6;
 
+  --lighter: #CECBB8;
+  --light: #DDDAC7;
+  --lightless: #CAC4B0;
+
+  /* --darkless: #252429; */
+  --darkless: #535352;
   --dark: #17171d;
   --darker: #121217;
-  --darkless: #252429;
 }

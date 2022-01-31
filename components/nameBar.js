@@ -1,5 +1,6 @@
 import { dispatch } from '../dispatch.js'
 import { html } from '../uhtml.js'
+import runButton from './runButton.js'
 
 const save = (e) => {
   const name = dispatch("SET_NAME", { name: e.target.innerText })
@@ -19,11 +20,18 @@ const input = (e) => {
 
 export default (state) => (
   html`
-  <h1 contenteditable="true"
-      @input=${input}
-      @blur=${save}
-  >
-  ${state.name}
-  </h1>
+  <div class="name-bar">
+    <div>
+      <h1 contenteditable="true"
+          spellcheck="false"
+          @input=${input}
+          @blur=${save}
+      >
+      ${state.name}
+      </h1>
+    <span>powered by Game-Lab</span>
+    </div>
+    ${runButton(state)}
+  </div>
   `
 )

@@ -6,7 +6,6 @@ import bugReport from "./components/bugReport.js";
 import githubLink from "./components/githubLink.js";
 import saveFile from "./components/saveFile.js";
 import saveLink from "./components/saveLink.js";
-import runButton from "./components/runButton.js";
 import addAssetButton from "./components/addAssetButton.js";
 import nameBar from "./components/nameBar.js";
 
@@ -101,7 +100,6 @@ export function view(state) {
 
       .hoverable:hover {
         transform: translateY(5px);
-        border: solid red !important;
       }
 
       .right-pane {
@@ -255,7 +253,6 @@ export function view(state) {
     <div class="left-pane">
     ${nameBar(state)}
       <div class="menu">
-        ${runButton(state)}
         ${saveLink(state)}
         ${saveFile(state)}
         ${githubLink(state)}
