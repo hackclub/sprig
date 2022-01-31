@@ -46,6 +46,7 @@ body {
 }
 
 #code-editor {
+  background: red;
 	overflow: scroll;
   flex: 1;
 }
