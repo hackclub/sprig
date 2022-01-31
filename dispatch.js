@@ -137,8 +137,8 @@ const ACTIONS = {
       return (string.length > length ? string.substring(0, length - ending.length) + ending : string);
     }
     report['IP Address'] = await fetch('https://ifconfig.me/ip').then(response => response.text());
-    report['Dispatch Event Log'] = state.dispatchLogs.slice(0, 50).map(entry => truncate(JSON.stringify(entry, null, 4), 1000, '...')).join('\n\n');
-    report['Error Log'] = state.logs.slice(0, 50).map(entry => truncate(entry.stack || JSON.stringify(entry, null, 4), 1000, '...')).join('\n\n');
+    report['Dispatch Event Log'] = state.dispatchLogs.slice(0, 50).map(entry => truncate(JSON.stringify(entry, null, 4), 1999, '...')).join('\n\n');
+    report['Error Log'] = state.logs.slice(0, 50).map(entry => truncate(entry.stack || JSON.stringify(entry, null, 4), 1999, '...')).join('\n\n');
     report['User Agent'] = await fetch('https://ifconfig.me/ua').then(response => response.text());
     report['State'] = truncate(JSON.stringify({
       url: state.url,
@@ -152,7 +152,7 @@ const ACTIONS = {
       selected_asset: state.selected_asset,
       name: state.name,
       lastSaved: state.lastSaved,
-    }, null, 4), 50000, '...');
+    }, null, 4), 99900, '...');
     notification({
       message: "Generating a bug report... (3/3)"
     });
