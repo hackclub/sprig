@@ -151,6 +151,8 @@ const ACTIONS = {
 
     state.assets = saved.assets || [];
 
+    state.name = saved.name
+
     // TODO: do we need to select default asset? maybe not
 
     if (!state.engineVersion) {
@@ -218,6 +220,10 @@ const ACTIONS = {
     }
 
     dispatch("RENDER");
+  },
+  SET_NAME({ name }, state) {
+    state.name = name
+    console.log(state.name)
   },
   CHANGE_ASSET_NAME({ index, newName }, state) {
     const usedNames = state.assets.map((x) => x.name);
