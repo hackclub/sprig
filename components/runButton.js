@@ -15,7 +15,7 @@ const image = (state) => {
 }
 export default (state) => (
   html`
-    <button class="menu-option hoverable tooltipped"
+    <button class="hoverable tooltipped button"
             @click=${click}
             @mouseenter=${mouseEnter}>
       <span class="tooltipped-text">Run (shift+enter)</span>
