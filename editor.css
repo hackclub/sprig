@@ -248,3 +248,7 @@ body {
 
 
 
+
+button > img {
+  image-rendering: pixelated; /* Make button icons crisp */
+}
