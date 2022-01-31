@@ -121,7 +121,7 @@ const ACTIONS = {
     });
     const url = new URL('https://airtable.com/shrpcDFA5f9wEOSIm')
     for (const key in report) {
-      url.searchParams.append(`prefill_${encodeURIComponent(key)}`, encodeURIComponent(report[key]))
+      url.searchParams.append(`prefill_${key}`, report[key])
     }
     window.open(url, '_blank');
     state.bugReportStatus = "ready"
