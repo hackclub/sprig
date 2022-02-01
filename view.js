@@ -187,6 +187,7 @@ export function view(state) {
         width: max-content;
         padding: 5px;
         overflow: scroll;
+        color: var(--smoke);
       }
 
       .list-of-sprites > * {
@@ -320,6 +321,7 @@ export function view(state) {
         outline: none;
         padding: 0;
         width: 110px;
+        color: inherit;
       }
 
       .a-to-button {
