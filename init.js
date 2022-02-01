@@ -1,6 +1,7 @@
 import { events } from "./events.js";
 import { defaultProg } from "./defaultProg.js";
 import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
+import initCm from "./cm.bundle.js";
 
 export function init(state) {
   const url = new URL(window.location.href);
@@ -16,7 +17,12 @@ export function init(state) {
   state.pixelEditor = createPixelEditor(
     document.querySelector(".pixel-editor")
   );
-  state.codemirror = document.querySelector("#code-editor");
+
+  const cmEditorView = initCm(state.codemirror);
+  cmEditorView.dom.id = "code-editor";
+  document.querySelector("#code-editor").replaceWith(cmEditorView.dom);
+  state.codemirror = cmEditorView;
+
   events(state);
 
   if (file) {
@@ -38,7 +44,7 @@ export function init(state) {
       // if (!file.startsWith("http")) file = `examples/${file}`;
       // fetch(file_url, { mode: "cors" }).then((file) =>
       //   file.text().then((txt) => {
-      //     state.codemirror.view.dispatch({ changes: { from: 0, insert: txt } });
+      //     state.codemirror.dispatch({ changes: { from: 0, insert: txt } });
       //     dispatch("RUN");
       //   })
       // );
@@ -47,13 +53,13 @@ export function init(state) {
     const saved = JSON.parse(window.localStorage.getItem("hc-game-lab"));
 
     if (!saved) {
-      state.codemirror.view.dispatch({
+      state.codemirror.dispatch({
         changes: { from: 0, insert: defaultProg.trim() },
       });
       dispatch("CREATE_SPRITE");
     } else {
       const prog = saved.prog;
-      state.codemirror.view.dispatch({
+      state.codemirror.dispatch({
         changes: { from: 0, insert: !prog ? defaultProg.trim() : prog },
       });
 

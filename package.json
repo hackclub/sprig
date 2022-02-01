@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "@codemirror/basic-setup": "^0.19.1",
+    "@codemirror/lang-javascript": "^0.19.7",
+    "@codemirror/language": "^0.19.7",
+    "@codemirror/view": "^0.19.40"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.1.3",
+    "rollup": "^2.66.1",
+    "serve": "^13.0.2"
+  },
+  "scripts": {
+    "bundle-cm": "rollup cm.js -f esm -o cm.bundle.js -p @rollup/plugin-node-resolve",
+    "dev": "serve"
+  }
+}

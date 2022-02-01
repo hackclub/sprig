@@ -49,7 +49,7 @@ const ACTIONS = {
     init(state);
   },
   RUN(args, state) {
-    const string = state.codemirror.view.state.doc.toString();
+    const string = state.codemirror.state.doc.toString();
 
     const hasImport = /import\s/.test(string);
     if (hasImport) {
@@ -102,7 +102,7 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   GET_SAVE_STATE(args, state) {
-    const prog = state.codemirror.view.state.doc.toString();
+    const prog = state.codemirror.state.doc.toString();
     return JSON.stringify({ prog, sprites: state.sprites, name: state.name });
   },
   SAVE({ type }, state) {
@@ -187,9 +187,9 @@ const ACTIONS = {
   },
   UPLOAD({ saved }, state) {
     const newProg = saved.prog;
-    const currentProg = state.codemirror.view.state.doc.toString();
+    const currentProg = state.codemirror.state.doc.toString();
 
-    state.codemirror.view.dispatch({
+    state.codemirror.dispatch({
       changes: { from: 0, to: currentProg.length, insert: newProg },
     });
 
@@ -206,8 +206,8 @@ const ACTIONS = {
     dispatch("RUN");
   },
   LOAD_EXAMPLE({ content }, state) {
-    const string = state.codemirror.view.state.doc.toString();
-    state.codemirror.view.dispatch({
+    const string = state.codemirror.state.doc.toString();
+    state.codemirror.dispatch({
       changes: { from: 0, to: string.length, insert: content },
     });
     dispatch("RUN");

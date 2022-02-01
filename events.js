@@ -135,7 +135,7 @@ function addNumberDragging(state, bodyListener) {
   let num, pos_start, pos_end, sigFigs, usePrecision, selectedText;
 
   bodyListener("mousedown", ".ͼc, .ͼy", (e) => {
-    const s = state.codemirror.view.state;
+    const s = state.codemirror.state;
     const doc = s.doc;
     const pos = s.selection.main.head;
     const at = doc.lineAt(pos);
@@ -178,7 +178,7 @@ function addNumberDragging(state, bodyListener) {
 
       const newValue = `${num}`;
 
-      state.codemirror.view.dispatch({
+      state.codemirror.dispatch({
         changes: {
           from: pos_start,
           to: pos_start + selectedText.length,

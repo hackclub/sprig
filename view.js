@@ -1,6 +1,4 @@
 import { html } from "./uhtml.js";
-import "./codemirror/codemirror-html.js";
-import "./codemirror/codemirror-js.js";
 
 function shareOptions(state) {
   return html`
@@ -192,7 +190,7 @@ export function view(state) {
       }
     </style>
     <div class="left-pane">
-      <codemirror-js id="code-editor"></codemirror-js>
+      <div id="code-editor"></div>
       <div
         class=${[
           "log",
