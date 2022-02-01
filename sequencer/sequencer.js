@@ -137,8 +137,18 @@ export function createSequencer(target) {
       const json = JSON.parse(raw);
       const { song, cells, bpm } = json;
 
-      state.cells = cells;
+      for (const cell in state.cells) {
+        delete state.cells[cell];
+      }
+
+      for (const cell in cells) {
+        state.cells[cell] = cells[cell];
+      }
+
       state.bpm = bpm;
+      state.data.cells = state.cells;
+      state.data.bpm = state.bpm;
+      state.data.song = song;
       r();
     };
   }
