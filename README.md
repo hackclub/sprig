@@ -1,8 +1,8 @@
 ## Hack Club Game Lab
 
-The Hack Club Game Lab is Hack Club's version of a [fantasy console](https://en.wikipedia.org/wiki/Fantasy_video_game_console) (ex. [PICO-8](https://www.lexaloffle.com/pico-8.php)), and designed to help run engaging Hack Club meetings!
+The Hack Club Game Lab is a microworld to discover programming and the joys of making things you want with computers by making simple games. It's Hack Club's version of a [fantasy console](https://en.wikipedia.org/wiki/Fantasy_video_game_console) (ex. [PICO-8](https://www.lexaloffle.com/pico-8.php)), and is designed to help run engaging Hack Club meetings by making it easy to get started building things instead of explaining things!
 
-Inspired by [constuctionism](https://en.wikipedia.org/wiki/Constructionism_(learning_theory)), the idea behind Game Lab is to create a "microworld" where new club members are able to quickly build meaningful, engaging games through tinkering and with minimal prior coding or JavaScript knowledge.
+The game lab is designed with the principles of [constuctionism](https://en.wikipedia.org/wiki/Constructionism_(learning_theory)). It's the idea that people learn best when they make things that they care about which they can share with others. We made Game Lab so you can learn programming by building programs filled with character and delight. 
 
 Design goals:
 
