@@ -10,6 +10,7 @@ import { createSequencer } from "./sequencer/sequencer.js";
 import { playTune, loopTune } from "./tunePlayers.js";
 import uiSounds from "./assets/ui-sounds.js";
 import notification from "./utils/notification.js";
+import validate from "./utils/validate.js";
 
 const STATE = {
   codemirror: undefined,
@@ -104,16 +105,42 @@ const ACTIONS = {
 
       state.assets.forEach(asset => {
         included[asset.name] = asset.data;
-      })
+      });
 
-      try { // TODO can we run this in an iframe?
-        new Function(...Object.keys(included), string)(
-          ...Object.values(included)
-        );
-      } catch (e) {
-        console.log(e);
+      let { success, error } = validate(string);
+      if (success) {
+
+        try { // TODO can we run this in an iframe?
+          new Function(...Object.keys(included), string)(
+            ...Object.values(included)
+          );
+        } catch (e) {
+          console.log(e);
+          state.error = true;
+          let split = e.stack.split('\n').slice(0, 2);
+          function filterInts (str) {
+            return str.split('').filter(char => char == +char).join('');
+          }
+          function checkLine (line) {
+            let colonSplit = line.split(':');
+            if (!(colonSplit.length >= 3)) return false;
+            if (isNaN(+filterInts(colonSplit[colonSplit.length - 1]))) return false; // If the integer is not similar to the string, it's not a number
+            if (isNaN(+filterInts(colonSplit[colonSplit.length - 2]))) return false;
+            return true;
+          }
+          let lineNumber = e.stack.includes(e.message) ? 1 : 0
+          console.log(split, checkLine(split[lineNumber]));
+          if (checkLine(split[lineNumber])) {
+            let trace = split[lineNumber].split(':')[split[lineNumber].split(':').length - 2] + ':' + split[lineNumber].split(':')[split[lineNumber].split(':').length - 1]
+            let [line, col] = trace.split(':');
+            const str = `${e.stack.includes(e.message) ? split[0] : (e.name ? e.name : 'RuntimeError') + ': ' + e.message}\n    at code.js:${+filterInts(line) - 2}:${+filterInts(col)}`;
+            state.logs.push(str);
+          }
+          else state.logs.push(e.stack.includes(e.message) ? (e.name ? e.name : 'RuntimeError') : (e.name ? e.name : 'RuntimeError') + ': ' + e.message); // Best(?) combination of checking if certain error properties exist
+        }
+      } else {
         state.error = true;
-        const str = e.stack;
+        const str = `SyntaxError: ${error.message}\n    at code.js:${error.line}:${error.col}`;
         state.logs.push(str);
       }
       dispatch("RENDER");
