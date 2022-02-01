@@ -1,4 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-*.bundle.js linguist-vendored
+@codemirror/* linguist-vendored
 uhtml.js linguist-vendored

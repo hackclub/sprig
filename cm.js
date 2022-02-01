@@ -3,8 +3,8 @@ import {
     EditorState,
     EditorView,
     basicSetup
-} from "@codemirror/basic-setup";
-import { javascript } from "@codemirror/lang-javascript";
+} from "./@codemirror/basic-setup.js";
+import { javascript } from "./@codemirror/lang-javascript.js";
 
 export default function init() {
     return new EditorView({

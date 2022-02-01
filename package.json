@@ -11,7 +11,7 @@
     "serve": "^13.0.2"
   },
   "scripts": {
-    "bundle-cm": "rollup cm.js -f esm -o cm.bundle.js -p @rollup/plugin-node-resolve",
+    "bundle-cm": "rollup -c",
     "dev": "serve"
   }
 }

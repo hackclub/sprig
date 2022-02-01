@@ -1,7 +1,7 @@
 import { events } from "./events.js";
 import { defaultProg } from "./defaultProg.js";
 import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
-import initCm from "./cm.bundle.js";
+import initCm from "./cm.js";
 
 export function init(state) {
   const url = new URL(window.location.href);
