@@ -258,7 +258,10 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   SET_NAME({ name }, state) {
-    state.name = name.trim().replace(/\s+/g,'-') || "project-name"
+    const safeName = name.trim()             // no whitespace before or after
+                        .replace(/\n/g, '')  // no newlines at all
+                        .replace(/\s+/g,'-') // all remaining whitespace converted to hyphyens
+    state.name = safeName || "my-project"
 
     return state.name
   },
