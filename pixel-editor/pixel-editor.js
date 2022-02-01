@@ -103,7 +103,7 @@ export function createPixelEditor(target) {
     let reader = new FileReader();
     reader.onload = (event) => {
       const dataURL = event.target.result;
-      const canvas = document.getElementById('offscreen-canvas');
+      const canvas = target.querySelector('#offscreen-canvas');
       const ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const image = new Image();
@@ -166,6 +166,15 @@ export function createPixelEditor(target) {
         >
           <img src="./assets/undo.png" alt="undo" width="25px" />
         </button>
+        <button @click=${() => {
+          const canvas = target.querySelector('#offscreen-canvas');
+          drawCanvas(canvas);
+          const image = canvas.toDataURL();
+          const aDownloadLink = document.createElement('a');
+          aDownloadLink.download = 'sprite.png';
+          aDownloadLink.href = image;
+          aDownloadLink.click();          
+        }}>export</button>
       </div>
 
       <div class="colors">
@@ -446,6 +455,63 @@ export function createPixelEditor(target) {
           (x % 2 === 0 && y % 2 === 1) || (x % 2 === 1 && y % 2 === 0)
             ? BACKGROUND_BLUE
             : BACKGROUND_WHITE;
+      }
+
+      let index = i * 4;
+      pixels[index] = color[0];
+      pixels[index + 1] = color[1];
+      pixels[index + 2] = color[2];
+      pixels[index + 3] = color[3];
+    });
+
+    tempCanvas.width = gridW;
+    tempCanvas.height = gridH;
+    ctx.webkitImageSmoothingEnabled = false;
+    ctx.mozImageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = false;
+    // tempCtx.webkitImageSmoothingEnabled = false;
+    // tempCtx.mozImageSmoothingEnabled = false;
+    // tempCtx.imageSmoothingEnabled = false;
+
+    const image = new ImageData(
+      pixels,
+      state.defaultGridArraySize[0],
+      state.defaultGridArraySize[1]
+    );
+    tempCtx.putImageData(image, 0, 0);
+
+    state.selected.forEach((i) => {
+      const [x, y] = i_to_xy(i);
+      tempCtx.fillStyle = "#aaaaaaaa";
+      tempCtx.fillRect(x, y, 1, 1);
+    });
+
+    ctx.drawImage(tempCanvas, 0, 0, w, h);
+  };
+
+  const drawCanvasNoBg = (canvas, main = true) => {
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const grid = state.tempGridColors.map((color, i) => {
+      if (color === null) return state.gridColors[i];
+      else return color;
+    });
+
+    const [w, h] = readCanvas(canvas);
+    const [gridW, gridH] = main ? state.gridSize : state.defaultGridArraySize;
+    // const xSize = w/gridW;
+    // const ySize = h/gridH;
+
+    const pixels = new Uint8ClampedArray(
+      state.defaultGridArraySize[0] * state.defaultGridArraySize[1] * 4
+    );
+
+    grid.forEach((color, i) => {
+      if (color[3] === 0) {
+        const [x, y] = i_to_xy(i);
+        color = [0, 0, 0, 0];
       }
 
       let index = i * 4;
