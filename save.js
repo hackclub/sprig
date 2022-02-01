@@ -17,7 +17,7 @@ async function saveToS3({ content, state, copyUrl }) {
     })
   }
 
-  const link = new URL(window.location.hostname)
+  const link = new URL(window.location.origin+window.location.pathname)
   link.searchParams.append('id', id)
 
   if (copyUrl) copy(link)
