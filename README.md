@@ -1,4 +1,6 @@
-## Hack Club Game Lab
+# 👾 Hack Club Game Lab
+
+**[Launch the Game Lab →](https://game-lab.hackclub.dev/)**
 
 The Hack Club Game Lab is Hack Club's version of a [fantasy console](https://en.wikipedia.org/wiki/Fantasy_video_game_console) (ex. [PICO-8](https://www.lexaloffle.com/pico-8.php)), and designed to help run engaging Hack Club meetings!
 
@@ -14,7 +16,7 @@ Join `#gamelab-dev` on the [Hack Club Slack](https://hackclub.com/slack/) to joi
 
 <img width="500" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149387903-eec65489-6a8d-4779-adde-2b6e35c7273a.gif">
 
-Check out a minimal example game: [Superb Macedonian Plumber Bro](https://hackclub.github.io/game-lab/?file=recxJ4Z4C3U0WbSIT)
+Check out a minimal example game: [Superb Macedonian Plumber Bro](https://game-lab.hackclub.dev/?file=recxJ4Z4C3U0WbSIT).
 
 ## Development
 
@@ -33,7 +35,8 @@ And then go to http://localhost:3000 in your web browser, and it should work!
 
 ## Minimal Examples
 
-initialize engine
+Initialize the Game Engine:
+
 ```js
 const canvas = document.querySelector(".game-canvas");
 const e = createEngine(canvas, 300, 300);
@@ -41,7 +44,7 @@ const e = createEngine(canvas, 300, 300);
 
 ---
 
-[make a character](https://hackclub.github.io/game-lab/?file=recUlLLmfEksmALAM)
+[Make a character:](https://game-lab.hackclub.dev/?file=recUlLLmfEksmALAM)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149362983-6f82a61c-c3d5-40b7-920f-f673c3ff2646.png">
 
@@ -62,7 +65,7 @@ e.start();
 
 ---
 
-[add floor with gravity](https://hackclub.github.io/game-lab/?file=recMIYxXueSz8tXQs)
+[Add a floor with gravity:](https://game-lab.hackclub.dev/?file=recMIYxXueSz8tXQs)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149363706-453a45e8-d0d4-44a3-acc3-09e4bb577392.gif">
 
@@ -96,7 +99,7 @@ e.start();
 
 ---
 
-[add movement](https://hackclub.github.io/game-lab/?file=rec7bKM7Iiq7f6vFF)
+[Add movement:](https://game-lab.hackclub.dev/?file=rec7bKM7Iiq7f6vFF)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149365452-7b042996-2beb-40a8-866e-f5748b5631da.gif">
 
@@ -130,7 +133,7 @@ e.start();
 
 ---
 
-[add jump](https://hackclub.github.io/game-lab/?file=rec75TEodfPebIzlc)
+[Add jump:](https://game-lab.hackclub.dev/?file=rec75TEodfPebIzlc)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149366181-588ae196-03dd-4268-9907-9477caa8a834.gif">
 
@@ -172,7 +175,7 @@ e.start();
 
 ---
 
-[platforms](https://hackclub.github.io/game-lab/?file=recBW6ApDr7xzlhxz)
+[Add platforms:](https://game-lab.hackclub.dev/?file=recBW6ApDr7xzlhxz)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149367516-7edb2780-edbd-4977-9a07-dcfbf47fcf93.gif">
 
@@ -226,7 +229,7 @@ e.start();
 
 ---
 
-[add background](https://hackclub.github.io/game-lab/?file=recEy698LbPNQlL1G)
+[Add a background:](https://game-lab.hackclub.dev/?file=recEy698LbPNQlL1G)
 
 <img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149368356-c343a214-0d31-4d5f-a2d4-d0575b18047b.png">
 
@@ -246,7 +249,7 @@ e.start();
 
 ---
 
-[collision](https://hackclub.github.io/game-lab/?file=recC0NfXt8DIWQU3H)
+[Add collisions](https://game-lab.hackclub.dev/?file=recC0NfXt8DIWQU3H)
 
 <img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149369879-7d384b3a-2f15-4816-a59e-76b56bb9a944.gif">
 
@@ -283,7 +286,7 @@ e.start();
 
 ---
 
-## all available object properties
+Refer to the following example for all the available object properties:
 
 ```js
 e.add({
@@ -326,19 +329,19 @@ e.add({
 
 ## Tiny Games
 
-[Pong-ish](https://hackclub.github.io/game-lab/?file=recZMaBjgnNXgZsUK)
+[Pong-ish](https://game-lab.hackclub.dev/?file=recZMaBjgnNXgZsUK)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149371012-faf3e45f-9d3a-47d4-831b-566d9171d2bd.gif">
 
 ---
 
-[Crappy Birds](https://hackclub.github.io/game-lab/?file=recJX7dAboz7v1OFG)
+[Crappy Birds](https://game-lab.hackclub.dev/?file=recJX7dAboz7v1OFG)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149380918-a1855ab3-cc2d-4a9a-adc0-d5316d6f17ba.gif">
 
 ---
 
-[Brick Broken](https://hackclub.github.io/game-lab/?file=rec6bdF7IS7vY7xzl)
+[Brick Broken](https://game-lab.hackclub.dev/?file=rec6bdF7IS7vY7xzl)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/150606449-5b73d7fe-f2d3-432f-9cc5-346c20919ec8.gif">
 
