@@ -19,7 +19,7 @@ const image = (state) => {
   }
 }
 const klass = (state) => {
-  let k = "hoverable tooltipped "
+  let k = "hoverable tooltipped button "
   switch(state.bugReportStatus) {
     case 'loading':
       k += 'cursor-progress'
