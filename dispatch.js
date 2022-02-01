@@ -117,7 +117,6 @@ const ACTIONS = {
         } catch (e) {
           console.log(e);
           state.error = true;
-          console.log(e.stack, 'stack', e.message, 'message')
           let split = e.stack.split('\n').slice(0, 2);
           function filterInts (str) {
             return str.split('').filter(char => char == +char).join('');
@@ -134,10 +133,10 @@ const ACTIONS = {
           if (checkLine(split[lineNumber])) {
             let trace = split[lineNumber].split(':')[split[lineNumber].split(':').length - 2] + ':' + split[lineNumber].split(':')[split[lineNumber].split(':').length - 1]
             let [line, col] = trace.split(':');
-            const str = `${e.stack.includes(e.message) ? split[0] : 'RuntimeError: ' + e.message}\n    at code.js:${+filterInts(line) - 2}:${+filterInts(col)}`;
+            const str = `${e.stack.includes(e.message) ? split[0] : (e.name ? e.name : 'RuntimeError') + ': ' + e.message}\n    at code.js:${+filterInts(line) - 2}:${+filterInts(col)}`;
             state.logs.push(str);
           }
-          else state.logs.push(e.stack);
+          else state.logs.push(e.stack.includes(e.message) ? (e.name ? e.name : 'RuntimeError') : (e.name ? e.name : 'RuntimeError') + ': ' + e.message); // Best(?) combination of checking if certain error properties exist
         }
       } else {
         state.error = true;
