@@ -117,12 +117,24 @@ const ACTIONS = {
         } catch (e) {
           console.log(e);
           state.error = true;
+          console.log(e.stack, 'stack', e.message, 'message')
           let split = e.stack.split('\n').slice(0, 2);
-          if (split[split.length - 1].endsWith(')') && split[split.length - 1].includes('<anonymous>:')) {
-            let trace = split[split.length - 1].substring(split[split.length - 1].indexOf(')'));
-            trace = trace.substring(trace.indexOf(':') + 1, trace.length - 1);
+          function filterInts (str) {
+            return str.split('').filter(char => char == +char).join('');
+          }
+          function checkLine (line) {
+            let colonSplit = line.split(':');
+            if (!(colonSplit.length >= 3)) return false;
+            if (isNaN(+filterInts(colonSplit[colonSplit.length - 1]))) return false; // If the integer is not similar to the string, it's not a number
+            if (isNaN(+filterInts(colonSplit[colonSplit.length - 2]))) return false;
+            return true;
+          }
+          let lineNumber = e.stack.includes(e.message) ? 1 : 0
+          console.log(split, checkLine(split[lineNumber]));
+          if (checkLine(split[lineNumber])) {
+            let trace = split[lineNumber].split(':')[split[lineNumber].split(':').length - 2] + ':' + split[lineNumber].split(':')[split[lineNumber].split(':').length - 1]
             let [line, col] = trace.split(':');
-            const str = `${split[0]}\n    at code.js:${+line - 2}:${+col}`;
+            const str = `${e.stack.includes(e.message) ? split[0] : 'RuntimeError: ' + e.message}\n    at code.js:${+filterInts(line) - 2}:${+filterInts(col)}`;
             state.logs.push(str);
           }
           else state.logs.push(e.stack);
