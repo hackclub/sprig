@@ -128,7 +128,33 @@ export function view(state) {
       }
 
       .game-output .menu {
-        justify-content: center;
+        display: flex;
+        justify-content: end;
+      }
+
+      .game-output .menu > *:first-child {
+        margin-right: auto;
+      }
+
+      @keyframes screen-flicker {
+        0% {
+          box-shadow:
+            0 0 6px 3px #fff2,  /* inner white */
+            0 0 10px 6px #f0f2, /* middle magenta */
+            0 0 14px 9px #0ff2; /* outer cyan */
+        }
+        20% {
+          box-shadow:
+            0 0 30px 15px #fff2,  /* inner white */
+            0 0 50px 30px #f0f2, /* middle magenta */
+            0 0 70px 45px #0ff2; /* outer cyan */
+        }
+        100% {
+          box-shadow:
+            0 0 6px 3px #fff2,  /* inner white */
+            0 0 10px 6px #f0f2, /* middle magenta */
+            0 0 14px 9px #0ff2; /* outer cyan */
+        }
       }
 
       .game-canvas {
@@ -136,6 +162,8 @@ export function view(state) {
           0 0 6px 3px #fff2,  /* inner white */
           0 0 10px 6px #f0f2, /* middle magenta */
           0 0 14px 9px #0ff2; /* outer cyan */
+        animation: ease-in-out 1s screen-flicker;
+        animation-fill-mode: forwards;
       }
 
       .pixel-editor-container {
