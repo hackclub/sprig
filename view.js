@@ -8,6 +8,7 @@ import saveFile from "./components/saveFile.js";
 import saveLink from "./components/saveLink.js";
 import addAssetButton from "./components/addAssetButton.js";
 import nameBar from "./components/nameBar.js";
+import runButton from "./components/runButton.js";
 
 const toggleHide = (className) =>
   document.querySelector(`.${className}`).classList.toggle("hide");
@@ -279,6 +280,7 @@ export function view(state) {
           >
           </canvas>
       <div class="menu">
+        ${runButton(state)}
         ${saveLink(state)}
         ${saveFile(state)}
         ${githubLink(state)}
