@@ -13,7 +13,7 @@ export default (state) => (
       target="_blank"
       href="https://github.com/hackclub/game-lab"
       >
-      <button class="hoverable tooltipped cursor-pointer">
+      <button class="hoverable tooltipped button cursor-pointer">
         <span class="tooltipped-text">View repo</span>
         <img src="./assets/github.png" width="32px" />
       </button>

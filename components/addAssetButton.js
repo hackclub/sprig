@@ -19,11 +19,11 @@ const image = (assetType) => {
 
 export default (state, assetType) => (
   html`
-    <button class="hoverable tooltipped"
+    <button class="hoverable tooltipped button"
             @mouseenter=${mouseEnter}
             @click=${() => click(assetType)}>
       <span class="tooltipped-text">Add ${assetType}</span>
-      <img src="${image(assetType)}" width="32px" />
+      <img src="${image(assetType)}" width="32px" height="32px" />
     </button>
   `
 )
