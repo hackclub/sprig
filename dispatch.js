@@ -10,6 +10,7 @@ import { createSequencer } from "./sequencer/sequencer.js";
 import { playTune, loopTune } from "./tunePlayers.js";
 import uiSounds from "./assets/ui-sounds.js";
 import notification from "./utils/notification.js";
+import validate from "./utils/validate.js";
 
 const STATE = {
   codemirror: undefined,
@@ -104,16 +105,31 @@ const ACTIONS = {
 
       state.assets.forEach(asset => {
         included[asset.name] = asset.data;
-      })
+      });
 
-      try { // TODO can we run this in an iframe?
-        new Function(...Object.keys(included), string)(
-          ...Object.values(included)
-        );
-      } catch (e) {
-        console.log(e);
+      let { success, error } = validate(string);
+      if (success) {
+
+        try { // TODO can we run this in an iframe?
+          new Function(...Object.keys(included), string)(
+            ...Object.values(included)
+          );
+        } catch (e) {
+          console.log(e);
+          state.error = true;
+          let split = e.stack.split('\n').slice(0, 2);
+          if (split[split.length - 1].endsWith(')') && split[split.length - 1].includes('<anonymous>:')) {
+            let trace = split[split.length - 1].substring(split[split.length - 1].indexOf(')'));
+            trace = trace.substring(trace.indexOf(':') + 1, trace.length - 1);
+            let [line, col] = trace.split(':');
+            const str = `${split[0]}\n    at code.js:${+line - 2}:${+col}`;
+            state.logs.push(str);
+          }
+          else state.logs.push(e.stack);
+        }
+      } else {
         state.error = true;
-        const str = e.stack;
+        const str = `SyntaxError: ${error.message}\n    at code.js:${error.line}:${error.col}`;
         state.logs.push(str);
       }
       dispatch("RENDER");
