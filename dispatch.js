@@ -11,6 +11,7 @@ import { playTune, loopTune } from "./tunePlayers.js";
 import { createEval } from "./evalGameScript.js";
 import uiSounds from "./assets/ui-sounds.js";
 import notification from "./utils/notification.js";
+import validate from "./utils/validate.js";
 
 const STATE = {
   codemirror: undefined,
