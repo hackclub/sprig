@@ -77,15 +77,36 @@ export function view(state) {
       .horizontal-bar {
         position: absolute;
         left: var(--vertical-bar);
+        right: 0;
         top: calc(var(--horizontal-bar) - 5px);
         background: none;
         height: 10px;
-        width: 100%;
         z-index: 10;
       }
 
+      .horizontal-bar:after {
+        content: ' ';
+        height: 0.5em;
+        width: 10em;
+        max-width: 30%;
+        border-radius: 5em;
+        background: var(--darker);
+        cursor: inherit;
+        display: inline-block;
+        transform: translateY(-50%) translateX(-50%);
+        position: absolute;
+        left: 50%;
+        top: 50%;
+      }
+
+      .horizontal-bar:hover:after {
+        max-width: 30%;
+        background: var(--lightless);
+      }
+
       .horizontal-bar:hover {
-        background: black;
+        background: var(--darker);
+        border: 1px dashed var(--darker);
         cursor: row-resize;
       }
 

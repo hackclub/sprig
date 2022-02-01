@@ -69,7 +69,7 @@ body {
 .menu {
   width: 100%;
   min-height: 30px;
-  background: grey;
+  background: var(--darkless);
   display: flex;
 }
 
@@ -103,16 +103,14 @@ body {
 }
 
 #vertical-bar:hover:after {
-  width: 1.5em;
-  height: 10em;
   max-height: 30%;
-  background: var(--dark);
+  background: var(--lightless);
 }
 
 #vertical-bar:hover {
   cursor: col-resize;
-  border: 1px dashed var(--dark);
-  background: var(--dark);
+  border: 1px dashed var(--darker);
+  background: var(--darker);
 }
 
 .CodeMirror {
