@@ -103,6 +103,7 @@ export function view(state) {
         min-width: 40px;
         width: max-content;
         padding: 5px;
+        color: var(--smoke);
       }
 
       .list-of-sprites > * {
@@ -241,6 +242,7 @@ export function view(state) {
         outline: none;
         padding: 0;
         width: 110px;
+        color: inherit;
       }
 
       .a-to-button {
