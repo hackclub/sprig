@@ -168,7 +168,7 @@ export function createPixelEditor(target) {
         </button>
         <button @click=${() => {
           const canvas = target.querySelector('#offscreen-canvas');
-          drawCanvas(canvas);
+          drawCanvasNoBg(canvas);
           const image = canvas.toDataURL();
           const aDownloadLink = document.createElement('a');
           aDownloadLink.download = 'sprite.png';
@@ -494,26 +494,14 @@ export function createPixelEditor(target) {
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const grid = state.tempGridColors.map((color, i) => {
-      if (color === null) return state.gridColors[i];
-      else return color;
-    });
-
     const [w, h] = readCanvas(canvas);
     const [gridW, gridH] = main ? state.gridSize : state.defaultGridArraySize;
-    // const xSize = w/gridW;
-    // const ySize = h/gridH;
 
     const pixels = new Uint8ClampedArray(
       state.defaultGridArraySize[0] * state.defaultGridArraySize[1] * 4
-    );
+    ).fill(0);
 
-    grid.forEach((color, i) => {
-      if (color[3] === 0) {
-        const [x, y] = i_to_xy(i);
-        color = [0, 0, 0, 0];
-      }
-
+    state.gridColors.forEach((color, i) => {
       let index = i * 4;
       pixels[index] = color[0];
       pixels[index + 1] = color[1];
@@ -521,29 +509,17 @@ export function createPixelEditor(target) {
       pixels[index + 3] = color[3];
     });
 
-    tempCanvas.width = gridW;
-    tempCanvas.height = gridH;
     ctx.webkitImageSmoothingEnabled = false;
     ctx.mozImageSmoothingEnabled = false;
     ctx.imageSmoothingEnabled = false;
-    // tempCtx.webkitImageSmoothingEnabled = false;
-    // tempCtx.mozImageSmoothingEnabled = false;
-    // tempCtx.imageSmoothingEnabled = false;
 
     const image = new ImageData(
       pixels,
       state.defaultGridArraySize[0],
       state.defaultGridArraySize[1]
     );
-    tempCtx.putImageData(image, 0, 0);
 
-    state.selected.forEach((i) => {
-      const [x, y] = i_to_xy(i);
-      tempCtx.fillStyle = "#aaaaaaaa";
-      tempCtx.fillRect(x, y, 1, 1);
-    });
-
-    ctx.drawImage(tempCanvas, 0, 0, w, h);
+    ctx.putImageData(image, 0, 0);
   };
 
   const setCanvasSize = (c) => {
