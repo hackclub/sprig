@@ -87,9 +87,32 @@ body {
   z-index: 10;
 }
 
+#vertical-bar:after {
+  content: ' ';
+  width: 0.5em;
+  height: 10em;
+  max-height: 30%;
+  border-radius: 5em;
+  background: var(--darker);
+  cursor: inherit;
+  display: inline-block;
+  transform: translateY(-50%) translateX(-50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+#vertical-bar:hover:after {
+  width: 1.5em;
+  height: 10em;
+  max-height: 30%;
+  background: var(--dark);
+}
+
 #vertical-bar:hover {
   cursor: col-resize;
-  background: black;
+  border: 1px dashed var(--dark);
+  background: var(--dark);
 }
 
 .CodeMirror {
