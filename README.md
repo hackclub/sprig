@@ -1,47 +1,29 @@
-# 👾 Hack Club Game Lab
+# 👾 **[Hack Club Game Lab →](https://game-lab.hackclub.dev/)**
 
-**[Launch the Game Lab →](https://game-lab.hackclub.dev/)**
+The best way to learn is through making things and sharing them with others.  
+**And that's what Game Lab is all about**.
 
-The Hack Club Game Lab is a microworld to discover programming and the joys of making things you want with computers by making simple games. It's Hack Club's version of a [fantasy console](https://en.wikipedia.org/wiki/Fantasy_video_game_console) (ex. [PICO-8](https://www.lexaloffle.com/pico-8.php)), and is designed to help run engaging Hack Club meetings by making it easy to get started building things instead of explaining things!
+Have you ever wanted to...
 
-The game lab is designed with the principles of [constuctionism](https://en.wikipedia.org/wiki/Constructionism_(learning_theory)). It's the idea that people learn best when they make things that they care about which they can share with others. We made Game Lab so you can learn programming by building programs filled with character and delight. 
+- Make Pong in 30 lines of code?
+- Create the Chrome dino game in 50?
+- Or... even better... make a delightful game that doesn't exist yet?
 
-Design goals:
+Then get building with Game Lab!
 
-- A new coder without any prior coding experience should be able to figure out how to build a game like Pong within an hour from looking at examples and tinkering
-- New coders will generate ideas for their own games they feel they can build with Game Lab through looking at examples
-- Experienced coders should have fun making games in Game Lab too!
+You should be able to get started in Game Lab with very little experience programming but you should still be able to have fun making games even if you're an expert. Enjoy and we'd love to see what you make!
 
-Join `#gamelab-dev` on the [Hack Club Slack](https://hackclub.com/slack/) to join the develpoment discussion!
+### ⮑ _**[Click here to launch Game Lab](https://game-lab.hackclub.dev/)**_ ⮐
+_(and scroll down for a brief tutorial to get started)_
+!
 
-<img width="500" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149387903-eec65489-6a8d-4779-adde-2b6e35c7273a.gif">
+## Tutorial / How To Get Started Building Games
 
-Check out a minimal example game: [Superb Macedonian Plumber Bro](https://game-lab.hackclub.dev/?file=recxJ4Z4C3U0WbSIT).
+Learning from functional examples is the best way to get started building games with Game Lab.
 
-## Development
+Below we have created a series of short examples with code that works, that grow from creating a character on the screen to creating a more complicated game.
 
-The Hack Club Game Lab requires a local HTTP server to run in development. Here's how to get it running on your own machine.
-
-Clone repo:
-
-    $ git clone https://github.com/hackclub/game-lab
-
-Start a local HTTP server inside the repo:
-
-    $ cd game-lab/
-    $ python3 -m http.server 3000
-
-And then go to http://localhost:3000 in your web browser, and it should work!
-
-## Versions
-
-Game-Lab is in active development. We want to make sure you can play the games you make even if they aren't compatible with the newest version of the editor. If you made a game and need to run it on an old version of Game-Lab you can use this site: https://game-lab-server-1.maxwofford.repl.co/[SEMANTIC_VERSION]/index.html
-
-For example the first release of Game-Lab is available here: https://game-lab-server-1.maxwofford.repl.co/0.1.0/index.html
-
-## Minimal Examples
-
-Initialize the Game Engine:
+Initialize the game engine (this should already be written for you when you open the editor)
 
 ```js
 const canvas = document.querySelector(".game-canvas");
@@ -351,6 +333,40 @@ e.add({
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/150606449-5b73d7fe-f2d3-432f-9cc5-346c20919ec8.gif">
 
+## HELP: My game used to work but now it doesn't?
+
+This could be because you made your game in an old version of Game Lab.
+
+Game Lab is in active development. We want to make sure you can play the games you make even if they aren't compatible with the newest version of the editor. If you made a game and need to run it on an old version of Game Lab you can use this site: https://game-lab-server-1.maxwofford.repl.co/[SEMANTIC_VERSION]/index.html
+
+For example the first release of Game Lab is available here: https://game-lab-server-1.maxwofford.repl.co/0.1.0/index.html
+
+<img width="500" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149387903-eec65489-6a8d-4779-adde-2b6e35c7273a.gif">
+
+Check out a minimal example game: [Superb Macedonian Plumber Bro](https://game-lab.hackclub.dev/?file=recxJ4Z4C3U0WbSIT).
+
+## Philosophy
+
+As we said before people learn best when they make things that they care about which they can share with others. This learning philosophy is called [constuctionism](https://en.wikipedia.org/wiki/Constructionism_(learning_theory)) and Game Lab is a type of microworld. It's an environment where you can discover programming by building programs filled with character and delight. 
+
+Game Lab could also be considered a minimalist [fantasy console](https://en.wikipedia.org/wiki/Fantasy_video_game_console#:~:text=A%20fantasy%20video%20game%20console,their%20fictional%20hardware%20will%20have.) sort of like Pico-8.
+
+## Development
+
+Join `#gamelab-dev` on the [Hack Club Slack](https://hackclub.com/slack/) to join the development discussion
+
+The Hack Club Game Lab requires a local HTTP server to run in development. Here's how to get it running on your own machine.
+
+Clone repo:
+
+    $ git clone https://github.com/hackclub/game-lab
+
+Start a local HTTP server inside the repo:
+
+    $ cd game-lab/
+    $ python3 -m http.server 3000
+
+And then go to http://localhost:3000 in your web browser, and it should work!
 
 ## License
 
