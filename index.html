@@ -1,20 +1,23 @@
 <!doctype html>
 
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>game lab</title>
-  <link rel="stylesheet" href="./editor.css"></link>
-  <script defer data-domain="hackclub.com" src="https://plausible.io/js/plausible.js"></script>
-  <script
-    src="https://js.sentry-cdn.com/904e4267a16d4344a22f5e1c543e5b0a.min.js"
-    crossorigin="anonymous"
-    data-lazy="no"
-    defer
-  ></script>
-</head>
-  <body>
-    <div id="root"></div>
-  </body>
-  <script type="module" src="./main.js"></script>
+  <head>
+    <meta charset="utf-8">
+    <link rel="manifest" href="https://assets.hackclub.com/favicons/site.webmanifest">
+    <meta name="viewport" content="width=device-width">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Hack Club">
+    <meta name="twitter:site" content="@hackclub">
+    <title>Redirecting you to Hack Club Game Lab</title>
+    <meta name="theme-color" content="#ec3750">
+    <meta name="msapplication-TileColor" content="#ec3750">
+    <link rel="mask-icon" href="https://assets.hackclub.com/favicons/safari-pinned-tab.svg" color="#ec3750">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://assets.hackclub.com/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://assets.hackclub.com/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://assets.hackclub.com/favicons/favicon-16x16.png">
+    <script>
+      window.onload = () => window.location = window.location.href.replace("hackclub.github.io/game-lab", "game-lab.hackclub.dev");
+    </script>
+  </head>
 </html>
