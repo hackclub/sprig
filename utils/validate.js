@@ -8,7 +8,7 @@ export default function validate (code) {
         let colsBefore = code.split('\n').slice(0, err.lineNumber - 1).join('\n').length;
         error = {
             line: err.lineNumber,
-            col: err.index - colsBefore,
+            col: err.lineNumber == 1 ? err.index - colsBefore + 1 : err.index - colsBefore,
             message: err.description
         }
     }
