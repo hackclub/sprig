@@ -88,6 +88,12 @@ const gameOutput = (state) => html`
         >
       </span>
     </div>
+    <div class="menu">
+      ${saveLink(state)}
+      ${saveFile(state)}
+      ${githubLink(state)}
+      ${bugReport(state)}
+    </div>
   </div>
 `;
 
@@ -114,10 +120,22 @@ export function view(state) {
         display: flex;
         justify-content: center;
         align-items: center;
-        background: #000067;
+        background: var(--lighter);
         width: 100%;
         height: var(--horizontal-bar);
         position: relative;
+        text-align: center;
+      }
+
+      .game-output .menu {
+        justify-content: center;
+      }
+
+      .game-canvas {
+        box-shadow:
+          0 0 6px 3px #fff2,  /* inner white */
+          0 0 10px 6px #f0f2, /* middle magenta */
+          0 0 14px 9px #0ff2; /* outer cyan */
       }
 
       .pixel-editor-container {
@@ -132,7 +150,7 @@ export function view(state) {
       .list-of-sprites {
         display: flex;
         flex-direction: column;
-        background: #d3d3d3;
+        background: var(--darkless);
         min-height: 100%;
         max-height: 100%;
         height: 100%;
@@ -224,6 +242,24 @@ export function view(state) {
         border: 2px solid blue;
       }
 
+      .game-container {
+        background: url('./assets/screen-backing.svg');
+        border: 1em solid var(--lightless);
+        border-radius: 5px;
+        padding: 0.5em;
+        background: var(--darkless);
+        position: relative;
+      }
+
+      .text-container {
+        width: 1px;
+        height: 1px;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        overflow: show;
+      }
+
       .show-options {
         color: white;
         font-size: 20px;
@@ -273,12 +309,6 @@ export function view(state) {
     </style>
     <div class="left-pane">
     ${nameBar(state)}
-      <div class="menu">
-        ${saveLink(state)}
-        ${saveFile(state)}
-        ${githubLink(state)}
-        ${bugReport(state)}
-      </div>
       <codemirror-js id="code-editor"></codemirror-js>
       <div
         class=${[
