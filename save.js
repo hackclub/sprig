@@ -58,18 +58,19 @@ export async function save(type, state, copyUrl = true) {
       state.saveLinkStatus = "loading"
       dispatch("RENDER")
       await saveToS3({ content, state, copyUrl })
+      dispatch("SOUND", "upload")
       state.saveLinkStatus = "ready"
       break
     case 'file':
       state.saveFileStatus = "loading";
       dispatch("RENDER");
       await saveToFile({ content, state });
+      dispatch("SOUND", "download");
       state.saveFileStatus = 'ready';
       break;
     default:
       throw new Error("Sharing type", type, "does not exist");
   }
-  dispatch("SOUND", "confirm")
   state.runStatus = 'ready'
   dispatch("RENDER")
   console.log('ready')

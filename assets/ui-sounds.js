@@ -19,4 +19,8 @@ sounds.yes = m({song: "[b6;--g6+]-"}),
 sounds.delete = sounds.no
 sounds.create = sounds.yes
 
+sounds.upload = sounds.bootdown
+sounds.download = sounds.bootdown
+sounds.load = sounds.bootup
+
 export default sounds
