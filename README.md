@@ -33,7 +33,7 @@ And then go to http://localhost:3000 in your web browser, and it should work!
 
 ## Versions
 
-Game-Lab is in active development. We want to make sure you can play the games you make even if they aren't compatiable with the newest version of the editor. If you made a game and need to run it on an old version of Game-Lab you can use this site: https://game-lab-server-1.maxwofford.repl.co/[SEMANTIC_VERSION]/index.html
+Game-Lab is in active development. We want to make sure you can play the games you make even if they aren't compatible with the newest version of the editor. If you made a game and need to run it on an old version of Game-Lab you can use this site: https://game-lab-server-1.maxwofford.repl.co/[SEMANTIC_VERSION]/index.html
 
 For example the first release of Game-Lab is available here: https://game-lab-server-1.maxwofford.repl.co/0.1.0/index.html
 
