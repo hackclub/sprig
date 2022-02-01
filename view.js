@@ -99,7 +99,7 @@ export function view(state) {
       }
 
       .hoverable:hover {
-        transform: translateY(5px);
+        transform: translateY(1px);
       }
 
       .right-pane {
