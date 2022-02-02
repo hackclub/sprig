@@ -1,7 +1,15 @@
 import { Engine } from "./Engine.js";
 import { playTune, loopTune } from "./tunePlayers.js";
 
-
+const BLACK_LISTED_WORDS = [
+  "localStorage",
+  // "document",
+  // "window",
+  // "eval",
+  // "import",
+  // "Function"
+]
+  
 export function createEval() {
   let currentEngine = null;
   let tunePlayers = [];
@@ -9,11 +17,10 @@ export function createEval() {
   return evalGameScript;
 
   function evalGameScript({ assets, prog, show, gameCanvas }) {
-
-    if (prog.includes("localCache")) {
-      return new Error(`Error: "localCache" is not allowed in game script.`);
+    if (BLACK_LISTED_WORDS.some(word => prog.includes(word))) {
+      return new Error(`Error: "localStorage" is not allowed in game script.`);
     }
-    
+
     if (tunePlayers.length > 0) {
       tunePlayers.forEach(x => x.end()); 
       tunePlayers = [];
