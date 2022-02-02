@@ -103,7 +103,13 @@ const ACTIONS = {
 
     if (state.version !== saved.version) {
       notification({
-        message: `Version mismatch.\nFile uses version: ${state.version}\nEditor is version: ${saved.version}`,
+        message: `Version mismatch.<br>
+                  Editor is version: ${state.version}<br>
+                  File uses version: ${saved.version}<br>
+                  ${saved.version 
+                    ? `Old editor is available <a target="_blank" href="https://game-lab-versions.hackclub.dev/${saved.version}/index.html">here</a>.` 
+                    : "" 
+                  }`,
         timeout: 5000,
       });
     }
