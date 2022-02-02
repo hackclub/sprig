@@ -1,6 +1,6 @@
 // should write: we're creating elements in here, but we should redo to fit with uhtml
 
-export default function notification({message, type}={}) {
+export default function notification({ message, type, timeout }={}) {
   // document.querySelector(".shared-modal").classList.toggle("hide");
   const el = document.createElement('div')
   el.classList.add('shared-modal')
@@ -10,5 +10,5 @@ export default function notification({message, type}={}) {
   }
   document.getElementById('notification-container').appendChild(el)
   
-  setTimeout(() => el.remove(), 3000);
+  setTimeout(() => el.remove(), timeout || 3000);
 }

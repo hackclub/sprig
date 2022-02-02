@@ -10,6 +10,8 @@ import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
 import { createSequencer } from "./sequencer/sequencer.js";
 import { playTune, loopTune } from "./tunePlayers.js";
 import { createEval } from "./evalGameScript.js";
+import notification from "./utils/notification.js";
+
 
 const STATE = {
   codemirror: undefined,
@@ -22,7 +24,7 @@ const STATE = {
   assets: [],
   mouseX: 0,
   mouseY: 0,
-  engineVersion: "0.2.0", // TODO: actually start loading data depending on this value
+  version: "0.2.0",
   previousID: null, // TODO: start setting this correctly on cartridge load
   tunePlayers: [],
   selected_asset: -1,
@@ -82,7 +84,7 @@ const ACTIONS = {
       assets: state.assets,
       name: state.name,
       previousID: state.previousID,
-      engineVersion: state.engineVersion,
+      version: state.version,
     });
   },
   SAVE: async ({ type }, state) => {
@@ -103,17 +105,17 @@ const ACTIONS = {
 
     state.assets = saved.assets || [];
 
-    // TODO: do we need to select default asset? maybe not
-
-    if (!state.engineVersion) {
-      state.engineVersion = await latestEngineVersion();
+    console.log(saved, saved.version);
+    if (state.version !== saved.version) {
+      notification({
+        message: `Version mismatch.\nFile uses version: ${state.version}\nEditor is version: ${saved.version}`,
+        timeout: 5000
+      })
     }
 
     const el = document.querySelector(".asset-editor");
     render(el, html``);
-
     if (state.assetEditor && state.assetEditor.end) state.assetEditor.end();
-
     state.selected_asset = -1;
 
     dispatch("RENDER");
