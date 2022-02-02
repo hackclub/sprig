@@ -16,6 +16,8 @@ sounds.hover = m({song: "[d6-;-]--", volume: 1}) // hover is kinda annoying, let
 sounds.no = m({song: "[g6;--d#6+]-"})
 sounds.yes = m({song: "[b6;--g6+]-"}),
 
+sounds.cancel = sounds.no
+
 sounds.delete = sounds.no
 sounds.create = sounds.yes
 
