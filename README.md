@@ -13,8 +13,10 @@ Then get building with Game Lab!
 
 You should be able to get started in Game Lab with very little experience programming but you should still be able to have fun with it even if you're an expert. Enjoy and we'd love to see what you make!
 
-Superb Macedonian Electrician Siblings
+
 <img width="500" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149387903-eec65489-6a8d-4779-adde-2b6e35c7273a.gif">
+
+Superb Macedonian Electrician Siblings
 
 ### ⮑ _**[Click here to launch Game Lab](https://game-lab.hackclub.dev/)**_ ⮐
 _(and scroll down for a brief tutorial to get started)_
