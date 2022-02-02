@@ -1,6 +1,6 @@
 # 👾 **[Hack Club Game Lab →](https://game-lab.hackclub.dev/)**
 
-The best way to learn is through making things and sharing them with others.  
+The best way to learn is by making things you care about and sharing them with others.  
 **And that's what Game Lab is all about**.
 
 Have you ever wanted to...
@@ -11,7 +11,7 @@ Have you ever wanted to...
 
 Then get building with Game Lab!
 
-You should be able to get started in Game Lab with very little experience programming but you should still be able to have fun making games even if you're an expert. Enjoy and we'd love to see what you make!
+You should be able to get started in Game Lab with very little experience programming but you should still be able to have fun with it even if you're an expert. Enjoy and we'd love to see what you make!
 
 ### ⮑ _**[Click here to launch Game Lab](https://game-lab.hackclub.dev/)**_ ⮐
 _(and scroll down for a brief tutorial to get started)_
@@ -26,8 +26,7 @@ Below we have created a series of short examples with code that works, that grow
 Initialize the game engine (this should already be written for you when you open the editor)
 
 ```js
-const canvas = document.querySelector(".game-canvas");
-const e = createEngine(canvas, 300, 300);
+const e = createEngine(gameCanvas, 300, 300);
 ```
 
 ---
@@ -37,8 +36,7 @@ const e = createEngine(canvas, 300, 300);
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149362983-6f82a61c-c3d5-40b7-920f-f673c3ff2646.png">
 
 ```js
-const canvas = document.querySelector(".game-canvas");
-const e = createEngine(canvas, 300, 300);
+const e = createEngine(gameCanvas, 300, 300);
 
 e.add({
   tags: ["test"],
@@ -58,8 +56,7 @@ e.start();
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149363706-453a45e8-d0d4-44a3-acc3-09e4bb577392.gif">
 
 ```js
-const canvas = document.querySelector(".game-canvas");
-const e = createEngine(canvas, 300, 300);
+const e = createEngine(gameCanvas, 300, 300);
 
 e.add({
   tags: ["test"],
@@ -92,8 +89,7 @@ e.start();
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149365452-7b042996-2beb-40a8-866e-f5748b5631da.gif">
 
 ```js
-const canvas = document.querySelector(".game-canvas");
-const e = createEngine(canvas, 300, 300);
+const e = createEngine(gameCanvas, 300, 300);
 
 e.add({
   tags: ["test"],
@@ -126,8 +122,7 @@ e.start();
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149366181-588ae196-03dd-4268-9907-9477caa8a834.gif">
 
 ```js
-const canvas = document.querySelector(".game-canvas");
-const e = createEngine(canvas, 300, 300);
+const e = createEngine(gameCanvas, 300, 300);
 
 e.add({
   tags: ["test"],
@@ -168,8 +163,7 @@ e.start();
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149367516-7edb2780-edbd-4977-9a07-dcfbf47fcf93.gif">
 
 ```js
-const canvas = document.querySelector(".game-canvas");
-const e = createEngine(canvas, 300, 300);
+const e = createEngine(gameCanvas, 300, 300);
 const ctx = e.ctx;
 
 e.add({
@@ -222,8 +216,7 @@ e.start();
 <img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149368356-c343a214-0d31-4d5f-a2d4-d0575b18047b.png">
 
 ```js
-const canvas = document.querySelector(".game-canvas");
-const e = createEngine(canvas, 300, 300);
+const e = createEngine(gameCanvas, 300, 300);
 
 e.add({
   update() {
@@ -242,8 +235,7 @@ e.start();
 <img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149369879-7d384b3a-2f15-4816-a59e-76b56bb9a944.gif">
 
 ```js
-const canvas = document.querySelector(".game-canvas");
-const e = createEngine(canvas, 300, 300);
+const e = createEngine(gameCanvas, 300, 300);
 const ctx = e.ctx;
 
 e.add({
@@ -347,9 +339,9 @@ Check out a minimal example game: [Superb Macedonian Plumber Bro](https://game-l
 
 ## Philosophy
 
-As we said before people learn best when they make things that they care about which they can share with others. This learning philosophy is called [constuctionism](https://en.wikipedia.org/wiki/Constructionism_(learning_theory)) and Game Lab is a type of microworld. It's an environment where you can discover programming by building programs filled with character and delight. 
+As we said before people learn best when they make things that they care about which they can share with others. This learning philosophy is called [constuctionism](https://en.wikipedia.org/wiki/Constructionism_(learning_theory)) and Game Lab is a type of microworld. It's an environment where you can discover programming by using it to express yourself. 
 
-Game Lab could also be considered a minimalist [fantasy console](https://en.wikipedia.org/wiki/Fantasy_video_game_console#:~:text=A%20fantasy%20video%20game%20console,their%20fictional%20hardware%20will%20have.) sort of like Pico-8.
+Game Lab could also be considered a minimalist [fantasy console](https://en.wikipedia.org/wiki/Fantasy_video_game_console#:~:text=A%20fantasy%20video%20game%20console,their%20fictional%20hardware%20will%20have.) sort of like [Pico-8](https://www.lexaloffle.com/pico-8.php).
 
 ## Development
 
