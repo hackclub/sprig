@@ -100,16 +100,26 @@ const ACTIONS = {
         included[asset.name] = asset.data;
       })
 
+      document.querySelector("iframe").contentWindow.postMessage({ 
+        prog: string, 
+        assets: state.assets, 
+        show: state.show 
+      }, '*');
+
+
       try { // TODO can we run this in an iframe?
         new Function(...Object.keys(included), string)(
           ...Object.values(included)
         );
+
+
       } catch (e) {
         console.log(e);
         state.error = true;
         const str = e.stack;
         state.logs.push(str);
       }
+
       dispatch("RENDER");
       document.querySelector(".game-canvas").focus();
     }

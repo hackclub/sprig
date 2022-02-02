@@ -26,6 +26,61 @@ const toggleHide = (className) =>
 // <button class="menu-option" @click=${() => toggleHide("examples")}>examples</button>
 // <button class="menu-option" @click=${() => toggleHide("options")}>options</button>
 
+const gameOutput = state => html`
+  <div class="game-output">
+    <div class="game-container">
+      <canvas
+        @mousemove=${(e) => {
+          dispatch("CANVAS_MOUSE_MOVE", {
+            content: { mouseX: e.offsetX, mouseY: e.offsetY },
+          });
+        }}
+        class="game-canvas"
+      >
+      </canvas>
+      <div class="text-container"></div>
+    </div>
+    <p
+      @click=${(e) => {
+        state.show.origin = !state.show.origin;
+        dispatch("RUN");
+      }}
+      class="output-overlay toggle-show-origin"
+    >
+      ${state.show.origin ? "[x]" : "[ ]"} show origin
+    </p>
+    <p
+      @click=${(e) => {
+        state.show.hitbox = !state.show.hitbox;
+        dispatch("RUN");
+      }}
+      class="output-overlay toggle-show-hitbox"
+    >
+      ${state.show.hitbox ? "[x]" : "[ ]"} show hitbox
+    </p>
+    <pre class="output-overlay mouse-display">
+      ${(() => {
+        const canv = document.querySelector(".game-canvas") ?? {
+          width: 100,
+          height: 100,
+        };
+        const widthChars = ("" + canv.width).length;
+        const heightChars = ("" + canv.height).length;
+        return (
+          "mouse: " +
+          ("" + state.mouseX).padStart(widthChars) +
+          " x, " +
+          ("" + state.mouseY).padStart(heightChars) +
+          " y"
+        );
+      })()}
+    </pre>
+
+    <iframe class="game-iframe"></iframe>
+
+  </div>
+`
+
 export function view(state) {
   return html`
     <style>
@@ -191,6 +246,11 @@ export function view(state) {
         align-items: center;
         color: var(--text-color);
       }
+
+      .game-iframe {
+        width: 100%;
+        height: 100%;
+      }
     </style>
     <div class="left-pane">
       <codemirror-js id="code-editor"></codemirror-js>
@@ -219,61 +279,12 @@ export function view(state) {
       </div>
     </div>
     <div class="right-pane">
-      <div class="game-output">
-        <div class="game-container">
-          <canvas
-            @mousemove=${(e) => {
-              dispatch("CANVAS_MOUSE_MOVE", {
-                content: { mouseX: e.offsetX, mouseY: e.offsetY },
-              });
-            }}
-            class="game-canvas"
-          >
-          </canvas>
-          <div class="text-container"></div>
-        </div>
-        <p
-          @click=${(e) => {
-            state.show.origin = !state.show.origin;
-            dispatch("RENDER");
-          }}
-          class="output-overlay toggle-show-origin"
-        >
-          ${state.show.origin ? "[x]" : "[ ]"} show origin
-        </p>
-        <p
-          @click=${(e) => {
-            state.show.hitbox = !state.show.hitbox;
-            dispatch("RENDER");
-          }}
-          class="output-overlay toggle-show-hitbox"
-        >
-          ${state.show.hitbox ? "[x]" : "[ ]"} show hitbox
-        </p>
-        <pre class="output-overlay mouse-display">
-          ${(() => {
-            const canv = document.querySelector(".game-canvas") ?? {
-              width: 100,
-              height: 100,
-            };
-            const widthChars = ("" + canv.width).length;
-            const heightChars = ("" + canv.height).length;
-            return (
-              "mouse: " +
-              ("" + state.mouseX).padStart(widthChars) +
-              " x, " +
-              ("" + state.mouseY).padStart(heightChars) +
-              " y"
-            );
-          })()}
-        </pre
-        >
-      </div>
+      ${gameOutput(state)}
       <div class="pixel-editor-container">
         <div class="list-of-sprites">
           ${state.assets.map(
             (x, i) => {
-              return html.for(x)`
+              return html`
               <div
                 class=${[
                   "sprite-entry",

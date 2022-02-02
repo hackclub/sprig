@@ -20,8 +20,6 @@ function RGBA_to_hex([r, g, b, a]) {
   return "#" + r + g + b + a;
 }
 
-
-
 export function createPixelEditor(target) {
   const state = {
     canvas: null,

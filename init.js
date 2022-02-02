@@ -58,12 +58,95 @@ function initVert() {
   }
 }
 
+function setGameIframe() {
+  const iframe = document.querySelector(".game-iframe");
+  const string = `
+    <style>
+      html, body {
+        margin: 0px;
+      }
+
+      .game-canvas-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: blue;
+      }
+    </style>
+    <script defer type="module">
+      import { Engine } from "http://localhost:8080/Engine.js";
+      import { playTune, loopTune } from "http://localhost:8080/tunePlayers.js";
+
+      let currentEngine = null;
+      let tunePlayers = [];
+
+      window.onmessage = function(e) {
+        const { data } = e;
+        const { assets, prog, show } = data;
+
+        if (tunePlayers.length > 0) {
+          tunePlayers.forEach(x => x.end()); 
+          tunePlayers = [];
+        }
+
+        const gameCanvas = document.querySelector(".game-canvas");
+
+        Engine.show = show;
+
+        const included = {
+          playTune() {
+            const tunePlayer = playTune(...arguments);
+            tunePlayers.push(tunePlayer);
+
+            return tunePlayer;
+          },
+          
+          loopTune() {
+            const tunePlayer = loopTune(...arguments);
+            tunePlayers.push(tunePlayer);
+
+            return tunePlayer;
+          },
+          gameCanvas,
+          createEngine(...args) {
+            if (currentEngine) cancelAnimationFrame(currentEngine._animId);
+            currentEngine = new Engine(...args);
+            return currentEngine;
+          },
+        };
+
+        assets.forEach(asset => {
+          included[asset.name] = asset.data;
+        })
+
+        try {
+          new Function(...Object.keys(included), prog)(
+            ...Object.values(included)
+          );
+        } catch (err) {
+          e.source.postMessage(err, e.origin);
+        }
+
+      };
+    </script>
+    <div class="game-canvas-container">
+      <canvas class="game-canvas" width="1" height="1"></canvas>
+    </div>
+  `
+  var blob = new Blob([string], { type: 'text/html' });
+  iframe.src = URL.createObjectURL(blob);
+}
+
 export async function init(state) {
   initVert()
 
   dispatch("RENDER");
   state.codemirror = document.querySelector("#code-editor");
   events(state);
+
+  setGameIframe();
 
   const saved = await loadFromAirtable() ||
                 await loadFromS3() ||
