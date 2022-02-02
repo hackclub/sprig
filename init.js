@@ -3,6 +3,7 @@ import { dispatch } from "./dispatch.js";
 import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
 import { createSequencer } from "./sequencer/sequencer.js";
 import { latestEngineVersion } from "./github.js";
+import { createEval } from "./evalGameScript.js";
 
 const DEFAULT_CARTRIDGE = '3449c9e5e332f1dbb81505cd739fbf3f'
 
@@ -89,59 +90,20 @@ function setGameIframe() {
       }
     </style>
     <script defer type="module">
-      import { Engine } from "${window.location.href}Engine.js";
-      import { playTune, loopTune } from "${window.location.href}tunePlayers.js";
+      import { createEval } from "${window.location.href}evalGameScript.js";
 
-      let currentEngine = null;
-      let tunePlayers = [];
+      const evalGameScript = createEval();
 
       window.onmessage = function(e) {
         const { data } = e;
         const { assets, prog, show } = data;
 
-        if (tunePlayers.length > 0) {
-          tunePlayers.forEach(x => x.end()); 
-          tunePlayers = [];
-        }
-
         const gameCanvas = document.querySelector(".game-canvas");
 
-        Engine.show = show;
+        const err = evalGameScript({ assets, prog, show, gameCanvas });
 
-        const included = {
-          playTune() {
-            const tunePlayer = playTune(...arguments);
-            tunePlayers.push(tunePlayer);
-
-            return tunePlayer;
-          },
-          
-          loopTune() {
-            const tunePlayer = loopTune(...arguments);
-            tunePlayers.push(tunePlayer);
-
-            return tunePlayer;
-          },
-          gameCanvas,
-          createEngine(...args) {
-            if (currentEngine) cancelAnimationFrame(currentEngine._animId);
-            currentEngine = new Engine(...args);
-            return currentEngine;
-          },
-        };
-
-        assets.forEach(asset => {
-          included[asset.name] = asset.data;
-        })
-
-        try {
-          new Function(...Object.keys(included), prog)(
-            ...Object.values(included)
-          );
-        } catch (err) {
-          e.source.postMessage(err, e.origin);
-        }
-
+        if (err) e.source.postMessage(err, e.origin);
+        
       };
     </script>
     <div class="outer-container">
@@ -151,6 +113,7 @@ function setGameIframe() {
       </div>
     </div>
   `
+
   var blob = new Blob([string], { type: 'text/html' });
   iframe.src = URL.createObjectURL(blob);
 

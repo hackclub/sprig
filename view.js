@@ -44,9 +44,42 @@ const toggleHide = (className) =>
 //   })()}
 // </pre>
 
+const gameOutput0 = () => html`
+  <style>
+    .outer-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: blue;
+    }
+
+    .inner-container {
+      width: min-content;
+      height: min-content;
+      position: relative;
+    }
+
+    .text-container {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      overflow: show;
+    }
+  </style>
+  <div class="outer-container">
+    <div class="inner-container">
+      <canvas class="game-canvas"></canvas>
+      <div class="text-container"></div>
+    </div>
+  </div>
+`
+
 const gameOutput = state => html`
   <div class="game-output">
-    <iframe class="game-iframe"></iframe>
+    <iframe class="game-iframe" sandbox="allow-scripts allow-same-origin"></iframe>
+    ${false ? gameOutput0() : ""}
     <div class="show-options">
       <p
         @click=${(e) => {

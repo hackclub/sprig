@@ -9,6 +9,7 @@ import { latestEngineVersion } from "./github.js";
 import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
 import { createSequencer } from "./sequencer/sequencer.js";
 import { playTune, loopTune } from "./tunePlayers.js";
+import { createEval } from "./evalGameScript.js";
 
 const STATE = {
   codemirror: undefined,
@@ -33,7 +34,8 @@ const STATE = {
   },
 };
 
-let currentEngine;
+const evalGameScript = createEval();
+
 const ACTIONS = {
   INIT(args, state) {
     init(state);
@@ -54,10 +56,12 @@ const ACTIONS = {
       show: state.show 
     }, '*');
 
-    dispatch("RENDER");
-    
+    // const gameCanvas = document.querySelector(".game-canvas");
+    // const err = evalGameScript({ assets: state.assets, prog: string, show: state.show, gameCanvas });
+    // if (err) e.source.postMessage(err, e.origin);
     // document.querySelector(".game-canvas").focus(); // TODO: can we focus in iframe
-  
+
+    dispatch("RENDER");
   },
   LOG_ERROR({ stack }, state) {
     state.error = true;
