@@ -105,7 +105,6 @@ const ACTIONS = {
 
     state.assets = saved.assets || [];
 
-    console.log(saved, saved.version);
     if (state.version !== saved.version) {
       notification({
         message: `Version mismatch.\nFile uses version: ${state.version}\nEditor is version: ${saved.version}`,
