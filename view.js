@@ -169,7 +169,7 @@ export function view(state) {
 
       .pixel-editor-container {
         display: flex;
-        background: green;
+        background: var(--lightless);
         width: 100%;
         flex: 1;
         z-index: 9;
