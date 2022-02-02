@@ -161,6 +161,11 @@ export function view(state) {
 
       .game-canvas {
         border-radius: 5px;
+
+        background: url(./assets/no-canvas.gif);
+        background-repeat: no-repeat;
+        background-size: cover;
+
         box-shadow:
           0 0 6px 3px #fff2,  /* inner white */
           0 0 10px 6px #f0f2, /* middle magenta */
