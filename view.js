@@ -76,6 +76,7 @@ export function view(state) {
       }
 
       .game-canvas {
+        border-radius: 5px;
         box-shadow:
           0 0 6px 3px #fff2,  /* inner white */
           0 0 10px 6px #f0f2, /* middle magenta */
