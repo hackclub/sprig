@@ -457,9 +457,19 @@ obj.hasTag("tag-name")
     <b>Playing Tunes</b>
     <br /><br />
     To play a tune once:
-    <pre>playTune(tune_asset_name);</pre>
+    <pre>playTune(tune_asset_name);
+
+// or play multiple toons
+
+playTune(tune_0, tune_1, tune_2);
+</pre>
     To play a tune on repeat:
-    <pre>loopTune(tune_asset_name);</pre>
+    <pre>loopTune(tune_asset_name);
+
+// or loop multiple toons
+
+loopTune(tune_0, tune_1, tune_2);
+</pre>
     To stop a tune on repeat:
     <pre>
 const tuneToStop = loopTune(tune_asset_name);
