@@ -16,9 +16,11 @@ sounds.hover = m({song: "[d6-;-]--", volume: 1}) // hover is kinda annoying, let
 sounds.no = m({song: "[g6;--d#6+]-"})
 sounds.yes = m({song: "[b6;--g6+]-"}),
 
+sounds.crunch = () => new Audio('https://cloud-5zby1xatk-hack-club-bot.vercel.app/0crunch.m4a').play()
+
 sounds.cancel = sounds.no
 
-sounds.delete = sounds.no
+sounds.delete = sounds.crunch
 sounds.create = sounds.yes
 
 sounds.upload = sounds.bootdown
