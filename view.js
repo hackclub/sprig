@@ -175,19 +175,6 @@ export function view(state) {
         border: 2px solid blue;
       }
 
-      .game-container {
-        position: relative;
-      }
-
-      .text-container {
-        width: 1px;
-        height: 1px;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        overflow: show;
-      }
-
       .show-options {
         color: white;
         font-size: 20px;
@@ -256,6 +243,9 @@ export function view(state) {
           href="https://github.com/hackclub/game-lab"
           >GitHub</a
         >
+        <button class="menu-option">
+          docs
+        </button>
       </div>
     </div>
     <div class="right-pane">

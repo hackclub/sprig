@@ -85,6 +85,7 @@ function setGameIframe() {
         position: absolute;
         left: 0px;
         top: 0px;
+        overflow: show;
       }
     </style>
     <script defer type="module">

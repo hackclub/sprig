@@ -130,9 +130,16 @@ export function createPixelEditor(target) {
         state.tool = toolName;
         r();
       }}
-      style="height: 40px;"
+      style="
+        display: flex; 
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: min-content;
+      "
     >
       <img src=${`./assets/${toolName}.png`} alt=${toolName} width="25px" />
+      ${toolName}
     </button>
   `;
 
@@ -160,9 +167,16 @@ export function createPixelEditor(target) {
               state.gridColors[i] = grid[i];
             });
           }}
-          style="height: 40px;"
+          style="
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: min-content;
+          "
         >
           <img src="./assets/undo.png" alt="undo" width="25px" />
+          undo
         </button>
         <button @click=${() => {
           const canvas = target.querySelector('#offscreen-canvas');
@@ -673,7 +687,6 @@ export function createPixelEditor(target) {
       ).fill([0, 0, 0, 0]),
     }),
     gridColors: () => state.gridColors,
-    setImageData: setImageData,
     end() {
       if (state.animationId) window.cancelAnimationFrame(state.animationId);
     }

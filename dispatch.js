@@ -98,6 +98,13 @@ const ACTIONS = {
       state.engineVersion = await latestEngineVersion()
     }
 
+    const el = document.querySelector(".asset-editor");
+    render(el, html``);
+
+    if (state.assetEditor && state.assetEditor.end) state.assetEditor.end();
+
+    state.selected_asset = -1;
+
     dispatch("RENDER");
     dispatch("RUN");
   },
@@ -188,7 +195,7 @@ const ACTIONS = {
     state.selected_asset = index;
     dispatch("RENDER");
   },
-  DELETE_ASSET({ index }, state) { // TODO this is broken
+  DELETE_ASSET({ index }, state) {
     const assetType = state.assets[index].type;
     state.selected_asset = index;
 
