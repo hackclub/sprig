@@ -137,6 +137,7 @@ export function createPixelEditor(target) {
         align-items: center;
         height: min-content;
       "
+      title="${toolName}"
     >
       <img src=${`./assets/${toolName}.png`} alt=${toolName} width="25px" />
       ${toolName}
@@ -174,11 +175,12 @@ export function createPixelEditor(target) {
             align-items: center;
             height: min-content;
           "
+          title="undo"
         >
           <img src="./assets/undo.png" alt="undo" width="25px" />
           undo
         </button>
-        <button @click=${() => {
+        <button title="export" @click=${() => {
           const canvas = target.querySelector('#offscreen-canvas');
           drawCanvasNoBg(canvas);
           const image = canvas.toDataURL();
