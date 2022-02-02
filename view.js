@@ -24,7 +24,7 @@ export function view(state) {
       }
 
       .hoverable:hover {
-        transform: translateY(1px);
+        transform: translateY(-1px);
       }
 
       .right-pane {
@@ -144,7 +144,7 @@ export function view(state) {
 
       .horizontal-bar:hover:after {
         max-width: 30%;
-        background: var(--lightless);
+        background: var(--80s-tan-dark);
       }
 
       .horizontal-bar:hover {
@@ -171,7 +171,7 @@ export function view(state) {
       }
 
       .sprite-entry:hover {
-        border: 2px solid yellow;
+        border: 2px solid var(--80s-orange-light);
       }
 
       .sprite-delete {
@@ -186,7 +186,7 @@ export function view(state) {
       }
 
       .selected-sprite {
-        border: 2px solid blue;
+        border: 2px solid var(--80s-purple-light);
       }
 
       .game-container {
@@ -290,6 +290,7 @@ export function view(state) {
             ${bugReport(state)}
           </div>
         </div>
+        ${/*
         <p
           @click=${(e) => {
             state.show.origin = !state.show.origin;
@@ -324,8 +325,8 @@ export function view(state) {
               " y"
             );
           })()}
-        </pre
-        >
+        </pre>
+        */''}
       </div>
       <div class="pixel-editor-container">
         <div class="list-of-sprites">

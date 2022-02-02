@@ -1,17 +1,23 @@
 @import url('./variables.css');
 
 .button {
-  color: var(--darkless);
-  background: var(--light);
-  border: 5px solid var(--lighter);
+  /* color: var(--darkless); */
+  background: var(--dark);
+  border: 5px solid var(--darkless);
   border-radius: 12px;
   transition-duration: 0.01s;
   margin: 2px;
 }
 
 .button:hover {
-  background: var(--lightless);
-  border: 5px solid var(--light);
+  background: var(--darker);
+  border: 5px solid var(--darkless);
+  transform: translateY(-1px) !important;
+}
+
+.button:active {
+  background: var(--darkless);
+  transform: translateY(-3px) !important;
 }
 
 button {
@@ -19,6 +25,14 @@ button {
   padding-bottom: 5px;
 }
 
-button > img {
+button img {
   object-fit: contain;
+  filter: invert(75%) drop-shadow(0px 0px 3px var(--80s-purple-dark));
+}
+
+button:hover img {
+  filter: invert(85%) drop-shadow(0px 0px 5px var(--80s-purple-light));
+}
+button:active img {
+  filter: invert(100%) drop-shadow(0px 0px 7px var(--80s-orange-light));
 }

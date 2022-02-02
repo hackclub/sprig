@@ -3,22 +3,27 @@
 
 .name-bar {
   font-family: 'JetBrains Mono', monospace;
-  color: var(--light);
   background: var(--darkless);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1em;
 }
-
 .name-bar * {
   flex-grow: 0;
 }
-
 .name-bar h1 {
   margin: 0;
-  color: var(--smoke);
+  color: var(--80s-tan);
+  text-shadow: 0 0 3px var(--80s-orange-dark);
+}
+.name-bar h1:hover {
+  color: var(--80s-tan-light);
+  text-shadow: 0 0 5px var(--80s-orange-light);
 }
 .name-bar h1:focus {
-  background: var(--dark);
+  color: var(--80s-tan-light);
+}
+.name-bar span {
+  color: var(--80s-tan-dark);
 }

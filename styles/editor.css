@@ -104,7 +104,7 @@ body {
 
 #vertical-bar:hover:after {
   max-height: 30%;
-  background: var(--lightless);
+  background: var(--80s-tan-dark);
 }
 
 #vertical-bar:hover {

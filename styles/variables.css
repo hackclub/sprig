@@ -16,14 +16,29 @@
   --blue: #338eda;
   --purple: #a633d6;
 
-  --lighter: #DDDAC7;
+  /* 80s theme */
+
+  --80s-purple-dark:  #9535ce;
+  --80s-purple-light: #aa1ef8;
+  --80s-tan-dark:     #afa796;
+  --80s-tan:          #ecdec0;
+  --80s-tan-light:    #f0e8d7;
+  --80s-orange-light: #ea855b;
+  --80s-orange-dark:  #d97144;
+  --80s-pink:         #ff0085;
+
+  /* --lighter: #DDDAC7;
   --light: #CECBB8;
-  --lightless: #CAC4B0;
+  --lightless: #CAC4B0; */
+
+  --lighter: var(--slate);
+  --light: var(--black);
+  --lightless: #171e27;
 
   /* dark colors from bank are a little too dark for this theme, let's make our own colors */
-  /* --darkless: #252429; */
-  /* --dark: #17171d; */
-  --darkless: #535352;
-  --dark: #3E4040;
+  --darkless: #252429;
+  --dark: #17171d;
+  /* --darkless: #535352; */
+  /* --dark: #3E4040; */
   --darker: #121217;
 }
