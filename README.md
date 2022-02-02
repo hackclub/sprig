@@ -12,8 +12,6 @@ Then get building with Game Lab!
 
 You should be able to get started in Game Lab with very little experience programming but you should still be able to have fun with it even if you're an expert. Enjoy and we'd love to see what you make!
 
-<img width="500" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149387903-eec65489-6a8d-4779-adde-2b6e35c7273a.gif">
-
 ### ⮑ _**[Click here to launch Game Lab](https://game-lab.hackclub.dev/)**_ ⮐
 _(and scroll down for a brief tutorial to get started)_
 !
@@ -40,7 +38,6 @@ Make a character:
 const e = createEngine(gameCanvas, 300, 300);
 
 e.add({
-  tags: ["test"],
   x: 188,
   y: 69,
   sprite: test_sprite,
@@ -60,20 +57,18 @@ Add a floor with gravity:
 const e = createEngine(gameCanvas, 300, 300);
 
 e.add({
-  tags: ["test"],
-  solid: true,
+  solid: true, // the solid property makes this object collideable
   x: 135,
   y: 114,
   sprite: test_sprite,
   scale: 4,
-  update(obj) {
-    obj.vy += 2;
+  update(me) { // update runs every frame
+    me.vy += 2; // adding velocity every frame is acceleration
   }
 })
 
 e.add({
-  tags: ["floor"],
-  solid: true,
+  solid: true, // the solid property makes this object collideable
   x: -6,
   y: 283,
   sprite: floor,
@@ -93,19 +88,21 @@ Add movement:
 const e = createEngine(gameCanvas, 300, 300);
 
 e.add({
-  tags: ["test"],
   solid: true,
   x: 135,
   y: 114,
   sprite: test_sprite,
   scale: 4,
-  update(obj) {
-    obj.vy += 2;
+  update(me) {
+    me.vy += 2;
+
+    // we can add key inputs by checking the keys in the update loop
+    if (e.heldKey("ArrowLeft")) me.x -= 3;
+    if (e.heldKey("ArrowRight")) me.x += 3; 
   }
 })
 
 e.add({
-  tags: ["floor"],
   solid: true,
   x: -6,
   y: 283,
@@ -126,27 +123,28 @@ Add jump:
 const e = createEngine(gameCanvas, 300, 300);
 
 e.add({
-  tags: ["test"],
+  tags: ["player"], // we can add tags so we can reference objects
   solid: true,
   x: 135,
   y: 114,
   sprite: test_sprite,
   scale: 4,
-  collides(me, them) {
+  collides(me, them) { // this runs when we collide with another object
     if (e.pressedKey(" ")) {
+      // here we are checking if we are standing on the floor
       if (them.hasTag("floor")) me.vy -= 19;
     }
   },
-  update(obj) {
-    obj.vy += 2;
+  update(me) {
+    me.vy += 2;
 
-    if (e.heldKey("ArrowLeft")) obj.x -= 3;
-    if (e.heldKey("ArrowRight")) obj.x += 3;
+    if (e.heldKey("ArrowLeft")) me.x -= 3;
+    if (e.heldKey("ArrowRight")) me.x += 3;
   }
 })
 
 e.add({
-  tags: ["floor"],
+  tags: ["floor"], // we can add tags so we can reference objects
   solid: true,
   x: -6,
   y: 283,
@@ -181,14 +179,15 @@ e.add({
       if (them.hasTag("platform")) me.vy -= 11;
     }
   },
-  update: (obj) => {
-      obj.ay = 0.4;
+  update: (me) => {
+      me.vy -= 0.4;
   
-      if (e.heldKey("ArrowLeft")) obj.x -= 3;
-      if (e.heldKey("ArrowRight")) obj.x += 3;
+      if (e.heldKey("ArrowLeft")) me.x -= 3;
+      if (e.heldKey("ArrowRight")) me.x += 3;
   },
 })
 
+// we can use a function to make multiple instances of an object
 const addPlatform = (x, y) => e.add({
   tags: ["platform"],
   sprite: floor,
@@ -197,15 +196,53 @@ const addPlatform = (x, y) => e.add({
   x: x,
   y: y,
   vx: -1,
-  bounce: -1,
-  update: (obj) => {
-      if (obj.x < 0) obj.vx = 1;
-      if (obj.x + obj.width > e.width) obj.vx = -1
+  bounce: -1, // bounce determines how much velocity changes when we collide with something
+  update: (me) => {
+      if (me.x < 0) me.vx = 1;
+      if (me.x + me.width > e.width) me.vx = -1
   },
 })
 
 addPlatform(50, 200);
 addPlatform(20, 100);
+
+e.start();
+```
+
+---
+
+Collections:
+
+<img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149369879-7d384b3a-2f15-4816-a59e-76b56bb9a944.gif">
+
+```js
+const e = createEngine(gameCanvas, 300, 300);
+const ctx = e.ctx;
+
+e.add({
+  tags: ["player"],
+  sprite: test_sprite,
+  scale: 2,
+  x: 150,
+  y: 50,
+  update: (me) => {
+    if (e.heldKey("ArrowUp")) me.y -= 3;
+    if (e.heldKey("ArrowDown")) me.y += 3;
+  },
+})
+
+e.add({
+  tags: ["target"],
+  sprite: floor,
+  scale: 3,
+  x: 112,
+  y: 232,
+  collides(me, them) {
+    if (them.hasTag("player")) {
+      e.remove("target"); // we can remove objects by their tag name
+    }
+  }
+})
 
 e.start();
 ```
@@ -220,45 +257,9 @@ Add a background:
 const e = createEngine(gameCanvas, 300, 300);
 
 e.add({
-  update() {
+  update() { // we can also draw on the game canvas
     e.ctx.fillStyle = "pink";
     e.ctx.fillRect(0, 0, e.width, e.height);
-  }
-})
-
-e.start();
-```
-
----
-
-Add collisions:
-
-<img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149369879-7d384b3a-2f15-4816-a59e-76b56bb9a944.gif">
-
-```js
-const e = createEngine(gameCanvas, 300, 300);
-const ctx = e.ctx;
-
-e.add({
-  tags: ["player"],
-  sprite: test_sprite,
-  scale: 2,
-  x: 150,
-  y: 50,
-  update: (obj) => {
-    if (e.heldKey("ArrowUp")) obj.y -= 3;
-    if (e.heldKey("ArrowDown")) obj.y += 3;
-  },
-})
-
-e.add({
-  tags: ["target"],
-  sprite: floor,
-  scale: 3,
-  x: 112,
-  y: 232,
-  collides(me, them) {
-    if (them.hasTag("player")) e.remove("target");
   }
 })
 
@@ -271,38 +272,27 @@ Refer to the following example for all the available object properties:
 
 ```js
 e.add({
-  tags: ["tag-name"],
-  solid: true,
-  x: 178,
-  y: 126,
-  vx: 1,
-  vy: 3,
-  ax: 0,
-  ay: 0,
+  tags: ["tag-name"], // assign tags to later reference object
+  solid: true, // add solid property to make object bump into other solids
+  x: 178, // x position
+  y: 126, // y position
+  vx: 1, // x velocity
+  vy: 3, // y velocity
   sprite: ball,
   scale: 2,
-  bounce: 1,
-  origin: [0, 0], // x: 0 - 1, y: 0 - 1, "left|center|right top|center|bottom", "center"
-  collides(me, them) {
-    if (them.hasTag("tag-name")) {
-      me.vx *= 1.3;
-      me.vy *= 1.3;
-    }
+  rotate: 90, // rotate by some degrees
+  bounce: 1, // how much velocity is lost on collisions
+  origin: [0, 0], // this moves the origin of the object
+  collides(me, them) { // function run on collision
+    if (them.hasTag("tag-name")) {} // check tag names to figure out what you've collided with
   },
-  update: (obj) => {
-    if (e.heldKey("ArrowDown")) obj.y += 3;
-    if (e.pressedKey("ArrowUp")) obj.y -= 3;
+  update: (me) => {
+    if (e.heldKey("ArrowDown")) me.y += 3; // add key inputs
+    if (e.pressedKey("ArrowUp")) me.y -= 3; // add key inputs
 
-    if (obj.y < 0) obj.vy *= -1;
-    if (obj.y > e.height - obj.height) obj.vy *= -1;
-    if (obj.x < 0) {
-      e.end();
-      e.addText("Blue Wins", e.width/2, e.height/2, { color: "blue", size: 32 })
-    }
-
-    if (obj.x > e.width - obj.width) {
-      e.end();
-      e.addText("Red Wins", e.width/2, e.height/2, { color: "red", size: 32 })
+    if (me.x < 0) {
+      e.end(); // end the game
+      e.addText("Game Over", e.width/2, e.height/2, { color: "blue", size: 32 }) // add text
     }
   },
 })
