@@ -63,8 +63,10 @@ const trackMouse = (e) => {
 
 const gameOutput = state => html`
   <div class="game-output">
-    ${false ? html`<iframe class="game-iframe" sandbox="allow-scripts allow-same-origin"></iframe>` : "" }
-    ${true ? gameOutput0() : ""}
+    ${true 
+      ? gameOutput0() 
+      : html`<iframe class="game-iframe" sandbox="allow-scripts allow-same-origin"></iframe>`
+    }
     <div class="show-options">
       <p
         @click=${(e) => {
@@ -265,15 +267,15 @@ export function view(state) {
           run (shift + enter)
         </button>
         ${shareOptions(state)}
+        <button class="menu-option" @click=${toggleDocs}>
+          docs
+        </button>
         <a
           class="a-to-button menu-choice"
           target="_blank"
           href="https://github.com/hackclub/game-lab"
           >GitHub</a
         >
-        <button class="menu-option">
-          docs
-        </button>
       </div>
     </div>
     <div class="right-pane">
@@ -307,23 +309,145 @@ export function view(state) {
       <div class="horizontal-bar"></div>
     </div>
     <div id="vertical-bar"></div>
-    ${renderOptions(state)}
     <div id="notification-container"></div>
     ${renderDocs(state)}
   `;
+}
+
+const toggleDocs = () => {
+  const docs = document.querySelector(".docs");
+  docs.classList.toggle("hide-docs");
 }
 
 const renderDocs = (state) => html`
   <style>
     .docs {
       position: absolute;
+      box-sizing: border-box;
       height: 100%;
-      width: 300px;
+      width: 60%;
       right: 0px;
       top: 0px;
+      background: white;
+      z-index: 10;
+      padding: 10px;
+      overflow: scroll;
+      transition: right 1s ease-in-out;
+    }
+
+    .hide-docs {
+      right: -60%;
+    }
+
+    .close-docs {
+      position: fixed;
+      right: 10px;
+      top: 10px;
+
+    }
+
+    .hide-docs .close-docs {
+      display: none;
+    }
+
+    .docs pre, .docs code {
+      background: lightgrey;
+      border-radius: 3px;
+      padding: 5px;
+      overflow: scroll;
     }
   </style>
-  <div class="docs"></div>
+  <div class="docs hide-docs">
+    <b>Create Engine</b> 
+    <pre>const engine = createEngine(gameCanvas, width, height);</pre>
+    Example:
+    <pre>const engine = createEngine(gameCanvas, 300, 300);</pre>
+    <code>gameCanvas</code> is automatically injected into your game script.
+    <br><br>
+
+    <b>Start Engine</b> 
+    <pre>engine.start()</pre>
+
+    <b>End Engine</b> 
+    <pre>engine.end()</pre>
+
+    <b>Engine Properties</b> 
+    <pre>engine.width
+engine.height
+</pre>
+
+    <b>Add Object</b> 
+    <pre>engine.add({
+  tags: ["name"],
+  x: number, // the x position
+  y: number, // the y position
+  vx: number, // the x velocity
+  vy: number, // the y velocity
+  sprite: sprite_name,
+  scale: number,
+  rotate: number,
+  bounce: number, // how much velocity is lost on collisions
+  origin: [0, 0], // 0 - 1
+  collides: (me, them) => {
+
+  },
+  update: (me) => { // runs every frame
+
+  }
+})</pre>
+
+    <b>Add Text</b> 
+    <pre>engine.addText(
+    "string",  
+    x, 
+    y, 
+    { // optional parameters
+      color: "string", 
+      size: number,
+      rotate: number,
+    }
+)</pre>
+    Example of adding text:
+    <pre>const greetingText = e.addText("hello world", 150, 150);</pre>
+    Example of updating text:
+    <pre>greetingText.text = "new greeting";</pre>
+
+
+    <b>Remove Object</b> 
+    <pre>engine.remove(obj)</pre>
+    or
+    <pre>engine.remove("tag-name")</pre>
+
+
+    <b>Key Inputs</b> 
+    <pre>engine.pressedKey(keyCode)</pre>
+    <pre>engine.heldKey(keyCode)</pre>
+
+    <b>Object Properties</b> 
+    <br><br>
+    On each object you can access:
+    <pre>obj.x
+obj.y
+obj.vx
+obj.vy
+obj.width
+obj.height
+obj.hasTag("tag-name")
+</pre>
+
+    <b>Playing Tunes</b> 
+    <br><br>
+    To play a tune once:
+    <pre>playTune(tune_asset_name);</pre>
+    To play a tune on repeat:
+    <pre>loopTune(tune_asset_name);</pre>
+    To stop a tune on repeat:
+    <pre>const tuneToStop = loopTune(tune_asset_name);
+tuneToStop.end();
+</pre>
+
+<button class="close-docs" @click=${toggleDocs}>close</button>
+  </div>
 `
 
 const renderSpriteName = (name, index, state) =>
@@ -344,21 +468,3 @@ const renderSpriteName = (name, index, state) =>
       >
         ${name}
       </div> `;
-
-const renderOptions = (state) => {
-  return html`
-    <div class="options hide">
-      <div class="option">
-        <span>Link Share Method:</span>
-        <select
-          @change=${(e) => dispatch("SHARE_TYPE", { type: e.target.value })}
-          .value=${state.shareType}
-        >
-          <option value="binary-url">Binary URL</option>
-          <option value="airtable">Airtable</option>
-        </select>
-      </div>
-      <button class="close" @click=${() => toggleHide("options")}>close</button>
-    </div>
-  `;
-};
