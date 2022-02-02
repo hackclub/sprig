@@ -31,7 +31,7 @@ const e = createEngine(gameCanvas, 300, 300);
 
 ---
 
-[Make a character:](https://game-lab.hackclub.dev/?file=recUlLLmfEksmALAM)
+Make a character:
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149362983-6f82a61c-c3d5-40b7-920f-f673c3ff2646.png">
 
@@ -51,7 +51,7 @@ e.start();
 
 ---
 
-[Add a floor with gravity:](https://game-lab.hackclub.dev/?file=recMIYxXueSz8tXQs)
+Add a floor with gravity:
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149363706-453a45e8-d0d4-44a3-acc3-09e4bb577392.gif">
 
@@ -84,7 +84,7 @@ e.start();
 
 ---
 
-[Add movement:](https://game-lab.hackclub.dev/?file=rec7bKM7Iiq7f6vFF)
+Add movement:
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149365452-7b042996-2beb-40a8-866e-f5748b5631da.gif">
 
@@ -117,7 +117,7 @@ e.start();
 
 ---
 
-[Add jump:](https://game-lab.hackclub.dev/?file=rec75TEodfPebIzlc)
+Add jump:
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149366181-588ae196-03dd-4268-9907-9477caa8a834.gif">
 
@@ -158,7 +158,7 @@ e.start();
 
 ---
 
-[Add platforms:](https://game-lab.hackclub.dev/?file=recBW6ApDr7xzlhxz)
+Add platforms:
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149367516-7edb2780-edbd-4977-9a07-dcfbf47fcf93.gif">
 
@@ -211,7 +211,7 @@ e.start();
 
 ---
 
-[Add a background:](https://game-lab.hackclub.dev/?file=recEy698LbPNQlL1G)
+Add a background:
 
 <img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149368356-c343a214-0d31-4d5f-a2d4-d0575b18047b.png">
 
@@ -230,7 +230,7 @@ e.start();
 
 ---
 
-[Add collisions](https://game-lab.hackclub.dev/?file=recC0NfXt8DIWQU3H)
+Add collisions:
 
 <img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149369879-7d384b3a-2f15-4816-a59e-76b56bb9a944.gif">
 
@@ -309,6 +309,8 @@ e.add({
 
 ## Tiny Games
 
+__WARNING!!! These examples are made in an older version of Game Lab. See if you can fix them to work with the new version. See below if you want to run an older version of Game Lab__
+
 [Pong-ish](https://game-lab.hackclub.dev/?file=recZMaBjgnNXgZsUK)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149371012-faf3e45f-9d3a-47d4-831b-566d9171d2bd.gif">
@@ -332,10 +334,6 @@ This could be because you made your game in an old version of Game Lab.
 Game Lab is in active development. We want to make sure you can play the games you make even if they aren't compatible with the newest version of the editor. If you made a game and need to run it on an old version of Game Lab you can use this site: https://game-lab-server-1.maxwofford.repl.co/[SEMANTIC_VERSION]/index.html
 
 For example the first release of Game Lab is available here: https://game-lab-server-1.maxwofford.repl.co/0.1.0/index.html
-
-<img width="500" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149387903-eec65489-6a8d-4779-adde-2b6e35c7273a.gif">
-
-Check out a minimal example game: [Superb Macedonian Plumber Bro](https://game-lab.hackclub.dev/?file=recxJ4Z4C3U0WbSIT).
 
 ## Philosophy
 
