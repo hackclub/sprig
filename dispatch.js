@@ -12,7 +12,6 @@ import { playTune, loopTune } from "./tunePlayers.js";
 import { createEval } from "./evalGameScript.js";
 import notification from "./utils/notification.js";
 
-
 const STATE = {
   codemirror: undefined,
   url: undefined,
@@ -108,8 +107,8 @@ const ACTIONS = {
     if (state.version !== saved.version) {
       notification({
         message: `Version mismatch.\nFile uses version: ${state.version}\nEditor is version: ${saved.version}`,
-        timeout: 5000
-      })
+        timeout: 5000,
+      });
     }
 
     const el = document.querySelector(".asset-editor");
