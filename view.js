@@ -23,27 +23,6 @@ function shareOptions(state) {
 const toggleHide = (className) =>
   document.querySelector(`.${className}`).classList.toggle("hide");
 
-// <button class="menu-option" @click=${() => toggleHide("examples")}>examples</button>
-// <button class="menu-option" @click=${() => toggleHide("options")}>options</button>
-
-// <pre class="output-overlay mouse-display">
-//   ${(() => {
-//     const canv = document.querySelector(".game-canvas") ?? {
-//       width: 100,
-//       height: 100,
-//     };
-//     const widthChars = ("" + canv.width).length;
-//     const heightChars = ("" + canv.height).length;
-//     return (
-//       "mouse: " +
-//       ("" + state.mouseX).padStart(widthChars) +
-//       " x, " +
-//       ("" + state.mouseY).padStart(heightChars) +
-//       " y"
-//     );
-//   })()}
-// </pre>
-
 const gameOutput0 = () => html`
   <style>
     .outer-container {
@@ -157,6 +136,7 @@ export function view(state) {
         min-width: 40px;
         width: max-content;
         padding: 5px;
+        overflow: scroll;
       }
 
       .list-of-sprites > * {

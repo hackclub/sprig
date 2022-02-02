@@ -3,10 +3,10 @@ import { playTune, loopTune } from "./tunePlayers.js";
 
 const BLACK_LISTED_WORDS = [
   "localStorage",
-  // "document",
-  // "window",
+  "document",
+  "window",
   // "eval",
-  // "import",
+  "import",
   // "Function"
 ]
   
@@ -17,8 +17,11 @@ export function createEval() {
   return evalGameScript;
 
   function evalGameScript({ assets, prog, show, gameCanvas }) {
-    if (BLACK_LISTED_WORDS.some(word => prog.includes(word))) {
-      return new Error(`Error: "localStorage" is not allowed in game script.`);
+    for (let i = 0; i < BLACK_LISTED_WORDS.length; i++) {
+      const word = BLACK_LISTED_WORDS[i];
+      if (prog.includes(word)) {
+        return new Error(`Error: "${word}" is not allowed in game script.`);
+      }
     }
 
     if (tunePlayers.length > 0) {

@@ -110,7 +110,7 @@ const ACTIONS = {
     state.selected_asset = -1;
 
     dispatch("RENDER");
-    dispatch("RUN");
+    // dispatch("RUN");
   },
   CREATE_ASSET({ assetType }, state) {
     // need to clear asset editor

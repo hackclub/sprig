@@ -422,7 +422,11 @@ export function createSequencer(target) {
   }
 
   const onDownSVG = (e) => {
-    const [x, y] = getSVGPos(e);
+    let [x, y] = getSVGPos(e);
+    
+    x = Math.max(Math.min(x, state.numberX-1), 0);
+    y = Math.max(Math.min(y, state.numberY-1), 0);
+
     const key = `${x}_${y}`;    
 
     if (key in state.cells && state.cells[key] === state.instrument) {
@@ -500,6 +504,7 @@ export function createSequencer(target) {
       state.cells = cells;
       state.bpm = bpm;
       state.data = data;
+      console.log(state);
       r();
     },
     getTune() {
