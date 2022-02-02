@@ -281,13 +281,13 @@ export function view(state) {
             class="game-canvas"
           >
           </canvas>
-      <div class="menu">
-        ${runButton(state)}
-        ${saveLink(state)}
-        ${saveFile(state)}
-        ${githubLink(state)}
-        ${bugReport(state)}
-      </div>
+          <div class="menu">
+            ${runButton(state)}
+            ${saveLink(state)}
+            ${saveFile(state)}
+            ${githubLink(state)}
+            ${bugReport(state)}
+          </div>
         </div>
         <p
           @click=${(e) => {
