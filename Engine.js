@@ -172,14 +172,14 @@ class Object {
           canMoveInX = false;
           this._ax = 0;
           this._vx = -this.bounce * this._vx;
-          this._x -= ogx < -1.5 ? ogx : 0;
+          this._x -= ogx < -1 ? ogx : 0;
         }
 
         if (y > 0 && ogy <= 0) {
           canMoveInY = false;
           this._ay = 0;
           this._vy = -this.bounce * this._vy;
-          this._y -= ogy < -1.5 ? ogy : 0;
+          this._y -= ogy < -1 ? ogy : 0;
         }
       }
 

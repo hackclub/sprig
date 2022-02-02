@@ -22,7 +22,7 @@ const STATE = {
   assets: [],
   mouseX: 0,
   mouseY: 0,
-  engineVersion: null, // TODO: actually start loading data depending on this value
+  engineVersion: "0.2.0", // TODO: actually start loading data depending on this value
   previousID: null, // TODO: start setting this correctly on cartridge load
   tunePlayers: [],
   selected_asset: -1,
