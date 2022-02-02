@@ -41,88 +41,28 @@ const ACTIONS = {
   RUN(args, state) {
     const string = state.codemirror.view.state.doc.toString();
 
-    const hasImport = /import\s/.test(string);
-    if (hasImport) {
-      // how to inject included into this scope?
-      const blob = URL.createObjectURL(
-        new Blob([string], { type: "text/javascript" })
-      );
-      import(blob).then((res) => {
-        // console.log(imported);
-        // TODO: these are accumulating how can I clear them out?
-        URL.revokeObjectURL(blob);
-      });
-    } else {
-      state.error = false;
-      state.logs = [];
-      if (state.tunePlayers.length > 0) {
-        state.tunePlayers.forEach(x => x.end()); 
-        state.tunePlayers = [];
-      }
+    const sprites = state.assets.filter(a => a.type === "sprite").map(a => a.data);
 
-      Engine.show = state.show;
+    size_up_sprites(sprites);
 
-      const sprites = state.assets.filter(a => a.type === "sprite").map(a => a.data);
+    state.logs = [];
+    state.error = false;
 
-      size_up_sprites(sprites);
+    document.querySelector("iframe").contentWindow.postMessage({ 
+      prog: string, 
+      assets: state.assets, 
+      show: state.show 
+    }, '*');
 
-      const gameCanvas = document.querySelector(".game-canvas");
-
-      const included = {
-        // blacklist
-        document: null,
-        window: null,
-        localStorage: null,
-        // end of blacklist
-        _state: state,
-        playTune() {
-          const tunePlayer = playTune(...arguments);
-          state.tunePlayers.push(tunePlayer);
-
-          return tunePlayer;
-        },
-        
-        loopTune() {
-          const tunePlayer = loopTune(...arguments);
-          state.tunePlayers.push(tunePlayer);
-
-          return tunePlayer;
-        },
-        gameCanvas,
-        createEngine(...args) {
-          if (currentEngine) cancelAnimationFrame(currentEngine._animId);
-          currentEngine = new Engine(...args);
-          return currentEngine;
-        },
-      };
-
-      state.assets.forEach(asset => {
-        included[asset.name] = asset.data;
-      })
-
-      document.querySelector("iframe").contentWindow.postMessage({ 
-        prog: string, 
-        assets: state.assets, 
-        show: state.show 
-      }, '*');
-
-
-      try { // TODO can we run this in an iframe?
-        new Function(...Object.keys(included), string)(
-          ...Object.values(included)
-        );
-
-
-      } catch (e) {
-        console.log(e);
-        state.error = true;
-        const str = e.stack;
-        state.logs.push(str);
-      }
-
-      dispatch("RENDER");
-      document.querySelector(".game-canvas").focus();
-    }
+    dispatch("RENDER");
+    
+    // document.querySelector(".game-canvas").focus(); // TODO: can we focus in iframe
+  
+  },
+  LOG_ERROR({ stack }, state) {
+    state.error = true;
+    state.logs = [...state.logs, stack];
+    dispatch("RENDER");
   },
   GET_SAVE_STATE(args, state) {
     const prog = state.codemirror.view.state.doc.toString();

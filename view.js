@@ -26,58 +26,45 @@ const toggleHide = (className) =>
 // <button class="menu-option" @click=${() => toggleHide("examples")}>examples</button>
 // <button class="menu-option" @click=${() => toggleHide("options")}>options</button>
 
+// <pre class="output-overlay mouse-display">
+//   ${(() => {
+//     const canv = document.querySelector(".game-canvas") ?? {
+//       width: 100,
+//       height: 100,
+//     };
+//     const widthChars = ("" + canv.width).length;
+//     const heightChars = ("" + canv.height).length;
+//     return (
+//       "mouse: " +
+//       ("" + state.mouseX).padStart(widthChars) +
+//       " x, " +
+//       ("" + state.mouseY).padStart(heightChars) +
+//       " y"
+//     );
+//   })()}
+// </pre>
+
 const gameOutput = state => html`
   <div class="game-output">
-    <div class="game-container">
-      <canvas
-        @mousemove=${(e) => {
-          dispatch("CANVAS_MOUSE_MOVE", {
-            content: { mouseX: e.offsetX, mouseY: e.offsetY },
-          });
-        }}
-        class="game-canvas"
-      >
-      </canvas>
-      <div class="text-container"></div>
-    </div>
-    <p
-      @click=${(e) => {
-        state.show.origin = !state.show.origin;
-        dispatch("RUN");
-      }}
-      class="output-overlay toggle-show-origin"
-    >
-      ${state.show.origin ? "[x]" : "[ ]"} show origin
-    </p>
-    <p
-      @click=${(e) => {
-        state.show.hitbox = !state.show.hitbox;
-        dispatch("RUN");
-      }}
-      class="output-overlay toggle-show-hitbox"
-    >
-      ${state.show.hitbox ? "[x]" : "[ ]"} show hitbox
-    </p>
-    <pre class="output-overlay mouse-display">
-      ${(() => {
-        const canv = document.querySelector(".game-canvas") ?? {
-          width: 100,
-          height: 100,
-        };
-        const widthChars = ("" + canv.width).length;
-        const heightChars = ("" + canv.height).length;
-        return (
-          "mouse: " +
-          ("" + state.mouseX).padStart(widthChars) +
-          " x, " +
-          ("" + state.mouseY).padStart(heightChars) +
-          " y"
-        );
-      })()}
-    </pre>
-
     <iframe class="game-iframe"></iframe>
-
+    <div class="show-options">
+      <p
+        @click=${(e) => {
+          state.show.origin = !state.show.origin;
+          dispatch("RUN");
+        }}
+      >
+        ${state.show.origin ? "[x]" : "[ ]"} show origin
+      </p>
+      <p
+        @click=${(e) => {
+          state.show.hitbox = !state.show.hitbox;
+          dispatch("RUN");
+        }}
+      >
+        ${state.show.hitbox ? "[x]" : "[ ]"} show hitbox
+      </p>
+    </div>
   </div>
 `
 
@@ -103,6 +90,7 @@ export function view(state) {
         background: #000067;
         width: 100%;
         height: var(--horizontal-bar);
+        position: relative;
       }
 
       .pixel-editor-container {
@@ -200,28 +188,20 @@ export function view(state) {
         overflow: show;
       }
 
-      .output-overlay {
+      .show-options {
         color: white;
-        margin: 0px;
-        height: 1em;
         font-size: 20px;
         font-family: monospace;
         position: absolute;
         user-select: none;
+        right: 10px;
+        bottom: 10px;
       }
 
-      .mouse-display {
-        bottom: calc(100% - var(--horizontal-bar) + 5px);
-        right: 10px;
-      }
-
-      .toggle-show-origin {
-        bottom: calc(100% - var(--horizontal-bar) + 25px);
-        right: 10px;
-      }
-      .toggle-show-hitbox {
-        bottom: calc(100% - var(--horizontal-bar) + 45px);
-        right: 10px;
+      .show-options > * {
+        padding: 0px;
+        margin: 0px;
+        padding-bottom: 5px;
       }
 
       .sprite-entry-input {

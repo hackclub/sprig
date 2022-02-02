@@ -66,7 +66,7 @@ function setGameIframe() {
         margin: 0px;
       }
 
-      .game-canvas-container {
+      .outer-container {
         width: 100%;
         height: 100%;
         display: flex;
@@ -74,10 +74,22 @@ function setGameIframe() {
         align-items: center;
         background: blue;
       }
+
+      .inner-container {
+        width: min-content;
+        height: min-content;
+        position: relative;
+      }
+
+      .text-container {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+      }
     </style>
     <script defer type="module">
-      import { Engine } from "http://localhost:8080/Engine.js";
-      import { playTune, loopTune } from "http://localhost:8080/tunePlayers.js";
+      import { Engine } from "${window.location.href}Engine.js";
+      import { playTune, loopTune } from "${window.location.href}tunePlayers.js";
 
       let currentEngine = null;
       let tunePlayers = [];
@@ -131,12 +143,19 @@ function setGameIframe() {
 
       };
     </script>
-    <div class="game-canvas-container">
-      <canvas class="game-canvas" width="1" height="1"></canvas>
+    <div class="outer-container">
+      <div class="inner-container">
+        <canvas class="game-canvas"></canvas>
+        <div class="text-container"></div>
+      </div>
     </div>
   `
   var blob = new Blob([string], { type: 'text/html' });
   iframe.src = URL.createObjectURL(blob);
+
+  window.addEventListener("message", e => {
+    dispatch("LOG_ERROR", { stack: e.data.stack });
+  })
 }
 
 export async function init(state) {
