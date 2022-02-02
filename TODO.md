@@ -1,7 +1,11 @@
+
+
 ## Feb 2, 2022
 
-- [] re-add displaying mouse postion over game canvas
-- [] fixed mis-selected asset on catridge load
+- [] edit readme
+- [] add version prompt with link to correct version of editor
+- [x] re-add displaying mouse postion over game canvas
+- [x] fixed mis-selected asset on catridge load
 
 ## Jan 31, 2022
 

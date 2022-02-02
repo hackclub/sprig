@@ -41,7 +41,7 @@ async function saveToS3({ content, state }) {
       body: JSON.stringify(content),
     });
   }
-  const link = `https://${window.location.href}?id=${id}`;
+  const link = `${window.location.href}?id=${id}`;
   copy(link);
   notification({
     message: "Sharing link copied to clipboard!",

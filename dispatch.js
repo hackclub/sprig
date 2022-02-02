@@ -14,9 +14,7 @@ import notification from "./utils/notification.js";
 
 const STATE = {
   codemirror: undefined,
-  url: undefined,
   show: { origin: false, hitbox: false },
-  examples: [],
   error: false,
   logs: [],
   assetEditor: undefined, // type :: pixelEditor | sequencer which have different interfaces
@@ -25,7 +23,6 @@ const STATE = {
   mouseY: 0,
   version: "0.2.0",
   previousID: null, // TODO: start setting this correctly on cartridge load
-  tunePlayers: [],
   selected_asset: -1,
   name: "name-here",
   lastSaved: {
