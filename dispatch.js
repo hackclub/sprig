@@ -328,9 +328,23 @@ const ACTIONS = {
     state.selected_asset = index;
     dispatch("RENDER");
   },
-  DELETE_ASSET({ index }, state) { // TODO this is broken
+  DELETE_ASSET: async ({ index }, state) => {
+    dispatch("SOUND", "click")
     const assetType = state.assets[index].type;
     state.selected_asset = index;
+
+    // msw: our use of confirm() will interupt the page's JS execution and
+    // create painful clipping in the UI sounds we're trying to play. These
+    // empty promises are just here to wait long enough for songs to play
+    // without interrupting them
+    await new Promise(resolve => setTimeout(() =>resolve(), 350))
+    const shouldContinue = confirm(`Are you sure you want to remove that ${assetType}?`)
+    await new Promise(resolve => setTimeout(() =>resolve(), 350))
+    if (!shouldContinue) {
+      dispatch("SOUND", "cancel")
+      return null
+    }
+    dispatch("SOUND", "delete")
 
     state.assets = state.assets.filter((x, i) => i !== index);
 
