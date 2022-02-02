@@ -1,4 +1,5 @@
 import { html } from "./uhtml.js";
+import { dispatch } from "./dispatch.js";
 import "./codemirror/codemirror-html.js";
 import "./codemirror/codemirror-js.js";
 
@@ -22,8 +23,76 @@ function shareOptions(state) {
 const toggleHide = (className) =>
   document.querySelector(`.${className}`).classList.toggle("hide");
 
-// <button class="menu-option" @click=${() => toggleHide("examples")}>examples</button>
-// <button class="menu-option" @click=${() => toggleHide("options")}>options</button>
+const gameOutput0 = () => html`
+  <style>
+    .outer-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: blue;
+    }
+
+    .inner-container {
+      width: min-content;
+      height: min-content;
+      position: relative;
+    }
+
+    .text-container {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      overflow: show;
+    }
+  </style>
+  <div class="outer-container">
+    <div class="inner-container">
+      <canvas class="game-canvas" @mousemove=${trackMouse}></canvas>
+      <div class="text-container"></div>
+    </div>
+  </div>
+`
+
+const trackMouse = (e) => {
+  dispatch("CANVAS_MOUSE_MOVE", {
+    content: { mouseX: e.offsetX, mouseY: e.offsetY },
+  });
+}
+
+const gameOutput = state => html`
+  <div class="game-output">
+    ${true 
+      ? gameOutput0() 
+      : html`<iframe class="game-iframe" sandbox="allow-scripts allow-same-origin"></iframe>`
+    }
+    <div class="show-options">
+      <p
+        @click=${(e) => {
+          state.show.origin = !state.show.origin;
+          dispatch("RUN");
+        }}
+      >
+        ${state.show.origin ? "[x]" : "[ ]"} show origin
+      </p>
+      <p
+        @click=${(e) => {
+          state.show.hitbox = !state.show.hitbox;
+          dispatch("RUN");
+        }}
+      >
+        ${state.show.hitbox ? "[x]" : "[ ]"} show hitbox
+      </p>
+      <span style="display: flex;">
+        <span style="min-width: 70px; max-width: 70px;">mouse:</span>
+        <span style="display: flex; justify-content: flex-end; min-width: 70px; max-width: 70px;">${state.mouseX} x</span>
+        ,
+        <span style="display: flex; justify-content: flex-end; min-width: 70px; max-width: 70px;">${state.mouseY} y</span>
+      </span>
+    </div>
+  </div>
+`
 
 export function view(state) {
   return html`
@@ -47,6 +116,7 @@ export function view(state) {
         background: #000067;
         width: 100%;
         height: var(--horizontal-bar);
+        position: relative;
       }
 
       .pixel-editor-container {
@@ -68,13 +138,14 @@ export function view(state) {
         min-width: 40px;
         width: max-content;
         padding: 5px;
+        overflow: scroll;
       }
 
       .list-of-sprites > * {
         padding-bottom: 3px;
       }
 
-      .pixel-editor {
+      .asset-editor {
         overflow: scroll;
         position: relative;
         flex: 1;
@@ -131,41 +202,23 @@ export function view(state) {
         border: 2px solid blue;
       }
 
-      .game-container {
-        position: relative;
-      }
-
-      .text-container {
-        width: 1px;
-        height: 1px;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        overflow: show;
-      }
-
-      .output-overlay {
+      .show-options {
         color: white;
-        margin: 0px;
-        height: 1em;
         font-size: 20px;
         font-family: monospace;
         position: absolute;
         user-select: none;
+        right: 10px;
+        bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
       }
 
-      .mouse-display {
-        bottom: calc(100% - var(--horizontal-bar) + 5px);
-        right: 10px;
-      }
-
-      .toggle-show-origin {
-        bottom: calc(100% - var(--horizontal-bar) + 25px);
-        right: 10px;
-      }
-      .toggle-show-hitbox {
-        bottom: calc(100% - var(--horizontal-bar) + 45px);
-        right: 10px;
+      .show-options > * {
+        padding: 0px;
+        margin: 0px;
+        padding-bottom: 5px;
       }
 
       .sprite-entry-input {
@@ -190,6 +243,11 @@ export function view(state) {
         align-items: center;
         color: var(--text-color);
       }
+
+      .game-iframe {
+        width: 100%;
+        height: 100%;
+      }
     </style>
     <div class="left-pane">
       <codemirror-js id="code-editor"></codemirror-js>
@@ -209,6 +267,9 @@ export function view(state) {
           run (shift + enter)
         </button>
         ${shareOptions(state)}
+        <button class="menu-option" @click=${toggleDocs}>
+          docs
+        </button>
         <a
           class="a-to-button menu-choice"
           target="_blank"
@@ -218,138 +279,192 @@ export function view(state) {
       </div>
     </div>
     <div class="right-pane">
-      <div class="game-output">
-        <div class="game-container">
-          <canvas
-            @mousemove=${(e) => {
-              dispatch("CANVAS_MOUSE_MOVE", {
-                content: { mouseX: e.offsetX, mouseY: e.offsetY },
-              });
-            }}
-            class="game-canvas"
-          >
-          </canvas>
-          <div class="text-container"></div>
-        </div>
-        <p
-          @click=${(e) => {
-            state.show.origin = !state.show.origin;
-            dispatch("RENDER");
-          }}
-          class="output-overlay toggle-show-origin"
-        >
-          ${state.show.origin ? "[x]" : "[ ]"} show origin
-        </p>
-        <p
-          @click=${(e) => {
-            state.show.hitbox = !state.show.hitbox;
-            dispatch("RENDER");
-          }}
-          class="output-overlay toggle-show-hitbox"
-        >
-          ${state.show.hitbox ? "[x]" : "[ ]"} show hitbox
-        </p>
-        <pre class="output-overlay mouse-display">
-          ${(() => {
-            const canv = document.querySelector(".game-canvas") ?? {
-              width: 100,
-              height: 100,
-            };
-            const widthChars = ("" + canv.width).length;
-            const heightChars = ("" + canv.height).length;
-            return (
-              "mouse: " +
-              ("" + state.mouseX).padStart(widthChars) +
-              " x, " +
-              ("" + state.mouseY).padStart(heightChars) +
-              " y"
-            );
-          })()}
-        </pre
-        >
-      </div>
+      ${gameOutput(state)}
       <div class="pixel-editor-container">
         <div class="list-of-sprites">
-          ${Object.keys(state.sprites).map(
-            (x, i) => html.for({ x })`
+          ${state.assets.map(
+            (x, i) => {
+              return html`
               <div
                 class=${[
                   "sprite-entry",
-                  x === state.selected_sprite ? "selected-sprite" : "",
+                  i === state.selected_asset ? "selected-sprite" : "",
                 ].join(" ")}
               >
-                ${renderSpriteName(x, state)}
+                ${renderSpriteName(x.name, i, state)}
                 <div
                   class="sprite-delete"
-                  @mousedown=${() => dispatch("DELETE_SPRITE", { name: x })}
+                  @mousedown=${() => dispatch("DELETE_ASSET", { index: i })}
                 >
                   x
                 </div>
               </div>
             `
-          )}
-          <button @click=${() => dispatch("CREATE_SPRITE")}>add</button>
+          })}
+          <button @click=${() => dispatch("CREATE_ASSET", { assetType: "sprite" })}>add sprite</button>
+          <button @click=${() => dispatch("CREATE_ASSET", { assetType: "tune" })}>add tune</button>
         </div>
-        <div class="pixel-editor"></div>
+        <div class="asset-editor"></div>
       </div>
       <div class="horizontal-bar"></div>
     </div>
     <div id="vertical-bar"></div>
-    ${renderExamples(state)} ${renderOptions(state)} ${renderShared(state)}
+    <div id="notification-container"></div>
+    ${renderDocs(state)}
   `;
 }
 
-const renderSpriteName = (name, state) =>
-  state.selected_sprite === name
+const toggleDocs = () => {
+  const docs = document.querySelector(".docs");
+  docs.classList.toggle("hide-docs");
+}
+
+const renderDocs = (state) => html`
+  <style>
+    .docs {
+      position: absolute;
+      box-sizing: border-box;
+      height: 100%;
+      width: 60%;
+      right: 0px;
+      top: 0px;
+      background: white;
+      z-index: 10;
+      padding: 10px;
+      overflow: scroll;
+      transition: right 1s ease-in-out;
+    }
+
+    .hide-docs {
+      right: -60%;
+    }
+
+    .close-docs {
+      position: fixed;
+      right: 10px;
+      top: 10px;
+
+    }
+
+    .hide-docs .close-docs {
+      display: none;
+    }
+
+    .docs pre, .docs code {
+      background: lightgrey;
+      border-radius: 3px;
+      padding: 5px;
+      overflow: scroll;
+    }
+  </style>
+  <div class="docs hide-docs">
+    <b>Create Engine</b> 
+    <pre>const engine = createEngine(gameCanvas, width, height);</pre>
+    Example:
+    <pre>const engine = createEngine(gameCanvas, 300, 300);</pre>
+    <code>gameCanvas</code> is automatically injected into your game script.
+    <br><br>
+
+    <b>Start Engine</b> 
+    <pre>engine.start()</pre>
+
+    <b>End Engine</b> 
+    <pre>engine.end()</pre>
+
+    <b>Engine Properties</b> 
+    <pre>engine.width
+engine.height
+</pre>
+
+    <b>Add Object</b> 
+    <pre>engine.add({
+  tags: ["name"],
+  x: number, // the x position
+  y: number, // the y position
+  vx: number, // the x velocity
+  vy: number, // the y velocity
+  sprite: sprite_name,
+  scale: number,
+  rotate: number,
+  bounce: number, // how much velocity is lost on collisions
+  origin: [0, 0], // 0 - 1
+  collides: (me, them) => {
+
+  },
+  update: (me) => { // runs every frame
+
+  }
+})</pre>
+
+    <b>Add Text</b> 
+    <pre>engine.addText(
+    "string",  
+    x, 
+    y, 
+    { // optional parameters
+      color: "string", 
+      size: number,
+      rotate: number,
+    }
+)</pre>
+    Example of adding text:
+    <pre>const greetingText = e.addText("hello world", 150, 150);</pre>
+    Example of updating text:
+    <pre>greetingText.text = "new greeting";</pre>
+
+
+    <b>Remove Object</b> 
+    <pre>engine.remove(obj)</pre>
+    or
+    <pre>engine.remove("tag-name")</pre>
+
+
+    <b>Key Inputs</b> 
+    <pre>engine.pressedKey(keyCode)</pre>
+    <pre>engine.heldKey(keyCode)</pre>
+
+    <b>Object Properties</b> 
+    <br><br>
+    On each object you can access:
+    <pre>obj.x
+obj.y
+obj.vx
+obj.vy
+obj.width
+obj.height
+obj.hasTag("tag-name")
+</pre>
+
+    <b>Playing Tunes</b> 
+    <br><br>
+    To play a tune once:
+    <pre>playTune(tune_asset_name);</pre>
+    To play a tune on repeat:
+    <pre>loopTune(tune_asset_name);</pre>
+    To stop a tune on repeat:
+    <pre>const tuneToStop = loopTune(tune_asset_name);
+tuneToStop.end();
+</pre>
+
+<button class="close-docs" @click=${toggleDocs}>close</button>
+  </div>
+`
+
+const renderSpriteName = (name, index, state) =>
+  state.selected_asset === index
     ? html`<input 
           class="sprite-entry-input"
           .value=${name} 
-          @change=${(e) =>
-            dispatch("CHANGE_SPRITE_NAME", {
-              oldName: name,
+          @input=${(e) => {
+            dispatch("CHANGE_ASSET_NAME", {
+              index,
               newName: e.target.value,
-            })}></input>`
+            });
+          }}
+          ></input>`
     : html`<div
         class="sprite-name"
-        @mousedown=${() => dispatch("SELECT_SPRITE", { name })}
+        @mousedown=${() => dispatch("SELECT_ASSET", { index })}
       >
         ${name}
       </div> `;
-
-const renderShared = (state) => html`
-  <div class="shared-modal hide">Sharing link copied to clip board.</div>
-`;
-
-const renderExamples = (state) => html`
-  <div class="examples hide">
-    ${state.examples.map(
-      (x, i) => html`
-        <span
-          class="example"
-          @click=${() => dispatch("LOAD_EXAMPLE", { content: x["Content"] })}
-        >
-          ${x["Name"]}
-        </span>
-      `
-    )}
-    <button class="close" @click=${() => toggleHide("examples")}>close</button>
-  </div>
-`;
-
-const renderOptions = (state) => {
-  return html`
-    <div class="options hide">
-      <div class="option">
-        <span>Link Share Method:</span>
-        <select
-          @change=${(e) => dispatch("SHARE_TYPE", { type: e.target.value })}
-          .value=${state.shareType}
-        >
-          <option value="binary-url">Binary URL</option>
-          <option value="airtable">Airtable</option>
-        </select>
-      </div>
-      <button class="close" @click=${() => toggleHide("options")}>close</button>
-    </div>
-  `;
-};

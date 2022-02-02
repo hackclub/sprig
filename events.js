@@ -1,3 +1,5 @@
+import { dispatch } from "./dispatch.js";
+
 const trigger = (e) => e.composedPath()[0];
 const matchesTrigger = (e, selectorString) =>
   trigger(e).matches(selectorString);
@@ -40,16 +42,28 @@ function readFile(file) {
   reader.onloadend = (event) => {
     let raw = reader.result;
 
-    const saved = JSON.parse(raw);
+    try {
+      const saved = JSON.parse(raw);
+      dispatch("LOAD_CARTRIDGE", { saved });
+      
+    } catch (err) {
 
-    dispatch("UPLOAD", { saved });
+    }
   };
 }
 
 function addDropUpload(state, bodyListener) {
   bodyListener("drop", "", function (evt) {
+
     let dt = evt.dataTransfer;
     let files = dt.files;
+
+    if (evt.path.some(el => el.matches && el.matches(".asset-editor"))) {
+      console.log(files);
+      pauseEvent(evt);
+      return;
+    };
+
 
     upload(files);
 
