@@ -300,13 +300,13 @@ e.add({
 
 ## Tiny Games
 
-[Pong-ish](https://https://game-lab.hackclub.dev/?id=bd5087c16160988e4d2e27ca2c6157f9)
+[Pong-ish](https://game-lab.hackclub.dev/?id=bd5087c16160988e4d2e27ca2c6157f9)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149371012-faf3e45f-9d3a-47d4-831b-566d9171d2bd.gif">
 
 ---
 
-[Crappy Birds](https://https://game-lab.hackclub.dev/?id=c66c509f01eb83f7bc67053818b75159)
+[Crappy Birds](https://game-lab.hackclub.dev/?id=c66c509f01eb83f7bc67053818b75159)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149380918-a1855ab3-cc2d-4a9a-adc0-d5316d6f17ba.gif">
 
