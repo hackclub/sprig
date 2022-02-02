@@ -70,16 +70,22 @@ const gameOutput0 = () => html`
   </style>
   <div class="outer-container">
     <div class="inner-container">
-      <canvas class="game-canvas"></canvas>
+      <canvas class="game-canvas" @mousemove=${trackMouse}></canvas>
       <div class="text-container"></div>
     </div>
   </div>
 `
 
+const trackMouse = (e) => {
+  dispatch("CANVAS_MOUSE_MOVE", {
+    content: { mouseX: e.offsetX, mouseY: e.offsetY },
+  });
+}
+
 const gameOutput = state => html`
   <div class="game-output">
-    <iframe class="game-iframe" sandbox="allow-scripts allow-same-origin"></iframe>
-    ${false ? gameOutput0() : ""}
+    ${false ? html`<iframe class="game-iframe" sandbox="allow-scripts allow-same-origin"></iframe>` : "" }
+    ${true ? gameOutput0() : ""}
     <div class="show-options">
       <p
         @click=${(e) => {
@@ -97,6 +103,12 @@ const gameOutput = state => html`
       >
         ${state.show.hitbox ? "[x]" : "[ ]"} show hitbox
       </p>
+      <span style="display: flex;">
+        <span style="min-width: 70px; max-width: 70px;">mouse:</span>
+        <span style="display: flex; justify-content: flex-end; min-width: 70px; max-width: 70px;">${state.mouseX} x</span>
+        ,
+        <span style="display: flex; justify-content: flex-end; min-width: 70px; max-width: 70px;">${state.mouseY} y</span>
+      </span>
     </div>
   </div>
 `
@@ -216,6 +228,9 @@ export function view(state) {
         user-select: none;
         right: 10px;
         bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
       }
 
       .show-options > * {

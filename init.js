@@ -118,7 +118,7 @@ function setGameIframe() {
   iframe.src = URL.createObjectURL(blob);
 
   window.addEventListener("message", e => {
-    dispatch("LOG_ERROR", { stack: e.data.stack });
+    dispatch("LOG_ERROR", { err: e.data });
   })
 }
 
@@ -129,7 +129,7 @@ export async function init(state) {
   state.codemirror = document.querySelector("#code-editor");
   events(state);
 
-  setGameIframe();
+  // setGameIframe();
 
   const saved = await loadFromAirtable() ||
                 await loadFromS3() ||

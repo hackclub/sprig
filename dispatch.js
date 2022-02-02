@@ -50,22 +50,22 @@ const ACTIONS = {
     state.logs = [];
     state.error = false;
 
-    document.querySelector("iframe").contentWindow.postMessage({ 
-      prog: string, 
-      assets: state.assets, 
-      show: state.show 
-    }, '*');
+    // document.querySelector("iframe").contentWindow.postMessage({ 
+    //   prog: string, 
+    //   assets: state.assets, 
+    //   show: state.show 
+    // }, '*');
 
-    // const gameCanvas = document.querySelector(".game-canvas");
-    // const err = evalGameScript({ assets: state.assets, prog: string, show: state.show, gameCanvas });
-    // if (err) e.source.postMessage(err, e.origin);
-    // document.querySelector(".game-canvas").focus(); // TODO: can we focus in iframe
+    const gameCanvas = document.querySelector(".game-canvas");
+    const err = evalGameScript({ assets: state.assets, prog: string, show: state.show, gameCanvas });
+    if (err) dispatch("LOG_ERROR", { err })
+    document.querySelector(".game-canvas").focus(); // TODO: can we focus in iframe
 
     dispatch("RENDER");
   },
-  LOG_ERROR({ stack }, state) {
+  LOG_ERROR({ err }, state) {
     state.error = true;
-    state.logs = [...state.logs, stack];
+    state.logs = [...state.logs, err.stack];
     dispatch("RENDER");
   },
   GET_SAVE_STATE(args, state) {

@@ -10,6 +10,10 @@ export function createEval() {
 
   function evalGameScript({ assets, prog, show, gameCanvas }) {
 
+    if (prog.includes("localCache")) {
+      return new Error(`Error: "localCache" is not allowed in game script.`);
+    }
+    
     if (tunePlayers.length > 0) {
       tunePlayers.forEach(x => x.end()); 
       tunePlayers = [];
