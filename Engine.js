@@ -163,7 +163,7 @@ class Object {
 
     this.engine.objects.forEach((otherObj) => {
       if (this == otherObj) return;
-      
+
       const [ogx, ogy] = overlap(this, otherObj);
       const [x, y] = overlap(this, otherObj, [dx, dy]);
 
