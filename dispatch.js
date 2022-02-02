@@ -43,22 +43,29 @@ const ACTIONS = {
   RUN(args, state) {
     const string = state.codemirror.view.state.doc.toString();
 
-    const sprites = state.assets.filter(a => a.type === "sprite").map(a => a.data);
+    const sprites = state.assets
+      .filter((a) => a.type === "sprite")
+      .map((a) => a.data);
 
     size_up_sprites(sprites);
 
     state.logs = [];
     state.error = false;
 
-    // document.querySelector("iframe").contentWindow.postMessage({ 
-    //   prog: string, 
-    //   assets: state.assets, 
-    //   show: state.show 
+    // document.querySelector("iframe").contentWindow.postMessage({
+    //   prog: string,
+    //   assets: state.assets,
+    //   show: state.show
     // }, '*');
 
     const gameCanvas = document.querySelector(".game-canvas");
-    const err = evalGameScript({ assets: state.assets, prog: string, show: state.show, gameCanvas });
-    if (err) dispatch("LOG_ERROR", { err })
+    const err = evalGameScript({
+      assets: state.assets,
+      prog: string,
+      show: state.show,
+      gameCanvas,
+    });
+    if (err) dispatch("LOG_ERROR", { err });
     document.querySelector(".game-canvas").focus(); // TODO: can we focus in iframe
 
     dispatch("RENDER");
@@ -75,11 +82,11 @@ const ACTIONS = {
       assets: state.assets,
       name: state.name,
       previousID: state.previousID,
-      engineVersion: state.engineVersion
+      engineVersion: state.engineVersion,
     });
   },
   SAVE: async ({ type }, state) => {
-    await save(type, state)
+    await save(type, state);
   },
   CANVAS_MOUSE_MOVE({ content: { mouseX, mouseY } }, state) {
     state.mouseX = mouseX;
@@ -99,7 +106,7 @@ const ACTIONS = {
     // TODO: do we need to select default asset? maybe not
 
     if (!state.engineVersion) {
-      state.engineVersion = await latestEngineVersion()
+      state.engineVersion = await latestEngineVersion();
     }
 
     const el = document.querySelector(".asset-editor");
@@ -118,7 +125,7 @@ const ACTIONS = {
     render(el, html``);
 
     if (state.assetEditor && state.assetEditor.end) state.assetEditor.end();
-    
+
     function randString(length) {
       var randomChars = "abcdefghijklmnopqrstuvwxyz";
       var result = "";
@@ -133,7 +140,7 @@ const ACTIONS = {
     if (assetType === "sprite") {
       state.assetEditor = createPixelEditor(
         document.querySelector(".asset-editor")
-      )
+      );
       const grid = state.assetEditor.createEmptyGrid();
       state.assetEditor.setGridColors(grid);
 
@@ -141,22 +148,22 @@ const ACTIONS = {
       state.assets.push({
         name,
         type: "sprite",
-        data: grid
-      })
+        data: grid,
+      });
 
       state.selected_asset = state.assets.length - 1;
     } else if (assetType === "tune") {
       state.assetEditor = createSequencer(
         document.querySelector(".asset-editor")
-      )
+      );
 
       const name = "tune_" + randString(3);
       const tune = state.assetEditor.getTune();
       state.assets.push({
         name,
         type: "tune",
-        data: tune
-      })
+        data: tune,
+      });
       state.assetEditor.setTune(tune);
       state.selected_asset = state.assets.length - 1;
     }
@@ -164,7 +171,7 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   CHANGE_ASSET_NAME({ index, newName }, state) {
-    const usedNames = state.assets.map(x => x.name);
+    const usedNames = state.assets.map((x) => x.name);
     if (usedNames.includes(newName)) return;
     else {
       state.assets[index].name = newName;
@@ -184,14 +191,14 @@ const ACTIONS = {
     if (assetType === "sprite") {
       state.assetEditor = createPixelEditor(
         document.querySelector(".asset-editor")
-      )
+      );
 
       const grid = state.assets[index].data;
       state.assetEditor.setGridColors(grid);
     } else if (assetType === "tune") {
       state.assetEditor = createSequencer(
         document.querySelector(".asset-editor")
-      )
+      );
       const tune = state.assets[index].data;
       state.assetEditor.setTune(tune);
     }
@@ -206,10 +213,11 @@ const ACTIONS = {
     state.assets = state.assets.filter((x, i) => i !== index);
 
     if (state.selected_asset >= state.assets.length) {
-      state.selected_asset = state.assets.length - 1
+      state.selected_asset = state.assets.length - 1;
     }
 
-    if (state.selected_asset !== -1) dispatch("SELECT_ASSET", { index: state.selected_asset });
+    if (state.selected_asset !== -1)
+      dispatch("SELECT_ASSET", { index: state.selected_asset });
     else {
       if (state.assetEditor && state.assetEditor.end) state.assetEditor.end();
       const el = document.querySelector(".asset-editor");

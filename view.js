@@ -53,20 +53,22 @@ const gameOutput0 = () => html`
       <div class="text-container"></div>
     </div>
   </div>
-`
+`;
 
 const trackMouse = (e) => {
   dispatch("CANVAS_MOUSE_MOVE", {
     content: { mouseX: e.offsetX, mouseY: e.offsetY },
   });
-}
+};
 
-const gameOutput = state => html`
+const gameOutput = (state) => html`
   <div class="game-output">
-    ${true 
-      ? gameOutput0() 
-      : html`<iframe class="game-iframe" sandbox="allow-scripts allow-same-origin"></iframe>`
-    }
+    ${true
+      ? gameOutput0()
+      : html`<iframe
+          class="game-iframe"
+          sandbox="allow-scripts allow-same-origin"
+        ></iframe>`}
     <div class="show-options">
       <p
         @click=${(e) => {
@@ -86,13 +88,19 @@ const gameOutput = state => html`
       </p>
       <span style="display: flex;">
         <span style="min-width: 70px; max-width: 70px;">mouse:</span>
-        <span style="display: flex; justify-content: flex-end; min-width: 70px; max-width: 70px;">${state.mouseX} x</span>
+        <span
+          style="display: flex; justify-content: flex-end; min-width: 70px; max-width: 70px;"
+          >${state.mouseX} x</span
+        >
         ,
-        <span style="display: flex; justify-content: flex-end; min-width: 70px; max-width: 70px;">${state.mouseY} y</span>
+        <span
+          style="display: flex; justify-content: flex-end; min-width: 70px; max-width: 70px;"
+          >${state.mouseY} y</span
+        >
       </span>
     </div>
   </div>
-`
+`;
 
 export function view(state) {
   return html`
@@ -267,9 +275,7 @@ export function view(state) {
           run (shift + enter)
         </button>
         ${shareOptions(state)}
-        <button class="menu-option" @click=${toggleDocs}>
-          docs
-        </button>
+        <button class="menu-option" @click=${toggleDocs}>docs</button>
         <a
           class="a-to-button menu-choice"
           target="_blank"
@@ -282,9 +288,8 @@ export function view(state) {
       ${gameOutput(state)}
       <div class="pixel-editor-container">
         <div class="list-of-sprites">
-          ${state.assets.map(
-            (x, i) => {
-              return html`
+          ${state.assets.map((x, i) => {
+            return html`
               <div
                 class=${[
                   "sprite-entry",
@@ -299,10 +304,18 @@ export function view(state) {
                   x
                 </div>
               </div>
-            `
+            `;
           })}
-          <button @click=${() => dispatch("CREATE_ASSET", { assetType: "sprite" })}>add sprite</button>
-          <button @click=${() => dispatch("CREATE_ASSET", { assetType: "tune" })}>add tune</button>
+          <button
+            @click=${() => dispatch("CREATE_ASSET", { assetType: "sprite" })}
+          >
+            add sprite
+          </button>
+          <button
+            @click=${() => dispatch("CREATE_ASSET", { assetType: "tune" })}
+          >
+            add tune
+          </button>
         </div>
         <div class="asset-editor"></div>
       </div>
@@ -317,7 +330,7 @@ export function view(state) {
 const toggleDocs = () => {
   const docs = document.querySelector(".docs");
   docs.classList.toggle("hide-docs");
-}
+};
 
 const renderDocs = (state) => html`
   <style>
@@ -343,14 +356,14 @@ const renderDocs = (state) => html`
       position: fixed;
       right: 10px;
       top: 10px;
-
     }
 
     .hide-docs .close-docs {
       display: none;
     }
 
-    .docs pre, .docs code {
+    .docs pre,
+    .docs code {
       background: lightgrey;
       border-radius: 3px;
       padding: 5px;
@@ -358,26 +371,29 @@ const renderDocs = (state) => html`
     }
   </style>
   <div class="docs hide-docs">
-    <b>Create Engine</b> 
+    <b>Create Engine</b>
     <pre>const engine = createEngine(gameCanvas, width, height);</pre>
     Example:
     <pre>const engine = createEngine(gameCanvas, 300, 300);</pre>
     <code>gameCanvas</code> is automatically injected into your game script.
-    <br><br>
+    <br /><br />
 
-    <b>Start Engine</b> 
+    <b>Start Engine</b>
     <pre>engine.start()</pre>
 
-    <b>End Engine</b> 
+    <b>End Engine</b>
     <pre>engine.end()</pre>
 
-    <b>Engine Properties</b> 
-    <pre>engine.width
+    <b>Engine Properties</b>
+    <pre>
+engine.width
 engine.height
-</pre>
+</pre
+    >
 
-    <b>Add Object</b> 
-    <pre>engine.add({
+    <b>Add Object</b>
+    <pre>
+engine.add({
   tags: ["name"],
   x: number, // the x position
   y: number, // the y position
@@ -394,10 +410,12 @@ engine.height
   update: (me) => { // runs every frame
 
   }
-})</pre>
+})</pre
+    >
 
-    <b>Add Text</b> 
-    <pre>engine.addText(
+    <b>Add Text</b>
+    <pre>
+engine.addText(
     "string",  
     x, 
     y, 
@@ -406,49 +424,52 @@ engine.height
       size: number,
       rotate: number,
     }
-)</pre>
+)</pre
+    >
     Example of adding text:
     <pre>const greetingText = e.addText("hello world", 150, 150);</pre>
     Example of updating text:
     <pre>greetingText.text = "new greeting";</pre>
 
-
-    <b>Remove Object</b> 
+    <b>Remove Object</b>
     <pre>engine.remove(obj)</pre>
     or
     <pre>engine.remove("tag-name")</pre>
 
-
-    <b>Key Inputs</b> 
+    <b>Key Inputs</b>
     <pre>engine.pressedKey(keyCode)</pre>
     <pre>engine.heldKey(keyCode)</pre>
 
-    <b>Object Properties</b> 
-    <br><br>
+    <b>Object Properties</b>
+    <br /><br />
     On each object you can access:
-    <pre>obj.x
+    <pre>
+obj.x
 obj.y
 obj.vx
 obj.vy
 obj.width
 obj.height
 obj.hasTag("tag-name")
-</pre>
+</pre
+    >
 
-    <b>Playing Tunes</b> 
-    <br><br>
+    <b>Playing Tunes</b>
+    <br /><br />
     To play a tune once:
     <pre>playTune(tune_asset_name);</pre>
     To play a tune on repeat:
     <pre>loopTune(tune_asset_name);</pre>
     To stop a tune on repeat:
-    <pre>const tuneToStop = loopTune(tune_asset_name);
+    <pre>
+const tuneToStop = loopTune(tune_asset_name);
 tuneToStop.end();
-</pre>
+</pre
+    >
 
-<button class="close-docs" @click=${toggleDocs}>close</button>
+    <button class="close-docs" @click=${toggleDocs}>close</button>
   </div>
-`
+`;
 
 const renderSpriteName = (name, index, state) =>
   state.selected_asset === index

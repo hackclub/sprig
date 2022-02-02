@@ -8,8 +8,8 @@ const BLACK_LISTED_WORDS = [
   // "eval",
   "import",
   // "Function"
-]
-  
+];
+
 export function createEval() {
   let currentEngine = null;
   let tunePlayers = [];
@@ -25,7 +25,7 @@ export function createEval() {
     }
 
     if (tunePlayers.length > 0) {
-      tunePlayers.forEach(x => x.end()); 
+      tunePlayers.forEach((x) => x.end());
       tunePlayers = [];
     }
 
@@ -52,19 +52,16 @@ export function createEval() {
       },
     };
 
-    assets.forEach(asset => {
+    assets.forEach((asset) => {
       included[asset.name] = asset.data;
-    })
+    });
 
     try {
-      new Function(...Object.keys(included), prog)(
-        ...Object.values(included)
-      );
+      new Function(...Object.keys(included), prog)(...Object.values(included));
 
       return null;
     } catch (err) {
       return err;
     }
-
-  };
+  }
 }

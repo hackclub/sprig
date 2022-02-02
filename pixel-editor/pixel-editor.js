@@ -76,7 +76,7 @@ export function createPixelEditor(target) {
 
   function addDropUpload() {
     const container = target.querySelector(".pixel-editor-container");
-    
+
     container.addEventListener("drop", (e) => {
       let dt = e.dataTransfer;
       let files = dt.files;
@@ -101,8 +101,8 @@ export function createPixelEditor(target) {
     let reader = new FileReader();
     reader.onload = (event) => {
       const dataURL = event.target.result;
-      const canvas = target.querySelector('#offscreen-canvas');
-      const ctx = canvas.getContext('2d');
+      const canvas = target.querySelector("#offscreen-canvas");
+      const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const image = new Image();
       image.onload = () => {
@@ -113,15 +113,14 @@ export function createPixelEditor(target) {
             imageData.data[i * 4],
             imageData.data[i * 4 + 1],
             imageData.data[i * 4 + 2],
-            imageData.data[i * 4 + 3]
+            imageData.data[i * 4 + 3],
           ];
         }
       };
       image.src = dataURL;
     };
     reader.readAsDataURL(file);
-
-  }
+  };
 
   const renderTool = (toolName, state) => html`
     <button
@@ -157,8 +156,8 @@ export function createPixelEditor(target) {
         ></canvas>
       </div>
       <div class="toolbox">
-        ${["draw", "circle", "rectangle", "line", "bucket", "move"].map((name) =>
-          renderTool(name, state)
+        ${["draw", "circle", "rectangle", "line", "bucket", "move"].map(
+          (name) => renderTool(name, state)
         )}
         <button
           @click=${() => {
@@ -180,15 +179,20 @@ export function createPixelEditor(target) {
           <img src="./assets/undo.png" alt="undo" width="25px" />
           undo
         </button>
-        <button title="export" @click=${() => {
-          const canvas = target.querySelector('#offscreen-canvas');
-          drawCanvasNoBg(canvas);
-          const image = canvas.toDataURL();
-          const aDownloadLink = document.createElement('a');
-          aDownloadLink.download = 'sprite.png';
-          aDownloadLink.href = image;
-          aDownloadLink.click();          
-        }}>export</button>
+        <button
+          title="export"
+          @click=${() => {
+            const canvas = target.querySelector("#offscreen-canvas");
+            drawCanvasNoBg(canvas);
+            const image = canvas.toDataURL();
+            const aDownloadLink = document.createElement("a");
+            aDownloadLink.download = "sprite.png";
+            aDownloadLink.href = image;
+            aDownloadLink.click();
+          }}
+        >
+          export
+        </button>
       </div>
 
       <div class="colors">
@@ -202,14 +206,18 @@ export function createPixelEditor(target) {
             state.color = hexToRGBA(e.target.value);
             r();
           }}
-          class=${RGBA_to_hex(state.color) !== "#00000000" ? "selected-tool" : ""}
+          class=${RGBA_to_hex(state.color) !== "#00000000"
+            ? "selected-tool"
+            : ""}
           style=${`
             height: 35px; 
             width: 35px; 
           `}
         />
         <button
-          class=${RGBA_to_hex(state.color) === "#00000000" ? "selected-tool" : ""}
+          class=${RGBA_to_hex(state.color) === "#00000000"
+            ? "selected-tool"
+            : ""}
           @click=${() => {
             state.color = hexToRGBA("#00000000");
             r();
@@ -691,6 +699,6 @@ export function createPixelEditor(target) {
     gridColors: () => state.gridColors,
     end() {
       if (state.animationId) window.cancelAnimationFrame(state.animationId);
-    }
+    },
   };
 }
