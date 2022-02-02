@@ -309,8 +309,22 @@ export function view(state) {
     <div id="vertical-bar"></div>
     ${renderOptions(state)}
     <div id="notification-container"></div>
+    ${renderDocs(state)}
   `;
 }
+
+const renderDocs = (state) => html`
+  <style>
+    .docs {
+      position: absolute;
+      height: 100%;
+      width: 300px;
+      right: 0px;
+      top: 0px;
+    }
+  </style>
+  <div class="docs"></div>
+`
 
 const renderSpriteName = (name, index, state) =>
   state.selected_asset === index

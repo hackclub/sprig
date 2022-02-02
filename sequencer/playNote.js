@@ -1,13 +1,3 @@
-import { Synth } from "./audiosynth.js";
-
-
-const instruments = {
-  piano: Synth.createInstrument('piano'),
-  edm: Synth.createInstrument('edm'),
-  acoustic: Synth.createInstrument('acoustic'),
-  organ: Synth.createInstrument('organ'),
-}
-
 let letters = {
   "c": 16.35,
   "c#": 17.32,
