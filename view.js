@@ -90,6 +90,7 @@ const gameOutput = (state) => html`
       </span>
     </div>
     <div class="menu">
+      ${runButton(state)}
       ${saveLink(state)}
       ${saveFile(state)}
       ${githubLink(state)}
