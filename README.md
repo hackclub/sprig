@@ -278,7 +278,9 @@ playTune(tune_asset_name);
 
 // or play multiple toons
 playTune(tune_0, tune_1, tune_2);
-To play a tune on repeat:
+
+
+// To play a tune on repeat:
 loopTune(tune_asset_name);
 
 // or loop multiple toons
