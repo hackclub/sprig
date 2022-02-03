@@ -162,6 +162,8 @@ class Object {
     let canMoveInY = true;
 
     this.engine.objects.forEach((otherObj) => {
+      if (this == otherObj) return;
+
       const [ogx, ogy] = overlap(this, otherObj);
       const [x, y] = overlap(this, otherObj, [dx, dy]);
 
@@ -172,14 +174,14 @@ class Object {
           canMoveInX = false;
           this._ax = 0;
           this._vx = -this.bounce * this._vx;
-          this._x -= ogx < -1.5 ? ogx : 0;
+          this._x -= ogx < -1 ? ogx : 0;
         }
 
         if (y > 0 && ogy <= 0) {
           canMoveInY = false;
           this._ay = 0;
           this._vy = -this.bounce * this._vy;
-          this._y -= ogy < -1.5 ? ogy : 0;
+          this._y -= ogy < -1 ? ogy : 0;
         }
       }
 
@@ -337,9 +339,6 @@ class Engine {
     const parent = canvas.parentNode;
     parent.querySelectorAll(".text-container > *").forEach((x) => x.remove());
     this.textContainer = parent.querySelector(".text-container");
-
-    /* let's make sure we know how big all the sprites are before we do any game logic */
-    dispatch("SIZE_UP_SPRITES");
 
     canvas.setAttribute("tabindex", "1");
 

@@ -1,4 +1,4 @@
-import { render, html, svg } from "../pkg/uhtml.js";
+import { render, html, svg } from "../uhtml.js";
 
 // canvas {
 //   image-rendering: optimizeSpeed;
@@ -11,16 +11,10 @@ import { render, html, svg } from "../pkg/uhtml.js";
 //   -ms-interpolation-mode: nearest-neighbor;
 // }
 
-export const pixelStyles = html`
+const pixelStyles = html`
   <style>
     :root {
       --dark-grey: #434343;
-    }
-
-    .pixel-editor-container {
-      position: relative;
-      width: 100%;
-      height: 100%;
     }
 
     .canvas-container {
@@ -33,10 +27,6 @@ export const pixelStyles = html`
 
     .drawing-canvas {
       background: white;
-    }
-
-    .offscreen-canvas {
-      display: none;
     }
 
     .toolbox {
@@ -86,3 +76,5 @@ export const pixelStyles = html`
     }
   </style>
 `;
+
+export default pixelStyles;

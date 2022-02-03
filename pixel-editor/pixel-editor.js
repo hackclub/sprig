@@ -37,11 +37,89 @@ export function createPixelEditor(target) {
     showGrid: false,
     defaultGridArraySize: [32, 32],
     undoRedoStack: [],
+    animationId: null,
     selectHandle: {
       clicked: false,
       dragged: false,
     },
     // hoveredCell: null,
+  };
+
+  function upload(files, extensions = []) {
+    let file = files[0];
+    let fileName = file.name.split(".");
+    let name = fileName[0];
+    const extension = fileName[fileName.length - 1];
+
+    if (extensions.length > 0 && extensions.includes(enxtension))
+      throw "Extension not recongized: " + fileName;
+
+    readFile(file);
+  }
+
+  function readFile(file) {
+    var reader = new FileReader();
+    reader.readAsText(file);
+
+    reader.onloadend = (event) => {
+      let raw = reader.result;
+
+      // const json = JSON.parse(raw);
+      // const { song, cells, bpm } = json;
+
+      // state.cells = cells;
+      // state.bpm = bpm;
+      setImageData(file);
+      r();
+    };
+  }
+
+  function addDropUpload() {
+    const container = target.querySelector(".pixel-editor-container");
+
+    container.addEventListener("drop", (e) => {
+      let dt = e.dataTransfer;
+      let files = dt.files;
+
+      upload(files);
+
+      if (e.stopPropagation) e.stopPropagation();
+      if (e.preventDefault) e.preventDefault();
+      e.cancelBubble = true;
+      e.returnValue = false;
+    });
+
+    container.addEventListener("dragover", (e) => {
+      if (e.stopPropagation) e.stopPropagation();
+      if (e.preventDefault) e.preventDefault();
+      e.cancelBubble = true;
+      e.returnValue = false;
+    });
+  }
+
+  const setImageData = (file) => {
+    let reader = new FileReader();
+    reader.onload = (event) => {
+      const dataURL = event.target.result;
+      const canvas = target.querySelector("#offscreen-canvas");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const image = new Image();
+      image.onload = () => {
+        ctx.drawImage(image, 0, 0, 32, 32);
+        const imageData = ctx.getImageData(0, 0, 32, 32);
+        for (let i = 0; i < state.gridColors.length; i++) {
+          state.gridColors[i] = [
+            imageData.data[i * 4],
+            imageData.data[i * 4 + 1],
+            imageData.data[i * 4 + 2],
+            imageData.data[i * 4 + 3],
+          ];
+        }
+      };
+      image.src = dataURL;
+    };
+    reader.readAsDataURL(file);
   };
 
   const renderTool = (toolName, state) => html`
@@ -51,65 +129,105 @@ export function createPixelEditor(target) {
         state.tool = toolName;
         r();
       }}
-      style="height: 40px;"
+      style="
+        display: flex; 
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: min-content;
+      "
       title="${toolName}"
     >
-      <img src=${`./assets/${toolName}.png`} width="25px" />
+      <img src=${`./assets/${toolName}.png`} alt=${toolName} width="25px" />
+      ${toolName}
     </button>
   `;
 
   const view = (state) => html`
     ${pixelStyles}
-    <div class="canvas-container">
-      <canvas class="drawing-canvas"></canvas>
-    </div>
-    <div class="toolbox">
-      ${["draw", "circle", "rectangle", "line", "bucket", "move"].map((name) =>
-        renderTool(name, state)
-      )}
-      <button
-        @click=${() => {
-          if (state.undoRedoStack.length === 0) return;
-          const grid = JSON.parse(state.undoRedoStack.pop());
-          state.gridColors.forEach((arr, i) => {
-            state.gridColors[i] = grid[i];
-          });
-          document.dispatchEvent(new CustomEvent("spriteupdate"));
-        }}
-        style="height: 40px;"
-        title="undo"
-      >
-        <img src="./assets/undo.png" width="25px" />
-      </button>
-    </div>
+    <div class="pixel-editor-container">
+      <div class="canvas-container">
+        <canvas class="drawing-canvas"></canvas>
+        <canvas
+          class="offscreen-canvas"
+          id="offscreen-canvas"
+          width="32"
+          height="32"
+        ></canvas>
+      </div>
+      <div class="toolbox">
+        ${["draw", "circle", "rectangle", "line", "bucket", "move"].map(
+          (name) => renderTool(name, state)
+        )}
+        <button
+          @click=${() => {
+            if (state.undoRedoStack.length === 0) return;
+            const grid = JSON.parse(state.undoRedoStack.pop());
+            state.gridColors.forEach((arr, i) => {
+              state.gridColors[i] = grid[i];
+            });
+            document.dispatchEvent(new CustomEvent("spriteupdate"));
+          }}
+          style="
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: min-content;
+          "
+          title="undo"
+        >
+          <img src="./assets/undo.png" alt="undo" width="25px" />
+          undo
+        </button>
+        <button
+          title="export"
+          @click=${() => {
+            const canvas = target.querySelector("#offscreen-canvas");
+            drawCanvasNoBg(canvas);
+            const image = canvas.toDataURL();
+            const aDownloadLink = document.createElement("a");
+            aDownloadLink.download = "sprite.png";
+            aDownloadLink.href = image;
+            aDownloadLink.click();
+          }}
+        >
+          export
+        </button>
+      </div>
 
-    <div class="colors">
-      <input
-        type="color"
-        @input=${(e) => {
-          state.color = hexToRGBA(e.target.value);
-          r();
-        }}
-        @click=${(e) => {
-          state.color = hexToRGBA(e.target.value);
-          r();
-        }}
-        class=${RGBA_to_hex(state.color) !== "#00000000" ? "selected-tool" : ""}
-        style=${`
-          height: 35px; 
-          width: 35px; 
-        `}
-      />
-      <button
-        class=${RGBA_to_hex(state.color) === "#00000000" ? "selected-tool" : ""}
-        @click=${() => {
-          state.color = hexToRGBA("#00000000");
-          r();
-        }}
-        style="height: 35px;"
-      >
-        <img src="./assets/clear.png" width="25px" />
-      </button>
+      <div class="colors">
+        <input
+          type="color"
+          @input=${(e) => {
+            state.color = hexToRGBA(e.target.value);
+            r();
+          }}
+          @click=${(e) => {
+            state.color = hexToRGBA(e.target.value);
+            r();
+          }}
+          class=${RGBA_to_hex(state.color) !== "#00000000"
+            ? "selected-tool"
+            : ""}
+          style=${`
+            height: 35px; 
+            width: 35px; 
+          `}
+        />
+        <button
+          class=${RGBA_to_hex(state.color) === "#00000000"
+            ? "selected-tool"
+            : ""}
+          @click=${() => {
+            state.color = hexToRGBA("#00000000");
+            r();
+          }}
+          style="height: 35px;"
+        >
+          <img src="./assets/clear.png" width="25px" />
+        </button>
+      </div>
     </div>
   `;
 
@@ -394,6 +512,39 @@ export function createPixelEditor(target) {
     ctx.drawImage(tempCanvas, 0, 0, w, h);
   };
 
+  const drawCanvasNoBg = (canvas, main = true) => {
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const [w, h] = readCanvas(canvas);
+    const [gridW, gridH] = main ? state.gridSize : state.defaultGridArraySize;
+
+    const pixels = new Uint8ClampedArray(
+      state.defaultGridArraySize[0] * state.defaultGridArraySize[1] * 4
+    ).fill(0);
+
+    state.gridColors.forEach((color, i) => {
+      let index = i * 4;
+      pixels[index] = color[0];
+      pixels[index + 1] = color[1];
+      pixels[index + 2] = color[2];
+      pixels[index + 3] = color[3];
+    });
+
+    ctx.webkitImageSmoothingEnabled = false;
+    ctx.mozImageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = false;
+
+    const image = new ImageData(
+      pixels,
+      state.defaultGridArraySize[0],
+      state.defaultGridArraySize[1]
+    );
+
+    ctx.putImageData(image, 0, 0);
+  };
+
   const setCanvasSize = (c) => {
     if (state.gridSize[0] < state.gridSize[1]) {
       state.canvasSize[0] =
@@ -414,7 +565,7 @@ export function createPixelEditor(target) {
   const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
   function getPoint(e) {
-    const c = document.querySelector(".drawing-canvas");
+    const c = target.querySelector(".drawing-canvas");
     const rect = c.getBoundingClientRect();
     const rawX = e.clientX - rect.left;
     const rawY = e.clientY - rect.top;
@@ -434,8 +585,9 @@ export function createPixelEditor(target) {
   }
 
   const init = (state) => {
-    render(target, view(state));
-    const c = document.querySelector(".drawing-canvas");
+    r();
+    const c = target.querySelector(".drawing-canvas");
+
     state.canvas = c;
 
     setCanvasSize(c);
@@ -449,6 +601,8 @@ export function createPixelEditor(target) {
     ).fill(null);
 
     animate();
+
+    addDropUpload();
 
     c.addEventListener("mousedown", (e) => {
       state.undoRedoStack.push(JSON.stringify(state.gridColors));
@@ -528,7 +682,7 @@ export function createPixelEditor(target) {
 
   const animate = () => {
     drawCanvas(state.canvas);
-    window.requestAnimationFrame(animate);
+    state.animationId = window.requestAnimationFrame(animate); // need to cancel this animation frame
   };
 
   init(state);
@@ -546,5 +700,8 @@ export function createPixelEditor(target) {
       ).fill([0, 0, 0, 0]),
     }),
     gridColors: () => state.gridColors,
+    end() {
+      if (state.animationId) window.cancelAnimationFrame(state.animationId);
+    },
   };
 }
