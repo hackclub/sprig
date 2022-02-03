@@ -106,7 +106,9 @@ export function createPixelEditor(target) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const image = new Image();
       image.onload = () => {
-        ctx.drawImage(image, 0, 0, 32, 32);
+        const w = Math.min(image.width, 32);
+        const h = Math.min(image.height, 32);
+        ctx.drawImage(image, 0, 0, w, h);
         const imageData = ctx.getImageData(0, 0, 32, 32);
         for (let i = 0; i < state.gridColors.length; i++) {
           state.gridColors[i] = [

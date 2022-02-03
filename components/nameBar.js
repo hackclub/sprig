@@ -6,7 +6,7 @@ import menuButtons from "./menuButtons.js";
 const nameStyles = `
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  height: min-content;
 `
 
 const linkStyles = `
@@ -25,7 +25,7 @@ export default (state) => (
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: .8em;
+        padding: .5em .8em;
       }
 
       .name-bar-input {
@@ -41,9 +41,9 @@ export default (state) => (
       }
 
       .powered-by {
-        padding-top: 5px;
         display: flex;
         font-size: .9rem;
+        align-items: center
       }
     </style>
 
@@ -62,7 +62,7 @@ export default (state) => (
           &nbsp;
           <a href="https://github.com/hackclub/game-lab"
              target="_blank">
-            <img src="./assets/github.png" width="20px" />
+            <img style="transform: translate(-9px, 3px)" src="./assets/github.png" width="32px" />
           </a>
         </div>
       </div>
