@@ -5,6 +5,7 @@ import menuButtons from "./menuButtons.js";
 
 const nameStyles = `
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
   height: min-content;
 `

@@ -266,7 +266,6 @@ const ACTIONS = {
       state.assets[index].name = newName;
       state.selected_asset = index;
     }
-    // dispatch("RUN");
   },
   SELECT_ASSET({ index }, state) {
     // need to clear asset editor container to render template fresh

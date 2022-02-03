@@ -1,4 +1,4 @@
-# 👾 **[Hack Club Game Lab →](https://game-lab.hackclub.dev/)**
+# 👾 **[Hack Club Game Lab →](https://gamelab.hackclub.dev/)**
 
 The best way to learn is by making things you care about and sharing them with others. **That's what Game Lab is all about**.
 
@@ -12,7 +12,7 @@ Then get building with Game Lab!
 
 You should be able to get started in Game Lab with very little experience programming but you should still be able to have fun with it even if you're an expert. Enjoy and we'd love to see what you make!
 
-### ⮑ _**[Click here to launch Game Lab](https://game-lab.hackclub.dev/)**_ ⮐
+### ⮑ _**[Click here to launch Game Lab](https://gamelab.hackclub.dev/)**_ ⮐
 _(and scroll down for a brief tutorial to get started)_
 !
 
@@ -329,19 +329,19 @@ e.add({
 
 ## Tiny Games
 
-[Pong-ish](https://game-lab.hackclub.dev/?id=bd5087c16160988e4d2e27ca2c6157f9)
+[Pong-ish](https://gamelab.hackclub.dev/?id=bd5087c16160988e4d2e27ca2c6157f9)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149371012-faf3e45f-9d3a-47d4-831b-566d9171d2bd.gif">
 
 ---
 
-[Crappy Birds](https://game-lab.hackclub.dev/?id=c66c509f01eb83f7bc67053818b75159)
+[Crappy Birds](https://gamelab.hackclub.dev/?id=c66c509f01eb83f7bc67053818b75159)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149380918-a1855ab3-cc2d-4a9a-adc0-d5316d6f17ba.gif">
 
 ---
 
-[Brick Broken](https://game-lab.hackclub.dev/?id=8f18ab06c1a8f5267e6f4a6b3bec06f5)
+[Brick Broken](https://gamelab.hackclub.dev/?id=8f18ab06c1a8f5267e6f4a6b3bec06f5)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/150606449-5b73d7fe-f2d3-432f-9cc5-346c20919ec8.gif">
 
@@ -351,11 +351,11 @@ This could be because you made your game in an old version of Game Lab.
 
 Game Lab is in active development. We want to make sure you can play the games you make even if they aren't compatible with the newest version of the editor. If you made a game and need to run it on an old version of Game Lab you can use this site: 
 
-`https://game-lab-versions.hackclub.dev/[SEMANTIC_VERSION]/index.html`
+`https://gamelab-versions.hackclub.dev/[SEMANTIC_VERSION]/index.html`
 
 For example the first release of Game Lab is available here: 
 
-https://game-lab-versions.hackclub.dev/0.1.0/index.html
+https://gamelab-versions.hackclub.dev/0.1.0/index.html
 
 
 ## Philosophy
@@ -372,11 +372,11 @@ The Hack Club Game Lab requires a local HTTP server to run in development. Here'
 
 Clone repo:
 
-    $ git clone https://github.com/hackclub/game-lab
+    $ git clone https://github.com/hackclub/gamelab
 
 Start a local HTTP server inside the repo:
 
-    $ cd game-lab/
+    $ cd gamelab/
     $ python3 -m http.server 3000
 
 And then go to http://localhost:3000 in your web browser, and it should work!
