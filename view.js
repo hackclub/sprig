@@ -350,8 +350,7 @@ export function view(state) {
       ${gameOutput(state)}
       <div class="pixel-editor-container">
         <div class="list-of-sprites">
-          ${addAssetButton(state, "sprite")}
-          ${addAssetButton(state, "tune")}
+          ${addAssetButton(state, "sprite")} ${addAssetButton(state, "tune")}
           ${state.assets.map((x, i) => {
             return html`
               <div
