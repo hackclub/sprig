@@ -26,7 +26,7 @@ const STATE = {
   version: "0.2.0",
   previousID: null, // TODO: start setting this correctly on cartridge load
   selected_asset: -1,
-  name: "name-here",
+  name: "game-name-here",
   saveLinkStatus: "ready",
   saveFileStatus: "ready",
   runStatus: "loading",
