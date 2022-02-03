@@ -194,11 +194,11 @@ class Object {
   }
 
   get width() {
-    return this._width * this.scale;
+    return this._width * Math.abs(this.scale[0] ?? this.scale);
   }
 
   get height() {
-    return this._height * this.scale;
+    return this._height * Math.abs(this.scale[1] ?? this.scale);
   }
 
   get rotate() {
@@ -216,6 +216,8 @@ class Object {
     const [ox, oy] = [w * this.origin[0], h * this.origin[1]];
     ctx.translate(this._x, this._y);
     ctx.rotate(this._rotate);
+    if (Array.isArray(this.scale))
+        ctx.scale(...this.scale.map(Math.sign));
 
     // draw sprite with sprite scale
     if (this.sprite !== null) ctx.drawImage(this.sprite, -ox, -oy, w, h);
