@@ -216,8 +216,7 @@ class Object {
     const [ox, oy] = [w * this.origin[0], h * this.origin[1]];
     ctx.translate(this._x, this._y);
     ctx.rotate(this._rotate);
-    if (Array.isArray(this.scale))
-        ctx.scale(...this.scale.map(Math.sign));
+    if (Array.isArray(this.scale)) ctx.scale(...this.scale.map(Math.sign));
 
     // draw sprite with sprite scale
     if (this.sprite !== null) ctx.drawImage(this.sprite, -ox, -oy, w, h);
