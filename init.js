@@ -2,6 +2,7 @@ import { events } from "./events.js";
 import { defaultProg } from "./defaultProg.js";
 import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
 import initCm from "./cm.js";
+import { spriteUpdate } from "./dispatch.js";
 
 export function init(state) {
   const url = new URL(window.location.href);
@@ -75,6 +76,7 @@ export function init(state) {
         state.sprites = saved.sprites;
         const name = Object.keys(saved.sprites)[0];
         dispatch("SELECT_SPRITE", { name });
+        spriteUpdate(true);
       }
     }
 

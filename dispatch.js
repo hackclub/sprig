@@ -1,4 +1,4 @@
-import { html, render, svg } from "./uhtml.js";
+import { html, render, svg } from "./pkg/uhtml.js";
 import { view } from "./view.js";
 import { init } from "./init.js";
 import { Engine } from "./Engine.js";
@@ -21,7 +21,8 @@ function showShared() {
   );
 }
 
-const STATE = {
+// Exported to access in codemirror extensions
+export const STATE = {
   codemirror: undefined,
   url: undefined,
   shareType: "airtable",
@@ -42,6 +43,17 @@ const STATE = {
     link: "",
   },
 };
+
+export function spriteUpdate(name) {
+  console.log("Sprite update", name)
+  document.dispatchEvent(new CustomEvent("spriteupdate", {
+    detail: name === true ? {
+      every: true
+    } : {
+      name
+    }
+  }));
+}
 
 let currentEngine;
 const ACTIONS = {
@@ -204,6 +216,7 @@ const ACTIONS = {
 
     dispatch("RENDER");
     dispatch("RUN");
+    spriteUpdate(true);
   },
   LOAD_EXAMPLE({ content }, state) {
     const string = state.codemirror.state.doc.toString();
@@ -230,6 +243,7 @@ const ACTIONS = {
     state.pixelEditor.setGridColors(grid);
     state.selected_sprite = name;
     dispatch("RENDER");
+    spriteUpdate(name);
   },
   CHANGE_SPRITE_NAME({ oldName, newName }, state) {
     // check name is valid, not duplicate or blank
@@ -241,6 +255,8 @@ const ACTIONS = {
     state.selected_sprite = newName;
     dispatch("RUN");
     dispatch("RENDER");
+    spriteUpdate(oldName);
+    spriteUpdate(newName);
   },
   SELECT_SPRITE({ name }, state) {
     const grid = state.sprites[name];
@@ -262,6 +278,7 @@ const ACTIONS = {
 
     dispatch("RENDER");
     dispatch("RUN");
+    spriteUpdate(name);
   },
   RENDER() {
     // console.log("rendered");

@@ -1,4 +1,4 @@
-import { render, html, svg } from "../uhtml.js";
+import { render, html, svg } from "../pkg/uhtml.js";
 import { pixelStyles } from "./pixel-styles.js";
 
 const hexToRGBA = (hex) => {
@@ -74,6 +74,7 @@ export function createPixelEditor(target) {
           state.gridColors.forEach((arr, i) => {
             state.gridColors[i] = grid[i];
           });
+          document.dispatchEvent(new CustomEvent("spriteupdate"));
         }}
         style="height: 40px;"
         title="undo"
@@ -512,6 +513,8 @@ export function createPixelEditor(target) {
         if (c !== null) state.gridColors[i] = c;
       });
       state.tempGridColors.fill(null);
+
+      document.dispatchEvent(new CustomEvent("spriteupdate"));
     };
 
     c.addEventListener("mouseup", (e) => {

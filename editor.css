@@ -47,6 +47,7 @@ body {
 
 #code-editor {
   flex: 1;
+  overflow: auto;
 }
 
 .log {

@@ -1,4 +1,4 @@
-import { html } from "./uhtml.js";
+import { html } from "./pkg/uhtml.js";
 
 function shareOptions(state) {
   return html`

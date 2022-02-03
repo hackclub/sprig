@@ -1,4 +1,4 @@
-import { render, html, svg } from "../uhtml.js";
+import { render, html, svg } from "../pkg/uhtml.js";
 
 // canvas {
 //   image-rendering: optimizeSpeed;
