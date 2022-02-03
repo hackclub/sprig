@@ -268,7 +268,7 @@ e.start();
 
 ---
 
-Adding tunes:
+__Adding Tunes__
 
 To add tunes, background music, beeps and boops to your game first make a tune asset in the asset editor. You can then play the asset as such:
 
@@ -292,6 +292,8 @@ const tuneToStop = loopTune(tune_asset_name);
 tuneToStop.end();
 ```
 ___
+
+__All Object Properties__
 
 Refer to the following example for all the available object properties:
 
