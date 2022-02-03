@@ -1,6 +1,7 @@
 # 👾 **[Hack Club Game Lab →](https://gamelab.hackclub.dev/)**
 
-The best way to learn is by making things you care about and sharing them with others. **That's what Game Lab is all about**.
+The best way to learn is by making things you care about and sharing them with others.  
+**That's what Game Lab is all about**.
 
 Have you ever wanted to...
 
@@ -8,9 +9,9 @@ Have you ever wanted to...
 - Create the Chrome dino game in 50?
 - Or... even better... make a delightful game that doesn't exist yet?
 
-Then get building with Game Lab!
+Then get started making games with Game Lab!
 
-You should be able to get started in Game Lab with very little experience programming but you should still be able to have fun with it even if you're an expert. Enjoy and we'd love to see what you make!
+You should be able to get started in Game Lab with very little experience programming but you should still be able to have fun with it even if you're an expert. Enjoy and can't wait to see what you make!
 
 ### ⮑ _**[Click here to launch Game Lab](https://gamelab.hackclub.dev/)**_ ⮐
 _(and scroll down for a brief tutorial to get started)_
@@ -20,12 +21,12 @@ _(and scroll down for a brief tutorial to get started)_
 
 Learning from functional examples is the best way to get started building games with Game Lab.
 
-Below we have created a series of short examples with code that works, that grow from creating a character on the screen to creating a more complicated game.
+Below we have created a series of short examples that grow from creating a character on the screen to creating a more complicated game.
 
-Initialize the game engine (this should already be written for you when you open the editor)
+Initialize the game engine (this may already be written for you when you open the editor):
 
 ```js
-const e = createEngine(gameCanvas, 300, 300);
+const engine = createEngine(gameCanvas, 300, 300);
 ```
 
 ---
@@ -35,16 +36,18 @@ Make a character:
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149362983-6f82a61c-c3d5-40b7-920f-f673c3ff2646.png">
 
 ```js
-const e = createEngine(gameCanvas, 300, 300);
+const engine = createEngine(gameCanvas, 300, 300);
 
-e.add({
+engine.add({
   x: 188,
   y: 69,
-  sprite: test_sprite,
+  sprite: player, // you'll need to create a sprite named "player" in the editor
+                  // (you can name it anything, just change the name here too)
   scale: 4, // this makes the sprite larger than its default 32 x 32 pixel size
+            // try changing this number to see what happens
 })
 
-e.start();
+engine.start();
 ```
 
 ---
@@ -54,28 +57,28 @@ Add a floor with gravity:
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149363706-453a45e8-d0d4-44a3-acc3-09e4bb577392.gif">
 
 ```js
-const e = createEngine(gameCanvas, 300, 300);
+const engine = createEngine(gameCanvas, 300, 300);
 
-e.add({
+engine.add({
   solid: true, // the solid property makes this object collideable
   x: 135,
   y: 114,
-  sprite: test_sprite,
+  sprite: player,
   scale: 4,
   update(me) { // update runs every frame
     me.vy += 2; // adding velocity every frame is acceleration
   }
 })
 
-e.add({
+engine.add({
   solid: true, // the solid property makes this object collideable
   x: -6,
   y: 283,
-  sprite: floor,
+  sprite: floor, // you will need to create a new sprite called "floor"
   scale: 11,
 })
 
-e.start();
+engine.start();
 ```
 
 ---
@@ -85,24 +88,24 @@ Add movement:
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149365452-7b042996-2beb-40a8-866e-f5748b5631da.gif">
 
 ```js
-const e = createEngine(gameCanvas, 300, 300);
+const engine = createEngine(gameCanvas, 300, 300);
 
-e.add({
+engine.add({
   solid: true,
   x: 135,
   y: 114,
-  sprite: test_sprite,
+  sprite: player,
   scale: 4,
   update(me) {
     me.vy += 2;
 
     // we can add key inputs by checking the keys in the update loop
-    if (e.heldKey("ArrowLeft")) me.x -= 3;
-    if (e.heldKey("ArrowRight")) me.x += 3; 
+    if (engine.heldKey("ArrowLeft")) me.x -= 3;
+    if (engine.heldKey("ArrowRight")) me.x += 3; 
   }
 })
 
-e.add({
+engine.add({
   solid: true,
   x: -6,
   y: 283,
@@ -110,7 +113,7 @@ e.add({
   scale: 11,
 })
 
-e.start();
+engine.start();
 ```
 
 ---
@@ -120,17 +123,17 @@ Add jump:
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149366181-588ae196-03dd-4268-9907-9477caa8a834.gif">
 
 ```js
-const e = createEngine(gameCanvas, 300, 300);
+const engine = createEngine(gameCanvas, 300, 300);
 
-e.add({
+engine.add({
   tags: ["player"], // we can add tags so we can reference objects
   solid: true,
   x: 135,
   y: 114,
-  sprite: test_sprite,
+  sprite: player,
   scale: 4,
   collides(me, them) { // this runs when we collide with another object
-    if (e.pressedKey(" ")) {
+    if (engine.pressedKey(" ")) {
       // here we are checking if we are standing on the floor
       if (them.hasTag("floor")) me.vy -= 19;
     }
@@ -138,12 +141,12 @@ e.add({
   update(me) {
     me.vy += 2;
 
-    if (e.heldKey("ArrowLeft")) me.x -= 3;
-    if (e.heldKey("ArrowRight")) me.x += 3;
+    if (engine.heldKey("ArrowLeft")) me.x -= 3;
+    if (engine.heldKey("ArrowRight")) me.x += 3;
   }
 })
 
-e.add({
+engine.add({
   tags: ["floor"], // we can add tags so we can reference objects
   solid: true,
   x: -6,
@@ -152,7 +155,7 @@ e.add({
   scale: 11,
 })
 
-e.start();
+engine.start();
 ```
 
 ---
@@ -162,12 +165,12 @@ Add platforms:
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149367516-7edb2780-edbd-4977-9a07-dcfbf47fcf93.gif">
 
 ```js
-const e = createEngine(gameCanvas, 300, 300);
-const ctx = e.ctx;
+const engine = createEngine(gameCanvas, 300, 300);
+const ctx = engine.ctx;
 
-e.add({
+engine.add({
   tags: ["player"],
-  sprite: test_sprite,
+  sprite: player,
   scale: 3,
   solid: true,
   x: 50,
@@ -175,20 +178,20 @@ e.add({
   collides(me, them) {
     if (them.hasTag("platform")) me.vx = them.vx;
     
-    if (e.pressedKey(" ")) {
+    if (engine.pressedKey(" ")) {
       if (them.hasTag("platform")) me.vy -= 11;
     }
   },
   update: (me) => {
       me.vy += 0.4;
   
-      if (e.heldKey("ArrowLeft")) me.x -= 3;
-      if (e.heldKey("ArrowRight")) me.x += 3;
+      if (engine.heldKey("ArrowLeft")) me.x -= 3;
+      if (engine.heldKey("ArrowRight")) me.x += 3;
   },
 })
 
 // we can use a function to make multiple instances of an object
-const addPlatform = (x, y) => e.add({
+const addPlatform = (x, y) => engine.add({
   tags: ["platform"],
   sprite: floor,
   scale: 3,
@@ -199,14 +202,14 @@ const addPlatform = (x, y) => e.add({
   bounce: -1, // bounce determines how much velocity changes when we collide with something
   update: (me) => {
       if (me.x < 0) me.vx = 1;
-      if (me.x + me.width > e.width) me.vx = -1
+      if (me.x + me.width > engine.width) me.vx = -1
   },
 })
 
 addPlatform(50, 200);
 addPlatform(20, 100);
 
-e.start();
+engine.start();
 ```
 
 ---
@@ -216,22 +219,22 @@ Collections:
 <img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149369879-7d384b3a-2f15-4816-a59e-76b56bb9a944.gif">
 
 ```js
-const e = createEngine(gameCanvas, 300, 300);
-const ctx = e.ctx;
+const engine = createEngine(gameCanvas, 300, 300);
+const ctx = engine.ctx;
 
-e.add({
+engine.add({
   tags: ["player"],
   sprite: test_sprite,
   scale: 2,
   x: 150,
   y: 50,
   update: (me) => {
-    if (e.heldKey("ArrowUp")) me.y -= 3;
-    if (e.heldKey("ArrowDown")) me.y += 3;
+    if (engine.heldKey("ArrowUp")) me.y -= 3;
+    if (engine.heldKey("ArrowDown")) me.y += 3;
   },
 })
 
-e.add({
+engine.add({
   tags: ["target"],
   sprite: floor,
   scale: 3,
@@ -239,12 +242,12 @@ e.add({
   y: 232,
   collides(me, them) {
     if (them.hasTag("player")) {
-      e.remove("target"); // we can remove objects by their tag name
+      engine.remove("target"); // we can remove objects by their tag name
     }
   }
 })
 
-e.start();
+engine.start();
 ```
 
 ---
@@ -256,14 +259,14 @@ Add a background:
 ```js
 const e = createEngine(gameCanvas, 300, 300);
 
-e.add({
+engine.add({
   update() { // we can also draw on the game canvas
-    e.ctx.fillStyle = "pink";
-    e.ctx.fillRect(0, 0, e.width, e.height);
+    engine.ctx.fillStyle = "pink";
+    engine.ctx.fillRect(0, 0, e.width, e.height);
   }
 })
 
-e.start();
+engine.start();
 ```
 
 ---
@@ -300,7 +303,7 @@ __All Object Properties__
 Refer to the following example for all the available object properties:
 
 ```js
-e.add({
+engine.add({
   tags: ["tag-name"], // assign tags to later reference object
   solid: true, // add solid property to make object bump into other solids
   x: 178, // x position
@@ -316,12 +319,12 @@ e.add({
     if (them.hasTag("tag-name")) {} // check tag names to figure out what you've collided with
   },
   update: (me) => {
-    if (e.heldKey("ArrowDown")) me.y += 3; // add key inputs
-    if (e.pressedKey("ArrowUp")) me.y -= 3; // add key inputs
+    if (engine.heldKey("ArrowDown")) me.y += 3; // add key inputs
+    if (engine.pressedKey("ArrowUp")) me.y -= 3; // add key inputs
 
     if (me.x < 0) {
-      e.end(); // end the game
-      e.addText("Game Over", e.width/2, e.height/2, { color: "blue", size: 32 }) // add text
+      engine.end(); // end the game
+      engine.addText("Game Over", engine.width/2, engine.height/2, { color: "blue", size: 32 }) // add text
     }
   },
 })
