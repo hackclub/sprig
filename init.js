@@ -127,7 +127,7 @@ function setGameIframe() {
 export async function init(state) {
   initVert();
 
-  state.runStatus = 'loading'
+  state.runStatus = "loading";
   dispatch("RENDER");
   state.codemirror = document.querySelector("#code-editor");
   events(state);
@@ -141,5 +141,5 @@ export async function init(state) {
     (await loadFromDefault());
 
   dispatch("LOAD_CARTRIDGE", { saved });
-  dispatch("SOUND", "bootup")
+  dispatch("SOUND", "bootup");
 }

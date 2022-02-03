@@ -134,22 +134,16 @@ export function view(state) {
 
       @keyframes screen-flicker {
         0% {
-          box-shadow:
-            0 0 6px 3px #fff2,  /* inner white */
-            0 0 10px 6px #f0f2, /* middle magenta */
-            0 0 14px 9px #0ff2; /* outer cyan */
+          box-shadow: 0 0 6px 3px #fff2, /* inner white */ 0 0 10px 6px #f0f2,
+            /* middle magenta */ 0 0 14px 9px #0ff2; /* outer cyan */
         }
         20% {
-          box-shadow:
-            0 0 30px 15px #fff2,  /* inner white */
-            0 0 50px 30px #f0f2, /* middle magenta */
-            0 0 70px 45px #0ff2; /* outer cyan */
+          box-shadow: 0 0 30px 15px #fff2, /* inner white */ 0 0 50px 30px #f0f2,
+            /* middle magenta */ 0 0 70px 45px #0ff2; /* outer cyan */
         }
         100% {
-          box-shadow:
-            0 0 6px 3px #fff2,  /* inner white */
-            0 0 10px 6px #f0f2, /* middle magenta */
-            0 0 14px 9px #0ff2; /* outer cyan */
+          box-shadow: 0 0 6px 3px #fff2, /* inner white */ 0 0 10px 6px #f0f2,
+            /* middle magenta */ 0 0 14px 9px #0ff2; /* outer cyan */
         }
       }
 
@@ -160,10 +154,8 @@ export function view(state) {
         background-repeat: no-repeat;
         background-size: cover;
 
-        box-shadow:
-          0 0 6px 3px #fff2,  /* inner white */
-          0 0 10px 6px #f0f2, /* middle magenta */
-          0 0 14px 9px #0ff2; /* outer cyan */
+        box-shadow: 0 0 6px 3px #fff2, /* inner white */ 0 0 10px 6px #f0f2,
+          /* middle magenta */ 0 0 14px 9px #0ff2; /* outer cyan */
         animation: ease-in-out 1s screen-flicker;
         animation-fill-mode: forwards;
       }
@@ -212,7 +204,7 @@ export function view(state) {
       }
 
       .horizontal-bar:after {
-        content: ' ';
+        content: " ";
         height: 0.5em;
         width: 10em;
         max-width: 30%;
@@ -274,7 +266,7 @@ export function view(state) {
       }
 
       .game-container {
-        background: url('./assets/screen-backing.svg');
+        background: url("./assets/screen-backing.svg");
         border: 1em solid var(--lightless);
         border-radius: 5px;
         padding: 0.5em;
@@ -340,7 +332,7 @@ export function view(state) {
       }
     </style>
     <div class="left-pane">
-    ${nameBar(state)}
+      ${nameBar(state)}
       <codemirror-js id="code-editor"></codemirror-js>
       <div
         class=${[
@@ -358,10 +350,9 @@ export function view(state) {
       ${gameOutput(state)}
       <div class="pixel-editor-container">
         <div class="list-of-sprites">
-          ${addAssetButton(state, 'tune')}
-          ${addAssetButton(state, 'sprite')}
+          ${addAssetButton(state, "tune")} ${addAssetButton(state, "sprite")}
           ${state.assets.map((x, i) => {
-              return html`
+            return html`
               <div
                 class=${[
                   "sprite-entry",
