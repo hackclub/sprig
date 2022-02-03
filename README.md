@@ -41,7 +41,7 @@ e.add({
   x: 188,
   y: 69,
   sprite: test_sprite,
-  scale: 4,
+  scale: 4, // this makes the sprite larger than its default 32 x 32 pixel size
 })
 
 e.start();
@@ -180,7 +180,7 @@ e.add({
     }
   },
   update: (me) => {
-      me.vy -= 0.4;
+      me.vy += 0.4;
   
       if (e.heldKey("ArrowLeft")) me.x -= 3;
       if (e.heldKey("ArrowRight")) me.x += 3;
