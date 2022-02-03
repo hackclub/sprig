@@ -534,6 +534,10 @@ tuneToStop.end();
 </pre
     >
 
+    <b>Examples</b>
+    <br><br>
+    <div>Examples can be found in the <a href="https://github.com/hackclub/gamelab" target="_blank">GitHub repository README</a>, check out the "Tiny Games".</div>
+
     <button class="close-docs" @click=${toggleDocs}>close</button>
   </div>
 `;
