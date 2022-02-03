@@ -13,11 +13,10 @@ import uiSounds from "./assets/ui-sounds.js";
 import notification from "./utils/notification.js";
 import validate from "./utils/validate.js";
 
+
 const STATE = {
   codemirror: undefined,
-  url: undefined,
   show: { origin: false, hitbox: false },
-  examples: [],
   error: false,
   logs: [],
   dispatchLogs: [], // Logs for dispatch functions called
@@ -25,9 +24,8 @@ const STATE = {
   assets: [],
   mouseX: 0,
   mouseY: 0,
-  engineVersion: null, // TODO: actually start loading data depending on this value
+  version: "0.2.0",
   previousID: null, // TODO: start setting this correctly on cartridge load
-  tunePlayers: [],
   selected_asset: -1,
   name: "name-here",
   saveLinkStatus: "ready",
@@ -135,7 +133,7 @@ const ACTIONS = {
       assets: state.assets,
       name: state.name,
       previousID: state.previousID,
-      engineVersion: state.engineVersion,
+      version: state.version,
     });
   },
   SAVE: async ({ type, copyUrl }, state) => {
@@ -155,20 +153,25 @@ const ACTIONS = {
     });
 
     state.assets = saved.assets || [];
-
     state.name = saved.name
 
-    // TODO: do we need to select default asset? maybe not
-
-    if (!state.engineVersion) {
-      state.engineVersion = await latestEngineVersion();
+    if (state.version !== saved.version) {
+      notification({
+        message: `Version mismatch.<br>
+                  Editor is version: ${state.version}<br>
+                  File uses version: ${saved.version}<br>
+                  ${
+                    saved.version
+                      ? `Old editor is available <a target="_blank" href="https://game-lab-versions.hackclub.dev/${saved.version}/index.html">here</a>.`
+                      : ""
+                  }`,
+        timeout: 5000,
+      });
     }
 
     const el = document.querySelector(".asset-editor");
     render(el, html``);
-
     if (state.assetEditor && state.assetEditor.end) state.assetEditor.end();
-
     state.selected_asset = -1;
 
     state.runStatus = 'ready'
