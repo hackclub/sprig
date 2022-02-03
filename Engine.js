@@ -192,11 +192,11 @@ class Object {
   }
 
   get width() {
-    return this._width * this.scale;
+    return this._width * Math.abs(this.scale[0] ?? this.scale);
   }
 
   get height() {
-    return this._height * this.scale;
+    return this._height * Math.abs(this.scale[1] ?? this.scale);
   }
 
   get rotate() {
@@ -214,6 +214,8 @@ class Object {
     const [ox, oy] = [w * this.origin[0], h * this.origin[1]];
     ctx.translate(this._x, this._y);
     ctx.rotate(this._rotate);
+    if (Array.isArray(this.scale))
+        ctx.scale(...this.scale.map(Math.sign));
 
     // draw sprite with sprite scale
     if (this.sprite !== null) ctx.drawImage(this.sprite, -ox, -oy, w, h);
@@ -325,7 +327,6 @@ class Engine {
     this.objects = [];
     this.drawing = false;
     this.step = 0;
-    this.cam = { x: 0.01, y: 0 };
 
     this._width = width;
     this._height = height;
@@ -408,8 +409,6 @@ class Engine {
     const draw = () => {
       this.ctx.fillStyle = "white";
       this.ctx.fillRect(0, 0, this.width, this.height);
-      this.ctx.save();
-      this.ctx.translate(this.cam.x, this.cam.y);
 
       this.objects.forEach((obj) => {
         let ogX = obj.x;
@@ -432,7 +431,6 @@ class Engine {
       this.step += 1;
 
       if (this.drawing) this._animId = window.requestAnimationFrame(draw);
-      this.ctx.restore();
     };
 
     // setInterval(draw, 1000/10)
