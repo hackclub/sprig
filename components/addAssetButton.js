@@ -6,6 +6,7 @@ const click = (assetType) => {
   dispatch("CREATE_ASSET", { assetType })
 }
 const mouseEnter = () => dispatch("SOUND", "hover")
+
 const image = (assetType) => {
   switch (assetType) {
     case 'tune':
@@ -17,13 +18,20 @@ const image = (assetType) => {
   }
 }
 
+const styles = `
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
+
 export default (state, assetType) => (
   html`
-    <button class="hoverable tooltipped button cursor-pointer"
-            @mouseenter=${mouseEnter}
-            @click=${() => click(assetType)}>
-      <span class="tooltipped-text">Add ${assetType}</span>
-      <img src="${image(assetType)}" width="32px" height="32px" />
+    <button 
+      style=${styles}
+      class="hoverable tooltipped button cursor-pointer"
+      @click=${() => click(assetType)}>
+      <img src="${image(assetType)}" width="24px" height="24px" style="padding-right: 5px;"/>
+      <span>add ${assetType}</span>
     </button>
   `
 )

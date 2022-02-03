@@ -16,6 +16,7 @@ const image = (state) => {
       return './assets/err.png'
   }
 }
+
 const klass = (state) => {
   let k = "hoverable tooltipped button "
   switch(state.saveLinkStatus) {

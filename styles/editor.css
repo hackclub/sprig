@@ -1,3 +1,5 @@
+@import url('./variables.css');
+
 :root {
   --vertical-bar: 60%;
   --background: #dbdbdb;

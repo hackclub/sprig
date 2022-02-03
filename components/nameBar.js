@@ -3,56 +3,70 @@ import { html } from '../uhtml.js';
 import runButton from './runButton.js';
 import menuButtons from "./menuButtons.js";
 
-const save = (e) => {
-  const name = dispatch("SET_NAME", { name: e.target.innerText })
-  e.target.textContent = name
-  dispatch("RENDER")
-}
-const input = (e) => {
-  if (e.inputType === "insertParagraph") {
-    dispatch("SOUND", "yes")
-    e.target.blur()
-    // ^ this will end typing & trigger a save
-  } else {
-    dispatch("SOUND", "click")
-    dispatch("SET_NAME", { name: e.target.innerText })
-  }
-}
-const linkClick = (e) => {
-  dispatch("SOUND", "click")
-}
-const linkHover = (e) => {
-  dispatch("SOUND", "hover")
-}
-
-const nameInputStyles = `
+const nameStyles = `
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
+`
+
+const linkStyles = `
+  display: flex;
 `
 
 export default (state) => (
   html`
-  <div class="name-bar">
-    <div styles=${nameInputStyles}>
-      <h1 contenteditable="true"
-          spellcheck="false"
-          @input=${input}
-          @blur=${save}
-      >
-      ${state.name}
-      </h1>
-    <span>
-      <span style="font-weight: 400;">powered by</span>
-      <a href="https://github.com/hackclub/game-lab"
-         target="_blank"
-         @click=${linkClick}
-         @hover=${linkHover}
-         class="logo-link">
-        <strong>gamelab</strong>
-      </a>
-    </span>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;800&display=swap');
+
+      .name-bar {
+        font-family: 'JetBrains Mono', monospace;
+        color: var(--light);
+        background: var(--darkless);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: .8em;
+      }
+
+      .name-bar-input {
+        width: 95%;
+        margin: 0;
+        background: var(--darkless);
+        color: var(--smoke);
+        border: none;
+        font-size: 1.5rem;
+      }
+      .name-bar-input:focus {
+         background: var(--dark);
+      }
+
+      .powered-by {
+        padding-top: 5px;
+        display: flex;
+        font-size: .9rem;
+      }
+    </style>
+
+    <div class="name-bar">
+      <div style=${nameStyles}>
+        <input 
+          class="name-bar-input"
+          @input=${e => dispatch("SET_NAME", { name: e.target.value })}.value=${state.name}>
+        </input>
+        <div class="powered-by">
+          <div>powered by&nbsp;</div>
+          <a href="https://github.com/hackclub/game-lab"
+             target="_blank">
+            <strong>gamelab</strong>
+          </a>
+          &nbsp;
+          <a href="https://github.com/hackclub/game-lab"
+             target="_blank">
+            <img src="./assets/github.png" width="20px" />
+          </a>
+        </div>
+      </div>
+      ${menuButtons(state)}
     </div>
-    ${menuButtons(state)}
-  </div>
   `
 )
