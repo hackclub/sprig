@@ -17,6 +17,12 @@ const input = (e) => {
     dispatch("SET_NAME", { name: e.target.innerText })
   }
 }
+const linkClick = (e) => {
+  dispatch("SOUND", "click")
+}
+const linkHover = (e) => {
+  dispatch("SOUND", "hover")
+}
 
 export default (state) => (
   html`
@@ -29,7 +35,16 @@ export default (state) => (
       >
       ${state.name}
       </h1>
-    <span>powered by Game-Lab</span>
+    <span>
+      <span style="font-weight: 400;">powered by</span>
+      <a href="https://github.com/hackclub/game-lab"
+         target="_blank"
+         @click=${linkClick}
+         @hover=${linkHover}
+         class="logo-link">
+        <strong>gamelab</strong>
+      </a>
+    </span>
     </div>
     ${runButton(state)}
   </div>

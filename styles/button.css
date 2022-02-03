@@ -21,4 +21,5 @@ button {
 
 button > img {
   object-fit: contain;
+  image-rendering: pixelated; /* Make button icons crisp */
 }

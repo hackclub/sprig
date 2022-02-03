@@ -260,13 +260,10 @@ body {
   z-index: 100;
 }
 
+a {
+  color: inherit;
+}
 
-
-
-
-
-
-
-button > img {
+img {
   image-rendering: pixelated; /* Make button icons crisp */
 }
