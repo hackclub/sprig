@@ -268,6 +268,31 @@ e.start();
 
 ---
 
+Adding tunes:
+
+To add tunes, background music, beeps and boops to your game first make a tune asset in the asset editor. You can then play the asset as such:
+
+```js
+// To play a tune once
+playTune(tune_asset_name);
+
+// or play multiple toons
+playTune(tune_0, tune_1, tune_2);
+To play a tune on repeat:
+loopTune(tune_asset_name);
+
+// or loop multiple toons
+loopTune(tune_0, tune_1, tune_2);
+```
+
+To stop a tune on repeat:
+
+```js
+const tuneToStop = loopTune(tune_asset_name);
+tuneToStop.end();
+```
+___
+
 Refer to the following example for all the available object properties:
 
 ```js
