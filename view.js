@@ -513,7 +513,7 @@ obj.hasTag("tag-name")
     <pre>
 playTune(tune_asset_name);
 
-// or play multiple toons
+// or play multiple tunes
 
 playTune(tune_0, tune_1, tune_2);
 </pre
@@ -522,7 +522,7 @@ playTune(tune_0, tune_1, tune_2);
     <pre>
 loopTune(tune_asset_name);
 
-// or loop multiple toons
+// or loop multiple tunes
 
 loopTune(tune_0, tune_1, tune_2);
 </pre
