@@ -19,7 +19,7 @@ const image = (assetType) => {
 
 export default (state, assetType) => (
   html`
-    <button class="hoverable tooltipped button cursor-pointer "
+    <button class="hoverable tooltipped button cursor-pointer"
             @mouseenter=${mouseEnter}
             @click=${() => click(assetType)}>
       <span class="tooltipped-text">Add ${assetType}</span>

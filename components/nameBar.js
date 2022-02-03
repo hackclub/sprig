@@ -1,6 +1,7 @@
-import { dispatch } from '../dispatch.js'
-import { html } from '../uhtml.js'
-import runButton from './runButton.js'
+import { dispatch } from '../dispatch.js';
+import { html } from '../uhtml.js';
+import runButton from './runButton.js';
+import menuButtons from "./menuButtons.js";
 
 const save = (e) => {
   const name = dispatch("SET_NAME", { name: e.target.innerText })
@@ -24,10 +25,15 @@ const linkHover = (e) => {
   dispatch("SOUND", "hover")
 }
 
+const nameInputStyles = `
+  display: flex;
+  flex-grow: 1;
+`
+
 export default (state) => (
   html`
   <div class="name-bar">
-    <div>
+    <div styles=${nameInputStyles}>
       <h1 contenteditable="true"
           spellcheck="false"
           @input=${input}
@@ -46,7 +52,7 @@ export default (state) => (
       </a>
     </span>
     </div>
-    ${runButton(state)}
+    ${menuButtons(state)}
   </div>
   `
 )

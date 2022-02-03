@@ -2,13 +2,9 @@ import { html } from "./uhtml.js";
 import { dispatch } from "./dispatch.js";
 import "./codemirror/codemirror-html.js";
 import "./codemirror/codemirror-js.js";
-import bugReport from "./components/bugReport.js";
-import githubLink from "./components/githubLink.js";
-import saveFile from "./components/saveFile.js";
-import saveLink from "./components/saveLink.js";
+
 import addAssetButton from "./components/addAssetButton.js";
 import nameBar from "./components/nameBar.js";
-import runButton from "./components/runButton.js";
 
 const toggleHide = (className) =>
   document.querySelector(`.${className}`).classList.toggle("hide");
@@ -45,13 +41,6 @@ const gameOutput0 = (state) => html`
   <div class="outer-container">
     <div class="inner-container">
       <canvas class="game-canvas" @mousemove=${trackMouse}></canvas>
-      <div class="menu">
-        ${runButton(state)}
-        ${saveLink(state)}
-        ${saveFile(state)}
-        ${githubLink(state)}
-        ${bugReport(state)}
-      </div>
       <div class="text-container"></div>
     </div>
   </div>
