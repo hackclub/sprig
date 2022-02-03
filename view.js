@@ -13,7 +13,7 @@ import runButton from "./components/runButton.js";
 const toggleHide = (className) =>
   document.querySelector(`.${className}`).classList.toggle("hide");
 
-const gameOutput0 = () => html`
+const gameOutput0 = (state) => html`
   <style>
     .outer-container {
       width: 100%;
@@ -21,13 +21,18 @@ const gameOutput0 = () => html`
       display: flex;
       justify-content: center;
       align-items: center;
-      background: blue;
+      background: var(--lighter);
+      border-radius: 5px;
     }
 
     .inner-container {
       width: min-content;
       height: min-content;
       position: relative;
+      background: var(--darkless);
+      padding: 0.5em;
+      border-radius: 5px;
+      border: 0.5em solid var(--lightless);
     }
 
     .text-container {
@@ -40,6 +45,13 @@ const gameOutput0 = () => html`
   <div class="outer-container">
     <div class="inner-container">
       <canvas class="game-canvas" @mousemove=${trackMouse}></canvas>
+      <div class="menu">
+        ${runButton(state)}
+        ${saveLink(state)}
+        ${saveFile(state)}
+        ${githubLink(state)}
+        ${bugReport(state)}
+      </div>
       <div class="text-container"></div>
     </div>
   </div>
@@ -54,7 +66,7 @@ const trackMouse = (e) => {
 const gameOutput = (state) => html`
   <div class="game-output">
     ${true
-      ? gameOutput0()
+      ? gameOutput0(state)
       : html`<iframe
           class="game-iframe"
           sandbox="allow-scripts allow-same-origin"
@@ -88,13 +100,6 @@ const gameOutput = (state) => html`
           >${state.mouseY} y</span
         >
       </span>
-    </div>
-    <div class="menu">
-      ${runButton(state)}
-      ${saveLink(state)}
-      ${saveFile(state)}
-      ${githubLink(state)}
-      ${bugReport(state)}
     </div>
   </div>
 `;
