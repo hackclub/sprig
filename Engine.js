@@ -325,6 +325,7 @@ class Engine {
     this.objects = [];
     this.drawing = false;
     this.step = 0;
+    this.cam = { x: 0.01, y: 0 };
 
     this._width = width;
     this._height = height;
@@ -407,6 +408,8 @@ class Engine {
     const draw = () => {
       this.ctx.fillStyle = "white";
       this.ctx.fillRect(0, 0, this.width, this.height);
+      this.ctx.save();
+      this.ctx.translate(this.cam.x, this.cam.y);
 
       this.objects.forEach((obj) => {
         let ogX = obj.x;
@@ -429,6 +432,7 @@ class Engine {
       this.step += 1;
 
       if (this.drawing) this._animId = window.requestAnimationFrame(draw);
+      this.ctx.restore();
     };
 
     // setInterval(draw, 1000/10)
