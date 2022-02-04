@@ -1,0 +1,29 @@
+:root {
+  /* recommend not using these variables directly-- they won't change along with light/dark mode */
+  --black: #1f2d3d;
+  --slate: #3c4858;
+  --muted: #8492a6;
+  --smoke: #e0e6ed;
+  --snow: #f9fafc;
+  --white: #fff;
+
+  /* base colors */
+  --red: #ec3750;
+  --orange: #ff8c37;
+  --yellow: #f1c40f;
+  --green: #33d6a6;
+  --cyan: #5bc0de;
+  --blue: #338eda;
+  --purple: #a633d6;
+
+  --lighter: #DDDAC7;
+  --light: #CECBB8;
+  --lightless: #CAC4B0;
+
+  /* dark colors from bank are a little too dark for this theme, let's make our own colors */
+  /* --darkless: #252429; */
+  /* --dark: #17171d; */
+  --darkless: #535352;
+  --dark: #3E4040;
+  --darker: #121217;
+}

@@ -21,7 +21,7 @@ export function size_up_sprites(sprites) {
   }
 
   for (const sprite of Object.values(sprites)) {
-    sprite.bounds = contextBoundingBox(sprite.colors, 32, 32);
+    sprite.bounds = contextBoundingBox(sprite.colors, ...sprite.size);
     if (sprite.bounds.x === undefined) {
       sprite.bounds = {
         x: 0,

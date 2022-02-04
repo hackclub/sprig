@@ -1,3 +1,5 @@
+@import url('./variables.css');
+
 :root {
   --vertical-bar: 60%;
   --background: #dbdbdb;
@@ -67,12 +69,9 @@ body {
 }
 
 .menu {
-  /*overflow: hidden;*/
   width: 100%;
   min-height: 30px;
-  height: 30px;
-  max-height: 30px;
-  background: grey;
+  background: var(--darkless);
   display: flex;
 }
 
@@ -90,9 +89,30 @@ body {
   z-index: 10;
 }
 
+#vertical-bar:after {
+  content: ' ';
+  width: 0.5em;
+  height: 10em;
+  max-height: 30%;
+  border-radius: 5em;
+  background: var(--darker);
+  cursor: inherit;
+  display: inline-block;
+  transform: translateY(-50%) translateX(-50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+#vertical-bar:hover:after {
+  max-height: 30%;
+  background: var(--lightless);
+}
+
 #vertical-bar:hover {
   cursor: col-resize;
-  background: black;
+  border: 1px dashed var(--darker);
+  background: var(--darker);
 }
 
 .CodeMirror {
@@ -242,9 +262,10 @@ body {
   z-index: 100;
 }
 
+a {
+  color: inherit;
+}
 
-
-
-
-
-
+img {
+  image-rendering: pixelated; /* Make button icons crisp */
+}

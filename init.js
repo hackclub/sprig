@@ -1,12 +1,8 @@
 import { events } from "./events.js";
-import { dispatch, spriteUpdate } from "./dispatch.js";
-import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
+import { dispatch } from "./dispatch.js";
 import initCm from "./cm.js";
-import { createSequencer } from "./sequencer/sequencer.js";
-import { latestEngineVersion } from "./github.js";
-import { createEval } from "./evalGameScript.js";
 
-const DEFAULT_CARTRIDGE = "3449c9e5e332f1dbb81505cd739fbf3f";
+const DEFAULT_CARTRIDGE = "02d93944c0b8769374eeab7aea6dc369";
 
 function getParam(key) {
   const search = new URLSearchParams(window.location.search);
@@ -132,6 +128,7 @@ function setGameIframe() {
 export async function init(state) {
   initVert();
 
+  state.runStatus = "loading";
   dispatch("RENDER");
   
   const cmEditorView = initCm(state.codemirror);
@@ -150,4 +147,5 @@ export async function init(state) {
     (await loadFromDefault());
 
   dispatch("LOAD_CARTRIDGE", { saved });
+  dispatch("SOUND", "bootup");
 }
