@@ -227,6 +227,7 @@ const ACTIONS = {
 
     state.assets = saved.assets || [];
     state.name = saved.name;
+    state.previousID = saved.previousID || null;
 
     if (state.version !== saved.version) {
       notification({
