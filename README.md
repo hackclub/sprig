@@ -1,4 +1,4 @@
-# 👾 **[Hack Club Game Lab →](https://gamelab.hackclub.dev/)**
+# 👾 **[Hack Club Game Lab →](https://gamelab.hackclub.com/)**
 
 The best way to learn is by making things you care about and sharing them with others.  
 **That's what Game Lab is all about**.
@@ -8,13 +8,12 @@ Have you ever wanted to...
 - Make Pong in 30 lines of code?
 - Create the Chrome dino game in 50?
 - Or... even better... make a delightful game that doesn't exist yet?
-- [2knight lol](https://gamelab.hackclub.dev/?id=f5360644915f206624d1447a2ce85d8d)
 
 Then get started making games with Game Lab!
 
 You should be able to get started in Game Lab with very little experience programming but you should still be able to have fun with it even if you're an expert. Enjoy and can't wait to see what you make!
 
-### ⮑ _**[Click here to launch Game Lab](https://gamelab.hackclub.dev/)**_ ⮐
+### ⮑ _**[Click here to launch Game Lab](https://gamelab.hackclub.com/)**_ ⮐
 _(and scroll down for a brief tutorial to get started)_
 !
 
@@ -333,19 +332,19 @@ engine.add({
 
 ## Tiny Games
 
-[Pong-ish](https://gamelab.hackclub.dev/?id=bd5087c16160988e4d2e27ca2c6157f9)
+[Pong-ish](https://gamelab.hackclub.com/?id=bd5087c16160988e4d2e27ca2c6157f9)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149371012-faf3e45f-9d3a-47d4-831b-566d9171d2bd.gif">
 
 ---
 
-[Crappy Birds](https://gamelab.hackclub.dev/?id=889eceae8614e9286e1d5fb28349ffad)
+[Crappy Birds](https://gamelab.hackclub.com/?id=889eceae8614e9286e1d5fb28349ffad)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149380918-a1855ab3-cc2d-4a9a-adc0-d5316d6f17ba.gif">
 
 ---
 
-[Brick Broken](https://gamelab.hackclub.dev/?id=8f18ab06c1a8f5267e6f4a6b3bec06f5)
+[Brick Broken](https://gamelab.hackclub.com/?id=8f18ab06c1a8f5267e6f4a6b3bec06f5)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/150606449-5b73d7fe-f2d3-432f-9cc5-346c20919ec8.gif">
 
