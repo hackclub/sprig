@@ -84,7 +84,12 @@ const ACTIONS = {
       show: state.show,
       gameCanvas,
     });
-    if (err) dispatch("LOG_ERROR", { err });
+    if (err) {
+      dispatch("LOG_ERROR", { err });
+      dispatch("FAVICON", 'red.png')
+    } else {
+      dispatch("FAVICON", 'yellow.png')
+    }
     document.querySelector(".game-canvas").focus(); // TODO: can we focus in iframe
 
     dispatch("RENDER");
