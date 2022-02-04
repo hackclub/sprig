@@ -1,9 +1,14 @@
+## Feb 2, 2022
 
+- [] add new proejct button
+- [] add pause game button
+- [] link to readme
+- [] give challenge prompts
 
 ## Feb 2, 2022
 
 - [] edit readme
-- [] add version prompt with link to correct version of editor
+- [x] add version prompt with link to correct version of editor
 - [x] re-add displaying mouse postion over game canvas
 - [x] fixed mis-selected asset on catridge load
 

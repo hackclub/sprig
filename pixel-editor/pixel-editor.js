@@ -25,7 +25,7 @@ export function createPixelEditor(target) {
     canvas: null,
     gridColors: [],
     tempGridColors: [],
-    gridSize: [32, 32],
+    viewboxSize: [32, 32],
     canvasSize: [500, 500],
     maxCanvasSize: 350,
     selected: [],
@@ -35,7 +35,7 @@ export function createPixelEditor(target) {
     mousedownPt: [0, 0],
     currentPt: [0, 0],
     showGrid: false,
-    defaultGridArraySize: [32, 32],
+    gridSize: [32, 32],
     undoRedoStack: [],
     animationId: null,
     selectHandle: {
@@ -265,7 +265,7 @@ export function createPixelEditor(target) {
   const drawGrid = (canvas) => {
     if (!state.showGrid) return;
     const [w, h, ctx] = readCanvas(canvas);
-    const [gridW, gridH] = state.gridSize;
+    const [gridW, gridH] = state.viewboxSize;
     const xSize = w / gridW;
     const ySize = h / gridH;
 
@@ -294,11 +294,11 @@ export function createPixelEditor(target) {
 
   const tools_mousedown = {
     draw: (x, y) => {
-      const [gridW, gridH] = state.defaultGridArraySize;
+      const [gridW, gridH] = state.gridSize;
       state.gridColors[gridW * y + x] = state.color;
     },
     bucket: (x, y) => {
-      const [gridW, gridH] = state.defaultGridArraySize;
+      const [gridW, gridH] = state.gridSize;
 
       const startColor = RGBA_to_hex(state.gridColors[gridW * y + x]);
       const newColor = RGBA_to_hex(state.color);
@@ -327,7 +327,7 @@ export function createPixelEditor(target) {
       }
     },
     move: (x, y) => {
-      const [gridW, gridH] = state.defaultGridArraySize;
+      const [gridW, gridH] = state.gridSize;
       const grid = state.gridColors;
 
       const checkValidity = (x, y) => {
@@ -374,7 +374,7 @@ export function createPixelEditor(target) {
   const tools_mousemove = {
     draw: (x, y) => {
       if (!state.mousedown) return;
-      const [gridW, gridH] = state.defaultGridArraySize;
+      const [gridW, gridH] = state.gridSize;
 
       const pts = line(state.currentPt, state.mousedownPt);
 
@@ -387,7 +387,7 @@ export function createPixelEditor(target) {
     rectangle: (x, y) => {
       state.tempGridColors = state.tempGridColors.fill(null);
       if (!state.mousedown) return;
-      const [gridW, gridH] = state.defaultGridArraySize;
+      const [gridW, gridH] = state.gridSize;
 
       const xMin = Math.min(state.currentPt[0], state.mousedownPt[0]);
       const xMax = Math.max(state.currentPt[0], state.mousedownPt[0]);
@@ -403,7 +403,7 @@ export function createPixelEditor(target) {
       state.tempGridColors = state.tempGridColors.fill(null);
       if (!state.mousedown) return;
 
-      const [gridW, gridH] = state.defaultGridArraySize;
+      const [gridW, gridH] = state.gridSize;
 
       const pts = line(state.currentPt, state.mousedownPt);
 
@@ -415,7 +415,7 @@ export function createPixelEditor(target) {
       state.tempGridColors = state.tempGridColors.fill(null);
       if (!state.mousedown) return;
 
-      const [gridW, gridH] = state.defaultGridArraySize;
+      const [gridW, gridH] = state.gridSize;
 
       const xMin = Math.min(state.currentPt[0], state.mousedownPt[0]);
       const xMax = Math.max(state.currentPt[0], state.mousedownPt[0]);
@@ -440,8 +440,8 @@ export function createPixelEditor(target) {
   };
 
   const i_to_xy = (i) => {
-    const x = i % state.defaultGridArraySize[0];
-    const y = Math.floor(i / state.defaultGridArraySize[1]);
+    const x = i % state.gridSize[0];
+    const y = Math.floor(i / state.gridSize[1]);
 
     return [x, y];
   };
@@ -462,12 +462,12 @@ export function createPixelEditor(target) {
     });
 
     const [w, h] = readCanvas(canvas);
-    const [gridW, gridH] = main ? state.gridSize : state.defaultGridArraySize;
+    const [gridW, gridH] = main ? state.viewboxSize : state.gridSize;
     // const xSize = w/gridW;
     // const ySize = h/gridH;
 
     const pixels = new Uint8ClampedArray(
-      state.defaultGridArraySize[0] * state.defaultGridArraySize[1] * 4
+      state.gridSize[0] * state.gridSize[1] * 4
     );
 
     grid.forEach((color, i) => {
@@ -497,8 +497,8 @@ export function createPixelEditor(target) {
 
     const image = new ImageData(
       pixels,
-      state.defaultGridArraySize[0],
-      state.defaultGridArraySize[1]
+      state.gridSize[0],
+      state.gridSize[1]
     );
     tempCtx.putImageData(image, 0, 0);
 
@@ -517,10 +517,10 @@ export function createPixelEditor(target) {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const [w, h] = readCanvas(canvas);
-    const [gridW, gridH] = main ? state.gridSize : state.defaultGridArraySize;
+    const [gridW, gridH] = main ? state.viewboxSize : state.gridSize;
 
     const pixels = new Uint8ClampedArray(
-      state.defaultGridArraySize[0] * state.defaultGridArraySize[1] * 4
+      state.gridSize[0] * state.gridSize[1] * 4
     ).fill(0);
 
     state.gridColors.forEach((color, i) => {
@@ -537,22 +537,22 @@ export function createPixelEditor(target) {
 
     const image = new ImageData(
       pixels,
-      state.defaultGridArraySize[0],
-      state.defaultGridArraySize[1]
+      state.gridSize[0],
+      state.gridSize[1]
     );
 
     ctx.putImageData(image, 0, 0);
   };
 
   const setCanvasSize = (c) => {
-    if (state.gridSize[0] < state.gridSize[1]) {
+    if (state.viewboxSize[0] < state.viewboxSize[1]) {
       state.canvasSize[0] =
-        (state.gridSize[0] / state.gridSize[1]) * state.maxCanvasSize;
+        (state.viewboxSize[0] / state.viewboxSize[1]) * state.maxCanvasSize;
       state.canvasSize[1] = state.maxCanvasSize;
     } else {
       state.canvasSize[0] = state.maxCanvasSize;
       state.canvasSize[1] =
-        (state.gridSize[1] / state.gridSize[0]) * state.maxCanvasSize;
+        (state.viewboxSize[1] / state.viewboxSize[0]) * state.maxCanvasSize;
     }
 
     c.width = state.canvasSize[0];
@@ -570,15 +570,15 @@ export function createPixelEditor(target) {
     const rawY = e.clientY - rect.top;
 
     const [w, h, ctx] = readCanvas(c);
-    const [gridW, gridH] = state.gridSize;
+    const [gridW, gridH] = state.viewboxSize;
     const xSize = w / gridW;
     const ySize = h / gridH;
 
     let x = Math.floor(rawX / xSize);
     let y = Math.floor(rawY / ySize);
 
-    x = clamp(x, 0, state.defaultGridArraySize[0] - 1);
-    y = clamp(y, 0, state.defaultGridArraySize[1] - 1);
+    x = clamp(x, 0, state.gridSize[0] - 1);
+    y = clamp(y, 0, state.gridSize[1] - 1);
 
     return [x, y];
   }
@@ -591,12 +591,12 @@ export function createPixelEditor(target) {
 
     setCanvasSize(c);
     // init canvas data
-    const [gridW, gridH] = state.gridSize;
+    const [gridW, gridH] = state.viewboxSize;
     state.gridColors = new Array(
-      state.defaultGridArraySize[0] * state.defaultGridArraySize[1]
+      state.gridSize[0] * state.gridSize[1]
     ).fill(hexToRGBA("#00000000"));
     state.tempGridColors = new Array(
-      state.defaultGridArraySize[0] * state.defaultGridArraySize[1]
+      state.gridSize[0] * state.gridSize[1]
     ).fill(null);
 
     animate();
@@ -630,13 +630,13 @@ export function createPixelEditor(target) {
           const newY = y + dy;
           if (
             newX < 0 ||
-            newX >= state.defaultGridArraySize[0] ||
+            newX >= state.gridSize[0] ||
             newY < 0 ||
-            newY >= state.defaultGridArraySize[1]
+            newY >= state.gridSize[1]
           )
             return;
 
-          const newI = state.defaultGridArraySize[0] * newY + newX;
+          const newI = state.gridSize[0] * newY + newX;
 
           const currentColor = state.gridColors[i];
           state.tempGridColors[newI] = currentColor;
@@ -687,13 +687,13 @@ export function createPixelEditor(target) {
   return {
     setGridColors: ({ colors, size }) => {
       state.gridColors = colors;
-      state.defaultGridArraySize = size;
       state.gridSize = size;
+      state.viewboxSize = size;
     },
     createEmptyGrid: () => ({
-      size: state.defaultGridArraySize,
+      size: state.gridSize,
       colors: new Array(
-        state.defaultGridArraySize[0] * state.defaultGridArraySize[1]
+        state.gridSize[0] * state.gridSize[1]
       ).fill([0, 0, 0, 0]),
     }),
     gridColors: () => state.gridColors,
