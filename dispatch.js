@@ -107,8 +107,13 @@ const ACTIONS = {
       let [line, col] = trace.split(':');
       const str = `${err.stack.includes(err.message) ? split[0] : (err.name ? err.name : 'RuntimeError') + ': ' + err.message}\n    at code.js:${+filterInts(line) - 2}:${+filterInts(col)}`;
       state.logs.push(str);
-    }
-    else state.logs.push(err.stack.includes(err.message) ? (err.name ? err.name : 'RuntimeError') : (err.name ? err.name : 'RuntimeError') + ': ' + err.message); // Best(?) combination of checking if certain error properties exist
+    } else {
+      state.logs.push((
+        err.stack.includes(err.message) ?
+        (err.name ? err.name : 'RuntimeError') + '\n    at code.js' :
+        (err.name ? err.name : 'RuntimeError') + ': ' + err.message + '\n    at code.js'
+      ) + '\n\nGame Lab was unable to determine where your error is located. Please submit a bug report if you think this issue was caused by Game Lab.'); // Safari sadly doesn't show you a stack trace inside evals
+    } // Best(?) combination of checking if certain error properties exist
     dispatch("RENDER");
   },
   SOUND(arg, state) {
