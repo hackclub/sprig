@@ -88,9 +88,8 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   LOG_ERROR({ err }, state) {
-    let e = err;
     state.error = true;
-    let split = e.stack.split('\n').slice(0, 2);
+    let split = err.stack.split('\n').slice(0, 2);
     function filterInts (str) {
       return str.split('').filter(char => char == +char).join('');
     }
@@ -101,15 +100,15 @@ const ACTIONS = {
       if (isNaN(+filterInts(colonSplit[colonSplit.length - 2]))) return false;
       return true;
     }
-    let lineNumber = e.stack.includes(e.message) ? 1 : 0
+    let lineNumber = err.stack.includes(err.message) ? 1 : 0
     console.log(split, checkLine(split[lineNumber]));
     if (checkLine(split[lineNumber])) {
       let trace = split[lineNumber].split(':')[split[lineNumber].split(':').length - 2] + ':' + split[lineNumber].split(':')[split[lineNumber].split(':').length - 1]
       let [line, col] = trace.split(':');
-      const str = `${e.stack.includes(e.message) ? split[0] : (e.name ? e.name : 'RuntimeError') + ': ' + e.message}\n    at code.js:${+filterInts(line) - 2}:${+filterInts(col)}`;
+      const str = `${err.stack.includes(err.message) ? split[0] : (err.name ? err.name : 'RuntimeError') + ': ' + err.message}\n    at code.js:${+filterInts(line) - 2}:${+filterInts(col)}`;
       state.logs.push(str);
     }
-    else state.logs.push(e.stack.includes(e.message) ? (e.name ? e.name : 'RuntimeError') : (e.name ? e.name : 'RuntimeError') + ': ' + e.message); // Best(?) combination of checking if certain error properties exist
+    else state.logs.push(err.stack.includes(err.message) ? (err.name ? err.name : 'RuntimeError') : (err.name ? err.name : 'RuntimeError') + ': ' + err.message); // Best(?) combination of checking if certain error properties exist
     dispatch("RENDER");
   },
   SOUND(arg, state) {
