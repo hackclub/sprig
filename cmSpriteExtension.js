@@ -8,13 +8,13 @@ import {
 } from "./pkg/@codemirror/view.js";
 import { syntaxTree } from "./pkg/@codemirror/language.js";
 import { html, render } from "./pkg/uhtml.js";
-import { STATE } from "./dispatch.js";
+import { dispatch, STATE } from "./dispatch.js";
 
 function getDataURL(spriteData) {
     const imageData = new ImageData(
-        new Uint8ClampedArray(spriteData.colors.flat()),
-        spriteData.size[0],
-        spriteData.size[1]
+        new Uint8ClampedArray(spriteData.data.colors.flat()),
+        spriteData.data.size[0],
+        spriteData.data.size[1]
     );
 
     const canvas = document.createElement("canvas");
@@ -25,10 +25,10 @@ function getDataURL(spriteData) {
     return canvas.toDataURL();
 }
 
-const spriteImg = (spriteId, s) => html`
+const spriteImg = (sprite, s) => html`
     <img
-        src=${getDataURL(STATE.sprites[spriteId])}
-        alt=${spriteId + " sprite thumbnail"}
+        src=${getDataURL(sprite)}
+        alt=${sprite.name + " sprite thumbnail"}
         style=${`border:1px solid;background-color:white;image-rendering:pixelated;${s}`}
     />
 `;
@@ -47,9 +47,10 @@ class SpriteWidget extends WidgetType {
     eq(other) { return other.val === this.val; }
 
     r() {
+        const thisSprite = this.val && STATE.assets.find(a => a.type === "sprite" && a.name === this.val);
         render(this.domNode, html`
             <div style="display:flex;position:relative;cursor:pointer" class="cm-sprite-widget" onclick=${() => { this.popupOpen = !this.popupOpen; this.r(); }}>
-                ${(this.val && STATE.sprites[this.val]) ? spriteImg(this.val) : null}
+                ${thisSprite ? spriteImg(thisSprite) : null}
                 <button>v</button>
                 ${this.popupOpen ? html`
                     <div
@@ -57,26 +58,26 @@ class SpriteWidget extends WidgetType {
                         onclick=${e => e.stopPropagation()}
                     >
                         <h5 style="margin:0;margin-bottom:0.5rem">Sprites</h5>
-                        ${Object.keys(STATE.sprites).map(sprite => html`
+                        ${STATE.assets.filter(a => a.type === "sprite").map(sprite => html`
                             <button
-                                style=${`display:inline-block;position:relative;width:100px;cursor:${sprite === this.val ? "not-allowed" : "inherit"}`}
+                                style=${`display:inline-block;position:relative;width:100px;cursor:${sprite.name === this.val ? "not-allowed" : "inherit"}`}
                                 onclick=${() => {
                                     // Do the code mutation
                                     this.view.dispatch({
                                         changes: {
                                             from: this.from,
                                             to: this.to,
-                                            insert: sprite
+                                            insert: sprite.name
                                         }
                                     });
                                     dispatch("RUN");
                                     // Closes since codemirror deletes this instance of the widget and makes a new one
                                 }}
-                                disabled=${sprite === this.val ? true : null}
+                                disabled=${sprite.name === this.val ? true : null}
                             >
                                 ${spriteImg(sprite, "width: 75px")}
-                                <p style="margin:0">${sprite}</p>
-                                ${sprite === this.val ? html`
+                                <p style="margin:0">${sprite.name}</p>
+                                ${sprite.name === this.val ? html`
                                     <span style="position:absolute;top:0;right:0;color:green;font-size:1.5rem">✓</span>
                                 ` : null}
                             </button>
@@ -89,7 +90,7 @@ class SpriteWidget extends WidgetType {
     }
 
     updateListener(e) {
-        if((e.detail?.name ?? STATE.selected_sprite) === this.val || e.detail?.every) {
+        if(e.detail?.every || (e.detail?.name ?? STATE.assets[STATE.selected_asset].name) === this.val) {
             this.r();
         }
     }

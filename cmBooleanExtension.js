@@ -6,6 +6,7 @@ import {
     ViewPlugin
 } from "./pkg/@codemirror/view.js";
 import { syntaxTree } from "./pkg/@codemirror/language.js";
+import { dispatch } from "./dispatch.js";
 
 class CheckboxWidget extends WidgetType {
     constructor(checked) {

@@ -1,4 +1,4 @@
-import { render, html, svg } from "../uhtml.js";
+import { render, html, svg } from "../pkg/uhtml.js";
 import { playNote } from "./playNote.js";
 import styles from "./sequencer-styles.js";
 
