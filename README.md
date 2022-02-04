@@ -8,7 +8,6 @@ Have you ever wanted to...
 - Make Pong in 30 lines of code?
 - Create the Chrome dino game in 50?
 - Or... even better... make a delightful game that doesn't exist yet?
-- [2knight lol](https://gamelab.hackclub.dev/?id=f5360644915f206624d1447a2ce85d8d)
 
 Then get started making games with Game Lab!
 
