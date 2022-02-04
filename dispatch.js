@@ -62,19 +62,19 @@ const ACTIONS = {
     //   show: state.show
     // }, '*');
 
-    const { error, success } = validate(string); // Re-add esprima pre-run validation
+    // const { error, success } = validate(string); // Re-add esprima pre-run validation
 
-    if (!success) {
-      state.logs = [
-        ...state.logs,
-        error.message == undefined // Just in case something weird happens, encourage the user to submit a bug report if it does
-          ? `Game Lab encountered an unexpected error. If you're seeing this, please submit a bug report by clicking the bug button at the top.\n    at code.js`
-          : `${error.message}\n    at code.js:${error.line}:${error.col}`,
-      ];
-      state.error = true;
-      dispatch("RENDER");
-      return;
-    }
+    // if (!success) {
+    //   state.logs = [
+    //     ...state.logs,
+    //     error.message == undefined // Just in case something weird happens, encourage the user to submit a bug report if it does
+    //       ? `Game Lab encountered an unexpected error. If you're seeing this, please submit a bug report by clicking the bug button at the top.\n    at code.js`
+    //       : `${error.message}\n    at code.js:${error.line}:${error.col}`,
+    //   ];
+    //   state.error = true;
+    //   dispatch("RENDER");
+    //   return;
+    // }
 
     const gameCanvas = document.querySelector(".game-canvas");
     const err = evalGameScript({
