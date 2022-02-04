@@ -1,7 +1,7 @@
 import { events } from "./events.js";
 import { dispatch } from "./dispatch.js";
 
-const DEFAULT_CARTRIDGE = "3449c9e5e332f1dbb81505cd739fbf3f";
+const DEFAULT_CARTRIDGE = "02d93944c0b8769374eeab7aea6dc369";
 
 function getParam(key) {
   const search = new URLSearchParams(window.location.search);
@@ -127,7 +127,7 @@ function setGameIframe() {
 export async function init(state) {
   initVert();
 
-  state.runStatus = 'loading'
+  state.runStatus = "loading";
   dispatch("RENDER");
   state.codemirror = document.querySelector("#code-editor");
   events(state);
@@ -141,5 +141,5 @@ export async function init(state) {
     (await loadFromDefault());
 
   dispatch("LOAD_CARTRIDGE", { saved });
-  dispatch("SOUND", "bootup")
+  dispatch("SOUND", "bootup");
 }

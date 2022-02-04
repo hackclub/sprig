@@ -12,8 +12,11 @@ export default ({ buttonImage, tooltipText, width, click, buttonPadding, classNa
   return html`
     <style>
       .button {
+        display: flex;
         position: relative;
         box-sizing: border-box;
+        justify-content: center;
+        align-items: center;
       }
 
       .button:hover {

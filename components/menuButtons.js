@@ -49,7 +49,7 @@ const uploadClick = () => {
 
 const uploadButton = state => button({ 
   buttonImage: uploadImageLink(state), 
-  tooltipText: "upload", 
+  tooltipText: "get share link", 
   click: uploadClick, 
   className: klass(state, "saveLinkStatus") 
 })
@@ -75,7 +75,7 @@ const downloadClick = () => {
 
 const downloadButton = state => button({ 
   buttonImage: downloadImageLink(state), 
-  tooltipText: "download", 
+  tooltipText: "download file", 
   click: downloadClick, 
   className: klass(state, "saveFileStatus") 
 })
@@ -133,7 +133,7 @@ const runButton = state => button({
 // show ref
 
 const refButton = state => button({ 
-  buttonImage: './assets/reference.png', 
+  buttonImage: './assets/ref-icon.png', 
   tooltipText: "show reference", 
   className: "cursor-pointer",
   click: refClick, 
