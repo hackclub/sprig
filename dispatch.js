@@ -12,6 +12,7 @@ import { createEval } from "./evalGameScript.js";
 import uiSounds from "./assets/ui-sounds.js";
 import notification from "./utils/notification.js";
 import validate from "./utils/validate.js";
+import favicon from "./utils/favicon.js";
 
 const STATE = {
   codemirror: undefined,
@@ -131,8 +132,15 @@ const ACTIONS = {
     } // Best(?) combination of checking if certain error properties exist
     dispatch("RENDER");
   },
-  SOUND(arg, state) {
+  SOUND(arg = null, state) {
     uiSounds[arg]();
+  },
+  FAVICON(arg = null, state) {
+    if (typeof arg === 'string') {
+      favicon(arg)
+    } else {
+      favicon()
+    }
   },
   REPORT_BUG: async (args, state) => {
     state.bugReportStatus = "loading";
