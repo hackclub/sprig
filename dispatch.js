@@ -62,6 +62,15 @@ const ACTIONS = {
     //   show: state.show
     // }, '*');
 
+    const { error, success } = validate(string); // Re-add esprima pre-run validation
+
+    if (!success) {
+      state.logs = [ ...state.logs, `${error.message}\n    at code.js:${error.line}:${error.col}` ];
+      state.error = true;
+      dispatch("RENDER");
+      return;
+    }
+
     const gameCanvas = document.querySelector(".game-canvas");
     const err = evalGameScript({
       assets: state.assets,
