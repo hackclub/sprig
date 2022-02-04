@@ -1,4 +1,3 @@
-// Don't import this file directly - instead import cm.bundle.js
 import {
     EditorState,
     EditorView,
