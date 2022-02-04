@@ -330,12 +330,8 @@ export function view(state) {
       }
     </style>
     <div class="left-pane">
-<<<<<<< HEAD
-      <div id="code-editor"></div>
-=======
       ${nameBar(state)}
-      <codemirror-js id="code-editor"></codemirror-js>
->>>>>>> 28494f424559731b266489d85cdb4637fb816a10
+      <div id="code-editor"></div>
       <div
         class=${[
           "log",
