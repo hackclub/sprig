@@ -105,7 +105,7 @@ const ACTIONS = {
       return true;
     }
     let lineNumber = err.stack.includes(err.message) ? 1 : 0;
-    console.log(split, checkLine(split[lineNumber]));
+
     if (checkLine(split[lineNumber])) {
       let trace =
         split[lineNumber].split(":")[split[lineNumber].split(":").length - 2] +
