@@ -12,15 +12,24 @@ export default ({ buttonImage, tooltipText, width, click, buttonPadding, classNa
   return html`
     <style>
       .button {
+        background-image: url(assets/btn0.png);
         display: flex;
         position: relative;
         box-sizing: border-box;
         justify-content: center;
         align-items: center;
+        height: 32px;
+        width: 32px;
+        border: 0px;
       }
 
       .button:hover {
+        background-image: url(assets/btn1.png);
         transform: translateY(1px);
+      }
+
+      .button:active {
+        background-image: url(assets/btn2.png);
       }
 
       .tooltip {
