@@ -65,7 +65,11 @@ const ACTIONS = {
     const { error, success } = validate(string); // Re-add esprima pre-run validation
 
     if (!success) {
-      state.logs = [ ...state.logs, `${error.message}\n    at code.js:${error.line}:${error.col}` ];
+      state.logs = [ ...state.logs, 
+        error.message == undefined ? // Just in case something weird happens, encourage the user to submit a bug report if it does
+        `Game Lab encountered an unexpected error. If you're seeing this, please submit a bug report by clicking the bug button at the top.\n    at code.js` :
+        `${error.message}\n    at code.js:${error.line}:${error.col}`
+      ];
       state.error = true;
       dispatch("RENDER");
       return;
@@ -84,8 +88,28 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   LOG_ERROR({ err }, state) {
+    let e = err;
     state.error = true;
-    state.logs = [...state.logs, err.stack];
+    let split = e.stack.split('\n').slice(0, 2);
+    function filterInts (str) {
+      return str.split('').filter(char => char == +char).join('');
+    }
+    function checkLine (line) {
+      let colonSplit = line.split(':');
+      if (!(colonSplit.length >= 3)) return false;
+      if (isNaN(+filterInts(colonSplit[colonSplit.length - 1]))) return false;
+      if (isNaN(+filterInts(colonSplit[colonSplit.length - 2]))) return false;
+      return true;
+    }
+    let lineNumber = e.stack.includes(e.message) ? 1 : 0
+    console.log(split, checkLine(split[lineNumber]));
+    if (checkLine(split[lineNumber])) {
+      let trace = split[lineNumber].split(':')[split[lineNumber].split(':').length - 2] + ':' + split[lineNumber].split(':')[split[lineNumber].split(':').length - 1]
+      let [line, col] = trace.split(':');
+      const str = `${e.stack.includes(e.message) ? split[0] : (e.name ? e.name : 'RuntimeError') + ': ' + e.message}\n    at code.js:${+filterInts(line) - 2}:${+filterInts(col)}`;
+      state.logs.push(str);
+    }
+    else state.logs.push(e.stack.includes(e.message) ? (e.name ? e.name : 'RuntimeError') : (e.name ? e.name : 'RuntimeError') + ': ' + e.message); // Best(?) combination of checking if certain error properties exist
     dispatch("RENDER");
   },
   SOUND(arg, state) {
