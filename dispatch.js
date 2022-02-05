@@ -89,6 +89,7 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   LOG_ERROR({ err }, state) {
+    console.log(err);
     state.error = true;
     let split = err.stack.split("\n").slice(0, 2);
     function filterInts(str) {
