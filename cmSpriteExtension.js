@@ -66,7 +66,7 @@ class SpriteWidget extends WidgetType {
                                     this.view.dispatch({
                                         changes: {
                                             from: this.from,
-                                            to: this.to,
+                                            to: this.to ?? this.from,
                                             insert: sprite.name
                                         }
                                     });
@@ -212,7 +212,7 @@ function makeSpriteWidgets(view) {
                 // e.add({ sprite: [sprite_name | something else] })
                 //                 |----------------------------|
 
-                const isErrored = spriteProp.getChildren("⚠").length > 0;
+                const isErrored = spriteProp.getChildren("⚠").length > 0 || propColon.nextSibling.name === "LineComment" || propColon.nextSibling.getChildren("⚠").length > 0;
                 let val = !isErrored ? propColon.nextSibling : propColon;
                 
                 return {
