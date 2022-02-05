@@ -1,6 +1,6 @@
 import { events } from "./events.js";
 import { dispatch } from "./dispatch.js";
-import initCm from "./cm.js";
+import initCm from "./codemirror/cm.js";
 
 const DEFAULT_CARTRIDGE = "02d93944c0b8769374eeab7aea6dc369";
 

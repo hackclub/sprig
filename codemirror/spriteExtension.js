@@ -5,10 +5,10 @@ import {
     WidgetType,
     Decoration,
     ViewPlugin
-} from "./pkg/@codemirror/view.js";
-import { syntaxTree } from "./pkg/@codemirror/language.js";
-import { html, render } from "./pkg/uhtml.js";
-import { dispatch, STATE } from "./dispatch.js";
+} from "../pkg/@codemirror/view.js";
+import { syntaxTree } from "../pkg/@codemirror/language.js";
+import { html, render } from "../pkg/uhtml.js";
+import { dispatch, STATE } from "../dispatch.js";
 
 function getDataURL(spriteData) {
     const imageData = new ImageData(
