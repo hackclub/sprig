@@ -87,9 +87,9 @@ const ACTIONS = {
     });
     if (err) {
       dispatch("LOG_ERROR", { err });
-      dispatch("FAVICON", 'red.png')
+      dispatch("FAVICON", "red.png");
     } else {
-      dispatch("FAVICON", 'yellow.png')
+      dispatch("FAVICON", "yellow.png");
     }
     document.querySelector(".game-canvas").focus(); // TODO: can we focus in iframe
 
@@ -149,10 +149,10 @@ const ACTIONS = {
     uiSounds[arg]();
   },
   FAVICON(arg = null, state) {
-    if (typeof arg === 'string') {
-      favicon(arg)
+    if (typeof arg === "string") {
+      favicon(arg);
     } else {
-      favicon()
+      favicon();
     }
   },
   REPORT_BUG: async (args, state) => {
