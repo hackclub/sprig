@@ -12,6 +12,7 @@ import { createEval } from "./evalGameScript.js";
 import uiSounds from "./assets/ui-sounds.js";
 import notification from "./utils/notification.js";
 import validate from "./utils/validate.js";
+import favicon from "./utils/favicon.js";
 import title from "./utils/title.js";
 
 const STATE = {
@@ -84,7 +85,12 @@ const ACTIONS = {
       show: state.show,
       gameCanvas,
     });
-    if (err) dispatch("LOG_ERROR", { err });
+    if (err) {
+      dispatch("LOG_ERROR", { err });
+      dispatch("FAVICON", 'red.png')
+    } else {
+      dispatch("FAVICON", 'yellow.png')
+    }
     document.querySelector(".game-canvas").focus(); // TODO: can we focus in iframe
 
     dispatch("RENDER");
@@ -141,6 +147,13 @@ const ACTIONS = {
   },
   SOUND(arg, state) {
     uiSounds[arg]();
+  },
+  FAVICON(arg = null, state) {
+    if (typeof arg === 'string') {
+      favicon(arg)
+    } else {
+      favicon()
+    }
   },
   REPORT_BUG: async (args, state) => {
     state.bugReportStatus = "loading";
