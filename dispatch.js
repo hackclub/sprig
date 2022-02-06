@@ -13,6 +13,7 @@ import uiSounds from "./assets/ui-sounds.js";
 import notification from "./utils/notification.js";
 import validate from "./utils/validate.js";
 import favicon from "./utils/favicon.js";
+import title from "./utils/title.js";
 
 const STATE = {
   codemirror: undefined,
@@ -137,7 +138,14 @@ const ACTIONS = {
     } // Best(?) combination of checking if certain error properties exist
     dispatch("RENDER");
   },
-  SOUND(arg = null, state) {
+  SET_TITLE(arg, state) {
+    if (typeof arg == "string") {
+      title(arg);
+    } else {
+      title();
+    }
+  },
+  SOUND(arg, state) {
     uiSounds[arg]();
   },
   FAVICON(arg = null, state) {
@@ -231,6 +239,7 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   LOAD_CARTRIDGE: async ({ saved }, state) => {
+    dispatch("SET_TITLE", "loading...");
     const newProg = saved.prog;
     const currentProg = state.codemirror.view.state.doc.toString();
 
@@ -240,6 +249,7 @@ const ACTIONS = {
 
     state.assets = saved.assets || [];
     state.name = saved.name;
+    state.previousID = saved.previousID || null;
 
     if (state.version !== saved.version) {
       notification({
@@ -248,7 +258,7 @@ const ACTIONS = {
                   File uses version: ${saved.version}<br>
                   ${
                     saved.version
-                      ? `Old editor is available <a target="_blank" href="https://game-lab-versions.hackclub.dev/${saved.version}/index.html">here</a>.`
+                      ? `Old editor is available <a target="_blank" href="https://gamelab-versions.hackclub.dev/${saved.version}/index.html">here</a>.`
                       : ""
                   }`,
         timeout: 5000,
@@ -261,6 +271,7 @@ const ACTIONS = {
     state.selected_asset = -1;
 
     state.runStatus = "ready";
+    dispatch("SET_TITLE", state.name);
     dispatch("RENDER");
     // dispatch("RUN");
   },
@@ -320,6 +331,9 @@ const ACTIONS = {
       .trim() // no whitespace before or after
       .replace(/\n/g, "") // no newlines at all
       .replace(/\s+/g, "-"); // all remaining whitespace converted to hyphyens
+
+    dispatch("SET_TITLE", safeName);
+
     state.name = safeName || "my-project";
 
     return state.name;
