@@ -134,9 +134,9 @@ const ACTIONS = {
   },
   SET_TITLE(arg, state) {
     if (typeof arg == "string") {
-      title(arg)
+      title(arg);
     } else {
-      title()
+      title();
     }
   },
   SOUND(arg, state) {
@@ -226,7 +226,7 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   LOAD_CARTRIDGE: async ({ saved }, state) => {
-    dispatch("SET_TITLE", "loading...")
+    dispatch("SET_TITLE", "loading...");
     const newProg = saved.prog;
     const currentProg = state.codemirror.view.state.doc.toString();
 
@@ -258,7 +258,7 @@ const ACTIONS = {
     state.selected_asset = -1;
 
     state.runStatus = "ready";
-    dispatch("SET_TITLE", state.name)
+    dispatch("SET_TITLE", state.name);
     dispatch("RENDER");
     // dispatch("RUN");
   },
@@ -318,8 +318,8 @@ const ACTIONS = {
       .trim() // no whitespace before or after
       .replace(/\n/g, "") // no newlines at all
       .replace(/\s+/g, "-"); // all remaining whitespace converted to hyphyens
-    
-    dispatch("SET_TITLE", safeName)
+
+    dispatch("SET_TITLE", safeName);
 
     state.name = safeName || "my-project";
 
