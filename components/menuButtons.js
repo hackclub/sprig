@@ -54,6 +54,32 @@ const uploadButton = state => button({
   className: klass(state, "saveLinkStatus") 
 })
 
+// new project button
+const newProjectImageLink = (state) => {
+  switch (state.loadFileStatus) {
+    case 'loading':
+      return './assets/loading.gif'
+    case 'ready':
+      return './assets/new_project.png'
+    default:
+      return './assets/err.png'
+  }
+}
+
+const newProjectClick = () => {
+  if (confirm("This will clear the existing project. Continue?")) {
+    dispatch("SOUND", "click");
+    dispatch("LOAD_DEFAULT_CARTRIDGE");
+  }
+}
+
+const newProjectButton = state => button({
+  buttonImage: newProjectImageLink(state),
+  tooltipText: "create new project",
+  click: newProjectClick,
+  className: klass(state, "loadFileStatus")
+})
+
 
 // download button
 
@@ -148,6 +174,7 @@ const refClick = () => {
 
 export default (state) => html`
   <div style=${styles}>
+    ${newProjectButton(state)}
     ${downloadButton(state)}
     ${uploadButton(state)}
     ${bugButton(state)}

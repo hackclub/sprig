@@ -14,7 +14,7 @@ function removeParam(key) {
   window.history.pushState({}, null, url);
 }
 
-function loadFromDefault() {
+export function loadFromDefault() {
   return loadFromS3(DEFAULT_CARTRIDGE);
 }
 
