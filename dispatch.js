@@ -1,6 +1,6 @@
 import { html, render, svg } from "./uhtml.js";
 import { view } from "./view.js";
-import { init } from "./init.js";
+import { loadFromDefault, init } from "./init.js";
 import { save } from "./save.js";
 import { Engine } from "./Engine.js";
 import { size_up_sprites } from "./size_up_sprites.js";
@@ -30,6 +30,7 @@ const STATE = {
   saveLinkStatus: "ready",
   saveFileStatus: "ready",
   runStatus: "loading",
+  loadFileStatus: "ready",
   bugReportStatus: "ready",
   lastSaved: {
     name: "",
@@ -217,6 +218,11 @@ const ACTIONS = {
     state.mouseX = mouseX;
     state.mouseY = mouseY;
     dispatch("RENDER");
+  },
+  LOAD_DEFAULT_CARTRIDGE: async ({}, state) => {
+      state.loadFileStatus = 'loading';
+      await dispatch("LOAD_CARTRIDGE", { saved: await loadFromDefault() });
+      state.loadFileStatus = 'ready';
   },
   LOAD_CARTRIDGE: async ({ saved }, state) => {
     const newProg = saved.prog;
