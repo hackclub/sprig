@@ -396,7 +396,8 @@ const ACTIONS = {
 };
 
 export function dispatch(action, args = {}) {
-  console.log(action);
+  // console.log(action);
+  
   const trigger = ACTIONS[action];
   STATE.dispatchLogs.unshift({ action, args, timestamp: Date.now() });
   if (trigger) return trigger(args, STATE);

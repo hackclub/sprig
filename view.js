@@ -538,7 +538,7 @@ tuneToStop.end();
     <br /><br />
     <div>
       Examples can be found in the
-      <a href="https://github.com/hackclub/gamelab" target="_blank"
+      <a href="https://github.com/hackclub/gamelab#readme" target="_blank"
         >GitHub repository README</a
       >, check out the "Tiny Games".
     </div>
