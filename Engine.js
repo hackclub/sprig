@@ -207,25 +207,25 @@ class Object {
         const { top, bottom, left, right } = this.distanceTo(otherObj);
 
 
-        if (dy < 0 && top !== Infinity) { // moving up
+        if (dy < 0 && top !== Infinity && x > y) { // moving up
           canMoveInY = false;
           this._vy = -this.bounce * this._vy;
           this._y -= top;
         }
 
-        if (dy > 0 && bottom !== Infinity) { // moving down
+        if (dy > 0 && bottom !== Infinity && x > y) { // moving down
           canMoveInY = false;
           this._vy = -this.bounce * this._vy;
           this._y += bottom;
         }
 
-        if (dx < 0 && left !== Infinity) { // moving left
+        if (dx < 0 && left !== Infinity && x < y) { // moving left
           canMoveInX = false;
           this._vx = -this.bounce * this._vx;
           this._x -= left;
         }
 
-        if (dx > 0 && right !== Infinity) { // moving right
+        if (dx > 0 && right !== Infinity && x < y) { // moving right
           canMoveInX = false;
           this._vx = -this.bounce * this._vx;
           this._x += right;
