@@ -142,4 +142,5 @@ export async function init(state) {
 
   dispatch("LOAD_CARTRIDGE", { saved });
   dispatch("SOUND", "bootup");
+  dispatch("FAVICON");
 }
