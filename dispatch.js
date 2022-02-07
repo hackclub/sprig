@@ -12,6 +12,8 @@ import { createEval } from "./evalGameScript.js";
 import uiSounds from "./assets/ui-sounds.js";
 import notification from "./utils/notification.js";
 import validate from "./utils/validate.js";
+import favicon from "./utils/favicon.js";
+import title from "./utils/title.js";
 
 const STATE = {
   codemirror: undefined,
@@ -84,7 +86,12 @@ const ACTIONS = {
       show: state.show,
       gameCanvas,
     });
-    if (err) dispatch("LOG_ERROR", { err });
+    if (err) {
+      dispatch("LOG_ERROR", { err });
+      dispatch("FAVICON", "red.png");
+    } else {
+      dispatch("FAVICON", "yellow.png");
+    }
     document.querySelector(".game-canvas").focus(); // TODO: can we focus in iframe
 
     dispatch("RENDER");
@@ -133,8 +140,22 @@ const ACTIONS = {
     } // Best(?) combination of checking if certain error properties exist
     dispatch("RENDER");
   },
+  SET_TITLE(arg, state) {
+    if (typeof arg == "string") {
+      title(arg);
+    } else {
+      title();
+    }
+  },
   SOUND(arg, state) {
     uiSounds[arg]();
+  },
+  FAVICON(arg = null, state) {
+    if (typeof arg === "string") {
+      favicon(arg);
+    } else {
+      favicon();
+    }
   },
   REPORT_BUG: async (args, state) => {
     state.bugReportStatus = "loading";
@@ -225,6 +246,7 @@ const ACTIONS = {
       state.loadFileStatus = 'ready';
   },
   LOAD_CARTRIDGE: async ({ saved }, state) => {
+    dispatch("SET_TITLE", "loading...");
     const newProg = saved.prog;
     const currentProg = state.codemirror.view.state.doc.toString();
 
@@ -256,6 +278,7 @@ const ACTIONS = {
     state.selected_asset = -1;
 
     state.runStatus = "ready";
+    dispatch("SET_TITLE", state.name);
     dispatch("RENDER");
     // dispatch("RUN");
   },
@@ -315,6 +338,9 @@ const ACTIONS = {
       .trim() // no whitespace before or after
       .replace(/\n/g, "") // no newlines at all
       .replace(/\s+/g, "-"); // all remaining whitespace converted to hyphyens
+
+    dispatch("SET_TITLE", safeName);
+
     state.name = safeName || "my-project";
 
     return state.name;
@@ -396,7 +422,8 @@ const ACTIONS = {
 };
 
 export function dispatch(action, args = {}) {
-  console.log(action);
+  // console.log(action);
+  
   const trigger = ACTIONS[action];
   STATE.dispatchLogs.unshift({ action, args, timestamp: Date.now() });
   if (trigger) return trigger(args, STATE);
