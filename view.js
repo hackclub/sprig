@@ -352,6 +352,7 @@ export function view(state) {
         <div class="list-of-sprites">
           ${addAssetButton(state, "sprite")} ${addAssetButton(state, "tune")}
           ${state.assets.map((x, i) => {
+            console.log(x);
             return html`
               <div
                 class=${[
@@ -359,6 +360,10 @@ export function view(state) {
                   i === state.selected_asset ? "selected-sprite" : "",
                 ].join(" ")}
               >
+                ${({
+                    "tune": html`<img src="assets/tune.png" style="width:16px;height:16px;filter:invert(1);margin-right:5px;">`,
+                    "sprite": html`<img src="assets/favicon.png" style="width:11px;height:11px;padding:3px;filter:grayscale(1);margin-right:5px;">`
+                })[x.type]}
                 ${renderSpriteName(x.name, i, state)}
                 <div
                   class="sprite-delete"
