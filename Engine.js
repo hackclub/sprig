@@ -445,9 +445,6 @@ class Engine {
 
       const { top, bottom, left, right } = me.distanceTo(them);
 
-
-      // otherwise collided
-
       let canMoveInX = true;
       let canMoveInY = true;
       let collided = false;
