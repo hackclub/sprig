@@ -450,40 +450,42 @@ class Engine {
 
       let canMoveInX = true;
       let canMoveInY = true;
-      if (them.solid && me.solid) {
-        // console.log("collides", { top, bottom, left, right, dx, dy });
+      let collided = false;
 
-        if (dy < 0 && Math.abs(dy) > top && top >= 0) {
-          me.vy = -me.bounce * me.vy;
-          me.y = me.y - top + 0.1;
-          canMoveInY = false;
-        }
-
-        if (dy > 0 && Math.abs(dy) > bottom && bottom >= 0) {
-          me.vy = -me.bounce * me.vy;
-          me.y = me.y + bottom - 0.1;
-          canMoveInY = false;
-        }
-
-        if (dx < 0 && Math.abs(dx) > left && left >= 0) {
-          me.vx = -me.bounce * me.vx;
-          me.x = me.x - left + 0.1;
-          canMoveInX = false;
-        }
-
-        if (dx > 0 && Math.abs(dx) > right && right >= 0) {
-          me.vx = -me.bounce * me.vx;
-          me.x = me.x + right - 0.1;
-          canMoveInX = false;
-        }
-
-      } 
+      const bothSolid = them.solid && me.solid;
       
+      if (dy < 0 && Math.abs(dy) > top && top >= 0) {
+        if (bothSolid) me.vy = -me.bounce * me.vy;
+        if (bothSolid) me.y = me.y - top + 0.1;
+        if (bothSolid) canMoveInY = false;
+        collided = true;
+      }
+
+      if (dy > 0 && Math.abs(dy) > bottom && bottom >= 0) {
+        if (bothSolid) me.vy = -me.bounce * me.vy;
+        if (bothSolid) me.y = me.y + bottom - 0.1;
+        if (bothSolid) canMoveInY = false;
+        collided = true;
+      }
+
+      if (dx < 0 && Math.abs(dx) > left && left >= 0) {
+        if (bothSolid) me.vx = -me.bounce * me.vx;
+        if (bothSolid) me.x = me.x - left + 0.1;
+        if (bothSolid) canMoveInX = false;
+        collided = true;
+      }
+
+      if (dx > 0 && Math.abs(dx) > right && right >= 0) {
+        if (bothSolid) me.vx = -me.bounce * me.vx;
+        if (bothSolid) me.x = me.x + right - 0.1;
+        if (bothSolid) canMoveInX = false;
+        collided = true;
+      }
+
       if (canMoveInX) me.x += dx;
       if (canMoveInY) me.y += dy;
 
-      if (me.collides !== null) me.collides(me, them);
-      // if (them.collides !== null) them.collides(them, me);
+      if (collided && me.collides !== null) me.collides(me, them);
 
     };
 
