@@ -92,6 +92,20 @@ function distanceTo(obj0, obj1) {
     right = -(obj1.x+obj1.width-obj0.x);
   }
 
+  // if (left == 0 || right == 0) {
+  //   if (left == 0) left = 0;
+  //   if (right == 0) right = 0;
+  //   top = Infinity;
+  //   bottom = Infinity;
+  // }
+
+  // if (top == 0 || bottom == 0) {
+  //   if (top == 0) top = 0;
+  //   if (bottom == 0) bottom = 0;
+  //   left = Infinity;
+  //   right = Infinity;
+  // }
+
   return { top, right, bottom, left };
 }
 
@@ -402,7 +416,7 @@ class Engine {
     draw();
   }
 
-  resolve() {
+  resolve(xy = "xy") {
     const objs = this.objects;
 
     for (let i = 0; i < objs.length; i++) {
@@ -411,51 +425,169 @@ class Engine {
           const obj1 = objs[j];
 
           resolveObj(obj0, obj1);
+
+
+
+          // if (xy === "xy") resolveObj(obj0, obj1);
+          // else if (xy === "x") resolveObj(obj0, obj1, "x");
+          // else if (xy === "y") resolveObj(obj0, obj1, "y");
          
       }
     }
 
-    function resolveObj (me, them) {
+    function resolveObj (me, them, xy = "xy") {
       if (me == them) return;
+
+      const [x, y] = overlap(me, them);
+
+      if (x <= 0 || y <= 0) return;
       
       const dx = me.x - me.lastX;
       const dy = me.y - me.lastY;
-      
+
+      me.x -= dx;
+      me.y -= dy;
+
       const { top, bottom, left, right } = me.distanceTo(them);
 
-      if (dy < 0 && top > 0) return;
-      if (dy > 0 && bottom > 0) return;
-      if (dx < 0 && left > 0) return;
-      if (dx > 0 && right > 0) return;
+      console.log("collides", { top, bottom, left, right, dx, dy, x, y });
 
-      // const { top: ot, bottom: ob, left: ol, right: or } = me.distanceTo(them); // distance after move
-      
-      // if (!(ot < 0 && top > 0) && !(ob < 0 && bottom > 0) && !(ol < 0 && left > 0) && !(or < 0 && right > 0)) return; 
+      // if i'm moving in a direction that has space accept the change and move on
+
+      // let acceptable = true;
+      // if (dy < 0 && Math.abs(dy) < top) acceptable = false;
+      // if (dy > 0 && Math.abs(dy) < bottom) acceptable = false;
+      // if (dx < 0 && Math.abs(dx) < left) acceptable = false;
+      // if (dx > 0 && Math.abs(dx) < right) acceptable = false;
+
+      // if (acceptable) {
+      //   me.x += dx;
+      //   me.y += dy;
+      //   return;
+      // } else {
+      //   console.log("collision")
+      // }
+
+
+      // console.log(dx, right)
+      // moved and have space to do so
+      // if (dy < 0 &&  top) return;
+      // if (dy > bottom) return;
+      // if (dx < left) return;
+      // if (!(dx >= 0 && right >= 0)) return;
+
+      // otherwise collided
 
       if (them.solid && me.solid) {
 
-        me.x -= dx;
-        me.y -= dy;
+        // const udOrlr = Math.min()
 
-        const { top, bottom, left, right } = me.distanceTo(them); // distance before move
-        
-        // me.x += dx;
-        // me.y += dy;
-
-        if (dy < 0) { // moving up
+        if (dy < 0 && Math.abs(dy) > top && x > y) {
           me.vy = -me.bounce * me.vy;
-          me.y -= top;
-        } else if (dy > 0 && bottom !== Infinity && bottom > 0) { // moving down
-          me.vy = -me.bounce * me.vy;
-          me.y += bottom;
-        } else if (dx < 0 && left !== Infinity && left > 0) { // moving left
-          me.vx = -me.bounce * me.vx;
-          me.x -= left;
-        } else if (dx > 0 && right !== Infinity && right > 0)  { // moving right
-          me.vx = -me.bounce * me.vx;
-          me.x += right;
+          me.y = me.y - top;
         }
 
+        if (dy > 0 && Math.abs(dy) > bottom && x > y) {
+          me.vy = -me.bounce * me.vy;
+          me.y = me.y + bottom;
+        }
+
+        if (dx < 0 && Math.abs(dx) > left && y > x) {
+          me.vx = -me.bounce * me.vx;
+          me.x = me.x - left;
+        }
+
+        if (dx > 0 && Math.abs(dx) > right && y > x) {
+          me.vx = -me.bounce * me.vx;
+          me.x = me.x + right;
+        }
+
+        // if (dx > left) {
+        //   me.vx = -me.bounce * me.vx;
+        //   me.x = me.x + right;
+        // }
+
+        // if (dx < right) {
+        //   me.vx = -me.bounce * me.vx;
+        //   me.x = me.x - left;
+        // }
+
+        // if (y > x) {
+          // if (dy <= 0 && dx <= 0) {
+          //   me.vy = -me.bounce * me.vy;
+          //   me.y = me.y - top;
+
+          //   me.vx = -me.bounce * me.vx;
+          //   me.x = me.x - left;
+          // }
+
+          // else if (dy >= 0 && dx <= 0) {
+          //   me.vy = -me.bounce * me.vy;
+          //   me.y = me.y + bottom;
+
+          //   me.vx = -me.bounce * me.vx;
+          //   me.x = me.x + right;
+          // }
+
+          // else if (dy >= 0 && dx >= 0) {
+          //   me.vy = -me.bounce * me.vy;
+          //   me.y = me.y + bottom;
+
+          //   me.vx = -me.bounce * me.vx;
+          //   me.x = me.x + right;
+          // }
+
+          // else if (dy >= 0 && dx <= 0) {
+          //   me.vy = -me.bounce * me.vy;
+          //   me.y = me.y + bottom;
+
+          //   me.vx = -me.bounce * me.vx;
+          //   me.x = me.x - left;
+          // }
+
+        // }
+
+        // if (x < y) {
+          // if (dx < 0) {
+          //   me.vx = -me.bounce * me.vx;
+          //   me.x = me.x - left;
+          // }
+
+          // if (dx > 0) {
+          //   me.vx = -me.bounce * me.vx;
+          //   me.x = me.x + right;
+          // }
+        // }
+
+
+        // if (dx < 0 && left < 0 && x < y) {
+        //   me.vx = -me.bounce * me.vx;
+        //   me.x = me.x - left;
+        // }
+
+        // if (dx > 0 && right < 0 && x < y) {
+        //   me.vx = -me.bounce * me.vx;
+        //   me.x = me.x + right;
+        // }
+
+        // if (x > y) {
+        //   if (dy < 0 && top > bottom) { // moving up
+        //     me.vy = -me.bounce * me.vy;
+        //     me.y = top > bottom 
+        //       ? me.y - (dy < 0 ? top : 0) 
+        //       : me.y + (dy > 0 ? bottom : 0);
+        //   } 
+        // }
+
+        // if (y > x) {
+        //   if (dx !== 0) { // moving left
+        //     me.vx = -me.bounce * me.vx;
+        //     me.x = left > right ? me.x - left : me.x + right;
+        //   } 
+        // }
+      } else {
+        me.x += dx;
+        me.y += dy;
       }
 
       if (me.collides !== null) me.collides(me, them);
