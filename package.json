@@ -6,6 +6,7 @@
   "author": "Caleb Denio <cjdenio44@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.25.0",
     "ejs": "^3.1.6"
   }
 }
