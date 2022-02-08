@@ -32,7 +32,7 @@ export default async function handler(req, res) {
     res.send(
       ejs.render(template, {
         game: {
-          url: `https://gamelab.hackclub.com/?id=${id}`,
+          url: `/?id=${id}`,
           name: game.name,
         },
         url: `https://gamelab.hackclub.com/share/${id}`,
