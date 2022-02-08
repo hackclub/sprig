@@ -431,11 +431,6 @@ class Engine {
 
     function resolveObj (me, them) {
       if (me == them) return;
-
-
-      // console.log({ x, y, me, them });
-
-      // if (x <= 0 || y <= 0) return;
       
       const dx = me.x - me.lastX;
       const dy = me.y - me.lastY;
