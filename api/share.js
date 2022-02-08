@@ -21,6 +21,7 @@ const template = `
 </html>
 `;
 
+/** @type {import("@vercel/node").VercelApiHandler} */
 export default async function handler(req, res) {
   const { id } = req.query;
 
