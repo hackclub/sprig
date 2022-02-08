@@ -137,18 +137,19 @@ class Object {
     this.rotate = params.rotate ?? 0;
     this.origin = params.origin || [0, 0];
 
-    this._x = params.x ?? 0;
-    this._y = params.y ?? 0;
-    this._vx = params.vx ?? 0;
-    this._vy = params.vy ?? 0;
+    this.x = params.x ?? 0;
+    this.y = params.y ?? 0;
+    this.lastX = 0;
+    this.lastY = 0;
+
+    this.vx = params.vx ?? 0;
+    this.vy = params.vy ?? 0;
     this.bounce = params.bounce ?? 0;
     this.solid = params.solid ?? false;
     this.click = params.click ?? null;
-    this._update = params.update ?? null;
-    this._collides = params.collides ?? null;
+    this.update = params.update ?? null;
+    this.collides = params.collides ?? null;
     this.drawBounds = params.drawBounds ?? false;
-    this.dx = 0;
-    this.dy = 0;
 
     this.id = Math.random();
   }
@@ -174,100 +175,6 @@ class Object {
 
   hasTag(tag) {
     return this.tags.includes(tag);
-  }
-
-  translate(dx, dy) {
-    let canMoveInX = true;
-    let canMoveInY = true;
-
-    this.engine.objects.forEach((otherObj) => {
-      if (this == otherObj) return;
-
-      const [ogx, ogy] = overlap(this, otherObj);
-      const [x, y] = overlap(this, otherObj, [dx, dy]);
-
-      // distancesTo(this, otherObj);
-
-      // let xDist = dx < 0 
-      //   ? otherObj.x + otherObj.width - this.x // moving left
-      //   : this.x + this.width - otherObj.x // moving right
-
-      // let yDist = dy < 0 
-      //   ? otherObj.y + otherObj.height - this.y // moving up
-      //   : this.y + this.height - otherObj.y // moving down
-
-      // if (dx === 0) xDist = 0;
-      // if (dy === 0) yDist = 0;
-
-      // console.log(xDist, yDist);
-
-      if (otherObj.solid && this.solid) {
-        if (x <= 0 || y <= 0) return; 
-
-        const { top, bottom, left, right } = this.distanceTo(otherObj);
-
-
-        if (dy < 0 && top !== Infinity && x > y) { // moving up
-          canMoveInY = false;
-          this._vy = -this.bounce * this._vy;
-          this._y -= top;
-        }
-
-        if (dy > 0 && bottom !== Infinity && x > y) { // moving down
-          canMoveInY = false;
-          this._vy = -this.bounce * this._vy;
-          this._y += bottom;
-        }
-
-        if (dx < 0 && left !== Infinity && x < y) { // moving left
-          canMoveInX = false;
-          this._vx = -this.bounce * this._vx;
-          this._x -= left;
-        }
-
-        if (dx > 0 && right !== Infinity && x < y) { // moving right
-          canMoveInX = false;
-          this._vx = -this.bounce * this._vx;
-          this._x += right;
-        }
-
-        // this means that the rectangle is overlapping in it's next step
-
-        // let xDist = x;
-        // while (xDist > 0) {
-        //   this._x += 
-        // }
-
-        // if (x < y) {
-        //   canMoveInX = false;
-        //   this._vx = -this.bounce * this._vx;
-        //   this._x = dx < 0 ? otherObj.x + otherObj.width : otherObj.x - this.width;
-        // } else {
-        //   canMoveInY = false;
-        //   this._vy = -this.bounce * this._vy;
-        //   this._y = dy < 0 ? otherObj.y + otherObj.height : otherObj.y - this.height;
-        // }
-
-        //  if (x > 0) {
-        //   canMoveInX = false;
-        //   this._vx = -this.bounce * this._vx;
-        //   this._x -= ogx < 0 ? ogx : 0;
-        // }
-
-
-        // if (y > 0) {
-        //   canMoveInY = false;
-        //   this._vy = -this.bounce * this._vy;
-        //   this._y -= ogy < 0 ? ogy : 0;
-        // }
-      }
-
-      if (x >= 0 && y >= 0 && this._collides !== null)
-        this._collides(this, otherObj);
-    });
-
-    if (canMoveInX) this._x += dx;
-    if (canMoveInY) this._y += dy;
   }
 
   get width() {
@@ -300,7 +207,7 @@ class Object {
     const h = this.height;
     ctx.save();
     const [ox, oy] = [w * this.origin[0], h * this.origin[1]];
-    ctx.translate(this._x, this._y);
+    ctx.translate(this.x, this.y);
     ctx.rotate(this._rotate);
     
     // const xInvert = this.scale[0] < 0 ? -1 : 1;
@@ -322,35 +229,6 @@ class Object {
       ctx.strokeRect(this.x - ox, this.y - oy, w, h);
     }
 
-    // this is why the hitbox was off by some pixels
-    if (this._update !== null) this._update(obj);
-
-  }
-
-  set x(val) {
-    this.translate(val - this._x, 0);
-  }
-  set y(val) {
-    this.translate(0, val - this._y);
-  }
-  set vx(val) {
-    this._vx = val;
-  }
-  set vy(val) {
-    this._vy = val;
-  }
-
-  get x() {
-    return this._x;
-  }
-  get y() {
-    return this._y;
-  }
-  get vx() {
-    return this._vx;
-  }
-  get vy() {
-    return this._vy;
   }
 
 }
@@ -493,15 +371,20 @@ class Engine {
       this.ctx.fillRect(0, 0, this.width, this.height);
 
       this.objects.forEach((obj) => {
-        let ogX = obj.x;
-        let ogY = obj.y;
 
-        obj.translate(obj.vx, obj.vy);
+        obj.lastX = obj.x;
+        obj.lastY = obj.y;
 
+        if (obj.update !== null) obj.update(obj);
+
+        obj.x += obj.vx
+        obj.y += obj.vy
+      });
+
+      this.resolve();
+
+      this.objects.forEach((obj) => {
         if (obj.draw !== null) obj.draw(obj);
-
-        obj.dx = ogX - obj.x;
-        obj.dy = ogY - obj.y;
       });
 
       [...this._pressedKeys].forEach((key) => {
@@ -517,6 +400,68 @@ class Engine {
 
     this.drawing = true;
     draw();
+  }
+
+  resolve() {
+    const objs = this.objects;
+
+    for (let i = 0; i < objs.length; i++) {
+      for (let j = i; j < objs.length; j++) {
+          const obj0 = objs[i];
+          const obj1 = objs[j];
+
+          resolveObj(obj0, obj1);
+         
+      }
+    }
+
+    function resolveObj (me, them) {
+      if (me == them) return;
+      
+      const dx = me.x - me.lastX;
+      const dy = me.y - me.lastY;
+      
+      const { top, bottom, left, right } = me.distanceTo(them);
+
+      if (dy < 0 && top > 0) return;
+      if (dy > 0 && bottom > 0) return;
+      if (dx < 0 && left > 0) return;
+      if (dx > 0 && right > 0) return;
+
+      // const { top: ot, bottom: ob, left: ol, right: or } = me.distanceTo(them); // distance after move
+      
+      // if (!(ot < 0 && top > 0) && !(ob < 0 && bottom > 0) && !(ol < 0 && left > 0) && !(or < 0 && right > 0)) return; 
+
+      if (them.solid && me.solid) {
+
+        me.x -= dx;
+        me.y -= dy;
+
+        const { top, bottom, left, right } = me.distanceTo(them); // distance before move
+        
+        // me.x += dx;
+        // me.y += dy;
+
+        if (dy < 0) { // moving up
+          me.vy = -me.bounce * me.vy;
+          me.y -= top;
+        } else if (dy > 0 && bottom !== Infinity && bottom > 0) { // moving down
+          me.vy = -me.bounce * me.vy;
+          me.y += bottom;
+        } else if (dx < 0 && left !== Infinity && left > 0) { // moving left
+          me.vx = -me.bounce * me.vx;
+          me.x -= left;
+        } else if (dx > 0 && right !== Infinity && right > 0)  { // moving right
+          me.vx = -me.bounce * me.vx;
+          me.x += right;
+        }
+
+      }
+
+      if (me.collides !== null) me.collides(me, them);
+
+    };
+
   }
 
   end() {
