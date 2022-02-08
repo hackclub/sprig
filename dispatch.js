@@ -161,57 +161,82 @@ const ACTIONS = {
       message: "Generating a bug report... (1/3)",
     });
     const report = {};
-    report["Engine Version"] = state.engineVersion;
-    await dispatch("SAVE", { type: "link", copyUrl: false });
-    report["Project Link"] = state.lastSaved.link;
-    notification({
-      message: "Generating a bug report... (2/3)",
-    });
-    function truncate(string, length, ending) {
-      return string.length > length
-        ? string.substring(0, length - ending.length) + ending
-        : string;
+    try { // Just in case there's an error compiling the report, make sure the bug is still reported
+      report["Engine Version"] = state.engineVersion;
+      await dispatch("SAVE", { type: "link", copyUrl: false });
+      report["Project Link"] = state.lastSaved.link;
+      function truncate(string, length, ending) {
+        return string.length > length
+          ? string.substring(0, length - ending.length) + ending
+          : string;
+      }
+      function fetchTimeout(url, timeout = 10000) {
+        return new Promise((resolve, reject) => {
+          let timeoutId = setTimeout(() => {
+            resolve('{"error": "timeout"}');
+          }, timeout);
+          fetch(url)
+            .then((res) => {
+              res.text().then((text) => {
+                clearTimeout(timeoutId);
+                resolve(text);
+              }).catch((err) => {
+                clearTimeout(timeoutId);
+                resolve('{"error": "parsing failed"}');
+              });
+            })
+            .catch((err) => {
+              clearTimeout(timeoutId);
+              resolve('{"error": "fetch failed"}');
+            });
+        });
+      }
+      report["IP Address"] = await fetchTimeout('https://ifconfig.me/ip');
+      notification({
+        message: "Generating a bug report... (2/3)",
+      });
+      report["Dispatch Event Log"] = state.dispatchLogs
+        .slice(0, 50)
+        .map((entry) => truncate(JSON.stringify(entry, null, 4), 1999, "..."))
+        .join("\n\n");
+      report["Error Log"] = state.logs
+        .slice(0, 50)
+        .map((entry) =>
+          truncate(entry.stack || JSON.stringify(entry, null, 4), 1999, "...")
+        )
+        .join("\n\n");
+      report["User Agent"] = await fetchTimeout("https://ifconfig.me/ua");
+      report["State"] = truncate(
+        JSON.stringify(
+          {
+            url: state.url,
+            show: state.show,
+            examples: state.examples,
+            error: state.error,
+            mouseX: state.mouseX,
+            mouseY: state.mouseY,
+            engineVersion: state.engineVersion,
+            previousID: state.previousID,
+            selected_asset: state.selected_asset,
+            name: state.name,
+            lastSaved: state.lastSaved,
+          },
+          null,
+          4
+        ),
+        99900,
+        "..."
+      );
+      notification({
+        message: "Generating a bug report... (3/3)",
+      });
+    } catch (err) {
+      notification({
+        message: "Error generating part of the report, proceeding with current data...",
+      });
+      if (report["State"]) report["State"] += ('\n\n' + err.message + '\n' + err.stack).substring(0, 99999 - report["State"].length); // If there's an error, log it to the last part of the state field
+      else report["State"] = (err.message + '\n' + err.stack).substring(0, 99999); // Or just set it to the whole object if there's nothing already there
     }
-    report["IP Address"] = await fetch("https://ifconfig.me/ip").then(
-      (response) => response.text()
-    );
-    report["Dispatch Event Log"] = state.dispatchLogs
-      .slice(0, 50)
-      .map((entry) => truncate(JSON.stringify(entry, null, 4), 1999, "..."))
-      .join("\n\n");
-    report["Error Log"] = state.logs
-      .slice(0, 50)
-      .map((entry) =>
-        truncate(entry.stack || JSON.stringify(entry, null, 4), 1999, "...")
-      )
-      .join("\n\n");
-    report["User Agent"] = await fetch("https://ifconfig.me/ua").then(
-      (response) => response.text()
-    );
-    report["State"] = truncate(
-      JSON.stringify(
-        {
-          url: state.url,
-          show: state.show,
-          examples: state.examples,
-          error: state.error,
-          mouseX: state.mouseX,
-          mouseY: state.mouseY,
-          engineVersion: state.engineVersion,
-          previousID: state.previousID,
-          selected_asset: state.selected_asset,
-          name: state.name,
-          lastSaved: state.lastSaved,
-        },
-        null,
-        4
-      ),
-      99900,
-      "..."
-    );
-    notification({
-      message: "Generating a bug report... (3/3)",
-    });
     const url = new URL("https://airtable.com/shrpcDFA5f9wEOSIm");
     for (const key in report) {
       url.searchParams.append(`prefill_${key}`, report[key]);
