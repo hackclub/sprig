@@ -361,7 +361,7 @@ export function view(state) {
               >
                 ${({
                     "tune": html`<img src="assets/tune.png" style="width:16px;height:16px;filter:invert(1);margin-right:5px;">`,
-                    "sprite": html`<img src="assets/favicon.png" style="width:11px;height:11px;padding:3px;filter:grayscale(1);margin-right:5px;">`
+                    "sprite": html`<img src="assets/favicon/white.png" style="width:11px;height:11px;padding:3px;margin-right:5px;">`
                 })[x.type]}
                 ${renderSpriteName(x.name, i, state)}
                 <div
