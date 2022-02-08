@@ -159,7 +159,7 @@ const runButton = state => button({
 // show ref
 
 const refButton = state => button({ 
-  buttonImage: './assets/docs4.png', 
+  buttonImage: './assets/question-icon.png', 
   tooltipText: "show reference", 
   className: "cursor-pointer",
   click: refClick, 

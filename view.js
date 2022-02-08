@@ -352,7 +352,6 @@ export function view(state) {
         <div class="list-of-sprites">
           ${addAssetButton(state, "sprite")} ${addAssetButton(state, "tune")}
           ${state.assets.map((x, i) => {
-            console.log(x);
             return html`
               <div
                 class=${[

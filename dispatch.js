@@ -199,7 +199,7 @@ const ACTIONS = {
           error: state.error,
           mouseX: state.mouseX,
           mouseY: state.mouseY,
-          engineVersion: state.engineVersion,
+          engineVersion: state.version,
           previousID: state.previousID,
           selected_asset: state.selected_asset,
           name: state.name,
@@ -241,9 +241,10 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   LOAD_DEFAULT_CARTRIDGE: async ({}, state) => {
-      state.loadFileStatus = 'loading';
-      await dispatch("LOAD_CARTRIDGE", { saved: await loadFromDefault() });
-      state.loadFileStatus = 'ready';
+    state.loadFileStatus = 'loading';
+    await dispatch("LOAD_CARTRIDGE", { saved: await loadFromDefault() });
+    state.loadFileStatus = 'ready';
+    dispatch("RENDER");
   },
   LOAD_CARTRIDGE: async ({ saved }, state) => {
     dispatch("SET_TITLE", "loading...");
