@@ -153,8 +153,8 @@ class Object {
 
     this.x = params.x ?? 0;
     this.y = params.y ?? 0;
-    this.lastX = 0;
-    this.lastY = 0;
+    this.lastX = this.x;
+    this.lastY = this.y;
 
     this.vx = params.vx ?? 0;
     this.vy = params.vy ?? 0;
@@ -393,6 +393,7 @@ class Engine {
 
         obj.x += obj.vx
         obj.y += obj.vy
+
       });
 
       this.resolve();
@@ -416,31 +417,25 @@ class Engine {
     draw();
   }
 
-  resolve(xy = "xy") {
+  resolve() {
     const objs = this.objects;
 
     for (let i = 0; i < objs.length; i++) {
-      for (let j = i; j < objs.length; j++) {
+      for (let j = 0; j < objs.length; j++) {
           const obj0 = objs[i];
           const obj1 = objs[j];
 
           resolveObj(obj0, obj1);
-
-
-
-          // if (xy === "xy") resolveObj(obj0, obj1);
-          // else if (xy === "x") resolveObj(obj0, obj1, "x");
-          // else if (xy === "y") resolveObj(obj0, obj1, "y");
-         
       }
     }
 
-    function resolveObj (me, them, xy = "xy") {
+    function resolveObj (me, them) {
       if (me == them) return;
 
-      const [x, y] = overlap(me, them);
 
-      if (x <= 0 || y <= 0) return;
+      // console.log({ x, y, me, them });
+
+      // if (x <= 0 || y <= 0) return;
       
       const dx = me.x - me.lastX;
       const dy = me.y - me.lastY;
@@ -450,147 +445,45 @@ class Engine {
 
       const { top, bottom, left, right } = me.distanceTo(them);
 
-      console.log("collides", { top, bottom, left, right, dx, dy, x, y });
-
-      // if i'm moving in a direction that has space accept the change and move on
-
-      // let acceptable = true;
-      // if (dy < 0 && Math.abs(dy) < top) acceptable = false;
-      // if (dy > 0 && Math.abs(dy) < bottom) acceptable = false;
-      // if (dx < 0 && Math.abs(dx) < left) acceptable = false;
-      // if (dx > 0 && Math.abs(dx) < right) acceptable = false;
-
-      // if (acceptable) {
-      //   me.x += dx;
-      //   me.y += dy;
-      //   return;
-      // } else {
-      //   console.log("collision")
-      // }
-
-
-      // console.log(dx, right)
-      // moved and have space to do so
-      // if (dy < 0 &&  top) return;
-      // if (dy > bottom) return;
-      // if (dx < left) return;
-      // if (!(dx >= 0 && right >= 0)) return;
 
       // otherwise collided
 
+      let canMoveInX = true;
+      let canMoveInY = true;
       if (them.solid && me.solid) {
+        // console.log("collides", { top, bottom, left, right, dx, dy });
 
-        // const udOrlr = Math.min()
-
-        if (dy < 0 && Math.abs(dy) > top && x > y) {
+        if (dy < 0 && Math.abs(dy) > top && top >= 0) {
           me.vy = -me.bounce * me.vy;
-          me.y = me.y - top;
+          me.y = me.y - top + 0.1;
+          canMoveInY = false;
         }
 
-        if (dy > 0 && Math.abs(dy) > bottom && x > y) {
+        if (dy > 0 && Math.abs(dy) > bottom && bottom >= 0) {
           me.vy = -me.bounce * me.vy;
-          me.y = me.y + bottom;
+          me.y = me.y + bottom - 0.1;
+          canMoveInY = false;
         }
 
-        if (dx < 0 && Math.abs(dx) > left && y > x) {
+        if (dx < 0 && Math.abs(dx) > left && left >= 0) {
           me.vx = -me.bounce * me.vx;
-          me.x = me.x - left;
+          me.x = me.x - left + 0.1;
+          canMoveInX = false;
         }
 
-        if (dx > 0 && Math.abs(dx) > right && y > x) {
+        if (dx > 0 && Math.abs(dx) > right && right >= 0) {
           me.vx = -me.bounce * me.vx;
-          me.x = me.x + right;
+          me.x = me.x + right - 0.1;
+          canMoveInX = false;
         }
 
-        // if (dx > left) {
-        //   me.vx = -me.bounce * me.vx;
-        //   me.x = me.x + right;
-        // }
-
-        // if (dx < right) {
-        //   me.vx = -me.bounce * me.vx;
-        //   me.x = me.x - left;
-        // }
-
-        // if (y > x) {
-          // if (dy <= 0 && dx <= 0) {
-          //   me.vy = -me.bounce * me.vy;
-          //   me.y = me.y - top;
-
-          //   me.vx = -me.bounce * me.vx;
-          //   me.x = me.x - left;
-          // }
-
-          // else if (dy >= 0 && dx <= 0) {
-          //   me.vy = -me.bounce * me.vy;
-          //   me.y = me.y + bottom;
-
-          //   me.vx = -me.bounce * me.vx;
-          //   me.x = me.x + right;
-          // }
-
-          // else if (dy >= 0 && dx >= 0) {
-          //   me.vy = -me.bounce * me.vy;
-          //   me.y = me.y + bottom;
-
-          //   me.vx = -me.bounce * me.vx;
-          //   me.x = me.x + right;
-          // }
-
-          // else if (dy >= 0 && dx <= 0) {
-          //   me.vy = -me.bounce * me.vy;
-          //   me.y = me.y + bottom;
-
-          //   me.vx = -me.bounce * me.vx;
-          //   me.x = me.x - left;
-          // }
-
-        // }
-
-        // if (x < y) {
-          // if (dx < 0) {
-          //   me.vx = -me.bounce * me.vx;
-          //   me.x = me.x - left;
-          // }
-
-          // if (dx > 0) {
-          //   me.vx = -me.bounce * me.vx;
-          //   me.x = me.x + right;
-          // }
-        // }
-
-
-        // if (dx < 0 && left < 0 && x < y) {
-        //   me.vx = -me.bounce * me.vx;
-        //   me.x = me.x - left;
-        // }
-
-        // if (dx > 0 && right < 0 && x < y) {
-        //   me.vx = -me.bounce * me.vx;
-        //   me.x = me.x + right;
-        // }
-
-        // if (x > y) {
-        //   if (dy < 0 && top > bottom) { // moving up
-        //     me.vy = -me.bounce * me.vy;
-        //     me.y = top > bottom 
-        //       ? me.y - (dy < 0 ? top : 0) 
-        //       : me.y + (dy > 0 ? bottom : 0);
-        //   } 
-        // }
-
-        // if (y > x) {
-        //   if (dx !== 0) { // moving left
-        //     me.vx = -me.bounce * me.vx;
-        //     me.x = left > right ? me.x - left : me.x + right;
-        //   } 
-        // }
-      } else {
-        me.x += dx;
-        me.y += dy;
-      }
+      } 
+      
+      if (canMoveInX) me.x += dx;
+      if (canMoveInY) me.y += dy;
 
       if (me.collides !== null) me.collides(me, them);
+      // if (them.collides !== null) them.collides(them, me);
 
     };
 
