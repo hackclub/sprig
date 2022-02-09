@@ -1,4 +1,5 @@
 import core from "puppeteer-core";
+import puppeteer from "puppeteer";
 import chrome from "chrome-aws-lambda";
 
 function wait(ms) {
@@ -8,7 +9,7 @@ function wait(ms) {
 }
 
 /** @type {import("@vercel/node").VercelApiHandler} */
-export default async function handler(req, res) {
+export default async function handler(req, res, dev = false) {
   const { id } = req.query;
 
   if (!id) {
@@ -19,19 +20,30 @@ export default async function handler(req, res) {
     return;
   }
 
-  const browser = await core.launch({
-    args: chrome.args,
-    executablePath: await chrome.executablePath,
-    headless: chrome.headless,
-  });
+  const browser = dev
+    ? await puppeteer.launch()
+    : await core.launch({
+        args: chrome.args,
+        executablePath: await chrome.executablePath,
+        headless: chrome.headless,
+      });
 
   const page = await browser.newPage();
   await page.setViewport({ width: 1200, height: 600 });
-  await page.goto(`https://${req.headers.host}/?id=${id}`, {
-    waitUntil: "domcontentloaded",
+  await page.goto(
+    dev
+      ? `http://${req.headers.host}/?id=${id}`
+      : `https://${req.headers.host}/?id=${id}`,
+    {
+      waitUntil: "domcontentloaded",
+    }
+  );
+  await page.evaluate(() => {
+    return new Promise((resolve) => {
+      document.addEventListener("init_done", resolve);
+    });
   });
-  await wait(1000);
-  //   await page.click(".run-button");
+  await page.click(".run-button");
   const file = await page.screenshot();
 
   res.setHeader("Content-Type", "image/png");

@@ -1,5 +1,6 @@
 {
   "name": "game-lab",
+  "type": "module",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "git@github.com:hackclub/game-lab.git",
@@ -12,6 +13,12 @@
     "puppeteer-core": "^13.2.0"
   },
   "devDependencies": {
-    "@vercel/node": "^1.12.1"
+    "@vercel/node": "^1.12.1",
+    "express": "^4.17.2",
+    "nodemon": "^2.0.15",
+    "puppeteer": "^13.2.0"
+  },
+  "scripts": {
+    "dev": "nodemon api/_dev.js"
   }
 }

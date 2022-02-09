@@ -135,12 +135,14 @@ export async function init(state) {
   // setGameIframe();
 
   const saved =
-    (await loadFromAirtable()) ||
+    (await loadFromDefault()) ||
     (await loadFromS3()) ||
-    (await loadFromStorage()) ||
-    (await loadFromDefault());
+    (await loadFromAirtable()) ||
+    (await loadFromStorage());
 
   dispatch("LOAD_CARTRIDGE", { saved });
   dispatch("SOUND", "bootup");
   dispatch("FAVICON");
+
+  document.dispatchEvent(new Event("init_done"));
 }
