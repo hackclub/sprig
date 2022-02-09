@@ -19,8 +19,7 @@ async function saveToS3({ content, state, copyUrl }) {
     });
   }
 
-  const link = new URL(window.location.origin + window.location.pathname);
-  link.searchParams.append("id", id);
+  const link = window.location.origin + `/share/${id}`
 
   if (copyUrl) copy(link);
   if (copyUrl)
