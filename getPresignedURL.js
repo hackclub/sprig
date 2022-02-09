@@ -1,6 +1,6 @@
 // This code doesn't run in the codebase, it's a backup of the code running in AWS Lambda
 
-// Are you editing this on AWS? Please make sure to update github.com/hackclub/game-lab once you deploy.
+// Are you editing this on AWS? Please make sure to update github.com/hackclub/gamelab once you deploy.
 
 // Are you on github? You can find this on https://eu-west-1.console.aws.amazon.com/lambda/home?region=eu-west-1#/functions/getPresignedURL?tab=code
 // Under the logins@hackclub.com account (details in the team 1password)

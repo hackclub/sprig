@@ -56,12 +56,12 @@ export default (state) => (
         </input>
         <div class="powered-by">
           <div>powered by&nbsp;</div>
-          <a href="https://github.com/hackclub/game-lab"
+          <a href="https://github.com/hackclub/gamelab"
              target="_blank">
             <strong>gamelab</strong>
           </a>
           &nbsp;
-          <a href="https://github.com/hackclub/game-lab"
+          <a href="https://github.com/hackclub/gamelab"
              target="_blank">
             <img style="transform: translate(-9px, 3px)" src="./assets/github.png" width="32px" />
           </a>
