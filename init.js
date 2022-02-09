@@ -135,10 +135,10 @@ export async function init(state) {
   // setGameIframe();
 
   const saved =
-    (await loadFromDefault()) ||
     (await loadFromS3()) ||
     (await loadFromAirtable()) ||
-    (await loadFromStorage());
+    (await loadFromStorage()) ||
+    (await loadFromDefault());
 
   dispatch("LOAD_CARTRIDGE", { saved });
   dispatch("SOUND", "bootup");
