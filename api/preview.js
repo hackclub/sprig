@@ -39,9 +39,12 @@ export default async function handler(req, res, dev = false) {
     }
   );
   await page.evaluate(() => {
-    return new Promise((resolve) => {
-      document.addEventListener("init_done", resolve);
-    });
+    return Promise.all([
+      document.fonts.ready,
+      new Promise((resolve) => {
+        document.addEventListener("init_done", resolve);
+      }),
+    ]);
   });
   await page.click(".run-button");
   const file = await page.screenshot();
