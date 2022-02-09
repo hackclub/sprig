@@ -153,6 +153,8 @@ class Object {
 
     this.x = params.x ?? 0;
     this.y = params.y ?? 0;
+    this.x += Math.random()/10;
+    this.y += Math.random()/10;
     this.lastX = this.x;
     this.lastY = this.y;
 
@@ -445,29 +447,31 @@ class Engine {
       let collided = false;
 
       const bothSolid = them.solid && me.solid;
+
+      // const [x, y] = overlap(me, them);
       
-      if (dy < 0 && Math.abs(dy) > top && top >= 0) {
+      if (dy < 0 && Math.abs(dy) > top && top >= -me.height) {
         if (bothSolid) me.vy = -me.bounce * me.vy;
         if (bothSolid) me.y = me.y - top + 0.1;
         if (bothSolid) canMoveInY = false;
         collided = true;
       }
 
-      if (dy > 0 && Math.abs(dy) > bottom && bottom >= 0) {
+      if (dy > 0 && Math.abs(dy) > bottom && bottom >= -me.height) {
         if (bothSolid) me.vy = -me.bounce * me.vy;
         if (bothSolid) me.y = me.y + bottom - 0.1;
         if (bothSolid) canMoveInY = false;
         collided = true;
       }
 
-      if (dx < 0 && Math.abs(dx) > left && left >= 0) {
+      if (dx < 0 && Math.abs(dx) > left && left >= -me.width) {
         if (bothSolid) me.vx = -me.bounce * me.vx;
         if (bothSolid) me.x = me.x - left + 0.1;
         if (bothSolid) canMoveInX = false;
         collided = true;
       }
 
-      if (dx > 0 && Math.abs(dx) > right && right >= 0) {
+      if (dx > 0 && Math.abs(dx) > right && right >= -me.width) {
         if (bothSolid) me.vx = -me.bounce * me.vx;
         if (bothSolid) me.x = me.x + right - 0.1;
         if (bothSolid) canMoveInX = false;
