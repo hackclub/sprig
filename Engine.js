@@ -433,6 +433,8 @@ class Engine {
 
     function resolveObj (me, them) {
       if (me == them) return;
+
+      const [ x, y ] = overlap(me, them);
       
       const dx = me.x - me.lastX;
       const dy = me.y - me.lastY;
@@ -445,6 +447,8 @@ class Engine {
       let canMoveInX = true;
       let canMoveInY = true;
       let collided = false;
+
+      if (x > 0 && y > 0) collided = true;
 
       const bothSolid = them.solid && me.solid;
       

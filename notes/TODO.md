@@ -1,8 +1,13 @@
+## Feb 8th, 2022
+
+- [] why does the old physics work so well?
+- [] is stopping teleportation good?
+
 ## Feb 2, 2022
 
-- [] add new proejct button
+- [x] add new proejct button
 - [] add pause game button
-- [] link to readme
+- [x] link to readme
 - [] give challenge prompts
 
 ## Feb 2, 2022
