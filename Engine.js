@@ -79,17 +79,22 @@ function distanceTo(obj0, obj1) {
   let left = Infinity;
 
   // top is obj0 top - obj1 bottom if below and left and right are in bounds
-  const overlapX = is_overlapping_range(obj0.x, obj0.x+obj0.width, obj1.x, obj1.x+obj1.width);
-  const overlapY = is_overlapping_range(obj0.y, obj0.y+obj0.height, obj1.y, obj1.y+obj1.height);
+  let x0 = obj0.x - obj0.origin[0] * obj0.width;
+  let y0 = obj0.y - obj0.origin[1] * obj0.height;
+  let x1 = obj1.x - obj1.origin[0] * obj1.width;
+  let y1 = obj1.y - obj1.origin[1] * obj1.height;
+
+  const overlapX = is_overlapping_range(x0, x0+obj0.width, x1, x1+obj1.width);
+  const overlapY = is_overlapping_range(y0, y0+obj0.height, y1, y1+obj1.height);
 
   if (overlapX) {
-    top = -(obj0.y + obj0.height - obj1.y);
-    bottom = -(obj1.y + obj1.height - obj0.y);
+    top = -(y0 + obj0.height - y1);
+    bottom = -(y1 + obj1.height - y0);
   }
 
   if (overlapY) {
-    left = -(obj0.x + obj0.width - obj1.x);
-    right = -(obj1.x+obj1.width-obj0.x);
+    left = -(x0 + obj0.width - x1);
+    right = -(x1+obj1.width-x0);
   }
 
   // if (left == 0 || right == 0) {
@@ -128,6 +133,7 @@ function initSprite(spriteData, that) {
     that._sprite.width = that._width;
     that._sprite.height = that._height;
     that._sprite.getContext("2d").putImageData(that.imageData, -dx, -dy);
+    if (that.initialized) that.draw();
   } else {
     that._sprite = null;
   }
@@ -135,6 +141,7 @@ function initSprite(spriteData, that) {
 
 class Object {
   constructor(params, engine) {
+    this.initialized = false;
     this.engine = engine;
     this.tags = params.tags ?? [];
 
@@ -149,7 +156,28 @@ class Object {
     this.scale = params.scale;
 
     this.rotate = params.rotate ?? 0;
-    this.origin = params.origin || [0, 0];
+
+    // this.origin = params.origin || [0, 0];
+
+    const origins = {
+      "left top": [0, 0],
+      "left center": [0, 0.5],
+      "left bottom": [0, 1],
+      "center top": [0.5, 0],
+      "center center": [0.5, 0.5],
+      center: [0.5, 0.5],
+      "center bottom": [0.5, 1],
+      "right top": [1, 0],
+      "right center": [1, 0.5],
+      "right bottom": [1, 1],
+    };
+
+    this.origin =
+      typeof params.origin === "string" && params.origin in origins
+        ? origins[params.origin]
+      : Array.isArray(params.origin)
+        ? params.origin
+        : [0, 0];
 
     this.x = params.x ?? 0;
     this.y = params.y ?? 0;
@@ -217,8 +245,8 @@ class Object {
     return this._scale;
   }
 
-  draw(obj) {
-    const { ctx } = obj.engine;
+  draw() {
+    const { ctx } = this.engine;
     const w = this.width;
     const h = this.height;
     ctx.save();
@@ -244,6 +272,8 @@ class Object {
       ctx.strokeStyle = "grey";
       ctx.strokeRect(this.x - ox, this.y - oy, w, h);
     }
+
+    if (!this.initialized) this.initialized = true;
 
   }
 
@@ -401,7 +431,7 @@ class Engine {
       this.resolve();
 
       this.objects.forEach((obj) => {
-        if (obj.draw !== null) obj.draw(obj);
+        if (obj.draw !== null) obj.draw();
       });
 
       [...this._pressedKeys].forEach((key) => {
