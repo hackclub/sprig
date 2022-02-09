@@ -287,7 +287,7 @@ class Text {
 
     const color = ops.color ?? "black";
     const size = ops.size ?? 12;
-    const font = ops.font ?? "Times New Roman";
+    const font = ops.font ?? "monospace";
     const rotate = ops.rotate ?? 0;
     const scale = ops.scale ?? 1;
 

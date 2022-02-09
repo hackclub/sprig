@@ -53,6 +53,7 @@ export function createEval() {
         return currentEngine;
       },
       leaderboard: async (score, e) => {
+
         await fetch(LB_SERVER, {
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
@@ -60,17 +61,28 @@ export function createEval() {
         });
         let lb = await fetch(LB_SERVER).then(x => x.json());
         let scores = Object.entries(lb);
+        scores.sort(([ , a], [ , b]) => b - a);
+        scores = scores.splice(0, 5);
         
+        e.ctx.globalAlpha = 0.66;
+        e.ctx.fillRect(0, 0, e.canvas.width, e.canvas.height);
+        
+        let x = e.canvas.width  * 0.5;
+        let y = e.canvas.height * 0.2;
+        let size = e.canvas.height * 0.1;
         e.addText(
           (scores.length) ? "LEADERBOARD" : "Leaderboard is empty :(",
-          100,
-          100
+          x,
+          y,
+          { size }
         );
 
-        scores.sort(([ , a], [ , b]) => b - a);
-        let y = 100;
-        for (const [name, score] of scores)
-          e.addText(name + ": " + score, 100, y += 20);
+        y += 5;
+        for (const [name, score] of scores) {
+          y += size;
+          e.addText(name.substring(0, 3), x - 50, y, { size: size - 4 });
+          e.addText(               score, x + 50, y, { size: size - 4 });
+        }
       }
     };
 
