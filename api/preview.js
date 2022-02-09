@@ -40,6 +40,7 @@ export default async function handler(req, res, dev = false) {
       }),
     ]);
   });
+  await (await page.$(".sprite-entry"))?.click();
   await page.click(".run-button");
   const file = await page.screenshot();
 
