@@ -12,7 +12,10 @@ export default async function handler(req, res) {
   const { id } = req.query;
 
   if (!id) {
-    res.send("What kinda wacky shenanigans ya tryin' to pull here????");
+    res
+      .status(400)
+      .setHeader("Content-Type", "text/plain")
+      .send("What kinda wacky shenanigans ya tryin' to pull here????");
     return;
   }
 
@@ -24,8 +27,10 @@ export default async function handler(req, res) {
 
   const page = await browser.newPage();
   await page.setViewport({ width: 1200, height: 600 });
-  await page.goto(`https://gamelab.hackclub.com/?id=${id}`);
-  await wait(100);
+  await page.goto(`https://${req.headers.host}/?id=${id}`, {
+    waitUntil: "domcontentloaded",
+  });
+  await wait(1000);
   //   await page.click(".run-button");
   const file = await page.screenshot();
 

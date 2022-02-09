@@ -39,7 +39,7 @@ export default async function handler(req, res) {
           url: `/?id=${id}`,
           name: game.name,
         },
-        url: `https://gamelab.hackclub.com/share/${id}`,
+        url: `https://${req.headers.host}/share/${id}`,
         imageUrl: `https://${req.headers.host}/api/preview?${imageUrlParams}`,
       })
     );
