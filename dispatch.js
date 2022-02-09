@@ -1,6 +1,6 @@
 import { html, render, svg } from "./uhtml.js";
 import { view } from "./view.js";
-import { init } from "./init.js";
+import { loadFromDefault, init } from "./init.js";
 import { save } from "./save.js";
 import { Engine } from "./Engine.js";
 import { size_up_sprites } from "./size_up_sprites.js";
@@ -25,13 +25,14 @@ const STATE = {
   assets: [],
   mouseX: 0,
   mouseY: 0,
-  version: "0.2.1",
+  version: "0.2.2",
   previousID: null, // TODO: start setting this correctly on cartridge load
   selected_asset: -1,
   name: "game-name-here",
   saveLinkStatus: "ready",
   saveFileStatus: "ready",
   runStatus: "loading",
+  loadFileStatus: "ready",
   bugReportStatus: "ready",
   lastSaved: {
     name: "",
@@ -96,6 +97,7 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   LOG_ERROR({ err }, state) {
+    console.log(err);
     state.error = true;
     let split = err.stack.split("\n").slice(0, 2);
     function filterInts(str) {
@@ -197,7 +199,7 @@ const ACTIONS = {
           error: state.error,
           mouseX: state.mouseX,
           mouseY: state.mouseY,
-          engineVersion: state.engineVersion,
+          engineVersion: state.version,
           previousID: state.previousID,
           selected_asset: state.selected_asset,
           name: state.name,
@@ -236,6 +238,12 @@ const ACTIONS = {
   CANVAS_MOUSE_MOVE({ content: { mouseX, mouseY } }, state) {
     state.mouseX = mouseX;
     state.mouseY = mouseY;
+    dispatch("RENDER");
+  },
+  LOAD_DEFAULT_CARTRIDGE: async ({}, state) => {
+    state.loadFileStatus = 'loading';
+    await dispatch("LOAD_CARTRIDGE", { saved: await loadFromDefault() });
+    state.loadFileStatus = 'ready';
     dispatch("RENDER");
   },
   LOAD_CARTRIDGE: async ({ saved }, state) => {
@@ -415,7 +423,8 @@ const ACTIONS = {
 };
 
 export function dispatch(action, args = {}) {
-  console.log(action);
+  // console.log(action);
+  
   const trigger = ACTIONS[action];
   STATE.dispatchLogs.unshift({ action, args, timestamp: Date.now() });
   if (trigger) return trigger(args, STATE);

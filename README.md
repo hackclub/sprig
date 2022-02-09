@@ -65,7 +65,7 @@ engine.add({
   y: 114,
   sprite: player,
   scale: 4,
-  update(me) { // update runs every frame
+  update: (me) => { // update runs every frame
     me.vy += 2; // adding velocity every frame is acceleration
   }
 })
@@ -96,7 +96,7 @@ engine.add({
   y: 114,
   sprite: player,
   scale: 4,
-  update(me) {
+  update: (me) => {
     me.vy += 2;
 
     // we can add key inputs by checking the keys in the update loop
@@ -132,13 +132,13 @@ engine.add({
   y: 114,
   sprite: player,
   scale: 4,
-  collides(me, them) { // this runs when we collide with another object
+  collides: (me, them) => { // this runs when we collide with another object
     if (engine.pressedKey(" ")) {
       // here we are checking if we are standing on the floor
       if (them.hasTag("floor")) me.vy -= 19;
     }
   },
-  update(me) {
+  update: (me) => {
     me.vy += 2;
 
     if (engine.heldKey("ArrowLeft")) me.x -= 3;
@@ -166,7 +166,6 @@ Add platforms:
 
 ```js
 const engine = createEngine(gameCanvas, 300, 300);
-const ctx = engine.ctx;
 
 engine.add({
   tags: ["player"],
@@ -175,7 +174,7 @@ engine.add({
   solid: true,
   x: 50,
   y: 16,
-  collides(me, them) {
+  collides: (me, them) => {
     if (them.hasTag("platform")) me.vx = them.vx;
     
     if (engine.pressedKey(" ")) {
@@ -214,13 +213,12 @@ engine.start();
 
 ---
 
-Collections:
+Removing objects:
 
 <img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149369879-7d384b3a-2f15-4816-a59e-76b56bb9a944.gif">
 
 ```js
 const engine = createEngine(gameCanvas, 300, 300);
-const ctx = engine.ctx;
 
 engine.add({
   tags: ["player"],
@@ -240,7 +238,7 @@ engine.add({
   scale: 3,
   x: 112,
   y: 232,
-  collides(me, them) {
+  collides: (me, them) => {
     if (them.hasTag("player")) {
       engine.remove("target"); // we can remove objects by their tag name
     }
@@ -260,7 +258,7 @@ Add a background:
 const e = createEngine(gameCanvas, 300, 300);
 
 engine.add({
-  update() { // we can also draw on the game canvas
+  update: () => { // we can also draw on the game canvas
     engine.ctx.fillStyle = "pink";
     engine.ctx.fillRect(0, 0, e.width, e.height);
   }
@@ -315,7 +313,7 @@ engine.add({
   rotate: 90, // rotate by some degrees
   bounce: 1, // how much velocity is lost on collisions
   origin: [0, 0], // this moves the origin of the object
-  collides(me, them) { // function run on collision
+  collides: (me, them) => { // function run on collision
     if (them.hasTag("tag-name")) {} // check tag names to figure out what you've collided with
   },
   update: (me) => {

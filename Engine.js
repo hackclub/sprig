@@ -66,6 +66,54 @@ function haveCollided(obj0, obj1, buffer = 0) {
   );
 }
 
+function is_overlapping_range(x1,x2,y1,y2) {
+  return Math.max(x1,y1) <= Math.min(x2,y2)
+}
+
+function distanceTo(obj0, obj1) {
+  // me is obj1, them is obj0
+
+  let top = Infinity;
+  let right = Infinity;
+  let bottom = Infinity;
+  let left = Infinity;
+
+  // top is obj0 top - obj1 bottom if below and left and right are in bounds
+  let x0 = obj0.x - obj0.origin[0] * obj0.width;
+  let y0 = obj0.y - obj0.origin[1] * obj0.height;
+  let x1 = obj1.x - obj1.origin[0] * obj1.width;
+  let y1 = obj1.y - obj1.origin[1] * obj1.height;
+
+  const overlapX = is_overlapping_range(x0, x0+obj0.width, x1, x1+obj1.width);
+  const overlapY = is_overlapping_range(y0, y0+obj0.height, y1, y1+obj1.height);
+
+  if (overlapX) {
+    top = -(y0 + obj0.height - y1);
+    bottom = -(y1 + obj1.height - y0);
+  }
+
+  if (overlapY) {
+    left = -(x0 + obj0.width - x1);
+    right = -(x1+obj1.width-x0);
+  }
+
+  // if (left == 0 || right == 0) {
+  //   if (left == 0) left = 0;
+  //   if (right == 0) right = 0;
+  //   top = Infinity;
+  //   bottom = Infinity;
+  // }
+
+  // if (top == 0 || bottom == 0) {
+  //   if (top == 0) top = 0;
+  //   if (bottom == 0) bottom = 0;
+  //   left = Infinity;
+  //   right = Infinity;
+  // }
+
+  return { top, right, bottom, left };
+}
+
 function initSprite(spriteData, that) {
   if (typeof spriteData === "object") {
     const [w, h] = spriteData.size;
@@ -85,6 +133,7 @@ function initSprite(spriteData, that) {
     that._sprite.width = that._width;
     that._sprite.height = that._height;
     that._sprite.getContext("2d").putImageData(that.imageData, -dx, -dy);
+    if (that.initialized) that.draw();
   } else {
     that._sprite = null;
   }
@@ -92,6 +141,7 @@ function initSprite(spriteData, that) {
 
 class Object {
   constructor(params, engine) {
+    this.initialized = false;
     this.engine = engine;
     this.tags = params.tags ?? [];
 
@@ -101,8 +151,13 @@ class Object {
     this._width = null;
     this._height = null;
     this.sprite = params.sprite;
-    this.scale = params.scale ?? 1;
+
+    this._scale = [1, 1];
+    this.scale = params.scale;
+
     this.rotate = params.rotate ?? 0;
+
+    // this.origin = params.origin || [0, 0];
 
     const origins = {
       "left top": [0, 0],
@@ -120,27 +175,36 @@ class Object {
     this.origin =
       typeof params.origin === "string" && params.origin in origins
         ? origins[params.origin]
-        : Array.isArray(params.origin)
+      : Array.isArray(params.origin)
         ? params.origin
         : [0, 0];
 
-    this._x = params.x ?? 0;
-    this._y = params.y ?? 0;
-    this._vx = params.vx ?? 0;
-    this._vy = params.vy ?? 0;
-    this._ax = params.ax ?? 0;
-    this._ay = params.ay ?? 0;
+    this.x = params.x ?? 0;
+    this.y = params.y ?? 0;
+    this.x += Math.random()/10;
+    this.y += Math.random()/10;
+    this.lastX = this.x;
+    this.lastY = this.y;
+
+    this.vx = params.vx ?? 0;
+    this.vy = params.vy ?? 0;
     this.bounce = params.bounce ?? 0;
-    // this.solidTo = params.solidTo ?? [];
     this.solid = params.solid ?? false;
     this.click = params.click ?? null;
-    this._update = params.update ?? null;
-    this._collides = params.collides ?? null;
+    this.update = params.update ?? null;
+    this.collides = params.collides ?? null;
     this.drawBounds = params.drawBounds ?? false;
-    this.dx = 0;
-    this.dy = 0;
 
     this.id = Math.random();
+  }
+
+  distanceTo(them) {
+     const dists = distanceTo(them, this);
+     return dists;
+  }
+
+  overlap(them) {
+    return overlap(this, them);
   }
 
   get sprite() {
@@ -157,48 +221,12 @@ class Object {
     return this.tags.includes(tag);
   }
 
-  translate(dx, dy) {
-    let canMoveInX = true;
-    let canMoveInY = true;
-
-    this.engine.objects.forEach((otherObj) => {
-      if (this == otherObj) return;
-
-      const [ogx, ogy] = overlap(this, otherObj);
-      const [x, y] = overlap(this, otherObj, [dx, dy]);
-
-      if (otherObj.solid && this.solid) {
-        if (x <= 0 || y <= 0) return;
-
-        if (x > 0 && ogx <= 0) {
-          canMoveInX = false;
-          this._ax = 0;
-          this._vx = -this.bounce * this._vx;
-          this._x -= ogx < -1 ? ogx : 0;
-        }
-
-        if (y > 0 && ogy <= 0) {
-          canMoveInY = false;
-          this._ay = 0;
-          this._vy = -this.bounce * this._vy;
-          this._y -= ogy < -1 ? ogy : 0;
-        }
-      }
-
-      if (ogx >= 0 && ogy >= 0 && this._collides !== null)
-        this._collides(this, otherObj);
-    });
-
-    if (canMoveInX) this._x += dx;
-    if (canMoveInY) this._y += dy;
-  }
-
   get width() {
-    return this._width * Math.abs(this.scale[0] ?? this.scale);
+    return this._width * this.scale[0];
   }
 
   get height() {
-    return this._height * Math.abs(this.scale[1] ?? this.scale);
+    return this._height * this.scale[1];
   }
 
   get rotate() {
@@ -208,15 +236,27 @@ class Object {
     this._rotate = (x / 180) * Math.PI;
   }
 
-  draw(obj) {
-    const { ctx } = obj.engine;
+  set scale(factor) {
+    if (typeof factor === "number") this._scale = [factor, factor];
+    if (Array.isArray(factor)) this._scale = factor;
+  }
+
+  get scale() {
+    return this._scale;
+  }
+
+  draw() {
+    const { ctx } = this.engine;
     const w = this.width;
     const h = this.height;
     ctx.save();
     const [ox, oy] = [w * this.origin[0], h * this.origin[1]];
-    ctx.translate(this._x, this._y);
+    ctx.translate(this.x, this.y);
     ctx.rotate(this._rotate);
-    if (Array.isArray(this.scale)) ctx.scale(...this.scale.map(Math.sign));
+    
+    // const xInvert = this.scale[0] < 0 ? -1 : 1;
+    // const yInvert = this.scale[1] < 0 ? -1 : 1;
+    // ctx.scale(xInvert, yInvert);
 
     // draw sprite with sprite scale
     if (this.sprite !== null) ctx.drawImage(this.sprite, -ox, -oy, w, h);
@@ -233,46 +273,10 @@ class Object {
       ctx.strokeRect(this.x - ox, this.y - oy, w, h);
     }
 
-    if (this._update !== null) this._update(obj);
+    if (!this.initialized) this.initialized = true;
+
   }
 
-  set x(val) {
-    this.translate(val - this._x, 0);
-  }
-  set y(val) {
-    this.translate(0, val - this._y);
-  }
-  set vx(val) {
-    this._vx = val;
-  }
-  set vy(val) {
-    this._vy = val;
-  }
-  set ax(val) {
-    this._ax = val;
-  }
-  set ay(val) {
-    this._ay = val;
-  }
-
-  get x() {
-    return this._x;
-  }
-  get y() {
-    return this._y;
-  }
-  get vx() {
-    return this._vx;
-  }
-  get vy() {
-    return this._vy;
-  }
-  get ax() {
-    return this._ax;
-  }
-  get ay() {
-    return this._ay;
-  }
 }
 
 class Text {
@@ -413,17 +417,21 @@ class Engine {
       this.ctx.fillRect(0, 0, this.width, this.height);
 
       this.objects.forEach((obj) => {
-        let ogX = obj.x;
-        let ogY = obj.y;
 
-        if (obj.draw !== null) obj.draw(obj);
+        obj.lastX = obj.x;
+        obj.lastY = obj.y;
 
-        obj.vx += obj.ax;
-        obj.vy += obj.ay;
-        obj.translate(obj.vx, obj.vy);
+        if (obj.update !== null) obj.update(obj);
 
-        obj.dx = ogX - obj.x;
-        obj.dy = ogY - obj.y;
+        obj.x += obj.vx
+        obj.y += obj.vy
+
+      });
+
+      this.resolve();
+
+      this.objects.forEach((obj) => {
+        if (obj.draw !== null) obj.draw();
       });
 
       [...this._pressedKeys].forEach((key) => {
@@ -439,6 +447,88 @@ class Engine {
 
     this.drawing = true;
     draw();
+  }
+
+  resolve() {
+    const objs = this.objects;
+
+    for (let i = 0; i < objs.length; i++) {
+      for (let j = 0; j < objs.length; j++) {
+          const obj0 = objs[i];
+          const obj1 = objs[j];
+
+          resolveObj(obj0, obj1);
+      }
+    }
+
+    function resolveObj (me, them) {
+      if (me == them) return;
+
+      const [ x, y ] = overlap(me, them);
+      
+      const dx = me.x - me.lastX;
+      const dy = me.y - me.lastY;
+
+      me.x -= dx;
+      me.y -= dy;
+
+      const { top, bottom, left, right } = me.distanceTo(them);
+
+      let canMoveInX = true;
+      let canMoveInY = true;
+      let collided = false;
+
+      if (x > 0 && y > 0) collided = true;
+
+      const bothSolid = them.solid && me.solid;
+
+      const BUFFER = 0.1;
+      
+      if (dy < 0 && Math.abs(dy) > top && top >= -me.height + BUFFER) {
+        if (bothSolid) {
+          me.vy = -me.bounce * me.vy;
+          me.y = me.y - top + BUFFER; // need a little buffer
+          canMoveInY = false;
+        }
+
+        collided = true;
+      }
+
+      if (dy > 0 && Math.abs(dy) > bottom && bottom >= -me.height + BUFFER) {
+        if (bothSolid) {
+          me.vy = -me.bounce * me.vy;
+          me.y = me.y + bottom - BUFFER;
+          canMoveInY = false;
+        }
+
+        collided = true;
+      }
+
+      if (dx < 0 && Math.abs(dx) > left && left >= -me.width + BUFFER) {
+        if (bothSolid) {
+          me.vx = -me.bounce * me.vx;
+          me.x = me.x - left + BUFFER;
+          canMoveInX = false;
+        }
+        collided = true;
+      }
+
+      if (dx > 0 && Math.abs(dx) > right && right >= -me.width + BUFFER) {
+        if (bothSolid) {
+          me.vx = -me.bounce * me.vx;
+          me.x = me.x + right - BUFFER;
+          canMoveInX = false;
+        }
+        collided = true;
+      }
+
+      if (canMoveInX) me.x += dx;
+      if (canMoveInY) me.y += dy;
+
+      if (collided && me.collides !== null) me.collides(me, them);
+
+    };
+
   }
 
   end() {

@@ -1,9 +1,19 @@
+## Feb 8th, 2022
 
+- [] why does the old physics work so well?
+- [] is stopping teleportation good?
+
+## Feb 2, 2022
+
+- [x] add new proejct button
+- [] add pause game button
+- [x] link to readme
+- [] give challenge prompts
 
 ## Feb 2, 2022
 
 - [] edit readme
-- [] add version prompt with link to correct version of editor
+- [x] add version prompt with link to correct version of editor
 - [x] re-add displaying mouse postion over game canvas
 - [x] fixed mis-selected asset on catridge load
 
