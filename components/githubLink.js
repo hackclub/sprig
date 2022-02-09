@@ -29,7 +29,7 @@ export default (state) => (
       @mouseenter=${mouseEnter}
       @click=${click}
       target="_blank"
-      href="https://github.com/hackclub/game-lab"
+      href="https://github.com/hackclub/gamelab"
       >
       <button class="github-button">
         <span class="github-tooltip">GitHub</span>
