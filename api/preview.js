@@ -19,6 +19,7 @@ export default async function handler(req, res) {
   const page = await browser.newPage();
   await page.setViewport({ width: 1200, height: 600 });
   await page.goto(`https://hackclub.gamelab.com/?id=${id}`);
+  await page.click(".run-button");
   const file = await page.screenshot();
 
   res.setHeader("Content-Type", "image/png");
