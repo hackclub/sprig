@@ -481,40 +481,42 @@ class Engine {
       if (x > 0 && y > 0) collided = true;
 
       const bothSolid = them.solid && me.solid;
+
+      const BUFFER = 0.1;
       
-      if (dy < 0 && Math.abs(dy) > top && top >= -me.height/2) { // not sure why I halve this
+      if (dy < 0 && Math.abs(dy) > top && top >= -me.height + BUFFER) {
         if (bothSolid) {
           me.vy = -me.bounce * me.vy;
-          me.y = me.y - top + 0.1; // need a little buffer
+          me.y = me.y - top + BUFFER; // need a little buffer
           canMoveInY = false;
         }
 
         collided = true;
       }
 
-      if (dy > 0 && Math.abs(dy) > bottom && bottom >= -me.height/2) {
+      if (dy > 0 && Math.abs(dy) > bottom && bottom >= -me.height + BUFFER) {
         if (bothSolid) {
           me.vy = -me.bounce * me.vy;
-          me.y = me.y + bottom - 0.1;
+          me.y = me.y + bottom - BUFFER;
           canMoveInY = false;
         }
 
         collided = true;
       }
 
-      if (dx < 0 && Math.abs(dx) > left && left >= -me.width/2) {
+      if (dx < 0 && Math.abs(dx) > left && left >= -me.width + BUFFER) {
         if (bothSolid) {
           me.vx = -me.bounce * me.vx;
-          me.x = me.x - left + 0.1;
+          me.x = me.x - left + BUFFER;
           canMoveInX = false;
         }
         collided = true;
       }
 
-      if (dx > 0 && Math.abs(dx) > right && right >= -me.width/2) {
+      if (dx > 0 && Math.abs(dx) > right && right >= -me.width + BUFFER) {
         if (bothSolid) {
           me.vx = -me.bounce * me.vx;
-          me.x = me.x + right - 0.1;
+          me.x = me.x + right - BUFFER;
           canMoveInX = false;
         }
         collided = true;
