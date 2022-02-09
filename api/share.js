@@ -10,6 +10,7 @@ const template = `
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="<%= game.name %> on Game Lab" />
+    <meta property="og:description" content="Play <%= game.name %> on Game Lab, the web-based game editor by Hack Club." />
     <meta property="og:url" content="<%= url %>" />
     <meta property="og:image" content="<%= imageUrl %>" />
 

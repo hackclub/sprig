@@ -2,12 +2,6 @@ import core from "puppeteer-core";
 import puppeteer from "puppeteer";
 import chrome from "chrome-aws-lambda";
 
-function wait(ms) {
-  return new Promise((r) => {
-    setTimeout(r, ms);
-  });
-}
-
 /** @type {import("@vercel/node").VercelApiHandler} */
 export default async function handler(req, res, dev = false) {
   const { id } = req.query;
@@ -50,5 +44,9 @@ export default async function handler(req, res, dev = false) {
   const file = await page.screenshot();
 
   res.setHeader("Content-Type", "image/png");
+  res.setHeader(
+    "Cache-Control",
+    `public, immutable, no-transform, s-maxage=31536000, max-age=31536000`
+  );
   res.end(file);
 }
