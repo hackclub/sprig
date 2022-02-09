@@ -25,7 +25,7 @@ const STATE = {
   assets: [],
   mouseX: 0,
   mouseY: 0,
-  version: "0.2.0",
+  version: "0.2.1",
   previousID: null, // TODO: start setting this correctly on cartridge load
   selected_asset: -1,
   name: "game-name-here",
