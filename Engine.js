@@ -185,7 +185,7 @@ class Object {
         }
       }
 
-      if (x >= 0 && y >= 0 && this._collides !== null)
+      if (ogx >= 0 && ogy >= 0 && this._collides !== null)
         this._collides(this, otherObj);
     });
 
@@ -226,13 +226,14 @@ class Object {
       ctx.fillRect(-2, -2, 4, 4);
     }
 
-    if (this._update !== null) this._update(obj);
     ctx.restore();
 
     if (Engine.show.hitbox) {
       ctx.strokeStyle = "grey";
       ctx.strokeRect(this.x - ox, this.y - oy, w, h);
     }
+
+    if (this._update !== null) this._update(obj);
   }
 
   set x(val) {
