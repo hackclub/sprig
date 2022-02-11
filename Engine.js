@@ -287,11 +287,12 @@ class Text {
 
     const color = ops.color ?? "black";
     const size = ops.size ?? 12;
-    const font = ops.font ?? "Times New Roman";
+    const font = ops.font ?? "monospace";
     const rotate = ops.rotate ?? 0;
     const scale = ops.scale ?? 1;
 
-    const span = document.createElement("span");
+    const span = document.createElement("a");
+    if (ops.href) span.href = ops.href;
     span.style = `
       position: absolute;
       left: ${x}px;
@@ -321,6 +322,10 @@ class Text {
   }
 }
 
+const clearText = (node) => node
+  .querySelectorAll(".text-container > *")
+  .forEach((x) => x.remove());
+
 class Engine {
   constructor(canvas, width, height) {
     this.canvas = canvas;
@@ -342,9 +347,8 @@ class Engine {
     this._heldKeys = new Set();
     this._pressedKeys = new Set();
 
-    const parent = canvas.parentNode;
-    parent.querySelectorAll(".text-container > *").forEach((x) => x.remove());
-    this.textContainer = parent.querySelector(".text-container");
+    clearText(canvas.parentNode);
+    this.textContainer = canvas.parentNode.querySelector(".text-container");
 
     canvas.setAttribute("tabindex", "1");
 
@@ -375,6 +379,76 @@ class Engine {
     // canvas.addEventListener("click", e => {
     //   console.log(e.clientX, e.clientY);
     // })
+  }
+
+  async leaderboard(score) {
+    const LB_SERVER = "https://misguided.enterprises/gamelabscores/";
+
+    const hash = this.gameHash;
+    const res = await fetch(LB_SERVER, {
+      method: 'post',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ score, hash })
+    }).then(x => x.json());
+
+    let lb = await fetch(LB_SERVER + hash).then(x => x.json());
+    let scores = window.Object.entries(lb);
+    scores.sort(([ , a], [ , b]) => b.score - a.score);
+    scores = scores.splice(0, 5);
+    
+    this.ctx.globalAlpha = 0.66;
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    
+    clearText(this.canvas.parentNode);
+
+    let x = this.canvas.width  * 0.5;
+    let y = this.canvas.height * 0.2;
+    let size = this.canvas.height * 0.1;
+    this.addText(
+      (() => {
+        if (res.prev && res.prev > score)
+          return "PERSONAL BEST";
+        else if (scores.length)
+          return "LEADERBOARD";
+        else
+          return "EMPTY LEADERBOARD :(";
+      })(),
+      x,
+      y,
+      { size }
+    );
+
+    y += size + 5;
+    for (const [slack_id, { name, score }] of scores) {
+      let opts = {
+        size: size - 4,
+        href: "https://app.slack.com/client/T0266FRGM/C0266FRGV/user_profile/" + slack_id,
+        color: "blue"
+      }
+      this.addText(name.substring(0, 3), x - 50, y, opts);
+      delete opts.href;
+      delete opts.color;
+      this.addText(               score, x + 50, y, opts);
+      y += size;
+    }
+
+    if (res.err) this.addText(
+      "login to add your " + score,
+      x, y,
+      {
+        size: size - 4,
+        color: "blue",
+        href:
+          LB_SERVER + "login/"
+            + "?from=" + encodeURIComponent(window.location)
+            + "&score=" + encodeURIComponent(score)
+            + "&hash=" + encodeURIComponent(hash)
+      }
+    );
+    if (res.prev) {
+      this.addText(`score: ${score}, best: ${res.prev}` , x, y, { size: size - 4 });
+    }
   }
 
   get width() {

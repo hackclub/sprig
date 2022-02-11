@@ -1,5 +1,6 @@
 import { Engine } from "./Engine.js";
 import { playTune, loopTune } from "./tunePlayers.js";
+import { hashState } from "./save.js";
 
 const BLACK_LISTED_WORDS = [
   "localStorage",
@@ -9,8 +10,6 @@ const BLACK_LISTED_WORDS = [
   "import",
   // "Function"
 ];
-
-const LB_SERVER = "https://misguided.enterprises/gamelabscores/";
 
 export function createEval() {
   let currentEngine = null;
@@ -50,28 +49,9 @@ export function createEval() {
       createEngine(...args) {
         if (currentEngine) cancelAnimationFrame(currentEngine._animId);
         currentEngine = new Engine(...args);
+        currentEngine.gameHash = hashState();
         return currentEngine;
       },
-      leaderboard: async (score, e) => {
-        await fetch(LB_SERVER, {
-          method: 'post',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user: prompt("name for leaderboard?"), score })
-        });
-        let lb = await fetch(LB_SERVER).then(x => x.json());
-        let scores = Object.entries(lb);
-        
-        e.addText(
-          (scores.length) ? "LEADERBOARD" : "Leaderboard is empty :(",
-          100,
-          100
-        );
-
-        scores.sort(([ , a], [ , b]) => b - a);
-        let y = 100;
-        for (const [name, score] of scores)
-          e.addText(name + ": " + score, 100, y += 20);
-      }
     };
 
     assets.forEach((asset) => {

@@ -99,45 +99,10 @@ const ACTIONS = {
   LOG_ERROR({ err }, state) {
     console.log(err);
     state.error = true;
-    let split = err.stack.split("\n").slice(0, 2);
-    function filterInts(str) {
-      return str
-        .split("")
-        .filter((char) => char == +char)
-        .join("");
-    }
-    function checkLine(line) {
-      let colonSplit = line.split(":");
-      if (!(colonSplit.length >= 3)) return false;
-      if (isNaN(+filterInts(colonSplit[colonSplit.length - 1]))) return false;
-      if (isNaN(+filterInts(colonSplit[colonSplit.length - 2]))) return false;
-      return true;
-    }
-    let lineNumber = err.stack.includes(err.message) ? 1 : 0;
 
-    if (checkLine(split[lineNumber])) {
-      let trace =
-        split[lineNumber].split(":")[split[lineNumber].split(":").length - 2] +
-        ":" +
-        split[lineNumber].split(":")[split[lineNumber].split(":").length - 1];
-      let [line, col] = trace.split(":");
-      const str = `${
-        err.stack.includes(err.message)
-          ? split[0]
-          : (err.name ? err.name : "RuntimeError") + ": " + err.message
-      }\n    at code.js:${+filterInts(line) - 2}:${+filterInts(col)}`;
-      state.logs.push(str);
-    } else {
-      state.logs.push(
-        (err.stack.includes(err.message)
-          ? (err.name ? err.name : "RuntimeError") + "\n    at code.js"
-          : (err.name ? err.name : "RuntimeError") +
-            ": " +
-            err.message +
-            "\n    at code.js") +
-          "\n\nGame Lab was unable to determine where your error is located. Please submit a bug report if you think this issue was caused by Game Lab."
-      ); // Safari sadly doesn't show you a stack trace inside evals
-    } // Best(?) combination of checking if certain error properties exist
+    // processError will go here when ready
+    state.logs = [err.stack];
+
     dispatch("RENDER");
   },
   SET_TITLE(arg, state) {
@@ -247,6 +212,11 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   LOAD_CARTRIDGE: async ({ saved }, state) => {
+    const el = document.querySelector(".asset-editor");
+    render(el, html``);
+    if (state.assetEditor && state.assetEditor.end) state.assetEditor.end();
+    state.selected_asset = -1;
+
     dispatch("SET_TITLE", "loading...");
     const newProg = saved.prog;
     const currentProg = state.codemirror.view.state.doc.toString();
@@ -272,11 +242,6 @@ const ACTIONS = {
         timeout: 5000,
       });
     }
-
-    const el = document.querySelector(".asset-editor");
-    render(el, html``);
-    if (state.assetEditor && state.assetEditor.end) state.assetEditor.end();
-    state.selected_asset = -1;
 
     state.runStatus = "ready";
     dispatch("SET_TITLE", state.name);
