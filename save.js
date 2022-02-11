@@ -3,6 +3,8 @@ import md5 from "https://cdn.skypack.dev/md5";
 import copy from "./utils/copy.js";
 import notification from "./utils/notification.js";
 
+export const hashState = () => md5(dispatch("GET_SAVE_STATE"));
+
 async function saveToS3({ content, state, copyUrl }) {
   const uniqueID = md5(JSON.stringify(content));
   const { exists, uploadURL, jsonFilename, id } = await fetch(

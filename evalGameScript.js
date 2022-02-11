@@ -1,5 +1,6 @@
 import { Engine } from "./Engine.js";
 import { playTune, loopTune } from "./tunePlayers.js";
+import { hashState } from "./save.js";
 
 const BLACK_LISTED_WORDS = [
   "localStorage",
@@ -48,6 +49,7 @@ export function createEval() {
       createEngine(...args) {
         if (currentEngine) cancelAnimationFrame(currentEngine._animId);
         currentEngine = new Engine(...args);
+        currentEngine.gameHash = hashState();
         return currentEngine;
       },
     };

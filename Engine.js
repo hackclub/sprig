@@ -384,14 +384,15 @@ class Engine {
   async leaderboard(score) {
     const LB_SERVER = "https://misguided.enterprises/gamelabscores/";
 
+    const hash = this.gameHash;
     const res = await fetch(LB_SERVER, {
       method: 'post',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ score })
+      body: JSON.stringify({ score, hash })
     }).then(x => x.json());
 
-    let lb = await fetch(LB_SERVER).then(x => x.json());
+    let lb = await fetch(LB_SERVER + hash).then(x => x.json());
     let scores = window.Object.entries(lb);
     scores.sort(([ , a], [ , b]) => b.score - a.score);
     scores = scores.splice(0, 5);
@@ -405,7 +406,14 @@ class Engine {
     let y = this.canvas.height * 0.2;
     let size = this.canvas.height * 0.1;
     this.addText(
-      (scores.length) ? "LEADERBOARD" : "Leaderboard is empty :(",
+      (() => {
+        if (res.prev && res.prev > score)
+          return "PERSONAL BEST";
+        else if (scores.length)
+          return "LEADERBOARD";
+        else
+          return "EMPTY LEADERBOARD :(";
+      })(),
       x,
       y,
       { size }
@@ -431,7 +439,11 @@ class Engine {
       {
         size: size - 4,
         color: "blue",
-        href: LB_SERVER + "login/?from=" + encodeURIComponent(window.location)
+        href:
+          LB_SERVER + "login/"
+            + "?from=" + encodeURIComponent(window.location)
+            + "&score=" + encodeURIComponent(score)
+            + "&hash=" + encodeURIComponent(hash)
       }
     );
     if (res.prev) {
