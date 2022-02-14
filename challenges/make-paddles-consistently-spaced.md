@@ -1,3 +1,5 @@
+# sticky paddles
+
 ## Link
 
 https://gamelab.hackclub.com/?id=b5fe336ec5a35442a64fdb373dfe535e
