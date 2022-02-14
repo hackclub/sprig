@@ -412,7 +412,7 @@ class Engine {
         else if (scores.length)
           return "LEADERBOARD";
         else
-          return "EMPTY LEADERBOARD :(";
+          return "NO SCORES :(";
       })(),
       x,
       y,
