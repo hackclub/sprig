@@ -311,13 +311,18 @@ const ACTIONS = {
 
     return state.name;
   },
-  CHANGE_ASSET_NAME({ index, newName }, state) {
+  CHANGE_ASSET_NAME({ e, index, newName }, state) {
     const usedNames = state.assets.map((x) => x.name);
-    if (usedNames.includes(newName)) return;
-    else {
-      state.assets[index].name = newName;
-      state.selected_asset = index;
+    if (usedNames.includes(newName) || newName.length === 0) return;
+
+    if (!/^[a-z_][a-z_0-9]*$/gi.test(newName)) {
+      e.target.value = state.assets[index].name;
     }
+
+		else {
+			state.assets[index].name = newName;
+			state.selected_asset = index;
+		}
   },
   SELECT_ASSET({ index }, state) {
     // need to clear asset editor container to render template fresh
