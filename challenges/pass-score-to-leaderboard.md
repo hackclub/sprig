@@ -2,7 +2,7 @@
 
 ## Link
 
-https://gamelab.hackclub.com/?id=44b596d6ca32c44dc85e38ecf3872eb0
+https://gamelab.hackclub.com/?id=a1eb48c14c179312a75204c7f0743745
 
 ## Problem
 
@@ -13,6 +13,8 @@ let score = 0;
 const scoreText = e.addText("", 150, 150, { size: 30 });
  
 let tick = setInterval(() => scoreText.text = score++, 750);
+
+loopTune(elevator_music);
 
 e.add({
   update() {
@@ -36,6 +38,8 @@ let score = 0;
 const scoreText = e.addText("", 150, 150, { size: 30 });
  
 let tick = setInterval(() => scoreText.text = score++, 750);
+
+loopTune(elevator_music);
 
 e.add({
   update() {
