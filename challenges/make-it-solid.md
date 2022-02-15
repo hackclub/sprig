@@ -2,7 +2,7 @@
 
 ## Link
 
-https://gamelab.hackclub.com/?id=8b2fe77a1e8b7309bd593f19dd651f68
+https://gamelab.hackclub.com/?id=140c3988464c7ea2e8981c73398348d8
 
 ## Problem
 

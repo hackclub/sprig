@@ -2,7 +2,7 @@
 
 ## Link
 
-https://gamelab.hackclub.com/?id=e7006e1480451ea167193c64bf5bae6d
+https://gamelab.hackclub.com/?id=5aff1db900613b02f603367c36dc4ce2
 
 ## Problem
 
@@ -100,14 +100,14 @@ e.add({
     }
   },
   update: (obj) => {
-      if (obj.y < 0) {
-        obj.vy *= -1;
-      }
+    if (obj.y < 0) {
+      obj.vy *= -1;
+    }
 
-      if (obj.y > e.height - obj.height) {
-        obj.vy *= -1;
-      }
-    },
+    if (obj.y > e.height - obj.height) {
+      obj.vy *= -1;
+    }
+  },
 })
 
 e.add({
