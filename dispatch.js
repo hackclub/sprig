@@ -45,15 +45,15 @@ const STATE = {
   challenges: [
     { 
       name: "add bounce sound", 
-      link: `${window.location.origin}/?id=5aff1db900613b02f603367c36dc4ce2`
+      link: `${window.location.origin}/?id=ecdd45d69183f9621b47236d660486e5`
     },
     { 
       name: "animate sprite", 
       link: `${window.location.origin}/?id=b19577800e2b5995664c8ff247af6ad1`
     },
     { 
-      name: "fall on platform", 
-      link: `${window.location.origin}/?id=ee9668ca099c7ec8c7087d9c5253e04a`
+      name: "fall on platform",
+      link: `${window.location.origin}/?id=d93ffb8de3a690690316b77b1f6a1eec`
     },
     { 
       name: "jump to new platform", 
@@ -61,7 +61,7 @@ const STATE = {
     },
     { 
       name: "make it go left", 
-      link: `${window.location.origin}/?id=5c32337a64aa42acb49ffe473fc1efe3`
+      link: `${window.location.origin}/?id=aeecd712337e262a2a63b58d85feb0cd`
     },
     { 
       name: "make it solid", 
