@@ -458,6 +458,7 @@ engine.add({
   y: number, // the y position
   vx: number, // the x velocity
   vy: number, // the y velocity
+  solid: false, // or true, makes the object collide with other solid objects
   sprite: sprite_name,
   scale: number,
   rotate: number,
