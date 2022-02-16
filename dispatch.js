@@ -39,6 +39,42 @@ const STATE = {
     text: "",
     link: "",
   },
+  showChallengeBar: true,
+  challenges: [
+    { 
+      name: "add bounce sound", 
+      link: "https://gamelab.hackclub.com/?id=5aff1db900613b02f603367c36dc4ce2" 
+    },
+    { 
+      name: "animate sprite", 
+      link: "https://gamelab.hackclub.com/?id=b19577800e2b5995664c8ff247af6ad1" 
+    },
+    { 
+      name: "fall on platform", 
+      link: "https://gamelab.hackclub.com/?id=ee9668ca099c7ec8c7087d9c5253e04a" 
+    },
+    { 
+      name: "jump to new platform", 
+      link: "https://gamelab.hackclub.com/?id=b19577800e2b5995664c8ff247af6ad1" 
+    },
+    { 
+      name: "make it go left", 
+      link: "https://gamelab.hackclub.com/?id=5c32337a64aa42acb49ffe473fc1efe3" 
+    },
+    { 
+      name: "animate sprite", 
+      link: "https://gamelab.hackclub.com/?id=b19577800e2b5995664c8ff247af6ad1" 
+    },
+    { 
+      name: "add bounce sound", 
+      link: "https://gamelab.hackclub.com/?id=5aff1db900613b02f603367c36dc4ce2" 
+    },
+    { 
+      name: "animate sprite", 
+      link: "https://gamelab.hackclub.com/?id=b19577800e2b5995664c8ff247af6ad1" 
+    },
+  ],
+  challengeIndex: -1,
 };
 
 const evalGameScript = createEval();

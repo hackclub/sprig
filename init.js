@@ -132,6 +132,12 @@ export async function init(state) {
   state.codemirror = document.querySelector("#code-editor");
   events(state);
 
+  state.challenges.forEach( (x, i) => {
+    if (x.link === window.href) {
+      state.challengeIndex = i;
+    }
+  })
+
   // setGameIframe();
 
   const saved =

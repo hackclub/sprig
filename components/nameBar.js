@@ -1,6 +1,5 @@
 import { dispatch } from '../dispatch.js';
 import { html } from '../uhtml.js';
-import runButton from './runButton.js';
 import menuButtons from "./menuButtons.js";
 
 const nameStyles = `
@@ -52,7 +51,7 @@ export default (state) => (
       <div style=${nameStyles}>
         <input 
           class="name-bar-input"
-          @input=${e => dispatch("SET_NAME", { name: e.target.value })}.value=${state.name}>
+          @input=${e => dispatch("SET_NAME", { name: e.target.value })} .value=${state.name}>
         </input>
         <div class="powered-by">
           <div>powered by&nbsp;</div>
@@ -69,5 +68,80 @@ export default (state) => (
       </div>
       ${menuButtons(state)}
     </div>
+    ${state.showChallengeBar ? challengeBar(state) : ""}
   `
 )
+
+const challengeBar = (state) => html`
+  <style>
+    .challenge-bar {
+      color: white;
+      background: var(--darkless);
+      display: flex;
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      justify-content: space-between;
+    }
+
+    .challenge-menu-container {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .challenge-menu {
+      visibility: hidden;
+      position: absolute;
+      left: 50%;
+      top: 100%;
+      overflow: revert;
+      background: var(--darkless);
+      z-index: 10;
+      transform: translate(-50%, 0);
+      padding: 10px;
+      width: 100%;
+    }
+
+    .challenge-menu > * :hover {
+      color: orange;
+    }
+
+    .challenge-menu-container:hover .challenge-menu {
+      visibility: visible;
+    }
+
+    .challenge-arrow:hover {
+      color: orange;
+    }
+  </style>
+  <div class="challenge-bar">
+    ${
+      state.challengeIndex > 0 
+      ? html`<a class="challenge-arrow" href=${state.challenges[state.challengeIndex-1].link}>←</a>`
+      : html`&nbsp;`
+    }
+    <span class="challenge-menu-container">
+      Try these challenges to get started.
+      <div class="challenge-menu">
+        ${state.challenges.map( x => html`
+          <div>
+            <a href=${x.link}>${x.name}</a>
+          </div>
+        ` )}
+      </div>
+    </span>
+    ${
+      state.challengeIndex < state.challenges.length - 1 
+      ? html`<a class="challenge-arrow" href=${state.challenges[state.challengeIndex+1].link}>→</a>`
+      : html`&nbsp;`
+    }
+  </div>
+`
+
+
+
+
+
+
+
+
