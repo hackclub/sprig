@@ -15,8 +15,6 @@ import validate from "./utils/validate.js";
 import favicon from "./utils/favicon.js";
 import title from "./utils/title.js";
 
-console.log("window", window.location);
-
 const STATE = {
   codemirror: undefined,
   show: { origin: false, hitbox: false },
