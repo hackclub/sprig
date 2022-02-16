@@ -70,15 +70,21 @@ const STATE = {
       link: `${window.location.origin}/?id=ecdd45d69183f9621b47236d660486e5`
     },
     {
+      name: "off the walls",
+      link: `${window.location.origin}/?id=0b6d386ac9fc88ef155b70dfd1b32936`
+    },
+    {
       name: "bridge the gap",
       link: `${window.location.origin}/?id=b253bffc739aa3ca8ca1f57d6a5abed1`
-    }
-    /* -- make the ball bounce off the other side -- */
+    },
     {
       name: "touch to collect", 
       link: `${window.location.origin}/?id=971f2e635d6f5ebb8197c170ca01dc17`
     },
-    /* -- make a function to add multiple platforms -- */
+    {
+      name: "multi-platforming",
+      link: `${window.location.origin}/?id=8a890a186508db040959f7ec91a70f1c`
+    },
     /* -- spawn bullet -- */
     {
       name: "pressed vs. held",
