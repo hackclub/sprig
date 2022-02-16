@@ -83,6 +83,10 @@ const STATE = {
       name: "touch to collect", 
       link: `${window.location.origin}/?id=971f2e635d6f5ebb8197c170ca01dc17`
     },
+    {
+      name: "make a bunch",
+      link: `${window.location.origin}/?id=f96c9821c46ab0bc8c36cf6c56fb95f9`
+    }
   ],
   challengeIndex: -1,
 };
