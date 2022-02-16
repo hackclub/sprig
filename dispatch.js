@@ -69,11 +69,19 @@ const STATE = {
     },
     { 
       name: "sticky paddles", 
-      link: `${window.location.origin}/?id=b5fe336ec5a35442a64fdb373dfe535e`
+      link: `${window.location.origin}/?id=3299f529845b06658794de36b0e33ac7`
     },
     { 
       name: "one jump", 
       link: `${window.location.origin}/?id=a653579c8ae71b41c8d72a1683c37bc0`
+    },
+    { 
+      name: "pass score to leaderboard", 
+      link: `${window.location.origin}/?id=a1eb48c14c179312a75204c7f0743745`
+    },
+    { 
+      name: "touch to collect", 
+      link: `${window.location.origin}/?id=971f2e635d6f5ebb8197c170ca01dc17`
     },
   ],
   challengeIndex: -1,
