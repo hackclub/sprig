@@ -69,7 +69,7 @@ const STATE = {
     },
     { 
       name: "sticky paddles", 
-      link: `${window.location.origin}/?id=3299f529845b06658794de36b0e33ac7`
+      link: `${window.location.origin}/?id=f5134c1689acd0a4819b148efd4169b5`
     },
     { 
       name: "one jump", 
