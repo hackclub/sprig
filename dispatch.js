@@ -87,10 +87,10 @@ const STATE = {
       name: "pressed vs. held",
       link: `${window.location.origin}/?id=3e4d8a38439bf62a2b1a80fb9ee6667d`
     },
-    {
-      name: "animate sprite", 
-      link: `${window.location.origin}/?id=b19577800e2b5995664c8ff247af6ad1`
-    },
+    // {
+    //   name: "animate sprite", 
+    //   link: `${window.location.origin}/?id=b19577800e2b5995664c8ff247af6ad1`
+    // },
     {
       name: "one jump", 
       link: `${window.location.origin}/?id=a653579c8ae71b41c8d72a1683c37bc0`
