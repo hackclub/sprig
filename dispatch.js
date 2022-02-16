@@ -69,7 +69,10 @@ const STATE = {
       name: "add bounce sound", 
       link: `${window.location.origin}/?id=ecdd45d69183f9621b47236d660486e5`
     },
-    /* -- add pong obstacle -- */
+    {
+      name: "bridge the gap",
+      link: `${window.location.origin}/?id=b253bffc739aa3ca8ca1f57d6a5abed1`
+    }
     /* -- make the ball bounce off the other side -- */
     {
       name: "touch to collect", 
@@ -83,7 +86,7 @@ const STATE = {
     },
     {
       name: "animate sprite", 
-      link: `${window.location.origin}/?id=b19577800e2b5995664c8ff247af6ad1`
+      link: `${window.location.origin}/?id=1ff13ed26bf5edf03ed38edca70e67d5`
     },
     {
       name: "one jump", 
