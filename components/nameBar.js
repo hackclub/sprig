@@ -130,7 +130,10 @@ const challengeBar = (state) => html`
       : html`&nbsp;`
     }
     <span class="challenge-menu-container">
-      Try these challenges to get started.
+      ${ state.challengeIndex > 0 
+        ? `You're on challenge ${state.challengeIndex+1}/${state.challenges.length}.`
+        : "Try these challenges to get started." 
+      }
       <div class="challenge-menu">
         ${state.challenges.map( (x, i) => html`
           <div class=${[state.challengeIndex === i ? "selected-challenge" : ""].join(" ")}>
