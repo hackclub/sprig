@@ -133,7 +133,7 @@ export async function init(state) {
   events(state);
 
   state.challenges.forEach( (x, i) => {
-    if (x.link === window.href) {
+    if (x.link === window.location.href) {
       state.challengeIndex = i;
     }
   })

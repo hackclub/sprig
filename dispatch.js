@@ -15,6 +15,8 @@ import validate from "./utils/validate.js";
 import favicon from "./utils/favicon.js";
 import title from "./utils/title.js";
 
+console.log("window", window.location);
+
 const STATE = {
   codemirror: undefined,
   show: { origin: false, hitbox: false },
@@ -43,35 +45,35 @@ const STATE = {
   challenges: [
     { 
       name: "add bounce sound", 
-      link: "https://gamelab.hackclub.com/?id=5aff1db900613b02f603367c36dc4ce2" 
+      link: `${window.location.origin}/?id=5aff1db900613b02f603367c36dc4ce2`
     },
     { 
       name: "animate sprite", 
-      link: "https://gamelab.hackclub.com/?id=b19577800e2b5995664c8ff247af6ad1" 
+      link: `${window.location.origin}/?id=b19577800e2b5995664c8ff247af6ad1`
     },
     { 
       name: "fall on platform", 
-      link: "https://gamelab.hackclub.com/?id=ee9668ca099c7ec8c7087d9c5253e04a" 
+      link: `${window.location.origin}/?id=ee9668ca099c7ec8c7087d9c5253e04a`
     },
     { 
       name: "jump to new platform", 
-      link: "https://gamelab.hackclub.com/?id=b19577800e2b5995664c8ff247af6ad1" 
+      link: `${window.location.origin}/?id=b19577800e2b5995664c8ff247af6ad1`
     },
     { 
       name: "make it go left", 
-      link: "https://gamelab.hackclub.com/?id=5c32337a64aa42acb49ffe473fc1efe3" 
+      link: `${window.location.origin}/?id=5c32337a64aa42acb49ffe473fc1efe3`
     },
     { 
-      name: "animate sprite", 
-      link: "https://gamelab.hackclub.com/?id=b19577800e2b5995664c8ff247af6ad1" 
+      name: "make it solid", 
+      link: `${window.location.origin}/?id=140c3988464c7ea2e8981c73398348d8`
     },
     { 
-      name: "add bounce sound", 
-      link: "https://gamelab.hackclub.com/?id=5aff1db900613b02f603367c36dc4ce2" 
+      name: "sticky paddles", 
+      link: `${window.location.origin}/?id=b5fe336ec5a35442a64fdb373dfe535e`
     },
     { 
-      name: "animate sprite", 
-      link: "https://gamelab.hackclub.com/?id=b19577800e2b5995664c8ff247af6ad1" 
+      name: "one jump", 
+      link: `${window.location.origin}/?id=a653579c8ae71b41c8d72a1683c37bc0`
     },
   ],
   challengeIndex: -1,
