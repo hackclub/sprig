@@ -85,6 +85,7 @@ const challengeBar = (state) => html`
       box-sizing: border-box;
       justify-content: space-between;
       padding-top: 0px;
+      position: relative;
     }
 
     .challenge-menu-container {
@@ -105,8 +106,12 @@ const challengeBar = (state) => html`
       width: 100%;
     }
 
-    .challenge-menu > * :hover {
+    .challenge-item:hover {
       color: orange;
+    }
+
+    .challenge-item:nth-child(even) a {
+      /* text-decoration: none; */
     }
 
     .challenge-menu-container:hover .challenge-menu {
@@ -121,22 +126,31 @@ const challengeBar = (state) => html`
       content: "→"
     }
 
-
+    .challenge-progress-container {
+      background: #00ffff80;
+      height: 25%;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+    }
   </style>
   <div class="challenge-bar">
+    <div style=${`width: ${(state.challengeIndex+1)/state.challenges.length*100}%`} class="challenge-progress-container"></div>
+
+
     ${
       state.challengeIndex > 0 
       ? html`<a class="challenge-arrow" href=${state.challenges[state.challengeIndex-1].link}>←</a>`
       : html`&nbsp;`
     }
     <span class="challenge-menu-container">
-      ${ state.challengeIndex > 0 
+      ${ state.challengeIndex >= 0 
         ? `You're on challenge ${state.challengeIndex+1}/${state.challenges.length}.`
         : "Try these challenges to get started." 
       }
       <div class="challenge-menu">
         ${state.challenges.map( (x, i) => html`
-          <div class=${[state.challengeIndex === i ? "selected-challenge" : ""].join(" ")}>
+          <div class=${[state.challengeIndex === i ? "selected-challenge" : "", "challenge-item"].join(" ")}>
             <a href=${x.link}>${x.name}</a>
           </div>
         ` )}
