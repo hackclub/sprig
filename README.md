@@ -330,7 +330,7 @@ engine.add({
 
 ## Tiny Games
 
-[Pong-ish](https://gamelab.hackclub.com/?id=bd5087c16160988e4d2e27ca2c6157f9)
+[Pong-ish](https://gamelab.hackclub.com/?id=8da8700aeb32e508ad0b31836c5cc093)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149371012-faf3e45f-9d3a-47d4-831b-566d9171d2bd.gif">
 
@@ -342,7 +342,7 @@ engine.add({
 
 ---
 
-[Brick Broken](https://gamelab.hackclub.com/?id=8f18ab06c1a8f5267e6f4a6b3bec06f5)
+[Brick Broken](https://gamelab.hackclub.com/?id=93523665fc2ccdd1c6eac2dc875a42de)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/150606449-5b73d7fe-f2d3-432f-9cc5-346c20919ec8.gif">
 

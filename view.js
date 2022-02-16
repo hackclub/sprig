@@ -284,6 +284,7 @@ export function view(state) {
       }
 
       .show-options {
+        background-color: rgba(0, 0, 0, 25%);
         color: white;
         font-size: 20px;
         font-family: monospace;
@@ -291,6 +292,7 @@ export function view(state) {
         user-select: none;
         right: 10px;
         bottom: 10px;
+        padding: 0 5px;
         display: flex;
         flex-direction: column;
         align-items: flex-end;
