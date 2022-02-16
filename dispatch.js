@@ -43,7 +43,7 @@ const STATE = {
   challenges: [
     {
       name: "jump to new platform", 
-      link: `${window.location.origin}/?id=b19577800e2b5995664c8ff247af6ad1`
+      link: `${window.location.origin}/?id=61367dbe272bee65e68de7183ade8801`
     },
     {
       name: "make it go left", 

@@ -79,9 +79,12 @@ const challengeBar = (state) => html`
       background: var(--darkless);
       display: flex;
       width: 100%;
-      padding: 10px;
+      padding: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
       box-sizing: border-box;
       justify-content: space-between;
+      padding-top: 0px;
     }
 
     .challenge-menu-container {
