@@ -41,50 +41,61 @@ const STATE = {
   },
   showChallengeBar: true,
   challenges: [
-    { 
-      name: "add bounce sound", 
-      link: `${window.location.origin}/?id=ecdd45d69183f9621b47236d660486e5`
-    },
-    { 
-      name: "animate sprite", 
-      link: `${window.location.origin}/?id=b19577800e2b5995664c8ff247af6ad1`
-    },
-    { 
-      name: "fall on platform",
-      link: `${window.location.origin}/?id=d93ffb8de3a690690316b77b1f6a1eec`
-    },
-    { 
+    {
       name: "jump to new platform", 
       link: `${window.location.origin}/?id=b19577800e2b5995664c8ff247af6ad1`
     },
-    { 
+    {
       name: "make it go left", 
       link: `${window.location.origin}/?id=aeecd712337e262a2a63b58d85feb0cd`
     },
-    { 
+    {
+      name: "fall on platform",
+      link: `${window.location.origin}/?id=d93ffb8de3a690690316b77b1f6a1eec`
+    },
+    {
       name: "make it solid", 
       link: `${window.location.origin}/?id=140c3988464c7ea2e8981c73398348d8`
     },
-    { 
+    {
       name: "sticky paddles", 
       link: `${window.location.origin}/?id=f5134c1689acd0a4819b148efd4169b5`
     },
-    { 
-      name: "one jump", 
-      link: `${window.location.origin}/?id=a653579c8ae71b41c8d72a1683c37bc0`
-    },
-    { 
+    {
       name: "pass score to leaderboard", 
       link: `${window.location.origin}/?id=a1eb48c14c179312a75204c7f0743745`
     },
-    { 
+    {
+      name: "add bounce sound", 
+      link: `${window.location.origin}/?id=ecdd45d69183f9621b47236d660486e5`
+    },
+    /* -- add pong obstacle -- */
+    /* -- make the ball bounce off the other side -- */
+    {
       name: "touch to collect", 
       link: `${window.location.origin}/?id=971f2e635d6f5ebb8197c170ca01dc17`
     },
+    /* -- make a function to add multiple platforms -- */
+    /* -- spawn bullet -- */
+    {
+      name: "pressed vs. held",
+      link: `${window.location.origin}/?id=3e4d8a38439bf62a2b1a80fb9ee6667d`
+    },
+    {
+      name: "animate sprite", 
+      link: `${window.location.origin}/?id=b19577800e2b5995664c8ff247af6ad1`
+    },
+    {
+      name: "one jump", 
+      link: `${window.location.origin}/?id=a653579c8ae71b41c8d72a1683c37bc0`
+    },
+    /* -- what did you just collide with!?! -- */
     {
       name: "make a bunch",
       link: `${window.location.origin}/?id=f96c9821c46ab0bc8c36cf6c56fb95f9`
-    }
+    },
+    /* -- wrap game in func to restart on demand -- */
+    /* -- multiple levels -- */
   ],
   challengeIndex: -1,
 };
