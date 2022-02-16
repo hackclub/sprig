@@ -113,6 +113,12 @@ const challengeBar = (state) => html`
     .challenge-arrow:hover {
       color: orange;
     }
+
+    .selected-challenge::before {
+      content: "→"
+    }
+
+
   </style>
   <div class="challenge-bar">
     ${
@@ -123,8 +129,8 @@ const challengeBar = (state) => html`
     <span class="challenge-menu-container">
       Try these challenges to get started.
       <div class="challenge-menu">
-        ${state.challenges.map( x => html`
-          <div>
+        ${state.challenges.map( (x, i) => html`
+          <div class=${[state.challengeIndex === i ? "selected-challenge" : ""].join(" ")}>
             <a href=${x.link}>${x.name}</a>
           </div>
         ` )}
