@@ -95,6 +95,7 @@ const challengeBar = (state) => html`
 
     .challenge-menu {
       visibility: hidden;
+      min-width: max-content;
       position: absolute;
       left: 50%;
       top: 100%;
