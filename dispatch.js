@@ -69,10 +69,13 @@ const STATE = {
       name: "add bounce sound", 
       link: `${window.location.origin}/?id=ecdd45d69183f9621b47236d660486e5`
     },
-    /* -- add pong obstacle -- */
     {
       name: "off the walls",
       link: `${window.location.origin}/?id=0b6d386ac9fc88ef155b70dfd1b32936`
+    },
+    {
+      name: "bridge the gap",
+      link: `${window.location.origin}/?id=b253bffc739aa3ca8ca1f57d6a5abed1`
     },
     {
       name: "touch to collect", 
@@ -87,10 +90,10 @@ const STATE = {
       name: "pressed vs. held",
       link: `${window.location.origin}/?id=3e4d8a38439bf62a2b1a80fb9ee6667d`
     },
-    // {
-    //   name: "animate sprite", 
-    //   link: `${window.location.origin}/?id=b19577800e2b5995664c8ff247af6ad1`
-    // },
+    {
+      name: "animate sprite", 
+      link: `${window.location.origin}/?id=1ff13ed26bf5edf03ed38edca70e67d5`
+    },
     {
       name: "one jump", 
       link: `${window.location.origin}/?id=a653579c8ae71b41c8d72a1683c37bc0`
