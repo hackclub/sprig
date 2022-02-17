@@ -20,6 +20,8 @@ export function loadFromDefault() {
 }
 
 function loadFromStorage() {
+  if (getParam("cached") === "false") return;
+
   const storedData = window.localStorage.getItem("hc-game-lab");
   if (!storedData) {
     return null;
@@ -33,7 +35,7 @@ function loadFromStorage() {
         dispatch("LOAD_CARTRIDGE", { saved });
       }}>load it</button>?
     `,
-    timeout: 5000
+    timeout: 6000
   });
 
   // return saved;
@@ -153,6 +155,7 @@ export async function init(state) {
   // setGameIframe();
 
   loadFromStorage();
+  removeParam("cached");
 
   const saved =
     (await loadFromAirtable()) ||

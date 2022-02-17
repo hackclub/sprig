@@ -90,6 +90,7 @@ const challengeBar = (state) => html`
 
     .challenge-menu-container {
       position: relative;
+      cursor: pointer;
     }
 
     .challenge-menu {
@@ -108,10 +109,6 @@ const challengeBar = (state) => html`
 
     .challenge-item:nth-child(even) {
       color: lightgrey;
-    }
-
-    .challenge-item a {
-      cursor: pointer;
     }
 
     .challenge-item a:hover {
@@ -146,7 +143,7 @@ const challengeBar = (state) => html`
       state.challengeIndex > 0 
       ? html`<a 
                 class="challenge-arrow" 
-                style="padding-right: 5px;" 
+                style="padding-right: 40px;" 
                 href=${state.challenges[state.challengeIndex-1].link}>←</a>`
       : html`&nbsp;`
     }
@@ -167,7 +164,7 @@ const challengeBar = (state) => html`
       state.challengeIndex < state.challenges.length - 1 
       ? html`<a 
                 class="challenge-arrow" 
-                style="padding-left: 5px;" 
+                style="padding-left: 40px;" 
                 href=${state.challenges[state.challengeIndex+1].link}>→</a>`
       : html`&nbsp;`
     }
