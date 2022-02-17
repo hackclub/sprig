@@ -42,28 +42,28 @@ const STATE = {
   showChallengeBar: true,
   challenges: [
     {
-      name: "jump to new platform", 
-      link: `${window.location.origin}/?id=61367dbe272bee65e68de7183ade8801`
+      name: "jumpstart", 
+      link: `${window.location.origin}/?id=a03045a49a8e46b9c594eab57bca77d8`
     },
     {
-      name: "make it go left", 
-      link: `${window.location.origin}/?id=aeecd712337e262a2a63b58d85feb0cd`
+      name: "crisis averted",
+      link: `${window.location.origin}/?id=b17eeab7e53817731e65b57e8db91da5`
     },
     {
-      name: "fall on platform",
-      link: `${window.location.origin}/?id=d93ffb8de3a690690316b77b1f6a1eec`
+      name: "left behind", 
+      link: `${window.location.origin}/?id=e222f64223d6da07208fe6d0b8da5086`
     },
     {
-      name: "make it solid", 
-      link: `${window.location.origin}/?id=62502eafc2f74a143ee1ee62fc71225d`
+      name: "whats the hold up?", 
+      link: `${window.location.origin}/?id=c6e7c88949e3c800c59dfe3bb604bec6`
     },
     {
-      name: "sticky paddles", 
-      link: `${window.location.origin}/?id=f5134c1689acd0a4819b148efd4169b5`
+      name: "sticky situation", 
+      link: `${window.location.origin}/?id=7fb849e43733c1e2916b9238cb3b4d4a`
     },
     {
-      name: "pass score to leaderboard", 
-      link: `${window.location.origin}/?id=a1eb48c14c179312a75204c7f0743745`
+      name: "leaderb0rd", 
+      link: `${window.location.origin}/?id=cf87c30d90d0bdd2f951cc5aba4e8ff0`
     },
     {
       name: "add bounce sound", 
@@ -85,7 +85,10 @@ const STATE = {
       name: "multi-platforming",
       link: `${window.location.origin}/?id=8a890a186508db040959f7ec91a70f1c`
     },
-    /* -- spawn bullet -- */
+    {
+      name: "debarchery",
+      link: `${window.location.origin}/?id=5ebfe42952f9d1ac52b36a41736bd5fe`
+    },
     {
       name: "pressed vs. held",
       link: `${window.location.origin}/?id=3e4d8a38439bf62a2b1a80fb9ee6667d`
@@ -101,7 +104,7 @@ const STATE = {
     /* -- what did you just collide with!?! -- */
     {
       name: "make a bunch",
-      link: `${window.location.origin}/?id=f96c9821c46ab0bc8c36cf6c56fb95f9`
+      link: `${window.location.origin}/?id=8b6079313ff215662335ffe9624aa620`
     },
     /* -- wrap game in func to restart on demand -- */
     /* -- multiple levels -- */
