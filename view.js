@@ -561,6 +561,7 @@ const renderSpriteName = (name, index, state) =>
           .value=${name} 
           @input=${(e) => {
             dispatch("CHANGE_ASSET_NAME", {
+              e,
               index,
               newName: e.target.value,
             });
