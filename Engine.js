@@ -292,7 +292,6 @@ class Text {
     const scale = ops.scale ?? 1;
 
     const span = document.createElement("a");
-    if (ops.href) span.href = ops.href;
     span.style = `
       position: absolute;
       left: ${x}px;
@@ -303,6 +302,15 @@ class Text {
       transform: rotate(${rotate}deg) scale(${scale}) translate(-50%, -50%);
       width: max-content;
     `;
+    if (ops.href) {
+      span.href = ops.href;
+      if (ops.newTab) {
+        span.target = "_blank";
+        span.rel = "noopener";
+      }
+    } else {
+      span.style.pointerEvents = 'none';
+    }
     span.innerText = str;
 
     this.el = span;
@@ -424,6 +432,7 @@ class Engine {
       let opts = {
         size: size - 4,
         href: "https://app.slack.com/client/T0266FRGM/C0266FRGV/user_profile/" + slack_id,
+        newTab: true,
         color: "blue"
       }
       this.addText(name.substring(0, 3), x - 50, y, opts);
