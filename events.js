@@ -216,14 +216,15 @@ export function events(state) {
   const bodyListener = createListener(document.body);
   bodyListener("keydown", "", function (event) {
     let code = event.code;
-
-    window.localStorage.setItem("hc-game-lab", dispatch("GET_SAVE_STATE"));
-
     if (code === "Enter" && event.shiftKey) {
       event.preventDefault();
       dispatch("RUN");
     }
   });
+
+  window.addEventListener("beforeunload", () => {
+    window.localStorage.setItem("hc-game-lab", dispatch("GET_SAVE_STATE"));
+  })
 
   addVerticalBarDrag(state, bodyListener);
   addHorzBarDrag(state, bodyListener);

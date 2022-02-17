@@ -2,6 +2,7 @@
 
 
 export default function notification({ message, type, timeout }={}) {
+  return;
   // document.querySelector(".shared-modal").classList.toggle("hide");
   const el = document.createElement('div')
   el.classList.add('shared-modal')

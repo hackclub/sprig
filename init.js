@@ -1,7 +1,8 @@
 import { events } from "./events.js";
 import { dispatch } from "./dispatch.js";
+import { html } from "./uhtml.js";
 
-const DEFAULT_CARTRIDGE = "23318f7e0d5f7ec020dbc5dd9b469ceb";
+const DEFAULT_CARTRIDGE = "3f9827f54d4ff42ff6c3a125f0279002";
 
 function getParam(key) {
   const search = new URLSearchParams(window.location.search);
@@ -18,13 +19,24 @@ export function loadFromDefault() {
   return loadFromS3(DEFAULT_CARTRIDGE);
 }
 
-async function loadFromStorage() {
+function loadFromStorage() {
   const storedData = window.localStorage.getItem("hc-game-lab");
   if (!storedData) {
     return null;
   }
   const saved = JSON.parse(storedData);
-  return saved;
+
+  dispatch("NOTIFICATION", {
+    message: html`
+      An old game you were working on was found in your storage.<br>
+      Would you like to <button @click=${() => {
+        dispatch("LOAD_CARTRIDGE", { saved });
+      }}>load it</button>?
+    `,
+    timeout: 7000
+  });
+
+  // return saved;
 }
 
 async function loadFromAirtable() {
@@ -140,10 +152,11 @@ export async function init(state) {
 
   // setGameIframe();
 
+  loadFromStorage();
+
   const saved =
     (await loadFromAirtable()) ||
     (await loadFromS3()) ||
-    (await loadFromStorage()) ||
     (await loadFromDefault());
 
   dispatch("LOAD_CARTRIDGE", { saved });

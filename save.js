@@ -1,7 +1,6 @@
 import { dispatch } from "./dispatch.js";
 import md5 from "https://cdn.skypack.dev/md5";
 import copy from "./utils/copy.js";
-import notification from "./utils/notification.js";
 
 export const hashState = () => md5(dispatch("GET_SAVE_STATE"));
 
@@ -26,8 +25,9 @@ async function saveToS3({ content, state, copyUrl }) {
 
   if (copyUrl) copy(link);
   if (copyUrl)
-    notification({
+    dispatch("NOTIFICATION", {
       message: "Sharing link copied to clipboard!",
+      timeout: 3000
     });
 
   state.lastSaved.name = content.name;
@@ -47,9 +47,9 @@ async function saveToFile({ content, state }) {
   link.click();
   URL.revokeObjectURL(link);
 
-  notification({
-    message:
-      "Your file has just been downloaded! Just drag it into the editor to load from your save",
+  dispatch("NOTIFICATION", {
+    message: "Your file has just been downloaded! Just drag it into the editor to load from your save",
+    timeout: 3000
   });
 }
 

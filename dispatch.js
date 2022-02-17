@@ -10,7 +10,6 @@ import { createSequencer } from "./sequencer/sequencer.js";
 import { playTune, loopTune } from "./tunePlayers.js";
 import { createEval } from "./evalGameScript.js";
 import uiSounds from "./assets/ui-sounds.js";
-import notification from "./utils/notification.js";
 import validate from "./utils/validate.js";
 import favicon from "./utils/favicon.js";
 import title from "./utils/title.js";
@@ -39,6 +38,7 @@ const STATE = {
     text: "",
     link: "",
   },
+  notifications: {},
   showChallengeBar: true,
   challenges: [
     {
@@ -195,15 +195,17 @@ const ACTIONS = {
   },
   REPORT_BUG: async (args, state) => {
     state.bugReportStatus = "loading";
-    notification({
+    dispatch("NOTIFICATION", {
       message: "Generating a bug report... (1/3)",
+      timeout: 3000,
     });
     const report = {};
     report["Engine Version"] = state.engineVersion;
     await dispatch("SAVE", { type: "link", copyUrl: false });
     report["Project Link"] = state.lastSaved.link;
-    notification({
+    dispatch("NOTIFICATION", {
       message: "Generating a bug report... (2/3)",
+      timeout: 3000,
     });
     function truncate(string, length, ending) {
       return string.length > length
@@ -247,8 +249,9 @@ const ACTIONS = {
       99900,
       "..."
     );
-    notification({
+    dispatch("NOTIFICATION", {
       message: "Generating a bug report... (3/3)",
+      timeout: 3000,
     });
     const url = new URL("https://airtable.com/shrpcDFA5f9wEOSIm");
     for (const key in report) {
@@ -301,23 +304,46 @@ const ACTIONS = {
     state.previousID = saved.previousID || null;
 
     if (state.version !== saved.version) {
-      notification({
-        message: `Version mismatch.<br>
-                  Editor is version: ${state.version}<br>
-                  File uses version: ${saved.version}<br>
-                  ${
-                    saved.version
-                      ? `Old editor is available <a target="_blank" href="https://gamelab-versions.hackclub.dev/${saved.version}/index.html">here</a>.`
-                      : ""
-                  }`,
-        timeout: 5000,
-      });
+
+      const link = `https://gamelab-versions.hackclub.dev/${saved.version}/index.html`
+
+      dispatch("NOTIFICATION", {
+        message: html`
+          Version mismatch.<br>
+          Your file was made in an older version of the editor.<br>
+          Editor is version: ${state.version}.<br>
+          File uses version: ${saved.version}.
+          <br>
+          ${
+            saved.version
+              ? html`
+                  If your game runs fine then there's no problem!<br>
+                  If not you can find the old editor 
+                  <a target="_blank" href=${link}>here</a>
+                `
+              : ""
+          }
+        `,
+        timeout: 10000
+      })
     }
 
     state.runStatus = "ready";
     dispatch("SET_TITLE", state.name);
     dispatch("RENDER");
     // dispatch("RUN");
+  },
+  NOTIFICATION({ message, timeout }, state) {
+    const id = Date.now();
+
+    state.notifications[id] = message;
+
+    dispatch("RENDER");
+
+    setTimeout(() => {
+      delete state.notifications[id];
+      dispatch("RENDER");
+    }, timeout)
   },
   CREATE_ASSET({ assetType }, state) {
     // need to clear asset editor
