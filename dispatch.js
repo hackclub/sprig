@@ -43,35 +43,35 @@ const STATE = {
   challenges: [
     {
       name: "jumpstart", 
-      link: `${window.location.origin}/?id=a03045a49a8e46b9c594eab57bca77d8`
+      link: `${window.location.origin}/?id=864f802da9102937b71a7e8ee0699e7e`
     },
     {
       name: "crisis averted",
-      link: `${window.location.origin}/?id=b17eeab7e53817731e65b57e8db91da5`
+      link: `${window.location.origin}/?id=332cbc7c2cc4b7bc32537bde3bcb6f5c`
     },
     {
       name: "left behind", 
-      link: `${window.location.origin}/?id=e222f64223d6da07208fe6d0b8da5086`
+      link: `${window.location.origin}/?id=bcfc3a57a84a7ec11d0f7bc28a0676c8`
     },
     {
       name: "whats the hold up?", 
-      link: `${window.location.origin}/?id=c6e7c88949e3c800c59dfe3bb604bec6`
+      link: `${window.location.origin}/?id=5ca3097a41cd509d106f1fcd4a3e9183`
     },
     {
       name: "sticky situation", 
-      link: `${window.location.origin}/?id=7fb849e43733c1e2916b9238cb3b4d4a`
+      link: `${window.location.origin}/?id=ce2093e872b57c0283f4b7591a5c9e47`
     },
     {
       name: "leaderb0rd", 
-      link: `${window.location.origin}/?id=e039799495806408d86786b490b907eb`
+      link: `${window.location.origin}/?id=1bfeee186cb4d765237a634b7d84b678`
     },
     {
       name: "add bounce sound", 
-      link: `${window.location.origin}/?id=e2aafda9307eb373a93db5c7d4ecea29`
+      link: `${window.location.origin}/?id=08118f5df413fd11d32c58d8ba6c00a2`
     },
     {
       name: "off the walls",
-      link: `${window.location.origin}/?id=0b6d386ac9fc88ef155b70dfd1b32936`
+      link: `${window.location.origin}/?id=df55ab0b0b6bd6a78ba0e45c2483e9ae`
     },
     {
       name: "bridge the gap",
@@ -79,15 +79,15 @@ const STATE = {
     },
     {
       name: "touch to collect", 
-      link: `${window.location.origin}/?id=3f0b1c5b8f02aaa2fa324e607d30ee66`
+      link: `${window.location.origin}/?id=9da927c62c30cd89db12093877c42045`
     },
     {
       name: "multi-platforming",
-      link: `${window.location.origin}/?id=f870664007aef333d9e28fb7b247c6e0`
+      link: `${window.location.origin}/?id=2330e25785ce920dabbac962aa2541ad`
     },
     {
       name: "debarchery",
-      link: `${window.location.origin}/?id=ca81bf221b5401778dc32b7f5925784a`
+      link: `${window.location.origin}/?id=dceddece3bc425bf6af5ab7836059270`
     },
     {
       name: "pressed vs. held",
@@ -95,16 +95,16 @@ const STATE = {
     },
     {
       name: "animate sprite", 
-      link: `${window.location.origin}/?id=1ff13ed26bf5edf03ed38edca70e67d5`
+      link: `${window.location.origin}/?id=438e4864f1688bfd2784107a7db824de`
     },
     {
       name: "one jump", 
-      link: `${window.location.origin}/?id=a653579c8ae71b41c8d72a1683c37bc0`
+      link: `${window.location.origin}/?id=6d58826e3858b0b3847e247db0448374`
     },
     /* -- what did you just collide with!?! -- */
     {
       name: "make a bunch",
-      link: `${window.location.origin}/?id=5fab8726e33df93707d92f4474848f54`
+      link: `${window.location.origin}/?id=0549788cba6dd81c3d94ec6a7662e01a`
     },
     /* -- wrap game in func to restart on demand -- */
     /* -- multiple levels -- */
