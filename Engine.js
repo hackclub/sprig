@@ -301,6 +301,7 @@ class Text {
       font-family: ${font};
       font-size: ${size}px;
       transform: rotate(${rotate}deg) scale(${scale}) translate(-50%, -50%);
+      pointer-events: none;
       width: max-content;
     `;
     span.innerText = str;
