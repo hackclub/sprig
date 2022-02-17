@@ -83,7 +83,7 @@ const challengeBar = (state) => html`
       padding-left: 10px;
       padding-right: 10px;
       box-sizing: border-box;
-      justify-content: space-between;
+      justify-content: center;
       padding-top: 0px;
       position: relative;
     }
@@ -107,12 +107,12 @@ const challengeBar = (state) => html`
       width: 100%;
     }
 
-    .challenge-item:hover {
-      color: orange;
+    .challenge-item:nth-child(even) {
+      color: lightgrey;
     }
 
-    .challenge-item:nth-child(even) a {
-      /* text-decoration: none; */
+    .challenge-item a:hover {
+      color: orange;
     }
 
     .challenge-menu-container:hover .challenge-menu {
@@ -141,25 +141,31 @@ const challengeBar = (state) => html`
 
     ${
       state.challengeIndex > 0 
-      ? html`<a class="challenge-arrow" href=${state.challenges[state.challengeIndex-1].link}>←</a>`
+      ? html`<a 
+                class="challenge-arrow" 
+                style="padding-right: 40px;" 
+                href=${state.challenges[state.challengeIndex-1].link}>←</a>`
       : html`&nbsp;`
     }
     <span class="challenge-menu-container">
       ${ state.challengeIndex >= 0 
         ? `You're on challenge ${state.challengeIndex+1}/${state.challenges.length}.`
-        : "Try these challenges to get started." 
+        : "Hover here for little code challenges." 
       }
       <div class="challenge-menu">
         ${state.challenges.map( (x, i) => html`
           <div class=${[state.challengeIndex === i ? "selected-challenge" : "", "challenge-item"].join(" ")}>
-            <a href=${x.link}>${x.name}</a>
+            <a style="width: 100%;" href=${x.link}>${x.name}</a>
           </div>
         ` )}
       </div>
     </span>
     ${
       state.challengeIndex < state.challenges.length - 1 
-      ? html`<a class="challenge-arrow" href=${state.challenges[state.challengeIndex+1].link}>→</a>`
+      ? html`<a 
+                class="challenge-arrow" 
+                style="padding-left: 40px;" 
+                href=${state.challenges[state.challengeIndex+1].link}>→</a>`
       : html`&nbsp;`
     }
   </div>

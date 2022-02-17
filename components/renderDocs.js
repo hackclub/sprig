@@ -1,11 +1,13 @@
-const toggleRef = () => {
-  const ref = document.querySelector(".ref");
-  ref.classList.toggle("hide-ref");
+import { html } from "../uhtml.js";
+
+const toggleDocs = () => {
+  const docs = document.querySelector(".docs");
+  docs.classList.toggle("hide-docs");
 };
 
-const renderRef = (state) => html`
+export const renderDocs = (state) => html`
   <style>
-    .ref {
+    .docs {
       position: absolute;
       box-sizing: border-box;
       height: 100%;
@@ -19,57 +21,58 @@ const renderRef = (state) => html`
       transition: right 1s ease-in-out;
     }
 
-    .hide-ref {
+    .hide-docs {
       right: -60%;
     }
 
-    .close-ref {
+    .close-docs {
       position: fixed;
       right: 10px;
       top: 10px;
     }
 
-    .hide-ref .close-ref {
+    .hide-docs .close-docs {
       display: none;
     }
 
-    .ref pre,
-    .ref code {
+    .docs pre,
+    .docs code {
       background: lightgrey;
       border-radius: 3px;
       padding: 5px;
       overflow: scroll;
     }
   </style>
-  <div class="ref hide-ref">
+  <div class="docs hide-docs">
     <b>Create Engine</b>
-    <pre>const engine = createEngine(gameCanvas, width, height);</pre>
+    <pre>const e = createEngine(gameCanvas, width, height);</pre>
     Example:
-    <pre>const engine = createEngine(gameCanvas, 300, 300);</pre>
+    <pre>const e = createEngine(gameCanvas, 300, 300);</pre>
     <code>gameCanvas</code> is automatically injected into your game script.
     <br /><br />
 
     <b>Start Engine</b>
-    <pre>engine.start()</pre>
+    <pre>e.start()</pre>
 
     <b>End Engine</b>
-    <pre>engine.end()</pre>
+    <pre>e.end()</pre>
 
     <b>Engine Properties</b>
     <pre>
-engine.width
-engine.height
+e.width
+e.height
 </pre
     >
 
     <b>Add Object</b>
     <pre>
-engine.add({
+e.add({
   tags: ["name"],
   x: number, // the x position
   y: number, // the y position
   vx: number, // the x velocity
   vy: number, // the y velocity
+  solid: false, // or true, makes the object collide with other solid objects
   sprite: sprite_name,
   scale: number,
   rotate: number,
@@ -86,7 +89,7 @@ engine.add({
 
     <b>Add Text</b>
     <pre>
-engine.addText(
+e.addText(
     "string",  
     x, 
     y, 
@@ -103,13 +106,13 @@ engine.addText(
     <pre>greetingText.text = "new greeting";</pre>
 
     <b>Remove Object</b>
-    <pre>engine.remove(obj)</pre>
+    <pre>e.remove(obj)</pre>
     or
-    <pre>engine.remove("tag-name")</pre>
+    <pre>e.remove("tag-name")</pre>
 
     <b>Key Inputs</b>
-    <pre>engine.pressedKey(keyCode)</pre>
-    <pre>engine.heldKey(keyCode)</pre>
+    <pre>e.pressedKey(keyCode)</pre>
+    <pre>e.heldKey(keyCode)</pre>
 
     <b>Object Properties</b>
     <br /><br />
@@ -131,7 +134,7 @@ obj.hasTag("tag-name")
     <pre>
 playTune(tune_asset_name);
 
-// or play multiple toons
+// or play multiple tunes
 
 playTune(tune_0, tune_1, tune_2);
 </pre
@@ -140,7 +143,7 @@ playTune(tune_0, tune_1, tune_2);
     <pre>
 loopTune(tune_asset_name);
 
-// or loop multiple toons
+// or loop multiple tunes
 
 loopTune(tune_0, tune_1, tune_2);
 </pre
@@ -152,6 +155,15 @@ tuneToStop.end();
 </pre
     >
 
-    <button class="close-ref" @click=${toggleRef}>close</button>
+    <b>Examples</b>
+    <br /><br />
+    <div>
+      Examples can be found in the
+      <a href="https://github.com/hackclub/gamelab#readme" target="_blank"
+        >GitHub repository README</a
+      >, check out the "Tiny Games".
+    </div>
+
+    <button class="close-docs" @click=${toggleDocs}>close</button>
   </div>
 `;

@@ -1,8 +1,3 @@
-// import bugReport from "./bugReport.js";
-// import githubLink from "./githubLink.js";
-// import saveFile from "./saveFile.js";
-// import saveLink from "./saveLink.js";
-// import runButton from "./runButton.js";
 import { html } from '../uhtml.js';
 import button from "./button.js";
 import { dispatch } from "../dispatch.js";
