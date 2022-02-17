@@ -63,7 +63,7 @@ const STATE = {
     },
     {
       name: "leaderb0rd", 
-      link: `${window.location.origin}/?id=cf87c30d90d0bdd2f951cc5aba4e8ff0`
+      link: `${window.location.origin}/?id=e039799495806408d86786b490b907eb`
     },
     {
       name: "add bounce sound", 
@@ -79,15 +79,15 @@ const STATE = {
     },
     {
       name: "touch to collect", 
-      link: `${window.location.origin}/?id=971f2e635d6f5ebb8197c170ca01dc17`
+      link: `${window.location.origin}/?id=3f0b1c5b8f02aaa2fa324e607d30ee66`
     },
     {
       name: "multi-platforming",
-      link: `${window.location.origin}/?id=8a890a186508db040959f7ec91a70f1c`
+      link: `${window.location.origin}/?id=f870664007aef333d9e28fb7b247c6e0`
     },
     {
       name: "debarchery",
-      link: `${window.location.origin}/?id=5ebfe42952f9d1ac52b36a41736bd5fe`
+      link: `${window.location.origin}/?id=ca81bf221b5401778dc32b7f5925784a`
     },
     {
       name: "pressed vs. held",
@@ -104,7 +104,7 @@ const STATE = {
     /* -- what did you just collide with!?! -- */
     {
       name: "make a bunch",
-      link: `${window.location.origin}/?id=8b6079313ff215662335ffe9624aa620`
+      link: `${window.location.origin}/?id=5fab8726e33df93707d92f4474848f54`
     },
     /* -- wrap game in func to restart on demand -- */
     /* -- multiple levels -- */
