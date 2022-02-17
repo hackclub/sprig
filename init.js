@@ -33,7 +33,7 @@ function loadFromStorage() {
         dispatch("LOAD_CARTRIDGE", { saved });
       }}>load it</button>?
     `,
-    timeout: 7000
+    timeout: 5000
   });
 
   // return saved;
