@@ -319,7 +319,7 @@ const ACTIONS = {
               ? html`
                   If your game runs fine then there's no problem!<br>
                   If not you can find the old editor 
-                  <a target="_blank" href=${link}>here</a>
+                  <a target="_blank" href=${link}>here</a>.
                 `
               : ""
           }
