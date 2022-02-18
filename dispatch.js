@@ -10,7 +10,6 @@ import { createSequencer } from "./sequencer/sequencer.js";
 import { playTune, loopTune } from "./tunePlayers.js";
 import { createEval } from "./evalGameScript.js";
 import uiSounds from "./assets/ui-sounds.js";
-import notification from "./utils/notification.js";
 import validate from "./utils/validate.js";
 import favicon from "./utils/favicon.js";
 import title from "./utils/title.js";
@@ -39,6 +38,71 @@ const STATE = {
     text: "",
     link: "",
   },
+  oldGame: null,
+  notifications: {},
+  showChallengeBar: true,
+  challenges: [
+    {
+      name: "jumpstart", 
+      link: `${window.location.origin}/?cached=false&id=864f802da9102937b71a7e8ee0699e7e`
+    },
+    {
+      name: "crisis averted",
+      link: `${window.location.origin}/?cached=false&id=332cbc7c2cc4b7bc32537bde3bcb6f5c`
+    },
+    {
+      name: "left behind", 
+      link: `${window.location.origin}/?cached=false&id=bcfc3a57a84a7ec11d0f7bc28a0676c8`
+    },
+    {
+      name: "whats the hold up?", 
+      link: `${window.location.origin}/?cached=false&id=5ca3097a41cd509d106f1fcd4a3e9183`
+    },
+    {
+      name: "sticky situation", 
+      link: `${window.location.origin}/?cached=false&id=ce2093e872b57c0283f4b7591a5c9e47`
+    },
+    {
+      name: "leaderb0rd", 
+      link: `${window.location.origin}/?cached=false&id=1bfeee186cb4d765237a634b7d84b678`
+    },
+    {
+      name: "add bounce sound", 
+      link: `${window.location.origin}/?cached=false&id=08118f5df413fd11d32c58d8ba6c00a2`
+    },
+    {
+      name: "off the walls",
+      link: `${window.location.origin}/?cached=false&id=df55ab0b0b6bd6a78ba0e45c2483e9ae`
+    },
+    {
+      name: "multi-platforming",
+      link: `${window.location.origin}/?cached=false&id=2330e25785ce920dabbac962aa2541ad`
+    },
+    {
+      name: "debarchery",
+      link: `${window.location.origin}/?cached=false&id=dceddece3bc425bf6af5ab7836059270`
+    },
+    {
+      name: "pressed vs. held",
+      link: `${window.location.origin}/?cached=false&id=3e4d8a38439bf62a2b1a80fb9ee6667d`
+    },
+    {
+      name: "animate sprite", 
+      link: `${window.location.origin}/?cached=false&id=438e4864f1688bfd2784107a7db824de`
+    },
+    {
+      name: "one jump", 
+      link: `${window.location.origin}/?cached=false&id=6d58826e3858b0b3847e247db0448374`
+    },
+    /* -- what did you just collide with!?! -- */
+    {
+      name: "make a bunch",
+      link: `${window.location.origin}/?cached=false&id=0549788cba6dd81c3d94ec6a7662e01a`
+    },
+    /* -- wrap game in func to restart on demand -- */
+    /* -- multiple levels -- */
+  ],
+  challengeIndex: -1,
 };
 
 const evalGameScript = createEval();
@@ -124,15 +188,17 @@ const ACTIONS = {
   },
   REPORT_BUG: async (args, state) => {
     state.bugReportStatus = "loading";
-    notification({
+    dispatch("NOTIFICATION", {
       message: "Generating a bug report... (1/3)",
+      timeout: 3000,
     });
     const report = {};
     report["Engine Version"] = state.engineVersion;
     await dispatch("SAVE", { type: "link", copyUrl: false });
     report["Project Link"] = state.lastSaved.link;
-    notification({
+    dispatch("NOTIFICATION", {
       message: "Generating a bug report... (2/3)",
+      timeout: 3000,
     });
     function truncate(string, length, ending) {
       return string.length > length
@@ -176,8 +242,9 @@ const ACTIONS = {
       99900,
       "..."
     );
-    notification({
+    dispatch("NOTIFICATION", {
       message: "Generating a bug report... (3/3)",
+      timeout: 3000,
     });
     const url = new URL("https://airtable.com/shrpcDFA5f9wEOSIm");
     for (const key in report) {
@@ -230,23 +297,46 @@ const ACTIONS = {
     state.previousID = saved.previousID || null;
 
     if (state.version !== saved.version) {
-      notification({
-        message: `Version mismatch.<br>
-                  Editor is version: ${state.version}<br>
-                  File uses version: ${saved.version}<br>
-                  ${
-                    saved.version
-                      ? `Old editor is available <a target="_blank" href="https://gamelab-versions.hackclub.dev/${saved.version}/index.html">here</a>.`
-                      : ""
-                  }`,
-        timeout: 5000,
-      });
+
+      const link = `https://gamelab-versions.hackclub.dev/${saved.version}/index.html`
+
+      dispatch("NOTIFICATION", {
+        message: html`
+          Version mismatch.<br>
+          Your file was made in an older version of the editor.<br>
+          Editor is version: ${state.version}.<br>
+          File uses version: ${saved.version}.
+          <br>
+          ${
+            saved.version
+              ? html`
+                  If your game runs fine then there's no problem!<br>
+                  If not you can find the old editor 
+                  <a target="_blank" href=${link}>here</a>.
+                `
+              : ""
+          }
+        `,
+        timeout: 10000
+      })
     }
 
     state.runStatus = "ready";
     dispatch("SET_TITLE", state.name);
     dispatch("RENDER");
     // dispatch("RUN");
+  },
+  NOTIFICATION({ message, timeout }, state) {
+    const id = Date.now();
+
+    state.notifications[id] = message;
+
+    dispatch("RENDER");
+
+    setTimeout(() => {
+      delete state.notifications[id];
+      dispatch("RENDER");
+    }, timeout)
   },
   CREATE_ASSET({ assetType }, state) {
     // need to clear asset editor

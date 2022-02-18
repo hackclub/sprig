@@ -31,7 +31,6 @@ export default ({ buttonImage, tooltipText, width, click, buttonPadding, classNa
         position: absolute;
         top: 130%;
         left: 50%;
-        z-index: 1;
         width: max-content;
         z-index: 99;
         transform: translate(-50%, 0);

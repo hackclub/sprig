@@ -3,11 +3,11 @@ import { playTune, loopTune } from "./tunePlayers.js";
 import { hashState } from "./save.js";
 
 const BLACK_LISTED_WORDS = [
-  "localStorage",
-  "document",
-  "window",
+  // "localStorage",
+  // "document",
+  // "window",
   // "eval",
-  "import",
+  // "import",
   // "Function"
 ];
 

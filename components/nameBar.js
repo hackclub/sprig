@@ -1,6 +1,5 @@
 import { dispatch } from '../dispatch.js';
 import { html } from '../uhtml.js';
-import runButton from './runButton.js';
 import menuButtons from "./menuButtons.js";
 
 const nameStyles = `
@@ -52,7 +51,7 @@ export default (state) => (
       <div style=${nameStyles}>
         <input 
           class="name-bar-input"
-          @input=${e => dispatch("SET_NAME", { name: e.target.value })}.value=${state.name}>
+          @input=${e => dispatch("SET_NAME", { name: e.target.value })} .value=${state.name}>
         </input>
         <div class="powered-by">
           <div>powered by&nbsp;</div>
@@ -69,5 +68,113 @@ export default (state) => (
       </div>
       ${menuButtons(state)}
     </div>
+    ${state.showChallengeBar ? challengeBar(state) : ""}
   `
 )
+
+const challengeBar = (state) => html`
+  <style>
+    .challenge-bar {
+      color: white;
+      background: var(--darkless);
+      display: flex;
+      width: 100%;
+      padding: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
+      box-sizing: border-box;
+      justify-content: center;
+      padding-top: 0px;
+      position: relative;
+    }
+
+    .challenge-menu-container {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .challenge-menu {
+      visibility: hidden;
+      min-width: max-content;
+      position: absolute;
+      left: 50%;
+      top: 100%;
+      overflow: revert;
+      background: var(--darkless);
+      z-index: 10;
+      transform: translate(-50%, 0);
+      padding: 10px;
+      width: 100%;
+    }
+
+    .challenge-item:nth-child(even) {
+      color: lightgrey;
+    }
+
+    .challenge-item a:hover {
+      color: orange;
+    }
+
+    .challenge-menu-container:hover .challenge-menu {
+      visibility: visible;
+    }
+
+    .challenge-arrow:hover {
+      color: orange;
+    }
+
+    .selected-challenge::before {
+      content: "→"
+    }
+
+    .challenge-progress-container {
+      background: #00ffff80;
+      height: 25%;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+    }
+  </style>
+  <div class="challenge-bar">
+    <div style=${`width: ${(state.challengeIndex+1)/state.challenges.length*100}%`} class="challenge-progress-container"></div>
+
+
+    ${
+      state.challengeIndex > 0 
+      ? html`<a 
+                class="challenge-arrow" 
+                style="padding-right: 40px;" 
+                href=${state.challenges[state.challengeIndex-1].link}>←</a>`
+      : html`&nbsp;`
+    }
+    <span class="challenge-menu-container">
+      ${ state.challengeIndex >= 0 
+        ? `You're on challenge ${state.challengeIndex+1}/${state.challenges.length}.`
+        : "Hover here for little code challenges." 
+      }
+      <div class="challenge-menu">
+        ${state.challenges.map( (x, i) => html`
+          <div class=${[state.challengeIndex === i ? "selected-challenge" : "", "challenge-item"].join(" ")}>
+            <a style="width: 100%;" href=${x.link}>${x.name}</a>
+          </div>
+        ` )}
+      </div>
+    </span>
+    ${
+      state.challengeIndex < state.challenges.length - 1 
+      ? html`<a 
+                class="challenge-arrow" 
+                style="padding-left: 40px;" 
+                href=${state.challenges[state.challengeIndex+1].link}>→</a>`
+      : html`&nbsp;`
+    }
+  </div>
+`
+
+
+
+
+
+
+
+
