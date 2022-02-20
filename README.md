@@ -65,7 +65,7 @@ engine.add({
   y: 114,
   sprite: player,
   scale: 4,
-  update(me) { // update runs every frame
+  update: (me) => { // update runs every frame
     me.vy += 2; // adding velocity every frame is acceleration
   }
 })
@@ -96,7 +96,7 @@ engine.add({
   y: 114,
   sprite: player,
   scale: 4,
-  update(me) {
+  update: (me) => {
     me.vy += 2;
 
     // we can add key inputs by checking the keys in the update loop
@@ -132,13 +132,13 @@ engine.add({
   y: 114,
   sprite: player,
   scale: 4,
-  collides(me, them) { // this runs when we collide with another object
+  collides: (me, them) => { // this runs when we collide with another object
     if (engine.pressedKey(" ")) {
       // here we are checking if we are standing on the floor
       if (them.hasTag("floor")) me.vy -= 19;
     }
   },
-  update(me) {
+  update: (me) => {
     me.vy += 2;
 
     if (engine.heldKey("ArrowLeft")) me.x -= 3;
@@ -166,7 +166,6 @@ Add platforms:
 
 ```js
 const engine = createEngine(gameCanvas, 300, 300);
-const ctx = engine.ctx;
 
 engine.add({
   tags: ["player"],
@@ -175,7 +174,7 @@ engine.add({
   solid: true,
   x: 50,
   y: 16,
-  collides(me, them) {
+  collides: (me, them) => {
     if (them.hasTag("platform")) me.vx = them.vx;
     
     if (engine.pressedKey(" ")) {
@@ -214,13 +213,12 @@ engine.start();
 
 ---
 
-Collections:
+Removing objects:
 
 <img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149369879-7d384b3a-2f15-4816-a59e-76b56bb9a944.gif">
 
 ```js
 const engine = createEngine(gameCanvas, 300, 300);
-const ctx = engine.ctx;
 
 engine.add({
   tags: ["player"],
@@ -240,7 +238,7 @@ engine.add({
   scale: 3,
   x: 112,
   y: 232,
-  collides(me, them) {
+  collides: (me, them) => {
     if (them.hasTag("player")) {
       engine.remove("target"); // we can remove objects by their tag name
     }
@@ -260,7 +258,7 @@ Add a background:
 const e = createEngine(gameCanvas, 300, 300);
 
 engine.add({
-  update() { // we can also draw on the game canvas
+  update: () => { // we can also draw on the game canvas
     engine.ctx.fillStyle = "pink";
     engine.ctx.fillRect(0, 0, e.width, e.height);
   }
@@ -315,7 +313,7 @@ engine.add({
   rotate: 90, // rotate by some degrees
   bounce: 1, // how much velocity is lost on collisions
   origin: [0, 0], // this moves the origin of the object
-  collides(me, them) { // function run on collision
+  collides: (me, them) => { // function run on collision
     if (them.hasTag("tag-name")) {} // check tag names to figure out what you've collided with
   },
   update: (me) => {
@@ -332,19 +330,19 @@ engine.add({
 
 ## Tiny Games
 
-[Pong-ish](https://gamelab.hackclub.com/?id=bd5087c16160988e4d2e27ca2c6157f9)
+[Pong-ish](https://gamelab.hackclub.com/?id=8da8700aeb32e508ad0b31836c5cc093)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149371012-faf3e45f-9d3a-47d4-831b-566d9171d2bd.gif">
 
 ---
 
-[Crappy Birds](https://gamelab.hackclub.com/?id=889eceae8614e9286e1d5fb28349ffad)
+[Crappy Birds](https://gamelab.hackclub.com/?id=e1e4eaa60b3cdd80c1e81d976569aab8)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149380918-a1855ab3-cc2d-4a9a-adc0-d5316d6f17ba.gif">
 
 ---
 
-[Brick Broken](https://gamelab.hackclub.com/?id=8f18ab06c1a8f5267e6f4a6b3bec06f5)
+[Brick Broken](https://gamelab.hackclub.com/?id=93523665fc2ccdd1c6eac2dc875a42de)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/150606449-5b73d7fe-f2d3-432f-9cc5-346c20919ec8.gif">
 

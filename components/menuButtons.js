@@ -1,8 +1,3 @@
-// import bugReport from "./bugReport.js";
-// import githubLink from "./githubLink.js";
-// import saveFile from "./saveFile.js";
-// import saveLink from "./saveLink.js";
-// import runButton from "./runButton.js";
 import { html } from '../uhtml.js';
 import button from "./button.js";
 import { dispatch } from "../dispatch.js";
@@ -52,6 +47,32 @@ const uploadButton = state => button({
   tooltipText: "get share link", 
   click: uploadClick, 
   className: klass(state, "saveLinkStatus") 
+})
+
+// new project button
+const newProjectImageLink = (state) => {
+  switch (state.loadFileStatus) {
+    case 'loading':
+      return './assets/loading.gif'
+    case 'ready':
+      return './assets/new_project.png'
+    default:
+      return './assets/err.png'
+  }
+}
+
+const newProjectClick = () => {
+  if (confirm("This will clear the existing project. Continue?")) {
+    dispatch("SOUND", "click");
+    dispatch("LOAD_DEFAULT_CARTRIDGE");
+  }
+}
+
+const newProjectButton = state => button({
+  buttonImage: newProjectImageLink(state),
+  tooltipText: "create new project",
+  click: newProjectClick,
+  className: klass(state, "loadFileStatus")
 })
 
 
@@ -133,7 +154,7 @@ const runButton = state => button({
 // show ref
 
 const refButton = state => button({ 
-  buttonImage: './assets/docs4.png', 
+  buttonImage: './assets/question-icon.png', 
   tooltipText: "show reference", 
   className: "cursor-pointer",
   click: refClick, 
@@ -148,6 +169,7 @@ const refClick = () => {
 
 export default (state) => html`
   <div style=${styles}>
+    ${newProjectButton(state)}
     ${downloadButton(state)}
     ${uploadButton(state)}
     ${bugButton(state)}

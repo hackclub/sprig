@@ -249,12 +249,17 @@ body {
   opacity: .7;
 }
 
-.shared-modal {
+.notification-container {
   position: fixed;
-  right: 20px;
-  top: 20px;
+  right: 10px;
+  top: 10px;
+  z-index: 100;
+}
+
+.shared-modal {
   color: var(--text-color);
   background: var(--background-2);
+  margin-bottom: 5px;
   padding: 10px;
   border: 2px solid black;
   border-radius: 5px;

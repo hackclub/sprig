@@ -10,7 +10,7 @@ async function getFromGH() {
   let sha = null;
   try {
     const commits = await fetch(
-      "https://api.github.com/repos/hackclub/game-lab/commits?branch=main&per_page=1"
+      "https://api.github.com/repos/hackclub/gamelab/commits?branch=main&per_page=1"
     ).then((r) => r.json());
     const [latestCommit] = commits;
     sha = latestCommit.sha;

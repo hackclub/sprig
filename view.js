@@ -4,6 +4,7 @@ import "./codemirror/codemirror-html.js";
 import "./codemirror/codemirror-js.js";
 
 import addAssetButton from "./components/addAssetButton.js";
+import { renderDocs } from "./components/renderDocs.js";
 import nameBar from "./components/nameBar.js";
 
 const toggleHide = (className) =>
@@ -284,6 +285,7 @@ export function view(state) {
       }
 
       .show-options {
+        background-color: rgba(0, 0, 0, 25%);
         color: white;
         font-size: 20px;
         font-family: monospace;
@@ -291,6 +293,7 @@ export function view(state) {
         user-select: none;
         right: 10px;
         bottom: 10px;
+        padding: 0 5px;
         display: flex;
         flex-direction: column;
         align-items: flex-end;
@@ -359,6 +362,10 @@ export function view(state) {
                   i === state.selected_asset ? "selected-sprite" : "",
                 ].join(" ")}
               >
+                ${({
+                    "tune": html`<img src="assets/tune.png" style="width:16px;height:16px;filter:invert(1);margin-right:5px;">`,
+                    "sprite": html`<img src="assets/favicon/white.png" style="width:11px;height:11px;padding:3px;margin-right:5px;">`
+                })[x.type]}
                 ${renderSpriteName(x.name, i, state)}
                 <div
                   class="sprite-delete"
@@ -375,177 +382,18 @@ export function view(state) {
       <div class="horizontal-bar"></div>
     </div>
     <div id="vertical-bar"></div>
-    <div id="notification-container"></div>
+    <div class="notification-container">
+      ${Object.values(state.notifications).map(
+        x => html`
+          <div class="shared-modal">
+            ${x}
+          </div>
+        `
+      )}
+    </div>
     ${renderDocs(state)}
   `;
 }
-
-const toggleDocs = () => {
-  const docs = document.querySelector(".docs");
-  docs.classList.toggle("hide-docs");
-};
-
-const renderDocs = (state) => html`
-  <style>
-    .docs {
-      position: absolute;
-      box-sizing: border-box;
-      height: 100%;
-      width: 60%;
-      right: 0px;
-      top: 0px;
-      background: white;
-      z-index: 10;
-      padding: 10px;
-      overflow: scroll;
-      transition: right 1s ease-in-out;
-    }
-
-    .hide-docs {
-      right: -60%;
-    }
-
-    .close-docs {
-      position: fixed;
-      right: 10px;
-      top: 10px;
-    }
-
-    .hide-docs .close-docs {
-      display: none;
-    }
-
-    .docs pre,
-    .docs code {
-      background: lightgrey;
-      border-radius: 3px;
-      padding: 5px;
-      overflow: scroll;
-    }
-  </style>
-  <div class="docs hide-docs">
-    <b>Create Engine</b>
-    <pre>const engine = createEngine(gameCanvas, width, height);</pre>
-    Example:
-    <pre>const engine = createEngine(gameCanvas, 300, 300);</pre>
-    <code>gameCanvas</code> is automatically injected into your game script.
-    <br /><br />
-
-    <b>Start Engine</b>
-    <pre>engine.start()</pre>
-
-    <b>End Engine</b>
-    <pre>engine.end()</pre>
-
-    <b>Engine Properties</b>
-    <pre>
-engine.width
-engine.height
-</pre
-    >
-
-    <b>Add Object</b>
-    <pre>
-engine.add({
-  tags: ["name"],
-  x: number, // the x position
-  y: number, // the y position
-  vx: number, // the x velocity
-  vy: number, // the y velocity
-  sprite: sprite_name,
-  scale: number,
-  rotate: number,
-  bounce: number, // how much velocity is lost on collisions
-  origin: [0, 0], // 0 - 1
-  collides: (me, them) => {
-
-  },
-  update: (me) => { // runs every frame
-
-  }
-})</pre
-    >
-
-    <b>Add Text</b>
-    <pre>
-engine.addText(
-    "string",  
-    x, 
-    y, 
-    { // optional parameters
-      color: "string", 
-      size: number,
-      rotate: number,
-    }
-)</pre
-    >
-    Example of adding text:
-    <pre>const greetingText = e.addText("hello world", 150, 150);</pre>
-    Example of updating text:
-    <pre>greetingText.text = "new greeting";</pre>
-
-    <b>Remove Object</b>
-    <pre>engine.remove(obj)</pre>
-    or
-    <pre>engine.remove("tag-name")</pre>
-
-    <b>Key Inputs</b>
-    <pre>engine.pressedKey(keyCode)</pre>
-    <pre>engine.heldKey(keyCode)</pre>
-
-    <b>Object Properties</b>
-    <br /><br />
-    On each object you can access:
-    <pre>
-obj.x
-obj.y
-obj.vx
-obj.vy
-obj.width
-obj.height
-obj.hasTag("tag-name")
-</pre
-    >
-
-    <b>Playing Tunes</b>
-    <br /><br />
-    To play a tune once:
-    <pre>
-playTune(tune_asset_name);
-
-// or play multiple tunes
-
-playTune(tune_0, tune_1, tune_2);
-</pre
-    >
-    To play a tune on repeat:
-    <pre>
-loopTune(tune_asset_name);
-
-// or loop multiple tunes
-
-loopTune(tune_0, tune_1, tune_2);
-</pre
-    >
-    To stop a tune on repeat:
-    <pre>
-const tuneToStop = loopTune(tune_asset_name);
-tuneToStop.end();
-</pre
-    >
-
-    <b>Examples</b>
-    <br /><br />
-    <div>
-      Examples can be found in the
-      <a href="https://github.com/hackclub/gamelab" target="_blank"
-        >GitHub repository README</a
-      >, check out the "Tiny Games".
-    </div>
-
-    <button class="close-docs" @click=${toggleDocs}>close</button>
-  </div>
-`;
 
 const renderSpriteName = (name, index, state) =>
   state.selected_asset === index
@@ -554,6 +402,7 @@ const renderSpriteName = (name, index, state) =>
           .value=${name} 
           @input=${(e) => {
             dispatch("CHANGE_ASSET_NAME", {
+              e,
               index,
               newName: e.target.value,
             });
