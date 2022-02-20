@@ -159,6 +159,7 @@ export async function init(state) {
 
   const saved =
     (await loadFromS3()) ||
+    (await loadFromAirtable()) ||
     (await loadFromDefault());
 
   dispatch("LOAD_CARTRIDGE", { saved });
