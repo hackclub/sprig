@@ -1,4 +1,3 @@
-
 function processError(err) {
   const logs = [];
 

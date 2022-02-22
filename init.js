@@ -30,12 +30,17 @@ function loadFromStorage() {
 
   dispatch("NOTIFICATION", {
     message: html`
-      An old game you were working on was found in your storage.<br>
-      Would you like to <button @click=${() => {
-        dispatch("LOAD_CARTRIDGE", { saved });
-      }}>load it</button>?
+      An old game you were working on was found in your storage.<br />
+      Would you like to
+      <button
+        @click=${() => {
+          dispatch("LOAD_CARTRIDGE", { saved });
+        }}
+      >
+        load it</button
+      >?
     `,
-    timeout: 6000
+    timeout: 6000,
   });
 
   // return saved;
@@ -146,11 +151,11 @@ export async function init(state) {
   state.codemirror = document.querySelector("#code-editor");
   events(state);
 
-  state.challenges.forEach( (x, i) => {
+  state.challenges.forEach((x, i) => {
     if (x.link === window.location.href) {
       state.challengeIndex = i;
     }
-  })
+  });
 
   // setGameIframe();
 

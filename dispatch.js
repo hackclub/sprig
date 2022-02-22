@@ -43,61 +43,61 @@ const STATE = {
   showChallengeBar: true,
   challenges: [
     {
-      name: "jumpstart", 
-      link: `${window.location.origin}/?cached=false&id=864f802da9102937b71a7e8ee0699e7e`
+      name: "jumpstart",
+      link: `${window.location.origin}/?cached=false&id=864f802da9102937b71a7e8ee0699e7e`,
     },
     {
       name: "crisis averted",
-      link: `${window.location.origin}/?cached=false&id=332cbc7c2cc4b7bc32537bde3bcb6f5c`
+      link: `${window.location.origin}/?cached=false&id=332cbc7c2cc4b7bc32537bde3bcb6f5c`,
     },
     {
-      name: "left behind", 
-      link: `${window.location.origin}/?cached=false&id=bcfc3a57a84a7ec11d0f7bc28a0676c8`
+      name: "left behind",
+      link: `${window.location.origin}/?cached=false&id=bcfc3a57a84a7ec11d0f7bc28a0676c8`,
     },
     {
-      name: "whats the hold up?", 
-      link: `${window.location.origin}/?cached=false&id=5ca3097a41cd509d106f1fcd4a3e9183`
+      name: "whats the hold up?",
+      link: `${window.location.origin}/?cached=false&id=5ca3097a41cd509d106f1fcd4a3e9183`,
     },
     {
-      name: "sticky situation", 
-      link: `${window.location.origin}/?cached=false&id=ce2093e872b57c0283f4b7591a5c9e47`
+      name: "sticky situation",
+      link: `${window.location.origin}/?cached=false&id=ce2093e872b57c0283f4b7591a5c9e47`,
     },
     {
-      name: "leaderb0rd", 
-      link: `${window.location.origin}/?cached=false&id=1bfeee186cb4d765237a634b7d84b678`
+      name: "leaderb0rd",
+      link: `${window.location.origin}/?cached=false&id=1bfeee186cb4d765237a634b7d84b678`,
     },
     {
-      name: "add bounce sound", 
-      link: `${window.location.origin}/?cached=false&id=08118f5df413fd11d32c58d8ba6c00a2`
+      name: "add bounce sound",
+      link: `${window.location.origin}/?cached=false&id=08118f5df413fd11d32c58d8ba6c00a2`,
     },
     {
       name: "off the walls",
-      link: `${window.location.origin}/?cached=false&id=df55ab0b0b6bd6a78ba0e45c2483e9ae`
+      link: `${window.location.origin}/?cached=false&id=df55ab0b0b6bd6a78ba0e45c2483e9ae`,
     },
     {
       name: "multi-platforming",
-      link: `${window.location.origin}/?cached=false&id=2330e25785ce920dabbac962aa2541ad`
+      link: `${window.location.origin}/?cached=false&id=2330e25785ce920dabbac962aa2541ad`,
     },
     {
       name: "debarchery",
-      link: `${window.location.origin}/?cached=false&id=dceddece3bc425bf6af5ab7836059270`
+      link: `${window.location.origin}/?cached=false&id=dceddece3bc425bf6af5ab7836059270`,
     },
     {
       name: "pressed vs. held",
-      link: `${window.location.origin}/?cached=false&id=3e4d8a38439bf62a2b1a80fb9ee6667d`
+      link: `${window.location.origin}/?cached=false&id=3e4d8a38439bf62a2b1a80fb9ee6667d`,
     },
     {
-      name: "animate sprite", 
-      link: `${window.location.origin}/?cached=false&id=438e4864f1688bfd2784107a7db824de`
+      name: "animate sprite",
+      link: `${window.location.origin}/?cached=false&id=438e4864f1688bfd2784107a7db824de`,
     },
     {
-      name: "one jump", 
-      link: `${window.location.origin}/?cached=false&id=6d58826e3858b0b3847e247db0448374`
+      name: "one jump",
+      link: `${window.location.origin}/?cached=false&id=6d58826e3858b0b3847e247db0448374`,
     },
     /* -- what did you just collide with!?! -- */
     {
       name: "make a bunch",
-      link: `${window.location.origin}/?cached=false&id=0549788cba6dd81c3d94ec6a7662e01a`
+      link: `${window.location.origin}/?cached=false&id=0549788cba6dd81c3d94ec6a7662e01a`,
     },
     /* -- wrap game in func to restart on demand -- */
     /* -- multiple levels -- */
@@ -273,9 +273,9 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   LOAD_DEFAULT_CARTRIDGE: async ({}, state) => {
-    state.loadFileStatus = 'loading';
+    state.loadFileStatus = "loading";
     await dispatch("LOAD_CARTRIDGE", { saved: await loadFromDefault() });
-    state.loadFileStatus = 'ready';
+    state.loadFileStatus = "ready";
     dispatch("RENDER");
   },
   LOAD_CARTRIDGE: async ({ saved }, state) => {
@@ -297,28 +297,25 @@ const ACTIONS = {
     state.previousID = saved.previousID || null;
 
     if (state.version !== saved.version) {
-
-      const link = `https://gamelab-versions.hackclub.dev/${saved.version}/index.html`
+      const link = `https://gamelab-versions.hackclub.dev/${saved.version}/index.html`;
 
       dispatch("NOTIFICATION", {
         message: html`
-          Version mismatch.<br>
-          Your file was made in an older version of the editor.<br>
-          Editor is version: ${state.version}.<br>
+          Version mismatch.<br />
+          Your file was made in an older version of the editor.<br />
+          Editor is version: ${state.version}.<br />
           File uses version: ${saved.version}.
-          <br>
-          ${
-            saved.version
-              ? html`
-                  If your game runs fine then there's no problem!<br>
-                  If not you can find the old editor 
-                  <a target="_blank" href=${link}>here</a>.
-                `
-              : ""
-          }
+          <br />
+          ${saved.version
+            ? html`
+                If your game runs fine then there's no problem!<br />
+                If not you can find the old editor
+                <a target="_blank" href=${link}>here</a>.
+              `
+            : ""}
         `,
-        timeout: 10000
-      })
+        timeout: 10000,
+      });
     }
 
     state.runStatus = "ready";
@@ -336,7 +333,7 @@ const ACTIONS = {
     setTimeout(() => {
       delete state.notifications[id];
       dispatch("RENDER");
-    }, timeout)
+    }, timeout);
   },
   CREATE_ASSET({ assetType }, state) {
     // need to clear asset editor
@@ -407,12 +404,10 @@ const ACTIONS = {
 
     if (!/^[a-z_][a-z_0-9]*$/gi.test(newName)) {
       e.target.value = state.assets[index].name;
+    } else {
+      state.assets[index].name = newName;
+      state.selected_asset = index;
     }
-
-		else {
-			state.assets[index].name = newName;
-			state.selected_asset = index;
-		}
   },
   SELECT_ASSET({ index }, state) {
     // need to clear asset editor container to render template fresh
@@ -484,7 +479,7 @@ const ACTIONS = {
 
 export function dispatch(action, args = {}) {
   // console.log(action);
-  
+
   const trigger = ACTIONS[action];
   STATE.dispatchLogs.unshift({ action, args, timestamp: Date.now() });
   if (trigger) return trigger(args, STATE);
