@@ -158,11 +158,13 @@ export async function init(state) {
   removeParam("cached");
 
   const saved =
-    (await loadFromAirtable()) ||
     (await loadFromS3()) ||
+    (await loadFromAirtable()) ||
     (await loadFromDefault());
 
   dispatch("LOAD_CARTRIDGE", { saved });
   dispatch("SOUND", "bootup");
   dispatch("FAVICON");
+
+  document.dispatchEvent(new Event("init_done"));
 }

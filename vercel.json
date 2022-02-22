@@ -1,3 +1,4 @@
 {
-  "github": { "silent": true }
+  "github": { "silent": true },
+  "rewrites": [{ "source": "/share/:id", "destination": "/api/share" }]
 }
