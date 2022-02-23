@@ -22,11 +22,13 @@ async function saveToS3({ content, state, copyUrl }) {
 
   const link = window.location.origin + `/share/${id}`;
 
-	if (copyUrl)
-		notification({
-			message: `<div>Here's your sharing link: <button onclick="navigator.clipboard.writeText('${link.toString()}')">copy</button></div>`,
-			timeout: 5000
-		});
+	if (copyUrl) {
+    dispatch("NOTIFICATION", {
+      message: "Sharing link copied to clipboard!",
+      timeout: 3000,
+    });
+  }
+
 
   state.lastSaved.name = content.name;
   state.lastSaved.prog = content.prog;
