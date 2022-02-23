@@ -1,3 +1,4 @@
+import { html } from "./uhtml.js";
 import { dispatch } from "./dispatch.js";
 import md5 from "https://cdn.skypack.dev/md5";
 import copy from "./utils/copy.js";
@@ -24,11 +25,42 @@ async function saveToS3({ content, state, copyUrl }) {
   link.searchParams.append("id", id);
 
   if (copyUrl) copy(link);
-  if (copyUrl)
+  if (copyUrl) {
     dispatch("NOTIFICATION", {
       message: "Sharing link copied to clipboard!",
       timeout: 3000
     });
+    setTimeout(() => {
+      dispatch("NOTIFICATION", {
+        message: html`
+          <b>We'd love to have you share it in the scrapbook!</b>
+          <hr>
+          <input style="margin:5px;" id="joinslackname" type="text" placeholder="Fiona Hackworth"> Full name</input>
+          <br>
+          <input style="margin:5px;" id="joinslackemail" type="email" placeholder="fiona@hackclub.com"> Email</input>
+          <br>
+          <div style="display:flex;justify-content:center;">
+            <button style="margin:3px;" @click=${() => {
+              const log = x => (console.log(x), x);
+              fetch("https://hackclub.com/api/join", {
+                method: "POST",
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(log({
+                  name: document.getElementById("joinslackname").value,
+                  email: document.getElementById("joinslackemail").value,
+                  teen: true,
+                  reason: "Gamelab",
+                }))
+              }).catch(console.error)
+            }}>LET'S DO THIS</button>
+            <button style="margin:3px;" @click=${()=>open('https://app.slack.com/client/T0266FRGM/C01504DCLVD')}>Sign back in</button>
+          <div/>
+        `,
+      });
+    }, 500);
+  }
 
   state.lastSaved.name = content.name;
   state.lastSaved.prog = content.prog;

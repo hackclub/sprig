@@ -333,10 +333,11 @@ const ACTIONS = {
 
     dispatch("RENDER");
 
-    setTimeout(() => {
-      delete state.notifications[id];
-      dispatch("RENDER");
-    }, timeout)
+    if (timeout !== undefined)
+      setTimeout(() => {
+        delete state.notifications[id];
+        dispatch("RENDER");
+      }, timeout)
   },
   CREATE_ASSET({ assetType }, state) {
     // need to clear asset editor
