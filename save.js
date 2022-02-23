@@ -20,8 +20,7 @@ async function saveToS3({ content, state, copyUrl }) {
     });
   }
 
-  const link = new URL(window.location.origin + window.location.pathname);
-  link.searchParams.append("id", id);
+  const link = window.location.origin + `/share/${id}`;
 
 	if (copyUrl)
 		notification({
@@ -47,8 +46,9 @@ async function saveToFile({ content, state }) {
   URL.revokeObjectURL(link);
 
   dispatch("NOTIFICATION", {
-    message: "Your file has just been downloaded! Just drag it into the editor to load from your save",
-    timeout: 3000
+    message:
+      "Your file has just been downloaded! Just drag it into the editor to load from your save",
+    timeout: 3000,
   });
 }
 

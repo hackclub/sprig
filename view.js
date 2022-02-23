@@ -362,10 +362,16 @@ export function view(state) {
                   i === state.selected_asset ? "selected-sprite" : "",
                 ].join(" ")}
               >
-                ${({
-                    "tune": html`<img src="assets/tune.png" style="width:16px;height:16px;filter:invert(1);margin-right:5px;">`,
-                    "sprite": html`<img src="assets/favicon/white.png" style="width:11px;height:11px;padding:3px;margin-right:5px;">`
-                })[x.type]}
+                ${{
+                  tune: html`<img
+                    src="assets/tune.png"
+                    style="width:16px;height:16px;filter:invert(1);margin-right:5px;"
+                  />`,
+                  sprite: html`<img
+                    src="assets/favicon/white.png"
+                    style="width:11px;height:11px;padding:3px;margin-right:5px;"
+                  />`,
+                }[x.type]}
                 ${renderSpriteName(x.name, i, state)}
                 <div
                   class="sprite-delete"
@@ -384,11 +390,7 @@ export function view(state) {
     <div id="vertical-bar"></div>
     <div class="notification-container">
       ${Object.values(state.notifications).map(
-        x => html`
-          <div class="shared-modal">
-            ${x}
-          </div>
-        `
+        (x) => html` <div class="shared-modal">${x}</div> `
       )}
     </div>
     ${renderDocs(state)}

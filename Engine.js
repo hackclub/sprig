@@ -66,8 +66,8 @@ function haveCollided(obj0, obj1, buffer = 0) {
   );
 }
 
-function is_overlapping_range(x1,x2,y1,y2) {
-  return Math.max(x1,y1) <= Math.min(x2,y2)
+function is_overlapping_range(x1, x2, y1, y2) {
+  return Math.max(x1, y1) <= Math.min(x2, y2);
 }
 
 function distanceTo(obj0, obj1) {
@@ -84,8 +84,18 @@ function distanceTo(obj0, obj1) {
   let x1 = obj1.x - obj1.origin[0] * obj1.width;
   let y1 = obj1.y - obj1.origin[1] * obj1.height;
 
-  const overlapX = is_overlapping_range(x0, x0+obj0.width, x1, x1+obj1.width);
-  const overlapY = is_overlapping_range(y0, y0+obj0.height, y1, y1+obj1.height);
+  const overlapX = is_overlapping_range(
+    x0,
+    x0 + obj0.width,
+    x1,
+    x1 + obj1.width
+  );
+  const overlapY = is_overlapping_range(
+    y0,
+    y0 + obj0.height,
+    y1,
+    y1 + obj1.height
+  );
 
   if (overlapX) {
     top = -(y0 + obj0.height - y1);
@@ -94,7 +104,7 @@ function distanceTo(obj0, obj1) {
 
   if (overlapY) {
     left = -(x0 + obj0.width - x1);
-    right = -(x1+obj1.width-x0);
+    right = -(x1 + obj1.width - x0);
   }
 
   // if (left == 0 || right == 0) {
@@ -175,14 +185,14 @@ class Object {
     this.origin =
       typeof params.origin === "string" && params.origin in origins
         ? origins[params.origin]
-      : Array.isArray(params.origin)
+        : Array.isArray(params.origin)
         ? params.origin
         : [0, 0];
 
     this.x = params.x ?? 0;
     this.y = params.y ?? 0;
-    this.x += Math.random()/10;
-    this.y += Math.random()/10;
+    this.x += Math.random() / 10;
+    this.y += Math.random() / 10;
     this.lastX = this.x;
     this.lastY = this.y;
 
@@ -199,8 +209,8 @@ class Object {
   }
 
   distanceTo(them) {
-     const dists = distanceTo(them, this);
-     return dists;
+    const dists = distanceTo(them, this);
+    return dists;
   }
 
   overlap(them) {
@@ -253,7 +263,7 @@ class Object {
     const [ox, oy] = [w * this.origin[0], h * this.origin[1]];
     ctx.translate(this.x, this.y);
     ctx.rotate(this._rotate);
-    
+
     // const xInvert = this.scale[0] < 0 ? -1 : 1;
     // const yInvert = this.scale[1] < 0 ? -1 : 1;
     // ctx.scale(xInvert, yInvert);
@@ -274,9 +284,7 @@ class Object {
     }
 
     if (!this.initialized) this.initialized = true;
-
   }
-
 }
 
 class Text {
@@ -309,7 +317,7 @@ class Text {
         span.rel = "noopener";
       }
     } else {
-      span.style.pointerEvents = 'none';
+      span.style.pointerEvents = "none";
     }
     span.innerText = str;
 
@@ -330,9 +338,8 @@ class Text {
   }
 }
 
-const clearText = (node) => node
-  .querySelectorAll(".text-container > *")
-  .forEach((x) => x.remove());
+const clearText = (node) =>
+  node.querySelectorAll(".text-container > *").forEach((x) => x.remove());
 
 class Engine {
   constructor(canvas, width, height) {
@@ -394,33 +401,30 @@ class Engine {
 
     const hash = this.gameHash;
     const res = await fetch(LB_SERVER, {
-      method: 'post',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ score, hash })
-    }).then(x => x.json());
+      method: "post",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ score, hash }),
+    }).then((x) => x.json());
 
-    let lb = await fetch(LB_SERVER + hash).then(x => x.json());
+    let lb = await fetch(LB_SERVER + hash).then((x) => x.json());
     let scores = window.Object.entries(lb);
-    scores.sort(([ , a], [ , b]) => b.score - a.score);
+    scores.sort(([, a], [, b]) => b.score - a.score);
     scores = scores.splice(0, 5);
-    
+
     this.ctx.globalAlpha = 0.66;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    
+
     clearText(this.canvas.parentNode);
 
-    let x = this.canvas.width  * 0.5;
+    let x = this.canvas.width * 0.5;
     let y = this.canvas.height * 0.2;
     let size = this.canvas.height * 0.1;
     this.addText(
       (() => {
-        if (res.prev && res.prev > score)
-          return "PERSONAL BEST";
-        else if (scores.length)
-          return "LEADERBOARD";
-        else
-          return "NO SCORES :(";
+        if (res.prev && res.prev > score) return "PERSONAL BEST";
+        else if (scores.length) return "LEADERBOARD";
+        else return "NO SCORES :(";
       })(),
       x,
       y,
@@ -431,32 +435,37 @@ class Engine {
     for (const [slack_id, { name, score }] of scores) {
       let opts = {
         size: size - 4,
-        href: "https://app.slack.com/client/T0266FRGM/C0266FRGV/user_profile/" + slack_id,
+        href:
+          "https://app.slack.com/client/T0266FRGM/C0266FRGV/user_profile/" +
+          slack_id,
         newTab: true,
-        color: "blue"
-      }
+        color: "blue",
+      };
       this.addText(name.substring(0, 3), x - 50, y, opts);
       delete opts.href;
       delete opts.color;
-      this.addText(               score, x + 50, y, opts);
+      this.addText(score, x + 50, y, opts);
       y += size;
     }
 
-    if (res.err) this.addText(
-      "login to add your " + score,
-      x, y,
-      {
+    if (res.err)
+      this.addText("login to add your " + score, x, y, {
         size: size - 4,
         color: "blue",
         href:
-          LB_SERVER + "login/"
-            + "?from=" + encodeURIComponent(window.location)
-            + "&score=" + encodeURIComponent(score)
-            + "&hash=" + encodeURIComponent(hash)
-      }
-    );
+          LB_SERVER +
+          "login/" +
+          "?from=" +
+          encodeURIComponent(window.location) +
+          "&score=" +
+          encodeURIComponent(score) +
+          "&hash=" +
+          encodeURIComponent(hash),
+      });
     if (res.prev) {
-      this.addText(`score: ${score}, best: ${res.prev}` , x, y, { size: size - 4 });
+      this.addText(`score: ${score}, best: ${res.prev}`, x, y, {
+        size: size - 4,
+      });
     }
   }
 
@@ -500,15 +509,13 @@ class Engine {
       this.ctx.fillRect(0, 0, this.width, this.height);
 
       this.objects.forEach((obj) => {
-
         obj.lastX = obj.x;
         obj.lastY = obj.y;
 
         if (obj.update !== null) obj.update(obj);
 
-        obj.x += obj.vx
-        obj.y += obj.vy
-
+        obj.x += obj.vx;
+        obj.y += obj.vy;
       });
 
       this.resolve();
@@ -537,18 +544,18 @@ class Engine {
 
     for (let i = 0; i < objs.length; i++) {
       for (let j = 0; j < objs.length; j++) {
-          const obj0 = objs[i];
-          const obj1 = objs[j];
+        const obj0 = objs[i];
+        const obj1 = objs[j];
 
-          resolveObj(obj0, obj1);
+        resolveObj(obj0, obj1);
       }
     }
 
-    function resolveObj (me, them) {
+    function resolveObj(me, them) {
       if (me == them) return;
 
-      const [ x, y ] = overlap(me, them);
-      
+      const [x, y] = overlap(me, them);
+
       const dx = me.x - me.lastX;
       const dy = me.y - me.lastY;
 
@@ -566,7 +573,7 @@ class Engine {
       const bothSolid = them.solid && me.solid;
 
       const BUFFER = 0.1;
-      
+
       if (dy < 0 && Math.abs(dy) > top && top >= -me.height + BUFFER) {
         if (bothSolid) {
           me.vy = -me.bounce * me.vy;
@@ -609,9 +616,7 @@ class Engine {
       if (canMoveInY) me.y += dy;
 
       if (collided && me.collides !== null) me.collides(me, them);
-
-    };
-
+    }
   }
 
   end() {

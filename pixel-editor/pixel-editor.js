@@ -497,11 +497,7 @@ export function createPixelEditor(target) {
     // tempCtx.mozImageSmoothingEnabled = false;
     // tempCtx.imageSmoothingEnabled = false;
 
-    const image = new ImageData(
-      pixels,
-      state.gridSize[0],
-      state.gridSize[1]
-    );
+    const image = new ImageData(pixels, state.gridSize[0], state.gridSize[1]);
     tempCtx.putImageData(image, 0, 0);
 
     state.selected.forEach((i) => {
@@ -537,11 +533,7 @@ export function createPixelEditor(target) {
     ctx.mozImageSmoothingEnabled = false;
     ctx.imageSmoothingEnabled = false;
 
-    const image = new ImageData(
-      pixels,
-      state.gridSize[0],
-      state.gridSize[1]
-    );
+    const image = new ImageData(pixels, state.gridSize[0], state.gridSize[1]);
 
     ctx.putImageData(image, 0, 0);
   };
@@ -594,9 +586,9 @@ export function createPixelEditor(target) {
     setCanvasSize(c);
     // init canvas data
     const [gridW, gridH] = state.viewboxSize;
-    state.gridColors = new Array(
-      state.gridSize[0] * state.gridSize[1]
-    ).fill(hexToRGBA("#00000000"));
+    state.gridColors = new Array(state.gridSize[0] * state.gridSize[1]).fill(
+      hexToRGBA("#00000000")
+    );
     state.tempGridColors = new Array(
       state.gridSize[0] * state.gridSize[1]
     ).fill(null);
@@ -694,9 +686,9 @@ export function createPixelEditor(target) {
     },
     createEmptyGrid: () => ({
       size: state.gridSize,
-      colors: new Array(
-        state.gridSize[0] * state.gridSize[1]
-      ).fill([0, 0, 0, 0]),
+      colors: new Array(state.gridSize[0] * state.gridSize[1]).fill([
+        0, 0, 0, 0,
+      ]),
     }),
     gridColors: () => state.gridColors,
     end() {

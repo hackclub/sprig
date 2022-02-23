@@ -1,0 +1,22 @@
+{
+  "name": "gamelab",
+  "type": "module",
+  "version": "0.2.1",
+  "repository": "https://github.com/hackclub/gamelab",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.25.0",
+    "chrome-aws-lambda": "^10.1.0",
+    "ejs": "^3.1.6",
+    "puppeteer-core": "^13.2.0"
+  },
+  "devDependencies": {
+    "@vercel/node": "^1.12.1",
+    "express": "^4.17.2",
+    "nodemon": "^2.0.15",
+    "puppeteer": "^13.2.0"
+  },
+  "scripts": {
+    "dev": "nodemon api/_dev.js"
+  }
+}

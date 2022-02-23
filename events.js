@@ -224,7 +224,7 @@ export function events(state) {
 
   window.addEventListener("beforeunload", () => {
     window.localStorage.setItem("hc-game-lab", dispatch("GET_SAVE_STATE"));
-  })
+  });
 
   addVerticalBarDrag(state, bodyListener);
   addHorzBarDrag(state, bodyListener);
