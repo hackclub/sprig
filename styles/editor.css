@@ -249,24 +249,6 @@ body {
   opacity: .7;
 }
 
-.notification-container {
-  position: fixed;
-  right: 10px;
-  top: 10px;
-  z-index: 100;
-}
-
-.shared-modal {
-  color: var(--text-color);
-  background: var(--background-2);
-  margin-bottom: 5px;
-  padding: 10px;
-  border: 2px solid black;
-  border-radius: 5px;
-  /*transform: translate(-50%, 0%);*/
-  z-index: 100;
-}
-
 a {
   color: inherit;
 }

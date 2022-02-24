@@ -42,8 +42,32 @@ export const renderDocs = (state) => html`
       padding: 5px;
       overflow: scroll;
     }
+
+    .notification-container {
+      border: 1px solid black;
+      padding: 10px;
+      border-radius: 1em;
+      max-height: 30%;
+      overflow-y: scroll;
+    }
+
+    .shared-modal {
+      color: var(--text-color);
+      background: var(--background-2);
+      margin-bottom: 5px;
+      padding: 10px;
+      border: 2px solid black;
+      border-radius: 5px;
+    }
   </style>
   <div class="docs hide-docs">
+    <h3>Notifications:</h3>
+    <div class="notification-container">
+      ${Object.values(state.notifications).map(
+        (x) => html` <div class="shared-modal">${x}</div> `
+      )}
+    </div>
+    <h3>Documentation</h3>
     <b>Create Engine</b>
     <pre>const e = createEngine(gameCanvas, width, height);</pre>
     Example:

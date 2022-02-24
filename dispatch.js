@@ -39,7 +39,7 @@ const STATE = {
     link: "",
   },
   oldGame: null,
-  notifications: {},
+  notifications: [],
   showChallengeBar: true,
   challenges: [
     {
@@ -190,7 +190,6 @@ const ACTIONS = {
     state.bugReportStatus = "loading";
     dispatch("NOTIFICATION", {
       message: "Generating a bug report... (1/3)",
-      timeout: 3000,
     });
     const report = {};
     report["Engine Version"] = state.engineVersion;
@@ -198,7 +197,6 @@ const ACTIONS = {
     report["Project Link"] = state.lastSaved.link;
     dispatch("NOTIFICATION", {
       message: "Generating a bug report... (2/3)",
-      timeout: 3000,
     });
     function truncate(string, length, ending) {
       return string.length > length
@@ -244,7 +242,6 @@ const ACTIONS = {
     );
     dispatch("NOTIFICATION", {
       message: "Generating a bug report... (3/3)",
-      timeout: 3000,
     });
     const url = new URL("https://airtable.com/shrpcDFA5f9wEOSIm");
     for (const key in report) {
@@ -314,7 +311,7 @@ const ACTIONS = {
               `
             : ""}
         `,
-        timeout: 10000,
+        open: true,
       });
     }
 
@@ -323,17 +320,23 @@ const ACTIONS = {
     dispatch("RENDER");
     // dispatch("RUN");
   },
-  NOTIFICATION({ message, timeout }, state) {
-    const id = Date.now();
-
-    state.notifications[id] = message;
+  NOTIFICATION({ message, timeout, open }, state) {
+    state.notifications = [message, ...state.notifications];
 
     dispatch("RENDER");
 
-    setTimeout(() => {
-      delete state.notifications[id];
-      dispatch("RENDER");
-    }, timeout);
+    // open the docs bar for timeout time
+    const docs = document.querySelector(".docs");
+
+    if (open) docs.classList.remove("hide-docs");
+
+    if (timeout) {
+      docs.classList.remove("hide-docs");
+      setTimeout(() => {
+        docs.classList.add("hide-docs");
+      }, timeout)
+    };
+
   },
   CREATE_ASSET({ assetType }, state) {
     // need to clear asset editor

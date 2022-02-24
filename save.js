@@ -1,6 +1,7 @@
 import { dispatch } from "./dispatch.js";
 import md5 from "https://cdn.skypack.dev/md5";
 import copy from "./utils/copy.js";
+import { html } from "./uhtml.js";
 
 export const hashState = () => md5(dispatch("GET_SAVE_STATE"));
 
@@ -20,15 +21,22 @@ async function saveToS3({ content, state, copyUrl }) {
     });
   }
 
-  const link = window.location.origin + `?id=${id}`;
+  function getURLPath(extension) {
+    return window.location.protocol + '//' + window.location.host + window.location.pathname + extension;
+  }
+
+  const link = getURLPath(`?id=${id}`);
 
   if (copyUrl) {
 
     copy(link);
 
     dispatch("NOTIFICATION", {
-      message: "Sharing link copied to clipboard!",
-      timeout: 3000,
+      message: html`
+        Sharing link copied to clipboard! 
+        If you're on Safari you'll have to <button @click=${() => copy(link)}>click here to copy</button>.
+      `,
+      open: true,
     });
   }
 
@@ -52,7 +60,7 @@ async function saveToFile({ content, state }) {
   dispatch("NOTIFICATION", {
     message:
       "Your file has just been downloaded! Just drag it into the editor to load from your save",
-    timeout: 3000,
+    open: true,
   });
 }
 

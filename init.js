@@ -40,7 +40,7 @@ function loadFromStorage() {
         load it</button
       >?
     `,
-    timeout: 6000,
+    open: true,
   });
 
   // return saved;

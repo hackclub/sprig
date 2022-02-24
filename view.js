@@ -388,11 +388,6 @@ export function view(state) {
       <div class="horizontal-bar"></div>
     </div>
     <div id="vertical-bar"></div>
-    <div class="notification-container">
-      ${Object.values(state.notifications).map(
-        (x) => html` <div class="shared-modal">${x}</div> `
-      )}
-    </div>
     ${renderDocs(state)}
   `;
 }
