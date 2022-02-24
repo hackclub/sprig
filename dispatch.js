@@ -334,9 +334,8 @@ const ACTIONS = {
       docs.classList.remove("hide-docs");
       setTimeout(() => {
         docs.classList.add("hide-docs");
-      }, timeout)
-    };
-
+      }, timeout);
+    }
   },
   CREATE_ASSET({ assetType }, state) {
     // need to clear asset editor

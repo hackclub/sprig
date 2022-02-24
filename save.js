@@ -22,7 +22,13 @@ async function saveToS3({ content, state, copyUrl }) {
   }
 
   function getURLPath(extension) {
-    return window.location.protocol + '//' + window.location.host + window.location.pathname + extension;
+    return (
+      window.location.protocol +
+      "//" +
+      window.location.host +
+      window.location.pathname +
+      extension
+    );
   }
 
   const link = getURLPath(`?id=${id}`);
@@ -32,8 +38,8 @@ async function saveToS3({ content, state, copyUrl }) {
 
     dispatch("NOTIFICATION", {
       message: html`
-        Sharing link copied to clipboard! 
-        If you're on Safari you'll have to <button @click=${() => copy(link)}>click here to copy</button>.
+        Sharing link copied to clipboard! If you're on Safari you'll have to
+        <button @click=${() => copy(link)}>click here to copy</button>.
       `,
       open: true,
     });
