@@ -20,9 +20,12 @@ async function saveToS3({ content, state, copyUrl }) {
     });
   }
 
-  const link = window.location.origin + `/share/${id}`;
+  const link = window.location.origin + `?id=${id}`;
 
   if (copyUrl) {
+
+    copy(link);
+
     dispatch("NOTIFICATION", {
       message: "Sharing link copied to clipboard!",
       timeout: 3000,
