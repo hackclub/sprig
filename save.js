@@ -28,7 +28,6 @@ async function saveToS3({ content, state, copyUrl }) {
   const link = getURLPath(`?id=${id}`);
 
   if (copyUrl) {
-
     copy(link);
 
     dispatch("NOTIFICATION", {
