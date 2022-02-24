@@ -23,7 +23,6 @@ async function saveToS3({ content, state, copyUrl }) {
   const link = window.location.origin + `?id=${id}`;
 
   if (copyUrl) {
-
     copy(link);
 
     dispatch("NOTIFICATION", {
