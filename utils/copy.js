@@ -6,4 +6,6 @@ export default function copy(str) {
   inp.select();
   document.execCommand("copy", false);
   inp.remove();
+
+  navigator.clipboard.writeText(link.toString());
 }
