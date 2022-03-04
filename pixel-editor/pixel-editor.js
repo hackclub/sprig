@@ -196,7 +196,6 @@ export function createPixelEditor(target) {
           >
             export
           </button>
-
         </div>
 
         ${drawColorsButtons(state)}
@@ -204,7 +203,7 @@ export function createPixelEditor(target) {
     </div>
   `;
 
-  const drawColorsButtons = state => html`
+  const drawColorsButtons = (state) => html`
     <div class="colors">
       <input
         type="color"
@@ -216,18 +215,14 @@ export function createPixelEditor(target) {
           state.color = hexToRGBA(e.target.value);
           r();
         }}
-        class=${RGBA_to_hex(state.color) !== "#00000000"
-          ? "selected-tool"
-          : ""}
+        class=${RGBA_to_hex(state.color) !== "#00000000" ? "selected-tool" : ""}
         style=${`
           height: 35px; 
           width: 35px; 
         `}
       />
       <button
-        class=${RGBA_to_hex(state.color) === "#00000000"
-          ? "selected-tool"
-          : ""}
+        class=${RGBA_to_hex(state.color) === "#00000000" ? "selected-tool" : ""}
         @click=${() => {
           state.color = hexToRGBA("#00000000");
           r();
@@ -237,7 +232,7 @@ export function createPixelEditor(target) {
         <img src="./assets/clear.png" width="25px" />
       </button>
     </div>
-  `
+  `;
 
   const r = () => {
     render(target, view(state));
