@@ -40,7 +40,7 @@ function loadFromStorage() {
         load it</button
       >?
     `,
-    open: true,
+    open: false,
   });
 
   // return saved;

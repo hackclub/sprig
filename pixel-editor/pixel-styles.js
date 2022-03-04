@@ -18,21 +18,23 @@ export const pixelStyles = html`
     }
 
     .pixel-editor-container {
-      position: relative;
       width: 100%;
       height: 100%;
     }
 
     .canvas-container {
       display: grid;
+      align-items: center;
+      justify-content: center;
       background: grey;
       width: 100%;
       height: 100%;
-      place-content: center;
+      overflow: scroll;
     }
 
     .drawing-canvas {
       background: white;
+
     }
 
     .offscreen-canvas {
@@ -40,25 +42,23 @@ export const pixelStyles = html`
     }
 
     .toolbox {
-      position: absolute;
-      right: 10px;
-      top: 10px;
       display: flex;
       flex-direction: column;
       border: 2px solid black;
       padding: 5px;
       background: lightgrey;
+      overflow: scroll;
+      justify-content: space-between;
+      min-width: 100px;
     }
 
-    .toolbox > * {
+    .tools > * {
       background: lightgrey;
       margin-bottom: 5px;
+      width: 100%;
     }
 
     .colors {
-      position: absolute;
-      right: 10px;
-      bottom: 10px;
       display: flex;
       flex-direction: row;
       justify-content: center;
@@ -66,7 +66,7 @@ export const pixelStyles = html`
     }
 
     .colors > * {
-      margin-right: 5px;
+      flex: 1;
     }
 
     .gridsize {

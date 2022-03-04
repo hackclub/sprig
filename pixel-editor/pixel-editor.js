@@ -158,79 +158,86 @@ export function createPixelEditor(target) {
         ></canvas>
       </div>
       <div class="toolbox">
-        ${["draw", "circle", "rectangle", "line", "bucket", "move"].map(
-          (name) => renderTool(name, state)
-        )}
-        <button
-          @click=${() => {
-            if (state.undoRedoStack.length === 0) return;
-            const grid = JSON.parse(state.undoRedoStack.pop());
-            state.gridColors.forEach((arr, i) => {
-              state.gridColors[i] = grid[i];
-            });
-          }}
-          style="
-            display: flex; 
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: min-content;
-          "
-          title="undo"
-        >
-          <img src="./assets/undo.png" alt="undo" width="25px" />
-          undo
-        </button>
-        <button
-          title="export"
-          @click=${() => {
-            const canvas = target.querySelector("#offscreen-canvas");
-            drawCanvasNoBg(canvas);
-            const image = canvas.toDataURL();
-            const aDownloadLink = document.createElement("a");
-            aDownloadLink.download = "sprite.png";
-            aDownloadLink.href = image;
-            aDownloadLink.click();
-          }}
-        >
-          export
-        </button>
-      </div>
+        <div class="tools">
+          ${["draw", "circle", "rectangle", "line", "bucket", "move"].map(
+            (name) => renderTool(name, state)
+          )}
+          <button
+            @click=${() => {
+              if (state.undoRedoStack.length === 0) return;
+              const grid = JSON.parse(state.undoRedoStack.pop());
+              state.gridColors.forEach((arr, i) => {
+                state.gridColors[i] = grid[i];
+              });
+            }}
+            style="
+              display: flex; 
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              height: min-content;
+            "
+            title="undo"
+          >
+            <img src="./assets/undo.png" alt="undo" width="25px" />
+            undo
+          </button>
+          <button
+            title="export"
+            @click=${() => {
+              const canvas = target.querySelector("#offscreen-canvas");
+              drawCanvasNoBg(canvas);
+              const image = canvas.toDataURL();
+              const aDownloadLink = document.createElement("a");
+              aDownloadLink.download = "sprite.png";
+              aDownloadLink.href = image;
+              aDownloadLink.click();
+            }}
+          >
+            export
+          </button>
 
-      <div class="colors">
-        <input
-          type="color"
-          @input=${(e) => {
-            state.color = hexToRGBA(e.target.value);
-            r();
-          }}
-          @click=${(e) => {
-            state.color = hexToRGBA(e.target.value);
-            r();
-          }}
-          class=${RGBA_to_hex(state.color) !== "#00000000"
-            ? "selected-tool"
-            : ""}
-          style=${`
-            height: 35px; 
-            width: 35px; 
-          `}
-        />
-        <button
-          class=${RGBA_to_hex(state.color) === "#00000000"
-            ? "selected-tool"
-            : ""}
-          @click=${() => {
-            state.color = hexToRGBA("#00000000");
-            r();
-          }}
-          style="height: 35px;"
-        >
-          <img src="./assets/clear.png" width="25px" />
-        </button>
+        </div>
+
+        ${drawColorsButtons(state)}
       </div>
     </div>
   `;
+
+  const drawColorsButtons = state => html`
+    <div class="colors">
+      <input
+        type="color"
+        @input=${(e) => {
+          state.color = hexToRGBA(e.target.value);
+          r();
+        }}
+        @click=${(e) => {
+          state.color = hexToRGBA(e.target.value);
+          r();
+        }}
+        class=${RGBA_to_hex(state.color) !== "#00000000"
+          ? "selected-tool"
+          : ""}
+        style=${`
+          height: 35px; 
+          width: 35px; 
+        `}
+      />
+      <button
+        class=${RGBA_to_hex(state.color) === "#00000000"
+          ? "selected-tool"
+          : ""}
+        @click=${() => {
+          state.color = hexToRGBA("#00000000");
+          r();
+        }}
+        style="height: 35px;"
+      >
+        <img src="./assets/clear.png" width="25px" />
+      </button>
+    </div>
+  `
 
   const r = () => {
     render(target, view(state));
