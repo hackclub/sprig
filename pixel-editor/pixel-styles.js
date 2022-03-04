@@ -34,7 +34,6 @@ export const pixelStyles = html`
 
     .drawing-canvas {
       background: white;
-
     }
 
     .offscreen-canvas {
