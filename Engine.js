@@ -201,11 +201,23 @@ class Object {
     this.bounce = params.bounce ?? 0;
     this.solid = params.solid ?? false;
     this.click = params.click ?? null;
-    this.update = params.update ?? null;
-    this.collides = params.collides ?? null;
     this.drawBounds = params.drawBounds ?? false;
 
     this.id = Math.random();
+
+    this.update = [];
+    this.collide = [];
+    (params.onInit ?? []).forEach(fun => fun(this));
+  }
+
+  onUpdate(fun) {
+    this.update.push(fun);
+    return this;
+  }
+
+  onCollide(them, fun) { // them :: ref | "tag"
+    this.collide.push([ them, fun ]);
+    return this;
   }
 
   distanceTo(them) {
@@ -362,6 +374,9 @@ class Engine {
     this._heldKeys = new Set();
     this._pressedKeys = new Set();
 
+    this._keyPressEventListeners = {};
+    this._keyHoldEventListeners = {};
+
     clearText(canvas.parentNode);
     this.textContainer = canvas.parentNode.querySelector(".text-container");
 
@@ -512,8 +527,24 @@ class Engine {
         obj.lastX = obj.x;
         obj.lastY = obj.y;
 
-        if (obj.update !== null) obj.update(obj);
+        if (obj.update.length > 0) obj.update.forEach(f => f(obj));
+      });
 
+      for (let key in this._keyHoldEventListeners) {
+        const events = this._keyHoldEventListeners[key];
+        events.forEach( f => {
+          if (this.heldKey(key)) f();
+        });
+      }
+
+      for (let key in this._keyPressEventListeners) {
+        const events = this._keyPressEventListeners[key];
+        events.forEach( f => {
+          if (this.pressedKey(key)) f();
+        });
+      }
+
+      this.objects.forEach((obj) => {
         obj.x += obj.vx;
         obj.y += obj.vy;
       });
@@ -615,7 +646,17 @@ class Engine {
       if (canMoveInX) me.x += dx;
       if (canMoveInY) me.y += dy;
 
-      if (collided && me.collides !== null) me.collides(me, them);
+      if (collided && me.collide.length > 0) {
+        me.collide.forEach(([ identifier, f ]) => {
+          if (typeof identifier === "function" && f === undefined) {
+            identifier(them);
+            return;
+          }
+
+          if (typeof identifier === "string" && them.hasTag(identifier)) f(them);
+          else if (typeof identifier === "object" && identifier.id === them.id) f(them);
+        });
+      }
     }
   }
 
@@ -635,6 +676,26 @@ class Engine {
   pressedKey(key) {
     return this._pressedKeys.has(key);
   }
+
+  onKeyHold(key, listener) {
+    if (key in this._keyHoldEventListeners) {
+      this._keyHoldEventListeners[key].push(listener);
+    } else {
+      this._keyHoldEventListeners[key] = [listener];
+    }
+  }
+
+  onKeyPress(key, listener) {
+    if (key in this._keyPressEventListeners) {
+      this._keyPressEventListeners[key].push(listener);
+    } else {
+      this._keyPressEventListeners[key] = [listener];
+    }
+  }
+
+  // onMouseDown() {}
+  // onMouseMove() {}
+  // onMouseUp() {}
 }
 
 export { Engine };
