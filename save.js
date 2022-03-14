@@ -31,7 +31,7 @@ async function saveToS3({ content, state, copyUrl }) {
     );
   }
 
-  const link = getURLPath(`?id=${id}`);
+  const link = getURLPath(`share/${id}`);
 
   if (copyUrl) {
     copy(link);
