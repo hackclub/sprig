@@ -44,7 +44,7 @@ const STATE = {
   challenges: [
     {
       name: "jumpstart",
-      link: `${window.location.origin}/?cached=false&id=864f802da9102937b71a7e8ee0699e7e`,
+      link: `${window.location.origin}/?cached=false&id=c30a88779103d33c3e9c47ac3ca36d02`,
     },
     {
       name: "crisis averted",
