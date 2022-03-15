@@ -44,19 +44,19 @@ const STATE = {
   challenges: [
     {
       name: "jumpstart",
-      link: `${window.location.origin}/?cached=false&id=864f802da9102937b71a7e8ee0699e7e`,
+      link: `${window.location.origin}/?cached=false&id=a9cc498d70351538839c72ba2dfa5029`,
     },
     {
       name: "crisis averted",
-      link: `${window.location.origin}/?cached=false&id=332cbc7c2cc4b7bc32537bde3bcb6f5c`,
+      link: `${window.location.origin}/?cached=false&id=c284215d18f62b27e5d0b483c0fa10c4`,
     },
     {
       name: "left behind",
-      link: `${window.location.origin}/?cached=false&id=bcfc3a57a84a7ec11d0f7bc28a0676c8`,
+      link: `${window.location.origin}/?cached=false&id=c6faaa6fb82e1643d79231acfd547cf1`,
     },
     {
       name: "whats the hold up?",
-      link: `${window.location.origin}/?cached=false&id=5ca3097a41cd509d106f1fcd4a3e9183`,
+      link: `${window.location.origin}/?cached=false&id=acd08709f9b2288fd5460750c22a196f`,
     },
     {
       name: "sticky situation",
