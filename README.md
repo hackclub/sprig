@@ -380,7 +380,11 @@ Start a local HTTP server inside the repo:
     $ cd gamelab/
     $ python3 -m http.server 3000
 
-And then go to http://localhost:3000 in your web browser, and it should work!
+And then go to http://localhost:3000 in your web browser...
+
+    $ open http://localhost:3000/
+
+...and it should work!
 
 ## License
 
