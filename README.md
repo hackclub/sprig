@@ -361,7 +361,7 @@ https://gamelab-versions.hackclub.dev/0.1.0/index.html
 
 ## Philosophy
 
-As we said before people learn best when they make things that they care about which they can share with others. This learning philosophy is called [constructionism](https://en.wikipedia.org/wiki/Constructionism_(learning_theory)) and Game Lab is a type of microworld. It's an environment where you can discover programming by using it to express yourself. 
+As we have said previously, people learn best when they make things that they care about, which they can then share with others. This type of learning philosophy is called [constructionism](https://en.wikipedia.org/wiki/Constructionism_(learning_theory)), and Game Lab is a type of microworld. A microworld is an environment where you can discover programming by using it to express yourself.
 
 Game Lab could also be considered a minimalist [fantasy console](https://en.wikipedia.org/wiki/Fantasy_video_game_console#:~:text=A%20fantasy%20video%20game%20console,their%20fictional%20hardware%20will%20have.) sort of like [Pico-8](https://www.lexaloffle.com/pico-8.php).
 
