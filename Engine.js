@@ -232,11 +232,11 @@ class Object {
   }
 
   get width() {
-    return this._width * this.scale[0];
+    return this._width * Math.abs(this.scale[0]);
   }
 
   get height() {
-    return this._height * this.scale[1];
+    return this._height * Math.abs(this.scale[1]);
   }
 
   get rotate() {
@@ -264,9 +264,9 @@ class Object {
     ctx.translate(this.x, this.y);
     ctx.rotate(this._rotate);
 
-    // const xInvert = this.scale[0] < 0 ? -1 : 1;
-    // const yInvert = this.scale[1] < 0 ? -1 : 1;
-    // ctx.scale(xInvert, yInvert);
+    const xInvert = this.scale[0] < 0 ? -1 : 1;
+    const yInvert = this.scale[1] < 0 ? -1 : 1;
+    ctx.scale(xInvert, yInvert);
 
     // draw sprite with sprite scale
     if (this.sprite !== null) ctx.drawImage(this.sprite, -ox, -oy, w, h);
