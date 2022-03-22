@@ -144,6 +144,7 @@ function setGameIframe() {
 }
 
 export async function init(state) {
+  dispatch("FAVICON", 'loading.gif');
   initVert();
 
   state.runStatus = "loading";
