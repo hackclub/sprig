@@ -11,7 +11,7 @@ Have you ever wanted to...
 
 Then get started making games with Game Lab!
 
-You should be able to get started in Game Lab with very little experience programming but you should still be able to have fun with it even if you're an expert. Enjoy and can't wait to see what you make!
+You should be able to get started in Game Lab with very little experience programming. Even if you're an expert, you should still be able to have fun with it. We hope you enjoy it, and we can't wait to see what you make!
 
 ### ⮑ _**[Click here to launch Game Lab](https://gamelab.hackclub.com/)**_ ⮐
 _(and scroll down for a brief tutorial to get started)_
