@@ -188,9 +188,10 @@ const ACTIONS = {
       col = lineCol[1];
     }
 
-    const msg = line && col 
-      ? `${err.message} on line ${line} in column ${col}`
-      : err.message
+    const msg =
+      line && col
+        ? `${err.message} on line ${line} in column ${col}`
+        : err.message;
 
     state.error = true;
     state.logs = [...STATE.logs, msg];
@@ -199,7 +200,7 @@ const ACTIONS = {
     const cmLines = document.querySelectorAll(".cm-line");
 
     for (let i = 0; i < cmLines.length; i++) {
-      if (!line || i+1 !== line) continue;
+      if (!line || i + 1 !== line) continue;
 
       const cmLine = cmLines[i];
 
