@@ -152,6 +152,11 @@ obj.hasTag("tag-name")
 </pre
     >
 
+    <b>object.distanceTo(otherObject)</b>
+    <br /><br />
+    Returns the Euclidean distance between each object.
+    <br /><br />
+
     <b>object.teleport</b>
     <pre>
     obj.x = 100
