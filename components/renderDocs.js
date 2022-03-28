@@ -152,6 +152,23 @@ obj.hasTag("tag-name")
 </pre
     >
 
+    <b>object.teleport</b>
+    <pre>
+    obj.x = 100
+    obj.y = 100
+    /* vs */
+    obj.teleport(100, 100)
+    </pre>
+    If you simply assign to x and y, collision detection
+    will still be triggered which might stop them from getting there
+    if something is in the way.
+    <br /><br />
+
+    Instead, you can use obj.teleport. This will move them to the
+    specified location without triggering collision detection,
+    so that they are guaranteed to get there.
+    <br /><br />
+
     <b>Playing Tunes</b>
     <br /><br />
     To play a tune once:

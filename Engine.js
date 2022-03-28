@@ -221,6 +221,11 @@ class Object {
     return this._sprite;
   }
 
+  telport(x, y) {
+    this.lastX = this.x = x;
+    this.lasty = this.y = y;
+  }
+
   set sprite(spriteData) {
     // scaling doesn't work here
     initSprite(spriteData, this);
