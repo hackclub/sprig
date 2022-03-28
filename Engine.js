@@ -206,12 +206,12 @@ class Object {
     this.drawBounds = params.drawBounds ?? false;
 
     if (params.fps != undefined) {
-      console.log(params, params.fps, 1000/params.fps);
+      console.log(params, params.fps, 1000 / params.fps);
       this.updateInterval = setInterval(() => {
         if (this.engine.objects.indexOf(this) == -1)
           return clearInterval(this.updateInterval);
         this.update(this);
-      }, 1000/params.fps);
+      }, 1000 / params.fps);
     }
 
     this.id = Math.random();
