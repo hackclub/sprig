@@ -205,7 +205,25 @@ class Object {
     this.collides = params.collides ?? null;
     this.drawBounds = params.drawBounds ?? false;
 
+    if (params.fps != undefined) {
+      console.log(params, params.fps, 1000/params.fps);
+      this.updateInterval = setInterval(() => {
+        if (this.engine.objects.indexOf(this) == -1)
+          return clearInterval(this.updateInterval);
+        this.update(this);
+      }, 1000/params.fps);
+    }
+
     this.id = Math.random();
+  }
+
+  set fps(x) {
+    throw new Error(
+      "gamelab doesn't currently support changing the fps " +
+        "while the game is running. if you need this, " +
+        "file an issue on github.com/hackclub/game-lab. " +
+        "We'd love to know what you're making!"
+    );
   }
 
   distanceTo(them) {
@@ -517,7 +535,8 @@ class Engine {
         obj.lastX = obj.x;
         obj.lastY = obj.y;
 
-        if (obj.update !== null) obj.update(obj);
+        if (obj.update !== null && obj.updateInterval == undefined)
+          obj.update(obj);
 
         obj.x += obj.vx;
         obj.y += obj.vy;

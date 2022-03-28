@@ -148,9 +148,18 @@ obj.vx
 obj.vy
 obj.width
 obj.height
+obj.fps
 obj.hasTag("tag-name")
 </pre
     >
+
+    <b>object.fps</b>
+    <br /><br />
+    Specifies how often your object's update function should be called.
+    If fps isn't specified, then your object will be updated according
+    to your monitor's refresh rate
+    (most often 60 fps, but sometimes as much as 240).
+    <br /><br />
 
     <b>object.distanceTo(otherObject)</b>
     <br /><br />
