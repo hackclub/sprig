@@ -536,7 +536,11 @@ class Engine {
     // setInterval(draw, 1000/10)
 
     this.drawing = true;
-    draw();
+    try {
+     draw();
+    } catch (err) {
+      throw err;
+    }
   }
 
   resolve() {

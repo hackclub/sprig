@@ -123,6 +123,13 @@ const ACTIONS = {
     state.logs = [];
     state.error = false;
 
+    const cmLines = document.querySelectorAll(".cm-line");
+    for (let i = 0; i < cmLines.length; i++) {
+      const cmLine = cmLines[i];
+
+      cmLine.style.background = "";
+    }
+
     // document.querySelector("iframe").contentWindow.postMessage({
     //   prog: string,
     //   assets: state.assets,
@@ -162,12 +169,42 @@ const ACTIONS = {
   },
   LOG_ERROR({ err }, state) {
     console.log(err);
+    // state.error = true;
+
+    // // processError will go here when ready
+    // state.logs = [err.stack];
+
+    // dispatch("RENDER");
+
+    // console.error(e.data);
+
+    const location = err.stack.match(/<anonymous>:(.+)\)/);
+    let line = null;
+    let col = null;
+
+    if (location) {
+      let lineCol = location[1].split(":").map(Number);
+      line = lineCol[0] - 2;
+      col = lineCol[1];
+    }
+
+    const msg = line && col 
+      ? `${err.message} on line ${line} in column ${col}`
+      : err.message
+
     state.error = true;
-
-    // processError will go here when ready
-    state.logs = [err.stack];
-
+    state.logs = [...STATE.logs, msg];
     dispatch("RENDER");
+
+    const cmLines = document.querySelectorAll(".cm-line");
+
+    for (let i = 0; i < cmLines.length; i++) {
+      if (!line || i+1 !== line) continue;
+
+      const cmLine = cmLines[i];
+
+      cmLine.style.background = "#ecb2b2";
+    }
   },
   SET_TITLE(arg, state) {
     if (typeof arg == "string") {

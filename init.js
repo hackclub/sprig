@@ -159,6 +159,10 @@ export async function init(state) {
 
   // setGameIframe();
 
+  window.addEventListener("error", e => {
+    dispatch("LOG_ERROR", { err: e.error });
+  })
+
   loadFromStorage();
   removeParam("cached");
 
