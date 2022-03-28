@@ -148,9 +148,40 @@ obj.vx
 obj.vy
 obj.width
 obj.height
+obj.fps
 obj.hasTag("tag-name")
 </pre
     >
+
+    <b>object.fps</b>
+    <br /><br />
+    Specifies how often your object's update function should be called.
+    If fps isn't specified, then your object will be updated according
+    to your monitor's refresh rate
+    (most often 60 fps, but sometimes as much as 240).
+    <br /><br />
+
+    <b>object.distanceTo(otherObject)</b>
+    <br /><br />
+    Returns the Euclidean distance between each object.
+    <br /><br />
+
+    <b>object.teleport</b>
+    <pre>
+    obj.x = 100
+    obj.y = 100
+    /* vs */
+    obj.teleport(100, 100)
+    </pre>
+    If you simply assign to x and y, collision detection
+    will still be triggered which might stop them from getting there
+    if something is in the way.
+    <br /><br />
+
+    Instead, you can use obj.teleport. This will move them to the
+    specified location without triggering collision detection,
+    so that they are guaranteed to get there.
+    <br /><br />
 
     <b>Playing Tunes</b>
     <br /><br />
