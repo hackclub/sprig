@@ -148,10 +148,25 @@ obj.vx
 obj.vy
 obj.width
 obj.height
+obj.scale
 obj.fps
 obj.hasTag("tag-name")
 </pre
     >
+
+    <b>object.scale</b>
+    <br /><br />
+    obj.sprite specifies how much bigger to make the sprite.
+    <pre>
+// make the sprite twice as large
+sprite.scale = 2;
+
+// make the sprite twice as tall, but the same width
+sprite.scale = [1, 2];
+
+// mirror the sprite over the X axis
+sprite.scale = [-1, 1];
+    </pre>
 
     <b>object.fps</b>
     <br /><br />
