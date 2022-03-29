@@ -154,6 +154,12 @@ obj.hasTag("tag-name")
 </pre
     >
 
+    <b>object.props</b>
+    <br /><br />
+    Object.props is a handy place to store things you need for your game.
+    Gamelab doesn't do anything to it aside from keep track of it for you.
+    <br /><br />
+
     <b>object.scale</b>
     <br /><br />
     obj.sprite specifies how much bigger to make the sprite.
@@ -165,8 +171,7 @@ sprite.scale = 2;
 sprite.scale = [1, 2];
 
 // mirror the sprite over the X axis
-sprite.scale = [-1, 1];
-    </pre>
+sprite.scale = [-1, 1];</pre>
 
     <b>object.fps</b>
     <br /><br />
