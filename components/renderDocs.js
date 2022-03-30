@@ -168,10 +168,10 @@ obj.hasTag("tag-name")
 
     <b>object.teleport</b>
     <pre>
-    obj.x = 100
-    obj.y = 100
-    /* vs */
-    obj.teleport(100, 100)
+obj.x = 100
+obj.y = 100
+/* vs */
+obj.teleport(100, 100)
     </pre>
     If you simply assign to x and y, collision detection
     will still be triggered which might stop them from getting there
@@ -195,7 +195,7 @@ playTune(tune_0, tune_1, tune_2);
 </pre
     >
     To play a tune on repeat:
-    <pre>
+<pre>
 loopTune(tune_asset_name);
 
 // or loop multiple tunes
@@ -204,7 +204,7 @@ loopTune(tune_0, tune_1, tune_2);
 </pre
     >
     To stop a tune on repeat:
-    <pre>
+<pre>
 const tuneToStop = loopTune(tune_asset_name);
 tuneToStop.end();
 </pre

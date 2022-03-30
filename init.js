@@ -28,6 +28,23 @@ function loadFromStorage() {
   }
   const saved = JSON.parse(storedData);
 
+  if (Array.isArray(saved))
+    return dispatch("NOTIFICATION", {
+      message: html`
+        The following games were found in your storage:<br />
+        ${saved.map(save => html`
+          <button
+            @click=${() => {
+              dispatch("LOAD_CARTRIDGE", { saved: save });
+            }}
+          >
+          ${save.name}
+          </button>
+        `)}
+      `,
+      open: false,
+    });
+
   dispatch("NOTIFICATION", {
     message: html`
       An old game you were working on was found in your storage.<br />
@@ -175,6 +192,7 @@ export async function init(state) {
   dispatch("LOAD_CARTRIDGE", { saved });
   dispatch("SOUND", "bootup");
   dispatch("FAVICON");
+  dispatch("GENERATE_NAME");
 
   document.dispatchEvent(new Event("init_done"));
 }
