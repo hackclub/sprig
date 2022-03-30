@@ -150,28 +150,27 @@ function initSprite(spriteData, that) {
 }
 
 const VALID_PARAMS = [
-  "x", 
-  "y", 
-  "vx", 
-  "vy", 
-  "tags", 
-  "sprite", 
+  "x",
+  "y",
+  "vx",
+  "vy",
+  "tags",
+  "sprite",
   "scale",
-  "rotate", 
-  "collides", 
-  "update", 
+  "rotate",
+  "collides",
+  "update",
   "solid",
   "bounce",
   "origin",
   "props",
   // not doced?
   "click",
-  "drawBounds"
+  "drawBounds",
 ];
 
 class Object {
   constructor(params, engine) {
-
     for (const k in params) {
       if (!VALID_PARAMS.includes(k)) {
         const msg = `Sprite's "${k}" set to "${params[k]}", but sprites don't have "${k}"s`;
