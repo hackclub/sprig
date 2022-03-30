@@ -32,15 +32,17 @@ function loadFromStorage() {
     return dispatch("NOTIFICATION", {
       message: html`
         The following games were found in your storage:<br />
-        ${saved.map(save => html`
-          <button
-            @click=${() => {
-              dispatch("LOAD_CARTRIDGE", { saved: save });
-            }}
-          >
-          ${save.name}
-          </button>
-        `)}
+        ${saved.map(
+          (save) => html`
+            <button
+              @click=${() => {
+                dispatch("LOAD_CARTRIDGE", { saved: save });
+              }}
+            >
+              ${save.name}
+            </button>
+          `
+        )}
       `,
       open: false,
     });

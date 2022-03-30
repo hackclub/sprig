@@ -228,15 +228,12 @@ export function events(state) {
 
     (() => {
       if (Array.isArray(all)) {
-        const existing = all.findIndex(x => x.name == fresh.name);
-        if (existing > -1)
-          return all[existing] = fresh;
+        const existing = all.findIndex((x) => x.name == fresh.name);
+        if (existing > -1) return (all[existing] = fresh);
       }
 
-      if (all == null)
-        all = [];
-      else if (!Array.isArray(all))
-        all = [all];
+      if (all == null) all = [];
+      else if (!Array.isArray(all)) all = [all];
       all.push(fresh);
     })();
 
