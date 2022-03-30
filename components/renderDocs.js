@@ -81,13 +81,6 @@ export const renderDocs = (state) => html`
     <b>End Engine</b>
     <pre>e.end()</pre>
 
-    <b>Engine Properties</b>
-    <pre>
-e.width
-e.height
-</pre
-    >
-
     <b>Add Object</b>
     <pre>
 e.add({
@@ -114,16 +107,16 @@ e.add({
     <b>Add Text</b>
     <pre>
 e.addText(
-    "string",  
-    x, 
-    y, 
-    { // optional parameters
-      color: "string", 
-      size: number,
-      rotate: number,
-    }
-)</pre
-    >
+  "string",  
+  x, 
+  y, 
+  { // optional parameters
+    color: "string", 
+    size: number,
+    rotate: number,
+  }
+)
+  </pre>
     Example of adding text:
     <pre>const greetingText = e.addText("hello world", 150, 150);</pre>
     Example of updating text:
@@ -148,10 +141,30 @@ obj.vx
 obj.vy
 obj.width
 obj.height
+obj.scale
 obj.fps
 obj.hasTag("tag-name")
-</pre
-    >
+    </pre>
+
+    <b>object.props</b>
+    <br /><br />
+    Object.props is a handy place to store things you need for your game.
+    Gamelab doesn't do anything to it aside from keep track of it for you.
+    <br /><br />
+
+    <b>object.scale</b>
+    <br /><br />
+    obj.sprite specifies how much bigger to make the sprite.
+    <pre>
+// make the sprite twice as large
+sprite.scale = 2;
+
+// make the sprite twice as tall, but the same width
+sprite.scale = [1, 2];
+
+// mirror the sprite over the X axis
+sprite.scale = [-1, 1];
+    </pre>
 
     <b>object.fps</b>
     <br /><br />
@@ -192,8 +205,7 @@ playTune(tune_asset_name);
 // or play multiple tunes
 
 playTune(tune_0, tune_1, tune_2);
-</pre
-    >
+    </pre>
     To play a tune on repeat:
 <pre>
 loopTune(tune_asset_name);
@@ -201,14 +213,12 @@ loopTune(tune_asset_name);
 // or loop multiple tunes
 
 loopTune(tune_0, tune_1, tune_2);
-</pre
-    >
+    </pre>
     To stop a tune on repeat:
 <pre>
 const tuneToStop = loopTune(tune_asset_name);
 tuneToStop.end();
-</pre
-    >
+    </pre>
 
     <b>Examples</b>
     <br /><br />

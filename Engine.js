@@ -149,8 +149,36 @@ function initSprite(spriteData, that) {
   }
 }
 
+const VALID_PARAMS = [
+  "x", 
+  "y", 
+  "vx", 
+  "vy", 
+  "tags", 
+  "sprite", 
+  "scale",
+  "rotate", 
+  "collides", 
+  "update", 
+  "solid",
+  "bounce",
+  "origin",
+  "props",
+  // not doced?
+  "click",
+  "drawBounds"
+];
+
 class Object {
   constructor(params, engine) {
+
+    for (const k in params) {
+      if (!VALID_PARAMS.includes(k)) {
+        const msg = `Sprite's "${k}" set to "${params[k]}", but sprites don't have "${k}"s`;
+        throw new Error(msg);
+      }
+    }
+
     this.initialized = false;
     this.engine = engine;
     this.tags = params.tags ?? [];
@@ -182,11 +210,12 @@ class Object {
       "right bottom": [1, 1],
     };
 
+    const origin = params.origin;
     this.origin =
-      typeof params.origin === "string" && params.origin in origins
-        ? origins[params.origin]
-        : Array.isArray(params.origin)
-        ? params.origin
+      typeof origin === "string" && origin in origins
+        ? origins[origin]
+        : Array.isArray(origin)
+        ? origin
         : [0, 0];
 
     this.x = params.x ?? 0;
@@ -204,14 +233,15 @@ class Object {
     this.update = params.update ?? null;
     this.collides = params.collides ?? null;
     this.drawBounds = params.drawBounds ?? false;
+    this.props = params.props ?? {};
 
-    if (params.fps != undefined) {
-      console.log(params, params.fps, 1000 / params.fps);
+    const fps = params.fps;
+    if (fps != undefined) {
       this.updateInterval = setInterval(() => {
         if (this.engine.objects.indexOf(this) == -1)
           return clearInterval(this.updateInterval);
         this.update(this);
-      }, 1000 / params.fps);
+      }, 1000 / fps);
     }
 
     this.id = Math.random();
