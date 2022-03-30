@@ -149,30 +149,51 @@ function initSprite(spriteData, that) {
   }
 }
 
+const VALID_PARAMS = [
+  "x", 
+  "y", 
+  "vx", 
+  "vy", 
+  "tags", 
+  "sprite", 
+  "scale",
+  "rotate", 
+  "collides", 
+  "update", 
+  "solid",
+  "bounce",
+  "origin",
+  "props",
+  // not doced?
+  "click",
+  "drawBounds"
+];
+
 class Object {
   constructor(params, engine) {
-    const take = key => {
-      const ret = params[key];
-      if (delete params[key])
-        return ret;
-      return
-        undefined;
-    };
+
+    for (const k in params) {
+      if (!VALID_PARAMS.includes(k)) {
+        const msg = `Sprite's "${k}" set to "${params[k]}", but sprites don't have "${k}"s`;
+        throw new Error(msg);
+      }
+    }
+
     this.initialized = false;
     this.engine = engine;
-    this.tags = take("tags") ?? [];
+    this.tags = params.tags ?? [];
 
     let bounds = { x: 0, y: 0, maxX: 16, maxY: 16, width: 16, height: 16 };
 
     this._sprite = null;
     this._width = null;
     this._height = null;
-    this.sprite = take("sprite");
+    this.sprite = params.sprite;
 
     this._scale = [1, 1];
-    this.scale = take("scale");
+    this.scale = params.scale;
 
-    this.rotate = take("rotate") ?? 0;
+    this.rotate = params.rotate ?? 0;
 
     // this.origin = params.origin || [0, 0];
 
@@ -189,7 +210,7 @@ class Object {
       "right bottom": [1, 1],
     };
 
-    const origin = take("origin");
+    const origin = params.origin;
     this.origin =
       typeof origin === "string" && origin in origins
         ? origins[origin]
@@ -197,24 +218,24 @@ class Object {
         ? origin
         : [0, 0];
 
-    this.x = take("x") ?? 0;
-    this.y = take("y") ?? 0;
+    this.x = params.x ?? 0;
+    this.y = params.y ?? 0;
     this.x += Math.random() / 10;
     this.y += Math.random() / 10;
     this.lastX = this.x;
     this.lastY = this.y;
 
-    this.vx = take("vx") ?? 0;
-    this.vy = take("vy") ?? 0;
-    this.bounce = take("bounce") ?? 0;
-    this.solid = take("solid") ?? false;
-    this.click = take("click") ?? null;
-    this.update = take("update") ?? null;
-    this.collides = take("collides") ?? null;
-    this.drawBounds = take("drawBounds") ?? false;
-    this.props = take("props") ?? {};
+    this.vx = params.vx ?? 0;
+    this.vy = params.vy ?? 0;
+    this.bounce = params.bounce ?? 0;
+    this.solid = params.solid ?? false;
+    this.click = params.click ?? null;
+    this.update = params.update ?? null;
+    this.collides = params.collides ?? null;
+    this.drawBounds = params.drawBounds ?? false;
+    this.props = params.props ?? {};
 
-    const fps = take("fps");
+    const fps = params.fps;
     if (fps != undefined) {
       this.updateInterval = setInterval(() => {
         if (this.engine.objects.indexOf(this) == -1)
@@ -222,11 +243,6 @@ class Object {
         this.update(this);
       }, 1000 / fps);
     }
-
-    for (const [key, val] of window.Object.entries(params))
-      throw new Error(
-        `Sprite's "${key}" set to "${val}", but sprites don't have "${key}"s`
-      );
 
     this.id = Math.random();
   }

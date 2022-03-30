@@ -81,12 +81,6 @@ export const renderDocs = (state) => html`
     <b>End Engine</b>
     <pre>e.end()</pre>
 
-    <b>Engine Properties</b>
-    <pre>
-e.width
-e.height
-  </pre>
-
     <b>Add Object</b>
     <pre>
 e.add({
