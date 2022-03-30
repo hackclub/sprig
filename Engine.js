@@ -267,7 +267,7 @@ class Object {
     return this._sprite;
   }
 
-  telport(x, y) {
+  teleport(x, y) {
     this.lastX = this.x = x;
     this.lasty = this.y = y;
   }
