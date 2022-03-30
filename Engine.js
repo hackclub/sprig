@@ -164,9 +164,9 @@ const VALID_PARAMS = [
   "bounce",
   "origin",
   "props",
+  "fps",
   // not doced?
   "click",
-  "drawBounds",
 ];
 
 class Object {
@@ -231,7 +231,6 @@ class Object {
     this.click = params.click ?? null;
     this.update = params.update ?? null;
     this.collides = params.collides ?? null;
-    this.drawBounds = params.drawBounds ?? false;
     this.props = params.props ?? {};
 
     const fps = params.fps;
