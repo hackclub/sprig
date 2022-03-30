@@ -85,8 +85,7 @@ export const renderDocs = (state) => html`
     <pre>
 e.width
 e.height
-</pre
-    >
+  </pre>
 
     <b>Add Object</b>
     <pre>
@@ -114,16 +113,16 @@ e.add({
     <b>Add Text</b>
     <pre>
 e.addText(
-    "string",  
-    x, 
-    y, 
-    { // optional parameters
-      color: "string", 
-      size: number,
-      rotate: number,
-    }
-)</pre
-    >
+  "string",  
+  x, 
+  y, 
+  { // optional parameters
+    color: "string", 
+    size: number,
+    rotate: number,
+  }
+)
+  </pre>
     Example of adding text:
     <pre>const greetingText = e.addText("hello world", 150, 150);</pre>
     Example of updating text:
@@ -151,8 +150,7 @@ obj.height
 obj.scale
 obj.fps
 obj.hasTag("tag-name")
-</pre
-    >
+    </pre>
 
     <b>object.props</b>
     <br /><br />
@@ -171,7 +169,8 @@ sprite.scale = 2;
 sprite.scale = [1, 2];
 
 // mirror the sprite over the X axis
-sprite.scale = [-1, 1];</pre>
+sprite.scale = [-1, 1];
+    </pre>
 
     <b>object.fps</b>
     <br /><br />
@@ -188,10 +187,10 @@ sprite.scale = [-1, 1];</pre>
 
     <b>object.teleport</b>
     <pre>
-    obj.x = 100
-    obj.y = 100
-    /* vs */
-    obj.teleport(100, 100)
+obj.x = 100
+obj.y = 100
+/* vs */
+obj.teleport(100, 100)
     </pre>
     If you simply assign to x and y, collision detection
     will still be triggered which might stop them from getting there
@@ -212,8 +211,7 @@ playTune(tune_asset_name);
 // or play multiple tunes
 
 playTune(tune_0, tune_1, tune_2);
-</pre
-    >
+    </pre>
     To play a tune on repeat:
     <pre>
 loopTune(tune_asset_name);
@@ -221,14 +219,12 @@ loopTune(tune_asset_name);
 // or loop multiple tunes
 
 loopTune(tune_0, tune_1, tune_2);
-</pre
-    >
+    </pre>
     To stop a tune on repeat:
     <pre>
 const tuneToStop = loopTune(tune_asset_name);
 tuneToStop.end();
-</pre
-    >
+    </pre>
 
     <b>Examples</b>
     <br /><br />
