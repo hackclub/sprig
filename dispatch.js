@@ -265,9 +265,7 @@ const ACTIONS = {
         truncate(entry.stack || JSON.stringify(entry, null, 4), 1999, "...")
       )
       .join("\n\n");
-    report["User Agent"] = await fetch("https://ifconfig.me/ua").then(
-      (response) => response.text()
-    );
+    report["User Agent"] = navigator.userAgent;
     report["State"] = truncate(
       JSON.stringify(
         {
