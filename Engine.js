@@ -681,12 +681,18 @@ class Engine {
     return new Text(str, x, y, ops, this.textContainer);
   }
 
-  heldKey(key) {
-    return this._heldKeys.has(key);
+  ANY_KEY = "AnyKey";
+
+  heldKey(key=this.ANY_KEY) {
+    return key === this.ANY_KEY ?
+      this._heldKeys.size > 0 :
+      this._heldKeys.has(key);
   }
 
-  pressedKey(key) {
-    return this._pressedKeys.has(key);
+  pressedKey(key=this.ANY_KEY) {
+    return key === this.ANY_KEY ?
+      this._pressedKeys.length > 0 :
+      this._pressedKeys.has(key);
   }
 }
 
