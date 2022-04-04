@@ -234,7 +234,7 @@ export function events(state) {
       oldSaves = [oldSaves];
     }
 
-    const saveIndex = all.findIndex((x) => x.name === fresh.name);
+    const saveIndex = oldSaves.findIndex((x) => x.name === fresh.name);
 
     if (saveIndex > -1) {
       oldSaves[saveIndex] = newSave;
