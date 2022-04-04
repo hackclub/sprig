@@ -59,10 +59,6 @@ const STATE = {
       link: `${window.location.origin}/?cached=false&id=c3cee4344b09613cdff9ca992fa8b642`,
     },
     {
-      name: "leaderb0rd",
-      link: `${window.location.origin}/?cached=false&id=1bfeee186cb4d765237a634b7d84b678`,
-    },
-    {
       name: "add bounce sound",
       link: `${window.location.origin}/?cached=false&id=26312484f6b308582627698f2885cb64`,
     },
