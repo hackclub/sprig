@@ -212,13 +212,13 @@ class Entity {
     this.collides = params.collides ?? null;
     this.props = params.props ?? {};
 
-    const secondsBetweenUpdates = params.secondsBetweenUpdates ?? 1/60;
+    const secondsBetweenUpdates = params.secondsBetweenUpdates ?? 1 / 60;
     if (this.update !== null) {
       const updateInterval = setInterval(() => {
         if (this.engine.objects.indexOf(this) === -1)
           return clearInterval(updateInterval);
         this.update(this);
-      }, secondsBetweenUpdates/1000);
+      }, secondsBetweenUpdates / 1000);
     }
 
     this.id = Math.random();
@@ -589,14 +589,14 @@ class Engine {
   }
 
   heldKey(key) {
-    return key === undefined 
-      ? Object.keys(this._heldKeys).length > 0 
+    return key === undefined
+      ? Object.keys(this._heldKeys).length > 0
       : this._heldKeys.has(key);
   }
 
   pressedKey(key) {
-    return pressedKey === undefined 
-      ? Object.keys(this._pressedKeys).length > 0 
+    return pressedKey === undefined
+      ? Object.keys(this._pressedKeys).length > 0
       : this._pressedKeys.has(key);
   }
 }

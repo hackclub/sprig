@@ -2,7 +2,6 @@ import { Engine } from "./Engine.js";
 import { playTune, loopTune } from "./tunePlayers.js";
 import md5 from "https://cdn.skypack.dev/md5";
 
-
 const BLACK_LISTED_WORDS = [
   // "localStorage",
   // "document",
