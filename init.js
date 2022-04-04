@@ -16,6 +16,7 @@ function removeParam(key) {
 }
 
 export function loadFromDefault() {
+  dispatch("GENERATE_NAME");
   return loadFromS3(DEFAULT_CARTRIDGE);
 }
 
@@ -27,6 +28,25 @@ function loadFromStorage() {
     return null;
   }
   const saved = JSON.parse(storedData);
+
+  if (Array.isArray(saved))
+    return dispatch("NOTIFICATION", {
+      message: html`
+        The following games were found in your storage:<br />
+        ${saved.map(
+          (save) => html`
+            <button
+              @click=${() => {
+                dispatch("LOAD_CARTRIDGE", { saved: save });
+              }}
+            >
+              ${save.name}
+            </button>
+          `
+        )}
+      `,
+      open: false,
+    });
 
   dispatch("NOTIFICATION", {
     message: html`

@@ -222,9 +222,27 @@ export function events(state) {
     }
   });
 
-  window.addEventListener("beforeunload", () => {
-    window.localStorage.setItem("hc-game-lab", dispatch("GET_SAVE_STATE"));
-  });
+  const save = () => {
+    let all = JSON.parse(window.localStorage.getItem("hc-game-lab"));
+    const fresh = JSON.parse(dispatch("GET_SAVE_STATE"));
+
+    (() => {
+      if (Array.isArray(all)) {
+        const existing = all.findIndex((x) => x.name == fresh.name);
+        if (existing > -1) return (all[existing] = fresh);
+      }
+
+      if (all == null) all = [];
+      else if (!Array.isArray(all)) all = [all];
+      all.push(fresh);
+    })();
+
+    window.localStorage.setItem("hc-game-lab", JSON.stringify(all));
+  };
+
+  window.addEventListener("beforeunload", save);
+  window.addEventListener("onkeydown", save);
+  window.addEventListener("onmousedown", save);
 
   addVerticalBarDrag(state, bodyListener);
   addHorzBarDrag(state, bodyListener);

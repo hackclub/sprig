@@ -62,10 +62,11 @@ const newProjectImageLink = (state) => {
 }
 
 const newProjectClick = () => {
-  if (confirm("This will clear the existing project. Continue?")) {
-    dispatch("SOUND", "click");
-    dispatch("LOAD_DEFAULT_CARTRIDGE");
-  }
+  alert(`If you want to get back to this project, simply click "?"`);
+  dispatch("SOUND", "click");
+  dispatch("LOAD_DEFAULT_CARTRIDGE").then(() => {
+    dispatch("GENERATE_NAME");
+  });
 }
 
 const newProjectButton = state => button({

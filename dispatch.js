@@ -97,6 +97,17 @@ const STATE = {
   challengeIndex: -1,
 };
 
+function randString(length) {
+  var randomChars = "abcdefghijklmnopqrstuvwxyz";
+  var result = "";
+  for (var i = 0; i < length; i++) {
+    result += randomChars.charAt(
+      Math.floor(Math.random() * randomChars.length)
+    );
+  }
+  return result;
+}
+
 const evalGameScript = createEval();
 
 const ACTIONS = {
@@ -299,6 +310,10 @@ const ACTIONS = {
     state.mouseY = mouseY;
     dispatch("RENDER");
   },
+  GENERATE_NAME({}, state) {
+    state.name = "gamelab-" + randString(3);
+    dispatch("RENDER");
+  },
   LOAD_DEFAULT_CARTRIDGE: async ({}, state) => {
     state.loadFileStatus = "loading";
     await dispatch("LOAD_CARTRIDGE", { saved: await loadFromDefault() });
@@ -373,17 +388,6 @@ const ACTIONS = {
     render(el, html``);
 
     if (state.assetEditor && state.assetEditor.end) state.assetEditor.end();
-
-    function randString(length) {
-      var randomChars = "abcdefghijklmnopqrstuvwxyz";
-      var result = "";
-      for (var i = 0; i < length; i++) {
-        result += randomChars.charAt(
-          Math.floor(Math.random() * randomChars.length)
-        );
-      }
-      return result;
-    }
 
     if (assetType === "sprite") {
       state.assetEditor = createPixelEditor(

@@ -150,28 +150,27 @@ function initSprite(spriteData, that) {
 }
 
 const VALID_PARAMS = [
-  "x", 
-  "y", 
-  "vx", 
-  "vy", 
-  "tags", 
-  "sprite", 
+  "x",
+  "y",
+  "vx",
+  "vy",
+  "tags",
+  "sprite",
   "scale",
-  "rotate", 
-  "collides", 
-  "update", 
+  "rotate",
+  "collides",
+  "update",
   "solid",
   "bounce",
   "origin",
   "props",
+  "fps",
   // not doced?
   "click",
-  "drawBounds"
 ];
 
 class Object {
   constructor(params, engine) {
-
     for (const k in params) {
       if (!VALID_PARAMS.includes(k)) {
         const msg = `Sprite's "${k}" set to "${params[k]}", but sprites don't have "${k}"s`;
@@ -232,7 +231,6 @@ class Object {
     this.click = params.click ?? null;
     this.update = params.update ?? null;
     this.collides = params.collides ?? null;
-    this.drawBounds = params.drawBounds ?? false;
     this.props = params.props ?? {};
 
     const fps = params.fps;
@@ -269,7 +267,7 @@ class Object {
     return this._sprite;
   }
 
-  telport(x, y) {
+  teleport(x, y) {
     this.lastX = this.x = x;
     this.lasty = this.y = y;
   }

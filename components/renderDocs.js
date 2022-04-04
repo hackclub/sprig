@@ -207,7 +207,7 @@ playTune(tune_asset_name);
 playTune(tune_0, tune_1, tune_2);
     </pre>
     To play a tune on repeat:
-    <pre>
+<pre>
 loopTune(tune_asset_name);
 
 // or loop multiple tunes
@@ -215,7 +215,7 @@ loopTune(tune_asset_name);
 loopTune(tune_0, tune_1, tune_2);
     </pre>
     To stop a tune on repeat:
-    <pre>
+<pre>
 const tuneToStop = loopTune(tune_asset_name);
 tuneToStop.end();
     </pre>
