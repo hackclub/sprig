@@ -169,7 +169,7 @@ const VALID_PARAMS = [
   "click",
 ];
 
-class Entity {
+class _Object {
   constructor(params, engine) {
     for (const k in params) {
       if (!VALID_PARAMS.includes(k)) {
@@ -442,7 +442,7 @@ class Engine {
   } // not doced
 
   add(params) {
-    const newObj = new Entity(params, this);
+    const newObj = new _Object(params, this);
     this.objects.push(newObj);
 
     return newObj;
