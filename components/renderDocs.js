@@ -225,7 +225,6 @@ tuneToStop.end();
       One useful pattern is using maps to functions.
     </div>
     <pre>
-    
 // here are the behavior maps
 const playerHeldKeys = {
   "w": me => me.y -= 2,
