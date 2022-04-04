@@ -11,13 +11,18 @@ export function exportHTML(name, saveJSON) {
         display: flex;
         justify-content: center;
         align-items: center;
-        background: blue;
+        background: #dddac7;
+        border-radius: 5px;
       }
 
       .inner-container {
         width: min-content;
         height: min-content;
         position: relative;
+        background: #535352;
+        padding: 0.5em;
+        border-radius: 5px;
+        border: 0.5em solid #cac4b0;
       }
 
       .text-container {

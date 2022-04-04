@@ -595,7 +595,7 @@ class Engine {
   }
 
   pressedKey(key) {
-    return pressedKey === undefined
+    return key === undefined
       ? [...this._pressedKeys].length > 0
       : this._pressedKeys.has(key);
   }
