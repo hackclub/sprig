@@ -590,13 +590,13 @@ class Engine {
 
   heldKey(key) {
     return key === undefined
-      ? Object.keys(this._heldKeys).length > 0
+      ? [...this._heldKeys].length > 0
       : this._heldKeys.has(key);
   }
 
   pressedKey(key) {
     return pressedKey === undefined
-      ? Object.keys(this._pressedKeys).length > 0
+      ? [...this._pressedKeys].length > 0
       : this._pressedKeys.has(key);
   }
 }
