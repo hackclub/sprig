@@ -570,8 +570,8 @@ class Engine {
         if (obj.update !== null && obj.updateInterval == undefined)
           obj.update(obj);
 
-        obj.x += obj.vx * (elapsed/1000);
-        obj.y += obj.vy * (elapsed/1000);
+        obj.x += obj.vx * (elapsed / 1000);
+        obj.y += obj.vy * (elapsed / 1000);
       });
 
       this.resolve();

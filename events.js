@@ -226,9 +226,11 @@ export function events(state) {
     let oldSaves = JSON.parse(window.localStorage.getItem("hc-game-lab"));
     const newSave = JSON.parse(dispatch("GET_SAVE_STATE"));
 
-    if (oldSaves === null) { // no saves
+    if (oldSaves === null) {
+      // no saves
       oldSaves = [];
-    } else if (!Array.isArray(oldSaves)) { // is an object
+    } else if (!Array.isArray(oldSaves)) {
+      // is an object
       oldSaves = [oldSaves];
     }
 
@@ -242,7 +244,6 @@ export function events(state) {
 
     // only save last five files
     oldSaves = oldSaves.slice(-5);
-
 
     window.localStorage.setItem("hc-game-lab", JSON.stringify(oldSaves));
   };
