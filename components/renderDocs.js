@@ -225,6 +225,9 @@ tuneToStop.end();
       One useful pattern is using maps to functions.
     </div>
     <pre>
+// create our engine
+const e = createEngine(gameCanvas, 300, 300);
+
 // here are the behavior maps
 const playerHeldKeys = {
   "w": me => me.y -= 2,
@@ -244,9 +247,6 @@ const playerCollisions = {
     console.log("collided with floor");
   }
 }
-
-// create our engine
-const e = createEngine(gameCanvas, 300, 300);
 
 // define the player object
 const player = {
