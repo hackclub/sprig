@@ -2,6 +2,8 @@ import { html } from '../uhtml.js';
 import button from "./button.js";
 import { dispatch } from "../dispatch.js";
 
+import { exportHTML } from "../exportHTML.js";
+
 const styles = `
   display: flex;
   flex-direction: row;
@@ -167,11 +169,22 @@ const refClick = () => {
   docs.classList.toggle("hide-docs");
 };
 
+const exportButton = state => button({ 
+  buttonImage: './assets/question-icon.png', 
+  tooltipText: "export html", 
+  className: "cursor-pointer",
+  click: () => {
+    const saveStateJSON = dispatch("GET_SAVE_STATE");
+    exportHTML(state.name, saveStateJSON);
+  }, 
+})
+
 
 export default (state) => html`
   <div style=${styles}>
     ${newProjectButton(state)}
     ${downloadButton(state)}
+    ${exportButton(state)}
     ${uploadButton(state)}
     ${bugButton(state)}
     ${refButton(state)}

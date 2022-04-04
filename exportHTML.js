@@ -1,4 +1,3 @@
-
 export function exportHTML(name, saveJSON) {
   const string = `
     <style>
@@ -58,5 +57,4 @@ export function exportHTML(name, saveJSON) {
 
   link.click();
   URL.revokeObjectURL(link);
-  
 }
