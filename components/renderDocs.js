@@ -121,6 +121,8 @@ e.addText(
     <pre>const greetingText = e.addText("hello world", 150, 150);</pre>
     Example of updating text:
     <pre>greetingText.text = "new greeting";</pre>
+    Example of removing text:
+    <pre>greetingText.remove();</pre>
 
     <b>Remove Object</b>
     <pre>e.remove(obj)</pre>
@@ -142,7 +144,7 @@ obj.vy
 obj.width
 obj.height
 obj.scale
-obj.fps
+obj.secondsBetweenUpdates
 obj.hasTag("tag-name")
     </pre>
 
@@ -166,12 +168,9 @@ sprite.scale = [1, 2];
 sprite.scale = [-1, 1];
     </pre>
 
-    <b>object.fps</b>
+    <b>object.secondsBetweenUpdates</b>
     <br /><br />
     Specifies how often your object's update function should be called.
-    If fps isn't specified, then your object will be updated according
-    to your monitor's refresh rate
-    (most often 60 fps, but sometimes as much as 240).
     <br /><br />
 
     <b>object.distanceTo(otherObject)</b>
@@ -218,6 +217,87 @@ loopTune(tune_0, tune_1, tune_2);
 <pre>
 const tuneToStop = loopTune(tune_asset_name);
 tuneToStop.end();
+    </pre>
+
+    <b>Idioms</b>
+    <br><br>
+    <div>
+      One useful pattern is using maps to functions.
+    </div>
+    <pre>
+// create our engine
+const e = createEngine(gameCanvas, 300, 300);
+
+// here are the behavior maps
+const playerHeldKeys = {
+  "w": me => me.y -= 2,
+  "s": me => me.y += 2,
+  "a": me => me.x -= 2,
+  "d": me => me.x += 2,
+}
+
+const playerPressedKeys = {
+  " ": me => {
+    console.log("pressed space");
+  },
+}
+
+const playerCollisions = {
+  "floor": (me, them) => {
+    console.log("collided with floor");
+  }
+}
+
+// define the player object
+const player = {
+  sprite: sprite_player,
+  x: 10,
+  y: 20,
+  scale: 2,
+  collides: (me, them) => {
+    collidesMap(me, them, playerCollisions)
+  },
+  update: me => {
+    heldKeyMap(me, playerHeldKeys)
+    pressedKeyMap(me, playerPressedKeys)
+  }
+}
+
+// use the player object
+e.add(player);
+
+// define the floor object
+const floor = {
+  tags: ["floor"],
+  sprite: sprite_floor,
+  scale: [18, 2],
+  y: 221
+}
+
+// use the floor object
+e.add(floor);
+
+// start the engine
+e.start();
+
+// here are some helper functions to map inputs to events
+function pressedKeyMap(me, map) {
+  for (let k in map) {
+    if (e.pressedKey(k)) map[k](me);
+  }
+}
+
+function heldKeyMap(me, map) {
+  for (let k in map) {
+    if (e.heldKey(k)) map[k](me);
+  }
+}
+
+function collidesMap(me, them, map) {
+  for (let k in map) {
+    if (them.hasTag(k)) map[k](me, them);
+  }
+}
     </pre>
 
     <b>Examples</b>
