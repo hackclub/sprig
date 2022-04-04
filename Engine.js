@@ -164,7 +164,7 @@ const VALID_PARAMS = [
   "bounce",
   "origin",
   "props",
-  "fps",
+  "secondsBetweenUpdate",
   // not doced?
   "click",
 ];
@@ -194,28 +194,7 @@ class Object {
 
     this.rotate = params.rotate ?? 0;
 
-    // this.origin = params.origin || [0, 0];
-
-    const origins = {
-      "left top": [0, 0],
-      "left center": [0, 0.5],
-      "left bottom": [0, 1],
-      "center top": [0.5, 0],
-      "center center": [0.5, 0.5],
-      center: [0.5, 0.5],
-      "center bottom": [0.5, 1],
-      "right top": [1, 0],
-      "right center": [1, 0.5],
-      "right bottom": [1, 1],
-    };
-
-    const origin = params.origin;
-    this.origin =
-      typeof origin === "string" && origin in origins
-        ? origins[origin]
-        : Array.isArray(origin)
-        ? origin
-        : [0, 0];
+    this.origin = params.origin ?? [0, 0];
 
     this.x = params.x ?? 0;
     this.y = params.y ?? 0;
@@ -233,21 +212,20 @@ class Object {
     this.collides = params.collides ?? null;
     this.props = params.props ?? {};
 
-    const fps = params.fps;
-    if (fps != undefined) {
-      this.updateInterval = setInterval(() => {
-        if (this.engine.objects.indexOf(this) == -1)
-          return clearInterval(this.updateInterval);
-        this.update(this);
-      }, 1000 / fps);
-    }
+    const secondsBetweenUpdate = params.secondsBetweenUpdate ?? 1/60;
+    this.updateInterval = setInterval(() => {
+      if (this.engine.objects.indexOf(this) === -1)
+        return clearInterval(this.updateInterval);
+      this.update(this);
+    }, secondsBetweenUpdate/1000);
+    
 
     this.id = Math.random();
   }
 
-  set fps(x) {
+  set secondsBetweenUpdate(x) {
     throw new Error(
-      "gamelab doesn't currently support changing the fps " +
+      "gamelab doesn't currently support changing the secondsBetweenUpdate " +
         "while the game is running. if you need this, " +
         "file an issue on github.com/hackclub/game-lab. " +
         "We'd love to know what you're making!"
@@ -566,9 +544,6 @@ class Engine {
       this.objects.forEach((obj) => {
         obj.lastX = obj.x;
         obj.lastY = obj.y;
-
-        if (obj.update !== null && obj.updateInterval == undefined)
-          obj.update(obj);
 
         obj.x += obj.vx * (elapsed / 1000);
         obj.y += obj.vy * (elapsed / 1000);
