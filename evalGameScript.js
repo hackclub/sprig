@@ -1,6 +1,5 @@
 import { Engine } from "./Engine.js";
 import { playTune, loopTune } from "./tunePlayers.js";
-import md5 from "https://cdn.skypack.dev/md5";
 
 const BLACK_LISTED_WORDS = [
   // "localStorage",
@@ -49,7 +48,6 @@ export function createEval() {
       createEngine(...args) {
         if (currentEngine) cancelAnimationFrame(currentEngine._animId);
         currentEngine = new Engine(...args);
-        // currentEngine.gameHash = md5(prog);
         return currentEngine;
       },
     };
