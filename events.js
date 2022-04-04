@@ -223,21 +223,28 @@ export function events(state) {
   });
 
   const save = () => {
-    let all = JSON.parse(window.localStorage.getItem("hc-game-lab"));
-    const fresh = JSON.parse(dispatch("GET_SAVE_STATE"));
+    let oldSaves = JSON.parse(window.localStorage.getItem("hc-game-lab"));
+    const newSave = JSON.parse(dispatch("GET_SAVE_STATE"));
 
-    (() => {
-      if (Array.isArray(all)) {
-        const existing = all.findIndex((x) => x.name == fresh.name);
-        if (existing > -1) return (all[existing] = fresh);
-      }
+    if (oldSaves === null) { // no saves
+      oldSaves = [];
+    } else if (!Array.isArray(oldSaves)) { // is an object
+      oldSaves = [oldSaves];
+    }
 
-      if (all == null) all = [];
-      else if (!Array.isArray(all)) all = [all];
-      all.push(fresh);
-    })();
+    const saveIndex = all.findIndex((x) => x.name === fresh.name);
 
-    window.localStorage.setItem("hc-game-lab", JSON.stringify(all));
+    if (saveIndex > -1) {
+      oldSaves[saveIndex] = newSave;
+    } else {
+      oldSaves.push(newSave);
+    }
+
+    // only save last five files
+    oldSaves = oldSaves.slice(-5);
+
+
+    window.localStorage.setItem("hc-game-lab", JSON.stringify(oldSaves));
   };
 
   window.addEventListener("beforeunload", save);

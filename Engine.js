@@ -555,7 +555,11 @@ class Engine {
   }
 
   start() {
-    const draw = () => {
+    let last = null;
+    const draw = (ts) => {
+      const elapsed = ts - (last ?? ts);
+      last = ts;
+
       this.ctx.fillStyle = "white";
       this.ctx.fillRect(0, 0, this.width, this.height);
 
@@ -566,8 +570,8 @@ class Engine {
         if (obj.update !== null && obj.updateInterval == undefined)
           obj.update(obj);
 
-        obj.x += obj.vx;
-        obj.y += obj.vy;
+        obj.x += obj.vx * (elapsed/1000);
+        obj.y += obj.vy * (elapsed/1000);
       });
 
       this.resolve();
@@ -589,7 +593,7 @@ class Engine {
 
     this.drawing = true;
 
-    draw();
+    window.requestAnimationFrame(draw);
   }
 
   resolve() {

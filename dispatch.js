@@ -24,7 +24,7 @@ const STATE = {
   assets: [],
   mouseX: 0,
   mouseY: 0,
-  version: "0.2.2",
+  version: "0.2.3",
   previousID: null, // TODO: start setting this correctly on cartridge load
   selected_asset: -1,
   name: "game-name-here",
@@ -44,11 +44,11 @@ const STATE = {
   challenges: [
     {
       name: "jumpstart",
-      link: `${window.location.origin}/?cached=false&id=a9cc498d70351538839c72ba2dfa5029`,
+      link: `${window.location.origin}/?cached=false&id=48044dbac8875315cdf85d8c1c5e03e2`,
     },
     {
       name: "crisis averted",
-      link: `${window.location.origin}/?cached=false&id=c284215d18f62b27e5d0b483c0fa10c4`,
+      link: `${window.location.origin}/?cached=false&id=7131c58b768762a68d05b1ce72373f71`,
     },
     {
       name: "left behind",
@@ -56,11 +56,7 @@ const STATE = {
     },
     {
       name: "whats the hold up?",
-      link: `${window.location.origin}/?cached=false&id=acd08709f9b2288fd5460750c22a196f`,
-    },
-    {
-      name: "sticky situation",
-      link: `${window.location.origin}/?cached=false&id=ce2093e872b57c0283f4b7591a5c9e47`,
+      link: `${window.location.origin}/?cached=false&id=c3cee4344b09613cdff9ca992fa8b642`,
     },
     {
       name: "leaderb0rd",
@@ -68,23 +64,19 @@ const STATE = {
     },
     {
       name: "add bounce sound",
-      link: `${window.location.origin}/?cached=false&id=08118f5df413fd11d32c58d8ba6c00a2`,
+      link: `${window.location.origin}/?cached=false&id=26312484f6b308582627698f2885cb64`,
     },
     {
       name: "off the walls",
-      link: `${window.location.origin}/?cached=false&id=df55ab0b0b6bd6a78ba0e45c2483e9ae`,
-    },
-    {
-      name: "multi-platforming",
-      link: `${window.location.origin}/?cached=false&id=2330e25785ce920dabbac962aa2541ad`,
+      link: `${window.location.origin}/?cached=false&id=7b8b193e409cdd5cc74135e9bff35e01`,
     },
     {
       name: "debarchery",
-      link: `${window.location.origin}/?cached=false&id=dceddece3bc425bf6af5ab7836059270`,
+      link: `${window.location.origin}/?cached=false&id=823d39de13ebd166511dd2b059382375`,
     },
     {
       name: "pressed vs. held",
-      link: `${window.location.origin}/?cached=false&id=3e4d8a38439bf62a2b1a80fb9ee6667d`,
+      link: `${window.location.origin}/?cached=false&id=d9d39a4f69d3c6c07fe5978292dd2ef6`,
     },
     {
       name: "animate sprite",
@@ -92,12 +84,12 @@ const STATE = {
     },
     {
       name: "one jump",
-      link: `${window.location.origin}/?cached=false&id=6d58826e3858b0b3847e247db0448374`,
+      link: `${window.location.origin}/?cached=false&id=b3f4c6862600550c2b9bef8613168498`,
     },
     /* -- what did you just collide with!?! -- */
     {
       name: "make a bunch",
-      link: `${window.location.origin}/?cached=false&id=0549788cba6dd81c3d94ec6a7662e01a`,
+      link: `${window.location.origin}/?cached=false&id=666aaba1d9cece4ea6343ce129d1c17b`,
     },
     /* -- wrap game in func to restart on demand -- */
     /* -- multiple levels -- */
