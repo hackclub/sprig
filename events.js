@@ -220,6 +220,11 @@ export function events(state) {
       event.preventDefault();
       dispatch("RUN");
     }
+
+    if (code === "Escape") {
+      event.preventDefault();
+      document.querySelector(".close-docs").click();
+    }
   });
 
   const save = () => {
