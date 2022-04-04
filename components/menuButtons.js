@@ -170,7 +170,7 @@ const refClick = () => {
 };
 
 const exportButton = state => button({ 
-  buttonImage: './assets/question-icon.png', 
+  buttonImage: './assets/html-export.png', 
   tooltipText: "export html", 
   className: "cursor-pointer",
   click: () => {
