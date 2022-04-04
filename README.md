@@ -365,6 +365,38 @@ As we have said previously, people learn best when they make things that they ca
 
 Game Lab could also be considered a minimalist [fantasy console](https://en.wikipedia.org/wiki/Fantasy_video_game_console#:~:text=A%20fantasy%20video%20game%20console,their%20fictional%20hardware%20will%20have.) sort of like [Pico-8](https://www.lexaloffle.com/pico-8.php).
 
+## Bundling with Deno
+
+You can use [Deno](https://deno.land) to create a standalone build of Game Lab that can be used without Internet access.
+
+First, install Deno: https://deno.land/#installation
+
+Clone the repo:
+
+    $ git clone https://github.com/hackclub/gamelab
+    $ cd gamelab/
+
+Bundle Game Lab:
+
+    $ deno bundle main.js -- dist.js
+
+Update `index.html` to point to `dist.js`:
+
+```diff
+- <script type="module" src="./main.js"></script>
++ <script type="module" src="./dist.js"></script>
+```
+
+Start a local HTTP server:
+
+    $ python3 -m http.server 3000
+
+Go to http://localhost:3000 in your web browser...
+
+    $ open http://localhost:3000/
+
+...and it should work (even without an Internet connection)!
+
 ## Development
 
 Join `#gamelab-dev` on the [Hack Club Slack](https://hackclub.com/slack/) to join the development discussion
