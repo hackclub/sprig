@@ -225,29 +225,8 @@ tuneToStop.end();
       One useful pattern is using maps to functions.
     </div>
     <pre>
-
-// here are some helper functions to map inputs to events
-
-function pressedKeyMap(me, map) {
-  for (let k in map) {
-    if (e.pressedKey(k)) map[k](me);
-  }
-}
-
-function heldKeyMap(me, map) {
-  for (let k in map) {
-    if (e.heldKey(k)) map[k](me);
-  }
-}
-
-function collidesMap(me, them, map) {
-  for (let k in map) {
-    if (them.hasTag(k)) map[k](me, them);
-  }
-}
-
+    
 // here are the behavior maps
-
 const playerHeldKeys = {
   "w": me => me.y -= 2,
   "s": me => me.y += 2,
@@ -257,13 +236,13 @@ const playerHeldKeys = {
 
 const playerPressedKeys = {
   " ": me => {
-    console.log(me.distanceTo(f))
+    console.log("pressed space");
   },
 }
 
 const playerCollisions = {
   "floor": (me, them) => {
-    me.y -= 10
+    console.log("collided with floor");
   }
 }
 
@@ -297,10 +276,29 @@ const floor = {
 }
 
 // use the floor object
-const f = e.add(floor);
+e.add(floor);
 
 // start the engine
 e.start();
+
+// here are some helper functions to map inputs to events
+function pressedKeyMap(me, map) {
+  for (let k in map) {
+    if (e.pressedKey(k)) map[k](me);
+  }
+}
+
+function heldKeyMap(me, map) {
+  for (let k in map) {
+    if (e.heldKey(k)) map[k](me);
+  }
+}
+
+function collidesMap(me, them, map) {
+  for (let k in map) {
+    if (them.hasTag(k)) map[k](me, them);
+  }
+}
     </pre>
 
     <b>Examples</b>
