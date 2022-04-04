@@ -1,5 +1,5 @@
 
-export function exportHTML(saveJSON) {
+export function exportHTML(name, saveJSON) {
   const string = `
     <style>
       html, body {
@@ -29,19 +29,21 @@ export function exportHTML(saveJSON) {
       }
     </style>
     <script defer type="module">
-      import { createEval } from "${window.location.href}evalGameScript.js";
+      import { createEval } from "https://gamelab.hackclub.com/evalGameScript.js";
 
       const evalGameScript = createEval();
 
-      const saveObj = JSON.parse(${saveJSON});
+      const saveObj = ${saveJSON};
 
       const { assets, prog } = saveObj;
 
       const gameCanvas = document.querySelector(".game-canvas");
 
+      console.log(gameCanvas)
+
       const err = evalGameScript({ assets, prog, gameCanvas });
 
-      if (err) e.source.postMessage(err, e.origin);
+      console.log(err);
     </script>
     <div class="outer-container">
       <div class="inner-container">
@@ -51,7 +53,12 @@ export function exportHTML(saveJSON) {
     </div>
   `;
 
-  
+  const blob = new Blob([string], { type: "text/html" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `${name}.html`;
 
+  link.click();
+  URL.revokeObjectURL(link);
   
 }

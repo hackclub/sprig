@@ -164,12 +164,12 @@ const VALID_PARAMS = [
   "bounce",
   "origin",
   "props",
-  "secondsBetweenUpdate",
+  "secondsBetweenUpdates",
   // not doced?
   "click",
 ];
 
-class Object {
+class Entity {
   constructor(params, engine) {
     for (const k in params) {
       if (!VALID_PARAMS.includes(k)) {
@@ -212,20 +212,21 @@ class Object {
     this.collides = params.collides ?? null;
     this.props = params.props ?? {};
 
-    const secondsBetweenUpdate = params.secondsBetweenUpdate ?? 1/60;
-    this.updateInterval = setInterval(() => {
-      if (this.engine.objects.indexOf(this) === -1)
-        return clearInterval(this.updateInterval);
-      this.update(this);
-    }, secondsBetweenUpdate/1000);
-    
+    const secondsBetweenUpdates = params.secondsBetweenUpdates ?? 1/60;
+    if (this.update !== null) {
+      const updateInterval = setInterval(() => {
+        if (this.engine.objects.indexOf(this) === -1)
+          return clearInterval(updateInterval);
+        this.update(this);
+      }, secondsBetweenUpdates/1000);
+    }
 
     this.id = Math.random();
   }
 
-  set secondsBetweenUpdate(x) {
+  set secondsBetweenUpdates(x) {
     throw new Error(
-      "gamelab doesn't currently support changing the secondsBetweenUpdate " +
+      "gamelab doesn't currently support changing the secondsBetweenUpdates " +
         "while the game is running. if you need this, " +
         "file an issue on github.com/hackclub/game-lab. " +
         "We'd love to know what you're making!"
@@ -425,79 +426,6 @@ class Engine {
     // })
   }
 
-  async leaderboard(score) {
-    const LB_SERVER = "https://misguided.enterprises/gamelabscores/";
-
-    const hash = this.gameHash;
-    const res = await fetch(LB_SERVER, {
-      method: "post",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ score, hash }),
-    }).then((x) => x.json());
-
-    let lb = await fetch(LB_SERVER + hash).then((x) => x.json());
-    let scores = window.Object.entries(lb);
-    scores.sort(([, a], [, b]) => b.score - a.score);
-    scores = scores.splice(0, 5);
-
-    this.ctx.globalAlpha = 0.66;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-    clearText(this.canvas.parentNode);
-
-    let x = this.canvas.width * 0.5;
-    let y = this.canvas.height * 0.2;
-    let size = this.canvas.height * 0.1;
-    this.addText(
-      (() => {
-        if (res.prev && res.prev > score) return "PERSONAL BEST";
-        else if (scores.length) return "LEADERBOARD";
-        else return "NO SCORES :(";
-      })(),
-      x,
-      y,
-      { size }
-    );
-
-    y += size + 5;
-    for (const [slack_id, { name, score }] of scores) {
-      let opts = {
-        size: size - 4,
-        href:
-          "https://app.slack.com/client/T0266FRGM/C0266FRGV/user_profile/" +
-          slack_id,
-        newTab: true,
-        color: "blue",
-      };
-      this.addText(name.substring(0, 3), x - 50, y, opts);
-      delete opts.href;
-      delete opts.color;
-      this.addText(score, x + 50, y, opts);
-      y += size;
-    }
-
-    if (res.err)
-      this.addText("login to add your " + score, x, y, {
-        size: size - 4,
-        color: "blue",
-        href:
-          LB_SERVER +
-          "login/" +
-          "?from=" +
-          encodeURIComponent(window.location) +
-          "&score=" +
-          encodeURIComponent(score) +
-          "&hash=" +
-          encodeURIComponent(hash),
-      });
-    if (res.prev) {
-      this.addText(`score: ${score}, best: ${res.prev}`, x, y, {
-        size: size - 4,
-      });
-    }
-  }
-
   get width() {
     return this._width;
   }
@@ -514,7 +442,7 @@ class Engine {
   } // not doced
 
   add(params) {
-    const newObj = new Object(params, this);
+    const newObj = new Entity(params, this);
     this.objects.push(newObj);
 
     return newObj;
@@ -661,11 +589,15 @@ class Engine {
   }
 
   heldKey(key) {
-    return this._heldKeys.has(key);
+    return key === undefined 
+      ? Object.keys(this._heldKeys).length > 0 
+      : this._heldKeys.has(key);
   }
 
   pressedKey(key) {
-    return this._pressedKeys.has(key);
+    return pressedKey === undefined 
+      ? Object.keys(this._pressedKeys).length > 0 
+      : this._pressedKeys.has(key);
   }
 }
 
