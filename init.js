@@ -16,6 +16,7 @@ function removeParam(key) {
 }
 
 export function loadFromDefault() {
+  dispatch("GENERATE_NAME");
   return loadFromS3(DEFAULT_CARTRIDGE);
 }
 
@@ -194,7 +195,6 @@ export async function init(state) {
   dispatch("LOAD_CARTRIDGE", { saved });
   dispatch("SOUND", "bootup");
   dispatch("FAVICON");
-  dispatch("GENERATE_NAME");
 
   document.dispatchEvent(new Event("init_done"));
 }
