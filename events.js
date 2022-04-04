@@ -248,8 +248,8 @@ export function events(state) {
   };
 
   window.addEventListener("beforeunload", save);
-  window.addEventListener("onkeydown", save);
-  window.addEventListener("onmousedown", save);
+  window.addEventListener("keydown", save);
+  window.addEventListener("mousedown", save);
 
   addVerticalBarDrag(state, bodyListener);
   addHorzBarDrag(state, bodyListener);
