@@ -378,13 +378,13 @@ Clone the repo:
 
 Bundle Game Lab:
 
-    $ deno bundle main.js -- dist.js
+    $ deno bundle main.js -- bundle.js
 
-Update `index.html` to point to `dist.js`:
+Update `index.html` to point to `bundle.js`:
 
 ```diff
 - <script type="module" src="./main.js"></script>
-+ <script type="module" src="./dist.js"></script>
++ <script type="module" src="./bundle.js"></script>
 ```
 
 Start a local HTTP server:
