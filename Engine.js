@@ -212,25 +212,9 @@ class _Object {
     this.collides = params.collides ?? null;
     this.props = params.props ?? {};
 
-    const secondsBetweenUpdates = params.secondsBetweenUpdates ?? 1 / 60;
-    if (this.update !== null) {
-      const updateInterval = setInterval(() => {
-        if (this.engine.objects.indexOf(this) === -1)
-          return clearInterval(updateInterval);
-        this.update(this);
-      }, secondsBetweenUpdates / 1000);
-    }
-
+    this.secondsBetweenUpdates = params.secondsBetweenUpdates ?? 1 / 60;
+    this._secondAccumulator = 0;
     this.id = Math.random();
-  }
-
-  set secondsBetweenUpdates(x) {
-    throw new Error(
-      "gamelab doesn't currently support changing the secondsBetweenUpdates " +
-        "while the game is running. if you need this, " +
-        "file an issue on github.com/hackclub/game-lab. " +
-        "We'd love to know what you're making!"
-    );
   }
 
   distanceTo(them) {
@@ -463,7 +447,7 @@ class Engine {
   start() {
     let last = null;
     const draw = (ts) => {
-      const elapsed = ts - (last ?? ts);
+      const elapsedMs = ts - (last ?? ts);
       last = ts;
 
       this.ctx.fillStyle = "white";
@@ -473,8 +457,14 @@ class Engine {
         obj.lastX = obj.x;
         obj.lastY = obj.y;
 
-        obj.x += obj.vx * (elapsed / 1000);
-        obj.y += obj.vy * (elapsed / 1000);
+        obj.x += obj.vx * (elapsedMs / 1000);
+        obj.y += obj.vy * (elapsedMs / 1000);
+
+        obj._secondAccumulator += elapsedMs / 1000;
+        while (obj._secondAccumulator > obj.secondsBetweenUpdates) {
+          obj._secondAccumulator -= obj.secondsBetweenUpdates;
+          if (obj.update) obj.update(obj);
+        }
       });
 
       this.resolve();
@@ -483,9 +473,7 @@ class Engine {
         if (obj.draw !== null) obj.draw();
       });
 
-      [...this._pressedKeys].forEach((key) => {
-        this._pressedKeys.delete(key);
-      });
+      this._pressedKeys.clear();
 
       this.step += 1;
 
