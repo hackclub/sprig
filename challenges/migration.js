@@ -1,4 +1,3 @@
-
 for await (const { name: path, isFile } of Deno.readDir("./"))
   (async () => {
     let [, index, name] = path.match(/([0-9]+)-(.+)\.json$/) ?? [];
