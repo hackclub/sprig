@@ -9,6 +9,7 @@ import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
 import { createSequencer } from "./sequencer/sequencer.js";
 import { playTune, loopTune } from "./tunePlayers.js";
 import { createEval } from "./evalGameScript.js";
+import quest from "./challenges/quest.js";
 import uiSounds from "./assets/ui-sounds.js";
 import validate from "./utils/validate.js";
 import favicon from "./utils/favicon.js";
@@ -41,55 +42,10 @@ const STATE = {
   oldGame: null,
   notifications: [],
   showChallengeBar: true,
-  challenges: [
-    {
-      name: "jumpstart",
-      link: `${window.location.origin}/?cached=false&id=48044dbac8875315cdf85d8c1c5e03e2`,
-    },
-    {
-      name: "crisis averted",
-      link: `${window.location.origin}/?cached=false&id=7131c58b768762a68d05b1ce72373f71`,
-    },
-    {
-      name: "left behind",
-      link: `${window.location.origin}/?cached=false&id=c6faaa6fb82e1643d79231acfd547cf1`,
-    },
-    {
-      name: "whats the hold up?",
-      link: `${window.location.origin}/?cached=false&id=c3cee4344b09613cdff9ca992fa8b642`,
-    },
-    {
-      name: "add bounce sound",
-      link: `${window.location.origin}/?cached=false&id=26312484f6b308582627698f2885cb64`,
-    },
-    {
-      name: "off the walls",
-      link: `${window.location.origin}/?cached=false&id=7b8b193e409cdd5cc74135e9bff35e01`,
-    },
-    {
-      name: "debarchery",
-      link: `${window.location.origin}/?cached=false&id=823d39de13ebd166511dd2b059382375`,
-    },
-    {
-      name: "pressed vs. held",
-      link: `${window.location.origin}/?cached=false&id=d9d39a4f69d3c6c07fe5978292dd2ef6`,
-    },
-    {
-      name: "animate sprite",
-      link: `${window.location.origin}/?cached=false&id=438e4864f1688bfd2784107a7db824de`,
-    },
-    {
-      name: "one jump",
-      link: `${window.location.origin}/?cached=false&id=b3f4c6862600550c2b9bef8613168498`,
-    },
-    /* -- what did you just collide with!?! -- */
-    {
-      name: "make a bunch",
-      link: `${window.location.origin}/?cached=false&id=666aaba1d9cece4ea6343ce129d1c17b`,
-    },
-    /* -- wrap game in func to restart on demand -- */
-    /* -- multiple levels -- */
-  ],
+  challenges: quest.map(({ name, id }) => ({
+    link: `${window.location.origin}/?cached=false&id=${id}`,
+    name,
+  })),
   challengeIndex: -1,
 };
 
