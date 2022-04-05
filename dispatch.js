@@ -230,7 +230,11 @@ const ACTIONS = {
     });
     const report = {};
     report["Engine Version"] = state.engineVersion;
-    await dispatch("SAVE", { type: "link", copyUrl: false, nameWarning: false });
+    await dispatch("SAVE", {
+      type: "link",
+      copyUrl: false,
+      nameWarning: false,
+    });
     report["Project Link"] = state.lastSaved.link;
     dispatch("NOTIFICATION", {
       message: "Generating a bug report... (2/3)",
@@ -296,23 +300,23 @@ const ACTIONS = {
       version: state.version,
     });
   },
-  RENAME_PROMPT(){
-    const name = prompt('Would you like to name your project before saving?')
-    const safeName = dispatch('SET_NAME', {name})
+  RENAME_PROMPT() {
+    const name = prompt("Would you like to name your project before saving?");
+    const safeName = dispatch("SET_NAME", { name });
     if (safeName != "my-project") {
-      confirm(`Renamed to '${safeName}'`)
+      confirm(`Renamed to '${safeName}'`);
     }
   },
-  SAVE: async ({ type, copyUrl, nameWarning=true }, state) => {
+  SAVE: async ({ type, copyUrl, nameWarning = true }, state) => {
     const defaultNames = [
       "project-name",
       "my-project",
       "name-here",
-      "project-name-here"
-    ]
-    console.log({nameWarning, name: state.name})
+      "project-name-here",
+    ];
+    console.log({ nameWarning, name: state.name });
     if (nameWarning && defaultNames.indexOf(state.name) != -1) {
-      await dispatch('RENAME_PROMPT')
+      await dispatch("RENAME_PROMPT");
     }
     await save(type, state, copyUrl);
   },
