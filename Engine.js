@@ -165,6 +165,7 @@ const VALID_PARAMS = [
   "origin",
   "props",
   "secondsBetweenUpdates",
+  "zIndex",
   // not doced?
   "click",
 ];
@@ -202,6 +203,8 @@ class _Object {
     this.y += Math.random() / 10;
     this.lastX = this.x;
     this.lastY = this.y;
+
+    this.zIndex = params.zIndex;
 
     this.vx = params.vx ?? 0;
     this.vy = params.vy ?? 0;
@@ -469,6 +472,7 @@ class Engine {
 
       this.resolve();
 
+      this.objects.sort((a, b) => a.zIndex - b.zIndex);
       this.objects.forEach((obj) => {
         if (obj.draw !== null) obj.draw();
       });
