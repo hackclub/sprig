@@ -178,6 +178,11 @@ sprite.scale = [-1, 1];
     Returns the Euclidean distance between each object.
     <br /><br />
 
+    <b>object.zIndex</b>
+    <br /><br />
+    Objects with higher zIndexes are rendered on top of objects with lower zIndexes.
+    <br /><br />
+
     <b>object.teleport</b>
     <pre>
 obj.x = 100
