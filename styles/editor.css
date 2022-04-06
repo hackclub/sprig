@@ -256,3 +256,17 @@ a {
 img {
   image-rendering: pixelated; /* Make button icons crisp */
 }
+
+@media screen and (max-width: 450px) {
+  .overflow-x-on-mobile {              /*  for the buttons at the top, make  */
+    overflow-x: auto;                  /*   it scrollable on small screens   */
+    overflow-y: hidden;                /*  so that games are still playable  */
+  }
+}
+
+@media screen and (max-height: 450px) {
+  .overflow-x-on-mobile {              /*  for the buttons at the top, make  */
+    overflow-x: auto;                  /*   it scrollable on small screens   */
+    overflow-y: hidden;                /*  so that games are still playable  */
+  }
+}

@@ -181,7 +181,7 @@ const exportButton = state => button({
 
 
 export default (state) => html`
-  <div style=${styles}>
+  <div style=${styles} class="overflow-x-on-mobile">
     ${newProjectButton(state)}
     ${downloadButton(state)}
     ${exportButton(state)}
