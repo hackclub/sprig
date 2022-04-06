@@ -179,7 +179,9 @@ sprite.scale = [-1, 1];
     <br /><br />
 
     <b>object.zIndex</b>
-    Objects with higher zIndexes are rendered on top objects with lower zIndexes.
+    <br /><br />
+    Objects with higher zIndexes are rendered on top of objects with lower zIndexes.
+    <br /><br />
 
     <b>object.teleport</b>
     <pre>
