@@ -450,7 +450,7 @@ class Engine {
   start() {
     let last = null;
     const draw = (ts) => {
-      const elapsedMs = ts - (last ?? ts);
+      const elapsedMs = Math.min(3000, ts - (last ?? ts));
       last = ts;
 
       this.ctx.fillStyle = "white";
