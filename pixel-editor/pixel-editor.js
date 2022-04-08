@@ -20,8 +20,9 @@ function RGBA_to_hex([r, g, b, a]) {
   return "#" + r + g + b + a;
 }
 
-export function createPixelEditor(target) {
+export function createPixelEditor(target, name="sprite") {
   const state = {
+    name,
     canvas: null,
     gridColors: [],
     tempGridColors: [],
@@ -189,7 +190,7 @@ export function createPixelEditor(target) {
               drawCanvasNoBg(canvas);
               const image = canvas.toDataURL();
               const aDownloadLink = document.createElement("a");
-              aDownloadLink.download = "sprite.png";
+              aDownloadLink.download = `${state.name}.png`;
               aDownloadLink.href = image;
               aDownloadLink.click();
             }}

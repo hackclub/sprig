@@ -361,13 +361,14 @@ const ACTIONS = {
     if (state.assetEditor && state.assetEditor.end) state.assetEditor.end();
 
     if (assetType === "sprite") {
+      const name = "sprite_" + randString(3);
       state.assetEditor = createPixelEditor(
-        document.querySelector(".asset-editor")
+        document.querySelector(".asset-editor"),
+        name
       );
       const grid = state.assetEditor.createEmptyGrid();
       state.assetEditor.setGridColors(grid);
 
-      const name = "sprite_" + randString(3);
       state.assets.push({
         name,
         type: "sprite",
@@ -427,7 +428,8 @@ const ACTIONS = {
 
     if (assetType === "sprite") {
       state.assetEditor = createPixelEditor(
-        document.querySelector(".asset-editor")
+        document.querySelector(".asset-editor"),
+        state.assets[index].name
       );
 
       const grid = state.assets[index].data;
