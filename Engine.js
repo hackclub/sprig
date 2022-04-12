@@ -471,6 +471,7 @@ class Engine {
           obj.y += obj.vy * (obj.secondsBetweenUpdates);
         }
 
+
       });
 
       this.resolve();
