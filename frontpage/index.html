@@ -98,8 +98,7 @@ const hslToStr = ([a, b, c]) => `hsl(${a}, ${b}%, ${c}%)`;
     wings[name].img = imageData2Image(data);
   }
 
-  (function frame() {
-
+  requestAnimationFrame(function frame(now) {
     (() => {
       ctx.save();
 
@@ -109,8 +108,8 @@ const hslToStr = ([a, b, c]) => `hsl(${a}, ${b}%, ${c}%)`;
 
       const pan = (img, speed) => {
         const w = img.width;
-        ctx.drawImage(img, (Date.now() / speed) % w, 0);
-        ctx.drawImage(img, (Date.now() / speed) % w - w*Math.sign(speed), 0);
+        ctx.drawImage(img, (now / speed) % w, 0);
+        ctx.drawImage(img, (now / speed) % w - w*Math.sign(speed), 0);
       };
 
       pan(art.ocean, 300);
@@ -125,7 +124,7 @@ const hslToStr = ([a, b, c]) => `hsl(${a}, ${b}%, ${c}%)`;
       for (let i = 0; i < 31; i++) {
         let t = (0.5 - i/30);
 
-        const q = Math.sin(t * 400 + Date.now() / 1000)/2;
+        const q = Math.sin(t * 400 + now / 1000)/2;
         const r = q * (0.5 - Math.abs(t));
         const x =     140 - t * 350,
               y = r * 140          ;
@@ -174,7 +173,7 @@ const hslToStr = ([a, b, c]) => `hsl(${a}, ${b}%, ${c}%)`;
         ctx.scale(3 * dir, 3);
 
         const TAU = Math.PI * 2;
-        let t = ((ay + Date.now() / 300 + ((flip < 0) ? Math.PI : 0)) % TAU) / TAU;
+        let t = ((ay + now / 300 + ((flip < 0) ? Math.PI : 0)) % TAU) / TAU;
         const tM = 0.5, vM = 0.75;
         if (t < tM) t = lerp(0, vM, invLerp(0, tM, t));
         else        t = lerp(vM, 1, invLerp(tM, 1, t));
@@ -190,7 +189,7 @@ const hslToStr = ([a, b, c]) => `hsl(${a}, ${b}%, ${c}%)`;
 
         ctx.save();
         const w = 350;
-        const t = flip * Math.sin(ay + Date.now() / 300);
+        const t = flip * Math.sin(ay + now / 300);
         const x = ax + 150 + w/2 + 10 * t, y = ay + 15 * t;
         const hover = Math.abs(mouse.x - x) < w/2 &&
                       Math.abs(mouse.y - y) < 40;
@@ -215,7 +214,7 @@ const hslToStr = ([a, b, c]) => `hsl(${a}, ${b}%, ${c}%)`;
     })();
 
     requestAnimationFrame(frame);
-  })();
+  });
 })();
 
   </script>
