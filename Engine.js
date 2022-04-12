@@ -465,7 +465,7 @@ class Engine {
         obj._secondAccumulator += elapsedMs / 1000;
         while (obj._secondAccumulator > obj.secondsBetweenUpdates) {
           obj._secondAccumulator -= obj.secondsBetweenUpdates;
-          if (obj.update) { 
+          if (obj.update) {
             // console.log("updating", obj)
             obj.update(obj);
           }
