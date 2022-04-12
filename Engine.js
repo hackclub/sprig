@@ -369,7 +369,9 @@ class Engine {
     this.ctx.imageSmoothingEnabled = false;
     this.objects = [];
     this.drawing = false;
-    this.step = 0;
+
+    // this
+    // this.updatesPerSecond = 60;
 
     this._width = width;
     this._height = height;
@@ -460,14 +462,17 @@ class Engine {
         obj.lastX = obj.x;
         obj.lastY = obj.y;
 
-        obj.x += obj.vx * (elapsedMs / 1000);
-        obj.y += obj.vy * (elapsedMs / 1000);
-
         obj._secondAccumulator += elapsedMs / 1000;
         while (obj._secondAccumulator > obj.secondsBetweenUpdates) {
           obj._secondAccumulator -= obj.secondsBetweenUpdates;
-          if (obj.update) obj.update(obj);
+          if (obj.update) { 
+            // console.log("updating", obj)
+            obj.update(obj);
+          }
         }
+
+        obj.x += obj.vx * (elapsedMs / 1000);
+        obj.y += obj.vy * (elapsedMs / 1000);
       });
 
       this.resolve();
@@ -475,14 +480,14 @@ class Engine {
       /* JavaScript's sort is stable, so undefined - undefined here
          won't shuffle; if you don't ever specify an index, things
          render in the order that they were spawned. */
+
       this.objects.sort((a, b) => a.zIndex - b.zIndex);
+
       this.objects.forEach((obj) => {
         if (obj.draw !== null) obj.draw();
       });
 
       this._pressedKeys.clear();
-
-      this.step += 1;
 
       if (this.drawing) this._animId = window.requestAnimationFrame(draw);
     };
