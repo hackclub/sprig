@@ -466,10 +466,10 @@ class Engine {
         while (obj._secondAccumulator > obj.secondsBetweenUpdates) {
           obj._secondAccumulator -= obj.secondsBetweenUpdates;
           if (obj.update) obj.update(obj);
-        }
 
-        obj.x += obj.vx * (obj.secondsBetweenUpdates / 1000);
-        obj.y += obj.vy * (obj.secondsBetweenUpdates / 1000);
+          obj.x += obj.vx * (obj.secondsBetweenUpdates);
+          obj.y += obj.vy * (obj.secondsBetweenUpdates);
+        }
 
       });
 
