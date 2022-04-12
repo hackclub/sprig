@@ -469,10 +469,12 @@ class Engine {
             // console.log("updating", obj)
             obj.update(obj);
           }
+
+          obj.x += obj.vx * (obj.secondsBetweenUpdates / 1000);
+          obj.y += obj.vy * (obj.secondsBetweenUpdates / 1000);
         }
 
-        obj.x += obj.vx * (elapsedMs / 1000);
-        obj.y += obj.vy * (elapsedMs / 1000);
+
       });
 
       this.resolve();

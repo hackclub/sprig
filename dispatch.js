@@ -185,7 +185,7 @@ const ACTIONS = {
       message: "Generating a bug report... (1/3)",
     });
     const report = {};
-    report["Engine Version"] = state.engineVersion;
+    report["Engine Version"] = state.version;
     await dispatch("SAVE", {
       type: "link",
       copyUrl: false,
@@ -223,7 +223,7 @@ const ACTIONS = {
           error: state.error,
           mouseX: state.mouseX,
           mouseY: state.mouseY,
-          engineVersion: state.version,
+          version: state.version,
           previousID: state.previousID,
           selected_asset: state.selected_asset,
           name: state.name,
