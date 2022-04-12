@@ -66,7 +66,7 @@ engine.add({
   sprite: player,
   scale: 4,
   update: (me) => { // update runs every frame
-    me.vy += 2; // adding velocity every frame is acceleration
+    me.vy += 50; // adding velocity every frame is acceleration
   }
 })
 
@@ -97,7 +97,7 @@ engine.add({
   sprite: player,
   scale: 4,
   update: (me) => {
-    me.vy += 2;
+    me.vy += 50;
 
     // we can add key inputs by checking the keys in the update loop
     if (engine.heldKey("ArrowLeft")) me.x -= 3;
@@ -135,11 +135,11 @@ engine.add({
   collides: (me, them) => { // this runs when we collide with another object
     if (engine.pressedKey(" ")) {
       // here we are checking if we are standing on the floor
-      if (them.hasTag("floor")) me.vy -= 19;
+      if (them.hasTag("floor")) me.vy -= 80;
     }
   },
   update: (me) => {
-    me.vy += 2;
+    me.vy += 50;
 
     if (engine.heldKey("ArrowLeft")) me.x -= 3;
     if (engine.heldKey("ArrowRight")) me.x += 3;
@@ -178,7 +178,7 @@ engine.add({
     if (them.hasTag("platform")) me.vx = them.vx;
     
     if (engine.pressedKey(" ")) {
-      if (them.hasTag("platform")) me.vy -= 11;
+      if (them.hasTag("platform")) me.vy -= 50;
     }
   },
   update: (me) => {
@@ -197,11 +197,11 @@ const addPlatform = (x, y) => engine.add({
   solid: true,
   x: x,
   y: y,
-  vx: -1,
+  vx: -40,
   bounce: -1, // bounce determines how much velocity changes when we collide with something
   update: (me) => {
-      if (me.x < 0) me.vx = 1;
-      if (me.x + me.width > engine.width) me.vx = -1
+      if (me.x < 0) me.vx = 40;
+      if (me.x + me.width > engine.width) me.vx = -40
   },
 })
 
@@ -306,8 +306,8 @@ engine.add({
   solid: true, // add solid property to make object bump into other solids
   x: 178, // x position
   y: 126, // y position
-  vx: 1, // x velocity
-  vy: 3, // y velocity
+  vx: 40, // x velocity
+  vy: 100, // y velocity
   sprite: ball,
   scale: 2,
   rotate: 90, // rotate by some degrees
@@ -336,13 +336,13 @@ engine.add({
 
 ---
 
-[Crappy Birds](https://gamelab.hackclub.com/?id=e1e4eaa60b3cdd80c1e81d976569aab8)
+[Crappy Birds](https://gamelab.hackclub.com/?id=c47297ab3703f57d85d115b7cca8f34e)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149380918-a1855ab3-cc2d-4a9a-adc0-d5316d6f17ba.gif">
 
 ---
 
-[Brick Broken](https://gamelab.hackclub.com/?id=93523665fc2ccdd1c6eac2dc875a42de)
+[Brick Broken](https://gamelab.hackclub.com/?id=60638924dda1114388e1c23b431232da)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/150606449-5b73d7fe-f2d3-432f-9cc5-346c20919ec8.gif">
 
