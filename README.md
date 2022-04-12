@@ -66,7 +66,7 @@ engine.add({
   sprite: player,
   scale: 4,
   update: (me) => { // update runs every frame
-    me.vy += 2; // adding velocity every frame is acceleration
+    me.vy += 50; // adding velocity every frame is acceleration
   }
 })
 
@@ -100,8 +100,8 @@ engine.add({
     me.vy += 50;
 
     // we can add key inputs by checking the keys in the update loop
-    if (engine.heldKey("ArrowLeft")) me.x -= 70;
-    if (engine.heldKey("ArrowRight")) me.x += 70; 
+    if (engine.heldKey("ArrowLeft")) me.x -= 3;
+    if (engine.heldKey("ArrowRight")) me.x += 3; 
   }
 })
 
@@ -141,8 +141,8 @@ engine.add({
   update: (me) => {
     me.vy += 50;
 
-    if (engine.heldKey("ArrowLeft")) me.x -= 50;
-    if (engine.heldKey("ArrowRight")) me.x += 50;
+    if (engine.heldKey("ArrowLeft")) me.x -= 3;
+    if (engine.heldKey("ArrowRight")) me.x += 3;
   }
 })
 
@@ -184,8 +184,8 @@ engine.add({
   update: (me) => {
       me.vy += 0.4;
   
-      if (engine.heldKey("ArrowLeft")) me.x -= 90;
-      if (engine.heldKey("ArrowRight")) me.x += 90;
+      if (engine.heldKey("ArrowLeft")) me.x -= 3;
+      if (engine.heldKey("ArrowRight")) me.x += 3;
   },
 })
 
@@ -227,8 +227,8 @@ engine.add({
   x: 150,
   y: 50,
   update: (me) => {
-    if (engine.heldKey("ArrowUp")) me.y -= 30;
-    if (engine.heldKey("ArrowDown")) me.y += 30;
+    if (engine.heldKey("ArrowUp")) me.y -= 3;
+    if (engine.heldKey("ArrowDown")) me.y += 3;
   },
 })
 
