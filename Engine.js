@@ -470,7 +470,6 @@ class Engine {
 
         obj.x += obj.vx * (obj.secondsBetweenUpdates / 1000);
         obj.y += obj.vy * (obj.secondsBetweenUpdates / 1000);
-
       });
 
       this.resolve();
