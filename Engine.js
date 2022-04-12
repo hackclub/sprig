@@ -369,7 +369,6 @@ class Engine {
     this.ctx.imageSmoothingEnabled = false;
     this.objects = [];
     this.drawing = false;
-    this.step = 0;
 
     this._width = width;
     this._height = height;
@@ -398,7 +397,6 @@ class Engine {
     canvas.addEventListener("keyup", (e) => {
       const key = e.key;
       this._heldKeys.delete(key);
-      this._pressedKeys.delete(key);
 
       e.preventDefault();
     });
@@ -448,9 +446,9 @@ class Engine {
   }
 
   start() {
-    let last = null;
+    let last = 0;
     const draw = (ts) => {
-      const elapsedMs = Math.min(3000, ts - (last ?? ts));
+      const elapsedMs = Math.min(3000, ts - last);
       last = ts;
 
       this.ctx.fillStyle = "white";
@@ -463,11 +461,13 @@ class Engine {
         obj.x += obj.vx * (elapsedMs / 1000);
         obj.y += obj.vy * (elapsedMs / 1000);
 
-        obj._secondAccumulator += elapsedMs / 1000;
-        while (obj._secondAccumulator > obj.secondsBetweenUpdates) {
-          obj._secondAccumulator -= obj.secondsBetweenUpdates;
-          if (obj.update) obj.update(obj);
-        }
+        // obj._secondAccumulator += elapsedMs / 1000;
+        // while (obj._secondAccumulator > obj.secondsBetweenUpdates) {
+        //   obj._secondAccumulator -= obj.secondsBetweenUpdates;
+        //   if (obj.update) obj.update(obj);
+        // }
+
+        if (obj.update) obj.update(obj);
       });
 
       this.resolve();
@@ -481,8 +481,6 @@ class Engine {
       });
 
       this._pressedKeys.clear();
-
-      this.step += 1;
 
       if (this.drawing) this._animId = window.requestAnimationFrame(draw);
     };
