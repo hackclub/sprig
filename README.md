@@ -342,7 +342,7 @@ engine.add({
 
 ---
 
-[Brick Broken](https://gamelab.hackclub.com/?id=93523665fc2ccdd1c6eac2dc875a42de)
+[Brick Broken](https://gamelab.hackclub.com/?id=60638924dda1114388e1c23b431232da)
 
 <img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/150606449-5b73d7fe-f2d3-432f-9cc5-346c20919ec8.gif">
 
