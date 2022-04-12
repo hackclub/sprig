@@ -2,7 +2,7 @@ import { events } from "./events.js";
 import { dispatch } from "./dispatch.js";
 import { html } from "./uhtml.js";
 
-const DEFAULT_CARTRIDGE = "9de74f941f7559ec8abf8980883abbb2";
+const DEFAULT_CARTRIDGE = "329d49b77f7927691e12d1516434e790";
 
 function getParam(key) {
   const search = new URLSearchParams(window.location.search);
