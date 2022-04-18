@@ -64,7 +64,7 @@ const newProjectImageLink = (state) => {
 }
 
 const newProjectClick = () => {
-  alert(`If you want to get back to this project, simply click "?"`);
+  confirm(`If you want to get back to this project?`);
   dispatch("SOUND", "click");
   dispatch("LOAD_DEFAULT_CARTRIDGE").then(() => {
     dispatch("GENERATE_NAME");

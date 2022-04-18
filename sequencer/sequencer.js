@@ -488,7 +488,7 @@ export function createSequencer(target) {
 
     r();
     // add events
-    window.addEventListener("resize", r);
+    // window.addEventListener("resize", r);
     addDropUpload();
 
   }
