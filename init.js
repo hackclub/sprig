@@ -1,4 +1,5 @@
 import { events } from "./events.js";
+import frontpage from "./frontpage.js";
 import { dispatch } from "./dispatch.js";
 import { html } from "./uhtml.js";
 
@@ -164,6 +165,39 @@ function setGameIframe() {
 }
 
 export async function init(state) {
+  if (![...new URLSearchParams(window.location.search)].length) {
+    const canvas = document.createElement("canvas");
+    frontpage(canvas, [
+      {
+        name: "NEW PROJECT",
+        async onClick(exit) {
+          exit();
+          await loadFromS3(DEFAULT_CARTRIDGE);
+          dispatch("SET_NAME", {
+            name: prompt("What would you like to name your new project?")
+          });
+        }
+      },
+      {
+        name: "CHALLENGES",
+        onClick(exit) {
+          document
+            .querySelector(".challenge-menu")
+            .style
+            .visibility = "visible";
+          exit();
+        }
+      },
+      {
+        name: "REFERENCE",
+        onClick(exit) {
+          document.querySelector(".close-docs").click();
+          exit();
+        }
+      }
+    ]);
+  }
+
   dispatch("FAVICON", "loading.gif");
   initVert();
 

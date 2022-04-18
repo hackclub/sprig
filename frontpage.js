@@ -1,34 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Hello, world!</title>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/pixelated" type="text/css"/>
-  <meta name="description" content="" />
-  <style>
-    document, body {
-      padding: 0px;
-      margin: 0px;
-      overflow: hidden;
-    }
-  </style>
-</head>
-<body>
-  <canvas id="canvas">
-  <script>
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-
-(window.onresize = () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  ctx.imageSmoothingEnabled = false;
-})();
-
-const mouse = { x: 0, y: 0 };
-window.onmousemove = ev => (mouse.x = ev.pageX, mouse.y = ev.pageY);
-
 const lerp = (a, b, t) => (1 - t) * a + t * b;
 const invLerp = (a, b, v) => (v - a) / (b - a);
 
@@ -55,13 +24,43 @@ function imageData2Image(imagedata) {
 
 const hslToStr = ([a, b, c]) => `hsl(${a}, ${b}%, ${c}%)`;
 
-(async () => {
+export default async (canvas, buttons) => {
+  canvas.id = "frontpage";
+  const ctx = canvas.getContext("2d");
+
+  let drawing = true;
+  document.body.appendChild(canvas);
+  document.getElementById("root").style.zIndex = -1;
+  const exit = () => {
+    drawing = false;
+    document.getElementById("root").style.zIndex = 0;
+  }
+
+  (window.onresize = () => {
+    if (document.getElementById("frontpage")) {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      ctx.imageSmoothingEnabled = false;
+    }
+  })();
+
+  let mouse = { x: 0, y: 0 };
+  let mouseDown = false;
+  let mouseDownPos = { x: 0, y: 0 };
+  const pagePos = ({ pageX: x, pageY: y }) => ({ x, y });
+  canvas.onmousemove = ev => mouse = pagePos(ev);
+  canvas.onmousedown = ev => {
+    mouseDown = true;
+    mouseDownPos = pagePos(ev);
+  };
+  canvas.onmouseup = () => mouseDown = false;
+
   const art = Object.fromEntries(await Promise.all(
     ["wing", "ocean", "pillars", "windows"]
       .map(name => new Promise(res => {
         const asset = new Image();
         asset.onload = () => res([name, asset]);
-        asset.src = name + ".png";
+        asset.src = `assets/${name}.png`;
       }))
   ));
 
@@ -99,6 +98,8 @@ const hslToStr = ([a, b, c]) => `hsl(${a}, ${b}%, ${c}%)`;
   }
 
   requestAnimationFrame(function frame(now) {
+    if (drawing) requestAnimationFrame(frame);
+
     (() => {
       ctx.save();
 
@@ -184,15 +185,20 @@ const hslToStr = ([a, b, c]) => `hsl(${a}, ${b}%, ${c}%)`;
       };
 
       let ay = 0;
-      const button = (text, ax, wing, flip=1) => {
+      const button = ({ text, ax, wing, flip=1, onClick }) => {
         ay += 230;
 
         ctx.save();
         const w = 350;
         const t = flip * Math.sin(ay + now / 300);
         const x = ax + 150 + w/2 + 10 * t, y = ay + 15 * t;
-        const hover = Math.abs(mouse.x - x) < w/2 &&
-                      Math.abs(mouse.y - y) < 40;
+
+        const posHovers = pos => Math.abs(mouse.x - x) < w/2 &&
+                                 Math.abs(mouse.y - y) < 40;
+        const hover = posHovers(mouse);
+        if (mouseDown && posHovers(mouseDownPos))
+          mouseDown = false, onClick(exit);
+
         ctx.translate(x, y);
         ctx.rotate(t * (2/70) * Math.PI);
         ctx.font = '50px "SFPixelateShadedRegular"';
@@ -208,15 +214,17 @@ const hslToStr = ([a, b, c]) => `hsl(${a}, ${b}%, ${c}%)`;
         drawWing(wing.img, w/ 2, 0, ay, -1, flip);
         ctx.restore();
       };
-      button("NEW PROJECT", 0, wings.maroon);
-      button("CHALLENGES", 40, wings.purple, -1);
-      button("REFERENCE",  80, wings.darkblue);
+
+      let x = 0;
+      for (const i in buttons)
+        button({
+          text: buttons[i].name,
+          onClick: buttons[i].onClick,
+          wing: wings[['maroon', 'purple', 'darkblue'][i % 3]],
+          ax: x += 40,
+          flip: (i % 2) ? -1 : 1,
+        });
+
     })();
-
-    requestAnimationFrame(frame);
   });
-})();
-
-  </script>
-</body>
-</html>
+}

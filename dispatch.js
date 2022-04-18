@@ -402,6 +402,7 @@ const ACTIONS = {
     dispatch("SET_TITLE", safeName);
 
     state.name = safeName || "my-project";
+    dispatch("RENDER");
 
     return state.name;
   },
