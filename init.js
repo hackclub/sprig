@@ -167,7 +167,7 @@ function setGameIframe() {
 export async function init(state) {
   if (![...new URLSearchParams(window.location.search)].length) {
     const canvas = document.createElement("canvas");
-    frontpage(canvas, [
+    const buttons = [
       {
         name: "NEW PROJECT",
         async onClick(exit) {
@@ -195,7 +195,15 @@ export async function init(state) {
           exit();
         }
       }
-    ]);
+    ];
+    frontpage({
+      canvas,
+      buttons,
+      async onSaveClick(saved, exit) {
+        dispatch("LOAD_CARTRIDGE", { saved });
+        exit();
+      }
+    });
   }
 
   dispatch("FAVICON", "loading.gif");
