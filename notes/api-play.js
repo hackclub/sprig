@@ -429,3 +429,144 @@ const floor = {
 e.add(floor);
 
 e.start();
+
+////////////////////////////////
+
+// initialize engine
+// const e = setScreenSize(300, 300);
+
+// fix screen size? fixed aspect ratio
+// units are 0 - 100
+
+// default origin is center?
+// remove rotate? keep flip?
+let beaker = add({
+  sprite: sprite_beaker, // assign sprite here
+  solid: true, // collides with other solid objects
+  x: 130, // set initial x position
+  y: 91, // set initial y position
+  scale: 2,
+})
+
+add({
+  sprite: sprite_floor,
+  tags: ["floor"], // can be used to reference object
+  solid: true,
+  x: 102,
+  y: 242,
+  scale: 3
+})
+
+createTimer( _ => {
+  getTagged("floor").forEach( sprite => {
+    sprite.y += 3;
+  })
+}, 1/30)
+
+let timer = createTimer(time => {
+  console.log("every second");
+  if (time > 10) cancelTimer(timer);
+}, 1)
+
+onCollision("tag1", "tag2", (tag0, tag1) => {
+  
+})
+
+onCollision(beaker, "tag2", (tag0, tag1) => {
+  
+})
+
+onInput("keyheld", (data) => {
+  if (data === "3") {
+    getTagged("floor").forEach(floor => {
+      floor.y = 300;
+    })
+  }
+})
+
+// onInput("keypress:3", () => { })
+// onInput("keyheld:space", () => { })
+
+// onKeyPress("a", () => { })
+// onKeyHeld("a", () => { })
+// onKeyHeld("a", () => { })
+
+// won't need this with timer
+onUpdate(() => {
+  getTagged("floor").forEach(sprite => {
+    sprite.x += 3;
+    sprite.y += 3;
+  })
+
+  // forTagged("floor", floor => { })
+})
+
+// start the game
+start();
+
+
+//////////////////////////////
+
+const obj = add({
+  sprite,
+  tags: [],
+  scale: [1, 1],
+  x, 
+  y,
+  vx,
+  vy,
+  solid: true,
+  origin: [0.5, 0.5],
+  zIndex: 1,
+  props: {},
+  // bounce: 1,
+  // rotate: 0
+});
+
+obj.teleport(x, y);
+obj.distanceTo(otherObj);
+obj.addTag("something");
+obj.removeTag("something");
+obj.width;
+obj.height;
+
+
+// center is x, y
+let sampleText = addText("text", x, y, { size, color, rotate });
+sampleText.text = "text"; 
+// or sampleText.setText("text")
+// or just remove and re-add
+
+remove(tag | sprite | text);
+
+getTagged(tagName);
+
+let timer0 = createTimer(time => {
+  if (keyheld("k")) {
+    console.log("key k held");
+  }
+
+  if (keypressed("k")) { // when is this triggered?
+    console.log("key k pressed");
+  }
+}, 1/30);
+cancelTimer(timer0); // or timer0.cancel(); or remove(timer0)
+
+// should i be able to remove these?
+// when will keyheld be triggered?
+onInput("keypress", data => { // "keyhold" | "mousemove" | "mousedown" | "mouseup"
+  if (data === "k") {
+    console.log("k");
+  }
+})
+
+onCollision(tag0 | obj, tag1, (tagged0, tagged1) => { // on collide
+
+})
+
+start();
+end();
+
+playTune(tune_asset_name);
+const tuneToStop = loopTune(tune_asset_name);
+tuneToStop.end(); // or endTune(tuneToStop) or remove(tuneToStop)
