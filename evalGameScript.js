@@ -1,5 +1,5 @@
 import { Engine } from "./Engine.js";
-import { playTune, loopTune } from "./tunePlayers.js";
+import { init } from "./engine/gamelab_functions.js";
 
 const BLACK_LISTED_WORDS = [
   // "localStorage",
@@ -11,12 +11,13 @@ const BLACK_LISTED_WORDS = [
 ];
 
 export function createEval() {
-  let currentEngine = null;
-  let tunePlayers = [];
+  let current = null;
 
   return evalGameScript;
 
   function evalGameScript({ assets, prog, show, gameCanvas }) {
+    if (current) current();
+
     for (let i = 0; i < BLACK_LISTED_WORDS.length; i++) {
       const word = BLACK_LISTED_WORDS[i];
       if (prog.includes(word)) {
@@ -24,33 +25,14 @@ export function createEval() {
       }
     }
 
-    if (tunePlayers.length > 0) {
-      tunePlayers.forEach((x) => x.end());
-      tunePlayers = [];
-    }
+    // Engine.show = show;
 
-    Engine.show = show;
+    gameCanvas.width = 300;
+    gameCanvas.height = 300;
 
-    const included = {
-      playTune() {
-        const tunePlayer = playTune(...arguments);
-        tunePlayers.push(tunePlayer);
+    const included = init(gameCanvas);
 
-        return tunePlayer;
-      },
-      gameCanvas,
-      loopTune() {
-        const tunePlayer = loopTune(...arguments);
-        tunePlayers.push(tunePlayer);
-
-        return tunePlayer;
-      },
-      createEngine(...args) {
-        if (currentEngine) cancelAnimationFrame(currentEngine._animId);
-        currentEngine = new Engine(...args);
-        return currentEngine;
-      },
-    };
+    current = included.end;
 
     assets.forEach((asset) => {
       included[asset.name] = asset.data;

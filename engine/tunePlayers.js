@@ -1,4 +1,4 @@
-import { playCellsOnBeat } from "./sequencer/sequencer.js";
+import { playCellsOnBeat } from "../sequencer/sequencer.js";
 
 function wait(time) {
   return new Promise((resolve) => setTimeout(resolve, time));

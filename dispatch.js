@@ -7,7 +7,6 @@ import { size_up_sprites } from "./size_up_sprites.js";
 import { latestEngineVersion } from "./github.js";
 import { createPixelEditor } from "./pixel-editor/pixel-editor.js";
 import { createSequencer } from "./sequencer/sequencer.js";
-import { playTune, loopTune } from "./tunePlayers.js";
 import { createEval } from "./evalGameScript.js";
 import quest from "./challenges/quest.js";
 import uiSounds from "./assets/ui-sounds.js";
