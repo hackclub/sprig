@@ -20,7 +20,7 @@ export function init(canvas) {
 
   const ctx = canvas.getContext("2d");
 
-  timeKeeper.addTimer( _ => {
+  timeKeeper.addTimer(_ => {
     heldKeys.forEach(key => {
       inputEvents["keyhold"].forEach(fn => fn(key));
     })
@@ -36,6 +36,8 @@ export function init(canvas) {
     heldKeys.add(key);
 
     inputEvents["keypress"].forEach(fn => fn(key));
+
+    resolveObjs(gameObjects);
     
     e.preventDefault();
   });
@@ -63,9 +65,9 @@ export function init(canvas) {
       obj.y += obj.vy * elapsedMs;
     });
 
-    resolveObjs(gameObjects);
-
     timeKeeper.update(elapsedMs);
+
+    resolveObjs(gameObjects);
 
     // draw gameObjects and texts
     ctx.fillStyle = "white";
@@ -95,6 +97,14 @@ export function init(canvas) {
       gameObjects = gameObjects.filter((x) => x.id !== gameObject.id);
     }
 
+    collisionEvents.forEach(([tag1, tag2, fn]) => {
+      if (typeof tag1 === "string") {
+        gameObject.collisionFns.push([tag2, fn]);
+      } else { // is game object
+
+      }
+    })
+
     return gameObject;
   }
 
@@ -112,7 +122,7 @@ export function init(canvas) {
   }
 
   function getTagged(tag) {
-    return gameObjects.filter((x) => x.tags.includes(tag));
+    return tag === "" ? gameObjects : gameObjects.filter((x) => x.tags.includes(tag));
   }
 
  function playTune() {
@@ -138,13 +148,13 @@ export function init(canvas) {
   }
 
   function remove(thing) {
-    // sprite id
+    // sprite
     // tag
-    // tune id
-    // text id
-    // collision event id
-    // input event id
-    // timer id
+    // tune
+    // text
+    // collision event
+    // input event
+    // timer
 
     if (typeof thing === "string") {
       gameObjects = gameObjects.filter((x) => !x.tags.includes(thing))
@@ -168,7 +178,18 @@ export function init(canvas) {
   }
 
   function onCollision(id0, id1, fn) { // could be gameObject or tag
-    
+    collisionEvents.push([id0, id1, fn]);
+
+    if (typeof id0 === "string") {
+      getTagged(id0).forEach(x => {
+        // add collision
+        x.collisionFns.push([id1, fn]);
+      })
+    } else { // is game object
+
+    }
+
+    // should this be removable?
   }
 
   function start() {
@@ -201,6 +222,7 @@ export function init(canvas) {
     onInput,
     onCollision,
     start,
-    end
+    end,
+    every: (tag, fn) => getTagged(tag).forEach(fn)
   }
 }

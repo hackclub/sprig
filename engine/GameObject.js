@@ -46,12 +46,13 @@ export class GameObject {
     this.lastX = this.x;
     this.lastY = this.y;
 
-    this.zIndex = params.zIndex;
+    this.zIndex = params.zIndex ?? 0;
     this.vx = params.vx ?? 0;
     this.vy = params.vy ?? 0;
     this.bounce = params.bounce ?? 0;
     this.solid = params.solid ?? false;
     this.props = params.props ?? {};
+    this.collisionFns = [];
 
     this.id = Math.random().toString(36).slice(2);
   }
@@ -77,6 +78,17 @@ export class GameObject {
 
   hasTag(tag) {
     return this.tags.includes(tag);
+  }
+
+  addTag(tag) {
+    this.tags.push(tag);
+    return this;
+  }
+
+  removeTag(tag) {
+    this.tags = this.tags.filter( x => x !== tag );
+
+    return this;
   }
 
   get width() {

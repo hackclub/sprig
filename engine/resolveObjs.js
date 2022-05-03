@@ -11,9 +11,8 @@ function resolveObj(me, them) {
 
   let canMoveInX = true;
   let canMoveInY = true;
-  let collided = false;
-
-  if (top*bottom < 0 && left*right < 0) collided = true;
+  let collided = false 
+  // top*bottom > 0 && left*right > 0 && top*bottom*left*right !== Infinity;
 
   const bothSolid = them.solid && me.solid;
 
@@ -60,7 +59,11 @@ function resolveObj(me, them) {
   if (canMoveInX) me.x += dx;
   if (canMoveInY) me.y += dy;
 
-  // if (collided && me.collides !== null) me.collides(me, them);
+  if (collided && me.collisionFns.length > 0) {
+    me.collisionFns.forEach(([tag, fn]) => {
+      if (them.hasTag(tag)) fn(me, them);
+    })
+  }
 }
 
 export function resolveObjs(objects) {
