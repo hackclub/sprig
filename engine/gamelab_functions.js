@@ -253,8 +253,6 @@ export function init(canvas) {
     const getDeltas = (tiles) => tiles.map(t => [t.dx, t.dy]).flat();
     const anyMoved = () => getDeltas(currentLevel).some(d => d !== 0);
 
-    // currentLevel.forEach(canMoveToPush);
-
     setTileDeltas();
     // should repeat this until nothing moves
     while (anyMoved()) {
@@ -266,7 +264,7 @@ export function init(canvas) {
   canvas.addEventListener("keydown", (e) => {
     const key = e.key;
 
-    const VALID_INPUTS = ["w", "a", "s", "d"];
+    const VALID_INPUTS = ["w", "a", "s", "d", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
 
     if (!VALID_INPUTS.includes(key)) return;
 
@@ -277,9 +275,14 @@ export function init(canvas) {
 
     // runCollisions();
 
-    currentLevel.forEach(canMoveToPush);
+    // currentLevel.forEach(canMoveToPush);
 
     // clear deltas here?
+    const clearDeltas = tile => {
+      tile.dx = 0;
+      tile.dy = 0;
+    }
+    currentLevel.forEach(clearDeltas);
 
     e.preventDefault();
   });
@@ -290,19 +293,25 @@ export function init(canvas) {
 
   const canMoveToPush = (tile) => {
     const grid = getTileGrid();
-    const cellKey = `${tile.x},${tile.y}`;
     const { x, y, dx, dy, type } = tile;
+    const cellKey = `${x+dx},${y+dy}`;
 
-    // If I'm not solid I can move
-    if (!solids.includes(tile.type)) return;
-    if (dx === 0 && dy === 0) return;
+    const notSolid = !solids.includes(tile.type);
+    const noMovement = dx === 0 && dy === 0;
+    const movingToEmpty = !grid[cellKey];
+
+    if (notSolid || noMovement || movingToEmpty) {
+      tile._x += dx;
+      tile._y += dy;
+      return;
+    }
 
     let canMove = true;
 
-    // console.log(grid[cellKey]);
+    // console.log(cellKey, grid[cellKey]);
 
     grid[cellKey].forEach(cell => {
-      if (tile === cell) return;
+      // if (tile === cell) return;
 
       const isSolid = solids.includes(cell.type);
       const isPushable = (type in pushable) && pushable[type].includes(cell.type);
@@ -311,41 +320,21 @@ export function init(canvas) {
         canMove = false;
 
       if (isSolid && isPushable) {
-        cell.x += dx;
-        cell.y += dy;
+        cell.dx += dx;
+        cell.dy += dy;
         canMoveToPush(cell);
-        if (cell.x === x && cell.y === y) canMove = false;
+        // if (cell.x+cell.dx === x && cell.y+cell.dy === y) canMove = false;
+        if (cell.dx === 0 && cell.dy === 0) canMove = false;
       }
     })
 
     if (!canMove) {
-      tile.x -= dx;
-      tile.y -= dy;
+      tile.dx = 0;
+      tile.dy = 0;
     }
 
-    tile.dx = 0;
-    tile.dy = 0;
-
-    // if nothing solid in tile space I can move
-    // if (grid[cellKey].every(t => !solids.includes(t.type))) return;
-
-    // if some solid but not pushable
-    // if (grid[cellKey].some(t => solids.includes(t.type) && pushable[type]?.includes(t.type))) {
-    //   tile.x -= dx;
-    //   tile.y -= dy;
-    //   tile.dx = 0;
-    //   tile.dy = 0;
-    // }
-
-    // if some solid but all pushable check if pushable can move
-    // const movingTiles = grid[cellKey].filter(t => pushable[type].includes(t.type))
-    
-    // movingTiles.forEach(t => {
-    //   t.requestedX = t.x + dx;
-    //   t.requestedY = t.y + dy;
-    // })
-
-    // return movingTiles.every(canMoveToPush);
+    tile._x += tile.dx;
+    tile._y += tile.dy;
   }
 
   class Tile {
@@ -375,10 +364,8 @@ export function init(canvas) {
     }
 
     set x(newX) {
-      // if (getTile(newX, this._y).every(t => !solids.includes(t.type))) this._x = newX;
-      // this.requestedX = newX;
       this.dx = newX - this.x;
-      this._x = newX;
+      canMoveToPush(this);
       return this;
     }
 
@@ -388,9 +375,7 @@ export function init(canvas) {
 
     set y(newY) {
       this.dy = newY - this.y;
-      this._y = newY;
-      // this.requestedY = newY;
-      // if (getTile(this._x, newY).every(t => !solids.includes(t.type))) this._y = newY;
+      canMoveToPush(this);
       return this;
     }
 
@@ -432,7 +417,6 @@ export function init(canvas) {
     width = w;
     height = h;
 
-    // const newLevel = [];
     for (let i = 0; i < w*h; i++) {
       const type = string.split("").filter(x => x.match(/\S/))[i];
 
@@ -443,10 +427,6 @@ export function init(canvas) {
       const newTile = new Tile(x, y, type);
       currentLevel.push(newTile)
     }
-
-    // currentLevel = newLevel;
-
-    // console.log(currentLevel);
 
     return currentLevel;
   }
