@@ -4,6 +4,12 @@ import { playTune, loopTune } from "./tunePlayers.js";
 import { GameObject } from "./GameObject.js";
 
 export function init(canvas) {
+
+  // remove event listeners
+  let newCanvas = canvas.cloneNode(true);
+  canvas.parentNode.replaceChild(newCanvas, canvas);
+  canvas = newCanvas;
+
   let gameObjects = [];
   const texts = new Set();
   let tunes = new Set();
@@ -237,6 +243,7 @@ export function init(canvas) {
     reset: [],
     undo: [],
   };
+  let afterInputs = [];
   let tileCollisions = [];
   let solids = [];
   let pushable = {};
@@ -284,6 +291,8 @@ export function init(canvas) {
     }
     currentLevel.forEach(clearDeltas);
 
+    afterInputs.forEach(f => f());
+
     e.preventDefault();
   });
 
@@ -296,7 +305,7 @@ export function init(canvas) {
     const { x, y, dx, dy, type } = tile;
     const cellKey = `${x+dx},${y+dy}`;
 
-    const notSolid = !solids.includes(tile.type);
+    const notSolid = !solids.includes(type);
     const noMovement = dx === 0 && dy === 0;
     const movingToEmpty = !grid[cellKey];
 
@@ -342,14 +351,8 @@ export function init(canvas) {
       this.type = type;
       this._x = x;
       this._y = y;
-      this.lastX = x;
-      this.lastY = y;
       this.dx = 0;
       this.dy = 0;
-      this.requestedX = x;
-      this.requestedY = y;
-      this.requestedDx = 0;
-      this.requestedDy = 0;
 
       const sprite = legend[type];
       if (!sprite) console.error("unknown tile type");
@@ -382,7 +385,6 @@ export function init(canvas) {
     get y() {
       return this._y;
     }
-
 
   }
 
@@ -462,6 +464,12 @@ export function init(canvas) {
       .filter(tile => tile.x === x && tile.y === y)
       .map(tile => tile.type)
       .includes(type)
+  }
+
+  function tilesWith(type) {
+    const grid = getTileGrid();
+
+    // return getGrid
   }
 
   function everyTile(type, fn) {
@@ -569,6 +577,14 @@ export function init(canvas) {
    
   }
 
+  function replace() {
+
+  }
+
+  function afterInput(fn) {
+    afterInputs.push(fn);
+  }
+
   return {
     add,
     addText,
@@ -595,6 +611,9 @@ export function init(canvas) {
     onTileCollision,
     onTileInput,
     makeSolid,
-    makePushable
+    makePushable,
+    replace,
+    afterInput,
+    getTileGrid
   }
 }
