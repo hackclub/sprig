@@ -238,21 +238,11 @@ export function init(canvas) {
     undo: [],
   };
   let tileCollisions = [];
+  let solids = [];
+  let pushable = {};
 
-  canvas.addEventListener("keydown", (e) => {
-    const key = e.key;
-
-    const VALID_INPUTS = ["w", "a", "s", "d"];
-
-    if (!VALID_INPUTS.includes(key)) return;
-
-    if (key === "w") tileInputs["up"].forEach(fn => fn());
-    if (key === "a") tileInputs["left"].forEach(fn => fn());
-    if (key === "s") tileInputs["down"].forEach(fn => fn());
-    if (key === "d") tileInputs["right"].forEach(fn => fn());
-
-    // set deltas
-    currentLevel.forEach(tile => {
+  function runCollisions() {
+    const setTileDeltas = () => currentLevel.forEach(tile => {
       tile.dx = tile.x - tile.lastX;
       tile.lastX = tile.x;
 
@@ -263,32 +253,114 @@ export function init(canvas) {
     const getDeltas = (tiles) => tiles.map(t => [t.dx, t.dy]).flat();
     const anyMoved = () => getDeltas(currentLevel).some(d => d !== 0);
 
+    // currentLevel.forEach(canMoveToPush);
 
+    setTileDeltas();
     // should repeat this until nothing moves
     while (anyMoved()) {
       checkTileCollisions();
-      currentLevel.forEach(tile => {
-        tile.dx = tile.x - tile.lastX;
-        tile.lastX = tile.x;
-
-        tile.dy = tile.y - tile.lastY;
-        tile.lastY = tile.y;
-      })
-
+      setTileDeltas();
     }
-        
+  }
+
+  canvas.addEventListener("keydown", (e) => {
+    const key = e.key;
+
+    const VALID_INPUTS = ["w", "a", "s", "d"];
+
+    if (!VALID_INPUTS.includes(key)) return;
+
+    if (key === "w" || key === "ArrowUp") tileInputs["up"].forEach(fn => fn());
+    if (key === "a" || key === "ArrowLeft") tileInputs["left"].forEach(fn => fn());
+    if (key === "s" || key === "ArrowDown") tileInputs["down"].forEach(fn => fn());
+    if (key === "d" || key === "ArrowRight") tileInputs["right"].forEach(fn => fn());
+
+    // runCollisions();
+
+    currentLevel.forEach(canMoveToPush);
+
+    // clear deltas here?
+
     e.preventDefault();
   });
+
+  const canMoveTo = (x, y, tile) => {
+    return getTile(x, y).every(t => !solids.includes(t.type));
+  }
+
+  const canMoveToPush = (tile) => {
+    const grid = getTileGrid();
+    const cellKey = `${tile.x},${tile.y}`;
+    const { x, y, dx, dy, type } = tile;
+
+    // If I'm not solid I can move
+    if (!solids.includes(tile.type)) return;
+    if (dx === 0 && dy === 0) return;
+
+    let canMove = true;
+
+    // console.log(grid[cellKey]);
+
+    grid[cellKey].forEach(cell => {
+      if (tile === cell) return;
+
+      const isSolid = solids.includes(cell.type);
+      const isPushable = (type in pushable) && pushable[type].includes(cell.type);
+
+      if (isSolid && !isPushable)
+        canMove = false;
+
+      if (isSolid && isPushable) {
+        cell.x += dx;
+        cell.y += dy;
+        canMoveToPush(cell);
+        if (cell.x === x && cell.y === y) canMove = false;
+      }
+    })
+
+    if (!canMove) {
+      tile.x -= dx;
+      tile.y -= dy;
+    }
+
+    tile.dx = 0;
+    tile.dy = 0;
+
+    // if nothing solid in tile space I can move
+    // if (grid[cellKey].every(t => !solids.includes(t.type))) return;
+
+    // if some solid but not pushable
+    // if (grid[cellKey].some(t => solids.includes(t.type) && pushable[type]?.includes(t.type))) {
+    //   tile.x -= dx;
+    //   tile.y -= dy;
+    //   tile.dx = 0;
+    //   tile.dy = 0;
+    // }
+
+    // if some solid but all pushable check if pushable can move
+    // const movingTiles = grid[cellKey].filter(t => pushable[type].includes(t.type))
+    
+    // movingTiles.forEach(t => {
+    //   t.requestedX = t.x + dx;
+    //   t.requestedY = t.y + dy;
+    // })
+
+    // return movingTiles.every(canMoveToPush);
+  }
 
   class Tile {
     constructor(x, y, type) {
       this.type = type;
-      this.x = x;
-      this.y = y;
+      this._x = x;
+      this._y = y;
       this.lastX = x;
       this.lastY = y;
       this.dx = 0;
       this.dy = 0;
+      this.requestedX = x;
+      this.requestedY = y;
+      this.requestedDx = 0;
+      this.requestedDy = 0;
 
       const sprite = legend[type];
       if (!sprite) console.error("unknown tile type");
@@ -302,25 +374,29 @@ export function init(canvas) {
       );
     }
 
-    // set x(newX) {
-    //   this.dx = newX - this._x;
-    //   this._x = newX;
-    //   return this;
-    // }
+    set x(newX) {
+      // if (getTile(newX, this._y).every(t => !solids.includes(t.type))) this._x = newX;
+      // this.requestedX = newX;
+      this.dx = newX - this.x;
+      this._x = newX;
+      return this;
+    }
 
-    // get x() {
-    //   return this._x;
-    // }
+    get x() {
+      return this._x;
+    }
 
-    // set y(newY) {
-    //   this.dy = newY - this._y;
-    //   this._y = newY;
-    //   return this;
-    // }
+    set y(newY) {
+      this.dy = newY - this.y;
+      this._y = newY;
+      // this.requestedY = newY;
+      // if (getTile(this._x, newY).every(t => !solids.includes(t.type))) this._y = newY;
+      return this;
+    }
 
-    // get y() {
-    //   return this._y;
-    // }
+    get y() {
+      return this._y;
+    }
 
 
   }
@@ -422,6 +498,14 @@ export function init(canvas) {
 
   }
 
+  function makeSolid(arr) {
+    solids = arr;
+  }
+
+  function makePushable(map) {
+    pushable = map;
+  }
+
   // type
   // type + 3
   // type.x + 3
@@ -447,15 +531,21 @@ export function init(canvas) {
     tileInputs[type].push(fn);
   }
 
+  function getTileGrid() {
+    const overlaps = {};
+    const tiles = currentLevel.map(tile => [ `${tile.x},${tile.y}`, tile ]);
+    tiles.forEach( tile => {
+      const [ key, data ] = tile;
+      if (key in overlaps) overlaps[key].push(data);
+      else overlaps[key] = [data];
+    })
+
+    return overlaps;
+  }
+
   function checkTileCollisions() {
     // check collisions
-    const overlaps = {};
-    const tiles = currentLevel.map(tile => [`${tile.x},${tile.y}`, tile.type, tile]);
-    tiles.forEach( tile => {
-      const tileData = { type: tile[1], val: tile[2] };
-      if (tile[0] in overlaps) overlaps[tile[0]].push(tileData);
-      else overlaps[tile[0]] = [tileData];
-    })
+    const overlaps = getTileGrid();
 
     Object.values(overlaps).forEach(tiles => {
       if (tiles.length > 1) {
@@ -466,8 +556,8 @@ export function init(canvas) {
           const [ type0, type1, fn ] = collision;
 
           if (types.includes(type0) && types.includes(type1)) {
-            const tile0 = tiles[types.indexOf(type0)].val;
-            const tile1 = tiles[types.indexOf(type1)].val;
+            const tile0 = tiles[types.indexOf(type0)];
+            const tile1 = tiles[types.indexOf(type1)];
             fn(tile0, tile1);
           }
         })
@@ -523,6 +613,8 @@ export function init(canvas) {
     tileContains,
     addRule,
     onTileCollision,
-    onTileInput
+    onTileInput,
+    makeSolid,
+    makePushable
   }
 }
