@@ -247,6 +247,7 @@ export function init(canvas) {
   let tileCollisions = [];
   let solids = [];
   let pushable = {};
+  let zOrder = [];
 
   function runCollisions() {
     const setTileDeltas = () => currentLevel.forEach(tile => {
@@ -284,14 +285,13 @@ export function init(canvas) {
 
     // currentLevel.forEach(canMoveToPush);
 
+    afterInputs.forEach(f => f());
+
     // clear deltas here?
-    const clearDeltas = tile => {
+    currentLevel.forEach(tile => {
       tile.dx = 0;
       tile.dy = 0;
-    }
-    currentLevel.forEach(clearDeltas);
-
-    afterInputs.forEach(f => f());
+    });
 
     e.preventDefault();
   });
@@ -563,17 +563,18 @@ export function init(canvas) {
     const w = canvas.width/width;
     const h = canvas.height/height;
 
-    currentLevel.forEach(tile => {
+    currentLevel
+      .sort((a, b) => zOrder.indexOf(b.type) - zOrder.indexOf(a.type))
+      .forEach(tile => {
 
-
-      ctx.drawImage(
-        tile.canvas, 
-        tile.x*canvas.width/width, 
-        tile.y*canvas.height/height,
-        w,
-        h
-      );
-    });
+        ctx.drawImage(
+          tile.canvas, 
+          tile.x*canvas.width/width, 
+          tile.y*canvas.height/height,
+          w,
+          h
+        );
+      });
    
   }
 
@@ -584,6 +585,8 @@ export function init(canvas) {
   function afterInput(fn) {
     afterInputs.push(fn);
   }
+
+  // how to add timed things, like bird flying and ball kicks
 
   return {
     add,
@@ -599,21 +602,25 @@ export function init(canvas) {
     end,
     every: (tag, fn) => getTagged(tag).forEach(fn),
     setScreenSize,
-    setLegend,
-    addLayer,
-    setTile,
-    getTile,
-    addTile,
-    clearTile,
-    everyTile,
-    tileContains,
-    addRule,
-    onTileCollision,
-    onTileInput,
-    makeSolid,
-    makePushable,
-    replace,
-    afterInput,
-    getTileGrid
+    // tile functions
+    setLegend, // ***
+    addLayer, // ***
+    setTile, // *
+    getTile, // *
+    addTile, // **
+    clearTile, // *
+    everyTile, // *
+    tileContains, // *
+    addRule, // ?
+    onTileCollision, // *
+    onTileInput, // ***
+    makeSolid, // ***, could use collision layers
+    makePushable, // ***
+    replace, // **
+    afterInput, // ***
+    getTileGrid, // **
+    getTileAll: (type) => currentLevel.filter(t => t.type === type), // **
+    clear: () => { currentLevel = []; }, // ***
+    setZOrder: (order) => { zOrder = order; }, // **, could use order of collision layers
   }
 }
