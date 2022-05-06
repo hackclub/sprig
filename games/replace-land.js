@@ -98,6 +98,7 @@ makeSolid(["p", "#", "r"])
 
 makePushable({
   "p": ["#"],
+  "#": ["#"]
 })
 
 let level = 0;
@@ -106,20 +107,20 @@ const levels = {
   0: `
     rrrrrrrrrr
     rp.......r
-    r....#g..r
+    r....##..r
     r........r
-    r...r....r
+    r...r.#..r
     r...r....r
     r...r....r
     rrrrrrrrrr
   `,
   1: `
     rrrrrrrrrr
-    rp.....rgr
+    rp.....r#r
     r...#..r.r
     r........r
-    r.#.r..g.r
-    r...r....r
+    r.#.r..#.r
+    r#..r..#.r
     r...r....r
     rrrrrrrrrr
     `
@@ -149,12 +150,32 @@ onTileInput("right", _ => {
 })
 
 afterInput(_ => {
-  const hasG = [];
-  Object.values(getTileGrid()).forEach(cell => {
-    if (cell.map(c => c.type).includes("g")) hasG.push(cell.map(c => c.type));
-  })
+  const pat0 = `
+    ###
+  `
 
-  if (hasG.every(c => c.includes("#"))) {
+  const pat1 = `
+    ...
+  `
+
+  replace(pat0, pat1);
+
+  const pat2 = `
+    # 
+    # 
+    #
+  `
+
+  const pat3 = `
+    . 
+    . 
+    .
+  `
+
+  replace(pat2, pat3);
+
+
+  if (getTileAll("#").length === 0) {
     level++;
     clear();
     if (level in levels) addLayer(levels[level])

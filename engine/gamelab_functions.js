@@ -372,6 +372,12 @@ export function init(canvas) {
       return this._y;
     }
 
+    remove() {
+      currentLevel = currentLevel.filter(t => t !== this);
+
+      return this;
+    }
+
   }
 
   function setLegend(objectMap) {
@@ -546,8 +552,81 @@ export function init(canvas) {
    
   }
 
-  function replace() {
+  function parsePattern(string) {
+    const parsedPattern = [];
+    const rows = string.trim().split("\n").map(x => x.trim());
+    const rowLengths = rows.map(x => x.length);
+    const isRect = allEqual(rowLengths)
+    if (!isRect) console.error("pattern must be rectangle");
+    const w = rows[0].length;
+    const h = rows.length;
 
+    for (let i = 0; i < w*h; i++) {
+      const type = string.split("").filter(x => x.match(/\S/))[i];
+      parsedPattern.push(type)
+    }
+
+    const result = { width: w, height: h, pattern: parsedPattern };
+
+    return result;
+  }
+
+  function matchPattern(patternData) {
+
+    const { width: w, height: h, pattern } = patternData;
+
+    const grid = getTileGrid();
+    let allMatches = [];
+
+    for (let i = 0; i < width*height; i++) {
+      const x = i%width; 
+      const y = Math.floor(i/width); 
+      
+      let match = true;
+      let matches = [];
+      for (let j = 0; j < w*h; j++) {
+        const dx = j%w; 
+        const dy = Math.floor(j/w);
+        const type = pattern[j];
+        const key = `${x+dx},${y+dy}`;
+        match = match && 
+          (grid[key]?.map(t => t.type).includes(type) 
+           || type === "." // anything
+           || (type === "_" && grid[key] === undefined) // empty
+          );
+
+        if (grid[key]) matches.push(grid[key].filter(t => t.type === type)[0]); // take the first match
+        else matches.push({ x: x+dx, y:y+dy, type: "." });
+      }
+
+      if (match) {
+        allMatches.push(matches);
+      }
+    }
+
+    return allMatches;
+  }
+
+  function replace(pattern, newPattern) {
+    const p = parsePattern(pattern);
+    const matches = matchPattern(p);
+
+    const pNew = parsePattern(newPattern);
+
+    if (p.width !== pNew.width || p.height !== pNew.height) 
+      console.error("Pattern dimensions must match.");
+
+    matches.forEach(match => {
+      match.forEach( (t, i) => {
+        const { x, y, type } = t;
+        if (type !== ".") t.remove();
+        if (pNew.pattern[i] === "_") clearTile(x, y);
+        else if (pNew.pattern[i] !== ".") addTile(x, y, pNew.pattern[i]);
+
+      })
+    })
+
+    return matches.length > 0
   }
 
   function afterInput(fn) {
