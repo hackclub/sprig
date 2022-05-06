@@ -145,11 +145,7 @@ setInterval(() => {
     r`)
 
 
-  replace(
-  `r
-   u`
-  ,`r
-    d`)
+  replace(`r\nu`,`r\nd`);
 
   replace(
   `p
@@ -162,7 +158,7 @@ setInterval(() => {
    p`
   ,`d
     .`)
-}, 200)
+}, 250)
 
 
 let player = getTileAll("p")[0];
