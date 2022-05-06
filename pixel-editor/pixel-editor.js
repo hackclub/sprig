@@ -195,6 +195,17 @@ export function createPixelEditor(target) {
           >
             export
           </button>
+          <button
+            title="print"
+            @click=${() => {
+              const canvas = target.querySelector("#offscreen-canvas");
+              const ctx = canvas.getContext("2d");
+              const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+              console.log(imageData);
+            }}
+          >
+            print
+          </button>
         </div>
 
         ${drawColorsButtons(state)}
