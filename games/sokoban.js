@@ -1,3 +1,31 @@
+import { init } from "../engine/gamelab_functions.js";
+
+const canvas = document.querySelector(".sokoban");
+
+const {
+  setScreenSize,
+  setLegend,
+  addLayer,
+  setTile,
+  getTile,
+  addTile,
+  clearTile,
+  everyTile,
+  tileContains,
+  addRule,
+  onTileCollision,
+  onTileInput,
+  makeSolid,
+  makePushable,
+  replace,
+  afterInput,
+  getTileGrid,
+  getTileAll,
+  clear,
+  setZOrder,
+  sprite,
+  start
+} = init(canvas);
 
 setScreenSize(500, 500*.8)
 
