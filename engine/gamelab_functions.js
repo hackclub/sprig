@@ -300,9 +300,9 @@ export function init(canvas) {
     return getTile(x, y).every(t => !solids.includes(t.type));
   }
 
-  const canMoveToPush = (tile) => {
+  const canMoveToPush = (tile, dx, dy) => {
     const grid = getTileGrid();
-    const { x, y, dx, dy, type } = tile;
+    const { x, y, type } = tile;
     const cellKey = `${x+dx},${y+dy}`;
 
     const notSolid = !solids.includes(type);
@@ -331,7 +331,7 @@ export function init(canvas) {
       if (isSolid && isPushable) {
         cell.dx += dx;
         cell.dy += dy;
-        canMoveToPush(cell);
+        canMoveToPush(cell, cell.dx, cell.dy);
         // if (cell.x+cell.dx === x && cell.y+cell.dy === y) canMove = false;
         if (cell.dx === 0 && cell.dy === 0) canMove = false;
       }
@@ -368,7 +368,7 @@ export function init(canvas) {
 
     set x(newX) {
       this.dx = newX - this.x;
-      canMoveToPush(this);
+      canMoveToPush(this, this.dx, 0);
       return this;
     }
 
@@ -378,7 +378,7 @@ export function init(canvas) {
 
     set y(newY) {
       this.dy = newY - this.y;
-      canMoveToPush(this);
+      canMoveToPush(this, 0, this.dy);
       return this;
     }
 
