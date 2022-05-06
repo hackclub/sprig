@@ -1,6 +1,5 @@
 import { TimeKeeper } from "./TimeKeeper.js";
 import { resolveObjs } from "./resolveObjs.js";
-import { playTune, loopTune } from "./tunePlayers.js";
 import { GameObject } from "./GameObject.js";
 
 export function init(canvas) {
@@ -131,28 +130,6 @@ export function init(canvas) {
 
   function getTagged(tag) {
     return tag === "" ? gameObjects : gameObjects.filter((x) => x.tags.includes(tag));
-  }
-
- function playTune() {
-    const tune = playTuneHelper(...arguments);
-    tunes.add(tune);
-    tune.remove = () => {
-      tune.end();
-      tunes.remove(tune);
-    }
-
-    return tune;
-  }
-
-  function loopTune() {
-    const tune = loopTuneHelper(...arguments);
-    tunes.add(tune);
-    tune.remove = () => {
-      tune.end();
-      tunes.remove(tune);
-    }
-
-    return tune;
   }
 
   function remove(thing) {
@@ -594,8 +571,6 @@ export function init(canvas) {
     addTimer,
     remove,
     getTagged,
-    playTune,
-    loopTune,
     onInput,
     onCollision,
     start,

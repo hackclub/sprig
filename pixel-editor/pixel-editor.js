@@ -26,7 +26,6 @@ export function createPixelEditor(target) {
     gridColors: [],
     tempGridColors: [],
     viewboxSize: [32, 32],
-    canvasSize: [500, 500],
     maxCanvasSize: 350,
     selected: [],
     tool: "draw",
