@@ -1,4 +1,4 @@
-import { render, html, svg } from "../uhtml.js";
+import { render, html, svg } from "/libs/uhtml.js";
 
 // canvas {
 //   image-rendering: optimizeSpeed;
@@ -20,14 +20,15 @@ export const pixelStyles = html`
     .pixel-editor-container {
       width: 100%;
       height: 100%;
+      display: flex;
     }
 
     .canvas-container {
-      display: grid;
+      display: flex;
       align-items: center;
       justify-content: center;
       background: grey;
-      width: 100%;
+      width: 90%;
       height: 100%;
       overflow: scroll;
     }
@@ -42,6 +43,7 @@ export const pixelStyles = html`
 
     .toolbox {
       display: flex;
+      width: 10%;
       flex-direction: column;
       border: 2px solid black;
       padding: 5px;
@@ -59,13 +61,7 @@ export const pixelStyles = html`
 
     .colors {
       display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .colors > * {
-      flex: 1;
+      flex-wrap: wrap;
     }
 
     .gridsize {
@@ -81,7 +77,7 @@ export const pixelStyles = html`
     }
 
     .selected-tool {
-      border: 2px solid yellow;
+      border: 2px solid yellow !important;
     }
   </style>
 `;

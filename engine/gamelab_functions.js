@@ -9,6 +9,12 @@ export function init(canvas) {
   canvas.parentNode.replaceChild(newCanvas, canvas);
   canvas = newCanvas;
 
+  const ctx = canvas.getContext("2d");
+
+  ctx.webkitImageSmoothingEnabled = false;
+  ctx.mozImageSmoothingEnabled = false;
+  ctx.imageSmoothingEnabled = false;
+
   let gameObjects = [];
   const texts = new Set();
   let tunes = new Set();
@@ -22,8 +28,6 @@ export function init(canvas) {
 
   let lastTime = 0;
   const heldKeys = new Set();
-
-  const ctx = canvas.getContext("2d");
 
   timeKeeper.addTimer(_ => {
     heldKeys.forEach(key => {
@@ -203,6 +207,10 @@ export function init(canvas) {
   function setScreenSize(w, h) {
     canvas.width = w;
     canvas.height = h;
+
+    ctx.webkitImageSmoothingEnabled = false;
+    ctx.mozImageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = false;
   }
 
   // tile gamelab
@@ -334,8 +342,9 @@ export function init(canvas) {
       const sprite = legend[type];
       if (!sprite) console.error("unknown tile type");
       this.canvas = document.createElement("canvas");
-      this.canvas.width = 32;
-      this.canvas.height = 32;
+      this.canvas.width = sprite.width;
+      this.canvas.height = sprite.height;
+
       this.canvas.getContext("2d").putImageData(
         sprite, 
         0,
@@ -366,20 +375,7 @@ export function init(canvas) {
   }
 
   function setLegend(objectMap) {
-    for (let key in objectMap) {
-      let value = objectMap[key];
-      // if (!Array.isArray(value)) value = [ value ];
-
-
-      legend[key] = new ImageData(
-        new Uint8ClampedArray(value.colors.flat()),
-        32,
-        32
-      );
-
-    }
-
-    console.log(legend);
+    legend = objectMap;
   }
 
   const allEqual = arr => arr.every(val => val === arr[0]);
@@ -531,11 +527,6 @@ export function init(canvas) {
   }
 
 
-  ctx.webkitImageSmoothingEnabled = false;
-  ctx.mozImageSmoothingEnabled = false;
-  ctx.imageSmoothingEnabled = false;
-
-
   function drawTiles() {
     const w = canvas.width/width;
     const h = canvas.height/height;
@@ -561,6 +552,40 @@ export function init(canvas) {
 
   function afterInput(fn) {
     afterInputs.push(fn);
+  }
+
+  function sprite(string) { // returns image data
+    const rows = string.trim().split("\n").map(x => x.trim());
+    const rowLengths = rows.map(x => x.length);
+    const isRect = allEqual(rowLengths)
+    if (!isRect) console.error("Level must be rect.");
+    const width = rows[0].length;
+    const height = rows.length;
+    const data = new Uint8ClampedArray(width*height*4);
+
+    const colors = {
+      "0": [0, 0, 0, 255],
+      "r": [255, 0, 0, 255],
+      "g": [0, 255, 0, 255],
+      "b": [0, 0, 255, 255],
+      ".": [0, 0, 0, 0],
+    }
+
+    for (let i = 0; i < width*height; i++) {
+      const type = string.split("").filter(x => x.match(/\S/))[i];
+
+      if (!(type in colors)) console.error("unknown color:", type);
+
+      const [ r, g, b, a ] = colors[type];
+      data[i*4] = r;
+      data[i*4 + 1] = g;
+      data[i*4 + 2] = b;
+      data[i*4 + 3] = a;
+    }
+
+    const result = new ImageData(data, width, height);
+
+    return result;
   }
 
   // how to add timed things, like bird flying and ball kicks
@@ -597,5 +622,6 @@ export function init(canvas) {
     getTileAll: (type) => currentLevel.filter(t => t.type === type), // **
     clear: () => { currentLevel = []; }, // ***
     setZOrder: (order) => { zOrder = order; }, // **, could use order of collision layers
+    sprite,
   }
 }

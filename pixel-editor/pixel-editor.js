@@ -1,4 +1,4 @@
-import { render, html, svg } from "../uhtml.js";
+import { render, html, svg } from "/libs/uhtml.js";
 import { pixelStyles } from "./pixel-styles.js";
 
 const hexToRGBA = (hex) => {
@@ -25,7 +25,8 @@ export function createPixelEditor(target) {
     canvas: null,
     gridColors: [],
     tempGridColors: [],
-    viewboxSize: [32, 32],
+    viewboxSize: [16, 16],
+    canvasSize: [1, 1],
     maxCanvasSize: 350,
     selected: [],
     tool: "draw",
@@ -34,7 +35,7 @@ export function createPixelEditor(target) {
     mousedownPt: [0, 0],
     currentPt: [0, 0],
     showGrid: false,
-    gridSize: [32, 32],
+    gridSize: [16, 16],
     undoRedoStack: [],
     animationId: null,
     selectHandle: {
@@ -105,10 +106,10 @@ export function createPixelEditor(target) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const image = new Image();
       image.onload = () => {
-        const w = Math.min(image.width, 32);
-        const h = Math.min(image.height, 32);
+        const w = Math.min(image.width, state.gridSize[0]);
+        const h = Math.min(image.height, state.gridSize[1]);
         ctx.drawImage(image, 0, 0, w, h);
-        const imageData = ctx.getImageData(0, 0, 32, 32);
+        const imageData = ctx.getImageData(0, 0, state.gridSize[0], state.gridSize[1]);
         for (let i = 0; i < state.gridColors.length; i++) {
           state.gridColors[i] = [
             imageData.data[i * 4],
@@ -139,7 +140,6 @@ export function createPixelEditor(target) {
       "
       title="${toolName}"
     >
-      <img src=${`./assets/${toolName}.png`} alt=${toolName} width="25px" />
       ${toolName}
     </button>
   `;
@@ -152,8 +152,8 @@ export function createPixelEditor(target) {
         <canvas
           class="offscreen-canvas"
           id="offscreen-canvas"
-          width="32"
-          height="32"
+          width=${state.viewboxSize[0]}
+          height=${state.viewboxSize[1]}
         ></canvas>
       </div>
       <div class="toolbox">
@@ -178,7 +178,6 @@ export function createPixelEditor(target) {
             "
             title="undo"
           >
-            <img src="./assets/undo.png" alt="undo" width="25px" />
             undo
           </button>
           <button
@@ -199,9 +198,31 @@ export function createPixelEditor(target) {
             title="print"
             @click=${() => {
               const canvas = target.querySelector("#offscreen-canvas");
+              drawCanvasNoBg(canvas);
               const ctx = canvas.getContext("2d");
               const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
               console.log(imageData);
+              let str = "";
+              const colors = {
+                "0,0,0,255": "0",
+                "255,0,0,255": "r",
+                "0,255,0,255": "g",
+                "0,0,255,255": "b",
+                "0,0,0,0": ".",
+              }
+              for (let i = 0; i < imageData.width*imageData.height; i += 1) {
+                const r = imageData.data[i*4];
+                const g = imageData.data[i*4+1];
+                const b = imageData.data[i*4+2];
+                const a = imageData.data[i*4+3];
+                const key = `${r},${g},${b},${a}`;
+                const color = colors[key];
+                
+                if ((i % imageData.width === 0) && i !== 0) str += "\n";
+                str += color;
+              }
+
+              console.log(str);
             }}
           >
             print
@@ -215,32 +236,31 @@ export function createPixelEditor(target) {
 
   const drawColorsButtons = (state) => html`
     <div class="colors">
-      <input
-        type="color"
-        @input=${(e) => {
-          state.color = hexToRGBA(e.target.value);
-          r();
-        }}
-        @click=${(e) => {
-          state.color = hexToRGBA(e.target.value);
-          r();
-        }}
-        class=${RGBA_to_hex(state.color) !== "#00000000" ? "selected-tool" : ""}
-        style=${`
-          height: 35px; 
-          width: 35px; 
-        `}
-      />
-      <button
+      <div 
+        style="border: 2px dashed black; height: 30px; width: 30px; background: black;"
+        class=${RGBA_to_hex(state.color) === "#000000ff" ? "selected-tool" : ""}
+        @click=${() => { state.color = [ 0, 0, 0, 255 ]; r(); }}>
+      </div>
+      <div 
+        style="border: 2px dashed black; height: 30px; width: 30px; background: #ff0000ff;"
+        class=${RGBA_to_hex(state.color) === "#ff0000ff" ? "selected-tool" : ""}
+        @click=${() => { state.color = [ 255, 0, 0, 255 ]; r(); }}>
+      </div>
+      <div 
+        style="border: 2px dashed black; height: 30px; width: 30px; background: #00ff00ff;"
+        class=${RGBA_to_hex(state.color) === "#00ff00ff" ? "selected-tool" : ""}
+        @click=${() => { state.color = [ 0, 255, 0, 255 ]; r(); }}>
+      </div>
+      <div 
+        style="border: 2px dashed black; height: 30px; width: 30px; background: #0000ffff;"
+        class=${RGBA_to_hex(state.color) === "#0000ffff" ? "selected-tool" : ""}
+        @click=${() => { state.color = [ 0, 0, 255, 255 ]; r(); }}>
+      </div>
+      <div 
+        style="border: 2px dashed black; height: 30px; width: 30px; background: #00000000;"
         class=${RGBA_to_hex(state.color) === "#00000000" ? "selected-tool" : ""}
-        @click=${() => {
-          state.color = hexToRGBA("#00000000");
-          r();
-        }}
-        style="height: 35px;"
-      >
-        <img src="./assets/clear.png" width="25px" />
-      </button>
+        @click=${() => { state.color = [ 0, 0, 0, 0 ]; r(); }}>
+      </div>
     </div>
   `;
 
