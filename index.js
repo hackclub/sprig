@@ -4,3 +4,4 @@ import "./games/two-player.js";
 import "./games/replace-land.js";
 // import "./games/wall-bounce.js";
 import "./games/sokoban-replace.js";
+import "./games/lightsoff.js";

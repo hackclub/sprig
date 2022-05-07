@@ -233,6 +233,7 @@ export function init(canvas) {
   let solids = [];
   let pushable = {};
   let zOrder = [];
+  let layers = [];
 
   function runCollisions() {
     const setTileDeltas = () => currentLevel.forEach(tile => {
@@ -598,12 +599,26 @@ export function init(canvas) {
            || (type === "_" && grid[key] === undefined) // empty
           );
 
-        if (grid[key] && type !== ".") matches.push(grid[key].filter(t => t.type === type)[0]); // take the first match
-        // else if (grid[key] && type === ".") matches.push(grid[key][0]);
+        if (grid[key] && type !== ".") {
+          const options = grid[key].filter(t => t.type === type)
+          if (options.length > 0) matches.push(options[0]); // take the first match
+
+        } // else if (grid[key] && type === ".") matches.push(grid[key][0]);
         else matches.push({ x: x+dx, y:y+dy, type });
       }
 
-      if (match) {
+      // all matches are in some layer together
+      const matchTypes = matches
+          .map(t => t.type)
+          .filter(t => ![".", "_"].includes(t));
+
+      const layerBuddies = layers
+        .some(layer => matchTypes.every(type => layer.includes(type)))
+        || matchTypes.length === 1;
+
+      if (match) console.log(layers, matchTypes, matches, layerBuddies);
+
+      if (match && layerBuddies) {
         allMatches.push(matches);
       }
     }
@@ -637,6 +652,10 @@ export function init(canvas) {
     })
 
     return matches.length > 0
+  }
+
+  function setLayers(l) {
+    layers = l;
   }
 
   function afterInput(fn) {
@@ -713,5 +732,6 @@ export function init(canvas) {
     clear: () => { currentLevel = []; }, // ***
     setZOrder: (order) => { zOrder = order; }, // **, could use order of collision layers
     sprite,
+    setLayers
   }
 }

@@ -24,7 +24,8 @@ const {
   clear,
   setZOrder,
   sprite,
-  start
+  start,
+  setLayers
 } = init(canvas);
 
 setScreenSize(500, 500*.8)
@@ -181,6 +182,8 @@ addLayer(levels[level])
 
 
 let player = () => getTileAll("p")[0];
+
+setLayers([["p", "#"]])
 
 onTileInput("up", _ => {
   replace("_\np", "p\n_"); // how to move on top of goal?
