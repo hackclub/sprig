@@ -1,7 +1,7 @@
-import "./games/sokoban.js";
-import "./games/snake.js";
-import "./games/two-player.js";
-import "./games/replace-land.js";
+// import "./games/sokoban.js";
+// import "./games/snake.js";
+// import "./games/two-player.js";
+// import "./games/replace-land.js";
 // import "./games/wall-bounce.js";
 import "./games/sokoban-replace.js";
-import "./games/lightsoff.js";
+// import "./games/lightsoff.js";

@@ -185,65 +185,65 @@ addLayer(levels[level])
 
 let player = () => getTileAll("p")[0];
 
-// setLayers([["p", "#"]])
-
-// makeSolid(["p", "#", "r"])
-
-// makePushable({
-//   "p": ["#"]
-// })
+const testKey = { 
+  "_": t => {
+    return t.type === "g" || t.type === "." 
+  }
+}
 
 onTileInput("up", _ => {
-  match("p").flat()[0].y -= 1;
+  match("_\np", testKey).forEach(arr => {
+    arr[1].y -= 1;
+  })
 
-  // replace("_\np", "p\n_"); // how to move on top of goal?
-  // if (replace(".\np")) player().y -= 1;
-  // replace("_\n#\np", "#\np\n_");
+  match("_\n#\np", testKey).forEach(arr => {
+    arr[1].y -= 1;
+    arr[2].y -= 1;
+  })
 })
 
 onTileInput("down", _ => {
-  // player().y += 1;
+  match("p\n_", testKey).forEach(arr => {
+    arr[0].y += 1;
+  })
 
-  replace("p\n.", ".\np");
-  replace("p\n#\n.", ".\np\n#");
+  match("p\n#\n_", testKey).forEach(arr => {
+    arr[0].y += 1;
+    arr[1].y += 1;
+  })
 })
 
 onTileInput("left", _ => {
-  // if (match("rp").length) return;
-  player().x -= 1;
+  match("_p", testKey).forEach(arr => {
+    arr[1].x -= 1;
+  })
 
-  // replace("_p", "p_");
-  // replace("_#p", "#p_");
-  // if(replace("g#p", "bp_")) return;
-  // replace("_bp", "#gp");
+  match("_#p", testKey).forEach(arr => {
+    arr[1].x -= 1;
+    arr[2].x -= 1;
+  })
 })
 
 onTileInput("right", _ => {
-  const m = match("p.");
-  console.log(m);
-  // if (match("pr").length) return
+  match("p_", testKey).forEach(arr => {
+    arr[0].x += 1;
+  })
 
-  player().x += 1;
-  // player().x += 1;
-  // combine(["p", "r"], ",");
-
-  // combine(["p", "r"], ",");
-  // replace("_,", "pr")
-
-  // replace("p_", "_p");
-  // replace("p#.", "_p#");
-
-  // replace("p#(_g)", ([a, b]) => { a.x += 1; b.x += 1; });
-
-  // if(replace("p#g", "_pb")) return;
-  // replace("pb_", "pg#");
+  match("p#_", testKey).forEach(arr => {
+    arr[0].x += 1;
+    arr[1].x += 1;
+  })
 })
 
-// setInterval(_ => {
-//   replace("g\n_", "_\ng");
-// }, 1000)
+setInterval(_ => {
+  match("g\n*", { "*": t => t.type !== "r" }).forEach(arr => {
+    arr[0].y += 1;
+    // arr[0].type = "r";
+  });
+}, 1000)
 
 afterInput(_ => {
+
   // replace("g\n_", "_\ng");
 
   const hasG = [];

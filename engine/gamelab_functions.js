@@ -590,6 +590,16 @@ export function init(canvas) {
     const { width: w, height: h, pattern } = patternData;
 
     const grid = getTileGrid();
+
+    // if no cell with key then cell empty
+    for (let i = 0; i < width*height; i++) {
+      const x = i%width; 
+      const y = Math.floor(i/width); 
+      const key = `${x},${y}`;
+
+      if (!grid[key]) grid[key] = [{ x, y, type: "." }];
+    }
+
     let allMatches = [];
 
     for (let i = 0; i < width*height; i++) {
@@ -606,29 +616,14 @@ export function init(canvas) {
         const type = pattern[j];
         const key = `${x+dx},${y+dy}`;
         
-        let matchValue = 
-          (type in testMap)
+        let matchValue = (type in testMap)
             ? grid[key]?.find(testMap[type])
             : grid[key]?.find(t => t.type === type)
 
-        if (type === "." && grid[key] === undefined) 
-          matchValue = { x: x+dx, y:y+dy, type };
-
         match = match && matchValue !== undefined;
 
-        matches.push(match);
+        matches.push(matchValue);
       }
-
-      // all matches are in some layer together
-      // const matchTypes = matches
-      //     .map(t => t.type)
-      //     .filter(t => !["."].includes(t));
-
-      // const layerBuddies = layers
-      //   .some(layer => matchTypes.every(type => layer.includes(type)))
-      //   || matchTypes.length === 1;
-
-      // if (match) console.log(layers, matchTypes, matches, layerBuddies);
 
       if (match) {
         allMatches.push(matches);
@@ -644,25 +639,12 @@ export function init(canvas) {
     return matches;
   }
 
-  function replace(pattern, newPattern) {
+  function replace(pattern, newPattern, testMap = {}) { 
+    // ? should be able to pass result of matches
+    // maybe passing testMap is okay
+    
     const p = parsePattern(pattern);
-    const matches = matchPattern(p);
-
-    // let matches = pattern;
-    // if (typeof pattern === "string") {
-    //   const p = parsePattern(pattern);
-    //   matches = matchPattern(p);
-    // } else {
-    //   // check matches are all of same length
-    // }
-
-    // if (newPattern === "") return matches.length > 0;
-
-    // if (typeof newPattern === "function") {
-    //   matches.forEach(newPattern);
-
-    //   return matches.length > 0;
-    // }
+    const matches = matchPattern(p, testMap);
 
     const pNew = parsePattern(newPattern);
 
@@ -672,14 +654,9 @@ export function init(canvas) {
     matches.forEach(match => {
       match.forEach( (t, i) => {
         const { x, y, type } = t;
-
         const newType = pNew.pattern[i];
-         if (t.type in legend && (newType in legend || newType === "_")) 
-           t.remove(); 
-
-        if (newType in legend) addTile(x, y, newType); 
-        else if (newType !== "." && newType !== "_") 
-          console.error("can't replace with unknown tile:", newType);
+        if (type !== ".") t.remove(); 
+        if (newType !== ".") addTile(x, y, newType); 
       })
     })
 
