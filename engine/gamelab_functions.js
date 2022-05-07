@@ -257,7 +257,7 @@ export function init(canvas) {
   canvas.addEventListener("keydown", (e) => {
     const key = e.key;
 
-    const VALID_INPUTS = ["w", "a", "s", "d", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+    const VALID_INPUTS = ["w", "a", "s", "d", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", " "];
 
     if (!VALID_INPUTS.includes(key)) return;
 
@@ -265,6 +265,7 @@ export function init(canvas) {
     if (key === "a" || key === "ArrowLeft") tileInputs["left"].forEach(fn => fn());
     if (key === "s" || key === "ArrowDown") tileInputs["down"].forEach(fn => fn());
     if (key === "d" || key === "ArrowRight") tileInputs["right"].forEach(fn => fn());
+    if (key === "Enter" || key === " ") tileInputs["action0"].forEach(fn => fn());
 
     // runCollisions();
 
@@ -644,6 +645,7 @@ export function init(canvas) {
 
     const colors = {
       "0": [0, 0, 0, 255],
+      "1": [255, 255, 255, 255],
       "r": [255, 0, 0, 255],
       "g": [0, 255, 0, 255],
       "b": [0, 0, 255, 255],
