@@ -127,16 +127,16 @@ addLayer(levels[level]);
 setInterval(() => {
   replace(
     `d
-     _`
+     .`
     ,`.
       d`)
 
 
   replace(
-  `_
+  `.
    u`
   ,`u
-    _`)
+    .`)
 
   replace(
   `d

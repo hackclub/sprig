@@ -13,7 +13,7 @@ Some things to consider.
 - Is the concept of pushability neccessary?
   - Can it be covered by replacements, replacements don't have notion of motion
 
-  
+- Match test could take whole tile or tile type
 
 - Only want to draw one map
 

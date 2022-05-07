@@ -616,8 +616,15 @@ export function init(canvas) {
         const type = pattern[j];
         const key = `${x+dx},${y+dy}`;
         
-        let matchValue = (type in testMap)
-            ? grid[key]?.find(testMap[type])
+        let testFn;
+        if (type in testMap) {
+          const val = testMap[type];
+          if (Array.isArray(val)) testFn = t => val.includes(t.type);
+          if (typeof val === "function") testFn = val
+        }
+
+        let matchValue = (testFn)
+            ? grid[key]?.find(testFn) // could take whole tile or tile type
             : grid[key]?.find(t => t.type === type)
 
         match = match && matchValue !== undefined;
@@ -642,7 +649,7 @@ export function init(canvas) {
   function replace(pattern, newPattern, testMap = {}) { 
     // ? should be able to pass result of matches
     // maybe passing testMap is okay
-    
+
     const p = parsePattern(pattern);
     const matches = matchPattern(p, testMap);
 

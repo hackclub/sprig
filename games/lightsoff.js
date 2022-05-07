@@ -122,7 +122,6 @@ const lr = [
     `
 ];
 
-console.log(lr);
 
 const levels = lr.map(l =>
     [

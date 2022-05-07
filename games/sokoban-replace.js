@@ -188,7 +188,8 @@ let player = () => getTileAll("p")[0];
 const testKey = { 
   "_": t => {
     return t.type === "g" || t.type === "." 
-  }
+  },
+  "_": ["g", "."]
 }
 
 onTileInput("up", _ => {
@@ -235,16 +236,7 @@ onTileInput("right", _ => {
   })
 })
 
-setInterval(_ => {
-  match("g\n*", { "*": t => t.type !== "r" }).forEach(arr => {
-    arr[0].y += 1;
-    // arr[0].type = "r";
-  });
-}, 1000)
-
 afterInput(_ => {
-
-  // replace("g\n_", "_\ng");
 
   const hasG = [];
   Object.values(getTileGrid()).forEach(cell => {
