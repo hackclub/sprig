@@ -171,8 +171,6 @@ const levels = {
 
 addLayer(levels[level])
 
-let player = () => getTileAll("p")[0];
-
 const testKey = { 
   "_": t => {
     return t.type === "g" || t.type === "." 
