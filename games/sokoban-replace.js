@@ -169,18 +169,6 @@ const levels = {
     `
 }
 
-const bg = () => addLayer(`
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
-,,,,,,,,,,
-`)
-
-// bg();
 addLayer(levels[level])
 
 let player = () => getTileAll("p")[0];
@@ -246,7 +234,6 @@ afterInput(_ => {
   if (hasG.every(c => c.includes("#"))) {
     level++;
     clear();
-    // bg();
     if (level in levels) addLayer(levels[level])
     else console.log("you win");
   }
