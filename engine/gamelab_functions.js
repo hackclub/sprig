@@ -581,6 +581,8 @@ export function init(canvas) {
     for (let i = 0; i < width*height; i++) {
       const x = i%width; 
       const y = Math.floor(i/width); 
+
+      if (x + w > width || y + h > height) continue;
       
       let match = true;
       let matches = [];
@@ -595,8 +597,9 @@ export function init(canvas) {
            || (type === "_" && grid[key] === undefined) // empty
           );
 
-        if (grid[key]) matches.push(grid[key].filter(t => t.type === type)[0]); // take the first match
-        else matches.push({ x: x+dx, y:y+dy, type: "." });
+        if (grid[key] && type !== ".") matches.push(grid[key].filter(t => t.type === type)[0]); // take the first match
+        // else if (grid[key] && type === ".") matches.push(grid[key][0]);
+        else matches.push({ x: x+dx, y:y+dy, type });
       }
 
       if (match) {
@@ -607,9 +610,11 @@ export function init(canvas) {
     return allMatches;
   }
 
-  function replace(pattern, newPattern) {
+  function replace(pattern, newPattern = "") {
     const p = parsePattern(pattern);
     const matches = matchPattern(p);
+
+    if (newPattern === "") return matches.length > 0;
 
     const pNew = parsePattern(newPattern);
 
@@ -619,10 +624,14 @@ export function init(canvas) {
     matches.forEach(match => {
       match.forEach( (t, i) => {
         const { x, y, type } = t;
-        if (type !== ".") t.remove();
-        if (pNew.pattern[i] === "_") clearTile(x, y);
-        else if (pNew.pattern[i] !== ".") addTile(x, y, pNew.pattern[i]);
 
+        const newType = pNew.pattern[i];
+         if (t.type in legend && (newType in legend || newType === "_")) 
+           t.remove(); 
+
+        if (newType in legend) addTile(x, y, newType); 
+        else if (newType !== "." && newType !== "_") 
+          console.error("can't replace with unknown tile:", newType);
       })
     })
 
