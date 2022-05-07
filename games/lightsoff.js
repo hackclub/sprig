@@ -149,15 +149,16 @@ const getPlayer = () => getTileAll("s")[0] ?? getTileAll("t")[0];
 
 // Animate player
 setInterval(() => {
-    const t1 = getTileAll("s")[0];
-    if(t1) {
-        t1.remove();
-        addTile(t1.x, t1.y, "t");
-    } else {
-        const t2 = getTileAll("t")[0];
-        t2.remove();
-        addTile(t2.x, t2.y, "s");
-    }
+    // const t1 = getTileAll("s")[0];
+    // if(t1) {
+    //     t1.remove();
+    //     addTile(t1.x, t1.y, "t");
+    // } else {
+    //     const t2 = getTileAll("t")[0];
+    //     t2.remove();
+    //     addTile(t2.x, t2.y, "s");
+    // }
+    if (!replace("t", "s")) replace("s", "t");
 }, 500)
 
 onTileInput("up", _ => {

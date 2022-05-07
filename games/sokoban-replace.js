@@ -26,7 +26,9 @@ const {
   sprite,
   start,
   setLayers,
-  combine
+  combine,
+  setDontReplace,
+  match
 } = init(canvas);
 
 setScreenSize(500, 500*.8)
@@ -183,10 +185,16 @@ addLayer(levels[level])
 
 let player = () => getTileAll("p")[0];
 
-setLayers([["p", "#"]])
+// setLayers([["p", "#"]])
+
+// makeSolid(["p", "#", "r"])
+
+// makePushable({
+//   "p": ["#"]
+// })
 
 onTileInput("up", _ => {
-  player().y -= 1;
+  match("p").flat()[0].y -= 1;
 
   // replace("_\np", "p\n_"); // how to move on top of goal?
   // if (replace(".\np")) player().y -= 1;
@@ -194,13 +202,14 @@ onTileInput("up", _ => {
 })
 
 onTileInput("down", _ => {
-  player().y += 1;
+  // player().y += 1;
 
-  // replace("p\n_", "_\np");
-  // replace("p\n#\n_", "_\np\n#");
+  replace("p\n.", ".\np");
+  replace("p\n#\n.", ".\np\n#");
 })
 
 onTileInput("left", _ => {
+  // if (match("rp").length) return;
   player().x -= 1;
 
   // replace("_p", "p_");
@@ -210,17 +219,33 @@ onTileInput("left", _ => {
 })
 
 onTileInput("right", _ => {
+  const m = match("p.");
+  console.log(m);
+  // if (match("pr").length) return
+
   player().x += 1;
-  combine(["p", "r"], ",");
-  replace("_,", "pr")
+  // player().x += 1;
+  // combine(["p", "r"], ",");
+
+  // combine(["p", "r"], ",");
+  // replace("_,", "pr")
 
   // replace("p_", "_p");
-  // replace("p#_", "_p#");
+  // replace("p#.", "_p#");
+
+  // replace("p#(_g)", ([a, b]) => { a.x += 1; b.x += 1; });
+
   // if(replace("p#g", "_pb")) return;
   // replace("pb_", "pg#");
 })
 
+// setInterval(_ => {
+//   replace("g\n_", "_\ng");
+// }, 1000)
+
 afterInput(_ => {
+  // replace("g\n_", "_\ng");
+
   const hasG = [];
   Object.values(getTileGrid()).forEach(cell => {
     if (cell.map(c => c.type).includes("g")) hasG.push(cell.map(c => c.type));

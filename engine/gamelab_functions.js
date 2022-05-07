@@ -234,6 +234,9 @@ export function init(canvas) {
   let pushable = {};
   let zOrder = [];
   let layers = [];
+  let dontReplace = [];
+
+  const setDontReplace = arr => dontReplace = arr;
 
   function runCollisions() {
     const setTileDeltas = () => currentLevel.forEach(tile => {
@@ -335,14 +338,19 @@ export function init(canvas) {
 
   class Tile {
     constructor(x, y, type) {
+      this._type = null;
       this.type = type;
       this._x = x;
       this._y = y;
       this.dx = 0;
       this.dy = 0;
 
-      const sprite = legend[type];
-      if (!sprite) console.error("unknown tile type");
+
+    }
+
+    set type(t) {
+      this._type = t;
+      const sprite = (t in legend) ? legend[t] : new Uint8ClampedArray(16*16*4).fill(0);
       this.canvas = document.createElement("canvas");
       this.canvas.width = sprite.width;
       this.canvas.height = sprite.height;
@@ -352,6 +360,10 @@ export function init(canvas) {
         0,
         0,
       );
+    }
+
+    get type() {
+      return this._type;
     }
 
     set x(newX) {
@@ -573,7 +585,7 @@ export function init(canvas) {
     return result;
   }
 
-  function matchPattern(patternData) {
+  function matchPattern(patternData, testMap = {}) {
 
     const { width: w, height: h, pattern } = patternData;
 
@@ -593,18 +605,18 @@ export function init(canvas) {
         const dy = Math.floor(j/w);
         const type = pattern[j];
         const key = `${x+dx},${y+dy}`;
-        match = match && 
-          (grid[key]?.map(t => t.type).includes(type) 
-           || type === "." // empty
-           || (type === "_" && grid[key] === undefined) // empty
-          );
+        
+        let matchValue = 
+          (type in testMap)
+            ? grid[key]?.find(testMap[type])
+            : grid[key]?.find(t => t.type === type)
 
-        if (grid[key] && type !== ".") {
-          const options = grid[key].filter(t => t.type === type)
-          if (options.length > 0) matches.push(options[0]); // take the first match
+        if (type === "." && grid[key] === undefined) 
+          matchValue = { x: x+dx, y:y+dy, type };
 
-        } // else if (grid[key] && type === ".") matches.push(grid[key][0]);
-        else matches.push({ x: x+dx, y:y+dy, type });
+        match = match && matchValue !== undefined;
+
+        matches.push(match);
       }
 
       // all matches are in some layer together
@@ -626,11 +638,31 @@ export function init(canvas) {
     return allMatches;
   }
 
-  function replace(pattern, newPattern = "") {
+  function match(pattern, testMap = {}) {
+    const p = parsePattern(pattern);
+    const matches = matchPattern(p, testMap);
+    return matches;
+  }
+
+  function replace(pattern, newPattern) {
     const p = parsePattern(pattern);
     const matches = matchPattern(p);
 
-    if (newPattern === "") return matches.length > 0;
+    // let matches = pattern;
+    // if (typeof pattern === "string") {
+    //   const p = parsePattern(pattern);
+    //   matches = matchPattern(p);
+    // } else {
+    //   // check matches are all of same length
+    // }
+
+    // if (newPattern === "") return matches.length > 0;
+
+    // if (typeof newPattern === "function") {
+    //   matches.forEach(newPattern);
+
+    //   return matches.length > 0;
+    // }
 
     const pNew = parsePattern(newPattern);
 
@@ -764,6 +796,8 @@ export function init(canvas) {
     setZOrder: (order) => { zOrder = order; }, // **, could use order of collision layers
     sprite,
     setLayers,
-    combine
+    combine,
+    setDontReplace,
+    match
   }
 }

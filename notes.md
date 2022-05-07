@@ -20,3 +20,10 @@ Some things to consider.
 - What special symbols are in replacement rules?
   - "." anything
   - "\_" nothing
+  - "\_" could also mean nothing solid or background
+
+- Is there some way of creating layers which only interact (match?) with themselves
+
+- Is it better to be strictly 2d with one block in each spot at a time
+  - ben's cursor in lights out wouldn't work
+
