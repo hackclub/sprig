@@ -14,3 +14,9 @@ Some things to consider.
   - Can it be covered by replacements, replacements don't have notion of motion
 
   
+
+- Only want to draw one map
+
+- What special symbols are in replacement rules?
+  - "." anything
+  - "\_" nothing

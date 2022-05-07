@@ -595,7 +595,7 @@ export function init(canvas) {
         const key = `${x+dx},${y+dy}`;
         match = match && 
           (grid[key]?.map(t => t.type).includes(type) 
-           || type === "." // anything
+           || type === "." // empty
            || (type === "_" && grid[key] === undefined) // empty
           );
 
@@ -608,17 +608,17 @@ export function init(canvas) {
       }
 
       // all matches are in some layer together
-      const matchTypes = matches
-          .map(t => t.type)
-          .filter(t => ![".", "_"].includes(t));
+      // const matchTypes = matches
+      //     .map(t => t.type)
+      //     .filter(t => !["."].includes(t));
 
-      const layerBuddies = layers
-        .some(layer => matchTypes.every(type => layer.includes(type)))
-        || matchTypes.length === 1;
+      // const layerBuddies = layers
+      //   .some(layer => matchTypes.every(type => layer.includes(type)))
+      //   || matchTypes.length === 1;
 
-      if (match) console.log(layers, matchTypes, matches, layerBuddies);
+      // if (match) console.log(layers, matchTypes, matches, layerBuddies);
 
-      if (match && layerBuddies) {
+      if (match) {
         allMatches.push(matches);
       }
     }
@@ -652,6 +652,37 @@ export function init(canvas) {
     })
 
     return matches.length > 0
+  }
+
+  function combine(arr, newType) {
+    const grid = getTileGrid();
+
+    let matched = false;
+
+    Object.keys(grid).forEach(k => {
+      const cell = grid[k];
+      const typesInCell = cell.map(tile => tile.type);
+
+      const matches = [];
+
+      arr.forEach(t => {
+        const index = typesInCell.indexOf(t);
+        if (index !== -1 && !matches.includes(index)) {
+          matches.push(index);
+        } 
+      })
+
+      if (matches.length === arr.length) {
+        matches.forEach(i => cell[i].remove());
+        const [ x, y ] = k.split(",").map(Number);
+
+        addTile(x, y, newType);
+
+        matched = true;
+      }
+    })
+
+    return matched;
   }
 
   function setLayers(l) {
@@ -732,6 +763,7 @@ export function init(canvas) {
     clear: () => { currentLevel = []; }, // ***
     setZOrder: (order) => { zOrder = order; }, // **, could use order of collision layers
     sprite,
-    setLayers
+    setLayers,
+    combine
   }
 }

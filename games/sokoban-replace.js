@@ -25,7 +25,8 @@ const {
   setZOrder,
   sprite,
   start,
-  setLayers
+  setLayers,
+  combine
 } = init(canvas);
 
 setScreenSize(500, 500*.8)
@@ -180,34 +181,43 @@ const bg = () => addLayer(`
 // bg();
 addLayer(levels[level])
 
-
 let player = () => getTileAll("p")[0];
 
 setLayers([["p", "#"]])
 
 onTileInput("up", _ => {
-  replace("_\np", "p\n_"); // how to move on top of goal?
+  player().y -= 1;
+
+  // replace("_\np", "p\n_"); // how to move on top of goal?
   // if (replace(".\np")) player().y -= 1;
-  replace("_\n#\np", "#\np\n_");
+  // replace("_\n#\np", "#\np\n_");
 })
 
 onTileInput("down", _ => {
-  replace("p\n_", "_\np");
-  replace("p\n#\n_", "_\np\n#");
+  player().y += 1;
+
+  // replace("p\n_", "_\np");
+  // replace("p\n#\n_", "_\np\n#");
 })
 
 onTileInput("left", _ => {
-  replace("_p", "p_");
-  replace("_#p", "#p_");
-  if(replace("g#p", "bp_")) return;
-  replace("_bp", "#gp");
+  player().x -= 1;
+
+  // replace("_p", "p_");
+  // replace("_#p", "#p_");
+  // if(replace("g#p", "bp_")) return;
+  // replace("_bp", "#gp");
 })
 
 onTileInput("right", _ => {
-  replace("p_", "_p");
-  replace("p#_", "_p#");
-  if(replace("p#g", "_pb")) return;
-  replace("pb_", "pg#");
+  player().x += 1;
+  combine(["p", "r"], ",");
+  replace("_,", "pr")
+
+  // replace("p_", "_p");
+  // replace("p#_", "_p#");
+  // if(replace("p#g", "_pb")) return;
+  // replace("pb_", "pg#");
 })
 
 afterInput(_ => {
