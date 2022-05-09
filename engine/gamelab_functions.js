@@ -94,15 +94,12 @@ export function init(canvas) {
     if (notSolid || noMovement || movingToEmpty) {
       tile._x += dx;
       tile._y += dy;
-      return;
+      return true;
     }
 
     let canMove = true;
 
-    // console.log(cellKey, grid[cellKey]);
-
     grid[cellKey].forEach(cell => {
-      // if (tile === cell) return;
 
       const isSolid = solids.includes(cell.type);
       const isPushable = (type in pushable) && pushable[type].includes(cell.type);
@@ -111,22 +108,17 @@ export function init(canvas) {
         canMove = false;
 
       if (isSolid && isPushable) {
-        console.log(cell.type, cell.dx, dx, dy);
-        cell.dx += dx;
-        cell.dy += dy;
-        canMoveToPush(cell, cell.dx, cell.dy);
-        // if (cell.x+cell.dx === x && cell.y+cell.dy === y) canMove = false;
-        if (cell.dx === 0 && cell.dy === 0) canMove = false;
+        canMove = canMove && canMoveToPush(cell, dx, dy);
       }
     })
 
-    if (!canMove) {
-      tile.dx = 0;
-      tile.dy = 0;
+    if (canMove) {
+      tile._x += dx;
+      tile._y += dy;
     }
 
-    tile._x += tile.dx;
-    tile._y += tile.dy;
+    return canMove;
+
   }
 
   class Tile {
@@ -163,8 +155,8 @@ export function init(canvas) {
     }
 
     set x(newX) {
-      this.dx = newX - this.x;
-      canMoveToPush(this, this.dx, 0);
+      const dx = newX - this.x;
+      if (canMoveToPush(this, dx, 0)) this.dx = dx;
       return this;
     }
 
@@ -173,8 +165,8 @@ export function init(canvas) {
     }
 
     set y(newY) {
-      this.dy = newY - this.y;
-      canMoveToPush(this, 0, this.dy);
+      const dy = newY - this.y;
+      if (canMoveToPush(this, 0, dy)) this.dy = dy;
       return this;
     }
 

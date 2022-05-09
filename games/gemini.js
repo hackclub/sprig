@@ -144,8 +144,8 @@ const levels = [
   `
     rrrrrrrrrr
     rrrrrrrrrr
-    rp2..rrrrr
-    rrrr...ggr
+    r.p2.rrrrr
+    rrrr....gr
     rrrrrrrrrr
     rrrrrrrrrr
   `,
@@ -161,28 +161,36 @@ onInput("up", _ => {
   if (movesMade >= maxMoves) return;
   player().y -= 1;
   moveHistory.push("u");
+  movesMade++;
+
 })
 
 onInput("down", _ => {
   if (movesMade >= maxMoves) return;
   player().y += 1;
   moveHistory.push("d");
+  movesMade++;
+
 })
 
 onInput("left", _ => {
   if (movesMade >= maxMoves) return;
   player().x -= 1;
   moveHistory.push("l");
+  movesMade++;
+
 })
 
 onInput("right", _ => {
   if (movesMade >= maxMoves) return;
   player().x += 1;
   moveHistory.push("r");
+  movesMade++;
+
 })
 
 makePushable({
-  "2": ["p"]
+  "2": ["p"],
 })
 
 onInput("action0", _ => {
@@ -201,19 +209,19 @@ onInput("action0", _ => {
     }
     if (move === "r") {
       p2().x += 1;
-      
+
       // replace("2p.", ".2p");
       // replace("2pg", "..w");
     }
 
+    // p2().dx = 0;
+    // getAll("p")[0] = 0;
+
+    // console.log(p2().dx, getAll("p")[0].dx)
+
     replace("2\n.", ".\n2");
 
     swap(["p", "g"], "w")
-
-    if (getAll("w").length) {
-      console.log("you win");
-      break;
-    }
   }
 
   moveHistory = [];
@@ -221,15 +229,18 @@ onInput("action0", _ => {
 
 afterInput(_ => {
   replace("p\n.", ".\np");
-  movesMade++;
 
-  let movesLeft = maxMoves - movesMade;
-  console.log("moves left", movesLeft);
+  // let movesLeft = maxMoves - movesMade;
+  // console.log(movesLeft);
+  swap(["p", "g"], "w")
 
-  if (swap(["p", "g"], "win") === 1) {
+  if (getAll("w").length && level < levels.length-1) {
+    makeSolid(["p", "r"])
     level++;
-    moveHistory = 0;
-    moves
+    moveHistory = [];
+    movesMade = 0;
+    clear();
+    addLayer(levels[level]);
   }
 
 })
