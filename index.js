@@ -5,3 +5,5 @@ import "./games/replace-land.js";
 import "./games/wall-bounce.js";
 import "./games/sokoban-replace.js";
 import "./games/lightsoff.js";
+import "./games/snake-replace.js";
+import "./games/gemini.js"

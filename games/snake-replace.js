@@ -1,34 +1,30 @@
-import { init } from "../engine/gamelab_functions_v0.js";
+import { init } from "../engine/gamelab_functions.js";
 
-const canvas = document.querySelector(".snake");
+const canvas = document.querySelector(".snake-replace");
 
 const {
   setScreenSize,
-  setLegend,
-  addLayer,
-  setTile,
-  getTile,
-  addTile,
-  clearTile,
-  everyTile,
-  tileContains,
-  addRule,
-  onTileCollision,
-  onTileInput,
+  setLegend, 
+  addLayer, 
+  getCell,
+  addTile, 
+  clearTile, 
   makeSolid,
-  makePushable,
-  replace,
-  afterInput,
-  getTileGrid,
-  getTileAll,
-  clear,
-  setZOrder,
+  makePushable, 
+  replace, 
+  onInput,
+  afterInput, 
+  getGrid,
+  getAll, 
+  clear, 
+  setZOrder, 
   sprite,
-  start
+  swap,
+  match
 } = init(canvas);
 
-setScreenSize(500, 500*.8)
 
+setScreenSize(500, 500*.8)
 
 setLegend({
   r: sprite(`
@@ -154,26 +150,26 @@ const levels = {
 
 
 addLayer(levels[level])
-let player = getTileAll("p")[0];
+let player = getAll("p")[0];
 addTile(player.x - player.dx, player.y - player.dy, "r")
 
-onTileInput("up", _ => {
+onInput("up", _ => {
   if (player.y === 0) return;
   player.y -= 1;
 
 })
 
-onTileInput("down", _ => {
+onInput("down", _ => {
   if (player.y === 7) return;
   player.y += 1;
 })
 
-onTileInput("left", _ => {
+onInput("left", _ => {
   if (player.x === 0) return;
   player.x -= 1;
 })
 
-onTileInput("right", _ => {
+onInput("right", _ => {
   if (player.x === 9) return;
   player.x += 1;
 })
@@ -185,12 +181,12 @@ afterInput(_ => {
     addTile(player.x, player.y, "r")
   }
   
-  if (getTileAll("r").length === 10*8 - getTileAll("0").length) {
+  if (getAll("r").length === 10*8 - getAll("0").length) {
     level++;
     clear();
     if (level in levels) addLayer(levels[level])
     else console.log("you win")
-    player = getTileAll("p")[0]
+    player = getAll("p")[0]
     addTile(player.x - player.dx, player.y - player.dy, "r")
   }
 })
@@ -199,4 +195,3 @@ afterInput(_ => {
 // all cells with x also have y
 // no cells like such around
 
-start()

@@ -15,19 +15,194 @@ export function init(canvas) {
   ctx.mozImageSmoothingEnabled = false;
   ctx.imageSmoothingEnabled = false;
 
+  let gameObjects = [];
+  const texts = new Set();
+  let tunes = new Set();
+  const timeKeeper = new TimeKeeper();
+  let inputEvents = {
+    keypress: new Set(),
+    keyhold: new Set()
+  };
+  let collisionEvents = []; // collisions should be on gameObjects
+  let gameloopId = null;
+
+  let lastTime = 0;
+  const heldKeys = new Set();
+
+  timeKeeper.addTimer(_ => {
+    heldKeys.forEach(key => {
+      inputEvents["keyhold"].forEach(fn => fn(key));
+    })
+  }, 1/30);
+
   canvas.setAttribute("tabindex", "1");
 
-  function gameloop() {
+  canvas.addEventListener("keydown", (e) => {
+    const key = e.key;
 
+    if (heldKeys.has(key)) return;
+
+    heldKeys.add(key);
+
+    inputEvents["keypress"].forEach(fn => fn(key));
+
+    resolveObjs(gameObjects);
+    
+    e.preventDefault();
+  });
+
+  canvas.addEventListener("keyup", (e) => {
+    const key = e.key;
+    heldKeys.delete(key);
+
+    e.preventDefault();
+  });
+
+  const generateId = (prefix = "") => 
+    (prefix !== "" ? prefix + "_" : "") + 
+    Math.random().toString(36).slice(2);
+
+  function gameloop(time) {
+    const elapsedMs = performance.now() - lastTime;
+    lastTime = time;
+
+    gameObjects.forEach(obj => {
+      obj.lastX = obj.x;
+      obj.lastY = obj.y;
+
+      obj.x += obj.vx * elapsedMs;
+      obj.y += obj.vy * elapsedMs;
+    });
+
+    timeKeeper.update(elapsedMs);
+
+    resolveObjs(gameObjects);
+
+    // draw gameObjects and texts
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    gameObjects.forEach(obj => obj.draw(canvas.width/100, canvas.height/100, ctx));
+    texts.forEach(text => drawText(text, ctx));
+
     drawTiles();
 
-    window.requestAnimationFrame(gameloop);
+    const id = window.requestAnimationFrame(gameloop);
+
+    gameloopId = id;
   }
 
-  window.requestAnimationFrame(gameloop);
+  // ----------------------------------------
+
+  function add(obj) {
+
+    const gameObject = new GameObject(obj);
+
+    gameObjects.push(gameObject);
+
+    // add collisions if it matches first param of collisionEvent
+
+    gameObjects = gameObjects.sort((a, b) => a.zIndex - b.zIndex);
+
+    gameObject.remove = () => {
+      gameObjects = gameObjects.filter((x) => x.id !== gameObject.id);
+    }
+
+    collisionEvents.forEach(([tag1, tag2, fn]) => {
+      if (typeof tag1 === "string") {
+        gameObject.collisionFns.push([tag2, fn]);
+      } else { // is game object
+
+      }
+    })
+
+    return gameObject;
+  }
+
+  function addText(text, x, y, ops) {
+    const obj = { text, x, y, ...ops };
+    texts.add(obj);
+
+    return {
+      remove: () => texts.delete(obj)
+    }
+  }
+
+  function addTimer(fn, time) {
+    return timeKeeper.addTimer(fn, time);
+  }
+
+  function getTagged(tag) {
+    return tag === "" ? gameObjects : gameObjects.filter((x) => x.tags.includes(tag));
+  }
+
+  function remove(thing) {
+    // sprite
+    // tag
+    // tune
+    // text
+    // collision event
+    // input event
+    // timer
+
+    if (typeof thing === "string") {
+      gameObjects = gameObjects.filter((x) => !x.tags.includes(thing))
+    } else {
+      thing.remove();
+    }
+    
+  }
+
+  function onInput(type, fn) {
+
+    if (type in inputEvents) {
+      inputEvents[type].add(fn);
+    } else {
+      console.log("unknown event");
+    }
+
+    return {
+      remove: () => inputEvents[type].delete(fn)
+    }
+  }
+
+  function onCollision(id0, id1, fn) { // could be gameObject or tag
+    collisionEvents.push([id0, id1, fn]);
+
+    if (typeof id0 === "string") {
+      getTagged(id0).forEach(x => {
+        // add collision
+        x.collisionFns.push([id1, fn]);
+      })
+    } else { // is game object
+
+    }
+
+    // should this be removable?
+  }
+
+  function start() {
+    if (gameloopId) end();
+
+    lastTime = performance.now();
+
+    gameloopId = window.requestAnimationFrame(gameloop);
+  }
+
+  function end() {
+    window.cancelAnimationFrame(gameloopId);
+
+    timeKeeper.clear();
+
+    tunes.forEach(tune => tune.remove());
+    tunes.clear();
+
+    gameloopId = null;
+    collisionEvents = [];
+    inputEvents.keypress.clear();
+    inputEvents.keyhold.clear();
+    texts.clear();
+  }
 
   function setScreenSize(w, h) {
     canvas.width = w;
@@ -54,9 +229,34 @@ export function init(canvas) {
     undo: [],
   };
   let afterInputs = [];
+  let tileCollisions = [];
   let solids = [];
   let pushable = {};
   let zOrder = [];
+  let layers = [];
+  let dontReplace = [];
+
+  const setDontReplace = arr => dontReplace = arr;
+
+  function runCollisions() {
+    const setTileDeltas = () => currentLevel.forEach(tile => {
+      tile.dx = tile.x - tile.lastX;
+      tile.lastX = tile.x;
+
+      tile.dy = tile.y - tile.lastY;
+      tile.lastY = tile.y;
+    })
+
+    const getDeltas = (tiles) => tiles.map(t => [t.dx, t.dy]).flat();
+    const anyMoved = () => getDeltas(currentLevel).some(d => d !== 0);
+
+    setTileDeltas();
+    // should repeat this until nothing moves
+    while (anyMoved()) {
+      checkTileCollisions();
+      setTileDeltas();
+    }
+  }
 
   canvas.addEventListener("keydown", (e) => {
     const key = e.key;
@@ -71,6 +271,10 @@ export function init(canvas) {
     if (key === "d" || key === "ArrowRight") tileInputs["right"].forEach(fn => fn());
     if (key === "Enter" || key === " ") tileInputs["action0"].forEach(fn => fn());
 
+    // runCollisions();
+
+    // currentLevel.forEach(canMoveToPush);
+
     afterInputs.forEach(f => f());
 
     // clear deltas here?
@@ -82,8 +286,12 @@ export function init(canvas) {
     e.preventDefault();
   });
 
+  const canMoveTo = (x, y, tile) => {
+    return getTile(x, y).every(t => !solids.includes(t.type));
+  }
+
   const canMoveToPush = (tile, dx, dy) => {
-    const grid = getGrid();
+    const grid = getTileGrid();
     const { x, y, type } = tile;
     const cellKey = `${x+dx},${y+dy}`;
 
@@ -111,7 +319,6 @@ export function init(canvas) {
         canMove = false;
 
       if (isSolid && isPushable) {
-        console.log(cell.type, cell.dx, dx, dy);
         cell.dx += dx;
         cell.dy += dy;
         canMoveToPush(cell, cell.dx, cell.dy);
@@ -142,11 +349,8 @@ export function init(canvas) {
     }
 
     set type(t) {
-      if (t === ".") t.remove(); // hmm
-
       this._type = t;
-      const defaultSprite = new ImageData(new Uint8ClampedArray(16*16*4).fill(0), 16)
-      const sprite = (t in legend) ? legend[t] : defaultSprite;
+      const sprite = (t in legend) ? legend[t] : new Uint8ClampedArray(16*16*4).fill(0);
       this.canvas = document.createElement("canvas");
       this.canvas.width = sprite.width;
       this.canvas.height = sprite.height;
@@ -224,6 +428,17 @@ export function init(canvas) {
 
   function addTile(x, y, type) { // could take array
     // if (type === ".") 
+    
+    const tile = new Tile(x, y, type);
+    currentLevel.push(tile);
+
+    return tile;
+  }
+
+  function setTile(x, y, type = ".") { // could take array
+    currentLevel = currentLevel.filter(tile => tile.x !== x || tile.y !== y);
+
+    if (type === ".") return;
 
     const tile = new Tile(x, y, type);
     currentLevel.push(tile);
@@ -235,8 +450,35 @@ export function init(canvas) {
     currentLevel = currentLevel.filter(tile => tile.x !== x || tile.y !== y);
   }
 
-  function getCell(x, y) { // 
+  function getTile(x, y) { // 
     return currentLevel.filter(tile => tile.x === x && tile.y === y);
+  }
+
+  function tileContains(x, y, type) {
+    return currentLevel
+      .filter(tile => tile.x === x && tile.y === y)
+      .map(tile => tile.type)
+      .includes(type)
+  }
+
+  function tilesWith(type) {
+    const grid = getTileGrid();
+
+    // return getGrid
+  }
+
+  function everyTile(type, fn) {
+    const tiles = [];
+    currentLevel.forEach( tile => {
+      if (tile.type === type) tiles.push(fn(tile));
+    })
+
+    return tiles;
+  }
+
+  function addRule(pattern, fn) {
+    // if pattern matches grid then call fn
+
   }
 
   function makeSolid(arr) {
@@ -247,12 +489,32 @@ export function init(canvas) {
     pushable = map;
   }
 
-  function onInput(type, fn) {
+  // type
+  // type + 3
+  // type.x + 3
+  // type.y + 3 || type.y - 3
+  // -3 < type.x < +3 && -3 < type.y < +3
+  function onTileCollision(area0, area1, fn) {
+    // if area0 overlaps area1 call fn
+
+    // group by all overlaps
+    if (typeof area0 === "string") area0 = [area0];
+    if (typeof area1 === "string") area1 = [area1];
+
+    area0.forEach(t0 => {
+      area1.forEach(t1 => {
+        tileCollisions.push([ t0, t1, fn ]);
+      })
+    })
+
+  }
+
+  function onTileInput(type, fn) {
     if (!(type in tileInputs)) console.error("unknown input type:", type)
     tileInputs[type].push(fn);
   }
 
-  function getGrid() {
+  function getTileGrid() {
     const overlaps = {};
     const tiles = currentLevel.map(tile => [ `${tile.x},${tile.y}`, tile ]);
     tiles.forEach( tile => {
@@ -262,6 +524,28 @@ export function init(canvas) {
     })
 
     return overlaps;
+  }
+
+  function checkTileCollisions() {
+    // check collisions
+    const overlaps = getTileGrid();
+
+    Object.values(overlaps).forEach(tiles => {
+      if (tiles.length > 1) {
+        // console.log(tiles);
+        // if those tiles contain every tile in a 
+        const types = tiles.map(x => x.type);
+        tileCollisions.forEach(collision => {
+          const [ type0, type1, fn ] = collision;
+
+          if (types.includes(type0) && types.includes(type1)) {
+            const tile0 = tiles[types.indexOf(type0)];
+            const tile1 = tiles[types.indexOf(type1)];
+            fn(tile0, tile1);
+          }
+        })
+      }
+    })
   }
 
 
@@ -307,7 +591,7 @@ export function init(canvas) {
 
     const { width: w, height: h, pattern } = patternData;
 
-    const grid = getGrid();
+    const grid = getTileGrid();
 
     // if no cell with key then cell empty
     for (let i = 0; i < width*height; i++) {
@@ -388,14 +672,10 @@ export function init(canvas) {
     return matches.length > 0
   }
 
-  function swap(arr, newTypes) { // swap could do multiple
-    if (typeof arr === "string") arr = [ arr ];
-    if (typeof newTypes === "string") newTypes = [ newTypes ];
-
-    const grid = getGrid();
+  function combine(arr, newType) {
+    const grid = getTileGrid();
 
     let matched = false;
-    let length = 0;
 
     Object.keys(grid).forEach(k => {
       const cell = grid[k];
@@ -414,14 +694,13 @@ export function init(canvas) {
         matches.forEach(i => cell[i].remove());
         const [ x, y ] = k.split(",").map(Number);
 
-        newTypes.forEach(t => addTile(x, y, t));
+        addTile(x, y, newType);
 
         matched = true;
-        length++;
       }
     })
 
-    return length;
+    return matched;
   }
 
   function setLayers(l) {
@@ -470,24 +749,41 @@ export function init(canvas) {
   // how to add timed things, like bird flying and ball kicks
 
   return {
+    add,
+    addText,
+    addTimer,
+    remove,
+    getTagged,
+    onInput,
+    onCollision,
+    start,
+    end,
+    every: (tag, fn) => getTagged(tag).forEach(fn),
     setScreenSize,
     // tile functions
     setLegend, // ***
     addLayer, // ***
-    getCell, // *
+    setTile, // *
+    getTile, // *
     addTile, // **
     clearTile, // *
-    onInput, // ***
+    everyTile, // *
+    tileContains, // *
+    addRule, // ?
+    onTileCollision, // *
+    onTileInput, // ***
     makeSolid, // ***, could use collision layers
     makePushable, // ***
     replace, // **
     afterInput, // ***
-    getGrid, // **
-    getAll: (type) => currentLevel.filter(t => t.type === type), // **
+    getTileGrid, // **
+    getTileAll: (type) => currentLevel.filter(t => t.type === type), // **
     clear: () => { currentLevel = []; }, // ***
     setZOrder: (order) => { zOrder = order; }, // **, could use order of collision layers
     sprite,
-    swap,
+    setLayers,
+    combine,
+    setDontReplace,
     match
   }
 }

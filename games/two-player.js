@@ -1,4 +1,4 @@
-import { init } from "../engine/gamelab_functions.js";
+import { init } from "../engine/gamelab_functions_v0.js";
 
 const canvas = document.querySelector(".two-player");
 

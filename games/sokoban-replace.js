@@ -1,4 +1,4 @@
-import { init } from "../engine/gamelab_functions.js";
+import { init } from "../engine/gamelab_functions_v0.js";
 
 const canvas = document.querySelector(".sokoban-replace");
 
@@ -172,20 +172,23 @@ const levels = {
 addLayer(levels[level])
 
 const testKey = { 
-  "_": t => {
-    return t.type === "g" || t.type === "." 
-  },
+  // "_": t => {
+  //   return t.type !== "r" && t.type !== "#" 
+  // },
   "_": ["g", "."]
 }
 
+makeSolid(["p", "#", "r"])
+
 onTileInput("up", _ => {
-  match("_\np", testKey).forEach(arr => {
+
+  match("_\n#\np", testKey).forEach(arr => {
+    arr[2].y -= 1;
     arr[1].y -= 1;
   })
 
-  match("_\n#\np", testKey).forEach(arr => {
+  match("_\np", testKey).forEach(arr => {
     arr[1].y -= 1;
-    arr[2].y -= 1;
   })
 })
 
@@ -195,8 +198,8 @@ onTileInput("down", _ => {
   })
 
   match("p\n#\n_", testKey).forEach(arr => {
-    arr[0].y += 1;
     arr[1].y += 1;
+    arr[0].y += 1;
   })
 })
 
@@ -217,8 +220,8 @@ onTileInput("right", _ => {
   })
 
   match("p#_", testKey).forEach(arr => {
-    arr[0].x += 1;
     arr[1].x += 1;
+    arr[0].x += 1;
   })
 })
 
