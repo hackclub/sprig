@@ -395,6 +395,7 @@ export function init(canvas) {
     return matches;
   }
 
+  // should this return [], number, or boolean
   function replace(pattern, newPattern, testMap = {}) { 
     // ? should be able to pass result of matches
     // maybe passing testMap is okay
@@ -422,6 +423,7 @@ export function init(canvas) {
   function clear() { currentLevel = []; } // ***
 
 
+  // should this return [], number, or boolean
   function swap(arr, newTypes) { // swap could do multiple
     if (typeof arr === "string") arr = [ arr ];
     if (typeof newTypes === "string") newTypes = [ newTypes ];
