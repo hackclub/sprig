@@ -24,7 +24,7 @@ const {
 } = init(canvas);
 
 
-setScreenSize(500, 500*.8)
+setScreenSize(500, 500)
 
 setLegend({
   r: sprite(`
@@ -136,17 +136,13 @@ const levels = [
   `
     rrrrrrrrrr
     rrrrrrrrrr
-    rrrrrrrrrr
     rp2....g.r
-    rrrrrrrrrr
     rrrrrrrrrr
   `,
   `
     rrrrrrrrrr
-    rrrrrrrrrr
     r.p2.rrrrr
     rrrr....gr
-    rrrrrrrrrr
     rrrrrrrrrr
   `,
 ]

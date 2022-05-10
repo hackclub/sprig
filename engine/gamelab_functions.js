@@ -17,6 +17,8 @@ export function init(canvas) {
 
   canvas.setAttribute("tabindex", "1");
 
+  let animationId;
+
   function gameloop() {
 
     ctx.fillStyle = "white";
@@ -24,7 +26,11 @@ export function init(canvas) {
 
     drawTiles();
 
-    window.requestAnimationFrame(gameloop);
+    animationId = window.requestAnimationFrame(gameloop);
+  }
+
+  function end() {
+    window.cancelAnimationFrame(animationId);
   }
 
   window.requestAnimationFrame(gameloop);
@@ -57,6 +63,7 @@ export function init(canvas) {
   let solids = [];
   let pushable = {};
   let zOrder = [];
+  let maxTileDim = 0;
 
   canvas.addEventListener("keydown", (e) => {
     const key = e.key;
@@ -200,6 +207,15 @@ export function init(canvas) {
     width = w;
     height = h;
 
+    // scale the ctx based on aspect ratio of level
+    // tiles should always be square
+    // find max tile width to fit
+
+    maxTileDim = Math.min(canvas.width/w, canvas.height/h);
+    
+    // should this adjust screen size?
+    setScreenSize(w*maxTileDim, h*maxTileDim);
+
     for (let i = 0; i < w*h; i++) {
       const type = string.split("").filter(x => x.match(/\S/))[i];
 
@@ -258,8 +274,6 @@ export function init(canvas) {
 
 
   function drawTiles() {
-    const w = canvas.width/width;
-    const h = canvas.height/height;
 
     currentLevel
       .sort((a, b) => zOrder.indexOf(b.type) - zOrder.indexOf(a.type))
@@ -267,10 +281,10 @@ export function init(canvas) {
 
         ctx.drawImage(
           tile.canvas, 
-          tile.x*canvas.width/width, 
-          tile.y*canvas.height/height,
-          w,
-          h
+          tile.x*maxTileDim, 
+          tile.y*maxTileDim,
+          maxTileDim,
+          maxTileDim
         );
       });
    
