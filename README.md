@@ -56,6 +56,15 @@ clears all tiles in x and y
 
 types can be "up" "down" "left" "right" "action"
 
+```
+onInput("right", () => {
+  getAll("p")[0].x += 1;
+
+  // match("p")[0][0].x += 1;
+  // get("p").x += 1;
+})
+```
+
 ### setSolids(arr)
 
 ```
@@ -73,6 +82,8 @@ setPushables({"p": ["r"]});
 takes map and every key can push types in value
 
 ### replace(pattern0, pattern1, matchMap = {})
+
+returns boolean of if it matched
 
 ```
 replace("pp", "g.")
@@ -108,7 +119,27 @@ returns map of form {
 
 ### swap(type, type)
 
+returns number of swaps
+
+```
+swap("a", "b");
+
+// or
+
+swap(["a", "b"], "c");
+
+// or
+
+swap("a", ["b", "c"]);
+
+// or
+
+swap(["a", "b"], ["c", "d"]);
+```
+
 ### match(pattern, patternMap = {})
+
+returns array of matches
 
 ```
 match("p.");
@@ -125,11 +156,26 @@ match("p_", matchMap);
 
 ### getAll(type)
 
+returns all tiles of given type
+
 ### clear()
+
+clears all tiles
 
 ### setZOrder(arr)
 
+sets order of rendering
+
+```
+setZOrder(["p", "r"])
+```
+
 ### setBackground(type)
+
+sets the default background tile
+only changes the visuals
+
+### The Tile
 
 Tiles have:
 ```
