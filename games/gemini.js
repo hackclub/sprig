@@ -29,22 +29,7 @@ setScreenSize(500, 500)
 
 setLegend({
   r: sprite(`
-rrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrr
-rrrrrrrrrrrrrrrr
+r
   `),
   g: sprite(`
 ................

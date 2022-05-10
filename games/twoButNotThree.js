@@ -175,27 +175,36 @@ setSolids(["p", "1", "r"])
 
 setPushables({
   "p": ["1"],
-  1: ["1"]
+  "1": ["1"]
 })
 
 
 setMap(levels[level])
 
+// get vs getAll vs getFirst
 let player = () => getAllTiles("p")[0];
 
+const upPattern = `1
+                   1
+                   1
+                   p
+                   `
+const downPattern = `p
+                     1
+                     1
+                     1
+                     `
+
 onInput("up", _ => {
-    if (match("1\n1\n1\np").length) return;
+  if (match(upPattern).length) return;
 
+  // getFirst("p").y -= 1;
   player().y -= 1;
-
-
 })
 
 onInput("down", _ => {
-  if (match("p\n1\n1\n1").length) return;
+  if (match(downPattern).length) return;
   player().y += 1;
-
-
 })
 
 onInput("left", _ => {
