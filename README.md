@@ -76,7 +76,7 @@ solids can't overlap with eachother
 ### setPushables(pushMap)
 
 ```
-setPushables({"p": ["r"]});
+setPushables({ "p": ["r"] });
 ```
 
 takes map and every key can push types in value
