@@ -7,3 +7,8 @@ import "./games/sokoban-replace.js";
 import "./games/lightsoff.js";
 import "./games/snake-replace.js";
 import "./games/gemini.js"
+import "./games/blockfaker.js"
+import "./games/suckyban.js"
+import "./games/plantsvsmankind.js"
+import "./games/axechess.js"
+import "./games/brokenzengarden.js"
