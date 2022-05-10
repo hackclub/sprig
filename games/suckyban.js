@@ -1,4 +1,5 @@
-const log = x => (console.log(x), x);
+// const log = x => (console.log(x), x);
+const log = (x) => x;
 
 /* let's get this party started */
 const canvas = document.querySelector(".suckyban");

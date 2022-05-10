@@ -5,12 +5,12 @@ const canvas = document.querySelector(".gemini");
 const {
   setScreenSize,
   setLegend, 
-  addLayer, 
+  setMap, 
   getCell,
   addTile, 
   clearTile, 
-  makeSolid,
-  makePushable, 
+  setSolids,
+  setPushables, 
   replace, 
   onInput,
   afterInput, 
@@ -20,7 +20,8 @@ const {
   setZOrder, 
   sprite,
   swap,
-  match
+  match,
+  setBackground
 } = init(canvas);
 
 
@@ -119,11 +120,13 @@ gggggggggggggggg
   `)
 })
 
-makeSolid(["p", "r"])
+setSolids(["p", "r"])
 
 setZOrder(["p","r", "2"]);
 
-// makePushable({
+// setBackground("g")
+
+// setPushables({
 //   "2": ["p"]
 // })
 
@@ -148,7 +151,7 @@ const levels = [
 ]
 
 
-addLayer(levels[level])
+setMap(levels[level])
 swap("t", ["p", "2"]);
 
 let player = () => getAll("p")[0];
@@ -185,12 +188,12 @@ onInput("right", _ => {
 
 })
 
-makePushable({
+setPushables({
   "2": ["p"],
 })
 
 onInput("action0", _ => {
-  makeSolid(["p", "r", "2"])
+  setSolids(["p", "r", "2"])
   const p2 = () => getAll("2")[0];
   for (let i = 0; i < moveHistory.length; i++) {
 
@@ -231,12 +234,12 @@ afterInput(_ => {
   swap(["p", "g"], "w")
 
   if (getAll("w").length && level < levels.length-1) {
-    makeSolid(["p", "r"])
+    setSolids(["p", "r"])
     level++;
     moveHistory = [];
     movesMade = 0;
     clear();
-    addLayer(levels[level]);
+    setMap(levels[level]);
   }
 
 })

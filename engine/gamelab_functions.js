@@ -65,6 +65,17 @@ export function init(canvas) {
   let zOrder = [];
   let maxTileDim = 0;
 
+  let background = new ImageData(new Uint8ClampedArray(16*16*4).fill(0), 16);
+  const bgCanvas = document.createElement("canvas");
+  bgCanvas.width = background.width;
+  bgCanvas.height = background.height;
+
+  bgCanvas.getContext("2d").putImageData(
+    background, 
+    0,
+    0,
+  );
+
   canvas.addEventListener("keydown", (e) => {
     const key = e.key;
 
@@ -136,8 +147,6 @@ export function init(canvas) {
       this._y = y;
       this.dx = 0;
       this.dy = 0;
-
-
     }
 
     set type(t) {
@@ -195,8 +204,10 @@ export function init(canvas) {
 
   const allEqual = arr => arr.every(val => val === arr[0]);
 
-  function addLayer(string) { // could have background and sprites
+  function setMap(string) { // could have background and sprites
     // check that level is rectangle
+
+    clear();
 
     const rows = string.trim().split("\n").map(x => x.trim());
     const rowLengths = rows.map(x => x.length);
@@ -247,11 +258,11 @@ export function init(canvas) {
     return currentLevel.filter(tile => tile.x === x && tile.y === y);
   }
 
-  function makeSolid(arr) {
+  function setSolids(arr) {
     solids = arr;
   }
 
-  function makePushable(map) {
+  function setPushables(map) {
     pushable = map;
   }
 
@@ -274,6 +285,18 @@ export function init(canvas) {
 
 
   function drawTiles() {
+
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+        ctx.drawImage(
+          bgCanvas, 
+          x*maxTileDim, 
+          y*maxTileDim,
+          maxTileDim,
+          maxTileDim
+        );
+      }
+    }
 
     currentLevel
       .sort((a, b) => zOrder.indexOf(b.type) - zOrder.indexOf(a.type))
@@ -357,7 +380,9 @@ export function init(canvas) {
       }
 
       if (match) {
-        allMatches.push(matches);
+        // if match doesn't have overlap with existing matches
+        const overlap = matches.some(t => allMatches.flat().includes(t));
+        if (!overlap) allMatches.push(matches);
       }
     }
 
@@ -394,6 +419,9 @@ export function init(canvas) {
     return matches.length > 0
   }
 
+  function clear() { currentLevel = []; } // ***
+
+
   function swap(arr, newTypes) { // swap could do multiple
     if (typeof arr === "string") arr = [ arr ];
     if (typeof newTypes === "string") newTypes = [ newTypes ];
@@ -428,10 +456,6 @@ export function init(canvas) {
     })
 
     return length;
-  }
-
-  function setLayers(l) {
-    layers = l;
   }
 
   function afterInput(fn) {
@@ -479,21 +503,32 @@ export function init(canvas) {
     setScreenSize,
     // tile functions
     setLegend, // ***
-    addLayer, // ***
+    setMap, // ***
     getCell, // *
     addTile, // **
     clearTile, // *
     onInput, // ***
-    makeSolid, // ***, could use collision layers
-    makePushable, // ***
+    setSolids, // ***, could use collision layers
+    setPushables, // ***
     replace, // **
     afterInput, // ***
     getGrid, // **
-    getAll: (type) => currentLevel.filter(t => t.type === type), // **
-    clear: () => { currentLevel = []; }, // ***
-    setZOrder: (order) => { zOrder = order; }, // **, could use order of collision layers
     sprite,
     swap,
-    match
+    match,
+    getAll: (type) => currentLevel.filter(t => t.type === type), // **
+    clear,
+    setZOrder: (order) => { zOrder = order; }, // **, could use order of collision layers
+    setBackground: (type) => { 
+      background = type in legend ? legend[type] : background; // else should be default
+      bgCanvas.width = background.width;
+      bgCanvas.height = background.height;
+
+      bgCanvas.getContext("2d").putImageData(
+        background, 
+        0,
+        0,
+      );
+    }
   }
 }

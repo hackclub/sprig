@@ -1,6 +1,6 @@
 import { init } from "../engine/gamelab_functions.js";
 
-const canvas = document.querySelector(".snake-replace");
+const canvas = document.querySelector(".twoButNotThree");
 
 const {
   setScreenSize,
@@ -20,11 +20,12 @@ const {
   setZOrder, 
   sprite,
   swap,
-  match
+  match,
+  setBackground
 } = init(canvas);
 
 
-setScreenSize(500, 500*.8)
+setScreenSize(500, 500)
 
 setLegend({
   r: sprite(`
@@ -63,7 +64,25 @@ rrrrrrrrrrrrrrrr
 ................
 ................
   `),
-  b: sprite(`
+    1: sprite(`
+................
+................
+................
+....0000000.....
+....0.....0000..
+....0...0....0..
+....0...0....0..
+....0...0...00..
+....0000000.0...
+....0...0...0...
+....0...0...0...
+....0...0...0...
+....000000000...
+................
+................
+................
+  `),
+  2: sprite(`
 ................
 ................
 ................
@@ -99,7 +118,7 @@ rrrrrrrrrrrrrrrr
 ................
 ................
   `),
-  "0": sprite(`
+  "w": sprite(`
 gggggggggggggggg
 gggggggggggggggg
 gggggggggggggggg
@@ -119,79 +138,83 @@ gggggggggggggggg
   `)
 })
 
-setSolids(["p", "r", "0"])
+setSolids(["p", "r"])
 
-setZOrder(["p","r", "0"]);
+setZOrder(["p","r", "2"]);
+
+// setBackground("g")
+
+// setPushables({
+//   "2": ["p"]
+// })
 
 let level = 0;
+let maxMoves = 4;
+let moveHistory = [];
+let movesMade = 0;
 
-const levels = {
-  1: `
-    ..........
-    ..........
-    ...p......
-    ..........
-    ..........
-    ..........
-    ..........
-    ..........
+const levels = [
+  `
+    rrrrrrrrrr
+    r........r
+    r..111...r
+    r...11...r
+    r..11....r
+    rp.....g.r
+    rrrrrrrrrr
   `,
-  0: `
-    p..0......
-    ...0......
-    ...000....
-    ..........
-    ..........
-    ...000....
-    ..0.......
-    ..0.......
-    `
-}
+  `
+    rrrrrrrrrr
+    r.p2.rrrrr
+    rrrr....gr
+    rrrrrrrrrr
+  `,
+]
+
+setSolids(["p", "1", "r"])
+
+setPushables({
+  "p": ["1"],
+  1: ["1"]
+})
 
 
 setMap(levels[level])
-let player = getAll("p")[0];
-addTile(player.x - player.dx, player.y - player.dy, "r")
+
+let player = () => getAll("p")[0];
 
 onInput("up", _ => {
-  if (player.y === 0) return;
-  player.y -= 1;
+    if (match("1\n1\n1\np").length) return;
+
+  player().y -= 1;
+
 
 })
 
 onInput("down", _ => {
-  if (player.y === 7) return;
-  player.y += 1;
+  if (match("p\n1\n1\n1").length) return;
+  player().y += 1;
+
+
 })
 
 onInput("left", _ => {
-  if (player.x === 0) return;
-  player.x -= 1;
+  if (match("111p").length) return;
+  player().x -= 1;
+
+
 })
 
 onInput("right", _ => {
-  if (player.x === 9) return;
-  player.x += 1;
+  if (match("p111").length) return;
+
+  player().x += 1;
+
+
 })
 
-// in what order should collision, push be applied
 
 afterInput(_ => {
-  if (player.dy !== 0 || player.dx !==0) {
-    addTile(player.x, player.y, "r")
-  }
-  
-  if (getAll("r").length === 10*8 - getAll("0").length) {
-    level++;
-    clear();
-    if (level in levels) setMap(levels[level])
-    else console.log("you win")
-    player = getAll("p")[0]
-    addTile(player.x - player.dx, player.y - player.dy, "r")
-  }
-})
 
-// win conditions
-// all cells with x also have y
-// no cells like such around
+})
 

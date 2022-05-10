@@ -66,6 +66,7 @@ Addtile list results in adding multiple tiles
 Addlayer vs setmap
 Clear current layer, only one per level anyway?
 Add key to have multiple things in character
+if maps have different dimensions weird behavior
 
 Why "and" doesn't work in replace, which tile should you return? Replace needs to run per tile. Could return list use filter over find. For and to work need to run filter per cell. Issue is then you have an array of arrays of arrays as result. What if "and" tiles are in legend
 
