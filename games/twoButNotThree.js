@@ -15,7 +15,7 @@ const {
   onInput,
   afterInput, 
   getGrid,
-  getAll, 
+  getAllTiles, 
   clear, 
   setZOrder, 
   sprite,
@@ -181,7 +181,7 @@ setPushables({
 
 setMap(levels[level])
 
-let player = () => getAll("p")[0];
+let player = () => getAllTiles("p")[0];
 
 onInput("up", _ => {
     if (match("1\n1\n1\np").length) return;

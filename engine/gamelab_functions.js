@@ -518,7 +518,8 @@ export function init(canvas) {
     sprite,
     swap,
     match,
-    getAll: (type) => currentLevel.filter(t => t.type === type), // **
+    getTile: (type) => currentLevel.find(t => t.type === type), // **
+    getAllTiles: (type) => currentLevel.filter(t => t.type === type), // **
     clear,
     setZOrder: (order) => { zOrder = order; }, // **, could use order of collision layers
     setBackground: (type) => { 

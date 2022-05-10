@@ -125,12 +125,7 @@ const levels = {
 addLayer(levels[level]);
 
 setInterval(() => {
-  replace(
-    `d
-     .`
-    ,`.
-      d`)
-
+  replace(`d\n.`,`.\nd`);
 
   replace(
   `.

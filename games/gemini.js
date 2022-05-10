@@ -15,7 +15,7 @@ const {
   onInput,
   afterInput, 
   getGrid,
-  getAll, 
+  getAllTiles, 
   clear, 
   setZOrder, 
   sprite,
@@ -154,7 +154,7 @@ const levels = [
 setMap(levels[level])
 swap("t", ["p", "2"]);
 
-let player = () => getAll("p")[0];
+let player = () => getAllTiles("p")[0];
 
 onInput("up", _ => {
   if (movesMade >= maxMoves) return;
@@ -194,7 +194,7 @@ setPushables({
 
 onInput("action0", _ => {
   setSolids(["p", "r", "2"])
-  const p2 = () => getAll("2")[0];
+  const p2 = () => getAllTiles("2")[0];
   for (let i = 0; i < moveHistory.length; i++) {
 
     let move = moveHistory[i];
@@ -214,9 +214,9 @@ onInput("action0", _ => {
     }
 
     // p2().dx = 0;
-    // getAll("p")[0] = 0;
+    // getAllTiles("p")[0] = 0;
 
-    // console.log(p2().dx, getAll("p")[0].dx)
+    // console.log(p2().dx, getAllTiles("p")[0].dx)
 
     replace("2\n.", ".\n2");
 
@@ -233,7 +233,7 @@ afterInput(_ => {
   // console.log(movesLeft);
   swap(["p", "g"], "w")
 
-  if (getAll("w").length && level < levels.length-1) {
+  if (getAllTiles("w").length && level < levels.length-1) {
     setSolids(["p", "r"])
     level++;
     moveHistory = [];

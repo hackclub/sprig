@@ -15,7 +15,7 @@ const {
   onInput,
   afterInput, 
   getGrid,
-  getAll, 
+  getAllTiles, 
   clear, 
   setZOrder, 
   sprite,
@@ -150,7 +150,7 @@ const levels = {
 
 
 setMap(levels[level])
-let player = getAll("p")[0];
+let player = getAllTiles("p")[0];
 addTile(player.x - player.dx, player.y - player.dy, "r")
 
 onInput("up", _ => {
@@ -181,12 +181,12 @@ afterInput(_ => {
     addTile(player.x, player.y, "r")
   }
   
-  if (getAll("r").length === 10*8 - getAll("0").length) {
+  if (getAllTiles("r").length === 10*8 - getAllTiles("0").length) {
     level++;
     clear();
     if (level in levels) setMap(levels[level])
     else console.log("you win")
-    player = getAll("p")[0]
+    player = getAllTiles("p")[0]
     addTile(player.x - player.dx, player.y - player.dy, "r")
   }
 })
