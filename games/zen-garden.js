@@ -1,6 +1,6 @@
 import { init } from "../engine/gamelab_functions.js";
 
-const canvas = document.querySelector(".maze");
+const canvas = document.querySelector(".zen-garden");
 
 const {
   setScreenSize,
@@ -85,10 +85,13 @@ setLegend({
 ................
 ................
 ................
-    `)
+    `),
+    // x: combine("g", "h")
 })
 
-setBackground("w")
+const water = "w";
+
+setBackground(water)
 
 const map = `
 bbbbbbbbbb
@@ -99,11 +102,21 @@ b....b..rb
 bbbbbbbbbb
 `
 
-setSolids(["b", "d"])
+setMap(map, { x: [ "b", "c" ] }); // want to be and
 
-setZOrder(["d", "g", "r"])
+match(`aa`, { 
+  a: "bx", // want to be or
+  a: (t) => t.type === "b" || t.type === "x",
+})
 
-setMap(map)
+swap("l", ["d", "r"])
+
+setSolids(["d", "r"])
+// setLayers(["a", "b"], ["b", "c"])
+
+setZOrder(["d", "b","g", "r"])
+
+
 
 onInput("up", _ => {
   getTile("d").y -= 1;
