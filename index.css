@@ -1,11 +1,77 @@
+:root {
+  --vertical-bar: 60%;
+}
+
 body, html {
   margin: 0px;
+}
+
+.root {
   width: 100vw;
   height: 100vh;
   position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.menu {
+  height: 30px;
+  background: #2929d0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-container {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+
+.code-container {
+  background: #ebc8eb;
+  width: var(--vertical-bar);
+  min-width: var(--vertical-bar);
+  max-width: var(--vertical-bar);
+  height: 100%;
   overflow: scroll;
 }
 
+.code-editor {
+
+}
+
+.game-output {
+  flex: 1;
+  height: 100%;
+  background: #a2f5a2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vertical-bar {
+  position: absolute;
+  left: calc( var(--vertical-bar) - 5px);
+  top: 30px;
+  background: none;
+  width: 10px;
+  height: 100%;
+  z-index: 10;
+}
+
+.vertical-bar:hover {
+  background: black;
+}
+
+
+/*
 .canvas-container {
   display: flex;
   justify-content: flex-start;
@@ -20,3 +86,4 @@ canvas {
   border: 1px solid black;
   margin: 10px;
 }
+*/
