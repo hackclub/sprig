@@ -204,7 +204,7 @@ export function init(canvas) {
 
   const allEqual = arr => arr.every(val => val === arr[0]);
 
-  function setMap(string) { // could have background and sprites
+  function setMap(string, spriteComboMap = {}) { // could have background and sprites
     // check that level is rectangle
 
     clear();
@@ -232,10 +232,16 @@ export function init(canvas) {
 
       if (type === ".") continue;
 
+      const types = type in spriteComboMap
+        ? spriteComboMap[type]
+        : [ type ];
+
       const x = i%w; 
-      const y = Math.floor(i/w); 
-      const newTile = new Tile(x, y, type);
-      currentLevel.push(newTile)
+      const y = Math.floor(i/w);
+      types.forEach(t => {
+        const newTile = new Tile(x, y, type);
+        currentLevel.push(newTile)
+      }) 
     }
 
     return currentLevel;
