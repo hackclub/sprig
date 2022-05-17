@@ -22,9 +22,57 @@ body, html {
   background: #2929d0;
   width: 100%;
   display: flex;
+  align-items: flex-start;
+  /*justify-content: center;*/
+  padding-left: 10px;
+  z-index: 1000; /* why is codemirror such high z */
+}
+
+.menu-item {
+  color: white;
+  padding-right: 30px;
+  height: 100%;
+  width: max-content;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
+
+.menu-item:hover {
+  cursor: pointer;
+  opacity: .8;
+}
+
+.dropdown-container {
+  position: relative;
+}
+
+.dropdown-list {
+  visibility: hidden;
+  position: absolute;
+  top: 99%;
+  left: -5px;
+  background: blue;
+  padding: 0px 10px 5px 10px;
+  border-radius: 0px 0px 5px 5px;
+  box-sizing: border-box;
+}
+
+.dropdown-list > * {
+  cursor: pointer;
+  opacity: 1;
+  padding-top: 5px;
+}
+
+.dropdown-list > *:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.dropdown-container:hover .dropdown-list {
+  visibility: visible;
+}
+
 
 .main-container {
   width: 100%;
