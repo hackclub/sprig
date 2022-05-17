@@ -90,3 +90,16 @@ No filter over lapping rectangles
 
 How to check for win conditions
 
+
+------------------------------------------
+
+TODO
+
+- finilize engine design
+- Generate sound effects
+- Editor
+- Upload flow
+- Hype site
+- Finish circuit design
+  - decide sound circuit
+

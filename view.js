@@ -6,12 +6,22 @@ export const view = (state) => html`
   <div class="main-container">
     <div class="code-container">
       <codemirror-js class="code-editor"></codemirror-js>
+      <div class="logs">
+        ${state.logs.map(x => html`${x}`)}
+      </div>
     </div>
     <div class="vertical-bar" aria-hidden="true"></div>
     <div class="game-output">
-      <canvas class="game-canvas"></canvas>
+      <div class="game-container">
+        <canvas class="game-canvas"></canvas>
+      </div>
+      <div class="docs">${docs()}</div>
     </div>
   </div>
+`
+
+const docs = () => html`
+  <p>tests</p>
 `
 
 const menu = () => html`
@@ -26,7 +36,8 @@ const menu = () => html`
         <div>html</div>
       </div>
     </div>
-    <div class="menu-item">docs</div>
+    <div class="menu-item docs-trigger">docs</div>
+    <div class="menu-item">upload</div>
     <div 
       class="menu-item" 
       @click=${() => dispatch("RUN")}>

@@ -27,6 +27,15 @@ const ACTIONS = {
   },
   RUN(args, state) {
     console.log("run");
+    state.logs = [];
+    
+    const cmLines = document.querySelectorAll(".cm-line");
+
+    for (let i = 0; i < cmLines.length; i++) {
+      const cmLine = cmLines[i];
+      cmLine.style.background = "";
+    }
+
     const script = state.codemirror.view.state.doc.toString();
     const err = evalGameScript(script);
     if (err) dispatch("LOG_ERROR", { err });
@@ -52,7 +61,7 @@ const ACTIONS = {
         : err.message;
 
     state.error = true;
-    state.logs = [...STATE.logs, msg];
+    state.logs = [...state.logs, msg];
     dispatch("RENDER");
 
     const cmLines = document.querySelectorAll(".cm-line");
@@ -66,7 +75,7 @@ const ACTIONS = {
     }
   },
   RENDER(args, state) {
-    render(document.querySelector(".root"), view(STATE));
+    render(document.querySelector(".root"), view(state));
   },
 }
 

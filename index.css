@@ -1,5 +1,6 @@
 :root {
   --vertical-bar: 60%;
+  --docs-percentage: 65%;
 }
 
 body, html, .root {
@@ -79,15 +80,22 @@ body {
 }
 
 .code-editor, .cm-editor {
-  height: 100%;
+  height: calc(100% - 50px);
+}
+
+.logs {
+  background: red;
+  height: 50px;
 }
 
 .game-output {
   flex: 1;
   height: 100%;
-  background: #e9ecef;
+  background: orange;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  overflow: auto;
 }
 
 .vertical-bar {
@@ -104,6 +112,28 @@ body {
   background: #d6336c;
 }
 
+.game-container {
+  background: #e9ecef;
+  width: 100%;
+  height: calc(100% - var(--docs-percentage));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: height 1s;
+  overflow: auto;
+}
+
+.game-container canvas {
+  border: 2px solid black;
+}
+
+.docs {
+  background: #dcc2f1;
+  width: 100%;
+  flex: 1;
+  box-sizing: border-box;
+  overflow: scroll;
+}
 
 /*
 .canvas-container {

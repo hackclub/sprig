@@ -229,8 +229,19 @@ export function addEvents(state) {
     }
   });
 
+  bodyListener("mousedown", ".docs-trigger", function (event) {
+    console.log("open/close docs");
+    const setPerc = n => document.documentElement.style.setProperty("--docs-percentage", `${n}%`);
+
+    const perc = getComputedStyle(document.documentElement).getPropertyValue("--docs-percentage");
+
+    if (perc === "0%") setPerc(65);
+    else setPerc(0);
+
+  });
+
   addVerticalBarDrag(state, bodyListener);
   // addHorzBarDrag(state, bodyListener);
-  addNumberDragging(state, bodyListener);
+  // addNumberDragging(state, bodyListener);
   addDropUpload(state, bodyListener);
 }
