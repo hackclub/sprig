@@ -8,7 +8,7 @@ export const view = (state) => html`
   <div class="main-container">
     <div class="code-container">
       <codemirror-js class="code-editor"></codemirror-js>
-      <div class="logs">
+      <div class=${["logs", state.error ? "erred" : ""].join(" ")}>
         ${state.logs.map(x => html`${x}`)}
       </div>
     </div>

@@ -29,6 +29,7 @@ const ACTIONS = {
   RUN(args, state) {
     console.log("run");
     state.logs = [];
+    state.error = false;
     
     const cmLines = document.querySelectorAll(".cm-line");
 

@@ -75,7 +75,7 @@ body {
   width: var(--vertical-bar);
   min-width: var(--vertical-bar);
   max-width: var(--vertical-bar);
-  height: 100%;
+  flex: 1;
   overflow: scroll;
 }
 
@@ -84,8 +84,11 @@ body {
 }
 
 .logs {
-  background: red;
   height: 50px;
+}
+
+.erred {
+  background: red;
 }
 
 .game-output {
