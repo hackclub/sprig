@@ -240,21 +240,6 @@ export function addEvents(state) {
 
   });
 
-  bodyListener("mousedown", ".sprite-editor-trigger", function (event) {
-    const el = document.querySelector(".sprite-editor");
-    el.classList.toggle("hide");
-  });
-
-  bodyListener("mousedown", ".sequencer-editor-trigger", function (event) {
-    const el = document.querySelector(".sequencer-editor");
-    el.classList.toggle("hide");
-  });
-
-  bodyListener("mousedown", ".map-editor-trigger", function (event) {
-    const el = document.querySelector(".map-editor");
-    el.classList.toggle("hide");
-  });
-
   addVerticalBarDrag(state, bodyListener);
   // addHorzBarDrag(state, bodyListener);
   // addNumberDragging(state, bodyListener);

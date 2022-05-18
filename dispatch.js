@@ -10,6 +10,7 @@ const STATE = {
   logs: [],
   name: "game-name-here",
   notifications: [],
+  editorType: "",
 }
 
 const ACTIONS = {
@@ -73,6 +74,10 @@ const ACTIONS = {
 
       cmLine.style.background = "#ecb2b2";
     }
+  },
+  SET_EDITOR({ type }, state) {
+    state.editorType = type;
+    dispatch("RENDER");
   },
   RENDER(args, state) {
     render(document.querySelector(".root"), view(state));

@@ -135,7 +135,7 @@ body {
   overflow: scroll;
 }
 
-.sprite-editor, .sequencer-editor, .map-editor {
+.asset-editor {
   position: fixed;
   left: 20%;
   top: 10%;

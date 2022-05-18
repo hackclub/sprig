@@ -22,14 +22,18 @@ export const view = (state) => html`
       </div>
     </div>
   </div>
-  <div class="sprite-editor hide">
-    <pixel-editor></pixel-editor>
-  </div>
-  <div class="sequencer-editor hide">
-    <sequencer-editor></sequencer-editor>
-  </div>
-  <div class="map-editor hide">
-    <pixel-editor></pixel-editor>
+  <div class=${["asset-editor", state.editorType === "" ? "hide" : ""].join(" ")}>
+    <button 
+      @click=${() => dispatch("SET_EDITOR", { type: "" })}>
+      close
+    </button>
+    ${
+      {
+        "sprite": html`<pixel-editor></pixel-editor>`,
+        "sequencer": html`<sequencer-editor></sequencer-editor>`,
+        "":""
+      }[state.editorType]
+    }
   </div>
 `
 
@@ -49,13 +53,31 @@ const menu = () => html`
         <div>html</div>
       </div>
     </div>
+    <div class="menu-item dropdown-container">
+      editors
+      <div class="dropdown-list">
+        <div 
+          @click=${() => dispatch("SET_EDITOR", { type: "sprite" })}
+          class="menu-item">
+          sprite
+        </div>
+        <div
+          @click=${() => dispatch("SET_EDITOR", { type: "sequencer" })} 
+          class="menu-item">
+          sequencer
+        </div>
+        <div
+          @click=${() => dispatch("SET_EDITOR", { type: "map" })} 
+          class="menu-item">
+          map
+        </div>
+      </div>
+    </div>
     <div class="menu-item docs-trigger">docs</div>
-    <div class="menu-item sprite-editor-trigger">sprite editor</div>
-    <div class="menu-item sequencer-editor-trigger">sequencer editor</div>
-    <div class="menu-item map-editor-trigger">map editor</div>
     <div class="menu-item">upload</div>
     <div 
-      class="menu-item" 
+      class="me
+        nu-item" 
       @click=${() => dispatch("RUN")}>
       run
     </div>
