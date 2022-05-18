@@ -1,5 +1,7 @@
 import { html } from "./libs/uhtml.js";
 import { dispatch } from "./dispatch.js";
+import "./pixel-editor/pixel-editor.js";
+import "./sequencer/sequencer.js";
 
 export const view = (state) => html`
   ${menu()}
@@ -15,8 +17,19 @@ export const view = (state) => html`
       <div class="game-container">
         <canvas class="game-canvas"></canvas>
       </div>
-      <div class="docs">${docs()}</div>
+      <div class="docs">
+        ${docs()}
+      </div>
     </div>
+  </div>
+  <div class="sprite-editor hide">
+    <pixel-editor></pixel-editor>
+  </div>
+  <div class="sequencer-editor hide">
+    <sequencer-editor></sequencer-editor>
+  </div>
+  <div class="map-editor hide">
+    <pixel-editor></pixel-editor>
   </div>
 `
 
@@ -37,6 +50,9 @@ const menu = () => html`
       </div>
     </div>
     <div class="menu-item docs-trigger">docs</div>
+    <div class="menu-item sprite-editor-trigger">sprite editor</div>
+    <div class="menu-item sequencer-editor-trigger">sequencer editor</div>
+    <div class="menu-item map-editor-trigger">map editor</div>
     <div class="menu-item">upload</div>
     <div 
       class="menu-item" 

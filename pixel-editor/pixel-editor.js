@@ -1,5 +1,4 @@
 import { render, html, svg } from "/libs/uhtml.js";
-import { pixelStyles } from "./pixel-styles.js";
 
 const hexToRGBA = (hex) => {
   let [r, g, b, a = 255] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
@@ -145,7 +144,7 @@ export function createPixelEditor(target) {
   `;
 
   const view = (state) => html`
-    ${pixelStyles}
+    <link rel="stylesheet" href="./pixel-editor/pixel-styles.css">
     <div class="pixel-editor-container">
       <div class="canvas-container">
         <canvas class="drawing-canvas"></canvas>
@@ -728,3 +727,30 @@ export function createPixelEditor(target) {
     },
   };
 }
+
+class PixelEditor extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+
+    const shadow = this.attachShadow({mode: 'open'});
+
+    const methods = createPixelEditor(shadow);
+    for (let i in methods) {
+      this[i] = methods[i];
+    }
+  }
+
+  disconnectedCallback() {
+    this.end();
+  }
+
+}
+
+customElements.define("pixel-editor", PixelEditor);
+
+
+
+

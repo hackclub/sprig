@@ -104,7 +104,7 @@ body {
   background: none;
   width: 8px;
   height: 100%;
-  z-index: 10;
+  z-index: 9;
   cursor: col-resize;
 }
 
@@ -133,6 +133,19 @@ body {
   flex: 1;
   box-sizing: border-box;
   overflow: scroll;
+}
+
+.sprite-editor, .sequencer-editor, .map-editor {
+  position: fixed;
+  left: 20%;
+  top: 10%;
+  width: 60%;
+  height: 60%;
+  z-index: 10;
+}
+
+.hide {
+  visibility: hidden;
 }
 
 /*
