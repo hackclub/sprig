@@ -76,8 +76,7 @@ const menu = () => html`
     <div class="menu-item docs-trigger">docs</div>
     <div class="menu-item">upload</div>
     <div 
-      class="me
-        nu-item" 
+      class="menu-item" 
       @click=${() => dispatch("RUN")}>
       run
     </div>
