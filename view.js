@@ -31,7 +31,7 @@ export const view = (state) => html`
     <div class="asset-editor-content">
       ${
         {
-          "sprite": html`<pixel-editor></pixel-editor>`,
+          "sprite": html`<pixel-editor init-text=${state.editor?.initText}></pixel-editor>`,
           "sequencer": html`<sequencer-editor></sequencer-editor>`,
           [undefined]: ""
         }[state.editor?.type]
@@ -60,17 +60,17 @@ const menu = () => html`
       [dbg] editors
       <div class="dropdown-list">
         <div 
-          @click=${() => dispatch("SET_EDITOR", { type: "sprite", onText: console.log })}
+          @click=${() => dispatch("SET_EDITOR", { type: "sprite", debug: true })}
           class="menu-item">
           sprite
         </div>
         <div
-          @click=${() => dispatch("SET_EDITOR", { type: "sequencer", onText: console.log })} 
+          @click=${() => dispatch("SET_EDITOR", { type: "sequencer", debug: true })} 
           class="menu-item">
           sequencer
         </div>
         <div
-          @click=${() => dispatch("SET_EDITOR", { type: "map", onText: console.log })} 
+          @click=${() => dispatch("SET_EDITOR", { type: "map", debug: true })} 
           class="menu-item">
           map
         </div>

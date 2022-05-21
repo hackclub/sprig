@@ -10,7 +10,7 @@ const STATE = {
   logs: [],
   name: "game-name-here",
   notifications: [],
-  editor: null, // { type: string, onText: (text: string) => void }
+  editor: null
 }
 
 const ACTIONS = {
@@ -86,7 +86,16 @@ const ACTIONS = {
   },
   EDITOR_TEXT(text, state) {
     if (!state.editor) return console.log("EDITOR_TEXT but no editor");
-    state.editor.onText(text);
+    if (state.editor.debug) return console.log(text);
+    
+    state.codemirror.dispatch({ changes: {
+      from: state.editor.from,
+      to: state.editor.to,
+      insert: text
+    } })
+    state.editor.to = state.editor.from + text.length;
+
+    dispatch("RUN");
   },
   RENDER(args, state) {
     render(document.querySelector(".root"), view(state));

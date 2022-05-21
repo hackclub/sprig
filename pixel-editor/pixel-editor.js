@@ -1,5 +1,6 @@
 import { render, html } from "/libs/uhtml.js";
 import { dispatch } from "../dispatch.js";
+import { spriteTextToImage } from "../engine/sprite.js";
 
 const hexToRGBA = (hex) => {
   let [r, g, b, a = 255] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
@@ -718,6 +719,17 @@ export function createPixelEditor(target) {
   init(state);
 
   return {
+    loadText(text) {
+      const imageData = spriteTextToImage(text);
+      for (let i = 0; i < state.gridColors.length; i++) {
+        state.gridColors[i] = [
+          imageData.data[i * 4],
+          imageData.data[i * 4 + 1],
+          imageData.data[i * 4 + 2],
+          imageData.data[i * 4 + 3],
+        ];
+      }
+    },
     setGridColors: ({ colors, size }) => {
       state.gridColors = colors;
       state.gridSize = size;
@@ -740,13 +752,16 @@ class PixelEditor extends HTMLElement {
   constructor() {
     super();
   }
-
+  
   connectedCallback() {
     const shadow = this.attachShadow({ mode: "open" });
     const methods = createPixelEditor(shadow);
     for (const i in methods) {
       this[i] = methods[i];
     }
+
+    const initText = this.getAttribute("init-text");
+    if (initText) this.loadText(initText);
   }
 
   disconnectedCallback() {

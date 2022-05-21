@@ -1,14 +1,22 @@
 import {
   EditorView,
   WidgetType,
-  Decoration,
-  ViewPlugin
+  Decoration
 } from "../libs/@codemirror/view.js";
 import { StateField } from "../libs/@codemirror/state.js";
 import { syntaxTree } from "../libs/@codemirror/language.js";
+import { dispatch } from "../dispatch.js";
 
 class OpenButtonWidget extends WidgetType {
-  eq(other) { return true; }
+  constructor(text, from, to) {
+    super();
+    
+    this.text = text;
+    this.from = from;
+    this.to = to;
+  }
+
+  eq(other) { return other.text === this.text; }
   ignoreEvent() { return false; }
 
   toDOM() {
@@ -17,6 +25,14 @@ class OpenButtonWidget extends WidgetType {
     
     const button = container.appendChild(document.createElement("button"));
     button.textContent = "edit sprite";
+    button.addEventListener("click", () => {
+      dispatch("SET_EDITOR", {
+        type: "sprite",
+        initText: this.text.slice(1, -1),
+        from: this.from + 1,
+        to: this.to - 1
+      });
+    });
 
     return container;
   }
@@ -42,8 +58,7 @@ function openButtons(state) {
 
       const templateStringText = state.doc.sliceString(templateString.from, templateString.to);
       const decoration = Decoration.replace({
-        widget: new OpenButtonWidget(),
-        // block: true
+        widget: new OpenButtonWidget(templateStringText, templateString.from, templateString.to)
       });
       widgets.push(decoration.range(templateString.from, templateString.to));
     }
