@@ -214,11 +214,11 @@ function addNumberDragging(state, bodyListener) {
 }
 
 export function addEvents(state) {
-  console.log("added events");
   const bodyListener = createListener(document.body);
   bodyListener("keydown", "", function (event) {
     let code = event.code;
-    if (code === "Enter" && event.shiftKey) {
+    
+    if (code === "Enter" && (event.shiftKey || event.ctrlKey || event.metaKey)) {
       event.preventDefault();
       dispatch("RUN");
     }
