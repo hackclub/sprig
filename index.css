@@ -1,6 +1,6 @@
 :root {
   --vertical-bar: 60%;
-  --docs-percentage: 65%;
+  --docs-percentage: 0%;
 }
 
 body, html, .root {
@@ -76,7 +76,7 @@ body {
   min-width: var(--vertical-bar);
   max-width: var(--vertical-bar);
   flex: 1;
-  overflow: scroll;
+  overflow: hidden;
 }
 
 .code-editor, .cm-editor {
@@ -85,10 +85,12 @@ body {
 
 .logs {
   height: 50px;
+  overflow-y: auto;
 }
 
 .erred {
-  background: red;
+  background: #c92a2a;
+  color: #ffffff;
 }
 
 .game-output {
@@ -98,7 +100,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .vertical-bar {
@@ -135,7 +137,7 @@ body {
   width: 100%;
   flex: 1;
   box-sizing: border-box;
-  overflow: scroll;
+  overflow-y: auto;
 }
 
 .asset-editor {
