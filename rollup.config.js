@@ -6,6 +6,7 @@ export default {
     "@codemirror/lang-javascript": "./node_modules/@codemirror/lang-javascript/dist/index.js",
     "@codemirror/language": "./node_modules/@codemirror/language/dist/index.js",
     "@codemirror/view": "./node_modules/@codemirror/view/dist/index.js",
+    "@codemirror/state": "./node_modules/@codemirror/state/dist/index.js",
     "uhtml": "./node_modules/uhtml/esm/index.js"
   },
   output: {

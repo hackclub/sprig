@@ -222,11 +222,6 @@ export function addEvents(state) {
       event.preventDefault();
       dispatch("RUN");
     }
-
-    if (code === "Escape") {
-      event.preventDefault();
-      document.querySelector(".close-docs").click();
-    }
   });
 
   bodyListener("mousedown", ".docs-trigger", function (event) {

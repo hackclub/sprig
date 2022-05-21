@@ -29,9 +29,11 @@ class CheckboxWidget extends WidgetType {
 }
 
 function checkboxes(view) {
-  const widgets = []
+  const widgets = [];
+  const syntax = syntaxTree(view.state);
+
   for (const { from, to } of view.visibleRanges) {
-    syntaxTree(view.state).iterate({
+    syntax.iterate({
       from,
       to,
       enter(node) {
@@ -43,8 +45,9 @@ function checkboxes(view) {
         });
         widgets.push(decoration.range(node.from));
       }
-    })
+    });
   }
+  
   return Decoration.set(widgets);
 }
 
