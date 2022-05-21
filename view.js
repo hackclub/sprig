@@ -22,18 +22,21 @@ export const view = (state) => html`
       </div>
     </div>
   </div>
-  <div class=${["asset-editor", state.editorType === "" ? "hide" : ""].join(" ")}>
-    <button 
+  <div class=${["asset-editor-container", state.editorType === "" ? "hide" : ""].join(" ")}>
+    <button
+      class="close"
       @click=${() => dispatch("SET_EDITOR", { type: "" })}>
       close
     </button>
-    ${
-      {
-        "sprite": html`<pixel-editor></pixel-editor>`,
-        "sequencer": html`<sequencer-editor></sequencer-editor>`,
-        "":""
-      }[state.editorType]
-    }
+    <div class="asset-editor-content">
+      ${
+        {
+          "sprite": html`<pixel-editor></pixel-editor>`,
+          "sequencer": html`<sequencer-editor></sequencer-editor>`,
+          "":""
+        }[state.editorType]
+      }
+    </div>
   </div>
 `
 

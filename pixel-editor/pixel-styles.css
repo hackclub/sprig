@@ -15,7 +15,7 @@
   background: grey;
   width: 90%;
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .drawing-canvas {
@@ -33,7 +33,7 @@
   border: 2px solid black;
   padding: 5px;
   background: lightgrey;
-  overflow: scroll;
+  overflow: auto;
   justify-content: space-between;
   min-width: 100px;
 }
