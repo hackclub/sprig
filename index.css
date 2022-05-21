@@ -81,7 +81,7 @@ body {
   overflow: hidden;
 }
 
-.code-editor, .cm-editor {
+#code-editor, .cm-editor {
   height: calc(100% - 50px);
 }
 

@@ -7,7 +7,7 @@ export const view = (state) => html`
   ${menu()}
   <div class="main-container">
     <div class="code-container">
-      <codemirror-js class="code-editor"></codemirror-js>
+      <div id="code-editor"></div>
       <div class=${["logs", state.error ? "erred" : ""].join(" ")}>
         ${state.logs.map(x => html`${x}`)}
       </div>

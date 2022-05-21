@@ -1,8 +1,8 @@
 import { render } from "./libs/uhtml.js";
-import "./libs/codemirror-js.js";
 import { addEvents } from "./events.js";
 import { evalGameScript } from "./evalGameScript.js";
 import { view } from "./view.js";
+import { createEditorView } from "./codemirror/cm.js";
 
 const STATE = {
   codemirror: undefined,
@@ -16,7 +16,11 @@ const STATE = {
 const ACTIONS = {
   INIT(args, state) {
     dispatch("RENDER");
-    state.codemirror = document.querySelector(".code-editor");
+
+    state.codemirror = createEditorView();
+    state.codemirror.dom.id = "code-editor";
+    document.querySelector("#code-editor").replaceWith(state.codemirror.dom);
+
     addEvents(state);
 
     window.addEventListener("error", (e) => {
@@ -38,7 +42,7 @@ const ACTIONS = {
       cmLine.style.background = "";
     }
 
-    const script = state.codemirror.view.state.doc.toString();
+    const script = state.codemirror.state.doc.toString();
     const err = evalGameScript(script);
     if (err) dispatch("LOG_ERROR", { err });
 
