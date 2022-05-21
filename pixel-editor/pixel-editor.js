@@ -1,4 +1,5 @@
-import { render, html, svg } from "/libs/uhtml.js";
+import { render, html } from "/libs/uhtml.js";
+import { dispatch } from "../dispatch.js";
 
 const hexToRGBA = (hex) => {
   let [r, g, b, a = 255] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
@@ -96,6 +97,35 @@ export function createPixelEditor(target) {
     });
   }
 
+  function stateUpdate() {
+    const canvas = target.querySelector("#offscreen-canvas");
+    drawCanvasNoBg(canvas);
+    const ctx = canvas.getContext("2d");
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const colors = {
+      "0,0,0,255": "0",
+      "255,0,0,255": "r",
+      "0,255,0,255": "g",
+      "0,0,255,255": "b",
+      "0,0,0,0": ".",
+    }
+
+    let text = "";
+    for (let i = 0; i < imageData.width*imageData.height; i += 1) {
+      const r = imageData.data[i*4];
+      const g = imageData.data[i*4+1];
+      const b = imageData.data[i*4+2];
+      const a = imageData.data[i*4+3];
+      const key = `${r},${g},${b},${a}`;
+      const color = colors[key];
+      
+      if ((i % imageData.width === 0) && i !== 0) text += "\n";
+      text += color;
+    }
+
+    dispatch("EDITOR_TEXT", text);
+  }
+
   const setImageData = (file) => {
     let reader = new FileReader();
     reader.onload = (event) => {
@@ -121,6 +151,7 @@ export function createPixelEditor(target) {
       image.src = dataURL;
     };
     reader.readAsDataURL(file);
+    stateUpdate();
   };
 
   const renderTool = (toolName, state) => html`
@@ -143,6 +174,7 @@ export function createPixelEditor(target) {
     </button>
   `;
 
+  // FIXME: Stylesheet takes a sec to load/render so we get a FOUC. Can we preload somehow?
   const view = (state) => html`
     <link rel="stylesheet" href="./pixel-editor/pixel-styles.css">
     <div class="pixel-editor-container">
@@ -167,6 +199,7 @@ export function createPixelEditor(target) {
               state.gridColors.forEach((arr, i) => {
                 state.gridColors[i] = grid[i];
               });
+              stateUpdate();
             }}
             style="
               display: flex; 
@@ -196,35 +229,10 @@ export function createPixelEditor(target) {
           <button
             title="print"
             @click=${() => {
-              const canvas = target.querySelector("#offscreen-canvas");
-              drawCanvasNoBg(canvas);
-              const ctx = canvas.getContext("2d");
-              const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-              console.log(imageData);
-              let str = "";
-              const colors = {
-                "0,0,0,255": "0",
-                "255,0,0,255": "r",
-                "0,255,0,255": "g",
-                "0,0,255,255": "b",
-                "0,0,0,0": ".",
-              }
-              for (let i = 0; i < imageData.width*imageData.height; i += 1) {
-                const r = imageData.data[i*4];
-                const g = imageData.data[i*4+1];
-                const b = imageData.data[i*4+2];
-                const a = imageData.data[i*4+3];
-                const key = `${r},${g},${b},${a}`;
-                const color = colors[key];
-                
-                if ((i % imageData.width === 0) && i !== 0) str += "\n";
-                str += color;
-              }
-
-              console.log(str);
+              stateUpdate();
             }}
           >
-            print
+            [dbg] state update
           </button>
         </div>
 
@@ -582,7 +590,7 @@ export function createPixelEditor(target) {
 
     c.width = state.canvasSize[0];
     c.height = state.canvasSize[1];
-    const ctx = c.getContext("2d");
+    // const ctx = c.getContext("2d");
     // ctx.translate(0.5, 0.5);
   };
 
@@ -611,10 +619,9 @@ export function createPixelEditor(target) {
   const init = (state) => {
     r();
     const c = target.querySelector(".drawing-canvas");
-
     state.canvas = c;
-
     setCanvasSize(c);
+    
     // init canvas data
     const [gridW, gridH] = state.viewboxSize;
     state.gridColors = new Array(state.gridSize[0] * state.gridSize[1]).fill(
@@ -691,6 +698,7 @@ export function createPixelEditor(target) {
         if (c !== null) state.gridColors[i] = c;
       });
       state.tempGridColors.fill(null);
+      stateUpdate();
     };
 
     c.addEventListener("mouseup", (e) => {
@@ -734,11 +742,9 @@ class PixelEditor extends HTMLElement {
   }
 
   connectedCallback() {
-
-    const shadow = this.attachShadow({mode: 'open'});
-
+    const shadow = this.attachShadow({ mode: "open" });
     const methods = createPixelEditor(shadow);
-    for (let i in methods) {
+    for (const i in methods) {
       this[i] = methods[i];
     }
   }
@@ -746,11 +752,6 @@ class PixelEditor extends HTMLElement {
   disconnectedCallback() {
     this.end();
   }
-
 }
 
 customElements.define("pixel-editor", PixelEditor);
-
-
-
-

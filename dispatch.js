@@ -10,7 +10,7 @@ const STATE = {
   logs: [],
   name: "game-name-here",
   notifications: [],
-  editorType: "",
+  editor: null, // { type: string, onText: (text: string) => void }
 }
 
 const ACTIONS = {
@@ -80,9 +80,13 @@ const ACTIONS = {
       cmLine.style.background = "#ecb2b2";
     }
   },
-  SET_EDITOR({ type }, state) {
-    state.editorType = type;
+  SET_EDITOR(editor, state) {
+    state.editor = editor;
     dispatch("RENDER");
+  },
+  EDITOR_TEXT(text, state) {
+    if (!state.editor) return console.log("EDITOR_TEXT but no editor");
+    state.editor.onText(text);
   },
   RENDER(args, state) {
     render(document.querySelector(".root"), view(state));

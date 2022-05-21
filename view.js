@@ -22,10 +22,10 @@ export const view = (state) => html`
       </div>
     </div>
   </div>
-  <div class=${["asset-editor-container", state.editorType === "" ? "hide" : ""].join(" ")}>
+  <div class=${["asset-editor-container", state.editor ? "" : "hide"].join(" ")}>
     <button
       class="close"
-      @click=${() => dispatch("SET_EDITOR", { type: "" })}>
+      @click=${() => dispatch("SET_EDITOR", null)}>
       close
     </button>
     <div class="asset-editor-content">
@@ -33,8 +33,8 @@ export const view = (state) => html`
         {
           "sprite": html`<pixel-editor></pixel-editor>`,
           "sequencer": html`<sequencer-editor></sequencer-editor>`,
-          "":""
-        }[state.editorType]
+          [undefined]: ""
+        }[state.editor?.type]
       }
     </div>
   </div>
@@ -57,20 +57,20 @@ const menu = () => html`
       </div>
     </div>
     <div class="menu-item dropdown-container">
-      editors
+      [dbg] editors
       <div class="dropdown-list">
         <div 
-          @click=${() => dispatch("SET_EDITOR", { type: "sprite" })}
+          @click=${() => dispatch("SET_EDITOR", { type: "sprite", onText: console.log })}
           class="menu-item">
           sprite
         </div>
         <div
-          @click=${() => dispatch("SET_EDITOR", { type: "sequencer" })} 
+          @click=${() => dispatch("SET_EDITOR", { type: "sequencer", onText: console.log })} 
           class="menu-item">
           sequencer
         </div>
         <div
-          @click=${() => dispatch("SET_EDITOR", { type: "map" })} 
+          @click=${() => dispatch("SET_EDITOR", { type: "map", onText: console.log })} 
           class="menu-item">
           map
         </div>
