@@ -16,7 +16,7 @@ class OpenButtonWidget extends WidgetType {
     this.to = to;
   }
 
-  eq(other) { return other.text === this.text; }
+  eq(other) { return other.text === this.text && other.from === this.from && other.to === this.to; }
   ignoreEvent() { return false; }
 
   toDOM() {
@@ -25,16 +25,26 @@ class OpenButtonWidget extends WidgetType {
     
     const button = container.appendChild(document.createElement("button"));
     button.textContent = "edit sprite";
-    button.addEventListener("click", () => {
-      dispatch("SET_EDITOR", {
-        type: "sprite",
-        initText: this.text.slice(1, -1),
-        from: this.from + 1,
-        to: this.to - 1
-      });
-    });
+    button.addEventListener("click", () => this.onClick());
 
     return container;
+  }
+
+  updateDOM(container) {
+    const oldButton = container.children[0];
+    const button = oldButton.cloneNode(true); // This'll remove all event listeners.
+    button.addEventListener("click", () => this.onClick());
+    container.replaceChild(button, oldButton);
+    return true;
+  }
+
+  onClick() {
+    dispatch("SET_EDITOR", {
+      type: "sprite",
+      initText: this.text.slice(1, -1),
+      from: this.from + 1,
+      to: this.to - 1
+    });
   }
 }
 
