@@ -29,7 +29,7 @@ class OpenButtonWidget extends WidgetType {
     button.addEventListener("click", () => this.onClick());
 
     const canvas = container.appendChild(document.createElement("canvas"));
-    const data = spriteTextToImageData(this.text);
+    const data = spriteTextToImageData(this.text); // If this is causing perf issues we should probably be doing it on hover.
     canvas.width = data.width;
     canvas.height = data.height;
     canvas.getContext("2d").putImageData(data, 0, 0);

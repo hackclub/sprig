@@ -131,8 +131,10 @@ body {
   overflow: auto;
 }
 
-.game-container canvas {
+.game-canvas {
+  display: block;
   border: 2px solid black;
+  image-rendering: pixelated;
 }
 
 .docs {
