@@ -171,7 +171,7 @@ body {
   display: none;
 }
 
-.cm-boolean-toggle {
+.cm-boolean-toggle, .cm-open-button {
   line-height: 1;
   vertical-align: middle;
 }
@@ -179,4 +179,22 @@ body {
 .cm-boolean-toggle input {
   margin: 0;
   margin-right: 0.5ch;
+}
+
+.cm-open-button button {
+  position: relative;
+  top: -1px;
+  padding: 0 4px;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inh;
+  border: none;
+  background: #1864ab;
+  color: #ffffff;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.cm-open-button button:hover {
+  background: #1c7ed6;
 }

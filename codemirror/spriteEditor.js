@@ -67,10 +67,12 @@ function openButtons(state) {
       if (templateString?.name !== "TemplateString") return;
 
       const templateStringText = state.doc.sliceString(templateString.from, templateString.to);
+      if (!templateStringText.endsWith('`')) return;
+
       const decoration = Decoration.replace({
         widget: new OpenButtonWidget(templateStringText, templateString.from, templateString.to)
       });
-      widgets.push(decoration.range(templateString.from, templateString.to));
+      widgets.push(decoration.range(node.from, node.to));
     }
   })
 
