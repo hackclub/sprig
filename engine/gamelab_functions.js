@@ -1,7 +1,7 @@
 import { TimeKeeper } from "./TimeKeeper.js";
 import { resolveObjs } from "./resolveObjs.js";
 import { GameObject } from "./GameObject.js";
-import { spriteTextToImage } from "./sprite.js";
+import { spriteTextToImageData } from "./sprite.js";
 
 export function init(canvas) {
 
@@ -472,7 +472,7 @@ export function init(canvas) {
   }
 
   function sprite(string) { // returns image data
-    return spriteTextToImage(string);
+    return spriteTextToImageData(string);
   }
 
   // how to add timed things, like bird flying and ball kicks

@@ -1,4 +1,4 @@
-export function spriteTextToImage(string) {
+export function spriteTextToImageData(string) {
   const rows = string.trim().split("\n").map(x => x.trim());
   const rowLengths = rows.map(x => x.length);
   const isRect = rowLengths.every(val => val === rowLengths[0])

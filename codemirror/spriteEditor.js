@@ -6,6 +6,7 @@ import {
 import { StateField } from "../libs/@codemirror/state.js";
 import { syntaxTree } from "../libs/@codemirror/language.js";
 import { dispatch } from "../dispatch.js";
+import { spriteTextToImageData } from "../engine/sprite.js";
 
 class OpenButtonWidget extends WidgetType {
   constructor(text, from, to) {
@@ -27,6 +28,12 @@ class OpenButtonWidget extends WidgetType {
     button.textContent = "edit sprite";
     button.addEventListener("click", () => this.onClick());
 
+    const canvas = container.appendChild(document.createElement("canvas"));
+    const data = spriteTextToImageData(this.text);
+    canvas.width = data.width;
+    canvas.height = data.height;
+    canvas.getContext("2d").putImageData(data, 0, 0);
+
     return container;
   }
 
@@ -35,15 +42,23 @@ class OpenButtonWidget extends WidgetType {
     const button = oldButton.cloneNode(true); // This'll remove all event listeners.
     button.addEventListener("click", () => this.onClick());
     container.replaceChild(button, oldButton);
+
+    const canvas = container.querySelector("canvas");
+    const data = spriteTextToImageData(this.text);
+    canvas.width = data.width;
+    canvas.height = data.height;
+    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+    canvas.getContext("2d").putImageData(data, 0, 0);
+
     return true;
   }
 
   onClick() {
     dispatch("SET_EDITOR", {
       type: "sprite",
-      initText: this.text.slice(1, -1),
-      from: this.from + 1,
-      to: this.to - 1
+      initText: this.text,
+      from: this.from,
+      to: this.to
     });
   }
 }
@@ -70,7 +85,11 @@ function openButtons(state) {
       if (!templateStringText.endsWith('`')) return;
 
       const decoration = Decoration.replace({
-        widget: new OpenButtonWidget(templateStringText, templateString.from, templateString.to)
+        widget: new OpenButtonWidget(
+          templateStringText.slice(1, -1),
+          templateString.from + 1,
+          templateString.to - 1
+        )
       });
       widgets.push(decoration.range(node.from, node.to));
     }

@@ -1,6 +1,6 @@
 import { render, html } from "/libs/uhtml.js";
 import { dispatch } from "../dispatch.js";
-import { spriteTextToImage } from "../engine/sprite.js";
+import { spriteTextToImageData } from "../engine/sprite.js";
 
 const hexToRGBA = (hex) => {
   let [r, g, b, a = 255] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
@@ -21,6 +21,8 @@ function RGBA_to_hex([r, g, b, a]) {
   return "#" + r + g + b + a;
 }
 
+// NOTE: kognise - Could the editor canvas be 16x16 and just scaled up with CSS?
+//                 Whole file here could do with a refactor, maybe I will at some point.
 export function createPixelEditor(target) {
   const state = {
     canvas: null,
@@ -175,7 +177,7 @@ export function createPixelEditor(target) {
     </button>
   `;
 
-  // FIXME: Stylesheet takes a sec to load/render so we get a FOUC. Can we preload somehow?
+  // FIXME: kognise - Stylesheet takes a sec to load/render so we get a FOUC. Can we preload somehow?
   const view = (state) => html`
     <link rel="stylesheet" href="./pixel-editor/pixel-styles.css">
     <div class="pixel-editor-container">
@@ -720,7 +722,7 @@ export function createPixelEditor(target) {
 
   return {
     loadText(text) {
-      const imageData = spriteTextToImage(text);
+      const imageData = spriteTextToImageData(text);
       for (let i = 0; i < state.gridColors.length; i++) {
         state.gridColors[i] = [
           imageData.data[i * 4],

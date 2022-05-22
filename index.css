@@ -181,6 +181,10 @@ body {
   margin-right: 0.5ch;
 }
 
+.cm-open-button {
+  position: relative;
+}
+
 .cm-open-button button {
   position: relative;
   top: -1px;
@@ -197,4 +201,18 @@ body {
 
 .cm-open-button button:hover {
   background: #1c7ed6;
+}
+
+.cm-open-button canvas {
+  position: absolute;
+  left: 0;
+  width: 100px;
+  image-rendering: pixelated;
+  z-index: 999;
+  display: none;
+  pointer-events: none;
+}
+
+.cm-open-button:hover canvas {
+  display: block;
 }
