@@ -77,7 +77,11 @@ const menu = () => html`
       </div>
     </div>
     <div class="menu-item docs-trigger">docs</div>
-    <div class="menu-item">upload</div>
+    <div 
+      class="menu-item" 
+      @click=${() => dispatch("UPLOAD")}>
+      upload
+    </div>
     <div 
       class="menu-item" 
       @click=${() => dispatch("RUN")}>

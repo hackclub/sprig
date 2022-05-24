@@ -2,6 +2,7 @@ import { render } from "./libs/uhtml.js";
 import { addEvents } from "./events.js";
 import { evalGameScript } from "./evalGameScript.js";
 import { view } from "./view.js";
+import { openPort } from "./upload.js";
 import { createEditorView } from "./codemirror/cm.js";
 
 const STATE = {
@@ -47,6 +48,9 @@ const ACTIONS = {
     if (err) dispatch("LOG_ERROR", { err });
 
     dispatch("RENDER");
+  },
+  UPLOAD(args, state) {
+    openPort();
   },
   LOG_ERROR({ err }, state) {
     console.log(err);
