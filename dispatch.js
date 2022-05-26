@@ -2,7 +2,7 @@ import { render } from "./libs/uhtml.js";
 import { addEvents } from "./events.js";
 import { evalGameScript } from "./evalGameScript.js";
 import { view } from "./view.js";
-import { openPort } from "./upload.js";
+import { upload } from "./upload.js";
 import { createEditorView } from "./codemirror/cm.js";
 
 const STATE = {
@@ -50,7 +50,7 @@ const ACTIONS = {
     dispatch("RENDER");
   },
   UPLOAD(args, state) {
-    openPort();
+    upload(state.codemirror.state.doc.toString());
   },
   LOG_ERROR({ err }, state) {
     console.log(err);
