@@ -199,8 +199,13 @@ export function init(canvas) {
 
   }
 
+  let hasSetLegend = false;
   function setLegend(objectMap) {
+    if (hasSetLegend) {
+      throw new Error("Legend is already set, make sure you aren't accidentally calling setLegend multiple times!");
+    }
     legend = objectMap;
+    hasSetLegend = true;
   }
 
   const allEqual = arr => arr.every(val => val === arr[0]);
@@ -491,6 +496,7 @@ export function init(canvas) {
     replace, // **
     afterInput, // ***
     getGrid, // **
+    map: string => string, // No-op for now, here for editor support
     sprite,
     swap,
     match,

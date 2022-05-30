@@ -26,14 +26,8 @@ class OpenButtonWidget extends WidgetType {
     container.classList.add("cm-open-button");
     
     const button = container.appendChild(document.createElement("button"));
-    button.textContent = "edit sprite";
+    button.textContent = "edit map";
     button.addEventListener("click", () => this.onClick());
-
-    const canvas = container.appendChild(document.createElement("canvas"));
-    const data = spriteTextToImageData(this.text); // If this is causing perf issues we should probably be doing it on hover.
-    canvas.width = data.width;
-    canvas.height = data.height;
-    canvas.getContext("2d").putImageData(data, 0, 0);
 
     return container;
   }
@@ -43,46 +37,77 @@ class OpenButtonWidget extends WidgetType {
     const button = oldButton.cloneNode(true); // This'll remove all event listeners.
     button.addEventListener("click", () => this.onClick());
     container.replaceChild(button, oldButton);
-
-    const canvas = container.querySelector("canvas");
-    const data = spriteTextToImageData(this.text);
-    canvas.width = data.width;
-    canvas.height = data.height;
-    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-    canvas.getContext("2d").putImageData(data, 0, 0);
-
     return true;
   }
 
-  onClick() {
-    dispatch("SET_EDITOR", {
-      type: "sprite",
-      initText: this.text,
-      from: this.from,
-      to: this.to
-    });
-  }
+  onClick() {}
+}
+
+function getLegend(syntax, doc) {
+  let foundLegend = false;
+  const legend = {};
+  syntax.iterate({
+    enter(node) {
+      if (foundLegend || node.name !== "CallExpression") return;
+      
+      const identifier = syntax.resolve(node.from, 1);
+      if (identifier?.name !== "VariableName") return;
+      const identifierName = doc.sliceString(identifier.from, identifier.to);
+      if (identifierName !== "setLegend") return;
+      foundLegend = true;
+      
+      const argList = identifier.parent.getChild("ArgList");
+      if (!argList) return;
+      const objectExp = argList.firstChild.nextSibling;
+      if (objectExp?.name !== "ObjectExpression") return;
+      
+      node.iterate((node) => {
+        if (node.name !== "Property") return;
+
+        const nameNode = node.node.firstChild;
+        if (!["String", "PropertyDefinition"].includes(nameNode.name)) return;
+        const nameText = doc.sliceString(nameNode.from, nameNode.to);
+
+        let propName;
+        try {
+          propName = nameNode.name === "String" ? eval(nameText) : nameText;
+        } catch {
+          // If the string is malformed and the eval fails. (Bad Code)
+          return;
+        }
+
+        if (nameNode.nextSibling.name !== ':') return;
+        const spriteText = getTemplateFunctionText('sprite', nameNode.nextSibling.nextSibling, syntax, doc);
+        if (spriteText) legend[propName] = spriteText;
+      });
+    }
+  })
+  return legend;
 }
 
 function openButtons(state) {
   const widgets = [];
   const syntax = syntaxTree(state);
 
+  const legend = getLegend(syntaxTree(state), state.doc);
+  console.log(legend)
   syntax.iterate({
     enter(node) {
-      const spriteText = getTemplateFunctionText('sprite', node, syntax, state.doc);
-      if (!spriteText) return;
+      const mapText = getTemplateFunctionText('map', node, syntax, state.doc);
+      if (!mapText) return;
+      // console.log(mapText)
 
       const decoration = Decoration.replace({
         widget: new OpenButtonWidget(
-          spriteText.text,
-          spriteText.from,
-          spriteText.to
+          mapText.text,
+          mapText.from,
+          mapText.to
         )
       });
       widgets.push(decoration.range(node.from, node.to));
     }
   })
+
 
   return Decoration.set(widgets);
 }

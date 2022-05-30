@@ -25,10 +25,10 @@ const {
   sprite,
   swap,
   match,
+  map,
   setBackground,
   getTile
 } = init(canvas);
-
 
 setScreenSize(500, 500*.8)
 
@@ -72,7 +72,7 @@ setLegend({
 ................
 ................
     `),
-    "g": sprite(`
+  "g": sprite(`
 ................
 ................
 ................
@@ -89,8 +89,8 @@ setLegend({
 ................
 ................
 ................
-    `),
-    // x: combine("g", "h")
+  `),
+  // x: combine("g", "h")
 })
 
 const water = "w";
@@ -99,32 +99,31 @@ setBackground(water)
 
 let level = 0;
 const levels = [
-`
+  map(`
 bbbbbbbbbb
 bp.b.....b
 b..b.....b
 b..b.#b..b
 b.....b.gb
 bbbbbbbbbb
-`,
-`
+  `),
+  map(`
 bbbbbbbbbb
 bp......gb
 b....b...b
 b.b#bg.#.b
 b......b.b
 bbbbbbbbbb
-`,
-`
+  `),
+  map(`
 bbbbbbbbbb
 b........b
 b........b
 b........b
 b........b
 bbbbbbbbbb
-`
+  `)
 ]
-
 
 setMap(levels[level]);
 
@@ -157,7 +156,6 @@ onInput("action0", _ => {
 })
 
 afterInput(_ => {
-
   // this pattern could be improved
   const countMatches = swap(["#", "g"], "*");
   swap("*", ["#", "g"]);
@@ -166,7 +164,6 @@ afterInput(_ => {
     level++;
     setMap(levels[level]);
   }
-
 })
 
 
