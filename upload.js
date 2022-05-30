@@ -42,7 +42,7 @@ function fmtImageData(imgData) {
 let index;
 const games = {
   list: (() => {
-    const raw = JSON.parse(window.localStorage['beaker-games']);
+    const raw = JSON.parse(localStorage.getItem('beaker-games') ?? '[]');
     const list = Array.isArray(raw) ? raw : [];
     return [...Array(3)].map((x, i) => list[i] ?? {
       name: "<empty>",
@@ -50,7 +50,7 @@ const games = {
     });
   })(),
   save() {
-    window.localStorage['beaker-games'] = JSON.stringify(this.list);
+    localStorage.setItem('beaker-games', JSON.stringify(this.list));
   },
   add(code) {
     do {
