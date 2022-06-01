@@ -1,8 +1,10 @@
 import { html } from "./libs/uhtml.js";
 import { dispatch } from "./dispatch.js";
+
 import "./pixel-editor/pixel-editor.js";
 import "./sequencer/sequencer.js";
 import "./map-editor/map-editor.js";
+import "./sprite-preview.js";
 
 export const view = (state) => html`
   ${menu()}

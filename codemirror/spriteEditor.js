@@ -29,11 +29,7 @@ class OpenButtonWidget extends WidgetType {
     button.textContent = "edit sprite";
     button.addEventListener("click", () => this.onClick());
 
-    const canvas = container.appendChild(document.createElement("canvas"));
-    const data = spriteTextToImageData(this.text); // If this is causing perf issues we should probably be doing it on hover.
-    canvas.width = data.width;
-    canvas.height = data.height;
-    canvas.getContext("2d").putImageData(data, 0, 0);
+    container.appendChild(document.createElement("sprite-preview")).setAttribute("text", this.text);
 
     return container;
   }
@@ -44,12 +40,7 @@ class OpenButtonWidget extends WidgetType {
     button.addEventListener("click", () => this.onClick());
     container.replaceChild(button, oldButton);
 
-    const canvas = container.querySelector("canvas");
-    const data = spriteTextToImageData(this.text);
-    canvas.width = data.width;
-    canvas.height = data.height;
-    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-    canvas.getContext("2d").putImageData(data, 0, 0);
+    container.querySelector("sprite-preview").setAttribute("text", this.text);
 
     return true;
   }

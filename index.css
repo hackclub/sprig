@@ -205,7 +205,7 @@ body {
   background: #1c7ed6;
 }
 
-.cm-open-button canvas {
+.cm-open-button sprite-preview {
   position: absolute;
   left: 0;
   width: 100px;
@@ -215,6 +215,6 @@ body {
   pointer-events: none;
 }
 
-.cm-open-button:hover canvas {
+.cm-open-button:hover sprite-preview {
   display: block;
 }
