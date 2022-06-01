@@ -1,0 +1,5 @@
+.map-editor-container {
+  height: 100%;
+  display: flex;
+  background: lightgrey;
+}

@@ -2,6 +2,7 @@ import { html } from "./libs/uhtml.js";
 import { dispatch } from "./dispatch.js";
 import "./pixel-editor/pixel-editor.js";
 import "./sequencer/sequencer.js";
+import "./map-editor/map-editor.js";
 
 export const view = (state) => html`
   ${menu()}
@@ -33,6 +34,7 @@ export const view = (state) => html`
         {
           "sprite": html`<pixel-editor init-text=${state.editor?.initText}></pixel-editor>`,
           "sequencer": html`<sequencer-editor></sequencer-editor>`,
+          "map": html`<map-editor></map-editor>`,
           [undefined]: ""
         }[state.editor?.type]
       }
