@@ -209,7 +209,6 @@ body {
   position: absolute;
   left: 0;
   width: 100px;
-  image-rendering: pixelated;
   z-index: 999;
   display: none;
   pointer-events: none;

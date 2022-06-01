@@ -10,6 +10,7 @@ class SpritePreview extends HTMLElement {
     this.canvas = shadow.appendChild(document.createElement("canvas"));
     this.canvas.style.display = "block";
     this.canvas.style.width = "100%";
+    this.canvas.style.imageRendering = "pixelated";
     this.attributeChangedCallback();
   }
 

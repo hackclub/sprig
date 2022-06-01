@@ -14,7 +14,7 @@ export function createMapEditor(target) {
       </div>
       <div class="sprites">
         ${Object.entries(state.legend).map(([name, sprite]) => html`
-          ${name}<br>
+          <sprite-preview text="${sprite.text}" />
         `)}
       </div>
     </div>
