@@ -57,7 +57,7 @@ class OpenButtonWidget extends WidgetType {
   onClick() {
     dispatch("SET_EDITOR", {
       type: "sprite",
-      initText: this.text,
+      initValue: this.text,
       from: this.from,
       to: this.to
     });

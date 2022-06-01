@@ -32,9 +32,9 @@ export const view = (state) => html`
     <div class="asset-editor-content">
       ${
         {
-          "sprite": html`<pixel-editor init-text=${state.editor?.initText}></pixel-editor>`,
-          "sequencer": html`<sequencer-editor></sequencer-editor>`,
-          "map": html`<map-editor></map-editor>`,
+          "sprite": html`<pixel-editor id="asset-editor"></pixel-editor>`,
+          "sequencer": html`<sequencer-editor id="asset-editor"></sequencer-editor>`,
+          "map": html`<map-editor id="asset-editor"></map-editor>`,
           [undefined]: ""
         }[state.editor?.type]
       }

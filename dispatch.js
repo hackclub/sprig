@@ -87,6 +87,10 @@ const ACTIONS = {
   SET_EDITOR(editor, state) {
     state.editor = editor;
     dispatch("RENDER");
+    if (editor?.initValue) {
+      const el = document.getElementById("asset-editor");
+      el.loadInitValue && el.loadInitValue(editor.initValue);
+    }
   },
   EDITOR_TEXT(text, state) {
     if (!state.editor) return console.log("EDITOR_TEXT but no editor");

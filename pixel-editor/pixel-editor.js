@@ -721,7 +721,7 @@ export function createPixelEditor(target) {
   init(state);
 
   return {
-    loadText(text) {
+    loadInitValue(text) {
       const imageData = spriteTextToImageData(text);
       for (let i = 0; i < state.gridColors.length; i++) {
         state.gridColors[i] = [
@@ -761,9 +761,6 @@ class PixelEditor extends HTMLElement {
     for (const i in methods) {
       this[i] = methods[i];
     }
-
-    const initText = this.getAttribute("init-text");
-    if (initText) this.loadText(initText);
   }
 
   disconnectedCallback() {

@@ -1,7 +1,3 @@
-:root {
-  --dark-grey: #434343;
-}
-
 .pixel-editor-container {
   height: 100%;
   display: flex;

@@ -1,12 +1,22 @@
 import { render, html } from "/libs/uhtml.js";
+import { spriteTextToImageData } from "../engine/sprite.js";
 
 export function createMapEditor(target) {
-  const state = {}
+  const state = {
+    legend: {}
+  }
 
   const view = (state) => html`
     <link rel="stylesheet" href="./map-editor/map-styles.css">
     <div class="map-editor-container">
-      hiiiii
+      <div class="canvas-container">
+        hiiiii
+      </div>
+      <div class="sprites">
+        ${Object.entries(state.legend).map(([name, sprite]) => html`
+          ${name}<br>
+        `)}
+      </div>
     </div>
   `;
 
@@ -21,6 +31,11 @@ export function createMapEditor(target) {
   init(state);
 
   return {
+    loadInitValue({ text, legend }) {
+      console.log(legend);
+      state.legend = legend;
+      r();
+    },
     end() {
       console.log("Map editor unmount");
     },
@@ -30,7 +45,6 @@ export function createMapEditor(target) {
 class MapEditor extends HTMLElement {
   constructor() {
     super();
-    console.log(this.end)
   }
   
   connectedCallback() {

@@ -3,3 +3,12 @@
   display: flex;
   background: lightgrey;
 }
+
+.canvas-container {
+  flex: 1;
+}
+
+.sprites {
+  width: 250px;
+  background: grey;
+}

@@ -6,19 +6,22 @@ import {
 import { StateField } from "../libs/@codemirror/state.js";
 import { syntaxTree } from "../libs/@codemirror/language.js";
 import { dispatch } from "../dispatch.js";
-import { spriteTextToImageData } from "../engine/sprite.js";
 import { getTemplateFunctionText } from "./util.js";
 
 class OpenButtonWidget extends WidgetType {
-  constructor(text, from, to) {
+  constructor(legend, text, from, to) {
     super();
     
+    this.legend = legend;
     this.text = text;
     this.from = from;
     this.to = to;
   }
 
-  eq(other) { return other.text === this.text && other.from === this.from && other.to === this.to; }
+  eq(other) {
+    return other.text === this.text && other.from === this.from && other.to === this.to
+      && other.legend === this.legend; // badbadbadbadbadbad (probably)
+  }
   ignoreEvent() { return false; }
 
   toDOM() {
@@ -40,7 +43,17 @@ class OpenButtonWidget extends WidgetType {
     return true;
   }
 
-  onClick() {}
+  onClick() {
+    dispatch("SET_EDITOR", {
+      type: "map",
+      initValue: {
+        text: this.text,
+        legend: this.legend
+      },
+      from: this.from,
+      to: this.to
+    });
+  }
 }
 
 function getLegend(syntax, doc) {
@@ -90,7 +103,6 @@ function openButtons(state) {
   const syntax = syntaxTree(state);
 
   const legend = getLegend(syntaxTree(state), state.doc);
-  console.log(legend)
   syntax.iterate({
     enter(node) {
       const mapText = getTemplateFunctionText('map', node, syntax, state.doc);
@@ -99,6 +111,7 @@ function openButtons(state) {
 
       const decoration = Decoration.replace({
         widget: new OpenButtonWidget(
+          legend,
           mapText.text,
           mapText.from,
           mapText.to
