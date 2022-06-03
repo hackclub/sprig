@@ -19,11 +19,12 @@
 }
 
 .sprites {
-  display: flex;
   width: 250px;
   background: grey;
 }
 
-.sprites sprite-preview {
+.sprites button {
+  display: inline-block;
   width: 50px;
+  aspect-ratio: 1 / 1;
 }

@@ -1,5 +1,6 @@
 import { render, html } from "/libs/uhtml.js";
 import { spriteTextToImageData } from "../engine/sprite.js";
+import { dispatch } from "../dispatch.js";
 
 const SPRITE_SIZE = 16;
 
@@ -8,9 +9,13 @@ export function createMapEditor(target) {
     canvas: null,
     width: 10,
     height: 6,
+    activeSprite: "",
+    mouseDown: 0,
+    updateTextDebounce: null,
     cells: [[]],
     legend: {}
   }
+  const endEffects = [];
 
   const view = (state) => html`
     <link rel="stylesheet" href="./map-editor/map-styles.css">
@@ -20,8 +25,11 @@ export function createMapEditor(target) {
       </div>
       <div class="sprites">
         ${Object.entries(state.legend).map(([name, sprite]) => html`
-          <sprite-preview text="${sprite.text}" />
+          <button onclick=${() => state.activeSprite = name}>
+            <sprite-preview text="${sprite.text}" />
+          </button>
         `)}
+        <button onclick=${() => state.activeSprite = "."}></button>
       </div>
     </div>
   `;
@@ -32,8 +40,20 @@ export function createMapEditor(target) {
     state.canvas.height = state.height * SPRITE_SIZE;
   };
 
+  const updateText = () => {
+    let text = "";
+    for (let y = 0; y < state.height; y++) {
+      for (let x = 0; x < state.width; x++) {
+        text += (state.cells[y] && state.cells[y][x]) || ".";
+      }
+      text += "\n";
+    }
+    dispatch("EDITOR_TEXT", text.trim());
+  }
+
   const draw = () => {
     const ctx = state.canvas.getContext("2d");
+    ctx.clearRect(0, 0, state.canvas.width, state.canvas.height);
     for (let y = 0; y < state.height; y++) {
       for (let x = 0; x < state.width; x++) {
         if (!state.cells[y]) continue;
@@ -44,9 +64,44 @@ export function createMapEditor(target) {
     }
   };
 
+  const onMouseUpdate = (e) => {
+    const [mx, my] = [e.pageX - state.canvas.offsetLeft, e.pageY - state.canvas.offsetTop];
+    const [tw, th] = [state.canvas.offsetWidth / state.width, state.canvas.offsetHeight / state.height];
+    const [x, y] = [Math.floor(mx / tw), Math.floor(my / th)];
+
+    if (state.mouseDown > 0
+      && (state.legend[state.activeSprite] || state.activeSprite === ".")
+      && x < state.width && y < state.height
+      && x >= 0 && y >= 0
+      && (state.cells[y] && state.cells[y][x]) !== state.activeSprite
+    ) {
+      state.cells[y][x] = state.activeSprite;
+      draw();
+
+      clearTimeout(state.updateTextDebounce);
+      state.updateTextDebounce = setTimeout(updateText, 100);
+    }
+  }
+
   const init = () => {
     r();
     state.canvas = target.querySelector(".canvas-container > canvas");
+
+    const mouseDown = (e) => {
+      state.mouseDown++;
+      onMouseUpdate(e);
+    };
+    document.addEventListener("mousedown", mouseDown);
+    endEffects.push(() => document.removeEventListener("mousedown", mouseDown));
+    
+    const mouseUp = (e) => {
+      state.mouseDown = Math.max(0, state.mouseDown - 1); // Just in case :)
+    };
+    document.addEventListener("mouseup", mouseUp);
+    endEffects.push(() => document.removeEventListener("mouseup", mouseUp));
+
+    state.canvas.addEventListener("mousemove", onMouseUpdate);
+
     resizeCanvas();
     draw();
   };
@@ -68,7 +123,7 @@ export function createMapEditor(target) {
       r();
     },
     end() {
-      console.log("Map editor unmount");
+      endEffects.forEach(e => e());
     },
   };
 }

@@ -107,7 +107,6 @@ function openButtons(state) {
     enter(node) {
       const mapText = getTemplateFunctionText('map', node, syntax, state.doc);
       if (!mapText) return;
-      // console.log(mapText)
 
       const decoration = Decoration.replace({
         widget: new OpenButtonWidget(
