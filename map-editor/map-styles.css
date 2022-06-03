@@ -6,9 +6,24 @@
 
 .canvas-container {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.canvas-container > canvas {
+  background: grey;
+  image-rendering: pixelated;
+  width: 100%;
+  max-width: 500px;
 }
 
 .sprites {
+  display: flex;
   width: 250px;
   background: grey;
+}
+
+.sprites sprite-preview {
+  width: 50px;
 }
