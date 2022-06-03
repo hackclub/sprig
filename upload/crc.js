@@ -1,4 +1,4 @@
-import { Buffer } from "../upload/Buffer.js";
+import { Buffer } from "../upload/buffer.js";
 
 const crc1$1 = (current, previous = 0) => {
     let crc = ~~previous;

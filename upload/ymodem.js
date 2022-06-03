@@ -2,7 +2,7 @@
  * https://raw.githubusercontent.com/kaluma-project/kaluma-project.github.io/master/src/components/ide/ymodem.js
  */
 
-import { Buffer } from "../upload/Buffer.js";
+import { Buffer } from "../upload/buffer.js";
 import { crc16xmodem as crc16 } from "../upload/crc.js";
 
 const PACKET_SIZE = 1024;
