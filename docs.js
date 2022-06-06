@@ -1,17 +1,8 @@
-# A Tile Based Gamelab
+import "./markdown-renderer.js";
+import { html } from "./libs/uhtml.js";
 
-We're experimenting with a tile based game engine.
-
-The functions for making games are defined in `./engine/gamelab_functions.js`.
-
-Check out the example games in `./games/`.
-
-You can draw sprites using the pixel editor.
-
-Go to `https://localhost:3000/pixel-editor`.
-
-Draw your sprite and click print to get the sprite data string in the console.
-
+export const docs = () => html`
+  <markdown-renderer>
 # The Toolkit
 
 ### setScreenSize(x, y)
@@ -20,23 +11,23 @@ set the dimensions of the screen
 
 ### setLegend(spriteMap)
 
-```
+\`\`\`
 setLegend({ "a": new ImageData(...) })
-```
+\`\`\`
 
 create legend of single characters to sprite images
 
 ### setMap(string)
 
-```
-const level = `
+\`\`\`
+const level = \`
   ...
   aaa
   .a.
-`
+\`
 
 setMap(level)
-```
+\`\`\`
 
 clears existing tiles and adds the tiles in map
 
@@ -56,28 +47,28 @@ clears all tiles in x and y
 
 types can be "up" "down" "left" "right" "action"
 
-```
+\`\`\`
 onInput("right", () => {
   getAll("p")[0].x += 1;
 
   // match("p")[0][0].x += 1;
   // get("p").x += 1;
 })
-```
+\`\`\`
 
 ### setSolids(arr)
 
-```
+\`\`\`
 setSolids(["p", "r"]);
-```
+\`\`\`
 
 solids can't overlap with eachother
 
 ### setPushables(pushMap)
 
-```
+\`\`\`
 setPushables({ "p": ["r"] });
-```
+\`\`\`
 
 takes map and every key can push types in value
 
@@ -85,7 +76,7 @@ takes map and every key can push types in value
 
 returns boolean of if it matched
 
-```
+\`\`\`
 replace("pp", "g.")
 
 const matchMap = { 
@@ -94,18 +85,18 @@ const matchMap = {
 }
 
 replace("p_", "g#", matchMap)
-```
+\`\`\`
 
 
 ### afterInput(callback)
 
-```
+\`\`\`
 afterInput(_ => {
   if (swap(["p", "g"], "w").length) {
     console.log("you win");
   }
 })
-```
+\`\`\`
 
 
 
@@ -121,7 +112,7 @@ returns map of form {
 
 returns number of swaps
 
-```
+\`\`\`
 swap("a", "b");
 
 // or
@@ -135,13 +126,13 @@ swap("a", ["b", "c"]);
 // or
 
 swap(["a", "b"], ["c", "d"]);
-```
+\`\`\`
 
 ### match(pattern, patternMap = {})
 
 returns array of matches
 
-```
+\`\`\`
 match("p.");
 
 // or
@@ -152,7 +143,7 @@ const matchMap = {
 
 match("p_", matchMap);
 
-```
+\`\`\`
 
 ### getAll(type)
 
@@ -166,9 +157,9 @@ clears all tiles
 
 sets order of rendering
 
-```
+\`\`\`
 setZOrder(["p", "r"])
-```
+\`\`\`
 
 ### setBackground(type)
 
@@ -178,7 +169,7 @@ only changes the visuals
 ### The Tile
 
 Tiles have:
-```
+\`\`\`
 {
   x
   y
@@ -186,19 +177,9 @@ Tiles have:
   dx
   dy
 }
-```
+\`\`\`
 Can set x y type
 
 dx and dy are cleared afterInputs
-
-to remove tile use tile.remove() or set tile.type = "."
-
-# TODO
-
-- [ ] add name editing
-- [ ] add exporting
-- [ ] fix bug with err-line getting overwritten on input
-- [ ] finalize engine
-- [ ] add samples
-- [ ] add file loading
-- [ ] style docs
+  </markdown-renderer>
+`

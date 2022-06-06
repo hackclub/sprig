@@ -244,6 +244,9 @@ export function init(canvas) {
 
       const x = i%w; 
       const y = Math.floor(i/w);
+
+            console.log(x,y, types);
+
       types.forEach(t => {
         const newTile = new Tile(x, y, type);
         currentLevel.push(newTile)
