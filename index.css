@@ -35,6 +35,7 @@ body {
   width: max-content;
   display: flex;
   align-items: center;
+  text-decoration: none;
 }
 
 .menu-item:hover, .dropdown-list > *:hover {
@@ -69,7 +70,7 @@ body {
   flex: 1;
   position: relative;
   display: flex;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .code-container {
@@ -77,23 +78,26 @@ body {
   width: var(--vertical-bar);
   min-width: var(--vertical-bar);
   max-width: var(--vertical-bar);
-  flex: 1;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 #code-editor, .cm-editor {
-  height: calc(100% - 50px);
+  flex: 1;
+  overflow-y: auto;
 }
 
 .logs {
-  padding: 5px;
-  height: 50px;
+  height: 0px;
+  box-sizing: border-box;
   overflow-y: auto;
 }
 
 .erred {
   background: #c92a2a;
   color: #ffffff;
+  height: 50px;
+  padding: 5px;
 }
 
 .game-output {

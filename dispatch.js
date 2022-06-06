@@ -4,6 +4,7 @@ import { evalGameScript } from "./evalGameScript.js";
 import { view } from "./view.js";
 import { upload } from "./upload.js";
 import { createEditorView } from "./codemirror/cm.js";
+import { loadFromURL } from "./loadFromURL.js"
 
 const STATE = {
   codemirror: undefined,
@@ -11,11 +12,12 @@ const STATE = {
   logs: [],
   name: "game-name-here",
   notifications: [],
-  editor: null
+  editor: null,
+  samples: [],
 }
 
 const ACTIONS = {
-  INIT(args, state) {
+  INIT: async (args, state) => {
     dispatch("RENDER");
 
     state.codemirror = createEditorView();
@@ -27,6 +29,17 @@ const ACTIONS = {
     window.addEventListener("error", (e) => {
       dispatch("LOG_ERROR", { err: e.error });
     });
+
+    const text = await loadFromURL();
+    if (text) {
+      const changes = {
+        from: 0,
+        insert: text
+      };
+
+      state.codemirror.dispatch({ changes })
+    }
+
 
     document.querySelector(".game-canvas").focus();
     dispatch("RENDER");
@@ -41,6 +54,7 @@ const ACTIONS = {
     for (let i = 0; i < cmLines.length; i++) {
       const cmLine = cmLines[i];
       cmLine.style.background = "";
+      cmLine.classList.remove("err-line");
     }
 
     const script = state.codemirror.state.doc.toString();
@@ -80,7 +94,7 @@ const ACTIONS = {
       if (!line || i + 1 !== line) continue;
 
       const cmLine = cmLines[i];
-
+      cmLine.classList.add("err-line");
       cmLine.style.background = "#ecb2b2";
     }
   },
@@ -111,6 +125,7 @@ const ACTIONS = {
 }
 
 export function dispatch(action, args = {}) {
+  console.log(action);
   const trigger = ACTIONS[action];
   if (trigger) return trigger(args, STATE);
   else {

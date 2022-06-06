@@ -1,13 +1,14 @@
 import { html } from "./libs/uhtml.js";
 import { dispatch } from "./dispatch.js";
 
+import { docs } from "./docs.js";
 import "./pixel-editor/pixel-editor.js";
 import "./sequencer/sequencer.js";
 import "./map-editor/map-editor.js";
 import "./sprite-preview.js";
 
 export const view = (state) => html`
-  ${menu()}
+  ${menu(state)}
   <div class="main-container">
     <div class="code-container">
       <div id="code-editor"></div>
@@ -44,14 +45,14 @@ export const view = (state) => html`
   </div>
 `
 
-const docs = () => html`
-  <p>tests</p>
+const sampleMenuItem = sample => html`
+  <a class="sample-menu-item" href=${sample.link}>${sample.name}</a>
 `
 
-const menu = () => html`
+const menu = (state) => html`
   <div class="menu">
     <div class="menu-item">name</div>
-    <div class="menu-item">github</div>
+    <a class="menu-item" href="https://www.github.com/hackclub/gamelab">github</a>
     <div class="menu-item dropdown-container">
       export
       <div class="dropdown-list">
@@ -78,6 +79,12 @@ const menu = () => html`
           class="menu-item">
           map
         </div>
+      </div>
+    </div>
+    <div class="menu-item dropdown-container">
+      samples
+      <div class="dropdown-list">
+        ${state.samples.map(console.log)}
       </div>
     </div>
     <div class="menu-item docs-trigger">docs</div>
