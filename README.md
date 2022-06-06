@@ -195,10 +195,46 @@ to remove tile use tile.remove() or set tile.type = "."
 
 # TODO
 
+by wednesday 1 - 2
+
+### Leo
 - [ ] add name editing
+- [ ] add local storage
 - [ ] add exporting
+- [ ] add file loading
+- [ ] add sound playing to engine
+- [ ] add sprites to state from evaluation
+
+### Lexi
+- [ ] tune editor
+  - [ ] text representation
+  - [ ] parity with current functionality
+- [ ] change editor triggers to tagged template literals
+  - [ ] sprite(`...`) -> sprite`...`
+  - [ ] code folding for above?
+- [ ] getting legend from sprites in state
 - [ ] fix bug with err-line getting overwritten on input
+
+### Together
+- [ ] refactor
+- [ ] styles
+  - [ ] docs
+
+later
+
+### Other
 - [ ] finalize engine
 - [ ] add samples
-- [ ] add file loading
-- [ ] style docs
+- [ ] upload flow
+- [ ] game gallery
+ - [ ] loading from game gallery
+- [ ] hype site
+- [ ] readme
+- [ ] establish design language
+
+
+
+
+
+
+
