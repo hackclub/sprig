@@ -25,11 +25,11 @@ export function createMapEditor(target) {
       </div>
       <div class="sprites">
         ${Object.entries(state.legend).map(([name, sprite]) => html`
-          <button onclick=${() => state.activeSprite = name}>
+          <button @click=${() => state.activeSprite = name}>
             <sprite-preview text="${sprite.text}" />
           </button>
         `)}
-        <button onclick=${() => state.activeSprite = "."}></button>
+        <button @click=${() => state.activeSprite = "."}></button>
       </div>
     </div>
   `;

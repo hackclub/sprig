@@ -12,11 +12,11 @@ import { playNote } from "./playNote.js";
 // line/drag erasing
 
 const instrumentColorMap = {
-  "sine": "red",
-  "square": "blue",
-  "sawtooth": "orange",
-  "triangle": "green",
-}
+  sine: "red",
+  square: "blue",
+  sawtooth: "orange",
+  triangle: "green",
+};
 
 const noteMap = {
   13: "c4",
@@ -34,11 +34,12 @@ const noteMap = {
   1: "a5",
   0: "b5",
 }
+const noteColors = ["red", "orange", "yellow", "green", "lightblue", "blue", "purple"];
 
 export function playCellsOnBeat(cells, bpm, beat) {
   // notes :: note[]
   const notes = [];
-  // note :: [ pitch, instrument]
+  // note :: [ pitch, instrument ]
 
   Object
     .entries(cells)
@@ -65,7 +66,6 @@ function downloadText(filename, text) {
 }
 
 function getSong(cells, bpm, length, noteMap) {
-
   const song = [];
   for (let i = 0; i < length; i++) song.push([]);
 
@@ -121,7 +121,7 @@ export function createSequencer(target) {
     const extension = fileName[fileName.length - 1];
 
     if (extensions.length > 0 && extensions.includes(enxtension))
-      throw "Extension not recongized: " + fileName;
+      throw "Extension not recognized: " + fileName;
 
     readFile(file);
   }
@@ -196,7 +196,6 @@ export function createSequencer(target) {
       i++;
     }
 
-
     let j = 0;
     while ((j+1)*lengthY < height) {
       lines.push([
@@ -208,7 +207,7 @@ export function createSequencer(target) {
 
     return lines.map(line => svg`
       <path 
-        stroke="black" 
+        stroke="black"
         vector-effect="non-scaling-stroke" 
         stroke-width="1" d="${ptsToD(line)}"/>
     `)
@@ -219,7 +218,6 @@ export function createSequencer(target) {
     const { left, right, bottom, top, width, height} = state.svg.getBoundingClientRect();
     const cellWidth = width/state.numberX;
     const cellHeight = height/state.numberY;
-
 
     return svg`
       <rect 
@@ -237,7 +235,6 @@ export function createSequencer(target) {
     const cellHeight = height/numberY;
 
     const drawCell = ([x, y, color]) => {
-
       return svg`
         <rect 
           fill=${color}
@@ -252,15 +249,14 @@ export function createSequencer(target) {
 
     for (const key in cells) {
       const [x, y] = key.split("_").map(Number);
-      const color = instrumentColorMap[cells[key]];
-      cellsToDraw.push([ x, y, color ])
+      const color = noteColors[(13 - y) % noteColors.length];
+      cellsToDraw.push([ x, y, color ]);
     }
 
     return cellsToDraw.map(drawCell);
   }
 
   const drawInstrumentSelection = (instrument, color) => {
-
     return html`
       <div 
         class="instrument" 
@@ -380,7 +376,7 @@ export function createSequencer(target) {
       state.cells[key] = state.instrument;
       const n = noteMap[y];
       const d = (1000*60)/state.bpm;
-      playNote(n, d, state.instrument)
+      playNote(n, d, state.instrument);
       state.drawing = true;
     }
 
@@ -397,7 +393,14 @@ export function createSequencer(target) {
       pts.forEach(([x, y]) => {
         const key = `${x}_${y}`
         if (state.erasing) delete state.cells[key]
-        else state.cells[key] = state.instrument;
+        else {
+          if (state.cells[key] !== state.instrument) {
+            const n = noteMap[y];
+            const d = (1000*60)/state.bpm;
+            playNote(n, d, state.instrument);
+          }
+          state.cells[key] = state.instrument;
+        }
       })
     }
 
@@ -430,11 +433,10 @@ export function createSequencer(target) {
     r(); 
     state.svg = target.querySelector("svg");
 
-    r();
     // add events
+    target.querySelector("link").addEventListener("load", r, { once: true });
     // window.addEventListener("resize", r);
     addDropUpload();
-
   }
 
   init(state);
