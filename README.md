@@ -207,7 +207,7 @@ by wednesday 1 - 2
 
 ### Lexi
 - [ ] tune editor
-  - [ ] text representation
+  - [x] text representation
   - [ ] parity with current functionality
 - [ ] change editor triggers to tagged template literals
   - [ ] sprite(`...`) -> sprite`...`
