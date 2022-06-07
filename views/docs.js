@@ -181,5 +181,35 @@ Tiles have:
 Can set x y type
 
 dx and dy are cleared afterInputs
+
+
+### Tunes
+
+Sounds can be created with 
+
+\`\`\`
+tune\`...\`;
+\`\`\`
+
+They can be played with 
+
+\`\`\`
+playTune(tune, n = 1);
+\`\`\` 
+
+where \`n\` is how many times the sound is repeated. 
+To repeat indefinitely use
+
+\`\`\`
+playTune(tune, Infinity);
+\`\`\`
+
+End the sound like so
+
+\`\`\`
+const t = playTune(tune, Infinity);
+t.end();
+\`\`\`
+
   </markdown-renderer>
 `
