@@ -1,5 +1,5 @@
 import "./markdown-renderer.js";
-import { html } from "./libs/uhtml.js";
+import { html } from "../libs/uhtml.js";
 
 export const docs = () => html`
   <markdown-renderer>

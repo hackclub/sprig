@@ -2,6 +2,7 @@ import { TimeKeeper } from "./TimeKeeper.js";
 import { resolveObjs } from "./resolveObjs.js";
 import { GameObject } from "./GameObject.js";
 import { spriteTextToImageData } from "./sprite.js";
+import { dispatch } from "../dispatch.js";
 
 export function init(canvas) {
 
@@ -206,6 +207,7 @@ export function init(canvas) {
     }
     legend = objectMap;
     hasSetLegend = true;
+    dispatch("SET_SPRITES", { sprites: objectMap });
   }
 
   const allEqual = arr => arr.every(val => val === arr[0]);
@@ -244,8 +246,6 @@ export function init(canvas) {
 
       const x = i%w; 
       const y = Math.floor(i/w);
-
-            console.log(x,y, types);
 
       types.forEach(t => {
         const newTile = new Tile(x, y, type);

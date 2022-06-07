@@ -1,6 +1,6 @@
 // markdown component
 
-import marked from './libs/marked.js';
+import marked from '../libs/marked.js';
 
 customElements.define('markdown-renderer', class extends HTMLElement {
   constructor() {

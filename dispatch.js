@@ -1,10 +1,11 @@
 import { render } from "./libs/uhtml.js";
-import { addEvents } from "./events.js";
-import { evalGameScript } from "./evalGameScript.js";
 import { view } from "./view.js";
 import { upload } from "./upload.js";
-import { createEditorView } from "./codemirror/cm.js";
-import { loadFromURL } from "./loadFromURL.js"
+import { run } from "./dispatches/run.js";
+import { init } from "./dispatches/init.js";
+import { logError } from "./dispatches/logError.js";
+import { setName } from "./dispatches/setName.js";
+import { saveToFile } from "./dispatches/export/saveToFile.js";
 
 const STATE = {
   codemirror: undefined,
@@ -14,90 +15,25 @@ const STATE = {
   notifications: [],
   editor: null,
   samples: [],
+  sprites: {},
 }
 
+window.getState = () => console.log(STATE);
+
 const ACTIONS = {
-  INIT: async (args, state) => {
-    dispatch("RENDER");
-
-    state.codemirror = createEditorView();
-    state.codemirror.dom.id = "code-editor";
-    document.querySelector("#code-editor").replaceWith(state.codemirror.dom);
-
-    addEvents(state);
-
-    window.addEventListener("error", (e) => {
-      dispatch("LOG_ERROR", { err: e.error });
-    });
-
-    const text = await loadFromURL();
-    if (text) {
-      const changes = {
-        from: 0,
-        insert: text
-      };
-
-      state.codemirror.dispatch({ changes })
-    }
-
-
-    document.querySelector(".game-canvas").focus();
-    dispatch("RENDER");
-  },
-  RUN(args, state) {
-    console.log("run");
-    state.logs = [];
-    state.error = false;
-    
-    const cmLines = document.querySelectorAll(".cm-line");
-
-    for (let i = 0; i < cmLines.length; i++) {
-      const cmLine = cmLines[i];
-      cmLine.style.background = "";
-      cmLine.classList.remove("err-line");
-    }
-
-    const script = state.codemirror.state.doc.toString();
-    const err = evalGameScript(script);
-    if (err) dispatch("LOG_ERROR", { err });
-
-    dispatch("RENDER");
-  },
+  INIT: init,
+  RUN: run,
+  SET_SPRITES({ sprites }, state) {
+    state.sprites = sprites;
+  }, 
   UPLOAD(args, state) {
     upload(state.codemirror.state.doc.toString());
   },
-  LOG_ERROR({ err }, state) {
-    console.log(err);
-
-    const location = err.stack.match(/<anonymous>:(.+)\)/);
-    let line = null;
-    let col = null;
-
-    if (location) {
-      let lineCol = location[1].split(":").map(Number);
-      line = lineCol[0] - 2;
-      col = lineCol[1];
-    }
-
-    const msg =
-      line && col
-        ? `${err.message} on line ${line} in column ${col}`
-        : err.message;
-
-    state.error = true;
-    state.logs = [...state.logs, msg];
-    dispatch("RENDER");
-
-    const cmLines = document.querySelectorAll(".cm-line");
-
-    for (let i = 0; i < cmLines.length; i++) {
-      if (!line || i + 1 !== line) continue;
-
-      const cmLine = cmLines[i];
-      cmLine.classList.add("err-line");
-      cmLine.style.background = "#ecb2b2";
-    }
+  SAVE_TO_FILE(args, state) {
+    const prog = state.codemirror.state.doc.toString();
+    saveToFile(`${state.name}.js`, prog);
   },
+  LOG_ERROR: logError,
   SET_EDITOR(editor, state) {
     state.editor = editor;
     dispatch("RENDER");
@@ -105,6 +41,21 @@ const ACTIONS = {
       const el = document.getElementById("asset-editor");
       el.loadInitValue && el.loadInitValue(editor.initValue);
     }
+  },
+  SET_EDITOR_TEXT({ text }, state) {
+    const currentProgLength = state.codemirror.state.doc.toString();
+    console.log(text);
+    const changes = {
+      from: 0,
+      to: currentProgLength.length,
+      insert: text
+    };
+
+    state.codemirror.dispatch({ changes })
+  },
+  SET_NAME: setName,
+  LOAD_FROM_DATA({ data }, state) {
+    console.log(data);
   },
   EDITOR_TEXT(text, state) {
     if (!state.editor) return console.log("EDITOR_TEXT but no editor");
@@ -125,7 +76,6 @@ const ACTIONS = {
 }
 
 export function dispatch(action, args = {}) {
-  console.log(action);
   const trigger = ACTIONS[action];
   if (trigger) return trigger(args, STATE);
   else {

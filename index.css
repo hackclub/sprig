@@ -32,7 +32,6 @@ body {
 .menu-item, .dropdown-list > * {
   color: #ffffff;
   padding: 8px 14px;
-  width: max-content;
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -54,12 +53,13 @@ body {
   overflow: hidden; /* this is bad and horrible but it works for now lol */
   top: 99%;
   left: 0;
+  background: #a61e4d;
 }
 
 .dropdown-list > * {
   cursor: pointer;
   background: #a61e4d;
-  width: 100%;
+  width: max-content;
 }
 
 .dropdown-container:hover .dropdown-list {
@@ -96,7 +96,7 @@ body {
 .erred {
   background: #c92a2a;
   color: #ffffff;
-  height: 50px;
+  height: 80px;
   padding: 5px;
 }
 

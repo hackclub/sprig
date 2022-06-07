@@ -1,5 +1,16 @@
 setScreenSize(500, 500*.8)
 
+const tune = playTune([
+  [500, "sine", 64.4, 500, "sine", "c5", 1000],
+  [300, "sine", 87, 300],
+  [500, "sine", "a4", 500],
+  [300],
+  [100, "triangle", 53, 200],
+  [400]
+], 2)
+
+// can end with tune.end();
+
 
 setLegend({
   r: sprite(`
@@ -131,7 +142,7 @@ addTile(player.x - player.dx, player.y - player.dy, "r")
 onInput("up", _ => {
   if (player.y === 0) return;
   player.y -= 1;
-
+  tune.end();
 })
 
 onInput("down", _ => {
@@ -147,6 +158,7 @@ onInput("left", _ => {
 onInput("right", _ => {
   if (player.x === 9) return;
   player.x += 1;
+
 })
 
 // in what order should collision, push be applied

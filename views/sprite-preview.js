@@ -1,4 +1,4 @@
-import { spriteTextToImageData } from "./engine/sprite.js";
+import { spriteTextToImageData } from "../engine/sprite.js";
 
 class SpritePreview extends HTMLElement {
   constructor() {

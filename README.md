@@ -198,12 +198,15 @@ to remove tile use tile.remove() or set tile.type = "."
 by wednesday 1 - 2
 
 ### Leo
-- [ ] add name editing
-- [ ] add local storage
+- [x] add name editing
 - [ ] add exporting
-- [ ] add file loading
-- [ ] add sound playing to engine
-- [ ] add sprites to state from evaluation
+  - [x] js
+  - [ ] html
+  - [ ] link
+- [ ] add local storage
+- [x] add file loading
+- [x] add sound playing to engine
+- [x] add sprites to state from evaluation
 
 ### Lexi
 - [ ] tune editor
@@ -227,10 +230,13 @@ later
 - [ ] add samples
 - [ ] upload flow
 - [ ] game gallery
- - [ ] loading from game gallery
+  - [ ] loading from game gallery
 - [ ] hype site
 - [ ] readme
 - [ ] establish design language
+
+### Bugs
+- [ ] when typing in browser console get: "Possible side-effect in debug-evaluate"
 
 
 

@@ -1,11 +1,11 @@
 import { html } from "./libs/uhtml.js";
 import { dispatch } from "./dispatch.js";
 
-import { docs } from "./docs.js";
+import { docs } from "./views/docs.js";
 import "./pixel-editor/pixel-editor.js";
 import "./sequencer/sequencer.js";
 import "./map-editor/map-editor.js";
-import "./sprite-preview.js";
+import "./views/sprite-preview.js";
 
 export const view = (state) => html`
   ${menu(state)}
@@ -13,7 +13,7 @@ export const view = (state) => html`
     <div class="code-container">
       <div id="code-editor"></div>
       <div class=${["logs", state.error ? "erred" : ""].join(" ")}>
-        ${state.logs.map(x => html`${x}`)}
+        ${state.logs.map(x => html`${x}<br>`)}
       </div>
     </div>
     <div class="vertical-bar" aria-hidden="true"></div>
@@ -51,14 +51,18 @@ const sampleMenuItem = sample => html`
 
 const menu = (state) => html`
   <div class="menu">
-    <div class="menu-item">name</div>
+    <div 
+      class="menu-item menu-name" 
+      contenteditable 
+      spellcheck="false"
+      @blur=${e => dispatch("SET_NAME", { name: e.target.innerText })}>${state.name}</div>
     <a class="menu-item" href="https://www.github.com/hackclub/gamelab">github</a>
     <div class="menu-item dropdown-container">
       export
       <div class="dropdown-list">
-        <div>json</div>
-        <div>link</div>
-        <div>html</div>
+        <div @click=${e => dispatch("SAVE_TO_FILE")}>js</div>
+        <div>TODO: link</div>
+        <div>TODO: html</div>
       </div>
     </div>
     <div class="menu-item dropdown-container">
