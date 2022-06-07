@@ -55,6 +55,52 @@ export function playCellsOnBeat(cells, bpm, beat) {
   })
 }
 
+export function tuneTextToCells(text) {
+  const beats = text.split(/\s+/g).filter(b => !!b).map(b => b.split('+'));
+  const cells = {};
+
+  for (let x = 0; x < beats.length; x++) {
+    for (const [wave, ...note] of beats[x]) {
+      if (wave === 'r') continue;
+      const instrument = {
+        '~': 'sine',
+        '-': 'square',
+        '/': 'sawtooth',
+        '^': 'triangle'
+      }[wave];
+      const y = Object.entries(noteMap).find(([k, v]) => v === note[0])[0];
+      cells[`${x}_${y}`] = instrument;
+    }
+  }
+
+  return cells;
+}
+
+export function tuneCellsToText(cells, beatCount = 32) {
+  const beats = [];
+
+  for (let x = 0; x < beatCount; x++) {
+    const notes = Object.entries(cells)
+      .filter(([k, v]) => k.split("_")[0] === x.toString())
+      .map(([k, v]) => [Number(k.split("_")[1]), v]);
+    if (notes.length === 0) {
+      beats.push('r');
+    } else {
+      beats.push(notes.map(([y, instrument]) => {
+        const wave = {
+          sine: '~',
+          square: '-',
+          sawtooth: '/',
+          triangle: '^'
+        }[instrument];
+        return `${wave}${noteMap[y]}`;
+      }).join('+'));
+    }
+  }
+
+  return beats.join(' ');
+}
+
 function downloadText(filename, text) {
   const blob = new Blob([text], { type: "text/plain" });
 
@@ -411,7 +457,7 @@ export function createSequencer(target) {
   const onUpSVG = e => {
     state.erasing = false;
     state.drawing = false;
-
+    dispatch("EDITOR_TEXT", tuneCellsToText(state.cells));
     r();
   }
 
@@ -442,6 +488,10 @@ export function createSequencer(target) {
   init(state);
 
   return {
+    loadInitValue(text) {
+      state.cells = tuneTextToCells(text);
+      r();
+    },
     end() {
       if (state.interval) clearInterval(state.interval);
     },
