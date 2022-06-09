@@ -3,6 +3,7 @@ import { resolveObjs } from "./resolveObjs.js";
 import { GameObject } from "./GameObject.js";
 import { spriteTextToImageData } from "./sprite.js";
 import { dispatch } from "../dispatch.js";
+import { textToTune } from './playTune.js';
 
 export function init(canvas) {
 
@@ -479,11 +480,18 @@ export function init(canvas) {
     afterInputs.push(fn);
   }
 
-  function sprite(string) { // returns image data
-    return spriteTextToImageData(string);
-  }
-
   // how to add timed things, like bird flying and ball kicks
+  
+  // Tagged tempalate literal factory go brrr
+  function makeTag(cb) {
+    return (strings, ...interps) => {
+      if (typeof strings === "string") {
+        throw new Error("Tagged template literal must be used like name`text`, instead of name(`text`)");
+      }
+      const string = strings.reduce((p, c, i) => p + c + (interps[i] ?? ''), '');
+      return cb(string);
+    }
+  }
 
   return {
     setScreenSize,
@@ -499,8 +507,9 @@ export function init(canvas) {
     replace, // **
     afterInput, // ***
     getGrid, // **
-    map: string => string, // No-op for now, here for editor support
-    sprite,
+    map: makeTag(string => string), // No-op for now, here for editor support
+    tune: makeTag(string => textToTune(string)),
+    sprite: makeTag(string => spriteTextToImageData(string)),
     swap,
     match,
     getTile: (type) => currentLevel.find(t => t.type === type), // **
