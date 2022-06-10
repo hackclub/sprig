@@ -33,7 +33,7 @@ const {
 setScreenSize(500, 500*.8)
 
 setLegend({
-  "p": sprite(`
+  "p": sprite`
 ................
 ................
 .......0000.....
@@ -51,8 +51,8 @@ setLegend({
 ......00.00.....
 ................
 
-    `),
-  "w": sprite(`
+    `,
+  "w": sprite`
 bbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbb
@@ -69,8 +69,8 @@ bbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbb
-  `),
-  "b": sprite(`
+  `,
+  "b": sprite`
 0000000000000000
 0000000000000000
 0000000000000000
@@ -87,8 +87,8 @@ bbbbbbbbbbbbbbbb
 0000000000000000
 0000000000000000
 0000000000000000
-  `),
-  "#": sprite(`
+  `,
+  "#": sprite`
 ................
 ................
 ................
@@ -105,8 +105,8 @@ bbbbbbbbbbbbbbbb
 ................
 ................
 ................
-    `),
-  "g": sprite(`
+    `,
+  "g": sprite`
 ................
 ................
 ................
@@ -123,7 +123,7 @@ bbbbbbbbbbbbbbbb
 ................
 ................
 ................
-  `),
+  `,
   // x: combine("g", "h")
 })
 
@@ -133,30 +133,30 @@ setBackground(water)
 
 let level = 0;
 const levels = [
-  map(`
+  map`
 bbbbbbbbbb
 bp.b.....b
 b..b.....b
 b..b.#b..b
 b.....b.gb
 bbbbbbbbbb
-  `),
-  map(`
+  `,
+  map`
 bbbbbbbbbb
 bp......gb
 b....b...b
 b.b#bg.#.b
 b......b.b
 bbbbbbbbbb
-  `),
-  map(`
+  `,
+  map`
 bbbbbbbbbb
 b........b
 b........b
 b........b
 b........b
 bbbbbbbbbb
-  `)
+  `
 ]
 
 setMap(levels[level]);

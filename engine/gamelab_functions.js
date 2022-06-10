@@ -6,7 +6,6 @@ import { dispatch } from "../dispatch.js";
 import { textToTune } from './playTune.js';
 
 export function init(canvas) {
-
   // remove event listeners
   let newCanvas = canvas.cloneNode(true);
   canvas.parentNode.replaceChild(newCanvas, canvas);
@@ -157,7 +156,7 @@ export function init(canvas) {
 
       this._type = t;
       const defaultSprite = new ImageData(new Uint8ClampedArray(16*16*4).fill(0), 16)
-      const sprite = (t in legend) ? legend[t] : defaultSprite;
+      const sprite = (t in legend) ? legend[t].imageData : defaultSprite;
       this.canvas = document.createElement("canvas");
       this.canvas.width = sprite.width;
       this.canvas.height = sprite.height;
@@ -201,13 +200,8 @@ export function init(canvas) {
 
   }
 
-  let hasSetLegend = false;
   function setLegend(objectMap) {
-    if (hasSetLegend) {
-      throw new Error("Legend is already set, make sure you aren't accidentally calling setLegend multiple times!");
-    }
     legend = objectMap;
-    hasSetLegend = true;
     dispatch("SET_SPRITES", { sprites: objectMap });
   }
 
@@ -507,9 +501,9 @@ export function init(canvas) {
     replace, // **
     afterInput, // ***
     getGrid, // **
-    map: makeTag(string => string), // No-op for now, here for editor support
-    tune: makeTag(string => textToTune(string)),
-    sprite: makeTag(string => spriteTextToImageData(string)),
+    map: makeTag(text => text), // No-op for now, here for editor support
+    tune: makeTag(text => textToTune(text)),
+    sprite: makeTag(text => ({text, imageData: spriteTextToImageData(text)})),
     swap,
     match,
     getTile: (type) => currentLevel.find(t => t.type === type), // **
@@ -517,7 +511,7 @@ export function init(canvas) {
     clear,
     setZOrder: (order) => { zOrder = order; }, // **, could use order of collision layers
     setBackground: (type) => { 
-      background = type in legend ? legend[type] : background; // else should be default
+      background = type in legend ? legend[type].imageData : background; // else should be default
       bgCanvas.width = background.width;
       bgCanvas.height = background.height;
 

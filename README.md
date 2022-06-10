@@ -215,7 +215,7 @@ by wednesday 1 - 2
 - [ ] change editor triggers to tagged template literals
   - [x] sprite(`...`) -> sprite`...`
   - [ ] code folding for above?
-- [ ] getting legend from sprites in state
+- [x] getting legend from sprites in state
 - [ ] fix bug with err-line getting overwritten on input
 
 ### Together

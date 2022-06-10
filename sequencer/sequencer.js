@@ -486,7 +486,7 @@ export function createSequencer(target) {
   init(state);
 
   return {
-    loadInitValue(text) {
+    loadInitValue({ text }) {
       state.cells = tuneToCells(textToTune(text));
       r();
     },

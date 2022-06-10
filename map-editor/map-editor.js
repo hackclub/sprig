@@ -108,9 +108,9 @@ export function createMapEditor(target) {
   init();
 
   return {
-    loadInitValue({ text, legend }) {
+    loadInitValue({ text, sprites }) {
       state.legend = Object.fromEntries(
-        Object.entries(legend)
+        Object.entries(sprites)
           .map(([ key, sprite ]) => [ key, { ...sprite, imageData: spriteTextToImageData(sprite.text) } ])
       );
 

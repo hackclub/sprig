@@ -69,17 +69,17 @@ const menu = (state) => html`
       [dbg] editors
       <div class="dropdown-list">
         <div 
-          @click=${() => dispatch("SET_EDITOR", { type: "sprite", debug: true })}
+          @click=${() => dispatch("SET_EDITOR", { type: "sprite" })}
           class="menu-item">
           sprite
         </div>
         <div
-          @click=${() => dispatch("SET_EDITOR", { type: "sequencer", debug: true })} 
+          @click=${() => dispatch("SET_EDITOR", { type: "sequencer" })} 
           class="menu-item">
           sequencer
         </div>
         <div
-          @click=${() => dispatch("SET_EDITOR", { type: "map", debug: true })} 
+          @click=${() => dispatch("SET_EDITOR", { type: "map" })} 
           class="menu-item">
           map
         </div>

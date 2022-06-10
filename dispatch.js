@@ -37,9 +37,12 @@ const ACTIONS = {
   SET_EDITOR(editor, state) {
     state.editor = editor;
     dispatch("RENDER");
-    if (editor?.initValue) {
+    if (editor?.text) {
       const el = document.getElementById("asset-editor");
-      el.loadInitValue && el.loadInitValue(editor.initValue);
+      el.loadInitValue && el.loadInitValue({
+        text: editor.text,
+        sprites: state.sprites
+      });
     }
   },
   SET_EDITOR_TEXT({ text }, state) {

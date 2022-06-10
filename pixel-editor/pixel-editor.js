@@ -721,7 +721,7 @@ export function createPixelEditor(target) {
   init(state);
 
   return {
-    loadInitValue(text) {
+    loadInitValue({ text }) {
       const imageData = spriteTextToImageData(text);
       for (let i = 0; i < state.gridColors.length; i++) {
         state.gridColors[i] = [
