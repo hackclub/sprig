@@ -2,7 +2,7 @@
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 
-const tones = {
+export const tones = {
   "B0": 31,
   "C1": 33,
   "C#1": 35,

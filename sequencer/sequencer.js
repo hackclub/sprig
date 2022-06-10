@@ -1,5 +1,7 @@
 import { render, html, svg } from "/libs/uhtml.js";
 import { playNote } from "./playNote.js";
+import { dispatch } from "../dispatch.js";
+import { tuneToText, textToTune, tones } from '../engine/playTune.js';
 
 // could add
 // scale selection -> chromatic, minor, pentatonic
@@ -53,6 +55,47 @@ export function playCellsOnBeat(cells, bpm, beat) {
     const d = (1000*60)/bpm;
     playNote(n, d, instrument)
   })
+}
+
+function cellsToTune(cells, bpm, beats) {
+  const tune = [];
+  const beatTime = 1000*60/bpm;
+  const getNotes = (x) => Object.entries(cells)
+    .filter(([k]) => k.split("_")[0] === x.toString())
+    .map(([k, v]) => [Number(k.split("_")[1]), v]);
+  for (let x = 0; x < beats; x++) {
+    let rests = 0;
+    while (getNotes(x).length === 0 && x < beats) {
+      rests++;
+      x++;
+    }
+    if (rests) tune.push([rests * beatTime]);
+    if (x >= beats) break;
+
+    const notes = getNotes(x);
+    tune.push([beatTime, ...notes.map(([ y, instrument ]) => [ instrument, noteMap[y], beatTime ])].flat());
+  }
+  return tune;
+}
+
+function tuneToCells(tune) {
+  const nonRestBeats = tune.filter(el => el.length > 1);
+  if (!nonRestBeats.length) return {};
+  const beatTime = nonRestBeats[0][0];
+  
+  const cells = {};
+  let x = 0;
+  for (const [duration, ...rest] of tune) {
+    if (!rest.length) x += duration / beatTime;
+    for (let i = 0; i < rest.length; i += 3) {
+      const [instrument, note] = rest.slice(i, i + 2);
+      const name = typeof note === "string"
+        ? name.toLowerCase()
+        : Object.entries(tones).find(([, v]) => v === note)[0].toLowerCase();
+      const y = Object.entries(noteMap).find(([, v]) => v === note)[0];
+      cells[`${x}_${y}`] = instrument;
+    }
+  }
 }
 
 function downloadText(filename, text) {
@@ -411,7 +454,8 @@ export function createSequencer(target) {
   const onUpSVG = e => {
     state.erasing = false;
     state.drawing = false;
-    dispatch("EDITOR_TEXT", tuneCellsToText(state.cells));
+    const text = tuneToText(cellsToTune(state.cells, state.bpm, state.numberX));
+    dispatch("EDITOR_TEXT", text);
     r();
   }
 
@@ -443,7 +487,7 @@ export function createSequencer(target) {
 
   return {
     loadInitValue(text) {
-      state.cells = tuneTextToCells(text);
+      state.cells = tuneToCells(textToTune(text));
       r();
     },
     end() {
