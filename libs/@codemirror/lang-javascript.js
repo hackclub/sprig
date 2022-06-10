@@ -1,7 +1,7 @@
-import { P as Parser, k as NodeSet, l as NodeType, D as DefaultBufferLength, N as NodeProp, T as Tree, n as IterMode, o as styleTags, t as tags, L as LRLanguage, p as indentNodeProp, q as continuedIndent, r as flatIndent, u as delimitedIndent, v as foldNodeProp, w as foldInside, x as LanguageSupport, s as syntaxTree } from '../index-120515b5.js';
+import { P as Parser, k as NodeSet, l as NodeType, D as DefaultBufferLength, N as NodeProp, T as Tree, n as IterMode, o as styleTags, t as tags, L as LRLanguage, p as indentNodeProp, q as continuedIndent, r as flatIndent, u as delimitedIndent, v as foldNodeProp, w as foldInside, x as LanguageSupport, j as syntaxTree } from '../index-565791f7.js';
 import { EditorSelection } from './state.js';
-import { E as EditorView } from '../index-59bcf64b.js';
-import { s as snippetCompletion, i as ifNotIn, e as completeFromList } from '../index-65bc36dd.js';
+import { E as EditorView } from '../index-ddff944c.js';
+import { s as snippetCompletion, i as ifNotIn, e as completeFromList } from '../index-a8a1c9f8.js';
 
 /// A parse stack. These are used internally by the parser to track
 /// parsing progress. They also provide some properties and methods

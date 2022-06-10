@@ -8,6 +8,7 @@
     "@codemirror/language": "^0.20.2",
     "@codemirror/view": "^0.20.6",
     "@codemirror/state": "^0.20.0",
+    "@codemirror/commands": "^6.0.0",
     "crc": "^4.1.0",
     "buffer": "^6.0.3",
     "uhtml": "^3.0.1"
