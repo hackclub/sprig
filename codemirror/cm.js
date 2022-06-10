@@ -7,14 +7,15 @@ import { javascript } from "../libs/@codemirror/lang-javascript.js";
 import booleanCheckbox from './booleanCheckbox.js';
 import editors from './editors.js';
 
-export function createEditorView() {
+export function createEditorView(onUpdate = () => {}) {
   return new EditorView({
     state: EditorState.create({
       extensions: [
         basicSetup,
         javascript(),
         booleanCheckbox,
-        editors
+        editors,
+        EditorView.updateListener.of(onUpdate)
       ]
     })
   });

@@ -12,7 +12,7 @@ export const view = (state) => html`
   <div class="main-container">
     <div class="code-container">
       <div id="code-editor"></div>
-      <div class=${["logs", state.error ? "erred" : ""].join(" ")}>
+      <div class=${["logs", state.errorInfo ? "erred" : ""].join(" ")}>
         ${state.logs.map(x => html`${x}<br>`)}
       </div>
     </div>

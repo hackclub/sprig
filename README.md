@@ -216,7 +216,7 @@ by wednesday 1 - 2
   - [x] sprite(`...`) -> sprite`...`
   - [ ] code folding for above?
 - [x] getting legend from sprites in state
-- [ ] fix bug with err-line getting overwritten on input
+- [x] fix bug with err-line getting overwritten on input (done jankily)
 
 ### Together
 - [ ] refactor

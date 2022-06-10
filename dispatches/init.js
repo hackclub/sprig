@@ -2,11 +2,14 @@ import { dispatch } from "../dispatch.js";
 import { loadFromURL } from "./loadFromURL.js"
 import { createEditorView } from "../codemirror/cm.js";
 import { addEvents } from "../events.js";
+import { highlightError } from "./logError.js";
 
 export async function init(args, state) {
   dispatch("RENDER");
 
-  state.codemirror = createEditorView();
+  state.codemirror = createEditorView(() => {
+    highlightError(state);
+  });
   state.codemirror.dom.id = "code-editor";
   document.querySelector("#code-editor").replaceWith(state.codemirror.dom);
 

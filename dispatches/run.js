@@ -3,7 +3,7 @@ import { evalGameScript } from "./evalGameScript.js";
 
 export function run(args, state) {
   state.logs = [];
-  state.error = false;
+  state.errorInfo = null;
   
   const cmLines = document.querySelectorAll(".cm-line");
 

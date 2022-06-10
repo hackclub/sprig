@@ -18,12 +18,16 @@ export function logError({ err }, state) {
       ? `${err.message} on line ${line} in column ${col}`
       : err.message;
 
-  state.error = true;
+  state.errorInfo = { line };
   state.logs = [...state.logs, msg];
   dispatch("RENDER");
+  highlightError(state);
+}
+
+export function highlightError(state) {
+  const line = state.errorInfo?.line;
 
   const cmLines = document.querySelectorAll(".cm-line");
-
   for (let i = 0; i < cmLines.length; i++) {
     if (!line || i + 1 !== line) continue;
 

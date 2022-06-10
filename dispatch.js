@@ -9,7 +9,7 @@ import { saveToFile } from "./dispatches/export/saveToFile.js";
 
 const STATE = {
   codemirror: undefined,
-  error: false,
+  errorInfo: null,
   logs: [],
   name: "game-name-here",
   notifications: [],
