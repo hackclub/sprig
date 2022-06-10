@@ -1,60 +1,8 @@
-import {
-  EditorView,
-  WidgetType,
-  Decoration
-} from "../libs/@codemirror/view.js";
+import { EditorView, Decoration } from "../libs/@codemirror/view.js";
 import { StateField } from "../libs/@codemirror/state.js";
 import { syntaxTree } from "../libs/@codemirror/language.js";
-import { dispatch } from "../dispatch.js";
 import { getTag } from "./util.js";
-
-class OpenButtonWidget extends WidgetType {
-  constructor(legend, text, from, to) {
-    super();
-    
-    this.legend = legend;
-    this.text = text;
-    this.from = from;
-    this.to = to;
-  }
-
-  eq(other) {
-    return other.text === this.text && other.from === this.from && other.to === this.to
-      && other.legend === this.legend; // badbadbadbadbadbad (probably)
-  }
-  ignoreEvent() { return false; }
-
-  toDOM() {
-    const container = document.createElement("span");
-    container.classList.add("cm-open-button");
-    
-    const button = container.appendChild(document.createElement("button"));
-    button.textContent = "edit map";
-    button.addEventListener("click", () => this.onClick());
-
-    return container;
-  }
-
-  updateDOM(container) {
-    const oldButton = container.children[0];
-    const button = oldButton.cloneNode(true); // This'll remove all event listeners.
-    button.addEventListener("click", () => this.onClick());
-    container.replaceChild(button, oldButton);
-    return true;
-  }
-
-  onClick() {
-    dispatch("SET_EDITOR", {
-      type: "map",
-      initValue: {
-        text: this.text,
-        legend: this.legend
-      },
-      from: this.from,
-      to: this.to
-    });
-  }
-}
+import { OpenButtonWidget } from "./openButton.js";
 
 function getLegend(syntax, doc) {
   let foundLegend = false;
@@ -110,8 +58,9 @@ function openButtons(state) {
 
       const decoration = Decoration.replace({
         widget: new OpenButtonWidget(
-          legend,
-          tag.text,
+          'map',
+          'map',
+          { text: tag.text, legend },
           tag.textFrom,
           tag.textTo
         )

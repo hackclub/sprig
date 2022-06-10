@@ -30,7 +30,6 @@ export async function init(args, state) {
     state.codemirror.dispatch({ changes })
   }
 
-
   document.querySelector(".game-canvas").focus();
   dispatch("RENDER");
 }

@@ -5,7 +5,7 @@ import {
 } from "../libs/@codemirror/basic-setup.js";
 import { javascript } from "../libs/@codemirror/lang-javascript.js";
 import booleanCheckbox from './booleanCheckbox.js';
-import spriteEditor from './spriteEditor.js';
+import spriteTuneEditor from './spriteTuneEditors.js';
 import mapEditor from "./mapEditor.js";
 
 export function createEditorView() {
@@ -15,7 +15,7 @@ export function createEditorView() {
         basicSetup,
         javascript(),
         booleanCheckbox,
-        spriteEditor,
+        spriteTuneEditor,
         mapEditor
       ]
     })

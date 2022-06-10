@@ -209,11 +209,11 @@ by wednesday 1 - 2
 - [x] add sprites to state from evaluation
 
 ### Lexi
-- [ ] tune editor
+- [x] tune editor
   - [x] text representation
-  - [ ] parity with current functionality
+  - [x] parity with current functionality
 - [ ] change editor triggers to tagged template literals
-  - [ ] sprite(`...`) -> sprite`...`
+  - [x] sprite(`...`) -> sprite`...`
   - [ ] code folding for above?
 - [ ] getting legend from sprites in state
 - [ ] fix bug with err-line getting overwritten on input
