@@ -6,7 +6,7 @@ import {
 import { StateField } from "../libs/@codemirror/state.js";
 import { syntaxTree } from "../libs/@codemirror/language.js";
 import { dispatch } from "../dispatch.js";
-import { getTemplateFunctionText } from "./util.js";
+import { getTag } from "./util.js";
 
 class OpenButtonWidget extends WidgetType {
   constructor(legend, text, from, to) {
@@ -90,7 +90,7 @@ function getLegend(syntax, doc) {
         }
 
         if (nameNode.nextSibling.name !== ':') return;
-        const spriteText = getTemplateFunctionText('sprite', nameNode.nextSibling.nextSibling, syntax, doc);
+        const spriteText = getTag('sprite', nameNode.nextSibling.nextSibling, syntax, doc);
         if (spriteText) legend[propName] = spriteText;
       });
     }
@@ -105,18 +105,18 @@ function openButtons(state) {
   const legend = getLegend(syntaxTree(state), state.doc);
   syntax.iterate({
     enter(node) {
-      const mapText = getTemplateFunctionText('map', node, syntax, state.doc);
-      if (!mapText) return;
+      const tag = getTag('map', node, syntax, state.doc);
+      if (!tag) return;
 
       const decoration = Decoration.replace({
         widget: new OpenButtonWidget(
           legend,
-          mapText.text,
-          mapText.from,
-          mapText.to
+          tag.text,
+          tag.textFrom,
+          tag.textTo
         )
       });
-      widgets.push(decoration.range(node.from, node.to));
+      widgets.push(decoration.range(tag.nameFrom, tag.nameTo));
     }
   })
 

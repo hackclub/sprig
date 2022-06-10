@@ -7,7 +7,7 @@ import { StateField } from "../libs/@codemirror/state.js";
 import { syntaxTree } from "../libs/@codemirror/language.js";
 import { dispatch } from "../dispatch.js";
 import { spriteTextToImageData } from "../engine/sprite.js";
-import { getTemplateFunctionText } from "./util.js";
+import { getTag } from "./util.js";
 
 class OpenButtonWidget extends WidgetType {
   constructor(text, from, to) {
@@ -61,17 +61,17 @@ function openButtons(state) {
 
   syntax.iterate({
     enter(node) {
-      const spriteText = getTemplateFunctionText('sprite', node, syntax, state.doc);
-      if (!spriteText) return;
+      const tag = getTag('sprite', node, syntax, state.doc);
+      if (!tag) return;
 
       const decoration = Decoration.replace({
         widget: new OpenButtonWidget(
-          spriteText.text,
-          spriteText.from,
-          spriteText.to
+          tag.text,
+          tag.textFrom,
+          tag.textTo
         )
       });
-      widgets.push(decoration.range(node.from, node.to));
+      widgets.push(decoration.range(tag.nameFrom, tag.nameTo));
     }
   })
 
