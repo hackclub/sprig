@@ -1,6 +1,6 @@
 import { EditorView, WidgetType, Decoration } from "../libs/@codemirror/view.js";
 import { StateField } from "../libs/@codemirror/state.js";
-import { syntaxTree } from "../libs/@codemirror/language.js";
+import { syntaxTree, foldService } from "../libs/@codemirror/language.js";
 import { getTag } from "./util.js";
 import { dispatch } from "../dispatch.js";
 
@@ -58,10 +58,11 @@ export class OpenButtonWidget extends WidgetType {
   }
 }
 
-function openButtons(state) {
+function makeValue(state) {
   const widgets = [];
+  const foldRanges = [];
+  
   const syntax = syntaxTree(state);
-
   syntax.iterate({
     enter(node) {
       for (const [label, editorType] of pairs) {
@@ -71,23 +72,38 @@ function openButtons(state) {
           widget: new OpenButtonWidget(label, editorType, tag.text, tag.textFrom, tag.textTo)
         });
         widgets.push(decoration.range(tag.nameFrom, tag.nameTo));
+        foldRanges.push({ from: tag.textFrom, to: tag.textTo });
         break;
       }
     }
   })
 
-  return Decoration.set(widgets);
+  return {
+    decorations: Decoration.set(widgets),
+    foldRanges
+  };
 }
 
 export default StateField.define({
   create(state) {
-    return openButtons(state);
+    return makeValue(state);
   },
-  update(decorations, transaction) {
-    if (transaction.docChanged) return openButtons(transaction.state);
-    return decorations.map(transaction.changes);
+  update(value, transaction) {
+    if (transaction.docChanged) {
+      return makeValue(transaction.state);
+    } else {
+      return {
+        ...value,
+        decorations: value.decorations.map(transaction.changes)
+      };
+    }
   },
   provide(field) {
-    return EditorView.decorations.from(field);
+    return [
+      EditorView.decorations.from(field, value => value.decorations),
+      foldService.from(field, value => (_, lineStart, lineEnd) => (
+        value.foldRanges.find(range => range.from >= lineStart && range.from <= lineEnd) ?? null
+      ))
+    ];
   }
 });
