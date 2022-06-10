@@ -59,7 +59,7 @@ body {
 .dropdown-list > * {
   cursor: pointer;
   background: #a61e4d;
-  width: max-content;
+  width: 100%;
 }
 
 .dropdown-container:hover .dropdown-list {
