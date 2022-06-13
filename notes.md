@@ -1,3 +1,17 @@
+## Kognotes
+
+- Error if sprite is passed instead of sprite key
+- Warning if non-solids are passed to pushables? Or do we want to allow pushables?
+- `getFirst` function
+- Remove set size function
+- Scrap `getGrid`
+- Sprites, tiles, cells, evil distinction, fixx!!!!!!
+  - Bitmaps, sprites, tiles/cells??
+- Make sure dx and dy are cleared on every input
+- Make matchMap function take array
+
+## Leo stuff
+
 Some things to consider.
 
 - How to restart games?

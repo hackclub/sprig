@@ -193,9 +193,30 @@ dx and dy are cleared afterInputs
 
 to remove tile use tile.remove() or set tile.type = "."
 
-# TODO
+## Roadmap-ish
 
-by wednesday 1 - 2
+**Monday:**
+
+- [ ] Lexi: Docs
+- [ ] Lexi: README
+
+**Tuesday:**
+
+- [ ] Figure out game gallery / sharing
+- [ ] Create structure and some copy for marketing site
+- [ ] Lexi: Start on design possibilities
+
+**Wednesday:**
+
+- [ ] Decide on a design language
+
+**Wednesday+:** Design all the things and implement as much as possible.
+
+**Tuesday:** Pass on everything, last-minute work.
+
+Lexi gone on the morning of Wednesday, August 22nd.
+
+# TODO
 
 ### Leo
 - [x] add name editing

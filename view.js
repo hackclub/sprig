@@ -22,7 +22,7 @@ export const view = (state) => html`
         <canvas class="game-canvas"></canvas>
       </div>
       <div class="docs">
-        ${docs()}
+        ${docs(state)}
       </div>
     </div>
   </div>
@@ -63,26 +63,6 @@ const menu = (state) => html`
         <div @click=${e => dispatch("SAVE_TO_FILE")}>js</div>
         <div>TODO: link</div>
         <div>TODO: html</div>
-      </div>
-    </div>
-    <div class="menu-item dropdown-container">
-      [dbg] editors
-      <div class="dropdown-list">
-        <div 
-          @click=${() => dispatch("SET_EDITOR", { type: "sprite" })}
-          class="menu-item">
-          sprite
-        </div>
-        <div
-          @click=${() => dispatch("SET_EDITOR", { type: "sequencer" })} 
-          class="menu-item">
-          sequencer
-        </div>
-        <div
-          @click=${() => dispatch("SET_EDITOR", { type: "map" })} 
-          class="menu-item">
-          map
-        </div>
       </div>
     </div>
     <div class="menu-item dropdown-container">
