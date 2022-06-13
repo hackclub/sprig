@@ -62,7 +62,7 @@ const ACTIONS = {
   },
   EDITOR_TEXT(text, state) {
     if (!state.editor) return console.log("EDITOR_TEXT but no editor");
-    if (state.editor.debug) return console.log(text);
+    if (!state.editor.from && !state.editor.to) return console.log(text);
     
     state.codemirror.dispatch({ changes: {
       from: state.editor.from,
