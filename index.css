@@ -54,6 +54,7 @@ body {
   top: 99%;
   left: 0;
   background: #a61e4d;
+  width: max-content;
 }
 
 .dropdown-list > * {

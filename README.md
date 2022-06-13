@@ -233,14 +233,18 @@ later
   - [ ] loading from game gallery
 - [ ] hype site
 - [ ] readme
+- [ ] style editors
 - [ ] establish design language
 - [ ] fold editor outputs after closing editor
 - [ ] editors blink when loading
+- [ ] set color pallete
 
 ### Bugs
 - [ ] when typing in browser console get: "Possible side-effect in debug-evaluate"
+  - [ ] add error event handler
 - [ ] tune gets cleared when you try to edit it
-
+- [ ] Uncaught RangeError: Applying change set to a document with the wrong length
+- [ ] when editting undersized sprite: "unknown color: undefined"
 
 
 

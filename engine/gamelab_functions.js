@@ -56,10 +56,10 @@ export function init(canvas) {
     down: [],
     left: [],
     right: [],
-    action0: [],
-    action1: [],
-    reset: [],
-    undo: [],
+    i: [],
+    j: [],
+    k: [],
+    l: [],
   };
   let afterInputs = [];
   let solids = [];
@@ -89,7 +89,10 @@ export function init(canvas) {
     if (key === "a" || key === "ArrowLeft") tileInputs["left"].forEach(fn => fn());
     if (key === "s" || key === "ArrowDown") tileInputs["down"].forEach(fn => fn());
     if (key === "d" || key === "ArrowRight") tileInputs["right"].forEach(fn => fn());
-    if (key === "Enter" || key === " ") tileInputs["action0"].forEach(fn => fn());
+    if (key === "i") tileInputs["i"].forEach(fn => fn());
+    if (key === "j") tileInputs["j"].forEach(fn => fn());
+    if (key === "k") tileInputs["k"].forEach(fn => fn());
+    if (key === "l") tileInputs["l"].forEach(fn => fn());
 
     afterInputs.forEach(f => f());
 
@@ -498,16 +501,16 @@ export function init(canvas) {
     onInput, // ***
     setSolids, // ***, could use collision layers
     setPushables, // ***
-    replace, // **
+    replacePattern: replace, // **
     afterInput, // ***
     getGrid, // **
     map: makeTag(text => text), // No-op for now, here for editor support
     tune: makeTag(text => textToTune(text)),
     sprite: makeTag(text => ({text, imageData: spriteTextToImageData(text)})),
-    swap,
-    match,
-    getTile: (type) => currentLevel.find(t => t.type === type), // **
-    getAllTiles: (type) => currentLevel.filter(t => t.type === type), // **
+    swapStack: swap,
+    matchPattern: match,
+    getFirst: (type) => currentLevel.find(t => t.type === type), // **
+    getAll: (type) => type ? currentLevel.filter(t => t.type === type) : currentLevel, // **
     clear,
     setZOrder: (order) => { zOrder = order; }, // **, could use order of collision layers
     setBackground: (type) => { 
