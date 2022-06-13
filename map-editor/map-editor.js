@@ -48,7 +48,7 @@ export function createMapEditor(target) {
       }
       text += "\n";
     }
-    dispatch("EDITOR_TEXT", text.trim());
+    dispatch("EDITOR_TEXT", "\n" + text.trim());
   }
 
   const draw = () => {

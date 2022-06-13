@@ -126,7 +126,7 @@ export function createPixelEditor(target) {
       text += color;
     }
 
-    dispatch("EDITOR_TEXT", text);
+    dispatch("EDITOR_TEXT", "\n" + text);
   }
 
   const setImageData = (file) => {

@@ -234,9 +234,12 @@ later
 - [ ] hype site
 - [ ] readme
 - [ ] establish design language
+- [ ] fold editor outputs after closing editor
+- [ ] editors blink when loading
 
 ### Bugs
 - [ ] when typing in browser console get: "Possible side-effect in debug-evaluate"
+- [ ] tune gets cleared when you try to edit it
 
 
 
