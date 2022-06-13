@@ -88,7 +88,7 @@ const menu = (state) => html`
     <div class="menu-item dropdown-container">
       samples
       <div class="dropdown-list">
-        ${state.samples.map(console.log)}
+        ${state.samples.map(drawSample)}
       </div>
     </div>
     <div class="menu-item docs-trigger">docs</div>
@@ -104,3 +104,13 @@ const menu = (state) => html`
     </div>
   </div>
 `
+
+const drawSample = ({ name, link }) => {
+  return html`
+    <a 
+      class="menu-item" 
+      href=${link}>
+      ${name}
+    </a>
+  `
+}

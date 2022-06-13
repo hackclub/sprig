@@ -6,6 +6,10 @@ import { init } from "./dispatches/init.js";
 import { logError } from "./dispatches/logError.js";
 import { setName } from "./dispatches/setName.js";
 import { saveToFile } from "./dispatches/export/saveToFile.js";
+import "./dispatches/fetchAndBundle/fetchAndBundle.js";
+
+const makeSampleLink = str => 
+  `http://${window.location.host}/?file=http://${window.location.host}/games/${str}.js`
 
 const STATE = {
   codemirror: undefined,
@@ -14,7 +18,12 @@ const STATE = {
   name: "game-name-here",
   notifications: [],
   editor: null,
-  samples: [],
+  samples: [
+    { 
+      name: "maze",
+      link: makeSampleLink("maze-v1")
+    }
+  ],
   sprites: {},
 }
 

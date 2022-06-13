@@ -455,7 +455,7 @@ export function createSequencer(target) {
     state.erasing = false;
     state.drawing = false;
     const text = tuneToText(cellsToTune(state.cells, state.bpm, state.numberX));
-    dispatch("EDITOR_TEXT", text);
+    dispatch("EDITOR_TEXT",  "\n" + text);
     r();
   }
 
