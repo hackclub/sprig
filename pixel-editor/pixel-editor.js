@@ -229,14 +229,6 @@ export function createPixelEditor(target) {
           >
             export
           </button>
-          <button
-            title="print"
-            @click=${() => {
-              stateUpdate();
-            }}
-          >
-            [dbg] state update
-          </button>
         </div>
 
         ${drawColorsButtons(state)}
