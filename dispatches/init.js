@@ -33,6 +33,11 @@ export async function init(args, state) {
     state.codemirror.dispatch({ changes })
   }
 
+  fetch("/docs.md").then(res => res.text()).then(docs => {
+    state.docs = docs;
+    dispatch("RENDER");
+  })
+
   document.querySelector(".game-canvas").focus();
   dispatch("RENDER");
 }
