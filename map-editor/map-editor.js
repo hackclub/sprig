@@ -108,10 +108,10 @@ export function createMapEditor(target) {
   init();
 
   return {
-    loadInitValue({ text, sprites }) {
+    loadInitValue({ text, bitmaps }) {
       state.legend = Object.fromEntries(
-        Object.entries(sprites)
-          .map(([ key, sprite ]) => [ key, { ...sprite, imageData: spriteTextToImageData(sprite.text) } ])
+        Object.entries(bitmaps)
+          .map(([ key, bitmap ]) => [ key, { ...bitmap, imageData: spriteTextToImageData(bitmap.text) } ])
       );
 
       state.cells = text.trim().split("\n").map(x => [...x.trim()]);

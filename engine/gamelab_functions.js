@@ -209,7 +209,7 @@ export function init(canvas) {
 
   function setLegend(bitmaps) {
     legend = bitmaps;
-    dispatch("SET_SPRITES", { sprites: bitmaps });
+    dispatch("SET_BITMAPS", { bitmaps });
   }
 
   const allEqual = arr => arr.every(val => val === arr[0]);
