@@ -197,26 +197,26 @@ to remove tile use tile.remove() or set tile.type = "."
 
 **Monday:**
 
-- [ ] Lexi: Docs
-- [ ] Lexi: README
+- [x] Lexi: Improve docs
 
 **Tuesday:**
 
-- [ ] Figure out game gallery / sharing
-- [ ] Create structure and some copy for marketing site
-- [ ] Lexi: Start on design possibilities
+- [x] Figure out game gallery / sharing
+- [ ] Lexi: Finish docs, styles for docs
+- [ ] Lexi: README
+- [ ] Leo: Code folding
 
-**Wednesday:**
+**Wednesday:** All about design, design, design, design.
 
-- [ ] Decide on a design language
+**Wednesday-Thursday:** Implement the design. Landing page?
 
-**Wednesday+:** Design all the things and implement as much as possible.
+**Friday+:** Build the gallery system.
 
 **Tuesday:** Pass on everything, last-minute work.
 
 Lexi gone on the morning of Wednesday, August 22nd.
 
-# TODO
+# Todos
 
 ### Leo
 - [x] add name editing
