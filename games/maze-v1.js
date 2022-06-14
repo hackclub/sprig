@@ -149,7 +149,8 @@ onInput("left", _ => {
 
 onInput("right", _ => {
   if (player.x === 9) return;
-  player.x += 1;
+  // player.x += 1;
+  moveSprite(player, 1, 0)
 
 })
 
