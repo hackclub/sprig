@@ -39,9 +39,11 @@ export async function init(args, state) {
   })
 
   const docsPerc = parseInt(localStorage.getItem("docs-percentage"));
-  if (!isNaN(docsPerc)) {
+  if (!isNaN(docsPerc))
     document.documentElement.style.setProperty("--docs-percentage", `${docsPerc}%`);
-  }
+  const verticalBar = parseInt(localStorage.getItem("vertical-bar"));
+  if (!isNaN(verticalBar))
+    document.documentElement.style.setProperty("--vertical-bar", `${verticalBar}%`);
 
   document.querySelector(".game-canvas").focus();
   dispatch("RENDER");

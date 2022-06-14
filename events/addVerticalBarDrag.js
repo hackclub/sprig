@@ -30,6 +30,7 @@ export function addVerticalBarDrag(state, bodyListener) {
     if (x > maxX) x = maxX;
 
     document.documentElement.style.setProperty("--vertical-bar", `${x}%`);
+    localStorage.setItem("vertical-bar", x);
 
     pauseEvent(e);
   });
