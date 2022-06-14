@@ -12,7 +12,7 @@ body, html, .root {
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .root {
@@ -74,6 +74,10 @@ body {
   overflow-y: hidden;
 }
 
+.docs, .game-container, .code-container {
+  border: 0.5px solid #ced4da;
+}
+
 .code-container {
   background: #f8f9fa;
   width: var(--vertical-bar);
@@ -86,6 +90,11 @@ body {
 #code-editor, .cm-editor {
   flex: 1;
   overflow-y: auto;
+}
+
+.cm-scroller {
+  font-family: "Fira Code", monospace !important;
+  font-size: 15px;
 }
 
 .logs {
@@ -104,7 +113,6 @@ body {
 .game-output {
   flex: 1;
   height: 100%;
-  background: orange;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -143,10 +151,11 @@ body {
 }
 
 .docs {
-  background: #dcc2f1;
+  background: #f8f9fa;
   width: 100%;
   flex: 1;
   overflow-y: auto;
+  padding: 10px;
 }
 
 .asset-editor-container {

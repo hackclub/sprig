@@ -247,7 +247,7 @@ Rules:
 replace("pp", "g.")
 ```
 
-### Music and Sound Effects
+## Music and Sound Effects
 
 Game Lab comes bundled with a built-in sound engine and sequencer! You can use this to write background music, or with a high BPM to make sound effects.
 

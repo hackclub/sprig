@@ -14,19 +14,7 @@ Draw your sprite and click print to get the sprite data string in the console.
 
 ## Roadmap-ish
 
-**Tuesday:**
-
-- [x] Figure out game gallery / sharing
-- Lexi:
-  - [x] Finish docs
-  - [ ] Styles for docs
-  - [ ] README
-- Leo:
-  - [ ] Code folding
-  - [ ] Add local storage
-  - [ ] Exporting:
-    - [ ] HTML
-    - [ ] Link
+**Tuesday:** Discuss game gallery / sharing and roadmap.
 
 **Wednesday:** All about design, design, design, design.
 
@@ -40,6 +28,17 @@ Lexi gone on the morning of Wednesday, August 22nd.
 
 ## Kognotes
 
+- Some immediate tasks:
+  - Lexi:
+    - [x] Finish docs
+    - [x] Styles for docs
+    - [ ] README
+  - Leo:
+    - [ ] Code folding
+    - [ ] Add local storage
+    - [ ] Exporting:
+      - [ ] HTML
+      - [ ] Link
 - Renames and refactoring:
   - [x] Sprites, tiles, cells -> bitmaps, sprites, cells
     - [x] Base change
@@ -76,3 +75,9 @@ Lexi gone on the morning of Wednesday, August 22nd.
   - [ ] When typing in browser console get: "Possible side-effect in debug-evaluate" (add error event handler)
   - [ ] Tune gets cleared when you try to edit it
   - [ ] When editting undersized sprite: "unknown color: undefined" (kog: is this a bug)
+- [ ] Docs fixes:
+  - [ ] GFM blockquote support
+  - [ ] Code highlighting (should match CodeMirror?)
+  - [ ] Fix `>` and `<` in code blocks showing up as `&gt;` and `&lt;`
+  - [ ] Styles for blockquotes
+  - [ ] Styles for images
