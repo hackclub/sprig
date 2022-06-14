@@ -7,8 +7,11 @@
 - Scrap `getGrid`
 - Sprites, tiles, cells, evil distinction, fixx!!!!!!
   - Bitmaps, sprites, tiles/cells??
-- Make sure dx and dy are cleared on every input
+- Make sure dx and dy are cleared on every input beginning and ending
 - Make matchMap function take array
+- Sprite type to bitmap key
+- Warning for creating a sprite with multi-character keys, with period as key
+- BPM isn't a thing anymore, fix that
 
 ## Leo stuff
 
