@@ -27,13 +27,16 @@ export function addEvents(state) {
   });
 
   bodyListener("mousedown", ".docs-trigger", function (event) {
-    const setPerc = n => document.documentElement.style.setProperty("--docs-percentage", `${n}%`);
+    const setPerc = n => {
+      document.documentElement.style.setProperty("--docs-percentage", `${n}%`);
+      localStorage.setItem("docs-percentage", n);
+    };
     
     const perc = getComputedStyle(document.documentElement).getPropertyValue("--docs-percentage");
-    console.log("open/close docs", perc);
-
-    if (perc.trim() === "0%") setPerc(65);
-    else setPerc(0);
+    if (perc.trim() === "0%")
+      setPerc(65);
+    else
+      setPerc(0);
   });
 
   addVerticalBarDrag(state, bodyListener);

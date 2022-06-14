@@ -38,6 +38,11 @@ export async function init(args, state) {
     dispatch("RENDER");
   })
 
+  const docsPerc = parseInt(localStorage.getItem("docs-percentage"));
+  if (!isNaN(docsPerc)) {
+    document.documentElement.style.setProperty("--docs-percentage", `${docsPerc}%`);
+  }
+
   document.querySelector(".game-canvas").focus();
   dispatch("RENDER");
 }
