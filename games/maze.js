@@ -1,163 +1,169 @@
-import { init } from "../engine/gamelab_functions.js";
-
-const canvas = document.querySelector(".maze");
-
-const {
-  setScreenSize,
-  setLegend, 
-  setMap, 
-  getCell,
-  addSprite, 
-  clearTile, 
-  setSolids,
-  setPushables, 
-  replace, 
-  onInput,
-  afterInput, 
-  getGrid,
-  getAllTiles, 
-  clear, 
-  setZOrder, 
-  sprite,
-  swap,
-  match,
-  setBackground,
-  getTile
-} = init(canvas);
-
-
 setScreenSize(500, 500*.8)
 
-setLegend({
-  "d": sprite(`
-................
-................
-.......0000.....
-.......0ggg0....
-......0ggggg0...
-......0gggbgr...
-......0gggggrr..
-.......0gggg0...
-..00000ggggg0...
-..0ggggggggg0...
-..0ggggggggg0...
-...0ggggggg0....
-....0ggggg00....
-.....00000......
-......00.00.....
-................
+// playTune([
+//   [500, "sine", 64.4, 500, "sine", "c5", 1000],
+//   [300, "sine", 87, 300],
+//   [500, "sine", "a4", 500],
+//   [300],
+//   [100, "triangle", 53, 200],
+//   [400]
+// ], 2)
 
-    `),
-  "w": sprite("b"),
-  "b": sprite("0"),
-  "r": sprite(`
+// can end with tune.end();
+
+
+setLegend({
+  r: bitmap`rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr`,
+  g: bitmap`
+................
+............r...
+....rr......r...
+.....rr....r....
+......rggggrg...
+.....grr..r.gg..
+....gg.rr.r..g..
+....g...r.r..g..
+....g....rr..g..
+....g....rr..g..
+....g........g..
+....gg.......g..
+.....gg.....gg..
+.......gggggg...
+................
+................
+  `,
+  b: bitmap`
 ................
 ................
 ................
-......rrrrr.....
-.....rrrrrrr....
-....rrrrrrrrr...
-....rrrrrrrrr...
-....rrrrrrrrr...
-....rrrrrrrrr...
-....rrrrrrrrr...
-....rrrrrrrrr...
-.....rrrrrrr....
-......rrrrr.....
+....0000000.....
+....0.....0000..
+....0...0....0..
+....0...0....0..
+....0...0...00..
+....0000000.0...
+....0...0...0...
+....0...0...0...
+....0...0...0...
+....000000000...
 ................
 ................
 ................
-    `),
-    "g": sprite(`
+  `,
+  p: bitmap`................
 ................
 ................
 ................
-......ggggg.....
-.....ggggggg....
-....ggggggggg...
-....ggggggggg...
-....ggggggggg...
-....ggggggggg...
-....ggggggggg...
-....ggggggggg...
-.....ggggggg....
-......ggggg.....
+.....000000.....
+....00....00....
+....0..0.0.0....
+....00.....0....
+.....0....0.....
+.....000000.....
+......0..00.....
+.....00...0.....
+.....0..........
 ................
 ................
-................
-    `)
+................`,
+  "0": bitmap`
+gggggggggggggggg
+gggggggggggggggg
+gggggggggggggggg
+gggggggggggggggg
+gggggggggggggggg
+gggggggggggggggg
+gggggggggggggggg
+gggggggggggggggg
+gggggggggggggggg
+gggggggggggggggg
+gggggggggggggggg
+gggggggggggggggg
+gggggggggggggggg
+gggggggggggggggg
+gggggggggggggggg
+gggggggggggggggg
+  `
 })
 
-setBackground("w")
+setSolids(["p", "r", "0"])
 
-const map = `
-bbbbbbbbbb
-bd.b.....b
-b..b.b...b
-b..b.b...b
-b....b..rb
-bbbbbbbbbb
-`
+setZOrder(["p","r", "0"]);
 
-setSolids(["b", "d"])
+let level = 0;
 
-setZOrder(["d", "g", "r"])
+const levels = {
+  1: map`..........
+..........
+..........
+..........
+..........
+..........
+..........
+..........`,
+  0: map`p..0....0.
+...0....0.
+..0000..0.
+........0.
+..........
+..0000....
+..0....0..
+..0.......`
+}
 
-setMap(map)
+
+setMap(levels[level])
+let player = getFirst("p");
+addSprite("r", player.x - player.dx, player.y - player.dy)
 
 onInput("up", _ => {
-  getTile("d").y -= 1;
+  if (player.y === 0) return;
+  player.y -= 1;
+  // tune.end();
 })
 
 onInput("down", _ => {
-  getTile("d").y += 1;
+  if (player.y === 7) return;
+  player.y += 1;
 })
 
 onInput("left", _ => {
-  getTile("d").x -= 1;
+  if (player.x === 0) return;
+  player.x -= 1;
 })
 
 onInput("right", _ => {
-  getTile("d").x += 1;
+  if (player.x === 9) return;
+  player.x += 1;
 })
 
-/*
-onRight(() => {
-  getTile("d").x += 1;
-})
-
-
-
-window.addEventListener('resize',resize);
-frame.ondragover = allowDrop;
-frame.ondrop = handleDropFile;
-
-function handleRight() {
-  getTile("d").x += 1;
-}
-
-onRight = handleRight;
-
-onRight(handleRight);
-
-onInput("right", handleRight);
-
-onInput({
-  right: handleRight,
-  left: handleLeft,
-  up: handleUp,
-  down: handleDown
-})
-*/
+// in what order should collision, push be applied
 
 afterInput(_ => {
-
-  const swapped = swap(["d", "r"], ["d", "g"]);
-
-  if (swapped) {
-    console.log("you win");
+  if (player.dy !== 0 || player.dx !==0) {
+    addSprite("r", player.x, player.y)
   }
-
+  
+  if (match("r").length === 10*8 - match("0").length) {
+    level++;
+    if (level in levels) setMap(levels[level])
+    else console.log("you win")
+    player = getFirst("p");
+    addSprite(player.x - player.dx, player.y - player.dy, "r")
+  }
 })
-
-

@@ -20,8 +20,12 @@ const STATE = {
   editor: null,
   samples: [
     {
+      name: "test",
+      link: makeSampleLink("test")
+    },
+    {
       name: "maze",
-      link: makeSampleLink("maze-v1")
+      link: makeSampleLink("maze")
     }
   ],
   bitmaps: {},

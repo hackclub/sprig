@@ -68,6 +68,7 @@ Lexi gone on the morning of Wednesday, August 22nd.
     - [ ] Prototype the new PCB-based editor design
   - Leo:
     - [ ] Code folding
+    - [ ] map editor can't render combinations of bitmapKeys
     - [ ] Add local storage
     - [ ] Exporting:
       - [ ] HTML
