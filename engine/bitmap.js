@@ -1,5 +1,5 @@
 // At odds with in-game behavior... doesn't enforce a size with stretching.
-export function spriteTextToImageData(string) {
+export function bitmapTextToImageData(string) {
   const rows = string.trim().split("\n").map(x => x.trim());
   const rowLengths = rows.map(x => x.length);
   const isRect = rowLengths.every(val => val === rowLengths[0])

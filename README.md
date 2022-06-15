@@ -1,274 +1,121 @@
-# A Tile Based Gamelab
+# [👾 Hack Club Game Lab →](#)
 
-We're experimenting with a tile based game engine.
+✨ Version 2: now experimenting with a new tile-based game engine!
 
-The functions for making games are defined in `./engine/gamelab_functions.js`.
+The best way to learn is by making things you care about and sharing them with others.  
+**That's what Game Lab is all about.**
 
-Check out the example games in `./games/`.
+Ever wanted to make a delightful new game? Game Lab is your chance to shine!
 
-You can draw sprites using the pixel editor.
+You should be able to get started in Game Lab with very little experience programming. Even if you're an expert, you should still be able to have fun. We hope you enjoy Game Lab, and we can't wait to see what you make.
 
-Go to `https://localhost:3000/pixel-editor`.
+### ⮑ _**[Click here to launch Game Lab](#)**_ ⮐
+_(and check out [docs.md](/docs.md) to learn more)_
 
-Draw your sprite and click print to get the sprite data string in the console.
+## Philosophy
 
-# The Toolkit
+People learn best when they make things that they care about, which they can then share with others. This learning philosophy is called [constructionism](https://en.wikipedia.org/wiki/Constructionism_(learning_theory)). Game Lab is a microworld, an environment you can use to express yourself while discovering programming.
 
-### setScreenSize(x, y)
+Game Lab could also be considered a minimalist [fantasy console](https://en.wikipedia.org/wiki/Fantasy_video_game_console) sort of like [Pico-8](https://www.lexaloffle.com/pico-8.php).
 
-set the dimensions of the screen
+## Development
 
-### setLegend(spriteMap)
+Join `#gamelab-dev` on the [Hack Club Slack](https://hackclub.com/slack/) to join the development discussion.
 
-```
-setLegend({ "a": new ImageData(...) })
-```
+Game Lab requires a local HTTP server to run in development. Here's how to get it running on your own machine.
 
-create legend of single characters to sprite images
-
-### setMap(string)
+Clone repo:
 
 ```
-const level = `
-  ...
-  aaa
-  .a.
-`
-
-setMap(level)
+$ git clone https://github.com/hackclub/gamelab/
 ```
 
-clears existing tiles and adds the tiles in map
-
-### getCell(x, y)
-
-gets all tiles in a specific cell
-
-### addTile(x, y, type)
-
-adds tile of given type into cell at x and y
-
-### clearTile(x, y)
-
-clears all tiles in x and y
-
-### onInput(type, callback)
-
-types can be "up" "down" "left" "right" "action"
+Start a local HTTP server inside the repo:
 
 ```
-onInput("right", () => {
-  getAll("p")[0].x += 1;
-
-  // match("p")[0][0].x += 1;
-  // get("p").x += 1;
-})
+$ cd gamelab/
+$ git checkout puzzle-engine
+$ python3 -m http.server 3000
 ```
 
-### setSolids(arr)
+Visit <http://localhost:3000> in your web browser and it should work!
 
-```
-setSolids(["p", "r"]);
-```
+## License
 
-solids can't overlap with eachother
-
-### setPushables(pushMap)
-
-```
-setPushables({ "p": ["r"] });
-```
-
-takes map and every key can push types in value
-
-### replace(pattern0, pattern1, matchMap = {})
-
-returns boolean of if it matched
-
-```
-replace("pp", "g.")
-
-const matchMap = { 
-  "_": t => t.type === "p" || t.type === "r", 
-  "#": ["p", "r"] 
-}
-
-replace("p_", "g#", matchMap)
-```
-
-
-### afterInput(callback)
-
-```
-afterInput(_ => {
-  if (swap(["p", "g"], "w").length) {
-    console.log("you win");
-  }
-})
-```
-
-
-
-### getGrid()
-
-returns map of form {
-  x,y: [] // tiles in cell
-}
-
-### sprite(string)
-
-### swap(type, type)
-
-returns number of swaps
-
-```
-swap("a", "b");
-
-// or
-
-swap(["a", "b"], "c");
-
-// or
-
-swap("a", ["b", "c"]);
-
-// or
-
-swap(["a", "b"], ["c", "d"]);
-```
-
-### match(pattern, patternMap = {})
-
-returns array of matches
-
-```
-match("p.");
-
-// or
-
-const matchMap = { 
-  "_": t => t.type === "p" || t.type === "r", 
-}
-
-match("p_", matchMap);
-
-```
-
-### getAll(type)
-
-returns all tiles of given type
-
-### clear()
-
-clears all tiles
-
-### setZOrder(arr)
-
-sets order of rendering
-
-```
-setZOrder(["p", "r"])
-```
-
-### setBackground(type)
-
-sets the default background tile
-only changes the visuals
-
-### The Tile
-
-Tiles have:
-```
-{
-  x
-  y
-  type
-  dx
-  dy
-}
-```
-Can set x y type
-
-dx and dy are cleared afterInputs
-
-to remove tile use tile.remove() or set tile.type = "."
+The Hack Club Game Lab is open source and licensed under the [MIT License](./LICENSE). Fork, remix, and make it your own! Pull requests and other contributions greatly appreciated.
 
 ## Roadmap-ish
 
-**Monday:**
+**Tuesday:** Discuss game gallery / sharing and roadmap.
 
-- [ ] Lexi: Docs
-- [ ] Lexi: README
+**Wednesday:** All about design, design, design, design.
 
-**Tuesday:**
+**Wednesday-Thursday:** Implement the design. Landing page?
 
-- [ ] Figure out game gallery / sharing
-- [ ] Create structure and some copy for marketing site
-- [ ] Lexi: Start on design possibilities
-
-**Wednesday:**
-
-- [ ] Decide on a design language
-
-**Wednesday+:** Design all the things and implement as much as possible.
+**Friday+:** Build the gallery system.
 
 **Tuesday:** Pass on everything, last-minute work.
 
 Lexi gone on the morning of Wednesday, August 22nd.
 
-# TODO
+## Kognotes
 
-### Leo
-- [x] add name editing
-- [ ] add exporting
-  - [x] js
-  - [ ] html
-  - [ ] link
-- [ ] add local storage
-- [x] add file loading
-- [x] add sound playing to engine
-- [x] add sprites to state from evaluation
-
-### Lexi
-- [x] tune editor
-  - [x] text representation
-  - [x] parity with current functionality
-- [ ] change editor triggers to tagged template literals
-  - [x] sprite(`...`) -> sprite`...`
-  - [ ] code folding for above?
-- [x] getting legend from sprites in state
-- [x] fix bug with err-line getting overwritten on input (done jankily)
-
-### Together
-- [ ] refactor
-- [ ] styles
-  - [ ] docs
-
-later
-
-### Other
-- [ ] finalize engine
-- [ ] add samples
-- [ ] upload flow
-- [ ] game gallery
-  - [ ] loading from game gallery
-- [ ] hype site
-- [ ] readme
-- [ ] style editors
-- [ ] establish design language
-- [ ] fold editor outputs after closing editor
-- [ ] editors blink when loading
-- [ ] set color pallete
-
-### Bugs
-- [ ] when typing in browser console get: "Possible side-effect in debug-evaluate"
-  - [ ] add error event handler
-- [ ] tune gets cleared when you try to edit it
-- [ ] Uncaught RangeError: Applying change set to a document with the wrong length
-- [ ] when editting undersized sprite: "unknown color: undefined"
-
-
-
-
-
-
+- Some immediate tasks:
+  - Lexi:
+    - [x] Finish docs
+    - [x] Styles for docs
+    - [x] Basic README
+  - Leo:
+    - [ ] Code folding
+    - [ ] Add local storage
+    - [ ] Exporting:
+      - [ ] HTML
+      - [ ] Link
+- Renames and refactoring:
+  - [x] Sprites, tiles, cells -> bitmaps, sprites, cells
+    - [x] Base change
+    - [x] Sprite `type` to `bitmapKey`
+  - [x] `getFirst` function
+  - [x] Scrap `getGrid`
+  - [ ] Remove set size function
+  - [x] Update parameter names to match docs
+  - [x] Verify controls against docs
+  - [ ] Make internal functions start with `_`
+  - [ ] Make sure everything matches docs in general
+- Features, bugfixes, considerations:
+  - [x] Make sure dx and dy are cleared on every input beginning and ending
+  - [ ] Add wildcard to pattern matching
+  - [ ] BPM isn't a thing anymore, fix that
+  - [ ] Are stacks exclusive or inclusive? Do they replace the whole cell?
+  - [ ] Does patternMap match stack behavior (can you pass a single *or* an array)?
+  - [ ] Why does replacePattern return a boolean and not a count?
+  - [ ] Does `addSprite` add to the front or the back?
+  - [ ] `setMap` supports a sprite combo map too, how should that work?
+  - [ ] Should we get rid of all the old Game Lab remnants?
+  - [ ] In pattern matching, make sure sprites are entirely cleared
+- Warnings and errors:
+  - [x] Warning for creating a sprite with multi-character keys, with period as key, with asterisk as key
+  - [x] Error if bitmap is passed instead of bitmap key (only in `addSprite`, could be in more!)
+  - [ ] Pattern matching:
+    - [x] Error for mismatching size?
+    - [ ] Error for wildcards?
+    - [ ] Error for functions in the replacer?
+  - [ ] Warning when interpolating in tags
+  - [ ] Show warnings in editor
+- Editor environment bugs:
+  - [ ] Editors blink when loading
+  - [ ] When typing in browser console get: "Possible side-effect in debug-evaluate" (add error event handler)
+  - [ ] Tune gets cleared when you try to edit it
+  - [ ] When editing undersized bitmap: "unknown color: undefined" (kog: is this a bug?)
+- Docs fixes:
+  - [ ] GFM blockquote support
+  - [ ] Code highlighting (should match CodeMirror?)
+  - [ ] Fix `>` and `<` in code blocks showing up as `&gt;` and `&lt;`
+  - [ ] Styles for blockquotes
+  - [ ] Styles for images
+  - [ ] Interactive table of contents
+- README sections:
+  - [ ] Backwards compatibility / tile engine
+  - [ ] Example games / gallery
+  - [ ] Since docs have moved, the README feels quite skeleton-like... what can we do to improve this?
+    - [ ] Add images!

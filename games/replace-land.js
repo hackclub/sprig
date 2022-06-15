@@ -8,7 +8,7 @@ const {
   addLayer,
   setTile,
   getTile,
-  addTile,
+  addSprite,
   clearTile,
   everyTile,
   tileContains,

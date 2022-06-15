@@ -19,12 +19,12 @@ const STATE = {
   notifications: [],
   editor: null,
   samples: [
-    { 
+    {
       name: "maze",
       link: makeSampleLink("maze-v1")
     }
   ],
-  sprites: {},
+  bitmaps: {},
 }
 
 window.getState = () => console.log(STATE);
@@ -32,8 +32,8 @@ window.getState = () => console.log(STATE);
 const ACTIONS = {
   INIT: init,
   RUN: run,
-  SET_SPRITES({ sprites }, state) {
-    state.sprites = sprites;
+  SET_BITMAPS({ bitmaps }, state) {
+    state.bitmaps = bitmaps;
   }, 
   UPLOAD(args, state) {
     upload(state.codemirror.state.doc.toString());
@@ -50,7 +50,7 @@ const ACTIONS = {
       const el = document.getElementById("asset-editor");
       el.loadInitValue && el.loadInitValue({
         text: editor.text,
-        sprites: state.sprites
+        bitmaps: state.bitmaps
       });
     }
   },

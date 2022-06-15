@@ -8,7 +8,7 @@ const {
   addLayer,
   setTile,
   getTile,
-  addTile,
+  addSprite,
   clearTile,
   everyTile,
   tileContains,
@@ -182,44 +182,44 @@ makeSolid(["p", "#", "r"])
 
 onTileInput("up", _ => {
 
-  match("_\n#\np", testKey).forEach(arr => {
+  matchPattern("_\n#\np", testKey).forEach(arr => {
     arr[2].y -= 1;
     arr[1].y -= 1;
   })
 
-  match("_\np", testKey).forEach(arr => {
+  matchPattern("_\np", testKey).forEach(arr => {
     arr[1].y -= 1;
   })
 })
 
 onTileInput("down", _ => {
-  match("p\n_", testKey).forEach(arr => {
+  matchPattern("p\n_", testKey).forEach(arr => {
     arr[0].y += 1;
   })
 
-  match("p\n#\n_", testKey).forEach(arr => {
+  matchPattern("p\n#\n_", testKey).forEach(arr => {
     arr[1].y += 1;
     arr[0].y += 1;
   })
 })
 
 onTileInput("left", _ => {
-  match("_p", testKey).forEach(arr => {
+  matchPattern("_p", testKey).forEach(arr => {
     arr[1].x -= 1;
   })
 
-  match("_#p", testKey).forEach(arr => {
+  matchPattern("_#p", testKey).forEach(arr => {
     arr[1].x -= 1;
     arr[2].x -= 1;
   })
 })
 
 onTileInput("right", _ => {
-  match("p_", testKey).forEach(arr => {
+  matchPattern("p_", testKey).forEach(arr => {
     arr[0].x += 1;
   })
 
-  match("p#_", testKey).forEach(arr => {
+  matchPattern("p#_", testKey).forEach(arr => {
     arr[1].x += 1;
     arr[0].x += 1;
   })

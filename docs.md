@@ -28,7 +28,7 @@ setBackground("a")
 
 This won't create a sprite— in other words, it only changes the visuals and won't affect in-game interactions like collisions.
 
-### setMap(string)
+### setMap(level)
 
 Designing a level is like drawing a bitmap:
 
@@ -170,14 +170,14 @@ More complex multi-cell pattern matching enables finding and manipulating multip
 
 // A sprite of type "p" up and to the left of a sprite of type "r":
 `
-p.
-.r
+p*
+*r
 `
 ```
 
-> **Note!** The `.` works as a wildcard, matching sprites of any type or an empty cell. 
+> **Note!** The `*` works as a wildcard, matching sprites of any type or an empty cell. 
 > 
-> If you looked at the textual representation of maps, you'll notice this syntax is familiar. They're like little mini-levels used for building your levels!
+> You can use `.` to only match only an empty cell. If you looked at the textual representation of maps, you'll notice this syntax is familiar.
 
 ### getAll(bitmapKey)
 
@@ -185,58 +185,69 @@ Returns all sprites of the given type. If no bitmap key is specified, it returns
 
 ### getFirst(bitmapKey)
 
-Returns the first sprite of a given type. Shortcut for `getAll(bitmapKey)[0]`. Useful if you know there's only one of a sprite, such as with a player character.
+Returns the first sprite of a given type. Useful if you know there's only one of a sprite, such as with a player character.
 
-### replaceStack(lookFor, replaceWith)
+Shortcut for `getAll(bitmapKey)[0]`.
 
-Find every tile with all the specified sprites, and replace it with a new stack of sprites. The parameters can be either a single bitmap key or an array of bitmap keys.
+### swap(lookFor, replaceWith)
+
+Find every tile containing all the specified sprites and replace each one with a newly created stack of sprites. The parameters can be either a single bitmap key or an array of bitmap keys.
 
 ```js
+// Replace every tile with an "a" with a "b":
 swap("a", "b")
-// or...
-swap(["a", "b"], "c")
-// or...
-swap("a", ["b", "c"])
-// or...
+
+// Replace every tile with an "a" and a "b" with a "c":
+swap(["a", "b"], "c") 
+
+// Replace every tile with an "a" with a "b" and a "c":
+swap("a", ["b", "c"]) 
+
+// Replace every tile with an "a" and a "b" with a "c" and a "d":
 swap(["a", "b"], ["c", "d"])
 ```
 
 ### matchPattern(pattern, patternMap = {})
 
-returns array of array of tiles
+Returns an array of matching cells, each one an array of sprites.
 
 ```js
-match("p.");
-
-// or
-
-const matchMap = { 
-    "_": t => t.type === "p" || t.type === "r", 
-}
-
-match("p_", matchMap);
+matchPattern("p.")
 ```
 
-### replacePattern(pattern0, pattern1, matchMap = {})
+**Advanced usage with pattern maps:**
 
-returns boolean of if it matched
-
-finds pattern0, creates pattern1 out of thin air and replaces it  
-works multiline too
+A map can be specified as a second parameter to create fake keys with custom matchers. It works with arrays to match stacks:
 
 ```js
-replace("pp", "g.")
-
-// not used often
-const matchMap = { 
-    "_": t => t.type === "p" || t.type === "r", 
-    "#": ["p", "r"] 
-}
-
-replace("p_", "g#", matchMap)
+matchPattern("p_", { 
+    "_": ["p", "r"]
+})
 ```
 
-### Music and Sound Effects
+Or, for even more flexibility, a custom function to test sprites:
+
+```js
+matchPattern("+r", { 
+    "+": (s) => s.bitmapKey === "a" || s.bitmapKey === "b"
+})
+```
+
+### replacePattern(lookFor, replaceWith, patternMap = {})
+
+Finds matching cells from the given pattern and replaces them with new cells. Returns a boolean of whether it found a match.
+
+Rules:
+
+- `replaceWith` must be the same size as `lookFor`
+- Wildcards aren't allowed in `replaceWith`
+- If using a pattern map (see above for usage), only stacks can be used in `replaceWith`
+
+```js
+replacePattern("pp", "g.")
+```
+
+## Music and Sound Effects
 
 Game Lab comes bundled with a built-in sound engine and sequencer! You can use this to write background music, or with a high BPM to make sound effects.
 

@@ -7,7 +7,7 @@ const {
   setLegend, 
   setMap, 
   getCell,
-  addTile, 
+  addSprite, 
   clearTile, 
   setSolids,
   setPushables, 
@@ -151,7 +151,7 @@ const levels = {
 
 setMap(levels[level])
 let player = getAllTiles("p")[0];
-addTile(player.x - player.dx, player.y - player.dy, "r")
+addSprite(player.x - player.dx, player.y - player.dy, "r")
 
 onInput("up", _ => {
   if (player.y === 0) return;
@@ -178,7 +178,7 @@ onInput("right", _ => {
 
 afterInput(_ => {
   if (player.dy !== 0 || player.dx !==0) {
-    addTile(player.x, player.y, "r")
+    addSprite(player.x, player.y, "r")
   }
   
   if (getAllTiles("r").length === 10*8 - getAllTiles("0").length) {
@@ -187,7 +187,7 @@ afterInput(_ => {
     if (level in levels) setMap(levels[level])
     else console.log("you win")
     player = getAllTiles("p")[0]
-    addTile(player.x - player.dx, player.y - player.dy, "r")
+    addSprite(player.x - player.dx, player.y - player.dy, "r")
   }
 })
 

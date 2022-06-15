@@ -1,5 +1,5 @@
 import { render, html } from "/libs/uhtml.js";
-import { spriteTextToImageData } from "../engine/sprite.js";
+import { bitmapTextToImageData } from "../engine/bitmap.js";
 import { dispatch } from "../dispatch.js";
 
 const SPRITE_SIZE = 16;
@@ -9,7 +9,7 @@ export function createMapEditor(target) {
     canvas: null,
     width: 10,
     height: 6,
-    activeSprite: "",
+    activeBitmap: "",
     mouseDown: 0,
     updateTextDebounce: null,
     cells: [[]],
@@ -24,12 +24,12 @@ export function createMapEditor(target) {
         <canvas></canvas>
       </div>
       <div class="sprites">
-        ${Object.entries(state.legend).map(([name, sprite]) => html`
-          <button @click=${() => state.activeSprite = name}>
-            <sprite-preview text="${sprite.text}" />
+        ${Object.entries(state.legend).map(([name, bitmap]) => html`
+          <button @click=${() => state.activeBitmap = name}>
+            <bitmap-preview text="${bitmap.text}" />
           </button>
         `)}
-        <button @click=${() => state.activeSprite = "."}></button>
+        <button @click=${() => state.activeBitmap = "."}></button>
       </div>
     </div>
   `;
@@ -70,12 +70,12 @@ export function createMapEditor(target) {
     const [x, y] = [Math.floor(mx / tw), Math.floor(my / th)];
 
     if (state.mouseDown > 0
-      && (state.legend[state.activeSprite] || state.activeSprite === ".")
+      && (state.legend[state.activeBitmap] || state.activeBitmap === ".")
       && x < state.width && y < state.height
       && x >= 0 && y >= 0
-      && (state.cells[y] && state.cells[y][x]) !== state.activeSprite
+      && (state.cells[y] && state.cells[y][x]) !== state.activeBitmap
     ) {
-      state.cells[y][x] = state.activeSprite;
+      state.cells[y][x] = state.activeBitmap;
       draw();
 
       clearTimeout(state.updateTextDebounce);
@@ -108,10 +108,10 @@ export function createMapEditor(target) {
   init();
 
   return {
-    loadInitValue({ text, sprites }) {
+    loadInitValue({ text, bitmaps }) {
       state.legend = Object.fromEntries(
-        Object.entries(sprites)
-          .map(([ key, sprite ]) => [ key, { ...sprite, imageData: spriteTextToImageData(sprite.text) } ])
+        Object.entries(bitmaps)
+          .map(([ key, bitmap ]) => [ key, { ...bitmap, imageData: bitmapTextToImageData(bitmap.text) } ])
       );
 
       state.cells = text.trim().split("\n").map(x => [...x.trim()]);

@@ -5,7 +5,7 @@ import { getTag } from "./util.js";
 import { dispatch } from "../dispatch.js";
 
 const pairs = [
-  [ "sprite", "sprite" ],
+  [ "bitmap", "bitmap" ],
   [ "tune", "sequencer" ],
   [ "map", "map" ]
 ]
@@ -32,7 +32,7 @@ export class OpenButtonWidget extends WidgetType {
     button.textContent = this.label;
     button.addEventListener("click", () => this.onClick());
 
-    if (this.editorType === "sprite") container.appendChild(document.createElement("sprite-preview")).setAttribute("text", this.text);
+    if (this.editorType === "bitmap") container.appendChild(document.createElement("bitmap-preview")).setAttribute("text", this.text);
 
     return container;
   }
@@ -43,7 +43,7 @@ export class OpenButtonWidget extends WidgetType {
     button.addEventListener("click", () => this.onClick());
     container.replaceChild(button, oldButton);
 
-    if (this.editorType === "sprite") container.querySelector("sprite-preview").setAttribute("text", this.text);
+    if (this.editorType === "sprite") container.querySelector("bitmap-preview").setAttribute("text", this.text);
 
     return true;
   }

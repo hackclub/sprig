@@ -1,18 +1,3 @@
-## Kognotes
-
-- Error if sprite is passed instead of sprite key
-- Warning if non-solids are passed to pushables? Or do we want to allow pushables?
-- `getFirst` function
-- Remove set size function
-- Scrap `getGrid`
-- Sprites, tiles, cells, evil distinction, fixx!!!!!!
-  - Bitmaps, sprites, tiles/cells??
-- Make sure dx and dy are cleared on every input beginning and ending
-- Make matchMap function take array
-- Sprite type to bitmap key
-- Warning for creating a sprite with multi-character keys, with period as key
-- BPM isn't a thing anymore, fix that
-
 ## Leo stuff
 
 Some things to consider.
@@ -110,7 +95,7 @@ How to check for win conditions
 
 ------------------------------------------
 
-TODO
+Todo
 
 - finilize engine design
 - Generate sound effects

@@ -8,7 +8,7 @@ const {
   addLayer,
   setTile,
   getTile,
-  addTile,
+  addSprite,
   clearTile,
   everyTile,
   tileContains,
@@ -155,7 +155,7 @@ const levels = {
 
 addLayer(levels[level])
 let player = getTileAll("p")[0];
-addTile(player.x - player.dx, player.y - player.dy, "r")
+addSprite(player.x - player.dx, player.y - player.dy, "r")
 
 onTileInput("up", _ => {
   if (player.y === 0) return;
@@ -182,7 +182,7 @@ onTileInput("right", _ => {
 
 afterInput(_ => {
   if (player.dy !== 0 || player.dx !==0) {
-    addTile(player.x, player.y, "r")
+    addSprite(player.x, player.y, "r")
   }
   
   if (getTileAll("r").length === 10*8 - getTileAll("0").length) {
@@ -191,7 +191,7 @@ afterInput(_ => {
     if (level in levels) addLayer(levels[level])
     else console.log("you win")
     player = getTileAll("p")[0]
-    addTile(player.x - player.dx, player.y - player.dy, "r")
+    addSprite(player.x - player.dx, player.y - player.dy, "r")
   }
 })
 

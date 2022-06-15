@@ -5,6 +5,7 @@ export function addNumberDragging(state, bodyListener) {
   let dragged = false;
   let num, pos_start, pos_end, sigFigs, usePrecision, selectedText;
 
+  // FIXME: ͼ is bad apparently
   bodyListener("mousedown", ".ͼc, .ͼy", (e) => {
     const s = state.codemirror.state;
     const doc = s.doc;

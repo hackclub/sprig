@@ -5,7 +5,7 @@ import { docs } from "./views/docs.js";
 import "./pixel-editor/pixel-editor.js";
 import "./sequencer/sequencer.js";
 import "./map-editor/map-editor.js";
-import "./views/sprite-preview.js";
+import "./views/bitmap-preview.js";
 
 export const view = (state) => html`
   ${menu(state)}
@@ -35,7 +35,7 @@ export const view = (state) => html`
     <div class="asset-editor-content">
       ${
         {
-          "sprite": html`<pixel-editor id="asset-editor"></pixel-editor>`,
+          "bitmap": html`<pixel-editor id="asset-editor"></pixel-editor>`,
           "sequencer": html`<sequencer-editor id="asset-editor"></sequencer-editor>`,
           "map": html`<map-editor id="asset-editor"></map-editor>`,
           [undefined]: ""

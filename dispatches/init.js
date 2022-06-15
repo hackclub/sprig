@@ -33,6 +33,18 @@ export async function init(args, state) {
     state.codemirror.dispatch({ changes })
   }
 
+  fetch("/docs.md").then(res => res.text()).then(docs => {
+    state.docs = docs;
+    dispatch("RENDER");
+  })
+
+  const docsPerc = parseInt(localStorage.getItem("docs-percentage"));
+  if (!isNaN(docsPerc))
+    document.documentElement.style.setProperty("--docs-percentage", `${docsPerc}%`);
+  const verticalBar = parseInt(localStorage.getItem("vertical-bar"));
+  if (!isNaN(verticalBar))
+    document.documentElement.style.setProperty("--vertical-bar", `${verticalBar}%`);
+
   document.querySelector(".game-canvas").focus();
   dispatch("RENDER");
 }

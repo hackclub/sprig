@@ -8,7 +8,7 @@ const {
     addLayer,
     setTile,
     getTile,
-    addTile,
+    addSprite,
     clearTile,
     everyTile,
     tileContains,
@@ -151,13 +151,13 @@ setInterval(() => {
     // const t1 = getTileAll("s")[0];
     // if(t1) {
     //     t1.remove();
-    //     addTile(t1.x, t1.y, "t");
+    //     addSprite(t1.x, t1.y, "t");
     // } else {
     //     const t2 = getTileAll("t")[0];
     //     t2.remove();
-    //     addTile(t2.x, t2.y, "s");
+    //     addSprite(t2.x, t2.y, "s");
     // }
-    if (!replace("t", "s")) replace("s", "t");
+    if (!replacePattern("t", "s")) replacePattern("s", "t");
 }, 500)
 
 onTileInput("up", _ => {
@@ -190,7 +190,7 @@ onTileInput("action0", _ => {
         .filter(t => t)
         .forEach(t => {
             t.remove();
-            addTile(t.x, t.y, t.type === "1" ? "a" : "1")
+            addSprite(t.x, t.y, t.type === "1" ? "a" : "1")
         });
 
     if(getTileAll("1").length === 25) {
