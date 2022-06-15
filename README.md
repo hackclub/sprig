@@ -2,7 +2,8 @@
 
 ✨ Version 2: now experimenting with a new tile-based game engine!
 
-The best way to learn is by making things you care about and sharing them with others. **That's what Game Lab is all about.**
+The best way to learn is by making things you care about and sharing them with others.  
+**That's what Game Lab is all about.**
 
 Ever wanted to make a delightful new game? Game Lab is your chance to shine!
 
