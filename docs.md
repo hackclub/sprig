@@ -16,7 +16,22 @@ setLegend({ "a": bitmap`...` })
 
 To create a new bitmap, type `bitmap` and then two backticks (`` ` ``). Click on the highlighted "bitmap" button to edit your drawing:
 
-Sprite trigger button screenshot
+Sprite trigger button screenshot.
+
+You can create keys for combinations of sprites with `anyOf` or `allOf`:
+
+```js
+setLegend({ 
+    "a": bitmap`...`,
+    "b": bitmap`...`,
+    "C": anyOf("a", "b"),
+    "D": allOf("a", "b")
+})
+```
+
+These combinations are useful when pattern matching or when adding multiple sprites to the same tile in map creation.
+
+`anyOf` is a read-only combination.
 
 ### setBackground(bitmapKey)
 
@@ -108,7 +123,7 @@ Runs after ever input event has finished being handled. Useful for tasks like ch
 
 ```js
 afterInput(() => {
-    if (matchStack(["p", "g"])) {
+    if (match("g").length > 0) {
         console.log("you win")
     }
 })
@@ -121,11 +136,9 @@ Each cell can contain any number of sprites stacked on top of each other.
 Sprites contain:
 ```
 {
-    bitmapKey
+    type
     x
     y
-    dx
-    dy
 }
 ```
 
@@ -135,10 +148,8 @@ The `bitmapKey` can also be changed to update the rendered graphic and collision
 
 ```js
 sprite.y += 1
-sprite.bitmapKey = "p"
+sprite.type = "p"
 ```
-
-> **Note!** You probably won't need `dx` and `dy`, but we expose them for more advanced usage. They contain the *actual* moved distance of the sprite after collisions, and are cleared at the beginning and end of each input handler.
 
 ### getCell(x, y)
 
@@ -151,10 +162,6 @@ Creates a new sprite of the given type and inserts it at the front of a cell.
 ### clearCell(x, y)
 
 Removes all sprites from the specified cell.
-
-### clear()
-
-Clears all cells in the game.
 
 ## Pattern Matching
 
@@ -179,61 +186,25 @@ p*
 > 
 > You can use `.` to only match only an empty cell. If you looked at the textual representation of maps, you'll notice this syntax is familiar.
 
-### getAll(bitmapKey)
+### getAll(type)
 
 Returns all sprites of the given type. If no bitmap key is specified, it returns all the sprites in the game.
 
-### getFirst(bitmapKey)
+### getFirst(type)
 
 Returns the first sprite of a given type. Useful if you know there's only one of a sprite, such as with a player character.
 
-Shortcut for `getAll(bitmapKey)[0]`.
+Shortcut for `getAll(type)[0]`.
 
-### swap(lookFor, replaceWith)
-
-Find every tile containing all the specified sprites and replace each one with a newly created stack of sprites. The parameters can be either a single bitmap key or an array of bitmap keys.
-
-```js
-// Replace every tile with an "a" with a "b":
-swap("a", "b")
-
-// Replace every tile with an "a" and a "b" with a "c":
-swap(["a", "b"], "c") 
-
-// Replace every tile with an "a" with a "b" and a "c":
-swap("a", ["b", "c"]) 
-
-// Replace every tile with an "a" and a "b" with a "c" and a "d":
-swap(["a", "b"], ["c", "d"])
-```
-
-### matchPattern(pattern, patternMap = {})
+### match(pattern)
 
 Returns an array of matching cells, each one an array of sprites.
 
 ```js
-matchPattern("p.")
-```
+match("p.")
+````
 
-**Advanced usage with pattern maps:**
-
-A map can be specified as a second parameter to create fake keys with custom matchers. It works with arrays to match stacks:
-
-```js
-matchPattern("p_", { 
-    "_": ["p", "r"]
-})
-```
-
-Or, for even more flexibility, a custom function to test sprites:
-
-```js
-matchPattern("+r", { 
-    "+": (s) => s.bitmapKey === "a" || s.bitmapKey === "b"
-})
-```
-
-### replacePattern(lookFor, replaceWith, patternMap = {})
+### replace(lookFor, replaceWith)
 
 Finds matching cells from the given pattern and replaces them with new cells. Returns a boolean of whether it found a match.
 
@@ -241,7 +212,6 @@ Rules:
 
 - `replaceWith` must be the same size as `lookFor`
 - Wildcards aren't allowed in `replaceWith`
-- If using a pattern map (see above for usage), only stacks can be used in `replaceWith`
 
 ```js
 replacePattern("pp", "g.")

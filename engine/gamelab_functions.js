@@ -159,7 +159,7 @@ export function init(canvas) {
     set bitmapKey(k) {
       if (k === ".") this.remove(); // hmm
 
-      if (t !== "." && !(t in legend)) throw `"${t}" not in legend.`
+      if (k !== "." && !(k in legend)) throw `"${k}" not in legend.`
 
       this._bitmapKey = k;
       const defaultSprite = new ImageData(new Uint8ClampedArray(16*16*4).fill(0), 16)
