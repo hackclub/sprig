@@ -7,7 +7,7 @@ const {
   setLegend, 
   setMap, 
   getCell,
-  addTile, 
+  addSprite, 
   clearTile, 
   setSolids,
   setPushables, 
@@ -208,14 +208,14 @@ onInput("down", _ => {
 })
 
 onInput("left", _ => {
-  if (match("111p").length) return;
+  if (matchPattern("111p").length) return;
   player().x -= 1;
 
 
 })
 
 onInput("right", _ => {
-  if (match("p111").length) return;
+  if (matchPattern("p111").length) return;
 
   player().x += 1;
 

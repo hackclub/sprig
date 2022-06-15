@@ -220,7 +220,7 @@ matchPattern("p.")
 A map can be specified as a second parameter to create fake keys with custom matchers. It works with arrays to match stacks:
 
 ```js
-match("p_", { 
+matchPattern("p_", { 
     "_": ["p", "r"]
 })
 ```
@@ -228,7 +228,7 @@ match("p_", {
 Or, for even more flexibility, a custom function to test sprites:
 
 ```js
-match("+r", { 
+matchPattern("+r", { 
     "+": (s) => s.bitmapKey === "a" || s.bitmapKey === "b"
 })
 ```
@@ -244,7 +244,7 @@ Rules:
 - If using a pattern map (see above for usage), only stacks can be used in `replaceWith`
 
 ```js
-replace("pp", "g.")
+replacePattern("pp", "g.")
 ```
 
 ## Music and Sound Effects

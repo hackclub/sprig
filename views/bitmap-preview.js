@@ -1,6 +1,6 @@
-import { spriteTextToImageData } from "../engine/sprite.js";
+import { bitmapTextToImageData } from "../engine/bitmap.js";
 
-class SpritePreview extends HTMLElement {
+class BitmapPreview extends HTMLElement {
   constructor() {
     super();
   }
@@ -17,7 +17,7 @@ class SpritePreview extends HTMLElement {
   attributeChangedCallback() {
     if (!this.canvas) return;
 
-    const data = spriteTextToImageData(this.getAttribute("text") ?? "");
+    const data = bitmapTextToImageData(this.getAttribute("text") ?? "");
     this.canvas.width = data.width;
     this.canvas.height = data.height;
     this.canvas.getContext("2d").clearRect(0, 0, data.width, data.height);
@@ -28,4 +28,4 @@ class SpritePreview extends HTMLElement {
   static get observedAttributes() { return [ "text" ]; }
 }
 
-customElements.define("sprite-preview", SpritePreview);
+customElements.define("bitmap-preview", BitmapPreview);

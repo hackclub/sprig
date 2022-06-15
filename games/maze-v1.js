@@ -13,7 +13,7 @@ setScreenSize(500, 500*.8)
 
 
 setLegend({
-  r: sprite`rrrrrrrrrrrrrrrr
+  r: bitmap`rrrrrrrrrrrrrrrr
 rrrrrrrrrrrrrrrr
 rrrrrrrrrrrrrrrr
 rrrrrrrrrrrrrrrr
@@ -29,7 +29,7 @@ rrrrrrrrrrrrrrrr
 rrrrrrrrrrrrrrrr
 rrrrrrrrrrrrrrrr
 rrrrrrrrrrrrrrrr`,
-  g: sprite`
+  g: bitmap`
 ................
 ............r...
 ....rr......r...
@@ -47,7 +47,7 @@ rrrrrrrrrrrrrrrr`,
 ................
 ................
   `,
-  b: sprite`
+  b: bitmap`
 ................
 ................
 ................
@@ -65,7 +65,7 @@ rrrrrrrrrrrrrrrr`,
 ................
 ................
   `,
-  p: sprite`................
+  p: bitmap`................
 ................
 ................
 ................
@@ -81,7 +81,7 @@ rrrrrrrrrrrrrrrr`,
 ................
 ................
 ................`,
-  "0": sprite`
+  "0": bitmap`
 gggggggggggggggg
 gggggggggggggggg
 gggggggggggggggg
@@ -128,8 +128,8 @@ const levels = {
 
 
 setMap(levels[level])
-let player = match("p")[0][0];
-addTile(player.x - player.dx, player.y - player.dy, "r")
+let player = matchPattern("p")[0][0];
+addSprite(player.x - player.dx, player.y - player.dy, "r")
 
 onInput("up", _ => {
   if (player.y === 0) return;
@@ -149,9 +149,7 @@ onInput("left", _ => {
 
 onInput("right", _ => {
   if (player.x === 9) return;
-  // player.x += 1;
-  moveSprite(player, 1, 0)
-
+  player.x += 1;
 })
 
 // in what order should collision, push be applied
@@ -159,15 +157,15 @@ onInput("right", _ => {
 afterInput(_ => {
   console.log(player)
   if (player.dy !== 0 || player.dx !==0) {
-    addTile(player.x, player.y, "r")
+    addSprite(player.x, player.y, "r")
   }
   
-  if (match("r").length === 10*8 - match("0").length) {
+  if (matchPattern("r").length === 10*8 - matchPattern("0").length) {
     level++;
     clear();
     if (level in levels) setMap(levels[level])
     else console.log("you win")
-    player = match("p")[0][0]
-    addTile(player.x - player.dx, player.y - player.dy, "r")
+    player = matchPattern("p")[0][0]
+    addSprite(player.x - player.dx, player.y - player.dy, "r")
   }
 })

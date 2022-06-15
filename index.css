@@ -219,7 +219,7 @@ body {
   background: #1c7ed6;
 }
 
-.cm-open-button sprite-preview {
+.cm-open-button bitmap-preview {
   position: absolute;
   left: 0;
   width: 100px;
@@ -228,6 +228,6 @@ body {
   pointer-events: none;
 }
 
-.cm-open-button:hover sprite-preview {
+.cm-open-button:hover bitmap-preview {
   display: block;
 }

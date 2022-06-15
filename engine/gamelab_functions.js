@@ -1,7 +1,7 @@
 import { TimeKeeper } from "./TimeKeeper.js";
 import { resolveObjs } from "./resolveObjs.js";
 import { GameObject } from "./GameObject.js";
-import { spriteTextToImageData } from "./sprite.js";
+import { bitmapTextToImageData } from "./bitmap.js";
 import { dispatch } from "../dispatch.js";
 import { textToTune } from './playTune.js';
 
@@ -201,13 +201,27 @@ export function init(canvas) {
 
     remove() {
       currentLevel = currentLevel.filter(s => s !== this);
-
       return this;
     }
+  }
 
+  function _checkBitmapKey(bitmapKey) {
+    if (typeof bitmapKey !== "string")
+      throw new Error(`Bitmap key isn't a string! Remember, you can't pass a bitmap directly, you must use setLegend`)
+    if (!(bitmapKey in legend))
+      throw new Error(`Bitmap key "${bitmapKey}" isn't in the legend so I don't know what it is!`)
   }
 
   function setLegend(bitmaps) {
+    for (const key of Object.keys(bitmaps)) {
+      if ([".", "*"].includes(key)) {
+        console.warn(`Legend key "${key}" has a special meaning in some case, you should avoid it`);
+        delete bitmaps[key];
+      } else if (key.length > 1) {
+        console.warn(`Legend key "${key}" is too long, you should only use single-character keys`);
+        delete bitmaps[key];
+      }
+    }
     legend = bitmaps;
     dispatch("SET_BITMAPS", { bitmaps });
   }
@@ -258,6 +272,7 @@ export function init(canvas) {
   }
 
   function addSprite(x, y, bitmapKey) {
+    _checkBitmapKey(bitmapKey);
     const cell = new Sprite(x, y, bitmapKey);
     currentLevel.push(cell);
     return cell;
@@ -271,8 +286,8 @@ export function init(canvas) {
     return currentLevel.filter(cell => cell.x === x && cell.y === y);
   }
 
-  function setSolids(bitmapKey) {
-    solids = bitmapKey;
+  function setSolids(bitmapKeys) {
+    solids = bitmapKeys;
   }
 
   function setPushables(pushMap) {
@@ -311,7 +326,7 @@ export function init(canvas) {
     }
 
     currentLevel
-      .sort((a, b) => zOrder.indexOf(b.bitmapKey) - zOrder.indexOf(a.tybitmapKeype))
+      .sort((a, b) => zOrder.indexOf(b.bitmapKey) - zOrder.indexOf(a.bitmapKey))
       .forEach(sprite => {
         ctx.drawImage(
           sprite.canvas, 
@@ -329,7 +344,7 @@ export function init(canvas) {
     const rows = string.trim().split("\n").map(x => x.trim());
     const rowLengths = rows.map(x => x.length);
     const isRect = allEqual(rowLengths)
-    if (!isRect) console.error("pattern must be rectangle");
+    if (!isRect) throw new Error("Pattern must be a rectangle");
     const w = rows[0].length;
     const h = rows.length;
 
@@ -533,9 +548,9 @@ export function init(canvas) {
     // Tags
     map: makeTag(text => text), // No-op for editor support
     tune: makeTag(text => textToTune(text)),
-    sprite: makeTag(text => ({
+    bitmap: makeTag(text => ({
       text,
-      imageData: spriteTextToImageData(text)
+      imageData: bitmapTextToImageData(text)
     })),
   }
 }

@@ -7,7 +7,7 @@ const {
   setLegend, 
   setMap, 
   getCell,
-  addTile, 
+  addSprite, 
   clearTile, 
   setSolids,
   setPushables, 
@@ -104,7 +104,7 @@ bbbbbbbbbb
 
 setMap(map, { x: [ "b", "c" ] }); // want to be and
 
-match(`aa`, { 
+matchPattern(`aa`, { 
   a: "bx", // want to be or
   a: (t) => t.type === "b" || t.type === "x",
 })

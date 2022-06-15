@@ -7,7 +7,7 @@ const {
   setLegend, 
   setMap, 
   getCell,
-  addTile, 
+  addSprite, 
   clearTile, 
   setSolids,
   setPushables, 

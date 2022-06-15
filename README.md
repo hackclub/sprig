@@ -94,10 +94,10 @@ Lexi gone on the morning of Wednesday, August 22nd.
   - [ ] Should we get rid of all the old Game Lab remnants?
   - [ ] In pattern matching, make sure sprites are entirely cleared
 - Warnings and errors:
-  - [ ] Warning for creating a sprite with multi-character keys, with period as key, with asterisk as key
-  - [ ] Error if sprite is passed instead of sprite key
+  - [x] Warning for creating a sprite with multi-character keys, with period as key, with asterisk as key
+  - [x] Error if bitmap is passed instead of bitmap key (only in `addSprite`, could be in more!)
   - [ ] Pattern matching:
-    - [ ] Error for mismatching size?
+    - [x] Error for mismatching size?
     - [ ] Error for wildcards?
     - [ ] Error for functions in the replacer?
   - [ ] Warning when interpolating in tags
@@ -106,7 +106,7 @@ Lexi gone on the morning of Wednesday, August 22nd.
   - [ ] Editors blink when loading
   - [ ] When typing in browser console get: "Possible side-effect in debug-evaluate" (add error event handler)
   - [ ] Tune gets cleared when you try to edit it
-  - [ ] When editting undersized sprite: "unknown color: undefined" (kog: is this a bug)
+  - [ ] When editing undersized bitmap: "unknown color: undefined" (kog: is this a bug?)
 - Docs fixes:
   - [ ] GFM blockquote support
   - [ ] Code highlighting (should match CodeMirror?)

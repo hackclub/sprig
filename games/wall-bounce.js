@@ -8,7 +8,7 @@ const {
   addLayer,
   setTile,
   getTile,
-  addTile,
+  addSprite,
   clearTile,
   everyTile,
   tileContains,
@@ -125,30 +125,30 @@ const levels = {
 addLayer(levels[level]);
 
 setInterval(() => {
-  replace(`d\n.`,`.\nd`);
+  replacePattern(`d\n.`,`.\nd`);
 
-  replace(
+  replacePattern(
   `.
    u`
   ,`u
     .`)
 
-  replace(
+  replacePattern(
   `d
    r`
   ,`u
     r`)
 
 
-  replace(`r\nu`,`r\nd`);
+  replacePattern(`r\nu`,`r\nd`);
 
-  replace(
+  replacePattern(
   `p
    u`
   ,`.
     u`)
 
-   replace(
+   replacePattern(
   `d
    p`
   ,`d
@@ -177,7 +177,7 @@ onTileInput("right", _ => {
 
 afterInput(_ => {
   if (player.x === 8) {
-    replace("p", "r");
+    replacePattern("p", "r");
   }
 })
 

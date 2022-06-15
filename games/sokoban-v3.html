@@ -11,7 +11,7 @@ const {
   setLegend, 
   setMap, 
   getCell,
-  addTile, 
+  addSprite, 
   clearTile, 
   setSolids,
   setPushables, 
@@ -33,7 +33,7 @@ const {
 setScreenSize(500, 500*.8)
 
 setLegend({
-  "p": sprite`
+  "p": bitmap`
 ................
 ................
 .......0000.....
@@ -52,7 +52,7 @@ setLegend({
 ................
 
     `,
-  "w": sprite`
+  "w": bitmap`
 bbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbb
@@ -70,7 +70,7 @@ bbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbb
   `,
-  "b": sprite`
+  "b": bitmap`
 0000000000000000
 0000000000000000
 0000000000000000
@@ -88,7 +88,7 @@ bbbbbbbbbbbbbbbb
 0000000000000000
 0000000000000000
   `,
-  "#": sprite`
+  "#": bitmap`
 ................
 ................
 ................
@@ -106,7 +106,7 @@ bbbbbbbbbbbbbbbb
 ................
 ................
     `,
-  "g": sprite`
+  "g": bitmap`
 ................
 ................
 ................
@@ -194,7 +194,7 @@ afterInput(_ => {
   const countMatches = swap(["#", "g"], "*");
   swap("*", ["#", "g"]);
 
-  if (countMatches === match("g").length) {
+  if (countMatches === matchPattern("g").length) {
     level++;
     setMap(levels[level]);
   }

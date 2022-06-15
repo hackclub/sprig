@@ -1,6 +1,6 @@
 import { render, html } from "/libs/uhtml.js";
 import { dispatch } from "../dispatch.js";
-import { spriteTextToImageData } from "../engine/sprite.js";
+import { bitmapTextToImageData } from "../engine/bitmap.js";
 
 const hexToRGBA = (hex) => {
   let [r, g, b, a = 255] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
@@ -714,7 +714,7 @@ export function createPixelEditor(target) {
 
   return {
     loadInitValue({ text }) {
-      const imageData = spriteTextToImageData(text);
+      const imageData = bitmapTextToImageData(text);
       for (let i = 0; i < state.gridColors.length; i++) {
         state.gridColors[i] = [
           imageData.data[i * 4],

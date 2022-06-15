@@ -7,7 +7,7 @@ const {
   setLegend, 
   setMap, 
   getCell,
-  addTile, 
+  addSprite, 
   clearTile, 
   setSolids,
   setPushables, 
@@ -188,14 +188,14 @@ onInput("action0", _ => {
     if (move === "d") p2().y += 1;
     if (move === "l") {
       p2().x -= 1;
-      // replace(".p2", "p2.");
-      // replace("gp2", "w..");
+      // replacePattern(".p2", "p2.");
+      // replacePattern("gp2", "w..");
     }
     if (move === "r") {
       p2().x += 1;
 
-      // replace("2p.", ".2p");
-      // replace("2pg", "..w");
+      // replacePattern("2p.", ".2p");
+      // replacePattern("2pg", "..w");
     }
 
     // p2().dx = 0;
@@ -203,7 +203,7 @@ onInput("action0", _ => {
 
     // console.log(p2().dx, getAllTiles("p")[0].dx)
 
-    replace("2\n.", ".\n2");
+    replacePattern("2\n.", ".\n2");
 
     swap(["p", "g"], "w")
   }
@@ -212,7 +212,7 @@ onInput("action0", _ => {
 })
 
 afterInput(_ => {
-  replace("p\n.", ".\np");
+  replacePattern("p\n.", ".\np");
 
   // let movesLeft = maxMoves - movesMade;
   // console.log(movesLeft);
