@@ -47,7 +47,7 @@ export function init(canvas) {
   let legend = {};
   let width = 0;
   let height = 0;
-  let currentLevel = [];
+  let grid = [];
   let tileInputs = {
     up: [],
     down: [],
@@ -93,114 +93,40 @@ export function init(canvas) {
 
     afterInputs.forEach(f => f());
 
-    // clear deltas here?
-    currentLevel.forEach(tile => {
-      tile.dx = 0;
-      tile.dy = 0;
-    });
-
     e.preventDefault();
   });
 
-  const canMoveToPush = (tile, dx, dy) => {
-    const grid = getGrid();
-    const { x, y, type } = tile;
-    const cellKey = `${x+dx},${y+dy}`;
+  const checkBounds = (x, y) => {
+    if (x > width || x < 0 || y < 0 || y > height) throw `Sprite out of bounds.`;
+  }
 
-    const notSolid = !solids.includes(type);
-    const noMovement = dx === 0 && dy === 0;
-    const movingToEmpty = !grid[cellKey];
+  const checkLegend = type => {
+    if (!(type in legend)) throw `Unknown sprite type: ${type}`;
+  }
 
-    if (notSolid || noMovement || movingToEmpty) {
-      tile._x += dx;
-      tile._y += dy;
-      return true;
-    }
+  const addSprite = (x, y, type) => {
+    checkBounds(x, y);
+    checkLegend(type);
 
-    let canMove = true;
+    const i = x+(y*w);
 
-    grid[cellKey].forEach(cell => {
+    const isCombo = legend[type].type !== undefined;
 
-      const isSolid = solids.includes(cell.type);
-      const isPushable = (type in pushable) && pushable[type].includes(cell.type);
-
-      if (isSolid && !isPushable)
-        canMove = false;
-
-      if (isSolid && isPushable) {
-        canMove = canMove && canMoveToPush(cell, dx, dy);
+    if (isCombo) {
+      const comboType = legend[type].type;
+      if (comboType === "and") {
+        grid[i].push(...legend[type].list);
       }
-    })
 
-    if (canMove) {
-      tile._x += dx;
-      tile._y += dy;
+      if (comboType === "or") throw `"anyOf" combinations are read only.`
     }
 
-    return canMove;
-
+    if (type === "*") throw `"*" combinations are read only.`
+    else if (type === ".") clearTile(x, y);
+    else grid[i].push(type);
   }
 
-  class Tile {
-    constructor(x, y, type) {
-      this._type = null;
-      this.type = type;
-      this._x = x;
-      this._y = y;
-      this.dx = 0;
-      this.dy = 0;
-    }
 
-    set type(t) {
-      if (t === ".") t.remove(); // hmm
-
-      if (t !== "." && !(t in legend)) throw `"${t}" not in legend.`
-
-      this._type = t;
-      const defaultSprite = new ImageData(new Uint8ClampedArray(16*16*4).fill(0), 16)
-      const sprite = (t in legend) ? legend[t].imageData : defaultSprite;
-      this.canvas = document.createElement("canvas");
-      this.canvas.width = sprite.width;
-      this.canvas.height = sprite.height;
-
-      this.canvas.getContext("2d").putImageData(
-        sprite, 
-        0,
-        0,
-      );
-    }
-
-    get type() {
-      return this._type;
-    }
-
-    set x(newX) {
-      const dx = newX - this.x;
-      if (canMoveToPush(this, dx, 0)) this.dx = dx;
-      return this;
-    }
-
-    get x() {
-      return this._x;
-    }
-
-    set y(newY) {
-      const dy = newY - this.y;
-      if (canMoveToPush(this, 0, dy)) this.dy = dy;
-      return this;
-    }
-
-    get y() {
-      return this._y;
-    }
-
-    remove() {
-      currentLevel = currentLevel.filter(t => t !== this);
-
-      return this;
-    }
-
-  }
 
   const anyOf = (...args) => ({ type: "or", list: args });
   const allOf = (...args) => ({ type: "and", list: args });
@@ -210,12 +136,11 @@ export function init(canvas) {
     dispatch("SET_SPRITES", { sprites: objectMap });
   }
 
-  const allEqual = arr => arr.every(val => val === arr[0]);
 
   function setMap(string, spriteComboMap = {}) { // could have background and sprites
     // check that level is rectangle
 
-    clear();
+
 
     const rows = string.trim().split("\n").map(x => x.trim());
     const rowLengths = rows.map(x => x.length);
@@ -225,6 +150,8 @@ export function init(canvas) {
     const h = rows.length;
     width = w;
     height = h;
+
+    grid = new Array(w*h).fill([]);
 
     // scale the ctx based on aspect ratio of level
     // tiles should always be square
@@ -247,30 +174,21 @@ export function init(canvas) {
       const x = i%w; 
       const y = Math.floor(i/w);
 
-      types.forEach(t => {
-        const newTile = new Tile(x, y, type);
-        currentLevel.push(newTile)
-      }) 
+      types.forEach(t => addSprite(x, y, t)); 
     }
 
-    return currentLevel;
-  }
-
-  function addTile(x, y, type) { // could take array
-    // if (type === ".") 
-
-    const tile = new Tile(x, y, type);
-    currentLevel.push(tile);
-
-    return tile;
+    return grid;
   }
 
   function clearTile(x, y) {
-    currentLevel = currentLevel.filter(tile => tile.x !== x || tile.y !== y);
+    checkBounds(x, y);
+    const i = w*y+x;
+    grid[i] = [];
   }
 
-  function getCell(x, y) { // 
-    return currentLevel.filter(tile => tile.x === x && tile.y === y);
+  function getTile(x, y) { 
+    checkBounds(x, y);
+    return grid[w*y+x];
   }
 
   function setSolids(arr) {
@@ -282,22 +200,9 @@ export function init(canvas) {
   }
 
   function onInput(type, fn) {
-    if (!(type in tileInputs)) console.error("unknown input type:", type)
+    if (!(type in tileInputs)) console.error("Unknown input type:", type)
     tileInputs[type].push(fn);
   }
-
-  function getGrid() {
-    const overlaps = {};
-    const tiles = currentLevel.map(tile => [ `${tile.x},${tile.y}`, tile ]);
-    tiles.forEach( tile => {
-      const [ key, data ] = tile;
-      if (key in overlaps) overlaps[key].push(data);
-      else overlaps[key] = [data];
-    })
-
-    return overlaps;
-  }
-
 
   function drawTiles() {
 
@@ -350,8 +255,6 @@ export function init(canvas) {
   function matchPattern(patternData, testMap = {}) {
 
     const { width: w, height: h, pattern } = patternData;
-
-    const grid = getGrid();
 
     // if no cell with key then cell empty
     for (let i = 0; i < width*height; i++) {
@@ -446,8 +349,6 @@ export function init(canvas) {
     if (typeof arr === "string") arr = [ arr ];
     if (typeof newTypes === "string") newTypes = [ newTypes ];
 
-    const grid = getGrid();
-
     let matched = false;
     let length = 0;
 
@@ -507,7 +408,6 @@ export function init(canvas) {
     setSolids, // ***, could use collision layers
     setPushables, // ***
     afterInput, // ***
-    getGrid, // **
     map: makeTag(text => text), // No-op for now, here for editor support
     tune: makeTag(text => textToTune(text)),
     sprite: makeTag(text => ({text, imageData: spriteTextToImageData(text)})),

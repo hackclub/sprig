@@ -4,9 +4,10 @@ import { indentWithTab } from "../libs/@codemirror/commands.js";
 import { javascript } from "../libs/@codemirror/lang-javascript.js";
 import booleanCheckbox from './booleanCheckbox.js';
 import editors from './editors.js';
+import { foldRange, foldAll } from "../libs/index-120515b5.js";
 
 export function createEditorView(onUpdate = () => {}) {
-  return new EditorView({
+  const editor = new EditorView({
     state: EditorState.create({
       extensions: [
         basicSetup,
@@ -18,4 +19,9 @@ export function createEditorView(onUpdate = () => {}) {
       ]
     })
   });
+
+  editor.foldRange = foldRange;
+  editor.foldAll = foldAll;
+
+  return editor;
 }

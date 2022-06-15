@@ -3291,8 +3291,10 @@ because the editor state was only just initialized, or because the
 document is so big that the parser decided not to parse it
 entirely).
 */
-const foldAll = view => {
+export const foldAll = view => {
     let { state } = view, effects = [];
+        console.log("state", state);
+
     for (let pos = 0; pos < state.doc.length;) {
         let line = view.lineBlockAt(pos), range = foldable(state, line.from, line.to);
         if (range)
@@ -3303,10 +3305,22 @@ const foldAll = view => {
         view.dispatch({ effects: maybeEnable(view.state, effects) });
     return !!effects.length;
 };
+
+export const foldRange = view => (from, to) => {
+  let {state} = view, effects = []
+  for (let pos = from; pos < to;) {
+    let line = view.lineBlockAt(pos), range = foldable(state, line.from, line.to)
+    if (range) effects.push(foldEffect.of(range))
+    pos = (range ? view.lineBlockAt(range.to) : line).to + 1
+  }
+  if (effects.length) view.dispatch({effects: maybeEnable(view.state, effects)})
+  return !!effects.length
+}
+
 /**
 Unfold all folded code.
 */
-const unfoldAll = view => {
+export const unfoldAll = view => {
     let field = view.state.field(foldState, false);
     if (!field || !field.size)
         return false;

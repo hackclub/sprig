@@ -80,7 +80,10 @@ const ACTIONS = {
     } })
     state.editor.to = state.editor.from + text.length;
 
-    dispatch("RUN");
+    console.log(state.codemirror.foldAll(state.codemirror));
+    console.log(state.codemirror, state.editor);
+    state.codemirror.foldRange(state.editor.from, state.editor.to+1);
+    // dispatch("RUN");
   },
   RENDER(args, state) {
     render(document.querySelector(".root"), view(state));
