@@ -117,3 +117,4 @@ Lexi gone on the morning of Wednesday, August 22nd.
   - [ ] Backwards compatibility / tile engine
   - [ ] Example games / gallery
   - [ ] Since docs have moved, the README feels quite skeleton-like... what can we do to improve this?
+    - [ ] Add images!
