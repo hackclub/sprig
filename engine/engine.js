@@ -80,7 +80,7 @@ export function init(canvas) {
 
     set type(k) {
 
-      if (!(k in legend)) throw `"${k}" not in legend.`
+      if (!(k in legend)) throw new Error(`"${k}" not in legend.`);
 
       this.remove();
       addSprite(k, this._x, this._y);
@@ -195,16 +195,16 @@ export function init(canvas) {
   }
 
   const _checkBounds = (x, y) => {
-    if (x > width || x < 0 || y < 0 || y > height) throw `Sprite out of bounds.`;
+    if (x > width || x < 0 || y < 0 || y > height) throw new Error(`Sprite out of bounds.`);
   }
 
   const _checkLegend = type => {
-    if (!(type in legend)) throw `Unknown sprite type: ${type}`;
+    if (!(type in legend)) throw new Error(`Unknown sprite type: ${type}`);
   }
 
   const addSprite = (type, x, y) => {
     if (type === ".") return;
-    if (type === "*") throw `* wildcards are read-only.`;
+    if (type === "*") throw new Error(`* wildcards are read-only.`);
 
     _checkBounds(x, y);
     _checkLegend(type);
@@ -224,7 +224,7 @@ export function init(canvas) {
         });
       }
 
-      if (comboType === "or") throw `"anyOf" combinations are read only.`
+      if (comboType === "or") throw new Error(`"anyOf" combinations are read only.`);
     } else {
       // create sprite
       const s = new Sprite(type, x, y);
@@ -235,18 +235,27 @@ export function init(canvas) {
   const anyOf = (...args) => ({ type: "or", list: args });
   const allOf = (...args) => ({ type: "and", list: args });
 
-  function setLegend(objectMap) {
-    legend = objectMap;
-    dispatch("SET_BITMAPS", { bitmaps: objectMap });
+  function setLegend(bitmaps) {
+    for (const key of Object.keys(bitmaps)) {
+      if ([".", "*"].includes(key)) {
+        console.warn(`Legend key "${key}" has a special meaning in some case, you should avoid it`);
+        delete bitmaps[key];
+      } else if (key.length > 1) {
+        console.warn(`Legend key "${key}" is too long, you should only use single-character keys`);
+        delete bitmaps[key];
+      }
+    }
+    legend = bitmaps;
+    dispatch("SET_BITMAPS", { bitmaps });
   }
 
   function _getTileImage(type) {
-    if (!(type in legend)) throw `Type not in legend: ${type}`;
+    if (!(type in legend)) throw new Error(`Type not in legend: ${type}`);
 
     const val = legend[type];
     const isCombo = val.type !== undefined;
 
-    if (isCombo) throw `Can not draw combination sprites.`
+    if (isCombo) throw new Error(`Can not draw combination sprites.`);
 
     tempCanvas.width = val.imageData.width;
     tempCanvas.height = val.imageData.height;
@@ -356,12 +365,12 @@ export function init(canvas) {
    
   }
 
-  function parsePattern(string) {
+  function _parsePattern(string) {
     const parsedPattern = [];
     const rows = string.trim().split("\n").map(x => x.trim());
     const rowLengths = rows.map(x => x.length);
     const isRect = _allEqual(rowLengths)
-    if (!isRect) console.error("pattern must be rectangle");
+    if (!isRect) throw new Error("Pattern must be rectangle.");
     const w = rows[0].length;
     const h = rows.length;
 
@@ -375,7 +384,7 @@ export function init(canvas) {
     return result;
   }
 
-  function matchPattern(patternData) {
+  function _matchPattern(patternData) {
 
     const { width: w, height: h, pattern } = patternData;
 
@@ -434,20 +443,21 @@ export function init(canvas) {
   }
 
   function match(pattern) {
-    const p = parsePattern(pattern);
-    const matches = matchPattern(p);
+    const p = _parsePattern(pattern);
+    const matches = _matchPattern(p);
     return matches;
   }
 
   // should this return [], number, or boolean
   function replace(pattern, newPattern) { 
-    const p = parsePattern(pattern);
-    const matches = matchPattern(p);
+    const p = _parsePattern(pattern);
+    const matches = _matchPattern(p);
 
-    const pNew = parsePattern(newPattern);
+    const pNew = _parsePattern(newPattern);
 
     if (p.width !== pNew.width || p.height !== pNew.height) 
-      console.error("Pattern dimensions must match.");
+      throw new Error("Patterns passed to replacePattern must be the same size");
+
 
     matches.forEach(match => {
       match.forEach( (t, i) => {
