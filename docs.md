@@ -139,6 +139,8 @@ Sprites contain:
     type
     x
     y
+    dx
+    dy
 }
 ```
 
@@ -150,6 +152,8 @@ The `bitmapKey` can also be changed to update the rendered graphic and collision
 sprite.y += 1
 sprite.type = "p"
 ```
+
+`dx` and `dy` are cleared afterInput. They can be used to check if your sprite moved and by how much.
 
 ### getCell(x, y)
 

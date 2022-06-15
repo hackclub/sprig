@@ -109,6 +109,7 @@ export function createMapEditor(target) {
 
   return {
     loadInitValue({ text, bitmaps }) {
+      // TODO: if bitmap is or ignore if and then load both images
       state.legend = Object.fromEntries(
         Object.entries(bitmaps)
           .map(([ key, bitmap ]) => [ key, { ...bitmap, imageData: bitmapTextToImageData(bitmap.text) } ])

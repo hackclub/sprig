@@ -74,6 +74,8 @@ export function init(canvas) {
       this._type = type;
       this._x = x;
       this._y = y;
+      this.dx = 0;
+      this.dy = 0;
     }
 
     set type(k) {
@@ -90,7 +92,7 @@ export function init(canvas) {
 
     set x(newX) {
       const dx = newX - this.x;
-      _canMoveToPush(this, dx, 0);
+      if (_canMoveToPush(this, dx, 0)) this.dx = dx;
       return this;
     }
 
@@ -100,7 +102,7 @@ export function init(canvas) {
 
     set y(newY) {
       const dy = newY - this.y;
-      _canMoveToPush(this, 0, dy);
+      if (_canMoveToPush(this, 0, dy)) this.dy = dy;
       return this;
     }
 
@@ -173,6 +175,11 @@ export function init(canvas) {
     if (key === "l") tileInputs["l"].forEach(fn => fn());
 
     afterInputs.forEach(f => f());
+
+    sprites.forEach(s => {
+      s.dx = 0;
+      s.dy = 0;
+    })
 
     e.preventDefault();
   });
