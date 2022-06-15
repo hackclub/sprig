@@ -153,7 +153,7 @@ sprite.y += 1
 sprite.type = "p"
 ```
 
-`dx` and `dy` are cleared afterInput. They can be used to check if your sprite moved and by how much.
+`dx` and `dy` are cleared after `afterInput`. They can be used to check if the sprite moved and by how much.
 
 ### getCell(x, y)
 

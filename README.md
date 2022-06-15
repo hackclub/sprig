@@ -81,26 +81,26 @@ Lexi gone on the morning of Wednesday, August 22nd.
   - [ ] Remove set size function
   - [x] Update parameter names to match docs
   - [x] Verify controls against docs
-  - [ ] Make internal functions start with `_`
+  - [x] Make internal functions start with `_`
   - [ ] Make sure everything matches docs in general
 - Features, bugfixes, considerations:
   - [x] Make sure dx and dy are cleared on every input beginning and ending
-  - [ ] Add wildcard to pattern matching
+  - [x] Add wildcard to pattern matching
   - [ ] BPM isn't a thing anymore, fix that
   - [ ] Are stacks exclusive or inclusive? Do they replace the whole cell?
   - [ ] Does patternMap match stack behavior (can you pass a single *or* an array)?
   - [ ] Why does replacePattern return a boolean and not a count?
   - [ ] Does `addSprite` add to the front or the back?
-  - [ ] `setMap` supports a sprite combo map too, how should that work?
+  - [x] `setMap` supports a sprite combo map too, how should that work?
   - [ ] Should we get rid of all the old Game Lab remnants?
-  - [ ] In pattern matching, make sure sprites are entirely cleared
+  - [x] In pattern matching, make sure sprites are entirely cleared
 - Warnings and errors:
   - [x] Warning for creating a sprite with multi-character keys, with period as key, with asterisk as key
   - [x] Error if bitmap is passed instead of bitmap key (only in `addSprite`, could be in more!)
-  - [ ] Pattern matching:
+  - [x] Pattern matching:
     - [x] Error for mismatching size?
-    - [ ] Error for wildcards?
-    - [ ] Error for functions in the replacer?
+    - [x] Error for wildcards?
+    - [x] Error for functions in the replacer?
   - [ ] Warning when interpolating in tags
   - [ ] Show warnings in editor
 - Editor environment bugs:
