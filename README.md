@@ -65,6 +65,7 @@ Lexi gone on the morning of Wednesday, August 22nd.
     - [x] Finish docs
     - [x] Styles for docs
     - [x] Basic README
+    - [ ] Prototype the new PCB-based editor design
   - Leo:
     - [ ] Code folding
     - [ ] Add local storage
