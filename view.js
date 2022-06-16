@@ -9,6 +9,7 @@ import "./views/bitmap-preview.js";
 
 export const view = (state) => html`
   ${menu(state)}
+
   <div class="main-container">
     <div class="code-container">
       <div id="code-editor"></div>
@@ -16,16 +17,18 @@ export const view = (state) => html`
         ${state.logs.map(x => html`${x}<br>`)}
       </div>
     </div>
-    <div class="vertical-bar" aria-hidden="true"></div>
-    <div class="game-output">
-      <div class="game-container">
-        <canvas class="game-canvas"></canvas>
-      </div>
-      <div class="docs">
-        ${docs(state)}
-      </div>
+
+    <!--<div class="vertical-bar" aria-hidden="true"></div>-->
+    
+    <div class="game-docs-container">
+      <canvas class="game-canvas"></canvas>
+      
+      <!--<div class="docs">
+        $docs(state)}
+      </div>-->
     </div>
   </div>
+
   <div class=${["asset-editor-container", state.editor ? "" : "hide"].join(" ")}>
     <button
       class="close"
