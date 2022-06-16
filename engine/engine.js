@@ -417,13 +417,19 @@ export function init(canvas) {
           })
           if (localMatches.length === targets.length) matchValue = localMatches;
         } else if (legend[type]?.type === "or") {
-          matchValue = [cur.find(x => legend[type].list.includes(x.type))];
+          matchValue = cur.find(x => legend[type].list.includes(x.type));
+          if (matchValue !== undefined) matchValue = [ matchValue ];
+          else match = false;
         } else if (type === "*") {
-          matchValue = [cur.find(x => x.type)];
+          matchValue = cur.find(x => x.type);
+          if (matchValue === undefined) matchValue = [];
+          else matchValue = [matchValue];
         } else if (type === "." && cur.length === 0) {
           matchValue = [];
         } else if (type in legend && legend[type]?.type === undefined) {
-          matchValue = [cur.find(x => x.type === type)];
+          matchValue = cur.find(x => x.type === type);
+          if (matchValue !== undefined) matchValue = [matchValue];
+          else match = false;
         }
 
         match = match && matchValue !== undefined;

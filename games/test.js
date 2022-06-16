@@ -78,6 +78,8 @@ const pat0 = `
 
 const match0 = match(pat0);
 
+console.log("match0", match0);
+
 setZOrder(["b", "a"])
 
 setSolids(["a", "b"])
@@ -86,7 +88,6 @@ setPushables({
   "a": ["b"]
 })
 
-console.log(match0);
 
 onInput("right", () => {
   getFirst("a").x += 1;
