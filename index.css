@@ -1,7 +1,4 @@
 :root {
-  --vertical-bar: 60%;
-  --docs-percentage: 0%;
-
   --pcb-base: #016e3a;
   --pcb-trace: #014a27;
 }
@@ -23,7 +20,6 @@ body {
 .root {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .menu {
@@ -33,13 +29,20 @@ body {
   z-index: 1000; /* why is codemirror such high z */
 }
 
+.menu .spacer {
+  flex: 1;
+}
+
 .menu-item, .dropdown-list > * {
   color: #ffffff;
   padding: 8px 14px;
-  padding-bottom: 16px;
   display: flex;
   align-items: center;
   text-decoration: none;
+}
+
+.menu-item {
+  padding-bottom: 16px;
 }
 
 .menu-name {
@@ -52,6 +55,10 @@ body {
   cursor: pointer;
   background: var(--pcb-trace);
   color: #ffffff;
+}
+
+.dropdown-list > *:hover {
+  background: #000000;
 }
 
 .dropdown-container {
@@ -85,23 +92,17 @@ body {
   gap: 20px;
   position: relative;
   display: flex;
-  overflow-y: hidden;
+  overflow: hidden;
 }
-
-/* .docs, .game-container, .code-container {
-  border: 0.5px solid #ced4da;
-} */
 
 .code-container {
   background: #f8f9fa;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  flex: 2;
+  overflow: hidden;
 }
 
-#code-editor, .cm-editor {
-  flex: 1;
-  overflow-y: auto;
+.cm-editor {
+  height: 100%;
 }
 
 .cm-scroller {
@@ -123,39 +124,33 @@ body {
 }
 
 .game-docs-container {
-  /* flex: 1;
-  height: 100%;
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-width: 300px;
+  overflow: hidden;
+  gap: 30px;
   align-items: center;
-  overflow: hidden; */
-  width: 500px;
+  font-size: 0.9em;
 }
-
-/* .game {
-  background: #e9ecef;
-  width: 100%;
-  height: calc(100% - var(--docs-percentage));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: height 0.2s ease-in-out;
-  overflow: auto;
-} */
 
 .game-canvas {
   display: block;
   width: 100%;
+  max-width: 450px;
   aspect-ratio: 5 / 4;
   background: var(--pcb-trace);
   image-rendering: pixelated;
+  outline: none;
 }
 
 .docs {
   background: #f8f9fa;
-  width: 100%;
   flex: 1;
+  width: 100%;
+  overflow-x: hidden;
   overflow-y: auto;
+  word-wrap: break-word;
   padding: 10px;
 }
 

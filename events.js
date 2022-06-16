@@ -1,6 +1,5 @@
 import { dispatch } from "./dispatch.js";
 import { addDropUpload } from "./events/addDropUpload.js";
-import { addVerticalBarDrag } from "./events/addVerticalBarDrag.js";
 
 const trigger = (e) => e.composedPath()[0];
 const matchesTrigger = (e, selectorString) =>
@@ -26,20 +25,6 @@ export function addEvents(state) {
     }
   });
 
-  bodyListener("mousedown", ".docs-trigger", function (event) {
-    const setPerc = n => {
-      document.documentElement.style.setProperty("--docs-percentage", `${n}%`);
-      localStorage.setItem("docs-percentage", n);
-    };
-    
-    const perc = getComputedStyle(document.documentElement).getPropertyValue("--docs-percentage");
-    if (perc.trim() === "0%")
-      setPerc(65);
-    else
-      setPerc(0);
-  });
-
-  addVerticalBarDrag(state, bodyListener);
   // addNumberDragging(state, bodyListener);
   addDropUpload(state, bodyListener);
 }

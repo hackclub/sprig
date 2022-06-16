@@ -17,15 +17,13 @@ export const view = (state) => html`
         ${state.logs.map(x => html`${x}<br>`)}
       </div>
     </div>
-
-    <!--<div class="vertical-bar" aria-hidden="true"></div>-->
     
     <div class="game-docs-container">
       <canvas class="game-canvas"></canvas>
       
-      <!--<div class="docs">
-        $docs(state)}
-      </div>-->
+      <div class="docs">
+        ${docs(state)}
+      </div>
     </div>
   </div>
 
@@ -58,8 +56,11 @@ const menu = (state) => html`
       class="menu-item menu-name" 
       contenteditable 
       spellcheck="false"
-      @blur=${e => dispatch("SET_NAME", { name: e.target.innerText })}>${state.name}</div>
-    <a class="menu-item" href="https://www.github.com/hackclub/gamelab">github</a>
+      @blur=${e => dispatch("SET_NAME", { name: e.target.innerText })}
+    >
+      ${state.name}
+    </div>
+
     <div class="menu-item dropdown-container">
       export
       <div class="dropdown-list">
@@ -74,7 +75,6 @@ const menu = (state) => html`
         ${state.samples.map(drawSample)}
       </div>
     </div>
-    <div class="menu-item docs-trigger">docs</div>
     <div 
       class="menu-item" 
       @click=${() => dispatch("UPLOAD")}>
@@ -85,14 +85,16 @@ const menu = (state) => html`
       @click=${() => dispatch("RUN")}>
       run
     </div>
+
+    <div class="spacer" aria-hidden="true" />
+
+    <a class="menu-item" href="https://github.com/hackclub/gamelab/">github</a>
   </div>
 `
 
 const drawSample = ({ name, link }) => {
   return html`
-    <a 
-      class="menu-item" 
-      href=${link}>
+    <a href=${link}>
       ${name}
     </a>
   `

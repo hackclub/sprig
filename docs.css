@@ -14,7 +14,7 @@ h2 {
   margin: 0;
   font-size: 1.75em;
   margin-top: 40px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 h3 {
@@ -25,7 +25,7 @@ h3 {
 
 p, ul, pre {
   color: #495057;
-  margin: 10px 0;
+  margin: 16px 0;
   line-height: 1.5;
 }
 
@@ -43,4 +43,5 @@ code {
 pre code {
   display: block;
   padding: 12px 16px;
+  overflow: auto;
 }
