@@ -10,7 +10,7 @@ h1 {
 }
 
 h2 {
-  color: #c2255c;
+  color: var(--pcb-base);
   margin: 0;
   font-size: 1.75em;
   margin-top: 40px;
