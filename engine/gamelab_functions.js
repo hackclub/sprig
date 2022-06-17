@@ -4,6 +4,7 @@ import { dispatch } from "../dispatch.js";
 import { textToTune } from './playTune.js';
 
 export function init(canvas) {
+
   // Remove event listeners
   let newCanvas = canvas.cloneNode(true);
   canvas.parentNode.replaceChild(newCanvas, canvas);
@@ -25,7 +26,6 @@ export function init(canvas) {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     drawTiles();
-
     animationId = window.requestAnimationFrame(gameloop);
   }
 

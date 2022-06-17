@@ -122,5 +122,9 @@ Lexi gone on the morning of Wednesday, August 22nd.
   - [ ] Since docs have moved, the README feels quite skeleton-like... what can we do to improve this?
     - [ ] Add images!
 - Editor polishes:
+  - [ ] Screen sizes
+  - [ ] Non-cursor interactions for ipad and chromebook
+  - [ ] Full screen the game
+  - [ ] Feedback for user inputs
   - [ ] Across all editors, right click to erase
   - [ ] Make sure if the mouse is unpressed outside an editor canvas that's registered (we need global listeners and proper cleanups to prevent memory leaks)

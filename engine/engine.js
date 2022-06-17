@@ -2,6 +2,9 @@ import { bitmapTextToImageData } from "./bitmap.js";
 import { dispatch } from "../dispatch.js";
 import { textToTune } from './playTune.js';
 
+
+let cur = null;
+
 export function init(canvas) {
   // remove event listeners
   let newCanvas = canvas.cloneNode(true);
@@ -19,7 +22,7 @@ export function init(canvas) {
   let animationId;
 
   function gameloop() {
-
+    
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -31,6 +34,10 @@ export function init(canvas) {
   function end() {
     window.cancelAnimationFrame(animationId);
   }
+
+  if (cur) cur();
+  cur = end;
+
 
   window.requestAnimationFrame(gameloop);
 
