@@ -27,12 +27,14 @@ export const view = (state) => html`
     </div>
   </div>
 
-  <div class=${["asset-editor-container", state.editor ? "" : "hide"].join(" ")}>
-    <button
-      class="close"
-      @click=${() => dispatch("SET_EDITOR", null)}>
-      close
-    </button>
+  <div class=${["asset-editor-container", state.editor ? "" : "hide"].join(" ")}  @click=${(event) => {
+    // Click on overlay or close button:
+    for (const item of event.composedPath()) {
+      if (item.classList && item.classList.contains("asset-editor-content")) return;
+    }
+    dispatch("SET_EDITOR", null)
+  }}>
+    <button class="close"><ion-icon icon="close" /></button>
     <div class="asset-editor-content">
       ${
         {
@@ -81,14 +83,17 @@ const menu = (state) => html`
       upload
     </div>
     <div 
-      class="menu-item" 
+      class="menu-item run" 
       @click=${() => dispatch("RUN")}>
+      <ion-icon name="play" style="margin-right: 6px;" />
       run
     </div>
 
     <div class="spacer" aria-hidden="true" />
 
-    <a class="menu-item" href="https://github.com/hackclub/gamelab/">github</a>
+    <a class="menu-item" href="https://github.com/hackclub/gamelab/">
+      <ion-icon name="logo-github" />
+    </a>
   </div>
 `
 
