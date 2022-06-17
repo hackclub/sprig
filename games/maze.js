@@ -112,13 +112,14 @@ const levels = {
   1: map`..........
 ..........
 ..........
-..........
+....p.....
 ..........
 ..........
 ..........
 ..........`,
   0: map`p..0....0.
 ...0....0.
+..0000..0.
 ..0000..0.
 ........0.
 ..........
@@ -133,23 +134,19 @@ let player = getFirst("p");
 addSprite("r", player.x - player.dx, player.y - player.dy)
 
 onInput("up", _ => {
-  if (player.y === 0) return;
   player.y -= 1;
   // tune.end();
 })
 
 onInput("down", _ => {
-  if (player.y === 7) return;
   player.y += 1;
 })
 
 onInput("left", _ => {
-  if (player.x === 0) return;
   player.x -= 1;
 })
 
 onInput("right", _ => {
-  if (player.x === 9) return;
   player.x += 1;
 })
 

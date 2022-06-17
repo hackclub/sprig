@@ -52,8 +52,11 @@ export function init(canvas) {
 
   // tile gamelab
   let legend = {};
-  let width = 0;
-  let height = 0;
+  let dimensions = {
+    width: 0,
+    height: 0,
+    maxTileDim: 0,
+  }
   let sprites = [];
   let tileInputs = {
     up: [],
@@ -126,6 +129,7 @@ export function init(canvas) {
 
   const _canMoveToPush = (sprite, dx, dy) => {
     const { x, y, type } = sprite;
+    const { width, height } = dimensions;
     const i = (x+dx)+(y+dy)*width;
 
     const inBounds = (x+dx < width && x+dx >= 0 && y+dy < height && y+dy >= 0);
@@ -192,6 +196,8 @@ export function init(canvas) {
   });
 
   const getGrid = () => {
+    const { width, height } = dimensions;
+
     const grid = new Array(width*height).fill(0).map(x => []);
     sprites.forEach(s => {
       const i = s.x+s.y*width;
@@ -202,6 +208,8 @@ export function init(canvas) {
   }
 
   const _checkBounds = (x, y) => {
+    const { width, height } = dimensions;
+
     if (x > width || x < 0 || y < 0 || y > height) throw new Error(`Sprite out of bounds.`);
   }
 
@@ -215,6 +223,8 @@ export function init(canvas) {
 
     _checkBounds(x, y);
     _checkLegend(type);
+
+    const { width, height } = dimensions;
 
     const i = x+(y*width);
 
@@ -287,8 +297,8 @@ export function init(canvas) {
     if (!isRect) console.error("Level must be rect.");
     const w = rows[0].length;
     const h = rows.length;
-    width = w;
-    height = h;
+    dimensions.width = w;
+    dimensions.height = h;
 
     // const grid = new Array(w*h).fill(0).map(x => []);
 
@@ -298,8 +308,8 @@ export function init(canvas) {
     // tiles should always be square
     // find max tile width to fit
 
-    maxTileDim = Math.min(canvas.width/w, canvas.height/h);
-    
+    const maxTileDim = Math.min(canvas.width/w, canvas.height/h);
+    dimensions.maxTileDim = maxTileDim;
     // should this adjust screen size?
     setScreenSize(w*maxTileDim, h*maxTileDim);
 
@@ -322,7 +332,7 @@ export function init(canvas) {
   }
 
   function getTile(x, y) { 
-    return getGrid()[width*y+x];
+    return getGrid()[dimensions.width*y+x];
   }
 
   function setSolids(arr) {
@@ -340,6 +350,7 @@ export function init(canvas) {
 
   function drawTiles() {
     const grid = getGrid();
+    const { width, maxTileDim } = dimensions;
     for (let i = 0; i < grid.length; i++) {
       const x = i%width; 
       const y = Math.floor(i/width); 
@@ -392,7 +403,7 @@ export function init(canvas) {
   }
 
   function _matchPattern(patternData) {
-
+    const { width, height } = dimensions;
     const { width: w, height: h, pattern } = patternData;
 
     let allMatches = [];
