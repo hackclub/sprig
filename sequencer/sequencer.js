@@ -90,9 +90,9 @@ function tuneToCells(tune) {
     for (let i = 0; i < rest.length; i += 3) {
       const [instrument, note] = rest.slice(i, i + 2);
       const name = typeof note === "string"
-        ? name.toLowerCase()
+        ? note.toLowerCase()
         : Object.entries(tones).find(([, v]) => v === note)[0].toLowerCase();
-      const y = Object.entries(noteMap).find(([, v]) => v === note)[0];
+      const y = Object.entries(noteMap).find(([, v]) => v === name)[0];
       cells[`${x}_${y}`] = instrument;
     }
   }
