@@ -32,7 +32,7 @@ export function createPixelEditor(target) {
     canvasSize: [1, 1],
     maxCanvasSize: 350,
     selected: [],
-    tool: "draw",
+    tool: "brush",
     color: hexToRGBA("#000000"),
     mousedown: false,
     mousedownPt: [0, 0],
@@ -157,23 +157,14 @@ export function createPixelEditor(target) {
     stateUpdate();
   };
 
-  const renderTool = (toolName, state) => html`
+  const renderTool = ([ toolName, icon ], state) => html`
     <button
-      class=${[state.tool === toolName ? "selected-tool" : ""].join(" ")}
-      @click=${() => {
-        state.tool = toolName;
-        r();
-      }}
-      style="
-        display: flex; 
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: min-content;
-      "
-      title="${toolName}"
+      class=${[state.tool === toolName ? "active" : ""].join(" ")}
+      @click=${() => { state.tool = toolName; r(); }}
+      title=${toolName}
     >
-      ${toolName}
+      <ion-icon name=${icon} />
+      <div>${toolName}</div>
     </button>
   `;
 
@@ -192,11 +183,16 @@ export function createPixelEditor(target) {
       </div>
       <div class="toolbox">
         <div class="tools">
-          ${["draw", "circle", "rectangle", "line", "bucket", "move"].map(
-            (name) => renderTool(name, state)
-          )}
-          <button
-            @click=${() => {
+          ${[
+            ["brush", "brush"],
+            ["line", "arrow-forward"],
+            ["circle", "ellipse"],
+            ["box", "square"],
+            ["bucket", "color-fill"],
+            ["move", "move"],
+          ].map((tool) => renderTool(tool, state))}
+          <!-- <button
+            @click=$() => {
               if (state.undoRedoStack.length === 0) return;
               const grid = JSON.parse(state.undoRedoStack.pop());
               state.gridColors.forEach((arr, i) => {
@@ -204,20 +200,13 @@ export function createPixelEditor(target) {
               });
               stateUpdate();
             }}
-            style="
-              display: flex; 
-              flex-direction: column;
-              justify-content: center;
-              align-items: center;
-              height: min-content;
-            "
             title="undo"
           >
             undo
           </button>
           <button
             title="export"
-            @click=${() => {
+            @click=$() => {
               const canvas = target.querySelector("#offscreen-canvas");
               drawCanvasNoBg(canvas);
               const image = canvas.toDataURL();
@@ -228,7 +217,7 @@ export function createPixelEditor(target) {
             }}
           >
             export
-          </button>
+          </button> -->
         </div>
 
         ${drawColorsButtons(state)}
@@ -239,28 +228,28 @@ export function createPixelEditor(target) {
   const drawColorsButtons = (state) => html`
     <div class="colors">
       <div 
-        style="border: 2px dashed black; height: 30px; width: 30px; background: black;"
-        class=${RGBA_to_hex(state.color) === "#000000ff" ? "selected-tool" : ""}
+        class=${RGBA_to_hex(state.color) === "#000000ff" ? "active" : ""}
+        style="background-color: #000000ff"
         @click=${() => { state.color = [ 0, 0, 0, 255 ]; r(); }}>
       </div>
       <div 
-        style="border: 2px dashed black; height: 30px; width: 30px; background: #ff0000ff;"
-        class=${RGBA_to_hex(state.color) === "#ff0000ff" ? "selected-tool" : ""}
+        class=${RGBA_to_hex(state.color) === "#ff0000ff" ? "active" : ""}
+        style="background-color: #ff0000ff"
         @click=${() => { state.color = [ 255, 0, 0, 255 ]; r(); }}>
       </div>
       <div 
-        style="border: 2px dashed black; height: 30px; width: 30px; background: #00ff00ff;"
-        class=${RGBA_to_hex(state.color) === "#00ff00ff" ? "selected-tool" : ""}
+        class=${RGBA_to_hex(state.color) === "#00ff00ff" ? "active" : ""}
+        style="background-color: #00ff00ff"
         @click=${() => { state.color = [ 0, 255, 0, 255 ]; r(); }}>
       </div>
-      <div 
-        style="border: 2px dashed black; height: 30px; width: 30px; background: #0000ffff;"
-        class=${RGBA_to_hex(state.color) === "#0000ffff" ? "selected-tool" : ""}
+      <div
+        class=${RGBA_to_hex(state.color) === "#0000ffff" ? "active" : ""}
+        style="background-color: #0000ffff"
         @click=${() => { state.color = [ 0, 0, 255, 255 ]; r(); }}>
       </div>
       <div 
-        style="border: 2px dashed black; height: 30px; width: 30px; background: #00000000;"
-        class=${RGBA_to_hex(state.color) === "#00000000" ? "selected-tool" : ""}
+        class=${RGBA_to_hex(state.color) === "#00000000" ? "active" : ""}
+        style="background-color: #00000000"
         @click=${() => { state.color = [ 0, 0, 0, 0 ]; r(); }}>
       </div>
     </div>
@@ -329,7 +318,7 @@ export function createPixelEditor(target) {
   };
 
   const tools_mousedown = {
-    draw: (x, y) => {
+    brush: (x, y) => {
       const [gridW, gridH] = state.gridSize;
       state.gridColors[gridW * y + x] = state.color;
     },
@@ -408,7 +397,7 @@ export function createPixelEditor(target) {
   };
 
   const tools_mousemove = {
-    draw: (x, y) => {
+    brush: (x, y) => {
       if (!state.mousedown) return;
       const [gridW, gridH] = state.gridSize;
 
@@ -420,7 +409,7 @@ export function createPixelEditor(target) {
 
       state.mousedownPt = state.currentPt;
     },
-    rectangle: (x, y) => {
+    box: (x, y) => {
       state.tempGridColors = state.tempGridColors.fill(null);
       if (!state.mousedown) return;
       const [gridW, gridH] = state.gridSize;

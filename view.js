@@ -9,6 +9,7 @@ import "./views/bitmap-preview.js";
 
 export const view = (state) => html`
   ${menu(state)}
+
   <div class="main-container">
     <div class="code-container">
       <div id="code-editor"></div>
@@ -16,22 +17,24 @@ export const view = (state) => html`
         ${state.logs.map(x => html`${x}<br>`)}
       </div>
     </div>
-    <div class="vertical-bar" aria-hidden="true"></div>
-    <div class="game-output">
-      <div class="game-container">
-        <canvas class="game-canvas"></canvas>
-      </div>
+    
+    <div class="game-docs-container">
+      <canvas class="game-canvas"></canvas>
+      
       <div class="docs">
         ${docs(state)}
       </div>
     </div>
   </div>
-  <div class=${["asset-editor-container", state.editor ? "" : "hide"].join(" ")}>
-    <button
-      class="close"
-      @click=${() => dispatch("SET_EDITOR", null)}>
-      close
-    </button>
+
+  <div class=${["asset-editor-container", state.editor ? "" : "hide"].join(" ")}  @click=${(event) => {
+    // Click on overlay or close button:
+    for (const item of event.composedPath()) {
+      if (item.classList && item.classList.contains("asset-editor-content")) return;
+    }
+    dispatch("SET_EDITOR", null)
+  }}>
+    <button class="close"><ion-icon icon="close" /></button>
     <div class="asset-editor-content">
       ${
         {
@@ -55,8 +58,11 @@ const menu = (state) => html`
       class="menu-item menu-name" 
       contenteditable 
       spellcheck="false"
-      @blur=${e => dispatch("SET_NAME", { name: e.target.innerText })}>${state.name}</div>
-    <a class="menu-item" href="https://www.github.com/hackclub/gamelab">github</a>
+      @blur=${e => dispatch("SET_NAME", { name: e.target.innerText })}
+    >
+      ${state.name}
+    </div>
+
     <div class="menu-item dropdown-container">
       export
       <div class="dropdown-list">
@@ -71,25 +77,29 @@ const menu = (state) => html`
         ${state.samples.map(drawSample)}
       </div>
     </div>
-    <div class="menu-item docs-trigger">docs</div>
     <div 
       class="menu-item" 
       @click=${() => dispatch("UPLOAD")}>
       upload
     </div>
     <div 
-      class="menu-item" 
+      class="menu-item run" 
       @click=${() => dispatch("RUN")}>
+      <ion-icon name="play" style="margin-right: 6px;" />
       run
     </div>
+
+    <div class="spacer" aria-hidden="true" />
+
+    <a class="menu-item" href="https://github.com/hackclub/gamelab/">
+      <ion-icon name="logo-github" />
+    </a>
   </div>
 `
 
 const drawSample = ({ name, link }) => {
   return html`
-    <a 
-      class="menu-item" 
-      href=${link}>
+    <a href=${link}>
       ${name}
     </a>
   `

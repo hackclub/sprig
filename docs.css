@@ -10,11 +10,11 @@ h1 {
 }
 
 h2 {
-  color: #c2255c;
+  color: var(--pcb-base);
   margin: 0;
   font-size: 1.75em;
   margin-top: 40px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 h3 {
@@ -25,12 +25,12 @@ h3 {
 
 p, ul, pre {
   color: #495057;
-  margin: 10px 0;
+  margin: 16px 0;
   line-height: 1.5;
 }
 
 code, pre {
-  font-family: "Fira Code", monospace;
+  font-family: "B612 Mono", monospace;
   font-size: 0.9375em;
   background: #e9ecef;
   color: #343a40;
@@ -43,4 +43,5 @@ code {
 pre code {
   display: block;
   padding: 12px 16px;
+  overflow: auto;
 }

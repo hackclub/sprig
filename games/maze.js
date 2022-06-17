@@ -1,3 +1,4 @@
+map``
 setScreenSize(500, 500*.8)
 
 // playTune([

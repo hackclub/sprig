@@ -77,7 +77,7 @@ setMap(levels[1])
 Solid sprites can't overlap with each other. This is useful for, for example, creating walls— both the wall and player bitmaps can be marked as solid to enable collisions between them:
 
 ```js
-setSolids(["p", "w"]);
+setSolids(["p", "w"])
 ```
 
 ### setPushables(pushMap)
@@ -85,7 +85,7 @@ setSolids(["p", "w"]);
 Want sprites to be able to push each other around? Use `setPushables` to map a bitmap key to a list of bitmaps that it can push around:
 
 ```js
-setPushables({ "p": ["r"] });
+setPushables({ "p": ["r"] })
 ```
 
 > **Watch out!** Make sure everything you pass to `setPushables` is also marked as a solid or they won't be pushed around.

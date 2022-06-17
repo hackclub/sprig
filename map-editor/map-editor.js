@@ -24,12 +24,16 @@ export function createMapEditor(target) {
         <canvas></canvas>
       </div>
       <div class="sprites">
-        ${Object.entries(state.legend).map(([name, bitmap]) => html`
-          <button @click=${() => state.activeBitmap = name}>
+        ${Object.entries(state.legend).map(([name, bitmap]) => html`<button
+            class=${state.activeBitmap === name ? "active" : ""}
+            @click=${() => { state.activeBitmap = name; r() }}
+          >
             <bitmap-preview text="${bitmap.text}" />
           </button>
-        `)}
-        <button @click=${() => state.activeBitmap = "."}></button>
+        `)}<button
+          class=${state.activeBitmap === "." ? "active" : ""}
+          @click=${() => { state.activeBitmap = "."; r() }}
+        />
       </div>
     </div>
   `;
@@ -38,6 +42,22 @@ export function createMapEditor(target) {
   const resizeCanvas = () => {
     state.canvas.width = state.width * SPRITE_SIZE;
     state.canvas.height = state.height * SPRITE_SIZE;
+
+    if (state.cells.length < state.height) {
+      while (state.cells.length < state.height) {
+        state.cells.push([]);
+      }
+    } else if (state.cells.length > state.height) {
+      state.cells = state.cells.slice(0, state.height);
+    }
+
+    for (let y = 0; y < state.height; y++) {
+      if (state.cells[y].length < state.width) {
+        state.cells[y] = state.cells[y].concat(new Array(state.width - state.cells[y].length).fill("."));
+      } else if (state.cells[y].length > state.width) {
+        state.cells[y] = state.cells[y].slice(0, state.width);
+      }
+    }
   };
 
   const updateText = () => {
@@ -112,15 +132,18 @@ export function createMapEditor(target) {
       // TODO: if bitmap is or ignore if and then load both images
       state.legend = Object.fromEntries(
         Object.entries(bitmaps)
+          .filter(([, bitmap]) => !!bitmap.text)
           .map(([ key, bitmap ]) => [ key, { ...bitmap, imageData: bitmapTextToImageData(bitmap.text) } ])
       );
-
-      state.cells = text.trim().split("\n").map(x => [...x.trim()]);
-      state.width = state.cells[0].length;
-      state.height = state.cells.length;
+      
+      if (text) {
+        state.cells = text.trim().split("\n").map(x => [...x.trim()]);
+        state.width = state.cells[0].length;
+        state.height = state.cells.length;
+      }
+      
       resizeCanvas();
       draw();
-
       r();
     },
     end() {

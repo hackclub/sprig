@@ -50,7 +50,7 @@ const ACTIONS = {
   SET_EDITOR(editor, state) {
     state.editor = editor;
     dispatch("RENDER");
-    if (editor?.text) {
+    if (typeof editor?.text === "string") {
       const el = document.getElementById("asset-editor");
       el.loadInitValue && el.loadInitValue({
         text: editor.text,
