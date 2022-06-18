@@ -86,7 +86,6 @@ function tuneToCells(tune) {
   const cells = {};
   let x = 0;
   for (const [duration, ...rest] of tune) {
-    if (!rest.length) x += duration / beatTime;
     for (let i = 0; i < rest.length; i += 3) {
       const [instrument, note] = rest.slice(i, i + 2);
       const name = typeof note === "string"
@@ -95,7 +94,14 @@ function tuneToCells(tune) {
       const y = Object.entries(noteMap).find(([, v]) => v === name)[0];
       cells[`${x}_${y}`] = instrument;
     }
+
+    if (!rest.length) {
+      x += duration / beatTime;
+    } else {
+      x++;
+    }
   }
+  return cells;
 }
 
 function downloadText(filename, text) {
