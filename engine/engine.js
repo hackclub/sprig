@@ -19,10 +19,8 @@ export function init(canvas) {
 
   canvas.setAttribute("tabindex", "1");
 
-  let animationId;
 
   function gameloop() {
-    
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -39,11 +37,19 @@ export function init(canvas) {
   cur = end;
 
 
-  window.requestAnimationFrame(gameloop);
+   let animationId = window.requestAnimationFrame(gameloop);
 
   function setScreenSize(w, h) {
     canvas.width = w;
     canvas.height = h;
+    if (h*5/4 > w) {
+      canvas.style["height"] = "100%";
+      canvas.style.removeProperty("width");
+    } else {
+      canvas.style["width"] = "100%";
+      canvas.style.removeProperty("height");
+    }
+    // canvas.style["aspect-ratio"] = w/h;
 
     ctx.webkitImageSmoothingEnabled = false;
     ctx.mozImageSmoothingEnabled = false;
@@ -252,6 +258,8 @@ export function init(canvas) {
   const anyOf = (...args) => ({ type: "or", list: args });
   const allOf = (...args) => ({ type: "and", list: args });
 
+  let cachedTileImages = {};
+
   function setLegend(bitmaps) {
     for (const key of Object.keys(bitmaps)) {
       if ([".", "*"].includes(key)) {
@@ -263,9 +271,11 @@ export function init(canvas) {
       }
     }
     legend = bitmaps;
+    cachedTileImages = {};
     dispatch("SET_BITMAPS", { bitmaps });
   }
 
+  
   function _getTileImage(type) {
     if (!(type in legend)) throw new Error(`Type not in legend: ${type}`);
 
@@ -274,16 +284,28 @@ export function init(canvas) {
 
     if (isCombo) throw new Error(`Can not draw combination sprites.`);
 
-    tempCanvas.width = val.imageData.width;
-    tempCanvas.height = val.imageData.height;
+    if (!(type in cachedTileImages)) {
+      const c = document.createElement("canvas");
+      c.width = val.imageData.width;
+      c.height = val.imageData.height;
 
-    tempCanvas.getContext("2d").putImageData(
-      val.imageData, 
-      0,
-      0,
-    );
+      const ctx = c.getContext("2d");
+
+      ctx.webkitImageSmoothingEnabled = false;
+      ctx.mozImageSmoothingEnabled = false;
+      ctx.imageSmoothingEnabled = false;
+
+      ctx.putImageData(
+        val.imageData, 
+        0,
+        0,
+      );
+
+      cachedTileImages[type] = c;
+    }
+
     
-    return tempCanvas;
+    return cachedTileImages[type];
   }
 
   const _allEqual = arr => arr.every(val => val === arr[0]);

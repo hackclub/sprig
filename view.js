@@ -20,8 +20,9 @@ export const view = (state) => html`
     </div>
     
     <div class="game-docs-container">
-      <canvas class="game-canvas"></canvas>
-      
+      <div class="game-canvas-container">
+        <canvas class="game-canvas"></canvas>
+      </div>
       <div class="docs">
         ${docs(state)}
       </div>
@@ -103,6 +104,10 @@ const menu = (state) => html`
       class="menu-item" 
       @click=${() => dispatch("UPLOAD")}>
       upload
+    </div>
+    <div 
+      class="menu-item docs-trigger">
+      docs
     </div>
     <div 
       class="menu-item run" 

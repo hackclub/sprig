@@ -10,6 +10,7 @@
   --switch-fg-low: #495057;
   --switch-fg-high: #f8f9fa;
   --editor-sidebar-width: 360px;
+  --docs-percentage: 0%;
 }
 
 :root { box-sizing: border-box; }
@@ -130,6 +131,7 @@ body {
   flex: 2;
   display: flex;
   flex-direction: column;
+  max-width: 900px;
 }
 
 .cm-editor {
@@ -158,32 +160,43 @@ body {
 .game-docs-container {
   display: flex;
   flex-direction: column;
+  place-content: center;
   flex: 1;
-  min-width: 300px;
   overflow: hidden;
-  gap: 30px;
+  gap: 20px;
   align-items: center;
   font-size: 0.9em;
 }
 
-.game-canvas {
-  display: block;
+.game-canvas-container {
   width: 100%;
-  max-width: 450px;
-  aspect-ratio: 5 / 4;
+  max-height: calc(100% - var(--docs-percentage));
+  aspect-ratio: 5/4;
+  transition: height 0.2s ease-in-out;
   background: var(--pcb-trace);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-canvas {
   image-rendering: pixelated;
   outline: none;
 }
 
 .docs {
   background: var(--bg-surface);
-  flex: 1;
+  height: 0;
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   word-wrap: break-word;
+  transition: height 0.2s ease-in-out;
+}
+
+.docs-expanded {
   padding: 10px;
+  height: var(--docs-percentage);
 }
 
 .asset-editor-container {

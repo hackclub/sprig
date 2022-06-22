@@ -56,31 +56,32 @@ The Hack Club Game Lab is open source and licensed under the [MIT License](./LIC
 
 **Tuesday:** Pass on everything, last-minute work.
 
-Lexi gone on the morning of Wednesday, August 22nd.
+Lexi gone on the morning of Wednesday, June 22nd.
 
 ## TODO
 
 ### now
   - [ ] map editor can't render combinations of bitmapKeys
-  - [ ] Editors blink when loading
   - [ ] When typing in browser console get: "Possible side-effect in debug-evaluate" (add error event handler)
-  - [ ] Tune gets cleared when you try to edit it
+  - [x] Tune gets cleared when you try to edit it
   - [ ] When editing undersized bitmap: "unknown color: undefined" (kog: is this a bug?)
-  - [ ] pixels are integers
+  - [ ] size the game screen correctly
+    - [ ] pixels are integers
   - [ ] colors
     - logo color line
     - terminal color system
-  - [ ] fullscreen the game
-  - [ ] console
-  - [ ] link sharing
   - [ ] Fix `>` and `<` in code blocks showing up as `&gt;` and `&lt;`
-  - [ ] Across all editors, right click to erase
 
 
 ### at some point
   - [ ] play on phone
   - [ ] feedback on user inputs
   - [ ] better error logging
+  - [ ] Editors blink when loading
+  - [ ] console
+  - [ ] Across all editors, right click to erase
+  - [ ] fullscreen the game
+  - [ ] link sharing
 
 ### maybe
   - [ ] Exporting:
