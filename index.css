@@ -128,11 +128,13 @@ body {
 .code-container {
   background: var(--bg-surface);
   flex: 2;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .cm-editor {
-  height: 100%;
+  flex: 1;
+  overflow: scroll;
 }
 
 .cm-scroller {

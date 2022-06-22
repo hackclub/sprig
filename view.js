@@ -1,5 +1,6 @@
 import { html } from "./libs/uhtml.js";
 import { dispatch } from "./dispatch.js";
+import { saveGame } from "./saveGame.js"
 
 import { docs } from "./views/docs.js";
 import "./pixel-editor/pixel-editor.js";
@@ -63,9 +64,14 @@ const editableName = (state) => html`
   </div>
 `
 
-const drawFile = (file) => {
+const drawFile = (file, i, state) => {
   const [ name, text ] = file;
-  const setText = () => dispatch("SET_EDITOR_TEXT", { text })
+  const setText = () => {
+    saveGame(state);
+    const games = Object.fromEntries(state.savedGames);
+    const text = games[name];
+    dispatch("SET_EDITOR_TEXT", { text })
+  }
   return html`
     <div @click=${setText}>${name}</div>
   `
@@ -76,7 +82,7 @@ const menu = (state) => html`
     <div class="menu-item dropdown-container">
       files
       <div class="dropdown-list">
-        ${state.savedGames.map(drawFile)}
+        ${state.savedGames.map((file, i) => drawFile(file, i, state))}
       </div>
     </div>
     <div class="menu-item dropdown-container">

@@ -1,5 +1,6 @@
 import { dispatch } from "./dispatch.js";
 import { addDropUpload } from "./events/addDropUpload.js";
+import { saveGame } from "./saveGame.js"
 
 const trigger = (e) => e.composedPath()[0];
 const matchesTrigger = (e, selectorString) =>
@@ -14,17 +15,7 @@ export const createListener =
     });
   };
 
-function saveGame(state) {
-  const string = state.codemirror.state.doc.toString();
-  const match = string.match(/@title:\s+([^\n]+)/);
-  const name = (match !== null) ? match[1] : "draft";
-  const newSave = [ name, string ];
-  const currentGames = state.savedGames
-    .filter( x => x[0] !== name)
-    .slice(0, 4);
-  const toSave = [ newSave, ...currentGames ]
-  window.localStorage.setItem("puzzle-lab", JSON.stringify(toSave) );
-}
+
 
 export function addEvents(state) {
   const bodyListener = createListener(document.body);
