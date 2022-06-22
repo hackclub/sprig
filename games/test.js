@@ -1,5 +1,6 @@
-// http://127.0.0.1:8080/?file=http://127.0.0.1:8080/games/test.js
-
+/*
+@title: test
+*/
 setLegend({
   "a": bitmap`
 rrrrrrrrrrrrrrrr

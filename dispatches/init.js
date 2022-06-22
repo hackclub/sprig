@@ -18,7 +18,7 @@ export async function init(args, state) {
   const savedString = window.localStorage.getItem("puzzle-lab") || "[]";
   state.savedGames = JSON.parse(savedString);
   const games = Object.fromEntries(state.savedGames);
-  if ("draft" in games) dispatch("SET_EDITOR_TEXT", { text: games["draft"] });
+  if ("DRAFT" in games) dispatch("SET_EDITOR_TEXT", { text: games["DRAFT"] });
 
   window.addEventListener("error", (e) => {
     // this is a hack to cut down on this chrome bug: https://support.google.com/chrome/thread/165732696/typing-in-console-triggers-error?hl=en

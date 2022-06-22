@@ -61,7 +61,6 @@ const ACTIONS = {
   },
   SET_EDITOR_TEXT({ text }, state) {
     const currentProgLength = state.codemirror.state.doc.toString();
-    console.log(text);
     const changes = {
       from: 0,
       to: currentProgLength.length,
@@ -69,6 +68,7 @@ const ACTIONS = {
     };
 
     state.codemirror.dispatch({ changes })
+    dispatch("RENDER");
   },
   SET_NAME: setName,
   LOAD_FROM_DATA({ data }, state) {

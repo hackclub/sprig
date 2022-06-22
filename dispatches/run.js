@@ -1,7 +1,10 @@
 import { dispatch } from "../dispatch.js";
 import { evalGameScript } from "./evalGameScript.js";
+import { saveGame } from "../saveGame.js"
 
 export function run(args, state) {
+  saveGame(state);
+  
   state.logs = [];
   state.errorInfo = null;
   
