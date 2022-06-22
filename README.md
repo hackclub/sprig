@@ -65,7 +65,7 @@ Lexi gone on the morning of Wednesday, August 22nd.
     - [x] Finish docs
     - [x] Styles for docs
     - [x] Basic README
-    - [ ] Prototype the new PCB-based editor design
+    - [x] Prototype the new PCB-based editor design
   - Leo:
     - [ ] Code folding
     - [ ] map editor can't render combinations of bitmapKeys
@@ -128,3 +128,14 @@ Lexi gone on the morning of Wednesday, August 22nd.
   - [ ] Feedback for user inputs
   - [ ] Across all editors, right click to erase
   - [ ] Make sure if the mouse is unpressed outside an editor canvas that's registered (we need global listeners and proper cleanups to prevent memory leaks)
+
+- [ ] play on phone
+- [ ] pixels are integers
+- [ ] colors
+- [ ] logo color line
+- [ ] terminal color system
+- [ ] file or project manager
+- [ ] cache files locally
+- [ ] charactersitic image
+- [ ] image gallery
+- [ ] load images dropping them in

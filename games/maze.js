@@ -1,4 +1,7 @@
-map``
+/*
+@title: maze_game
+@author: leo mcelroy
+*/
 setScreenSize(500, 500*.8)
 
 // playTune([

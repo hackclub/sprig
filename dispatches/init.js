@@ -15,6 +15,9 @@ export async function init(args, state) {
 
   addEvents(state);
 
+  const savedString = window.localStorage.getItem("puzzle-lab") || "[]";
+  state.savedGames = JSON.parse(savedString);
+
   window.addEventListener("error", (e) => {
     // this is a hack to cut down on this chrome bug: https://support.google.com/chrome/thread/165732696/typing-in-console-triggers-error?hl=en
     if (e.message.includes("Uncaught EvalError")) return;

@@ -52,17 +52,33 @@ const sampleMenuItem = sample => html`
   <a class="sample-menu-item" href=${sample.link}>${sample.name}</a>
 `
 
+const editableName = (state) => html`
+  <div 
+    class="menu-item menu-name" 
+    contenteditable 
+    spellcheck="false"
+    @blur=${e => dispatch("SET_NAME", { name: e.target.innerText })}
+  >
+    ${state.name}
+  </div>
+`
+
+const drawFile = (file) => {
+  const [ name, text ] = file;
+  const setText = () => dispatch("SET_EDITOR_TEXT", { text })
+  return html`
+    <div @click=${setText}>${name}</div>
+  `
+}  
+
 const menu = (state) => html`
   <div class="menu">
-    <div 
-      class="menu-item menu-name" 
-      contenteditable 
-      spellcheck="false"
-      @blur=${e => dispatch("SET_NAME", { name: e.target.innerText })}
-    >
-      ${state.name}
+    <div class="menu-item dropdown-container">
+      files
+      <div class="dropdown-list">
+        ${state.savedGames.map(drawFile)}
+      </div>
     </div>
-
     <div class="menu-item dropdown-container">
       export
       <div class="dropdown-list">

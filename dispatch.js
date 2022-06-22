@@ -29,6 +29,7 @@ const STATE = {
     }
   ],
   bitmaps: {},
+  savedGames: [],
 }
 
 window.getState = () => console.log(STATE);
