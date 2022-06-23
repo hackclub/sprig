@@ -1,6 +1,7 @@
 import { bitmapTextToImageData } from "./bitmap.js";
 import { dispatch } from "../dispatch.js";
-import { textToTune } from './playTune.js';
+import { textToTune } from '../textTuneConverters.js';
+import { global_state } from "../global_state.js";
 
 
 let cur = null;
@@ -556,7 +557,7 @@ export function init(canvas) {
     afterInput, 
     map: _makeTag(text => text), // No-op for now, here for editor support
     tune: _makeTag(text => textToTune(text)),
-    bitmap: _makeTag(text => ({text, imageData: bitmapTextToImageData(text)})),
+    bitmap: _makeTag(text => ({text, imageData: bitmapTextToImageData(text, global_state.palette)})),
     match,
     replace,
     getFirst: (type) => sprites.find(t => t.type === type), // **

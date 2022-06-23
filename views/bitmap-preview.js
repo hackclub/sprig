@@ -1,4 +1,7 @@
 import { bitmapTextToImageData } from "../engine/bitmap.js";
+import { global_state } from "../global_state.js";
+
+const PALETTE = global_state.palette;
 
 class BitmapPreview extends HTMLElement {
   constructor() {
@@ -17,7 +20,7 @@ class BitmapPreview extends HTMLElement {
   attributeChangedCallback() {
     if (!this.canvas) return;
 
-    const data = bitmapTextToImageData(this.getAttribute("text") ?? "");
+    const data = bitmapTextToImageData(this.getAttribute("text") ?? "", PALETTE);
     this.canvas.width = data.width;
     this.canvas.height = data.height;
     this.canvas.getContext("2d").clearRect(0, 0, data.width, data.height);

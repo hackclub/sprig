@@ -1,4 +1,5 @@
 import { dispatch } from "../dispatch.js";
+import { global_state } from "../global_state.js";
 
 function upload(files, extensions = []) {
   let file = files[0];
@@ -22,7 +23,8 @@ function readFile(file) {
     let text = reader.result;
 
     try {
-      dispatch("SET_EDITOR_TEXT", { text });
+      const cur = global_state.codemirror.state.doc.toString();
+      dispatch("SET_EDITOR_TEXT", { text, range: [ 0, cur.length ] });
     } catch (err) {}
   };
 }

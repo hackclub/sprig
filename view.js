@@ -34,7 +34,7 @@ export const view = (state) => html`
     for (const item of event.composedPath()) {
       if (item.classList && item.classList.contains("asset-editor-content")) return;
     }
-    dispatch("SET_EDITOR", null)
+    dispatch("SET_ASSET_EDITOR", { type: null, text: null })
   }}>
     <button class="close"><ion-icon icon="close" /></button>
     <div class="asset-editor-content">
@@ -44,7 +44,7 @@ export const view = (state) => html`
           "sequencer": html`<sequencer-editor id="asset-editor"></sequencer-editor>`,
           "map": html`<map-editor id="asset-editor"></map-editor>`,
           [undefined]: ""
-        }[state.editor?.type]
+        }[state.editor]
       }
     </div>
   </div>
@@ -71,7 +71,8 @@ const drawFile = (file, i, state) => {
     saveGame(state);
     const games = Object.fromEntries(state.savedGames);
     const text = games[name];
-    dispatch("SET_EDITOR_TEXT", { text })
+    const cur = state.codemirror.state.doc.toString();
+    dispatch("SET_EDITOR_TEXT", { text, range: [0, cur.length] })
   }
   return html`
     <div @click=${setText}>${name}</div>

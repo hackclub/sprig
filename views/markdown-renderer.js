@@ -14,6 +14,10 @@ customElements.define('markdown-renderer', class extends HTMLElement {
   }
 
   update() {
-    this.shadowRoot.innerHTML = `${marked(this.innerHTML)}`
+    let text = `${marked(this.innerHTML)}`;
+    text = text
+      .replaceAll("&amp;gt;", ">")
+      .replaceAll("&amp;lt;", "<")
+    this.shadowRoot.innerHTML = text;
   }
 })

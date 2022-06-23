@@ -49,12 +49,15 @@ export class OpenButtonWidget extends WidgetType {
   }
 
   onClick() {
-    dispatch("SET_EDITOR", {
+    dispatch("SET_EDIT_RANGE", {
+      range: [this.from, this.to]
+    });
+
+    dispatch("SET_ASSET_EDITOR", {
       type: this.editorType,
       text: this.text,
-      from: this.from,
-      to: this.to
     });
+
   }
 }
 

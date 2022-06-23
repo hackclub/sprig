@@ -4,7 +4,7 @@ import { saveGame } from "../saveGame.js"
 
 export function run(args, state) {
   saveGame(state);
-  
+
   state.logs = [];
   state.errorInfo = null;
   
@@ -17,7 +17,7 @@ export function run(args, state) {
   }
 
   const script = state.codemirror.state.doc.toString();
-  const err = evalGameScript(script);
+  const err = evalGameScript(script, state.palette);
   if (err) dispatch("LOG_ERROR", { err });
 
   dispatch("RENDER");

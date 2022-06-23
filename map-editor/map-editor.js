@@ -1,6 +1,7 @@
 import { render, html } from "/libs/uhtml.js";
 import { bitmapTextToImageData } from "../engine/bitmap.js";
 import { dispatch } from "../dispatch.js";
+import { global_state } from "../global_state.js";
 
 const SPRITE_SIZE = 16;
 
@@ -13,7 +14,8 @@ export function createMapEditor(target) {
     mouseDown: 0,
     updateTextDebounce: null,
     cells: [[]],
-    legend: {}
+    legend: {},
+    palette: global_state.palette,
   }
   const endEffects = [];
 
@@ -68,7 +70,10 @@ export function createMapEditor(target) {
       }
       text += "\n";
     }
-    dispatch("EDITOR_TEXT", "\n" + text.trim());
+
+    text = "\n" + text.trim();
+
+    dispatch("SET_EDITOR_TEXT", { text, range: global_state.editRange });
   }
 
   const draw = () => {
@@ -129,11 +134,44 @@ export function createMapEditor(target) {
 
   return {
     loadInitValue({ text, bitmaps }) {
-      // TODO: if bitmap is or ignore if and then load both images
-      state.legend = Object.fromEntries(
+      const legend = {};
+
+      for (let k in bitmaps) {
+        const val = bitmaps[k];
+        if (val.type === "or") continue;
+        if (val.type === "and") {
+          // need to overlay the text?
+          let textArr = [];
+          val.list.forEach(sprite => {
+            const spriteText = bitmaps[sprite].text.replace(/ +?/g, '');;
+            if (textArr.length === 0) textArr = spriteText.split("");
+            else {
+              spriteText.split("").forEach((ch, i) => {
+                if (ch === ".") return;
+                textArr[i] = ch;
+              })
+            }
+          })
+
+          const text = textArr.join("")
+
+          legend[k] = {
+            text,
+            imageData: bitmapTextToImageData(text, state.palette)
+          }
+        } else {
+          legend[k] = {
+            ...val,
+            imageData: bitmapTextToImageData(val.text, state.palette)
+          }
+        }
+      }
+
+      state.legend = legend;
+      Object.fromEntries(
         Object.entries(bitmaps)
           .filter(([, bitmap]) => !!bitmap.text)
-          .map(([ key, bitmap ]) => [ key, { ...bitmap, imageData: bitmapTextToImageData(bitmap.text) } ])
+          .map(([ key, bitmap ]) => [ key, { ...bitmap, imageData: bitmapTextToImageData(bitmap.text, state.palette) } ])
       );
       
       if (text) {

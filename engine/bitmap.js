@@ -1,5 +1,5 @@
 // At odds with in-game behavior... doesn't enforce a size with stretching.
-export function bitmapTextToImageData(string) {
+export function bitmapTextToImageData(string, palette) {
   const rows = string.trim().split("\n").map(x => x.trim());
   const rowLengths = rows.map(x => x.length);
   const isRect = rowLengths.every(val => val === rowLengths[0])
@@ -8,14 +8,7 @@ export function bitmapTextToImageData(string) {
   const height = rows.length || 1;
   const data = new Uint8ClampedArray(width*height*4);
   
-  const colors = {
-    "0": [0, 0, 0, 255],
-    "1": [255, 255, 255, 255],
-    "r": [255, 0, 0, 255],
-    "g": [0, 255, 0, 255],
-    "b": [0, 0, 255, 255],
-    ".": [0, 0, 0, 0],
-  }
+  const colors = Object.fromEntries(palette);
   
   for (let i = 0; i < width*height; i++) {
     const type = string.split("").filter(x => x.match(/\S/))[i];

@@ -4,10 +4,10 @@ import { playTune } from "../engine/playTune.js";
 
 let tunes = [];
 
-export function evalGameScript(script) {
+export function evalGameScript(script, palette) {
   const canvas = document.querySelector(".game-canvas");
   const gameFunctions = init(canvas);
-
+  
   tunes.forEach(t => t.end());
   tunes = [];
 

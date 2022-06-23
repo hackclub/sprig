@@ -11,6 +11,7 @@
   --switch-fg-high: #f8f9fa;
   --editor-sidebar-width: 360px;
   --docs-percentage: 0%;
+  --editor-width: 60%;
 }
 
 :root { box-sizing: border-box; }
@@ -76,10 +77,11 @@ body {
 .run {
   box-shadow: inset 0 -6px 0 0 var(--pcb-lighter);
   background: var(--pcb-trace);
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  /*margin-left: 25px;*/
+  /*position: absolute;*/
+  /*top: 0;*/
+  /*left: 50%;*/
+  /*transform: translateX(-50%);*/
   transition: box-shadow 100ms linear;
 }
 
@@ -128,7 +130,7 @@ body {
 
 .code-container {
   background: var(--bg-surface);
-  flex: 2;
+  width: var(--editor-width);
   display: flex;
   flex-direction: column;
   max-width: 900px;
@@ -140,8 +142,8 @@ body {
 }
 
 .cm-scroller {
-  font-family: "B612 Mono", monospace !important;
-  font-size: 0.9375em;
+  font-family: monospace !important;
+  font-size: 1.3em;
 }
 
 .logs {

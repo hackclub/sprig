@@ -1,6 +1,7 @@
 import { render, html } from "/libs/uhtml.js";
 import { dispatch } from "../dispatch.js";
 import { bitmapTextToImageData } from "../engine/bitmap.js";
+import { global_state } from "../global_state.js";
 
 const hexToRGBA = (hex) => {
   let [r, g, b, a = 255] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
@@ -33,7 +34,7 @@ export function createPixelEditor(target) {
     maxCanvasSize: 350,
     selected: [],
     tool: "brush",
-    color: hexToRGBA("#000000"),
+    color: [0, 0, 0, 255],
     mousedown: false,
     mousedownPt: [0, 0],
     currentPt: [0, 0],
@@ -45,6 +46,7 @@ export function createPixelEditor(target) {
       clicked: false,
       dragged: false,
     },
+    palette: global_state.palette,
     // hoveredCell: null,
   };
 
@@ -54,7 +56,7 @@ export function createPixelEditor(target) {
     let name = fileName[0];
     const extension = fileName[fileName.length - 1];
 
-    if (extensions.length > 0 && extensions.includes(enxtension))
+    if (extensions.length > 0 && extensions.includes(extension))
       throw "Extension not recongized: " + fileName;
 
     readFile(file);
@@ -105,13 +107,9 @@ export function createPixelEditor(target) {
     drawCanvasNoBg(canvas);
     const ctx = canvas.getContext("2d");
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const colors = {
-      "0,0,0,255": "0",
-      "255,0,0,255": "r",
-      "0,255,0,255": "g",
-      "0,0,255,255": "b",
-      "0,0,0,0": ".",
-    }
+    const colors = Object.fromEntries(
+      state.palette.map(x => [x[1].join(","), x[0]])
+    );
 
     let text = "";
     for (let i = 0; i < imageData.width*imageData.height; i += 1) {
@@ -120,13 +118,14 @@ export function createPixelEditor(target) {
       const b = imageData.data[i*4+2];
       const a = imageData.data[i*4+3];
       const key = `${r},${g},${b},${a}`;
-      const color = colors[key];
+      const color = colors[key] ?? ".";
       
       if ((i % imageData.width === 0) && i !== 0) text += "\n";
       text += color;
     }
 
-    dispatch("EDITOR_TEXT", "\n" + text);
+    text = "\n" + text.trim();
+    dispatch("SET_EDITOR_TEXT", { text, range: global_state.editRange });
   }
 
   const setImageData = (file) => {
@@ -225,35 +224,18 @@ export function createPixelEditor(target) {
     </div>
   `;
 
-  const drawColorsButtons = (state) => html`
-    <div class="colors">
+  const drawColorsButtons = (state) => {
+    const drawColor = (color) => html`
       <div 
-        class=${RGBA_to_hex(state.color) === "#000000ff" ? "active" : ""}
-        style="background-color: #000000ff"
-        @click=${() => { state.color = [ 0, 0, 0, 255 ]; r(); }}>
+        class=${RGBA_to_hex(state.color) === RGBA_to_hex(color[1]) ? "active" : ""}
+        style=${`background-color: ${RGBA_to_hex(color[1])}`}
+        @click=${() => { state.color = color[1]; r(); }}>
       </div>
-      <div 
-        class=${RGBA_to_hex(state.color) === "#ff0000ff" ? "active" : ""}
-        style="background-color: #ff0000ff"
-        @click=${() => { state.color = [ 255, 0, 0, 255 ]; r(); }}>
-      </div>
-      <div 
-        class=${RGBA_to_hex(state.color) === "#00ff00ff" ? "active" : ""}
-        style="background-color: #00ff00ff"
-        @click=${() => { state.color = [ 0, 255, 0, 255 ]; r(); }}>
-      </div>
-      <div
-        class=${RGBA_to_hex(state.color) === "#0000ffff" ? "active" : ""}
-        style="background-color: #0000ffff"
-        @click=${() => { state.color = [ 0, 0, 255, 255 ]; r(); }}>
-      </div>
-      <div 
-        class=${RGBA_to_hex(state.color) === "#00000000" ? "active" : ""}
-        style="background-color: #00000000"
-        @click=${() => { state.color = [ 0, 0, 0, 0 ]; r(); }}>
-      </div>
-    </div>
-  `;
+    `
+    return html`
+      <div class="colors">${state.palette.map(drawColor)}</div>
+    `
+  };
 
   const r = () => {
     render(target, view(state));
@@ -703,7 +685,8 @@ export function createPixelEditor(target) {
 
   return {
     loadInitValue({ text }) {
-      const imageData = bitmapTextToImageData(text);
+      console.log(text, state.palette);
+      const imageData = bitmapTextToImageData(text, state.palette);
       for (let i = 0; i < state.gridColors.length; i++) {
         state.gridColors[i] = [
           imageData.data[i * 4],

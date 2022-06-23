@@ -1,4 +1,15 @@
 
+/*
+song form
+
+[
+  [duration, instrument, pitch, duration, ...],
+
+
+]
+*/
+
+
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 
@@ -161,52 +172,3 @@ function playFrequency(frequency, duration, instrument) {
 // [500, "sine", 64.4, 500, "sine", "c5", 1000]
 // Comma between each tune element. Whitespace ignored.
 
-const instrumentKey = {
-  '~': 'sine',
-  '-': 'square',
-  '^': 'triangle',
-  '/': 'sawtooth',
-};
-const reverseInstrumentKey = Object.fromEntries(Object.entries(instrumentKey).map(([k, v]) => [v, k]));
-
-export function textToTune(text) {
-  const elements = text.replace(/\s/g, '').split(',');
-  const tune = [];
-
-  for (const element of elements) {
-    if (!element) continue;
-    const [durationRaw, notesRaw] = element.split(':');
-    const duration = parseInt(durationRaw);
-    const notes = (notesRaw || '').split('+').map((noteRaw) => {
-      if (!noteRaw) return [];
-      const [, pitchRaw, instrumentRaw, durationRaw] = noteRaw.match(/^(.+)([~\-^\/])(\d+)$/);
-      return [
-        instrumentKey[instrumentRaw],
-        isNaN(parseInt(pitchRaw, 10)) ? pitchRaw : parseInt(pitchRaw, 10),
-        parseInt(durationRaw, 10)
-      ];
-    });
-    tune.push([duration, ...notes].flat());
-  }
-  return tune;
-}
-
-export function tuneToText(tune) {
-  const groupNotes = (notes) => {
-    const groups = [];
-    for (let i = 0; i < notes.length; i++) {
-      if (i % 3 === 0) {
-        groups.push([notes[i]]);
-      } else {
-        groups[groups.length-1].push(notes[i]);
-      }
-    }
-    return groups;
-  }
-
-  return tune.map(([duration, ...notes]) => (
-    notes.length === 0 ? duration : `${duration}: ${groupNotes(notes).map(([instrument, duration, note]) => (
-      `${duration}${reverseInstrumentKey[instrument]}${note}`
-    )).join(' + ')}`
-  )).join(',\n');
-}

@@ -1,8 +1,8 @@
 import { render, html, svg } from "/libs/uhtml.js";
 import { playNote } from "./playNote.js";
 import { dispatch } from "../dispatch.js";
-import { tuneToText, textToTune, tones } from '../engine/playTune.js';
-
+import { tuneToText, textToTune, tones } from '../textTuneConverters.js';
+import { global_state } from "../global_state.js";
 // could add
 // scale selection -> chromatic, minor, pentatonic
 // length selection
@@ -58,6 +58,7 @@ export function playCellsOnBeat(cells, bpm, beat) {
 }
 
 function cellsToTune(cells, bpm, beats) {
+
   const tune = [];
   const beatTime = 1000*60/bpm;
   const getNotes = (x) => Object.entries(cells)
@@ -298,7 +299,8 @@ export function createSequencer(target) {
 
     for (const key in cells) {
       const [x, y] = key.split("_").map(Number);
-      const color = noteColors[(13 - y) % noteColors.length];
+      // const color = noteColors[(13 - y) % noteColors.length];
+      const color = instrumentColorMap[cells[key]];
       cellsToDraw.push([ x, y, color ]);
     }
 
@@ -306,11 +308,20 @@ export function createSequencer(target) {
   }
 
   const drawInstrumentSelection = (instrument, color) => {
+    const instrumentSymbol = { 
+      "sine": "~", 
+      "triangle": "^",
+      "square": "-",
+      "sawtooth": "/"
+    }[instrument];
+
     return html`
       <div 
         class="instrument" 
         style=${`
           background: ${color};
+          width:50px;
+          height:50px;
           border: ${state.instrument === instrument ? "2px solid black" : "none"};
           box-sizing: border-box;
           `} 
@@ -318,19 +329,18 @@ export function createSequencer(target) {
           state.instrument = instrument;
           r();
         }}>
-        ${instrument}
+        ${instrumentSymbol}
         </div>
     `
   }
 
   const view = (state) => html`
     <link rel="stylesheet" href="./sequencer/sequencer.css">
-    <div class="container">
+    <div class="container" @mouseup=${setCodeText}>
       <svg 
         class="svg-container" 
         @mousedown=${onDownSVG} 
-        @mousemove=${onMoveSVG}
-        @mouseup=${onUpSVG}>
+        @mousemove=${onMoveSVG}>
         ${state.svg ? drawCells(state) : ""}
         ${state.svg ? drawBeat(state) : ""}
         ${state.svg ? drawGrid(state.numberX, state.numberY, state.svg) : ""}
@@ -457,11 +467,12 @@ export function createSequencer(target) {
     r();
   }
 
-  const onUpSVG = e => {
+  const setCodeText = e => {
     state.erasing = false;
     state.drawing = false;
-    const text = tuneToText(cellsToTune(state.cells, state.bpm, state.numberX));
-    dispatch("EDITOR_TEXT",  "\n" + text);
+    let text = tuneToText(cellsToTune(state.cells, state.bpm, state.numberX));
+    text = "\n" + text.trim();
+    dispatch("SET_EDITOR_TEXT", { text, range: global_state.editRange });
     r();
   }
 
@@ -494,6 +505,10 @@ export function createSequencer(target) {
   return {
     loadInitValue({ text }) {
       state.cells = tuneToCells(textToTune(text));
+      let num = text.match(/(.+):/);
+      if (num) num = 60*1000/Number(num[1]);
+      else num = 120;
+      state.bpm = Math.round(num);
       r();
     },
     end() {
@@ -504,7 +519,6 @@ export function createSequencer(target) {
       state.cells = cells;
       state.bpm = bpm;
       state.data = data;
-      console.log(state);
       r();
     },
     getTune() {

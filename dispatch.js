@@ -7,32 +7,7 @@ import { logError } from "./dispatches/logError.js";
 import { setName } from "./dispatches/setName.js";
 import { saveToFile } from "./dispatches/export/saveToFile.js";
 import "./dispatches/fetchAndBundle/fetchAndBundle.js";
-
-const makeSampleLink = str => 
-  `http://${window.location.host}/?file=http://${window.location.host}/games/${str}.js`
-
-const STATE = {
-  codemirror: undefined,
-  errorInfo: null,
-  logs: [],
-  name: "game-name-here",
-  notifications: [],
-  editor: null,
-  samples: [
-    {
-      name: "test",
-      link: makeSampleLink("test")
-    },
-    {
-      name: "maze",
-      link: makeSampleLink("maze")
-    }
-  ],
-  bitmaps: {},
-  savedGames: [],
-}
-
-window.getState = () => console.log(STATE);
+import { global_state } from "./global_state.js";
 
 const ACTIONS = {
   INIT: init,
@@ -44,51 +19,43 @@ const ACTIONS = {
     upload(state.codemirror.state.doc.toString());
   },
   SAVE_TO_FILE(args, state) {
-    const prog = state.codemirror.state.doc.toString();
-    saveToFile(`${state.name}.js`, prog);
+    const string = state.codemirror.state.doc.toString();
+    const match = string.match(/@title:\s+([^\n]+)/);
+    const name = (match !== null) ? match[1] : "DRAFT";
+    saveToFile(`${name}.js`, string);
   },
   LOG_ERROR: logError,
-  SET_EDITOR(editor, state) {
-    state.editor = editor;
-    dispatch("RENDER");
-    if (typeof editor?.text === "string") {
-      const el = document.getElementById("asset-editor");
-      el.loadInitValue && el.loadInitValue({
-        text: editor.text,
-        bitmaps: state.bitmaps
-      });
-    }
+  SET_EDIT_RANGE({ range }, state) {
+    state.editRange = range;
   },
-  SET_EDITOR_TEXT({ text }, state) {
-    const currentProgLength = state.codemirror.state.doc.toString();
+  SET_ASSET_EDITOR({ type, text }, state) {
+    state.editor = type;
+    dispatch("RENDER");
+    if (type === null) return;
+
+    const el = document.getElementById("asset-editor");
+    el.loadInitValue && el.loadInitValue({
+      text,
+      bitmaps: state.bitmaps
+    });    
+  },
+  SET_EDITOR_TEXT({ text, range }, state) {
+    const [ from, to ] = range;
     const changes = {
-      from: 0,
-      to: currentProgLength.length,
+      from,
+      to,
       insert: text
     };
 
     state.codemirror.dispatch({ changes })
     dispatch("RENDER");
+
+    if (state.editRange === null) return;
+    state.editRange[1] = state.editRange[0] + text.length;
   },
   SET_NAME: setName,
   LOAD_FROM_DATA({ data }, state) {
     console.log(data);
-  },
-  EDITOR_TEXT(text, state) {
-    if (!state.editor) return console.log("EDITOR_TEXT but no editor");
-    if (!state.editor.from && !state.editor.to) return console.log(text);
-    
-    state.codemirror.dispatch({ changes: {
-      from: state.editor.from,
-      to: state.editor.to,
-      insert: text
-    } })
-    state.editor.to = state.editor.from + text.length;
-
-    // console.log(state.codemirror.foldAll(state.codemirror));
-    // console.log(state.codemirror, state.editor);
-    // state.codemirror.foldRange(state.editor.from, state.editor.to+1);
-    // dispatch("RUN");
   },
   RENDER(args, state) {
     render(document.querySelector(".root"), view(state));
@@ -97,7 +64,7 @@ const ACTIONS = {
 
 export function dispatch(action, args = {}) {
   const trigger = ACTIONS[action];
-  if (trigger) return trigger(args, STATE);
+  if (trigger) return trigger(args, global_state);
   else {
     console.log("Action not recongnized:", action);
     return null;
