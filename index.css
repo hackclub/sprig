@@ -133,7 +133,6 @@ body {
   width: var(--editor-width);
   display: flex;
   flex-direction: column;
-  max-width: 900px;
 }
 
 .cm-editor {
@@ -287,4 +286,18 @@ body {
 
 .cm-open-button:hover bitmap-preview {
   display: block;
+}
+
+.vertical-bar {
+  position: absolute;
+  left: var(--editor-width);
+  background: none;
+  height: 100%;
+  width: 20px;
+}
+
+.vertical-bar:hover {
+  cursor: col-resize;
+  background: var(--pcb-trace);
+  opacity: .8;
 }

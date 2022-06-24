@@ -1,5 +1,6 @@
 import { dispatch } from "./dispatch.js";
 import { addDropUpload } from "./events/addDropUpload.js";
+import { addVerticalBar } from "./events/addVerticalBar.js";
 import { saveGame } from "./saveGame.js"
 
 const trigger = (e) => e.composedPath()[0];
@@ -46,6 +47,7 @@ export function addEvents(state) {
    saveGame(state);
   })
 
+  addVerticalBar(state, bodyListener);
   // addNumberDragging(state, bodyListener);
   addDropUpload(state, bodyListener);
 }

@@ -27,6 +27,8 @@ export const view = (state) => html`
         ${docs(state)}
       </div>
     </div>
+
+    <div class="vertical-bar"></div>
   </div>
 
   <div class=${["asset-editor-container", state.editor ? "" : "hide"].join(" ")}  @click=${(event) => {

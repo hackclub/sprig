@@ -1,25 +1,25 @@
 
 
-export function addHorzBarDrag(state, bodyListener) {
+export function addVerticalBar(state, bodyListener) {
   let moveBar = false;
 
-  bodyListener("mousedown", ".horizontal-bar", (e) => {
+  bodyListener("mousedown", ".vertical-bar", (e) => {
     moveBar = true;
   });
 
   bodyListener("mousemove", "", (e) => {
     if (!moveBar) return;
 
-    let y = (e.clientY / window.innerHeight) * 100;
-    if (y === 0) return;
+    let x = (e.clientX / window.innerWidth) * 100;
+    if (x === 0) return;
 
-    const minY = 0;
-    const maxY = 100;
+    const minX = 0;
+    const maxX = 100;
 
-    if (y < minY) y = minY;
-    if (y > maxY) y = maxY;
+    if (x < minX) x = minX;
+    if (x > maxX) x = maxX;
 
-    document.documentElement.style.setProperty("--horizontal-bar", `${y}%`);
+    document.documentElement.style.setProperty("--editor-width", `${x}%`);
 
     pauseEvent(e);
   });

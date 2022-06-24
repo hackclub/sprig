@@ -61,9 +61,9 @@ Lexi gone on the morning of Wednesday, June 22nd.
 ## TODO
 
 ### now
-- [ ] fix tune editor
 - [ ] fullscreen the game
 - [ ] link sharing
+- [ ] make map size correctly in map editor
 
 ### at some point
 
@@ -115,6 +115,8 @@ Lexi gone on the morning of Wednesday, June 22nd.
 
 
 ### addressed
+- [x] add screen resizing bars
+- [x] fix tune editor
 - [x] Fix `>` and `<` in code blocks showing up as `&gt;` and `&lt;`
   - sort of hacked this
 - [x] Show warnings in editor
