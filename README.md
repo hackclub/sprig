@@ -64,6 +64,7 @@ Lexi gone on the morning of Wednesday, June 22nd.
 - [ ] fullscreen the game
 - [ ] link sharing
 - [ ] make map size correctly in map editor
+- [ ] Code folding
 
 ### at some point
 
@@ -72,7 +73,6 @@ Lexi gone on the morning of Wednesday, June 22nd.
 - [ ] better error logging
 - [ ] Editors blink when loading
 - [ ] console
-- [ ] Across all editors, right click to erase
 - [ ] When typing in browser console get: "Possible side-effect in debug-evaluate" (add error event handler)
 - [ ] preview maps
 - [ ] map editor
@@ -83,10 +83,10 @@ Lexi gone on the morning of Wednesday, June 22nd.
 
 ### maybe
 
+- [ ] Across all editors, right click to erase
 - [ ] Exporting:
   - [ ] HTML
   - [ ] Link
-- [ ] Code folding
 - [ ] Remove set size function
 - [ ] Make sure everything matches docs in general
 - [ ] BPM isn't a thing anymore, fix that

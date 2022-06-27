@@ -1,4 +1,4 @@
-import { render, html } from "/libs/uhtml.js";
+import { render, html } from "uhtml";
 import { dispatch } from "../dispatch.js";
 import { bitmapTextToImageData } from "../engine/bitmap.js";
 import { global_state } from "../global_state.js";

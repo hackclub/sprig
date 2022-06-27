@@ -11,6 +11,8 @@ export async function init(args, state) {
     highlightError(state);
   });
   state.codemirror.dom.id = "code-editor";
+  console.log(state.codemirror.dom);
+  console.log(document.querySelector("#code-editor"));
   document.querySelector("#code-editor").replaceWith(state.codemirror.dom);
 
   addEvents(state);

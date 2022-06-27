@@ -1,8 +1,8 @@
-import { EditorState, basicSetup } from "../libs/@codemirror/basic-setup.js";
-import { EditorView, keymap } from "../libs/@codemirror/view.js";
-import { indentUnit } from "../libs/@codemirror/language.js";
-import { indentWithTab } from "../libs/@codemirror/commands.js";
-import { javascript } from "../libs/@codemirror/lang-javascript.js";
+import { EditorState, basicSetup } from "@codemirror/basic-setup";
+import { EditorView, keymap } from "@codemirror/view";
+import { indentUnit } from "@codemirror/language";
+import { indentWithTab } from "@codemirror/commands";
+import { javascript } from "@codemirror/lang-javascript";
 import booleanCheckbox from './booleanCheckbox.js';
 import editors from './editors.js';
 

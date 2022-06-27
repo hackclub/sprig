@@ -2,8 +2,8 @@ import {
   WidgetType,
   Decoration,
   ViewPlugin
-} from "../libs/@codemirror/view.js";
-import { syntaxTree } from "../libs/@codemirror/language.js";
+} from "@codemirror/view";
+import { syntaxTree } from "@codemirror/language";
 import { dispatch } from "../dispatch.js";
 
 class CheckboxWidget extends WidgetType {

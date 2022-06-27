@@ -1,4 +1,4 @@
-import { render, html, svg } from "/libs/uhtml.js";
+import { render, html, svg } from "uhtml";
 import { playNote } from "./playNote.js";
 import { dispatch } from "../dispatch.js";
 import { tuneToText, textToTune, tones } from '../textTuneConverters.js';

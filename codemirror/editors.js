@@ -1,6 +1,6 @@
-import { EditorView, WidgetType, Decoration } from "../libs/@codemirror/view.js";
-import { StateField } from "../libs/@codemirror/state.js";
-import { syntaxTree, foldService } from "../libs/@codemirror/language.js";
+import { EditorView, WidgetType, Decoration } from "@codemirror/view";
+import { StateField } from "@codemirror/state";
+import { syntaxTree, foldService } from "@codemirror/language";
 import { getTag } from "./util.js";
 import { dispatch } from "../dispatch.js";
 
