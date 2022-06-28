@@ -4,6 +4,17 @@ import { createEditorView } from "../codemirror/cm.js";
 import { addEvents } from "../events.js";
 import { highlightError } from "./logError.js";
 
+function getParam(key) {
+  const search = new URLSearchParams(window.location.search);
+  return search.get(key);
+}
+
+function removeParam(key) {
+  const url = new URL(window.location);
+  url.searchParams.delete(key);
+  window.history.pushState({}, null, url);
+}
+
 export async function init(args, state) {
   dispatch("RENDER");
 
@@ -30,14 +41,32 @@ export async function init(args, state) {
     dispatch("LOG_ERROR", { err: e.error });
   });
 
-  const text = await loadFromURL();
-  if (text) {
+  const file = getParam("file");
+  removeParam("file");
+  if (file) {
+    const text = await loadFromURL(file);
+
     const changes = {
       from: 0,
       insert: text
     };
 
     state.codemirror.dispatch({ changes })
+  }
+
+  const id = getParam("id");
+  removeParam("id");
+  if (id) {
+    const url = `https://project-bucket-hackclub.s3.eu-west-1.amazonaws.com/${id}.json`
+    const json = await fetch(url, { mode: "cors" }).then((r) => r.json());
+    const text = json.text;
+
+    const changes = {
+      from: 0,
+      insert: text
+    };
+
+    state.codemirror.dispatch({ changes });
   }
 
   fetch("/docs.md").then(res => res.text()).then(docs => {

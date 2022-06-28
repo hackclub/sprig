@@ -77,7 +77,7 @@ const drawFile = (file, i, state) => {
     dispatch("SET_EDITOR_TEXT", { text, range: [0, cur.length] })
   }
   return html`
-    <div @click=${setText}>${name}</div>
+    <div @click=${setText}>${name.slice(0, 15)}${name.length > 15 ? "..." : ""}</div>
   `
 }  
 
@@ -93,7 +93,7 @@ const menu = (state) => html`
       export
       <div class="dropdown-list">
         <div @click=${e => dispatch("SAVE_TO_FILE")}>js</div>
-        <div>TODO: link</div>
+        <div @click=${e => dispatch("GET_URL")}>link</div>
         <div>TODO: html</div>
       </div>
     </div>

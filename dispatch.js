@@ -7,7 +7,19 @@ import { logError } from "./dispatches/logError.js";
 import { setName } from "./dispatches/setName.js";
 import { saveToFile } from "./dispatches/export/saveToFile.js";
 import "./dispatches/fetchAndBundle/fetchAndBundle.js";
+import { exportS3 } from "./s3.js";
 import { global_state } from "./global_state.js";
+
+function getURLPath(extension) {
+  return (
+    window.location.protocol +
+    "//" +
+    window.location.host +
+    window.location.pathname +
+    extension
+  );
+}
+
 
 const ACTIONS = {
   INIT: init,
@@ -23,6 +35,11 @@ const ACTIONS = {
     const match = string.match(/@title:\s+([^\n]+)/);
     const name = (match !== null) ? match[1] : "DRAFT";
     saveToFile(`${name}.js`, string);
+  },
+  async GET_URL(args, state) {
+    const string = state.codemirror.state.doc.toString();
+    const link = await exportS3(string);
+    console.log(link);
   },
   LOG_ERROR: logError,
   SET_EDIT_RANGE({ range }, state) {
