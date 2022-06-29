@@ -41,19 +41,8 @@ export function init(canvas) {
    let animationId = window.requestAnimationFrame(gameloop);
 
   function setScreenSize(w, h) {
-    const container = document.querySelector(".game-canvas-container");
     canvas.width = w;
     canvas.height = h;
-
-    const { width, height } = container.getBoundingClientRect();
-    if (height*5/4 > width) {
-      canvas.style["width"] = "100%";
-      canvas.style.removeProperty("height");
-    } else {
-      canvas.style["height"] = "100%";
-      canvas.style.removeProperty("width");
-    }
-    // canvas.style["aspect-ratio"] = w/h;
 
     ctx.webkitImageSmoothingEnabled = false;
     ctx.mozImageSmoothingEnabled = false;

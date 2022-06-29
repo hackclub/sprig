@@ -3,6 +3,7 @@ import { loadFromURL } from "./loadFromURL.js"
 import { createEditorView } from "../codemirror/cm.js";
 import { addEvents } from "../events.js";
 import { highlightError } from "./logError.js";
+import { sizeGameCanvas } from "./sizeGameCanvas.js"
 
 function getParam(key) {
   const search = new URLSearchParams(window.location.search);
@@ -60,6 +61,7 @@ export async function init(args, state) {
     const url = `https://project-bucket-hackclub.s3.eu-west-1.amazonaws.com/${id}.json`
     const json = await fetch(url, { mode: "cors" }).then((r) => r.json());
     const text = json.text;
+    console.log(id, text);
 
     const changes = {
       from: 0,
@@ -73,6 +75,9 @@ export async function init(args, state) {
     state.docs = docs;
     dispatch("RENDER");
   });
+
+  const container = document.querySelector(".game-canvas-container");
+  new ResizeObserver(sizeGameCanvas).observe(container);
 
   document.querySelector(".game-canvas").focus();
   dispatch("RENDER");
