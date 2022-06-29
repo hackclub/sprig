@@ -63,6 +63,7 @@ export async function init(args, state) {
 
     const changes = {
       from: 0,
+      to: state.codemirror.state.doc.toString().length,
       insert: text
     };
 
