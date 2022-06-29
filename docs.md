@@ -129,7 +129,7 @@ afterInput(() => {
 })
 ```
 
-## Sprites and Cells
+## Sprites and Tiles
 
 Each cell can contain any number of sprites stacked on top of each other.
 
@@ -155,15 +155,15 @@ sprite.type = "p"
 
 `dx` and `dy` are cleared after `afterInput`. They can be used to check if the sprite moved and by how much.
 
-### getCell(x, y)
+### getTile(x, y)
 
 Returns a list of the sprites in the specified cell.
 
-### addSprite(x, y, bitmapKey)
+### addSprite(bitmapKey, x, y)
 
 Creates a new sprite of the given type and inserts it at the front of a cell.
 
-### clearCell(x, y)
+### clearTile(x, y)
 
 Removes all sprites from the specified cell.
 
