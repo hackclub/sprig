@@ -23,8 +23,6 @@ export async function init(args, state) {
     highlightError(state);
   });
   state.codemirror.dom.id = "code-editor";
-  console.log(state.codemirror.dom);
-  console.log(document.querySelector("#code-editor"));
   document.querySelector("#code-editor").replaceWith(state.codemirror.dom);
 
   addEvents(state);
@@ -49,6 +47,7 @@ export async function init(args, state) {
 
     const changes = {
       from: 0,
+      to: state.codemirror.state.doc.toString().length,
       insert: text
     };
 
@@ -61,7 +60,6 @@ export async function init(args, state) {
     const url = `https://project-bucket-hackclub.s3.eu-west-1.amazonaws.com/${id}.json`
     const json = await fetch(url, { mode: "cors" }).then((r) => r.json());
     const text = json.text;
-    console.log(id, text);
 
     const changes = {
       from: 0,

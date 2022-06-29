@@ -65,11 +65,12 @@ Lexi gone on the morning of Wednesday, June 22nd.
 - [ ] make map size correctly in map editor
 - [ ] Code folding
 - [ ] style the upload flow
-- [ ] make deployment build work
+- [x] make deployment build work
 - [ ] preview maps
 
 ### at some point
 
+- [ ] first line bitmap not previewed
 - [ ] feedback on user inputs
 - [ ] better error logging
 - [ ] Editors blink when loading

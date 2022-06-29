@@ -1,6 +1,5 @@
-
 const makeSampleLink = str => 
-  `${window.location.protocol}://${window.location.host}/?file=${window.location.protocol}://${window.location.host}/games/${str}.js`
+  `${window.location.protocol}//${window.location.host}/?file=${window.location.protocol}//${window.location.host}/games/${str}.js`
 
 export const global_state = {
   codemirror: undefined,
@@ -18,6 +17,14 @@ export const global_state = {
     {
       name: "maze",
       link: makeSampleLink("maze")
+    },
+    {
+      name: "fire",
+      link: makeSampleLink("fire")
+    },
+    {
+      name: "flightless_bird",
+      link: makeSampleLink("flightless_bird")
     }
   ],
   bitmaps: {},
