@@ -1,6 +1,7 @@
 import { dispatch } from "../dispatch.js";
 import { evalGameScript } from "./evalGameScript.js";
 import { saveGame } from "../saveGame.js"
+import { sizeGameCanvas } from "./sizeGameCanvas.js"
 
 export function run(args, state) {
   saveGame(state);
@@ -20,5 +21,11 @@ export function run(args, state) {
   const err = evalGameScript(script, state.palette);
   if (err) dispatch("LOG_ERROR", { err });
 
+  sizeGameCanvas();
+
   dispatch("RENDER");
+
+  const canvas = document.querySelector(".game-canvas");
+  canvas.focus();
 }
+

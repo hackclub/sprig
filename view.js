@@ -94,7 +94,6 @@ const menu = (state) => html`
       <div class="dropdown-list">
         <div @click=${e => dispatch("SAVE_TO_FILE")}>js</div>
         <div @click=${e => dispatch("GET_URL")}>link</div>
-        <div>TODO: html</div>
       </div>
     </div>
     <div class="menu-item dropdown-container">

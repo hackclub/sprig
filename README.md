@@ -62,7 +62,6 @@ Lexi gone on the morning of Wednesday, June 22nd.
 
 ### now
 - [ ] fullscreen the game
-- [ ] link sharing
 - [ ] make map size correctly in map editor
 - [ ] Code folding
 
@@ -83,6 +82,7 @@ Lexi gone on the morning of Wednesday, June 22nd.
 
 ### maybe
 
+- [ ] add ability to delete saved files
 - [ ] Across all editors, right click to erase
 - [ ] Exporting:
   - [ ] HTML
@@ -115,6 +115,7 @@ Lexi gone on the morning of Wednesday, June 22nd.
 
 
 ### addressed
+- [x] link sharing
 - [x] add screen resizing bars
 - [x] fix tune editor
 - [x] Fix `>` and `<` in code blocks showing up as `&gt;` and `&lt;`
