@@ -2,7 +2,7 @@
 
 ## Level Design
 
-Game Lab games are made of a grid of square "cells". Each cell can contain multiple overlapping "sprites" for in-game elements like walls or the player, each one represented by a pixelated drawing called a "bitmap".
+Game Lab games are made of a grid of square "tiles". Each tile can contain multiple overlapping "sprites" for in-game elements like walls or the player, each one represented by a pixelated drawing called a "bitmap".
 
 Each bitmap has a single character name used as a key to keep track of them in the map. When developing your game you can also use this key to create and find sprites.
 
@@ -16,22 +16,17 @@ setLegend({ "a": bitmap`...` })
 
 To create a new bitmap, type `bitmap` and then two backticks (`` ` ``). Click on the highlighted "bitmap" button to edit your drawing:
 
-Sprite trigger button screenshot.
-
-You can create keys for combinations of sprites with `anyOf` or `allOf`:
+You can create keys for combinations of sprites with arrays:
 
 ```js
 setLegend({ 
     "a": bitmap`...`,
     "b": bitmap`...`,
-    "C": anyOf("a", "b"),
-    "D": allOf("a", "b")
+    "D": ["a", "b"]
 })
 ```
 
-These combinations are useful when pattern matching or when adding multiple sprites to the same tile in map creation.
-
-`anyOf` is a read-only combination.
+These combinations are useful when adding multiple sprites to the same tile in map creation.
 
 ### setBackground(bitmapKey)
 
@@ -104,6 +99,8 @@ setZOrder(["p", "r"])
 
 Game Lab has four directional controls: `up`, `down`, `left`, and `right`
 
+(on your keyboard `up`, `down`, `left`, and `right` are accessed with `w`, `a`, `s`, and `d`).
+
 It also has four action buttons: `i`, `j`, `k`, and `l`
 
 ### onInput(type, callback)
@@ -112,7 +109,7 @@ Do something when the player presses a control:
 
 ```js
 onInput("right", () => {
-    // Move the player one cell to the right
+    // Move the player one tile to the right
     getFirst("p").x += 1
 })
 ```
@@ -123,7 +120,7 @@ Runs after ever input event has finished being handled. Useful for tasks like ch
 
 ```js
 afterInput(() => {
-    if (match("g").length > 0) {
+    if (getAll("g").length > 0) {
         console.log("you win")
     }
 })
@@ -131,7 +128,7 @@ afterInput(() => {
 
 ## Sprites and Tiles
 
-Each cell can contain any number of sprites stacked on top of each other.
+Each tile can contain any number of sprites stacked on top of each other.
 
 Sprites contain:
 ```
@@ -157,15 +154,19 @@ sprite.type = "p"
 
 ### getTile(x, y)
 
-Returns a list of the sprites in the specified cell.
+Returns a list of the sprites in the specified tile.
+
+### tilesWith(arrayOfTypes)
+
+Returns a list of the tiles with all types contained in them.
 
 ### addSprite(bitmapKey, x, y)
 
-Creates a new sprite of the given type and inserts it at the front of a cell.
+Creates a new sprite of the given type and inserts it at the front of a tile.
 
 ### clearTile(x, y)
 
-Removes all sprites from the specified cell.
+Removes all sprites from the specified tile.
 
 ## Pattern Matching
 
@@ -173,7 +174,7 @@ The most powerful construct in Game Lab is pattern matching. These functions wil
 
 Simpler pattern matching constructs can be used to find all the sprites with a given bitmap key, or manipulate a stack of sprites.
 
-More complex multi-cell pattern matching enables finding and manipulating multiple sprites at once by their relative positions to each other. This uses special syntax:
+More complex multi-tile pattern matching enables finding and manipulating multiple sprites at once by their relative positions to each other. This uses special syntax:
 
 ```js
 // Two sprites of bitmap key "p" next to each other:
@@ -186,9 +187,9 @@ p*
 `
 ```
 
-> **Note!** The `*` works as a wildcard, matching sprites of any type or an empty cell. 
+> **Note!** The `*` works as a wildcard, matching sprites of any type or an empty tile. 
 > 
-> You can use `.` to only match only an empty cell. If you looked at the textual representation of maps, you'll notice this syntax is familiar.
+> You can use `.` to only match only an empty tile. If you looked at the textual representation of maps, you'll notice this syntax is familiar.
 
 ### getAll(type)
 
@@ -202,7 +203,7 @@ Shortcut for `getAll(type)[0]`.
 
 ### match(pattern)
 
-Returns an array of matching cells, each one an array of sprites.
+Returns an array of matching tiles, each one an array of sprites.
 
 ```js
 match("p.")
@@ -210,7 +211,7 @@ match("p.")
 
 ### replace(lookFor, replaceWith)
 
-Finds matching cells from the given pattern and replaces them with new cells. Returns a boolean of whether it found a match.
+Finds matching tiles from the given pattern and replaces them with new tiles. Returns a boolean of whether it found a match.
 
 Rules:
 
@@ -243,5 +244,3 @@ const playback = playTune(melody, Infinity)
 // Or make it shut up early:
 playback.end()
 ```
-
-Sequencer window screenshot
