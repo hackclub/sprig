@@ -25,7 +25,6 @@ export function run(args, state) {
 
   dispatch("RENDER");
 
-  const canvas = document.querySelector(".game-canvas");
-  canvas.focus();
+  document.querySelector(".game-canvas").focus();
 }
 
