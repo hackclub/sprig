@@ -1,6 +1,7 @@
 // markdown component
 
 import marked from '../libs/marked.js';
+import { style } from "../docs/style.js";
 
 customElements.define('markdown-renderer', class extends HTMLElement {
   constructor() {
@@ -18,6 +19,6 @@ customElements.define('markdown-renderer', class extends HTMLElement {
     text = text
       .replaceAll("&amp;gt;", ">")
       .replaceAll("&amp;lt;", "<")
-    this.shadowRoot.innerHTML = text;
+    this.shadowRoot.innerHTML = `<style>${style}</style>${text}`;
   }
 })

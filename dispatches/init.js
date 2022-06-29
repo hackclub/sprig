@@ -69,11 +69,6 @@ export async function init(args, state) {
     state.codemirror.dispatch({ changes });
   }
 
-  fetch("/docs.md").then(res => res.text()).then(docs => {
-    state.docs = docs;
-    dispatch("RENDER");
-  });
-
   const container = document.querySelector(".game-canvas-container");
   new ResizeObserver(sizeGameCanvas).observe(container);
 
