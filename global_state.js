@@ -1,6 +1,6 @@
 
 const makeSampleLink = str => 
-  `http://${window.location.host}/?file=http://${window.location.host}/games/${str}.js`
+  `${window.location.protocol}://${window.location.host}/?file=${window.location.protocol}://${window.location.host}/games/${str}.js`
 
 export const global_state = {
   codemirror: undefined,

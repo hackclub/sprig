@@ -3,6 +3,7 @@ import { playNote } from "./playNote.js";
 import { dispatch } from "../dispatch.js";
 import { tuneToText, textToTune, tones } from '../textTuneConverters.js';
 import { global_state } from "../global_state.js";
+import { style } from "./style.js";
 // could add
 // scale selection -> chromatic, minor, pentatonic
 // length selection
@@ -335,7 +336,7 @@ export function createSequencer(target) {
   }
 
   const view = (state) => html`
-    <link rel="stylesheet" href="./sequencer/sequencer.css">
+    <style>${style}</style>
     <div class="container" @mouseup=${setCodeText}>
       <svg 
         class="svg-container" 

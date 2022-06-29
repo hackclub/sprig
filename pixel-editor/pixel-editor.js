@@ -2,6 +2,7 @@ import { render, html } from "uhtml";
 import { dispatch } from "../dispatch.js";
 import { bitmapTextToImageData } from "../engine/bitmap.js";
 import { global_state } from "../global_state.js";
+import { style } from "./style.js";
 
 const hexToRGBA = (hex) => {
   let [r, g, b, a = 255] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
@@ -169,7 +170,7 @@ export function createPixelEditor(target) {
 
   // FIXME: kognise - Stylesheet takes a sec to load/render so we get a FOUC. Can we preload somehow?
   const view = (state) => html`
-    <link rel="stylesheet" href="./pixel-editor/pixel-styles.css">
+    <style>${style}</style>
     <div class="pixel-editor-container">
       <div class="canvas-container">
         <canvas class="drawing-canvas"></canvas>

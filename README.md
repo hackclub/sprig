@@ -64,16 +64,17 @@ Lexi gone on the morning of Wednesday, June 22nd.
 - [ ] fullscreen the game
 - [ ] make map size correctly in map editor
 - [ ] Code folding
+- [ ] style the upload flow
+- [ ] make deployment build work
+- [ ] preview maps
 
 ### at some point
 
-- [ ] style the upload flow
 - [ ] feedback on user inputs
 - [ ] better error logging
 - [ ] Editors blink when loading
 - [ ] console
 - [ ] When typing in browser console get: "Possible side-effect in debug-evaluate" (add error event handler)
-- [ ] preview maps
 - [ ] map editor
   - [x] render combos
   - [ ] add rows and columns

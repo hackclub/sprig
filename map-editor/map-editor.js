@@ -2,6 +2,7 @@ import { render, html } from "uhtml";
 import { bitmapTextToImageData } from "../engine/bitmap.js";
 import { dispatch } from "../dispatch.js";
 import { global_state } from "../global_state.js";
+import { style } from "./style.js";
 
 const SPRITE_SIZE = 16;
 
@@ -20,7 +21,7 @@ export function createMapEditor(target) {
   const endEffects = [];
 
   const view = (state) => html`
-    <link rel="stylesheet" href="./map-editor/map-styles.css">
+    <style>${style}</style>
     <div class="map-editor-container">
       <div class="canvas-container">
         <canvas></canvas>

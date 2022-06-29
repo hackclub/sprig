@@ -262,6 +262,8 @@ export function init(canvas) {
         console.warn(`Legend key "${key}" is too long, you should only use single-character keys`);
         delete bitmaps[key];
       }
+      const val = bitmaps[key];
+      if (Array.isArray(val)) bitmaps[key] = allOf(...val);
     }
     legend = bitmaps;
     cachedTileImages = {};
@@ -347,7 +349,29 @@ export function init(canvas) {
   }
 
   function getTile(x, y) { 
-    return getGrid()[dimensions.width*y+x];
+    return getGrid()[dimensions.width*y+x] || [];
+  }
+
+  function hasDuplicates(array) {
+    return (new Set(array)).size !== array.length;
+  }
+
+  function tilesWith(matchingTypes) {
+    const tiles = [];
+    const grid = getGrid();
+    for (let x = 0; x < dimensions.width; x++) {
+      for (let y = 0; y < dimensions.height; y++) {
+        const tile = grid[dimensions.width*y+x] || [];
+        const matchIndices = matchingTypes.map(type => {
+          return tile.map(s => s.type).indexOf(type);
+        })
+
+
+        if (!hasDuplicates(matchIndices) && !matchIndices.includes(-1)) tiles.push(tile);
+      }
+    }
+
+    return tiles;
   }
 
   function setSolids(arr) {
@@ -542,6 +566,7 @@ export function init(canvas) {
     addSprite,
     getGrid,
     getTile,
+    tilesWith,
     clearTile, 
     onInput, 
     setSolids, 
