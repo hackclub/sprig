@@ -21,4 +21,5 @@ export function run(args, state) {
   if (err) dispatch("LOG_ERROR", { err });
 
   dispatch("RENDER");
+  document.querySelector(".game-canvas").focus();
 }
