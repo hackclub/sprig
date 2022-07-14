@@ -1,6 +1,8 @@
-# [Hack Club Sprig](sprig.hackclub.dev)
+# :leaves: [Hack Club Sprig](https://sprig.hackclub.dev) :leaves:
 
-Sprig is a web-based environment for creating tile games. These games run in the browser and on the Sprig Console, a game console where every user is a creator. The only way to obtain a Sprig console is to make a game for it and share it in the [Sprig Gallery](sprig-gallery.hackclub.dev)
+<img src="https://user-images.githubusercontent.com/27078897/179077324-74842cf2-be0b-4801-a3ab-90a5fcfa11f4.png" height="300px"/>
+
+Sprig is a web-based environment for creating tile games. These games run in the browser and on the Sprig Console, a game console where every user is a creator. The only way to obtain a Sprig console is to make a game for it and share it in the [Sprig Gallery](https://sprig-gallery.hackclub.dev)
 
 
 ## Development

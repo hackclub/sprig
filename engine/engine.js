@@ -223,6 +223,14 @@ export function init({ palette, setBitmaps, setScreenSize }) {
     state.pushable = map;
   }
 
+  const hasTypeAny = (x, y, types) => getTile(x, y)
+    .map(sprite => sprite.type)
+    .some(type => types.includes(type));
+
+  const hasTypeAll = (x, y, types) => getTile(x, y)
+    .map(sprite => sprite.type)
+    .every(type => types.includes(type));
+
   const api = {
     setLegend, 
     setMap, 
@@ -230,6 +238,8 @@ export function init({ palette, setBitmaps, setScreenSize }) {
     getGrid,
     getTile,
     tilesWith,
+    hasTypeAny, // maybe
+    hasTypeAll, // maybe
     clearTile, 
     setSolids, 
     setPushables, 

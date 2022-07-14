@@ -1,6 +1,6 @@
 import { palette } from "./palette.js"
 
-const githubPages = str => `https://hackclub.github.io/puzzlelab/games/${str}.js`;
+const githubPages = str => `https://hackclub.github.io/sprig/games/${str}.js`;
 const makeSampleLink = str => 
   `${window.location.protocol}//${window.location.host}/?file=${githubPages(str)}`
 const makeSample = str => ({

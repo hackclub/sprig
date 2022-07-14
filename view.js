@@ -103,12 +103,12 @@ const menu = (state) => html`
         <div @click=${e => dispatch("GET_URL")}>link</div>
       </div>
     </div>
-    <div class="menu-item dropdown-container">
-      samples
-      <div class="dropdown-list">
-        ${state.samples.map(drawSample)}
-      </div>
-    </div>
+    <a 
+      class="menu-item dropdown-container" 
+      href="https://sprig-gallery.hackclub.dev"
+      target="_blank">
+      gallery
+    </a>
     <div 
       class="menu-item" 
       @click=${() => dispatch("UPLOAD")}>
@@ -127,7 +127,7 @@ const menu = (state) => html`
 
     <div class="spacer" aria-hidden="true" />
 
-    <a class="menu-item" href="https://github.com/hackclub/puzzlelab/">
+    <a class="menu-item" href="https://github.com/hackclub/sprig/">
       <ion-icon name="logo-github" />
     </a>
   </div>
