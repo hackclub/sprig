@@ -39,6 +39,13 @@ const ACTIONS = {
   async GET_URL(args, state) {
     const string = state.codemirror.state.doc.toString();
     const link = await exportS3(string);
+
+    await fetch("https://misguided.enterprises/clubscraps/cabal", {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ link })
+    });
+
     console.log(link);
   },
   LOG_ERROR: logError,
