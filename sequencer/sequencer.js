@@ -1,7 +1,9 @@
-import { render, html, svg } from "../uhtml.js";
+import { render, html, svg } from "uhtml";
 import { playNote } from "./playNote.js";
-import styles from "./sequencer-styles.js";
-
+import { dispatch } from "../dispatch.js";
+import { tuneToText, textToTune, tones } from '../textTuneConverters.js';
+import { global_state } from "../global_state.js";
+import { style } from "./style.js";
 // could add
 // scale selection -> chromatic, minor, pentatonic
 // length selection
@@ -13,11 +15,11 @@ import styles from "./sequencer-styles.js";
 // line/drag erasing
 
 const instrumentColorMap = {
-  "sine": "red",
-  "square": "blue",
-  "sawtooth": "orange",
-  "triangle": "green",
-}
+  sine: "red",
+  square: "blue",
+  sawtooth: "orange",
+  triangle: "green",
+};
 
 const noteMap = {
   13: "c4",
@@ -35,11 +37,12 @@ const noteMap = {
   1: "a5",
   0: "b5",
 }
+const noteColors = ["red", "orange", "yellow", "green", "lightblue", "blue", "purple"];
 
 export function playCellsOnBeat(cells, bpm, beat) {
   // notes :: note[]
   const notes = [];
-  // note :: [ pitch, instrument]
+  // note :: [ pitch, instrument ]
 
   Object
     .entries(cells)
@@ -55,6 +58,54 @@ export function playCellsOnBeat(cells, bpm, beat) {
   })
 }
 
+function cellsToTune(cells, bpm, beats) {
+
+  const tune = [];
+  const beatTime = 1000*60/bpm;
+  const getNotes = (x) => Object.entries(cells)
+    .filter(([k]) => k.split("_")[0] === x.toString())
+    .map(([k, v]) => [Number(k.split("_")[1]), v]);
+  for (let x = 0; x < beats; x++) {
+    let rests = 0;
+    while (getNotes(x).length === 0 && x < beats) {
+      rests++;
+      x++;
+    }
+    if (rests) tune.push([rests * beatTime]);
+    if (x >= beats) break;
+
+    const notes = getNotes(x);
+    tune.push([beatTime, ...notes.map(([ y, instrument ]) => [ instrument, noteMap[y], beatTime ])].flat());
+  }
+  return tune;
+}
+
+function tuneToCells(tune) {
+  const nonRestBeats = tune.filter(el => el.length > 1);
+  if (!nonRestBeats.length) return {};
+  const beatTime = nonRestBeats[0][0];
+  
+  const cells = {};
+  let x = 0;
+  for (const [duration, ...rest] of tune) {
+    for (let i = 0; i < rest.length; i += 3) {
+      const [instrument, note] = rest.slice(i, i + 2);
+      const name = typeof note === "string"
+        ? note.toLowerCase()
+        : Object.entries(tones).find(([, v]) => v === note)[0].toLowerCase();
+      const y = Object.entries(noteMap).find(([, v]) => v === name)[0];
+      cells[`${x}_${y}`] = instrument;
+    }
+
+    if (!rest.length) {
+      x += duration / beatTime;
+    } else {
+      x++;
+    }
+  }
+  return cells;
+}
+
 function downloadText(filename, text) {
   const blob = new Blob([text], { type: "text/plain" });
 
@@ -66,7 +117,6 @@ function downloadText(filename, text) {
 }
 
 function getSong(cells, bpm, length, noteMap) {
-
   const song = [];
   for (let i = 0; i < length; i++) song.push([]);
 
@@ -122,7 +172,7 @@ export function createSequencer(target) {
     const extension = fileName[fileName.length - 1];
 
     if (extensions.length > 0 && extensions.includes(enxtension))
-      throw "Extension not recongized: " + fileName;
+      throw "Extension not recognized: " + fileName;
 
     readFile(file);
   }
@@ -197,7 +247,6 @@ export function createSequencer(target) {
       i++;
     }
 
-
     let j = 0;
     while ((j+1)*lengthY < height) {
       lines.push([
@@ -209,7 +258,7 @@ export function createSequencer(target) {
 
     return lines.map(line => svg`
       <path 
-        stroke="black" 
+        stroke="black"
         vector-effect="non-scaling-stroke" 
         stroke-width="1" d="${ptsToD(line)}"/>
     `)
@@ -220,7 +269,6 @@ export function createSequencer(target) {
     const { left, right, bottom, top, width, height} = state.svg.getBoundingClientRect();
     const cellWidth = width/state.numberX;
     const cellHeight = height/state.numberY;
-
 
     return svg`
       <rect 
@@ -238,7 +286,6 @@ export function createSequencer(target) {
     const cellHeight = height/numberY;
 
     const drawCell = ([x, y, color]) => {
-
       return svg`
         <rect 
           fill=${color}
@@ -253,20 +300,29 @@ export function createSequencer(target) {
 
     for (const key in cells) {
       const [x, y] = key.split("_").map(Number);
+      // const color = noteColors[(13 - y) % noteColors.length];
       const color = instrumentColorMap[cells[key]];
-      cellsToDraw.push([ x, y, color ])
+      cellsToDraw.push([ x, y, color ]);
     }
 
     return cellsToDraw.map(drawCell);
   }
 
   const drawInstrumentSelection = (instrument, color) => {
+    const instrumentSymbol = { 
+      "sine": "~", 
+      "triangle": "^",
+      "square": "-",
+      "sawtooth": "/"
+    }[instrument];
 
     return html`
       <div 
         class="instrument" 
         style=${`
           background: ${color};
+          width:50px;
+          height:50px;
           border: ${state.instrument === instrument ? "2px solid black" : "none"};
           box-sizing: border-box;
           `} 
@@ -274,74 +330,18 @@ export function createSequencer(target) {
           state.instrument = instrument;
           r();
         }}>
-        ${instrument}
+        ${instrumentSymbol}
         </div>
     `
   }
 
   const view = (state) => html`
-    <style>
-      html, body {
-        margin: 0px;
-      }
-
-      .svg-container {
-        width: 100%;
-        height: 100%;
-        flex: 1;
-        background: white;
-      }
-
-      .container {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: 100%;
-      }
-
-      .sequencer-toolbox {
-        display: flex;
-        min-height: 80px;
-        max-height: 80px;
-        background: lightgrey;
-        justify-content: space-around;
-        align-items: center;
-      }
-
-      .bpm {
-        display: flex;
-      }
-
-      .instruments {
-        display: flex;
-        flex-wrap: wrap;
-        min-width: 140px;
-        justify-content: flex-end;
-      }
-
-      .instrument {
-        color: white;
-        height: 30px;
-        display: flex;
-        width: 70px;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .bpm-control {
-        cursor: pointer;
-      }
-
-      .bpm-control:hover {
-        color: orange;
-      }
-    </style>
-    <div class="container">
+    <style>${style}</style>
+    <div class="container" @mouseup=${setCodeText}>
       <svg 
         class="svg-container" 
         @mousedown=${onDownSVG} 
-        @mousemove=${onMoveSVG}
-        @mouseup=${onUpSVG}>
+        @mousemove=${onMoveSVG}>
         ${state.svg ? drawCells(state) : ""}
         ${state.svg ? drawBeat(state) : ""}
         ${state.svg ? drawGrid(state.numberX, state.numberY, state.svg) : ""}
@@ -436,7 +436,7 @@ export function createSequencer(target) {
       state.cells[key] = state.instrument;
       const n = noteMap[y];
       const d = (1000*60)/state.bpm;
-      playNote(n, d, state.instrument)
+      playNote(n, d, state.instrument);
       state.drawing = true;
     }
 
@@ -453,7 +453,14 @@ export function createSequencer(target) {
       pts.forEach(([x, y]) => {
         const key = `${x}_${y}`
         if (state.erasing) delete state.cells[key]
-        else state.cells[key] = state.instrument;
+        else {
+          if (state.cells[key] !== state.instrument) {
+            const n = noteMap[y];
+            const d = (1000*60)/state.bpm;
+            playNote(n, d, state.instrument);
+          }
+          state.cells[key] = state.instrument;
+        }
       })
     }
 
@@ -461,10 +468,12 @@ export function createSequencer(target) {
     r();
   }
 
-  const onUpSVG = e => {
+  const setCodeText = e => {
     state.erasing = false;
     state.drawing = false;
-
+    let text = tuneToText(cellsToTune(state.cells, state.bpm, state.numberX));
+    text = "\n" + text.trim();
+    dispatch("SET_EDITOR_TEXT", { text, range: global_state.editRange });
     r();
   }
 
@@ -486,16 +495,23 @@ export function createSequencer(target) {
     r(); 
     state.svg = target.querySelector("svg");
 
-    r();
     // add events
+    target.querySelector("link").addEventListener("load", r, { once: true });
     // window.addEventListener("resize", r);
     addDropUpload();
-
   }
 
   init(state);
 
   return {
+    loadInitValue({ text }) {
+      state.cells = tuneToCells(textToTune(text));
+      let num = text.match(/(.+):/);
+      if (num) num = 60*1000/Number(num[1]);
+      else num = 120;
+      state.bpm = Math.round(num);
+      r();
+    },
     end() {
       if (state.interval) clearInterval(state.interval);
     },
@@ -504,7 +520,6 @@ export function createSequencer(target) {
       state.cells = cells;
       state.bpm = bpm;
       state.data = data;
-      console.log(state);
       r();
     },
     getTune() {
@@ -512,3 +527,29 @@ export function createSequencer(target) {
     }
   };
 }
+
+class Sequencer extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+
+    const shadow = this.attachShadow({mode: 'open'});
+
+    const methods = createSequencer(shadow);
+    for (let i in methods) {
+      this[i] = methods[i];
+    }
+
+
+  }
+
+  disconnectedCallback() {
+    this.end();
+  }
+
+}
+
+customElements.define("sequencer-editor", Sequencer);
+

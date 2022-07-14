@@ -1,5 +1,8 @@
-import { render, html, svg } from "../uhtml.js";
-import { pixelStyles } from "./pixel-styles.js";
+import { render, html } from "uhtml";
+import { dispatch } from "../dispatch.js";
+import { bitmapTextToImageData } from "../engine/bitmap.js";
+import { global_state } from "../global_state.js";
+import { style } from "./style.js";
 
 const hexToRGBA = (hex) => {
   let [r, g, b, a = 255] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
@@ -20,28 +23,31 @@ function RGBA_to_hex([r, g, b, a]) {
   return "#" + r + g + b + a;
 }
 
+// NOTE: kognise - Could the editor canvas be 16x16 and just scaled up with CSS?
+//                 Whole file here could do with a refactor, maybe I will at some point.
 export function createPixelEditor(target) {
   const state = {
     canvas: null,
     gridColors: [],
     tempGridColors: [],
-    viewboxSize: [32, 32],
-    canvasSize: [500, 500],
+    viewboxSize: [16, 16],
+    canvasSize: [1, 1],
     maxCanvasSize: 350,
     selected: [],
-    tool: "draw",
-    color: hexToRGBA("#000000"),
+    tool: "brush",
+    color: [0, 0, 0, 255],
     mousedown: false,
     mousedownPt: [0, 0],
     currentPt: [0, 0],
     showGrid: false,
-    gridSize: [32, 32],
+    gridSize: [16, 16],
     undoRedoStack: [],
     animationId: null,
     selectHandle: {
       clicked: false,
       dragged: false,
     },
+    palette: global_state.palette,
     // hoveredCell: null,
   };
 
@@ -51,7 +57,7 @@ export function createPixelEditor(target) {
     let name = fileName[0];
     const extension = fileName[fileName.length - 1];
 
-    if (extensions.length > 0 && extensions.includes(enxtension))
+    if (extensions.length > 0 && extensions.includes(extension))
       throw "Extension not recongized: " + fileName;
 
     readFile(file);
@@ -97,6 +103,32 @@ export function createPixelEditor(target) {
     });
   }
 
+  function stateUpdate() {
+    const canvas = target.querySelector("#offscreen-canvas");
+    drawCanvasNoBg(canvas);
+    const ctx = canvas.getContext("2d");
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const colors = Object.fromEntries(
+      state.palette.map(x => [x[1].join(","), x[0]])
+    );
+
+    let text = "";
+    for (let i = 0; i < imageData.width*imageData.height; i += 1) {
+      const r = imageData.data[i*4];
+      const g = imageData.data[i*4+1];
+      const b = imageData.data[i*4+2];
+      const a = imageData.data[i*4+3];
+      const key = `${r},${g},${b},${a}`;
+      const color = colors[key] ?? ".";
+      
+      if ((i % imageData.width === 0) && i !== 0) text += "\n";
+      text += color;
+    }
+
+    text = "\n" + text.trim();
+    dispatch("SET_EDITOR_TEXT", { text, range: global_state.editRange });
+  }
+
   const setImageData = (file) => {
     let reader = new FileReader();
     reader.onload = (event) => {
@@ -106,10 +138,10 @@ export function createPixelEditor(target) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const image = new Image();
       image.onload = () => {
-        const w = Math.min(image.width, 32);
-        const h = Math.min(image.height, 32);
+        const w = Math.min(image.width, state.gridSize[0]);
+        const h = Math.min(image.height, state.gridSize[1]);
         ctx.drawImage(image, 0, 0, w, h);
-        const imageData = ctx.getImageData(0, 0, 32, 32);
+        const imageData = ctx.getImageData(0, 0, state.gridSize[0], state.gridSize[1]);
         for (let i = 0; i < state.gridColors.length; i++) {
           state.gridColors[i] = [
             imageData.data[i * 4],
@@ -122,69 +154,59 @@ export function createPixelEditor(target) {
       image.src = dataURL;
     };
     reader.readAsDataURL(file);
+    stateUpdate();
   };
 
-  const renderTool = (toolName, state) => html`
+  const renderTool = ([ toolName, icon ], state) => html`
     <button
-      class=${[state.tool === toolName ? "selected-tool" : ""].join(" ")}
-      @click=${() => {
-        state.tool = toolName;
-        r();
-      }}
-      style="
-        display: flex; 
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: min-content;
-      "
-      title="${toolName}"
+      class=${[state.tool === toolName ? "active" : ""].join(" ")}
+      @click=${() => { state.tool = toolName; r(); }}
+      title=${toolName}
     >
-      <img src=${`./assets/${toolName}.png`} alt=${toolName} width="25px" />
-      ${toolName}
+      <ion-icon name=${icon} />
+      <div>${toolName}</div>
     </button>
   `;
 
+  // FIXME: kognise - Stylesheet takes a sec to load/render so we get a FOUC. Can we preload somehow?
   const view = (state) => html`
-    ${pixelStyles}
+    <style>${style}</style>
     <div class="pixel-editor-container">
       <div class="canvas-container">
         <canvas class="drawing-canvas"></canvas>
         <canvas
           class="offscreen-canvas"
           id="offscreen-canvas"
-          width="32"
-          height="32"
+          width=${state.viewboxSize[0]}
+          height=${state.viewboxSize[1]}
         ></canvas>
       </div>
       <div class="toolbox">
         <div class="tools">
-          ${["draw", "circle", "rectangle", "line", "bucket", "move"].map(
-            (name) => renderTool(name, state)
-          )}
-          <button
-            @click=${() => {
+          ${[
+            ["brush", "brush"],
+            ["line", "arrow-forward"],
+            ["circle", "ellipse"],
+            ["box", "square"],
+            ["bucket", "color-fill"],
+            ["move", "move"],
+          ].map((tool) => renderTool(tool, state))}
+          <!-- <button
+            @click=$() => {
               if (state.undoRedoStack.length === 0) return;
               const grid = JSON.parse(state.undoRedoStack.pop());
               state.gridColors.forEach((arr, i) => {
                 state.gridColors[i] = grid[i];
               });
+              stateUpdate();
             }}
-            style="
-              display: flex; 
-              flex-direction: column;
-              justify-content: center;
-              align-items: center;
-              height: min-content;
-            "
             title="undo"
           >
-            <img src="./assets/undo.png" alt="undo" width="25px" />
             undo
           </button>
           <button
             title="export"
-            @click=${() => {
+            @click=$() => {
               const canvas = target.querySelector("#offscreen-canvas");
               drawCanvasNoBg(canvas);
               const image = canvas.toDataURL();
@@ -195,7 +217,7 @@ export function createPixelEditor(target) {
             }}
           >
             export
-          </button>
+          </button> -->
         </div>
 
         ${drawColorsButtons(state)}
@@ -203,36 +225,18 @@ export function createPixelEditor(target) {
     </div>
   `;
 
-  const drawColorsButtons = (state) => html`
-    <div class="colors">
-      <input
-        type="color"
-        @input=${(e) => {
-          state.color = hexToRGBA(e.target.value);
-          r();
-        }}
-        @click=${(e) => {
-          state.color = hexToRGBA(e.target.value);
-          r();
-        }}
-        class=${RGBA_to_hex(state.color) !== "#00000000" ? "selected-tool" : ""}
-        style=${`
-          height: 35px; 
-          width: 35px; 
-        `}
-      />
-      <button
-        class=${RGBA_to_hex(state.color) === "#00000000" ? "selected-tool" : ""}
-        @click=${() => {
-          state.color = hexToRGBA("#00000000");
-          r();
-        }}
-        style="height: 35px;"
-      >
-        <img src="./assets/clear.png" width="25px" />
-      </button>
-    </div>
-  `;
+  const drawColorsButtons = (state) => {
+    const drawColor = (color) => html`
+      <div 
+        class=${RGBA_to_hex(state.color) === RGBA_to_hex(color[1]) ? "active" : ""}
+        style=${`background-color: ${RGBA_to_hex(color[1])}`}
+        @click=${() => { state.color = color[1]; r(); }}>
+      </div>
+    `
+    return html`
+      <div class="colors">${state.palette.map(drawColor)}</div>
+    `
+  };
 
   const r = () => {
     render(target, view(state));
@@ -297,7 +301,7 @@ export function createPixelEditor(target) {
   };
 
   const tools_mousedown = {
-    draw: (x, y) => {
+    brush: (x, y) => {
       const [gridW, gridH] = state.gridSize;
       state.gridColors[gridW * y + x] = state.color;
     },
@@ -376,7 +380,7 @@ export function createPixelEditor(target) {
   };
 
   const tools_mousemove = {
-    draw: (x, y) => {
+    brush: (x, y) => {
       if (!state.mousedown) return;
       const [gridW, gridH] = state.gridSize;
 
@@ -388,7 +392,7 @@ export function createPixelEditor(target) {
 
       state.mousedownPt = state.currentPt;
     },
-    rectangle: (x, y) => {
+    box: (x, y) => {
       state.tempGridColors = state.tempGridColors.fill(null);
       if (!state.mousedown) return;
       const [gridW, gridH] = state.gridSize;
@@ -553,7 +557,7 @@ export function createPixelEditor(target) {
 
     c.width = state.canvasSize[0];
     c.height = state.canvasSize[1];
-    const ctx = c.getContext("2d");
+    // const ctx = c.getContext("2d");
     // ctx.translate(0.5, 0.5);
   };
 
@@ -582,10 +586,9 @@ export function createPixelEditor(target) {
   const init = (state) => {
     r();
     const c = target.querySelector(".drawing-canvas");
-
     state.canvas = c;
-
     setCanvasSize(c);
+    
     // init canvas data
     const [gridW, gridH] = state.viewboxSize;
     state.gridColors = new Array(state.gridSize[0] * state.gridSize[1]).fill(
@@ -662,6 +665,7 @@ export function createPixelEditor(target) {
         if (c !== null) state.gridColors[i] = c;
       });
       state.tempGridColors.fill(null);
+      stateUpdate();
     };
 
     c.addEventListener("mouseup", (e) => {
@@ -681,6 +685,17 @@ export function createPixelEditor(target) {
   init(state);
 
   return {
+    loadInitValue({ text }) {
+      const imageData = bitmapTextToImageData(text, state.palette);
+      for (let i = 0; i < state.gridColors.length; i++) {
+        state.gridColors[i] = [
+          imageData.data[i * 4],
+          imageData.data[i * 4 + 1],
+          imageData.data[i * 4 + 2],
+          imageData.data[i * 4 + 3],
+        ];
+      }
+    },
     setGridColors: ({ colors, size }) => {
       state.gridColors = colors;
       state.gridSize = size;
@@ -698,3 +713,23 @@ export function createPixelEditor(target) {
     },
   };
 }
+
+class PixelEditor extends HTMLElement {
+  constructor() {
+    super();
+  }
+  
+  connectedCallback() {
+    const shadow = this.attachShadow({ mode: "open" });
+    const methods = createPixelEditor(shadow);
+    for (const i in methods) {
+      this[i] = methods[i];
+    }
+  }
+
+  disconnectedCallback() {
+    this.end();
+  }
+}
+
+customElements.define("pixel-editor", PixelEditor);
