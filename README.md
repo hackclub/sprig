@@ -1,4 +1,4 @@
-# :leaves: [Hack Club Sprig](www.sprig.hackclub.dev) :leaves:
+# :leaves: [Hack Club Sprig](https://sprig.hackclub.dev) :leaves:
 
 ![Screen Shot 2022-07-14 at 4 28 20 PM](https://user-images.githubusercontent.com/27078897/179077324-74842cf2-be0b-4801-a3ab-90a5fcfa11f4.png)
 
