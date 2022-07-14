@@ -105,7 +105,7 @@ const menu = (state) => html`
     </div>
     <a 
       class="menu-item dropdown-container" 
-      href="https://github.com/hackclub/sprig-gallery"
+      href="https://sprig-gallery.hackclub.dev"
       target="_blank">
       gallery
     </a>
