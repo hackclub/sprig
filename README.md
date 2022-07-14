@@ -1,6 +1,7 @@
-# Hack Club Puzzle Lab
+# [Hack Club Sprig](sprig.hackclub.dev)
 
-The best way to learn is by making things you care about and sharing them with others.  
+Sprig is a web-based environment for creating tile games. These games run in the browser and on the Sprig Console, a game console where every user is a creator. The only way to obtain a Sprig console is to make a game for it and share it in the [Sprig Gallery](sprig-gallery.hackclub.dev)
+
 
 ## Development
 
@@ -9,22 +10,22 @@ We use vite for development.
 Clone repo:
 
 ```
-$ git clone https://github.com/hackclub/puzzlelab/
+$ git clone https://github.com/hackclub/sprig/
 ```
 
-Start a local HTTP server inside the repo:
+To run:
 
 ```
-$ cd puzzlelab/
-$ yarn
-$ yarn dev
+cd sprig
+yarn
+yarn dev
 ```
 
 Visit <http://localhost:3000> in your web browser and it should work!
 
 ## License
 
-The Hack Club Puzzle Lab is open source and licensed under the [MIT License](./LICENSE). Fork, remix, and make it your own! Pull requests and other contributions greatly appreciated.
+The Hack Club Sprig is open source and licensed under the [MIT License](./LICENSE). Fork, remix, and make it your own! Pull requests and other contributions greatly appreciated.
 
 ## TODO
 
