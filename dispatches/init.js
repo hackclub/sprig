@@ -30,7 +30,13 @@ export async function init(args, state) {
   const savedString = window.localStorage.getItem("puzzle-lab") || "[]";
   state.savedGames = JSON.parse(savedString);
   const games = Object.fromEntries(state.savedGames);
-  if ("DRAFT" in games) dispatch("SET_EDITOR_TEXT", { text: games["DRAFT"], range: [0, 0] });
+  const set = text => dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] });
+  if ("DRAFT" in games)
+    set(games["DRAFT"]);
+  else {
+    const link = "https://raw.githubusercontent.com/hackclub/sprig/main/games/snailtrail.js";
+    set(await fetch(link).then(x => x.text()));
+  }
 
   window.addEventListener("error", (e) => {
     // this is a hack to cut down on this chrome bug: https://support.google.com/chrome/thread/165732696/typing-in-console-triggers-error?hl=en
