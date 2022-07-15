@@ -85,6 +85,18 @@ const ACTIONS = {
   RENDER(args, state) {
     render(document.querySelector(".root"), view(state));
   },
+  DOC_OPEN(args, state) {
+    const setPerc = n => {
+      document.documentElement.style.setProperty("--docs-percentage", `${n}%`);
+    };
+    
+    const perc = getComputedStyle(document.documentElement)
+      .getPropertyValue("--docs-percentage");
+
+    setPerc((perc.trim() === "0%") ? 75 : 0);
+
+    document.querySelector(".docs").classList.toggle("docs-expanded");
+  }
 }
 
 export function dispatch(action, args = {}) {

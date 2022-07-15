@@ -30,17 +30,7 @@ export function addEvents(state) {
   });
 
   bodyListener("mousedown", ".docs-trigger", function (event) {
-    const setPerc = n => {
-      document.documentElement.style.setProperty("--docs-percentage", `${n}%`);
-    };
-    
-    const perc = getComputedStyle(document.documentElement).getPropertyValue("--docs-percentage");
-    if (perc.trim() === "0%")
-      setPerc(75);
-    else
-      setPerc(0);
-
-    document.querySelector(".docs").classList.toggle("docs-expanded");
+    dispatch("DOC_OPEN");
   });
 
   window.addEventListener("unload", () => {
