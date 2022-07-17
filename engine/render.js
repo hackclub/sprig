@@ -1,18 +1,23 @@
 const spritesheetIndex = 0;
 const texIndex = 1;
-let gl, texLocation, texResLocation, spritesheetLocation;
+let gl,              texLocation,
+                  texResLocation,
+             spritesheetLocation,
+    spritesheetTileCountLocation;
+
+const SPRITESHEET_TILE_COUNT = (1 << 10) / 16;
 
 export function setBitmaps(bitmaps) {
-  const sw = 16 * 4;
-  const sh = 16 * 4;
+  const sw = 16 * SPRITESHEET_TILE_COUNT;
+  const sh = 16 * SPRITESHEET_TILE_COUNT;
   const spritesheet = new ImageData(sw, sh);
   for (let i = 0; i < bitmaps.length; i++) {
     const [_, { imageData: { data: bitmap } }] = bitmaps[i];
     console.log(i, bitmap);
     for (let x = 0; x < 16; x++)
       for (let y = 0; y < 16; y++) {
-        const sx = (          (i % 4))*16 + x;
-        const sy = (Math.floor(i / 4))*16 + y;
+        const sx = (          (i % SPRITESHEET_TILE_COUNT))*16 + x;
+        const sy = (Math.floor(i / SPRITESHEET_TILE_COUNT))*16 + y;
         spritesheet.data[(sy*sw + sx)*4 + 0] = bitmap[(y*16 + x)*4 + 0];
         spritesheet.data[(sy*sw + sx)*4 + 1] = bitmap[(y*16 + x)*4 + 1];
         spritesheet.data[(sy*sw + sx)*4 + 2] = bitmap[(y*16 + x)*4 + 2];
@@ -31,6 +36,7 @@ export function init(canvas) {
   texLocation = gl.getUniformLocation(program, "u_tex");
   texResLocation = gl.getUniformLocation(program, "u_texres");
   spritesheetLocation = gl.getUniformLocation(program, "u_spritesheet");
+  spritesheetTileCountLocation = gl.getUniformLocation(program, "u_spritesheet_tile_count");
   resize(canvas);
 
   function createShader(source, type) {
@@ -69,6 +75,7 @@ export function render(canvas) {
   gl.uniform1i(spritesheetLocation, spritesheetIndex);
   gl.uniform1i(texLocation, texIndex);
   gl.uniform2f(texResLocation, canvas.width, canvas.height);
+  gl.uniform1i(spritesheetTileCountLocation, SPRITESHEET_TILE_COUNT);
 
   gl.drawArrays(gl.TRIANGLE_FAN, 0, 3);
 }
@@ -110,6 +117,7 @@ precision highp float;
 
 uniform sampler2D u_tex;
 uniform sampler2D u_spritesheet;
+uniform int u_spritesheet_tile_count;
 uniform vec2 u_texres;
 in vec2 texCoord;
 
@@ -118,8 +126,9 @@ out vec4 frag;
 vec4 sampleTile(vec2 coord, float index) {
   int spriteIndex = int(index*255.0)-1;
   vec2 fcoord = mod(coord*u_texres, 1.0);
-  fcoord += vec2(spriteIndex%4, spriteIndex/4);
-  vec4 ret = texture(u_spritesheet, fcoord/4.0);
+  fcoord += vec2(spriteIndex % u_spritesheet_tile_count,
+                 spriteIndex / u_spritesheet_tile_count);
+  vec4 ret = texture(u_spritesheet, fcoord/float(u_spritesheet_tile_count));
   ret.a *= min(1.0, index);
   return ret;
 }
