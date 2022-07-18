@@ -24,6 +24,7 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
     solids: [],
     pushable: {},
   };
+  drawText(state.text);
 
   class Sprite {
     constructor(type, x, y) {
