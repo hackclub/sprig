@@ -11,6 +11,14 @@ let cur = null;
 export function init(canvas) {
   const engine = gridEngine.init({
     palette: global_state.palette,
+    drawText: img => {
+      const text = document.querySelector(".game-text");
+      text.width = img.width;
+      text.height = img.height;
+      text
+        .getContext("2d")
+        .putImageData(img, 0, 0);
+    },
     setBitmaps: bitmaps => {
       console.log(bitmaps);
       render.setBitmaps(bitmaps);

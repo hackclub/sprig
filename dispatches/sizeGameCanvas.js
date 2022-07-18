@@ -1,6 +1,6 @@
 export function sizeGameCanvas() {
   const container = document.querySelector(".game-canvas-container");
-  const canvas = container.querySelector("canvas");
+  const canvas = container.querySelector(".game-canvas");
   if (!container || !canvas) return;
 
   // const ar = canvas.width/canvas.height;
@@ -13,16 +13,26 @@ export function sizeGameCanvas() {
   //   canvas.style.removeProperty("width");
   // }
 
-  const [idealWidth, idealHeight] = window.idealDimensions || [1, 1];
-  let scale = Math.min(width/idealWidth, height/idealHeight);
-  // scale = nearestPowerOf2(scale);
-  const w = Math.floor(idealWidth * scale);
-  const h = Math.floor(idealHeight * scale);
+  const actualFromIdeal = (idealWidth, idealHeight) => {
+    let scale = Math.min(width/idealWidth, height/idealHeight);
+    // scale = nearestPowerOf2(scale);
+    return {
+      w: Math.floor(idealWidth * scale),
+      h: Math.floor(idealHeight * scale)
+    };
+  }
+  (() => {
+    const { w, h } = actualFromIdeal(...(window.idealDimensions || [1, 1]));
+    canvas.style.width = `${w}px`;
+    canvas.style.height = `${h}px`;
+  })();
 
-  // console.log("scale", scale);
-
-  canvas.style.width = `${w}px`;
-  canvas.style.height = `${h}px`;
+  (() => {
+    const text = document.querySelector(".game-text");
+    const { w, h } = actualFromIdeal(5, 4);
+    text.style.width = `${w}px`;
+    text.style.height = `${h}px`;
+  })();
 }
 
 function nearestPowerOf2(n) {

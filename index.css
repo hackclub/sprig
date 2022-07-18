@@ -181,6 +181,11 @@ body {
   overflow: hidden;
 }
 
+.game-text {
+  image-rendering: pixelated;
+  pointer-events: none;
+  position: absolute;
+}
 .game-canvas {
   image-rendering: pixelated;
   outline: none;
