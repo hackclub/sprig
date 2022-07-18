@@ -1,3 +1,11 @@
+/*
+@title: sokoban
+@author: leo
+*/
+
+// Welcome to Sprig!
+// Here is an example game to acquaint you with your toolkit.
+
 const player = "p";
 const box = "b";
 const goal = "g";
