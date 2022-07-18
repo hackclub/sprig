@@ -92,16 +92,16 @@ const drawFile = (file, i, state) => {
 const menu = (state) => html`
   <div class="menu">
     <div class="menu-item dropdown-container">
-      files
+      shed
       <div class="dropdown-list">
         ${state.savedGames.map((file, i) => drawFile(file, i, state))}
       </div>
     </div>
     <div class="menu-item dropdown-container">
-      export
+      save
       <div class="dropdown-list">
-        <div @click=${e => dispatch("SAVE_TO_FILE")}>js</div>
-        <div @click=${e => dispatch("GET_URL")}>link</div>
+        <div @click=${e => dispatch("SAVE_TO_FILE")}>to file</div>
+        <div @click=${e => dispatch("GET_URL")}>to link</div>
       </div>
     </div>
     <a 
