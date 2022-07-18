@@ -6,6 +6,9 @@
 // Welcome to Sprig!
 // Here is an example game to acquaint you with your toolkit.
 
+// You can find a walkthrough of this game here:
+// https://github.com/hackclub/sprig-gallery/blob/main/src/routes/getting-started.md#lets-make-our-first-game-in-sprig 
+
 const player = "p";
 const box = "b";
 const goal = "g";
