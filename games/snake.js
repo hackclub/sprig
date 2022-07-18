@@ -1,3 +1,8 @@
+/*
+@title: snake
+@author: ced
+*/
+
 const apple = 'a';
 const playerUp    = 'u';
 const playerDown  = 'd';

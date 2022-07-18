@@ -1,3 +1,8 @@
+/*
+@title: snailtrail
+@author: ced
+*/
+
 const playerUp    = 'u';
 const playerDown  = 'd';
 const playerLeft  = 'l';

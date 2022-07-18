@@ -1,3 +1,8 @@
+/*
+@title: pyre
+@author: ced
+*/
+
 const smallFire = ['0', '1'];
 const   bigFire = ['2', '3'];
 const   allFire = [...smallFire, ...bigFire];

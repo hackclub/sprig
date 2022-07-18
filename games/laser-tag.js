@@ -1,5 +1,6 @@
 /*
 @title: laser tag
+@author: leo
 */
 
 const player1 = "0"
