@@ -32,12 +32,13 @@ The Hack Club Sprig is open source and licensed under the [MIT License](./LICENS
 ## TODO
 
 ### now
+- [ ] empty bitmap should be editable
 - [ ] fullscreen the game
 - [ ] style the upload flow
-- [ ] monkeypatch `setInterval`
+- [x] monkeypatch `setInterval`
 - [ ] preview maps
 - [x] previews don't update accordingly
-- [ ] simplify api
+- [x] simplify api
   - single character references are confusing
   - matching and replacing can be done manually, more programmatic in a way
   - how to handle maps with multiple sprites in one tile
