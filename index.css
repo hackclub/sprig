@@ -11,7 +11,7 @@
   --switch-fg-high: #f8f9fa;
   --editor-sidebar-width: 360px;
   --docs-percentage: 0%;
-  --editor-width: 60%;
+  --editor-width: 0%;
 }
 
 :root { box-sizing: border-box; }
