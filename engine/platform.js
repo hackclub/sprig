@@ -83,18 +83,24 @@ export function init(canvas) {
   canvas.addEventListener("keydown", (e) => {
     const key = e.key;
 
-    const VALID_INPUTS = ["w", "a", "s", "d", "i", "j", "k", "l"];
+    console.log(key);
+    const INPUT_MAP = {
+      "up":    ["w", "ArrowUp"   ],
+      "down":  ["s", "ArrowDown" ],
+      "left":  ["a", "ArrowLeft" ],
+      "right": ["d", "ArrowRight"],
+      "i":     ["i"],
+      "j":     ["j"],
+      "k":     ["k"],
+      "l":     ["l"]
+    };
 
+    const VALID_INPUTS = Object.values(INPUT_MAP).flat();
     if (!VALID_INPUTS.includes(key)) return;
 
-    if (key === "w") tileInputs["up"].forEach(fn => fn());
-    if (key === "a") tileInputs["left"].forEach(fn => fn());
-    if (key === "s") tileInputs["down"].forEach(fn => fn());
-    if (key === "d") tileInputs["right"].forEach(fn => fn());
-    if (key === "i") tileInputs["i"].forEach(fn => fn());
-    if (key === "j") tileInputs["j"].forEach(fn => fn());
-    if (key === "k") tileInputs["k"].forEach(fn => fn());
-    if (key === "l") tileInputs["l"].forEach(fn => fn());
+    for (const [gameKey, platformKeys] of Object.entries(INPUT_MAP))
+      if (platformKeys.includes(key))
+        tileInputs[gameKey].forEach(fn => fn());
 
     afterInputs.forEach(f => f());
 
