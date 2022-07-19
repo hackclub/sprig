@@ -160,8 +160,12 @@ setMap(map\`
 const player = () => getFirst(bean);
 
 /* CAN YOU ADD MORE DIRECTIONS? */
-onInput("left", () => player().x -= 1);
-onInput("down", () => player().y += 1);
+onInput("left", () => {
+  player().x -= 1
+});
+onInput("down", () => {
+  player().y += 1
+});
     `
   },
   {
@@ -236,10 +240,15 @@ cccccbbcc
 cccccbcc.
 ..cccccc.\`);
 
-/* PASTE SOME MOVEMENT CODE HERE ;)
- * hint: go to your shed to get the code from the last stage! */
+
+/* PASTE SOME MOVEMENT CODE HERE ;) */
+
+
+/* hint: go to your shed to get the code from the last stage! */
+
 
 /* ps - what happens if you make non-bean players? :O */
+
 
 /* what happens if you make vines solid? :3 */
 setSolids( [bean, trellis] )
@@ -318,10 +327,18 @@ bb.bbbbbb
 bbbbbbbbb\`);
 
 const player = () => getFirst(bean);
-onInput( "left", () => player().x -= 1);
-onInput("right", () => player().x += 1);
-onInput( "down", () => player().y += 1);
-onInput(   "up", () => player().y -= 1);
+onInput( "left", () => {
+  player().x -= 1;
+});
+onInput("right", () => {
+  player().x += 1;
+});
+onInput( "down", () => {
+  player().y += 1;
+});
+onInput(   "up", () => {
+  player().y -= 1;
+});
 
 /* uhhh ... what  things should be solid?!? */
 
