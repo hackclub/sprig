@@ -31,12 +31,8 @@ export async function init(args, state) {
   state.savedGames = JSON.parse(savedString);
   const games = Object.fromEntries(state.savedGames);
   const set = text => dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] });
-  if ("DRAFT" in games)
-    set(games["DRAFT"]);
-  else {
-    const link = "https://raw.githubusercontent.com/hackclub/sprig/main/games/snailtrail.js";
-    set(await fetch(link).then(x => x.text()));
-  }
+  const link = "https://raw.githubusercontent.com/hackclub/sprig/main/games/sokoban.js";
+  set(await fetch(link).then(x => x.text()));
 
   window.addEventListener("error", (e) => {
     // this is a hack to cut down on this chrome bug: https://support.google.com/chrome/thread/165732696/typing-in-console-triggers-error?hl=en
@@ -88,6 +84,5 @@ export async function init(args, state) {
   new ResizeObserver(sizeGameCanvas).observe(container);
 
   document.querySelector(".game-canvas").focus();
-  dispatch("DOC_OPEN");
   dispatch("RENDER");
 }

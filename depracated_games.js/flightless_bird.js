@@ -1,4 +1,7 @@
-setScreenSize(500, 500*.8)
+/*
+@title: flightless_bird
+@author: ced
+*/
 
 setLegend({
   d: bitmap`

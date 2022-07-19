@@ -363,13 +363,13 @@ for (const challenge of challenges)
 const menu = (state) => html`
   <div class="menu">
     <div class="menu-item dropdown-container">
-      shed
+      recent
       <div class="dropdown-list">
         ${state.savedGames.map((file, i) => drawFile(file, i, state))}
       </div>
     </div>
     <div class="menu-item dropdown-container">
-      grow
+      learn
       <div class="dropdown-list">
         ${challenges.map(({ content, name }, i) => {
           const load = () => {
@@ -404,7 +404,7 @@ const menu = (state) => html`
     </div>
     <div 
       class="menu-item docs-trigger">
-      docs
+      help
     </div>
     <div 
       class="menu-item run" 
