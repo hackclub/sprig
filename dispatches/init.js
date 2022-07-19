@@ -84,6 +84,5 @@ export async function init(args, state) {
   new ResizeObserver(sizeGameCanvas).observe(container);
 
   document.querySelector(".game-canvas").focus();
-  dispatch("DOC_OPEN");
   dispatch("RENDER");
 }
