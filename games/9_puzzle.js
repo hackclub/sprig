@@ -140,9 +140,9 @@ const rbTile = (x,y) => {
   return undefined;
 }
 
-onInput("up", _ => {ptile.y -= 1;})
-onInput("down", _ => {ptile.y += 1;})
-onInput("left", _ => {ptile.x -= 1;})
-onInput("right", _ => {ptile.x += 1;})
+onInput("w", _ => {ptile.y -= 1;})
+onInput("s", _ => {ptile.y += 1;})
+onInput("a", _ => {ptile.x -= 1;})
+onInput("d", _ => {ptile.x += 1;})
 
 setLevel(0)

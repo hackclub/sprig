@@ -160,10 +160,10 @@ setMap(map\`
 const player = () => getFirst(bean);
 
 /* CAN YOU ADD MORE DIRECTIONS? */
-onInput("left", () => {
+onInput("a", () => {
   player().x -= 1
 });
-onInput("down", () => {
+onInput("s", () => {
   player().y += 1
 });
     `
@@ -327,16 +327,16 @@ bb.bbbbbb
 bbbbbbbbb\`);
 
 const player = () => getFirst(bean);
-onInput( "left", () => {
+onInput("a", () => {
   player().x -= 1;
 });
-onInput("right", () => {
+onInput("d", () => {
   player().x += 1;
 });
-onInput( "down", () => {
+onInput("s", () => {
   player().y += 1;
 });
-onInput(   "up", () => {
+onInput("w", () => {
   player().y -= 1;
 });
 

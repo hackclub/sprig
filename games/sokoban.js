@@ -102,19 +102,19 @@ p.w.
 const currentLevel = levels[level];
 setMap(currentLevel);
 
-onInput("up", () => {
+onInput("w", () => {
   getFirst(player).y -= 1;
 });
 
-onInput("down", () => {
+onInput("s", () => {
   getFirst(player).y += 1;
 });
 
-onInput("left", () => {
+onInput("a", () => {
   getFirst(player).x -= 1;
 });
 
-onInput("right", () => {
+onInput("d", () => {
   getFirst(player).x += 1;
 });
 

@@ -92,19 +92,19 @@ setMap(levels[level])
 const p = getFirst(player);
 addSprite(p.x - p.dx, p.y - p.dy, red)
 
-onInput("up", _ => {
+onInput("w", _ => {
   getFirst(player).y -= 1;
 })
 
-onInput("down", _ => {
+onInput("s", _ => {
   getFirst(player).y += 1;
 })
 
-onInput("left", _ => {
+onInput("a", _ => {
   getFirst(player).x -= 1;
 })
 
-onInput("right", _ => {
+onInput("d", _ => {
   getFirst(player).x += 1;
 })
 
