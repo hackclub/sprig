@@ -152,7 +152,7 @@ afterInput(() => {
       if (sprite.type === coin) {
         sprite.remove();
         money++;
-        setText(`You've got: ${money}`)
+        setText(`You've got ${money} coins.`)
       } 
     })
   });
