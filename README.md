@@ -7,6 +7,8 @@ Sprig is a web-based environment for creating tile games. These games run in the
 
 ## Development
 
+Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) where you can join the development discussion and ask for help.
+
 We use vite for development.
 
 Clone repo:
