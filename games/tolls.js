@@ -12,7 +12,7 @@ Press j to reset the level.
 */
 
 let money = 0;
-setText(`You've got: ${money}`)
+setText(`You've got ${money} coins.`)
 
 const player = 'p';
 const coin = 'c';
@@ -160,7 +160,7 @@ afterInput(() => {
   tilesWith(toll, player).forEach(tile => {
     if (money) {
       money--;
-      setText(`You've got: ${money}`)
+      setText(`You've got ${money} coins.`)
     } else {
       const p = getFirst(player);
       p.x -= p.dx;
