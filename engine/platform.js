@@ -69,10 +69,10 @@ export function init(canvas) {
   // tempCanvas.height = 16;
 
   let tileInputs = {
-    up: [],
-    down: [],
-    left: [],
-    right: [],
+    w: [],
+    s: [],
+    a: [],
+    d: [],
     i: [],
     j: [],
     k: [],
