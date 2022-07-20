@@ -3,7 +3,6 @@ import { palette } from "../../palette.js";
 
 async function drawGame(game) {
 
-  if (game.split('.').pop() != 'js') return {};
   const url = `https://raw.githubusercontent.com/hackclub/sprig/main/games/${name}.js`;
   const src = await fetch(url).then(x => x.text());
 
