@@ -72,6 +72,6 @@ async function drawGames(game) {
 }
 
 export default async function handler(request, response) {
-  const { name } = req.query;
+  const { name } = request.query;
   return response.status(200).json({ data: "test", name });
 }
