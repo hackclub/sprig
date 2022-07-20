@@ -93,6 +93,19 @@ const challenges = [
   {
     name: 'bean',
     content: `
+/*                     WELCOME TO SPRIG!!!
+ *
+ * This is the first of many "challenges" which will help you
+ *             familiarize yourself with Sprig.
+ *
+ *  Read through to get acquainted with the format all Sprig
+ *    games share. Play with the art! Make it your own :)
+ *
+ *   When you're ready, click the big green button to go to
+ *                  the next challenge!
+ */
+
+
 /* HERE we give each kind of sprite
  * in our game a letter, as a shorthand. */
 const bean = 'a';
