@@ -196,6 +196,8 @@ sprite.type = "p"
 \`dx\` and \`dy\` are cleared after \`afterInput\`. 
 They can be used to check if the sprite moved and by how much.
 
+You can remove a sprite with \`sprite.remove()\`.
+
 ### getTile(x, y)
 
 Returns a list of the sprites in the specified tile.
