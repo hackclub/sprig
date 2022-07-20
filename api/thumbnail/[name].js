@@ -1,10 +1,11 @@
 import * as gridEngine from "../../engine/engine.js";
 import { palette } from "../../palette.js";
 
-async function drawGames(game) {
+async function drawGame(game) {
 
-  if (game.name.split('.').pop() != 'js') return {};
-  const src = await fetch(game.download_url).then(x => x.text());
+  if (game.split('.').pop() != 'js') return {};
+  const url = `https://raw.githubusercontent.com/hackclub/sprig/main/games/${name}.js`;
+  const src = await fetch(url).then(x => x.text());
 
   let screen, bitmaps;
   const setScreenSize = (w, h) => screen = new ImageData(w, h);
@@ -24,7 +25,7 @@ async function drawGames(game) {
     if (!screen) throw new Error("never set screen size");
     if (!bitmaps) throw new Error("never set legend");
   } catch(e) {
-    console.error(`couldn't run ${game.name}: ${e}`);
+    console.error(`couldn't run ${game}: ${e}`);
     return {};
   }
 
@@ -35,7 +36,7 @@ async function drawGames(game) {
   canvas.imageSmoothingEnabled = false;
   canvas.getContext("2d").putImageData(screen, 0, 0);
   
-  return { name: game.name, download_url: canvas.toDataURL() };
+  return { name: game, image: canvas.toDataURL(), url };
 
 
   function blitSprite(screen, sprite, tx, ty) {
@@ -73,5 +74,6 @@ async function drawGames(game) {
 
 export default async function handler(request, response) {
   const { name } = request.query;
-  return response.status(200).json({ data: "test", name });
+  const data = await drawGame(name);
+  return response.status(200).json(data);
 }
