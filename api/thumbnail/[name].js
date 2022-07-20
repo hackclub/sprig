@@ -13,7 +13,10 @@ async function drawGame(game) {
   const src = readFileSync(file, 'utf8');
 
   let screen, bitmaps;
-  const setScreenSize = (w, h) => screen = new ImageData(w, h);
+  const setScreenSize = (w, h) => screen = {
+    data: new Uint8Array(w*h*4),
+    width: w
+  };
   const { api, state } = gridEngine.init({
     palette,
     setBitmaps: bm => bitmaps = bm,
