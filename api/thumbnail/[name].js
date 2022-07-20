@@ -1,5 +1,6 @@
 import * as gridEngine from "../../engine/engine.js";
 import { palette } from "../../palette.js";
+import fetch from 'node-fetch';
 
 async function drawGame(game) {
 
@@ -30,12 +31,8 @@ async function drawGame(game) {
 
   screen.data.fill(255);
   drawTiles(state, api, screen, bitmaps);
-  const canvas = document.createElement("canvas");
-  canvas.width = canvas.height = Math.max(screen.width, screen.height);
-  canvas.imageSmoothingEnabled = false;
-  canvas.getContext("2d").putImageData(screen, 0, 0);
   
-  return { name: game, image: canvas.toDataURL(), url };
+  return { name: game, image: screen, url };
 
 
   function blitSprite(screen, sprite, tx, ty) {
