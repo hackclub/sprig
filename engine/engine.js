@@ -25,7 +25,7 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
     solids: [],
     pushable: {},
   };
-  drawText(state.text);
+  if (drawText) drawText(state.text);
 
   class Sprite {
     constructor(type, x, y) {
@@ -152,6 +152,9 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
   }
 
   function setLegend(...bitmaps) {
+    bitmaps.forEach(([ key, value ]) => {
+      if (key.length !== 1) throw new Error(`Bitmaps must have one character names.`);
+    })
     state.legend = bitmaps;
     setBitmaps(bitmaps);
   }
@@ -192,7 +195,7 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
 
   function setTextColor(r, g, b) {
     state.textColor = [r, g, b];
-    drawText(state.text);
+    if (drawText) drawText(state.text);
   }
 
   function setText(str) {
