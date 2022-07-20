@@ -292,16 +292,16 @@ const pushPlayer = (dx, dy) => {
     getFirst(player).y += dy;
   }
 }
-onInput( "left", () => {
+onInput("a", () => {
   pushPlayer(-1,  0);
 })
-onInput("right", () => {
+onInput("d", () => {
   pushPlayer( 1,  0);
 })
-onInput(   "up", () => {
+onInput("w", () => {
   pushPlayer( 0, -1);
 })
-onInput( "down", () => {
+onInput("s", () => {
   pushPlayer( 0,  1);
 })
 

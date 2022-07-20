@@ -3,7 +3,7 @@ export function bitmapTextToImageData(string, palette) {
   const rows = string.trim().split("\n").map(x => x.trim());
   const rowLengths = rows.map(x => x.length);
   const isRect = rowLengths.every(val => val === rowLengths[0])
-  if (!isRect) console.error("Level must be rect.");
+  if (!isRect) throw new Error("Level must be rect.");
   const width = rows[0].length || 1;
   const height = rows.length || 1;
   const data = new Uint8ClampedArray(width*height*4);
@@ -13,7 +13,11 @@ export function bitmapTextToImageData(string, palette) {
   for (let i = 0; i < width*height; i++) {
     const type = string.split("").filter(x => x.match(/\S/))[i];
 
-    // if (!(type in colors)) console.error("unknown color:", type);
+    if (!(type in colors)) {
+      const err = `in sprite string: no known color for char "${type}"`;
+      console.error(err + '\n' + string);
+      throw new Error(err + ' (invalid sprite in console)');
+    }
 
     const [ r, g, b, a ] = colors[type] ?? colors["."];
     data[i*4] = r;

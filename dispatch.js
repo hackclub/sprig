@@ -47,6 +47,11 @@ const ACTIONS = {
     });
 
     console.log(link);
+    alert(
+      "copied a link to your game to your clipboard ;)\n" +
+        "safari likes to stop us from doing that, \n" +
+        "so it's also in your browser console!"
+    );
   },
   LOG_ERROR: logError,
   SET_EDIT_RANGE({ range }, state) {
@@ -54,6 +59,7 @@ const ACTIONS = {
   },
   SET_ASSET_EDITOR({ type, text }, state) {
     state.editor = type;
+    dispatch("RUN");
     dispatch("RENDER");
     if (type === null) return;
 

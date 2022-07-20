@@ -93,6 +93,19 @@ const challenges = [
   {
     name: 'bean',
     content: `
+/*                     WELCOME TO SPRIG!!!
+ *
+ * This is the first of many "challenges" which will help you
+ *             familiarize yourself with Sprig.
+ *
+ *  Read through to get acquainted with the format all Sprig
+ *    games share. Play with the art! Make it your own :)
+ *
+ *   When you're ready, click the big green button to go to
+ *                  the next challenge!
+ */
+
+
 /* HERE we give each kind of sprite
  * in our game a letter, as a shorthand. */
 const bean = 'a';
@@ -160,8 +173,12 @@ setMap(map\`
 const player = () => getFirst(bean);
 
 /* CAN YOU ADD MORE DIRECTIONS? */
-onInput("left", () => player().x -= 1);
-onInput("down", () => player().y += 1);
+onInput("a", () => {
+  player().x -= 1
+});
+onInput("s", () => {
+  player().y += 1
+});
     `
   },
   {
@@ -236,10 +253,15 @@ cccccbbcc
 cccccbcc.
 ..cccccc.\`);
 
-/* PASTE SOME MOVEMENT CODE HERE ;)
- * hint: go to your shed to get the code from the last stage! */
+
+/* PASTE SOME MOVEMENT CODE HERE ;) */
+
+
+/* hint: go to your shed to get the code from the last stage! */
+
 
 /* ps - what happens if you make non-bean players? :O */
+
 
 /* what happens if you make vines solid? :3 */
 setSolids( [bean, trellis] )
@@ -318,10 +340,18 @@ bb.bbbbbb
 bbbbbbbbb\`);
 
 const player = () => getFirst(bean);
-onInput( "left", () => player().x -= 1);
-onInput("right", () => player().x += 1);
-onInput( "down", () => player().y += 1);
-onInput(   "up", () => player().y -= 1);
+onInput("a", () => {
+  player().x -= 1;
+});
+onInput("d", () => {
+  player().x += 1;
+});
+onInput("s", () => {
+  player().y += 1;
+});
+onInput("w", () => {
+  player().y -= 1;
+});
 
 /* uhhh ... what  things should be solid?!? */
 

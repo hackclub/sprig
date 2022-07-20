@@ -357,7 +357,7 @@ const push = (type, [x, y]) => {
   }
 };
 
-onInput(   'up', () => push(   playerUp, [ 0, -1]));
-onInput( 'down', () => push( playerDown, [ 0,  1]));
-onInput( 'left', () => push( playerLeft, [-1,  0]));
-onInput('right', () => push(playerRight, [ 1,  0]));
+onInput('w', () => push(   playerUp, [ 0, -1]));
+onInput('s', () => push( playerDown, [ 0,  1]));
+onInput('a', () => push( playerLeft, [-1,  0]));
+onInput('d', () => push(playerRight, [ 1,  0]));

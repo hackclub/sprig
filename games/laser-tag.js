@@ -242,7 +242,7 @@ const getActivePlayer = () => getFirst(activePlayer);
 
 setMap(levels[level]);
 
-onInput("up", _ => {
+onInput("w", _ => {
     const p1 = getFirst(player1);
     const p2 = getFirst(player2);
     if (p1.y < p2.y) {
@@ -255,7 +255,7 @@ onInput("up", _ => {
 
 })
 
-onInput("down", _ => {
+onInput("s", _ => {
     const p1 = getFirst(player1);
     const p2 = getFirst(player2);
     if (p1.y > p2.y) {
@@ -267,7 +267,7 @@ onInput("down", _ => {
     }
 })
 
-onInput("left", _ => {
+onInput("a", _ => {
     const p1 = getFirst(player1);
     const p2 = getFirst(player2);
     if (p1.x < p2.x) {
@@ -279,7 +279,7 @@ onInput("left", _ => {
     }
 })
 
-onInput("right", _ => {
+onInput("d", _ => {
     const p1 = getFirst(player1);
     const p2 = getFirst(player2);
     if (p1.x > p2.x) {

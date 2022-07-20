@@ -69,10 +69,10 @@ export function init(canvas) {
   // tempCanvas.height = 16;
 
   let tileInputs = {
-    up: [],
-    down: [],
-    left: [],
-    right: [],
+    w: [],
+    s: [],
+    a: [],
+    d: [],
     i: [],
     j: [],
     k: [],
@@ -80,21 +80,16 @@ export function init(canvas) {
   };
   let afterInputs = [];
 
+
+  const VALID_INPUTS = ["w", "a", "s", "d", "i", "j", "k", "l"];
   canvas.addEventListener("keydown", (e) => {
     const key = e.key;
 
-    const VALID_INPUTS = ["w", "a", "s", "d", "i", "j", "k", "l"];
-
     if (!VALID_INPUTS.includes(key)) return;
 
-    if (key === "w") tileInputs["up"].forEach(fn => fn());
-    if (key === "a") tileInputs["left"].forEach(fn => fn());
-    if (key === "s") tileInputs["down"].forEach(fn => fn());
-    if (key === "d") tileInputs["right"].forEach(fn => fn());
-    if (key === "i") tileInputs["i"].forEach(fn => fn());
-    if (key === "j") tileInputs["j"].forEach(fn => fn());
-    if (key === "k") tileInputs["k"].forEach(fn => fn());
-    if (key === "l") tileInputs["l"].forEach(fn => fn());
+    for (const valid_key of VALID_INPUTS)
+      if (key == valid_key)
+        tileInputs[key].forEach(fn => fn());
 
     afterInputs.forEach(f => f());
 
@@ -107,7 +102,9 @@ export function init(canvas) {
   });
 
   function onInput(type, fn) {
-    if (!(type in tileInputs)) console.error("Unknown input type:", type)
+    if (!(type in tileInputs)) throw new Error(
+      `Unknown input key, "${type}": expected one of ${VALID_INPUTS.join(', ')}`
+    )
     tileInputs[type].push(fn);
   }
 

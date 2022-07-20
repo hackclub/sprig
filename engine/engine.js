@@ -15,6 +15,7 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
   // tile gamelab
   const state = {
     legend: [],
+    textColor: [ 10, 10, 80 ],
     text: new ImageData(160, 128),
     dimensions: {
       width: 0,
@@ -187,6 +188,11 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
 
   function clearTile(x, y) {
     state.sprites = state.sprites.filter(s => s.x !== x || s.y !== y);
+  }
+
+  function setTextColor(r, g, b) {
+    state.textColor = [r, g, b];
+    drawText(state.text);
   }
 
   function setText(str) {
@@ -464,9 +470,9 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
             for (let x = 0; x < 8; x++) {
               const val = (bits>>(7-x)) & 1;
 
-              txt.data[(y*txt.width + xt + x)*4 + 0] = val*10;
-              txt.data[(y*txt.width + xt + x)*4 + 1] = val*10;
-              txt.data[(y*txt.width + xt + x)*4 + 2] = val*80;
+              txt.data[(y*txt.width + xt + x)*4 + 0] = val*state.textColor[0];
+              txt.data[(y*txt.width + xt + x)*4 + 1] = val*state.textColor[1];
+              txt.data[(y*txt.width + xt + x)*4 + 2] = val*state.textColor[2];
               txt.data[(y*txt.width + xt + x)*4 + 3] = val*255;
             }
             y++;
@@ -525,6 +531,7 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
     setLegend, 
     setMap, 
     setText,
+    setTextColor,
     addSprite,
     getGrid,
     getTile,

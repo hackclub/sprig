@@ -353,7 +353,7 @@ setMap(map`${mapStr}`);
 
 let done = false;
 
-onInput("left", () => {
+onInput("a", () => {
   if (done) return;
   if (empty.x === 0) return;
   // get tile to left of empty
@@ -362,7 +362,7 @@ onInput("left", () => {
   empty.x -= 1;
 })
 
-onInput("right", () => {
+onInput("d", () => {
   if (done) return;
   if (empty.x === 3) return;
   // get tile to right of empty
@@ -371,7 +371,7 @@ onInput("right", () => {
   empty.x += 1;
 })
 
-onInput("down", () => {
+onInput("s", () => {
   if (done) return;
   if (empty.y === 3) return;
   // get tile to bottom of empty
@@ -380,7 +380,7 @@ onInput("down", () => {
   empty.y += 1;
 })
 
-onInput("up", () => {
+onInput("w", () => {
   if (done) return;
   if (empty.y === 0) return;
   // get tile to top of empty

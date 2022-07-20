@@ -126,23 +126,23 @@ wwtwww
 
 setMap(levels[level]);
 
-onInput( "left", () => {
+onInput("a", () => {
   getFirst(player).x -= 1;
 });
 
-onInput("right", () => {
+onInput("d", () => {
   getFirst(player).x += 1;
 });
 
-onInput( "down", () => {
+onInput("s", () => {
   getFirst(player).y += 1;
 });
 
-onInput(   "up", () => {
+onInput("w", () => {
   getFirst(player).y -= 1;
 });
 
-onInput(   "j", () => {
+onInput("j", () => {
   setMap(levels[level]);
 });
 

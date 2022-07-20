@@ -145,7 +145,7 @@ const startLevel = n => {
     tick();
 }
 
-onInput(  "up", () => {
+onInput("w", () => {
     const elapsed = Date.now() - lastTick;
     
     if (!alive && elapsed > 500) {

@@ -95,6 +95,25 @@ Sets how sprites draw when stacked. Sprites earlier in the array are drawn on to
 setZOrder(["p", "r"])
 ```
 
+## Text
+
+### setText
+Works very similarly to `setMap`!
+```
+setText(
+`
+         n
+    s     e
+     u     r
+      p     d
+`);
+
+### setTextColor(r, g, b)
+```
+// set the text color to bright red!
+setTextColor(255, 0, 0);
+```
+
 ## User Input
 
 Game Lab has four directional controls: `up`, `down`, `left`, and `right`
