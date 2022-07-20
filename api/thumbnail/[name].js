@@ -1,11 +1,15 @@
 import * as gridEngine from "../../engine/engine.js";
 import { palette } from "../../palette.js";
-import fetch from 'node-fetch';
+// import fetch from 'node-fetch';
+import { readFileSync } from 'fs';
+// import path from 'path';
 
 async function drawGame(game) {
 
-  const url = `https://raw.githubusercontent.com/hackclub/sprig/main/games/${game}.js`;
-  const src = await fetch(url).then(x => x.text());
+  // const url = `https://raw.githubusercontent.com/hackclub/sprig/main/games/${game}.js`;
+  // const src = await fetch(url).then(x => x.text());
+
+  const src = readFileSync(`../../games/${game}.js`, 'utf8');
 
   let screen, bitmaps;
   const setScreenSize = (w, h) => screen = new ImageData(w, h);
