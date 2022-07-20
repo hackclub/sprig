@@ -54,7 +54,7 @@ async function drawGame(name) {
 export default async function handler(request, response) {
   const { name } = request.query;
   const data = await drawGame(name);
-  return response.status(200).json({ data });
+  return response.status(200).send(JSON.stringify(data));
 }
 
 function makeSpriteBitmap(grid) {
