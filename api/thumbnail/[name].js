@@ -1,14 +1,16 @@
 import { palette } from "../../palette.js";
 import { readFileSync } from 'fs';
 import path from 'path';
+import fetch from "node-fetch";
 
-function drawGame(name) {
+async function drawGame(name) {
 
   const url = `https://raw.githubusercontent.com/hackclub/sprig/main/games/${name}.js`;
 
-  const file = path.join(process.cwd(), '../../games', `${name}.js`);
-  console.log(file);
-  const src = readFileSync(file, 'utf8');
+  // const file = path.join(process.cwd(), '../../games', `${name}.js`);
+  // console.log(file);
+  // const src = readFileSync(file, 'utf8');
+  const src = await fetch(url).then( res => res.text() );
 
   let legend = src.match(/setLegend\(([\s\S]*?)\)/)[1];
 
@@ -49,12 +51,9 @@ function drawGame(name) {
   return { name, image, url };
 }
 
-const test = drawGame("sokoban");
-console.log(test);
-
 export default async function handler(request, response) {
   const { name } = request.query;
-  const data = drawGame(name);
+  const data = await drawGame(name);
   return response.status(200).json(data);
 }
 
