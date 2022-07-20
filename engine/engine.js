@@ -488,7 +488,12 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
   }
 
   function getTile(x, y) { 
-    return getGrid()[state.dimensions.width*y+x] || [];
+    return y >= 0 
+      && y < state.dimensions.height 
+      && x >= 0 
+      && y < state.dimensions.width 
+      ? (getGrid()[state.dimensions.width*y+x] || [])
+      : [];
   }
 
   function hasDuplicates(array) {
@@ -545,7 +550,7 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
     setSolids, 
     setPushables, 
     map: _makeTag(text => text), // No-op for now, here for editor support
-    bitmap: _makeTag(text => ({
+    bitmap: _makeTag(text => ({ // TODO: make this no-op and store bitmap somewhere else
       text,
       imageData: bitmapTextToImageData(text, palette)
     })),
