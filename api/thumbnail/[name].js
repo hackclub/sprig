@@ -1,5 +1,5 @@
-import * as gridEngine from "../engine/engine.js";
-import { palette } from "../palette.js";
+import * as gridEngine from "engine/engine.js";
+import { palette } from "palette.js";
 
 async function drawGames(game) {
 
