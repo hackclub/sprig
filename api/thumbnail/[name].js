@@ -7,6 +7,7 @@ function drawGame(name) {
   const url = `https://raw.githubusercontent.com/hackclub/sprig/main/games/${name}.js`;
 
   const file = path.join(process.cwd(), '../../games', `${name}.js`);
+  console.log(file);
   const src = readFileSync(file, 'utf8');
 
   let legend = src.match(/setLegend\(([\s\S]*?)\)/)[1];
@@ -48,7 +49,8 @@ function drawGame(name) {
   return { name, image, url };
 }
 
-const test = drawGame("tolls");
+const test = drawGame("sokoban");
+console.log(test);
 
 export default async function handler(request, response) {
   const { name } = request.query;
