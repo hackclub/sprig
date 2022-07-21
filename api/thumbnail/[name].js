@@ -19,9 +19,18 @@ async function drawGame(name) {
   let lastKey = "";
   legend.split(",").forEach(x => {
     if (x.includes("[")) {
-      const tempKey = x.replace("[", "").trim();
-      const re = new RegExp(`${tempKey}.*?=.*?["'](.*?)["']`);
-      lastKey = src.match(re)[1];
+      // check if is variable or string
+      if (!x.includes(/["']/)) {
+        const tempKey = x.replace("[", "").trim();
+        const re = new RegExp(`${tempKey}.*?=.*?["'](.*?)["']`);
+        lastKey = src.match(re)[1];
+      } else {
+        lastKey = src
+          .split("")
+          .filter(ch => !(/['"\s\[]/).test(ch))
+          .join("");
+      }
+
     } else {
       const value = x.match(/bitmap`([\s\S]*?)`/);
 
@@ -61,13 +70,13 @@ async function drawGame(name) {
 export default async function handler(req, res) {
   const { name } = req.query;
   const data = await drawGame(name);
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  )
+  // res.setHeader('Access-Control-Allow-Credentials', true)
+  // res.setHeader('Access-Control-Allow-Origin', '*')
+  // res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+  // res.setHeader(
+  //   'Access-Control-Allow-Headers',
+  //   'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  // )
   return res.status(200).send(data);
 }
 
