@@ -239,11 +239,11 @@ export function createPixelEditor(target) {
           @click=${() => { state.color = color[1]; r(); }}>
         </div>
       `
+    }
 
     return html`
       <div class="colors">${state.palette.map(drawColor)}</div>
     `
-    }
   };
 
   const r = () => {
