@@ -230,7 +230,7 @@ export function createPixelEditor(target) {
       const isTransparent = color[1][3] === 0;
       
       let style = `background-color: ${RGBA_to_hex(color[1])};`;
-      isTransparent ? style += ` background-image: url("/checkerboard.svg")` : ``
+      isTransparent ? style += ` background-image: url("data:image/svg+xml,%0A%3Csvg width='23' height='23' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='8' height='8' fill='white'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H4V4H0V0ZM4 4H8V8H4V4Z' fill='%23DCEFFC'/%3E%3C/svg%3E%0A");` : ``
 
       return html`
         <div 
