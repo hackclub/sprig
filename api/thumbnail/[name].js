@@ -3,9 +3,6 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import fetch from "node-fetch";
 
-
-console.log(await drawGame("sokoban"));
-
 async function drawGame(name) {
 
   const url = `https://raw.githubusercontent.com/hackclub/sprig/main/games/${name}.js`;
