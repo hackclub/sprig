@@ -1,3 +1,5 @@
+import { bitmapTextToImageData } from "./bitmap.js";
+
 const spritesheetIndex = 0;
 const texIndex = 1;
 let gl,              texLocation,
@@ -12,16 +14,15 @@ export function setBitmaps(bitmaps) {
   const sh = 16 * SPRITESHEET_TILE_COUNT;
   const spritesheet = new ImageData(sw, sh);
   for (let i = 0; i < bitmaps.length; i++) {
-    const [_, { imageData: { data: bitmap } }] = bitmaps[i];
-    console.log(i, bitmap);
+    const { data } = bitmapTextToImageData(bitmaps[i][1]);
     for (let x = 0; x < 16; x++)
       for (let y = 0; y < 16; y++) {
         const sx = (          (i % SPRITESHEET_TILE_COUNT))*16 + x;
         const sy = (Math.floor(i / SPRITESHEET_TILE_COUNT))*16 + y;
-        spritesheet.data[(sy*sw + sx)*4 + 0] = bitmap[(y*16 + x)*4 + 0];
-        spritesheet.data[(sy*sw + sx)*4 + 1] = bitmap[(y*16 + x)*4 + 1];
-        spritesheet.data[(sy*sw + sx)*4 + 2] = bitmap[(y*16 + x)*4 + 2];
-        spritesheet.data[(sy*sw + sx)*4 + 3] = bitmap[(y*16 + x)*4 + 3];
+        spritesheet.data[(sy*sw + sx)*4 + 0] = data[(y*16 + x)*4 + 0];
+        spritesheet.data[(sy*sw + sx)*4 + 1] = data[(y*16 + x)*4 + 1];
+        spritesheet.data[(sy*sw + sx)*4 + 2] = data[(y*16 + x)*4 + 2];
+        spritesheet.data[(sy*sw + sx)*4 + 3] = data[(y*16 + x)*4 + 3];
       }
   }
   uploadImage(spritesheet, spritesheetIndex);

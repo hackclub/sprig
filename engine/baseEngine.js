@@ -1,8 +1,5 @@
-import { bitmapTextToImageData } from "./bitmap.js";
-import { font } from "./font.js";
-
 // Tagged tempalate literal factory go brrr
-export function _makeTag(cb) {
+function _makeTag(cb) {
   return (strings, ...interps) => {
     if (typeof strings === "string") {
       throw new Error("Tagged template literal must be used like name`text`, instead of name(`text`)");
@@ -12,12 +9,12 @@ export function _makeTag(cb) {
   }
 }
 
-export function init({ palette, setBitmaps, setScreenSize, drawText }) {
+export function baseEngine() {
   // tile gamelab
   const state = {
     legend: [],
     textColor: [ 10, 10, 80 ],
-    text: new ImageData(160, 128),
+    text: "",
     dimensions: {
       width: 0,
       height: 0,
@@ -26,7 +23,6 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
     solids: [],
     pushable: {},
   };
-  if (drawText) drawText(state.text);
 
   class Sprite {
     constructor(type, x, y) {
@@ -151,14 +147,6 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
     const s = new Sprite(type, x, y);
     state.sprites.push(s);
   }
-
-  function setLegend(...bitmaps) {
-    bitmaps.forEach(([ key, value ]) => {
-      if (key.length !== 1) throw new Error(`Bitmaps must have one character names.`);
-    })
-    state.legend = bitmaps;
-    setBitmaps(bitmaps);
-  }
   
   const _allEqual = arr => arr.every(val => val === arr[0]);
 
@@ -174,8 +162,6 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
 
     state.sprites = [];
 
-    setScreenSize(w*16, h*16);
-
     for (let i = 0; i < w*h; i++) {
       const char = string.split("").filter(x => x.match(/\S/))[i];
       if (char === ".") continue;
@@ -184,7 +170,6 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
 
       const x = i%w; 
       const y = Math.floor(i/w);
-
 
       addSprite(x, y, type);
     }
@@ -196,37 +181,10 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
 
   function setTextColor(r, g, b) {
     state.textColor = [r, g, b];
-    if (drawText) drawText(state.text);
   }
 
   function setText(str) {
-    if (!drawText) return;
-
-    const txt = state.text;
-    txt.data.fill(0);
-
-    for (const [i, line] of Object.entries(str.split('\n'))) {
-      let xt = 0;
-      for (const char of line.split('')) {
-        const cc = char.charCodeAt(0);
-
-        let y = i*8;
-        for (const bits of font.slice(cc*8, (1+cc)*8)) {
-            for (let x = 0; x < 8; x++) {
-              const val = (bits>>(7-x)) & 1;
-
-              txt.data[(y*txt.width + xt + x)*4 + 0] = val*state.textColor[0];
-              txt.data[(y*txt.width + xt + x)*4 + 1] = val*state.textColor[1];
-              txt.data[(y*txt.width + xt + x)*4 + 2] = val*state.textColor[2];
-              txt.data[(y*txt.width + xt + x)*4 + 3] = val*255;
-            }
-            y++;
-        }
-        xt += 8;
-      }
-    }
-
-    drawText(txt);
+    state.text = str;
   }
 
   function getTile(x, y) { 
@@ -278,7 +236,6 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
     .every(type => types.includes(type));
 
   const api = {
-    setLegend, 
     setMap, 
     setText,
     setTextColor,
@@ -291,11 +248,9 @@ export function init({ palette, setBitmaps, setScreenSize, drawText }) {
     clearTile, 
     setSolids, 
     setPushables, 
-    map: _makeTag(text => text), // No-op for now, here for editor support
-    bitmap: _makeTag(text => ({ // TODO: make this no-op and store bitmap somewhere else
-      text,
-      imageData: bitmapTextToImageData(text, palette)
-    })),
+    map: _makeTag(text => text),
+    bitmap: _makeTag(text => text),
+    tune: _makeTag(text => text),
     getFirst: (type) => state.sprites.find(t => t.type === type), // **
     getAll: (type) => type ? state.sprites.filter(t => t.type === type) : state.sprites, // **
     width: () => state.dimensions.width,

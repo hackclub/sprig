@@ -1,31 +1,47 @@
 import { dispatch } from "../dispatch.js";
-import { textToTune } from '../textTuneConverters.js';
-import { global_state } from "../global_state.js";
 import { sizeGameCanvas } from "../dispatches/sizeGameCanvas.js";
 import * as render from "./render.js";
-import * as gridEngine from "./engine.js";
+import { baseEngine } from "./baseEngine.js";
+import { font } from "./font.js";
 
+
+function drawText(str, color) {
+  const img = new ImageData(168, 120);
+  img.data.fill(0);
+
+  for (const [i, line] of Object.entries(str.split('\n'))) {
+    let xt = 0;
+    for (const char of line.split('')) {
+      const cc = char.charCodeAt(0);
+
+      let y = i*8;
+      for (const bits of font.slice(cc*8, (1+cc)*8)) {
+          for (let x = 0; x < 8; x++) {
+            const val = (bits>>(7-x)) & 1;
+
+            img.data[(y*img.width + xt + x)*4 + 0] = val*color[0];
+            img.data[(y*img.width + xt + x)*4 + 1] = val*color[1];
+            img.data[(y*img.width + xt + x)*4 + 2] = val*color[2];
+            img.data[(y*img.width + xt + x)*4 + 3] = val*255;
+          }
+          y++;
+      }
+      xt += 8;
+    }
+  }
+
+  const text = document.querySelector(".game-text");
+  text.width = img.width;
+  text.height = img.height;
+  text
+    .getContext("2d")
+    .putImageData(img, 0, 0);
+}
 
 let cur = null;
 
 export function init(canvas) {
-  const engine = gridEngine.init({
-    palette: global_state.palette,
-    drawText: img => {
-      const text = document.querySelector(".game-text");
-      text.width = img.width;
-      text.height = img.height;
-      text
-        .getContext("2d")
-        .putImageData(img, 0, 0);
-    },
-    setBitmaps: bitmaps => {
-      console.log(bitmaps);
-      render.setBitmaps(bitmaps);
-      dispatch("SET_BITMAPS", { bitmaps });
-    },
-    setScreenSize,
-  });
+  const { api, state } = baseEngine();
 
   // remove event listeners
   let newCanvas = canvas.cloneNode(true);
@@ -37,9 +53,25 @@ export function init(canvas) {
   canvas.setAttribute("tabindex", "1");
 
   function gameloop() {
+    const dims = state.dimensions;
+    setScreenSize(dims.width*16, dims.height*16);
+
+    // draw text
+    drawText(state.text, state.textColor);
+
     render.render(drawTiles());
 
     animationId = window.requestAnimationFrame(gameloop);
+  }
+
+  function setLegend(...bitmaps) {
+    bitmaps.forEach(([ key, value ]) => {
+      if (key.length !== 1) throw new Error(`Bitmaps must have one character names.`);
+    })
+    state.legend = bitmaps;
+
+    render.setBitmaps(bitmaps);
+    dispatch("SET_BITMAPS", { bitmaps });
   }
 
   function end() {
@@ -56,17 +88,12 @@ export function init(canvas) {
     canvas.width = w;
     canvas.height = h;
 
-    const { width, height } = engine.state.dimensions;
+    const { width, height } = state.dimensions;
     window.idealDimensions = [width, height];
     sizeGameCanvas();
 
     render.resize(canvas);
   }
-
-  let background = "";
-  const tempCanvas = document.createElement("canvas");
-  // tempCanvas.width = 16;
-  // tempCanvas.height = 16;
 
   let tileInputs = {
     w: [],
@@ -80,7 +107,6 @@ export function init(canvas) {
   };
   let afterInputs = [];
 
-
   const VALID_INPUTS = ["w", "a", "s", "d", "i", "j", "k", "l"];
   canvas.addEventListener("keydown", (e) => {
     const key = e.key;
@@ -93,7 +119,7 @@ export function init(canvas) {
 
     afterInputs.forEach(f => f());
 
-    engine.state.sprites.forEach(s => {
+    state.sprites.forEach(s => {
       s.dx = 0;
       s.dy = 0;
     })
@@ -109,10 +135,10 @@ export function init(canvas) {
   }
 
   function drawTiles() {
-    const { dimensions, legend } = engine.state;
+    const { dimensions, legend } = state;
     const { width, height, maxTileDim } = dimensions;
 
-    const grid = engine.api.getGrid();
+    const grid = api.getGrid();
     if (width == 0 || height == 0) return new ImageData(1, 1);
     const img = new ImageData(width, height);
 
@@ -141,10 +167,11 @@ export function init(canvas) {
   // how to add timed things, like bird flying and ball kicks
   
   return {
+    setLegend,
     onInput, 
     afterInput, 
-    tune: gridEngine._makeTag(text => textToTune(text)),
     setScreenSize,
-    ...engine.api,
+    getState: () => state,
+    ...api,
   }
 }

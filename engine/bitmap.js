@@ -1,5 +1,7 @@
+import { palette } from "../palette.js";
+
 // At odds with in-game behavior... doesn't enforce a size with stretching.
-export function bitmapTextToImageData(string, palette) {
+export function bitmapTextToImageData(string) {
   const rows = string.trim().split("\n").map(x => x.trim());
   const rowLengths = rows.map(x => x.length);
   const isRect = rowLengths.every(val => val === rowLengths[0])

@@ -1,12 +1,13 @@
 // import { init } from "../engine/gamelab_functions.js";
-import { init } from "../engine/platform.js";
-import { playTune } from "../engine/playTune.js";
+import { init } from "./webEngine.js";
+import { playTune } from "./playTune.js";
+import { textToTune } from './textTuneConverters.js';
 
 let tunes = [];
 let intervals = [];
 let timeouts = [];
 
-export function evalGameScript(script, palette) {
+export function evalGameScript(script) {
   const canvas = document.querySelector(".game-canvas");
   const gameFunctions = init(canvas);
 
@@ -29,7 +30,8 @@ export function evalGameScript(script, palette) {
       return i;
   };
 
-  gameFunctions.playTune = (tune, n) => {
+  gameFunctions.playTune = (text, n) => {
+    const tune = textToTune(text);
     const x = playTune(tune, n);
     tunes.push(x);
   };

@@ -191,23 +191,19 @@ export function createMapEditor(target) {
   return {
     loadInitValue({ text, bitmaps }) {
       const legend = {};
+      console.log(text, bitmaps);
 
       bitmaps.forEach( (x, i) => {
         const k = x[0];
         const val = x[1];
 
-        legend[k] = {
-          ...val,
-          imageData: bitmapTextToImageData(val.text, state.palette)
+        if (val.length > 0) legend[k] = {
+          text: val,
+          imageData: bitmapTextToImageData(val, state.palette)
         }
       })
 
       state.legend = legend;
-      Object.fromEntries(
-        Object.entries(bitmaps)
-          .filter(([, bitmap]) => !!bitmap.text)
-          .map(([ key, bitmap ]) => [ key, { ...bitmap, imageData: bitmapTextToImageData(bitmap.text, state.palette) } ])
-      );
       
       if (text) {
         state.cells = text.trim().split("\n").map(x => [...x.trim()]);
