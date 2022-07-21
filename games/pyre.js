@@ -197,8 +197,7 @@ const replace = (type0, type1) => {
 }
 
 let tick = 0;
-const ticker = window.activeTicker = setInterval(() => {
-    if (window.activeTicker != ticker) return clearInterval(ticker);
+setInterval(() => {
     tick++;
 
     /* fire flicker */

@@ -1,7 +1,5 @@
 import { palette } from "../../palette.js";
 import { baseEngine } from "../../engine/baseEngine.js";
-import { readFileSync } from 'fs';
-import path from 'path';
 import fetch from "node-fetch";
 
 function evalGameScript(script) {
@@ -26,7 +24,9 @@ function evalGameScript(script) {
   try {
     const fn = new Function(...Object.keys(patchedApi), script);
     fn(...Object.values(patchedApi));
-  } catch (err) { }
+  } catch (err) {
+    console.log(err);
+  }
 
   return {
     legend: Object.fromEntries(legend),
