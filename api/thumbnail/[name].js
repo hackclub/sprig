@@ -55,7 +55,6 @@ async function drawGame(name) {
   firstMap.trim().split("\n").forEach( (row, y) => {
     row.trim().split("").forEach( (sprite, x) => {
       if (sprite === ".") return;
-      console.log(sprite)
       const bitmap = makeSpriteBitmap(reconstructedLegend[sprite]);
       blitSprite(image, bitmap, x, y);
     })
