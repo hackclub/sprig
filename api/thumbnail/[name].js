@@ -20,7 +20,7 @@ async function drawGame(name) {
   legend.split(",").forEach(x => {
     if (x.includes("[")) {
       // check if is variable or string
-      if (!x.includes(/["']/)) {
+      if (!x.match(/["']/)) {
         const tempKey = x.replace("[", "").trim();
         const re = new RegExp(`${tempKey}.*?=.*?["'](.*?)["']`);
         lastKey = src.match(re)[1];
