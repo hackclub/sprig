@@ -61,6 +61,8 @@ async function drawGame(name) {
 export default async function handler(request, response) {
   const { name } = request.query;
   const data = await drawGame(name);
+  response.setHeader('Access-Control-Allow-Credentials', true)
+  response.setHeader('Access-Control-Allow-Origin', '*')
   return response.status(200).send(data);
 }
 
