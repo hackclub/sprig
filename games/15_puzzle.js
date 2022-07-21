@@ -1,5 +1,5 @@
 /*
-@title: 15-puzzle
+@title: 15 puzzle
 @author: maggie
 
 INSTRUCTIONS:
