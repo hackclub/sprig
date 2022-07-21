@@ -3,6 +3,9 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import fetch from "node-fetch";
 
+
+console.log(await drawGame("sokoban"));
+
 async function drawGame(name) {
 
   const url = `https://raw.githubusercontent.com/hackclub/sprig/main/games/${name}.js`;
@@ -46,6 +49,13 @@ async function drawGame(name) {
       blitSprite(image, bitmap, x, y);
     })
   })
+
+  // convert to base64
+  image.data = image.data.reduce(
+    (data, byte) => data + String.fromCharCode(byte)
+  , '');
+
+  image.data = btoa(image.data);
 
 
   return { name, image, url };
