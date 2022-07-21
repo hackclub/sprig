@@ -3,8 +3,6 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import fetch from "node-fetch";
 
-console.log(await drawGame("15_puzzle"));
-
 async function drawGame(name) {
 
   const url = `https://raw.githubusercontent.com/hackclub/sprig/main/games/${name}.js`;
@@ -74,13 +72,13 @@ async function drawGame(name) {
 export default async function handler(req, res) {
   const { name } = req.query;
   const data = await drawGame(name);
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader(
     'Access-Control-Allow-Headers',
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  )
+  );
   return res.status(200).send(data);
 }
 
