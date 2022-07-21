@@ -58,12 +58,17 @@ async function drawGame(name) {
   return { name, image, url };
 }
 
-export default async function handler(request, response) {
-  const { name } = request.query;
+export default async function handler(req, res) {
+  const { name } = req.query;
   const data = await drawGame(name);
-  response.setHeader('Access-Control-Allow-Credentials', true)
-  response.setHeader('Access-Control-Allow-Origin', '*')
-  return response.status(200).send(data);
+  res.setHeader('Access-Control-Allow-Credentials', true)
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  )
+  return res.status(200).send(data);
 }
 
 function makeSpriteBitmap(grid) {
