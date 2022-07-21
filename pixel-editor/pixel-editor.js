@@ -226,16 +226,20 @@ export function createPixelEditor(target) {
   `;
 
   const drawColorsButtons = (state) => {
-    const drawColor = (color) => html`
-      <div 
-        class=${RGBA_to_hex(state.color) === RGBA_to_hex(color[1]) ? "active" : ""}
-        style=${`background-color: ${RGBA_to_hex(color[1])}`}
-        @click=${() => { state.color = color[1]; r(); }}>
-      </div>
-    `
-    return html`
-      <div class="colors">${state.palette.map(drawColor)}</div>
-    `
+    const drawColor = (color) => {
+      const isTransparent = color[1][3] === 0;
+      
+      let style = `background-color: ${RGBA_to_hex(color[1])};`;
+      isTransparent ? style += ` background-image: url("/checkerboard.svg")` : ``
+
+      return html`
+        <div 
+          class=${RGBA_to_hex(state.color) === RGBA_to_hex(color[1]) ? "active" : ""}
+          style=${style}
+          @click=${() => { state.color = color[1]; r(); }}>
+        </div>
+      `
+    }
   };
 
   const r = () => {
