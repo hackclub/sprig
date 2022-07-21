@@ -4,6 +4,11 @@
 
 Sprig is a web-based environment for creating tile games. These games run in the browser and on the Sprig Console, a game console where every user is a creator. The only way to obtain a Sprig console is to make a game for it and share it in the [Sprig Gallery](https://sprig-gallery.hackclub.dev)
 
+## Philosophy
+
+As we have said previously, people learn best when they make things that they care about, which they can then share with others. This type of learning philosophy is called constructionism, and Sprig is a type of microworld. A microworld is an environment where you can discover programming by using it to express yourself. 
+
+This creative expression takes place in Sprig through game development, allowing users to become creators and make their own games or remix an existing one.
 
 ## Development
 
