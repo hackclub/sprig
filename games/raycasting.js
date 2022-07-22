@@ -1,6 +1,15 @@
 /*
-@title: 3D Demo
+@title: Raycasting Demo
 @author: Henry Bass
+
+Press W to move forwards, S to move back
+A and D to look
+
+In the top left is the map, any red tiles are tiles that are currently visible. Blue is look direction.
+
+No objective currently.
+
+(Rotation and Position are not locked to grid)
 */
 const wall1 = "1";
 const wall2 = "2";
