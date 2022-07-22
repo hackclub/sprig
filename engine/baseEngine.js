@@ -247,6 +247,7 @@ export function baseEngine() {
   const api = {
     setMap, 
     addText,
+    clearText,
     addSprite,
     getGrid,
     getTile,
