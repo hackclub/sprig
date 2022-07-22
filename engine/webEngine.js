@@ -4,14 +4,37 @@ import * as render from "./render.js";
 import { baseEngine } from "./baseEngine.js";
 import { font } from "./font.js";
 
+function composeText(texts) {
+  const emptyCell = () => ({ char: ' ', color: [0, 0, 0] });
+  const range = (length, fn) => Array.from({ length }, fn);
+  const gridFromSize = (w, h) => range(h, _ => range(w, emptyCell));
+  const CHARS_MAX_X = 20;
+  const CHARS_MAX_Y = 16;
 
-function drawText(str, color) {
+  const grid = gridFromSize(CHARS_MAX_X, CHARS_MAX_Y);
+
+  for (const { x: sx, y: sy, content, color } of texts) {
+    let y = sy;
+    for (const line of content.split('\n')) {
+      let x = sx;
+      for (const char of line.split(''))
+        if (x <= CHARS_MAX_X && y < CHARS_MAX_Y)
+          grid[y][x++] = { color, char };
+      y++;
+    }
+  }
+
+  return grid;
+}
+
+
+function drawText(charGrid) {
   const img = new ImageData(168, 120);
   img.data.fill(0);
 
-  for (const [i, line] of Object.entries(str.split('\n'))) {
+  for (const [i, row] of Object.entries(charGrid)) {
     let xt = 0;
-    for (const char of line.split('')) {
+    for (const { char, color } of row) {
       const cc = char.charCodeAt(0);
 
       let y = i*8;
@@ -57,7 +80,7 @@ export function init(canvas) {
     setScreenSize(dims.width*16, dims.height*16);
 
     // draw text
-    drawText(state.text(), state.textColor);
+    drawText(composeText(state.texts));
 
     render.render(drawTiles());
 
