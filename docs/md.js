@@ -1,12 +1,14 @@
 export const md = `
 # The Toolkit
 
-## The Editor
-
-Run games by hitting the \`Run\` button or pressing \`shift+enter\`.
+Sprig is a tiny construction kit to build tile based games.
+It was made by Hack Club, a global community of teen coders who 
+believe people learn best by making things they care about 
+and sharing them with others.
+All of the Sprig engine is about 15 functions.
 
 If this is your first time using Sprig try going 
-through the challenges in the learn tab.
+through the challenges in the \`learn\` tab.
 
 You can also start with an empty file and 
 go through [this tutorial](https://github.com/hackclub/sprig-gallery/blob/main/src/routes/getting-started.md#lets-make-our-first-game-in-sprig 
@@ -14,6 +16,8 @@ go through [this tutorial](https://github.com/hackclub/sprig-gallery/blob/main/s
 
 If you get stuck you can talk to other people in the community
 about Sprig on [Hack Club's Slack](https://hackclub.com/slack).
+
+Run games by hitting the \`Run\` button or pressing \`shift+enter\`.
 
 ## Level Design
 
