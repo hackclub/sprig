@@ -110,7 +110,7 @@ hint: go to your shed to get the code from the last stage!
 
 After doing that try these things:
 
-What happens if you getFirst(vine) rather than getFirst(bean)? :O
+What happens if you getFirst(trellis) rather than getFirst(bean)? :O
 
 What happens if you make vines solid? :3
 */
