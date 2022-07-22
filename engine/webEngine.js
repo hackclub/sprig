@@ -139,8 +139,6 @@ export function init(canvas) {
     for (const valid_key of VALID_INPUTS)
       if (key == valid_key)
         tileInputs[valid_key].push(true);
-        
-
 
     afterInputs.forEach(f => f());
 
@@ -153,7 +151,7 @@ export function init(canvas) {
   });
 
   function onInput(type, fn) {
-    if (!(type in tileInputs)) throw new Error(
+    if (!(type in tileInputs)) throw new Error(``
       `Unknown input key, "${type}": expected one of ${[...VALID_INPUTS].pop().join(', ')} or a space character inside quotes for spacebar.`
     )
     tileInputs[type].push(fn);
