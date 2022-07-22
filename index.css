@@ -307,3 +307,18 @@ body {
   background: var(--pcb-trace);
   opacity: .8;
 }
+
+.next-learn {
+  position: absolute;
+  border-radius: 3px;
+  bottom: 0px;
+  right: 0px;
+  background: var(--pcb-trace);
+  color: white;
+  width: 5em;
+  height: 2em;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

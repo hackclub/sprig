@@ -13,6 +13,22 @@ export const view = (state) => html`
 
   <div class="main-container">
     <div class="code-container">
+      <div @click=${() => {
+        const cur = state.codemirror.state.doc.toString();
+        const match = cur.match(/@title:\s+([^\n]+)/);
+        const curName = (match !== null) ? match[1] : "DRAFT";
+
+        let i = 0;
+        for (const { name } of challenges) {
+          if (challenges[i+1] && name == curName) {
+            dispatch("SET_EDITOR_TEXT", {
+              text: challenges[i+1].content.trim(),
+              range: [0, cur.length]
+            });
+          }
+          i++;
+        }
+      }} class="next-learn">next</div>
       <div id="code-editor"></div>
       <div class=${["logs", state.errorInfo ? "erred" : ""].join(" ")}>
         ${state.logs.map(x => html`${x}<br>`)}
@@ -387,6 +403,12 @@ const menu = (state) => html`
         ${challenges.map(({ content, name }, i) => {
           const load = () => {
             const cur = state.codemirror.state.doc.toString();
+            const match = cur.match(/@title:\s+([^\n]+)/);
+            const curName = (match !== null) ? match[1] : "DRAFT";
+
+            if (curName == name &&
+              !confirm(`are you sure you want to overwrite your edited "${name}"?`))
+              return;
 
             dispatch("SET_EDITOR_TEXT", {
               text: content.trim(),
