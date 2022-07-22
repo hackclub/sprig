@@ -10,11 +10,17 @@ function _makeTag(cb) {
 }
 
 export function baseEngine() {
+  const gridFromSize = (w, h) => [...Array(h)].map(_ => Array(w).fill(' '));
+  const gridToString = grid => grid.map(x => x.join('')).join('\n');
+  const CHARS_MAX_X = 20;
+  const CHARS_MAX_Y = 16;
+
   // tile gamelab
   const state = {
     legend: [],
     textColor: [ 10, 10, 80 ],
-    text: "",
+    textGrid: gridFromSize(CHARS_MAX_X, CHARS_MAX_Y),
+    text() { return gridToString(this.textGrid) },
     dimensions: {
       width: 0,
       height: 0,
@@ -183,8 +189,23 @@ export function baseEngine() {
     state.textColor = [r, g, b];
   }
 
+  function placeText(sx, sy, str) {
+    let x, y;
+    y = sy;
+    for (const line of str.split('\n')) {
+      x = sx;
+      for (const char of line.split(''))
+        if (x < CHARS_MAX_X && y < CHARS_MAX_Y)
+          state.textGrid[y][x++] = char;
+      y++;
+    }
+  }
+
   function setText(str) {
-    state.text = str;
+    /* clear grid */
+    state.textGrid = gridFromSize(CHARS_MAX_X, CHARS_MAX_Y);
+
+    placeText(0, 0, str);
   }
 
   function getTile(x, y) { 
@@ -237,8 +258,7 @@ export function baseEngine() {
 
   const api = {
     setMap, 
-    setText,
-    setTextColor,
+    setText, placeText, setTextColor,
     addSprite,
     getGrid,
     getTile,

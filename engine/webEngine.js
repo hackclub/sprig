@@ -57,7 +57,7 @@ export function init(canvas) {
     setScreenSize(dims.width*16, dims.height*16);
 
     // draw text
-    drawText(state.text, state.textColor);
+    drawText(state.text(), state.textColor);
 
     render.render(drawTiles());
 
