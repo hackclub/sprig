@@ -130,7 +130,7 @@ export function init(canvas) {
   };
   let afterInputs = [];
 
-  const VALID_INPUTS = ["w", "a", "s", "d", "i", "j", "k", "l"];
+  const VALID_INPUTS = ["w", "a", "s", "d", "i", "j", "k", "l", " "];
   canvas.addEventListener("keydown", (e) => {
     const key = e.key;
 
@@ -138,7 +138,9 @@ export function init(canvas) {
 
     for (const valid_key of VALID_INPUTS)
       if (key == valid_key)
-        tileInputs[key].forEach(fn => fn());
+        tileInputs[valid_key].push(true);
+        
+
 
     afterInputs.forEach(f => f());
 
@@ -152,7 +154,7 @@ export function init(canvas) {
 
   function onInput(type, fn) {
     if (!(type in tileInputs)) throw new Error(
-      `Unknown input key, "${type}": expected one of ${VALID_INPUTS.join(', ')}`
+      `Unknown input key, "${type}": expected one of ${[...VALID_INPUTS].pop().join(', ')} or a space character inside quotes for spacebar.`
     )
     tileInputs[type].push(fn);
   }
