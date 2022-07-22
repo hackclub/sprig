@@ -1,11 +1,14 @@
 /*
 @title: laser tag
 @author: leo
+
+Instructions:
+
+Get to the green block.
+Dont get hit by the lasers.
 */
 
-setTextColor(205, 120, 100);
-placeText(4, 0, "get to green");
-placeText(4, 14, "dont get hit");
+
 
 const player1 = "0"
 const player2 = "1"

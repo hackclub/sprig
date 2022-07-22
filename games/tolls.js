@@ -2,6 +2,8 @@
 @title: tolls
 @author: leo
 
+Instructions:
+
 Use w, a, s, d to move around.
 
 Passing through a door takes one coin.
@@ -14,7 +16,6 @@ Press j to reset the level.
 let money = 0;
 setTextColor(255, 0, 0);
 setText(`You've got ${money} coins.`);
-placeText(0, 14, `get to green to win`)
 
 const player = 'p';
 const coin = 'c';

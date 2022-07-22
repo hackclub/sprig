@@ -1,17 +1,23 @@
 /*
 @title: sokoban
 @author: leo
+
+Instructions:
+
+Cover the green with purple.
+
+----------------------------
+
+Welcome to Sprig!
+Here is an example game to acquaint you with your toolkit.
+
+You can find a walkthrough of this game here:
+https://github.com/hackclub/sprig-gallery/blob/main/src/routes/getting-started.md#lets-make-our-first-game-in-sprig 
+
 */
 
-// Welcome to Sprig!
-// Here is an example game to acquaint you with your toolkit.
 
-// You can find a walkthrough of this game here:
-// https://github.com/hackclub/sprig-gallery/blob/main/src/routes/getting-started.md#lets-make-our-first-game-in-sprig 
 
-setTextColor(0, 128, 255);
-placeText(5, 12, "cover green");
-placeText(5, 13, "with purple");
 
 const player = "p";
 const box = "b";

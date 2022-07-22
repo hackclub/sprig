@@ -1,6 +1,10 @@
 /*
 @title: pyre
 @author: ced
+
+Instructions:
+
+Burn down the blue hut.
 */
 
 const smallFire = ['0', '1'];
@@ -238,9 +242,8 @@ setInterval(() => {
   /* win condition */
   if (getAll(house).length == 0 && fireTiles().length == 0) {
     levels[1+level] && setMap(levels[++level]);
-    setTextColor(200, 20, 20);
-    placeText(6,  0, "smol been")
-    placeText(6, 14, "big rage")
+    addText("smol been", { x: 6, y: 0, color: [ 200, 20, 20 ]});
+    addText("big rage", { x: 6, y: 0, color: [ 200, 20, 20 ]});
   }
 }, 200);
 
@@ -308,9 +311,7 @@ onInput("s", () => {
 })
 
 setMap(levels[level]);
-setTextColor(140, 20, 20);
-placeText(6,  0, "burn down")
-placeText(6, 14, "blue hut")
+
 onInput(    "j", () => {
   setMap(levels[level]);
 });
