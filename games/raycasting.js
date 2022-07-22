@@ -16,9 +16,9 @@ const yellow = "y";
 const blue = "b"
 const walls = [wall1, wall2, wall3, wall4, wall5, wall6, wall7]
 const pi = 3.141
-var vAngle = 0;
+var vAngle = (pi/4) * 3;
 var x = 1.5
-var y = 1.5
+var y = 7.5
 
 const screenSize = 48
 var range = 10
