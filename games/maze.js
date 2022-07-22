@@ -1,27 +1,11 @@
 /*
 @title: maze_game
 @author: leo mcelroy
+
+Instructions:
+
+Cover all the tiles.
 */
-
-setTextColor(220, 100, 240);
-const instructions = `c  
-o
-v
-e
-r
-
-a
-l
-l
-
-t 
-i 
-l 
-e 
-s
-`
-placeText( 1, 0, instructions);
-placeText(19, 0, instructions);
 
 const player = "p";
 const red = "r";

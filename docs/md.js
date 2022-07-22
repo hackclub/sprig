@@ -1,6 +1,20 @@
 export const md = `
 # The Toolkit
 
+## The Editor
+
+Run games by hitting the \`Run\` button or pressing \`shift+enter\`.
+
+If this is your first time using Sprig try going 
+through the challenges in the learn tab.
+
+You can also start with an empty file and 
+go through [this tutorial](https://github.com/hackclub/sprig-gallery/blob/main/src/routes/getting-started.md#lets-make-our-first-game-in-sprig 
+).
+
+If you get stuck you can talk to other people in the community
+about Sprig on [Hack Club's Slack](https://hackclub.com/slack).
+
 ## Everything
 
 There are less than 15 functions you need to learn to know everything the engine can do.
@@ -138,18 +152,16 @@ setPushables({ "p": ["b", "p"] })
 
 ## User Input
 
-Game Lab has four directional controls: \`up\`, \`down\`, \`left\`, and \`right\`
+Game Lab has eight inputs  \`w\`, \`a\`, \`s\`, \`d\`, \`i\`, \`j\`, \`k\`, \`l\`.
 
-(on your keyboard \`up\`, \`down\`, \`left\`, and \`right\` are accessed with \`w\`, \`a\`, \`s\`, and \`d\`).
-
-It also has four action buttons: \`i\`, \`j\`, \`k\`, and \`l\`
+Typically \`w\`, \`a\`, \`s\`, \`d\` are used as directional controls.
 
 ### onInput(type, callback)
 
 Do something when the player presses a control:
 
 \`\`\`js
-onInput("right", () => {
+onInput("a", () => {
     // Move the player one tile to the right
     getFirst("p").x += 1
 })
@@ -236,6 +248,26 @@ Useful if you know there's only one of a sprite, such as with a player character
 
 Shortcut for \`getAll(type)[0]\`.
 
+## Text
+
+### addText(string, options = { x, y, color })
+
+You can add text with optional \`x\`, \`y\`, and \`color\`.
+
+For example:
+
+\`\`\`js
+addText("hello", { 
+    x: 10, 
+    y: 4, 
+    color: [ 255, 0, 0 ] // red
+})
+\`\`\`
+
+### clearText()
+
+Clears all text on the screen.
+
 ## Music and Sound Effects
 
 Game Lab comes bundled with a built-in sound engine and sequencer! You can use this to write background music, or with a high BPM to make sound effects.
@@ -260,6 +292,12 @@ const playback = playTune(melody, Infinity)
 playback.end()
 \`\`\`
 
+
+## Debugging
+
+Open up your browser console to debug.
+
+You can look at game state by...
 
 `
 

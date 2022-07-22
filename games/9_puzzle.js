@@ -1,16 +1,19 @@
 /*
+
 @title: 9_puzzle
 @author: brian
+
+Instructions:
+
+cover pink tiles with red
+press k to pull white tiles
+
 */
 
 const player = "p";
 const target = "t";
 const red = "r";
 const blue = "b";
-
-setTextColor(120, 255, 80);
-placeText(1, 0, "cover pink with red");
-placeText(0, 14, "press k to pull white");
 
 setLegend(
   [ player, bitmap`

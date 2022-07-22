@@ -1,9 +1,11 @@
 /*
 @title: color_patterns
 @author: brian
-*/
 
-placeText(5, 13, "   repeat\nthe pattern");
+Instructions:
+
+repeat the pattern
+*/
 
 const player = "p";
 const target = "t";
