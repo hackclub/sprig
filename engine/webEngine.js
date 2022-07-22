@@ -138,7 +138,7 @@ export function init(canvas) {
 
     for (const valid_key of VALID_INPUTS)
       if (key == valid_key)
-        tileInputs[valid_key].push(true);
+        tileInputs[key].forEach(fn => fn());
 
     afterInputs.forEach(f => f());
 
