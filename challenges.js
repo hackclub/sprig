@@ -564,5 +564,4 @@ for (const challenge of challenges)
 @title: ${challenge.name}
 @author: hackclub
 */
-
-` + challenge.content;
+${challenge.content}`;
