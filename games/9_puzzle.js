@@ -8,6 +8,10 @@ const target = "t";
 const red = "r";
 const blue = "b";
 
+setTextColor(120, 255, 80);
+placeText(1, 0, "cover pink with red");
+placeText(0, 14, "press k to pull white");
+
 setLegend(
   [ player, bitmap`
 ................

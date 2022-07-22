@@ -12,7 +12,9 @@ Press j to reset the level.
 */
 
 let money = 0;
-setText(`You've got ${money} coins.`)
+setTextColor(255, 0, 0);
+setText(`You've got ${money} coins.`);
+placeText(0, 14, `get to green to win`)
 
 const player = 'p';
 const coin = 'c';
@@ -121,7 +123,12 @@ p..t.c
 c..wcc
 wwtwww
 ...w.e
-...t..`
+...t..`,
+  map`
+....
+..p.
+.c..
+....`
 ]
 
 setMap(levels[level]);
@@ -173,6 +180,9 @@ afterInput(() => {
     if (level < levels.length-1) {
       level++;
       setMap(levels[level]);
+      if (level == levels.length-1) {
+        setText("you win!");
+      }
     }
   }
   

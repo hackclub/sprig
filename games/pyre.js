@@ -12,7 +12,7 @@ const      cube = 'c';
 const     house = 'h';
 const     grass = 'g';
 setLegend(
-    [ smallFire[0], bitmap`
+  [ smallFire[0], bitmap`
 ................
 ................
 .....3.3........
@@ -30,7 +30,7 @@ setLegend(
 .......3........
 ................
 `],
-    [ smallFire[1], bitmap`
+  [ smallFire[1], bitmap`
 ................
 ................
 ........3.3.....
@@ -47,7 +47,7 @@ setLegend(
 .......333.3....
 ........3.......
 ................`],
-    [ bigFire[0], bitmap`
+  [ bigFire[0], bitmap`
 ................
 ......3.3.......
 .3.3.3.3........
@@ -64,7 +64,7 @@ setLegend(
 ....3.333.3.3...
 .......3........
 ................`],
-    [ bigFire[1], bitmap`
+  [ bigFire[1], bitmap`
 ................
 .......3.3......
 ........3.3.3.3.
@@ -81,7 +81,7 @@ setLegend(
 ...3.3.333.3....
 ........3.......
 ................`],
-    [ log, bitmap`
+  [ log, bitmap`
 ................
 ................
 ..........44....
@@ -98,7 +98,7 @@ setLegend(
 ..4...44........
 ...444..........
 ................`],
-    [ player, bitmap`
+  [ player, bitmap`
 ................
 ................
 ................
@@ -115,7 +115,7 @@ setLegend(
 ................
 ................
 ................`],
-    [ cube, bitmap`
+  [ cube, bitmap`
 ......4444......
 ....44....44....
 ..44........44..
@@ -132,7 +132,7 @@ setLegend(
 ....44..4.44....
 ......4444......
 ................`], 
-    [ house, bitmap`
+  [ house, bitmap`
 ................
 ................
 ................
@@ -149,7 +149,7 @@ setLegend(
 ...5.........5..
 ..5....555....5.
 ...555.555.555..`],
-    [ grass, bitmap`
+  [ grass, bitmap`
 ..4.........4...
 ...4.........4..
 ...44........4..
@@ -180,74 +180,77 @@ const      isFire = tile => allFire.includes(tile.type);
 
 const fireTiles = () => allFire.flatMap(getAll);
 const neighborTiles = tile => {
-    return [
-        getTile(tile.x+1, tile.y+0),                                 
-        getTile(tile.x-1, tile.y+0),                                 
-        getTile(tile.x+0, tile.y+1),                                 
-        getTile(tile.x+0, tile.y-1),                                 
-        getTile(tile.x,   tile.y)
-    ]
-    .flat();
+  return [
+    getTile(tile.x+1, tile.y+0),                                 
+    getTile(tile.x-1, tile.y+0),                                 
+    getTile(tile.x+0, tile.y+1),                                 
+    getTile(tile.x+0, tile.y-1),                                 
+    getTile(tile.x,   tile.y)
+  ]
+  .flat();
 }
 
 const replace = (type0, type1) => {
-    for (const sprite of getAll(type0)) {
-        sprite.type = type1;
-    }
+  for (const sprite of getAll(type0)) {
+    sprite.type = type1;
+  }
 }
 
 let tick = 0;
 setInterval(() => {
-    tick++;
+  tick++;
 
-    /* fire flicker */
-    if (tick % 2) {
-        replace(smallFire[0], smallFire[1]);
-        replace(  bigFire[0],   bigFire[1]);
-    } else {
-        replace(smallFire[1], smallFire[0]);
-        replace(  bigFire[1],   bigFire[0]);
-    }
+  /* fire flicker */
+  if (tick % 2) {
+    replace(smallFire[0], smallFire[1]);
+    replace(  bigFire[0],   bigFire[1]);
+  } else {
+    replace(smallFire[1], smallFire[0]);
+    replace(  bigFire[1],   bigFire[0]);
+  }
 
-    /* fire spread */
-    if (tick % 4 == 0) {        
-        // changing the map while iterating over can create bugs,
-        // so we'll store the tiles we want to replace with fire here
-        const replacements = new Map();
+  /* fire spread */
+  if (tick % 4 == 0) {        
+    // changing the map while iterating over can create bugs,
+    // so we'll store the tiles we want to replace with fire here
+    const replacements = new Map();
+    
+    for (const fire of fireTiles()) {            
+      for (const tile of neighborTiles(fire)) {
+        if (isFire(tile)) continue;
+        if (isSmallFire(fire) && needsBigFire(tile)) continue;
         
-        for (const fire of fireTiles()) {            
-            for (const tile of neighborTiles(fire)) {
-                if (isFire(tile)) continue;
-                if (isSmallFire(fire) && needsBigFire(tile)) continue;
-                
-                replacements.set(
-                    tile,
-                    burnsBig(tile) ? bigFire[0] : smallFire[0]
-                );
-            }
-            
-            fire.remove();
-        }
-
-        // apply all of the replacements we stored
-        for (const [tile, type] of replacements) {
-            tile.type = type;
-        }
+        replacements.set(
+          tile,
+          burnsBig(tile) ? bigFire[0] : smallFire[0]
+        );
+      }
+      
+      fire.remove();
     }
 
-    /* win condition */
-    if (getAll(house).length == 0 && fireTiles().length == 0) {
-        levels[1+level] && setMap(levels[++level]);
+    // apply all of the replacements we stored
+    for (const [tile, type] of replacements) {
+      tile.type = type;
     }
+  }
+
+  /* win condition */
+  if (getAll(house).length == 0 && fireTiles().length == 0) {
+    levels[1+level] && setMap(levels[++level]);
+    setTextColor(200, 20, 20);
+    placeText(6,  0, "smol been")
+    placeText(6, 14, "big rage")
+  }
 }, 200);
 
 afterInput(() => {
-    /* crate kill grass */
-    for (const { x, y } of getAll('c')) {
-        for (const g of getTile(x, y).filter(isGrass)) {
-            g.remove();
-        }
+  /* crate kill grass */
+  for (const { x, y } of getAll('c')) {
+    for (const g of getTile(x, y).filter(isGrass)) {
+      g.remove();
     }
+  }
 })
 
 let level = 0;
@@ -305,6 +308,9 @@ onInput("s", () => {
 })
 
 setMap(levels[level]);
+setTextColor(140, 20, 20);
+placeText(6,  0, "burn down")
+placeText(6, 14, "blue hut")
 onInput(    "j", () => {
-    setMap(levels[level])
+  setMap(levels[level]);
 });

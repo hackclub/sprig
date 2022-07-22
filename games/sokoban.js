@@ -9,6 +9,10 @@
 // You can find a walkthrough of this game here:
 // https://github.com/hackclub/sprig-gallery/blob/main/src/routes/getting-started.md#lets-make-our-first-game-in-sprig 
 
+setTextColor(0, 128, 255);
+placeText(5, 12, "cover green");
+placeText(5, 13, "with purple");
+
 const player = "p";
 const box = "b";
 const goal = "g";
@@ -120,7 +124,10 @@ onInput("d", () => {
 
 onInput("j", () => {
   const currentLevel = levels[level];
-  if (currentLevel !== undefined) setMap(currentLevel);
+  if (currentLevel !== undefined) {
+    setText("");
+    setMap(currentLevel);
+  }
 });
 
 setSolids([ player, box, wall ]);

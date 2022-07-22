@@ -3,6 +3,10 @@
 @author: leo
 */
 
+setTextColor(205, 120, 100);
+placeText(4, 0, "get to green");
+placeText(4, 14, "dont get hit");
+
 const player1 = "0"
 const player2 = "1"
 const wall = "2"

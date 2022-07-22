@@ -3,6 +3,8 @@
 @author: brian
 */
 
+placeText(5, 13, "   repeat\nthe pattern");
+
 const player = "p";
 const target = "t";
 const red = "r";
@@ -190,7 +192,7 @@ const previousLevel = () => {
 }
 
 const setLevel = (n) => {
-  setMap(levels[n]);
+  setMap(levels[n].trim() + '\n.....');
   addSprite(1,0,player);
   ptile = getFirst(player);
 }

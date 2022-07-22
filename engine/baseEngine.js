@@ -195,7 +195,7 @@ export function baseEngine() {
     for (const line of str.split('\n')) {
       x = sx;
       for (const char of line.split(''))
-        if (x < CHARS_MAX_X && y < CHARS_MAX_Y)
+        if (x <= CHARS_MAX_X && y < CHARS_MAX_Y)
           state.textGrid[y][x++] = char;
       y++;
     }
