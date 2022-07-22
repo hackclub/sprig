@@ -384,7 +384,7 @@ const trellis = 'c';
 const target = 'd';
 
 setLegend(
-  [bean, bitmap`
+  [bean, bitmap\`
 ................
 ......000.......
 .....0.220......
@@ -400,8 +400,8 @@ setLegend(
 .....0000.......
 ....0....0......
 ....0....0......
-...00...00......`],
-  [vine, bitmap`
+...00...00......\`],
+  [vine, bitmap\`
 ........44......
 .......44.......
 ......44.......4
@@ -417,8 +417,8 @@ setLegend(
 4...........4...
 4..........44...
 4.........44....
-4........44.....`],
-  [trellis, bitmap`
+4........44.....\`],
+  [trellis, bitmap\`
 .L...L.....L..L.
 .L...L.....L..L.
 ..L.L.L...LL.L..
@@ -434,8 +434,8 @@ setLegend(
 .L..L.L..L.L.L..
 .L..L.L..L.L..L.
 L....L....L...L.
-L....L....L...L.`],
-  [target, bitmap`
+L....L....L...L.\`],
+  [target, bitmap\`
 ......3..3......
 ....333..333....
 ...3..3..3..3...
@@ -451,10 +451,10 @@ L....L....L...L.`],
 ..3..........3..
 ...3..3..3..3...
 ....333..333....
-......3..3......`]
+......3..3......\`]
 );
 
-setMap(map`
+setMap(map\`
 bbbbbbbbb
 bbbb..dbb
 bbb.....b
@@ -463,7 +463,7 @@ b...c.a.b
 b......bb
 b.d...bbb
 bb.bbbbbb
-bbbbbbbbb`);
+bbbbbbbbb\`);
 
 const player = () => getFirst(bean);
 onInput("a", () => {
@@ -488,7 +488,7 @@ afterInput(() => {
   const targetCount = 3; // TODO
   
   setTextColor(0, 100, 255);
-  setText(` ${coveredTargetCount}/${targetCount} of the way there ...`);
+  setText(coveredTargetCount + '/' + targetCount + ' of the way there ...');
 
   if (targetCount == coveredTargetCount)
     setText("you win!");
@@ -505,7 +505,7 @@ const trellis = 'c';
 const target = 'd';
 
 setLegend(
-  [bean, bitmap`
+  [bean, bitmap\`
 ................
 ......000.......
 .....0.220......
@@ -521,8 +521,8 @@ setLegend(
 .....0000.......
 ....0....0......
 ....0....0......
-...00...00......`],
-  [vine, bitmap`
+...00...00......\`],
+  [vine, bitmap\`
 ........44......
 .......44.......
 ......44.......4
@@ -538,8 +538,8 @@ setLegend(
 4...........4...
 4..........44...
 4.........44....
-4........44.....`],
-  [trellis, bitmap`
+4........44.....\`],
+  [trellis, bitmap\`
 .L...L.....L..L.
 .L...L.....L..L.
 ..L.L.L...LL.L..
@@ -555,8 +555,8 @@ setLegend(
 .L..L.L..L.L.L..
 .L..L.L..L.L..L.
 L....L....L...L.
-L....L....L...L.`],
-  [target, bitmap`
+L....L....L...L.\`],
+  [target, bitmap\`
 ......3..3......
 ....333..333....
 ...3..3..3..3...
@@ -572,10 +572,10 @@ L....L....L...L.`],
 ..3..........3..
 ...3..3..3..3...
 ....333..333....
-......3..3......`]
+......3..3......\`]
 );
 
-setMap(map`
+setMap(map\`
 bbbbbbbbb
 bbbb..dbb
 bbb.....b
@@ -584,7 +584,7 @@ b...c.a.b
 b......bb
 b.d...bbb
 bb.bbbbbb
-bbbbbbbbb`);
+bbbbbbbbb\`);
 
 const player = () => getFirst(bean);
 onInput("a", () => {
@@ -604,20 +604,20 @@ setSolids( [ bean, trellis, vine ]);
 
 let level = 0;
 const levels = [
-  map`
+  map\`
 bbbbbbb
 bba.bbb
 b...bdb
 b...c.b
 bb.c.db
-bbbbbbb`,
-  map`
+bbbbbbb\`,
+  map\`
 bb.a.bb
 b.c.c.b
 b..c..b
 bbb.bbb
 b..d..b
-bbd.dbb`
+bbd.dbb\`
   /* add a level! */
 ];
 setMap(levels[0]);
@@ -627,7 +627,7 @@ afterInput(() => {
   const targetCount = tilesWith(target).length;
   
   setTextColor(0, 100, 255);
-  setText(` ${coveredTargetCount}/${targetCount} of the way there ...`);
+  setText(coveredTargetCount + '/' + targetCount + ' of the way there ...');
 
   if (targetCount == coveredTargetCount)
     setMap(levels[++level]);
