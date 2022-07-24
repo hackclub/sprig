@@ -14,8 +14,7 @@ Press j to reset the level.
 */
 
 let money = 0;
-setTextColor(255, 0, 0);
-setText(`You've got ${money} coins.`);
+addText(`You've got ${money} coins.`, { color: [255, 0, 0 ] });
 
 const player = 'p';
 const coin = 'c';
@@ -160,7 +159,8 @@ afterInput(() => {
       if (sprite.type === coin) {
         sprite.remove();
         money++;
-        setText(`You've got ${money} coins.`)
+        clearText();
+        addText(`You've got ${money} coins.`, { color: [255, 0, 0] })
       } 
     })
   });
@@ -168,7 +168,8 @@ afterInput(() => {
   tilesWith(toll, player).forEach(tile => {
     if (money) {
       money--;
-      setText(`You've got ${money} coins.`)
+      clearText();
+      addText(`You've got ${money} coins.`, { color: [255, 0, 0] })
     } else {
       const p = getFirst(player);
       p.x -= p.dx;
@@ -182,7 +183,8 @@ afterInput(() => {
       level++;
       setMap(levels[level]);
       if (level == levels.length-1) {
-        setText("you win!");
+        clearText();
+        addText("you win!", { color: [255, 0, 0] });
       }
     }
   }

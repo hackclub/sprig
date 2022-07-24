@@ -3,29 +3,30 @@ export const challenges = [
   {
     name: 'CH. 1 - bean',
     content: `
-/*                     WELCOME TO SPRIG!!!
- *
- * This is the first of many "challenges" which will help you
- *             familiarize yourself with Sprig.
- *
- *  Read through to get acquainted with the format all Sprig
- *    games share. Play with the art! Make it your own :)
- *
- *   When you're ready, click the big green button to go to
- *                  the next challenge!
- *
- *             You can run your game by hitting Run 
- *                  or pressing Shift+Enter
- */
+/*                     
+                     WELCOME TO SPRIG!!!
+ 
+  This is the first of many "challenges" which will help you
+              familiarize yourself with Sprig.
+ 
+   Read through to get acquainted with the format all Sprig
+     games share. Play with the art! Make it your own :)
+ 
+    When you're ready, click the big green button to go to
+                   the next challenge!
+ 
+              You can run your game by hitting Run 
+                   or pressing Shift+Enter
+*/
 
+// HERE we give each kind of sprite
+// in our game a letter, as a shorthand.
 
-/* HERE we give each kind of sprite
- * in our game a letter, as a shorthand. */
 const bean = 'a';
 
-/* HERE we give each sprite its art! */
+// HERE we give each sprite its art!
 setLegend(
-  /* click "bitmap" to change the art! */
+  // click "bitmap" to change the art!
   [bean, bitmap\`
 ................
 ......000.......
@@ -45,15 +46,22 @@ setLegend(
 ...00...00......\`]
 );
 
-/* HERE we make a map out of those letters.
- * try making the map bigger!
- * (hint: CLICK "map") */
+// HERE we make a map out of those letters.
+// try making the map bigger!
+// (hint: CLICK "map")
 setMap(map\`a\`);
 `
   },
   {
     name: 'CH. 2 - walk',
     content: `
+/*
+This bean can walk left and down.
+Can you add controls to walk right and up also?
+
+Hint: we use w, a, s, d as inputs, check the help tab
+*/
+
 const bean = 'a';
 
 setLegend(
@@ -83,20 +91,30 @@ setMap(map\`
 .....
 .....\`);
 
-const player = () => getFirst(bean);
-
-/* CAN YOU ADD MORE DIRECTIONS? */
 onInput("a", () => {
-  player().x -= 1
+  getFirst(bean).x -= 1
 });
+
 onInput("s", () => {
-  player().y += 1
+  getFirst(bean).y += 1
 });
     `
   },
   {
     name: 'CH. 3 - trellis',
     content: `
+/*
+Go get your movement code from the last challenge and add it to this one.
+
+hint: go to your shed to get the code from the last stage!
+
+After doing that try these things:
+
+What happens if you getFirst(trellis) rather than getFirst(bean)? :O
+
+What happens if you make vines solid? :3
+*/
+
 const bean = 'a';
 const vine = 'b';
 const trellis = 'c';
@@ -166,23 +184,18 @@ cccccbbcc
 cccccbcc.
 ..cccccc.\`);
 
+// PASTE MOVEMENT CODE BELOW THIS
 
-/* PASTE SOME MOVEMENT CODE HERE ;) */
-
-
-/* hint: go to your shed to get the code from the last stage! */
-
-
-/* ps - what happens if you make non-bean players? :O */
-
-
-/* what happens if you make vines solid? :3 */
 setSolids( [bean, trellis] )
     `
   },
   {
     name: 'CH. 4 - heave',
     content: `
+/*
+Make some things solid so the bean can push the trellis.
+*/
+
 const bean = 'a';
 const vine = 'b';
 const trellis = 'c';
@@ -252,7 +265,9 @@ b.....bbb
 bb.bbbbbb
 bbbbbbbbb\`);
 
+// notice how we're using a function to get the bean now
 const player = () => getFirst(bean);
+
 onInput("a", () => {
   player().x -= 1;
 });
@@ -266,15 +281,19 @@ onInput("w", () => {
   player().y -= 1;
 });
 
-/* uhhh ... what  things should be solid?!? */
-
-/* hehe see if you can figure out what this does >:) */
+// see if you can figure out what this does >:)
 setPushables({
   [bean]: [trellis]
 })
     `
   },
   { name: 'CH. 5 - victory', content: `
+/*
+Count the right number of target tiles to test the win condition.
+
+hint: use tilesWith to count tiles with a certain content
+*/
+
 const bean = 'a';
 const vine = 'b';
 const trellis = 'c';
@@ -363,6 +382,7 @@ bb.bbbbbb
 bbbbbbbbb\`);
 
 const player = () => getFirst(bean);
+
 onInput("a", () => {
   player().x -= 1;
 });
@@ -379,16 +399,15 @@ onInput("w", () => {
 setSolids( [ bean, trellis, vine ]);
 
 afterInput(() => {
-  /* can you figure out how to make it find
-   * the correct number of targets? */
-  const coveredTargetCount = tilesWith(target, trellis).length;
-  const targetCount = 3; // TODO
-  
-  setTextColor(0, 100, 255);
-  setText(coveredTargetCount + '/' + targetCount + ' of the way there ...');
 
-  if (targetCount == coveredTargetCount)
-    setText("you win!");
+  const coveredTargetCount = tilesWith(target, trellis).length;
+  
+  // TODO: change three to something like the line above
+  const targetCount = 3;
+  
+  if (targetCount == coveredTargetCount) {
+    addText("you win!");
+  }
 })
 
 setPushables({
@@ -396,6 +415,10 @@ setPushables({
 })
   `},
   { name: 'CH. 6 - level up', content: `
+/*
+Add another level to this game.
+*/
+
 const bean = 'a';
 const vine = 'b';
 const trellis = 'c';
@@ -484,6 +507,7 @@ bb.bbbbbb
 bbbbbbbbb\`);
 
 const player = () => getFirst(bean);
+
 onInput("a", () => {
   player().x -= 1;
 });
@@ -515,7 +539,6 @@ b..c..b
 bbb.bbb
 b..d..b
 bbd.dbb\`
-  /* add a level! */
 ];
 setMap(levels[0]);
 
@@ -541,5 +564,4 @@ for (const challenge of challenges)
 @title: ${challenge.name}
 @author: hackclub
 */
-
-` + challenge.content;
+${challenge.content}`;

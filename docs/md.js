@@ -1,12 +1,14 @@
 export const md = `
 # The Toolkit
 
-## The Editor
-
-Run games by hitting the \`Run\` button or pressing \`shift+enter\`.
+Sprig is a tiny construction kit to build tile based games.
+It was made by Hack Club, a global community of teen coders who 
+believe people learn best by making things they care about 
+and sharing them with others.
+All of the Sprig engine is about 15 functions.
 
 If this is your first time using Sprig try going 
-through the challenges in the learn tab.
+through the challenges in the \`learn\` tab.
 
 You can also start with an empty file and 
 go through [this tutorial](https://github.com/hackclub/sprig-gallery/blob/main/src/routes/getting-started.md#lets-make-our-first-game-in-sprig 
@@ -15,58 +17,15 @@ go through [this tutorial](https://github.com/hackclub/sprig-gallery/blob/main/s
 If you get stuck you can talk to other people in the community
 about Sprig on [Hack Club's Slack](https://hackclub.com/slack).
 
-## Everything
-
-There are less than 15 functions you need to learn to know everything the engine can do.
-
-\`\`\`js
-
-const player = "p";
-const wall = "w";
-
-setLegend(
-    [player, bitmap\`...\`],
-    [wall, bitmap\`...\`],
-    ...
-);
-
-setBackground(wall);
-
-setSolids([ player, wall ]);
-setPushables({
-    [player]: [ wall ]
-});
-
-setMap(map\`...\`);
-
-onInput("right", () => { });
-afterInput(() => { });
-
-getAll(wall);
-getFirst(player);
-
-getTile(0, 0);
-tilesWith(player, wall, ...);
-clearTile(0, 0);
-addSprite(0, 0, wall);
-
-const playback = playTune(tune\`...\`, Infinity);
-playback.end();
-\`\`\`
+Run games by hitting the \`Run\` button or pressing \`shift+enter\`.
 
 ## Level Design
 
-Game Lab games are made of a grid of square "tiles". 
-Each tile can contain multiple overlapping "sprites" 
-for in-game elements like walls or the player, 
-each one represented by a pixelated drawing called a "bitmap".
-
-Each bitmap has a name used as a key to keep track of them in the map or a "sprite type". 
-When developing your game you can also use this key to create and find sprites.
+Sprig games are made up of grids of square tiles.
 
 ### setLegend(bitmaps)
 
-Tell Game Lab what types of sprites are available in your game. 
+Tell Sprig what types of sprites are available in your game. 
 Bitmap keys must be a single character. 
 We recommend storing character keys in variables.
 
@@ -96,7 +55,7 @@ Tiles a bitmap as the background of the game:
 setBackground(spriteKey)
 \`\`\`
 
-This won't create a sprite— in other words, it only changes the visuals and won't affect in-game interactions like collisions.
+This only changes the visuals of the game.
 
 ### setMap(level)
 
