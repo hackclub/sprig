@@ -93,9 +93,9 @@ export async function wasmEngine() {
 
   const api = {
     setMap: str => {
-      const str_mem = wasm.temp_alloc(str.length, 1);
-      write(str, str_mem);
-      wasm.map_set(str_mem);
+      const mem = wasm.temp_str_mem();
+      write(str, mem);
+      wasm.map_set(mem);
     }, 
 
     addText,
@@ -103,7 +103,7 @@ export async function wasmEngine() {
 
     addSprite: (x, y, type) => new Sprite(wasm.map_add(x, y, type.charCodeAt(0))),
     getGrid: () => {
-      const iter = wasm.temp_alloc(readByte(wasm.sizeof_MapIter.value), 4);
+      const iter = wasm.temp_MapIter_mem();
       const  width = wasm.map_width();
       const height = wasm.map_height();
 
@@ -120,7 +120,7 @@ export async function wasmEngine() {
 
     },
     getTile: (x, y) => {
-      const iter = wasm.temp_alloc(readByte(wasm.sizeof_MapIter.value), 4);
+      const iter = wasm.temp_MapIter_mem();
       wasm.MapIter_position(iter, x, y);
 
       const out = [];
@@ -133,10 +133,10 @@ export async function wasmEngine() {
       return out;
     },
     tilesWith: (...mustHave) => {
-      const mustHave_mem = wasm.temp_alloc(mustHave.length, 1);
+      const mustHave_mem = wasm.temp_str_mem();
       write(mustHave.join(''), mustHave_mem);
 
-      const iter = wasm.temp_alloc(readByte(wasm.sizeof_MapIter.value), 4);
+      const iter = wasm.temp_MapIter_mem();
       const out = [];
       while (wasm.map_tiles_with(iter, mustHave_mem)) {
         const tile = [];
@@ -163,7 +163,7 @@ export async function wasmEngine() {
     tune: _makeTag(text => text),
     getFirst: char => new Sprite(wasm.map_get_first(char.charCodeAt(0))),
     getAll: char => {
-      const iter = wasm.temp_alloc(readByte(wasm.sizeof_MapIter.value), 4);
+      const iter = wasm.temp_MapIter_mem();
       const step = char
         ? (() => wasm.map_get_all(iter, char.charCodeAt(0)))
         : (() => wasm.map_get_grid(iter));

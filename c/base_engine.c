@@ -39,6 +39,8 @@ struct Sprite {
 static void map_free(Sprite *s);
 static Sprite *map_alloc(void);
 
+typedef struct { Sprite *sprite; int x, y; } MapIter;
+
 #define PER_CHAR (255)
 #define MAP_SIZE_X (100)
 #define MAP_SIZE_Y (100)
@@ -56,8 +58,8 @@ typedef struct {
   /* points into sprite_pool */
   Sprite *map[MAP_SIZE_X][MAP_SIZE_Y];
 
-  int temp_cursor;
-  uint8_t temp[(1 << 12)];
+  uint8_t temp_str_mem[(1 << 12)];
+  MapIter temp_MapIter_mem;
 } State;
 static State *state = 0;
 
@@ -72,28 +74,14 @@ WASM_EXPORT void init(int bytes) {
   putchar('i');
 }
 
-WASM_EXPORT uint8_t *temp_alloc(int bytes, int align) {
-  uint8_t *mem = state->temp + state->temp_cursor;
+WASM_EXPORT uint8_t *temp_str_mem(void) {
+  __builtin_memset(&state->temp_str_mem, 0, sizeof(state->temp_str_mem));
+  return state->temp_str_mem;
+}
 
-  /* allocate some extra for alignment, if necessary */
-  int align_pad = align - (int)mem%align;
-  state->temp_cursor += align_pad;
-
-  mem = state->temp + state->temp_cursor;
-
-  state->temp_cursor += bytes;
-
-  /* if going to overflow: dont, basically */
-  /* SHIT, THIS SHOULD BE AN ACTUAL RING BUFFER */
-  if (state->temp_cursor > sizeof(state->temp)) {
-    mem = state->temp;
-    state->temp_cursor = bytes;
-
-    /* all my code relies on memory being zero-init lol */
-    __builtin_memset(&state->temp, 0, sizeof(state->temp));
-  }
-
-  return mem;
+WASM_EXPORT MapIter *temp_MapIter_mem(void) {
+  __builtin_memset(&state->temp_MapIter_mem, 0, sizeof(state->temp_MapIter_mem));
+  return &state->temp_MapIter_mem;
 }
 
 static Sprite *map_alloc(void) {
@@ -176,9 +164,6 @@ WASM_EXPORT Sprite *map_get_first(char kind) {
     }
   return 0;
 }
-
-typedef struct { Sprite *sprite; int x, y, _pad; } MapIter;
-WASM_EXPORT uint8_t sizeof_MapIter = sizeof(MapIter);
 
 WASM_EXPORT uint8_t map_get_grid(MapIter *m) {
   if (m->sprite && m->sprite->next) {
