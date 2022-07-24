@@ -1,8 +1,11 @@
 import { dispatch } from "../dispatch.js";
 import { sizeGameCanvas } from "../dispatches/sizeGameCanvas.js";
 import * as render from "./render.js";
-import { baseEngine } from "./baseEngine.js";
+// import { baseEngine } from "./baseEngine.js";
+import { wasmEngine } from "./wasmEngine.js";
 import { font } from "./font.js";
+
+const baseEngine = wasmEngine;
 
 function composeText(texts) {
   const emptyCell = () => ({ char: ' ', color: [0, 0, 0] });
@@ -64,7 +67,8 @@ function drawText(charGrid) {
 let cur = null;
 
 export function init(canvas) {
-  const { api, state } = baseEngine();
+  const log = x => (console.log(x), x);
+  const { api, state } = log(baseEngine());
 
   // remove event listeners
   let newCanvas = canvas.cloneNode(true);
@@ -76,8 +80,7 @@ export function init(canvas) {
   canvas.setAttribute("tabindex", "1");
 
   function gameloop() {
-    const dims = state.dimensions;
-    setScreenSize(dims.width*16, dims.height*16);
+    setScreenSize(api.width()*16, api.height()*16);
 
     // draw text
     drawText(composeText(state.texts));
@@ -111,8 +114,7 @@ export function init(canvas) {
     canvas.width = w;
     canvas.height = h;
 
-    const { width, height } = state.dimensions;
-    window.idealDimensions = [width, height];
+    window.idealDimensions = [api.width(), api.height()];
     sizeGameCanvas();
 
     render.resize(canvas);
@@ -142,10 +144,10 @@ export function init(canvas) {
 
     afterInputs.forEach(f => f());
 
-    state.sprites.forEach(s => {
-      s.dx = 0;
-      s.dy = 0;
-    })
+    // state.sprites.forEach(s => {
+    //   s.dx = 0;
+    //   s.dy = 0;
+    // })
 
     e.preventDefault();
   });
@@ -158,8 +160,9 @@ export function init(canvas) {
   }
 
   function drawTiles() {
-    const { dimensions, legend } = state;
-    const { width, height, maxTileDim } = dimensions;
+    const { legend } = state;
+    const width = api.width();
+    const height = api.height();
 
     const grid = api.getGrid();
     if (width == 0 || height == 0) return new ImageData(1, 1);
@@ -176,7 +179,7 @@ export function init(canvas) {
       for (let i = 0; i < 4; i++) {
         if (!sprites[i]) continue;
         const { type: t } = sprites[i];
-        img.data[(y*dimensions.width + x)*4 + i] = 1+legend.findIndex(f => f[0] == t);
+        img.data[(y*width + x)*4 + i] = 1+legend.findIndex(f => f[0] == t);
       }
     }
 

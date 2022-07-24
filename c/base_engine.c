@@ -39,7 +39,7 @@ struct Sprite {
 static void map_free(Sprite *s);
 static Sprite *map_alloc(void);
 
-typedef struct { Sprite *sprite; int x, y; } MapIter;
+typedef struct { Sprite *sprite; int x, y; uint8_t dirty; } MapIter;
 
 #define PER_CHAR (255)
 #define MAP_SIZE_X (100)
@@ -172,11 +172,15 @@ WASM_EXPORT uint8_t map_get_grid(MapIter *m) {
   }
 
   while (1) {
-    m->x++;
-    if (m->x >= state->width) {
-      m->x = 0;
-      m->y++;
-      if (m->y >= state->height) return 0;
+    if (!m->dirty)
+      m->dirty = 1;
+    else {
+      m->x++;
+      if (m->x >= state->width) {
+        m->x = 0;
+        m->y++;
+        if (m->y >= state->height) return 0;
+      }
     }
 
     if (state->map[m->x][m->y]) {
@@ -210,11 +214,15 @@ WASM_EXPORT uint8_t map_tiles_with(MapIter *m, char *kinds) {
   }
 
   while (1) {
-    m->x++;
-    if (m->x >= state->width) {
-      m->x = 0;
-      m->y++;
-      if (m->y >= state->height) return 0;
+    if (!m->dirty)
+      m->dirty = 1;
+    else {
+      m->x++;
+      if (m->x >= state->width) {
+        m->x = 0;
+        m->y++;
+        if (m->y >= state->height) return 0;
+      }
     }
 
     if (state->map[m->x][m->y]) {

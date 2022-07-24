@@ -9,35 +9,32 @@ function _makeTag(cb) {
   }
 }
 
+const importObj = {
+  env: {
+    putchar: x => console.log(String.fromCharCode(x)),
+    putint: console.log,
+  }
+};
 
-//  function hasDuplicates(array) {
-//    return (new Set(array)).size !== array.length;
-//  }
-//
-//  function tilesWith(...matchingTypes) {
-//    const { width, height } = state.dimensions;
-//    const tiles = [];
-//    const grid = getGrid();
-//    for (let x = 0; x < width; x++) {
-//      for (let y = 0; y < height; y++) {
-//        const tile = grid[width*y+x] || [];
-//        const matchIndices = matchingTypes.map(type => {
-//          return tile.map(s => s.type).indexOf(type);
-//        })
-//
-//
-//        if (!hasDuplicates(matchIndices) && !matchIndices.includes(-1)) tiles.push(tile);
-//      }
-//    }
-//
-//    return tiles;
-//  }
+const load = {
+  async deno() {
+    const wasm_src = Deno.readFileSync("../c/build/base_engine.wasm");
+    return await WebAssembly.instantiate(wasm_src, importObj);
+  },
+  async web() {
+    const wasm_src = fetch("c/build/base_engine.wasm");
+    return await WebAssembly.instantiateStreaming(wasm_src, importObj);
+  }
+};
 
+const { instance } = await load[('Deno' in globalThis) ? 'deno' : 'web']();
+const wasm = instance.exports;
 
-export async function wasmEngine() {
+export function wasmEngine() {
 
   const state = {
     texts: [],
+    legend: [],
   };
 
   /* opts: x, y, color (all optional) */
@@ -57,25 +54,18 @@ export async function wasmEngine() {
     state.texts = [];
   }
 
-  const wasm_src = fetch("c/build/base_engine.wasm");
-  const { instance } =
-    await WebAssembly.instantiateStreaming(wasm_src, { env: {
-      putchar: x => console.log(String.fromCharCode(x)),
-      putint: console.log,
-    } });
-  const wasm = instance.exports;
   wasm.init();
 
   /* WASM helpers */
   const readByte = adr => new Uint8Array(wasm.memory.buffer, adr)[0];
   const readU32 = adr => new Uint32Array(wasm.memory.buffer, adr)[0];
-  const write = (str, adr) => {
+  const memcpy = (str, adr) => {
     const buf = new Uint8Array(wasm.memory.buffer, adr)
     new TextEncoder().encodeInto(str, buf);
   };
 
   class Sprite {
-    constructor(addr) { this.addr = addr; }
+    constructor(addr) { this.addr = addr; this.dx = 0; this.dy = 0; }
 
     set type(k) { wasm.sprite_set_kind(this.addr, k.charCodeAt(0)); }
     get type()  { return String.fromCharCode(wasm.sprite_get_kind(this.addr)); }
@@ -94,7 +84,7 @@ export async function wasmEngine() {
   const api = {
     setMap: str => {
       const mem = wasm.temp_str_mem();
-      write(str, mem);
+      memcpy(str.trim(), mem);
       wasm.map_set(mem);
     }, 
 
@@ -117,7 +107,6 @@ export async function wasmEngine() {
         grid[i].push(sprite);
       }
       return grid;
-
     },
     getTile: (x, y) => {
       const iter = wasm.temp_MapIter_mem();
@@ -134,7 +123,7 @@ export async function wasmEngine() {
     },
     tilesWith: (...mustHave) => {
       const mustHave_mem = wasm.temp_str_mem();
-      write(mustHave.join(''), mustHave_mem);
+      memcpy(mustHave.join(''), mustHave_mem);
 
       const iter = wasm.temp_MapIter_mem();
       const out = [];

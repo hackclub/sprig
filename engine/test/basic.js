@@ -13,7 +13,7 @@ const printGrid = () => {
   console.log(out);
 }
 
-api.setMap(`....
+api.setMap(`xx..
 ooww
 ....`);
 api.setSolids([ 'o' ]);

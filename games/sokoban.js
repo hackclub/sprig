@@ -130,7 +130,7 @@ onInput("d", () => {
 onInput("j", () => {
   const currentLevel = levels[level];
   if (currentLevel !== undefined) {
-    setText("");
+    clearText();
     setMap(currentLevel);
   }
 });
@@ -155,7 +155,7 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      setText("you win!");
+      addText("you win!");
     }
   }
 });
