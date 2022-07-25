@@ -124,7 +124,14 @@ const moveTileTo = (x,y) => {
 }
 
 const nextLevel = () => {
-  if(levels[level+1]) level++;
+  const greenText = text => addText(text, { color: [0, 200, 0] });
+  if(levels[level+1]) {
+    level++;
+    greenText(`level ${level+1}/${levels.length}`);
+  } else {
+    clearText();
+    greenText(`you win!`);
+  }
   setLevel(level);
 }
 

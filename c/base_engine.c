@@ -4,6 +4,7 @@
 /* --- begin random wasm bs --- */
 extern void putchar(char c);
 extern void putint(int i);
+extern void oom();
 extern unsigned char __heap_base;
 #define PAGE_SIZE (1 << 16)
 /* --- end random wasm bs --- */
@@ -85,7 +86,10 @@ WASM_EXPORT MapIter *temp_MapIter_mem(void) {
 }
 
 static Sprite *map_alloc(void) {
-  return state->sprite_pool + state->sprite_pool_head++;
+  Sprite *mem = state->sprite_pool + state->sprite_pool_head++;
+  if (state->sprite_pool_head*sizeof(Sprite) > sizeof(state->sprite_pool))
+    oom();
+  return mem;
 }
 static void map_free(Sprite *s) {
   // TODO: generational indexing
@@ -157,10 +161,11 @@ WASM_EXPORT int map_height(void) { return state->height; }
 WASM_EXPORT Sprite *map_get_first(char kind) {
   for (int y = 0; y < state->height; y++)
     for (int x = 0; x < state->width; x++) {
-      if (!state->map[x][y]) continue;
+      Sprite *top = state->map[x][y];
 
-      if (state->map[x][y]->kind == kind)
-        return state->map[x][y];
+      for (; top; top = top->next)
+        if (top->kind == kind)
+          return top;
     }
   return 0;
 }
@@ -272,16 +277,16 @@ WASM_EXPORT int map_move(Sprite *s, int big_dx, int big_dy) {
   int goal = (fabsf(big_dx) > fabsf(big_dy)) ? big_dx : big_dy;
 
   while (prog != goal) {
+    int x = s->x+dx;
+    int y = s->y+dy;
+
+    /* no moving off of the map! */
+    if (x < 0) return prog;
+    if (y < 0) return prog;
+    if (x >= state->width) return prog;
+    if (y >= state->height) return prog;
+
     if (state->solid[(int)s->kind]) {
-      int x = s->x+dx;
-      int y = s->y+dy;
-
-      /* no moving off of the map! */
-      if (x < 0) return prog;
-      if (y < 0) return prog;
-      if (x >= state->width) return prog;
-      if (y >= state->height) return prog;
-
       /* no moving into a solid! */
       Sprite *n = state->map[x][y];
 

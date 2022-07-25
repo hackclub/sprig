@@ -13,6 +13,7 @@ const importObj = {
   env: {
     putchar: x => console.log(String.fromCharCode(x)),
     putint: console.log,
+    oom: () => { throw new Error("sprite alloc overflow (TODO: gendex)"); }
   }
 };
 
@@ -35,6 +36,7 @@ export function wasmEngine() {
   const state = {
     texts: [],
     legend: [],
+    deltas: { x: {}, y: {} },
   };
 
   /* opts: x, y, color (all optional) */
@@ -55,6 +57,7 @@ export function wasmEngine() {
   }
 
   wasm.init();
+  new Uint8Array(wasm.memory.buffer).fill(0);
 
   /* WASM helpers */
   const readByte = adr => new Uint8Array(wasm.memory.buffer, adr)[0];
@@ -64,17 +67,26 @@ export function wasmEngine() {
     new TextEncoder().encodeInto(str, buf);
   };
 
+  function addrToSprite(addr) {
+    if (addr == 0) return undefined;
+    return new Sprite(addr);
+  }
+
+  const ds = state.deltas;
   class Sprite {
-    constructor(addr) { this.addr = addr; this.dx = 0; this.dy = 0; }
+    constructor(addr) { this.addr = addr; }
 
     set type(k) { wasm.sprite_set_kind(this.addr, k.charCodeAt(0)); }
     get type()  { return String.fromCharCode(wasm.sprite_get_kind(this.addr)); }
 
-    set x(newX) { this.dx = wasm.map_move(this.addr, newX - this.x, 0); }
+    set x(newX) { ds.x[this.addr] = wasm.map_move(this.addr, newX - this.x, 0); }
     get x()     { return wasm.sprite_get_x(this.addr); }
 
-    set y(newY) { this.dy = wasm.map_move(this.addr, 0, newY - this.y); }
+    set y(newY) { ds.y[this.addr] = wasm.map_move(this.addr, 0, newY - this.y); }
     get y()     { return wasm.sprite_get_y(this.addr); }
+
+    get dx() { return ds.x[this.addr] || 0; }
+    get dy() { return ds.y[this.addr] || 0; }
 
     get next() { return readU32(this.addr); }
 
@@ -91,7 +103,7 @@ export function wasmEngine() {
     addText,
     clearText,
 
-    addSprite: (x, y, type) => new Sprite(wasm.map_add(x, y, type.charCodeAt(0))),
+    addSprite: (x, y, type) => addrToSprite(wasm.map_add(x, y, type.charCodeAt(0))),
     getGrid: () => {
       const iter = wasm.temp_MapIter_mem();
       const  width = wasm.map_width();
@@ -102,7 +114,7 @@ export function wasmEngine() {
         _ => [],
       );
       while (wasm.map_get_grid(iter)) {
-        const sprite = new Sprite(readU32(iter));
+        const sprite = addrToSprite(readU32(iter));
         const i = sprite.x + sprite.y*width;
         grid[i].push(sprite);
       }
@@ -114,7 +126,7 @@ export function wasmEngine() {
 
       const out = [];
       while (wasm.map_get_grid(iter)) {
-        const sprite = new Sprite(readU32(iter));
+        const sprite = addrToSprite(readU32(iter));
         if (sprite.x != x || sprite.y != y)
           break;
         out.push(sprite);
@@ -130,7 +142,7 @@ export function wasmEngine() {
       while (wasm.map_tiles_with(iter, mustHave_mem)) {
         const tile = [];
         let top = readU32(iter);
-        do { tile.push(new Sprite(top)); } while (top = readU32(top));
+        do { tile.push(addrToSprite(top)); } while (top = readU32(top));
         out.push(tile);
       }
       return out;
@@ -150,7 +162,7 @@ export function wasmEngine() {
     map: _makeTag(text => text),
     bitmap: _makeTag(text => text),
     tune: _makeTag(text => text),
-    getFirst: char => new Sprite(wasm.map_get_first(char.charCodeAt(0))),
+    getFirst: char => addrToSprite(wasm.map_get_first(char.charCodeAt(0))),
     getAll: char => {
       const iter = wasm.temp_MapIter_mem();
       const step = char
@@ -158,7 +170,7 @@ export function wasmEngine() {
         : (() => wasm.map_get_grid(iter));
 
       const out = [];
-      while (step()) out.push(new Sprite(readU32(iter)));
+      while (step()) out.push(addrToSprite(readU32(iter)));
       return out;
     },
     width: () => wasm.map_width(),

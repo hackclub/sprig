@@ -144,10 +144,8 @@ export function init(canvas) {
 
     afterInputs.forEach(f => f());
 
-    // state.sprites.forEach(s => {
-    //   s.dx = 0;
-    //   s.dy = 0;
-    // })
+    state.deltas.x = {};
+    state.deltas.y = {};
 
     e.preventDefault();
   });
