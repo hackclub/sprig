@@ -99,7 +99,7 @@ const menu = (state) => html`
       </div>
     </div>
     <div class="menu-item dropdown-container">
-      export
+      save
       <div class="dropdown-list">
         <div @click=${e => dispatch("SAVE_TO_FILE")}>to file</div>
         <div @click=${e => dispatch("GET_URL")}>to link</div>
