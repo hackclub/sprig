@@ -99,29 +99,7 @@ const menu = (state) => html`
       </div>
     </div>
     <div class="menu-item dropdown-container">
-      learn
-      <div class="dropdown-list">
-        ${challenges.map(({ content, name }, i) => {
-          const load = () => {
-            const cur = state.codemirror.state.doc.toString();
-            const match = cur.match(/@title:\s+([^\n]+)/);
-            const curName = (match !== null) ? match[1] : "DRAFT";
-
-            if (curName == name &&
-              !confirm(`are you sure you want to overwrite your edited "${name}"?`))
-              return;
-
-            dispatch("SET_EDITOR_TEXT", {
-              text: content.trim(),
-              range: [0, cur.length]
-            });
-          };
-          return html`<div @click=${load}>${name}</div>`
-        })}
-      </div>
-    </div>
-    <div class="menu-item dropdown-container">
-      save
+      export
       <div class="dropdown-list">
         <div @click=${e => dispatch("SAVE_TO_FILE")}>to file</div>
         <div @click=${e => dispatch("GET_URL")}>to link</div>
@@ -164,6 +142,31 @@ const drawSample = ({ name, link }) => {
     </a>
   `
 }
+
+const learn = () => html`
+ <div class="menu-item dropdown-container">
+    learn
+    <div class="dropdown-list">
+      ${challenges.map(({ content, name }, i) => {
+        const load = () => {
+          const cur = state.codemirror.state.doc.toString();
+          const match = cur.match(/@title:\s+([^\n]+)/);
+          const curName = (match !== null) ? match[1] : "DRAFT";
+
+          if (curName == name &&
+            !confirm(`are you sure you want to overwrite your edited "${name}"?`))
+            return;
+
+          dispatch("SET_EDITOR_TEXT", {
+            text: content.trim(),
+            range: [0, cur.length]
+          });
+        };
+        return html`<div @click=${load}>${name}</div>`
+      })}
+    </div>
+  </div>
+`
 
 
 const next = () => html`

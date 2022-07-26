@@ -31,7 +31,7 @@ export async function init(args, state) {
   state.savedGames = JSON.parse(savedString);
   const games = Object.fromEntries(state.savedGames);
   const set = text => dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] });
-  const link = "https://raw.githubusercontent.com/hackclub/sprig/main/games/sokoban.js";
+  const link = "https://raw.githubusercontent.com/hackclub/sprig/main/games/getting_started.js";
   set(await fetch(link).then(x => x.text()));
 
   window.addEventListener("error", (e) => {

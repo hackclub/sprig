@@ -7,8 +7,8 @@ believe people learn best by making things they care about
 and sharing them with others.
 All of the Sprig engine is about 15 functions.
 
-If this is your first time using Sprig try going 
-through the challenges in the \`learn\` tab.
+If this is your first time using Sprig try playing through the starter game. 
+After that check out the gallery.
 
 You can also start with an empty file and 
 go through [this tutorial](https://github.com/hackclub/sprig-gallery/blob/main/src/routes/getting-started.md#lets-make-our-first-game-in-sprig 
