@@ -10,7 +10,7 @@ First hit run to start the game (you can also press shift+enter).
 
 To beat this game you'll have to edit the code for each level.
 
-The objective is to push the purple block onto the green goals.
+The objective is to push the purple boxes onto the green goals.
 
 Use "w", "a", "s", "d" to move around. 
 (You'll have to add "w" and "a" yourself!)
@@ -44,7 +44,7 @@ Edit the map.
 Level 4
 --------
 
-Make blocks push blocks.
+Make boxes push boxes.
 
 --------
 Level 5
