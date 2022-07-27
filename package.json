@@ -6,10 +6,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codemirror/autocomplete": "^6.1.0",
     "@codemirror/basic-setup": "^0.20.0",
     "@codemirror/commands": "^6.0.0",
     "@codemirror/lang-javascript": "^0.20.0",
     "@codemirror/language": "^0.20.2",
+    "@codemirror/lint": "^6.0.0",
+    "@codemirror/search": "^6.0.1",
     "@codemirror/state": "^0.20.0",
     "@codemirror/view": "^0.20.6",
     "buffer": "^6.0.3",
