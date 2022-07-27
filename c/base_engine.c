@@ -114,18 +114,6 @@ WASM_EXPORT uint8_t *screen(void) {
   return (void *)state->screen;
 }
 
-static void render_premultiply_alpha(uint8_t *rgba) {
-  float a = (float)rgba[3] / 255.0f;
-
-  float r = (float)rgba[0] / 255.0f * a;
-  float g = (float)rgba[1] / 255.0f * a;
-  float b = (float)rgba[2] / 255.0f * a;
-
-  rgba[0] = (uint8_t) (r * 255.0f);
-  rgba[1] = (uint8_t) (g * 255.0f);
-  rgba[2] = (uint8_t) (b * 255.0f);
-}
-
 /* call this when the map changes size, or when the legend changes */
 static void render_resize_legend(void) {
   /* how big do our tiles need to be to fit them all snugly on screen? */
@@ -160,10 +148,11 @@ static void render_blit_sprite(int sx, int sy, char kind) {
       uint8_t *dst = state->screen[sy+y][sx+x];
       uint8_t *src = d->pixels[y][x];
 
-      float inv_src_a = 1.0f - ((float)src[3] / 255.0f);
-      dst[0] = src[0] + inv_src_a*dst[0];
-      dst[1] = src[1] + inv_src_a*dst[1];
-      dst[2] = src[2] + inv_src_a*dst[2];
+      if (src[3] == 0 || dst[3] > 0) continue;
+
+      dst[0] = src[0];
+      dst[1] = src[1];
+      dst[2] = src[2];
       dst[3] = 255;
     }
 }
@@ -174,18 +163,19 @@ WASM_EXPORT void render_set_background(char kind) {
 
 WASM_EXPORT uint8_t map_get_grid(MapIter *m);
 WASM_EXPORT void render(void) {
+  __builtin_memset(&state->screen, 0, sizeof(state->screen));
+
   int pixel_width = state->width*state->tile_size;
   int pixel_height = state->height*state->tile_size;
 
   int ox = (SCREEN_SIZE_X - pixel_width)/2;
   int oy = (SCREEN_SIZE_Y - pixel_height)/2;
 
-  for (int y = oy; y < oy+pixel_height; y++)
-    for (int x = ox; x < ox+pixel_width; x++)
-      state->screen[y][x][0] = 255,
-      state->screen[y][x][1] = 255,
-      state->screen[y][x][2] = 255,
-      state->screen[y][x][3] = 255;
+  MapIter m = {0};
+  while (map_get_grid(&m))
+    render_blit_sprite(ox + state->tile_size*m.sprite->x,
+                       oy + state->tile_size*m.sprite->y,
+                       m.sprite->kind);
 
   if (state->background_sprite)
     for (int y = 0; y < state->height; y++)
@@ -194,11 +184,13 @@ WASM_EXPORT void render(void) {
                            oy + state->tile_size*y,
                            state->background_sprite);
 
-  MapIter m = {0};
-  while (map_get_grid(&m))
-    render_blit_sprite(ox + state->tile_size*m.sprite->x,
-                       oy + state->tile_size*m.sprite->y,
-                       m.sprite->kind);
+  for (int y = oy; y < oy+pixel_height; y++)
+    for (int x = ox; x < ox+pixel_width; x++)
+      if (state->screen[y][x][3] == 0)
+        state->screen[y][x][0] = 255,
+        state->screen[y][x][1] = 255,
+        state->screen[y][x][2] = 255,
+        state->screen[y][x][3] = 255;
 }
 
 static Sprite *map_alloc(void) {
@@ -269,7 +261,6 @@ WASM_EXPORT void map_set(char *str) {
   } while (*str++);
   state->width = tx;
   state->height = ty+1;
-  __builtin_memset(&state->screen, 0, sizeof(state->screen));
 
   render_resize_legend();
 }
@@ -485,16 +476,6 @@ WASM_EXPORT void legend_clear(void) {
   __builtin_memset(&state->legend_doodled, 0, sizeof(state->legend_doodled));
 }
 WASM_EXPORT void legend_prepare(void) {
-  /* TODO: simplify alpha transparency? */
-  for (int i = 0; i <= PER_CHAR; i++) {
-    if (!state->legend_doodled[i]) continue;
-    
-    Doodle *d = state->legend + i;
-    for (int y = 0; y < 16; y++)
-      for (int x = 0; x < 16; x++)
-        render_premultiply_alpha(d->pixels[y][x]);
-  }
-
   if (state->width && state->height)
     render_resize_legend();
 }
