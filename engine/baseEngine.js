@@ -197,12 +197,13 @@ export function baseEngine() {
   }
 
   function getTile(x, y) { 
-    return y >= 0 
-      && y < state.dimensions.height 
-      && x >= 0 
-      && y < state.dimensions.width 
-      ? (getGrid()[state.dimensions.width*y+x] || [])
-      : [];
+    
+    if (y < 0) return [];
+    if (x < 0) return [];
+    if (y >= state.dimensions.height) return [];
+    if (x >= state.dimensions.height) return [];
+
+    return getGrid()[state.dimensions.width*y+x] || [];
   }
 
   function hasDuplicates(array) {
