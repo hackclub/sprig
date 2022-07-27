@@ -8,7 +8,9 @@ Welcome to Sprig!!!
 
 First hit run to start the game (you can also press shift+enter).
 
-To beat this game you'll have to edit the code for each level.
+To beat each level you'll have to edit the code.
+
+The code for this game starts on line 70.
 
 The objective is to push the purple boxes onto the green goals.
 
