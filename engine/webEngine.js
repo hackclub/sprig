@@ -66,7 +66,7 @@ function drawText(charGrid) {
 let cur = null;
 
 export function init(canvas) {
-  const { api, render, state } = baseEngine();
+  const { api, render, clearDeltas, state } = baseEngine();
 
   // remove event listeners
   let newCanvas = canvas.cloneNode(true);
@@ -135,8 +135,7 @@ export function init(canvas) {
 
     afterInputs.forEach(f => f());
 
-    state.deltas.x = {};
-    state.deltas.y = {};
+    clearDeltas();
 
     e.preventDefault();
   });

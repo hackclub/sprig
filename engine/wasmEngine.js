@@ -1,5 +1,3 @@
-import { bitmapTextToImageData } from "./bitmap.js";
-
 // Tagged template literal factory go brrr
 function _makeTag(cb) {
   return (strings, ...interps) => {
@@ -38,7 +36,6 @@ export function wasmEngine() {
   const state = {
     texts: [],
     legend: [],
-    deltas: { x: {}, y: {} },
   };
 
   /* opts: x, y, color (all optional) */
@@ -79,23 +76,22 @@ export function wasmEngine() {
     return new Sprite(addr);
   }
 
-  const ds = state.deltas;
   class Sprite {
     constructor(addr) { this.addr = addr; }
 
     set type(k) { wasm.sprite_set_kind(this.addr, k.charCodeAt(0)); }
     get type()  { return String.fromCharCode(wasm.sprite_get_kind(this.addr)); }
 
-    set x(newX) { ds.x[this.addr] = wasm.map_move(this.addr, newX - this.x, 0); }
-    get x()     { return wasm.sprite_get_x(this.addr); }
+    set x(newX) { wasm.map_move(this.addr, newX - this.x, 0); }
+    set y(newY) { wasm.map_move(this.addr, 0, newY - this.y); }
 
-    set y(newY) { ds.y[this.addr] = wasm.map_move(this.addr, 0, newY - this.y); }
+    get x()     { return wasm.sprite_get_x(this.addr); }
     get y()     { return wasm.sprite_get_y(this.addr); }
 
-    get dx() { return ds.x[this.addr] || 0; }
-    get dy() { return ds.y[this.addr] || 0; }
+    get dx() { return wasm.sprite_get_dx(this.addr); }
+    get dy() { return wasm.sprite_get_dy(this.addr); }
 
-    get next() { return readU32(this.addr); }
+    // get next() { return readU32(this.addr); }
 
     remove() { wasm.map_remove(this.addr); }
   }
@@ -181,15 +177,13 @@ export function wasmEngine() {
       return out;
     },
     setLegend: bitmaps => {
-      console.log({ bitmaps });
       wasm.legend_clear();
       for (const [charStr, imgStr] of bitmaps) {
         const char = charStr.charCodeAt(0);
-        const img = bitmapTextToImageData(imgStr);
+        const mem = wasm.temp_str_mem();
+        memcpy(imgStr.trim(), mem);
 
-        const dst_ptr = wasm.legend_mem_for_kind(char);
-        const dst = new Uint8ClampedArray(wasm.memory.buffer, dst_ptr);
-        dst.set(img.data);
+        wasm.legend_doodle_set(char, mem);
       }
       wasm.legend_prepare();
     },
@@ -201,5 +195,5 @@ export function wasmEngine() {
     // }
   };
 
-  return { api, render: wasm.render, state };
+  return { api, render: wasm.render, clearDeltas: wasm.map_clear_deltas, state };
 }

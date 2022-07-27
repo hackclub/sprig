@@ -34,13 +34,15 @@ typedef struct {
 typedef struct Sprite Sprite;
 struct Sprite {
   Sprite *next;
-  int x, y;
+  int x, y, dx, dy;
   char kind;
 };
 static void map_free(Sprite *s);
 static Sprite *map_alloc(void);
 
 typedef struct { Sprite *sprite; int x, y; uint8_t dirty; } MapIter;
+
+typedef struct { uint8_t rgba[4]; } Color;
 
 #define PER_CHAR (255)
 #define MAP_SIZE_X (100)
@@ -67,9 +69,10 @@ typedef struct {
 
   int tile_size; /* how small tiles have to be to fit map on screen */
   char background_sprite;
+  Color palette[PER_CHAR];
   uint8_t screen[SCREEN_SIZE_Y][SCREEN_SIZE_X][4];
 
-  uint8_t temp_str_mem[(1 << 12)];
+  char temp_str_mem[(1 << 12)];
   MapIter temp_MapIter_mem;
 } State;
 static State *state = 0;
@@ -81,11 +84,23 @@ WASM_EXPORT void init(int bytes) {
   if (delta > 0) __builtin_wasm_memory_grow(0, delta);
   state = (void *)&__heap_base;
 
+  state->palette['0'] = (Color){{   0,   0,   0, 255 }};
+  state->palette['1'] = (Color){{ 128, 128, 128, 255 }};
+  state->palette['L'] = (Color){{  85,  85,  85, 255 }};
+  state->palette['2'] = (Color){{ 255, 255, 255, 255 }};
+  state->palette['3'] = (Color){{ 255,   0,   0, 255 }};
+  state->palette['4'] = (Color){{   0, 255,   0, 255 }};
+  state->palette['5'] = (Color){{   0,   0, 255, 255 }};
+  state->palette['6'] = (Color){{ 255, 255,   0, 255 }};
+  state->palette['7'] = (Color){{   0, 255, 255, 255 }};
+  state->palette['8'] = (Color){{ 255,   0, 255, 255 }};
+  state->palette['.'] = (Color){{   0,   0,   0,   0 }};
+
   putchar('h');
   putchar('i');
 }
 
-WASM_EXPORT uint8_t *temp_str_mem(void) {
+WASM_EXPORT char *temp_str_mem(void) {
   __builtin_memset(&state->temp_str_mem, 0, sizeof(state->temp_str_mem));
   return state->temp_str_mem;
 }
@@ -370,7 +385,7 @@ WASM_EXPORT void map_drill(int x, int y) {
 
 /* move a sprite by one unit along the specified axis
    returns how much it was moved on that axis (may be 0 if path obstructed) */
-WASM_EXPORT int map_move(Sprite *s, int big_dx, int big_dy) {
+static int _map_move(Sprite *s, int big_dx, int big_dy) {
   int dx = signf(big_dx);
   int dy = signf(big_dy);
 
@@ -398,7 +413,7 @@ WASM_EXPORT int map_move(Sprite *s, int big_dx, int big_dy) {
         if (state->solid[(int)n->kind]) {
           /* unless you can push them out of the way ig */
           if (state->push_table[(int)s->kind][(int)n->kind]) {
-            if (map_move(n, dx, dy) == 0)
+            if (_map_move(n, dx, dy) == 0)
               return prog;
           }
           else
@@ -416,10 +431,28 @@ WASM_EXPORT int map_move(Sprite *s, int big_dx, int big_dy) {
   return prog;
 }
 
+WASM_EXPORT void map_move(Sprite *s, int big_dx, int big_dy) {
+  int moved = _map_move(s, big_dx, big_dy);
+  if (big_dx != 0) s->dx = moved;
+  else             s->dy = moved;
+}
+
 WASM_EXPORT int sprite_get_x(Sprite *s) { return s->x; }
 WASM_EXPORT int sprite_get_y(Sprite *s) { return s->y; }
+WASM_EXPORT int sprite_get_dx(Sprite *s) { return s->dx; }
+WASM_EXPORT int sprite_get_dy(Sprite *s) { return s->dy; }
 WASM_EXPORT char sprite_get_kind(Sprite *s) { return s->kind; }
 WASM_EXPORT void sprite_set_kind(Sprite *s, char kind) { s->kind = kind; }
+
+WASM_EXPORT void map_clear_deltas(void) {
+  for (int y = 0; y < state->height; y++)
+    for (int x = 0; x < state->width; x++) {
+      Sprite *top = state->map[x][y];
+
+      for (; top; top = top->next)
+        top->dx = top->dy = 0;
+    }
+}
 
 WASM_EXPORT void solids_push(char c) {
   state->solid[(int)c] = 1;
@@ -428,9 +461,25 @@ WASM_EXPORT void solids_clear(void) {
   __builtin_memset(&state->solid, 0, sizeof(state->solid));
 }
 
-WASM_EXPORT Doodle *legend_mem_for_kind(char kind) {
+WASM_EXPORT void legend_doodle_set(char kind, char *str) {
   state->legend_doodled[(int)kind] = 1;
-  return state->legend + (int)kind;
+
+  Doodle *d = state->legend + (int)kind;
+
+  int px = 0, py = 0;
+  do {
+    switch (*str) {
+      case '\n': py++, px = 0; break;
+      case  '.': px++;         break;
+      case '\0':               break;
+      default: {
+        Color *c = state->palette + (int) *str;
+        for (int i = 0; i < 4; i++)
+          d->pixels[py][px][i] = c->rgba[i];
+        px++;
+      } break;
+    }
+  } while (*str++);
 }
 WASM_EXPORT void legend_clear(void) {
   __builtin_memset(&state->legend_doodled, 0, sizeof(state->legend_doodled));
