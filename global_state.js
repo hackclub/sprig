@@ -26,4 +26,5 @@ export const global_state = {
   bitmaps: [],
   savedGames: [],
   palette,
+  stale: false,
 }

@@ -9,6 +9,7 @@ import { saveToFile } from "./dispatches/export/saveToFile.js";
 // import "./dispatches/fetchAndBundle/fetchAndBundle.js";
 import { exportS3 } from "./s3.js";
 import { global_state } from "./global_state.js";
+import { saveGame } from "./saveGame.js"
 
 function getURLPath(extension) {
   return (
@@ -29,6 +30,11 @@ const ACTIONS = {
   }, 
   UPLOAD(args, state) {
     upload(state.codemirror.state.doc.toString());
+  },
+  SAVE(args, state) {
+    saveGame(state);
+    state.stale = false;
+    dispatch("RENDER");
   },
   SAVE_TO_FILE(args, state) {
     const string = state.codemirror.state.doc.toString();

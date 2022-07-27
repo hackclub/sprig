@@ -1,6 +1,5 @@
 import { html } from "./libs/uhtml.js";
 import { dispatch } from "./dispatch.js";
-import { saveGame } from "./saveGame.js"
 
 import { challenges } from "./challenges.js";
 import { docs } from "./views/docs.js";
@@ -72,9 +71,43 @@ const editableName = (state) => html`
 const drawFile = (file, i, state) => {
   const [ name, text ] = file;
   const setText = () => {
-    saveGame(state);
     const games = Object.fromEntries(state.savedGames);
     const text = games[name];
+    const cur = state.codemirror.state.doc.toString();
+    dispatch("SET_EDITOR_TEXT", { text, range: [0, cur.length] })
+  }
+
+  const deleteFile = () => {
+    const toSave = state.savedGames.filter( ([ fileName, text ]) => {
+      return fileName !== name;
+    })
+    window.localStorage.setItem("puzzle-lab", JSON.stringify(toSave) );
+    state.savedGames = toSave;
+    dispatch("RENDER");
+  }
+
+  const fullText = state.codemirror.state.doc.toString();
+  const matches = fullText.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g);
+  for (const match of matches) {
+    const index = match.index;
+    state.codemirror.foldRange(index, index+1);
+  }
+  return html`
+    <div style="display: flex;">
+      <div style="width:30px;" class="delete-file" @click=${deleteFile}>x</div>
+      <div style="width:100%;" @click=${setText}>${name.slice(0, 15)}${name.length > 15 ? "..." : ""}</div>
+    </div>
+  `
+} 
+
+const newFile = (state) => {
+  if (!state.codemirror) return "";
+
+  const setText = () => {
+    const text = `/*
+@title: game_name
+@author: your_name
+*/`;
     const cur = state.codemirror.state.doc.toString();
     dispatch("SET_EDITOR_TEXT", { text, range: [0, cur.length] })
   }
@@ -86,23 +119,28 @@ const drawFile = (file, i, state) => {
     state.codemirror.foldRange(index, index+1);
   }
   return html`
-    <div @click=${setText}>${name.slice(0, 15)}${name.length > 15 ? "..." : ""}</div>
+    <div style="display: flex;">
+      <div style="width:30px;">+</div>
+      <div style="width:100%;" @click=${setText}>new file</div>
+    </div>
   `
 } 
 
 const menu = (state) => html`
   <div class="menu">
+    <div class=${["menu-item", state.stale ? "stale" : ""].join(" ")} @click=${() => dispatch("SAVE")}>save</div>
     <div class="menu-item dropdown-container">
-      recent
+      files
       <div class="dropdown-list">
         ${state.savedGames.map((file, i) => drawFile(file, i, state))}
+        ${newFile(state)}
       </div>
     </div>
     <div class="menu-item dropdown-container">
-      save
+      share
       <div class="dropdown-list">
-        <div @click=${e => dispatch("SAVE_TO_FILE")}>to file</div>
-        <div @click=${e => dispatch("GET_URL")}>to link</div>
+        <div @click=${e => dispatch("SAVE_TO_FILE")}>as file</div>
+        <div @click=${e => dispatch("GET_URL")}>as link</div>
       </div>
     </div>
     <a 

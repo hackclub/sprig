@@ -9,7 +9,7 @@ export function saveGame(state) {
   const newSave = [ name, string ];
   const currentGames = state.savedGames
     .filter( x => x[0] !== name)
-    .slice(0, 4);
+    // .slice(0, 4);
   const toSave = [ newSave, ...currentGames ]
   state.savedGames = toSave;
   window.localStorage.setItem("puzzle-lab", JSON.stringify(toSave) );

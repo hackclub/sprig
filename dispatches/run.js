@@ -1,10 +1,8 @@
 import { dispatch } from "../dispatch.js";
 import { evalGameScript } from "../engine/evalGameScript.js";
-import { saveGame } from "../saveGame.js"
 import { sizeGameCanvas } from "./sizeGameCanvas.js"
 
 export function run(args, state) {
-  saveGame(state);
 
   state.logs = [];
   state.errorInfo = null;
