@@ -1,6 +1,5 @@
 import { dispatch } from "../dispatch.js";
 import { sizeGameCanvas } from "../dispatches/sizeGameCanvas.js";
-import * as render from "./render.js";
 // import { baseEngine } from "./baseEngine.js";
 import { wasmEngine } from "./wasmEngine.js";
 import { font } from "./font.js";
@@ -67,37 +66,31 @@ function drawText(charGrid) {
 let cur = null;
 
 export function init(canvas) {
-  const log = x => (console.log(x), x);
-  const { api, state } = log(baseEngine());
+  const { api, render, state } = baseEngine();
 
   // remove event listeners
   let newCanvas = canvas.cloneNode(true);
   canvas.parentNode.replaceChild(newCanvas, canvas);
   canvas = newCanvas;
 
-  render.init(canvas);
-
   canvas.setAttribute("tabindex", "1");
 
+  console.log(state.screen);
   function gameloop() {
     setScreenSize(api.width()*16, api.height()*16);
 
     // draw text
-    drawText(composeText(state.texts));
+    // drawText(composeText(state.texts));
 
-    render.render(drawTiles());
+    const text = document.querySelector(".game-text");
+    text.width = state.screen.width;
+    text.height = state.screen.height;
+    render();
+    text
+      .getContext("2d")
+      .putImageData(state.screen, 0, 0);
 
     animationId = window.requestAnimationFrame(gameloop);
-  }
-
-  function setLegend(...bitmaps) {
-    bitmaps.forEach(([ key, value ]) => {
-      if (key.length !== 1) throw new Error(`Bitmaps must have one character names.`);
-    })
-    state.legend = bitmaps;
-
-    render.setBitmaps(bitmaps);
-    dispatch("SET_BITMAPS", { bitmaps });
   }
 
   function end() {
@@ -116,8 +109,6 @@ export function init(canvas) {
 
     window.idealDimensions = [api.width(), api.height()];
     sizeGameCanvas();
-
-    render.resize(canvas);
   }
 
   let tileInputs = {
@@ -191,11 +182,19 @@ export function init(canvas) {
   // how to add timed things, like bird flying and ball kicks
   
   return {
-    setLegend,
+    ...api,
+
+    /* overwrite api.setLegend with one that updates bitmaps */
+    setLegend: (...bitmaps) => {
+      api.setLegend(bitmaps);
+      dispatch("SET_BITMAPS", { bitmaps });
+    },
+    
     onInput, 
     afterInput, 
     setScreenSize,
+
+    /* nobody should use this, we don't want to have to say this won't change */
     getState: () => state,
-    ...api,
   }
 }

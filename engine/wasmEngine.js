@@ -1,3 +1,5 @@
+import { bitmapTextToImageData } from "./bitmap.js";
+
 // Tagged template literal factory go brrr
 function _makeTag(cb) {
   return (strings, ...interps) => {
@@ -56,8 +58,13 @@ export function wasmEngine() {
     state.texts = [];
   }
 
-  wasm.init();
   new Uint8Array(wasm.memory.buffer).fill(0);
+  wasm.init();
+  state.screen = new ImageData(
+    new Uint8ClampedArray(wasm.memory.buffer, wasm.screen(), 160*128*4),
+    160,
+    128
+  );
 
   /* WASM helpers */
   const readByte = adr => new Uint8Array(wasm.memory.buffer, adr)[0];
@@ -173,6 +180,19 @@ export function wasmEngine() {
       while (step()) out.push(addrToSprite(readU32(iter)));
       return out;
     },
+    setLegend: bitmaps => {
+      console.log({ bitmaps });
+      wasm.legend_clear();
+      for (const [charStr, imgStr] of bitmaps) {
+        const char = charStr.charCodeAt(0);
+        const img = bitmapTextToImageData(imgStr);
+
+        const dst_ptr = wasm.legend_mem_for_kind(char);
+        const dst = new Uint8ClampedArray(wasm.memory.buffer, dst_ptr);
+        dst.set(img.data);
+      }
+      wasm.legend_prepare();
+    },
     width: () => wasm.map_width(),
     height: () => wasm.map_height(),
     // setBackground: (type) => { 
@@ -181,5 +201,5 @@ export function wasmEngine() {
     // }
   };
 
-  return { api, state };
+  return { api, render: wasm.render, state };
 }
