@@ -33,7 +33,7 @@ export const style = `
     padding: 15px;
   }
 
-  .tools button {
+  .sprite-button {
     --cols: 5;
     width: calc((var(--editor-sidebar-width) - 30px - var(--cols) * 10px) / var(--cols));
     display: inline-block;
@@ -46,7 +46,41 @@ export const style = `
     border-radius: 4px;
   }
 
-  .tools button.active {
+  .sprite-button.active {
     box-shadow: inset 0 0 0 6px #fcc419;
+  }
+
+  .action-button-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .action-button {
+    margin: 10px;
+    --shadow-color: var(--btn-inactive-shadow);
+    position: relative;
+    display: flex;
+    background: var(--btn-inactive);
+    box-shadow: 0 4px 0 var(--shadow-color);
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 10px 14px;
+    align-items: center;
+    width: 40%;
+  }
+
+  .action-button.active {
+    background: var(--pcb-base);
+    --shadow-color: var(--pcb-trace);
+  }
+
+  .action-button:active {
+    top: 4px;
+    box-shadow: 0 0px 0 var(--shadow-color);
   }
 `

@@ -36,21 +36,21 @@ export function createMapEditor(target) {
       <div class="tools">
         <div>
           ${Object.entries(state.legend).map(([name, bitmap]) => html`<button
-              class=${state.activeBitmap === name ? "active" : ""}
+              class=${"sprite-button " + (state.activeBitmap === name ? "active" : "")}
               @click=${() => { state.activeBitmap = name; r() }}
             >
               <bitmap-preview text="${bitmap.text}" />
             </button>
           `)}<button
-            class=${state.activeBitmap === "." ? "active" : ""}
+            class=${"sprite-button " + (state.activeBitmap === "." ? "active" : "")}
             @click=${() => { state.activeBitmap = "."; r() }}
           />
         </div>
-        <div>
-          <button @mousedown=${addRow}>add row</buttton>
-          <button @mousedown=${delRow}>delete row</buttton>
-          <button @mousedown=${addCol}>add column</buttton>
-          <button @mousedown=${delCol}>delete column</buttton>
+        <div class="action-button-container">
+          <button class="action-button" @mousedown=${addRow}>add row</buttton>
+          <button class="action-button" @mousedown=${addCol}>add col</buttton>
+          <button class="action-button" @mousedown=${delRow}>delete row</buttton>
+          <button class="action-button" @mousedown=${delCol}>delete col</buttton>
         </div>
       </div>
     </div>
@@ -152,6 +152,7 @@ export function createMapEditor(target) {
   }
 
   const delRow = () => {
+    if (state.height === 1) return;
     state.cells = state.cells.slice(0, state.cells.length - 1);
     state.height--;
     updateText();
@@ -168,6 +169,7 @@ export function createMapEditor(target) {
   }
 
   const delCol = () => {
+    if (state.width === 1) return;
     state.cells.forEach((row, i) => {
       state.cells[i] = row.slice(0, row.length - 1);
     })
