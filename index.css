@@ -166,6 +166,10 @@ body {
   padding: 5px;
 }
 
+.err-line {
+  background: #ecb2b2 !important;
+}
+
 .game-docs-container {
   display: flex;
   flex-direction: column;

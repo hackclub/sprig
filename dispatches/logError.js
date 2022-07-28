@@ -28,7 +28,7 @@ export function logError({ type, err }, state) {
     const { description, lineNumber, column } = err;
 
     const msg = `${description} on line ${lineNumber} in column ${column}.\nOpen the browser console for more information.`;
-    state.errorInfo = { line:lineNumber };
+    state.errorInfo = { line: lineNumber };
     state.logs = [...state.logs, msg];
   }
 
@@ -39,13 +39,12 @@ export function logError({ type, err }, state) {
 
 export function highlightError(state) {
   const line = state.errorInfo?.line;
-
-  const cmLines = document.querySelectorAll(".cm-line");
+  const cmLines = document.querySelectorAll(".cm-lineNumbers > .cm-gutterElement");
   for (let i = 0; i < cmLines.length; i++) {
-    if (!line || i + 1 !== line) continue;
-
     const cmLine = cmLines[i];
+    const innerNumber = cmLine.innerText;
+    const height = cmLine.style.height;
+    if (Number(cmLine.innerText) !== line || height === "0px") continue;
     cmLine.classList.add("err-line");
-    cmLine.style.background = "#ecb2b2";
   }
 }

@@ -22,6 +22,7 @@ export async function init(args, state) {
   state.codemirror = createEditorView(() => {
     highlightError(state);
   });
+  
   state.codemirror.dom.id = "code-editor";
   document.querySelector("#code-editor").replaceWith(state.codemirror.dom);
 
@@ -38,7 +39,7 @@ export async function init(args, state) {
     // this is a hack to cut down on this chrome bug: https://support.google.com/chrome/thread/165732696/typing-in-console-triggers-error?hl=en
     if (e.message.includes("Uncaught EvalError")) return;
 
-    dispatch("LOG_ERROR", { type: "page", err: e.error });
+    console.error("caught error:", e);
   });
 
   const file = getParam("file");

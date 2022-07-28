@@ -7,11 +7,10 @@ export function run(args, state) {
   state.logs = [];
   state.errorInfo = null;
   
-  const cmLines = document.querySelectorAll(".cm-line");
+  const cmLines = document.querySelectorAll(".err-line");
 
   for (let i = 0; i < cmLines.length; i++) {
     const cmLine = cmLines[i];
-    cmLine.style.background = "";
     cmLine.classList.remove("err-line");
   }
 
