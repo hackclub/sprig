@@ -242,9 +242,17 @@ export function createMapEditor(target) {
   }
 
   const mouseDraw = (e) => {
-    const [mx, my] = [e.pageX - state.canvas.offsetLeft, e.pageY - state.canvas.offsetTop];
-    const [tw, th] = [state.canvas.offsetWidth / state.width, state.canvas.offsetHeight / state.height];
-    const [x, y] = [Math.floor(mx / tw), Math.floor(my / th)];
+    // const [mx, my] = [e.pageX - state.canvas.offsetLeft, e.pageY - state.canvas.offsetTop];
+    // const [tw, th] = [state.canvas.offsetWidth / state.width, state.canvas.offsetHeight / state.height];
+    // const [x, y] = [Math.floor(mx / tw), Math.floor(my / th)];
+
+    const rect = state.canvas.getBoundingClientRect();
+    const absX = e.clientX - rect.left;
+    const absY = e.clientY - rect.top;
+    const xStep = rect.width/state.width;
+    const yStep = rect.height/state.height;
+    const x = Math.floor(absX/xStep);
+    const y = Math.floor(absY/yStep);
 
     if (state.mousedown
       && (state.legend[state.activeBitmap] || state.activeBitmap === ".")
