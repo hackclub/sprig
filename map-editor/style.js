@@ -15,6 +15,11 @@ export const style = `
     display: flex;
     align-items: center;
     justify-content: center;
+    position:relative;
+  }
+
+  .grid {
+    position: absolute;
   }
 
   .canvas-container > canvas {
