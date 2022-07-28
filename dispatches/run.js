@@ -23,6 +23,16 @@ export function run(args, state) {
 
   dispatch("RENDER");
 
-  document.querySelector(".game-canvas").focus();
+  // wiggle the canvas window
+  const gameCanvas = document.querySelector(".game-canvas");
+  const gameCanvasContainer = document.querySelector(".game-canvas-container");
+
+  gameCanvasContainer.classList.add("shake");
+
+  gameCanvas.focus();
+
+  setTimeout(() => {
+    gameCanvasContainer.classList.remove("shake");
+  }, 200)
 }
 
