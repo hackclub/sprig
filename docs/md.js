@@ -34,13 +34,18 @@ const player = "p";
 setLegend([ player, bitmap\`...\` ]);
 \`\`\`
 
-To create a new bitmap, type \`bitmap\` and then two backticks (\`\` \` \`\`). 
-Click on the highlighted "bitmap" button to edit your drawing:
+To create a new bitmap, type 
+
+\`\`\`
+bitmap\`.\`
+\`\`\`
+
+Those are backticks! Click on the highlighted "bitmap" button to edit your drawing:
 
 \`\`\`js
 setLegend( 
-    [ "p", bitmap\`...\`],
-    [ "w", bitmap\`...\`]
+    [ "p", bitmap\`.\`],
+    [ "w", bitmap\`.\`]
 )
 \`\`\`
 
@@ -257,6 +262,16 @@ playback.end()
 Open up your browser console to debug.
 
 You can look at game state by...
+
+## Idioms
+
+### Get Neighbors
+
+### Find Pattern
+
+### Replace
+
+### Count Overlaps
 
 `
 

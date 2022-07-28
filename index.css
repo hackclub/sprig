@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap');
+
 :root {
   --pcb-lighter: #04a356;
   --pcb-base: #016e3a;
@@ -23,7 +25,7 @@ body, html, .root {
 }
 
 body {
-  font-family: "B612 Mono", monospace;
+  font-family: "Fira Mono", monospace;
   background: var(--pcb-base);
   background-image: url(/bg.svg);
   background-position: center center;
