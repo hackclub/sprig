@@ -191,8 +191,8 @@ export function createPixelEditor(target) {
             ["bucket", "color-fill"],
             ["move", "move"],
           ].map((tool) => renderTool(tool, state))}
-          <!-- <button
-            @click=$() => {
+          <button
+            @click=${() => {
               if (state.undoRedoStack.length === 0) return;
               const grid = JSON.parse(state.undoRedoStack.pop());
               state.gridColors.forEach((arr, i) => {
@@ -206,7 +206,7 @@ export function createPixelEditor(target) {
           </button>
           <button
             title="export"
-            @click=$() => {
+            @click=${() => {
               const canvas = target.querySelector("#offscreen-canvas");
               drawCanvasNoBg(canvas);
               const image = canvas.toDataURL();
@@ -217,7 +217,7 @@ export function createPixelEditor(target) {
             }}
           >
             export
-          </button> -->
+          </button>
         </div>
 
         ${drawColorsButtons(state)}
@@ -694,6 +694,16 @@ export function createPixelEditor(target) {
 
   return {
     loadInitValue({ text }) {
+      const rows = text.trim().split("/n");
+
+      while (rows.length < 16) rows.push("................");
+
+      rows.forEach((row, i) => {
+        while (rows[i].length < 16) rows[i] = rows[i] + ".";
+      })
+
+      text = rows.join("\n");
+
       const imageData = bitmapTextToImageData(text, state.palette);
       for (let i = 0; i < state.gridColors.length; i++) {
         state.gridColors[i] = [

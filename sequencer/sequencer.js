@@ -496,7 +496,9 @@ export function createSequencer(target) {
     state.svg = target.querySelector("svg");
 
     // add events
-    target.querySelector("link").addEventListener("load", r, { once: true });
+
+    // BUG: what was this line below supposed to do?
+    // target.querySelector("link").addEventListener("load", r, { once: true });
     // window.addEventListener("resize", r);
     addDropUpload();
   }

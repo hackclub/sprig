@@ -108,6 +108,8 @@ const ACTIONS = {
     setPerc((perc.trim() === "0%") ? 75 : 0);
 
     document.querySelector(".docs").classList.toggle("docs-expanded");
+
+    dispatch("RENDER");
   }
 }
 

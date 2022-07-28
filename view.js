@@ -74,7 +74,9 @@ const drawFile = (file, i, state) => {
     const games = Object.fromEntries(state.savedGames);
     const text = games[name];
     const cur = state.codemirror.state.doc.toString();
-    dispatch("SET_EDITOR_TEXT", { text, range: [0, cur.length] })
+    dispatch("SET_EDITOR_TEXT", { text: "", range: [0, cur.length] })
+    dispatch("RUN");
+    dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] })
   }
 
   const deleteFile = () => {
@@ -146,7 +148,7 @@ const menu = (state) => html`
     <a 
       class="menu-item dropdown-container" 
       href="https://sprig-gallery.hackclub.dev"
-      target="_blank">
+      >
       gallery
     </a>
     <div 
@@ -156,7 +158,7 @@ const menu = (state) => html`
     </div>
     <div 
       class="menu-item docs-trigger">
-      help
+      ${docsOpenClosed()}-help
     </div>
     <div 
       class="menu-item run" 
@@ -225,3 +227,8 @@ const next = () => html`
     }
   }} class="next-learn">next</div>
 `
+
+function docsOpenClosed() {
+  const perc = getComputedStyle(document.documentElement).getPropertyValue("--docs-percentage");
+  return perc.trim() === "0%" ? "open" : "close";
+}
