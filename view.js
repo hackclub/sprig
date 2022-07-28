@@ -109,9 +109,58 @@ const newFile = (state) => {
     const text = `/*
 @title: game_name
 @author: your_name
-*/`;
+*/
+
+const player = "p";
+
+setLegend(
+  [ player, bitmap\`
+................
+................
+.......000......
+.......0.0......
+......0..0......
+......0...0.0...
+....0003.30.0...
+....0.0...000...
+....0.05550.....
+......0...0.....
+.....0....0.....
+.....0...0......
+......000.......
+......0.0.......
+.....00.00......
+................\`]
+);
+
+setSolids([]);
+
+let level = 0;
+const levels = [
+  map\`
+p.
+..\`,
+];
+
+setMap(levels[level]);
+
+setPushables({
+  [ player ]: [],
+});
+
+onInput("s", () => {
+  getFirst(player).y += 1
+});
+
+afterInput(() => {
+  
+});
+
+`;
     const cur = state.codemirror.state.doc.toString();
-    dispatch("SET_EDITOR_TEXT", { text, range: [0, cur.length] })
+    dispatch("SET_EDITOR_TEXT", { text: "", range: [0, cur.length] });
+    dispatch("RUN");
+    dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] });
   }
 
   const fullText = state.codemirror.state.doc.toString();
