@@ -63,47 +63,14 @@ export function createMapEditor(target) {
     const ctx = state.canvas.getContext("2d");
     ctx.clearRect(0, 0, state.canvas.width, state.canvas.height);
 
-
-
     for (let y = 0; y < state.height; y++) {
       for (let x = 0; x < state.width; x++) {
-
-        // show grid
-
-        /* checkerboard */
-        // const bgColor =
-        //   (x % 2 === 0 && y % 2 === 1) || (x % 2 === 1 && y % 2 === 0)
-        //     ? BACKGROUND_BLUE
-        //     : BACKGROUND_WHITE;
-        // ctx.fillStyle = bgColor;
-        // ctx.fillRect(x * SPRITE_SIZE, y * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE);
-        
-        /* lines */
-
-
-
         if (!state.cells[y]) continue;
         const sprite = state.legend[state.cells[y][x]];
         if (!sprite) continue;
         ctx.putImageData(sprite.imageData, x * SPRITE_SIZE, y * SPRITE_SIZE, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
       }
     }
-    
-    // ctx.strokeStyle = "#787878";
-    // ctx.lineWidth = .8;
-
-    // ctx.beginPath();
-    // for (let y = 1; y < state.height; y++) {
-    //   ctx.moveTo(0, y*SPRITE_SIZE)
-    //   ctx.lineTo(state.width*SPRITE_SIZE, y*SPRITE_SIZE);
-    // }
-
-    // for (let x = 1; x < state.width; x++) {
-    //   ctx.moveTo(x*SPRITE_SIZE, 0)
-    //   ctx.lineTo(x*SPRITE_SIZE, state.height*SPRITE_SIZE);
-    // }
-    
-    // ctx.stroke();
   };
 
   const resizeCanvas = () => {
@@ -129,26 +96,18 @@ export function createMapEditor(target) {
 
   const drawGrid = () => {
     const d = [];
-    // const ctx = state.canvas.getContext("2d");
-    // ctx.strokeStyle = "#787878";
-    // ctx.lineWidth = 1;
 
     const xStep = state.canvas.width/state.width;
     const yStep = state.canvas.height/state.height;
 
-    // ctx.beginPath();
     for (let y = 1; y < state.height; y++) {
       d.push(`M ${0}, ${y*yStep}`);
       d.push(`L ${state.canvas.width}, ${y*yStep}`);
-      // ctx.moveTo(0, y*yStep)
-      // ctx.lineTo(state.canvas.width, y*yStep);
     }
 
     for (let x = 1; x < state.width; x++) {
       d.push(`M ${x*xStep}, ${0}`);
       d.push(`L ${x*xStep}, ${state.canvas.height}`);
-      // ctx.moveTo(x*xStep, 0)
-      // ctx.lineTo(x*xStep, state.canvas.height);
     }
     
     const svg = target.querySelector(".grid");
@@ -166,7 +125,7 @@ export function createMapEditor(target) {
     const yStep = state.canvas.height/state.height;
 
     const [ x, y ] = state.hoveredCell;
-
+    rect.setAttribute("stroke", x < 0 || x >= state.width || y < 0 || y >= state.height ? "none" : "#ebc64f");
     rect.setAttribute("width", xStep);
     rect.setAttribute("height", yStep);
     rect.setAttribute("x", x*xStep);
