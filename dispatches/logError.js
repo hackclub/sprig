@@ -1,25 +1,38 @@
 import { dispatch } from "../dispatch.js";
 
-export function logError({ err }, state) {
-  console.log(err);
+export function logError({ type, err }, state) {
+  console.error(err);
 
-  const location = err.stack.match(/<anonymous>:(.+)\)/);
-  let line = null;
-  let col = null;
+  if (type === "page" || type === "runtime") {
+    let line = null;
+    let col = null;
+    let location = err.stack.match(/<anonymous>:(.+)\)/);
 
-  if (location) {
-    let lineCol = location[1].split(":").map(Number);
-    line = lineCol[0] - 2;
-    col = lineCol[1];
+    if (location) {
+      let lineCol = location[1].split(":").map(Number);
+      line = lineCol[0] - 2;
+      col = lineCol[1];
+    }
+
+    const msg =
+      line && col
+        ? `${err.message} on line ${line} in column ${col}`
+        : err.message;
+
+    if (line && col) {
+      state.errorInfo = { line };
+      state.logs = [...state.logs, msg];
+    }
+
+  } else if (type === "parse") {
+    const { description, lineNumber, column } = err;
+
+    const msg = `${description} on line ${lineNumber} in column ${column}`;
+    state.errorInfo = { line:lineNumber };
+    state.logs = [...state.logs, msg];
   }
 
-  const msg =
-    line && col
-      ? `${err.message} on line ${line} in column ${col}`
-      : err.message;
 
-  state.errorInfo = { line };
-  state.logs = [...state.logs, msg];
   dispatch("RENDER");
   highlightError(state);
 }

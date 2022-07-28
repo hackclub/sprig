@@ -2,6 +2,7 @@
 import { init } from "./webEngine.js";
 import { playTune } from "./playTune.js";
 import { textToTune } from './textTuneConverters.js';
+import { parseScript } from "esprima";
 
 let tunes = [];
 let intervals = [];
@@ -37,11 +38,16 @@ export function evalGameScript(script) {
   };
 
   try {
+    parseScript(script);
+  } catch (err) {
+    return { type: "parse", err };
+  }
+
+  try {
     const fn = new Function(...Object.keys(gameFunctions), script);
     fn(...Object.values(gameFunctions));
-
     return null;
   } catch (err) {
-    return err;
+    return { type: "runtime", err };
   }
 }

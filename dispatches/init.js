@@ -38,8 +38,7 @@ export async function init(args, state) {
     // this is a hack to cut down on this chrome bug: https://support.google.com/chrome/thread/165732696/typing-in-console-triggers-error?hl=en
     if (e.message.includes("Uncaught EvalError")) return;
 
-    console.error(e.error);
-    dispatch("LOG_ERROR", { err: e.error });
+    dispatch("LOG_ERROR", { type: "page", err: e.error });
   });
 
   const file = getParam("file");

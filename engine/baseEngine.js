@@ -151,6 +151,8 @@ export function baseEngine() {
   const _allEqual = arr => arr.every(val => val === arr[0]);
 
   function setMap(string) { 
+    if (!string) throw new Error("Tried to set empty map.");
+    
     const rows = string.trim().split("\n").map(x => x.trim());
     const rowLengths = rows.map(x => x.length);
     const isRect = _allEqual(rowLengths)

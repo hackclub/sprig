@@ -189,6 +189,14 @@ body {
   overflow: hidden;
 }
 
+/*.game-canvas-container:focus,*/
+.game-canvas:focus {
+  box-shadow:
+    0px 0px 2px #fff,            /* outer white */
+    0px 0px 6px #0ff,        /* outer left magenta */
+    0px 0px 10px #f0f;         /* outer right cyan */
+}
+
 .game-text {
   image-rendering: pixelated;
   pointer-events: none;

@@ -17,7 +17,7 @@ export function run(args, state) {
 
   const script = state.codemirror.state.doc.toString();
   const err = evalGameScript(script, state.palette);
-  if (err) dispatch("LOG_ERROR", { err });
+  if (err) dispatch("LOG_ERROR", err);
 
   sizeGameCanvas();
 
