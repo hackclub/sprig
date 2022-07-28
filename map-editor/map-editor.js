@@ -26,7 +26,7 @@ export function createMapEditor(target) {
       @mousemove=${mouseDraw}
       @mouseup=${onMouseUp}>
       <div class="canvas-container">
-        <svg class="grid"><path stroke="black" stroke-width=".5" d=""/></svg>
+        <svg class="grid"><path stroke="#7a7e7c" stroke-width=".2" d=""/></svg>
         <canvas></canvas>
       </div>
       <div class="tools">
