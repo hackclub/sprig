@@ -16,6 +16,7 @@ export function createMapEditor(target) {
     cells: [[]],
     legend: {},
     palette: global_state.palette,
+    hoveredCell: null
   }
 
   const view = (state) => html`
@@ -26,7 +27,10 @@ export function createMapEditor(target) {
       @mousemove=${mouseDraw}
       @mouseup=${onMouseUp}>
       <div class="canvas-container">
-        <svg class="grid"><path stroke="#7a7e7c" stroke-width=".2" d=""/></svg>
+        <svg class="grid">
+          <path stroke="#7a7e7c" stroke-width=".2" d=""/>
+          <rect x="0" y="0" width="0" height="0" stroke="#ebc64f" fill="none" stroke-width=".5"/>
+        </svg>
         <canvas></canvas>
       </div>
       <div class="tools">
@@ -154,6 +158,21 @@ export function createMapEditor(target) {
     svg.setAttribute("viewBox", `0 0 ${state.canvas.width} ${state.canvas.height}`);
   }
 
+  const drawHoveredCell = () => {
+    const rect = target.querySelector(".grid > rect");
+    if (!rect) return;
+
+    const xStep = state.canvas.width/state.width;
+    const yStep = state.canvas.height/state.height;
+
+    const [ x, y ] = state.hoveredCell;
+
+    rect.setAttribute("width", xStep);
+    rect.setAttribute("height", yStep);
+    rect.setAttribute("x", x*xStep);
+    rect.setAttribute("y", y*yStep);
+  }
+
   const r = () => { 
     render(target, view(state)); 
 
@@ -253,6 +272,9 @@ export function createMapEditor(target) {
     const yStep = rect.height/state.height;
     const x = Math.floor(absX/xStep);
     const y = Math.floor(absY/yStep);
+
+    state.hoveredCell = [ x, y ];
+    drawHoveredCell();
 
     if (state.mousedown
       && (state.legend[state.activeBitmap] || state.activeBitmap === ".")
