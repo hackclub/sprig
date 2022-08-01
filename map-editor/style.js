@@ -83,4 +83,9 @@ export const style = `
     top: 4px;
     box-shadow: 0 0px 0 var(--shadow-color);
   }
+
+  .tiles {
+    display: flex;
+    flex-wrap: wrap;
+  }
 `

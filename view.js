@@ -84,6 +84,9 @@ const drawFile = (file, i, state) => {
       return fileName !== name;
     })
     window.localStorage.setItem("puzzle-lab", JSON.stringify(toSave) );
+   
+    if (!confirm(`Do you want to delete: ${name}?`)) return;
+
     state.savedGames = toSave;
     dispatch("RENDER");
   }

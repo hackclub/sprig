@@ -34,7 +34,7 @@ export function createMapEditor(target) {
         <canvas></canvas>
       </div>
       <div class="tools">
-        <div>
+        <div class="tiles">
           ${Object.entries(state.legend).map(([name, bitmap]) => html`<button
               class=${"sprite-button " + (state.activeBitmap === name ? "active" : "")}
               @click=${() => { state.activeBitmap = name; r() }}
