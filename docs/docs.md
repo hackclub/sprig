@@ -175,7 +175,7 @@ You can remove a sprite with `sprite.remove()`.
 
 Returns a list of the sprites in the specified tile.
 
-### tilesWith(arrayOfTypes)
+### tilesWith(type, ...)
 
 Returns a list of the tiles with all types contained in them.
 
