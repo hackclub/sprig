@@ -27,4 +27,5 @@ export const global_state = {
   savedGames: [],
   palette,
   stale: false,
+  staleRun: true,
 }

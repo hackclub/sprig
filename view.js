@@ -213,7 +213,7 @@ const menu = (state) => html`
       ${docsOpenClosed()}-help
     </div>
     <div 
-      class="menu-item run" 
+      class=${["menu-item", "run", state.staleRun ? "stale-run" : ""].join(" ")} 
       @click=${() => dispatch("RUN")}>
       <ion-icon name="play" style="margin-right: 6px;" />
       run

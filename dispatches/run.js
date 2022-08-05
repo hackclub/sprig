@@ -6,6 +6,7 @@ export function run(args, state) {
 
   state.logs = [];
   state.errorInfo = null;
+  state.staleRun = false;
   
   const cmLines = document.querySelectorAll(".err-line");
 

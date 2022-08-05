@@ -74,10 +74,6 @@ body {
   color: red;
 }
 
-.stale {
-  background: #ba8722d6;
-}
-
 .menu-name {
   box-shadow: inset 0 -6px 0 0 var(--pcb-trace);
   font-weight: bold;
@@ -97,6 +93,18 @@ body {
 
 .run:hover {
   box-shadow: inset 0 -50px 0 0 var(--pcb-lighter);
+}
+
+.stale {
+  background: #ba8722d6;
+}
+
+.stale-run {
+  box-shadow: inset 0 -6px 0 0 #ba8722d6;
+}
+
+.stale-run:hover {
+  box-shadow: inset 0 -50px 0 0 #ba8722d6;
 }
 
 .dropdown-list > *:hover {

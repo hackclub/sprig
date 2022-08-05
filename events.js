@@ -33,8 +33,9 @@ export function addEvents(state) {
 
     if (isCM) {
       // set code to stale
-      const rerender = !state.stale;
+      const rerender = !state.stale || !state.staleRun;
       state.stale = true;
+      state.staleRun = true;
 
       if (rerender) dispatch("RENDER");
     }
