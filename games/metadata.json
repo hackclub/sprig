@@ -1,72 +1,80 @@
-{
-  "game-title": {
-      "author": "",
-      "img": "",
-      "tags": ["beginner", "tutorial"]
-  },
-  "15_puzzle": {
+[
+  {
+      "title": "15_puzzle",
       "author": "maggie liu",
       "img": "",
       "tags": ["advanced"]
   },
-  "9_puzzle": {
+  {
+      "title": "9_puzzle",
       "author": "brian silverman",
       "img": "",
       "tags": []
   },
-  "Kindless": {
+  {
+      "title": "Kindless",
       "author": "Ishan",
       "img": "",
       "tags": ["advanced"]
   },
-  "color_patterns": {
+  {
+      "title": "color_patterns",
       "author": "brian silverman",
       "img": "",
       "tags": []
   },
-  "crappy_birds": {
+  {
+      "title": "crappy_birds",
       "author": "ced",
       "img": "",
       "tags": []
   },
-  "friendship": {
+  {
+      "title": "friendship",
       "author": "nicky case",
       "img": "",
       "tags": ["beginner"]
   },
-  "getting_started": {
+  {
+      "title": "getting_started",
       "author": "hack club",
       "img": "",
       "tags": ["beginner", "tutorial"]
   },
-  "laser_tag": {
+  {
+      "title": "laser_tag",
       "author": "leo mcelroy",
       "img": "",
       "tags": []
   },
-  "maze": {
+  {
+      "title": "maze",
       "author": "leo mcelroy",
       "img": "",
       "tags": ["beginner"]
   },
-  "pyre": {
+  {
+      "title": "pyre",
       "author": "ced",
       "img": "",
       "tags": []
   },
-  "raycasting": {
+  {
+      "title": "raycasting",
       "author": "henry bass",
       "img": "",
       "tags": ["advanced"]
   },
-  "sokoban": {
+  {
+      "title": "sokoban",
       "author": "leo mcelroy",
       "img": "",
       "tags": ["beginner"]
   },
-  "tolls": {
+  {
+      "title": "tolls",
       "author": "leo mcelroy",
       "img": "",
       "tags": []
   }
-}
+]
