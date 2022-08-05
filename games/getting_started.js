@@ -1,5 +1,5 @@
 /*
-@title: nokoban
+@title: getting_started
 @author: leo
 
 Instructions:

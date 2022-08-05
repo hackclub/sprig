@@ -103,7 +103,7 @@ setSolids([player, wall]);
 
 ### setPushables(pushMap)
 
-Want sprites to be able to push each other around? Use `setPushables` to map a bitmap key to a list of bitmaps that it can push around:
+Use `setPushables` to make sprites push other sprites around. The sprite on the left will be able to push all sprites listed on the right.
 
 ```js
 const player = "p";
@@ -114,9 +114,7 @@ setPushables({
 })
 ```
 
-> **Watch out!** Make sure everything you pass to `setPushables` is also marked as a solid or they won't be pushed around.
-> 
-> For more advanced usage, you could update the solids list in-game to enable and disable pushables dynamically.
+**Watch out!** Make sure everything you pass to `setPushables` is also marked as a solid or they won't be pushed around.
 
 ## User Input
 
