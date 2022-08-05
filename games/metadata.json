@@ -3,5 +3,70 @@
       "author": "",
       "img": "",
       "tags": ["beginner", "tutorial"]
+  },
+  "15_puzzle": {
+      "author": "maggie liu",
+      "img": "",
+      "tags": ["advanced"]
+  },
+  "9_puzzle": {
+      "author": "brian silverman",
+      "img": "",
+      "tags": []
+  },
+  "Kindless": {
+      "author": "Ishan",
+      "img": "",
+      "tags": ["advanced"]
+  },
+  "color_patterns": {
+      "author": "brian silverman",
+      "img": "",
+      "tags": []
+  },
+  "crappy_birds": {
+      "author": "ced",
+      "img": "",
+      "tags": []
+  },
+  "friendship": {
+      "author": "nicky case",
+      "img": "",
+      "tags": ["beginner"]
+  },
+  "getting_started": {
+      "author": "hack club",
+      "img": "",
+      "tags": ["beginner", "tutorial"]
+  },
+  "laser_tag": {
+      "author": "leo mcelroy",
+      "img": "",
+      "tags": []
+  },
+  "maze": {
+      "author": "leo mcelroy",
+      "img": "",
+      "tags": ["beginner"]
+  },
+  "pyre": {
+      "author": "ced",
+      "img": "",
+      "tags": []
+  },
+  "raycasting": {
+      "author": "henry bass",
+      "img": "",
+      "tags": ["advanced"]
+  },
+  "sokoban": {
+      "author": "leo mcelroy",
+      "img": "",
+      "tags": ["beginner"]
+  },
+  "tolls": {
+      "author": "leo mcelroy",
+      "img": "",
+      "tags": []
   }
 }
