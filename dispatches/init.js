@@ -85,7 +85,7 @@ export async function init(args, state) {
 
   document.querySelector(".game-canvas").focus();
 
-  const md = await fetch("/docs/docs.md").then(res => res.text());
+  const md = await fetch("https://raw.githubusercontent.com/hackclub/sprig/main/docs/docs.md").then(res => res.text());
   const mdRenderer = document.querySelector("markdown-renderer");
   mdRenderer.innerHTML = md;
 
