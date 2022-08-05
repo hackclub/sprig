@@ -46,18 +46,13 @@ const ACTIONS = {
     const string = state.codemirror.state.doc.toString();
     const link = await exportS3(string);
 
-    await fetch("https://misguided.enterprises/clubscraps/cabal", {
+    alert(`Here is your game link: ${link}`);
+
+    fetch("https://misguided.enterprises/clubscraps/cabal", {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ link })
     });
-
-    console.log(link);
-    alert(
-      "copied a link to your game to your clipboard ;)\n" +
-        "safari likes to stop us from doing that, \n" +
-        "so it's also in your browser console!"
-    );
   },
   LOG_ERROR: logError,
   SET_EDIT_RANGE({ range }, state) {
