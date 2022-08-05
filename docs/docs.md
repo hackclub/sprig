@@ -5,12 +5,9 @@ Sprig is a tiny construction kit to build tile based games.
 It was made by Hack Club, a global community of teen coders who 
 believe people learn best by making things they care about 
 and sharing them with others.
-All of the Sprig engine is about 15 functions.
 
 If this is your first time using Sprig try playing through the starter game. 
-After that check out the gallery.
-
-You can also start with an empty file and 
+After that check out the gallery. You can also start with an empty file and 
 go through [this tutorial](https://github.com/hackclub/sprig-gallery/blob/main/src/routes/getting-started.md#lets-make-our-first-game-in-sprig).
 
 If you get stuck you can talk to other people in the community
@@ -161,8 +158,6 @@ Sprites contain:
 ```
 
 You can move the sprite by setting `x` and `y`. 
-Collisions are checked; 
-the value won't change if the sprite is being blocked by a solid object!
 
 The `bitmapKey` can also be changed to update the rendered graphic and collision rules the sprite will follow.
 
