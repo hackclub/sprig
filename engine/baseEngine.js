@@ -203,7 +203,7 @@ export function baseEngine() {
     if (y < 0) return [];
     if (x < 0) return [];
     if (y >= state.dimensions.height) return [];
-    if (x >= state.dimensions.height) return [];
+    if (x >= state.dimensions.width) return [];
 
     return getGrid()[state.dimensions.width*y+x] || [];
   }
