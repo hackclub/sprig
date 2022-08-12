@@ -50,4 +50,17 @@ Once we approve it! Your game will appear in the gallery :)
 
 <img width="1458" alt="0screenshot_2022-07-07_at_11 52 55_pm" src="https://user-images.githubusercontent.com/27078897/184409792-3863eb41-c93e-4dd5-aaf3-5dc2952628ce.png">
 
+## Optional: Add Custom Thumbnail
+
+By defauly the thumbnail will be the first map of your game. If you want to change this you can:
+
+- Take a screenshot of your game
+- Click back to the gallery folder
+- Open the img folder in gallery
+- Click "Add File"
+- Select "Upload File"
+- Name your image file the file name for your game
+- Click "Commit File"
+
+<img width="1458" alt="0screenshot_2022-07-07_at_11 52 55_pm-1" src="https://user-images.githubusercontent.com/27078897/184410129-a2dbf444-ae7e-442b-b4bd-d3f21ede54cc.png">
 
