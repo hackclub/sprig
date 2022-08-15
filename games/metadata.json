@@ -81,6 +81,30 @@
       "title": "tolls",
       "author": "leo mcelroy",
       "img": "",
-      "tags": []
+      "tags": ["WIP"]
+  },
+  {
+      "title": "fogged",
+      "author": "Jay Reddy",
+      "img": "",
+      "tags": ["WIP"]
+  },
+  {
+      "title": "multiplayer_soccer",
+      "author": "Shannon Yeow",
+      "img": "",
+      "tags": ["multiplayer"]
+  },
+  {
+      "title": "multiplayer_soccer",
+      "author": "Shannon Yeow",
+      "img": "",
+      "tags": ["multiplayer"]
+  },
+  {
+      "title": "snakey_snake",
+      "author": "Alexander Chin",
+      "img": "",
+      "tags": ["WIP"]
   }
 ]
