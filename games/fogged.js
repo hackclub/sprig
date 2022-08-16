@@ -158,6 +158,6 @@ afterInput(() => {
   const numberCovered = tilesWith(goal, player).length;
 
   if (numberCovered === targetNumber) {
-      addText("you win!", { y: 4, color: "#ff0000" });
+      addText("you win!", { y: 4, color: [255, 0, 0] });
   }
 }); 

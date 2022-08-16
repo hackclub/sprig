@@ -114,15 +114,9 @@
       "tags": ["roguelike", "advanced"]
   },
   {
-      "title": "games_are_easy",
-      "author": "Riya and Christy",
-      "img": "",
-      "tags": ["begginer"]
-  },
-  {
       "title": "among_us_maze",
       "author": "Riya and Christy",
       "img": "",
-      "tags": ["advanced"]
+      "tags": ["advanced", "web-only"]
 }
 ]
