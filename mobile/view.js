@@ -13,6 +13,7 @@ export const view = (text) => html`
       margin: 0;
       width: 100vw;
       height: 100vh;
+      overflow: none;
     }
 
     .mobile-view {
@@ -49,6 +50,10 @@ export const view = (text) => html`
       justify-content: center;
     }
 
+    .mobile-button:active {
+      background: grey;
+    }
+
     .input-button-w {
       position: absolute;
       top: calc(50% - 75px);
@@ -79,13 +84,13 @@ export const view = (text) => html`
       right: calc(5% + 25px);
     }
 
-    .input-button-j {
+    .input-button-l {
       position: absolute;
       top: calc(50% - 25px);
       right: calc(5% - 25px);
     }
 
-    .input-button-l {
+    .input-button-j {
       position: absolute;
       top: calc(50% - 25px);
       right: calc(5% + 75px);;
@@ -100,20 +105,20 @@ export const view = (text) => html`
   </style>
   <div class="mobile-view">
     <div class="wasd">
-      <div class="mobile-button input-button-w" @click=${() => dispatchKey("w")}>w</div>
-      <div class="mobile-button input-button-a" @click=${() => dispatchKey("a")}>a</div>
-      <div class="mobile-button input-button-s" @click=${() => dispatchKey("s")}>s</div>
-      <div class="mobile-button input-button-d" @click=${() => dispatchKey("d")}>d</div>
+      <div class="mobile-button no-select input-button-w" @click=${() => dispatchKey("w")}>w</div>
+      <div class="mobile-button no-select input-button-a" @click=${() => dispatchKey("a")}>a</div>
+      <div class="mobile-button no-select input-button-s" @click=${() => dispatchKey("s")}>s</div>
+      <div class="mobile-button no-select input-button-d" @click=${() => dispatchKey("d")}>d</div>
     </div>
     <div class="game-canvas-container">
       <canvas class="game-canvas"></canvas>
       <canvas class="game-text"></canvas>
     </div>
     <div class="wasd">
-      <div class="mobile-button input-button-i" @click=${() => dispatchKey("i")}>i</div>
-      <div class="mobile-button input-button-j" @click=${() => dispatchKey("j")}>j</div>
-      <div class="mobile-button input-button-k" @click=${() => dispatchKey("k")}>k</div>
-      <div class="mobile-button input-button-l" @click=${() => dispatchKey("l")}>l</div>
+      <div class="mobile-button no-select input-button-i" @click=${() => dispatchKey("i")}>i</div>
+      <div class="mobile-button no-select input-button-j" @click=${() => dispatchKey("j")}>j</div>
+      <div class="mobile-button no-select input-button-k" @click=${() => dispatchKey("k")}>k</div>
+      <div class="mobile-button no-select input-button-l" @click=${() => dispatchKey("l")}>l</div>
     </div>
   </div>
   <div class="mobile-run" @click=${() => runGame(text)}>run</div>
