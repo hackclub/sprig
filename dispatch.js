@@ -91,7 +91,8 @@ const ACTIONS = {
     console.log(data);
   },
   RENDER_MOBILE({ text }, state) {
-    render(document.querySelector(".root"), viewMobile(text));
+    render(document.querySelector(".root"), view(state));
+    // render(document.querySelector(".root"), viewMobile(text));
     // screen.orientation.lock('landscape');
   },
   RENDER(args, state) {
