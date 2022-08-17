@@ -10,6 +10,7 @@ import { saveToFile } from "./dispatches/export/saveToFile.js";
 import { exportS3 } from "./s3.js";
 import { global_state } from "./global_state.js";
 import { saveGame } from "./saveGame.js"
+import { view as viewMobile } from "./mobile/view.js";
 
 function getURLPath(extension) {
   return (
@@ -88,6 +89,10 @@ const ACTIONS = {
   SET_NAME: setName,
   LOAD_FROM_DATA({ data }, state) {
     console.log(data);
+  },
+  RENDER_MOBILE({ text }, state) {
+    render(document.querySelector(".root"), viewMobile(text));
+    // screen.orientation.lock('landscape');
   },
   RENDER(args, state) {
     render(document.querySelector(".root"), view(state));

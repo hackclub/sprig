@@ -96,15 +96,21 @@
       "tags": ["multiplayer"]
   },
   {
-      "title": "multiplayer_soccer",
-      "author": "Shannon Yeow",
-      "img": "",
-      "tags": ["multiplayer"]
-  },
-  {
       "title": "snakey_snake",
       "author": "Alexander Chin",
       "img": "",
       "tags": ["WIP"]
+  },
+  {
+      "title": "platform_rogue",
+      "author": "farreltobias",
+      "img": "",
+      "tags": ["roguelike", "advanced"]
+  },
+  {
+      "title": "among_us_maze",
+      "author": "Riya and Christy",
+      "img": "",
+      "tags": ["advanced", "web-only"]
   }
 ]

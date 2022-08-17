@@ -35,7 +35,6 @@ function evalGameScript(script) {
 }
 
 async function drawGame(name) {
-
   const url = `https://raw.githubusercontent.com/hackclub/sprig/main/games/${name}.js`;
   const src = await fetch(url).then( res => res.text() );
   const { legend, map } = evalGameScript(src);
@@ -76,6 +75,7 @@ export default async function handler(req, res) {
     'Access-Control-Allow-Headers',
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
   );
+  res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=604800');
   return res.status(200).send(data);
 }
 
