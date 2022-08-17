@@ -82,7 +82,10 @@ export function init(canvas) {
     // draw text
     drawText(composeText(state.texts));
 
+
     render.render(drawTiles());
+    // if mobile
+    // console.log(drawTiles());
 
     animationId = window.requestAnimationFrame(gameloop);
   }
