@@ -8,6 +8,7 @@ import "./sequencer/sequencer.js";
 import "./map-editor/map-editor.js";
 import "./views/bitmap-preview.js";
 
+
 export const view = (state) => html`
   ${menu(state)}
 

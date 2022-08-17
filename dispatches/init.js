@@ -90,4 +90,15 @@ export async function init(args, state) {
   mdRenderer.innerHTML = md;
 
   dispatch("RENDER");
+
+  // switch to mobile mode
+  const mobile = isMobile();
+  if (mobile) {
+    const text = state.codemirror.state.doc.toString(); 
+    console.log(text);
+    dispatch("RENDER_MOBILE", { text });
+  }
 }
+
+const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
