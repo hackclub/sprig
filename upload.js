@@ -11,148 +11,231 @@ function delay(ms) {
   });
 }
 
-function fmtImageData(imgData) {
-  const pixels = [...imgData.data];
-  const { width: w, height: h } = imgData;
+const imports = `
+const {
+  /* sprite interactions */ setSolids, setPushables,
+  /*              see also: sprite.x +=, sprite.y += */
 
-  const bytes = new Uint8Array(w*h*2);
-  const color16 = (r, g, b) =>
-    ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
+  /* art */ setLegend, setBackground,
+  /* text */ addText, clearText,
 
-  for (let x = 0; x < w; x++)
-    for (let y = 0; y < h; y++) {
-      let i = (y*w + x);
-      const [r, g, b, a] = pixels.slice(i*4, (i + 1)*4);
-      if (a < 255) continue;
-      const col = color16(Math.max(b, 5),
-                   Math.max(g, 5),
-                   Math.max(r, 5));
-      bytes[i*2+0] = col >> 8;
-      bytes[i*2+1] = col;
-    }
-  const data = new Uint16Array(bytes.buffer);
+  /*   spawn sprites */ setMap, addSprite,
+  /* despawn sprites */ clearTile, /* sprite.remove() */
 
-  return `{
-    data: new Uint16Array([${[...data]}]),
-    width: ${w},
-    height: ${h}
-  }`;
-}
+  /* tile queries */ getGrid, getTile, getFirst, getAll, tilesWith,
+  /* see also: sprite.type */
 
-let index;
-const games = {
-  list: (() => {
-    const raw = JSON.parse(localStorage.getItem('beaker-games') ?? '[]');
-    const list = Array.isArray(raw) ? raw : [];
-    return [...Array(3)].map((x, i) => list[i] ?? {
-      name: "<empty>",
-      code: '',
-    });
-  })(),
-  save() {
-    localStorage.setItem('beaker-games', JSON.stringify(this.list));
-  },
-  add(code) {
-    do {
-      index = prompt(`
-Your Beaker has 3 slots:
-${this.list.map((x, i) => `[${i}] - ${x?.name}`).join("\n")}
-Where shall we write your game? [0, 1, 2]
-      `)
-      if (index == null) return null;
-    } while(!["0", "1", "2"].includes(index));
-    index = +index;
+  /* map dimensions */ width, height,
 
-    let name;
-    while (!(name = prompt(`What do you call your game?`)));
+  /* constructors */ bitmap, tune, map,
 
-    alert(`Press upload again to write "${name}" to slot ${index}!`);
+  /* input handling */ onInput, afterInput,
 
-    this.list[index] = { code, name };
-    this.save();
-  }
+  /* how much sprite has moved since last onInput: sprite.dx, sprite.dy */
+} = require("engine");
+`;
+
+const startupSound = `
+const tones = {
+  "B0": 31,
+  "C1": 33,
+  "C#1": 35,
+  "D1": 37,
+  "D#1": 39,
+  "E1": 41,
+  "F1": 44,
+  "F#1": 46,
+  "G1": 49,
+  "G#1": 52,
+  "A1": 55,
+  "A#1": 58,
+  "B1": 62,
+  "C2": 65,
+  "C#2": 69,
+  "D2": 73,
+  "D#2": 78,
+  "E2": 82,
+  "F2": 87,
+  "F#2": 93,
+  "G2": 98,
+  "G#2": 104,
+  "A2": 110,
+  "A#2": 117,
+  "B2": 123,
+  "C3": 131,
+  "C#3": 139,
+  "D3": 147,
+  "D#3": 156,
+  "E3": 165,
+  "F3": 175,
+  "F#3": 185,
+  "G3": 196,
+  "G#3": 208,
+  "A3": 220,
+  "A#3": 233,
+  "B3": 247,
+  "C4": 262,
+  "C#4": 277,
+  "D4": 294,
+  "D#4": 311,
+  "E4": 330,
+  "F4": 349,
+  "F#4": 370,
+  "G4": 392,
+  "G#4": 415,
+  "A4": 440,
+  "A#4": 466,
+  "B4": 494,
+  "C5": 523,
+  "C#5": 554,
+  "D5": 587,
+  "D#5": 622,
+  "E5": 659,
+  "F5": 698,
+  "F#5": 740,
+  "G5": 784,
+  "G#5": 831,
+  "A5": 880,
+  "A#5": 932,
+  "B5": 988,
+  "C6": 1047,
+  "C#6": 1109,
+  "D6": 1175,
+  "D#6": 1245,
+  "E6": 1319,
+  "F6": 1397,
+  "F#6": 1480,
+  "G6": 1568,
+  "G#6": 1661,
+  "A6": 1760,
+  "A#6": 1865,
+  "B6": 1976,
+  "C7": 2093,
+  "C#7": 2217,
+  "D7": 2349,
+  "D#7": 2489,
+  "E7": 2637,
+  "F7": 2794,
+  "F#7": 2960,
+  "G7": 3136,
+  "G#7": 3322,
+  "A7": 3520,
+  "A#7": 3729,
+  "B7": 3951,
+  "C8": 4186,
+  "C#8": 4435,
+  "D8": 4699,
+  "D#8": 4978
 };
 
-function flash() {
-  const textImg = (text, width=80, height=16) => {
-    const offscreen = document.createElement("canvas");
-    offscreen.width = width;
-    offscreen.height = height;
-    const octx = offscreen.getContext("2d");
-    octx.fillStyle = "white";
-    octx.fillRect(0, 0, 108, 108);
-    octx.fillStyle = "black";
-    octx.fillText(text, 2, 10);
-    return octx.getImageData(0, 0, width, height);
-  }
-  const t0 = textImg("maze game");
-  const t1 = textImg("suckyban");
+const instrumentKey = {
+  '~': 'sine',
+  '-': 'square',
+  '^': 'triangle',
+  '/': 'sawtooth',
+};
 
-  return `
-    const games = [
-      ${games.list.map(({ name, code }) => `{
-        code: \`${code.replaceAll("`", "\\`")}\`,
-        img: ${fmtImageData(textImg(name))},
-      }`).join(",\n")}
-    ];
-    const cr = ${fmtImageData(textImg(">", 16, 16))};
+const reverseInstrumentKey = Object.fromEntries(Object.entries(instrumentKey).map(([k, v]) => [v, k]));
 
-    /* input */
-    const { GPIO } = require("gpio");
-    const btn = pin => ({
-      last: 1,
-      pin: new GPIO(pin, INPUT_PULLUP),
-      read() {
-        const now = this.pin.read();
-        return (now != this.last && !(this.last = now));
-      }
+function textToTune(text) {
+  const elements = text.replace(/\\s/g, '').split(',');
+  const tune = [];
+
+  for (const element of elements) {
+    if (!element) continue;
+    const [durationRaw, notesRaw] = element.split(':');
+    const duration = Math.round(parseInt(durationRaw));
+    const notes = (notesRaw || '').split('+').map((noteRaw) => {
+      if (!noteRaw) return [];
+      const [, pitchRaw, instrumentRaw, durationRaw] = noteRaw.match(/^(.+)([~\\-^\\/])(.+)$/);
+      return [
+        instrumentKey[instrumentRaw],
+        isNaN(parseInt(pitchRaw, 10)) ? pitchRaw : parseInt(pitchRaw, 10),
+        parseInt(durationRaw, 10)
+      ];
     });
-    const down = btn(0);
-    const open = btn(1);
+    tune.push([duration, ...notes].flat());
+  }
 
-    /* drawin */
-    const width = 128, height = 160;
-    const pixels = new Uint16Array(width * height);
-    const { rfill, sprdraw } = global.require("native");
-    const { screen } = require("screen");
-
-    const gc = screen.getContext("buffer");
-
-    let ts = 0;
-    let i = 0;
-    const loop = (function loop() {
-      i = (i + down.read()) % games.length;
-      if (open.read()) {
-        if (games[i].code) {
-          eval(games[i].code);
-          return;
-        }
-        console.log("there's no game there!");
-      }
-      rfill(pixels, gc.color16(255, 255, 255), width*height);
-
-      let y = 20;
-      for (const { img } of games) {
-        sprdraw(img.data, img.width, img.height, pixels, 30, y);
-        y += 30
-      }
-      let t = Math.sin(ts++ / 5) * 4;
-      sprdraw(cr.data, cr.width, cr.height, pixels, 10+t, 20+30*i);
-      
-      const pixels8 = new Uint8Array(pixels.buffer);
-      screen.fillImage(0, 0, width, height, pixels8);
-      setTimeout(loop, 1000/20);
-    })();
-  `;
+  return tune;
 }
 
-export async function upload(code) {
-  if (index == undefined) {
-    games.add(code);
-    return;
-  }
-  games.list[index].code = code;
+const sleep = async (duration) => new Promise(_ => setTimeout(_, duration))
 
+const INSTRUMENTS = ["sine", "triangle", "square", "sawtooth"];
+
+function playFrequency(channel, frequency, duration) {
+  const { setvolume, setfreq } = require("i2saudio");
+  setvolume(channel, 1500);
+  setfreq(channel, frequency);
+  setTimeout(() => setvolume(channel, 0), duration);
+}
+
+async function playTuneHelper(tune, number, playingRef) {
+  for (let i = 0; i < tune.length*number; i++) {
+    const index = i%tune.length;
+    if (!playingRef.playing) break;
+    const noteSet = tune[index];
+    const sleepTime = noteSet[0];
+    let channel = 0;
+    
+    for (let j = 1; j < noteSet.length; j += 3) {
+      const instrument = noteSet[j];
+      const note = noteSet[j+1];
+      const duration = noteSet[j+2];
+
+      const f = typeof note === "string" 
+        ? tones[note.toUpperCase()]
+        : 2**((note-69)/12)*440;
+
+      if (INSTRUMENTS.includes(instrument) && f !== undefined)
+        playFrequency(channel, f, duration);
+      
+      channel++;
+    }
+    await sleep(sleepTime);
+  }
+}
+
+function playTune(tune, number = 1) {
+  let playingRef = { playing: true };
+
+  playTuneHelper(tune, number, playingRef);
+
+  return {
+    end() {
+      playingRef.playing = false;
+    },
+    isPlaying() {
+      return playingRef.playing;
+    },
+  };
+}
+
+
+playTune(textToTune(\`
+150: c5~150 + g4~150 + e5^150,
+150,
+150: g5^150,
+150,
+150: b4~150 + d5^150 + g4~150,
+150,
+150: e5^150,
+150,
+150: a4~150 + f4~150 + c5^150,
+150,
+150: g4~150 + b4~150 + d5^150,
+150,
+150: g4~150 + e4~150 + c4~150 + e5^150 + c5~150 + g5~150,
+2850
+\`));
+// Syntax:
+// 500: 64.4~500 + c5~1000
+// [500, "sine", 64.4, 500, "sine", "c5", 1000]
+// Comma between each tune element. Whitespace ignored.
+`;
+
+export async function upload(code) {
   if (!serial) {
     const port = await navigator.serial.requestPort();
     serial = new Serial(port);
@@ -177,8 +260,11 @@ export async function upload(code) {
   await serial.write(".flash -w\r");
   await delay(500);
 
-  const result = await transfer(serial, "code",
-    new TextEncoder().encode(flash()));
+  const result = await transfer(
+    serial,
+    "code",
+    new TextEncoder().encode(startupSound + imports + code)
+  );
   console.log('ymodem transfer result: ', result);
   await delay(500);
   serial.write("\r.load\r");

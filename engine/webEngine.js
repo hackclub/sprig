@@ -29,7 +29,7 @@ function composeText(texts) {
 
 
 function drawText(charGrid) {
-  const img = new ImageData(168, 120);
+  const img = new ImageData(160, 128);
   img.data.fill(0);
 
   for (const [i, row] of Object.entries(charGrid)) {
