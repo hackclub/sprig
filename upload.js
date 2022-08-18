@@ -171,13 +171,13 @@ function playFrequency(channel, frequency, duration) {
   setTimeout(() => setvolume(channel, 0), duration);
 }
 
-async function playTuneHelper(tune, number, playingRef) {
+const audio = require("i2saudio");
+function playTuneHelper(tune, number, playingRef) {
   for (let i = 0; i < tune.length*number; i++) {
     const index = i%tune.length;
     if (!playingRef.playing) break;
     const noteSet = tune[index];
     const sleepTime = noteSet[0];
-    let channel = 0;
     
     for (let j = 1; j < noteSet.length; j += 3) {
       const instrument = noteSet[j];
@@ -189,11 +189,9 @@ async function playTuneHelper(tune, number, playingRef) {
         : 2**((note-69)/12)*440;
 
       if (INSTRUMENTS.includes(instrument) && f !== undefined)
-        playFrequency(channel, f, duration);
-      
-      channel++;
+        audio.push_freq(f);
     }
-    await sleep(sleepTime);
+    audio.wait(sleepTime);
   }
 }
 
