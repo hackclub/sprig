@@ -77,7 +77,7 @@ body {
 }
 
 .dropdown-list > *:hover {
-  background: blue;
+  background: var(--accent-darker);
 }
 
 .delete-file:hover {
