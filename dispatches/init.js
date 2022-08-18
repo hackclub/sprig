@@ -108,6 +108,11 @@ export async function init(args, state) {
   const mdRenderer = document.querySelector("markdown-renderer");
   mdRenderer.innerHTML = md;
 
+  if (localStorage.getItem("docs-percentage")) {
+    document.documentElement.style.setProperty("--docs-percentage", localStorage.getItem("docs-percentage"));
+    document.querySelector(".docs").classList.toggle("docs-expanded", localStorage.getItem("docs-percentage").trim() !== "0%");
+  }
+
   dispatch("RENDER");
 
   // switch to mobile mode

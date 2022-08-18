@@ -100,6 +100,7 @@ const ACTIONS = {
   DOC_OPEN(args, state) {
     const setPerc = n => {
       document.documentElement.style.setProperty("--docs-percentage", `${n}%`);
+      localStorage.setItem("docs-percentage", `${n}%`);
     };
     
     const perc = getComputedStyle(document.documentElement)
