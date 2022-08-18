@@ -149,8 +149,7 @@ in vec2 texCoord;
 out vec4 frag;
 
 vec4 sampleTile(vec2 coord, float index) {
-  // index = index+0.0001; // this index is sometimes wrong because of floating point math
-  
+  // this index is sometimes wrong because of floating point math
   // if it's low this should trigger
   if (index - trunc(index) > 0.001) index = index + 0.0001;
 
