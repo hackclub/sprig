@@ -165,7 +165,7 @@ body {
 
 .cm-editor {
   flex: 1;
-  overflow: scroll;
+  overflow: hidden;
 }
 
 .cm-scroller {
