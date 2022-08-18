@@ -27,20 +27,17 @@ function hasSomeParentTheClass(element, classname) {
 export function addEvents(state) {
   const bodyListener = createListener(document.body);
   bodyListener("keydown", "", function (event) {
-
+    const code = event.code;
+    const mod = navigator.platform.startsWith("Mac")
+      ? event.metaKey && !event.ctrlKey
+      : event.ctrlKey && !event.metaKey;
     const active = document.activeElement;
     const isCM = active ? hasSomeParentTheClass(active, "code-container") : false;
 
-    if (isCM) {
-      // set code to stale
-      const rerender = !state.stale || !state.staleRun;
-      state.stale = true;
-      state.staleRun = true;
-
-      if (rerender) dispatch("RENDER");
+    if (isCM && code === "KeyS" && !event.shiftKey && mod) {
+      event.preventDefault();
+      dispatch("SAVE");
     }
-
-    let code = event.code;
     
     if (code === "Enter" && (event.shiftKey || event.ctrlKey || event.metaKey)) {
       event.preventDefault();

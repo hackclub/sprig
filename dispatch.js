@@ -22,7 +22,6 @@ function getURLPath(extension) {
   );
 }
 
-
 const ACTIONS = {
   INIT: init,
   RUN: run,
@@ -118,7 +117,7 @@ export function dispatch(action, args = {}) {
   const trigger = ACTIONS[action];
   if (trigger) return trigger(args, global_state);
   else {
-    console.log("Action not recongnized:", action);
+    console.log("Action not recognized:", action);
     return null;
   }
 }

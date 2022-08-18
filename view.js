@@ -74,8 +74,10 @@ const drawFile = (file, i, state) => {
     const games = Object.fromEntries(state.savedGames);
     const text = games[name];
     const cur = state.codemirror.state.doc.toString();
+    state.newDocument = true;
     dispatch("SET_EDITOR_TEXT", { text: "", range: [0, cur.length] })
     dispatch("RUN");
+    state.newDocument = true;
     dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] })
   }
 
@@ -160,8 +162,10 @@ afterInput(() => {
 });
 `;
     const cur = state.codemirror.state.doc.toString();
+    state.newDocument = true;
     dispatch("SET_EDITOR_TEXT", { text: "", range: [0, cur.length] });
     dispatch("RUN");
+    state.newDocument = true;
     dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] });
   }
 
@@ -181,6 +185,7 @@ afterInput(() => {
 
 const menu = (state) => html`
   <div class="menu">
+    <!-- menus: file, community, upload? something similar -->
     <div class=${["menu-item", state.stale ? "stale" : ""].join(" ")} @click=${() => dispatch("SAVE")}>save</div>
     <div class="menu-item dropdown-container">
       files
@@ -248,6 +253,7 @@ const learn = () => html`
             !confirm(`are you sure you want to overwrite your edited "${name}"?`))
             return;
 
+          state.newDocument = true;
           dispatch("SET_EDITOR_TEXT", {
             text: content.trim(),
             range: [0, cur.length]
@@ -269,6 +275,7 @@ const next = () => html`
     let i = 0;
     for (const { name } of challenges) {
       if (challenges[i+1] && name == curName) {
+        state.newDocument = true;
         dispatch("SET_EDITOR_TEXT", {
           text: challenges[i+1].content.trim(),
           range: [0, cur.length]

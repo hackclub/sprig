@@ -19,8 +19,19 @@ function removeParam(key) {
 export async function init(args, state) {
   dispatch("RENDER");
 
-  state.codemirror = createEditorView(() => {
+  state.codemirror = createEditorView((update) => {
     highlightError(state);
+    
+    if (!update.docChanged) return;
+    if (state.newDocument) {
+      state.newDocument = false;
+      return;
+    }
+
+    const rerender = !state.stale || !state.staleRun;
+    state.stale = true;
+    state.staleRun = true;
+    if (rerender) dispatch("RENDER");
   });
   
   state.codemirror.dom.id = "code-editor";
@@ -35,9 +46,11 @@ export async function init(args, state) {
   const lastGameName = window.localStorage.getItem("last-game");
   const lastGame = state.savedGames.find(([name]) => name === lastGameName)
   if (lastGame) {
+    state.newDocument = true;
     set(lastGame[1]);
   } else {
     const link = "https://raw.githubusercontent.com/hackclub/sprig/main/games/getting_started.js";
+    state.newDocument = true;
     set(await fetch(link).then(x => x.text()));
   }
 
