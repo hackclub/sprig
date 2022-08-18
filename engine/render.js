@@ -7,7 +7,7 @@ let gl,              texLocation,
              spritesheetLocation,
     spritesheetTileCountLocation;
 
-const SPRITESHEET_TILE_COUNT = (1 << 10) / 16;
+const SPRITESHEET_TILE_COUNT = 64;
 
 export function setBitmaps(bitmaps) {
   const sw = 16 * SPRITESHEET_TILE_COUNT;
@@ -61,7 +61,31 @@ export function init(canvas) {
         gl['uniform' + type](location, v1, v2, v3, v4);
       }
     };
-    
+
+    const positionAttributeLocation = gl.getAttribLocation(program, "a_position");
+    const positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+    const positions = [
+      0, 0,
+      4, 0,
+      0, 4,
+      4, 4
+    ];
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+    const vao = gl.createVertexArray();
+    gl.bindVertexArray(vao);
+    gl.enableVertexAttribArray(positionAttributeLocation);
+
+    const size = 2;          // 2 components per iteration
+    const type = gl.FLOAT;   // the data is 32bit floats
+    const normalize = false; // don't normalize the data
+    const stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+    const offset = 0;        // start at the beginning of the buffer
+    gl.vertexAttribPointer(
+        positionAttributeLocation, size, type, normalize, stride, offset)
+
     return program;
   }
 }
@@ -125,6 +149,10 @@ in vec2 texCoord;
 out vec4 frag;
 
 vec4 sampleTile(vec2 coord, float index) {
+  // this index is sometimes wrong because of floating point math
+  // if it's low this should trigger
+  if (index - trunc(index) > 0.001) index = index + 0.0001;
+
   int spriteIndex = int(index*255.0)-1;
   vec2 fcoord = mod(coord*u_texres, 1.0);
   fcoord += vec2(spriteIndex % u_spritesheet_tile_count,
@@ -140,21 +168,29 @@ void main(void) {
 
   frag = vec4(1);
   vec4 sprite;
-  sprite = sampleTile(coord, raw.a); if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
-  sprite = sampleTile(coord, raw.b); if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
-  sprite = sampleTile(coord, raw.g); if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
-  sprite = sampleTile(coord, raw.r); if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
+  sprite = sampleTile(coord, raw.a); 
+  if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
+  sprite = sampleTile(coord, raw.b); 
+  if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
+  sprite = sampleTile(coord, raw.g); 
+  if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
+  sprite = sampleTile(coord, raw.r); 
+  if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
+
 }
   `,
   'shader-vertex': `#version 300 es
 
 precision highp float;
-
+in vec2 a_position;
 out vec2 texCoord;
 
 void main(void) {
-    float x = float((gl_VertexID & 1) << 2);
-    float y = float((gl_VertexID & 2) << 1);
+    // float x = float((gl_VertexID & 1) << 2);
+    // float y = float((gl_VertexID & 2) << 1);
+
+    float x = a_position.x;
+    float y = a_position.y;
     texCoord.x = x * 0.5;
     texCoord.y = y * 0.5;
     gl_Position = vec4(x - 1.0, y - 1.0, 0, 1);

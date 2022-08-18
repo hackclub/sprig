@@ -13,7 +13,7 @@ export const view = (text) => html`
       margin: 0;
       width: 100vw;
       height: 100vh;
-      overflow: none;
+      overflow: hidden;
     }
 
     .mobile-view {

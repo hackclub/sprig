@@ -12,6 +12,9 @@ export function evalGameScript(script) {
   const canvas = document.querySelector(".game-canvas");
   const gameFunctions = init(canvas);
 
+  // for debugging
+  window.getState = gameFunctions.getState;
+
   tunes.forEach(t => t.end());
   tunes = [];
 
