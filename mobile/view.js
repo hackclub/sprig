@@ -31,7 +31,7 @@ export const view = (text) => html`
 
     .mobile-run {
       position: absolute;
-      background: var(--pcb-trace);
+      background: var(--bg-floating);
       color: white;
       padding: 5px 10px 5px 10px;
       border-radius: 5px;

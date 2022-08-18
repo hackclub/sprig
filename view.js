@@ -8,7 +8,6 @@ import "./sequencer/sequencer.js";
 import "./map-editor/map-editor.js";
 import "./views/bitmap-preview.js";
 
-
 export const view = (state) => html`
   ${menu(state)}
 
@@ -159,7 +158,6 @@ onInput("s", () => {
 afterInput(() => {
   
 });
-
 `;
     const cur = state.codemirror.state.doc.toString();
     dispatch("SET_EDITOR_TEXT", { text: "", range: [0, cur.length] });

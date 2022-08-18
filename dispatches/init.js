@@ -30,10 +30,16 @@ export async function init(args, state) {
 
   const savedString = window.localStorage.getItem("puzzle-lab") || "[]";
   state.savedGames = JSON.parse(savedString);
-  const games = Object.fromEntries(state.savedGames);
+
   const set = text => dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] });
-  const link = "https://raw.githubusercontent.com/hackclub/sprig/main/games/getting_started.js";
-  set(await fetch(link).then(x => x.text()));
+  const lastGameName = window.localStorage.getItem("last-game");
+  const lastGame = state.savedGames.find(([name]) => name === lastGameName)
+  if (lastGame) {
+    set(lastGame[1]);
+  } else {
+    const link = "https://raw.githubusercontent.com/hackclub/sprig/main/games/getting_started.js";
+    set(await fetch(link).then(x => x.text()));
+  }
 
   window.addEventListener("error", (e) => {
     // this is a hack to cut down on this chrome bug: https://support.google.com/chrome/thread/165732696/typing-in-console-triggers-error?hl=en
@@ -101,4 +107,3 @@ export async function init(args, state) {
 }
 
 const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
