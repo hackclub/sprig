@@ -7,7 +7,7 @@ let gl,              texLocation,
              spritesheetLocation,
     spritesheetTileCountLocation;
 
-const SPRITESHEET_TILE_COUNT = (1 << 10) / 16;
+const SPRITESHEET_TILE_COUNT = 64;
 
 export function setBitmaps(bitmaps) {
   const sw = 16 * SPRITESHEET_TILE_COUNT;
@@ -149,7 +149,11 @@ in vec2 texCoord;
 out vec4 frag;
 
 vec4 sampleTile(vec2 coord, float index) {
-  index = index + 0.0001; // why?
+  // index = index+0.0001; // this index is sometimes wrong because of floating point math
+  
+  // if it's low this should trigger
+  if (index - trunc(index) > 0.001) index = index + 0.0001;
+
   int spriteIndex = int(index*255.0)-1;
   vec2 fcoord = mod(coord*u_texres, 1.0);
   fcoord += vec2(spriteIndex % u_spritesheet_tile_count,
