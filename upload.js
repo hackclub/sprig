@@ -138,7 +138,7 @@ const instrumentKey = {
 const reverseInstrumentKey = Object.fromEntries(Object.entries(instrumentKey).map(([k, v]) => [v, k]));
 
 function textToTune(text) {
-  const elements = text.replace(/\\s/g, '').split(',');
+  const elements = text.replace(/\s/g, '').split(',');
   const tune = [];
 
   for (const element of elements) {
@@ -147,7 +147,7 @@ function textToTune(text) {
     const duration = Math.round(parseInt(durationRaw));
     const notes = (notesRaw || '').split('+').map((noteRaw) => {
       if (!noteRaw) return [];
-      const [, pitchRaw, instrumentRaw, durationRaw] = noteRaw.match(/^(.+)([~\\-^\\/])(.+)$/);
+      const [, pitchRaw, instrumentRaw, durationRaw] = noteRaw.match(/^(.+)([~\-^\/])(.+)$/);
       return [
         instrumentKey[instrumentRaw],
         isNaN(parseInt(pitchRaw, 10)) ? pitchRaw : parseInt(pitchRaw, 10),
@@ -163,13 +163,6 @@ function textToTune(text) {
 const sleep = async (duration) => new Promise(_ => setTimeout(_, duration))
 
 const INSTRUMENTS = ["sine", "triangle", "square", "sawtooth"];
-
-function playFrequency(channel, frequency, duration) {
-  const { setvolume, setfreq } = require("i2saudio");
-  setvolume(channel, 1500);
-  setfreq(channel, frequency);
-  setTimeout(() => setvolume(channel, 0), duration);
-}
 
 const audio = require("i2saudio");
 function playTuneHelper(tune, number, playingRef) {
@@ -188,8 +181,9 @@ function playTuneHelper(tune, number, playingRef) {
         ? tones[note.toUpperCase()]
         : 2**((note-69)/12)*440;
 
-      if (INSTRUMENTS.includes(instrument) && f !== undefined)
-        audio.push_freq(f);
+      const i = INSTRUMENTS.indexOf(instrument);
+      if ((i >= 0) && f !== undefined)
+        audio.push_freq(f, i);
     }
     audio.wait(sleepTime);
   }
