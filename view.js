@@ -7,6 +7,7 @@ import "./pixel-editor/pixel-editor.js";
 import "./sequencer/sequencer.js";
 import "./map-editor/map-editor.js";
 import "./views/bitmap-preview.js";
+import { saveGame } from "./saveGame.js"
 
 export const view = (state) => html`
   ${menu(state)}
@@ -71,14 +72,18 @@ const editableName = (state) => html`
 const drawFile = (file, i, state) => {
   const [ name, text ] = file;
   const setText = () => {
+    if (state.stale) return alert("You have unsaved changes! Please save your work before switching files.");
+    state.staleRun = true;
+
     const games = Object.fromEntries(state.savedGames);
     const text = games[name];
     const cur = state.codemirror.state.doc.toString();
     state.newDocument = true;
-    dispatch("SET_EDITOR_TEXT", { text: "", range: [0, cur.length] })
+    dispatch("SET_EDITOR_TEXT", { text: "", range: [0, cur.length] });
     dispatch("RUN");
     state.newDocument = true;
-    dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] })
+    dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] });
+    dispatch("RENDER");
   }
 
   const deleteFile = () => {
@@ -111,6 +116,9 @@ const newFile = (state) => {
   if (!state.codemirror) return "";
 
   const setText = () => {
+    if (state.stale) return alert("You have unsaved changes! Please save your work before creating a new file.");
+    state.staleRun = true;
+    
     const text = `/*
 @title: game_name
 @author: your_name
@@ -167,6 +175,7 @@ afterInput(() => {
     dispatch("RUN");
     state.newDocument = true;
     dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] });
+    dispatch("RENDER");
   }
 
   const fullText = state.codemirror.state.doc.toString();

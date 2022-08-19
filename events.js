@@ -49,9 +49,12 @@ export function addEvents(state) {
     dispatch("DOC_OPEN");
   });
 
-  window.addEventListener("unload", () => {
-   saveGame(state);
-  })
+  window.addEventListener("beforeunload", (event) => {
+    if (state.stale) {
+      event.preventDefault();
+      return event.returnValue = "You have unsaved changes. Are you sure you want to leave?";
+    }
+  });
 
   addVerticalBar(state, bodyListener);
   // addNumberDragging(state, bodyListener);
