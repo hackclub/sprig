@@ -65,12 +65,6 @@ let cur = null;
 
 export function init(canvas) {
   const { api, state } = baseEngine();
-
-  // remove event listeners
-  let newCanvas = canvas.cloneNode(true);
-  canvas.parentNode.replaceChild(newCanvas, canvas);
-  canvas = newCanvas;
-
   render.init(canvas);
 
   canvas.setAttribute("tabindex", "1");

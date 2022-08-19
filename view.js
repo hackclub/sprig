@@ -7,7 +7,6 @@ import "./pixel-editor/pixel-editor.js";
 import "./sequencer/sequencer.js";
 import "./map-editor/map-editor.js";
 import "./views/bitmap-preview.js";
-import { saveGame } from "./saveGame.js"
 
 export const view = (state) => html`
   ${menu(state)}

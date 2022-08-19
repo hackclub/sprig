@@ -43,7 +43,6 @@ export class OpenButtonWidget extends WidgetType {
     button.addEventListener("click", () => this.onClick());
     container.replaceChild(button, oldButton);
 
-
     if (this.editorType === "bitmap") {
       container
         .querySelector("bitmap-preview")
@@ -76,16 +75,13 @@ function makeValue(state) {
       for (const [label, editorType] of pairs) {
         const tag = getTag(label, node, syntax, state.doc);
         if (!tag) continue;
-
         if (tag.nameFrom === tag.nameTo) continue;
-        if (tag.textFrom === tag.textTo) continue;
 
         const decoration = Decoration.replace({
           widget: new OpenButtonWidget(label, editorType, tag.text, tag.textFrom, tag.textTo)
         });
-
         widgets.push(decoration.range(tag.nameFrom, tag.nameTo));
-        foldRanges.push({ from: tag.textFrom, to: tag.textTo });
+        if (tag.textFrom !== tag.textTo) foldRanges.push({ from: tag.textFrom, to: tag.textTo });
         break;
       }
     }

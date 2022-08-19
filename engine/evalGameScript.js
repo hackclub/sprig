@@ -10,6 +10,12 @@ let timeouts = [];
 
 export function evalGameScript(script) {
   const canvas = document.querySelector(".game-canvas");
+  
+  // remove event listeners
+  const newCanvas = canvas.cloneNode(true);
+  canvas.parentNode.replaceChild(newCanvas, canvas);
+  canvas = newCanvas;
+
   const gameFunctions = init(canvas);
 
   // for debugging
@@ -29,9 +35,9 @@ export function evalGameScript(script) {
   intervals.forEach(clearInterval);
   intervals = [];
   gameFunctions.setInterval = (fn, n) => {
-      const i = setInterval(fn, n);
-      intervals.push(i);
-      return i;
+    const i = setInterval(fn, n);
+    intervals.push(i);
+    return i;
   };
 
   gameFunctions.playTune = (text, n) => {
@@ -39,6 +45,28 @@ export function evalGameScript(script) {
     const x = playTune(tune, n);
     tunes.push(x);
   };
+
+  try {
+    parseScript(script);
+  } catch (err) {
+    return { type: "parse", err };
+  }
+
+  try {
+    const fn = new Function(...Object.keys(gameFunctions), script);
+    fn(...Object.values(gameFunctions));
+    return null;
+  } catch (err) {
+    return { type: "runtime", err };
+  }
+}
+
+export function evalGameScriptHeadless(script) {
+  const gameFunctions = init(document.createElement("canvas"));
+
+  gameFunctions.setTimeout = () => {}
+  gameFunctions.setInterval = () => {};
+  gameFunctions.playTune = () => {};
 
   try {
     parseScript(script);

@@ -60,7 +60,7 @@ const ACTIONS = {
   },
   SET_ASSET_EDITOR({ type, text }, state) {
     state.editor = type;
-    dispatch("RUN");
+    dispatch("RUN", { headless: true });
     dispatch("RENDER");
     if (type === null) return;
 
@@ -79,7 +79,7 @@ const ACTIONS = {
       insert: text
     };
 
-    state.codemirror.dispatch({ changes })
+    state.codemirror.dispatch({ changes });
     dispatch("RENDER");
 
     if (state.editRange === null) return;

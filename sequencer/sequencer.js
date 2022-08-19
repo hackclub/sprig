@@ -2,7 +2,7 @@ import { render, html, svg } from "uhtml";
 import { playNote } from "./playNote.js";
 import { dispatch } from "../dispatch.js";
 import { tuneToText, textToTune, tones } from '../engine/textTuneConverters.js';
-import { global_state } from "../global_state.js";
+import { global_state as globalState } from "../global_state.js";
 import { style } from "./style.js";
 // could add
 // scale selection -> chromatic, minor, pentatonic
@@ -473,7 +473,7 @@ export function createSequencer(target) {
     state.drawing = false;
     let text = tuneToText(cellsToTune(state.cells, state.bpm, state.numberX));
     text = "\n" + text.trim();
-    dispatch("SET_EDITOR_TEXT", { text, range: global_state.editRange });
+    dispatch("SET_EDITOR_TEXT", { text, range: globalState.editRange });
     r();
   }
 
