@@ -258,7 +258,9 @@ playback.end()
 
 Open up your browser console to debug.
 
-You can look at game state by...
+You can look at game state by running `getState()` in the console.
+
+<!-- 
 
 ## Idioms
 
@@ -269,3 +271,5 @@ You can look at game state by...
 ### Replace
 
 ### Count Overlaps
+
+ -->
