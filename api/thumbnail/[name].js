@@ -83,12 +83,12 @@ export default async function handler(req, res) {
       };
     } else {
       // Fetch the script and try to run the game
-      const src = await fetch(url).then((res) => res.text());
+      const src = await fetch(srcUrl).then((res) => res.text());
       data.image = await drawGameImage(src);
     }
   } catch (error) {
-    console.error(error);
     // If everything breaks, use a default image
+    console.error(error);
     const image = await fetch("https://cloud-i203j2e6a-hack-club-bot.vercel.app/1confused_dinosaur.png");
     data.image = {
       kind: "png",
