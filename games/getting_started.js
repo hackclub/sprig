@@ -6,7 +6,8 @@ Instructions:
 
 Welcome to Sprig!!!
 
-First hit run to start the game (you can also press shift+enter).
+Hit "run" to execute the code and
+start the game (you can also press shift+enter).
 
 To beat each level you'll have to edit the code.
 
@@ -14,10 +15,11 @@ The code for this game starts on line 70.
 
 The objective is to push the purple boxes onto the green goals.
 
-Use "w", "a", "s", "d" to move around. 
-(You'll have to add "w" and "a" yourself!)
+Use "s", "d" to move around. 
 
 Press j to reset the current level.
+
+Hit "open-help" to discover your toolkit.
 
 --------
 Level 1
@@ -30,7 +32,6 @@ Level 2
 --------
 
 Add controls to move up and left.
-
 
 Tip: 
 Do you find it annoying restarting at level 0?
