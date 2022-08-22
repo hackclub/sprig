@@ -4,19 +4,21 @@ Sprig is a web-based environment for creating tile games. These games run in the
 
 You should be able to get started in Sprig with very little experience in programming. Even if you're an expert, you should still be able to have fun. We hope you enjoy Sprig, and we can't wait to see what you make.
 
-[image of sprig console]
+![PXL_20220822_200106565](https://user-images.githubusercontent.com/27078897/186008810-470bf457-e38e-466d-8c79-3f9586485db3.jpg)
 
-**Sprig is a custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenaged hacker that successfully shares a game they create in our [community gallery](link to gallery).
+**Sprig is a custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenaged hacker that successfully shares a game they create in our community gallery.
 
-[images of games]
+<img width="861" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://user-images.githubusercontent.com/27078897/186008635-47f58392-4d5f-4b5e-a4d8-63c7b96d99fb.png">
 
 **Sprig is a web-based game editor** that transforms learning to code from studying language syntax to making small creative projects. The Sprig game engine exposes a small construction kit for making tile-based games. This construction kit helps you focus on being creative instead of learning big APIs.
+
+<img width="1547" alt="Screen Shot 2022-08-22 at 4 04 08 PM" src="https://user-images.githubusercontent.com/27078897/186008909-cc9ea9d5-5843-487e-ac3a-29330496eed1.png">
 
 Sprig games are designed to be shared and hacked on with friends. Every game submitted is easily viewable and editable in our gallery allowing people to learn from and build off each other. 
 
 **Sprig is a hardware development kit**. It’s not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It’s a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.
 
-[image of components laid out nicely]
+<!-- [image of components laid out nicely] -->
 
 **Sprig is open source**. Shipping a game to the Sprig Gallery is contributing to an open-source project. Everything about Sprig is transparent and editable. That includes the hardware designs, the game engine for the web, the embedded game engine for the RP2040 chip, the web-editor itself, and even the gallery and intro pages!
 
