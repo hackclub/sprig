@@ -24,9 +24,9 @@ Sprig games are designed to be shared and hacked on with friends. Every game sub
 
 The Sprig was developed by a team at Hack Club with assistance from Brian Silverman (who helped develop Scratch and the precursor to Lego Mindstorms), Vadim Gerasimov (engineer at Google who helped create Tetris when he was 15), and Quentin Bolseé (researcher at MIT and Vrije University), and dozens contributions from teenage open-source developers!
 
---
+## You Ship, We Ship
 
-   Make a game 
+Make a game 
 -> share it with the community 
 -> receive your device 
 -> play Sprig games on it 
