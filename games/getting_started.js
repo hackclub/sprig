@@ -14,8 +14,7 @@ The code for this game starts on line 70.
 
 The objective is to push the purple boxes onto the green goals.
 
-Use "w", "a", "s", "d" to move around. 
-(You'll have to add "w" and "a" yourself!)
+Use "s", "d" to move around. 
 
 Press j to reset the current level.
 
@@ -32,7 +31,6 @@ Level 2
 --------
 
 Add controls to move up and left.
-
 
 Tip: 
 Do you find it annoying restarting at level 0?
