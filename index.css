@@ -13,6 +13,10 @@
   --switch-fg-low: #515151;
   --switch-fg-high: #f3f3f3;
 
+  --seq-grid-playhead: #dcdbeb;
+  --seq-grid-low: #d5d5d5;
+  --seq-grid-high: #b8b8b8;
+
   --editor-sidebar-width: 360px;
   --docs-percentage: 0%;
   --editor-width: 60%;
