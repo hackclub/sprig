@@ -1,8 +1,6 @@
 import { Serial } from "./upload/serial.js"
 import { transfer } from "./upload/ymodem.js"
 
-let serial;
-
 function delay(ms) {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -56,26 +54,21 @@ playTune(\`
 \`);
 `;
 
-export async function upload(code) {
-  if (!serial) {
-    const port = await navigator.serial.requestPort();
-    serial = new Serial(port);
-    await serial.open({ baudRate: 115200 });
+async function uploadToSerial(serial, code) {
 
-    let respStr;
-    serial.on("data", t => {
-      for (let c of t) {
-        if (c == 10) return;
-        if (c == 13) {
-          console.log(respStr);
-          respStr = '';
-        }
-        else respStr += String.fromCharCode(c);
+  let respStr;
+  serial.on("data", t => {
+    for (let c of t) {
+      if (c == 10) return;
+      if (c == 13) {
+        console.log(respStr);
+        respStr = '';
       }
-    })
+      else respStr += String.fromCharCode(c);
+    }
+  })
 
-    serial.write("\r.hi\r");
-  }
+  serial.write("\r.hi\r");
 
   await serial.write("\r");
   await serial.write(".flash -w\r");
@@ -89,4 +82,15 @@ export async function upload(code) {
   console.log('ymodem transfer result: ', result);
   await delay(500);
   serial.write("\r.load\r");
+  alert("upload complete! you may need to unplug and replug your device.");
+}
+
+export async function upload(code) {
+  const port = await navigator.serial.requestPort();
+  const serial = new Serial(port);
+  await serial.open({ baudRate: 115200 });
+
+  uploadToSerial(serial, code)
+    .catch(console.error)
+    .finally(() => serial.close());
 }

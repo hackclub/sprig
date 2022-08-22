@@ -15,6 +15,7 @@ const    player = 'p';
 const      cube = 'c';
 const     house = 'h';
 const     grass = 'g';
+const      rock = 'r';
 setLegend(
   [ smallFire[0], bitmap`
 ................
@@ -169,10 +170,27 @@ setLegend(
 .4...44......4..
 .4...........4..
 4...........4...
+................`],
+  [  rock, bitmap`
+................
+.....1111.......
+....1....1......
+...1......1.....
+...1......1.....
+...1...1..1.....
+..1.....1..1....
+..1......1.1....
+..1........1....
+..1........1....
+..1........1....
+..1........1....
+..1........1....
+..11......11....
+....111111......
 ................`]
 )
 
-setSolids([player, log, cube]);
+setSolids([player, log, cube, rock, house]);
 setPushables({ [player]: [cube] })
 
 const      isGrass = tile => tile.type == grass;
@@ -181,6 +199,7 @@ const needsBigFire = tile => tile.type == house;
 
 const isSmallFire = tile => smallFire.includes(tile.type);
 const      isFire = tile => allFire.includes(tile.type);
+const isFlammable = tile => tile.type != rock;
 
 const fireTiles = () => allFire.flatMap(getAll);
 const neighborTiles = tile => {
@@ -200,9 +219,11 @@ const replace = (type0, type1) => {
   }
 }
 
-let tick = 0;
+let tick = 0, state = 'menuUntilInput';
 setInterval(() => {
+  
   tick++;
+  if (!states[state].fireSpreads) return;
 
   /* fire flicker */
   if (tick % 2) {
@@ -221,7 +242,7 @@ setInterval(() => {
     
     for (const fire of fireTiles()) {            
       for (const tile of neighborTiles(fire)) {
-        if (isFire(tile)) continue;
+        if (isFire(tile) || !isFlammable(tile)) continue;
         if (isSmallFire(fire) && needsBigFire(tile)) continue;
         
         replacements.set(
@@ -235,16 +256,20 @@ setInterval(() => {
 
     // apply all of the replacements we stored
     for (const [tile, type] of replacements) {
+      playTune(tune`
+30.165912518853695: g4~30.165912518853695 + f4/30.165912518853695 + e4~30.165912518853695 + d4~30.165912518853695 + c4^30.165912518853695,
+30.165912518853695: d4~30.165912518853695 + c4^30.165912518853695 + e4~30.165912518853695 + f4~30.165912518853695,
+30.165912518853695: d4^30.165912518853695 + e4~30.165912518853695,
+30.165912518853695: c4^30.165912518853695,
+844.6455505279034`);
       tile.type = type;
     }
   }
 
   /* win condition */
-  if (getAll(house).length == 0 && fireTiles().length == 0) {
-    levels[1+level] && setMap(levels[++level]);
-    addText("smol been", { x: 6, y: 0, color: [ 200, 20, 20 ]});
-    addText("big rage", { x: 6, y: 0, color: [ 200, 20, 20 ]});
-  }
+  if (getAll(house).length == 0 && fireTiles().length == 0)
+    if (states[state].levelClear)
+      states[state].levelClear();
 }, 200);
 
 afterInput(() => {
@@ -258,36 +283,44 @@ afterInput(() => {
 
 let level = 0;
 const levels = [
-    map`
+  { map: map`
+0.gl
+rplh
+grgg` },
+  { map: map`
+0g.gl
+grcrh
+grpr.
+grrr.`, text: ['push cube', 'j to restart'] },
+  { map: map`
+0gggg
+g..pg
+g.crg
+gg.lh`, text: ['need big fire', 'for revenge'] },
+  { map: map`
+..lllg
+..c..g
+.....g
+..h..g
+.....g
+..p..g
+....3g`, text: ['need big fire', 'for revenge'] },
+  { map: map`
+gg.gg
+g.c.h
+gp.rr
+0rr..`, text: ['need big fire', 'for revenge'] },
+  { map: map`
 .........
-...g.g...
+...g.g.p.
 ..gg.gg..
 .gg...g..
 ..1...gl.
 ......ll.
 ..lllll..
-..hl...p.
-.........`,
-    map`
-.........
-..gg.....
-.gggg....
-.ghgg....
-.ggg..c..
-gggg.....
-gg...p...
-g1.......
-.........`,
-    map`
-..llllggg
-........g
-........g
-..h.....g
-......c.g
-..p.....g
-........g
-.......gg
-.1gggggg.`,
+..hl.....
+.........`, text: ['smol been', 'big rage' ] },
+
 ]
 // .reverse();
 
@@ -297,21 +330,66 @@ const pushPlayer = (dx, dy) => {
     getFirst(player).y += dy;
   }
 }
-onInput("a", () => {
-  pushPlayer(-1,  0);
-})
-onInput("d", () => {
-  pushPlayer( 1,  0);
-})
-onInput("w", () => {
-  pushPlayer( 0, -1);
-})
-onInput("s", () => {
-  pushPlayer( 0,  1);
-})
 
-setMap(levels[level]);
+addText("press up to begin!", { y:  1 });
+addText(              "PYRE", { y: 14, color: [255, 20, 50] });
 
-onInput(    "j", () => {
-  setMap(levels[level]);
-});
+const states = {
+  playing: {
+    fireSpreads: true,
+    a: () => pushPlayer(-1,  0),
+    d: () => pushPlayer( 1,  0),
+    w: () => pushPlayer( 0, -1),
+    s: () => pushPlayer( 0,  1),
+    j: () => {
+      state = 'wait';
+      setMap(levels[level].map);
+      setTimeout(() => state = 'playing', 750);
+    },
+    levelClear: () => {
+      state = 'wait';
+      setTimeout(() => {
+        if (levels[1+level]) {
+          const { map, text } = levels[++level];
+          playTune(tune`
+    159.3625498007968,
+    79.6812749003984: f4^79.6812749003984 + e4~79.6812749003984,
+    79.6812749003984: a4^79.6812749003984 + g4^79.6812749003984 + f4~79.6812749003984,
+    79.6812749003984,
+    79.6812749003984: d5^79.6812749003984,
+    79.6812749003984: f5^79.6812749003984 + e5^79.6812749003984 + d5~79.6812749003984,
+    79.6812749003984: g5^79.6812749003984 + f5~79.6812749003984,
+    159.3625498007968,
+    79.6812749003984: a5~79.6812749003984 + d5~79.6812749003984 + f4~79.6812749003984,
+    79.6812749003984: a5^79.6812749003984 + d5^79.6812749003984 + f4^79.6812749003984,
+    1593.6254980079682`);
+          setMap(map);
+          clearText();
+          addText(text[0], { y: 0, color: [ 200, 20, 20 ]});
+          addText(text[1], { y: 15, color: [ 200, 20, 20 ]});
+        }
+        setTimeout(() => state = 'playing', 500);
+      }, 500);
+    }
+  },
+  wait: { fireSpreads: false },
+  menuUntilInput: {
+    fireSpreads: false,
+    w: () => {
+      clearText();
+      state = 'lockedUntilClear';
+      states.playing.w();
+    }
+  },
+  lockedUntilClear: {
+    fireSpreads: true,
+    levelClear: () => states.playing.levelClear(),
+  }
+}
+for (const dir of "wasdj".split(''))
+  onInput(dir, () => {
+    if (states[state][dir])
+      states[state][dir]()
+  });
+
+setMap(levels[level].map);
