@@ -15,21 +15,24 @@ That's all!
 ![hmm...](docs/wheres_waldo_uf2.png)
 
 Your journey starts with a scavenger hunt.
-See if you can find the "pico-os.uf2" file in [https://github.com/hackclub/sprig](the sprig repo!).
+See if you can find the "pico-os.uf2" file in [the sprig repo](https://github.com/hackclub/sprig)!
 You might recognize it as the place where you uploaded your game to the gallery :P
 Go ahead and download that file.
 
 ## BOOTSEL
 ![sprig!](docs/sprig.png)
+
 Hold that button right there, and plug in the sprig!
 
 ## Drag n Drop
 It should appear in your file menu as a separate drive, much like a USB.
 ![drop!](docs/drag_n_drop.png)
+
 Just drop the .uf2 in there, and you're good to go! The device should immediately restart and show the sprig logo :)
 
 ## Okay but what about MY game?
 ![drop!](docs/upload_button.png)
+
 Open up your game in the editor, click the upload button, and select the Sprig from the menu (again, like a USB device.)
 
 That's it! You're done :)
