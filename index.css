@@ -352,6 +352,13 @@ body {
   display: block;
 }
 
+.cm-open-button ion-icon {
+  margin-left: 3px;
+  vertical-align: middle;
+  height: 0.8em;
+  margin-top: -0.2em;
+}
+
 .vertical-bar {
   position: absolute;
   left: var(--editor-width);

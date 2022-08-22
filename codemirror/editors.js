@@ -5,16 +5,17 @@ import { getTag } from "./util.js";
 import { dispatch } from "../dispatch.js";
 
 const pairs = [
-  [ "bitmap", "bitmap" ],
-  [ "tune", "sequencer" ],
-  [ "map", "map" ]
+  [ "bitmap", "image", "bitmap" ],
+  [ "tune", "musical-notes", "sequencer" ],
+  [ "map", "map", "map" ]
 ]
 
 export class OpenButtonWidget extends WidgetType {
-  constructor(label, editorType, text, from, to) {
+  constructor(label, icon, editorType, text, from, to) {
     super();
     
     this.label = label;
+    this.icon = icon;
     this.editorType = editorType;
     this.text = text;
     this.from = from;
@@ -31,6 +32,9 @@ export class OpenButtonWidget extends WidgetType {
     const button = container.appendChild(document.createElement("button"));
     button.textContent = this.label;
     button.addEventListener("click", () => this.onClick());
+
+    const icon = button.appendChild(document.createElement("ion-icon"));
+    icon.name = this.icon;
 
     if (this.editorType === "bitmap") container.appendChild(document.createElement("bitmap-preview")).setAttribute("text", this.text);
 
@@ -61,7 +65,6 @@ export class OpenButtonWidget extends WidgetType {
       type: this.editorType,
       text: this.text,
     });
-
   }
 }
 
@@ -72,13 +75,13 @@ function makeValue(state) {
   const syntax = syntaxTree(state);
   syntax.iterate({
     enter(node) {
-      for (const [label, editorType] of pairs) {
+      for (const [label, icon, editorType] of pairs) {
         const tag = getTag(label, node, syntax, state.doc);
         if (!tag) continue;
         if (tag.nameFrom === tag.nameTo) continue;
 
         const decoration = Decoration.replace({
-          widget: new OpenButtonWidget(label, editorType, tag.text, tag.textFrom, tag.textTo)
+          widget: new OpenButtonWidget(label, icon, editorType, tag.text, tag.textFrom, tag.textTo)
         });
         widgets.push(decoration.range(tag.nameFrom, tag.nameTo));
         if (tag.textFrom !== tag.textTo) foldRanges.push({ from: tag.textFrom, to: tag.textTo });

@@ -17,6 +17,13 @@ const instrumentColorMap = {
   triangle: "#099268",
 };
 
+const instrumentDarkerColorMap = {
+  sine: "#9a2222",
+  square: "#195185",
+  sawtooth: "#ad471f",
+  triangle: "#116a4f"
+}
+
 const noteMap = {
   13: "c4",
   12: "d4",
@@ -257,7 +264,7 @@ export function createSequencer(target) {
     `);
   }
 
-  const drawInstrumentSelection = (instrument, color) => {
+  const drawInstrumentSelection = (instrument) => {
     const instrumentSymbol = { 
       "sine": "~", 
       "triangle": "^",
@@ -266,21 +273,19 @@ export function createSequencer(target) {
     }[instrument];
 
     return html`
-      <div 
-        class="instrument" 
+      <button 
+        class=${["instrument", state.instrument === instrument ? "pressed" : ""].join(" ")}
         style=${`
-          background: ${color};
-          width:50px;
-          height:50px;
-          border: ${state.instrument === instrument ? "2px solid black" : "none"};
-          box-sizing: border-box;
+          background: ${instrumentColorMap[instrument]};
+          --shadow-color: ${instrumentDarkerColorMap[instrument]};
         `}
         @click=${() => { 
           state.instrument = instrument;
           r();
-        }}>
+        }}
+      >
         ${instrumentSymbol}
-        </div>
+      </button>
     `
   }
 
@@ -311,7 +316,7 @@ export function createSequencer(target) {
         </div>
 
         <div class="bpm">
-          <div style="padding-right: 10px;">BPM:</div>
+          <div style="padding-right: 10px;">speed:</div>
           <div 
             class="bpm-control" 
             style="padding-right: 5px;" 
@@ -335,7 +340,7 @@ export function createSequencer(target) {
             r();
           }} type="range" min="1" max="1000" .value=${state.bpm / 2}>
           </input>
-          <span style="width: 30px;">${state.bpm / 2}</span>
+          <span style="width: 30px;">${state.bpm / 2} bpm</span>
           <div 
             class="bpm-control" 
             style="padding-left: 5px;" 
@@ -349,6 +354,7 @@ export function createSequencer(target) {
               r();
             }}>+</div>
         </div>
+
         <div class="instruments">
           ${Object
             .entries(instrumentColorMap)

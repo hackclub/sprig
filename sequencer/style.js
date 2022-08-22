@@ -48,9 +48,8 @@ export const style = `
     color: white;
     background: var(--bg-floating);
     display: flex;
-    min-height: 80px;
-    max-height: 80px;
-    justify-content: space-around;
+    padding: 16px 20px;
+    justify-content: space-between;
     align-items: center;
   }
 
@@ -79,20 +78,12 @@ export const style = `
 
   .instruments {
     display: flex;
-    flex-wrap: wrap;
-    min-width: 140px;
     justify-content: flex-end;
+    gap: 4px;
   }
 
   .instrument {
-    color: white;
-    height: 30px;
-    display: flex;
-    width: 70px;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
+    padding: 10px 16px;
   }
 
   .bpm-control {
