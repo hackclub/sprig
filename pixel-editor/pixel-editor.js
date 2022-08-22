@@ -481,6 +481,7 @@ export function createPixelEditor(target) {
     const [gridW, gridH] = main ? state.viewboxSize : state.gridSize;
     const xSize = w/gridW;
     const ySize = h/gridH;
+    const rectOffset = 0.3;
 
     grid.forEach((color, i) => {
       if (color[3] === 0) { // empty
@@ -496,7 +497,7 @@ export function createPixelEditor(target) {
       } else {
         const [x, y] = i_to_xy(i);
         ctx.fillStyle = RGBA_to_hex(color);
-        ctx.fillRect(x*xSize, y*ySize, xSize, ySize);
+        ctx.fillRect(x*xSize-rectOffset, y*ySize-rectOffset, xSize+rectOffset, ySize+rectOffset);
       }
 
     });
