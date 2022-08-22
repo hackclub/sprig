@@ -58,7 +58,7 @@ async function drawGameImage(src) {
   image.data = image.data.reduce(
     (data, byte) => data + String.fromCharCode(byte)
   , '');
-  image.data = Buffer.from(image.data).toString('base64');
+  image.data = btoa(image.data);
 
   return image;
 }
