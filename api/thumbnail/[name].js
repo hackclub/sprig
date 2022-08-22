@@ -86,7 +86,8 @@ export default async function handler(req, res) {
       const src = await fetch(url).then((res) => res.text());
       data.image = await drawGameImage(src);
     }
-  } catch {
+  } catch (error) {
+    console.error(error);
     // If everything breaks, use a default image
     const image = await fetch("https://cloud-i203j2e6a-hack-club-bot.vercel.app/1confused_dinosaur.png");
     data.image = {
