@@ -15,7 +15,7 @@ That's all!
 ![hmm...](docs/wheres_waldo_uf2.png)
 
 Your journey starts with a scavenger hunt.
-See if you can find the "pico-os.uf2" file in (https://github.com/hackclub/sprig)[the sprig repo!].
+See if you can find the "pico-os.uf2" file in [https://github.com/hackclub/sprig](the sprig repo)!.
 You might recognize it as the place where you uploaded your game to the gallery :P
 Go ahead and download that file.
 
