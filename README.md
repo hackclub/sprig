@@ -4,13 +4,13 @@ Sprig is a web-based environment for creating tile games. These games run in the
 
 You should be able to get started in Sprig with very little experience in programming. Even if you're an expert, you should still be able to have fun. We hope you enjoy Sprig, and we can't wait to see what you make.
 
+**Sprig is a custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenaged hacker that successfully shares a game they create in our community gallery.
+
 <p align="center">
 <a>
 <img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://user-images.githubusercontent.com/27078897/186011946-2fa810c0-e115-4006-a5f8-a7d6749ed5db.jpg">
 </a>
 </p>
-
-**Sprig is a custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenaged hacker that successfully shares a game they create in our community gallery.
 
 <p align="center">
 <a href="https://sprig-gallery.hackclub.dev">
