@@ -34,16 +34,16 @@ function evalGameScript(script) {
   }
 }
 
-async function drawGame(name) {
-  const url = `https://raw.githubusercontent.com/hackclub/sprig/main/games/${name}.js`;
-  const src = await fetch(url).then( res => res.text() );
+async function drawGameImage(src) {
   const { legend, map } = evalGameScript(src);
 
   const mapWidth = map.trim().split("\n")[0].trim().length;
   const mapHeight = map.trim().split("\n").length;
   const image = {
+    kind: "raw",
     data: new Uint8Array(mapWidth*mapHeight*16*16*4),
-    width: mapWidth*16
+    width: mapWidth*16,
+    height: mapHeight*16,
   };
 
   map.trim().split("\n").forEach( (row, y) => {
@@ -58,16 +58,43 @@ async function drawGame(name) {
   image.data = image.data.reduce(
     (data, byte) => data + String.fromCharCode(byte)
   , '');
+  image.data = Buffer.from(image.data).toString('base64');
 
-  image.data = btoa(image.data);
-
-
-  return { name, image, url };
+  return image;
 }
 
 export default async function handler(req, res) {
   const { name } = req.query;
-  const data = await drawGame(name);
+  const srcUrl = `https://raw.githubusercontent.com/hackclub/sprig/main/games/${encodeURIComponent(name)}.js`;
+  const data = {
+    name,
+    image: null,
+    url: srcUrl
+  };
+  
+  try {
+    // Try fetching a custom image (PNG only)
+    const imgUrl = `https://raw.githubusercontent.com/hackclub/sprig/main/games/img/${encodeURIComponent(name)}.png`;
+    const image = await fetch(imgUrl)
+    if (image.status === 200) {
+      data.image = {
+        kind: "png",
+        data: Buffer.from(await image.arrayBuffer()).toString('base64')
+      };
+    } else {
+      // Fetch the script and try to run the game
+      const src = await fetch(url).then((res) => res.text());
+      data.image = await drawGameImage(src);
+    }
+  } catch {
+    // If everything breaks, use a default image
+    const image = await fetch("https://cloud-i203j2e6a-hack-club-bot.vercel.app/1confused_dinosaur.png");
+    data.image = {
+      kind: "png",
+      data: Buffer.from(await image.arrayBuffer()).toString('base64')
+    };
+  }
+
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -76,6 +103,7 @@ export default async function handler(req, res) {
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
   );
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=604800');
+
   return res.status(200).send(data);
 }
 
