@@ -477,50 +477,47 @@ export function createPixelEditor(target) {
       else return color;
     });
 
-    const [w, h] = readCanvas(canvas);
+    const [ w, h ] = readCanvas(canvas);
     const [gridW, gridH] = main ? state.viewboxSize : state.gridSize;
-    // const xSize = w/gridW;
-    // const ySize = h/gridH;
-
-    const pixels = new Uint8ClampedArray(
-      state.gridSize[0] * state.gridSize[1] * 4
-    );
+    const xSize = w/gridW;
+    const ySize = h/gridH;
 
     grid.forEach((color, i) => {
-      if (color[3] === 0) {
+      if (color[3] === 0) { // empty
         const [x, y] = i_to_xy(i);
-        color =
-          (x % 2 === 0 && y % 2 === 1) || (x % 2 === 1 && y % 2 === 0)
-            ? BACKGROUND_BLUE
-            : BACKGROUND_WHITE;
+
+        ctx.fillStyle = RGBA_to_hex(BACKGROUND_WHITE);
+        ctx.fillRect(x*xSize, y*ySize, xSize/2, ySize/2);
+        ctx.fillRect(x*xSize+xSize/2, y*ySize+ySize/2, xSize/2, ySize/2);
+
+        ctx.fillStyle = RGBA_to_hex(BACKGROUND_BLUE);
+        ctx.fillRect(x*xSize+xSize/2, y*ySize, xSize/2, ySize/2);
+        ctx.fillRect(x*xSize, y*ySize+ySize/2, xSize/2, ySize/2);
+      } else {
+        const [x, y] = i_to_xy(i);
+        ctx.fillStyle = RGBA_to_hex(color);
+        ctx.fillRect(x*xSize, y*ySize, xSize, ySize);
       }
 
-      let index = i * 4;
-      pixels[index] = color[0];
-      pixels[index + 1] = color[1];
-      pixels[index + 2] = color[2];
-      pixels[index + 3] = color[3];
     });
 
-    tempCanvas.width = gridW;
-    tempCanvas.height = gridH;
     ctx.webkitImageSmoothingEnabled = false;
     ctx.mozImageSmoothingEnabled = false;
     ctx.imageSmoothingEnabled = false;
-    // tempCtx.webkitImageSmoothingEnabled = false;
-    // tempCtx.mozImageSmoothingEnabled = false;
-    // tempCtx.imageSmoothingEnabled = false;
-
-    const image = new ImageData(pixels, state.gridSize[0], state.gridSize[1]);
-    tempCtx.putImageData(image, 0, 0);
 
     state.selected.forEach((i) => {
       const [x, y] = i_to_xy(i);
-      tempCtx.fillStyle = "#aaaaaaaa";
-      tempCtx.fillRect(x, y, 1, 1);
+      ctx.fillStyle = "#aaaaaaaa";
+      ctx.fillRect(x*xSize, y*ySize, xSize, ySize);
     });
 
-    ctx.drawImage(tempCanvas, 0, 0, w, h);
+    const [ x, y ] = state.currentPt;
+    // ctx.fillStyle = "none";
+    ctx.beginPath();
+    ctx.strokeStyle = "#ffff00";
+    ctx.lineWidth = "3";
+    ctx.rect(x*xSize-0.1, y*ySize-0.1, xSize+0.1, ySize+0.1);
+    ctx.stroke();
   };
 
   const drawCanvasNoBg = (canvas, main = true) => {
@@ -617,6 +614,7 @@ export function createPixelEditor(target) {
       state.mousedown = true;
       const pt = getPoint(e);
       state.mousedownPt = pt;
+      state.currentPt = pt;
 
       if (state.tool in tools_mousedown) tools_mousedown[state.tool](...pt);
     });
@@ -624,6 +622,7 @@ export function createPixelEditor(target) {
     c.addEventListener("mousemove", (e) => {
       const pt = getPoint(e);
       state.currentPt = pt;
+
       if (state.tool in tools_mousemove) tools_mousemove[state.tool](...pt);
 
       if (state.selectHandle.clicked) {
@@ -656,7 +655,7 @@ export function createPixelEditor(target) {
     const resetDrawing = (e) => {
       state.mousedown = false;
       state.mousedownPt = [0, 0];
-      state.currentPt = [0, 0];
+      // state.currentPt = [0, 0];
 
       if (state.selectHandle.dragged) {
         state.selected.forEach((i) => {
