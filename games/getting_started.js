@@ -19,6 +19,8 @@ Use "w", "a", "s", "d" to move around.
 
 Press j to reset the current level.
 
+Hit "open-help" to discover your toolkit.
+
 --------
 Level 1
 --------
