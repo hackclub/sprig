@@ -22,10 +22,6 @@ Sprig games are designed to be shared and hacked on with friends. Every game sub
 
 **Sprig is open source**. Shipping a game to the Sprig Gallery is contributing to an open-source project. Everything about Sprig is transparent and editable. That includes the hardware designs, the game engine for the web, the embedded game engine for the RP2040 chip, the web-editor itself, and even the gallery and intro pages!
 
-## Acknowledgements 
-
-The Sprig was developed by a team at Hack Club with assistance from Brian Silverman (who helped develop Scratch and the precursor to Lego Mindstorms), Vadim Gerasimov (engineer at Google who helped create Tetris when he was 15), and Quentin Bolseé (researcher at MIT and Vrije University), and dozens contributions from teenage open-source developers!
-
 ## You Ship, We Ship
 
 Make a game 
@@ -33,8 +29,6 @@ Make a game
 -> receive your device 
 -> play Sprig games on it 
 -> hack on the device for more projects
-
---
 
 ## Philosophy
 
@@ -63,6 +57,10 @@ yarn dev
 ```
 
 Visit <http://localhost:3000> in your web browser and it should work!
+
+## Acknowledgements 
+
+The Sprig was developed by a team at Hack Club with assistance from Brian Silverman (who helped develop Scratch and the precursor to Lego Mindstorms), Vadim Gerasimov (engineer at Google who helped create Tetris when he was 15), and Quentin Bolseé (researcher at MIT and Vrije University), and dozens contributions from teenage open-source developers!
 
 ## License
 
