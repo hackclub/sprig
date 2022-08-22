@@ -3,8 +3,8 @@
 Sprig is a web-based environment for creating tile games. These games run in the browser and on the Sprig Console, a game console where every user is a creator. The only way to obtain a Sprig console is to make a game for it and share it in the [Sprig Gallery](https://sprig-gallery.hackclub.dev).
 
 <p align="center">
-<a href="https://sprig-gallery.hackclub.dev">
-<img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://user-images.githubusercontent.com/27078897/186008635-47f58392-4d5f-4b5e-a4d8-63c7b96d99fb.png">
+<a>
+<img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://user-images.githubusercontent.com/27078897/186011946-2fa810c0-e115-4006-a5f8-a7d6749ed5db.jpg">
 </a>
 </p>
 
@@ -13,8 +13,8 @@ You should be able to get started in Sprig with very little experience in progra
 **Sprig is a custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenaged hacker that successfully shares a game they create in our community gallery.
 
 <p align="center">
-<a>
-<img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://user-images.githubusercontent.com/27078897/186011946-2fa810c0-e115-4006-a5f8-a7d6749ed5db.jpg">
+<a href="https://sprig-gallery.hackclub.dev">
+<img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://user-images.githubusercontent.com/27078897/186008635-47f58392-4d5f-4b5e-a4d8-63c7b96d99fb.png">
 </a>
 </p>
 
