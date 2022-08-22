@@ -30,7 +30,11 @@ Sprig games are designed to be shared and hacked on with friends. Every game sub
 
 **Sprig is a hardware development kit**. It’s not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It’s a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.
 
-<!-- [image of components laid out nicely] -->
+<p align="center">
+<a href="https://sprig.hackclub.dev">
+<img width="500" alt="Screen Shot 2022-08-22 at 4 04 08 PM" src="https://user-images.githubusercontent.com/27078897/186015708-860df540-6c41-4400-aed5-d0fe8c9d31aa.jpg">
+</a>
+</p>
 
 **Sprig is open source**. Shipping a game to the Sprig Gallery is contributing to an open-source project. Everything about Sprig is transparent and editable. That includes the hardware designs, the game engine for the web, the embedded game engine for the RP2040 chip, the web-editor itself, and even the gallery and intro pages!
 
