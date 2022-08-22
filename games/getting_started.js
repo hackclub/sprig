@@ -6,7 +6,8 @@ Instructions:
 
 Welcome to Sprig!!!
 
-First hit run to start the game (you can also press shift+enter).
+Hit "run" to execute the code and
+start the game (you can also press shift+enter).
 
 To beat each level you'll have to edit the code.
 
