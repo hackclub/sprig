@@ -36,10 +36,15 @@ export const style = `
     min-width: 100px;
   }
 
+  .spacer {
+    flex: 1;
+  }
+
   .tools {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+    margin-bottom: 20px;
   }
 
   .tools button {

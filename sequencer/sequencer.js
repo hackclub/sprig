@@ -4,15 +4,11 @@ import { dispatch } from "../dispatch.js";
 import { tuneToText, textToTune, tones } from '../engine/textTuneConverters.js';
 import { global_state as globalState } from "../global_state.js";
 import { style } from "./style.js";
+
 // could add
 // scale selection -> chromatic, minor, pentatonic
 // length selection
 // percussion
-
-// done
-// need to improve audio context handling
-// line/drag drawing
-// line/drag erasing
 
 const instrumentColorMap = {
   sine: "#e03131",
@@ -104,29 +100,6 @@ function tuneToCells(tune) {
   }
   return cells;
 }
-
-function downloadText(filename, text) {
-  const blob = new Blob([text], { type: "text/plain" });
-
-  var link = document.createElement("a"); // Or maybe get it from the current document
-  link.href = URL.createObjectURL(blob);
-  link.download = `${filename}`;
-  link.click();
-  URL.revokeObjectURL(link);
-}
-
-function getSong(cells, bpm, length, noteMap) {
-  const song = [];
-  for (let i = 0; i < length; i++) song.push([]);
-
-  for (const k in cells) {
-    const [x, y] = k.split("_").map(Number);
-    song[x].push([noteMap[y], 1000*60/bpm, cells[k]]);
-  }
-
-  return song;
-}
-
 
 function line(from, to) {
   const points = [];
@@ -320,20 +293,23 @@ export function createSequencer(target) {
 
       <div class="sequencer-toolbox">
         <div class="play-pause">
-          <button @click=${() => {
-            if (state.interval) {
-              clearInterval(state.interval)
-              state.interval = null;
-            } else {
-              state.interval = play();
-            }
-          }}>play/pause</button>
-          <button @click=${() => {
-            const song = getSong(state.cells, state.bpm, state.numberX, noteMap);
-
-            downloadText("jam.json", JSON.stringify({ song, cells: state.cells, bpm: state.bpm }));
-          }}>export</button>
+          <button
+            @click=${() => {
+              if (state.interval) {
+                clearInterval(state.interval)
+                state.interval = null;
+              } else {
+                state.interval = play();
+              }
+              r();
+            }}
+            class=${["accent", state.interval ? "pressed" : ""].join(" ")}
+          >
+            <ion-icon name="play" style="vertical-align: middle;" />
+            play
+          </button>
         </div>
+
         <div class="bpm">
           <div style="padding-right: 10px;">BPM:</div>
           <div 

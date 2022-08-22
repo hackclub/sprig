@@ -58,6 +58,25 @@ export const style = `
     display: flex;
   }
 
+  button {
+    --shadow-color: var(--accent-darker);
+    position: relative;
+    background: var(--accent-lighter);
+    box-shadow: 0 4px 0 var(--shadow-color);
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 10px 14px;
+  }
+
+  button.pressed, button:active {
+    top: 4px;
+    box-shadow: 0 0px 0 var(--shadow-color);
+  }
+
   .instruments {
     display: flex;
     flex-wrap: wrap;
@@ -72,6 +91,8 @@ export const style = `
     width: 70px;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    user-select: none;
   }
 
   .bpm-control {
