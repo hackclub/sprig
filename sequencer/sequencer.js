@@ -271,6 +271,12 @@ export function createSequencer(target) {
       "square": "-",
       "sawtooth": "/"
     }[instrument];
+    const shortName = {
+      "sine": "sin",
+      "triangle": "tri",
+      "square": "sqr",
+      "sawtooth": "saw"
+    }
 
     return html`
       <button 
@@ -285,6 +291,7 @@ export function createSequencer(target) {
         }}
       >
         ${instrumentSymbol}
+        ${shortName[instrument]}
       </button>
     `
   }

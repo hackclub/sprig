@@ -53,6 +53,8 @@ export class OpenButtonWidget extends WidgetType {
         .setAttribute("text", this.text);
     }
 
+    container.querySelector("ion-icon").name = this.icon;
+
     return true;
   }
 
