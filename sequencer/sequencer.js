@@ -212,6 +212,7 @@ export function createSequencer(target) {
     const key = `${x}_${y}`;
     const color = instrumentColorMap[cells[key]] || "transparent";
 
+    
     return html`
       <div
         class=${classes.join(" ")}
@@ -221,6 +222,9 @@ export function createSequencer(target) {
             delete state.cells[key];
             state.erasing = true;
           } else {
+            const numberInCol = Object.keys(cells).filter(k => k.startsWith(`${x}_`)).length;
+            if (numberInCol >= 5) return;
+
             state.cells[key] = state.instrument;
             const n = noteMap[y];
             const d = (1000*60)/state.bpm;
@@ -234,10 +238,13 @@ export function createSequencer(target) {
         @mouseover=${() => {
           if (state.drawing || state.erasing) {
             const pts = line(state.lastPt, [x, y]);
-            pts.forEach(([x, y]) => {
+            for (const [x, y] of pts) {
               const key = `${x}_${y}`
               if (state.erasing) delete state.cells[key]
               else {
+                const numberInCol = Object.keys(cells).filter(k => k.startsWith(`${x}_`)).length;
+                if (numberInCol >= 5) continue;
+
                 if (state.cells[key] !== state.instrument) {
                   const n = noteMap[y];
                   const d = (1000*60)/state.bpm;
@@ -245,10 +252,11 @@ export function createSequencer(target) {
                 }
                 state.cells[key] = state.instrument;
               }
-            })
+            }
           }
 
-          state.lastPt = [x, y];
+          const numberInCol = Object.keys(cells).filter(k => k.startsWith(`${x}_`)).length;
+          if (numberInCol < 5) state.lastPt = [x, y];
           r();
         }}
       />
