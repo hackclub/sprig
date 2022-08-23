@@ -108,10 +108,9 @@ export async function init(args, state) {
   const mdRenderer = document.querySelector("markdown-renderer");
   mdRenderer.innerHTML = md;
 
-  if (localStorage.getItem("docs-percentage")) {
-    document.documentElement.style.setProperty("--docs-percentage", localStorage.getItem("docs-percentage"));
-    document.querySelector(".docs").classList.toggle("docs-expanded", localStorage.getItem("docs-percentage").trim() !== "0%");
-  }
+  const docsPerc = localStorage.getItem("docs-percentage") || "75%";
+  document.documentElement.style.setProperty("--docs-percentage", docsPerc);
+  document.querySelector(".docs").classList.toggle("docs-expanded", docsPerc.trim() !== "0%");
 
   dispatch("RENDER");
 
