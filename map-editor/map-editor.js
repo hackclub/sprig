@@ -19,20 +19,73 @@ export function createMapEditor(target) {
     hoveredCell: null
   }
 
+  const resizeButtons = (state, w, h) => {
+    return html`
+      <div class="buttons">
+        <button @click=${() => {
+          if (w) {
+            // Add a column
+            state.cells.forEach(row => row[w === 1 ? 'push' : 'unshift']("."));
+            state.width++;
+          }
+          if (h) {
+            // Add a row
+            state.cells[h === 1 ? 'push' : 'unshift'](new Array(state.width).fill("."));
+            state.height++;
+          }
+          updateText();
+          r();
+        }}>
+          +
+        </button>
+        <button @click=${() => {
+          if (w) {
+            // Remove a column
+            state.cells.forEach(row => row.splice(w === 1 ? row.length - 1 : 0, 1));
+            state.width--;
+          }
+          if (h) {
+            // Remove a row
+            state.cells.splice(h === 1 ? state.cells.length - 1 : 0, 1);
+            state.height--;
+          }
+          updateText();
+          r();
+        }} hidden=${w && state.width <= 1 || h && state.height <= 1 ? 'hidden' : null}>
+          -
+        </button>
+      </div>
+    `
+  }
+
   const view = (state) => html`
     <style>${style}</style>
     <div 
       class="map-editor-container"
       @mousedown=${(e) => { state.mousedown = true; mouseDraw(e); }}
       @mousemove=${mouseDraw}
-      @mouseup=${onMouseUp}>
-      <div class="canvas-container">
-        <svg class="grid">
-          <path stroke="#7a7e7c" stroke-width=".2" d=""/>
-          <rect x="0" y="0" width="0" height="0" stroke="#ebc64f" fill="none" stroke-width=".5"/>
-        </svg>
-        <canvas></canvas>
+      @mouseup=${onMouseUp}
+    >
+      <div class="resize-horiz">
+        ${resizeButtons(state, -1, 0)}
+
+        <div class="resize-vert">
+          ${resizeButtons(state, 0, -1)}
+
+          <div class="canvas-container">
+            <svg class="grid">
+              <path stroke="#7a7e7c" stroke-width=".2" d=""/>
+              <rect x="0" y="0" width="0" height="0" stroke="#ebc64f" fill="none" stroke-width=".5"/>
+            </svg>
+            <canvas></canvas>
+          </div>
+
+          ${resizeButtons(state, 0, 1)}
+        </div>
+
+        ${resizeButtons(state, 1, 0)}
       </div>
+
       <div class="tools">
         <div class="tiles">
           ${Object.entries(state.legend).map(([name, bitmap]) => html`<button
@@ -45,12 +98,6 @@ export function createMapEditor(target) {
             class=${"sprite-button " + (state.activeBitmap === "." ? "active" : "")}
             @click=${() => { state.activeBitmap = "."; r() }}
           />
-        </div>
-        <div class="action-button-container">
-          <button class="action-button" @mousedown=${addRow}>add row</buttton>
-          <button class="action-button" @mousedown=${addCol}>add col</buttton>
-          <button class="action-button" @mousedown=${delRow}>delete row</buttton>
-          <button class="action-button" @mousedown=${delCol}>delete col</buttton>
         </div>
       </div>
     </div>
