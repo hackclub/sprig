@@ -45,7 +45,7 @@ export function addEvents(state) {
     }
   });
 
-  bodyListener("mousedown", ".docs-trigger", function (event) {
+  bodyListener("click", ".docs-trigger", function (event) {
     dispatch("DOC_OPEN");
   });
 

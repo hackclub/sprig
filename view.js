@@ -231,8 +231,7 @@ const menu = (state) => html`
 
     <div class="spacer" aria-hidden="true" />
 
-    <div 
-      class="menu-item docs-trigger">
+    <div class="menu-item docs-trigger">
       ${docsOpenClosed()} help
     </div>
 
