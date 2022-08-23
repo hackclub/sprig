@@ -53,14 +53,10 @@ export const style = `
     align-items: center;
   }
 
-  .bpm {
-    display: flex;
-  }
-
   button {
-    --shadow-color: var(--accent-darker);
+    --shadow-color: var(--btn-inactive-shadow);
     position: relative;
-    background: var(--accent-lighter);
+    background: var(--btn-inactive);
     box-shadow: 0 4px 0 var(--shadow-color);
     border: none;
     font-family: inherit;
@@ -69,6 +65,11 @@ export const style = `
     border-radius: 4px;
     cursor: pointer;
     padding: 10px 14px;
+  }
+
+  button.accent {
+    --shadow-color: var(--accent-darker);
+    background: var(--accent-lighter);
   }
 
   button.pressed, button:active {
@@ -86,11 +87,51 @@ export const style = `
     padding: 10px 16px;
   }
 
-  .bpm-control {
+  .bpm {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    align-items: center;
+  }
+
+  .bpm .label {
+    margin-right: 8px;
+  }
+
+  .bpm .slider {
+    height: 6px;
+    border-radius: 3px;
+    width: 300px;
+    background: var(--btn-inactive);
+    -webkit-appearance: none;
+  }
+
+  .bpm .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: var(--accent-lighter);
     cursor: pointer;
   }
 
-  .bpm-control:hover {
-    color: orange;
+  .bpm .slider::-moz-range-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: red;
+    cursor: pointer;
+  }
+
+  .bpm .text {
+    outline: none;
+    font-size: inherit;
+    font-family: inherit;
+    border: none;
+    background: transparent;
+    color: var(--accent-lighter);
+    width: 6ch;
+    text-align: center;
+    padding: 4px 6px;
   }
 `

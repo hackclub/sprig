@@ -296,6 +296,17 @@ export function createSequencer(target) {
     `
   }
 
+  const handleBpmInput = (e) => {
+    if (e.target.value.length > 4) return r();
+    state.bpm = Number(e.target.value) * 2;
+    state.data.bpm = state.bpm;
+    if (state.interval) {
+      clearInterval(state.interval);
+      state.interval = play();
+    }
+    r();
+  }
+
   const view = (state) => html`
     <style>${style}</style>
     <div class="container">
@@ -317,49 +328,35 @@ export function createSequencer(target) {
             }}
             class=${["accent", state.interval ? "pressed" : ""].join(" ")}
           >
-            <ion-icon name="play" style="vertical-align: middle;" />
+            <ion-icon name=${state.interval ? "pause" : "play"} style="vertical-align: middle;" />
             play
+          </button>
+          <button @click=${() => {
+            clearInterval(state.interval)
+            state.interval = null;
+            state.beat = 0;
+            r();
+          }}>
+            <ion-icon name="stop" style="vertical-align: middle;" />
           </button>
         </div>
 
         <div class="bpm">
-          <div style="padding-right: 10px;">speed:</div>
-          <div 
-            class="bpm-control" 
-            style="padding-right: 5px;" 
-            @click=${() => {
-              state.bpm = Math.max(state.bpm - 1, 1);
-              state.data.bpm = state.bpm;
-              if (state.interval) {
-                clearInterval(state.interval);
-                state.interval = play();
-              }
-
-              r();
-            }}>-</div>
-          <input @input=${(e) => {
-            state.bpm = Number(e.target.value) * 2;
-            state.data.bpm = state.bpm;
-            if (state.interval) {
-              clearInterval(state.interval);
-              state.interval = play();
-            }
-            r();
-          }} type="range" min="1" max="1000" .value=${state.bpm / 2}>
-          </input>
-          <span style="width: 30px;">${state.bpm / 2} bpm</span>
-          <div 
-            class="bpm-control" 
-            style="padding-left: 5px;" 
-            @click=${() => {
-              state.bpm = Math.min(state.bpm + 1, 2000);
-              state.data.bpm = state.bpm;
-              if (state.interval) {
-                clearInterval(state.interval);
-                state.interval = play();
-              }
-              r();
-            }}>+</div>
+          <div class="label">speed (bpm):</div>
+          <input
+            @input=${handleBpmInput}
+            type="range"
+            min="1"
+            max="1000"
+            .value=${state.bpm / 2}
+            class="slider"
+          />
+          <input
+            @input=${handleBpmInput}
+            type="number"
+            .value=${state.bpm / 2}
+            class="text"
+          />
         </div>
 
         <div class="instruments">
