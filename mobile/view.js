@@ -1,6 +1,5 @@
 import { html } from "../libs/uhtml.js";
 import { evalGameScript } from "../engine/evalGameScript.js";
-import { sizeGameCanvas } from "../dispatches/sizeGameCanvas.js"
 import { global_state } from "../global_state.js";
 
 export const view = (text) => html`

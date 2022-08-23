@@ -63,7 +63,7 @@ function drawText(charGrid) {
 
 let cur = null;
 
-export function init(canvas) {
+export function init(canvas, headless = false) {
   const { api, state } = baseEngine();
   render.init(canvas);
 
@@ -105,6 +105,7 @@ export function init(canvas) {
   let animationId = window.requestAnimationFrame(gameloop);
 
   function setScreenSize(w, h) {
+    if (headless) return;
     canvas.width = w;
     canvas.height = h;
 
