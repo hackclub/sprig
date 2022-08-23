@@ -9,7 +9,7 @@ let intervals = [];
 let timeouts = [];
 
 export function evalGameScript(script) {
-  const canvas = document.querySelector(".game-canvas");
+  let canvas = document.querySelector(".game-canvas");
   
   // remove event listeners
   const newCanvas = canvas.cloneNode(true);
