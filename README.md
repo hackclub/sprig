@@ -18,7 +18,7 @@ You should be able to get started in Sprig with very little experience in progra
 </a>
 </p>
 
-**Sprig is a [web-based game editor](https://sprig.hackclub.dev)** that transforms learning to code from studying language syntax to making small creative projects. The Sprig game engine exposes a small construction kit for making tile-based games. This construction kit helps you focus on being creative instead of learning big APIs.
+**Sprig is a [web-based game editor](https://sprig.hackclub.dev)** that transforms learning to code from studying language syntax to making small creative projects. The Sprig game engine exposes a small construction kit for making tile-based games. This construction kit helps you focus on being creative instead of learning big APIs. The games are just JavaScript and we built a custom system to run that same JavaScript on the microcontroller!
 
 <p align="center">
 <a href="https://sprig.hackclub.dev">
@@ -36,15 +36,15 @@ Sprig games are designed to be shared and hacked on with friends. Every game sub
 </a>
 </p>
 
-**Sprig is open source**. Shipping a game to the Sprig Gallery is contributing to an open-source project. Everything about Sprig is transparent and editable. That includes the hardware designs, the game engine for the web, the embedded game engine for the RP2040 chip, the web-editor itself, and even the gallery and intro pages!
+**Sprig is open source**. Shipping a game to the Sprig Gallery is contributing to an open-source project. Everything about Sprig is transparent and editable. That includes the hardware designs, the game engine for the web, the embedded game engine for the RP2040 chip, the web-editor itself, and even the gallery and intro pages! We did some fun engineering to get Sprig to work and to make your games run the same on your desktop computer and a $4 microcontroller. That involved custom JS runtimes with optimizations in C and even PIO assembly.
 
 ## You Ship, We Ship
 
-Make a game 
--> share it with the community 
--> receive your device 
--> play Sprig games on it 
--> hack on the device for more projects
+make a game 
+&rarr; share it with the community 
+&rarr; receive your device 
+&rarr; play Sprig games on it 
+&rarr; hack on the device for more projects
 
 ## Philosophy
 
