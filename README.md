@@ -4,9 +4,10 @@ The Hack Club Sprig is a game console where **every user is a creator**. It can 
 
 <p align="center">
 <a>
-<img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://user-images.githubusercontent.com/27078897/186011946-2fa810c0-e115-4006-a5f8-a7d6749ed5db.jpg">
+<img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://user-images.githubusercontent.com/27078897/186769641-5b1181b4-9969-4276-9fa0-9f15140e4a9b.jpg">
 </a>
 </p>
+
 
 You should be able to get started in Sprig with very little experience in programming. Even if you're an expert, you should still be able to have fun. We hope you enjoy Sprig, and we can't wait to see what you make.
 
