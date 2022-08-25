@@ -8,8 +8,7 @@ let tunes = [];
 let intervals = [];
 let timeouts = [];
 
-export function evalGameScript(script) {
-  const canvas = document.querySelector(".game-canvas");
+export function evalGameScript(script, canvas) {
   const gameFunctions = init(canvas);
 
   // for debugging

@@ -125,11 +125,12 @@ export const view = (text) => html`
 `
 
 function runGame(text) {
-  evalGameScript(text, global_state.palette);
 
   // wiggle the canvas window
   const gameCanvas = document.querySelector(".game-canvas");
   const gameCanvasContainer = document.querySelector(".game-canvas-container");
+
+  evalGameScript(text, gameCanvas);
 
   gameCanvasContainer.classList.add("shake");
 

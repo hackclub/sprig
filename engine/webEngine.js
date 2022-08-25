@@ -63,7 +63,7 @@ function drawText(charGrid) {
 
 let cur = null;
 
-export function init(canvas) {
+export function init(canvas, runDispatch = true) {
   const { api, state } = baseEngine();
 
   // remove event listeners
@@ -97,7 +97,7 @@ export function init(canvas) {
     state.legend = bitmaps;
 
     render.setBitmaps(bitmaps);
-    dispatch("SET_BITMAPS", { bitmaps });
+    if (runDispatch) dispatch("SET_BITMAPS", { bitmaps });
   }
 
   function end() {
