@@ -27,20 +27,17 @@ function hasSomeParentTheClass(element, classname) {
 export function addEvents(state) {
   const bodyListener = createListener(document.body);
   bodyListener("keydown", "", function (event) {
-
+    const code = event.code;
+    const mod = navigator.platform.startsWith("Mac")
+      ? event.metaKey && !event.ctrlKey
+      : event.ctrlKey && !event.metaKey;
     const active = document.activeElement;
     const isCM = active ? hasSomeParentTheClass(active, "code-container") : false;
 
-    if (isCM) {
-      // set code to stale
-      const rerender = !state.stale || !state.staleRun;
-      state.stale = true;
-      state.staleRun = true;
-
-      if (rerender) dispatch("RENDER");
+    if (isCM && code === "KeyS" && !event.shiftKey && mod) {
+      event.preventDefault();
+      dispatch("SAVE");
     }
-
-    let code = event.code;
     
     if (code === "Enter" && (event.shiftKey || event.ctrlKey || event.metaKey)) {
       event.preventDefault();
@@ -48,13 +45,16 @@ export function addEvents(state) {
     }
   });
 
-  bodyListener("mousedown", ".docs-trigger", function (event) {
+  bodyListener("click", ".docs-trigger", function (event) {
     dispatch("DOC_OPEN");
   });
 
-  window.addEventListener("unload", () => {
-   saveGame(state);
-  })
+  window.addEventListener("beforeunload", (event) => {
+    if (state.stale) {
+      event.preventDefault();
+      return event.returnValue = "You have unsaved changes. Are you sure you want to leave?";
+    }
+  });
 
   addVerticalBar(state, bodyListener);
   // addNumberDragging(state, bodyListener);

@@ -191,6 +191,11 @@ export function createPixelEditor(target) {
             ["bucket", "color-fill"],
             ["move", "move"],
           ].map((tool) => renderTool(tool, state))}
+        </div>
+
+        <div class="spacer" />
+
+        <div class="tools">
           <button
             @click=${() => {
               if (state.undoRedoStack.length === 0) return;
@@ -202,7 +207,8 @@ export function createPixelEditor(target) {
             }}
             title="undo"
           >
-            undo
+            <ion-icon name="arrow-undo" />
+            <div>undo</div>
           </button>
           <button
             title="export"
@@ -216,7 +222,8 @@ export function createPixelEditor(target) {
               aDownloadLink.click();
             }}
           >
-            export
+            <ion-icon name="image" />
+            <div>export</div>
           </button>
         </div>
 

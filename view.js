@@ -8,7 +8,6 @@ import "./sequencer/sequencer.js";
 import "./map-editor/map-editor.js";
 import "./views/bitmap-preview.js";
 
-
 export const view = (state) => html`
   ${menu(state)}
 
@@ -72,12 +71,18 @@ const editableName = (state) => html`
 const drawFile = (file, i, state) => {
   const [ name, text ] = file;
   const setText = () => {
+    if (state.stale) return alert("You have unsaved changes! Please save your work before switching files.");
+    state.staleRun = true;
+
     const games = Object.fromEntries(state.savedGames);
     const text = games[name];
     const cur = state.codemirror.state.doc.toString();
-    dispatch("SET_EDITOR_TEXT", { text: "", range: [0, cur.length] })
+    state.newDocument = true;
+    dispatch("SET_EDITOR_TEXT", { text: "", range: [0, cur.length] });
     dispatch("RUN");
-    dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] })
+    state.newDocument = true;
+    dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] });
+    dispatch("RENDER");
   }
 
   const deleteFile = () => {
@@ -99,9 +104,9 @@ const drawFile = (file, i, state) => {
     state.codemirror.foldRange(index, index+1);
   }
   return html`
-    <div style="display: flex;">
-      <div style="width:30px;" class="delete-file" @click=${deleteFile}>x</div>
-      <div style="width:100%;" @click=${setText}>${name.slice(0, 15)}${name.length > 15 ? "..." : ""}</div>
+    <div style="display: flex; width: 100%;">
+      <div style="flex:1;" @click=${setText}>${name.slice(0, 15)}${name.length > 15 ? "..." : ""}</div>
+      <div style="margin-left: 10px;" class="delete-file" @click=${deleteFile}>x</div>
     </div>
   `
 } 
@@ -110,6 +115,9 @@ const newFile = (state) => {
   if (!state.codemirror) return "";
 
   const setText = () => {
+    if (state.stale) return alert("You have unsaved changes! Please save your work before creating a new file.");
+    state.staleRun = true;
+    
     const text = `/*
 @title: game_name
 @author: your_name
@@ -159,12 +167,14 @@ onInput("s", () => {
 afterInput(() => {
   
 });
-
 `;
     const cur = state.codemirror.state.doc.toString();
+    state.newDocument = true;
     dispatch("SET_EDITOR_TEXT", { text: "", range: [0, cur.length] });
     dispatch("RUN");
+    state.newDocument = true;
     dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] });
+    dispatch("RENDER");
   }
 
   const fullText = state.codemirror.state.doc.toString();
@@ -174,45 +184,44 @@ afterInput(() => {
     state.codemirror.foldRange(index, index+1);
   }
   return html`
-    <div style="display: flex;">
-      <div style="width:30px;">+</div>
-      <div style="width:100%;" @click=${setText}>new file</div>
-    </div>
+    <div @click=${setText}>new game</div>
   `
 } 
 
 const menu = (state) => html`
   <div class="menu">
-    <div class=${["menu-item", state.stale ? "stale" : ""].join(" ")} @click=${() => dispatch("SAVE")}>save</div>
     <div class="menu-item dropdown-container">
-      files
+      ${state.stale ? 'file*' : 'file'}
       <div class="dropdown-list">
-        ${state.savedGames.map((file, i) => drawFile(file, i, state))}
         ${newFile(state)}
+
+        <div class="popout-container">
+          open recent &rsaquo;
+          <div class="popout-list">${state.savedGames.map((file, i) => drawFile(file, i, state))}</div>
+        </div>
+
+        <div @click=${() => dispatch("SAVE")}>${state.stale ? 'save*' : 'save'}</div>
+
+        <div class="menu-spacer" />
+
+        <div class="popout-container">
+          share &rsaquo;
+          <div class="popout-list">
+            <div @click=${e => dispatch("SAVE_TO_FILE")}>as file</div>
+            <div @click=${e => dispatch("GET_URL")}>as link</div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="menu-item dropdown-container">
-      share
-      <div class="dropdown-list">
-        <div @click=${e => dispatch("SAVE_TO_FILE")}>as file</div>
-        <div @click=${e => dispatch("GET_URL")}>as link</div>
-      </div>
-    </div>
-    <a 
-      class="menu-item dropdown-container" 
-      href="https://sprig-gallery.hackclub.dev"
-      >
-      gallery
+
+    <a class="menu-item" href="https://sprig-gallery.hackclub.dev">
+      explore gallery
     </a>
-    <div 
-      class="menu-item" 
-      @click=${() => dispatch("UPLOAD")}>
-      upload
+
+    <div class="menu-item" @click=${() => dispatch("UPLOAD")}>
+      upload to device
     </div>
-    <div 
-      class="menu-item docs-trigger">
-      ${docsOpenClosed()}-help
-    </div>
+
     <div 
       class=${["menu-item", "run", state.staleRun ? "stale-run" : ""].join(" ")} 
       @click=${() => dispatch("RUN")}>
@@ -221,6 +230,10 @@ const menu = (state) => html`
     </div>
 
     <div class="spacer" aria-hidden="true" />
+
+    <div class="menu-item docs-trigger">
+      ${docsOpenClosed()} help
+    </div>
 
     <a class="menu-item" href="https://github.com/hackclub/sprig/">
       <ion-icon name="logo-github" />
@@ -250,6 +263,7 @@ const learn = () => html`
             !confirm(`are you sure you want to overwrite your edited "${name}"?`))
             return;
 
+          state.newDocument = true;
           dispatch("SET_EDITOR_TEXT", {
             text: content.trim(),
             range: [0, cur.length]
@@ -271,6 +285,7 @@ const next = () => html`
     let i = 0;
     for (const { name } of challenges) {
       if (challenges[i+1] && name == curName) {
+        state.newDocument = true;
         dispatch("SET_EDITOR_TEXT", {
           text: challenges[i+1].content.trim(),
           range: [0, cur.length]

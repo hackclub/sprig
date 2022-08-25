@@ -63,14 +63,8 @@ function drawText(charGrid) {
 
 let cur = null;
 
-export function init(canvas, runDispatch = true) {
+export function init(canvas, headless = false, runDispatch = true) {
   const { api, state } = baseEngine();
-
-  // remove event listeners
-  let newCanvas = canvas.cloneNode(true);
-  canvas.parentNode.replaceChild(newCanvas, canvas);
-  canvas = newCanvas;
-
   render.init(canvas);
 
   canvas.setAttribute("tabindex", "1");
@@ -111,6 +105,7 @@ export function init(canvas, runDispatch = true) {
   let animationId = window.requestAnimationFrame(gameloop);
 
   function setScreenSize(w, h) {
+    if (headless) return;
     canvas.width = w;
     canvas.height = h;
 

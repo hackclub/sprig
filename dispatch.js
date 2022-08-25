@@ -22,7 +22,6 @@ function getURLPath(extension) {
   );
 }
 
-
 const ACTIONS = {
   INIT: init,
   RUN: run,
@@ -61,7 +60,7 @@ const ACTIONS = {
   },
   SET_ASSET_EDITOR({ type, text }, state) {
     state.editor = type;
-    dispatch("RUN");
+    dispatch("RUN", { headless: true });
     dispatch("RENDER");
     if (type === null) return;
 
@@ -80,7 +79,7 @@ const ACTIONS = {
       insert: text
     };
 
-    state.codemirror.dispatch({ changes })
+    state.codemirror.dispatch({ changes });
     dispatch("RENDER");
 
     if (state.editRange === null) return;
@@ -101,6 +100,7 @@ const ACTIONS = {
   DOC_OPEN(args, state) {
     const setPerc = n => {
       document.documentElement.style.setProperty("--docs-percentage", `${n}%`);
+      localStorage.setItem("docs-percentage", `${n}%`);
     };
     
     const perc = getComputedStyle(document.documentElement)
@@ -118,7 +118,7 @@ export function dispatch(action, args = {}) {
   const trigger = ACTIONS[action];
   if (trigger) return trigger(args, global_state);
   else {
-    console.log("Action not recongnized:", action);
+    console.log("Action not recognized:", action);
     return null;
   }
 }

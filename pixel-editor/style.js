@@ -36,10 +36,15 @@ export const style = `
     min-width: 100px;
   }
 
+  .spacer {
+    flex: 1;
+  }
+
   .tools {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+    margin-bottom: 20px;
   }
 
   .tools button {
@@ -59,8 +64,8 @@ export const style = `
   }
 
   .tools button.active {
-    background: var(--pcb-base);
-    --shadow-color: var(--pcb-trace);
+    background: var(--accent-lighter);
+    --shadow-color: var(--accent-darker);
   }
 
   .tools button:active {

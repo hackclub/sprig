@@ -1,6 +1,5 @@
 import { html } from "../libs/uhtml.js";
 import { evalGameScript } from "../engine/evalGameScript.js";
-import { sizeGameCanvas } from "../dispatches/sizeGameCanvas.js"
 import { global_state } from "../global_state.js";
 
 export const view = (text) => html`
@@ -31,7 +30,7 @@ export const view = (text) => html`
 
     .mobile-run {
       position: absolute;
-      background: var(--pcb-trace);
+      background: var(--bg-floating);
       color: white;
       padding: 5px 10px 5px 10px;
       border-radius: 5px;

@@ -28,4 +28,5 @@ export const global_state = {
   palette,
   stale: false,
   staleRun: true,
+  newDocument: false, // Whether the editor contents was set to a new doc, to avoid lighting up the save button
 }

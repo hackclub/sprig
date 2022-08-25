@@ -13,4 +13,5 @@ export function saveGame(state) {
   const toSave = [ newSave, ...currentGames ]
   state.savedGames = toSave;
   window.localStorage.setItem("puzzle-lab", JSON.stringify(toSave) );
+  window.localStorage.setItem("last-game", name);
 }

@@ -1,25 +1,28 @@
-import { render, html, svg } from "uhtml";
+import { render, html } from "uhtml";
 import { playNote } from "./playNote.js";
 import { dispatch } from "../dispatch.js";
 import { tuneToText, textToTune, tones } from '../engine/textTuneConverters.js';
-import { global_state } from "../global_state.js";
+import { global_state as globalState } from "../global_state.js";
 import { style } from "./style.js";
+
 // could add
 // scale selection -> chromatic, minor, pentatonic
 // length selection
 // percussion
 
-// done
-// need to improve audio context handling
-// line/drag drawing
-// line/drag erasing
-
 const instrumentColorMap = {
-  sine: "red",
-  square: "blue",
-  sawtooth: "orange",
-  triangle: "green",
+  sine: "#e03131",
+  square: "#1971c2",
+  sawtooth: "#e8590c",
+  triangle: "#099268",
 };
+
+const instrumentDarkerColorMap = {
+  sine: "#9a2222",
+  square: "#195185",
+  sawtooth: "#ad471f",
+  triangle: "#116a4f"
+}
 
 const noteMap = {
   13: "c4",
@@ -36,8 +39,7 @@ const noteMap = {
   2: "g5",
   1: "a5",
   0: "b5",
-}
-const noteColors = ["red", "orange", "yellow", "green", "lightblue", "blue", "purple"];
+};
 
 export function playCellsOnBeat(cells, bpm, beat) {
   // notes :: note[]
@@ -106,29 +108,6 @@ function tuneToCells(tune) {
   return cells;
 }
 
-function downloadText(filename, text) {
-  const blob = new Blob([text], { type: "text/plain" });
-
-  var link = document.createElement("a"); // Or maybe get it from the current document
-  link.href = URL.createObjectURL(blob);
-  link.download = `${filename}`;
-  link.click();
-  URL.revokeObjectURL(link);
-}
-
-function getSong(cells, bpm, length, noteMap) {
-  const song = [];
-  for (let i = 0; i < length; i++) song.push([]);
-
-  for (const k in cells) {
-    const [x, y] = k.split("_").map(Number);
-    song[x].push([noteMap[y], 1000*60/bpm, cells[k]]);
-  }
-
-  return song;
-}
-
-
 function line(from, to) {
   const points = [];
   if (Math.abs(from[0] - to[0]) > Math.abs(from[1] - to[1])) {
@@ -153,7 +132,6 @@ export function createSequencer(target) {
   const state = {
     numberX: 32,
     numberY: 14,
-    svg: null,
     instrument: "sine",
     cells: {},
     beat: 0,
@@ -168,7 +146,6 @@ export function createSequencer(target) {
   function upload(files, extensions = []) {
     let file = files[0];
     let fileName = file.name.split(".");
-    let name = fileName[0];
     const extension = fileName[fileName.length - 1];
 
     if (extensions.length > 0 && extensions.includes(enxtension))
@@ -226,181 +203,170 @@ export function createSequencer(target) {
     });
   }
 
-  const ptsToD = pts => {
-    const reducer = (acc, cur, i) => `${acc} ${i === 0 ? "M" : "L"} ${cur.join(",")}`;
-    return pts.reduce(reducer, "");
+  const cell = ({ cells, numberY }, x, y) => {
+    const classes = ["cell"];
+    if (x % 2 === 0) classes.push("beat");
+    if (x % 8 === 0) classes.push("downbeat");
+    if ((numberY - y) % 8 === 0) classes.push("root");
+
+    const key = `${x}_${y}`;
+    const color = instrumentColorMap[cells[key]] || "transparent";
+
+    
+    return html`
+      <div
+        class=${classes.join(" ")}
+        style=${`background: ${color};`}
+        @mousedown=${() => {
+          if (key in state.cells && state.cells[key] === state.instrument) {
+            delete state.cells[key];
+            state.erasing = true;
+          } else {
+            const numberInCol = Object.keys(cells).filter(k => k.startsWith(`${x}_`)).length;
+            if (numberInCol >= 5) return;
+
+            state.cells[key] = state.instrument;
+            const n = noteMap[y];
+            const d = (1000*60)/state.bpm;
+            playNote(n, d, state.instrument);
+            state.drawing = true;
+          }
+
+          state.lastPt = [x, y];
+          r();
+        }}
+        @mouseover=${() => {
+          if (state.drawing || state.erasing) {
+            const pts = line(state.lastPt, [x, y]);
+            for (const [x, y] of pts) {
+              const key = `${x}_${y}`
+              if (state.erasing) delete state.cells[key]
+              else {
+                const numberInCol = Object.keys(cells).filter(k => k.startsWith(`${x}_`)).length;
+                if (numberInCol >= 5) continue;
+
+                if (state.cells[key] !== state.instrument) {
+                  const n = noteMap[y];
+                  const d = (1000*60)/state.bpm;
+                  playNote(n, d, state.instrument);
+                }
+                state.cells[key] = state.instrument;
+              }
+            }
+          }
+
+          const numberInCol = Object.keys(cells).filter(k => k.startsWith(`${x}_`)).length;
+          if (numberInCol < 5) state.lastPt = [x, y];
+          r();
+        }}
+      />
+    `;
   }
 
-  const drawGrid = (numberX, numberY, target) => {
-    const { left, right, bottom, top, width, height} = target.getBoundingClientRect();
-
-    const lines = [];
-    let lengthX = width/numberX;
-    let lengthY = height/numberY;
-
-    let i = 0;
-    while ((i+1)*lengthX < width) {
-      lines.push([
-        [(i+1)*lengthX, 0],
-        [(i+1)*lengthX, height],
-      ])
-      i++;
-    }
-
-    let j = 0;
-    while ((j+1)*lengthY < height) {
-      lines.push([
-        [0, (j+1)*lengthY],
-        [width, (j+1)*lengthY],
-      ])
-      j++;
-    }
-
-    return lines.map(line => svg`
-      <path 
-        stroke="black"
-        vector-effect="non-scaling-stroke" 
-        stroke-width="1" d="${ptsToD(line)}"/>
-    `)
+  const grid = (state) => {
+    const { numberX, numberY, beat } = state;
+    return new Array(numberX).fill(0).map((_, x) => html`
+      <div class=${["column", beat === x ? "playhead" : ""].join(" ")}>
+        ${new Array(numberY).fill(0).map((_, y) => cell(state, x, y))}
+      </div>
+    `);
   }
 
-
-  const drawBeat = (state) => {
-    const { left, right, bottom, top, width, height} = state.svg.getBoundingClientRect();
-    const cellWidth = width/state.numberX;
-    const cellHeight = height/state.numberY;
-
-    return svg`
-      <rect 
-        fill=#72cacb33
-        x=${state.beat*cellWidth} 
-        y=${0} 
-        width=${cellWidth} 
-        height=${height}/>
-    `
-  }
-
-  const drawCells = ({ cells, svg: container, numberX, numberY }) => {
-    const { left, right, bottom, top, width, height} = container.getBoundingClientRect();
-    const cellWidth = width/numberX;
-    const cellHeight = height/numberY;
-
-    const drawCell = ([x, y, color]) => {
-      return svg`
-        <rect 
-          fill=${color}
-          x=${x*cellWidth} 
-          y=${y*cellHeight} 
-          width=${cellWidth} 
-          height=${cellHeight}/>
-      `
-    }
-
-    const cellsToDraw = [];
-
-    for (const key in cells) {
-      const [x, y] = key.split("_").map(Number);
-      // const color = noteColors[(13 - y) % noteColors.length];
-      const color = instrumentColorMap[cells[key]];
-      cellsToDraw.push([ x, y, color ]);
-    }
-
-    return cellsToDraw.map(drawCell);
-  }
-
-  const drawInstrumentSelection = (instrument, color) => {
+  const drawInstrumentSelection = (instrument) => {
     const instrumentSymbol = { 
       "sine": "~", 
       "triangle": "^",
       "square": "-",
       "sawtooth": "/"
     }[instrument];
+    const shortName = {
+      "sine": "sin",
+      "triangle": "tri",
+      "square": "sqr",
+      "sawtooth": "saw"
+    }
 
     return html`
-      <div 
-        class="instrument" 
+      <button 
+        class=${["instrument", state.instrument === instrument ? "pressed" : ""].join(" ")}
         style=${`
-          background: ${color};
-          width:50px;
-          height:50px;
-          border: ${state.instrument === instrument ? "2px solid black" : "none"};
-          box-sizing: border-box;
-          `} 
+          background: ${instrumentColorMap[instrument]};
+          --shadow-color: ${instrumentDarkerColorMap[instrument]};
+        `}
         @click=${() => { 
           state.instrument = instrument;
           r();
-        }}>
+        }}
+      >
         ${instrumentSymbol}
-        </div>
+        ${shortName[instrument]}
+      </button>
     `
+  }
+
+  const handleBpmInput = (e) => {
+    if (e.target.value.length > 4) return r();
+    state.bpm = Number(e.target.value) * 2;
+    state.data.bpm = state.bpm;
+    if (state.interval) {
+      clearInterval(state.interval);
+      state.interval = play();
+    }
+    r();
   }
 
   const view = (state) => html`
     <style>${style}</style>
-    <div class="container" @mouseup=${setCodeText}>
-      <svg 
-        class="svg-container" 
-        @mousedown=${onDownSVG} 
-        @mousemove=${onMoveSVG}>
-        ${state.svg ? drawCells(state) : ""}
-        ${state.svg ? drawBeat(state) : ""}
-        ${state.svg ? drawGrid(state.numberX, state.numberY, state.svg) : ""}
-      </svg>
+    <div class="container">
+      <div class="sequencer-grid">
+        ${grid(state)}
+      </div>
+
       <div class="sequencer-toolbox">
         <div class="play-pause">
-          <button @click=${() => {
-            if (state.interval) {
-              clearInterval(state.interval)
-              state.interval = null;
-            } else {
-              state.interval = play();
-            }
-          }}>play/pause</button>
-          <button @click=${() => {
-            const song = getSong(state.cells, state.bpm, state.numberX, noteMap);
-
-            downloadText("jam.json", JSON.stringify({ song, cells: state.cells, bpm: state.bpm }));
-          }}>export</button>
-        </div>
-        <div class="bpm">
-          <div style="padding-right: 10px;">BPM:</div>
-          <div 
-            class="bpm-control" 
-            style="padding-right: 5px;" 
+          <button
             @click=${() => {
-              state.bpm = Math.max(state.bpm - 1, 1);
-              state.data.bpm = state.bpm;
               if (state.interval) {
-                clearInterval(state.interval);
+                clearInterval(state.interval)
+                state.interval = null;
+              } else {
                 state.interval = play();
               }
-
               r();
-            }}>-</div>
-          <input @input=${(e) => {
-            state.bpm = Number(e.target.value);
-            state.data.bpm = state.bpm;
-            if (state.interval) {
-              clearInterval(state.interval);
-              state.interval = play();
-            }
+            }}
+            class=${["accent", state.interval ? "pressed" : ""].join(" ")}
+          >
+            <ion-icon name=${state.interval ? "pause" : "play"} style="vertical-align: middle;" />
+            play
+          </button>
+          <button @click=${() => {
+            clearInterval(state.interval)
+            state.interval = null;
+            state.beat = 0;
             r();
-          }} type="range" min="1" max="2000" .value=${state.bpm}>
-          </input>
-          <span style="width: 30px;">${state.bpm}</span>
-          <div 
-            class="bpm-control" 
-            style="padding-left: 5px;" 
-            @click=${() => {
-              state.bpm = Math.min(state.bpm + 1, 2000);
-              state.data.bpm = state.bpm;
-              if (state.interval) {
-                clearInterval(state.interval);
-                state.interval = play();
-              }
-              r();
-            }}>+</div>
+          }}>
+            <ion-icon name="stop" style="vertical-align: middle;" />
+          </button>
         </div>
+
+        <div class="bpm">
+          <div class="label">speed (bpm):</div>
+          <input
+            @input=${handleBpmInput}
+            type="range"
+            min="1"
+            max="1000"
+            .value=${state.bpm / 2}
+            class="slider"
+          />
+          <input
+            @input=${handleBpmInput}
+            type="number"
+            .value=${state.bpm / 2}
+            class="text"
+          />
+        </div>
+
         <div class="instruments">
           ${Object
             .entries(instrumentColorMap)
@@ -410,70 +376,13 @@ export function createSequencer(target) {
     </div>
   `;
 
-  const getSVGPos = (e) => {
-    const { left, right, bottom, top, width, height} = state.svg.getBoundingClientRect();
-    const cellWidth = width/state.numberX;
-    const cellHeight = height/state.numberY;
-
-    const x = Math.floor(e.offsetX/cellWidth);
-    const y = Math.floor(e.offsetY/cellHeight);
-
-    return [x, y];
-  }
-
-  const onDownSVG = (e) => {
-    let [x, y] = getSVGPos(e);
-    
-    x = Math.max(Math.min(x, state.numberX-1), 0);
-    y = Math.max(Math.min(y, state.numberY-1), 0);
-
-    const key = `${x}_${y}`;    
-
-    if (key in state.cells && state.cells[key] === state.instrument) {
-      delete state.cells[key];
-      state.erasing = true;
-    } else {
-      state.cells[key] = state.instrument;
-      const n = noteMap[y];
-      const d = (1000*60)/state.bpm;
-      playNote(n, d, state.instrument);
-      state.drawing = true;
-    }
-
-    state.lastPt = [x, y];
-
-    r();
-  }
-
-  const onMoveSVG = e => {
-    const currentPt = getSVGPos(e);
-
-    if (state.drawing || state.erasing) {
-      const pts = line(state.lastPt, currentPt);
-      pts.forEach(([x, y]) => {
-        const key = `${x}_${y}`
-        if (state.erasing) delete state.cells[key]
-        else {
-          if (state.cells[key] !== state.instrument) {
-            const n = noteMap[y];
-            const d = (1000*60)/state.bpm;
-            playNote(n, d, state.instrument);
-          }
-          state.cells[key] = state.instrument;
-        }
-      })
-    }
-
-    state.lastPt = currentPt;
-    r();
-  }
-
-  const setCodeText = e => {
+  const setCodeText = () => {
+    if (!state.erasing && !state.drawing) return;
     state.erasing = false;
     state.drawing = false;
     let text = tuneToText(cellsToTune(state.cells, state.bpm, state.numberX));
     text = "\n" + text.trim();
-    dispatch("SET_EDITOR_TEXT", { text, range: global_state.editRange });
+    dispatch("SET_EDITOR_TEXT", { text, range: globalState.editRange });
     r();
   }
 
@@ -481,26 +390,20 @@ export function createSequencer(target) {
     render(target, view(state));
   };
 
-
   const play = () => setInterval(() => {
     state.beat = (state.beat+1) % (state.numberX);
     // play song
     playCellsOnBeat(state.cells, state.bpm, state.beat);
-
-
     r();
   }, (1000*60)/state.bpm)
 
   const init = (state) => {
-    r(); 
-    state.svg = target.querySelector("svg");
-
-    // add events
-
-    // BUG: what was this line below supposed to do?
-    // target.querySelector("link").addEventListener("load", r, { once: true });
-    // window.addEventListener("resize", r);
+    r();
     addDropUpload();
+
+    const grid = target.querySelector(".sequencer-grid");
+    grid.addEventListener("mouseup", setCodeText);
+    grid.addEventListener("mouseleave", setCodeText);
   }
 
   init(state);
@@ -536,21 +439,17 @@ class Sequencer extends HTMLElement {
   }
 
   connectedCallback() {
-
     const shadow = this.attachShadow({mode: 'open'});
 
     const methods = createSequencer(shadow);
     for (let i in methods) {
       this[i] = methods[i];
     }
-
-
   }
 
   disconnectedCallback() {
     this.end();
   }
-
 }
 
 customElements.define("sequencer-editor", Sequencer);
