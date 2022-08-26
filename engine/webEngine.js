@@ -76,10 +76,8 @@ export function init(canvas, headless = false, runDispatch = true) {
     // draw text
     drawText(composeText(state.texts));
 
-
     render.render(drawTiles());
-    // if mobile
-    // console.log(drawTiles());
+
 
     animationId = window.requestAnimationFrame(gameloop);
   }

@@ -11,12 +11,9 @@ start the game (you can also press shift+enter).
 
 To beat each level you'll have to edit the code.
 
-The code for this game starts on line 70.
+The code for this game starts below this comment.
 
 The objective is to push the purple boxes onto the green goals.
-
-Use "s", "d" to move around. 
-
 Press j to reset the current level.
 
 Hit "open-help" to discover your toolkit.

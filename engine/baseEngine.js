@@ -22,6 +22,7 @@ export function baseEngine() {
     sprites: [],
     solids: [],
     pushable: {},
+    background: null,
   };
 
   class Sprite {

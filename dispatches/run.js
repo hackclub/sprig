@@ -18,7 +18,7 @@ export function run(args, state) {
       cmLine.classList.remove("err-line");
     }
 
-    const gameCanvas = document.querySelector(".game-canvas");
+    let gameCanvas = document.querySelector(".game-canvas");
     const gameCanvasContainer = document.querySelector(".game-canvas-container");
 
     const script = state.codemirror.state.doc.toString();
@@ -27,16 +27,19 @@ export function run(args, state) {
 
     sizeGameCanvas();
 
+    gameCanvas = document.querySelector(".game-canvas");
+
     dispatch("RENDER");
 
     // wiggle the canvas window
     gameCanvasContainer.classList.add("shake");
 
-    gameCanvas.focus();
-
     setTimeout(() => {
       gameCanvasContainer.classList.remove("shake");
-    }, 200)
+    }, 200);
+
+    gameCanvas.focus();
+
   }
 }
 

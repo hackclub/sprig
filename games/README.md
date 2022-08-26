@@ -1,4 +1,4 @@
-# Welcome to the [Sprig Game Gallery](https://sprig-gallery.hackclub.dev)
+# Welcome to the [Sprig Game Gallery](https://sprig.hackclub.com/gallery)
 
 This is where the games in the gallery come from.
 

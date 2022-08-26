@@ -43,10 +43,29 @@ const ACTIONS = {
     saveToFile(`${name}.js`, string);
   },
   async GET_URL(args, state) {
+    if (state.shareLinkState !== "idle") return console.warn("Share already in progress");
+
+    state.shareLinkState = "loading";
+    dispatch("RENDER");
+
     const string = state.codemirror.state.doc.toString();
     const link = await exportS3(string);
+    console.log(`Got link: ${link}`);
 
-    alert(`Here is your game link: ${link}`);
+    const input = document.createElement("input");
+    input.value = link;
+    input.select();
+    document.execCommand("copy");
+    input.remove();
+    
+    navigator.clipboard.writeText(link)
+
+    state.shareLinkState = "copied";
+    dispatch("RENDER");
+    setTimeout(() => {
+      state.shareLinkState = "idle";
+      dispatch("RENDER");
+    }, 3000);
 
     fetch("https://misguided.enterprises/clubscraps/cabal", {
       method: "POST",

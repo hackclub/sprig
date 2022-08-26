@@ -102,7 +102,7 @@ body {
   content: "";
   height: 1px;
   width: 100%;
-  background: rgb(87, 87, 87);
+  background: #317051;
   position: absolute;
   top: 3px;
 }
@@ -168,7 +168,7 @@ body {
 }
 
 .run {
-  box-shadow: inset 0 -6px 0 0 transparent;
+  box-shadow: inset 0 0 0 0 var(--enig);
   background: var(--pcb-trace);
   /* margin-left: 60px; L: temp */
   position: absolute;
@@ -179,7 +179,7 @@ body {
   cursor: pointer;
 }
 
-.stale-run {
+.stale-run, .run:hover {
   box-shadow: inset 0 -6px 0 0 var(--enig);
 }
 
@@ -412,4 +412,19 @@ body {
   animation-duration: 0.5s;
   transform-origin:50% 50%;
   animation-iteration-count: infinite;
+}
+
+.sprig-logo-container {  }
+
+.sprig-logo {
+  margin-left: 20px;
+  margin-top: 3px;
+  margin-right: 5px;
+  height: 2rem;
+  z-index: 9999;
+  cursor: pointer;
+}
+
+.sprig-logo:hover {
+  transform: scale(1.05);
 }

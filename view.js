@@ -85,7 +85,12 @@ const drawFile = (file, i, state) => {
     dispatch("RENDER");
   }
 
-  const deleteFile = () => {
+  const deleteFile = (e) => {
+    if (e.stopPropagation) e.stopPropagation();
+    if (e.preventDefault) e.preventDefault();
+    e.cancelBubble = true;
+    e.returnValue = false;
+
     const toSave = state.savedGames.filter( ([ fileName, text ]) => {
       return fileName !== name;
     })
@@ -95,6 +100,8 @@ const drawFile = (file, i, state) => {
 
     state.savedGames = toSave;
     dispatch("RENDER");
+
+    return false;
   }
 
   const fullText = state.codemirror.state.doc.toString();
@@ -103,9 +110,10 @@ const drawFile = (file, i, state) => {
     const index = match.index;
     state.codemirror.foldRange(index, index+1);
   }
+  
   return html`
-    <div style="display: flex; width: 100%;">
-      <div style="flex:1;" @click=${setText}>${name.slice(0, 15)}${name.length > 15 ? "..." : ""}</div>
+    <div style="display: flex; width: 100%;" @click=${setText}>
+      <div style="flex:1;">${name.slice(0, 15)}${name.length > 15 ? "..." : ""}</div>
       <div style="margin-left: 10px;" class="delete-file" @click=${deleteFile}>x</div>
     </div>
   `
@@ -190,6 +198,9 @@ afterInput(() => {
 
 const menu = (state) => html`
   <div class="menu">
+    <a class="sprig-logo-container" href="https://sprig.hackclub.com/">
+      <img src="https://cloud-ah8ey4rmb-hack-club-bot.vercel.app/0spriglogotext-white.png" alt="sprig logo" class="sprig-logo" />
+    </a>
     <div class="menu-item dropdown-container">
       ${state.stale ? 'file*' : 'file'}
       <div class="dropdown-list">
@@ -208,15 +219,17 @@ const menu = (state) => html`
           share &rsaquo;
           <div class="popout-list">
             <div @click=${e => dispatch("SAVE_TO_FILE")}>as file</div>
-            <div @click=${e => dispatch("GET_URL")}>as link</div>
+            <div @click=${e => dispatch("GET_URL")}>
+              ${{
+                idle: 'as link',
+                loading: 'loading...',
+                copied: 'copied!'
+              }[state.shareLinkState]}
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <a class="menu-item" href="https://sprig-gallery.hackclub.dev/gallery">
-      explore gallery
-    </a>
 
     <div class="menu-item" @click=${() => dispatch("UPLOAD")}>
       upload to device
@@ -234,10 +247,6 @@ const menu = (state) => html`
     <div class="menu-item docs-trigger">
       ${docsOpenClosed()} help
     </div>
-
-    <a class="menu-item" href="https://github.com/hackclub/sprig/">
-      <ion-icon name="logo-github" />
-    </a>
   </div>
 `
 
