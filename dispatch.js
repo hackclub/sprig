@@ -50,6 +50,7 @@ const ACTIONS = {
 
     const string = state.codemirror.state.doc.toString();
     const link = await exportS3(string);
+    console.log(`Got link: ${link}`);
 
     const input = document.createElement("input");
     input.value = link;
