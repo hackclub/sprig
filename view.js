@@ -248,6 +248,10 @@ const menu = (state) => html`
     <a class="menu-item" href="https://sprig.hackclub.com/">
       <ion-icon name="home" />
     </a>
+
+    <a class="menu-item sprig-logo-container" href="https://sprig.hackclub.com/">
+      <img src="./spriglogotext-white.png" alt="sprig logo" class="sprig-logo" />
+    </a>
   </div>
 `
 

@@ -413,3 +413,17 @@ body {
   transform-origin:50% 50%;
   animation-iteration-count: infinite;
 }
+
+.sprig-logo-container {
+  display: none;
+}
+
+.sprig-logo {
+  width: 6rem;
+  z-index: 9999;
+  cursor: pointer;
+}
+
+.sprig-logo:hover {
+  transform: scale(1.05);
+}
