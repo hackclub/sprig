@@ -85,7 +85,12 @@ const drawFile = (file, i, state) => {
     dispatch("RENDER");
   }
 
-  const deleteFile = () => {
+  const deleteFile = (e) => {
+    if (e.stopPropagation) e.stopPropagation();
+    if (e.preventDefault) e.preventDefault();
+    e.cancelBubble = true;
+    e.returnValue = false;
+
     const toSave = state.savedGames.filter( ([ fileName, text ]) => {
       return fileName !== name;
     })
@@ -95,6 +100,8 @@ const drawFile = (file, i, state) => {
 
     state.savedGames = toSave;
     dispatch("RENDER");
+
+    return false;
   }
 
   const fullText = state.codemirror.state.doc.toString();
@@ -103,9 +110,10 @@ const drawFile = (file, i, state) => {
     const index = match.index;
     state.codemirror.foldRange(index, index+1);
   }
+  
   return html`
-    <div style="display: flex; width: 100%;">
-      <div style="flex:1;" @click=${setText}>${name.slice(0, 15)}${name.length > 15 ? "..." : ""}</div>
+    <div style="display: flex; width: 100%;" @click=${setText}>
+      <div style="flex:1;">${name.slice(0, 15)}${name.length > 15 ? "..." : ""}</div>
       <div style="margin-left: 10px;" class="delete-file" @click=${deleteFile}>x</div>
     </div>
   `
