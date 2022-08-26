@@ -6,12 +6,9 @@ It was made by Hack Club, a global community of teen coders who
 believe people learn best by making things they care about 
 and sharing them with others.
 
-If this is your first time using Sprig try playing through the starter game. 
-After that check out the gallery. You can also start with an empty file and 
-go through [this tutorial](https://github.com/hackclub/sprig-gallery/blob/main/src/routes/getting-started.md#lets-make-our-first-game-in-sprig).
+If this is your first time using Sprig, try playing through the tutorial. From there, we suggest hacking on any of the current games or starting from scratch.
 
-If you get stuck you can talk to other people in the community
-about Sprig on [Hack Club's Slack](https://hackclub.com/slack).
+If you ever need help, have ideas, or want to meet other game-makers, join the community in the [#sprig](https://hackclub.slack.com/archives/C02UN35M7LG) channel on the [Hack Club Slack](https://hackclub.com/slack).
 
 Run games by hitting the `Run` button or pressing `shift+enter`.
 
