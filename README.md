@@ -1,6 +1,6 @@
 # :leaves: [Hack Club SPRIG](https://sprig.hackclub.dev) :leaves: 
 
-The Hack Club Sprig is a game console where **every user is a creator**. It can only be obtained by building a tile-based game in the [web-based game editor](https://sprig.hackclub.dev) and shipping in the the [community gallery](https://sprig-gallery.hackclub.dev).
+The Hack Club Sprig is a game console where **every user is a creator**. It can only be obtained by building a tile-based game in the [web-based game editor](https://sprig.hackclub.dev) and shipping in the the [community gallery](https://sprig-gallery.hackclub.dev/gallery).
 
 <p align="center">
 <a>

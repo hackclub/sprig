@@ -214,7 +214,7 @@ const menu = (state) => html`
       </div>
     </div>
 
-    <a class="menu-item" href="https://sprig-gallery.hackclub.dev">
+    <a class="menu-item" href="https://sprig-gallery.hackclub.dev/gallery">
       explore gallery
     </a>
 
