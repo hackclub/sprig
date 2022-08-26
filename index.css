@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap');
 
 :root {
-  --pcb-base: #016e3a;
+  --pcb-base: #016535;
   --pcb-trace: #014a27;
-  --pcb-trace-lighter: #11844d;
+  --pcb-trace-lighter: #08693a;
   --enig: #c49806;
   --accent-darker: #4e319e;
   --accent-lighter: #7142f2;
@@ -334,14 +334,14 @@ body {
   font-family: inherit;
   line-height: inh;
   border: none;
-  background: var(--pcb-trace);
+  background: var(--pcb-base);
   color: #ffffff;
   cursor: pointer;
   border-radius: 3px;
 }
 
 .cm-open-button button:hover {
-  background: var(--pcb-trace-lighter);
+  background: var(--pcb-trace);
 }
 
 .cm-open-button bitmap-preview {
