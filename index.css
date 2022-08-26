@@ -417,6 +417,7 @@ body {
 .sprig-logo-container {  }
 
 .sprig-logo {
+  margin-left: 20px;
   margin-top: 3px;
   margin-right: 5px;
   height: 2rem;
