@@ -193,6 +193,7 @@ export function init(canvas, headless = false, runDispatch = true) {
     afterInput, 
     setScreenSize,
     getState: () => state,
+    setBackground: (type) => render.setBackground(type),
     ...api,
   }
 }

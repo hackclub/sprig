@@ -2,14 +2,23 @@ import { bitmapTextToImageData } from "./bitmap.js";
 
 const spritesheetIndex = 0;
 const texIndex = 1;
+let backgroundTile = 0;
 let gl,              texLocation,
                   texResLocation,
              spritesheetLocation,
+          backgroundTileLocation,
     spritesheetTileCountLocation;
 
 const SPRITESHEET_TILE_COUNT = 64;
 
+let _bitmaps;
+export function setBackground(bg) {
+  backgroundTile = 1+_bitmaps.findIndex(f => f[0] == bg);
+}
+
 export function setBitmaps(bitmaps) {
+  _bitmaps = bitmaps;
+
   const sw = 16 * SPRITESHEET_TILE_COUNT;
   const sh = 16 * SPRITESHEET_TILE_COUNT;
   const spritesheet = new ImageData(sw, sh);
@@ -37,6 +46,7 @@ export function init(canvas) {
   texLocation = gl.getUniformLocation(program, "u_tex");
   texResLocation = gl.getUniformLocation(program, "u_texres");
   spritesheetLocation = gl.getUniformLocation(program, "u_spritesheet");
+  backgroundTileLocation = gl.getUniformLocation(program, "u_background_tile");
   spritesheetTileCountLocation = gl.getUniformLocation(program, "u_spritesheet_tile_count");
   resize(canvas);
 
@@ -97,8 +107,9 @@ export function resize(canvas) {
 export function render(canvas) {
   uploadImage(canvas, texIndex, gl.NEAREST);
 
-  gl.uniform1i(spritesheetLocation, spritesheetIndex);
-  gl.uniform1i(texLocation, texIndex);
+  gl.uniform1i(backgroundTileLocation, backgroundTile);
+  gl.uniform1i(spritesheetLocation,    spritesheetIndex);
+  gl.uniform1i(texLocation,            texIndex);
   gl.uniform2f(texResLocation, canvas.width, canvas.height);
   gl.uniform1i(spritesheetTileCountLocation, SPRITESHEET_TILE_COUNT);
 
@@ -143,6 +154,7 @@ precision highp float;
 uniform sampler2D u_tex;
 uniform sampler2D u_spritesheet;
 uniform int u_spritesheet_tile_count;
+uniform int u_background_tile;
 uniform vec2 u_texres;
 in vec2 texCoord;
 
@@ -176,7 +188,8 @@ void main(void) {
   if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
   sprite = sampleTile(coord, raw.r); 
   if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
-
+  sprite = sampleTile(coord, float(u_background_tile)/255.0f);
+  if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
 }
   `,
   'shader-vertex': `#version 300 es

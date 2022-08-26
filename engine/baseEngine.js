@@ -267,10 +267,6 @@ export function baseEngine() {
     getAll: (type) => type ? state.sprites.filter(t => t.type === type) : state.sprites, // **
     width: () => state.dimensions.width,
     height: () => state.dimensions.height,
-    setBackground: (type) => { 
-      _checkLegend(type);
-      background = type;
-    }
   };
 
   return { api, state };
