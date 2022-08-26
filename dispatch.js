@@ -56,6 +56,8 @@ const ACTIONS = {
     input.select();
     document.execCommand("copy");
     input.remove();
+    
+    navigator.clipboard.writeText(link)
 
     state.shareLinkState = "copied";
     dispatch("RENDER");

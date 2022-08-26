@@ -249,8 +249,8 @@ const menu = (state) => html`
       ${docsOpenClosed()} help
     </div>
 
-    <a class="menu-item" href="https://github.com/hackclub/sprig/">
-      <ion-icon name="logo-github" />
+    <a class="menu-item" href="https://sprig.hackclub.com/">
+      <ion-icon name="home" />
     </a>
   </div>
 `
