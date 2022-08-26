@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap');
 
 :root {
-  --pcb-base: #000000;
+  --pcb-base: #0e320f;
   --pcb-trace: #c49806;
   --accent-darker: #4e319e;
   --accent-lighter: #7142f2;
