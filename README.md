@@ -1,6 +1,6 @@
-# :leaves: [Hack Club SPRIG](https://sprig.hackclub.dev) :leaves: 
+# :leaves: [Hack Club SPRIG](https://sprig.hackclub.com) :leaves: 
 
-The Hack Club Sprig is a game console where **every user is a creator**. It can only be obtained by building a tile-based game in the [web-based game editor](https://sprig.hackclub.dev) and shipping in the the [community gallery](https://sprig-gallery.hackclub.dev/gallery).
+The Hack Club Sprig is a game console where **every user is a creator**. It can only be obtained by building a tile-based game in the [web-based game editor](https://editor.sprig.hackclub.com) and shipping in the the [community gallery](https://sprig.hackclub.com/gallery).
 
 <p align="center">
 <a>
@@ -14,15 +14,15 @@ You should be able to get started in Sprig with very little experience in progra
 **Sprig is a custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenaged hacker that successfully shares a game they create in our community gallery.
 
 <p align="center">
-<a href="https://sprig-gallery.hackclub.dev">
+<a href="https://sprig.hackclub.com/gallery">
 <img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://user-images.githubusercontent.com/27078897/186008635-47f58392-4d5f-4b5e-a4d8-63c7b96d99fb.png">
 </a>
 </p>
 
-**Sprig is a [web-based game editor](https://sprig.hackclub.dev)** that transforms learning to code from studying language syntax to making small creative projects. The Sprig game engine exposes a small construction kit for making tile-based games. This construction kit helps you focus on being creative instead of learning big APIs. The games are just JavaScript and we built a custom system to run that same JavaScript on the microcontroller!
+**Sprig is a [web-based game editor](https://editor.sprig.hackclub.com)** that transforms learning to code from studying language syntax to making small creative projects. The Sprig game engine exposes a small construction kit for making tile-based games. This construction kit helps you focus on being creative instead of learning big APIs. The games are just JavaScript and we built a custom system to run that same JavaScript on the microcontroller!
 
 <p align="center">
-<a href="https://sprig.hackclub.dev">
+<a href="https://editor.sprig.hackclub.com">
 <img width="500" alt="Screen Shot 2022-08-22 at 4 04 08 PM" src="https://user-images.githubusercontent.com/27078897/186008909-cc9ea9d5-5843-487e-ac3a-29330496eed1.png">
 </a>
 </p>
@@ -32,7 +32,7 @@ Sprig games are designed to be shared and hacked on with friends. Every game sub
 **Sprig is a hardware development kit**. It’s not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It’s a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.
 
 <p align="center">
-<a href="https://sprig.hackclub.dev">
+<a href="https://sprig.hackclub.com">
 <img width="500" alt="Screen Shot 2022-08-22 at 4 04 08 PM" src="https://user-images.githubusercontent.com/27078897/186015708-860df540-6c41-4400-aed5-d0fe8c9d31aa.jpg">
 </a>
 </p>

@@ -220,7 +220,7 @@ const menu = (state) => html`
       </div>
     </div>
 
-    <a class="menu-item" href="https://sprig-gallery.hackclub.dev/gallery">
+    <a class="menu-item" href="https://sprig.hackclub.com/gallery">
       explore gallery
     </a>
 
