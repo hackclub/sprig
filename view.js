@@ -198,6 +198,9 @@ afterInput(() => {
 
 const menu = (state) => html`
   <div class="menu">
+    <a class="sprig-logo-container" href="https://sprig.hackclub.com/">
+      <img src="./spriglogotext-white.png" alt="sprig logo" class="sprig-logo" />
+    </a>
     <div class="menu-item dropdown-container">
       ${state.stale ? 'file*' : 'file'}
       <div class="dropdown-list">
@@ -244,14 +247,6 @@ const menu = (state) => html`
     <div class="menu-item docs-trigger">
       ${docsOpenClosed()} help
     </div>
-
-    <a class="menu-item" href="https://sprig.hackclub.com/">
-      <ion-icon name="home" />
-    </a>
-
-    <a class="menu-item sprig-logo-container" href="https://sprig.hackclub.com/">
-      <img src="./spriglogotext-white.png" alt="sprig logo" class="sprig-logo" />
-    </a>
   </div>
 `
 
