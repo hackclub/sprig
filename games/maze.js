@@ -74,6 +74,10 @@ let level = 0;
 
 const levels = [
   map`
+p...
+..w.
+..w.`,
+  map`
 p..w....
 ...w....
 ..wwww..
@@ -84,11 +88,13 @@ p..w....
 ..ww....
 `,
   map`
+..w..
 p....
+.w...
+..ww.
+..ww.
 .....
-.....
-.....
-`
+..www`,
 ]
 
 
@@ -112,6 +118,13 @@ onInput("d", _ => {
   getFirst(player).x += 1;
 })
 
+onInput("j", _ => {
+  setMap(levels[level]);
+  const p = getFirst(player);
+  addSprite(p.x, p.y, red)
+  
+})
+
 afterInput(_ => {
   const p = getFirst(player);
   if (p.dy !== 0 || p.dx !==0) {
@@ -121,7 +134,7 @@ afterInput(_ => {
   if (getAll(red).length === width() * height() - getAll(wall).length) {
     level++;
     if (level in levels) setMap(levels[level])
-    else console.log("you win")
+    else addText("you win", { y: 5, color: [0, 0, 255]})
     const p = getFirst(player);
     addSprite(p.x, p.y, red)
   }

@@ -51,13 +51,13 @@
       "title": "laser_tag",
       "author": "leo mcelroy",
       "img": "",
-      "tags": []
+      "tags": ["hackable"]
   },
   {
       "title": "maze",
       "author": "leo mcelroy",
       "img": "",
-      "tags": ["beginner"]
+      "tags": ["beginner", "hackable"]
   },
   {
       "title": "pyre",
@@ -75,7 +75,7 @@
       "title": "sokoban",
       "author": "leo mcelroy",
       "img": "",
-      "tags": ["beginner"]
+      "tags": ["beginner", "hackable"]
   },
   {
       "title": "tolls",
