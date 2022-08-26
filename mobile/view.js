@@ -26,6 +26,7 @@ export const view = (text) => html`
     .mobile-view .game-canvas-container {
       width: 50%;
       aspect-ratio: calc(160/128);
+      max-height: 100%;
     }
 
     .mobile-run {
