@@ -6,17 +6,9 @@ Instructions:
 
 Cover the green with purple.
 
-----------------------------
-
-Welcome to Sprig!
-Here is an example game to acquaint you with your toolkit.
-
-You can find a walkthrough of this game if you hit help.
+Use w, a, s, d to move around and j to restart the level.
 
 */
-
-
-
 
 const player = "p";
 const box = "b";
@@ -102,10 +94,23 @@ p.w.
 ....
 ....`,
   map`
+....g
+.bbww
+w....
+g...p`,
+  map`
 p.w.
 .bwg
 ....
-..bg`
+..bg`,
+  map`
+..w
+..w
+gbg
+.b.
+.w.
+bw.
+g.p`
 ];
 
 const currentLevel = levels[level];
@@ -130,7 +135,7 @@ onInput("d", () => {
 onInput("j", () => {
   const currentLevel = levels[level];
   if (currentLevel !== undefined) {
-    setText("");
+    clearText();
     setMap(currentLevel);
   }
 });
@@ -155,7 +160,7 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("you win!", { y: 4 });
+      addText("you win!", { y: 4, color: [255, 0, 0] });
     }
   }
 });

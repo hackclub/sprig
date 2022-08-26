@@ -11,11 +11,13 @@ function getParam(key) {
 }
 
 function removeParam(key) {
+  return;
+  
   const url = new URL(window.location);
   url.searchParams.delete(key);
 
-  // Why is this here?
-  // window.history.pushState({}, null, url);
+  // Can we clear param without adding history
+  window.history.pushState({}, null, url);
 }
 
 export async function init(args, state) {

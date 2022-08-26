@@ -8,8 +8,6 @@ Get to the green block.
 Dont get hit by the lasers.
 */
 
-
-
 const player1 = "0"
 const player2 = "1"
 const wall = "2"
@@ -20,6 +18,7 @@ const rightLaser = "6"
 const vert = "7"
 const horz = "8"
 const target = "9"
+const background = "b"
 
 setLegend(
   [ player1, bitmap`
@@ -192,6 +191,23 @@ setLegend(
 ...4.4...4.4....
 ...44444..44....
 ........4444....`],
+  [ background, bitmap`
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLL1LLLLLLLLLLL
+LLLLLLLLLLL1L11L
+LLL1LLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLL1LL
+LLL1LLLLLLLL1LLL
+L1LLLLLLLLLLLLLL
+L1LLL1LLLLL1LLLL
+LLLLLLLLLL1LLLLL
+LLLLL1LLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL`],
   [ "u", bitmap`
 ................
 ................
@@ -208,8 +224,27 @@ setLegend(
 ..00.000.00.00..
 ................
 ................
+................`],
+  [ "w", bitmap`
+................
+................
+......0.0.......
+......0.0.......
+......0.0.......
+......0.0.......
+......000.......
+................
+................
+.0...0.000.0..0.
+.0...0..0..00.0.
+.0.0.0..0..0.00.
+.0.0.0..0..0.00.
+.00000.000.0..0.
+................
 ................`]
 )
+
+// setBackground(background);
 
 setSolids([
     player1, 
@@ -236,11 +271,12 @@ const levels = [
 .0.7.1.
 .2.3...`,
     map`
-.......
-.22222.
-.21202.
-.22222.
-.......`,
+...49
+..1..
+22..5
+9....
+0....`,
+    map`w`
 ];
 
 let activePlayer = player1;
@@ -248,6 +284,7 @@ let activePlayer = player1;
 const getActivePlayer = () => getFirst(activePlayer);
 
 setMap(levels[level]);
+initLasers();
 
 onInput("w", _ => {
     const p1 = getFirst(player1);
@@ -301,16 +338,12 @@ onInput("d", _ => {
 /* reset level */
 onInput("j", _ => setMap(levels[level]));
 
-// onInput("k", _ => {
-//     activePlayer = activePlayer === player1 
-//         ? player2 
-//         : player1;
-// });
-
-const isJustLaser = t => t.length === 1 
+function isJustLaser(t) {
+  return t.length === 1 
     && (t.map(x => x.type).includes(vert)
         || t.map(x => x.type).includes(horz)
         || t.map(x => x.type).includes(player2));
+}
 
 function initLasers() {
     // remove all lasers
