@@ -228,10 +228,6 @@ const menu = (state) => html`
       </div>
     </div>
 
-    <a class="menu-item" href="https://sprig.hackclub.com/gallery">
-      explore gallery
-    </a>
-
     <div class="menu-item" @click=${() => dispatch("UPLOAD")}>
       upload to device
     </div>
