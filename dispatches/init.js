@@ -13,7 +13,9 @@ function getParam(key) {
 function removeParam(key) {
   const url = new URL(window.location);
   url.searchParams.delete(key);
-  window.history.pushState({}, null, url);
+
+  // Why is this here?
+  // window.history.pushState({}, null, url);
 }
 
 export async function init(args, state) {
