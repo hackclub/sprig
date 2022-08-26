@@ -208,7 +208,13 @@ const menu = (state) => html`
           share &rsaquo;
           <div class="popout-list">
             <div @click=${e => dispatch("SAVE_TO_FILE")}>as file</div>
-            <div @click=${e => dispatch("GET_URL")}>as link</div>
+            <div @click=${e => dispatch("GET_URL")}>
+              ${{
+                idle: 'as link',
+                loading: 'loading...',
+                copied: 'copied!'
+              }[state.shareLinkState]}
+            </div>
           </div>
         </div>
       </div>
