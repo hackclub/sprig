@@ -18,8 +18,11 @@ export function run(args, state) {
       cmLine.classList.remove("err-line");
     }
 
+    const gameCanvas = document.querySelector(".game-canvas");
+    const gameCanvasContainer = document.querySelector(".game-canvas-container");
+
     const script = state.codemirror.state.doc.toString();
-    const err = evalGameScript(script, state.palette);
+    const err = evalGameScript(script, gameCanvas);
     if (err) dispatch("LOG_ERROR", err);
 
     sizeGameCanvas();
@@ -27,9 +30,6 @@ export function run(args, state) {
     dispatch("RENDER");
 
     // wiggle the canvas window
-    const gameCanvas = document.querySelector(".game-canvas");
-    const gameCanvasContainer = document.querySelector(".game-canvas-container");
-
     gameCanvasContainer.classList.add("shake");
 
     gameCanvas.focus();
