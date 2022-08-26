@@ -22,6 +22,7 @@ export function baseEngine() {
     sprites: [],
     solids: [],
     pushable: {},
+    background: null,
   };
 
   class Sprite {
@@ -269,7 +270,7 @@ export function baseEngine() {
     height: () => state.dimensions.height,
     setBackground: (type) => { 
       _checkLegend(type);
-      background = type;
+      state.background = type;
     }
   };
 
