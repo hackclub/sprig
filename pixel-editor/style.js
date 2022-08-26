@@ -64,8 +64,8 @@ export const style = `
   }
 
   .tools button.active {
-    background: var(--accent-lighter);
-    --shadow-color: var(--accent-darker);
+    background: var(--pcb-trace-lighter);
+    --shadow-color: var(--pcb-trace);
   }
 
   .tools button:active {

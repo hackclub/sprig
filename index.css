@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap');
 
 :root {
-  --pcb-base: #0e320f;
-  --pcb-trace: #c49806;
+  --pcb-base: #016e3a;
+  --pcb-trace: #014a27;
+  --pcb-trace-lighter: #11844d;
+  --enig: #c49806;
   --accent-darker: #4e319e;
   --accent-lighter: #7142f2;
   --bg-floating: #191919;
@@ -75,10 +77,13 @@ body {
   cursor: pointer;
 }
 
-.menu-item:not(.run):not(.menu-spacer):hover,
-.dropdown-list > *:not(.menu-spacer):hover,
-.popout-list > *:not(.menu-spacer):hover {
-  background: var(--accent-darker);
+.menu-item:not(.run):not(.menu-spacer):hover {
+  background: var(--pcb-trace);
+}
+
+.popout-list > *:not(.menu-spacer):hover,
+.dropdown-list > *:not(.menu-spacer):hover {
+  background: var(--pcb-trace-lighter);
   color: #ffffff;
 }
 
@@ -128,7 +133,7 @@ body {
 }
 
 .dropdown-list > *, .popout-list > * {
-  background: var(--bg-floating);
+  background: var(--pcb-trace);
 }
 
 .dropdown-list > *, .popout-list > * {
@@ -148,11 +153,11 @@ body {
 }
 
 .menu-item.stale {
-  background: var(--accent-darker);
+  background: var(--pcb-trace);
 }
 
 .menu-item.stale:hover {
-  background: var(--accent-lighter);
+  background: var(--pcb-trace-lighter);
 }
 
 .code-container {
@@ -164,7 +169,7 @@ body {
 
 .run {
   box-shadow: inset 0 -6px 0 0 transparent;
-  background: var(--bg-floating);
+  background: var(--pcb-trace);
   /* margin-left: 60px; L: temp */
   position: absolute;
   top: 0;
@@ -175,11 +180,11 @@ body {
 }
 
 .stale-run {
-  box-shadow: inset 0 -6px 0 0 var(--pcb-trace);
+  box-shadow: inset 0 -6px 0 0 var(--enig);
 }
 
 .stale-run:hover {
-  box-shadow: inset 0 -50px 0 0 var(--pcb-trace);
+  box-shadow: inset 0 -50px 0 0 var(--enig);
 }
 
 .cm-editor {
@@ -224,7 +229,7 @@ body {
   max-height: calc(100% - var(--docs-percentage));
   aspect-ratio: 5/4;
   transition: height 0.2s ease-in-out;
-  background: var(--bg-floating);
+  background: var(--pcb-trace);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -329,14 +334,14 @@ body {
   font-family: inherit;
   line-height: inh;
   border: none;
-  background: var(--accent-darker);
+  background: var(--pcb-trace);
   color: #ffffff;
   cursor: pointer;
   border-radius: 3px;
 }
 
 .cm-open-button button:hover {
-  background: var(--accent-lighter);
+  background: var(--pcb-trace-lighter);
 }
 
 .cm-open-button bitmap-preview {
@@ -369,7 +374,7 @@ body {
 
 .vertical-bar:hover {
   cursor: col-resize;
-  background: var(--bg-floating);
+  background: var(--pcb-trace);
   opacity: .8;
 }
 
@@ -378,7 +383,7 @@ body {
   border-radius: 3px;
   bottom: 0px;
   right: 0px;
-  background: var(--bg-floating);
+  background: var(--pcb-trace);
   color: white;
   width: 5em;
   height: 2em;

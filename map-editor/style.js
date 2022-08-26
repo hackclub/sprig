@@ -45,7 +45,7 @@ export const style = `
   }
 
   .resize-horiz .buttons button:hover {
-    color: var(--accent-lighter);
+    color: var(--pcb-trace-lighter);
   }
 
   .canvas-container {
@@ -87,7 +87,7 @@ export const style = `
   }
 
   .sprite-button.active {
-    box-shadow: inset 0 0 0 6px var(--accent-lighter);
+    box-shadow: inset 0 0 0 6px var(--pcb-trace-lighter);
   }
 
   .tiles {

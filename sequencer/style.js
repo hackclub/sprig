@@ -68,8 +68,8 @@ export const style = `
   }
 
   button.accent {
-    --shadow-color: var(--accent-darker);
-    background: var(--accent-lighter);
+    --shadow-color: var(--pcb-trace);
+    background: var(--pcb-trace-lighter);
   }
 
   button.pressed, button:active {
@@ -111,7 +111,7 @@ export const style = `
     height: 20px;
     width: 20px;
     border-radius: 50%;
-    background: var(--accent-lighter);
+    background: var(--pcb-trace-lighter);
     cursor: pointer;
   }
 
@@ -129,7 +129,7 @@ export const style = `
     font-family: inherit;
     border: none;
     background: transparent;
-    color: var(--accent-lighter);
+    color: var(--pcb-trace-lighter);
     width: 6ch;
     text-align: center;
     padding: 4px 6px;
