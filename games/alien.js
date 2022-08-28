@@ -88,12 +88,13 @@ onInput("d", () => {
 onInput("a", () => {
   getFirst(lazer).x -= 1;
 });
+addText("Time left: ", { y: 0 });
 
 //countdown timer
-var timeleft = 10;
+var timeleft = 300;
     var downloadTimer = setInterval(function(){
     timeleft--;
-    addText("Time Left: "+timeleft, { y: 1 });
+    addText(""+timeleft, { y: 1 });
       if(timeleft <= 0){
         clearTile(getFirst(lazer).x,getFirst(lazer).y);
         clearInterval(downloadTimer);
