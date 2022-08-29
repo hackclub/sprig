@@ -180,6 +180,8 @@ void main(void) {
 
   frag = vec4(1);
   vec4 sprite;
+  sprite = sampleTile(coord, float(u_background_tile)/255.0f);
+  if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
   sprite = sampleTile(coord, raw.a); 
   if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
   sprite = sampleTile(coord, raw.b); 
@@ -187,8 +189,6 @@ void main(void) {
   sprite = sampleTile(coord, raw.g); 
   if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
   sprite = sampleTile(coord, raw.r); 
-  if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
-  sprite = sampleTile(coord, float(u_background_tile)/255.0f);
   if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);
 }
   `,
