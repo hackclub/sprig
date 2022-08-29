@@ -9,7 +9,7 @@ export function getTag(name, node, syntax, doc) {
   const templateString = identifier.nextSibling;
   if (templateString?.name !== "TemplateString") return;
   const templateStringText = doc.sliceString(templateString.from, templateString.to);
-  if (!templateStringText.endsWith('`')) return;
+  if (!templateStringText.endsWith('`') || !templateStringText.startsWith('`') || templateStringText.length < 2) return;
 
   return {
     text: templateStringText.slice(1, -1),
