@@ -118,5 +118,11 @@
       "author": "Jacky Zhao",
       "img": "",
       "tags": []
+  },
+  {
+      "title": "minesweeper",
+      "author": "sam liu",
+      "img": "",
+      "tags": ["classic"]
   }
 ]
