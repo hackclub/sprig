@@ -174,7 +174,7 @@ Returns a list of the sprites in the specified tile.
 
 ### tilesWith(type, ...)
 
-Returns a list of the tiles with all types contained in them.
+Returns a list of the tiles that contain type.
 
 ```js
 tilesWith(block)
