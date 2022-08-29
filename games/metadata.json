@@ -124,5 +124,11 @@
       "author": "sam liu",
       "img": "",
       "tags": ["classic"]
+  },
+  {
+      "title": "connect_four",
+      "author": "sam liu",
+      "img": "",
+      "tags": ["classic"]
   }
 ]
