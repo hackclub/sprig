@@ -131,7 +131,7 @@ setLegend(
 1111111111111111
 1111111111111111
 1111111111111111`]);
-let level = 10;
+let level = 0;
 const nextlvl = tune`
 250: e5~250,
 250,
