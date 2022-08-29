@@ -3,7 +3,7 @@ export const style = `
     text-align: center;
     margin: 0;
     margin-top: 20px;
-    margin-bottom: -10px;
+    margin-bottom: 30px;
     color: #868e96;
     font-size: 2.8em;
     line-height: 1;
@@ -31,8 +31,8 @@ export const style = `
   }
 
   code, pre {
-    font-family: monospace;
-    font-size: 1.1em;
+    font-family: inherit;
+    font-size: inherit;
     background: #e9ecef;
     color: #343a40;
   }
