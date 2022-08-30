@@ -71,7 +71,7 @@ const editableName = (state) => html`
 const drawFile = (file, i, state) => {
   const [ name, text ] = file;
   const setText = () => {
-    if (state.stale) return confirm("You have unsaved changes! Please save your work before switching files.");
+    if (state.stale && !confirm("You have unsaved changes! Are you sure you want to switch files?")) return;
     state.staleRun = true;
 
     const games = Object.fromEntries(state.savedGames);
@@ -123,7 +123,7 @@ const newFile = (state) => {
   if (!state.codemirror) return "";
 
   const setText = () => {
-    if (state.stale) return confirm("You have unsaved changes! Please save your work before creating a new file.");
+    if (state.stale && !confirm("You have unsaved changes! Are you sure you want to create a new file?")) return;
     state.staleRun = true;
     
     const text = `/*
