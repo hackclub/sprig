@@ -118,5 +118,29 @@
       "author": "Jacky Zhao",
       "img": "",
       "tags": []
+  },
+  {
+      "title": "minesweeper",
+      "author": "sam liu",
+      "img": "",
+      "tags": ["classic"]
+  },
+  {
+      "title": "connect_four",
+      "author": "sam liu",
+      "img": "",
+      "tags": ["classic"]
+  },
+  {
+      "title": "spraze",
+      "author": "Peipr",
+      "img": "",
+      "tags": []
+  },
+  {
+    "title": "Nomis",
+    "author": "Cheru Berhanu",
+    "img": "",
+    "tags": ["hackable"]
   }
 ]

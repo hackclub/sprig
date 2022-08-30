@@ -414,12 +414,10 @@ body {
   animation-iteration-count: infinite;
 }
 
-.sprig-logo-container {  }
-
 .sprig-logo {
-  margin-left: 20px;
+  margin-left: 15px;
   margin-top: 3px;
-  margin-right: 5px;
+  margin-right: 10px;
   height: 2rem;
   z-index: 9999;
   cursor: pointer;
