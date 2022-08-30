@@ -1,15 +1,61 @@
 /*
 @title: alien
 @author: anshimathur0325
-move the player with "a" and "d" for left and right
-move the lazer up with "w"
-if the lazer reaches the top without hitting an alien you lose one point. 
-you gain a point when you hit an alien. 
-*/
+Move the player with "a" and "d" for left and right
+Move the lazer up with "w"
 
+The game ends if the lazer hits an asteroid. 
+
+If the lazer reaches the top without hitting an alien you lose one point.
+You gain a point when you hit an alien. 
+
+*/
+//adds music if alien is hit and background music.
+const melody = tune `
+500,
+500: b5-500,
+15000`
+
+const background = tune `
+500,
+500: c5-500,
+500: d5-500,
+500: e5-500,
+500: f5-500,
+500: g5-500,
+500: g5-500,
+500: g5-500,
+500: g5-500,
+500: g5-500,
+500,
+500: a5-500,
+500,
+500: g5-500,
+500: f5-500,
+500: e5-500,
+500: d5-500,
+500: c5-500,
+500: c5-500,
+500: c5-500,
+500: c5-500,
+500: c5-500,
+500: f5-500,
+500: e5-500,
+500: d5-500,
+500: c5-500,
+500,
+500: e4-500,
+500: c5-500,
+500: e4-500,
+500: c5-500,
+500: e4-500`
+
+const playback = playTune(background, Infinity);
 const player="p";
 const alien="w";
 const lazer="c";
+const asteroid="a";
+const black = "b";
 let score = 0;
 setLegend(
   [ player, bitmap`
@@ -19,16 +65,16 @@ setLegend(
 .....111111.....
 .....111111.....
 .11111111111111.
-....5......5....
-....5.0.0..5.0..
-..0.5......50...
-...05.000..5....
-....5......5....
-....5......5....
+....57777775....
+....57070775.2..
+..2.577777752...
+...257000775....
+....57777775....
+....57777775....
 .....555555.....
-.......0.0......
-.......0.0......
-.......0.0......`],
+.......2.2......
+.......2.2......
+.......2.2......`],
   [ alien, bitmap`
 ................
 ................
@@ -39,9 +85,9 @@ setLegend(
 .....40404......
 .....40404......
 .....44444......
-...000000000....
-..00000000000...
-..00807060300...
+...111111111....
+..11111111111...
+..11817161311...
 ................
 ................
 ................
@@ -62,16 +108,50 @@ setLegend(
 ................
 ................
 ................
-................`]
-  
+................`],
+  [ asteroid,  bitmap`
+................
+................
+......1111......
+......1LL11.....
+.....11LLL1.....
+....111LLL11....
+....111LLLL1....
+...11L111LL1....
+....1LL11111....
+....1LL1111.....
+...11111111.....
+..111111........
+...1111.........
+................
+................
+................`],
+  [ black, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`]
 );
+setBackground(black);
+
 //lazer movement
 onInput("w", () => {
   for (let i = 0; i < 1; i++) {
   getFirst(lazer).y -=1;
   
 }
-
 //player movement with lazer
 });
 onInput("d", () => {
@@ -88,31 +168,33 @@ onInput("d", () => {
 onInput("a", () => {
   getFirst(lazer).x -= 1;
 });
-addText("Time left: ", { y: 0 });
+addText("Time left: ", { y: 0 , color: [255,0,0] });
 
 //countdown timer
-var timeleft = 300;
+var timeleft = 15;
     var downloadTimer = setInterval(function(){
     timeleft--;
-    addText(""+timeleft, { y: 1 });
+    clearText();
+    addText(""+timeleft, { y: 1 , color: [255,0,0] });
       if(timeleft <= 0){
         clearTile(getFirst(lazer).x,getFirst(lazer).y);
         clearInterval(downloadTimer);
         clearText()
-        addText("Final Score: "+score, {y:4});
+
+        addText("Final Score: "+score, {y:4, color: [255,0,0]});
 
     }
     },1000);
 
 //map location
 setMap( map`
+..a.......
 ..........
-..........
-..........
+.....a....
 ..w.......
 ..........
-..........
-..........
+.....a....
+a.........
 ..........
 c.........
 p.........`);
@@ -130,23 +212,52 @@ afterInput(() => {
   if (getFirst(lazer).y==0){
     clearTile(getFirst(lazer).x,getFirst(lazer).y);
     addSprite(getFirst(player).x, 8, lazer);
+    clearTile(getFirst(alien).x,getFirst(alien).y);
+    addSprite(Math.floor(Math.random() * 6)+3, Math.floor(Math.random() * 2)+1, alien);
+
     score--;
   }
-  
-  //removes the hit alien and lazer, puts another alien in a random spot
+  //Ends the game if the asteroid is hit
+  const asteroidHit = tilesWith(asteroid, lazer).length;
+  const numAsteroid = tilesWith(lazer).length;
+  if (asteroidHit === numAsteroid) {
+    clearTile(getFirst(lazer).x,getFirst(lazer).y);
+        clearInterval(downloadTimer);
+        clearText()
+        addText("You Lost", {y:4, color: [255,0,0] });
+        playback.end();
+  }
+  //removes the hit alien and lazer, puts another alien and asteroid in a random spot 
   //and restores the lazer to the player. 
   //Also adds a point to the score. 
   if (numberCovered === targetNumber) {
-    clearTile(getFirst(lazer).x,getFirst(alien).y);
-    addSprite(getFirst(player).x, 8, lazer);
-    addSprite(Math.floor(Math.random() * 8), Math.floor(Math.random() * 8), alien);
-    score++;
-  }
 
-  //Displays the score. 
-  addText("score: "+score, { y: 4 });
-  
+    playTune(melody)
+    
+    clearTile(getFirst(lazer).x,getFirst(alien).y);
+    clearTile(getFirst(asteroid).x, getFirst(asteroid).y);
+    clearTile(getFirst(asteroid).x, getFirst(asteroid).y);
+    clearTile(getFirst(asteroid).x, getFirst(asteroid).y);
+
+    addSprite(getFirst(player).x, 8, lazer);
+    
+    addSprite(Math.floor(Math.random() * 6)+3, Math.floor(Math.random() * 2)+1, alien);
+    
+    addSprite(Math.floor(Math.random() * 6)+3, Math.floor(Math.random() * 5)+3, asteroid);
+    addSprite(Math.floor(Math.random() * 6)+3, Math.floor(Math.random() * 5)+3, asteroid);
+    addSprite(Math.floor(Math.random() * 6)+3, Math.floor(Math.random() * 5)+3, asteroid);
+    addSprite(Math.floor(Math.random() * 6)+3, Math.floor(Math.random() * 5)+3, asteroid);
+
+    score++;
+    //Displays the score. 
+
+    addText("score: "+score, { y: 4 , color: [255,0,0]} );
+
+  }
 });
+
+
+
 
 
 
