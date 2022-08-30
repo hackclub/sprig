@@ -28,7 +28,7 @@ Make the purple block pushable.
 Level 2
 --------
 
-Add controls to move up and left.
+Add controls to move up and left, use "w" and "d" as inputs
 
 Tip: 
 Do you find it annoying restarting at level 0?
@@ -48,6 +48,12 @@ Make boxes push boxes.
 
 --------
 Level 5
+--------
+
+Add sound effects when you move.
+
+--------
+Level 6
 --------
 
 Solve the puzzle!
@@ -160,6 +166,10 @@ p...
 ...b
 .bbg`,
   map`
+...
+.p.
+...`,
+  map`
 p.w.
 .bwg
 ....
@@ -212,7 +222,7 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("you win!", { y: 4 });
+      addText("you win!", { y: 4, color: [255, 0, 0] });
     }
   }
 });

@@ -1,7 +1,8 @@
 
 # The Toolkit
 
-Sprig is a tiny construction kit to build tile based games.
+Sprig is a tiny construction kit to build tile based games. 
+The games are written in JavaScript.
 It was made by Hack Club, a global community of teen coders who 
 believe people learn best by making things they care about 
 and sharing them with others.
@@ -121,7 +122,7 @@ Typically `w`, `a`, `s`, `d` are used as directional controls.
 Do something when the player presses a control:
 
 ```js
-onInput("a", () => {
+onInput("d", () => {
     // Move the player one tile to the right
     getFirst(player).x += 1
 })
