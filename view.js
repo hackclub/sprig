@@ -199,7 +199,7 @@ afterInput(() => {
 const menu = (state) => html`
   <div class="menu">
     <a class="sprig-logo-container" href="https://sprig.hackclub.com/">
-      <img src="spriglogotext-white.png" alt="sprig logo" class="sprig-logo" />
+      <img src="https://cloud-ah8ey4rmb-hack-club-bot.vercel.app/0spriglogotext-white.png" alt="sprig logo" class="sprig-logo" />
     </a>
     <div class="menu-item dropdown-container">
       ${state.stale ? 'file*' : 'file'}
