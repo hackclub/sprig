@@ -249,6 +249,7 @@ L11111111111111L
 LLLLLLLLLLLLLLLL` ]
 );
 
+// This will store the state of the game board
 // -2: flag, -1: bomb, 0: tile, 1: opened
 let board = [
   [0,0,0,0,0,0,0,0,0],
@@ -262,7 +263,8 @@ let board = [
   [0,0,0,0,0,0,0,0,0],
 ];
 
-// -1: bomb, 0: no number, >0: the number itself. 
+// This will store the values which the grids should display
+// -1: bomb, 0: no number, >0: the number itself
 let numbers = [
   [0,0,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,0,0],
@@ -275,23 +277,28 @@ let numbers = [
   [0,0,0,0,0,0,0,0,0],
 ];
 
+// Initial selection location; center
 let selectX = 4;
 let selectY = 4;
 
 let player;
 let gameover = false;
-let opened = 0;
+let opened = 0; // The amount of tiles opened
+let flags = 0; // The amount of flags placed
 
+// Place 10 random bombs
 for (let i = 0; i < 10; i++) {
   let randX = Math.floor(Math.random() * 9);
   let randY = Math.floor(Math.random() * 9);
   if (board[randY][randX] == 0) {
     board[randY][randX] = -1
   } else {
+    // If the space is already taken, another iteration.
     i--;
   };
 };
 
+// Compute the values and store them in "numbers"
 for (let x = 0; x < 9; x++) {
     for (let y = 0; y < 9; y++) {
       if (board[y][x] == -1) {
@@ -328,6 +335,7 @@ for (let x = 0; x < 9; x++) {
     };
 };
 
+// Draws the board to the screen
 function drawBoard() {
   for (let x = 0; x < 9; x++) {
     for (let y = 0; y < 9; y++) {
@@ -369,6 +377,7 @@ function drawBoard() {
   
 }
 
+// Open all neighbouring tiles, excluding flagged ones
 function openAround(x, y) {
   
   if (x > 0) {
@@ -453,8 +462,8 @@ function openAround(x, y) {
   };
 }
 
+// Open all connected empty tiles
 function flood(x, y) {
-  // directions. 0: up, -1: left, 1: right, -2: down
   if (board[y][x] == 0) {
     board[y][x] = 1;
     opened++;
@@ -485,6 +494,7 @@ function flood(x, y) {
   
 };
 
+// If you lost the game
 function lost() {
   gameover = true;
   for (let x = 0; x < 9; x++) {
@@ -506,6 +516,7 @@ function lost() {
 
 };
 
+// If you won
 function win() {
   gameover = true;  
   for (let x = 0; x < 9; x++) {
@@ -523,51 +534,53 @@ function win() {
   });
 };
 
-onInput("w", () => {
-  selectY--;
-});
+// Move controls
+onInput("w", () => {selectY--});
+onInput("a", () => {selectX--});
+onInput("s", () => {selectY++});
+onInput("d", () => {selectX++});
 
-onInput("a", () => {
-  selectX--;
-});
-
-onInput("s", () => {
-  selectY++;
-});
-
-onInput("d", () => {
-  selectX++;
-});
-
+// Open tile
 onInput("j", () => {
+  // Exclude flagged tiles
   if (board[selectY][selectX] == -2 ) { return };
   
   if (board[selectY][selectX] == -1) {
-    lost();
+    lost(); // You opened a mine
   } else if (numbers[selectY][selectX] == 0){
-    flood(selectX, selectY);
+    flood(selectX, selectY); // Open all connected empty tiles
   } else if (board[selectY][selectX] == 1) {
-    openAround(selectX, selectY);
+    openAround(selectX, selectY); // Open neighbouring if you click on a number
   } else {
     board[selectY][selectX] = 1;
     opened++;
   };
 
-  if (opened >= 71) {
+  if (opened >= 71 && flags >= 10) {
     win();
   };
   
   drawBoard();
 });
 
+// Flag a tile
 onInput("l", () => {
+  // Exclude opened tiles
   if (board[selectY][selectX] != 0 && board[selectY][selectX] != -1 && board[selectY][selectX] != -2 ) { return };
-  
+
+  // Toggle the flag
   if (board[selectY][selectX] == -2) {
     board[selectY][selectX] = 0;
+    flags--;
   } else {
     board[selectY][selectX] = -2;
+    flags++;
   };
+
+  if (opened >= 71 && flags >= 10) {
+    win();
+  };
+  
   drawBoard();
 });
 
