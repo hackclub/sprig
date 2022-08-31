@@ -105,7 +105,7 @@
       "title": "platform_rogue",
       "author": "farreltobias",
       "img": "",
-      "tags": ["roguelike", "advanced"]
+      "tags": ["advanced"]
   },
   {
       "title": "among_us_maze",
@@ -117,7 +117,7 @@
       "title": "256",
       "author": "Jacky Zhao",
       "img": "",
-      "tags": []
+      "tags": ["classic"]
   },
   {
       "title": "minesweeper",
