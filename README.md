@@ -11,7 +11,7 @@ The Hack Club Sprig is a game console where **every user is a creator**. It can 
 
 You should be able to get started in Sprig with very little experience in programming. Even if you're an expert, you should still be able to have fun. We hope you enjoy Sprig, and we can't wait to see what you make.
 
-**Sprig is a custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenaged hacker that successfully shares a game they create in our community gallery.
+**Sprig is a custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenage hacker that successfully shares a game they create in our community gallery.
 
 <p align="center">
 <a href="https://sprig.hackclub.com/gallery">
