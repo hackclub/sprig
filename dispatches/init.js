@@ -112,7 +112,8 @@ export async function init(args, state) {
   const mdRenderer = document.querySelector("markdown-renderer");
   mdRenderer.innerHTML = md;
 
-  const docsPerc = localStorage.getItem("docs-percentage") || "75%";
+  const DEFAULT_DOCS_PERCENTAGE = "0%";
+  const docsPerc = localStorage.getItem("docs-percentage") || DEFAULT_DOCS_PERCENTAGE;
   document.documentElement.style.setProperty("--docs-percentage", docsPerc);
   document.querySelector(".docs").classList.toggle("docs-expanded", docsPerc.trim() !== "0%");
 
