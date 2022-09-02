@@ -52,6 +52,7 @@ export function evalGameScript(script, canvas) {
   }
 
   try {
+    // script += `'use strict';\n\n${script}`
     const fn = new Function(...Object.keys(gameFunctions), script);
     fn(...Object.values(gameFunctions));
     return null;
