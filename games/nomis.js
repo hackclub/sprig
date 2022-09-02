@@ -449,25 +449,19 @@ setMap(maps.default);
 const colors = ["red", "blue", "yellow", "green"]
 
 const greenTune = tune`
-500,
 500: d5^500,
-15000`
+15500`
 const redTune = tune`
-500,
 500: c5^500,
-15000`
+15500`
 const blueTune = tune`
-500,
 500: b4^500,
-15000`
+15500`
 const yellowTune = tune`
-500,
 500: a4^500,
-15000`
+15500`
 
 const setColor = (val) => {
-  // Audio is apparently very laggy
-  /*
   switch (val) {
     case "red":
       playTune(redTune)
@@ -482,8 +476,7 @@ const setColor = (val) => {
       playTune(greenTune)
       break
   }
-  */
-    setMap(maps[val])
+  setMap(maps[val])
 }
 
 let sequence = []
