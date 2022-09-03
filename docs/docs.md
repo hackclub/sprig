@@ -130,7 +130,7 @@ onInput("d", () => {
 
 ### afterInput(callback)
 
-Runs after ever input event has finished being handled. Useful for tasks like checking win states:
+Runs after every input event has finished being handled. Useful for tasks like checking win states:
 
 ```js
 afterInput(() => {
