@@ -154,5 +154,11 @@
     "author": "Leonard (Omay)",
     "img": "",
     "tags": ["puzzle"]
+  },
+  {
+    "title": "tictactoe",
+    "author": "reesericci",
+    "img": "",
+    "tags": ["classic", "multiplayer"]
   }
 ]
