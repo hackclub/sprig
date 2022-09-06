@@ -39,7 +39,7 @@
       "title": "friendship",
       "author": "nicky case",
       "img": "",
-      "tags": ["beginner"]
+      "tags": ["beginner", "puzzle"]
   },
   {
       "title": "getting_started",
@@ -51,19 +51,19 @@
       "title": "laser_tag",
       "author": "leo mcelroy",
       "img": "",
-      "tags": ["hackable"]
+      "tags": ["hackable", "puzzle"]
   },
   {
       "title": "maze",
       "author": "leo mcelroy",
       "img": "",
-      "tags": ["beginner", "hackable"]
+      "tags": ["beginner", "hackable", "puzzle"]
   },
   {
       "title": "pyre",
       "author": "ced",
       "img": "",
-      "tags": []
+      "tags": ["puzzle"]
   },
   {
       "title": "raycasting",
@@ -75,7 +75,7 @@
       "title": "sokoban",
       "author": "leo mcelroy",
       "img": "",
-      "tags": ["beginner", "hackable"]
+      "tags": ["beginner", "hackable", "puzzle"]
   },
   {
       "title": "tolls",
@@ -99,7 +99,7 @@
       "title": "snakey_snake",
       "author": "Alexander Chin",
       "img": "",
-      "tags": ["WIP"]
+      "tags": ["WIP", "puzzle"]
   },
   {
       "title": "platform_rogue",
@@ -148,5 +148,11 @@
     "author": "gammacarrot",
     "img": "",
     "tags": ["classic"]
+  },
+  {
+    "title": "sokoban_plus",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["puzzle"]
   }
 ]
