@@ -122,24 +122,21 @@ onInput("s", () => {
     i.y += 1;
   }
 });
-
 onInput("d", () => {
   let players = getAll(player);
   for (let i of players) {
     i.x += 1;
   }
 });
-
 onInput("w", () => {
   let players = getAll(player);
   for (let i of players) {
     i.y -= 1;
   }
 });
-
 onInput("a", () => {
   let players = getAll(player);
-  for (let i of players) 
+  for (let i of players) {
     i.x -= 1;
   }
 });
