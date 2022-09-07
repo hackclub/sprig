@@ -21,9 +21,31 @@ export const view = (text) => html`
       justify-content: center;
       width: 100%;
       height: 100%;
+      background: #00000046;
+
+      flex-direction: column;
+      gap: 20px;
+      padding: 10px;
+      color: white;
+      align-items: flex-start;
     }
 
-    .mobile-view .game-canvas-container {
+    p {
+      margin: 0;
+    }
+      
+    button {
+      display: block;
+      background: black;
+      color: white;
+      font-size: inherit;
+      font-family: inherit;
+      padding: 6px 12px;
+      border: 0;
+      border-radius: 4px;
+    }
+
+    /*.mobile-view .game-canvas-container {
       width: 50%;
       aspect-ratio: calc(160/128);
       max-height: 100%;
@@ -100,10 +122,14 @@ export const view = (text) => html`
       position: absolute;
       top: calc(50% + 25px);
       right: calc(5% + 25px);;
-    }
-
+    }*/
   </style>
   <div class="mobile-view">
+    <p>The mobile experience isn't quite ready yet!</p>
+    <p>Try on your computer instead, or check out the landing page.</p>
+    <button>Learn about Sprig &raquo;</button>
+  </div>
+  ${/*<div class="mobile-view">
     <div class="wasd">
       <div class="mobile-button no-select input-button-w" @click=${() => dispatchKey("w")}>w</div>
       <div class="mobile-button no-select input-button-a" @click=${() => dispatchKey("a")}>a</div>
@@ -121,7 +147,7 @@ export const view = (text) => html`
       <div class="mobile-button no-select input-button-l" @click=${() => dispatchKey("l")}>l</div>
     </div>
   </div>
-  <div class="mobile-run" @click=${() => runGame(text)}>run</div>
+  <div class="mobile-run" @click=${() => runGame(text)}>run</div>*/null}
 `
 
 function runGame(text) {
