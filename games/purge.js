@@ -116,20 +116,32 @@ g.p`
 const currentLevel = levels[level];
 setMap(currentLevel);
 
-onInput("w", () => {
-  getFirst(player).y -= 1;
-});
-
 onInput("s", () => {
-  getFirst(player).y += 1;
-});
-
-onInput("a", () => {
-  getFirst(player).x -= 1;
+  let players = getAll(player);
+  for (let i of players) {
+    i.y += 1;
+  }
 });
 
 onInput("d", () => {
-  getFirst(player).x += 1;
+  let players = getAll(player);
+  for (let i of players) {
+    i.x += 1;
+  }
+});
+
+onInput("w", () => {
+  let players = getAll(player);
+  for (let i of players) {
+    i.y -= 1;
+  }
+});
+
+onInput("a", () => {
+  let players = getAll(player);
+  for (let i of players) 
+    i.x -= 1;
+  }
 });
 
 onInput("j", () => {
