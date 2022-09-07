@@ -113,7 +113,7 @@ setPushables({
 
 ## User Input
 
-Game Lab has eight inputs  `w`, `a`, `s`, `d`, `i`, `j`, `k`, `l`.
+Sprig has eight inputs  `w`, `a`, `s`, `d`, `i`, `j`, `k`, `l`.
 
 Typically `w`, `a`, `s`, `d` are used as directional controls.
 
