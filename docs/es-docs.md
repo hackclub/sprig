@@ -232,7 +232,7 @@ Borra todo el texto de la pantalla.
 
 ## Música y Efectos de Sonido
 
-¡Game Lab viene con un motor de sonido y un secuenciador integrados! Puede usar esto para escribir música de fondo o con un alto BPM para hacer efectos de sonido.
+¡Sprig viene con un motor de sonido y un secuenciador integrados! Puede usar esto para escribir música de fondo o con un alto BPM para hacer efectos de sonido.
 
 Puedes crear una melodía con la palabra clave `tune`.
 Como de costumbre, haz clic en el botón para abrir una ventana de edición.
