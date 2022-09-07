@@ -227,7 +227,7 @@ Clears all text on the screen.
 
 ## Music and Sound Effects
 
-Game Lab comes bundled with a built-in sound engine and sequencer! You can use this to write background music, or with a high BPM to make sound effects.
+Sprig comes bundled with a built-in sound engine and sequencer! You can use this to write background music, or with a high BPM to make sound effects.
 
 You can create a tune with the `tune` keyword. 
 As usual, click on the button to open an editor window.
