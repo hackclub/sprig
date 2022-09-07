@@ -45,6 +45,11 @@ export const view = (text) => html`
       border-radius: 4px;
     }
 
+    a {
+
+      text-decoration: none;
+    }
+
     /*.mobile-view .game-canvas-container {
       width: 50%;
       aspect-ratio: calc(160/128);
@@ -127,7 +132,7 @@ export const view = (text) => html`
   <div class="mobile-view">
     <p>The mobile experience isn't quite ready yet!</p>
     <p>Try on your computer instead, or check out the landing page.</p>
-    <button>Learn about Sprig &raquo;</button>
+    <a href='https://sprig.hackclub.com'><button>Learn about Sprig &raquo;</button></a>
   </div>
   ${/*<div class="mobile-view">
     <div class="wasd">
