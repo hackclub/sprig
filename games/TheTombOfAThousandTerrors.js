@@ -482,6 +482,7 @@ afterInput(() => {
   }
 
   if(tilesWith(player, door2).length && levelState.inventory.has(key1) && levelState.inventory.has(key2) ){
+    playTune(openedDoorTune);
     nextLevel();
   }  
 });
