@@ -161,11 +161,6 @@ onInput("d", () => {
   getFirst(imposter).x+= 1
 });
 
-onInput("j", () => {
-  level++;
-  setMap(levels[level]);
-  checkPosition()
-});
 
 const checkPosition = () => {
   
