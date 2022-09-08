@@ -1,6 +1,6 @@
 /*
 @title: You are the imposter...
-@author: Anonyomous 
+@author: Andy
 */
 
 const player = "p";
