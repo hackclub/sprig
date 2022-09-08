@@ -215,5 +215,12 @@
     "author": "noviicee",
     "img": "",
     "tags": ["puzzle"]
+  },
+  {
+    "filename": "pong",
+    "title": "pong",
+    "author": "neesh",
+    "img": "",
+    "tags": ["classic"]
   }
 ]
