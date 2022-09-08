@@ -4,34 +4,12 @@
 */
 
 const player = "p";
-const player_solo = "s";
 const water = "w";
 const ice = "i";
 const target = "t";
-
 const coin = "c";
 
 setLegend(
-  [
-    player_solo,
-    bitmap`
-................
-................
-................
-.....0000000....
-....022222220...
-....022222220...
-....022020220...
-....022262220...
-....022222220...
-...00222222200..
-....022222220...
-....022222220...
-.....0660660....
-................
-................
-................`,
-  ],
   [
     player,
     bitmap`
@@ -52,25 +30,6 @@ setLegend(
 5555555555555555
 5555555555555555`,
   ],
-  //   [wall, bitmap`
-  // LLLLLLLLLLLLLLLL
-  // L11L11L11L11L11L
-  // L11L11L11L11L11L
-  // LLLLLLLLLLLLLLLL
-  // L11L11L11L11L11L
-  // L11L11L11L11L11L
-  // LLLLLLLLLLLLLLLL
-  // L11L11L11L11L11L
-  // L11L11L11L11L11L
-  // LLLLLLLLLLLLLLLL
-  // L11L11L11L11L11L
-  // L11L11L11L11L11L
-  // LLLLLLLLLLLLLLLL
-  // L11L11L11L11L11L
-  // L11L11L11L11L11L
-  // LLLLLLLLLLLLLLLL`],
-
-  // bitmap is random 2 and 7
   [
     water,
     bitmap`
@@ -91,7 +50,6 @@ setLegend(
 5555555555555555
 5555555555555555`,
   ],
-
   [
     target,
     bitmap`
@@ -112,7 +70,6 @@ setLegend(
 5555555555555555
 5555555555555555`,
   ],
-
   [
     ice,
     bitmap`
@@ -156,11 +113,11 @@ setLegend(
 );
 
 setSolids([player, ice]);
-
 setBackground(water);
 
 let level = 0;
 const levelDimensions = [8, 8, 8, 8, 8];
+
 const levels = [
   map`
 p.......
@@ -198,7 +155,7 @@ c....ci.
 .ic..c..
 .....i..
 ........`,
-map`
+  map`
 p..i...i
 ...i....
 ........
@@ -239,17 +196,13 @@ const tunes = {
 113.20754716981132,
 113.20754716981132: c5-113.20754716981132,
 113.20754716981132: g4-113.20754716981132,
-3283.0188679245284`
+3283.0188679245284`,
 };
 
-setPushables({
-  [player]: [],
-});
-
-function goTo(x, y){
+function goTo(x, y) {
   const cur = getTile(x, y);
   if (cur.length && cur[0].type == ice) return false;
-  if (cur.length && cur[0].type == coin){
+  if (cur.length && cur[0].type == coin) {
     cur[0].remove();
     playTune(tunes.coin);
   }
@@ -260,25 +213,25 @@ function goTo(x, y){
 
 onInput("s", () => {
   while (getFirst(player).y + 1 < levelDimensions[level]) {
-    if(!goTo(getFirst(player).x, getFirst(player).y + 1)) break;
+    if (!goTo(getFirst(player).x, getFirst(player).y + 1)) break;
   }
 });
 
 onInput("w", () => {
   while (getFirst(player).y - 1 >= 0) {
-    if(!goTo(getFirst(player).x, getFirst(player).y - 1)) break;
+    if (!goTo(getFirst(player).x, getFirst(player).y - 1)) break;
   }
 });
 
 onInput("a", () => {
   while (getFirst(player).x - 1 >= 0) {
-    if(!goTo(getFirst(player).x - 1, getFirst(player).y)) break;
+    if (!goTo(getFirst(player).x - 1, getFirst(player).y)) break;
   }
 });
 
 onInput("d", () => {
   while (getFirst(player).x + 1 < levelDimensions[level]) {
-    if(!goTo(getFirst(player).x + 1, getFirst(player).y)) break;
+    if (!goTo(getFirst(player).x + 1, getFirst(player).y)) break;
   }
 });
 
@@ -288,24 +241,22 @@ onInput("j", () => {
   playTune(tunes.reset);
 });
 
-
 setMap(levels[level]);
 addText("Move penguin!", { y: 4, color: [255, 0, 0] });
 playTune(tunes.start);
 
 afterInput(() => {
+  clearText();
   const numberCovered = tilesWith(player, target).length;
   if (numberCovered === 1) {
     const coinsLeft = tilesWith(coin).length;
     if (coinsLeft !== 0) {
-      clearText();
       addText("There are", { y: 4, color: [255, 0, 0] });
       addText("still coins!", { y: 5, color: [255, 0, 0] });
       return;
     }
     // increase the current level number
     level = level + 1;
-    clearText();
 
     const currentLevel = levels[level];
 
@@ -317,19 +268,15 @@ afterInput(() => {
       addText("you win!", { y: 4, color: [255, 0, 0] });
       playTune(tunes.win);
     }
-  } else {
-    clearText();
   }
 
   if (level == 0) {
-    clearText();
     addText("Penguin slides", { y: 4, color: [255, 0, 0] });
     addText("until it", { y: 5, color: [255, 0, 0] });
     addText("reaches ice!", { y: 6, color: [255, 0, 0] });
   }
 
   if (level == 1) {
-    clearText();
     addText("To reset", { y: 4, color: [255, 0, 0] });
     addText("press j", { y: 5, color: [255, 0, 0] });
   }
