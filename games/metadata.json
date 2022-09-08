@@ -1,5 +1,33 @@
 [
   {
+    "filename": "sokoban",
+    "title": "sokoban",
+    "author": "leo mcelroy",
+    "img": "",
+    "tags": ["beginner", "hackable", "puzzle"]
+  },
+  {
+    "filename": "pong",
+    "title": "pong",
+    "author": "neesh",
+    "img": "",
+    "tags": ["classic"]
+  },
+  {
+    "filename": "penguin_slide",
+    "title": "penguin_slide",
+    "author": "veehz",
+    "img": "",
+    "tags": ["puzzle"]
+  },
+  {
+    "filename": "laser_tag",
+    "title": "laser_tag",
+    "author": "leo mcelroy",
+    "img": "",
+    "tags": ["hackable", "puzzle"]
+  },
+  {
     "filename": "15_puzzle",
     "title": "15_puzzle",
     "author": "maggie liu",
@@ -56,13 +84,6 @@
     "tags": ["beginner", "tutorial"]
   },
   {
-    "filename": "laser_tag",
-    "title": "laser_tag",
-    "author": "leo mcelroy",
-    "img": "",
-    "tags": ["hackable", "puzzle"]
-  },
-  {
     "filename": "maze",
     "title": "maze",
     "author": "leo mcelroy",
@@ -82,13 +103,6 @@
     "author": "henry bass",
     "img": "",
     "tags": ["advanced"]
-  },
-  {
-    "filename": "sokoban",
-    "title": "sokoban",
-    "author": "leo mcelroy",
-    "img": "",
-    "tags": ["beginner", "hackable", "puzzle"]
   },
   {
     "filename": "tolls",
@@ -213,20 +227,6 @@
     "filename": "purge",
     "title": "purge",
     "author": "noviicee",
-    "img": "",
-    "tags": ["puzzle"]
-  },
-  {
-    "filename": "pong",
-    "title": "pong",
-    "author": "neesh",
-    "img": "",
-    "tags": ["classic"]
-  },
-  {
-    "filename": "penguin_slide",
-    "title": "penguin_slide",
-    "author": "veehz",
     "img": "",
     "tags": ["puzzle"]
   }
