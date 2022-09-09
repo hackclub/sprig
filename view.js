@@ -232,7 +232,7 @@ const menu = (state) => html`
     </div>
 
     <a class="menu-item" href="https://sprig.hackclub.com/gallery">
-      explore gallery
+      gallery
     </a>
 
     <div class="menu-item" @click=${() => dispatch("UPLOAD")}>
