@@ -86,8 +86,12 @@ const lose = tune`
 166.66666666666666: c4-166.66666666666666,
 2333.333333333333`;
 
+var enemyVictories = 0
+var playerVictories = 0
 
 var gameFinished = false;
+
+showScore()
 
 addText("Press j to confirm", { y: 1, color: [255, 255, 255] });
 addText("Use w and s to move", { y: 3, color: [255, 255, 255] });
@@ -300,7 +304,22 @@ function restart() {
     addSprite(4, 3, wall);
     clearText()
     gameFinished = false;
+    showScore()
 }
+
+function showScore() {
+      addText("GAME" , {
+            x: 8,
+            y: 13,
+            color: [255, 255, 0]
+        });
+    addText(playerVictories + "  " + enemyVictories , {
+            x: 8,
+            y: 15,
+            color: [255, 255, 255]
+        });
+}
+  
 
 onInput("j", () => {
 
@@ -325,6 +344,8 @@ onInput("j", () => {
                 y: 1,
                 color: [255, 0, 0]
             });
+          
+            enemyVictories += 1
             playTune(lose)
 
         } else {
@@ -332,6 +353,8 @@ onInput("j", () => {
                 y: 1,
                 color: [0, 255, 0]
             });
+          
+            playerVictories += 1
             playTune(win)
         }
 
