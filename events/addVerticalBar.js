@@ -10,11 +10,11 @@ export function addVerticalBar(state, bodyListener) {
   bodyListener("mousemove", "", (e) => {
     if (!moveBar) return;
 
-    let x = (e.clientX / window.innerWidth) * 100;
+    let x = ((e.clientX - 30) / (window.innerWidth - 40)) * 100;
     if (x === 0) return;
 
-    const minX = 0;
-    const maxX = 100;
+    const minX = 2;
+    const maxX = 98;
 
     if (x < minX) x = minX;
     if (x > maxX) x = maxX;

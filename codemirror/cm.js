@@ -1,11 +1,8 @@
 import { EditorState, basicSetup } from "@codemirror/basic-setup";
-// import { EditorState, basicSetup } from "./basicSetup.js";
 import { EditorView, keymap } from "@codemirror/view";
-import { StateEffect } from "@codemirror/state";
 import { indentUnit, foldable, foldEffect } from "@codemirror/language";
 import { indentWithTab } from "@codemirror/commands";
 import { javascript } from "@codemirror/lang-javascript";
-// import booleanCheckbox from './booleanCheckbox.js';
 import editors from './editors.js';
 
 

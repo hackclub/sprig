@@ -30,4 +30,6 @@ export const global_state = {
   staleRun: true,
   newDocument: false, // Whether the editor contents was set to a new doc, to avoid lighting up the save button
   shareLinkState: 'idle', // idle, loading, copied
+  uploadState: 'idle', // idle, uploading, done
+  uploadLogs: ''
 }
