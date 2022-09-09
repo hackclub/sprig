@@ -1,28 +1,46 @@
 import { html } from "../libs/uhtml.js";
 import { evalGameScript } from "../engine/evalGameScript.js";
-import { global_state } from "../global_state.js";
 
 export const view = (text) => html`
   <style>
     .root {
       display: flex;
+      margin: 0;
+      overflow: hidden;
       position: absolute;
       left: 0;
       top: 0;
-      margin: 0;
+      transform-origin: left top;
       width: 100vw;
       height: 100vh;
-      overflow: hidden;
+    }
+
+    @media (orientation: portrait) {
+      .root {
+        transform: rotate(-90deg);
+        width: 100vh;
+        height: 100vw;
+        overflow-x: hidden;
+        top: 100%;
+        left: 0;
+      }
+    }
+
+    body {
+      margin: 0;
     }
 
     .mobile-view {
+      width: 100%;
+      height: 100%;
+    }
+
+    .message {
       display: flex;
-      align-items: center;
       justify-content: center;
       width: 100%;
       height: 100%;
       background: #00000046;
-
       flex-direction: column;
       gap: 20px;
       padding: 10px;
@@ -30,40 +48,50 @@ export const view = (text) => html`
       align-items: flex-start;
     }
 
+    .player {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+
     p {
       margin: 0;
+      max-width: 90%;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
     }
       
     button {
       display: block;
-      background: black;
+      background: transparent;
+      border: 2px solid #5e7251;
       color: white;
       font-size: inherit;
       font-family: inherit;
       padding: 6px 12px;
-      border: 0;
       border-radius: 4px;
     }
 
-    a {
+    button.black {
+      background: black;
+      color: white;
+      border-color: black;
+    }
 
+    a {
       text-decoration: none;
     }
 
-    /*.mobile-view .game-canvas-container {
+    .mobile-view .game-canvas-container {
       width: 50%;
       aspect-ratio: calc(160/128);
       max-height: 100%;
-    }
-
-    .mobile-run {
-      position: absolute;
-      background: var(--bg-floating);
-      color: white;
-      padding: 5px 10px 5px 10px;
-      border-radius: 5px;
-      bottom: 5px;
-      left: 5px;
     }
 
     .mobile-button {
@@ -127,36 +155,49 @@ export const view = (text) => html`
       position: absolute;
       top: calc(50% + 25px);
       right: calc(5% + 25px);;
-    }*/
+    }
+
+    .hidden {
+      display: none;
+    }
   </style>
   <div class="mobile-view">
-    <p>The mobile experience isn't quite ready yet!</p>
-    <p>Try on your computer instead, or check out the landing page.</p>
-    <a href='https://sprig.hackclub.com'><button>Learn about Sprig &raquo;</button></a>
+    <div class="message">
+      <p>The mobile editing experience isn't quite ready yet!</p>
+      <p>Switch to your computer, check out the landing page, or play this game on your phone.</p>
+
+      <div class="buttons">
+        <button class="black" @click=${() => {
+          document.querySelector(".message").classList.add("hidden");
+          document.querySelector(".player").classList.remove("hidden");
+          runGame(text);
+        }}>Play game</button>
+        <a href='https://sprig.hackclub.com'><button>Learn about Sprig &raquo;</button></a>
+      </div>
+    </div>
+
+    <div class="player hidden">
+      <div class="wasd">
+        <div class="mobile-button no-select input-button-w" @click=${() => dispatchKey("w")}>w</div>
+        <div class="mobile-button no-select input-button-a" @click=${() => dispatchKey("a")}>a</div>
+        <div class="mobile-button no-select input-button-s" @click=${() => dispatchKey("s")}>s</div>
+        <div class="mobile-button no-select input-button-d" @click=${() => dispatchKey("d")}>d</div>
+      </div>
+      <div class="game-canvas-container">
+        <canvas class="game-canvas"></canvas>
+        <canvas class="game-text"></canvas>
+      </div>
+      <div class="wasd">
+        <div class="mobile-button no-select input-button-i" @click=${() => dispatchKey("i")}>i</div>
+        <div class="mobile-button no-select input-button-j" @click=${() => dispatchKey("j")}>j</div>
+        <div class="mobile-button no-select input-button-k" @click=${() => dispatchKey("k")}>k</div>
+        <div class="mobile-button no-select input-button-l" @click=${() => dispatchKey("l")}>l</div>
+      </div>
+    </div>
   </div>
-  ${/*<div class="mobile-view">
-    <div class="wasd">
-      <div class="mobile-button no-select input-button-w" @click=${() => dispatchKey("w")}>w</div>
-      <div class="mobile-button no-select input-button-a" @click=${() => dispatchKey("a")}>a</div>
-      <div class="mobile-button no-select input-button-s" @click=${() => dispatchKey("s")}>s</div>
-      <div class="mobile-button no-select input-button-d" @click=${() => dispatchKey("d")}>d</div>
-    </div>
-    <div class="game-canvas-container">
-      <canvas class="game-canvas"></canvas>
-      <canvas class="game-text"></canvas>
-    </div>
-    <div class="wasd">
-      <div class="mobile-button no-select input-button-i" @click=${() => dispatchKey("i")}>i</div>
-      <div class="mobile-button no-select input-button-j" @click=${() => dispatchKey("j")}>j</div>
-      <div class="mobile-button no-select input-button-k" @click=${() => dispatchKey("k")}>k</div>
-      <div class="mobile-button no-select input-button-l" @click=${() => dispatchKey("l")}>l</div>
-    </div>
-  </div>
-  <div class="mobile-run" @click=${() => runGame(text)}>run</div>*/null}
 `
 
 function runGame(text) {
-
   // wiggle the canvas window
   const gameCanvas = document.querySelector(".game-canvas");
   const gameCanvasContainer = document.querySelector(".game-canvas-container");
