@@ -47,7 +47,7 @@ make a game
 &rarr; play Sprig games on it 
 &rarr; hack on the device for more projects
 
-*Only teenagers and younger can received Sprigs!* All are welcome to submit to the gallery though.
+***Only teenagers and younger can received Sprigs!*** All are welcome to submit to the gallery though.
 
 ## Philosophy
 
