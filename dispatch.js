@@ -6,11 +6,11 @@ import { init } from "./dispatches/init.js";
 import { logError } from "./dispatches/logError.js";
 import { setName } from "./dispatches/setName.js";
 import { saveToFile } from "./dispatches/export/saveToFile.js";
-// import "./dispatches/fetchAndBundle/fetchAndBundle.js";
 import { exportS3 } from "./s3.js";
 import { global_state } from "./global_state.js";
 import { saveGame } from "./saveGame.js"
 import { view as viewMobile } from "./mobile/view.js";
+import { strip } from 'ansicolor';
 
 function getURLPath(extension) {
   return (
@@ -29,6 +29,8 @@ const ACTIONS = {
     state.bitmaps = bitmaps;
   }, 
   UPLOAD(args, state) {
+    if (state.uploadState === "uploading") return;
+    state.uploadLogs = "";
     upload(state.codemirror.state.doc.toString());
   },
   SAVE(args, state) {
@@ -130,6 +132,19 @@ const ACTIONS = {
     document.querySelector(".docs").classList.toggle("docs-expanded");
 
     dispatch("RENDER");
+  },
+  SET_UPLOAD_STATE(args, state) {
+    state.uploadState = args;
+    dispatch("RENDER");
+  },
+  UPLOAD_LOG(args, state) {
+    args = strip(args);
+    console.log(args);
+    state.uploadLogs += state.uploadLogs ? '\n' + args : args;
+    dispatch("RENDER");
+
+    const container = document.querySelector(".logs-container");
+    container.scrollTo(0, container.scrollHeight);
   }
 }
 

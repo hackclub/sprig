@@ -32,6 +32,14 @@ export const view = (state) => html`
     <div class="vertical-bar"></div>
   </div>
 
+  ${state.uploadState !== 'idle' ? html`
+    <div class="logs-container">
+      <pre>${state.uploadLogs}${state.uploadState === "done" ? html`
+        <br><br><button @click=${() => dispatch("SET_UPLOAD_STATE", "idle")}>close logs</button>
+      ` : null}</pre>
+    </div>
+  ` : null}
+
   <div class=${["asset-editor-container", state.editor ? "" : "hide"].join(" ")}  @click=${(event) => {
     // Click on overlay or close button:
     for (const item of event.composedPath()) {
@@ -83,6 +91,7 @@ const drawFile = (file, i, state) => {
     state.newDocument = true;
     dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] });
     dispatch("RENDER");
+    window.localStorage.setItem("last-game", name);
   }
 
   const deleteFile = (e) => {
