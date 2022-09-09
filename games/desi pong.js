@@ -12,7 +12,7 @@ const background = "b"
 const playerSpeed = 4;
 let aiSpeed = 4;
 
-let aiMoving = true;
+//let aiMoving = true;
 
 const ball = "o";
 let ballDx = 0;
@@ -42,39 +42,39 @@ const loseSound = tune`
 
 setLegend(
   [ player1, bitmap`
-...222222.......
-...222222.......
-...222222.......
-...222222.......
-...222222.......
-...222222.......
-...222222.......
-...222222.......
-...222222.......
-...222222.......
-...222222.......
-...222222.......
-...222222.......
-...222222.......
-...222222.......
-...222222.......`],
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666`],
   [ player2, bitmap`
-.......222222...
-.......222222...
-.......222222...
-.......222222...
-.......222222...
-.......222222...
-.......222222...
-.......222222...
-.......222222...
-.......222222...
-.......222222...
-.......222222...
-.......222222...
-.......222222...
-.......222222...
-.......222222...`],
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444`],
   [ background, bitmap`
 LLLLLLLLLLLLLLLL
 LLLLLLLLLLLLLLLL
@@ -198,7 +198,7 @@ setPushables({
 
 addText(`${player1Score} - ${player2Score}`, {
   y: 1,
-  color: [ 255, 255, 255 ]
+  color: [ 255, 77, 255 ]
 });
 
 function dist(x1, y1, x2, y2) {
@@ -209,9 +209,9 @@ function dist(x1, y1, x2, y2) {
 
 function writeScore() {
   clearText()
-  addText(`${player1Score} - ${player2Score}`, {
+  addText(`P1-${player1Score} - ${player2Score}-P2`, {
     y: 1,
-    color: [ 255, 255, 255 ]
+    color: [ 255, 77, 255 ]
   });
 }
 
@@ -277,38 +277,3 @@ setInterval(() => {
     restart(sprite)
   } 
 }, 60)
-
-setInterval(() => {
-  const sprite = getFirst(ball);
-  const mapHeight = getState().dimensions.height;
-  const mapWidth = getState().dimensions.width;
-
-  if (ballDx < 0) {
-    aiSpeed = 1;
-  }
-  else {
-    aiSpeed = 2;
-  }
-
-  if (aiMoving) {
-    if ((Math.random() * 100) < 40) {
-      aiMoving = false;
-      setTimeout(() => {
-        aiMoving = true;
-      }, 40);
-    };
-  }
-  if (!aiMoving) return;
-
-  aiYValues = getAll(player2).map(e => e.y);
-  if (Math.min(...aiYValues) > sprite.y) {
-      getAll(player2).forEach(p => {
-        p.y -= 2;
-      })
-  }
-  else if (Math.max(...aiYValues) < sprite.y) {
-    getAll(player2).reverse().forEach((p, i) => {
-      p.y += 2;
-    })
-  }
-}, 10)
