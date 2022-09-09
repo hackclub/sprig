@@ -47,6 +47,8 @@ make a game
 &rarr; play Sprig games on it 
 &rarr; hack on the device for more projects
 
+*Only teenagers and younger can received Sprigs!* All are welcome to submit to the gallery though.
+
 ## Philosophy
 
 People learn best when they make things that they care about, which they can then share with others. This type of learning philosophy is called constructionism, and Sprig is a type of microworld. A microworld is an environment where you can discover programming by using it to express yourself. 
