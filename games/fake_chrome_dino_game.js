@@ -1,3 +1,7 @@
+/*
+@title: fake_chrome_dino_game
+@author: beanbeah
+*/
 const mod = (f, n) => ((f % n) + n) % n;
 const cubeBitMap = "d";
 const cube = () => getFirst("d");
