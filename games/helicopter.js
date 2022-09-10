@@ -8,7 +8,7 @@
 const player = "p";
 const obj1 = "8";
 const obj2 = "2";
-const prego = "o";
+const wall = "o";
 const final = "f";
 
 setLegend(
@@ -20,23 +20,23 @@ setLegend(
 .555555555555...
 .5...555555.....
 ......5..5......`],
-  [ prego, bitmap`
-.0..0......0....
-...0.........0..
-....0..0..0.....
-.0..............
-....0.0..0.0..0.
-0.0.............
-..0...0.0....0..
-..0..0..0.......
-..0.......00..0.
-0...0.0..0....0.
-0.0......0..0...
-................
-....0..0...0..0.
-.0..0...........
-...........0....
-........0.......`],
+  [ wall, bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777`],
   [ final, bitmap`
 ................
 ................
@@ -75,20 +75,20 @@ setLegend(
 let level = 0;
 const levels = [
   map`
-po.....
+poo..o.
 .o.2.8.
 ...o...
-..of...`,
+..of..o`,
   map`
-pof....
+pof...o
 .oooo..
 ..28...
 o......`,
   map`
-p.ofo.o
+p.ofo..
 ..o....
 ..ooo2.
-.....8.`,
+o....8.`,
 ];
 const currentLevel = levels[level];
 setMap(currentLevel);
@@ -120,9 +120,11 @@ onInput("j", () => {
   if (currentLevel !== undefined) setMap(currentLevel);
 });
 
-setSolids([prego, player, obj1, obj2 ]);
+setSolids([wall, player, obj1, obj2 ]);
 
 afterInput(() => {
+  
+
   const atual = tilesWith( player, final).length;
   const f2 = tilesWith(final).length;
    if (atual === f2) {
@@ -133,7 +135,10 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("You win!")
+      addText("You win!",{
+        y: 5,
+        color: [ 255, 0, 0 ] 
+      })
     }
   }
 });
