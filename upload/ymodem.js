@@ -99,6 +99,7 @@ export function transfer(serial, filename, buffer) {
 
     /* Send packet */
     function sendPacket() {
+      console.log('send packet!')
       if (seq < queue.length) {
         // make a packet (3 for packet header, YModem.PACKET_SIZE for payload, 2 for crc16)
         var packet = Buffer.alloc(3 + PACKET_SIZE + 2);
@@ -124,6 +125,7 @@ export function transfer(serial, filename, buffer) {
 
     /* Handler for data from Ymodem */
     function handler(data) {
+      console.log("ymodem", [...data]);
       for (var i = 0; i < data.byteLength; i++) {
         if (!finished) {
           var ch = data[i];
@@ -170,11 +172,20 @@ export function transfer(serial, filename, buffer) {
       }
     }
 
+    function disconnectHandler() {
+      session = false;
+      sending = false;
+      serial.removeListener("data", handler);
+      serial.removeListener("disconnect", disconnectHandler);
+      reject(new Error("Transfer aborted because device disconnected"))
+    }
+
     /* Finish transmittion */
     function close() {
       session = false;
       sending = false;
       serial.removeListener("data", handler);
+      serial.removeListener("disconnect", disconnectHandler);
       if (!finished) {
         const result = {
           filePath: filename,
@@ -200,5 +211,6 @@ export function transfer(serial, filename, buffer) {
     // Start to transfer
     session = true;
     serial.on("data", handler);
+    serial.on("disconnect", disconnectHandler)
   });
 }
