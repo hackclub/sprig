@@ -11,73 +11,73 @@ const border = "b";
 
 setLegend(
   [ player, bitmap`
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222`],
+................
+....22222222....
+...2222222222...
+..222222222222..
+.22222222222222.
+.22222222222222.
+.22222222222222.
+.22222222222222.
+.22222222222222.
+.22222222222222.
+.22222222222222.
+.22222222222222.
+..222222222222..
+...2222222222...
+....22222222....
+................`],
   [ body, bitmap`
-6666666666666666
-6666666666666666
-6666666666666666
-6666666666666666
-6666666666666666
-6666666666666666
-6666666666666666
-6666666666666666
-6666666666666666
-6666666666666666
-6666666666666666
-6666666666666666
-6666666666666666
-6666666666666666
-6666666666666666
-6666666666666666`],
+................
+....66666666....
+...6666666666...
+..666666666666..
+.66666666666666.
+.66666666666666.
+.66666666666666.
+.66666666666666.
+.66666666666666.
+.66666666666666.
+.66666666666666.
+.66666666666666.
+..666666666666..
+...6666666666...
+....66666666....
+................`],
   [ background, bitmap`
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111`],
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL`],
   [ food, bitmap`
-..4444.000......
-.4444440........
-44444..0........
-.44..330333.....
-....33333333....
-...3333333333...
+..444444........
+444444444333....
+4444444443333...
+..344444333333..
+.33333333333333.
+.33333333333333.
+.33333333333333.
+.33333333333333.
+.33333333333333.
+.33333333333333.
+.33333333333333.
+.33333333333333.
 ..333333333333..
-.33333333333333.
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-.33333333333333.
 ...3333333333...
-.....333333.....`],
+....33333333....
+................`],
   [ border, bitmap`
 0000000000000000
 0000000000000000
@@ -102,22 +102,25 @@ setBackground(background);
 let level = 0;
 const levels = [
   map`
-bbbbbbbbbbbbbbb
-...............
-....f..........
-...............
-...............
-...............
-.......p.......
-...............
-...............
-...............
-...............
-...............
-...............
-...............
-...............
-...............`,
+bbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbb
+b...............b
+b...............b
+b............f..b
+b...............b
+b...............b
+b...............b
+b...............b
+b.......p.......b
+b...............b
+b...............b
+b...............b
+b...............b
+b...............b
+b...............b
+b...............b
+bbbbbbbbbbbbbbbbb`,
 ];
 
 setMap(levels[level]);
@@ -129,41 +132,65 @@ setPushables({
 const lostMsg = () => {
   addText("LOST", { 
       x: 8, 
-      y: 7, 
+      y: 8, 
       color: [ 255, 0, 0 ]
   });
 }
 
 let score = 0;
+let snake = [{ xPos: getFirst(player).x, yPos: getFirst(player).y }];
+
 const showScore = () => {
   addText(`${score}`, { 
-      x: 3, 
-      y: 0, 
+      x: 4, 
+      y: 1, 
       color: [ 255, 255, 255 ]
   });
 }
 showScore();
 
 const foodPlacement = () => {
-  getFirst(food).x = Math.floor(Math.random()*14);
-  getFirst(food).y = Math.floor(Math.random()*15) + 1;
+  getFirst(food).x = Math.floor(Math.random()*15) + 1;
+  getFirst(food).y = Math.floor(Math.random()*15) + 3;
 }
-foodPlacement();
+
+const collision = () => {
+  for(let i=0;i<snake.length;i++){
+    if(getFirst(player).x === snake[i].xPos && getFirst(player).y === snake[i].yPos){
+      clearInterval(game);
+      lostMsg();
+      break;
+    }
+  }
+}
 
 const eatFood = () => {
-  if(getFirst(player).x === getFirst(food).x && getFirst(player).y === getFirst(food).y){
+  let xPosHead = getFirst(player).x;
+  let yPosHead = getFirst(player).y;
+  
+  if(xPosHead === getFirst(food).x && yPosHead === getFirst(food).y){
     score++;
-    // gainWeight();
-    showScore();
     foodPlacement();
+    showScore();
+  }else{
+    collision();
+    const tail = snake.pop(); 
+    for(let i=0;i<snake.length;i++){
+      if(snake[i].xPos === getFirst(food).x && snake[i].yPos === getFirst(food).y){
+        foodPlacement();
+      }
+    }
+    clearTile(tail.xPos, tail.yPos);
   }
+  snake.unshift({ xPos: xPosHead, yPos: yPosHead });
+  bodyMovement();
 }
 
 let keyPressed = "";
 
 const moveForward = () => {
   if(keyPressed === "a"){
-    if(getFirst(player).x === 0){
+    if(getFirst(player).x === 1){
         clearInterval(game);
         lostMsg();
         return;
@@ -172,7 +199,7 @@ const moveForward = () => {
     eatFood();
   }
   if(keyPressed === "d"){
-    if(getFirst(player).x === 14){
+    if(getFirst(player).x === 15){
       clearInterval(game);
       lostMsg();
       return;
@@ -181,7 +208,7 @@ const moveForward = () => {
     eatFood();
   }
   if(keyPressed === "w"){
-    if(getFirst(player).y === 1){
+    if(getFirst(player).y === 3){
       clearInterval(game);
       lostMsg();
       return;
@@ -190,7 +217,7 @@ const moveForward = () => {
     eatFood();
   }
   if(keyPressed === "s"){
-    if(getFirst(player).y === 15){
+    if(getFirst(player).y === 17){
       clearInterval(game);
       lostMsg();
       return;
@@ -200,17 +227,15 @@ const moveForward = () => {
   }
 }
 
-// const gainWeight = () => {
-//   if(keyPressed === "d"){
-//     const xPos = getFirst(player).x;
-//     const yPos = getFirst(player).y;
-//     console.log(xPos+" ",yPos);
-
-//     getFirst(body).x = 0;
-//     getFirst(body).y = 0;
-    
-//   }
-// }
+const bodyMovement = () => {
+  for(let i=0;i<snake.length;i++){
+    let xPos = snake[i].xPos;
+    let yPos = snake[i].yPos;
+    if(i != 0){
+      addSprite(xPos, yPos, body);
+    }
+  }
+}
 
 onInput("a", () => {
   if(keyPressed !== "d"){
@@ -236,10 +261,4 @@ onInput("s", () => {
   }
 });
 
-
-
-let game = setInterval(moveForward, 100);
-
-afterInput(() => {
-  
-});
+let game = setInterval(moveForward, 130);
