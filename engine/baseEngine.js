@@ -268,6 +268,7 @@ export function baseEngine() {
     getAll: (type) => type ? state.sprites.filter(t => t.type === type) : state.sprites, // **
     width: () => state.dimensions.width,
     height: () => state.dimensions.height,
+    storage: localStorage
   };
 
   return { api, state };
