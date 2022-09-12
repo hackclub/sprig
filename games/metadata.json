@@ -256,7 +256,7 @@
     "title": "seven_ate_nine_(789)",
     "author": "blobbybilb",
     "img": "",
-    "tags": []
+    "tags": ["multiplayer"]
   },
   {
     "filename": "mandelbrot",
@@ -270,6 +270,6 @@
     "title": "tetris",
     "author": "neesh",
     "img": "",
-    "tags": []
+    "tags": ["classic"]
   }
 ]
