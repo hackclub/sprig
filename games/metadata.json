@@ -107,7 +107,7 @@
   {
     "filename": "raycasting",
     "title": "raycasting",
-    "author": "henry bass",
+    "author": "HenryBass",
     "img": "",
     "tags": ["advanced"]
   },
@@ -253,8 +253,15 @@
   },
   {
     "filename": "seven_ate_nine_(789)",
-    "title": "seven_ate_nine_(789).js",
+    "title": "seven_ate_nine_(789)",
     "author": "blobbybilb",
+    "img": "",
+    "tags": []
+  },
+  {
+    "filename": "mandelbrot",
+    "title": "mandelbrot",
+    "author": "HenryBass",
     "img": "",
     "tags": []
   }
