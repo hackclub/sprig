@@ -1,15 +1,11 @@
 /*
 @title: Mandelbrot
 @author: Henry
-
 Instructions:
-
 Explore the Mandelbrot set!
-
 Use W, A, S, D to move around
 Use I, K to zoom
 Use J, L to enhance (Useful to decrease res when zoomed in, to load faster)
-
 */
 
 
@@ -29,6 +25,8 @@ let res = 32 * 1.25
 let max = res
 let xoff = 0
 let yoff = 0
+
+let maxiter = 64
 
 let resfac = 1.25
 let movefac = 0.2
@@ -182,7 +180,7 @@ function mand(x, y, j, k) {
   let n = 0
   let z = new Comp(i, j)
   //let z = new Comp(x, y)
-  while (z.abs() <= 2 && n < max) {
+  while (z.abs() <= 2 && n < (Math.log2(max) * 32)) {
     z = c.add(z.sqr())
     n += 1
   }
@@ -192,7 +190,8 @@ function mand(x, y, j, k) {
 
 
 function render(i, j) {
-screen = ``
+var screen = ``
+
 for (let x = 0; x < res; x++) {
   for (let y = 0; y < res; y++) {
     n = mand(((y / max) * 2) - 1.35 - xoff, ((x / max) * 2) - 1 - yoff, i, j)
@@ -214,8 +213,16 @@ for (let x = 0; x < res; x++) {
 
   }
   screen += "\n"
+
 }
   setMap(screen);
+  clearText()
+  addText("Zoom: 2^" + Math.log2(1 / (res/max)), { 
+    x: 2, 
+    y: 0, 
+    color: [ 0, 50, 50 ]
+})
+
 }
 render(i, j)
 
