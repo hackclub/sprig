@@ -74,10 +74,14 @@ export const style = `
     padding: 15px;
   }
 
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    flex-wrap: wrap;
+  }
+
   .sprite-button {
-    --cols: 5;
-    width: calc((var(--editor-sidebar-width) - 30px - var(--cols) * 10px) / var(--cols));
-    display: inline-block;
+    display: block;
     background: var(--bg-surface);
     border: none;
     aspect-ratio: 1 / 1;
@@ -89,10 +93,5 @@ export const style = `
 
   .sprite-button.active {
     box-shadow: inset 0 0 0 6px var(--pcb-trace-lighter);
-  }
-
-  .tiles {
-    display: flex;
-    flex-wrap: wrap;
   }
 `
