@@ -15,6 +15,7 @@
     "@codemirror/search": "^6.0.1",
     "@codemirror/state": "^0.20.0",
     "@codemirror/view": "^0.20.6",
+    "ansicolor": "^1.1.100",
     "buffer": "^6.0.3",
     "codemirror": "^6.0.0",
     "crc": "^4.1.0",
