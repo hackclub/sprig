@@ -68,6 +68,7 @@ export const style = `
   }
 
   .tools {
+    overflow-y: auto;
     width: var(--editor-sidebar-width);
     background: var(--bg-floating);
     padding: 15px;
