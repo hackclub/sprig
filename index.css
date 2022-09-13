@@ -339,6 +339,7 @@ body {
 }
 
 .asset-editor-content {
+  overflow: hidden;
   flex: 1;
   width: 100%;
 }
