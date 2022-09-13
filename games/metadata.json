@@ -271,5 +271,12 @@
     "author": "neesh",
     "img": "",
     "tags": ["classic"]
+  },
+  {
+    "filename": "simple_maze",
+    "title": "simple_maze",
+    "author": "Itamar Davidyan",
+    "img": "",
+    "tags": []
   }
 ]
