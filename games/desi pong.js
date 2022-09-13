@@ -1,5 +1,5 @@
 /*
-@title: Desi Pong
+@title: Desi-Pong
 @author: Arnob Das
 */
 
@@ -8,11 +8,9 @@ const player2 = "2";
 let player1Score = 0;
 let player2Score = 0;
 const background = "b"
-
-const playerSpeed = 4;
-let aiSpeed = 4;
-
-//let aiMoving = true;
+let i;
+let isPaused = false;
+const playerSpeed = 5;
 
 const ball = "o";
 let ballDx = 0;
@@ -159,7 +157,7 @@ const levels = [
 ...........................................................
 ...........................................................
 ...........................................................
-...........................................................`,
+...........................................................`
 ];
 
 
@@ -190,13 +188,33 @@ onInput("k", () => {
   })
 });
 
+onInput("j", () => {
+  isPaused = false;
+});
+
+onInput("l", () => {
+  isPaused = true;
+});
+
+onInput("d", () => {
+  player1Score=0
+  player2Score=0
+  ballDx = 0;
+  ballDy = 0;
+  setTimeout(() => {
+    ballDx = Math.random() < 0.5 ? -1 : 1;
+    ballDy = Math.random() < 0.5 ? -2 : 2;
+  }, 1000);
+  console.log("Game Restarted");
+});
+
 setPushables({
   [player1]: [player1],
   [player2]: [player2]
 })
 
 
-addText(`${player1Score} - ${player2Score}`, {
+addText(`P1- ${player1Score} - ${player2Score} -P2`, {
   y: 1,
   color: [ 255, 77, 255 ]
 });
@@ -209,7 +227,7 @@ function dist(x1, y1, x2, y2) {
 
 function writeScore() {
   clearText()
-  addText(`P1-${player1Score} - ${player2Score}-P2`, {
+  addText(`P1- ${player1Score} - ${player2Score} -P2`, {
     y: 1,
     color: [ 255, 77, 255 ]
   });
@@ -229,6 +247,7 @@ function restart(sprite) {
   }, 1000);
 }
 
+
 function makeSound() {
   if (soundOne) {
     playTune(hitSound1);
@@ -239,7 +258,8 @@ function makeSound() {
   soundOne = !soundOne
 }
 
-setInterval(() => {
+
+function control(){
   const sprite = getFirst(ball);
   sprite.x += ballDx;
   sprite.y += ballDy;
@@ -275,5 +295,36 @@ setInterval(() => {
     player2Score += 1;
     playTune(loseSound);
     restart(sprite)
-  } 
+  }
+}
+
+i=setInterval(() => {
+  if(!isPaused) {
+    control(); 
+  }
 }, 60)
+
+let scoreCheck = 3;
+
+// stop game when player1 or player2 score is equal or greater that 10.
+setInterval(()=>{
+  if(player1Score>=scoreCheck || player2Score>=scoreCheck){
+      addText("Game Over !!!", {
+        y: 7,
+        color: [ 255, 77, 255 ]
+      });
+      clearInterval(i);
+  }
+  if(player1Score>=scoreCheck){
+    addText("Player 1 is win !", {
+        y: 5,
+        color: [ 255, 77, 255 ]
+      });
+  }
+  if(player2Score>=scoreCheck){
+    addText("Player 2 is win !", {
+        y: 5,
+        color: [ 255, 77, 255 ]
+      });
+  }
+},0)
