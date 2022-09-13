@@ -43,6 +43,7 @@ export function evalGameScript(script, canvas) {
     const tune = textToTune(text);
     const x = playTune(tune, n);
     tunes.push(x);
+    return x;
   };
 
   try {
