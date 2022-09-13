@@ -107,7 +107,7 @@
   {
     "filename": "raycasting",
     "title": "raycasting",
-    "author": "henry bass",
+    "author": "HenryBass",
     "img": "",
     "tags": ["advanced"]
   },
@@ -249,7 +249,7 @@
     "title": "Virtual_Machine",
     "author": "N_Rizwan",
     "img": "",
-    "tags": [""]
+    "tags": []
   },
   {
     "filename": "Rock_Paper_Scissors",
@@ -257,5 +257,54 @@
     "author": "ezefranca",
     "img": "",
     "tags": ["classic"]
+  },
+  {
+    "filename": "seven_ate_nine_(789)",
+    "title": "seven_ate_nine_(789)",
+    "author": "blobbybilb",
+    "img": "",
+    "tags": ["multiplayer"]
+  },
+  {
+    "filename": "mandelbrot",
+    "title": "mandelbrot",
+    "author": "HenryBass",
+    "img": "",
+    "tags": []
+  },
+  {
+    "filename": "tetris",
+    "title": "tetris",
+    "author": "neesh",
+    "img": "",
+    "tags": ["classic"]
+  },
+  {
+    "filename": "simple_maze",
+    "title": "simple_maze",
+    "author": "Itamar Davidyan",
+    "img": "",
+    "tags": []
+  },
+  {
+    "filename": "killpigs",
+    "title": "killpigs",
+    "author": "luiç",
+    "img": "",
+    "tags": []
+  },
+  {
+    "filename": "TheTombOfAThousandTerrors",
+    "title": "TheTombOfAThousandTerrors",
+    "author": "Fabian",
+    "img": "",
+    "tags": []
+  },
+  {
+    "filename": "reversi",
+    "title": "reversi",
+    "author": "veehj",
+    "img": "",
+    "tags": ["classic", "multiplayer"]
   }
 ]
