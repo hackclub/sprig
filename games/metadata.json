@@ -292,5 +292,12 @@
     "author": "Fabian",
     "img": "",
     "tags": []
+  },
+  {
+    "filename": "reversi",
+    "title": "reversi",
+    "author": "veehj",
+    "img": "",
+    "tags": ["classic", "multiplayer"]
   }
 ]
