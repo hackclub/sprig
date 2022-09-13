@@ -1,220 +1,141 @@
 /*
-@title: Maze
-@author: Itamar Davidyan
+@title: maze_game
+@author: leo mcelroy
+
+Instructions:
+
+Cover all the tiles.
 */
 
-
 const player = "p";
-const goal = "g";
-const wallU = "U";
-const wallD = "D";
-const wallL = "L";
-const wallR = "R";
+const red = "r";
+const wall = "w";
 
 setLegend(
   [ player, bitmap`
 ................
 ................
-..000000000000..
-..0..........0..
-..0..........0..
-..0..33..33..0..
-..0..33..33..0..
-..0..........0..
-..0..0....0..0..
-..0...0000...0..
-...0........0...
-....0......0....
+................
+................
 .....000000.....
-................
-................
-................`],
-  [ goal, bitmap`
-................
-................
-..3..........3..
-...3........3...
-....3......3....
-.....3....3.....
-......3..3......
-.......33.......
-.......33.......
-......3..3......
-.....3....3.....
-....3......3....
-...3........3...
-..3..........3..
-................
-................`],
-  [ wallU, bitmap`
-LLLLLLLLLLLLLLLL
+....00....00....
+....0..0.0.0....
+....00.....0....
+.....0....0.....
+.....000000.....
+......0..00.....
+.....00...0.....
+.....0..........
 ................
 ................
 ................
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................`],
-  [ wallD, bitmap`
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................
-LLLLLLLLLLLLLLLL`],
-  [ wallL, bitmap`
-L...............
-L...............
-L...............
-L...............
-L...............
-L...............
-L...............
-L...............
-L...............
-L...............
-L...............
-L...............
-L...............
-L...............
-L...............
-L...............`],
-  [ wallR, bitmap`
-...............L
-...............L
-...............L
-...............L
-...............L
-...............L
-...............L
-...............L
-...............L
-...............L
-...............L
-...............L
-...............L
-...............L
-...............L
-...............L`],
-);
+ `],
+  [ red, bitmap`
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+ `],
+  [ wall, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+ `]
+)
+
+setSolids([player, red, wall])
 
 let level = 0;
+
 const levels = [
   map`
-.DDg
-...U
-UUU.
-pUUU`,
+p...
+..w.
+..w.`,
   map`
-DDD..
-.DDDL
-.DgL.
-ULU.L
-pUUU.`
-];
+p..w....
+...w....
+..wwww..
+........
+........
+..wwww..
+..ww....
+..ww....
+`,
+  map`
+..w..
+p....
+.w...
+..ww.
+..ww.
+.....
+..www`,
+]
 
-const currentLevel = levels[level];
-setMap(currentLevel);
 
-setSolids([ player ]);
+setMap(levels[level])
+const p = getFirst(player);
+addSprite(p.x - p.dx, p.y - p.dy, red)
 
-// START - PLAYER MOVEMENT CONTROLS
+onInput("w", _ => {
+  getFirst(player).y -= 1;
+})
 
-onInput("s", () => {
-  const currentPlayer = getFirst(player);
-  const { x, y } = currentPlayer;
+onInput("s", _ => {
+  getFirst(player).y += 1;
+})
 
-  const playerTileSprites = getTile(x, y);
-  if (playerTileSprites.some(({ _type }) => _type === wallD)) return;
+onInput("a", _ => {
+  getFirst(player).x -= 1;
+})
+
+onInput("d", _ => {
+  getFirst(player).x += 1;
+})
+
+onInput("j", _ => {
+  setMap(levels[level]);
+  const p = getFirst(player);
+  addSprite(p.x, p.y, red)
   
-  const belowTileSprites = getTile(x, y+1);
-  if (belowTileSprites.some(({ _type }) => _type === wallU)) return;
-  
-  currentPlayer.y += 1;
-});
+})
 
-onInput("d", () => {
-  const currentPlayer = getFirst(player);
-  const { x, y } = currentPlayer;
-
-  const playerTileSprites = getTile(x, y);
-  if (playerTileSprites.some(({ _type }) => _type === wallR)) return;
-  
-  const rightTileSprites = getTile(x+1, y);
-  if (rightTileSprites.some(({ _type }) => _type === wallL)) return;
-  
-  currentPlayer.x += 1;
-});
-
-onInput("a", () => {
-  const currentPlayer = getFirst(player);
-  const { x, y } = currentPlayer;
-
-  const playerTileSprites = getTile(x, y);
-  if (playerTileSprites.some(({ _type }) => _type === wallL)) return;
-  
-  const leftTileSprites = getTile(x-1, y);
-  if (leftTileSprites.some(({ _type }) => _type === wallR)) return;
-  
-  currentPlayer.x -= 1;
-});
-
-onInput("w", () => {
-  const currentPlayer = getFirst(player);
-  const { x, y } = currentPlayer;
-
-  const playerTileSprites = getTile(x, y);
-  if (playerTileSprites.some(({ _type }) => _type === wallU)) return;
-  
-  const aboveTileSprites = getTile(x, y-1);
-  if (aboveTileSprites.some(({ _type }) => _type === wallD)) return;
-  
-  currentPlayer.y -= 1;
-});
-
-// END - PLAYER MOVEMENT CONTROLS
-
-onInput("j", () => {
-  const currentLevel = levels[level];
-  if (currentLevel !== undefined) {
-    clearText("");
-    setMap(currentLevel);
+afterInput(_ => {
+  const p = getFirst(player);
+  if (p.dy !== 0 || p.dx !==0) {
+    addSprite(p.x, p.y, red)
   }
-});
 
-afterInput(() => {
-  // count the number of tiles with goals and boxes
-  const numberOfPlayersArrivedTarget = tilesWith(goal, player).length;
-
-  if (numberOfPlayersArrivedTarget === 1) {
-    // increase the current level number
-    level = level + 1;
-
-    const currentLevel = levels[level];
-
-    // make sure the level exists and if so set the map
-    if (currentLevel !== undefined) {
-      setMap(currentLevel);
-    } else {
-      addText("you win!", { y: 4, color: [255, 0, 0] });
-    }
+  if (getAll(red).length === width() * height() - getAll(wall).length) {
+    level++;
+    if (level in levels) setMap(levels[level])
+    else addText("you win", { y: 5, color: [0, 0, 255]})
+    const p = getFirst(player);
+    addSprite(p.x, p.y, red)
   }
-});
+})
