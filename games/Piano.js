@@ -149,11 +149,6 @@ setPushables({
 // FUNCTIONS
 
 function playSound(x) {
-  addText(`${song}`, {
-  y: 10,
-  color: [ 255, 255, 255 ]
-  });
-
   if (x == 0) {
     playTune(c);
   } else if (x == 1) {
