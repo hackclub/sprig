@@ -137,6 +137,14 @@ const lostMsg = () => {
   });
 }
 
+const congratulation = () => {
+  addText("CONGRATS !!", { 
+      x: 5, 
+      y: 8, 
+      color: [ 255, 0, 0 ]
+  });
+}
+
 let score = 0;
 let snake = [{ xPos: getFirst(player).x, yPos: getFirst(player).y }];
 
@@ -150,9 +158,22 @@ const showScore = () => {
 showScore();
 
 const foodPlacement = () => {
-  getFirst(food).x = Math.floor(Math.random()*15) + 1;
-  getFirst(food).y = Math.floor(Math.random()*15) + 3;
+  for(let i=0;i<snake.length;i++){
+    if(snake[i].xPos === getFirst(food).x && snake[i].yPos === getFirst(food).y){
+      getFirst(food).x = Math.floor(Math.random()*15) + 1;
+      getFirst(food).y = Math.floor(Math.random()*15) + 3;
+    }
+  }
 }
+
+const eatFoodMelody = tune`
+82.64462809917356,
+82.64462809917356: b5~82.64462809917356,
+2479.3388429752067`;
+const collisionMelody = tune`
+500,
+500: d5-500,
+15000`;
 
 const collision = () => {
   for(let i=0;i<snake.length;i++){
@@ -167,19 +188,19 @@ const collision = () => {
 const eatFood = () => {
   let xPosHead = getFirst(player).x;
   let yPosHead = getFirst(player).y;
-  
   if(xPosHead === getFirst(food).x && yPosHead === getFirst(food).y){
     score++;
+    if(score === 150){
+      clearInterval(game);
+      congratulation();
+    }
+    playTune(eatFoodMelody);
     foodPlacement();
     showScore();
   }else{
     collision();
     const tail = snake.pop(); 
-    for(let i=0;i<snake.length;i++){
-      if(snake[i].xPos === getFirst(food).x && snake[i].yPos === getFirst(food).y){
-        foodPlacement();
-      }
-    }
+    foodPlacement();
     clearTile(tail.xPos, tail.yPos);
   }
   snake.unshift({ xPos: xPosHead, yPos: yPosHead });
@@ -191,9 +212,9 @@ let keyPressed = "";
 const moveForward = () => {
   if(keyPressed === "a"){
     if(getFirst(player).x === 1){
-        clearInterval(game);
-        lostMsg();
-        return;
+      clearInterval(game);
+      lostMsg();
+      return;
     }
     getFirst(player).x -= 1;
     eatFood();
@@ -261,4 +282,4 @@ onInput("s", () => {
   }
 });
 
-let game = setInterval(moveForward, 130);
+let game = setInterval(moveForward, 120);
