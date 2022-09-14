@@ -88,7 +88,7 @@ let numFallingPieceRows, numFallingPieceCols;
 let fallingPieceRow, fallingPieceCol;
 
 function newFallingPiece() {
-  randomIndex = Math.floor(Math.random() * pieces.length);
+  let randomIndex = Math.floor(Math.random() * pieces.length);
   fallingPiece = pieces[randomIndex]
   fallingPieceColor = colors[randomIndex]
 
@@ -99,14 +99,14 @@ function newFallingPiece() {
 }
 
 function placeFallingPiece() {
-  fp = fallingPiece;
+  let fp = fallingPiece;
   for (let r = 0; r < fp.length; r ++) {
     const row = fp[r]
     for (let c = 0; c < fp[r].length; c++) {
       const col = fp[r][c];
       if (col) {
-        boardRow = fallingPieceRow + r;
-        boardCol = fallingPieceCol + c;
+        let boardRow = fallingPieceRow + r;
+        let boardCol = fallingPieceCol + c;
         board[boardRow][boardCol] = fallingPieceColor
       }
     }
@@ -132,10 +132,10 @@ function rotateFallingPiece() {
   const oldPiece = fallingPiece;
   const oldRow = fallingPieceRow;
   const oldCol = fallingPieceCol;
-  rotated = generateEmpty2DList(oldCols, oldRows)
+  let rotated = generateEmpty2DList(oldCols, oldRows)
 
-  newRows = oldCols
-  newCols = oldRows
+  let newRows = oldCols
+  let newCols = oldRows
 
   for (let c = 0; c < oldCols; c ++) {
     for (let r = 0; r < oldRows; r ++) {
@@ -151,8 +151,8 @@ function rotateFallingPiece() {
   numFallingPieceCols = newCols;
   fallingPiece = rotated;
 
-  newRow = oldRow + Math.floor(oldRows / 2) - Math.floor(newRows / 2)
-  newCol = oldCol + Math.floor(oldCols / 2) - Math.floor(newCols / 2)
+  let newRow = oldRow + Math.floor(oldRows / 2) - Math.floor(newRows / 2)
+  let newCol = oldCol + Math.floor(oldCols / 2) - Math.floor(newCols / 2)
 
   fallingPieceRow = newRow
   fallingPieceCol = newCol;
