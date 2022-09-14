@@ -11,6 +11,7 @@ const player = "p";
 const left = "l";
 const right = "r";
 
+let ptile;
 
 setLegend(
   [ player, bitmap`
