@@ -38,7 +38,7 @@ export function logError({ type, err }, state) {
 }
 
 export function highlightError(state) {
-  const line = state.errorInfo?.line - 1;
+  const line = state.errorInfo?.line;
   const cmLines = document.querySelectorAll(".cm-lineNumbers > .cm-gutterElement");
   for (let i = 0; i < cmLines.length; i++) {
     const cmLine = cmLines[i];
