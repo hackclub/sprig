@@ -10,7 +10,7 @@ export function logError({ type, err }, state) {
 
     if (location) {
       let lineCol = location[1].split(":").map(Number);
-      line = lineCol[0] - 2;
+      line = lineCol[0] - 2 - 1;
       col = lineCol[1];
     }
 
@@ -38,7 +38,7 @@ export function logError({ type, err }, state) {
 }
 
 export function highlightError(state) {
-  const line = state.errorInfo?.line;
+  const line = state.errorInfo?.line - 1;
   const cmLines = document.querySelectorAll(".cm-lineNumbers > .cm-gutterElement");
   for (let i = 0; i < cmLines.length; i++) {
     const cmLine = cmLines[i];
