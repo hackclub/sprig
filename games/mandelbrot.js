@@ -8,6 +8,7 @@ Use I, K to zoom
 Use J, L to enhance (Useful to decrease res when zoomed in, to load faster)
 */
 
+let n;
 
 const a = "0";
 const b = "1";
