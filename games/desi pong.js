@@ -304,7 +304,7 @@ i=setInterval(() => {
   }
 }, 60)
 
-let scoreCheck = 3;
+let scoreCheck = 10;
 
 // stop game when player1 or player2 score is equal or greater that 10.
 setInterval(()=>{
