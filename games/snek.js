@@ -197,14 +197,14 @@ const die = () => {
 
 const render = () => {
   // Remove all pre-existing sprites
-  sprites = getAll();
-  for (sprite of sprites) {
+  const sprites = getAll();
+  for (const sprite of sprites) {
     if (sprite.type !== background && sprite.type !== fruit) {
       sprite.remove();
     }
   }
 
-  for (num of path) {
+  for (const num of path) {
     addSprite(num % 8, Math.floor(num / 8), body);
   }
   addSprite(path[0] % 8, Math.floor(path[0] / 8), dir);
