@@ -26,9 +26,10 @@ export function logError({ type, err }, state) {
 
   } else if (type === "parse") {
     const { description, lineNumber, column } = err;
+    const line = lineNumber - 1;
 
-    const msg = `${description} on line ${lineNumber} in column ${column}.\nOpen the browser console for more information.`;
-    state.errorInfo = { line: lineNumber };
+    const msg = `${description} on line ${line} in column ${column}.\nOpen the browser console for more information.`;
+    state.errorInfo = { line };
     state.logs = [...state.logs, msg];
   }
 
