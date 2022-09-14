@@ -3,9 +3,10 @@
 - Create list of game ideas
 - Storage abstraction layer for games
 - Better editor folding
-- switch to dark version on hype page
+- Switch to dark version on hype page
 - Have sprig sprout grow as you scroll
-- Change main menu color
+- Redesign main menu
+  - adjust colors? 
 - Adjust color palette
 - Color map imported sprites
 - Add whitenoise waveform
