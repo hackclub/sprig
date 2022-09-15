@@ -624,7 +624,7 @@ LLLLLLLLLLLLLLLL
 0000000000000000
 0000000000000000`],
 );
-let level = 24;
+let level = 0;
 const levels = [
   map`
 pc.a`,
