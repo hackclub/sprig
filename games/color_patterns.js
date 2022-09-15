@@ -139,12 +139,14 @@ r.b.b
 b.b.b
 r.rbb`,
 ]
-
+let ptile;
 onInput("j", _ => {
+  ptile = getFirst(player);
     colorTile(ptile.x, ptile.y).type = blue;
 });
 
 onInput("l", _ => {
+  ptile = getFirst(player);
     colorTile(ptile.x, ptile.y).type = red;
 });
 
@@ -174,9 +176,9 @@ const checkResult = () => {
     const r = results[level];
     for(let y=0;y<5;y++){
       for(let x=0;x<5;x++){
-          res = r.charAt(y*6+x+1);
+          let res = r.charAt(y*6+x+1);
           if('rb'.indexOf(res)==-1) continue;
-          t = colorTile(x,y).type;
+          let t = colorTile(x,y).type;
           if(t!=res) return false; 
       }
     }

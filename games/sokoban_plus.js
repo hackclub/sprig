@@ -865,45 +865,40 @@ function everyMove() {
   for (i of trailsa) {
     i.type = trailb;
   }
-  playTune(playerstep);
-}
-onInput("s", () => {
-  let players = getAll(player);
-  everyMove();
-  for (let i of players) {
+  for(let i of getAll(player)){
     if(trails){
       addSprite(i.x, i.y, traila);
     }
+  }
+  playTune(playerstep);
+}
+let players;
+let i;
+onInput("s", () => {
+  players = getAll(player);
+  everyMove();
+  for (i of players) {
     i.y += 1;
   }
 });
 onInput("d", () => {
-  let players = getAll(player);
+  players = getAll(player);
   everyMove();
-  for (let i of players) {
-    if(trails){
-      addSprite(i.x, i.y, traila);
-    }
+  for (i of players) {
     i.x += 1;
   }
 });
 onInput("w", () => {
-  let players = getAll(player);
+  players = getAll(player);
   everyMove();
-  for (let i of players) {
-    if(trails){
-      addSprite(i.x, i.y, traila);
-    }
+  for (i of players) {
     i.y -= 1;
   }
 });
 onInput("a", () => {
-  let players = getAll(player);
+  players = getAll(player);
   everyMove();
-  for (let i of players) {
-    if(trails){
-      addSprite(i.x, i.y, traila);
-    }
+  for (i of players) {
     i.x -= 1;
   }
 });
@@ -928,19 +923,14 @@ onInput("k", () => {
   trails = !trails;
 });
 afterInput(() => {
-  // count the number of tiles with goals
   const targetNumber = tilesWith(goala).length + tilesWith(goalb).length + tilesWith(goaln).length;
-  // count the number of tiles with goals and boxes
   const numberCovered = tilesWith(goala, boxa).length + tilesWith(goalb, boxb).length + tilesWith(goala, boxn).length + tilesWith(goalb, boxn).length + tilesWith(goaln, boxa).length + tilesWith(goaln, boxb).length + tilesWith(goaln, boxn).length;
   if (numberCovered === targetNumber) {
-    // increase the current level number
     level = level + 1;
     const currentLevel = levels[level];
     playTune(cont);
-    // make sure the level exists and if so set the map
-    if (currentLevel !== undefined) {
-      setMap(currentLevel);
-    } else {
+    setMap(currentLevel);
+    if (level === levels.length-1) {
       addText("You win!", {
         y: 4,
         color: [0, 255, 0]

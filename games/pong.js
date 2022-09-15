@@ -277,7 +277,7 @@ setInterval(() => {
     restart(sprite)
   } 
 }, 60)
-
+let aiYValues;
 setInterval(() => {
   const sprite = getFirst(ball);
   const mapHeight = getState().dimensions.height;
