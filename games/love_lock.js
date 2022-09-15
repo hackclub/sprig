@@ -827,18 +827,19 @@ setMap(levels[level]);
 onInput("j", () => {
   clearText();
   unlock=0
-  setMap(levels[0]);
+  setMap(levels[level]);
 });
 //=====CONTROLS======
 onInput("l", () => {
   clearText();
   unlock=0
+  setMap(levels[level]);
   addText(`-LOVE LOCK-`, {y:1, color: [255, 0, 0 ] });
   addText(`Movements `, {y:3, color: [255, 0, 0 ] });
   addText(`W, A, S, D`, {y:4, color: [0, 255, 0 ] });
   addText(`Other Controls`, {y:6, color: [255, 0, 0 ] });
   addText(`I, J, K, L`, {y:7, color: [0, 255, 255 ] });
-  setMap(levels[0]);
+  
 });
 //=====MUSIC======
 onInput("k", () => {
