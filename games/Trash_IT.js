@@ -746,7 +746,7 @@ const skulls = tilesWith(skull).length;
   const target = tilesWith(skull, player).length;
   if (skulls === target) 
   {
-    tr = level = 0;
+    let tr = level = 0;
     const ds = levels[tr];
   if (ds !== undefined) 
   {

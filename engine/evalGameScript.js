@@ -9,6 +9,7 @@ let intervals = [];
 let timeouts = [];
 
 export function evalGameScript(script, canvas) {
+  script = `"use strict"\n${script}`;
 
   // remove event listeners
   const newCanvas = canvas.cloneNode(true);
@@ -43,6 +44,7 @@ export function evalGameScript(script, canvas) {
     const tune = textToTune(text);
     const x = playTune(tune, n);
     tunes.push(x);
+    return x;
   };
 
   try {

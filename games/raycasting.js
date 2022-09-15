@@ -33,6 +33,8 @@ const screenSize = 48
 var range = 10
 var mapSize = 8
 
+let angle, dist, hit;
+
 var screen = ``
 
 var map =

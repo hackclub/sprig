@@ -107,7 +107,7 @@
   {
     "filename": "raycasting",
     "title": "raycasting",
-    "author": "henry bass",
+    "author": "HenryBass",
     "img": "",
     "tags": ["advanced"]
   },
@@ -248,6 +248,118 @@
     "filename": "Virtual_Machine",
     "title": "Virtual_Machine",
     "author": "N_Rizwan",
+    "img": "",
+    "tags": []
+  },
+  {
+    "filename": "coding_demo_1_linked_sprites",
+    "title": "coding_demo_1_linked_sprites",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["demo", "hackable"]
+  },
+  {
+    "filename": "coding_demo_2_multiple_maps",
+    "title": "coding_demo_2_multiple_maps",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["demo", "hackable"]
+  },
+  {
+    "filename": "Rock_Paper_Scissors",
+    "title": "Rock_Paper_Scissors",
+    "author": "ezefranca",
+    "img": "",
+    "tags": ["classic"]
+  },
+  {
+    "filename": "seven_ate_nine_(789)",
+    "title": "seven_ate_nine_(789)",
+    "author": "blobbybilb",
+    "img": "",
+    "tags": ["multiplayer"]
+  },
+  {
+    "filename": "mandelbrot",
+    "title": "mandelbrot",
+    "author": "HenryBass",
+    "img": "",
+    "tags": []
+  },
+  {
+    "filename": "tetris",
+    "title": "tetris",
+    "author": "neesh",
+    "img": "",
+    "tags": ["classic"]
+  },
+  {
+    "filename": "simple_maze",
+    "title": "simple_maze",
+    "author": "Itamar Davidyan",
+    "img": "",
+    "tags": []
+  },
+  {
+    "filename": "killpigs",
+    "title": "killpigs",
+    "author": "luiç",
+    "img": "",
+    "tags": []
+  },
+  {
+    "filename": "TheTombOfAThousandTerrors",
+    "title": "TheTombOfAThousandTerrors",
+    "author": "Fabian",
+    "img": "",
+    "tags": []
+  },
+  {
+    "filename": "reversi",
+    "title": "reversi",
+    "author": "veehj",
+    "img": "",
+    "tags": ["classic", "multiplayer"]
+  },
+  {
+    "filename": "Flurffy",
+    "title": "Flurffy",
+    "author": "LucasHT22",
+    "img": "",
+    "tags": []
+  },
+  {
+    "filename": "snake_game",
+    "title": "snake_game",
+    "author": "souvikpal2000",
+    "img": "",
+    "tags": []
+  },
+  {
+    "filename": "Piano",
+    "title": "Piano",
+    "author": "Scott",
+    "img": "",
+    "tags": []
+  },
+  {
+    "filename": "desi-pong",
+    "title": "desi-pong",
+    "author": "Arnob Das",
+    "img": "",
+    "tags": []
+  },
+  {
+    "filename": "Trash_IT",
+    "title": "Trash_IT",
+    "author": "N Rizwan",
+    "img": "",
+    "tags": []
+  },
+  {
+    "filename": "Paint_IT",
+    "title": "Paint_IT",
+    "author": "N Rizwan",
     "img": "",
     "tags": []
   }

@@ -194,15 +194,14 @@ const previousLevel = () => {
 }
 
 const setLevel = (n) => {
-  setMap(levels[n].trim() + '\n.....');
+  setMap(levels[n]);
   addSprite(1,0,player);
-  ptile = getFirst(player);
 }
 
 
-onInput("w", _ => {ptile.y -= 1;})
-onInput("s", _ => {ptile.y += 1;})
-onInput("a", _ => {ptile.x -= 1;})
-onInput("d", _ => {ptile.x += 1;})
+onInput("w", _ => {getFirst(player).y -= 1;})
+onInput("s", _ => {getFirst(player).y += 1;})
+onInput("a", _ => {getFirst(player).x -= 1;})
+onInput("d", _ => {getFirst(player).x += 1;})
 
 setLevel(0)
