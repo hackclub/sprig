@@ -157,23 +157,30 @@ const showScore = () => {
 }
 showScore();
 
-const foodPlacement = () => {
-  for(let i=0;i<snake.length;i++){
-    if(snake[i].xPos === getFirst(food).x && snake[i].yPos === getFirst(food).y){
-      getFirst(food).x = Math.floor(Math.random()*15) + 1;
-      getFirst(food).y = Math.floor(Math.random()*15) + 3;
+const checkFoodPlacement = () => {
+  let found = 1;
+  while(found === 1){
+    getFirst(food).x = Math.floor(Math.random()*15) + 1;
+    getFirst(food).y = Math.floor(Math.random()*15) + 3;
+    found = 0;
+    for(let i=0;i<snake.length;i++){
+      if(snake[i].xPos === getFirst(food).x && snake[i].yPos === getFirst(food).y){
+        found = 1;
+        break;
+      }
     }
-  }
+    if(found === 0){
+      break;
+    }
+  } 
 }
 
 const eatFoodMelody = tune`
-82.64462809917356,
 82.64462809917356: b5~82.64462809917356,
-2479.3388429752067`;
+2561.9834710743803`;
 const collisionMelody = tune`
-500,
 500: d5-500,
-15000`;
+15500`;
 
 const collision = () => {
   for(let i=0;i<snake.length;i++){
@@ -189,21 +196,21 @@ const eatFood = () => {
   let xPosHead = getFirst(player).x;
   let yPosHead = getFirst(player).y;
   if(xPosHead === getFirst(food).x && yPosHead === getFirst(food).y){
+    playTune(eatFoodMelody);
     score++;
     if(score === 150){
       clearInterval(game);
       congratulation();
-    }
-    playTune(eatFoodMelody);
-    foodPlacement();
+    }  
     showScore();
+    snake.unshift({ xPos: xPosHead, yPos: yPosHead });
+    checkFoodPlacement();
   }else{
     collision();
-    const tail = snake.pop(); 
-    foodPlacement();
+    const tail = snake.pop();
     clearTile(tail.xPos, tail.yPos);
+    snake.unshift({ xPos: xPosHead, yPos: yPosHead });
   }
-  snake.unshift({ xPos: xPosHead, yPos: yPosHead });
   bodyMovement();
 }
 
