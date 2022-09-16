@@ -3,6 +3,22 @@
 @author: Nathan Pease
 */
 
+/*
+CONTROLS:
+  Game Nav:
+    W - move up
+    S - move down
+    A - move left
+    D - move right
+    J - restart level
+  Menu Nav:
+    I - navegate menu up
+    K - navegate menu down
+    J - navegate menu left
+    L - navegate menu right
+    S - select option
+*/
+
 // Sprites
 const player = "p";
 const bluePortal = "b";
