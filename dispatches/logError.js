@@ -1,9 +1,21 @@
 import { dispatch } from "../dispatch.js";
 
 export function logError({ type, err }, state) {
-  console.error(err);
+  console.log("logError", type, err);
 
-  if (type === "page" || type === "runtime") {
+  if (type === "page") {
+    let line = err.lineno - 3;
+    let col = err.colno;
+
+    const msg =
+      line && col
+        ? `${err.message} on line ${line} in column ${col}.\nOpen the browser console for more information.`
+        : err.message;
+
+    state.errorInfo = { line };
+    state.logs = [...state.logs, msg];
+  }
+  else if (type === "runtime") {
     let line = null;
     let col = null;
     let location = err.stack.match(/<anonymous>:(.+)\)/);

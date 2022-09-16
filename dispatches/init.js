@@ -58,11 +58,11 @@ export async function init(args, state) {
     set(await fetch(link).then(x => x.text()));
   }
 
-  window.addEventListener("error", (e) => {
+  window.addEventListener("error", (err) => {
     // this is a hack to cut down on this chrome bug: https://support.google.com/chrome/thread/165732696/typing-in-console-triggers-error?hl=en
-    if (e.message.includes("Uncaught EvalError")) return;
+    if (err.message.includes("Uncaught EvalError")) return;
 
-    console.error("caught error:", e);
+    dispatch("LOG_ERROR", { type: "page", err });
   });
 
   const file = getParam("file");

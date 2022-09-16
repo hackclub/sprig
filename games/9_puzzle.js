@@ -103,7 +103,10 @@ bbb
 bb.`,
 ]
 
+let ptile;
+
 onInput("k", _ => {
+  ptile = getFirst(player);
   if(isHole(ptile.x,ptile.y+1)) moveTileTo(ptile.x,ptile.y+1);
   else if(isHole(ptile.x,ptile.y-1)) moveTileTo(ptile.x,ptile.y-1);
   else if(isHole(ptile.x-1,ptile.y)) moveTileTo(ptile.x-1,ptile.y);
