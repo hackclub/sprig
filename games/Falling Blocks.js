@@ -111,8 +111,10 @@ const obstacleUpdate = setInterval(() => {
     }
   }
   for(let i = 0; i < toRemove.length; ++i) {
-    clearTile(obstacles[toRemove[i]][0], obstacles[toRemove[i]][1]);
-    obstacles.splice(toRemove[i], 1);
+    if(!(getFirst(player).x == obstacles[toRemove[i]][0] && getFirst(player).y == obstacles[toRemove[i]][1])) {
+        clearTile(obstacles[toRemove[i]][0], obstacles[toRemove[i]][1]);
+        obstacles.splice(toRemove[i], 1);
+    }
   }
   clearText();
   addText(`Lives: ${lives}`)
