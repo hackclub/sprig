@@ -13,6 +13,7 @@ const obstacle = "o";
 let gameOver = false;
 
 let lives = 3;
+let timer = 0;
 
 setLegend(
   [ player, bitmap`
@@ -117,13 +118,16 @@ const obstacleUpdate = setInterval(() => {
     }
   }
   clearText();
-  addText(`Lives: ${lives}`)
+  addText(`Lives: ${lives}`);
   if(lives == 0) {
     clearInterval(obstacleUpdate);
     clearInterval(obstacleSpawn);
-    addText("Game Over");
+    addText("Game Over", { x : 5, y : 0});
+    addText(`Score: ${timer}`, { x : 5, y : 1});
+    
     gameOver = true;
   }
+  timer++;
 }, updateRate);
 
 
