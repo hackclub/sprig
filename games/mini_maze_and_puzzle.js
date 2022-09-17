@@ -299,7 +299,7 @@ setLegend(
   ...objects
 );
 
-let level = 5;
+let level = 0;
 const levels = [
   map`
 aaaaaaaaaaaaaad
@@ -554,7 +554,7 @@ const checkDoorArrived = () => {
     setTimeout(() => {
   
       clearText();
-    }, 700);
+    }, 500);
     
   }
   
@@ -633,8 +633,12 @@ afterInput(() => {
     clearTile(barrierX, barrierY);
     button_status="pressed";
   } else {
-    addSprite(uBarrierX, uBarrierY, barrier);
-    button_status="unpressed";
+    const currentLevelCheck = levels[level];
+    if(currentLevelCheck == levels[5]){
+      console.log("test")
+      addSprite(uBarrierX, uBarrierY, barrier);
+      button_status="unpressed";
+    }
   }
 
   if(playerArrivedFake)
