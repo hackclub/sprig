@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>Spaceship Landing</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+        <script src="collision.js"></script>
+    </head>
+    <body>
+        <img class="spaceship" src="spaceship.png">
+        <img class="platform" src="platform.png">
+        <img class="ocean" src="wave.png">
+        <audio src="engine.mp3" autoplay></audio>
+        <script>
+            function checkKey(event){
+                var keyPressed = event.originalEvent.code;
+                if(keyPressed == 'ArrowRight'){
+                    var rightCSS = {
+                        'left': '+=20px'
+                    }
+                    $(".spaceship").css(rightCSS);
+                }
+                if (keyPressed == 'ArrowLeft'){
+                    var leftCSS = {
+                        'left': '-=20px'
+                    }
+                    $(".spaceship").css(leftCSS);
+                }
+            }
+
+            $(document).keydown(checkKey);
+
+            function platformCollision(){
+                var collided = collision($('.spaceship'), $('.platform'));
+                if(collided){
+                    $('body').html("Spaceship landed succesfully");
+                }
+            }
+            
+            setInterval(platformCollision, 50);
+            
+            function waterCollision(){
+                var collided = collision($('.spaceship'), $('.water'));
+                if(collided){
+                    $('body').html("Spaceship has crashed");
+                }
+            }
+            
+            setInterval(waterCollision, 50);
+        </script>
+    </body>
+</html>

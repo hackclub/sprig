@@ -1,0 +1,59 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+html, body{
+    width: 100%;
+    height: 100%;
+    background-image:url('ocean.png');
+    background-size: cover;
+    background-repeat: repeat-x;
+    background-position: bottom;
+    overflow: hidden;
+    font-family:'Pacifico', cursive;
+    text-align: center;
+    font-size: 72px;
+    color: darkblue;
+}
+
+.platform{
+    position: absolute;
+    bottom: 100px;
+    width: 250px;
+    animation-name: horizontal;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.spaceship{
+    position: absolute;
+    width: 100px;
+    bottom: 65px;
+    animation-name: vertical;
+    animation-duration: 15s;
+    animation-iteration-count: 1;
+}
+
+.ocean{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}
+
+@keyframes horizontal{
+    from{
+        left:800px;
+    }to{
+        left: 400px;
+    }
+}
+
+@keyframes vertical{
+    from{
+        bottom:1000px;
+    }to{
+        bottom:65px;
+    }
+}
