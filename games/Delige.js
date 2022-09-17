@@ -214,7 +214,7 @@ afterInput(() => {
       setMap(currentLevel);
     } else {
       addText("You are a winner. Keep hacking!", { y: 5, color: [233, 116, 81] });
+      const playback = playTune(melody, Infinity);
     }
-    const playback = playTune(melody, Infinity)
   }
 });
