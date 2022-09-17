@@ -96,34 +96,36 @@ const obstacleUpdate = setInterval(() => {
   }
   let toRemove = [];
     
-  for(let i = 0; i < obstacles.length; ++i) {
-    if(obstacles[i][1] >= 11) {
-      toRemove.push(i);
-    }
-  }
   
   for(let i = 0; i < obstacles.length; ++i) {
     let playerPos = getFirst(player);
     let playerX = playerPos.x;
     let playerY = playerPos.y;
-    if(obstacles[i][0] == playerX && obstacles[i][1] == playerY - 1) {
+    if(obstacles[i][0] == playerX && obstacles[i][1] >= playerY - 1) {
       lives -= 1;
       toRemove.push(i);
     }
   }
-  for(let i = 0; i < toRemove.length; ++i) {
-    if(obstacles[i][0] != getFirst(player).x && obstacles[i][1] != getFirst(player.y)) {
-      getTile(...obstacles[toRemove[i]]).y = 11;
-      setTimeout(() => {
-        clearTile(obstacles[toRemove[i]][0], obstacles[toRemove[i]][1]);
-        obstacles.splice(toRemove[i], 1);
-      }, 100);
+  for(let i = 0; i < obstacles.length; ++i) {
+    if(obstacles[i][1] == 11) {
+      toRemove.push(i);
     }
+  }
+  for(let i = 0; i < toRemove.length; ++i) {
+    getTile(...obstacles[toRemove[i]]).forEach(item => {
+      if(item != null && item.type != "p") {
+        item.y = 11;
+        setTimeout(() => {
+          item.remove();
+          obstacles.splice(toRemove[i], 1);
+        }, 100);
+      }
+    });
   }
 
   clearText();
   addText(`Lives: ${lives}`);
-  if(lives == 0) {
+  if(lives <= 0) {
     clearInterval(obstacleUpdate);
     clearInterval(obstacleSpawn);
     addText("Game Over", { x : 5, y : 0});
@@ -148,4 +150,3 @@ onInput("d", () => {
     getFirst(player).x += 1;
   }
 });
-
