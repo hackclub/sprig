@@ -24,130 +24,138 @@ const lava = "l";
 const goal = "g";
 const fake_goal = "f";
 const wall = "w";
+const barrier = "r";
 const medium = "m";
 const box = "b";
 const decoration = "d";
 const background = "a";
+const button = "n";
 
 const killables = [lava,trap];
 
+let button_status = "unpressed";
+let status = "play";
 let jumps = 0;
+let uBarrierY = 0;
+let uBarrierX = 0;
+let barrierY = 0;
+let barrierX = 0;
 
 const playerDead = [
   player,
   bitmap`
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLL00L0LL0LLLLL
-LLLLL000000LLLLL
-LL44000000044LLL
-LLL4003333040LLL
-LLL0000000000LLL
-LLL0LLLLLLLL0LLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL`,
+................
+................
+................
+................
+................
+................
+................
+....00.0..0.....
+.....000000.....
+..44000000044...
+...4003333040...
+...0000000000...
+...0........0...
+................
+................
+................`,
 ];
 
 const playerAlive = [
   player,
   bitmap`
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLL44LLL44LLLLL
-LLLL0400040LLLLL
-LLLL0000000LLLLL
-LLLL0033330LLLLL
-LLLL40000004LLLL
-LLLL40000004LLLL
-LLLL40000004LLLL
-LLLL0000000LLLLL
-LLLL0000000LLLLL
-LLLL0LLLLL0LLLLL
-LLLL0LLLLL0LLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL`,
+................
+................
+................
+....44...44.....
+....0400040.....
+....0000000.....
+....0033330.....
+....40000004....
+....40000004....
+....40000004....
+....0000000.....
+....0000000.....
+....0.....0.....
+....0.....0.....
+................
+................`,
 ];
 
 const playerAliveLeft = [
   player,
   bitmap`
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLL44LLL44LLLLL
-LLLL0400040LLLLL
-LLLL0000000LLLLL
-LLLL0333300LLLLL
-LLL40000004LLLLL
-LLL40000004LLLLL
-LLL40000004LLLLL
-LLLL0000000LLLLL
-LLLL0000000LLLLL
-LLLL0LLLLL0LLLLL
-LLLL0LLLLL0LLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL`,
+................
+................
+................
+....44...44.....
+....0400040.....
+....0000000.....
+....0333300.....
+...40000004.....
+...40000004.....
+...40000004.....
+....0000000.....
+....0000000.....
+....0.....0.....
+....0.....0.....
+................
+................`,
 ];
 
 const objects = [
   [ trap, bitmap`
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-L44LLLLLLLL444LL
-LL448888844488LL
-LLL4LLL444L4444L
-LLL84444444LL8LL
-LLL8LLLL8L4L444L
-LLL8444L84L4L844
-L4448888848848LL
-L4L8LL4L4LLL44LL
-L4L8LL4L4LLLL4LL
-LLL8LLL444LLL44L
-LLL8LLL48L44L84L
-LLL44448888448LL
-444LLLLLLLLL4LLL
-LLLLLLLLLLLLLLLL`],
+2222222222222222
+2222222222222222
+2442222222244422
+2244888884448822
+2224222444244442
+2228444444422822
+2228222282424442
+2228444284242844
+2444888884884822
+2428224242224422
+2428224242222422
+2228222444222442
+2228222482442842
+2224444888844822
+4442222222224222
+2222222222222222`],
   [ goal, bitmap`
-LLLLLLLLLLLLLLLL
-LL644444444444LL
-LL644444444444LL
-LL64444LLL4444LL
-LL6444LLLLL444LL
-LL644LLLLLLL44LL
-LL644LLLLLLL44LL
-LL644LLLLLLL44LL
-LL644LLLLLLL44LL
-LL6444LLLLL444LL
-LL6444LLLLL444LL
-LL644444444444LL
-LL644444444444LL
-LL666666666666LL
-LL666666666666LL
-LLLLLLLLLLLLLLLL`],
+2222222222222222
+2264444444444422
+2264444444444422
+2264444222444422
+2264442222244422
+2264422222224422
+2264422222224422
+2264422222224422
+2264422222224422
+2264442222244422
+2264442222244422
+2264444444444422
+2264444444444422
+2266666666666622
+2266666666666622
+2222222222222222`],
   [ fake_goal, bitmap`
-LLLLLLLLLLLLLLLL
-LL644444444444LL
-LL644444444444LL
-LL64444LLL4444LL
-LL644LLLLLLL44LL
-LL644LLLLLLL44LL
-LL644LLLLLLL44LL
-LL644LLLLLLL44LL
-LL644LLLLLLL44LL
-LL644LLLLLLL44LL
-LL6444LLLLL444LL
-LL644444444444LL
-LL644444444444LL
-LL666666666666LL
-LL666666666666LL
-LLLLLLLLLLLLLLLL`],
+2222222222222222
+2264444444444422
+2264444444444422
+2264444222444422
+2264422222224422
+2264422222224422
+2264422222224422
+2264422222224422
+2264422222224422
+2264422222224422
+2264442222244422
+2264444444444422
+2264444444444422
+2266666666666622
+2266666666666622
+2222222222222222`],
   [ wall, bitmap`
 1111111111111111
 1LLLLLLLLLLLLLL1
@@ -183,73 +191,107 @@ LLLLL111111LLLLL
 3333333333333333
 3333333333333333`],
   [ box, bitmap`
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LL555555555555LL
-LL555555555555LL
-LL577775555555LL
-LL577775555555LL
-LL577775577775LL
-LL555555577775LL
-LL555555577775LL
-LL555555555555LL
-LL555555555555LL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL`],
+2222222222222222
+2222222222222222
+2222222222222222
+2255555555555522
+2255555555555522
+2257777555555522
+2257777555555522
+2257777557777522
+2255555557777522
+2255555557777522
+2255555555555522
+2255555555555522
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222`],
   [ medium, bitmap`
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-000666666666666L
-00L6LLLLLLLLL06L
-00L6LLLLLLLLL06L
-00L6LLLLLLLLL06L
-00L6LLLLLLLLL06L
-0LL6LLLLLLLLL06L
-0LL6LLLLLLLLL06L
-0LL6LLLLLLLLL06L
-00L6LLLLLLLLL06L
-00L6LLLLLLLLL06L
-00L6LLLLLLLLL06L
-00L6LLLLLLLLL06L
-000666666666666L
+2222222222222222
+2222222222222222
+0006666666666662
+0026222222222062
+0026222222222062
+0026222222222062
+0026222222222062
+0226222222222062
+0226222222222062
+0226222222222062
+0026222222222062
+0026222222222062
+0026222222222062
+0026222222222062
+0006666666666662
+2222222222222222`],
+  [ button, bitmap`
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+...3333333333...
+..LLLLLLLLLLLL..`],
+  [ barrier, bitmap`
+LLLL333333333LLL
+LLLL111111111LLL
+LLLL111000011LLL
+LLLL111000011LLL
+LLLL111000011LLL
+LLLL111000011LLL
+LLLL111000011LLL
+LLLL111000011LLL
+LLLL111000011LLL
+LLLL111000011LLL
+LLLL111111111LLL
+LLLL111111111LLL
+LLLL111111111LLL
+LLLL111111111LLL
+LLLL333333333LLL
 LLLLLLLLLLLLLLLL`],
   [ decoration, bitmap`
-LLLLL6LLLLLLLLLL
-L44446LLLLLLLLLL
-LLL664LLLLLLL44L
-LLLLLL4LLLL6L4LL
-LLLLLLLLLLLL4LLL
-LLLLLLLLLLL64LLL
-L4LLLLLLLLLL64LL
-L44LLLLLLLLLLLLL
-LL6LLLLLLLLLLLLL
-LLL6LLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLL4LLL
-LLLLLLLLLL64LLLL
-LLLLLL444446LLLL
-LLLLLLLLLL6LLLLL
-LLLLLLLLLLLLLLLL`],
+2222562222222222
+2444465222222222
+22L664L222225442
+22LLLL422226L452
+22222222222L4L22
+2222222222264L22
+2422222222226422
+244L222222222222
+2L6L222222222222
+2LL6522222222222
+2225222222222222
+222222222LLL4222
+222222225L64L222
+222222444446L222
+22222222256LL222
+2222222222222222`],
   [ background, bitmap`
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL`],
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222`],
 ]
 
 setLegend(
@@ -257,7 +299,7 @@ setLegend(
   ...objects
 );
 
-let level = 4;
+let level = 0;
 const levels = [
   map`
 aaaaaaaaaaaaaad
@@ -267,7 +309,7 @@ wwwwwwwwwwaddaa
 dddddaaaaaaaaaa
 dddaaaaaaawwwww
 ddaaaaaawwwwwww
-daaawwawddwwwww
+daaawwaaddwwwww
 paaaaaaaadwwwww
 wwwwllllllwwwww`,
   map`
@@ -314,12 +356,23 @@ bttwwawbwawwttb
 aaaaaaaaaaaaaaa
 wwwwwwwawwwwwww
 maaaaabpbaaaaam`,
+  map`
+gffffffffffffff
+gffffffffffffff
+gffffffffffffff
+...............
+wwwwww...w.....
+......t...w....
+.....nttttwwww.
+.ww.bwtttt...a.
+p.........r....
+wwwwwwwwwwwwwww`,
 ];
 
 const currentLevel = levels[level];
 setMap(currentLevel);
 
-setSolids([ player,  wall, box ]);
+setSolids([ player,  wall, box, barrier ]);
 
 setPushables({
   [player]: [box],
@@ -356,18 +409,21 @@ const fake = tune`
 
 onInput("s", () => {
   playTune(walk);
+
+  if(jumps) jumps=0;
   getFirst(player).y++;
 });
 
 onInput("d", () => {
   playTune(walk);
+
   setLegend(playerAlive, ...objects);
   getFirst(player).x++;
 });
 
 onInput("w", () => {
   playTune(walk);
-
+  if(jumps<0) {jumps=0; getFirst(player).y--;}
   if(jumps) return;
   
   jumps++;
@@ -388,9 +444,9 @@ const jump = async () => {
 
     getFirst(player).y--;
     checkIfKillablesWereTouched()
-    
+    checkDoorArrived()
 
-    await wait(100);
+    await wait(300);
   }, Promise.resolve());
 
   await resetGravity();
@@ -402,14 +458,14 @@ const resetGravity = async () => {
 
     getFirst(player).y++;
 
-    await wait(100);
+    await wait(300);
   }, Promise.resolve());
 };
 
 // gravity
 setInterval(() => {
   checkIfKillablesWereTouched()
-  
+  checkDoorArrived()
   if (jumps || getFirst(player).y === 10) return;
 
   getFirst(player).y++;
@@ -443,7 +499,6 @@ const killPlayer = () => {
   setTimeout(() => {
     setLegend(playerAlive, ...objects);
 
-    console.log(level)
     setMap(levels[level]);
     switch(level){
       case 0: 
@@ -466,6 +521,10 @@ const killPlayer = () => {
         getFirst(player).y = 10;
         getFirst(player).x = 7;
         break;
+      case 5:
+        getFirst(player).y = 10;
+        getFirst(player).x = 0;
+        break;
         
     }
     clearText();
@@ -483,25 +542,7 @@ const checkIfKillablesWereTouched = () => {
   if (playerTouchedKillable) killPlayer();
 }
 
-// END - PLAYER MOVEMENT CONTROLS
-
-onInput("j", () => {
-  const currentLevel = levels[level];
-  if (currentLevel !== undefined) {
-    clearText("");
-    setMap(currentLevel);
-  }
-});
-
-afterInput(() => {
-  checkIfKillablesWereTouched();
-  
-  // count the number of tiles with goals
-  const targetNumber = tilesWith(medium).length;
-  
-  // count the number of tiles with goals and boxes
-  const numberCovered = tilesWith(medium, box).length;
-
+const checkDoorArrived = () => {
   const playerArrived = tilesWith(player,goal).length;
 
   const playerArrivedFake = tilesWith(player,fake_goal).length;
@@ -516,7 +557,96 @@ afterInput(() => {
     }, 700);
     
   }
-  console.log(getFirst(player));
+  
+  if (playerArrived) {
+    // increase the current level number
+    level = level + 1;
+
+    const currentLevel = levels[level];
+
+    // make sure the level exists and if so set the map
+    if (currentLevel !== undefined) {
+      setMap(currentLevel);
+    } else {
+      if(status=="win") return;
+      playTune(win);
+      addText("you win!", { y: 4, color: [250, 252, 0] });
+      setTimeout(() => {
+    
+        clearText();
+        addText("press k to", { y: 4, color: [0, 0, 0] });
+        addText("restart the game!", { y: 6, color: [0, 0, 0] });
+        
+      }, 800);
+      status="win"
+    }
+  }
+}
+
+// END - PLAYER MOVEMENT CONTROLS
+
+onInput("j", () => {
+  const currentLevel = levels[level];
+  if (currentLevel !== undefined) {
+    clearText("");
+    setMap(currentLevel);
+    clearText("");
+  }
+});
+
+onInput("k", () => {
+  const currentLevel = levels[0];
+  console.log(levels[level]);
+  if (currentLevel !== undefined) {
+    clearText("");
+    setMap(currentLevel);
+  }
+});
+
+afterInput(() => {
+  checkIfKillablesWereTouched();
+  // count the number of tiles with goals
+  const targetNumber = tilesWith(medium).length;
+  
+  // count the number of tiles with goals and boxes
+  const numberCovered = tilesWith(medium, box).length;
+
+  const playerArrived = tilesWith(player,goal).length;
+
+  const playerArrivedFake = tilesWith(player,fake_goal).length;
+
+  const buttonPressed = tilesWith(button, box).length;
+
+  if(getFirst(barrier)){ 
+    barrierX = getFirst(barrier).x;
+    barrierY = getFirst(barrier).y;
+  }
+
+  if(barrierY) {
+    uBarrierY=barrierY;
+    uBarrierX=barrierX;
+  }
+           
+  if(buttonPressed)
+  {
+    if(button_status == "pressed") return;
+    clearTile(barrierX, barrierY);
+    button_status="pressed";
+  } else {
+    addSprite(uBarrierX, uBarrierY, barrier);
+    button_status="unpressed";
+  }
+
+  if(playerArrivedFake)
+  {
+    playTune(fake);
+    addText("Wrong Door!", { y: 4, color: [0, 0, 255] });
+    setTimeout(() => {
+  
+      clearText();
+    }, 700);
+    
+  }
   if (playerArrived || (targetNumber == numberCovered && targetNumber != 0 && numberCovered !=0)) {
     // increase the current level number
     level = level + 1;
@@ -527,15 +657,17 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
+      if(status=="win") return;
       playTune(win);
       addText("you win!", { y: 4, color: [250, 252, 0] });
       setTimeout(() => {
     
         clearText();
-        addText("press j to", { y: 4, color: [0, 0, 0] });
+        addText("press k to", { y: 4, color: [0, 0, 0] });
         addText("restart the game!", { y: 6, color: [0, 0, 0] });
         
       }, 800);
+      status = "win";
     }
   }
 });
