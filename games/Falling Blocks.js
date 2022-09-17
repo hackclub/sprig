@@ -17,7 +17,13 @@ let timer = 0;
 const hit = tune`
 30,
 30: g4~30,
-900`
+900`;
+const gameOverTune = tune`
+186.33540372670808: f4-186.33540372670808,
+186.33540372670808: e4-186.33540372670808,
+186.33540372670808: d4-186.33540372670808,
+186.33540372670808: c4-186.33540372670808,
+5217.391304347826`;
 
 setLegend(
   [ player, bitmap`
@@ -98,8 +104,9 @@ const obstacleUpdate = setInterval(() => {
       obstacles[i][1] += 1;
     }
   }
+  
   let toRemove = [];
-    
+  
   for(let i = 0; i < obstacles.length; ++i) {
     let playerPos = getFirst(player);
     let playerX = playerPos.x;
@@ -108,17 +115,18 @@ const obstacleUpdate = setInterval(() => {
       playTune(hit);
       lives -= 1;
       toRemove.push(i);
+      
     }
   }
   for(let i = 0; i < obstacles.length; ++i) {
-    if(obstacles[i][1] == 11) {
+    if(obstacles[i][1] == getFirst(player).y) {
       toRemove.push(i);
     }
   }
   for(let i = 0; i < toRemove.length; ++i) {
     getTile(...obstacles[toRemove[i]]).forEach(item => {
       if(item != null && item.type != "p") {
-        item.y = 11;
+        item.y = getFirst(player).y;
         setTimeout(() => {
           item.remove();
           obstacles.splice(toRemove[i], 1);
@@ -135,14 +143,11 @@ const obstacleUpdate = setInterval(() => {
     clearInterval(obstacleSpawn);
     addText("Game Over", { x : 5, y : 0});
     addText(`Score: ${timer}`, { x : 5, y : 1});
-    
+    playTune(gameOverTune);
     gameOver = true;
   }
   timer++;
 }, updateRate);
-
-
-setSolids([ player ]);
 
 onInput("a", () => {
   if(!gameOver) {
