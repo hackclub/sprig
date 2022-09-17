@@ -107,16 +107,20 @@ const obstacleUpdate = setInterval(() => {
   }
   
   for(let i = 0; i < obstacles.length; ++i) {
-    if(obstacles[i][1] >= 11) {
+    if(obstacles[i][1] == 11) {
       toRemove.push(i);
     }
   }
   for(let i = 0; i < toRemove.length; ++i) {
     if(obstacles[i][0] != getFirst(player).x) {
-      clearTile(obstacles[toRemove[i]][0], obstacles[toRemove[i]][1]);
-      obstacles.splice(toRemove[i], 1);
+      getTile(...obstacles[toRemove[i]]).y = 11;
+      setTimeout(() => {
+        clearTile(obstacles[toRemove[i]][0], obstacles[toRemove[i]][1]);
+        obstacles.splice(toRemove[i], 1);
+      }, 100);
     }
   }
+  
   clearText();
   addText(`Lives: ${lives}`);
   if(lives == 0) {
