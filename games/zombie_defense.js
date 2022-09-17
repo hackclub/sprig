@@ -425,7 +425,7 @@ setInterval(() => {
     y: 7, 
     color: [ 200, 0, 0 ]
   })
-  addText(`Press k to retry`, {
+  addText(`Press j to retry`, {
     x: 3, 
     y: 8, 
     color: [ 200, 0, 0 ]
