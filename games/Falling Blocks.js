@@ -95,6 +95,12 @@ const obstacleUpdate = setInterval(() => {
     }
   }
   let toRemove = [];
+    
+  for(let i = 0; i < obstacles.length; ++i) {
+    if(obstacles[i][1] >= 11) {
+      toRemove.push(i);
+    }
+  }
   
   for(let i = 0; i < obstacles.length; ++i) {
     let playerPos = getFirst(player);
@@ -105,14 +111,8 @@ const obstacleUpdate = setInterval(() => {
       toRemove.push(i);
     }
   }
-  
-  for(let i = 0; i < obstacles.length; ++i) {
-    if(obstacles[i][1] == 11) {
-      toRemove.push(i);
-    }
-  }
   for(let i = 0; i < toRemove.length; ++i) {
-    if(obstacles[i][0] != getFirst(player).x) {
+    if(obstacles[i][0] != getFirst(player).x && obstacles[i][1] != getFirst(player.y)) {
       getTile(...obstacles[toRemove[i]]).y = 11;
       setTimeout(() => {
         clearTile(obstacles[toRemove[i]][0], obstacles[toRemove[i]][1]);
@@ -120,7 +120,7 @@ const obstacleUpdate = setInterval(() => {
       }, 100);
     }
   }
-  
+
   clearText();
   addText(`Lives: ${lives}`);
   if(lives == 0) {
