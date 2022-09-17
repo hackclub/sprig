@@ -299,7 +299,7 @@ setLegend(
   ...objects
 );
 
-let level = 0;
+let level = 5;
 const levels = [
   map`
 aaaaaaaaaaaaaad
@@ -362,7 +362,7 @@ gffffffffffffff
 gffffffffffffff
 ...............
 wwwwww...w.....
-......t...w....
+....w.t...w....
 .....nttttwwww.
 .ww.bwtttt...a.
 p.........r....
@@ -446,7 +446,7 @@ const jump = async () => {
     checkIfKillablesWereTouched()
     checkDoorArrived()
 
-    await wait(300);
+    await wait(100);
   }, Promise.resolve());
 
   await resetGravity();
@@ -458,7 +458,7 @@ const resetGravity = async () => {
 
     getFirst(player).y++;
 
-    await wait(300);
+    await wait(130);
   }, Promise.resolve());
 };
 
@@ -470,7 +470,7 @@ setInterval(() => {
 
   getFirst(player).y++;
   
-}, 100);
+}, 130);
 
 const shake = () => {
   const gameCanvasContainer = document.querySelector(".game-canvas-container");
