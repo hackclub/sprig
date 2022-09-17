@@ -238,8 +238,6 @@ const levels = [
 
 let isGameOver = false;
 prepBoard();
-generateTile();
-generateTile();
 
 // setPushables({
   // [ player ]: [],
@@ -374,7 +372,6 @@ onInput("a", () => {
 onInput("j", () => {
   isGameOver = true;
   prepBoard();
-  generateTile();
 });
 
 
@@ -405,6 +402,8 @@ function prepBoard() {
   isGameOver = false;
   clearText("");
   setMap(levels[level]);
+  generateTile();
+  generateTile();
 }
 
 function generateTile() {
