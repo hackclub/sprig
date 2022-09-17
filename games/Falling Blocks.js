@@ -14,6 +14,10 @@ let gameOver = false;
 
 let lives = 3;
 let timer = 0;
+const hit = tune`
+30,
+30: g4~30,
+900`
 
 setLegend(
   [ player, bitmap`
@@ -96,12 +100,12 @@ const obstacleUpdate = setInterval(() => {
   }
   let toRemove = [];
     
-  
   for(let i = 0; i < obstacles.length; ++i) {
     let playerPos = getFirst(player);
     let playerX = playerPos.x;
     let playerY = playerPos.y;
     if(obstacles[i][0] == playerX && obstacles[i][1] >= playerY - 1) {
+      playTune(hit);
       lives -= 1;
       toRemove.push(i);
     }
@@ -124,7 +128,8 @@ const obstacleUpdate = setInterval(() => {
   }
 
   clearText();
-  addText(`Lives: ${lives}`);
+  addText(`Lives: ${lives}`, { x : 5, y : 0});
+  
   if(lives <= 0) {
     clearInterval(obstacleUpdate);
     clearInterval(obstacleSpawn);
