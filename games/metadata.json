@@ -140,7 +140,7 @@
     "tags": ["hackable"]
   },   
   {
-    "filename": "reaction_timer",
+    "filename": "reactor",
     "title": "reaction_timer",
     "author": "sampoder",
     "img": "",
@@ -327,13 +327,6 @@
     "author": "Edmund",
     "img": "",
     "tags": []
-  },
-  {
-    "filename": "reaction_timer",
-    "title": "reaction_timer",
-    "author": "sampoder",
-    "img": "",
-    "tags": ["multiplayer"]
   },
   {
     "filename": "tetris",
