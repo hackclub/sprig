@@ -138,7 +138,14 @@
     "author": "Thanosan Prathifkumar",
     "img": "",
     "tags": ["hackable"]
-  }, 
+  },   
+  {
+    "filename": "reaction_timer",
+    "title": "reaction_timer",
+    "author": "sampoder",
+    "img": "",
+    "tags": ["multiplayer"]
+  },
   {
     "filename": "mini_maze_and_puzzle",
     "title": "mini_maze_and_puzzle",
