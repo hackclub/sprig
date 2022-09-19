@@ -217,7 +217,9 @@ export function createSequencer(target) {
       <div
         class=${classes.join(" ")}
         style=${`background: ${color};`}
-        @mousedown=${() => {
+        @mousedown=${(event) => {
+          event.preventDefault();
+          
           if (key in state.cells && state.cells[key] === state.instrument) {
             delete state.cells[key];
             state.erasing = true;
