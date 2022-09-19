@@ -28,6 +28,12 @@ const ACTIONS = {
   SET_BITMAPS({ bitmaps }, state) {
     state.bitmaps = bitmaps;
   }, 
+  SET_END_TUNES({ endTunes }, state) {
+    state.endTunes = endTunes;
+  },
+  END_TUNES(args, state) {
+    if (state.endTunes) state.endTunes();
+  },
   UPLOAD(args, state) {
     if (state.uploadState === "uploading") return;
     state.uploadLogs = "";

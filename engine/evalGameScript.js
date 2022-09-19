@@ -3,6 +3,7 @@ import { init } from "./webEngine.js";
 import { playTune } from "./playTune.js";
 import { textToTune } from './textTuneConverters.js';
 import { parseScript } from "esprima";
+import { dispatch } from "../dispatch.js";
 
 let tunes = [];
 let intervals = [];
@@ -23,6 +24,7 @@ export function evalGameScript(script, canvas) {
 
   tunes.forEach(t => t.end());
   tunes = [];
+  dispatch("SET_END_TUNES", { endTunes: () => tunes.forEach(t => t.end()) });
 
   timeouts.forEach(clearTimeout);
   timeouts = [];

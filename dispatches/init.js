@@ -61,7 +61,7 @@ export async function init(args, state) {
   window.addEventListener("error", (err) => {
     // this is a hack to cut down on this chrome bug: https://support.google.com/chrome/thread/165732696/typing-in-console-triggers-error?hl=en
     if (err.message.includes("Uncaught EvalError")) return;
-
+    console.log("window err", err)
     dispatch("LOG_ERROR", { type: "page", err });
   });
 
