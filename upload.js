@@ -95,6 +95,7 @@ async function uploadToSerial(serial, code) {
   }
 
   await write("\r.hi\r");
+  await write("\r.reset\r");
   await write('\r')
   await write(".flash -w\r");
   await delay(500);
