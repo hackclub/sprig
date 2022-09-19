@@ -322,11 +322,18 @@
     "tags": ["multiplayer"]
   },
   {
-    "filename": "mandelbrot",
-    "title": "mandelbrot",
-    "author": "HenryBass",
+    "filename": "zombie_defense",
+    "title": "zombie_defense",
+    "author": "Edmund",
     "img": "",
     "tags": []
+  },
+  {
+    "filename": "reaction_timer",
+    "title": "reaction_timer",
+    "author": "sampoder",
+    "img": "",
+    "tags": ["multiplayer"]
   },
   {
     "filename": "tetris",
