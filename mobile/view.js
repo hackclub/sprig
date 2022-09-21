@@ -13,7 +13,6 @@ export const view = (text) => html`
       transform-origin: left top;
       width: 100vw;
       height: 100vh;
-      user-select: none;
     }
 
     @media (orientation: portrait) {
