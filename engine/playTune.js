@@ -13,6 +13,18 @@ song form
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 
+const volGain = audioCtx.createGain();
+volGain.connect(audioCtx.destination);
+
+let _mute = false;
+export const mute = {
+  get current() { return _mute; },
+  set current(value) {
+    _mute = value;
+    volGain.gain.value = 1 - _mute;
+  }
+};
+
 export const tones = {
   "B0": 31,
   "C1": 33,
@@ -146,24 +158,27 @@ export function playTune(tune, number = 1) {
 }
 
 function playFrequency(frequency, duration, instrument) {
-  var o = audioCtx.createOscillator()
-  var g = audioCtx.createGain()
-  o.frequency.value = frequency;
-  o.type = instrument ?? 'sine';
-  o.connect(g)
-  g.connect(audioCtx.destination)
-  o.start();
+  const osc = audioCtx.createOscillator()
+  const rampGain = audioCtx.createGain()
+
+  osc.connect(rampGain)
+  rampGain.connect(volGain)
+
+  osc.frequency.value = frequency;
+  osc.type = instrument ?? 'sine';
+  osc.start();
 
   const endTime = audioCtx.currentTime + duration*2/1000;
-  o.stop(endTime)
+  osc.stop(endTime)
   
-  g.gain.setValueAtTime(0, audioCtx.currentTime);
-  g.gain.linearRampToValueAtTime(.2, audioCtx.currentTime + duration/5/1000);
-  g.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration/1000)
-  g.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration*2/1000) // does this ramp from the last ramp
-  // await audioCtx.close();
-  o.onended = () => {
-    g.disconnect();
+  rampGain.gain.setValueAtTime(0, audioCtx.currentTime);
+  rampGain.gain.linearRampToValueAtTime(.2, audioCtx.currentTime + duration/5/1000);
+  rampGain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration/1000)
+  rampGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration*2/1000) // does this ramp from the last ramp
+  
+  osc.onended = () => {
+    osc.disconnect();
+    rampGain.disconnect();
   };
 }
 

@@ -13,7 +13,7 @@ export function bitmapTextToImageData(string) {
   const colors = Object.fromEntries(palette);
   
   for (let i = 0; i < width*height; i++) {
-    const type = string.split("").filter(x => x.match(/\S/))[i];
+    const type = string.split("").filter(x => x.match(/\S/))[i] || ".";
 
     if (!(type in colors)) {
       const err = `in sprite string: no known color for char "${type}"`;

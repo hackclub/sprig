@@ -3,6 +3,18 @@
 @author: souvikpal2000
 */
 
+/*
+Use Key "w", "s", "a", "d" to start the Game.
+
+Use Key "w" to change the direction of snake Upwards.
+Use Key "s" to change the direction of snake Downwards.
+Use Key "a" to change the direction of snake Left.
+Use Key "d" to change the direction of snake Right.
+Use Key "l" to Reset the Game.
+
+Key "l" can only be used after the Message LOST.
+*/
+
 const player = "p";
 const body = "h";
 const background = "s";
@@ -129,6 +141,9 @@ setPushables({
   [ player ]: [],
 });
 
+let reset = null;
+let game = null;
+
 const lostMsg = () => {
   addText("LOST", { 
       x: 8, 
@@ -147,6 +162,8 @@ const congratulation = () => {
 
 let score = 0;
 let snake = [{ xPos: getFirst(player).x, yPos: getFirst(player).y }];
+//console.log(getFirst(player).x+" "+getFirst(player).y)
+//console.log(getFirst(food).x+" "+getFirst(food).y)
 
 const showScore = () => {
   addText(`${score}`, { 
@@ -182,10 +199,14 @@ const collisionMelody = tune`
 500: d5-500,
 15500`;
 
+let lost = 0;
+
 const collision = () => {
   for(let i=0;i<snake.length;i++){
     if(getFirst(player).x === snake[i].xPos && getFirst(player).y === snake[i].yPos){
+      lost = 1;
       clearInterval(game);
+      clearInterval(reset);
       lostMsg();
       break;
     }
@@ -216,11 +237,17 @@ const eatFood = () => {
 
 let keyPressed = "";
 
+const collisionWithWall = () => {
+  lost = 1;
+  clearInterval(game);
+  clearInterval(reset);
+  lostMsg();
+}
+
 const moveForward = () => {
   if(keyPressed === "a"){
     if(getFirst(player).x === 1){
-      clearInterval(game);
-      lostMsg();
+      collisionWithWall();
       return;
     }
     getFirst(player).x -= 1;
@@ -228,8 +255,7 @@ const moveForward = () => {
   }
   if(keyPressed === "d"){
     if(getFirst(player).x === 15){
-      clearInterval(game);
-      lostMsg();
+      collisionWithWall();
       return;
     }
     getFirst(player).x += 1;
@@ -237,8 +263,7 @@ const moveForward = () => {
   }
   if(keyPressed === "w"){
     if(getFirst(player).y === 3){
-      clearInterval(game);
-      lostMsg();
+      collisionWithWall();
       return;
     }
     getFirst(player).y -= 1;
@@ -246,8 +271,7 @@ const moveForward = () => {
   }
   if(keyPressed === "s"){
     if(getFirst(player).y === 17){
-      clearInterval(game);
-      lostMsg();
+      collisionWithWall();
       return;
     }
     getFirst(player).y += 1;
@@ -288,5 +312,32 @@ onInput("s", () => {
     keyPressed = "s";
   }
 });
+console.log(keyPressed);
 
-let game = setInterval(moveForward, 120);
+const resetGame = () => {
+  keyPressed = "";
+  
+  snake.map((body) => {
+    return clearTile(body.xPos, body.yPos); // Removing Snake Body
+  })
+  clearTile(getFirst(food).x, getFirst(food).y); // Removing Food
+  
+  clearText() // Clearing all Text in playing Area
+  score = 0; // Resetting Score
+  showScore(); // Show Score Text in Screen Again
+  
+  addSprite(8, 10, player); // Add Snake Head
+  snake = [{ xPos: getFirst(player).x, yPos: getFirst(player).y }];
+  addSprite(13, 5, food); // Add Food
+
+  reset = setInterval(moveForward, 120);
+}
+
+onInput("l", () => {
+  if(lost === 1){
+    resetGame();
+    lost = 0;
+  }
+})
+
+game = setInterval(moveForward, 120);

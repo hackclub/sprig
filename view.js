@@ -7,6 +7,7 @@ import "./pixel-editor/pixel-editor.js";
 import "./sequencer/sequencer.js";
 import "./map-editor/map-editor.js";
 import "./views/bitmap-preview.js";
+import { mute } from "./engine/playTune.js";
 
 export const view = (state) => html`
   ${menu(state)}
@@ -255,7 +256,11 @@ const menu = (state) => html`
       run
     </div>
 
-    <div class="spacer" aria-hidden="true" />
+    <div class="spacer" />
+
+    <div class="menu-item" @click=${() => dispatch("TOGGLE_MUTE")}>
+      ${mute.current ? "unmute" : "mute"} audio
+    </div>
 
     <div class="menu-item docs-trigger">
       ${docsOpenClosed()} help
