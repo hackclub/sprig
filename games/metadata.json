@@ -478,5 +478,13 @@
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2022-09-19"
-  }
+  },
+  {
+    "filename": "infinite_maze",
+    "title": "infinite_maze",
+    "author": "pertark",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-09-22"
+  },
 ]
