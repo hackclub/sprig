@@ -495,12 +495,20 @@
     "tags": ["advanced"],
     "addedOn": "2022-09-23"
   },
-    {
+  {
     "filename": "goaled",
     "title": "goaled",
     "author": "Ronan Verma",
     "img": "",
     "tags": [""],
     "addedOn": "2022-09-24"
+  },
+  {
+    "filename": "2D_life",
+    "title": "2D_life",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["simulation", "hackable", "classic"],
+    "addedOn": "2022-09-25"
   }
 ]
