@@ -2,18 +2,17 @@
 @title: 2D Life
 @author: Leonard (Omay)
 
-Change livingOutcomes and deadOutcomes for new rules.
-It works like this.
-If a cell is alive, livingOutcomes[neighbors] is the outcome -- 0 it dies, 1 it stays alive
-If it is dead, deadOutcomes[neighbors] is the outcome, same rules apply.
-For instance, highlife would be
+Change outcomes for new rules.
+It works like this:
+The part before the "/" is what qualifies a cell to be born (prefixed by a "B")
+The numbers between the "B" and "/" are how many neighbors it takes to be born.
+The part after the "/" is what qualifies a cell to survive (prefixed by a "S")
+The numbers between the "S" and "/" are how many neighbors it takes for a cell to survive.
 
-const livingOutcomes = [0,0,1,1,0,0,0,0,0];
-const deadOutcomes = [0,0,0,1,0,0,1,0,0];
+For instance, highlife would be "B36/S23"
 */
 
-const livingOutcomes = [0,0,1,1,0,0,0,0,0];
-const deadOutcomes = [0,0,0,1,0,0,0,0,0];
+const outcomes = "B3/S23";
 
 const sel = "s";
 const living = "l";
@@ -172,6 +171,16 @@ onInput("k", () => {
   var deadCells = getAll(dead);
   var livingCellsClone = livingCells.map(x => spriteData(x));
   var deadCellsClone = deadCells.map(x => spriteData(x));
+  var deadOutcomes = [0,0,0,0,0,0,0,0,0];
+  var livingOutcomes = [0,0,0,0,0,0,0,0,0];
+  var dO = outcomes.split("/")[0].substring(1, outcomes.split("/")[0].length);
+  var lO = outcomes.split("/")[1].substring(1, outcomes.split("/")[1].length);
+  for(var i = 0; i < dO.length; i++){
+    deadOutcomes[parseInt(dO.charAt(i))] = 1;
+  }
+  for(var i = 0; i < lO.length; i++){
+    livingOutcomes[parseInt(lO.charAt(i))] = 1;
+  }
   for(var i = 0; i < livingCellsClone.length; i++){
     var livingNeighbors = getLivingNeighbors(livingCellsClone[i].x, livingCellsClone[i].y, livingCellsClone);
     if(livingOutcomes[livingNeighbors] === 0){
