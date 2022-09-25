@@ -117,15 +117,6 @@ addSprite(0, 0, sel);
 function spriteData(sprite){
   return {x:sprite.x,y:sprite.y,type:sprite.type};
 }
-function loopBetween(x, mi, ma){
-  if(x < mi){
-    return ma;
-  }else if(x > ma){
-    return mi;
-  }else{
-    return x;
-  }
-}
 function getLivingNeighbors(x, y, livingSprites){
   var livingNeighbors = 0;
   for(var i = 0; i < livingSprites.length; i++){
