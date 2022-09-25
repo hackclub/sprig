@@ -2,7 +2,13 @@
 @title: 2D Life
 @author: Leonard (Omay)
 
-Change outcomes for new rules.
+Use "WASD" to move the selector.
+Use "I" to toggle the cell that the selector is at.
+Use "J" to start or stop the simulation.
+Use "K" to step the simulation.
+Use "L" to clear the board.
+
+Change the const "outcomes" for new rules.
 It works like this:
 The part before the "/" is what qualifies a cell to be born (prefixed by a "B")
 The numbers between the "B" and "/" are how many neighbors it takes to be born.
@@ -13,6 +19,7 @@ For instance, highlife would be "B36/S23"
 */
 
 const outcomes = "B3/S23";
+const fps = 10;
 
 const sel = "s";
 const living = "l";
@@ -78,9 +85,9 @@ let level = 0;
 const levels = [
   map`
 dddddddddddddddddddddddddddddddddddddddd
-dldddddddddddddddddddddddddddddddddddddd
-ddlldddddddddddddddddddddddddddddddddddd
-dllddddddddddddddddddddddddddddddddddddd
+dddddddddddddddddddddddddddddddddddddddd
+dddddddddddddddddddddddddddddddddddddddd
+dddddddddddddddddddddddddddddddddddddddd
 dddddddddddddddddddddddddddddddddddddddd
 dddddddddddddddddddddddddddddddddddddddd
 dddddddddddddddddddddddddddddddddddddddd
@@ -133,31 +140,7 @@ function getLivingNeighbors(x, y, livingSprites){
   }
   return livingNeighbors;
 }
-onInput("w", () => {
-  getFirst(sel).y -= 1;
-});
-onInput("a", () => {
-  getFirst(sel).x -= 1;
-});
-onInput("s", () => {
-  getFirst(sel).y += 1;
-});
-onInput("d", () => {
-  getFirst(sel).x += 1;
-});
-onInput("i", () => {
-  var selc = getFirst(sel);
-  var tile = getTile(selc.x, selc.y);
-  var tilet = tile.map(x => x.type);
-  if(tilet.includes(living)){
-    tile[tilet.indexOf(living)].remove();
-    addSprite(selc.x, selc.y, dead);
-  }else{
-    tile[tilet.indexOf(dead)].remove();
-    addSprite(selc.x, selc.y, living);
-  }
-});
-onInput("k", () => {
+function step(){
   var livingCells = getAll(living);
   var deadCells = getAll(dead);
   var livingCellsClone = livingCells.map(x => spriteData(x));
@@ -186,4 +169,45 @@ onInput("k", () => {
       addSprite(deadCellsClone[i].x, deadCellsClone[i].y, living);
     }
   }
+}
+var interval;
+var running = false;
+onInput("w", () => {
+  getFirst(sel).y -= 1;
+});
+onInput("a", () => {
+  getFirst(sel).x -= 1;
+});
+onInput("s", () => {
+  getFirst(sel).y += 1;
+});
+onInput("d", () => {
+  getFirst(sel).x += 1;
+});
+onInput("i", () => {
+  var selc = getFirst(sel);
+  var tile = getTile(selc.x, selc.y);
+  var tilet = tile.map(x => x.type);
+  if(tilet.includes(living)){
+    tile[tilet.indexOf(living)].remove();
+    addSprite(selc.x, selc.y, dead);
+  }else{
+    tile[tilet.indexOf(dead)].remove();
+    addSprite(selc.x, selc.y, living);
+  }
+});
+onInput("j", () => {
+  if(running){
+    clearInterval(interval);
+  }else{
+    interval = setInterval(step, 1000/fps);
+  }
+  running = !running;
+});
+onInput("k", () => {
+  step();
+});
+onInput("l", () => {
+  setMap(levels[level]);
+  addSprite(0, 0, sel);
 });
