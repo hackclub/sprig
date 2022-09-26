@@ -1,4 +1,5 @@
 import { bitmapTextToImageData } from "./bitmap.js";
+import { palette } from "../palette.js";
 
 const spritesheetIndex = 0;
 const texIndex = 1;
@@ -178,7 +179,7 @@ void main(void) {
   vec2 coord = vec2(texCoord.x, 1.0 - texCoord.y);
   vec4 raw = texture(u_tex, coord);
 
-  frag = vec4(1);
+  frag = vec4(${palette.find(([ key ]) => key === "2")[1].map((point) => point / 255).join(", ")});
   vec4 sprite;
   sprite = sampleTile(coord, float(u_background_tile)/255.0f);
   if (sprite.a > 0.0) frag = vec4(sprite.xyz, 1);

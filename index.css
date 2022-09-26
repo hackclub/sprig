@@ -44,6 +44,7 @@ body {
 
 .no-select {
   user-select: none;
+  -webkit-user-select: none;
 }
 
 .root {
@@ -393,11 +394,18 @@ body {
   display: block;
 }
 
-.cm-open-button ion-icon {
-  margin-left: 3px;
-  vertical-align: middle;
+.cm-open-button .icon-container {
+  display: inline-block;
   height: 0.8em;
-  margin-top: -0.2em;
+  width: 0.8em;
+  margin-left: 4px;
+  vertical-align: middle;
+  margin-top: -0.16em;
+}
+
+.cm-open-button ion-icon {
+  height: 100%;
+  width: 100%;
 }
 
 .vertical-bar {
