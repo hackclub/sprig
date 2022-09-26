@@ -1,5 +1,5 @@
 /*
-@title: maze runner
+@title: maze_runner
 @author: wetf
 */
 
