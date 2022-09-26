@@ -84,7 +84,7 @@
     "title": "shoot_green_blobs",
     "author": "otterly-otter",
     "img": "",
-    "tags": [],
+    "tags": ["classic"],
     "addedOn": "2022-09-07"
   },
   {
@@ -92,7 +92,7 @@
     "title": "crappy_bird",
     "author": "ced",
     "img": "",
-    "tags": ["classic"],
+    "tags": ["classic", "endless"],
     "addedOn": "2022-07-14"
   },
   {
@@ -108,7 +108,7 @@
     "title": "flappy_bird_but_no_gravity_and_worse",
     "author": "sam liu",
     "img": "",
-    "tags": ["WIP"],
+    "tags": ["WIP", "endless"],
     "addedOn": "2022-09-16"
   },
   {
@@ -292,7 +292,7 @@
     "title": "alien",
     "author": "anshimathur0325",
     "img": "",
-    "tags": [],
+    "tags": ["endless"],
     "addedOn": "2022-09-06"
   },
   {
@@ -372,7 +372,7 @@
     "title": "zombie_defense",
     "author": "Edmund",
     "img": "",
-    "tags": [],
+    "tags": ["endless"],
     "addedOn": "2022-09-19"
   },
   {
@@ -460,7 +460,7 @@
     "title": "Paint_IT",
     "author": "N Rizwan",
     "img": "",
-    "tags": [],
+    "tags": ["sandbox"],
     "addedOn": "2022-09-14"
   },
   {
@@ -508,7 +508,7 @@
     "title": "2D_life",
     "author": "Leonard (Omay)",
     "img": "",
-    "tags": ["simulation", "hackable", "classic"],
+    "tags": ["simulation", "hackable", "classic", "sandbox"],
     "addedOn": "2022-09-25"
   },
   {
