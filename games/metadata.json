@@ -511,10 +511,8 @@
     "tags": ["simulation", "hackable", "classic"],
     "addedOn": "2022-09-25"
   },
-  //@title: maze runner
-@author: wetf
   {
-    "filename": "maze runner",
+    "filename": "maze_runner",
     "title": "maze runner",
     "author": "wetf",
     "img": "",
