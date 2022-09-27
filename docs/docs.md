@@ -260,12 +260,42 @@ You can look at game state by running `getState()` in the console.
 
 ## Idioms
 
-### Get Neighbors
+Find Pattern
 
-### Find Pattern
+```
+const neighbors = (sprite) => {
+    const neighbors = [];
 
-### Replace
+    const x = sprite.x;
+    const y = sprite.y;
 
-### Count Overlaps
+    getTile(x+1, y).forEach(s => {
+        neighbors.push(s);
+    })
 
+    getTile(x-1, y).forEach(s => {
+        neighbors.push(s);
+    })
+
+    getTile(x, y+1).forEach(s => {
+        neighbors.push(s);
+    })
+
+    getTile(x, y-1).forEach(s => {
+        neighbors.push(s);
+    })
+
+    return neighbors;
+}
+
+const replace = (oldType, newType) => getAll(oldType).forEach(s => {
+    s.type = newType;
+})
+
+const overlaps = tilesWith(type0, type1, ...).length;
+
+const tileHasType = (x, y, type) => getTile(x, y).some(s => s.type === type);
+
+const getTypeFromTile = (x, y, type) => getTile(x, y, type).find(s => s.type === type);
+```
  -->

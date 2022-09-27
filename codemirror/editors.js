@@ -33,7 +33,9 @@ export class OpenButtonWidget extends WidgetType {
     button.textContent = this.label;
     button.addEventListener("click", () => this.onClick());
 
-    const icon = button.appendChild(document.createElement("ion-icon"));
+    const iconContainer = button.appendChild(document.createElement("div"));
+    iconContainer.classList.add("icon-container");
+    const icon = iconContainer.appendChild(document.createElement("ion-icon"));
     icon.name = this.icon;
 
     if (this.editorType === "bitmap") container.appendChild(document.createElement("bitmap-preview")).setAttribute("text", this.text);

@@ -119,7 +119,8 @@ export const style = `
     height: 20px;
     width: 20px;
     border-radius: 50%;
-    background: red;
+    background: var(--pcb-trace-lighter);
+    border: none;
     cursor: pointer;
   }
 

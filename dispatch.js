@@ -10,6 +10,7 @@ import { exportS3 } from "./s3.js";
 import { global_state } from "./global_state.js";
 import { saveGame } from "./saveGame.js"
 import { view as viewMobile } from "./mobile/view.js";
+import { mute } from "./engine/playTune.js";
 import { strip } from 'ansicolor';
 
 function getURLPath(extension) {
@@ -43,6 +44,10 @@ const ACTIONS = {
     const match = string.match(/@title:\s+([^\n]+)/);
     const name = (match !== null) ? match[1] : "DRAFT";
     saveToFile(`${name}.js`, string);
+  },
+  TOGGLE_MUTE() {
+    mute.current = !mute.current;
+    dispatch("RENDER");
   },
   async GET_URL(args, state) {
     if (state.shareLinkState !== "idle") return console.warn("Share already in progress");

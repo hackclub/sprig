@@ -217,7 +217,9 @@ export function createSequencer(target) {
       <div
         class=${classes.join(" ")}
         style=${`background: ${color};`}
-        @mousedown=${() => {
+        @mousedown=${(event) => {
+          event.preventDefault();
+          
           if (key in state.cells && state.cells[key] === state.instrument) {
             delete state.cells[key];
             state.erasing = true;
@@ -313,6 +315,7 @@ export function createSequencer(target) {
       state.interval = play();
     }
     r();
+    setCodeText();
   }
 
   const view = (state) => html`
@@ -377,7 +380,6 @@ export function createSequencer(target) {
   `;
 
   const setCodeText = () => {
-    if (!state.erasing && !state.drawing) return;
     state.erasing = false;
     state.drawing = false;
     let text = tuneToText(cellsToTune(state.cells, state.bpm, state.numberX));

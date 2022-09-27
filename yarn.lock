@@ -12,10 +12,20 @@
     "@codemirror/view" "^0.20.0"
     "@lezer/common" "^0.16.0"
 
-"@codemirror/autocomplete@^6.0.0", "@codemirror/autocomplete@^6.1.0":
+"@codemirror/autocomplete@^6.0.0":
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@codemirror/autocomplete/-/autocomplete-6.1.0.tgz#7d3ca6d49e3a71cfd366c0af16172f5c128376eb"
   integrity sha512-wtO4O5WDyXhhCd4q4utDIDZxnQfmJ++3dGBCG9LMtI79+92OcA1DVk/n7BEupKmjIr8AzvptDz7YQ9ud6OkU+A==
+  dependencies:
+    "@codemirror/language" "^6.0.0"
+    "@codemirror/state" "^6.0.0"
+    "@codemirror/view" "^6.0.0"
+    "@lezer/common" "^1.0.0"
+
+"@codemirror/autocomplete@^6.1.0":
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/@codemirror/autocomplete/-/autocomplete-6.2.0.tgz#f7205f8281613f77529f07b279ee25e1a5d20124"
+  integrity sha512-yNCm2CEE4kE4L2Sf7WeyCej1Q3951ccaCWfomrlBkoERKCss+TzuEeqGe5VnAJTEybLy1yzf1BdMUY/988bfpg==
   dependencies:
     "@codemirror/language" "^6.0.0"
     "@codemirror/state" "^6.0.0"
@@ -46,9 +56,9 @@
     "@lezer/common" "^0.16.0"
 
 "@codemirror/commands@^6.0.0":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@codemirror/commands/-/commands-6.0.1.tgz#c005dd2dab2f6d90ad00d4a25bfeaaec2393efa6"
-  integrity sha512-iNHDByicYqQjs0Wo1MKGfqNbMYMyhS9WV6EwMVwsHXImlFemgEUC+c5X22bXKBStN3qnwg4fArNZM+gkv22baQ==
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@codemirror/commands/-/commands-6.1.0.tgz#c9da851f419f25dae400d7cd94f80b80ef060696"
+  integrity sha512-qCj2YqmbBjj0P1iumnlL5lBqZvJPzT+t2UvgjcaXErp5ZvMqFRVgQyrEfdXX6SX5UcvcHKBjXqno+MkUp0aYvQ==
   dependencies:
     "@codemirror/language" "^6.0.0"
     "@codemirror/state" "^6.0.0"
@@ -119,10 +129,19 @@
     "@codemirror/view" "^0.20.0"
     crelt "^1.0.5"
 
-"@codemirror/search@^6.0.0", "@codemirror/search@^6.0.1":
+"@codemirror/search@^6.0.0":
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/@codemirror/search/-/search-6.0.1.tgz#12c20fdfb341fb4ca2125b2eaec35a8cf4b682f1"
   integrity sha512-uOinkOrM+daMduCgMPomDfKLr7drGHB4jHl3Vq6xY2WRlL7MkNsBE0b+XHYa/Mee2npsJOgwvkW4n1lMFeBW2Q==
+  dependencies:
+    "@codemirror/state" "^6.0.0"
+    "@codemirror/view" "^6.0.0"
+    crelt "^1.0.5"
+
+"@codemirror/search@^6.0.1":
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/@codemirror/search/-/search-6.2.0.tgz#05742292c8414dfcf86bd27ef2908d43620f79d2"
+  integrity sha512-FVhpUvPFUJe8lg2EQJTTcF4RNI9d/OC3PVitvOfhv5OuY7ZgtMfJl22o5eMkzOEsUY2Wxe7BKGLpe2UI5Wq3PQ==
   dependencies:
     "@codemirror/state" "^6.0.0"
     "@codemirror/view" "^6.0.0"
@@ -134,9 +153,9 @@
   integrity sha512-ms0tlV5A02OK0pFvTtSUGMLkoarzh1F8mr6jy1cD7ucSC2X/VLHtQCxfhdSEGqTYlQF2hoZtmLv+amqhdgbwjQ==
 
 "@codemirror/state@^6.0.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@codemirror/state/-/state-6.1.0.tgz#c0f1d80f61908c9dcf5e2a3fe931e9dd78f3df8a"
-  integrity sha512-qbUr94DZTe6/V1VS7LDLz11rM/1t/nJxR1El4I6UaxDEdc0aZZvq6JCLJWiRmUf95NRAnDH6fhXn+PWp9wGCIg==
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/@codemirror/state/-/state-6.1.2.tgz#182d46eabcc17c95508984d6add5a5a641dcd517"
+  integrity sha512-Mxff85Hp5va+zuj+H748KbubXjrinX/k28lj43H14T2D0+4kuvEFIEIO7hCEcvBT8ubZyIelt9yGOjj2MWOEQA==
 
 "@codemirror/view@^0.20.0", "@codemirror/view@^0.20.2", "@codemirror/view@^0.20.6":
   version "0.20.7"
@@ -148,9 +167,9 @@
     w3c-keyname "^2.2.4"
 
 "@codemirror/view@^6.0.0":
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/@codemirror/view/-/view-6.1.2.tgz#22dd4f6867581aa09dc1d952253f655c1a44bd91"
-  integrity sha512-puUydfKwfmOo+ixtuB+uN/ZpcteEYSnpjHmMaow1sOQhNICsKtGBup3i9ybVqyzDagARRYzSHTWjbdeHqmn31w==
+  version "6.2.4"
+  resolved "https://registry.yarnpkg.com/@codemirror/view/-/view-6.2.4.tgz#dad3511097764ea3280bae7f63b7c1c09db9c21c"
+  integrity sha512-Zc5qDv+CD2ubWs6ShGJL0tf4y2w5vObdg7Eus0ouhg9g5lrvsAnwO9PvavDZdK4bpH6O+cnNDRhFlvDuieXo/g==
   dependencies:
     "@codemirror/state" "^6.0.0"
     style-mod "^4.0.0"
@@ -162,9 +181,9 @@
   integrity sha512-qPmG7YTZ6lATyTOAWf8vXE+iRrt1NJd4cm2nJHK+v7X9TsOF6+HtuU/ctaZy2RCrluxDb89hI6KWQ5LfQGQWuA==
 
 "@lezer/common@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@lezer/common/-/common-1.0.0.tgz#1c95ae53ec17706aa3cbcc88b52c23f22ed56096"
-  integrity sha512-ohydQe+Hb+w4oMDvXzs8uuJd2NoA3D8YDcLiuDsLqH+yflDTPEpgCsWI3/6rH5C3BAedtH1/R51dxENldQceEA==
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@lezer/common/-/common-1.0.1.tgz#d014fda6d582c24336fadf2715e76f02f73c8908"
+  integrity sha512-8TR5++Q/F//tpDsLd5zkrvEX5xxeemafEaek7mUp7Y+bI8cKQXdSqhzTOBaOogETcMOVr0pT3BBPXp13477ciw==
 
 "@lezer/highlight@^0.16.0":
   version "0.16.0"
@@ -174,9 +193,9 @@
     "@lezer/common" "^0.16.0"
 
 "@lezer/highlight@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@lezer/highlight/-/highlight-1.0.0.tgz#1dc82300f5d39fbd67ae1194b5519b4c381878d3"
-  integrity sha512-nsCnNtim90UKsB5YxoX65v3GEIw3iCHw9RM2DtdgkiqAbKh9pCdvi8AWNwkYf10Lu6fxNhXPpkpHbW6mihhvJA==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@lezer/highlight/-/highlight-1.1.0.tgz#ce8cc593384e76210b1163dcd0a657f19c525f1d"
+  integrity sha512-DAGFnxWil6aMrfpJ1clvOQrMvgDXjah8K5eA6+TsETioHlSi7Z2n/KSpbJPeuItcI2OeOR5tIWsqZqLnFSGN/w==
   dependencies:
     "@lezer/common" "^1.0.0"
 
@@ -196,9 +215,9 @@
     "@lezer/common" "^0.16.0"
 
 "@lezer/lr@^1.0.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@lezer/lr/-/lr-1.2.0.tgz#59aecafdbc15be63f918cf777f470dd17562f051"
-  integrity sha512-TgEpfm9br2SX8JwtwKT8HsQZKuFkLRg6g+IRxObk9nVKQLKnkP3oMh+QGcTBL9GQsfQ2ADtKPbj2iGSMf3ytiA==
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@lezer/lr/-/lr-1.2.3.tgz#f44ca844f15f6762fde4eab877d110567e34ffa1"
+  integrity sha512-qpB7rBzH8f6Mzjv2AVZRahcm+2Cf7nbIH++uXbvVOL1yIRvVWQ3HAM/saeBLCyz/togB7LGo76qdJYL1uKQlqA==
   dependencies:
     "@lezer/common" "^1.0.0"
 
@@ -630,9 +649,9 @@ vite@^2.9.12:
     fsevents "~2.3.2"
 
 w3c-keyname@^2.2.4:
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/w3c-keyname/-/w3c-keyname-2.2.5.tgz#f115ad3976f42f0f90e0cff18b9dc7657c7835fd"
-  integrity sha512-WJrK7i6w+ULuZsGscCezbCH4Aev5U3xY87vnSimzzEgPQhb0Sa0a1rE3c2jtEwrFtSfi61Jefw3jI5/DD/3jbQ==
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/w3c-keyname/-/w3c-keyname-2.2.6.tgz#8412046116bc16c5d73d4e612053ea10a189c85f"
+  integrity sha512-f+fciywl1SJEniZHD6H+kUO8gOnwIr7f4ijKA6+ZvJFjeGi1r4PDLl53Ayud9O/rk64RqgoQine0feoeOU0kXg==
 
 web-streams-polyfill@^3.0.3:
   version "3.2.1"
