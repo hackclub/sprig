@@ -518,5 +518,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-26"
+  },
+  {
+    "filename": "mandelbrot",
+    "title": "Mandelbrot",
+    "author": "HenryBass",
+    "img": "",
+    "tags": ["sandbox", "simulation", "hackable"],
+    "addedOn": "2022-09-14"
   }
 ]
