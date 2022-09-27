@@ -52,7 +52,7 @@
     "title": "9_puzzle",
     "author": "brian silverman",
     "img": "",
-    "tags": [],
+    "tags": ["puzzle"],
     "addedOn": "2022-07-14"
   },
   {
@@ -68,7 +68,7 @@
     "title": "color_patterns",
     "author": "brian silverman",
     "img": "",
-    "tags": [],
+    "tags": ["puzzle"],
     "addedOn": "2022-07-14"
   },
   {
@@ -76,7 +76,7 @@
     "title": "matcher",
     "author": "brian silverman",
     "img": "",
-    "tags": [],
+    "tags": ["puzzle"],
     "addedOn": "2022-08-12"
   },
   {
@@ -84,7 +84,7 @@
     "title": "shoot_green_blobs",
     "author": "otterly-otter",
     "img": "",
-    "tags": [],
+    "tags": ["classic"],
     "addedOn": "2022-09-07"
   },
   {
@@ -92,7 +92,7 @@
     "title": "crappy_bird",
     "author": "ced",
     "img": "",
-    "tags": [],
+    "tags": ["classic", "endless"],
     "addedOn": "2022-07-14"
   },
   {
@@ -108,7 +108,7 @@
     "title": "flappy_bird_but_no_gravity_and_worse",
     "author": "sam liu",
     "img": "",
-    "tags": ["WIP"],
+    "tags": ["WIP", "endless"],
     "addedOn": "2022-09-16"
   },
   {
@@ -172,7 +172,7 @@
     "title": "mini_maze_and_puzzle",
     "author": "muhammad tsaqif mukhayyar",
     "img": "",
-    "tags": [],
+    "tags": ["puzzle"],
     "addedOn": "2022-09-16"
   },
   {
@@ -252,7 +252,7 @@
     "title": "SprazeJS",
     "author": "Peipr",
     "img": "",
-    "tags": [],
+    "tags": ["puzzle"],
     "addedOn": "2022-08-29"
   },
   {
@@ -292,7 +292,7 @@
     "title": "alien",
     "author": "anshimathur0325",
     "img": "",
-    "tags": [],
+    "tags": ["endless"],
     "addedOn": "2022-09-06"
   },
   {
@@ -324,7 +324,7 @@
     "title": "confusing_conditions",
     "author": "Sooraj",
     "img": "",
-    "tags": [],
+    "tags": ["puzzle"],
     "addedOn": "2022-09-08"
   },
   {
@@ -332,7 +332,7 @@
     "title": "Virtual_Machine",
     "author": "N_Rizwan",
     "img": "",
-    "tags": [],
+    "tags": ["puzzle"],
     "addedOn": "2022-09-08"
   },
   {
@@ -372,7 +372,7 @@
     "title": "zombie_defense",
     "author": "Edmund",
     "img": "",
-    "tags": [],
+    "tags": ["endless"],
     "addedOn": "2022-09-19"
   },
   {
@@ -388,7 +388,7 @@
     "title": "simple_maze",
     "author": "Itamar Davidyan",
     "img": "",
-    "tags": [],
+    "tags": ["puzzle"],
     "addedOn": "2022-09-13"
   },
   {
@@ -396,7 +396,7 @@
     "title": "killpigs",
     "author": "luiç",
     "img": "",
-    "tags": [],
+    "tags": ["puzzle"],
     "addedOn": "2022-09-13"
   },
   {
@@ -404,7 +404,7 @@
     "title": "TheTombOfAThousandTerrors",
     "author": "Fabian",
     "img": "",
-    "tags": [],
+    "tags": ["puzzle"],
     "addedOn": "2022-09-13"
   },
   {
@@ -420,7 +420,7 @@
     "title": "Flurffy",
     "author": "LucasHT22",
     "img": "",
-    "tags": [],
+    "tags": ["classic"],
     "addedOn": "2022-09-13"
   },
   {
@@ -428,7 +428,7 @@
     "title": "snake_game",
     "author": "souvikpal2000",
     "img": "",
-    "tags": [],
+    "tags": ["classic"],
     "addedOn": "2022-09-13"
   },
   {
@@ -436,7 +436,7 @@
     "title": "Piano",
     "author": "Scott",
     "img": "",
-    "tags": [],
+    "tags": ["simulation"],
     "addedOn": "2022-09-14"
   },
   {
@@ -444,7 +444,7 @@
     "title": "desi-pong",
     "author": "Arnob Das",
     "img": "",
-    "tags": [],
+    "tags": ["classic"],
     "addedOn": "2022-09-14"
   },
   {
@@ -452,7 +452,7 @@
     "title": "Trash_IT",
     "author": "N Rizwan",
     "img": "",
-    "tags": [],
+    "tags": ["puzzle"],
     "addedOn": "2022-09-14"
   },
   {
@@ -460,7 +460,7 @@
     "title": "Paint_IT",
     "author": "N Rizwan",
     "img": "",
-    "tags": [],
+    "tags": ["sandbox"],
     "addedOn": "2022-09-14"
   },
   {
@@ -468,7 +468,7 @@
     "title": "love_lock",
     "author": "N Rizwan",
     "img": "",
-    "tags": [],
+    "tags": ["puzzle"],
     "addedOn": "2022-09-15"
   },
   {
@@ -478,5 +478,45 @@
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2022-09-19"
+  },
+  {
+    "filename": "infinite_maze",
+    "title": "infinite_maze",
+    "author": "pertark",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-09-22"
+  },
+  {
+    "filename": "Falling_Water",
+    "title": "Falling_Water",
+    "author": "Captainexpo",
+    "img": "",
+    "tags": ["advanced"],
+    "addedOn": "2022-09-23"
+  },
+  {
+    "filename": "goaled",
+    "title": "goaled",
+    "author": "Ronan Verma",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-09-24"
+  },
+  {
+    "filename": "2D_life",
+    "title": "2D_life",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["simulation", "hackable", "classic", "sandbox"],
+    "addedOn": "2022-09-25"
+  },
+  {
+    "filename": "maze_runner",
+    "title": "maze_runner",
+    "author": "wetf",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-09-26"
   }
 ]

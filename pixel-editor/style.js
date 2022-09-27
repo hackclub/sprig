@@ -89,15 +89,15 @@ export const style = `
   }
 
   .colors div {
-    height: 50px;
-    width: 50px;
-    border: 2px solid var(--switch-fg-low);
+    height: 40px;
+    width: 77px;
+    /*border: 2px solid var(--switch-fg-low);*/
     border-radius: 4px;
     cursor: pointer;
   }
 
   .colors div.active {
-    border-color: var(--switch-fg-high);
+    border: 2px solid var(--switch-fg-high);
   }
 
   .gridsize {
