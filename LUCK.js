@@ -1,3 +1,8 @@
+/*
+@title: LUCK
+@author: Ethan
+*/
+
 const player = "p";
 const box = "b";
 const goal = "g";
