@@ -7,7 +7,7 @@ const player = "p";
 const box = "b";
 const wall = "w";
 const treasure = "t";
-const key = "k";
+const box2 = "k";
 
 setLegend(
   [ player, bitmap`
@@ -78,26 +78,26 @@ C9CCCCCCCCCCCC9C
 C9CCCCCCCCCCCC9C
 C99999999999999C
 CCCCCCCCCCCCCCCC`],
-  [ key, bitmap`
-......66666.....
-.....66...66....
-.....66...66....
-.....66...66....
-.....66...66....
-.....6666666....
-.....6666666....
-........6.......
-........6.......
-.....6666.......
-.....6666.......
-........6.......
-........6.......
-........6.......
-........6.......
-........6.......`]
+  [ box2, bitmap`
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH`]
 );
 
-setSolids([player,box,wall]);
+setSolids([player,box,wall,box2]);
 
 let level = 0;
 const levels = [
@@ -132,6 +132,50 @@ w..www...w.wwww
 w..w.....b..w.w
 w.ww.....w.ww.w
 wwwwwwwwwwwwwww`,
+  map`
+................
+...kbkkkkkkkk...
+kkbkkkb.kk..kkk.
+k.......k.b...k.
+k.kkkkkbk.b.k.k.
+k.k...k.k.kkk.k.
+k.k...kp..k.b.k.
+k.k...kkkkk.b.k.
+..k..b....k.kkk.
+bkkkkkkkk.k.k...
+.kkk....b.k.k...
+..k...k.k.k.k...
+..b...k.k.b.k...
+kkkkkkk.t...k...`,
+  map`
+t....kkkkk.........k
+k..k.....k.........k
+kk..kkkk.kkkk.b..b.k
+k.k....kb...k......k
+k..k..kk....k.b..b.k
+k...k.kkkkbbk..bb..k
+kk.k.b.kkk..k......k
+kk..k.kkkk..k......k
+kk.k.b..kk..k......k
+kk..k..kkk..kkkkkkkk
+k..k.b..kk..........
+k...k.k..k......b..b
+k..k.b...b..kkkkkkkp`,
+  map`
+..............kk..bp
+..............kk...b
+kkkkkbwwwww...kkbkkk
+k.b.......w...kk.k..
+k.k...wwwbww..kk.b..
+k.kk....w..w.bkk.b..
+k.kkkk..w..w.kkkkk..
+k....kkkw.tw.k...k..
+k...b..kwwwwbkkkkk..
+kkkkk..kb.k......b..
+....kbbkkkkb.....b..
+....k.......kkkkkkkk
+....k.......k.......
+....kkkkkkkkk.......`,
   map`
 wwwwwwwwwwwwwwwwwwww
 w..................w
@@ -169,10 +213,10 @@ onInput("d", () => {
 
 afterInput(() => {
 
-  //===========FOLDER TO TRASH SCRIPT==============
-  const dustbins = tilesWith(treasure).length;
+  //=========================
+  const treasuree = tilesWith(treasure).length;
   const targett = tilesWith(treasure, player).length;
-  if (dustbins === targett) 
+  if (treasuree === targett) 
   {
     level = level + 1;
     const currentLevel = levels[level];
@@ -182,7 +226,10 @@ afterInput(() => {
     } 
   }
 
-  
 })
 
+
+onInput("j", () => {
+  setMap(levels[level]);
+});
 
