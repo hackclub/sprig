@@ -6,7 +6,7 @@
 const player = "p";
 const box = "b";
 const goal = "g";
-const wall = "w";das
+const wall = "w";
 
 setLegend(
   [ player, bitmap`
