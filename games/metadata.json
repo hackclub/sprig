@@ -526,5 +526,13 @@
     "img": "",
     "tags": ["sandbox", "simulation", "hackable"],
     "addedOn": "2022-09-14"
+  },
+    {
+    "filename": "Treasure_Hunt",
+    "title": "Treasure_Hunt",
+    "author": "Manikandan_M",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-09-28"
   }
 ]
