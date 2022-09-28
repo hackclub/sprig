@@ -103,10 +103,8 @@ bbb
 bb.`,
 ]
 
-let ptile;
-
 onInput("k", _ => {
-  ptile = getFirst(player);
+  const ptile = getFirst(player);
   if(isHole(ptile.x,ptile.y+1)) moveTileTo(ptile.x,ptile.y+1);
   else if(isHole(ptile.x,ptile.y-1)) moveTileTo(ptile.x,ptile.y-1);
   else if(isHole(ptile.x-1,ptile.y)) moveTileTo(ptile.x-1,ptile.y);
@@ -118,6 +116,8 @@ afterInput(_ => {
 })
 
 const moveTileTo = (x,y) => {
+    const ptile = getFirst(player);
+
   const ut = rbTile(ptile.x,ptile.y);
   if(ut){
     ut.x = x;
