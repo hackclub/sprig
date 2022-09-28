@@ -542,5 +542,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-28"
+  },
+    {
+    "filename": "Breakout",
+    "title": "Breakout",
+    "author": "Holly",
+    "img": "",
+    "tags": ["puzzle", "classic"],
+    "addedOn": "2022-09-28"
   }
 ]
