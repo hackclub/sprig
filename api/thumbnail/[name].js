@@ -11,6 +11,7 @@ function evalGameScript(script) {
   const patchedApi = {
     ...api,
     setLegend: (...bitmaps) => { legend = bitmaps; },
+    setBackground: () => {},
     setMap: (string) => { map = string },
     onInput: () => {}, 
     afterInput: () => {}, 
