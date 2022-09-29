@@ -535,7 +535,7 @@
     "tags": ["puzzle"],
     "addedOn": "2022-09-28"
   },
-      {
+    {
     "filename": "LUCK",
     "title": "LUCK",
     "author": "Ethan",
@@ -549,6 +549,14 @@
     "author": "Holly",
     "img": "",
     "tags": ["puzzle", "classic"],
+    "addedOn": "2022-09-28"
+  },
+  {
+    "filename": "alien_invaders",
+    "title": "alien_invaders",
+    "author": "stati30241",
+    "img": "",
+    "tags": ["classic"],
     "addedOn": "2022-09-28"
   }
 ]
