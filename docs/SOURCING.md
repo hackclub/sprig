@@ -32,7 +32,7 @@ A game console requires several things- controls, display, audio, and power.
 
 ## Controls
 
-Sprig’s control interface consists of eight twelve-millimeter through-hole tactile switches. We got them from [Adafruit](https://www.adafruit.com/product/1119). We’ve also played around.
+Sprig’s control interface consists of eight twelve-millimeter through-hole tactile switches. We got them from [Adafruit](https://www.adafruit.com/product/1119). We also played around with smaller buttons and surface mount buttons.
 
 Our first prototype used [six-millimeter surface mount soft switches](https://www.adafruit.com/product/3983) which we couldn’t find much stock of. During PCB assembly, the parts must be on an entire reel, and Adafruit cut theirs in strips of 10, and we couldn’t find enough - most people had maybe only a few hundred. They also weren’t too sensitive and you had to press all the way down to register a press.
 
@@ -64,7 +64,7 @@ Sprig’s PCBs were ordered from JLCPCB and ALLPCB. JLC is cheaper and significa
   
 JLC’s assembly was also much cheaper. For a batch of 5 Sprigs, it would cost me $100 at JLC, and $500+ at ALLPCB. We usually ordered JLC for rush prototypes and ALLPCB for prototype validation.
 
-Matte Black solder mask is any hardware designer's best friend, and so is green. But green is boring! We went with matte green. I also loved the color of ENIG, so they were ordered that. With testing for substrate thicknesses of 1.6mm, 2.0mm, and 2.4mm, we concluded that 1.6mm was the easiest for buttons to be installed in. Ordering information: 1.6mm, 140x65mm, Matte Black/Matte Green, ENIG. Everything else is standard.
+Matte Black solder mask is any hardware designer's best friend, but green always has a fun classic look. So we went with both. I also loved the gold color of ENIG. With testing for substrate thicknesses of 1.6mm, 2.0mm, and 2.4mm, we concluded that 1.6mm was the easiest for buttons to be installed in. Ordering information: 1.6mm, 140x65mm, Matte Black/Glossy Green, ENIG. Everything else is standard.
   
 ## Reverse Polarity Protection
   
