@@ -574,5 +574,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-30"
+ },
+ {
+    "filename": "tower_of_hanoi",
+    "title": "tower_of_hanoi",
+    "author": "nicholasz2510",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-10-02"
  }
 ]
