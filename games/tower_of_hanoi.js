@@ -4,21 +4,16 @@
 */
 
 
+// SPRITES
 const post = "p";
+const loop0 = "0";
 const loop1 = "1";
 const loop2 = "2";
-const loop3 = "3";
 const selected = "s"; 
-
-let indexSelected = 0;
-let wantMove = false;
-let posts = [[2, 1, 0], [], []];
-const types = ["3", "2", "1"];
-
 setLegend(
   [ post, bitmap`
 ................
-................
+.......CL.......
 .......CL.......
 .......CL.......
 .......CL.......
@@ -33,7 +28,7 @@ setLegend(
 .......CL.......
 .CCCCCCCCCCCCCC.
 ................`],
-  [ loop1, bitmap`
+  [ loop0, bitmap`
 ................
 ................
 ................
@@ -50,7 +45,7 @@ setLegend(
 ...4444444444...
 ................
 ................`],
-  [ loop2, bitmap`
+  [ loop1, bitmap`
 ................
 ................
 ................
@@ -67,7 +62,7 @@ setLegend(
 ................
 ................
 ................`],
-  [ loop3, bitmap`
+  [ loop2, bitmap`
 ................
 ................
 ................
@@ -86,7 +81,7 @@ setLegend(
 ................`],
   [ selected, bitmap`
 ................
-................
+.......3L.......
 .......3L.......
 .......3L.......
 .......3L.......
@@ -102,11 +97,45 @@ setLegend(
 .33333333333333.
 ................`]
 );
-const currentLevel = map`
-ppp`
+const loops = [loop0, loop1, loop2];
+const blank = map`
+...
+...`;
+const level = map`
+ppp
+...`;
 
-addText("ASD to select tower", {x: 0, y: 5});
-addText("Press J to start", {x: 0, y: 8});
+
+// STATE
+let indexSelected;
+let posts;
+let types;
+let moveCount;
+let started = false;
+let numRings = 2;
+
+// ON RUN
+setMap(blank);
+addText("ASD = source", {y: 4});
+addText("JKL = destination", {y: 6});
+addText("any key to start", {y: 8});
+
+function reset() {
+  clearText();
+  setMap(level);
+  for (let i = 0; i < numRings; i++) {
+    addSprite(0,0,loops[i]);
+  }
+  select(0);
+  posts = [[...Array(numRings).keys()].reverse(), [], []];
+  types = posts[0].map(x => String(x));
+  moveCount = 0;
+  started = true;
+}
+
+function updateMoveCount() {
+  
+}
 
 function clearSelection() {
   let tiles = getAll("s");
@@ -128,74 +157,82 @@ function select(j) {
 }
 
 function move(j, k) {
-  if (posts[j][posts[j].length - 1] > posts[k][posts[k].length - 1]) {
-    return false;
-  } else if (posts[j].length == 0) {
-    return false;
+  if (j == k || j == -1 || posts[j][posts[j].length - 1] > posts[k][posts[k].length - 1] || posts[j].length == 0) {
+    return;
   }
   
   let removed = posts[j].pop();
   posts[k].push(removed);
   let movedSprite = getFirst(types[removed]);
   movedSprite.x = k;
-  return true;
+  indexSelected = -1;
+  moveCount++;
 }
 
-onInput("j", () => {
-  clearText();
-  setMap(currentLevel);
-  addSprite(0,0,loop1);
-  addSprite(0,0,loop2);
-  addSprite(0,0,loop3);
-  select(0);
-  let wantMove = false;
-  let posts = [[2, 1, 0], [], []];
-});
 
+// MOVE FROM
 onInput("a", () => {
-  let prevIndexSelected = indexSelected;
+  if (!started) {
+    return;
+  }
   clearSelection();
   select(0);
-  if (wantMove) {
-    let success = move(prevIndexSelected, indexSelected);
-    if (success) {
-      wantMove = false;
-    }
-  } else {
-    wantMove = true;
-  }
 });
 
 onInput("s", () => {
-  let prevIndexSelected = indexSelected;
+  if (!started) {
+    return;
+  }
   clearSelection();
   select(1);
-  if (wantMove) {
-    let success = move(prevIndexSelected, indexSelected);
-    if (success) {
-      wantMove = false;
-    }
-  } else {
-    wantMove = true;
-  }
 });
 
 onInput("d", () => {
-  let prevIndexSelected = indexSelected;
+  if (!started) {
+    return;
+  }
   clearSelection();
   select(2);
-  if (wantMove) {
-    let success = move(prevIndexSelected, indexSelected);
-    if (success) {
-      wantMove = false;
-    }
-  } else {
-    wantMove = true;
-  }
 });
 
-afterInput(() => {
-  if (posts[2].length == 3) { 
-    addText("you win!", { y: 4, color: [255, 0, 0] });
+
+// MOVE TO
+onInput("j", () => {
+  if (!started) {
+    return;
   }
+  move(indexSelected, 0);
+  clearSelection();
+});
+
+onInput("k", () => {
+  if (!started) {
+    return;
+  }
+  move(indexSelected, 1);
+  clearSelection();
+});
+
+onInput("l", () => {
+  if (!started) {
+    return;
+  }
+  move(indexSelected, 2);
+  clearSelection();
+});
+
+
+afterInput(() => {
+  if (!started) {
+    reset();
+  }
+  clearText();
+  
+  if (posts[2].length == numRings) {
+    addText("win!", { y: 12, color: [255, 0, 0] });
+    started = false;
+    numRings = 3;
+  }
+
+  addText("Move count: " + moveCount, { y: 8});
 });
