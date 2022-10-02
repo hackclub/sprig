@@ -436,6 +436,7 @@ onInput("d", () => {
 
 onInput("j", () => {
   const p = gameState.player
+  if(!p) return
   if (p.playback && p.playback.end) p.playback.end() // no optional chaining? :(
   if (getAll(bullet).length) {
     p.playback = playTune(sounds.cannotFire)
