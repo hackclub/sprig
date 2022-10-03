@@ -196,14 +196,19 @@ const eatFoodMelody = tune`
 82.64462809917356: b5~82.64462809917356,
 2561.9834710743803`;
 const collisionMelody = tune`
-500: d5-500,
-15500`;
+84.50704225352112: c4-84.50704225352112,
+84.50704225352112: d4-84.50704225352112,
+84.50704225352112: e4-84.50704225352112,
+84.50704225352112: d4-84.50704225352112,
+84.50704225352112: c4-84.50704225352112,
+2281.6901408450703`;
 
 let lost = 0;
 
 const collision = () => {
   for(let i=0;i<snake.length;i++){
     if(getFirst(player).x === snake[i].xPos && getFirst(player).y === snake[i].yPos){
+      playTune(collisionMelody);
       lost = 1;
       clearInterval(game);
       clearInterval(reset);
@@ -238,6 +243,7 @@ const eatFood = () => {
 let keyPressed = "";
 
 const collisionWithWall = () => {
+  playTune(collisionMelody);
   lost = 1;
   clearInterval(game);
   clearInterval(reset);
