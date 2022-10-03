@@ -66,14 +66,9 @@ setSolids([coolguy, green, blocker])
 let level = 0;
 const levels = [
   map`
-c.....bbb
-bbbbb....
-.........
-....bbb..
-bbb......
-.b.......
-.b....b..
-......b..`,
+cb..
+.b.b
+...b`,
   map`
 c.......
 bbbbbbb.
@@ -84,10 +79,32 @@ bbbbbbb.
 .bbbbbb.
 ........`,
   map`
-cb..
-.b.b
-...b`,
-  
+c.....bbb
+bbbbb....
+.........
+....bbb..
+bbb......
+.b.......
+.b....b..
+......b..`,
+  map`
+c.......
+........
+.b......
+...bbbb.
+....b...
+.bb.....
+.bb..bbb`,
+   map`
+c........b
+b..bbbb..b
+b.........
+b......bb.
+b...bb..b.
+....bb..b.
+..........
+.bbb...b..`,
+   
 ]
 setMap(levels[level])
 const c = getFirst(coolguy);
