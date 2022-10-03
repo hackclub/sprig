@@ -101,9 +101,9 @@ b..bbbb..b
 b.........
 b......bb.
 b...bb..b.
-....bb..b.
+b...bb..b.
 ..........
-.bbb...b..`,
+.bbbb..b..`,
    
 ]
 setMap(levels[level])
