@@ -324,12 +324,18 @@ timerStart = setInterval(() => {
 
 
 onInput("d", () => {
-  getFirst(pointer).x += 1
-  ind += 1
-  if (ind > 5) {
-    ind = 5
+  try {
+    getFirst(pointer).x += 1
+    ind += 1
+    if (ind > 5) {
+      ind = 5
+    }
+    console.log(ind)
+  } catch (error) {
+    console.log("ignored")
+
   }
-  console.log(ind)
+  
 });
 
 onInput("j", () => {
@@ -357,12 +363,19 @@ onInput("k", () => {
 });
 
 onInput("a", () => {
-  getFirst(pointer).x -= 1
-  ind -= 1 
-  if (ind < 0) {
-    ind = 0
+  try {
+    getFirst(pointer).x -= 1
+    ind -= 1 
+    if (ind < 0) {
+      ind = 0
+    }
+    console.log(ind)
+
+  } catch (error) {
+    console.log("ignored a")
+
   }
-  console.log(ind)
+  
 
 });
 
