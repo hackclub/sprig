@@ -1,10 +1,9 @@
 # Things we may do or may want to do
 
 - Create list of game ideas
-- Storage abstraction layer for games
 - Better editor folding
 - Switch to dark version on hype page
-- Have sprig sprout grow as you scroll
+- [animate growing sprig as you scroll](https://github.com/hackclub/sprig/issues/334)
 - Redesign main menu
   - adjust colors? 
 - Adjust color palette
@@ -17,3 +16,6 @@
   - will have to update any broken gallery games if we do this
   - also have to adjust line number on error messages
 - improve error logging
+- [Storage Abstraction for Games](https://github.com/hackclub/sprig/issues/362)
+- [make a sprite gallery](https://github.com/hackclub/sprig/issues/345)
+
