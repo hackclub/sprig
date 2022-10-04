@@ -131,7 +131,7 @@ export function baseEngine() {
   const _checkBounds = (x, y) => {
     const { width, height } = state.dimensions;
 
-    if (x > width || x < 0 || y < 0 || y > height) throw new Error(`Sprite out of bounds.`);
+    if (x >= width || x < 0 || y < 0 || y >= height) throw new Error(`Sprite out of bounds.`);
   }
 
   const _checkLegend = type => {
