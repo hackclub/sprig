@@ -319,6 +319,7 @@ const ypos = getFirst(pointer).y
 
 
 timerStart = setInterval(() => {
+    addText(score.toString() + " " + wrongs.toString() + " " + counter.toString(), {x:12, y:13, color: [0,0,255]})
     counter += 1;
 }, 1000);
 
