@@ -1,6 +1,17 @@
 /*
 @title: floppyMatch
 @author: GBan22
+Instructions:
+
+In floppyMatch, you control a pointer that can move from left to right. A floppy disk appears at the top of the screen, and you have to match it. 
+
+You match it by moving the pointer with a and d and selecting a floppy disk top and bottom with i (that match the disk on the top). 
+After you select two parts, the program checks whether the selections are correct. If they are, you get a point, 
+but if they aren't, then you get a strike. After ten points, you win, but after 3 strikes, you lose and your 
+progress is reset. (if you accidentally select a part that you don't want to, press k and your chosen parts should reset.) 
+You can also press j to restart or play again. There is also a timer (it serves no use other than for fun).
+
+Try to beat your time! Press j if u want to restart, by the way, and press k to reset your chosen pieces.
 */
 
 const p1 = "a";
