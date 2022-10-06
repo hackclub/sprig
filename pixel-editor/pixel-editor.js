@@ -23,6 +23,12 @@ function RGBA_to_hex([r, g, b, a]) {
   return "#" + r + g + b + a;
 }
 
+// Horrible way of doing this but it works.
+const sharedState = {
+  tool: "brush",
+  color: [0, 0, 0, 255]
+}
+
 // NOTE: kognise - Could the editor canvas be 16x16 and just scaled up with CSS?
 //                 Whole file here could do with a refactor, maybe I will at some point.
 export function createPixelEditor(target) {
@@ -159,8 +165,8 @@ export function createPixelEditor(target) {
 
   const renderTool = ([ toolName, icon ], state) => html`
     <button
-      class=${[state.tool === toolName ? "active" : ""].join(" ")}
-      @click=${() => { state.tool = toolName; r(); }}
+      class=${[sharedState.tool === toolName ? "active" : ""].join(" ")}
+      @click=${() => { sharedState.tool = toolName; r(); }}
       title=${toolName}
     >
       <ion-icon name=${icon} />
@@ -241,9 +247,9 @@ export function createPixelEditor(target) {
 
       return html`
         <div 
-          class=${RGBA_to_hex(state.color) === RGBA_to_hex(color[1]) ? "active" : ""}
+          class=${RGBA_to_hex(sharedState.color) === RGBA_to_hex(color[1]) ? "active" : ""}
           style=${style}
-          @click=${() => { state.color = color[1]; r(); }}>
+          @click=${() => { sharedState.color = color[1]; r(); }}>
         </div>
       `
     }
@@ -318,13 +324,13 @@ export function createPixelEditor(target) {
   const tools_mousedown = {
     brush: (x, y) => {
       const [gridW, gridH] = state.gridSize;
-      state.gridColors[gridW * y + x] = state.color;
+      state.gridColors[gridW * y + x] = sharedState.color;
     },
     bucket: (x, y) => {
       const [gridW, gridH] = state.gridSize;
 
       const startColor = RGBA_to_hex(state.gridColors[gridW * y + x]);
-      const newColor = RGBA_to_hex(state.color);
+      const newColor = RGBA_to_hex(sharedState.color);
       const grid = state.gridColors;
 
       const checkValidity = (x, y) => {
@@ -342,7 +348,7 @@ export function createPixelEditor(target) {
       q.push([x, y]);
       while (q.length > 0) {
         const [x1, y1] = q.pop();
-        grid[gridW * y1 + x1] = state.color;
+        grid[gridW * y1 + x1] = sharedState.color;
         if (checkValidity(x1 + 1, y1)) q.push([x1 + 1, y1]);
         if (checkValidity(x1 - 1, y1)) q.push([x1 - 1, y1]);
         if (checkValidity(x1, y1 + 1)) q.push([x1, y1 + 1]);
@@ -402,7 +408,7 @@ export function createPixelEditor(target) {
       const pts = line(state.currentPt, state.mousedownPt);
 
       pts.forEach(([x, y]) => {
-        state.tempGridColors[gridW * y + x] = state.color;
+        state.tempGridColors[gridW * y + x] = sharedState.color;
       });
 
       state.mousedownPt = state.currentPt;
@@ -418,7 +424,7 @@ export function createPixelEditor(target) {
       const yMax = Math.max(state.currentPt[1], state.mousedownPt[1]);
       for (let x = xMin; x <= xMax; x++) {
         for (let y = yMin; y <= yMax; y++) {
-          state.tempGridColors[gridW * y + x] = state.color;
+          state.tempGridColors[gridW * y + x] = sharedState.color;
         }
       }
     },
@@ -431,7 +437,7 @@ export function createPixelEditor(target) {
       const pts = line(state.currentPt, state.mousedownPt);
 
       pts.forEach(([x, y]) => {
-        state.tempGridColors[gridW * y + x] = state.color;
+        state.tempGridColors[gridW * y + x] = sharedState.color;
       });
     },
     circle: (x, y) => {
@@ -455,7 +461,7 @@ export function createPixelEditor(target) {
       for (let x = xMin; x <= xMax; x++) {
         for (let y = yMin; y <= yMax; y++) {
           if (inCircle(x, y)) {
-            state.tempGridColors[gridW * y + x] = state.color;
+            state.tempGridColors[gridW * y + x] = sharedState.color;
           }
         }
       }
@@ -624,14 +630,14 @@ export function createPixelEditor(target) {
       state.mousedownPt = pt;
       state.currentPt = pt;
 
-      if (state.tool in tools_mousedown) tools_mousedown[state.tool](...pt);
+      if (sharedState.tool in tools_mousedown) tools_mousedown[sharedState.tool](...pt);
     });
 
     c.addEventListener("mousemove", (e) => {
       const pt = getPoint(e);
       state.currentPt = pt;
 
-      if (state.tool in tools_mousemove) tools_mousemove[state.tool](...pt);
+      if (sharedState.tool in tools_mousemove) tools_mousemove[sharedState.tool](...pt);
 
       if (state.selectHandle.clicked) {
         state.tempGridColors.fill(null);
