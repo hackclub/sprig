@@ -54,6 +54,7 @@ export function createPixelEditor(target) {
       dragged: false,
     },
     palette: global_state.palette,
+    clearConfirm: false
     // hoveredCell: null,
   };
 
@@ -174,7 +175,6 @@ export function createPixelEditor(target) {
     </button>
   `;
 
-  // FIXME: kognise - Stylesheet takes a sec to load/render so we get a FOUC. Can we preload somehow?
   const view = (state) => html`
     <style>${style}</style>
     <div class="pixel-editor-container">
@@ -216,6 +216,45 @@ export function createPixelEditor(target) {
             <ion-icon name="arrow-undo" />
             <div>undo</div>
           </button>
+
+          <button
+            @click=${() => {
+              if (!state.clearConfirm) {
+                state.clearConfirm = true;
+                r();
+              } else {
+                state.clearConfirm = false;
+                r();
+                state.undoRedoStack.push(JSON.stringify(state.gridColors));
+                if (state.undoRedoStack.length > 15) state.undoRedoStack.unshift();
+                state.gridColors.forEach((_, i) => state.gridColors[i] = [0, 0, 0, 0]);
+                stateUpdate();
+              }
+            }}
+            title="clear"
+          >
+            <ion-icon name="trash" />
+            <div>${state.clearConfirm ? 'you sure?' : 'clear'}</div>
+          </button>
+
+          <button
+            @click=${() => {
+              state.undoRedoStack.push(JSON.stringify(state.gridColors));
+              if (state.undoRedoStack.length > 15) state.undoRedoStack.unshift();
+              const temp = [ ...state.gridColors ];
+              for (let j = 0; j < 16; ++j) {
+                for (let i = 0; i < 16; ++i) {
+                  state.gridColors[j + i*16] = temp[i + (15 - j)*16];
+                }
+              }
+              stateUpdate();
+            }}
+            title="rotate"
+          >
+            <ion-icon name="reload" />
+            <div>rotate</div>
+          </button>
+
           <button
             title="export"
             @click=${() => {
