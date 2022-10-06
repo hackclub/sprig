@@ -28,7 +28,7 @@ Make the purple block pushable.
 Level 2
 --------
 
-Add controls to move up and left, use "w" and "d" as inputs
+Add controls to move up and left, use "w" and "a" as inputs
 
 Tip: 
 Do you find it annoying restarting at level 0?
