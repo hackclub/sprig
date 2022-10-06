@@ -229,6 +229,9 @@ Then select the right layer in the menu and hit okay.
 
 ![](https://paper-attachments.dropbox.com/s_0511BA4B191598753ECBC49567C0623B4E6F1551BAE3832CD8B8B2EDAF26FAB6_1665083148114_Screen+Shot+2022-10-06+at+3.04.20+PM.png)
 
+You can see the final result below.
+
+![Screen Shot 2022-10-06 at 3 19 32 PM](https://user-images.githubusercontent.com/27078897/194400337-fe6d60cc-f94d-486c-86d1-afc7c729e8fb.png)
 
 # BELOW IS A WIP
 
