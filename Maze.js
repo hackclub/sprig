@@ -1,12 +1,22 @@
 /*
 @title: Maze
-@author: Akeell 
+@author: Akeell
 */
+
+/*instructions
+Get your character to the green teleporter to get to the next level. 
+Controls: W = up
+          S = down
+          A = left
+          d = right
+          J = restart
+*/
+
+
 
 const player = "p";
 const wall = "w"; 
 const teleport = "t"; 
-const block = "b"
 
 setLegend(
   [ player, bitmap`
@@ -25,7 +35,7 @@ setLegend(
 ......000.......
 ......0.0.......
 .....00.00......
-................`], 
+................`],
   [wall, bitmap`
 0000000000000000
 0000000000000000
@@ -42,7 +52,7 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000` ],  
+0000000000000000` ], 
   [teleport, bitmap`
 ................
 ................
@@ -59,27 +69,10 @@ setLegend(
 ..4....D....4...
 ..44444444444...
 ................
-................`],   
-  [block, bitmap`
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL`]
+................`], 
 );
 
-setSolids([player, wall, block]);
+setSolids([player, wall]);
 
 let level = 0;
 const levels = [
@@ -106,73 +99,13 @@ pw.........
 .......w...
 ..wwwwwwww.
 .wt........`,
-  map`
-........w....
-wwwwww..w.ww.
-p.........w..
-ww..w.w...w..
-....wwwwwww..
-.w.w.w....w..
-.wwwwwt.w.w..
-.ww.wwwww.w..
-.w...w.ww.w..
-.w.w.ww.w....
-.w.w.w..wwww.
-.......w.....`, 
-  map`
-.tw......w......
-.ww.wwwwww.wwww.
-.........w......
-w....ww.....w..w
-w.w.w..wwwwwww..
-wwwwww.ww....w..
-.......w...wpw.w
-.ww.w..w.w.www.w
-....ww..........
-........w.w...ww
-..w.w..w...w..w.
-.w.w.ww.........
-.......wwwwwwwww`,
-  map`
-....w..w...wt.....
-.ww......w..wwwww.
-.w...ww.wwww......
-.www..ww..ww.ww.ww
-.........w.w......
-www....www..w..www
-.pw.www.....w..w..
-w.w..wwww.w.w..w..
-..........w...ww..`,
-  map`
-p..w.w..
-ww.w.b..
-...w.b..
-.www..w.
-...b..w.
-.w.w..wt`, 
-  map`
-p...b....w.................
-.www.www..www..wwwww.wwww..
-.w..ww..w.w..w...w...w....w
-.w...w..w.w..w...w..ww....w
-.www.www..w.w....w.w.w.www.
-...w.w..w.ww.....ww..w...w.
-...w.w..w.w.w.b..w...w..tw.
-bwww.w.w..w..w.wwwww.wwwww.
-......w.w..w.........w....w
-.wwwwww...w..w..w...w.ww...
-....w.wwww..w.....w.....w..
-.......w..wwwwwww......w.w.
-wwwww....w....w.wwww.w...w.
-.w....w....w...........w...`,
-  
 ];
 
 const currentLevel = levels[level];
 setMap(currentLevel);
 
 setPushables({
-  [ player ]: [block],
+  [ player ]: [],
 });
 
 //Start - Movement
