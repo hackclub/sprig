@@ -12,9 +12,10 @@ export function bitmapTextToImageData(string) {
   
   const colors = Object.fromEntries(palette);
   
+  const nonSpace = string.split("").filter(x => x !== " " && x !== "\n"); // \S regex was too slow
   for (let i = 0; i < width*height; i++) {
-    const type = string.split("").filter(x => x.match(/\S/))[i] || ".";
-
+    const type = nonSpace[i] || ".";
+  
     if (!(type in colors)) {
       const err = `in sprite string: no known color for char "${type}"`;
       console.error(err + '\n' + string);

@@ -4,6 +4,7 @@ import { palette } from "../palette.js";
 const spritesheetIndex = 0;
 const texIndex = 1;
 let backgroundTile = 0;
+let backgroundKey = ".";
 let gl,              texLocation,
                   texResLocation,
              spritesheetLocation,
@@ -14,7 +15,8 @@ const SPRITESHEET_TILE_COUNT = 64;
 
 let _bitmaps;
 export function setBackground(bg) {
-  backgroundTile = 1+_bitmaps.findIndex(f => f[0] == bg);
+  backgroundKey = bg;
+  backgroundTile = 1+_bitmaps.findIndex(f => f[0] == bg) || 0;
 }
 
 export function setBitmaps(bitmaps) {
@@ -36,6 +38,7 @@ export function setBitmaps(bitmaps) {
       }
   }
   uploadImage(spritesheet, spritesheetIndex);
+  setBackground(backgroundKey);
 }
 
 export function init(canvas) {
