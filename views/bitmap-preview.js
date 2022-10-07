@@ -20,11 +20,17 @@ class BitmapPreview extends HTMLElement {
   attributeChangedCallback() {
     if (!this.canvas) return;
 
-    const data = bitmapTextToImageData(this.getAttribute("text") ?? "", PALETTE);
-    this.canvas.width = data.width;
-    this.canvas.height = data.height;
-    this.canvas.getContext("2d").clearRect(0, 0, data.width, data.height);
-    this.canvas.getContext("2d").putImageData(data, 0, 0);
+    try {
+      const data = bitmapTextToImageData(this.getAttribute("text") ?? "", PALETTE);
+      this.canvas.width = data.width;
+      this.canvas.height = data.height;
+      this.canvas.getContext("2d").clearRect(0, 0, data.width, data.height);
+      this.canvas.getContext("2d").putImageData(data, 0, 0);
+    } catch {
+      this.canvas.width = 1;
+      this.canvas.height = 1;
+      this.canvas.getContext("2d").clearRect(0, 0, 1, 1);
+    }
     this.staleCanvas = false;
   }
 

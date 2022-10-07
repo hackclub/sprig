@@ -3,6 +3,7 @@ import { StateField } from "@codemirror/state";
 import { syntaxTree, foldService } from "@codemirror/language";
 import { getTag } from "./util.js";
 import { dispatch } from "../dispatch.js";
+import { global_state } from "../global_state.js";
 
 const pairs = [
   [ "bitmap", "image", "bitmap" ],
@@ -11,18 +12,21 @@ const pairs = [
 ]
 
 export class OpenButtonWidget extends WidgetType {
-  constructor(label, icon, editorType, text, from, to) {
+  constructor(label, icon, editorType, text) {
     super();
     
     this.label = label;
     this.icon = icon;
     this.editorType = editorType;
     this.text = text;
-    this.from = from;
-    this.to = to;
   }
 
-  eq(other) { return other.text === this.text && other.from === this.from && other.to === this.to; }
+  eq(other) {
+    return other.label === this.label &&
+      other.icon === this.icon &&
+      other.editorType === this.editorType &&
+      other.text === this.text;
+  }
   ignoreEvent() { return false; }
 
   toDOM() {
@@ -31,7 +35,7 @@ export class OpenButtonWidget extends WidgetType {
     
     const button = container.appendChild(document.createElement("button"));
     button.textContent = this.label;
-    button.addEventListener("click", () => this.onClick());
+    button.addEventListener("click", (event) => this.onClick(event));
 
     const iconContainer = button.appendChild(document.createElement("div"));
     iconContainer.classList.add("icon-container");
@@ -46,7 +50,7 @@ export class OpenButtonWidget extends WidgetType {
   updateDOM(container) {
     const oldButton = container.children[0];
     const button = oldButton.cloneNode(true); // This'll remove all event listeners.
-    button.addEventListener("click", () => this.onClick());
+    button.addEventListener("click", (event) => this.onClick(event));
     container.replaceChild(button, oldButton);
 
     if (this.editorType === "bitmap") {
@@ -60,9 +64,24 @@ export class OpenButtonWidget extends WidgetType {
     return true;
   }
 
-  onClick() {
+  onClick(event) {
+    const doc = global_state.codemirror.state.doc.toString();
+    let pos = global_state.codemirror.posAtCoords({ x: event.pageX, y: event.pageY });
+    let from = -1;
+
+    while (true) {
+      if (doc[pos] === "`") {
+        if (from === -1) {
+          from = pos + 1;
+        } else {
+          break;
+        }
+      }
+      pos++;
+    }
+
     dispatch("SET_EDIT_RANGE", {
-      range: [this.from, this.to]
+      range: [from, pos]
     });
 
     dispatch("SET_ASSET_EDITOR", {
@@ -85,7 +104,7 @@ function makeValue(state) {
         if (tag.nameFrom === tag.nameTo) continue;
 
         const decoration = Decoration.replace({
-          widget: new OpenButtonWidget(label, icon, editorType, tag.text, tag.textFrom, tag.textTo)
+          widget: new OpenButtonWidget(label, icon, editorType, tag.text)
         });
         widgets.push(decoration.range(tag.nameFrom, tag.nameTo));
         if (tag.textFrom !== tag.textTo) foldRanges.push({ from: tag.textFrom, to: tag.textTo });
@@ -105,14 +124,7 @@ export default StateField.define({
     return makeValue(state);
   },
   update(value, transaction) {
-    if (transaction.docChanged) {
-      return makeValue(transaction.state);
-    } else {
-      return {
-        ...value,
-        decorations: value.decorations.map(transaction.changes)
-      };
-    }
+    return makeValue(transaction.state);
   },
   provide(field) {
     return [

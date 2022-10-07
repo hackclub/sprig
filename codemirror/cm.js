@@ -5,8 +5,6 @@ import { indentWithTab } from "@codemirror/commands";
 import { javascript } from "@codemirror/lang-javascript";
 import editors from './editors.js';
 
-
-
 const foldRange = view => (start, end) => {
   let { state } = view, effects = [];
   for (let pos = start; pos < end;) {
