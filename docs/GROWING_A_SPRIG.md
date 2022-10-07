@@ -233,15 +233,17 @@ You can see the final result below.
 
 ![Screen Shot 2022-10-06 at 3 19 32 PM](https://user-images.githubusercontent.com/27078897/194400337-fe6d60cc-f94d-486c-86d1-afc7c729e8fb.png)
 
+## The Firmware
+
+We are using KalumaJS
+
+---
+
 # BELOW IS A WIP
 
 ### Mechanical
 
 Pull an image of the board into Fusion360. Sketch out the back covers.
-
-## The Firmware
-
-We are using KalumaJS
 
 ## The Manufacturing
 
