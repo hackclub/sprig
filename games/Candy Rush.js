@@ -80,7 +80,7 @@ setLegend(
 0000000000000000`]
 );
 
-let level = 3;
+let level = 0;
 const levels = [
   map`
 .g...
