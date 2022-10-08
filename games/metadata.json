@@ -599,13 +599,21 @@
     "tags": ["puzzle"],
     "addedOn": "2022-10-05"
  },
-  {
+ {
     "filename": "maze7",
     "title": "maze7",
     "author": "akeell",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-06"
+ },
+ {
+    "filename": "game_name",
+    "title": "Flying_Game",
+    "author": "Zainab Khorakiwala",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-10-08"
  }
   
 ]
