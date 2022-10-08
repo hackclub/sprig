@@ -1,6 +1,6 @@
 /*
-@title: game_name
-@author: your_name
+@title: Flying Game
+@author: Zainab Khorakiwala
 */
 
 const player = "p";
