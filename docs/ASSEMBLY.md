@@ -8,8 +8,8 @@
 - 1x LCD screen
 - 2x spacers (for LCD screen)
 - 1x Raspberry Pi Pico
-- 4x backings (with D-pad cutouts)
-- 4x backings (flat)
+- 2x backings (with D-pad cutouts)
+- 2x backings (flat)
 - 8x buttons
 - 2x M2\*16 screws (for the LCD screen)
 - 8x M2\*10 screws (for the backings)
