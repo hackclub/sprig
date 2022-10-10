@@ -2,10 +2,6 @@
 @title: Bolt Battle
 @author: Arnav Ambre
 
-/*
-@title: Bolt Battle
-@author: Arnav Ambre
-
 INSTRUCTIONS:
 Use WASD to move the character to push the lighting bolts onto the batteries.
 In this update, blue bolts must be moved onto blue batteries, and yellow bolts must be moved to yellow batteries.
