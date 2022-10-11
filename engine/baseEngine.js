@@ -165,8 +165,9 @@ export function baseEngine() {
 
     state.sprites = [];
 
+    const nonSpace = string.split("").filter(x => x !== " " && x !== "\n"); // \S regex was too slow
     for (let i = 0; i < w*h; i++) {
-      const char = string.split("").filter(x => x.match(/\S/))[i];
+      const char = nonSpace[i];
       if (char === ".") continue;
       // the index will be the ascii char for the number of the index
       const type = char;
