@@ -24,6 +24,7 @@ function RGBA_to_hex([r, g, b, a]) {
 }
 
 // Horrible way of doing this but it works.
+// 
 const sharedState = {
   tool: "brush",
   color: [0, 0, 0, 255]
@@ -43,6 +44,7 @@ export function createPixelEditor(target) {
     tool: "brush",
     color: [0, 0, 0, 255],
     mousedown: false,
+    rightClick: false,
     mousedownPt: [0, 0],
     currentPt: [0, 0],
     showGrid: false,
@@ -363,13 +365,13 @@ export function createPixelEditor(target) {
   const tools_mousedown = {
     brush: (x, y) => {
       const [gridW, gridH] = state.gridSize;
-      state.gridColors[gridW * y + x] = sharedState.color;
+      state.gridColors[gridW * y + x] = state.rightClick ? [0,0,0,0] : sharedState.color;
     },
     bucket: (x, y) => {
       const [gridW, gridH] = state.gridSize;
 
       const startColor = RGBA_to_hex(state.gridColors[gridW * y + x]);
-      const newColor = RGBA_to_hex(sharedState.color);
+      const newColor = RGBA_to_hex(state.rightClick ? [0,0,0,0] : sharedState.color);
       const grid = state.gridColors;
 
       const checkValidity = (x, y) => {
@@ -387,7 +389,7 @@ export function createPixelEditor(target) {
       q.push([x, y]);
       while (q.length > 0) {
         const [x1, y1] = q.pop();
-        grid[gridW * y1 + x1] = sharedState.color;
+        grid[gridW * y1 + x1] = state.rightClick ? [0,0,0,0] : sharedState.color;
         if (checkValidity(x1 + 1, y1)) q.push([x1 + 1, y1]);
         if (checkValidity(x1 - 1, y1)) q.push([x1 - 1, y1]);
         if (checkValidity(x1, y1 + 1)) q.push([x1, y1 + 1]);
@@ -447,7 +449,7 @@ export function createPixelEditor(target) {
       const pts = line(state.currentPt, state.mousedownPt);
 
       pts.forEach(([x, y]) => {
-        state.tempGridColors[gridW * y + x] = sharedState.color;
+        state.tempGridColors[gridW * y + x] = state.rightClick ? [0,0,0,0] : sharedState.color;
       });
 
       state.mousedownPt = state.currentPt;
@@ -463,7 +465,7 @@ export function createPixelEditor(target) {
       const yMax = Math.max(state.currentPt[1], state.mousedownPt[1]);
       for (let x = xMin; x <= xMax; x++) {
         for (let y = yMin; y <= yMax; y++) {
-          state.tempGridColors[gridW * y + x] = sharedState.color;
+          state.tempGridColors[gridW * y + x] = state.rightClick ? [0,0,0,0] : sharedState.color;
         }
       }
     },
@@ -476,7 +478,7 @@ export function createPixelEditor(target) {
       const pts = line(state.currentPt, state.mousedownPt);
 
       pts.forEach(([x, y]) => {
-        state.tempGridColors[gridW * y + x] = sharedState.color;
+        state.tempGridColors[gridW * y + x] = state.rightClick ? [0,0,0,0] : sharedState.color;
       });
     },
     circle: (x, y) => {
@@ -500,7 +502,7 @@ export function createPixelEditor(target) {
       for (let x = xMin; x <= xMax; x++) {
         for (let y = yMin; y <= yMax; y++) {
           if (inCircle(x, y)) {
-            state.tempGridColors[gridW * y + x] = sharedState.color;
+            state.tempGridColors[gridW * y + x] = state.rightClick ? [0,0,0,0] : sharedState.color;
           }
         }
       }
@@ -660,11 +662,16 @@ export function createPixelEditor(target) {
 
     addDropUpload();
 
+    c.addEventListener("contextmenu", (e) => e.preventDefault());
+
     c.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      if (e.button === 2) state.rightClick = true;
+
       state.undoRedoStack.push(JSON.stringify(state.gridColors));
       if (state.undoRedoStack.length > 15) state.undoRedoStack.unshift();
 
-      state.mousedown = true;
+      state.mousedown++;
       const pt = getPoint(e);
       state.mousedownPt = pt;
       state.currentPt = pt;
@@ -706,7 +713,8 @@ export function createPixelEditor(target) {
     });
 
     const resetDrawing = (e) => {
-      state.mousedown = false;
+      state.rightClick = false;
+      state.mousedown = 0;
       state.mousedownPt = [0, 0];
       // state.currentPt = [0, 0];
 
@@ -729,7 +737,9 @@ export function createPixelEditor(target) {
     };
 
     c.addEventListener("mouseup", (e) => {
-      resetDrawing();
+      state.mousedown--;
+      if (e.button === 2) state.rightClick = false;
+      if (state.mousedown <= 0) resetDrawing();
     });
 
     c.addEventListener("mouseleave", (e) => {
