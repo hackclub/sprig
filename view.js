@@ -211,7 +211,7 @@ const menu = (state) => html`
     <a class="sprig-logo-container" href="https://sprig.hackclub.com/">
       <img src="https://cloud-ah8ey4rmb-hack-club-bot.vercel.app/0spriglogotext-white.png" alt="sprig logo" class="sprig-logo" />
     </a>
-    <div class="menu-item dropdown-container">
+    <div class=${[ "menu-item", "dropdown-container", state.shareLinkState !== "idle" ? "show" : "" ].join(" ")}>
       ${state.stale ? 'file*' : 'file'}
       <div class="dropdown-list">
         ${newFile(state)}
@@ -225,7 +225,7 @@ const menu = (state) => html`
 
         <div class="menu-spacer" />
 
-        <div class="popout-container">
+        <div class=${[ "popout-container", state.shareLinkState !== "idle" ? "show" : "" ].join(" ")}>
           share &rsaquo;
           <div class="popout-list">
             <div @click=${e => dispatch("SAVE_TO_FILE")}>as file</div>

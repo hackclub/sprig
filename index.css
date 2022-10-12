@@ -78,7 +78,8 @@ body {
   cursor: pointer;
 }
 
-.menu-item:not(.run):not(.menu-spacer):hover {
+.menu-item:not(.run):not(.menu-spacer):hover,
+.menu-item.show {
   background: var(--pcb-trace);
 }
 
@@ -141,7 +142,10 @@ body {
   width: 100%;
 }
 
-.dropdown-container:hover .dropdown-list, .popout-container:hover .popout-list {
+.dropdown-container:hover .dropdown-list,
+.dropdown-container.show .dropdown-list,
+.popout-container:hover .popout-list,
+.popout-container.show .popout-list {
   visibility: visible;
 }
 
