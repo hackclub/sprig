@@ -646,5 +646,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-12"
+ },
+ {
+    "filename": "puzzle_runner",
+    "title": "puzzle_runner",
+    "author": "Shanath",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-10-12"
  } 
 ]
