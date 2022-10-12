@@ -118,13 +118,13 @@ export const view = (text) => html`
     .input-button-a {
       position: absolute;
       top: calc(50% - 25px);
-      right: calc(5% - 25px);
+      right: calc(5% + 75px);
     }
 
     .input-button-d {
       position: absolute;
       top: calc(50% - 25px);
-      right: calc(5% + 75px);;
+      right: calc(5% - 25px);
     }
 
     .input-button-s {
@@ -142,13 +142,13 @@ export const view = (text) => html`
     .input-button-l {
       position: absolute;
       top: calc(50% - 25px);
-      left: calc(5% - 25px);
+      left: calc(5% + 75px);
     }
 
     .input-button-j {
       position: absolute;
       top: calc(50% - 25px);
-      left: calc(5% + 75px);;
+      left: calc(5% - 25px);
     }
 
     .input-button-k {
