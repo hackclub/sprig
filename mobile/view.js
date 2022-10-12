@@ -178,20 +178,20 @@ export const view = (text) => html`
 
     <div class="player hidden">
       <div class="wasd">
-        <div class="mobile-button no-select input-button-i" @mousedown=${() => dispatchKey("i")}>i</div>
-        <div class="mobile-button no-select input-button-j" @mousedown=${() => dispatchKey("j")}>j</div>
-        <div class="mobile-button no-select input-button-k" @mousedown=${() => dispatchKey("k")}>k</div>
-        <div class="mobile-button no-select input-button-l" @mousedown=${() => dispatchKey("l")}>l</div>
+        <div class="mobile-button no-select input-button-i" @pointerdown=${() => dispatchKey("i")}>i</div>
+        <div class="mobile-button no-select input-button-j" @pointerdown=${() => dispatchKey("j")}>j</div>
+        <div class="mobile-button no-select input-button-k" @pointerdown=${() => dispatchKey("k")}>k</div>
+        <div class="mobile-button no-select input-button-l" @pointerdown=${() => dispatchKey("l")}>l</div>
       </div>
       <div class="game-canvas-container">
         <canvas class="game-canvas"></canvas>
         <canvas class="game-text"></canvas>
       </div>
       <div class="wasd">
-        <div class="mobile-button no-select input-button-w" @mousedown=${() => dispatchKey("w")}>w</div>
-        <div class="mobile-button no-select input-button-a" @mousedown=${() => dispatchKey("a")}>a</div>
-        <div class="mobile-button no-select input-button-s" @mousedown=${() => dispatchKey("s")}>s</div>
-        <div class="mobile-button no-select input-button-d" @mousedown=${() => dispatchKey("d")}>d</div>
+        <div class="mobile-button no-select input-button-w" @pointerdown=${() => dispatchKey("w")}>w</div>
+        <div class="mobile-button no-select input-button-a" @pointerdown=${() => dispatchKey("a")}>a</div>
+        <div class="mobile-button no-select input-button-s" @pointerdown=${() => dispatchKey("s")}>s</div>
+        <div class="mobile-button no-select input-button-d" @pointerdown=${() => dispatchKey("d")}>d</div>
       </div>
     </div>
   </div>
