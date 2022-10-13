@@ -185,7 +185,7 @@ onInput("j", () => {
 });
 
 
-var tempototal = 85;
+var tempototal = 100;
     var tempodescendo = setInterval(function(){
     tempototal--;
     clearText(); 
