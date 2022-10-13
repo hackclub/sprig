@@ -2,12 +2,15 @@
 @title: Falling Water
 @author: Captainexpo
 
+Version: 2.0
+
 This is just a little water simulation using cellular automata for the water.
 Based on just a simple set of rules this can act like water, sand, fire, or smoke. 
 Although for this, it's just water.
 
 You can also press i and k to speed up/slow down the simulation speed.
 It can be a little buggy though.
+
 */
 
 const water = "s";
