@@ -1,12 +1,22 @@
 /*
 @title: Falling Water
 @author: Captainexpo
+
+Version: 1.1
+
+This is just a little water simulation using cellular automata for the water.
+Based on just a simple set of rules this can act like water, sand, fire, or smoke. 
+Although for this, it's just water.
+
+You can also press i and k to speed up/slow down the simulation speed.
+It can be a little buggy though.
+
 */
-const sand = "s";
-const wall = "w";
+
+const water = "s";
 let speed = "100"
 setLegend(
-  [ sand, bitmap`
+  [ water, bitmap`
 7555555555555557
 5555555555555555
 5555555555555555
@@ -22,24 +32,7 @@ setLegend(
 5555555555555555
 5555555555555555
 5555555555555555
-7555555555555557`,],
-  [ wall, bitmap`
-0000000000000000
-0200000022220020
-000LL02222000000
-0000000000000L00
-0L00000000000000
-00000L00L0200000
-0200020000000002
-02000000000000L2
-00L0000000L20200
-020000L0000000L0
-002000000L002022
-002L00000L220000
-0000000000020000
-L00200000000000L
-200000L02000L000
-0000000000000000`,]
+7555555555555557`,]
 );
 
 let level = 0;
@@ -105,42 +98,61 @@ const levels = [
 ...................................
 ...................................`,
 ];
+//Tutorial text
 addText("use WASD", {x: 6, y: 7, color: [0,0,0]})
 addText("to spawn water.", {x: 3, y: 8, color: [0,0,0]})
-setPushables({
-  [ sand ]: [],
-});
+
 const currentLevel = levels[0];
 setMap(currentLevel);
 
-setSolids([ sand]);
+setSolids([water]);
+
+//Update all of the water cells
 Update()
+
+//Get user input
 onInput("s", () => {
   clearText()
-  addSprite(15, 0, sand);
+  addSprite(15, 0, water);
 });
 onInput("w", () => {
   clearText()
-  addSprite(10, 0, sand);
+  addSprite(10, 0, water);
 });
 onInput("a", () => {
   clearText()
-  addSprite(5, 0, sand);
+  addSprite(5, 0, water);
 });
 onInput("d", () => {
-  clearText
-  addSprite(20, 0, sand);
+  clearText()
+  addSprite(20, 0, water);
 });
+
+//Change map
 onInput("j", () => {
   setMap(levels[0])
 });
 onInput("l", () => {
   setMap(levels[1])
 });
+
+//Raise/Lower tickspeed
+onInput("i", () => {
+  if(speed > 10){
+    speed -= 10
+  }
+});
+onInput("k", () => {
+  speed += 10
+});
 function Update(){
-    getAll(sand).forEach((w) => { 
-      getAll(sand).forEach((x)=> {
-                if (w.x == x.x && w.y == x.y-1) {
+  //Loop over all the water cells
+    getAll(water).forEach((w) => {
+      //Loop over all the water cells again
+      getAll(water).forEach((x)=> {
+        //Check if cell below is a water cell
+        if (w.x == x.x && w.y == x.y-1) {
+          //If it is, then move to the right or to the left
           if(Math.random() > 0.5){
             w.x += 1; 
           }
@@ -149,11 +161,48 @@ function Update(){
           }
         }  
       });
+      //Move down if you can
       w.y += 1;
+    console.log(speed)
   });
+  //Delay for a certain amount of time
   setTimeout(Update, speed);
-
 }
  
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//I wouldn't of expected you to look down here :)
