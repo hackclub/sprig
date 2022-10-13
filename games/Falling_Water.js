@@ -2,7 +2,7 @@
 @title: Falling Water
 @author: Captainexpo
 
-Version: 2.0
+Version: 1.1
 
 This is just a little water simulation using cellular automata for the water.
 Based on just a simple set of rules this can act like water, sand, fire, or smoke. 
