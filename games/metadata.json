@@ -662,5 +662,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-13"
- } 
+ },
+ {
+    "filename": "eat_the_cake",
+    "title": "eat_the_cake",
+    "author": "_klyap_",
+    "img": "",
+    "tags": ["beginner", "hackable"],
+    "addedOn": "2022-10-13"
+ }
 ]
