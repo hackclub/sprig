@@ -12,7 +12,7 @@ function evalGameScript(script) {
   const patchedApi = {
     ...api,
     setLegend: (...bitmaps) => { legend = bitmaps; },
-    setBackground: (bg) => background = bg,
+    setBackground: (bg) => { background = bg },
     setMap: (string) => { map = string },
     onInput: () => {}, 
     afterInput: () => {}, 
@@ -38,7 +38,7 @@ function evalGameScript(script) {
 }
 
 async function drawGameImage(src) {
-  const { legend, map } = evalGameScript(src);
+  const { legend, map, background } = evalGameScript(src);
 
   const mapWidth = map.trim().split("\n")[0].trim().length;
   const mapHeight = map.trim().split("\n").length;
