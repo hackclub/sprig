@@ -670,5 +670,21 @@
     "img": "",
     "tags": ["beginner", "hackable"],
     "addedOn": "2022-10-13"
+ },
+ {
+    "filename": "3072:_A_2048_Spin-Off",
+    "title": "3072:_A_2048_Spin-Off",
+    "author": "sahitid",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-10-14"
+ },
+ {
+    "filename": "pipes_puzzle",
+    "title": "pipes_puzzle",
+    "author": "RayhanADev",
+    "img": "pipes_puzzle",
+    "tags": ["puzzle"],
+    "addedOn": "2022-10-14"
  }
 ]
