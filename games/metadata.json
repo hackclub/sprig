@@ -686,5 +686,13 @@
     "img": "pipes_puzzle",
     "tags": ["puzzle"],
     "addedOn": "2022-10-14"
+ },
+ {
+    "filename": "Lava_and_Water",
+    "title": "Lava_and_Water",
+    "author": "Akeel",
+    "img": "",
+    "tags": ["puzzle", "classic"],
+    "addedOn": "2022-10-15"
  }
 ]
