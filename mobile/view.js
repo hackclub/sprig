@@ -112,49 +112,49 @@ export const view = (text) => html`
     .input-button-w {
       position: absolute;
       top: calc(50% - 75px);
-      left: calc(5% + 25px);
+      right: calc(5% + 25px);
     }
 
     .input-button-a {
       position: absolute;
       top: calc(50% - 25px);
-      left: calc(5% - 25px);
+      right: calc(5% + 75px);
     }
 
     .input-button-d {
       position: absolute;
       top: calc(50% - 25px);
-      left: calc(5% + 75px);;
+      right: calc(5% - 25px);
     }
 
     .input-button-s {
       position: absolute;
       top: calc(50% + 25px);
-      left: calc(5% + 25px);;
+      right: calc(5% + 25px);;
     }
 
     .input-button-i {
       position: absolute;
       top: calc(50% - 75px);
-      right: calc(5% + 25px);
+      left: calc(5% + 25px);
     }
 
     .input-button-l {
       position: absolute;
       top: calc(50% - 25px);
-      right: calc(5% - 25px);
+      left: calc(5% + 75px);
     }
 
     .input-button-j {
       position: absolute;
       top: calc(50% - 25px);
-      right: calc(5% + 75px);;
+      left: calc(5% - 25px);
     }
 
     .input-button-k {
       position: absolute;
       top: calc(50% + 25px);
-      right: calc(5% + 25px);;
+      left: calc(5% + 25px);;
     }
 
     .hidden {
@@ -178,20 +178,20 @@ export const view = (text) => html`
 
     <div class="player hidden">
       <div class="wasd">
-        <div class="mobile-button no-select input-button-w" @click=${() => dispatchKey("w")}>w</div>
-        <div class="mobile-button no-select input-button-a" @click=${() => dispatchKey("a")}>a</div>
-        <div class="mobile-button no-select input-button-s" @click=${() => dispatchKey("s")}>s</div>
-        <div class="mobile-button no-select input-button-d" @click=${() => dispatchKey("d")}>d</div>
+        <div class="mobile-button no-select input-button-i" @pointerdown=${() => dispatchKey("i")}>i</div>
+        <div class="mobile-button no-select input-button-j" @pointerdown=${() => dispatchKey("j")}>j</div>
+        <div class="mobile-button no-select input-button-k" @pointerdown=${() => dispatchKey("k")}>k</div>
+        <div class="mobile-button no-select input-button-l" @pointerdown=${() => dispatchKey("l")}>l</div>
       </div>
       <div class="game-canvas-container">
         <canvas class="game-canvas"></canvas>
         <canvas class="game-text"></canvas>
       </div>
       <div class="wasd">
-        <div class="mobile-button no-select input-button-i" @click=${() => dispatchKey("i")}>i</div>
-        <div class="mobile-button no-select input-button-j" @click=${() => dispatchKey("j")}>j</div>
-        <div class="mobile-button no-select input-button-k" @click=${() => dispatchKey("k")}>k</div>
-        <div class="mobile-button no-select input-button-l" @click=${() => dispatchKey("l")}>l</div>
+        <div class="mobile-button no-select input-button-w" @pointerdown=${() => dispatchKey("w")}>w</div>
+        <div class="mobile-button no-select input-button-a" @pointerdown=${() => dispatchKey("a")}>a</div>
+        <div class="mobile-button no-select input-button-s" @pointerdown=${() => dispatchKey("s")}>s</div>
+        <div class="mobile-button no-select input-button-d" @pointerdown=${() => dispatchKey("d")}>d</div>
       </div>
     </div>
   </div>

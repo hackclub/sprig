@@ -97,12 +97,9 @@ export async function init(args, state) {
 
   // fold all tagged template literals
   setTimeout(() => {
-    const text = state.codemirror.state.doc.toString();
-    const matches = text.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g);
-    for (const match of matches) {
-      const index = match.index;
-      state.codemirror.foldRange(index, index+1);
-    }
+    const fullText = state.codemirror.state.doc.toString();
+    const matches = [ ...fullText.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
+    state.codemirror.collapseRanges(matches.map((match) => [ match.index, match.index + 1]));
   }, 100);
 
   const container = document.querySelector(".game-canvas-container");

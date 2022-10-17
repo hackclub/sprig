@@ -11,6 +11,8 @@ function delay(ms) {
 }
 
 async function getPort() {
+  if (navigator.serial === undefined)
+    throw "your browser does not support the Web Serial API. please try again in a recent version of Chrome.";
   const ports = await navigator.serial.getPorts();
   if (ports.length !== 1) {
     dispatch("UPLOAD_LOG", "please pick a device.");

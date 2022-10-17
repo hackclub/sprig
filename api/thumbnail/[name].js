@@ -7,11 +7,12 @@ function evalGameScript(script) {
 
   let legend = null;
   let map = null;
+  let background = ".";
 
   const patchedApi = {
     ...api,
     setLegend: (...bitmaps) => { legend = bitmaps; },
-    setBackground: () => {},
+    setBackground: (bg) => { background = bg },
     setMap: (string) => { map = string },
     onInput: () => {}, 
     afterInput: () => {}, 
@@ -31,12 +32,13 @@ function evalGameScript(script) {
 
   return {
     legend: Object.fromEntries(legend),
-    map
+    map,
+    background
   }
 }
 
 async function drawGameImage(src) {
-  const { legend, map } = evalGameScript(src);
+  const { legend, map, background } = evalGameScript(src);
 
   const mapWidth = map.trim().split("\n")[0].trim().length;
   const mapHeight = map.trim().split("\n").length;
@@ -49,9 +51,11 @@ async function drawGameImage(src) {
 
   map.trim().split("\n").forEach( (row, y) => {
     row.trim().split("").forEach( (sprite, x) => {
+      if (background !== ".") {
+        blitSprite(image, makeSpriteBitmap(legend[background]), x, y);
+      }
       if (sprite === ".") return;
-      const bitmap = makeSpriteBitmap(legend[sprite]);
-      blitSprite(image, bitmap, x, y);
+      blitSprite(image, makeSpriteBitmap(legend[sprite]), x, y);
     })
   })
 

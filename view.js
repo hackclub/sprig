@@ -115,11 +115,8 @@ const drawFile = (file, i, state) => {
   }
 
   const fullText = state.codemirror.state.doc.toString();
-  const matches = fullText.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g);
-  for (const match of matches) {
-    const index = match.index;
-    state.codemirror.foldRange(index, index+1);
-  }
+  const matches = [ ...fullText.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
+  state.codemirror.collapseRanges(matches.map((match) => [ match.index, match.index + 1]));
   
   return html`
     <div style="display: flex; width: 100%;" @click=${setText}>
@@ -196,11 +193,9 @@ afterInput(() => {
   }
 
   const fullText = state.codemirror.state.doc.toString();
-  const matches = fullText.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g);
-  for (const match of matches) {
-    const index = match.index;
-    state.codemirror.foldRange(index, index+1);
-  }
+  const matches = [ ...fullText.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
+  state.codemirror.collapseRanges(matches.map((match) => [ match.index, match.index + 1]));
+  
   return html`
     <div @click=${setText}>new game</div>
   `
@@ -211,7 +206,7 @@ const menu = (state) => html`
     <a class="sprig-logo-container" href="https://sprig.hackclub.com/">
       <img src="https://cloud-ah8ey4rmb-hack-club-bot.vercel.app/0spriglogotext-white.png" alt="sprig logo" class="sprig-logo" />
     </a>
-    <div class="menu-item dropdown-container">
+    <div class=${[ "menu-item", "dropdown-container", state.shareLinkState !== "idle" ? "show" : "" ].join(" ")}>
       ${state.stale ? 'file*' : 'file'}
       <div class="dropdown-list">
         ${newFile(state)}
@@ -225,7 +220,7 @@ const menu = (state) => html`
 
         <div class="menu-spacer" />
 
-        <div class="popout-container">
+        <div class=${[ "popout-container", state.shareLinkState !== "idle" ? "show" : "" ].join(" ")}>
           share &rsaquo;
           <div class="popout-list">
             <div @click=${e => dispatch("SAVE_TO_FILE")}>as file</div>
