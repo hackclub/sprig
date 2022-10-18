@@ -1,10 +1,11 @@
 /*
-@title: 
+@title: Box_Maze
 @author: Boden
 */
 /*
   INSTRUCTIONS
-Make your way through the maze while pushing boxes, and standing on the multicolored goal
+Make your way through the maze while pushing boxes, and standing on the multicolored goal.
+Be careful as to not cover the goal with a box.
 CONTROLS
 w= up
 a= left
