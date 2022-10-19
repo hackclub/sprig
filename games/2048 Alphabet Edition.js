@@ -316,7 +316,7 @@ onInput("i", () => {
   addText(`K to reset level`, {y:9, color: [0, 0, 0, 255] });
   addText(`L to start music`, {y:10, color: [0, 0, 0, 255] });
   addText(`J to end music`, {y:11, color: [0, 0, 0, 255 ] });
-  addText(`Credits:`, {y:13, color: [19, 21, 224, 255 ] });
+  addText(`Credits: linkai101`, {y:13, color: [19, 21, 224, 255 ] });
   addText(`by OptimalBlock489`, {y:14, color: [245, 109, 187, 255 ] });
   
 });
