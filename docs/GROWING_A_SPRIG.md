@@ -1,5 +1,7 @@
 # How to Grow a Sprig
 
+This is a write up on what goes into making a Sprig. It doesn't cover every detail of the design, prototyping, and manufacturing a complete Sprig device but it will give you a good idea of the skills and tools used to do such a project. It's mostly written in a tutorial style with a scaled-down Sprig project used as an illlustrative example.
+
 ## The Hardware
 
 ### Electrical
@@ -224,7 +226,6 @@ First right click, select “Properties”.
 
 ![](https://paper-attachments.dropbox.com/s_0511BA4B191598753ECBC49567C0623B4E6F1551BAE3832CD8B8B2EDAF26FAB6_1665083108087_Screen+Shot+2022-10-06+at+3.04.44+PM.png)
 
-
 Then select the right layer in the menu and hit okay.
 
 ![](https://paper-attachments.dropbox.com/s_0511BA4B191598753ECBC49567C0623B4E6F1551BAE3832CD8B8B2EDAF26FAB6_1665083148114_Screen+Shot+2022-10-06+at+3.04.20+PM.png)
@@ -235,19 +236,40 @@ You can see the final result below.
 
 ## The Firmware
 
-We are using KalumaJS
+For the firmware we're using a modified version of [Kaluma](https://kalumajs.org/). Kaluma is a JavaScript runtime which can fit on a RP2040. To create SprigOS we added the ability to draw to the screen, make music efficiently, and the Sprig game engine.
+
+To load firmware onto the Pico depress the white button on the Pico and plug it into your computer while holding the button down. This will put the Pico in Bootload mode.
+
+![PXL_20221019_142858245](https://user-images.githubusercontent.com/27078897/196720476-4bbf0c88-cee0-429f-8cf7-890ec68986d5.jpg)
+
+The Pico will show up as a USB device.
+
+<img width="94" alt="Screen Shot 2022-10-19 at 10 30 47 AM" src="https://user-images.githubusercontent.com/27078897/196720590-a6f986ed-9c6d-4e2a-b514-baffa38864a2.png">
+
+Download the UF2 of our [SprigOS from GitHub](https://github.com/hackclub/sprig/blob/main/pico-os.uf2) and drop it onto the RPI-RP2.
+
+We can now load games onto our Pico from the serial port.
+
+### Mechanical
+
+The back covers of the Sprig are laser cut. To produce them we designed the components in a parametric CAD program, [Fusion 360](https://www.autodesk.com/products/fusion-360/overview?term=1-YEAR&tab=subscription), and then export them to a format suitable for laser cutting.
+
+When we open up Fusion we are confronted with a blank project.
+
+<img width="1502" alt="Screen Shot 2022-10-19 at 10 43 37 AM" src="https://user-images.githubusercontent.com/27078897/196723858-a0de57a8-0654-4a74-b01e-00327531ba66.png">
+
+Let's insert a reference image of the Sprig into the program.
+
+<img width="1502" alt="Screen Shot 2022-10-19 at 10 48 31 AM" src="https://user-images.githubusercontent.com/27078897/196725066-005cfafb-1918-4f85-9a0e-0e28ddf94543.png">
+
+
+### The Manufacturing
+
+We manufactured our board by sending Gerber files to a PCB fabrication house along with information about how to "stuff" the board (or add components to it). Hugo Hu helped coordinate the production and did a nice [write up](https://github.com/hackclub/sprig/blob/main/docs/SOURCING.md) on some of the sourcing details which you can find here.
 
 ---
 
 # BELOW IS A WIP
-
-### Mechanical
-
-Pull an image of the board into Fusion360. Sketch out the back covers.
-
-## The Manufacturing
-
-make gerbers
 
 ## The Game Engine
 
