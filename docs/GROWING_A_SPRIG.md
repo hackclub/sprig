@@ -262,6 +262,30 @@ Let's insert a reference image of the Sprig into the program.
 
 <img width="1502" alt="Screen Shot 2022-10-19 at 10 48 31 AM" src="https://user-images.githubusercontent.com/27078897/196725066-005cfafb-1918-4f85-9a0e-0e28ddf94543.png">
 
+We have to set the proper scale of the reference image. I do this by first drawing a reference rectangle to scale.
+
+<img width="924" alt="Screen Shot 2022-10-19 at 12 08 59 PM" src="https://user-images.githubusercontent.com/27078897/196745856-9a200c58-3a86-4852-856c-d9eebb0f1d3b.png">
+
+Then scale the canvas to fit inside the rectangle.
+
+<img width="895" alt="Screen Shot 2022-10-19 at 12 10 26 PM" src="https://user-images.githubusercontent.com/27078897/196746140-6d726315-74d9-4b82-9acc-bab0b4d375ab.png">
+
+We can now sketch out the backplate.
+
+<img width="1502" alt="Screen Shot 2022-10-19 at 12 18 30 PM" src="https://user-images.githubusercontent.com/27078897/196747972-aca06797-1b54-485b-a472-10b36307187e.png">
+
+Then extrude it.
+
+<img width="1502" alt="Screen Shot 2022-10-19 at 12 19 10 PM" src="https://user-images.githubusercontent.com/27078897/196748056-4b09f584-510f-41dd-89f5-de400e6c728f.png">
+
+Add some fillets so we don't cut our fingers.
+
+<img width="1502" alt="Screen Shot 2022-10-19 at 12 19 55 PM" src="https://user-images.githubusercontent.com/27078897/196748245-515a38e0-9007-4e48-bdc2-57e8e0cbb5b1.png">
+
+And mirror it to have the complimentary piece.
+
+<img width="1502" alt="Screen Shot 2022-10-19 at 12 20 26 PM" src="https://user-images.githubusercontent.com/27078897/196748389-c3d8f499-fabe-4873-897b-0ec491fcedae.png">
+
 
 ### The Manufacturing
 
