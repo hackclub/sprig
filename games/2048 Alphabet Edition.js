@@ -12,7 +12,7 @@ Controls:
 Use the a, w, d, and s keys to move left, up, right, and down!
 Instructions:
 2048 is a game where you combine the sums of numbered tiles in order to gain a higher numbered tile.
-This is a spin-off of that game. Try your best to get to "k" and win the game. Good Luck!
+This is a spin-off of that game. Try your best to get to "L" and win the game. Good Luck!
 
 Press k to reset game.
 Press l for music.
