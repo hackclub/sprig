@@ -726,5 +726,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-19"
+ },
+ {
+    "filename": "box_maze",
+    "title": "box_maze",
+    "author": "Boden",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-10-19"
  }
 ]
