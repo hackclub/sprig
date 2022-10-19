@@ -10,7 +10,7 @@ Controls:
 Use the a, w, d, and s keys to move left, up, right, and down!
 Instructions:
 2048 is a game where you combine the sums of numbered tiles in order to gain a higher numbered tile.
-This is a spin-off of that game. Try your best to get to "k" and win the game. Good Luck!
+This is a spin-off of that game. Try your best to get to "L" and win the game. Good Luck!
 
 Press k to reset game.
 Press l for music.
@@ -29,6 +29,7 @@ const h = "h";
 const i = "i";
 const j = "j";
 const k = "k";
+const l = "l";
 
 const tileOrder = ["a","b","c","d","e","f","g","h","i","j","k"];
 
@@ -236,7 +237,24 @@ setLegend(
 1888088880088881
 1888088888088881
 1888888888888881
-1111111111111111`]
+1111111111111111`],
+  [ l, bitmap`
+1111111111111111
+1444444444444441
+1444444444444441
+1444044444444441
+1444044444444441
+1444044444444441
+1444044444444441
+1444044444444441
+1444044444444441
+1444044444444441
+1444044444444441
+1444044444444441
+1444000000004441
+1444444444444441
+1444444444444441
+1111111111111111`],
 );
 
 // Music controls
