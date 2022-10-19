@@ -1,5 +1,6 @@
-import { EditorState, basicSetup } from "@codemirror/basic-setup";
+import { basicSetup } from "codemirror";
 import { EditorView, keymap } from "@codemirror/view";
+import { EditorState } from "@codemirror/state";
 import { indentUnit, foldable, foldEffect } from "@codemirror/language";
 import { indentWithTab } from "@codemirror/commands";
 import { javascript } from "@codemirror/lang-javascript";
@@ -23,7 +24,7 @@ const collapseRanges = (view) => (ranges) => {
 
 // this is a terrible hack but strange bugs are about this one
 // removing autocomplete and suggestions
-let bs = basicSetup.filter((x, i) => ![11, 12].includes(i))
+const bs = basicSetup.filter((_, i) => ![11, 12].includes(i));
 
 export function createEditorView(onUpdate = () => {}) {
   const editor = new EditorView({
@@ -33,7 +34,6 @@ export function createEditorView(onUpdate = () => {}) {
         keymap.of([indentWithTab]), // TODO: We should put a note about Esc+Tab for accessibility somewhere.
         indentUnit.of("  "),
         javascript(),
-        // booleanCheckbox,
         editors,
         EditorView.updateListener.of(onUpdate)
       ]
