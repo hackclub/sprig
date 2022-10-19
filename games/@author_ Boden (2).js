@@ -4,8 +4,8 @@
 */
 /*
   INSTRUCTIONS
-Make your way through the maze while pushing boxes, and standing on the multicolored goal.
-Be careful as to not cover the goal with a box.
+Make your way through the maze while pushing boxes, and standing on the multicolored goal
+to move to the next level
 CONTROLS
 w= up
 a= left
@@ -215,6 +215,8 @@ afterInput(() => {
       setMap(currentLevel);
     } else {
       addText("you win!", { y: 4, color: [255, 0, 0] });
+      clearInterval(tempodescendo);
+    clearTile(getFirst(player).x,getFirst(player).y);
     }
   }
 });
