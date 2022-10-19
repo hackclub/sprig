@@ -45,22 +45,22 @@ C.....C..C.....C
 C.....C..C.....C
 CCCCCCCCCCCCCCCC`],
   [ wall, bitmap`
-6666666666666666
-6666666666666666
-6666666666666666
-6666666666666666
-6666666CC6666666
-66666666C6666666
-666666CCCC666666
-666666CCCC666666
-66666CCCCCC66666
-66666CCCCCC66666
-6666CCCCCCCC6666
-6666CCCCCCCC6666
-6666666666666666
-6666666666666666
-6666666666666666
-6666666666666666`],
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
   [ thing, bitmap`
 0..............0
 .0............0.
@@ -102,6 +102,25 @@ setSolids([]);
 let level = 0;
 const levels = [
   map`
+p.g`,
+  map`
+wwww......wwwww
+...w.ww.w.....w
+.w.w.w..wwwww.w
+.w.w.ww.....w.w
+.w....w.www.w.w
+.wwww.w.w.w.w.w
+......w.w.w.w.g
+.wwwwww.w.w.www
+........w.w....
+wwwwwwwww.wwww.
+......w......w.
+w.w.w.w.wwww.w.
+w.w.....w.w....
+w.wwww.ww.wwww.
+w....w....w....
+wwwwpw.ww.wwww.`,
+  map`
 p.w..g
 .bw...
 ..w...
@@ -118,9 +137,33 @@ ww.........
 wwwww.www..
 ....w.w...w
 ..w.w.w.b.w
-p.w...w..ww
+p.w...w...w
 www.wwwwwww
 w.....wwwww`,
+  map`
+.......................
+.......................
+..wwwwwwwwwwwwwwwwwwww.
+..w.................ww.
+..w.wwwwwwwwwwwwwww.ww.
+..w.w.............w.wwt
+..w.w.wwwwwwwwwww.w.wwg
+..w.w.w.........w.w.wwt
+..w.w.w.wwwwwww.w.w.ww.
+..w.w.w.w.....w.w.w.ww.
+..w.w.w.w.www.w.w.w.ww.
+..w.w.w.w..pw.w.w.w.ww.
+..w.w.w.wwwww.w.w.w.ww.
+..w.w.w.......w.w.w....
+..w.w.wwwwwwwww.w.wwwww
+..w.w...........w.w...w
+..w.wwwwwwwwwwwww...b.w
+..w.............w.....w
+..w.............w.wwwww
+..wwwwwwwwwwwwww.twww..
+....................w..
+....................w..
+..................www..`,
 ];
 
 setSolids([ player, box, wall, thing ]);
@@ -128,27 +171,39 @@ setSolids([ player, box, wall, thing ]);
 setMap(levels[level]);
 
 setPushables({
-  [ player ]: [box], [ box ]: [thing],
+  [ player ]: [box], [ box ]: [thing], [thing]:[thing]
 });
 
 
 onInput("w", () => {
-  getFirst(player).y -= 1
-});
-
-onInput("a", () => {
-  getFirst(player).x -= 1
+  getFirst(player).y -= 1;
 });
 
 onInput("s", () => {
-  getFirst(player).y += 1
+  getFirst(player).y += 1;
+});
+
+onInput("a", () => {
+  getFirst(player).x -= 1;
 });
 
 onInput("d", () => {
-  getFirst(player).x += 1
+  getFirst(player).x += 1;
 });
 
-
+//from editor.sprig.hackclub.com/?file=https://raw.githubusercontent.com/hackclub/sprig/main/games/Flurffy.js
+var tempototal = 60;
+    var tempodescendo = setInterval(function(){
+    tempototal--;
+    clearText();
+    addText(""+tempototal, { y: 1 , color: [255,0,0] });
+      if(tempototal <= 0){
+        clearTile(getFirst(player).x,getFirst(player).y);
+        clearInterval(tempodescendo);
+        clearText()
+    }
+    },1000);
+ 
 afterInput(() => {
   const numberCovered = tilesWith(goal, player).length;
   const targetNumber = tilesWith(goal).length;
