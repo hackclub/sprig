@@ -251,7 +251,7 @@ const start = () => {
     }
 
     if (path.length > score + 2) {
-      pop = path.pop();
+      path.pop();
     }
     if (path.length !== [...new Set(path)].length) die(); // If there is a double up of body positions. aka you touched your body
 

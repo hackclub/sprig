@@ -8,7 +8,8 @@ import { global_state } from "../global_state.js";
 const pairs = [
   [ "bitmap", "image", "bitmap" ],
   [ "tune", "musical-notes", "sequencer" ],
-  [ "map", "map", "map" ]
+  [ "map", "map", "map" ],
+  [ "color", "color-palette", "palette" ]
 ]
 
 export class OpenButtonWidget extends WidgetType {

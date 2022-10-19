@@ -5,16 +5,19 @@ import { indentWithTab } from "@codemirror/commands";
 import { javascript } from "@codemirror/lang-javascript";
 import editors from './editors.js';
 
-const foldRange = view => (start, end) => {
-  let { state } = view, effects = [];
-  for (let pos = start; pos < end;) {
-      let line = view.lineBlockAt(pos), range = foldable(state, line.from, line.to);
-      if (range)
-          effects.push(foldEffect.of(range));
+const collapseRanges = (view) => (ranges) => {
+  const effects = [];
+
+  for (const [ start, end ] of ranges) {
+    for (let pos = start; pos < end;) {
+      const line = view.lineBlockAt(pos);
+      const range = foldable(view.state, line.from, line.to);
+      if (range) effects.push(foldEffect.of(range));
       pos = (range ? view.lineBlockAt(range.to) : line).to + 1;
+    }
   }
-  if (effects.length)
-      view.dispatch({ effects });
+
+  if (effects.length) view.dispatch({ effects });
   return !!effects.length;
 };
 
@@ -37,7 +40,7 @@ export function createEditorView(onUpdate = () => {}) {
     })
   });
 
-  editor.foldRange = foldRange(editor);
+  editor.collapseRanges = collapseRanges(editor);
 
   return editor;
 }
