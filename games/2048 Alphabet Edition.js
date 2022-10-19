@@ -2,6 +2,8 @@
 @title: 2048 Alphabet Edition
 @author: OptimalBlock489
 
+Credits : linkai101
+
 Why play 2048 when it's the same basic game you've been playing for years?
 Why don't you move on to a better version? A more intuitive version?
 I present to you... 2048 Alphabet Edition!
@@ -10,7 +12,7 @@ Controls:
 Use the a, w, d, and s keys to move left, up, right, and down!
 Instructions:
 2048 is a game where you combine the sums of numbered tiles in order to gain a higher numbered tile.
-This is a spin-off of that game. Try your best to get to "L" and win the game. Good Luck!
+This is a spin-off of that game. Try your best to get to "k" and win the game. Good Luck!
 
 Press k to reset game.
 Press l for music.
@@ -316,7 +318,7 @@ onInput("i", () => {
   addText(`K to reset level`, {y:9, color: [0, 0, 0, 255] });
   addText(`L to start music`, {y:10, color: [0, 0, 0, 255] });
   addText(`J to end music`, {y:11, color: [0, 0, 0, 255 ] });
-  addText(`Credits: linkai101`, {y:13, color: [19, 21, 224, 255 ] });
+  addText(`Credits:`, {y:13, color: [19, 21, 224, 255 ] });
   addText(`by OptimalBlock489`, {y:14, color: [245, 109, 187, 255 ] });
   
 });
