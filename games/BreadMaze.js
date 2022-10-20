@@ -9,6 +9,50 @@ const bread = "r";
 const goal = "g";
 const thing = "t";
 
+// Tunes
+const music = tune`
+263.1578947368421: c4~263.1578947368421,
+263.1578947368421: d4~263.1578947368421,
+263.1578947368421: e4~263.1578947368421,
+263.1578947368421: f4~263.1578947368421,
+263.1578947368421: g4~263.1578947368421,
+263.1578947368421: a4~263.1578947368421,
+263.1578947368421: b4~263.1578947368421,
+263.1578947368421: c5~263.1578947368421,
+263.1578947368421: d5~263.1578947368421,
+263.1578947368421: e5~263.1578947368421,
+263.1578947368421: f5~263.1578947368421,
+263.1578947368421: g5~263.1578947368421,
+263.1578947368421: a5~263.1578947368421,
+263.1578947368421: b5~263.1578947368421,
+263.1578947368421: a5~263.1578947368421,
+263.1578947368421: g5~263.1578947368421,
+263.1578947368421: f5~263.1578947368421,
+263.1578947368421: e5~263.1578947368421,
+263.1578947368421: d5~263.1578947368421,
+263.1578947368421: c5~263.1578947368421,
+263.1578947368421: b4~263.1578947368421,
+263.1578947368421: a4~263.1578947368421,
+263.1578947368421: g4~263.1578947368421,
+263.1578947368421: f4~263.1578947368421,
+263.1578947368421: e4~263.1578947368421,
+263.1578947368421: d4~263.1578947368421,
+263.1578947368421: c4~263.1578947368421,
+263.1578947368421: d4~263.1578947368421,
+263.1578947368421: e4~263.1578947368421,
+263.1578947368421: f4~263.1578947368421,
+263.1578947368421: g4~263.1578947368421,
+263.1578947368421: a4~263.1578947368421`;
+const pickUp = tune`
+30,
+30: d4-30,
+120,
+30: b5-30,
+750`;
+
+const initialTime = 35;
+var tempototal = initialTime;
+
 setLegend(
   [ player, bitmap`
 ................
@@ -134,45 +178,74 @@ r....rg...`
 setMap(levels[level]);
 
 setPushables({
-  [ player ]: [ box, thing ],
+  [ player ]: [ box ],
   [ box ]: [ thing ]
 });
 
+playTune(music, Infinity);
+addText("Press J to Start", {y: 6, color: [0, 255, 0]});
+addText("Pusht the Orange Box", {y: 9, color: [0, 0, 0]});
+
+
 onInput("w", () => {
-  getFirst(player).y -= 1
+  if(tempototal >= 0){
+    getFirst(player).y -= 1
+  }
+
 });
 
 onInput("a", () => {
-  getFirst(player).x -= 1
-});
-
-onInput("s", () => {
-  getFirst(player).y += 1
-});
-
-onInput("d", () => {
-  getFirst(player).x += 1
-});
-onInput("j", () => {
-  const currentLevel = levels[level];
-  if (currentLevel !== undefined) {
-    clearText();
-    setMap(currentLevel);
+  if(tempototal >= 0){
+    getFirst(player).x -= 1
   }
 });
 
-//timer - code borrowerd from flurffy
-var tempototal = 10;
+onInput("s", () => {
+  if(tempototal >= 0){
+    getFirst(player).y += 1
+  }
+});
+
+onInput("d", () => {
+  if(tempototal >= 0){
+    getFirst(player).x += 1
+  }
+});
+
+timerfunc();
+
+onInput("j", () => {
+  const currentLevel = levels[level];
+  timerfunc();
+  tempototal = initialTime;
+  if (currentLevel !== undefined) {
+    clearText();
+    setMap(currentLevel);
+    
+  }
+});
+
+
+
+function timerfunc() {
+
+  //timer - code borrowerd from flurffy
 var tempodescendo = setInterval(function(){
-tempototal--;
-clearText();
-addText(""+tempototal, { y: 1 , color: [255,0,0] });
+if(tempototal >= 0){
+  tempototal--;
+  clearText();
+  addText(""+tempototal, { y: 1 , color: [255,0,0] });
+}
+  
 if(tempototal <= 0){
       clearTile(getFirst(player).x,getFirst(player).y);
       clearInterval(tempodescendo);
-      clearText()
+      clearText();
+addText("time ran out ");
 }
 },1000);
+
+}
 
 afterInput(() => {
 // count the number of tiles with goals
@@ -186,7 +259,8 @@ afterInput(() => {
     level = level + 1;
 
     const currentLevel = levels[level];
-
+    tempototal = initialTime;
+    
     // make sure the level exists and if so set the map
     if (currentLevel !== undefined) {
       setMap(currentLevel);
