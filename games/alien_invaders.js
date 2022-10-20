@@ -319,15 +319,15 @@ const mainUpdate = () => {
     setMap(levels[1]);
 
     if (playerWin) {
-      addText("YOU", { x: 8, y: 6, color: [255, 0, 0] });
-      addText("WIN", { x: 8, y: 8, color: [255, 0, 0] });
+      addText("YOU", { x: 8, y: 6, color: color`3` });
+      addText("WIN", { x: 8, y: 8, color: color`3` });
       if (playSound) {
         playTune(victorySound);
         playSound = false;
       }
     } else {
-      addText("GAME", { x: 8, y: 6, color: [255, 0, 0] });
-      addText("OVER", { x: 8, y: 8, color: [255, 0, 0] });
+      addText("GAME", { x: 8, y: 6, color: color`3` });
+      addText("OVER", { x: 8, y: 8, color: color`3` });
       if (playSound) {
         playTune(gameOverSound);
         playSound = false;

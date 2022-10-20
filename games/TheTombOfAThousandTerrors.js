@@ -395,7 +395,7 @@ function levelSplash() {
   let pointsText = "Points: " + globalState.points;
   pointsText += globalState.points === 0 ? " (yet)" : "";
   let offset = 2 + Math.floor((16 - pointsText.length) / 2);
-  addText(pointsText, { x: offset, y: 14, color: [0, 255, 255]}); 
+  addText(pointsText, { x: offset, y: 14, color: color`7`}); 
 
   // try {
   //   bgSound = playTune(splashTune, Infinity);

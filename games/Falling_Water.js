@@ -99,8 +99,8 @@ const levels = [
 ...................................`,
 ];
 //Tutorial text
-addText("use WASD", {x: 6, y: 7, color: [0,0,0]})
-addText("to spawn water.", {x: 3, y: 8, color: [0,0,0]})
+addText("use WASD", {x: 6, y: 7, color: color`0`})
+addText("to spawn water.", {x: 3, y: 8, color: color`0`})
 
 const currentLevel = levels[0];
 setMap(currentLevel);

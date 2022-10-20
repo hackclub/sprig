@@ -351,7 +351,7 @@ setInterval(() => {
   `)
 
   clearText();
-  addText(`${score}`, { x: 14, y: 1, color: [255, 255, 255] })
+  addText(`${score}`, { x: 14, y: 1, color: color`2` })
 }, 30)
 
 setInterval(() => {

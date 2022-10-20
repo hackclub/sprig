@@ -14,7 +14,7 @@ Press j to reset the level.
 */
 
 let money = 0;
-addText(`You've got ${money} coins.`, { color: [255, 0, 0 ] });
+addText(`You've got ${money} coins.`, { color: color`3` });
 
 const player = 'p';
 const coin = 'c';
@@ -160,7 +160,7 @@ afterInput(() => {
         sprite.remove();
         money++;
         clearText();
-        addText(`You've got ${money} coins.`, { color: [255, 0, 0] })
+        addText(`You've got ${money} coins.`, { color: color`3` })
       } 
     })
   });
@@ -169,7 +169,7 @@ afterInput(() => {
     if (money) {
       money--;
       clearText();
-      addText(`You've got ${money} coins.`, { color: [255, 0, 0] })
+      addText(`You've got ${money} coins.`, { color: color`3` })
     } else {
       const p = getFirst(player);
       p.x -= p.dx;
@@ -184,7 +184,7 @@ afterInput(() => {
       setMap(levels[level]);
       if (level == levels.length-1) {
         clearText();
-        addText("you win!", { color: [255, 0, 0] });
+        addText("you win!", { color: color`3` });
       }
     }
   }

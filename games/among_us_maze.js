@@ -13,12 +13,13 @@ const wall = 'w';
 const amongus = 'a';
 const start = 's';
 const end = 'e';
+const colors = [ color`L`, color`1`, color`3`, color`C`, color`7`, color`5`, color`6`, color`F`, color`4`, color`D`, color`8`, color`H`, color`9` ]
 var win = false;
 var hasVirtualMouse = false;
 var pointsInt = 0;
 var notCheating = false;
 var canvas = document.querySelector("canvas.game-canvas")
-var text = addText("points: ", { y: 14, x: 2, color: [0, 0, 0] });
+var text = addText("points: ", { y: 14, x: 2, color: color`0` });
 
 // functions
 
@@ -30,11 +31,11 @@ function handleMovement(coords) {
   const inTile = getTile(x, y)
 
   if ((!hasVirtualMouse && inTile.length != 0) || (inTile.length > 1)) {
-    text = addText("points: ", { y: 14, x: 2, color: [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)] });
+    text = addText("points: ", { y: 14, x: 2, color: colors[Math.floor(Math.random() * colors.length)] });
     //text.style.color = [0,0,255];
     if (win) return
     pointsInt = hasVirtualMouse ? pointsInt - 100 : pointsInt - 5
-    addText(pointsInt.toString(), { y: 14, x: 10, color: [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)] });
+    addText(pointsInt.toString(), { y: 14, x: 10, color: colors[Math.floor(Math.random() * colors.length)] });
   }
 
   if ((x === 10 && y === 11) || (x === 9 && y === 11) || (x === 11 && y === 11) || (x === 10 && y === 10) || (x === 9 && y === 10) || (x === 11 && y === 10)) {
@@ -43,18 +44,18 @@ function handleMovement(coords) {
 
   if ((x === 1 && y === 20) || (x === 0 && y === 20) || (x === 1 && y === 21) || (x === 0 && y === 21)) {
     if (!notCheating) {
-      addText("STOP CHEATING!", {x: 5, y: 0, color: [255, 0, 0]});
+      addText("STOP CHEATING!", {x: 5, y: 0, color: color`3`});
       setTimeout(() => {
         clearText();
-        text = addText("points: ", { y: 14, x: 2, color: [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)] });
-        addText(pointsInt.toString(), { y: 14, x: 10, color: [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256),Math.floor(Math.random() * 256)] });
+        text = addText("points: ", { y: 14, x: 2, color: colors[Math.floor(Math.random() * colors.length)] });
+        addText(pointsInt.toString(), { y: 14, x: 10, color: colors[Math.floor(Math.random() * colors.length)] });
       }, 1500);
       
       pointsInt -= 1000;
-      addText(pointsInt.toString(), { y: 14, x: 10, color: [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256),Math.floor(Math.random() * 256)] });
+      addText(pointsInt.toString(), { y: 14, x: 10, color: colors[Math.floor(Math.random() * colors.length)] });
     } else {
       win = true;
-      addText("YOU WIN", {x: 10, y: 0, color: [255, 0, 0]});
+      addText("YOU WIN", {x: 10, y: 0, color: color`3`});
     }
   }
 }

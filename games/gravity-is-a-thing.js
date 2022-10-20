@@ -526,7 +526,7 @@ afterInput(() => {
   addText("Deaths: " + deaths , {
     x: 0,
     y: 15, 
-    color: [ 255, 0, 0]
+    color: color`3`
   })
 })
 
@@ -535,6 +535,6 @@ afterInput(() => {
   addText("Jumps: " + jumps , {
     x: 12,
     y: 15, 
-    color: [ 255, 0, 0]
+    color: color`3`
   })
 })

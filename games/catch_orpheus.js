@@ -119,7 +119,7 @@ afterInput(() => {
       addText("you win!", { 
           x: 10, 
           y: 4, 
-          color: [ 255, 0, 0 ] // red
+          color: color`3`
       })
       setTimeout(() => setMap(levels[0]), 2000)
       setTimeout(() => clearText(), 2000)

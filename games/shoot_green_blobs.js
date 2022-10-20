@@ -368,13 +368,13 @@ const processGameover = ({gameover, win, bgm}) => {
       addText(" YOU WIN", { 
         x: 6, 
         y: 8, 
-        color: [ 0, 255, 0 ] // red
+        color: color`4`
       })
     } else {
       addText("YOU LOSE", { 
         x: 6, 
         y: 8, 
-        color: [ 255, 0, 0 ] // red
+        color: color`3`
       })
     }
   }
@@ -382,7 +382,7 @@ const processGameover = ({gameover, win, bgm}) => {
 
 const processScore = ({score}) => {
   clearText()
-  addText(`SCORE:${score}`, {x: 5, y: 0, color: [255, 255, 255]})
+  addText(`SCORE:${score}`, {x: 5, y: 0, color: color`2`})
 }
 
 const fakeRAF = (cb) => {

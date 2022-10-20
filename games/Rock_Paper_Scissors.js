@@ -93,8 +93,8 @@ var gameFinished = false;
 
 showScore()
 
-addText("Press j to confirm", { y: 1, color: [255, 255, 255] });
-addText("Use w and s to move", { y: 3, color: [255, 255, 255] });
+addText("Press j to confirm", { y: 1, color: color`2` });
+addText("Use w and s to move", { y: 3, color: color`2` });
 setLegend(
     [player, bitmap`
 4444444444444444
@@ -311,12 +311,12 @@ function showScore() {
       addText("GAME" , {
             x: 8,
             y: 13,
-            color: [255, 255, 0]
+            color: color`6`
         });
     addText(playerVictories + "  " + enemyVictories , {
             x: 8,
             y: 15,
-            color: [255, 255, 255]
+            color: color`2`
         });
 }
   
@@ -333,7 +333,7 @@ onInput("j", () => {
         if (enemyPosition == playerPosition) {
             addText("Draw Game", {
                 y: 1,
-                color: [255, 255, 0]
+                color: color`6`
             });
             playTune(draw)
         } else if (playerPosition == 1 && enemyPosition == 2 ||
@@ -342,7 +342,7 @@ onInput("j", () => {
 
             addText("You Lose!", {
                 y: 1,
-                color: [255, 0, 0]
+                color: color`3`
             });
           
             enemyVictories += 1
@@ -351,7 +351,7 @@ onInput("j", () => {
         } else {
             addText("You Win!", {
                 y: 1,
-                color: [0, 255, 0]
+                color: color`4`
             });
           
             playerVictories += 1
@@ -361,7 +361,7 @@ onInput("j", () => {
         gameFinished = true;
         addText("Press d to restart", {
             y: 3,
-            color: [255, 255, 255]
+            color: color`2`
         });
     }
 

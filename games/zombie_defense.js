@@ -325,7 +325,7 @@ const reload = async () => {
   addText(`Reloading...`, {
     x: 1, 
     y: 14, 
-    color: [ 0, 200, 200 ]
+    color: color`7`
   })
   isReloading = true
   for (let i = reloadTimeSeconds; i > 0; i--) {
@@ -363,31 +363,31 @@ setInterval(() => {
       addText(`Bullets:${bullets}`, {
         x: 1, 
         y: 14, 
-        color: [ 0, 200, 150 ]
+        color: color`4`
       })
     } else {
       addText(`Reload!`, {
         x: 1, 
         y: 14, 
-        color: [ 200, 0, 0 ]
+        color: color`3`
       })
     }
   } else {
     addText(`Reloading...${reloadRemainTime}`, {
       x: 1, 
       y: 14, 
-      color: [ 0, 200, 200 ]
+      color: color`7`
     })
   }
   addText(`Score:${score}`, {
     x: 1, 
     y: 1, 
-    color: [ 0, 0, 200 ]
+    color: color`5`
   })
   addText(`Health:${health}`, {
     x: 10, 
     y: 1, 
-    color: [ 200, 0, 0 ]
+    color: color`3`
   })
 }, 10)
  
@@ -418,17 +418,17 @@ setInterval(() => {
   addText(`Game over`, {
     x: 6, 
     y: 6, 
-    color: [ 200, 0, 0 ]
+    color: color`3`
   })
   addText(`Score:${score}`, {
     x: 7, 
     y: 7, 
-    color: [ 200, 0, 0 ]
+    color: color`3`
   })
   addText(`Press j to retry`, {
     x: 3, 
     y: 8, 
-    color: [ 200, 0, 0 ]
+    color: color`3`
   })
   // Remove all zombies
   getAll(zombie).forEach((zombie) => {

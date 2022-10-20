@@ -391,10 +391,10 @@ setPushables({
 });
 
 playTune(music, Infinity);
-addText("Play", {y: 6, color: [0, 255, 0]});
-addText("Level Select", {y: 9, color: [0, 0, 0]});
+addText("Play", {y: 6, color: color`4`});
+addText("Level Select", {y: 9, color: color`0`});
 
-//addText(moves.toString(), { x: 1, y: 1, color: [255, 0, 0] });
+//addText(moves.toString(), { x: 1, y: 1, color: color`3` });
 
 onInput("w", () => {
   if (moves >= 1) {
@@ -431,8 +431,8 @@ onInput("s", () => {
     level = 0;
     setMap(levels[level]);
     clearText();
-    addText("Play", {y: 6, color: [0, 255, 0]});
-    addText("Level Select", {y: 9, color: [0, 0, 0]});
+    addText("Play", {y: 6, color: color`4`});
+    addText("Level Select", {y: 9, color: color`0`});
   }
   else if (level == 12) {
     level = selected + 1;
@@ -546,68 +546,68 @@ afterInput(() => {
 
   if (level != 0 && level != 12) {
     clearText();
-    addText(moves.toString(), { x: 1, y: 1, color: [255, 0, 0] });    
+    addText(moves.toString(), { x: 1, y: 1, color: color`3` });    
   }
   if (level == 11) {
-    addText("You Win!", {y: 8, color: [0, 0, 0]});  
+    addText("You Win!", {y: 8, color: color`0`});  
   } 
   else if (level == 12) {
     clearText();
-    addText("1", {x: 2, y: 6, color: [0, 0, 0]});
-    addText("2", {x: 5, y: 6, color: [0, 0, 0]});
-    addText("3", {x: 9, y: 6, color: [0, 0, 0]});
-    addText("4", {x: 13, y: 6, color: [0, 0, 0]});
-    addText("5", {x: 17, y: 6, color: [0, 0, 0]});
+    addText("1", {x: 2, y: 6, color: color`0`});
+    addText("2", {x: 5, y: 6, color: color`0`});
+    addText("3", {x: 9, y: 6, color: color`0`});
+    addText("4", {x: 13, y: 6, color: color`0`});
+    addText("5", {x: 17, y: 6, color: color`0`});
     
-    addText("6", {x: 2, y: 11, color: [0, 0, 0]});
-    addText("7", {x: 5, y: 11, color: [0, 0, 0]});
-    addText("8", {x: 9, y: 11, color: [0, 0, 0]});
-    addText("9", {x: 13, y: 11, color: [0, 0, 0]});
-    addText("10", {x: 17, y: 11, color: [0, 0, 0]});
+    addText("6", {x: 2, y: 11, color: color`0`});
+    addText("7", {x: 5, y: 11, color: color`0`});
+    addText("8", {x: 9, y: 11, color: color`0`});
+    addText("9", {x: 13, y: 11, color: color`0`});
+    addText("10", {x: 17, y: 11, color: color`0`});
   }
 
   if (level == 0) {
     if (selected == 0) {
       clearText();
-      addText("Play", {y: 6, color: [0, 255, 0]});
-      addText("Level Select", {y: 9, color: [0, 0, 0]});
+      addText("Play", {y: 6, color: color`4`});
+      addText("Level Select", {y: 9, color: color`0`});
     } else if (selected == 1) {
       clearText();
-      addText("Play", {y: 6, color: [0, 0, 0]});
-      addText("Level Select", {y: 9, color: [0, 255, 0]});
+      addText("Play", {y: 6, color: color`0`});
+      addText("Level Select", {y: 9, color: color`4`});
     }
   }
   else if (level == 12) {
     switch(selected) {
       case 0:
-        addText("1", {x: 2, y: 6, color: [0, 255, 0]});
+        addText("1", {x: 2, y: 6, color: color`4`});
         break;
       case 1:
-        addText("2", {x: 5, y: 6, color: [0, 255, 0]});
+        addText("2", {x: 5, y: 6, color: color`4`});
         break;
       case 2:
-        addText("3", {x: 9, y: 6, color: [0, 255, 0]});
+        addText("3", {x: 9, y: 6, color: color`4`});
         break;
       case 3:
-        addText("4", {x: 13, y: 6, color: [0, 255, 0]});
+        addText("4", {x: 13, y: 6, color: color`4`});
         break;
       case 4:
-        addText("5", {x: 17, y: 6, color: [0, 255, 0]});
+        addText("5", {x: 17, y: 6, color: color`4`});
         break;
       case 5:
-        addText("6", {x: 2, y: 11, color: [0, 255, 0]});
+        addText("6", {x: 2, y: 11, color: color`4`});
         break;
       case 6:
-        addText("7", {x: 5, y: 11, color: [0, 255, 0]});
+        addText("7", {x: 5, y: 11, color: color`4`});
         break;
       case 7:
-        addText("8", {x: 9, y: 11, color: [0, 255, 0]});
+        addText("8", {x: 9, y: 11, color: color`4`});
         break;
       case 8:
-        addText("9", {x: 13, y: 11, color: [0, 255, 0]});
+        addText("9", {x: 13, y: 11, color: color`4`});
         break;
       case 9:
-        addText("10", {x: 17, y: 11, color: [0, 255, 0]});
+        addText("10", {x: 17, y: 11, color: color`4`});
         break;
     }
   }

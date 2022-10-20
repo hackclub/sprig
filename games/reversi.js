@@ -380,7 +380,7 @@ function updateBoard() {
   setMap(map`${renderBoard()}`);
   addText("" + game.score[0] + " - " + game.score[1], {
     y: 15,
-    color: [255, 0, 0],
+    color: color`3`,
   });
 }
 
@@ -427,7 +427,7 @@ async function gameOnKey(key) {
   if (game.winner != -1) {
     addText("Winner: " + (game.winner ? "White" : "Black"), {
       y: 4,
-      color: [255, 0, 0],
+      color: color`3`,
     });
   }
 }
@@ -435,17 +435,17 @@ async function gameOnKey(key) {
 let menuChoice = 0;
 function showMenu() {
   clearText();
-  addText("Reversi", { y: 3, color: [255, 0, 0] });
+  addText("Reversi", { y: 3, color: color`3` });
   addText((menuChoice ? "> " : "") + "1 Player", {
     y: 5,
-    color: [menuChoice ? 0 : 255, menuChoice ? 255 : 0, 0],
+    color: menuChoice ? color`4` : color`3`,
   });
   addText((menuChoice ? "" : "> ") + "2 Players", {
     y: 6,
-    color: [menuChoice ? 255 : 0, menuChoice ? 0 : 255, 0],
+    color: menuChoice ? color`3` : color`4`,
   });
-  addText("W/S: select", { y: 8, color: [255, 0, 0] });
-  addText("I: confirm", { y: 9, color: [255, 0, 0] });
+  addText("W/S: select", { y: 8, color: color`3` });
+  addText("I: confirm", { y: 9, color: color`3` });
 }
 
 function onKey(key) {

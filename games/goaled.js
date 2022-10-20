@@ -307,7 +307,7 @@ afterInput(() => {
     addText(`score: ${counter}`, {
         x: 6,
         y: 8, 
-        color: [240, 0, 50]
+        color: color`3`
       })
     counter += 1
     setTimeout(() => {
@@ -325,12 +325,12 @@ function gameOver () {
   addText("Game over", {
       x: 6,
       y: 7,
-      color: [ 255, 255, 255 ]
+      color: color`2`
     });
   addText(`score: ${counter}`, {
         x: 6,
         y: 9, 
-        color: [ 50, 0, 240 ]
+        color: color`7`
       })
   counter = 1;
   setMap(levels[2])

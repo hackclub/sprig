@@ -168,20 +168,20 @@ onInput("d", () => {
 onInput("a", () => {
   getFirst(lazer).x -= 1;
 });
-addText("Time left: ", { y: 0 , color: [255,0,0] });
+addText("Time left: ", { y: 0 , color: color`3` });
 
 //countdown timer
 var timeleft = 15;
     var downloadTimer = setInterval(function(){
     timeleft--;
     clearText();
-    addText(""+timeleft, { y: 1 , color: [255,0,0] });
+    addText(""+timeleft, { y: 1 , color: color`3` });
       if(timeleft <= 0){
         clearTile(getFirst(lazer).x,getFirst(lazer).y);
         clearInterval(downloadTimer);
         clearText()
 
-        addText("Final Score: "+score, {y:4, color: [255,0,0]});
+        addText("Final Score: "+score, {y:4, color: color`3`});
 
     }
     },1000);
@@ -224,7 +224,7 @@ afterInput(() => {
     clearTile(getFirst(lazer).x,getFirst(lazer).y);
         clearInterval(downloadTimer);
         clearText()
-        addText("You Lost", {y:4, color: [255,0,0] });
+        addText("You Lost", {y:4, color: color`3` });
         playback.end();
   }
   //removes the hit alien and lazer, puts another alien and asteroid in a random spot 
@@ -251,7 +251,7 @@ afterInput(() => {
     score++;
     //Displays the score. 
 
-    addText("score: "+score, { y: 4 , color: [255,0,0]} );
+    addText("score: "+score, { y: 4 , color: color`3`} );
 
   }
 });

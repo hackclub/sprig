@@ -485,11 +485,11 @@ const shake = () => {
 const killPlayer = () => {
   addText("Oops!", {
     y: 4,
-    color: [255, 0, 0],
+    color: color`3`,
   });
   addText("killed yourself :(", {
     y: 6,
-    color: [255, 0, 0],
+    color: color`3`,
   });
 
   shake();
@@ -550,7 +550,7 @@ const checkDoorArrived = () => {
   if(playerArrivedFake)
   {
     playTune(fake);
-    addText("Wrong Door!", { y: 4, color: [0, 0, 255] });
+    addText("Wrong Door!", { y: 4, color: color`5` });
     setTimeout(() => {
   
       clearText();
@@ -570,12 +570,12 @@ const checkDoorArrived = () => {
     } else {
       if(status=="win") return;
       playTune(win);
-      addText("you win!", { y: 4, color: [250, 252, 0] });
+      addText("you win!", { y: 4, color: color`6` });
       setTimeout(() => {
     
         clearText();
-        addText("press k to", { y: 4, color: [0, 0, 0] });
-        addText("restart the game!", { y: 6, color: [0, 0, 0] });
+        addText("press k to", { y: 4, color: color`0` });
+        addText("restart the game!", { y: 6, color: color`0` });
         
       }, 800);
       status="win"
@@ -644,7 +644,7 @@ afterInput(() => {
   if(playerArrivedFake)
   {
     playTune(fake);
-    addText("Wrong Door!", { y: 4, color: [0, 0, 255] });
+    addText("Wrong Door!", { y: 4, color: color`5` });
     setTimeout(() => {
   
       clearText();
@@ -663,12 +663,12 @@ afterInput(() => {
     } else {
       if(status=="win") return;
       playTune(win);
-      addText("you win!", { y: 4, color: [250, 252, 0] });
+      addText("you win!", { y: 4, color: color`6` });
       setTimeout(() => {
     
         clearText();
-        addText("press k to", { y: 4, color: [0, 0, 0] });
-        addText("restart the game!", { y: 6, color: [0, 0, 0] });
+        addText("press k to", { y: 4, color: color`0` });
+        addText("restart the game!", { y: 6, color: color`0` });
         
       }, 800);
       status = "win";

@@ -105,7 +105,7 @@ function genWall() {
 }
 
 function gameLoop() {
-  addText(`Score: ${score}`, {x: 9, y: 14,color: [255,255,0]})
+  addText(`Score: ${score}`, {x: 9, y: 14,color: color`6`})
     
   getAll(wall).forEach((w) => {
     if (w.x == 0) {
@@ -142,8 +142,8 @@ function lost() {
 ........
 ........`);
   clearText();
-  addText("Game over!", {x: 5, y: 7, color: [255,255,0]})
-  addText(`Score: ${score}`, {x: 5, y: 8, color: [255,255,0]})
+  addText("Game over!", {x: 5, y: 7, color: color`6`})
+  addText(`Score: ${score}`, {x: 5, y: 8, color: color`6`})
 }
 
 gameLoop();

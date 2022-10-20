@@ -300,7 +300,7 @@ setLegend(
 );
 
 let score = 0
-addText(score.toString() + " " + wrongs.toString() + " " + counter.toString(), {x:12, y:13, color: [0,0,255]})
+addText(score.toString() + " " + wrongs.toString() + " " + counter.toString(), {x:12, y:13, color: color`5`})
 setSolids([]);
 
 let level = 0;
@@ -326,7 +326,7 @@ const ypos = getFirst(pointer).y
 
 
 timerStart = setInterval(() => {
-    addText(score.toString() + " " + wrongs.toString() + " " + counter.toString(), {x:12, y:13, color: [0,0,255]})
+    addText(score.toString() + " " + wrongs.toString() + " " + counter.toString(), {x:12, y:13, color: color`5`})
     counter += 1;
 }, 1000);
 
@@ -355,7 +355,7 @@ onInput("j", () => {
   clearText()
   clearInterval(timerStart)
   timerStart = setInterval(() => {
-    addText(score.toString() + " " + wrongs.toString() + " " + counter.toString(), {x:12, y:13, color: [0,0,255]})
+    addText(score.toString() + " " + wrongs.toString() + " " + counter.toString(), {x:12, y:13, color: color`5`})
     counter += 1;
 }, 1000);
   counter = 0
@@ -405,10 +405,10 @@ onInput("i", () => {
           setMap(levels[1])
           clearText()
           
-          addText("You got to " + ptsNeeded.toString() + "!", {x:1, y:3, color: [0,0,255]})
-          addText("Time it took: " + counter.toString(), {x:1, y:6, color: [0,0,255]})
-          addText("Messups: " + totalMess.toString(), {x:1, y:9, color: [0,0,255]})
-          addText("Resets: " + messUps.toString(), {x:1, y:12, color: [0,0,255]})
+          addText("You got to " + ptsNeeded.toString() + "!", {x:1, y:3, color: color`5`})
+          addText("Time it took: " + counter.toString(), {x:1, y:6, color: color`5`})
+          addText("Messups: " + totalMess.toString(), {x:1, y:9, color: color`5`})
+          addText("Resets: " + messUps.toString(), {x:1, y:12, color: color`5`})
       
         } else {
           doStuff()
@@ -427,7 +427,7 @@ onInput("i", () => {
           score = 0
           playTune(lose)
           clearText()
-          addText(score.toString() + " " + wrongs.toString(), {x:12, y:13, color: [0,0,255]})
+          addText(score.toString() + " " + wrongs.toString(), {x:12, y:13, color: color`5`})
 
           doStuff()
         }
@@ -476,7 +476,7 @@ doStuff()
 afterInput(() => {
 
   
-  addText(score.toString() + " " + wrongs.toString(), {x:12, y:13, color: [0,0,255]})
+  addText(score.toString() + " " + wrongs.toString(), {x:12, y:13, color: color`5`})
 
 
   

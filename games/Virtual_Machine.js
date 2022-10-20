@@ -435,7 +435,7 @@ afterInput(() => {
     const currentLevel = levels[level];
     if (currentLevel !== "") {
       setMap(currentLevel);
-      addText("-HACKED-", { y: 4, color: [0, 0, 0] })
+      addText("-HACKED-", { y: 4, color: color`0` })
       
     } 
   }
@@ -452,13 +452,13 @@ afterInput(() => {
 
     if (currentLevel !== "") {
       setMap(currentLevel);
-    addText(" LOGGED OUT ", { y: 7, color: [0, 0, 0] })} 
+    addText(" LOGGED OUT ", { y: 7, color: color`0` })} 
   }
   //===================================================================================
   
   //======================HEADER============================
   addText("-Virtual Machine-");
-  addText("-L to go back-", { y:15, color: [0, 0, 0] }).fontsize(2);
+  addText("-L to go back-", { y:15, color: color`0` }).fontsize(2);
   //========================================================
 
 });

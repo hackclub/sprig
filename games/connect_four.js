@@ -264,13 +264,13 @@ const win = () => {
     addText("Yellow Wins", { 
       x: 5, 
       y: 1, 
-      color: [ 0, 0, 0 ]
+      color: color`0`
     });
   } else {
     addText("Red Wins", { 
       x: 6, 
       y: 1, 
-      color: [ 0, 0, 0 ]
+      color: color`0`
     });
   };
   console.log(`${turn} Wins!`)

@@ -229,7 +229,7 @@ afterInput(() => {
   clearText();
   
   if (posts[2].length == numRings) {
-    addText("win!", { y: 12, color: [255, 0, 0] });
+    addText("win!", { y: 12, color: color`3` });
     started = false;
     numRings = 3;
   }

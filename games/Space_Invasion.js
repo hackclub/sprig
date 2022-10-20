@@ -307,17 +307,17 @@ const update = () =>{
     addText("Score:"+`${score}`,{ 
       x: 2, 
       y: 0, 
-      color: [ 255, 255, 255] 
+      color: color`2` 
     })
     addText("HP:",{ 
       x: 12, 
       y: 0, 
-      color: [ 255, 255, 255] 
+      color: color`2` 
     })
 /*    addText("Pow:",{ 
       x: 11, 
       y: 1, 
-      color: [ 255, 255, 255] 
+      color: color`2` 
     })
 */  
     if(lives == 3){
@@ -525,8 +525,8 @@ const winlose = () =>{
     clearTile(15,1)
     clearTile(16,1)
     
-    addText("You Lose", {x: 6,y: 6,color: [255, 255, 255]})
-    addText("Score:"+`${score}`,{x: 6,y: 8,color: [255, 255, 255]})
+    addText("You Lose", {x: 6,y: 6,color: color`2`})
+    addText("Score:"+`${score}`,{x: 6,y: 8,color: color`2`})
 
     playTune(death)
     clearInterval(game)
@@ -548,24 +548,22 @@ onInput("i", () => {
 const start_music = playTune(start, Infinity)
 
 const intro_screen = () => {
-  col1 = Math.floor(Math.random() * 256)
-  col2 = Math.floor(Math.random() * 256)
-  col3 = Math.floor(Math.random() * 256)
   sleep1 = Math.floor(Math.random() * 500)+80
   
   clearText()
 
+  const colors = [ color`3`, color`C`, color`7`, color`5`, color`6`, color`F`, color`4`, color`D`, color`8`, color`H`, color`9` ]
   addText("Space Invasion", { 
-    x: 3, 
+    x: 3,
     y: 1, 
-    color: [ col1, col2, col3] 
+    color: colors[Math.floor(Math.random() * colors.length)]
   })
 
   //addText("\n\n\n    Press A,D to\n\n        move  \n\n     W to Shoot\n\n     S to Shield   \n\n\n     I to Begin", { 
   addText("\n\n\n    Press A,D to\n\n        move  \n\n     W to Shoot\n\n  \n\n     I to Begin", {  
     x: 0, 
     y: 2, 
-    color: [ 255, 255, 255] 
+    color: color`2` 
   })
 }
 

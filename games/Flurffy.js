@@ -207,7 +207,7 @@ var tempototal = 35;
     var tempodescendo = setInterval(function(){
     tempototal--;
     clearText();
-    addText(""+tempototal, { y: 1 , color: [255,0,0] });
+    addText(""+tempototal, { y: 1 , color: color`3` });
       if(tempototal <= 0){
         clearTile(getFirst(flurffy).x,getFirst(flurffy).y);
         clearInterval(tempodescendo);

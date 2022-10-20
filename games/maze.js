@@ -134,7 +134,7 @@ afterInput(_ => {
   if (getAll(red).length === width() * height() - getAll(wall).length) {
     level++;
     if (level in levels) setMap(levels[level])
-    else addText("you win", { y: 5, color: [0, 0, 255]})
+    else addText("you win", { y: 5, color: color`5`})
     const p = getFirst(player);
     addSprite(p.x, p.y, red)
   }

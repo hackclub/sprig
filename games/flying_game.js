@@ -209,7 +209,7 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("Congratulations", { y: 4, color: [3, 4, 94] });
+      addText("Congratulations", { y: 4, color: color`0` });
     }
   }
 });

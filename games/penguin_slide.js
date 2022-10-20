@@ -242,7 +242,7 @@ onInput("j", () => {
 });
 
 setMap(levels[level]);
-addText("Move penguin!", { y: 4, color: [255, 0, 0] });
+addText("Move penguin!", { y: 4, color: color`3` });
 playTune(tunes.start);
 
 afterInput(() => {
@@ -251,8 +251,8 @@ afterInput(() => {
   if (numberCovered === 1) {
     const coinsLeft = tilesWith(coin).length;
     if (coinsLeft !== 0) {
-      addText("There are", { y: 4, color: [255, 0, 0] });
-      addText("still coins!", { y: 5, color: [255, 0, 0] });
+      addText("There are", { y: 4, color: color`3` });
+      addText("still coins!", { y: 5, color: color`3` });
       return;
     }
     // increase the current level number
@@ -265,19 +265,19 @@ afterInput(() => {
       setMap(currentLevel);
       playTune(tunes.start);
     } else {
-      addText("you win!", { y: 4, color: [255, 0, 0] });
+      addText("you win!", { y: 4, color: color`3` });
       playTune(tunes.win);
     }
   }
 
   if (level == 0) {
-    addText("Penguin slides", { y: 4, color: [255, 0, 0] });
-    addText("until it", { y: 5, color: [255, 0, 0] });
-    addText("reaches ice!", { y: 6, color: [255, 0, 0] });
+    addText("Penguin slides", { y: 4, color: color`3` });
+    addText("until it", { y: 5, color: color`3` });
+    addText("reaches ice!", { y: 6, color: color`3` });
   }
 
   if (level == 1) {
-    addText("To reset", { y: 4, color: [255, 0, 0] });
-    addText("press j", { y: 5, color: [255, 0, 0] });
+    addText("To reset", { y: 4, color: color`3` });
+    addText("press j", { y: 5, color: color`3` });
   }
 });

@@ -756,8 +756,8 @@ const skulls = tilesWith(skull).length;
 
   
   //======================HEADER============================
-  addText("-Trash IT!-",{ color: [333, 223, 222] });
-  addText("-Delete the File-", { y:15, color: [333, 223, 222] });
+  addText("-Trash IT!-",{ color: color`8` });
+  addText("-Delete the File-", { y:15, color: color`8` });
   //========================================================
 });
 

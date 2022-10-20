@@ -261,8 +261,8 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("you win!...", { y: 5, color: [0, 0, 0] });
-      addText("confusingly?", { y: 10, color: [0, 0, 0] });
+      addText("you win!...", { y: 5, color: color`0` });
+      addText("confusingly?", { y: 10, color: color`0` });
     }
   }
 });

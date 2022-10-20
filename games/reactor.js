@@ -38,17 +38,17 @@ function theResults(player){
   addText(`Player ${player} in`, { 
         x: 4, 
         y: 5, 
-        color: [ 255, 255, 255 ] // red
+        color: color`2`
     })
     addText(getSecondsDiff(start, Date.now()).toString(), { 
         x: 7, 
         y: 7, 
-        color: [ 255, 0, 0 ] // red
+        color: color`3`
     })
     addText("milliseconds", { 
         x: 4, 
         y: 9, 
-        color: [ 255, 255, 255 ] // red
+        color: color`2`
     })   
 }
 
@@ -56,43 +56,43 @@ function addTheText(){
   addText("hello!", { 
       x: 10, 
       y: 1, 
-      color: [ 255, 0, 0 ] // red
+      color: color`3`
   })
   
   addText("w/i for blue", { 
       x: 1, 
       y: 3, 
-      color: [ 0, 0, 255 ] 
+      color: color`5` 
   })
   
   addText("a/j for green", { 
       x: 6, 
       y: 5, 
-      color: [ 0, 255, 0 ]
+      color: color`D`
   })
   
   addText("s/k for yellow", { 
       x: 1, 
       y: 7, 
-      color: [ 255, 150, 0 ]
+      color: color`F`
   })
   
   addText("d/l for purple", { 
       x: 5, 
       y: 9, 
-      color: [ 147,112,219 ]
+      color: color`H`
   })
   
   addText("press anything", { 
       x: 1, 
       y: 11, 
-      color: [ 255, 0, 0 ] // red
+      color: color`3`
   })
   
   addText("to start (and wait)!", { 
       x: 0, 
       y: 13, 
-      color: [ 255, 0, 0 ] // red
+      color: color`3`
   })
 }
 

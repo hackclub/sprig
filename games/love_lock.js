@@ -16,7 +16,7 @@ Press l for Controls.
 
 
 let unlock = 0;
-addText(`${unlock} keys`, { x:2,color: [255, 0, 0 ] });
+addText(`${unlock} keys`, { x:2,color: color`3` });
 //=====CONSTRAINS======
 const player = 'p';
 const player2 = 'h';
@@ -834,11 +834,11 @@ onInput("l", () => {
   clearText();
   unlock=0
   setMap(levels[level]);
-  addText(`-LOVE LOCK-`, {y:1, color: [255, 0, 0 ] });
-  addText(`Movements `, {y:3, color: [255, 0, 0 ] });
-  addText(`W, A, S, D`, {y:4, color: [0, 255, 0 ] });
-  addText(`Other Controls`, {y:6, color: [255, 0, 0 ] });
-  addText(`I, J, K, L`, {y:7, color: [0, 255, 255 ] });
+  addText(`-LOVE LOCK-`, {y:1, color: color`3` });
+  addText(`Movements `, {y:3, color: color`3` });
+  addText(`W, A, S, D`, {y:4, color: color`4` });
+  addText(`Other Controls`, {y:6, color: color`3` });
+  addText(`I, J, K, L`, {y:7, color: color`7` });
   
 });
 //=====MUSIC======
@@ -849,13 +849,13 @@ onInput("k", () => {
 onInput("i", () => {
   clearText();
   unlock=0
-  addText(`-CREDITS-`, {y:1, color: [255, 0, 0 ] });
-  addText(`Initial Script`, {y:3, color: [255, 0, 0 ] });
-  addText(`Leo Mcelroy`, {y:4, color: [0, 255, 0 ] });
-  addText(`Completed By`, {y:6, color: [255, 0, 0 ] });
-  addText(`N Rizwan`, {y:7, color: [0, 255, 255 ] });
-  addText(`Song`, {y:9, color: [255, 0, 0 ] });
-  addText(`Let Her Go`, {y:10, color: [255, 255, 0 ] });
+  addText(`-CREDITS-`, {y:1, color: color`3` });
+  addText(`Initial Script`, {y:3, color: color`3` });
+  addText(`Leo Mcelroy`, {y:4, color: color`4` });
+  addText(`Completed By`, {y:6, color: color`3` });
+  addText(`N Rizwan`, {y:7, color: color`7` });
+  addText(`Song`, {y:9, color: color`3` });
+  addText(`Let Her Go`, {y:10, color: color`6` });
   setMap(levels[12]);
 });
 //=====MOVEMENT======
@@ -884,7 +884,7 @@ afterInput(() => {
         sprite.remove();
         unlock++;
         clearText();
-        addText(`${unlock} keys`, { x:2,color: [255, 0, 0 ] });
+        addText(`${unlock} keys`, { x:2,color: color`3` });
       } 
     })
   });
@@ -893,7 +893,7 @@ afterInput(() => {
     if (unlock) {
       unlock--;
       clearText();
-      addText(`${unlock} keys`, { x:2,color: [255, 0, 0 ] });
+      addText(`${unlock} keys`, { x:2,color: color`3` });
     } else {
       const p = getFirst(player);
       p.x -= p.dx;
@@ -908,14 +908,14 @@ afterInput(() => {
       setMap(levels[level]);
       if (level == levels.length-1) {
         clearText();
-        addText("YOU WIN!", {y:1, color: [255, 0, 0] });
-        addText(`-CREDITS-`, {y:3, color: [255, 0, 0 ] });
-        addText(`Initial Script`, {y:5, color: [255, 0, 0 ] });
-        addText(`Leo Mcelroy`, {y:6, color: [0, 255, 0 ] });
-        addText(`Completed By`, {y:8, color: [255, 0, 0 ] });
-        addText(`N Rizwan`, {y:9, color: [0, 255, 255 ] });
-        addText(`Song`, {y:11, color: [255, 0, 0 ] });
-        addText(`Let Her Go`, {y:12, color: [255, 255, 0 ] });
+        addText("YOU WIN!", {y:1, color: color`3` });
+        addText(`-CREDITS-`, {y:3, color: color`3` });
+        addText(`Initial Script`, {y:5, color: color`3` });
+        addText(`Leo Mcelroy`, {y:6, color: color`4` });
+        addText(`Completed By`, {y:8, color: color`3` });
+        addText(`N Rizwan`, {y:9, color: color`7` });
+        addText(`Song`, {y:11, color: color`3` });
+        addText(`Let Her Go`, {y:12, color: color`6` });
       }
     }
   } 

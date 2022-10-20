@@ -126,7 +126,7 @@ setMap(levels[level]);
 addText(`${Score}`, {
   y: 0,
   x: 9,
-  color: [ 255, 255, 255 ]
+  color: color`2`
 });
 
 onInput("d", () => {
@@ -144,7 +144,7 @@ function writeScore() {
   addText (`${Score += 1}`, {
   y: 0,
   x: 9,
-  color: [ 255, 255, 255 ]
+  color: color`2`
   });
 }
 
@@ -197,8 +197,8 @@ let gameInterval = setInterval(() => {
     playTune(loseSound);
     ballOne.remove();
     clearText()
-    addText ("GAME OVER!", { y: 0, x: 5, color: [ 255, 255, 255 ] });
-    addText ("TRY AGAIN!", { y: 5, x: 5, color: [ 255, 255, 255 ] });
+    addText ("GAME OVER!", { y: 0, x: 5, color: color`2` });
+    addText ("TRY AGAIN!", { y: 5, x: 5, color: color`2` });
     clearInterval(gameInterval);
  } 
   

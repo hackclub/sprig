@@ -26,13 +26,13 @@ Las claves de mapa de bits (bitMap keys) deben de ser un solo carácter.
 Recomendamos almacenar las claves de caracteres en variables.
 
 ```js
-const player = "p";
-const wall = "w";
+const player = "p"  
+const wall = "w"  
 
 setLegend(
-    [ player, bitmap`...` ],
-    [ wall, bitmap`...` ],
-);
+  [ player, bitmap`...` ],
+  [ wall, bitmap`...` ],
+)  
 ```
 
 Para crear un nuevo bitmap, escribe
@@ -77,9 +77,9 @@ Es posible que desees realizar un seguimiento de varios niveles utilizando un ar
 
 ```js
 const levels = [
-    map`...`,
-    map`...`,
-    // etc.
+  map`...`,
+  map`...`,
+  // etc.
 ]
 setMap(levels[0])
 
@@ -93,10 +93,10 @@ Los sprites sólidos no pueden superponerse entre sí.
 Esto es útil para crear cosas como paredes:
 
 ```js
-const player = "p";
-const wall = "w";
+const player = "p"  
+const wall = "w"  
 
-setSolids([player, wall]);
+setSolids([ player, wall ])  
 ```
 
 ### setPushables(pushMap)
@@ -104,11 +104,11 @@ setSolids([player, wall]);
 Usa `setPushables` para hacer que los sprites empujen a otros sprites. El sprite de la izquierda podrá empujar todos los sprites enumerados a la derecha.
 
 ```js
-const player = "p";
-const block = "b";
+const player = "p"  
+const block = "b"  
 
 setPushables({ 
-    [player]: [ block, player ] 
+  [player]: [ block, player ] 
 })
 ```
 
@@ -126,8 +126,8 @@ Hacer algo cuando el jugador presiona un control:
 
 ```js
 onInput("a", () => {
-    // Mueve al jugador un tile a la derecha.
-    getFirst(player).x += 1
+  // Mueve al jugador un tile a la derecha.
+  getFirst(player).x += 1
 })
 ```
 
@@ -137,9 +137,9 @@ Se ejecuta después de que cada evento de entrada haya terminado de manejarse. �
 
 ```js
 afterInput(() => {
-    if (getAll(block).length > 0) {
-        console.log("you win")
-    }
+  if (getAll(block).length > 0) {
+    console.log("you win")
+  }
 })
 ```
 
@@ -150,11 +150,11 @@ Cada tile puede contener cualquier número de sprites apilados uno encima del ot
 Los sprites contienen:
 ```
 {
-    type
-    x
-    y
-    dx
-    dy
+  type
+  x
+  y
+  dx
+  dy
 }
 ```
 
@@ -219,10 +219,10 @@ Puedes agregar texto con `x`, `y` y `color` opcionales.
 Por ejemplo:
 
 ```js
-addText("hello", { 
-    x: 10, 
-    y: 4, 
-    color: [ 255, 0, 0 ] // red
+addText("hello", {
+  x: 10,
+  y: 4,
+  color: color`3`
 })
 ```
 

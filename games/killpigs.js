@@ -180,7 +180,7 @@ const setKeyMap = () => {
 }
 const startLevel = (level) => {
   setKeyMap()
-  addText("" + (level + 1), { x: 1, y: 0, color: [ 255, 0, 0 ] })
+  addText("" + (level + 1), { x: 1, y: 0, color: color`3` })
   
 }
 startLevel(level)
@@ -212,7 +212,7 @@ onInput("j", async () => {
   const isWin = getAll(pig).some(({ x }) => x === rayPosition )
   const message = isWin ? "You Win" : "You Lose"
   
-  addText(message, { x: 6, y: 8, color: [ 255, 0, 0 ] })
+  addText(message, { x: 6, y: 8, color: color`3` })
   await timeout(1000)
   clearText()
   

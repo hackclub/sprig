@@ -221,7 +221,7 @@ for (let x = 0; x < res; x++) {
   addText("Zoom: 2^" + Math.log2(1 / (res/max)), { 
     x: 2, 
     y: 0, 
-    color: [ 0, 50, 50 ]
+    color: color`0`
 })
 
 }

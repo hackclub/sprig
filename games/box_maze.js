@@ -188,12 +188,12 @@ onInput("j", () => {
     var tempodescendo = setInterval(function(){
     tempototal--;
     clearText(); 
-    addText(""+tempototal, { y: 1 , color: [0,255,255] });
+    addText(""+tempototal, { y: 1 , color: color`7` });
       if(tempototal <= 0){ 
         clearInterval(tempodescendo);
         clearTile(getFirst(player).x,getFirst(player).y);
         // clearText(); was here before
-        addText("Try Again!", { y: 1 , color: [255,0,0] });
+        addText("Try Again!", { y: 1 , color: color`3` });
     }
     },1000);
 
@@ -214,7 +214,7 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("you win!", { y: 4, color: [255, 0, 0] });
+      addText("you win!", { y: 4, color: color`3` });
       clearInterval(tempodescendo);
     clearTile(getFirst(player).x,getFirst(player).y);
     }

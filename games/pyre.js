@@ -332,7 +332,7 @@ const pushPlayer = (dx, dy) => {
 }
 
 addText("press up to begin!", { y:  1 });
-addText(              "PYRE", { y: 14, color: [255, 20, 50] });
+addText(              "PYRE", { y: 14, color: color`3` });
 
 const states = {
   playing: {
@@ -365,8 +365,8 @@ const states = {
     1593.6254980079682`);
           setMap(map);
           clearText();
-          addText(text[0], { y: 0, color: [ 200, 20, 20 ]});
-          addText(text[1], { y: 15, color: [ 200, 20, 20 ]});
+          addText(text[0], { y: 0, color: color`3`});
+          addText(text[1], { y: 15, color: color`3`});
         }
         setTimeout(() => state = 'playing', 500);
       }, 500);

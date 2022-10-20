@@ -378,17 +378,17 @@ onInput("j", () => {
 afterInput(() => {
   if (checkLoss()) {
     isGameOver = true;
-    addText("You lost :(", { y: 4, color: [0, 0, 0] });
-    addText("Press j", { y: 8, color: [0, 0, 0] });
-    addText("to restart", { y: 9, color: [0, 0, 0] });
+    addText("You lost :(", { y: 4, color: color`0` });
+    addText("Press j", { y: 8, color: color`0` });
+    addText("to restart", { y: 9, color: color`0` });
     return;
   }
 
   if (getAll(twentyfortyeight).length >= 1) {
     isGameOver = true;
-    addText("You win!", { y: 4, color: [0, 0, 0] });
-    addText("Press j", { y: 8, color: [0, 0, 0] });
-    addText("to restart", { y: 9, color: [0, 0, 0] });
+    addText("You win!", { y: 4, color: color`0` });
+    addText("Press j", { y: 8, color: color`0` });
+    addText("to restart", { y: 9, color: color`0` });
     return;
   }
   

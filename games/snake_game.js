@@ -148,7 +148,7 @@ const lostMsg = () => {
   addText("LOST", { 
       x: 8, 
       y: 8, 
-      color: [ 255, 0, 0 ]
+      color: color`3`
   });
 }
 
@@ -156,7 +156,7 @@ const congratulation = () => {
   addText("CONGRATS !!", { 
       x: 5, 
       y: 8, 
-      color: [ 255, 0, 0 ]
+      color: color`3`
   });
 }
 
@@ -169,7 +169,7 @@ const showScore = () => {
   addText(`${score}`, { 
       x: 4, 
       y: 1, 
-      color: [ 255, 255, 255 ]
+      color: color`2`
   });
 }
 showScore();

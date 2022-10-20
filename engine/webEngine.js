@@ -27,7 +27,6 @@ function composeText(texts) {
   return grid;
 }
 
-
 function drawText(charGrid) {
   const img = new ImageData(160, 128);
   img.data.fill(0);

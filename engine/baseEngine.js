@@ -1,3 +1,5 @@
+import { palette } from "../palette.js";
+
 // Tagged tempalate literal factory go brrr
 function _makeTag(cb) {
   return (strings, ...interps) => {
@@ -184,14 +186,17 @@ export function baseEngine() {
   }
 
   /* opts: x, y, color (all optional) */
-  function addText(str, opts={}) {
+  function addText(str, opts = {}) {
     const CHARS_MAX_X = 21;
     const padLeft = Math.floor((CHARS_MAX_X - str.length)/2);
+
+    if (Array.isArray(opts.color)) throw new Error("addText no longer takes an RGBA color. Please use a Sprig color instead with: color``");
+    const [_, rgba] = palette.find(([key]) => key === opts.color) || palette.find(([key]) => key === "L");
 
     state.texts.push({
       x: opts.x ?? padLeft,
       y: opts.y ?? 0,
-      color: opts.color ?? [10, 10, 40],
+      color: rgba,
       content: str
     });
   }

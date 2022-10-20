@@ -506,12 +506,12 @@ function lost() {
   addText("Game Over", { 
     x: 5, 
     y: 6, 
-    color: [ 255, 255, 255 ]
+    color: color`2`
   });
   addText(`Score: ${opened}`, { 
     x: 6, 
     y: 8, 
-    color: [ 255, 255, 255 ]
+    color: color`2`
   });
 
 };
@@ -530,7 +530,7 @@ function win() {
   addText("You Win!", { 
     x: 6, 
     y: 7, 
-    color: [ 255, 255, 255 ]
+    color: color`2`
   });
 };
 

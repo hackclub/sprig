@@ -179,7 +179,7 @@ afterInput(() => {
     clearText();
     addText("Score: " + score, {
       y: 0,
-      color: [255, 0, 0]
+      color: color`3`
     })
   }
 });

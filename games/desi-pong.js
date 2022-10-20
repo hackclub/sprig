@@ -216,7 +216,7 @@ setPushables({
 
 addText(`P1- ${player1Score} - ${player2Score} -P2`, {
   y: 1,
-  color: [ 255, 77, 255 ]
+  color: color`8`
 });
 
 function dist(x1, y1, x2, y2) {
@@ -229,7 +229,7 @@ function writeScore() {
   clearText()
   addText(`P1- ${player1Score} - ${player2Score} -P2`, {
     y: 1,
-    color: [ 255, 77, 255 ]
+    color: color`8`
   });
 }
 
@@ -311,20 +311,20 @@ setInterval(()=>{
   if(player1Score>=scoreCheck || player2Score>=scoreCheck){
       addText("Game Over !!!", {
         y: 7,
-        color: [ 255, 77, 255 ]
+        color: color`8`
       });
       clearInterval(i);
   }
   if(player1Score>=scoreCheck){
     addText("Player 1 is win !", {
         y: 5,
-        color: [ 255, 77, 255 ]
+        color: color`8`
       });
   }
   if(player2Score>=scoreCheck){
     addText("Player 2 is win !", {
         y: 5,
-        color: [ 255, 77, 255 ]
+        color: color`8`
       });
   }
 },0)

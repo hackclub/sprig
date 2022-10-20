@@ -207,7 +207,7 @@ const addNewTile = () => {
 
 const drawScore = (score) => {
   clearText();
-  addText(`${score}pts`, {x: 3, y: 1, color: [255, 255, 255]});
+  addText(`${score}pts`, {x: 3, y: 1, color: color`2`});
 }
 
 let score = 0;
@@ -224,7 +224,7 @@ function step() {
         {
           x: (sprite.x) * 3 + 2,
           y: (sprite.y) * 2 + 2,
-          color: [0, 0, 0]
+          color: color`0`
         }
       ))
     )
@@ -279,12 +279,12 @@ afterInput(() => {
   // check if win
   if (getAll(b256).length > 0) {
     gameOver = true;
-    addText(`You win!`, {x: 6, y: 13, color: [0, 255, 0]});
+    addText(`You win!`, {x: 6, y: 13, color: color`4`});
   }
 
   if (checkGameOver()) {
     gameOver = true;
-    addText(`You lose!`, {x: 6, y: 13, color: [255, 0, 0]});
+    addText(`You lose!`, {x: 6, y: 13, color: color`3`});
   }
 });
 

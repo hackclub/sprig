@@ -164,7 +164,7 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("you win!", { y: 4, color: [255, 0, 0] });
+      addText("you win!", { y: 4, color: color`3` });
     }
   }
 });

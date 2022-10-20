@@ -845,7 +845,7 @@ const texts = [
 let level = 0;
 const currentLevel = levels[level];
 setMap(currentLevel);
-addText(texts[level], {x:1, color:[128,128,128]});
+addText(texts[level], {x:1, color:color`1`});
 setSolids([player, boxa, boxb, boxn, wall1, wall2, wall3, wall4, wall5, wall6, wall7, wall8, wall9, wall10, wall11, wall12, wall13, wall14, wall15, wall16, wall17, wall18, wall19, wall11, wall20, wall21, wall22, wall23, wall24, wall25]);
 setPushables({
   [player]: [boxa, boxb, boxn],
@@ -984,7 +984,7 @@ afterInput(() => {
   if (numberCovered === targetNumber && !(level === levels.length-1)) {
     level = level + 1;
     clearText();
-    addText(texts[level], {x:1, color:[128,128,128]});
+    addText(texts[level], {x:1, color:color`1`});
     const currentLevel = levels[level];
     playTune(cont);
     setMap(currentLevel);
@@ -992,7 +992,7 @@ afterInput(() => {
   if (level === levels.length-1) {
     addText("You win!", {
       y: 4,
-      color: [0, 255, 0]
+      color: color`4`
     });
     playTune(win);
   }

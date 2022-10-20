@@ -83,7 +83,7 @@ function updateScore() {
   addText(`Score:${score}`, {
     x: 1, 
     y: 4, 
-    color: [ 255, 255, 255]
+    color: color`2`
   })
 }
 

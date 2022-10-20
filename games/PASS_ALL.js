@@ -135,7 +135,7 @@ afterInput(_ => {
   if (getAll(green).length === width() * height() - getAll(blocker).length) {
     level++;
     if (level in levels) setMap(levels[level])
-    else addText("You are the Best", { y: 5, color: [0, 0, 255]})
+    else addText("You are the Best", { y: 5, color: color`5`})
     const c = getFirst(coolguy);
     addSprite(c.x, c.y, green)
   }

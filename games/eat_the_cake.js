@@ -117,8 +117,8 @@ const checkIfObjectWasTouched = () => {
   const playerTouchedCake = tilesWith(cake, player).length;
   const playerTouchedVeg = tilesWith(broccoli, player).length;
 
-  if (playerTouchedCake) addText("You ate cake! :)", { y: 4, color: [249, 163, 229] });
-  if (playerTouchedVeg) addText("Nuuuu whhyy", { y: 4, color: [249, 163, 229] });
+  if (playerTouchedCake) addText("You ate cake! :)", { y: 4, color: color`8` });
+  if (playerTouchedVeg) addText("Nuuuu whhyy", { y: 4, color: color`8` });
 
 };
 

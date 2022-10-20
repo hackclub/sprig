@@ -198,7 +198,7 @@ setPushables({
 
 addText(`${player1Score} - ${aiScore}`, {
   y: 1,
-  color: [ 255, 255, 255 ]
+  color: color`2`
 });
 
 function dist(x1, y1, x2, y2) {
@@ -211,7 +211,7 @@ function writeScore() {
   clearText()
   addText(`${player1Score} - ${aiScore}`, {
     y: 1,
-    color: [ 255, 255, 255 ]
+    color: color`2`
   });
 }
 

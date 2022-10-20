@@ -191,7 +191,7 @@ var interval = 0;
 var running = false;
 
 const die = () => {
-  addText("You lose!", { y: 4, color: [255, 255, 255] });
+  addText("You lose!", { y: 4, color: color`2` });
   stop();
 };
 
@@ -212,7 +212,7 @@ const render = () => {
 
   if (!running) return;
   clearText();
-  addText("Score: " + score, { y: 1, color: [255, 255, 255] });
+  addText("Score: " + score, { y: 1, color: color`2` });
 };
 
 const start = () => {

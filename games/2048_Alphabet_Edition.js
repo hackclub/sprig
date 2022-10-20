@@ -310,17 +310,16 @@ onInput("i", () => {
   prepBoard();
   
   setMap(levels[level]);
-  addText(`2048 Alphabet edition`, {y:1, color: [245, 109, 187, 255 ] });
-  addText(`To Move:`, {y:3, color: [19, 21, 224, 255] });
-  addText(`W, A, S, D`, {y:4, color: [245, 109, 187, 255 ] });
-  addText(`Other Controls`, {y:6, color: [19, 21, 224, 255] });
-  addText(`I for help`, {y:8, color: [0, 0, 0, 255 ] });
-  addText(`K to reset level`, {y:9, color: [0, 0, 0, 255] });
-  addText(`L to start music`, {y:10, color: [0, 0, 0, 255] });
-  addText(`J to end music`, {y:11, color: [0, 0, 0, 255 ] });
-  addText(`Credits:`, {y:13, color: [19, 21, 224, 255 ] });
-  addText(`by OptimalBlock489`, {y:14, color: [245, 109, 187, 255 ] });
-  
+  addText(`2048 Alphabet edition`, {y:1, color: color`8` });
+  addText(`To Move:`, {y:3, color: color`5` });
+  addText(`W, A, S, D`, {y:4, color: color`8` });
+  addText(`Other Controls`, {y:6, color: color`5` });
+  addText(`I for help`, {y:8, color: color`0` });
+  addText(`K to reset level`, {y:9, color: color`0` });
+  addText(`L to start music`, {y:10, color: color`0` });
+  addText(`J to end music`, {y:11, color: color`0` });
+  addText(`Credits:`, {y:13, color: color`5` });
+  addText(`by OptimalBlock489`, {y:14, color: color`8` });
 });
 
 //setSolids([player, wall]);
@@ -476,15 +475,15 @@ onInput("k", () => {
 afterInput(() => {
   if (checkGameOver()) {
     isGameOver = true;
-    addText("Game over!", { y: 4, color: [0, 0, 0] });
-    addText("K to restart", { y: 8, color: [0, 0, 0] });
+    addText("Game over!", { y: 4, color: color`0` });
+    addText("K to restart", { y: 8, color: color`0` });
     return;
   }
 
   if (getAll(k).length >= 1) {
     isGameOver = true;
-    addText("You win!", { y: 4, color: [0, 0, 0] });
-    addText("K to restart", { y: 8, color: [0, 0, 0] });
+    addText("You win!", { y: 4, color: color`0` });
+    addText("K to restart", { y: 8, color: color`0` });
     return;
   }
   
