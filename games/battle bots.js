@@ -22,7 +22,7 @@ const player1 = "p";
 const player2= "l";
 const background = "b";
 const lose = "o";
-const wall = "w";
+
 
 let gameOver = false;
 let p1Win = 0;
@@ -98,24 +98,7 @@ setLegend(
 3333333333333333
 3333333333333333
 3333333333333333
-3333333333333333` ],
-    [ wall, bitmap`
-9999999999999999
-9999999999999999
-9999999999999999
-9999999999999999
-9999999999999999
-9999999999999999
-9999999999999999
-9999999999999999
-9999999999999999
-9999999999999999
-9999999999999999
-9999999999999999
-9999999999999999
-9999999999999999
-9999999999999999
-9999999999999999` ],
+3333333333333333` ]
 );
 
 setBackground(background);
@@ -141,7 +124,7 @@ setMap(levels[currentLevel]);
 /* Some level setting nonsense*/
 
 /* Making players be able to push each other*/
-setSolids([player1, player2, wall]);
+setSolids([player1, player2]);
 
 setPushables({
     [player1]: [ player2 ],
@@ -183,19 +166,20 @@ onInput("i", () => {
 });
 
 addText("Duel", {
+    color: `6`,
     x: 8,
     y: 3,
-    color: [19, 12, 22]
+    
 });
 addText(p1Win +"", {
     x: 3,
     y: 1,
-    color: [19, 12, 22]
+    color: `3`
 });
 addText(p2Win +"", {
     x: 16,
     y: 14,
-    color: [19, 12, 22]
+    color: `3`
 });
 
 /* add collisons for the rest of the blocks*/
@@ -292,12 +276,12 @@ o..b.bl`
   addText(p1Win +"", {
     x: 3,
     y: 1,
-    color: [19, 12, 22]
+    color: `3`
 });
   addText(p2Win +"", {
     x: 16,
     y: 14,
-    color: [19, 12, 22]
+    color: `3`
 });
   
 });
