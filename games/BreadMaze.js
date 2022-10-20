@@ -50,7 +50,7 @@ const pickUp = tune`
 30: b5-30,
 750`;
 
-const initialTime = 35;
+const initialTime = 60;
 var tempototal = initialTime;
 
 setLegend(
