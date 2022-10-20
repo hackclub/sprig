@@ -406,61 +406,61 @@ onInput("w", () => {getFirst(player).y -= 1});
 onInput("d", () => {getFirst(player).x += 1});
 onInput("a", () => {getFirst(player).x -= 1});
 
+//======================HEADER============================
+addText("-Virtual Machine-");
+addText("-L to go back-", { y:15, color: color`0` });
+//========================================================
+
 
 //========================================================
 
 
 afterInput(() => {
-
-
-   //=================DUSTBIN====================
+  //=================DUSTBIN====================
 
   
-  const target2 = tilesWith(dustbin).length;
   const check2 = tilesWith(dustbin, player).length;
-  if (check2 === target2) {
-    level = level + 2
-    const currentLevel = levels[level];
-    if (currentLevel !== "") {
-      setMap(currentLevel);} 
-  }
+  if (check2 > 0) {
+    level = 2
 
-   //=================SKULL====================
-
-  
-  const target3 = tilesWith(skull).length;
-  const check3 = tilesWith(skull, player).length;
-  if (check3 === target3) {
-    level = level + 3
+    console.log("Load trash");
+    
     const currentLevel = levels[level];
     if (currentLevel !== "") {
       setMap(currentLevel);
-      addText("-HACKED-", { y: 4, color: color`0` })
-      
+      return;
+    }
+  }
+
+  //=================SKULL====================
+
+  
+  const check3 = tilesWith(skull, player).length;
+  if (check3 > 0) {
+    level = 3
+    const currentLevel = levels[level];
+    if (currentLevel !== "") {
+      setMap(currentLevel);
+      addText("-HACKED-", { y: 4, color: color`0` });
+      return;
     } 
   }
 
-   //=================POWER====================
+  //=================POWER====================
 
-  
-  const target4 = tilesWith(power).length;
   const check4 = tilesWith(power, player).length;
-  if (check4 === target4) {
-    level = level + 4 
+  if (check4 > 0) {
+    level = 4 
 
     const currentLevel = levels[level];
 
     if (currentLevel !== "") {
       setMap(currentLevel);
-    addText(" LOGGED OUT ", { y: 7, color: color`0` })} 
+      addText(" LOGGED OUT ", { y: 7, color: color`0` });
+      return;
+    }
   }
   //===================================================================================
-  
-  //======================HEADER============================
-  addText("-Virtual Machine-");
-  addText("-L to go back-", { y:15, color: color`0` }).fontsize(2);
-  //========================================================
-
 });
 
 
@@ -470,6 +470,3 @@ onInput("l", () => {
   clearText();
   setMap(currentLevel);
 });
-
-
-
