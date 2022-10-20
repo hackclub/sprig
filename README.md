@@ -57,7 +57,7 @@ People learn best when they make things that they care about, which they can the
 
 Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) where you can join the development discussion and ask for help, and to learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs).
 
-We use vite for development.
+We use [vite](https://vitejs.dev/) for development.
 
 Clone repo:
 

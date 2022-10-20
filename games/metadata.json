@@ -742,5 +742,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-20"
+ },
+ {
+    "filename": "BreadMaze",
+    "title": "BreadMaze",
+    "author": "Aiden",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-10-20"
  }
 ]

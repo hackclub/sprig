@@ -16,7 +16,7 @@ The code for this game starts below this comment.
 The objective is to push the purple boxes onto the green goals.
 Press j to reset the current level.
 
-Hit "open-help" to discover your toolkit.
+Click the "open help" to discover your toolkit.
 
 --------
 Level 1
