@@ -74,7 +74,7 @@ function addTheText(){
   addText("s/k for yellow", { 
       x: 1, 
       y: 7, 
-      color: color`F`
+      color: color`9`
   })
   
   addText("d/l for purple", { 
