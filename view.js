@@ -6,6 +6,7 @@ import { docs } from "./views/docs.js";
 import "./pixel-editor/pixel-editor.js";
 import "./sequencer/sequencer.js";
 import "./map-editor/map-editor.js";
+import "./color-picker/color-picker.js";
 import "./views/bitmap-preview.js";
 import { mute } from "./engine/playTune.js";
 
@@ -55,6 +56,7 @@ export const view = (state) => html`
           "bitmap": html`<pixel-editor id="asset-editor"></pixel-editor>`,
           "sequencer": html`<sequencer-editor id="asset-editor"></sequencer-editor>`,
           "map": html`<map-editor id="asset-editor"></map-editor>`,
+          "palette": html`<color-picker id="asset-editor"></color-picker>`,
           [undefined]: ""
         }[state.editor]
       }

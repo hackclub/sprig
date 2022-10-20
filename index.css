@@ -353,6 +353,15 @@ body {
   display: none;
 }
 
+.cm-swatch {
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  line-height: 1;
+  margin-right: 4px;
+  border: 0.5px solid black;
+}
+
 .cm-boolean-toggle, .cm-open-button {
   line-height: 1;
   vertical-align: middle;

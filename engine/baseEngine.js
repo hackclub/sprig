@@ -264,6 +264,7 @@ export function baseEngine() {
     setPushables, 
     map: _makeTag(text => text),
     bitmap: _makeTag(text => text),
+    color: _makeTag(text => text),
     tune: _makeTag(text => text),
     getFirst: (type) => state.sprites.find(t => t.type === type), // **
     getAll: (type) => type ? state.sprites.filter(t => t.type === type) : state.sprites, // **

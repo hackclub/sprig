@@ -91,7 +91,7 @@ export const style = `
   .colors div {
     height: 40px;
     width: 77px;
-    /*border: 2px solid var(--switch-fg-low);*/
+    border: 2px solid transparent;
     border-radius: 4px;
     cursor: pointer;
   }

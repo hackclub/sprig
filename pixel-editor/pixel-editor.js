@@ -3,25 +3,7 @@ import { dispatch } from "../dispatch.js";
 import { bitmapTextToImageData } from "../engine/bitmap.js";
 import { global_state } from "../global_state.js";
 import { style } from "./style.js";
-
-const hexToRGBA = (hex) => {
-  let [r, g, b, a = 255] = hex.match(/\w\w/g).map((x) => parseInt(x, 16));
-  return [r, g, b, a];
-};
-
-function RGBA_to_hex([r, g, b, a]) {
-  r = r.toString(16);
-  g = g.toString(16);
-  b = b.toString(16);
-  a = a.toString(16);
-
-  if (r.length == 1) r = "0" + r;
-  if (g.length == 1) g = "0" + g;
-  if (b.length == 1) b = "0" + b;
-  if (a.length == 1) a = "0" + a;
-
-  return "#" + r + g + b + a;
-}
+import { hexToRGBA, RGBA_to_hex, transparentBg } from "../palette.js";
 
 // Horrible way of doing this but it works.
 // 
@@ -274,29 +256,23 @@ export function createPixelEditor(target) {
           </button>
         </div>
 
-        ${drawColorsButtons(state)}
+        <div class="colors">
+          ${state.palette.map(drawColorButton)}
+        </div>
       </div>
     </div>
   `;
 
-  const drawColorsButtons = (state) => {
-    const drawColor = (color) => {
-      const isTransparent = color[1][3] === 0;
-      
-      let style = `background-color: ${RGBA_to_hex(color[1])};`;
-      isTransparent ? style += ` background-image: url("data:image/svg+xml,%0A%3Csvg width='23' height='23' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='8' height='8' fill='white'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H4V4H0V0ZM4 4H8V8H4V4Z' fill='%23DCEFFC'/%3E%3C/svg%3E%0A");` : ``
-
-      return html`
-        <div 
-          class=${RGBA_to_hex(sharedState.color) === RGBA_to_hex(color[1]) ? "active" : ""}
-          style=${style}
-          @click=${() => { sharedState.color = color[1]; r(); }}>
-        </div>
-      `
-    }
+  const drawColorButton = (color) => {
+    let style = `background-color: ${RGBA_to_hex(color[1])};`;
+    color[1][3] === 0 ? style += `background-image: url("${transparentBg}");` : ``
 
     return html`
-      <div class="colors">${state.palette.map(drawColor)}</div>
+      <div 
+        class=${RGBA_to_hex(sharedState.color) === RGBA_to_hex(color[1]) ? "active" : ""}
+        style=${style}
+        @click=${() => { sharedState.color = color[1]; r(); }}>
+      </div>
     `
   };
 
@@ -756,7 +732,7 @@ export function createPixelEditor(target) {
 
   return {
     loadInitValue({ text }) {
-      const rows = text.trim().split("/n");
+      const rows = text.trim().split("\n");
 
       while (rows.length < 16) rows.push("................");
 

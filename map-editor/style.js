@@ -1,6 +1,5 @@
 
 export const style = `
-
   :root { box-sizing: border-box; }
   * { box-sizing: inherit; }
 

@@ -28,7 +28,7 @@ export class OpenButtonWidget extends WidgetType {
       other.editorType === this.editorType &&
       other.text === this.text;
   }
-  ignoreEvent() { return false; }
+  ignoreEvent() { return true; }
 
   toDOM() {
     const container = document.createElement("span");
@@ -92,6 +92,30 @@ export class OpenButtonWidget extends WidgetType {
   }
 }
 
+export class SwatchWidget extends WidgetType {
+  constructor(rgba) {
+    super();
+    this.rgba = rgba;
+  }
+
+  eq(other) {
+    return other.rgba.every((value, index) => value === this.rgba[index]);
+  }
+  ignoreEvent() { return false; }
+
+  toDOM() {
+    const container = document.createElement("span");
+    container.classList.add("cm-swatch");
+    container.style.backgroundColor = `rgba(${this.rgba.join(", ")})`;
+    return container;
+  }
+
+  updateDOM(container) {
+    container.style.backgroundColor = `rgba(${this.rgba.join(", ")})`;
+    return true;
+  }
+}
+
 function makeValue(state) {
   const widgets = [];
   const foldRanges = [];
@@ -104,11 +128,19 @@ function makeValue(state) {
         if (!tag) continue;
         if (tag.nameFrom === tag.nameTo) continue;
 
-        const decoration = Decoration.replace({
+        widgets.push(Decoration.replace({
           widget: new OpenButtonWidget(label, icon, editorType, tag.text)
-        });
-        widgets.push(decoration.range(tag.nameFrom, tag.nameTo));
-        if (tag.textFrom !== tag.textTo) foldRanges.push({ from: tag.textFrom, to: tag.textTo });
+        }).range(tag.nameFrom, tag.nameTo));
+
+        if (label === "color") {
+          const color = global_state.palette.find(([key]) => key === tag.text);
+          if (color) {
+            widgets.push(Decoration.widget({ widget: new SwatchWidget(color[1]), side: 1 }).range(tag.textFrom));
+          }
+        } else if (tag.textFrom !== tag.textTo) {
+          foldRanges.push({ from: tag.textFrom, to: tag.textTo });
+        }
+        
         break;
       }
     }
