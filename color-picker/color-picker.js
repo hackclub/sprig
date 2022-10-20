@@ -11,7 +11,7 @@ export function createColorPicker(target) {
     <style>${style}</style>
 
     <div class="color-picker-outer">
-      <h3>color picker:</h3>
+      <h3>choose a color:</h3>
       <div class="color-picker-inner">
         ${global_state.palette.map(drawColorButton)}
       </div>
