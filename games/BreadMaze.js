@@ -183,8 +183,8 @@ setPushables({
 });
 
 playTune(music, Infinity);
-addText("Press J to Start", {y: 6, color: [0, 255, 0]});
-addText("Pusht the Orange Box", {y: 9, color: [0, 0, 0]});
+addText("Press J to Start", {y: 6, color: color`4`});
+addText("Pusht the Orange Box", {y: 9, color: color`0`});
 
 
 onInput("w", () => {
@@ -234,7 +234,7 @@ var tempodescendo = setInterval(function(){
 if(tempototal >= 0){
   tempototal--;
   clearText();
-  addText(""+tempototal, { y: 1 , color: [255,0,0] });
+  addText(""+tempototal, { y: 1 , color: color`3` });
 }
   
 if(tempototal <= 0){
@@ -266,7 +266,7 @@ afterInput(() => {
       setMap(currentLevel);
     } 
     else {
-      addText("you win!", { y: 4, color: [255, 0, 0] });
+      addText("you win!", { y: 4, color: color`3` });
     }
   }
 
