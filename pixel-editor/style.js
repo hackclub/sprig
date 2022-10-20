@@ -21,10 +21,6 @@ export const style = `
     background: var(--bg-surface);
   }
 
-  .offscreen-canvas {
-    display: none;
-  }
-
   .toolbox {
     display: flex;
     width: var(--editor-sidebar-width);

@@ -95,13 +95,8 @@ export function createPixelEditor(target) {
   }
 
   function stateUpdate() {
-    const canvas = target.querySelector("#offscreen-canvas");
-    drawCanvasNoBg(canvas);
-    const ctx = canvas.getContext("2d");
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const colors = Object.fromEntries(
-      state.palette.map(x => [x[1].join(","), x[0]])
-    );
+    const imageData = drawImageDataNoBg();
+    const colors = Object.fromEntries(state.palette.map(x => [x[1].join(","), x[0]]));
 
     let text = "";
     for (let i = 0; i < imageData.width*imageData.height; i += 1) {
@@ -125,6 +120,8 @@ export function createPixelEditor(target) {
     reader.onload = (event) => {
       const dataURL = event.target.result;
       const canvas = target.querySelector("#offscreen-canvas");
+      canvas.width = state.viewboxSize[0];
+      canvas.height = state.viewboxSize[1];
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const image = new Image();
@@ -164,12 +161,6 @@ export function createPixelEditor(target) {
     <div class="pixel-editor-container">
       <div class="canvas-container">
         <canvas class="drawing-canvas"></canvas>
-        <canvas
-          class="offscreen-canvas"
-          id="offscreen-canvas"
-          width=${state.viewboxSize[0]}
-          height=${state.viewboxSize[1]}
-        ></canvas>
       </div>
       <div class="toolbox">
         <div class="tools">
@@ -242,7 +233,9 @@ export function createPixelEditor(target) {
           <button
             title="export"
             @click=${() => {
-              const canvas = target.querySelector("#offscreen-canvas");
+              const canvas = document.createElement("canvas");
+              canvas.width = state.viewboxSize[0];
+              canvas.height = state.viewboxSize[1];
               drawCanvasNoBg(canvas);
               const image = canvas.toDataURL();
               const aDownloadLink = document.createElement("a");
@@ -551,14 +544,7 @@ export function createPixelEditor(target) {
     ctx.stroke();
   };
 
-  const drawCanvasNoBg = (canvas, main = true) => {
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    const [w, h] = readCanvas(canvas);
-    const [gridW, gridH] = main ? state.viewboxSize : state.gridSize;
-
+  const drawImageDataNoBg = () => {
     const pixels = new Uint8ClampedArray(
       state.gridSize[0] * state.gridSize[1] * 4
     ).fill(0);
@@ -571,13 +557,20 @@ export function createPixelEditor(target) {
       pixels[index + 3] = color[3];
     });
 
+    const image = new ImageData(pixels, state.gridSize[0], state.gridSize[1]);
+    return image
+  }
+
+  const drawCanvasNoBg = (canvas) => {
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
     ctx.webkitImageSmoothingEnabled = false;
     ctx.mozImageSmoothingEnabled = false;
     ctx.imageSmoothingEnabled = false;
 
-    const image = new ImageData(pixels, state.gridSize[0], state.gridSize[1]);
-
-    ctx.putImageData(image, 0, 0);
+    ctx.putImageData(drawImageDataNoBg(), 0, 0);
   };
 
   const setCanvasSize = (c) => {
