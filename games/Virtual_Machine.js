@@ -407,8 +407,8 @@ onInput("d", () => {getFirst(player).x += 1});
 onInput("a", () => {getFirst(player).x -= 1});
 
 //======================HEADER============================
-addText("-Virtual Machine-");
-addText("-L to go back-", { y:15, color: color`0` });
+addText("-Virtual Machine-", { color: color`8` });
+addText("-L to go back-", { y:15, color: color`8` });
 //========================================================
 
 
