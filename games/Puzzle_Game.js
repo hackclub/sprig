@@ -191,8 +191,17 @@ onInput("d", () => {
   getFirst(player).x += 1;
 });
 
+//reset level
+onInput("j", () => {
+  const currentLevel = levels[level];
+  if (currentLevel !== undefined) {
+    clearText();
+    setMap(currentLevel);
+  }
+});
+
 //from editor.sprig.hackclub.com/?file=https://raw.githubusercontent.com/hackclub/sprig/main/games/Flurffy.js
-var tempototal = 60;
+var tempototal = 100;
     var tempodescendo = setInterval(function(){
     tempototal--;
     clearText();
