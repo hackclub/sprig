@@ -382,14 +382,13 @@ function levelSplash() {
 
   setMap(maps[0]);
   
-  let color = [255,255, 0];
-  addText("Entering", { x: 6, y: 4, color});  
+  addText("Entering", { x: 6, y: 4, color: color`6`});  
   
   let names = levelState.name.match(/(.{1,16})/g);
   for(let i = 0; i < names.length; i++) {
     let name = names[i].trim();
     let offset = 2 + Math.floor((16 - name.length) / 2);
-    addText(name, { x: offset, y: 7 + i * 2, color});  
+    addText(name, { x: offset, y: 7 + i * 2, color: color`6`});  
   }
 
   let pointsText = "Points: " + globalState.points;
