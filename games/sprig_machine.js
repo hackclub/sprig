@@ -2241,6 +2241,48 @@ function checkMove(moving, dir){
 function mod(n, m) {
   return n - (m * (n/m | 0));
 }
+function checkPassive(){
+  var mutable = "abcdefghijklmnopqrstuvwxyz012345^&*(";
+  var movable = "abcdefghijklmnopqrstuvwxyz01";
+  //Enemys
+  var liveenemys = getAll(enemy[0]).concat(getAll(enemy[1])).concat(getAll(enemy[2])).concat(getAll(enemy[3]));
+  for(var i = 0; i < liveenemys.length; i++){
+    var curenemy = getTile(liveenemys[i].x, liveenemys[i].y);
+    var curenemytypes = curenemy.map(x => x.type);
+    if(curenemytypes.includes(sel)){
+      if(curenemy.length > 3){
+        playTune(destroy);
+        liveenemys = getAll(enemy[0]).concat(getAll(enemy[1])).concat(getAll(enemy[2])).concat(getAll(enemy[3]));
+        for(var j = 0; j < curenemytypes.length; j++){
+          if(mutable.includes(curenemytypes[j])){
+            curenemy[j].remove();
+          }
+        }
+      }
+    }else{
+      if(curenemy.length > 2){
+        playTune(destroy);
+        liveenemys = getAll(enemy[0]).concat(getAll(enemy[1])).concat(getAll(enemy[2])).concat(getAll(enemy[3]));
+        for(var j = 0; j < curenemytypes.length; j++){
+          if(mutable.includes(curenemytypes[j])){
+            curenemy[j].remove();
+          }
+        }
+      }
+    }
+  }
+  //Trash
+  var trashes = getAll(trash[0]).concat(getAll(trash[1])).concat(getAll(trash[2])).concat(getAll(trash[3]));
+  for(var i = 0; i < trashes.length; i++){
+    var curTrash = getTile(trashes[i].x, trashes[i].y);
+    for(var j = 0; j < curTrash.length; j++){
+      if(movable.includes(curTrash[j].type)){
+        playTune(destroy);
+        curTrash[j].remove();
+      }
+    }
+  }
+}
 function step(){
   running = true;
   var mutable = "abcdefghijklmnopqrstuvwxyz012345^&*(";
@@ -2270,6 +2312,7 @@ function step(){
       }
     }
   }
+  checkPassive();
   for(var i = 0; i < genas.length; i++){
     var tileb = getTile(genas[i].x+1, genas[i].y);
     var tilef = getTile(genas[i].x-1, genas[i].y);
@@ -2290,6 +2333,7 @@ function step(){
       }
     }
   }
+  checkPassive();
   for(var i = 0; i < genws.length; i++){
     var tileb = getTile(genws[i].x, genws[i].y+1);
     var tilef = getTile(genws[i].x, genws[i].y-1);
@@ -2310,6 +2354,7 @@ function step(){
       }
     }
   }
+  checkPassive();
   for(var i = 0; i < genss.length; i++){
     var tileb = getTile(genss[i].x, genss[i].y-1);
     var tilef = getTile(genss[i].x, genss[i].y+1);
@@ -2330,6 +2375,7 @@ function step(){
       }
     }
   }
+  checkPassive();
   //Rotators
   var rotcws = getAll(rotcw[0]).concat(getAll(rotcw[1])).concat(getAll(rotcw[2])).concat(getAll(rotcw[3]));
   for(var i = 0; i < rotcws.length; i++){
@@ -2384,62 +2430,28 @@ function step(){
     }
     playTune(move);
   }
+  checkPassive();
   for(var i = 0; i < moveras.length; i++){
     if(checkMove(moveras[i], "left")){
       moveras[i].x--;
     }
     playTune(move);
   }
+  checkPassive();
   for(var i = 0; i < moverws.length; i++){
     if(checkMove(moverws[i], "up")){
       moverws[i].y--;
     }
     playTune(move);
   }
+  checkPassive();
   for(var i = 0; i < moverss.length; i++){
     if(checkMove(moverss[i], "down")){
       moverss[i].y++;
     }
     playTune(move);
   }
-  //Enemys
-  var liveenemys = getAll(enemy[0]).concat(getAll(enemy[1])).concat(getAll(enemy[2])).concat(getAll(enemy[3]));
-  for(var i = 0; i < liveenemys.length; i++){
-    var curenemy = getTile(liveenemys[i].x, liveenemys[i].y);
-    var curenemytypes = curenemy.map(x => x.type);
-    if(curenemytypes.includes(sel)){
-      if(curenemy.length > 3){
-        playTune(destroy);
-        liveenemys = getAll(enemy[0]).concat(getAll(enemy[1])).concat(getAll(enemy[2])).concat(getAll(enemy[3]));
-        for(var j = 0; j < curenemytypes.length; j++){
-          if(mutable.includes(curenemytypes[j])){
-            curenemy[j].remove();
-          }
-        }
-      }
-    }else{
-      if(curenemy.length > 2){
-        playTune(destroy);
-        liveenemys = getAll(enemy[0]).concat(getAll(enemy[1])).concat(getAll(enemy[2])).concat(getAll(enemy[3]));
-        for(var j = 0; j < curenemytypes.length; j++){
-          if(mutable.includes(curenemytypes[j])){
-            curenemy[j].remove();
-          }
-        }
-      }
-    }
-  }
-  //Trash
-  var trashes = getAll(trash[0]).concat(getAll(trash[1])).concat(getAll(trash[2])).concat(getAll(trash[3]));
-  for(var i = 0; i < trashes.length; i++){
-    var curTrash = getTile(trashes[i].x, trashes[i].y);
-    for(var j = 0; j < curTrash.length; j++){
-      if(movable.includes(curTrash[j].type)){
-        playTune(destroy);
-        curTrash[j].remove();
-      }
-    }
-  }
+  checkPassive();
 }
 function play(){
   step();
