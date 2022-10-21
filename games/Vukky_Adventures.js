@@ -175,7 +175,7 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("Woo! :D", { y: 5, color: [0, 0, 255] });
+      addText("Woo! :D", { y: 5, color: color`5` });
     }
   }
 });
