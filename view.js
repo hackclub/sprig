@@ -1,6 +1,6 @@
 import { html } from "./libs/uhtml.js";
 import { dispatch } from "./dispatch.js";
-
+import { adjectives, nouns } from "./words.js";
 import { challenges } from "./challenges.js";
 import { docs } from "./views/docs.js";
 import "./pixel-editor/pixel-editor.js";
@@ -82,7 +82,6 @@ const editableName = (state) => html`
 const drawFile = (file, i, state) => {
   const [ name, text ] = file;
   const setText = () => {
-    if (state.stale && !confirm("You have unsaved changes! Are you sure you want to switch files?")) return;
     state.staleRun = true;
 
     const games = Object.fromEntries(state.savedGames);
@@ -115,10 +114,6 @@ const drawFile = (file, i, state) => {
 
     return false;
   }
-
-  const fullText = state.codemirror.state.doc.toString();
-  const matches = [ ...fullText.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
-  state.codemirror.collapseRanges(matches.map((match) => [ match.index, match.index + 1]));
   
   return html`
     <div style="display: flex; width: 100%;" @click=${setText}>
@@ -132,11 +127,10 @@ const newFile = (state) => {
   if (!state.codemirror) return "";
 
   const setText = () => {
-    if (state.stale && !confirm("You have unsaved changes! Are you sure you want to create a new file?")) return;
     state.staleRun = true;
     
     const text = `/*
-@title: game_name
+@title: ${adjectives[Math.floor(Math.random() * adjectives.length)]}_${nouns[Math.floor(Math.random() * nouns.length)]}
 @author: your_name
 */
 
@@ -209,7 +203,7 @@ const menu = (state) => html`
       <img src="https://cloud-ah8ey4rmb-hack-club-bot.vercel.app/0spriglogotext-white.png" alt="sprig logo" class="sprig-logo" />
     </a>
     <div class=${[ "menu-item", "dropdown-container", state.shareLinkState !== "idle" ? "show" : "" ].join(" ")}>
-      ${state.stale ? 'file*' : 'file'}
+      file
       <div class="dropdown-list">
         ${newFile(state)}
 
@@ -217,8 +211,6 @@ const menu = (state) => html`
           open recent &rsaquo;
           <div class="popout-list">${state.savedGames.map((file, i) => drawFile(file, i, state))}</div>
         </div>
-
-        <div @click=${() => dispatch("SAVE")}>${state.stale ? 'save*' : 'save'}</div>
 
         <div class="menu-spacer" />
 
@@ -281,7 +273,7 @@ const learn = () => html`
         const load = () => {
           const cur = state.codemirror.state.doc.toString();
           const match = cur.match(/@title:\s+([^\n]+)/);
-          const curName = (match !== null) ? match[1] : "DRAFT";
+          const curName = (match !== null) ? match[1] : "UNTITLED";
 
           if (curName == name &&
             !confirm(`are you sure you want to overwrite your edited "${name}"?`))
@@ -304,7 +296,7 @@ const next = () => html`
   <div @click=${() => {
     const cur = state.codemirror.state.doc.toString();
     const match = cur.match(/@title:\s+([^\n]+)/);
-    const curName = (match !== null) ? match[1] : "DRAFT";
+    const curName = (match !== null) ? match[1] : "UNTITLED";
 
     let i = 0;
     for (const { name } of challenges) {

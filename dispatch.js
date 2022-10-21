@@ -34,15 +34,10 @@ const ACTIONS = {
     state.uploadLogs = "";
     upload(state.codemirror.state.doc.toString());
   },
-  SAVE(args, state) {
-    saveGame(state);
-    state.stale = false;
-    dispatch("RENDER");
-  },
   SAVE_TO_FILE(args, state) {
     const string = state.codemirror.state.doc.toString();
     const match = string.match(/@title:\s+([^\n]+)/);
-    const name = (match !== null) ? match[1] : "DRAFT";
+    const name = (match !== null) ? match[1] : "UNTITLED";
     saveToFile(`${name}.js`, string);
   },
   TOGGLE_MUTE() {

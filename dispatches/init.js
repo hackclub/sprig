@@ -3,7 +3,8 @@ import { loadFromURL } from "./loadFromURL.js"
 import { createEditorView } from "../codemirror/cm.js";
 import { addEvents } from "../events.js";
 import { highlightError } from "./logError.js";
-import { sizeGameCanvas } from "./sizeGameCanvas.js"
+import { sizeGameCanvas } from "./sizeGameCanvas.js";
+import { saveGame } from "../saveGame.js";
 
 function getParam(key) {
   const search = new URLSearchParams(window.location.search);
@@ -31,11 +32,10 @@ export async function init(args, state) {
       state.newDocument = false;
       return;
     }
-
-    const rerender = !state.stale || !state.staleRun;
-    state.stale = true;
+    
+    saveGame(state);
     state.staleRun = true;
-    if (rerender) dispatch("RENDER");
+    dispatch("RENDER");
   });
   
   state.codemirror.dom.id = "code-editor";

@@ -3,7 +3,7 @@
 export function saveGame(state) {
   const string = state.codemirror.state.doc.toString();
   const match = string.match(/@title:\s+([^\n]+)/);
-  const name = (match !== null) ? match[1] : "DRAFT";
+  const name = (match !== null) ? match[1] : "UNTITLED";
   const gameDict = Object.fromEntries(state.savedGames);
   if (name in gameDict && gameDict[name] === string) return;
   const newSave = [ name, string ];

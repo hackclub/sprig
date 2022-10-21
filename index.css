@@ -157,14 +157,6 @@ body {
   overflow: hidden;
 }
 
-.menu-item.stale {
-  background: var(--pcb-trace);
-}
-
-.menu-item.stale:hover {
-  background: var(--pcb-trace-lighter);
-}
-
 .code-container {
   background: var(--bg-surface);
   width: var(--editor-width);
