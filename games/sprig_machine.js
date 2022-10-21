@@ -8,6 +8,8 @@ J: start sim
 K: step sim/proceed to next level
 L: reset sim
 
+While running, you can't pick up anything. Press L to restart so you can play it.
+
 The Movers (Blue) move in the direction they face.
 The Generators (Green) copy the block behind them, and put the in front of them.
 The Clockwise Rotators (Orange) rotate all adjacent blocks clockwise.
