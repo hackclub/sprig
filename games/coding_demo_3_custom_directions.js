@@ -2,6 +2,7 @@
 @title: Coding Demo 3: Custom Directional Solids
 @author: Leonard (Omay)
 Go to line 120 for the important code of this demo.
+Change the variable "level" on line 104 to 1 to get the demo map.
 */
 
 const onewayw = "w";
@@ -114,7 +115,7 @@ pwdssaaws.
   map`
 p........
 .w.d.s.a.
-.........`
+.........`//test
 ];
 setMap(levels[level]);
 /*Important stuff*/
