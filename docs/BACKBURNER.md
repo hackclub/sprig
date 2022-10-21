@@ -18,4 +18,5 @@
 - improve error logging
 - [Storage Abstraction for Games](https://github.com/hackclub/sprig/issues/362)
 - [make a sprite gallery](https://github.com/hackclub/sprig/issues/345)
+- [fix folding for ternary operator](https://github.com/hackclub/sprig/issues/360)
 
