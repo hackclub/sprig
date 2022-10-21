@@ -5,8 +5,17 @@
 WASD to move selection
 I: select
 J: start sim
-K: step sim
+K: step sim/proceed to next level
 L: reset sim
+
+The Movers (Blue) move in the direction they face.
+The Generators (Green) copy the block behind them, and put the in front of them.
+The Clockwise Rotators (Orange) rotate all adjacent blocks clockwise.
+The Counter-Clockwise Rotators (Light Blue) rotate all adjacent blocks counter-clockwise
+The Push cells (Yellow like #) can get pushed anywhere
+The Slide cells (Yellow like =) can get pushed in the direction their lines go
+The Enemies (Red) destroy any cell that goes into the same tile as them, as well as themselves
+The Trashes (Purple) destroy any cell that goes into the same tile as them, but not themselves
 */
 //Confiuration START
 const stepTime = 250;
