@@ -511,7 +511,7 @@ onInput("l", () => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("you win!", { y: 4, color: [255, 0, 0] });
+      addText("you win!", { y: 4, color: color`3` });
     }
   }
     
@@ -788,7 +788,7 @@ onInput("l", () => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("you win!", { y: 4, color: [255, 0, 0] });
+      addText("you win!", { y: 4, color: color`3` });
     }
   }
     
@@ -1011,7 +1011,7 @@ onInput("l", () => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("you win!", { y: 4, color: [255, 0, 0] });
+      addText("you win!", { y: 4, color: color`3` });
     }
   }
 });
@@ -1106,7 +1106,7 @@ afterInput(() => {
 11111111111.1...
 ...........11...
 ................`]);
-      addText("you lose!", { y: 4, color: [255, 0, 0] });
+      addText("you lose!", { y: 4, color: color`3` });
     }
   }
 });
