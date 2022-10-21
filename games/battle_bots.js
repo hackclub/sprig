@@ -166,7 +166,7 @@ onInput("i", () => {
 });
 
 addText("Duel", {
-    color: `6`,
+    color: color`6`,
     x: 8,
     y: 3,
     
@@ -174,12 +174,12 @@ addText("Duel", {
 addText(p1Win +"", {
     x: 3,
     y: 1,
-    color: `3`
+    color: color`3`
 });
 addText(p2Win +"", {
     x: 16,
     y: 14,
-    color: `3`
+    color: color`3`
 });
 
 /* add collisons for the rest of the blocks*/
@@ -276,12 +276,12 @@ o..b.bl`
   addText(p1Win +"", {
     x: 3,
     y: 1,
-    color: `3`
+    color: color`3`
 });
   addText(p2Win +"", {
     x: 16,
     y: 14,
-    color: `3`
+    color: color`3`
 });
   
 });
