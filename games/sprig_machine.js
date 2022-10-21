@@ -19,6 +19,11 @@ The Slide cells (Yellow like =) can get pushed in the direction their lines go
 The Enemies (Red) destroy any cell that goes into the same tile as them, as well as themselves
 The Trashes (Purple) destroy any cell that goes into the same tile as them, but not themselves
 The Walls (Gray) can't be moved. Can be generated though.
+
+Walkthrough: https://www.youtube.com/watch?v=KRSk3fpyM1M
+Video by Fullo.
+All levels by Sam Hogan, Mystic and Snazz.
+Inspired by Cell Machine Mystic Mod.
 */
 //Confiuration START
 const stepTime = 250;
