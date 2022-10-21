@@ -18,6 +18,7 @@ The Push cells (Yellow like #) can get pushed anywhere
 The Slide cells (Yellow like =) can get pushed in the direction their lines go
 The Enemies (Red) destroy any cell that goes into the same tile as them, as well as themselves
 The Trashes (Purple) destroy any cell that goes into the same tile as them, but not themselves
+The Walls (Gray) can't be moved. Can be generated though.
 */
 //Confiuration START
 const stepTime = 250;
