@@ -12,13 +12,9 @@ function getParam(key) {
 }
 
 function removeParam(key) {
-  return;
-  
   const url = new URL(window.location);
   url.searchParams.delete(key);
-
-  // Can we clear param without adding history
-  window.history.pushState({}, null, url);
+  window.history.replaceState({}, document.title, url);
 }
 
 export async function init(args, state) {
@@ -30,10 +26,10 @@ export async function init(args, state) {
     if (!update.docChanged) return;
     if (state.newDocument) {
       state.newDocument = false;
-      return;
+    } else {
+      saveGame(state);
     }
     
-    saveGame(state);
     state.staleRun = true;
     dispatch("RENDER");
   });
@@ -54,8 +50,9 @@ export async function init(args, state) {
     set(lastGame[1]);
   } else {
     const link = "https://raw.githubusercontent.com/hackclub/sprig/main/games/getting_started.js";
+    const text = await fetch(link).then(x => x.text());
     state.newDocument = true;
-    set(await fetch(link).then(x => x.text()));
+    set(text);
   }
 
   window.addEventListener("error", (err) => {
@@ -69,13 +66,12 @@ export async function init(args, state) {
   removeParam("file");
   if (file) {
     const text = await loadFromURL(file);
-
     const changes = {
       from: 0,
       to: state.codemirror.state.doc.toString().length,
       insert: text
     };
-
+    state.newDocument = true;
     state.codemirror.dispatch({ changes })
   }
 

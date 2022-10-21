@@ -117,7 +117,7 @@ const drawFile = (file, i, state) => {
   
   return html`
     <div style="display: flex; width: 100%;" @click=${setText}>
-      <div style="flex:1;">${name.slice(0, 15)}${name.length > 15 ? "..." : ""}</div>
+      <div style="flex:1;">${name.slice(0, 26)}${name.length > 26 ? "..." : ""}</div>
       <div style="margin-left: 10px;" class="delete-file" @click=${deleteFile}>x</div>
     </div>
   `

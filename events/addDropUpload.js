@@ -1,7 +1,7 @@
 import { dispatch } from "../dispatch.js";
 import { global_state } from "../global_state.js";
 
-function upload(files, extensions = []) {
+function upload(state, files, extensions = []) {
   let file = files[0];
   let fileName = file.name.split(".");
   let name = fileName[0];
@@ -10,12 +10,12 @@ function upload(files, extensions = []) {
   if (extensions.length > 0 && extensions.includes(enxtension))
     throw "Extension not recongized: " + fileName;
 
-  readFile(file);
+  readFile(state, file);
   // if (["json"].includes(extension)) readFile(file);
   // else console.log("Unknown extension:", extension);
 }
 
-function readFile(file) {
+function readFile(state, file) {
   var reader = new FileReader();
   reader.readAsText(file);
 
@@ -23,7 +23,8 @@ function readFile(file) {
     let text = reader.result;
 
     try {
-      const cur = global_state.codemirror.state.doc.toString();
+      const cur = state.codemirror.state.doc.toString();
+      state.newDocument = true;
       dispatch("SET_EDITOR_TEXT", { text, range: [ 0, cur.length ] });
     } catch (err) {}
   };
@@ -34,7 +35,7 @@ export function addDropUpload(state, bodyListener) {
     let dt = evt.dataTransfer;
     let files = dt.files;
 
-    upload(files);
+    upload(state, files);
 
     pauseEvent(evt);
   });
