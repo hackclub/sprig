@@ -87,7 +87,7 @@ export async function init(args, state) {
       to: state.codemirror.state.doc.toString().length,
       insert: text
     };
-
+    state.newDocument = true;
     state.codemirror.dispatch({ changes });
   }
 
