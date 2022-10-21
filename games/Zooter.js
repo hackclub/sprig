@@ -161,7 +161,7 @@ onInput("w", () => {
   getFirst(player).y -= 1;
 });
 
-onInput("j", () => {
+onInput("k", () => {
   if (projActive === false) {
       playTune(shoot)
       let p = getFirst(player);
@@ -170,7 +170,7 @@ onInput("j", () => {
   }
 });
 
-onInput("i", () => {
+onInput("j", () => {
   timers.forEach((timer) => {
     clearInterval(timer);
   });
