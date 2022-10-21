@@ -234,22 +234,6 @@ You can see the final result below.
 
 ![Screen Shot 2022-10-06 at 3 19 32 PM](https://user-images.githubusercontent.com/27078897/194400337-fe6d60cc-f94d-486c-86d1-afc7c729e8fb.png)
 
-## The Firmware
-
-For the firmware we're using a modified version of [Kaluma](https://kalumajs.org/). Kaluma is a JavaScript runtime which can fit on a RP2040. To create SprigOS we added the ability to draw to the screen, make music efficiently, and the Sprig game engine.
-
-To load firmware onto the Pico depress the white button on the Pico and plug it into your computer while holding the button down. This will put the Pico in Bootload mode.
-
-![PXL_20221019_142858245](https://user-images.githubusercontent.com/27078897/196720476-4bbf0c88-cee0-429f-8cf7-890ec68986d5.jpg)
-
-The Pico will show up as a USB device.
-
-<img width="94" alt="Screen Shot 2022-10-19 at 10 30 47 AM" src="https://user-images.githubusercontent.com/27078897/196720590-a6f986ed-9c6d-4e2a-b514-baffa38864a2.png">
-
-Download the UF2 of our [SprigOS from GitHub](https://github.com/hackclub/sprig/blob/main/pico-os.uf2) and drop it onto the RPI-RP2.
-
-We can now load games onto our Pico from the serial port.
-
 ### Mechanical
 
 The back covers of the Sprig are laser cut. To produce them we designed the components in a parametric CAD program, [Fusion 360](https://www.autodesk.com/products/fusion-360/overview?term=1-YEAR&tab=subscription), and then export them to a format suitable for laser cutting.
@@ -286,8 +270,23 @@ And mirror it to have the complimentary piece.
 
 <img width="1502" alt="Screen Shot 2022-10-19 at 12 20 26 PM" src="https://user-images.githubusercontent.com/27078897/196748389-c3d8f499-fabe-4873-897b-0ec491fcedae.png">
 
+## The Firmware
 
-### The Manufacturing
+For the firmware we're using a modified version of [Kaluma](https://kalumajs.org/). Kaluma is a JavaScript runtime which can fit on a RP2040. To create SprigOS we added the ability to draw to the screen, make music efficiently, and the Sprig game engine.
+
+To load firmware onto the Pico depress the white button on the Pico and plug it into your computer while holding the button down. This will put the Pico in Bootload mode.
+
+![PXL_20221019_142858245](https://user-images.githubusercontent.com/27078897/196720476-4bbf0c88-cee0-429f-8cf7-890ec68986d5.jpg)
+
+The Pico will show up as a USB device.
+
+<img width="94" alt="Screen Shot 2022-10-19 at 10 30 47 AM" src="https://user-images.githubusercontent.com/27078897/196720590-a6f986ed-9c6d-4e2a-b514-baffa38864a2.png">
+
+Download the UF2 of our [SprigOS from GitHub](https://github.com/hackclub/sprig/blob/main/pico-os.uf2) and drop it onto the RPI-RP2.
+
+We can now load games onto our Pico from the serial port.
+
+## The Manufacturing
 
 We manufactured our board by sending Gerber files to a PCB fabrication house along with information about how to "stuff" the board (or add components to it). Hugo Hu helped coordinate the production and did a nice [write up](https://github.com/hackclub/sprig/blob/main/docs/SOURCING.md) on some of the sourcing details which you can find here.
 
