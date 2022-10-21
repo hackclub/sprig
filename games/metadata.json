@@ -766,5 +766,13 @@
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2022-10-20"
+ },
+ {
+    "filename": "sprig_machine",
+    "title": "sprig_machine",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["sandbox", "puzzle"],
+    "addedOn": "2022-10-20"
  }
 ]
