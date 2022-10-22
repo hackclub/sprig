@@ -9,7 +9,7 @@ let intervals = [];
 let timeouts = [];
 
 export function evalGameScript(script, canvas) {
-  script = `"use strict"\n${script}`;
+  script = `"use strict";\n${script}`;
 
   // remove event listeners
   const newCanvas = canvas.cloneNode(true);
