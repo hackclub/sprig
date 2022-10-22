@@ -4,7 +4,7 @@
 
 WASD to move selection
 I: select
-J: start sim
+J: start/stop sim
 K: step sim/proceed to next level
 L: reset sim
 
@@ -2301,11 +2301,11 @@ function step(){
       for(var j = 0; j < tileb.length; j++){
         if(mutable.includes(tilebt[j])){
           for(var k = 0; k < tilef.length; k++){
-            if(movable.includes(tileft[k]) && checkMove(tilef[k], "right")){
+            if(movable.includes(tileft[k]) && checkMove(tilef[k], "right") && !(tileft.includes("y") || tileft.includes("z") || tileft.includes("0") || tileft.includes("1"))){
               tilef[k].x++;
             }
           }
-          if(tilef.length < 3 && (tileft.includes(bgp) || tileft.includes(bg))){
+          if(tilef.length < 3 && (tileft.includes(bgp) || tileft.includes(bg)) || tileft.includes("y") || tileft.includes("z") || tileft.includes("0") || tileft.includes("1")){
             addSprite(gends[i].x+1, gends[i].y, tilebt[j]);
           }
         }
@@ -2459,9 +2459,7 @@ function play(){
 }
 function stop(){
   clearTimeout(tTimeout);
-  setMap(levels[level]);
-  addMap(addLevels[level]);
-  addMap(selMap);
+  tTimeout = null;
   running = false;
 }
 //Simulation END
@@ -2521,8 +2519,14 @@ onInput("j", () => {
   if(getAll(enemy[0]).concat(getAll(enemy[1])).concat(getAll(enemy[2])).concat(getAll(enemy[3])).length === 0){
     level++;
     stop();
+    setMap(levels[level]);
+    addMap(addLevels[level]);
+    addMap(selMap);
+  }else if(tTimeout !== null){
+    stop();
+    running = true;
   }else{
-    if(selection === null){
+    if(selection === null && tTimeout === null){
       play();
     }
   }
