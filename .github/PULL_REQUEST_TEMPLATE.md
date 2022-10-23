@@ -12,7 +12,7 @@ How to play your game?
 Check off the items that are true.
 - [ ] The game was made using the [Sprig editor](https://editor.sprig.hackclub.com/).
 - [ ] The game is placed in the in the [`/games` directory](https://github.com/hackclub/sprig/tree/main/games).
-- [ ] A similar game does not exist already in the [Sprig gallary](https://sprig.hackclub.com/gallery).
+- [ ] The code is significantly different from all other games in the [Sprig gallary](https://sprig.hackclub.com/gallery).
 - [ ] The game runs without errors. 
 - [ ] The name of the file/game contains only alphanumeric characters, `-`s, or `_`s.
 
