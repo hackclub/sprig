@@ -782,5 +782,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-21"
+ },
+ {
+    "filename": "generic_dungeon_crawler",
+    "title": "generic_dungeon_crawler",
+    "author": "Lingdong Huang",
+    "img": "",
+    "tags": ["dungeon"],
+    "addedOn": "2022-10-24"
  }
 ]
