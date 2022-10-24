@@ -187,7 +187,7 @@ onInput("d", () => {
 
 <!-- ![Screen Recording 2022-07-18 at 3 20 09 PM](https://user-images.githubusercontent.com/27078897/179600584-3d5de630-6a63-436c-9c39-e811b592be12.gif) -->
 
-![Screen Recording 2022-10-24 at 3 05 41 PM](https://user-images.githubusercontent.com/27078897/197606572-9c1c3cb9-a898-4e50-a323-7e89ba0fd009.gif)
+![Screen Recording 2022-10-24 at 3 05 41 PM](https://user-images.githubusercontent.com/27078897/197607562-15d0146f-329c-4b90-ac91-584d1290528e.gif)
 
 
 ### Adding Behaviors
@@ -264,7 +264,7 @@ p.w.
 
 <!-- ![Screen Recording 2022-07-18 at 3 24 08 PM](https://user-images.githubusercontent.com/27078897/179601256-55d6a5cd-7135-490a-bb46-1ed3d8537e06.gif) -->
 
-![Screen Recording 2022-10-24 at 3 14 43 PM](https://user-images.githubusercontent.com/27078897/197607261-c5390b4c-6d9a-4677-8667-75f194656120.gif)
+![Screen Recording 2022-10-24 at 3 14 43 PM](https://user-images.githubusercontent.com/27078897/197607684-45683107-fb28-4900-95ff-cd0b1b69c1f5.gif)
 
 ### Polish
 
