@@ -1,6 +1,6 @@
 /*
 @title: Mistery of scooter
-@author: LucasHT22
+@author: Lucas
 */
 
 const player = "p";
