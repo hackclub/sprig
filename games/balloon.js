@@ -1,6 +1,6 @@
 /*
 @title: balloon
-@author: LucasHT22
+@author: Lucas
 */
 
 const player = "p";
