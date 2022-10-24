@@ -158,7 +158,7 @@ afterInput(() => {
     if (faseAtual !== undefined) {
       setMap(faseAtual);
     } else {
-      addText("voce venceu!")
+      addText("you win!")
     }
   }
 });
