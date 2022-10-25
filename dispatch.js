@@ -4,11 +4,10 @@ import { upload } from "./upload.js";
 import { run } from "./dispatches/run.js";
 import { init } from "./dispatches/init.js";
 import { logError } from "./dispatches/logError.js";
-import { setName } from "./dispatches/setName.js";
 import { saveToFile } from "./dispatches/export/saveToFile.js";
 import { exportS3 } from "./s3.js";
 import { global_state } from "./global_state.js";
-import { saveGame } from "./saveGame.js"
+import { saveGame } from "./saveGame.js";
 import { view as viewMobile } from "./mobile/view.js";
 import { mute } from "./engine/playTune.js";
 import { strip } from 'ansicolor';
@@ -105,10 +104,6 @@ const ACTIONS = {
 
     if (state.editRange === null) return;
     state.editRange[1] = state.editRange[0] + text.length;
-  },
-  SET_NAME: setName,
-  LOAD_FROM_DATA({ data }, state) {
-    console.log(data);
   },
   RENDER_MOBILE({ text }, state) {
     // render(document.querySelector(".root"), view(state));

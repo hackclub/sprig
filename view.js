@@ -64,21 +64,6 @@ export const view = (state) => html`
   </div>
 `
 
-const sampleMenuItem = sample => html`
-  <a class="sample-menu-item" href=${sample.link}>${sample.name}</a>
-`
-
-const editableName = (state) => html`
-  <div 
-    class="menu-item menu-name" 
-    contenteditable 
-    spellcheck="false"
-    @blur=${e => dispatch("SET_NAME", { name: e.target.innerText })}
-  >
-    ${state.name}
-  </div>
-`
-
 const drawFile = (file, i, state) => {
   const [ name, text ] = file;
   const setText = () => {

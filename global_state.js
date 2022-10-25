@@ -12,7 +12,6 @@ export const global_state = {
   codemirror: undefined,
   errorInfo: null,
   logs: [],
-  // name: "game-name-here",
   // notifications: [],
   editor: null,
   editRange: null,
