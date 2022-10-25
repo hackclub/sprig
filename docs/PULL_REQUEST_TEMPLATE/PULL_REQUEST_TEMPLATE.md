@@ -15,6 +15,7 @@ Check off the items that are true.
 - [ ] The code is significantly different from all other games in the [Sprig gallary](https://sprig.hackclub.com/gallery).
 - [ ] The game runs without errors. 
 - [ ] The name of the file/game contains only alphanumeric characters, `-`s, or `_`s.
+- [ ] The game name is not the same as the others from [gallery](https://sprig.hackclub.com/gallery)
 
 ## Image (If an image is used)
 
