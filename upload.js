@@ -17,7 +17,7 @@ const {
 
   /* map dimensions */ width, height,
 
-  /* constructors */ bitmap, tune, map,
+  /* constructors */ bitmap, tune, map, color,
 
   /* input handling */ onInput, afterInput,
 
@@ -169,6 +169,7 @@ function _makeTag(cb) {
 exports.bitmap = _makeTag(text => text);
 exports.tune = _makeTag(text => text);
 exports.map = _makeTag(text => text);
+exports.color = _makeTag(text => text);
 return exports;
 })();
 `;
