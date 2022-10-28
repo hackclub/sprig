@@ -122,11 +122,6 @@ const ACTIONS = {
     const titleMatch = code.match(/@title:\s+([^\n]+)/);
     const name = (titleMatch !== null) ? titleMatch[1] : "UNTITLED";
 
-    const gameDict = Object.fromEntries(state.savedGames);
-    if (state.prevName !== null && state.prevName !== name) {
-      delete gameDict[state.prevName];
-    }
-
     const newSave = [ name, code ];
     const currentGames = state.savedGames.filter(x => x[0] !== name && x[0] !== state.prevName);
     
