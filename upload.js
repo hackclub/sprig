@@ -116,32 +116,39 @@ native.press_cb(pin => {
 });
 
 {
-  let timers = [];
+  const timers = [];
   let id = 0;
   setTimeout  = (fn, ms) => (timers.push({ fn, ms, id }), id++);
   setInterval = (fn, ms) => (timers.push({ fn, ms, id, restartAt: ms }), id++);
   clearTimeout = clearInterval = id => {
-    timers = timers.filter(t => t.id != id);
+    timers.splice(timers.findIndex(t => t.id == id), 1);
   };
   native.frame_cb(dt => {
-    timers = timers.filter(tim => {
+    console.log(timers.map(t => t.id));
+    const errors = [];
+
+    for (const tim of [...timers]) {
+      if (!timers.includes(tim)) continue; /* just in case :) */
+
       if (tim.ms <= 0) {
         /* trigger their callback */
-        tim.fn();
-
-        /* in case they cleared themselves */
-        if (!timers.some(t => t == tim))
-          return false;
+        try {
+          tim.fn();
+        } catch (error) {
+          if (error) errors.push(error);
+        }
 
         /* restart intervals, clear timeouts */
         if (tim.restartAt !== undefined)
           tim.ms = tim.restartAt;
         else
-          return false;
+          timers.splice(timers.indexOf(tim), 1);
       }
       tim.ms -= dt;
-      return true;
-    });
+    }
+
+    /* we'll never need to throw more than one error -ced */
+    if (errors.length > 0) throw errors[0];
   });
 }
 
