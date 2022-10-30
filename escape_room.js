@@ -1,4 +1,5 @@
 /*
+@title: escape_room
 @author Dhruv
 @author Sampanna
 
@@ -57,7 +58,7 @@ setLegend(
 4444444444444444
 4444444444444444`]
 )
-let level = 3;
+let level = 0;
 const levels = [map`
 w.p.wwwwwwwwwwwwww
 w...w............w
