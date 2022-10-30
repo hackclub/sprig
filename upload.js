@@ -124,7 +124,6 @@ native.press_cb(pin => {
     timers.splice(timers.findIndex(t => t.id == id), 1);
   };
   native.frame_cb(dt => {
-    console.log(timers.map(t => t.id));
     const errors = [];
 
     for (const tim of [...timers]) {
@@ -210,93 +209,115 @@ ${code}
 async function getPort() {
   if (navigator.serial === undefined)
     throw "your browser does not support the Web Serial API. please try again in a recent version of Chrome.";
-  const ports = await navigator.serial.getPorts();
-  if (ports.length !== 1) {
-    dispatch("UPLOAD_LOG", "please pick a device.");
-    return await navigator.serial.requestPort({
-      filters: [
-        { usbVendorId: 0x2e8a, usbProductId: 10 },
-      ]
-    });
-  } else {
-    return ports[0];
-  }
+
+  return await navigator.serial.requestPort({
+    filters: [ { usbVendorId: 0x2e8a, usbProductId: 10 } ]
+  });
+
+  /* possibly return to this behavior when it is confirmed to work again */
+  /*
+   * const ports = await navigator.serial.getPorts();
+   * if (ports.length !== 1) {
+   *   dispatch("UPLOAD_LOG", "please pick a device.");
+   *   return await navigator.serial.requestPort({
+   *     filters: [
+   *       { usbVendorId: 0x2e8a, usbProductId: 10 },
+   *     ]
+   *   });
+   * } else {
+   *   return ports[0];
+   * }
+   */
 }
 
-/* don't await me, just let me sit on promise queue */
-async function logSerialOutput(port) {
-  async function* streamAsyncIterator(stream) {
-    // Get a lock on the stream
-    const reader = stream.getReader();
-
-    try {
-      while (true) {
-        // Read from the stream
-        const {done, value} = await reader.read();
-        // Exit if we're done
-        if (done) return;
-        // Else yield the chunk
-        yield value;
-      }
-    }
-    finally {
-      reader.releaseLock();
-    }
-  }
-
-  console.log("for await on reader");
-  const reader = port.readable.pipeThrough(new TextDecoderStream());
-  let str = "";
-  let flushtimeout = setTimeout(() => {}, 0);
-  const flush = () => { console.log('[pico] ' + str); str = "" };
-  for await (const val of streamAsyncIterator(reader)) {
-    str += val;
-    clearTimeout(flushtimeout);
-    flushtimeout = setTimeout(flush, 10);
-  }
-}
-
-async function uploadToSerial(message, writableStream) {
-  // defaultWriter is of type WritableStreamDefaultWriter
-  const defaultWriter = writableStream.getWriter();
-
+async function uploadToSerial(message, writer) {
   const buf = new TextEncoder().encode(message);
   console.log(new TextDecoder().decode(buf));
 
-  await defaultWriter.ready;
-  // await defaultWriter.write(new ArrayBuffer(htonl(message.length)));
-  await defaultWriter.write(new Uint32Array([buf.length]).buffer);
+  console.log("ready 1");
+  await writer.ready;
+  console.log("ready 1 - writing startup seq");
+  await writer.write(new Uint8Array([0, 1, 2, 3, 4]).buffer);
 
-  await defaultWriter.ready;
-  await defaultWriter.write(buf);
+  // await writer.write(new ArrayBuffer(htonl(message.length)));
+  console.log("ready 2");
+  await writer.ready;
+  console.log("ready 2 - writing len");
+  await writer.write(new Uint32Array([buf.length]).buffer);
+
+  console.log("ready 3");
+  await writer.ready;
+  console.log("ready 3 - writing source");
+  const ticker = setInterval(() => console.log("writing src - 300ms passed"), 300);
+  await writer.write(buf);
+  clearInterval(ticker);
   console.log(`wrote ${buf.length} chars`);
 
   // Ensure all are written before closing
-  await defaultWriter.ready;
-  defaultWriter.close();
+  await writer.ready;
 }
 
 export async function upload(code) {
   dispatch("SET_UPLOAD_STATE", "uploading");
   
-  let serial;
+  let port;
   try {
-    const port = await getPort();
+    port = await getPort();
 
     dispatch("UPLOAD_LOG", "port found, opening serial stream...");
     const start = Date.now();
 
     /* connect and begin logging output */
     await port.open({ baudRate: 115200 });
-    logSerialOutput(port);
     dispatch("UPLOAD_LOG", "connected to rp2040!");
-    
-    await uploadToSerial(startupBurrito(code), port.writable);
-    dispatch("UPLOAD_LOG", `upload complete in ${((Date.now() - start) / 1000).toFixed(2)}s! you may need to unplug and replug your device.`);
+
+    const textDecoder = new TextDecoderStream();
+    const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+    const reader = textDecoder.readable.getReader();
+
+    /* listen to data coming from the serial device. */
+    const receivedEOT = new Promise(res => {
+      (async () => {
+        try {
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            if (value.indexOf("ALL_GOOD") >= 0) res();
+            console.log(value);
+          }
+        } catch(e) {
+          console.error(e);
+        }
+        finally {
+          reader.releaseLock();
+        }
+      })();
+    });
+
+    const writer = port.writable.getWriter();
+    await uploadToSerial(startupBurrito(code), writer);
+
+    await receivedEOT;
+
+    reader.cancel();
+    console.log("waiting on close");
+    await readableStreamClosed.catch(_ => {/* ignore */});
+    console.log("readable closed");
+
+    console.log("writer releasing");
+    writer.releaseLock();
+    console.log("writer released");
+
+    const elapsed = ((Date.now() - start) / 1000).toFixed(2);
+    dispatch("UPLOAD_LOG", `upload complete in ${elapsed}s! ` +
+                           `you may need to unplug and replug your device.`);
   } catch (error) {
-    dispatch("UPLOAD_LOG", `error: ${error.toString()}`);
+    if (error)
+      dispatch("UPLOAD_LOG", `error: ${error.toString()}`);
+    else
+      console.log("undefined error!");
   }
   
-  if (serial) serial.close();
+  if (port) await port.close();
   dispatch("SET_UPLOAD_STATE", "done");
 }
