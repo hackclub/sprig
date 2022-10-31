@@ -38,6 +38,13 @@ exports.getAll = native.getAll;
 exports.width = native.width;
 exports.height = native.height;
 exports.setBackground = native.setBackground;
+exports.playTune = (str, times) => {
+  native.piano_queue_song(str, times);
+  return {
+    end: () => native.piano_unqueue_song(str),
+    isPlaying: () => native.piano_is_song_queued(str)
+  }
+}
 
 
 /* opts: x, y, color (all optional) */
@@ -160,8 +167,6 @@ exports.onInput = (key, fn) => {
 
   button.pinToHandlers[pin].push(fn);
 };
-
-exports.playTune = () => {};
 
 function _makeTag(cb) {
   return (strings, ...interps) => {
