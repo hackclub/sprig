@@ -15,7 +15,7 @@ You should be able to get started in Sprig with very little experience in progra
 
 <p align="center">
 <a href="https://sprig.hackclub.com/gallery">
-<img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://user-images.githubusercontent.com/27078897/186008635-47f58392-4d5f-4b5e-a4d8-63c7b96d99fb.png">
+<img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://user-images.githubusercontent.com/27078897/199109660-b69ed368-63d9-4280-ba89-309431bed507.png">
 </a>
 </p>
 
