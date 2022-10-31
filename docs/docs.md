@@ -111,6 +111,14 @@ setPushables({
 
 **Watch out!** Make sure everything you pass to `setPushables` is also marked as a solid or they won't be pushed around.
 
+### width()
+
+Get the width of the current map.
+
+### height()
+
+Get the height of the current map.
+
 ## User Input
 
 Sprig has eight inputs  `w`, `a`, `s`, `d`, `i`, `j`, `k`, `l`.
@@ -256,7 +264,7 @@ playback.end()
 
 Open up your browser console to debug.
 
-You can look at game state by running `getState()` in the console.
+You can look at game state by running `getState()` in the console. This will only work in the browser and not physical Sprigs; please avoid using this in your game. If you need the map size, use `width()` and `height()` instead.
 
 <!-- 
 
