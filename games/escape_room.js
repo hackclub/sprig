@@ -1,6 +1,6 @@
 /*
 @title: escape_room
-@author: Sampanna & Dhruv 
+@author: Sampanna and Dhruv 
 
 */
 const wall = "w";
