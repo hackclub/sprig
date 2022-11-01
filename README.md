@@ -91,10 +91,3 @@ We're also grateful for amazing open-source projects that make this possible lik
 ## License
 
 The Hack Club Sprig is open source and licensed under the [MIT License](./LICENSE). Fork, remix, and make it your own! Pull requests and other contributions greatly appreciated.
-
-
-
-
-
-
-
