@@ -5,6 +5,8 @@
 Controls: Use WASD to move your cursor, J to pick up a piece, and K to place it. 
 Additionally, you can use L to drop a piece (or deselect)
 If you hear a funny sound when you try to place, you're doing a move that isn't legal (to the rules of chess)
+
+How to play? watch this: https://cloud-o2x9qzux6-hack-club-bot.vercel.app/0screen_recording_2022-10-31_at_8.55.44_pm.mp4
 */
 
 const { Chess } = (() => {
