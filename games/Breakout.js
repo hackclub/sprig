@@ -9,8 +9,6 @@ const ball = "o";
 const background = "s";
 let Score = 0;
 let playerSpeed = 6;
-const mapHeight = getState().dimensions.height;
-const mapWidth = getState().dimensions.width;
 
 setLegend(
   [ playerL, bitmap`
@@ -159,8 +157,6 @@ function makeSound() {
 }
 
 let gameInterval = setInterval(() => {
-  const mapHeight = getState().dimensions.height;
-  const mapWidth = getState().dimensions.width;
   let ballOne = getFirst(ball)
   let positionBeforeX = ballOne.x;
   ballOne.x += headingX;
@@ -193,7 +189,7 @@ let gameInterval = setInterval(() => {
   }
 
   //you lose!  
-  if (ballOne.y >= mapHeight -1) {
+  if (ballOne.y >= height() -1) {
     playTune(loseSound);
     ballOne.remove();
     clearText()
