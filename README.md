@@ -42,7 +42,7 @@ Sprig games are designed to be shared and hacked on with friends. Every game sub
 </a>
 </p>
 
-## Fully open-sourced
+## Fully open source
 
 **Sprig is open source**. Shipping a game to the Sprig Gallery is contributing to an open-source project. Everything about Sprig is transparent and editable. That includes the [hardware designs](https://github.com/hackclub/sprig-hardware), the game engine for the web (this repo), the [embedded game engine for the RP2040 chip](https://github.com/hackclub/kaluma), the web-editor itself (this repo), and [even the gallery and intro pages](https://github.com/hackclub/sprig-gallery)! We did some fun engineering to get Sprig to work and to make your games run the same on your desktop computer and a $4 microcontroller. That involved custom JS runtimes with optimizations in C and even PIO assembly. We also documented some [behind-the-scenes](https://github.com/hackclub/sprig/tree/main/docs).
 
