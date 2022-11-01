@@ -798,5 +798,13 @@
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2022-10-30"
+ },
+ {
+    "filename": "chess",
+    "title": "chess",
+    "author": "Thomas Stubblefield",
+    "img": "",
+    "tags": ["multiplayer", "classic"],
+    "addedOn": "2022-10-31"
  }
 ]
