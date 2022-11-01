@@ -806,5 +806,13 @@
     "img": "",
     "tags": ["multiplayer", "classic"],
     "addedOn": "2022-10-31"
+ },
+ {
+    "filename": "escape_room",
+    "title": "escape_room",
+    "author": "Sampanna & Dhruv",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-01"
  }
 ]
