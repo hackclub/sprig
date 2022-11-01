@@ -1,6 +1,14 @@
 # :leaves: [Hack Club Sprig](https://sprig.hackclub.com) :leaves: 
 
-The Hack Club Sprig is a game console where **every user is a creator**. It can only be obtained by building a tile-based game in the [web-based game editor](https://editor.sprig.hackclub.com) and shipping it in the [community gallery](https://sprig.hackclub.com/gallery).
+[Hack Club's](https://hackclub.com) [Sprig](https://sprig.hackclub.com) is a game console where **every user is a creator**. It can only be obtained by building a tile-based game in the [web-based game editor](https://editor.sprig.hackclub.com) and shipping it in the [community gallery](https://sprig.hackclub.com/gallery).
+
+**Make your first Sprig game [here](https://editor.sprig.hackclub.com/?file=https://raw.githubusercontent.com/hackclub/sprig/main/games/getting_started.js) 👀**
+
+You should be able to get started in Sprig with very little programming experience. Even if you're an expert, you should still be able to have fun. 
+
+**Find games in our gallery [here](https://sprig.hackclub.com/gallery) <img src="https://emoji.slack-edge.com/T0266FRGM/sprig-dino/6f01fec60b51b343.png" width="16">**
+
+Sprig games are designed to be shared and hacked on with friends. Every game submitted is easily viewable and editable in our gallery allowing people to learn from and build off each other. 
 
 <p align="center">
 <a>
@@ -8,10 +16,9 @@ The Hack Club Sprig is a game console where **every user is a creator**. It can 
 </a>
 </p>
 
+## Sprig is a
 
-You should be able to get started in Sprig with very little experience in programming. Even if you're an expert, you should still be able to have fun. We hope you enjoy Sprig, and we can't wait to see what you make.
-
-**Sprig is a custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenage hacker that successfully shares a game they create in our community gallery.
+**custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenage hacker that successfully shares a game they create in our community gallery.
 
 <p align="center">
 <a href="https://sprig.hackclub.com/gallery">
@@ -19,7 +26,7 @@ You should be able to get started in Sprig with very little experience in progra
 </a>
 </p>
 
-**Sprig is a [web-based game editor](https://editor.sprig.hackclub.com)** that transforms learning to code from studying language syntax to making small creative projects. The Sprig game engine exposes a small construction kit for making tile-based games. This construction kit helps you focus on being creative instead of learning big APIs. The games are just JavaScript and we built a custom system to run that same JavaScript on the microcontroller!
+**[web-based game editor](https://editor.sprig.hackclub.com)** that transforms learning to code from studying language syntax to making small creative projects. The Sprig game engine exposes a small construction kit for making tile-based games. This construction kit helps you focus on being creative instead of learning big APIs. The games are just JavaScript and we built a custom system to run that same JavaScript on the microcontroller!
 
 <p align="center">
 <a href="https://editor.sprig.hackclub.com">
@@ -27,9 +34,7 @@ You should be able to get started in Sprig with very little experience in progra
 </a>
 </p>
 
-Sprig games are designed to be shared and hacked on with friends. Every game submitted is easily viewable and editable in our gallery allowing people to learn from and build off each other. 
-
-**Sprig is a hardware development kit**. It’s not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It’s a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.
+**hardware development kit**. It’s not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It’s a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.
 
 <p align="center">
 <a href="https://sprig.hackclub.com">
@@ -37,7 +42,9 @@ Sprig games are designed to be shared and hacked on with friends. Every game sub
 </a>
 </p>
 
-**Sprig is open source**. Shipping a game to the Sprig Gallery is contributing to an open-source project. Everything about Sprig is transparent and editable. That includes the [hardware designs](https://github.com/hackclub/sprig-hardware), the game engine for the web (this repo), the [embedded game engine for the RP2040 chip](https://github.com/hackclub/kaluma), the web-editor itself (this repo), and [even the gallery and intro pages](https://github.com/hackclub/sprig-gallery)! We did some fun engineering to get Sprig to work and to make your games run the same on your desktop computer and a $4 microcontroller. That involved custom JS runtimes with optimizations in C and even PIO assembly.
+## Fully open-sourced
+
+**Sprig is open source**. Shipping a game to the Sprig Gallery is contributing to an open-source project. Everything about Sprig is transparent and editable. That includes the [hardware designs](https://github.com/hackclub/sprig-hardware), the game engine for the web (this repo), the [embedded game engine for the RP2040 chip](https://github.com/hackclub/kaluma), the web-editor itself (this repo), and [even the gallery and intro pages](https://github.com/hackclub/sprig-gallery)! We did some fun engineering to get Sprig to work and to make your games run the same on your desktop computer and a $4 microcontroller. That involved custom JS runtimes with optimizations in C and even PIO assembly. We also documented some [behind-the-scenes](https://github.com/hackclub/sprig/tree/main/docs).
 
 ## You Ship, We Ship
 
@@ -47,7 +54,7 @@ make a game
 &rarr; play Sprig games on it 
 &rarr; hack on the device for more projects
 
-***Only teenagers and younger can receive Sprigs!*** All are welcome to submit to the gallery though.
+***Only teenagers and younger can receive Sprigs!*** All are welcome to submit to the [gallery](https://sprig.hackclub.com/gallery) though.
 
 ## Philosophy
 
