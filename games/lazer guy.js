@@ -1,11 +1,12 @@
-/*
+
+    /*
 @title: lazer guy
-@author: hayward
+@author: hayward herlihy
 
 Instructions:
 
-Get to the green block.
-Dont get hit by the lasers.
+yor caricter moovs 2 spaceis dont hit the kid balls and triy and get home.
+.
 */
 
 const player1 = "0"
@@ -20,6 +21,7 @@ const horz = "8"
 const target = "9"
 const background = "b"
 const door = "q"
+const ball = "w"
 
 
 setLegend(
@@ -245,30 +247,45 @@ setLegend(
 0LLLLL0LL0LLLLL0
 0000000000000000`],
   [ door,bitmap`
-...............9
-...............9
-...............9
-...............9
-...............9
-...............9
-...............9
-...............9
-...............9
-...............9
-...............9
-...............9
-...............9
-...............9
-...............9
-...............9`]
-  
+LLLLCCCCCCCCLLLL
+LLLCCCCCCCCCCLLL
+LLCCCCCCCCCCCCLL
+LCCCCCCCCCCCCCCL
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+1CCCCCCCCCCCCCCC
+1CCCCCCCCCCCC00C
+1CCCCCCCCCCCC00C
+1CCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCL
+LCCCCCCCCCCCCCLL
+LLCCCCCCCCCCCLLL
+LLLCCCCCCCCCLLLL
+LLLLCCCCCCCCLLLL`],
+  [ ball,bitmap`
+................
+....8888888.....
+...8888888886...
+..888881111LL6..
+.88881111111L66.
+.6L1100110011L6.
+.6L1111111111L6.
+.6L1111111111L6.
+.6L1111111111L6.
+.6L1101111011L6.
+.6L1110000111L6.
+.66L11111111L66.
+..6LL111111LL6..
+...66LLLLLL66...
+....66666666....
+................`]  
 ) 
 
 // setBackground(background);
 
 setSolids([
-     
-    player2, 
+      player2,
     wall, 
     upLaser,
     downLaser,
@@ -339,32 +356,12 @@ const levels = [
 2.2.......
 3.........`,
     map`
-........1.9
-....1......
-2..2.......
-...........
-..2..2.....
-...........
-1...2......
-2..........
-..2.....2..
-b.2...1....
-3..........`,
-    map`
-..2......19
-...........
-22...2.....
-...2.......
-...........
-2.....2w2..
-.....1.....`,
-    map`
-......
-bbqbbb
-b....b
-b....b
-b....b
-b01.3b`
+22222q2222
+2........2
+2........2
+2........2
+23.......2
+2222222222`
     
     
 ];
@@ -490,6 +487,8 @@ function initLasers() {
     })
 }
 
+let jail = false
+
 afterInput(_ => {
     initLasers();
     let finished = true;
@@ -507,26 +506,32 @@ afterInput(_ => {
 ..........
 2q22222229
 2..22...22
-2.0.....2.
-2222....2.
+2...0...2.
+22222...2.
 2.......2.
 2uuu2.uu2.
 2...b...2.
 23..2...2.
 222222222.`)
+
+      jail = true
+
     }
 
     if (finished && level+1 < levels.length) setMap(levels[++level]);
   setPushables({
-  ["w"]: []
+  ["uplazer"]: ["w"]
 });
 
   let p = getFirst(upLaser)
-  if(dead.length || level==9 || level == 0) {
+  if(dead.length || level==9 || jail) {
     let d = getFirst(door)
-   if(p.x==d.x && p.y==d.y){
+
+  if(p.x==d.x && p.y==d.y){
      setMap(levels[0])
-   }}
+    jail = false
+   }
+  }
 
   console.log(level)
   console.log(p)
