@@ -234,13 +234,11 @@ function writeScore() {
 }
 
 function restart(sprite) {
-  const mapHeight = getState().dimensions.height;
-  const mapWidth = getState().dimensions.width;
   writeScore()
   ballDx = 0;
   ballDy = 0;
-  sprite.x = Math.round(mapWidth / 2);
-  sprite.y = Math.round(mapHeight / 2);
+  sprite.x = Math.round(width() / 2);
+  sprite.y = Math.round(height() / 2);
   setTimeout(() => {
     ballDx = Math.random() < 0.5 ? -1 : 1;
     ballDy = Math.random() < 0.5 ? -2 : 2;
@@ -263,10 +261,8 @@ function control(){
   const sprite = getFirst(ball);
   sprite.x += ballDx;
   sprite.y += ballDy;
-  const mapHeight = getState().dimensions.height;
-  const mapWidth = getState().dimensions.width;
   
-  if (sprite.y >= mapHeight - 2) {
+  if (sprite.y >= height() - 2) {
     ballDy = Math.abs(ballDy) * -1;
     makeSound()
   }
@@ -282,7 +278,7 @@ function control(){
     ballDx = ballDx * -1;
     makeSound()
   }
-  else if (sprite.x >= mapWidth - 1) {
+  else if (sprite.x >= width() - 1) {
     player1Score += 1;
     playTune(pointSound);
     restart(sprite)

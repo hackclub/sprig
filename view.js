@@ -64,37 +64,8 @@ export const view = (state) => html`
   </div>
 `
 
-const sampleMenuItem = sample => html`
-  <a class="sample-menu-item" href=${sample.link}>${sample.name}</a>
-`
-
-const editableName = (state) => html`
-  <div 
-    class="menu-item menu-name" 
-    contenteditable 
-    spellcheck="false"
-    @blur=${e => dispatch("SET_NAME", { name: e.target.innerText })}
-  >
-    ${state.name}
-  </div>
-`
-
 const drawFile = (file, i, state) => {
   const [ name, text ] = file;
-  const setText = () => {
-    state.staleRun = true;
-
-    const games = Object.fromEntries(state.savedGames);
-    const text = games[name];
-    const cur = state.codemirror.state.doc.toString();
-    state.newDocument = true;
-    dispatch("SET_EDITOR_TEXT", { text: "", range: [0, cur.length] });
-    dispatch("RUN");
-    state.newDocument = true;
-    dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] });
-    dispatch("RENDER");
-    window.localStorage.setItem("last-game", name);
-  }
 
   const deleteFile = (e) => {
     if (e.stopPropagation) e.stopPropagation();
@@ -116,7 +87,11 @@ const drawFile = (file, i, state) => {
   }
   
   return html`
-    <div style="display: flex; width: 100%;" @click=${setText}>
+    <div style="display: flex; width: 100%;" @click=${() => {
+      const games = Object.fromEntries(state.savedGames);
+      dispatch("LOAD_NEW_GAME", { code: games[name] });
+      window.localStorage.setItem("last-game", name);
+    }}>
       <div style="flex:1;">${name.slice(0, 26)}${name.length > 26 ? "..." : ""}</div>
       <div style="margin-left: 10px;" class="delete-file" @click=${deleteFile}>x</div>
     </div>
@@ -126,11 +101,8 @@ const drawFile = (file, i, state) => {
 const newFile = (state) => {
   if (!state.codemirror) return "";
 
-  const setText = () => {
-    state.staleRun = true;
-    
-    const text = `/*
-@title: ${adjectives[Math.floor(Math.random() * adjectives.length)]}_${nouns[Math.floor(Math.random() * nouns.length)]}
+  const code = name => `/*
+@title: ${name}
 @author: your_name
 */
 
@@ -179,21 +151,17 @@ afterInput(() => {
   
 });
 `;
-    const cur = state.codemirror.state.doc.toString();
-    state.newDocument = true;
-    dispatch("SET_EDITOR_TEXT", { text: "", range: [0, cur.length] });
-    dispatch("RUN");
-    state.newDocument = true;
-    dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] });
-    dispatch("RENDER");
-  }
 
   const fullText = state.codemirror.state.doc.toString();
   const matches = [ ...fullText.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
   state.codemirror.collapseRanges(matches.map((match) => [ match.index, match.index + 1]));
   
   return html`
-    <div @click=${setText}>new game</div>
+    <div @click=${() => {
+      const name = adjectives[Math.floor(Math.random() * adjectives.length)] + '_' + nouns[Math.floor(Math.random() * nouns.length)];
+      dispatch("LOAD_NEW_GAME", { code: code(name) });
+      window.localStorage.setItem("last-game", name);
+    }}>new game</div>
   `
 } 
 

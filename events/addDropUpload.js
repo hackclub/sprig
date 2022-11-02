@@ -23,9 +23,7 @@ function readFile(state, file) {
     let text = reader.result;
 
     try {
-      const cur = state.codemirror.state.doc.toString();
-      state.newDocument = true;
-      dispatch("SET_EDITOR_TEXT", { text, range: [ 0, cur.length ] });
+      dispatch("LOAD_NEW_GAME", { code: text });
     } catch (err) {}
   };
 }

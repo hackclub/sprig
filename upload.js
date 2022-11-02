@@ -1,147 +1,117 @@
-import { Serial } from "./upload/serial.js";
-import { transfer } from "./upload/ymodem.js";
 import { dispatch } from "./dispatch.js";
-
-function delay(ms) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, ms);
-  });
-}
 
 async function getPort() {
   if (navigator.serial === undefined)
     throw "your browser does not support the Web Serial API. please try again in a recent version of Chrome.";
-  const ports = await navigator.serial.getPorts();
-  if (ports.length !== 1) {
-    dispatch("UPLOAD_LOG", "please pick a device.");
-    return await navigator.serial.requestPort({
-      filters: [
-        { usbVendorId: 0x2e8a, usbProductId: 10 },
-      ]
-    });
-  } else {
-    return ports[0];
-  }
+
+  return await navigator.serial.requestPort({
+    filters: [ { usbVendorId: 0x2e8a, usbProductId: 10 } ]
+  });
+
+  /* possibly return to this behavior when it is confirmed to work again */
+  /*
+   * const ports = await navigator.serial.getPorts();
+   * if (ports.length !== 1) {
+   *   dispatch("UPLOAD_LOG", "please pick a device.");
+   *   return await navigator.serial.requestPort({
+   *     filters: [
+   *       { usbVendorId: 0x2e8a, usbProductId: 10 },
+   *     ]
+   *   });
+   * } else {
+   *   return ports[0];
+   * }
+   */
 }
 
-const imports = `
-const {
-  /* sprite interactions */ setSolids, setPushables,
-  /*              see also: sprite.x +=, sprite.y += */
+async function uploadToSerial(message, writer) {
+  const buf = new TextEncoder().encode(message);
+  console.log(new TextDecoder().decode(buf));
 
-  /* art */ setLegend, setBackground,
-  /* text */ addText, clearText,
+  console.log("ready 1");
+  await writer.ready;
+  console.log("ready 1 - writing startup seq");
+  await writer.write(new Uint8Array([0, 1, 2, 3, 4]).buffer);
 
-  /*   spawn sprites */ setMap, addSprite,
-  /* despawn sprites */ clearTile, /* sprite.remove() */
+  // await writer.write(new ArrayBuffer(htonl(message.length)));
+  console.log("ready 2");
+  await writer.ready;
+  console.log("ready 2 - writing len");
+  await writer.write(new Uint32Array([buf.length]).buffer);
 
-  /* tile queries */ getGrid, getTile, getFirst, getAll, tilesWith,
-  /* see also: sprite.type */
+  console.log("ready 3");
+  await writer.ready;
+  console.log("ready 3 - writing source");
+  const ticker = setInterval(() => console.log("writing src - 300ms passed"), 300);
+  await writer.write(buf);
+  clearInterval(ticker);
+  console.log(`wrote ${buf.length} chars`);
 
-  /* map dimensions */ width, height,
-
-  /* constructors */ bitmap, tune, map,
-
-  /* input handling */ onInput, afterInput,
-
-  /* how much sprite has moved since last onInput: sprite.dx, sprite.dy */
-
-  playTune,
-} = require("engine");
-`;
-
-const startupSound = `
-playTune(\`
-150: c5~150 + g4~150 + e5^150,
-150,
-150: g5^150,
-150,
-150: b4~150 + d5^150 + g4~150,
-150,
-150: e5^150,
-150,
-150: a4~150 + f4~150 + c5^150,
-150,
-150: g4~150 + b4~150 + d5^150,
-150,
-150: g4~150 + e4~150 + c4~150 + e5^150 + c5~150 + g5~150,
-2850
-\`);
-`;
-
-/* wraps their code in a tortilla of startup menu goodness */
-const startupBurrito = code => `
-${imports}
-
-${code}
-`;
-
-async function uploadToSerial(serial, code) {
-  let respStr;
-  serial.on("data", t => {
-    for (let c of t) {
-      if (c === 10) return;  // Newline
-      if (c === 13) {        // Carriage return
-        dispatch('UPLOAD_LOG', '< ' + respStr);
-        respStr = '';
-      }
-      else respStr += String.fromCharCode(c);
-    }
-  })
-
-  let disconnected = false;
-  const checkDisconnect = () => {
-    if (disconnected) throw new Error("Device disconnected unexpectedly");
-  };
-  serial.on("disconnect", () => disconnected = true)
-
-  const write = (s) => {
-    checkDisconnect();
-    dispatch('UPLOAD_LOG', '> ' + s);
-    return serial.write(s);
-  }
-
-  await write("\r.hi\r");
-  await write("\r.reset\r");
-  await write('\r')
-  await write(".flash -w\r");
-  await delay(500);
-
-  dispatch("UPLOAD_LOG", "transferring file...");
-  checkDisconnect();
-  const result = await transfer(
-    serial,
-    "code",
-    new TextEncoder().encode(startupBurrito(code))
-  );
-  dispatch("UPLOAD_LOG", `wrote ${result.writtenBytes}/${result.totalBytes} bytes`);
-  await delay(500);
-  checkDisconnect();
-  await write("\r.reset\r");
-  await write("\r.load\r");
+  // Ensure all are written before closing
+  await writer.ready;
 }
 
 export async function upload(code) {
   dispatch("SET_UPLOAD_STATE", "uploading");
   
-  let serial;
+  let port;
   try {
-    const port = await getPort();
+    port = await getPort();
 
     dispatch("UPLOAD_LOG", "port found, opening serial stream...");
     const start = Date.now();
-    serial = new Serial(port);
-    await serial.open({ baudRate: 115200 });
+
+    /* connect and begin logging output */
+    await port.open({ baudRate: 115200 });
     dispatch("UPLOAD_LOG", "connected to rp2040!");
-    
-    await uploadToSerial(serial, code);
-    dispatch("UPLOAD_LOG", `upload complete in ${((Date.now() - start) / 1000).toFixed(2)}s! you may need to unplug and replug your device.`);
+
+    const textDecoder = new TextDecoderStream();
+    const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+    const reader = textDecoder.readable.getReader();
+
+    /* listen to data coming from the serial device. */
+    const receivedEOT = new Promise(res => {
+      (async () => {
+        try {
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            if (value.indexOf("ALL_GOOD") >= 0) res();
+            console.log(value);
+          }
+        } catch(e) {
+          console.error(e);
+        }
+        finally {
+          reader.releaseLock();
+        }
+      })();
+    });
+
+    const writer = port.writable.getWriter();
+    await uploadToSerial(code, writer);
+
+    await receivedEOT;
+
+    reader.cancel();
+    console.log("waiting on close");
+    await readableStreamClosed.catch(_ => {/* ignore */});
+    console.log("readable closed");
+
+    console.log("writer releasing");
+    writer.releaseLock();
+    console.log("writer released");
+
+    const elapsed = ((Date.now() - start) / 1000).toFixed(2);
+    dispatch("UPLOAD_LOG", `upload complete in ${elapsed}s! ` +
+                           `you may need to unplug and replug your device.`);
   } catch (error) {
-    dispatch("UPLOAD_LOG", `error: ${error.toString()}`);
+    if (error)
+      dispatch("UPLOAD_LOG", `error: ${error.toString()}`);
+    else
+      console.log("undefined error!");
   }
   
-  if (serial) serial.close();
+  if (port) await port.close();
   dispatch("SET_UPLOAD_STATE", "done");
 }
