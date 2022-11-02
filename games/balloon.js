@@ -1,6 +1,6 @@
 /*
 @title: balloon
-@author: LucasHT22
+@author: Lucas
 */
 
 const player = "p";
@@ -158,7 +158,7 @@ afterInput(() => {
     if (faseAtual !== undefined) {
       setMap(faseAtual);
     } else {
-      addText("voce venceu!")
+      addText("you win!")
     }
   }
 });

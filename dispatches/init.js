@@ -4,7 +4,6 @@ import { createEditorView } from "../codemirror/cm.js";
 import { addEvents } from "../events.js";
 import { highlightError } from "./logError.js";
 import { sizeGameCanvas } from "./sizeGameCanvas.js";
-import { saveGame } from "../saveGame.js";
 
 function getParam(key) {
   const search = new URLSearchParams(window.location.search);
@@ -22,14 +21,9 @@ export async function init(args, state) {
 
   state.codemirror = createEditorView((update) => {
     highlightError(state);
-    
+
     if (!update.docChanged) return;
-    if (state.newDocument) {
-      state.newDocument = false;
-    } else {
-      saveGame(state);
-    }
-    
+    dispatch("SAVE_TO_STORAGE");
     state.staleRun = true;
     dispatch("RENDER");
   });
@@ -42,17 +36,14 @@ export async function init(args, state) {
   const savedString = window.localStorage.getItem("puzzle-lab") || "[]";
   state.savedGames = JSON.parse(savedString);
 
-  const set = text => dispatch("SET_EDITOR_TEXT", { text, range: [0, 0] });
   const lastGameName = window.localStorage.getItem("last-game");
   const lastGame = state.savedGames.find(([name]) => name === lastGameName)
   if (lastGame) {
-    state.newDocument = true;
-    set(lastGame[1]);
+    dispatch("LOAD_NEW_GAME", { code: lastGame[1] });
   } else {
     const link = "https://raw.githubusercontent.com/hackclub/sprig/main/games/getting_started.js";
-    const text = await fetch(link).then(x => x.text());
-    state.newDocument = true;
-    set(text);
+    const code = await fetch(link).then(x => x.text());
+    dispatch("LOAD_NEW_GAME", { code });
   }
 
   window.addEventListener("error", (err) => {
@@ -65,14 +56,8 @@ export async function init(args, state) {
   const file = getParam("file");
   removeParam("file");
   if (file) {
-    const text = await loadFromURL(file);
-    const changes = {
-      from: 0,
-      to: state.codemirror.state.doc.toString().length,
-      insert: text
-    };
-    state.newDocument = true;
-    state.codemirror.dispatch({ changes })
+    const code = await loadFromURL(file);
+    dispatch("LOAD_NEW_GAME", { code });
   }
 
   const id = getParam("id");
@@ -80,15 +65,7 @@ export async function init(args, state) {
   if (id) {
     const url = `https://project-bucket-hackclub.s3.eu-west-1.amazonaws.com/${id}.json`
     const json = await fetch(url, { mode: "cors" }).then((r) => r.json());
-    const text = json.text;
-
-    const changes = {
-      from: 0,
-      to: state.codemirror.state.doc.toString().length,
-      insert: text
-    };
-    state.newDocument = true;
-    state.codemirror.dispatch({ changes });
+    dispatch("LOAD_NEW_GAME", { code: json.text });
   }
 
   // fold all tagged template literals

@@ -298,7 +298,7 @@
   {
     "filename": "mistery_of_scooter",
     "title": "mistery_of_scooter",
-    "author": "LucasHT22",
+    "author": "Lucas",
     "img": "",
     "tags": ["WIP"],
     "addedOn": "2022-09-08"
@@ -306,7 +306,7 @@
   {
     "filename": "balloon",
     "title": "balloon",
-    "author": "LucasHT22",
+    "author": "Lucas",
     "img": "",
     "tags": ["WIP"],
     "addedOn": "2022-09-08"
@@ -330,7 +330,7 @@
   {
     "filename": "Virtual_Machine",
     "title": "Virtual_Machine",
-    "author": "N_Rizwan",
+    "author": "N Rizwan",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-08"
@@ -426,7 +426,7 @@
   {
     "filename": "Flurffy",
     "title": "Flurffy",
-    "author": "LucasHT22",
+    "author": "Lucas",
     "img": "",
     "tags": ["classic"],
     "addedOn": "2022-09-13"
@@ -698,7 +698,7 @@
  {
     "filename": "Lava_and_Water",
     "title": "Lava_and_Water",
-    "author": "Akeel",
+    "author": "Akeell",
     "img": "",
     "tags": ["puzzle", "classic"],
     "addedOn": "2022-10-15"
@@ -706,7 +706,7 @@
  {
     "filename": "Music!",
     "title": "Music!",
-    "author": "Akeel",
+    "author": "Akeell",
     "img": "",
     "tags": [],
     "addedOn": "2022-10-16"
@@ -782,5 +782,37 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-21"
+ },
+ {
+    "filename": "generic_dungeon_crawler",
+    "title": "generic_dungeon_crawler",
+    "author": "Lingdong Huang",
+    "img": "",
+    "tags": ["dungeon"],
+    "addedOn": "2022-10-24"
+ },
+ {
+    "filename": "Tron",
+    "title": "Tron",
+    "author": "Robert Carmen",
+    "img": "",
+    "tags": ["multiplayer"],
+    "addedOn": "2022-10-30"
+ },
+ {
+    "filename": "chess",
+    "title": "chess",
+    "author": "Thomas Stubblefield",
+    "img": "",
+    "tags": ["multiplayer", "classic"],
+    "addedOn": "2022-10-31"
+ },
+ {
+    "filename": "escape_room",
+    "title": "escape_room",
+    "author": "Sampanna and Dhruv",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-01"
  }
 ]

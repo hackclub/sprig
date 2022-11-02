@@ -1,6 +1,6 @@
 /*
 @title: Flurffy
-@author: LucasHT22
+@author: Lucas
 */
 
 const flurffy = "f"

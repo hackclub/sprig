@@ -4,76 +4,22 @@ import { upload } from "./upload.js";
 import { run } from "./dispatches/run.js";
 import { init } from "./dispatches/init.js";
 import { logError } from "./dispatches/logError.js";
-import { setName } from "./dispatches/setName.js";
 import { saveToFile } from "./dispatches/export/saveToFile.js";
 import { exportS3 } from "./s3.js";
 import { global_state } from "./global_state.js";
-import { saveGame } from "./saveGame.js"
 import { view as viewMobile } from "./mobile/view.js";
 import { mute } from "./engine/playTune.js";
-import { strip } from 'ansicolor';
-
-function getURLPath(extension) {
-  return (
-    window.location.protocol +
-    "//" +
-    window.location.host +
-    window.location.pathname +
-    extension
-  );
-}
+import { strip } from "ansicolor";
 
 const ACTIONS = {
   INIT: init,
   RUN: run,
   SET_BITMAPS({ bitmaps }, state) {
     state.bitmaps = bitmaps;
-  }, 
-  UPLOAD(args, state) {
-    if (state.uploadState === "uploading") return;
-    state.uploadLogs = "";
-    upload(state.codemirror.state.doc.toString());
-  },
-  SAVE_TO_FILE(args, state) {
-    const string = state.codemirror.state.doc.toString();
-    const match = string.match(/@title:\s+([^\n]+)/);
-    const name = (match !== null) ? match[1] : "UNTITLED";
-    saveToFile(`${name}.js`, string);
   },
   TOGGLE_MUTE() {
     mute.current = !mute.current;
     dispatch("RENDER");
-  },
-  async GET_URL(args, state) {
-    if (state.shareLinkState !== "idle") return console.warn("Share already in progress");
-
-    state.shareLinkState = "loading";
-    dispatch("RENDER");
-
-    const string = state.codemirror.state.doc.toString();
-    const link = await exportS3(string);
-    console.log(`Got link: ${link}`);
-
-    const input = document.createElement("input");
-    input.value = link;
-    input.select();
-    document.execCommand("copy");
-    input.remove();
-    
-    navigator.clipboard.writeText(link)
-
-    state.shareLinkState = "copied";
-    dispatch("RENDER");
-    setTimeout(() => {
-      state.shareLinkState = "idle";
-      dispatch("RENDER");
-    }, 3000);
-
-    fetch("https://misguided.enterprises/clubscraps/cabal", {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ link })
-    });
   },
   LOG_ERROR: logError,
   SET_EDIT_RANGE({ range }, state) {
@@ -105,10 +51,6 @@ const ACTIONS = {
 
     if (state.editRange === null) return;
     state.editRange[1] = state.editRange[0] + text.length;
-  },
-  SET_NAME: setName,
-  LOAD_FROM_DATA({ data }, state) {
-    console.log(data);
   },
   RENDER_MOBILE({ text }, state) {
     // render(document.querySelector(".root"), view(state));
@@ -145,7 +87,86 @@ const ACTIONS = {
 
     const container = document.querySelector(".logs-container");
     container.scrollTo(0, container.scrollHeight);
-  }
+  },
+  UPLOAD(args, state) {
+    if (state.uploadState === "uploading") return;
+    state.uploadLogs = "";
+    upload(state.codemirror.state.doc.toString());
+  },
+
+  // File operations
+  LOAD_NEW_GAME({ code }, state) {
+    state.newDocument = true;
+    const cur = state.codemirror.state.doc.toString();
+    dispatch("SET_EDITOR_TEXT", { text: "", range: [0, cur.length] });
+    dispatch("RUN");
+    
+    state.newDocument = true;
+    dispatch("SET_EDITOR_TEXT", { text: code, range: [0, 0] });
+
+    const titleMatch = code.match(/@title:\s+([^\n]+)/);
+    const name = (titleMatch !== null) ? titleMatch[1] : "UNTITLED";
+    state.prevName = name;
+    
+    state.staleRun = true;
+    dispatch("RENDER");
+  },
+  SAVE_TO_STORAGE(args, state) {
+    if (state.newDocument) {
+      state.newDocument = false;
+      return;
+    }
+
+    const code = state.codemirror.state.doc.toString();
+
+    const titleMatch = code.match(/@title:\s+([^\n]+)/);
+    const name = (titleMatch !== null) ? titleMatch[1] : "UNTITLED";
+
+    const newSave = [ name, code ];
+    const currentGames = state.savedGames.filter(x => x[0] !== name && x[0] !== state.prevName);
+    
+    state.savedGames = [ newSave, ...currentGames ];
+    state.prevName = name;
+    window.localStorage.setItem("puzzle-lab", JSON.stringify(state.savedGames));
+    window.localStorage.setItem("last-game", name);
+  },
+  SAVE_TO_FILE(args, state) {
+    const string = state.codemirror.state.doc.toString();
+    const match = string.match(/@title:\s+([^\n]+)/);
+    const name = (match !== null) ? match[1] : "UNTITLED";
+    saveToFile(`${name}.js`, string);
+  },
+  async GET_URL(args, state) {
+    if (state.shareLinkState !== "idle") return console.warn("Share already in progress");
+
+    state.shareLinkState = "loading";
+    dispatch("RENDER");
+
+    const string = state.codemirror.state.doc.toString();
+    const link = await exportS3(string);
+    console.log(`Got link: ${link}`);
+
+    const input = document.createElement("input");
+    input.value = link;
+    input.select();
+    document.execCommand("copy");
+    input.remove();
+    
+    navigator.clipboard.writeText(link)
+
+    state.shareLinkState = "copied";
+    dispatch("RENDER");
+    setTimeout(() => {
+      state.shareLinkState = "idle";
+      dispatch("RENDER");
+    }, 3000);
+
+    fetch("https://misguided.enterprises/clubscraps/cabal", {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ link })
+    });
+  },
 }
 
 export function dispatch(action, args = {}) {

@@ -81,9 +81,7 @@ setLegend(
 
 setSolids([]);
 
-let level = 0;
-const levels = [
-  map`
+const maparr = map`
 dddddddddddddddddddddddddddddddddddddddd
 dddddddddddddddddddddddddddddddddddddddd
 dddddddddddddddddddddddddddddddddddddddd
@@ -115,60 +113,78 @@ dddddddddddddddddddddddddddddddddddddddd
 dddddddddddddddddddddddddddddddddddddddd
 dddddddddddddddddddddddddddddddddddddddd
 dddddddddddddddddddddddddddddddddddddddd
-dddddddddddddddddddddddddddddddddddddddd`,
-];
-
-setMap(levels[level]);
+dddddddddddddddddddddddddddddddddddddddd`.trim().split('');
+setMap(maparr.join(''));
 addSprite(0, 0, sel);
 
-function spriteData(sprite){
-  return {x:sprite.x,y:sprite.y,type:sprite.type};
+/* plus one for newline. NOTE: does funky shit when OOB */
+const maparr_get = (x, y)    => maparr[y*(width()+1) + x];
+const maparr_set = (x, y, c) => maparr[y*(width()+1) + x] = c;
+const maparr_render = () => {
+  /* we'll add this back at the end */
+  const { x: cx, y: cy } = getFirst(sel);
+
+  setMap(maparr.join(''));
+
+  /* add back the cursor */
+  addSprite(cx, cy, sel);
 }
-function getLivingNeighbors(x, y, livingSprites){
-  var livingNeighbors = 0;
-  for(var i = 0; i < livingSprites.length; i++){
-    if(
-      ((livingSprites[i].x === x-1 || livingSprites[i].x === x+1) && 
-      (livingSprites[i].y === y-1 || livingSprites[i].y === y+1)) ||
-      ((livingSprites[i].x === x) &&
-      (livingSprites[i].y === y-1 || livingSprites[i].y === y+1)) ||
-      ((livingSprites[i].x === x-1 || livingSprites[i].x === x+1) &&
-      (livingSprites[i].y === y))
-    ){
-      livingNeighbors++;
-    }
-  }
-  return livingNeighbors;
-}
-function step(){
-  var livingCells = getAll(living);
-  var deadCells = getAll(dead);
-  var livingCellsClone = livingCells.map(x => spriteData(x));
-  var deadCellsClone = deadCells.map(x => spriteData(x));
-  var deadOutcomes = [0,0,0,0,0,0,0,0,0];
-  var livingOutcomes = [0,0,0,0,0,0,0,0,0];
-  var dO = outcomes.split("/")[0].substring(1, outcomes.split("/")[0].length);
-  var lO = outcomes.split("/")[1].substring(1, outcomes.split("/")[1].length);
-  for(var i = 0; i < dO.length; i++){
+
+/* precompute outcomes */
+const deadOutcomes = [0,0,0,0,0,0,0,0,0];
+const livingOutcomes = [0,0,0,0,0,0,0,0,0];
+{
+  const dO = outcomes.split("/")[0].substring(1, outcomes.split("/")[0].length);
+  const lO = outcomes.split("/")[1].substring(1, outcomes.split("/")[1].length);
+  for (let i = 0; i < dO.length; i++) {
     deadOutcomes[parseInt(dO.charAt(i))] = 1;
   }
-  for(var i = 0; i < lO.length; i++){
+  for (let i = 0; i < lO.length; i++) {
     livingOutcomes[parseInt(lO.charAt(i))] = 1;
   }
-  for(var i = 0; i < livingCellsClone.length; i++){
-    var livingNeighbors = getLivingNeighbors(livingCellsClone[i].x, livingCellsClone[i].y, livingCellsClone);
-    if(livingOutcomes[livingNeighbors] === 0){
-      livingCells[i].remove();
-      addSprite(livingCellsClone[i].x, livingCellsClone[i].y, dead);
+}
+
+function step() {
+  const livingNeighborMap = new Uint8Array(width() * height());
+  const index = (x, y) => y*width() + x;
+  const livingNeighborMapAdd = (x, y) => {
+    if (x < 0) return;
+    if (y < 0) return;
+    if (x >= width() ) return;
+    if (y >= height()) return;
+    livingNeighborMap[index(x, y)] += 1;
+  }
+  /* go to each tile on the map,
+   * increasing the tile's neighbors' living count
+   * (if the tile is living) */
+  for (let x = 0; x < width(); x++) {
+    for (let y = 0; y < height(); y++) {
+      if (maparr_get(x, y) == living) {
+        livingNeighborMapAdd(x+1, y-1); // top left
+        livingNeighborMapAdd(x+1, y-0); // top center
+        livingNeighborMapAdd(x+1, y+1); // top right
+        livingNeighborMapAdd(x+0, y-1); // center left
+        livingNeighborMapAdd(x+0, y+1); // center right
+        livingNeighborMapAdd(x-1, y-1); // bottom left
+        livingNeighborMapAdd(x-1, y-0); // bottom center
+        livingNeighborMapAdd(x-1, y+1); // bottom right
+      }
     }
   }
-  for(var i = 0; i < deadCellsClone.length; i++){
-    var livingNeighbors = getLivingNeighbors(deadCellsClone[i].x, deadCellsClone[i].y, livingCellsClone);
-    if(deadOutcomes[livingNeighbors] === 1){
-      deadCells[i].remove();
-      addSprite(deadCellsClone[i].x, deadCellsClone[i].y, living);
+
+  for (let x = 0; x < width(); x++) {
+    for (let y = 0; y < height(); y++) {
+      const livingNeighbors = livingNeighborMap[index(x, y)];      
+      const type = maparr_get(x, y);
+      
+      if      ((type == living) && (livingOutcomes[livingNeighbors] == 0))
+        maparr_set(x, y, dead);
+      else if ((type ==   dead) && (  deadOutcomes[livingNeighbors] == 1))
+        maparr_set(x, y, living);
     }
   }
+
+  maparr_render();
 }
 var interval;
 var running = false;
@@ -185,16 +201,9 @@ onInput("d", () => {
   getFirst(sel).x += 1;
 });
 onInput("i", () => {
-  var selc = getFirst(sel);
-  var tile = getTile(selc.x, selc.y);
-  var tilet = tile.map(x => x.type);
-  if(tilet.includes(living)){
-    tile[tilet.indexOf(living)].remove();
-    addSprite(selc.x, selc.y, dead);
-  }else{
-    tile[tilet.indexOf(dead)].remove();
-    addSprite(selc.x, selc.y, living);
-  }
+  const { x, y } = getFirst(sel);
+  maparr_set(x, y, (maparr_get(x, y) == living) ? dead : living);
+  maparr_render();
 });
 onInput("j", () => {
   if(running){

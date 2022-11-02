@@ -12,7 +12,6 @@ export const global_state = {
   codemirror: undefined,
   errorInfo: null,
   logs: [],
-  // name: "game-name-here",
   // notifications: [],
   editor: null,
   editRange: null,
@@ -27,8 +26,10 @@ export const global_state = {
   savedGames: [],
   palette,
   staleRun: true,
-  newDocument: false, // Whether the editor contents was set to a new doc, to avoid lighting up the save button
   shareLinkState: 'idle', // idle, loading, copied
   uploadState: 'idle', // idle, uploading, done
-  uploadLogs: ''
+  uploadLogs: '',
+
+  newDocument: false, // Whether the editor just loaded a new game, to avoid triggering a save
+  prevName: null, // The name of the game when it was last saved
 }
