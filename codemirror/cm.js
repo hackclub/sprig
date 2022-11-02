@@ -31,6 +31,7 @@ export function createEditorView(onUpdate = () => {}) {
     state: EditorState.create({
       extensions: [
         bs,
+        // basicSetup,
         keymap.of([indentWithTab]), // TODO: We should put a note about Esc+Tab for accessibility somewhere.
         indentUnit.of("  "),
         javascript(),

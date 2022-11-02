@@ -126,6 +126,8 @@ body {
 }
 
 .popout-list {
+  overflow: scroll;
+  max-height: 50vh;
   border-radius: 0 0 4px 4px;
   --space: 8px;
   padding: var(--space);
