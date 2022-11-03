@@ -1,8 +1,8 @@
 # :leaves: Hack Club Sprig :leaves: 
 
-**[💻 Online Editor: Make a game](https://editor.sprig.hackclub.com)** | **[👀 Gallery: Find games](https://sprig.hackclub.com/gallery)** | **[🕸 Website](https://sprig.hackclub.com)** | **[📺 Hackathon Video](https://www.youtube.com/watch?v=PnK4gzO6S3Q)** | **[<img width="16" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://assets.hackclub.com/icon-rounded.svg"> Hack Club](https://hackclub.com)**
+**[💻 Online Editor: Make a game](https://editor.sprig.hackclub.com)** | **[👀 Gallery: Find games](https://sprig.hackclub.com/gallery)** | **[🕸 Website](https://sprig.hackclub.com)** 
 
-[Sprig](https://sprig.hackclub.com) is a game console where **every user is a creator**. It can only be obtained by building a tile-based game in the [web-based game editor](https://editor.sprig.hackclub.com) and shipping it in the [community gallery](https://sprig.hackclub.com/gallery).
+[Sprig](https://sprig.hackclub.com) is a game console where **every user is a creator**. It can only be obtained by building a tile-based game in the [web-based game editor](https://editor.sprig.hackclub.com) and shipping it in the [community gallery](https://sprig.hackclub.com/gallery). It's made by [Hack Club](https://hackclub.com).
 
 <p align="left">
 <a>
