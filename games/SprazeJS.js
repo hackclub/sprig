@@ -247,13 +247,14 @@ onInput("a", () => {
 onInput("l", () => {
   const currentLevel = levels[level];
   setMap(currentLevel);
-  playTune(fail)});
+  playTune(fail);
+});
 /*---------------------------------------------------------------------------*/
 
 afterInput(() => {
   const target = tilesWith(goal).length;
-  const fail = tilesWith(bg, player).length;
-  if (fail === target) {
+  const failedTiles = tilesWith(bg, player).length;
+  if (failedTiles === target) {
     playTune(fail);
     const currentLevel = levels[level]
     setMap(currentLevel);}
@@ -271,4 +272,12 @@ afterInput(() => {
       setMap(currentLevel);} 
     else {
       setBackground(bg)
-      addText("Win!", { y: 4 });}}});
+      addText("Win!", { y: 4 });
+    }
+  }
+});
+
+
+
+
+
