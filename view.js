@@ -151,10 +151,6 @@ afterInput(() => {
   
 });
 `;
-
-  const fullText = state.codemirror.state.doc.toString();
-  const matches = [ ...fullText.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
-  state.codemirror.collapseRanges(matches.map((match) => [ match.index, match.index + 1]));
   
   return html`
     <div @click=${() => {
