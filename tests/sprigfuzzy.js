@@ -24,13 +24,14 @@ async function spadeRun(path) {
 //   await testScript(slug);
 
 let brokenGames = [];
-let log = false;
+
 async function main() {
   brokenGames = [];
   for await (const dirEntry of Deno.readDir('./games')) {
     const name = dirEntry.name;
     const isJS = name.slice(-3) === ".js";
-    if (!isJS) continue;
+    if (!isJS || ["mandelbrot.js"].some(x => x === name)) continue;
+    console.log("running", name);
     await testScript(name);
   }
 
@@ -59,8 +60,8 @@ async function testScript(name) {
 
     for (const key of shakespeareMonKeys) {
       simulateKey(key);
-      if (log) console.log(`<<< pressing ${key} >>>`);
-      if (log) console.log(gridToString(api));
+      // console.log(`<<< pressing ${key} >>>`);
+      // console.log(gridToString(api));
     }
   } catch(e) {
     cleanup();
