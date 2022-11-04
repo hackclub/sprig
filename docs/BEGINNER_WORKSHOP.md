@@ -8,7 +8,7 @@ Go to the [Sprig editor](https://editor.sprig.hackclub.com/) to start creating y
 
 ### Creating and saving a game
 When you open up sprig editor, you should be greeted by some code that is already there to serve as a little tutorial. In this workshop we won't need that code, so you can delete everything to get a clean file.
-![](default-window.png)
+![](assets/default-window.png)
 To save the game, you first need to name it by adding a multiline comment like this:
 ```
 /*
@@ -35,7 +35,7 @@ setLegend(
 );
 ```
 Typing out the `bitmap` keyword should make it green and clickable. Clicking on it will open up the sprite editor, where you will be able to draw out what you want your sprites to look like.
-![](sprite-editor.png)
+![](assets/sprite-editor.png)
 
 ### Levels and maps
 Now that you have the sprites, next thing you will need is a level for the sprites to move and play around in. Creating a level is very similar to creating a bitmap for a sprite.
@@ -47,7 +47,7 @@ const levels =  [
 let currentLevel = levels[level];
 ```
 Like the `bitmap` keyword, the `map` is also clickable, and clicking it will open the map editor, where you can edit how you want your level to look like. You change the size the level, as well as adding sprites to the tiles.
-![](map-editor.png)
+![](assets/map-editor.png)
 Once you are satisfied with your level, you can set that level as the one to be used.
 ```
 setMap(currentLevel);
