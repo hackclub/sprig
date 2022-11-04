@@ -8,7 +8,7 @@ Go to the [Sprig editor](https://editor.sprig.hackclub.com/) to start creating y
 
 ### Creating and saving a game
 When you open up sprig editor, you should be greeted by some code that is already there to serve as a little tutorial. In this workshop we won't need that code, so you can delete everything to get a clean file.
-![](image.png)
+![](default-window.png)
 To save the game, you first need to name it by adding a multiline comment like this:
 ```
 /*
