@@ -23,30 +23,27 @@ async function spadeRun(path) {
 // for (const slug of gameSlugs)
 //   await testScript(slug);
 
+let brokenGames = [];
+let log = false;
 async function main() {
-  for await (const dirEntry of Deno.readDir('../games')) {
+  brokenGames = [];
+  for await (const dirEntry of Deno.readDir('./games')) {
     const name = dirEntry.name;
     const isJS = name.slice(-3) === ".js";
-    if (!isJS) return;
-    testScript(name);
+    if (!isJS) continue;
+    await testScript(name);
   }
+
+  console.log("broken games:", brokenGames);
+  console.log("number of broken games:", brokenGames.length);
+
+  return brokenGames;
 }
 
 main();
 
-async function stubbornFetch(url) {
-  try {
-    const req = await fetch(url);
-    return await req.text();
-  } catch {
-    return await stubbornFetch(url);
-  }
-}
-
 async function testScript(name) {
-  // const url = "https://raw.githubusercontent.com/hackclub/sprig/main/games/"+slug;
-  // const script = `"use strict";` + await stubbornFetch(url);
-  const script = await Deno.readTextFile(`../games/${name}`);
+  const script = await Deno.readTextFile(`./games/${name}`);
 
   const { api, cleanup, simulateKey } = simEngine();
 
@@ -62,13 +59,16 @@ async function testScript(name) {
 
     for (const key of shakespeareMonKeys) {
       simulateKey(key);
-      console.log(`<<< pressing ${key} >>>`);
-      console.log(gridToString(api));
+      if (log) console.log(`<<< pressing ${key} >>>`);
+      if (log) console.log(gridToString(api));
     }
   } catch(e) {
     cleanup();
     console.log(`ERROR WHILE RUNNING "${name}"`);
-    throw e;
+    brokenGames.push({
+      name,
+      error: e
+    })
   }
 
   cleanup();
