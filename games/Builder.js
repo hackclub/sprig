@@ -5,6 +5,8 @@
 WAD to move
 S to reset
 IJKL to make boxes
+
+Get a box to the goal
 */
 
 const player = "p";
