@@ -238,7 +238,7 @@ function gameOver(){
   setMap(level[1]);
   addText(`BRICK DODGER`, { x: 2, y: 2, color: color`0` });
   addText(`Score:${score}`, { x: 2, y: 4, color: color`0` });
-  addText(`Thx for playing`, { x: 2, y: 7, color: color`6` });
+  addText(`Thanks for playing`, { x: 1, y: 7, color: color`6` });
   addText(`-LMF`, { x: 2, y: 9, color: color`6` });
   addText(`Press K to play`, { x: 2, y: 11, color: color`D` });
 }
