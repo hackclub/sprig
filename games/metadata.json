@@ -854,5 +854,29 @@
     "img": "",
     "tags": ["endless"],
     "addedOn": "2022-11-06"
+ },
+ {
+    "filename": "Monty_Hall",
+    "title": "Monty_Hall",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["beginner", "simulation"],
+    "addedOn": "2022-11-06"
+ },
+ {
+    "filename": "Art",
+    "title": "Art",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["sandbox"],
+    "addedOn": "2022-11-06"
+ },
+ {
+    "filename": "Builder",
+    "title": "Builder",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-06"
  }
 ]
