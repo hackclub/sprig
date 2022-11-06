@@ -1,7 +1,7 @@
 /*...
 @title: L0st 
 @author: B00
-@Instructions:
+@Instructi0ns: WASD to move, I to restart level, K to talk, Get to the green and black thing (that looks like a cabbage), Push orange and blue things.
 */ 
 
 const player = "p" 
@@ -14,55 +14,55 @@ const NPC2 = "a"
 setLegend(
   [ player, bitmap`
 ................
-................
-................
-................
-................
-.....3330000....
-.....3330000....
-.....3320200....
-.....3323200....
-.....3333000....
-.....3333000....
-................
-................
-................
-................
+..999999000000..
+.99999290020000.
+.99992020202000.
+.99992020202000.
+.99992020202000.
+.99992020202000.
+.99992020202000.
+.99999290020000.
+.99999999000000.
+.99999999000000.
+.99999999000000.
+.99999999000000.
+.99999999000000.
+..999999900000..
 ................`],
   [ wall, bitmap`
-................
-................
-................
-......33........
-......33........
-......30........
-......30........
-......30........
-......00........
-......00........
-......00........
-................
-................
-................
-................
-................`],
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333000000000
+3333333000000000
+3333333000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
   [ goal, bitmap`
 ................
-................
-................
-................
-......044440....
-.....44000040...
-.....44000004...
-.....44040000...
-.....04000000...
-.....04440400...
-......044044....
-................
-................
-................
-................
-................`],
+.....00000000...
+....0444D444400.
+...0DDD0D0004440
+..0DDD0004400040
+.0D0000D00040040
+.0D0444DDDDL4000
+.0D0444D4DDDLD00
+.0004L4DDDDDD040
+.0004L444D4DD040
+044044L44D44D040
+04440DLLLDDDD040
+.0440D00L00D0440
+..044D40004D440.
+...00044444000..
+......00044.....`],
   [ pushable, bitmap `
 5559995555555555
 5599999555555555
@@ -358,27 +358,27 @@ onInput("k", () => {
   if (nextTo(player, NPC) || nextTo(player, NPC2)) { 
       switch (talkStage) {
         case 1:
-          addText ("Why are you here?", { y: 4, color: color`C`});
+          addText ("Why are you here?", { y: 4, color: color`8`});
           break;
         case 2:
           clearText();
-          addText ("If you stay\nhere too long...", { x: 4, y: 4, color: color`C`});
+          addText ("If you stay\nhere too long...", { x: 4, y: 4, color: color`8`});
           break;
         case 3:
           clearText();
-          addText ("It will \ncoruppt you.", {x: 4, y: 4, color: color`C`});
+          addText ("It will \ncoruppt you.", {x: 4, y: 4, color: color`8`});
           break;
         case 4:
           clearText();
-          addText ("But it's too \nlate to go back.", {x: 4, y: 4, color: color`C`});
+          addText ("But it's too \nlate to go back.", {x: 4, y: 4, color: color`8`});
           break;
         case 5:
           clearText();
-          addText ("So, I hope you \nescape. \nBut I never will. ", {x: 3, y: 4, color: color`C`});
+          addText ("So, I hope you \nescape. \nBut I never will. ", {x: 3, y: 4, color: color`8`});
           break;
         case 6:
           clearText();
-          addText ("Unless someone \nhelps me.", {x: 3, y: 4, color: color`C`});
+          addText ("Unless someone \nhelps me.", {x: 3, y: 4, color: color`8`});
           break;
         case 7:
           clearText();
@@ -389,30 +389,30 @@ onInput("k", () => {
           break;
         case 8:
           clearText();
-          addText ("Hello again. \nThe exit's \njust over there!", {x: 3, y: 2, color: color`C`});
+          addText ("Hello again. \nThe exit's \njust over there!", {x: 3, y: 2, color: color`8`});
           break;
         case 9:
           clearText();
-          addText ("I can't \nbelieve it!! \nI'm finally \ngetting out!!", {x: 3, y: 2, color: color `C`});
+          addText ("I can't \nbelieve it!! \nI'm finally \ngetting out!!", {x: 3, y: 2, color: color `8`});
           break;
         case 10:
           clearText();
-          addText ("I thought\n I \nwould never get \nout of \nthis place!!", {x: 3, y: 2, color: color `C`});
+          addText ("I thought\n I \nwould never get \nout of \nthis place!!", {x: 3, y: 2, color: color `8`});
           break;
         case 11:
           clearText();
-          addText ("But we need \nto hurry-", {x: 3, y: 2, color: color `C`});
+          addText ("But we need \nto hurry-", {x: 3, y: 2, color: color `8`});
           break;
         case 12:
           clearText();
           level += 1;
           currentLevel = levels[level];
           setMap(currentLevel);
-          addText ("Before we're \nboth...corrupted.", {x: 3, y: 2, color: color `C`});
+          addText ("Before we're \nboth...corrupted.", {x: 3, y: 2, color: color `8`});
           break;
         case 13:
           clearText();
-          addText ("GO!!", {x: 3, y: 2, color: color `C`});
+          addText ("GO!!", {x: 3, y: 2, color: color `8`});
           break;
         case 14:
           clearText();
