@@ -360,6 +360,14 @@
     "addedOn": "2022-10-20"
   },
   {
+    "filename": "coding_demo_4_screen_scroll",
+    "title": "coding_demo_4_screen_scroll",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["demo", "hackable"],
+    "addedOn": "2022-11-7"
+  },
+  {
     "filename": "Rock_Paper_Scissors",
     "title": "Rock_Paper_Scissors",
     "author": "ezefranca",
@@ -902,5 +910,13 @@
     "img": "",
     "tags": ["endless"],
     "addedOn": "2022-11-06"
+ },
+ {
+    "filename": "infinite_cat",
+    "title": "infinite_cat",
+    "author": "Deven Jadhav",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-07"
  }
 ]
