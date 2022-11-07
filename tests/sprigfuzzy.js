@@ -25,11 +25,21 @@ async function spadeRun(path) {
 
 let brokenGames = [];
 const SKIP = ["mandelbrot.js"];
+const ONLY = [];
 
 async function main() {
   brokenGames = [];
   for await (const dirEntry of Deno.readDir('./games')) {
     const name = dirEntry.name;
+
+    if (ONLY.length > 0) {
+      if (ONLY.some(x => x === name)) {
+        console.log("running", name);
+        await testScript(name);
+      }
+      continue;
+    }
+
     const isJS = name.slice(-3) === ".js";
     if (!isJS || SKIP.some(x => x === name)) continue;
     console.log("running", name);
@@ -154,7 +164,7 @@ function simEngine() {
     ...api,
 
     /* gotta do watchu gotta do */
-    console: { log: () => {} }
+    console: { log: () => {} },
   };
 
   return {
