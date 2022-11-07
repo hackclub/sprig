@@ -54,14 +54,14 @@ export async function init(args, state) {
   });
 
   const file = getParam("file");
-  removeParam("file");
+  // removeParam("file");
   if (file) {
     const code = await loadFromURL(file);
     dispatch("LOAD_NEW_GAME", { code });
   }
 
   const id = getParam("id");
-  removeParam("id");
+  // removeParam("id");
   if (id) {
     const url = `https://project-bucket-hackclub.s3.eu-west-1.amazonaws.com/${id}.json`
     const json = await fetch(url, { mode: "cors" }).then((r) => r.json());
