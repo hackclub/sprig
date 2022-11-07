@@ -24,13 +24,14 @@ async function spadeRun(path) {
 //   await testScript(slug);
 
 let brokenGames = [];
+const SKIP = ["mandelbrot.js"];
 
 async function main() {
   brokenGames = [];
   for await (const dirEntry of Deno.readDir('./games')) {
     const name = dirEntry.name;
     const isJS = name.slice(-3) === ".js";
-    if (!isJS || ["mandelbrot.js"].some(x => x === name)) continue;
+    if (!isJS || SKIP.some(x => x === name)) continue;
     console.log("running", name);
     await testScript(name);
   }
