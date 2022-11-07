@@ -24,8 +24,8 @@ async function spadeRun(path) {
 //   await testScript(slug);
 
 let brokenGames = [];
-const SKIP = ["mandelbrot.js"];
-const ONLY = [];
+const SKIP = ["mandelbrot.js", "generic_dungeon_crawler.js"];
+const ONLY = ["Infinite_Shooter.js"];
 
 async function main() {
   brokenGames = [];
