@@ -218,7 +218,6 @@ afterInput(() => {
   const lost1 = tilesWith(player, box).length;
   if (lost1 > 0){
     addText("You Lose!", { y: 4, color: color`3` });
-    setMap(level);
   }
 });
 
