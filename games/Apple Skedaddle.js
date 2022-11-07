@@ -3,9 +3,9 @@
 @author: DieselFalcon
 
 Rules:
-You are an apple who wants to be reunited with his Watermellon friend.
+You are an apple who wants to be reunited with his Watermelon friend.
 However, there are dangerous bombs stopping you from reaching him!
-Outwitt the bombs by working through the maze to reach your friend.
+Outwit the bombs by working through the maze to reach your friend.
 
 Controls:
 W-up
@@ -139,6 +139,48 @@ w.w.wwwwwww..w.w.w.w
 w.w..........w.w.w.w
 w.wwwwwwbwwwww.www.w
 w..................w
+wwwwwwwwwwwwwwwwwwww`,
+  map`
+wwwwwwwwwwwwwwwwwwww
+p.....w.......b....w
+w.wbw.www.wbw.w..w.w
+w.w.w.w.w.w.w.w..w.w
+wbw.w.w.wbw.w....w.w
+w.w.w.w.w.w.wwwwww.w
+w.....w.w.w.....bw.w
+w.w.w.w.wgw.www..w.w
+w.w.w.w.w.w.w.ww.w.w
+w.wwwbw...w.w..w.w.w
+w.....w.w.wwww.w.w.w
+w.wwwww.w....w.w.w.w
+w.....b.w.w..w.w.w.w
+www.wwwww.w......w.w
+w.w......bw..www.w.w
+w.w.wwwwwww..w.w.w.w
+w.w..........w.w.w.w
+w.wwwwwwbwwwww.www.w
+w..................w
+wwwwwwwwwwwwwwwwwwww`,
+  map`
+wpwwwwwwwwwwwwwwwwww
+w................b.w
+w.wwwwwwwwwwwwwwww.w
+w..................w
+w.wwwwwwwwwwwwwwww.w
+wbw.b..............w
+w.wwww.wwwwwwwwwwwbw
+w................w.w
+w.wwwwwwwwwwwww.ww.w
+w.w..b.............w
+w.wwwww.wwwwwwwwww.w
+wb......b..........w
+w.wwwwwwwwwwww.wwwbw
+w.w.b..............w
+w.wwwwwwwwwwwwwwww.w
+w............b...w.w
+w.wwwwwwwwwgwwww.w.w
+w.w...b...www..w.w.w
+w...b...b..........w
 wwwwwwwwwwwwwwwwwwww`
 ];
 
