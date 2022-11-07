@@ -142,12 +142,14 @@ r.rbb`,
 let ptile;
 onInput("j", _ => {
   ptile = getFirst(player);
-    colorTile(ptile.x, ptile.y).type = blue;
+  if (getTile(ptile.x, ptile.y).length === 1) return;
+  colorTile(ptile.x, ptile.y).type = blue;
 });
 
 onInput("l", _ => {
   ptile = getFirst(player);
-    colorTile(ptile.x, ptile.y).type = red;
+  if (getTile(ptile.x, ptile.y).length === 1) return;
+  colorTile(ptile.x, ptile.y).type = red;
 });
 
 onInput("i", _ => {

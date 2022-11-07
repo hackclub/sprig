@@ -296,8 +296,8 @@
     "addedOn": "2022-09-06"
   },
   {
-    "filename": "mistery_of_scooter",
-    "title": "mistery_of_scooter",
+    "filename": "mystery_of_scooter",
+    "title": "mystery_of_scooter",
     "author": "Lucas",
     "img": "",
     "tags": ["WIP"],
@@ -814,5 +814,93 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-11-01"
+ },
+ {
+    "filename": "QuadraPedal",
+    "title": "QuadraPedal",
+    "author": "Jamarkis",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-04"
+ },
+ {
+    "filename": "Bert_Blaster",
+    "title": "Bert_Blaster",
+    "author": "Waterbyte",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2022-11-05"
+ },
+ {
+    "filename": "Infinite_Shooter",
+    "title": "Infinite_Shooter",
+    "author": "not_a_robot",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2022-11-05"
+ },
+ {
+    "filename": "PushBattle",
+    "title": "PushBattle",
+    "author": "MatrixMongoose",
+    "img": "",
+    "tags": ["multiplayer"],
+    "addedOn": "2022-11-05"
+ },
+ {
+    "filename": "BRICK_DODGER",
+    "title": "BRICK_DODGER",
+    "author": "Logan Fick",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2022-11-06"
+ },
+ {
+    "filename": "Monty_Hall",
+    "title": "Monty_Hall",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["beginner", "simulation"],
+    "addedOn": "2022-11-06"
+ },
+ {
+    "filename": "Art",
+    "title": "Art",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["sandbox"],
+    "addedOn": "2022-11-06"
+ },
+ {
+    "filename": "Builder",
+    "title": "Builder",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-06"
+ },
+ {
+    "filename": "Apple_Skedaddle",
+    "title": "Apple_Skedaddle",
+    "author": "DieselFalcon",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-06"
+ },
+ {
+    "filename": "inconsequential_leveldungeon",
+    "title": "inconsequential_leveldungeon",
+    "author": "periwinkle",
+    "img": "",
+    "tags": ["dungeon"],
+    "addedOn": "2022-11-06"
+ },
+ {
+    "filename": "dihydrogen_monoxide_free_fall",
+    "title": "dihydrogen_monoxide_free_fall",
+    "author": "aksel s.",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2022-11-06"
  }
 ]

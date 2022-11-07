@@ -32,14 +32,26 @@ async function spadeRun(path) {
 //   await testScript(slug);
 
 let brokenGames = [];
-let log = false;
+const SKIP = ["mandelbrot.js"];
+const ONLY = [];
+
 async function main() {
   brokenGames = [];
   const tasks = [];
   for await (const dirEntry of Deno.readDir('./games')) {
     const name = dirEntry.name;
+
+    if (ONLY.length > 0) {
+      if (ONLY.some(x => x === name)) {
+        console.log("running", name);
+        await testScript(name);
+      }
+      continue;
+    }
+
     const isJS = name.slice(-3) === ".js";
-    if (!isJS) continue;
+    if (!isJS || SKIP.some(x => x === name)) continue;
+    console.log("running", name);
     tasks.push((async () => {
       const i = setInterval(() => console.log(name + ' is still running'), 10000);
       await testScript(name);
@@ -87,8 +99,8 @@ async function testScript(name) {
       await compareMaps();
       simulateKey(key);
       await spade.simKey(key);
-      if (log) console.log(`<<< pressing ${key} >>>`);
-      if (log) console.log(gridToString(api));
+      // if (log) console.log(`<<< pressing ${key} >>>`);
+      // if (log) console.log(gridToString(api));
     }
   } catch(e) {
     console.log(`ERROR WHILE RUNNING "${name}"`);

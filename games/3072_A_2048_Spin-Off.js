@@ -281,7 +281,7 @@ onInput("l", () => {
 });
 
 onInput("j", () => {
-  playback.end();
+  if (playback) playback.end();
 });
 
 //Instructions

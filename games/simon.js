@@ -438,15 +438,34 @@ pickTile();
 const tileColoursDim = [ yellow, blue, red, green ]
 const tileColoursBright = [ brightYellow, brightBlue, brightRed, brightGreen ]
 
-onInput("w", () => {getFirst(player).y -= 1});
-onInput("a", () => {getFirst(player).x -= 1});
-onInput("s", () => {getFirst(player).y += 1});
-onInput("d", () => {getFirst(player).x += 1});
+onInput("w", () => {
+  const p = getFirst(player);
+  if (!p) return;
+  p.y -= 1;
+});
+onInput("a", () => {
+  const p = getFirst(player);
+  if (!p) return;
+  p.x -= 1;
+});
+onInput("s", () => {
+  const p = getFirst(player);
+  if (!p) return;
+  p.y += 1;
+});
+onInput("d", () => {
+  const p = getFirst(player);
+  if (!p) return;
+  p.x += 1;
+});
 
 //Let's you select a tile to click on
 onInput("j", () => {
-  let playerX = getFirst(player).x;
-  let playerY = getFirst(player).y;
+  const p = getFirst(player);
+  if (!p) return;
+
+  let playerX = p.x;
+  let playerY = p.y;
   clearTile(playerX, playerY);
   addSprite(playerX, playerY, player);
   if(playerX == 0 && playerY == 0 && pattern[patternNumber] == "yellow") {addSprite(playerX, playerY, brightYellow);playTune(yellowSound);}

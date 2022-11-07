@@ -148,25 +148,35 @@ setBackground(black);
 
 //lazer movement
 onInput("w", () => {
+  const l = getFirst(lazer);
+  if (!l) return;
   for (let i = 0; i < 1; i++) {
-  getFirst(lazer).y -=1;
-  
-}
+    l.y -=1;
+    
+  }
 //player movement with lazer
 });
 onInput("d", () => {
-  getFirst(player).x += 1;
+  const p = getFirst(player);
+  if (!p) return;
+  p.x += 1;
 });
 
 onInput("a", () => {
-  getFirst(player).x -= 1;
+  const p = getFirst(player);
+  if (!p) return;
+  p.x -= 1;
 });
 onInput("d", () => {
-  getFirst(lazer).x += 1;
+  const l = getFirst(lazer);
+  if (!l) return;
+  l.x += 1;
 });
 
 onInput("a", () => {
-  getFirst(lazer).x -= 1;
+  const l = getFirst(lazer);
+  if (!l) return;
+  l.x -= 1;
 });
 addText("Time left: ", { y: 0 , color: color`3` });
 
@@ -177,7 +187,10 @@ var timeleft = 15;
     clearText();
     addText(""+timeleft, { y: 1 , color: color`3` });
       if(timeleft <= 0){
-        clearTile(getFirst(lazer).x,getFirst(lazer).y);
+        const l = getFirst(lazer);
+        if (!l) return;
+
+        clearTile(l.x, l.y);
         clearInterval(downloadTimer);
         clearText()
 
@@ -209,10 +222,19 @@ afterInput(() => {
 
   //resets the lazer if it misses the alien
   //and removes a point from the lazer. 
-  if (getFirst(lazer).y==0){
-    clearTile(getFirst(lazer).x,getFirst(lazer).y);
-    addSprite(getFirst(player).x, 8, lazer);
-    clearTile(getFirst(alien).x,getFirst(alien).y);
+
+  const l = getFirst(lazer);
+  if (!l) return;
+  
+  if (l.y==0){
+    const p = getFirst(player);
+    const a = getFirst(alien);
+
+    if (!p || !a) return;
+
+    clearTile(l.x,l.y);
+    addSprite(p.x, 8, lazer);
+    clearTile(a.x,a.y);
     addSprite(Math.floor(Math.random() * 6)+3, Math.floor(Math.random() * 2)+1, alien);
 
     score--;
@@ -225,7 +247,7 @@ afterInput(() => {
         clearInterval(downloadTimer);
         clearText()
         addText("You Lost", {y:4, color: color`3` });
-        playback.end();
+        if (playback) playback.end();
   }
   //removes the hit alien and lazer, puts another alien and asteroid in a random spot 
   //and restores the lazer to the player. 
@@ -233,13 +255,22 @@ afterInput(() => {
   if (numberCovered === targetNumber) {
 
     playTune(melody)
-    
-    clearTile(getFirst(lazer).x,getFirst(alien).y);
-    clearTile(getFirst(asteroid).x, getFirst(asteroid).y);
-    clearTile(getFirst(asteroid).x, getFirst(asteroid).y);
-    clearTile(getFirst(asteroid).x, getFirst(asteroid).y);
 
-    addSprite(getFirst(player).x, 8, lazer);
+    const l = getFirst(lazer);
+    const a = getFirst(alien);
+    const ast = getFirst(asteroid);
+
+    if (!l || !a || !ast) return;
+    
+    clearTile(l.x, a.y);
+    clearTile(ast.x, ast.y);
+    clearTile(ast.x, ast.y);
+    clearTile(ast.x, ast.y);
+
+    const p = getFirst(player);
+    if (!p) return;
+
+    addSprite(p.x, 8, lazer);
     
     addSprite(Math.floor(Math.random() * 6)+3, Math.floor(Math.random() * 2)+1, alien);
     

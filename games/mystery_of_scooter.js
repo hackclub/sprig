@@ -1,5 +1,5 @@
 /*
-@title: Mistery of scooter
+@title: Mystery of scooter
 @author: Lucas
 */
 

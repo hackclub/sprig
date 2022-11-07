@@ -475,21 +475,21 @@ addText("Level Select", {y: 9, color: color`3`});
 //addText(moves.toString(), { x: 1, y: 1, color: color`3` });
 
 onInput("w", () => {
-  if (moves >= 1) {
+  if (moves >= 1 && getFirst(firetruck)) {
     getFirst(firetruck).y -= 1
     moves -= 1;
   } 
 });
   
 onInput("a", () => {
-  if (moves >= 1) {
+  if (moves >= 1 && getFirst(firetruck)) {
     getFirst(firetruck).x -= 1
     moves -= 1;
   }
 });
   
 onInput("d", () => {
-  if (moves >= 1) {
+  if (moves >= 1 && getFirst(firetruck)) {
     getFirst(firetruck).x += 1
     moves -= 1;
   }
@@ -574,53 +574,46 @@ onInput("l", () => {
 
 afterInput(() => {
   
-  try {
-    if (getFirst(firetruck).x == getFirst(shortcut1).x) {
-      if (getFirst(firetruck).y == getFirst(shortcut1).y) {
-        setSolids([house1,house2,pine,coconut,bushes]);
-        getFirst(firetruck).x = getFirst(shortcut).x;
-        getFirst(firetruck).y = getFirst(shortcut).y;
-        setSolids([firetruck,house1,house2,pine,coconut,bushes]);
-      }
+
+  if (getFirst(firetruck) && getFirst(shortcut1) && getFirst(firetruck).x == getFirst(shortcut1).x) {
+    if (getFirst(firetruck).y == getFirst(shortcut1).y) {
+      setSolids([house1,house2,pine,coconut,bushes]);
+      getFirst(firetruck).x = getFirst(shortcut).x;
+      getFirst(firetruck).y = getFirst(shortcut).y;
+      setSolids([firetruck,house1,house2,pine,coconut,bushes]);
     }
-    else if (getFirst(firetruck).x == getFirst(shortcut).x) {
-      if (getFirst(firetruck).y == getFirst(shortcut).y) {
-        setSolids([house1,house2,pine,coconut,bushes]);
-        getFirst(firetruck).x = getFirst(shortcut1).x;
-        getFirst(firetruck).y = getFirst(shortcut1).y;
-        setSolids([firetruck,house1,house2,pine,coconut,bushes]);
-      }
+  }
+  else if (getFirst(firetruck) && getFirst(shortcut) && getFirst(firetruck).x == getFirst(shortcut).x) {
+    if (getFirst(firetruck).y == getFirst(shortcut).y) {
+      setSolids([house1,house2,pine,coconut,bushes]);
+      getFirst(firetruck).x = getFirst(shortcut1).x;
+      getFirst(firetruck).y = getFirst(shortcut1).y;
+      setSolids([firetruck,house1,house2,pine,coconut,bushes]);
     }
-  } catch (error){
-    console.error(error);
   }
 
-  try {
-    if (getFirst(firetruck).x == getFirst(blueWater).x) {
-      if (getFirst(firetruck).y == getFirst(blueWater).y) {
-        moves += 10;
-        let x = getFirst(firetruck).x;
-        let y = getFirst(firetruck).y;
-        playTune(extinguish);
-        clearTile(x, y);
-        addSprite(x, y, firetruck);
-      }
+
+  if (getFirst(firetruck) && getFirst(blueWater) && getFirst(firetruck).x == getFirst(blueWater).x) {
+    if (getFirst(firetruck).y == getFirst(blueWater).y) {
+      moves += 10;
+      let x = getFirst(firetruck).x;
+      let y = getFirst(firetruck).y;
+      playTune(extinguish);
+      clearTile(x, y);
+      addSprite(x, y, firetruck);
     }
-  } catch (error) {
-    console.error(error);
   }
 
-  try {
-    if (getFirst(firetruck).x == getFirst(fire).x) {
-      if (getFirst(firetruck).y == getFirst(fire).y) {
-        level += 1;
-        setMap(levels[level]);
-        moves = 20;
-      }
+
+
+  if (getFirst(firetruck) && getFirst(fire) && getFirst(firetruck).x == getFirst(fire).x) {
+    if (getFirst(firetruck).y == getFirst(fire).y) {
+      level += 1;
+      setMap(levels[level]);
+      moves = 20;
     }
-  } catch (error) {
-    console.error(error);
   }
+
 
   if (level != 0 && level != 12) {
     clearText();

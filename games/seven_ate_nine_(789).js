@@ -90,15 +90,15 @@ const soundStart = tune`
 let onW, onA, onS, onD, onI, onJ, onK, onL
 
 function setControlsMovement () {
-  onW = () => getFirst(seven).y -= 1
-  onA = () => getFirst(seven).x -= 1
-  onS = () => getFirst(seven).y += 1
-  onD = () => getFirst(seven).x += 1
+  onW = () => { if (getFirst(seven)) getFirst(seven).y -= 1 }
+  onA = () => { if (getFirst(seven)) getFirst(seven).x -= 1 }
+  onS = () => { if (getFirst(seven)) getFirst(seven).y += 1 }
+  onD = () => { if (getFirst(seven)) getFirst(seven).x += 1 }
 
-  onI = () => getFirst(nine).y -= 1
-  onJ = () => getFirst(nine).x -= 1
-  onK = () => getFirst(nine).y += 1
-  onL = () => getFirst(nine).x += 1
+  onI = () => { if (getFirst(nine)) getFirst(nine).y -= 1 }
+  onJ = () => { if (getFirst(nine)) getFirst(nine).x -= 1 }
+  onK = () => { if (getFirst(nine)) getFirst(nine).y += 1 }
+  onL = () => { if (getFirst(nine)) getFirst(nine).x += 1 }
 } setControlsMovement()
 
 function countDown () {
@@ -131,10 +131,10 @@ function sevenAteNine () {
 function moveEight () {
   if (eightStart === false) return
   const direction = eightDirection()
-  if (eightDirection() === "right") getFirst(eight).x += 1
-  if (eightDirection() === "left") getFirst(eight).x += -1
-  if (eightDirection() === "up") getFirst(eight).y += -1
-  if (eightDirection() === "down") getFirst(eight).y += 1
+  if (getFirst(eight) && eightDirection() === "right") getFirst(eight).x += 1
+  if (getFirst(eight) && eightDirection() === "left") getFirst(eight).x += -1
+  if (getFirst(eight) && eightDirection() === "up") getFirst(eight).y += -1
+  if (getFirst(eight) && eightDirection() === "down") getFirst(eight).y += 1
   if (tilesWith(seven, eight).length === 1) return nineSaved()
   setTimeout(moveEight, eightSpeed)
   eightSpeed *= eightAccel
@@ -384,7 +384,7 @@ startGame()
 afterInput(() => {
   if (tilesWith(seven, nine).length === 1) sevenAteNine()
   if (tilesWith(seven, eight).length === 1) nineSaved()
-  if ((getFirst(nine).x < 2) && (eightStart == false))  {
+  if (getFirst(nine) && (getFirst(nine).x < 2) && (eightStart == false))  {
     eightStart = true
     moveEight()
   }
