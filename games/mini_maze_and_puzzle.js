@@ -473,6 +473,7 @@ setInterval(() => {
 }, 130);
 
 const shake = () => {
+  if (typeof document === "undefined") return;
   const gameCanvasContainer = document.querySelector(".game-canvas-container");
 
   gameCanvasContainer.classList.add("shake");
