@@ -127,6 +127,10 @@ export function baseEngine() {
       grid[i].push(s);
     })
 
+    const legendIndex = t => state.legend.findIndex(l => l[0] == t.type);
+    for (const tile of grid)
+      tile.sort((a, b) => legendIndex(a) - legendIndex(b));
+
     return grid;
   }
 
