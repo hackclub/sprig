@@ -371,7 +371,10 @@ function drawBoard() {
       
     };
   };
-  
+  selectX = Math.min(width()-1, selectX);
+  selectX = Math.max(0, selectX);
+  selectY = Math.min(height()-1, selectY);
+  selectY = Math.max(0, selectY);
   addSprite(selectX, selectY, select);
   player = getFirst(select);
   
@@ -543,7 +546,14 @@ onInput("d", () => {selectX++});
 // Open tile
 onInput("j", () => {
   // Exclude flagged tiles
-  if (board[selectY][selectX] == -2 ) { return };
+  if (
+    board === undefined || 
+    board[selectY] === undefined || 
+    board[selectY][selectX] === undefined || 
+    numbers === undefined || 
+    numbers[selectY] === undefined || 
+    numbers[selectY][selectX] === undefined ||
+    board[selectY][selectX] == -2 ) { return };
   
   if (board[selectY][selectX] == -1) {
     lost(); // You opened a mine
@@ -565,6 +575,12 @@ onInput("j", () => {
 
 // Flag a tile
 onInput("l", () => {
+  if (
+    board === undefined || 
+    board[selectY] === undefined || 
+    board[selectY][selectX] === undefined
+  ) { return };
+
   // Exclude opened tiles
   if (board[selectY][selectX] != 0 && board[selectY][selectX] != -1 && board[selectY][selectX] != -2 ) { return };
 
