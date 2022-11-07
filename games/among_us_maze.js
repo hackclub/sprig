@@ -15,26 +15,23 @@ const start = 's';
 const end = 'e';
 const colors = [ color`L`, color`1`, color`3`, color`C`, color`7`, color`5`, color`6`, color`F`, color`4`, color`D`, color`8`, color`H`, color`9` ]
 var win = false;
-var hasVirtualMouse = false;
 var pointsInt = 0;
 var notCheating = false;
-var canvas = document.querySelector("canvas.game-canvas")
 var text = addText("points: ", { y: 14, x: 2, color: color`0` });
 
 // functions
 
 function handleMovement(coords) {
-  if (hasVirtualMouse) coords = getFirst(virtualMouse)
-  var tileSize = canvas.getBoundingClientRect().width / row
-  var x = hasVirtualMouse ? coords.x : Math.floor(coords.x / tileSize)
-  var y = hasVirtualMouse ? coords.y : Math.floor(coords.y / tileSize)
-  const inTile = getTile(x, y)
+  coords = getFirst(virtualMouse)
+  var x = coords.x;
+  var y = coords.y;
+  const inTile = getTile(x, y);
 
-  if ((!hasVirtualMouse && inTile.length != 0) || (inTile.length > 1)) {
+  if (inTile.length > 1) {
     text = addText("points: ", { y: 14, x: 2, color: colors[Math.floor(Math.random() * colors.length)] });
     //text.style.color = [0,0,255];
     if (win) return
-    pointsInt = hasVirtualMouse ? pointsInt - 100 : pointsInt - 5
+    pointsInt = pointsInt - 100;
     addText(pointsInt.toString(), { y: 14, x: 10, color: colors[Math.floor(Math.random() * colors.length)] });
   }
 
@@ -185,58 +182,33 @@ let level = 0;
 //displaying the map
 setMap(levels[level]);
 
-//calling the function to get mouse position
-getMousePos(canvas, coords => {
-})
-
-//function to track mouse position
-function getMousePos(canvas, evt) {
-  var rect = canvas.getBoundingClientRect();
-  return {
-    x: evt.clientX - rect.left,
-    y: evt.clientY - rect.top
-  };
-}
 
 onInput("w", () => {
-  if (!hasVirtualMouse) return
+
 
   getFirst(virtualMouse).y -= 1
   handleMovement()
 })
 
 onInput("a", () => {
-  if (!hasVirtualMouse) return
+
 
   getFirst(virtualMouse).x -= 1
   handleMovement()
 })
 
 onInput("s", () => {
-  if (!hasVirtualMouse) return
+
 
   getFirst(virtualMouse).y += 1
   handleMovement()
 })
 
 onInput("d", () => {
-  if (!hasVirtualMouse) return
+
 
   getFirst(virtualMouse).x += 1
   handleMovement()
 })
 
-onInput("i", () => {
-  if (hasVirtualMouse) return
-
-  addSprite(2, 1, virtualMouse)
-  hasVirtualMouse = true
-})
-
-//using mouse position to check if mouse hits a wall/ calculate points
-//checks if mouse touches the end element
-canvas.addEventListener("mousemove", () => {
-  if (hasVirtualMouse) return
-  var coords = getMousePos(canvas, event)
-  handleMovement(coords)
-}, false);
+addSprite(2, 1, virtualMouse)

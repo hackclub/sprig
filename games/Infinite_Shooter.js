@@ -129,7 +129,7 @@ addSprite(Math.floor(width()/2), height()-1, player);
 // keep dropping bad guys
 let i = 1000;
 let inf_intrvl = setInterval(() => {
-  let bad_guy_x = Math.floor(Math.random()*width());
+  let bad_guy_x = Math.floor(Math.random()*(width()-1));
   addSprite(bad_guy_x, 0, bad_guy);
   let cur_guy = getTile(bad_guy_x, 0)[0];
   let speed = Math.random() * 300 + 50;
@@ -179,22 +179,22 @@ let inf_intrvl = setInterval(() => {
   
 // player controls
 onInput("d", () => {
-  if (!has_lost) {
+  if (!has_lost && getFirst(player)) {
     getFirst(player).x += 1;
   }
 });
 onInput("a", () => {
-  if (!has_lost) {
+  if (!has_lost && getFirst(player)) {
     getFirst(player).x -= 1;
   }
 });
 onInput("w", () => {
-  if (!has_lost) {
+  if (!has_lost && getFirst(player)) {
     getFirst(player).y -= 1;
   }
 });
 onInput("s", () => {
-  if (!has_lost) {
+  if (!has_lost && getFirst(player)) {
     getFirst(player).y += 1;
   }
 });

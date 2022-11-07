@@ -487,8 +487,8 @@ afterInput(() => {
 });
 
 function setCurrentMapSlice(dx,dy) {
-  if(levelState.centerX == null) levelState.centerX = levelState.map._start.x + 1;
-  if(levelState.centerY == null) levelState.centerY = levelState.map._start.y + 1;
+  if(levelState.map && levelState.centerX == null) levelState.centerX = levelState.map._start.x + 1;
+  if(levelState.map && levelState.centerY == null) levelState.centerY = levelState.map._start.y + 1;
 
   var x, y;
   dx = dx || 0;
