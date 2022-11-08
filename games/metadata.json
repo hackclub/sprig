@@ -934,5 +934,13 @@
     "img": "",
     "tags": ["sandbox", "advanced", "simulation"],
     "addedOn": "2022-11-08"
+  },
+  {
+    "filename": "Amoeba",
+    "title": "Amoeba",
+    "author": "LUKÁCS Gergely",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-08"
   }
 ]
