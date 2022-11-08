@@ -67,7 +67,7 @@ setLegend(
 3333333333333333`]
 );
 
-setSolids([player, wall]);
+setSolids([player, wall, paint]);
 
 let level = 0;
 const levels = [
@@ -81,16 +81,36 @@ wwwww..w..wwwwwww
 wwwwww...wwwwwwww
 wwwwwwwwwwwwwwwww
 wwwwwwwwwwwwwwwww`,
+  map`
+pw...w...w...w...
+.w.w.w.w.w.w.w.w.
+.w.w.w.w.w.w.w.w.
+.w.w.w.w.w.w.w.w.
+.w.w.w.w.w.w.w.w.
+.w.w.w.w.w.w.w.w.
+.w.w.w.w.w.w.w.w.
+.w.w.w.w.w.w.w.w.
+...w...w...w...w.`,
    map`
-p...ww...........
-.ww.ww.wwwwwwwww.
-.w..ww.........w.
-......wwwwwwww.w.
-.ww.w..ww......w.
-..w..w..w.wwwwww.
-...w..w.w......w.
-.w..w...wwwwwwww.
-.....w...........`,
+wwwwwwwwwwwwwwwww
+p...............w
+wwwwwwwwwwwwwww.w
+w.............w.w
+w.wwwwwwwwwww.w.w
+w.w...........w.w
+w.wwwwwwwwwwwww.w
+w...............w
+wwwwwwwwwwwwwwwww`,
+   map`
+ww...............
+ww.wwwww.wwwwwww.
+ww.....wpw.....w.
+ww..ww.www.....w.
+ww...w.www..w..w.
+ww...w.www..w..w.
+wwwwww.www..w..w.
+wwwwww.www..wwww.
+wwwwww...........`,
 ];
 
 setMap(levels[level])
