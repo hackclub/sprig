@@ -1,6 +1,5 @@
 [
   {
-    "filename": "sokoban",
     "title": "sokoban",
     "author": "leo mcelroy",
     "img": "",
@@ -8,7 +7,6 @@
     "addedOn": "2022-07-18"
   },
   {
-    "filename": "Limits",
     "title": "Limits",
     "author": "Nathan Pease",
     "img": "",
@@ -16,7 +14,6 @@
     "addedOn": "2022-09-15"
   },
   {
-    "filename": "pong",
     "title": "pong",
     "author": "neesh",
     "img": "",
@@ -24,7 +21,6 @@
     "addedOn": "2022-09-07"
   },
   {
-    "filename": "penguin_slide",
     "title": "penguin_slide",
     "author": "veehz",
     "img": "",
@@ -32,7 +28,6 @@
     "addedOn": "2022-09-08"
   },
   {
-    "filename": "laser_tag",
     "title": "laser_tag",
     "author": "leo mcelroy",
     "img": "",
@@ -40,7 +35,6 @@
     "addedOn": "2022-07-14"
   },
   {
-    "filename": "15_puzzle",
     "title": "15_puzzle",
     "author": "maggie liu",
     "img": "",
@@ -48,7 +42,6 @@
     "addedOn": "2022-07-18"
   },
   {
-    "filename": "9_puzzle",
     "title": "9_puzzle",
     "author": "brian silverman",
     "img": "",
@@ -56,7 +49,6 @@
     "addedOn": "2022-07-14"
   },
   {
-    "filename": "kindless",
     "title": "kindless",
     "author": "Ishan",
     "img": "",
@@ -64,7 +56,6 @@
     "addedOn": "2022-07-26"
   },
   {
-    "filename": "color_patterns",
     "title": "color_patterns",
     "author": "brian silverman",
     "img": "",
@@ -72,7 +63,6 @@
     "addedOn": "2022-07-14"
   },
   {
-    "filename": "matcher",
     "title": "matcher",
     "author": "brian silverman",
     "img": "",
@@ -80,7 +70,6 @@
     "addedOn": "2022-08-12"
   },
   {
-    "filename": "shoot_green_blobs",
     "title": "shoot_green_blobs",
     "author": "otterly-otter",
     "img": "",
@@ -88,7 +77,6 @@
     "addedOn": "2022-09-07"
   },
   {
-    "filename": "crappy_bird",
     "title": "crappy_bird",
     "author": "ced",
     "img": "",
@@ -96,7 +84,6 @@
     "addedOn": "2022-07-14"
   },
   {
-    "filename": "2048",
     "title": "2048",
     "author": "linkai101",
     "img": "",
@@ -104,7 +91,6 @@
     "addedOn": "2022-09-16"
   },
   {
-    "filename": "flappy_bird_but_no_gravity_and_worse",
     "title": "flappy_bird_but_no_gravity_and_worse",
     "author": "sam liu",
     "img": "",
@@ -112,7 +98,6 @@
     "addedOn": "2022-09-16"
   },
   {
-    "filename": "friendship",
     "title": "friendship",
     "author": "nicky case",
     "img": "",
@@ -120,7 +105,6 @@
     "addedOn": "2022-07-27"
   },
   {
-    "filename": "getting_started",
     "title": "getting_started",
     "author": "hack club",
     "img": "",
@@ -128,7 +112,6 @@
     "addedOn": "2022-07-26"
   },
   {
-    "filename": "maze",
     "title": "maze",
     "author": "leo mcelroy",
     "img": "",
@@ -136,7 +119,6 @@
     "addedOn": "2022-07-15"
   },
   {
-    "filename": "pyre",
     "title": "pyre",
     "author": "ced",
     "img": "",
@@ -144,7 +126,6 @@
     "addedOn": "2022-07-18"
   },
   {
-    "filename": "raycasting",
     "title": "raycasting",
     "author": "HenryBass",
     "img": "",
@@ -152,7 +133,6 @@
     "addedOn": "2022-07-22"
   },
   {
-    "filename": "Falling_Blocks",
     "title": "Falling_Blocks",
     "author": "Thanosan Prathifkumar",
     "img": "",
@@ -160,7 +140,6 @@
     "addedOn": "2022-09-17"
   },   
   {
-    "filename": "reactor",
     "title": "reactor",
     "author": "sampoder",
     "img": "",
@@ -168,7 +147,6 @@
     "addedOn": "2022-09-16"
   },
   {
-    "filename": "mini_maze_and_puzzle",
     "title": "mini_maze_and_puzzle",
     "author": "muhammad tsaqif mukhayyar",
     "img": "",
@@ -176,7 +154,6 @@
     "addedOn": "2022-09-16"
   },
   {
-    "filename": "tolls",
     "title": "tolls",
     "author": "leo mcelroy",
     "img": "",
@@ -184,7 +161,6 @@
     "addedOn": "2022-07-19"
   },
   {
-    "filename": "fogged",
     "title": "fogged",
     "author": "Jay Reddy",
     "img": "",
@@ -192,7 +168,6 @@
     "addedOn": "2022-08-15"
   },
   {
-    "filename": "multiplayer_soccer",
     "title": "multiplayer_soccer",
     "author": "Shannon Yeow",
     "img": "",
@@ -200,7 +175,6 @@
     "addedOn": "2022-08-12"
   },
   {
-    "filename": "snakey_snake",
     "title": "snakey_snake",
     "author": "Alexander Chin",
     "img": "",
@@ -208,7 +182,6 @@
     "addedOn": "2022-08-12"
   },
   {
-    "filename": "platform_rogue",
     "title": "platform_rogue",
     "author": "farreltobias",
     "img": "",
@@ -216,7 +189,6 @@
     "addedOn": "2022-08-22"
   },
   {
-    "filename": "among_us_maze",
     "title": "among_us_maze",
     "author": "Riya and Christy",
     "img": "",
@@ -224,7 +196,6 @@
     "addedOn": "2022-08-16"
   },
   {
-    "filename": "256",
     "title": "256",
     "author": "Jacky Zhao",
     "img": "",
@@ -232,7 +203,6 @@
     "addedOn": "2022-08-22"
   },
   {
-    "filename": "minesweeper",
     "title": "minesweeper",
     "author": "sam liu",
     "img": "",
@@ -240,7 +210,6 @@
     "addedOn": "2022-08-29"
   },
   {
-    "filename": "connect_four",
     "title": "connect_four",
     "author": "sam liu",
     "img": "",
@@ -248,7 +217,6 @@
     "addedOn": "2022-08-29"
   },
   {
-    "filename": "SprazeJS",
     "title": "SprazeJS",
     "author": "Peipr",
     "img": "",
@@ -256,7 +224,6 @@
     "addedOn": "2022-08-29"
   },
   {
-    "filename": "nomis",
     "title": "nomis",
     "author": "Cheru Berhanu",
     "img": "",
@@ -264,7 +231,6 @@
     "addedOn": "2022-08-29"
   },
   {
-    "filename": "snek",
     "title": "snek",
     "author": "gammacarrot",
     "img": "",
@@ -272,7 +238,6 @@
     "addedOn": "2022-08-30"
   },
   {
-    "filename": "sokoban_plus",
     "title": "sokoban_plus",
     "author": "Leonard (Omay)",
     "img": "",
@@ -280,7 +245,6 @@
     "addedOn": "2022-09-06"
   },
   {
-    "filename": "tictactoe",
     "title": "tictactoe",
     "author": "reesericci",
     "img": "",
@@ -288,7 +252,6 @@
     "addedOn": "2022-09-06"
   },
   {
-    "filename": "alien",
     "title": "alien",
     "author": "anshimathur0325",
     "img": "",
@@ -296,7 +259,6 @@
     "addedOn": "2022-09-06"
   },
   {
-    "filename": "mystery_of_scooter",
     "title": "mystery_of_scooter",
     "author": "Lucas",
     "img": "",
@@ -304,7 +266,6 @@
     "addedOn": "2022-09-08"
   },
   {
-    "filename": "balloon",
     "title": "balloon",
     "author": "Lucas",
     "img": "",
@@ -312,7 +273,6 @@
     "addedOn": "2022-09-08"
   },
   {
-    "filename": "purge",
     "title": "purge",
     "author": "noviicee",
     "img": "",
@@ -320,7 +280,6 @@
     "addedOn": "2022-09-08"
   },
   {
-    "filename": "confusing_conditions",
     "title": "confusing_conditions",
     "author": "Sooraj",
     "img": "",
@@ -328,7 +287,6 @@
     "addedOn": "2022-09-08"
   },
   {
-    "filename": "Virtual_Machine",
     "title": "Virtual_Machine",
     "author": "N Rizwan",
     "img": "",
@@ -336,7 +294,6 @@
     "addedOn": "2022-09-08"
   },
   {
-    "filename": "coding_demo_1_linked_sprites",
     "title": "coding_demo_1_linked_sprites",
     "author": "Leonard (Omay)",
     "img": "",
@@ -344,7 +301,6 @@
     "addedOn": "2022-09-13"
   },
   {
-    "filename": "coding_demo_2_multiple_maps",
     "title": "coding_demo_2_multiple_maps",
     "author": "Leonard (Omay)",
     "img": "",
@@ -352,7 +308,6 @@
     "addedOn": "2022-09-13"
   },
   {
-    "filename": "coding_demo_3_custom_directions",
     "title": "coding_demo_3_custom_directions",
     "author": "Leonard (Omay)",
     "img": "",
@@ -360,7 +315,6 @@
     "addedOn": "2022-10-20"
   },
   {
-    "filename": "coding_demo_4_screen_scroll",
     "title": "coding_demo_4_screen_scroll",
     "author": "Leonard (Omay)",
     "img": "",
@@ -368,7 +322,6 @@
     "addedOn": "2022-11-7"
   },
   {
-    "filename": "Rock_Paper_Scissors",
     "title": "Rock_Paper_Scissors",
     "author": "ezefranca",
     "img": "",
@@ -376,7 +329,6 @@
     "addedOn": "2022-09-13"
   },
   {
-    "filename": "seven_ate_nine_(789)",
     "title": "seven_ate_nine_(789)",
     "author": "blobbybilb",
     "img": "",
@@ -384,7 +336,6 @@
     "addedOn": "2022-09-12"
   },
   {
-    "filename": "zombie_defense",
     "title": "zombie_defense",
     "author": "Edmund",
     "img": "",
@@ -392,7 +343,6 @@
     "addedOn": "2022-09-19"
   },
   {
-    "filename": "tetris",
     "title": "tetris",
     "author": "neesh",
     "img": "",
@@ -400,7 +350,6 @@
     "addedOn": "2022-09-12"
   },
   {
-    "filename": "simple_maze",
     "title": "simple_maze",
     "author": "Itamar Davidyan",
     "img": "",
@@ -408,7 +357,6 @@
     "addedOn": "2022-09-13"
   },
   {
-    "filename": "killpigs",
     "title": "killpigs",
     "author": "luiç",
     "img": "",
@@ -416,7 +364,6 @@
     "addedOn": "2022-09-13"
   },
   {
-    "filename": "TheTombOfAThousandTerrors",
     "title": "TheTombOfAThousandTerrors",
     "author": "Fabian",
     "img": "",
@@ -424,7 +371,6 @@
     "addedOn": "2022-09-13"
   },
   {
-    "filename": "reversi",
     "title": "reversi",
     "author": "veehj",
     "img": "",
@@ -432,7 +378,6 @@
     "addedOn": "2022-09-13"
   },
   {
-    "filename": "Flurffy",
     "title": "Flurffy",
     "author": "Lucas",
     "img": "",
@@ -440,7 +385,6 @@
     "addedOn": "2022-09-13"
   },
   {
-    "filename": "snake_game",
     "title": "snake_game",
     "author": "souvikpal2000",
     "img": "",
@@ -448,7 +392,6 @@
     "addedOn": "2022-09-13"
   },
   {
-    "filename": "Piano",
     "title": "Piano",
     "author": "Scott",
     "img": "",
@@ -456,7 +399,6 @@
     "addedOn": "2022-09-14"
   },
   {
-    "filename": "desi-pong",
     "title": "desi-pong",
     "author": "Arnob Das",
     "img": "",
@@ -464,7 +406,6 @@
     "addedOn": "2022-09-14"
   },
   {
-    "filename": "Trash_IT",
     "title": "Trash_IT",
     "author": "N Rizwan",
     "img": "",
@@ -472,7 +413,6 @@
     "addedOn": "2022-09-14"
   },
   {
-    "filename": "Paint_IT",
     "title": "Paint_IT",
     "author": "N Rizwan",
     "img": "",
@@ -480,7 +420,6 @@
     "addedOn": "2022-09-14"
   },
   {
-    "filename": "love_lock",
     "title": "love_lock",
     "author": "N Rizwan",
     "img": "",
@@ -488,7 +427,6 @@
     "addedOn": "2022-09-15"
   },
   {
-    "filename": "color_domination",
     "title": "color_domination",
     "author": "adrianoapj",
     "img": "",
@@ -496,7 +434,6 @@
     "addedOn": "2022-09-19"
   },
   {
-    "filename": "infinite_maze",
     "title": "infinite_maze",
     "author": "pertark",
     "img": "",
@@ -504,7 +441,6 @@
     "addedOn": "2022-09-22"
   },
   {
-    "filename": "Falling_Water",
     "title": "Falling_Water",
     "author": "Captainexpo",
     "img": "",
@@ -512,7 +448,6 @@
     "addedOn": "2022-09-23"
   },
   {
-    "filename": "goaled",
     "title": "goaled",
     "author": "Ronan Verma",
     "img": "",
@@ -520,7 +455,6 @@
     "addedOn": "2022-09-24"
   },
   {
-    "filename": "2D_life",
     "title": "2D_life",
     "author": "Leonard (Omay)",
     "img": "",
@@ -528,7 +462,6 @@
     "addedOn": "2022-09-25"
   },
   {
-    "filename": "maze_runner",
     "title": "maze_runner",
     "author": "wetf",
     "img": "",
@@ -536,15 +469,13 @@
     "addedOn": "2022-09-26"
   },
   {
-    "filename": "mandelbrot",
-    "title": "Mandelbrot",
+    "title": "mandelbrot",
     "author": "HenryBass",
     "img": "",
     "tags": ["sandbox", "simulation", "hackable"],
     "addedOn": "2022-09-14"
   },
     {
-    "filename": "Treasure_Hunt",
     "title": "Treasure_Hunt",
     "author": "Manikandan_M",
     "img": "",
@@ -552,7 +483,6 @@
     "addedOn": "2022-09-28"
   },
     {
-    "filename": "LUCK",
     "title": "LUCK",
     "author": "Ethan",
     "img": "",
@@ -560,7 +490,6 @@
     "addedOn": "2022-09-28"
   },
     {
-    "filename": "Breakout",
     "title": "Breakout",
     "author": "Holly",
     "img": "",
@@ -568,7 +497,6 @@
     "addedOn": "2022-09-28"
   },
   {
-    "filename": "alien_invaders",
     "title": "alien_invaders",
     "author": "stati30241",
     "img": "",
@@ -576,7 +504,6 @@
     "addedOn": "2022-09-28"
   },
   {
-    "filename": "simon",
     "title": "simon",
     "author": "riley",
     "img": "",
@@ -584,7 +511,6 @@
     "addedOn": "2022-09-29"
  },
  {
-    "filename": "gravity-is-a-thing",
     "title": "gravity-is-a-thing",
     "author": "Will_Rigney",
     "img": "",
@@ -592,7 +518,6 @@
     "addedOn": "2022-09-30"
  },
  {
-    "filename": "tower_of_hanoi",
     "title": "tower_of_hanoi",
     "author": "nicholasz2510",
     "img": "",
@@ -600,7 +525,6 @@
     "addedOn": "2022-10-02"
  },
  {
-    "filename": "PASS_ALL",
     "title": "PASS_ALL",
     "author": "Shivang0",
     "img": "",
@@ -608,7 +532,6 @@
     "addedOn": "2022-10-03"
  },
  {
-    "filename": "floppyMatch",
     "title": "floppyMatch",
     "author": "GBan22",
     "img": "",
@@ -616,7 +539,6 @@
     "addedOn": "2022-10-05"
  },
  {
-    "filename": "maze7",
     "title": "maze7",
     "author": "akeell",
     "img": "",
@@ -624,15 +546,13 @@
     "addedOn": "2022-10-06"
  },
  {
-    "filename": "flying_game",
-    "title": "Flying_Game",
+    "title": "flying_game",
     "author": "Zainab Khorakiwala",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-08"
  },
  {
-    "filename": "catch_orpheus",
     "title": "catch_orpheus",
     "author": "sampoder",
     "img": "",
@@ -640,7 +560,6 @@
     "addedOn": "2022-10-08"
  },
  {
-    "filename": "candy_rush",
     "title": "candy_rush",
     "author": "tasbia uddin",
     "img": "",
@@ -648,7 +567,6 @@
     "addedOn": "2022-10-07"
  },
  {
-    "filename": "bolt_battle",
     "title": "bolt_battle",
     "author": "Arnav Ambre",
     "img": "",
@@ -656,15 +574,13 @@
     "addedOn": "2022-10-10"
  },
  {
-    "filename": "Hectic_Hockey",
-    "title": "hectic_hockey",
+    "title": "Hectic_Hockey",
     "author": "Colton",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-12"
  },
  {
-    "filename": "puzzle_runner",
     "title": "puzzle_runner",
     "author": "Shanath",
     "img": "",
@@ -672,7 +588,6 @@
     "addedOn": "2022-10-12"
  },
  {
-    "filename": "time_puzzle",
     "title": "time_puzzle",
     "author": "Akeell",
     "img": "",
@@ -680,7 +595,6 @@
     "addedOn": "2022-10-13"
  },
  {
-    "filename": "eat_the_cake",
     "title": "eat_the_cake",
     "author": "_klyap_",
     "img": "",
@@ -688,7 +602,6 @@
     "addedOn": "2022-10-13"
  },
  {
-    "filename": "3072_A_2048_Spin-Off",
     "title": "3072_A_2048_Spin-Off",
     "author": "sahitid",
     "img": "",
@@ -696,7 +609,6 @@
     "addedOn": "2022-10-14"
  },
  {
-    "filename": "pipes_puzzle",
     "title": "pipes_puzzle",
     "author": "RayhanADev",
     "img": "pipes_puzzle",
@@ -704,7 +616,6 @@
     "addedOn": "2022-10-14"
  },
  {
-    "filename": "Lava_and_Water",
     "title": "Lava_and_Water",
     "author": "Akeell",
     "img": "",
@@ -712,7 +623,6 @@
     "addedOn": "2022-10-15"
  },
  {
-    "filename": "Music!",
     "title": "Music!",
     "author": "Akeell",
     "img": "",
@@ -720,7 +630,6 @@
     "addedOn": "2022-10-16"
  },
  {
-    "filename": "Space_Invasion",
     "title": "Space_Invasion",
     "author": "Agent-Shu",
     "img": "",
@@ -728,7 +637,6 @@
     "addedOn": "2022-10-18"
  },
  {
-    "filename": "Call_911",
     "title": "Call_911",
     "author": "Rohit",
     "img": "",
@@ -736,7 +644,6 @@
     "addedOn": "2022-10-18"
  },
  {
-    "filename": "2048_Alphabet_Edition",
     "title": "2048_Alphabet_Edition",
     "author": "OptimalBlock489",
     "img": "",
@@ -744,7 +651,6 @@
     "addedOn": "2022-10-19"
  },
  {
-    "filename": "box_maze",
     "title": "box_maze",
     "author": "Boden",
     "img": "",
@@ -752,7 +658,6 @@
     "addedOn": "2022-10-19"
  },
  {
-    "filename": "Puzzle_Game",
     "title": "Puzzle_Game",
     "author": "Amelia",
     "img": "",
@@ -760,7 +665,6 @@
     "addedOn": "2022-10-20"
  },
  {
-    "filename": "BreadMaze",
     "title": "BreadMaze",
     "author": "Aiden",
     "img": "",
@@ -768,7 +672,6 @@
     "addedOn": "2022-10-20"
  },
  {
-    "filename": "battle_bots",
     "title": "battle_bots",
     "author": "kyle",
     "img": "",
@@ -776,7 +679,6 @@
     "addedOn": "2022-10-20"
  },
  {
-    "filename": "sprig_machine",
     "title": "sprig_machine",
     "author": "Leonard (Omay)",
     "img": "",
@@ -784,7 +686,6 @@
     "addedOn": "2022-10-21"
  },
  {
-    "filename": "Zooter",
     "title": "Zooter",
     "author": "PerrinPerson",
     "img": "",
@@ -792,7 +693,6 @@
     "addedOn": "2022-10-21"
  },
  {
-    "filename": "generic_dungeon_crawler",
     "title": "generic_dungeon_crawler",
     "author": "Lingdong Huang",
     "img": "",
@@ -800,7 +700,6 @@
     "addedOn": "2022-10-24"
  },
  {
-    "filename": "Tron",
     "title": "Tron",
     "author": "Robert Carmen",
     "img": "",
@@ -808,7 +707,6 @@
     "addedOn": "2022-10-30"
  },
  {
-    "filename": "chess",
     "title": "chess",
     "author": "Thomas Stubblefield",
     "img": "",
@@ -816,7 +714,6 @@
     "addedOn": "2022-10-31"
  },
  {
-    "filename": "escape_room",
     "title": "escape_room",
     "author": "Sampanna and Dhruv",
     "img": "",
@@ -824,7 +721,6 @@
     "addedOn": "2022-11-01"
  },
  {
-    "filename": "QuadraPedal",
     "title": "QuadraPedal",
     "author": "Jamarkis",
     "img": "",
@@ -832,7 +728,6 @@
     "addedOn": "2022-11-04"
  },
  {
-    "filename": "Bert_Blaster",
     "title": "Bert_Blaster",
     "author": "Waterbyte",
     "img": "",
@@ -840,7 +735,6 @@
     "addedOn": "2022-11-05"
  },
  {
-    "filename": "Infinite_Shooter",
     "title": "Infinite_Shooter",
     "author": "not_a_robot",
     "img": "",
@@ -848,7 +742,6 @@
     "addedOn": "2022-11-05"
  },
  {
-    "filename": "PushBattle",
     "title": "PushBattle",
     "author": "MatrixMongoose",
     "img": "",
@@ -856,7 +749,6 @@
     "addedOn": "2022-11-05"
  },
  {
-    "filename": "BRICK_DODGER",
     "title": "BRICK_DODGER",
     "author": "Logan Fick",
     "img": "",
@@ -864,7 +756,6 @@
     "addedOn": "2022-11-06"
  },
  {
-    "filename": "Monty_Hall",
     "title": "Monty_Hall",
     "author": "Leonard (Omay)",
     "img": "",
@@ -872,7 +763,6 @@
     "addedOn": "2022-11-06"
  },
  {
-    "filename": "Art",
     "title": "Art",
     "author": "Leonard (Omay)",
     "img": "",
@@ -880,7 +770,6 @@
     "addedOn": "2022-11-06"
  },
  {
-    "filename": "Builder",
     "title": "Builder",
     "author": "Leonard (Omay)",
     "img": "",
@@ -888,7 +777,6 @@
     "addedOn": "2022-11-06"
  },
  {
-    "filename": "Apple_Skedaddle",
     "title": "Apple_Skedaddle",
     "author": "DieselFalcon",
     "img": "",
@@ -896,7 +784,6 @@
     "addedOn": "2022-11-06"
  },
  {
-    "filename": "inconsequential_leveldungeon",
     "title": "inconsequential_leveldungeon",
     "author": "periwinkle",
     "img": "",
@@ -904,7 +791,6 @@
     "addedOn": "2022-11-06"
  },
  {
-    "filename": "dihydrogen_monoxide_free_fall",
     "title": "dihydrogen_monoxide_free_fall",
     "author": "aksel s.",
     "img": "",
@@ -912,7 +798,6 @@
     "addedOn": "2022-11-06"
  },
  {
-    "filename": "infinite_cat",
     "title": "infinite_cat",
     "author": "Deven Jadhav",
     "img": "",
@@ -920,7 +805,6 @@
     "addedOn": "2022-11-07"
  },
  {
-    "filename": "L0st",
     "title": "L0st",
     "author": "B00",
     "img": "",
