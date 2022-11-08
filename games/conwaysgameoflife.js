@@ -87,7 +87,7 @@ function gamegrid_debug_text(x, y, text, colour) {
 // const game_width = 9; // chosen to allow debug mode
 // const game_height = 6;
 
-const game_width = 20;
+const game_width = 25;
 const game_height = 20;
 
 const debug_text_constants_x = [1, 3, 5, 7, 10, 12, 14, 16, 19];
