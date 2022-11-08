@@ -1,811 +1,811 @@
 [
   {
-    "title": "sokoban",
+    "filename": "sokoban",
     "author": "leo mcelroy",
     "img": "",
     "tags": ["beginner", "hackable", "puzzle"],
     "addedOn": "2022-07-18"
   },
   {
-    "title": "Limits",
+    "filename": "Limits",
     "author": "Nathan Pease",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-15"
   },
   {
-    "title": "pong",
+    "filename": "pong",
     "author": "neesh",
     "img": "",
     "tags": ["classic"],
     "addedOn": "2022-09-07"
   },
   {
-    "title": "penguin_slide",
+    "filename": "penguin_slide",
     "author": "veehz",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-08"
   },
   {
-    "title": "laser_tag",
+    "filename": "laser_tag",
     "author": "leo mcelroy",
     "img": "",
     "tags": ["hackable", "puzzle"],
     "addedOn": "2022-07-14"
   },
   {
-    "title": "15_puzzle",
+    "filename": "15_puzzle",
     "author": "maggie liu",
     "img": "",
     "tags": ["advanced"],
     "addedOn": "2022-07-18"
   },
   {
-    "title": "9_puzzle",
+    "filename": "9_puzzle",
     "author": "brian silverman",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-07-14"
   },
   {
-    "title": "kindless",
+    "filename": "kindless",
     "author": "Ishan",
     "img": "",
     "tags": ["advanced"],
     "addedOn": "2022-07-26"
   },
   {
-    "title": "color_patterns",
+    "filename": "color_patterns",
     "author": "brian silverman",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-07-14"
   },
   {
-    "title": "matcher",
+    "filename": "matcher",
     "author": "brian silverman",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-08-12"
   },
   {
-    "title": "shoot_green_blobs",
+    "filename": "shoot_green_blobs",
     "author": "otterly-otter",
     "img": "",
     "tags": ["classic"],
     "addedOn": "2022-09-07"
   },
   {
-    "title": "crappy_bird",
+    "filename": "crappy_bird",
     "author": "ced",
     "img": "",
     "tags": ["classic", "endless"],
     "addedOn": "2022-07-14"
   },
   {
-    "title": "2048",
+    "filename": "2048",
     "author": "linkai101",
     "img": "",
     "tags": ["classic"],
     "addedOn": "2022-09-16"
   },
   {
-    "title": "flappy_bird_but_no_gravity_and_worse",
+    "filename": "flappy_bird_but_no_gravity_and_worse",
     "author": "sam liu",
     "img": "",
     "tags": ["WIP", "endless"],
     "addedOn": "2022-09-16"
   },
   {
-    "title": "friendship",
+    "filename": "friendship",
     "author": "nicky case",
     "img": "",
     "tags": ["beginner", "puzzle"],
     "addedOn": "2022-07-27"
   },
   {
-    "title": "getting_started",
+    "filename": "getting_started",
     "author": "hack club",
     "img": "",
     "tags": ["beginner", "tutorial"],
     "addedOn": "2022-07-26"
   },
   {
-    "title": "maze",
+    "filename": "maze",
     "author": "leo mcelroy",
     "img": "",
     "tags": ["beginner", "hackable", "puzzle"],
     "addedOn": "2022-07-15"
   },
   {
-    "title": "pyre",
+    "filename": "pyre",
     "author": "ced",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-07-18"
   },
   {
-    "title": "raycasting",
+    "filename": "raycasting",
     "author": "HenryBass",
     "img": "",
     "tags": ["advanced"],
     "addedOn": "2022-07-22"
   },
   {
-    "title": "Falling_Blocks",
+    "filename": "Falling_Blocks",
     "author": "Thanosan Prathifkumar",
     "img": "",
     "tags": ["hackable"],
     "addedOn": "2022-09-17"
   },   
   {
-    "title": "reactor",
+    "filename": "reactor",
     "author": "sampoder",
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2022-09-16"
   },
   {
-    "title": "mini_maze_and_puzzle",
+    "filename": "mini_maze_and_puzzle",
     "author": "muhammad tsaqif mukhayyar",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-16"
   },
   {
-    "title": "tolls",
+    "filename": "tolls",
     "author": "leo mcelroy",
     "img": "",
     "tags": ["WIP"],
     "addedOn": "2022-07-19"
   },
   {
-    "title": "fogged",
+    "filename": "fogged",
     "author": "Jay Reddy",
     "img": "",
     "tags": ["WIP"],
     "addedOn": "2022-08-15"
   },
   {
-    "title": "multiplayer_soccer",
+    "filename": "multiplayer_soccer",
     "author": "Shannon Yeow",
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2022-08-12"
   },
   {
-    "title": "snakey_snake",
+    "filename": "snakey_snake",
     "author": "Alexander Chin",
     "img": "",
     "tags": ["WIP", "puzzle"],
     "addedOn": "2022-08-12"
   },
   {
-    "title": "platform_rogue",
+    "filename": "platform_rogue",
     "author": "farreltobias",
     "img": "",
     "tags": ["advanced"],
     "addedOn": "2022-08-22"
   },
   {
-    "title": "among_us_maze",
+    "filename": "among_us_maze",
     "author": "Riya and Christy",
     "img": "",
     "tags": ["advanced", "web-only"],
     "addedOn": "2022-08-16"
   },
   {
-    "title": "256",
+    "filename": "256",
     "author": "Jacky Zhao",
     "img": "",
     "tags": ["classic"],
     "addedOn": "2022-08-22"
   },
   {
-    "title": "minesweeper",
+    "filename": "minesweeper",
     "author": "sam liu",
     "img": "",
     "tags": ["classic"],
     "addedOn": "2022-08-29"
   },
   {
-    "title": "connect_four",
+    "filename": "connect_four",
     "author": "sam liu",
     "img": "",
     "tags": ["classic"],
     "addedOn": "2022-08-29"
   },
   {
-    "title": "SprazeJS",
+    "filename": "SprazeJS",
     "author": "Peipr",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-08-29"
   },
   {
-    "title": "nomis",
+    "filename": "nomis",
     "author": "Cheru Berhanu",
     "img": "",
     "tags": ["classic", "hackable"],
     "addedOn": "2022-08-29"
   },
   {
-    "title": "snek",
+    "filename": "snek",
     "author": "gammacarrot",
     "img": "",
     "tags": ["classic"],
     "addedOn": "2022-08-30"
   },
   {
-    "title": "sokoban_plus",
+    "filename": "sokoban_plus",
     "author": "Leonard (Omay)",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-06"
   },
   {
-    "title": "tictactoe",
+    "filename": "tictactoe",
     "author": "reesericci",
     "img": "",
     "tags": ["classic", "multiplayer"],
     "addedOn": "2022-09-06"
   },
   {
-    "title": "alien",
+    "filename": "alien",
     "author": "anshimathur0325",
     "img": "",
     "tags": ["endless"],
     "addedOn": "2022-09-06"
   },
   {
-    "title": "mystery_of_scooter",
+    "filename": "mystery_of_scooter",
     "author": "Lucas",
     "img": "",
     "tags": ["WIP"],
     "addedOn": "2022-09-08"
   },
   {
-    "title": "balloon",
+    "filename": "balloon",
     "author": "Lucas",
     "img": "",
     "tags": ["WIP"],
     "addedOn": "2022-09-08"
   },
   {
-    "title": "purge",
+    "filename": "purge",
     "author": "noviicee",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-08"
   },
   {
-    "title": "confusing_conditions",
+    "filename": "confusing_conditions",
     "author": "Sooraj",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-08"
   },
   {
-    "title": "Virtual_Machine",
+    "filename": "Virtual_Machine",
     "author": "N Rizwan",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-08"
   },
   {
-    "title": "coding_demo_1_linked_sprites",
+    "filename": "coding_demo_1_linked_sprites",
     "author": "Leonard (Omay)",
     "img": "",
     "tags": ["demo", "hackable"],
     "addedOn": "2022-09-13"
   },
   {
-    "title": "coding_demo_2_multiple_maps",
+    "filename": "coding_demo_2_multiple_maps",
     "author": "Leonard (Omay)",
     "img": "",
     "tags": ["demo", "hackable"],
     "addedOn": "2022-09-13"
   },
   {
-    "title": "coding_demo_3_custom_directions",
+    "filename": "coding_demo_3_custom_directions",
     "author": "Leonard (Omay)",
     "img": "",
     "tags": ["demo", "hackable"],
     "addedOn": "2022-10-20"
   },
   {
-    "title": "coding_demo_4_screen_scroll",
+    "filename": "coding_demo_4_screen_scroll",
     "author": "Leonard (Omay)",
     "img": "",
     "tags": ["demo", "hackable"],
     "addedOn": "2022-11-7"
   },
   {
-    "title": "Rock_Paper_Scissors",
+    "filename": "Rock_Paper_Scissors",
     "author": "ezefranca",
     "img": "",
     "tags": ["classic"],
     "addedOn": "2022-09-13"
   },
   {
-    "title": "seven_ate_nine_(789)",
+    "filename": "seven_ate_nine_(789)",
     "author": "blobbybilb",
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2022-09-12"
   },
   {
-    "title": "zombie_defense",
+    "filename": "zombie_defense",
     "author": "Edmund",
     "img": "",
     "tags": ["endless"],
     "addedOn": "2022-09-19"
   },
   {
-    "title": "tetris",
+    "filename": "tetris",
     "author": "neesh",
     "img": "",
     "tags": ["classic"],
     "addedOn": "2022-09-12"
   },
   {
-    "title": "simple_maze",
+    "filename": "simple_maze",
     "author": "Itamar Davidyan",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-13"
   },
   {
-    "title": "killpigs",
+    "filename": "killpigs",
     "author": "luiç",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-13"
   },
   {
-    "title": "TheTombOfAThousandTerrors",
+    "filename": "TheTombOfAThousandTerrors",
     "author": "Fabian",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-13"
   },
   {
-    "title": "reversi",
+    "filename": "reversi",
     "author": "veehj",
     "img": "",
     "tags": ["classic", "multiplayer"],
     "addedOn": "2022-09-13"
   },
   {
-    "title": "Flurffy",
+    "filename": "Flurffy",
     "author": "Lucas",
     "img": "",
     "tags": ["classic"],
     "addedOn": "2022-09-13"
   },
   {
-    "title": "snake_game",
+    "filename": "snake_game",
     "author": "souvikpal2000",
     "img": "",
     "tags": ["classic"],
     "addedOn": "2022-09-13"
   },
   {
-    "title": "Piano",
+    "filename": "Piano",
     "author": "Scott",
     "img": "",
     "tags": ["simulation"],
     "addedOn": "2022-09-14"
   },
   {
-    "title": "desi-pong",
+    "filename": "desi-pong",
     "author": "Arnob Das",
     "img": "",
     "tags": ["classic"],
     "addedOn": "2022-09-14"
   },
   {
-    "title": "Trash_IT",
+    "filename": "Trash_IT",
     "author": "N Rizwan",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-14"
   },
   {
-    "title": "Paint_IT",
+    "filename": "Paint_IT",
     "author": "N Rizwan",
     "img": "",
     "tags": ["sandbox"],
     "addedOn": "2022-09-14"
   },
   {
-    "title": "love_lock",
+    "filename": "love_lock",
     "author": "N Rizwan",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-15"
   },
   {
-    "title": "color_domination",
+    "filename": "color_domination",
     "author": "adrianoapj",
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2022-09-19"
   },
   {
-    "title": "infinite_maze",
+    "filename": "infinite_maze",
     "author": "pertark",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-22"
   },
   {
-    "title": "Falling_Water",
+    "filename": "Falling_Water",
     "author": "Captainexpo",
     "img": "",
     "tags": ["simulation", "advanced"],
     "addedOn": "2022-09-23"
   },
   {
-    "title": "goaled",
+    "filename": "goaled",
     "author": "Ronan Verma",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-24"
   },
   {
-    "title": "2D_life",
+    "filename": "2D_life",
     "author": "Leonard (Omay)",
     "img": "",
     "tags": ["simulation", "hackable", "classic", "sandbox"],
     "addedOn": "2022-09-25"
   },
   {
-    "title": "maze_runner",
+    "filename": "maze_runner",
     "author": "wetf",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-26"
   },
   {
-    "title": "mandelbrot",
+    "filename": "mandelbrot",
     "author": "HenryBass",
     "img": "",
     "tags": ["sandbox", "simulation", "hackable"],
     "addedOn": "2022-09-14"
   },
     {
-    "title": "Treasure_Hunt",
+    "filename": "Treasure_Hunt",
     "author": "Manikandan_M",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-28"
   },
     {
-    "title": "LUCK",
+    "filename": "LUCK",
     "author": "Ethan",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-28"
   },
     {
-    "title": "Breakout",
+    "filename": "Breakout",
     "author": "Holly",
     "img": "",
     "tags": ["puzzle", "classic"],
     "addedOn": "2022-09-28"
   },
   {
-    "title": "alien_invaders",
+    "filename": "alien_invaders",
     "author": "stati30241",
     "img": "",
     "tags": ["classic"],
     "addedOn": "2022-09-28"
   },
   {
-    "title": "simon",
+    "filename": "simon",
     "author": "riley",
     "img": "",
     "tags": ["classic"],
     "addedOn": "2022-09-29"
  },
  {
-    "title": "gravity-is-a-thing",
+    "filename": "gravity-is-a-thing",
     "author": "Will_Rigney",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-09-30"
  },
  {
-    "title": "tower_of_hanoi",
+    "filename": "tower_of_hanoi",
     "author": "nicholasz2510",
     "img": "",
     "tags": ["puzzle", "classic"],
     "addedOn": "2022-10-02"
  },
  {
-    "title": "PASS_ALL",
+    "filename": "PASS_ALL",
     "author": "Shivang0",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-03"
  },
  {
-    "title": "floppyMatch",
+    "filename": "floppyMatch",
     "author": "GBan22",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-05"
  },
  {
-    "title": "maze7",
+    "filename": "maze7",
     "author": "akeell",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-06"
  },
  {
-    "title": "flying_game",
+    "filename": "flying_game",
     "author": "Zainab Khorakiwala",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-08"
  },
  {
-    "title": "catch_orpheus",
+    "filename": "catch_orpheus",
     "author": "sampoder",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-08"
  },
  {
-    "title": "candy_rush",
+    "filename": "candy_rush",
     "author": "tasbia uddin",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-07"
  },
  {
-    "title": "bolt_battle",
+    "filename": "bolt_battle",
     "author": "Arnav Ambre",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-10"
  },
  {
-    "title": "Hectic_Hockey",
+    "filename": "Hectic_Hockey",
     "author": "Colton",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-12"
  },
  {
-    "title": "puzzle_runner",
+    "filename": "puzzle_runner",
     "author": "Shanath",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-12"
  },
  {
-    "title": "time_puzzle",
+    "filename": "time_puzzle",
     "author": "Akeell",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-13"
  },
  {
-    "title": "eat_the_cake",
+    "filename": "eat_the_cake",
     "author": "_klyap_",
     "img": "",
     "tags": ["beginner", "hackable"],
     "addedOn": "2022-10-13"
  },
  {
-    "title": "3072_A_2048_Spin-Off",
+    "filename": "3072_A_2048_Spin-Off",
     "author": "sahitid",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-14"
  },
  {
-    "title": "pipes_puzzle",
+    "filename": "pipes_puzzle",
     "author": "RayhanADev",
     "img": "pipes_puzzle",
     "tags": ["puzzle"],
     "addedOn": "2022-10-14"
  },
  {
-    "title": "Lava_and_Water",
+    "filename": "Lava_and_Water",
     "author": "Akeell",
     "img": "",
     "tags": ["puzzle", "classic"],
     "addedOn": "2022-10-15"
  },
  {
-    "title": "Music!",
+    "filename": "Music!",
     "author": "Akeell",
     "img": "",
     "tags": [],
     "addedOn": "2022-10-16"
  },
  {
-    "title": "Space_Invasion",
+    "filename": "Space_Invasion",
     "author": "Agent-Shu",
     "img": "",
     "tags": ["endless"],
     "addedOn": "2022-10-18"
  },
  {
-    "title": "Call_911",
+    "filename": "Call_911",
     "author": "Rohit",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-18"
  },
  {
-    "title": "2048_Alphabet_Edition",
+    "filename": "2048_Alphabet_Edition",
     "author": "OptimalBlock489",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-19"
  },
  {
-    "title": "box_maze",
+    "filename": "box_maze",
     "author": "Boden",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-19"
  },
  {
-    "title": "Puzzle_Game",
+    "filename": "Puzzle_Game",
     "author": "Amelia",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-20"
  },
  {
-    "title": "BreadMaze",
+    "filename": "BreadMaze",
     "author": "Aiden",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-20"
  },
  {
-    "title": "battle_bots",
+    "filename": "battle_bots",
     "author": "kyle",
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2022-10-20"
  },
  {
-    "title": "sprig_machine",
+    "filename": "sprig_machine",
     "author": "Leonard (Omay)",
     "img": "",
     "tags": ["sandbox", "puzzle"],
     "addedOn": "2022-10-21"
  },
  {
-    "title": "Zooter",
+    "filename": "Zooter",
     "author": "PerrinPerson",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-10-21"
  },
  {
-    "title": "generic_dungeon_crawler",
+    "filename": "generic_dungeon_crawler",
     "author": "Lingdong Huang",
     "img": "",
     "tags": ["dungeon"],
     "addedOn": "2022-10-24"
  },
  {
-    "title": "Tron",
+    "filename": "Tron",
     "author": "Robert Carmen",
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2022-10-30"
  },
  {
-    "title": "chess",
+    "filename": "chess",
     "author": "Thomas Stubblefield",
     "img": "",
     "tags": ["multiplayer", "classic"],
     "addedOn": "2022-10-31"
  },
  {
-    "title": "escape_room",
+    "filename": "escape_room",
     "author": "Sampanna and Dhruv",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-11-01"
  },
  {
-    "title": "QuadraPedal",
+    "filename": "QuadraPedal",
     "author": "Jamarkis",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-11-04"
  },
  {
-    "title": "Bert_Blaster",
+    "filename": "Bert_Blaster",
     "author": "Waterbyte",
     "img": "",
     "tags": ["endless"],
     "addedOn": "2022-11-05"
  },
  {
-    "title": "Infinite_Shooter",
+    "filename": "Infinite_Shooter",
     "author": "not_a_robot",
     "img": "",
     "tags": ["endless"],
     "addedOn": "2022-11-05"
  },
  {
-    "title": "PushBattle",
+    "filename": "PushBattle",
     "author": "MatrixMongoose",
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2022-11-05"
  },
  {
-    "title": "BRICK_DODGER",
+    "filename": "BRICK_DODGER",
     "author": "Logan Fick",
     "img": "",
     "tags": ["endless"],
     "addedOn": "2022-11-06"
  },
  {
-    "title": "Monty_Hall",
+    "filename": "Monty_Hall",
     "author": "Leonard (Omay)",
     "img": "",
     "tags": ["beginner", "simulation"],
     "addedOn": "2022-11-06"
  },
  {
-    "title": "Art",
+    "filename": "Art",
     "author": "Leonard (Omay)",
     "img": "",
     "tags": ["sandbox"],
     "addedOn": "2022-11-06"
  },
  {
-    "title": "Builder",
+    "filename": "Builder",
     "author": "Leonard (Omay)",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-11-06"
  },
  {
-    "title": "Apple_Skedaddle",
+    "filename": "Apple_Skedaddle",
     "author": "DieselFalcon",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-11-06"
  },
  {
-    "title": "inconsequential_leveldungeon",
+    "filename": "inconsequential_leveldungeon",
     "author": "periwinkle",
     "img": "",
     "tags": ["dungeon"],
     "addedOn": "2022-11-06"
  },
  {
-    "title": "dihydrogen_monoxide_free_fall",
+    "filename": "dihydrogen_monoxide_free_fall",
     "author": "aksel s.",
     "img": "",
     "tags": ["endless"],
     "addedOn": "2022-11-06"
  },
  {
-    "title": "infinite_cat",
+    "filename": "infinite_cat",
     "author": "Deven Jadhav",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-11-07"
  },
  {
-    "title": "L0st",
+    "filename": "L0st",
     "author": "B00",
     "img": "",
     "tags": ["puzzle"],
