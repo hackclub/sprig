@@ -926,5 +926,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-11-07"
- }
+ },
+ {
+    "filename": "conwaysgameoflife",
+    "title": "Conway's Game of Life",
+    "author": "the456gamer",
+    "img": "",
+    "tags": ["sandbox", "advanced", "simulation"],
+    "addedOn": "2022-11-08"
+  }
 ]
