@@ -3,7 +3,7 @@
 @author: LUKÁCS Gergely
 
 HOW TO PLAY:
-Amoeba is a two-player strategy game, a version of gomoku.
+Amoeba is a two-player strategy game, a version of Gomoku.
 To win, you need to place (at least) five marks in a line.
 The two players take it in turns to place a mark on the grid.
 The aim of the game is to place five of your own marks in
