@@ -37,7 +37,7 @@ let angle, dist, hit;
 
 var screen = ``
 
-var map =
+var henryMap =
 `#########
 #.......#
 #.$.$...#
@@ -61,7 +61,7 @@ for (let i = 0; i < screenSize; i++) {
     screen += "\n"
 }
 
-map = map.split("\n").map(function(x) {
+henryMap = henryMap.split("\n").map(function(x) {
     return x.split("")
 });
 
@@ -275,7 +275,7 @@ onInput("w", () => {
     var nx = Math.cos(vAngle)
     var ny = Math.sin(vAngle)
     if (inRange(x - nx, -1, mapSize) && inRange(y - ny, 0, mapSize)) {
-        if (map[Math.floor(x - nx)][Math.floor(y - ny)] == ".") {
+        if (henryMap[Math.floor(x - nx)][Math.floor(y - ny)] == ".") {
             y -= ny;
             x -= nx;
         }
@@ -286,7 +286,7 @@ onInput("s", () => {
     var nx = Math.cos(vAngle)
     var ny = Math.sin(vAngle)
     if (inRange(x + nx, -1, mapSize) && inRange(y + ny, 0, mapSize)) {
-        if (map[Math.floor(x + nx)][Math.floor(y + ny)] == ".") {
+        if (henryMap[Math.floor(x + nx)][Math.floor(y + ny)] == ".") {
             y += ny;
             x += nx;
         }
@@ -320,7 +320,7 @@ function rayCast(startx, starty, angle, dAngle) {
         let cx = startx - (dx * i)
         let cy = starty - (dy * i)
         lastDist = getDist(startx, starty, cx, cy) * Math.cos(dAngle)
-        hit = map[Math.floor(cx)][Math.floor(cy)]
+        hit = henryMap[Math.floor(cx)][Math.floor(cy)]
         if (hit !== ".") {
            return [i * Math.cos(dAngle), hit, Math.floor(cx), Math.floor(cy)]
         }
@@ -394,13 +394,13 @@ var tick = () => {
                 clearTile(i, j);
                 addSprite(i, j, red);
             } else if (i <= mapSize && j <= mapSize) {
-                if (map[i][j] == ".") {
+                if (henryMap[i][j] == ".") {
                     clearTile(i, j);
                     addSprite(i, j, floor);
-                } else if (map[i][j] == "#") {
+                } else if (henryMap[i][j] == "#") {
                     clearTile(i, j);
                     addSprite(i, j, wall3);
-                } else if (map[i][j] == "$") {
+                } else if (henryMap[i][j] == "$") {
                     clearTile(i, j);
                     addSprite(i, j, yellow);
                 } else if (i == hit[2] && j == hit[3]) {
