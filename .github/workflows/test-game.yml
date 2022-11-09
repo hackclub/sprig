@@ -23,11 +23,11 @@ jobs:
       - name: Init Submodules
         run: git submodule update --init --recursive
       - name: Setup Build Directory
-        run: mkdir build && cd build
+        run: mkdir build
       - name: Cmake
-        run: cmake ..
+        run: cd build && cmake ..
       - name: Make
-        run: make
+        run: cd build && make
 
   test-game:
     runs-on: ubuntu-latest
