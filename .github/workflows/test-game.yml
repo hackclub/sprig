@@ -1,0 +1,7 @@
+name: test-game
+run-name: Testing ${{ github.actor }}'s Sprig game
+
+on: 
+  push:
+    branches:
+      - main
