@@ -7,12 +7,33 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
+  build-spade:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          repository: hackclub/spade
+      - name: Init Submodules
+        run: git submodule update --init --recursive
+      - name: Setup Build Directory
+        run: mkdir build && cd build
+      - name: Cmake
+        run: cmake ..
+      - name: Make
+        run: make
+
   test-game:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Git Checkout
+      - name: Checkout
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
