@@ -33,6 +33,7 @@ jobs:
         run: cd build && make
 
   test-game:
+    needs: build-spade
     runs-on: ubuntu-latest
     
     steps:
