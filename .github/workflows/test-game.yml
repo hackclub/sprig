@@ -2,6 +2,20 @@ name: test-game
 run-name: Testing ${{ github.actor }}'s Sprig game
 
 on: 
-  push:
+  workflow_dispatch:
+  pull_request:
     branches:
       - main
+
+jobs:
+  test-game:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1.1.1
