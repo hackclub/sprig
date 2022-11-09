@@ -2,34 +2,31 @@ import { baseEngine } from "../engine/baseEngine.js"
 import { iterateReader } from "https://deno.land/std@0.162.0/streams/conversion.ts";
 import * as pathUtils from "https://deno.land/std/path/mod.ts";
 
-async function spadeRun(path) {
-  const H = Deno.env.get("HOME");
-  const p = Deno.run({
-    cmd: [H + "/spade/pc_build/spade", H + "/sprig/games/" + path],
-    stdout: "piped",
-    stdin: "piped"
-  });
-
-  /* feels like this is necessary, to get 'er warmed up */
-  await new Promise(res => setTimeout(res, 100));
-
-  async function *mapReader() {
-    const decoder = new TextDecoder();
-
-    for await (const out of iterateReader(p.stdout))
-      yield decoder.decode(out).trim();
-  }
-
-  const encoder = new TextEncoder();
-  return {
-    out: mapReader(),
-    simKey: key => p.stdin.write(encoder.encode(key + '\n')),
-    cleanup: () => p.close(),
-  };
-}
-
-// for (const slug of gameSlugs)
-//   await testScript(slug);
+// async function spadeRun(path) {
+//   const H = Deno.env.get("HOME");
+//   const p = Deno.run({
+//     cmd: [H + "/spade/pc_build/spade", H + "/sprig/games/" + path],
+//     stdout: "piped",
+//     stdin: "piped"
+//   });
+// 
+//   /* feels like this is necessary, to get 'er warmed up */
+//   await new Promise(res => setTimeout(res, 100));
+// 
+//   async function *mapReader() {
+//     const decoder = new TextDecoder();
+// 
+//     for await (const out of iterateReader(p.stdout))
+//       yield decoder.decode(out).trim();
+//   }
+// 
+//   const encoder = new TextEncoder();
+//   return {
+//     out: mapReader(),
+//     simKey: key => p.stdin.write(encoder.encode(key + '\n')),
+//     cleanup: () => p.close(),
+//   };
+// }
 
 let brokenGames = [];
 const SKIP = ["mandelbrot.js"];
@@ -79,26 +76,27 @@ async function testScript(name) {
   const choose = arr => arr[Math.floor(Math.random() * arr.length)];
   const shakespeareMonKeys = [...Array(1000)].map(_ => choose("wasdjilk".split('')));
 
-  const spade = await spadeRun(name);
+  // const spade = await spadeRun(name);
   try {
-    const compareMaps = async () => {
-      const spadeMap = (await spade.out.next()).value;
-      const sprigMap = gridToString(api);
+    // const compareMaps = async () => {
+    //   const spadeMap = (await spade.out.next()).value;
+    //   const sprigMap = gridToString(api);
 
-      if (spadeMap != sprigMap) {
-        const text = `maps different!\nsprig map:\n${sprigMap}\nspade map:\n${spadeMap}`;
-        throw new Error(text);
-      }
-    }
+    //   if (spadeMap != sprigMap) {
+    //     const text = `maps different!\nsprig map:\n${sprigMap}\nspade map:\n${spadeMap}`;
+    //     throw new Error(text);
+    //   }
+    // }
 
     console.log(`running ${name}!`);
     const fn = new Function(...Object.keys(api), script);
     fn(...Object.values(api)); /* init */
 
     for (const key of shakespeareMonKeys) {
-      await compareMaps();
+      // await compareMaps();
       simulateKey(key);
-      await spade.simKey(key);
+      // await spade.simKey(key);
+
       // if (log) console.log(`<<< pressing ${key} >>>`);
       // if (log) console.log(gridToString(api));
     }
