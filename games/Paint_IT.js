@@ -196,14 +196,42 @@ m..............................................................................m
 mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm`;
 setMap(Canvas)
 //================================
-onInput("i", () => {addSprite(ax, ay, black);
-                   playTune(w);});
-onInput("j", () => {addSprite(bx, by, red);
-                   playTune(s);});
-onInput("k", () => {addSprite(cx, cy, blue);
-                   playTune(d);});
-onInput("l", () => {addSprite(dx, dy, yellow);
-                   playTune(a);});
+onInput("i", () => {
+  ax = Math.min(width()-1, ax);
+  ax = Math.max(0, ax);
+  ay = Math.min(height()-1, ay);
+  ay = Math.max(0, ay);
+  addSprite(ax, ay, black);
+  playTune(w);
+});
+
+onInput("j", () => {
+  bx = Math.min(width()-1, bx);
+  bx = Math.max(0, bx);
+  by = Math.min(height()-1, by);
+  by = Math.max(0, by);
+  addSprite(bx, by, red);
+  playTune(s);
+});
+
+onInput("k", () => {
+  cx = Math.min(width()-1, cx);
+  cx = Math.max(0, cx);
+  cy = Math.min(height()-1, cy);
+  cy = Math.max(0, cy);
+  addSprite(cx, cy, blue);
+  playTune(d);
+});
+
+onInput("l", () => {
+  dx = Math.min(width()-1, dx);
+  dx = Math.max(0, dx);
+  dy = Math.min(height()-1, dy);
+  dy = Math.max(0, dy);
+  addSprite(dx, dy, yellow);
+  playTune(a);
+});
+
 //================================
 onInput("w", () => {ay--});
 onInput("a", () => {ax--});

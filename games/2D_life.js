@@ -217,6 +217,5 @@ onInput("k", () => {
   step();
 });
 onInput("l", () => {
-  setMap(levels[level]);
   addSprite(0, 0, sel);
 });

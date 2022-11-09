@@ -151,10 +151,6 @@ afterInput(() => {
   
 });
 `;
-
-  const fullText = state.codemirror.state.doc.toString();
-  const matches = [ ...fullText.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
-  state.codemirror.collapseRanges(matches.map((match) => [ match.index, match.index + 1]));
   
   return html`
     <div @click=${() => {
@@ -182,18 +178,13 @@ const menu = (state) => html`
 
         <div class="menu-spacer" />
 
-        <div class=${[ "popout-container", state.shareLinkState !== "idle" ? "show" : "" ].join(" ")}>
-          share &rsaquo;
-          <div class="popout-list">
-            <div @click=${e => dispatch("SAVE_TO_FILE")}>as file</div>
-            <div @click=${e => dispatch("GET_URL")}>
-              ${{
-                idle: 'as link',
-                loading: 'loading...',
-                copied: 'copied!'
-              }[state.shareLinkState]}
-            </div>
-          </div>
+        <div @click=${e => dispatch("SAVE_TO_FILE")}>download file</div>
+        <div @click=${e => dispatch("GET_URL")}>
+          ${{
+            idle: 'copy link',
+            loading: 'loading...',
+            copied: 'copied!'
+          }[state.shareLinkState]}
         </div>
       </div>
     </div>
@@ -224,6 +215,23 @@ const menu = (state) => html`
     </div>
   </div>
 `
+
+// pop out menu for share link
+/*      
+<div class=${[ "popout-container", state.shareLinkState !== "idle" ? "show" : "" ].join(" ")}>
+  share &rsaquo;
+  <div class="popout-list">
+    <div @click=${e => dispatch("SAVE_TO_FILE")}>as file</div>
+    <div @click=${e => dispatch("GET_URL")}>
+      ${{
+        idle: 'as link',
+        loading: 'loading...',
+        copied: 'copied!'
+      }[state.shareLinkState]}
+    </div>
+  </div>
+</div>
+*/
 
 const drawSample = ({ name, link }) => {
   return html`

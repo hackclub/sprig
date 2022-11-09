@@ -110,6 +110,13 @@ const ACTIONS = {
     
     state.staleRun = true;
     dispatch("RENDER");
+
+    // fold all tagged template literals
+    setTimeout(() => {
+      const fullText = state.codemirror.state.doc.toString();
+      const matches = [ ...fullText.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
+      state.codemirror.collapseRanges(matches.map((match) => [ match.index, match.index + 1]));
+    }, 100);
   },
   SAVE_TO_STORAGE(args, state) {
     if (state.newDocument) {

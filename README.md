@@ -1,42 +1,38 @@
-# :leaves: [Hack Club Sprig](https://sprig.hackclub.com) :leaves: 
+# :leaves: Hack Club Sprig :leaves: 
 
-[Hack Club's](https://hackclub.com) [Sprig](https://sprig.hackclub.com) is a game console where **every user is a creator**. It can only be obtained by building a tile-based game in the [web-based game editor](https://editor.sprig.hackclub.com) and shipping it in the [community gallery](https://sprig.hackclub.com/gallery).
+**[💻 Online Editor: Make a game](https://editor.sprig.hackclub.com)** | **[👀 Gallery: Find games](https://sprig.hackclub.com/gallery)** | **[🕸 Website](https://sprig.hackclub.com)** 
 
-**Make your first Sprig game [here](https://editor.sprig.hackclub.com/?file=https://raw.githubusercontent.com/hackclub/sprig/main/games/getting_started.js) 👀**
+[Sprig](https://sprig.hackclub.com) is a game console where **every user is a creator**. It can only be obtained by building a tile-based game in the [web-based game editor](https://editor.sprig.hackclub.com) and shipping it in the [community gallery](https://sprig.hackclub.com/gallery). It's made by [Hack Club](https://hackclub.com).
 
-You should be able to get started in Sprig with very little programming experience. Even if you're an expert, you should still be able to have fun. 
-
-**Find games in our gallery [here](https://sprig.hackclub.com/gallery) <img src="https://emoji.slack-edge.com/T0266FRGM/sprig-dino/6f01fec60b51b343.png" width="16">**
-
-Sprig games are designed to be shared and hacked on with friends. Every game submitted is easily viewable and editable in our gallery allowing people to learn from and build off each other. 
-
-<p align="center">
+<p align="left">
 <a>
 <img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://user-images.githubusercontent.com/27078897/186769641-5b1181b4-9969-4276-9fa0-9f15140e4a9b.jpg">
 </a>
 </p>
 
+You should be able to get started in Sprig with very little programming experience. Even if you're an expert, you should still be able to have fun. Sprig games are designed to be shared and hacked on with friends. Every game submitted is easily viewable and editable in our gallery allowing people to learn from and build off each other. 
+
 ## Sprig is a
 
-**custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenage hacker that successfully shares a game they create in our community gallery.
+**custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenage hacker that successfully shares a game they create in our [community gallery](https://sprig.hackclub.com/gallery).
 
-<p align="center">
-<a href="https://sprig.hackclub.com/gallery">
-<img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://user-images.githubusercontent.com/27078897/199109660-b69ed368-63d9-4280-ba89-309431bed507.png">
+<p align="left">
+<a>
+<img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://sprig.hackclub.com/stories-tiny/sprig-back.jpeg">
 </a>
 </p>
 
 **[web-based game editor](https://editor.sprig.hackclub.com)** that transforms learning to code from studying language syntax to making small creative projects. The Sprig game engine exposes a small construction kit for making tile-based games. This construction kit helps you focus on being creative instead of learning big APIs. The games are just JavaScript and we built a custom system to run that same JavaScript on the microcontroller!
 
-<p align="center">
+<p align="left">
 <a href="https://editor.sprig.hackclub.com">
 <img width="500" alt="Screen Shot 2022-08-22 at 4 04 08 PM" src="https://user-images.githubusercontent.com/27078897/186008909-cc9ea9d5-5843-487e-ac3a-29330496eed1.png">
 </a>
 </p>
 
-**hardware development kit**. It’s not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It’s a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.
+**[hardware development kit](https://github.com/hackclub/sprig/blob/main/docs/ASSEMBLY.md)**. It’s not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It’s a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.
 
-<p align="center">
+<p align="left">
 <a href="https://sprig.hackclub.com">
 <img width="500" alt="Screen Shot 2022-08-22 at 4 04 08 PM" src="https://user-images.githubusercontent.com/27078897/186015708-860df540-6c41-4400-aed5-d0fe8c9d31aa.jpg">
 </a>
@@ -48,14 +44,15 @@ Sprig games are designed to be shared and hacked on with friends. Every game sub
 
 ## You Ship, We Ship
 
-make a game 
-&rarr; share it with the community 
-&rarr; receive your device 
-&rarr; play Sprig games on it 
-&rarr; hack on the device for more projects
+Make a game 
+&rarr; Share it with the community 
+&rarr; Receive your device 
+&rarr; Play Sprig games on it 
+&rarr; Hack on the device for more projects
 
 ***Only teenagers and younger can receive Sprigs!*** All are welcome to submit to the [gallery](https://sprig.hackclub.com/gallery) though.
 
+[Make your first Sprig game!](https://editor.sprig.hackclub.com/?file=https://raw.githubusercontent.com/hackclub/sprig/main/games/getting_started.js)
 ## Philosophy
 
 People learn best when they make things that they care about, which they can then share with others. This type of learning philosophy is called constructionism, and Sprig is a type of microworld. A microworld is an environment where you can discover programming by using it to express yourself. 

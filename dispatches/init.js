@@ -54,26 +54,19 @@ export async function init(args, state) {
   });
 
   const file = getParam("file");
-  removeParam("file");
+  // removeParam("file");
   if (file) {
     const code = await loadFromURL(file);
     dispatch("LOAD_NEW_GAME", { code });
   }
 
   const id = getParam("id");
-  removeParam("id");
+  // removeParam("id");
   if (id) {
     const url = `https://project-bucket-hackclub.s3.eu-west-1.amazonaws.com/${id}.json`
     const json = await fetch(url, { mode: "cors" }).then((r) => r.json());
     dispatch("LOAD_NEW_GAME", { code: json.text });
   }
-
-  // fold all tagged template literals
-  setTimeout(() => {
-    const fullText = state.codemirror.state.doc.toString();
-    const matches = [ ...fullText.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
-    state.codemirror.collapseRanges(matches.map((match) => [ match.index, match.index + 1]));
-  }, 100);
 
   const container = document.querySelector(".game-canvas-container");
   new ResizeObserver(sizeGameCanvas).observe(container);

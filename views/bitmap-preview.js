@@ -9,6 +9,8 @@ class BitmapPreview extends HTMLElement {
   }
   
   connectedCallback() {
+    if (this.hasShadow) return;
+    this.hasShadow = true;
     const shadow = this.attachShadow({ mode: "open" });
     this.canvas = shadow.appendChild(document.createElement("canvas"));
     this.canvas.style.display = "block";

@@ -215,6 +215,7 @@ let gameOver = false;
 const checkGameOver = () => getEmptyTiles().length === 0;
 
 function step() {
+  if (gameOver) return;
   addNewTile();
   drawScore(score);
   blocks

@@ -103,43 +103,67 @@ setPushables({
 
 
 onInput("s", () => {
-  addSprite(getFirst(player2).x, getFirst(player2).y, stream2)
-  getFirst(player2).y += 1
+  const p2 = getFirst(player2);
+  if (!p2) return;
+  
+  addSprite(p2.x, p2.y, stream2)
+  p2.y += 1
 });
 
 onInput("w", () => {
-  addSprite(getFirst(player2).x, getFirst(player2).y, stream2)
-  getFirst(player2).y -= 1
+  const p2 = getFirst(player2);
+  if (!p2) return;
+  
+  addSprite(p2.x, p2.y, stream2)
+  p2.y -= 1
 });
 
 onInput("a", () => {
-  addSprite(getFirst(player2).x, getFirst(player2).y, stream2)
-  getFirst(player2).x -= 1
+  const p2 = getFirst(player2);
+  if (!p2) return;
+  
+  addSprite(p2.x, p2.y, stream2)
+  p2.x -= 1
 });
 
 onInput("d", () => {
-  addSprite(getFirst(player2).x, getFirst(player2).y, stream2)
-  getFirst(player2).x += 1
+  const p2 = getFirst(player2);
+  if (!p2) return;
+  
+  addSprite(p2.x, p2.y, stream2)
+  p2.x += 1
 });
 
 onInput("i", () => {
-  addSprite(getFirst(player).x, getFirst(player).y, stream)
-  getFirst(player).y -= 1
+  const p1 = getFirst(player);
+  if (!p1) return;
+  
+  addSprite(p1.x, p1.y, stream)
+  p1.y -= 1
 });
 
 onInput("k", () => {
-  addSprite(getFirst(player).x, getFirst(player).y, stream)
-  getFirst(player).y += 1
+  const p1 = getFirst(player);
+  if (!p1) return;
+  
+  addSprite(p1.x, p1.y, stream)
+  p1.y += 1
 });
 
 onInput("j", () => {
-  addSprite(getFirst(player).x, getFirst(player).y, stream)
-  getFirst(player).x -= 1
+  const p1 = getFirst(player);
+  if (!p1) return;
+  
+  addSprite(p1.x, p1.y, stream)
+  p1.x -= 1
 });
 
 onInput("l", () => {
-  addSprite(getFirst(player).x, getFirst(player).y, stream)
-  getFirst(player).x += 1
+  const p1 = getFirst(player);
+  if (!p1) return;
+  
+  addSprite(p1.x, p1.y, stream)
+  p1.x += 1
 });
 
 afterInput(() => {

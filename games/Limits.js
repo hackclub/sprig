@@ -397,21 +397,21 @@ addText("Level Select", {y: 9, color: color`0`});
 //addText(moves.toString(), { x: 1, y: 1, color: color`3` });
 
 onInput("w", () => {
-  if (moves >= 1) {
+  if (moves >= 1 && getFirst(player)) {
     getFirst(player).y -= 1
     moves -= 1;
   } 
 });
   
 onInput("a", () => {
-  if (moves >= 1) {
+  if (moves >= 1 && getFirst(player)) {
     getFirst(player).x -= 1
     moves -= 1;
   }
 });
   
 onInput("d", () => {
-  if (moves >= 1) {
+  if (moves >= 1 && getFirst(player)) {
     getFirst(player).x += 1
     moves -= 1;
   }
@@ -438,7 +438,7 @@ onInput("s", () => {
     level = selected + 1;
     setMap(levels[selected + 1]);
   }
-  else if (moves >= 1) {
+  else if (moves >= 1 && getFirst(player)) {
     getFirst(player).y += 1
     moves -= 1;
   }
@@ -496,53 +496,45 @@ onInput("l", () => {
 
 afterInput(() => {
   
-  try {
-    if (getFirst(player).x == getFirst(bluePortal).x) {
-      if (getFirst(player).y == getFirst(bluePortal).y) {
-        setSolids([solid]);
-        getFirst(player).x = getFirst(redPortal).x;
-        getFirst(player).y = getFirst(redPortal).y;
-        setSolids([player, solid]);
-      }
+
+  if (getFirst(bluePortal) && getFirst(player) && getFirst(player).x == getFirst(bluePortal).x) {
+    if (getFirst(player).y == getFirst(bluePortal).y) {
+      setSolids([solid]);
+      getFirst(player).x = getFirst(redPortal).x;
+      getFirst(player).y = getFirst(redPortal).y;
+      setSolids([player, solid]);
     }
-    else if (getFirst(player).x == getFirst(redPortal).x) {
-      if (getFirst(player).y == getFirst(redPortal).y) {
-        setSolids([solid]);
-        getFirst(player).x = getFirst(bluePortal).x;
-        getFirst(player).y = getFirst(bluePortal).y;
-        setSolids([player, solid]);
-      }
+  }
+  else if (getFirst(redPortal) && getFirst(player) && getFirst(player).x == getFirst(redPortal).x) {
+    if (getFirst(player).y == getFirst(redPortal).y) {
+      setSolids([solid]);
+      getFirst(player).x = getFirst(bluePortal).x;
+      getFirst(player).y = getFirst(bluePortal).y;
+      setSolids([player, solid]);
     }
-  } catch (error){
-    console.error(error);
+  }
+ 
+  if (getFirst(player) && getFirst(move) && getFirst(player).x == getFirst(move).x) {
+    if (getFirst(player).y == getFirst(move).y) {
+      moves += 10;
+      let x = getFirst(player).x;
+      let y = getFirst(player).y;
+      playTune(pickUp);
+      clearTile(x, y);
+      addSprite(x, y, player);
+    }
   }
 
-  try {
-    if (getFirst(player).x == getFirst(move).x) {
-      if (getFirst(player).y == getFirst(move).y) {
-        moves += 10;
-        let x = getFirst(player).x;
-        let y = getFirst(player).y;
-        playTune(pickUp);
-        clearTile(x, y);
-        addSprite(x, y, player);
-      }
+
+
+  if (getFirst(player) && getFirst(win) && getFirst(player).x == getFirst(win).x) {
+    if (getFirst(player).y == getFirst(win).y) {
+      level += 1;
+      setMap(levels[level]);
+      moves = 20;
     }
-  } catch (error) {
-    console.error(error);
   }
 
-  try {
-    if (getFirst(player).x == getFirst(win).x) {
-      if (getFirst(player).y == getFirst(win).y) {
-        level += 1;
-        setMap(levels[level]);
-        moves = 20;
-      }
-    }
-  } catch (error) {
-    console.error(error);
-  }
 
   if (level != 0 && level != 12) {
     clearText();

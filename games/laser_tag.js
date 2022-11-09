@@ -289,6 +289,9 @@ initLasers();
 onInput("w", _ => {
     const p1 = getFirst(player1);
     const p2 = getFirst(player2);
+
+    if (!p1 || !p2) return;
+
     if (p1.y < p2.y) {
         p1.y -= 1;
         p2.y -= 1;
@@ -302,6 +305,9 @@ onInput("w", _ => {
 onInput("s", _ => {
     const p1 = getFirst(player1);
     const p2 = getFirst(player2);
+
+    if (!p1 || !p2) return;
+
     if (p1.y > p2.y) {
         p1.y += 1;
         p2.y += 1;
@@ -314,6 +320,9 @@ onInput("s", _ => {
 onInput("a", _ => {
     const p1 = getFirst(player1);
     const p2 = getFirst(player2);
+
+    if (!p1 || !p2) return;
+
     if (p1.x < p2.x) {
         p1.x -= 1;
         p2.x -= 1;
@@ -326,6 +335,9 @@ onInput("a", _ => {
 onInput("d", _ => {
     const p1 = getFirst(player1);
     const p2 = getFirst(player2);
+
+    if (!p1 || !p2) return;
+    
     if (p1.x > p2.x) {
         p1.x += 1;
         p2.x += 1;
