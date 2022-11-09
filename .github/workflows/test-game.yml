@@ -20,7 +20,7 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.5.0
         with:
           repository: hackclub/spade
       - name: Init Submodules
@@ -38,7 +38,7 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.5.0
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
