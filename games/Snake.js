@@ -168,7 +168,7 @@ const music = tune`
 1764.7058823529412: d5~1764.7058823529412 + f5/1764.7058823529412 + c4/1764.7058823529412 + e4/1764.7058823529412 + g4/1764.7058823529412,
 1764.7058823529412`;
 
-const playback = playTune(music, Infinity)
+let playback = playTune(music, Infinity)
 
 let direction = "e";
 let directionToSet = "e";
@@ -259,7 +259,7 @@ onInput("i", () => {
   addScore();
 
   playback.end();
-  const playback = playTune(music, Infinity);
+  playback = playTune(music, Infinity);
 });
 
 placeFood();
