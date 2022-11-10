@@ -16,6 +16,7 @@ const box_green = "b";
 const goal_green = "g";
 const box_red = "r";
 const goal_red = "x";
+const background = "z";
 
 
 
@@ -122,77 +123,94 @@ CC6CCCCC6CCCCC6C
 ................
 ................
 ................`],
+  [ background,  bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777`],
 );
 
 let level = 0;
 const levels = [
   map`
-..www...
-..wgw...
-..w.wwww
+wwwwwwww
+wwwgwwww
+www.wwww
 wwwb.bgw
 wg.bpwww
-wwwwbw..
-...wgw..
-...www..`,
+wwwwbwww
+wwwwgwww
+wwwwwwww`,
   map`
-..www...
-.wwgw...
-.w.bwwww
+wwwwwwww
+wwwgwwww
+ww.bwwww
 ww...bpw
 wg.bbgww
-wwww.ww.
-...wgw..
-...www..`,
+wwww.www
+wwwwgwww
+wwwwwwww`,
   map`
-www....
+wwwwwww
 wgwwwww
 wgg...w
 w.bbbpw
 w....ww
-wwwwww.`,
+wwwwwww`,
   map`
-..wwww..
-..w.pwww
-..wbb..w
-www.bg.w
-wggg.www
-wwwb.w..
-..w..w..
-..wwww..`,
-  map`
-..wwww
+wwwwww
 www..w
 w.rg.w
 w.bx.w
 wp..ww
-wwwww.`,
+wwwwww`,
   map`
-..wwwww
+wwwwwww
 www...w
 wgr.bxw
 w.....w
 wwww.pw
-...wwww`,
+wwwwwww`,
   map`
-.wwwwww.
+wwwwwwww
 ww.x..ww
 w.rwb..w
 w..g...w
 wwwww.pw
-....wwww`,
+wwwwwwww`,
   map`
-.wwww.
-ww..w.
+wwwwwwww
+www.pwww
+wwwbb..w
+www.bg.w
+wggg.www
+wwwb.www
+www..www
+wwwwwwww`,
+  map`
+wwwwww
+ww..ww
 wp.rww
 w.xg.w
 w.b..w
 ww..ww
-.wwww.`,
+wwwwww`,
 ];
 
 const blankScreen = map`.`;
-setBackground();
+setBackground(background);
 
 const currentLevel = levels[level];
 setMap(currentLevel);
