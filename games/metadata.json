@@ -950,5 +950,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-11-08"
+  },
+  {
+    "filename": "Snake",
+    "title": "Snake",
+    "author": "Boyne",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2022-11-10"
   }
 ]
