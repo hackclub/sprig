@@ -1,7 +1,6 @@
 /*
 @title: red_light_green_light
 @author: annie
-
 wasd to move
 get a score of 3 during at level to progress to the next level
 move road blocks to get to the goal
@@ -265,21 +264,30 @@ scoreKeep()
 
 
 // player controls 
+
   onInput("w", () => {
+    if (gameRun==true){
     getFirst(player).y -= 1;
+    }
   });
   
   onInput("s", () => {
+     if (gameRun==true){
     getFirst(player).y += 1;
+     }
   });
   
   onInput("a", () => {
+     if (gameRun==true){
     getFirst(player).x -= 1;
+     }
   });
   
   onInput("d", () => {
+     if (gameRun==true){
     getFirst(player).x += 1;
-  });
+     }
+  })
 
 // timer
   var timeleft = 30;
@@ -294,13 +302,14 @@ scoreKeep()
     if(timeleft <= 0 && gameRun === true){
       clearInterval(Timer);
       clearText();
+      
       clearTile(getFirst(coin).x, getFirst(coin).y);
       clearTile(getFirst(player).x, getFirst(player).y);
 
       addText("game over!", { 
-    x: 5, 
-    y: 5, 
-    color: color`3`  })
+      x: 5, 
+      y: 5, 
+      color: color`3`  })
 
     
     }
@@ -325,7 +334,7 @@ scoreKeep()
    if (finishLine === 1 && score >= 3) {
       level = level + 1;
      timeleft = 30
-     score =0
+     score = 0
     const currentLevel = levels[level];
     if (currentLevel !== undefined) {
       setMap(currentLevel);
@@ -335,10 +344,10 @@ scoreKeep()
     }
     }
     //check if the red light is on
-      if (greenOn==false ){
+      if (greenOn==false && gameRun==true){
         timeleft = 0;
-        gameRun = false;
         clearText();
+        gameRun = false
         clearTile(getFirst(coin).x, getFirst(coin).y);
         clearTile(getFirst(player).x, getFirst(player).y);
         addText("game over!", { 
