@@ -119,6 +119,14 @@ www
 www`,
 ];
 
+onInput("j", () => {
+  const currentLevel = levels[level];
+  if (currentLevel !== undefined) {
+    clearText("");
+    setMap(currentLevel);
+  }
+});
+
 setMap(levels[level]);
 
 setPushables({
