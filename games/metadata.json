@@ -966,5 +966,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-11-10"
+  },
+  {
+    "filename": "speedy_snake",
+    "title": "speedy_snake",
+    "author": "ItsAStarryKnight",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2022-11-11"
   }
 ]
