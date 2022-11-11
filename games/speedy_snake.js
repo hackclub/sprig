@@ -1,11 +1,12 @@
 /*
-@title: speedy snake
+@title: speedy_snake
 @author: ItsAStarryKnight
 */
 
 //Classic snake game with a twist!
 //Controls: a to go left, w to go up, s to go down, d to go right, l to restart
 //To try hard mode, press j - to go back to easy mode, press k
+//To pause the game, press I - to resume, press I again!
 //If you eat the apple, your score increases (and so does the speed!!)
 //If you hit the wall, the game ends
 //Instead of having the snake increase in size, the snake will increase in speed,
@@ -21,34 +22,34 @@ DDDDDDDDDDDDDDDD
 DDDDDDDDDDDDDDDD
 DDDDDDDDDDDDDDDD
 DDDDDDDDDDDDDDDD
+DD000DDDDDD000DD
+DD020DDDDDD020DD
+DD002DDDDDD002DD
 DDDDDDDDDDDDDDDD
 DDDDDDDDDDDDDDDD
 DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
+DDDDDD333DDDDDDD
+DDDDDD333333DDDD
+DDDDDD3333333DDD
+DDDDDDDDDDD3333D
+DDDDDDDDDDDD333D
 DDDDDDDDDDDDDDDD`],
   [ wall, bitmap `
+CCLLCCCCCCCCLLCC
+CCLLCCCCCCCCLLCC
+CCLLCCCCCCCCLLCC
 LLLLLLLLLLLLLLLL
+CCCCCCCLLCCCCCCC
+CCCCCCCLLCCCCCCC
+CCCCCCCLLCCCCCCC
 LLLLLLLLLLLLLLLL
+CCLLCCCCCCCCLLCC
+CCLLCCCCCCCCLLCC
+CCLLCCCCCCCCLLCC
 LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
+CCCCCCCLLCCCCCCC
+CCCCCCCLLCCCCCCC
+CCCCCCCLLCCCCCCC
 LLLLLLLLLLLLLLLL`],
   [apple, bitmap `
 .....44..44.....
@@ -82,19 +83,19 @@ wwwwwwwwwwwwwwwwwww
 wwwwwwwwwwwwwwwwwww 
 w.................w 
 w.................w
-w.................w
-w.................w
-w........p........w
-w.................w
+w...p.............w
 w.................w
 w.................w
 w.................w
 w.................w
-w........a........w
 w.................w
 w.................w
 w.................w
 w.................w
+w.................w
+w.................w
+w.................w
+w.......a.........w
 w.................w
 w.................w
 wwwwwwwwwwwwwwwwwww
@@ -119,6 +120,8 @@ var dir="d";
 var speed=150;
 var x=3;
 var mode="easy";
+var pausePlay=1;
+var gameO=0;
 
 onInput("s", () => {
   dir="d";
@@ -146,6 +149,9 @@ onInput("k", () => {
   mode="easy";
   resetGame();
 }); 
+onInput("i", () =>{
+  pause();
+});
 
 const appleTune = tune`
 283.0188679245283,
@@ -182,6 +188,7 @@ function resetApple(){
 
 function gameOver(){
   clearInterval(g);
+  gameO=1;
   playTune(wallTune);
   if(dir=="d"){
     getFirst(player).y--;
@@ -209,7 +216,7 @@ function checkState(){
       resetApple();
     }
   } else{
-    console.log(getFirst(player).y, getFirst(player).x)
+    //console.log(getFirst(player).y, getFirst(player).x)
     if(dir=="d"){
       if(getFirst(player).y++==22){
         gameOver();
@@ -233,6 +240,7 @@ function checkState(){
 function resetGame(){
   score=0;
   speed=150;
+  gameO=0;
   clearTile(getFirst(player).x, getFirst(player).y);
   clearTile(getFirst(apple).x, getFirst(apple).y);
   addSprite(9,10,player);
@@ -258,8 +266,41 @@ function resetGame(){
   setI();
 }
 
+function pause(){
+  if(!gameO){
+    if(pausePlay==1){
+      clearInterval(g);
+      addText("Paused", 
+      {x:4, 
+       y:1, 
+       color: color`1` })
+      pausePlay=0;
+    }
+    else if(pausePlay==0){
+      setI();
+      clearText();
+      if(mode=="easy"){
+        addText("Speedy Snake", 
+        {x:4, 
+         y:1, 
+         color: color`4` })
+      } else{
+        addText("Speedy Snake", 
+        {x:4, 
+         y:1, 
+         color: color`9` })
+      }
+      addText("score: "+score, 
+      {x:4, 
+       y:2, 
+       color: color`2` })
+      pausePlay=1;
+    }
+  }
+}
+
 function setI(){
   clearInterval(g);
   g=window.setInterval(checkState, speed);
 }
-setI();
+resetGame();
