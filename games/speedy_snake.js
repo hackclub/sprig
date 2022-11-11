@@ -216,7 +216,6 @@ function checkState(){
       resetApple();
     }
   } else{
-    //console.log(getFirst(player).y, getFirst(player).x)
     if(dir=="d"){
       if(getFirst(player).y++==22){
         gameOver();
