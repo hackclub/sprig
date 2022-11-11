@@ -3,6 +3,7 @@
 @author: Leo H
 */
 var points
+var isAlive = true
 const melody = tune`
 223.88059701492537: c4/223.88059701492537,
 223.88059701492537: g4~223.88059701492537 + d4^223.88059701492537,
@@ -102,6 +103,14 @@ setLegend(
 3333333333333333`]
 );
 
+onInput("j", () => {
+  const currentLevel = levels[level];
+  if (currentLevel !== undefined) {
+    clearText("");
+    setMap(currentLevel);
+  }
+});
+
 setSolids([ wall, player ]);
 
 let level = 0;
@@ -119,46 +128,49 @@ www
 www`,
 ];
 
-onInput("j", () => {
-  const currentLevel = levels[level];
-  if (currentLevel !== undefined) {
-    clearText("");
-    setMap(currentLevel);
-  }
-});
-
 setMap(levels[level]);
 
 setPushables({
   [ player ]: [],
 });
 
+
+
+
 onInput("s", () => {
-  getFirst(player).y += 1
-  moveAll();
-  addSprite(1, 1, baddude)  
-  points += 1
+  if (isAlive){
+    getFirst(player).y += 1
+    moveAll();
+    addSprite(1, 1, baddude)  
+    points += 1
+  }
 });
 
 onInput("w", () => {
-  getFirst(player).y -= 1
-  moveAll();
-  addSprite(1, 1, baddude)
-  points += 1
+  if (isAlive){
+    getFirst(player).y -= 1
+    moveAll();
+    addSprite(1, 1, baddude)
+    points += 1
+  }
 });
 
 onInput("a", () => {
-  getFirst(player).x -= 1
-  moveAll();
-  addSprite(0, 1, baddude)
-  points += 1
+  if (isAlive){
+    getFirst(player).x -= 1
+    moveAll();
+    addSprite(0, 1, baddude)
+    points += 1
+  }
 });
 
 onInput("d", () => {
-  getFirst(player).x += 1
-  moveAll();
-  addSprite(2, 1, baddude)
-  points += 1
+  if (isAlive){
+    getFirst(player).x += 1
+    moveAll();
+    addSprite(2, 1, baddude)
+    points += 1
+  }
 });
 
 afterInput(() => {
@@ -167,12 +179,13 @@ afterInput(() => {
       x: 7,
       y: 6,
       color: color `5`
-  })
-   addText(points.toString(), {
+    })
+    addText(points.toString(), {
       x: 9,
       y: 10,
       color: color `5`
-   })
-playback.end()
-}
+    })
+    playback.end()
+    isAlive = false
+  }
 })
