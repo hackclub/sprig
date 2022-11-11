@@ -175,7 +175,7 @@ onInput("d", () => {
 
 afterInput(() => {
   if (tilesWith(player, baddude).length > 0){
-    addText("YouLose", {
+    addText("You Lose", {
       x: 7,
       y: 6,
       color: color `5`
