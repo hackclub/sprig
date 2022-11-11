@@ -974,5 +974,13 @@
     "img": "",
     "tags": ["endless"],
     "addedOn": "2022-11-11"
+  },
+  {
+    "filename": "dual_state_machine",
+    "title": "dual_state_machine",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-11"
   }
 ]
