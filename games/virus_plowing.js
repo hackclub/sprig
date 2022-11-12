@@ -164,6 +164,10 @@ setPushables({
 });
 
 let player = new Player(getFirst(playerKey).x, getFirst(playerKey).y);
+getFirst(virusKey).x = Math.floor(Math.random() * (width() - 3) + 2);
+getFirst(virusKey).y = Math.floor(Math.random() * (height() - 3) + 2);
+getFirst(shieldKey).x = Math.floor(Math.random() * (width() - 3) + 2);
+getFirst(shieldKey).y = Math.floor(Math.random() * (height() - 3) + 2);
 
 onInput("w", () => {
   player.move('w');
@@ -183,7 +187,7 @@ onInput("i", () => {
   if (!showingInstructions) {
     addText("Move with WASD.\nPush shield into \nvirus squares.\nDon't touch viruses!", { 
       x: 0,
-      y: 1,
+      y: 2,
       color: color`3`
     })
   } else {
