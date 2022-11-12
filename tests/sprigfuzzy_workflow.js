@@ -33,8 +33,6 @@ const SKIP = ["mandelbrot.js"];
 
 const ONLY = Deno.args.filter(x => x.startsWith('games/')).map(x => x.slice(6)).concat(Deno.args.filter(x => !x.startsWith('games/')));
 
-console.log(ONLY);
-
 async function main() {
   brokenGames = [];
   const tasks = [];
