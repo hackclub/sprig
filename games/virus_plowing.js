@@ -167,6 +167,7 @@ setPushables({
 let player = new Player(getFirst(playerKey).x, getFirst(playerKey).y);
 
 function startGame() {
+  score = 0;
   getFirst(virusKey).x = Math.floor(Math.random() * (width() - 3) + 2);
   getFirst(virusKey).y = Math.floor(Math.random() * (height() - 3) + 2);
   getFirst(shieldKey).x = Math.floor(Math.random() * (width() - 3) + 2);
