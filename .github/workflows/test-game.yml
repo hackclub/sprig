@@ -1,0 +1,46 @@
+name: test-game
+run-name: Testing ${{ github.actor }}'s Sprig game
+
+on: 
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  build-spade:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: hackclub/spade
+      - name: Init Submodules
+        run: git submodule update --init --recursive
+      - name: Setup Build Directory
+        run: mkdir build
+      - name: Cmake
+        run: cd build && cmake ..
+      - name: Make
+        run: cd build && make
+
+  test-game:
+    needs: build-spade
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1.1.1
