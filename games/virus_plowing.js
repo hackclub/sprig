@@ -11,6 +11,7 @@ CONTROLS:
   D - Move Right
 
   I - Info
+  J - Restart
 */
 
 class Player {
@@ -23,15 +24,19 @@ class Player {
     switch(dir) {
       case 'w':
         this.y--;
+        if (this.y <= 0) this.y = 0;
         break;
       case 'a':
         this.x--;
+        if (this.x <= 0) this.x = 0;
         break;
       case 's':
         this.y++;
+        if (this.y >= height()) this.y = height() - 1;
         break;
       case 'd':
         this.x++;
+        if (this.x >= width()) this.x = width() - 1;
         break;
       default:
         break;
@@ -161,6 +166,17 @@ setPushables({
 
 let player = new Player(getFirst(playerKey).x, getFirst(playerKey).y);
 
+function startGame() {
+  getFirst(virusKey).x = Math.floor(Math.random() * (width() - 3) + 2);
+  getFirst(virusKey).y = Math.floor(Math.random() * (height() - 3) + 2);
+  getFirst(shieldKey).x = Math.floor(Math.random() * (width() - 3) + 2);
+  getFirst(shieldKey).y = Math.floor(Math.random() * (height() - 3) + 2);
+  player.x = 1;
+  player.y = 1;
+  player.update()
+}
+startGame();
+
 onInput("w", () => {
   player.move('w');
 });
@@ -179,7 +195,7 @@ onInput("i", () => {
   if (!showingInstructions) {
     addText("Move with WASD.\nPush shield into \nvirus squares.\nDon't touch viruses!", { 
       x: 0,
-      y: 1,
+      y: 2,
       color: color`3`
     })
   } else {
@@ -189,21 +205,30 @@ onInput("i", () => {
   
 });
 
+onInput("j", () => {
+  if (died) return;
+  clearText()
+  level = 0;
+  setMap(levels[level]);
+  startGame();
+});
+
 afterInput(() => {
   if (level === 1) {
     clearText()
     setMap(levels[level]);
     addText("You Died", { 
       x: 6,
-      y: 1,
+      y: 2,
       color: color`3`
     })
 
     addText(`Score: ${score}`, { 
       x: 6,
-      y: 3,
+      y: 4,
       color: color`3`
     })
+    died = false;
   } else {
     player.update();
   
@@ -222,7 +247,7 @@ afterInput(() => {
         clearText();
         addText("Press Any Key.", { 
           x: 3,
-          y: 1,
+          y: 2,
           color: color`3`
         })
         level = 1;
