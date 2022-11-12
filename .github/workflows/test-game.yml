@@ -1,14 +1,12 @@
 name: test-game
-run-name: Testing ${{ github.actor }}'s Sprig game
 
 on: 
   workflow_dispatch:
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - samactions
+    paths:
+      - 'games/**.js'
 
 permissions:
   contents: read
@@ -21,10 +19,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v34.4.0
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
+          files: |
+            games/**.js
+
       - name: Setup Deno
         uses: denoland/setup-deno@v1.1.1
+
       - name: Check Games
-        run: deno run --allow-read tests/sprigfuzzy_workflow.js
+        run: deno run --allow-read tests/sprigfuzzy_workflow.js ${{ steps.changed-files.outputs.all_changed_files }}
