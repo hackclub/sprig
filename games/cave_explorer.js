@@ -69,7 +69,7 @@ setLegend(
 
 setSolids([player, wall, paint]);
 
-let level = 0;
+let level = 5;
 const levels = [
   map`
 p.wwwwwwwwwwwwwww
@@ -82,26 +82,26 @@ wwwwww...wwwwwwww
 wwwwwwwwwwwwwwwww
 wwwwwwwwwwwwwwwww`,
   map`
-pw...w...w...w...
-.w.w.w.w.w.w.w.w.
-.w.w.w.w.w.w.w.w.
-.w.w.w.w.w.w.w.w.
-.w.w.w.w.w.w.w.w.
-.w.w.w.w.w.w.w.w.
-.w.w.w.w.w.w.w.w.
-.w.w.w.w.w.w.w.w.
-...w...w...w...w.`,
-   map`
-wwwwwwwwwwwwwwwww
-p...............w
-wwwwwwwwwwwwwww.w
-w.............w.w
-w.wwwwwwwwwww.w.w
-w.w...........w.w
-w.wwwwwwwwwwwww.w
-w...............w
-wwwwwwwwwwwwwwwww`,
-   map`
+p.wwwwwwwwwwwwwww
+w..wwwwwwwww.....
+ww.w...wwwww.w.w.
+ww.w.w.wwwww.w.w.
+ww.w.w.wwwww.....
+ww...w....wwwww.w
+wwwwwwwww..wwww.w
+wwwwwwwwww..www.w
+wwwwwwwwwww.....w`,
+  map`
+...w...w.p.w.....
+.w...w...w...w...
+.wwwwwwwwwwwwwww.
+..w...w......w...
+w.w.w.w.wwww.w.ww
+w.w.w.w.wwww.w.ww
+w.w.w.w.wwww.w.ww
+w.w.w.w.wwww.w.ww
+w...w...wwww...ww`,
+  map`
 ww...............
 ww.wwwww.wwwwwww.
 ww.....wpw.....w.
@@ -111,6 +111,66 @@ ww...w.www..w..w.
 wwwwww.www..w..w.
 wwwwww.www..wwww.
 wwwwww...........`,
+  map`
+wwwwwwwwpwwwwwwww
+wwwwwwww.w.......
+ww.......w.wwwww.
+ww....wwww.w...w.
+wwwww.w....w...w.
+wwwww.w.wwww...w.
+wwwww.w........w.
+wwwww.wwwwwwwwww.
+wwwww............`,
+  map`
+wwwwwwww.........
+wwwwwwww.wwwwwww.
+wwwwwwwwpw.......
+wwwwwwwwww.......
+wwwwwwwwww.......
+wwwwwwwwww.......
+wwwwwwwwww.......
+wwwwwwwwww.......
+wwwwwwwwww.......`,
+  map`
+.......w.........
+.wwwww.w.wwwwwww.
+.w...w.wpw..wwww.
+.w.w.w.www..wwww.
+.w.w.w.www..wwww.
+.w.w.w.www..wwww.
+.w.....www..wwww.
+.wwwwwwwww..wwww.
+.................`,
+  map`
+pwwwww...........
+..wwww.wwwwwwwww.
+w..www.ww....www.
+ww..ww.ww.ww.www.
+www..w....ww.ww..
+wwww..www.ww.w..w
+wwwww..ww.ww...ww
+wwwwww..w.wwwwwww
+wwwwwww...wwwwwww`,
+  map`
+wwp..............
+wwwwwwww.wwwwwww.
+wwwwwww..wwwwwww.
+w.......wwwwwwww.
+..wwww..wwwwwwww.
+.wwwww..wwwwwwww.
+.wwwww..wwwwwwww.
+.wwwww..wwwwwwww.
+.................`,
+  map`
+wwwwwwwwwwwwtwww.
+tttttwtwwwtwwwtw.
+twwwtwwtwtwwtttt.
+tttttwwwtwwwtwtw.
+twwwwwwtwtwwtwtw.
+ttttwwtwwwtwtwtw.
+wwwwwwwwwwwwwwww.
+wwwwwwwwwwwwwwww.
+p................`,
 ];
 
 setMap(levels[level])
