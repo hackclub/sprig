@@ -11,7 +11,7 @@ on:
 
   push:
     branches:
-      - samactions
+      - main
 
 permissions:
   contents: read
