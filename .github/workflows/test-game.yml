@@ -6,6 +6,9 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'games/**.js'
+
   push:
     branches:
       - samactions
@@ -24,7 +27,19 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v34.4.0
+        with:
+          files: |
+            games/**.js
+
       - name: Setup Deno
         uses: denoland/setup-deno@v1.1.1
+
+      - name: Testing
+        run: ${{ steps.changed-files.outputs.all_changed_files }}
+
       - name: Check Games
         run: deno run --allow-read tests/sprigfuzzy_workflow.js
