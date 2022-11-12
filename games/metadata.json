@@ -998,14 +998,21 @@
     "img": "",
     "tags": ["endless"],
     "addedOn": "2022-11-11"
-  }
-  ,
+  },
   {
     "filename": "cave_explorer",
     "title": "cave_explorer",
     "author": "Sid Khare",
     "img": "",
     "tags": ["maze", "puzzle"],
+    "addedOn": "2022-11-12"
+  },
+  {
+    "filename": "DogsvsCats",
+    "title": "DogsvsCats",
+    "author": "Theodor",
+    "img": "",
+    "tags": ["endless"],
     "addedOn": "2022-11-12"
   }
 ]
