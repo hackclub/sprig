@@ -39,6 +39,7 @@ const playback = playTune(melody, Infinity)
 const dogone = "p";
 const dogtwo = "q";
 const catone = "c";
+const background = "b";
 setLegend(
   [ dogone, bitmap`
 ................
@@ -91,7 +92,25 @@ setLegend(
 .....LLLLLLLL...
 ................
 ................`],
+  [ background, bitmap`
+444444444D444444
+44444444D4D44444
+44D4444444444444
+4D4D444444444444
+4444444444D44444
+444444444D4D4444
+4444444444444444
+4444444444444444
+4444444D444444D4
+444444D4D4444D4D
+4444444444444444
+4D44444444444444
+D4D4444444444444
+44444D444444D444
+4444D4D4444D4D44
+4444444444444444`]
 );
+setBackground(background);
 const dog = () => getFirst("p") || getFirst("q");
 setSolids([]);
 
@@ -161,7 +180,7 @@ function movecat(cat) {
 }
 function moveCats() {
   getAll(catone).forEach(movecat);
-addText(""+numcats, { x:2, y: 0, color: color`8` });
+addText(""+numcats, { x:2, y: 0, color: color`H` });
  if (!uded){ 
    setTimeout(moveCats, catspeed);
  }
