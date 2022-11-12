@@ -11,6 +11,7 @@ CONTROLS:
   D - Move Right
 
   I - Info
+  J - Restart
 */
 
 class Player {
@@ -164,10 +165,17 @@ setPushables({
 });
 
 let player = new Player(getFirst(playerKey).x, getFirst(playerKey).y);
-getFirst(virusKey).x = Math.floor(Math.random() * (width() - 3) + 2);
-getFirst(virusKey).y = Math.floor(Math.random() * (height() - 3) + 2);
-getFirst(shieldKey).x = Math.floor(Math.random() * (width() - 3) + 2);
-getFirst(shieldKey).y = Math.floor(Math.random() * (height() - 3) + 2);
+
+function startGame() {
+  getFirst(virusKey).x = Math.floor(Math.random() * (width() - 3) + 2);
+  getFirst(virusKey).y = Math.floor(Math.random() * (height() - 3) + 2);
+  getFirst(shieldKey).x = Math.floor(Math.random() * (width() - 3) + 2);
+  getFirst(shieldKey).y = Math.floor(Math.random() * (height() - 3) + 2);
+  player.x = 1;
+  player.y = 1;
+  player.update()
+}
+startGame();
 
 onInput("w", () => {
   player.move('w');
@@ -197,6 +205,14 @@ onInput("i", () => {
   
 });
 
+onInput("j", () => {
+  if (died) return;
+  clearText()
+  level = 0;
+  setMap(levels[level]);
+  startGame();
+});
+
 afterInput(() => {
   if (level === 1) {
     clearText()
@@ -212,6 +228,7 @@ afterInput(() => {
       y: 4,
       color: color`3`
     })
+    died = false;
   } else {
     player.update();
   
