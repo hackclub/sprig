@@ -109,7 +109,7 @@ async function testScript(name) {
   }
   finally {
     cleanup();
-    spade.cleanup();
+    // spade.cleanup();
   }
 }
 
