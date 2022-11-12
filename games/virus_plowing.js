@@ -67,6 +67,7 @@ const dieSound = tune`
 
 let score = 0;
 let showingInstructions = false;
+let died = false;
 
 setLegend(
   [ playerKey, bitmap`
@@ -214,7 +215,8 @@ afterInput(() => {
     }
     for (const virus of getAll(virusKey)) {
       if (toVirusSpawn === 1) if (getAll(virusKey)[getAll(virusKey).length - 1] === virus.x && getAll(virusKey)[getAll(virusKey).length - 1] === virus.y) getAll(virusKey)[getAll(virusKey).length - 1].remove();
-      if (player.x === virus.x && player.y === virus.y) {
+      if (player.x === virus.x && player.y === virus.y && !died) {
+        died = true;
         getFirst(playerKey).remove();
         playTune(dieSound);
         clearText();
