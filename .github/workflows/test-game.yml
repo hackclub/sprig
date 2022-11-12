@@ -27,4 +27,4 @@ jobs:
       - name: Setup Deno
         uses: denoland/setup-deno@v1.1.1
       - name: Check Games
-        run: deno run --allow-read tests/sprigfuzzy.js
+        run: deno run --allow-read tests/sprigfuzzy_workflow.js
