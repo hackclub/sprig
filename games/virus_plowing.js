@@ -23,15 +23,19 @@ class Player {
     switch(dir) {
       case 'w':
         this.y--;
+        if (this.y <= 0) this.y = 0;
         break;
       case 'a':
         this.x--;
+        if (this.x <= 0) this.x = 0;
         break;
       case 's':
         this.y++;
+        if (this.y >= height()) this.y = height() - 1;
         break;
       case 'd':
         this.x++;
+        if (this.x >= width()) this.x = width() - 1;
         break;
       default:
         break;
@@ -195,13 +199,13 @@ afterInput(() => {
     setMap(levels[level]);
     addText("You Died", { 
       x: 6,
-      y: 1,
+      y: 2,
       color: color`3`
     })
 
     addText(`Score: ${score}`, { 
       x: 6,
-      y: 3,
+      y: 4,
       color: color`3`
     })
   } else {
@@ -222,7 +226,7 @@ afterInput(() => {
         clearText();
         addText("Press Any Key.", { 
           x: 3,
-          y: 1,
+          y: 2,
           color: color`3`
         })
         level = 1;
