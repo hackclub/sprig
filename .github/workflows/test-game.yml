@@ -8,32 +8,14 @@ on:
       - main
   push:
     branches:
-      - main
+      - samactions
 
 permissions:
   contents: read
   pull-requests: read
 
 jobs:
-  build-spade:
-    runs-on: macos-latest
-    
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          repository: hackclub/spade
-      - name: Init Submodules
-        run: git submodule update --init --recursive
-      - name: Setup Build Directory
-        run: mkdir build
-      - name: Cmake
-        run: cd build && cmake ..
-      - name: Make
-        run: cd build && make
-
   test-game:
-    needs: build-spade
     runs-on: ubuntu-latest
     
     steps:
@@ -44,3 +26,5 @@ jobs:
           fetch-depth: 0
       - name: Setup Deno
         uses: denoland/setup-deno@v1.1.1
+      - name: Check Games
+        run: deno run --allow-read tests/sprigfuzzy.js
