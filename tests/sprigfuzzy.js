@@ -44,7 +44,7 @@ async function main() {
     if (ONLY.length > 0) {
       if (ONLY.some(x => x === name)) {
         console.log("running", name);
-        await testScript(name);
+        await testScriptJS(name);
       }
       continue;
     }
@@ -54,7 +54,7 @@ async function main() {
     console.log("running", name);
     tasks.push((async () => {
       const i = setInterval(() => console.log(name + ' is still running'), 10000);
-      await testScript(name);
+      await testScriptJS(name);
       clearInterval(i);
     })());
   }
@@ -112,6 +112,34 @@ async function testScript(name) {
   finally {
     cleanup();
     spade.cleanup();
+  }
+}
+
+async function testScriptJS(name) {
+  const script = await Deno.readTextFile(`./games/${name}`);
+
+  const { api, cleanup, simulateKey } = simEngine();
+
+  /* generate simulated inputs */
+  const choose = arr => arr[Math.floor(Math.random() * arr.length)];
+  const shakespeareMonKeys = [...Array(1000)].map(_ => choose("wasdjilk".split('')));
+
+  try {
+    console.log(`running ${name}!`);
+    const fn = new Function(...Object.keys(api), script);
+    fn(...Object.values(api)); /* init */
+
+    for (const key of shakespeareMonKeys) {
+      simulateKey(key);
+    }
+  } catch(e) {
+    console.log(`ERROR WHILE RUNNING "${name}"`);
+    brokenGames.push({
+      name,
+      error: e
+    });
+  } finally {
+    cleanup();
   }
 }
 
