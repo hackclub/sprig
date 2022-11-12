@@ -1,5 +1,4 @@
 name: test-game
-run-name: Testing ${{ github.actor }}'s Sprig game
 
 on: 
   workflow_dispatch:
@@ -8,10 +7,6 @@ on:
       - main
     paths:
       - 'games/**.js'
-
-  push:
-    branches:
-      - main
 
 permissions:
   contents: read
@@ -42,4 +37,4 @@ jobs:
         run: ${{ steps.changed-files.outputs.all_changed_files }}
 
       - name: Check Games
-        run: deno run --allow-read tests/sprigfuzzy_workflow.js
+        run: deno run --allow-read tests/sprigfuzzy_workflow.js ${{ steps.changed-files.outputs.all_changed_files }}
