@@ -1,327 +1,46 @@
 /*
 @title: spriggymon
 @author: spriglover69
+
+full source: https://github.com/spriglover69/spriggymon
 */
 
-function _0x224b(_0x241ef4,_0xa57277){const _0x5080ca=_0x5080();return _0x224b=function(_0x224b95,_0x37d584){_0x224b95=_0x224b95-0xa2;let _0x179fbb=_0x5080ca[_0x224b95];return _0x179fbb;},_0x224b(_0x241ef4,_0xa57277);}function _0x5080(){const _0x4bf418=['\x20HP','call','\x20Is\x20it\x20just\x20me\x20or\x20\x20\x20\x0a\x20...\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20that\x20vent\x20wasn\x27t\x20\x20\x20\x0a\x20there\x20before,\x20\x20\x20\x20\x20\x20\x0a\x20right?\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20that\x27s\x20\x20\x20...\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20a\x20tad,\x20erm,\x20sus.\x20\x20\x20\x0a','outside','now','amogus','sort','woodenDoor','\x20Great\x20work!\x20Bank\x27s\x20\x0a\x20looking\x20...\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20good\x20to\x20bueno!\x20\x20\x20\x20\x20\x0a\x20...\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20...\x20mostly\x20...\x20\x20\x20\x0a','\x0alost\x20','7016IYVPbj','min','A\x20to\x20WEAKEN','QUEST:\x20Find\x20Bank!','getOwnPropertySymbols','HMMM,\x20here','\x0a....0.0000.0....\x0a....00000000....\x0a....000000000...\x0a...0020020000...\x0a...00000000000..\x0a...000220000000.\x0a...020200200000.\x0a...002222000000.\x0a...000000000000.\x0a...000000000000.\x0a...000000000000.\x0a...000000000000.\x0a....00000000000.\x0a....00..00...00.\x0a....00..00...00.\x0a....0...0....0..\x0a','substring','\x20There\x20you\x20are!\x20I\x20\x20\x20\x0a\x20hope\x20you\x20don\x27t\x20plan\x0a\x20on\x20making\x20a\x20habit\x20\x20\x0a\x20of\x20being\x20late!\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Zach\x27s\x20waiting\x20for\x20\x0a\x20you\x20in\x20a\x20call\x20room\x20\x0a\x20upstairs.\x20Hurry\x20up!\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Get\x20upstairs!\x20\x20\x20\x20\x20\x20\x0a','keys','positionsOf','Old\x20Man','ceil','all','heal','assign','SIT\x20ON\x20YOU','\x20...\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Haha,\x20just\x20kidding.\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20This\x20fever\x20dream\x20\x20\x20\x0a\x20has\x20been\x20too\x20brain\x20\x0a\x20dead\x20to\x20pull\x20off\x20\x20\x20\x0a\x20messaging\x20like\x20that\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20...\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20So\x20what\x20really\x20\x20\x20\x20\x20\x0a\x20happened\x20on\x20your\x20\x20\x20\x0a\x20first\x20day?\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a','height','forEach','trigger','565243Wfezkn','switchOff','random','...','getOwnPropertyDescriptors','\x20Hullo.\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20You\x20must\x20be\x20the\x20\x20\x20\x20\x0a\x20new\x20member\x20of\x20HQ!\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Well,\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20you\x27re\x20in\x20for\x20some\x20\x0a\x20first\x20day,\x20alright!\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20It\x27s\x20the\x20Tomb\x20of\x20a\x20\x0a\x20Thousand\x20Triggers\x20\x20\x0a\x20in\x20there!\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a','staircase','bank','propertyIsEnumerable','\x20There\x20you\x20are!\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20I\x20just\x20realized,\x20\x20\x20\x0a\x20Zach\x20wasn\x27t\x20up\x20\x20\x20\x20\x20\x0a\x20there\x20with\x20you,\x20\x20\x20\x20\x0a\x20and\x20I\x20never\x20saw\x20\x20\x20\x20\x0a\x20him\x20leave\x20...\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20I\x20mean\x20seriously,\x20\x20\x0a\x20Did\x20he\x20vent\x20or\x20\x20\x20\x20\x20\x0a\x20something!?!\x20\x20\x20\x20\x20\x20\x20\x0a','attack','kara','axis','\x20By\x20some\x20miracle,\x20\x20\x20\x0a\x20your\x20spriggymonz\x20\x20\x20\x0a\x20are\x20breathing\x20again\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20...\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20So\x20you\x27re\x20equipped\x20\x0a\x20to\x20return\x20to\x20what-\x20\x0a\x20-ever\x20irresponsibly\x0a\x20dangerous\x20escapade\x20\x0a\x20I\x27m\x20sure\x20you\x20embar-\x0a\x20-assingly\x20failed.\x20\x20\x0a','\x20Wh.\x20What\x20the\x20shit?\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Like,\x20who\x20even\x20is\x20\x20\x0a\x20the\x20imposter\x20at\x20\x20\x20\x20\x0a\x20this\x20point?\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Zach\x20vented\x20...\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20but\x20I\x20just\x20saw\x20you\x20\x0a\x20kill\x20a\x20crewmate...\x20\x0a','wasabi','set','attacks','S\x20to\x20HEAL','pos','\x20And\x20cherry\x20on\x20top:\x20\x0a\x20Bank\x27s\x20gone\x20down!\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20I\x20can\x27t\x20get\x20to\x20the\x20\x0a\x20lever\x20to\x20redeploy\x20\x20\x0a\x20the\x20codebase,\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20for\x20fear\x20of\x20getting\x0a\x20my\x20face\x20bitten\x20off!\x0a','values','\x20\x20did\x20somebody\x20call\x20\x0a\x20\x20\x20\x20\x20\x20\x20for\x20an\x20\x20\x20\x20\x20\x20\x20\x0a\x20EMERGENCY\x20MEETING?\x20\x0a','VENT','\x20So\x20I\x27m\x20changing\x20my\x20\x0a\x20name\x20to\x20Zach\x20Latte!\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20We\x27ll\x20be\x20known\x20\x20\x20\x20\x20\x0a\x20everywhere!\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20You\x20can\x20help\x20me\x20\x20\x20\x20\x0a\x20break\x20the\x20news\x20...\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20You\x20don\x27t\x20seem\x20so\x20\x20\x0a\x20enthusiastic.\x20\x20\x20\x20\x20\x20\x0a','number','sign','flat','\x20All\x20of\x20your\x20\x27monz\x20\x20\x0a\x20were\x20defeated.\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20...\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20You\x20make\x20it\x20back\x20to\x0a\x20HQ\x20in\x20a\x20foggy\x20haze\x20\x0a\x20and\x20collapse.\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Hours\x20later,\x20you\x27re\x0a\x20awoken\x20by\x20Kara.\x20\x20\x20\x20\x0a','write','defineProperty','OLD\x20MAN\x20SMELL','\x20That\x20chest\x20Wasabi\x20\x20\x0a\x20knocked\x20out\x20of\x20the\x20\x0a\x20way\x20must\x27ve\x20been\x20\x20\x20\x0a\x20there\x20for\x20quite\x20a\x20\x20\x0a\x20while!\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20The\x20door\x20is\x20caked\x20\x20\x0a\x20in\x20a\x20layer\x20of\x20dust\x20\x0a\x20and\x20cobwebs,\x20but\x20\x20\x20\x0a\x20unlocked!\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a','showWinner','slice','includes','length','\x20You\x20want\x20me\x20to\x20heal\x0a\x20the\x20innocent\x20beings\x0a\x20you\x27ve\x20been\x20irres-\x20\x0a\x20-ponsibly\x20torturing\x0a\x20in\x20a\x20lawless\x20cock-\x20\x0a\x20fighting\x20ring?\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20...\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Sure\x20thing.\x20\x20\x20\x20\x20\x20\x20\x20\x0a','\x20There\x20you\x20are!\x20\x20\x20\x20\x20\x0a\x20Where\x20have\x20you\x20\x20\x20\x20\x20\x0a\x20been!?\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20We\x27ve\x20been\x20waiting!\x0a','\x20One\x20last\x20thing,\x20\x20\x20\x20\x0a\x20part\x20of\x20your\x20duties\x0a\x20here\x20at\x20HQ\x20will\x20be\x20\x0a\x20safekeeping\x20this\x20\x20\x20\x0a\x20repulsive-looking\x20\x20\x0a\x20dinosaur,\x20Orpheus.\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Treat\x20her\x20well!\x20I\x20\x20\x0a\x20don\x27t\x20want\x20to\x20see\x20\x20\x0a\x20her\x20taught\x20to\x20\x20\x20\x20\x20\x20\x0a\x20fight\x20with\x20strays!\x20\x0a','log','1478NeLrDc','3331870ekTVON','callRoom','filter','hasOwnProperty','6534318NEGyRb','Wasabi','read','\x20Hey\x20look,\x20that\x27s\x20\x20\x20\x0a\x20Zach\x27s\x20desk!\x20You\x27ve\x0a\x20seen\x20pictures\x20of\x20it\x0a\x20in\x20the\x20Slack.\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20It\x27s\x20still\x20warm,\x20\x20\x20\x0a\x20and\x20smells\x20vaguely\x20\x0a\x20of\x20coffee.\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a','orpheus','find','...\x20but\x20missed','\x20...\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20...\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20...\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a','\x20It\x27s\x20your\x20first\x20\x20\x20\x20\x0a\x20day\x20working\x20at\x20\x20\x20\x20\x20\x0a\x20Hack\x20Club\x20HQ,\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20and\x20you\x20can\x27t\x20\x20\x20\x20\x20\x20\x0a\x20wait\x20to\x20start.\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20...\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20First,\x20find\x20Kara!\x20\x20\x0a','\x20It\x27s\x20locked!\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Besides,\x20you\x20\x20\x20\x20\x20\x20\x20\x0a\x20don\x27t\x20want\x20to\x20be\x20\x20\x20\x0a\x20late\x20on\x20your\x20first\x20\x0a\x20day!\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a','strength','weaken','\x0a.......00.......\x0a.....0000000....\x0a....0033333000..\x0a....0333333330..\x0a....03333000000.\x0a....033307777770\x0a....033307777770\x0a....033307777700\x0a...003333000000.\x0a...033333333330.\x0a...033333333330.\x0a...033330333330.\x0a..0033330333300.\x0a..033330033330..\x0a..000330.00330..\x0a....0000..0000..\x0a','player','4676952kqzJeV','substr','width','active','join','\x20What\x27s\x20all\x20the\x20\x20\x20\x20\x20\x0a\x20ruckus\x20going\x20on\x20up\x20\x0a\x20here?\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20Oh,\x20no!\x20Poor\x20\x20\x20\x20\x20\x0a\x20\x20Orpheus!\x20Let\x20me\x20\x20\x20\x0a\x20\x20\x20patch\x20her\x20up!\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20If\x20she\x20ever\x20gets\x20\x20\x20\x0a\x20like\x20this\x20again,\x20\x20\x20\x0a\x20just\x20come\x20to\x20me,\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20ok?\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a','any\x20key\x20to\x20continue','sprite','prototype','RACIAL\x20EPITHET','\x20There\x20you\x20are!\x20I\x20\x20\x20\x0a\x20need\x20your\x20help!\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20I\x27ve\x20found\x20the\x20best\x0a\x20way\x20to\x20make\x20HC\x20more\x0a\x20popular.\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Coding\x20is\x20too\x20hard.\x0a\x20People\x20don\x27t\x20like\x20\x20\x0a\x20it.\x20But\x20coffee?\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Everyone\x20loves\x20it!\x20\x0a','onGameEnd','\x20wins!','push','indexOf','gameRunning','vent','121772iMrGAA','FOSSILIZE','\x20You\x20look\x20like\x20you\x20\x20\x0a\x20might\x20be\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20expendable,\x20wanna\x20\x20\x0a\x20give\x20it\x20a\x20shot?\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20...\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Do\x20it,\x20I\x20dare\x20you!\x20\x0a','zachsGrandpa','turn','name','desk','\x20\x20orpheus\x20DID\x20NOT\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20absorb\x20\x20\x20\x20\x0a\x20\x20amogus\x27s\x20healing\x20\x20\x0a\x20\x20ability!\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20(get\x20gud\x20noob)\x20\x20\x20\x20\x0a','color','pauseAfter','abs','accuracy','trim','\x0a....C.CCCC.C....\x0a....CCCCCCCC....\x0a....CCCCCCCCC...\x0a...CC0CC0CCCC...\x0a...CCCCCCCCCCC..\x0a...CCC00CCCCCCC.\x0a...C0C0CC0CCCCC.\x0a...CC0000CCCCCC.\x0a...CCCCCCCCCCCC.\x0a...CCCCCCCCCCCC.\x0a...CCCCCCCCCCCC.\x0a...CCCCCCCCCCCC.\x0a....CCCCCCCCCCC.\x0a....CC..CC...CC.\x0a....CC..CC...CC.\x0a....C...C....C..\x0a','switch','defineProperties','...\x20and\x20','speed','stride','split','ghost','closet','consoleText','LOOK\x20BACK','QUEST:\x20Find\x20Kara!','EMERGENCY\x20MEETING','\x20\x20orpheus\x20absorbed\x20\x20\x0a\x20\x20amogus\x27s\x20healing\x20\x20\x0a\x20\x20ability!\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a','................\x0a................\x0a................\x0a................\x0a......00000.....\x0a.....0011200....\x0a.....0122220....\x0a....001002000...\x0a....012002200...\x0a....01202220....\x0a....01200000....\x0a....012220......\x0a....002220......\x0a....002220......\x0a....002220......\x0a....002220......\x0a','2109zJfeRq','max','\x20used\x0a','you','chest','oldMan','them','\x20It\x27s\x20great\x20to\x20meet\x20\x0a\x20you,\x20finally,\x20Zach!\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20But,\x20fundamentally\x20\x0a\x20changing\x20what\x20HC\x20is\x0a\x20to\x20make\x20it\x20more\x20\x20\x20\x20\x0a\x20popular\x20doesn\x27t\x20do\x20\x0a\x20the\x20world\x20any\x20good!\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20By\x20trying\x20to\x20be\x20\x20\x20\x20\x0a\x20everything\x20to\x20\x20\x20\x20\x20\x20\x0a\x20everyone,\x20you\x20\x20\x20\x20\x20\x20\x0a\x20become\x20nothing\x20\x20\x20\x20\x20\x0a\x20to\x20no\x20one.\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a','arr','882iBbjhD'];_0x5080=function(){return _0x4bf418;};return _0x5080();}(function(_0x489341,_0x47f49b){const _0x3a313e=_0x224b,_0x4c682d=_0x489341();while(!![]){try{const _0x39e7ec=parseInt(_0x3a313e(0xb6))/0x1+parseInt(_0x3a313e(0xdf))/0x2*(-parseInt(_0x3a313e(0x11f))/0x3)+parseInt(_0x3a313e(0x103))/0x4+parseInt(_0x3a313e(0xe0))/0x5+parseInt(_0x3a313e(0xf2))/0x6+-parseInt(_0x3a313e(0xe4))/0x7+-parseInt(_0x3a313e(0x133))/0x8*(parseInt(_0x3a313e(0x128))/0x9);if(_0x39e7ec===_0x47f49b)break;else _0x4c682d['push'](_0x4c682d['shift']());}catch(_0x2202a9){_0x4c682d['push'](_0x4c682d['shift']());}}}(_0x5080,0x7ab57),((()=>{const _0x189ec8=_0x224b;var _0x1406f7=Object[_0x189ec8(0xd4)],_0x3fc257=Object[_0x189ec8(0x112)],_0xd5d74d=Object[_0x189ec8(0xba)],_0x1bd638=Object[_0x189ec8(0xa5)],_0xb8cb66=Object[_0x189ec8(0xfa)][_0x189ec8(0xe3)],_0x38e40a=Object[_0x189ec8(0xfa)][_0x189ec8(0xbe)],_0x1978da=(_0x1fd67b,_0x22ade8,_0x7b0c45)=>_0x22ade8 in _0x1fd67b?_0x1406f7(_0x1fd67b,_0x22ade8,{'enumerable':!0x0,'configurable':!0x0,'writable':!0x0,'value':_0x7b0c45}):_0x1fd67b[_0x22ade8]=_0x7b0c45,_0x244336=(_0x10ff7c,_0x3a6114)=>{const _0x1b3fdd=_0x189ec8;for(var _0xf33490 in _0x3a6114||(_0x3a6114={}))_0xb8cb66[_0x1b3fdd(0x12a)](_0x3a6114,_0xf33490)&&_0x1978da(_0x10ff7c,_0xf33490,_0x3a6114[_0xf33490]);if(_0x1bd638){for(var _0xf33490 of _0x1bd638(_0x3a6114))_0x38e40a[_0x1b3fdd(0x12a)](_0x3a6114,_0xf33490)&&_0x1978da(_0x10ff7c,_0xf33490,_0x3a6114[_0xf33490]);}return _0x10ff7c;},_0x18e4f8=(_0x5a3dbb,_0x3d6764)=>_0x3fc257(_0x5a3dbb,_0xd5d74d(_0x3d6764)),_0x5621b2=_0x189ec8(0xf0),_0xba3495=_0x189ec8(0xa7),_0x3cb5a4='\x0a222222L00L222222\x0a22222L0110L22222\x0a2222001111002222\x0a22L01L2222L10L22\x0a2201111111110002\x0a2200LLLLLLLL0202\x0a2220L22LL22L0202\x0a2220L202202L0202\x0a2220L202202L0202\x0a22L0LL2LL2LL0202\x0a22022LL00LL20102\x0a220221LLLL120L02\x0a22L0011LL1100102\x0a2222011111100202\x0a22210LL00LL00002\x0a2222222222222222\x0a',_0x4a4527=_0x189ec8(0x11e),_0x32e1f9='\x0a....C.CCCC.C....\x0a....CCCCCCCC....\x0a....CCCCCCCCC...\x0a...CC0CC0CCCC...\x0a...CCCCCCCCCCC..\x0a...CCC00CCCCCCC.\x0a...C0C0CC0CCCCC.\x0a...CC0000CCCCCC.\x0a...CCCCCCCCCCCC.\x0a...CCCCCCCCCCCC.\x0a...CCCCCCCCCCCC.\x0a...CCCCCCCCCCCC.\x0a....CCCCCCCCCCC.\x0a....CC..CC...CC.\x0a....CC..CC...CC.\x0a....C...C....C..\x0a',_0x21a065='\x0a.....333CCC.....\x0a.....333CCC.....\x0a.....333CCC.....\x0a.....333CCC.....\x0a.....333CCC.....\x0a.....333CCC.....\x0a.....333CCC.....\x0a.....333CCC.....\x0a..333333CCCCCC..\x0a...33333CCCCC...\x0a....3333CCCC....\x0a.....333CCC.....\x0a......33CC......\x0a.......3C.......\x0a................\x0a................\x0a',_0xa282a7=_0x21a065['split']('\x0a')['reverse']()[_0x189ec8(0xf6)]('\x0a');function _0x7d5b3f(_0x14a1ec){return _0x14a1ec<=0x19?'3':_0x14a1ec<=0x32?'9':'4';}function _0x25b9b1(_0x2fff69,_0x5311d5){const _0x517fce=_0x189ec8;let _0x2386e4=Math[_0x517fce(0xad)](_0x5311d5*0.16);return _0x2fff69[_0x517fce(0x10f)]()[_0x517fce(0x116)]('\x0a')['map']((_0x385194,_0x1317ab)=>(_0x2386e4>=Math[_0x517fce(0x10d)](_0x1317ab-0x10)?_0x7d5b3f(_0x5311d5):'1')+_0x385194[_0x517fce(0x10f)]()[_0x517fce(0xa8)](0x1))[_0x517fce(0xf6)]('\x0a');}var _0x3ad95f=0x64;function _0x5abbe9(_0x6bb44){_0x3ad95f=_0x6bb44;}var _0x57e2dc={'gameRunning':!0x1,'you':{'hp':0x64,'strength':0xa},'them':{'hp':0x64,'strength':0xa},'showWinner':!0x1,'consoleText':'','turn':_0x189ec8(0x122),'onGameEnd'(){}},_0xdd6e62='a',_0x13789e='b';function _0x46535e(){const _0x307c19=_0x189ec8;if(clearText(),_0x57e2dc['showWinner']){setLegend([_0xdd6e62,_0x57e2dc[_0x307c19(0x122)][_0x307c19(0xf9)]],[_0x13789e,_0x57e2dc[_0x307c19(0x125)][_0x307c19(0xf9)]]),setMap(map`
-  .....
-  ..${_0x57e2dc['you']['hp']<=0x0?_0x13789e:_0xdd6e62}..
-  .....
-  .....`),addText((_0x57e2dc[_0x307c19(0x122)]['hp']<=0x0?_0x57e2dc[_0x307c19(0x125)][_0x307c19(0x108)]:_0x57e2dc['you'][_0x307c19(0x108)])+_0x307c19(0xfe),{'x':0x3,'y':0xa});return;}if(setLegend([_0xdd6e62,_0x25b9b1(_0x57e2dc[_0x307c19(0x122)]['sprite'],_0x57e2dc[_0x307c19(0x122)]['hp'])],[_0x13789e,_0x25b9b1(_0x57e2dc[_0x307c19(0x125)]['sprite'],_0x57e2dc[_0x307c19(0x125)]['hp'])],['c',_0x21a065],['d',_0xa282a7]),setMap(map`
-    .....
-    .${_0x57e2dc['turn']==_0x307c19(0x122)?'c':'.'}.b.
-    .a...
-    .....`),_0x57e2dc['turn']=='you'){let _0x59e408=['W\x20to\x20ATTACK'];_0x57e2dc[_0x307c19(0x122)][_0x307c19(0xc7)]['weaken']&&_0x59e408[_0x307c19(0xff)](_0x307c19(0xa3)),_0x57e2dc[_0x307c19(0x122)][_0x307c19(0xc7)][_0x307c19(0xaf)]&&_0x57e2dc[_0x307c19(0x122)]['hp']<=0x5a&&_0x59e408['push'](_0x307c19(0xc8)),_0x59e408[_0x307c19(0xb4)]((_0x1806b2,_0x3f5318)=>{addText(_0x1806b2,{'x':0x1,'y':_0x3f5318+0x1});});}_0x57e2dc[_0x307c19(0x119)]&&_0x57e2dc[_0x307c19(0x119)][_0x307c19(0x116)]('\x0a')[_0x307c19(0xb4)]((_0x514466,_0x2ef9c7)=>{const _0x476c32=_0x307c19;addText(_0x514466,{'x':0x1,'y':0xf-_0x57e2dc[_0x476c32(0x119)][_0x476c32(0x116)]('\x0a')[_0x476c32(0xda)]+_0x2ef9c7});});}async function _0x43050b(){const _0x4de48c=_0x189ec8;let _0x6d48a5=[];_0x57e2dc[_0x4de48c(0x125)][_0x4de48c(0xc7)][_0x4de48c(0xc0)]&&_0x6d48a5[_0x4de48c(0xff)](_0x4f4ecb),_0x57e2dc[_0x4de48c(0x125)][_0x4de48c(0xc7)][_0x4de48c(0xef)]&&_0x6d48a5[_0x4de48c(0xff)](_0x23f872),_0x57e2dc[_0x4de48c(0x125)][_0x4de48c(0xc7)][_0x4de48c(0xaf)]&&_0x57e2dc['them']['hp']<=0x5a&&_0x6d48a5[_0x4de48c(0xff)](_0x2b8ab1),_0x6d48a5[Math['floor'](Math['random']()*_0x6d48a5['length'])](_0x4de48c(0x125));}async function _0x467af0(_0x12ecce,{x:_0xce378f,y:_0x4c32f5},_0x232053){getFirst(_0x12ecce)['x']+=_0xce378f||0x0,getFirst(_0x12ecce)['y']+=_0x4c32f5||0x0,await new Promise(_0x50c631=>setTimeout(_0x50c631,_0x232053)),getFirst(_0x12ecce)['x']-=_0xce378f||0x0,getFirst(_0x12ecce)['y']-=_0x4c32f5||0x0;}function _0x19b89a(_0x3412d1){const _0xf5c9de=_0x189ec8;return 0xa+Math[_0xf5c9de(0x10d)](_0x3412d1-0xa)*0x5;}async function _0x4f4ecb(_0x5e03ca){const _0x1a5907=_0x189ec8;var _0x50b355;let _0x24fb5d=_0x5e03ca==_0x1a5907(0x122)?_0x57e2dc['you']:_0x57e2dc[_0x1a5907(0x125)],_0x5128c2=_0x5e03ca==_0x1a5907(0x122)?_0x57e2dc[_0x1a5907(0x125)]:_0x57e2dc[_0x1a5907(0x122)];_0x57e2dc[_0x1a5907(0x107)]=void 0x0,_0x57e2dc[_0x1a5907(0x119)]=_0x24fb5d['name']+_0x1a5907(0x121)+_0x24fb5d['attacks']['attack']+_0x1a5907(0xb9),_0x46535e(),await new Promise(_0x5882f9=>setTimeout(_0x5882f9,0x3e8));let _0x1b28fb=Math[_0x1a5907(0xb8)]()<((_0x50b355=_0x24fb5d[_0x1a5907(0x10e)])!=null?_0x50b355:0.6),_0x6bca79=_0x19b89a(_0x5128c2[_0x1a5907(0xee)]);if(_0x1b28fb?(_0x5e03ca==_0x1a5907(0x122)?_0x57e2dc['them']['hp']-=_0x6bca79:(_0x57e2dc[_0x1a5907(0x122)]['hp']-=_0x6bca79,_0x3ad95f=_0x57e2dc[_0x1a5907(0x122)]['hp']),_0x57e2dc['consoleText']=_0x1a5907(0x113)+_0x5128c2[_0x1a5907(0x108)]+_0x1a5907(0x132)+_0x6bca79+_0x1a5907(0x129)):_0x57e2dc[_0x1a5907(0x119)]=_0x1a5907(0xea),_0x46535e(),await _0x467af0(_0x5e03ca==_0x1a5907(0x122)?_0xdd6e62:_0x13789e,_0x1b28fb?{'x':_0x5e03ca=='you'?0x1:-0x1}:{'y':-0x1},0xc8),_0x57e2dc[_0x1a5907(0x122)]['hp']<=0x0||_0x57e2dc['them']['hp']<=0x0){setTimeout(()=>{const _0x3dc5f7=_0x1a5907;_0x57e2dc[_0x3dc5f7(0xd7)]=!0x0,_0x46535e();},0x3e8),setTimeout(()=>{const _0x224669=_0x1a5907;_0x57e2dc[_0x224669(0xfd)](_0x57e2dc),_0x57e2dc[_0x224669(0x101)]=!0x1;},0x7d0);return;}_0x5e03ca=='you'?(_0x57e2dc[_0x1a5907(0x107)]='them',setTimeout(_0x43050b,0x7d0)):_0x57e2dc[_0x1a5907(0x107)]='you',_0x46535e();}async function _0x2b8ab1(_0x181f3f){const _0x457f05=_0x189ec8;let _0x528a3e=_0x181f3f==_0x457f05(0x122)?_0x57e2dc[_0x457f05(0x122)]:_0x57e2dc['them'];_0x57e2dc[_0x457f05(0x107)]=void 0x0,_0x57e2dc[_0x457f05(0x119)]=_0x528a3e['name']+_0x457f05(0x121)+_0x528a3e[_0x457f05(0xc7)][_0x457f05(0xaf)]+_0x457f05(0xb9),_0x46535e(),await new Promise(_0x42f55c=>setTimeout(_0x42f55c,0x3e8));let _0x2a5ff0=!0x0,_0x2d44e1=0xa;_0x2a5ff0?(_0x181f3f==_0x457f05(0x122)?(_0x57e2dc[_0x457f05(0x122)]['hp']+=_0x2d44e1,_0x3ad95f=_0x57e2dc['you']['hp']):_0x57e2dc[_0x457f05(0x125)]['hp']+=_0x2d44e1,_0x57e2dc['consoleText']='...\x20and\x20healed\x20to\x0a+'+_0x2d44e1+_0x457f05(0x129)):_0x57e2dc[_0x457f05(0x119)]=_0x457f05(0xea),_0x46535e(),_0x181f3f==_0x457f05(0x122)?(_0x57e2dc[_0x457f05(0x107)]=_0x457f05(0x125),setTimeout(_0x43050b,0x7d0)):_0x57e2dc[_0x457f05(0x107)]=_0x457f05(0x122),_0x46535e();}async function _0x23f872(_0x2b8ed0){const _0x1ed363=_0x189ec8;var _0x101b14;let _0x20c592=_0x2b8ed0==_0x1ed363(0x122)?_0x57e2dc[_0x1ed363(0x122)]:_0x57e2dc[_0x1ed363(0x125)],_0x5ef952=_0x2b8ed0==_0x1ed363(0x122)?_0x57e2dc[_0x1ed363(0x125)]:_0x57e2dc[_0x1ed363(0x122)];_0x57e2dc[_0x1ed363(0x107)]=void 0x0,_0x57e2dc[_0x1ed363(0x119)]=_0x20c592[_0x1ed363(0x108)]+'\x20used\x0a'+_0x20c592[_0x1ed363(0xc7)][_0x1ed363(0xef)]+_0x1ed363(0xb9),_0x46535e(),await new Promise(_0x32fbad=>setTimeout(_0x32fbad,0x3e8));let _0x15ea10=Math[_0x1ed363(0xb8)]()<((_0x101b14=_0x20c592['accuracy'])!=null?_0x101b14:0.6);_0x15ea10?(_0x2b8ed0==_0x1ed363(0x122)?_0x57e2dc[_0x1ed363(0x125)][_0x1ed363(0xee)]-=0x2:_0x57e2dc[_0x1ed363(0x122)][_0x1ed363(0xee)]-=0x2,_0x57e2dc[_0x1ed363(0x119)]='...\x20and\x20'+_0x5ef952[_0x1ed363(0x108)]+'\x0awas\x20WEAKENED'):_0x57e2dc['consoleText']=_0x1ed363(0xea),_0x46535e(),await _0x467af0(_0x2b8ed0==_0x1ed363(0x122)?_0xdd6e62:_0x13789e,_0x15ea10?{'x':_0x2b8ed0=='you'?0x1:-0x1}:{'y':-0x1},0xc8),_0x2b8ed0==_0x1ed363(0x122)?(_0x57e2dc[_0x1ed363(0x107)]=_0x1ed363(0x125),setTimeout(_0x43050b,0x7d0)):_0x57e2dc['turn']=_0x1ed363(0x122),_0x46535e();}onInput('w',async()=>{const _0x51aeda=_0x189ec8;_0x57e2dc['gameRunning']&&_0x57e2dc['turn']==_0x51aeda(0x122)&&_0x4f4ecb(_0x51aeda(0x122));}),onInput('a',async()=>{const _0x49fb05=_0x189ec8;_0x57e2dc['gameRunning']&&_0x57e2dc[_0x49fb05(0x122)][_0x49fb05(0xc7)]['weaken']&&_0x57e2dc[_0x49fb05(0x107)]==_0x49fb05(0x122)&&_0x23f872(_0x49fb05(0x122));}),onInput('s',async()=>{const _0x17b21c=_0x189ec8;_0x57e2dc[_0x17b21c(0x101)]&&_0x57e2dc[_0x17b21c(0x122)]['attacks']['heal']&&_0x57e2dc['you']['hp']<=0x5a&&_0x57e2dc[_0x17b21c(0x107)]==_0x17b21c(0x122)&&_0x2b8ab1(_0x17b21c(0x122));});function _0x188246(_0x507270,_0x45f557){return new Promise(_0xf96c06=>{const _0x24b658=_0x224b;_0x57e2dc={'gameRunning':!0x0,'you':_0x244336({'hp':_0x3ad95f,'strength':0xa},_0x507270),'them':_0x244336({'hp':0x64,'strength':0xa},_0x45f557),'showWinner':!0x1,'consoleText':'','turn':_0x24b658(0x122),'onGameEnd':_0xf96c06},_0x46535e();});}var _0x4d8de4={'wasabi':{'name':_0x189ec8(0xe5),'sprite':_0xba3495,'attacks':{'attack':'FACE\x20LICK'},'accuracy':0x0,'strength':0x9},'trigger':{'name':'Trigger','sprite':_0x32e1f9,'attacks':{'attack':'FACE\x20BITE','weaken':_0x189ec8(0xb1)},'strength':0x8,'accuracy':0.8},'zachsGrandpa':{'name':_0x189ec8(0xac),'sprite':_0x3cb5a4,'attacks':{'attack':'CANE','weaken':[_0x189ec8(0xd5),_0x189ec8(0xfb)][~~(0.1+Math['random']())]}},'amogus':{'name':'Amogus','sprite':_0x5621b2,'attacks':{'attack':_0x189ec8(0xcd),'weaken':'RED\x20SUS','heal':_0x189ec8(0x11c)}},'orpheus':{'name':'Orpheus','sprite':_0x4a4527,'attacks':{'attack':_0x189ec8(0x11a),'weaken':_0x189ec8(0x104),'heal':'CHIRP'}}};async function _0x5a571c(){const _0x5bb19c=_0x189ec8;return await _0x188246(_0x18e4f8(_0x244336({},_0x4d8de4[_0x5bb19c(0xe8)]),{'attacks':{'attack':_0x4d8de4[_0x5bb19c(0xe8)]['attacks'][_0x5bb19c(0xc0)]},'accuracy':0.8}),_0x4d8de4[_0x5bb19c(0xc5)]);}async function _0xea8e7c(){const _0x2950d7=_0x189ec8;return await _0x188246(_0x18e4f8(_0x244336({},_0x4d8de4[_0x2950d7(0xe8)]),{'attacks':{'attack':_0x4d8de4[_0x2950d7(0xe8)][_0x2950d7(0xc7)][_0x2950d7(0xc0)],'weaken':_0x4d8de4[_0x2950d7(0xe8)][_0x2950d7(0xc7)][_0x2950d7(0xef)]},'accuracy':0.7}),_0x4d8de4[_0x2950d7(0x106)]);}async function _0x1b9cb9(){const _0x1bfde4=_0x189ec8;return await _0x188246(_0x18e4f8(_0x244336({},_0x4d8de4[_0x1bfde4(0xe8)]),{'attacks':{'attack':_0x4d8de4[_0x1bfde4(0xe8)][_0x1bfde4(0xc7)][_0x1bfde4(0xc0)],'weaken':_0x4d8de4[_0x1bfde4(0xe8)][_0x1bfde4(0xc7)]['weaken']}}),_0x4d8de4[_0x1bfde4(0x12e)]);}async function _0x275794(_0x1008be){const _0x277cfd=_0x189ec8;return _0x1008be?await _0x188246(_0x4d8de4[_0x277cfd(0xe8)],_0x4d8de4[_0x277cfd(0xb5)]):await _0x188246(_0x18e4f8(_0x244336({},_0x4d8de4[_0x277cfd(0xe8)]),{'attacks':{'attack':_0x4d8de4[_0x277cfd(0xe8)][_0x277cfd(0xc7)]['attack'],'weaken':_0x4d8de4[_0x277cfd(0xe8)][_0x277cfd(0xc7)][_0x277cfd(0xef)]}}),_0x4d8de4[_0x277cfd(0xb5)]);}var _0xa072d3={'switchOff':'Ê','switch':'Ë','max':':','caveEntrance':'-','chest':'Å','amogus':'Ñ','vent':'¢','desk':'?','ghost':'Z','staircase':'Â','sign':'É','player':')','ladder':'¡','ironDoor':'j','woodenDoor':'b','kara':'B','oldMan':'2','trigger':'Ò'},_0x1d15bc=!0x1,_0x3cdf73=((()=>{let _0x1fb2dc=()=>{};return afterInput(_0x365542=>_0x1fb2dc()),_0x122661=>_0x1fb2dc=_0x122661;})()),_0x26da7f=map`
-.....
-.....
-.....
-.....`,_0x31652c=class{constructor(_0x4ea2c9){const _0x21772d=_0x189ec8;this[_0x21772d(0x127)]=(_0x4ea2c9[_0x21772d(0x10f)]()+'\x0a')[_0x21772d(0x116)]('')[_0x21772d(0xe2)](_0x5e2175=>_0x5e2175!='\x20'),this[_0x21772d(0xf4)]=this[_0x21772d(0x127)]['indexOf']('\x0a'),this[_0x21772d(0xb3)]=this[_0x21772d(0x127)][_0x21772d(0xda)]/this['stride'];}get[_0x189ec8(0x115)](){const _0x424949=_0x189ec8;return this[_0x424949(0xf4)]+0x1;}[_0x189ec8(0xe6)](_0xb0c8a5,_0x2918d1){const _0x1027c9=_0x189ec8;return this['arr'][_0x2918d1*this[_0x1027c9(0x115)]+_0xb0c8a5];}[_0x189ec8(0xd3)](_0x5820be,_0x415689,_0x85dd0d){const _0x2113aa=_0x189ec8;this[_0x2113aa(0x127)][_0x415689*this[_0x2113aa(0x115)]+_0x5820be]=_0x85dd0d;}*['positionsOf'](_0x5b635d){const _0x594666=_0x189ec8;let _0x3077ac=-0x1;for(;;){if(_0x3077ac=this[_0x594666(0x127)][_0x594666(0x100)](_0x5b635d,_0x3077ac+0x1),_0x3077ac==-0x1)return;yield[_0x3077ac%this['stride'],Math['floor'](_0x3077ac/this[_0x594666(0x115)])];}}[_0x189ec8(0xc6)](){const _0x4e49ef=_0x189ec8;setMap(this[_0x4e49ef(0x127)][_0x4e49ef(0xf6)](''));}[_0x189ec8(0xff)](){const _0x3ffa2b=_0x189ec8;let _0x4c248d=0x0,_0x261a47=0x0,_0x19c028=[...this[_0x3ffa2b(0x127)]],_0x20a85f=()=>_0x19c028[0x0],_0x32835d=()=>_0x19c028['shift']();do switch(_0x20a85f()){case'\x20':continue;case'\x0a':_0x261a47++,_0x4c248d=0x0;break;case'.':_0x4c248d++;break;case'\x00':break;default:{if(_0x4c248d>=width()||_0x261a47>=height())continue;addSprite(_0x4c248d,_0x261a47,_0x20a85f()),_0x4c248d++;}break;}while(_0x32835d());}},_0x26e06c,_0x1dc1e8=()=>_0x26e06c={'outside':[new _0x31652c(map`
-  $%$!$$$$$$$$
-  $$$!$%%$$%$!
-  $$$$$$!$$$$$
-  $$$%$$!!$$$$
-  $$"$$$$$$$%$
-  !$"%%$$$$$$$
-  !$$%$$9$$$$$
-  $$$$&8I80$9$
-    88881$$$(8I8`),new _0x31652c(map`
-  .©©.©©©...Í.
-  ............
-  .¾¾¾........
-  .¾¾¶.¶¶¶....
-  .¶¶¶.¶¶¶.¶¶¶
-  .¶¶¶.¶.¶¶¶¶¶
-  .¶.¶.....¶.¶
-  ...É........
-  ......¶.....`),new _0x31652c(map`
-  ............
-  ............
-  .*3;..£³....
-  .+#<.[¤´..£³
-  .+#<.^¥µ.[¤´
-  .+#<.abq.^¥µ
-  .,-=.....Qbq
-  ............
-  ............`)],'hq':[new _0x31652c(map`
-.....
-[dddl
-]eeem
-^fffn`),new _0x31652c(map`
-.iii.
-.B...
-.....
-..¢..`),new _0x31652c(map`
-¡...b
-.....
-.....
-.....`)],'callRoom':[new _0x31652c(map`
-.....
-[dddl
-]eeem
-^fffn`),new _0x31652c(map`
-.zi.i
-...Å.
-.....
-..Z?.`),new _0x31652c(map`
-Â..b.
-.....
-.....
-.....`)],'closet':[new _0x31652c(map`
-.....
-..[dl
-..^fn
-.....`),new _0x31652c(map`
-ÐÐa.q
-ÐÐ...
-ÐÐ2..
-ÐÐÐÐÐ`),new _0x31652c(map`
-...b.
-.....
-.....
-.....`)],'bank':[new _0x31652c(map`
-...........
-[dddddddddl
-]PePePePePm
-]ePePePePem
-]PePePePePm
-^fffffffffn`),new _0x31652c(map`
-aiziiriiziq
-...........
-...........
-...........
-...........
-...........`),new _0x31652c(map`
-...........
-...........
-...........
-..........Ë
-...........
-...........`)]};_0x1dc1e8();var [_0xe19452]=[..._0x26e06c[_0x189ec8(0x12c)][0x2]['positionsOf'](_0xa072d3['caveEntrance'])],[_0x23e678,_0x187b2f]=[..._0x26e06c['outside'][0x2]['positionsOf'](_0xa072d3[_0x189ec8(0x130)])],[_0x4483c7]=[..._0x26e06c['hq'][0x2][_0x189ec8(0xab)](_0xa072d3['woodenDoor'])],[_0x5f3c07]=[..._0x26e06c['hq'][0x2][_0x189ec8(0xab)](_0xa072d3['ladder'])],[_0x7af04f]=[..._0x26e06c[_0x189ec8(0xe1)][0x2][_0x189ec8(0xab)](_0xa072d3[_0x189ec8(0xbc)])],[_0x3306cb]=[..._0x26e06c['callRoom'][0x2]['positionsOf'](_0xa072d3[_0x189ec8(0x130)])],[_0x3429c0]=[..._0x26e06c[_0x189ec8(0x118)][0x2][_0x189ec8(0xab)](_0xa072d3[_0x189ec8(0x130)])],_0x1fa1a2=[{'active':0x1,'pos':{'outside':_0x187b2f,'hq':_0x4483c7}},{'active':0x1,'pos':{'callRoom':_0x7af04f,'hq':_0x5f3c07}},{'active':0x0,'pos':{'callRoom':_0x3306cb,'closet':_0x3429c0}}],_0x5d23ef=(_0x5e1e94,_0x568d55=_0x3880ea)=>_0x1fa1a2[_0x189ec8(0xe9)](_0x13d496=>_0x5e1e94+''==''+_0x13d496[_0x189ec8(0xc9)][_0x568d55]),[_0x88b8a7]=[..._0x26e06c['callRoom'][0x1][_0x189ec8(0xab)](_0xa072d3[_0x189ec8(0x109)])],[_0x837428]=[..._0x26e06c[_0x189ec8(0xe1)][0x1][_0x189ec8(0xab)](_0xa072d3[_0x189ec8(0x123)])],[_0x22bf15]=[..._0x26e06c['hq'][0x1]['positionsOf'](_0xa072d3[_0x189ec8(0x102)])],[_0x333d58]=[..._0x26e06c[_0x189ec8(0x12c)][0x1][_0x189ec8(0xab)](_0xa072d3[_0x189ec8(0xd0)])],_0x284cf0=[_0x333d58[0x0]-0x3,_0x333d58[0x1]],[_0x269752]=[..._0x26e06c[_0x189ec8(0xbd)][0x2][_0x189ec8(0xab)](_0xa072d3[_0x189ec8(0x111)])];_0x26e06c['hq'][0x1]['write'](..._0x22bf15,'.');var _0x13fc30=_0x42a45b=>[_0x42a45b[0x0],_0x42a45b[0x1]+0x1],_0x4b4393=_0x4465ce=>[_0x4465ce[0x0],_0x4465ce[0x1]-0x1],_0x29ebc8,_0xa6885=()=>_0x29ebc8={'outside':[{'active':0x1,'pos':_0xe19452,'fn':_0x2e1221},{'active':0x0,'pos':_0xe19452,'fn':_0x1f007f},{'active':0x1,'pos':_0x23e678,'fn':_0x23a1eb},{'active':0x0,'pos':_0x23e678,'fn':_0xa307e1},{'active':0x0,'pos':_0x13fc30(_0x333d58),'fn':_0x551f50},{'active':0x0,'pos':_0x284cf0,'fn':_0xe7ebb4}],'hq':[{'active':0x1,'pos':_0x13fc30(_0x4483c7),'fn':_0x438229},{'active':0x0,'pos':_0x13fc30(_0x4483c7),'fn':_0x8905a7},{'active':0x0,'pos':_0x13fc30(_0x4483c7),'fn':_0x163ea1},{'active':0x1,'pos':_0x13fc30(_0x5f3c07),'fn':_0x255a06},{'active':0x0,'pos':_0x13fc30(_0x5f3c07),'fn':_0x1e597f},{'active':0x0,'pos':_0x4b4393(_0x22bf15),'fn':_0x24f3bf},{'active':0x0,'pos':_0x13fc30(_0x4483c7),'fn':_0x3a798c}],'callRoom':[{'active':0x1,'pos':_0x13fc30(_0x7af04f),'fn':_0x12bc87},{'active':0x1,'pos':_0x4b4393(_0x88b8a7),'fn':_0x539c92},{'active':0x1,'pos':_0x3306cb,'fn':_0x2f5010}],'closet':[{'active':0x1,'pos':_0x13fc30(_0x13fc30(_0x3429c0)),'fn':_0x19982d}],'bank':[{'active':0x1,'pos':_0x269752,'fn':_0x55f4d7}]};_0xa6885();var _0x3b409b=_0xbe9117=>Object[_0x189ec8(0xcb)](_0x29ebc8)[_0x189ec8(0xd1)]()[_0x189ec8(0xe9)](_0x440321=>_0x440321['fn']==_0xbe9117),_0x55c160={[_0xa072d3[_0x189ec8(0xb7)]]:0x2,[_0xa072d3[_0x189ec8(0x111)]]:0x2,[_0xa072d3[_0x189ec8(0x120)]]:0x1,[_0xa072d3[_0x189ec8(0xf1)]]:0x1,[_0xa072d3[_0x189ec8(0x102)]]:0x1,[_0xa072d3[_0x189ec8(0x12e)]]:0x2,[_0xa072d3[_0x189ec8(0xc1)]]:{'hq':0x1,'callRoom':0x1,'outside':0x2},[_0xa072d3[_0x189ec8(0xb5)]]:0x2},_0xe0669b=[['!',bitmap`2222222221222222
-2222222222222222
-2222222222222222
-2222122222222222
-2222112222212122
-2222212222221222
-2222222222222222
-2121222222222222
-2212222222222222
-2222222222222222
-2222222122222222
-2222221122222222
-2221221222221212
-2221122222222122
-2222122222222222
-2222222212122222`],['\x22',bitmap`2222222221222222
-2121222222222221
-2212222222212211
-2222222222211212
-2222222222221222
-2222222222222222
-2222222121222222
-2222222212222222
-2222222222222222
-2222222222221212
-2222221222222122
-2212211222222222
-2211212222222222
-2221222222222222
-2222222222222222
-2222222212122222`],['#',bitmap`2222222221222222
-2222222222222222
-2222222222222222
-2212122222222222
-2221222222222222
-2222222222121222
-2222222222212222
-2222221212222222
-2222222122222222
-2222222222222122
-2222212222221122
-2122112222221222
-2112122222222222
-2212222222222222
-2222222222222222
-2222222212122222`],['$',bitmap`2222222221222222
-2222222222222222
-2222222222222222
-2222222222221212
-2121222222222122
-2212222222222222
-2222222222222222
-2222222212222222
-2222222211221222
-2222222221211222
-2222222222212222
-2222222222222222
-2221212222222222
-2222122222222222
-2222222222222222
-2222222212122222`],['%',bitmap`2222222221222222
-2222222222222222
-2222222221121122
-2222222221L1L122
-2121222222121222
-2212222221L1L122
-2222222221121122
-2222222222222222
-2222222222222222
-2211211222222222
-221L1L1222222222
-2221212222221212
-221L1L1222222122
-2211211222222222
-2222222222222222
-2222222212122222`],['&',bitmap`2222222222222222
-2222222222111122
-2222221111111111
-2222111211111111
-2221111111111111
-2221121111111111
-2211111111111111
-2211111111111111
-2211111111111111
-2211111111111111
-2111111111111111
-2111111111111111
-2121111111111121
-2111111111122111
-2211111111122122
-2211111111111122`],['(',bitmap`2211111111111122
-2211111111122122
-2111111111122111
-2111111111111121
-2111111111111111
-2111111111111111
-2211111111111111
-2212111111111111
-2211111111111111
-2211221111111111
-2221221111111111
-2221111111111111
-2222111211111111
-2222221111111111
-2222222222111122
-2222222222222222`],[')',bitmap`2222222222222222
-2222222222222222
-2222L000000L2222
-222L0LLLLLL0L222
-2220LLLLLLLL0L22
-2220L12LL2102022
-2220L22222202022
-2220220220202022
-2220L20220202022
-2L000L2222102022
-2012101111L010L2
-2022201111022202
-202220LLLL00L002
-201210L00LL00022
-2200011001101222
-2222222222222222`],['*',bitmap`2222L00000000000
-22L0011111111111
-2L01122222111122
-2012222222222222
-L012222222221222
-0122222222222222
-0122222121222222
-0122222212222222
-0122222222222222
-0122222222221212
-0112221222222122
-0112211222222222
-0112212222222222
-0112222222222222
-0122222222222222
-0122222212122222`],['+',bitmap`0122222221222222
-0122222222222222
-0112212122222222
-0112221222222222
-0112222222221222
-0112222222211222
-0122222212212222
-0122222211222222
-0122222221222222
-0122222222222222
-0112222222212122
-0112222222221222
-0112122222222222
-0112222222222222
-0122222222222222
-0122222212122222`],[',',bitmap`0122222221222222
-0122222222222221
-01L2222222212211
-011LL22222222222
-01111LLL22LLLL22
-01211111LL1111LL
-0122221111222211
-0112222222222222
-0121112222111122
-0122221111222211
-0122222222222222
-L012222222222222
-2011112222111122
-2L01111111111111
-22L00LL111LLLL11
-2222L00000000000`],['-',bitmap`2222222222222222
-2222222222221222
-2222222222222222
-2222222222222222
-22LLLL2222LLLL22
-LL1111LLLL1111LL
-1122221111222211
-2222220000222222
-2211100000011122
-1122000000002211
-2222000000002222
-2220000000000222
-2210000000000122
-11100LLLLLL00111
-11L0LLLLLLLL0L11
-0000LLLLLLLL0000`],['/',bitmap`2222222222222222
-2222222222221222
-2222222222222222
-2222222222222222
-22LLLL2222LLLL22
-LL1111LLLL1111LL
-1122221111222211
-2222220000222222
-2211101221011122
-1122012222102211
-2222021111202222
-2220121111210222
-2210211LL1120122
-1110211LL1120111
-11L0211111120L11
-0000222222220000`],['0',bitmap`2222222222222222
-2211112222222222
-1111111111222222
-1111111121112222
-1111111111111222
-1111111111221222
-1111111111221122
-1111111111111122
-1111111111112122
-1111111111111122
-1111111111111112
-1111111111111112
-1211111111111112
-1112111111111112
-2211111111111122
-2211111111111122`],['1',bitmap`2211111111111122
-2211211111111122
-1111111111111112
-1221111111111112
-1221111111111112
-1111111111111112
-1111111111111122
-1111111111112122
-1111111111111122
-1111111112211122
-1111111112211222
-1111111111111222
-1111111121112222
-1111111111222222
-2211112222222222
-2222222222222222`],['2',bitmap`222222L00L222222
+(()=>{var j2=Object.defineProperty,K2=Object.defineProperties;var U2=Object.getOwnPropertyDescriptors;var C2=Object.getOwnPropertySymbols;var Q2=Object.prototype.hasOwnProperty,V2=Object.prototype.propertyIsEnumerable;var h2=(L,t,e)=>t in L?j2(L,t,{enumerable:!0,configurable:!0,writable:!0,value:e}):L[t]=e,H=(L,t)=>{for(var e in t||(t={}))Q2.call(t,e)&&h2(L,e,t[e]);if(C2)for(var e of C2(t))V2.call(t,e)&&h2(L,e,t[e]);return L},F=(L,t)=>K2(L,U2(t));var f2=`
+.......00.......
+.....0000000....
+....0033333000..
+....0333333330..
+....03333000000.
+....033307777770
+....033307777770
+....033307777700
+...003333000000.
+...033333333330.
+...033333333330.
+...033330333330.
+..0033330333300.
+..033330033330..
+..000330.00330..
+....0000..0000..
+`,j=`
+....0.0000.0....
+....00000000....
+....000000000...
+...0020020000...
+...00000000000..
+...000220000000.
+...020200200000.
+...002222000000.
+...000000000000.
+...000000000000.
+...000000000000.
+...000000000000.
+....00000000000.
+....00..00...00.
+....00..00...00.
+....0...0....0..
+`,w2=`
+222222L00L222222
 22222L0110L22222
 2222001111002222
 22L01L2222L10L22
@@ -336,10 +55,169 @@ LL1111LLLL1111LL
 22L0011LL1100102
 2222011111100202
 22210LL00LL00002
-2222222222222222`],['3',bitmap`0000000000000000
-1111111111111111
-2211112222111122
 2222222222222222
+`,d2=`................
+................
+................
+................
+......00000.....
+.....0011200....
+.....0122220....
+....001002000...
+....012002200...
+....01202220....
+....01200000....
+....012220......
+....002220......
+....002220......
+....002220......
+....002220......
+`,b2=`
+....C.CCCC.C....
+....CCCCCCCC....
+....CCCCCCCCC...
+...CC0CC0CCCC...
+...CCCCCCCCCCC..
+...CCC00CCCCCCC.
+...C0C0CC0CCCCC.
+...CC0000CCCCCC.
+...CCCCCCCCCCCC.
+...CCCCCCCCCCCC.
+...CCCCCCCCCCCC.
+...CCCCCCCCCCCC.
+....CCCCCCCCCCC.
+....CC..CC...CC.
+....CC..CC...CC.
+....C...C....C..
+`,X=`
+.....333CCC.....
+.....333CCC.....
+.....333CCC.....
+.....333CCC.....
+.....333CCC.....
+.....333CCC.....
+.....333CCC.....
+.....333CCC.....
+..333333CCCCCC..
+...33333CCCCC...
+....3333CCCC....
+.....333CCC.....
+......33CC......
+.......3C.......
+................
+................
+`,y2=X.split(`
+`).reverse().join(`
+`);function J2(L){return L<=25?"3":L<=50?"9":"4"}function K(L,t){let e=Math.ceil(t*.16);return L.trim().split(`
+`).map((c,u)=>(e>=Math.abs(u-16)?J2(t):"1")+c.trim().substring(1)).join(`
+`)}var U=100;function _(L){U=L}var a={gameRunning:!1,you:{hp:100,strength:10},them:{hp:100,strength:10},showWinner:!1,consoleText:"",turn:"you",onGameEnd(){}},G="a",W="b";function P(){if(clearText(),a.showWinner){setLegend([G,a.you.sprite],[W,a.them.sprite]),setMap(map`
+  .....
+  ..${a.you.hp<=0?W:G}..
+  .....
+  .....`),addText(`${a.you.hp<=0?a.them.name:a.you.name} wins!`,{x:3,y:10});return}if(setLegend([G,K(a.you.sprite,a.you.hp)],[W,K(a.them.sprite,a.them.hp)],["c",X],["d",y2]),setMap(map`
+    .....
+    .${a.turn=="you"?"c":"."}.b.
+    .a...
+    .....`),a.turn=="you"){let L=["W to ATTACK"];a.you.attacks.weaken&&L.push("A to WEAKEN"),a.you.attacks.heal&&a.you.hp<=90&&L.push("S to HEAL"),L.forEach((t,e)=>{addText(t,{x:1,y:e+1})})}a.consoleText&&a.consoleText.split(`
+`).forEach((L,t)=>{addText(L,{x:1,y:15-a.consoleText.split(`
+`).length+t})})}async function L2(){let L=[];a.them.attacks.attack&&L.push(k2),a.them.attacks.weaken&&L.push(v2),a.them.attacks.heal&&a.them.hp<=90&&L.push(T2),L[Math.floor(Math.random()*L.length)]("them")}async function g2(L,{x:t,y:e},n){getFirst(L).x+=t||0,getFirst(L).y+=e||0,await new Promise(c=>setTimeout(c,n)),getFirst(L).x-=t||0,getFirst(L).y-=e||0}function X2(L){return 10+Math.abs(L-10)*5}async function k2(L){var u;let t=L=="you"?a.you:a.them,e=L=="you"?a.them:a.you;a.turn=void 0,a.consoleText=`${t.name} used
+${t.attacks.attack}...`,P(),await new Promise(x=>setTimeout(x,1e3));let n=Math.random()<((u=t.accuracy)!=null?u:.6),c=X2(e.strength);if(n?(L=="you"?a.them.hp-=c:(a.you.hp-=c,U=a.you.hp),a.consoleText=`... and ${e.name}
+lost ${c} HP`):a.consoleText="... but missed",P(),await g2(L=="you"?G:W,n?{x:L=="you"?1:-1}:{y:-1},200),a.you.hp<=0||a.them.hp<=0){setTimeout(()=>{a.showWinner=!0,P()},1e3),setTimeout(()=>{a.onGameEnd(a),a.gameRunning=!1},2e3);return}L=="you"?(a.turn="them",setTimeout(L2,2e3)):a.turn="you",P()}async function T2(L){let t=L=="you"?a.you:a.them;a.turn=void 0,a.consoleText=`${t.name} used
+${t.attacks.heal}...`,P(),await new Promise(c=>setTimeout(c,1e3));let e=!0,n=10;e?(L=="you"?(a.you.hp+=n,U=a.you.hp):a.them.hp+=n,a.consoleText=`... and healed to
++${n} HP`):a.consoleText="... but missed",P(),L=="you"?(a.turn="them",setTimeout(L2,2e3)):a.turn="you",P()}async function v2(L){var c;let t=L=="you"?a.you:a.them,e=L=="you"?a.them:a.you;a.turn=void 0,a.consoleText=`${t.name} used
+${t.attacks.weaken}...`,P(),await new Promise(u=>setTimeout(u,1e3));let n=Math.random()<((c=t.accuracy)!=null?c:.6);n?(L=="you"?a.them.strength-=2:a.you.strength-=2,a.consoleText=`... and ${e.name}
+was WEAKENED`):a.consoleText="... but missed",P(),await g2(L=="you"?G:W,n?{x:L=="you"?1:-1}:{y:-1},200),L=="you"?(a.turn="them",setTimeout(L2,2e3)):a.turn="you",P()}onInput("w",async()=>{a.gameRunning&&a.turn=="you"&&k2("you")});onInput("a",async()=>{a.gameRunning&&a.you.attacks.weaken&&a.turn=="you"&&v2("you")});onInput("s",async()=>{a.gameRunning&&a.you.attacks.heal&&a.you.hp<=90&&a.turn=="you"&&T2("you")});function q(L,t){return new Promise(e=>{a={gameRunning:!0,you:H({hp:U,strength:10},L),them:H({hp:100,strength:10},t),showWinner:!1,consoleText:"",turn:"you",onGameEnd:e},P()})}var g={wasabi:{name:"Wasabi",sprite:j,attacks:{attack:"FACE LICK"},accuracy:0,strength:9},trigger:{name:"Trigger",sprite:b2,attacks:{attack:"FACE BITE",weaken:"SIT ON YOU"},strength:8,accuracy:.8},zachsGrandpa:{name:"Old Man",sprite:w2,attacks:{attack:"CANE",weaken:["OLD MAN SMELL","RACIAL EPITHET"][~~(.1+Math.random())]}},amogus:{name:"Amogus",sprite:f2,attacks:{attack:"VENT",weaken:"RED SUS",heal:"EMERGENCY MEETING"}},orpheus:{name:"Orpheus",sprite:d2,attacks:{attack:"LOOK BACK",weaken:"FOSSILIZE",heal:"CHIRP"}}};async function x2(){return await q(F(H({},g.orpheus),{attacks:{attack:g.orpheus.attacks.attack},accuracy:.8}),g.wasabi)}async function $2(){return await q(F(H({},g.orpheus),{attacks:{attack:g.orpheus.attacks.attack,weaken:g.orpheus.attacks.weaken},accuracy:.7}),g.zachsGrandpa)}async function P2(){return await q(F(H({},g.orpheus),{attacks:{attack:g.orpheus.attacks.attack,weaken:g.orpheus.attacks.weaken}}),g.amogus)}async function I2(L){return L?await q(g.orpheus,g.trigger):await q(F(H({},g.orpheus),{attacks:{attack:g.orpheus.attacks.attack,weaken:g.orpheus.attacks.weaken}}),g.trigger)}var i={switchOff:"\xCA",switch:"\xCB",max:":",caveEntrance:"-",chest:"\xC5",amogus:"\xD1",vent:"\xA2",desk:"?",ghost:"Z",staircase:"\xC2",sign:"\xC9",player:")",ladder:"\xA1",ironDoor:"j",woodenDoor:"b",kara:"B",oldMan:"2",trigger:"\xD2"},H2=!1,D=(()=>{let L=()=>{};return afterInput(t=>L()),t=>L=t})(),a2=map`
+.....
+.....
+.....
+.....`,C=class{constructor(t){this.arr=(t.trim()+`
+`).split("").filter(e=>e!=" "),this.width=this.arr.indexOf(`
+`),this.height=this.arr.length/this.stride}get stride(){return this.width+1}read(t,e){return this.arr[e*this.stride+t]}write(t,e,n){this.arr[e*this.stride+t]=n}*positionsOf(t){let e=-1;for(;;){if(e=this.arr.indexOf(t,e+1),e==-1)return;yield[e%this.stride,Math.floor(e/this.stride)]}}set(){setMap(this.arr.join(""))}push(){let t=0,e=0,n=[...this.arr],c=()=>n[0],u=()=>n.shift();do switch(c()){case" ":continue;case`
+`:e++,t=0;break;case".":t++;break;case"\0":break;default:{if(t>=width()||e>=height())continue;addSprite(t,e,c()),t++}break}while(u())}},l,M2=()=>l={outside:[new C(map`
+  $%$!$$$$$$$$
+  $$$!$%%$$%$!
+  $$$$$$!$$$$$
+  $$$%$$!!$$$$
+  $$"$$$$$$$%$
+  !$"%%$$$$$$$
+  !$$%$$9$$$$$
+  $$$$&8I80$9$
+    88881$$$(8I8`),new C(map`
+  .©©.©©©...Í.
+  ............
+  .¾¾¾........
+  .¾¾¶.¶¶¶....
+  .¶¶¶.¶¶¶.¶¶¶
+  .¶¶¶.¶.¶¶¶¶¶
+  .¶.¶.....¶.¶
+  ...É........
+  ......¶.....`),new C(map`
+  ............
+  ............
+  .*3;..£³....
+  .+#<.[¤´..£³
+  .+#<.^¥µ.[¤´
+  .+#<.abq.^¥µ
+  .,-=.....Qbq
+  ............
+  ............`)],hq:[new C(map`
+.....
+[dddl
+]eeem
+^fffn`),new C(map`
+.iii.
+.B...
+.....
+..¢..`),new C(map`
+¡...b
+.....
+.....
+.....`)],callRoom:[new C(map`
+.....
+[dddl
+]eeem
+^fffn`),new C(map`
+.zi.i
+...Å.
+.....
+..Z?.`),new C(map`
+Â..b.
+.....
+.....
+.....`)],closet:[new C(map`
+.....
+..[dl
+..^fn
+.....`),new C(map`
+ÐÐa.q
+ÐÐ...
+ÐÐ2..
+ÐÐÐÐÐ`),new C(map`
+...b.
+.....
+.....
+.....`)],bank:[new C(map`
+...........
+[dddddddddl
+]PePePePePm
+]ePePePePem
+]PePePePePm
+^fffffffffn`),new C(map`
+aiziiriiziq
+...........
+...........
+...........
+...........
+...........`),new C(map`
+...........
+...........
+...........
+..........Ë
+...........
+...........`)]};M2();var[t2]=[...l.outside[2].positionsOf(i.caveEntrance)],[O2,_2]=[...l.outside[2].positionsOf(i.woodenDoor)],[S]=[...l.hq[2].positionsOf(i.woodenDoor)],[e2]=[...l.hq[2].positionsOf(i.ladder)],[n2]=[...l.callRoom[2].positionsOf(i.staircase)],[i2]=[...l.callRoom[2].positionsOf(i.woodenDoor)],[A2]=[...l.closet[2].positionsOf(i.woodenDoor)],R2=[{active:1,pos:{outside:_2,hq:S}},{active:1,pos:{callRoom:n2,hq:e2}},{active:0,pos:{callRoom:i2,closet:A2}}],L1=(L,t=I)=>R2.find(e=>L+""==""+e.pos[t]),[t1]=[...l.callRoom[1].positionsOf(i.desk)],[x1]=[...l.callRoom[1].positionsOf(i.chest)],[B]=[...l.hq[1].positionsOf(i.vent)],[V]=[...l.outside[1].positionsOf(i.sign)],q2=[V[0]-3,V[1]],[z]=[...l.bank[2].positionsOf(i.switch)];l.hq[1].write(...B,".");var k=L=>[L[0],L[1]+1],J=L=>[L[0],L[1]-1],o2,B2=()=>o2={outside:[{active:1,pos:t2,fn:p2},{active:0,pos:t2,fn:N},{active:1,pos:O2,fn:u2},{active:0,pos:O2,fn:D2},{active:0,pos:k(V),fn:G2},{active:0,pos:q2,fn:r2}],hq:[{active:1,pos:k(S),fn:l2},{active:0,pos:k(S),fn:W2},{active:0,pos:k(S),fn:F2},{active:1,pos:k(e2),fn:z2},{active:0,pos:k(e2),fn:N2},{active:0,pos:J(B),fn:Z2},{active:0,pos:k(S),fn:c2}],callRoom:[{active:1,pos:k(n2),fn:s1},{active:1,pos:J(t1),fn:o1},{active:1,pos:i2,fn:r1}],closet:[{active:1,pos:k(k(A2)),fn:c1}],bank:[{active:1,pos:z,fn:a1}]};B2();var d=L=>Object.values(o2).flat().find(t=>t.fn==L),Q={[i.switchOff]:2,[i.switch]:2,[i.max]:1,[i.player]:1,[i.vent]:1,[i.amogus]:2,[i.kara]:{hq:1,callRoom:1,outside:2},[i.trigger]:2},e1=[["!",bitmap`2222222221222222
+2222222222222222
+2222222222222222
+2222122222222222
 2222112222212122
 2222212222221222
 2222222222222222
@@ -351,7 +229,22 @@ LL1111LLLL1111LL
 2221221222221212
 2221122222222122
 2222122222222222
-2222222212122222`],['4',bitmap`2222222221222222
+2222222212122222`],['"',bitmap`2222222221222222
+2121222222222221
+2212222222212211
+2222222222211212
+2222222222221222
+2222222222222222
+2222222121222222
+2222222212222222
+2222222222222222
+2222222222221212
+2222221222222122
+2212211222222222
+2211212222222222
+2221222222222222
+2222222222222222
+2222222212122222`],["#",bitmap`2222222221222222
 2222222222222222
 2222222222222222
 2212122222222222
@@ -366,7 +259,232 @@ LL1111LLLL1111LL
 2112122222222222
 2212222222222222
 2222222222222222
-2222222212122222`],['5',bitmap`2222222221222222
+2222222212122222`],["$",bitmap`2222222221222222
+2222222222222222
+2222222222222222
+2222222222221212
+2121222222222122
+2212222222222222
+2222222222222222
+2222222212222222
+2222222211221222
+2222222221211222
+2222222222212222
+2222222222222222
+2221212222222222
+2222122222222222
+2222222222222222
+2222222212122222`],["%",bitmap`2222222221222222
+2222222222222222
+2222222221121122
+2222222221L1L122
+2121222222121222
+2212222221L1L122
+2222222221121122
+2222222222222222
+2222222222222222
+2211211222222222
+221L1L1222222222
+2221212222221212
+221L1L1222222122
+2211211222222222
+2222222222222222
+2222222212122222`],["&",bitmap`2222222222222222
+2222222222111122
+2222221111111111
+2222111211111111
+2221111111111111
+2221121111111111
+2211111111111111
+2211111111111111
+2211111111111111
+2211111111111111
+2111111111111111
+2111111111111111
+2121111111111121
+2111111111122111
+2211111111122122
+2211111111111122`],["(",bitmap`2211111111111122
+2211111111122122
+2111111111122111
+2111111111111121
+2111111111111111
+2111111111111111
+2211111111111111
+2212111111111111
+2211111111111111
+2211221111111111
+2221221111111111
+2221111111111111
+2222111211111111
+2222221111111111
+2222222222111122
+2222222222222222`],[")",bitmap`2222222222222222
+2222222222222222
+2222L000000L2222
+222L0LLLLLL0L222
+2220LLLLLLLL0L22
+2220L12LL2102022
+2220L22222202022
+2220220220202022
+2220L20220202022
+2L000L2222102022
+2012101111L010L2
+2022201111022202
+202220LLLL00L002
+201210L00LL00022
+2200011001101222
+2222222222222222`],["*",bitmap`2222L00000000000
+22L0011111111111
+2L01122222111122
+2012222222222222
+L012222222221222
+0122222222222222
+0122222121222222
+0122222212222222
+0122222222222222
+0122222222221212
+0112221222222122
+0112211222222222
+0112212222222222
+0112222222222222
+0122222222222222
+0122222212122222`],["+",bitmap`0122222221222222
+0122222222222222
+0112212122222222
+0112221222222222
+0112222222221222
+0112222222211222
+0122222212212222
+0122222211222222
+0122222221222222
+0122222222222222
+0112222222212122
+0112222222221222
+0112122222222222
+0112222222222222
+0122222222222222
+0122222212122222`],[",",bitmap`0122222221222222
+0122222222222221
+01L2222222212211
+011LL22222222222
+01111LLL22LLLL22
+01211111LL1111LL
+0122221111222211
+0112222222222222
+0121112222111122
+0122221111222211
+0122222222222222
+L012222222222222
+2011112222111122
+2L01111111111111
+22L00LL111LLLL11
+2222L00000000000`],["-",bitmap`2222222222222222
+2222222222221222
+2222222222222222
+2222222222222222
+22LLLL2222LLLL22
+LL1111LLLL1111LL
+1122221111222211
+2222220000222222
+2211100000011122
+1122000000002211
+2222000000002222
+2220000000000222
+2210000000000122
+11100LLLLLL00111
+11L0LLLLLLLL0L11
+0000LLLLLLLL0000`],["/",bitmap`2222222222222222
+2222222222221222
+2222222222222222
+2222222222222222
+22LLLL2222LLLL22
+LL1111LLLL1111LL
+1122221111222211
+2222220000222222
+2211101221011122
+1122012222102211
+2222021111202222
+2220121111210222
+2210211LL1120122
+1110211LL1120111
+11L0211111120L11
+0000222222220000`],["0",bitmap`2222222222222222
+2211112222222222
+1111111111222222
+1111111121112222
+1111111111111222
+1111111111221222
+1111111111221122
+1111111111111122
+1111111111112122
+1111111111111122
+1111111111111112
+1111111111111112
+1211111111111112
+1112111111111112
+2211111111111122
+2211111111111122`],["1",bitmap`2211111111111122
+2211211111111122
+1111111111111112
+1221111111111112
+1221111111111112
+1111111111111112
+1111111111111122
+1111111111112122
+1111111111111122
+1111111112211122
+1111111112211222
+1111111111111222
+1111111121112222
+1111111111222222
+2211112222222222
+2222222222222222`],["2",bitmap`222222L00L222222
+22222L0110L22222
+2222001111002222
+22L01L2222L10L22
+2201111111110002
+2200LLLLLLLL0202
+2220L22LL22L0202
+2220L202202L0202
+2220L202202L0202
+22L0LL2LL2LL0202
+22022LL00LL20102
+220221LLLL120L02
+22L0011LL1100102
+2222011111100202
+22210LL00LL00002
+2222222222222222`],["3",bitmap`0000000000000000
+1111111111111111
+2211112222111122
+2222222222222222
+2222112222212122
+2222212222221222
+2222222222222222
+2121222222222222
+2212222222222222
+2222222222222222
+2222222122222222
+2222221122222222
+2221221222221212
+2221122222222122
+2222122222222222
+2222222212122222`],["4",bitmap`2222222221222222
+2222222222222222
+2222222222222222
+2212122222222222
+2221222222222222
+2222222222121222
+2222222222212222
+2222221212222222
+2222222122222222
+2222222222222122
+2222212222221122
+2122112222221222
+2112122222222222
+2212222222222222
+2222222222222222
+2222222212122222`],["5",bitmap`2222222221222222
 2222222222222222
 2222222222222222
 2222222222222222
@@ -381,7 +499,7 @@ LL1111LLLL1111LL
 2211112222111122
 1111111111111111
 11LLLL1111LLLL11
-0000000000000000`],['6',bitmap`2222222222222222
+0000000000000000`],["6",bitmap`2222222222222222
 2222121222222222
 2222212222222222
 2222222222222222
@@ -396,7 +514,7 @@ LL1L22222222L1LL
 221L22222222L122
 111L22222222L111
 11LL11111111LL11
-0000L111111L0000`],['7',bitmap`2222222222222222
+0000L111111L0000`],["7",bitmap`2222222222222222
 2222222222212122
 2222222222221222
 2222222222222222
@@ -411,7 +529,7 @@ LL1L21212222L1LL
 221L22222222L122
 111L22221212L111
 11L0222221220L11
-0002222222222000`],['8',bitmap`2222222222222222
+0002222222222000`],["8",bitmap`2222222222222222
 2211112222111122
 1111111111111111
 1211111122112111
@@ -426,7 +544,7 @@ LL1L21212222L1LL
 1212212111111121
 1111111111111111
 2211112222111122
-2222222222222222`],['9',bitmap`2211111111111122
+2222222222222222`],["9",bitmap`2211111111111122
 2211111111112122
 2111111111111112
 2112111111111112
@@ -441,7 +559,7 @@ LL1L21212222L1LL
 2111111111111212
 2111111111111112
 2212111111111122
-2211111111111122`],[':',bitmap`2222222222222222
+2211111111111122`],[":",bitmap`2222222222222222
 2222220000222222
 2222L00LL00L2222
 222L0LLLLLL0L222
@@ -456,7 +574,7 @@ LL1L21212222L1LL
 22L0011111100L22
 22220LL00LL02222
 2221011001101222
-2222222222222222`],[';',bitmap`00000000000L2222
+2222222222222222`],[";",bitmap`00000000000L2222
 1111111111100L22
 22111122222110L2
 2222222222222102
@@ -471,7 +589,7 @@ LL1L21212222L1LL
 2211212222222110
 2221222222222110
 2222222222222210
-2222222212122210`],['<',bitmap`2222222221222210
+2222222212122210`],["<",bitmap`2222222221222210
 2222222222222210
 2222212122222110
 2222221222222110
@@ -486,7 +604,7 @@ LL1L21212222L1LL
 2212122222222110
 2221222222222110
 2222222222222210
-2222222212122210`],['=',bitmap`2222222221222210
+2222222212122210`],["=",bitmap`2222222221222210
 2121222222222210
 2212222222222L10
 22222222222LL110
@@ -501,7 +619,7 @@ LL1111LL11111210
 2211112222111102
 11111111111110L2
 11LLLL111LL00L22
-00000000000L2222`],['>',bitmap`2222222222222222
+00000000000L2222`],[">",bitmap`2222222222222222
 2222222222222212
 2220002222000222
 2220202222020222
@@ -516,7 +634,7 @@ LL101L1111L101LL
 2210100000010122
 11101L1111L10111
 11L0100000010L11
-0000001111000000`],['?',bitmap`2202222222222022
+0000001111000000`],["?",bitmap`2202222222222022
 2102222222222012
 2012222222222102
 2000000000000002
@@ -531,7 +649,7 @@ LL101L1111L101LL
 2000000000000002
 2012222222222102
 21022212L2122012
-2202222222222022`],['@',bitmap`2211111111111122
+2202222222222022`],["@",bitmap`2211111111111122
 2211111111111112
 2111111111111111
 2112111111111111
@@ -546,7 +664,7 @@ LL101L1111L101LL
 2111111111111111
 2111111111111111
 2212111111112112
-2211111111111122`],['A',bitmap`2211111111111122
+2211111111111122`],["A",bitmap`2211111111111122
 2112111111112122
 1111111111111112
 1111111111111112
@@ -561,7 +679,7 @@ LL101L1111L101LL
 1111111111112112
 1111111111111112
 2112111111111122
-2211111111111122`],['B',bitmap`2222222222222222
+2211111111111122`],["B",bitmap`2222222222222222
 2222222222222222
 2222L000000L2222
 222L01L1LLL0L222
@@ -576,7 +694,7 @@ LL101L1111L101LL
 22L00L1111L00L22
 22220LLLLLL02222
 2221011001101222
-2222222222222222`],['C',bitmap`2222222222222222
+2222222222222222`],["C",bitmap`2222222222222222
 2222222221000012
 2222210000111100
 2221001111111111
@@ -591,7 +709,7 @@ LL101L1111L101LL
 2012222222222222
 2012222212L21222
 2102212222222222
-2202222222222222`],['D',bitmap`2202222222222222
+2202222222222222`],["D",bitmap`2202222222222222
 2102222222222222
 2012222222222222
 20122222212L2122
@@ -606,7 +724,7 @@ LL101L1111L101LL
 2012222222222222
 2012222222222222
 21022212L2122222
-2202222222222222`],['E',bitmap`2202222222222222
+2202222222222222`],["E",bitmap`2202222222222222
 2102222222222222
 2012221222222222
 2012222222212122
@@ -621,7 +739,7 @@ LL101L1111L101LL
 2221002222222222
 2222210000222200
 2222222221000012
-2222222222222222`],['F',bitmap`2202222222222022
+2222222222222222`],["F",bitmap`2202222222222022
 2102222222222012
 2012222222222102
 2012222221222102
@@ -636,7 +754,7 @@ LL101L1111L101LL
 2012222222222102
 2012222222222102
 21022212L2122012
-2202222222222022`],['G',bitmap`2222222222222222
+2202222222222022`],["G",bitmap`2222222222222222
 2100001221000012
 0011110000111100
 1111111111111111
@@ -651,7 +769,7 @@ LL101L1111L101LL
 2222222222222222
 0022220000222200
 2100001221000012
-2222222222222222`],['H',bitmap`2222222222222222
+2222222222222222`],["H",bitmap`2222222222222222
 2211112222111122
 1111111111111111
 1112112211111121
@@ -666,7 +784,7 @@ LL101L1111L101LL
 1211111111111121
 1111111111111111
 2111111111111112
-2211111111111122`],['I',bitmap`2211111111111122
+2211111111111122`],["I",bitmap`2211111111111122
 2111111111111112
 1111111111111111
 1211111111111121
@@ -681,7 +799,7 @@ LL101L1111L101LL
 1112112211111121
 1111111111111111
 2211112222111122
-2222222222222222`],['J',bitmap`2222222222222222
+2222222222222222`],["J",bitmap`2222222222222222
 2222222222222222
 2222222222222222
 2222200000022222
@@ -696,7 +814,7 @@ LL101L1111L101LL
 2202120220212022
 22L000L22L000L22
 2222222222222222
-2222222222222222`],['K',bitmap`2222222222222222
+2222222222222222`],["K",bitmap`2222222222222222
 2100001221000012
 0011110000111100
 1111111111111111
@@ -711,7 +829,7 @@ LL101L1111L101LL
 2212222222222222
 2222222222222222
 22222212L2122222
-2222222222222222`],['L',bitmap`2222222222222222
+2222222222222222`],["L",bitmap`2222222222222222
 2222222222222222
 2221212222222222
 2222222222222122
@@ -726,7 +844,7 @@ LL101L1111L101LL
 2222222222222222
 2222222222222222
 2222222212222222
-2222222222222222`],['M',bitmap`2222222222222222
+2222222222222222`],["M",bitmap`2222222222222222
 2222222222222222
 222222222212L212
 2222222222222222
@@ -741,7 +859,7 @@ LL101L1111L101LL
 2222222222222222
 0022220000222200
 2100001221000012
-2222222222222222`],['N',bitmap`2222222222222222
+2222222222222222`],["N",bitmap`2222222222222222
 2222222221000012
 2222210000111100
 2221001111111111
@@ -756,7 +874,7 @@ LL101L1111L101LL
 2012222222222222
 2012222222222200
 2102212222222012
-2202222222222022`],['O',bitmap`2202222222222022
+2202222222222022`],["O",bitmap`2202222222222022
 2102222222222012
 2012221222222100
 2012222222212111
@@ -771,7 +889,7 @@ LL101L1111L101LL
 2221002222222222
 2222210000222200
 2222222221000012
-2222222222222222`],['P',bitmap`2211111111111122
+2222222222222222`],["P",bitmap`2211111111111122
 2112111111112112
 1111111111111111
 1111111111111111
@@ -786,7 +904,7 @@ LL101L1111L101LL
 1111111111111111
 1111111111111111
 2111111111112112
-2211111111111122`],['Q',bitmap`0122222222222222
+2211111111111122`],["Q",bitmap`0122222222222222
 0112222222222222
 011222L0000L2222
 0122220111102222
@@ -801,7 +919,7 @@ LL101L1111L101LL
 0122222222222222
 0111111111111111
 0111111111111111
-L000000000000000`],['R',bitmap`2222222222222222
+L000000000000000`],["R",bitmap`2222222222222222
 2222222222222222
 2222L000000L2222
 222L01222210L222
@@ -816,7 +934,7 @@ L000000000000000`],['R',bitmap`2222222222222222
 220202122100L002
 22L0010000100022
 2221020110201222
-2222222222222222`],['S',bitmap`2222222222222222
+2222222222222222`],["S",bitmap`2222222222222222
 2100001222222222
 0011110000122222
 1111111111001222
@@ -831,7 +949,7 @@ L000000000000000`],['R',bitmap`2222222222222222
 2222222222222102
 22212L2122222102
 2222222222122012
-2222222222222022`],['T',bitmap`2222222222222022
+2222222222222022`],["T",bitmap`2222222222222022
 2222222222122012
 2222222222222102
 2222222222222102
@@ -846,7 +964,7 @@ L000000000000000`],['R',bitmap`2222222222222222
 2212122222222102
 2222222222222102
 2222222122222012
-2222222222222022`],['U',bitmap`2222222222222022
+2222222222222022`],["U",bitmap`2222222222222022
 2222222222222012
 2222222212122102
 2222222222222102
@@ -861,7 +979,7 @@ L000000000000000`],['R',bitmap`2222222222222222
 2222222222001222
 0022220000122222
 2100001222222222
-2222222222222222`],['V',bitmap`2222222222222222
+2222222222222222`],["V",bitmap`2222222222222222
 2100001222222222
 0011110000122222
 1111111111001222
@@ -876,7 +994,7 @@ L000000000000000`],['R',bitmap`2222222222222222
 2222222222222102
 0022222222222102
 2102222222122012
-2202222222222022`],['W',bitmap`2202222222222022
+2202222222222022`],["W",bitmap`2202222222222022
 2102222222222012
 0012222222222102
 111212L212222102
@@ -891,7 +1009,7 @@ L000000000000000`],['R',bitmap`2222222222222222
 2222222222001222
 0022220000122222
 2100001222222222
-2222222222222222`],['X',bitmap`2222222222222222
+2222222222222222`],["X",bitmap`2222222222222222
 2222111111112222
 2211121211111122
 2211112111111122
@@ -906,7 +1024,7 @@ L000000000000000`],['R',bitmap`2222222222222222
 221111L1L1111122
 2211111L11111122
 2222111111112222
-2222222222222222`],['Y',bitmap`2222222222222210
+2222222222222222`],["Y",bitmap`2222222222222210
 2222222222222110
 2222L0000L222110
 2222011110222210
@@ -921,7 +1039,7 @@ L000000000000000`],['R',bitmap`2222222222222222
 2222222222222210
 1111111111111110
 1111111111111110
-000000000000000L`],['Z',_0xba3495],['[',bitmap`L000000000000000
+000000000000000L`],["Z",j],["[",bitmap`L000000000000000
 0222222222222222
 0222222222222222
 022LLLLLLLLLLLLL
@@ -936,8 +1054,7 @@ L000000000000000`],['R',bitmap`2222222222222222
 022L111111111211
 022L111111LL1111
 022L111111LL1111
-022L111111111111`],                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         /* https://codeberg.org/spriglover69/spriggymon */
-[']',bitmap`022L111111111111
+022L111111111111`],["]",bitmap`022L111111111111
 022L111111111111
 022L111111111111
 022L111111122111
@@ -952,7 +1069,7 @@ L000000000000000`],['R',bitmap`2222222222222222
 022L111122111111
 022L111111111111
 022L111111111111
-022L111111111111`],['^',bitmap`022L111111111111
+022L111111111111`],["^",bitmap`022L111111111111
 022L111111111111
 022L111111111111
 022L112211111111
@@ -967,7 +1084,7 @@ L000000000000000`],['R',bitmap`2222222222222222
 022L111111111111
 0222222222222222
 0222222222222222
-L000000000000000`],['_',bitmap`022L11111111L220
+L000000000000000`],["_",bitmap`022L11111111L220
 022L11111111L220
 022L11111111L220
 022L11111111L220
@@ -982,7 +1099,7 @@ L000000000000000`],['_',bitmap`022L11111111L220
 022L11111111L220
 022L11111111L220
 022L11111111L220
-022L11111111L220`],['`',bitmap`0000000000000000
+022L11111111L220`],["`",bitmap`0000000000000000
 2222222222222222
 2222222222222222
 LLLLLLLLLLLLLLLL
@@ -997,7 +1114,7 @@ LLLLLLLLLLLLLLLL
 1111111111111111
 2222222222222222
 2222222222222222
-0000000000000000`],['a',bitmap`0122222222222222
+0000000000000000`],["a",bitmap`0122222222222222
 0112222222222222
 0112222111222222
 0122222111222222
@@ -1012,7 +1129,7 @@ LLLLLLLLLLLLLLLL
 0122222222222222
 0111111111111111
 0111111111111111
-L000000000000000`],['b',bitmap`2222222222222222
+L000000000000000`],["b",bitmap`2222222222222222
 2112222222222222
 2222222222222222
 2222000000002222
@@ -1027,7 +1144,7 @@ L000000000000000`],['b',bitmap`2222222222222222
 2202122222212022
 1102111111112011
 1102222222222011
-0000000000000000`],['c',bitmap`2222222222222222
+0000000000000000`],["c",bitmap`2222222222222222
 222222L00L222222
 2222220210222222
 2222220220222222
@@ -1042,7 +1159,7 @@ L000000000000000`],['b',bitmap`2222222222222222
 2222220LL0222222
 2222220220222222
 222222L00L222222
-2222222222222222`],['d',bitmap`0000000000000000
+2222222222222222`],["d",bitmap`0000000000000000
 2222222222222222
 2222222222222222
 LLLLLLLLLLLLLLLL
@@ -1057,7 +1174,7 @@ LLLLLLLLLLLLLLLL
 1111111111111111
 1111111111111111
 1111111111111111
-1111111111111111`],['e',bitmap`1111111111111111
+1111111111111111`],["e",bitmap`1111111111111111
 11111LL111111111
 11LL1LL121111111
 11LL111111111111
@@ -1072,7 +1189,7 @@ LLLLLLLLLLLLLLLL
 1122121111111111
 11111111111111L1
 1111111111111111
-1111111111111111`],['f',bitmap`1111111111111111
+1111111111111111`],["f",bitmap`1111111111111111
 1111111111111221
 11L1111111111221
 1111111111111111
@@ -1087,7 +1204,7 @@ LLLLLLLLLLLLLLLL
 1111111111111111
 2222222222222222
 2222222222222222
-0000000000000000`],['g',bitmap`L000000000000000
+0000000000000000`],["g",bitmap`L000000000000000
 0222222222222222
 0222222222222222
 022LLLLLLLLLLLLL
@@ -1102,7 +1219,7 @@ LLLLLLLLLLLLLLLL
 022L111111111111
 022L111111111222
 022L111111111222
-022L11111111L220`],['h',bitmap`022L11111111L220
+022L11111111L220`],["h",bitmap`022L11111111L220
 022L11111111L222
 022L11111111L222
 022L11111111LLLL
@@ -1117,7 +1234,7 @@ LLLLLLLLLLLLLLLL
 022L111111111111
 0222222222222222
 0222222222222222
-L000000000000000`],['i',bitmap`2222222222222222
+L000000000000000`],["i",bitmap`2222222222222222
 2222112222222222
 2222222222222222
 2211222222222222
@@ -1132,7 +1249,7 @@ L000000000000000`],['i',bitmap`2222222222222222
 2222222222222222
 1111111111111111
 1111111111111111
-0000000000000000`],['j',bitmap`2222222222222222
+0000000000000000`],["j",bitmap`2222222222222222
 2222222222112222
 2222222222222222
 2220000000000222
@@ -1147,7 +1264,7 @@ L000000000000000`],['i',bitmap`2222222222222222
 2202111111112022
 1102L111111L2011
 1102222222222011
-0000000000000000`],['k',bitmap`2222222222222222
+0000000000000000`],["k",bitmap`2222222222222222
 2222222222222222
 2222222222222222
 2221000220001222
@@ -1162,7 +1279,7 @@ L000000000000000`],['i',bitmap`2222222222222222
 2222222002222222
 2222222222222222
 2222222222222222
-2222222222222222`],['l',bitmap`000000000000000L
+2222222222222222`],["l",bitmap`000000000000000L
 2222222222222220
 2222222222222220
 LLLLLLLLLLLLL220
@@ -1177,7 +1294,7 @@ LLLLLLLLLLLLL220
 1111111LL111L220
 122121111111L220
 122111111111L220
-111111111111L220`],['m',bitmap`111111111111L220
+111111111111L220`],["m",bitmap`111111111111L220
 111111111111L220
 111112211111L220
 111212211111L220
@@ -1192,7 +1309,7 @@ LLLLLLLLLLLLL220
 111111111111L220
 111111111111L220
 111111111111L220
-111111111111L220`],['n',bitmap`111111111111L220
+111111111111L220`],["n",bitmap`111111111111L220
 11111L111111L220
 111111111111L220
 111111111111L220
@@ -1207,7 +1324,7 @@ LLLLLLLLLLLLL220
 111111111111L220
 2222222222222220
 2222222222222220
-000000000000000L`],['o',bitmap`000000000000000L
+000000000000000L`],["o",bitmap`000000000000000L
 2222222222222220
 2222222222222220
 LLLLLLLLLLLLL220
@@ -1222,7 +1339,7 @@ LLLLLLLLLLLLL220
 111111111111L220
 222111111111L220
 222111111111L220
-022L11111111L220`],['p',bitmap`022L11111111L220
+022L11111111L220`],["p",bitmap`022L11111111L220
 222L11111111L220
 222L11111111L220
 LLLL11111111L220
@@ -1237,7 +1354,7 @@ LLLL11111111L220
 111111111111L220
 2222222222222220
 2222222222222220
-000000000000000L`],['q',bitmap`2222222222222210
+000000000000000L`],["q",bitmap`2222222222222210
 2222222222222110
 2222222222222110
 2222211211222210
@@ -1252,7 +1369,7 @@ LLLL11111111L220
 2222222222222210
 1111111111111110
 1111111111111110
-000000000000000L`],['r',bitmap`2222222222222222
+000000000000000L`],["r",bitmap`2222222222222222
 2222211222222222
 2222222222222222
 2111L000000L1112
@@ -1267,7 +1384,7 @@ LLLL11111111L220
 2222222222222222
 1111111111111111
 1111111111111111
-0000000000000000`],['s',bitmap`2222222222222222
+0000000000000000`],["s",bitmap`2222222222222222
 2222222222222222
 2222222222222222
 2221000220001222
@@ -1282,7 +1399,7 @@ LLLL11111111L220
 2222222002222222
 2222222222222222
 2222222222222222
-2222222222222222`],['t',bitmap`2222222222222222
+2222222222222222`],["t",bitmap`2222222222222222
 2222222222222200
 22222222222200L2
 221212222220L222
@@ -1297,7 +1414,7 @@ LLLL11111111L220
 220L22222222L00L
 2102222222222002
 20L2222222222L00
-2011222222221102`],['u',bitmap`2222222222222222
+2011222222221102`],["u",bitmap`2222222222222222
 2222222222222200
 22222222222200L2
 221212222220L222
@@ -1312,7 +1429,7 @@ LLLL11111111L220
 222221222220000L
 2122222222222202
 22222222221111L0
-2222222222222222`],['v',bitmap`2011112222111102
+2222222222222222`],["v",bitmap`2011112222111102
 20L1111111111L00
 22011111111100L2
 220L11111110L222
@@ -1327,7 +1444,7 @@ LLLL11111111L220
 221122222220000L
 2221222222222202
 22222222221111L0
-2222222222222222`],['w',bitmap`02111111LLLLLL10
+2222222222222222`],["w",bitmap`02111111LLLLLL10
 02111121LLLLLL10
 02111221LLLLLL10
 02111211LLLLLL10
@@ -1342,7 +1459,7 @@ LLLL11111111L220
 02111111LLLLLL10
 02111111LLL1LL10
 02111111LLL11L10
-02111111LLLL1L10`],['x',bitmap`02111111LLLLLL10
+02111111LLLL1L10`],["x",bitmap`02111111LLLLLL10
 02111211LLLLLL10
 02112211LLLLLL10
 02122111LLLLLL10
@@ -1357,7 +1474,7 @@ LLLL11111111L220
 0211LL0220LL1L10
 021LL022220LL110
 02LL02222220LL10
-0000222222220000`],['y',bitmap`0122222222222210
+0000222222220000`],["y",bitmap`0122222222222210
 0112222111222110
 0112222111222110
 0122222222222210
@@ -1372,7 +1489,7 @@ LLLL11111111L220
 0122222222222210
 0111111111111110
 0111111111111110
-L00000000000000L`],['z',bitmap`2222222222222222
+L00000000000000L`],["z",bitmap`2222222222222222
 2222222222221122
 2222222222222222
 2222L000000L2222
@@ -1387,7 +1504,7 @@ L00000000000000L`],['z',bitmap`2222222222222222
 2222222222222222
 1111111111111111
 1111111111111111
-0000000000000000`],['{',bitmap`2222222222222222
+0000000000000000`],["{",bitmap`2222222222222222
 2222222222222222
 2222222222222222
 2221000220001222
@@ -1402,7 +1519,7 @@ L00000000000000L`],['z',bitmap`2222222222222222
 2222222002222222
 2222222222222222
 2222222222222222
-2222222222222222`],['|',bitmap`2222222222222222
+2222222222222222`],["|",bitmap`2222222222222222
 2222222222222222
 2222221212222222
 2222222122222222
@@ -1417,7 +1534,7 @@ L00000000000000L`],['z',bitmap`2222222222222222
 220L22222222L022
 2202222222222022
 20L2222222222L02
-2011222222221102`],['}',bitmap`2011112222111102
+2011222222221102`],["}",bitmap`2011112222111102
 00L1111111111L00
 2L001111111100L2
 222L01111110L222
@@ -1432,7 +1549,7 @@ L00000000000000L`],['z',bitmap`2222222222222222
 L00L22222222L00L
 2002222222222002
 00L2222222222L00
-2011222222221102`],['~',bitmap`2011112222111102
+2011222222221102`],["~",bitmap`2011112222111102
 20L1111111111L02
 2201111111111022
 220L11111111L022
@@ -1447,7 +1564,7 @@ L00L22222222L00L
 2211222222212222
 2221222222222222
 2222222222222222
-2222222222222222`],['¡',bitmap`2222222222222222
+2222222222222222`],["\xA1",bitmap`2222222222222222
 2200022222200022
 2202022222202022
 2201000000001022
@@ -1462,7 +1579,7 @@ L00L22222222L00L
 2201L111111L1022
 2201000000001022
 2200011111100022
-2222222222222222`],['¢',bitmap`
+2222222222222222`],["\xA2",bitmap`
 ................
 ................
 ................
@@ -1478,7 +1595,7 @@ L00L22222222L00L
 ................
 ................
 ................
-................`],['£',bitmap`2222222222222220
+................`],["\xA3",bitmap`2222222222222220
 2222222222222201
 2222222121222011
 2222222212220111
@@ -1493,7 +1610,7 @@ L00L22222222L00L
 2220111122112111
 2201111121111111
 2021111111111111
-0221111111111111`],['¤',bitmap`0221111111111111
+0221111111111111`],["\xA4",bitmap`0221111111111111
 0221111111111121
 0221111111111221
 0221111111111211
@@ -1508,7 +1625,7 @@ L00L22222222L00L
 0221111111221111
 0221111111211111
 0221111111111111
-0221111111111111`],['¥',bitmap`0221111111111111
+0221111111111111`],["\xA5",bitmap`0221111111111111
 022111111111111L
 02211111211111LL
 0221121221111LL0
@@ -1523,7 +1640,7 @@ L00L22222222L00L
 0221LL0222222222
 022LL02211122222
 021L022211122222
-0000222222222222`],['¦',bitmap`2222222222222222
+0000222222222222`],["\xA6",bitmap`2222222222222222
 0022222222212122
 2L00222222221222
 222L022222222222
@@ -1538,7 +1655,7 @@ L00L22222222L00L
 L00L22222222L022
 2002222222222012
 00L2222222222L02
-2011222222221102`],['§',bitmap`2222222222222222
+2011222222221102`],["\xA7",bitmap`2222222222222222
 0022222222222222
 2L00222212222222
 222L022211221222
@@ -1553,7 +1670,7 @@ L00L22222222L022
 L000022222121222
 2022222222212222
 0L11112222222222
-2222222222222222`],['¨',bitmap`2011112222111102
+2222222222222222`],["\xA8",bitmap`2011112222111102
 00L1111111111L02
 2L00111111111022
 222L01111111L022
@@ -1568,7 +1685,7 @@ L000022222121222
 L000022222222222
 2022222222221212
 0L11112222222122
-2222222222222222`],['©',bitmap`2222222222222222
+2222222222222222`],["\xA9",bitmap`2222222222222222
 2212122222222222
 2221222222222222
 2222222222121222
@@ -1583,7 +1700,7 @@ L000022222222222
 2011L111111L1102
 2011000000001102
 2000011111100002
-2222222222222222`],['ª',bitmap`2222222222222222
+2222222222222222`],["\xAA",bitmap`2222222222222222
 2222222222212222
 2222222222222222
 2222222221222122
@@ -1598,7 +1715,7 @@ L000022222222222
 22201121LLLL0222
 22011221LLLLL022
 20111211LLLLLL02
-01111111LLLLLLL0`],['«',bitmap`11111111LLLLLLLL
+01111111LLLLLLL0`],["\xAB",bitmap`11111111LLLLLLLL
 11121111LLLLLLLL
 11221111LLLLLLLL
 12211111LLLLLLLL
@@ -1613,7 +1730,7 @@ L000022222222222
 11111111LLLLLLLL
 11111111LLLLLLLL
 11111111LLLLLLLL
-11111111LLLLLLLL`],['¬',bitmap`11111111LLLLLLLL
+11111111LLLLLLLL`],["\xAC",bitmap`11111111LLLLLLLL
 11111111LLLLLLLL
 11111111LLLLLLLL
 11111111LLLLL1LL
@@ -1628,7 +1745,7 @@ L000022222222222
 1111LL0220LL1LLL
 111LL022220LL1LL
 11LL02222220LL1L
-1LL0222222220LL1`],['­',bitmap`LL022222222220LL
+1LL0222222220LL1`],["\xAD",bitmap`LL022222222220LL
 L02222222222220L
 0222222222222220
 2222222222222222
@@ -1643,7 +1760,7 @@ L02222222222220L
 2222222221112112
 2222222222222222
 2222222222211222
-2222222222222222`],['®',bitmap`2222222222222222
+2222222222222222`],["\xAE",bitmap`2222222222222222
 2222220000222222
 222200L22L002222
 2220L222222L0222
@@ -1658,7 +1775,7 @@ L02222222222220L
 2220000LL0000222
 2222220220222222
 221111L00L111122
-2222222222222222`],['¯',bitmap`2222222222222222
+2222222222222222`],["\xAF",bitmap`2222222222222222
 2200000022212122
 20L2222L02221222
 0L222222L0222222
@@ -1673,7 +1790,7 @@ L02222222222220L
 2222222200LL0022
 2121222220220222
 221222211L00L112
-2222222222222222`],['°',bitmap`2222222222222222
+2222222222222222`],["\xB0",bitmap`2222222222222222
 2222222002222222
 22222201L0222122
 21222011LL022222
@@ -1688,7 +1805,7 @@ L02222222222220L
 2200111001110022
 2210L110011L0122
 2210000000000122
-2222222222222222`],['±',bitmap`2222222222222222
+2222222222222222`],["\xB1",bitmap`2222222222222222
 222222L00L221212
 2222220220222122
 2222L001100L2222
@@ -1703,7 +1820,7 @@ L02222222222220L
 222011LLLL110222
 2220L111111L0222
 2220000000000222
-2222222222222222`],['²',bitmap`0221111111111111
+2222222222222222`],["\xB2",bitmap`0221111111111111
 0221111111111111
 0221000000000011
 0221012222222L11
@@ -1718,7 +1835,7 @@ L02222222222220L
 022102LL11121111
 02210LL111111211
 0221111111112211
-0221111111112111`],['³',bitmap`0222222222222222
+0221111111112111`],["\xB3",bitmap`0222222222222222
 L022222222222222
 LL02222121222222
 LLL0222212221222
@@ -1733,7 +1850,7 @@ LLLLL11LLLL02222
 LLL1LL11LLLL0222
 LLL11LL1LLLLL022
 LLLL1LLLLLLLL102
-LLLLLLLLLLLLL110`],['´',bitmap`LLLLLLLLLLLLL110
+LLLLLLLLLLLLL110`],["\xB4",bitmap`LLLLLLLLLLLLL110
 LLLLLLLL1LLLL110
 LLLLLLLL11LLL110
 LLLLL1LLL11LL110
@@ -1748,7 +1865,7 @@ LL1LLLLLLLLLL110
 LL11LLLLL1LLL110
 LLL11LLLL11LL110
 LLLL1LLLLL1LL110
-LLLLLLLLLLLLL110`],['µ',bitmap`1LLLLLLLLLLLL110
+LLLLLLLLLLLLL110`],["\xB5",bitmap`1LLLLLLLLLLLL110
 L1LLLLL1LLLLL110
 LL1LLLL11LLLL110
 0LL1LLLL1LLLL110
@@ -1763,7 +1880,7 @@ LL1LLLL11LLLL110
 2222222220LL1110
 22222222220LL110
 222222211220LL10
-2222222222220000`],['¶',bitmap`2222200000022222
+2222222222220000`],["\xB6",bitmap`2222200000022222
 22200L2222L00222
 220L22222222L022
 20L2222222222L02
@@ -1778,7 +1895,7 @@ LL1LLLL11LLLL110
 222220L22L022222
 2222002222002222
 2222010220102222
-2111L0L00L0L1112`],['·',bitmap`2222222222222222
+2111L0L00L0L1112`],["\xB7",bitmap`2222222222222222
 2222222002222222
 2122220LL0222222
 2222000LL0002222
@@ -1793,7 +1910,7 @@ LL1LLLL11LLLL110
 2222220110L22122
 2222220220222222
 222211L00L112222
-2222222222222222`],['¸',bitmap`2222222222222222
+2222222222222222`],["\xB8",bitmap`2222222222222222
 2222200000022222
 2122021111102222
 22201211111L0222
@@ -1808,7 +1925,7 @@ LL1LLLL11LLLL110
 0011001001001100
 10L1111001111L01
 1000000000000001
-2222222222222222`],['¹',bitmap`2222222222222222
+2222222222222222`],["\xB9",bitmap`2222222222222222
 2222220000222222
 2212220220222222
 2222000110002222
@@ -1823,7 +1940,7 @@ LL1LLLL11LLLL110
 2220112222110222
 2120111111110222
 2220111111110222
-222L00000000L222`],['º',bitmap`LLLLLLLLLLLLL110
+222L00000000L222`],["\xBA",bitmap`LLLLLLLLLLLLL110
 LLLLLLLLLLLLL110
 LL0000000000L110
 LL1LLLLLLL00L110
@@ -1838,7 +1955,7 @@ LL1LLLL11120L110
 LL11LLLL1120L110
 LLL1LLLLL110L110
 LLLLLLLLLLLLL110
-LLLLLLLLLLLLL110`],['»',bitmap`0221111111111111
+LLLLLLLLLLLLL110`],["\xBB",bitmap`0221111111111111
 022111111111111L
 02211111211111LL
 0221121221111LL0
@@ -1853,7 +1970,7 @@ LLLLLLLLLLLLL110`],['»',bitmap`0221111111111111
 0221LL0222222222
 022LL01111111111
 021L011111111111
-0000000000000000`],['¼',bitmap`LL022222222220LL
+0000000000000000`],["\xBC",bitmap`LL022222222220LL
 L02211222222220L
 0222222222222220
 2222222222222222
@@ -1868,7 +1985,7 @@ L02211222222220L
 2222222222222222
 1111111111111111
 1111111111111111
-0000000000000000`],['½',bitmap`0122222222222210
+0000000000000000`],["\xBD",bitmap`0122222222222210
 0112222221122110
 0112222222222110
 01222L0000L22210
@@ -1883,7 +2000,7 @@ L02211222222220L
 0122222222222210
 0111111111111110
 0111111111111110
-L00000000000000L`],['¾',bitmap`2222222222222222
+L00000000000000L`],["\xBE",bitmap`2222222222222222
 2222200000022222
 22220L2222L02222
 2220222222220222
@@ -1898,7 +2015,7 @@ L00000000000000L`],['¾',bitmap`2222222222222222
 2222201220222222
 2222200220222222
 222111L00L111222
-2222222222222222`],['¿',bitmap`2222222222222222
+2222222222222222`],["\xBF",bitmap`2222222222222222
 22222L0000L22222
 222220L11L022222
 2212201111022222
@@ -1913,7 +2030,7 @@ L00000000000000L`],['¾',bitmap`2222222222222222
 2222202111022222
 2122201111022222
 22211L0000L11222
-2222222222222222`],['À',bitmap`2222222222222222
+2222222222222222`],["\xC0",bitmap`2222222222222222
 2222222002222222
 2222220210222222
 2222201222022222
@@ -1928,7 +2045,7 @@ L00000000000000L`],['¾',bitmap`2222222222222222
 210L11000011L012
 21100L0000L00112
 2221100000011222
-2222222222222222`],['Á',bitmap`2222222222222222
+2222222222222222`],["\xC1",bitmap`2222222222222222
 2222222222222222
 2222221212212222
 2212222122222222
@@ -1943,7 +2060,7 @@ L00000000000000L`],['¾',bitmap`2222222222222222
 2220112122110212
 2220111111110222
 2220111111110222
-222L00000000L222`],['Â',bitmap`2222222222222222
+222L00000000L222`],["\xC2",bitmap`2222222222222222
 2222222222222222
 22L0000000000L22
 2200000000000022
@@ -1958,7 +2075,7 @@ L00000000000000L`],['¾',bitmap`2222222222222222
 2200011022022022
 22L0000000000L22
 2222222222222222
-2222222222222222`],['Ã',bitmap`1LLLLLLLLLLLL110
+2222222222222222`],["\xC3",bitmap`1LLLLLLLLLLLL110
 L1LLLLL1LLLLL110
 LL1LLLL11LLLL110
 0LL1LLLL1LLLL110
@@ -1973,7 +2090,7 @@ LL1LLLL11LLLL110
 2222222220LL1110
 11111111110LL110
 111111111110LL10
-0000000000000000`],['Ä',bitmap`LL022222222220LL
+0000000000000000`],["\xC4",bitmap`LL022222222220LL
 L02222222211220L
 0222222222222220
 2222000000002222
@@ -1988,7 +2105,7 @@ L02222222211220L
 2202122222212022
 1102111111112011
 1102222222222011
-0000000000000000`],['Å',bitmap`2222222222222222
+0000000000000000`],["\xC5",bitmap`2222222222222222
 2222222222222222
 2200000000000022
 20L2222222222L02
@@ -2003,7 +2120,7 @@ L02222222211220L
 20L2222222222L02
 2000000000000002
 2222222222222222
-2222222222222222`],['Æ',bitmap`2222222002222222
+2222222222222222`],["\xC6",bitmap`2222222002222222
 2222220110222222
 2222220110222222
 222220L11L022222
@@ -2018,7 +2135,7 @@ L02222222211220L
 22200L1111L00222
 2222200LL0022222
 2222220220222222
-222111L00L111222`],['Ç',bitmap`2L0L22222222L0L2
+222111L00L111222`],["\xC7",bitmap`2L0L22222222L0L2
 L0L0L222222L0L0L
 0LLL02L00L20LLL0
 01110L0L10L01110
@@ -2033,7 +2150,7 @@ L0L0L222222L0L0L
 0111L220022L1110
 0222000000002220
 0000011111100000
-2222222222222222`],['È',bitmap`2222222222222222
+2222222222222222`],["\xC8",bitmap`2222222222222222
 2222222002222222
 2121220220222222
 222220L21L022122
@@ -2048,7 +2165,7 @@ L0L0L222222L0L0L
 2022222001111202
 2022222001111102
 2L000000000000L2
-2222222222222222`],['É',bitmap`2222222222222222
+2222222222222222`],["\xC9",bitmap`2222222222222222
 2222222222222222
 2222220000222222
 2200000LL0000022
@@ -2063,7 +2180,7 @@ L0L0L222222L0L0L
 2222220110222222
 2222220110222222
 221111L00L111122
-2222222222222222`],['Ê',bitmap`
+2222222222222222`],["\xCA",bitmap`
 ................
 ................
 ................
@@ -2079,7 +2196,7 @@ L0L0L222222L0L0L
 ...0L111111L0...
 ...0000000000...
 ................
-................`],['Ë',bitmap`
+................`],["\xCB",bitmap`
 ................
 ................
 ................
@@ -2095,7 +2212,7 @@ L0L0L222222L0L0L
 ...0L111111L0...
 ...0000000000...
 ................
-................`],['Ì',bitmap`2222222222222222
+................`],["\xCC",bitmap`2222222222222222
 2222222222222222
 2222222222222222
 2222222222222222
@@ -2110,7 +2227,7 @@ L0L0L222222L0L0L
 2222222222222222
 2222222222222222
 2222222222222222
-2222222222222222`],['Í',bitmap`2222222222222222
+2222222222222222`],["\xCD",bitmap`2222222222222222
 2222222222222222
 2222222222222222
 22222L0000L22222
@@ -2125,7 +2242,7 @@ L0L0L222222L0L0L
 2222011111102222
 2222211111122222
 2222222222222222
-2222222222222222`],['Ð',bitmap`
+2222222222222222`],["\xD0",bitmap`
 0000000000000000
 0000000000000000
 0000000000000000
@@ -2141,7 +2258,7 @@ L0L0L222222L0L0L
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000`],['Ñ',bitmap`.......00.......
+0000000000000000`],["\xD1",bitmap`.......00.......
 .....0000000....
 ....0033333000..
 ....0333333330..
@@ -2156,13 +2273,325 @@ L0L0L222222L0L0L
 ..0033330333300.
 ..033330033330..
 ..000330.00330..
-....0000..0000..`],['Ò',_0x189ec8(0x110)]],_0x274dde=new _0x31652c(_0x26da7f),_0x57ad2f,_0x3880ea,_0x33025c,_0x413371,_0x3d41d8,_0x2dce7e=_0x189ec8(0x11b),_0x24c557=!0x1,_0x59f58c=!0x1,_0x2b2310=async()=>{const _0x564cd9=_0x189ec8;_0x5d0b35(_0x564cd9(0x12c),[0x2,0x8]),await _0x2d1c92(_0x564cd9(0xec));};((async()=>(_0x5d0b35(_0x189ec8(0x12c),[0x2,0x8]),_0x3cdf73(_0x19e63f),setInterval(_0x25d608,0x64),await _0x2b2310(),onInput('w',()=>!_0x59f58c&&_0xd89c70(0x0,-0x1)),onInput('s',()=>!_0x59f58c&&_0xd89c70(0x0,0x1)),onInput('a',()=>!_0x59f58c&&_0xd89c70(-0x1,0x0)),onInput('d',()=>!_0x59f58c&&_0xd89c70(0x1,0x0))))());async function _0x55f4d7(_0x2e0e08){const _0x3b8941=_0x189ec8;_0x59f58c=!0x0,_0x24c557=0x0,_0xd89c70(_0x2e0e08[0x0]-_0x413371[0x0],_0x2e0e08[0x1]-_0x413371[0x1]),_0x19e63f(),await new Promise(_0x2a60e3=>setTimeout(_0x2a60e3,0x640)),clearInterval(_0x57ad2f),_0x33025c[0x2][_0x3b8941(0xd3)](..._0x269752,_0xa072d3[_0x3b8941(0xb7)]),_0x19e63f(),await new Promise(_0x3798ff=>setTimeout(_0x3798ff,0x7d0)),_0x33025c[0x2][_0x3b8941(0xd3)](..._0x269752,_0xa072d3[_0x3b8941(0x111)]),_0x19e63f(),await new Promise(_0x158ab0=>setTimeout(_0x158ab0,0x640)),_0x5d0b35('outside',_0x13fc30(_0xe19452)),_0x24c557=0x0,await _0x2d1c92(_0x3b8941(0x131)),await _0x2d1c92('\x20By\x20the\x20way,\x20do\x20you\x20\x0a\x20know\x20what\x20Zach\x27s\x20\x20\x20\x0a\x20up\x20to?\x20I\x20saw\x20him\x20\x20\x20\x0a\x20behind\x20the\x20country\x20\x0a\x20store\x20with\x20a\x20cargo\x20\x0a\x20truck\x20full\x20of\x20HC\x20\x20\x20\x0a\x20merch\x20and\x20an\x20\x20\x20\x20\x20\x20\x20\x0a\x20industrial\x20drum\x20of\x20\x0a\x20coffee!\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a'),_0x99773a(),_0x59f58c=!0x1;}function _0x99773a(){const _0x3fb8a4=_0x189ec8;_0x3b409b(_0xa307e1)['active']=0x1,_0x3b409b(_0x23a1eb)[_0x3fb8a4(0xf5)]=0x0;}async function _0xa307e1(_0x466105){const _0x30a646=_0x189ec8;let _0x2a6291=[..._0x413371];_0x59f58c=0x1,_0xd89c70(_0x466105[0x0]-_0x2a6291[0x0],_0x466105[0x1]-_0x2a6291[0x1]),_0x19e63f(),await new Promise(_0x1c4885=>setTimeout(_0x1c4885,0x1f4)),_0xd89c70(_0x466105[0x0]-_0x2a6291[0x0],_0x466105[0x1]-_0x2a6291[0x1]),_0x19e63f(),await new Promise(_0x1108a4=>setTimeout(_0x1108a4,0x3e8)),_0x33025c[0x1]['write'](..._0x466105,_0xa072d3['max']),_0x19e63f(),await new Promise(_0x4dfbff=>setTimeout(_0x4dfbff,0x3e8)),await _0x2d1c92(_0x30a646(0xfc)),await _0x2d1c92(_0x30a646(0xce)),await _0x2d1c92(_0x30a646(0x126)),await _0x2d1c92(_0x30a646(0xb2)),_0x19e63f(),await new Promise(_0x3bc6bf=>setTimeout(_0x3bc6bf,0x3e8)),_0x274dde=new _0x31652c(map`
+....0000..0000..`],["\xD2",`
+....C.CCCC.C....
+....CCCCCCCC....
+....CCCCCCCCC...
+...CC0CC0CCCC...
+...CCCCCCCCCCC..
+...CCC00CCCCCCC.
+...C0C0CC0CCCCC.
+...CC0000CCCCCC.
+...CCCCCCCCCCCC.
+...CCCCCCCCCCCC.
+...CCCCCCCCCCCC.
+...CCCCCCCCCCCC.
+....CCCCCCCCCCC.
+....CC..CC...CC.
+....CC..CC...CC.
+....C...C....C..
+`]],b=new C(a2),E,I,r,m,f,s2="QUEST: Find Kara!",M=!1,s=!1,S2=async()=>{O("outside",[2,8]),await p(` It's your first    
+ day working at     
+ Hack Club HQ,      
+                    
+ and you can't      
+ wait to start.     
+                    
+ ...                
+                    
+ First, find Kara!  
+`)};(async()=>(O("outside",[2,8]),D(o),setInterval(m1,100),await S2(),onInput("w",()=>!s&&v(0,-1)),onInput("s",()=>!s&&v(0,1)),onInput("a",()=>!s&&v(-1,0)),onInput("d",()=>!s&&v(1,0))))();async function a1(L){s=!0,M=0,v(L[0]-m[0],L[1]-m[1]),o(),await new Promise(t=>setTimeout(t,1600)),clearInterval(E),r[2].write(...z,i.switchOff),o(),await new Promise(t=>setTimeout(t,2e3)),r[2].write(...z,i.switch),o(),await new Promise(t=>setTimeout(t,1600)),O("outside",k(t2)),M=0,await p(` Great work! Bank's 
+ looking ...        
+ good to bueno!     
+ ...                
+   ... mostly ...   
+`),await p(` By the way, do you 
+ know what Zach's   
+ up to? I saw him   
+ behind the country 
+ store with a cargo 
+ truck full of HC   
+ merch and an       
+ industrial drum of 
+ coffee!            
+`),n1(),s=!1}function n1(){d(D2).active=1,d(u2).active=0}async function D2(L){let t=[...m];s=1,v(L[0]-t[0],L[1]-t[1]),o(),await new Promise(n=>setTimeout(n,500)),v(L[0]-t[0],L[1]-t[1]),o(),await new Promise(n=>setTimeout(n,1e3)),r[1].write(...L,i.max),o(),await new Promise(n=>setTimeout(n,1e3)),await p(` There you are! I   
+ need your help!    
+                    
+ I've found the best
+ way to make HC more
+ popular.           
+                    
+ Coding is too hard.
+ People don't like  
+ it. But coffee?    
+                    
+ Everyone loves it! 
+`),await p(` So I'm changing my 
+ name to Zach Latte!
+                    
+ We'll be known     
+ everywhere!        
+                    
+ You can help me    
+ break the news ... 
+                    
+ You don't seem so  
+ enthusiastic.      
+`),await p(` It's great to meet 
+ you, finally, Zach!
+                    
+ But, fundamentally 
+ changing what HC is
+ to make it more    
+ popular doesn't do 
+ the world any good!
+                    
+ By trying to be    
+ everything to      
+ everyone, you      
+ become nothing     
+ to no one.         
+`),await p(` ...                
+                    
+ Haha, just kidding.
+                    
+ This fever dream   
+ has been too brain 
+ dead to pull off   
+ messaging like that
+                    
+ ...                
+                    
+ So what really     
+ happened on your   
+ first day?         
+`),o(),await new Promise(n=>setTimeout(n,1e3)),b=new C(map`
 ...
 ...
-...`),_0x3d41d8[0x0]++,_0x3d41d8[0x1]++,_0x19e63f(),await new Promise(_0x513911=>setTimeout(_0x513911,0x2bc)),_0x274dde=new _0x31652c(map`
-.`),_0x3d41d8[0x0]++,_0x3d41d8[0x1]++,_0x19e63f(),await new Promise(_0x54dd6d=>setTimeout(_0x54dd6d,0x2bc)),_0x274dde=new _0x31652c(_0x26da7f),_0xa6885(),_0x1dc1e8(),_0x3b409b(_0x438229)['active']=0x0,_0x3b409b(_0x8905a7)['active']=0x1;let [_0x4753be]=[..._0x26e06c['hq'][0x1][_0x30a646(0xab)](_0xa072d3[_0x30a646(0xc1)])];_0x26e06c['hq'][0x1][_0x30a646(0xd3)](..._0x4753be,_0xa072d3[_0x30a646(0x120)]),await _0x2b2310(),_0x59f58c=0x0;}var _0xfe821=0xa;async function _0x1f007f(){const _0x5c8181=_0x189ec8;let _0x12f0da=[0x0,~~(_0x26e06c[_0x5c8181(0xbd)][0x0][_0x5c8181(0xb3)]/0x2)];_0x5d0b35(_0x5c8181(0xbd),_0x12f0da),console[_0x5c8181(0xde)](_0x5c8181(0xa6)),_0x24c557=0x1,_0x57ad2f!=null&&clearInterval(_0x57ad2f),_0x57ad2f=setInterval(async()=>{const _0x2a55a0=_0x5c8181;_0x33025c!=_0x26e06c[_0x2a55a0(0xbd)]&&(clearInterval(_0x57ad2f),_0x57ad2f=void 0x0);let _0x3cbc29=[..._0x33025c[0x2][_0x2a55a0(0xab)](_0xa072d3[_0x2a55a0(0xb5)])];for(let _0x56cfb5 of _0x33025c[0x2][_0x2a55a0(0xab)](_0xa072d3['trigger']))_0x33025c[0x2][_0x2a55a0(0xd3)](..._0x56cfb5,'.');for(let _0x1e127a=0x0;_0x1e127a<_0xfe821;_0x1e127a++){let _0x1050dc=_0x4462c5=>0x1-0x2*Math[_0x2a55a0(0x10d)](0.5-_0x4462c5%0x1),_0x52fc76=Date['now']()+_0x1e127a*0x384,_0x1e0b3c=_0x1050dc(_0x52fc76/0xbb8)%0x1*0x5,_0xa07bfb=0x1+~~(_0x52fc76/0xbb8/0x9*0x3%0x1*0x9),_0x5b6a5c=0x1+~~_0x1e0b3c;if(_0x33025c[0x2][_0x2a55a0(0xd3)](_0xa07bfb,_0x5b6a5c,_0xa072d3[_0x2a55a0(0xb5)]),_0x33025c[0x1][_0x2a55a0(0xe6)](_0xa07bfb,_0x5b6a5c)==_0xa072d3[_0x2a55a0(0xf1)]){clearInterval(_0x57ad2f),_0x59f58c=!0x0,_0x24c557=0x0;for(let _0x1b6cec of _0x3cbc29)_0x33025c[0x2][_0x2a55a0(0xd3)](..._0x1b6cec,_0xa072d3[_0x2a55a0(0xb5)]);_0x19e63f(),await new Promise(_0xeb94db=>setTimeout(_0xeb94db,0x3e8));let _0x56a0ba=(await _0x275794(_0x1d15bc))['you']['hp']>0x0;if(_0x59f58c=!0x1,_0x56a0ba)_0x1f007f(),_0xd89c70(0x0,0x0),_0xfe821*=0.8;else{_0x3b409b(_0x163ea1)[_0x2a55a0(0xf5)]=0x1,_0x3b409b(_0x255a06)[_0x2a55a0(0xf5)]=0x0,_0x3b409b(_0x438229)[_0x2a55a0(0xf5)]=0x0,_0x3b409b(_0x3a798c)['active']=0x0,_0x24c557=0x0,_0x5d0b35('hq',_0x13fc30(_0x4483c7)),_0x1a56ea(),_0x3b409b(_0x1f007f)[_0x2a55a0(0xf5)]=0x1;return;}break;}}_0x19e63f();});}async function _0xe7ebb4(_0xd8d10d){const _0x5c723f=_0x189ec8;_0xd89c70(_0xd8d10d[0x0]-_0x413371[0x0],_0xd8d10d[0x1]-_0x413371[0x1]),await _0x2d1c92(_0x5c723f(0xeb)),_0x3b409b(_0xe7ebb4)[_0x5c723f(0xf5)]=0x1;}async function _0x49e092(){const _0x26b25d=_0x189ec8;_0x26e06c[_0x26b25d(0x12c)][0x1]['write'](..._0x333d58,_0xa072d3[_0x26b25d(0x120)]),_0x26e06c[_0x26b25d(0x12c)][0x2][_0x26b25d(0xd3)](..._0x284cf0,_0xa072d3[_0x26b25d(0xc1)]),_0x19e63f(),_0x3b409b(_0xe7ebb4)[_0x26b25d(0xf5)]=0x1,_0x3b409b(_0x551f50)[_0x26b25d(0xf5)]=0x1;}async function _0x3a798c(){const _0x4c388c=_0x189ec8;await _0x2d1c92(_0x4c388c(0xdb)),playerHp=0x64,_0x1a56ea();}async function _0x1a56ea(){let _0x173935=setInterval(()=>{const _0x568a01=_0x224b;_0x3880ea!='hq'&&(clearInterval(_0x173935),_0x3b409b(_0x3a798c)[_0x568a01(0xf5)]=0x1);},0x64);}async function _0x163ea1(){const _0xd632e8=_0x189ec8;_0x59f58c=0x1,await _0x2d1c92(_0xd632e8(0xd2)),await _0x2d1c92(_0xd632e8(0xc3)),_0x5abbe9(0x64),_0x59f58c=0x0;}async function _0x551f50(){const _0x362a57=_0x189ec8;let _0x223081=_0x3880ea,_0x34ceae=[..._0x413371];await _0x2d1c92(_0x362a57(0xbb));let _0x1a88c6=async(_0x2e3b27=0x0)=>{_0x24c557=!0x0,await _0x1f007f(),_0x59f58c=0x1,_0x3cdf73(()=>{}),await new Promise(_0x547d1c=>setTimeout(()=>_0x3cdf73(_0x547d1c),_0x2e3b27)),clearInterval(_0x57ad2f);};await _0x1a88c6(),await _0x2d1c92('\x20Sorry,\x20context:\x20\x20\x20\x20\x0a\x20Trigger\x20is\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20something\x20of\x20an\x20\x20\x20\x20\x0a\x20unofficial\x20mascot,\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20But\x20I\x20don\x27t\x20know\x20\x20\x20\x0a\x20what\x27s\x20gotten\x20into\x20\x0a\x20him\x20today!\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20He\x27s\x20gone\x20crazy!\x20\x20\x20\x0a'),await _0x2d1c92(_0x362a57(0xca));let _0x45965a=!0x0;((async()=>{const _0x432c95=_0x362a57;setTimeout(()=>clearInterval(_0x57ad2f),0x96);for(let _0x46e71b=0x0;_0x46e71b<0xa;_0x46e71b++)if(_0x26e06c[_0x432c95(0xbd)][0x2][_0x432c95(0xd3)](..._0x269752,'.'),_0x19e63f(),await new Promise(_0x198a91=>setTimeout(_0x198a91,0xc8)),_0x26e06c[_0x432c95(0xbd)][0x2][_0x432c95(0xd3)](..._0x269752,_0xa072d3[_0x432c95(0x111)]),!_0x45965a||(_0x19e63f(),await new Promise(_0x236506=>setTimeout(_0x236506,0x320)),!_0x45965a))return;})()),await _0x1a88c6(0x258),_0x45965a=!0x1,await _0x2d1c92(_0x362a57(0x105)),_0x24c557=0x0,_0x5d0b35(_0x223081,_0x34ceae),_0x3b409b(_0x2e1221)[_0x362a57(0xf5)]=0x0,_0x3b409b(_0x1f007f)[_0x362a57(0xf5)]=0x1,_0x59f58c=!0x1,_0x33025c&&_0x19e63f();}async function _0x2d1c92(_0x35a983){const _0x58cb46=_0x189ec8;let _0x334bc7=_0x59f58c;_0x59f58c=!0x0,_0x274dde=new _0x31652c(_0x26da7f),_0x274dde['set']();let _0x6380e=0x0,_0x1fd8dd=()=>{const _0x3ea087=_0x224b;clearText(),addText(_0x3ea087(0xf8),{'x':0x1,'y':0xe,'color':'1'}),addText(_0x35a983[_0x3ea087(0xd8)](0x0,_0x6380e),{'x':0x0,'y':0x2});};for(_0x3cdf73(()=>{const _0xde1ba9=_0x224b;_0x6380e=_0x35a983[_0xde1ba9(0x100)]('\x0a',_0x6380e+0x1),_0x1fd8dd();});_0x6380e<_0x35a983[_0x58cb46(0xda)];_0x6380e++)_0x1fd8dd(),['\x0a','\x20'][_0x58cb46(0xd9)](_0x35a983[_0x6380e])||await new Promise(_0x3d15af=>setTimeout(_0x3d15af,0x50));await new Promise(_0x45c648=>_0x3cdf73(_0x45c648)),clearText(),_0x59f58c=_0x334bc7,_0x19e63f(),_0x3cdf73(_0x19e63f);}async function _0x4af7df(_0xd6a2d2,_0x335623,_0x3e8acd={}){const _0x92676c=_0x189ec8;let _0x4f5415=Object[_0x92676c(0xb0)]({'axis':0x0,'speed':0x258,'pauseAfter':0x320},_0x3e8acd),_0x537f80=_0x33025c[0x1],[_0x46731f]=[..._0x537f80[_0x92676c(0xab)](_0xd6a2d2)],_0x54199d=Math[_0x92676c(0xd0)](_0x335623[_0x4f5415[_0x92676c(0xc2)]]-_0x46731f[_0x4f5415[_0x92676c(0xc2)]]);for(let _0x44ba33=_0x46731f[_0x4f5415['axis']];_0x44ba33!=_0x335623[_0x4f5415['axis']];_0x44ba33+=_0x54199d)_0x537f80[_0x92676c(0xd3)](..._0x46731f,'.'),_0x46731f[_0x4f5415[_0x92676c(0xc2)]]=_0x44ba33,_0x537f80[_0x92676c(0xd3)](..._0x46731f,_0xd6a2d2),_0x19e63f(),await new Promise(_0x33fcdc=>setTimeout(_0x33fcdc,_0x4f5415[_0x92676c(0x114)]));await new Promise(_0x51ee7a=>setTimeout(_0x51ee7a,_0x4f5415[_0x92676c(0x10c)]));}async function _0x23a1eb(){const _0x17943c=_0x189ec8;_0x59f58c=!0x0,await _0x2d1c92(_0x17943c(0xed)),_0xd89c70(0x0,0x1),_0x59f58c=!0x1,_0x33025c&&_0x19e63f(),_0x3b409b(_0x23a1eb)['active']=0x1;}async function _0x2e1221(){const _0x3ffa08=_0x189ec8;_0x59f58c=!0x0,await _0x2d1c92(_0x3ffa08(0xed)),_0xd89c70(0x0,0x1),_0x59f58c=!0x1,_0x33025c&&_0x19e63f(),_0x3b409b(_0x2e1221)[_0x3ffa08(0xf5)]=0x1;}async function _0x8905a7(){const _0xf3b9cc=_0x189ec8;_0x59f58c=!0x0;let [_0x3b66ec]=[..._0x26e06c['hq'][0x1][_0xf3b9cc(0xab)](_0xa072d3[_0xf3b9cc(0x120)])];await _0x4af7df(_0xa072d3['player'],_0x3b66ec),[_0x413371]=[..._0x33025c[0x1][_0xf3b9cc(0xab)](_0xa072d3[_0xf3b9cc(0xf1)])],await _0x2d1c92(_0xf3b9cc(0xdc)),_0x59f58c=0x1,_0x19e63f(),await new Promise(_0x4f1842=>setTimeout(_0x4f1842,0x3e8)),_0x274dde=new _0x31652c(map`
+...`),f[0]++,f[1]++,o(),await new Promise(n=>setTimeout(n,700)),b=new C(map`
+.`),f[0]++,f[1]++,o(),await new Promise(n=>setTimeout(n,700)),b=new C(a2),B2(),M2(),d(l2).active=0,d(W2).active=1;let[e]=[...l.hq[1].positionsOf(i.kara)];l.hq[1].write(...e,i.max),await S2(),s=0}var E2=10;async function N(){let L=[0,~~(l.bank[0].height/2)];O("bank",L),console.log("HMMM, here"),M=1,E!=null&&clearInterval(E),E=setInterval(async()=>{r!=l.bank&&(clearInterval(E),E=void 0);let t=[...r[2].positionsOf(i.trigger)];for(let e of r[2].positionsOf(i.trigger))r[2].write(...e,".");for(let e=0;e<E2;e++){let n=h=>1-2*Math.abs(.5-h%1),x=Date.now()+e*900,$=n(x/3e3)%1*5,R=1+~~(x/3e3/9*3%1*9),Z=1+~~$;if(r[2].write(R,Z,i.trigger),r[1].read(R,Z)==i.player){clearInterval(E),s=!0,M=0;for(let w of t)r[2].write(...w,i.trigger);o(),await new Promise(w=>setTimeout(w,1e3));let y=(await I2(H2)).you.hp>0;if(s=!1,y)N(),v(0,0),E2*=.8;else{d(F2).active=1,d(z2).active=0,d(l2).active=0,d(c2).active=0,M=0,O("hq",k(S)),m2(),d(N).active=1;return}break}}o()})}async function r2(L){v(L[0]-m[0],L[1]-m[1]),await p(` ...                
+                    
+                    
+ ...                
+                    
+                    
+ ...                
+                    
+                    
+`),d(r2).active=1}async function i1(){l.outside[1].write(...V,i.max),l.outside[2].write(...q2,i.kara),o(),d(r2).active=1,d(G2).active=1}async function c2(){await p(` You want me to heal
+ the innocent beings
+ you've been irres- 
+ -ponsibly torturing
+ in a lawless cock- 
+ fighting ring?     
+                    
+ ...                
+                    
+ Sure thing.        
+`),playerHp=100,m2()}async function m2(){let L=setInterval(()=>{I!="hq"&&(clearInterval(L),d(c2).active=1)},100)}async function F2(){s=1,await p(` All of your 'monz  
+ were defeated.     
+                    
+ ...                
+                    
+ You make it back to
+ HQ in a foggy haze 
+ and collapse.      
+                    
+ Hours later, you're
+ awoken by Kara.    
+`),await p(` By some miracle,   
+ your spriggymonz   
+ are breathing again
+                    
+ ...                
+                    
+ So you're equipped 
+ to return to what- 
+ -ever irresponsibly
+ dangerous escapade 
+ I'm sure you embar-
+ -assingly failed.  
+`),_(100),s=0}async function G2(){let L=I,t=[...m];await p(` Hullo.             
+ You must be the    
+ new member of HQ!  
+                    
+ Well,              
+ you're in for some 
+ first day, alright!
+                    
+ It's the Tomb of a 
+ Thousand Triggers  
+ in there!          
+`);let e=async(c=0)=>{M=!0,await N(),s=1,D(()=>{}),await new Promise(u=>setTimeout(()=>D(u),c)),clearInterval(E)};await e(),await p(` Sorry, context:    
+ Trigger is         
+ something of an    
+ unofficial mascot, 
+                    
+ But I don't know   
+ what's gotten into 
+ him today!         
+                    
+ He's gone crazy!   
+`),await p(` And cherry on top: 
+ Bank's gone down!  
+                    
+ I can't get to the 
+ lever to redeploy  
+ the codebase,      
+                    
+ for fear of getting
+ my face bitten off!
+`);let n=!0;(async()=>{setTimeout(()=>clearInterval(E),150);for(let c=0;c<10;c++)if(l.bank[2].write(...z,"."),o(),await new Promise(u=>setTimeout(u,200)),l.bank[2].write(...z,i.switch),!n||(o(),await new Promise(u=>setTimeout(u,800)),!n))return})(),await e(600),n=!1,await p(` You look like you  
+ might be           
+ expendable, wanna  
+ give it a shot?    
+                    
+ ...                
+                    
+ Do it, I dare you! 
+`),M=0,O(L,t),d(p2).active=0,d(N).active=1,s=!1,r&&o()}async function p(L){let t=s;s=!0,b=new C(a2),b.set();let e=0,n=()=>{clearText(),addText("any key to continue",{x:1,y:14,color:"1"}),addText(L.slice(0,e),{x:0,y:2})};for(D(()=>{e=L.indexOf(`
+`,e+1),n()});e<L.length;e++)n(),[`
+`," "].includes(L[e])||await new Promise(c=>setTimeout(c,80));await new Promise(c=>D(c)),clearText(),s=t,o(),D(o)}async function T(L,t,e={}){let n=Object.assign({axis:0,speed:600,pauseAfter:800},e),c=r[1],[u]=[...c.positionsOf(L)],x=Math.sign(t[n.axis]-u[n.axis]);for(let $=u[n.axis];$!=t[n.axis];$+=x)c.write(...u,"."),u[n.axis]=$,c.write(...u,L),o(),await new Promise(A=>setTimeout(A,n.speed));await new Promise($=>setTimeout($,n.pauseAfter))}async function u2(){s=!0,await p(` It's locked!       
+                    
+ Besides, you       
+ don't want to be   
+ late on your first 
+ day!               
+`),v(0,1),s=!1,r&&o(),d(u2).active=1}async function p2(){s=!0,await p(` It's locked!       
+                    
+ Besides, you       
+ don't want to be   
+ late on your first 
+ day!               
+`),v(0,1),s=!1,r&&o(),d(p2).active=1}async function W2(){s=!0;let[L]=[...l.hq[1].positionsOf(i.max)];await T(i.player,L),[m]=[...r[1].positionsOf(i.player)],await p(` There you are!     
+ Where have you     
+ been!?             
+ We've been waiting!
+`),s=1,o(),await new Promise(t=>setTimeout(t,1e3)),b=new C(map`
 ...
 ...
-...`),_0x3d41d8[0x0]++,_0x19e63f(),await new Promise(_0x52e232=>setTimeout(_0x52e232,0x2bc)),_0x274dde=new _0x31652c(map`
-.`),_0x3d41d8[0x0]++,_0x3d41d8[0x1]++,_0x19e63f(),_0x59f58c=0x1,await new Promise(_0xae3e17=>setTimeout(_0xae3e17,0x2bc)),_0x274dde=new _0x31652c(map`
-.`),_0x274dde[_0xf3b9cc(0xc6)](),_0x2dce7e='THE\x20END',await new Promise();}async function _0x438229(){const _0x219bac=_0x189ec8;_0x59f58c=!0x0,await _0x4af7df(_0xa072d3['kara'],_0x413371),await _0x2d1c92(_0x219bac(0xa9)),_0x59f58c=!0x1,_0x33025c&&_0x19e63f();}async function _0x255a06(){const _0x149494=_0x189ec8;_0x59f58c=!0x0,await _0x4af7df(_0xa072d3[_0x149494(0xc1)],_0x413371),await _0x2d1c92(_0x149494(0xdd)),_0x59f58c=!0x1,_0x33025c&&_0x19e63f();}async function _0x539c92(){const _0x3788fa=_0x189ec8;_0x59f58c=!0x0,await new Promise(_0x312ac6=>setTimeout(_0x312ac6,0x190)),await _0x2d1c92(_0x3788fa(0xe7)),_0x59f58c=!0x1,_0x33025c&&_0x19e63f();}async function _0x12bc87(){const _0x426a2e=_0x189ec8;_0x59f58c=!0x0,await _0x4af7df(_0xa072d3['ghost'],_0x4b4393(_0x413371),{'axis':0x1,'pauseAfter':0x0}),await _0x4af7df(_0xa072d3[_0x426a2e(0x117)],_0x4b4393(_0x413371),{'axis':0x0}),await _0x2d1c92('\x20Oh\x20look,\x20it\x27s\x20that\x20\x0a\x20dog\x20Kara\x20keeps\x20\x20\x20\x20\x20\x0a\x20around,\x20Wasabi!\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20<growls\x20menacingly>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Uh\x20...\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20I\x20think\x20I\x20might\x27ve\x20\x0a\x20left\x20some\x20food\x20in\x20\x20\x0a\x20my\x20pocket\x20...\x20\x20\x20\x20\x20\x20\x0a'),await _0x5a571c(),_0x5d0b35(_0x3880ea,_0x413371),clearText();let _0x174ccf=_0x13fc30(_0x3306cb);await _0x4af7df(_0xa072d3[_0x426a2e(0x117)],_0x174ccf,{'pauseAfter':0x0,'speed':0xc8}),await Promise[_0x426a2e(0xae)]([_0x4af7df(_0xa072d3['chest'],[_0x174ccf[0x0]+0x2,_0x174ccf[0x1]],{'speed':0xc8}),_0x4af7df(_0xa072d3[_0x426a2e(0x117)],[_0x174ccf[0x0]+0x1,_0x174ccf[0x1]],{'speed':0xc8})]),await _0x4af7df(_0xa072d3[_0x426a2e(0x117)],[_0x174ccf[0x0],_0x174ccf[0x1]+0x2],{'speed':0x1f4,'axis':0x1}),await _0x4af7df(_0xa072d3[_0x426a2e(0x117)],[_0x413371[0x0]-0x1,_0x413371[0x1]],{'speed':0x1f4,'axis':0x0}),await _0x4af7df(_0xa072d3[_0x426a2e(0xf1)],[_0x413371[0x0]+0x2,_0x413371[0x1]],{'speed':0x64,'axis':0x0}),[_0x413371]=[..._0x33025c[0x1][_0x426a2e(0xab)](_0xa072d3[_0x426a2e(0xf1)])],await _0x4af7df(_0xa072d3['ghost'],_0x7af04f,{'speed':0xc8,'axis':0x1});let [_0x524f46]=[..._0x33025c[0x1][_0x426a2e(0xab)](_0xa072d3[_0x426a2e(0x117)])];_0x33025c[0x1]['write'](..._0x524f46,'.'),_0x19e63f(),await new Promise(_0x11f92b=>setTimeout(_0x11f92b,0x5dc)),_0x33025c[0x1][_0x426a2e(0xd3)](..._0x524f46,_0xa072d3[_0x426a2e(0xc1)]),_0x19e63f(),await new Promise(_0x18bb81=>setTimeout(_0x18bb81,0x3e8)),await _0x2d1c92(_0x426a2e(0xf7)),_0x5abbe9(0x64),_0x33025c[0x1][_0x426a2e(0xd3)](..._0x524f46,'.'),_0x19e63f(),await new Promise(_0x116331=>setTimeout(_0x116331,0x1f4)),_0x3b409b(_0x1e597f)[_0x426a2e(0xf5)]=0x1,_0x59f58c=!0x1,_0x33025c&&_0x19e63f();}async function _0x2f5010(){const _0x5f1681=_0x189ec8;_0x59f58c=!0x0,await _0x2d1c92(_0x5f1681(0xd6)),_0x5d23ef(_0x413371)[_0x5f1681(0xf5)]=0x1,_0xd89c70(0x0,0x1),_0x59f58c=!0x1,_0x33025c&&_0x19e63f();}async function _0x1e597f(){const _0x30a306=_0x189ec8;_0x59f58c=!0x0,await new Promise(_0x158281=>setTimeout(_0x158281,0x190)),await _0x2d1c92(_0x30a306(0xbf)),await new Promise(_0x361b57=>setTimeout(_0x361b57,0x320)),_0x26e06c['hq'][0x1]['write'](..._0x22bf15,_0xa072d3[_0x30a306(0x102)]),_0x19e63f(),_0x3b409b(_0x24f3bf)[_0x30a306(0xf5)]=0x1,await new Promise(_0x182fa4=>setTimeout(_0x182fa4,0x320)),await _0x2d1c92(_0x30a306(0x12b)),_0x59f58c=!0x1,_0x33025c&&_0x19e63f();}async function _0x24f3bf(){const _0x5a0136=_0x189ec8;_0x59f58c=!0x0,await new Promise(_0x25e2f5=>setTimeout(_0x25e2f5,0x3e8)),_0x26e06c['hq'][0x2]['write'](..._0x22bf15,_0xa072d3[_0x5a0136(0x12e)]),_0x19e63f(),await new Promise(_0x1cf48d=>setTimeout(_0x1cf48d,0x9c4)),await _0x2d1c92(_0x5a0136(0xcc));let _0x1419ed=await _0x1b9cb9();_0x5d0b35(_0x3880ea,_0x413371),clearText(),_0x1419ed[_0x5a0136(0x125)]['hp']<=0x0?(_0x1d15bc=!0x0,await _0x2d1c92(_0x5a0136(0x11d))):await _0x2d1c92(_0x5a0136(0x10a)),await new Promise(_0x3f3606=>setTimeout(_0x3f3606,0x1f4)),_0x26e06c['hq'][0x2][_0x5a0136(0xd3)](..._0x22bf15,'.'),_0x19e63f(),await new Promise(_0xebcc82=>setTimeout(_0xebcc82,0xc8)),_0x26e06c['hq'][0x2]['write'](..._0x22bf15,_0xa072d3[_0x5a0136(0x12e)]),_0x19e63f(),await new Promise(_0x2023f2=>setTimeout(_0x2023f2,0x64)),_0x26e06c['hq'][0x2][_0x5a0136(0xd3)](..._0x22bf15,'.'),_0x19e63f(),await new Promise(_0x20cbee=>setTimeout(_0x20cbee,0x1f4)),await _0x4af7df(_0xa072d3[_0x5a0136(0xc1)],_0x13fc30(_0x413371),{'speed':0x1f4,'axis':0x1}),await _0x2d1c92(_0x5a0136(0xc4)),await _0x2d1c92('\x20I\x20mean...\x20whatever.\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Zach\x27s\x20Calendar\x20\x20\x20\x20\x0a\x20puts\x20him\x20in\x20a\x20cold\x20\x0a\x20inhospitable\x20cave,\x20\x0a\x20the\x20Bank\x20office.\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20Find\x20him\x20so\x20you\x20can\x0a\x20start\x20your\x201st\x20day!\x0a'),_0x2dce7e=_0x5a0136(0xa4),_0x49e092(),_0x1a56ea(),_0x59f58c=!0x1,_0x33025c&&_0x19e63f();}async function _0x19982d(){const _0x1cb362=_0x189ec8;_0x59f58c=!0x0,await new Promise(_0x4d8656=>setTimeout(_0x4d8656,0x190)),await _0x2d1c92('\x20Listen\x20here,\x20kid!\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20I\x20been\x20livin\x27\x20in\x20\x20\x20\x0a\x20this\x20here\x20closet\x20\x20\x20\x0a\x20afore\x20you\x20was\x20even\x20\x0a\x20borned,\x20ya\x20hear\x20me?\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20I\x20think\x20it\x27s\x20high\x20\x20\x0a\x20time\x20I\x20gave\x20a\x20\x20\x20\x20\x20\x20\x0a\x20whippersnapper\x20an\x20\x20\x0a\x20ass\x20whoopin!\x20\x20\x20\x20\x20\x20\x20\x0a'),await _0xea8e7c(),_0x5d0b35(_0x3880ea,_0x413371),clearText(),await new Promise(_0x4432d2=>setTimeout(_0x4432d2,0x1f4)),_0x26e06c['closet'][0x1][_0x1cb362(0xd3)](0x2,0x2,'.'),_0x19e63f(),await new Promise(_0x3c020a=>setTimeout(_0x3c020a,0xc8)),_0x26e06c[_0x1cb362(0x118)][0x1][_0x1cb362(0xd3)](0x2,0x2,_0xa072d3[_0x1cb362(0x124)]),_0x19e63f(),await new Promise(_0x5b770c=>setTimeout(_0x5b770c,0x64)),_0x26e06c[_0x1cb362(0x118)][0x1]['write'](0x2,0x2,'.'),_0x19e63f(),await new Promise(_0x1c9c4c=>setTimeout(_0x1c9c4c,0x1f4)),_0x59f58c=!0x1,_0x33025c&&_0x19e63f();}function _0x5d0b35(_0x1ff4c3,_0xb92b08){const _0x198604=_0x189ec8;_0x413371&&_0x33025c[0x1][_0x198604(0xd3)](..._0x413371,'.'),_0x33025c=_0x26e06c[_0x1ff4c3],_0x3880ea=_0x1ff4c3,_0x413371=_0xb92b08,_0x33025c[0x1]['write'](..._0x413371,_0xa072d3[_0x198604(0xf1)]),_0x3d41d8=[0x0,0x0],setLegend(..._0xe0669b[_0x198604(0x12f)](([_0x3db3b4],[_0x45cea3])=>{const _0x5c8c0c=_0x198604;let _0x9fcc31=_0x301d30=>_0x301d30 in _0x55c160?typeof _0x55c160[_0x301d30]==_0x5c8c0c(0xcf)?_0x55c160[_0x301d30]:_0x55c160[_0x301d30][_0x3880ea]:_0x33025c['findIndex'](_0x516885=>_0x516885['arr'][_0x5c8c0c(0xd9)](_0x301d30));return _0x9fcc31(_0x45cea3)-_0x9fcc31(_0x3db3b4);})),_0x19e63f(),_0xd89c70(0x0,0x0);}function _0xd89c70(..._0x4a0151){const _0x5dd2e8=_0x189ec8;let _0x30ac22=(_0x162e1f,_0x4954e8)=>{const _0x17d161=_0x224b;for(let _0x24234c=0x0;_0x24234c<0x2;_0x24234c++)if(_0x4954e8[_0x17d161(0xa2)][_0x24234c]<_0x162e1f[_0x17d161(0xa2)][_0x24234c]||_0x4954e8['max'][_0x24234c]>_0x162e1f[_0x17d161(0x120)][_0x24234c])return!0x1;return!0x0;},_0x1da5a0={'min':[0x0,0x0],'max':[_0x33025c[0x0][_0x5dd2e8(0xf4)],_0x33025c[0x0][_0x5dd2e8(0xb3)]]},_0x500755=(_0x1eb6bb,_0x30bcb9,_0x23e72f)=>{let _0xbbe53f=[_0x1eb6bb[0x0]+_0x30bcb9[0x0],_0x1eb6bb[0x1]+_0x30bcb9[0x1]],_0x1fb800={'min':_0xbbe53f,'max':[_0xbbe53f[0x0]+_0x23e72f[0x0],_0xbbe53f[0x1]+_0x23e72f[0x1]]};return _0x30ac22(_0x1da5a0,_0x1fb800)?_0xbbe53f:_0x1eb6bb;},_0x5b45de=_0x4ccbf3=>{const _0x5863c7=_0x5dd2e8;let _0x23f20b=_0x500755(_0x413371,_0x4ccbf3,[0x1,0x1]);return _0x33025c[0x1][_0x5863c7(0xe6)](..._0x23f20b)!='.'?_0x413371:_0x23f20b;},_0xb04f7b=[..._0x413371];_0x33025c[0x1][_0x5dd2e8(0xd3)](..._0x413371,'.'),_0x413371=_0x5b45de(_0x4a0151),_0x33025c[0x1][_0x5dd2e8(0xd3)](..._0x413371,_0xa072d3['player']);let _0x3bdc14=_0x1fa1a2[_0x5dd2e8(0xe9)](_0x500aa5=>_0x500aa5[_0x5dd2e8(0xf5)]?_0x500aa5['pos'][_0x3880ea]+''==''+_0x413371:!0x1);if(_0x3bdc14){let [_0x2d39ae]=Object[_0x5dd2e8(0xaa)](_0x3bdc14[_0x5dd2e8(0xc9)])[_0x5dd2e8(0xe2)](_0x14cc17=>_0x14cc17!=_0x3880ea),_0x198c78=[..._0x3bdc14[_0x5dd2e8(0xc9)][_0x2d39ae]];_0x198c78[0x1]++,_0x5d0b35(_0x2d39ae,_0x198c78);return;}let _0x5ba110=[_0x274dde[_0x5dd2e8(0xf4)],_0x274dde[_0x5dd2e8(0xb3)]],_0x26c829=[_0x413371[0x0]-~~(_0x274dde[_0x5dd2e8(0xf4)]/0x2),_0x413371[0x1]-~~(_0x274dde[_0x5dd2e8(0xb3)]/0x2)],_0x5c640a=(_0x4672ee,_0x2fd201)=>{let _0x43bd08=[..._0x3d41d8];if(_0x3d41d8=_0x500755(_0x3d41d8,[_0x4672ee,_0x2fd201],_0x5ba110),_0x43bd08+''!=''+_0x3d41d8)return!0x0;};for(;_0x3d41d8[0x0]<_0x26c829[0x0]&&_0x5c640a(0x1,0x0)||_0x3d41d8[0x0]>_0x26c829[0x0]&&_0x5c640a(-0x1,0x0)||_0x3d41d8[0x1]<_0x26c829[0x1]&&_0x5c640a(0x0,0x1)||_0x3d41d8[0x1]>_0x26c829[0x1]&&_0x5c640a(0x0,-0x1););let _0x8bc1a0=[_0x5ba110[0x0]+_0x3d41d8[0x0],_0x5ba110[0x1]+_0x3d41d8[0x1]];_0x30ac22(_0x1da5a0,{'min':_0x3d41d8,'max':_0x8bc1a0})||(_0x3d41d8=[0x0,0x0]);for(let _0x587240 of _0x29ebc8[_0x3880ea]||[]){let {pos:_0x2dcf98,fn:_0x450d18}=_0x587240;_0x587240[_0x5dd2e8(0xf5)]&&_0x2dcf98+''==''+_0x413371&&(_0x587240[_0x5dd2e8(0xf5)]=0x0,_0x450d18(_0xb04f7b));}}function _0x19e63f(){const _0x5214ba=_0x189ec8;if(_0x57e2dc['gameRunning'])return;if(_0x24c557){_0x33025c['forEach']((_0x3b120b,_0x5733b1)=>_0x5733b1?_0x3b120b[_0x5214ba(0xff)]():_0x3b120b[_0x5214ba(0xc6)]());return;}let _0x111105=0x0;for(let _0x1a4858 of _0x33025c){for(let _0x542c3b=0x0;_0x542c3b<_0x274dde[_0x5214ba(0xf4)];_0x542c3b++)for(let _0x2bdcaa=0x0;_0x2bdcaa<_0x274dde[_0x5214ba(0xb3)];_0x2bdcaa++){let _0x5050b1=_0x1a4858[_0x5214ba(0xe6)](_0x3d41d8[0x0]+_0x542c3b,_0x3d41d8[0x1]+_0x2bdcaa);_0x274dde[_0x5214ba(0xd3)](_0x542c3b,_0x2bdcaa,_0x5050b1);}_0x111105++?_0x274dde[_0x5214ba(0xff)]():_0x274dde['set']();}}function _0x25d608(){const _0x1476a3=_0x189ec8;if(_0x59f58c)return;let _0x1826e3={'y':0xf,'color':color`L`},_0x26e4f8=_0x2dce7e;function _0x13debb(_0x57bdf8,_0x1ffb4a=0x0){const _0x38805e=_0x224b;let _0x20d963=_0x1ffb4a%_0x57bdf8[_0x38805e(0xda)];return _0x57bdf8[_0x38805e(0xd8)](_0x20d963)+_0x57bdf8[_0x38805e(0xd8)](0x0,_0x20d963);}_0x33025c[0x1][_0x1476a3(0xe6)](_0x413371[0x0],_0x413371[0x1]-0x1)==_0xa072d3[_0x1476a3(0xd0)]&&(_0x26e4f8=_0x13debb('SIGN:\x20HQ\x27s\x20the\x20rightmost\x20house!\x20\x20\x20\x20',~~(Date[_0x1476a3(0x12d)]()/0x118))[_0x1476a3(0xf3)](0x0,0xa0/0x8),_0x1826e3[_0x1476a3(0x10b)]=color`H`),clearText(),addText(_0x26e4f8,_0x1826e3);}})()));
+...`),f[0]++,o(),await new Promise(t=>setTimeout(t,700)),b=new C(map`
+.`),f[0]++,f[1]++,o(),s=1,await new Promise(t=>setTimeout(t,700)),b=new C(map`
+.`),b.set(),s2="THE END",await new Promise}async function l2(){s=!0,await T(i.kara,m),await p(` There you are! I   
+ hope you don't plan
+ on making a habit  
+ of being late!     
+                    
+ Zach's waiting for 
+ you in a call room 
+ upstairs. Hurry up!
+                    
+ Get upstairs!      
+`),s=!1,r&&o()}async function z2(){s=!0,await T(i.kara,m),await p(` One last thing,    
+ part of your duties
+ here at HQ will be 
+ safekeeping this   
+ repulsive-looking  
+ dinosaur, Orpheus. 
+                    
+ Treat her well! I  
+ don't want to see  
+ her taught to      
+ fight with strays! 
+`),s=!1,r&&o()}async function o1(){s=!0,await new Promise(L=>setTimeout(L,400)),await p(` Hey look, that's   
+ Zach's desk! You've
+ seen pictures of it
+ in the Slack.      
+                    
+ It's still warm,   
+ and smells vaguely 
+ of coffee.         
+`),s=!1,r&&o()}async function s1(){s=!0,await T(i.ghost,J(m),{axis:1,pauseAfter:0}),await T(i.ghost,J(m),{axis:0}),await p(` Oh look, it's that 
+ dog Kara keeps     
+ around, Wasabi!    
+                    
+ <growls menacingly>
+                    
+ Uh ...             
+ I think I might've 
+ left some food in  
+ my pocket ...      
+`),await x2(),O(I,m),clearText();let L=k(i2);await T(i.ghost,L,{pauseAfter:0,speed:200}),await Promise.all([T(i.chest,[L[0]+2,L[1]],{speed:200}),T(i.ghost,[L[0]+1,L[1]],{speed:200})]),await T(i.ghost,[L[0],L[1]+2],{speed:500,axis:1}),await T(i.ghost,[m[0]-1,m[1]],{speed:500,axis:0}),await T(i.player,[m[0]+2,m[1]],{speed:100,axis:0}),[m]=[...r[1].positionsOf(i.player)],await T(i.ghost,n2,{speed:200,axis:1});let[t]=[...r[1].positionsOf(i.ghost)];r[1].write(...t,"."),o(),await new Promise(e=>setTimeout(e,1500)),r[1].write(...t,i.kara),o(),await new Promise(e=>setTimeout(e,1e3)),await p(` What's all the     
+ ruckus going on up 
+ here?              
+                    
+   Oh, no! Poor     
+  Orpheus! Let me   
+   patch her up!    
+                    
+ If she ever gets   
+ like this again,   
+ just come to me,   
+        ok?         
+`),_(100),r[1].write(...t,"."),o(),await new Promise(e=>setTimeout(e,500)),d(N2).active=1,s=!1,r&&o()}async function r1(){s=!0,await p(` That chest Wasabi  
+ knocked out of the 
+ way must've been   
+ there for quite a  
+ while!             
+                    
+ The door is caked  
+ in a layer of dust 
+ and cobwebs, but   
+ unlocked!          
+`),L1(m).active=1,v(0,1),s=!1,r&&o()}async function N2(){s=!0,await new Promise(L=>setTimeout(L,400)),await p(` There you are!     
+                    
+ I just realized,   
+ Zach wasn't up     
+ there with you,    
+ and I never saw    
+ him leave ...      
+                    
+ I mean seriously,  
+ Did he vent or     
+ something!?!       
+`),await new Promise(L=>setTimeout(L,800)),l.hq[1].write(...B,i.vent),o(),d(Z2).active=1,await new Promise(L=>setTimeout(L,800)),await p(` Is it just me or   
+ ...                
+ that vent wasn't   
+ there before,      
+ right?             
+                    
+ that's   ...       
+                    
+ a tad, erm, sus.   
+`),s=!1,r&&o()}async function Z2(){s=!0,await new Promise(t=>setTimeout(t,1e3)),l.hq[2].write(...B,i.amogus),o(),await new Promise(t=>setTimeout(t,2500)),await p(`  did somebody call 
+       for an       
+ EMERGENCY MEETING? 
+`);let L=await P2();O(I,m),clearText(),L.them.hp<=0?(H2=!0,await p(`  orpheus absorbed  
+  amogus's healing  
+  ability!          
+`)):await p(`  orpheus DID NOT  
+          absorb    
+  amogus's healing  
+  ability!          
+  (get gud noob)    
+`),await new Promise(t=>setTimeout(t,500)),l.hq[2].write(...B,"."),o(),await new Promise(t=>setTimeout(t,200)),l.hq[2].write(...B,i.amogus),o(),await new Promise(t=>setTimeout(t,100)),l.hq[2].write(...B,"."),o(),await new Promise(t=>setTimeout(t,500)),await T(i.kara,k(m),{speed:500,axis:1}),await p(` Wh. What the shit? 
+                    
+ Like, who even is  
+ the imposter at    
+ this point?        
+                    
+ Zach vented ...    
+                    
+ but I just saw you 
+ kill a crewmate... 
+`),await p(` I mean... whatever.
+                    
+ Zach's Calendar    
+ puts him in a cold 
+ inhospitable cave, 
+ the Bank office.   
+                    
+ Find him so you can
+ start your 1st day!
+`),s2="QUEST: Find Bank!",i1(),m2(),s=!1,r&&o()}async function c1(){s=!0,await new Promise(L=>setTimeout(L,400)),await p(` Listen here, kid!  
+                    
+ I been livin' in   
+ this here closet   
+ afore you was even 
+ borned, ya hear me?
+                    
+ I think it's high  
+ time I gave a      
+ whippersnapper an  
+ ass whoopin!       
+`),await $2(),O(I,m),clearText(),await new Promise(L=>setTimeout(L,500)),l.closet[1].write(2,2,"."),o(),await new Promise(L=>setTimeout(L,200)),l.closet[1].write(2,2,i.oldMan),o(),await new Promise(L=>setTimeout(L,100)),l.closet[1].write(2,2,"."),o(),await new Promise(L=>setTimeout(L,500)),s=!1,r&&o()}function O(L,t){m&&r[1].write(...m,"."),r=l[L],I=L,m=t,r[1].write(...m,i.player),f=[0,0],setLegend(...e1.sort(([e],[n])=>{let c=u=>u in Q?typeof Q[u]=="number"?Q[u]:Q[u][I]:r.findIndex(x=>x.arr.includes(u));return c(n)-c(e)})),o(),v(0,0)}function v(...L){let t=(h,y)=>{for(let w=0;w<2;w++)if(y.min[w]<h.min[w]||y.max[w]>h.max[w])return!1;return!0},e={min:[0,0],max:[r[0].width,r[0].height]},n=(h,y,w)=>{let Y=[h[0]+y[0],h[1]+y[1]],Y2={min:Y,max:[Y[0]+w[0],Y[1]+w[1]]};return t(e,Y2)?Y:h},c=h=>{let y=n(m,h,[1,1]);return r[1].read(...y)!="."?m:y},u=[...m];r[1].write(...m,"."),m=c(L),r[1].write(...m,i.player);let x=R2.find(h=>h.active?h.pos[I]+""==""+m:!1);if(x){let[h]=Object.keys(x.pos).filter(w=>w!=I),y=[...x.pos[h]];y[1]++,O(h,y);return}let $=[b.width,b.height],A=[m[0]-~~(b.width/2),m[1]-~~(b.height/2)],R=(h,y)=>{let w=[...f];if(f=n(f,[h,y],$),w+""!=""+f)return!0};for(;f[0]<A[0]&&R(1,0)||f[0]>A[0]&&R(-1,0)||f[1]<A[1]&&R(0,1)||f[1]>A[1]&&R(0,-1););let Z=[$[0]+f[0],$[1]+f[1]];t(e,{min:f,max:Z})||(f=[0,0]);for(let h of o2[I]||[]){let{pos:y,fn:w}=h;h.active&&y+""==""+m&&(h.active=0,w(u))}}function o(){if(a.gameRunning)return;if(M){r.forEach((t,e)=>e?t.push():t.set());return}let L=0;for(let t of r){for(let e=0;e<b.width;e++)for(let n=0;n<b.height;n++){let c=t.read(f[0]+e,f[1]+n);b.write(e,n,c)}L++?b.push():b.set()}}function m1(){if(s)return;let L={y:15,color:color`L`},t=s2;function e(n,c=0){let u=c%n.length;return n.slice(u)+n.slice(0,u)}r[1].read(m[0],m[1]-1)==i.sign&&(t=e("SIGN: HQ's the rightmost house!    ",~~(Date.now()/280)).substr(0,160/8),L.color=color`H`),clearText(),addText(t,L)}})();
