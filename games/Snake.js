@@ -215,7 +215,7 @@ function gameOver() {
   addText("Final Score: " + score, {x: 1, y:6});
   addText("Try again? Press i.", {x: 1, y:13});
   clearInterval(interval);
-  playback.end();
+  if(playback) playback.end();
 }
 
 addScore();
@@ -258,7 +258,7 @@ onInput("i", () => {
   interval = setInterval(move, 400);
   addScore();
 
-  playback.end();
+  if(playback) playback.end();
   playback = playTune(music, Infinity);
 });
 

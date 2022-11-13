@@ -185,7 +185,7 @@ afterInput(() => {
       y: 10,
       color: color `5`
     })
-    playback.end()
+    if(playback) playback.end()
     isAlive = false
   }
 })
