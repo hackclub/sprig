@@ -960,6 +960,7 @@ const getSequenceInDirection = (
 };
 
 const checkForSequences = () => {
+  let giveAnotherTurn = false;
   const sequenceChecks = [
     [-1, 1],
     [1, -1],
@@ -982,9 +983,11 @@ const checkForSequences = () => {
     if (result !== false) {
       // Sequence detected
       saved.push(result);
+      giveAnotherTurn = true;
       renderLines(result);
     }
   }
+  return giveAnotherTurn;
 };
 
 const placeLetter = (which) => {
@@ -995,9 +998,10 @@ const placeLetter = (which) => {
       x: pointer.pos.x,
       y: pointer.pos.y,
     });
-    checkForSequences();
+    const giveAnotherTurn = checkForSequences();
     checkWin();
-    currentPlayer = currentPlayer === "blue" ? "green" : "blue";
+    if (giveAnotherTurn === false)
+      currentPlayer = currentPlayer === "blue" ? "green" : "blue";
   }
 };
 
