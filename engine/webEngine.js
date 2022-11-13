@@ -125,15 +125,30 @@ export function init(canvas, headless = false, runDispatch = true) {
   };
   let afterInputs = [];
 
-  const VALID_INPUTS = ["w", "a", "s", "d", "i", "j", "k", "l"];
+  const KEY_MAPPINGS = {
+    "w": "w",
+    "a": "a",
+    "s": "s",
+    "d": "d",
+    "i": "i",
+    "j": "j",
+    "k": "k",
+    "l": "l",
+    "ArrowUp": "w",
+    "ArrowDown": "s",
+    "ArrowLeft": "a",
+    "ArrowRight": "d",
+    "1": "j",
+    "2": "k",
+    "3": "i",
+    "4": "l",
+  };
   canvas.addEventListener("keydown", (e) => {
     const key = e.key;
 
-    if (!VALID_INPUTS.includes(key)) return;
+    if (!(key in KEY_MAPPINGS)) return;
 
-    for (const valid_key of VALID_INPUTS)
-      if (key == valid_key)
-        tileInputs[key].forEach(fn => fn());
+    tileInputs[KEY_MAPPINGS[key]].forEach(fn => fn());
 
     afterInputs.forEach(f => f());
 
@@ -147,7 +162,7 @@ export function init(canvas, headless = false, runDispatch = true) {
 
   function onInput(type, fn) {
     if (!(type in tileInputs)) throw new Error(
-      `Unknown input key, "${type}": expected one of ${VALID_INPUTS.join(', ')}`
+      `Unknown input key, "${type}": expected one of ${[...new Set(Object.values(KEY_MAPPINGS))].join(', ')}`
     )
     tileInputs[type].push(fn);
   }
