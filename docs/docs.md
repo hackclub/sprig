@@ -125,7 +125,7 @@ Sprig has eight inputs  `w`, `a`, `s`, `d`, `i`, `j`, `k`, `l`.
 
 Typically `w`, `a`, `s`, `d` are used as directional controls.
 
-In case you're using a different keyboard layout, arrow keys are mapped to WASD and `1`, `2`, `3`, and `4` map to `i`, `j`, `k`, and `l` respectively (although you still need to refer to the inputs by the non-mapped names in your code).
+In case you're using a different keyboard layout, arrow keys are mapped to WASD and `1`, `2`, `3`, and `4` map to `j`, `k`, `i`, and `l` respectively (although you still need to refer to the inputs by the non-mapped names in your code).
 
 ### onInput(type, callback)
 

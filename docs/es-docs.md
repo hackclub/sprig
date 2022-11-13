@@ -120,7 +120,7 @@ Gamelab tiene ocho entradas  `w`, `a`, `s`, `d`, `i`, `j`, `k`, `l`.
 
 Típicamente `w`, `a`, `s`, `d` se utilizan como controles direccionales.
 
-En caso de que esté utilizando un diseño de teclado diferente, las teclas de flecha se asignan a WASD y `1`, `2`, `3` y `4` se asignan a `i`, `j`, `k` y ` l` respectivamente (aunque todavía necesita referirse a las entradas por los nombres no asignados en su código). <!-- TODO: this is translated via Google Translate, verify the translation is correct -->
+En caso de que esté utilizando un diseño de teclado diferente, las teclas de flecha se asignan a WASD y `1`, `2`, `3` y `4` se asignan a `j`, `k`, `i`, and `l` respectivamente (aunque todavía necesita referirse a las entradas por los nombres no asignados en su código). <!-- TODO: this is translated via Google Translate, verify the translation is correct -->
 
 ### onInput(type, callback)
 
