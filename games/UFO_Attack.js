@@ -157,35 +157,52 @@ setPushables({
 });
 
 onInput("s", () => {
-  getFirst(player).y += 1;
+  const p = getFirst(player);
+  if (!p) return;
+  p.y += 1;
 });
 
 onInput("w", () => {
-  getFirst(player).y -= 1;
+  const p = getFirst(player);
+  if (!p) return;
+  p.y -= 1;
 });
 
 onInput("d", () => {
-  getFirst(player).x += 1;
+  const p = getFirst(player);
+  if (!p) return;
+  p.x += 1;
 });
 
 onInput("a", () => {
-  getFirst(player).x -= 1;
+  const p = getFirst(player);
+  if (!p) return;
+  p.x -= 1;
 });
 
 onInput("s", () => {
-  getFirst(box).y += 1;
+  const b = getFirst(box);
+  if (!b) return;
+  b.y += 1;
 });
 
 onInput("w", () => {
-  getFirst(box).y -= 1;
+  const b = getFirst(box);
+  if (!b) return;
+  b.y -= 1;
 });
 
 onInput("d", () => {
   getFirst(box).x += 1;
+  const b = getFirst(box);
+  if (!b) return;
+  b.x += 1;
 });
 
 onInput("a", () => {
-  getFirst(box).x -= 1;
+  const b = getFirst(box);
+  if (!b) return;
+  b.x -= 1;
 });
 
 onInput("j", () => {
