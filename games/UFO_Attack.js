@@ -157,52 +157,35 @@ setPushables({
 });
 
 onInput("s", () => {
-  const p = getFirst(player);
-  if (!p) return;
-  p.y += 1;
+  getFirst(player).y += 1;
 });
 
 onInput("w", () => {
-  const p = getFirst(player);
-  if (!p) return;
-  p.y -= 1;
+  getFirst(player).y -= 1;
 });
 
 onInput("d", () => {
-  const p = getFirst(player);
-  if (!p) return;
-  p.x += 1;
+  getFirst(player).x += 1;
 });
 
 onInput("a", () => {
-  const p = getFirst(player);
-  if (!p) return;
-  p.x -= 1;
+  getFirst(player).x -= 1;
 });
 
 onInput("s", () => {
-  const b = getFirst(box);
-  if (!b) return;
-  b.y += 1;
+  getFirst(box).y += 1;
 });
 
 onInput("w", () => {
-  const b = getFirst(box);
-  if (!b) return;
-  b.y -= 1;
+  getFirst(box).y -= 1;
 });
 
 onInput("d", () => {
   getFirst(box).x += 1;
-  const b = getFirst(box);
-  if (!b) return;
-  b.x += 1;
 });
 
 onInput("a", () => {
-  const b = getFirst(box);
-  if (!b) return;
-  b.x -= 1;
+  getFirst(box).x -= 1;
 });
 
 onInput("j", () => {
@@ -215,7 +198,7 @@ onInput("j", () => {
 
 afterInput(() => {
   const targetNumber = tilesWith(player).length;
-  
+
   const numberCovered = tilesWith(player, box).length;
 
   if (numberCovered === targetNumber) {
@@ -246,12 +229,12 @@ afterInput(() => {
 
 afterInput(() => {
   const targetNumber = tilesWith(goal).length;
-  
+
   const numberCovered = tilesWith(goal, player).length;
 
   if (numberCovered === targetNumber) {
     level = level + 1;
-    
+
     const currentLevel = levels[level];
 
     if (currentLevel !== undefined) {
@@ -264,7 +247,7 @@ afterInput(() => {
 
 afterInput(() => {
   const targetNumber = tilesWith(player).length;
-  
+
   const numberCovered = tilesWith(player, box).length;
 
   if (numberCovered === targetNumber) {
