@@ -312,14 +312,14 @@ let selectedLvl = "1"
 
 
 onInput("a", () => {
-  if (!hasLost) {
+  if (!hasLost && getAll(player).length > 0) {
   getFirst(player).x -= 1;
   }
 });
 
 
 onInput("d", () => {
-  if (!hasLost) {
+  if (!hasLost && getAll(player).length > 0) {
   getFirst(player).x += 1;
   }
 });
