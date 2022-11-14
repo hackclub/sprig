@@ -1070,5 +1070,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-11-13"
+  },
+  {
+    "filename": "Jumper",
+    "title": "Jumper",
+    "author": "TC",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2022-11-13"
   }
 ]
