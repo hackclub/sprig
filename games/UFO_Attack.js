@@ -198,7 +198,7 @@ onInput("j", () => {
 
 afterInput(() => {
   const targetNumber = tilesWith(player).length;
-  
+
   const numberCovered = tilesWith(player, box).length;
 
   if (numberCovered === targetNumber) {
@@ -229,12 +229,12 @@ afterInput(() => {
 
 afterInput(() => {
   const targetNumber = tilesWith(goal).length;
-  
+
   const numberCovered = tilesWith(goal, player).length;
 
   if (numberCovered === targetNumber) {
     level = level + 1;
-    
+
     const currentLevel = levels[level];
 
     if (currentLevel !== undefined) {
@@ -247,7 +247,7 @@ afterInput(() => {
 
 afterInput(() => {
   const targetNumber = tilesWith(player).length;
-  
+
   const numberCovered = tilesWith(player, box).length;
 
   if (numberCovered === targetNumber) {

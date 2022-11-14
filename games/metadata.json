@@ -1054,5 +1054,21 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-11-13"
+  },
+  {
+    "filename": "SOS_Game",
+    "title": "SOS_Game",
+    "author": "Milán Leskó",
+    "img": "",
+    "tags": ["multiplayer"],
+    "addedOn": "2022-11-13"
+  },
+  {
+    "filename": "soko_quest",
+    "title": "soko_quest",
+    "author": "swarit choudhari",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-13"
   }
 ]
