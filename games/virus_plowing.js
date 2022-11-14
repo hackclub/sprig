@@ -53,27 +53,6 @@ const playerKey = "p";
 const virusKey = "v";
 const shieldKey = "s";
 
-const killVirusSound = tune`
-124.48132780082987: c5~124.48132780082987,
-124.48132780082987: f5~124.48132780082987 + c5-124.48132780082987,
-124.48132780082987: f5-124.48132780082987,
-3609.9585062240662`;
-const dieSound = tune`
-205.4794520547945: f5-205.4794520547945 + b4^205.4794520547945,
-205.4794520547945: f5-205.4794520547945 + b4^205.4794520547945,
-205.4794520547945: c5-205.4794520547945 + f4^205.4794520547945,
-205.4794520547945: c5-205.4794520547945 + f4^205.4794520547945,
-205.4794520547945: e5-205.4794520547945 + a4^205.4794520547945,
-205.4794520547945: d5-205.4794520547945 + g4^205.4794520547945,
-205.4794520547945,
-205.4794520547945: b4/205.4794520547945,
-205.4794520547945: b4/205.4794520547945,
-4726.027397260274`;
-
-let score = 0;
-let showingInstructions = false;
-let died = false;
-
 setLegend(
   [ playerKey, bitmap`
 3333333333333333
@@ -127,7 +106,6 @@ setLegend(
 ...7777777777...
 ................` ]
 );
-
 setSolids([playerKey, shieldKey]);
 
 let level = 0;
@@ -157,7 +135,6 @@ const levels = [
 ..................
 ..................`,
 ];
-
 setMap(levels[level]);
 
 setPushables({
@@ -165,6 +142,27 @@ setPushables({
 });
 
 let player = new Player(getFirst(playerKey).x, getFirst(playerKey).y);
+
+const killVirusSound = tune`
+124.48132780082987: c5~124.48132780082987,
+124.48132780082987: f5~124.48132780082987 + c5-124.48132780082987,
+124.48132780082987: f5-124.48132780082987,
+3609.9585062240662`;
+const dieSound = tune`
+205.4794520547945: f5-205.4794520547945 + b4^205.4794520547945,
+205.4794520547945: f5-205.4794520547945 + b4^205.4794520547945,
+205.4794520547945: c5-205.4794520547945 + f4^205.4794520547945,
+205.4794520547945: c5-205.4794520547945 + f4^205.4794520547945,
+205.4794520547945: e5-205.4794520547945 + a4^205.4794520547945,
+205.4794520547945: d5-205.4794520547945 + g4^205.4794520547945,
+205.4794520547945,
+205.4794520547945: b4/205.4794520547945,
+205.4794520547945: b4/205.4794520547945,
+4726.027397260274`;
+
+let score = 0;
+let showingInstructions = false;
+let died = false;
 
 function startGame() {
   score = 0;
@@ -176,6 +174,8 @@ function startGame() {
   player.y = 1;
   player.update()
 }
+
+
 startGame();
 
 onInput("w", () => {
@@ -222,26 +222,26 @@ afterInput(() => {
       x: 6,
       y: 2,
       color: color`3`
-    })
-
+    });
     addText(`Score: ${score}`, { 
       x: 6,
       y: 4,
       color: color`3`
-    })
+    });
     died = false;
   } else {
     player.update();
   
-    let toVirusSpawn = Math.floor(Math.random() * 2);
+    const allViruses = getAll(virusKey);
+    let toVirusSpawn = Math.floor(Math.random() * 2); // gets if we spawn a virus
     if (toVirusSpawn === 1) {
       addSprite(Math.floor(Math.random() * width()), Math.floor(Math.random() * height()), virusKey);
-      if (getAll(virusKey)[getAll(virusKey).length - 1] === player.x && getAll(virusKey)[getAll(virusKey).length - 1] === player.y) getAll(virusKey)[getAll(virusKey).length - 1].remove();
-      if (getAll(virusKey)[getAll(virusKey).length - 1] === getFirst(shieldKey).x && getAll(virusKey)[getAll(virusKey).length - 1] === getFirst(shieldKey).y) getAll(virusKey)[getAll(virusKey).length - 1].remove();
+      if (allViruses[allViruses.length - 1].x === player.x && allViruses[allViruses.length - 1].y === player.y) allViruses[allViruses.length - 1].remove(); // if the new virus spawns at the location of the player, destroy it
+      if (allViruses[allViruses.length - 1].x === getFirst(shieldKey).x && allViruses[allViruses.length - 1].y === getFirst(shieldKey).y) allViruses[allViruses.length - 1].remove(); // if the new virus spawns at the location of the sheild, destroy it
     }
     for (const virus of getAll(virusKey)) {
-      if (toVirusSpawn === 1) if (getAll(virusKey)[getAll(virusKey).length - 1] === virus.x && getAll(virusKey)[getAll(virusKey).length - 1] === virus.y) getAll(virusKey)[getAll(virusKey).length - 1].remove();
-      if (player.x === virus.x && player.y === virus.y && !died) {
+      if (toVirusSpawn === 1 && allViruses.length < 1) if (allViruses[allViruses.length - 1].x === virus.x && allViruses[allViruses.length - 1].y === virus.y) allViruses[allViruses.length - 1].remove(); // if the new virus spawns at the location of another virus, destroy it
+      if (player.x === virus.x && player.y === virus.y && !died) { // if player touches virus
         died = true;
         getFirst(playerKey).remove();
         playTune(dieSound);
@@ -253,7 +253,7 @@ afterInput(() => {
         })
         level = 1;
       }
-      if (getFirst(shieldKey).x === virus.x && getFirst(shieldKey).y === virus.y) {
+      if (getFirst(shieldKey).x === virus.x && getFirst(shieldKey).y === virus.y) { // if shield is in same spot as a virus, then destroy the virus
         virus.remove();
         playTune(killVirusSound);
         score++;
