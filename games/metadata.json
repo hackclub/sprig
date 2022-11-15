@@ -1094,5 +1094,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-11-14"
+  },
+  {
+    "filename": "Mastermind",
+    "title": "Mastermind",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["puzzle", "classic"],
+    "addedOn": "2022-11-14"
   }
 ]
