@@ -104,8 +104,6 @@ setLegend(
 2777777722227772`]
 );
 
-setSolids([wall, selector]);
-
 let level = 0;
 const levels = [
   map`
@@ -178,7 +176,7 @@ onInput("d", () => {
   getFirst(selector).x += 1;
 });
 onInput("i", () => {
-  if(checkNeighbor(getFirst(selector).x, getFirst(selector).y, (turn % 2 === 0) ? redBoat : blueBoat) && !getTile(getFirst(selector).x, getFirst(selector).y).map(x => x.type).includes(blueBoat) && !getTile(getFirst(selector).x, getFirst(selector).y).map(x => x.type).includes(redBoat)){
+  if(checkNeighbor(getFirst(selector).x, getFirst(selector).y, (turn % 2 === 0) ? redBoat : blueBoat) && !getTile(getFirst(selector).x, getFirst(selector).y).map(x => x.type).includes(blueBoat) && !getTile(getFirst(selector).x, getFirst(selector).y).map(x => x.type).includes(redBoat) && !getTile(getFirst(selector).x, getFirst(selector).y).map(x => x.type).includes(wall)){
     addSprite(getFirst(selector).x, getFirst(selector).y, (turn % 2 === 0) ? redBoat : blueBoat);
     turn++;
   }
