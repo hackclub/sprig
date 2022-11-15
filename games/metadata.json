@@ -1110,5 +1110,13 @@
     "img": "",
     "tags": ["puzzle", "multiplayer"],
     "addedOn": "2022-11-15"
+  },
+  {
+    "filename": "Nim",
+    "title": "Nim",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["puzzle", "classic"],
+    "addedOn": "2022-11-15"
   }
 ]
