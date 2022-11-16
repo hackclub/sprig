@@ -326,7 +326,7 @@ onInput("j", () => {
 
 onInput("i", () => {
   genMusic(7);
-  playback.end()
+  if(playback) playback.end();
   playback = playTune(playList[level], Infinity);
 });
 
@@ -336,7 +336,7 @@ afterInput(() => {
     setMap(levels[level]);
     setBackground(wall);
     levelScored = false;
-    playback.end()
+    if(playback) playback.end();
     playTune(nextLevel);
     playback = playTune(playList[level], Infinity);
   }
@@ -381,7 +381,7 @@ afterInput(() => {
   if(tilesWith(trapdoor, pathway).length == 1 && !levelScored){
     score++;
     levelScored = true;
-    playback.end()
+    if(playback) playback.end();
     playTune(openDoor);
     playback = playTune(playList[level], Infinity);
   }
