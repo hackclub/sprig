@@ -3,6 +3,60 @@
 @author: pertark
 */
 
+//INCLUDE
+var px = 1;
+var py = 1;
+var mapNat = [];
+//LIB
+function getMapV2(){
+  var map = [];
+  for(var i = 0; i < height(); i++){
+    map.push([]);
+    for(var j = 0; j < width(); j++){
+      map[i].push([]);
+      var tile = getTile(j, i);
+      for(var k = 0; k < tile.length; k++){
+        map[i][j].push(tile[k].type);
+      }
+    }
+  }
+  return map;
+}
+function setMapV2(map){
+  var tempMap = "";
+  for(var i = 0; i < map.length; i++){
+    for(var j = 0; j < map[i].length; j++){
+      tempMap += ".";
+    }
+    tempMap += "\n";
+  }
+  setMap(tempMap);
+  for(var i = 0; i < map.length; i++){
+    for(var j = 0; j < map[i].length; j++){
+      for(var k = 0; k < map[i][j].length; k++){
+        addSprite(j, i, map[i][j][k]);
+      }
+    }
+  }
+}
+function trimMapV2(x, y, w, h, map){
+  var map2 = [];
+  var mapWidth = map[0].length;
+  var mapHeight = map.length;
+  x = Math.max(Math.min(mapWidth-w, x), 0);
+  y = Math.max(Math.min(mapHeight-h, y), 0);
+  for(var i = 0; i < Math.min(h, mapHeight); i++){
+    map2.push([]);
+    for(var j = 0; j < Math.min(w, mapWidth); j++){
+      map2[i].push([]);
+      for(var k = 0; k < map[i+y][j+x].length; k++){
+        map2[i][j].push(map[i+y][j+x][k]);
+      }
+    }
+  }
+  return map2;
+}
+//END INCLUDE
 
 const player = "r";
 const wall = "w";
@@ -67,35 +121,51 @@ setSolids([player, wall]);
 // Controls
 
 onInput("w", () => {
-  getFirst(player).y -= 1;
+  setMapV2(mapNat);
+  getFirst(player).y -= 1;//Change
+  py = getFirst(player).y;
 });
 
 onInput("a", () => {
-  getFirst(player).x -= 1;
+  setMapV2(mapNat);
+  getFirst(player).x -= 1;//Change
+  px = getFirst(player).x;
 });
 
 onInput("s", () => {
-  getFirst(player).y += 1;
+  setMapV2(mapNat);
+  getFirst(player).y += 1;//Change
+  py = getFirst(player).y;
 });
 
 onInput("d", () => {
-  getFirst(player).x += 1;
+  setMapV2(mapNat);
+  getFirst(player).x += 1;//Change
+  px = getFirst(player).x;
 });
 
 onInput("i", () => {
-  getFirst(player).y -= 1;
+  setMapV2(mapNat);
+  getFirst(player).y -= 1;//Change
+  py = getFirst(player).y;
 });
 
 onInput("j", () => {
-  getFirst(player).x -= 1;
+  setMapV2(mapNat);
+  getFirst(player).x -= 1;//Change
+  px = getFirst(player).x;
 });
 
 onInput("k", () => {
-  getFirst(player).y += 1;
+  setMapV2(mapNat);
+  getFirst(player).y += 1;//Change
+  py = getFirst(player).y;
 });
 
 onInput("l", () => {
-  getFirst(player).x += 1;
+  setMapV2(mapNat);
+  getFirst(player).x += 1;//Change
+  px = getFirst(player).x;
 });
 
 // Maze generation
@@ -166,20 +236,30 @@ function mazeGeneration(w, h) {
 }
 
 let first = mazeGeneration(4, 4)
+let mapa;
 setMap(first)
-
+//INCLUDE
+mapNat = getMapV2();
+setMapV2(trimMapV2(px-5, py-4, 10, 8, mapNat));
+//END INCLUDE
 let score = 0;
 
 afterInput(() => {
   if (tilesWith(player, goal).length) {
-    let map = mazeGeneration(4+score, 4+score);
+    mapa = mazeGeneration(4+score, 4+score);
     score += 1;
-    console.log(map);
-    setMap(map);
+    console.log(mapa);
+    setMap(mapa);
     clearText();
     addText("Score: " + score, {
       y: 0,
       color: color`3`
     })
+    px = 1;
+    py = 1;
   }
+  //INCLUDE
+  mapNat = getMapV2();
+  setMapV2(trimMapV2(px-5, py-4, 10, 8, mapNat));
+  //END INCLUDE
 });
