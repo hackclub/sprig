@@ -380,12 +380,12 @@ afterInput(() => {
   const rightEnemy = getTile(playerCoords.x + 2, playerCoords.y)[0]
   let enemyHits = 0;
 
-  if (topEnemy && getTile(playerCoords.x, playerCoords.y - 1)[0].type !== grass && topEnemy.type === "d") {
+  if (topEnemy && getTile(playerCoords.x, playerCoords.y - 1)[0].type !== grass && /b|d/.test(topEnemy.type)) {
     topEnemy.y += 2;
-    enemyHits = tilesWith(player, enemyDown).length;
-  } else if (bottomEnemy && getTile(playerCoords.x, playerCoords.y + 1)[0].type !== grass && bottomEnemy.type === "u") {
+    enemyHits = tilesWith(player, enemyDown).length || tilesWith(player, enemyUpDown).length;
+  } else if (bottomEnemy && getTile(playerCoords.x, playerCoords.y + 1)[0].type !== grass && /b|u/.test(bottomEnemy.type)) {
     bottomEnemy.y -= 2;
-    enemyHits = tilesWith(player, enemyUp).length;
+    enemyHits = tilesWith(player, enemyUp).length || tilesWith(player, enemyUpDown).length;
   } else if (leftEnemy && getTile(playerCoords.x - 1, playerCoords.y)[0].type !== grass && /a|r/.test(leftEnemy.type)) {
     leftEnemy.x += 2;
     enemyHits = tilesWith(player, enemyRight).length || tilesWith(player, enemyLeftRight).length;
@@ -403,7 +403,7 @@ afterInput(() => {
 
   const playerHits = getTile(playerCoords.x, playerCoords.y);
 
-  if (playerHits.length > 1 && /u|d|l|r|a/.test(playerHits[1].type)) {
+  if (playerHits.length > 1 && /u|d|l|r|a|b/.test(playerHits[1].type)) {
     playTune(kill);
     clearTile(playerCoords.x, playerCoords.y);
     addSprite(playerCoords.x, playerCoords.y, player);
