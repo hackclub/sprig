@@ -228,6 +228,11 @@ afterInput(() => {
       y: 4,
       color: color`3`
     });
+    addText("'J' to Restart", { 
+      x: 3,
+      y: 7,
+      color: color`3`
+    });
     died = false;
   } else {
     player.update();
