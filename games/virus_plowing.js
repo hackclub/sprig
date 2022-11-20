@@ -14,10 +14,16 @@ CONTROLS:
   J - Restart
 */
 
-class Player {
+class Obj {
   constructor(x, y) {
     this.x = x;
     this.y = y;
+  }
+}
+
+class Player extends Obj {
+  constructor(x, y) {
+    super(x, y);
   }
 
   move(dir) {
@@ -46,6 +52,13 @@ class Player {
   update() {
     getFirst(playerKey).x = this.x;
     getFirst(playerKey).y = this.y;
+  }
+}
+
+class Virus extends Obj {
+  constructor(x, y) {
+    super(x, y);
+    this.toSpawn = true;
   }
 }
 
@@ -235,17 +248,7 @@ afterInput(() => {
     });
     died = false;
   } else {
-    player.update();
-  
-    const allViruses = getAll(virusKey);
-    let toVirusSpawn = Math.floor(Math.random() * 2); // gets if we spawn a virus
-    if (toVirusSpawn === 1) {
-      addSprite(Math.floor(Math.random() * width()), Math.floor(Math.random() * height()), virusKey);
-      if (allViruses[allViruses.length - 1].x === player.x && allViruses[allViruses.length - 1].y === player.y) allViruses[allViruses.length - 1].remove(); // if the new virus spawns at the location of the player, destroy it
-      if (allViruses[allViruses.length - 1].x === getFirst(shieldKey).x && allViruses[allViruses.length - 1].y === getFirst(shieldKey).y) allViruses[allViruses.length - 1].remove(); // if the new virus spawns at the location of the sheild, destroy it
-    }
     for (const virus of getAll(virusKey)) {
-      if (toVirusSpawn === 1 && allViruses.length < 1) if (allViruses[allViruses.length - 1].x === virus.x && allViruses[allViruses.length - 1].y === virus.y) allViruses[allViruses.length - 1].remove(); // if the new virus spawns at the location of another virus, destroy it
       if (player.x === virus.x && player.y === virus.y && !died) { // if player touches virus
         died = true;
         getFirst(playerKey).remove();
@@ -258,11 +261,38 @@ afterInput(() => {
         })
         level = 1;
       }
+      if (!died) player.update();
+
       if (getFirst(shieldKey).x === virus.x && getFirst(shieldKey).y === virus.y) { // if shield is in same spot as a virus, then destroy the virus
-        virus.remove();
-        playTune(killVirusSound);
-        score++;
+          virus.remove();
+          playTune(killVirusSound);
+          score++;
+      }
+    }  
+    const allViruses = getAll(virusKey);
+    let toVirusSpawn = Math.floor(Math.random() * 2); // gets if we spawn a virus
+    var newVirus = undefined;
+    if (toVirusSpawn === 1) {
+      newVirus = new Virus(Math.floor(Math.random() * width()), Math.floor(Math.random() * height()));
+      if (newVirus.toSpawn && newVirus.x === player.x && newVirus.y === player.y && newVirus !== null) {
+        newVirus.toSpawn = false; // if the new virus spawns at the location of the player, don't spawn it
+        console.log("is same as player")
+      }
+      if (newVirus.toSpawn && newVirus.x === getFirst(shieldKey).x && newVirus.y === getFirst(shieldKey).y && newVirus !== undefined) {
+        newVirus.toSpawn = false; // if the new virus spawns at the location of the shield, don't spawn it
+        console.log("is same as shield")
       }
     }
+    
+    for (const virus of getAll(virusKey)) {
+      if ((toVirusSpawn === 1 && allViruses.length > 1 && newVirus !== undefined) && (newVirus.x === virus.x && newVirus.y === virus.y)) {
+        if (!newVirus.toSpawn) break;
+        newVirus.toSpawn = false; // if the new virus spawns at the location of another virus, don't spawn it
+        console.log("is same as a virus");
+      }
+    }
+    
+    if (toVirusSpawn && newVirus.toSpawn) addSprite(newVirus.x, newVirus.y, virusKey);    
   }
+
 });
