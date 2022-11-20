@@ -32,7 +32,7 @@
 
 ![Photo of a PCB with an LCD and 8 buttons](https://cloud-obltnnp51-hack-club-bot.vercel.app/5all-buttons.jpg)
 
-4. Turn the board over, and put the clear backings on. The first piece should have a D-pad cutout; the smooth piece should be on top. Make sure to peel of the protective plastic film on the front and back of each piece.
+4. Turn the board over, and put the clear backings on. The first piece should have a D-pad cutout; the smooth piece should be on top. Make sure to peel off the protective plastic film on the front and back of each piece.
 
 ![Photo of a protective plastic film being peeled off of an acrylic piece](https://cloud-6po09tv9d-hack-club-bot.vercel.app/3peel-plastic.jpg)
 
