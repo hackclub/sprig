@@ -274,21 +274,14 @@ afterInput(() => {
     var newVirus = undefined;
     if (toVirusSpawn === 1) {
       newVirus = new Virus(Math.floor(Math.random() * width()), Math.floor(Math.random() * height()));
-      if (newVirus.toSpawn && newVirus.x === player.x && newVirus.y === player.y && newVirus !== null) {
-        newVirus.toSpawn = false; // if the new virus spawns at the location of the player, don't spawn it
-        console.log("is same as player")
-      }
-      if (newVirus.toSpawn && newVirus.x === getFirst(shieldKey).x && newVirus.y === getFirst(shieldKey).y && newVirus !== undefined) {
-        newVirus.toSpawn = false; // if the new virus spawns at the location of the shield, don't spawn it
-        console.log("is same as shield")
-      }
+      if (newVirus.toSpawn && newVirus.x === player.x && newVirus.y === player.y && newVirus !== null) newVirus.toSpawn = false; // if the new virus spawns at the location of the player, don't spawn it
+      if (newVirus.toSpawn && newVirus.x === getFirst(shieldKey).x && newVirus.y === getFirst(shieldKey).y && newVirus !== undefined) newVirus.toSpawn = false; // if the new virus spawns at the location of the shield, don't spawn it
     }
     
     for (const virus of getAll(virusKey)) {
       if ((toVirusSpawn === 1 && allViruses.length > 1 && newVirus !== undefined) && (newVirus.x === virus.x && newVirus.y === virus.y)) {
         if (!newVirus.toSpawn) break;
         newVirus.toSpawn = false; // if the new virus spawns at the location of another virus, don't spawn it
-        console.log("is same as a virus");
       }
     }
     
