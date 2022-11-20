@@ -1166,5 +1166,13 @@
     "img": "",
     "tags": ["endless"],
     "addedOn": "2022-11-18"
+  },
+  {
+    "filename": "sprigle",
+    "title": "sprigle",
+    "author": "jedgrei",
+    "img": "",
+    "tags": ["classic", "puzzle", "advanced"],
+    "addedOn": "2022-11-18"
   }
 ]
