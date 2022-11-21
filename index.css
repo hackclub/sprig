@@ -288,6 +288,16 @@ body {
   outline: none;
 }
 
+@-moz-document url-prefix() {
+  /* Hack to support Firefox 91 (ESR in use on debian) */
+  .game-text {
+    image-rendering: crisp-edges;
+  }
+  .game-canvas {
+    image-rendering: crisp-edges;
+  }
+}
+
 .docs {
   background: var(--bg-surface);
   height: 0;
