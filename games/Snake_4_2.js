@@ -585,12 +585,14 @@ afterInput(() => {
 
 onInput("w", () => {
   if(lin1 != 3 && (gameState == 1 || gameState == 2) && !back1) {
-    var tx = getFirst(p1head).x;
-    var ty = getFirst(p1head).y;
+    const p = getFirst(p1head);
+    if (!p) return;
+    var tx = p.x;
+    var ty = p.y;
     lpin = 1;
-    getFirst(p1head).y -= 1;
+    p.y -= 1;
     lin1 = 1;
-    if (ty != getFirst(p1head).y || tx != getFirst(p1head).x){
+    if (ty != p.y || tx != p.x){
       addSprite(tx, ty, p1tail)
     }
     else {
@@ -598,19 +600,23 @@ onInput("w", () => {
       else {dead(-2, 1)};
     }
   } else {back1 = true; lpin = 1;}
-  if (gameState == 0 && getFirst(cursor).y == 3){
-    getFirst(cursor).y -= 2;
+  const c = getFirst(cursor);
+  if (!c) return;
+  if (gameState == 0 && c.y == 3){
+    c.y -= 2;
   }
 })
 
 onInput("s", () => {
   if(lin1 != 1 && (gameState == 1 || gameState == 2) && !back1) {
-    var tx = getFirst(p1head).x;
-    var ty = getFirst(p1head).y;
+    const p = getFirst(p1head);
+    if (!p) return;
+    var tx = p.x;
+    var ty = p.y;
     lpin = 1;
-    getFirst(p1head).y += 1;
+    p.y += 1;
     lin1 = 3;
-    if (ty != getFirst(p1head).y || tx != getFirst(p1head).x){
+    if (ty != p.y || tx != p.x){
       addSprite(tx, ty, p1tail)
     }
     else {
@@ -618,19 +624,23 @@ onInput("s", () => {
       else {dead(-2, 1)};
     }
   } else {back1 = true; lpin = 1;}
-  if (gameState == 0 && getFirst(cursor).y == 1){
-    getFirst(cursor).y += 2;
+  const c = getFirst(cursor);
+  if (!c) return;
+  if (gameState == 0 && c.y == 1){
+    c.y += 2;
   }
 })
 
 onInput("a", () => {
   if(lin1 != 2 && (gameState == 1 || gameState == 2) && !back1) {
-    var tx = getFirst(p1head).x;
-    var ty = getFirst(p1head).y;
+    const p = getFirst(p1head);
+    if (!p) return;
+    var tx = p.x;
+    var ty = p.y;
     lpin = 1;
-    getFirst(p1head).x -= 1;
+    p.x -= 1;
     lin1 = 4;
-    if (ty != getFirst(p1head).y || tx != getFirst(p1head).x){
+    if (ty != p.y || tx != p.x){
       addSprite(tx, ty, p1tail)
     }
     else {
@@ -642,12 +652,14 @@ onInput("a", () => {
 
 onInput("d", () => {
   if(lin1 != 4 && (gameState == 1 || gameState == 2) && !back1) {
-    var tx = getFirst(p1head).x;
-    var ty = getFirst(p1head).y;
+    const p = getFirst(p1head);
+    if (!p) return;
+    var tx = p.x;
+    var ty = p.y;
     lpin = 1;
-    getFirst(p1head).x += 1;
+    p.x += 1;
     lin1 = 2;
-    if (ty != getFirst(p1head).y || tx != getFirst(p1head).x){
+    if (ty != p.y || tx != p.x){
       addSprite(tx, ty, p1tail)
     }
     else {
@@ -655,10 +667,12 @@ onInput("d", () => {
       else {dead(-2, 1)};
     }
   } else {back1 = true; lpin = 1;}
-  if (gameState == 0 && getFirst(cursor).y == 1){
+  const c = getFirst(cursor);
+  if (!c) return;
+  if (gameState == 0 && c.y == 1){
     start(playsend);
   }
-  if (gameState == 0 && getFirst(cursor).y == 3){
+  if (gameState == 0 && c.y == 3){
     start(play2end);
   }
 })
@@ -666,12 +680,14 @@ onInput("d", () => {
 //player 2 movements
 onInput("l", () => {
   if(lin2 != 4 && gameState == 2 && !back2) {
-    var tx = getFirst(p2head).x;
-    var ty = getFirst(p2head).y;
+    const h = getFirst(p2head);
+    if (!h) return;
+    var tx = h.x;
+    var ty = h.y;
     lpin = 2;
-    getFirst(p2head).x += 1;
+    h.x += 1;
     lin2 = 2;
-    if (ty != getFirst(p2head).y || tx != getFirst(p2head).x){
+    if (ty != h.y || tx != h.x){
       addSprite(tx, ty, p2tail)
     }
     else {dead(-2, 2)}
@@ -680,12 +696,14 @@ onInput("l", () => {
 
 onInput("j", () => {
   if(lin2 != 2 && gameState == 2 && !back2) {
-    var tx = getFirst(p2head).x;
-    var ty = getFirst(p2head).y;
+    const h = getFirst(p2head);
+    if (!h) return;
+    var tx = h.x;
+    var ty = h.y;
     lpin = 2;
-    getFirst(p2head).x -= 1;
+    h.x -= 1;
     lin2 = 4;
-    if (ty != getFirst(p2head).y || tx != getFirst(p2head).x){
+    if (ty != h.y || tx != h.x){
       addSprite(tx, ty, p2tail)
     }
     else {dead(-2, 2)}
@@ -694,12 +712,14 @@ onInput("j", () => {
 
 onInput("i", () => {
   if(lin2 != 3 && gameState == 2 && !back2) {
-    var tx = getFirst(p2head).x;
-    var ty = getFirst(p2head).y;
+    const h = getFirst(p2head);
+    if (!h) return;
+    var tx = h.x;
+    var ty = h.y;
     lpin = 2;
-    getFirst(p2head).y -= 1;
+    h.y -= 1;
     lin2 = 1;
-    if (ty != getFirst(p2head).y || tx != getFirst(p2head).x){
+    if (ty != h.y || tx != h.x){
       addSprite(tx, ty, p2tail)
     }
     else {dead(-2, 2)}
@@ -708,12 +728,14 @@ onInput("i", () => {
 
 onInput("k", () => {
   if(lin2 != 1 && gameState == 2 && !back2) {
-    var tx = getFirst(p2head).x;
-    var ty = getFirst(p2head).y;
+    const h = getFirst(p2head);
+    if (!h) return;
+    var tx = h.x;
+    var ty = h.y;
     lpin = 2;
-    getFirst(p2head).y += 1;
+    h.y += 1;
     lin2 = 3;
-    if (ty != getFirst(p2head).y || tx != getFirst(p2head).x){
+    if (ty != h.y || tx != h.x){
       addSprite(tx, ty, p2tail)
     }
     else {dead(-2, 2)}
