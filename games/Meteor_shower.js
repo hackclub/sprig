@@ -149,7 +149,65 @@ m..m......m..
 ....m..m..mm.
 m.mm...m.m...
 .....m.p..m.m`,
+  map`
+.........m...
+m.m.m..m....m
+.m..mm....m..
+..m....m.m.m.
+m...m.m...m..
+.m.....m.m..m
+...mm.m.m.m..
+.m..m.......m
+m..mm.m.m.m..
+.m.......m...
+..m..m.m...m.
+m..m.....mm..
+.m..mm.....m.
+..m....m.m.mm
+.m..m.m......
+....m..m..mm.
+m.mm...m.m...
+mm...m....mpm`,
+  map`
+.........m...
+m.m.m..m....m
+.m..mm....m..
+..m....m.m.m.
+m...m.m...m.p
+.m.....m.m..m
+...mm.m.m.m..
+.m..........m
+m..mm.m.m.m..
+.m..m....m...
+..m..m.m..mm.
+m..m......m.m
+.m..mm..m....
+..m..m.m.m.mm
+.m..m....m...
+...mm..m..mm.
+m.mm...m.m...
+m....m....m.m`,
 ];
+
+maps[100] = map`
+.............
+.............
+.............
+.............
+.............
+.............
+.............
+.............
+.............
+.............
+.............
+.............
+.............
+.............
+.............
+.............
+.............
+.............`
 
 
 setMap(maps[0]);
@@ -177,9 +235,6 @@ addText("Start(K)", {
 });
 
 let started = false;
-let lvl1 = false;
-let lvl2 = false;
-let lvl3 = false;
 
 //Movement controls
 
@@ -220,70 +275,50 @@ function handleInput(input) {
 onInput("k", () => {
   if (!started) {
     started = true;
-    lvl1 = true
     clearText();
   }
 });
 
-afterInput(() => {
-  const meteors = getAll(meteor);
-  const play = getFirst(player);
-  for (const mete of meteors) {
-    if (mete.x === play.x && mete.y === play.y) endOfGame();
-  }
-  if (lvl1 && getFirst(player).x == getFirst(coin).x && getFirst(player).y == getFirst(coin).y){
-    lvl1 = false
+let lvl = 0
+const checkWin = () => {
+  if (
+    getFirst(player).x == getFirst(coin).x &&
+    getFirst(player).y == getFirst(coin).y
+  ) {
+    setMap(maps[100])
+    setBackground();
     started = false;
-    addText("Lvl 1 done", {
-      x: 5,
+    lvl += 1
+    addText(lvl === 5 ? "You won!" : `Lvl ${lvl} done` , {
+      x: lvl === 5 ? 6 : 5,
       y: 7,
       color: color`4`,
     });
-    setTimeout(() => {
+    
+    lvl < 5 && setTimeout(() => {
       started = true;
-      lvl2 = true;
       clearText()
-      setMap(maps[1])
+      setMap(maps[lvl])
+      setBackground(bg);
       placeCoin();
     }, 3000);
-  };
+  }
+}
 
-    if (lvl2 && getFirst(player).x == getFirst(coin).x && getFirst(player).y == getFirst(coin).y) {
-      lvl2 = false;
-      started = false;
-      addText("Lvl 2 done", {
-      x: 5,
-      y: 7,
-      color: color`4`,
-      }); 
-      setTimeout(() => {
-        started = true
-        lvl3 = true
-        clearText()
-        setMap(maps[2])
-        placeCoin();
-    }, 3000);     
-    };
-
-    if (lvl3 && getFirst(player).x == getFirst(coin).x && getFirst(player).y == getFirst(coin).y) {
-      started = false;
-      lvl3 = false;
-      addText("You won", {
+const checkLose = () => {
+  const play = getFirst(player);
+  const found = getTile(play.x, play.y).find(value => value.type === meteor)
+  if (found !== undefined) {
+    started = false;
+    addText("You lost!", {
       x: 6,
       y: 7,
-      color: color`4`,
-      });
-    };    
-});
-
-
-
-  
-function endOfGame() {
-  started = false;
-  addText("You lost!", {
-    x: 6,
-    y: 7,
-    color: color`3`,
-  });
+      color: color`3`,
+    });
+  }
 }
+
+afterInput(() => {
+  checkLose()
+  checkWin()
+});
