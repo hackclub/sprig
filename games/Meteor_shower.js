@@ -1,5 +1,5 @@
 /* 
-@title: Meteor shower
+@title: Meteorshower
 @author: Mate P.
 */
 
@@ -91,9 +91,29 @@ setLegend(
   ]
 );
 
-const maps = map`
+const maps = [ 
+  map`
 .............
-..m.m..m....m
+....m..m....m
+.m........m..
+.......m...m.
+m...m........
+.m...........
+......m...m..
+.............
+....m.....m..
+.m...........
+......m......
+m.........m..
+........m....
+.m...........
+....m........
+.......m..m..
+.m...........
+.......p.....`,
+  map`
+.............
+m.m.m..m....m
 .m..m.....m..
 ..m....m.m.m.
 m...m.....m..
@@ -104,16 +124,38 @@ m...m.....m..
 .m.......m...
 ..m..m.m...m.
 m.........m..
-....mm.......
+.m..mm.......
 ..m....m.m.mm
 .m..m........
 ....m..m..m..
 m.m..........
-.....m.p..m.m`;
+.....m.p..m.m`,
+  map`
+.........m...
+m.m.m..m....m
+.m..mm....m..
+..m....m.m.m.
+m...m.m...m..
+.m.....m.m..m
+...mm.m.m.m..
+.m..........m
+m..mm.m.m.m..
+.m.......m...
+..m..m.m...m.
+m..m......m..
+.m..mm.....m.
+..m....m.m.mm
+.m..m........
+....m..m..mm.
+m.mm...m.m...
+.....m.p..m.m`,
+];
 
-setMap(maps);
+
+setMap(maps[0]);
 
 setBackground(bg);
+
 
 const placeCoin = () => {
   let targetLocation = {};
@@ -135,6 +177,9 @@ addText("Start(K)", {
 });
 
 let started = false;
+let lvl1 = false;
+let lvl2 = false;
+let lvl3 = false;
 
 //Movement controls
 
@@ -175,6 +220,7 @@ function handleInput(input) {
 onInput("k", () => {
   if (!started) {
     started = true;
+    lvl1 = true
     clearText();
   }
 });
@@ -185,19 +231,54 @@ afterInput(() => {
   for (const mete of meteors) {
     if (mete.x === play.x && mete.y === play.y) endOfGame();
   }
-  if (
-    getFirst(player).x == getFirst(coin).x &&
-    getFirst(player).y == getFirst(coin).y
-  ) {
+  if (lvl1 && getFirst(player).x == getFirst(coin).x && getFirst(player).y == getFirst(coin).y){
+    lvl1 = false
     started = false;
-    addText("You won!", {
-      x: 6,
+    addText("Lvl 1 done", {
+      x: 5,
       y: 7,
       color: color`4`,
     });
-  }
+    setTimeout(() => {
+      started = true;
+      lvl2 = true;
+      clearText()
+      setMap(maps[1])
+      placeCoin();
+    }, 3000);
+  };
+
+    if (lvl2 && getFirst(player).x == getFirst(coin).x && getFirst(player).y == getFirst(coin).y) {
+      lvl2 = false;
+      started = false;
+      addText("Lvl 2 done", {
+      x: 5,
+      y: 7,
+      color: color`4`,
+      }); 
+      setTimeout(() => {
+        started = true
+        lvl3 = true
+        clearText()
+        setMap(maps[2])
+        placeCoin();
+    }, 3000);     
+    };
+
+    if (lvl3 && getFirst(player).x == getFirst(coin).x && getFirst(player).y == getFirst(coin).y) {
+      started = false;
+      lvl3 = false;
+      addText("You won", {
+      x: 6,
+      y: 7,
+      color: color`4`,
+      });
+    };    
 });
 
+
+
+  
 function endOfGame() {
   started = false;
   addText("You lost!", {
