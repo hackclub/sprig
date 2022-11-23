@@ -248,7 +248,7 @@ const meow = tune`
 
 // level maps 
 
-let level = 12;
+let level = 0;
 const levels = [
   map`
 p.......
