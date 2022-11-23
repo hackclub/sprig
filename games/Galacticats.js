@@ -552,7 +552,7 @@ afterInput(() => {
     setMap(currentLevel)
     playback.end()
     playTune(meow)
-    addText("Galacticats", { 
+    addText("You win!", { 
       y: 3,
       color: color`6`
     })
