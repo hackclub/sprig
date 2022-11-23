@@ -2,7 +2,7 @@
 @title: Galacticats
 @author: adadyer
 
-Get the Galacticat back to his ship. 🚀
+Get the Galacticat back to his ship. 
 
 */
 
@@ -248,7 +248,7 @@ const meow = tune`
 
 // level maps 
 
-let level = 0;
+let level = 12;
 const levels = [
   map`
 p.......
@@ -377,12 +377,12 @@ p...s`
   
 ];
 const theEnd = map`
-// // p...........
-// // ............
-// // ............
-// // ............
-// // ............
-// ............`
+...........
+...........
+...........
+.....p.....
+...........
+...........`
 
 setMap(levels[level]);
 
