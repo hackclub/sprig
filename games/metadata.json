@@ -1174,5 +1174,29 @@
     "img": "",
     "tags": ["classic", "puzzle", "advanced"],
     "addedOn": "2022-11-19"
+  },
+  {
+    "filename": "the_RUN",
+    "title": "the_RUN",
+    "author": "lumos studio",
+    "img": "",
+    "tags": [],
+    "addedOn": "2022-11-21"
+  },
+  {
+    "filename": "Meteor_shower",
+    "title": "Meteor_shower",
+    "author": "Mate P.",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-22"
+  },
+  {
+    "filename": "solar_system",
+    "title": "solar_system",
+    "author": "CD",
+    "img": "",
+    "tags": ["simulation"],
+    "addedOn": "2022-11-23"
   }
 ]
