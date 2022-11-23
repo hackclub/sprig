@@ -120,7 +120,7 @@ setLegend(
 .00..00....0.0..`]
 );
 setSolids([player, player2, box, wall, obst]);
-let level = 4;
+let level = 0;
 const levels = [
   map`
 ....g
