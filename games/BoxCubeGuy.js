@@ -1,4 +1,7 @@
-
+/*
+@title: BoxCubeGuy
+@author: CaptainATW
+*/
 
 var x = 0;
 const player = "p";
