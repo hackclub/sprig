@@ -1214,5 +1214,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-11-23"
+  },
+  {
+    "filename": "BoxCubeGuy",
+    "title": "BoxCubeGuy",
+    "author": "CaptainATW",
+    "img": "CaptainATW",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-25"
   }
 ]
