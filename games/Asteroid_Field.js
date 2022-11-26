@@ -337,7 +337,7 @@ onInput("d", () => {
     let activeLevel = levels[level];
     if (level >= 1) {
         clearText();
-        if playback playback.end();
+        if(playback) playback.end();
     if (activeLevel !== undefined) {
       setMap(activeLevel);
     }
