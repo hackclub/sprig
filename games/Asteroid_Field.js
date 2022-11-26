@@ -2,7 +2,7 @@
 @title: Asteroid Field
 @author: Kaitlyn
 */
-function getRandomInt(min, max) {
+  function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min);
@@ -79,6 +79,7 @@ const gameMusic = tune`
 750: f4~750,
 750: d5~750`
 const playback = playTune(menuMusic, Infinity);
+const farMove = "d"
 const levels = [
   map`
 ..........
@@ -86,7 +87,7 @@ const levels = [
 ..........
 ..........
 ..........
-....es....
+e....s....
 ..........
 ..........`, // Menu
   map`
@@ -96,11 +97,11 @@ const levels = [
 .a........
 ......b.a.
 b.a.......
-.b....a.e.
+.b....ae..
 a....sb..b`, // Level 1 
   map`
 .e..a.a..a
-..a.....a.
+..a.....ad
 ..a.b...aa
 .......a..
 .b.a....b.
@@ -118,8 +119,8 @@ a..a.....a
 .b...s..b.`, // Level 3
   map`
 ..........
-..aa.b.b.e
-.....a..a.
+..aa.b.b..
+.....a..ae
 b...b.b..b
 .b....a.a.
 .a....b...
@@ -160,7 +161,7 @@ eb..a.b.b.
 .a........
 ...b....a.
 .b.a...aa.
-b..b..b...`, // Level 8
+b..b..b..d`, // Level 8
   map`
 a.eb.a....
 ........ab
@@ -257,7 +258,24 @@ L11441144114411L
 ..4HH......HH4..
 ...44HHHHHH44...
 ....44444444....
-................`]
+................`],
+  [farMove, bitmap`
+.......7.......7
+......77......77
+.....777.....777
+....7777....7777
+...77777...77777
+..777777..777777
+.7777777.7777777
+7777777777777777
+7777777777777777
+.7777777.7777777
+..777777..777777
+...77777...77777
+....7777....7777
+.....777.....777
+......77......77
+.......7.......7`]
 );
 
 setSolids([ asteroida, asteroidb, ship ]);
@@ -295,6 +313,25 @@ let num = 0
 afterInput(() => {
   const goall = tilesWith(goal).length
   const win = tilesWith(goal, ship).length
+  const farMoved = tilesWith(farMove).length
+  const hasFarMove = tilesWith(farMove, ship).length
+  if (farMoved == hasFarMove && farMoved !== 0) {
+    onInput("w", () => {
+  getFirst(ship).y -= 1;
+});
+
+onInput("a", () => {
+  getFirst(ship).x -= 1;
+});
+
+onInput("s", () => {
+  getFirst(ship).y += 1;
+});
+
+onInput("d", () => {
+  getFirst(ship).x += 1;
+});
+  }
   if (win == goall) {
     level = getRandomInt(1, 9);
     let activeLevel = levels[level];
