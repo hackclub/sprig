@@ -1230,5 +1230,13 @@
     "img": "CaptainATW",
     "tags": ["puzzle"],
     "addedOn": "2022-11-25"
+  },
+  {
+    "filename": "creepy_crush",
+    "title": "creepy_crush",
+    "author": "issac",
+    "img": "creepy_crush",
+    "tags": ["puzzle", "advanced"],
+    "addedOn": "2022-11-27"
   }
 ]
