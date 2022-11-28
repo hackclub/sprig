@@ -16,7 +16,6 @@ function evalGameScript(script) {
     setMap: (string) => { map = string },
     onInput: () => {}, 
     afterInput: () => {}, 
-    setScreenSize: () => {},
     getState: () => state,
     playTune: () => {},
     setTimeout: () => {},

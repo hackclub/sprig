@@ -21,18 +21,10 @@ export function sizeGameCanvas() {
       h: Math.floor(idealHeight * scale)
     };
   }
-  (() => {
-    const { w, h } = actualFromIdeal(...(window.idealDimensions || [1, 1]));
-    canvas.style.width = `${w}px`;
-    canvas.style.height = `${h}px`;
-  })();
 
-  (() => {
-    const text = document.querySelector(".game-text");
-    const { w, h } = actualFromIdeal(5, 4);
-    text.style.width = `${w}px`;
-    text.style.height = `${h}px`;
-  })();
+  const { w, h } = actualFromIdeal(5, 4);
+  canvas.style.width = `${w}px`;
+  canvas.style.height = `${h}px`;
 }
 
 function nearestPowerOf2(n) {

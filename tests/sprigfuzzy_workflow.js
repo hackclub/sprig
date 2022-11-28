@@ -187,7 +187,6 @@ function simEngine() {
 
     /* not implementing these */
     playTune: () => {},
-    setScreenSize: () => {}, /* didn't even know this was still in the API */
     setBackground: (type) => {},
 
     /* will simulate input into these */

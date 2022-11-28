@@ -1,81 +1,24 @@
 import { dispatch } from "../dispatch.js";
 import { sizeGameCanvas } from "../dispatches/sizeGameCanvas.js";
-import * as render from "./render.js";
+import * as render from "./renderSimple.js";
 import { baseEngine } from "./baseEngine.js";
-import { font } from "./font.js";
-
-function composeText(texts) {
-  const emptyCell = () => ({ char: ' ', color: [0, 0, 0] });
-  const range = (length, fn) => Array.from({ length }, fn);
-  const gridFromSize = (w, h) => range(h, _ => range(w, emptyCell));
-  const CHARS_MAX_X = 20;
-  const CHARS_MAX_Y = 16;
-
-  const grid = gridFromSize(CHARS_MAX_X, CHARS_MAX_Y);
-
-  for (const { x: sx, y: sy, content, color } of texts) {
-    let y = sy;
-    for (const line of content.split('\n')) {
-      let x = sx;
-      for (const char of line.split(''))
-        if (x <= CHARS_MAX_X && y < CHARS_MAX_Y)
-          grid[y][x++] = { color, char };
-      y++;
-    }
-  }
-
-  return grid;
-}
-
-function drawText(charGrid) {
-  const img = new ImageData(160, 128);
-  img.data.fill(0);
-
-  for (const [i, row] of Object.entries(charGrid)) {
-    let xt = 0;
-    for (const { char, color } of row) {
-      const cc = char.charCodeAt(0);
-
-      let y = i*8;
-      for (const bits of font.slice(cc*8, (1+cc)*8)) {
-          for (let x = 0; x < 8; x++) {
-            const val = (bits>>(7-x)) & 1;
-
-            img.data[(y*img.width + xt + x)*4 + 0] = val*color[0];
-            img.data[(y*img.width + xt + x)*4 + 1] = val*color[1];
-            img.data[(y*img.width + xt + x)*4 + 2] = val*color[2];
-            img.data[(y*img.width + xt + x)*4 + 3] = val*255;
-          }
-          y++;
-      }
-      xt += 8;
-    }
-  }
-
-  const text = document.querySelector(".game-text");
-  text.width = img.width;
-  text.height = img.height;
-  text
-    .getContext("2d")
-    .putImageData(img, 0, 0);
-}
+import { getTextImg } from "./getTextImg.js";
 
 let cur = null;
+let _bitmaps = {};
 
 export function init(canvas, headless = false, runDispatch = true) {
   const { api, state } = baseEngine();
-  render.init(canvas);
 
   canvas.setAttribute("tabindex", "1");
 
   function gameloop() {
-    const dims = state.dimensions;
-    setScreenSize(dims.width*16, dims.height*16);
+    const { width, height } = state.dimensions;
 
     // draw text
-    drawText(composeText(state.texts));
+    const textImg = getTextImg(state.texts);
 
-    render.render(drawTiles());
+    const image = new Uint8ClampedArray(width*height*16*16*4);
 
 
     animationId = window.requestAnimationFrame(gameloop);
@@ -87,7 +30,11 @@ export function init(canvas, headless = false, runDispatch = true) {
     })
     state.legend = bitmaps;
 
-    render.setBitmaps(bitmaps);
+    for (let i = 0; i < bitmaps.length; i++) {
+      const [ key, value ] = bitmaps[i];
+      _bitmaps[i] = bitmapTextToImageData(value);;
+    }
+
     if (runDispatch) dispatch("SET_BITMAPS", { bitmaps });
   }
 
@@ -100,18 +47,6 @@ export function init(canvas, headless = false, runDispatch = true) {
 
 
   let animationId = window.requestAnimationFrame(gameloop);
-
-  function setScreenSize(w, h) {
-    if (headless) return;
-    canvas.width = w;
-    canvas.height = h;
-
-    const { width, height } = state.dimensions;
-    window.idealDimensions = [width, height];
-    sizeGameCanvas();
-
-    render.resize(canvas);
-  }
 
   let tileInputs = {
     w: [],
@@ -152,30 +87,11 @@ export function init(canvas, headless = false, runDispatch = true) {
     tileInputs[type].push(fn);
   }
 
-  function drawTiles() {
-    const { dimensions, legend } = state;
-    const { width, height, maxTileDim } = dimensions;
-
+  function getDimsGrid() {
+    const { width, height } = state.dimensions;
     const grid = api.getGrid();
-    if (width == 0 || height == 0) return new ImageData(1, 1);
-    const img = new ImageData(width, height);
 
-    for (let i = 0; i < grid.length; i++) {
-      const x = i%width; 
-      const y = Math.floor(i/width); 
-
-      const sprites = grid[i];
-      const zOrder = legend.map(x => x[0]);
-      sprites.sort((a, b) => zOrder.indexOf(a.type) - zOrder.indexOf(b.type));
-
-      for (let i = 0; i < 4; i++) {
-        if (!sprites[i]) continue;
-        const { type: t } = sprites[i];
-        img.data[(y*dimensions.width + x)*4 + i] = 1+legend.findIndex(f => f[0] == t);
-      }
-    }
-
-    return img;
+    return { width, height, grid };
   }
 
   function afterInput(fn) {
@@ -188,7 +104,6 @@ export function init(canvas, headless = false, runDispatch = true) {
     setLegend,
     onInput, 
     afterInput, 
-    setScreenSize,
     getState: () => state,
     setBackground: (type) => render.setBackground(type),
     ...api,
