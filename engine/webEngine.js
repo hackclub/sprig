@@ -3,11 +3,25 @@ import { sizeGameCanvas } from "../dispatches/sizeGameCanvas.js";
 import * as render from "./renderSimple.js";
 import { baseEngine } from "./baseEngine.js";
 import { getTextImg } from "./getTextImg.js";
+import { bitmapTextToImageData } from "./bitmap.js";
 
 let cur = null;
 let _bitmaps = {};
+let offscreenCanvas = new OffscreenCanvas(1, 1);
+let offscreenCtx = offscreenCanvas.getContext("2d");
 
-export function init(canvas, headless = false, runDispatch = true) {
+// offscreenCanvas.style = `
+//   position: absolute;
+//   left: 591px;
+//   top: 128px;
+//   z-index: 10000;
+//   background: black;
+// `
+
+const textCanvas = new OffscreenCanvas(160, 128);
+let textCtx = textCanvas.getContext("2d");
+
+export function init(canvas, runDispatch = true) {
   const { api, state } = baseEngine();
 
   canvas.setAttribute("tabindex", "1");
@@ -16,10 +30,33 @@ export function init(canvas, headless = false, runDispatch = true) {
     const { width, height } = state.dimensions;
 
     // draw text
-    const textImg = getTextImg(state.texts);
+    // but how big is it
 
     const image = new Uint8ClampedArray(width*height*16*16*4);
+    offscreenCanvas.width = width*16;
+    offscreenCanvas.height = height*16;
 
+    const grid = api.getGrid();
+
+    for (let i = 0; i < width * height; i++) {
+      const x = i % width;
+      const y = Math.floor(i/width);
+      const sprites = grid[i];
+
+      // sort by z-index
+      // sprites.sort()
+      // transparancy is messed up
+
+      sprites.forEach((sprite) => {
+        const imgData = _bitmaps[sprite.type];
+        offscreenCtx.drawImage(imgData, x*16, y*16);
+      });
+
+    }
+
+    const textImg = getTextImg(state.texts);
+
+    canvas.getContext("2d").drawImage(offscreenCanvas, 0, 0, width*16, height*16);
 
     animationId = window.requestAnimationFrame(gameloop);
   }
@@ -32,7 +69,10 @@ export function init(canvas, headless = false, runDispatch = true) {
 
     for (let i = 0; i < bitmaps.length; i++) {
       const [ key, value ] = bitmaps[i];
-      _bitmaps[i] = bitmapTextToImageData(value);;
+      const imgData = bitmapTextToImageData(value);
+      const littleCanvas = new OffscreenCanvas(16, 16);
+      littleCanvas.getContext("2d").putImageData(imgData, 0, 0);
+      _bitmaps[key] = littleCanvas;
     }
 
     if (runDispatch) dispatch("SET_BITMAPS", { bitmaps });
