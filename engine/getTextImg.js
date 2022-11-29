@@ -23,6 +23,8 @@ function composeText(texts) {
   return grid;
 }
 
+// const canvas = new OffscreenCanvas(160, 128);
+
 export function getTextImg(texts) {
   const charGrid = composeText(texts);
   const img = new ImageData(160, 128);
@@ -49,5 +51,8 @@ export function getTextImg(texts) {
     }
   }
 
-  return img;
+  const canvas = new OffscreenCanvas(160, 128);
+  canvas.getContext("2d").putImageData(img, 0, 0);
+
+  return canvas;
 }

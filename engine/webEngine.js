@@ -7,27 +7,26 @@ import { bitmapTextToImageData } from "./bitmap.js";
 
 let cur = null;
 let _bitmaps = {};
+let _zOrder = [];
 let offscreenCanvas = new OffscreenCanvas(1, 1);
 let offscreenCtx = offscreenCanvas.getContext("2d");
-
-// offscreenCanvas.style = `
-//   position: absolute;
-//   left: 591px;
-//   top: 128px;
-//   z-index: 10000;
-//   background: black;
-// `
-
-const textCanvas = new OffscreenCanvas(160, 128);
-let textCtx = textCanvas.getContext("2d");
 
 export function init(canvas, runDispatch = true) {
   const { api, state } = baseEngine();
 
   canvas.setAttribute("tabindex", "1");
 
+  const ctx = canvas.getContext("2d");
+  ctx.webkitImageSmoothingEnabled = false;
+  ctx.mozImageSmoothingEnabled = false;
+  ctx.imageSmoothingEnabled = false;
+
   function gameloop() {
     const { width, height } = state.dimensions;
+    if (width === 0 || height === 0) return;
+
+   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 
     // draw text
     // but how big is it
@@ -36,6 +35,9 @@ export function init(canvas, runDispatch = true) {
     offscreenCanvas.width = width*16;
     offscreenCanvas.height = height*16;
 
+    offscreenCtx.fillStyle = "white";
+    offscreenCtx.fillRect(0, 0, width*16, height*16);
+
     const grid = api.getGrid();
 
     for (let i = 0; i < width * height; i++) {
@@ -43,20 +45,41 @@ export function init(canvas, runDispatch = true) {
       const y = Math.floor(i/width);
       const sprites = grid[i];
 
-      // sort by z-index
-      // sprites.sort()
-      // transparancy is messed up
-
-      sprites.forEach((sprite) => {
-        const imgData = _bitmaps[sprite.type];
+      if (state.background) {
+        const imgData = _bitmaps[state.background];
         offscreenCtx.drawImage(imgData, x*16, y*16);
-      });
+      }
+
+      sprites
+        .sort((a, b) => _zOrder.indexOf(b.type) - _zOrder.indexOf(a.type))
+        .forEach((sprite) => {
+          const imgData = _bitmaps[sprite.type];
+          offscreenCtx.drawImage(imgData, x*16, y*16);
+        });
 
     }
 
-    const textImg = getTextImg(state.texts);
 
-    canvas.getContext("2d").drawImage(offscreenCanvas, 0, 0, width*16, height*16);
+    const scale = Math.min(canvas.width/(width*16), canvas.height/(height*16));
+    const actualWidth = offscreenCanvas.width*scale;
+    const actualHeight = offscreenCanvas.height*scale;
+    ctx.drawImage(
+      offscreenCanvas, 
+      (canvas.width-actualWidth)/2, 
+      (canvas.height-actualHeight)/2, 
+      actualWidth, 
+      actualHeight
+    );
+
+    const textCanvas = getTextImg(state.texts);
+    ctx.drawImage(
+      textCanvas, 
+      0,
+      0, 
+      canvas.width, 
+      canvas.height
+    );
+
 
     animationId = window.requestAnimationFrame(gameloop);
   }
@@ -66,12 +89,14 @@ export function init(canvas, runDispatch = true) {
       if (key.length !== 1) throw new Error(`Bitmaps must have one character names.`);
     })
     state.legend = bitmaps;
+    _zOrder = bitmaps.map(x => x[0]);
 
     for (let i = 0; i < bitmaps.length; i++) {
       const [ key, value ] = bitmaps[i];
       const imgData = bitmapTextToImageData(value);
       const littleCanvas = new OffscreenCanvas(16, 16);
       littleCanvas.getContext("2d").putImageData(imgData, 0, 0);
+
       _bitmaps[key] = littleCanvas;
     }
 
@@ -145,7 +170,6 @@ export function init(canvas, runDispatch = true) {
     onInput, 
     afterInput, 
     getState: () => state,
-    setBackground: (type) => render.setBackground(type),
     ...api,
   }
 }

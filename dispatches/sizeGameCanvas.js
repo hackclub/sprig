@@ -25,6 +25,13 @@ export function sizeGameCanvas() {
   const { w, h } = actualFromIdeal(5, 4);
   canvas.style.width = `${w}px`;
   canvas.style.height = `${h}px`;
+  canvas.width = w;
+  canvas.height = h;
+
+  const ctx = canvas.getContext("2d");
+  ctx.webkitImageSmoothingEnabled = false;
+  ctx.mozImageSmoothingEnabled = false;
+  ctx.imageSmoothingEnabled = false;
 }
 
 function nearestPowerOf2(n) {
