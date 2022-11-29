@@ -1238,5 +1238,13 @@
     "img": "creepy_crush",
     "tags": ["puzzle", "advanced"],
     "addedOn": "2022-11-27"
+  },
+  {
+    "filename": "loadsamoney",
+    "title": "loadsamoney",
+    "author": "geschmit",
+    "img": "",
+    "tags": ["simulation", "endless"],
+    "addedOn": "2022-11-28"
   }
 ]
