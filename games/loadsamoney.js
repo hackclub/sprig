@@ -7,13 +7,14 @@ probaly.
 (https://www.youtube.com/watch?v=ULeDlxa3gyc)
 
 Instructions:
-Make that sweet dough! Use [WASD] to print the bills and [IJKL] to buy upgrades!
+Make that sweet dough! Use [WASD] to print the bills 
+and [IJKL] to buy upgrades!
 
 Upgrades do as followed:
-Money printers(I): ..... Gives 1 dollar every 2 seconds.
-Money men(J): .......... Gives a 2x multiplier.
-Money banks(K): ........ Gives a 5x multiplier.
-24k sprigs(L): ......... Gives bragging rights.
+Money printers(I): ..... Costs 200$. Gives 1 dollar every 2 seconds.
+Money men(J): .......... Costs 500$. Gives a 2x multiplier.
+Money banks(K): ........ Costs 1250$. Gives a 5x multiplier.
+24k sprigs(L): ......... Costs 5000$. Gives bragging rights.
 
 Controls:
 [WASD] - Make money
@@ -234,10 +235,12 @@ for (const x of inKeys) {
   })
 }
 
-let instY = 3
+let instY = 4
+let shopStuff = ``
 for (const x of Object.keys(shopItems)) {
   const item = shopItems[x]
   addSprite(0,instY,item.sprite)
+  shopStuff += `${item.name}: ${item.price}\n`
   onInput(x, () => {
     if (money >= item.price) {
       currItems[x]++
@@ -250,13 +253,13 @@ for (const x of Object.keys(shopItems)) {
 
 setInterval(() => {
   clearText()
-  addText(`LOADSAMONEY\n${money}\$ \\ ${mult}x`, {
+  addText(`LOADSAMONEY\n\n${shopStuff}\n${money}\$ \\ ${mult}x`, {
   x: 1,
-  y: 1,
+  y: 0,
   color: color`4`
   })
 
-  let yPos = 7   
+  let yPos = 9   
   for (const x of Object.keys(shopItems)) {
     const item = shopItems[x]
     addText(`${currItems[x]} \\ ${item.name}`,{
