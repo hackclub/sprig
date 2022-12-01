@@ -4,12 +4,13 @@
 
 controls: 
 W, A, S, D - movement
+J - restart
 
 Goal:
 collect all of the stars before the ghosts collect you
 
 Note:
-ghosts can phase through walls because they are ghosts and is mechanic is most definitely a design choice
+ghosts can phase through walls because they are ghosts and this mechanic is most definitely a design choice
 
 */
 
@@ -242,24 +243,24 @@ const levels = [
 p.wwwwwwww
 .........w
 w......s.w
-w.....r..w
+w..i..r..w
 w........w
 w........w
-w..o.....w
+w..o..c..w
 w.s....s.w
 w........w
 wwwwwwwwww`,
   map`
-p.wwwwwwww
-.........w
-w......s.w
-w..c..r..w
-w........w
-w........w
-w..i..o..w
-w.s....s.w
-w........w
-wwwwwwwwww`,
+p.........
+...wwwwww.
+.......sw.
+.w.c..r.w.
+.w......w.
+.w......w.
+.w.i..o.w.
+.ws....sw.
+.wwwwwwww.
+..........`,
   map`
 p.w....w.s
 ..........
@@ -310,6 +311,21 @@ const currentLevel = levels[level];
 setMap(currentLevel);
 
 setSolids([pacRight, pacLeft, pacUp, pacDown, wall, ]);
+
+onInput("j", () => {
+  level = 0
+  setMap(map`
+p.wwwwwwww
+.........w
+w......s.w
+w..i..r..w
+w........w
+w........w
+w..o..c..w
+w.s....s.w
+w........w
+wwwwwwwwww`)
+});
 
 /* player controls */
 
