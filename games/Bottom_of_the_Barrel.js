@@ -1234,7 +1234,7 @@ startGame();
 resetBattleStats();
 
 onInput("d", () => {
-  if(battleMode == false && floor != 5) {
+  if(typeof getFirst(player) !== 'undefined' && battleMode == false && floor != 5) {
     getFirst(player).x += 1;
     setSprites(playerR, fballInVis);
     if(typeof getFirst(next) !== 'undefined' && getFirst(player).x == getFirst(next).x) {
@@ -1284,7 +1284,7 @@ onInput("d", () => {
   }
 })
 onInput("a", () => {
-  if(battleMode == false && floor != 5) {
+  if(typeof getFirst(player) !== 'undefined' && battleMode == false && floor != 5) {
     getFirst(player).x += -1;
     setSprites(playerL, fballInVis);
     if(typeof getFirst(prev) !== 'undefined' && getFirst(player).x == getFirst(prev).x) {
