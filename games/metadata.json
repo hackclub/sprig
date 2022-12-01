@@ -1254,5 +1254,13 @@
     "img": "",
     "tags": ["classic", "puzzle"],
     "addedOn": "2022-12-01"
+  },
+  {
+    "filename": "Bottom_of_the_Barrel",
+    "title": "Bottom_of_the_Barrel",
+    "author": "Ozfolo",
+    "img": "",
+    "tags": ["advanced", "puzzle"],
+    "addedOn": "2022-12-01"
   }
 ]
