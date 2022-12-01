@@ -1246,5 +1246,13 @@
     "img": "",
     "tags": ["simulation", "endless"],
     "addedOn": "2022-11-28"
+  },
+  {
+    "filename": "Pac-Man_But_With_Stars",
+    "title": "Pac-Man_But_With_Stars",
+    "author": "Austin",
+    "img": "",
+    "tags": ["classic", "puzzle"],
+    "addedOn": "2022-12-01"
   }
 ]
