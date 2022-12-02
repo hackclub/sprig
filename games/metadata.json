@@ -1270,5 +1270,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-12-01"
+  },
+  {
+    "filename": "Advent of Sprig",
+    "title": "Advent of Sprig",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["event"],
+    "addedOn": "2022-12-01"
   }
 ]
