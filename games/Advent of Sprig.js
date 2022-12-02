@@ -1,11 +1,11 @@
 /*
-@title: Advent of Sprig
+@title: Advent of Sprig 2
 @author: Leonard (Omay)
 Every day, I will add a new game or level of a game.
 */
 
 let scene = "menu";
-let availDays = 1;
+let availDays = 2;
 
 const d0l = "a";
 const d1l = "b";
@@ -524,7 +524,16 @@ y........y
 y.0......y
 y..y..y..y
 y..y..y.zy
-yyyyyyyyyy`
+yyyyyyyyyy`,
+  map`
+yyyyyyyyyy
+y......0zy
+y.yyyyyy.y
+y....0zy.y
+y....0zy.y
+y.yyyyyy.y
+y......0zy
+yyyyyyyyyy`,
 ];
 const days = [[10,4,18,13,21,3],[14,11,2,5,12,23],[1,19,6,22,8,15],[7,17,9,16,20,24]];
 function addMap(mapa){
@@ -545,28 +554,28 @@ setBackground(bg);
 onInput("w", () => {
   if(scene === "menu"){
     getFirst(sel).y -= 1;
-  }else if(scene === "game1"){
+  }else if(scene === "game1" || scene === "game2" || scene === "game3"){
     getFirst(player).y -= 1;
   }
 });
 onInput("a", () => {
   if(scene === "menu"){
     getFirst(sel).x -= 1;
-  }else if(scene === "game1"){
+  }else if(scene === "game1" || scene === "game2" || scene === "game3"){
     getFirst(player).x -= 1;
   }
 });
 onInput("s", () => {
   if(scene === "menu"){
     getFirst(sel).y += 1;
-  }else if(scene === "game1"){
+  }else if(scene === "game1" || scene === "game2" || scene === "game3"){
     getFirst(player).y += 1;
   }
 });
 onInput("d", () => {
   if(scene === "menu"){
     getFirst(sel).x += 1;
-  }else if(scene === "game1"){
+  }else if(scene === "game1" || scene === "game2" || scene === "game3"){
     getFirst(player).x += 1;
   }
 });
