@@ -1262,5 +1262,13 @@
     "img": "",
     "tags": ["advanced", "puzzle"],
     "addedOn": "2022-12-01"
+  },
+  {
+    "filename": "Fish_in_the_Sea",
+    "title": "Fish_in_the_Sea",
+    "author": "Hugh Wilks",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-01"
   }
 ]
