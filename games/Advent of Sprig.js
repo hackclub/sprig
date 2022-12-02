@@ -527,7 +527,7 @@ y..y..y.zy
 yyyyyyyyyy`,
   map`
 yyyyyyyyyy
-y......0zy
+yx.....0zy
 y.yyyyyy.y
 y....0zy.y
 y....0zy.y
