@@ -28,6 +28,7 @@ const spider = "a";
 const fball = "f";
 const robot = "r";
 const demon = "d";
+const sky = "k";
 let floor = 0;
 let enemyTiles = ["s","s","g","g","h","m","a","g","m","r","r","d"];
 let e ="0";
@@ -85,7 +86,7 @@ function startingValues() {
   at = 25;
   currentE = 0;
   playerTurn = false;
-  demonStats = {"health": 700, "defence": 100, "attack": 350,"XP": 10000, "weakness": "none", "strength": "fire"};
+  demonStats = {"health": 600, "defence": 100, "attack": 350,"XP": 10000, "weakness": "none", "strength": "fire"};
   robotStats = {"health": 450, "defence": 100, "attack": 300,"XP": 1000, "weakness": "throw", "strength": "fire"};
   spiderStats = {"health": 300, "defence": 70, "attack": 250,"XP": 500, "weakness": "fire", "strength": "cut"};
   pigStats = {"health": 400, "defence": 50, "attack": 300,"XP": 400, "weakness": "cut", "strength": "throw"};
@@ -405,6 +406,23 @@ LLLLLLLLLLLLLLLL`],
 .....300003.....
 ......0..0......
 ......0..0......`],
+  [sky, bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777`],
   [fball,fireball],
   )
 }
@@ -715,7 +733,7 @@ function endTurn() {
   statsShow();
   playerTurn = false;
   enemyTurn();
-  
+
 }
 function levelUp() {
   clearText();
@@ -783,7 +801,7 @@ function resetBattleStats() {
   pigStats = {"health": 400, "defence": 50, "attack": 300,"XP": 400, "weakness": "cut", "strength": "throw"};
   spiderStats = {"health": 300, "defence": 70, "attack": 250,"XP": 500, "weakness": "fire", "strength": "cut"};
   robotStats = {"health": 500, "defence": 100, "attack": 300,"XP": 1000, "weakness": "throw", "strength": "fire"};
-  demonStats = {"health": 700, "defence": 100, "attack": 350,"XP": 10000, "weakness": "none", "strength": "fire"};
+  demonStats = {"health": 600, "defence": 100, "attack": 350,"XP": 10000, "weakness": "none", "strength": "fire"};
 }
 
 function item(type) {
@@ -824,11 +842,11 @@ function item(type) {
     }, "400")
   }
   else if(type == "None") {
-    
+
   }
 }
 function attack(type) {
-  
+
     if(type == "slash") {
       setTimeout(() => {
         setSprites(playerStrike1, fballInVis);
@@ -901,7 +919,7 @@ function attack(type) {
       setTimeout(() => {
         getFirst(player).x += -1;
       }, "1000")
-      
+
       if(eS["weakness"] == "cut") {
         eS["health"] += Math.round(-((playerStats["attack"]*2)*(100/(100+eS["defence"]))));
         addText("Weak!", { 
@@ -949,7 +967,7 @@ function attack(type) {
         setSprites(playerR, fballInVis);
         getFirst(fball).x += -5;
       }, "300")
-      
+
       if(eS["weakness"] == "fire") {
         eS["health"] += Math.round(-((playerStats["attack"]*2)*(100/(100+eS["defence"]))));
         addText("Weak!", { 
@@ -970,7 +988,7 @@ function attack(type) {
         eS["health"] += Math.round(-(playerStats["attack"]*(100/(100+eS["defence"]))));
       }
     }
-      
+
     else if(type == "throw") {
       setTimeout(() => {
         setSprites(playerThrow, fballInVis);
@@ -1008,8 +1026,8 @@ function attack(type) {
       setTimeout(() => {
         setSprites(playerR, fballInVis)
       }, "400")
-      
-      
+
+
       if(eS["weakness"] == "throw") {
         eS["health"] += Math.round(-((playerStats["attack"]*2)*(100/(100+eS["defence"]))));
         addText("Weak!", { 
@@ -1030,7 +1048,7 @@ function attack(type) {
         eS["health"] += Math.round(-(playerStats["attack"]*(100/(100+eS["defence"]))));
       }
     }
-    
+
   setTimeout(() => {
     clearText();
     bmScreenReset();
@@ -1039,7 +1057,7 @@ function attack(type) {
   setTimeout(() => {
     endTurn();
   }, "1100")
-  
+
 }
 function statsShow(){
  addText(`HP: ${playerStats["health"]}`, { 
@@ -1057,7 +1075,7 @@ function statsShow(){
     y: 3,
     color: color`2`
   })
-  
+
 }
 function bmScreenReset() {
   clearText();
@@ -1125,7 +1143,7 @@ function prevR() {
   else if(floor != 0 && floor/2 != Math.round(floor/2)){
     setMap(levels[thisMap-1]);
     thisMap += -1;
-    
+
     clearText();
   }
 }
@@ -1178,7 +1196,7 @@ function checkDead() {
     levelUp();
     resetBattleStats();
   }
-  
+
 }
 function enemyTurn() {
   if(eS["health"] > 0) {
@@ -1332,7 +1350,7 @@ onInput("a", () => {
       battleMap();
     }
   }
-  
+
 })
 onInput("s", () => {
   if(battleMode == true && playerTurn) {
@@ -1358,23 +1376,7 @@ onInput("w", () => {
     thisMap += 1;
     floor += 1;
     if(floor == 5) {
-      setBackground(bitmap`
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777`);
+      setBackground(sky);
       addText("The End", { 
       x: 5,
       y: 2,
@@ -1418,7 +1420,7 @@ onInput("w", () => {
       battleMap();
     }
   }
-  
+
 })
 
 onInput("j", () => {
@@ -1565,6 +1567,6 @@ onInput("j", () => {
         bmScreen = 0;
       }
     }
-  
+
   }
 })
