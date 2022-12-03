@@ -23,7 +23,7 @@ Click the "open help" to discover your toolkit.
 Level 1
 --------
 
-create a square map the size you prefer and add the player in the middle of the map.
+Add the player and obstacles in map
 
 --------
 Level 2
@@ -36,6 +36,11 @@ Level 3
 --------
 
 Fix the code!
+This cause this error:
+Uncaught TypeError: Cannot read properties of undefined (reading 'length') on line 153 in column 33. Open the browser console for more information.
+
+Tip:
+the getAll() and getFirst() functions are a bit strange, aren't they?
 
 --------
 Level 4
@@ -90,11 +95,19 @@ setLegend(
 .......0........
 .......0........
 ......0.0.......
-.....0...0......`]
+.....0...0......`],
 )
 
 // Map
-setMap(map`.`)
+setMap(map`
+........
+........
+........
+........
+........
+........
+........
+........`)
 
 // Create a variable that shows when the game is running
 var gameRunning = true; 
@@ -130,7 +143,7 @@ function despawnObstacles() {
   let obstacles = getAll(obstacle);
 
   for (let i = 0; i < obstacles.length; i++) {
-   if (obstacles[i].y == /* put the number of tiles that make up your map height */) {
+   if (obstacles[i].y == 8) {
      obstacles[i].remove();
    }
   }
