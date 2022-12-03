@@ -10,7 +10,7 @@ let _zOrder = [];
 let offscreenCanvas = new OffscreenCanvas(1, 1);
 let offscreenCtx = offscreenCanvas.getContext("2d");
 
-export function init(canvas, runDispatch = true) {
+export function init(canvas) {
   const { api, state } = baseEngine();
 
   canvas.setAttribute("tabindex", "1");
@@ -98,8 +98,6 @@ export function init(canvas, runDispatch = true) {
 
       _bitmaps[key] = littleCanvas;
     }
-
-    if (runDispatch) dispatch("SET_BITMAPS", { bitmaps });
   }
 
   function end() {

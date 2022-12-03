@@ -1254,5 +1254,37 @@
     "img": "",
     "tags": ["classic", "puzzle"],
     "addedOn": "2022-12-01"
+  },
+  {
+    "filename": "Bottom_of_the_Barrel",
+    "title": "Bottom_of_the_Barrel",
+    "author": "Ozfolo",
+    "img": "",
+    "tags": ["advanced", "puzzle"],
+    "addedOn": "2022-12-01"
+  },
+  {
+    "filename": "Fish_in_the_Sea",
+    "title": "Fish_in_the_Sea",
+    "author": "Hugh Wilks",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-01"
+  },
+  {
+    "filename": "Advent of Sprig",
+    "title": "Advent of Sprig",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["event"],
+    "addedOn": "2022-12-01"
+  },
+  {
+    "filename": "Icy_Portals",
+    "title": "Icy_Portals",
+    "author": "Jonathan La",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-02"
   }
 ]
