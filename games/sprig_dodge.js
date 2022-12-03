@@ -37,7 +37,7 @@ Level 3
 
 Fix the code!
 This cause this error:
-Uncaught TypeError: Cannot read properties of undefined (reading 'length') on line 153 in column 33. Open the browser console for more information.
+Uncaught TypeError: Cannot read properties of undefined (reading 'length') on line ... in column 33. Open the browser console for more information.
 
 Tip:
 the getAll() and getFirst() functions are a bit strange, aren't they?
