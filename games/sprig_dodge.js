@@ -152,7 +152,7 @@ function despawnObstacles() {
 
 // See if the player was hit
 function checkHit() {
-  // fix here
+  // LEVEL 3 - Fix code
   let obstacles = getFirst(obstacle);
   let p = getAll(player);
 
