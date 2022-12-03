@@ -1,4 +1,7 @@
-
+/*
+@title: cricket_frenzy
+@author: aryan.k
+*/
 const player = "p";
 const box = "b";
 const goal = "g";
@@ -81,49 +84,67 @@ const levels = [
   map`
 w...ww
 .b..ww
-.pw.gw`,
+.p..gw`,
   map`
-p..
-.b.
-..g`,
+w......
+.......
+p..ww..
+.b.w...
+..wg...
+wwwwwww`,
   map`
-p..g
-.b..
-....
-....`,
+p.wgw
+wbw.w
+....w
+....w
+...ww`,
   map`
-p...
-....
-....
-.b.g`,
+w....w
+p....w
+..w..w
+.bw..w
+..wgww`,
   map`
 p.w.
 .bwg
 ....
 ..bg`,
   map`
-w.gb
-..bg
-....
-w.pw`,
+w.gb.
+..bg.
+.....
+w.pw.`,
   map`
-wwwwwwwwwwwwwwwwwwwwwww
+wwwwww...wwwwwwwwwwwwww
 ...........wwwwwwwwwwww
 ...www.....wwwwwwwwwwww
-.....ww....wwwwwwwwww.w
-......ww...wwwwwwwww..w
+.....ww....ww.w.wwwww.w
+......ww...ww...wwww..w
 .b.....ww.......ww....w
 ........www...........w
 ..........ww..........w
 ...........www.....p..w
 .............www......w
 ...............ww....gw
-...............wwwwwwww`
+...............wwwwwwww`,
+   map`
+....w.......w....
+..b.w..wbw..w.b..
+...ww.......www..
+.......www.......
+..w.........ww...
+..ww...ggg.......
+...w...ggg......w
+...w....p.....w..
+...w..........w..
+..wwwwwwwww.www..
+.bw...w.b...w.b..
+..w...w.....w....`
 
   
 ];
 
-// Create a tune:
+
 const melody = tune`
 41.666666666666664: e4^41.666666666666664,
 41.666666666666664: f5^41.666666666666664 + g5^41.666666666666664 + b5/41.666666666666664 + f4^41.666666666666664,
@@ -186,7 +207,7 @@ onInput("a", () => {
   getFirst(player).x -= 1;
 });
 
-// END - PLAYER MOVEMENT CONTROLS
+
 
 onInput("j", () => {
   const currentLevel = levels[level];
@@ -197,23 +218,23 @@ onInput("j", () => {
 });
 
 afterInput(() => {
-  // count the number of tiles with goals
+
   const targetNumber = tilesWith(goal).length;
   
-  // count the number of tiles with goals and boxes
+ 
   const numberCovered = tilesWith(goal, box).length;
 
   if (numberCovered === targetNumber) {
-    // increase the current level number
+
     level = level + 1;
 
     const currentLevel = levels[level];
 
-    // make sure the level exists and if so set the map
+  
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("YAY!", { y: 4, color: color`3` });
+      addText("COMPLETED", { y: 4, color: color`3` });
     }
   }
 });
