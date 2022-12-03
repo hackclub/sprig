@@ -271,6 +271,7 @@ export function baseEngine() {
     clearTile, 
     setSolids, 
     setPushables, 
+    setBackground: (type) => { state.background = type },
     map: _makeTag(text => text),
     bitmap: _makeTag(text => text),
     color: _makeTag(text => text),

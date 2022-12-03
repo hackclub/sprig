@@ -64,7 +64,7 @@ export function evalGameScript(script, canvas) {
 }
 
 export function evalGameScriptHeadless(script) {
-  const gameFunctions = init(document.createElement("canvas"), true);
+  const gameFunctions = init(document.createElement("canvas"));
 
   gameFunctions.setTimeout = () => {}
   gameFunctions.setInterval = () => {};

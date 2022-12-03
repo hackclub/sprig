@@ -24,7 +24,6 @@ export const view = (state) => html`
     <div class="game-docs-container">
       <div class="game-canvas-container">
         <canvas class="game-canvas"></canvas>
-        <canvas class="game-text"></canvas>
       </div>
       <div class="docs">
         ${docs(state)}
