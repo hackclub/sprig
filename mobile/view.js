@@ -121,13 +121,13 @@ export const view = (text) => html`
       right: calc(5% + 75px);
     }
 
-    .input-button-k {
+    .input-button-l {
       position: absolute;
       top: calc(50% - 25px);
       right: calc(5% - 25px);
     }
 
-    .input-button-l {
+    .input-button-k {
       position: absolute;
       top: calc(50% + 25px);
       right: calc(5% + 25px);;
@@ -139,19 +139,19 @@ export const view = (text) => html`
       left: calc(5% + 25px);
     }
 
-    .input-button-a {
+    .input-button-d {
       position: absolute;
       top: calc(50% - 25px);
       left: calc(5% + 75px);
     }
 
-    .input-button-s {
+    .input-button-a {
       position: absolute;
       top: calc(50% - 25px);
       left: calc(5% - 25px);
     }
 
-    .input-button-d {
+    .input-button-s {
       position: absolute;
       top: calc(50% + 25px);
       left: calc(5% + 25px);;
