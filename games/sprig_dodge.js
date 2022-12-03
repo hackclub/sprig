@@ -29,7 +29,7 @@ Add the player to the map
 Level 2
 --------
 
-Add controls to right, use "d" as input
+Add controls for moving the player to right, use "d" as input
 
 --------
 Level 3
