@@ -121,6 +121,7 @@ onInput("a", () => {
   }
 });
 
+// LEVEL 2 - Add move right controls
 // END - PLAYER MOVEMENT CONTROLS
 
 // Put obstacle in a random position
