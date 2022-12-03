@@ -99,7 +99,7 @@ setLegend(
 .....0...0......`],
 )
 
-// Map
+// LEVEL 1 - Add player to map
 setMap(map`
 ........
 ........
