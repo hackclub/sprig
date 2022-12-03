@@ -1,5 +1,6 @@
 import { html } from "../libs/uhtml.js";
 import { evalGameScript } from "../engine/evalGameScript.js";
+import { sizeGameCanvas } from "../dispatches/sizeGameCanvas.js";
 
 export const view = (text) => html`
   <style>
@@ -185,7 +186,6 @@ export const view = (text) => html`
       </div>
       <div class="game-canvas-container">
         <canvas class="game-canvas"></canvas>
-        <canvas class="game-text"></canvas>
       </div>
       <div class="wasd">
         <div class="mobile-button no-select input-button-w" @pointerdown=${() => dispatchKey("w")}>w</div>
@@ -198,6 +198,7 @@ export const view = (text) => html`
 `
 
 function runGame(text) {
+  sizeGameCanvas();
   // wiggle the canvas window
   const gameCanvas = document.querySelector(".game-canvas");
   const gameCanvasContainer = document.querySelector(".game-canvas-container");
