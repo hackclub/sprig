@@ -46,7 +46,8 @@ the getAll() and getFirst() functions are a bit strange, aren't they?
 Level 4
 --------
 
-Add all functions in gameLoop
+Add all functions in the gameLoop interval
+Tip: use spawnObstacle(), moveObstacles(), despawnObstacles(), and checkHit()
 
 --------
 END
