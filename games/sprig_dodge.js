@@ -166,7 +166,7 @@ function checkHit() {
 }
 
 var gameLoop = setInterval(() => {
-  // Add all functions here
+  // LEVEL 4 - Add all game functions
 
   if (checkHit()) {
     clearInterval(gameLoop);
