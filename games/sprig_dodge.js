@@ -53,7 +53,7 @@ Tip: use spawnObstacle(), moveObstacles(), despawnObstacles(), and checkHit()
 END
 --------
 
-Make your own game! Try
+Modify the game to make it your own! Try:
  - adding two players
  - adding powerups
  - come up with your own mechanic!
