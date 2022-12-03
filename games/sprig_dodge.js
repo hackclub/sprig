@@ -23,7 +23,7 @@ Click the "open help" to discover your toolkit.
 Level 1
 --------
 
-Add the player and obstacles in map
+Add the player to the map
 
 --------
 Level 2
