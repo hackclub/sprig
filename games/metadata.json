@@ -1182,5 +1182,109 @@
     "img": "",
     "tags": [],
     "addedOn": "2022-11-21"
+  },
+  {
+    "filename": "Meteor_shower",
+    "title": "Meteor_shower",
+    "author": "Mate P.",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-22"
+  },
+  {
+    "filename": "solar_system",
+    "title": "solar_system",
+    "author": "CD",
+    "img": "",
+    "tags": ["simulation"],
+    "addedOn": "2022-11-23"
+  },
+  {
+    "filename": "Galacticats",
+    "title": "Galacticats",
+    "author": "adadyer",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-23"
+  },
+  {
+    "filename": "restocker_simulater_sprig",
+    "title": "restocker_simulater",
+    "author": "omegakitty",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-23"
+  },
+  {
+    "filename": "BoxCubeGuy",
+    "title": "BoxCubeGuy",
+    "author": "CaptainATW",
+    "img": "CaptainATW",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-25"
+  },
+  {
+    "filename": "Asteroid_Field",
+    "title": "Asteroid_Field",
+    "author": "Kaitlyn",
+    "img": "CaptainATW",
+    "tags": ["puzzle"],
+    "addedOn": "2022-11-25"
+  },
+  {
+    "filename": "creepy_crush",
+    "title": "creepy_crush",
+    "author": "issac",
+    "img": "creepy_crush",
+    "tags": ["puzzle", "advanced"],
+    "addedOn": "2022-11-27"
+  },
+  {
+    "filename": "loadsamoney",
+    "title": "loadsamoney",
+    "author": "geschmit",
+    "img": "",
+    "tags": ["simulation", "endless"],
+    "addedOn": "2022-11-28"
+  },
+  {
+    "filename": "Pac-Man_But_With_Stars",
+    "title": "Pac-Man_But_With_Stars",
+    "author": "Austin",
+    "img": "",
+    "tags": ["classic", "puzzle"],
+    "addedOn": "2022-12-01"
+  },
+  {
+    "filename": "Bottom_of_the_Barrel",
+    "title": "Bottom_of_the_Barrel",
+    "author": "Ozfolo",
+    "img": "",
+    "tags": ["advanced", "puzzle"],
+    "addedOn": "2022-12-01"
+  },
+  {
+    "filename": "Fish_in_the_Sea",
+    "title": "Fish_in_the_Sea",
+    "author": "Hugh Wilks",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-01"
+  },
+  {
+    "filename": "Advent of Sprig",
+    "title": "Advent of Sprig",
+    "author": "Leonard (Omay)",
+    "img": "",
+    "tags": ["event"],
+    "addedOn": "2022-12-01"
+  },
+  {
+    "filename": "Icy_Portals",
+    "title": "Icy_Portals",
+    "author": "Jonathan La",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-02"
   }
 ]

@@ -2,7 +2,7 @@
 
 **Anyone can submit to the gallery, but read the details below if you want your very own Sprig.** If you have any questions, join #sprig on our [Slack](https://hackclub.com/slack)!
 
-Sprig consoles are a limited run and will be ready for delivery end of October 2022*.
+Sprig consoles are a limited run and will be ready for delivery end of 2022*.
 
 Get on the waitlist now by [sharing your game](https://sprig.hackclub.com/share) and having it approved by one of our project maintainers. Once your GitHub pull request is approved, we'll collect your shipping details.
 
