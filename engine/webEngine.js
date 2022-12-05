@@ -92,6 +92,7 @@ export function init(canvas) {
 
   function setLegend(...bitmaps) {
     bitmaps.forEach(([ key, value ]) => {
+      if (key === ".") throw new Error(`Can't reassign "."`);
       if (key.length !== 1) throw new Error(`Bitmaps must have one character names.`);
     })
 
