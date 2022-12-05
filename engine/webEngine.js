@@ -1,4 +1,3 @@
-import { dispatch } from "../dispatch.js";
 import { sizeGameCanvas } from "../dispatches/sizeGameCanvas.js";
 import { baseEngine } from "./baseEngine.js";
 import { getTextImg } from "./getTextImg.js";
@@ -18,7 +17,7 @@ let _zOrder = [];
 let offscreenCanvas = makeCanvas(1, 1);
 let offscreenCtx = offscreenCanvas.getContext("2d");
 
-export function init(canvas, runDispatch = true) {
+export function init(canvas) {
   const { api, state } = baseEngine();
 
   canvas.setAttribute("tabindex", "1");
@@ -95,6 +94,7 @@ export function init(canvas, runDispatch = true) {
     bitmaps.forEach(([ key, value ]) => {
       if (key.length !== 1) throw new Error(`Bitmaps must have one character names.`);
     })
+
     state.legend = bitmaps;
     _zOrder = bitmaps.map(x => x[0]);
 
@@ -106,8 +106,6 @@ export function init(canvas, runDispatch = true) {
 
       _bitmaps[key] = littleCanvas;
     }
-
-    if (runDispatch) dispatch("SET_BITMAPS", { bitmaps });
   }
 
   function end() {
