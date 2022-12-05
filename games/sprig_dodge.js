@@ -9,7 +9,7 @@ Welcome to Sprig!!!
 Hit "run" to execute the code and
 start the game (you can also press shift+enter).
 
-To beat each level you'll have to edit the code.
+To complete each step you'll have to edit the code.
 
 The code for this game starts below this comment.
 
@@ -20,19 +20,19 @@ The goal is to dodge the fireballs.
 Click the "open help" to discover your toolkit.
 
 --------
-Level 1
+Step 1
 --------
 
 Add the player to the map
 
 --------
-Level 2
+Step 2
 --------
 
 Add controls for moving the player to right, use "d" as input
 
 --------
-Level 3
+Step 3
 --------
 
 Fix the code!
@@ -43,10 +43,11 @@ Tip:
 the getAll() and getFirst() functions are a bit strange, aren't they?
 
 --------
-Level 4
+Step 4
 --------
 
 Add all functions in the gameLoop interval
+
 Tip: use spawnObstacle(), moveObstacles(), despawnObstacles(), and checkHit()
 
 --------
@@ -99,7 +100,7 @@ setLegend(
 .....0...0......`],
 )
 
-// LEVEL 1 - Add player to map
+// Step 1 - Add player to map
 setMap(map`
 ........
 ........
@@ -121,7 +122,7 @@ onInput("a", () => {
   }
 });
 
-// LEVEL 2 - Add move right controls
+// Step 2 - Add move right controls
 // END - PLAYER MOVEMENT CONTROLS
 
 // Put obstacle in a random position
@@ -153,7 +154,7 @@ function despawnObstacles() {
 
 // See if the player was hit
 function checkHit() {
-  // LEVEL 3 - Fix code
+  // Step 3 - Fix code
   let obstacles = getFirst(obstacle);
   let p = getAll(player);
 
@@ -167,7 +168,7 @@ function checkHit() {
 }
 
 var gameLoop = setInterval(() => {
-  // LEVEL 4 - Add all game functions
+  // Step 4 - Add all game functions
 
   if (checkHit()) {
     clearInterval(gameLoop);
