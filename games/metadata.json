@@ -1286,5 +1286,29 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-12-02"
+  },
+  {
+    "filename": "Jet_Box",
+    "title": "Jet_Box",
+    "author": "Hugh Wilks",
+    "img": "Jet_Box",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-03"
+  },
+  {
+    "filename": "music-be-like",
+    "title": "music-be-like",
+    "author": "trueGrand",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-04"
+  },
+  {
+    "filename": "Ninja_In_A_Bear_Trap_Factory",
+    "title": "Ninja_In_A_Bear_Trap_Factory",
+    "author": "Matt The Banana",
+    "img": "Ninja_In_A_Bear_Trap_Factory",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-04"
   }
 ]
