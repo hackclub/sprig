@@ -418,6 +418,7 @@ onInput("j", () => {
   if (currentLevel !== undefined) {
     clearText("");
     setMap(currentLevel);
+    swords = 0;
   }
 });
 
