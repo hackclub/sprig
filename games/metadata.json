@@ -1310,5 +1310,13 @@
     "img": "Ninja_In_A_Bear_Trap_Factory",
     "tags": ["puzzle"],
     "addedOn": "2022-12-04"
+  },
+  {
+    "filename": "niabtf2",
+    "title": "Ninja_In_A_Bear_Trap_Factory_2",
+    "author": "Matt The Banana",
+    "img": "niabtf2",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-06"
   }
 ]
