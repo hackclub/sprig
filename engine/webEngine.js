@@ -1,16 +1,23 @@
-import { dispatch } from "../dispatch.js";
 import { sizeGameCanvas } from "../dispatches/sizeGameCanvas.js";
 import { baseEngine } from "./baseEngine.js";
 import { getTextImg } from "./getTextImg.js";
 import { bitmapTextToImageData } from "./bitmap.js";
 
+function makeCanvas(width, height) {
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+
+  return canvas;
+}
+
 let cur = null;
 let _bitmaps = {};
 let _zOrder = [];
-let offscreenCanvas = new OffscreenCanvas(1, 1);
+let offscreenCanvas = makeCanvas(1, 1);
 let offscreenCtx = offscreenCanvas.getContext("2d");
 
-export function init(canvas, runDispatch = true) {
+export function init(canvas) {
   const { api, state } = baseEngine();
 
   canvas.setAttribute("tabindex", "1");
@@ -85,21 +92,21 @@ export function init(canvas, runDispatch = true) {
 
   function setLegend(...bitmaps) {
     bitmaps.forEach(([ key, value ]) => {
+      if (key === ".") throw new Error(`Can't reassign "."`);
       if (key.length !== 1) throw new Error(`Bitmaps must have one character names.`);
     })
+
     state.legend = bitmaps;
     _zOrder = bitmaps.map(x => x[0]);
 
     for (let i = 0; i < bitmaps.length; i++) {
       const [ key, value ] = bitmaps[i];
       const imgData = bitmapTextToImageData(value);
-      const littleCanvas = new OffscreenCanvas(16, 16);
+      const littleCanvas = makeCanvas(16, 16);
       littleCanvas.getContext("2d").putImageData(imgData, 0, 0);
 
       _bitmaps[key] = littleCanvas;
     }
-
-    if (runDispatch) dispatch("SET_BITMAPS", { bitmaps });
   }
 
   function end() {

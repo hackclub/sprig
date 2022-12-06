@@ -1,8 +1,8 @@
-// import { init } from "../engine/gamelab_functions.js";
 import { init } from "./webEngine.js";
 import { playTune } from "./playTune.js";
 import { textToTune } from './textTuneConverters.js';
 import { parseScript } from "esprima";
+import { dispatch } from "../dispatch.js";
 
 let tunes = [];
 let intervals = [];
@@ -57,6 +57,7 @@ export function evalGameScript(script, canvas) {
     // script += `'use strict';\n\n${script}`
     const fn = new Function(...Object.keys(gameFunctions), script);
     fn(...Object.values(gameFunctions));
+    dispatch("SET_BITMAPS", { bitmaps: gameFunctions.getState().legend });
     return null;
   } catch (err) {
     return { type: "runtime", err };
@@ -79,6 +80,7 @@ export function evalGameScriptHeadless(script) {
   try {
     const fn = new Function(...Object.keys(gameFunctions), script);
     fn(...Object.values(gameFunctions));
+    dispatch("SET_BITMAPS", { bitmaps: gameFunctions.getState().legend });
     return null;
   } catch (err) {
     return { type: "runtime", err };
