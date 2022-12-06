@@ -1,5 +1,5 @@
 /*
-@title: Ninja In A Bear Trap Factory 2
+@title: Ninja In A Bear Trap Factory
 @author: Matt The Banana
 */
 
@@ -307,7 +307,7 @@ L111111111111111
 
 setBackground(floor)
 
-let level = 6;
+let level = 0;
 const levels = [
   
   map`
