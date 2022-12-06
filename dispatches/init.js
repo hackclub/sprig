@@ -88,8 +88,8 @@ export async function init(args, state) {
   const mobile = isMobile();
   if (mobile) {
     const text = state.codemirror.state.doc.toString(); 
-    console.log(text);
     dispatch("RENDER_MOBILE", { text });
+    sizeGameCanvas();
   }
 }
 
