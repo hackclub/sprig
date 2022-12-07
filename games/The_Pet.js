@@ -1,5 +1,5 @@
 /*
-@title: The_pet
+@title: The_Pet
 @author: wyn-cmd
 */
 
