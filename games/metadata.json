@@ -1326,5 +1326,13 @@
     "img": "bbbbbb",
     "tags": ["puzzle"],
     "addedOn": "2022-12-06"
+  },
+  {
+    "filename": "Pac_Man",
+    "title": "Pac_Man",
+    "author": "Nico Koundakjian",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
   }
 ]
