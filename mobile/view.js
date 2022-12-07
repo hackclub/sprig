@@ -1,5 +1,6 @@
 import { html } from "../libs/uhtml.js";
 import { evalGameScript } from "../engine/evalGameScript.js";
+import { sizeGameCanvas } from "../dispatches/sizeGameCanvas.js";
 
 export const view = (text) => html`
   <style>
@@ -109,49 +110,49 @@ export const view = (text) => html`
       background: grey;
     }
 
-    .input-button-w {
+    .input-button-i {
       position: absolute;
       top: calc(50% - 75px);
       right: calc(5% + 25px);
     }
 
-    .input-button-a {
+    .input-button-j {
       position: absolute;
       top: calc(50% - 25px);
       right: calc(5% + 75px);
     }
 
-    .input-button-d {
+    .input-button-l {
       position: absolute;
       top: calc(50% - 25px);
       right: calc(5% - 25px);
     }
 
-    .input-button-s {
+    .input-button-k {
       position: absolute;
       top: calc(50% + 25px);
       right: calc(5% + 25px);;
     }
 
-    .input-button-i {
+    .input-button-w {
       position: absolute;
       top: calc(50% - 75px);
       left: calc(5% + 25px);
     }
 
-    .input-button-l {
+    .input-button-d {
       position: absolute;
       top: calc(50% - 25px);
       left: calc(5% + 75px);
     }
 
-    .input-button-j {
+    .input-button-a {
       position: absolute;
       top: calc(50% - 25px);
       left: calc(5% - 25px);
     }
 
-    .input-button-k {
+    .input-button-s {
       position: absolute;
       top: calc(50% + 25px);
       left: calc(5% + 25px);;
@@ -185,7 +186,6 @@ export const view = (text) => html`
       </div>
       <div class="game-canvas-container">
         <canvas class="game-canvas"></canvas>
-        <canvas class="game-text"></canvas>
       </div>
       <div class="wasd">
         <div class="mobile-button no-select input-button-w" @pointerdown=${() => dispatchKey("w")}>w</div>
@@ -198,6 +198,7 @@ export const view = (text) => html`
 `
 
 function runGame(text) {
+  sizeGameCanvas();
   // wiggle the canvas window
   const gameCanvas = document.querySelector(".game-canvas");
   const gameCanvasContainer = document.querySelector(".game-canvas-container");
