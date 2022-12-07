@@ -1326,5 +1326,29 @@
     "img": "bbbbbb",
     "tags": ["puzzle"],
     "addedOn": "2022-12-06"
+  },
+  {
+    "filename": "Pac_Man",
+    "title": "Pac_Man",
+    "author": "Nico Koundakjian",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Stop",
+    "title": "Stop",
+    "author": "wyn-cmd",
+    "img": "Stop",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "The_Pet",
+    "title": "The_Pet",
+    "author": "wyn-cmd",
+    "img": "The_Pet",
+    "tags": ["simulation"],
+    "addedOn": "2022-12-07"
   }
 ]
