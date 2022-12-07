@@ -1310,5 +1310,45 @@
     "img": "Ninja_In_A_Bear_Trap_Factory",
     "tags": ["puzzle"],
     "addedOn": "2022-12-04"
+  },
+  {
+    "filename": "niabtf2",
+    "title": "Ninja_In_A_Bear_Trap_Factory_2",
+    "author": "Matt The Banana",
+    "img": "niabtf2",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-06"
+  },
+  {
+    "filename": "bbbbbb",
+    "title": "bbbbbb",
+    "author": "hoggie",
+    "img": "bbbbbb",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-06"
+  },
+  {
+    "filename": "Pac_Man",
+    "title": "Pac_Man",
+    "author": "Nico Koundakjian",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Stop",
+    "title": "Stop",
+    "author": "wyn-cmd",
+    "img": "Stop",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "The_Pet",
+    "title": "The_Pet",
+    "author": "wyn-cmd",
+    "img": "The_Pet",
+    "tags": ["simulation"],
+    "addedOn": "2022-12-07"
   }
 ]
