@@ -36,7 +36,7 @@ Just drop the .uf2 in there, and you're good to go! The device should immediatel
 
 ## Okay but what about MY game?
 
-![drop!](./assets/upload_button.png)
+![drop!](https://cloud-7fl999odl-hack-club-bot.vercel.app/0screenshot3.png)
 
 Open up your game in the editor, click the upload button, and select the Sprig from the menu (again, like a USB device.)
 

@@ -13,6 +13,8 @@ If you ever need help, have ideas, or want to meet other game-makers, join the c
 
 Run games by hitting the `Run` button or pressing `shift+enter`.
 
+The best way to save games is to download the `js` file. Some work is cached in the browser but if you lose your browser history or change computers it will be lost.
+
 ## Level Design
 
 Sprig games are made up of grids of square tiles.

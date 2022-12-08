@@ -304,7 +304,7 @@ onInput("l", () => {
 
 onInput("k", () => {
     const currentLevel = levels[levelNumber];
-    setMap(currentLevel);
+    if(currentLevel !== undefined) setMap(currentLevel);
 
 })
 

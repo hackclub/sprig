@@ -829,7 +829,7 @@ const intervalID = setInterval(() => {
   nextTextureFrame(sprites.cursor);
   update_texture_map();
 }, 500);
-
+/*
 function cleanup() {
   clearInterval(intervalID);
   setPaused(true);
@@ -837,7 +837,7 @@ function cleanup() {
 }
 
 document.querySelector(".run").addEventListener("click", cleanup);
-
+*/
 var simulation_running = false;
 
 var continous_simulation = function () {
