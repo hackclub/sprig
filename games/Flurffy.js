@@ -2,7 +2,6 @@
 @title: Flurffy
 @author: Lucas
 */
-
 const flurffy = "f"
 const canoup = "m"
 const canodown = "o"
@@ -11,9 +10,8 @@ const canotd = "d"
 const bg = "b"
 const canof = "n"
 const morte = "h"
-
 setLegend(
-  [ flurffy, bitmap`
+	[flurffy, bitmap`
 ................
 .......00000....
 .....00660220...
@@ -30,7 +28,7 @@ setLegend(
 ................
 ................
 ................`],
-  [ canoup, bitmap`
+	[canoup, bitmap`
 2044444444444D02
 2044444444444D02
 2044444444444D02
@@ -47,7 +45,7 @@ setLegend(
 2044444444444D02
 2044444444444D02
 2044444444444D02`],
-  [ canodown, bitmap`
+	[canodown, bitmap`
 20D4444444444402
 20D4444444444402
 20D4444444444402
@@ -64,7 +62,7 @@ setLegend(
 20D4444444444402
 20D4444444444402
 20D4444444444402`],
-  [ canot, bitmap`
+	[canot, bitmap`
 0000000000000000
 04444444444444D0
 04444444444444D0
@@ -81,7 +79,7 @@ setLegend(
 2044444444444D02
 2044444444444D02
 2044444444444D02`],
-  [ canotd, bitmap`
+	[canotd, bitmap`
 2044444444444D02
 2044444444444D02
 2044444444444D02
@@ -98,7 +96,7 @@ setLegend(
 04444444444444D0
 04444444444444D0
 0000000000000000`],
-  [ canof, bitmap`
+	[canof, bitmap`
 0000002222000000
 0777700000077770
 0777707777077770
@@ -115,7 +113,7 @@ setLegend(
 0777707777077770
 0777700000077770
 0000002222000000`],
-  [ bg, bitmap`
+	[bg, bitmap`
 2222222222222222
 2222222222222222
 2222222222222222
@@ -131,42 +129,39 @@ setLegend(
 2222222222222222
 2222222222222222
 2222222222222222
-2222222222222222`],
-);
-
+2222222222222222`], );
 setSolids([flurffy, canoup, canodown, canot, canotd]);
-
 let level = 0;
 const levels = [
-  map`
+	map`
 bmbmbm
 bmbmbm
 bdbdbd
 fbbbbn
 btbtbt
 bmbmbm`,
-  map`
+	map`
 fbddmm
 tbbbmm
 mtbbdm
 mmtbbm
 mmmtbd
 mmmbbn`,
-  map`
+	map`
 mbmmbd
 mbmmbn
 mbddbt
 dbbbbm
 fbtbbm
 ttmbtm`,
-  map`
+	map`
 mbmmmm
 mbddmm
 mbbbbm
 dbtbdd
 fbmbbn
 ttmtbt`,
-  map`
+	map`
 bbddmbddd
 bbbbmbbbb
 bbtbmbtbt
@@ -176,7 +171,7 @@ bbmbmbmbm
 bbmbdbmbd
 fbmbbbmbn
 btmbttmbt`,
-  map`
+	map`
 ddmddmbddm
 fbm.bmbbbb
 tbdbbmbtbm
@@ -187,7 +182,7 @@ mmmmbmbmbm
 mmmmbdbmbd
 mmmmbbbmbn
 mmmmbttmbt`,
-  map`
+	map`
 ddmddmbdddmmmm
 fbmbbmbbbbmmmm
 tbdbbmbtbtmmmm
@@ -203,48 +198,49 @@ mmmmmmmmmmtbbn
 mmmmmmmmmmmtbt
 mmmmmmmmmmmmtm`,
 ];
-
 setMap(levels[level]);
-
 onInput("w", () => {
-  getFirst(flurffy).y -= 1;
+	if (!getFirst(flurffy)) return;
+	getFirst(flurffy).y -= 1;
 });
-
 onInput("s", () => {
-  getFirst(flurffy).y += 1;
+	if (!getFirst(flurffy)) return;
+	getFirst(flurffy).y += 1;
 });
-
 onInput("a", () => {
-  getFirst(flurffy).x -= 1;
+	if (!getFirst(flurffy)) return;
+	getFirst(flurffy).x -= 1;
 });
-
 onInput("d", () => {
-  getFirst(flurffy).x += 1;
+	if (!getFirst(flurffy)) return;
+	getFirst(flurffy).x += 1;
 });
 var tempototal = 35;
-    var tempodescendo = setInterval(function(){
-    tempototal--;
-    clearText();
-    addText(""+tempototal, { y: 1 , color: color`3` });
-      if(tempototal <= 0){
-        clearTile(getFirst(flurffy).x,getFirst(flurffy).y);
-        clearInterval(tempodescendo);
-        clearText()
-    }
-    },1000);
-
+var tempodescendo = setInterval(function() {
+	tempototal--;
+	clearText();
+	addText("" + tempototal, {
+		y: 1,
+		color: color`3`
+	});
+	if (tempototal <= 0) {
+		clearTile(getFirst(flurffy).x, getFirst(flurffy).y);
+		clearInterval(tempodescendo);
+		clearText()
+	}
+}, 1000);
 afterInput(() => {
-  const atual = tilesWith( flurffy, canof).length;
-  const f2 = tilesWith(canof).length;
-   if (atual === f2) {
-    level = level + 1;
-
-    const faseAtual = levels[level];
-
-    if (faseAtual !== undefined) {
-      setMap(faseAtual);
-    } else {
-      addText("congrats, you win!")
-    }
-  }
+	const atual = tilesWith(flurffy, canof).length;
+	const f2 = tilesWith(canof).length;
+	if (atual === f2) {
+		level = level + 1;
+		const faseAtual = levels[level];
+		if (faseAtual !== undefined) {
+			setMap(faseAtual);
+		} else {
+			clearText();
+			addText("congrats, you win!")
+			clearInterval(tempodescendo);
+		}
+	}
 });
