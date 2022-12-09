@@ -578,7 +578,7 @@ afterInput(() => {
     } else if (level == 2) {
       level = 0
       setMap(levels[level]);
-      setBackground(snow);
+      setBackground(grass);
       mapNat = getMapV2();
       setMapV2(trimMapV2(px-5, py-4, 10, 8, mapNat));
     }
