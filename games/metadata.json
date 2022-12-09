@@ -1366,5 +1366,13 @@
     "img": "Invisible_Maze",
     "tags": ["puzzle"],
     "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Worldcraft",
+    "title": "Worldcraft",
+    "author": "adadyer",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-09"
   }
 ]
