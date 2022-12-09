@@ -7,12 +7,17 @@ Instructions:
 You control the jet. You must get to the yellow square
 and blast it with "J" to open a path. If you aren't in
 front of the open path by the time the green dot on the
-left hits the top (representing your distance from the wall)
+right hits the top (representing your distance from the wall)
 you crash.
 
 Controls:
 WASD - move
 J - blast (only works on the yellow square)
+
+Feel free to change the speed at the bottom of the program!
+The lower the number, the faster it goes!
+I found 300 to be pretty quick and 250 a real challenge.
+The preset 550 is nice and calm to get you used to the game.
 */
 
 const success = tune`
