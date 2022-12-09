@@ -1350,5 +1350,21 @@
     "img": "The_Pet",
     "tags": ["simulation"],
     "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Temple",
+    "title": "Temple",
+    "author": "Wynston",
+    "img": "Temple",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Invisible_Maze",
+    "title": "Invisible_Maze",
+    "author": "Ryan Qin",
+    "img": "Invisible_Maze",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
   }
 ]
