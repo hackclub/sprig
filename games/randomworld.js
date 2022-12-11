@@ -2307,6 +2307,7 @@ function changeHp(delta_hp) {
 
 // Clear all intervals and display death screen with score
 function death() {
+  stopMusic();
   playTune(death_sound);
   closeInventory();
   clearInterval(enemy_update_interval);
