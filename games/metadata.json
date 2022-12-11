@@ -1390,5 +1390,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-12-10"
+  },
+  {
+    "filename": "randomworld",
+    "title": "randomworld",
+    "author": "Wojtek Widomski",
+    "img": "randomworld",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-11"
   }
 ]
