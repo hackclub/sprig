@@ -57,6 +57,18 @@ Make a game
 
 People learn best when they make things that they care about, which they can then share with others. This type of learning philosophy is called constructionism, and Sprig is a type of microworld. A microworld is an environment where you can discover programming by using it to express yourself. 
 
+## Tutorials
+
+Check out some [Sprig workshops here](https://workshops.hackclub.com#sprig) or watch some short videos to get acquainted with Sprig.
+
+This video shows a quick overview of the editor:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/GEbDRR_cqJI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+This video shows making a simple example "game":
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/1UTLS4aO9bQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ## Development
 
 Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) where you can join the development discussion and ask for help, and to learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs).
