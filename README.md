@@ -52,14 +52,13 @@ Make a game
 
 ***Only teenagers and younger can receive Sprigs!*** All are welcome to submit to the [gallery](https://sprig.hackclub.com/gallery) though.
 
-[Make your first Sprig game!](https://editor.sprig.hackclub.com/?file=https://raw.githubusercontent.com/hackclub/sprig/main/games/getting_started.js)
 ## Philosophy
 
 People learn best when they make things that they care about, which they can then share with others. This type of learning philosophy is called constructionism, and Sprig is a type of microworld. A microworld is an environment where you can discover programming by using it to express yourself. 
 
 ## Tutorials
 
-Check out some [Sprig workshops here](https://workshops.hackclub.com#sprig) or watch some short videos to get acquainted with Sprig.
+To get started you can follow [this challenge in the editor](https://editor.sprig.hackclub.com/?file=https://raw.githubusercontent.com/hackclub/sprig/main/games/getting_started.js), check out some [Sprig workshops](https://workshops.hackclub.com#sprig) or watch some short videos to get acquainted with Sprig:
 
 [This video shows a quick overview of the editor.](https://youtu.be/GEbDRR_cqJI)
 
