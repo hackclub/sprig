@@ -1310,5 +1310,93 @@
     "img": "Ninja_In_A_Bear_Trap_Factory",
     "tags": ["puzzle"],
     "addedOn": "2022-12-04"
+  },
+  {
+    "filename": "niabtf2",
+    "title": "Ninja_In_A_Bear_Trap_Factory_2",
+    "author": "Matt The Banana",
+    "img": "niabtf2",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-06"
+  },
+  {
+    "filename": "bbbbbb",
+    "title": "bbbbbb",
+    "author": "hoggie",
+    "img": "bbbbbb",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-06"
+  },
+  {
+    "filename": "Pac_Man",
+    "title": "Pac_Man",
+    "author": "Nico Koundakjian",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Stop",
+    "title": "Stop",
+    "author": "wyn-cmd",
+    "img": "Stop",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "The_Pet",
+    "title": "The_Pet",
+    "author": "wyn-cmd",
+    "img": "The_Pet",
+    "tags": ["simulation"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Temple",
+    "title": "Temple",
+    "author": "Wynston",
+    "img": "Temple",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Invisible_Maze",
+    "title": "Invisible_Maze",
+    "author": "Ryan Qin",
+    "img": "Invisible_Maze",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Worldcraft",
+    "title": "Worldcraft",
+    "author": "adadyer",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-09"
+  },
+  {
+    "filename": "Maze_Runner",
+    "title": "Maze_Runner",
+    "author": "Alan Alwakeel, Samuel Sapatla, Suhaan Palakamshetty, Martin Beythoon",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-10"
+  },
+  {
+    "filename": "cricket_frenzy",
+    "title": "cricket_frenzy",
+    "author": "aryan.k",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-10"
+  },
+  {
+    "filename": "randomworld",
+    "title": "randomworld",
+    "author": "Wojtek Widomski",
+    "img": "randomworld",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-11"
   }
 ]
