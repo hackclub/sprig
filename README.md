@@ -61,13 +61,9 @@ People learn best when they make things that they care about, which they can the
 
 Check out some [Sprig workshops here](https://workshops.hackclub.com#sprig) or watch some short videos to get acquainted with Sprig.
 
-This video shows a quick overview of the editor:
+[This video shows a quick overview of the editor.](https://youtu.be/GEbDRR_cqJI)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/GEbDRR_cqJI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-This video shows making a simple example "game":
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/1UTLS4aO9bQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[This video shows making a simple example "game".](https://youtu.be/1UTLS4aO9bQ)
 
 ## Development
 
