@@ -4,17 +4,19 @@
 
 ![Parts of game console laid out on a wooden table](https://cloud-6po09tv9d-hack-club-bot.vercel.app/4everything.jpg)
 
-- 1x Sprig PCB
-- 1x LCD screen
-- 2x spacers (for LCD screen)
-- 1x Raspberry Pi Pico
-- 2x backings (with D-pad cutouts)
-- 2x backings (flat)
-- 8x buttons
-- 2x M2\*16 screws (for the LCD screen)
-- 8x M2\*10 screws (for the backings)
-- 10x M2 Nuts
-- Allen key
+| Quantity | Item                                                                    |
+| -------- | ----------------------------------------------------------------------- |
+| 1        | Sprig PCB                                                               |
+| 1        | LCD screen                                                              |
+| 1        | Raspberry Pi Pico                                                       |
+| 4        | clear backings (2 with D-pad cutouts, 2 solid)                          |
+| 1        | bag of 10 tactile button switches                                       |
+| 1        | bag of hardware for screen (2 spacers, 2 M\*14 screws, 2 hex nuts)\*    |
+| 1        | bag of hardware for backings (8 M2\*10 screws, 8 hex nuts, allen key)\* |
+| 1        | adapter or micro-USB cable                                              |
+| 1        | bag of 2 AAA batteries                                                  |
+
+\* May include extra hardware.
 
 ## Instructions
 
@@ -48,6 +50,6 @@
 
 ![Photo of a PCB](https://cloud-obltnnp51-hack-club-bot.vercel.app/0pico.jpg)
 
-7. Put in 2 AAA batteries (not included).
+1. Put in 2 AAA batteries.
 
 ![Photo of an assembled handheld game console](https://cloud-93zuth77c-hack-club-bot.vercel.app/0img_1613.jpg)
