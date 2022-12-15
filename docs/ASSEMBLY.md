@@ -28,13 +28,13 @@
 
 ![Photo of an LCD assembled with screws and spacers](https://cloud-6po09tv9d-hack-club-bot.vercel.app/1screws-through-spacers.jpg)
 
-3. Put buttons in corresponding holes on each side of the board.
+3. Put 4 buttons in corresponding holes on each side of the board. You'll have 2 extra buttons.
 
 ![Photo of a single button on a PCB](https://cloud-6po09tv9d-hack-club-bot.vercel.app/0singlebutton.jpg)
 
 ![Photo of a PCB with an LCD and 8 buttons](https://cloud-obltnnp51-hack-club-bot.vercel.app/5all-buttons.jpg)
 
-4. Turn the board over, and put the clear backings on. The first piece should have a D-pad cutout; the smooth piece should be on top. Make sure to peel off the protective plastic film on the front and back of each piece.
+4. Turn the board over, and put the clear backings on. The first piece should have a D-pad cutout; the solid piece should be on top. The screw holes and D-pad cutout may need to be cleared out. Make sure to peel off the protective film on the front and back of each piece.
 
 ![Photo of a protective plastic film being peeled off of an acrylic piece](https://cloud-6po09tv9d-hack-club-bot.vercel.app/3peel-plastic.jpg)
 
@@ -42,7 +42,7 @@
 
 ![Photo of two plastic pieces stacked atop a PCB](https://cloud-obltnnp51-hack-club-bot.vercel.app/3backing2.jpg)
 
-5. Put screws in holes and add nuts on the top side of the board.
+5. Put screws in holes and add nuts on the top side of the board. Tighten using the allen key provided.
 
 ![Four screws securing 2 pieces of plastic to a PCB](https://cloud-obltnnp51-hack-club-bot.vercel.app/2backing-withscrews.jpg)
 
@@ -50,6 +50,6 @@
 
 ![Photo of a PCB](https://cloud-obltnnp51-hack-club-bot.vercel.app/0pico.jpg)
 
-1. Put in 2 AAA batteries.
+7. Put in 2 AAA batteries.
 
 ![Photo of an assembled handheld game console](https://cloud-93zuth77c-hack-club-bot.vercel.app/0img_1613.jpg)
