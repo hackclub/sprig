@@ -1,6 +1,6 @@
 /*
 @title: Maze Running
-@author:bigEthan
+@author: bigEthan
 
 */
 const wall = "w";
