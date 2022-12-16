@@ -1398,5 +1398,13 @@
     "img": "randomworld",
     "tags": ["puzzle"],
     "addedOn": "2022-12-11"
+  },
+  {
+    "filename": "sprig_dodge",
+    "title": "sprig_dodge",
+    "author": "Lucas and samliu",
+    "img": "",
+    "tags": ["tutorial", "begginer"],
+    "addedOn": "2022-12-15"
   }
 ]
