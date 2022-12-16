@@ -15,8 +15,8 @@ Below are instructions for assembling your Sprig console.
 | 1        | Raspberry Pi Pico                                                       |
 | 4        | clear backings (2 with D-pad cutouts, 2 solid)                          |
 | 1        | bag of 10 tactile button switches                                       |
-| 1        | bag of hardware for screen (2 spacers, 2 M\*14 screws, 2 hex nuts)\*    |
-| 1        | bag of hardware for backings (8 M2\*10 screws, 8 hex nuts, allen key)\* |
+| 1        | bag of hardware for screen (2 spacers, 2 M\*14mm screws, 2 hex nuts)\*    |
+| 1        | bag of hardware for backings (8 M2\*10mm screws, 8 hex nuts, allen key)\* |
 | 1        | adapter or micro-USB cable                                              |
 | 1        | bag of 2 AAA batteries                                                  |
 
