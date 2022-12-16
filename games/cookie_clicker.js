@@ -41,6 +41,8 @@ const bigcookie = "b"
 const shop = "s"
 const cpcShop = "z"
 const cursor = "m"
+const goldCookie ="g"
+const bGoldCookie = "r"
 setLegend(
   [ cookie, bitmap`
 ................
@@ -126,7 +128,41 @@ CCCCCCCCCCCCCCCC
 ...0....0220....
 ...0....0220....
 .0.0.....00.....
-.000............`]
+.000............`],
+  [ goldCookie, bitmap`
+................
+................
+.....FFFFFFF....
+...FF6660960F...
+...F606660660F..
+..F6666066969F..
+..F6066966906F..
+..F6696660666F..
+..F0960606096F..
+..F0666066666F..
+..F6606690666F..
+...F69660669FF..
+...FF6696966F...
+....FFFFFFFF....
+................
+................`],
+  [ bGoldCookie, bitmap`
+..FFFFFFFFFFFF..
+.FFFFFFFFFFFFFF.
+FFFF66660666FFFF
+FFF6666606666FFF
+FF669666696666FF
+FF660696669666FF
+FF666606960096FF
+FF696060006006FF
+FF600669960966FF
+FF660609669666FF
+FF660090966666FF
+FF666666669666FF
+FFF6966090666FFF
+FFFF66666666FFFF
+.FFFFFFFFFFFFFF.
+..FFFFFFFFFFFF..`]
 )
 
 const buy = tune`
@@ -219,16 +255,26 @@ function addMoneyOnce() {
 }
 
 function makeSmallCookie() {
-  getFirst(char).type = "c"
-  char = "c"
+  if(money > 10000) {
+        getFirst(char).type = "g"
+        char = "g"
+  } else {
+        getFirst(char).type = "c"
+        char = "c"
+  }
 }
 
 function makeBigCookie() {
-  if(char === "c") {
+  if(char === "c" || char === "g") {
     let c = getFirst(char).type
     if(c != undefined) {
-      getFirst(char).type = "b"
-      char = "b"
+        if(money > 10000) {
+          getFirst(char).type = "r"
+          char = "r"
+        } else {
+          getFirst(char).type = "b"
+          char = "b"
+        }
     }
     setTimeout(makeSmallCookie, 100);
   }
