@@ -30,7 +30,10 @@
     let cpcStart = AMOUNT OF CPC UPGRADES GAVEN TO THE PLAYER AT THE START OF THE GAME
     let char = VARIABLE USED FOR SPRITE CHANGING MECHANISM, char = "c" MEANING THE SPRITE IS A SMALL COOKIE
     char = "b" MEANING THE SPRITE IS A BIG COOKIE
-    const playback = MAIN MELODY OF THE GAME PLAYING INFINITELY (CHANGE UNDER const game AT LINE 137)
+    const playback = MAIN MELODY OF THE GAME PLAYING INFINITELY (CHANGE UNDER const game AT LINE 249)
+    const goldReq = MONEY REQUIREMENT TO UNLOCK GOLDEN COOKIE
+    const diamondReq = MONEY REQUIREMENT TO UNLOCK DIAMOND COOKIE
+    const emeraldReq = MONEY REQUIREMENT TO UNLOCK EMERALD COOKIE
 
 HAVE FUN PLAYING
 AND HACKING THE GAME!
@@ -43,6 +46,11 @@ const cpcShop = "z"
 const cursor = "m"
 const goldCookie ="g"
 const bGoldCookie = "r"
+const diamondCookie = "d"
+const bDiamondCookie = "t"
+const emeraldCookie = "e"
+const bEmeraldCookie = "q"
+
 setLegend(
   [ cookie, bitmap`
 ................
@@ -162,7 +170,75 @@ FF666666669666FF
 FFF6966090666FFF
 FFFF66666666FFFF
 .FFFFFFFFFFFFFF.
-..FFFFFFFFFFFF..`]
+..FFFFFFFFFFFF..`],
+  [ diamondCookie, bitmap`
+................
+................
+.....5555555....
+...5577709705...
+...57077707705..
+..577770779795..
+..570779779075..
+..577977707775..
+..509707070975..
+..507770777775..
+..577077907775..
+...57977077955..
+...5577979775...
+....55555555....
+................
+................`],
+  [ bDiamondCookie, bitmap`
+..555555555555..
+.55555555555555.
+5555777707775555
+5557777707777555
+5577977779777755
+5577079777977755
+5577770797009755
+5579707000700755
+5570077997097755
+5577070977977755
+5577009097777755
+5577777777977755
+5557977090777555
+5555777777775555
+.55555555555555.
+..555555555555..`],
+  [ emeraldCookie, bitmap`
+................
+................
+....DDDDDDDDD...
+...DD4440940DD..
+...D404440440D..
+..D4444044949D..
+..D4044944904D..
+..D4494440444D..
+..D0940404094D..
+..D0444044444D..
+..D4404490444D..
+..DD49440449DD..
+...DD4494944D...
+....DDDDDDDD....
+................
+................`],
+  [ bEmeraldCookie, bitmap`
+..DDDDDDDDDDDD..
+.DDDDDDDDDDDDDD.
+DDDD44440444DDDD
+DDD4444404444DDD
+DD449444494444DD
+DD440494449444DD
+DD444404940094DD
+DD494040004004DD
+DD400449940944DD
+DD440409449444DD
+DD440090944444DD
+DD444444449444DD
+DDD4944090444DDD
+DDDD44444444DDDD
+.DDDDDDDDDDDDDD.
+..DDDDDDDDDDDD..`]
 )
 
 const buy = tune`
@@ -223,6 +299,9 @@ let cpcOwned = 1;
 let cpsStart = 1;
 let cpcStart = 1;
 let char = "c";
+const goldReq = 10000; 
+const diamondReq = 50000;
+const emeraldReq = 100000;
 const playback = playTune(game, Infinity)
 
 // ----- GAME FUNCTIONS ----- //
@@ -255,25 +334,37 @@ function addMoneyOnce() {
 }
 
 function makeSmallCookie() {
-  if(money > 10000) {
+  if(money > emeraldReq) {
+        getFirst(char).type = "e"
+        char = "e"
+  } else if(money > diamondReq) {
+        getFirst(char).type = "d"
+        char = "d"
+  } else if(money > goldReq) {
         getFirst(char).type = "g"
         char = "g"
   } else {
-        getFirst(char).type = "c"
-        char = "c"
+      getFirst(char).type = "c"
+      char = "c"
   }
 }
 
 function makeBigCookie() {
-  if(char === "c" || char === "g") {
+  if(char === "c" || char === "g" || char === "e" || char === "d") {
     let c = getFirst(char).type
     if(c != undefined) {
-        if(money > 10000) {
-          getFirst(char).type = "r"
-          char = "r"
+        if(money > emeraldReq) {
+            getFirst(char).type = "q"
+            char = "q"
+        } else if(money > diamondReq) {
+            getFirst(char).type = "t"
+            char = "t"
+        } else if(money > goldReq) {
+            getFirst(char).type = "r"
+            char = "r"
         } else {
-          getFirst(char).type = "b"
-          char = "b"
+            getFirst(char).type = "b"
+            char = "b"
         }
     }
     setTimeout(makeSmallCookie, 100);
