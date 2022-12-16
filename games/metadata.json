@@ -1414,5 +1414,13 @@
     "img": "cookie_clicker",
     "tags": ["endless"],
     "addedOn": "2022-12-16"
+  },
+  {
+    "filename": "lights_out",
+    "title": "lights_out",
+    "author": "StarGazer1258 (Nathaniel Johns)",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-16"
   }
 ]
