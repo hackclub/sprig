@@ -1430,5 +1430,13 @@
     "img": "BigButton",
     "tags": [],
     "addedOn": "2022-12-17"
+  },
+  {
+    "filename": "dvd_logo_simulator",
+    "title": "DVD logo simulator",
+    "author": "the456gamer",
+    "img": "dvd_logo_simulator",
+    "tags": ["simulation", "demo", "endless"],
+    "addedOn": "2022-12-18"
   }
 ]
