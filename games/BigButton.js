@@ -63,7 +63,6 @@ setLegend(
 .....77777777...
 ......777777....
 ................`]
-
 );
 
 function sleep(milliseconds) {
@@ -124,6 +123,7 @@ addText("Press w\nto start!", { x: 3, y: 1, color: color`3`});
 addText("Press the\nspecified\nbutton when the\nscreen turns\nto red", { x: 3, y: 5, color: color`H`});
 var button = "";
 var startTime = new Date().getTime();
+
 onInput("w", () => {
   if (!hasStartedGame) {
     hasStartedGame = true;
@@ -142,7 +142,6 @@ onInput("w", () => {
     clearTile(1,1);
               setTimeout(() => {  
               button = buttonOptions.random();
-                button = "w";
                 addText(button, {x: 9, y: 7, color: color`7`});
                 setBackground("a");
                startTime = new Date().getTime();
@@ -155,11 +154,10 @@ onInput("w", () => {
     }, 500);
   } else {
     clearText();
-    clearTile(1, 1);
+    setBackground("b");
     if (button == "w") {
       const endTime = new Date().getTime();
       const mseconds = endTime - startTime;
-      setBackground("b");
       addText("Time:  " + mseconds + "ms", { x: 3, y: 7, color: color`4`});
       if (mseconds < 70) {
         addText("Fast!", { x: 3, y: 2, color: color`8`});
@@ -174,4 +172,151 @@ onInput("w", () => {
     addText("Press w\nto play again", { x: 3, y: 11, color: color`H`});
     hasStartedGame = false;
   }
+});
+
+onInput("a", () => {
+  clearText();
+  setBackground("b");
+	if (button == "a") {
+	  const endTime = new Date().getTime();
+	  const mseconds = endTime - startTime;
+	  addText("Time:  " + mseconds + "ms", { x: 3, y: 7, color: color`4`});
+	  if (mseconds < 70) {
+		addText("Fast!", { x: 3, y: 2, color: color`8`});
+	  } else {
+	  addText("Congrats!\nYou're slower\nthan mud!", { x: 3, y: 2, color: color`3`});
+	}
+	} else {
+	  // Wrong button
+	  addText("Wrong Button!", { x: 3, y: 1, color: color`3`});
+	}
+	
+	addText("Press w\nto play again", { x: 3, y: 11, color: color`H`});
+	hasStartedGame = false;
+});
+
+onInput("s", () => {
+  clearText();
+  setBackground("b");
+	if (button == "s") {
+	  const endTime = new Date().getTime();
+	  const mseconds = endTime - startTime;
+	  addText("Time:  " + mseconds + "ms", { x: 3, y: 7, color: color`4`});
+	  if (mseconds < 70) {
+		addText("Fast!", { x: 3, y: 2, color: color`8`});
+	  } else {
+	  addText("Congrats!\nYou're slower\nthan mud!", { x: 3, y: 2, color: color`3`});
+	}
+	} else {
+	  // Wrong button
+	  addText("Wrong Button!", { x: 3, y: 1, color: color`3`});
+	}
+	
+	addText("Press w\nto play again", { x: 3, y: 11, color: color`H`});
+	hasStartedGame = false;
+});
+
+onInput("d", () => {
+  clearText();
+  setBackground("b");
+	if (button == "d") {
+	  const endTime = new Date().getTime();
+	  const mseconds = endTime - startTime;
+	  addText("Time:  " + mseconds + "ms", { x: 3, y: 7, color: color`4`});
+	  if (mseconds < 70) {
+		addText("Fast!", { x: 3, y: 2, color: color`8`});
+	  } else {
+	  addText("Congrats!\nYou're slower\nthan mud!", { x: 3, y: 2, color: color`3`});
+	}
+	} else {
+	  // Wrong button
+	  addText("Wrong Button!", { x: 3, y: 1, color: color`3`});
+	}
+	
+	addText("Press w\nto play again", { x: 3, y: 11, color: color`H`});
+	hasStartedGame = false;
+});
+
+onInput("i", () => {
+  clearText();
+  setBackground("b");
+	if (button == "i") {
+	  const endTime = new Date().getTime();
+	  const mseconds = endTime - startTime;
+	  addText("Time:  " + mseconds + "ms", { x: 3, y: 7, color: color`4`});
+	  if (mseconds < 70) {
+		addText("Fast!", { x: 3, y: 2, color: color`8`});
+	  } else {
+	  addText("Congrats!\nYou're slower\nthan mud!", { x: 3, y: 2, color: color`3`});
+	}
+	} else {
+	  // Wrong button
+	  addText("Wrong Button!", { x: 3, y: 1, color: color`3`});
+	}
+	
+	addText("Press w\nto play again", { x: 3, y: 11, color: color`H`});
+	hasStartedGame = false;
+});
+
+onInput("j", () => {
+  clearText();
+  setBackground("b");
+	if (button == "j") {
+	  const endTime = new Date().getTime();
+	  const mseconds = endTime - startTime;
+	  addText("Time:  " + mseconds + "ms", { x: 3, y: 7, color: color`4`});
+	  if (mseconds < 70) {
+		addText("Fast!", { x: 3, y: 2, color: color`8`});
+	  } else {
+	  addText("Congrats!\nYou're slower\nthan mud!", { x: 3, y: 2, color: color`3`});
+	}
+	} else {
+	  // Wrong button
+	  addText("Wrong Button!", { x: 3, y: 1, color: color`3`});
+	}
+	
+	addText("Press w\nto play again", { x: 3, y: 11, color: color`H`});
+	hasStartedGame = false;
+});
+
+onInput("k", () => {
+  clearText();
+  setBackground("b");
+	if (button == "k") {
+	  const endTime = new Date().getTime();
+	  const mseconds = endTime - startTime;
+	  addText("Time:  " + mseconds + "ms", { x: 3, y: 7, color: color`4`});
+	  if (mseconds < 70) {
+		addText("Fast!", { x: 3, y: 2, color: color`8`});
+	  } else {
+	  addText("Congrats!\nYou're slower\nthan mud!", { x: 3, y: 2, color: color`3`});
+	}
+	} else {
+	  // Wrong button
+	  addText("Wrong Button!", { x: 3, y: 1, color: color`3`});
+	}
+	
+	addText("Press w\nto play again", { x: 3, y: 11, color: color`H`});
+	hasStartedGame = false;
+});
+
+onInput("l", () => {
+  clearText();
+  setBackground("b");
+	if (button == "l") {
+	  const endTime = new Date().getTime();
+	  const mseconds = endTime - startTime;
+	  addText("Time:  " + mseconds + "ms", { x: 3, y: 7, color: color`4`});
+	  if (mseconds < 70) {
+		addText("Fast!", { x: 3, y: 2, color: color`8`});
+	  } else {
+	  addText("Congrats!\nYou're slower\nthan mud!", { x: 3, y: 2, color: color`3`});
+	}
+	} else {
+	  // Wrong button
+	  addText("Wrong Button!", { x: 3, y: 1, color: color`3`});
+	}
+	
+	addText("Press w\nto play again", { x: 3, y: 11, color: color`H`});
+	hasStartedGame = false;
 });
