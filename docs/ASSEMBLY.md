@@ -8,17 +8,17 @@ Below are instructions for assembling your Sprig console.
 
 ![Parts of game console laid out on a wooden table](https://cloud-6po09tv9d-hack-club-bot.vercel.app/4everything.jpg)
 
-| Quantity | Item                                                                    |
-| -------- | ----------------------------------------------------------------------- |
-| 1        | Sprig PCB                                                               |
-| 1        | LCD screen                                                              |
-| 1        | Raspberry Pi Pico                                                       |
-| 4        | clear backings (2 with D-pad cutouts, 2 solid)                          |
-| 1        | bag of 10 tactile button switches                                       |
+| Quantity | Item                                                                      |
+| -------- | ------------------------------------------------------------------------- |
+| 1        | Sprig PCB                                                                 |
+| 1        | LCD screen                                                                |
+| 1        | Raspberry Pi Pico                                                         |
+| 4        | clear backings (2 with D-pad cutouts, 2 solid)                            |
+| 1        | bag of 10 tactile button switches                                         |
 | 1        | bag of hardware for screen (2 spacers, 2 M\*14mm screws, 2 hex nuts)\*    |
 | 1        | bag of hardware for backings (8 M2\*10mm screws, 8 hex nuts, allen key)\* |
-| 1        | adapter or micro-USB cable                                              |
-| 1        | bag of 2 AAA batteries                                                  |
+| 1        | adapter or micro-USB cable                                                |
+| 1        | bag of 2 AAA batteries                                                    |
 
 \* May include extra hardware.
 
@@ -57,3 +57,5 @@ Below are instructions for assembling your Sprig console.
 7. Put in 2 AAA batteries.
 
 ![Photo of an assembled handheld game console](https://cloud-93zuth77c-hack-club-bot.vercel.app/0img_1613.jpg)
+
+**Now you can start uploading games to your Sprig! See the [upload guide](UPLOAD.md) for instructions on how to set up your Raspberry Pi Pico.** ➡️
