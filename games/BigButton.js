@@ -128,7 +128,7 @@ onInput("w", () => {
   if (!hasStartedGame) {
     hasStartedGame = true;
     clearText();
-    playback.end();
+    if (playback) playback.end();
     addSprite(1, 1, "w");
     setTimeout(() => {  
       clearTile(1, 1); 
