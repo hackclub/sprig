@@ -161,7 +161,7 @@ onInput("w", () => {
       const mseconds = endTime - startTime;
       setBackground("b");
       addText("Time:  " + mseconds + "ms", { x: 3, y: 7, color: color`4`});
-      if (mseconds < 150) {
+      if (mseconds < 70) {
         addText("Fast!", { x: 3, y: 2, color: color`8`});
       } else {
       addText("Congrats!\nYou're slower\nthan mud!", { x: 3, y: 2, color: color`3`});
@@ -174,8 +174,4 @@ onInput("w", () => {
     addText("Press w\nto play again", { x: 3, y: 11, color: color`H`});
     hasStartedGame = false;
   }
-});
-
-afterInput(() => {
-  
 });
