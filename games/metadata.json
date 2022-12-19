@@ -1462,5 +1462,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "BrainTeaserMaze",
+    "title": "BrainTeaserMaze",
+    "author": "Arhan",
+    "img": "BrainTeaserMaze",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-19"
   }
 ]
