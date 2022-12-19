@@ -62,7 +62,10 @@ export async function init(args, state) {
     // These params only make sense when running from a file
 
     if (getParam("run")) dispatch("RUN")
-    if (getParam("hide")) document.querySelector(".code-container").remove()
+    if (getParam("hide")) {
+      document.querySelector(".code-container").remove()
+      document.querySelector(".vertical-bar").remove()
+    }
 
     const watch = getParam("watch")
     if (watch) {
