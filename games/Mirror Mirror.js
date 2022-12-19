@@ -1,6 +1,6 @@
 /*
 @title: Mirror Mirror
-@author: Anonymous4045
+@author: Benjamin Grelk
 */
 
 const player = "p";
