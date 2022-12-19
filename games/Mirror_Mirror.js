@@ -1,6 +1,6 @@
 /*
 @title: Mirror_Mirror
-@author: Anonymous4045
+@author: Benjamin Grelk
 */
 
 const player = "p";
@@ -10,9 +10,16 @@ const exit = "e";
 const bg = "b"
 
 const walkEffect = tune`
-65.78947368421052: d4~65.78947368421052,
-65.78947368421052: d5~65.78947368421052 + f4~65.78947368421052,
-1973.6842105263156`;
+65.78947368421052: b4~65.78947368421052,
+2039.4736842105262`;
+const failEffect = tune`
+122.44897959183673: f5~122.44897959183673,
+122.44897959183673: c5~122.44897959183673,
+3673.469387755102`;
+const passEffect = tune`
+128.2051282051282: d5~128.2051282051282,
+128.2051282051282: g5~128.2051282051282,
+3846.153846153846`;
 
 setLegend(
   [player, bitmap`
@@ -51,55 +58,55 @@ setLegend(
 ......0..0......`],
   [wall, bitmap`
 0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
+0LLLLLLLLLLLLLL0
+0LLLLLLLLLLLLLL0
+0LLLLLLLLLLLLLL0
+0LLLLLLLLLLLLLL0
+0LLLLLLLLLLLLLL0
+0LLLLLLLLLLLLLL0
+0LLLLLLLLLLLLLL0
+0LLLLLLLLLLLLLL0
+0LLLLLLLLLLLLLL0
+0LLLLLLLLLLLLLL0
+0LLLLLLLLLLLLLL0
+0LLLLLLLLLLLLLL0
+0LLLLLLLLLLLLLL0
+0LLLLLLLLLLLLLL0
 0000000000000000`],
   [exit, bitmap`
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444`],
+LLLLLLLLLLLLLLLL
+L44444444444444L
+L44444444444444L
+L44444444444444L
+L44444444444444L
+L44444444444444L
+L44444444444444L
+L44444444444444L
+L44444444444444L
+L44444444444444L
+L44444444444444L
+L44444444444444L
+L44444444444444L
+L44444444444444L
+L44444444444444L
+LLLLLLLLLLLLLLLL`],
   [bg, bitmap`
-........1.......
-........1.......
-........1.......
-........1.......
-........1.......
-........1.......
-........1.......
-........11111111
-11111111........
-.......1........
-.......1........
-.......1........
-.......1........
-.......1........
-.......1........
-.......1........`]
+77777777L7777777
+77777777L7777777
+77777777L7777777
+77777777L7777777
+77777777L7777777
+77777777L7777777
+77777777L7777777
+77777777LLLLLLLL
+LLLLLLLL77777777
+7777777L77777777
+7777777L77777777
+7777777L77777777
+7777777L77777777
+7777777L77777777
+7777777L77777777
+7777777L77777777`]
   );
 
 setSolids([player, mirror, wall]);
@@ -137,25 +144,25 @@ ew.....w...wwww
 .......w....w..
 .......w......e`,
   map`
-p......wm......
-.......w.......
-.......w.......
-.......w.......
-.......w.......
-.......w.......
-.......w.......
-.......w.......
-......ew......e`,
+pbbbbbbwmbbbbwb
+bbbwbbbwbbbbwbb
+bbwbbwwwbbbwwbb
+bwbbbbbwbbwwbbb
+wwbwwwwwbwwbbwb
+bbbbbbbwbwbbwwb
+wwbwwbbwbbbwbbb
+bbbwbbbwbbwbbww
+bbbwbbewbwwbbbe`,
   map`
-p......wm......
-.......w.......
-.......w.......
-.......w.......
-.......w.......
-.......w.......
-.......w.......
-.......w.......
-......ew......e`,
+pbbbwwbbbbbwwwm
+wwwbwbbwbwbwwwb
+bbwbwbwwbwbbwwb
+bbwbwbwebwwbwwb
+bbbbwbwebwwwwbb
+bwbwwbwwwwwwbbw
+bwwwbbbbbbbwbww
+bbwwbwwbwwbbbww
+wbbbbwwbwwbbwww`,
 ];
 
 setMap(levels[level]);
@@ -182,13 +189,23 @@ onInput("d", () => {
   getFirst(mirror).x += 1;
 });
 
-afterInput(() => {
-  playTune(walkEffect);
+onInput("j", () => {
+  playTune(failEffect);
+  const currentLevel = levels[level];
+  if (currentLevel !== undefined) {
+    clearText("");
+    setMap(currentLevel);
+  }
+});
 
+afterInput(() => {
   let sum = tilesWith(exit, mirror).length + tilesWith(exit, player).length ;
   if (sum == 2) {
-    level = level + 1
+    // Both entities are on an exit pad
 
+    playTune(passEffect);
+
+    level = level + 1
     const currentLevel = levels[level];
 
     // make sure the level exists and if so set the map
@@ -198,6 +215,15 @@ afterInput(() => {
       addText("you win!", { y: 4, color: color`3` });
     }
   } else if (sum == 1) {
+    // Only one entity is on an exit
+
+    playTune(failEffect);
     
-  }
-});
+    const currentLevel = levels[level];
+    if (currentLevel !== undefined) {
+      clearText("");
+      setMap(currentLevel);
+    } 
+  } else {
+      playTune(walkEffect);
+    }});
