@@ -1,12 +1,13 @@
 /*
-@title: Mirror Mirror
-@author: Benjamin Grelk
+@title: Mirror_Mirror
+@author: Anonymous4045
 */
 
 const player = "p";
 const mirror = "m";
 const wall = "w";
 const exit = "e";
+const bg = "b"
 
 const walkEffect = tune`
 65.78947368421052: d4~65.78947368421052,
@@ -81,7 +82,24 @@ setLegend(
 4444444444444444
 4444444444444444
 4444444444444444
-4444444444444444`]
+4444444444444444`],
+  [bg, bitmap`
+........1.......
+........1.......
+........1.......
+........1.......
+........1.......
+........1.......
+........1.......
+........11111111
+11111111........
+.......1........
+.......1........
+.......1........
+.......1........
+.......1........
+.......1........
+.......1........`]
   );
 
 setSolids([player, mirror, wall]);
@@ -141,6 +159,8 @@ p......wm......
 ];
 
 setMap(levels[level]);
+
+setBackground(bg);
 
 onInput("s", () => {
   getFirst(player).y += 1;
