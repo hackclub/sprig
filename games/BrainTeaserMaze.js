@@ -241,8 +241,8 @@ wwwwwwwwww
 wwwwwwwwww
 wwwwwwwwww
 wwwwwwwwww`);
-      addText("You won!", { y: 4,x:4 });
-      addText("Game Over", { y: 5,x:4});
+      addText("You won!", { y: 4,x:4 , color: color`2`});
+      addText("Game Over", { y: 5,x:4, color: color`2`});
     }
   }
 });
