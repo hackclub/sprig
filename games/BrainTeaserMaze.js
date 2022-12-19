@@ -1,5 +1,5 @@
 /*
-@title: Brain Teaser Maze
+@title: BrainTeaserMaze
 @author: Arhan
 
 
