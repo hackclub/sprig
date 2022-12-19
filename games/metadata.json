@@ -1470,5 +1470,13 @@
     "img": "BrainTeaserMaze",
     "tags": ["puzzle"],
     "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "13_medium_sokoban_puzzles",
+    "title": "13_medium_sokoban_puzzles",
+    "author": "Zachary Miller",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-19"
   }
 ]
