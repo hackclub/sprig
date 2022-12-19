@@ -234,6 +234,13 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
+      setMap(map`
+wwwwwwwwww
+wwwwwwwwww
+wwwwwwwwww
+wwwwwwwwww
+wwwwwwwwww
+wwwwwwwwww`);
       addText("You won!", { y: 4,x:4 });
       addText("Game Over", { y: 5,x:4});
     }
