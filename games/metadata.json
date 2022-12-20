@@ -1366,5 +1366,125 @@
     "img": "Invisible_Maze",
     "tags": ["puzzle"],
     "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Worldcraft",
+    "title": "Worldcraft",
+    "author": "adadyer",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-09"
+  },
+  {
+    "filename": "Maze_Runner",
+    "title": "Maze_Runner",
+    "author": "Alan Alwakeel, Samuel Sapatla, Suhaan Palakamshetty, Martin Beythoon",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-10"
+  },
+  {
+    "filename": "cricket_frenzy",
+    "title": "cricket_frenzy",
+    "author": "aryan.k",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-10"
+  },
+  {
+    "filename": "randomworld",
+    "title": "randomworld",
+    "author": "Wojtek Widomski",
+    "img": "randomworld",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-11"
+  },
+  {
+    "filename": "sprig_dodge",
+    "title": "sprig_dodge",
+    "author": "Lucas and samliu",
+    "img": "sprig_dodge",
+    "tags": ["beginner", "tutorial"],
+    "addedOn": "2022-12-15"
+  },
+  {
+    "filename": "cookie_clicker",
+    "title": "cookie_clicker",
+    "author": "kunevi",
+    "img": "cookie_clicker",
+    "tags": ["endless"],
+    "addedOn": "2022-12-16"
+  },
+  {
+    "filename": "lights_out",
+    "title": "lights_out",
+    "author": "StarGazer1258 (Nathaniel Johns)",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-16"
+  },
+  {
+    "filename": "BigButton",
+    "title": "BigButton",
+    "author": "LinusSkucas",
+    "img": "BigButton",
+    "tags": [],
+    "addedOn": "2022-12-17"
+  },
+  {
+    "filename": "dvd_logo_simulator",
+    "title": "DVD logo simulator",
+    "author": "the456gamer",
+    "img": "dvd_logo_simulator",
+    "tags": ["simulation", "demo", "endless"],
+    "addedOn": "2022-12-18"
+  },
+  {
+    "filename": "crimbletips",
+    "title": "crimbLetips",
+    "author": "ShawnM",
+    "img": "crimbletips",
+    "tags": [],
+    "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "Mirror_Mirror",
+    "title": "Mirror_Mirror",
+    "author": "Benjamin Grelk",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "Box_Jump",
+    "title": "Box_Jump",
+    "author": "Elijah Schneider",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "BrainTeaserMaze",
+    "title": "BrainTeaserMaze",
+    "author": "Arhan",
+    "img": "BrainTeaserMaze",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "13_medium_sokoban_puzzles",
+    "title": "13_medium_sokoban_puzzles",
+    "author": "Zachary Miller",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "Robot_Party_Basic_Buildv1",
+    "title": "Robot_Party_Basic_Buildv1",
+    "author": "Gam3rrXD",
+    "img": "Robot_Party_Basic_Buildv1",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-20"
   }
 ]
