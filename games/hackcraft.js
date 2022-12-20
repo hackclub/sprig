@@ -25,7 +25,7 @@ The controls are given below:
 * ===========
 *
 * k to place block (to right if on ground, below if in air)
-* l to mine block (first which exist in this order: right, below, left, above)
+* l to mine block (first which exists in this order: right, below, left, above)
 *
 * s to enable mine mode
 * i to enable inventory mode
@@ -48,7 +48,6 @@ The controls are given below:
 * s to exit mode
 
 */
-
 
 (function () {
     'use strict';
@@ -110,7 +109,6 @@ The controls are given below:
 
     const makeSelectedBitmap = (originalBmp) => {
         let lines = originalBmp.trim().split("\n");
-        console.log(lines);
         const horizontalHighlight = "6666666666666666";
         lines[0] = horizontalHighlight;
         lines[lines.length - 1] = horizontalHighlight;
@@ -310,7 +308,6 @@ D44D4D4D444.4D.4`,
     };
     const verbatim = Object.entries(bitmapsMap);
     const selected = verbatim.flatMap(([key, bmp]) => key in selectedKeys ? [[selectedKeys[key], makeSelectedBitmap(bmp)]] : []);
-    console.log(typeof selected);
     const bitmaps = [...verbatim, ...selected];
 
     var Direction;
@@ -341,6 +338,7 @@ D44D4D4D444.4D.4`,
                 addSprite(x - 1, y, block);
         }
         static mineAuto(player) {
+            console.log("called");
             if (this.existsBlock(player, Direction.Right))
                 this.mine(player, Direction.Right);
             else if (this.existsBlock(player, Direction.Below))
@@ -364,13 +362,13 @@ D44D4D4D444.4D.4`,
         static existsBlock(player, direction) {
             const { x, y } = player.bottomSprite;
             if (direction === Direction.Right)
-                return getTile(x + 1, y).length === 0;
+                return getTile(x + 1, y).length !== 0;
             else if (direction === Direction.Below)
-                return getTile(x, y + 1).length === 0;
+                return getTile(x, y + 1).length !== 0;
             else if (direction === Direction.Above)
-                return getTile(x, y - 2).length === 0;
+                return getTile(x, y - 2).length !== 0;
             else if (direction === Direction.Left)
-                return getTile(x - 1, y).length === 0;
+                return getTile(x - 1, y).length !== 0;
         }
     }
     Blocks.all = [dirt, stone, plank, sand, log, leaves, white_wool, red_wool, black_wool];
@@ -532,10 +530,8 @@ b............`,
             this.bottomSprite.x++;
             this.topSprite.x++;
             let result = false;
-            if (bottomOriginalX + 1 === this.bottomSprite.x && topOriginalX + 1 === this.topSprite.x) {
-                console.log("Right empty");
+            if (bottomOriginalX + 1 === this.bottomSprite.x && topOriginalX + 1 === this.topSprite.x)
                 result = true;
-            }
             this.bottomSprite.x = bottomOriginalX;
             this.topSprite.x = topOriginalX;
             return result;
@@ -546,10 +542,8 @@ b............`,
             this.bottomSprite.x--;
             this.topSprite.x--;
             let result = false;
-            if (bottomOriginalX - 1 === this.bottomSprite.x && topOriginalX - 1 === this.topSprite.x) {
-                console.log("Left empty");
+            if (bottomOriginalX - 1 === this.bottomSprite.x && topOriginalX - 1 === this.topSprite.x)
                 result = true;
-            }
             this.bottomSprite.x = bottomOriginalX;
             this.topSprite.x = topOriginalX;
             return result;
@@ -568,7 +562,7 @@ b............`,
      * ===========
      *
      * k to place block (to right if on ground, below if in air)
-     * l to mine block (first which exist in this order: right, below, left, above)
+     * l to mine block (first which exists in this order: right, below, left, above)
      *
      * s to enable mine mode
      * i to enable inventory mode
