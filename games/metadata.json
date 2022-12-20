@@ -1486,5 +1486,13 @@
     "img": "Robot_Party_Basic_Buildv1",
     "tags": ["puzzle"],
     "addedOn": "2022-12-20"
+  },
+  {
+    "filename": "Terminal-Dungeon",
+    "title": "Terminal-Dungeon",
+    "author": "adadyer",
+    "img": "terminal-dungeon",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-20"
   }
 ]
