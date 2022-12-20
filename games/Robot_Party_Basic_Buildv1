@@ -2,7 +2,10 @@
 @title: Robot_Party | Basic Build v1
 @author: Gam3rrXD
 */
-
+let button_press = 0;
+let min = 0;
+var seconds = 0;
+var lol = setInterval(function() { seconds++; if (seconds == 60) {min++; seconds = 0;} addText(min + ":" + seconds, { x:14 , y:1 , color: color`0` })} , 1000);
 
 const player = "p";
 const box = "b";
@@ -140,53 +143,50 @@ const rese = tune`
 570`
 
 let level = 0;
-const endlvl = getRandomInt(5);
+const endlvl = getRandomInt(2);
 const levels = [
   map`
-p.bg`,
+p...
+..b.
+....
+...g`,
   map`
-p..
-.b.
-..g`,
+p...
+.b..
+..g.
+....`,
   map`
 p.wg
 .bw.
 ....
-....`,
+ww..`,
   map`
 p...
 ...b
 ...b
 .bbg`,
   map`
-www
-wpw
-w..
-wwb
-ww.
-wwg`,
+wwwg
+wpwb
+w...
+wwww`,
   map`
 p.w.
-.bwg
+.b.g
 ....
-....
-..bg`
+.b.g`,
+  map`
+wg..
+w.b.
+wpbg
+wwww`, 
+  map`
+p.bg
+bw..
+..b.
+gw.g`
 ];
 const end = [map`
-ggggg
-ggggg
-ggggg
-ggggg
-ggggg`, map`
-bbbb
-bbbb
-bbbb
-bbbb
-bbbb`, map`
-pppp
-pppp
-pppp
-pppp`, map`
 wwww
 wwww
 wwww
@@ -194,8 +194,7 @@ wwww`, map`
 pbgw
 wgbp
 pbgw
-wgbp
-pbgw`]
+wgbp`]
 const currentLevel = levels[level];
 const endLevel = end[endlvl];
 setMap(currentLevel);
@@ -208,21 +207,25 @@ setPushables({
 
 // Movement + Sounds
 onInput("w", () => {
+  button_press++;
   playTune(move, 1)
   getFirst(player).y -= 1;
 });
 
 onInput("a", () => {
+  button_press++;
   playTune(move, 1)
   getFirst(player).x -= 1;
 });
 
 onInput("s", () => {
+  button_press++;
   playTune(move, 1)
   getFirst(player).y += 1;
 });
 
 onInput("d", () => {
+  button_press++;
   playTune(move, 1)
   getFirst(player).x += 1;
 });
@@ -230,6 +233,7 @@ onInput("d", () => {
 // Reset Level + Sound
 
 onInput("j", () => {
+  button_press++;
   const currentLevel = levels[level];
   if (currentLevel !== undefined) {
     clearText("");
@@ -255,9 +259,11 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
+      clearInterval(lol);
       setMap(endLevel)
-      if (endlvl == 4) { addText("You found ", { y: 4, color: color`4` }); addText("the hidden level!", { y: 6, color: color`4` }); playTune(secnd, Infinity); }
-      else { addText("Winner!", { y: 4, color: color`3` }); playTune(endd, Infinity); }
+      clearText()
+      if (endlvl == 1) { addText("You found ", { y: 4, color: color`4` }); addText("the hidden level!", { y: 5, color: color`4` }); addText("Time Taken: " + min + ":" + seconds , { y: 7, color: color`5` }); addText("Pressed: " + button_press , { y: 9, color: color`H` }); playTune(secnd, Infinity); }
+      else { addText("Winner!", { y: 3, color: color`3` }); addText("Time Taken: " + min + ":" + seconds , { y: 6, color: color`5` }); addText("Pressed: " + button_press , { y: 9, color: color`H` }); playTune(endd, Infinity); }
     }
   }
 });
