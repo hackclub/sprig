@@ -11,6 +11,8 @@ const player = "p";
 const box = "b";
 const goal = "g";
 const wall = "w";
+const half_wall = "h";
+const fake_wall = "f";
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
@@ -67,6 +69,40 @@ setLegend(
 ................
 ................`],
   [ wall, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
+  [ half_wall, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+................
+................
+................
+................
+................
+................
+................
+................`],
+  [ fake_wall, bitmap`
 0000000000000000
 0000000000000000
 0000000000000000
@@ -184,8 +220,33 @@ wwww`,
 p.bg
 bw..
 ..b.
-gw.g`
-];
+gw.g`,
+  map`
+g...
+wwb.
+.w.w
+p..w`, 
+map`
+hhph
+h.bh
+h.gh
+hhhh`, map`
+hh..
+p..b
+hhhg
+hhhh`, map`
+pf..
+ww..
+.wb.
+gf..`, map`
+wwwp
+ffff
+fbff
+wwwg`, map`
+pfff
+wfff
+wfbg
+wwww`];
 const end = [map`
 wwww
 wwww
@@ -198,7 +259,7 @@ wgbp`]
 const currentLevel = levels[level];
 const endLevel = end[endlvl];
 setMap(currentLevel);
-setSolids([ player, box, wall ]);
+setSolids([ player, box, wall, half_wall ]);
 
 setPushables({
   [player]: [box],
