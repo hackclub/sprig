@@ -20,6 +20,7 @@ The controls are given below:
 * a to move left
 * d to move right
 * w to jump
+* hold s to clear map
 *
 * Normal Mode
 * ===========
@@ -76,6 +77,7 @@ The controls are given below:
         [black_wool]: "9",
     };
     const slotDefaults = [dirt, stone, plank, sand, log, leaves, white_wool, red_wool, black_wool];
+    const pos = { x: 5, y: 0 };
     class Inventory {
         constructor() {
             this.selection = 0;
@@ -97,13 +99,19 @@ The controls are given below:
                 this.highlight(this.selection);
             }
         }
+        rerender() {
+            for (let i = 0; i < 9; i++) {
+                this.unhighlight(i);
+            }
+            this.highlight(this.selection);
+        }
         highlight(slot) {
-            clearTile(slot + 2, 0);
-            addSprite(slot + 2, 0, selectedKeys[slotDefaults[slot]]);
+            clearTile(slot + pos.x, pos.y);
+            addSprite(slot + pos.x, pos.y, selectedKeys[slotDefaults[slot]]);
         }
         unhighlight(slot) {
-            clearTile(slot + 2, 0);
-            addSprite(slot + 2, 0, slotDefaults[slot]);
+            clearTile(slot + pos.x, pos.y);
+            addSprite(slot + pos.x, pos.y, slotDefaults[slot]);
         }
     }
 
@@ -338,7 +346,6 @@ D44D4D4D444.4D.4`,
                 addSprite(x - 1, y, block);
         }
         static mineAuto(player) {
-            console.log("called");
             if (this.existsBlock(player, Direction.Right))
                 this.mine(player, Direction.Right);
             else if (this.existsBlock(player, Direction.Below))
@@ -375,18 +382,21 @@ D44D4D4D444.4D.4`,
 
     const levels = [
         map `
-..1spalewrc..
-.............
-.............
-.............
-.............
-.............
-.............
-.............
-.............
-.............
-t............
-b............`,
+.....1spalewrc.....
+...................
+...................
+...................
+...................
+...................
+...p............e..
+..ppp..........eee.
+.ppppp........eeeee
+ppppppp........eee.
+.lpppl..........l..
+.lp.pl...t......l..
+.lp.pl...b......l..
+ddddddddddddddddddd
+sssssssssssssssssss`,
     ];
 
     var Mode;
@@ -432,11 +442,34 @@ b............`,
                 else if (this.mode === Mode.Inventory)
                     inventory.next();
             });
+            let last = Date.now();
+            let tickCount = 0;
+            let immune = false;
             onInput("s", () => {
-                if (this.mode === Mode.Normal)
-                    this.setMode(Mode.Mine);
-                else
-                    this.setMode(Mode.Normal);
+                let now = Date.now();
+                if (now - last < 100) {
+                    tickCount++;
+                    if (tickCount >= 50 && !immune) {
+                        immune = true;
+                        tickCount = 0;
+                        setTimeout(() => (immune = false), 1000);
+                        // Clear map
+                        for (let x = 0; x < width(); x++) {
+                            for (let y = 0; y < height(); y++) {
+                                clearTile(x, y);
+                            }
+                        }
+                        inventory.rerender();
+                        player.spawn();
+                    }
+                }
+                else {
+                    if (this.mode === Mode.Normal)
+                        this.setMode(Mode.Mine);
+                    else
+                        this.setMode(Mode.Normal);
+                }
+                last = now;
             });
             onInput("i", () => {
                 if (this.mode === Mode.Normal)
@@ -497,7 +530,7 @@ b............`,
             this.bottomSprite.y += drop;
             this.topSprite.y += drop;
         }
-        setupGravity() {
+        setupGravityAndAttachFallback() {
             setInterval(() => {
                 if (!this.isGrounded()) {
                     this.fallVelocity += 0.2;
@@ -510,6 +543,13 @@ b............`,
                 const drop = Math.floor(this.fallVelocity);
                 this.fall(drop);
             }, 100);
+            // Recover from de-attachment
+            setInterval(() => {
+                if (this.topSprite.y !== this.bottomSprite.y - 1 || this.topSprite.x !== this.bottomSprite.x) {
+                    this.topSprite.y = this.bottomSprite.y - 1;
+                    this.topSprite.x = this.bottomSprite.x;
+                }
+            }, 1000);
         }
         isGrounded() {
             const originalY = this.bottomSprite.y;
@@ -547,6 +587,12 @@ b............`,
             this.bottomSprite.x = bottomOriginalX;
             this.topSprite.x = topOriginalX;
             return result;
+        }
+        spawn() {
+            addSprite(1, height() - 1, this.bottom);
+            addSprite(1, height() - 2, this.top);
+            this.bottomSprite = getFirst(this.bottom);
+            this.topSprite = getFirst(this.top);
         }
     }
 
@@ -594,7 +640,7 @@ b............`,
     setMap(currentLevel);
     // Player
     const player = new Player(playerBottom, playerTop);
-    player.setupGravity();
+    player.setupGravityAndAttachFallback();
     // Inventory
     const inventory = new Inventory();
     // Modes and controls
