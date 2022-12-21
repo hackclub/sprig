@@ -4,7 +4,7 @@
 
 Instructions:
 
-This is a voxel game in which you can build/destory structures. 
+This is a voxel game in which you can build/destroy structures. 
 
 Important note on contributing/hacking: While hacking is possible on the
 type-stripped & bundled version of the game (the code below), the same game is
