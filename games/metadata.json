@@ -1502,5 +1502,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-12-21"
+  },
+  {
+    "filename": "black_jack",
+    "title": "black_jack",
+    "author": "xevaly",
+    "img": "black_jack",
+    "tags": ["classic"],
+    "addedOn": "2022-12-21"
   }
 ]
