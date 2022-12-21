@@ -1,0 +1,553 @@
+/*
+@title: cube_escape
+@author: marios_mitsios
+*/
+
+// Variables
+const BULLET_SPEED = 1
+const TICK = 75
+
+// Initialization
+const player = "p";
+const enemy = "e";
+const bullet = "b";
+const flipBullet = "f";
+const wall = "w";
+const unbreakableWall = "u";
+const warpHole = "h";
+const backHole = "o";
+const restartHole = "r";
+const txtLife = "t";
+const txtLevel = "l";
+const txtI = "1";
+const txtII = "2";
+const txtIII = "3";
+const txtIV = "4";
+const txtV = "5";
+let lives = 3;
+
+setLegend(
+  [ player, bitmap`
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LL111111111111LL
+LL112311112311LL
+LL112311112311LL
+LL111111111111LL
+LL111111111111LL
+LL111111111111LL
+LL111111111111LL
+LL111111111111LL
+LL111111111111LL
+LL111111111111LL
+LL111111111111LL
+LL111111111111LL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL`],
+  [ enemy, bitmap`
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DD444444444444DD
+DD44C3C44C3C44DD
+DD4433C4433C44DD
+DD44C3344C3344DD
+DD444444444444DD
+DD444444444444DD
+DD444444444444DD
+DD444444444444DD
+DD444444444444DD
+DD444444444444DD
+DD444444444444DD
+DD444444444444DD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD`],
+  [ bullet, bitmap`
+................
+................
+................
+................
+................
+................
+....LLLLLL......
+....LLLLLL1.....
+....LLLLL11.....
+....LLL111......
+................
+................
+................
+................
+................
+................`],
+  [ flipBullet, bitmap`
+................
+................
+................
+................
+................
+................
+......LLLLLL....
+.....LLLLLL1....
+.....LLLLL11....
+......LLL111....
+................
+................
+................
+................
+................
+................`],
+  [ wall, bitmap`
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CC99CC9999CC99CC
+CC9CCC9999CCC9CC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CC99CC9999CC99CC
+CC99CC9999CC99CC
+CC99CC9999CC99CC
+CC99CC9999CC99CC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CC9CCC9999CCC9CC
+CC99CC9999CC99CC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC`],
+  [ unbreakableWall, bitmap`
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LL11L111111L11LL
+LL1LLL1111LLL1LL
+LLLLLLLLLLLLLLLL
+LL1LLLLLLLLLL1LL
+LL11LLLLLLLL11LL
+LL11LL1111LL11LL
+LL11LL1111LL11LL
+LL11LL1111LL11LL
+LL1LLLLLLLLLL1LL
+LLLLLLLLLLLLLLLL
+LL1LLL1111LLL1LL
+LL11L111111L11LL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL`],
+  [ warpHole, bitmap`
+................
+....00000000....
+...0000000000...
+..000LLLLLL000..
+.000LLLLLLLL000.
+.00LLL1111LLL00.
+.00LL11LL11LL00.
+.00LL1LLLL1LL00.
+.00LL1LLLL1LL00.
+.00LL11LL11LL00.
+.00LLL1111LLL00.
+.000LLLLLLLL000.
+..000LLLLLL000..
+...0000000000...
+....00000000....
+................` ],
+  [ backHole, bitmap`
+................
+....CCCCCCCC....
+...CCCCCCCCCC...
+..CCC333333CCC..
+.CCC33333333CCC.
+.CC3339999333CC.
+.CC3399339933CC.
+.CC3393333933CC.
+.CC3393333933CC.
+.CC3399339933CC.
+.CC3339999333CC.
+.CCC33333333CCC.
+..CCC333333CCC..
+...CCCCCCCCCC...
+....CCCCCCCC....
+................` ],
+  [ restartHole, bitmap`
+................
+....FFFFFFFF....
+...FFFFFFFFFF...
+..FFF444444FFF..
+.FFF44444444FFF.
+.FF444DDDD444FF.
+.FF44DD44DD44FF.
+.FF44D4444D44FF.
+.FF44D4444D44FF.
+.FF44DD44DD44FF.
+.FF444DDDD444FF.
+.FFF44444444FFF.
+..FFF444444FFF..
+...FFFFFFFFFF...
+....FFFFFFFF....
+................` ],
+  [ txtLevel, bitmap`
+................
+.......000......
+.......000......
+.......000......
+.......000......
+.......000......
+.......000......
+.......000......
+.......000......
+.......000......
+.......000......
+.......000......
+.......00000000.
+.......00000000.
+.......00000000.
+................` ],
+  [ txtLife, bitmap`
+................
+................
+................
+.....3....3.....
+....333..333....
+...3333333333...
+..333333333333..
+..333333333333..
+..333333333333..
+...3333333333...
+....33333333....
+.....333333.....
+......3333......
+.......33.......
+................
+................` ],
+  [ txtI, bitmap`
+................
+.00000000000000.
+.00000000000000.
+.00000000000000.
+......0000......
+......0000......
+......0000......
+......0000......
+......0000......
+......0000......
+......0000......
+......0000......
+.00000000000000.
+.00000000000000.
+.00000000000000.
+................` ],
+  [ txtII, bitmap`
+................
+.000000..000000.
+.000000..000000.
+.000000..000000.
+...00......00...
+...00......00...
+...00......00...
+...00......00...
+...00......00...
+...00......00...
+...00......00...
+...00......00...
+.000000..000000.
+.000000..000000.
+.000000..000000.
+................` ],
+  [ txtIII, bitmap`
+................
+.00000000000000.
+.00000000000000.
+.00000000000000.
+..00...00...00..
+..00...00...00..
+..00...00...00..
+..00...00...00..
+..00...00...00..
+..00...00...00..
+..00...00...00..
+..00...00...00..
+.00000000000000.
+.00000000000000.
+.00000000000000.
+................` ],
+  [ txtIV, bitmap`
+................
+.0000.0000.0000.
+.0000.0000.0000.
+.0000.0000.0000.
+..00...00...00..
+..00...00...00..
+..00...00...00..
+...00.00....00..
+...00.00....00..
+...00.00....00..
+...00.00....00..
+...00000....00..
+....000....0000.
+....000....0000.
+....000....0000.
+................` ],
+  [ txtV, bitmap`
+................
+...0000..0000...
+...0000..0000...
+...0000..0000...
+....00....00....
+....00....00....
+....00....00....
+.....00..000....
+.....00..00.....
+.....00..00.....
+.....00..00.....
+.....000000.....
+......0000......
+......0000......
+......0000......
+................` ]
+);
+
+// Random
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min) ) + min;
+}
+
+// Collisions
+setSolids([
+  player, wall, unbreakableWall, enemy
+]);
+setPushables({
+  [ player ]: [],
+});
+
+// Level Manager
+const startingLevel = 0;
+let level = startingLevel;
+const levels = [
+  map`
+...wh
+...uu
+.....
+.....
+p..l1`,
+  map`
+rw.wh
+uu.uu
+..wwo
+.uuuu
+pu.l2`,
+  map`
+rw.u..h
+uu.u...
+ow.u.e.
+uu.u...
+...uuuw
+p......
+.....l3`,
+  map`
+hw..euo
+uue..uw
+uu.....
+ru....e
+.we....
+pw...e.
+.w...l4`,
+  map`
+rue...l5
+wu......
+pw......
+wu...e..
+ou......
+uu......
+uuu.e.uw
+..uuuuuh`,
+  map`
+l51uuuu.wo
+uuuuuuu.uu
+p......w.e
+.......w.e
+uuuuuuu.uu
+..uuuuu.wr`
+];
+
+const reloadMap = () => {
+  clearText();
+  setMap(levels[level]);
+  if (level == 5){
+    addText("You escaped,\nor did you?", {x: 2, y: 7, color: color`3`})
+  }
+}
+
+const nextMap = () => {
+  level += 1;
+  initialization();
+}
+
+const previousMap = () => {
+  level -= 1;
+  initialization();
+}
+
+const removeLife = () => {
+  lives -= 1;
+  initialization();
+}
+
+const addLife = () => {
+  lives += 1;
+  initialization();
+}
+// UI
+const displayUI = () => {
+  getTile(1, height() - 1).forEach(tile => {
+    if (tile.type == txtI || tile.type == txtII || tile.type == txtIII) {
+      tile.remove()
+    }
+  })
+  if (lives == 3) {
+    addSprite(1, height() - 1, txtIII)
+  } else if (lives == 2) {
+    addSprite(1, height() - 1, txtII)
+  } else if (lives == 1) {
+    addSprite(1, height() - 1, txtI)
+  } else {
+    level = startingLevel;
+    lives = 3;
+    initialization();
+  }
+}
+
+// Bullet Manager
+const fireBullet = () => {
+  let playerEntity = getFirst(player);
+  if (playerEntity.x != width() - 1) {
+    addSprite(playerEntity.x, playerEntity.y, bullet);
+  }
+}
+
+const fireFlipBullet = () => {
+  let playerEntity = getFirst(player);
+  if (playerEntity.x != -1) {
+    addSprite(playerEntity.x, playerEntity.y, flipBullet);
+  }
+}
+
+const moveBullets = () => {
+  getAll(bullet).forEach(bulletToMove => {
+    bulletToMove.x += BULLET_SPEED;
+  })
+  getAll(flipBullet).forEach(bulletToMove => {
+    bulletToMove.x -= BULLET_SPEED;
+  })
+}
+
+const checkBulletCollisions = () => {
+  getAll(bullet).forEach(bulletToCheck => {
+    if (bulletToCheck.x == width() - 1) {
+      bulletToCheck.remove();
+    }
+    getTile(bulletToCheck.x, bulletToCheck.y).forEach(tile => {
+      if (tile.type == wall || tile.type == enemy) {
+        tile.remove();
+        bulletToCheck.remove();
+      }
+    })
+  })
+  getAll(flipBullet).forEach(bulletToCheck => {
+    if (bulletToCheck.x == 0) {
+      bulletToCheck.remove();
+    }
+    getTile(bulletToCheck.x, bulletToCheck.y).forEach(tile => {
+      if (tile.type == wall || tile.type == enemy) {
+        tile.remove();
+        bulletToCheck.remove();
+      }
+    })
+  })
+}
+
+// Enemy Manager
+const enemyAI = () => {
+  if (getRndInteger(0, 7) == 0)
+  {
+    getAll(enemy).forEach(enemyInstance => {
+      switch (getRndInteger(0, 3)) {
+        case 0:
+          enemyInstance.x += 1
+          break;
+        case 1:
+          enemyInstance.x -= 1
+          break;
+        case 2:
+          enemyInstance.y += 1
+          break;
+        case 3:
+          enemyInstance.y -= 1
+          break
+        default:
+          break;
+      }
+    })
+  }
+}
+
+const enemyPlayerCollisions = () => {
+  getAll(enemy).forEach(enemyInstance => {
+    let playerInstance = getFirst(player)
+    if (getTile(enemyInstance.x + 1, enemyInstance.y).includes(playerInstance) ||
+        getTile(enemyInstance.x - 1, enemyInstance.y).includes(playerInstance) ||
+        getTile(enemyInstance.x, enemyInstance.y + 1).includes(playerInstance) ||
+        getTile(enemyInstance.x, enemyInstance.y - 1).includes(playerInstance)
+       )
+    {
+      removeLife();
+    }
+  })
+}
+
+// Main Loop
+window.setInterval(() => {
+  moveBullets();
+  checkBulletCollisions();
+  enemyAI();
+  displayUI();
+}, TICK);
+
+const initialization = () => {
+  reloadMap();
+  addSprite(0, height() - 1, txtLife);
+}
+
+// Input Manager
+onInput("a", () => {
+  getFirst(player).x -= 1;
+})
+
+onInput("d", () => {
+  getFirst(player).x += 1;
+})
+
+onInput("w", () => {
+  getFirst(player).y -= 1;
+})
+
+onInput("s", () => {
+  getFirst(player).y += 1;
+})
+
+onInput("l", () => {
+  fireBullet();
+})
+
+onInput("j", () => {
+  fireFlipBullet();
+})
+
+afterInput(() => {
+  let playerInstance = getFirst(player);
+  getTile(playerInstance.x, playerInstance.y).forEach(tile => {
+    if (tile.type == warpHole) {
+      nextMap();
+    } else if (tile.type == backHole) {
+      previousMap();
+    } else if (tile.type == restartHole) {
+      reloadMap();
+    }
+  })
+  enemyPlayerCollisions()
+});
+initialization()
