@@ -274,7 +274,6 @@ w.bw.wbwbb...w..w.wbw
 w...b......b..bb...g.
 wwwwwwwwwwwwwwwwwwwww`,
   map`
-wwwwwwwwwwwwwwwwwwwwwwwwwwwww
 wp.w.b....w.b......b..w..bw.w
 ww.w...wb.b..w..w..w..b.w...w
 w..b.b.b..b..w..b.w..w..b.wbw
@@ -299,8 +298,7 @@ w.w.wbw..w.w.b.w..wb.ww.b.w.w
 wb....bb..w.w..b....w...w...w
 w..bb.wwbw...ww..w....wb..w.w
 wwb..b.wbw.w..b.w.bw.w..www.w
-wg...w..b......b....b...b..bw
-wwwwwwwwwwwwwwwwwwwwwwwwwwwww`,
+wg...w..b......b....b...b..bw`,
   map`
 wwwwwwwwwwwwwwwwwww
 .p................w
