@@ -1443,7 +1443,7 @@
     "filename": "crimbletips",
     "title": "crimbLetips",
     "author": "ShawnM",
-    "img": "crimbletips",
+    "img": "crimbletips1",
     "tags": [],
     "addedOn": "2022-12-19"
   },
@@ -1494,5 +1494,21 @@
     "img": "terminal-dungeon",
     "tags": ["puzzle"],
     "addedOn": "2022-12-20"
+  },
+  {
+    "filename": "Lava_the_impossible_maze",
+    "title": "Lava_the_impossible_maze",
+    "author": "Augustin Z",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-21"
+  },
+  {
+    "filename": "black_jack",
+    "title": "black_jack",
+    "author": "xevaly",
+    "img": "black_jack",
+    "tags": ["classic"],
+    "addedOn": "2022-12-21"
   }
 ]
