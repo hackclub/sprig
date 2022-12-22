@@ -1510,5 +1510,13 @@
     "img": "black_jack",
     "tags": ["classic"],
     "addedOn": "2022-12-21"
+  },
+  {
+    "filename": "hackcraft",
+    "title": "hackcraft",
+    "author": "xevaly",
+    "img": "hackcraft",
+    "tags": ["classic", "simulation"],
+    "addedOn": "2022-12-22"
   }
 ]
