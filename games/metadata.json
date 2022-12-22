@@ -1518,5 +1518,13 @@
     "img": "hackcraft",
     "tags": ["classic", "simulation"],
     "addedOn": "2022-12-22"
+  },
+  {
+    "filename": "gravity_fun",
+    "title": "gravity_fun",
+    "author": "phantomeniasll",
+    "img": "gravity_fun",
+    "tags": ["classic"],
+    "addedOn": "2022-12-22"
   }
 ]
