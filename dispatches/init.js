@@ -56,12 +56,14 @@ export async function init(args, state) {
   const file = getParam("file");
   // removeParam("file");
   if (file) {
+    const fileURL = new URL(file);
+    const trusted = (fileURL.path.split("/").pop().join("/") === "hackclub/sprig/main/games" && fileURL.hostname === "raw.githubusercontent.com");
     const code = await loadFromURL(file);
     dispatch("LOAD_NEW_GAME", { code });
 
     // These params only make sense when running from a file
-
-    if (getParam("run")) dispatch("RUN")
+    if (!trusted) alert("This code is not from a verified source (not in the games directory on the Sprig repository)");
+    if (getParam("run") && trusted) dispatch("RUN")
     if (getParam("hide")) {
       document.querySelector(".code-container").remove()
       document.querySelector(".vertical-bar").remove()
@@ -77,7 +79,7 @@ export async function init(args, state) {
         if (newCode !== oldCode){
           oldCode = newCode
           dispatch("LOAD_NEW_GAME", { code: oldCode })
-          if (getParam("run")) dispatch("RUN")
+          if (getParam("run") && trusted) dispatch("RUN")
         }
       }, watch)
     }
