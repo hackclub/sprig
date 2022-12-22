@@ -58,7 +58,9 @@ export async function init(args, state) {
   if (file) {
     const fileURL = new URL(file);
     console.log(fileURL);
-    const trusted = (fileURL.pathname.split("/").pop().join("/") === "hackclub/sprig/main/games" && fileURL.hostname === "raw.githubusercontent.com");
+    var pathname = fileURL.pathname.split("/");
+    pathname.pop();
+    const trusted = (pathname.join("/") === "/hackclub/sprig/main/games" && fileURL.hostname === "raw.githubusercontent.com");
     const code = await loadFromURL(file);
     dispatch("LOAD_NEW_GAME", { code });
 
