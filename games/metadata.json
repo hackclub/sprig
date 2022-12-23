@@ -1534,5 +1534,13 @@
     "img": "charge",
     "tags": ["puzzle"],
     "addedOn": "2022-12-23"
+  },
+  {
+    "filename": "get_the_birdie",
+    "title": "get_the_birdie",
+    "author": "Sophie",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-23"
   }
 ]
