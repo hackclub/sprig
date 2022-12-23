@@ -1,5 +1,5 @@
 /*
-@titLE: Get_the_birdie!
+@title: Get_the_birdie!
 @author: Sophie
 */
 
@@ -235,31 +235,3 @@ afterInput(() => {
 
   
 });
-
-
-
-
-
-      
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-  
-
-     
-
-
-
-
