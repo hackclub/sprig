@@ -21,12 +21,10 @@ If the dealer busts, the player wins the game. If the dealer does not bust, then
 To play another Round with the same bet size simply press "A" or get back to the main menu by pressing "L".
 
 */
-
-
-const heart   = "a";
+const heart = "a";
 const diamond = "b";
-const spades  = "c";
-const clubs   = "d";
+const spades = "c";
+const clubs = "d";
 
 const cardTL = "e";
 const cardTR = "f";
@@ -53,43 +51,43 @@ const king = "K";
 const ace = "A";
 
 const lookup = {
-  "2": two,
-  "3": three,
-  "4": four,
-  "5": five,
-  "6": six,
-  "7": seven,
-  "8": eight,
-  "9": nine,
-  "10": ten,
-  "j": jack,
-  "q": queen,
-  "k": king,
-  "a": ace,
-  "h": heart,
-  "s": spades,
-  "c": clubs,
-  "d": diamond
+    "2": two,
+    "3": three,
+    "4": four,
+    "5": five,
+    "6": six,
+    "7": seven,
+    "8": eight,
+    "9": nine,
+    "10": ten,
+    "j": jack,
+    "q": queen,
+    "k": king,
+    "a": ace,
+    "h": heart,
+    "s": spades,
+    "c": clubs,
+    "d": diamond
 }
 
 const cardValue = {
-"2": 2,
-"3": 3,
-"4": 4,
-"5": 5,
-"6": 6,
-"7": 7,
-"8": 8,
-"9": 9,
-"10":10,
-"j": 10,
-"q": 10,
-"k": 10,
-"a": 11
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5,
+    "6": 6,
+    "7": 7,
+    "8": 8,
+    "9": 9,
+    "10": 10,
+    "j": 10,
+    "q": 10,
+    "k": 10,
+    "a": 11
 }
 
 
-  setMap(map`
+setMap(map`
 .................
 .................
 .................
@@ -99,20 +97,21 @@ const cardValue = {
 .................
 .................
 .................`);
-  setBackground(empty);
+setBackground(empty);
 
-const cardSet = ["h2","h3","h4","h5","h6","h7","h8","h9","h10", "hj",
-                 "hq","hk","ha","s2","s3","s4","s5","s6","s7","s8","s9","s10",
-                   "sj","sq","sk","sa","c2","c3","c4","c5","c6","c7","c8","c9",
-                     "c10","cj","cq","ck","ca","d2","d3","d4","d5","d6","d7","d8","d9",
-                     "d10","dj","dq","dk","da"]
+const cardSet = ["h2", "h3", "h4", "h5", "h6", "h7", "h8", "h9", "h10", "hj",
+    "hq", "hk", "ha", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10",
+    "sj", "sq", "sk", "sa", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9",
+    "c10", "cj", "cq", "ck", "ca", "d2", "d3", "d4", "d5", "d6", "d7", "d8", "d9",
+    "d10", "dj", "dq", "dk", "da"
+]
 
 for (let i = 0; i <= 6; i++) {
-  cardSet.push(...cardSet);
+    cardSet.push(...cardSet);
 }
 
 setLegend(
-  [ cardTL, bitmap`
+    [cardTL, bitmap`
 ................
 ................
 ................
@@ -129,7 +128,7 @@ setLegend(
 ...0444444444444
 ...0444444444444
 ...0444444444444`],
-  [ cardTR, bitmap`
+    [cardTR, bitmap`
 ................
 ................
 ................
@@ -146,7 +145,7 @@ setLegend(
 4444444444460...
 4444444444460...
 4444444444460...`],
-  [ cardTM, bitmap`
+    [cardTM, bitmap`
 ................
 ................
 ................
@@ -163,7 +162,7 @@ setLegend(
 4444444444444444
 4444444444444444
 4444444444444444`],
-  [ cardBL, bitmap`
+    [cardBL, bitmap`
 ...0DD4444444444
 ...0DD4444444444
 ...0DD4444444444
@@ -180,7 +179,7 @@ setLegend(
 ................
 ................
 ................`],
-  [ cardBR, bitmap`
+    [cardBR, bitmap`
 4444444444440...
 4444444444440...
 4444444444440...
@@ -197,7 +196,7 @@ setLegend(
 ................
 ................
 ................`],
-  [ cardBM, bitmap`
+    [cardBM, bitmap`
 4444444444444444
 4444444444444444
 4444444444444444
@@ -214,7 +213,7 @@ DDDDD4DDD4D4D444
 ................
 ................
 ................`],
-  [ cardLS, bitmap`
+    [cardLS, bitmap`
 ...0444444444444
 ...0444444444444
 ...0444444444444
@@ -231,7 +230,7 @@ DDDDD4DDD4D4D444
 ...0D44444444444
 ...0D44444444444
 ...0D44444444444`],
-  [ cardRS, bitmap`
+    [cardRS, bitmap`
 4444444444460...
 4444444444460...
 4444444444460...
@@ -248,7 +247,7 @@ DDDDD4DDD4D4D444
 4444444444440...
 4444444444440...
 4444444444440...`],
-  [ empty, bitmap`
+    [empty, bitmap`
 DDDDDDDDDDDDDDDD
 DDDDDDDDDDDDDDDD
 DDDDDDDDDDDDDDDD
@@ -265,7 +264,7 @@ DDDDDDDDDDDDDDDD
 DDDDDDDDDDDDDDDD
 DDDDDDDDDDDDDDDD
 DDDDDDDDDDDDDDDD`],
-  [ diamond, bitmap`
+    [diamond, bitmap`
 4444444444444444
 4444444404444444
 4444444030444444
@@ -282,7 +281,7 @@ DDDDDDDDDDDDDDDD`],
 4444444030444444
 4444444404444444
 4444444444444444`],
-  [ spades, bitmap`
+    [spades, bitmap`
 4444444444444444
 4444444444444444
 4444444444444444
@@ -299,7 +298,7 @@ DDDDDDDDDDDDDDDD`],
 4444444000444444
 4444440000044444
 4444444444444444`],
-  [ heart, bitmap`
+    [heart, bitmap`
 4444444444444444
 4444000444000444
 4440333040333044
@@ -316,7 +315,7 @@ DDDDDDDDDDDDDDDD`],
 4444444030444444
 4444444404444444
 4444444444444444`],
-  [ clubs, bitmap`
+    [clubs, bitmap`
 4444444444444444
 4444444404444444
 4444444000444444
@@ -333,7 +332,7 @@ DDDDDDDDDDDDDDDD`],
 4444444000444444
 4444440000044444
 4444444444444444`],
-  [ two, bitmap`
+    [two, bitmap`
 4444444444444444
 4444444444444444
 4444440000044444
@@ -350,7 +349,7 @@ DDDDDDDDDDDDDDDD`],
 4444444444444444
 4444444444444444
 4444444444444444`],
-  [ three, bitmap`
+    [three, bitmap`
 4444444444444444
 4444444444444444
 4444444444444444
@@ -367,7 +366,7 @@ DDDDDDDDDDDDDDDD`],
 4444444444444444
 4444444444444444
 4444444444444444`],
-  [ four, bitmap`
+    [four, bitmap`
 4444444444444444
 4444444444444444
 4444444444444444
@@ -384,7 +383,7 @@ DDDDDDDDDDDDDDDD`],
 4444444444444444
 4444444444444444
 4444444444444444`],
-  [ five, bitmap`
+    [five, bitmap`
 4444444444444444
 4444444444444444
 4444000000004444
@@ -401,7 +400,7 @@ DDDDDDDDDDDDDDDD`],
 4444444444444444
 4444444444444444
 4444444444444444`],
-  [ six, bitmap`
+    [six, bitmap`
 4444444444444444
 4444444444444444
 4444444400044444
@@ -418,7 +417,7 @@ DDDDDDDDDDDDDDDD`],
 4444400000004444
 4444440000044444
 4444444444444444`],
-  [ seven, bitmap`
+    [seven, bitmap`
 4444444444444444
 4444444444444444
 4444000000000444
@@ -435,7 +434,7 @@ DDDDDDDDDDDDDDDD`],
 4444444004444444
 4444444444444444
 4444444444444444`],
-  [ eight, bitmap`
+    [eight, bitmap`
 4444444444444444
 4444440000444444
 4444400000044444
@@ -452,7 +451,7 @@ DDDDDDDDDDDDDDDD`],
 4444400000044444
 4444444444444444
 4444444444444444`],
-  [ nine, bitmap`
+    [nine, bitmap`
 4444444444444444
 4444444444444444
 4444400000444444
@@ -469,7 +468,7 @@ DDDDDDDDDDDDDDDD`],
 4444444004444444
 4444444444444444
 4444444444444444`],
-  [ ten, bitmap`
+    [ten, bitmap`
 4444444444444444
 4444444444444444
 4444444444444444
@@ -486,7 +485,7 @@ DDDDDDDDDDDDDDDD`],
 4444444444444444
 4444444444444444
 4444444444444444`],
-  [ jack, bitmap`
+    [jack, bitmap`
 4444444444444444
 4444444444444444
 4444000000000444
@@ -503,7 +502,7 @@ DDDDDDDDDDDDDDDD`],
 4444440000044444
 4444444444444444
 4444444444444444`],
-  [ queen, bitmap`
+    [queen, bitmap`
 4444444444444444
 4444444444444444
 4444000000044444
@@ -520,7 +519,7 @@ DDDDDDDDDDDDDDDD`],
 4444444444400444
 4444444444444444
 4444444444444444`],
-  [ king, bitmap`
+    [king, bitmap`
 4444444444444444
 4444444444444444
 4444400444004444
@@ -537,7 +536,7 @@ DDDDDDDDDDDDDDDD`],
 4444400444400444
 4444444444444444
 4444444444444444`],
-  [ ace, bitmap`
+    [ace, bitmap`
 4444444444444444
 4444444444444444
 4444400000044444
@@ -569,71 +568,83 @@ function shuffle(a) {
 }
 
 function drawCard(val, num, x, y) {
-  addSprite(x, y, cardTL);
-  addSprite(x, y+1, cardLS);
-  addSprite(x, y+2, cardLS);
-  addSprite(x+1, y, cardTM);
-  addSprite(x+2, y+1, cardRS);
-  addSprite(x+2, y+2, cardRS);
-  addSprite(x+1, y+3, cardBM);
-  addSprite(x, y+3, cardBL);
-  addSprite(x+2, y, cardTR);
-  addSprite(x+2, y+3, cardBR);
-  addSprite(x+1, y+1, val);
-  addSprite(x+1, y+2, lookup[num.toString()]);
+    addSprite(x, y, cardTL);
+    addSprite(x, y + 1, cardLS);
+    addSprite(x, y + 2, cardLS);
+    addSprite(x + 1, y, cardTM);
+    addSprite(x + 2, y + 1, cardRS);
+    addSprite(x + 2, y + 2, cardRS);
+    addSprite(x + 1, y + 3, cardBM);
+    addSprite(x, y + 3, cardBL);
+    addSprite(x + 2, y, cardTR);
+    addSprite(x + 2, y + 3, cardBR);
+    addSprite(x + 1, y + 1, val);
+    addSprite(x + 1, y + 2, lookup[num.toString()]);
 }
 
 function showHand(cards, is_dealer) {
-  let i = 0;
-  cards.forEach(card => {
-    console.log(card);
-    drawCard(lookup[card[0]], card.slice(1), 4*!is_dealer+i*2, 1+3*!is_dealer);
-    i++;
-  })
+    let i = 0;
+    cards.forEach(card => {
+        console.log(card);
+        drawCard(lookup[card[0]], card.slice(1), 4 * !is_dealer + i * 2, 1 + 3 * !is_dealer);
+        i++;
+    })
 }
 
 function updateGUI() {
-  clearText();
-  addText("You:", {x: 1, y: 9, color:color`0`})
-  
-  addText(`D: ${calculateHandValue(dealerHand)} - P: ${calculateHandValue(playerHand)}`, {x: 1, y: 3, color:color`0`});
-  
-  addText(`Bet: ${betSize}   Bal: ${cash}`, {x: 1, y: 12, color:color`0`});
-  
+    clearText();
+    addText("You:", {
+        x: 1,
+        y: 9,
+        color: color`0`
+    })
+
+    addText(`D: ${calculateHandValue(dealerHand)} - P: ${calculateHandValue(playerHand)}`, {
+        x: 1,
+        y: 3,
+        color: color`0`
+    });
+
+    addText(`Bet: ${betSize}   Bal: ${cash}`, {
+        x: 1,
+        y: 12,
+        color: color`0`
+    });
+
 }
 
 function calculateHandValue(cards) {
-  let sumCards = 0;
-  let amountOfAce = 0;
-  cards.forEach(card => {
-    if (card.slice(1) == "a") {
-      amountOfAce++;
-    } 
-    
-    sumCards += cardValue[card.slice(1)];
+    let sumCards = 0;
+    let amountOfAce = 0;
+    cards.forEach(card => {
+        if (card.slice(1) == "a") {
+            amountOfAce++;
+        }
 
-    if (sumCards > 21 && amountOfAce > 0) {
-      amountOfAce--;
-      sumCards-=10;
-    }
-  })
+        sumCards += cardValue[card.slice(1)];
 
-  return sumCards;
+        if (sumCards > 21 && amountOfAce > 0) {
+            amountOfAce--;
+            sumCards -= 10;
+        }
+    })
+
+    return sumCards;
 }
 
 function fillDealerCards() {
-  while (calculateHandValue(dealerHand) < 17) {
-    let newCard = deck.pop();
-    dealerHand.push(newCard);
-    
-    updateGUI();
-    
-    showHand(dealerHand, true);
-  }
+    while (calculateHandValue(dealerHand) < 17) {
+        let newCard = deck.pop();
+        dealerHand.push(newCard);
+
+        updateGUI();
+
+        showHand(dealerHand, true);
+    }
 }
 
 function roundStart() {
-  setMap(map`
+    setMap(map`
 .................
 .................
 .................
@@ -643,12 +654,28 @@ function roundStart() {
 .................
 .................
 .................`);
-  setBackground(empty);
-  clearText();
-  addText("BlackJack", {x: 6, y: 3, color:color`0`});
-  addText("Press J to start", {x: 2, y: 5, color:color`0`});
-  addText(`Bal: ${cash} Bet: ${betSize}`, {x: 2, y: 8, color:color`0`});
-  addText("> K +10 / I -10", {x: 2, y: 10, color:color`0`});
+    setBackground(empty);
+    clearText();
+    addText("BlackJack", {
+        x: 6,
+        y: 3,
+        color: color`0`
+    });
+    addText("Press J to start", {
+        x: 2,
+        y: 5,
+        color: color`0`
+    });
+    addText(`Bal: ${cash} Bet: ${betSize}`, {
+        x: 2,
+        y: 8,
+        color: color`0`
+    });
+    addText("> K +10 / I -10", {
+        x: 2,
+        y: 10,
+        color: color`0`
+    });
 }
 
 
@@ -661,39 +688,40 @@ let beforeRound = true;
 let cash = 500;
 let betSize = 10;
 let doubleDown = false;
+let cashedOut = false;
 
 roundStart()
 
 
 // w = Hit
 onInput("w", () => {
-  if (gameOver || beforeRound) return;
-  playerHand.push(deck.pop());
-  showHand(playerHand, false);
+    if (gameOver || beforeRound) return;
+    playerHand.push(deck.pop());
+    showHand(playerHand, false);
 });
 
 // d = Double Down
 onInput("d", () => {
-  if (gameOver || beforeRound) return;
-  playerHand.push(deck.pop());
-  showHand(playerHand, false);
-  cash -= betSize;
-  updateGUI();
-  doubleDown = true;
-  gameOver = true;
+    if (gameOver || beforeRound) return;
+    playerHand.push(deck.pop());
+    showHand(playerHand, false);
+    cash -= betSize;
+    updateGUI();
+    doubleDown = true;
+    gameOver = true;
 });
 
 // s = Stand
-onInput("s", () => { 
-  if (gameOver || beforeRound) return;
-  gameOver = true;
-  fillDealerCards();
+onInput("s", () => {
+    if (gameOver || beforeRound) return;
+    gameOver = true;
+    fillDealerCards();
 });
 
 // a = restart
-onInput("a", () => { 
-  if (!gameOver || beforeRound) return  
-  setMap(map`
+onInput("a", () => {
+    if (!gameOver || beforeRound) return
+    setMap(map`
 .................
 .................
 .................
@@ -703,91 +731,114 @@ onInput("a", () => {
 .................
 .................
 .................`)
-  setBackground(empty)
-  
-  deck = shuffle([...cardSet]);
-  cash -= betSize;
-  playerHand = [deck.pop()];
-  dealerHand = [deck.pop()];
-  gameOver = false;
-  doubleDown = false;
-  
-  updateGUI();
-  showHand(dealerHand, true);
-  showHand(playerHand, false);
+    setBackground(empty)
+
+    deck = shuffle([...cardSet]);
+    cash -= betSize;
+    playerHand = [deck.pop()];
+    dealerHand = [deck.pop()];
+    gameOver = false;
+    doubleDown = false;
+
+    updateGUI();
+    showHand(dealerHand, true);
+    showHand(playerHand, false);
 });
 
 // i = upper bet
 onInput("i", () => {
-  if (!beforeRound || (cash < betSize + 10)) return
-  betSize += 10;
-  roundStart();
+    if (!beforeRound || (cash < betSize + 10)) return
+    betSize += 10;
+    roundStart();
 })
 
 // k = lower bet
 onInput("k", () => {
-  if (betSize == 10 || !beforeRound) return
-  betSize -= 10;
-  roundStart();
+    if (betSize == 10 || !beforeRound) return
+    betSize -= 10;
+    roundStart();
 })
 
 
 // j = start round
 onInput("j", () => {
-  if (!beforeRound) return
-  beforeRound = false;
-  cash -= betSize;
-  showHand(dealerHand, true);
-  showHand(playerHand, false);
+    if (!beforeRound) return
+    beforeRound = false;
+    cash -= betSize;
+    showHand(dealerHand, true);
+    showHand(playerHand, false);
 })
 
 // l = back to beforeRound
 onInput("l", () => {
-  if (!gameOver) return
-  beforeRound = true;
-  roundStart();
+    if (!gameOver) return
+    beforeRound = true;
+    roundStart();
 })
 
 afterInput(() => {
-  if (beforeRound) return
-  
-  updateGUI();
-  if (calculateHandValue(playerHand) > 21) {
-    gameOver = true;
-  } 
-  else if (calculateHandValue(playerHand) == 21) {
-    gameOver = true;
-  }
+    if (beforeRound) return
 
-  if (gameOver) {
-    fillDealerCards();
     updateGUI();
+    if (calculateHandValue(playerHand) > 21) {
+        gameOver = true;
+    } else if (calculateHandValue(playerHand) == 21) {
+        gameOver = true;
+    }
 
-    let playerVal = calculateHandValue(playerHand);
-    let dealerVal = calculateHandValue(dealerHand);
-    
+    if (gameOver) {
+        fillDealerCards();
+        updateGUI();
 
-    if (playerVal > 21) {
-      addText("Busted!", {x: 10, y: 5, color:color`0`});
-    }
-    else if (playerVal == 21 && dealerVal != 21) {
-      addText("Black Jack!", {x: 9, y: 5, color:color`0`});
-      cash += 2.5 * betSize + 2.5 * betSize * doubleDown;
+        let playerVal = calculateHandValue(playerHand);
+        let dealerVal = calculateHandValue(dealerHand);
 
+
+        if (playerVal > 21) {
+            addText("Busted!", {
+                x: 10,
+                y: 5,
+                color: color`0`
+            });
+        } else if (playerVal == 21 && dealerVal != 21) {
+            addText("Black Jack!", {
+                x: 9,
+                y: 5,
+                color: color`0`
+            });
+            if (!cashedOut) {
+                cash += 2.5 * betSize + 2.5 * betSize * doubleDown;
+                cashedOut = true;
+            }
+
+        } else if (dealerVal > 21 || dealerVal < playerVal) {
+            addText("You won!", {
+                x: 10,
+                y: 5,
+                color: color`0`
+            });
+            if (!cashedOut) {
+                cash += 2 * betSize + 2 * betSize * doubleDown;
+                cashedOut = true;
+            }
+        } else if (dealerVal > playerVal || (dealerVal == 21 && playerVal < 21)) {
+            addText("You lost!", {
+                x: 10,
+                y: 5,
+                color: color`0`
+            });
+
+        } else if (dealerVal == playerVal) {
+            addText("Push!", {
+                x: 10,
+                y: 5,
+                color: color`0`
+            });
+            if (!cashedOut) {
+                cash += betSize + betSize * doubleDown;
+                cashedOut = true;
+            }
+
+        }
     }
-    else if (dealerVal > 21 || dealerVal < playerVal) {
-      addText("You won!", {x: 10, y: 5, color:color`0`});
-      cash += 2 * betSize + 2 * betSize * doubleDown;
-    }
-    else if (dealerVal > playerVal || (dealerVal == 21 && playerVal < 21)) { 
-      addText("You lost!", {x: 10, y: 5, color:color`0`});
-      
-    }
-    else if (dealerVal == playerVal) { 
-      addText("Push!", {x: 10, y: 5, color:color`0`});
-      cash += betSize + betSize * doubleDown;
-      
-    }   
-  }
 });
-
