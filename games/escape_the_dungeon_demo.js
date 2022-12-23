@@ -161,30 +161,7 @@ l.........l
 l....p....l
 l.........l
 lk........l
-wwwwwwwwwww`,
-  map`
-...
-...
-...`,
-  map`
-p.wg
-.bw.
-..w.
-..w.`,
-  map`
-p...
-...b
-...b
-.bbg`,
-  map`
-...
-.p.
-...`,
-  map`
-p.w.
-.bwg
-....
-..bg`
+wwwwwwwwwww`
 ];
 
 const currentLevel = levels[level];
