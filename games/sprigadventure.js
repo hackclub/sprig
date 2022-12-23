@@ -1155,127 +1155,127 @@ let langdata = {
 let playback = playTune(music.menu, Infinity);
  
 function playmusic(inm){
-   playback.end()
+   if (playback) playback.end();;
   switch(inm){
     case "menu":
       if(settings.volume == 2){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(music.menu, Infinity)
       }else if(settings.volume == 1){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(lowmusic.menu, Infinity)
       }else{
-        playback.end()
+        if (playback) playback.end();
       }
       break;
     case "menu2":
       if(settings.volume == 2){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(music.menu2, Infinity)
       }else if(settings.volume == 1){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(lowmusic.menu2, Infinity)
       }else{
-        playback.end()
+        if (playback) playback.end();
       }
       break;
     case "menu3":
       if(settings.volume == 2){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(music.menu3, Infinity)
       }else if(settings.volume == 1){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(lowmusic.menu3, Infinity)
       }else{
-        playback.end()
+        if (playback) playback.end();
       }
       break;
     case "game":
       if(settings.volume == 2){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(music.game, Infinity)
       }else if(settings.volume == 1){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(lowmusic.game, Infinity)
       }else{
-        playback.end()
+        if (playback) playback.end();
       }
       break;
     case "game2":
       if(settings.volume == 2){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(music.game2, Infinity)
       }else if(settings.volume == 1){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(lowmusic.game2, Infinity)
       }else{
-        playback.end()
+        if (playback) playback.end();
       }
       break;
     case "spookygame2":
       if(settings.volume == 2){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(music.spookygame2, Infinity)
       }else if(settings.volume == 1){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(lowmusic.spookygame2, Infinity)
       }else{
-        playback.end()
+        if (playback) playback.end();
       }
       break;
        case "game3p1":
       if(settings.volume == 2){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(music.game3p1, Infinity)
       }else if(settings.volume == 1){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(lowmusic.game3p1, Infinity)
       }else{
-        playback.end()
+        if (playback) playback.end();
       }
       break;
       case "game3p2":
       if(settings.volume == 2){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(music.game3p2, Infinity)
       }else if(settings.volume == 1){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(lowmusic.game3p2, Infinity)
       }else{
-        playback.end()
+        if (playback) playback.end();
       }
       break
       case "game4p1":
       if(settings.volume == 2){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(music.game4p1, Infinity)
       }else if(settings.volume == 1){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(lowmusic.game4p1, Infinity)
       }else{
-        playback.end()
+        if (playback) playback.end();
       }
       break;
       case "game4p2":
       if(settings.volume == 2){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(music.game4p2, Infinity)
       }else if(settings.volume == 1){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(lowmusic.game4p2, Infinity)
       }else{
-        playback.end()
+        if (playback) playback.end();
       }
       break;
       case "game4p3":
       if(settings.volume == 2){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(music.game4p3, Infinity)
       }else if(settings.volume == 1){
-        playback.end()
+        if (playback) playback.end();
         playback = playTune(lowmusic.game4p3, Infinity)
       }else{
-        playback.end()
+        if (playback) playback.end();
       }
       break;
   }
