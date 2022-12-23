@@ -153,6 +153,7 @@ export function baseEngine() {
 
     const s = new Sprite(type, x, y);
     state.sprites.push(s);
+    return s;
   }
   
   const _allEqual = arr => arr.every(val => val === arr[0]);
