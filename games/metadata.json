@@ -1526,5 +1526,29 @@
     "img": "gravity_fun",
     "tags": ["classic"],
     "addedOn": "2022-12-22"
+  },
+  {
+    "filename": "charge",
+    "title": "charge",
+    "author": "ZeroQLi",
+    "img": "charge",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-23"
+  },
+  {
+    "filename": "get_the_birdie",
+    "title": "get_the_birdie",
+    "author": "Sophie",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-23"
+  },
+  {
+    "filename": "sprigadventure",
+    "title": "sprigadventure",
+    "author": "stormypluto3865",
+    "img": "",
+    "tags": ["advanced"],
+    "addedOn": "2022-12-23"
   }
 ]
