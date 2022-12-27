@@ -336,7 +336,7 @@ LLLLLLLLLLLLLLLL`],
 1111111111111111` ]
 );
 
-let levelIndex = 20;
+let levelIndex = 0;
 const levels = [
   map`
 u.....
@@ -595,6 +595,8 @@ onInput("l", () => {
 afterInput(() => {
   user.update();
 });
+
+// console.log(levels.length);
 
 setInterval(() => {
   if (levelIndex === levels.length - 1) {
