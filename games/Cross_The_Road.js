@@ -273,6 +273,9 @@ function runGame() {
       
       despawnAllVehicles();
     }
+    
+    if(checkHit() || checkWin())
+      clearInterval(gameLoop);
   }, 1);
 }
 
