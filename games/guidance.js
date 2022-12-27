@@ -596,8 +596,6 @@ afterInput(() => {
   user.update();
 });
 
-// console.log(levels.length);
-
 setInterval(() => {
   if (levelIndex === levels.length - 1) {
     clearText();
