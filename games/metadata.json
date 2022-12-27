@@ -1590,5 +1590,13 @@
     "img": "Cross_The_Road",
     "tags": ["endless"],
     "addedOn": "2022-12-27"
+  },
+  {
+    "filename": "guidance",
+    "title": "guidance",
+    "author": "danush_ramanan",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-27"
   }
 ]
