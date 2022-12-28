@@ -1612,6 +1612,14 @@
     "title": "Friendly_Figures",
     "author": "Ali A. Saleh",
     "img": "",
+    "tags": ["puzzle", "multiplayer"],
+    "addedOn": "2022-12-28"
+  },
+  {
+    "filename": "Burger_Maker_V1",
+    "title": "Burger_Maker_V1",
+    "author": "Captain_AJ",
+    "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-12-28"
   }
