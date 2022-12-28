@@ -9,6 +9,7 @@ Thank you,
 - Hack Club for allowing me an opportunity to be creative with code through Sprig!
 - Hack Club's Leo & Holly for inspiring me to make this Sprig game!
 - DieselFalcon for inspirating me through your Apple Skedaddle Sprig Game!
+- Sam Liu and Lucas Honda Tonini for helping ensure my game's compatibility with Hack Club's Sprig Console.
 
 ---
 
@@ -339,12 +340,18 @@ setBackground(background);
 let level = 0;
 const levels = [
   map`
-p..g`,
-  map`
-b..t`,
+g..p
+t..b`,
   map`
 p..t
 b..g`,
+  map`
+b..g
+p..t`,
+  map`
+.wg
+pt.
+bw.`,
   map`
 p.....
 .w..w.
