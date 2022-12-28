@@ -757,21 +757,25 @@ setPushables({
 });
 
 onInput("s", () => {
+  if(!getFirst(mrchef)) return;
   getFirst(mrchef).y += 1;
     playTune(walk);
 });
 
 onInput("w", () => {
+  if(!getFirst(mrchef)) return;
   getFirst(mrchef).y -= 1;
     playTune(walk);
 });
 
 onInput("a", () => {
+  if(!getFirst(mrchef)) return;
   getFirst(mrchef).x -= 1;
     playTune(walk);
 });
 
 onInput("d", () => {
+  if(!getFirst(mrchef)) return;
   getFirst(mrchef).x += 1;
     playTune(walk);
 });
