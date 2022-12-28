@@ -3,15 +3,15 @@
 @author: Captain_AJ
 */
 
-// Version: 1.1
+// Version: 1.2
 
 // Story
 
 /* You play as Mr. Chef!
 A quickly rising burger maker.
-Your becoming one best in the world!
-And now with this new secret ingrident 
-your'e finally showcasing, you may the THE best.
+You're becoming one best in the world!
+And now, with this new secret ingredient, 
+you're finally showcasing that you may be the THE best.
 So get out there and assemble those burgers during the grand unveiling of:
 Mr. Chef's Super Secret, Super Tasty, Sauce!
 */
@@ -29,7 +29,8 @@ Mr. Chef's Super Secret, Super Tasty, Sauce!
 
 /* Push the ingredients into their proper places
 (i.e. cheese into the yellow circle) to make a complete burger.
-But! there are mazes to maunever around
+But! there are mazes to manuever around.
+Ingredients can not push other ingredients.
 */
 
 const mrchef = "m";
@@ -445,7 +446,6 @@ const playback = playTune(menu, Infinity);
 setSolids([mrchef, bun, patty, lettuce, tomato, cheese, wall, secret]);
 
 let level = 0;
-var isLevelEight = false;
 const levels = [
   map`
 ...............................................
@@ -574,6 +574,16 @@ const levels = [
 ...............
 ...............`, // text
   map`
+...............
+...............
+...............
+...............
+...............
+...............
+...............
+...............
+...............`, // text  
+  map`
 ........w....
 .........c.p.
 ..m...g.wwww.
@@ -582,7 +592,7 @@ const levels = [
 ......f...w..
 ww..wwgww.www
 ......s...b..
-....w...w....`, // level1
+....w...w....`, // level1 (map9)
   map`
 ww..bg.w...
 .....h.w.c.
@@ -694,7 +704,7 @@ addText("Press i", { x: 7, y: 11, color: color`0` });
 
 onInput("i", () => {
   clearText();
-  setMap(levels[level]);
+ 
 if (level == 0) {
    
   } 
@@ -731,34 +741,16 @@ if (level == 0) {
      
   }
 
-  // addText("level Number: " + level, { x: 0, y: 9, color: color`4` });
-  if (level <= 7) {
-  level++;
-   // addText("Level =" + level, { x: 1, y: 13, color: color`4` });
-    if(level == 8) {
-      clearText();
-    }
-    if(level == 9){
-      clearText();
-    }
+  if (level <= 8) {
+    level++;
+    setMap(levels[level]);
   }
-
+  
 });
 
-/* if (level == 13) {
-  playback.end()
-  const playback = playTune (melody, Infinity)
-}
-*/
-
-/*
-addText("Story", {
-  x: 11,
-  y: 11,
-  color: color `0`
-
-})    
-*/
+ if(level >= 9){
+      clearText();
+    }
 
 setPushables({
   [mrchef]: [bun, patty, lettuce, tomato, cheese, secret],
@@ -820,19 +812,16 @@ afterInput(() => {
   var isTomato = numberCoveredTomato === targetNumberTomato;
   var isCheese = numberCoveredCheese === targetNumberCheese;
   var isLettuce = numberCoveredLettuce === targetNumberLettuce;
-
+  var isBurgerReady = isBun && isPatty && isSecret && isCheese && isLettuce && isTomato;
+  
   // const numberCovered = tilesWith(goal, box).length;
   //const targetNumber = tilesWith(goal).length;
 
-
   
-  if ((level >= 8) && (level <= 14) && isBun && isPatty && isSecret && isCheese && isLettuce && isTomato) {
-    if(isLevelEight == true) {
+  if ((level >= 9) && (level <= 15) && isBurgerReady) {
     level++;
-    }
-    isLevelEight = true;
-    // addText(", you may the THE best.",{ x: 0, y: 3, color: color `C`})
     setMap(levels[level]);
+    clearText()
 
   }
 
