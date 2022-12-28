@@ -700,21 +700,21 @@ if (level == 0) {
   } 
    if (level == 1) {
     addText("You play as", { x: 1, y: 3, color: color`C` });
-    addText("Mr. Chef an up and", { x: 1, y: 6, color: color`C` });
+    addText("Mr. Chef, an up and", { x: 1, y: 6, color: color`C` });
     addText("coming burger chef.", { x: 1, y: 9, color: color`C` });
   } else if (level == 2) {
-    addText("Your becoming one", { x: 1, y: 3, color: color`C` });
+    addText("You're becoming one", { x: 1, y: 3, color: color`C` });
     addText("of the best", { x: 1, y: 6, color: color`C` });
     addText("in the world!", { x: 1, y: 9, color: color`C` });
   } else if (level == 3) {
-    addText("And now with", { x: 1, y: 3, color: color`C` });
+    addText("And now, with", { x: 1, y: 3, color: color`C` });
     addText("this new secret ", { x: 1, y: 6, color: color`C` });
     addText("ingredient, ", { x: 1, y: 9, color: color`C` });
      
   } else if (level == 4) {
     addText("you're quickly", { x: 1, y: 3, color: color`C` });
-     addText("showcasing, you may", { x: 1, y: 6, color: color`C` });
-     addText("be the THE, best.", { x: 1, y: 9, color: color`C` });
+     addText("showcasing you may", { x: 1, y: 6, color: color`C` });
+     addText("be the THE best.", { x: 1, y: 9, color: color`C` });
   } else if (level == 5) {
     addText("So get out", { x: 1, y: 3, color: color`C` });
      addText("there and", { x: 1, y: 6, color: color`C` });
