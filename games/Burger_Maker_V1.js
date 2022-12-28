@@ -3,7 +3,7 @@
 @author: Captain_AJ
 */
 
-// Version: 1
+// Version: 1.1
 
 // Story
 
@@ -445,7 +445,7 @@ const playback = playTune(menu, Infinity);
 setSolids([mrchef, bun, patty, lettuce, tomato, cheese, wall, secret]);
 
 let level = 0;
-
+var isLevelEight = false;
 const levels = [
   map`
 ...............................................
@@ -732,9 +732,12 @@ if (level == 0) {
   }
 
   // addText("level Number: " + level, { x: 0, y: 9, color: color`4` });
-  if (level <= 8) {
+  if (level <= 7) {
   level++;
    // addText("Level =" + level, { x: 1, y: 13, color: color`4` });
+    if(level == 8) {
+      clearText();
+    }
     if(level == 9){
       clearText();
     }
@@ -823,8 +826,11 @@ afterInput(() => {
 
 
   
-  if ((level >= 9) && (level <= 14) && isBun && isPatty && isSecret && isCheese && isLettuce && isTomato) {
+  if ((level >= 8) && (level <= 14) && isBun && isPatty && isSecret && isCheese && isLettuce && isTomato) {
+    if(isLevelEight == true) {
     level++;
+    }
+    isLevelEight = true;
     // addText(", you may the THE best.",{ x: 0, y: 3, color: color `C`})
     setMap(levels[level]);
 
