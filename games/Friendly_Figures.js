@@ -55,8 +55,8 @@ const melody = tune`
 416.6666666666667: d5~416.6666666666667,
 416.6666666666667: b4~416.6666666666667,
 416.6666666666667: d5~416.6666666666667,
-416.6666666666667: c5~416.6666666666667`
-playTune(melody, Infinity)
+416.6666666666667: c5~416.6666666666667`;
+playTune(melody, Infinity);
 const player = "p";
 const player2 = "b";
 const playerend = "q";
@@ -67,12 +67,14 @@ const teleportend = "z";
 const teleport2end = "x";
 const wall = "w";
 const background = "n";
-const ffend = "y"
+const ffend = "y";
 const end1 = "e";
 const end2 = "f";
 
 setLegend(
-  [ player, bitmap`
+  [
+    player,
+    bitmap`
 0000000000000000
 0000000000000000
 0000000000000000
@@ -88,8 +90,11 @@ setLegend(
 0000033333300000
 0000000000000000
 0000000000000000
-0000000000000000`],
-  [ player2, bitmap`
+0000000000000000`,
+  ],
+  [
+    player2,
+    bitmap`
 0000000000000000
 0000000000000000
 0000000000000000
@@ -105,8 +110,11 @@ setLegend(
 0007777777777000
 0000000000000000
 0000000000000000
-0000000000000000`],
-  [ ffend, bitmap`
+0000000000000000`,
+  ],
+  [
+    ffend,
+    bitmap`
 0000000000000000
 0003333300000000
 0033333330000000
@@ -122,8 +130,11 @@ setLegend(
 0000000072777727
 0000000072222227
 0000000077777777
-0000000000000000`],
-  [ playerend, bitmap`
+0000000000000000`,
+  ],
+  [
+    playerend,
+    bitmap`
 0000000000000000
 0000000000000000
 0000000000000000
@@ -139,8 +150,11 @@ setLegend(
 0000033333300000
 0000000000000000
 0000000000000000
-0000000000000000`],
-  [ player2end, bitmap`
+0000000000000000`,
+  ],
+  [
+    player2end,
+    bitmap`
 0000000000000000
 0000000000000000
 0000000000000000
@@ -156,8 +170,11 @@ setLegend(
 0007777777777000
 0000000000000000
 0000000000000000
-0000000000000000`],
-  [ teleport, bitmap`
+0000000000000000`,
+  ],
+  [
+    teleport,
+    bitmap`
 0002222222222000
 0002333333332000
 0002322222232000
@@ -173,8 +190,11 @@ setLegend(
 0002333333332000
 0002333333332000
 0002333333332000
-0002222222222000`],
-  [ teleport2, bitmap`
+0002222222222000`,
+  ],
+  [
+    teleport2,
+    bitmap`
 0002222222222000
 0002777777772000
 0002722222272000
@@ -190,8 +210,11 @@ setLegend(
 0002777777772000
 0002777777772000
 0002777777772000
-0002222222222000`],
-  [ teleportend, bitmap`
+0002222222222000`,
+  ],
+  [
+    teleportend,
+    bitmap`
 0002222222222000
 0002333333332000
 0002322222232000
@@ -207,8 +230,11 @@ setLegend(
 0002333333332000
 0002333333332000
 0002333333332000
-0002222222222000`],
-  [ teleport2end, bitmap`
+0002222222222000`,
+  ],
+  [
+    teleport2end,
+    bitmap`
 0002222222222000
 0002777777772000
 0002722222272000
@@ -224,8 +250,11 @@ setLegend(
 0002777777772000
 0002777777772000
 0002777777772000
-0002222222222000`],
-  [ wall, bitmap`
+0002222222222000`,
+  ],
+  [
+    wall,
+    bitmap`
 FFFFFFFFFFFFFFFF
 FFFFFFFFFFFFFFFF
 FFFFFFFFFFFFFFFF
@@ -241,8 +270,11 @@ FFFFFFFFFFFFFFFF
 FFFFFFFFFFFFFFFF
 FFFFFFFFFFFFFFFF
 FFFFFFFFFFFFFFFF
-FFFFFFFFFFFFFFFF`],
-  [ background, bitmap`
+FFFFFFFFFFFFFFFF`,
+  ],
+  [
+    background,
+    bitmap`
 0000000000000000
 0000000000000000
 0000000000000000
@@ -258,8 +290,11 @@ FFFFFFFFFFFFFFFF`],
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000` ],
-  [ end1, bitmap`
+0000000000000000`,
+  ],
+  [
+    end1,
+    bitmap`
 0000000000000000
 0000000000000000
 0222022232322202
@@ -275,8 +310,11 @@ FFFFFFFFFFFFFFFF`],
 0200023222332222
 0000000000000000
 0000000000000000
-0000000000000000` ],
-  [ end2, bitmap`
+0000000000000000`,
+  ],
+  [
+    end2,
+    bitmap`
 0000000000000000
 0000000000000000
 2202200200202000
@@ -292,7 +330,8 @@ FFFFFFFFFFFFFFFF`],
 0200022202220200
 0000000000000000
 0000000000000000
-0000000000000000` ],
+0000000000000000`,
+  ]
 );
 
 setBackground(background);
@@ -520,51 +559,53 @@ ef`,
 const currentLevel = levels[level];
 setMap(currentLevel);
 
-setSolids([ player, player2, wall, ffend, playerend, player2end, teleportend, teleport2end]);
+setSolids([
+  player,
+  player2,
+  wall,
+  ffend,
+  playerend,
+  player2end,
+  teleportend,
+  teleport2end,
+]);
 
 onInput("s", () => {
-if(!getFirst(player)) return;
   getFirst(player).y += 1;
 });
 
 onInput("d", () => {
-if(!getFirst(player)) return;
   getFirst(player).x += 1;
 });
 
 onInput("a", () => {
-if(!getFirst(player)) return;
   getFirst(player).x -= 1;
 });
 
 onInput("w", () => {
-if(!getFirst(player)) return;
   getFirst(player).y -= 1;
 });
 
 onInput("k", () => {
-if(!getFirst(player)) return;
   getFirst(player2).y += 1;
 });
 
 onInput("l", () => {
-if(!getFirst(player2)) return;
   getFirst(player2).x += 1;
 });
 
 onInput("j", () => {
-if(!getFirst(player2)) return;
   getFirst(player2).x -= 1;
 });
 
 onInput("i", () => {
-if(!getFirst(player2)) return;
   getFirst(player2).y -= 1;
 });
 
 afterInput(() => {
   const targetNumber = tilesWith(teleport).length + tilesWith(teleport2).length;
-  const numberCovered = tilesWith(teleport, player).length + tilesWith(teleport2, player2).length;
+  const numberCovered =
+    tilesWith(teleport, player).length + tilesWith(teleport2, player2).length;
 
   if (numberCovered === targetNumber) {
     level = level + 1;
