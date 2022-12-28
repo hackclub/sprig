@@ -1326,5 +1326,277 @@
     "img": "bbbbbb",
     "tags": ["puzzle"],
     "addedOn": "2022-12-06"
+  },
+  {
+    "filename": "Pac_Man",
+    "title": "Pac_Man",
+    "author": "Nico Koundakjian",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Stop",
+    "title": "Stop",
+    "author": "wyn-cmd",
+    "img": "Stop",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "The_Pet",
+    "title": "The_Pet",
+    "author": "wyn-cmd",
+    "img": "The_Pet",
+    "tags": ["simulation"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Temple",
+    "title": "Temple",
+    "author": "Wynston",
+    "img": "Temple",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Invisible_Maze",
+    "title": "Invisible_Maze",
+    "author": "Ryan Qin",
+    "img": "Invisible_Maze",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Worldcraft",
+    "title": "Worldcraft",
+    "author": "adadyer",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-09"
+  },
+  {
+    "filename": "Maze_Runner",
+    "title": "Maze_Runner",
+    "author": "Alan Alwakeel, Samuel Sapatla, Suhaan Palakamshetty, Martin Beythoon",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-10"
+  },
+  {
+    "filename": "cricket_frenzy",
+    "title": "cricket_frenzy",
+    "author": "aryan.k",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-10"
+  },
+  {
+    "filename": "randomworld",
+    "title": "randomworld",
+    "author": "Wojtek Widomski",
+    "img": "randomworld",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-11"
+  },
+  {
+    "filename": "sprig_dodge",
+    "title": "sprig_dodge",
+    "author": "Lucas and samliu",
+    "img": "sprig_dodge",
+    "tags": ["beginner", "tutorial"],
+    "addedOn": "2022-12-15"
+  },
+  {
+    "filename": "cookie_clicker",
+    "title": "cookie_clicker",
+    "author": "kunevi",
+    "img": "cookie_clicker",
+    "tags": ["endless"],
+    "addedOn": "2022-12-16"
+  },
+  {
+    "filename": "lights_out",
+    "title": "lights_out",
+    "author": "StarGazer1258 (Nathaniel Johns)",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-16"
+  },
+  {
+    "filename": "BigButton",
+    "title": "BigButton",
+    "author": "LinusSkucas",
+    "img": "BigButton",
+    "tags": [],
+    "addedOn": "2022-12-17"
+  },
+  {
+    "filename": "dvd_logo_simulator",
+    "title": "DVD logo simulator",
+    "author": "the456gamer",
+    "img": "dvd_logo_simulator",
+    "tags": ["simulation", "demo", "endless"],
+    "addedOn": "2022-12-18"
+  },
+  {
+    "filename": "crimbletips",
+    "title": "crimbLetips",
+    "author": "ShawnM",
+    "img": "",
+    "tags": [],
+    "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "Mirror_Mirror",
+    "title": "Mirror_Mirror",
+    "author": "Benjamin Grelk",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "Box_Jump",
+    "title": "Box_Jump",
+    "author": "Elijah Schneider",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "BrainTeaserMaze",
+    "title": "BrainTeaserMaze",
+    "author": "Arhan",
+    "img": "BrainTeaserMaze",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "13_medium_sokoban_puzzles",
+    "title": "13_medium_sokoban_puzzles",
+    "author": "Zachary Miller",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "Robot_Party_Basic_Buildv1",
+    "title": "Robot_Party_Basic_Buildv1",
+    "author": "Gam3rrXD",
+    "img": "Robot_Party_Basic_Buildv1",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-20"
+  },
+  {
+    "filename": "Terminal-Dungeon",
+    "title": "Terminal-Dungeon",
+    "author": "adadyer",
+    "img": "terminal-dungeon",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-20"
+  },
+  {
+    "filename": "Lava_the_impossible_maze",
+    "title": "Lava_the_impossible_maze",
+    "author": "Augustin Z",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-21"
+  },
+  {
+    "filename": "black_jack",
+    "title": "black_jack",
+    "author": "xevaly",
+    "img": "black_jack",
+    "tags": ["classic"],
+    "addedOn": "2022-12-21"
+  },
+  {
+    "filename": "hackcraft",
+    "title": "hackcraft",
+    "author": "khushraj",
+    "img": "hackcraft",
+    "tags": ["classic", "simulation"],
+    "addedOn": "2022-12-22"
+  },
+  {
+    "filename": "gravity_fun",
+    "title": "gravity_fun",
+    "author": "phantomeniasll",
+    "img": "gravity_fun",
+    "tags": ["classic"],
+    "addedOn": "2022-12-22"
+  },
+  {
+    "filename": "charge",
+    "title": "charge",
+    "author": "ZeroQLi",
+    "img": "charge",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-23"
+  },
+  {
+    "filename": "get_the_birdie",
+    "title": "get_the_birdie",
+    "author": "Sophie",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-23"
+  },
+  {
+    "filename": "sprigadventure",
+    "title": "sprigadventure",
+    "author": "stormypluto3865",
+    "img": "",
+    "tags": ["advanced"],
+    "addedOn": "2022-12-23"
+  },
+  {
+    "filename": "shitpest",
+    "title": "shitpest",
+    "author": "Mason Meirs",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-24"
+  },
+  {
+    "filename": "Sort",
+    "title": "Sort",
+    "author": "Mohan",
+    "img": "Sort",
+    "tags": [],
+    "addedOn": "2022-12-26"
+  },
+  {
+    "filename": "attack_on_slimes",
+    "title": "attack_on_slimes",
+    "author": "OwOSwordsman",
+    "img": "attack_on_slimes",
+    "tags": ["endless"],
+    "addedOn": "2022-12-26"
+  },
+  {
+    "filename": "Colour_Game",
+    "title": "Colour_Game",
+    "author": "Thuvaragan",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2022-12-26"
+  },
+  {
+    "filename": "Cross_The_Road",
+    "title": "Cross_The_Road",
+    "author": "Haneesh Pediredla",
+    "img": "Cross_The_Road",
+    "tags": ["endless"],
+    "addedOn": "2022-12-27"
+  },
+  {
+    "filename": "guidance",
+    "title": "guidance",
+    "author": "danush_ramanan",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-27"
   }
 ]

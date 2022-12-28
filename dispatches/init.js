@@ -27,7 +27,7 @@ export async function init(args, state) {
     state.staleRun = true;
     dispatch("RENDER");
   });
-  
+
   state.codemirror.dom.id = "code-editor";
   document.querySelector("#code-editor").replaceWith(state.codemirror.dom);
 
@@ -58,6 +58,29 @@ export async function init(args, state) {
   if (file) {
     const code = await loadFromURL(file);
     dispatch("LOAD_NEW_GAME", { code });
+
+    // These params only make sense when running from a file
+
+    if (getParam("run")) dispatch("RUN")
+    if (getParam("hide")) {
+      document.querySelector(".code-container").remove()
+      document.querySelector(".vertical-bar").remove()
+    }
+
+    const watch = getParam("watch")
+    if (watch) {
+      let oldCode = code
+
+      setInterval(async () => {
+        const newCode = await loadFromURL(file)
+
+        if (newCode !== oldCode){
+          oldCode = newCode
+          dispatch("LOAD_NEW_GAME", { code: oldCode })
+          if (getParam("run")) dispatch("RUN")
+        }
+      }, watch)
+    }
   }
 
   const id = getParam("id");
@@ -87,7 +110,7 @@ export async function init(args, state) {
   // switch to mobile mode
   const mobile = isMobile();
   if (mobile) {
-    const text = state.codemirror.state.doc.toString(); 
+    const text = state.codemirror.state.doc.toString();
     dispatch("RENDER_MOBILE", { text });
     sizeGameCanvas();
   }
