@@ -718,7 +718,7 @@ if (level == 0) {
   } else if (level == 5) {
     addText("So get out", { x: 1, y: 3, color: color`C` });
      addText("there and", { x: 1, y: 6, color: color`C` });
-     addText("assemble those", { x: 1, y: 9, color: color`C` });
+     addText("assemble those...", { x: 1, y: 9, color: color`C` });
   } else if (level == 6) {
     addText("burgers during", { x: 1, y: 3, color: color`C` });
      addText("the grand", { x: 1, y: 6, color: color`C` });
@@ -726,13 +726,13 @@ if (level == 0) {
   } else if (level == 7) {
     addText("Mr. Chef's", { x: 1, y: 3, color: color`C` });
      addText("Super Secret,", { x: 1, y: 6, color: color`C` });
-     addText("Super Tasty,", { x: 1, y: 9, color: color`C` });
-     addText("Sauce! - MCSSSTS :)", { x: 1, y: 9, color: color`C` });
+     addText("Super Tasty...", { x: 1, y: 9, color: color`C` });
+     addText("Sauce! - MCSSSTS :)", { x: 1, y: 12, color: color`C` });
      
   }
 
   // addText("level Number: " + level, { x: 0, y: 9, color: color`4` });
-  if (level <= 7) {
+  if (level <= 8) {
   level++;
    // addText("Level =" + level, { x: 1, y: 13, color: color`4` });
     if(level == 9){
