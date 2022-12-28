@@ -523,34 +523,42 @@ setMap(currentLevel);
 setSolids([ player, player2, wall, ffend, playerend, player2end, teleportend, teleport2end]);
 
 onInput("s", () => {
+if(!getFirst(player)) return;
   getFirst(player).y += 1;
 });
 
 onInput("d", () => {
+if(!getFirst(player)) return;
   getFirst(player).x += 1;
 });
 
 onInput("a", () => {
+if(!getFirst(player)) return;
   getFirst(player).x -= 1;
 });
 
 onInput("w", () => {
+if(!getFirst(player)) return;
   getFirst(player).y -= 1;
 });
 
 onInput("k", () => {
+if(!getFirst(player)) return;
   getFirst(player2).y += 1;
 });
 
 onInput("l", () => {
+if(!getFirst(player2)) return;
   getFirst(player2).x += 1;
 });
 
 onInput("j", () => {
+if(!getFirst(player2)) return;
   getFirst(player2).x -= 1;
 });
 
 onInput("i", () => {
+if(!getFirst(player2)) return;
   getFirst(player2).y -= 1;
 });
 
