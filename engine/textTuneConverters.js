@@ -138,12 +138,12 @@ export function tuneToText(tune) {
 
   const notesToString = ([duration, ...notes]) => (
     notes.length === 0 
-      ? duration 
-      : `${duration}: ${groupNotes(notes).map(notesToStringHelper).join(' + ')}`
+      ? Math.trunc(duration) 
+      : `${Math.trunc(duration)}: ${groupNotes(notes).map(notesToStringHelper).join(' + ')}`
   )
 
-  const notesToStringHelper = ([instrument, duration, note]) => (
-      `${duration}${reverseInstrumentKey[instrument]}${note}`
+  const notesToStringHelper = ([instrument, note, duration]) => (
+      `${note}${reverseInstrumentKey[instrument]}${Math.trunc(duration)}`
     )
 
   return tune.map(notesToString).join(',\n');
