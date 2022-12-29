@@ -1,13 +1,18 @@
 /*
 @title: Cross_The_Road
 @author: Haneesh Pediredla
+
+Play:-
+WASD to move. Dodge the vehicles and reach the finish line.
+If you stand longer dodging the vehicles then the score will be high.
+Press I to restart the game.
 */
 
 const vehicle = 'v';
 const player = 'p';
 const finishLine = 'f';
 
-let gameRunning = true;
+let gameRunning;
 
 let time = 0;
 let score = 0;
@@ -137,7 +142,7 @@ onInput('a', () => {
 });
 
 onInput('d', () => {
-    if(gameRunning) {
+  if(gameRunning) {
     let vehicles = getAll(vehicle);
     let p = getFirst(player);
 
@@ -153,6 +158,52 @@ onInput('d', () => {
     if(isCollision == false) {
       getFirst(player).x += 1; 
     }
+  }
+});
+
+onInput("i", () => {
+  if(gameRunning == false) {
+    let p = getFirst("p");
+
+    score = 0;
+    
+    p.x = 7;
+    p.y = 7;
+
+    setMap(map`
+ffffffff
+......v.
+...v....
+.....v..
+.v......
+......v.
+....v...
+.......p`);
+    
+    addText("Game Over!", {
+      x: 5,
+      y: 6,
+      color: color`2`
+    });
+    
+    addText("Score: "+score, {
+      x: 5,
+      y: 8,
+      color: color`2`
+    });
+
+    addText("Won Game!", {
+      x: 5,
+      y: 6,
+      color: color`2`
+    });
+    
+    addText("Score: "+score, {
+      x: 5,
+      y: 8,
+      color: color`2`
+    });
+    runGame();
   }
 });
 
@@ -221,6 +272,8 @@ function checkWin() {
 }
 
 function runGame() {
+  gameRunning = true;
+  
   let gameLoop = setInterval(() => {
     ++score;
     addText("Score: "+score, {
@@ -274,8 +327,10 @@ function runGame() {
       despawnAllVehicles();
     }
     
-    if(checkHit() || checkWin())
+    if(checkHit() || checkWin()) {
       clearInterval(gameLoop);
+      clearInterval(checksLoop);
+    }
   }, 1);
 }
 
