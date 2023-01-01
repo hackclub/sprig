@@ -6,8 +6,10 @@
 const player1 = "1";
 const player2 = "2";
 const background = "g";
-const borderWall = "w";
+const yBorderWall = "y";
+const cornerWall = "c";
 const ball = "b";
+const split = "s";
 setLegend(
   [ball, bitmap`
 .......00.......
@@ -60,7 +62,7 @@ setLegend(
 ......2332......
 ......2332......
 ......2222......`],
-  [borderWall, bitmap`
+  [yBorderWall, bitmap`
 0000000000000000
 0000000000000000
 0077777777777700
@@ -77,6 +79,40 @@ setLegend(
 0077777777777700
 0000000000000000
 0000000000000000`],
+  [cornerWall, bitmap`
+0000000000000000
+0000000000000000
+0033333333333300
+0033333333333300
+0033000000003300
+0033000000003300
+0033003333003300
+0033003333003300
+0033003333003300
+0033003333003300
+0033000000003300
+0033000000003300
+0033333333333300
+0033333333333300
+0000000000000000
+0000000000000000`],
+  [split, bitmap`
+.......00.......
+.......00.......
+.......00.......
+.......00.......
+.......00.......
+.......00.......
+.......00.......
+.......00.......
+.......00.......
+.......00.......
+.......00.......
+.......00.......
+.......00.......
+.......00.......
+.......00.......
+.......00.......`],
   [background, bitmap`
 1111111111111111
 1111111111111111
@@ -109,66 +145,41 @@ setTimeout(() => {
   ballX = Math.random() < 0.5 ? -1 : 1;
   ballY = Math.random() < 0.5 ? -2 : 2;
 }, 6000);
-// Score
-var player1Score = 0;
-var player2Score = 0;
-function updateScoreText(score1, score2) {
-  clearText()
-  addText(`${score1} - ${score2}`, {y: 2, color: color`2`})
-}
-function updateScore(player) {
-  switch(player) {
-    case 1:
-      player1Score = player1Score + 1;
-      updateScoreText(player1Score, player2Score)
-    case 2:
-      player2Score = player2Score + 1;
-      updateScoreText(player1Score, player2Score)
-  }
-}
-function computeScore(sprite) {
-  if (sprite.y <= (height() / 2)) {
-    updateScore(1)
-  } else {
-    updateScore(2)
-  }
-}
-updateScoreText("player1", "player2")
 // Map
 var level = 0;
 const maps = [
   map`
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwgww
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-w1gggggggggggggggggggggbggggggggggggggggggggg2w
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wgggggggggggggggggggggggggggggggggggggggggggggw
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww`,
+ycggggggggggggggggggggggsgggggggggggggggggggcy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+y1gggggggggggggggggggggbsggggggggggggggggggg2y
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ygggggggggggggggggggggggsggggggggggggggggggggy
+ycggggggggggggggggggggggsgggggggggggggggggggcy`,
 ]
 /*function switchMap() {
   deleteBall = true;
@@ -207,24 +218,62 @@ setInterval(() => {
   sprite.y += ballY;
   if (deleteBall) {
     sprite.remove()
-    deleteBall = false;
   }
   if (sprite.y >= height() - 2) {
     ballY = Math.abs(ballY) * -1;
-    computeScore(sprite)
   }
   else if (sprite.y <= 2) {
     ballY = Math.abs(ballY);
-    computeScore(sprite)
   }
-  if (sprite.x >= width() - 2) {
+  if (sprite.x >= width() - 1) {
     ballX = Math.abs(ballX) * -1;
   }
-  else if (sprite.x <= 2) {
+  else if (sprite.x <= 1) {
     ballX = Math.abs(ballX);
   }
   } catch(e) {
     console.log(e)
+  }
+}, 60)
+// Scoring
+var player1Score = 0;
+var player2Score = 0;
+const cornerCoords = []
+getAll(cornerWall).forEach((val) => {
+  cornerCoords.push({x: val.x, y: val.y})
+})
+function updateScore(sc1, sc2) {
+  clearText()
+  addText(`${sc1} - ${sc2}`)
+}
+function checkForCorners(sprite) {
+  cornerCoords.forEach((val) => {
+    if (val.x == sprite.x && val.y == sprite.y) {
+      return true
+    } else {
+      return false
+    }
+  })
+}
+setInterval(() => {
+  const ballSprite = getFirst(ball);
+  const halfMap = width() / 2;
+  if (deleteBall == false) {
+  if (ballSprite.x == 2 || ballSprite.x == 45) {
+    if (ballSprite.x <= halfMap) {
+      player1Score = player1Score + 1;
+      if (checkForCorners(ballSprite)) {
+        player1Score = player1Score - 1;
+      }
+      updateScore(player1Score, player2Score)
+    } else {
+      player2Score = player2Score + 1;
+      if (checkForCorners(ballSprite)) {
+        player2Score = player2Score - 1;
+      }
+      updateScore(player1Score, player2Score)
+    }
+  }
   }
 }, 60)
 setInterval(() => {
@@ -232,10 +281,13 @@ setInterval(() => {
     clearText()
     addText("Player 1 Won", {y: 2, color: color`2`})
     //switchMap()
+    deleteBall = true;
   }
   if (player2Score >=10) {
     clearText()
     addText("Player 2 Won", {y: 2, color: color`2`})
     //switchMap()
+    deleteBall = true;
   }
 })
+addText(`${height()}`)
