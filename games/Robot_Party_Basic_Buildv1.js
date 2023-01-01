@@ -190,7 +190,7 @@ const rese = tune`
 30: c4-30 + d4-30,
 570`
 
-let level = 0;
+let level = 13;
 const endlvl = getRandomInt(2);
 const levels = [
   map`
@@ -272,7 +272,7 @@ const end = [map`
 wwww
 wwww
 wwww
-wwww`, map`
+pbgw`, map`
 pbgw
 wgbp
 pbgw
