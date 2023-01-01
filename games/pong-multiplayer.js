@@ -138,19 +138,6 @@ updateScoreText("player1", "player2")
 var level = 0;
 const maps = [
   map`
-wwwwwwwwwwwwww
-wggggggggggggw
-wggggggggggggw
-wggggggggggggw
-wggggggggggggw
-wggggggggggggw
-wgggggbggggggw
-wggggggggggggw
-w1gggggggggg2w
-wggggggggggggw
-wggggggggggggw
-wwwwwwwwwwwwww`,
-  map`
 wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwgww
 wgggggggggggggggggggggggggggggggggggggggggggggw
 wgggggggggggggggggggggggggggggggggggggggggggggw
@@ -183,14 +170,14 @@ wgggggggggggggggggggggggggggggggggggggggggggggw
 wgggggggggggggggggggggggggggggggggggggggggggggw
 wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww`,
 ]
-function switchMap() {
+/*function switchMap() {
   deleteBall = true;
   setTimeout(2000)
   level = level + 1;
   setMap(maps[level])
   updateScoreText("player1", "player2")
   addSprite((width() / 2), (height() / 2), ball)
-}
+}*/
 setMap(maps[level])
 /*
   W (up) & S (down) are Player 1
@@ -244,11 +231,11 @@ setInterval(() => {
   if (player1Score >= 10) {
     clearText()
     addText("Player 1 Won", {y: 2, color: color`2`})
-    switchMap()
+    //switchMap()
   }
   if (player2Score >=10) {
     clearText()
     addText("Player 2 Won", {y: 2, color: color`2`})
-    switchMap()
+    //switchMap()
   }
 })
