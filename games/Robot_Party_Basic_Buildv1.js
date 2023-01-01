@@ -3,7 +3,6 @@
 @author: Gam3rrXD
 */
 function reset(){
-  console.log("debug");
     min = 0;
     seconds = 0;
     level=0;
