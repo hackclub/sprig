@@ -1,5 +1,5 @@
 /*
-@title: maze!
+@title: maze bird
 @author: rkohm
 */
 
