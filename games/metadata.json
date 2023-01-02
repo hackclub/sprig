@@ -1654,5 +1654,13 @@
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2023-01-01"
+  },
+  {
+    "filename": "maze_bird",
+    "title": "maze_bird",
+    "author": "rkohm",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-01"
   }
 ]
