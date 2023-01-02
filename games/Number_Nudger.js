@@ -501,22 +501,22 @@ anmopqrstuv.
 ..........x.
 dwlkjihgfe..`,
 map `
-.yyyyyyyyyy.
-b..........c
-banrmtosu..c
-b..v......xc
-b.q.p....x.c
-bx..xxxxxxxc
-bdefghijklwc
-.zzzzzzzzzz.`,map`
-dhyyeyyyyyyi
-b....x...xxr
-b.xq.n.p.x..
-bl......xa.x
-b.m.a...ugxj
-b..v.tao.x.s
-bdxfx.....k.
-.zxwxzzzzzzx`, ]
+.xxxxxxxxxx.
+x..........x
+xanrmtosu..x
+x..v......xx
+x.q.p....x.x
+xx..xxxxxxxx
+xdefghijklwx
+.xxxxxxxxxx.`,map`
+dhxxexxxxxxi
+x....x...xxr
+x.xq.n.p.x..
+xl......xa.x
+x.m.a...ugxj
+x..v.tao.x.s
+xdxfx.....k.
+.xxwxxxxxxxx`, ]
 let level = 0;
 addText(`Level ${level+1}`)
 setMap(levels[level]);
