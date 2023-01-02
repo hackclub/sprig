@@ -1,14 +1,18 @@
 /*
+
 @title: Missile Mania
 @author: Nisarga (https://github.com/nisarga-developer)
+
 Instructions:
 Hit "run" to execute the code and
 start the game (you can also press shift+enter).
-The objective is to avoid the the missiles. If the falling missile hits the player, the game ends.
+The objective is to avoid the the missiles. If the falling missile hits the player, the game ends. 
+Controls : A = move left, D = move right.
 */
 
 const player = "p";
 const obstacle = "o";
+const soil = "s" ;
 
 setLegend(
   [obstacle, bitmap`
@@ -45,6 +49,24 @@ setLegend(
 .......D........
 ......C.C.......
 .....C...C......`],
+  [soil, 
+bitmap`
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC`], 
 )
 setMap(map`
 ........
@@ -53,21 +75,9 @@ setMap(map`
 ........
 ........
 ........
-........
-....p...`)
+....p...
+ssssssss`)
 var gameRunning = true; 
-
-onInput("w", () => {
-  if (gameRunning) {
-    getFirst(player).y -= 1;
-  }
-});
-
-onInput("s", () => {
-  if (gameRunning) {
-    getFirst(player).y += 1;
-  }
-});
 
 
 onInput("a", () => {
@@ -95,17 +105,21 @@ function moveObstacles() {
     obstacles[i].y += 1;
   }
 }
+
 function despawnObstacles() {
   let obstacles = getAll(obstacle);
 
   for (let i = 0; i < obstacles.length; i++) {
-   if (obstacles[i].y == 8) {
-     obstacles[i].remove();
-   }
+    if (obstacles[i].y >= 7) {
+      obstacles[i].remove();
+    }
   }
 }
+
+
+
 function checkHit() {
-  let p = getAll(player);  // <-- Add this line
+  let p = getAll(player);  
   let obstacles = getAll(obstacle);
 
   for (let i = 0; i < obstacles.length; i++) {
