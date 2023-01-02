@@ -1662,5 +1662,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2023-01-01"
+  },
+  {
+    "filename": "missile_mania",
+    "title": "missile_mania",
+    "author": "Nisarga",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2023-01-01"
   }
 ]
