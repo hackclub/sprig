@@ -259,6 +259,15 @@ setInterval(() => {
 
 
 afterInput(() => {
+  if (tilesWith(surfer, powerup).length > 0) {
+        playTune(goalSound);
+        score++;
+        updateScore();
+        console.log(tilesWith(surfer,powerup));
+        getAll(powerup).forEach((powerupObj) => {
+        powerupObj.remove();
+  })
+  }
   tilesWith(surfer, powerup).forEach(tile => {
     tile.forEach(sprite => {
       if (sprite.type === "powerup") {
