@@ -1,9 +1,10 @@
 /*
 @title: Avoid_The_Tree
 @author: Samarth Verulkar
-*/ 
 Coding Demo 5: Gravity by Leonard (Omay)
 flappy_bird_but_no_gravity_and_worse by sam liu 
+*/ 
+
 let vy = 0;
 
 const jumpHeight = -10;
