@@ -2,8 +2,19 @@
 @title: Robot_Party | Basic Build v1
 @author: Gam3rrXD
 */
+function reset(){
+    min = 0;
+    seconds = 0;
+    level=0;
+    isend = 0;
+    button_press = 0;
+    reset_used = 0;
+    var lol = setInterval(function() { seconds++; if (seconds == 60) {min++; seconds = 0;} addText(min + ":" + seconds, { x:14 , y:1 , color: color`0` })} , 1000);
+}
 let button_press = 0;
+let reset_used = 0;
 let min = 0;
+let isend = 0;
 var seconds = 0;
 var lol = setInterval(function() { seconds++; if (seconds == 60) {min++; seconds = 0;} addText(min + ":" + seconds, { x:14 , y:1 , color: color`0` })} , 1000);
 
@@ -11,6 +22,8 @@ const player = "p";
 const box = "b";
 const goal = "g";
 const wall = "w";
+const half_wall = "h";
+const fake_wall = "f";
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
@@ -67,6 +80,40 @@ setLegend(
 ................
 ................`],
   [ wall, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
+  [ half_wall, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+................
+................
+................
+................
+................
+................
+................
+................`],
+  [ fake_wall, bitmap`
 0000000000000000
 0000000000000000
 0000000000000000
@@ -184,13 +231,47 @@ wwww`,
 p.bg
 bw..
 ..b.
-gw.g`
-];
+gw.g`,
+  map`
+g...
+wwb.
+.w.w
+p..w`, 
+map`
+hhph
+h.bh
+h.gh
+hhhh`, map`
+hh..
+p..b
+hhhg
+hhhh`, map`
+pf..
+ww..
+.wb.
+gf..`, map`
+wwwp
+ffff
+fbff
+wwwg`, map`
+pfff
+wfff
+wfbg
+wwww`];
+const secr_lvl = [map`
+pfwg
+wfwf
+ffbf
+ffff`, map`
+gwww
+ffbw
+fbff
+gwwp`]
 const end = [map`
 wwww
 wwww
 wwww
-wwww`, map`
+pbgw`, map`
 pbgw
 wgbp
 pbgw
@@ -198,7 +279,7 @@ wgbp`]
 const currentLevel = levels[level];
 const endLevel = end[endlvl];
 setMap(currentLevel);
-setSolids([ player, box, wall ]);
+setSolids([ player, box, wall, half_wall ]);
 
 setPushables({
   [player]: [box],
@@ -207,34 +288,49 @@ setPushables({
 
 // Movement + Sounds
 onInput("w", () => {
-  button_press++;
-  playTune(move, 1)
-  getFirst(player).y -= 1;
+  if (isend == 0) {
+    button_press++;
+    playTune(move, 1)
+    getFirst(player).y -= 1; }
 });
 
 onInput("a", () => {
-  button_press++;
-  playTune(move, 1)
-  getFirst(player).x -= 1;
+  if (isend == 0) {
+    button_press++;
+    playTune(move, 1)
+    getFirst(player).x -= 1;}
 });
 
 onInput("s", () => {
-  button_press++;
-  playTune(move, 1)
-  getFirst(player).y += 1;
+  if (isend == 0) {
+    button_press++;
+    playTune(move, 1)
+    getFirst(player).y += 1;
+  }
 });
 
 onInput("d", () => {
-  button_press++;
-  playTune(move, 1)
-  getFirst(player).x += 1;
+  if (isend == 0) {
+    button_press++;
+    playTune(move, 1)
+    getFirst(player).x += 1;
+  }
 });
-
+onInput("i", () => {
+   if (isend == 0)
+  {
+      setMap(secr_lvl[0])
+  }
+});
 // Reset Level + Sound
 
 onInput("j", () => {
-  button_press++;
-  const currentLevel = levels[level];
+  reset_used++;
+  if (isend == 1)
+  {
+    reset()
+  }
+  let currentLevel = levels[level];
   if (currentLevel !== undefined) {
     clearText("");
     playTune(rese)
@@ -261,9 +357,10 @@ afterInput(() => {
     } else {
       clearInterval(lol);
       setMap(endLevel)
+      isend++;
       clearText()
-      if (endlvl == 1) { addText("You found ", { y: 4, color: color`4` }); addText("the hidden level!", { y: 5, color: color`4` }); addText("Time Taken: " + min + ":" + seconds , { y: 7, color: color`5` }); addText("Pressed: " + button_press , { y: 9, color: color`H` }); playTune(secnd, Infinity); }
-      else { addText("Winner!", { y: 3, color: color`3` }); addText("Time Taken: " + min + ":" + seconds , { y: 6, color: color`5` }); addText("Pressed: " + button_press , { y: 9, color: color`H` }); playTune(endd, Infinity); }
+      if (endlvl == 1) { addText("You found ", { y: 4, color: color`4` }); addText("the hidden level!", { y: 5, color: color`4` }); addText("Time Taken: " + min + ":" + seconds , { y: 7, color: color`5` }); addText("Pressed: " + button_press , { y: 9, color: color`H` }); addText("Resets: " + reset_used , { y: 11, color: color`F` }); const playback = playTune(secnd, 1); }
+      else { addText("Winner!", { y: 3, color: color`3` }); addText("Time Taken: " + min + ":" + seconds , { y: 6, color: color`5` }); addText("Pressed: " + button_press , { y: 9, color: color`H` }); addText("Resets: " + reset_used , { y: 11, color: color`F` }); const playback = playTune(endd, 1); }
     }
   }
 });
