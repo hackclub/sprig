@@ -1,6 +1,8 @@
 /*
 @title: Avoid_The_Tree
 @author: Samarth Verulkar
+
+References and inspirations:
 Coding Demo 5: Gravity by Leonard (Omay)
 flappy_bird_but_no_gravity_and_worse by sam liu 
 */ 
