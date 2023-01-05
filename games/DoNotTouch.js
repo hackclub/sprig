@@ -1,5 +1,5 @@
 /*
-@title: Don't Touch
+@title: DoNotTouch
 @author: Yogesh Kushwaha
 Instructions:
 WASD to control your player
