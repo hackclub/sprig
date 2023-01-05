@@ -1334,5 +1334,373 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Stop",
+    "title": "Stop",
+    "author": "wyn-cmd",
+    "img": "Stop",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "The_Pet",
+    "title": "The_Pet",
+    "author": "wyn-cmd",
+    "img": "The_Pet",
+    "tags": ["simulation"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Temple",
+    "title": "Temple",
+    "author": "Wynston",
+    "img": "Temple",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Invisible_Maze",
+    "title": "Invisible_Maze",
+    "author": "Ryan Qin",
+    "img": "Invisible_Maze",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-07"
+  },
+  {
+    "filename": "Worldcraft",
+    "title": "Worldcraft",
+    "author": "adadyer",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-09"
+  },
+  {
+    "filename": "maze_runner2",
+    "title": "Maze_Runner",
+    "author": "Alan Alwakeel, Samuel Sapatla, Suhaan Palakamshetty, Martin Beythoon",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-10"
+  },
+  {
+    "filename": "cricket_frenzy",
+    "title": "cricket_frenzy",
+    "author": "aryan.k",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-10"
+  },
+  {
+    "filename": "randomworld",
+    "title": "randomworld",
+    "author": "Wojtek Widomski",
+    "img": "randomworld",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-11"
+  },
+  {
+    "filename": "sprig_dodge",
+    "title": "sprig_dodge",
+    "author": "Lucas and samliu",
+    "img": "sprig_dodge",
+    "tags": ["beginner", "tutorial"],
+    "addedOn": "2022-12-15"
+  },
+  {
+    "filename": "cookie_clicker",
+    "title": "cookie_clicker",
+    "author": "kunevi",
+    "img": "cookie_clicker",
+    "tags": ["endless"],
+    "addedOn": "2022-12-16"
+  },
+  {
+    "filename": "lights_out",
+    "title": "lights_out",
+    "author": "StarGazer1258 (Nathaniel Johns)",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-16"
+  },
+  {
+    "filename": "BigButton",
+    "title": "BigButton",
+    "author": "LinusSkucas",
+    "img": "BigButton",
+    "tags": [],
+    "addedOn": "2022-12-17"
+  },
+  {
+    "filename": "dvd_logo_simulator",
+    "title": "DVD logo simulator",
+    "author": "the456gamer",
+    "img": "dvd_logo_simulator",
+    "tags": ["simulation", "demo", "endless"],
+    "addedOn": "2022-12-18"
+  },
+  {
+    "filename": "crimbletips",
+    "title": "crimbLetips",
+    "author": "ShawnM",
+    "img": "",
+    "tags": [],
+    "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "Mirror_Mirror",
+    "title": "Mirror_Mirror",
+    "author": "Benjamin Grelk",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "Box_Jump",
+    "title": "Box_Jump",
+    "author": "Elijah Schneider",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "BrainTeaserMaze",
+    "title": "BrainTeaserMaze",
+    "author": "Arhan",
+    "img": "BrainTeaserMaze",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "13_medium_sokoban_puzzles",
+    "title": "13_medium_sokoban_puzzles",
+    "author": "Zachary Miller",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-19"
+  },
+  {
+    "filename": "Robot_Party_Basic_Buildv1",
+    "title": "Robot_Party_Basic_Buildv1",
+    "author": "Gam3rrXD",
+    "img": "Robot_Party_Basic_Buildv1",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-20"
+  },
+  {
+    "filename": "Terminal-Dungeon",
+    "title": "Terminal-Dungeon",
+    "author": "adadyer",
+    "img": "terminal-dungeon",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-20"
+  },
+  {
+    "filename": "Lava_the_impossible_maze",
+    "title": "Lava_the_impossible_maze",
+    "author": "Augustin Z",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-21"
+  },
+  {
+    "filename": "black_jack",
+    "title": "black_jack",
+    "author": "xevaly",
+    "img": "black_jack",
+    "tags": ["classic"],
+    "addedOn": "2022-12-21"
+  },
+  {
+    "filename": "hackcraft",
+    "title": "hackcraft",
+    "author": "khushraj",
+    "img": "hackcraft",
+    "tags": ["classic", "simulation"],
+    "addedOn": "2022-12-22"
+  },
+  {
+    "filename": "gravity_fun",
+    "title": "gravity_fun",
+    "author": "phantomeniasll",
+    "img": "gravity_fun",
+    "tags": ["classic"],
+    "addedOn": "2022-12-22"
+  },
+  {
+    "filename": "charge",
+    "title": "charge",
+    "author": "ZeroQLi",
+    "img": "charge",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-23"
+  },
+  {
+    "filename": "get_the_birdie",
+    "title": "get_the_birdie",
+    "author": "Sophie",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-23"
+  },
+  {
+    "filename": "sprigadventure",
+    "title": "sprigadventure",
+    "author": "stormypluto3865",
+    "img": "",
+    "tags": ["advanced"],
+    "addedOn": "2022-12-23"
+  },
+  {
+    "filename": "shitpest",
+    "title": "shitpest",
+    "author": "Mason Meirs",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-24"
+  },
+  {
+    "filename": "Sort",
+    "title": "Sort",
+    "author": "Mohan",
+    "img": "Sort",
+    "tags": [],
+    "addedOn": "2022-12-26"
+  },
+  {
+    "filename": "attack_on_slimes",
+    "title": "attack_on_slimes",
+    "author": "OwOSwordsman",
+    "img": "attack_on_slimes",
+    "tags": ["endless"],
+    "addedOn": "2022-12-26"
+  },
+  {
+    "filename": "Colour_Game",
+    "title": "Colour_Game",
+    "author": "Thuvaragan",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2022-12-26"
+  },
+  {
+    "filename": "Cross_The_Road",
+    "title": "Cross_The_Road",
+    "author": "Haneesh Pediredla",
+    "img": "Cross_The_Road",
+    "tags": ["endless"],
+    "addedOn": "2022-12-27"
+  },
+  {
+    "filename": "guidance",
+    "title": "guidance",
+    "author": "danush_ramanan",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-27"
+  },
+  {
+    "filename": "Dragon_Fest",
+    "title": "Dragon_Fest",
+    "author": "Peyeyey",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2022-12-27"
+  },
+  {
+    "filename": "Friendly_Figures",
+    "title": "Friendly_Figures",
+    "author": "Ali A. Saleh",
+    "img": "",
+    "tags": ["puzzle", "multiplayer"],
+    "addedOn": "2022-12-28"
+  },
+  {
+    "filename": "Burger_Maker_V1",
+    "title": "Burger_Maker_V1",
+    "author": "Captain_AJ",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2022-12-28"
+  },
+  {
+    "filename": "A_Really_One_Sided_Duel",
+    "title": "A_Really_One_Sided_Duel",
+    "author": "Saatwik Das",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2022-12-28"
+  },
+  {
+    "filename": "offline_t-rex_game",
+    "title": "offline_t-rex_game",
+    "author": "zoya hussain",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2022-12-31"
+  },
+  {
+    "filename": "Asteroid_Apocalypse",
+    "title": "Asteroid_Apocalypse",
+    "author": "zcsop1206",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2022-12-31"
+  },
+  {
+    "filename": "pong-multiplayer",
+    "title": "pong-multiplayer",
+    "author": "sean",
+    "img": "",
+    "tags": ["multiplayer"],
+    "addedOn": "2023-01-01"
+  },
+  {
+    "filename": "maze_bird",
+    "title": "maze_bird",
+    "author": "rkohm",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-01"
+  },
+  {
+    "filename": "missile_mania",
+    "title": "missile_mania",
+    "author": "Nisarga",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2023-01-01"
+  },
+  {
+    "filename": "Number_Nudger",
+    "title": "Number_Nudger",
+    "author": "Boon",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-02"
+  },
+  {
+    "filename": "Protect_The_Surfer",
+    "title": "Protect_The_Surfer",
+    "author": "thinkingjet",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-01-03"
+  },
+  {
+    "filename": "font-explorer",
+    "title": "font-explorer",
+    "author": "Shane Celis",
+    "img": "font-explorer",
+    "tags": ["tool"],
+    "addedOn": "2023-01-04"
+  },
+  {
+    "filename": "Amongus_flight",
+    "title": "Amongus_flight",
+    "author": "Yashas",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2023-01-04"
   }
 ]

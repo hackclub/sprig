@@ -296,15 +296,15 @@ We manufactured our board by sending Gerber files to a PCB fabrication house alo
 
 ## The Game Engine
 
-Lot's of what makes Sprig "Sprig" is the game engine to help you make charming tile-based games.
+Lots of what makes Sprig "Sprig" is the game engine, which helps you to make charming, tile-based games.
 
 This engine evolved from a more traditional "game-engine" we called Game Lab. 
 
-Game Lab had a physics engine which handled moving things with velocity and collisions between objects.
+Game Lab had a physics engine that handled moving things with velocity and collisions between objects.
 
-We found that people would make one game mechanic but never finish games so we decided to developed a simplified engine.
+We found that people would make one game mechanic but never finish games, so we decided to develop a simplified engine.
 
-We made everything tile based. That means everything moves discretely on a grid. It's accommodates making puzzle games.
+We made everything tile-based. That means everything moves discretely on a grid. This accommodates making puzzle games.
 
 ## The Web Editor
 
