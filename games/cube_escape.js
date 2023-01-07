@@ -522,6 +522,7 @@ uuu.......
 const reloadMap = () => {
   clearText();
   setMap(levels[level]);
+  addSprite(0, height() - 1, txtLife);
   textRenderer();
 }
 
@@ -687,7 +688,6 @@ window.setInterval(() => {
 
 const initialization = () => {
   reloadMap();
-  addSprite(0, height() - 1, txtLife);
 }
 
 // Input Manager
