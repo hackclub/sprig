@@ -3,9 +3,68 @@
 @author: marios_mitsios
 */
 
+// Text per Level
+const textResources = [
+  {
+    "level": 5,
+    "txt": "You escaped,\nor did you?",
+    "options": {
+      x: 2,
+      y: 7,
+      color: color`3`
+    }
+  },
+  {
+    "level": 7,
+    "txt": "Take THIS\nIts Dangerous \nto go alone!",
+    "options": {
+      x: 3,
+      y: 5,
+      color: color`6`
+    }
+  },
+  {
+    "level": 8,
+    "txt": "STAFF\nOFFICES",
+    "options": {
+      x: 10,
+      y: 2,
+      color: color`3`
+    }
+  },
+  {
+    "level": 8,
+    "txt": "The officies\nwill surely\nhave a way\nto escape!",
+    "options": {
+      x: 7,
+      y: 10,
+      color: color`4`
+    }
+  },
+  {
+    "level": 9,
+    "txt": "STOP RIGHT\nTHERE!\n\nFREEZE!",
+    "options": {
+      x: 5,
+      y: 6,
+      color: color`3`
+    }
+  },
+  {
+    "level": 10,
+    "txt": "That was it?",
+    "options": {
+      x: 6,
+      y: 7,
+      color: color`4`
+    }
+  },
+]
+
 // Variables
 const BULLET_SPEED = 1
 const TICK = 75
+let hasKey = false;
 
 // Initialization
 const player = "p";
@@ -13,6 +72,8 @@ const enemy = "e";
 const bullet = "b";
 const flipBullet = "f";
 const wall = "w";
+const key = "k";
+const lockedWall = "j";
 const unbreakableWall = "u";
 const warpHole = "h";
 const backHole = "o";
@@ -24,6 +85,7 @@ const txtII = "2";
 const txtIII = "3";
 const txtIV = "4";
 const txtV = "5";
+const txtErr = "g";
 let lives = 3;
 
 setLegend(
@@ -112,6 +174,23 @@ CC9CCC9999CCC9CC
 CC99CC9999CC99CC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC`],
+  [ lockedWall, bitmap`
+LLLLLLLLLLLLLLLL
+LLLCCCCCCCCCCLLL
+LLLLCC9999CCLLLL
+LCLLLC9999CLLLCL
+LCCLLLCCCCLLLCCL
+LCCCLLLLLLLLCCCL
+LC99CLLL6LLC99CL
+LC99CCL66LCC99CL
+LC99CCL66LCC99CL
+LC99CLL6LLLC99CL
+LCCCLLLLLLLLCCCL
+LCCLLLCCCCLLLCCL
+LCLLLC9999CLLLCL
+LLLLCC9999CCLLLL
+LLLCCCCCCCCCCLLL
+LLLLLLLLLLLLLLLL`],
   [ unbreakableWall, bitmap`
 LLLLLLLLLLLLLLLL
 LLLLLLLLLLLLLLLL
@@ -298,7 +377,41 @@ LLLLLLLLLLLLLLLL`],
 ......0000......
 ......0000......
 ......0000......
-................` ]
+................` ],
+  [ txtErr, bitmap`
+00000.0000.0000.
+00000.0000.0000.
+00....0..0.0..0.
+00....0..0.0..0.
+00....0000.0000.
+00....0000.0000.
+00....00...00...
+00000.00...00...
+00000.000..000..
+00....000..000..
+00....000..0.0..
+00....0.0..0.0..
+00....0.00.0.00.
+00....0.00.0.00.
+00000.0..0.0..0.
+00000.0..0.0..0.`],
+  [ key, bitmap`
+................
+................
+................
+................
+................
+.666666.........
+.666666.........
+.66..6666666666.
+.66..6666666666.
+.666666.....66..
+.666666.........
+................
+................
+................
+................
+................`]
 );
 
 // Random
@@ -308,7 +421,7 @@ function getRndInteger(min, max) {
 
 // Collisions
 setSolids([
-  player, wall, unbreakableWall, enemy
+  player, wall, unbreakableWall, enemy, lockedWall
 ]);
 setPushables({
   [ player ]: [],
@@ -361,15 +474,55 @@ uuuuuuu.uu
 p......w.e
 .......w.e
 uuuuuuu.uu
-..uuuuu.wr`
+..hweew.wr`,
+  map`
+he.w.e.l51
+uuuue.e.e.
+uuuuue.e.e
+pwe.w.e.e.
+uuu.uuuwuw
+..uuuuuruo`,
+  map`
+lg......jo
+........uu
+........ue
+p.....k.uh
+uuu.....uw
+..u......j`,
+  map`
+l5gu......
+uuuu.....e
+ow.u....eu
+uu.u....uu
+p..j...ejh
+uu.u....uu
+rw.u....eu
+uuuu.....e
+..uu......`,
+  map`
+...w...w..
+oeuu...uer
+uuuu...uuu
+.u.....euu
+pj....e.jh
+.u.....euu
+uuuuuuuuuu
+uuuuuuuuuu
+uuuuuuuuuu`,
+  map`
+lgu.......
+uuu.......
+..u.......
+p.j......o
+..u.......
+uuu.......
+..u.......`
 ];
 
 const reloadMap = () => {
   clearText();
   setMap(levels[level]);
-  if (level == 5){
-    addText("You escaped,\nor did you?", {x: 2, y: 7, color: color`3`})
-  }
+  textRenderer();
 }
 
 const nextMap = () => {
@@ -391,6 +544,16 @@ const addLife = () => {
   lives += 1;
   initialization();
 }
+
+// Text Renderer
+const textRenderer = () => {
+  textResources.forEach(text => {
+    if (level == text.level) {
+      addText(text.txt, text.options)
+    }
+  })
+}
+
 // UI
 const displayUI = () => {
   getTile(1, height() - 1).forEach(tile => {
@@ -494,9 +657,23 @@ const enemyPlayerCollisions = () => {
         getTile(enemyInstance.x, enemyInstance.y - 1).includes(playerInstance)
        )
     {
+      hasKey = false;
       removeLife();
     }
   })
+}
+
+// KeyManager
+const keyManager = () => {
+  // tilesWith(lockedWall).forEach(walls => {
+  //   console.log(walls[0].x)
+  // })
+  if (hasKey) {
+    tilesWith(lockedWall).forEach(walls => {
+      addSprite(walls[0].x, walls[0].y, wall)
+      walls[0].remove()
+    })
+  }
 }
 
 // Main Loop
@@ -505,6 +682,7 @@ window.setInterval(() => {
   checkBulletCollisions();
   enemyAI();
   displayUI();
+  keyManager();
 }, TICK);
 
 const initialization = () => {
@@ -546,6 +724,11 @@ afterInput(() => {
       previousMap();
     } else if (tile.type == restartHole) {
       reloadMap();
+    }
+
+    if (tile.type == key) {
+      hasKey = true;
+      tile.remove();
     }
   })
   enemyPlayerCollisions()
