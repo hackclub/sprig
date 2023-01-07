@@ -1710,5 +1710,21 @@
     "img": "",
     "tags": ["endless"],
     "addedOn": "2023-01-05"
+  },
+  {
+    "filename": "SprigClick",
+    "title": "SprigClick",
+    "author": "CatR3kd",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2023-01-06"
+  },
+  {
+    "filename": "cube_escape",
+    "title": "cube_escape",
+    "author": "marios_mitsios",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-07"
   }
 ]
