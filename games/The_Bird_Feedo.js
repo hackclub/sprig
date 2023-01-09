@@ -6,6 +6,7 @@ const bird = "b";
 const cookie = "c";
 
 let gameRunning = true;
+let myTime = 0;
 
 setLegend(
     [bird, bitmap`
@@ -49,11 +50,11 @@ setSolids([]);
 let level = 0;
 const levels = [
     map`
-.....c
+......
 b.....
 ...c..
 c....c
-..c...`,
+......`,
 ];
 
 setMap(levels[level]);
@@ -133,11 +134,16 @@ function showEnd() {
     }
     addText("The Bird Feedo", {
         x: 3,
-        y: 5,
+        y: 2,
         color: color`5`
     });
+    addText(`Your time: ${myTime}s`, {
+        x: 3,
+        y: 5,
+        color: color`7`
+    });
     addText("Game Over!", {
-        x: 5,
+        x: 3,
         y: 6,
         color: color`3`
     });
@@ -152,6 +158,7 @@ var gameLoop = setInterval(() => {
         gameRunning = false;
         showEnd();
     } else {
+        myTime += 1;
         moveBird();
         randomcookieiser();
     }
