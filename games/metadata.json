@@ -1718,5 +1718,29 @@
     "img": "",
     "tags": ["endless"],
     "addedOn": "2023-01-06"
+  },
+  {
+    "filename": "cube_escape",
+    "title": "cube_escape",
+    "author": "marios_mitsios",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-07"
+  },
+  {
+    "filename": "5-in-1-Carnival-Game-Pack!",
+    "title": "5-in-1-Carnival-Game-Pack!",
+    "author": "Ada Dyer",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-01-07"
+  },
+  {
+    "filename": "CATCH-ME",
+    "title": "CATCH-ME",
+    "author": "Nidheesh",
+    "img": "CATCH-ME",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-07"
   }
 ]
