@@ -144,7 +144,7 @@ const gameLoopFunc = () => {
           color: color`3`
         });
         gameOver = true;
-        bgMusic.end()
+        if (bgMusic) bgMusic.end()
       } else if (n.type == mustard) {
         score++;
         clearText();
@@ -190,7 +190,7 @@ onInput("j", () => {
   clearInterval(gameLoop);
   level = 0;
   setMap(levels[level]);
-  bgMusic.end();
+  if (bgMusic) bgMusic.end();
   bgMusic = playTune(bgTune, Infinity);
   // Display initial score
   addText(score.toString(), {
