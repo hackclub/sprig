@@ -190,7 +190,15 @@ onInput("j", () => {
   clearInterval(gameLoop);
   level = 0;
   setMap(levels[level]);
+  bgMusic.end();
   bgMusic = playTune(bgTune, Infinity);
+  // Display initial score
+  addText(score.toString(), {
+    x: 18,
+    y: 5,
+    color: color`0`
+  });
+  gameOver = false;
   gameLoop = setInterval(gameLoopFunc, speed);
 });
 
