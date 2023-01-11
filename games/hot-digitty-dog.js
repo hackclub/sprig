@@ -2,13 +2,14 @@
 @title: hot-digitty-dog
 @author: Urjith Mishra
 */
+
 // Sprites
 const player = "p";
 const mustard = "m";
 const pineapple = "s";
 
 // Speed info
-const minSpeed = 600;
+const minSpeed = 300;
 let speed = 1000;
 
 // Music
@@ -122,7 +123,7 @@ setMap(levels[level]);
 
 // Display initial score
 addText(score.toString(), {
-  x: 18,
+  x: 20 - score.toString().length,
   y: 5,
   color: color`0`
 });
@@ -144,7 +145,7 @@ const gameLoopFunc = () => {
           color: color`3`
         });
         gameOver = true;
-        if (bgMusic) bgMusic.end()
+        if (bgMusic) bgMusic.end();
       } else if (n.type == mustard) {
         score++;
         clearText();
@@ -159,7 +160,7 @@ const gameLoopFunc = () => {
   });
 
   // Generate new random pineapple or mustard
-  let generation = Math.floor(Math.random() * 3);
+  let generation = Math.floor(Math.random() * 2);
   let newY = Math.round(Math.random());
   switch (generation) {
     // Mustard
@@ -204,10 +205,30 @@ onInput("j", () => {
 
 // Go up
 onInput("w", () => {
+  if (getTile(getFirst(player).x, getFirst(player).y - 1).map(x => x.type).includes(mustard)) {
+    getTile(getFirst(player).x, getFirst(player).y - 1).map((x) => { x.remove() });
+    score++;
+    clearText();
+    addText(score.toString(), {
+      x: 18,
+      y: 5,
+      color: color`0`
+    });
+  }
   getFirst(player).y--;
 });
 
 // Go down
 onInput("s", () => {
+  if (getTile(getFirst(player).x, getFirst(player).y + 1).map(x => x.type).includes(mustard)) {
+    getTile(getFirst(player).x, getFirst(player).y + 1).map((x) => { x.remove() });
+    score++;
+    clearText();
+    addText(score.toString(), {
+      x: 18,
+      y: 5,
+      color: color`0`
+    });
+  }
   getFirst(player).y++;
 });
