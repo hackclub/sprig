@@ -123,7 +123,7 @@ setMap(levels[level]);
 
 // Display initial score
 addText(score.toString(), {
-  x: 18,
+  x: 20 - score.toString().length,
   y: 5,
   color: color`0`
 });
