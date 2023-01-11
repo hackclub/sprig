@@ -1766,5 +1766,29 @@
     "img": "",
     "tags": [],
     "addedOn": "2023-01-09"
+  },
+  {
+    "filename": "fractal_generator",
+    "title": "fractal_generator",
+    "author": "Graham Darcey",
+    "img": "",
+    "tags": ["sandbox", "simulation"],
+    "addedOn": "2023-01-10"
+  },
+  {
+    "filename": "cubefield",
+    "title": "cubefield",
+    "author": "jai",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2023-01-10"
+  },
+  {
+    "filename": "Let_Them_Eat_Cake",
+    "title": "Let_Them_Eat_Cake",
+    "author": "Xander Reyes",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-10"
   }
 ]
