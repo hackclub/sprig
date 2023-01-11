@@ -2,6 +2,7 @@
 @title: hot-digitty-dog
 @author: Urjith Mishra
 */
+
 // Sprites
 const player = "p";
 const mustard = "m";
@@ -144,7 +145,7 @@ const gameLoopFunc = () => {
           color: color`3`
         });
         gameOver = true;
-        if (bgMusic) bgMusic.end()
+        bgMusic.end()
       } else if (n.type == mustard) {
         score++;
         clearText();
@@ -190,7 +191,7 @@ onInput("j", () => {
   clearInterval(gameLoop);
   level = 0;
   setMap(levels[level]);
-  if (bgMusic) bgMusic.end();
+  bgMusic.end();
   bgMusic = playTune(bgTune, Infinity);
   // Display initial score
   addText(score.toString(), {
@@ -204,10 +205,30 @@ onInput("j", () => {
 
 // Go up
 onInput("w", () => {
+  if (getTile(getFirst(player).x, getFirst(player).y - 1).map(x => x.type).includes(mustard)) {
+    getTile(getFirst(player).x, getFirst(player).y - 1).map((x) => { x.remove() });
+    score++;
+    clearText();
+    addText(score.toString(), {
+      x: 18,
+      y: 5,
+      color: color`0`
+    });
+  }
   getFirst(player).y--;
 });
 
 // Go down
 onInput("s", () => {
+  if (getTile(getFirst(player).x, getFirst(player).y + 1).map(x => x.type).includes(mustard)) {
+    getTile(getFirst(player).x, getFirst(player).y + 1).map((x) => { x.remove() });
+    score++;
+    clearText();
+    addText(score.toString(), {
+      x: 18,
+      y: 5,
+      color: color`0`
+    });
+  }
   getFirst(player).y++;
 });
