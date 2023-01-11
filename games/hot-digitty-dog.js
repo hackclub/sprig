@@ -9,7 +9,7 @@ const mustard = "m";
 const pineapple = "s";
 
 // Speed info
-const minSpeed = 600;
+const minSpeed = 300;
 let speed = 1000;
 
 // Music
@@ -160,7 +160,7 @@ const gameLoopFunc = () => {
   });
 
   // Generate new random pineapple or mustard
-  let generation = Math.floor(Math.random() * 3);
+  let generation = Math.floor(Math.random() * 2);
   let newY = Math.round(Math.random());
   switch (generation) {
     // Mustard
