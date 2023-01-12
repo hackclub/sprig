@@ -308,7 +308,7 @@ export function createSequencer(target) {
 
   const handleBpmInput = (e) => {
     if (e.target.value.length > 4) return r();
-    if (e.target.value < 1) state.bpm = Number(1) * 2;
+    if (e.target.value < 1) state.bpm = 2; // 1 * 2
     else state.bpm = Number(e.target.value) * 2;
     state.data.bpm = state.bpm;
     if (state.interval) {
