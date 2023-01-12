@@ -20,10 +20,10 @@ setLegend(
 ................
 ................
 ................
-.44444444444444.
-.44444444444444.
-.44444444444444.
-.44444444444444.
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
 ................
 ................
 ................
@@ -38,8 +38,8 @@ setLegend(
 5555555557557555
 5555555555555555
 5555555555555555
-5..............5
-5..............5
+................
+................
 5555555555555555
 5555555555555555
 5557755555555555
@@ -111,15 +111,15 @@ function leng(chr, len) {
   return res
 }
 
-// The max health this bar can support is 14, but since the function
+// The max health this bar can support is 16, but since the function
 // changes health before setting the bar, this line is fine.
-let health = 15;
+let health = 17;
 
 function change() {
-  // Right now it just cycles, but you can set health from to 0 to 14
+  // Right now it just cycles, but you can set health from to 0 to 16
   // This is a fancy way of saying health-=1 except it restarts when it's done
-  health += 14;
-  health %= 15;
+  health += 16;
+  health %= 17;
   // Random health
   //health = Math.floor(Math.random()*15);
   
@@ -129,21 +129,19 @@ function change() {
   // For example, 4 (first) + 2 (middle) = 6 (yellow)
   
   //           (first)                     (middle)           (last)
-  let temp = leng(4+Math.floor((14-health)/11)*2, health) + leng(1, 14-health);
+  let temp = leng(4+Math.floor((16-health)/11)*2, health) + leng(1, 16-health);
   // For a constant color bar:
-  // let temp = leng(4, health) + leng(1, 14-health);
-  // The bar can't reach the edges because of weird syntax reasons. I couldn't find
-  // a way around it
+  // let temp = leng(4, health) + leng(1, 16-health);
   let temp2 = `
 ................
 ................
 ................
 ................
 ................
-.` +  temp  + `.
-.` +  temp  + `.
-.` +  temp  + `.
-.` +  temp  + `.
+` +  temp  +   `
+` +  temp  +   `
+` +  temp  +   `
+` +  temp  +   `
 ................
 ................
 ................
