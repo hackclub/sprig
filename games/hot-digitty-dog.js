@@ -150,7 +150,7 @@ const gameLoopFunc = () => {
         score++;
         clearText();
         addText(score.toString(), {
-          x: 18,
+          x: 20 - score.toString().length,
           y: 5,
           color: color`0`
         });
@@ -195,7 +195,7 @@ onInput("j", () => {
   bgMusic = playTune(bgTune, Infinity);
   // Display initial score
   addText(score.toString(), {
-    x: 18,
+    x: 20 - score.toString().length,
     y: 5,
     color: color`0`
   });
@@ -210,7 +210,7 @@ onInput("w", () => {
     score++;
     clearText();
     addText(score.toString(), {
-      x: 18,
+      x: 20 - score.toString().length,
       y: 5,
       color: color`0`
     });
@@ -225,7 +225,7 @@ onInput("s", () => {
     score++;
     clearText();
     addText(score.toString(), {
-      x: 18,
+      x: 20 - score.toString().length,
       y: 5,
       color: color`0`
     });
