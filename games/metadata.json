@@ -1808,8 +1808,8 @@
     "addedOn": "2023-01-12"
   },
   {
-    "filename": "bullet-dodge",
-    "title": "bullet-dodge",
+    "filename": "bullet_dodge",
+    "title": "bullet_dodge",
     "author": "vishram1123",
     "img": "bullet_dodge",
     "tags": ["puzzle"],
