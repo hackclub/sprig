@@ -1,5 +1,3 @@
-const annoying_bug_with_sprig_ide = "This bug preventing syntax highlighting is described here, which is the reason this dummy variable exists: https://github.com/hackclub/sprig/issues/716"
-
 /*
 @title: bullet-dodge
 @author: vishram1123
