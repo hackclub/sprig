@@ -691,17 +691,17 @@ qqqqqqq`,
     map`
 .......
 .......
-n.${enemyTiles[8]}...p
+n.${enemyTiles[8]}..pb
 qqqqqqq`,
     map`
 .......
 .......
-n.${enemyTiles[9]}...p
+n.${enemyTiles[9]}..pb
 qqqqqqq`,
     map`
 l......
 l......
-l.....p
+l....pb
 qqqqqqq`,
     map`
 .......
@@ -711,17 +711,17 @@ qqqqqqq`,
     map`
 .......
 .......
-p....${enemyTiles[11]}n
+bp...${enemyTiles[11]}n
 qqqqqqq`,
     map`
 ......l
 ......l
-p.....l
+bp....l
 qqqqqqq`,
     map`
 .......
 .......
-p......
+......p
 qqqqqqq`,
   ]
 }
@@ -1378,7 +1378,7 @@ onInput("w", () => {
     if(floor == 5) {
       setBackground(sky);
       addText("The End", { 
-      x: 5,
+      x: 6,
       y: 4,
       color: color`2`
     })

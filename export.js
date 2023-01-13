@@ -1,4 +1,3 @@
-import sprig from "./engine/exportable_engine.js";
-
+import { init as sprig } from "./engine/webEngine.js";
 
 export { sprig };

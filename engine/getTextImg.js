@@ -25,6 +25,14 @@ function composeText(texts) {
 
 // const canvas = new OffscreenCanvas(160, 128);
 
+function makeCanvas(width, height) {
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+
+  return canvas;
+}
+
 export function getTextImg(texts) {
   const charGrid = composeText(texts);
   const img = new ImageData(160, 128);
@@ -51,7 +59,7 @@ export function getTextImg(texts) {
     }
   }
 
-  const canvas = new OffscreenCanvas(160, 128);
+  const canvas = makeCanvas(160, 128);
   canvas.getContext("2d").putImageData(img, 0, 0);
 
   return canvas;
