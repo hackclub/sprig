@@ -1,6 +1,7 @@
 // @title: Health_Bar_Tutorial
 // @author: Hugh Wilks
 
+// Note: While this works fine on the computer, it DOES NOT WORK right on the actual Sprig
 // I needed to make a health bar for a game I was making and it was a bit
 // difficult to figure out due to some very specific rules when making sprites.
 // Probably because the sprite is being redefined, there can't be any other sprites 
@@ -152,8 +153,6 @@ function change() {
   
   // This redefines what the bar looks like
   setLegend([ healthBar, temp2 ]);
-  
-  addSprite(0, 0, healthBar);
 }
 
 change(); // This line makes sure the bar starts as soon as the program does
