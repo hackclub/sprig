@@ -5,47 +5,68 @@
 
 /*
 Instructions:
-
 Hit "run" to execute the code and
 start the game (you can also press shift+enter).
-
 WASD to move, J to reset the level.
-
-The objective is to get to any portal. Each move costs one energy (even
-if you hit a wall!). Collect an energy boost to increase your energy. 
+The objective is to get to any portal. Each move costs one energy (Bumping into 
+a wall won't!). Collect an energy boost to increase your energy. 
 Have fun!
 */
 
+function move(dir) {
+  const pla = getFirst(player);
+  const oldx = pla.x;
+  const oldy = pla.y;
+  try {
+    addSprite(oldx+dir[0], oldy+dir[1], blank);
+    const spot = getFirst(blank);
+    if (tilesWith(blank, wall).length < 1 && energy > 0) {
+      pla.x = spot.x;
+      pla.y = spot.y;
+      playTune(moveSound);
+      energy -= 1;
+    } else {
+      playTune(noMoveSound);
+    }
+    spot.remove();
+  } catch (Exeption) {
+    playTune(noMoveSound);
+  }
+}
+
 const collect = tune`
-30: e5/30,
-30: f5/30,
-30: g5/30,
-30: b5/30 + g5/30,
-840`;
+36.94581280788177: f4^36.94581280788177 + d4^36.94581280788177,
+36.94581280788177: e4^36.94581280788177 + g4^36.94581280788177,
+36.94581280788177: f4^36.94581280788177 + b4^36.94581280788177,
+1071.4285714285713`;
 const portalSound = tune`
-100: a4~100,
-100: b4~100,
-100: c5~100,
-100: d5~100 + a4~100,
-100: b4~100,
-100: c5~100,
-100: d5~100 + f5~100 + a5~100,
-2500`;
+93.75: a4~93.75,
+93.75: b4~93.75,
+93.75: c5~93.75,
+93.75: d5~93.75 + a4~93.75,
+93.75: b4~93.75,
+93.75: c5~93.75,
+93.75: d5~93.75 + f5~93.75 + a5~93.75,
+2343.75`;
 const moveSound = tune`
-30: g4-30,
-30: f4-30,
-30: a4-30,
+30: e4^30,
+30: d4^30,
+30: f4^30,
 870`;
+const noMoveSound = tune`
+46.15384615384615: c4^46.15384615384615,
+1430.7692307692307`;
 const resetSound = tune`
-30: d5-30 + f5^30,
-30: b4-30 + d5^30,
-30: g4-30 + b4^30,
-30: e4-30 + g4^30,
-30: c4-30 + e4^30,
-30: e4-30 + c4^30,
-30: g4-30 + e4^30,
-30: b4-30 + g4^30,
-30: b4^30 + d5-30 + f5^30`;
+30: d5^30 + f5^30,
+30: b4^30 + d5^30,
+30: g4^30 + b4^30,
+30: e4^30 + g4^30,
+30: c4^30 + e4^30,
+30: e4^30 + c4^30,
+30: g4^30 + e4^30,
+30: b4^30 + g4^30,
+30: b4^30 + e5^30,
+690`;
 const winSound = tune`
 60: f5~60 + a5~60,
 120,
@@ -60,6 +81,7 @@ const startSound = tune`
 2600`;
 
 const player = "p";
+const blank = "N"
 const food = "f";
 const goal = "g";
 const wall = "w";
@@ -134,7 +156,7 @@ setLegend(
 0000000005500005
 0000000550000000
 0000005000000000`],
-	[bg, bitmap`
+  [ bg, bitmap`
 5555555555555555
 5555555555555555
 5555555555555555
@@ -150,7 +172,24 @@ setLegend(
 5555555555555555
 5555555555555555
 5555555555555555
-5555555555555555`]
+5555555555555555`],
+  [ blank, bitmap`
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................`]
 );
 
 setBackground(bg);
@@ -265,48 +304,25 @@ let energy = 5;
 let lastX = 0;
 let lastY = 0;
 
-/*
-setPushables({
-  [player]: [food],
-  [food]: [food]
-});
-*/
-
 playTune(portalSound);
 addText("Energy: " + energy, { y: 1, color: color`6` });
 
 // START - PLAYER MOVEMENT CONTROLS
 
 onInput("w", () => {
-  if (energy > 0) {
-    getFirst(player).y -= 1;
-    energy -= 1;
-    playTune(moveSound);
-  }
+  move([0, -1]);
 });
 
 onInput("s", () => {
-  if (energy > 0) {
-    getFirst(player).y += 1;
-    energy -= 1;
-    playTune(moveSound);
-  }
+  move([0, 1]);
 });
 
 onInput("a", () => {
-  if (energy > 0) {
-    getFirst(player).x -= 1;
-    energy -= 1;
-    playTune(moveSound);
-  }
+  move([-1, 0]);
 });
 
 onInput("d", () => {
-  if (energy > 0) {
-    getFirst(player).x += 1;
-    energy -= 1;
-    playTune(moveSound);
-  }
+  move([1, 0]);
 });
 
 // END - PLAYER MOVEMENT CONTROLS
