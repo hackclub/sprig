@@ -1814,5 +1814,13 @@
     "img": "bullet_dodge",
     "tags": ["puzzle"],
     "addedOn": "2023-01-13"
+  },
+  {
+    "filename": "Mario_Kart",
+    "title": "Mario_Kart",
+    "author": "nucleiav",
+    "img": "sprig_mario",
+    "tags": ["endless"],
+    "addedOn": "2023-01-13"
   }
 ]
