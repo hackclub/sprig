@@ -1822,5 +1822,13 @@
     "img": "sprig_mario",
     "tags": ["endless"],
     "addedOn": "2023-01-13"
+  },
+  {
+    "filename": "brick_breaker",
+    "title": "brick_breaker",
+    "author": "shaunba",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-14"
   }
 ]
