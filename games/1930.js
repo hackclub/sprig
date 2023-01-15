@@ -504,6 +504,7 @@ onInput("i", () => {
     javas = levels[level].split("").filter((x) => x === java).length;
     blobs = levels[level].split("").filter((x) => x === blob).length;
     setMap(levels[level]);
+    success = false;
   }
 });
 
