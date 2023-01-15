@@ -1830,5 +1830,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2023-01-14"
+  },
+  {
+    "filename": "scrolling_maze",
+    "title": "scrolling_maze",
+    "author": "Ben",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-01-15"
   }
 ]
