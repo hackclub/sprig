@@ -529,7 +529,7 @@ const tick = () => {
     
     let door = getFirst("g") || getFirst("h") || getFirst("i");
     // console.log(i);
-    if (door_status) door.type = doors[i % 3];
+    if (door && door_status) door.type = doors[i % 3];
     // console.log(door);
 
     let jv = getFirst("l") || getFirst("m") || getFirst("n");
