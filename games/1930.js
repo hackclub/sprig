@@ -2,12 +2,10 @@
 /*
 @title: 1930
 @author: tejasag (@tej on slack)
-
 Keys: 
 - W to jump
 - A to move left
 - D to move right
-
 Objective: 
 - Kill all the Java aliens (squares) and send the Blobs (circles) to the 
   next level.
@@ -415,8 +413,6 @@ let door_status = false;
 let jumps = 2;
 let success = false;
 
-setMap(levels[level]);
-
 const bye_java = async (jav) => {
   javas--;
   if (javas === 0) {
@@ -495,16 +491,15 @@ onInput("w", () => {
 
 onInput("i", () => {
   if (!play) {
-    level--;
-    play++;
+    // level--;
+    // play = true;
+    start();
   }
   if (success) {
-    clearText();
     level++;
-    javas = levels[level].split("").filter((x) => x === java).length;
-    blobs = levels[level].split("").filter((x) => x === blob).length;
-    setMap(levels[level]);
+    play = false;
     success = false;
+    start();
   }
 });
 
@@ -522,12 +517,12 @@ const tick = () => {
   let doors = ["g", "h", "i"];
   let bursts = ["m", "n"];
   let i = 0;
-  setInterval(() => {
+  let ref = setInterval(() => {
     let g1 = getAll(grass1);
     let g2 = getAll(grass2);
     g1.forEach(x => x.type = grass2);
     g2.forEach(x => x.type = grass1);
-    
+
     let door = getFirst("g") || getFirst("h") || getFirst("i");
     // console.log(i);
     if (door && door_status) door.type = doors[i % 3];
@@ -542,6 +537,10 @@ const tick = () => {
 
     i++;
 
+    if (!play) {
+      clearInterval(ref);
+    }
+    
     // Gravity
     let b = getFirst(blob);
     if (!b) return;
@@ -550,8 +549,6 @@ const tick = () => {
 
     getAll(blob).forEach((x) => x && (x.y += 1) && checkDeath());
     getAll(java).forEach((x) => x && (x.y += 1) && checkDeath());
-
-    if (!play) return;
   }, 250);
 };
 
@@ -567,8 +564,11 @@ const end = (b) => {
 
 const start = () => {
   play = true;
+  level = level % 5;
   javas = levels[level].split("").filter((x) => x === java).length;
   blobs = levels[level].split("").filter((x) => x === blob).length;
+  setMap(levels[level]);
+  clearText();
   tick();
 };
 
