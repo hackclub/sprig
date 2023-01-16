@@ -1,25 +1,3 @@
-# Avoid the Falling Trees and Branches
-![image](https://user-images.githubusercontent.com/70272280/207963862-5b72af32-a360-4a5e-a69e-bae330c234ab.png)
-
-
-In this game, your goal is to collect as many apples as you can and put them in your basket. But be careful as you move around, because falling trees and branches will get in your way. Use the "A," "S," and "D" keys to dodge and weave around the obstacles, and collect as many apples as you can along the way. Can you reach the end of the level without getting hit by a falling tree or branch? Play and find out!
-
-# How to Play
-
-Use the "A," "S," and "D" keys to move around the forest and collect apples
-Be careful to avoid the falling trees and branches as you move
-Try to collect as many apples as you can and reach the end of the level
-
-# Tips
-Keep an eye on the sky to spot incoming trees and branches
-Use your agility and quick reflexes to dodge and weave around the obstacles
-Don't forget to collect the apples along the way!
-Good luck, and have fun!
-
-
-
-
-
 # :leaves: Hack Club Sprig :leaves: 
 
 **[💻 Online Editor: Make a game](https://editor.sprig.hackclub.com)** | **[👀 Gallery: Find games](https://sprig.hackclub.com/gallery)** | **[🕸 Website](https://sprig.hackclub.com)** 
