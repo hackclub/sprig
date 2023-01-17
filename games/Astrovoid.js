@@ -9,14 +9,14 @@
 // Points at which more astroids will be added, array index 
 // corresponds to number of astroids added per frame
 // Value corresponds to at what score to add more
-var difficulty_levels = [
+const levels = [
   30, // 2 astroids at score 30
   60, // 3 astroids at score 60
   90, // so on and so forth
   120,
   150,
   180
-]
+];
 
 // The amount of miliseconds before the next frame is drawn
 // Note: astroids are spawned every other frame
@@ -257,13 +257,23 @@ function menu() {
   addText("Move: WASD", {x: 5, y: 4, color: color`2`});
   addText("Pause: I", {x: 6, y: 5, color: color`2`});
   addText("Start: K", {x: 6, y: 6, color: color`2`});
+  addText("Restart: L", {x: 5, y: 7, color: color`2`});
+  
   setBackground(background1);
 
   addSprite(2, 3, player);
+  
 }
+
+var difficulty_levels;
+var level = 1;
 
 // run on game start
 function start() {
+  difficulty_levels = levels;
+  level = 1;
+  running = true;
+  points = 0;
   setMap(maps[0]);
   playback.end();
   playback = playTune(music, Infinity);
@@ -276,6 +286,7 @@ let running = true;
 
 // main game loop
 function gameLoop() {
+  console.log(difficulty_levels);
   if (running) { // I really don't like this method, but I couldn't find a delay/sleep function for js
     setTimeout(gameLoop, updateInterval); // call the function from the function
   }
@@ -296,8 +307,6 @@ function gameLoop() {
 
   frameCounter++;
 }
-
-var level = 1;
 
 // Spawns the astroids, takes into account the difficulty levels and the current score
 function spawnAstroids(score) {
@@ -391,6 +400,13 @@ onInput("k", () => {
   if (in_menu) {
     in_menu = false;
     start();
+  }
+});
+
+onInput("l", () => {
+  if (!running && !in_menu) {
+    in_menu = true;
+    menu();
   }
 });
 
