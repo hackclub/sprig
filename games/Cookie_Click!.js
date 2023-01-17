@@ -1,5 +1,5 @@
 /*
-@title: Cookie Click!
+@title: Cookie_Click!
 @author: briyandyju09
 
 Use W key to earn and J key to purchase a cookie upgrade
