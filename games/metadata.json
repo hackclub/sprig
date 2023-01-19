@@ -1870,5 +1870,13 @@
     "img": "",
     "tags": [],
     "addedOn": "2023-01-18"
+  },
+  {
+    "filename": "Tic-Tac-Toe",
+    "title": "Tic-Tac-Toe",
+    "author": "Atharv Gupta",
+    "img": "",
+    "tags": ["classic"],
+    "addedOn": "2023-01-19"
   }
 ]
