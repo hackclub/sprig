@@ -27,7 +27,8 @@
     "md5": "^2.3.0",
     "node-fetch": "^3.2.9",
     "uhtml": "^3.0.1",
-    "vanilla-tilt": "^1.7.2"
+    "vanilla-tilt": "^1.7.2",
+    "@lezer/common": "^1.0.0"
   },
   "devDependencies": {
     "vite": "^2.9.12"

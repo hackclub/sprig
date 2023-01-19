@@ -555,7 +555,7 @@ onInput("j", () => {
     numbers[selectY][selectX] === undefined ||
     board[selectY][selectX] == -2 ) { return };
   
-  if (board[selectY][selectX] == -1) {
+  if (numbers[selectY][selectX] == -1) {
     lost(); // You opened a mine
   } else if (numbers[selectY][selectX] == 0){
     flood(selectX, selectY); // Open all connected empty tiles
