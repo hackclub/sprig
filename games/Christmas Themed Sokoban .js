@@ -201,7 +201,8 @@ stssp.ss
 s.s.t.ss
 sptpppts
 s...t..s
-ssssssss`
+ssssssss`,
+  
 ];
 
 setMap(levels[level]);
@@ -290,9 +291,9 @@ afterInput(() => {
     } 
     else {
       addText("You win!", { y: 4, color: color`5` });
+      addText("Take this", {y: 6, color: color`5`});
+      addText("cookie", {y: 7, color: color`5`});
     }
   }
-
-
   
 });
