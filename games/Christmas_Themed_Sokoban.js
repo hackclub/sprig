@@ -1,5 +1,5 @@
 /*
-@title: Christmas Themed Sokoban 
+@title: Christmas_Themed_Sokoban 
 @author: Joshua
 */
 
