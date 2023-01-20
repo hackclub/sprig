@@ -9,9 +9,13 @@ const wall = "w"
 const grass = "g"
 const block = "b"
 const boss = "B"
+const bigboss = "q"
+const wither = "W"
 
 setLegend(
-  [player, bitmap`
+	[
+		player,
+		bitmap`
 .777777777777777
 .770000000000777
 .770969060090777
@@ -27,8 +31,11 @@ setLegend(
 .477000070000747
 .447700777007447
 .444700777007447
-.447755777557447`], 
-  [enemy, bitmap`
+.447755777557447`,
+	],
+	[
+		enemy,
+		bitmap`
 00000003L0000000
 0000000333000000
 00000L3L3L300000
@@ -44,8 +51,11 @@ setLegend(
 0000DHDDHHHD0000
 0000HDDHHHHH0000
 00003330DHD30000
-0003L3000L3L0000`],
-  [wall, bitmap`
+0003L3000L3L0000`,
+	],
+	[
+		wall,
+		bitmap`
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
@@ -61,8 +71,11 @@ CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCC`],
-  [grass,  bitmap`
+CCCCCCCCCCCCCCCC`,
+	],
+	[
+		grass,
+		bitmap`
 DDDDDDDDDDDDDDDD
 DDDDDDDDDDDDDDDD
 4CC444CCCCC44C44
@@ -78,8 +91,11 @@ DDDDDDDDDDDDDDDD
 4C444444C4444C44
 44444C444C444CC4
 4444444444444444
-CCCCCCCCCCCCCCCC`],
-  [block, bitmap`
+CCCCCCCCCCCCCCCC`,
+	],
+	[
+		block,
+		bitmap`
 0000000000000000
 0000000000000000
 0000000000000000
@@ -95,8 +111,11 @@ CCCCCCCCCCCCCCCC`],
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000`],
-  [boss, bitmap`
+0000000000000000`,
+	],
+	[
+		boss,
+		bitmap`
 7777766666777777
 7777000000067777
 7776022022067777
@@ -112,11 +131,53 @@ CCCCCCCCCCCCCCCC`],
 7775555555557777
 7772555255257777
 7775525525527777
-7772552555557777`]
-);
+7772552555557777`,
+	],
+	[
+		bigboss,
+		bitmap`
+0000000000000000
+0000000000000000
+0006666666660000
+0066666666666000
+0006666666666600
+0000066660066660
+0000006662066660
+0000000666666660
+0000000066666660
+0000000666666660
+0000006666666660
+0000066666666660
+0000666666666600
+0006666666666000
+0006666666660000
+0000000000000000`,
+	],
+	[
+		wither,
+		bitmap`
+2222200000002222
+22222LL000LL2222
+2222202202202222
+2222200000002222
+2222200222002222
+2LLLLLLLLLLLLLL2
+2LLLLLLLLLLLLLL2
+2222222LLL222222
+2222222LLL222222
+2222222LLL222222
+2220011LLL110022
+2220011LLL110022
+2222222LLL222222
+2220011LLL110022
+2220011LLL110022
+2222222LLL222222`,
+	]
+)
 
-let currentLevel=0
-const levels = [map`
+let currentLevel = 0
+const levels = [
+	map`
 we.e...e
 ....w.w.
 .ww..e.w
@@ -127,7 +188,8 @@ pw.e.w..
 .ww..e.w
 ...e....
 .w.w.e.e
-..e.w.w.`, map`
+..e.w.w.`,
+	map`
 .e..wwwwwe
 ...ew.Bww.
 .w....www.
@@ -137,7 +199,31 @@ pw.e.w..
 .wwew...w.
 .e....w...
 ..ww.e..w.
-pwwwwwwwwe`,map`
+pwwwwwwwwe`,
+	map`
+wBwgBgBggqwggq
+ggwwwgggggggwg
+eggggBgwwggqgg
+gegBgggggeggge
+ggggwwgwwgwgqg
+pgwgeggwggwgeg
+gggwwwgBgqgggg
+egeggqgggewwge`,
+	map`
+wWgqgBggWgeggggeggBggBggggggWgeggW
+WwgggggggggwwqgggWgwgggwwgegggggeg
+ggwBgwggeggwggggggwwwwgBggggwgWggg
+gqggWggggggwwgWwwgwWwWwggggWwgwwgq
+WgggggwWggwggggggwwggggggeggwggggg
+gggBgggggWwwgqgBggwgggegqggggwgBgg
+gwwggqgBgwwwggggggggBggggggWgwgggg
+ggwggwggggggggwgggeggggwgqgggqggWg
+qggBgwWgwggBggwwgggggggggwgwgggggB
+gggggggggggggqggWggqgegwgWwgggWgwg
+gWwWgwwwwgegggggwwggggggggggBggggg
+gwggwggwgggwwggggggBggggqgggggWgqg
+pgwWwBggggWggggegWggggegggwgWggBgg`,
+	map`
 wwwwbbwwbbwwbbbwwwbbwbbwwwwwwww
 wwwwbbwwbbwbbbbbwwbbwbbwwwwwwww
 wwwwbbwwbbwbbwbbwwbbwbbwwwwwwww
@@ -167,54 +253,73 @@ wwwbbwwbbwwbbwwbbwwbbwwbbwwbbww
 wwwbbwwbbwwbbwwbbwwbbwwbbwwbbww
 wwwbbwwbbwwbbwwbbwwbbwwbbwwbbww
 wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwbbwwbbwwbbwwbbwwbbwwbbwwbbww`]
+wwwbbwwbbwwbbwwbbwwbbwwbbwwbbww`,
+]
 
 setMap(levels[currentLevel])
 setBackground(grass)
 
 onInput("w", () => {
-  getFirst(player).y -= 1
+	getFirst(player).y -= 1
 })
 
 onInput("d", () => {
-  getFirst(player).x += 1
+	getFirst(player).x += 1
 })
 
 onInput("s", () => {
-  getFirst(player).y += 1
+	getFirst(player).y += 1
 })
 
 onInput("a", () => {
-  getFirst(player).x -= 1
+	getFirst(player).x -= 1
 })
 
-//onInput("k", () => {
-//    currentLevel =currentLevel +1
-//    setMap(levels[currentLevel])
-//})
+onInput("j", () => {
+	currentLevel = currentLevel + 1
+	setMap(levels[currentLevel])
+})
 
 setSolids([wall, player])
 
-afterInput( () =>{
-  const collisionsWithEnemy = tilesWith(player,enemy)
+afterInput(() => {
+	const collisionsWithEnemy = tilesWith(player, enemy)
 
-  if (collisionsWithEnemy.length > 0) {
-    collisionsWithEnemy[0][1].remove()
-  }
+	if (collisionsWithEnemy.length > 0) {
+		collisionsWithEnemy[0][1].remove()
+	}
 
-  const collisionsWithBoss = tilesWith(player,boss)
+	const collisionsWithBoss = tilesWith(player, boss)
 
-  if (collisionsWithBoss.length > 0) {
-    collisionsWithBoss[0][1].remove()
-  }
+	if (collisionsWithBoss.length > 0) {
+		collisionsWithBoss[0][1].remove()
+	}
+	const collisionsWithBigboss = tilesWith(player, bigboss)
 
-  const enemiesLeft = getAll(enemy)
-  const bossesLeft = getAll(boss)
-  
-  if (enemiesLeft.length==0 && bossesLeft.length==0){
-    currentLevel =currentLevel +1
-    setMap(levels[currentLevel])
-    // hello i am j cube by three setMap(
-  }
+	if (collisionsWithBigboss.length > 0) {
+		collisionsWithBigboss[0][1].remove()
+	}
 
+	const collisionsWithWither = tilesWith(player, wither)
+
+	if (collisionsWithWither.length > 0) {
+		collisionsWithWither[0][1].remove()
+	}
+
+	const enemiesLeft = getAll(enemy)
+	const bossesLeft = getAll(boss)
+	const bigbossesLeft = getAll(bigboss)
+	const witherLeft = getAll(wither)
+
+	if (
+		enemiesLeft.length == 0 &&
+		bossesLeft.length == 0 &&
+		bigbossesLeft.length == 0 &&
+		witherLeft.length == 0
+	) {
+		currentLevel = currentLevel + 1
+		if (levels.length - 1 >= currentLevel) {
+			setMap(levels[currentLevel])
+		}
+	}
 })
