@@ -586,22 +586,18 @@ setMap(home)
 addSprite(3, 2, player)
 
 onInput('w', () => {
-  if(!getFirst(player)) return;
     getFirst(player).y -= 1
 })
 
 onInput('a', () => {
-  if(!getFirst(player)) return;
     getFirst(player).x -= 1
 })
 
 onInput('s', () => {
-  if(!getFirst(player)) return;
     getFirst(player).y += 1
 })
 
 onInput('d', () => {
-  if(!getFirst(player)) return;
     getFirst(player).x += 1
 })
 

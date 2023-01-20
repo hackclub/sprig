@@ -81,7 +81,7 @@ const ACTIONS = {
   },
   UPLOAD_LOG(args, state) {
     args = strip(args);
-    console.log(args);
+    // console.log(args);
     state.uploadLogs += state.uploadLogs ? '\n' + args : args;
     dispatch("RENDER");
 
