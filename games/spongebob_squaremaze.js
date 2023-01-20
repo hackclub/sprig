@@ -12,6 +12,29 @@ const boss = "B"
 const bigboss = "q"
 const wither = "W"
 
+const death = tune`
+163.04347826086956,
+54.34782608695652: e5-54.34782608695652,
+54.34782608695652: a4/54.34782608695652 + e4-54.34782608695652 + g5-54.34782608695652 + c5-54.34782608695652,
+54.34782608695652: g5/54.34782608695652 + g4/54.34782608695652,
+54.34782608695652: g5/54.34782608695652 + e5~54.34782608695652 + d4-54.34782608695652,
+54.34782608695652: b4~54.34782608695652 + a4~54.34782608695652 + c5~54.34782608695652 + d5^54.34782608695652 + e5^54.34782608695652,
+54.34782608695652: b4~54.34782608695652 + c5~54.34782608695652 + a4~54.34782608695652 + d5^54.34782608695652 + e5^54.34782608695652,
+54.34782608695652: b4-54.34782608695652 + c5-54.34782608695652 + a4-54.34782608695652 + d5-54.34782608695652 + e5-54.34782608695652,
+54.34782608695652: c5-54.34782608695652 + a4-54.34782608695652 + b4-54.34782608695652 + d5-54.34782608695652 + e5-54.34782608695652,
+54.34782608695652: c5/54.34782608695652 + b4/54.34782608695652 + a4/54.34782608695652 + d5/54.34782608695652 + e5~54.34782608695652,
+54.34782608695652: a4/54.34782608695652 + c5/54.34782608695652 + b4/54.34782608695652 + d5/54.34782608695652 + e5~54.34782608695652,
+54.34782608695652: a4^54.34782608695652 + b4^54.34782608695652 + c5^54.34782608695652 + d5~54.34782608695652 + e5-54.34782608695652,
+54.34782608695652: b4^54.34782608695652 + a4^54.34782608695652 + c5^54.34782608695652 + d5~54.34782608695652 + e5-54.34782608695652,
+54.34782608695652: c5~54.34782608695652 + b4/54.34782608695652,
+54.34782608695652: c5~54.34782608695652 + b4/54.34782608695652,
+54.34782608695652: c5~54.34782608695652 + b4/54.34782608695652,
+54.34782608695652: c5~54.34782608695652 + b4/54.34782608695652,
+54.34782608695652: c5~54.34782608695652,
+54.34782608695652: c5~54.34782608695652,
+54.34782608695652: c5~54.34782608695652,
+543.4782608695652`
+
 setLegend(
 	[
 		player,
@@ -283,40 +306,26 @@ onInput("j", () => {
 setSolids([wall, player])
 
 afterInput(() => {
-	const collisionsWithEnemy = tilesWith(player, enemy)
+	const collisions = [
+		...tilesWith(player, enemy),
+		...tilesWith(player, boss),
+		...tilesWith(player, bigboss),
+		...tilesWith(player, wither),
+	]
 
-	if (collisionsWithEnemy.length > 0) {
-		collisionsWithEnemy[0][1].remove()
+	if (collisions.length > 0) {
+		collisions[0][1].remove()
+		playTune(death)
 	}
 
-	const collisionsWithBoss = tilesWith(player, boss)
+	const enemiesLeft = [
+		...getAll(enemy),
+		...getAll(boss),
+		...getAll(bigboss),
+		...getAll(wither),
+	]
 
-	if (collisionsWithBoss.length > 0) {
-		collisionsWithBoss[0][1].remove()
-	}
-	const collisionsWithBigboss = tilesWith(player, bigboss)
-
-	if (collisionsWithBigboss.length > 0) {
-		collisionsWithBigboss[0][1].remove()
-	}
-
-	const collisionsWithWither = tilesWith(player, wither)
-
-	if (collisionsWithWither.length > 0) {
-		collisionsWithWither[0][1].remove()
-	}
-
-	const enemiesLeft = getAll(enemy)
-	const bossesLeft = getAll(boss)
-	const bigbossesLeft = getAll(bigboss)
-	const witherLeft = getAll(wither)
-
-	if (
-		enemiesLeft.length == 0 &&
-		bossesLeft.length == 0 &&
-		bigbossesLeft.length == 0 &&
-		witherLeft.length == 0
-	) {
+	if (enemiesLeft.length == 0) {
 		currentLevel = currentLevel + 1
 		if (levels.length - 1 >= currentLevel) {
 			setMap(levels[currentLevel])
