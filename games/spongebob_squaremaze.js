@@ -315,11 +315,6 @@ onInput("a", () => {
 	if (fPlayer) fPlayer.x -= 1
 })
 
-onInput("j", () => {
-	currentLevel = currentLevel + 1
-	setMap(levels[currentLevel])
-})
-
 setSolids([wall, player])
 
 afterInput(() => {
