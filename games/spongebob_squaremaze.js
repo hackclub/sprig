@@ -1,6 +1,19 @@
 /*
 @title: spongebob_squaremaze
 @author: Jainam_Jain
+
+Instructions: 
+
+Kill all of the enemies to progress
+
+* Controls
+* ========
+*
+* w to move up
+* a to move left
+* s to move down
+* d to move right
+
 */
 
 const player = "p"
