@@ -1,6 +1,6 @@
 /*Flappy Bird Game
 @author: Andrew Chen 
-
+@title: Flappy Bird protype
 */
 
 const player = "p";
