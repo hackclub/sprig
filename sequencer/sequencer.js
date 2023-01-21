@@ -394,10 +394,12 @@ export function createSequencer(target) {
   };
 
   const play = () => setInterval(() => {
-    state.beat = (state.beat+1) % (state.numberX);
     // play song
     playCellsOnBeat(state.cells, state.bpm, state.beat);
     r();
+
+    // update beat
+    state.beat = (state.beat+1) % (state.numberX);
   }, (1000*60)/state.bpm)
 
   const init = (state) => {
