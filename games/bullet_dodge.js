@@ -23,12 +23,9 @@ UI:
 
 //sprite defs
 const player = "p";
-const border = "b";
-const border_invalid = "i";
-const border_executed = "e";
 const background = "w";
-const hp = "h";
-const inv_hp = "j";
+const [border, border_invalid, border_executed] = ["b", "i", "e"];
+const [hp, inv_hp] = ["h", "j"];
 const [bullet_up, bullet_left, bullet_right, bullet_down] = ["u", "l", "r", "d"];
 
 //sfx
@@ -419,55 +416,78 @@ onInput("j", () => {
 
 //end controls
 
+//random number generator because default implementation is broken
+let dt = 10000000;
+function random() {
+  dt^=(dt<<17);
+  dt^=(dt>>13);
+  dt^=(dt<<5);
+  return (dt>>>0)/4294967295;
+};
+
+//counts number of bullets on screen;
+let bulletCount = 0;
+
 //random bullet spawn function
 function spawnBullet() {
   //calculates health
-  setHealth();
+  //setHealth();
 
   //chooses bullet spawn location - top, left, bottom, or right
-  var pos = Math.round(Math.random() * 3)
-  var posX = [Math.round(Math.random() * 10), 1, Math.round(Math.random() * 10), 11][pos];
-  var posY = [1, Math.round(Math.random() * 10), 11, Math.round(Math.random() * 10)][pos];
+  var pos = Math.round(random() * 3)
+  var posX = [Math.round(random() * 11), 1, Math.round(random() * 11), 11][pos];
+  var posY = [1, Math.round(random() * 11), 11, Math.round(random() * 11)][pos];
 
   //sets bullet look
   var bulletType = [bullet_up, bullet_left, bullet_down, bullet_right]
   addSprite(posX, posY, bulletType[pos]);
-
+  bulletCount++;
+  
   //selects bullet and moves across screen. If hits other side, despawns. If hits player, recalculates health and despawns
-  var newBul = getAll(bulletType[pos])[getAll(bulletType[pos]).length - 1];
-  setInterval(() => {
-    newBul.x += [0, 1, 0, -1][pos];
-    newBul.y += [1, 0, -1, 0][pos];
-    var playerSprite = getFirst(player);
-      try {
-      if (newBul.x > 11 || newBul.x < 1 || newBul.y > 11 || newBul.y < 1) {
-        newBul.remove();
-      } else if (newBul.x == playerSprite.x && newBul.y == playerSprite.y) {
-        health--;
-        setHealth();
-        newBul.remove();
-        playTune(hitSound);
-      } 
-    } catch (e) {
+  getAll(bulletType[pos]).forEach(newBul => {
+    if (!newBul.moving) {
+      newBul.moving = true;
+      setInterval(() => {
+        var playerSprite = getFirst(player);
+        try {
+          if (newBul.x == playerSprite.x && newBul.y == playerSprite.y) {
+            health--;
+            setHealth();
+            newBul.remove();
+            bulletCount--
+            playTune(hitSound);
+          } 
+        } catch (d) {
+        }
+        newBul.x += [0, 1, 0, -1][pos];
+        newBul.y += [1, 0, -1, 0][pos];
+        try {
+          if (newBul.x > 11 || newBul.x < 1 || newBul.y > 11 || newBul.y < 1) {
+            newBul.remove();
+            bulletCount--
+          } 
+        } catch (e) {
+        }
+      }, 100);
     }
-  }, 100); 
+  });
 }
 
 //health bar setter function
 function setHealth() {
   //clears bottom
   for (var j = 0; j < 13;j++){
-    clearTile(i, 13);
+    clearTile(j, 13);
   }
 
   //adds green for health available
-  for (var i = 0; i < health; i++) {
-    clearTile(i, 13);
-    addSprite(i, 13, hp);
+  for (var k = 0; k < health; k++) {
+    clearTile(k, 13);
+    addSprite(k, 13, hp);
   } 
 
   //replaces with maroon when depleted
-  for (var j = health; j < 13;j++){
+  for (var i = health; i < 13;i++){
     clearTile(i, 13);
     addSprite(i, 13, inv_hp);
   }
@@ -479,7 +499,6 @@ let time = 0;
 let effects = false;
 let timeout = 200;
 let game = true;
-
 //dirty sleep hack
 async function sleep(msec) {
   return new Promise(resolve => setTimeout(resolve, msec));
@@ -502,7 +521,7 @@ async function gameLoop() {
   }, 100);
   while(true) {
     //spawn bullets
-    spawnBullet();
+    if (bulletCount < 9)  spawnBullet();
 
     //if health is fully depleted, stops timer and background theme, clears all elements, and display game over text and ending time. Plays ending theme
     if (health <= 0){
@@ -533,4 +552,5 @@ async function gameLoop() {
     await sleep(timeout);
   }
 }
+setHealth();
 gameLoop();
