@@ -604,7 +604,7 @@ afterInput(() => {
 });
 
 function failure() {
-  playback.end()
+  if (playback) playback.end();
   const failMusic = tune`
 375: f5~375 + c5~375 + a4~375 + f4~375,
 375: f4~375 + a4~375 + c5~375 + e5~375,
@@ -644,7 +644,7 @@ function failure() {
 }
 
 function success() {
-  playback.end()
+  if (playback) playback.end();
   const successMusic = tune`
 300: g4~300 + e4~300 + c4~300,
 300: c4~300 + e4~300 + a4~300,
