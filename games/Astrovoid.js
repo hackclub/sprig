@@ -330,7 +330,7 @@ function checkNextFrame() {
     if (object.y == height()-1) { // when the astroid is at the edge
       object.remove();
     }
-    if (checkDead(player_, object)) {
+    if (checkDead(object, player_)) {
       return;
     }
     object.y += 1;
