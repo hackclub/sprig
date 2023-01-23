@@ -308,7 +308,8 @@ export function createSequencer(target) {
 
   const handleBpmInput = (e) => {
     if (e.target.value.length > 4) return r();
-    state.bpm = Number(e.target.value) * 2;
+    if (e.target.value < 1) state.bpm = 2; // 1 * 2
+    else state.bpm = Number(e.target.value) * 2;
     state.data.bpm = state.bpm;
     if (state.interval) {
       clearInterval(state.interval);
@@ -393,10 +394,12 @@ export function createSequencer(target) {
   };
 
   const play = () => setInterval(() => {
-    state.beat = (state.beat+1) % (state.numberX);
     // play song
     playCellsOnBeat(state.cells, state.bpm, state.beat);
     r();
+
+    // update beat
+    state.beat = (state.beat+1) % (state.numberX);
   }, (1000*60)/state.bpm)
 
   const init = (state) => {
