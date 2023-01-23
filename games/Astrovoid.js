@@ -275,7 +275,7 @@ function start() {
   running = true;
   points = 0;
   setMap(maps[0]);
-  playback.end();
+  if (playback) playback.end();
   playback = playTune(music, Infinity);
   setBackground(background1); // set initial background
   addSprite(2, 4, "p");
@@ -346,7 +346,7 @@ function checkDead(astro, player_) {
     addSprite(player_.x, player_.y, explosion);
     player_.remove();
     astro.remove();
-    playback.end();
+    if (playback) playback.end();
     playTune(e_sfx);
     playTune(death);
     return true;
@@ -414,7 +414,7 @@ onInput("l", () => {
 onInput("i", () => {
   if (!in_menu) {
     running = !running;
-    playback.end();
+    if (playback) playback.end();
     if (running) {
       gameLoop(); // restart game loop
       playback = playTune(music, Infinity);
