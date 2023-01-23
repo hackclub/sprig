@@ -286,7 +286,6 @@ let running = true;
 
 // main game loop
 function gameLoop() {
-  console.log(difficulty_levels);
   if (running) { // I really don't like this method, but I couldn't find a delay/sleep function for js
     setTimeout(gameLoop, updateInterval); // call the function from the function
   }
