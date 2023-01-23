@@ -435,7 +435,7 @@ afterInput(() => {
       if (object.y == height()-1) { // when the astroid is at the edge
         object.remove();
       }
-      checkDead(player_, object);
+      checkDead(object, player_);
     });
   }
 });
