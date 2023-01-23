@@ -11,7 +11,8 @@ with no numbers at the start!
 Controls:
 - WASD to control the cursor
 - J to decrement the active number
-- K to increment the active number
+- L to increment the active number
+- K to clear the square
 
 * If there is no number in the box, press either J or K
 
@@ -539,6 +540,14 @@ onInput("j", () => {
   if (isWrong) addSprite(c.x, c.y, error)
   addSprite(c.x,c.y, cursor)
   numbers[c.y][c.x] = newNum
+})
+
+onInput("k", () => {
+  const {cursor: c, isWhite} = getCursor()
+  clearTile(c.x, c.y)
+  addSprite(c.x, c.y, isWhite ? white : blue)
+  addSprite(c.x, c.y, cursor)
+  numbers[c.y][c.x] = null
 })
 
 afterInput(() => {
