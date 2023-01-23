@@ -14,15 +14,15 @@ but that on its own won't get you far.
 With the sword, you're able to kill monsters and walk through walls,
 but you're able to be killed.
 
-Swap between having a sword and not having a sword by hitting "i". While
-having the sword in your hand, you also hit anything within a one-block
-radius.
+Swap between having a sword and not having a sword by hitting "i". That button is also how 
+you attack in a one block radius, so every time you attack, you are disarmed and need to hit "i"
+again to rearm. 
 
 INTENDED ORDER
-///////////////////////////
 The intended order is to do: yellow => green => purple => orange => red,
 but I've given it a more non-linear layout for player freedom purposes.
-//////////////////////////
+
+Beat all enemies in the red room to win the game.
 
 Hit "run" to execute the code and
 start the game (you can also press shift+enter).
@@ -469,18 +469,21 @@ onInput("i", () => {
       hasSword = false;
     }
     else {
-      if (!collectedSword && getFirst(sword).x == x && getFirst(sword).y == y) {
-        hasSword = true;
-        collectedSword = true;
-        clearTile(x, y);
-        addSprite(x, y, playerWithSword);
-        currentPlayer = playerWithSword;
-      }
-      else if (collectedSword) {
-        currentPlayer = playerWithSword;
-        clearTile(x, y);
-        addSprite(x, y, playerWithSword);
-        hasSword = true;
+      var getSword = getFirst(sword);
+      if (getSword) {
+        if (!collectedSword && getFirst(sword).x == x && getFirst(sword).y == y) {
+          hasSword = true;
+          collectedSword = true;
+          clearTile(x, y);
+          addSprite(x, y, playerWithSword);
+          currentPlayer = playerWithSword;
+        }
+        else if (collectedSword) {
+          currentPlayer = playerWithSword;
+          clearTile(x, y);
+          addSprite(x, y, playerWithSword);
+          hasSword = true;
+        }
       }
     }
   }
