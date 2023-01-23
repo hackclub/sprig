@@ -3,6 +3,29 @@
 @author: marios_mitsios
 */
 
+// !!! README !!!
+//
+// How to play.
+// Press WASD to move.
+// Press L to shoot a bullet to the right.
+// Press J to shoot a bullet to the left.
+// Shooting brown box and enemies, removes them.
+// Navigate to the gray warp portal to change to the next level.
+// Navigate to the red warp portal to change tp the previous level.
+// Navigate to the green warp portal to restart the current level.
+// If you touch the enemy ( green cube officer ) on any side you will lose 1 hp.
+// If your hp reaches 0 you restart.
+// You can touch the key item to unlock locked walls, after losing 1 hp you will lose the key.
+//
+// Changelog
+// YYYY-MM-DD CHANGELOG TEMPLATE
+// 2023-01-23 Added Slow Motion.
+//
+// Slow Motion Support
+// Set this to true if you are planning to make the game run in "slow motion".
+// Basically, it will loop *after* the player moves.
+const slowMode = false;
+
 // Text per Level
 const textResources = [
   {
@@ -473,8 +496,8 @@ l51uuuu.wo
 uuuuuuu.uu
 p......w.e
 .......w.e
-uuuuuuu.uu
-..hweew.wr`,
+uuu.wuu.uu
+..hweeu.wr`,
   map`
 he.w.e.l51
 uuuue.e.e.
@@ -601,15 +624,17 @@ const moveBullets = () => {
 
 const checkBulletCollisions = () => {
   getAll(bullet).forEach(bulletToCheck => {
-    if (bulletToCheck.x == width() - 1) {
-      bulletToCheck.remove();
-    }
-    getTile(bulletToCheck.x, bulletToCheck.y).forEach(tile => {
-      if (tile.type == wall || tile.type == enemy) {
-        tile.remove();
+    try {
+        if (bulletToCheck.x == width() - 1) {
         bulletToCheck.remove();
       }
-    })
+      getTile(bulletToCheck.x, bulletToCheck.y).forEach(tile => {
+        if (tile.type == wall || tile.type == enemy) {
+          tile.remove();
+          bulletToCheck.remove();
+        }
+      })
+    } catch (error) {}
   })
   getAll(flipBullet).forEach(bulletToCheck => {
     if (bulletToCheck.x == 0) {
@@ -677,14 +702,21 @@ const keyManager = () => {
   }
 }
 
-// Main Loop
-window.setInterval(() => {
+const mainLoop = () => {
   moveBullets();
   checkBulletCollisions();
   enemyAI();
   displayUI();
   keyManager();
-}, TICK);
+}
+
+// Main Loop
+if (!slowMode)
+{
+  setInterval(() => {
+    mainLoop();
+  }, TICK);
+}
 
 const initialization = () => {
   reloadMap();
@@ -731,6 +763,10 @@ afterInput(() => {
       tile.remove();
     }
   })
-  enemyPlayerCollisions()
+  enemyPlayerCollisions();
+
+  if (slowMode) {
+    mainLoop();
+  }
 });
 initialization()
