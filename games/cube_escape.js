@@ -19,13 +19,12 @@
 //
 // Changelog
 // YYYY-MM-DD CHANGELOG TEMPLATE
-// 2023-01-23 Added Sprig hardware support.
+// 2023-01-23 Added Slow Motion.
 //
-// Sprig Hardware Support
-// Set this to true if you are planning to upload this to the sprig.
-// It will loop *after* the player moves.
-// For web it is recommended to put false.
-const hardwareUpload = false;
+// Slow Motion Support
+// Set this to true if you are planning to make the game run in "slow motion".
+// Basically, it will loop *after* the player moves.
+const slowMode = false;
 
 // Text per Level
 const textResources = [
@@ -712,9 +711,9 @@ const mainLoop = () => {
 }
 
 // Main Loop
-if (!hardwareUpload)
+if (!slowMode)
 {
-  window.setInterval(() => {
+  setInterval(() => {
     mainLoop();
   }, TICK);
 }
@@ -766,7 +765,7 @@ afterInput(() => {
   })
   enemyPlayerCollisions();
 
-  if (hardwareUpload) {
+  if (slowMode) {
     mainLoop();
   }
 });
