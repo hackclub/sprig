@@ -37,7 +37,7 @@ The Sprig has a number of components. The bill of materials is:
 | LED 1206                        | 2        | Passive Component                 |
 | 100V 1A Schotky Diode Mini SMA  | 1        | Works as Power Gate for Batteries |
 | 1x10 5mm (short) female header  | 1        | Attaching Screen                  |
-| 1x? 7mm (regular) female header | 1        | Attaching Pico                    |
+| 1x20 7mm (regular) female header| 2        | Attaching Pico                    |
 
 
 The Sprig also uses some additional hardware.
@@ -46,12 +46,12 @@ The Sprig also uses some additional hardware.
 | Name                                        | Quantity | Function                                 |
 | ------------------------------------------- | -------- | ---------------------------------------- |
 | acrylic back covers                         | 4        | to protect your fingers from pointy bits |
-| m2 10mm socket head screw                   | 10       | fastens backcovers to board              |
-| m2 16mm socket head screw                   | 2        | for attaching screen                     |
-| m2 nuts                                     | 12       | for keeping screws on                    |
+| m2 10mm socket head screw                   | 8        | fastens backcovers to board              |
+| m2 14mm socket head screw                   | 2        | for attaching screen                     |
+| m2 nuts                                     | 10       | for keeping screws on                    |
 | 7.4mm black acetal spacers                  | 2        | for lifting the screen                   |
 | micro usb cable                             | 1        |                                          |
-| 2m allen key                                | 1        |                                          |
+| 1.5mm allen key                             | 1        |                                          |
 | aaa batteries                               | 2        |                                          |
 | carrying box                                | 1        |                                          |
 | adapter from male micro usb to female usb c | 1        |                                          |
