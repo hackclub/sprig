@@ -312,18 +312,46 @@ setMap(level);
 onInput("w", () => {
   if (game)
     getFirst(player).y -= 1
+  else {
+    clearText();
+    setMap(level);
+    gameLoop();
+    game = true;
+    setHealth()
+  }
 });
 onInput("a", () => {
   if (game)
     getFirst(player).x -= 1
+  else {
+    clearText();
+    setMap(level);
+    gameLoop();
+    game = true;
+    setHealth()
+  }
 });
 onInput("s", () => {
   if (game)
     getFirst(player).y += 1
+  else {
+    clearText();
+    setMap(level);
+    gameLoop();
+    game = true;
+    setHealth()
+  }
 });
 onInput("d", () => {
   if (game)
     getFirst(player).x += 1
+  else {
+    clearText();
+    setMap(level);
+    gameLoop();
+    game = true;
+    setHealth()
+  }
 });
 
 //powerup controls
@@ -333,6 +361,7 @@ onInput("i", () => {
     playTune(powerUp);
     health += 3;
     health = health > 13 ? 13 : health;
+    setHealth();
 
     //sets effects applied to true, and flashes border green
     effects = true;
@@ -352,7 +381,7 @@ onInput("i", () => {
     setTimeout(() => {
       effects = false;
     }, 5000);
-  } else {
+  } else if (game) {
     //if powerup is already applied, plays not allowed sfx and flashes border red
     playTune(noPower);
     for (var i = 0; i < 13; i++){
@@ -366,6 +395,12 @@ onInput("i", () => {
         sprite.remove();
       });
     }, 500);
+  } else {
+    clearText();
+    setMap(level);
+    gameLoop();
+    game = true;
+    setHealth()
   }
 });
 onInput("j", () => {
@@ -397,7 +432,7 @@ onInput("j", () => {
     setTimeout(() => {
       effects = false;
     }, 8000);
-  } else {
+  } else if (game) {
     //if powerup is already applied, plays not allowed sfx and flashes border red
     playTune(noPower);
     for (var i = 0; i < 13; i++){
@@ -411,18 +446,42 @@ onInput("j", () => {
         sprite.remove();
       });
     }, 500);
+  } else {
+    clearText();
+    setMap(level);
+    gameLoop();
+    game = true;
+    setHealth()
+  }
+})
+onInput("k", () => {
+  if (!game) {
+    clearText();
+    setMap(level);
+    gameLoop();
+    game = true;
+    setHealth()
+  }
+})
+onInput("l", () => {
+  if (!game) {
+    clearText();
+    setMap(level);
+    gameLoop();
+    game = true;
+    setHealth()
   }
 })
 
 //end controls
 
 //random number generator because default implementation is broken
-let dt = 10000000;
+let seed = 1 + Math.random() * 1000000000;
 function random() {
-  dt^=(dt<<17);
-  dt^=(dt>>13);
-  dt^=(dt<<5);
-  return (dt>>>0)/4294967295;
+  seed^=(seed<<17);
+  seed^=(seed>>13);
+  seed^=(seed<<5);
+  return (seed>>>0)/4294967295;
 };
 
 //counts number of bullets on screen;
@@ -447,7 +506,7 @@ function spawnBullet() {
   getAll(bulletType[pos]).forEach(newBul => {
     if (!newBul.moving) {
       newBul.moving = true;
-      setInterval(() => {
+      const bulletMove = setInterval(() => {
         var playerSprite = getFirst(player);
         try {
           if (newBul.x == playerSprite.x && newBul.y == playerSprite.y) {
@@ -456,6 +515,7 @@ function spawnBullet() {
             newBul.remove();
             bulletCount--
             playTune(hitSound);
+            clearInterval(bulletMove);
           } 
         } catch (d) {
         }
@@ -465,6 +525,7 @@ function spawnBullet() {
           if (newBul.x > 11 || newBul.x < 1 || newBul.y > 11 || newBul.y < 1) {
             newBul.remove();
             bulletCount--
+            clearInterval(bulletMove);
           } 
         } catch (e) {
         }
@@ -534,17 +595,36 @@ async function gameLoop() {
       }
       addText("Game Over", {
         x: 4,
-        y: 11,
+        y: 7,
         color: color`3`
       });
       addText("Time: " + Math.round(time * 10)/10 + "s", {
         x: 4,
-        y: 13,
+        y: 9,
         color: color`7`
+      });
+      addText("Click any", {
+        x: 4,
+        y: 11,
+        color: color`4`
+      });
+      addText("button to", {
+        x: 4,
+        y: 12,
+        color: color`4`
+      });
+      addText("restart", {
+        x: 4,
+        y: 13,
+        color: color`4`
       });
       playback.end();
       playTune(gameoverSong, 1);
       game = false;
+      health = 13;
+      time = 0;
+      effects = false;
+      timeout = 200;
       break;
     }
 
@@ -554,3 +634,4 @@ async function gameLoop() {
 }
 setHealth();
 gameLoop();
+
