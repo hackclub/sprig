@@ -36,7 +36,7 @@ Valid values are: easy, medium, hard, very-hard, insane or inhuman
 
 */
 
-const DIFFICULTY = "easy"
+const DIFFICULTY = "very-hard"
 
 // Constants
 
