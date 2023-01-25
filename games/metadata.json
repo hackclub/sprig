@@ -1910,5 +1910,13 @@
     "img": "",
     "tags": ["endless"],
     "addedOn": "2023-01-23"
+  },
+  {
+    "filename": "sudoku",
+    "title": "sudoku",
+    "author": "wyatt",
+    "img": "",
+    "tags": ["classic"],
+    "addedOn": "2023-01-25"
   }
 ]
