@@ -36,7 +36,7 @@ Valid values are: easy, medium, hard, very-hard, insane or inhuman
 
 */
 
-const DIFFICULTY = "very-hard"
+const DIFFICULTY = "easy"
 
 // Constants
 
@@ -480,7 +480,6 @@ bbbwwwbbb`
 
 // Instantiation
 
-// SUDOKU JS START
 const sudokuJS = () => {
     var sudoku = {};  // Global reference to the sudoku library
 
@@ -1278,7 +1277,6 @@ const sudokuJS = () => {
     initialize();
     return sudoku
 }
-// SUDOKU-JS END
 
 const sudoku = sudokuJS()
 
@@ -1339,11 +1337,11 @@ const startGame = () => {
         addSprite(x, y, newSprite)
       })
   }
+
+  addSprite(4,4, cursor)
 }
 
 startGame()
-
-addSprite(4,4, cursor)
 
 const getCursor = () => {
   const c = getFirst(cursor)
