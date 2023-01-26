@@ -1918,5 +1918,13 @@
     "img": "",
     "tags": ["classic"],
     "addedOn": "2023-01-25"
+  },
+  {
+    "filename": "spongebob_squaremaze",
+    "title": "spongebob_squaremaze",
+    "author": "Jainsm_Jain",
+    "img": "",
+    "tags": ["maze"],
+    "addedOn": "2023-01-26"
   }
 ]
