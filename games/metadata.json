@@ -1926,5 +1926,13 @@
     "img": "",
     "tags": ["maze"],
     "addedOn": "2023-01-26"
+  },
+  {
+    "filename": "hex_hubbub",
+    "title": "hex_hubbub",
+    "author": "ajs256",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-28"
   }
 ]
