@@ -110,7 +110,7 @@ const maintainTime = setInterval(() => {
     timer = 0;
     lives = 0;
   }
-  else {
+  else if(lives != 0) {
     timer += 1;
     addText(String(timer), { 
       x: 18,
