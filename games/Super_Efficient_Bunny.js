@@ -144,6 +144,8 @@ afterInput(() => {
   const tilesWithGoalAndPlayer = tilesWith(goal, player);
   stepslim -=1;
   if (stepslim <= 0){
+    clearTile(xcoord, ycoord); //removes Bunny after game ends
+    clearTile(goalx, goaly); //clears carrot after game ends
     addText("Game Over", {
     x: 6,
     y: 6,
@@ -168,8 +170,8 @@ afterInput(() => {
     clearTile(xcoord,ycoord);
     xcoord = 0;
     ycoord = 0;
-    let goalx = Math.floor(Math.random() * 12);
-    let goaly = Math.floor(Math.random() * 9);
+    let goalx = Math.floor(Math.random() * 12)+1; //edit to stop the carrot from spawning on the start block of the bunny to stop bunny from disappearing mid game.
+    let goaly = Math.floor(Math.random() * 9)+1; // edit to stop the carrot from spawning on the start block of the bunny to stop bunny from disappearing mid game.
     addSprite(goalx,goaly,goal);
     addText(stepslim + " Steps Left", {
     x: 3,
