@@ -106,8 +106,9 @@ p...........
 
 ];
 
-let stepslim = 400;
-  addText(stepslim + " Steps Left", {
+let stepslim = 400; /*Set to 100 for testing, 
+I will set back to 400 before submitting for review*/
+  addText("Steps Left: "+stepslim, {
     x: 3,
     y: 15,
     color: color`2`
@@ -143,20 +144,31 @@ onInput("d", () => {
 afterInput(() => {
   const tilesWithGoalAndPlayer = tilesWith(goal, player);
   stepslim -=1;
+  clearText();
   if (stepslim <= 0){
     clearTile(xcoord, ycoord); //removes Bunny after game ends
+    
     
     addText("Game Over", {
     x: 6,
     y: 6,
     color: color`2`
   });
+    
+    
   }
-  addText(stepslim + " Steps Left", {
+  
+  addText("Steps Left: "+stepslim, {
     x: 3,
     y: 15,
     color: color`2`
   });
+
+  addText("Level "+level, {
+  x: 6,
+  y: 0,
+  color: color`2`
+});
   
   if (tilesWithGoalAndPlayer.length >0 ){
     clearText();
@@ -173,7 +185,8 @@ afterInput(() => {
     let goalx = Math.floor(Math.random() * 11)+1; //edit to stop the carrot from spawning on the start block of the bunny to stop bunny from disappearing mid game.
     let goaly = Math.floor(Math.random() * 8)+1; // edit to stop the carrot from spawning on the start block of the bunny to stop bunny from disappearing mid game.
     addSprite(goalx,goaly,goal);
-    addText(stepslim + " Steps Left", {
+    
+    addText("Steps Left: "+stepslim, {
     x: 3,
     y: 15,
     color: color`2`
@@ -183,5 +196,6 @@ afterInput(() => {
     
     
   }
+  
   
 });
