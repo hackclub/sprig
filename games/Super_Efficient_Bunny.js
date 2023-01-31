@@ -6,7 +6,8 @@
 const player = "p";
 const goal = "g";
 const back = "b";
-const green = "z";
+
+
 setLegend(
   [ player, bitmap`
 ................
@@ -59,23 +60,7 @@ DDDDDDDD44444444
 DDDDDDDD44444444
 DDDDDDDD44444444
 DDDDDDDD44444444`],
-  [ green, bitmap`
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444`],
+  
   
   
 );
@@ -85,6 +70,8 @@ let steps = 0;
 let level = 0;
 let xcoord = 0;
 let ycoord= 0;
+
+
 
 addText("Level "+level, {
   x: 6,
@@ -116,45 +103,66 @@ I will set back to 400 before submitting for review*/
 
 setMap(levels[level]);
 
+
+
 setPushables({
   [ player ]: [],
 });
 
-onInput("s", () => {
+
+onInput("s", () => { 
+  if(stepslim > 0){
   getFirst(player).y += 1
   steps +=1;
-  ycoord +=1;
+  ycoord +=1;}
 });
-onInput("w", () => {
+
+
+
+onInput("w", () => { 
+  if(stepslim > 0){
   getFirst(player).y -= 1
   steps +=1;
-  ycoord -=1;
+  ycoord -=1;}
 });
+
+
 onInput("a", () => {
+  if(stepslim > 0){
   getFirst(player).x -= 1
   steps +=1;
-  xcoord -=1;
+  xcoord -=1;}
 });
+
+
 onInput("d", () => {
+  if(stepslim > 0){
   getFirst(player).x += 1
   steps +=1;
-  xcoord +=1;
+  xcoord +=1;}
 });
+
+
+
 
 afterInput(() => {
   const tilesWithGoalAndPlayer = tilesWith(goal, player);
-  stepslim -=1;
+  if(stepslim > 0){
+  stepslim -=1;}
   clearText();
+  
   if (stepslim <= 0){
-    clearTile(xcoord, ycoord); //removes Bunny after game ends
+    //clearTile(xcoord, ycoord); //removes Bunny after game ends
     
-    
+    clearText();
     addText("Game Over", {
     x: 6,
     y: 6,
     color: color`2`
-  });
     
+  });
+   clearTile(xcoord,ycoord);
+    addSprite(0,0, player); 
     
   }
   
@@ -178,8 +186,13 @@ afterInput(() => {
   y: 0,
   color: color`2`
 });
-    addSprite(0,0, player);
     clearTile(xcoord,ycoord);
+    for (let row = 0; row < 12; row++) { //created loop to clear the whole screen which stops the carrot glitch.
+  for (let col = 0; col < 9; col++) {
+    clearTile(row, col);
+  }
+}
+    addSprite(0,0, player);
     xcoord = 0;
     ycoord = 0;
     let goalx = Math.floor(Math.random() * 11)+1; //edit to stop the carrot from spawning on the start block of the bunny to stop bunny from disappearing mid game.
