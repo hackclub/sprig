@@ -1942,5 +1942,29 @@
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2023-01-28"
+  },
+  {
+    "filename": "spriggy_morse",
+    "title": "spriggy_morse",
+    "author": "Srishti Pandey",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-01-29"
+  },
+  {
+    "filename": "son_of_a_lich",
+    "title": "son_of_a_lich",
+    "author": "William Lay",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-01-30"
+  },
+  {
+    "filename": "Fire_Hound",
+    "title": "Fire_Hound",
+    "author": "Himir Desai",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-30"
   }
 ]
