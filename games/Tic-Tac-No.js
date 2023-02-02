@@ -128,6 +128,7 @@ aaa`);
     
     //Turn variable - false for red, true for blue
     turn = false
+
 }
 
 setUp();
@@ -190,6 +191,39 @@ function checkVic(){
     } 
 }
 
+//Movement
+onInput("s", () => {
+  try{
+      getFirst(player).y += 1
+  }
+  catch(err){}
+});
+
+onInput("w", () => {
+  try{
+  getFirst(player).y -= 1
+  }catch(err){}
+  });
+
+onInput("a", () => {
+  try{
+  getFirst(player).x -= 1
+  }catch(err){}
+});
+
+onInput("d", () => {
+  try{
+  getFirst(player).x += 1
+  }catch(err){}
+});
+
+
+//onClick
+onInput("j", () => {
+  try{
+    click(getFirst(player).x, getFirst(player).y);
+  }catch(err){}
+  });
 
 function click(x, y){
   if(!turn && board[y][x] == 0){
@@ -210,25 +244,3 @@ function click(x, y){
 }
 
 
-//Movement
-onInput("s", () => {
-  getFirst(player).y += 1
-});
-
-onInput("w", () => {
-  getFirst(player).y -= 1
-});
-
-onInput("a", () => {
-  getFirst(player).x -= 1
-});
-
-onInput("d", () => {
-  getFirst(player).x += 1
-});
-
-
-//onClick
-onInput("j", () => {
-  click(getFirst(player).x, getFirst(player).y);
-});
