@@ -1942,5 +1942,53 @@
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2023-01-28"
+  },
+  {
+    "filename": "spriggy_morse",
+    "title": "spriggy_morse",
+    "author": "Srishti Pandey",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-01-29"
+  },
+  {
+    "filename": "son_of_a_lich",
+    "title": "son_of_a_lich",
+    "author": "William Lay",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-01-30"
+  },
+  {
+    "filename": "Fire_Hound",
+    "title": "Fire_Hound",
+    "author": "Himir Desai",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-30"
+  },
+  {
+    "filename": "Super_Efficient_Bunny",
+    "title": "Super_Efficient_Bunny",
+    "author": "Mihir Surlaker",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-31"
+  },
+  {
+    "filename": "Tic_Tac_Toe",
+    "title": "Tic_Tac_Toe",
+    "author": "Northernside",
+    "img": "",
+    "tags": ["classic"],
+    "addedOn": "2023-02-02"
+  },
+  {
+    "filename": "Find_The_Suspect",
+    "title": "Find_The_Suspect",
+    "author": "jonas",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-02-02"
   }
 ]
