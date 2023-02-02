@@ -229,26 +229,32 @@ setMap(levels[0]);
 
 onInput("s", () => {
   if (mode === "place") {
+  if(!getFirst(cursor)) return;
   getFirst(cursor).y += 1;
   }
   else{
+    if(!getFirst(eraser)) return;
     getFirst(eraser).y += 1;
   }
 });
 
 onInput("d", () => {
   if (mode === "place") {
+  if(!getFirst(cursor)) return;
   getFirst(cursor).x += 1;
   }
   else{
+    if(!getFirst(eraser)) return;
     getFirst(eraser).x += 1;
   }
 });
 onInput("a", () => {
   if (mode === "place") {
+  if(!getFirst(cursor)) return;
   getFirst(cursor).x -= 1;
   }
   else{
+    if(!getFirst(eraser)) return;
     getFirst(eraser).x -= 1;
   }
 });
@@ -273,11 +279,13 @@ onInput("w", () => {
     start = "True"
     console.log(getFirst(cursor).x)
   } else if (mode === "place") {
+  if(!getFirst(cursor)) return;
   getFirst(cursor).y -= 1;
   }
   else{
+    if(!getFirst(eraser)) return;
     getFirst(eraser).y -= 1;
-  } 
+  }
 });
 // END - PLAYER MOVEMENT CONTROLS
 
