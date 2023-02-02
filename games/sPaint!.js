@@ -1,17 +1,14 @@
 /*
 @title: sPaint!
 @author: yzde
-
 controls:
 use w (at the first screen) to start
 use w,a,s,d to move the cursor or the eraser
 use k to place or erase pixel
 use l to reset everything
 use j to change between cursor and eraser
-
 coming soon:
 adding colors! :p
-
 socials:
 twitter: @yazidears
 ig: @yazidears
@@ -229,32 +226,26 @@ setMap(levels[0]);
 
 onInput("s", () => {
   if (mode === "place") {
-  if(!getFirst(cursor)) return;
   getFirst(cursor).y += 1;
   }
   else{
-    if(!getFirst(eraser)) return;
     getFirst(eraser).y += 1;
   }
 });
 
 onInput("d", () => {
   if (mode === "place") {
-  if(!getFirst(cursor)) return;
   getFirst(cursor).x += 1;
   }
   else{
-    if(!getFirst(eraser)) return;
     getFirst(eraser).x += 1;
   }
 });
 onInput("a", () => {
   if (mode === "place") {
-  if(!getFirst(cursor)) return;
   getFirst(cursor).x -= 1;
   }
   else{
-    if(!getFirst(eraser)) return;
     getFirst(eraser).x -= 1;
   }
 });
@@ -279,18 +270,16 @@ onInput("w", () => {
     start = "True"
     console.log(getFirst(cursor).x)
   } else if (mode === "place") {
-  if(!getFirst(cursor)) return;
   getFirst(cursor).y -= 1;
   }
   else{
-    if(!getFirst(eraser)) return;
     getFirst(eraser).y -= 1;
-  }
+  } 
 });
 // END - PLAYER MOVEMENT CONTROLS
 
 onInput("j", () => {
-  
+
     if (mode === "place"){
       mode = "erase"
       cursorx = getFirst(cursor).x
@@ -303,7 +292,7 @@ onInput("j", () => {
   color: color`3`
 })
       delay(1000).then(() => clearText());
-      
+
     }
     else if (mode === "erase"){
       mode = "place"
@@ -317,11 +306,11 @@ onInput("j", () => {
   color: color`0`
 })
       delay(1000).then(() => clearText());
-      
-    
+
+
     }
-      
-  
+
+
 });
 onInput("l", () => {
   const currentLevel = levels[level];
@@ -334,7 +323,7 @@ onInput("l", () => {
 //afterInput(() => {
   // count the number of tiles with goals
   //const targetNumber = tilesWith(goal).length;
-  
+
   // count the number of tiles with goals and boxes
   //const numberCovered = tilesWith(goal, box).length;
 
