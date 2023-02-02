@@ -1,14 +1,17 @@
 /*
 @title: sPaint!
 @author: yzde
+
 controls:
 use w (at the first screen) to start
 use w,a,s,d to move the cursor or the eraser
 use k to place or erase pixel
 use l to reset everything
 use j to change between cursor and eraser
+
 coming soon:
 adding colors! :p
+
 socials:
 twitter: @yazidears
 ig: @yazidears
@@ -226,39 +229,50 @@ setMap(levels[0]);
 
 onInput("s", () => {
   if (mode === "place") {
+  if(!getFirst(cursor)) return;
   getFirst(cursor).y += 1;
   }
   else{
+  if(!getFirst(eraser)) return;
     getFirst(eraser).y += 1;
   }
 });
 
 onInput("d", () => {
+  
   if (mode === "place") {
+    if(!getFirst(cursor)) return;
   getFirst(cursor).x += 1;
   }
   else{
+    if(!getFirst(eraser)) return;
     getFirst(eraser).x += 1;
   }
 });
 onInput("a", () => {
   if (mode === "place") {
+    if(!getFirst(cursor)) return;
   getFirst(cursor).x -= 1;
   }
   else{
+    if(!getFirst(eraser)) return;
     getFirst(eraser).x -= 1;
   }
 });
 onInput("k", () => {
   if (mode === "place"){
+  if(!getFirst(cursor)) return;
     cursorx = getFirst(cursor).x
+    if(!getFirst(cursor)) return;
     cursory = getFirst(cursor).y
     addSprite((cursorx), (cursory), pixel)
   }
   else if (mode === "erase"){
+     if(!getFirst(eraser)) return;
     cursorx = getFirst(eraser).x
+     if(!getFirst(eraser)) return;
     cursory = getFirst(eraser).y
-    clearTile(getFirst(eraser).x,getFirst(eraser).y)
+    clearTile(cursorx,cursory)
     addSprite(cursorx, cursory, eraser)
   }
 });
@@ -268,21 +282,24 @@ onInput("w", () => {
     clearText()
     setMap(levels[2]);
     start = "True"
-    console.log(getFirst(cursor).x)
   } else if (mode === "place") {
+     if(!getFirst(cursor)) return;
   getFirst(cursor).y -= 1;
   }
   else{
+     if(!getFirst(eraser)) return;
     getFirst(eraser).y -= 1;
   } 
 });
 // END - PLAYER MOVEMENT CONTROLS
 
 onInput("j", () => {
-
+  
     if (mode === "place"){
       mode = "erase"
+       if(!getFirst(cursor)) return;
       cursorx = getFirst(cursor).x
+       if(!getFirst(cursor)) return;
       cursory = getFirst(cursor).y
       clearTile(cursorx, cursory)
       addSprite(cursorx, cursory, eraser)
@@ -292,11 +309,13 @@ onInput("j", () => {
   color: color`3`
 })
       delay(1000).then(() => clearText());
-
+      
     }
     else if (mode === "erase"){
       mode = "place"
+       if(!getFirst(eraser)) return;
       cursorx = getFirst(eraser).x
+       if(!getFirst(eraser)) return;
       cursory = getFirst(eraser).y
       clearTile(cursorx, cursory)
       addSprite(cursorx, cursory, cursor)
@@ -306,11 +325,11 @@ onInput("j", () => {
   color: color`0`
 })
       delay(1000).then(() => clearText());
-
-
+      
+    
     }
-
-
+      
+  
 });
 onInput("l", () => {
   const currentLevel = levels[level];
@@ -319,25 +338,3 @@ onInput("l", () => {
     setMap(currentLevel);
   }
 });
-
-//afterInput(() => {
-  // count the number of tiles with goals
-  //const targetNumber = tilesWith(goal).length;
-
-  // count the number of tiles with goals and boxes
-  //const numberCovered = tilesWith(goal, box).length;
-
-  //if (numberCovered === targetNumber) {
-    // increase the current level number
-    //level = level + 1;
-
-    //const currentLevel = levels[level];
-
-    // make sure the level exists and if so set the map
-    //if (currentLevel !== undefined) {
-      //setMap(currentLevel);
-    //} else {
-      //addText("you win!", { y: 4, color: color`3` });
-    //}
-  //}
-//});
