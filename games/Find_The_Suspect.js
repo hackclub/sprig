@@ -449,11 +449,11 @@ initializeText();
 startGameSound();
 
 onInput("a", () => {
-  wasCorrect(false);
+  if(!finished) wasCorrect(false);
 });
 
 onInput("d", () => {
-  wasCorrect(true);
+  if(!finished) wasCorrect(true);
 });
 
 onInput("w", () => {
