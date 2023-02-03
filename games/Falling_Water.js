@@ -17,7 +17,7 @@ let curx = 0;
 let cury = 0;
 
 const water = "s";
-const wall = "w";x
+const wall = "w";
 const cursor = "c";
 
 let speed = "100"
