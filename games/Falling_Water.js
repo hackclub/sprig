@@ -2,22 +2,27 @@
 @title: Falling Water
 @author: Captainexpo
 
-Version: 1.1
+Version: 2.0
+
+Changes:
+added a cursor so you can place water wherever you want, and added a solid!
 
 This is just a little water simulation using cellular automata for the water.
 Based on just a simple set of rules this can act like water, sand, fire, or smoke. 
-Although for this, it's just water.
 
-You can also press i and k to speed up/slow down the simulation speed.
-It can be a little buggy though.
+
 
 */
+let curx = 0;
+let cury = 0;
 
 const water = "s";
+const wall = "w";x
+const cursor = "c";
+
 let speed = "100"
 setLegend(
   [ water, bitmap`
-7555555555555557
 5555555555555555
 5555555555555555
 5555555555555555
@@ -32,80 +37,74 @@ setLegend(
 5555555555555555
 5555555555555555
 5555555555555555
-7555555555555557`,]
+5555555555555555
+5555555555555555`,],
+  [ wall, bitmap`
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL`,],
+  [ cursor, bitmap`
+0000000000000000
+0000000000000000
+00............00
+00............00
+00............00
+00............00
+00............00
+00............00
+00............00
+00............00
+00............00
+00............00
+00............00
+00............00
+0000000000000000
+0000000000000000`,]
 );
 
-let level = 0;
-const levels = [
-  map`
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................
-.........................`,
-  map`
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................
-...................................`,
-];
 //Tutorial text
-addText("use WASD", {x: 6, y: 7, color: color`0`})
-addText("to spawn water.", {x: 3, y: 8, color: color`0`})
+addText("Use WASD and IK.", {x: 2, y: 7, color: color`0`})
 
-const currentLevel = levels[0];
-setMap(currentLevel);
+setMap(map`
+..........c..............
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................
+.........................`,);
 
-setSolids([water]);
+setSolids([water, wall]);
 
 //Update all of the water cells
 Update()
@@ -113,38 +112,37 @@ Update()
 //Get user input
 onInput("s", () => {
   clearText()
-  addSprite(15, 0, water);
+  getFirst(cursor).y += 1;
 });
 onInput("w", () => {
   clearText()
-  addSprite(10, 0, water);
+  getFirst(cursor).y -= 1;
 });
 onInput("a", () => {
   clearText()
-  addSprite(5, 0, water);
+  getFirst(cursor).x -= 1;
 });
 onInput("d", () => {
   clearText()
-  addSprite(20, 0, water);
+  getFirst(cursor).x += 1;
 });
 
-//Change map
-onInput("j", () => {
-  setMap(levels[0])
-});
-onInput("l", () => {
-  setMap(levels[1])
-});
-
-//Raise/Lower tickspeed
+//add wall/water/empty sprites
 onInput("i", () => {
-  if(speed > 10){
-    speed -= 10
-  }
+  addSprite(getFirst(cursor).x,getFirst(cursor).y, water)
 });
 onInput("k", () => {
-  speed += 10
+  addSprite(getFirst(cursor).x,getFirst(cursor).y, wall)
 });
+onInput("j", () => {
+  curx = getFirst(cursor).x
+  cury = getFirst(cursor).y
+  clearTile(getFirst(cursor).x,getFirst(cursor).y)
+  addSprite(curx,cury,cursor)
+});
+
+
+
 function Update(){
   //Loop over all the water cells
     getAll(water).forEach((w) => {
@@ -168,41 +166,3 @@ function Update(){
   //Delay for a certain amount of time
   setTimeout(Update, speed);
 }
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//I wouldn't of expected you to look down here :)
