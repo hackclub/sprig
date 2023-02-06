@@ -316,6 +316,9 @@ onInput("d", () => {
   getFirst(player).x += 1
 });
 
+onInput("j", () => {
+  setMap(levels[level])
+});
 
 afterInput(() => {
   const tilesplayerandfinal=tilesWith(final, player);
