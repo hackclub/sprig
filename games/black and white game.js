@@ -1,5 +1,5 @@
 /*
-@title: black and white game
+@title: Pusher game
 @author: liam
 */
 
@@ -176,7 +176,7 @@ onInput("d", () => {
 
 afterInput(() => {
   const tilesplayerandfinal=tilesWith(final, player);
-  if (tilesplayerandfinal.length > 0) {addText("you winl!");
+  if (tilesplayerandfinal.length > 0) {addText("you win!!");
   level += 1
   setMap(levels[level])
 }
