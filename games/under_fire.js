@@ -465,7 +465,7 @@ let health = 100;
 let enemyHealth = 100;
 let gameStop = false;
 let dmgCount = 0;
-let score = 49;
+let score = 0;
 let fireLaser = true;
 let postMisfire = false;
 
