@@ -292,6 +292,8 @@ We manufactured our board by sending Gerber files to a PCB fabrication house alo
 
 ---
 
+<!--
+ 
 # BELOW IS A WIP
 
 ## The Game Engine
@@ -320,5 +322,7 @@ Use CodeMirror. Analyzing the syntax tree.
 
 ## other things to mention
 
-custom footprints
+custom footprints 
+
+-->
 

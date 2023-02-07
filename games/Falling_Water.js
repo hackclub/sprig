@@ -2,10 +2,10 @@
 @title: Falling Water
 @author: Captainexpo
 
-Version: 2.0
+Version: 2.1
 
 Changes:
-added a cursor so you can place water wherever you want, and added a solid!
+Fixed bug where water would get stuck above walls, and I added a new thumbnail!
 
 This is just a little water simulation using cellular automata for the water.
 Based on just a simple set of rules this can act like water, sand, fire, or smoke. 
@@ -147,22 +147,20 @@ function Update(){
   //Loop over all the water cells
     getAll(water).forEach((w) => {
       //Loop over all the water cells again
-      getAll(water).forEach((x)=> {
-        //Check if cell below is a water cell
-        if (w.x == x.x && w.y == x.y-1) {
-          //If it is, then move to the right or to the left
-          if(Math.random() > 0.5){
-            w.x += 1; 
-          }
-          else{
-            w.x -= 1; 
-          }
-        }  
-      });
-      //Move down if you can
-      w.y += 1;
-    console.log(speed)
-  });
+      //Check if cell below is a water cell
+      if(getTile(w.x,w.y+1).length != 0){
+        //If it is, then move to the right or to the left
+        if(Math.random() > 0.5){
+          w.x += 1; 
+        }
+        else{
+          w.x -= 1; 
+        }
+      } 
+      w.y += 1
+    });
+    //Move down if you can
+    //w.y += 1
   //Delay for a certain amount of time
   setTimeout(Update, speed);
 }
