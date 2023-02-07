@@ -1,0 +1,19 @@
+---
+import '../global.css'
+import { getUser } from '../lib/account'
+import Navbar from '../components/molecules/navbar-main'
+import StandardHead from '../components/atoms/standard-head.astro'
+
+const loggedIn = !!await getUser()
+---
+
+<html lang='en'>
+	<head>
+		<StandardHead />
+		<title>Get a Sprig | Sprig</title>
+	</head>
+	<body>
+		<Navbar loggedIn={loggedIn} />
+		<h1>Get a Sprig</h1>
+	</body>
+</html>

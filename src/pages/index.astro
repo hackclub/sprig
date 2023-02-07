@@ -1,0 +1,20 @@
+---
+import '../global.css'
+import { getUser } from '../lib/account'
+import Navbar from '../components/molecules/navbar-main'
+import StandardHead from '../components/atoms/standard-head.astro'
+
+const loggedIn = !!await getUser()
+---
+
+<html lang='en'>
+	<head>
+		<StandardHead />
+		<title>Sprig</title>
+	</head>
+	<body>
+		<Navbar loggedIn={loggedIn} />
+		<h1>Something something current hype page</h1>
+		{loggedIn ? <button>Browse games</button> : <button>Get started</button>}
+	</body>
+</html>

@@ -1,0 +1,25 @@
+---
+import { signal } from '@preact/signals';
+import '../global.css'
+import { IoClose } from 'react-icons/io5'
+import SequencerEditor from '../components/editors/sequencer'
+import styles from '../components/molecules/editor-modal.module.css'
+
+const text = signal(`4500,
+500: g4-500,
+500: g4-500,
+500: f4-500,
+500: f4-500,
+500: f4-500 + g4-500 + d5-500,
+500: g4-500,
+8500`)
+---
+
+<div class={styles.overlay}>
+	<div class={`${styles.container} ${styles.fullsize}`}>
+		<button class={styles.close}><IoClose /></button>
+		<div class={styles.content}>
+			<SequencerEditor client:load text={text} />
+		</div>
+	</div>
+</div>
