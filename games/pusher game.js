@@ -324,6 +324,7 @@ afterInput(() => {
   const tilesplayerandfinal=tilesWith(final, player);
   if (tilesplayerandfinal.length > 0) {addText("you win!!");
   level += 1
+  // increase level
   setMap(levels[level])
 }
 });
