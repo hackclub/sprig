@@ -465,7 +465,7 @@ let health = 100;
 let enemyHealth = 100;
 let gameStop = false;
 let dmgCount = 0;
-let score = 0;
+let score = 49;
 let fireLaser = true;
 let postMisfire = false;
 
@@ -473,31 +473,31 @@ let postMisfire = false;
 
 // CONTROLS
 onInput("s", () => {
-  if (gameStop == false) {
+  if (gameStop == false && level != 0) {
     getFirst(player).y += 1
   }
 });
 
 onInput("w", () => {
-  if (gameStop == false) {
+  if (gameStop == false && level != 0) {
     getFirst(player).y -= 1
   }
 });
 
 onInput("a", () => {
-  if (gameStop == false) {
+  if (gameStop == false && level != 0) {
     getFirst(player).x -= 1
   }
 });
 
 onInput("d", () => {
-  if (gameStop == false) {
+  if (gameStop == false && level != 0) {
     getFirst(player).x += 1
   }
 });
 
 onInput("i", () => {
-  if (gameStop == false) {
+  if (gameStop == false && level != 0) {
     if (getFirst(player).x == getFirst(box).x && getFirst(player).y == getFirst(box).y) {
       mats = 5;
       playTune(replenish);
@@ -505,12 +505,15 @@ onInput("i", () => {
   }
 });
 
-// do not worry about bug :)
 onInput("k", () => {
-  if (gameStop == false) {
-    if ((tilesWith(player, damagedFloor) || tilesWith(player, brokenFloor)) && mats>0) {
+  if (gameStop == false && level != 0) {
+    if ((tilesWith(player, damagedFloor) || tilesWith(player, brokenFloor)) && mats > 0) {
       let dmg = getAll(damagedFloor);
-      dmg.push(getFirst(brokenFloor));
+      if (tilesWith(player, brokenFloor)) {
+        let brokenList = getAll(brokenFloor);
+        for (let h=0; h<brokenList.length; h++)
+          dmg.push(brokenList[h]);
+      }
       for (let i=0; i<dmg.length; i++) {
         if (dmg[i].x == getFirst(player).x && dmg[i].y == getFirst(player).y){
           dmg[i].remove();
@@ -524,9 +527,8 @@ onInput("k", () => {
 });
 
 onInput("l", () => {
-  if (gameStop == false && fireLaser) {
+  if (gameStop == false && fireLaser && score >= 50) {
     if (getFirst(player).x == getFirst(controlLaser).x && getFirst(player).y == getFirst(controlLaser).y) {
-      playtune(laserShot);
       firingMaBlue();
     }
   }
@@ -549,6 +551,7 @@ async function firingMaBlue() {
   fireLaser = false;
   let ranB = Math.floor(Math.random() * 4);
   if (ranB == 1) {
+    playTune(laserShot);
     for (let i=0; i<6; i++)
       addSprite(12, i, blueLaser);
     enemyHealth -= 10;
