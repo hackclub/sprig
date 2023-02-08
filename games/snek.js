@@ -5,6 +5,10 @@
 get the fruit
 */
 
+if (typeof jsr == 'number') {
+  jsr = 0xff
+}
+
 const head = { u: "u", d: "d", l: "l", r: "r", find: "s" };
 const body = "b";
 const fruit = "f";
@@ -237,7 +241,7 @@ const start = () => {
         path.unshift(path[0] + 1);
         break;
       case "l":
-        if ((path[0] - 1) % 10 == 9) return die();
+        if ((path[0] - 1) % 10 == 9 || path[1] == 1) return die();
         path.unshift(path[0] - 1);
         break;
       case "u":
@@ -291,6 +295,7 @@ onInput("j", () => {
   score = 0;
   dir = "r";
   currdir = "r";
+  stop();
   start();
 });
 
