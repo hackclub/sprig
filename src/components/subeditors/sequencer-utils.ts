@@ -1,4 +1,4 @@
-import type { Signal } from '@preact/signals'
+import { effect, Signal } from '@preact/signals'
 import { InstrumentType, tones, Tune } from '../../lib/engine/1-base/tune'
 import { playFrequency } from '../../lib/engine/3-editor/tune'
 import { lazy } from '../../lib/lazy'
@@ -116,13 +116,19 @@ const playBeat = (beat: number, cells: Cells, bpm: number) => {
 
 export const play = (cells: Signal<Cells>, bpm: Signal<number>, beat: Signal<number>): () => void => {
 	const stop = { current: false }
+	let _timeout: number | null = null
 	const go = () => {
 		if (stop.current) return
 		playBeat(beat.value, cells.value, bpm.value)
 		setTimeout(() => {
 			if (stop.current) return
 			beat.value = (beat.value + 1) % beats
-			setTimeout(go, ((1000 * 60) / bpm.value) - (audioCtx.outputLatency * 1000))
+
+			effect(() => {
+				if (_timeout) clearTimeout(_timeout)
+				_timeout = setTimeout(go, ((1000 * 60) / bpm.value) - (audioCtx.outputLatency * 1000))
+			})
+			
 		}, audioCtx.outputLatency * 1000)
 	}
 	go()

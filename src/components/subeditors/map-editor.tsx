@@ -1,6 +1,6 @@
 import styles from './map-editor.module.css'
 import { bitmaps, EditorProps } from '../../lib/state'
-import BitmapPreview from '../atoms/bitmap-preview'
+import BitmapPreview from '../bitmap-preview'
 import { Signal, useSignal } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
 import { transparentBgUrl } from '../../lib/engine/1-base/palette'

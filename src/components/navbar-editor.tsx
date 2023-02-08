@@ -1,4 +1,4 @@
-import type { Game, User } from '../../lib/account'
+import type { Game, User } from '../lib/account'
 import styles from './navbar-editor.module.css'
 
 interface EditorNavbarProps {

@@ -1,6 +1,6 @@
 import { useSignal, useSignalEffect } from '@preact/signals'
 import { IoClose } from 'react-icons/io5'
-import { codeMirror, editors, openEditor } from '../../lib/state'
+import { codeMirror, editors, openEditor } from '../lib/state'
 import styles from './editor-modal.module.css'
 
 export default function EditorModal() {

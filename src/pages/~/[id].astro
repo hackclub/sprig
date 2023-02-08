@@ -1,8 +1,8 @@
 ---
 import '../../global.css'
 import { getUser, getGame } from '../../lib/account'
-import Editor from '../../components/organisms/editor'
-import StandardHead from '../../components/atoms/standard-head.astro'
+import Editor from '../../components/big-interactive-pages/editor'
+import StandardHead from '../../components/standard-head.astro'
 
 const user = await getUser()
 if (!user || !Astro.params.id) return Astro.redirect('/', 302)
