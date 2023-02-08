@@ -3,10 +3,10 @@ import { Signal, signal } from '@preact/signals'
 import { IoColorPalette, IoImage, IoMap, IoMusicalNotes } from 'react-icons/io5'
 import type { FromTo } from './codemirror/util'
 
-import BitmapEditor from '../components/editors/bitmap-editor'
-import ColorPickerEditor from '../components/editors/color-picker'
-import MapEditor from '../components/editors/map-editor'
-import SequencerEditor from '../components/editors/sequencer'
+import BitmapEditor from '../components/subeditors/bitmap-editor'
+import ColorPickerEditor from '../components/subeditors/color-picker'
+import MapEditor from '../components/subeditors/map-editor'
+import SequencerEditor from '../components/subeditors/sequencer'
 
 // Error handling
 export interface NormalizedError {

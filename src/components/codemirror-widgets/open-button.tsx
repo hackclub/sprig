@@ -1,5 +1,5 @@
 import { codeMirror, editors, openEditor, type EditorKind } from '../../lib/state'
-import BitmapPreview from '../atoms/bitmap-preview'
+import BitmapPreview from '../bitmap-preview'
 import styles from './open-button.module.css'
 import { runGameHeadless } from '../../lib/engine/3-editor'
 

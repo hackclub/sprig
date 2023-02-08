@@ -1,12 +1,12 @@
 import styles from './editor.module.css'
 import type { Game, User } from '../../lib/account'
-import CodeMirror from '../atoms/codemirror'
-import Navbar from '../molecules/navbar-editor'
+import CodeMirror from '../codemirror'
+import Navbar from '../navbar-editor'
 import { IoPlayCircleOutline, IoVolumeHighOutline, IoVolumeMuteOutline } from 'react-icons/io5'
 import { useSignal, useSignalEffect } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
 import { codeMirror, errorLog, formatError, muted } from '../../lib/state'
-import EditorModal from '../molecules/editor-modal'
+import EditorModal from '../editor-modal'
 import { runGame } from '../../lib/engine/3-editor'
 
 interface EditorProps {

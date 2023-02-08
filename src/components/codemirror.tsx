@@ -1,4 +1,4 @@
-import { createEditorState } from '../../lib/codemirror/init'
+import { createEditorState } from '../lib/codemirror/init'
 import { useEffect, useRef } from 'preact/hooks'
 import { EditorView } from '@codemirror/view'
 import styles from './codemirror.module.css'
