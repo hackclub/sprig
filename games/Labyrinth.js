@@ -4,8 +4,6 @@
 */
 
 const player = "p";
-const box = "b";
-const goal = "g";
 const labywall = "w";
 const melody = tune`
 147.05882352941177: a5^147.05882352941177,
