@@ -5,6 +5,7 @@
 
 const player = "p";
 const labywall = "w";
+const end = "e";
 const melody = tune`
 147.05882352941177: a5^147.05882352941177,
 441.1764705882353,
@@ -72,8 +73,26 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000`]
+0000000000000000`],
+  [ end, bitmap`
+LLLLLLLLLLLLLLLL
+L11166666661111L
+L11161111111111L
+L11161111111111L
+L11161111111111L
+L11161111111111L
+L11161111111111L
+L11166666661111L
+L11161111111111L
+L11161111111111L
+L11161111111111L
+L11161111111111L
+L11161111111111L
+L11161111111111L
+L11166666661111L
+LLLLLLLLLLLLLLLL`],
 );
+
 
 let level = 0;
 const levels = [
@@ -97,8 +116,24 @@ w.......w...w.w..w.w
 w.......w..wwww..w.w
 w.......w..w.....w.w
 w.......w..w.....w.w
-wwwwwwwww..wwwwwwwww`,
+wwwwwwwwwwewwwwwwwww`,
+   map`
+wwwwwwwwwwwww
+w...........w
+w.w.wwwwww..w
+w.w.w....w..w
+w.www.ww.w..w
+w...w..w.ww.w
+w.w.w.ew....w
+w.wwwwwww...w
+w.w.....www.w
+w.w.....wpw.w
+w...wwwww.www
+w...........w
+wwwwwwwwwwwww`,
   ]
+const currentLevel = levels[level];
+setMap(currentLevel);
 
   const cl = levels[level];
 setMap(cl);
@@ -117,4 +152,28 @@ onInput("a", () => {
 
 onInput("d", () => {
   getFirst(player).x += 1;
+});
+
+onInput("j", () => {
+  const currentLevel = levels[level];
+  if (currentLevel !== undefined) {
+    clearText("");
+    setMap(currentLevel);
+     }
+});
+afterInput(() => {
+  
+const targetNumber = tilesWith(end).length;
+const numberCovered = tilesWith(end, player).length;
+  if (numberCovered === targetNumber) {
+     level = level + 1;
+
+    const currentLevel = levels[level];
+  
+  if (currentLevel !== undefined) {
+      setMap(currentLevel);
+    } else {
+      addText("you win!", { y: 10, color: color`4` });
+    }
+  }
 });
