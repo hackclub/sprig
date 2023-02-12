@@ -1,5 +1,5 @@
 /*
-@title: Labyrinth
+@title: Labyrint
 @author: DorukSarpAlwaysStrikesBack!
 */
 
