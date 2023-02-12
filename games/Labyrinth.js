@@ -131,6 +131,20 @@ w.w.....wpw.w
 w...wwwww.www
 w...........w
 wwwwwwwwwwwww`,
+     map`
+wwwwwwwwww
+w........w
+w.wwww..pw
+w.w..wwwww
+w.w......w
+w.w..www.w
+w.wwwwew.w
+w.w....w.w
+w......w.w
+w.wwwwww.w
+w.w......w
+w........w
+wwwwwwwwww`,
   ]
 const currentLevel = levels[level];
 setMap(currentLevel);
