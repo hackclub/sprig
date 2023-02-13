@@ -1,7 +1,6 @@
 // Constants
 const AVG_HEALTH = 5;
 const ZOMBIE_HEALTH = [240, 320];
-const ZOMBIE_SPEED = 2000;
 const NEW_SUN = 2000;  // Every 10 seconds
 const NEW_ZOMBIE = 10000;  // Every 10 seconds
 const SUN_VALUE = 25;
@@ -209,10 +208,9 @@ function Zombie(x, y) {
     x,
     y,
     health: random(...ZOMBIE_HEALTH),
-    speed: random(1500, 2500),
+    speed: random(1000, 2500),
     speedChanged: false,
     curr: 0,
-    attackingPlant: false,
     run: function(timestamp) {
       this.curr += timestamp;
       if (this.curr > this.speed) {
@@ -220,17 +218,10 @@ function Zombie(x, y) {
         // Return true if game is over (i.e., this.x = 0)
         if (this.x === 0) return true;
         // If plant is in front, you've got to wait a while ("attacking") before destroying the plant and moving forward
-        const sprites = getTile(this.x - 1, this.y).filter(tile => ![lightGreenGrass, darkGreenGrass].includes(tile.type));
+        const sprites = getTile(this.x - 1, this.y).filter(tile => ![lightGreenGrass.letter, darkGreenGrass.letter, sunlight.letter].includes(tile.type));
         if (sprites.length && sprites[0].type !== sunlight.letter) {
           const sprite = sprites[0];
-          // "Attack" the plant - that is, wait until the next round
-          if (!this.attackingPlant) {
-            this.attackingPlant = true;
-            this.speed *= 2;  // A little bit longer to attack the plant
-            return;
-          } else {
-            this.attackingPlant = false;
-          }
+          // "Attack" the plant
         } else this.x--;
         if (this.speedChanged) this.speed = random(1500, 2500);  // Reset back to original speed
         return false;
@@ -448,7 +439,9 @@ const wallnut = Plant(bitmap`
     this.health--;
     if (this.health <= 0) {
       // Oop, the wallnut dies :(
+      return false;
     }
+    return true;
   }
 });
 const potatoMine = Plant(bitmap`
@@ -476,7 +469,7 @@ const potatoMine = Plant(bitmap`
   onCollide: function (zombie) {
     zombie.health = 0;
     zombie.respond();
-    // TODO: Remove oneself
+    return false;
   }
 });
 const plants = {
@@ -601,10 +594,6 @@ CC000000000000CC
 CCCCCCCCCCCCCCCC`, repeaterPea),  // Cost: 200
 ];
 
-// Functions
-function generateRandomMap(level) {
-}
-
 let legend = [[ borderCursor.letter, borderCursor.bitmap ], [ cursor.letter, cursor.bitmap ], [ sunlight.letter, sunlight.bitmap ]];
 for (let bullet of Object.keys(BULLETS)) {
   legend.push([ BULLETS[bullet].letter, BULLETS[bullet].bitmap ]);
@@ -669,11 +658,14 @@ function GameClass() {
     sunlight: [],
     map: undefined,
     amount: 0,
+    score: 0,
+    over: false,
     init: function (map) {
       this.map = map;
       setMap(this.map);
       addSprite(borderChoice + 1, 0, borderCursor.letter);
       addText(String(this.amount), { x: 0, y: 0, color: color`6`});
+      addText(String(this.score), { x: 19, y: 0, color: color`4` });
     },
     addSprite: function (sprite) {
       this.sprites.push(sprite);
@@ -681,9 +673,13 @@ function GameClass() {
     run: function (timestamp) {
       // First, clear every sprite that isn't static or a plant 
       for (let plant of this.plantSprites) {
-        // Check if plant collided with zombie, and "kill" plant based on zombie.attackingPlant
+        // Check if plant collided with zombie, and "kill" plant based on zombie.attackingPlant, or let plant serve as defense
         const zombie = this.zombieSprites.filter(zombie => zombie.x === plant.x && zombie.y === plant.y);
-        
+        if (zombie.length) {
+           if (plant.onCollide) {
+             // Plant has a onCollide function
+           }
+        }
         if (plant.run) {
           const res = plant.run(timestamp);
           if (res && res.type === "sunlight" && this.sunlight.length < MAX_SUNLIGHT) {
@@ -721,17 +717,27 @@ function GameClass() {
       this.sprites = newSprites;
       let newZombies = [];
       for (let sprite of this.zombieSprites) {
+        if (sprite.x === 0) {
+          // Check if zombie has reached behind plants - if so, the game is over
+          addText("Oopsies! Try again?", { x: 3, y: 10, color: color`3` });
+          game.over = true;
+          clearInterval(gameloop);
+        }
         const past = getTile(sprite.x, sprite.y).filter(tile => tile.type === sprite.letter)[0];
         past.remove();
         sprite.run(timestamp);
         if (validX(sprite.x) && validY(sprite.y) && sprite.health > 0) {
           addSprite(sprite.x, sprite.y, sprite.letter);
           newZombies.push(sprite);
+        } else if (sprite.health < 0) {
+          // Zombie killed
+          this.score++;
         }
       }
       this.zombieSprites = newZombies;
       clearText();
       addText(String(this.amount), { x: 0, y: 0, color: color`6` });
+      addText(String(this.score), { x: 19, y: 0, color: color`4` });
     }
   };
 }
@@ -740,14 +746,15 @@ let game = GameClass();
 game.init(initGrid);
 
 onInput("a", () => {
-  if (borderChoice > 0 && !cursor.active) borderChoice--;
+  if (!game.over && borderChoice > 0 && !cursor.active) borderChoice--;
 });
 
 onInput("d", () => {
-  if (borderChoice !== plantCards.length - 1 && !cursor.active) borderChoice++;
+  if (!game.over && borderChoice !== plantCards.length - 1 && !cursor.active) borderChoice++;
 });
 
 onInput("s", () => {
+  if (game.over) return;
   // Let user place a sprite! But only if they have the requisite amount of sunlight
   const plant = plantCards[borderChoice].plant;
   console.log(plant);
@@ -759,6 +766,7 @@ onInput("s", () => {
 });
 
 onInput("w", () => {
+  if (game.over) return;
   // Put down sprite
   for (let sprite of game.plantSprites) {
     if (sprite.x === cursor.x && sprite.y === cursor.y) return;
@@ -780,24 +788,25 @@ onInput("w", () => {
 });
 
 onInput("i", () => {
-  if (cursor.y <= 1 || !cursor.active) return;
+  if (game.over || cursor.y <= 1 || !cursor.active) return;
   getFirst(cursor.letter).y--;
   cursor.y--;
 });
 
 onInput("j", () => {
-  if (cursor.x <= 1 || !cursor.active) return;
+  if (game.over || cursor.x <= 1 || !cursor.active) return;
   getFirst(cursor.letter).x--;
   cursor.x--;
 });
 
 onInput("l", () => {
-  if (cursor.x >= mapSize.x || !cursor.active) return;
+  if (game.over || cursor.x >= mapSize.x || !cursor.active) return;
   getFirst(cursor.letter).x++;
   cursor.x++;
 });
 
 onInput("k", () => {
+  if (game.over) return;
   if (!cursor.active) {
     // If cursor isn't active, this collects sunlight
     if (game.sunlight.length) {
@@ -816,6 +825,7 @@ onInput("k", () => {
 });
 
 afterInput(() => {
+  if (game.over) return;
   getFirst(borderCursor.letter).x = borderChoice + 1;
   addText(String(game.amount), { x: 0, y: 0, color: color`6`});
 });
@@ -823,7 +833,13 @@ afterInput(() => {
 let last = new Date();
 let sunlightCount = 0;
 let zombieCount = 0;
-setInterval(() => {
+let gameloop = setInterval(() => {
+  if (game.score === 100) {
+    // Player wins!
+    addText("You saved the day!", { x: 1, y: 10, color: color`3` });
+    game.over = true;
+    clearInterval(gameloop);
+  }
   let timestamp = new Date() - last;
   sunlightCount += timestamp;
   if (sunlightCount >= NEW_SUN && game.sunlight.length < 5) {
@@ -841,9 +857,6 @@ setInterval(() => {
   }
   game.run(timestamp);
   last = new Date();
-  // Every so often, we need to generate a zombie at (last x, random y from mapSize.y + 1 to mapSize.y - 1). These should automatically start moving
   // We should also have bulletSprites that have collide() functions when they collide with zombies.
   // Also make sure to run collide() functions on the plants themselves (for example, wallnut).
-  // Every run(), check if any of the zombies reach the end (behind the plants). If they do, the game is over.
-  // For now, if the player kills 100 zombies (10 for test), the player wins. Clear screen, clearInterval, game over.
 }, 1000 / 60);
