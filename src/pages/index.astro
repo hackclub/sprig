@@ -1,10 +1,11 @@
 ---
 import '../global.css'
-import { getUser } from '../lib/account'
+import { getSession } from '../lib/account'
 import Navbar from '../components/navbar-main'
 import StandardHead from '../components/standard-head.astro'
+import Button from '../components/button'
 
-const loggedIn = !!await getUser()
+const loggedIn = !!await getSession(Astro.cookies)
 ---
 
 <html lang='en'>
@@ -15,6 +16,8 @@ const loggedIn = !!await getUser()
 	<body>
 		<Navbar loggedIn={loggedIn} />
 		<h1>Something something current hype page</h1>
-		{loggedIn ? <button>Browse games</button> : <button>Get started</button>}
+		{loggedIn
+			? <a href='/~'><Button accent>Browse games</Button></a>
+			: <a href='/~/draft'><Button accent>Get started</Button></a>}
 	</body>
 </html>

@@ -26,7 +26,6 @@
 }
 
 .codeContainer .playButton {
-	--btn-icon-size: 24px;
 	position: absolute;
 	top: 0;
 	right: 0;

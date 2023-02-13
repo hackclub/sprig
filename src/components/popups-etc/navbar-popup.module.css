@@ -1,0 +1,11 @@
+.popup {
+	background: var(--bg-surface);
+	z-index: 99;
+	padding: 10px;
+	position: absolute;
+	width: 340px;
+	top: calc(48px + 4px);
+	right: 10px;
+	border: 2px solid var(--accent);
+	box-shadow: 0 4px 8px 0 #00000038;
+}

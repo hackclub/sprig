@@ -7,14 +7,16 @@ html, body { overflow: auto; height: 100%; }
 	--font-code: 'Fira Mono', monospace;
 	
 	--bg-base: #fafed7;
-	--bg-overlay: #000000df;
+	--bg-overlay: #000000c5;
 	--bg-drawing-hover: #9b9b9b52;
 	--bg-floating: #191919;
 	--bg-surface: #f8f9fa;
 	--bg-overflow: #dee2e6;
 	--bg-btn-inactive: #434343;
   	--bg-btn-inactive-dark: #2e2e2e;
+	
 	--fg-muted: #9d9d9d;
+	--fg-muted-on-accent: #8fcabb;
 	--error: #e03131;
 	--accent: #078969;
 	--accent-light: #80c3a0;
@@ -29,6 +31,16 @@ body {
 	font-family: var(--font-text);
 	margin: 0;
 	background: var(--bg-base);
+}
+
+a {
+	color: var(--accent);
+	text-decoration: none;
+}
+
+a:hover {
+	color: var(--accent-dark);
+	text-decoration: underline;
 }
 
 @keyframes shake {
@@ -50,37 +62,4 @@ body {
 	animation-duration: 0.5s;
 	transform-origin: 50% 50%;
 	animation-iteration-count: infinite;
-}
-
-.btn {
-	--btn-icon-size: 1em;
-	background: var(--bg-btn-inactive);
-	color: #ffffff;
-	padding: 10px 14px;
-	border: none;
-	cursor: var(--cursor-interactive);
-	display: flex;
-	flex-direction: row;
-	font-size: 0.9rem;
-	font-family: inherit;
-	align-items: center;
-	gap: 6px;
-}
-
-.btn:hover {
-	background: var(--bg-btn-inactive-dark);
-}
-
-.btn > svg {
-	display: block;
-	width: var(--btn-icon-size);
-	height: var(--btn-icon-size);
-}
-
-.btn-accent {
-	background: var(--accent);
-}
-
-.btn-accent:hover {
-	background: var(--accent-dark);
 }

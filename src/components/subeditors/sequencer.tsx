@@ -6,6 +6,7 @@ import { cellsToTune, height, tuneToCells, beats, Cells, yNoteMap, playNote, pla
 import { instruments, InstrumentType, reverseInstrumentKey, textToTune, tuneToText } from '../../lib/engine/1-base/tune'
 import { leftDown } from '../../lib/event'
 import { useEffect } from 'preact/hooks'
+import Button from '../button'
 
 interface CellProps {
 	instrument: Signal<InstrumentType>
@@ -150,7 +151,9 @@ export default function SequencerEditor(props: EditorProps) {
 
 			<div class={styles.toolbox}>
 				<div class={`${styles.buttons} ${styles.transportControls}`}>
-					<button
+					<Button
+						accent
+						icon={stop.value ? IoPause : IoPlay}
 						onClick={() => {
 							if (stop.value) {
 								stop.value()
@@ -159,20 +162,18 @@ export default function SequencerEditor(props: EditorProps) {
 								stop.value = play(cells, bpm, beat)
 							}
 						}}
-						class={`btn btn-accent ${styles.playButton} ${stop.value ? styles.playing : ''}`}
 					>
-						{stop.value
-							? <><IoPause /> Pause</>
-							: <><IoPlay /> Play</>}
-					</button>
+						{stop.value ? 'Pause' : 'Play'}
+					</Button>
 
-					<button class='btn' onClick={() => {
-						stop.value?.()
-						stop.value = null
-						beat.value = 0
-					}}>
-						<IoStop />
-					</button>
+					<Button
+						icon={IoStop}
+						onClick={() => {
+							stop.value?.()
+							stop.value = null
+							beat.value = 0
+						}}
+					/>
 				</div>
 
 				<div class={styles.bpm}>
@@ -198,10 +199,10 @@ export default function SequencerEditor(props: EditorProps) {
 
 					<div class={styles.buttons}>
 						{instruments.map(name => (
-							<button class={`btn ${instrument.value === name ? styles.active : ''}`} key={name} onClick={() => instrument.value = name}>
+							<Button key={name} class={instrument.value === name ? styles.active : ''} onClick={() => instrument.value = name}>
 								<span class={styles.key}>{reverseInstrumentKey[name]}</span>{' '}
 								{name[0]?.toUpperCase()}{name.slice(1)}
-							</button>
+							</Button>
 						))}
 					</div>
 				</div>

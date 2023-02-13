@@ -6,9 +6,9 @@
 }
 
 .grid {
-	--seq-grid-playhead: #dcdbeb;
-	--seq-grid-low: #d5d5d5;
-	--seq-grid-high: #b8b8b8;
+	--seq-grid-playhead: #e4e4e4;
+    --seq-grid-low: #cfcfcf;
+    --seq-grid-high: #aaaaaa;
 
 	flex: 1;
 	display: flex;

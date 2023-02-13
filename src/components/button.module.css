@@ -1,0 +1,47 @@
+.button {
+	--btn-icon-size: 1em;
+	background: var(--bg-btn-inactive);
+	color: #ffffff;
+	padding: 10px 14px;
+	border: none;
+	cursor: var(--cursor-interactive);
+	display: flex;
+	flex-direction: row;
+	font-size: 0.9rem;
+	font-family: inherit;
+	align-items: center;
+	gap: 6px;
+	user-select: none;
+	text-decoration: none;
+}
+
+.bigIcon {
+	--btn-icon-size: 24px;
+}
+
+.button:disabled {
+	cursor: not-allowed;
+	opacity: 0.8;
+}
+
+.button.loading {
+	cursor: wait;
+}
+
+.button:not(:disabled):hover {
+	background: var(--bg-btn-inactive-dark);
+}
+
+.button > svg {
+	display: block;
+	width: var(--btn-icon-size);
+	height: var(--btn-icon-size);
+}
+
+.accent {
+	background: var(--accent);
+}
+
+.accent:not(:disabled):hover {
+	background: var(--accent-dark);
+}

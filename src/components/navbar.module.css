@@ -1,0 +1,108 @@
+/* General styles */
+.container {
+	background: var(--accent);
+	color: #ffffff;
+	height: 48px;
+	display: flex;
+	flex-direction: row;
+	padding: 0 8px;
+	gap: 8px;
+	justify-content: space-between;
+	align-items: center;
+	position: relative;
+}
+
+.container ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	height: 100%;
+}
+
+.container li {
+	display: block;
+}
+
+/* Navlinks */
+.navlinks {
+	gap: 4px;
+}
+
+.navlinks li,
+.logo {
+	height: 100%;
+}
+
+.navlinks li a,
+.logo a {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	color: inherit;
+	text-decoration: none;
+	padding: 0 16px;
+	height: 100%;
+}
+
+.navlinks li a:hover,
+.logo a:hover {
+	background: var(--accent-dark);
+}
+
+/* Editor navbar */
+.editorStats {
+	gap: 10px;
+}
+
+.attribution {
+	color: var(--fg-muted-on-accent);
+	font-size: 0.9em;
+}
+
+.saveState {
+	color: var(--fg-muted-on-accent);
+	text-decoration: underline;
+	font-size: 0.9em;
+	margin-left: 20px;
+	user-select: none;
+}
+
+/* Actions on right */
+.rightActions {
+	gap: 14px;
+}
+
+/* Logo */
+.logo a {
+	font-weight: bold;
+	gap: 6px;
+}
+
+.logo :global(svg) {
+	display: block;
+	height: 24px;
+	width: 24px;
+}
+
+/* Action icon */
+.actionIcon {
+	display: block;
+}
+
+.actionIcon a {
+	display: block;
+	color: var(--fg-muted-on-accent);
+}
+
+.actionIcon a:hover {
+	color: inherit;
+}
+
+.actionIcon :global(svg) {
+	display: block;
+	height: 24px;
+	width: 24px;
+}

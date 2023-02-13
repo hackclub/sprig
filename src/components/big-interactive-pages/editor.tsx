@@ -1,17 +1,20 @@
 import styles from './editor.module.css'
-import type { Game, User } from '../../lib/account'
 import CodeMirror from '../codemirror'
 import Navbar from '../navbar-editor'
 import { IoPlayCircleOutline, IoVolumeHighOutline, IoVolumeMuteOutline } from 'react-icons/io5'
-import { useSignal, useSignalEffect } from '@preact/signals'
+import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
-import { codeMirror, errorLog, formatError, muted } from '../../lib/state'
-import EditorModal from '../editor-modal'
+import { codeMirror, errorLog, formatError, muted, PersistenceState } from '../../lib/state'
+import EditorModal from '../popups-etc/editor-modal'
 import { runGame } from '../../lib/engine/3-editor'
+import DraftWarningModal from '../popups-etc/draft-warning'
+import Button from '../button'
+import debounce from 'debounce'
+import Help from '../popups-etc/help'
 
 interface EditorProps {
-	user: User
-	game: Game
+	loggedIn: boolean
+	persistenceState: Signal<PersistenceState>
 	cookies: {
 		outputAreaSize: number | null
 	}
@@ -23,9 +26,9 @@ interface ResizeState {
 }
 const [ minWidth, maxWidth ] = [ 400, 800 ]
 
-export default function Editor(props: EditorProps) {
+export default function Editor({ persistenceState, loggedIn, cookies }: EditorProps) {
 	// Resize state storage
-	const outputAreaSize = useSignal(props.cookies.outputAreaSize ?? minWidth)
+	const outputAreaSize = useSignal(cookies.outputAreaSize ?? minWidth)
 	useSignalEffect(() => { document.cookie = `outputAreaSize=${outputAreaSize.value}` })
 	
 	// Resize bar logic
@@ -62,16 +65,83 @@ export default function Editor(props: EditorProps) {
 		}
 	}
 
+	// Losing work is bad, let's save the user's code
+	const saveQueue = useRef<Promise<void>[]>([])
+	const saveGame = debounce((code: string) => {
+		const promise = (async () => {
+			try {
+				const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null
+				const res = await fetch('/api/save', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ code, gameId: game?.id })
+				})
+				if (!res.ok) throw new Error('Failed to save game')
+			} catch (error) {
+				console.error(error)
+				if (persistenceState.value.kind === 'PERSISTED')
+					persistenceState.value = {
+						...persistenceState.value,
+						cloudSaveState: 'ERROR'
+					}
+			}
+		})()
+		saveQueue.current.push(promise)
+		promise.then(() => {
+			saveQueue.current = saveQueue.current.filter((q) => q !== promise)
+			if (saveQueue.current.length === 0 && persistenceState.value.kind === 'PERSISTED')
+				persistenceState.value = {
+					...persistenceState.value,
+					cloudSaveState: 'SAVED'
+				}
+		})
+	}, 1000)
+
+	// Warn before leave
+	useSignalEffect(() => {
+		let needsWarning = false
+		if (persistenceState.value.kind === 'SHARED') {
+			needsWarning = true
+		} else if (persistenceState.value.kind === 'IN_MEMORY_DRAFT' && !persistenceState.value.showInitialWarning) {
+			needsWarning = true
+		} else if (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') {
+			needsWarning = persistenceState.value.cloudSaveState !== 'SAVED'
+		}
+
+		if (needsWarning) {
+			const onBeforeUnload = (event: BeforeUnloadEvent) => {
+				event.preventDefault()
+				event.returnValue = ''
+				return ''
+			}
+			window.addEventListener('beforeunload', onBeforeUnload)
+			return () => window.removeEventListener('beforeunload', onBeforeUnload)
+		} else {
+			return () => {}
+		}
+	})
+
 	return (
 		<div class={styles.page}>
-			<Navbar user={props.user} game={props.game} />
+			<Navbar loggedIn={loggedIn} persistenceState={persistenceState} />
 			
 			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
 						class={styles.code}
-						initialCode={props.game.code}
+						initialCode={persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING'
+							? persistenceState.value.game.code
+							: ''}
 						onEditorView={(editor) => codeMirror.value = editor}
+						onCodeChange={() => {
+							if (persistenceState.value.kind === 'PERSISTED') {
+								persistenceState.value = {
+									...persistenceState.value,
+									cloudSaveState: 'SAVING'
+								}
+								saveGame(codeMirror.value!.state.doc.toString())
+							}
+						}}
 					/>
 					{errorLog.value.length > 0 && (
 						<div class={styles.errors}>
@@ -81,10 +151,9 @@ export default function Editor(props: EditorProps) {
 							})}
 						</div>
 					)}
-					<button class={`btn btn-accent ${styles.playButton}`} onClick={onClickRun}>
+					<Button accent icon={IoPlayCircleOutline} bigIcon iconSide='right' class={styles.playButton} onClick={onClickRun}>
 						Run
-						<IoPlayCircleOutline />
-					</button>
+					</Button>
 				</div>
 
 				<div
@@ -121,6 +190,11 @@ export default function Editor(props: EditorProps) {
 			</div>
 
 			<EditorModal />
+			{persistenceState.value.kind === 'IN_MEMORY_DRAFT' && persistenceState.value.showInitialWarning && (
+				<DraftWarningModal persistenceState={persistenceState} />
+			)}
+			
+			<Help />
 		</div>
 	)
 }

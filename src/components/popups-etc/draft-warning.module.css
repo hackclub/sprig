@@ -1,0 +1,21 @@
+.overlay {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 99999;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background: var(--bg-overlay);
+	padding: 10px;
+}
+
+.modal {
+	background: var(--bg-surface);
+	padding: 20px;
+	width: 100%;
+	max-width: 600px;
+}
