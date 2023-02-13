@@ -94,28 +94,36 @@ setMap(levels[level]);
 
 
 onInput("w", () => {
-  getFirst(player1).y -= 1
+  if(!getFirst(player1)) return;
+    getFirst(player1).y -= 1
 });
 onInput("a", () => {
-  getFirst(player1).x -= 1
+  if(!getFirst(player1)) return; 
+    getFirst(player1).x -= 1
 });
 onInput("s", () => {
-  getFirst(player1).y += 1
+  if(!getFirst(player1)) return;
+    getFirst(player1).y += 1
 });
 onInput("d", () => {
-  getFirst(player1).x += 1
+  if(!getFirst(player1)) return;
+    getFirst(player1).x += 1
 });
 onInput("i", () => {
+    if(!getFirst(player1)) return;
   getFirst(player2).y -= 1
 });
 onInput("j", () => {
-  getFirst(player2).x -= 1
+  if(!getFirst(player2)) return;
+    getFirst(player2).x -= 1
 });
 onInput("k", () => {
-  getFirst(player2).y += 1
+  if(!getFirst(player2)) return;  
+    getFirst(player2).y += 1
 });
 onInput("l", () => {
-  getFirst(player2).x += 1
+  if(!getFirst(player2)) return;
+    getFirst(player2).x += 1
 });
 
 
