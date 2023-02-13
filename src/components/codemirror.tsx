@@ -15,12 +15,15 @@ export default function CodeMirror(props: CodeMirrorProps) {
 
 	// Alert the parent to code changes (not reactive)
 	const onCodeChangeRef = useRef(props.onCodeChange)
-	useEffect(() => { onCodeChangeRef.current = props.onCodeChange }, [props.onCodeChange])
+	useEffect(() => { onCodeChangeRef.current = props.onCodeChange }, [ props.onCodeChange ])
 
 	useEffect(() => {
 		if (!parent.current) throw new Error('Oh golly! The editor parent ref is null')
+		let lastCode: string = props.initialCode ?? ''
 		const editor = new EditorView({
 			state: createEditorState(() => {
+				if (editor.state.doc.toString() === lastCode) return
+				lastCode = editor.state.doc.toString()
 				onCodeChangeRef.current?.()
 			}),
 			parent: parent.current

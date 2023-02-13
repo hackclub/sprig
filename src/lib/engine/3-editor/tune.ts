@@ -64,7 +64,7 @@ async function playTuneHelper(tune: Tune, number: number, playingRef: { playing:
 			const frequency = typeof note === 'string' 
 				? tones[note.toUpperCase()]
 				: 2**((note-69)/12)*440
-			if (instruments.includes(instrument) && frequency !== undefined) playFrequency(frequency, duration, instrument, audioCtx, volGain)
+			if (instruments.includes(instrument) && frequency !== undefined) playFrequency(frequency, duration, instrument, audioCtx, volGain.__lazy_self)
 		}
 		await sleep(sleepTime)
 	}

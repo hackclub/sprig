@@ -7,6 +7,7 @@ import BitmapEditor from '../components/subeditors/bitmap-editor'
 import ColorPickerEditor from '../components/subeditors/color-picker'
 import MapEditor from '../components/subeditors/map-editor'
 import SequencerEditor from '../components/subeditors/sequencer'
+import type { Game } from './account'
 
 // Error handling
 export interface NormalizedError {
@@ -63,6 +64,20 @@ export interface OpenEditor {
 	kind: EditorKind
 	editRange: FromTo
 	text: string
+}
+
+// Persistence
+export type PersistenceState = {
+	kind: 'IN_MEMORY_DRAFT'
+	showInitialWarning: boolean
+} | {
+	kind: 'PERSISTED'
+	showLoginPrompt: boolean
+	saveEmail: string | null
+	cloudSaveState: 'SAVED' | 'SAVING' | 'ERROR'
+	game: 'LOADING' | Game
+} | {
+	kind: 'SHARED'
 }
 
 export const codeMirror = signal<EditorView | null>(null)

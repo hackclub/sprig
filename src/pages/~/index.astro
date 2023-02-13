@@ -1,10 +1,17 @@
 ---
 import '../../global.css'
-import { getUser } from '../../lib/account'
+import { firestore, Game, getSession } from '../../lib/account'
 import Navbar from '../../components/navbar-main'
 import StandardHead from '../../components/standard-head.astro'
 
-if (!await getUser()) return Astro.redirect('/', 302)
+const session = await getSession(Astro.cookies)
+if (!session) return Astro.redirect('/~/draft', 302)
+
+const _games = await firestore.collection('games')
+	.where('ownerId', '==', session.user.id)
+	.orderBy('modifiedAt', 'desc')
+	.get()
+const games = _games.docs.map(doc => ({ id: doc.id, ...doc.data() } as Game))
 ---
 
 <html lang='en'>
@@ -16,6 +23,16 @@ if (!await getUser()) return Astro.redirect('/', 302)
 		<Navbar loggedIn />
 		<h1>Your games</h1>
 		<button id='new-game'>New game</button>
+
+		<ul>
+			{games.map(game => (
+				<li>
+					<a href={`/~/${game.id}`}>{game.name}</a>
+					{game.isDraft ? '*DRAFT' : ''}
+					({game.modifiedAt.toDate().toLocaleString()})
+				</li>
+			))}
+		</ul>
 
 		<script>
 			const newGameButton = document.getElementById('new-game') as HTMLButtonElement

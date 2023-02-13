@@ -9,5 +9,8 @@ export default defineConfig({
 	adapter: vercel(),
 	vite: {
 		plugins: [ prefresh() ]
+	},
+	markdown: {
+		shikiConfig: { theme: 'github-light' }
 	}
 })
