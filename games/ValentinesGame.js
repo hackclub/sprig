@@ -110,7 +110,7 @@ onInput("d", () => {
     getFirst(player1).x += 1
 });
 onInput("i", () => {
-    if(!getFirst(player1)) return;
+    if(!getFirst(player2)) return;
   getFirst(player2).y -= 1
 });
 onInput("j", () => {
@@ -128,6 +128,8 @@ onInput("l", () => {
 
 
 afterInput(() => {
+  if(!getFirst(player1)) return;
+  if(!getFirst(player2)) return;
   if(getFirst(player1).y === getFirst(player2).y && getFirst(player1).x === getFirst(player2).x-1){
   level = level + 1;
 
