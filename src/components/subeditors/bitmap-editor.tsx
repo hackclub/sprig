@@ -6,7 +6,7 @@ import { palette, type PaletteItem, rgbaToHex, transparentBgUrl, transparent } f
 import { drawingTools, gridsEq, makeTempGrid, mirrorGrid, TempGrid, transformTools, Vector } from './bitmap-editor-tools'
 import { useEffect, useRef } from 'preact/hooks'
 import tinykeys from 'tinykeys'
-import { IoArrowRedo, IoArrowUndo, IoImage, IoTrash } from 'react-icons/io5/index'
+import { IoArrowRedo, IoArrowUndo, IoImage, IoTrash } from 'react-icons/io5'
 import { leftDown, rightDown } from '../../lib/event'
 
 const makePixelGrid = (): PaletteItem[][] => new Array(16).fill(0).map(() => new Array(16).fill(transparent))

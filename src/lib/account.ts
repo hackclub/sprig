@@ -1,5 +1,5 @@
 import type { AstroCookies } from 'astro'
-import admin from 'firebase-admin'
+import { apps, credential } from 'firebase-admin'
 import { initializeApp } from 'firebase-admin/app'
 import { getFirestore, Timestamp } from 'firebase-admin/firestore'
 import { customAlphabet } from 'nanoid/async'
@@ -9,12 +9,12 @@ import { adjectives, nouns } from './words'
 const numberid = customAlphabet('0123456789')
 
 const app = lazy(() => {
-	if (admin.apps.length === 0) {
+	if (apps.length === 0) {
 		return initializeApp({
-			credential: admin.credential.cert(JSON.parse(Buffer.from(import.meta.env.FIREBASE_CREDENTIAL, 'base64').toString()))
+			credential: credential.cert(JSON.parse(Buffer.from(import.meta.env.FIREBASE_CREDENTIAL, 'base64').toString()))
 		})
 	} else {
-		return admin.apps[0]!
+		return apps[0]!
 	}
 })
 export const firestore = lazy(() => {
