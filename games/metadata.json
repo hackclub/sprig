@@ -2086,5 +2086,21 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2023-02-12"
+  },
+  {
+    "filename": "ValentinesGame",
+    "title": "ValentinesGame",
+    "author": "Markonije",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-02-13"
+  },
+  {
+    "filename": "bannai-snake",
+    "title": "bannai-snake",
+    "author": "aagrim hoysal",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-02-13"
   }
 ]
