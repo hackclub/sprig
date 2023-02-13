@@ -2,6 +2,22 @@
 @title: The Maze of Sprig
 @author: SahilD
 */
+/*
+instructions
+Get your character to the green teleporter to get to the next level. 
+Controls: W = up
+          S = down
+          A = left
+          d = right
+          J = restart
+          
+*/
+/*
+Have you ever got a liitle bored and your mom told you, "You can't get on your computer!" 
+Then get your sprig and play The Maze of Sprig. It is a fun game with sound and cool blocks. You can also add your own maps so you can play at your own will!
+*/
+
+
 
 const player = "p";
 const wall = "w";
