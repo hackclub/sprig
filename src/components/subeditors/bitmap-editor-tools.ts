@@ -1,4 +1,4 @@
-import { IoArrowForward, IoBrush, IoColorFill, IoColorWand, IoEllipse, IoEyedrop, IoMove, IoReload, IoSquare, IoSwapHorizontal, IoSwapVertical, IoSync } from 'react-icons/io5/index'
+import { IoArrowForward, IoBrush, IoColorFill, IoColorWand, IoEllipse, IoEyedrop, IoMove, IoReload, IoSquare, IoSwapHorizontal, IoSwapVertical, IoSync } from 'react-icons/io5'
 import { type PaletteItem, transparent } from '../../lib/engine/1-base/palette'
 
 export type TempGrid = (PaletteItem | null)[][]

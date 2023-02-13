@@ -1,6 +1,6 @@
 import type { EditorView } from '@codemirror/view'
 import { Signal, signal } from '@preact/signals'
-import { IoColorPalette, IoImage, IoMap, IoMusicalNotes } from 'react-icons/io5/index'
+import { IoColorPalette, IoImage, IoMap, IoMusicalNotes } from 'react-icons/io5'
 import type { FromTo } from './codemirror/util'
 
 import BitmapEditor from '../components/subeditors/bitmap-editor'

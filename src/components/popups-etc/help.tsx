@@ -1,5 +1,5 @@
 import { useSignal } from '@preact/signals'
-import { IoCaretDown, IoCaretUp } from 'react-icons/io5/index'
+import { IoCaretDown, IoCaretUp } from 'react-icons/io5'
 import styles from './help.module.css'
 import { compiledContent } from '../../../docs/docs.md'
 
