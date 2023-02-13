@@ -1,4 +1,4 @@
-import { IoLogoGithub } from 'react-icons/io5'
+import { IoLogoGithub } from 'react-icons/io5/index'
 import Button from './button'
 import styles from './navbar.module.css'
 import SprigIcon from './sprig-icon'

@@ -1,7 +1,7 @@
 import styles from './sequencer.module.css'
 import type { EditorProps } from '../../lib/state'
 import { type Signal, useSignal, useSignalEffect, signal } from '@preact/signals'
-import { IoPause, IoPlay, IoStop } from 'react-icons/io5'
+import { IoPause, IoPlay, IoStop } from 'react-icons/io5/index'
 import { cellsToTune, height, tuneToCells, beats, Cells, yNoteMap, playNote, play, cellsEq } from './sequencer-utils'
 import { instruments, InstrumentType, reverseInstrumentKey, textToTune, tuneToText } from '../../lib/engine/1-base/tune'
 import { leftDown } from '../../lib/event'
