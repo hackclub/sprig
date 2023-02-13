@@ -8,7 +8,11 @@ export default defineConfig({
 	output: 'server',
 	adapter: vercel(),
 	vite: {
-		plugins: [ prefresh() ]
+		plugins: [ prefresh() ],
+		ssr: {
+			// If an import is broken in the Vercel deployment, adding it here might fix it!
+			noExternal: [ 'react-icons', 'tinykeys' ]
+		}
 	},
 	markdown: {
 		shikiConfig: { theme: 'github-light' }
