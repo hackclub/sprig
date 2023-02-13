@@ -1,7 +1,7 @@
 import styles from './editor.module.css'
 import CodeMirror from '../codemirror'
 import Navbar from '../navbar-editor'
-import { IoPlayCircleOutline, IoVolumeHighOutline, IoVolumeMuteOutline } from 'react-icons/io5'
+import { IoPlayCircleOutline, IoVolumeHighOutline, IoVolumeMuteOutline } from 'react-icons/io5/index'
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
 import { codeMirror, errorLog, formatError, muted, PersistenceState } from '../../lib/state'
