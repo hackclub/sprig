@@ -8,5 +8,6 @@
 			"react-dom": ["./node_modules/preact/compat/"]
 		},
 		"importsNotUsedAsValues": "remove"
-	}
+	},
+	"exclude": [ "node_modules" ]
 }

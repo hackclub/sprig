@@ -1,6 +1,6 @@
 ---
 import '../../global.css'
-import { getGame, getSession, firestore, getUser } from '../../lib/account'
+import { getGame, getSession, firestore, getUser, makeGame } from '../../lib/account'
 import Editor from '../../components/big-interactive-pages/editor'
 import StandardHead from '../../components/standard-head.astro'
 import { signal } from '@preact/signals'
@@ -20,20 +20,14 @@ if (session) {
 				lastModified: Timestamp.now()
 			})
 		}
-		Astro.cookies.delete('sprigDraft')
+		Astro.cookies.delete('sprigDraft', { path: '/' })
 		return Astro.redirect(`/~/${draftGame.id}`, 302)
 	} else if (draftGame) {
 		if (draftGame.isDraft) {
 			// There's a *draft* game but I'm not the owner??? I guess... copy it to my account?
-			const _newGame = await firestore.collection('games').add({
-				ownerId: session.user.id,
-				isDraft: false,
-				lastModified: new Date,
-				name: draftGame.name,
-				code: draftGame.code
-			})
-			Astro.cookies.delete('sprigDraft')
-			return Astro.redirect(`/~/${_newGame.id}`, 302)
+			const newGame = await makeGame(session.user.id, false, draftGame.name, draftGame.code)
+			Astro.cookies.delete('sprigDraft', { path: '/' })
+			return Astro.redirect(`/~/${newGame.id}`, 302)
 		} else {
 			// There's somehow a non-draft game stored that I don't own, so just redirect to login
 			return Astro.redirect('/login', 302)
@@ -55,7 +49,7 @@ if (session) {
 	} else if (draftGame) {
 		// Oh boy, there's a game but it's not a draft anymore
 		// (They probably made their account on a different computer)
-		Astro.cookies.delete('sprigDraft')
+		Astro.cookies.delete('sprigDraft', { path: '/' })
 		return Astro.redirect('/login', 302)
 	} else {
 		// Brand new Sprigster!
@@ -71,8 +65,7 @@ const persistenceState = signal(_persistenceState)
 
 <html lang='en'>
 	<head>
-		<StandardHead />
-		<title>Editor | Sprig</title>
+		<StandardHead title='Editor' />
 	</head>
 	<body>
 		<Editor

@@ -16,8 +16,7 @@ const games = _games.docs.map(doc => ({ id: doc.id, ...doc.data() } as Game))
 
 <html lang='en'>
 	<head>
-		<StandardHead />
-		<title>Your Games | Sprig</title>
+		<StandardHead title='Your Games' />
 	</head>
 	<body>
 		<Navbar loggedIn />

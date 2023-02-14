@@ -67,7 +67,7 @@
 .content p, .content ul, .content pre {
 	color: #495057;
 	margin: 16px 0;
-	line-height: 1.5;
+	line-height: var(--line-height-text);
 }
 
 .content code, .content pre {
@@ -85,4 +85,8 @@
 	display: block;
 	padding: 12px 16px;
 	overflow: auto;
+}
+
+.content a:hover {
+	text-decoration: underline;
 }

@@ -15,7 +15,58 @@
 
 .modal {
 	background: var(--bg-surface);
-	padding: 20px;
+	padding: 40px;
 	width: 100%;
-	max-width: 600px;
+	max-width: 550px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 24px;
+}
+
+.modal h2 {
+	margin: 0;
+}
+
+.modal p {
+	line-height: var(--line-height-text);
+	font-size: 0.9em;
+	margin: 0;
+}
+
+.stack {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 14px;
+	width: 100%;
+}
+
+p.muted {
+	color: var(--fg-muted);
+	font-size: 0.8rem;
+}
+
+.inputRow {
+	display: flex;
+	flex-direction: row;
+	gap: 6px;
+	width: 100%;
+}
+
+.inputRow :global(input) {
+	flex: 1;
+}
+
+.inputRow.limited {
+	max-width: 300px;
+}
+
+.center {
+	text-align: center;
+}
+
+.error {
+	color: var(--error);
 }

@@ -106,3 +106,18 @@
 	height: 24px;
 	width: 24px;
 }
+
+/* Transparency! */
+.transparent {
+	background: transparent;
+}
+
+.transparent .navlinks li a:hover,
+.transparent .logo a:hover {
+	background: #7d7d7d42;
+}
+
+.transparent .actionIcon a:not(:hover) {
+	display: block;
+	color: var(--fg-muted);
+}
