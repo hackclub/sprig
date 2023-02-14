@@ -174,10 +174,6 @@ cdefgabc`;
 
 setMap(piano);
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 onInput("w", () => {
   playTune(tune_c);
   setMap(piano);
