@@ -21,11 +21,14 @@
 
 .button:disabled {
 	cursor: not-allowed;
-	opacity: 0.8;
+	opacity: 0.6;
 }
 
 .button.loading {
 	cursor: wait;
+	animation: shimmer 2.2s linear infinite forwards;
+    background-image: linear-gradient(to right, transparent 8%, #ffffffa1 18%, transparent 33%);
+    background-size: 1200px 100%;
 }
 
 .button:not(:disabled):hover {
@@ -44,4 +47,13 @@
 
 .accent:not(:disabled):hover {
 	background: var(--accent-dark);
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1200px 0;
+    }
+    100% {
+        background-position: 1200px 0;
+    }
 }

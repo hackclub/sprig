@@ -2,6 +2,8 @@ import type { Signal } from '@preact/signals'
 import { useAuthHelper } from '../../lib/auth-helper'
 import type { PersistenceState } from '../../lib/state'
 import Button from '../button'
+import Input from '../input'
+import LinkButton from '../link-button'
 import popupStyles from './navbar-popup.module.css'
 
 interface LoginPromptProps {
@@ -9,24 +11,29 @@ interface LoginPromptProps {
 }
 
 export default function LoginPrompt(props: LoginPromptProps) {
-	const auth = useAuthHelper()
+	const auth = useAuthHelper(
+		'IDLE',
+		(props.persistenceState.value.kind === 'PERSISTED' && props.persistenceState.value.saveEmail) || ''
+	)
 
 	if (props.persistenceState.value.kind !== 'PERSISTED' || !props.persistenceState.value.showLoginPrompt) return null
 
 	let content
 	if (auth.stage.value === 'IDLE') {
 		content = (<>
-			^ Finish logging in to make multiple games and stuff whatever
-			<Button accent onClick={() => auth.startEmailEntry()}>
-				Heck yes
-			</Button>
-			<Button onClick={() => {
-				if (props.persistenceState.value.kind === 'PERSISTED')
-					props.persistenceState.value = {
-						...props.persistenceState.value,
-						showLoginPrompt: false
-					}
-			}}>No</Button>
+			<p>Finish logging in to share your work and view your other games. We'll email you a code.</p>
+			<div class={popupStyles.inputRow}>
+				<Button accent onClick={() => auth.startEmailEntry()}>
+					Let's go
+				</Button>
+				<Button onClick={() => {
+					if (props.persistenceState.value.kind === 'PERSISTED')
+						props.persistenceState.value = {
+							...props.persistenceState.value,
+							showLoginPrompt: false
+						}
+				}}>Later</Button>
+			</div>
 		</>)
 	} else if (auth.stage.value === 'EMAIL') {
 		content = (
@@ -35,39 +42,38 @@ export default function LoginPrompt(props: LoginPromptProps) {
 				await auth.submitEmail()
 			}}>
 				<p>Enter your email:</p>
-				<input
-					type='email'
-					autocomplete='email'
-					value={auth.email}
-					onInput={event => auth.email.value = event.currentTarget.value}
-				/>
-				{auth.state.value === 'EMAIL_INCORRECT' && <p>Failed sending login code, check your email</p>}
-				<Button accent type='submit' disabled={!auth.emailValid.value} loading={auth.isLoading.value}>
-					Next
-				</Button>
+				<div class={popupStyles.inputRow}>
+					<Input type='email' placeholder='fiona@hackclub.com' autoComplete='email' bind={auth.email} />
+					<Button accent type='submit' disabled={!auth.emailValid.value} loading={auth.isLoading.value}>
+						Next
+					</Button>
+				</div>
+				{auth.state.value === 'EMAIL_INCORRECT' && <p class={popupStyles.error}>Failed sending login code. Did you enter the right email?</p>}
 			</form>
 		)
-	} else if (auth.stage.value === 'CODE') {
+	} else if (auth.stage.value === 'CODE' || auth.stage.value === 'LOGGED_IN') {
 		content = (
 			<form onSubmit={async (event) => {
 				event.preventDefault()
 				await auth.submitCode()
 				if (auth.state.value === 'LOGGED_IN' && props.persistenceState.value.kind === 'PERSISTED') {
-					window.location.href = props.persistenceState.value.game === 'LOADING'
-						? '/~'
-						: `/~/${props.persistenceState.value.game.id}`
+					window.location.reload()
 				}
 			}}>
-				<p>Welcome back! Enter the code we sent to your email:</p>
-				<input
-					type='text'
-					value={auth.code}
-					onInput={event => auth.code.value = event.currentTarget.value}
-				/>
-				{auth.state.value === 'CODE_INCORRECT' && <p>Incorrect login code</p>}
-				<Button accent type='submit' disabled={!auth.codeValid.value} loading={auth.isLoading.value}>
-					Log in
-				</Button>
+				<p>Enter the code we just emailed to you at {auth.email}:</p>
+				<div class={popupStyles.inputRow}>
+					<Input type='text' maxLength={6} placeholder='123456' bind={auth.code} />
+					<Button accent type='submit' disabled={!auth.codeValid.value} loading={auth.isLoading.value}>
+						Finish logging in
+					</Button>
+				</div>
+				{auth.state.value === 'CODE_INCORRECT' && <p class={popupStyles.error}>Incorrect login code.</p>}
+				<p class={popupStyles.muted}>
+					Wrong email?{' '}
+					<LinkButton onClick={() => auth.wrongEmail()} disabled={auth.isLoading.value}>
+						Go back
+					</LinkButton>
+				</p>
 			</form>
 		)
 	}

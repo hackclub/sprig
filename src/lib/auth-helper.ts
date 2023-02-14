@@ -14,7 +14,7 @@ export type AuthState =
 
 export type AuthStage = 'IDLE' | 'EMAIL' | 'CODE' | 'LOGGED_IN'
 	
-export const useAuthHelper = (initialState: AuthState = 'IDLE') => {
+export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: string = '') => {
 	const state = useSignal(initialState)
 	const readonlyState = useComputed(() => state.value)
 	const stage = useComputed(() => {
@@ -25,7 +25,7 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE') => {
 	})
 	const isLoading = useComputed(() => state.value.endsWith('_CHECKING'))
 	
-	const email = useSignal('')
+	const email = useSignal(initialEmail)
 	const emailValid = useComputed(() => isValidEmail(email.value))
 
 	const code = useSignal('')
@@ -68,6 +68,13 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE') => {
 		}
 	}
 
+	const wrongEmail = () => {
+		if (stage.value !== 'CODE') return
+		email.value = ''
+		code.value = ''
+		state.value = 'EMAIL_ENTRY'
+	}
+
 	return {
 		state: readonlyState,
 		stage,
@@ -78,7 +85,8 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE') => {
 		codeValid,
 		startEmailEntry,
 		submitEmail,
-		submitCode
+		submitCode,
+		wrongEmail
 	}
 }
 

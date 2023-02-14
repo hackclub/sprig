@@ -22,7 +22,7 @@ export declare class SpriteType {
 }
 
 export interface GameState {
-	legend: [string, unknown][]
+	legend: [string, string][]
 	texts: Text[]
 	dimensions: {
 		width: number

@@ -4,7 +4,7 @@ import Navbar from '../navbar-editor'
 import { IoPlayCircleOutline, IoVolumeHighOutline, IoVolumeMuteOutline } from 'react-icons/io5'
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
-import { codeMirror, errorLog, formatError, muted, PersistenceState } from '../../lib/state'
+import { codeMirror, errorLog, muted, PersistenceState } from '../../lib/state'
 import EditorModal from '../popups-etc/editor-modal'
 import { runGame } from '../../lib/engine/3-editor'
 import DraftWarningModal from '../popups-etc/draft-warning'
@@ -56,6 +56,7 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 		errorLog.value = []
 
 		const code = codeMirror.value?.state.doc.toString() ?? ''
+		console.log(code)
 		const res = runGame(code, screen.current)
 
 		cleanup.current = res.cleanup
@@ -133,6 +134,7 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 							? persistenceState.value.game.code
 							: ''}
 						onEditorView={(editor) => codeMirror.value = editor}
+						onRunShortcut={onClickRun}
 						onCodeChange={() => {
 							if (persistenceState.value.kind === 'PERSISTED') {
 								persistenceState.value = {
@@ -145,10 +147,9 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 					/>
 					{errorLog.value.length > 0 && (
 						<div class={styles.errors}>
-							{errorLog.value.map((error) => {
-								const formatted = formatError(error)
-								return <div key={formatted}>{formatted}</div>
-							})}
+							{errorLog.value.map((error) => (
+								<div key={error.description}>{error.description}</div>
+							))}
 						</div>
 					)}
 					<Button accent icon={IoPlayCircleOutline} bigIcon iconSide='right' class={styles.playButton} onClick={onClickRun}>

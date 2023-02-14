@@ -1,20 +1,46 @@
-import { basicSetup as basicSetupOriginal } from 'codemirror'
-import { EditorView, keymap } from '@codemirror/view'
-import { EditorState, type Extension } from '@codemirror/state'
-import { indentUnit } from '@codemirror/language'
-import { indentWithTab } from '@codemirror/commands'
+import { EditorView, keymap, lineNumbers, highlightActiveLineGutter, highlightSpecialChars, drawSelection, dropCursor, rectangularSelection, crosshairCursor, highlightActiveLine } from '@codemirror/view'
+import { EditorState } from '@codemirror/state'
+import { bracketMatching, defaultHighlightStyle, foldGutter, foldKeymap, indentOnInput, indentUnit, syntaxHighlighting } from '@codemirror/language'
+import { history, defaultKeymap, historyKeymap, indentWithTab, insertNewlineAndIndent } from '@codemirror/commands'
 import { javascript } from '@codemirror/lang-javascript'
+import { highlightSelectionMatches, searchKeymap } from '@codemirror/search'
 import widgets from './widgets'
 
-// This is a terrible hack but strange bugs are about this one.
-// Remove autocomplete and suggestions:
-const basicSetup = (basicSetupOriginal as Extension[]).filter((_, i) => ![11, 12].includes(i))
-
-export function createEditorState(onUpdate = () => {}): EditorState {
+export function createEditorState(onUpdate = () => {}, onRunShortcut = () => {}): EditorState {
 	return EditorState.create({
 		extensions: [
-			basicSetup,
-			keymap.of([ indentWithTab ]), // TODO: We should put a note about Esc+Tab for accessibility somewhere.
+			lineNumbers(),
+			highlightActiveLineGutter(),
+			highlightSpecialChars(),
+			history(),
+			foldGutter(),
+			drawSelection(),
+			dropCursor(),
+			EditorState.allowMultipleSelections.of(true),
+			indentOnInput(),
+			syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+			bracketMatching(),
+			rectangularSelection(),
+			crosshairCursor(),
+			highlightActiveLine(),
+			highlightSelectionMatches(),
+			keymap.of([
+				...defaultKeymap.filter(({ key }) => ![ 'Enter', 'Mod-Enter' ].includes(key!)),
+				...searchKeymap,
+				...historyKeymap,
+				...foldKeymap,
+				indentWithTab, // TODO: We should put a note about Esc+Tab for accessibility somewhere.
+				{
+					key: 'Mod-Enter',
+					preventDefault: true,
+					run: () => { onRunShortcut(); return true }
+				},
+				{
+					key: 'Enter',
+					run: insertNewlineAndIndent,
+					shift: () => { onRunShortcut(); return true }
+				}
+			]),
 			indentUnit.of('  '),
 			javascript(),
 			EditorView.updateListener.of(onUpdate),

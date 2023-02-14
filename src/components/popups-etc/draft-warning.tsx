@@ -2,6 +2,8 @@ import type { Signal } from '@preact/signals'
 import { saveGhostDraft, useAuthHelper } from '../../lib/auth-helper'
 import type { PersistenceState } from '../../lib/state'
 import Button from '../button'
+import Input from '../input'
+import LinkButton from '../link-button'
 import styles from './draft-warning.module.css'
 
 export interface DraftWarningModalProps {
@@ -14,62 +16,66 @@ export default function DraftWarningModal(props: DraftWarningModalProps) {
 	return (
 		<div class={styles.overlay}>
 			<div class={styles.modal}>
-				<h2>You're gonna lose all your work! This is horrible!</h2>
-
 				{auth.stage.value === 'EMAIL' ? (<>
-					<p>Continue without saving anything</p>
-					<Button
-						accent
-						disabled={auth.isLoading.value}
-						onClick={() => {
-							if (props.persistenceState.value.kind !== 'IN_MEMORY_DRAFT') return
-							props.persistenceState.value = {
-								...props.persistenceState.value,
-								showInitialWarning: false
-							}
-						}}
-					>
-						Yeah
-					</Button>
+					<div class={styles.stack}>
+						<h2>Start building right away</h2>
+						<p>
+							Enter your email and we will save your code and send you a link.
+							We'll never use this for marketing purposes.
+						</p>
+					</div>
 
 					<form onSubmit={async (event) => {
 						event.preventDefault()
 						await auth.submitEmail()
 						if (auth.state.value === 'EMAIL_INCORRECT') saveGhostDraft(auth, props.persistenceState)
-					}}>
-						<p>Enter your email, we'll save your work and email you a link to edit it</p>
-						<input
-							type='email'
-							autocomplete='email'
-							value={auth.email}
-							onInput={event => auth.email.value = event.currentTarget.value}
-						/>
-						<Button type='submit' disabled={!auth.emailValid.value} loading={auth.isLoading.value}>
-							Continue
-						</Button>
+					}} class={styles.stack}>
+						<div class={styles.inputRow}>
+							<Input type='email' autoComplete='email' placeholder='fiona@hackclub.com' bind={auth.email} />
+							<Button accent type='submit' disabled={!auth.emailValid.value} loading={auth.isLoading.value}>
+								Start coding
+							</Button>
+						</div>
+
+						<p class={styles.muted}>
+							<LinkButton
+								onClick={() => {
+									if (props.persistenceState.value.kind !== 'IN_MEMORY_DRAFT') return
+									props.persistenceState.value = {
+										...props.persistenceState.value,
+										showInitialWarning: false
+									}
+								}}
+								disabled={auth.isLoading.value}
+							>
+								or continue without saving your work
+							</LinkButton>
+						</p>
 					</form>
 				</>) : (<>
 					<form onSubmit={async (event) => {
 						event.preventDefault()
 						await auth.submitCode()
 						if (auth.state.value === 'LOGGED_IN') window.location.href = '/~'
-					}}>
-						<p>You've used Sprig before! Enter the code we mailed you to log in:</p>
-						<input
-							type='text'
-							value={auth.code}
-							onInput={event => auth.code.value = event.currentTarget.value}
-						/>
-						{auth.state.value === 'CODE_INCORRECT' && <p>Incorrect login code</p>}
-						<Button accent type='submit' disabled={!auth.codeValid.value} loading={auth.isLoading.value}>
-							Log in
-						</Button>
+					}} class={styles.stack}>
+						<h2>Welcome back!</h2>
+						<p>You've used Sprig before, so we emailed you a code to log in and access all your games. Enter login code:</p>
 
-						<p>Can't log in right now?</p>
-						<Button disabled={auth.isLoading.value} onClick={() => saveGhostDraft(auth, props.persistenceState)}>
-							Skip and just get coding
-						</Button>
+						<div class={`${styles.inputRow} ${styles.limited}`}>
+							<Input maxLength={6} class={styles.center} type='text' bind={auth.code} placeholder='123456' />
+							<Button accent type='submit' disabled={!auth.codeValid.value} loading={auth.isLoading.value}>
+								Log in
+							</Button>
+						</div>
+						{auth.state.value === 'CODE_INCORRECT' && <p class={styles.error}>Incorrect login code.</p>}
 					</form>
+
+					<p class={styles.muted}>
+						Can't log in right now?{' '}
+						<LinkButton onClick={() => saveGhostDraft(auth, props.persistenceState)} disabled={auth.isLoading.value}>
+							Skip and just get coding
+						</LinkButton>
+					</p>
 				</>)}
 			</div>
 		</div>

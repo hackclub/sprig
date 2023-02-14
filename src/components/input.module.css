@@ -1,0 +1,18 @@
+.input {
+	background: #ffffff;
+	border: 2px solid var(--fg-muted);
+	padding: 10px 14px;
+	display: block;
+	font-size: 0.9rem;
+	font-family: inherit;
+	outline: none;
+	width: 100%;
+}
+
+.input:focus {
+	border-color: var(--bg-btn-inactive);
+}
+
+.input::placeholder {
+	color: var(--fg-muted);
+}

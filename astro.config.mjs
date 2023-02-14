@@ -2,9 +2,14 @@ import { defineConfig } from 'astro/config'
 import preact from '@astrojs/preact'
 import vercel from '@astrojs/vercel/serverless'
 import prefresh from '@prefresh/vite'
+import svelte from '@astrojs/svelte'
 
 export default defineConfig({
-	integrations: [ preact({ compat: true }) ],
+	site: 'https://sprig.hackclub.com',
+	integrations: [
+		preact({ compat: true }),
+		svelte()
+	],
 	output: 'server',
 	adapter: vercel(),
 	vite: {

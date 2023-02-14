@@ -5,11 +5,12 @@ import SprigIcon from './sprig-icon'
 
 interface MainNavbarProps {
 	loggedIn: boolean
+	transparent?: boolean
 }
 
 export default function MainNavbar(props: MainNavbarProps) {
 	return (
-		<nav class={styles.container}>
+		<nav class={`${styles.container} ${props.transparent ? styles.transparent : ''}`}>
 			<ul class={styles.navlinks}>
 				<li class={styles.logo}><a href='/'><SprigIcon /> Sprig</a></li>
 				<li><a href='/gallery'>Gallery</a></li>
@@ -23,11 +24,11 @@ export default function MainNavbar(props: MainNavbarProps) {
 				</li>
 				{props.loggedIn ? (
 					<li>
-						<a href='/~'><Button>Your games</Button></a>
+						<a href='/~'><Button>Your Games</Button></a>
 					</li>
 				) : (
 					<li>
-						<a href='/~/draft'><Button>Open editor</Button></a>
+						<a href='/~/draft'><Button>Open Editor</Button></a>
 					</li>
 				)}
 			</ul>

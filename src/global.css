@@ -1,13 +1,14 @@
 *, *::before, *::after { box-sizing: inherit; }
-html { box-sizing: border-box; }
-html, body { overflow: auto; height: 100%; }
+html, body { height: 100%; }
+html { box-sizing: border-box; overflow: hidden; }
+body { overflow: auto; }
 
 :root {
 	--font-text: 'Inter', sans-serif;
 	--font-code: 'Fira Mono', monospace;
 	
 	--bg-base: #fafed7;
-	--bg-overlay: #000000c5;
+	--bg-overlay: #000000ae;
 	--bg-drawing-hover: #9b9b9b52;
 	--bg-floating: #191919;
 	--bg-surface: #f8f9fa;
@@ -25,12 +26,14 @@ html, body { overflow: auto; height: 100%; }
   	--fg-switch-high: #f3f3f3;
 
 	--cursor-interactive: default;
+	--line-height-text: 1.5;
 }
 
 body {
 	font-family: var(--font-text);
 	margin: 0;
 	background: var(--bg-base);
+	position: relative;
 }
 
 a {
@@ -40,7 +43,6 @@ a {
 
 a:hover {
 	color: var(--accent-dark);
-	text-decoration: underline;
 }
 
 @keyframes shake {

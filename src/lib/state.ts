@@ -11,16 +11,8 @@ import type { Game } from './account'
 
 // Error handling
 export interface NormalizedError {
-	line: number | null
-	column: number | null
-	description: string
 	raw: unknown
-}
-export const formatError = (normalizedError: NormalizedError): string => {
-	const { line, column, description } = normalizedError
-	if (line === null) return description
-	if (column === null) return `Error (line ${line}): ${description}`
-	return `Error (line ${line} col ${column}): ${description}`
+	description: string
 }
 
 // Editor types

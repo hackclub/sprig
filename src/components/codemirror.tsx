@@ -7,6 +7,7 @@ interface CodeMirrorProps {
 	class?: string | undefined
 	initialCode?: string
 	onCodeChange?: () => void
+	onRunShortcut?: () => void
 	onEditorView?: (editor: EditorView) => void
 }
 
@@ -17,6 +18,10 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	const onCodeChangeRef = useRef(props.onCodeChange)
 	useEffect(() => { onCodeChangeRef.current = props.onCodeChange }, [ props.onCodeChange ])
 
+	// Run button
+	const onRunShortcutRef = useRef(props.onRunShortcut)
+	useEffect(() => { onRunShortcutRef.current = props.onRunShortcut }, [ props.onRunShortcut ])
+
 	useEffect(() => {
 		if (!parent.current) throw new Error('Oh golly! The editor parent ref is null')
 		let lastCode: string = props.initialCode ?? ''
@@ -25,7 +30,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				if (editor.state.doc.toString() === lastCode) return
 				lastCode = editor.state.doc.toString()
 				onCodeChangeRef.current?.()
-			}),
+			}, () => onRunShortcutRef.current?.()),
 			parent: parent.current
 		})
 		if (props.initialCode) editor.dispatch({ changes: { from: 0, insert: props.initialCode } })
