@@ -14,7 +14,7 @@ interface EditorNavbarProps {
 
 export default function EditorNavbar(props: EditorNavbarProps) {
 	const showDraftSavePrompt = useSignal(false)
-	const showNavPopup = useSignal(true)
+	const showNavPopup = useSignal(false)
 
 	useEffect(() => {
 		const listener = (event: MouseEvent) => {
