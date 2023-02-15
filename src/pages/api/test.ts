@@ -5,6 +5,7 @@ export const get: APIRoute = async ({}) => {
 }
 
 export const post: APIRoute = async ({ request }) => {
-	const json = await request.json()
-	return new Response(JSON.stringify(json), { status: 200 })
+	console.log('got here')
+	const text = await request.text()
+	return new Response(text, { status: 200 })
 }
