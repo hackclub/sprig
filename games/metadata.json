@@ -2110,5 +2110,21 @@
     "img": "TheMazeOfSprig",
     "tags": ["puzzle"],
     "addedOn": "2023-02-14"
+  },
+  {
+    "filename": "Labyrinth2",
+    "title": "Labyrinth2",
+    "author": "DorukSarpAlwaysStrikesBack!",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-02-14"
+  },
+  {
+    "filename": "plants_vs_zombies",
+    "title": "plants_vs_zombies",
+    "author": "jianmin-chen",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-02-15"
   }
 ]
