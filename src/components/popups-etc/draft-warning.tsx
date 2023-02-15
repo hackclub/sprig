@@ -1,9 +1,9 @@
 import type { Signal } from '@preact/signals'
-import { saveGhostDraft, useAuthHelper } from '../../lib/auth-helper'
+import { persist, useAuthHelper } from '../../lib/auth-helper'
 import type { PersistenceState } from '../../lib/state'
-import Button from '../button'
-import Input from '../input'
-import LinkButton from '../link-button'
+import Button from '../design-system/button'
+import Input from '../design-system/input'
+import LinkButton from '../design-system/link-button'
 import styles from './draft-warning.module.css'
 
 export interface DraftWarningModalProps {
@@ -28,7 +28,7 @@ export default function DraftWarningModal(props: DraftWarningModalProps) {
 					<form onSubmit={async (event) => {
 						event.preventDefault()
 						await auth.submitEmail()
-						if (auth.state.value === 'EMAIL_INCORRECT') saveGhostDraft(auth, props.persistenceState)
+						if (auth.state.value === 'EMAIL_INCORRECT') persist(props.persistenceState, auth.email.value)
 					}} class={styles.stack}>
 						<div class={styles.inputRow}>
 							<Input type='email' autoComplete='email' placeholder='fiona@hackclub.com' bind={auth.email} />
@@ -40,7 +40,7 @@ export default function DraftWarningModal(props: DraftWarningModalProps) {
 						<p class={styles.muted}>
 							<LinkButton
 								onClick={() => {
-									if (props.persistenceState.value.kind !== 'IN_MEMORY_DRAFT') return
+									if (props.persistenceState.value.kind !== 'IN_MEMORY') return
 									props.persistenceState.value = {
 										...props.persistenceState.value,
 										showInitialWarning: false
@@ -72,7 +72,7 @@ export default function DraftWarningModal(props: DraftWarningModalProps) {
 
 					<p class={styles.muted}>
 						Can't log in right now?{' '}
-						<LinkButton onClick={() => saveGhostDraft(auth, props.persistenceState)} disabled={auth.isLoading.value}>
+						<LinkButton onClick={() => persist(props.persistenceState, true, auth.email.value)} disabled={auth.isLoading.value}>
 							Skip and just get coding
 						</LinkButton>
 					</p>

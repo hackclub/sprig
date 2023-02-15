@@ -24,6 +24,7 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: st
 		return 'IDLE'
 	})
 	const isLoading = useComputed(() => state.value.endsWith('_CHECKING'))
+	isLoading.subscribe(v => console.log(v))
 	
 	const email = useSignal(initialEmail)
 	const emailValid = useComputed(() => isValidEmail(email.value))
@@ -75,6 +76,12 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: st
 		state.value = 'EMAIL_ENTRY'
 	}
 
+	const sendCodeOverride = async (emailIn: string) => {
+		email.value = emailIn
+		state.value = 'EMAIL_ENTRY'
+		await submitEmail()
+	}
+
 	return {
 		state: readonlyState,
 		stage,
@@ -86,30 +93,36 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: st
 		startEmailEntry,
 		submitEmail,
 		submitCode,
+		sendCodeOverride,
 		wrongEmail
 	}
 }
 
-export const saveGhostDraft = async (auth: ReturnType<typeof useAuthHelper>, persistenceState: Signal<PersistenceState>, showLoginPrompt: boolean = false) => {
+export const persist = async (persistenceState: Signal<PersistenceState>, email?: string) => {
+	const isShared = persistenceState.value.kind === 'SHARED'
+	const gameName = persistenceState.value.kind === 'SHARED' && persistenceState.value.name
 	persistenceState.value = {
 		kind: 'PERSISTED',
-		showLoginPrompt,
+		showLoginPrompt: false,
 		cloudSaveState: 'SAVING',
 		game: 'LOADING',
-		saveEmail: auth.email.value
+		saveEmail: email ?? null,
+		stale: persistenceState.value.stale
 	}
 
 	try {
-		const res = await fetch('/api/new-ghost-draft', {
+		const res = await fetch('/api/new-game', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
-				email: auth.email.value,
-				code: codeMirror.value?.state.doc.toString() ?? ''
+				saveEmail: email,
+				code: codeMirror.value?.state.doc.toString() ?? '',
+				name: gameName
 			})
 		})
 		if (!res.ok) throw new Error(await res.text())
-		const { game } = await res.json()
+		const game = await res.json()
+		if (!isShared) document.cookie = `sprigTempGame=${game.id};path=/;max-age=${60 * 60 * 24 * 365}`
 
 		if (persistenceState.value.kind === 'PERSISTED')
 			persistenceState.value = {
@@ -117,6 +130,8 @@ export const saveGhostDraft = async (auth: ReturnType<typeof useAuthHelper>, per
 				cloudSaveState: 'SAVED',
 				game
 			}
+		
+		window.history.replaceState(null, '', `/~/${game.id}`)
 	} catch (error) {
 		console.error(error)
 		if (persistenceState.value.kind === 'PERSISTED')

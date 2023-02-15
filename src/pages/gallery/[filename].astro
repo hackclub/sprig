@@ -1,0 +1,43 @@
+---
+import '../../global.css'
+import Editor from '../../components/big-interactive-pages/editor'
+import StandardHead from '../../components/standard-head.astro'
+import { signal } from '@preact/signals'
+import type { PersistenceState } from '../../lib/state'
+import { getSession } from '../../lib/account'
+
+const session = await getSession(Astro.cookies)
+
+const filename = Astro.params.filename ?? ''
+const res = await fetch(`https://raw.githubusercontent.com/hackclub/sprig/main/games/${encodeURIComponent(filename)}.js`)
+if (!res.ok) return Astro.redirect('/404', 302)
+const code = await res.text()
+
+const nameRegex = /\n?@title: (.+)\n?/
+const authorRegex = /\n?@author: (.+)\n?/
+const name = code.match(nameRegex)?.[1] ?? filename
+const authorName = code.match(authorRegex)?.[1] ?? ''
+const cleanedCode = code.replace(nameRegex, '').replace(authorRegex, '')
+
+const persistenceState = signal<PersistenceState>({
+	kind: 'SHARED',
+	name,
+	authorName,
+	code: cleanedCode,
+	stale: false
+})
+---
+
+<html lang='en'>
+	<head>
+		<StandardHead title={name} />
+	</head>
+	<body>
+		<Editor
+			client:load
+			loggedIn={session?.level ?? 'none'}
+			persistenceState={persistenceState}
+			cookies={{ outputAreaSize: Astro.cookies.get('outputAreaSize').number() }}
+		/>
+	</body>
+</html>

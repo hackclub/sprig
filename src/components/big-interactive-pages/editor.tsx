@@ -8,12 +8,12 @@ import { codeMirror, errorLog, muted, PersistenceState } from '../../lib/state'
 import EditorModal from '../popups-etc/editor-modal'
 import { runGame } from '../../lib/engine/3-editor'
 import DraftWarningModal from '../popups-etc/draft-warning'
-import Button from '../button'
+import Button from '../design-system/button'
 import debounce from 'debounce'
 import Help from '../popups-etc/help'
 
 interface EditorProps {
-	loggedIn: boolean
+	loggedIn: 'full' | 'partial' | 'none'
 	persistenceState: Signal<PersistenceState>
 	cookies: {
 		outputAreaSize: number | null
@@ -56,7 +56,6 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 		errorLog.value = []
 
 		const code = codeMirror.value?.state.doc.toString() ?? ''
-		console.log(code)
 		const res = runGame(code, screen.current)
 
 		cleanup.current = res.cleanup
@@ -101,11 +100,9 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 	// Warn before leave
 	useSignalEffect(() => {
 		let needsWarning = false
-		if (persistenceState.value.kind === 'SHARED') {
-			needsWarning = true
-		} else if (persistenceState.value.kind === 'IN_MEMORY_DRAFT' && !persistenceState.value.showInitialWarning) {
-			needsWarning = true
-		} else if (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') {
+		if ([ 'SHARED', 'IN_MEMORY' ].includes(persistenceState.value.kind)) {
+			needsWarning = persistenceState.value.stale
+		} else if (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.stale && persistenceState.value.game !== 'LOADING') {
 			needsWarning = persistenceState.value.cloudSaveState !== 'SAVED'
 		}
 
@@ -122,6 +119,12 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 		}
 	})
 
+	let initialCode = ''
+	if (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING')
+		initialCode = persistenceState.value.game.code
+	else if (persistenceState.value.kind === 'SHARED')
+		initialCode = persistenceState.value.code
+
 	return (
 		<div class={styles.page}>
 			<Navbar loggedIn={loggedIn} persistenceState={persistenceState} />
@@ -130,12 +133,14 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 				<div className={styles.codeContainer}>
 					<CodeMirror
 						class={styles.code}
-						initialCode={persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING'
-							? persistenceState.value.game.code
-							: ''}
+						initialCode={initialCode}
 						onEditorView={(editor) => codeMirror.value = editor}
 						onRunShortcut={onClickRun}
 						onCodeChange={() => {
+							persistenceState.value = {
+								...persistenceState.value,
+								stale: true
+							}
 							if (persistenceState.value.kind === 'PERSISTED') {
 								persistenceState.value = {
 									...persistenceState.value,
@@ -191,7 +196,7 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 			</div>
 
 			<EditorModal />
-			{persistenceState.value.kind === 'IN_MEMORY_DRAFT' && persistenceState.value.showInitialWarning && (
+			{persistenceState.value.kind === 'IN_MEMORY' && persistenceState.value.showInitialWarning && (
 				<DraftWarningModal persistenceState={persistenceState} />
 			)}
 			

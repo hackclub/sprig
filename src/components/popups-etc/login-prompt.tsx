@@ -1,9 +1,9 @@
 import type { Signal } from '@preact/signals'
 import { useAuthHelper } from '../../lib/auth-helper'
 import type { PersistenceState } from '../../lib/state'
-import Button from '../button'
-import Input from '../input'
-import LinkButton from '../link-button'
+import Button from '../design-system/button'
+import Input from '../design-system/input'
+import LinkButton from '../design-system/link-button'
 import popupStyles from './navbar-popup.module.css'
 
 interface LoginPromptProps {
@@ -11,10 +11,8 @@ interface LoginPromptProps {
 }
 
 export default function LoginPrompt(props: LoginPromptProps) {
-	const auth = useAuthHelper(
-		'IDLE',
-		(props.persistenceState.value.kind === 'PERSISTED' && props.persistenceState.value.saveEmail) || ''
-	)
+	const initialEmail = (props.persistenceState.value.kind === 'PERSISTED' && props.persistenceState.value.saveEmail) || ''
+	const auth = useAuthHelper('IDLE', initialEmail)
 
 	if (props.persistenceState.value.kind !== 'PERSISTED' || !props.persistenceState.value.showLoginPrompt) return null
 
@@ -23,10 +21,16 @@ export default function LoginPrompt(props: LoginPromptProps) {
 		content = (<>
 			<p>Finish logging in to share your work and view your other games. We'll email you a code.</p>
 			<div class={popupStyles.inputRow}>
-				<Button accent onClick={() => auth.startEmailEntry()}>
+				<Button accent loading={auth.isLoading.value} onClick={() => {
+					if (initialEmail) {
+						auth.sendCodeOverride(initialEmail)
+					} else {
+						auth.startEmailEntry()
+					}
+				}}>
 					Let's go
 				</Button>
-				<Button onClick={() => {
+				<Button disabled={auth.isLoading.value} onClick={() => {
 					if (props.persistenceState.value.kind === 'PERSISTED')
 						props.persistenceState.value = {
 							...props.persistenceState.value,

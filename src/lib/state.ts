@@ -60,16 +60,22 @@ export interface OpenEditor {
 
 // Persistence
 export type PersistenceState = {
-	kind: 'IN_MEMORY_DRAFT'
+	kind: 'IN_MEMORY'
 	showInitialWarning: boolean
+	stale: boolean
 } | {
 	kind: 'PERSISTED'
 	showLoginPrompt: boolean
 	saveEmail: string | null
 	cloudSaveState: 'SAVED' | 'SAVING' | 'ERROR'
 	game: 'LOADING' | Game
+	stale: boolean
 } | {
 	kind: 'SHARED'
+	name: string
+	authorName: string
+	code: string
+	stale: boolean
 }
 
 export const codeMirror = signal<EditorView | null>(null)

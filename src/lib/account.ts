@@ -39,6 +39,7 @@ export interface Session {
 	id: string
 	createdAt: Timestamp
 	userId: string
+	full: boolean // Means they can access all games, not just unprotected access ones
 }
 
 export interface Game {
@@ -46,7 +47,7 @@ export interface Game {
 	ownerId: string
 	createdAt: Timestamp
 	modifiedAt: Timestamp
-	isDraft: boolean
+	unprotected: boolean // Can be edited by partial user session (email only)
 	name: string
 	code: string
 }
@@ -57,7 +58,7 @@ export interface LoginCode {
 	userId: string
 }
 
-export const getSession = async (cookies: AstroCookies): Promise<{ session: Session, user: User } | null> => {
+export const getSession = async (cookies: AstroCookies): Promise<{ session: Session, user: User, level: 'full' | 'partial' } | null> => {
 	if (!cookies.has('sprigSession')) return null
 	const _session = await firestore.collection('sessions').doc(cookies.get('sprigSession').value!).get()
 	if (!_session.exists) return null
@@ -71,16 +72,41 @@ export const getSession = async (cookies: AstroCookies): Promise<{ session: Sess
 	}
 	const user = { id: _user.id, ..._user.data() } as User
 
-	return { session, user }
+	return {
+		session,
+		user,
+		level: session.full ? 'full' : 'partial'
+	}
 }
 
-export const makeSession = async (userId: string): Promise<Session> => {
+// Assumptions: if there's a current session, it matches passed userId
+export const makeOrUpdateSession = async (cookies: AstroCookies, userId: string, authLevel: 'email' | 'code'): Promise<void> => {
+	const curSession = cookies.get('sprigSession').value
+	if (curSession) {
+		await firestore.collection('sessions').doc(curSession).update({
+			full: authLevel === 'code'
+		})
+		return
+	}
+
 	const data = {
 		createdAt: Timestamp.now(),
-		userId
+		userId,
+		full: authLevel === 'code'
 	}
 	const _session = await firestore.collection('sessions').add(data)
-	return { id: _session.id, ...data } as Session
+	cookies.set('sprigSession', _session.id, {
+		path: '/',
+		maxAge: 60 * 60 * 24 * 365,
+		httpOnly: true,
+		sameSite: 'strict'
+	})
+}
+
+export const updateSessionAuthLevel = async (id: string, authLevel: 'email' | 'code'): Promise<void> => {
+	await firestore.collection('sessions').doc(id).update({
+		full: authLevel === 'code'
+	})
 }
 
 export const getGame = async (id: string | undefined): Promise<Game | null> => {
@@ -90,12 +116,12 @@ export const getGame = async (id: string | undefined): Promise<Game | null> => {
 	return { id: _game.id, ..._game.data() } as Game
 }
 
-export const makeGame = async (ownerId: string, isDraft: boolean, name?: string, code?: string): Promise<Game> => {
+export const makeGame = async (ownerId: string, unprotected: boolean, name?: string, code?: string): Promise<Game> => {
 	const data = {
 		ownerId,
 		createdAt: Timestamp.now(),
 		modifiedAt: Timestamp.now(),
-		isDraft,
+		unprotected,
 		name: name ?? adjectives[Math.floor(Math.random() * adjectives.length)] + '_' + nouns[Math.floor(Math.random() * nouns.length)],
 		code: code ?? ''
 	}

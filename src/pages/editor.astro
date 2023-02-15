@@ -1,0 +1,32 @@
+---
+import '../global.css'
+import { getSession } from '../lib/account'
+import Editor from '../components/big-interactive-pages/editor'
+import StandardHead from '../components/standard-head.astro'
+import { signal } from '@preact/signals'
+import { PersistenceState } from '../lib/state'
+
+const tempGame = Astro.cookies.get('sprigTempGame').value
+if (tempGame) return Astro.redirect(`/~/${encodeURIComponent(tempGame)}`, 302)
+if (await getSession(Astro.cookies)) return Astro.redirect('/~', 302)
+
+const persistenceState = signal<PersistenceState>({
+	kind: 'IN_MEMORY',
+	showInitialWarning: true,
+	stale: false
+})
+---
+
+<html lang='en'>
+	<head>
+		<StandardHead title='Editor' />
+	</head>
+	<body>
+		<Editor
+			client:load
+			loggedIn='none'
+			persistenceState={persistenceState}
+			cookies={{ outputAreaSize: Astro.cookies.get('outputAreaSize').number() }}
+		/>
+	</body>
+</html>

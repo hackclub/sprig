@@ -18,7 +18,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 	const game = await getGame(gameId)
 	if (!game) return new Response('Game does not exist', { status: 404 })
 
-	if (!game.isDraft) {
+	if (!game.publicReadWrite) {
 		const session = await getSession(cookies)
 		if (!session) return new Response('Unauthorized', { status: 401 })
 		if (session.user.id !== game.ownerId) return new Response(`Can't edit a game you don't own`, { status: 403 })

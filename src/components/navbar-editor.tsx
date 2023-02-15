@@ -1,19 +1,20 @@
 import { Signal, useSignal } from '@preact/signals'
 import type { PersistenceState } from '../lib/state'
-import Button from './button'
-import DraftSavePrompt from './popups-etc/draft-save-prompt'
+import Button from './design-system/button'
+import SavePrompt from './popups-etc/save-prompt'
 import LoginPrompt from './popups-etc/login-prompt'
 import styles from './navbar.module.css'
-import SprigIcon from './sprig-icon'
+import SprigIcon from './design-system/sprig-icon'
 import { useEffect } from 'preact/hooks'
+import { persist } from '../lib/auth-helper'
 
 interface EditorNavbarProps {
-	loggedIn: boolean
+	loggedIn: 'full' | 'partial' | 'none'
 	persistenceState: Signal<PersistenceState>
 }
 
 export default function EditorNavbar(props: EditorNavbarProps) {
-	const showDraftSavePrompt = useSignal(false)
+	const showSavePrompt = useSignal(false)
 	const showNavPopup = useSignal(false)
 
 	useEffect(() => {
@@ -32,31 +33,33 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	}, [])
 
 	let saveState
-	if (props.persistenceState.value.kind === 'IN_MEMORY_DRAFT') {
+	if (props.persistenceState.value.kind === 'IN_MEMORY') {
 		saveState = 'Your work is unsaved!'
 	} else if (props.persistenceState.value.kind === 'SHARED') {
-		saveState = 'Your work is unsaved!'
+		saveState = props.persistenceState.value.stale
+			? 'Your changes are unsaved!'
+			: 'No changes to save'
 	} else if (props.persistenceState.value.kind === 'PERSISTED') {
 		saveState = {
 			SAVED: `Saved to ${props.persistenceState.value.saveEmail ?? 'cloud'}`,
-			SAVING: props.persistenceState.value.game === 'LOADING' || props.persistenceState.value.game.isDraft
-				? 'Saving draft...'
-				: 'Saving...',
+			SAVING: 'Saving...',
 			ERROR: 'Error saving to cloud'
 		}[props.persistenceState.value.cloudSaveState]
 	}
 
 	let actionButton
-	if (props.persistenceState.value.kind === 'IN_MEMORY_DRAFT') {
-		actionButton = <Button onClick={() => showDraftSavePrompt.value = !showDraftSavePrompt.value}>
+	if (props.persistenceState.value.kind === 'IN_MEMORY') {
+		actionButton = <Button onClick={() => showSavePrompt.value = !showSavePrompt.value}>
 			Save your work
 		</Button>
 	} else if (props.persistenceState.value.kind === 'SHARED') {
-		actionButton = <Button>Remix</Button>
-	} else if (props.persistenceState.value.kind === 'PERSISTED'
-		&& props.persistenceState.value.game !== 'LOADING'
-		&& props.persistenceState.value.game.isDraft
-	) {
+		actionButton = <Button onClick={() => {
+			if (props.loggedIn !== 'full') persist(props.persistenceState)
+			showSavePrompt.value = true
+		}}>
+			Clone to save edits
+		</Button>
+	} else if (props.loggedIn !== 'full') {
 		actionButton = <Button onClick={() => {
 			if (props.persistenceState.value.kind === 'PERSISTED')
 				props.persistenceState.value = {
@@ -82,7 +85,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					{props.persistenceState.value.kind === 'PERSISTED' && props.persistenceState.value.game !== 'LOADING' ? (<>
 						{props.persistenceState.value.game.name}
 						<span class={styles.attribution}>{' '} by you</span>
-					</>) : 'Draft'}
+					</>) : props.persistenceState.value.kind === 'SHARED' ? (<>
+						{props.persistenceState.value.name}
+						{props.persistenceState.value.authorName && (
+							<span class={styles.attribution}>
+								{' '} by @{props.persistenceState.value.authorName}
+							</span>
+						)}
+					</>) : 'Unsaved Game'}
 				</li>
 				<li class={styles.saveState}>{saveState}</li>
 			</ul>
@@ -90,14 +100,17 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		</nav>
 
 		<LoginPrompt persistenceState={props.persistenceState} />
-		{showDraftSavePrompt.value && <DraftSavePrompt
+		{showSavePrompt.value && <SavePrompt
+			loggedIn={props.loggedIn}
 			persistenceState={props.persistenceState}
-			onClose={() => showDraftSavePrompt.value = false}
+			onClose={() => showSavePrompt.value = false}
 		/>}
 
 		{showNavPopup.value && <div class={styles.navPopup}>
 			<ul>
-				<li><a href='/~'>Your games</a></li>
+				{props.loggedIn === 'none'
+					? <li><a href='/'>Home</a></li>
+					: <li><a href='/~'>Your games</a></li>}
 				<li><a href='/gallery'>Gallery</a></li>
 				<li><a href='/get'>Get a Sprig</a></li>
 				<li><a href='https://github.com/hackclub/sprig/' target='_blank'>GitHub</a></li>

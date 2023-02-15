@@ -1,18 +1,19 @@
 import { Signal, useSignal } from '@preact/signals'
-import { saveGhostDraft, useAuthHelper } from '../../lib/auth-helper'
+import { persist, useAuthHelper } from '../../lib/auth-helper'
 import type { PersistenceState } from '../../lib/state'
-import Button from '../button'
-import Input from '../input'
-import LinkButton from '../link-button'
+import Button from '../design-system/button'
+import Input from '../design-system/input'
+import LinkButton from '../design-system/link-button'
 import popupStyles from './navbar-popup.module.css'
 
-interface DraftSavePromptProps {
+interface SavePromptProps {
+	loggedIn: 'full' | 'partial' | 'none'
 	persistenceState: Signal<PersistenceState>
 	onClose: () => void
 }
 
-export default function DraftSavePrompt(props: DraftSavePromptProps) {
-	const auth = useAuthHelper('EMAIL_ENTRY')
+export default function SavePrompt(props: SavePromptProps) {
+	const auth = useAuthHelper(props.loggedIn ? 'LOGGED_IN' : 'EMAIL_ENTRY')
 	const ghostStage = useSignal(false)
 
 	let content
@@ -26,10 +27,8 @@ export default function DraftSavePrompt(props: DraftSavePromptProps) {
 			<form onSubmit={async (event) => {
 				event.preventDefault()
 				await auth.submitEmail()
-				if (auth.state.value === 'EMAIL_INCORRECT') {
-					ghostStage.value = true
-					saveGhostDraft(auth, props.persistenceState)
-				}
+				persist(props.persistenceState, auth.email.value)
+				if (auth.state.value === 'EMAIL_INCORRECT') ghostStage.value = true
 			}}>
 				<p>Enter your email to save your work, we'll send you a link for later:</p>
 				<div class={popupStyles.inputRow}>
@@ -47,7 +46,6 @@ export default function DraftSavePrompt(props: DraftSavePromptProps) {
 				await auth.submitCode()
 				if (auth.state.value === 'LOGGED_IN') {
 					ghostStage.value = true
-					await saveGhostDraft(auth, props.persistenceState)
 					props.persistenceState.subscribe(() => {
 						if (props.persistenceState.value.kind === 'PERSISTED' && props.persistenceState.value.cloudSaveState === 'SAVED')
 							window.location.reload()
@@ -66,10 +64,7 @@ export default function DraftSavePrompt(props: DraftSavePromptProps) {
 				<p class={popupStyles.muted}>
 					Can't log in right now?{' '}
 					<LinkButton
-						onClick={() => {
-							ghostStage.value = true
-							saveGhostDraft(auth, props.persistenceState)
-						}}
+						onClick={() => ghostStage.value = true}
 						disabled={auth.isLoading.value}
 					>
 						Skip and just get coding
