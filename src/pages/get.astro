@@ -4,7 +4,7 @@ import { getSession } from '../lib/account'
 import Navbar from '../components/navbar-main'
 import StandardHead from '../components/standard-head.astro'
 
-const loggedIn = !!await getSession(Astro.cookies)
+const session = await getSession(Astro.cookies)
 ---
 
 <html lang='en'>
@@ -12,7 +12,7 @@ const loggedIn = !!await getSession(Astro.cookies)
 		<StandardHead title='Get a Sprig' />
 	</head>
 	<body>
-		<Navbar loggedIn={loggedIn} />
+		<Navbar loggedIn={session?.level ?? 'none'} />
 		<h1>Get a Sprig</h1>
 	</body>
 </html>

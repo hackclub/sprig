@@ -26,7 +26,7 @@ const stories = [
 	{ id: 'learn', width: 800, height: 602 },
 ]
 
-const loggedIn = !!await getSession(Astro.cookies)
+const session = await getSession(Astro.cookies)
 ---
 
 <html lang='en'>
@@ -35,7 +35,7 @@ const loggedIn = !!await getSession(Astro.cookies)
 		<title>Sprig</title>
 	</head>
 	<body>
-		<Navbar transparent loggedIn={loggedIn} />
+		<Navbar transparent loggedIn={session?.level ?? 'none'} />
 
 		<div class='magic' id='m'>
 			<img src='/preview.webp' alt='A 3D rendering of the Sprig device.' id='preview' />
@@ -53,9 +53,9 @@ const loggedIn = !!await getSession(Astro.cookies)
 						kit!
 					</p>
 
-					{loggedIn
+					{(session && session.session.full)
 						? <a href='/~'><button class='btn active'>Your games &raquo;</button></a>
-						: <a href='/~/draft'><button class='btn active'>Get started &raquo;</button></a>}
+						: <a href='/editor'><button class='btn active'>{session ? 'Open editor' : 'Get started'} &raquo;</button></a>}
 				</div>
 			</div>
 		</section>

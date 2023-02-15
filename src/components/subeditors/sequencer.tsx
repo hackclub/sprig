@@ -6,7 +6,7 @@ import { cellsToTune, height, tuneToCells, beats, Cells, yNoteMap, playNote, pla
 import { instruments, InstrumentType, reverseInstrumentKey, textToTune, tuneToText } from '../../lib/engine/1-base/tune'
 import { leftDown } from '../../lib/event'
 import { useEffect } from 'preact/hooks'
-import Button from '../button'
+import Button from '../design-system/button'
 
 interface CellProps {
 	instrument: Signal<InstrumentType>

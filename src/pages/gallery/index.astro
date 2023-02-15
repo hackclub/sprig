@@ -1,0 +1,18 @@
+---
+import '../../global.css'
+import { getSession } from '../../lib/account'
+import Navbar from '../../components/navbar-main'
+import StandardHead from '../../components/standard-head.astro'
+
+const session = await getSession(Astro.cookies)
+---
+
+<html lang='en'>
+	<head>
+		<StandardHead title='Gallery' />
+	</head>
+	<body>
+		<Navbar loggedIn={session?.level ?? 'none'} />
+		<h1>Gallery</h1>
+	</body>
+</html>

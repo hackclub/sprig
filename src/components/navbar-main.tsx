@@ -1,10 +1,10 @@
 import { IoLogoGithub } from 'react-icons/io5'
-import Button from './button'
+import Button from './design-system/button'
 import styles from './navbar.module.css'
-import SprigIcon from './sprig-icon'
+import SprigIcon from './design-system/sprig-icon'
 
 interface MainNavbarProps {
-	loggedIn: boolean
+	loggedIn: 'partial' | 'full' | 'none'
 	transparent?: boolean
 }
 
@@ -22,13 +22,13 @@ export default function MainNavbar(props: MainNavbarProps) {
 						<IoLogoGithub />
 					</a>
 				</li>
-				{props.loggedIn ? (
+				{props.loggedIn === 'full' ? (
 					<li>
 						<a href='/~'><Button>Your Games</Button></a>
 					</li>
 				) : (
 					<li>
-						<a href='/~/draft'><Button>Open Editor</Button></a>
+						<a href='/editor'><Button>Open Editor</Button></a>
 					</li>
 				)}
 			</ul>

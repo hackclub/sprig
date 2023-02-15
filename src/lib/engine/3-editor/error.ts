@@ -21,11 +21,11 @@ interface StackItem {
 
 const firefoxStackRegex = /^(.*)@(.*?)(:(\d+):(\d+))?$/
 const chromeStackRegex = /^\s+at ([^()]+) \((.+?):(\d+):(\d+)\)$/
+const chromeStackOnlyUrlRegex = /^\s+at (.+?):(\d+):(\d+)$/
 const chromeAsRegex = /\[as (.+)\]/
 const chromeStackUrlRegex = /\((.+?):(\d+):(\d+)\)/
 const normalizeStack = (stack: string): StackItem[] | null => {
 	const lines = stack.trim().split('\n')
-	console.log(lines)
 
 	if (lines.every(line => firefoxStackRegex.test(line))) {
 		return lines.map(line => {
@@ -37,25 +37,36 @@ const normalizeStack = (stack: string): StackItem[] | null => {
 				column: match[5] ? Number(match[5]) : null
 			}
 		})
-	} else if (lines.slice(1).every(line => chromeStackRegex.test(line))) {
+	} else if (lines.slice(1).every(
+		line => chromeStackRegex.test(line) || chromeStackOnlyUrlRegex.test(line)
+	)) {
 		lines.shift()
 		return lines.map(line => {
-			const match = line.match(chromeStackRegex)!
+			const match = line.match(chromeStackRegex)
+			if (match) {
+				let callSite = match[1]!
+				const as = callSite.match(chromeAsRegex)
+				if (as) callSite = as[1]!
+				callSite = callSite.split('.').at(-1)!
 
-			let callSite = match[1]!
-			const as = callSite.match(chromeAsRegex)
-			if (as) callSite = as[1]!
-			callSite = callSite.split('.').at(-1)!
+				let fileUrl = match[2]!
+				while (chromeStackUrlRegex.test(fileUrl))
+					fileUrl = fileUrl.match(chromeStackUrlRegex)![1]!
+				
+				return {
+					callSite,
+					fileUrl,
+					lineNumber: Number(match[3]),
+					column: Number(match[4])
+				}
+			}
 
-			let fileUrl = match[2]!
-			while (chromeStackUrlRegex.test(fileUrl))
-				fileUrl = fileUrl.match(chromeStackUrlRegex)![1]!
-			
+			const match2 = line.match(chromeStackOnlyUrlRegex)!
 			return {
-				callSite,
-				fileUrl,
-				lineNumber: Number(match[3]),
-				column: Number(match[4])
+				callSite: '<unknown>',
+				fileUrl: match2[1]!,
+				lineNumber: Number(match2[2]),
+				column: Number(match2[3])
 			}
 		})
 	} else {

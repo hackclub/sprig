@@ -7,23 +7,43 @@ import { signal } from '@preact/signals'
 import type { PersistenceState } from '../../lib/state'
 
 const session = await getSession(Astro.cookies)
-if (!session || !Astro.params.id) return Astro.redirect('/login', 302)
+if (!session) return Astro.redirect('/login', 302)
 
-const game = await getGame(Astro.params.id)
-if (!game || game?.ownerId !== session.user.id) return Astro.redirect('/404', 302)
+const game = await getGame(Astro.params.id!)
+if (!game || game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
 
-if (game.isDraft) {
-	await firestore.collection('games').doc(game.id).update({ isDraft: false })
-	game.isDraft = false
+let _persistenceState: PersistenceState
+if (session.session.full) {
+	if (game.unprotected) {
+		await firestore.collection('games').doc(game.id).update({ unprotected: false })
+		game.unprotected = false
+	}
+	if (Astro.cookies.get('sprigTempGame').value === game.id)
+		Astro.cookies.delete('sprigTempGame', { path: '/' })
+
+	_persistenceState = {
+		kind: 'PERSISTED',
+		showLoginPrompt: false,
+		saveEmail: null,
+		cloudSaveState: 'SAVED',
+		game,
+		stale: false
+	}
+} else {
+	if (!game.unprotected) return Astro.redirect('/login', 302)
+	if (game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
+
+	_persistenceState = {
+		kind: 'PERSISTED',
+		showLoginPrompt: true,
+		saveEmail: session.user.email,
+		cloudSaveState: 'SAVED',
+		game,
+		stale: false
+	}
 }
 
-const persistenceState = signal<PersistenceState>({
-	kind: 'PERSISTED',
-	showLoginPrompt: false,
-	saveEmail: null,
-	cloudSaveState: 'SAVED',
-	game: game
-})
+const persistenceState = signal<PersistenceState>(_persistenceState)
 ---
 
 <html lang='en'>
@@ -33,7 +53,7 @@ const persistenceState = signal<PersistenceState>({
 	<body>
 		<Editor
 			client:load
-			loggedIn
+			loggedIn={session?.level ?? 'none'}
 			persistenceState={persistenceState}
 			cookies={{ outputAreaSize: Astro.cookies.get('outputAreaSize').number() }}
 		/>

@@ -34,17 +34,20 @@ export const loginCodeTemplate = (code: string): EmailSpec => ({
 	text: `Here's your Sprig login code: ${code}`
 })
 
-export const ghostDraftTemplate = (user: User, game: Game): EmailSpec => {
+export const tempGameTemplate = (user: User, game: Game): EmailSpec => {
 	const loginUrl = `https://sprig.hackclub.com/login?email=${encodeURIComponent(user.email)}&to=${encodeURIComponent(`/~/${game.id}`)}`
 	return {
 		subject: 'How to access your game | Sprig',
 		html: `
 			<p>Hi! You started working on a game in <a href="https://sprig.hackclub.com">Sprig</a>, and we made you an account if you ever want to keep working on it.</p>
+			<p>Game name: <strong>${game.name ?? 'Untitled'}</strong></p>
 			<p>To edit your game in the future, just head to <a href="${loginUrl}">${loginUrl}</a></p>
 			<p>Happy hacking!</p>
 		`,
 		text: [
 			'Hi! You started working on a game in Sprig, and we made you an account if you ever want to keep working on it.',
+			'',
+			`Game name: ${game.name ?? 'Untitled'}`,
 			'',
 			`To edit your game in the future, just head to ${loginUrl}`,
 			'',
