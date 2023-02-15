@@ -5,6 +5,7 @@ import DraftSavePrompt from './popups-etc/draft-save-prompt'
 import LoginPrompt from './popups-etc/login-prompt'
 import styles from './navbar.module.css'
 import SprigIcon from './sprig-icon'
+import { useEffect } from 'preact/hooks'
 
 interface EditorNavbarProps {
 	loggedIn: boolean
@@ -13,6 +14,22 @@ interface EditorNavbarProps {
 
 export default function EditorNavbar(props: EditorNavbarProps) {
 	const showDraftSavePrompt = useSignal(false)
+	const showNavPopup = useSignal(true)
+
+	useEffect(() => {
+		const listener = (event: MouseEvent) => {
+			// Ignore clicks inside popup content (and the logo, so it can be toggled)
+			for (const item of event.composedPath()) {
+				if (item instanceof HTMLElement && (
+					item.classList.contains(styles.navPopup!) ||
+					item.classList.contains(styles.logo!)
+				)) return
+			}
+			showNavPopup.value = false
+		}
+		window.addEventListener('click', listener)
+		return () => window.removeEventListener('click', listener)
+	}, [])
 
 	let saveState
 	if (props.persistenceState.value.kind === 'IN_MEMORY_DRAFT') {
@@ -50,14 +67,16 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			Log in to share
 		</Button>
 	} else {
-		actionButton = <Button>Share</Button>
+		actionButton = <Button>Share...</Button>
 	}
 
 	return (<>
 		<nav class={styles.container}>
 			<ul class={styles.editorStats}>
-				<li class={`${styles.logo} ${styles.popup}`}>
-					<a href={props.loggedIn ? '/~' : '/'}><SprigIcon /></a>
+				<li class={`${styles.logo} ${showNavPopup.value ? styles.active : ''}`}>
+					<button onClick={() => showNavPopup.value = !showNavPopup.value}>
+						<SprigIcon />
+					</button>
 				</li>
 				<li class={styles.filename}>
 					{props.persistenceState.value.kind === 'PERSISTED' && props.persistenceState.value.game !== 'LOADING' ? (<>
@@ -75,5 +94,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			persistenceState={props.persistenceState}
 			onClose={() => showDraftSavePrompt.value = false}
 		/>}
+
+		{showNavPopup.value && <div class={styles.navPopup}>
+			<ul>
+				<li><a href='/~'>Your games</a></li>
+				<li><a href='/gallery'>Gallery</a></li>
+				<li><a href='/get'>Get a Sprig</a></li>
+				<li><a href='https://github.com/hackclub/sprig/' target='_blank'>GitHub</a></li>
+			</ul>
+		</div>}
 	</>)
 }

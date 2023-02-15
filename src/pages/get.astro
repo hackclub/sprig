@@ -1,16 +1,15 @@
 ---
 import '../global.css'
-import { getUser } from '../lib/account'
+import { getSession } from '../lib/account'
 import Navbar from '../components/navbar-main'
 import StandardHead from '../components/standard-head.astro'
 
-const loggedIn = !!await getUser()
+const loggedIn = !!await getSession(Astro.cookies)
 ---
 
 <html lang='en'>
 	<head>
-		<StandardHead />
-		<title>Get a Sprig | Sprig</title>
+		<StandardHead title='Get a Sprig' />
 	</head>
 	<body>
 		<Navbar loggedIn={loggedIn} />
