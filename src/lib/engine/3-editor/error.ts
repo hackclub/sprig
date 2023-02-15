@@ -22,7 +22,7 @@ interface StackItem {
 const firefoxStackRegex = /^(.*)@(.*?)(:(\d+):(\d+))?$/
 const chromeStackRegex = /^\s+at ([^()]+) \((.+?):(\d+):(\d+)\)$/
 const chromeAsRegex = /\[as (.+)\]/
-const chromeStackUrlRegex = /\((.+)\)/
+const chromeStackUrlRegex = /\((.+?):(\d+):(\d+)\)/
 const normalizeStack = (stack: string): StackItem[] | null => {
 	const lines = stack.trim().split('\n')
 	console.log(lines)
@@ -74,14 +74,18 @@ export const normalizeGameError = (gameError: GameError): NormalizedError => {
 			raw: gameError.error
 		}
 	} else if (gameError.error instanceof Error) {
-		let description = `${gameError.error.name}: ${gameError.error.message}`
+		const descriptionLines: string[] = []
 
-		const stack = gameError.error.stack ? normalizeStack(gameError.error.stack) : null
-		for (const item of stack ?? []) {
-			if (item.callSite === 'runGame' && item.fileUrl.includes('/engine/'))
-				break
-			if (item.lineNumber && [ 'eval', 'anonymous' ].includes(item.callSite) && item.fileUrl.includes('/engine/'))
-				item.lineNumber -= lineOffset
+		const stack = (gameError.error.stack ? normalizeStack(gameError.error.stack) : null) ?? []
+		stack.reverse()
+
+		let foundEval = false
+		for (const item of stack) {
+			if (!foundEval && [ 'eval', 'anonymous' ].includes(item.callSite)) {
+				foundEval = true
+				if (item.lineNumber) item.lineNumber -= lineOffset
+			}
+			if (!foundEval) continue
 			
 			let fileName
 			try {
@@ -90,19 +94,19 @@ export const normalizeGameError = (gameError: GameError): NormalizedError => {
 			} catch {
 				fileName = item.fileUrl
 			}
-			console.log(item)
 
 			if (fileName && item.lineNumber && item.column) {
-				description += `\n    at ${item.callSite} (${fileName}:${item.lineNumber}:${item.column})`
+				descriptionLines.unshift(`    at ${item.callSite} (${fileName}:${item.lineNumber}:${item.column})`)
 			} else if (fileName) {
-				description += `\n    at ${item.callSite} (${fileName})`
+				descriptionLines.unshift(`    at ${item.callSite} (${fileName})`)
 			} else {
-				description += `\n    at ${item.callSite}`
+				descriptionLines.unshift(`    at ${item.callSite}`)
 			}
 		}
 
+		descriptionLines.unshift(`${gameError.error.name}: ${gameError.error.message}`)
 		return {
-			description,
+			description: descriptionLines.join('\n'),
 			raw: gameError.error
 		}
 	} else {
