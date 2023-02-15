@@ -24,7 +24,6 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: st
 		return 'IDLE'
 	})
 	const isLoading = useComputed(() => state.value.endsWith('_CHECKING'))
-	isLoading.subscribe(v => console.log(v))
 	
 	const email = useSignal(initialEmail)
 	const emailValid = useComputed(() => isValidEmail(email.value))
