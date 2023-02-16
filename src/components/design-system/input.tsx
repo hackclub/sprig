@@ -3,6 +3,7 @@ import styles from './input.module.css'
 
 interface InputProps {
 	type?: 'text' | 'password' | 'email' | 'number'
+	id?: string
 	placeholder?: string
 	autoComplete?: string
 	class?: string | undefined
@@ -13,6 +14,7 @@ interface InputProps {
 export default function Input(props: InputProps) {
 	return (
 		<input
+			id={props.id ?? ''}
 			class={`${styles.input} ${props.class ?? ''}`}
 			type={props.type ?? 'text'}
 			{...(props.bind ? {

@@ -67,7 +67,7 @@
 .content p, .content ul, .content pre {
 	color: #495057;
 	margin: 16px 0;
-	line-height: var(--line-height-text);
+	line-height: var(--line-height-copy);
 }
 
 .content code, .content pre {

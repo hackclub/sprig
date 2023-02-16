@@ -26,7 +26,7 @@ body { overflow: auto; }
   	--fg-switch-high: #f3f3f3;
 
 	--cursor-interactive: default;
-	--line-height-text: 1.5;
+	--line-height-copy: 1.5;
 }
 
 body {
@@ -64,4 +64,20 @@ a:hover {
 	animation-duration: 0.5s;
 	transform-origin: 50% 50%;
 	animation-iteration-count: infinite;
+}
+
+.copy-container {
+	width: 100%;
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 10px;
+}
+
+.copy-container > h1 {
+	margin: 0;
+	font-size: 2.5rem;
+}
+
+.copy-container p {
+	line-height: var(--line-height-copy);
 }

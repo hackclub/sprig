@@ -1,9 +1,9 @@
 ---
-import Card from '../components/homepage-card.svelte'
+import Card from '../legacy/homepage-card.svelte'
 import Navbar from '../components/navbar-main'
 import StandardHead from '../components/standard-head.astro'
 import '../global.css'
-import '../homepage-styles/homepage.scss'
+import '../legacy/homepage.scss'
 import { getSession } from '../lib/account'
 
 async function getConsolesRemaining(): Promise<number> {

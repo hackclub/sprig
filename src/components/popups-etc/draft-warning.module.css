@@ -30,7 +30,7 @@
 }
 
 .modal p {
-	line-height: var(--line-height-text);
+	line-height: var(--line-height-copy);
 	font-size: 0.9em;
 	margin: 0;
 }

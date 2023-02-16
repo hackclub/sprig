@@ -13,9 +13,9 @@ html {
 }
 
 body {
-	background: #e4e4e4;
+	background: #e4e4e4 !important;
 	font-family: $text-font;
-	line-height: var(--line-height-text);
+	line-height: var(--line-height-copy);
 }
 
 h1,
