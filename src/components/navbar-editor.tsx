@@ -10,6 +10,7 @@ import { persist } from '../lib/auth-helper'
 import InlineInput from './design-system/inline-input'
 import debounce from 'debounce'
 import SharePopup from './popups-etc/share-popup'
+import { IoSaveOutline, IoShareOutline } from 'react-icons/io5'
 
 const saveName = debounce(async (gameId: string, newName: string) => {
 	try {
@@ -50,8 +51,21 @@ interface EditorNavbarProps {
 
 export default function EditorNavbar(props: EditorNavbarProps) {
 	const showNavPopup = useSignal(false)
+
 	const showSavePrompt = useSignal(false)
 	const showSharePopup = useSignal(false)
+	useSignal(() => {
+		// Jank! Avoids overlapping dialogs :/
+		if (showSavePrompt.value && showSharePopup.value) showSavePrompt.value = false
+		if (props.persistenceState.value.kind === 'PERSISTED'
+			&& props.persistenceState.value.showLoginPrompt
+			&& showSharePopup.value
+		) props.persistenceState.value = {
+			...props.persistenceState.value,
+			showLoginPrompt: false
+		}
+	})
+
 	const deleteState = useSignal<'idle' | 'confirm' | 'deleting'>('idle')
 	useSignal(() => { if (!showNavPopup.value && deleteState.value === 'confirm') deleteState.value = 'idle' })
 
@@ -87,11 +101,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 	let actionButton
 	if (props.persistenceState.value.kind === 'IN_MEMORY') {
-		actionButton = <Button onClick={() => showSavePrompt.value = !showSavePrompt.value}>
+		actionButton = <Button icon={IoSaveOutline} onClick={() => showSavePrompt.value = !showSavePrompt.value}>
 			Save your work
 		</Button>
 	} else if (props.persistenceState.value.kind === 'SHARED') {
-		actionButton = <Button onClick={() => {
+		actionButton = <Button icon={IoSaveOutline} onClick={() => {
 			if (props.loggedIn !== 'full') persist(props.persistenceState)
 			showSavePrompt.value = true
 		}}>
@@ -108,8 +122,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			Log in to share
 		</Button>
 	} else {
-		actionButton = <Button onClick={() => showSharePopup.value = !showSharePopup.value}>
-			Share...
+		actionButton = <Button icon={IoShareOutline} onClick={() => showSharePopup.value = !showSharePopup.value}>
+			Share
 		</Button>
 	}
 
@@ -149,7 +163,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			persistenceState={props.persistenceState}
 			onClose={() => showSavePrompt.value = false}
 		/>}
-		{showSharePopup.value && <SharePopup persistenceState={props.persistenceState} />}
+		{showSharePopup.value && <SharePopup
+			persistenceState={props.persistenceState}
+			onClose={() => showSharePopup.value = false}
+		/>}
 
 		{showNavPopup.value && <div class={styles.navPopup}>
 			<ul>

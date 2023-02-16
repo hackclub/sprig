@@ -2,8 +2,8 @@
 	--btn-icon-size: 1em;
 	background: var(--bg-btn-inactive);
 	color: #ffffff;
-	padding: 8px 12px;
-	border: 2px solid var(--bg-btn-inactive);
+	padding: 10px 14px;
+	border: none;
 	cursor: var(--cursor-interactive);
 	display: inline-flex;
 	flex-direction: row;
@@ -13,6 +13,7 @@
 	gap: 6px;
 	user-select: none;
 	text-decoration: none;
+	line-height: 1.2;
 }
 
 .bigIcon {
@@ -33,7 +34,6 @@
 
 .button:not(:disabled):hover {
 	background: var(--bg-btn-inactive-dark);
-	border-color: var(--bg-btn-inactive-dark);
 }
 
 .button > svg {
@@ -42,14 +42,16 @@
 	height: var(--btn-icon-size);
 }
 
+.button:not(.bigIcon) > svg {
+	transform: scale(1.3);
+}
+
 .accent {
 	background: var(--accent);
-	border-color: var(--accent);
 }
 
 .accent:not(:disabled):hover {
 	background: var(--accent-dark);
-	border-color: var(--accent-dark);
 }
 
 @keyframes shimmer {

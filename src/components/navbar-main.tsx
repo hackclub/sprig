@@ -1,4 +1,4 @@
-import { IoLogoGithub } from 'react-icons/io5'
+import { IoAdd, IoLogoGithub } from 'react-icons/io5'
 import Button from './design-system/button'
 import styles from './navbar.module.css'
 import SprigIcon from './design-system/sprig-icon'
@@ -29,7 +29,7 @@ export default function MainNavbar(props: MainNavbarProps) {
 				</li>
 				{props.loggedIn === 'full' ? (
 					<li>
-						<a href='/~/new'><Button>New Game</Button></a>
+						<a href='/~/new'><Button icon={IoAdd}>New Game</Button></a>
 					</li>
 				) : (
 					<li>

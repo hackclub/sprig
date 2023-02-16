@@ -58,6 +58,24 @@ export interface LoginCode {
 	userId: string
 }
 
+export interface Snapshot {
+	id: string
+	createdAt: Timestamp
+	gameId: string
+	ownerId: string
+	name: string
+	ownerName: string
+	code: string
+}
+
+export interface SnapshotData {
+	id: string
+	createdAt: Timestamp
+	name: string
+	ownerName: string
+	code: string
+}
+
 export const getSession = async (cookies: AstroCookies): Promise<{ session: Session, user: User, level: 'full' | 'partial' } | null> => {
 	if (!cookies.has('sprigSession')) return null
 	const _session = await firestore.collection('sessions').doc(cookies.get('sprigSession').value!).get()
@@ -161,55 +179,32 @@ export const makeLoginCode = async (userId: string): Promise<string> => {
 	return code
 }
 
-// export const getGame = async (id: string): Promise<Game | null> => {
-// 	if (id !== 'test123') return null
-// 	return {
-// 		id: 'test123',
-// 		ownerId: '321tset',
-// 		name: 'Test Game',
-// 		code: `const player = "p";
+export const makeSnapshot = async (game: Game): Promise<Snapshot> => {
+	const data = {
+		gameId: game.id,
+		ownerId: game.ownerId,
+		name: game.name,
+		ownerName: (await getUser(game.ownerId))!.username,
+		code: game.code,
+		createdAt: Timestamp.now()
+	}
+	const _snapshot = await firestore.collection('snapshots').add(data)
+	return { id: _snapshot.id, ...data } as Snapshot
+}
 
-// setLegend(
-// 	[ player, bitmap\`
-// ................
-// ................
-// .......000......
-// .......0.0......
-// ......0..0......
-// ......0...0.0...
-// ....0003.30.0...
-// ....0.0...000...
-// ....0.05550.....
-// ......0...0.....
-// .....0....0.....
-// .....0...0......
-// ......000.......
-// ......0.0.......
-// .....00.00......
-// ................\`]
-// );
+export const getSnapshotData = async (id: string): Promise<SnapshotData | null> => {
+	const _snapshot = await firestore.collection('snapshots').doc(id).get()
+	if (!_snapshot.exists) return null
+	const snapshot = { id: _snapshot.id, ..._snapshot.data() } as Snapshot
 
-// setSolids([]);
+	const game = await getGame(snapshot.gameId)
+	const user = await getUser(snapshot.ownerId)
 
-// let level = 0;
-// const levels = [
-// 	map\`
-// p.....
-// ......\`,
-// ];
-
-// setMap(levels[level]);
-
-// setPushables({
-// 	[ player ]: [],
-// });
-
-// onInput("s", () => {
-// 	getFirst(player).y += 1
-// });
-
-// afterInput(() => {
-	
-// });`
-// 	}
-// }
+	return {
+		id: snapshot.id,
+		createdAt: snapshot.createdAt,
+		name: game?.name ?? snapshot.name,
+		ownerName: user?.username ?? snapshot.ownerName,
+		code: snapshot.code
+	}
+}
