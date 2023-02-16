@@ -106,13 +106,13 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		</Button>
 	} else if (props.persistenceState.value.kind === 'SHARED') {
 		actionButton = <Button icon={IoSaveOutline} onClick={() => {
-			if (props.loggedIn !== 'full') persist(props.persistenceState)
+			if (props.loggedIn !== 'none') persist(props.persistenceState)
 			showSavePrompt.value = true
 		}}>
 			Clone to save edits
 		</Button>
 	} else if (props.loggedIn !== 'full') {
-		actionButton = <Button onClick={() => {
+		actionButton = <Button icon={IoShareOutline} onClick={() => {
 			if (props.persistenceState.value.kind === 'PERSISTED')
 				props.persistenceState.value = {
 					...props.persistenceState.value,

@@ -72,7 +72,7 @@ export default function DraftWarningModal(props: DraftWarningModalProps) {
 
 					<p class={styles.muted}>
 						Can't log in right now?{' '}
-						<LinkButton onClick={() => persist(props.persistenceState, true, auth.email.value)} disabled={auth.isLoading.value}>
+						<LinkButton onClick={() => persist(props.persistenceState, auth.email.value)} disabled={auth.isLoading.value}>
 							Skip and just get coding
 						</LinkButton>
 					</p>
