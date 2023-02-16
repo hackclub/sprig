@@ -1,5 +1,6 @@
+import { foldable, foldEffect } from '@codemirror/language'
 import type { Text } from '@codemirror/state'
-import { WidgetType } from '@codemirror/view'
+import { EditorView, WidgetType } from '@codemirror/view'
 import type { SyntaxNodeRef, Tree } from '@lezer/common'
 import { ComponentType, h, render } from 'preact'
 
@@ -55,4 +56,20 @@ export const makeWidget = <T extends {}>(Component: ComponentType<T>) => class e
 		render(h(Component, this.props), container)
 		return true
 	}
+}
+
+export const collapseRanges = (view: EditorView, ranges: [number, number][]) => {
+	const effects = []
+  
+	for (const [ start, end ] of ranges) {
+		for (let pos = start; pos < end;) {
+			const line = view.lineBlockAt(pos)
+			const range = foldable(view.state, line.from, line.to)
+			if (range) effects.push(foldEffect.of(range))
+			pos = (range ? view.lineBlockAt(range.to) : line).to + 1
+		}
+	}
+  
+	if (effects.length) view.dispatch({ effects })
+	return !!effects.length
 }

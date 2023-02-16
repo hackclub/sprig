@@ -11,6 +11,7 @@ import DraftWarningModal from '../popups-etc/draft-warning'
 import Button from '../design-system/button'
 import debounce from 'debounce'
 import Help from '../popups-etc/help'
+import { collapseRanges } from '../../lib/codemirror/util'
 
 interface EditorProps {
 	loggedIn: 'full' | 'partial' | 'none'
@@ -25,6 +26,13 @@ interface ResizeState {
 	startValue: number
 }
 const [ minWidth, maxWidth ] = [ 400, 800 ]
+
+const foldAllTemplateLiterals = () => {
+	if (!codeMirror.value) return
+	const code = codeMirror.value.state.doc.toString() ?? ''
+	const matches = [ ...code.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
+	collapseRanges(codeMirror.value, matches.map((match) => [ match.index!, match.index! + 1 ]))
+}
 
 export default function Editor({ persistenceState, loggedIn, cookies }: EditorProps) {
 	// Resize state storage
@@ -47,7 +55,9 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 	const screen = useRef<HTMLCanvasElement>(null)
 	const cleanup = useRef<(() => void) | null>(null)
 	const screenShake = useSignal(0)
-	const onClickRun = async () => {
+	const onRun = async () => {
+		foldAllTemplateLiterals()
+		
 		if (!screen.current) return
 		screenShake.value++
 		setTimeout(() => screenShake.value--, 200)
@@ -143,8 +153,11 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 					<CodeMirror
 						class={styles.code}
 						initialCode={initialCode}
-						onEditorView={(editor) => codeMirror.value = editor}
-						onRunShortcut={onClickRun}
+						onEditorView={(editor) => {
+							codeMirror.value = editor
+							setTimeout(() => foldAllTemplateLiterals(), 100) // Fold after the document is parsed (gross)
+						}}
+						onRunShortcut={onRun}
 						onCodeChange={() => {
 							persistenceState.value = {
 								...persistenceState.value,
@@ -166,7 +179,7 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 							))}
 						</div>
 					)}
-					<Button accent icon={IoPlayCircleOutline} bigIcon iconSide='right' class={styles.playButton} onClick={onClickRun}>
+					<Button accent icon={IoPlayCircleOutline} bigIcon iconSide='right' class={styles.playButton} onClick={onRun}>
 						Run
 					</Button>
 				</div>
