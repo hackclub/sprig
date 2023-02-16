@@ -144,6 +144,13 @@
 	left: 8px;
 	padding: 8px 0;
 	box-shadow: 0 4px 8px 0 #0000005e;
+	min-width: 160px;
+}
+
+.navPopup .divider {
+	height: 2px;
+	background: var(--accent);
+	margin: 8px 0;
 }
 
 .navPopup ul {
@@ -157,10 +164,8 @@
 .navPopup a {
 	color: var(--fg-muted-on-accent);
 	display: block;
-	
-	padding: 8px 0;
-	padding-left: 16px;
-	padding-right: 40px;
+	padding: 8px 16px;
+	user-select: none;
 }
 
 .navPopup a:hover {

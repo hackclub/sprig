@@ -7,7 +7,7 @@ import { signal } from '@preact/signals'
 import type { PersistenceState } from '../../lib/state'
 
 const session = await getSession(Astro.cookies)
-if (!session) return Astro.redirect('/login', 302)
+if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 
 const game = await getGame(Astro.params.id!)
 if (!game || game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
@@ -30,7 +30,7 @@ if (session.session.full) {
 		stale: false
 	}
 } else {
-	if (!game.unprotected) return Astro.redirect('/login', 302)
+	if (!game.unprotected) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 	if (game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
 
 	_persistenceState = {

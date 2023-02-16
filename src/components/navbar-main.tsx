@@ -13,6 +13,11 @@ export default function MainNavbar(props: MainNavbarProps) {
 		<nav class={`${styles.container} ${props.transparent ? styles.transparent : ''}`}>
 			<ul class={styles.navlinks}>
 				<li class={styles.logo}><a href='/'><SprigIcon /> Sprig</a></li>
+				{props.loggedIn === 'full' ? (
+					<li>
+						<a href='/~'>Your Games</a>
+					</li>
+				) : null}
 				<li><a href='/gallery'>Gallery</a></li>
 				<li><a href='/get'>Get a Sprig</a></li>
 			</ul>
@@ -24,7 +29,7 @@ export default function MainNavbar(props: MainNavbarProps) {
 				</li>
 				{props.loggedIn === 'full' ? (
 					<li>
-						<a href='/~'><Button>Your Games</Button></a>
+						<a href='/~/new'><Button>New Game</Button></a>
 					</li>
 				) : (
 					<li>
