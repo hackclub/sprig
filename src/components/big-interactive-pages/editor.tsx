@@ -76,7 +76,7 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ code, gameId: game?.id })
 				})
-				if (!res.ok) throw new Error('Failed to save game')
+				if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`)
 			} catch (error) {
 				console.error(error)
 				if (persistenceState.value.kind === 'PERSISTED')

@@ -3,9 +3,10 @@ import '../../global.css'
 import { firestore, Game, getSession } from '../../lib/account'
 import Navbar from '../../components/navbar-main'
 import StandardHead from '../../components/standard-head.astro'
+import Button from '../../components/design-system/button'
 
 const session = await getSession(Astro.cookies)
-if (!session || !session.session.full) return Astro.redirect('/login', 302)
+if (!session || !session.session.full) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 
 const _games = await firestore.collection('games')
 	.where('ownerId', '==', session.user.id)
@@ -20,13 +21,13 @@ const games = _games.docs.map(doc => ({ id: doc.id, ...doc.data() } as Game))
 	</head>
 	<body>
 		<Navbar loggedIn='full' />
-		<h1>Your games</h1>
-		<button id='new-game'>New game</button>
+		<h1>Your Games</h1>
+		<a href='/~/new'><Button accent>New Game</Button></a>
 
 		<ul>
 			{games.map(game => (
 				<li>
-					<a href={`/~/${game.id}`}>{game.name}</a>
+					<a href={`/~/${game.id}`}>{game.name || 'Untitled'}</a>
 					({game.modifiedAt.toDate().toLocaleString()})
 				</li>
 			))}
