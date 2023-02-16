@@ -32,16 +32,5 @@ const games = _games.docs.map(doc => ({ id: doc.id, ...doc.data() } as Game))
 				</li>
 			))}
 		</ul>
-
-		<script>
-			const newGameButton = document.getElementById('new-game') as HTMLButtonElement
-			newGameButton.addEventListener('click', async () => {
-				newGameButton.disabled = true
-				const res = await fetch('/api/new-game', { method: 'POST' })
-				if (!res.ok) return alert('Failed to create game: ' + res.statusText)
-				const { id } = await res.json()
-				window.location.href = `/~/${id}`
-			})
-		</script>
 	</body>
 </html>

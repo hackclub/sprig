@@ -9,6 +9,7 @@ import { useEffect } from 'preact/hooks'
 import { persist } from '../lib/auth-helper'
 import InlineInput from './design-system/inline-input'
 import debounce from 'debounce'
+import SharePopup from './popups-etc/share-popup'
 
 const saveName = debounce(async (gameId: string, newName: string) => {
 	try {
@@ -48,8 +49,9 @@ interface EditorNavbarProps {
 }
 
 export default function EditorNavbar(props: EditorNavbarProps) {
-	const showSavePrompt = useSignal(false)
 	const showNavPopup = useSignal(false)
+	const showSavePrompt = useSignal(false)
+	const showSharePopup = useSignal(false)
 	const deleteState = useSignal<'idle' | 'confirm' | 'deleting'>('idle')
 	useSignal(() => { if (!showNavPopup.value && deleteState.value === 'confirm') deleteState.value = 'idle' })
 
@@ -106,7 +108,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			Log in to share
 		</Button>
 	} else {
-		actionButton = <Button>Share...</Button>
+		actionButton = <Button onClick={() => showSharePopup.value = !showSharePopup.value}>
+			Share...
+		</Button>
 	}
 
 	return (<>
@@ -145,13 +149,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			persistenceState={props.persistenceState}
 			onClose={() => showSavePrompt.value = false}
 		/>}
+		{showSharePopup.value && <SharePopup persistenceState={props.persistenceState} />}
 
 		{showNavPopup.value && <div class={styles.navPopup}>
 			<ul>
 				{props.loggedIn === 'full'
 					? (<>
-						<li><a href='/~/new'>New game</a></li>
 						<li><a href='/~'>Your games</a></li>
+						<li><a href='/~/new'>New game</a></li>
 					</>)
 					: (<>
 						<li><a href='/'>Home</a></li>
