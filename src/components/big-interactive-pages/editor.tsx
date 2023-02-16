@@ -119,6 +119,15 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 		}
 	})
 
+	// Disable native save shortcut
+	useEffect(() => {
+		const handler = (event: KeyboardEvent) => {
+			if (event.key === 's' && (event.metaKey || event.ctrlKey)) event.preventDefault()
+		}
+		window.addEventListener('keydown', handler)
+		return () => window.removeEventListener('keydown', handler)
+	}, [])
+
 	let initialCode = ''
 	if (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING')
 		initialCode = persistenceState.value.game.code

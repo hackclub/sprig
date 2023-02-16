@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import { firestore, getGame, getSession } from '../../lib/account'
+import { getGame, getSession, makeSnapshot } from '../../lib/account'
 
 export const post: APIRoute = async ({ request, cookies }) => {
 	let gameId: string
@@ -16,8 +16,10 @@ export const post: APIRoute = async ({ request, cookies }) => {
 
 	const session = await getSession(cookies)
 	if (!session) return new Response('Unauthorized', { status: 401 })
-	if (session.user.id !== game.ownerId) return new Response(`Can't delete a game you don't own`, { status: 403 })
+	if (session.user.id !== game.ownerId) return new Response(`Can't snapshot a game you don't own`, { status: 403 })
 
-	await firestore.collection('games').doc(gameId).delete()
-	return new Response(JSON.stringify({}), { status: 200 })
+	const snapshot = await makeSnapshot(game)
+	return new Response(JSON.stringify({
+		snapshotId: snapshot.id,
+	}), { status: 200 })
 }

@@ -1,0 +1,34 @@
+---
+import '../../global.css'
+import Editor from '../../components/big-interactive-pages/editor'
+import StandardHead from '../../components/standard-head.astro'
+import { signal } from '@preact/signals'
+import type { PersistenceState } from '../../lib/state'
+import { getSession, getSnapshotData } from '../../lib/account'
+
+const session = await getSession(Astro.cookies)
+const snapshotData = await getSnapshotData(Astro.params.snapshotId!)
+if (!snapshotData) return Astro.redirect('/404', 302)
+
+const persistenceState = signal<PersistenceState>({
+	kind: 'SHARED',
+	name: snapshotData.name,
+	authorName: snapshotData.ownerName,
+	code: snapshotData.code,
+	stale: false
+})
+---
+
+<html lang='en'>
+	<head>
+		<StandardHead title={snapshotData.name || 'Shared Game'} />
+	</head>
+	<body>
+		<Editor
+			client:load
+			loggedIn={session?.level ?? 'none'}
+			persistenceState={persistenceState}
+			cookies={{ outputAreaSize: Astro.cookies.get('outputAreaSize').number() }}
+		/>
+	</body>
+</html>

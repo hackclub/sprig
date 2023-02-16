@@ -21,7 +21,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 	if (!game.unprotected) {
 		const session = await getSession(cookies)
 		if (!session) return new Response('Unauthorized', { status: 401 })
-		if (session.user.id !== game.ownerId) return new Response(`Can't edit a game you don't own`, { status: 403 })
+		if (session.user.id !== game.ownerId) return new Response(`Can't rename a game you don't own`, { status: 403 })
 	}
 
 	await firestore.collection('games').doc(gameId).update({

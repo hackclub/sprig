@@ -1,4 +1,5 @@
 ---
+import { IoAdd } from 'react-icons/io5'
 import '../../global.css'
 import { firestore, Game, getSession } from '../../lib/account'
 import Navbar from '../../components/navbar-main'
@@ -22,7 +23,7 @@ const games = _games.docs.map(doc => ({ id: doc.id, ...doc.data() } as Game))
 	<body>
 		<Navbar loggedIn='full' />
 		<h1>Your Games</h1>
-		<a href='/~/new'><Button accent>New Game</Button></a>
+		<a href='/~/new'><Button icon={IoAdd} accent>New Game</Button></a>
 
 		<ul>
 			{games.map(game => (

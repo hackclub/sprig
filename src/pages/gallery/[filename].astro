@@ -20,8 +20,8 @@ const authorName = code.match(authorRegex)?.[1] ?? ''
 const cleanedCode = code
 	.replace(nameRegex, '')
 	.replace(authorRegex, '')
-	.replace(/^\/\*\n+(.+)?\n+\*\//, '/*\n$1\n*/')
-	.replace(/^\/\*\s*\*\/\s*/, '')
+	.replace(/^\/\*\n+(.+)?\n+\*\//s, '/*\n$1\n*/')
+	.replace(/^\/\*\s*\*\/\s*/s, '')
 
 const persistenceState = signal<PersistenceState>({
 	kind: 'SHARED',
