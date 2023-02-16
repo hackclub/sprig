@@ -2134,5 +2134,13 @@
     "img": "",
     "tags": ["simulation"],
     "addedOn": "2023-02-15"
+  },
+  {
+    "filename": "the_hungry_mouse",
+    "title": "the_hungry_mouse",
+    "author": "KaiEtkin",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-02-16"
   }
 ]
