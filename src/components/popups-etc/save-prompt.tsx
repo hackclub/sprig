@@ -13,7 +13,7 @@ interface SavePromptProps {
 }
 
 export default function SavePrompt(props: SavePromptProps) {
-	const auth = useAuthHelper(props.loggedIn ? 'LOGGED_IN' : 'EMAIL_ENTRY')
+	const auth = useAuthHelper(props.loggedIn === 'none' ? 'EMAIL_ENTRY' : 'LOGGED_IN')
 	const ghostStage = useSignal(false)
 
 	let content
