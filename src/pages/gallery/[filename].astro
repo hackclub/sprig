@@ -13,11 +13,15 @@ const res = await fetch(`https://raw.githubusercontent.com/hackclub/sprig/main/g
 if (!res.ok) return Astro.redirect('/404', 302)
 const code = await res.text()
 
-const nameRegex = /\n?@title: (.+)\n?/
-const authorRegex = /\n?@author: (.+)\n?/
+const nameRegex = /@title: (.+)/
+const authorRegex = /@author: (.+)/
 const name = code.match(nameRegex)?.[1] ?? filename
 const authorName = code.match(authorRegex)?.[1] ?? ''
-const cleanedCode = code.replace(nameRegex, '').replace(authorRegex, '')
+const cleanedCode = code
+	.replace(nameRegex, '')
+	.replace(authorRegex, '')
+	.replace(/^\/\*\n+(.+)?\n+\*\//, '/*\n$1\n*/')
+	.replace(/^\/\*\s*\*\/\s*/, '')
 
 const persistenceState = signal<PersistenceState>({
 	kind: 'SHARED',

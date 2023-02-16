@@ -2,10 +2,10 @@
 	--btn-icon-size: 1em;
 	background: var(--bg-btn-inactive);
 	color: #ffffff;
-	padding: 10px 14px;
-	border: none;
+	padding: 8px 12px;
+	border: 2px solid var(--bg-btn-inactive);
 	cursor: var(--cursor-interactive);
-	display: flex;
+	display: inline-flex;
 	flex-direction: row;
 	font-size: 0.9rem;
 	font-family: inherit;
@@ -33,6 +33,7 @@
 
 .button:not(:disabled):hover {
 	background: var(--bg-btn-inactive-dark);
+	border-color: var(--bg-btn-inactive-dark);
 }
 
 .button > svg {
@@ -43,10 +44,12 @@
 
 .accent {
 	background: var(--accent);
+	border-color: var(--accent);
 }
 
 .accent:not(:disabled):hover {
 	background: var(--accent-dark);
+	border-color: var(--accent-dark);
 }
 
 @keyframes shimmer {

@@ -22,7 +22,7 @@
 
 .popup p {
 	margin: 0;
-	line-height: var(--line-height-text);
+	line-height: var(--line-height-copy);
 	font-size: 0.9rem;
 }
 
