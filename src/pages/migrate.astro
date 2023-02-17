@@ -1,0 +1,21 @@
+---
+import '../global.css'
+import { getSession } from '../lib/account'
+import StandardHead from '../components/standard-head.astro'
+import Migrate from '../components/big-interactive-pages/migrate'
+
+const session = await getSession(Astro.cookies)
+---
+
+<html lang='en'>
+	<head>
+		<StandardHead title='Migrate Your Games' />
+	</head>
+	<body>
+		<Migrate
+			client:load
+			loggedIn={session?.level ?? 'none'}
+			intitialEmail={session?.user.email ?? ''}
+		/>
+	</body>
+</html>

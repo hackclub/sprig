@@ -1,8 +1,10 @@
-export const extractMetadata = (code: string): {
+export interface ExtractedMetadata {
 	name: string | null
 	authorName: string | null
 	cleanedCode: string
-} => {
+}
+
+export const extractMetadata = (code: string): ExtractedMetadata => {
 	const nameRegex = /@title: (.+)/
 	const authorRegex = /@author: (.+)/
 	const name = code.match(nameRegex)?.[1] ?? null
