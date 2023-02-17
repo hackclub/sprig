@@ -79,6 +79,11 @@ const games = _games.docs.map(doc => ({ id: doc.id, ...doc.data() } as Game))
 		<div class='copy-container'>
 			<h1>Your Games</h1>
 
+			{games.length === 0 ? (
+				<p style={{ color: 'var(--fg-muted)'}}>
+					It's all spooky and empty here. <a href='/new'>Make a game already!</a>
+				</p>
+			) : null}
 			<div class='games'>
 				{games.map(game => (
 					<a class='game' href={`/~/${game.id}`}>
