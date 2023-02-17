@@ -24,7 +24,7 @@ if (session.session.full) {
 	_persistenceState = {
 		kind: 'PERSISTED',
 		showLoginPrompt: false,
-		saveEmail: null,
+		saveEmail: session.user.email,
 		cloudSaveState: 'SAVED',
 		game,
 		stale: false

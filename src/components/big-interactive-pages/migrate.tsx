@@ -165,7 +165,7 @@ export default function Migrate({ loggedIn, intitialEmail }: MigrateProps) {
 						.map((game) => ({ id: gameIds[game.name], legacy: game }))
 					
 					if (loggedIn === 'full') {
-						window.location.href = '/~'
+						window.location.replace('/~')
 					} else {
 						state.value = 'done'
 					}

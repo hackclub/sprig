@@ -2,7 +2,7 @@ import styles from './editor.module.css'
 import CodeMirror from '../codemirror'
 import Navbar from '../navbar-editor'
 import { IoPlayCircleOutline, IoVolumeHighOutline, IoVolumeMuteOutline } from 'react-icons/io5'
-import { Signal, useSignal, useSignalEffect } from '@preact/signals'
+import { Signal, useComputed, useSignal, useSignalEffect } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
 import { codeMirror, errorLog, muted, PersistenceState } from '../../lib/state'
 import EditorModal from '../popups-etc/editor-modal'
@@ -27,8 +27,10 @@ interface ResizeState {
 	startMousePos: number
 	startValue: number
 }
-const [ minWidth, maxWidth ] = [ 400, 2000 ]
-const defaultWidth = 400
+
+const minOutputAreaSize = 400
+const defaultOutputAreaSize = 400
+const heightMargin = 130
 
 const foldAllTemplateLiterals = () => {
 	if (!codeMirror.value) return
@@ -39,14 +41,20 @@ const foldAllTemplateLiterals = () => {
 
 export default function Editor({ persistenceState, loggedIn, cookies }: EditorProps) {
 	// Resize state storage
-	const outputAreaSize = useSignal(cookies.outputAreaSize ?? defaultWidth)
+	const outputAreaSize = useSignal(cookies.outputAreaSize ?? defaultOutputAreaSize)
 	useSignalEffect(() => {
 		document.cookie = `outputAreaSize=${outputAreaSize.value};path=/;max-age=${60 * 60 * 24 * 365}`
-
-		// Limit height of output area
-		const height = Math.min(outputAreaSize.value * 4 / 5, window.innerHeight * 0.8)
-		outputAreaSize.value = height * 5 / 4
 	})
+
+	// Max height
+	const maxOutputAreaSize = useSignal(outputAreaSize.value)
+	useEffect(() => {
+		const updateMaxSize = () => { maxOutputAreaSize.value = (window.innerHeight - heightMargin) * 5 / 4 }
+		window.addEventListener('resize', updateMaxSize, { passive: true })
+		updateMaxSize()
+		return () => window.removeEventListener('resize', updateMaxSize)
+	}, [])
+	const realOutputAreaSize = useComputed(() => Math.min(maxOutputAreaSize.value, Math.max(minOutputAreaSize, outputAreaSize.value)))
 	
 	// Resize bar logic
 	const resizeState = useSignal<ResizeState | null>(null)
@@ -54,7 +62,7 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 		const onMouseMove = (event: MouseEvent) => {
 			if (!resizeState.value) return
 			event.preventDefault()
-			outputAreaSize.value = Math.min(maxWidth, Math.max(minWidth, resizeState.value.startValue + resizeState.value.startMousePos - event.clientX))
+			outputAreaSize.value = resizeState.value.startValue + resizeState.value.startMousePos - event.clientX
 		}
 		window.addEventListener('mousemove', onMouseMove)
 		return () => window.removeEventListener('mousemove', onMouseMove)
@@ -155,7 +163,7 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 			if (cancel) return
 			if (localStorage.getItem('seenMigration') !== 'true') {
 				localStorage.setItem('seenMigration', 'true')
-				window.location.href = '/migrate'
+				window.location.assign('/migrate')
 			}
 		})
 		return () => { cancel = true }
@@ -213,7 +221,7 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 					class={`${styles.resizeBar} ${resizeState.value ? styles.resizing : ''}`}
 					onMouseDown={(event) => {
 						document.documentElement.style.cursor = 'col-resize'
-						resizeState.value = { startMousePos: event.clientX, startValue: outputAreaSize.value }
+						resizeState.value = { startMousePos: event.clientX, startValue: realOutputAreaSize.value }
 						window.addEventListener('mouseup', () => {
 							resizeState.value = null
 							document.documentElement.style.cursor = ''
@@ -221,7 +229,7 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 					}}
 				/>
 
-				<div class={styles.outputArea} style={{ width: outputAreaSize.value }}>
+				<div class={styles.outputArea} style={{ width: realOutputAreaSize.value }}>
 					<div class={styles.screenContainer}>
 						<div class={styles.canvasWrapper}>
 							<canvas

@@ -56,7 +56,7 @@ export default function DraftWarningModal(props: DraftWarningModalProps) {
 					<form onSubmit={async (event) => {
 						event.preventDefault()
 						await auth.submitCode()
-						if (auth.state.value === 'LOGGED_IN') window.location.href = '/~'
+						if (auth.state.value === 'LOGGED_IN') window.location.replace('/~')
 					}} class={styles.stack}>
 						<h2>Welcome back!</h2>
 						<p>You've used Sprig before, so we emailed you a code to log in and access all your games. Enter login code:</p>
