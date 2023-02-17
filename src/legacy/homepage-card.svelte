@@ -116,11 +116,11 @@
 			flex-wrap: wrap;
 			h3 {
 				text-transform: lowercase;
+				white-space: nowrap;
 				text-overflow: ellipsis;
 				width: 100%;
 				overflow: hidden;
 				color: white;
-				white-space: nowrap;
 				margin: 0.8rem 0 0.8rem 0;
 				font-size: 1.4rem;
 				font-weight: 400;

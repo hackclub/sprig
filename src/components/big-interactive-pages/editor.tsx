@@ -13,6 +13,7 @@ import debounce from 'debounce'
 import Help from '../popups-etc/help'
 import { collapseRanges } from '../../lib/codemirror/util'
 import { defaultExampleCode } from '../../lib/examples'
+import { getPuzzleLabFromLocalStorage } from '../../lib/legacy-migration'
 
 interface EditorProps {
 	loggedIn: 'full' | 'partial' | 'none'
@@ -145,6 +146,19 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 		}
 		window.addEventListener('keydown', handler)
 		return () => window.removeEventListener('keydown', handler)
+	}, [])
+
+	// Migration
+	useEffect(() => {
+		let cancel = false
+		getPuzzleLabFromLocalStorage().then(() => {
+			if (cancel) return
+			if (localStorage.getItem('seenMigration') !== 'true') {
+				localStorage.setItem('seenMigration', 'true')
+				window.location.href = '/migrate'
+			}
+		})
+		return () => { cancel = true }
 	}, [])
 
 	let initialCode = ''
