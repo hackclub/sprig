@@ -2,9 +2,10 @@ import { IoAdd, IoLogoGithub } from 'react-icons/io5'
 import Button from './design-system/button'
 import styles from './navbar.module.css'
 import SprigIcon from './design-system/sprig-icon'
+import { SessionInfo } from '../lib/account'
 
 interface MainNavbarProps {
-	loggedIn: 'partial' | 'full' | 'none'
+	session: SessionInfo | null
 	transparent?: boolean
 }
 
@@ -13,7 +14,7 @@ export default function MainNavbar(props: MainNavbarProps) {
 		<nav class={`${styles.container} ${props.transparent ? styles.transparent : ''}`}>
 			<ul class={styles.navlinks}>
 				<li class={styles.logo}><a href='/'><SprigIcon /> Sprig</a></li>
-				{props.loggedIn === 'full' ? (
+				{props.session?.session.full ? (
 					<li>
 						<a href='/~'>Your Games</a>
 					</li>
@@ -27,7 +28,7 @@ export default function MainNavbar(props: MainNavbarProps) {
 						<IoLogoGithub />
 					</a>
 				</li>
-				{props.loggedIn === 'full' ? (
+				{props.session?.session.full ? (
 					<li>
 						<a href='/~/new'><Button icon={IoAdd}>New Game</Button></a>
 					</li>

@@ -76,7 +76,12 @@ export interface SnapshotData {
 	code: string
 }
 
-export const getSession = async (cookies: AstroCookies): Promise<{ session: Session, user: User, level: 'full' | 'partial' } | null> => {
+export interface SessionInfo {
+	session: Session
+	user: User
+}
+
+export const getSession = async (cookies: AstroCookies): Promise<SessionInfo | null> => {
 	if (!cookies.has('sprigSession')) return null
 	const _session = await firestore.collection('sessions').doc(cookies.get('sprigSession').value!).get()
 	if (!_session.exists) return null
@@ -90,21 +95,20 @@ export const getSession = async (cookies: AstroCookies): Promise<{ session: Sess
 	}
 	const user = { id: _user.id, ..._user.data() } as User
 
-	return {
-		session,
-		user,
-		level: session.full ? 'full' : 'partial'
-	}
+	return { session, user }
 }
 
-export const makeOrUpdateSession = async (cookies: AstroCookies, userId: string, authLevel: 'email' | 'code'): Promise<void> => {
+export const makeOrUpdateSession = async (cookies: AstroCookies, userId: string, authLevel: 'email' | 'code'): Promise<SessionInfo> => {
 	const curSessionId = cookies.get('sprigSession').value
 	const _curSession = curSessionId
 		? await firestore.collection('sessions').doc(curSessionId).get()
 		: null
 	if (_curSession && _curSession.exists && _curSession.data()!.userId === userId) {
 		await _curSession.ref.update({ full: authLevel === 'code' })
-		return
+		return {
+			session: { id: _curSession.id, ..._curSession.data() } as Session,
+			user: (await getUser(userId))!
+		}
 	}
 
 	const data = {
@@ -119,6 +123,10 @@ export const makeOrUpdateSession = async (cookies: AstroCookies, userId: string,
 		httpOnly: true,
 		sameSite: 'strict'
 	})
+	return {
+		session: { id: _session.id, ...data } as Session,
+		user: (await getUser(userId))!
+	}
 }
 
 export const updateSessionAuthLevel = async (id: string, authLevel: 'email' | 'code'): Promise<void> => {

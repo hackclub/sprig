@@ -207,7 +207,7 @@ export default function BitmapEditor(props: EditorProps) {
 
 				<div class={styles.configTools}>
 					<div class={styles.helpText}>
-						<p>Right click to erase</p>
+						{drawingTool.value.eraseEnabled && <p>Right click to erase</p>}
 						{drawingTool.value.snapEnabled && <p>Hold <span class={styles.shortcut}>shift</span> to snap</p>}
 						{drawingTool.value.mirrorEnabled && <p>Hold <span class={styles.shortcut}>alt</span> to live mirror</p>}
 					</div>

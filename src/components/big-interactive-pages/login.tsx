@@ -1,5 +1,6 @@
 import { useSignalEffect } from '@preact/signals'
 import { IoPaperPlaneOutline } from 'react-icons/io5'
+import { SessionInfo } from '../../lib/account'
 import { useAuthHelper } from '../../lib/auth-helper'
 import Button from '../design-system/button'
 import Input from '../design-system/input'
@@ -8,12 +9,12 @@ import MainNavbar from '../navbar-main'
 import styles from './login.module.css'
 
 interface LoginProps {
-	loggedIn: 'partial' | 'none'
+	session: SessionInfo | null
 	to: string
 	email: string
 }
 
-export default function Login({ loggedIn, email, to }: LoginProps) {
+export default function Login({ session, email, to }: LoginProps) {
 	const auth = useAuthHelper('EMAIL_ENTRY', email)
 	useSignalEffect(() => {
 		if (auth.stage.value === 'LOGGED_IN') window.location.replace(to)
@@ -21,7 +22,7 @@ export default function Login({ loggedIn, email, to }: LoginProps) {
 
 	return (
 		<div class={styles.page}>
-			<MainNavbar transparent loggedIn={loggedIn} />
+			<MainNavbar transparent session={session} />
 
 			<div class={styles.pageMain}>
 				<form onSubmit={(event) => {

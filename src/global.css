@@ -8,7 +8,7 @@ body { overflow: auto; }
 	--font-code: 'Fira Mono', monospace;
 	
 	--bg-base: #fafed7;
-	--bg-overlay: #000000ae;
+	--bg-overlay: #000000cf;
 	--bg-drawing-hover: #9b9b9b52;
 	--bg-floating: #191919;
 	--bg-surface: #f8f9fa;

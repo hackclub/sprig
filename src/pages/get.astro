@@ -13,7 +13,7 @@ const session = await getSession(Astro.cookies)
 		<StandardHead title='Get a Sprig' />
 	</head>
 	<body>
-		<Navbar transparent loggedIn={session?.level ?? 'none'} />
+		<Navbar transparent session={session} />
 		
 		<div class="wrapper">
 			<div class="heading-outer">

@@ -85,6 +85,7 @@ export const drawingTools = [
 		clickOnly: false,
 		snapEnabled: false,
 		mirrorEnabled: true,
+		eraseEnabled: true,
 		update(ctx: EditContext): TempGrid {
 			const grid = cloneGrid(ctx.tempGrid)
 			lineMut(grid, ctx.color, ctx.lastPos, ctx.currentPos)
@@ -99,6 +100,7 @@ export const drawingTools = [
 		clickOnly: false,
 		snapEnabled: true,
 		mirrorEnabled: true,
+		eraseEnabled: true,
 		update(ctx: EditContext): TempGrid {
 			const dest = ctx.shiftKey ? snapDestTo45deg(ctx.startPos, ctx.currentPos) : ctx.currentPos
 			const grid = makeTempGrid()
@@ -114,6 +116,7 @@ export const drawingTools = [
 		clickOnly: false,
 		snapEnabled: true,
 		mirrorEnabled: true,
+		eraseEnabled: true,
 		update(ctx: EditContext): TempGrid {
 			const grid = makeTempGrid()
 			const src = ctx.startPos
@@ -136,6 +139,7 @@ export const drawingTools = [
 		clickOnly: false,
 		snapEnabled: true,
 		mirrorEnabled: true,
+		eraseEnabled: true,
 		update(ctx: EditContext): TempGrid {
 			const grid = makeTempGrid()
 			const src = ctx.startPos
@@ -165,6 +169,7 @@ export const drawingTools = [
 		clickOnly: true,
 		snapEnabled: false,
 		mirrorEnabled: false,
+		eraseEnabled: true,
 		update(ctx: EditContext): TempGrid {
 			const grid = makeTempGrid()
 			const currentPixel = ctx.pixelGrid[ctx.currentPos.y]![ctx.currentPos.x]!
@@ -189,6 +194,7 @@ export const drawingTools = [
 		clickOnly: true,
 		snapEnabled: false,
 		mirrorEnabled: false,
+		eraseEnabled: true,
 		update(ctx: EditContext): TempGrid {
 			const currentPixel = ctx.pixelGrid[ctx.currentPos.y]![ctx.currentPos.x]!
 			return ctx.pixelGrid.map(row => row.map(pixel => pixel[0] === currentPixel[0] ? ctx.color : null))
@@ -202,6 +208,7 @@ export const drawingTools = [
 		clickOnly: false,
 		snapEnabled: true,
 		mirrorEnabled: false,
+		eraseEnabled: false,
 		update(ctx: EditContext): TempGrid {
 			const dest = ctx.shiftKey ? snapDestTo45deg(ctx.startPos, ctx.currentPos) : ctx.currentPos
 			const [ dx, dy ] = [ dest.x - ctx.startPos.x, dest.y - ctx.startPos.y ]
@@ -223,6 +230,7 @@ export const drawingTools = [
 		clickOnly: true,
 		snapEnabled: false,
 		mirrorEnabled: false,
+		eraseEnabled: false,
 		update(ctx: EditContext): TempGrid {
 			ctx.setColor(ctx.pixelGrid[ctx.currentPos.y]![ctx.currentPos.x]!)
 			return makeTempGrid()
@@ -248,7 +256,7 @@ export const transformTools = [
 	},
 	{
 		key: 'mirror',
-		name: 'Horizontal Mirror',
+		name: 'Mirror',
 		shortcut: 'Shift+M',
 		icon: IoSync,
 		activate: mirrorGrid

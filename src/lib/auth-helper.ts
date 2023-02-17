@@ -1,4 +1,5 @@
 import { Signal, useComputed, useSignal, useSignalEffect } from '@preact/signals'
+import { Game, SessionInfo } from './account'
 import { isValidEmail } from './email'
 import { codeMirror, PersistenceState } from './state'
 
@@ -38,7 +39,7 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: st
 		if (![ 'EMAIL_ENTRY', 'EMAIL_INCORRECT' ].includes(state.value)) return
 		state.value = 'EMAIL_CHECKING'
 
-		const res = await fetch('/api/email-login-code', {
+		const res = await fetch('/api/auth/email-login-code', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email: email.value })
@@ -55,7 +56,7 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: st
 		if (![ 'CODE_SENT', 'CODE_INCORRECT' ].includes(state.value)) return
 		state.value = 'CODE_CHECKING'
 
-		const res = await fetch('/api/submit-code', {
+		const res = await fetch('/api/auth/submit-code', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email: email.value, code: code.value })
@@ -102,32 +103,32 @@ export const persist = async (persistenceState: Signal<PersistenceState>, email?
 	const gameName: string | undefined = persistenceState.value.kind === 'SHARED' ? persistenceState.value.name : undefined
 	persistenceState.value = {
 		kind: 'PERSISTED',
-		showLoginPrompt: false,
 		cloudSaveState: 'SAVING',
 		game: 'LOADING',
-		saveEmail: email ?? null,
-		stale: persistenceState.value.stale
+		stale: persistenceState.value.stale,
+		session: persistenceState.value.session
 	}
 
 	try {
-		const res = await fetch('/api/new-game', {
+		const res = await fetch('/api/games/new', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
-				saveEmail: email,
+				partialSessionEmail: email,
 				code: codeMirror.value?.state.doc.toString() ?? '',
 				name: gameName
 			})
 		})
 		if (!res.ok) throw new Error(await res.text())
-		const game = await res.json()
+		const { game, sessionInfo } = await res.json() as { game: Game, sessionInfo: SessionInfo }
 		if (!isShared) document.cookie = `sprigTempGame=${game.id};path=/;max-age=${60 * 60 * 24 * 365}`
 
 		if (persistenceState.value.kind === 'PERSISTED')
 			persistenceState.value = {
 				...persistenceState.value,
 				cloudSaveState: 'SAVED',
-				game
+				game,
+				session: sessionInfo
 			}
 		
 		window.history.replaceState(null, '', `/~/${game.id}`)

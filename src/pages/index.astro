@@ -42,7 +42,7 @@ const session = await getSession(Astro.cookies)
 		<title>Sprig</title>
 	</head>
 	<body>
-		<Navbar transparent loggedIn={session?.level ?? 'none'} />
+		<Navbar transparent session={session} />
 
 		<div class='magic' id='m'>
 			<img src='/preview.webp' alt='A 3D rendering of the Sprig device.' id='preview' />

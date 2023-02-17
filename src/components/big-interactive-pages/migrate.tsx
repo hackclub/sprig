@@ -7,6 +7,7 @@ import Button from '../design-system/button'
 import { IoArrowForward, IoCheckmark } from 'react-icons/io5'
 import Input from '../design-system/input'
 import { getPuzzleLabFromLocalStorage } from '../../lib/legacy-migration'
+import { SessionInfo } from '../../lib/account'
 
 interface LegacyGame {
 	name: string
@@ -15,11 +16,11 @@ interface LegacyGame {
 }
 
 interface MigrateProps {
-	loggedIn: 'full' | 'partial' | 'none'
+	session: SessionInfo | null
 	intitialEmail: string
 }
 
-export default function Migrate({ loggedIn, intitialEmail }: MigrateProps) {
+export default function Migrate({ session, intitialEmail }: MigrateProps) {
 	const allGames = useSignal<LegacyGame[]>([])
 	const selectedGame = useSignal<LegacyGame | null>(null)
 	const migratingGames = useSignal<string[]>([])
@@ -54,7 +55,7 @@ export default function Migrate({ loggedIn, intitialEmail }: MigrateProps) {
 
 	if (state.value === 'done') return (
 		<div>
-			<MainNavbar loggedIn={loggedIn} />
+			<MainNavbar session={session} />
 
 			<div class='copy-container'>
 				<h1>Games Migrated!</h1>
@@ -84,7 +85,7 @@ export default function Migrate({ loggedIn, intitialEmail }: MigrateProps) {
 
 	return (
 		<div>
-			<MainNavbar loggedIn={loggedIn} />
+			<MainNavbar session={session} />
 
 			<div class='copy-container'>
 				<h1>Migrate Your Games</h1>
@@ -145,10 +146,10 @@ export default function Migrate({ loggedIn, intitialEmail }: MigrateProps) {
 					event.preventDefault()
 					state.value = 'loading'
 
-					const res = await fetch('/api/migrate', {
+					const res = await fetch('/api/games/migrate', {
 						method: 'POST',
 						body: JSON.stringify({
-							partialSessionEmail: loggedIn === 'full' ? undefined : email.value,
+							partialSessionEmail: session?.session.full ? undefined : email.value,
 							games: allGames.value
 								.filter(game => migratingGames.value.includes(game.name))
 								.map(game => ({
@@ -164,13 +165,13 @@ export default function Migrate({ loggedIn, intitialEmail }: MigrateProps) {
 						.filter(game => migratingGames.value.includes(game.name))
 						.map((game) => ({ id: gameIds[game.name], legacy: game }))
 					
-					if (loggedIn === 'full') {
+					if (session?.session.full) {
 						window.location.replace('/~')
 					} else {
 						state.value = 'done'
 					}
 				}}>
-					{loggedIn !== 'full' ? (
+					{session?.session.full ? (
 						<div class={styles.emailEntry}>
 							<label for='email'>Enter your email:</label>
 							<Input type='email' autoComplete='email' id='email' placeholder={'fiona@hackclub.com'} bind={email} />

@@ -38,7 +38,7 @@ export default function EditorModal() {
 		}
 	})
 
-	usePopupCloseClick(styles.overlay!, () => openEditor.value = null, !!openEditor.value)
+	usePopupCloseClick(styles.content!, () => openEditor.value = null, !!openEditor.value)
 	if (!openEditor.value) return null
 
 	return (

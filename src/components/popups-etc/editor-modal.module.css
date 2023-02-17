@@ -47,3 +47,9 @@
 	flex: 1;
 	width: 100%;
 }
+
+@media only screen and (max-height: 800px) {
+	.overlay {
+		padding: 30px;
+	}
+}

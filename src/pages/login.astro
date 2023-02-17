@@ -6,7 +6,7 @@ import StandardHead from '../components/standard-head.astro'
 
 const to = Astro.url.searchParams.get('to') ?? '/~'
 const session = await getSession(Astro.cookies)
-if (session && session.level === 'full') return Astro.redirect(to, 302)
+if (session?.session.full) return Astro.redirect(to, 302)
 const email = Astro.url.searchParams.get('email') ?? session?.user.email ?? ''
 ---
 
@@ -19,7 +19,7 @@ const email = Astro.url.searchParams.get('email') ?? session?.user.email ?? ''
 			client:load
 			to={to}
 			email={email}
-			loggedIn={(session?.level ?? 'none') as 'partial' | 'none'}
+			session={session}
 		/>
 	</body>
 </html>
