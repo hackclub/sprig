@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang='en'>
+	<head>
+		<meta charset='utf-8'>
+		<title>Migration IFrame</title>
+	</head>
+	<body>
+		<p>This is a hidden page for migrating old Sprig games to the new Sprig account system. You probably won't find anything here :)</p>
+
+		<script>
+			const referrer = new URL(document.referrer)
+			const allowed = [ 'localhost', '127.0.0.1' ].includes(referrer.hostname)
+				|| referrer.hostname.endsWith('.hackclub.dev')
+				|| referrer.hostname.endsWith('.hackclub.com')
+			if (!allowed) throw new Error('Disallowed referrer')
+				
+			window.parent.postMessage({
+				sprig: true,
+				puzzleLab: window.localStorage.getItem('puzzle-lab') || ''
+			}, '*')
+		</script>
+	</body>
+</html>
