@@ -1,5 +1,6 @@
 import { Signal, useSignal } from '@preact/signals'
 import { persist, useAuthHelper } from '../../lib/auth-helper'
+import { usePopupCloseClick } from '../../lib/popup-close-click'
 import type { PersistenceState } from '../../lib/state'
 import Button from '../design-system/button'
 import Input from '../design-system/input'
@@ -16,10 +17,15 @@ export default function SavePrompt(props: SavePromptProps) {
 	const auth = useAuthHelper(props.loggedIn === 'none' ? 'EMAIL_ENTRY' : 'LOGGED_IN')
 	const ghostStage = useSignal(false)
 
+	usePopupCloseClick(popupStyles.popup!, props.onClose)
+
 	let content
 	if (ghostStage.value || auth.stage.value === 'LOGGED_IN') {
 		content = (<>
-			<p>Your work is {props.persistenceState.value.kind === 'PERSISTED' && props.persistenceState.value.cloudSaveState === 'SAVED' ? 'saved' : 'saving'} to the cloud and you have been emailed a link to access it!</p>
+			<p>
+				Your work is {props.persistenceState.value.kind === 'PERSISTED' && props.persistenceState.value.cloudSaveState === 'SAVED' ? 'saved' : 'saving'} to the cloud
+				{props.loggedIn === 'full' ? '.' : ' and you have been emailed a link to access it!'}
+			</p>
 			<Button accent onClick={() => props.onClose()}>Done</Button>
 		</>)
 	} else if (auth.stage.value === 'EMAIL') {

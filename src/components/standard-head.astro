@@ -1,10 +1,12 @@
 ---
 interface Props {
 	title: string | null
+	socialImage?: string
 }
 
-const { title } = Astro.props as Props
+const { title, socialImage } = Astro.props as Props
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site)
+const image = socialImage ?? 'https://sprig.hackclub.com/stories-tiny/sprig-front.jpeg'
 ---
 
 <meta charset='utf-8'>
@@ -33,6 +35,6 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site)
 <meta name='theme-color' content='#0a0a16' />
 <meta property='og:url' content={canonicalUrl} />
 <meta property='og:type' content='website' />
-<meta property='og:image' content='https://sprig.hackclub.com/stories-tiny/sprig-front.jpeg' />
-<meta property='twitter:image' content='https://sprig.hackclub.com/stories-tiny/sprig-front.jpeg' />
+<meta property='og:image' content={image} />
+<meta property='twitter:image' content={image} />
 <meta name='twitter:card' content='summary_large_image'>

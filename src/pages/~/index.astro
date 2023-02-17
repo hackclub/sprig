@@ -1,10 +1,11 @@
 ---
-import { IoAdd } from 'react-icons/io5'
 import '../../global.css'
 import { firestore, Game, getSession } from '../../lib/account'
 import Navbar from '../../components/navbar-main'
 import StandardHead from '../../components/standard-head.astro'
+import ms from 'ms'
 import Button from '../../components/design-system/button'
+import { IoLogOutOutline } from 'react-icons/io5'
 
 const session = await getSession(Astro.cookies)
 if (!session || !session.session.full) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
@@ -19,19 +20,79 @@ const games = _games.docs.map(doc => ({ id: doc.id, ...doc.data() } as Game))
 <html lang='en'>
 	<head>
 		<StandardHead title='Your Games' />
+		
+		<style>
+			.games {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+				gap: 10px;
+				margin-top: 20px;
+			}
+
+			.game {
+				border: 2px solid var(--accent);
+				background: var(--bg-surface);
+				color: #000000;
+				padding: 12px;
+				user-select: none;
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				gap: 6px;
+			}
+
+			.game:hover {
+				background: var(--accent);
+				color: #ffffff;
+			}
+
+			.game h3 {
+				margin: 0;
+				font-size: 1rem;
+			}
+
+			.game .modified-at {
+				margin: 0;
+				font-size: 0.8rem;
+				color: var(--fg-muted);
+			}
+
+			.game:hover .modified-at {
+				color: var(--fg-muted-on-accent);
+			}
+
+			h2 {
+				margin: 0;
+				margin-top: 50px;
+			}
+
+			p {
+				margin: 0;
+				margin-top: 16px;
+    			margin-bottom: 18px;
+			}
+		</style>
 	</head>
 	<body>
 		<Navbar loggedIn='full' />
-		<h1>Your Games</h1>
-		<a href='/~/new'><Button icon={IoAdd} accent>New Game</Button></a>
 
-		<ul>
-			{games.map(game => (
-				<li>
-					<a href={`/~/${game.id}`}>{game.name || 'Untitled'}</a>
-					({game.modifiedAt.toDate().toLocaleString()})
-				</li>
-			))}
-		</ul>
+		<div class='copy-container'>
+			<h1>Your Games</h1>
+
+			<div class='games'>
+				{games.map(game => (
+					<a class='game' href={`/~/${game.id}`}>
+						<h3>{game.name || 'Untitled'}</h3>
+						<p class='modified-at'>
+							Edited {ms(Date.now() - game.modifiedAt.toMillis(), { long: true })} ago
+						</p>
+					</a>
+				))}
+			</div>
+
+			<h2>Account Info</h2>
+			<p>You are logged in as {session.user.email}. You have {games.length} games. You've been using Sprig for {ms(Date.now() - session.user.createdAt.toMillis(), { long: true })}.</p>
+			<a href='/logout'><Button icon={IoLogOutOutline}>Log out</Button></a>
+		</div>
 	</body>
 </html>

@@ -10,7 +10,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 	try {
 		const body = await request.json()
 
-		if (!session && typeof body.email !== 'string' || !isValidEmail(body.email))
+		if (!session && (typeof body.email !== 'string' || !isValidEmail(body.email)))
 			throw 'Missing/invalid email'
 		email = body.email ?? null
 
@@ -22,8 +22,8 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		return new Response(typeof error === 'string' ? error : 'Bad request body', { status: 400 })
 	}
 
-	const user = session ? session.user : await getUserByEmail(email!)
-	if (!user) return new Response('Invalid email', { status: 401 })
+	const user = await getUserByEmail(email!) ?? session?.user
+	if (!user) return new Response('Invalid email or session', { status: 401 })
 
 	const _codes = await firestore.collection('loginCodes')
 		.where('code', '==', code)

@@ -97,13 +97,13 @@ export const getSession = async (cookies: AstroCookies): Promise<{ session: Sess
 	}
 }
 
-// Assumptions: if there's a current session, it matches passed userId
 export const makeOrUpdateSession = async (cookies: AstroCookies, userId: string, authLevel: 'email' | 'code'): Promise<void> => {
-	const curSession = cookies.get('sprigSession').value
-	if (curSession) {
-		await firestore.collection('sessions').doc(curSession).update({
-			full: authLevel === 'code'
-		})
+	const curSessionId = cookies.get('sprigSession').value
+	const _curSession = curSessionId
+		? await firestore.collection('sessions').doc(curSessionId).get()
+		: null
+	if (_curSession && _curSession.exists && _curSession.data()!.userId === userId) {
+		await _curSession.ref.update({ full: authLevel === 'code' })
 		return
 	}
 

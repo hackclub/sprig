@@ -99,7 +99,7 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: st
 
 export const persist = async (persistenceState: Signal<PersistenceState>, email?: string) => {
 	const isShared = persistenceState.value.kind === 'SHARED'
-	const gameName = persistenceState.value.kind === 'SHARED' && persistenceState.value.name
+	const gameName: string | undefined = persistenceState.value.kind === 'SHARED' ? persistenceState.value.name : undefined
 	persistenceState.value = {
 		kind: 'PERSISTED',
 		showLoginPrompt: false,

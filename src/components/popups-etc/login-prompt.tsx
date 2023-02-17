@@ -1,5 +1,6 @@
 import type { Signal } from '@preact/signals'
 import { useAuthHelper } from '../../lib/auth-helper'
+import { usePopupCloseClick } from '../../lib/popup-close-click'
 import type { PersistenceState } from '../../lib/state'
 import Button from '../design-system/button'
 import Input from '../design-system/input'
@@ -14,7 +15,15 @@ export default function LoginPrompt(props: LoginPromptProps) {
 	const initialEmail = (props.persistenceState.value.kind === 'PERSISTED' && props.persistenceState.value.saveEmail) || ''
 	const auth = useAuthHelper('IDLE', initialEmail)
 
-	if (props.persistenceState.value.kind !== 'PERSISTED' || !props.persistenceState.value.showLoginPrompt) return null
+	const show = props.persistenceState.value.kind === 'PERSISTED' && props.persistenceState.value.showLoginPrompt
+	usePopupCloseClick(popupStyles.popup!, () => {
+		if (props.persistenceState.value.kind === 'PERSISTED')
+			props.persistenceState.value = {
+				...props.persistenceState.value,
+				showLoginPrompt: false
+			}
+	}, show)
+	if (!show) return null
 
 	let content
 	if (auth.stage.value === 'IDLE') {

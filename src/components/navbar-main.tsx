@@ -31,11 +31,14 @@ export default function MainNavbar(props: MainNavbarProps) {
 					<li>
 						<a href='/~/new'><Button icon={IoAdd}>New Game</Button></a>
 					</li>
-				) : (
+				) : (<>
+					<li class={styles.plainLink}>
+						<a href='/login'>Log In</a>
+					</li>
 					<li>
 						<a href='/editor'><Button>Open Editor</Button></a>
 					</li>
-				)}
+				</>)}
 			</ul>
 		</nav>
 	)
