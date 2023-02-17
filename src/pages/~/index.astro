@@ -96,7 +96,7 @@ const games = _games.docs.map(doc => ({ id: doc.id, ...doc.data() } as Game))
 			</div>
 
 			<h2>Account Info</h2>
-			<p>You are logged in as {session.user.email}. You have {games.length} games. You've been using Sprig for {ms(Date.now() - session.user.createdAt.toMillis(), { long: true })}.</p>
+			<p>You are logged in as {session.user.email}. You have {games.length} {games.length === 1 ? 'game' : 'games'}. You've been using Sprig for {ms(Date.now() - session.user.createdAt.toMillis(), { long: true })}.</p>
 			<a href='/logout'><Button icon={IoLogOutOutline}>Log out</Button></a>
 		</div>
 	</body>
