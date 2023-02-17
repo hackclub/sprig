@@ -4,7 +4,7 @@ import { initializeApp } from 'firebase-admin/app'
 import { getFirestore, Timestamp } from 'firebase-admin/firestore'
 import { customAlphabet } from 'nanoid/async'
 import { lazy } from './lazy'
-import { adjectives, nouns } from './words'
+import { generateGameName } from './words'
 
 const numberid = customAlphabet('0123456789')
 
@@ -148,7 +148,7 @@ export const makeGame = async (ownerId: string, unprotected: boolean, name?: str
 		createdAt: Timestamp.now(),
 		modifiedAt: Timestamp.now(),
 		unprotected,
-		name: name ?? adjectives[Math.floor(Math.random() * adjectives.length)] + '_' + nouns[Math.floor(Math.random() * nouns.length)],
+		name: name ?? generateGameName(),
 		code: code ?? ''
 	}
 	const _game = await firestore.collection('games').add(data)
