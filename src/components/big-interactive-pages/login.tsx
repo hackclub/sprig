@@ -16,7 +16,7 @@ interface LoginProps {
 export default function Login({ loggedIn, email, to }: LoginProps) {
 	const auth = useAuthHelper('EMAIL_ENTRY', email)
 	useSignalEffect(() => {
-		if (auth.stage.value === 'LOGGED_IN') window.location.href = to
+		if (auth.stage.value === 'LOGGED_IN') window.location.replace(to)
 	})
 
 	return (

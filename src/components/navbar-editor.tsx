@@ -199,7 +199,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									})
 								})
 								if (!res.ok) console.error(`Error deleting game: ${await res.text()}`)
-								window.location.href = '/~'
+								window.location.replace('/~')
 							}
 						}}>
 							{{
