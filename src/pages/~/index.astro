@@ -6,6 +6,7 @@ import StandardHead from '../../components/standard-head.astro'
 import ms from 'ms'
 import Button from '../../components/design-system/button'
 import { IoLogOutOutline } from 'react-icons/io5'
+import { isRandomGameName } from '../../lib/words'
 
 const session = await getSession(Astro.cookies)
 if (!session || !session.session.full) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
@@ -14,7 +15,15 @@ const _games = await firestore.collection('games')
 	.where('ownerId', '==', session.user.id)
 	.orderBy('modifiedAt', 'desc')
 	.get()
-const games = _games.docs.map(doc => ({ id: doc.id, ...doc.data() } as Game))
+const allGames = _games.docs.map(doc => ({ id: doc.id, ...doc.data() } as Game))
+
+let games = allGames.filter(game => !isRandomGameName(game.name))
+let unnamedGames = allGames.filter(game => isRandomGameName(game.name))
+
+if (games.length === 0 && unnamedGames.length > 0) {
+	games = unnamedGames
+	unnamedGames = []
+}
 ---
 
 <html lang='en'>
@@ -26,7 +35,7 @@ const games = _games.docs.map(doc => ({ id: doc.id, ...doc.data() } as Game))
 				display: grid;
 				grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 				gap: 10px;
-				margin-top: 20px;
+				margin-top: 14px;
 			}
 
 			.game {
@@ -94,6 +103,22 @@ const games = _games.docs.map(doc => ({ id: doc.id, ...doc.data() } as Game))
 					</a>
 				))}
 			</div>
+
+			{unnamedGames.length > 0 ? (
+				<div class='unnamed'>
+					<h2>Unnamed games</h2>
+					<div class='games'>
+						{unnamedGames.map(game => (
+							<a class='game' href={`/~/${game.id}`}>
+								<h3>{game.name || 'Untitled'}</h3>
+								<p class='modified-at'>
+									Edited {ms(Date.now() - game.modifiedAt.toMillis(), { long: true })} ago
+								</p>
+							</a>
+						))}
+					</div>
+				</div>
+			) : null}
 
 			<h2>Account Info</h2>
 			<p>You are logged in as {session.user.email}. You have {games.length} {games.length === 1 ? 'game' : 'games'}. You've been using Sprig for {ms(Date.now() - session.user.createdAt.toMillis(), { long: true })}.</p>
