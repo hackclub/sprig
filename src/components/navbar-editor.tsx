@@ -2,7 +2,6 @@ import { Signal, useSignal } from '@preact/signals'
 import { codeMirror, PersistenceState } from '../lib/state'
 import Button from './design-system/button'
 import SavePrompt from './popups-etc/save-prompt'
-import LoginPrompt from './popups-etc/login-prompt'
 import styles from './navbar.module.css'
 import SprigIcon from './design-system/sprig-icon'
 import { persist } from '../lib/auth-helper'
@@ -14,7 +13,7 @@ import { usePopupCloseClick } from '../lib/popup-close-click'
 
 const saveName = debounce(async (gameId: string, newName: string) => {
 	try {
-		const res = await fetch('/api/rename', {
+		const res = await fetch('/api/games/rename', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ gameId, newName })
@@ -45,7 +44,6 @@ const canDelete = (persistenceState: Signal<PersistenceState>) => {
 }
 
 interface EditorNavbarProps {
-	loggedIn: 'full' | 'partial' | 'none'
 	persistenceState: Signal<PersistenceState>
 }
 
@@ -65,43 +63,32 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	usePopupCloseClick(styles.navPopup!, () => showNavPopup.value = false, showNavPopup.value)
 
 	let saveState
-	if (props.persistenceState.value.kind === 'IN_MEMORY') {
-		saveState = 'Your work is unsaved!'
-	} else if (props.persistenceState.value.kind === 'SHARED') {
-		saveState = props.persistenceState.value.stale
-			? 'Your changes are unsaved!'
-			: 'No changes to save'
-	} else if (props.persistenceState.value.kind === 'PERSISTED') {
-		saveState = {
-			SAVED: `Saved to ${props.persistenceState.value.saveEmail ?? 'cloud'}`,
-			SAVING: 'Saving...',
-			ERROR: 'Error saving to cloud'
-		}[props.persistenceState.value.cloudSaveState]
-	}
-
 	let actionButton
 	if (props.persistenceState.value.kind === 'IN_MEMORY') {
+		saveState = 'Your work is unsaved!'
+
 		actionButton = <Button icon={IoSaveOutline} onClick={() => showSavePrompt.value = !showSavePrompt.value}>
 			Save your work
 		</Button>
 	} else if (props.persistenceState.value.kind === 'SHARED') {
+		saveState = props.persistenceState.value.stale
+			? 'Your changes are unsaved!'
+			: 'No changes to save'
+		
 		actionButton = <Button icon={IoShuffle} onClick={() => {
-			if (props.loggedIn !== 'none') persist(props.persistenceState)
+			if (props.persistenceState.value.session?.session.full)
+				persist(props.persistenceState)
 			showSavePrompt.value = true
 		}}>
 			Remix to save edits
 		</Button>
-	} else if (props.loggedIn !== 'full') {
-		actionButton = <Button icon={IoShareOutline} onClick={() => {
-			if (props.persistenceState.value.kind === 'PERSISTED')
-				props.persistenceState.value = {
-					...props.persistenceState.value,
-					showLoginPrompt: !props.persistenceState.value.showLoginPrompt
-				}
-		}}>
-			Log in to share
-		</Button>
-	} else {
+	} else if (props.persistenceState.value.kind === 'PERSISTED') {
+		saveState = {
+			SAVED: `Saved to ${props.persistenceState.value.session?.user.email ?? '???'}`,
+			SAVING: 'Saving...',
+			ERROR: 'Error saving to cloud'
+		}[props.persistenceState.value.cloudSaveState]
+
 		actionButton = <Button icon={IoShareOutline} onClick={() => showSharePopup.value = !showSharePopup.value}>
 			Share
 		</Button>
@@ -137,9 +124,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			<li>{actionButton}</li>
 		</nav>
 
-		<LoginPrompt persistenceState={props.persistenceState} />
+		{/* <LoginPrompt persistenceState={props.persistenceState} /> */}
 		{showSavePrompt.value && <SavePrompt
-			loggedIn={props.loggedIn}
+			kind={props.persistenceState.value.session?.session.full
+				? 'instant'
+				: 'email'}
 			persistenceState={props.persistenceState}
 			onClose={() => showSavePrompt.value = false}
 		/>}
@@ -150,7 +139,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 		{showNavPopup.value && <div class={styles.navPopup}>
 			<ul>
-				{props.loggedIn === 'full'
+				{props.persistenceState.value.session?.session.full
 					? (<>
 						<li><a href='/~'>Your games</a></li>
 						<li><a href='/~/new'>New game</a></li>
@@ -161,7 +150,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					</>)}
 				<li><a href='/gallery'>Gallery</a></li>
 				<li><a href='/get'>Get a Sprig</a></li>
-				{/* <li><a href='https://github.com/hackclub/sprig/' target='_blank'>GitHub</a></li> */}
 			</ul>
 			<div class={styles.divider} />
 			<ul>
@@ -189,7 +177,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								deleteState.value = 'confirm'
 							} else if (deleteState.value === 'confirm') {
 								deleteState.value = 'deleting'
-								const res = await fetch(`/api/delete`, {
+								const res = await fetch(`/api/games/delete`, {
 									method: 'POST',
 									headers: { 'Content-Type': 'application/json' },
 									body: JSON.stringify({

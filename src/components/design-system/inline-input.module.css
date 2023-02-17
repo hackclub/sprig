@@ -16,11 +16,13 @@
 	margin: 0;
 	outline: none;
 	position: absolute;
+	text-decoration: underline;
+	text-decoration-color: var(--fg-muted-on-accent);
 }
 
 .input:focus {
 	text-decoration: underline;
-	text-decoration-color: var(--fg-muted-on-accent);
+	text-decoration-color: currentColor;
 }
 
 .measure {

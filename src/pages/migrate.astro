@@ -14,7 +14,7 @@ const session = await getSession(Astro.cookies)
 	<body>
 		<Migrate
 			client:load
-			loggedIn={session?.level ?? 'none'}
+			session={session}
 			intitialEmail={session?.user.email ?? ''}
 		/>
 	</body>

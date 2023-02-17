@@ -15,7 +15,8 @@ const persistenceState = signal<PersistenceState>({
 	name: snapshotData.name,
 	authorName: snapshotData.ownerName,
 	code: snapshotData.code,
-	stale: false
+	stale: false,
+	session
 })
 ---
 
@@ -26,7 +27,6 @@ const persistenceState = signal<PersistenceState>({
 	<body>
 		<Editor
 			client:load
-			loggedIn={session?.level ?? 'none'}
 			persistenceState={persistenceState}
 			cookies={{ outputAreaSize: Astro.cookies.get('outputAreaSize').number() }}
 		/>

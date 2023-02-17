@@ -16,7 +16,6 @@ import { defaultExampleCode } from '../../lib/examples'
 import { getPuzzleLabFromLocalStorage } from '../../lib/legacy-migration'
 
 interface EditorProps {
-	loggedIn: 'full' | 'partial' | 'none'
 	persistenceState: Signal<PersistenceState>
 	cookies: {
 		outputAreaSize: number | null
@@ -39,7 +38,7 @@ const foldAllTemplateLiterals = () => {
 	collapseRanges(codeMirror.value, matches.map((match) => [ match.index!, match.index! + 1 ]))
 }
 
-export default function Editor({ persistenceState, loggedIn, cookies }: EditorProps) {
+export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Resize state storage
 	const outputAreaSize = useSignal(cookies.outputAreaSize ?? defaultOutputAreaSize)
 	useSignalEffect(() => {
@@ -99,7 +98,7 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 		const promise = (async () => {
 			try {
 				const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null
-				const res = await fetch('/api/save', {
+				const res = await fetch('/api/games/save', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ code, gameId: game?.id })
@@ -179,7 +178,7 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 
 	return (
 		<div class={styles.page}>
-			<Navbar loggedIn={loggedIn} persistenceState={persistenceState} />
+			<Navbar persistenceState={persistenceState} />
 			
 			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>

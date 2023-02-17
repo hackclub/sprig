@@ -25,7 +25,7 @@ export default function SharePopup(props: SharePopupProps) {
 				loading.value = true
 
 				try {
-					const res = await fetch('/api/snapshot', {
+					const res = await fetch('/api/games/snapshot', {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify({ gameId: props.persistenceState.value.game.id })
@@ -64,10 +64,6 @@ export default function SharePopup(props: SharePopupProps) {
 				<p style={{ color: 'var(--fg-muted)', marginTop: -8, wordBreak: 'break-all' }}>
 					{shareLink.value}
 				</p>
-			) : null}
-
-			{message.value ? (
-				<Button onClick={() => props.onClose()}>Close</Button>
 			) : null}
 		</div>
 	)

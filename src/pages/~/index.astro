@@ -74,7 +74,7 @@ const games = _games.docs.map(doc => ({ id: doc.id, ...doc.data() } as Game))
 		</style>
 	</head>
 	<body>
-		<Navbar loggedIn='full' />
+		<Navbar session={session} />
 
 		<div class='copy-container'>
 			<h1>Your Games</h1>

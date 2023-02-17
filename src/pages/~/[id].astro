@@ -23,8 +23,7 @@ if (session.session.full) {
 
 	_persistenceState = {
 		kind: 'PERSISTED',
-		showLoginPrompt: false,
-		saveEmail: session.user.email,
+		session,
 		cloudSaveState: 'SAVED',
 		game,
 		stale: false
@@ -35,8 +34,7 @@ if (session.session.full) {
 
 	_persistenceState = {
 		kind: 'PERSISTED',
-		showLoginPrompt: true,
-		saveEmail: session.user.email,
+		session,
 		cloudSaveState: 'SAVED',
 		game,
 		stale: false
@@ -53,7 +51,6 @@ const persistenceState = signal<PersistenceState>(_persistenceState)
 	<body>
 		<Editor
 			client:load
-			loggedIn={session?.level ?? 'none'}
 			persistenceState={persistenceState}
 			cookies={{ outputAreaSize: Astro.cookies.get('outputAreaSize').number() }}
 		/>

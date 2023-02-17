@@ -13,7 +13,8 @@ if (await getSession(Astro.cookies)) return Astro.redirect('/~', 302)
 const persistenceState = signal<PersistenceState>({
 	kind: 'IN_MEMORY',
 	showInitialWarning: true,
-	stale: false
+	stale: false,
+	session: null
 })
 ---
 
@@ -24,7 +25,6 @@ const persistenceState = signal<PersistenceState>({
 	<body>
 		<Editor
 			client:load
-			loggedIn='none'
 			persistenceState={persistenceState}
 			cookies={{ outputAreaSize: Astro.cookies.get('outputAreaSize').number() }}
 		/>
