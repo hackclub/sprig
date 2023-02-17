@@ -65,17 +65,17 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 	const screenShake = useSignal(0)
 	const onRun = async () => {
 		foldAllTemplateLiterals()
-		
 		if (!screen.current) return
-		screenShake.value++
-		setTimeout(() => screenShake.value--, 200)
 		
 		if (cleanup.current) cleanup.current()
 		errorLog.value = []
 
 		const code = codeMirror.value?.state.doc.toString() ?? ''
 		const res = runGame(code, screen.current)
+		
 		screen.current.focus()
+		screenShake.value++
+		setTimeout(() => screenShake.value--, 200)
 
 		cleanup.current = res.cleanup
 		if (res.error) {
