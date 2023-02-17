@@ -116,7 +116,7 @@ const playBeat = (beat: number, cells: Cells, bpm: number) => {
 
 export const play = (cells: Signal<Cells>, bpm: Signal<number>, beat: Signal<number>): () => void => {
 	const stop = { current: false }
-	let _timeout: number | null = null
+	let _timeout: unknown | null = null
 	const go = () => {
 		if (stop.current) return
 		playBeat(beat.value, cells.value, bpm.value)
@@ -125,7 +125,7 @@ export const play = (cells: Signal<Cells>, bpm: Signal<number>, beat: Signal<num
 			beat.value = (beat.value + 1) % beats
 
 			effect(() => {
-				if (_timeout) clearTimeout(_timeout)
+				if (_timeout) clearTimeout(_timeout as number)
 				_timeout = setTimeout(go, ((1000 * 60) / bpm.value) - (audioCtx.outputLatency * 1000))
 			})
 			

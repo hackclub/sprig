@@ -5,12 +5,12 @@ import SavePrompt from './popups-etc/save-prompt'
 import LoginPrompt from './popups-etc/login-prompt'
 import styles from './navbar.module.css'
 import SprigIcon from './design-system/sprig-icon'
-import { useEffect } from 'preact/hooks'
 import { persist } from '../lib/auth-helper'
 import InlineInput from './design-system/inline-input'
 import debounce from 'debounce'
 import SharePopup from './popups-etc/share-popup'
-import { IoSaveOutline, IoShareOutline } from 'react-icons/io5'
+import { IoSaveOutline, IoShareOutline, IoShuffle } from 'react-icons/io5'
+import { usePopupCloseClick } from '../lib/popup-close-click'
 
 const saveName = debounce(async (gameId: string, newName: string) => {
 	try {
@@ -54,35 +54,15 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 	const showSavePrompt = useSignal(false)
 	const showSharePopup = useSignal(false)
-	useSignal(() => {
-		// Jank! Avoids overlapping dialogs :/
-		if (showSavePrompt.value && showSharePopup.value) showSavePrompt.value = false
-		if (props.persistenceState.value.kind === 'PERSISTED'
-			&& props.persistenceState.value.showLoginPrompt
-			&& showSharePopup.value
-		) props.persistenceState.value = {
-			...props.persistenceState.value,
-			showLoginPrompt: false
-		}
-	})
 
 	const deleteState = useSignal<'idle' | 'confirm' | 'deleting'>('idle')
-	useSignal(() => { if (!showNavPopup.value && deleteState.value === 'confirm') deleteState.value = 'idle' })
+	useSignal(() => {
+		const _showNavPopup = showNavPopup.value
+		const _deleteState = deleteState.value
+		if (!_showNavPopup && _deleteState === 'confirm') deleteState.value = 'idle' 
+	})
 
-	useEffect(() => {
-		const listener = (event: MouseEvent) => {
-			// Ignore clicks inside popup content (and the logo, so it can be toggled)
-			for (const item of event.composedPath()) {
-				if (item instanceof HTMLElement && (
-					item.classList.contains(styles.navPopup!) ||
-					item.classList.contains(styles.logo!)
-				)) return
-			}
-			showNavPopup.value = false
-		}
-		window.addEventListener('click', listener)
-		return () => window.removeEventListener('click', listener)
-	}, [])
+	usePopupCloseClick(styles.navPopup!, () => showNavPopup.value = false, showNavPopup.value)
 
 	let saveState
 	if (props.persistenceState.value.kind === 'IN_MEMORY') {
@@ -105,11 +85,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			Save your work
 		</Button>
 	} else if (props.persistenceState.value.kind === 'SHARED') {
-		actionButton = <Button icon={IoSaveOutline} onClick={() => {
+		actionButton = <Button icon={IoShuffle} onClick={() => {
 			if (props.loggedIn !== 'none') persist(props.persistenceState)
 			showSavePrompt.value = true
 		}}>
-			Clone to save edits
+			Remix to save edits
 		</Button>
 	} else if (props.loggedIn !== 'full') {
 		actionButton = <Button icon={IoShareOutline} onClick={() => {

@@ -6,6 +6,13 @@ import '../global.css'
 import '../legacy/homepage.scss'
 import { getSession } from '../lib/account'
 
+const galleryRegex = /^https:\/\/raw\.githubusercontent\.com\/hackclub\/sprig\/main\/games\/(.+)\.js$/
+const galleryMatches = Astro.url.searchParams.get('file')?.match(galleryRegex) ?? null
+if (galleryMatches) return Astro.redirect(`/gallery/${galleryMatches[1]}`, 302)
+
+if (Astro.url.searchParams.has('id'))
+	return Astro.redirect(`/legacy-bucket/${Astro.url.searchParams.get('id')}`, 302)
+
 async function getConsolesRemaining(): Promise<number> {
 	const data = await fetch('https://airbridge.hackclub.com/v0.1/Sprig%20Waitlist/Requests').then(r => r.json())
 	if (!data) throw 'Failed to Fetch'
@@ -297,7 +304,7 @@ const session = await getSession(Astro.cookies)
 			import { Scene, WebGLRenderer, sRGBEncoding, PerspectiveCamera, AmbientLight, DirectionalLight, HemisphereLight, Raycaster, Vector2, Object3D, Mesh, Texture, BufferGeometry, Material } from 'three'
 			import { OrbitControls } from '../lib/orbit-controls'
 			import { imageDataEngine } from '../lib/engine/3-image-data/index'
-			import { exampleCode } from '../lib/homepage-example'
+			import { homepageExampleCode } from '../lib/examples'
 			import { InputKey, VALID_INPUTS } from '../lib/engine/2-web'
 
 			// @ts-ignore
@@ -386,7 +393,7 @@ const session = await getSession(Astro.cookies)
 
 						const screen = gltf.scene.getObjectByName('Screen')
 						glass = screen.children.find(({ material }: any) => material?.name === 'Glow Glass')
-						game.run(exampleCode)
+						game.run(homepageExampleCode)
 						glass.material = new THREE.MeshBasicMaterial({ map: new THREE.Texture(game.render()) })
 
 						m.appendChild(renderer.domElement)

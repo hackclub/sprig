@@ -27,6 +27,7 @@
 		"debounce": "^1.2.1",
 		"esprima": "^4.0.1",
 		"firebase-admin": "^11.5.0",
+		"ms": "^2.1.3",
 		"nanoid": "^4.0.1",
 		"preact": "^10.6.5",
 		"react": "npm:@preact/compat",

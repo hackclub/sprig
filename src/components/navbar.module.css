@@ -50,6 +50,7 @@
 }
 
 .navlinks li a:hover,
+.navlinks li.active a,
 .logo a:hover,
 .logo button:hover,
 .logo.active a,
@@ -98,17 +99,23 @@
 	cursor: var(--cursor-interactive);
 }
 
-/* Action icon */
+/* Action icon and plain links */
 .actionIcon {
 	display: block;
 }
 
-.actionIcon a {
+.plainLink {
+	margin: 0 4px;
+}
+
+.actionIcon a,
+.plainLink a {
 	display: block;
 	color: var(--fg-muted-on-accent);
 }
 
-.actionIcon a:hover {
+.actionIcon a:hover,
+.plainLink a:hover {
 	color: inherit;
 }
 
@@ -124,12 +131,14 @@
 }
 
 .transparent .navlinks li a:hover,
+.transparent .navlinks li.active a,
 .transparent .logo a:hover,
 .transparent .logo button:hover {
 	background: #7d7d7d42;
 }
 
-.transparent .actionIcon a:not(:hover) {
+.transparent .actionIcon a:not(:hover),
+.transparent .plainLink a:not(:hover) {
 	display: block;
 	color: var(--fg-muted);
 }

@@ -16,7 +16,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding-top: 240px;
+	padding-top: 20vh;
 }
 
 form {
@@ -24,7 +24,7 @@ form {
 	max-width: 500px;
 	padding: 30px;
 	background: var(--bg-surface);
-	border: 4px solid var(--accent);
+	border: 3px solid var(--accent);
 }
 
 h1 {

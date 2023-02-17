@@ -21,12 +21,12 @@ export default function InlineInput(props: InlineInputProps) {
 	}, [])
 
 	return (
-		<div class={styles.container}>
+		<div class={styles.container} style={{ width: width.value }}>
 			<input
 				class={styles.input}
 				value={props.value}
 				onInput={event => props.onChange(event.currentTarget.value)}
-				style={{ width: width.value }}
+				style={{ width: width.value + 30 }}
 				placeholder={props.placeholder}
 			/>
 			<span ref={measureRef} class={styles.measure} aria-hidden='true'>

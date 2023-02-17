@@ -12,6 +12,7 @@ import Button from '../design-system/button'
 import debounce from 'debounce'
 import Help from '../popups-etc/help'
 import { collapseRanges } from '../../lib/codemirror/util'
+import { defaultExampleCode } from '../../lib/examples'
 
 interface EditorProps {
 	loggedIn: 'full' | 'partial' | 'none'
@@ -25,7 +26,8 @@ interface ResizeState {
 	startMousePos: number
 	startValue: number
 }
-const [ minWidth, maxWidth ] = [ 400, 800 ]
+const [ minWidth, maxWidth ] = [ 400, 2000 ]
+const defaultWidth = 400
 
 const foldAllTemplateLiterals = () => {
 	if (!codeMirror.value) return
@@ -36,8 +38,14 @@ const foldAllTemplateLiterals = () => {
 
 export default function Editor({ persistenceState, loggedIn, cookies }: EditorProps) {
 	// Resize state storage
-	const outputAreaSize = useSignal(cookies.outputAreaSize ?? minWidth)
-	useSignalEffect(() => { document.cookie = `outputAreaSize=${outputAreaSize.value}` })
+	const outputAreaSize = useSignal(cookies.outputAreaSize ?? defaultWidth)
+	useSignalEffect(() => {
+		document.cookie = `outputAreaSize=${outputAreaSize.value};path=/;max-age=${60 * 60 * 24 * 365}`
+
+		// Limit height of output area
+		const height = Math.min(outputAreaSize.value * 4 / 5, window.innerHeight * 0.8)
+		outputAreaSize.value = height * 5 / 4
+	})
 	
 	// Resize bar logic
 	const resizeState = useSignal<ResizeState | null>(null)
@@ -67,6 +75,7 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 
 		const code = codeMirror.value?.state.doc.toString() ?? ''
 		const res = runGame(code, screen.current)
+		screen.current.focus()
 
 		cleanup.current = res.cleanup
 		if (res.error) {
@@ -143,6 +152,8 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 		initialCode = persistenceState.value.game.code
 	else if (persistenceState.value.kind === 'SHARED')
 		initialCode = persistenceState.value.code
+	else if (persistenceState.value.kind === 'IN_MEMORY')
+		initialCode = defaultExampleCode
 
 	return (
 		<div class={styles.page}>
@@ -196,15 +207,17 @@ export default function Editor({ persistenceState, loggedIn, cookies }: EditorPr
 					}}
 				/>
 
-				<div class={styles.outputArea}>
-					<div class={styles.screenContainer} style={{ width: outputAreaSize.value }}>
-						<canvas
-							class={`${styles.screen} ${screenShake.value > 0 ? 'shake' : ''}`}
-							ref={screen}
-							tabIndex={0}
-							width='1000'
-							height='800'
-						/>
+				<div class={styles.outputArea} style={{ width: outputAreaSize.value }}>
+					<div class={styles.screenContainer}>
+						<div class={styles.canvasWrapper}>
+							<canvas
+								class={`${styles.screen} ${screenShake.value > 0 ? 'shake' : ''}`}
+								ref={screen}
+								tabIndex={0}
+								width='1000'
+								height='800'
+							/>
+						</div>
 						<div class={styles.screenControls}>
 							<button className={styles.mute} onClick={() => muted.value = !muted.value}>
 								{muted.value

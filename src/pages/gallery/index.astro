@@ -44,7 +44,6 @@ games
 			}
 
 			.copy-container > h1 {
-				margin-top: 30px;
 				margin-bottom: 12px;
 			}
 
@@ -266,7 +265,7 @@ games
 
 		<script>
 			import { effect, signal } from '@preact/signals'
-			import { loadImageUrl } from '../../lib/game-preview'
+			import { loadThumbnailUrl } from '../../lib/thumbnail'
 
 			interface GameCard {
 				element: HTMLLIElement
@@ -281,7 +280,7 @@ games
 				const img = gameCard.element.querySelector('img') as HTMLImageElement
 				if ([ 'loading', 'true' ].includes(img.dataset.loaded!)) return
 				img.dataset.loaded = 'loading'
-				img.src = await loadImageUrl(gameCard.filename)
+				img.src = await loadThumbnailUrl(gameCard.filename)
 				img.dataset.loaded = 'true'
 			}
 

@@ -1,5 +1,6 @@
 import { useSignal, useSignalEffect } from '@preact/signals'
 import { IoClose } from 'react-icons/io5'
+import { usePopupCloseClick } from '../../lib/popup-close-click'
 import { codeMirror, editors, openEditor } from '../../lib/state'
 import styles from './editor-modal.module.css'
 
@@ -37,18 +38,11 @@ export default function EditorModal() {
 		}
 	})
 
+	usePopupCloseClick(styles.overlay!, () => openEditor.value = null, !!openEditor.value)
 	if (!openEditor.value) return null
+
 	return (
-		<div
-			class={styles.overlay}
-			onClick={(event) => {
-				// Ignore clicks inside modal content
-				for (const item of event.composedPath()) {
-					if (item instanceof HTMLElement && item.classList.contains(styles.content!)) return
-				}
-				openEditor.value = null
-			}}
-		>
+		<div class={styles.overlay}>
 			<div class={`${styles.container} ${editors[openEditor.value.kind].fullsizeModal ? styles.fullsize : ''}`}>
 				<button class={styles.close}><IoClose /></button>
 				<div class={styles.content}><Content text={text} /></div>
