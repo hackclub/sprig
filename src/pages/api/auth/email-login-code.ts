@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import { getUserByEmail, makeLoginCode } from '../../../lib/account'
+import { getUserByEmail, makeLoginCode, makeUser } from '../../../lib/account'
 import { isValidEmail, loginCodeTemplate, mail } from '../../../lib/email'
 
 export const post: APIRoute = async ({ request }) => {
@@ -12,9 +12,7 @@ export const post: APIRoute = async ({ request }) => {
 		return new Response(typeof error === 'string' ? error : 'Bad request body', { status: 400 })
 	}
 
-	const user = await getUserByEmail(email)
-	if (!user) return new Response('User not found', { status: 404 })
-
+	const user = await getUserByEmail(email) ?? await makeUser(email, null)
 	const code = await makeLoginCode(user.id)
 	await mail(user.email, loginCodeTemplate(code)) 
 	return new Response(JSON.stringify({}), { status: 200 })
