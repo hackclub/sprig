@@ -111,19 +111,25 @@ function generateNewLine(previousLine) {
   return line;
 }
 
-onInput("a", () => {
+const handleLeft = () => {
   if (running && getFirst(player)) {
     getFirst(player).x -= 1;
     if (playerPosition < WIDTH) playerPosition -= 1;
   }
-});
+};
 
-onInput("d", () => {
+const handleRight = () => {
   if (running && getFirst(player)) {
     getFirst(player).x += 1;
     if (playerPosition < WIDTH) playerPosition += 1;
   }
-});
+};
+
+onInput("a", handleLeft);
+onInput("d", handleRight);
+
+onInput("j", handleLeft);
+onInput("k", handleRight);
 
 afterInput(() => {
   let lines = level.split("\n");
