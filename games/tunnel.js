@@ -1,7 +1,6 @@
 /*
 @title: tunnel
 @author: amin
-
 */
 
 const HEIGHT = 20;
