@@ -2109,7 +2109,7 @@ function teleport() {
 
 // w, a, s, d
 function moveInput(x, y) {
-  if (display_state.mode != "death" && !display_state.file_menu) {
+  if (display_state.mode != "death" && display_state.mode != "sound_menu" && !display_state.file_menu) {
     if (display_state.inventory_open) {
       getFirst(inventory_selection).x += x; // select items in inventory (a, d)
     } else if (display_state.floppy_disk) {
@@ -2288,7 +2288,7 @@ onInput("l", () => {
 })
 
 afterInput(() => {
-  if (display_state.mode != "death") {
+  if (display_state.mode != "death" && display_state.mode != "sound_menu") {
     if (in_base == -1) {
       player_x = player_sprite.x + view_x;
       player_y = player_sprite.y + view_y;
