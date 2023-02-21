@@ -57,6 +57,7 @@ const teleportation_menu_bg = "K";
 const shovel = "H";
 const hp_potion = "Q";
 const speaker_icon = "u";
+const loading_icon = "U";
 
 setLegend(
   [ Player, bitmap`
@@ -909,6 +910,23 @@ LLLLLLLLLLLLLLLL`],
 .....2221.......
 ......221.......
 .......21.......` ],
+  [ loading_icon, bitmap`
+.22222222222222.
+.22222222222222.
+..222200222222..
+...2200000022...
+....22000022....
+.....220022.....
+......2222......
+.......22.......
+.......22.......
+......2222......
+.....220222.....
+....22022222....
+...2222202222...
+..220000000022..
+.22000000000022.
+.22222222222222.` ],
   [ black, bitmap`
 0000000000000000
 0000000000000000
@@ -1222,7 +1240,7 @@ let music_playback = null;
 // Generate random world
 function generateWorld(size) {
   let world = [];
-
+  
   // Forest is a place with more trees
   let forest_x = Math.floor(Math.random() * (WORLD_SIZE-30)) + 10;
   let forest_y = Math.floor(Math.random() * (WORLD_SIZE-30)) + 10;
@@ -1395,6 +1413,14 @@ function addBase(is_playerbase, door_x, door_y) {
     portal_power: is_playerbase,
     tableitem: item
   });
+}
+
+function showLoadingScreen() {
+  setMap(black_bg);
+  clearText();  
+  addSprite(1, 1, loading_icon);
+  addText("Generating", {x: 5, y: 2, color: color`2`});
+  addText("world...", {x: 5, y: 3, color: color`2`});
 }
 
 // End of WORLD GENERATION section
@@ -2336,7 +2362,8 @@ function soundMenu() {
 
 function setSound(mode) {
   sound_mode = mode;
-  newGame();
+  showLoadingScreen();
+  setTimeout(newGame, 50);
 }
 
 function playSoundIfOn(sound, music=false) {
@@ -2458,8 +2485,8 @@ function newGame() {
   world_sprites = [];
   hidden_items = [];
   enemies = new Map();
-  enemy_types.forEach((type, key) => {
-    enemies.set(key, []);
+    enemy_types.forEach((type, key) => {
+      enemies.set(key, []);
   });
   bases = [];
   in_base = -1;
