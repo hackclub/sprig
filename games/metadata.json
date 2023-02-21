@@ -2182,5 +2182,13 @@
     "img": "",
     "tags": ["dungeon"],
     "addedOn": "2023-02-20"
+  },
+  {
+    "filename": "bloxorz",
+    "title": "bloxorz",
+    "author": "itona",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-02-20"
   }
 ]
