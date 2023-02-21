@@ -56,6 +56,7 @@ const portal_desktop_icon = "k";
 const teleportation_menu_bg = "K";
 const shovel = "H";
 const hp_potion = "Q";
+const speaker_icon = "u";
 
 setLegend(
   [ Player, bitmap`
@@ -891,6 +892,23 @@ LLLLLLLLLLLLLLLL`],
 7777777777777777
 7777777777777777
 7777777777777777`],
+  [ speaker_icon, bitmap`
+.......21.......
+......221.......
+.....2221.......
+....22221.2.....
+...222221..2....
+222222221...2...
+212222221.2..2..
+212222221..2.2..
+212222221..2.2..
+212222221.2..2..
+222222221...2...
+...222221..2....
+....22221.2.....
+.....2221.......
+......221.......
+.......21.......` ],
   [ black, bitmap`
 0000000000000000
 0000000000000000
@@ -1135,6 +1153,16 @@ const enemy_types = new Map([
   [bear, {min_dist: 10, damage: 10, max_hp: 30, points: 100, world_max: 3, item: null}]
 ]);
 
+const black_bg = map`
+BBBBBBBBBB
+BBBBBBBBBB
+BBBBBBBBBB
+BBBBBBBBBB
+BBBBBBBBBB
+BBBBBBBBBB
+BBBBBBBBBB
+BBBBBBBBBB`;
+
 
 // ########################################
 // ### GLOBAL VARIABLES                 ###
@@ -1157,6 +1185,8 @@ let player_level;
 let next_level;
 let restart_allowed = false;
 let player_sprite;
+
+let sound_mode; // 0-off, 1-no music, 2-on
 
 // Enemies
 let enemies = new Map();
@@ -1454,7 +1484,7 @@ function useComputer() {
   } else { // Computer is turned off
     display_state.computer_progress = true;
     setMap(desktop_map);
-    playTune(computer_bios);
+    playSoundIfOn(computer_bios);
 
     // Show loading bar animation
     for (let i = 0; i < loading_sprites.length; i++) {
@@ -1464,7 +1494,7 @@ function useComputer() {
     bases[in_base].computer_power = true;
     
     setTimeout(() => {
-      playTune(computer_start);
+      playSoundIfOn(computer_start);
       useComputer();
     }, 250*loading_sprites.length + 100);
   }
@@ -1476,7 +1506,7 @@ function showError(text) {
   createWindow("Error");
   addSprite(COMPUTER_WINDOW_POSITION, COMPUTER_WINDOW_POSITION+1, error);
   addText(text, {x: COMPUTER_WINDOW_POSITION*2+2, y: COMPUTER_WINDOW_POSITION*2+2, color: color`0`});
-  playTune(computer_error)
+  playSoundIfOn(computer_error)
 }
 
 // Create empty window with title
@@ -1628,7 +1658,7 @@ function enablePortal() {
   addSprite(COMPUTER_WINDOW_POSITION+1, COMPUTER_WINDOW_POSITION+1, portal_off);
   addText("Enabling\nportal...", {x:COMPUTER_WINDOW_POSITION*2+2, y:COMPUTER_WINDOW_POSITION*2+4, color: color`0`});
 
-  playTune(portal_enable);
+  playSoundIfOn(portal_enable);
 
   const frame = 100;
   display_state.computer_progress = true;
@@ -1958,7 +1988,7 @@ function useShovel() {
         addSimpleItem("hp_potion", hp_potion, 10)
         refreshInventory();
         text_onetime.push({text: "Item found", options: {x: 0, y: 13, color: color`0`}});
-        playTune(collect_item_sound);
+        playSoundIfOn(collect_item_sound);
       } else if (hidden_items[i].item == "points") {
         score += 500;
         text_onetime.push({text: "+500", options: {x: 0, y: 2, color: color`0`}});
@@ -2027,11 +2057,11 @@ KKKKKKKKKK`;
     }
   }
   renderTeleportationList(0, 0);
-  music_playback = playTune(music_portal_menu, Infinity);
+  music_playback = playSoundIfOn(music_portal_menu, true);
 }
 
 function teleport() {
-  playTune(teleportation_sound);
+  playSoundIfOn(teleportation_sound);
   let base_idx = display_state.portals[display_state.teleportation_sel];
   enterBase(base_idx);
   updateText();
@@ -2093,7 +2123,7 @@ onInput("i", () => {
       }
       if (sprites[s].type == table && bases[in_base].tableitem != null) {
         // Collect item
-        playTune(collect_item_sound);
+        playSoundIfOn(collect_item_sound);
         if (bases[in_base].tableitem[0] == "hp_potion") {
           addSimpleItem("hp_potion", hp_potion, 1);
         } else {
@@ -2122,6 +2152,9 @@ onInput("i", () => {
 
 // Attack / select
 onInput("k", () => {
+  if (display_state.mode == "sound_menu") {
+    setSound(2);
+  }
   if (display_state.mode == "computer" && !display_state.computer_progress) {
     // Copy file
     let file = getFileUnderCursor();
@@ -2154,7 +2187,7 @@ onInput("k", () => {
     }
   } else if (display_state.mode == "world" && !display_state.inventory_open) {
     // Attack
-    playTune(attack_sound);
+    playSoundIfOn(attack_sound);
     enemies.forEach((enemies_arr, type) => {
       for (let e in enemies_arr) {
         if ((Math.abs(enemies_arr[e].x - player_x) == 1 && enemies_arr[e].y == player_y)
@@ -2165,7 +2198,7 @@ onInput("k", () => {
             addPoints(enemy_types.get(enemies_arr[e].type).points);
             updateText();
             if (enemy_types.get(type).item == "hp_potion") {
-              playTune(collect_item_sound);
+              playSoundIfOn(collect_item_sound);
               addSimpleItem("hp_potion", hp_potion, 1);
             }
             enemies_arr.splice(e, 1);
@@ -2181,10 +2214,10 @@ onInput("k", () => {
     if (item_key == "gps") {
       if (inventory.get(item_key).sprite == gps_on) {
         inventory.get(item_key).sprite = gps_off;
-        playTune(gps_off_sound);
+        playSoundIfOn(gps_off_sound);
       } else {
         inventory.get(item_key).sprite = gps_on;
-        playTune(gps_on_sound);
+        playSoundIfOn(gps_on_sound);
       }
       refreshInventory();
     } else if (item_key == "shovel") {
@@ -2205,7 +2238,9 @@ onInput("k", () => {
 
 // Inventory
 onInput("j", () => {
-  if (display_state.inventory_open) {
+  if (display_state.mode == "sound_menu") {
+    setSound(1);
+  } else if (display_state.inventory_open) {
     closeInventory();
   } else if (display_state.mode != "computer" && display_state.mode != "death" && display_state.mode != "teleportation") {
     openInventory();
@@ -2214,6 +2249,9 @@ onInput("j", () => {
 
 // File menu
 onInput("l", () => {
+  if (display_state.mode == "sound_menu") {
+    setSound(0);
+  }
   if (display_state.file_menu) {
     closeWindow();
   } else if (display_state.mode == "computer" && !display_state.file_open && getFileUnderCursor() != null) {
@@ -2260,7 +2298,7 @@ afterInput(() => {
           display_state.mode = "world";
           updateEnemiesDisplay();
           closeInventory();
-          music_playback = playTune(music, Infinity);
+          music_playback = playSoundIfOn(music, true);
         } else if (player_sprite.x == base_portal_x && player_sprite.y == base_portal_y && bases[in_base].portal_power) {
           // Teleportation
           teleportationMenu();
@@ -2279,6 +2317,44 @@ afterInput(() => {
 
 // End of CONTROLS section
 // ----------------------------------------
+
+
+// ########################################
+// ### SOUND MENU                       ###
+// ########################################
+
+
+function soundMenu() {
+  display_state.mode = "sound_menu";
+  setMap(black_bg);
+  addSprite(1, 1, speaker_icon);
+  addText("Enable sound?", {x: 5, y: 2, color: color`2`});
+  addText("(k) On", {x: 2, y: 5, color: color`2`});
+  addText("(l) Off", {x: 2, y: 6, color: color`2`});
+  addText("(j) No music", {x: 2, y:7, color: color`2`});
+}
+
+function setSound(mode) {
+  sound_mode = mode;
+  newGame();
+}
+
+function playSoundIfOn(sound, music=false) {
+  let playback = null;
+  if (music) {
+    if (sound_mode == 2) {
+      playback = playTune(sound, Infinity);
+    }
+  } else if (sound_mode >= 1) {
+    playback = playTune(sound);
+  }
+  return playback;
+}
+
+
+// End of SOUND MENU section
+// ----------------------------------------
+
 
 
 // ########################################
@@ -2308,7 +2384,7 @@ function changeHp(delta_hp) {
 // Clear all intervals and display death screen with score
 function death() {
   stopMusic();
-  playTune(death_sound);
+  playSoundIfOn(death_sound);
   closeInventory();
   clearInterval(enemy_update_interval);
   clearInterval(spawn_interval);
@@ -2429,12 +2505,11 @@ function newGame() {
   enemy_update_interval = setInterval(updateEnemies, 200);
 
 
-  music_playback = playTune(music, Infinity);
+  music_playback = playSoundIfOn(music, true);
 }
 
 // End of PLAYER AND GAME section
 // ----------------------------------------
 
 
-
-newGame();
+soundMenu();
