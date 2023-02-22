@@ -122,6 +122,7 @@ if (games.length === 0 && unnamedGames.length > 0) {
 
 			<h2>Account Info</h2>
 			<p>You are logged in as {session.user.email}. You have {games.length} {games.length === 1 ? 'game' : 'games'}. You've been using Sprig for {ms(Date.now() - session.user.createdAt.toMillis(), { long: true })}.</p>
+			<p>Visit <a href='/migrate'>the migration page</a> to move legacy Sprig games to your account from this computer.</p>
 			<a href='/logout'><Button icon={IoLogOutOutline}>Log out</Button></a>
 		</div>
 	</body>
