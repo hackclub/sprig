@@ -10,18 +10,24 @@ interface RunResult {
 	cleanup: () => void
 }
 
-export function runGame(code: string, canvas: HTMLCanvasElement): RunResult {
+export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (error: NormalizedError) => void): RunResult {
 	const game = webEngine(canvas)
 	
 	const tunes: any[] = []
 	const timeouts: number[] = []
 	const intervals: number[] = []
+
+	const errorListener = (event: ErrorEvent) => {
+		onPageError(normalizeGameError({ kind: 'page', error: event.error }))
+	}
+	window.addEventListener('error', errorListener)
 	
 	const cleanup = () => {
 		game.cleanup()
 		tunes.forEach(tune => tune.end())
 		timeouts.forEach(clearTimeout)
 		intervals.forEach(clearInterval)
+		window.removeEventListener('error', errorListener)
 	}
 
 	const api = {
