@@ -1,7 +1,7 @@
 import styles from './editor.module.css'
 import CodeMirror from '../codemirror'
 import Navbar from '../navbar-editor'
-import { IoPlayCircleOutline, IoVolumeHighOutline, IoVolumeMuteOutline } from 'react-icons/io5'
+import { IoClose, IoPlayCircleOutline, IoVolumeHighOutline, IoVolumeMuteOutline } from 'react-icons/io5'
 import { Signal, useComputed, useSignal, useSignalEffect } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
 import { codeMirror, errorLog, muted, PersistenceState } from '../../lib/state'
@@ -206,6 +206,10 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 					/>
 					{errorLog.value.length > 0 && (
 						<div class={styles.errors}>
+							<button class={styles.errorClose} onClick={() => errorLog.value = []}>
+								<IoClose />
+							</button>
+							
 							{errorLog.value.map((error) => (
 								<div key={error.description}>{error.description}</div>
 							))}
