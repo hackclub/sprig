@@ -45,6 +45,7 @@
 	white-space: pre-wrap;
 	word-wrap: break-word;
 	padding: 8px;
+	padding-right: 14px; /* space for close button. would flexbox be better? maybe! */
 	background: #ffffff;
 	border: 2px solid var(--accent);
 	border-top: 3px solid var(--error);
@@ -54,9 +55,21 @@
 	gap: 8px;
 }
 
+.codeContainer .errorClose {
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	color: var(--error);
+	background: none;
+	border: none;
+	cursor: var(--cursor-interactive);
+	font-size: 1.2rem;
+	padding: 0;
+	display: block;
+}
+
 .resizeBar {
 	height: 100%;
-	background: red;
 	width: 6px;
 	cursor: col-resize;
 	background: transparent;
