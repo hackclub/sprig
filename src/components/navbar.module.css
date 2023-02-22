@@ -3,7 +3,6 @@
 	z-index: 99;
 	background: var(--accent);
 	color: #ffffff;
-	height: 48px;
 	display: flex;
 	flex-direction: row;
 	padding: 0 8px;
@@ -11,6 +10,7 @@
 	justify-content: space-between;
 	align-items: center;
 	position: relative;
+	text-align: center;
 }
 
 .container ul {
@@ -20,7 +20,7 @@
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	height: 100%;
+	height: 48px;
 }
 
 .container li {
@@ -179,4 +179,31 @@
 
 .navPopup a:hover {
 	color: inherit;
+}
+
+/* responsive design */
+@media (max-width: 700px) {
+	.logoText {
+		display: none;
+	}
+}
+
+@media (max-width: 600px) {
+	.container {
+		flex-direction: column;
+		align-items: center;
+		gap: 0;
+	}
+}
+
+@media (max-width: 420px) {
+	.container {
+		font-size: 0.9rem;
+	}
+
+	.navlinks li a,
+	.logo a,
+	.logo button {
+		padding: 0 8px;
+	}
 }

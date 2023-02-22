@@ -205,18 +205,6 @@ a {
 	.logo { display: none; }
 }
 
-@media (max-width: 450px) {
-	nav a:nth-child(3) {
-	display: none;
-	}
-}
-
-@media (max-width: 400px) {
-	nav a:nth-child(1) {
-	display: none;
-	}
-}
-
 @media (max-width: $breakpoint-2) {
 	.sprig-dino {
 	display: none;
