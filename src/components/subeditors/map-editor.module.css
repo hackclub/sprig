@@ -26,7 +26,7 @@
 	display: block;
 	background: var(--bg-surface);
 	background-repeat: repeat;
-	background-size: 50% 50%;
+	background-size: 50%;
 	border: none;
 	aspect-ratio: 1;
 	padding: 0;
@@ -107,6 +107,8 @@
 .grid {
 	display: flex;
 	flex-direction: column;
+	background-repeat: repeat;
+	background-size: calc(var(--cell-size) / 4);
 }
 
 .grid .row {
