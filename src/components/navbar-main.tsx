@@ -13,7 +13,7 @@ export default function MainNavbar(props: MainNavbarProps) {
 	return (
 		<nav class={`${styles.container} ${props.transparent ? styles.transparent : ''}`}>
 			<ul class={styles.navlinks}>
-				<li class={styles.logo}><a href='/'><SprigIcon /> Sprig</a></li>
+				<li class={styles.logo}><a href='/'><SprigIcon /> <span class={styles.logoText}>Sprig</span></a></li>
 				{props.session?.session.full ? (
 					<li>
 						<a href='/~'>Your Games</a>
