@@ -13,7 +13,6 @@ import debounce from 'debounce'
 import Help from '../popups-etc/help'
 import { collapseRanges } from '../../lib/codemirror/util'
 import { defaultExampleCode } from '../../lib/examples'
-import { getPuzzleLabFromLocalStorage } from '../../lib/legacy-migration'
 import MigrateToast from '../popups-etc/migrate-toast'
 
 interface EditorProps {
@@ -80,7 +79,9 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		errorLog.value = []
 
 		const code = codeMirror.value?.state.doc.toString() ?? ''
-		const res = runGame(code, screen.current)
+		const res = runGame(code, screen.current, (error) => {
+			errorLog.value = [ ...errorLog.value, error ]
+		})
 		
 		screen.current.focus()
 		screenShake.value++
@@ -92,6 +93,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			errorLog.value = [ ...errorLog.value, res.error ]
 		}
 	}
+	useEffect(() => () => cleanup.current?.(), [])
 
 	// Losing work is bad, let's save the user's code
 	const saveQueue = useRef<Promise<void>[]>([])
@@ -198,8 +200,8 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 								<IoClose />
 							</button>
 							
-							{errorLog.value.map((error) => (
-								<div key={error.description}>{error.description}</div>
+							{errorLog.value.map((error, i) => (
+								<div key={`${i}-${error.description}`}>{error.description}</div>
 							))}
 						</div>
 					)}
