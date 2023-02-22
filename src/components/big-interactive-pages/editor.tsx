@@ -14,6 +14,7 @@ import Help from '../popups-etc/help'
 import { collapseRanges } from '../../lib/codemirror/util'
 import { defaultExampleCode } from '../../lib/examples'
 import { getPuzzleLabFromLocalStorage } from '../../lib/legacy-migration'
+import MigrateToast from '../popups-etc/migrate-toast'
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>
@@ -155,19 +156,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		return () => window.removeEventListener('keydown', handler)
 	}, [])
 
-	// Migration
-	useEffect(() => {
-		let cancel = false
-		getPuzzleLabFromLocalStorage().then(() => {
-			if (cancel) return
-			if (localStorage.getItem('seenMigration') !== 'true') {
-				localStorage.setItem('seenMigration', 'true')
-				window.location.assign('/migrate')
-			}
-		})
-		return () => { cancel = true }
-	}, [])
-
 	let initialCode = ''
 	if (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING')
 		initialCode = persistenceState.value.game.code
@@ -261,6 +249,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			)}
 			
 			<Help />
+			<MigrateToast persistenceState={persistenceState} />
 		</div>
 	)
 }
