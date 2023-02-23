@@ -211,24 +211,83 @@ export default function BitmapEditor(props: EditorProps) {
 						{drawingTool.value.snapEnabled && <p>Hold <span class={styles.shortcut}>shift</span> to snap</p>}
 						{drawingTool.value.mirrorEnabled && <p>Hold <span class={styles.shortcut}>alt</span> to live mirror</p>}
 					</div>
-					<div class={styles.toolGrid}>
-						{palette.map(([ key, rgba ]) => {
-							const isActive = uiRightClick.value
-								? key === transparent[0]
-								: key === color.value[0]
-							return (
-								<button
-									key={key}
-									onClick={() => color.value = [key, rgba]}
-									class={`${styles.color} ${isActive ? styles.active : ''}`}
-									style={{
-										backgroundColor: rgbaToHex(rgba),
-										backgroundImage: rgba[3] === 0 ? `url("${transparentBgUrl}")` : undefined,
-									}}
-								/>
-							)
-						})}
+				</div>
+			</div>
+
+			<div class={styles.canvasContainer}>
+				<div
+					class={styles.canvas}
+					style={{ backgroundImage: `url("${transparentBgUrl}")` }}
+					onMouseLeave={() => { if (editState.value) editState.value.lastPos = null }}
+				>
+					{moment.value.pixelGrid.map((row, y) => (
+						<div class={styles.row}>
+							{row.map((item, x) => {
+								const mirroredTempGrid = editState.value && (liveMirror.value ? mirrorGrid(editState.value.tempGrid) : editState.value.tempGrid)
+								if (mirroredTempGrid?.[y]![x]) item = mirroredTempGrid[y]![x]!
+								
+								return (
+									<div
+										key={`${x},${y}`}
+										class={styles.pixel}
+										onContextMenu={(event) => event.preventDefault()}
+										onMouseDown={(event) => {
+											event.preventDefault()
+											uiRightClick.value = rightDown(event)
+											liveMirror.value = event.altKey
+											if (leftDown(event) || rightDown(event)) {
+												if (!editState.value) {
+													editState.value = {
+														tempGrid: makeTempGrid(),
+														startPos: { x, y },
+														lastPos: { x, y }
+													}
+												}
+												drawingToolUpdate({ x, y }, event.shiftKey, rightDown(event))
+											}
+										}}
+										onMouseMove={(event) => {
+											event.preventDefault()
+											uiRightClick.value = rightDown(event)
+											liveMirror.value = event.altKey
+											if (!drawingTool.value.clickOnly && (leftDown(event) || rightDown(event)))
+												drawingToolUpdate({ x, y }, event.shiftKey, rightDown(event))
+										}}
+										style={{ backgroundColor: rgbaToHex(item[1]) }}
+									/>
+								)
+							})}
+						</div>
+					))}
+				</div>
+			</div>
+
+			<div class={styles.sidebar}>
+				<div class={styles.configTools}>
+					<div class={styles.toolSection}>
+						<h3>Color Picker</h3>
+						<div class={styles.toolGrid}>
+							{palette.map(([ key, rgba ]) => {
+								const isActive = uiRightClick.value
+									? key === transparent[0]
+									: key === color.value[0]
+								return (
+									<button
+										key={key}
+										onClick={() => color.value = [key, rgba]}
+										class={`${styles.color} ${isActive ? styles.active : ''}`}
+										style={{
+											backgroundColor: rgbaToHex(rgba),
+											backgroundImage: rgba[3] === 0 ? `url("${transparentBgUrl}")` : undefined,
+										}}
+									/>
+								)
+							})}
+						</div>
 					</div>
+				</div>
+
+				<div class={styles.configTools}>
 					<div class={styles.toolGrid}>
 						<ToolButton
 							key='undo'
@@ -280,54 +339,6 @@ export default function BitmapEditor(props: EditorProps) {
 							iconOnly
 						/>
 					</div>
-				</div>
-			</div>
-
-			<div class={styles.canvasContainer}>
-				<div
-					class={styles.canvas}
-					style={{ backgroundImage: `url("${transparentBgUrl}")` }}
-					onMouseLeave={() => { if (editState.value) editState.value.lastPos = null }}
-				>
-					{moment.value.pixelGrid.map((row, y) => (
-						<div class={styles.row}>
-							{row.map((item, x) => {
-								const mirroredTempGrid = editState.value && (liveMirror.value ? mirrorGrid(editState.value.tempGrid) : editState.value.tempGrid)
-								if (mirroredTempGrid?.[y]![x]) item = mirroredTempGrid[y]![x]!
-								
-								return (
-									<div
-										key={`${x},${y}`}
-										class={styles.pixel}
-										onContextMenu={(event) => event.preventDefault()}
-										onMouseDown={(event) => {
-											event.preventDefault()
-											uiRightClick.value = rightDown(event)
-											liveMirror.value = event.altKey
-											if (leftDown(event) || rightDown(event)) {
-												if (!editState.value) {
-													editState.value = {
-														tempGrid: makeTempGrid(),
-														startPos: { x, y },
-														lastPos: { x, y }
-													}
-												}
-												drawingToolUpdate({ x, y }, event.shiftKey, rightDown(event))
-											}
-										}}
-										onMouseMove={(event) => {
-											event.preventDefault()
-											uiRightClick.value = rightDown(event)
-											liveMirror.value = event.altKey
-											if (!drawingTool.value.clickOnly && (leftDown(event) || rightDown(event)))
-												drawingToolUpdate({ x, y }, event.shiftKey, rightDown(event))
-										}}
-										style={{ backgroundColor: rgbaToHex(item[1]) }}
-									/>
-								)
-							})}
-						</div>
-					))}
 				</div>
 			</div>
 		</div>
