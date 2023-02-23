@@ -1,5 +1,5 @@
 import { useEffect } from 'preact/hooks'
-import { leftDown } from './event'
+import { leftDown } from './keyboard'
 
 export const usePopupCloseClick = (popupClass: string | string[], close: () => void, isVisible: boolean = true) => {
 	useEffect(() => {

@@ -7,7 +7,7 @@ import { drawingTools, gridsEq, makeTempGrid, mirrorGrid, TempGrid, transformToo
 import { useEffect, useRef } from 'preact/hooks'
 import tinykeys from 'tinykeys'
 import { IoArrowRedo, IoArrowUndo, IoImage, IoTrash } from 'react-icons/io5'
-import { leftDown, rightDown } from '../../lib/event'
+import { leftDown, modIcon, rightDown } from '../../lib/keyboard'
 
 const makePixelGrid = (): PaletteItem[][] => new Array(16).fill(0).map(() => new Array(16).fill(transparent))
 const textToPixelGrid = (text: string): PaletteItem[][] => {
@@ -57,7 +57,7 @@ function ToolButton(props: ToolButtonProps) {
 
 	const formattedShortcut = props.shortcut
 		?.replaceAll('Shift', '⇧')
-		?.replaceAll('$mod', modIcon)
+		?.replaceAll('$mod', modIcon())
 		?.replaceAll('+', '')
 
 	return (
@@ -88,7 +88,6 @@ interface Moment {
 	next: Moment | null
 }
 
-const modIcon = typeof navigator === 'object' && /Mac|iPod|iPhone|iPad/.test(navigator.platform) ? '⌘' : '^'
 interface EditState {
 	tempGrid: TempGrid
 	startPos: Vector
