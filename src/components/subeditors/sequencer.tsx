@@ -4,7 +4,7 @@ import { type Signal, useSignal, useSignalEffect, signal } from '@preact/signals
 import { IoPause, IoPlay, IoStop } from 'react-icons/io5'
 import { cellsToTune, height, tuneToCells, beats, Cells, yNoteMap, playNote, play, cellsEq } from './sequencer-utils'
 import { instruments, InstrumentType, reverseInstrumentKey, textToTune, tuneToText } from '../../lib/engine/1-base/tune'
-import { leftDown } from '../../lib/event'
+import { leftDown } from '../../lib/keyboard'
 import { useEffect } from 'preact/hooks'
 import Button from '../design-system/button'
 
