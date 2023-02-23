@@ -1,4 +1,4 @@
-import { IoAdd, IoLogoGithub } from 'react-icons/io5'
+import { IoAdd, IoLogoGithub, IoOpenOutline } from 'react-icons/io5'
 import Button from './design-system/button'
 import styles from './navbar.module.css'
 import SprigIcon from './design-system/sprig-icon'
@@ -23,16 +23,24 @@ export default function MainNavbar(props: MainNavbarProps) {
 				<li><a href='/get'>Get a Sprig</a></li>
 			</ul>
 			<ul class={styles.rightActions}>
-				<li class={styles.actionIcon}>
-					<a href='https://github.com/hackclub/sprig/' target='_blank'>
-						<IoLogoGithub />
-					</a>
-				</li>
-				{props.session?.session.full ? (
+				{props.session?.session.full ? (<>
+					<li class={styles.actionIcon}>
+						<a href='https://github.com/hackclub/sprig/' target='_blank'>
+							<IoLogoGithub />
+						</a>
+					</li>
 					<li>
 						<a href='/~/new'><Button icon={IoAdd}>New Game</Button></a>
 					</li>
-				) : (<>
+				</>) : (<>
+					<li class={styles.plainLink}>
+						<a href='https://github.com/hackclub/sprig/' target='_blank'>
+							GitHub{' '}
+							<span style={{ verticalAlign: 'middle' }}>
+								<IoOpenOutline />
+							</span>
+						</a>
+					</li>
 					<li class={styles.plainLink}>
 						<a href='/login'>Log In</a>
 					</li>
