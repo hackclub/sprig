@@ -6,7 +6,8 @@ There's a special meteorite falling that only seems to care about
 special mathematical campfires! Guide the meteorite to the right 
 campfire and save the world from this peculiar meteorite.
 
-Use "a" and "d" to guide the meteorite left and right.
+Use "a" and "d" to guide the meteorite left and right, or "i" to 
+start a new round.
 */
 
 const meteorite = "m";
@@ -20,6 +21,7 @@ const sky4 = "d";
 let losses = 0,
   wins = 0,
   limit = 3;
+let interval;
 
 setLegend(
   [
@@ -215,17 +217,16 @@ const endGame = (condition) => {
   addText(message, { x: 5, y: 1, color: color`2` });
   addText(`Wins:   ${wins}`, { x: 5, y: 3, color: color`1` });
   addText(`Losses: ${losses}`, { x: 5, y: 4, color: color`1` });
-  addText("Any button to start again", { x: 1, y: 6, color: `1` });
+  addText("Press i to replay", { x: 1, y: 6, color: `1` });
+};
 
-  // Resets the number of wins and losses
+// Resets the number of wins and losses and destroys any meteorites, effectively 
+// restoring the map to its pre-loaded form
+const resetRound = () => {
   wins = 0;
   losses = 0;
-
-  // Adds an input listener to every button to restart the game
-  for (const button of ["w", "a", "s", "d", "i", "j", "k", "l"]) {
-    onInput(button, () => beginRound());
-  }
-};
+  getAll(meteorite);
+}
 
 // Concludes a round of a game based on the given condition (should be "win" or "loss")
 const endRound = (condition) => {
@@ -298,7 +299,8 @@ const check = (answer, answers) => {
 // mathematical equation
 const beginRound = () => {
   clearText();
-  addSprite(2, 0, meteorite);
+  clearInterval(interval);
+  addSprite(Math.round(Math.random() * 6), 0, meteorite);
 
   // Generates the mathematical equation to compute and the right answer
   // If the operator is multiplication, then the numbers are limited to 10 to keep things simple
@@ -330,7 +332,7 @@ const beginRound = () => {
     [answers[i], answers[j]] = [answers[j], answers[i]];
   }
 
-  const interval = setInterval(() => {
+  interval = setInterval(() => {
     if (getFirst(meteorite) !== undefined) {
       getFirst(meteorite).y += 1;
       check(answer, answers);
@@ -347,6 +349,15 @@ const beginRound = () => {
   addText(`${answers[2]}`, { x: 13, y: 15, color: color`0` });
 };
 
+onInput("i", () => {
+  // Resets the number of wins and losses and destroys the current 
+  wins = 0;
+  losses = 0;
+  if (getAll(meteorite).length > 0) {
+    getAll(meteorite).forEach((m) => m.remove());
+  }
+  beginRound();
+});
 onInput("a", () => {
   if (getFirst(meteorite) !== undefined) {
     getFirst(meteorite).x -= 1;
