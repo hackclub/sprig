@@ -18,15 +18,19 @@ interface CellProps {
 	y: number
 }
 
-const colorMap = [
-	'#e03131',
-	'#f76707',
-	'#fab005',
-	'#37b24d',
-	'#1098ad',
-	'#4263eb',
-	'#9c36b5'
-]
+const lightColorMap: Record<InstrumentType, string> = {
+	sine: '#fa5252',
+	square: '#4dabf7',
+	sawtooth: '#ff922b',
+	triangle: '#51cf66'
+}
+
+const colorMap: Record<InstrumentType, string> = {
+	sine: '#c92a2a',
+	square: '#1971c2',
+	sawtooth: '#e8590c',
+	triangle: '#099268'
+}
 
 const line = (from: [number, number], to: [number, number]): [number, number][] => {
 	const dx = Math.abs(to[0] - from[0])
@@ -55,7 +59,8 @@ function Cell(props: CellProps) {
     if ((height - props.y) % 8 === 0) classes.push(styles.root)
 
 	const cell = props.cells.value[`${props.x}_${props.y}`]
-	const backgroundColor = cell ? colorMap[(height - props.y - 1) % colorMap.length] : 'transparent'
+	const backgroundColor = cell ? colorMap[cell] : 'transparent'
+	const color = cell ? lightColorMap[cell] : 'black'
 
 	const drawAndPlay = (x: number, y: number) => {
 		const key = `${x}_${y}` as const
@@ -72,7 +77,7 @@ function Cell(props: CellProps) {
 	return (
 		<div
 			class={classes.join(' ')}
-			style={{ backgroundColor }}
+			style={{ color, backgroundColor }}
 			onMouseDown={(event) => {
 				event.preventDefault()
 				if (leftDown(event)) {
@@ -200,8 +205,10 @@ export default function SequencerEditor(props: EditorProps) {
 					<div class={styles.buttons}>
 						{instruments.map(name => (
 							<Button key={name} class={instrument.value === name ? styles.active : ''} onClick={() => instrument.value = name}>
-								<span class={styles.key}>{reverseInstrumentKey[name]}</span>{' '}
-								{name[0]?.toUpperCase()}{name.slice(1)}
+								<span class={styles.key} style={{ color: lightColorMap[name] }}>
+									{reverseInstrumentKey[name]}
+								</span>
+								{' ' + name[0]?.toUpperCase() + name.slice(1)}
 							</Button>
 						))}
 					</div>
