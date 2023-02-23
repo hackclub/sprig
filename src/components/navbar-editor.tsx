@@ -1,4 +1,4 @@
-import { Signal, useSignal } from '@preact/signals'
+import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 import { codeMirror, PersistenceState } from '../lib/state'
 import Button from './design-system/button'
 import SavePrompt from './popups-etc/save-prompt'
@@ -54,7 +54,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const showSharePopup = useSignal(false)
 
 	const deleteState = useSignal<'idle' | 'confirm' | 'deleting'>('idle')
-	useSignal(() => {
+	useSignalEffect(() => {
 		const _showNavPopup = showNavPopup.value
 		const _deleteState = deleteState.value
 		if (!_showNavPopup && _deleteState === 'confirm') deleteState.value = 'idle' 
