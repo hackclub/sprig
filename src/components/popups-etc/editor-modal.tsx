@@ -1,5 +1,7 @@
 import { useSignal, useSignalEffect } from '@preact/signals'
+import { useEffect } from 'preact/hooks'
 import { IoClose } from 'react-icons/io5'
+import tinykeys from 'tinykeys'
 import { usePopupCloseClick } from '../../lib/popup-close-click'
 import { codeMirror, editors, openEditor } from '../../lib/state'
 import styles from './editor-modal.module.css'
@@ -39,6 +41,9 @@ export default function EditorModal() {
 	})
 
 	usePopupCloseClick(styles.content!, () => openEditor.value = null, !!openEditor.value)
+	useEffect(() => tinykeys(window, {
+		'Escape': () => openEditor.value = null
+	}), [])
 	if (!openEditor.value) return null
 
 	return (
