@@ -197,6 +197,8 @@ ggggggg`;
 setMap(level);
 setBackground(sky2);
 
+// Concludes an iteration of a game by displaying the player's performance and prompting them 
+// to start the game again
 const endGame = (condition) => {
   clearText();
 
@@ -215,13 +217,17 @@ const endGame = (condition) => {
   addText(`Losses: ${losses}`, { x: 5, y: 4, color: color`1` });
   addText("Any button to start again", { x: 1, y: 6, color: `1` });
 
+  // Resets the number of wins and losses
   wins = 0;
   losses = 0;
+
+  // Adds an input listener to every button to restart the game
   for (const button of ["w", "a", "s", "d", "i", "j", "k", "l"]) {
     onInput(button, () => beginRound());
   }
 };
 
+// Concludes a round of a game based on the given condition (should be "win" or "loss")
 const endRound = (condition) => {
   clearText();
 
@@ -229,6 +235,7 @@ const endRound = (condition) => {
   switch (condition) {
     case "win":
       wins += 1;
+      // Checks if there are enough wins to warrant a win for the entire game
       if (wins === limit) {
         endGame("win");
         return;
@@ -238,6 +245,7 @@ const endRound = (condition) => {
       break;
     case "loss":
       losses += 1;
+      // Checks if there are enough losses to warrant a loss for the entire game
       if (losses === limit) {
         endGame("loss");
         return;
@@ -253,17 +261,26 @@ const endRound = (condition) => {
   }, 3000);
 };
 
+// Checks if (a) a meteorite has fallen into a campfire, and if so, then (b) whether the 
+// campfire is the right one
 const check = (answer, answers) => {
   const overlappingTiles = tilesWith(meteorite, campfire);
   if (getFirst(meteorite) === undefined) {
     return;
   }
+
+  // Checks if the meteorite has reached the bottom of the screen, in which an automatic loss 
+  // is warranted. Otherwise, checks if there exists a tile where both the meteorite and 
+  // campfire exist together (i.e., a collision)
   if (getFirst(meteorite).y === 8) {
     getFirst(meteorite).remove();
     endRound("loss");
   } else if (overlappingTiles.length === 1) {
     getFirst(meteorite).remove();
 
+    // Gets the x positions of all the campfires and the index of the selected campfire relative 
+    // to the order of the campfires. The index can be used to determine the user-selected answer 
+    // as the index of the answer in the answers array corresponds to the index of the campfire
     const campfiresIndexes = tilesWith(campfire).map((cf) => cf[0].x);
     const selectedCampfireIndex = campfiresIndexes.indexOf(
       overlappingTiles[0][1].x
@@ -277,12 +294,14 @@ const check = (answer, answers) => {
   }
 };
 
-// Starts a new round
+// Starts a new round by clearing the screen's text, adding a meteorite, and generating a new
+// mathematical equation
 const beginRound = () => {
   clearText();
   addSprite(2, 0, meteorite);
 
   // Generates the mathematical equation to compute and the right answer
+  // If the operator is multiplication, then the numbers are limited to 10 to keep things simple
   const operator = ["+", "-", "*"][Math.round(Math.random() * 2)],
     n1 = Math.round(Math.random() * (operator == "*" ? 10 : 20)),
     n2 = Math.round(Math.random() * (operator == "*" ? 10 : 20));
