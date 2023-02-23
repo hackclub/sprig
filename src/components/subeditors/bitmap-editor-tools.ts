@@ -189,7 +189,7 @@ export const drawingTools = [
 	},
 	{
 		key: 'color-bucket',
-		name: 'Color Replace Bucket',
+		name: 'Color Swap Bucket',
 		icon: IoColorWand,
 		clickOnly: true,
 		snapEnabled: false,
