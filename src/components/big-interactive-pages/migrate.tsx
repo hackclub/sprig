@@ -171,12 +171,12 @@ export default function Migrate({ session, intitialEmail }: MigrateProps) {
 						state.value = 'done'
 					}
 				}}>
-					{session?.session.full ? (
+					{session?.session.full ? null : (
 						<div class={styles.emailEntry}>
 							<label for='email'>Enter your email:</label>
 							<Input type='email' autoComplete='email' id='email' placeholder={'fiona@hackclub.com'} bind={email} />
 						</div>
-					) : null}
+					)}
 
 					<Button
 						accent
