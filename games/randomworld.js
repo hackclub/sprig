@@ -1807,7 +1807,7 @@ function updateEnemiesDisplay() {
 function updateEnemies() {
   if (display_state.mode == "world") {
     let chunk1 = getChunk(Math.max(player_x-max_min_dist, 0), Math.max(player_y-max_min_dist, 0));
-    let chunk2 = getChunk(Math.min(player_x+max_min_dist, WORLD_SIZE-1), Math.min(player_y+max_min_dist));
+    let chunk2 = getChunk(Math.min(player_x+max_min_dist, WORLD_SIZE-1), Math.min(player_y+max_min_dist, WORLD_SIZE-1));
 
     let enemies_to_update = [];
 
