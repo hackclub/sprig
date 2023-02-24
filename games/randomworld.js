@@ -1052,9 +1052,6 @@ const teleportation_sound = tune`
 60: a5^60 + b5^60,
 60: b5^60,
 840`;
-const attack_sound = tune`
-37.5: d4~37.5 + e4~37.5 + f4-37.5,
-1162.5`;
 const death_sound = tune`
 2000: c4-2000 + d4-2000 + e4-2000 + g4-2000 + f4-2000,
 62000`;
@@ -2237,7 +2234,6 @@ onInput("k", () => {
     }
   } else if (display_state.mode == "world" && !display_state.inventory_open) {
     // Attack
-    playSoundIfOn(attack_sound);
     let attack_chunks = new Map();
     if (player_x > 0) {
       let chunk = getChunk(player_x-1, player_y);
