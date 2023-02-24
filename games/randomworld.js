@@ -2393,7 +2393,8 @@ afterInput(() => {
       }
     }
   } else if (restart_allowed) {
-    newGame();
+    showLoadingScreen();
+    setTimeout(newGame, 50);
   }
 });
 
