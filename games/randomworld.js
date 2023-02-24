@@ -1172,6 +1172,8 @@ const enemy_types = new Map([
   [bear, {min_dist: 10, damage: 10, max_hp: 30, points: 100, world_max: 3, item: null}]
 ]);
 
+const max_min_dist = 10;
+
 const black_bg = map`
 BBBBBBBBBB
 BBBBBBBBBB
@@ -1188,8 +1190,18 @@ BBBBBBBBBB`;
 // ########################################
 
 // World
-let world; // 2d array of grass and trees
-let world_sprites = []; // Sprites (bases doors, walls and roofs)
+// world is array of Uint8Arrays (2d array of 8-bit unsigned ints)
+// first 4 bits is world block (sprite, that can't move)
+// 5th bit is 1 if there is an enemy
+// numbers less than 2 are not solid
+// to get this number: world[x][y] & 15 (15 is 2^4-1 - 1111 in binary)
+// to get sprite: sprite_types[world[x][y]&15]
+// to get number of sprite: sprite_numbers[sprite]
+let world;
+const sprite_types = [grass, grass1, tree, wall, roof, door, player_door];
+let sprite_numbers = new Map();
+sprite_types.forEach((spr, i) => sprite_numbers[spr] = i);
+
 let bases = [];
 let hidden_items = [];
 
@@ -1208,7 +1220,14 @@ let player_sprite;
 let sound_mode; // 0-off, 1-no music, 2-on
 
 // Enemies
-let enemies = new Map();
+// number of enemies of each type
+// Divide world in 8x8 chunks to update enemies only close to player
+let enemies_chunks;
+const CHUNK_SIZE = 8;
+let chunk_number = Math.ceil(WORLD_SIZE/CHUNK_SIZE);
+
+// number of enemies of each type (set to 0 in newGame())
+let enemies_number = new Map();
 let enemy_update_interval;
 let spawn_interval;
 
@@ -1240,8 +1259,6 @@ let music_playback = null;
 
 // Generate random world
 function generateWorld(size) {
-  let world = [];
-  
   // Forest is a place with more trees
   let forest_x = Math.floor(Math.random() * (WORLD_SIZE-30)) + 10;
   let forest_y = Math.floor(Math.random() * (WORLD_SIZE-30)) + 10;
@@ -1254,28 +1271,24 @@ function generateWorld(size) {
     forest_y += 10;
   }
 
-  // World is 2d array of chars
-  // (not array of strings, because strings in JS are immutable)
+  // World is 2d array of ints
   for (let i = 0; i < size; i++) {
-    world.push([]);
     for (let j = 0; j < size; j++) {
       let random_number = Math.floor(Math.random() * 100);
 
       if ((random_number % 50 == 0)
           || (random_number % 4 == 0 && Math.pow(i - forest_y, 2) + Math.pow(j - forest_x, 2) <= 100)) {
-        world[i].push(tree);
+        world[i][j] = sprite_numbers[tree];
       } else if (random_number % 10 == 0) {
-        world[i].push(grass1);
+        world[i][j] = sprite_numbers[grass1];
       } else {
-        world[i].push(grass);
+        world[i][j] = sprite_numbers[grass];
       }
     }
   }
 
   // Set start position of player to grass
-  world[WORLD_SIZE/2-1][WORLD_SIZE/2-1] = grass;
-  
-  return world;
+  world[WORLD_SIZE/2-1][WORLD_SIZE/2-1] = sprite_numbers[grass];
 }
 
 // Add bases at random positions
@@ -1319,14 +1332,9 @@ function addStructures() {
     while (!item_good_location) {
       hidden_item_x++;
       item_good_location = true;
-      if (world[hidden_item_y][hidden_item_x] == tree) {
+      if (world[hidden_item_y][hidden_item_x] >= 2) {
         item_good_location = false;
       } else {
-        for (let s of world_sprites) {
-          if (s.x == hidden_item_x && s.y == hidden_item_y) {
-            item_good_location = false;
-          }
-        }
         for (let i of hidden_items) {
           if (i.x == hidden_item_x && i.y == hidden_item_y) {
             item_good_location = false;
@@ -1363,7 +1371,7 @@ function addBase(is_playerbase, door_x, door_y) {
   // remove trees around base
   for (let i = door_y-3; i <= door_y + 1; i++){
     for (let j = door_x-2; j <= door_x+2; j++){
-      world[i][j] = grass;
+      world[i][j] = sprite_numbers[grass];
     }
   }
 
@@ -1379,23 +1387,23 @@ function addBase(is_playerbase, door_x, door_y) {
   // Player's base has different doors.
   // Player's computer can open all files and has file with information about it.
   if (is_playerbase) {
-    world_sprites.push({x:door_x, y:door_y, type:player_door});
+    world[door_y][door_x] = sprite_numbers[player_door];
     files.push({
       text: "This is your\ncomputer.\nIt can open\nall file\nformats.",
       can_open: true
     });
   } else {
-    world_sprites.push({x:door_x, y:door_y, type:door});
+    world[door_y][door_x] = sprite_numbers[door];
   }
   
   // Add walls
-  world_sprites.push({x:door_x-1, y:door_y, type:wall});
-  world_sprites.push({x:door_x+1, y:door_y, type:wall});
+  world[door_y][door_x-1] = sprite_numbers[wall];
+  world[door_y][door_x+1] = sprite_numbers[wall];
 
   // Add roof
   for (let i = door_y-1; i >= door_y - 2; i--) {
     for (let j = door_x-1; j <= door_x+1; j++) {
-      world_sprites.push({x:j, y:i, type:roof});
+      world[i][j] = sprite_numbers[roof];
     }
   }
 
@@ -1717,6 +1725,12 @@ function enablePortal() {
 // ### ENEMIES                          ###
 // ########################################
 
+function getChunk(x, y) {
+  let chunkX = Math.floor(x/CHUNK_SIZE);
+  let chunkY = Math.floor(y/CHUNK_SIZE);
+  return {x: chunkX, y: chunkY};
+}
+
 // Execute spawnEnemies for every type
 function spawnAllEnemies() {
   enemy_types.forEach((type, key) => {
@@ -1726,8 +1740,8 @@ function spawnAllEnemies() {
 
 // Spawn enemies with type in random places
 function spawnEnemies(type) {
-  let enemy_number = enemy_types.get(type).world_max - enemies.get(type).length;
-  for (let i = 0; i < enemy_number; i++) {
+  let to_spawn = enemy_types.get(type).world_max - enemies_number[type];
+  for (let i = 0; i < to_spawn; i++) {
     let new_x;
     let new_y;
     let good_location_found = false;
@@ -1741,19 +1755,15 @@ function spawnEnemies(type) {
         good_location_found = false;
         continue;
       }
-      let all_enemies = [];
-      enemies.forEach((enemies_arr, key) => {
-        all_enemies = all_enemies.concat(enemies_arr);
-      });
-      let sprites = world_sprites.concat(all_enemies);
-      // Do not spawn enemies in place of bases or other enemies
-      for (let s in sprites) {
-        if (sprites[s].x == new_x && sprites[s].y == new_y) {
-          new_x += 3;
-        }
+      if (world[new_y][new_x] >= 2) {
+        good_location_found = false;
+        continue;
       }
       if (good_location_found) {
-        enemies.get(type).push({type: type, x: new_x, y: new_y, hp: enemy_types.get(type).max_hp});
+        world[new_y][new_x] |= 1<<4;
+        let chunk = getChunk(new_x, new_y);
+        enemies_chunks[chunk.x][chunk.y].add({type: type, x: new_x, y: new_y, hp: enemy_types.get(type).max_hp});
+        enemies_number[type]++;
       }
     }
   }
@@ -1777,80 +1787,101 @@ function updateEnemiesDisplay() {
       }
     }
 
-    enemies.forEach((enemies_arr, key) => {
-      for (let e in enemies_arr) {
-        if (enemies_arr[e].x >= view_x && enemies_arr[e].x < view_x+CAMERA_WIDTH && enemies_arr[e].y >= view_y && enemies_arr[e].y < view_y+CAMERA_HEIGHT) {
-          let x = enemies_arr[e].x - view_x;
-          let y = enemies_arr[e].y - view_y;
-          addSprite(x, y, enemies_arr[e].type); // Add enemy
-          addSprite(x, y, enemy_hp_bar[Math.floor(enemies_arr[e].hp/enemy_types.get(enemies_arr[e].type).max_hp/0.25)]); // Add health bar
+    let chunk1 = getChunk(view_x, view_y);
+    let chunk2 = getChunk(view_x+CAMERA_WIDTH, view_y+CAMERA_HEIGHT);
+
+    for (let i = chunk1.x; i <= chunk2.x; i++) {
+      for (let j = chunk1.y; j <= chunk2.y; j++) {
+        for (let e of enemies_chunks[i][j]) {
+          if (e.x >= view_x && e.x < view_x+CAMERA_WIDTH && e.y >= view_y && e.y < view_y+CAMERA_HEIGHT) {
+            let x = e.x - view_x;
+            let y = e.y - view_y;
+            addSprite(x, y, e.type); // Add enemy
+            addSprite(x, y, enemy_hp_bar[Math.floor(e.hp/enemy_types.get(e.type).max_hp/0.25)]); // Add health bar
+          }
         }
       }
-    });
+    }
   }
 }
 
-// This function move enemies and makes them attack players.
+// This function moves enemies and makes them attack players.
 // It should be calles in interval (setInterval(updateEnemies, time))
 function updateEnemies() {
   if (display_state.mode == "world") {
-    enemies.forEach((enemies_arr, key) => {
-      for (let e in enemies_arr) {
-        if (Math.pow(enemies_arr[e].x - player_x, 2) + Math.pow(enemies_arr[e].y - player_y, 2) <= Math.pow(enemy_types.get(enemies_arr[e].type).min_dist, 2)) {
-          let move_x = 0;
-          let move_y = 0;
-          if (enemies_arr[e].x < player_x) {
-            move_x++;
-          } else if (enemies_arr[e].x > player_x) {
-            move_x--;
-          }
-          if (enemies_arr[e].y < player_y) {
-            move_y++;
-          } else if (enemies_arr[e].y > player_y) {
-            move_y--;
+    let chunk1 = getChunk(Math.max(player_x-max_min_dist, 0), Math.max(player_y-max_min_dist, 0));
+    let chunk2 = getChunk(Math.min(player_x+max_min_dist, WORLD_SIZE-1), Math.min(player_y+max_min_dist));
+
+    let enemies_to_update = [];
+
+    for (let i = chunk1.x; i <= chunk2.x; i++) {
+      for (let j = chunk1.y; j <= chunk2.y; j++) {
+        enemies_chunks[i][j].forEach((e) => {
+          enemies_to_update.push(e);
+        });
+      }
+    }
+
+    for (let e in enemies_to_update) {
+      let enemy = enemies_to_update[e];
+      let old_x = enemy.x;
+      let old_y = enemy.y;
+      if (Math.pow(old_x - player_x, 2) + Math.pow(old_y - player_y, 2) <= Math.pow(enemy_types.get(enemy.type).min_dist, 2)) {
+        let move_x = 0;
+        let move_y = 0;
+        if (old_x < player_x) {
+          move_x++;
+        } else if (old_x > player_x) {
+          move_x--;
+        }
+        if (old_y < player_y) {
+          move_y++;
+        } else if (old_y > player_y) {
+          move_y--;
+        }
+
+        let moves = [];
+        if (move_x != 0) {
+          moves.push([move_x, 0]);
+        }
+        if (move_y != 0) {
+          moves.push([0, move_y]);
+        }
+
+        for (let m of moves) {
+          let move_possible = true;
+          let new_x = old_x+m[0];
+          let new_y = old_y+m[1];
+
+          if (player_x == new_x && player_y == new_y) {
+            let alive = changeHp(-enemy_types.get(enemy.type).damage);
+            if (!alive) {
+              return;
+            }
+            move_possible = false;
           }
 
-          let moves = [];
-          if (move_x != 0) {
-            moves.push([move_x, 0]);
+          if (world[new_y][new_x] >= 2) {
+            move_possible = false;
           }
-          if (move_y != 0) {
-            moves.push([0, move_y]);
-          }
-    
-          for (let m in moves) {
-            let move_possible = true;
-            let new_x = enemies_arr[e].x+moves[m][0];
-            let new_y = enemies_arr[e].y+moves[m][1];
-            move_possible = (world[new_y][new_x] != tree);
-            if (player_x == new_x && player_y == new_y) {
-              let alive = changeHp(-enemy_types.get(enemies_arr[e].type).damage);
-              if (!alive) {
-                return;
-              }
-              move_possible = false;
-            }
-            let all_enemies = [];
-            enemies.forEach((enemies_arr, key) => {
-              all_enemies = all_enemies.concat(enemies_arr);
-            });
-            let sprites = world_sprites.concat(all_enemies);
-            for (let s in sprites) {
-              if (sprites[s].x == new_x && sprites[s].y == new_y) {
-                move_possible = false;
-                break;
-              }
-            }
-            if (move_possible) {
-              enemies_arr[e].x += moves[m][0];
-              enemies_arr[e].y += moves[m][1];
-              break;
-            }
+          
+          if (move_possible) {
+            world[old_y][old_x] &= ~(1<<4);
+            world[new_y][new_x] |= 1<<4;
+
+            let old_chunk = getChunk(old_x, old_y);
+            let new_chunk = getChunk(new_x, new_y);
+
+            enemies_chunks[old_chunk.x][old_chunk.y].delete(enemy);
+            enemy.x = new_x;
+            enemy.y = new_y;
+            enemies_chunks[new_chunk.x][new_chunk.y].add(enemy);
+
+            break;
           }
         }
       }
-    });
-  
+    }
     updateEnemiesDisplay();
   }
 }
@@ -1870,7 +1901,7 @@ function setView(world, x, y) {
   // Add part of a world to map
   for (let i = y; i < y+CAMERA_HEIGHT; i++){
     for (let j = x; j < x+CAMERA_WIDTH; j++){
-      view += world[i][j];
+      view += sprite_types[world[i][j] & 15];
     }
     view += "\n";
   }
@@ -1878,14 +1909,6 @@ function setView(world, x, y) {
   view_x = x;
   view_y = y;
   setMap(view); // Set new map
-
-  // Add sprites
-  for (let s in world_sprites) {
-    let spr = world_sprites[s];
-    if (spr.x >= x && spr.x < x+CAMERA_WIDTH && spr.y >= y && spr.y < y+CAMERA_HEIGHT) {
-      addSprite(spr.x - x, spr.y - y, spr.type);
-    }
-  }
 
   // Add player
   addSprite(player_x - x, player_y - y, Player);
@@ -2215,25 +2238,53 @@ onInput("k", () => {
   } else if (display_state.mode == "world" && !display_state.inventory_open) {
     // Attack
     playSoundIfOn(attack_sound);
-    enemies.forEach((enemies_arr, type) => {
-      for (let e in enemies_arr) {
-        if ((Math.abs(enemies_arr[e].x - player_x) == 1 && enemies_arr[e].y == player_y)
-           ||(Math.abs(enemies_arr[e].y - player_y) == 1 && enemies_arr[e].x == player_x)) {
-          enemies_arr[e].hp -= player_level;
-          controls_help.attack = true;
-          if (enemies_arr[e].hp <= 0){
-            addPoints(enemy_types.get(enemies_arr[e].type).points);
-            updateText();
-            if (enemy_types.get(type).item == "hp_potion") {
-              playSoundIfOn(collect_item_sound);
-              addSimpleItem("hp_potion", hp_potion, 1);
-            }
-            enemies_arr.splice(e, 1);
-            updateEnemiesDisplay();
+    let attack_chunks = new Map();
+    if (player_x > 0) {
+      let chunk = getChunk(player_x-1, player_y);
+      attack_chunks.set([chunk.x, chunk.y].toString(), chunk);
+    }
+    if (player_x < WORLD_SIZE-2) {
+      let chunk = getChunk(player_x+1, player_y);
+      attack_chunks.set([chunk.x, chunk.y].toString(), chunk);
+    }
+    if (player_y > 0) {
+      let chunk = getChunk(player_x, player_y-1);
+      attack_chunks.set([chunk.x, chunk.y].toString(), chunk);
+    }
+    if (player_y < WORLD_SIZE-2) {
+      let chunk = getChunk(player_x, player_y+1);
+      attack_chunks.set([chunk.x, chunk.y].toString(), chunk);
+    }
+    
+    attack_chunks.forEach((c) => {
+      let chunk_x = c.x;
+      let chunk_y = c.y;
+      let attack_enemies = [];
+      enemies_chunks[chunk_x][chunk_y].forEach((e) => {
+        if ((Math.abs(e.x - player_x) == 1 && e.y == player_y)
+        ||(Math.abs(e.y - player_y) == 1 && e.x == player_x)) {
+          attack_enemies.push(e);
+        }
+      });
+      for (let e of attack_enemies) {
+        // Remove enemy, modify its hp and, if it is > 0 add it back
+        enemies_chunks[chunk_x][chunk_y].delete(e);
+        e.hp -= player_level;
+        controls_help.attack = true;
+        if (e.hp <= 0) {
+          addPoints(enemy_types.get(e.type).points);
+          updateText();
+          if (enemy_types.get(e.type).item == "hp_potion") {
+            playSoundIfOn(collect_item_sound);
+            addSimpleItem("hp_potion", hp_potion, 1);
           }
+          world[e.y][e.x] &= ~(1<<4);
+        } else {
+          enemies_chunks[chunk_x][chunk_y].add(e);
         }
       }
     });
+    updateEnemiesDisplay();
   }
   if (display_state.inventory_open) {
     // Use item
@@ -2483,12 +2534,14 @@ function enterBase(base_idx) {
 
 function newGame() {
   // Reset variables to default values
-  world_sprites = [];
+  world = [...Array(WORLD_SIZE)].map(e => new Uint8Array(WORLD_SIZE).fill(0));
   hidden_items = [];
-  enemies = new Map();
-    enemy_types.forEach((type, key) => {
-      enemies.set(key, []);
+  enemies_number = new Map();
+  enemy_types.forEach((type, key) => {
+    enemies_number[key] = 0;
   });
+  enemies_chunks = [...Array(chunk_number)].map(e => Array(chunk_number).fill(null).map(() => (new Set())));
+  
   bases = [];
   in_base = -1;
   display_state = { // object to store information about currently displayed things
@@ -2514,7 +2567,7 @@ function newGame() {
   next_level = 500;
 
   // Generate new world
-  world = generateWorld(WORLD_SIZE);
+  generateWorld(WORLD_SIZE);
   addStructures();
 
   // Set player position to center
@@ -2529,7 +2582,7 @@ function newGame() {
   spawn_interval = setInterval(spawnAllEnemies, 20000);
 
   updateText();
-  
+
   enemy_update_interval = setInterval(updateEnemies, 200);
 
 
