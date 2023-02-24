@@ -1537,7 +1537,7 @@ function useComputer() {
 function showError(text) {
   createWindow("Error");
   addSprite(COMPUTER_WINDOW_POSITION, COMPUTER_WINDOW_POSITION+1, error);
-  addText(text, {x: COMPUTER_WINDOW_POSITION*2+2, y: COMPUTER_WINDOW_POSITION*2+2, color: color`0`});
+  addTextWorkaround(text, {x: COMPUTER_WINDOW_POSITION*2+2, y: COMPUTER_WINDOW_POSITION*2+2, color: color`0`});
   playSoundIfOn(computer_error)
 }
 
@@ -1570,7 +1570,7 @@ function openFile(base, idx, open_every_file) {
   let file = bases[base].files[idx];
   if (file.can_open || open_every_file) {  
     createWindow("Text editor");
-    addText(file.text, {x: COMPUTER_WINDOW_POSITION*2, y: COMPUTER_WINDOW_POSITION*2+2, color: color`0`});
+    addTextWorkaround(file.text, {x: COMPUTER_WINDOW_POSITION*2, y: COMPUTER_WINDOW_POSITION*2+2, color: color`0`});
   } else {
     showError("Can't open\nthis type\nof file");
   }
@@ -1688,7 +1688,7 @@ function enablePortal() {
   // add background (portal uses in some parts the same color as window background)
   addSprite(COMPUTER_WINDOW_POSITION+1, COMPUTER_WINDOW_POSITION+1, inventory_background);
   addSprite(COMPUTER_WINDOW_POSITION+1, COMPUTER_WINDOW_POSITION+1, portal_off);
-  addText("Enabling\nportal...", {x:COMPUTER_WINDOW_POSITION*2+2, y:COMPUTER_WINDOW_POSITION*2+4, color: color`0`});
+  addTextWorkaround("Enabling\nportal...", {x:COMPUTER_WINDOW_POSITION*2+2, y:COMPUTER_WINDOW_POSITION*2+4, color: color`0`});
 
   playSoundIfOn(portal_enable);
 
@@ -1915,6 +1915,15 @@ function setView(world, x, y) {
   updateEnemiesDisplay();
 }
 
+// Workaround bug https://github.com/hackclub/sprig/issues/815
+function addTextWorkaround(text, options) {
+  let lines = text.split("\n");
+  lines.forEach((l) => {
+    addText(l, options);
+    options.y++;
+  });
+}
+
 function updateText() {
   clearText();
   addText(player_hp.toString(), {x: 20-player_hp.toString().length, y: 0, color: color`3`}); // HP
@@ -1942,7 +1951,7 @@ function updateText() {
     addText(t.text, t.options);
   }
   for (let t of text_onetime) {
-    addText(t.text, t.options);
+    addTextWorkaround(t.text, t.options);
   }
   text_onetime = [];
 }
