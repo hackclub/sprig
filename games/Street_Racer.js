@@ -73,7 +73,7 @@ Make your own game! Try
 
 const player = "p";
 const otherCar = "b";
-const goal = "g";
+const player2 = "g";
 const road = "r";
 
 setLegend(
@@ -111,23 +111,23 @@ setLegend(
 2111333333331111
 2111333333331112
 2111111111111112`],
-  [ goal, bitmap`
-................
-................
-................
-....444444......
-...44....44.....
-...4......4.....
-...4.......4....
-...4.......4....
-...4.......4....
-...44......4....
-....4......4....
-....44....44....
-.....444444.....
-................
-................
-................`],
+  [ player2, bitmap`
+2111177777711112
+2111766776671112
+1111777777771112
+2111772222771111
+2111772222771111
+2117777227777112
+1111727777271112
+1111722772271112
+2111722772271111
+2111727777271111
+2111777227771112
+1111772222771112
+1117777777777112
+2117777777777111
+2117333773337112
+2111777777771112`],
   [ road, bitmap`
 2111111111111112
 2111111111111112
@@ -155,7 +155,7 @@ rrrrrrr
 rbrrrbr
 rrrrrrr
 rrrrrrr
-rrrrrrr
+rrrrgrr
 rrrprrr`,
 
 ];
@@ -184,22 +184,41 @@ onInput("d", () => {
     getFirst(player).x +=1;
   }
 });
+onInput("j", () => {
+  if (getFirst(player2).x !== 0){
+    getFirst(player2).x -=1;
+  }
+});
+
+onInput("l", () => {
+  if (getFirst(player2).x !== 6){
+    getFirst(player2).x +=1;
+  }
+});
 
 // END - PLAYER MOVEMENT CONTROLS
 let intervalCount = 0
-let intervalSpeed = 1000
+let intervalSpeed = 400
 let loop = setInterval(() => {
   intervalCount += 1
   getAll(otherCar).forEach((car) => {console.log(car); if(car.y == 6) {clearTile(car.x, car.y)}; car.y += 1})
   if (intervalCount % 2 === 0){
   addSprite(getRandomInt(6), 0, otherCar)}
   if(tilesWith(player, otherCar).length !== 0){
-    clearInterval(loop)
     addText("Game Over!", {
       x: 5,
       y: 6,
       color: color`3`
     });
+    clearInterval(loop)
+  }
+  if(tilesWith(player2, otherCar).length !== 0){
+    addText("Game Over!", {
+      x: 5,
+      y: 6,
+      color: color`3`
+    });
+    clearInterval(loop)
   }
 
-}, 500)
+}, intervalSpeed)
