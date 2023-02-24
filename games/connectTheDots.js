@@ -589,13 +589,10 @@ afterInput(() => {
     level++;
     changeLevel();
   }
+  
   if (tilesWith(lock).length == tilesWith(redEnd).length + tilesWith(orangeEnd).length + tilesWith(yellowEnd).length + tilesWith(greenEnd).length + tilesWith(blueEnd).length + tilesWith(purpleEnd).length) {
-    level = level + 1;
-    if (levels[level] !== undefined) {
-      setMap(levels[level]);
-    } else {
-      addText("you win!", { y: 8, color: color`0` });
-    }
+    level++;
+    changeLevel();
   }
 });
 
@@ -606,6 +603,10 @@ function changeLevel() {
   if (currentLevel !== undefined) {
     clearText("");
     setMap(currentLevel);
+    addText(level + "/30", {x: 1, y: 1, color: color`0`});
+  } else {
+    clearText("");
+    addText("you win!", { y: 8, color: color`0` });
   }
 }
 
