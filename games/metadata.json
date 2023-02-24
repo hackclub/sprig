@@ -2190,5 +2190,29 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2023-02-20"
+  },
+  {
+    "filename": "Flamin_Finger",
+    "title": "Flamin_Finger",
+    "author": "Richie Tran",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-02-23"
+  },
+  {
+    "filename": "mathematical_meteorite",
+    "title": "mathematical_meteorite",
+    "author": "Arash",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-02-23"
+  },
+  {
+    "filename": "Street_Racer",
+    "title": "Street_Racer",
+    "author": "Cdogo",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-02-24"
   }
 ]
