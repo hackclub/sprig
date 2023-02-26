@@ -2214,5 +2214,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2023-02-24"
+  },
+  {
+    "filename": "connectTheDots",
+    "title": "connectTheDots",
+    "author": "Alex Howden",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-02-26"
   }
 ]
