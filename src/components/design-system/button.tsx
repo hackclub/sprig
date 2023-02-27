@@ -10,6 +10,7 @@ interface ButtonProps {
 	accent?: boolean
 	class?: string | undefined
 	disabled?: boolean
+	spinnyIcon?: boolean
 	loading?: boolean
 	children?: ComponentChild
 	role?: JSX.HTMLAttributes<HTMLButtonElement>['role']
@@ -23,6 +24,7 @@ export default function Button(props: ButtonProps) {
 				${styles.button}
 				${props.accent ? styles.accent : ''}
 				${props.bigIcon ? styles.bigIcon : ''}
+				${props.spinnyIcon ? styles.spinnyIcon : ''}
 				${props.loading ? styles.loading : ''}
 				${props.class ?? ''}
 			`}

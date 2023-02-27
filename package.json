@@ -42,6 +42,7 @@
 		"@prefresh/vite": "^2.2.9",
 		"@types/debounce": "^1.2.1",
 		"@types/esprima": "^4.0.3",
-		"@types/three": "^0.149.0"
+		"@types/three": "^0.149.0",
+		"@types/w3c-web-serial": "^1.0.3"
 	}
 }
