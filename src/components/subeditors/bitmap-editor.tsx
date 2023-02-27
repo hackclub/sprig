@@ -7,7 +7,7 @@ import { drawingTools, gridsEq, makeTempGrid, mirrorGrid, TempGrid, transformToo
 import { useEffect, useRef } from 'preact/hooks'
 import tinykeys from 'tinykeys'
 import { IoArrowRedo, IoArrowUndo, IoImage, IoTrash } from 'react-icons/io5'
-import { leftDown, modIcon, rightDown } from '../../lib/keyboard'
+import { leftDown, modIcon, rightDown } from '../../lib/utils/keyboard'
 
 const makePixelGrid = (): PaletteItem[][] => new Array(16).fill(0).map(() => new Array(16).fill(transparent))
 const textToPixelGrid = (text: string): PaletteItem[][] => {

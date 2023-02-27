@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import { getSession, makeGame } from '../../lib/account'
+import { getSession, makeGame } from '../../lib/game-saving/account'
 import { defaultExampleCode } from '../../lib/examples'
 
 export const get: APIRoute = async ({ cookies, redirect }) => {

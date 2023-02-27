@@ -1,7 +1,7 @@
 import { effect, Signal } from '@preact/signals'
 import { InstrumentType, tones, Tune } from '../../lib/engine/1-base/tune'
 import { playFrequency } from '../../lib/engine/3-editor/tune'
-import { lazy } from '../../lib/lazy'
+import { lazy } from '../../lib/utils/lazy'
 
 // Weird representations are used here:
 // - Tune: see editor/tune.ts in the engine, represents the native tune format

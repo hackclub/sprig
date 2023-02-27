@@ -1,10 +1,12 @@
 ---
 import '../../global.css'
-import { firestore, getGame, getSession } from '../../lib/account'
+import { firestore, getGame, getSession } from '../../lib/game-saving/account'
 import Editor from '../../components/big-interactive-pages/editor'
 import StandardHead from '../../components/standard-head.astro'
 import { signal } from '@preact/signals'
 import type { PersistenceState } from '../../lib/state'
+import MobileUnsupported from '../../components/popups-etc/mobile-unsupported'
+import { mobileUserAgent } from '../../lib/utils/mobile'
 
 const session = await getSession(Astro.cookies)
 if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
@@ -42,6 +44,7 @@ if (session.session.full) {
 }
 
 const persistenceState = signal<PersistenceState>(_persistenceState)
+const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 ---
 
 <html lang='en'>
@@ -54,5 +57,6 @@ const persistenceState = signal<PersistenceState>(_persistenceState)
 			persistenceState={persistenceState}
 			cookies={{ outputAreaSize: Astro.cookies.get('outputAreaSize').number() }}
 		/>
+		{isMobile ? <MobileUnsupported /> : null}
 	</body>
 </html>

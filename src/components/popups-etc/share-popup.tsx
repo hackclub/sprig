@@ -1,6 +1,6 @@
 import { Signal, useSignal } from '@preact/signals'
 import { IoLink } from 'react-icons/io5'
-import { usePopupCloseClick } from '../../lib/popup-close-click'
+import { usePopupCloseClick } from '../../lib/utils/popup-close-click'
 import type { PersistenceState } from '../../lib/state'
 import Button from '../design-system/button'
 import popupStyles from './navbar-popup.module.css'

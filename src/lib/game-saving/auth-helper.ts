@@ -1,7 +1,7 @@
 import { Signal, useComputed, useSignal, useSignalEffect } from '@preact/signals'
 import { Game, SessionInfo } from './account'
 import { isValidEmail } from './email'
-import { codeMirror, PersistenceState } from './state'
+import { codeMirror, PersistenceState } from '../state'
 
 export type AuthState =
 	| 'IDLE'

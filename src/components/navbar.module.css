@@ -202,6 +202,7 @@
 		flex-direction: column;
 		align-items: center;
 		gap: 0;
+		padding-top: 4px;
 	}
 }
 

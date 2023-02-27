@@ -3,8 +3,8 @@ import admin from 'firebase-admin'
 import { initializeApp } from 'firebase-admin/app'
 import { getFirestore, Timestamp } from 'firebase-admin/firestore'
 import { customAlphabet } from 'nanoid/async'
-import { lazy } from './lazy'
-import { generateGameName } from './words'
+import { lazy } from '../utils/lazy'
+import { generateGameName } from '../words'
 
 const numberid = customAlphabet('0123456789')
 

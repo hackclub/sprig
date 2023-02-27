@@ -1,5 +1,5 @@
 import type { Signal } from '@preact/signals'
-import { persist, useAuthHelper } from '../../lib/auth-helper'
+import { persist, useAuthHelper } from '../../lib/game-saving/auth-helper'
 import type { PersistenceState } from '../../lib/state'
 import Button from '../design-system/button'
 import Input from '../design-system/input'

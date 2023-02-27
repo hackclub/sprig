@@ -1,6 +1,6 @@
 import _sendgrid from '@sendgrid/mail'
 import type { Game, User } from './account'
-import { lazy } from './lazy'
+import { lazy } from '../utils/lazy'
 
 export const isValidEmail = (email: string): boolean => /^\S+@\S+\.\S+$/.test(email)
 

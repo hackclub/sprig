@@ -2,7 +2,7 @@ import { useSignal, useSignalEffect } from '@preact/signals'
 import { useEffect } from 'preact/hooks'
 import { IoClose } from 'react-icons/io5'
 import tinykeys from 'tinykeys'
-import { usePopupCloseClick } from '../../lib/popup-close-click'
+import { usePopupCloseClick } from '../../lib/utils/popup-close-click'
 import { codeMirror, editors, openEditor } from '../../lib/state'
 import styles from './editor-modal.module.css'
 

@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
-import { firestore, getSession, getUserByEmail, makeOrUpdateSession } from '../../../lib/account'
-import { isValidEmail } from '../../../lib/email'
+import { firestore, getSession, getUserByEmail, makeOrUpdateSession } from '../../../lib/game-saving/account'
+import { isValidEmail } from '../../../lib/game-saving/email'
 
 export const post: APIRoute = async ({ request, cookies }) => {
 	const session = await getSession(cookies)

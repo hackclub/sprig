@@ -4,7 +4,9 @@ import Editor from '../../components/big-interactive-pages/editor'
 import StandardHead from '../../components/standard-head.astro'
 import { signal } from '@preact/signals'
 import type { PersistenceState } from '../../lib/state'
-import { getSession, getSnapshotData } from '../../lib/account'
+import { getSession, getSnapshotData } from '../../lib/game-saving/account'
+import MobilePlayer from '../../components/big-interactive-pages/mobile-player'
+import { mobileUserAgent } from '../../lib/utils/mobile'
 
 const session = await getSession(Astro.cookies)
 const snapshotData = await getSnapshotData(Astro.params.snapshotId!)
@@ -18,6 +20,7 @@ const persistenceState = signal<PersistenceState>({
 	stale: false,
 	session
 })
+const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 ---
 
 <html lang='en'>
@@ -25,10 +28,19 @@ const persistenceState = signal<PersistenceState>({
 		<StandardHead title={snapshotData.name || 'Shared Game'} />
 	</head>
 	<body>
-		<Editor
-			client:load
-			persistenceState={persistenceState}
-			cookies={{ outputAreaSize: Astro.cookies.get('outputAreaSize').number() }}
-		/>
+		{isMobile ? (
+			<MobilePlayer
+				client:load
+				code={snapshotData.code}
+				gameName={snapshotData.name}
+				authorName={snapshotData.ownerName}
+			/>
+		) : (
+			<Editor
+				client:load
+				persistenceState={persistenceState}
+				cookies={{ outputAreaSize: Astro.cookies.get('outputAreaSize').number() }}
+			/>
+		)}
 	</body>
 </html>

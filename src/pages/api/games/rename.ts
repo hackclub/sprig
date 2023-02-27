@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { Timestamp } from 'firebase-admin/firestore'
-import { firestore, getGame, getSession } from '../../../lib/account'
+import { firestore, getGame, getSession } from '../../../lib/game-saving/account'
 
 export const post: APIRoute = async ({ request, cookies }) => {
 	let gameId: string
