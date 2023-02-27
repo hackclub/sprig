@@ -1,7 +1,7 @@
 import { Signal, useSignal } from '@preact/signals'
 import { useEffect } from 'preact/hooks'
 import { IoOpenOutline } from 'react-icons/io5'
-import { getPuzzleLabFromLocalStorage } from '../../lib/legacy-migration'
+import { getPuzzleLabFromLocalStorage } from '../../lib/game-saving/legacy-migration'
 import { PersistenceState } from '../../lib/state'
 import Button from '../design-system/button'
 import styles from './migrate-toast.module.css'

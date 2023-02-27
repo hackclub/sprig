@@ -4,8 +4,10 @@ import Editor from '../../components/big-interactive-pages/editor'
 import StandardHead from '../../components/standard-head.astro'
 import { signal } from '@preact/signals'
 import type { PersistenceState } from '../../lib/state'
-import { getSession } from '../../lib/account'
-import { extractMetadata } from '../../lib/extract-metadata'
+import { getSession } from '../../lib/game-saving/account'
+import { extractMetadata } from '../../lib/game-saving/extract-metadata'
+import MobilePlayer from '../../components/big-interactive-pages/mobile-player'
+import { mobileUserAgent } from '../../lib/utils/mobile'
 
 const session = await getSession(Astro.cookies)
 
@@ -23,6 +25,7 @@ const persistenceState = signal<PersistenceState>({
 	stale: false,
 	session
 })
+const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 ---
 
 <html lang='en'>
@@ -30,10 +33,19 @@ const persistenceState = signal<PersistenceState>({
 		<StandardHead title={name} />
 	</head>
 	<body>
-		<Editor
-			client:load
-			persistenceState={persistenceState}
-			cookies={{ outputAreaSize: Astro.cookies.get('outputAreaSize').number() }}
-		/>
+		{isMobile ? (
+			<MobilePlayer
+				client:load
+				code={cleanedCode}
+				gameName={(name ?? filename) || 'Untitled'}
+				authorName={authorName || ''}
+			/>
+		) : (
+			<Editor
+				client:load
+				persistenceState={persistenceState}
+				cookies={{ outputAreaSize: Astro.cookies.get('outputAreaSize').number() }}
+			/>
+		)}
 	</body>
 </html>

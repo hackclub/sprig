@@ -7,7 +7,7 @@ import BitmapEditor from '../components/subeditors/bitmap-editor'
 import ColorPickerEditor from '../components/subeditors/color-picker'
 import MapEditor from '../components/subeditors/map-editor'
 import SequencerEditor from '../components/subeditors/sequencer'
-import type { Game, SessionInfo } from './account'
+import type { Game, SessionInfo } from './game-saving/account'
 
 // Error handling
 export interface NormalizedError {

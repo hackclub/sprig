@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import { getGame, getSession, makeSnapshot } from '../../../lib/account'
+import { getGame, getSession, makeSnapshot } from '../../../lib/game-saving/account'
 
 export const post: APIRoute = async ({ request, cookies }) => {
 	let gameId: string

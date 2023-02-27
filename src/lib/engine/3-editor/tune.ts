@@ -12,7 +12,7 @@ Comma between each tune element. Whitespace ignored.
 */
 
 import { effect } from '@preact/signals'
-import { lazy } from '../../lazy'
+import { lazy } from '../../utils/lazy'
 import { muted } from '../../state'
 import { instruments, InstrumentType, tones, type Tune } from '../1-base/tune'
 
