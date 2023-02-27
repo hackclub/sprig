@@ -27,7 +27,7 @@ interface ResizeState {
 	startValue: number
 }
 
-const minOutputAreaSize = 400
+const minOutputAreaSize = 360
 const defaultOutputAreaSize = 400
 const heightMargin = 130
 
@@ -40,7 +40,7 @@ const foldAllTemplateLiterals = () => {
 
 export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Resize state storage
-	const outputAreaSize = useSignal(cookies.outputAreaSize ?? defaultOutputAreaSize)
+	const outputAreaSize = useSignal(Math.max(minOutputAreaSize, cookies.outputAreaSize ?? defaultOutputAreaSize))
 	useSignalEffect(() => {
 		document.cookie = `outputAreaSize=${outputAreaSize.value};path=/;max-age=${60 * 60 * 24 * 365}`
 	})
@@ -94,15 +94,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		}
 	}
 	useEffect(() => () => cleanup.current?.(), [])
-
-	/*
-	- reached debounce callback
-		- previous promise? call this one after it
-		- no previous promise? call this one right away
-	- end of debounce callack
-		- is this the last callback? set cloudSaveState to SAVED/ERROR
-		- is this not the last callback? do nothing
-	*/
 
 	// Losing work is bad, let's save the user's code
 	const lastSavePromise = useRef<Promise<void>>(Promise.resolve())
