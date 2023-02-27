@@ -28,6 +28,7 @@
 
 /* Navlinks */
 .navlinks {
+	flex: 1;
 	gap: 4px;
 }
 
