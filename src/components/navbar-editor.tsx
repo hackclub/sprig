@@ -8,8 +8,10 @@ import { persist } from '../lib/auth-helper'
 import InlineInput from './design-system/inline-input'
 import debounce from 'debounce'
 import SharePopup from './popups-etc/share-popup'
-import { IoSaveOutline, IoShareOutline, IoShuffle } from 'react-icons/io5'
+import { IoPlay, IoSaveOutline, IoShareOutline, IoShuffle, IoWarning } from 'react-icons/io5'
 import { usePopupCloseClick } from '../lib/popup-close-click'
+import { upload, uploadState } from '../lib/upload'
+import { VscLoading } from 'react-icons/vsc'
 
 const saveName = debounce(async (gameId: string, newName: string) => {
 	try {
@@ -121,6 +123,23 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				</li>
 				<li class={styles.saveState}>{saveState}</li>
 			</ul>
+
+			<li>
+				<Button
+					accent
+					icon={{
+						IDLE: IoPlay,
+						LOADING: VscLoading,
+						ERROR: IoWarning
+					}[uploadState.value]}
+					spinnyIcon={uploadState.value === 'LOADING'}
+					loading={uploadState.value === 'LOADING'}
+					onClick={() => upload(codeMirror.value?.state.doc.toString() ?? '')}
+				>
+					Run on Device
+				</Button>
+			</li>
+
 			<li>{actionButton}</li>
 		</nav>
 

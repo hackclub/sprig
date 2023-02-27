@@ -7,7 +7,6 @@
 	flex-direction: row;
 	padding: 0 8px;
 	gap: 8px;
-	justify-content: space-between;
 	align-items: center;
 	position: relative;
 	text-align: center;
@@ -61,6 +60,7 @@
 /* Editor navbar */
 .editorStats {
 	gap: 10px;
+	flex: 1;
 }
 
 .attribution {
