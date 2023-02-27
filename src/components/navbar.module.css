@@ -86,12 +86,20 @@
 .logo a, .logo button {
 	font-weight: bold;
 	gap: 6px;
+	padding: 0 10px;
+	margin-left: 10px;
 }
 
-.logo :global(svg) {
+.logo .longImg {
+	transform: translateY(2px);
+}
+
+.logo .dino {
+	align-self: flex-end;
+}
+
+.logo .caret :global(svg) {
 	display: block;
-	height: 24px;
-	width: 24px;
 }
 
 .logo button {

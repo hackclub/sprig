@@ -1,7 +1,6 @@
 import { IoAdd, IoLogoGithub, IoOpenOutline } from 'react-icons/io5'
 import Button from './design-system/button'
 import styles from './navbar.module.css'
-import SprigIcon from './design-system/sprig-icon'
 import { SessionInfo } from '../lib/account'
 
 interface MainNavbarProps {
@@ -13,7 +12,11 @@ export default function MainNavbar(props: MainNavbarProps) {
 	return (
 		<nav class={`${styles.container} ${props.transparent ? styles.transparent : ''}`}>
 			<ul class={styles.navlinks}>
-				<li class={styles.logo}><a href='/'><SprigIcon /> <span class={styles.logoText}>Sprig</span></a></li>
+				<li class={styles.logo}>
+					<a href='/'>
+						<img class={styles.longImg} src='/spriglogotext-white.png' height={30} width={87} alt='Sprig Logo' />
+					</a>
+				</li>
 				{props.session?.session.full ? (
 					<li>
 						<a href='/~'>Your Games</a>
