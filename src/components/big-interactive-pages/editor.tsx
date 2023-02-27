@@ -95,10 +95,21 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	}
 	useEffect(() => () => cleanup.current?.(), [])
 
+	/*
+	- reached debounce callback
+		- previous promise? call this one after it
+		- no previous promise? call this one right away
+	- end of debounce callack
+		- is this the last callback? set cloudSaveState to SAVED/ERROR
+		- is this not the last callback? do nothing
+	*/
+
 	// Losing work is bad, let's save the user's code
-	const saveQueue = useRef<Promise<void>[]>([])
+	const lastSavePromise = useRef<Promise<void>>(Promise.resolve())
+	const saveQueueSize = useRef(0)
 	const saveGame = debounce((code: string) => {
-		const promise = (async () => {
+		const doSave = async () => {
+			let isError = false
 			try {
 				const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null
 				const res = await fetch('/api/games/save', {
@@ -109,22 +120,19 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 				if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`)
 			} catch (error) {
 				console.error(error)
-				if (persistenceState.value.kind === 'PERSISTED')
-					persistenceState.value = {
-						...persistenceState.value,
-						cloudSaveState: 'ERROR'
-					}
+				isError = true
 			}
-		})()
-		saveQueue.current.push(promise)
-		promise.then(() => {
-			saveQueue.current = saveQueue.current.filter((q) => q !== promise)
-			if (saveQueue.current.length === 0 && persistenceState.value.kind === 'PERSISTED')
+
+			saveQueueSize.current--
+			if (saveQueueSize.current === 0 && persistenceState.value.kind === 'PERSISTED')
 				persistenceState.value = {
 					...persistenceState.value,
-					cloudSaveState: 'SAVED'
+					cloudSaveState: isError ? 'ERROR' : 'SAVED'
 				}
-		})
+		}
+
+		saveQueueSize.current++
+		lastSavePromise.current = (lastSavePromise.current ?? Promise.resolve()).then(doSave)
 	}, 1000)
 
 	// Warn before leave
