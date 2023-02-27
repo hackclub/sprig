@@ -54,7 +54,7 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 		}
 	}
 
-	code = `"use strict"\n${code}`
+	code = `"use strict";\n${code}`
 	
 	try {
 		parseScript(code)
@@ -91,7 +91,7 @@ export function runGameHeadless(code: string): void {
 		playTune: () => {}
 	}
 
-	code = `"use strict"\n${code}`
+	code = `"use strict";\n${code}`
 	try {
 		const fn = new Function(...Object.keys(api), code)
 		fn(...Object.values(api))
