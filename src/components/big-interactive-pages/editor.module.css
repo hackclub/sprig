@@ -104,8 +104,8 @@
 	font-size: 0.9em;
 	display: flex;
 	flex-direction: row;
-	min-width: 400px;
 	justify-content: space-between;
+	gap: 10px;
 	align-items: center;
 	padding: 8px 0;
 }
@@ -135,4 +135,7 @@
 .screenControls .screenSize {
 	color: var(--accent-light);
 	user-select: none;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
