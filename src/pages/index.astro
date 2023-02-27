@@ -431,9 +431,9 @@ const session = await getSession(Astro.cookies)
 					const height = parseInt(m.style.height)
 					const left = parseInt(m.style.left)
 					const top = parseInt(m.style.top)
-
-					const x = mousePageCoords.x - left
-					const y = mousePageCoords.y - top
+					
+					const x = mousePageCoords.x - left + document.body.scrollLeft
+					const y = mousePageCoords.y - top + document.body.scrollTop
 
 					// calculate mouse position in normalized device coordinates
 					// (-1 to +1) for both components
