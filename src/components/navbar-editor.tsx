@@ -3,12 +3,11 @@ import { codeMirror, PersistenceState } from '../lib/state'
 import Button from './design-system/button'
 import SavePrompt from './popups-etc/save-prompt'
 import styles from './navbar.module.css'
-import SprigIcon from './design-system/sprig-icon'
 import { persist } from '../lib/auth-helper'
 import InlineInput from './design-system/inline-input'
 import debounce from 'debounce'
 import SharePopup from './popups-etc/share-popup'
-import { IoPlay, IoSaveOutline, IoShareOutline, IoShuffle, IoWarning } from 'react-icons/io5'
+import { IoChevronDown, IoPlay, IoSaveOutline, IoShareOutline, IoShuffle, IoWarning } from 'react-icons/io5'
 import { usePopupCloseClick } from '../lib/popup-close-click'
 import { upload, uploadState } from '../lib/upload'
 import { VscLoading } from 'react-icons/vsc'
@@ -101,7 +100,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			<ul class={styles.editorStats}>
 				<li class={`${styles.logo} ${showNavPopup.value ? styles.active : ''}`}>
 					<button onClick={() => showNavPopup.value = !showNavPopup.value}>
-						<SprigIcon />
+						{/* <SprigIcon /> */}
+						<img class={styles.dino} src='/SPRIGDINO.png' height={38} />
+						<div class={styles.caret}><IoChevronDown /></div>
 					</button>
 				</li>
 				<li class={styles.filename}>
