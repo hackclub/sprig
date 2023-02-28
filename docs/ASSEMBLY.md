@@ -46,7 +46,7 @@ Below are instructions for assembling your Sprig console.
 
 ![Photo of two plastic pieces stacked atop a PCB](https://cloud-obltnnp51-hack-club-bot.vercel.app/3backing2.jpg)
 
-5. Put the shorter screws in holes and add nuts on the top side of the board. Tighten using the allen key provided. Repeat for the other side, with the other D-pad cutout.
+5. Put the shorter screws in holes and add nuts on the top side of the board. Tighten using the allen key provided. Repeat for the clear backings on the other side.
 
 ![Four screws securing 2 pieces of plastic to a PCB](https://cloud-obltnnp51-hack-club-bot.vercel.app/2backing-withscrews.jpg)
 
