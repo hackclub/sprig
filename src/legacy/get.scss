@@ -78,23 +78,24 @@ nav {
 		background-position: bottom 200px center;
 	}
 	
+	a:not(:has(.btn)) {
+		color: #66ebb6;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
 	.heading-inner {
 		width: 75%;
 		margin: auto;
-	
-		a {
-			color: #66ebb6;
-	
-			&:hover {
-				text-decoration: underline;
-			}
-		}
 	}
 	
 	.step {
 		display: grid;
 		grid-template-columns: 1fr;
 		padding-bottom: 7vh;
+		line-height: 1.5;
 	}
 	
 	.bottom-cta {

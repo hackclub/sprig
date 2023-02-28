@@ -6,20 +6,11 @@ import Navbar from '../../components/navbar-main'
 import StandardHead from '../../components/standard-head.astro'
 import Button from '../../components/design-system/button'
 import Input from '../../components/design-system/input'
+import { getGalleryGames } from '../../lib/game-saving/gallery'
 
 const session = await getSession(Astro.cookies)
 
-interface GameMetadata {
-	filename: string
-	title: string
-	author: string
-	img: string
-	tags: string[]
-	addedOn: string
-	isNew: true | undefined
-}
-
-const games = await fetch('https://editor.sprig.hackclub.com/metadata.json').then((res) => res.json()) as GameMetadata[]
+const games = await getGalleryGames()
 const tags = [ ...new Set(games.reduce<string[]>((p, c) => [ ...p, ...c.tags ], [])) ]
 
 // Put tutorials first and sort everything else alphabetically
