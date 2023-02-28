@@ -825,6 +825,7 @@ const despawnbrownsubstance1 = setInterval(despawnbrownsubstance, 1);
 const checkbrownsubstancecatch1 = setInterval(checkbrownsubstancecatch, 1);
 
 
+     if (game1 == false) {
 onInput("d", () => {
 
   getFirst(player).x += 1
@@ -833,6 +834,8 @@ onInput("d", () => {
 onInput("a", () => {
   getFirst(player).x -= 1
 });
+       game1 = true;
+}
 
 onInput("j", () => {
     let p = getAll(player);  
