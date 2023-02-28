@@ -33,29 +33,15 @@ const session = await getSession(Astro.cookies)
 				<div class="step">
 					<div>
 						<p class="step-number">Step 0:</p>
-						<h2>Name your game</h2>
-						<p>Add the following comment.</p>
-					</div>
-					<code class="media">
-						/*<br />
-						@title: your_game<br />
-						@author: your name<br />
-						*/
-					</code>
-				</div>
-		
-				<div class="step">
-					<div>
-						<p class="step-number">Step 1:</p>
 						<h2>Download your game file</h2>
-						<p>Select "file", "share", then "as file". Your download should begin immediately.</p>
+						<p>In the top left Sprig menu, press "Download". Your file should start downloading immediately.</p>
 					</div>
 					<img class="media" src="/screenshots/export.png" alt="screenshot of where to export the game file" />
 				</div>
 		
 				<div class="step">
 					<div>
-						<p class="step-number">Step 2:</p>
+						<p class="step-number">Step 1:</p>
 						<h2>Fork the Sprig repository</h2>
 						<p>Click below to create a fork of the Sprig repository.</p>
 						<p>You might have to sign up for a GitHub account.</p>
@@ -70,7 +56,7 @@ const session = await getSession(Astro.cookies)
 		
 				<div class="step">
 					<div>
-						<p class="step-number">Step 3:</p>
+						<p class="step-number">Step 2:</p>
 						<h2>Upload your game to your fork</h2>
 						<ul>
 							<li>Open the "Games" folder within your fork</li>
@@ -84,7 +70,7 @@ const session = await getSession(Astro.cookies)
 		
 				<div class="step">
 					<div>
-						<p class="step-number">(Optional) Step 4:</p>
+						<p class="step-number">(Optional) Step 3:</p>
 						<h2>Add custom thumbnail</h2>
 						<p>
 							By default, the thumbnail that shows up in the gallery will be the first map of your game. If you want to
@@ -105,17 +91,18 @@ const session = await getSession(Astro.cookies)
 		
 				<div class="step">
 					<div>
-						<p class="step-number">Step 5:</p>
+						<p class="step-number">Step 4:</p>
 						<h2>Create a pull request</h2>
 						<ul>
 							<li>On your fork's page, click on "Contribute"</li>
 							<li>Select "Open Pull Request"</li>
 							<li>Click "Create Pull Request"</li>
 							<li>Name your pull request with the name of your game</li>
-							<li>Write some description of your game and your experience coding.</li>
+							<li>In the body, describe your game and your experience coding</li>
 							<li>Click "Create Pull Request"</li>
 						</ul>
 						<p>We'll take a look at your game! Once approved, your game will appear in the gallery :)</p>
+						<p>If you're a high schooler and your game meets <a href="https://github.com/hackclub/sprig/blob/main/docs/GET_A_SPRIG.md" target="_blank">the requirements</a> we'll also get in touch to mail you a physical Sprig of your own.</p>
 					</div>
 					<img class="media" src="/screenshots/contribute.png" alt="screenshot of the create pull request button" />
 				</div>
