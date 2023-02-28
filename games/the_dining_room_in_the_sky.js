@@ -70,6 +70,15 @@ const trcorner = "x";
 const tlcorner = "y";
 const right = "z";
 
+onInput("d", () => {
+
+  getFirst(player).x += 1
+});
+
+onInput("a", () => {
+  getFirst(player).x -= 1
+});
+          
 
 setLegend(
   [ player, bitmap`
@@ -825,14 +834,7 @@ const despawnbrownsubstance1 = setInterval(despawnbrownsubstance, 1);
 const checkbrownsubstancecatch1 = setInterval(checkbrownsubstancecatch, 1);
 
 
-onInput("d", () => {
 
-  getFirst(player).x += 1
-});
-
-onInput("a", () => {
-  getFirst(player).x -= 1
-});
 
 onInput("j", () => {
     let p = getAll(player);  
@@ -891,7 +893,6 @@ onInput("w", () => {
 
   }  
 });
-
 onInput("s", () => {
     clearText();
   addText(`Score:${Score}`, { 
