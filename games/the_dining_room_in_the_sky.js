@@ -623,7 +623,7 @@ onInput("w", () => {
 ..........
 ..........`);
     clearText();
-    playback.end();
+    if (playback) playback.end();
     gameover = true;
     gameon = false;
     setBackground(endscreen)
@@ -872,7 +872,7 @@ onInput("i", () => {
 });
 
 onInput("k", () => {
-    playback.end()
+    if (playback) playback.end()
 });
 
 onInput("w", () => {
