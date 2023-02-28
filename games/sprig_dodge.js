@@ -13,6 +13,8 @@ To complete each step you'll have to edit the code.
 
 The code for this game starts below this comment.
 
+This code has intentional errors.
+
 Made based on this workshop https://workshops.hackclub.com/sprig_dodge/
 
 The goal is to dodge the fireballs.
