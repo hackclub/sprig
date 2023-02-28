@@ -19,6 +19,7 @@ var havebrownsubstance = false;
 const brownsubstanceinventory = "i";
 const cloud ="j";
 const cloud2 ="k";
+var game1 = false;
 const melody = tune`
 265.4867256637168: c4^265.4867256637168,
 265.4867256637168: a4-265.4867256637168,
@@ -825,6 +826,7 @@ const despawnbrownsubstance1 = setInterval(despawnbrownsubstance, 1);
 const checkbrownsubstancecatch1 = setInterval(checkbrownsubstancecatch, 1);
 
 
+     if (game1 == false) {
 onInput("d", () => {
 
   getFirst(player).x += 1
@@ -833,6 +835,8 @@ onInput("d", () => {
 onInput("a", () => {
   getFirst(player).x -= 1
 });
+       game1 = true;
+}
 
 onInput("j", () => {
     let p = getAll(player);  
