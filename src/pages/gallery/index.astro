@@ -22,9 +22,9 @@ interface GameMetadata {
 const games = await fetch('https://editor.sprig.hackclub.com/metadata.json').then((res) => res.json()) as GameMetadata[]
 const tags = [ ...new Set(games.reduce<string[]>((p, c) => [ ...p, ...c.tags ], [])) ]
 
-// Sort alphabetically, then put tutorials first
+// Put tutorials first and sort everything else alphabetically
 games
-	.sort((a, b) => a.title > b.title ? 1 : -1)
+	.sort((a, b) => a.tags.includes('tutorial') ? -1 : (a.title > b.title ? 1 : -1))
 	.sort((a, _) => a.tags.includes('tutorial') ? -1 : 1)
 
 // Add isNew attribute to 10 newest games
