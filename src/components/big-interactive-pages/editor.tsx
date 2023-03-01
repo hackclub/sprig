@@ -9,7 +9,7 @@ import EditorModal from '../popups-etc/editor-modal'
 import { runGame } from '../../lib/engine/3-editor'
 import DraftWarningModal from '../popups-etc/draft-warning'
 import Button from '../design-system/button'
-import debounce from 'debounce'
+import { debounce } from 'throttle-debounce'
 import Help from '../popups-etc/help'
 import { collapseRanges } from '../../lib/codemirror/util'
 import { defaultExampleCode } from '../../lib/examples'
@@ -37,6 +37,36 @@ const foldAllTemplateLiterals = () => {
 	const matches = [ ...code.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
 	collapseRanges(codeMirror.value, matches.map((match) => [ match.index!, match.index! + 1 ]))
 }
+
+let lastSavePromise = Promise.resolve()
+let saveQueueSize = 0
+const saveGame = debounce(800, (persistenceState: Signal<PersistenceState>, code: string) => {
+	const doSave = async () => {
+		let isError = false
+		try {
+			const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null
+			const res = await fetch('/api/games/save', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ code, gameId: game?.id })
+			})
+			if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`)
+		} catch (error) {
+			console.error(error)
+			isError = true
+		}
+
+		saveQueueSize--
+		if (saveQueueSize === 0 && persistenceState.value.kind === 'PERSISTED')
+			persistenceState.value = {
+				...persistenceState.value,
+				cloudSaveState: isError ? 'ERROR' : 'SAVED'
+			}
+	}
+
+	saveQueueSize++
+	lastSavePromise = (lastSavePromise ?? Promise.resolve()).then(doSave)
+})
 
 export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Resize state storage
@@ -94,37 +124,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		}
 	}
 	useEffect(() => () => cleanup.current?.(), [])
-
-	// Losing work is bad, let's save the user's code
-	const lastSavePromise = useRef<Promise<void>>(Promise.resolve())
-	const saveQueueSize = useRef(0)
-	const saveGame = debounce((code: string) => {
-		const doSave = async () => {
-			let isError = false
-			try {
-				const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null
-				const res = await fetch('/api/games/save', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ code, gameId: game?.id })
-				})
-				if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`)
-			} catch (error) {
-				console.error(error)
-				isError = true
-			}
-
-			saveQueueSize.current--
-			if (saveQueueSize.current === 0 && persistenceState.value.kind === 'PERSISTED')
-				persistenceState.value = {
-					...persistenceState.value,
-					cloudSaveState: isError ? 'ERROR' : 'SAVED'
-				}
-		}
-
-		saveQueueSize.current++
-		lastSavePromise.current = (lastSavePromise.current ?? Promise.resolve()).then(doSave)
-	}, 1000)
 
 	// Warn before leave
 	useSignalEffect(() => {
@@ -189,7 +188,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 									...persistenceState.value,
 									cloudSaveState: 'SAVING'
 								}
-								saveGame(codeMirror.value!.state.doc.toString())
+								saveGame(persistenceState, codeMirror.value!.state.doc.toString())
 							}
 						}}
 					/>
