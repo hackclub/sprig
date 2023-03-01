@@ -3,8 +3,6 @@
 @author: Dylan Tran
 */
 
-        let Score = 0;
-
 const player = "1";
 const spriteKey = "a";
 const ground = "b";
@@ -13,12 +11,25 @@ const trash = "d";
 const food = "e";
 const paper = "f";
 const brownsubstance = "g";
-var havepaper = false;
 const paperinventory = "h";
-var havebrownsubstance = false;
 const brownsubstanceinventory = "i";
 const cloud ="j";
 const cloud2 ="k";
+const bigpaper = "l";
+const bottomsmallbrownsubstance = "m";
+const endscreen = "n";
+const topleft = "o";
+const topright = "p";
+const bottomleft = "q";
+const bottomright = "r";
+const left = "s";
+const above = "t";
+const below = "u";
+const blcorner = "v";
+const brcorner = "w";
+const trcorner = "x";
+const tlcorner = "y";
+const right = "z";
 const melody = tune`
 265.4867256637168: c4^265.4867256637168,
 265.4867256637168: a4-265.4867256637168,
@@ -51,24 +62,11 @@ const melody = tune`
 265.4867256637168: e4~265.4867256637168,
 265.4867256637168: e4-265.4867256637168 + a4^265.4867256637168,
 265.4867256637168`
-const bigpaper = "l";
-const bottomsmallbrownsubstance = "m";
+let Score = 0;
+var havepaper = false;
+var havebrownsubstance = false;
 var gameon = false;
-var gameover = false;
-const endscreen = "n";
-const topleft = "o";
-const topright = "p";
-const bottomleft = "q";
-const bottomright = "r";
-const left = "s";
-
-const above = "t";
-const below = "u";
-const blcorner = "v";
-const brcorner = "w";
-const trcorner = "x";
-const tlcorner = "y";
-const right = "z";
+var gameonyet = false;
 
 
 setLegend(
@@ -531,8 +529,8 @@ DDDDDDDD11111111
 DDDDDDDD11111111
 DDDDDDDD11777777
 DDDDDDDD11777777`],
-  
 );
+
 setMap(map`
 ..............
 ..............
@@ -608,10 +606,17 @@ setMap(map`
        addSprite(7, 8, bigpaper);
        addSprite(6, 9, bottomsmallbrownsubstance);
 
-
 onInput("w", () => {
   if (gameon == false) {
-    gameon = true;
+
+  function endgame() {
+  clearInterval(spawnpaper1);
+  clearInterval(spawnbrownsubstance1);
+  clearInterval(spawnfood1);
+  setTimeout(endmap, 4000);
+
+};   
+  setTimeout(endgame, 300000);
   function endmap() {
     setMap( map`
 ...yttx...
@@ -624,8 +629,6 @@ onInput("w", () => {
 ..........`);
     clearText();
     if (playback) playback.end();
-    gameover = true;
-    gameon = false;
     setBackground(endscreen)
     addText(`Final Score:${Score}`, { 
         x: 3,
@@ -652,19 +655,12 @@ onInput("w", () => {
       y: 12,
       color: color`3`});
     Score = 0;
+   gameon = false;
   };
-  function endgame() {
-  clearInterval(spawnpaper1 );
-  clearInterval(spawnbrownsubstance1);
-  clearInterval(spawnfood1);
-  setTimeout(endmap, 3000);
-};   
-  setTimeout(endgame, 300000);
-  const playback = playTune(melody, Infinity)
-
-setSolids([player, ground, trash, recycle]);
-setBackground(spriteKey)
-    setMap( map`
+  
+  setSolids([player, ground, trash, recycle]);
+  setBackground(spriteKey)
+  setMap( map`
 j.....j.......j
 ....j....k..k..
 .kj.k..k......j
@@ -677,35 +673,33 @@ j.......j...j.j
 ...............
 c......1......d
 bbbbbbbbbbbbbbb`)
-        clearText();
-        addText(`Score:${Score}`, { 
+  clearText();
+  addText(`Score:${Score}`, { 
         x: 6,
         y: 0,
         color: color`5`});
-
-function spawnfood() {
+  const playback = playTune(melody, Infinity);
+  
+  function spawnfood() {
   let x = Math.floor(Math.random() * 13)+1;
     addSprite(x, 0, food);
    };
-
-function movefood() {
+  function movefood() {
   let object = getAll(food);
 
   for (let i = 0; i < object.length; i++) {
     object[i].y += 1;
   }
-}
-
-function despawnfood() {
+};
+  function despawnfood() {
   let object = getAll(food);
   for (let i = 0; i < object.length; i++) {
     if (object[i].y >= 11) {
       object[i].remove();
     }
   }
-}
-
-function checkHit() {
+};
+  function checkHit() {
   let p = getAll(player);  
   let obstacles = getAll(food);
   for (let i = 0; i < obstacles.length; i++) {
@@ -721,33 +715,19 @@ function checkHit() {
       }
     }
   }
-}
-
-
-const spawnfood1 = setInterval(spawnfood, 800);
-
-const movefood1 = setInterval(movefood, 300);
-
-const despawnfood1 = setInterval(despawnfood, 1);
-
-const checkfoodcatch1 = setInterval(checkHit, 1);
-
-
-
-function spawnpaper() {
+};
+  function spawnpaper() {
   let x = Math.floor(Math.random() * 13)+1;
     addSprite(x, 0, paper);
    };
-
-function movepaper() {
+  function movepaper() {
   let object = getAll(paper);
 
   for (let i = 0; i < object.length; i++) {
     object[i].y += 1;
   }
-}
-
-function despawnpaper() {
+};
+  function despawnpaper() {
   let object = getAll(paper);
 
   for (let i = 0; i < object.length; i++) {
@@ -755,9 +735,8 @@ function despawnpaper() {
       object[i].remove();
     }
   }
-}
-
-function checkpapercatch() {
+};
+  function checkpapercatch() {
   let p = getAll(player);  
   let obstacles = getAll(paper);
   for (let i = 0; i < obstacles.length; i++) {
@@ -769,30 +748,19 @@ function checkpapercatch() {
       }
     }
   }
-}
-
-const spawnpaper1 = setInterval(spawnpaper, 1800);
-
-const movepaper1 = setInterval(movepaper, 300);
-
-const despawnpaper1 = setInterval(despawnpaper, 1);
-
-const checkpapercatch1 = setInterval(checkpapercatch, 1);
-
-function spawnbrownsubstance() {
+};
+  function spawnbrownsubstance() {
   let x = Math.floor(Math.random() * 13)+1;
     addSprite(x, 0, brownsubstance);
    };
-
-function movebrownsubstance() {
+  function movebrownsubstance() {
   let object = getAll(brownsubstance);
 
   for (let i = 0; i < object.length; i++) {
     object[i].y += 1;
   }
 }
-
-function despawnbrownsubstance() {
+  function despawnbrownsubstance() {
   let object = getAll(brownsubstance);
 
   for (let i = 0; i < object.length; i++) {
@@ -801,8 +769,7 @@ function despawnbrownsubstance() {
     }
   }
 }
-
-function checkbrownsubstancecatch() {
+  function checkbrownsubstancecatch() {
   let p = getAll(player);  
   let obstacles = getAll(brownsubstance);
   for (let i = 0; i < obstacles.length; i++) {
@@ -815,26 +782,86 @@ function checkbrownsubstancecatch() {
     }
   }
 }
+  
+  
+  const spawnfood1 = setInterval(spawnfood, 800);
+  const spawnpaper1 = setInterval(spawnpaper, 1800);
+  const spawnbrownsubstance1 = setInterval(spawnbrownsubstance, 3100);
+  
+ 
 
-const spawnbrownsubstance1 = setInterval(spawnbrownsubstance, 3100);
-
-const movebrownsubstance1 = setInterval(movebrownsubstance, 300);
-
-const despawnbrownsubstance1 = setInterval(despawnbrownsubstance, 1);
-
-const checkbrownsubstancecatch1 = setInterval(checkbrownsubstancecatch, 1);
-
-
-onInput("d", () => {
-
-  getFirst(player).x += 1
-});
-
-onInput("a", () => {
+  if (gameonyet == false) {
+  const movefood1 = setInterval(movefood, 300);
+  const despawnfood1 = setInterval(despawnfood, 1);
+  const checkfoodcatch1 = setInterval(checkHit, 1);
+  const movepaper1 = setInterval(movepaper, 300);
+  const despawnpaper1 = setInterval(despawnpaper, 1);
+  const checkpapercatch1 = setInterval(checkpapercatch, 1);
+  const movebrownsubstance1 = setInterval(movebrownsubstance, 300);
+  const despawnbrownsubstance1 = setInterval(despawnbrownsubstance, 1);
+  const checkbrownsubstancecatch1 = setInterval(checkbrownsubstancecatch, 1);
+  onInput("a", () => {
+if (gameon == true) {
   getFirst(player).x -= 1
-});
+ }
 
-onInput("j", () => {
+});
+  onInput("d", () => {
+
+if (gameon == true) {
+  getFirst(player).x += 1
+ }
+});
+  gameonyet = true;
+  }
+  
+  onInput("w", () => {
+  if (gameon == true) {
+  clearText();
+  addText(`Score:${Score}`, { 
+  x: 6,
+  y: 0,
+  color: color`5`});
+  let p = getAll(player);  
+  for (let j = 0; j < p.length; j++) {
+  addText(`meat is good`, { 
+        x: p[j].x-3,
+        y: p[j].y+2,
+        color: color`5`});
+  }
+
+
+  }  
+});
+  onInput("s", () => {
+   if (gameon == true) {
+  clearText();
+  addText(`Score:${Score}`, { 
+  x: 6,
+  y: 0,
+  color: color`5`});
+  let p = getAll(player);  
+  for (let j = 0; j < p.length; j++) {
+  addText(`can't fall`, { 
+        x: p[j].x-2,
+        y: p[j].y+2,
+        color: color`5`});
+  }  
+   }
+});
+  onInput("i", () => {
+  if (gameon == true) {
+  endgame();
+  clearInterval(spawnpaper1);
+  clearInterval(spawnbrownsubstance1);
+  clearInterval(spawnfood1);
+    
+  }
+  
+});
+  onInput("j", () => {
+  if (gameon == true) {
+
     let p = getAll(player);  
      for (let j = 0; j < p.length; j++) {
       if ( 1 == p[j].x && havepaper == true) {
@@ -848,9 +875,13 @@ onInput("j", () => {
         color: color`5`});
       }
       }
+  }
 });
-
-onInput("l", () => {
+  onInput("k", () => {
+    if (playback) playback.end()
+});
+  onInput("l", () => {
+  if (gameon == true) {
     let p = getAll(player);  
      for (let j = 0; j < p.length; j++) {
       if ( 13 == p[j].x && havebrownsubstance == true) {
@@ -864,51 +895,11 @@ onInput("l", () => {
         color: color`5`});
       }
       }
-});
-
-onInput("i", () => {
-  endgame();
-  
-});
-
-onInput("k", () => {
-    if (playback) playback.end()
-});
-
-onInput("w", () => {
-  clearText();
-  addText(`Score:${Score}`, { 
-  x: 6,
-  y: 0,
-  color: color`5`});
-  let p = getAll(player);  
-  for (let j = 0; j < p.length; j++) {
-  addText(`meat is good`, { 
-        x: p[j].x-3,
-        y: p[j].y+3,
-        color: color`5`});
-
-
-  }  
-});
-
-onInput("s", () => {
-    clearText();
-  addText(`Score:${Score}`, { 
-  x: 6,
-  y: 0,
-  color: color`5`});
-  let p = getAll(player);  
-  for (let j = 0; j < p.length; j++) {
-  addText(`can't fall`, { 
-        x: p[j].x-2,
-        y: p[j].y+3,
-        color: color`5`});
-  }  
-});
-
   }
 });
-
-
+  if (gameon == false) {
+    gameon = true;
+  }
+}
+});
 
