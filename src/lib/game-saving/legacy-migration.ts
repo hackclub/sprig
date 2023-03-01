@@ -18,7 +18,7 @@ export const getPuzzleLabFromLocalStorage = (): Promise<string> => new Promise((
 	}
 	window.addEventListener('message', listener)
 	iframe = document.createElement('iframe')
-	iframe.src = 'https://editor.sprig.hackclub.com/migration-iframe.html'
+	iframe.src = 'https://editor.sprig.hackclub.com/migration-helper.html'
 	iframe.style.display = 'none'
 	document.body.appendChild(iframe)
 })
