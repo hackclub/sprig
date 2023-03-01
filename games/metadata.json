@@ -2232,6 +2232,38 @@
     "addedOn": "2023-03-01"
   },
   {
+    "filename": "the_hungry_mouse",
+    "title": "The Hungry Mouse",
+    "author": "Kai Etkin",
+    "img": "the_hungry_mouse",
+    "tags": ["puzzle", "maze"],
+    "addedOn": "2023-03-01"
+  },
+  {
+    "filename": "Alien_Attack.js",
+    "title": "Alien_Attack",
+    "author": "whatware",
+    "img": "games/img/Alien_Attack.png",
+    "tags": [],
+    "addedOn": "2023-03-01"
+  },
+  {
+    "filename": "ElfSokoban.js",
+    "title": "ElfSokoban",
+    "author": "Markonije",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-03-01"
+  },
+  {
+    "filename": "It_Is_Coming_Out.js",
+    "title": "It_Is_Coming_Out!",
+    "author": "Onovez",
+    "img": "games/img/It_Is_Coming_Out.png",
+    "tags": [],
+    "addedOn": "2023-03-01"
+  },
+  {
     "filename": "the_dining_room_in_the_sky",
     "title": "the_dining_room_in_the_sky",
     "author": "Dylan Tran",
