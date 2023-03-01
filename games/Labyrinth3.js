@@ -117,7 +117,7 @@ w..........w
 wwwwwwwwwwww`,
    map`
 wwwwwwwww
-w.......w
+w......pw
 w.wwwwwww
 w.w.....w
 w.w.w.www
@@ -205,3 +205,15 @@ const numberCovered = tilesWith(end, player).length;
     }
   }
 });
+
+setPushables({
+  [ player ]: []
+})
+
+onInput("s", () => {
+  getFirst(player).y += 1
+})
+
+afterInput(() => {
+  
+})
