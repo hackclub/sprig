@@ -36,9 +36,9 @@
 .codeContainer .errors {
 	font-family: var(--font-code);
 	font-size: 0.9em;
-	position: absolute;
+	/* position: absolute;
 	left: 0;
-	bottom: 0;
+	bottom: 0; */
 	width: 100%;
 	height: 80px;
 	overflow-y: auto;

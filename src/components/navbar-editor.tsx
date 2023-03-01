@@ -5,14 +5,14 @@ import SavePrompt from './popups-etc/save-prompt'
 import styles from './navbar.module.css'
 import { persist } from '../lib/game-saving/auth-helper'
 import InlineInput from './design-system/inline-input'
-import debounce from 'debounce'
+import { throttle } from 'throttle-debounce'
 import SharePopup from './popups-etc/share-popup'
 import { IoChevronDown, IoPlay, IoSaveOutline, IoShareOutline, IoShuffle, IoWarning } from 'react-icons/io5'
 import { usePopupCloseClick } from '../lib/utils/popup-close-click'
 import { upload, uploadState } from '../lib/upload'
 import { VscLoading } from 'react-icons/vsc'
 
-const saveName = debounce(async (gameId: string, newName: string) => {
+const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
 		const res = await fetch('/api/games/rename', {
 			method: 'POST',
@@ -23,7 +23,7 @@ const saveName = debounce(async (gameId: string, newName: string) => {
 	} catch (error) {
 		console.error(error)
 	}
-}, 500)
+})
 
 const onNameEdit = (persistenceState: Signal<PersistenceState>, newName: string) => {
 	if (persistenceState.value.kind !== 'PERSISTED' || persistenceState.value.game === 'LOADING') return
