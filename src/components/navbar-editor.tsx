@@ -65,6 +65,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 	let saveState
 	let actionButton
+	let errorBlink = false
 	if (props.persistenceState.value.kind === 'IN_MEMORY') {
 		saveState = 'Your work is unsaved!'
 
@@ -89,6 +90,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			SAVING: 'Saving...',
 			ERROR: 'Error saving to cloud'
 		}[props.persistenceState.value.cloudSaveState]
+		if (props.persistenceState.value.cloudSaveState === 'ERROR')
+			errorBlink = true
 
 		actionButton = <Button icon={IoShareOutline} onClick={() => showSharePopup.value = !showSharePopup.value}>
 			Share
@@ -122,7 +125,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						)}
 					</>) : 'Unsaved Game'}
 				</li>
-				<li class={styles.saveState}>{saveState}</li>
+				<li class={`${styles.saveState} ${errorBlink ? styles.error : ''}`}>
+					{saveState}
+				</li>
 			</ul>
 
 			<li>

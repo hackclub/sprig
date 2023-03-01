@@ -77,6 +77,25 @@
 	user-select: none;
 }
 
+.saveState.error {
+	animation: blinking 1s infinite step-end;
+}
+
+@keyframes blinking {
+	0% {
+		opacity: 1;
+	}
+	60% {
+		opacity: 1;
+	}
+	80% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
 /* Actions on right */
 .rightActions {
 	gap: 14px;
