@@ -146,15 +146,15 @@ wwwwwwwwwwwwwwwww`,
     map`
 wwwwwwwwwwwwwwwwww
 w.......w........w
-w.......w.wwwwww.w
+w..w.w....wwwwww.w
 w..wwww.w.wp..w..w
 w..w..w.w.www.w..w
-w..w..w.w.....w..w
+w.ww..w.w.....w..w
 w..w.ww.wwwwwww..w
-w..w....w....www.w
-w..w....w.ww.wew.w
+w..w....w....wwwww
+w.ww....w.ww.wew.w
 w..wwwwww..w.w.w.w
-w..........w.w.w.w
+w.....w....w.w.w.w
 w.ww.....wwwww.w.w
 w..wwwwwww.....w.w
 w................w
@@ -202,6 +202,7 @@ const numberCovered = tilesWith(end, player).length;
       setMap(currentLevel);
     } else {
       addText("you win!", { y: 10, color: color`4` });
+          addText("The end!", { y: 3, color: color`D` });
     }
   }
 });
