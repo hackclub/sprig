@@ -2224,11 +2224,27 @@
     "addedOn": "2023-02-26"
   },
   {
+    "filename": "the_hungry_mouse",
+    "title": "The Hungry Mouse",
+    "author": "Kai Etkin",
+    "img": "the_hungry_mouse",
+    "tags": ["puzzle", "maze"],
+    "addedOn": "2023-03-01"
+  },
+  {
     "filename": "the_dining_room_in_the_sky",
     "title": "the_dining_room_in_the_sky",
     "author": "Dylan Tran",
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2023-02-28"
+  },
+  {
+    "filename": "whack_a_mole",
+    "title": "whack_a_mole",
+    "author": "Sameer Murthy",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2023-03-01"
   }
 ]
