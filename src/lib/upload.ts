@@ -5,8 +5,11 @@ export type UploadState = 'IDLE' | 'LOADING' | 'ERROR'
 export const uploadState = signal<UploadState>('IDLE')
 
 const getPort = async (): Promise<SerialPort> => {
-	if (!navigator.serial)
-		throw new Error('Your browser does not support the Web Serial API. Please try again in a recent version of Chrome.')
+	if (!navigator.serial) {
+		const msg = 'Your browser does not support the Web Serial API. Please try again in a recent version of Chrome.'
+		alert(msg)
+		throw new Error(msg)
+	}
 
 	// getPorts() returns all the ports granted access to this origin.
 	// If there's only one, it's probably a Sprig. This should allow
