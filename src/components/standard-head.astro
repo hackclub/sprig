@@ -1,4 +1,6 @@
 ---
+import { recaptchaKeyId } from '../lib/recaptcha'
+
 interface Props {
 	title: string | null
 	socialImage?: string
@@ -40,3 +42,4 @@ const image = socialImage ?? 'https://sprig.hackclub.com/stories-tiny/sprig-fron
 <meta name='twitter:card' content='summary_large_image'>
 
 <script defer data-domain='sprig.hackclub.com' src='https://plausible.io/js/plausible.js' />
+<script defer src={`https://www.google.com/recaptcha/enterprise.js?render=${recaptchaKeyId}`}></script>

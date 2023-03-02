@@ -1,19 +1,23 @@
 import type { APIRoute } from 'astro'
 import { getSession, getUserByEmail, makeGame, makeOrUpdateSession, makeUser, User } from '../../../lib/game-saving/account'
 import { isValidEmail, mail, tempGameTemplate } from '../../../lib/game-saving/email'
+import { assessCaptcha } from '../../../lib/recaptcha'
 
 export const post: APIRoute = async ({ request, cookies }) => {
-	let name: string | null
-	let code: string | null
+	let name: string
+	let code: string
 	let partialSessionEmail: string | null // For temp games
+	let recaptchaToken: string
 	try {
 		const body = await request.json()
-		if (body.name && typeof body.name !== 'string') throw 'Invalid game code'
+		if (body.name && typeof body.name !== 'string') throw 'Invalid game name'
 		name = body.name
 		if (body.code && typeof body.code !== 'string') throw 'Invalid game code'
 		code = body.code
 		if (body.partialSessionEmail && (typeof body.partialSessionEmail !== 'string' || !isValidEmail(body.partialSessionEmail))) throw 'Invalid email'
 		partialSessionEmail = body.partialSessionEmail
+		if (body.recaptchaToken && typeof body.recaptchaToken !== 'string') throw 'Invalid recaptcha token'
+		recaptchaToken = body.recaptchaToken
 	} catch (error) {
 		return new Response(typeof error === 'string' ? error : 'Bad request body', { status: 400 })
 	}
@@ -22,6 +26,9 @@ export const post: APIRoute = async ({ request, cookies }) => {
 	let user: User
 	let unprotected: boolean
 	if (partialSessionEmail) {
+		const recaptchaScore = await assessCaptcha(recaptchaToken, 'PERSIST_GAME')
+		if (recaptchaScore < 0.3) return new Response(`Recaptcha score too low (${recaptchaScore})`, { status: 400 })
+
 		user = await getUserByEmail(partialSessionEmail) ?? await makeUser(partialSessionEmail, null)
 		unprotected = true
 		sessionInfo = await makeOrUpdateSession(cookies, user.id, 'email')
