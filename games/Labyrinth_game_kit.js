@@ -122,26 +122,31 @@ LLLLLLLLLLLLLLLL`],
 let level = 0;
 const levels = [
   map`
-...w.....
-...w.....
-.p.w...e.
-...w.....
-...b.....
-...w.....
-...w.....`,
-   map`
-pw..........
-.w..........
-.w....wwww..
-.w....w.ew..
-.w....w..w..
-.w....w..w..
-.wwwwww..w..
-.b.......w..
-.w.......w..
-.w.......w..
-.wwwwwwwwwww
-............`,
+wwwwwwwwwww
+w..w.w....w
+w.pw.w.ww.w
+w..w.w.ew.w
+w.ww.wwww.w
+w.w....w..w
+wbwww..w..w
+w...w..ww.w
+w.........w
+wwwwwwwwwww`,
+    map`
+wwwwwwwwwwwwww
+w............w
+w.wwwwwwwww..w
+w.w.......w..w
+w.w.......w..w
+w.w.wbwwwww..w
+w.w.w.w......w
+w.wpw.w...wwbw
+w.www.w...w..w
+w.....wwwww..w
+w...w.w......w
+wwwww.wwwwww.w
+w.....we.....w
+wwwwwwwwwwwwww`,
   ]
 const currentLevel = levels[level];
 setMap(currentLevel);
