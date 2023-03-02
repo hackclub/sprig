@@ -2,6 +2,7 @@ import { Signal, useComputed, useSignal, useSignalEffect } from '@preact/signals
 import { Game, SessionInfo } from './account'
 import { isValidEmail } from './email'
 import { codeMirror, PersistenceState } from '../state'
+import { executeCaptcha } from '../recaptcha'
 
 export type AuthState =
 	| 'IDLE'
@@ -110,13 +111,16 @@ export const persist = async (persistenceState: Signal<PersistenceState>, email?
 	}
 
 	try {
+		const recaptchaToken = await executeCaptcha('PERSIST_GAME')
+
 		const res = await fetch('/api/games/new', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
 				partialSessionEmail: email,
 				code: codeMirror.value?.state.doc.toString() ?? '',
-				name: gameName
+				name: gameName,
+				recaptchaToken
 			})
 		})
 		if (!res.ok) throw new Error(await res.text())
