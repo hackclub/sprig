@@ -3,7 +3,7 @@
 @author: DorukSarpAlwaysStrikesBack!
 */
 
-/*W for up, A for left, S for down, D for right and J for reset. */
+/*W for up, A for left, S for down, D for right and J for reset, you cannot push the block to the end. */
 
 const player = "p";
 const labywall = "w";
@@ -129,6 +129,19 @@ const levels = [
 ...b.....
 ...w.....
 ...w.....`,
+   map`
+pw..........
+.w..........
+.w....wwww..
+.w....w.ew..
+.w....w..w..
+.w....w..w..
+.wwwwww..w..
+.b.......w..
+.w.......w..
+.w.......w..
+.wwwwwwwwwww
+............`,
   ]
 const currentLevel = levels[level];
 setMap(currentLevel);
