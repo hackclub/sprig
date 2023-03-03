@@ -83,5 +83,5 @@ a:hover {
 }
 
 .grecaptcha-badge {
-	display: none;
+	visibility: hidden;
 }
