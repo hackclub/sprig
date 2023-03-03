@@ -81,3 +81,7 @@ a:hover {
 .copy-container p {
 	line-height: var(--line-height-copy);
 }
+
+.grecaptcha-badge {
+	display: none;
+}
