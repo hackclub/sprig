@@ -8,7 +8,7 @@ export default {
     rollupOptions: {
       input: {
         main: resolve(_dirname, "index.html"),
-        migration: resolve(_dirname, "migration-iframe.html")
+        migration: resolve(_dirname, "migration-helper.html")
       }
     }
   }

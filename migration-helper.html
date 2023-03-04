@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang='en'>
+	<head>
+		<meta charset='utf-8'>
+		<title>Migration IFrame</title>
+	</head>
+	<body>
+		<p>This is a hidden page for migrating old Sprig games to the new Sprig account system. You probably won't find anything here :)</p>
+
+		<form method='post' id='form'>
+			<input type='hidden' id='puzzle-lab' name='puzzle-lab' value=''>
+		</form>
+
+		<script>
+			const urlAllowed = (url) => {
+				const parsed = new URL(url)
+				return [ 'localhost', '127.0.0.1' ].includes(parsed.hostname)
+					|| /^sprig(-beta)?(-[a-zA-Z0-9]+)?\.hackclub\.dev$/.test(parsed.hostname)
+					|| /^sprig-git-[a-zA-Z0-9\-]+\.hackclub\.dev$/.test(parsed.hostname)
+					|| parsed.hostname.endsWith('.hackclub.com')
+			}
+
+			const sendToParent = async () => {
+				if (!urlAllowed(document.referrer)) throw new Error('Disallowed referrer')
+
+				try {
+					if (typeof document.requestStorageAccess === 'function')
+						await document.requestStorageAccess()
+				} catch (error) {
+					if (error) console.warn(error)
+					window.parent.postMessage({
+						sprig: true,
+						puzzleLab: '',
+						storageAccessDenied: true
+					}, '*')
+					return
+				}
+					
+				window.parent.postMessage({
+					sprig: true,
+					puzzleLab: window.localStorage.getItem('puzzle-lab') || '',
+					storageAccessDenied: false
+				}, '*')
+			}
+
+			const params = new URLSearchParams(window.location.search)
+
+			if (params.has('redirect')) {
+				if (!urlAllowed(params.get('redirect'))) throw new Error('Disallowed redirect URL')
+				document.getElementById('form').action = params.get('redirect')
+				document.getElementById('puzzle-lab').value = window.localStorage.getItem('puzzle-lab') || ''
+				document.getElementById('form').submit()
+			} else {
+				sendToParent()
+			}
+		</script>
+	</body>
+</html>
