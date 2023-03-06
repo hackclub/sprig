@@ -70,3 +70,16 @@ p.muted {
 .error {
 	color: var(--error);
 }
+
+.warning {
+	background: #fff9db;
+	color: #9f6220;
+	padding: 10px;
+	line-height: var(--line-height-copy);
+	font-size: 0.9rem;
+}
+
+.warning a {
+	color: #000000;
+	text-decoration: underline;
+}
