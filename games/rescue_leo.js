@@ -288,6 +288,7 @@ onInput("w", () => {
 });
 
 onInput("a", () => {
+  if(!getFirst(player)) return;
   getFirst(player).x -= 1
 });
 
