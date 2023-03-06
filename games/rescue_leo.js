@@ -271,6 +271,8 @@ function beginGame() {
 
 
 onInput("j", () => {
+  if(!getFirst(player)) return;
+  
   if (level === 0)
   {
     clearText();
@@ -281,6 +283,7 @@ onInput("j", () => {
 
 // WASD Controls
 onInput("w", () => {
+  if(!getFirst(player)) return;
   getFirst(player).y -= 1
 });
 
@@ -289,10 +292,12 @@ onInput("a", () => {
 });
 
 onInput("s", () => {
+  if(!getFirst(player)) return;
   getFirst(player).y += 1
 });
 
 onInput("d", () => {
+  if(!getFirst(player)) return;
   getFirst(player).x += 1
 });
 
