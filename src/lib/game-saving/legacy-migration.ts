@@ -1,4 +1,4 @@
-import { Signal, useSignal } from '@preact/signals'
+import { type Signal, useSignal } from '@preact/signals'
 import { useEffect } from 'preact/hooks'
 	
 // const helperUrl = 'http://localhost:3001/migration-helper.html'
