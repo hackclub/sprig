@@ -7,10 +7,6 @@
 	<body>
 		<p>This is a hidden page for migrating old Sprig games to the new Sprig account system. You probably won't find anything here :)</p>
 
-		<form method='post' id='form'>
-			<input type='hidden' id='puzzle-lab' name='puzzle-lab' value=''>
-		</form>
-
 		<script>
 			const urlAllowed = (url) => {
 				const parsed = new URL(url)
@@ -47,9 +43,9 @@
 
 			if (params.has('redirect')) {
 				if (!urlAllowed(params.get('redirect'))) throw new Error('Disallowed redirect URL')
-				document.getElementById('form').action = params.get('redirect')
-				document.getElementById('puzzle-lab').value = window.localStorage.getItem('puzzle-lab') || ''
-				document.getElementById('form').submit()
+				const parsed = new URL(params.get('redirect'))
+				parsed.searchParams.set('puzzleLab', window.localStorage.getItem('puzzle-lab') || '')
+				window.location.replace(parsed.toString())
 			} else {
 				sendToParent()
 			}
