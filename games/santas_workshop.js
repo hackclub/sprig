@@ -189,8 +189,17 @@ function restartLevel() {
   setMap(currentLevel);
 }
 
+function restartGame() {
+  level = 0;
+  setMap(levels[level]);
+}
+
 onInput("l", () => {
   restartLevel();
+});
+
+onInput("j", () => {
+  restartGame();
 });
 
 onInput("w", () => {
