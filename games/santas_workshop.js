@@ -176,12 +176,21 @@ p.......
 ];
 
 
-const currentLevel = levels[level];
+let currentLevel = levels[level];
 setMap(currentLevel);
 
 setPushables({
   [ elf ]: [present],
   [present] : [present]
+});
+
+function restartLevel() {
+  currentLevel = levels[level];
+  setMap(currentLevel);
+}
+
+onInput("l", () => {
+  restartLevel();
 });
 
 onInput("w", () => {
