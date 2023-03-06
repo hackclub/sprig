@@ -5,7 +5,7 @@ import Navbar from '../../components/navbar-main'
 import StandardHead from '../../components/standard-head.astro'
 import ms from 'ms'
 import Button from '../../components/design-system/button'
-import { IoLogOutOutline, IoTrash, IoTrashOutline } from 'react-icons/io5'
+import { IoLogOutOutline, IoTrashOutline } from 'react-icons/io5'
 import { isRandomGameName } from '../../lib/words'
 
 const session = await getSession(Astro.cookies)
@@ -247,7 +247,7 @@ if (games.length === 0 && unnamedGames.length > 0) {
 				<div class='sidebar-section'>
 					<p>Visit <a href='/migrate' class='link'>the migration page</a> to move legacy Sprig games to your account from this computer.</p>
 					<div class='account-strip'>
-						<p class='email'>geribald@hackclub.com</p>
+						<p class='email'>{session.user.email}</p>
 						<a href='/logout'><Button icon={IoLogOutOutline}>Log out</Button></a>
 					</div>
 				</div>
