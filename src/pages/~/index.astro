@@ -101,7 +101,7 @@ if (games.length === 0 && unnamedGames.length > 0) {
 					<a class='game' href={`/~/${game.id}`}>
 						<h3>{game.name || 'Untitled'}</h3>
 						<p class='modified-at'>
-							Edited {ms(Date.now() - game.modifiedAt.toMillis(), { long: true })} ago
+							Edited {ms(Math.max(Date.now() - game.modifiedAt.toMillis(), 1000), { long: true })} ago
 						</p>
 					</a>
 				))}
@@ -115,7 +115,7 @@ if (games.length === 0 && unnamedGames.length > 0) {
 							<a class='game' href={`/~/${game.id}`}>
 								<h3>{game.name || 'Untitled'}</h3>
 								<p class='modified-at'>
-									Edited {ms(Date.now() - game.modifiedAt.toMillis(), { long: true })} ago
+									Edited {ms(Math.max(Date.now() - game.modifiedAt.toMillis(), 1000), { long: true })} ago
 								</p>
 							</a>
 						))}

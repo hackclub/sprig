@@ -15,7 +15,7 @@ export default function MigrateToast(props: MigrateToastProps) {
 
 	useEffect(() => {
 		if (localStorage.getItem('seenMigration') !== 'true') {
-			getPuzzleLabFromLocalStorage().then(data => {
+			getPuzzleLabFromLocalStorage(false).then(data => {
 				if (data.length > 0) showPopup.value = true
 			})
 		}
