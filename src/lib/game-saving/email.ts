@@ -43,6 +43,7 @@ export const tempGameTemplate = (user: User, game: Game): EmailSpec => {
 			<p>Game name: <strong>${game.name ?? 'Untitled'}</strong></p>
 			<p>To edit your game in the future, just head to <a href="${loginUrl}">${loginUrl}</a></p>
 			<p>Happy hacking!</p>
+			<p><small>(Not you? You can safely ignore this email and/or delete the game. Your Sprig account is safe and only you can log in.)</small></p>
 		`,
 		text: [
 			'Hi! You started working on a game in Sprig, and we made you an account if you ever want to keep working on it.',
@@ -51,7 +52,9 @@ export const tempGameTemplate = (user: User, game: Game): EmailSpec => {
 			'',
 			`To edit your game in the future, just head to ${loginUrl}`,
 			'',
-			'Happy hacking!'
+			'Happy hacking!',
+			'',
+			'(Not you? You can safely ignore this email and/or delete the game. Your Sprig account is safe and only you can log in.)'
 		].join('\n')
 	}
 }
