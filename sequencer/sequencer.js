@@ -319,6 +319,12 @@ export function createSequencer(target) {
     setCodeText();
   }
 
+  const resetCursor = () => {
+    clearInterval(state.interval)
+    state.interval = null;
+    state.beat = 0;
+  }
+
   const view = (state) => html`
     <style>${style}</style>
     <div class="container">
@@ -344,9 +350,7 @@ export function createSequencer(target) {
             play
           </button>
           <button @click=${() => {
-            clearInterval(state.interval)
-            state.interval = null;
-            state.beat = 0;
+            resetCursor();
             r();
           }}>
             <ion-icon name="stop" style="vertical-align: middle;" />
@@ -354,15 +358,16 @@ export function createSequencer(target) {
           <button @click=${() => {
             if (!state.clearTunesConfirm) {
               state.clearTunesConfirm = true;
-              r();
             } else {
               state.clearTunesConfirm = false;
+              resetCursor();
               state.cells = []; // clears the notes
+              setCodeText();
             }
             r();
           }}>
             <ion-icon name="refresh" style="vertical-align: middle;" />
-            <span>${state.clearTunesConfirm ? "you sure?" : "clear"}</span>
+            ${state.clearTunesConfirm ? "you sure?" : "clear"}
           </button>
         </div>
 
