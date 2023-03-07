@@ -351,6 +351,7 @@ export function createSequencer(target) {
           }}>
             <ion-icon name="stop" style="vertical-align: middle;" />
           </button>
+          </button>
         </div>
 
         <div class="bpm">
@@ -397,7 +398,7 @@ export function createSequencer(target) {
     // play song
     playCellsOnBeat(state.cells, state.bpm, state.beat);
     r();
-
+    
     // update beat
     state.beat = (state.beat+1) % (state.numberX);
   }, (1000*60)/state.bpm)
