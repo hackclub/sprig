@@ -139,15 +139,6 @@ ww.....g`,
 ....w...`,
   map`
 ...p....
-.b..wwb.
-.ww.....
-...gg.w.
-...gg.w.
-.ww...w.
-.b..w.b.
-....w...`,
-  map`
-...p....
 ...www..
 .....wb.
 ..w..w..
@@ -201,6 +192,8 @@ onInput("l", () => {
 onInput("j", () => {
   restartGame();
 });
+
+
 
 onInput("w", () => {
   getFirst(elf).y -= 1;
