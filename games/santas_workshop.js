@@ -95,6 +95,15 @@ pbw..
 .....
 ..w.g`,
   map`
+p.......
+........
+..wwwww.
+.bw.ggw.
+......w.
+.bw...w.
+..wwwww.
+........`,
+  map`
 pw....
 .w.wb.
 .w.w..
@@ -146,15 +155,6 @@ g.w..w..
 ..w.....
 ..w.wwww
 ........`,
-  map`
-p.......
-bw.....b
-.w.wwww.
-.w.w.gw.
-.w.w.gwb
-bw.gggw.
-.wwwwww.
-....b...`,
   map`
 p.......
 ........
@@ -225,3 +225,4 @@ afterInput(() => {
         if (currentLevel !== undefined) setMap(currentLevel);
     }
 });
+
