@@ -26,7 +26,7 @@ You should be able to get started in Sprig with very little programming experien
 
 <p align="left">
 <a href="https://sprig.hackclub.com/editor">
-<img width="500" alt="Screen Shot 2022-11-10 at 1 55 35 PM" src="https://cloud-h4knvel1s-hack-club-bot.vercel.app/0image.png">
+<img width="500" alt="Screen Shot 2022-03-07 at 6 21 27 PM" src="https://cloud-l94lfbasw-hack-club-bot.vercel.app/0image.png">
 </a>
 </p>
 
