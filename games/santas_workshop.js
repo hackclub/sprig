@@ -7,6 +7,7 @@ const elf = "p";
 const present = "b";
 const shoot = "g";
 const wall = "w";
+const yellow = "o";
 
 setLegend(
   [ elf, bitmap`
@@ -76,7 +77,24 @@ LLLLLLLLLLLLLLLL
 LLLLLLLLLLLLLLLL
 LLLLLLLLLLLLLLLL
 LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL`]
+LLLLLLLLLLLLLLLL`],
+  [ yellow, bitmap`
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666`]
 );
 
 setSolids([elf, present, wall]);
@@ -164,6 +182,15 @@ p.......
 .bww.w..
 ........
 ........`,
+  map`
+oooooooo
+oooooooo
+oooooooo
+oooooooo
+oooooooo
+oooooooo
+oooooooo
+oooooooo`,
 ];
 
 
@@ -221,8 +248,9 @@ afterInput(() => {
 
         const currentLevel = levels[level];
 
-        // make sure the level exists and if so set the map
-        if (currentLevel !== undefined) setMap(currentLevel);
+        if (level === 10) {
+          addText("You win!");
+        }
+         
     }
 });
-
