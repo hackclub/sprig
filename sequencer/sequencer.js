@@ -352,10 +352,17 @@ export function createSequencer(target) {
             <ion-icon name="stop" style="vertical-align: middle;" />
           </button>
           <button @click=${() => {
-            state.cells = []; // clears the notes
+            if (!state.clearTunesConfirm) {
+              state.clearTunesConfirm = true;
+              r();
+            } else {
+              state.clearTunesConfirm = false;
+              state.cells = []; // clears the notes
+            }
             r();
           }}>
             <ion-icon name="refresh" style="vertical-align: middle;" />
+            <span>${state.clearTunesConfirm ? "you sure?" : "clear"}</span>
           </button>
         </div>
 
