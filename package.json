@@ -36,7 +36,8 @@
 		"svelte": "^3.54.0",
 		"three": "^0.149.0",
 		"throttle-debounce": "^5.0.0",
-		"tinykeys": "^1.4.0"
+		"tinykeys": "^1.4.0",
+		"rehype-external-links": "^2.0.1"
 	},
 	"devDependencies": {
 		"@prefresh/vite": "^2.2.9",

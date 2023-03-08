@@ -3,6 +3,7 @@ import preact from '@astrojs/preact'
 import vercel from '@astrojs/vercel/serverless'
 import prefresh from '@prefresh/vite'
 import svelte from '@astrojs/svelte'
+import rehypeExternalLinks from 'rehype-external-links'
 
 export default defineConfig({
 	site: 'https://sprig.hackclub.com',
@@ -20,6 +21,9 @@ export default defineConfig({
 		}
 	},
 	markdown: {
-		shikiConfig: { theme: 'github-light' }
+		shikiConfig: { theme: 'github-light' },
+		rehypePlugins: [
+			[ rehypeExternalLinks, { target: '_blank' } ]
+		]
 	}
 })
