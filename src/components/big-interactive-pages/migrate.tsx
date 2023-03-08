@@ -32,7 +32,7 @@ export default function Migrate({ session, intitialEmail }: MigrateProps) {
 	useEffect(() => {
 		let cancel = false
 
-		getPuzzleLabFromLocalStorage().then(data => {
+		getPuzzleLabFromLocalStorage(true).then(data => {
 			if (cancel) return
 
 			let json: [string, string][]

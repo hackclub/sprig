@@ -1,5 +1,6 @@
 import type { Signal } from '@preact/signals'
 import { persist, useAuthHelper } from '../../lib/game-saving/auth-helper'
+import { useNeedsManualMigration } from '../../lib/game-saving/legacy-migration'
 import type { PersistenceState } from '../../lib/state'
 import Button from '../design-system/button'
 import Input from '../design-system/input'
@@ -12,11 +13,18 @@ export interface DraftWarningModalProps {
 
 export default function DraftWarningModal(props: DraftWarningModalProps) {
 	const auth = useAuthHelper('EMAIL_ENTRY')
+	const needsManualMigration = useNeedsManualMigration()
 
 	return (
 		<div class={styles.overlay}>
 			<div class={styles.modal}>
 				{auth.stage.value === 'EMAIL' ? (<>
+					{needsManualMigration.value ? (
+						<div class={styles.warning}>
+							<strong>Where did my games go?</strong> If you've used Sprig before on this browser, you may want to <a href='/migrate'>migrate your games</a>.
+						</div>
+					) : null}
+
 					<div class={styles.stack}>
 						<h2>Start building right away</h2>
 						<p>
