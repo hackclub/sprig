@@ -118,11 +118,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						<span class={styles.attribution}>{' '} by you</span>
 					</>) : props.persistenceState.value.kind === 'SHARED' ? (<>
 						{props.persistenceState.value.name}
-						{props.persistenceState.value.authorName && (
-							<span class={styles.attribution}>
-								{' '} by @{props.persistenceState.value.authorName}
-							</span>
-						)}
+						<span class={styles.attribution}>
+							{props.persistenceState.value.authorName 
+								? ` by ${props.persistenceState.value.authorName}`
+								: ' (shared with you)'}
+						</span>
 					</>) : 'Unsaved Game'}
 				</li>
 				<li class={`${styles.saveState} ${errorBlink ? styles.error : ''}`}>
