@@ -5,6 +5,7 @@ import StandardHead from '../components/standard-head.astro'
 import '../global.css'
 import '../legacy/homepage.scss'
 import { getSession } from '../lib/game-saving/account'
+import { getConsolesRemaining } from '../lib/remaining-consoles'
 
 // Redirects for legacy Sprig URLs
 const galleryRegex = /^https:\/\/raw\.githubusercontent\.com\/hackclub\/sprig\/main\/games\/(.+)\.js$/
@@ -13,15 +14,6 @@ if (galleryMatches) return Astro.redirect(`/gallery/${galleryMatches[1]}`, 302)
 if (Astro.url.searchParams.has('id'))
 	return Astro.redirect(`/legacy-bucket/${Astro.url.searchParams.get('id')}`, 302)
 
-async function getConsolesRemaining(): Promise<number> {
-	const data = await fetch('https://airbridge.hackclub.com/v0.1/Sprig%20Waitlist/Requests').then(r => r.json())
-	if (!data) throw 'Failed to Fetch'
-	const consoleCount = data.filter((console: any) => {
-		let status = console.fields.Status
-		return (status === 'Pending' || status === 'Approved')
-	}).length
-	return 420 - consoleCount
-}
 const remainingConsoles = await getConsolesRemaining()
 
 const stories = [
