@@ -7,7 +7,7 @@ import { persist } from '../lib/game-saving/auth-helper'
 import InlineInput from './design-system/inline-input'
 import { throttle } from 'throttle-debounce'
 import SharePopup from './popups-etc/share-popup'
-import { IoChevronDown, IoPlay, IoSaveOutline, IoShareOutline, IoShuffle, IoWarning } from 'react-icons/io5'
+import { IoChevronDown, IoLogoGithub, IoPlay, IoSaveOutline, IoShareOutline, IoShuffle, IoWarning } from 'react-icons/io5'
 import { usePopupCloseClick } from '../lib/utils/popup-close-click'
 import { upload, uploadState } from '../lib/upload'
 import { VscLoading } from 'react-icons/vsc'
@@ -129,6 +129,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					{saveState}
 				</li>
 			</ul>
+
+			<li class={styles.actionIcon}>
+				<a href='https://github.com/hackclub/sprig/' target='_blank'>
+					<IoLogoGithub />
+				</a>
+			</li>
 
 			<li>
 				<Button
