@@ -27,8 +27,8 @@
 <div class="gallery-item" bind:this={box} {id}>
 	<a
 		href={id
-			? 'https://editor.sprig.hackclub.com'
-			: `https://editor.sprig.hackclub.com/?file=https://raw.githubusercontent.com/hackclub/sprig/main/games/${filename}.js`}
+			? 'https://sprig.hackclub.com'
+			: `/gallery/${encodeURIComponent(filename)}`}
 		target="_blank"
 		rel="noopener noreferrer"
 	>
