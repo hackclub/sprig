@@ -327,7 +327,7 @@ export default function BitmapEditor(props: EditorProps) {
 						/>
 						<ToolButton
 							key='clear'
-							name='Clear Canvas'
+							name='Clear'
 							icon={IoTrash}
 							onActivate={() => moment.value = {
 								pixelGrid: makePixelGrid(),
