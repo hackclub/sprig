@@ -6,13 +6,15 @@ It was made by Hack Club, a global community of teen coders who
 believe people learn best by making things they care about 
 and sharing them with others.
 
-If this is your first time using Sprig, try playing through the [tutorial](https://editor.sprig.hackclub.com/?file=https://raw.githubusercontent.com/hackclub/sprig/main/games/getting_started.js). Then watching this [introduction to the editor](https://www.youtube.com/watch?v=GEbDRR_cqJI) or [walkthrough](https://www.youtube.com/watch?v=1UTLS4aO9bQ) on how to make a game. From there, we suggest hacking on any of the [current games](https://sprig.hackclub.com/gallery) or starting from scratch.
+Run games by hitting the `Run` button or pressing `Shift+Enter`.
+
+## Getting Help
+
+If this is your first time using Sprig, try playing through the [tutorial](https://sprig.hackclub.dev/gallery/getting_started).
+
+You can also watch this [introduction to the editor](https://www.youtube.com/watch?v=GEbDRR_cqJI) or [walkthrough](https://www.youtube.com/watch?v=1UTLS4aO9bQ) on how to make a game. From there, we suggest hacking on any of the [current games](https://sprig.hackclub.com/gallery) or starting from scratch.
 
 If you ever need help, have ideas, or want to meet other game-makers, join the community in the [#sprig](https://hackclub.slack.com/archives/C02UN35M7LG) channel on the [Hack Club Slack](https://hackclub.com/slack).
-
-Run games by hitting the `Run` button or pressing `shift+enter`.
-
-The best way to save games is to download the `js` file. Some work is cached in the browser but if you lose your browser history or change computers it will be lost.
 
 ## Level Design
 

@@ -1,4 +1,9 @@
 export const defaultExampleCode = `
+/*
+First time? Check out the tutorial game:
+https://sprig-beta.hackclub.dev/gallery/getting_started
+*/
+
 const player = "p"
 
 setLegend(
