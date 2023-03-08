@@ -1,4 +1,4 @@
-import { useSignal } from '@preact/signals'
+import { useSignal, useSignalEffect } from '@preact/signals'
 import { IoCaretDown, IoCaretUp } from 'react-icons/io5'
 import styles from './help.module.css'
 import { compiledContent } from '../../../docs/docs.md'
@@ -11,6 +11,10 @@ const html = compiledContent()
 
 export default function Help(props: HelpProps) {
 	const visible = useSignal(props.initialVisible ?? false)
+	
+	useSignalEffect(() => {
+		document.cookie = `hideHelp=${!visible.value};path=/;max-age=${60 * 60 * 24 * 365}`
+	})
 
 	return (
 		<div class={styles.container}>

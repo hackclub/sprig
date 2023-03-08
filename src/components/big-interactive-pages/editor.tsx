@@ -19,6 +19,7 @@ interface EditorProps {
 	persistenceState: Signal<PersistenceState>
 	cookies: {
 		outputAreaSize: number | null
+		hideHelp: boolean
 	}
 }
 
@@ -248,7 +249,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 				<DraftWarningModal persistenceState={persistenceState} />
 			)}
 			
-			<Help />
+			<Help initialVisible={!cookies.hideHelp} />
 			<MigrateToast persistenceState={persistenceState} />
 		</div>
 	)
