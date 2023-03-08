@@ -164,6 +164,8 @@ export default function Migrate({ session, intitialEmail }: MigrateProps) {
 					migratedGames.value = allGames.value
 						.filter(game => migratingGames.value.includes(game.name))
 						.map((game) => ({ id: gameIds[game.name], legacy: game }))
+
+					localStorage.setItem('seenMigration', 'true')
 					
 					if (session?.session.full) {
 						window.location.replace('/~')
