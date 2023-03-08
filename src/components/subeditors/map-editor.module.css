@@ -13,13 +13,13 @@
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
+	justify-content: space-between;
 }
 
 .spriteButtons {
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	gap: 6px;
-	flex: 1;
 }
 
 .spriteButton {
