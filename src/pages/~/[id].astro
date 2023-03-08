@@ -55,7 +55,10 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 		<Editor
 			client:load
 			persistenceState={persistenceState}
-			cookies={{ outputAreaSize: Astro.cookies.get('outputAreaSize').number() }}
+			cookies={{
+				outputAreaSize: Astro.cookies.get('outputAreaSize').number(),
+				hideHelp: Astro.cookies.get('hideHelp').boolean()
+			}}
 		/>
 		{isMobile ? <MobileUnsupported /> : null}
 	</body>
