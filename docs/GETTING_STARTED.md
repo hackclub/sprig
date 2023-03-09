@@ -26,8 +26,9 @@ setLegend(
 Click on bitmap to open up the pixel editor and draw an image for our sprite.
 
 <!-- ![Screen Recording 2022-07-18 at 12 24 08 PM](https://user-images.githubusercontent.com/27078897/179599823-be112b5d-3fe6-4c7f-b1ca-d741ef5b5bcb.gif) -->
+<!-- ![Screen Recording 2022-10-24 at 2 59 17 PM](https://user-images.githubusercontent.com/27078897/197604643-2a59cc85-5a07-446d-95b3-d9be844b62c0.gif) -->
 
-![Screen Recording 2022-10-24 at 2 59 17 PM](https://user-images.githubusercontent.com/27078897/197604643-2a59cc85-5a07-446d-95b3-d9be844b62c0.gif)
+![Screen Recording 2023-03-06 at 5 58 18 PM](https://user-images.githubusercontent.com/27078897/197604643-2a59cc85-5a07-446d-95b3-d9be844b62c0.gif)
 
 
 The bitmap is stored as a string. To take a look at it click on the little arrow next to the line number. You can minimize it by clicking the area again.
@@ -129,8 +130,9 @@ Click on `map` to open up the map editor.
 __Make sure you hit run__ to load the legend before editting the map.
 
 <!-- ![Screen Recording 2022-07-18 at 3 17 36 PM](https://user-images.githubusercontent.com/27078897/179600230-f29db474-9fcb-4829-94e5-d2f283bd03ad.gif) -->
+<!-- ![Screen Recording 2022-10-24 at 3 03 39 PM](https://user-images.githubusercontent.com/27078897/197605676-4c1e7a9b-3acc-41f5-a958-8e15dc55ba91.gif) -->
 
-![Screen Recording 2022-10-24 at 3 03 39 PM](https://user-images.githubusercontent.com/27078897/197605676-4c1e7a9b-3acc-41f5-a958-8e15dc55ba91.gif)
+![Screen Recording 2023-03-06 at 3 03 39 PM](https://cloud-fai1j30ad-hack-club-bot.vercel.app/020230306_170018.gif)
 
 To set the map use `setMap`.
 
@@ -186,8 +188,9 @@ onInput("d", () => {
 ```
 
 <!-- ![Screen Recording 2022-07-18 at 3 20 09 PM](https://user-images.githubusercontent.com/27078897/179600584-3d5de630-6a63-436c-9c39-e811b592be12.gif) -->
+<!-- ![Screen Recording 2022-10-24 at 3 05 41 PM](https://user-images.githubusercontent.com/27078897/197607562-15d0146f-329c-4b90-ac91-584d1290528e.gif) -->
 
-![Screen Recording 2022-10-24 at 3 05 41 PM](https://user-images.githubusercontent.com/27078897/197607562-15d0146f-329c-4b90-ac91-584d1290528e.gif)
+![Screen Recording 2023-03-06 at 5 03 05 PM](https://user-images.githubusercontent.com/27078897/197607562-15d0146f-329c-4b90-ac91-584d1290528e.gif)
 
 
 ### Adding Behaviors
@@ -203,8 +206,9 @@ setSolids([ player, box, wall ]);
 Now those sprites won't overlap.
 
 <!-- ![Screen Recording 2022-07-18 at 3 21 10 PM](https://user-images.githubusercontent.com/27078897/179600717-804753a6-4498-4432-b9f4-8bee9633adb3.gif) -->
+<!-- ![Screen Recording 2022-10-24 at 3 11 59 PM](https://user-images.githubusercontent.com/27078897/197606834-9c3c3e48-84bd-49a3-938e-43eea8ea05ce.gif) -->
 
-![Screen Recording 2022-10-24 at 3 11 59 PM](https://user-images.githubusercontent.com/27078897/197606834-9c3c3e48-84bd-49a3-938e-43eea8ea05ce.gif)
+![Screen Recording 2023-03-06 at 5 26 39 PM](https://user-images.githubusercontent.com/27078897/197606834-9c3c3e48-84bd-49a3-938e-43eea8ea05ce.gif)
 
 We want the player to push boxes though, we can set this behavior with `setPushables`.
 
@@ -219,8 +223,9 @@ The arguement passed to set pushables means that every sprite of type `player` o
 Let's see what that looks like now.
 
 <!-- ![Screen Recording 2022-07-18 at 3 22 43 PM](https://user-images.githubusercontent.com/27078897/179601035-0e7b751c-2767-47ea-b2bd-5d0497b4547f.gif) -->
+<!-- ![Screen Recording 2022-10-24 at 3 13 13 PM](https://user-images.githubusercontent.com/27078897/197606970-76f14b26-b3b2-44dd-ac96-a3459613a7b9.gif) -->
 
-![Screen Recording 2022-10-24 at 3 13 13 PM](https://user-images.githubusercontent.com/27078897/197606970-76f14b26-b3b2-44dd-ac96-a3459613a7b9.gif)
+![Screen Recording 2023-03-06 at 5 08 53 PM](https://cloud-p3xo8pbbd-hack-club-bot.vercel.app/020230306_170757.gif)
 
 ### Win Condition
 
@@ -263,8 +268,9 @@ p.w.
 ```
 
 <!-- ![Screen Recording 2022-07-18 at 3 24 08 PM](https://user-images.githubusercontent.com/27078897/179601256-55d6a5cd-7135-490a-bb46-1ed3d8537e06.gif) -->
+<!-- ![Screen Recording 2022-10-24 at 3 14 43 PM](https://user-images.githubusercontent.com/27078897/197607684-45683107-fb28-4900-95ff-cd0b1b69c1f5.gif) -->
 
-![Screen Recording 2022-10-24 at 3 14 43 PM](https://user-images.githubusercontent.com/27078897/197607684-45683107-fb28-4900-95ff-cd0b1b69c1f5.gif)
+![Screen Recording 2023-03-06 at 5 43 02 PM](https://cloud-qnqk1plkg-hack-club-bot.vercel.app/020230306_174220.gif)
 
 ### Polish
 
