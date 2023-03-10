@@ -239,18 +239,18 @@ onInput("d", () => {
 });
 
 afterInput(() => {
-    const numberCovered = tilesWith(shoot, present).length;
-    const targetNumber = tilesWith(shoot).length;
+  const numberCovered = tilesWith(shoot, present).length;
+  const targetNumber = tilesWith(shoot).length;
 
-    if (numberCovered === targetNumber) {
-        // increase the current level number
-        level = level + 1;
+  if (numberCovered === targetNumber) {
+    level = level + 1;
 
-        const currentLevel = levels[level];
+    if (level < 10) {
+      const currentLevel = levels[level];
+      setMap(currentLevel);=
 
-        if (level === 10) {
-          addText("You win!");
-        }
-         
+    } else {
+      addText("You win!");
     }
+  }
 });
