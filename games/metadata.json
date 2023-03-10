@@ -2294,5 +2294,21 @@
     "img": "",
     "tags": [],
     "addedOn": "2023-03-09"
+  },
+  {
+    "filename": "santas_workshop",
+    "title": "santas_workshop",
+    "author": "ava_sadasivan",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-03-10"
+  },
+  {
+    "filename": "Binary_Eater",
+    "title": "Binary_Eater",
+    "author": "Kumaraswamy",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-03-10"
   }
 ]
