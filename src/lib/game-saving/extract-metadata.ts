@@ -10,9 +10,9 @@ export const extractMetadata = (code: string): ExtractedMetadata => {
 	const name = code.match(nameRegex)?.[1] ?? null
 	const authorName = code.match(authorRegex)?.[1] ?? null
 	const cleanedCode = code
-		.replace(nameRegex, '')
-		.replace(authorRegex, '')
-		.replace(/^\/\*\n+(.+)?\n+\*\//s, '/*\n$1\n*/')
-		.replace(/^\/\*\s*\*\/\s*/s, '')
+		// .replace(nameRegex, '')
+		// .replace(authorRegex, '')
+		// .replace(/^\/\*\n+(.+)?\n+\*\//s, '/*\n$1\n*/')
+		// .replace(/^\/\*\s*\*\/\s*/s, '')
 	return { name, authorName, cleanedCode }
 }
