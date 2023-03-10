@@ -1,4 +1,4 @@
-# Let's make our first game in [Sprig](https://editor.sprig.hackclub.com)!
+# Let's make our first game in [Sprig](https://sprig.hackclub.com/editor)!
 
 All Sprig games take place on a grid of tiles.
 Sprig uses sprites in these tiles to represent everything in games. 

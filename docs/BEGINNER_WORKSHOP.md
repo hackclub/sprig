@@ -4,7 +4,7 @@
 Sprig is a open-source handheld console developed by Hack Club. It uses a Raspberry Pi Pico and you can write games for it using Javascript. It is a tiny game engine that is embedded into the web and allows for you to quickly create tile-based games. Once you are done building your game, you can share it by making a PR, which if approved, will add it to the gallery.
 
 ## Getting Started
-Go to the [Sprig editor](https://editor.sprig.hackclub.com/) to start creating your own Sprig games. In this workshop we will build a simple game where you will control a player that pushes boxes into a goal.
+Go to the [Sprig editor](https://sprig.hackclub.com/editor) to start creating your own Sprig games. In this workshop we will build a simple game where you will control a player that pushes boxes into a goal.
 
 ### Creating and saving a game
 When you open up sprig editor, you should be greeted by some code that is already there to serve as a little tutorial. In this workshop we won't need that code, so you can delete everything to get a clean file.

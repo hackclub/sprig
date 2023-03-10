@@ -10,7 +10,9 @@ import MobileUnsupported from '../components/popups-etc/mobile-unsupported'
 
 const tempGame = Astro.cookies.get('sprigTempGame').value
 if (tempGame) return Astro.redirect(`/~/${encodeURIComponent(tempGame)}`, 302)
-if (await getSession(Astro.cookies)) return Astro.redirect('/~', 302)
+
+const session = await getSession(Astro.cookies)
+if (session?.session.full) return Astro.redirect('/~', 302)
 
 const persistenceState = signal<PersistenceState>({
 	kind: 'IN_MEMORY',
