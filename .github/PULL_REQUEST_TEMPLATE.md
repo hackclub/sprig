@@ -2,10 +2,12 @@
 
 ## About your game
 
-What is your game about? 
+**What is your game about?**
+
 <!-- Example: Pushing boxes to the goal. (from [Sokoban Plus](https://sprig.hackclub.com/gallery/sokoban_plus)) -->
 
-How to play your game?
+**How do you play your game?**
+
 <!-- Example  : Press WASD to move, J to restart and K to toggle trails, Get A boxes (cyan) to A goals (green), Get B boxes (magenta) to B goals (red), Get normal boxes (gray) to either goal. (from [Sokoban plus](https://sprig.hackclub.com/gallery/sokoban_plus)) -->
 
 ## Code
@@ -22,4 +24,4 @@ Check off the items that are true. <!-- Put a `x` in the  `[ ]`. Example: `[x] T
 - [ ] The image is in the [`/games/img` directory](https://github.com/hackclub/sprig/tree/main/games/img).
 - [ ] The name of the image matches the name of your file. <!-- Example: `sokoban_plus.js` -> `sokoban_plus.png`. -->
 
-> Thanks for PR!
+> Thanks for your PR!

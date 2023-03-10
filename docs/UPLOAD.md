@@ -45,8 +45,8 @@ cp -X ~/Downloads/pico-os.uf2 /Volumes/RPI-RP2
 
 ## Okay but how do I upload MY game?
 
-![drop!](https://cloud-7fl999odl-hack-club-bot.vercel.app/0screenshot3.png)
+![drop!](https://doggo.ninja/lRotxY.png)
 
-Open up your game in the editor, click the upload button, and select the Sprig from the menu (again, like a USB device.)
+Open up your game in the editor, click the "Run on Device" button in the top right, and select the Sprig from the menu (again, like a USB device.)
 
 That's it! You're done :)

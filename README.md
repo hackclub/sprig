@@ -60,9 +60,9 @@ People learn best when they make things that they care about, which they can the
 
 To get started you can follow [this challenge in the editor](https://sprig.hackclub.dev/gallery/getting_started), check out some [Sprig workshops](https://workshops.hackclub.com#sprig) or watch some short videos to get acquainted with Sprig:
 
-[This video shows a quick overview of the editor.](https://youtu.be/GEbDRR_cqJI)
+<!-- [This video shows a quick overview of the editor.](https://youtu.be/GEbDRR_cqJI)
 
-[This video shows making a simple example "game".](https://youtu.be/1UTLS4aO9bQ)
+[This video shows making a simple example "game".](https://youtu.be/1UTLS4aO9bQ) -->
 
 ## Development
 
