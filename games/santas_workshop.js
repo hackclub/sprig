@@ -247,7 +247,7 @@ afterInput(() => {
 
     if (level < 10) {
       const currentLevel = levels[level];
-      setMap(currentLevel);=
+      setMap(currentLevel);
 
     } else {
       addText("You win!");
