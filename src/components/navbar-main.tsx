@@ -14,7 +14,7 @@ export default function MainNavbar(props: MainNavbarProps) {
 			<ul class={styles.navlinks}>
 				<li class={styles.logo}>
 					<a href='/'>
-						<img class={styles.longImg} src='/spriglogotext-gold.png' height={30} width={87} alt='Sprig Logo' />
+						<img class={styles.longImg} src='/spriglogotext-white.png' height={30} width={87} alt='Sprig Logo' />
 					</a>
 				</li>
 				{props.session?.session.full ? (
