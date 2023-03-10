@@ -2,6 +2,7 @@
 @title:  Binary Eater
 @author: Kumaraswamy
 
+Inspired from: https://zac.cy/trashguy/
 
 Game where the player can to give inputs using (WASD, IJKL), 
 these commands are then interpreted as custom binary commands and text is displayed
