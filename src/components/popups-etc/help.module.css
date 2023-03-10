@@ -39,6 +39,10 @@
 	box-shadow: 0 0 20px 0 #00000038;
 }
 
+.content strong {
+	color: #000000;
+}
+
 .content h1 {
 	text-align: center;
 	margin: 0;
@@ -51,7 +55,7 @@
 }
 
 .content h2 {
-	color: var(--pcb-base);
+	color: var(--accent-dark);
 	margin: 0;
 	font-size: 1.75em;
 	margin-top: 40px;
@@ -72,12 +76,12 @@
 
 .content code, .content pre {
 	font-family: var(--font-code);
-	font-size: inherit;
+	font-size: 0.9rem;
 	background: #e9ecef;
 	color: #343a40;
 }
 
-.content  code {
+.content code {
 	padding: 0 4px;
 }
 

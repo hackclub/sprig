@@ -8,6 +8,13 @@ import { PersistenceState } from '../lib/state'
 import { mobileUserAgent } from '../lib/utils/mobile'
 import MobileUnsupported from '../components/popups-etc/mobile-unsupported'
 
+// Redirects for legacy Sprig URLs
+const galleryRegex = /^https:\/\/raw\.githubusercontent\.com\/hackclub\/sprig\/main\/games\/(.+)\.js$/
+const galleryMatches = Astro.url.searchParams.get('file')?.match(galleryRegex) ?? null
+if (galleryMatches) return Astro.redirect(`/gallery/${galleryMatches[1]}`, 302)
+if (Astro.url.searchParams.has('id'))
+	return Astro.redirect(`/legacy-bucket/${Astro.url.searchParams.get('id')}`, 302)
+
 const tempGame = Astro.cookies.get('sprigTempGame').value
 if (tempGame) return Astro.redirect(`/~/${encodeURIComponent(tempGame)}`, 302)
 
