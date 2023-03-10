@@ -5,7 +5,7 @@ import StandardHead from '../../components/standard-head.astro'
 import { signal } from '@preact/signals'
 import type { PersistenceState } from '../../lib/state'
 import { getSession } from '../../lib/game-saving/account'
-import { extractMetadata } from '../../lib/game-saving/extract-metadata'
+import { getGalleryGames } from '../../lib/game-saving/gallery'
 import MobilePlayer from '../../components/big-interactive-pages/mobile-player'
 import { mobileUserAgent } from '../../lib/utils/mobile'
 
@@ -16,12 +16,16 @@ const res = await fetch(`https://raw.githubusercontent.com/hackclub/sprig/main/g
 if (!res.ok) return Astro.redirect('/404', 302)
 const code = await res.text()
 
-const { name, authorName, cleanedCode } = extractMetadata(code)
+const games = await getGalleryGames()
+const metadata = games.find(game => game.filename === filename)
+const name = metadata?.title
+const authorName = metadata?.author
+
 const persistenceState = signal<PersistenceState>({
 	kind: 'SHARED',
 	name: (name ?? filename) || 'Untitled',
 	authorName: authorName || '',
-	code: cleanedCode,
+	code: code,
 	stale: false,
 	session
 })
@@ -30,13 +34,13 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 
 <html lang='en'>
 	<head>
-		<StandardHead title={name} />
+		<StandardHead title={(name ?? filename) || 'Untitled'} />
 	</head>
 	<body>
 		{isMobile ? (
 			<MobilePlayer
 				client:load
-				code={cleanedCode}
+				code={code}
 				gameName={(name ?? filename) || 'Untitled'}
 				authorName={authorName || ''}
 			/>
