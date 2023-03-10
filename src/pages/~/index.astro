@@ -1,0 +1,31 @@
+---
+import '../../global.css'
+import { getUser } from '../../lib/account'
+import Navbar from '../../components/molecules/navbar-main'
+import StandardHead from '../../components/atoms/standard-head.astro'
+
+if (!await getUser()) return Astro.redirect('/', 302)
+---
+
+<html lang='en'>
+	<head>
+		<StandardHead />
+		<title>Your Games | Sprig</title>
+	</head>
+	<body>
+		<Navbar loggedIn />
+		<h1>Your games</h1>
+		<button id='new-game'>New game</button>
+
+		<script>
+			const newGameButton = document.getElementById('new-game') as HTMLButtonElement
+			newGameButton.addEventListener('click', async () => {
+				newGameButton.disabled = true
+				const res = await fetch('/api/new-game', { method: 'POST' })
+				if (!res.ok) return alert('Failed to create game: ' + res.statusText)
+				const { id } = await res.json()
+				window.location.href = `/~/${id}`
+			})
+		</script>
+	</body>
+</html>

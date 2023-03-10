@@ -1,0 +1,26 @@
+---
+import '../../global.css'
+import { getUser, getGame } from '../../lib/account'
+import Editor from '../../components/organisms/editor'
+import StandardHead from '../../components/atoms/standard-head.astro'
+
+const user = await getUser()
+if (!user || !Astro.params.id) return Astro.redirect('/', 302)
+const game = await getGame(Astro.params.id)
+if (game?.ownerId !== user.id) return Astro.redirect('/~', 302)
+---
+
+<html lang='en'>
+	<head>
+		<StandardHead />
+		<title>Editor | Sprig</title>
+	</head>
+	<body>
+		<Editor
+			client:load
+			user={user}
+			game={game}
+			cookies={{ outputAreaSize: Astro.cookies.get('outputAreaSize').number() }}
+		/>
+	</body>
+</html>

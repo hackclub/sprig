@@ -1,0 +1,120 @@
+.page {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.pageMain {
+	padding: 20px;
+	display: flex;
+	flex-direction: row;
+	gap: 6px;
+	flex: 1;
+	overflow: hidden;
+}
+
+.codeContainer {
+	height: 100%;
+	flex: 1;
+	background: #ffffff;
+	position: relative;
+}
+
+.codeContainer .code {
+	border: 2px solid var(--accent);
+	overflow: hidden;
+}
+
+.codeContainer .playButton {
+	--btn-icon-size: 24px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-weight: bold;
+}
+
+.codeContainer .errors {
+	font-family: var(--font-code);
+	font-size: 0.9em;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 80px;
+	overflow-y: auto;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	padding: 8px;
+	background: #ffffff;
+	border: 2px solid var(--accent);
+	border-top: 3px solid var(--error);
+	color: var(--error);
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.resizeBar {
+	height: 100%;
+	background: red;
+	width: 6px;
+	cursor: col-resize;
+	background: transparent;
+}
+  
+.resizeBar:hover, .resizeBar.resizing {
+	background: var(--accent-light);
+}
+
+.screen {
+	border: 2px solid var(--accent);
+	display: block;
+	background: #ffffff;
+	width: 100%;
+	height: auto;
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+	outline: none;
+}
+
+.screen:focus {
+	outline: 4px solid #2194ff6c;
+}
+
+.screenControls {
+	color: var(--accent);
+	font-size: 0.9em;
+	display: flex;
+	flex-direction: row;
+	min-width: 400px;
+	justify-content: space-between;
+	align-items: center;
+	padding: 8px 0;
+}
+
+.screenControls .mute {
+	cursor: var(--cursor-interactive);
+	user-select: none;
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+	border: none;
+	background: none;
+	padding: 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 6px;
+}
+
+.screenControls .mute :global(svg) {
+	--size: 24px;
+	display: block;
+	width: var(--size);
+	height: var(--size);
+}
+
+.screenControls .screenSize {
+	color: var(--accent-light);
+	user-select: none;
+}

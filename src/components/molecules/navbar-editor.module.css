@@ -1,0 +1,18 @@
+.container {
+	background: var(--accent);
+	color: white;
+}
+
+.container ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: row;
+	gap: 4px;
+	padding: 0 8px;
+}
+
+.container li {
+	padding: 12px 14px;
+}
