@@ -5,7 +5,7 @@
 Creds:-
 Nomis by Cheru Berhanu (Inspired me for the project)
 Music! by Akeell (Inspiration for the project)
-@Shrey Mehra on Slack (Inspired me in the first place to start XD and also 
+'Shrey Mehra' on Slack or @Shrey-Mehra (Inspired me in the first place to start and also 
 my mental and technical support because this project hurts my brain)
 */
 
