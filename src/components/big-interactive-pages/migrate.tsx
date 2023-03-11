@@ -8,6 +8,7 @@ import { IoArrowForward, IoCheckmark } from 'react-icons/io5'
 import Input from '../design-system/input'
 import { getPuzzleLabFromLocalStorage } from '../../lib/game-saving/legacy-migration'
 import { SessionInfo } from '../../lib/game-saving/account'
+import { isValidEmail } from '../../lib/game-saving/email'
 
 interface LegacyGame {
 	name: string
@@ -184,7 +185,7 @@ export default function Migrate({ session, intitialEmail }: MigrateProps) {
 						accent
 						icon={IoCheckmark}
 						class={styles.migrateButton}
-						disabled={migratingGames.value.length === 0}
+						disabled={migratingGames.value.length === 0 || (!session?.session.full && !isValidEmail(email.value))}
 						loading={state.value === 'loading'}
 						type='submit'
 					>

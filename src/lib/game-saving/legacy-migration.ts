@@ -5,6 +5,9 @@ import { useEffect } from 'preact/hooks'
 const helperUrl = 'https://editor.sprig.hackclub.com/migration-helper.html'
 
 export const getPuzzleLabFromLocalStorage = (allowRedirect: boolean): Promise<string> => new Promise((resolve) => {
+	if (localStorage.getItem('puzzleLabHotfix') !== null)
+		return resolve(localStorage.getItem('puzzleLabHotfix')!)
+
 	const params = new URLSearchParams(window.location.search)
 	if (params.get('puzzleLab') !== null) {
 		// Remove the query param, it's cleaner for the user and means
