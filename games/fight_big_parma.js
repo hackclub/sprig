@@ -1,6 +1,6 @@
 /*
 @title: fight_big_parma
-@author: me, myself, and that guy
+@author: jakempock
 */
 
 const parmas = ["9", "8", "7", "6"];
