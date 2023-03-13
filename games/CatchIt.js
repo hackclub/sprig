@@ -5,7 +5,7 @@
 Creds:-
 A_Really_One_Sided_Duel by Saatwik Das (The working was similar so I copied algorithms)
 Falling_Blocks by Thanosan Prathifkumar (Again, I copied the algorithm to make my work easy)
-@SHREEYA2007 on github
+
 */
 
 const player = "p";
