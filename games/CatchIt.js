@@ -107,7 +107,7 @@ setMap(level);
 
 const obstacleSpawn = setInterval(() => {
   // generate obstacles
-  let x = Math.floor(Math.random() * 1);
+  let x = Math.floor(Math.random() * 12);
   let found = false;
   for(let i = 0; i < obstacles.length; ++i) {
     if(obstacles[i][0] == x && obstacles[i][1] == 0 || obstacles[i][0] == x && obstacles[i][1] == 1) {
