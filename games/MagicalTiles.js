@@ -241,9 +241,6 @@ onInput("l", () => {
   playTune(orangeTune)
 });
 
-onInput("i", ()=>{
-  playback.end()
-});
 
   
   
