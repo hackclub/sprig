@@ -172,12 +172,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			<ul>
 				{props.persistenceState.value.session?.session.full
 					? (<>
-						<li><a href='/~'>Your games</a></li>
-						<li><a href='/~/new'>New game</a></li>
+						<li><a href='/~'>Your Games</a></li>
+						<li><a href='/~/new'>New Game</a></li>
 					</>)
 					: (<>
 						<li><a href='/'>Home</a></li>
-						<li><a href='/~'>Your games (log in)</a></li>
+						<li><a href='/~'>Your Games (log in)</a></li>
 					</>)}
 				<li><a href='/gallery'>Gallery</a></li>
 				<li><a href='/get'>Get a Sprig</a></li>
