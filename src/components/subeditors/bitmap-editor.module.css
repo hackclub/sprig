@@ -1,0 +1,175 @@
+.container {
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+	background: var(--bg-overflow);
+	overflow: hidden;
+}
+
+.sidebar {
+	background: var(--bg-floating);
+	color: #ffffff;
+	height: 100%;
+	width: 260px;
+	padding: 14px;
+	display: flex;
+	gap: 30px;
+	flex-direction: column;
+	justify-content: space-between;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.helpText {
+	font-size: 0.9em;
+	color: var(--fg-muted);
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.helpText p {
+	margin: 0;
+}
+
+.helpText .shortcut {
+	color: var(--accent-light);
+}
+
+.artTools, .configTools {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.artTools .toolGrid {
+	display: grid;
+	gap: 6px;
+	grid-template-columns: repeat(2, 1fr);
+}
+
+.configTools .toolGrid {
+	display: grid;
+	gap: 6px;
+	grid-template-columns: repeat(4, 1fr);
+}
+
+.toolSection {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.toolSection h3 {
+	font-size: 0.9em;
+	margin: 0;
+	user-select: none;
+}
+
+.tool {
+	--icon-size: 24px;
+	font-size: inherit;
+	font-family: inherit;
+	color: #ffffff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	background: #000000;
+	height: var(--size);
+	width: var(--size);
+	padding: 10px;
+	position: relative;
+	user-select: none;
+	outline: none;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	cursor: var(--cursor-interactive);
+}
+
+.toolName {
+	color: var(--fg-muted);
+	font-size: 0.9em;
+}
+
+.tool:disabled {
+	cursor: not-allowed;
+	opacity: 0.4;
+}
+
+.tool:not(:disabled):hover, .tool:not(:disabled):focus-visible {
+	background: #2f2f2f;
+}
+
+.tool.active {
+	box-shadow: 0 0 0 2px inset var(--accent);
+}
+
+.tool :global(svg) {
+	display: block;
+	height: var(--icon-size);
+	width: var(--icon-size);
+}
+
+.color {
+	aspect-ratio: 1;
+	border: none;
+	cursor: var(--cursor-interactive);
+}
+
+.color.active {
+	box-shadow: 0 0 0 2px var(--bg-overlay), 0 0 0 3px var(--fg-switch-high);
+}
+
+.tooltip {
+	font-size: 0.9em;
+	display: none;
+	position: absolute;
+	background: var(--bg-surface);
+	color: #000000;
+	padding: 2px 6px;
+	overflow: visible;
+	white-space: nowrap;
+	width: fit-content;
+	z-index: 999;
+}
+
+.tooltip.top { top: -24px; }
+.tooltip.bottom { bottom: -24px; }
+
+.tool:hover .tooltip, .tool:focus-visible .tooltip {
+	display: block;
+}
+
+.tooltip .shortcut {
+	color: var(--accent);
+}
+
+.canvasContainer {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.canvas {
+	--pixel-size: 24px;
+	background-size: var(--pixel-size) var(--pixel-size);
+	background-repeat: repeat;
+}
+
+.canvas .row {
+	display: flex;
+	flex-direction: row;
+}
+
+.pixel {
+	width: var(--pixel-size);
+	height: var(--pixel-size);
+}
+
+.pixel:hover {
+	box-shadow: 0 0 0 var(--pixel-size) inset var(--bg-drawing-hover);
+}
