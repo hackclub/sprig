@@ -9,9 +9,9 @@ import { effect, signal } from '@preact/signals'
 import { h, render } from 'preact'
 import SearchBox from '../../components/search-box'
 
-export function createEditorState(initialCode : string , onUpdate = () => {}, onRunShortcut = () => {}): EditorState {
+export function createEditorState(initialCode: string , onUpdate = () => {}, onRunShortcut = () => {}): EditorState {
 	return EditorState.create({
-		doc:initialCode,
+		doc: initialCode,
 		extensions: [
 			lineNumbers(),
 			highlightActiveLineGutter(),
