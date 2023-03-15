@@ -160,7 +160,6 @@ function findErrorLineCol(stack: string | undefined): [number | null, number | n
  * This is modified code from V1.
  */
 export function highlightError(line: number) {
-	console.log(line)
 	const cmLineGutters = document.querySelectorAll(".cm-lineNumbers > .cm-gutterElement") // Get all the line gutters
 	// Find the gutter that matches the line number and is not hidden
 	for (let i = 0; i < cmLineGutters.length; i++) {
