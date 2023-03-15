@@ -141,7 +141,9 @@ function findErrorLineCol(stack: string | undefined): [number | null, number | n
 
 	let line = null
 	let col = null
-	let location = stack.match(/<anonymous>:(.+)\)/)
+
+	// Get the most outer (first) error that is part of ther user's code (not part of the engine and anonymous)
+	let location = stack.match(/<anonymous>:(.+)\)/) 
 
 	if (location) {
 		let lineCol = location[1].split(":").map(Number)
@@ -159,7 +161,8 @@ function findErrorLineCol(stack: string | undefined): [number | null, number | n
  */
 export function highlightError(line: number) {
 	console.log(line)
-	const cmLineGutters = document.querySelectorAll(".cm-lineNumbers > .cm-gutterElement")
+	const cmLineGutters = document.querySelectorAll(".cm-lineNumbers > .cm-gutterElement") // Get all the line gutters
+	// Find the gutter that matches the line number and is not hidden
 	for (let i = 0; i < cmLineGutters.length; i++) {
 		const cmLineGutter = cmLineGutters[i] as HTMLElement;
 		const innerNumber = cmLineGutter.innerText;
