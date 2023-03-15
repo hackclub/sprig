@@ -113,6 +113,9 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		const code = codeMirror.value?.state.doc.toString() ?? ''
 		const res = runGame(code, screen.current, (error) => {
 			errorLog.value = [ ...errorLog.value, error ]
+			if (error.line) {
+				highlightError(error.line);
+			}
 		})
 
 		screen.current.focus()
