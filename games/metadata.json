@@ -2352,15 +2352,15 @@
     "addedOn": "2023-03-14"
   },
   {
-    "filename": "Alien_Attack.js",
+    "filename": "Alien_Attack",
     "title": "Alien_Attack",
     "author": "whatware",
-    "img": "games/img/Alien_Attack.png",
+    "img": "Alien_Attack",
     "tags": [],
     "addedOn": "2023-03-15"
   },
   {
-    "filename": "ElfSokoban.js",
+    "filename": "ElfSokoban",
     "title": "ElfSokoban",
     "author": "Markonije",
     "img": "",
@@ -2368,10 +2368,10 @@
     "addedOn": "2023-03-15"
   },
   {
-    "filename": "It_Is_Coming_Out!.js",
+    "filename": "It_Is_Coming_Out!",
     "title": "It_Is_Coming_Out!",
     "author": "N/A",
-    "img": "games/img/It_Is_Coming_Out!.png",
+    "img": "It_Is_Coming_Out!",
     "tags": [],
     "addedOn": "2023-03-15"
   }
