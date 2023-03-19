@@ -26,14 +26,14 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		if (!parent.current) throw new Error('Oh golly! The editor parent ref is null')
 		let lastCode: string = props.initialCode ?? ''
 		const editor = new EditorView({
-			state: createEditorState(() => {
+			state: createEditorState(props.initialCode ? props.initialCode : '', () => {
 				if (editor.state.doc.toString() === lastCode) return
 				lastCode = editor.state.doc.toString()
 				onCodeChangeRef.current?.()
 			}, () => onRunShortcutRef.current?.()),
 			parent: parent.current
 		})
-		if (props.initialCode) editor.dispatch({ changes: { from: 0, insert: props.initialCode } })
+		
 		props.onEditorView?.(editor)
 	}, [])
 
