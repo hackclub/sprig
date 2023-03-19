@@ -1,5 +1,5 @@
 /*
-@title: Maze Runner
+@title: Maze_Runner2
 @author: Charlie
 
 First time? Check out the tutorial game:
