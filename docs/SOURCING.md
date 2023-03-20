@@ -1,6 +1,6 @@
 # Sourcing!
 
-Sprig is a physical game console designed by Hack Club where you write your **own** [games!](https://editor.sprig.hackclub.com/) With any hardware device, it’s obvious you need to buy parts and have the board built. So all I need to do: is to find parts, buy parts, find a manufacturer, and boom! We get Sprigs. Yeah, no.
+Sprig is a physical game console designed by Hack Club where you write your **own** [games](https://sprig.hackclub.com/editor)! With any hardware device, it’s obvious you need to buy parts and have the board built. So all I need to do: is to find parts, buy parts, find a manufacturer, and boom! We get Sprigs. Yeah, no.
 
 Sourcing parts today is no task for the faint of heart. *[Have](https://cloud-7qmksvucf-hack-club-bot.vercel.app/0screen_shot_2022-09-22_at_3.07.15_pm.png)  [you](https://cloud-1dg3e6nm9-hack-club-bot.vercel.app/0screen_shot_2022-09-22_at_3.07.42_pm.png)  [seen](https://cloud-1eysvgt04-hack-club-bot.vercel.app/0screen_shot_2022-09-22_at_3.20.50_pm.png)  [these](https://cloud-4i20ywhg7-hack-club-bot.vercel.app/0screen_shot_2022-09-22_at_3.23.10_pm.png)  [bloody](https://cloud-bpjpduoo0-hack-club-bot.vercel.app/0screen_shot_2022-09-22_at_3.23.48_pm.png)  [shortages](https://cloud-m5x11st40-hack-club-bot.vercel.app/0screen_shot_2022-09-22_at_3.24.33_pm.png)?*
 

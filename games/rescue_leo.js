@@ -9,11 +9,11 @@ mugs the next time you go to Starbucks :)
 Leo, the sea turtle needs to reach the goal tile without hitting any trash.
 Using WASD controls, navigate to the goal tile without choking on plastic.
 
+Hit J to start!
+
 Potential upgrades(I'm new to JS, consider a PR!)
 - Moving trash
-- Main menu screen
 - Congratulations text
-
 */
 
 const player = "p";
@@ -135,6 +135,13 @@ setBackground(backgroundColor);
 let level = 0;
 const levels = [
   map`
+..........
+..........
+..........
+..........
+..........
+..........`,
+  map`
 .............
 .............
 ..bbbbbbbb...
@@ -235,29 +242,63 @@ bbrttbrbtbbbtbq
 bbrttrqrrrrttrq
 bbbrtqbbrbbrtrt
 bpbbbbqtttbrrrq`,
+  map`
+bbbbbbbrrrbtbbg
+brrqbttrrrtbbbb
+rqrqbbrrbrtrbbt
+qqbbqbrrrbbbrbr
+qrrqbbrtttbbtbr
+bbbbbrrtqqrqbbt
+trbqbbtttbqrbqt
+rqbrqbqtrqbqbrr
+btqqrbbbqtbbbrr
+bttbbbbrqttbrrr
+rbbqqbbbqqqbbbq
+brbbqbbbqbbbrrq
+bbrbrbqqbbqqttq
+bbbbbbqqbqbbrqb
+bpbbbbbbbqqrrqr`,
 ];
 
 setMap(levels[level]);
-addText("Using WASD, reach", {x: 2, y: 2, color: color`5`});
-addText("the goal tile", {x: 2, y: 3, color: color`5`});
-addText("without touching", {x: 2, y: 4, color: color`5`});
-addText("the trash!", {x: 2, y: 5, color: color`5`});
-setTimeout(clearText, 3000);
+beginGame();
+
+function beginGame() {
+  addText("START", {x: 7, y: 7, color: color`5`});
+  addText("Rescue Leo", {x: 5, y: 8, color: color`5`});
+  addText("Hit J to begin!", {x: 3, y: 9, color: color`5`});
+}
+
+
+onInput("j", () => {
+  if(!getFirst(player)) return;
+  
+  if (level === 0)
+  {
+    clearText();
+    level += 1;
+    setMap(levels[level]);
+  }
+});
 
 // WASD Controls
 onInput("w", () => {
+  if(!getFirst(player)) return;
   getFirst(player).y -= 1
 });
 
 onInput("a", () => {
+  if(!getFirst(player)) return;
   getFirst(player).x -= 1
 });
 
 onInput("s", () => {
+  if(!getFirst(player)) return;
   getFirst(player).y += 1
 });
 
 onInput("d", () => {
+  if(!getFirst(player)) return;
   getFirst(player).x += 1
 });
 
@@ -266,6 +307,7 @@ onInput("d", () => {
 function restartGame() {
   level = 0;
   setMap(levels[level]);
+  beginGame();
 }
 
 // Checks for collision with trash
@@ -282,8 +324,18 @@ afterInput(() => {
   if (trashTiles > 0) {
     level = 0;
     setMap(levels[level]);
+    beginGame();
   }
 
+  else if (level === 1) {
+    addText("Using WASD, reach", {x: 2, y: 2, color: color`5`});
+    addText("the goal tile", {x: 2, y: 3, color: color`5`});
+    addText("without touching", {x: 2, y: 4, color: color`5`});
+    addText("the trash!", {x: 2, y: 5, color: color`5`});
+    setTimeout(clearText, 3000);
+  }
+    
+  
   // Player reached goal tile, advance level
   if (goalTiles > 0) {
     // Increment level
@@ -296,10 +348,11 @@ afterInput(() => {
       setTimeout(clearText, 2000);
       addText("Restarting...", {x: 2, y: 4, color: color`5`});
       setTimeout(clearText, 2000);
-      setTimeout(restartGame, 5000);
+      setTimeout(restartGame, 2000);
     }
     else {   
       setMap(levels[level]);
     } 
   }
 });
+

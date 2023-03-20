@@ -2166,5 +2166,221 @@
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2023-02-19"
+  },
+  {
+    "filename": "wet-sand",
+    "title": "wet-sand",
+    "author": "mint",
+    "img": "",
+    "tags": ["simulation"],
+    "addedOn": "2023-02-20"
+  },
+  {
+    "filename": "RandomDungeon-final",
+    "title": "RandomDungeon",
+    "author": "JonathanLevi",
+    "img": "",
+    "tags": ["dungeon"],
+    "addedOn": "2023-02-20"
+  },
+  {
+    "filename": "bloxorz",
+    "title": "bloxorz",
+    "author": "itona",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-02-20"
+  },
+  {
+    "filename": "Flamin_Finger",
+    "title": "Flamin_Finger",
+    "author": "Richie Tran",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-02-23"
+  },
+  {
+    "filename": "mathematical_meteorite",
+    "title": "mathematical_meteorite",
+    "author": "Arash",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-02-23"
+  },
+  {
+    "filename": "Street_Racer",
+    "title": "Street_Racer",
+    "author": "Cdogo",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-02-24"
+  },
+  {
+    "filename": "connectTheDots",
+    "title": "connectTheDots",
+    "author": "Alex Howden",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-02-26"
+  },
+  {
+    "filename": "the_hungry_mouse",
+    "title": "The Hungry Mouse",
+    "author": "Kai Etkin",
+    "img": "the_hungry_mouse",
+    "tags": ["puzzle", "maze"],
+    "addedOn": "2023-03-01"
+  },
+  {
+    "filename": "the_dining_room_in_the_sky",
+    "title": "the_dining_room_in_the_sky",
+    "author": "Dylan Tran",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-02-28"
+  },
+  {
+    "filename": "whack_a_mole",
+    "title": "whack_a_mole",
+    "author": "Sameer Murthy",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2023-03-01"
+  },
+  {
+    "filename": "Labyrinth3",
+    "title": "Labyrinth3",
+    "author": "DorukSarpAlwaysStrikesBack!",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-03-01"
+  },
+  {
+    "filename": "bobs_bad_apple",
+    "title": "bobs_bad_apple",
+    "author": "L. Clark",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-03-01"
+  },
+  {
+    "filename": "calculator",
+    "title": "calculator",
+    "author": "Sameer Murthy",
+    "img": "",
+    "tags": ["tool", "simulation"],
+    "addedOn": "2023-03-03"
+  },
+  {
+    "filename": "Memory_Test",
+    "title": "Memory_Test",
+    "author": "Albert_M",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-03-03"
+  },
+  {
+    "filename": "Disco",
+    "title": "Disco",
+    "author": "rakshit rangaprasad",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-03-05"
+  },
+  {
+    "filename": "Dodge_The_Rock",
+    "title": "Dodge_The_Rock",
+    "author": "dutamot",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-03-09"
+  },
+  {
+    "filename": "santas_workshop",
+    "title": "santas_workshop",
+    "author": "ava_sadasivan",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-03-10"
+  },
+  {
+    "filename": "Binary_Eater",
+    "title": "Binary_Eater",
+    "author": "Kumaraswamy",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-03-10"
+  },
+  {
+    "filename": "fight_big_parma",
+    "title": "fight_big_parma",
+    "author": "jakempock",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-03-13"
+  },
+  {
+    "filename": "girl_scouts_x_hack_club",
+    "title": "girl_scouts_x_hack_club",
+    "author": "keira",
+    "img": "",
+    "tags": ["event"],
+    "addedOn": "2023-03-13"
+  },
+  {
+    "filename": "CatchIt",
+    "title": "CatchIt",
+    "author": "Shrey Mehra",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-03-14"
+  },
+  {
+    "filename": "fill_the_map",
+    "title": "fill_the_map",
+    "author": "Ansh Kumar",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-03-14"
+  },
+  {
+    "filename": "MagicalTiles",
+    "title": "MagicalTiles",
+    "author": "Shreeya Rani",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-03-14"
+  },
+  {
+    "filename": "Alien_Attack",
+    "title": "Alien_Attack",
+    "author": "whatware",
+    "img": "Alien_Attack",
+    "tags": [],
+    "addedOn": "2023-03-15"
+  },
+  {
+    "filename": "ElfSokoban",
+    "title": "ElfSokoban",
+    "author": "Markonije",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-03-15"
+  },
+  {
+    "filename": "It_Is_Coming_Out!",
+    "title": "It_Is_Coming_Out!",
+    "author": "N/A",
+    "img": "It_Is_Coming_Out!",
+    "tags": [],
+    "addedOn": "2023-03-15"
+  },
+  {
+    "filename": "Maze_Runner3",
+    "title": "Maze_Runner3",
+    "author": "Charlie",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-03-19"
   }
 ]
