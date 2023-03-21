@@ -30,8 +30,13 @@ export const loginCodeTemplate = (code: string): EmailSpec => ({
 	html: `
 		<p>Here's your Sprig login code:</p>
 		<h1>${code}</h1>
+		<p><small>(Not you? You can safely ignore this email.)</small></p>
 	`,
-	text: `Here's your Sprig login code: ${code}`
+	text: [
+		`Here's your Sprig login code: ${code}`,
+		'',
+		'(Not you? You can safely ignore this email.)'
+	].join('\n')
 })
 
 export const tempGameTemplate = (user: User, game: Game): EmailSpec => {
