@@ -5,9 +5,16 @@ import { useEffect } from 'preact/hooks'
 const helperUrl = 'https://editor.sprig.hackclub.com/migration-helper.html'
 
 export const getPuzzleLabFromLocalStorage = (allowRedirect: boolean): Promise<string> => new Promise((resolve) => {
-	if (localStorage.getItem('puzzleLabHotfix') !== null)
-		return resolve(localStorage.getItem('puzzleLabHotfix')!)
+	if (sessionStorage.getItem('migratedPuzzleLab')) {
+		const puzzleLab = sessionStorage.getItem('migratedPuzzleLab')!
+		sessionStorage.removeItem('migratedPuzzleLab')
+		return resolve(puzzleLab)
+	}
 
+	// Query param is deprecated or something, we should maybe eventually remove it.
+	// 
+	// (For context, before sessionStorage and a POST redirect was used, the value
+	// was passed as a query param.)
 	const params = new URLSearchParams(window.location.search)
 	if (params.get('puzzleLab') !== null) {
 		// Remove the query param, it's cleaner for the user and means

@@ -2,10 +2,13 @@ import type { APIRoute } from 'astro'
 
 export const post: APIRoute = async ({ request }) => {
 	let puzzleLab
+	let redirect
 	try {
 		const body = await request.formData()
-		puzzleLab = body.get('puzzle-lab')
+		puzzleLab = body.get('puzzleLab')
 		if (typeof puzzleLab !== 'string') throw 'Invalid form data'
+		redirect = body.get('redirect')
+		if (typeof redirect !== 'string' && redirect !== null) throw 'Invalid form data'
 	} catch (error) {
 		return new Response(typeof error === 'string' ? error : 'Bad request body', { status: 400 })
 	}
@@ -13,8 +16,10 @@ export const post: APIRoute = async ({ request }) => {
 	return new Response(`
 		<script>
 			const puzzleLab = ${JSON.stringify(puzzleLab)}
-			window.localStorage.setItem('puzzle-lab', puzzleLab)
-			window.location.replace('/migrate')
+			sessionStorage.setItem('migratedPuzzleLab', puzzleLab)
+
+			const search = new URLSearchParams(window.location.search)
+			window.location.replace(search.get('redirect') || '/migrate')
 		</script>
 	`, {
 		status: 200,
