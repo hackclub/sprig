@@ -16,10 +16,9 @@ export const post: APIRoute = async ({ request }) => {
 	return new Response(`
 		<script>
 			const puzzleLab = ${JSON.stringify(puzzleLab)}
+			const redirect = ${JSON.stringify(redirect)}
 			sessionStorage.setItem('migratedPuzzleLab', puzzleLab)
-
-			const search = new URLSearchParams(window.location.search)
-			window.location.replace(search.get('redirect') || '/migrate')
+			window.location.replace(redirect || '/migrate')
 		</script>
 	`, {
 		status: 200,
