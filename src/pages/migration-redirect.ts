@@ -5,10 +5,10 @@ export const post: APIRoute = async ({ request }) => {
 	let redirect
 	try {
 		const body = await request.formData()
-		puzzleLab = body.get('puzzleLab')
-		if (typeof puzzleLab !== 'string') throw 'Invalid form data'
+		puzzleLab = body.get('puzzle-lab')
+		if (typeof puzzleLab !== 'string') throw 'Invalid puzzle lab'
 		redirect = body.get('redirect')
-		if (typeof redirect !== 'string' && redirect !== null) throw 'Invalid form data'
+		if (typeof redirect !== 'string' && redirect !== null) throw 'Invalid redirect'
 	} catch (error) {
 		return new Response(typeof error === 'string' ? error : 'Bad request body', { status: 400 })
 	}
