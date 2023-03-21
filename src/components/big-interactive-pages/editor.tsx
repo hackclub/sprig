@@ -164,7 +164,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	else if (persistenceState.value.kind === 'SHARED')
 		initialCode = persistenceState.value.code
 	else if (persistenceState.value.kind === 'IN_MEMORY')
-		initialCode = defaultExampleCode
+		initialCode = localStorage.getItem('sprigMemory') ?? defaultExampleCode
 	
 	// Firefox has weird tab restoring logic. When you, for example, Ctrl-Shift-T, it opens
 	// a kinda broken cached version of the page. And for some reason this reverts the CM
@@ -211,6 +211,10 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 									cloudSaveState: 'SAVING'
 								}
 								saveGame(persistenceState, codeMirror.value!.state.doc.toString())
+							}
+
+							if (persistenceState.value.kind === 'IN_MEMORY') {
+								localStorage.setItem('sprigMemory', codeMirror.value!.state.doc.toString())
 							}
 						}}
 					/>
