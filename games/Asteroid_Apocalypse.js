@@ -167,16 +167,16 @@ onInput("d", () => {
       const a = getFirst(asteroid);
       const b = getFirst(base);
   
-      if (a.x>b.x) {
+      if (typeof(a) !== "undefined" && a.x>b.x) {
         a.x -= 1
       }
-      else if (a.x<b.x) {
+      else if (typeof(a) !== "undefined" && a.x<b.x) {
         a.x += 1
       }
-      if (a.y>b.y) {
+      if (typeof(a) !== "undefined" && a.y>b.y) {
         a.y -= 1
       }
-      else if (a.y<b.y) {
+      else if (typeof(a) !== "undefined" && a.y<b.y) {
         a.y += 1
       }
       
@@ -245,10 +245,3 @@ afterInput(() => {
 
   }
 });
-
-
-
-
-
-
-
