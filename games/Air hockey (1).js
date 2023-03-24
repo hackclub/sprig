@@ -10,6 +10,9 @@ use IJKL for the right side paddle
 Rules--
 
 Prevent the ball from hitting the corners!
+
+Thankful to all my slack friends for helping me in building this game
+i can never make this happen without your help
  */
 const player1 = "p"
 const player2 = "q"
