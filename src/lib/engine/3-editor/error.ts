@@ -133,7 +133,7 @@ export const normalizeGameError = (gameError: GameError): NormalizedError => {
 }
 
 /*
- * Finds the line and column of the error.
+ * Finds the line and column of innermost error from a stack.
  * This is modified code from V1.
  */
 function findErrorLineCol(stack: string | undefined): [number | null, number | null] {
@@ -155,7 +155,7 @@ function findErrorLineCol(stack: string | undefined): [number | null, number | n
 }
 
 /*
- * Highlights a line gutter
+ * Highlights the line gutter of the speciefied line number to indicate an error.
  * This uses a custom attribute to style the gutter.
  * This is modified code from V1.
  */
@@ -175,7 +175,7 @@ export function highlightError(line: number) {
 }
 
 /*
- * Clears all exsisting error highlights from the gutter
+ * Clears all exsisting error highlighted from the gutter
  */
 export function clearErrorHighlight() {
 	const cmLineGutters = document.querySelectorAll(".cm-lineNumbers > .cm-gutterElement")
