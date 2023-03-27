@@ -1,5 +1,11 @@
 # Your checklist for this pull request
 
+## Author name
+
+**Author:**
+
+<!-- A name or nickname that you want to appear as the author of the game -->
+
 ## About your game
 
 **What is your game about?**
@@ -8,7 +14,7 @@
 
 **How do you play your game?**
 
-<!-- Example  : Press WASD to move, J to restart and K to toggle trails, Get A boxes (cyan) to A goals (green), Get B boxes (magenta) to B goals (red), Get normal boxes (gray) to either goal. (from [Sokoban plus](https://sprig.hackclub.com/gallery/sokoban_plus)) -->
+<!-- Example: Press WASD to move, J to restart and K to toggle trails, Get A boxes (cyan) to A goals (green), Get B boxes (magenta) to B goals (red), Get normal boxes (gray) to either goal. (from [Sokoban plus](https://sprig.hackclub.com/gallery/sokoban_plus)) -->
 
 ## Code
 Check off the items that are true. <!-- Put a `x` in the  `[ ]`. Example: `[x] The game was made...` -->

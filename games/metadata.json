@@ -2310,5 +2310,109 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2023-03-10"
+  },
+  {
+    "filename": "fight_big_parma",
+    "title": "fight_big_parma",
+    "author": "jakempock",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-03-13"
+  },
+  {
+    "filename": "girl_scouts_x_hack_club",
+    "title": "girl_scouts_x_hack_club",
+    "author": "keira",
+    "img": "",
+    "tags": ["event"],
+    "addedOn": "2023-03-13"
+  },
+  {
+    "filename": "CatchIt",
+    "title": "CatchIt",
+    "author": "Shrey Mehra",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-03-14"
+  },
+  {
+    "filename": "fill_the_map",
+    "title": "fill_the_map",
+    "author": "Ansh Kumar",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-03-14"
+  },
+  {
+    "filename": "MagicalTiles",
+    "title": "MagicalTiles",
+    "author": "Shreeya Rani",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-03-14"
+  },
+  {
+    "filename": "Alien_Attack",
+    "title": "Alien_Attack",
+    "author": "whatware",
+    "img": "Alien_Attack",
+    "tags": [],
+    "addedOn": "2023-03-15"
+  },
+  {
+    "filename": "ElfSokoban",
+    "title": "ElfSokoban",
+    "author": "Markonije",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-03-15"
+  },
+  {
+    "filename": "It_Is_Coming_Out!",
+    "title": "It_Is_Coming_Out!",
+    "author": "N/A",
+    "img": "It_Is_Coming_Out!",
+    "tags": [],
+    "addedOn": "2023-03-15"
+  },
+  {
+    "filename": "Maze_Runner3",
+    "title": "Maze_Runner3",
+    "author": "Charlie",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-03-19"
+  },
+  {
+    "filename": "TwinPrimeRockets",
+    "title": "TwinPrimeRockets",
+    "author": "Pradevel",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-03-21"
+  },
+  {
+    "filename": "Duck_Hunt",
+    "title": "Duck_Hunt",
+    "author": "el",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-03-25"
+  },
+  {
+    "filename": "rickroll",
+    "title": "rickroll",
+    "author": "Tiger-The-Cat",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-03-25"
+  },
+  {
+    "filename": "Physics_Sandbox",
+    "title": "Physics_Sandbox",
+    "author": "Henry Bass",
+    "img": "",
+    "tags": ["simulation"],
+    "addedOn": "2023-03-27"
   }
 ]

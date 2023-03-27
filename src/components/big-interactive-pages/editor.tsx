@@ -15,6 +15,7 @@ import { collapseRanges } from '../../lib/codemirror/util'
 import { defaultExampleCode } from '../../lib/examples'
 import MigrateToast from '../popups-etc/migrate-toast'
 import { highlightError, clearErrorHighlight } from '../../lib/engine/3-editor/error'
+import { nanoid } from 'nanoid'
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>
@@ -173,7 +174,27 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	else if (persistenceState.value.kind === 'SHARED')
 		initialCode = persistenceState.value.code
 	else if (persistenceState.value.kind === 'IN_MEMORY')
-		initialCode = defaultExampleCode
+		initialCode = localStorage.getItem('sprigMemory') ?? defaultExampleCode
+	
+	// Firefox has weird tab restoring logic. When you, for example, Ctrl-Shift-T, it opens
+	// a kinda broken cached version of the page. And for some reason this reverts the CM
+	// state. Seems like manipulating Preact state is unpredictable, but sessionStorage is
+	// saved, so we use a random token to detect if the page is being restored and force a
+	// reload.
+	//
+	// See https://github.com/hackclub/sprig/issues/919 for a bug report this fixes.
+	useEffect(() => {
+		const pageId = nanoid()
+		window.addEventListener('unload', () => {
+			sessionStorage.setItem(pageId, pageId)
+		})
+		window.addEventListener('load', () => {
+			if (sessionStorage.getItem(pageId)) {
+				sessionStorage.removeItem('pageId')
+				window.location.reload()
+			}
+		})
+	}, [ initialCode ])
 
 	return (
 		<div class={styles.page}>
@@ -200,6 +221,10 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 									cloudSaveState: 'SAVING'
 								}
 								saveGame(persistenceState, codeMirror.value!.state.doc.toString())
+							}
+
+							if (persistenceState.value.kind === 'IN_MEMORY') {
+								localStorage.setItem('sprigMemory', codeMirror.value!.state.doc.toString())
 							}
 						}}
 					/>
