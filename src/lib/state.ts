@@ -13,6 +13,8 @@ import type { Game, SessionInfo } from './game-saving/account'
 export interface NormalizedError {
 	raw: unknown
 	description: string
+	line?: number | null
+	column?: number | null
 }
 
 // Editor types
