@@ -10,9 +10,9 @@ Run games by hitting the `Run` button or pressing `Shift+Enter`.
 
 ## Getting Help
 
-If this is your first time using Sprig, try playing through the [tutorial](https://sprig.hackclub.dev/gallery/getting_started). From there, we suggest hacking on any of the [current games](https://sprig.hackclub.com/gallery) or starting from scratch.
+If this is your first time using Sprig, try playing through the [tutorial](https://sprig.hackclub.com/gallery/getting_started). From there, we suggest hacking on any of the [current games](https://sprig.hackclub.com/gallery) or starting from scratch.
 
-<!-- If this is your first time using Sprig, try playing through the [tutorial](https://sprig.hackclub.dev/gallery/getting_started).
+<!-- If this is your first time using Sprig, try playing through the [tutorial](https://sprig.hackclub.com/gallery/getting_started).
 
 You can also watch this [introduction to the editor](https://www.youtube.com/watch?v=GEbDRR_cqJI) or [walkthrough](https://www.youtube.com/watch?v=1UTLS4aO9bQ) on how to make a game. From there, we suggest hacking on any of the [current games](https://sprig.hackclub.com/gallery) or starting from scratch. -->
 
