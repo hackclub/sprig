@@ -14,6 +14,7 @@ import Help from '../popups-etc/help'
 import { collapseRanges } from '../../lib/codemirror/util'
 import { defaultExampleCode } from '../../lib/examples'
 import MigrateToast from '../popups-etc/migrate-toast'
+import { highlightError, clearErrorHighlight } from '../../lib/engine/3-editor/error'
 import { nanoid } from 'nanoid'
 
 interface EditorProps {
@@ -86,7 +87,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		return () => window.removeEventListener('resize', updateMaxSize)
 	}, [])
 	const realOutputAreaSize = useComputed(() => Math.min(maxOutputAreaSize.value, Math.max(minOutputAreaSize, outputAreaSize.value)))
-	
+
 	// Resize bar logic
 	const resizeState = useSignal<ResizeState | null>(null)
 	useEffect(() => {
@@ -106,15 +107,18 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	const onRun = async () => {
 		foldAllTemplateLiterals()
 		if (!screen.current) return
-		
+
 		if (cleanup.current) cleanup.current()
 		errorLog.value = []
 
 		const code = codeMirror.value?.state.doc.toString() ?? ''
 		const res = runGame(code, screen.current, (error) => {
 			errorLog.value = [ ...errorLog.value, error ]
+			if (error.line) {
+				highlightError(error.line);
+			}
 		})
-		
+
 		screen.current.focus()
 		screenShake.value++
 		setTimeout(() => screenShake.value--, 200)
@@ -123,6 +127,12 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		if (res.error) {
 			console.error(res.error.raw)
 			errorLog.value = [ ...errorLog.value, res.error ]
+
+			if (res.error.line) {
+				highlightError(res.error.line);
+			}
+		} else {
+			clearErrorHighlight();
 		}
 	}
 	useEffect(() => () => cleanup.current?.(), [])
@@ -189,7 +199,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	return (
 		<div class={styles.page}>
 			<Navbar persistenceState={persistenceState} />
-			
+
 			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
@@ -223,7 +233,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 							<button class={styles.errorClose} onClick={() => errorLog.value = []}>
 								<IoClose />
 							</button>
-							
+
 							{errorLog.value.map((error, i) => (
 								<div key={`${i}-${error.description}`}>{error.description}</div>
 							))}
@@ -273,7 +283,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			{persistenceState.value.kind === 'IN_MEMORY' && persistenceState.value.showInitialWarning && (
 				<DraftWarningModal persistenceState={persistenceState} />
 			)}
-			
+
 			<Help initialVisible={!cookies.hideHelp} />
 			<MigrateToast persistenceState={persistenceState} />
 		</div>
