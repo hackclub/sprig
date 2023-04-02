@@ -2415,12 +2415,20 @@
     "tags": ["simulation"],
     "addedOn": "2023-03-27"
   },
-   {
+  {
     "filename": "chase_bob",
     "title": "chase_bob",
     "author": "Jesse Z",
     "img": "",
     "tags": [],
+    "addedOn": "2023-04-01"
+  },
+  {
+    "filename": "air_hockey",
+    "title": "air_hockey",
+    "author": "Soumay Manderna",
+    "img": "",
+    "tags": ["classic"],
     "addedOn": "2023-04-01"
   }
 ]
