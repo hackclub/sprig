@@ -1,6 +1,6 @@
 /*
 @author: @Soumay Manderna
-@title: air hockey
+@title: air_hockey
 
 Controls--
 
