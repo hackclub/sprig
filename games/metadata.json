@@ -2430,5 +2430,13 @@
     "img": "",
     "tags": ["classic"],
     "addedOn": "2023-04-01"
+  },
+  {
+    "filename": "Mining_Simulator",
+    "title": "Mining_Simulator",
+    "author": "MiniCube11",
+    "img": "",
+    "tags": ["simulation"],
+    "addedOn": "2023-04-10"
   }
 ]
