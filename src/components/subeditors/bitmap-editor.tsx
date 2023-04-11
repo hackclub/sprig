@@ -3,7 +3,7 @@ import type { EditorProps } from '../../lib/state'
 import type { IconType } from 'react-icons'
 import { signal, useSignal, useSignalEffect } from '@preact/signals'
 import { palette, type PaletteItem, rgbaToHex, transparentBgUrl, transparent } from '../../lib/engine/1-base/palette'
-import { drawingTools, gridsEq, makeTempGrid, mirrorGrid, TempGrid, transformTools, Vector } from './bitmap-editor-tools'
+import { drawingTools, makeTempGrid, mirrorGrid, TempGrid, transformTools, Vector } from './bitmap-editor-tools'
 import { useEffect, useRef } from 'preact/hooks'
 import tinykeys from 'tinykeys'
 import { IoArrowRedo, IoArrowUndo, IoImage, IoTrash } from 'react-icons/io5'
@@ -106,10 +106,12 @@ export default function BitmapEditor(props: EditorProps) {
 
 	// Sync text changes with pixel grid
 	useSignalEffect(() => {
+		const curGrid = moment.peek().pixelGrid
 		const newGrid = textToPixelGrid(props.text.value)
-		if (!gridsEq(newGrid, moment.peek().pixelGrid)) {
+
+		if (pixelGridToText(curGrid) !== pixelGridToText(newGrid)) {
 			moment.value = {
-				pixelGrid: textToPixelGrid(props.text.value),
+				pixelGrid: newGrid,
 				previous: moment.peek(),
 				next: null
 			}
@@ -296,6 +298,12 @@ export default function BitmapEditor(props: EditorProps) {
 							disabled={!moment.value.previous}
 							onActivate={() => {
 								if (!moment.value.previous) return
+								console.log('cur:')
+								console.log(pixelGridToText(moment.value.pixelGrid))
+								console.log('prev:')
+								console.log(pixelGridToText(moment.value.previous.pixelGrid))
+								console.log()
+
 								moment.value.previous.next = moment.value // We only need to populate this when traversing history
 								moment.value = moment.value.previous
 							}}
