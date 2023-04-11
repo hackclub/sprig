@@ -32,7 +32,6 @@ export default function SearchBox({ query, cursor, runCommand }: SearchBoxProps)
 				'Escape': () => runCommand(closeSearchPanel),
 				'$mod+F': (event) => {
 					event.preventDefault()
-					// findInput.current!.focus()
 					findInput.current!.select()
 				}
 			}),
