@@ -11,7 +11,7 @@ import { leftDown, modIcon, rightDown } from '../../lib/utils/keyboard'
 
 const makePixelGrid = (): PaletteItem[][] => new Array(16).fill(0).map(() => new Array(16).fill(transparent))
 const textToPixelGrid = (text: string): PaletteItem[][] => {
-	const rows = text.trim().split('\n')
+	const rows = text.trim().split('\n').map(row => row.trim())
 	while (rows.length < 16) rows.push('................')
 	rows.forEach((_, i) => { while (rows[i]!.length < 16) rows[i] += '.' })
 	return rows.map(row => [ ...row ].map(char => palette.find(([ key ]) => key === char) ?? transparent))
