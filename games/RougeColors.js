@@ -1,6 +1,7 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
+KingstimusPrime
+
+The goal of the game is to defeat all of the enemies by walking into them with the same color.
 */
 
 const player = "p"
