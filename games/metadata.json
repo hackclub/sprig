@@ -2462,5 +2462,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2023-04-19"
+  },
+  {
+    "filename": "space-invaders",
+    "title": "space-invaders",
+    "author": "Carmel132",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-04-19"
   }
 ]
