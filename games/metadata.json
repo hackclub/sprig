@@ -2454,5 +2454,21 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2023-04-15"
+  },
+  {
+    "filename": "RougeColors",
+    "title": "RougeColors",
+    "author": "KingstimusPrime",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-04-19"
+  },
+  {
+    "filename": "space-invaders",
+    "title": "space-invaders",
+    "author": "Carmel132",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-04-19"
   }
 ]
