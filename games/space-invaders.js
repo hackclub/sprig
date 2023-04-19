@@ -10,7 +10,7 @@ I   - Shoot
 J   - Restart
 */
 
-// The fact these idiots default identifiers to one letter keys is unprofessional and idiotic
+
 const enemyProjectile = "a"
 const bgColor = "b"
 const shieldTL = "c"
