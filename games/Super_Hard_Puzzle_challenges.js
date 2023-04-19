@@ -1,5 +1,5 @@
 /*
-Super Hard Puzzle challenges
+Super_Hard_Puzzle_challenges
 By Ruihan Cao
 
 Instructions:
