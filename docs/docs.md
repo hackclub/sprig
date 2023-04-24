@@ -4,7 +4,7 @@ Sprig is a tiny construction kit to build tile based games.
 The games are written in JavaScript.
 It was made by Hack Club, a global community of teen coders who 
 believe people learn best by making things they care about 
-and sharing them with others.
+and sharing them with others. You can watch [this video](https://www.youtube.com/watch?v=ZOPYB6dw4Os) for an introduction to Sprig website.
 
 Run games by hitting the `Run` button or pressing `Shift+Enter`.
 
