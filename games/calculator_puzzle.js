@@ -134,7 +134,7 @@ function updateLevel(level = 0) {
       color: color`0`,
     });
   if (levels[currentLevel].keys[3])
-    addText(`F Key: ${levels[currentLevel].keys[3]}`, {
+    addText(`D Key: ${levels[currentLevel].keys[3]}`, {
       x: 0,
       y: 14,
       color: color`0`,
