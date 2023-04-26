@@ -1,9 +1,3 @@
-//
-/*
-  @title: Alien_Attack
-  @author: whatware
-*/
-
 const player = "p"
 const laser = "l"
 const crash1 = "1"
