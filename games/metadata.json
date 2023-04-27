@@ -2478,5 +2478,21 @@
     "img": "",
     "tags": ["puzzle"],
     "added on": "2023-04-23"
+  },
+  {
+    "filename": "calculator_puzzle",
+    "title": "calculator_puzzle",
+    "author": "aboutdavid",
+    "img": "",
+    "tags": ["puzzle"],
+    "added on": "2023-04-25"
+  },
+  {
+    "filename": "Mad_city",
+    "title": "Mad_city",
+    "author": "Andromeda",
+    "img": "",
+    "tags": ["endless"],
+    "added on": "2023-04-26"
   }
 ]
