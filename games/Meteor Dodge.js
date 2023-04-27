@@ -110,6 +110,16 @@ setPushables({
   [ player ]: []
 })
 
+onInput("i", () => 
+  {
+    if (isDead)
+      clearText();
+      score = 0;
+      isDead = false;
+  }
+    
+);
+
 onInput("w", () => 
   {
     if (!isDead)
@@ -177,6 +187,7 @@ function despawnMeteorsV()
    if (meteorArray[i].y >= 7) 
    {
      meteorArray[i].remove();
+     if (!isDead)
      score++;
    }
   }
@@ -193,6 +204,22 @@ function despawnMeteorsH()
      meteorArray[i].remove();
      score++;
    }
+  }
+}
+function despawnMeteors()
+{
+let meteorArray = getAll(meteorH);
+
+  for (let i = 0; i < meteorArray.length; i++) 
+  {
+     meteorArray[i].remove();
+  }
+
+  meteorArray = getAll(meteorV);
+
+  for (let i = 0; i < meteorArray.length; i++) 
+  {
+     meteorArray[i].remove();
   }
 }
 
@@ -224,13 +251,16 @@ function meteorTouchingPlayer()
 }
 
 var gameLoop = setInterval(() => {
-  despawnMeteorsV();
-  despawnMeteorsH();
-  moveMeteorsV();
-  moveMeteorsH();
-  spawnMeteorV();
-  spawnMeteorH();
-
+  if (!isDead)
+    {
+  		despawnMeteorsV();
+  		despawnMeteorsH();
+ 		moveMeteorsV();
+  		moveMeteorsH();
+ 		spawnMeteorV();
+  		spawnMeteorH();
+    }
+	
   if (meteorTouchingPlayer()) 
   {
     if (score > highScore)
@@ -238,25 +268,36 @@ var gameLoop = setInterval(() => {
       highScore = score;
     }
     
-    clearInterval(gameLoop);
+    //clearInterval(gameLoop);
     isDead = true;
-    addText("YOU DIED!", {
-      x: 6,
-      y: 7,
-      color: color`2`
-    });
-
-    addText("Score " + score.toString(), {
-      x: 6,
-      y: 8,
-      color: color`2`
-    });
-
-    addText("HighScore " + highScore.toString(), {
-      x: 4,
-      y: 9,
-      color: color`6`
-    });
+    despawnMeteors();
+    
+    {
+      addText("YOU DIED!", {
+        x: 6,
+        y: 7,
+        color: color`2`
+      });
+  
+      addText("Score " + score.toString(), {
+        x: 6,
+        y: 8,
+        color: color`2`
+      });
+  
+      addText("HighScore " + highScore.toString(), {
+        x: 4,
+        y: 9,
+        color: color`6`
+      });
+      addText("i to Restart", {
+        x: 4,
+        y: 10,
+        color: color`2`
+      });
+    }
   }
-
 }, 1000);
+
+
+  
