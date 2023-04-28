@@ -4,7 +4,7 @@ import Navbar from '../components/navbar-main'
 import StandardHead from '../components/standard-head.astro'
 import '../global.css'
 import '../legacy/homepage.scss'
-import { getSession } from '../lib/game-saving/account'
+import { firestore, getSession } from '../lib/game-saving/account'
 import { getConsolesRemaining } from '../lib/remaining-consoles'
 
 const remainingConsoles = await getConsolesRemaining()
@@ -19,6 +19,15 @@ const stories = [
 ]
 
 const session = await getSession(Astro.cookies)
+
+let gameCount = 0
+if (session && session.session.full) {
+	const res = await firestore.collection('games')
+		.where('ownerId', '==', session.user.id)
+		.count()
+		.get()
+	gameCount = res.data().count
+}
 ---
 
 <html lang='en'>
@@ -46,7 +55,9 @@ const session = await getSession(Astro.cookies)
 					</p>
 
 					{(session && session.session.full)
-						? <a href='/~'><button class='btn active'>Your games &raquo;</button></a>
+						? gameCount === 0
+							? <a href='/~/new'><button class='btn active'>Get started &raquo;</button></a>
+							: <a href='/~'><button class='btn active'>Your games &raquo;</button></a>
 						: <a href='/editor'><button class='btn active'>{session ? 'Open editor' : 'Get started'} &raquo;</button></a>}
 				</div>
 			</div>

@@ -2382,5 +2382,125 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2023-03-19"
+  },
+  {
+    "filename": "TwinPrimeRockets",
+    "title": "TwinPrimeRockets",
+    "author": "Pradevel",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-03-21"
+  },
+  {
+    "filename": "Duck_Hunt",
+    "title": "Duck_Hunt",
+    "author": "el",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-03-25"
+  },
+  {
+    "filename": "rickroll",
+    "title": "rickroll",
+    "author": "Tiger-The-Cat",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-03-25"
+  },
+  {
+    "filename": "Physics_Sandbox",
+    "title": "Physics_Sandbox",
+    "author": "Henry Bass",
+    "img": "",
+    "tags": ["simulation"],
+    "addedOn": "2023-03-27"
+  },
+  {
+    "filename": "chase_bob",
+    "title": "chase_bob",
+    "author": "Jesse Z",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-04-01"
+  },
+  {
+    "filename": "air_hockey",
+    "title": "air_hockey",
+    "author": "Soumay Manderna",
+    "img": "",
+    "tags": ["classic"],
+    "addedOn": "2023-04-01"
+  },
+  {
+    "filename": "Mining_Simulator",
+    "title": "Mining_Simulator",
+    "author": "MiniCube11",
+    "img": "",
+    "tags": ["simulation"],
+    "addedOn": "2023-04-10"
+  },
+  {
+    "filename": "Among_The_Stars",
+    "title": "AmongTheStars",
+    "author": "VanGo",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2023-04-11"
+  },
+  {
+    "filename": "the_journey_of_the_box_a_sokoban_saga",
+    "title": "the journey of the box - a sokoban saga",
+    "author": "Ethan Francis",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-04-15"
+  },
+  {
+    "filename": "RougeColors",
+    "title": "RougeColors",
+    "author": "KingstimusPrime",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-04-19"
+  },
+  {
+    "filename": "space-invaders",
+    "title": "space-invaders",
+    "author": "Carmel132",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-04-19"
+  },
+  {
+    "filename": "Super_Hard_Puzzle_challenges",
+    "title": "Super_Hard_Puzzle_challenges",
+    "author": "Ruihan Cao",
+    "img": "",
+    "tags": ["puzzle"],
+    "added on": "2023-04-23"
+  },
+  {
+    "filename": "calculator_puzzle",
+    "title": "calculator_puzzle",
+    "author": "aboutdavid",
+    "img": "",
+    "tags": ["puzzle"],
+    "added on": "2023-04-25"
+  },
+  {
+    "filename": "Mad_city",
+    "title": "Mad_city",
+    "author": "Andromeda",
+    "img": "",
+    "tags": ["endless"],
+    "added on": "2023-04-26"
+  },
+  {
+    "filename": "Meteor_Dodge",
+    "title": "Meteor_Dodge",
+    "author": "Kritav",
+    "img": "",
+    "tags": ["endless"],
+    "added on": "2023-04-27"
   }
 ]

@@ -3,7 +3,7 @@ import type { EditorProps } from '../../lib/state'
 import type { IconType } from 'react-icons'
 import { signal, useSignal, useSignalEffect } from '@preact/signals'
 import { palette, type PaletteItem, rgbaToHex, transparentBgUrl, transparent } from '../../lib/engine/1-base/palette'
-import { drawingTools, gridsEq, makeTempGrid, mirrorGrid, TempGrid, transformTools, Vector } from './bitmap-editor-tools'
+import { drawingTools, makeTempGrid, mirrorGrid, TempGrid, transformTools, Vector } from './bitmap-editor-tools'
 import { useEffect, useRef } from 'preact/hooks'
 import tinykeys from 'tinykeys'
 import { IoArrowRedo, IoArrowUndo, IoImage, IoTrash } from 'react-icons/io5'
@@ -11,7 +11,7 @@ import { leftDown, modIcon, rightDown } from '../../lib/utils/keyboard'
 
 const makePixelGrid = (): PaletteItem[][] => new Array(16).fill(0).map(() => new Array(16).fill(transparent))
 const textToPixelGrid = (text: string): PaletteItem[][] => {
-	const rows = text.trim().split('\n')
+	const rows = text.trim().split('\n').map(row => row.trim())
 	while (rows.length < 16) rows.push('................')
 	rows.forEach((_, i) => { while (rows[i]!.length < 16) rows[i] += '.' })
 	return rows.map(row => [ ...row ].map(char => palette.find(([ key ]) => key === char) ?? transparent))
@@ -106,10 +106,12 @@ export default function BitmapEditor(props: EditorProps) {
 
 	// Sync text changes with pixel grid
 	useSignalEffect(() => {
+		const curGrid = moment.peek().pixelGrid
 		const newGrid = textToPixelGrid(props.text.value)
-		if (!gridsEq(newGrid, moment.peek().pixelGrid)) {
+
+		if (pixelGridToText(curGrid) !== pixelGridToText(newGrid)) {
 			moment.value = {
-				pixelGrid: textToPixelGrid(props.text.value),
+				pixelGrid: newGrid,
 				previous: moment.peek(),
 				next: null
 			}
@@ -296,6 +298,12 @@ export default function BitmapEditor(props: EditorProps) {
 							disabled={!moment.value.previous}
 							onActivate={() => {
 								if (!moment.value.previous) return
+								console.log('cur:')
+								console.log(pixelGridToText(moment.value.pixelGrid))
+								console.log('prev:')
+								console.log(pixelGridToText(moment.value.previous.pixelGrid))
+								console.log()
+
 								moment.value.previous.next = moment.value // We only need to populate this when traversing history
 								moment.value = moment.value.previous
 							}}

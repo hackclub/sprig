@@ -1,6 +1,16 @@
 /*
 @title: getting_started
 @author: leo
+*/
+
+/*
+ ______    _______  _______  ______     _______  __   __  ___   _______ 
+|    _ |  |       ||   _   ||      |   |       ||  | |  ||   | |       |
+|   | ||  |    ___||  |_|  ||  _    |  |_     _||  |_|  ||   | |  _____|
+|   |_||_ |   |___ |       || | |   |    |   |  |       ||   | | |_____ 
+|    __  ||    ___||       || |_|   |    |   |  |       ||   | |_____  |
+|   |  | ||   |___ |   _   ||       |    |   |  |   _   ||   |  _____| |
+|___|  |_||_______||__| |__||______|     |___|  |__| |__||___| |_______|
 
 Instructions:
 
@@ -9,14 +19,14 @@ Welcome to Sprig!!!
 Hit "run" to execute the code and
 start the game (you can also press shift+enter).
 
-To beat each level you'll have to edit the code.
-
-The code for this game starts below this comment.
+Click the "Show Help" to discover your toolkit.
 
 The objective is to push the purple boxes onto the green goals.
 Press j to reset the current level.
 
-Click the "open help" to discover your toolkit.
+To beat each level you'll have to edit the code.
+
+The code for this game starts below this comment (the brown text).
 
 --------
 Level 1

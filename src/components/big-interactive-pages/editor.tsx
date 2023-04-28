@@ -14,6 +14,8 @@ import Help from '../popups-etc/help'
 import { collapseRanges } from '../../lib/codemirror/util'
 import { defaultExampleCode } from '../../lib/examples'
 import MigrateToast from '../popups-etc/migrate-toast'
+import { highlightError, clearErrorHighlight } from '../../lib/engine/3-editor/error'
+import { nanoid } from 'nanoid'
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>
@@ -85,7 +87,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		return () => window.removeEventListener('resize', updateMaxSize)
 	}, [])
 	const realOutputAreaSize = useComputed(() => Math.min(maxOutputAreaSize.value, Math.max(minOutputAreaSize, outputAreaSize.value)))
-	
+
 	// Resize bar logic
 	const resizeState = useSignal<ResizeState | null>(null)
 	useEffect(() => {
@@ -105,15 +107,18 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	const onRun = async () => {
 		foldAllTemplateLiterals()
 		if (!screen.current) return
-		
+
 		if (cleanup.current) cleanup.current()
 		errorLog.value = []
 
 		const code = codeMirror.value?.state.doc.toString() ?? ''
 		const res = runGame(code, screen.current, (error) => {
 			errorLog.value = [ ...errorLog.value, error ]
+			if (error.line) {
+				highlightError(error.line);
+			}
 		})
-		
+
 		screen.current.focus()
 		screenShake.value++
 		setTimeout(() => screenShake.value--, 200)
@@ -122,6 +127,12 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		if (res.error) {
 			console.error(res.error.raw)
 			errorLog.value = [ ...errorLog.value, res.error ]
+
+			if (res.error.line) {
+				highlightError(res.error.line);
+			}
+		} else {
+			clearErrorHighlight();
 		}
 	}
 	useEffect(() => () => cleanup.current?.(), [])
@@ -163,12 +174,32 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	else if (persistenceState.value.kind === 'SHARED')
 		initialCode = persistenceState.value.code
 	else if (persistenceState.value.kind === 'IN_MEMORY')
-		initialCode = defaultExampleCode
+		initialCode = localStorage.getItem('sprigMemory') ?? defaultExampleCode
+	
+	// Firefox has weird tab restoring logic. When you, for example, Ctrl-Shift-T, it opens
+	// a kinda broken cached version of the page. And for some reason this reverts the CM
+	// state. Seems like manipulating Preact state is unpredictable, but sessionStorage is
+	// saved, so we use a random token to detect if the page is being restored and force a
+	// reload.
+	//
+	// See https://github.com/hackclub/sprig/issues/919 for a bug report this fixes.
+	useEffect(() => {
+		const pageId = nanoid()
+		window.addEventListener('unload', () => {
+			sessionStorage.setItem(pageId, pageId)
+		})
+		window.addEventListener('load', () => {
+			if (sessionStorage.getItem(pageId)) {
+				sessionStorage.removeItem('pageId')
+				window.location.reload()
+			}
+		})
+	}, [ initialCode ])
 
 	return (
 		<div class={styles.page}>
 			<Navbar persistenceState={persistenceState} />
-			
+
 			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
@@ -191,6 +222,10 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 								}
 								saveGame(persistenceState, codeMirror.value!.state.doc.toString())
 							}
+
+							if (persistenceState.value.kind === 'IN_MEMORY') {
+								localStorage.setItem('sprigMemory', codeMirror.value!.state.doc.toString())
+							}
 						}}
 					/>
 					{errorLog.value.length > 0 && (
@@ -198,7 +233,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 							<button class={styles.errorClose} onClick={() => errorLog.value = []}>
 								<IoClose />
 							</button>
-							
+
 							{errorLog.value.map((error, i) => (
 								<div key={`${i}-${error.description}`}>{error.description}</div>
 							))}
@@ -248,7 +283,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			{persistenceState.value.kind === 'IN_MEMORY' && persistenceState.value.showInitialWarning && (
 				<DraftWarningModal persistenceState={persistenceState} />
 			)}
-			
+
 			<Help initialVisible={!cookies.hideHelp} />
 			<MigrateToast persistenceState={persistenceState} />
 		</div>

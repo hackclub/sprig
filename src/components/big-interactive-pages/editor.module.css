@@ -89,7 +89,7 @@
 .screen {
 	border: 2px solid var(--accent);
 	display: block;
-	background: #ffffff;
+	background: #000000;
 	width: 100%;
 	height: auto;
 	max-height: 80%;

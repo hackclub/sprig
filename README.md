@@ -1,6 +1,6 @@
 # :leaves: Hack Club Sprig :leaves: 
 
-**[💻 Online Editor: Make a game](https://sprig.hackclub.com/editor)** | **[👀 Gallery: Find games](https://sprig.hackclub.com/gallery)** | **[🕸 Website](https://sprig.hackclub.com)** | **[🎮 Firmware](https://github.com/hackclub/spade)**
+**[💻 Online Editor: Make a game](https://sprig.hackclub.com/editor)** | **[👀 Gallery: Find games](https://sprig.hackclub.com/gallery)** | **[🕸 Website](https://sprig.hackclub.com)** | **[🎮 Firmware](https://github.com/hackclub/spade)** | **[See Game Submissions](https://github.com/hackclub/sprig/pulls)**
 
 [Sprig](https://sprig.hackclub.com) is a game console where **every user is a creator**. It can only be obtained by building a tile-based game in the [web-based game editor](https://sprig.hackclub.com/editor) and shipping it in the [community gallery](https://sprig.hackclub.com/gallery). It's made by [Hack Club](https://hackclub.com).
 
@@ -58,7 +58,7 @@ People learn best when they make things that they care about, which they can the
 
 ## Tutorials
 
-To get started you can follow [this challenge in the editor](https://sprig.hackclub.dev/gallery/getting_started), check out some [Sprig workshops](https://workshops.hackclub.com#sprig) or watch some short videos to get acquainted with Sprig:
+To get started you can follow [this challenge in the editor](https://sprig.hackclub.com/gallery/getting_started), check out some [Sprig workshops](https://workshops.hackclub.com#sprig) or watch some short videos to get acquainted with Sprig:
 
 <!-- [This video shows a quick overview of the editor.](https://youtu.be/GEbDRR_cqJI)
 

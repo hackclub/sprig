@@ -5,7 +5,6 @@ export type TempGrid = (PaletteItem | null)[][]
 export type Vector = { x: number, y: number }
 export const makeTempGrid = (): TempGrid => new Array(16).fill(0).map(() => new Array(16).fill(null))
 export const cloneGrid = <T>(grid: T[][]): T[][] => grid.map(row => row.slice())
-export const gridsEq = <T>(a: T[][], b: T[][]): boolean => a.every((row, y) => row.every((cell, x) => cell === b[y]![x]!))
 export const gridClamp = (v: Vector): Vector => ({
 	x: Math.max(0, Math.min(15, v.x)),
 	y: Math.max(0, Math.min(15, v.y))
