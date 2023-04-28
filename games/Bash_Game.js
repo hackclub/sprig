@@ -1,23 +1,18 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
+Developer: WelchJ
+:D
 
+Goal:
+    each turn, players strategically choose how many (1~4) coins to take
+    whoever takes the last coin wins a sack from the other
 
+    
+Win by defend your gold sacks and steal your opponent's!
 
+Control:
+    "a" and "d" to move the pointer
+    "s" to select and confirm the move
 */
-/*
-TODO:
-
-add AI opponent
-
-use random chance to make AI win?
-
-make waiting smarter, give time for the opponent to move
-
-Gold sacks as the winning condnitgion, 
-
-*/
-
 
 
 const sack = "s"
@@ -149,7 +144,7 @@ var remaining = 10 + Math.floor(Math.random() * randomGen);
 var impossible = false
 
 var waiting = false
-var players = 5
+var players = 3
 
 var playerWon = 7
 var opponentWon = 8
@@ -461,8 +456,6 @@ ccssscc`
 
 let intro = 10
 setMap(levels[intro])
-
-
 
 
 
