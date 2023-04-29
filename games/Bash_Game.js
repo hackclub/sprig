@@ -33,6 +33,8 @@ const confirm = "f"
 const user = "u"
 const oppo = "o"
 
+const lose = "l"
+
 const bgm = tune`
 173.41040462427745,
 173.41040462427745: D5-173.41040462427745 + C5-173.41040462427745,
@@ -356,7 +358,24 @@ setLegend(
 0550002222000550
 0555500000055550
 0555555555555550
-0000000000000000`]
+0000000000000000`],
+  [lose, bitmap`
+................
+................
+................
+...33.......33..
+...333.....333..
+....333...333...
+.....333.333....
+......33333.....
+.......333......
+......33333.....
+.....333.333....
+....333...333...
+...333.....333..
+...33.......33..
+................
+................`],
 )
 
 setSolids([arrow, coin, cross])
@@ -429,13 +448,13 @@ sc..f
 ssc.f
 sssff`,
     map`
-hhsss
-h.css
-h..cs
-h.o.h
-hc..h
-hcc.h
-hhhhh`,
+llsss
+l.css
+l..cs
+l.o.l
+lc..l
+lcc.l
+lllll`,
   map`
 o.......
 ........
@@ -530,6 +549,17 @@ playTune(move)
               players++
               otherMap = true
               setMap(levels[players])    
+                    addText("You Won", { 
+        x: 7,
+        y: 8,
+        color: color`4`
+      })
+
+          addText("A Sack!", { 
+        x: 7,
+        y: 9,
+        color: color`4`
+      })
           
               setTimeout(() => {
                 if(players == 6){
@@ -539,7 +569,7 @@ playTune(move)
                   addText("You Won!", { 
         x: 6,
         y: 10,
-        color: color`3`
+        color: color`4`
       })
                   end()
                 } else{
@@ -581,6 +611,17 @@ playTune(move)
               players--
               otherMap = true
               setMap(levels[players])
+          addText("You Lost", { 
+        x: 7,
+        y: 8,
+        color: color`3`
+      })
+
+          addText("A Sack!", { 
+        x: 7,
+        y: 9,
+        color: color`3`
+      })
               
               setTimeout(() => {
 
