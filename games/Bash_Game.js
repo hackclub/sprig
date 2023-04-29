@@ -380,7 +380,7 @@ setLegend(
 
 setSolids([arrow, coin, cross])
 
-let level = 9
+let startLevel = 9
 const levels = [
   map`
 .osss
@@ -574,7 +574,7 @@ playTune(move)
                   end()
                 } else{
                 remaining = 10 + Math.floor(Math.random() * randomGen)
-                setMap(levels[level])
+                setMap(levels[startLevel])
                 setImpossible()
                 addSprite(5, 1, coin)
                 waiting = false
@@ -637,7 +637,7 @@ addText("You Lost!", {
                   end()
                 } else{                
                 remaining = 10 + Math.floor(Math.random() * randomGen)
-                setMap(levels[level])
+                setMap(levels[startLevel])
                   setImpossible()
                   addSprite(5, 1, coin)
                 waiting = false
@@ -689,7 +689,7 @@ afterInput(() => {
   if(start){
     start = false
     pb = playTune(bgm, Infinity)
-    setMap(levels[level])
+    setMap(levels[startLevel])
     setImpossible()
     addSprite(5, 1, coin)
     updateLeftText()
