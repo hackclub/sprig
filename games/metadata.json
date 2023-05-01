@@ -2486,5 +2486,29 @@
     "img": "",
     "tags": ["puzzle"],
     "added on": "2023-04-25"
+  },
+  {
+    "filename": "Mad_city",
+    "title": "Mad_city",
+    "author": "Andromeda",
+    "img": "",
+    "tags": ["endless"],
+    "added on": "2023-04-26"
+  },
+  {
+    "filename": "Meteor_Dodge",
+    "title": "Meteor_Dodge",
+    "author": "Kritav",
+    "img": "",
+    "tags": ["endless"],
+    "added on": "2023-04-27"
+  },
+  {
+    "filename": "Bash_Game",
+    "title": "Bash_Game",
+    "author": "WelchJ",
+    "img": "",
+    "tags": ["puzzle"],
+    "added on": "2023-04-28"
   }
 ]
