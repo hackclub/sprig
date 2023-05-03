@@ -1,0 +1,238 @@
+/* General styles */
+.container {
+	z-index: 99;
+	background: var(--accent);
+	color: #ffffff;
+	display: flex;
+	flex-direction: row;
+	padding: 0 8px;
+	gap: 8px;
+	align-items: center;
+	position: relative;
+	text-align: center;
+}
+
+.container ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	height: 48px;
+}
+
+.container li {
+	display: block;
+}
+
+/* Navlinks */
+.navlinks {
+	flex: 1;
+	gap: 4px;
+}
+
+.navlinks li,
+.logo {
+	height: 100%;
+}
+
+.navlinks li a,
+.logo a,
+.logo button {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	color: inherit;
+	text-decoration: none;
+	padding: 0 16px;
+	height: 100%;
+}
+
+.navlinks li a:hover,
+.navlinks li.active a,
+.logo a:hover,
+.logo button:hover,
+.logo.active a,
+.logo.active button {
+	background: var(--accent-dark);
+}
+
+/* Editor navbar */
+.editorStats {
+	gap: 10px;
+	flex: 1;
+}
+
+.attribution {
+	color: var(--fg-muted-on-accent);
+	font-size: 0.9em;
+}
+
+.saveState {
+	color: var(--fg-muted-on-accent);
+	text-decoration: underline;
+	font-size: 0.9em;
+	margin-left: 20px;
+	user-select: none;
+}
+
+.saveState.error {
+	animation: blinking 1s infinite step-end;
+}
+
+@keyframes blinking {
+	0% {
+		opacity: 1;
+	}
+	60% {
+		opacity: 1;
+	}
+	80% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+/* Actions on right */
+.rightActions {
+	gap: 14px;
+}
+
+/* Logo */
+.logo a, .logo button {
+	font-weight: bold;
+	gap: 6px;
+	padding: 0 10px;
+	margin-left: 10px;
+}
+
+.logo .longImg {
+	transform: translateY(2px);
+}
+
+.logo .dino {
+	align-self: flex-end;
+}
+
+.logo .caret :global(svg) {
+	display: block;
+}
+
+.logo button {
+	background: transparent;
+	border: none;
+	cursor: var(--cursor-interactive);
+}
+
+/* Action icon and plain links */
+.actionIcon {
+	display: block;
+}
+
+.plainLink {
+	margin: 0 4px;
+}
+
+.actionIcon a,
+.plainLink a {
+	display: block;
+	color: var(--fg-muted-on-accent);
+}
+
+.actionIcon a:hover,
+.plainLink a:hover {
+	color: inherit;
+}
+
+.actionIcon :global(svg) {
+	display: block;
+	height: 24px;
+	width: 24px;
+}
+
+/* Transparency! */
+.transparent {
+	background: transparent;
+}
+
+.transparent .navlinks li a:hover,
+.transparent .navlinks li.active a,
+.transparent .logo a:hover,
+.transparent .logo button:hover {
+	background: #7d7d7d42;
+}
+
+.transparent .actionIcon a:not(:hover),
+.transparent .plainLink a:not(:hover) {
+	display: block;
+	color: var(--fg-muted);
+}
+
+/* Nav popup */
+.navPopup {
+	background: var(--accent-dark);
+	color: #ffffff;
+	z-index: 9;
+	position: absolute;
+	top: 48px;
+	left: 8px;
+	padding: 8px 0;
+	box-shadow: 0 4px 8px 0 #0000005e;
+	min-width: 160px;
+}
+
+.navPopup .divider {
+	height: 2px;
+	background: var(--accent);
+	margin: 8px 0;
+}
+
+.navPopup ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.navPopup a {
+	color: var(--fg-muted-on-accent);
+	display: block;
+	padding: 8px 16px;
+	user-select: none;
+}
+
+.navPopup a:hover {
+	color: inherit;
+}
+
+/* responsive design */
+@media (max-width: 700px) {
+	.logoText {
+		display: none;
+	}
+}
+
+@media (max-width: 600px) {
+	.container {
+		flex-direction: column;
+		align-items: center;
+		gap: 0;
+		padding-top: 4px;
+	}
+}
+
+@media (max-width: 420px) {
+	.container {
+		font-size: 0.9rem;
+	}
+
+	.navlinks li a,
+	.logo a,
+	.logo button {
+		padding: 0 8px;
+	}
+}

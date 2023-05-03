@@ -32,12 +32,21 @@ Hold that button right there, and plug in the sprig!
 It should appear in your file menu as a separate drive, much like a USB.
 ![drop!](./assets/drag_n_drop.png)
 
-Just drop the .uf2 in there, and you're good to go! The device should immediately restart and show the sprig logo :)
+Just drop the .uf2 in there, and you're good to go! The device should immediately restart, and a message should appear on the screen.
 
-## Okay but what about MY game?
+> **Note:** If you're having trouble getting the .uf2 file onto the Pico using the macOS Finder, try using the command line tool `cp` instead.
+> For example, if you downloaded the .uf2 file to your Downloads folder, you could run the following command in your terminal to copy the file to the Pico.
 
-![drop!](https://cloud-7fl999odl-hack-club-bot.vercel.app/0screenshot3.png)
+```sh
+cp -X ~/Downloads/pico-os.uf2 /Volumes/RPI-RP2
+```
 
-Open up your game in the editor, click the upload button, and select the Sprig from the menu (again, like a USB device.)
+![upload a game screen](./assets/default_screen.jpg)
+
+## Okay but how do I upload MY game?
+
+![drop!](https://doggo.ninja/lRotxY.png)
+
+Open up your game in the editor, click the "Run on Device" button in the top right, and select the Sprig from the menu (again, like a USB device.)
 
 That's it! You're done :)

@@ -5,10 +5,14 @@
 get the fruit
 */
 
+if (typeof jsr == 'number') {
+  jsr = 0xff
+}
+
 const head = { u: "u", d: "d", l: "l", r: "r", find: "s" };
 const body = "b";
 const fruit = "f";
-const background = ".";
+const background = "B";
 
 setLegend(
   [
@@ -174,14 +178,14 @@ setLegend(
 );
 setBackground(background);
 const level = map`
-........
-........
-........
-........
-..bb.f..
-........
-........
-........`;
+..........
+..........
+..........
+..........
+...bb.f...
+..........
+..........
+..........`;
 setMap(level);
 var path = [35, 34];
 var score = 0,
@@ -205,10 +209,10 @@ const render = () => {
   }
 
   for (const num of path) {
-    addSprite(num % 8, Math.floor(num / 8), body);
+    addSprite(num % 10, Math.floor(num / 10), body);
   }
-  addSprite(path[0] % 8, Math.floor(path[0] / 8), dir);
-  addSprite(path[0] % 8, Math.floor(path[0] / 8), head["find"]);
+  addSprite(path[0] % 10, Math.floor(path[0] / 10), dir);
+  addSprite(path[0] % 10, Math.floor(path[0] / 10), head["find"]);
 
   if (!running) return;
   clearText();
@@ -225,7 +229,7 @@ const start = () => {
     var tile = tilesWith(fruit, head["find"]).length;
     if (tile) {
       while (tilesWith(fruit, body).length) {
-        getFirst(fruit).x = Math.floor(Math.random() * 8);
+        getFirst(fruit).x = Math.floor(Math.random() * 10);
         getFirst(fruit).y = Math.floor(Math.random() * 8);
       }
       score += 1;
@@ -233,20 +237,20 @@ const start = () => {
 
     switch (dir) {
       case "r":
-        if ((path[0] + 1) % 8 == 0) return die();
+        if ((path[0] + 1) % 10 == 0) return die();
         path.unshift(path[0] + 1);
         break;
       case "l":
-        if ((path[0] - 1) % 8 == 7) return die();
+        if ((path[0] - 1) % 10 == 9 || path[1] == 1) return die();
         path.unshift(path[0] - 1);
         break;
       case "u":
-        if (path[0] - 8 < 0) return die();
-        path.unshift(path[0] - 8);
+        if (path[0] - 10 < 0) return die();
+        path.unshift(path[0] - 10);
         break;
       case "d":
-        if (path[0] + 8 > 63) return die();
-        path.unshift(path[0] + 8);
+        if (path[0] + 10 > 10*8-1) return die();
+        path.unshift(path[0] + 10);
         break;
     }
 
@@ -287,10 +291,11 @@ onInput("d", () => {
 onInput("j", () => {
   clearText();
   setMap(level);
-  path = [35, 34];
+  path = [44, 43];
   score = 0;
   dir = "r";
   currdir = "r";
+  stop();
   start();
 });
 

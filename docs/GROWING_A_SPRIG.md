@@ -37,7 +37,7 @@ The Sprig has a number of components. The bill of materials is:
 | LED 1206                        | 2        | Passive Component                 |
 | 100V 1A Schotky Diode Mini SMA  | 1        | Works as Power Gate for Batteries |
 | 1x10 5mm (short) female header  | 1        | Attaching Screen                  |
-| 1x? 7mm (regular) female header | 1        | Attaching Pico                    |
+| 1x20 7mm (regular) female header| 2        | Attaching Pico                    |
 
 
 The Sprig also uses some additional hardware.
@@ -46,12 +46,12 @@ The Sprig also uses some additional hardware.
 | Name                                        | Quantity | Function                                 |
 | ------------------------------------------- | -------- | ---------------------------------------- |
 | acrylic back covers                         | 4        | to protect your fingers from pointy bits |
-| m2 10mm socket head screw                   | 10       | fastens backcovers to board              |
-| m2 16mm socket head screw                   | 2        | for attaching screen                     |
-| m2 nuts                                     | 12       | for keeping screws on                    |
+| m2 10mm socket head screw                   | 8        | fastens backcovers to board              |
+| m2 14mm socket head screw                   | 2        | for attaching screen                     |
+| m2 nuts                                     | 10       | for keeping screws on                    |
 | 7.4mm black acetal spacers                  | 2        | for lifting the screen                   |
 | micro usb cable                             | 1        |                                          |
-| 2m allen key                                | 1        |                                          |
+| 1.5mm allen key                             | 1        |                                          |
 | aaa batteries                               | 2        |                                          |
 | carrying box                                | 1        |                                          |
 | adapter from male micro usb to female usb c | 1        |                                          |
@@ -292,19 +292,21 @@ We manufactured our board by sending Gerber files to a PCB fabrication house alo
 
 ---
 
+<!--
+ 
 # BELOW IS A WIP
 
 ## The Game Engine
 
-Lot's of what makes Sprig "Sprig" is the game engine to help you make charming tile-based games.
+Lots of what makes Sprig "Sprig" is the game engine, which helps you to make charming, tile-based games.
 
 This engine evolved from a more traditional "game-engine" we called Game Lab. 
 
-Game Lab had a physics engine which handled moving things with velocity and collisions between objects.
+Game Lab had a physics engine that handled moving things with velocity and collisions between objects.
 
-We found that people would make one game mechanic but never finish games so we decided to developed a simplified engine.
+We found that people would make one game mechanic but never finish games, so we decided to develop a simplified engine.
 
-We made everything tile based. That means everything moves discretely on a grid. It's accommodates making puzzle games.
+We made everything tile-based. That means everything moves discretely on a grid. This accommodates making puzzle games.
 
 ## The Web Editor
 
@@ -320,5 +322,7 @@ Use CodeMirror. Analyzing the syntax tree.
 
 ## other things to mention
 
-custom footprints
+custom footprints 
+
+-->
 
