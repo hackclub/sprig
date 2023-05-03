@@ -1,7 +1,5 @@
-/*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-*/
+//my insperation is space invaders//
+
 const background = "b"
 const player = "p"
 const attacku = "u"
