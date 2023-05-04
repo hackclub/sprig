@@ -1,0 +1,13 @@
+{
+	"extends": "astro/tsconfigs/strictest",
+	"compilerOptions": {
+		"jsx": "react-jsx",
+		"jsxImportSource": "preact",
+		"paths": {
+			"react": ["./node_modules/preact/compat/"],
+			"react-dom": ["./node_modules/preact/compat/"]
+		},
+		"importsNotUsedAsValues": "remove"
+	},
+	"exclude": [ "node_modules" ]
+}

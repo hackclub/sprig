@@ -28,7 +28,7 @@ Below are instructions for assembling your Sprig console.
 
 ![Photo of a PCB with LCD attached](https://cloud-6po09tv9d-hack-club-bot.vercel.app/2lcd-no-spacers.jpg)
 
-2. Add spacers and put the longer screws through the holes.
+2. Add spacers, put the longer screws through the holes, and screw the nuts on the back side.
 
 ![Photo of an LCD assembled with screws and spacers](https://cloud-6po09tv9d-hack-club-bot.vercel.app/1screws-through-spacers.jpg)
 
@@ -46,7 +46,7 @@ Below are instructions for assembling your Sprig console.
 
 ![Photo of two plastic pieces stacked atop a PCB](https://cloud-obltnnp51-hack-club-bot.vercel.app/3backing2.jpg)
 
-5. Put the shorter screws in holes and add nuts on the top side of the board. Tighten using the allen key provided.
+5. Put the shorter screws in holes and add nuts on the top side of the board. Tighten using the allen key provided. Repeat for the clear backings on the other side.
 
 ![Four screws securing 2 pieces of plastic to a PCB](https://cloud-obltnnp51-hack-club-bot.vercel.app/2backing-withscrews.jpg)
 
