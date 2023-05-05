@@ -194,6 +194,15 @@ wwwwpw.f
 w....www
 w.lbbbb.
 w.......`,
+  map`
+wwwwww....
+w.rw......
+.w..w..w..
+.l.....w..
+..bww..w..
+..bwfwww..
+.w.wf.....
+p..w......`,
 ];
 
 const setLevel = (lvl) => {
