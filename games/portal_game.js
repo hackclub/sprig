@@ -152,7 +152,7 @@ setLegend(
 ................`]
 );
 
-let level = 6;
+let level = 0;
 const levels = [
   map`
 r..f
@@ -223,7 +223,7 @@ onInput("a", () => { if(isPlaying) getFirst(player).x -= 1; });
 // END - PLAYER MOVEMENT CONTROLS
 
 onInput("j", () => {
-  if((levels.length-1) == level) setLevel(0);
+  if(!isPlaying && (levels.length-1) == level) setLevel(0);
   else setLevel(level);
 });
 onInput("l", () => {
