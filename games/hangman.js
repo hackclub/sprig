@@ -1,6 +1,7 @@
 /*
 @title: hangman
 @author: PapaAlpaca
+Special thanks to jedgrei for the alphabet design :)
 */
 /*
 =====CONTROLS=====
@@ -19,9 +20,6 @@ let guessed;
 let word;
 let incorrect;
 
-/*
- * Thank you to jedgrei for the letters
- */
 setLegend(
   [ cursor, bitmap`
 ..777777777777..
