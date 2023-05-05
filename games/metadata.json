@@ -2534,5 +2534,13 @@
     "img": "",
     "tags": ["logic"],
     "added on": "2023-05-05"
+  },
+  {
+    "filename": "hangman",
+    "title": "hangman",
+    "author": "PapaAlpaca",
+    "img": "",
+    "tags": ["classic"],
+    "added on": "2023-05-05"
   }
 ]
