@@ -139,7 +139,42 @@ p.......cc`,
 cccc.ccccccccc.
 p..............`,
   map`
+...c...............g
+.c.c.cccccccccccccc.
+.c...c...c...c...cc.
+.c.ccc.c.c.c.c.c.c..
+.c.....c.c.c.c.c.c.c
+.cccc.cc...c.c.c....
+.c..cccccccc.c.cccc.
+.cc...............c.
+.cc.ccccc..cccccccc.
+..c.....ccccc.....c.
+c.ccc.c.c...c.ccc.c.
+....c.c.c.c.c.c...c.
+.cc.ccc...c.c.c.ccc.
+.c......c.c...c...c.
+.cccccccccccccc.c.c.
+p...............c...`,
+  map`
+......c.............
+.cccc...ccccccccccc.
+.c...ccc..........c.
+.c.c.....cccccccc.c.
+.c..cc.cc.......c.c.
+.c.cg..cc.ccccc.c.c.
+.c.cccccc.....c.c.c.
+.c.c.cccccccc.c.c.c.
+.c.c..........c.c.c.
+.c.ccccccccccc..c.c.
+.c........cccc.c..c.
+.c.cccccc......c.c..
+.ccc.....ccccccc.c.c
+.....ccc.........c..
+ccccc...ccccccccc.c.
+p.....c.............`,
+  map`
 g`
+  
 ]
 
 setBackground(wall)
