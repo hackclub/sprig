@@ -2542,5 +2542,13 @@
     "img": "",
     "tags": ["classic"],
     "added on": "2023-05-05"
+  },
+  {
+    "filename": "hidden_maze",
+    "title": "hidden_maze",
+    "author": "Rylan Berry",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-05-06"
   }
 ]
