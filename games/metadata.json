@@ -2518,5 +2518,37 @@
     "img": "",
     "tags": ["dodge"],
     "added on": "2023-04-30"
+  },
+  {
+    "filename": "Antivirus",
+    "title": "Antivirus",
+    "author": "Nathan Jereb",
+    "img": "",
+    "tags": ["dodge"],
+    "added on": "2023-05-03"
+  },
+  {
+    "filename": "portal_game",
+    "title": "portal_game",
+    "author": "DanPlayz",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-05-05"
+  },
+  {
+    "filename": "hangman",
+    "title": "hangman",
+    "author": "PapaAlpaca",
+    "img": "",
+    "tags": ["classic"],
+    "added on": "2023-05-05"
+  },
+  {
+    "filename": "hidden_maze",
+    "title": "hidden_maze",
+    "author": "Rylan Berry",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-05-06"
   }
 ]
