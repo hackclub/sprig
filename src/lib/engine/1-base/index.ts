@@ -268,6 +268,9 @@ export function baseEngine() {
 	}
 	const setPushables = (map: Record<string, string[]>): void => { 
 		for (const key in map) {
+			if(key.length != 1) {
+				throw new Error('Your sprite name must be wrapped in [] brackets here.');
+			}
 			_checkLegend(key)
 		}
 		gameState.pushable = map 
