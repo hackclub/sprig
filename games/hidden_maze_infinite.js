@@ -3,7 +3,7 @@ Welcome to Hidden Maze Infinite (or Hidden Maze 2 if you will), the 2nd game in 
 I would recomend playing the 1st game, its a short introductory for what is to come.
 Controls are the same WASD, don't bother with worrying about getting to the end in this one, there is none, 
 I have carefully constructed a maze generation that will allow you to play for as long as you like.
-Remeber, have fun!
+Remember, have fun!
 */
 
 
