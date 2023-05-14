@@ -33,6 +33,9 @@ body {
 	font-family: var(--font-text);
 	margin: 0;
 	background: var(--bg-base);
+	background-image: url('https://sprig.hackclub.com/pcb.svg');
+	background-size: cover;
+	background-repeat: no-repeat;
 	position: relative;
 }
 
