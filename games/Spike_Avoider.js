@@ -1,7 +1,23 @@
 /*
 @title: Spike_Avoider
 @author: Hrushal Nikhare
+
+¯\_(ツ)_/¯
+
+press any button to start
+W to go up
+S to go down
+D to move ahead
+A to go back
+
+
+change diff for a challenge
+Recommended:
+Easy: 250
+Mid: 150
+Hard: 75
 */
+var diff = 250;
 const player = "p";
 const ground = "g";
 const spike = "s";
@@ -153,15 +169,17 @@ CCCCCCCCCCCCCCCC
     ],
 );
 var score = 0;
+var started = false;
+var running = false;
 setSolids([spike, spikeflip]);
 
 let level = 0;
 const levels = [
     map`
 ...................
-.p.................
+.p.....s...........
 ggggggggggggggggggg
-.kkkkkk............
+..........k........
 ...................`,
 
 ];
@@ -176,6 +194,17 @@ setPushables({
 var up = 1;
 var down = 0;
 
+function reset() {
+  setMap(levels[0]);
+  clearInterval(hmm);
+  score = 0;
+  started = false;
+  clearText()
+  hmm = setInterval(ActualGameloop, 250)
+  up = 1;
+  down = 0;
+}
+
 onInput("w", () => {
     if (up === 0) {
         getFirst(playerflip).y -= 2;
@@ -186,6 +215,7 @@ onInput("w", () => {
         }
     }
 });
+
 onInput("d", () => {
     try {
         getFirst(player).x += 1;
@@ -210,6 +240,11 @@ onInput("s", () => {
         }
     }
 });
+
+onInput("j", () => {
+  reset()
+});
+
 var sp = 0
 
 function Spawn() {
@@ -304,10 +339,21 @@ function checkHit() {
 
     return false;
 }
+
 afterInput(() => {
-    if (checkHit()) {
+  if (!started){
+    started = !started
+  }
+  if (checkHit()) {
         clearInterval(hmm);
         clearText();
+            if (score >= 500){
+          addText("Go touch Grass!",{
+            x: 3,
+            y: 1,
+            color: color`4`
+          })
+        }
         addText("Game Over!", {
             x: 5,
             y: 3,
@@ -316,15 +362,46 @@ afterInput(() => {
         addText(`Your Score: ${score}`, {
             x: 3,
             y: 5,
-            color: color`7`
+            color: color`2`
         });
+        addText("Press j to restart",{
+          x: 1,
+          y: 11,
+            color: color`6`
+        })
     }
 })
-
-var hmm = setInterval(() => {
-    kill()
+function ActualGameloop(){
+  if (started){
+      kill()
     Spawn()
-    move()
+        if (checkHit()) {
+        clearInterval(hmm);
+        clearText();
+        if (score >= 500){
+          addText("Go touch Grass!",{
+            x: 3,
+            y: 1,
+            color: color`4`
+          })
+        }
+        addText("Game Over!", {
+            x: 5,
+            y: 3,
+            color: color`3`
+        });
+        addText(`Your Score: ${score}`, {
+            x: 3,
+            y: 5,
+            color: color`2`
+        });
+        addText("Press j to restart",{
+          x: 1,
+          y: 11,
+            color: color`6`
+        })
+    }else{
+      move()
     clearText()
     addText(`Score: ${score}`, {
         x: 6,
@@ -332,4 +409,8 @@ var hmm = setInterval(() => {
         color: color`2`
     });
     score += 1
-}, 500)
+          
+    }
+  }
+}
+var hmm = setInterval(ActualGameloop, diff)
