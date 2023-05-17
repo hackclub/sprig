@@ -58,7 +58,7 @@ function gameOver() {
              y: 9,
              color: color`9`
         })
-  addText("Score:"+res, { 
+  addText("Score:"+score, { 
         x: 3,
         y: 3,
         color: color`3`
@@ -75,7 +75,7 @@ function gameOver() {
              y: 9,
              color: color`9`
         })
-    addText("Score:"+res, { 
+    addText("Score:"+score, { 
         x: 3,
         y: 3,
         color: color`3`
@@ -106,44 +106,46 @@ function setres(x) {
 function loop(count) {
   if(looping) {
     setTimeout(function() {
-      clearText();
-
-      no1 = Math.floor(Math.random() * count) + 1;
-      no2 = Math.floor(Math.random() * count) + 1;
-
-      setres(0)
-      var op = Math.floor(Math.random() * 2) + 1;
-      if(op == 1) {
-        setres(no1 * no2);
-      } else {
-        setres(no1 + no2);
+      if(looping) {
+        clearText();
+  
+        no1 = Math.floor(Math.random() * count) + 1;
+        no2 = Math.floor(Math.random() * count) + 1;
+  
+        setres(0)
+        var op = Math.floor(Math.random() * 2) + 1;
+        if(op == 1) {
+          setres(no1 * no2);
+        } else {
+          setres(no1 + no2);
+  
+        }
+        addText(no1 +"_?_"+ no2 + "=" + res + "" , { 
+             x: 6,
+             y: 4,
+             color: color`4`
+        })
+  
+        addText("Score:"+score, { 
+          x: 3,
+          y: 2,
+          color: color`3`
+        })
+        addText("A = Addition" , { 
+             x: 1,
+             y: 7,
+             color: color`9`
+        })
+          
+        addText("D = Multiplication" , { 
+             x: 1,
+             y: 9,
+             color: color`9`
+        })
+        
+        loop(count + 1);
 
       }
-      addText(no1 +"_?_"+ no2 + "=" + res + "" , { 
-           x: 6,
-           y: 4,
-           color: color`4`
-      })
-
-      addText("Score:"+score, { 
-        x: 3,
-        y: 2,
-        color: color`3`
-      })
-      addText("A = Addition" , { 
-           x: 1,
-           y: 7,
-           color: color`9`
-      })
-        
-      addText("D = Multiplication" , { 
-           x: 1,
-           y: 9,
-           color: color`9`
-      })
-      
-      loop(count + 1);
-      
     }, 1000);
   
 }
@@ -165,11 +167,7 @@ onInput("d", () => {
     score++;
   } else {
     gameOver();
-    addText("Score:"+res, { 
-        x: 3,
-        y: 10,
-        color: color`3`
-      })
+    
   }
   
 })
