@@ -5,26 +5,39 @@ Controls are the same WASD, don't bother with worrying about getting to the end 
 I have carefully constructed a maze generation that will allow you to play for as long as you like.
 Remeber, have fun!
 
-UPDATE 2.0
+UPDATE 1.1.0
 This is the second update to this game, it adds a variable map size, 
 the map types can be changed by using the following buttons:
 
   J: Easy/Baby maps-5x4
   I: Normal maps-10x8
-  K: Hard/Chad maps-20x16
+  L: Hard/Chad maps-20x16
 
 Normal maps will be the standard map type when you load in. 
 Also this update incidentally allows you to re-start a map type 
 if you press the change map button for the same map type you're on.
 Ex: Say you're stuck on a normal map nd you want anotherone, 
     you just press "I" to generate another map.
+
+UPDATE 1.2.0
+The third update adds a scoring system to the game.
+You can press "K" the reset your score.
+Each map gives you a different score when completed,
+
+  Easy: 1 point
+  Normal: 2 points
+  Hard: 4 points
     
+Also keep an eye out for the third game, depending on when you're seeing this 
+it may alread be out.
 */
 
 const player = "p"
 const wall = "w"
 const wall2 = "c"
 const goal = "g"
+let score = 0;
+let scoreIncrement = 2;
 
 setLegend(
   [ player, bitmap`
@@ -308,6 +321,7 @@ onInput("d", () => {
 })
 
 onInput("j", () => { //baby
+  scoreIncrement = 1;
   setMap(map`
 .....
 .....
@@ -326,6 +340,7 @@ onInput("j", () => { //baby
 })
 
 onInput("i", () => {//normal
+  scoreIncrement = 2;
   setMap(map`
 ..........
 ..........
@@ -349,6 +364,7 @@ onInput("i", () => {//normal
 
 
 onInput("l", () => { //chad
+  scoreIncrement = 4;
   setMap(map`
 ....................
 ....................
@@ -379,10 +395,47 @@ onInput("l", () => { //chad
 })
 
 
+onInput("k", () => { //chad
+  score =0
+  clearText();
+  addText("Score: " + score, {
+    x: 0,
+    y: 0,
+    color: color`9`
+    })
+})
+clearText();
+addText("Score: " + score, {
+    x: 0,
+    y: 0,
+    color: color`9`
+    })
+
 
 afterInput(() => {
+  clearText();
+  addText("Score: " + score, {
+    x: 0,
+    y: 0,
+    color: color`9`
+    })
   if (getFirst(goal).y == getFirst(player).y &&
       getFirst(goal).x == getFirst(player).x) {
+    score += scoreIncrement;
+
+    if (score == 666){
+      addText("You think,\nyou can leave?", {
+    x: 1,
+    y: 5,
+    color: color`3`
+    })
+    setTimeout(function() {clearText(); }, 1000);
+    }
+    addText("Score: " + score, {
+    x: 0,
+    y: 0,
+    color: color`9`
+    })
     resetMap();
     myMap = new Array(width());
     for (let a = 0; a < myMap.length; a++) {
