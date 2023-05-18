@@ -28,6 +28,8 @@ Each map gives you a different score when completed,
   Normal: 2 points
   Hard: 4 points
     
+Also keep an eye out for the third game, depending on when you're seeing this 
+it may alread be out.
 */
 
 const player = "p"
