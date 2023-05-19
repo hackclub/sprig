@@ -248,6 +248,11 @@ function updatePoints(){
     color: color`3`,
   })
 }
+  addText("K to Start", { 
+    x: 5,
+    y: 6,
+    color: color`3`,
+  });
 
 //SOUND EFFECTS
 const shuffle = tune`
