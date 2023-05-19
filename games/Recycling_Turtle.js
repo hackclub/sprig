@@ -5,6 +5,7 @@
 Keys: 
   - A to move left
   - D to move right
+  - J to restart
 
 How to play:
   - Turtle is tired of swimming around so much plastic, so he has decided to put matters into
@@ -232,6 +233,11 @@ function updatePoints(){
     addText("You win!", {
       x: 6,
       y: 6,
+      color: color`3`,
+    });
+    addText("J to Restart", {
+      x: 4,
+      y: 8,
       color: color`3`,
     });
   }
