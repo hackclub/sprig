@@ -5,6 +5,7 @@
 Keys: 
   - A to move left
   - D to move right
+  - K to start
   - J to restart
 
 How to play:
@@ -260,7 +261,7 @@ const oof = tune`
 189.873417721519: E4^189.873417721519 + D4^189.873417721519 + C4^189.873417721519,
 5886.0759493670885`;
 
-//PLAYER MOVEMENT CONTROLS
+//PLAYER CONTROLS
 onInput("a", () => {
   getFirst(player).x -= 1; //move left
   playTune(shuffle)
@@ -269,6 +270,17 @@ onInput("a", () => {
 onInput("d", () => {
   getFirst(player).x += 1; //move right
   playTune(shuffle)
+});
+
+onInput("k", () => {
+  clearText()
+  setInterval(gameLoop, 1000 / framesPerSecond);
+});
+
+onInput("j", () => {
+  setMap(levels[level])
+  points = 0;
+  onInput("k");
 });
 
 //SPRITE CONTROLS
@@ -325,6 +337,3 @@ function gameLoop() {
   spawnSprite();
   updatePoints();
 }
-
-// Set the interval for the game loop to be called every frame
-let gameLoopInterval = setInterval(gameLoop, 1000 / framesPerSecond);
