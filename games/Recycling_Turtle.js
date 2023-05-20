@@ -9,7 +9,7 @@ Keys:
   - J to restart
 
 How to play:
-  - Turtle is tired of swimming around so much plastic, so he has decided to put matters into
+  - Turtle is tired of swimming around so much pdddaalastic, so he has decided to put matters into
   his own flippers and help educate people about plastic disposal. Not all plastic can go in your
   curbside recycling bin, and certainly not the beach!
   - Play as Recycling Turtle to learn what plastic goes in your household bin,
@@ -210,8 +210,7 @@ LL............LL
 
 let level = 0;
 let points = 0;
-let gameRunning = true;
-let isFirstDrop = true;
+let gameInterval; //set global variable
 const framesPerSecond = 1.3; // Define the desired frames per second
 const levels = [
   map`
@@ -230,7 +229,7 @@ function updatePoints(){
     points = 0;
   }
   else if (points >= 100) {
-    clearInterval(gameLoopInterval);
+    stopGame();
     addText("You win!", {
       x: 6,
       y: 6,
@@ -259,14 +258,18 @@ const shuffle = tune`
 124.48132780082987: C4~124.48132780082987,
 3858.921161825726`;
 const bling = tune`
-99.00990099009901: B5^99.00990099009901 + G5^99.00990099009901,
-99.00990099009901: C5^99.00990099009901 + E5^99.00990099009901,
-2970.2970297029706`;
+74.44168734491315: B5^74.44168734491315 + G5^74.44168734491315,
+74.44168734491315: E5^74.44168734491315 + C5^74.44168734491315,
+2233.2506203473945`;
 const oof = tune`
-189.873417721519: E4^189.873417721519 + D4^189.873417721519 + C4^189.873417721519,
-5886.0759493670885`;
+163.9344262295082: E4^163.9344262295082 + D4^163.9344262295082 + C4^163.9344262295082,
+5081.9672131147545`;
 
 //PLAYER CONTROLS
+function stopGame(){
+  clearInterval(gameInterval);
+}
+
 onInput("a", () => {
   getFirst(player).x -= 1; //move left
   playTune(shuffle)
@@ -278,14 +281,15 @@ onInput("d", () => {
 });
 
 onInput("k", () => {
-  clearText()
-  setInterval(gameLoop, 1000 / framesPerSecond);
+  clearText();
+  gameInterval = setInterval(gameLoop, 1000 / framesPerSecond);
 });
 
 onInput("j", () => {
-  setMap(levels[level])
   points = 0;
-  onInput("k");
+  setMap(levels[level])
+  clearText();
+  gameInterval = setInterval(gameLoop, 1000 / framesPerSecond);
 });
 
 //SPRITE CONTROLS
@@ -313,7 +317,7 @@ function spawnSprite() {
   let check = Math.floor(Math.random()*5);
   if(check != 3){
     let x = Math.floor(Math.random() * width()); 
-    let y = isFirstDrop ? 0 : 0;
+    let y = 0;
     addSprite(x, y, randomSprite);
   }
 }
@@ -336,8 +340,8 @@ function dropSprite() {
   }
 }
 
+//GAME LOOP
 function gameLoop() {
-  // Game loop
   dropSprite();
   spawnSprite();
   updatePoints();
