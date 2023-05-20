@@ -2574,5 +2574,37 @@
     "img": "",
     "tags": ["logic"],
     "added on": "2023-05-13"
+  },
+  {
+    "filename": "drab_bullets",
+    "title": "drab_bullets",
+    "author": "Chirag",
+    "img": "",
+    "tags": ["endless"],
+    "added on": "2023-05-14"
+  },
+  {
+    "filename": "Spike_Avoider",
+    "title": "Spike_Avoider",
+    "author": "Hrushal Nikhare",
+    "img": "",
+    "tags": ["endless"],
+    "added on": "2023-05-16"
+  },
+  {
+    "filename": "Maths_Speedrun",
+    "title": "Maths_Speedrun",
+    "author": "Anshuman M.",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-05-17"
+  },
+  {
+    "filename": "Recycling_Turtle",
+    "title": "Recycling_Turtle",
+    "author": "ari-tistic",
+    "img": "",
+    "tags": ["puzzle-score"],
+    "added on": "2023-05-19"
   }
 ]
