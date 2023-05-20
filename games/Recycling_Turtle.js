@@ -9,7 +9,7 @@ Keys:
   - J to restart
 
 How to play:
-  - Turtle is tired of swimming around so much pdddaalastic, so he has decided to put matters into
+  - Turtle is tired of swimming around so much plastic, so he has decided to put matters into
   his own flippers and help educate people about plastic disposal. Not all plastic can go in your
   curbside recycling bin, and certainly not the beach!
   - Play as Recycling Turtle to learn what plastic goes in your household bin,
