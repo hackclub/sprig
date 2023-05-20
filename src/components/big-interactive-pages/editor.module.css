@@ -136,7 +136,7 @@
 }
 
 .screenControls .screenSize {
-	color: var(--accent-light);
+	color: var(--accent);
 	user-select: none;
 	overflow: hidden;
 	white-space: nowrap;
