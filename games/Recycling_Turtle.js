@@ -286,6 +286,7 @@ onInput("k", () => {
 });
 
 onInput("j", () => {
+  clearInterval(gameInterval);
   points = 0;
   setMap(levels[level])
   clearText();
