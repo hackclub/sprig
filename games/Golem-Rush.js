@@ -135,6 +135,11 @@ var gameLoop = setInterval(() => {
       y: 7,
       color: color`6`
     });
+    addText("press 'j'", {
+      x: 5,
+      y: 8,
+      color: color`9`
+    });
   }else{
     score += 1
     addText(score.toString(), {
@@ -145,3 +150,65 @@ var gameLoop = setInterval(() => {
   }
 
 }, 1000);
+
+
+function resetGame() {
+  clearText("");
+  gameRunning = true;
+  score = 0;
+  setMap(map`
+........
+...p....
+........
+........
+........
+........
+........
+........`);
+  gameLoop = setInterval(() => {
+    addText(score.toString(), {
+    x: 3,
+    y: 1,
+    color: color`6`
+  });
+  despawnObstacles();
+  moveObstacles();
+  spawnObstacle();
+  if(Math.floor(Math.random() * 3)==1){
+    spawnObstacle();
+  }else if(Math.floor(Math.random() * 3)==2){
+    spawnObstacle();
+    spawnObstacle();
+  };
+
+  if (checkHit()) {
+    clearInterval(gameLoop);
+    gameRunning = false;
+    addText("Game over!", {
+      x: 5,
+      y: 6,
+      color: color`3`
+    });
+    addText("Your score:"+score.toString(), {
+      x: 4,
+      y: 7,
+      color: color`6`
+    });
+  }else{
+    score += 1
+    addText(score.toString(), {
+      x: 3,
+      y: 1,
+      color: color`6`
+    });
+  }
+  }, 1000);
+}
+
+
+
+onInput("j", () => {
+  if (!gameRunning) {
+    resetGame();
+  }
+});
