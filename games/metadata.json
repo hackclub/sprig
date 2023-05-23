@@ -2622,5 +2622,13 @@
     "img": "",
     "tags": ["dodge"],
     "added on": "2023-05-23"
+  },
+  {
+    "filename": "hidden_maze_escape",
+    "title": "hidden_maze_escape",
+    "author": "Rylan Berry",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-05-23"
   }
 ]
