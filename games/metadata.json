@@ -2598,5 +2598,37 @@
     "img": "",
     "tags": ["logic"],
     "added on": "2023-05-17"
+  },
+  {
+    "filename": "Recycling_Turtle",
+    "title": "Recycling_Turtle",
+    "author": "ari-tistic",
+    "img": "",
+    "tags": ["puzzle-score"],
+    "added on": "2023-05-19"
+  },
+  {
+    "filename": "Golem-Rush",
+    "title": "Golem-Rush",
+    "author": "Spllit1",
+    "img": "",
+    "tags": ["dodge"],
+    "added on": "2023-05-22"
+  },
+  {
+    "filename": "galloping",
+    "title": "galloping",
+    "author": "Daniel Cui",
+    "img": "",
+    "tags": ["dodge"],
+    "added on": "2023-05-23"
+  },
+  {
+    "filename": "hidden_maze_escape",
+    "title": "hidden_maze_escape",
+    "author": "Rylan Berry",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-05-23"
   }
 ]
