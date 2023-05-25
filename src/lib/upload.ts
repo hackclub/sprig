@@ -6,7 +6,7 @@ export const uploadState = signal<UploadState>('IDLE')
 
 const getPort = async (): Promise<SerialPort> => {
 	if (!navigator.serial) {
-		const msg = 'Your browser does not support the Web Serial API. Please try again in a recent version of Chrome.'
+		const msg = 'Your browser does not support the Web Serial API. Please try again in a recent version of a Chromium-based browser, such as Chrome, Edge, or Arc.'
 		alert(msg)
 		throw new Error(msg)
 	}

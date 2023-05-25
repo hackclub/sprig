@@ -2526,5 +2526,117 @@
     "img": "",
     "tags": ["dodge"],
     "added on": "2023-05-03"
+  },
+  {
+    "filename": "portal_game",
+    "title": "portal_game",
+    "author": "DanPlayz",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-05-05"
+  },
+  {
+    "filename": "hangman",
+    "title": "hangman",
+    "author": "PapaAlpaca",
+    "img": "",
+    "tags": ["classic"],
+    "added on": "2023-05-05"
+  },
+  {
+    "filename": "hidden_maze",
+    "title": "hidden_maze",
+    "author": "Rylan Berry",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-05-06"
+  },
+  {
+    "filename": "Pet_the_Cat",
+    "title": "Pet_the_Cat",
+    "author": "Nathan Jereb",
+    "img": "",
+    "tags": [],
+    "added on": "2023-05-08"
+  },
+  {
+    "filename": "hidden_maze_infinite",
+    "title": "hidden_maze_infinite",
+    "author": "Rylan Berry",
+    "img": "",
+    "tags": ["endless"],
+    "added on": "2023-05-12"
+  },
+  {
+    "filename": "frog_at_the_fungi_maze",
+    "title": "frog_at_the_fungi_maze",
+    "author": "Javier Zaleta Martínez",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-05-13"
+  },
+  {
+    "filename": "drab_bullets",
+    "title": "drab_bullets",
+    "author": "Chirag",
+    "img": "",
+    "tags": ["endless"],
+    "added on": "2023-05-14"
+  },
+  {
+    "filename": "Spike_Avoider",
+    "title": "Spike_Avoider",
+    "author": "Hrushal Nikhare",
+    "img": "",
+    "tags": ["endless"],
+    "added on": "2023-05-16"
+  },
+  {
+    "filename": "Maths_Speedrun",
+    "title": "Maths_Speedrun",
+    "author": "Anshuman M.",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-05-17"
+  },
+  {
+    "filename": "Recycling_Turtle",
+    "title": "Recycling_Turtle",
+    "author": "ari-tistic",
+    "img": "",
+    "tags": ["puzzle-score"],
+    "added on": "2023-05-19"
+  },
+  {
+    "filename": "Golem-Rush",
+    "title": "Golem-Rush",
+    "author": "Spllit1",
+    "img": "",
+    "tags": ["dodge"],
+    "added on": "2023-05-22"
+  },
+  {
+    "filename": "galloping",
+    "title": "galloping",
+    "author": "Daniel Cui",
+    "img": "",
+    "tags": ["dodge"],
+    "added on": "2023-05-23"
+  },
+  {
+    "filename": "hidden_maze_escape",
+    "title": "hidden_maze_escape",
+    "author": "Rylan Berry",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-05-23"
+  },
+  {
+    "filename": "Operation_Ocean",
+    "title": "Operation_Ocean",
+    "author": "ari-tistic",
+    "img": "",
+    "tags": ["strategy"],
+    "added on": "2023-05-23"
   }
 ]

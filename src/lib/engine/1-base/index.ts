@@ -1,7 +1,7 @@
 import { palette } from './palette'
 import type { Text } from './text'
 
-// Tagged tempalate literal factory go brrr
+// Tagged template literal factory go brrr
 const _makeTag = <T>(cb: (string: string) => T) => {
 	return (strings: string[], ...interps: string[]) => {
 		if (typeof strings === 'string') {
@@ -65,7 +65,7 @@ export function baseEngine() {
 
 		set type(newType) {
 			const legendDict = Object.fromEntries(gameState.legend)
-			if (!(newType in legendDict)) throw new Error(`"${newType}" not in legend.`)
+			if (!(newType in legendDict)) throw new Error(`"${newType}" isn\'t in the legend.`)
 			this.remove()
 			addSprite(this._x, this._y, newType)
 		}
@@ -181,11 +181,14 @@ export function baseEngine() {
 
 	const setMap = (string: string): void => {
 		if (!string) throw new Error('Tried to set empty map.')
+
+		if (string.constructor == Object) throw new Error('setMap() takes a string, not a dict.') // https://stackoverflow.com/a/51285298
+		if (Array.isArray(string)) throw new Error('It looks like you passed an array into setMap(). Did you mean to use something like setMap(levels[level]) instead of setMap(levels)?')
 		
 		const rows = string.trim().split("\n").map(x => x.trim())
 		const rowLengths = rows.map(x => x.length)
 		const isRect = _allEqual(rowLengths)
-		if (!isRect) throw new Error('Level must be rect.')
+		if (!isRect) throw new Error('Level must be rectangular.')
 		const w = rows[0]?.length ?? 0
 		const h = rows.length
 		gameState.dimensions.width = w
@@ -259,8 +262,19 @@ export function baseEngine() {
 		return tiles
 	}
 
-	const setSolids = (arr: string[]): void => { gameState.solids = arr }
-	const setPushables = (map: Record<string, string[]>): void => { gameState.pushable = map }
+	const setSolids = (arr: string[]): void => { 
+		if (!Array.isArray(arr)) throw new Error('The sprites passed into setSolids() need to be an array.')
+		gameState.solids = arr 
+	}
+	const setPushables = (map: Record<string, string[]>): void => { 
+		for (const key in map) {
+			if(key.length != 1) {
+				throw new Error('Your sprite name must be wrapped in [] brackets here.');
+			}
+			_checkLegend(key)
+		}
+		gameState.pushable = map 
+	}
 
 	const api = {
 		setMap, 
