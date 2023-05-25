@@ -186,10 +186,6 @@ function infer_piece_type(san) {
 function stripped_san(move) {
   return move.replace(/=/, '').replace(/[+#]?[?!]*$/, '')
 }
-
-/*****************************************************************************
- * UTILITY FUNCTIONS
- ****************************************************************************/
 function rank(i) {
   return i >> 4
 }
@@ -245,12 +241,6 @@ const QUEEN = exports.QUEEN = 'q'
 const KING = exports.KING = 'k'
 
 const SQUARES = exports.SQUARES = (function () {
-  /* from the ECMA-262 spec (section 12.6.4):
-   * "The mechanics of enumerating the properties ... is
-   * implementation dependent"
-   * so: for (var sq in SQUARES) { keys.push(sq); } might not be
-   * ordered correctly
-   */
   var keys = []
   for (var i = SQUARE_MAP.a8; i <= SQUARE_MAP.h1; i++) {
     if (i & 0x88) {
@@ -283,10 +273,6 @@ const Chess = exports.Chess = function (fen) {
   var history = []
   var header = {}
   var comments = {}
-
-  /* if the user passes in a fen string, load it, else default to
-   * starting position
-   */
   if (typeof fen === 'undefined') {
     load(DEFAULT_POSITION)
   } else {
@@ -386,12 +372,6 @@ const Chess = exports.Chess = function (fen) {
 
     return true
   }
-
-  /* TODO: this function is pretty much crap - it validates structure but
-   * completely ignores content (e.g. doesn't verify that each side has a king)
-   * ... we should rewrite this, and ditch the silly error_number field while
-   * we're at it
-   */
   function validate_fen(fen) {
     var errors = {
       0: 'No errors.',
@@ -544,12 +524,6 @@ const Chess = exports.Chess = function (fen) {
     return header
   }
 
-  /* called when the initial board setup is changed with put() or remove().
-   * modifies the SetUp and FEN properties of the header object.  if the FEN is
-   * equal to the default position, the SetUp and FEN are deleted
-   * the setup is only updated if history.length is zero, ie moves haven't been
-   * made.
-   */
   function update_setup(fen) {
     if (history.length > 0) return
 
@@ -806,16 +780,6 @@ const Chess = exports.Chess = function (fen) {
     return legal_moves
   }
 
-  /* convert a move from 0x88 coordinates to Standard Algebraic Notation
-   * (SAN)
-   *
-   * @param {boolean} sloppy Use the sloppy SAN generator to work around over
-   * disambiguation bugs in Fritz and Chessbase.  See below:
-   *
-   * r1bqkbnr/ppp2ppp/2n5/1B1pP3/4P3/8/PPPP2PP/RNBQK1NR b KQkq - 2 4
-   * 4. ... Nge7 is overly disambiguated because the knight on c6 is pinned
-   * 4. ... Ne7 is technically the valid SAN
-   */
   function move_to_san(move, moves) {
     var output = ''
 
@@ -967,11 +931,6 @@ const Chess = exports.Chess = function (fen) {
   }
 
   function in_threefold_repetition() {
-    /* TODO: while this function is fine for casual use, a better
-     * implementation would use a Zobrist key (instead of FEN). the
-     * Zobrist key would be maintained in the make_move/undo_move functions,
-     * avoiding the costly that we do below.
-     */
     var moves = []
     var positions = {}
     var repetition = false
@@ -983,8 +942,6 @@ const Chess = exports.Chess = function (fen) {
     }
 
     while (true) {
-      /* remove the last two fields in the FEN string, they're not needed
-       * when checking for draw by rep */
       var fen = generate_fen().split(' ').slice(0, 4).join(' ')
 
       /* has the position occurred three or move times */
@@ -1172,26 +1129,6 @@ const Chess = exports.Chess = function (fen) {
           return null
         }
 
-        // The sloppy parser allows the user to parse non-standard chess
-        // notations. This parser is opt-in (by specifying the
-        // '{ sloppy: true }' setting) and is only run after the Standard
-        // Algebraic Notation (SAN) parser has failed.
-        //
-        // When running the sloppy parser, we'll run a regex to grab the piece,
-        // the to/from square, and an optional promotion piece. This regex will
-        // parse common non-standard notation like: Pe2-e4, Rc1c4, Qf3xf7,
-        // f7f8q, b1c3
-
-        // NOTE: Some positions and moves may be ambiguous when using the
-        // sloppy parser. For example, in this position:
-        // 6k1/8/8/B7/8/8/8/BN4K1 w - - 0 1, the move b1c3 may be interpreted
-        // as Nc3 or B1c3 (a disambiguated bishop move). In these cases, the
-        // sloppy parser will default to the most most basic interpretation
-        // (which is b1c3 parsing to Nc3).
-
-        // FIXME: these var's are hoisted into function scope, this will need
-        // to change when switching to const/let
-
         var overly_disambiguated = false
 
         var matches = clean_move.match(
@@ -1207,10 +1144,6 @@ const Chess = exports.Chess = function (fen) {
             overly_disambiguated = true
           }
         } else {
-          // The [a-h]?[1-8]? portion of the regex below handles moves that may
-          // be overly disambiguated (e.g. Nge7 is unnecessary and non-standard
-          // when there is one legal knight move to e7). In this case, the value
-          // of 'from' variable will be a rank or file, not a square.
           var matches = clean_move.match(
             /([pnbrqkPNBRQK])?([a-h]?[1-8]?)x?-?([a-h][1-8])([qrbnQRBN])?/
           )
@@ -1294,10 +1227,6 @@ const Chess = exports.Chess = function (fen) {
 
     return move
   }
-
-  /*****************************************************************************
-   * DEBUGGING UTILITIES
-   ****************************************************************************/
   function perft(depth) {
     var moves = generate_moves({ legal: false })
     var nodes = 0
@@ -1320,9 +1249,6 @@ const Chess = exports.Chess = function (fen) {
   }
 
   return {
-    /***************************************************************************
-     * PUBLIC API
-     **************************************************************************/
     load: function (fen) {
       return load(fen)
     },
