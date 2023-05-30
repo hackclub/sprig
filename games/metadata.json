@@ -2638,5 +2638,37 @@
     "img": "",
     "tags": ["strategy"],
     "added on": "2023-05-23"
+  },
+  {
+    "filename": "Mirror_Snake",
+    "title": "Mirror_Snake",
+    "author": "funnoodle11",
+    "img": "",
+    "tags": ["strategy"],
+    "added on": "2023-05-26"
+  },
+  {
+    "filename": "Minigame-Mania",
+    "title": "Minigame-Mania",
+    "author": "FlubbedAlpaca, ManushPatell, AiyuuGames, MatiasSharofi",
+    "img": "",
+    "tags": ["strategy"],
+    "added on": "2023-05-27"
+  },
+  {
+    "filename": "DontGetBurnt",
+    "title": "DontGetBurnt",
+    "author": "Alexandra Miller, Mariia Tymoshenko, Elaine Liu, Shenelle Jayakody, Ariane Clarke",
+    "img": "",
+    "tags": [""],
+    "added on": "2023-05-28"
+  },
+  {
+    "filename": "The_Story_of_Grass",
+    "title": "The_Story_of_Grass",
+    "author": "Sarah Wang / Sarinara",
+    "img": "",
+    "tags": ["puzzle-score"],
+    "added on": "2023-05-28"
   }
 ]
