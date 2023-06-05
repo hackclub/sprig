@@ -139,7 +139,16 @@ afterInput(() => {
   
 })
 
+onInput("j", () => {
+  if (gameRunning != true && titlescreen != true) {
+    setMap(levels[1]);
+    titlescreen = true;
+  }
+})
 
+afterInput(() => {
+  
+})
 
 function rockUpdate(someRock) {
   if (someRock != null) {
@@ -158,6 +167,7 @@ function rockUpdate(someRock) {
 
 var gameLoop = setInterval(() => {
   if (titlescreen) {
+    clearText();
     addText("two birds", {
       x: 5,
       y: 6,
@@ -184,7 +194,7 @@ var gameLoop = setInterval(() => {
       y: 6,
       color: color`3`
     });
-    addText("Restart to\nplay again!", {
+    addText("Press J to\nrestart!", {
       x: 5,
       y: 10,
       color: color`0`
