@@ -79,6 +79,7 @@ function reWriteText() {
         color: endGameTextDict[8]
       })
     }
+	return
   }
   
   canNextTurn = false
