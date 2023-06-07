@@ -1,4 +1,4 @@
-import type { NormalizedError } from '../../state'
+import type { NormalizedError } from '../state'
 
 export type EsprimaError = Error & {
 	description: string
@@ -146,9 +146,9 @@ function findErrorLineCol(stack: string | undefined): [number | null, number | n
 	let location = stack.match(/<anonymous>:(.+)\)/) 
 
 	if (location) {
-		let lineCol = location[1].split(":").map(Number)
-		line = lineCol[0] - 2 - 1
-		col = lineCol[1]
+		let lineCol = location[1]!.split(":").map(Number)
+		line = lineCol[0]! - 2 - 1
+		col = lineCol[1]!
 	}
 
 	return [line, col]

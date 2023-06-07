@@ -1,4 +1,4 @@
-import type { Rgba } from '../../lib/engine/1-base/palette'
+import type { Rgba } from 'sprig'
 import styles from './swatch.module.css'
 
 interface SwatchProps {

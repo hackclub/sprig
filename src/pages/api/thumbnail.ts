@@ -1,6 +1,5 @@
 import type { APIRoute } from 'astro'
-import { baseEngine } from '../../lib/engine/1-base'
-import { palette } from '../../lib/engine/1-base/palette'
+import { baseEngine, palette } from 'sprig/base'
 import { RawThumbnail, Thumbnail } from '../../lib/thumbnail'
 
 const evalGameScript = (script: string) => {

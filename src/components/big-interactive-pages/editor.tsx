@@ -6,7 +6,7 @@ import { Signal, useComputed, useSignal, useSignalEffect } from '@preact/signals
 import { useEffect, useRef } from 'preact/hooks'
 import { codeMirror, errorLog, muted, PersistenceState } from '../../lib/state'
 import EditorModal from '../popups-etc/editor-modal'
-import { runGame } from '../../lib/engine/3-editor'
+import { runGame } from '../../lib/engine'
 import DraftWarningModal from '../popups-etc/draft-warning'
 import Button from '../design-system/button'
 import { debounce } from 'throttle-debounce'
@@ -14,7 +14,7 @@ import Help from '../popups-etc/help'
 import { collapseRanges } from '../../lib/codemirror/util'
 import { defaultExampleCode } from '../../lib/examples'
 import MigrateToast from '../popups-etc/migrate-toast'
-import { highlightError, clearErrorHighlight } from '../../lib/engine/3-editor/error'
+import { highlightError, clearErrorHighlight } from '../../lib/engine/error'
 import { nanoid } from 'nanoid'
 
 interface EditorProps {
