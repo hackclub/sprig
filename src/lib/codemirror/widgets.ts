@@ -1,7 +1,7 @@
 import { EditorView, Decoration } from '@codemirror/view'
 import { type EditorState, StateField, type Range } from '@codemirror/state'
 import { syntaxTree, foldService } from '@codemirror/language'
-import { palette } from '../engine/1-base/palette'
+import { palette } from 'sprig/base'
 import { FromTo, getTag, makeWidget } from './util'
 import OpenButton from '../../components/codemirror-widgets/open-button'
 import Swatch from '../../components/codemirror-widgets/swatch'

@@ -1,9 +1,10 @@
-import { textToTune } from '../1-base/tune'
-import { webEngine } from '../2-web'
 import { playTune } from './tune'
 import { parseScript } from 'esprima'
 import { normalizeGameError, type EsprimaError } from './error'
-import { bitmaps, NormalizedError } from '../../state'
+import { bitmaps, NormalizedError } from '../state'
+import type { PlayTuneRes } from 'sprig'
+import { textToTune } from 'sprig/base'
+import { webEngine } from 'sprig/web'
 
 interface RunResult {
 	error: NormalizedError | null
@@ -13,7 +14,7 @@ interface RunResult {
 export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (error: NormalizedError) => void): RunResult {
 	const game = webEngine(canvas)
 	
-	const tunes: any[] = []
+	const tunes: PlayTuneRes[] = []
 	const timeouts: number[] = []
 	const intervals: number[] = []
 
