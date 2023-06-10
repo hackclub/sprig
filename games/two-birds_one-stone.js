@@ -143,7 +143,6 @@ onInput("j", () => {
   if (gameRunning != true && titlescreen != true) {
     setMap(levels[1]);
     titlescreen = true;
-	score=0;
   }
 })
 
@@ -169,6 +168,7 @@ function rockUpdate(someRock) {
 var gameLoop = setInterval(() => {
   if (titlescreen) {
     clearText();
+    score=0;
     addText("two birds", {
       x: 5,
       y: 6,
@@ -200,7 +200,6 @@ var gameLoop = setInterval(() => {
       y: 10,
       color: color`0`
     });
-	score=0;
   } else if (gameRunning) {
     getAll(player).forEach(aPlayer => hitCheck(aPlayer));
     clearText();
