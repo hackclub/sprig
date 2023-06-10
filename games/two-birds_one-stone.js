@@ -143,6 +143,7 @@ onInput("j", () => {
   if (gameRunning != true && titlescreen != true) {
     setMap(levels[1]);
     titlescreen = true;
+	score=0;
   }
 })
 
