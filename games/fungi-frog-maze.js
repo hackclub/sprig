@@ -1,15 +1,16 @@
 /*
-@title: frog_at_the_fungi_maze
-@author: Javier Zaleta Martínez 
+@title: fungi-frog-maze
+@author: @jzaleta
 
 ◕ ◡ ◕ っ
 ---------------------------------------------------------------------
 * Instructions:                                       
-Help the frog in reaching the destination!
+Help the fungi-frog in reaching the destination!
 Use WASD to move around and j to restart the level. 
 * Help:
-You can push the fungi to clear the path.
-Check out the false walls (you can go through those).
+You can push the fungi to move the rocks.
+You can go through the wooden walls.
+There are levels where there are no annoying rocks, yay!
 ----------------------------------------------------------------------
           \ 
            \ 
@@ -20,12 +21,13 @@ Check out the false walls (you can go through those).
      >____)/_\---/_\(____<     
 */
 
-//Game code below!
+// Game code below!!!
 
 const player = "p";
 const fungi = "f";
 const goal = "g";
 const wall = "w";
+const rock = "r";
 const fake = "q";
 const bg = "b"
 
@@ -38,10 +40,11 @@ const frogSound = tune`
 
 setLegend(
   [ player, bitmap`
-................
-................
-....000..000....
-....060..060....
+.....333633.....
+....33363363....
+...3363333333...
+...3000630003...
+....06033060....
 ...0000000000...
 ...0FFFFFFFF0...
 ..0FF000000FF0..
@@ -52,8 +55,7 @@ setLegend(
 .000DD0DD0DD000.
 .0DD0D0DD0D0DD0.
 .00000000000000.
-.....00..00.....
-................`],
+.....00..00.....`],
   [ fungi, bitmap`
 ................
 ................
@@ -93,7 +95,7 @@ LL111LLLLLLLL1LL
 1LLL11L22222L1LL
 111L11L11111LLLL
 L11LLLL11111LL1L
-L11111LLLLLLL111
+L11111LLLLLLL11L
 11LL111L11L2LL11
 1LLLLLLL11122L11
 LL21222L11112LL1
@@ -105,31 +107,48 @@ LLLLL1L1LLL1111L
 LL1111LL11LLLLLL
 L1L111LL1LLL1L1L
 LLLLLLL1LL1LLLLL`],
-  [ fake, bitmap`
-LL111LLLLLLLL1LL
-1LLL11L22222L1LL
-111L11L11111LLLL
-L11LLLL11111LL1L
-L11111LLLLLLL111
-11LL111L11L2LL11
-1LLLLLLL11122L11
-LL21222L11112LL1
-L211111LL11112L1
+  [ rock, bitmap`
+...LLLLLLLLLL...
+..LL1LLL122FLL..
+.LLLF1L11111LLL.
+L11LLLLF1111LLLL
+L11111LLLLLLL1FL
+L1LL111L11L2LL1L
+LLLLLLLL11112L1L
+LL11221L1F112LLL
+LL11L11LL11112LL
 L111111LLLLLLLLL
-L11111LL22L1122L
+L1111LLL22L112FL
 L111LLL111L111LL
-LLLLL1L1LLL1111L
-LL1111LL11LLLLLL
-L1L111LL1LLL6L6L
-LLLLLLL1LL1LLLLL`],
+LLLLL1L1LLL111LL
+.LF111LL1FLLLLL.
+..LLLLLLLLLLLL..
+................`],
+  [ fake, bitmap`
+CCCCCFCCCCCCFCCC
+CCCCCFCCCCCCFCCC
+CCCCCFCCCCCCFCCC
+CCCCCFCCCCCCFCCC
+CCCCCFCCCCCCFCCC
+FFFFFFFFFFFFFFFF
+CCCFCCCCCCFCCCCC
+CCCFCCCCCCFCCCCC
+CCCFCCCCCCFCCCCC
+CCCFCCCCCCFCCCCC
+FFFFFFFFFFFFFFFF
+CCCCCFCCCCCCFCCC
+CCCCCFCCCCCCFCCC
+CCCCCFCCCCCCFCCC
+CCCCCFCCCCCCFCCC
+CCCCCFCCCCCCFCCC`],
   [ bg, bitmap`
 4444D4444D4444D4
-444D44C44D444DD4
+444D44344D444DD4
 4F4D44444444D444
-44444C44D444444F
+44444C44D4444443
 4444444D44C44D44
 44D444444444DD44
-C4444D4444444444
+34444D4444444444
 44444DD44F4C44D4
 444F44D4444444D4
 4D44444444444444
@@ -137,8 +156,8 @@ D4444D444D4C4444
 4444444F4D444D44
 44F4D44444444DD4
 4444DD4444DD4444
-4444444C44DD4C44
-C4444F444444444F`]
+4444444C44DD4344
+34444F444444444F`]
 );
 
 setBackground(bg)
@@ -146,41 +165,49 @@ setBackground(bg)
 let level = 0;
 const levels = [
   map`
-gbbbbbbb
-wwqwwwwb
-bbbbbbbb
-bwwwwwww
-bbbbbbbb
-wwwwwwwb
-bbbbbbbb
-pbbbwwww`, //1
+bbbbbbbbbb
+wwwwfwwwwb
+gbbbrbbbbb
+wwwwbbbbbw
+bbbbbbbbww
+bwwwwwwwww
+bbbbbbbbbb
+wwwwwwwbbw
+bbbbbbbbww
+pbbbbbwwww`, //1
   map`
-....w...
-...wgw..
-wwww.www
-....fbww
-...bbqbb
-...wwbbb
-....wwww
-.......p`, //2
+wwwwwwwwwg
+bbbbbbbbbb
+bwwwwwwwww
+bbbbbbbbbb
+wwwwwbwwww
+bbbbbfrqqw
+bbbbwbbbbb
+bbbbwfwbbb
+wwwbwbwqww
+bbbbrbbbbp`, //2
   map`
-gbbbbwww
-bwwwbbww
-bbbbbbww
-wwwwwfww
-wwwbbbbw
-bbbfbwww
-bbbwwbbb
-bbbpqbbb`, //3
+bbbbgwwwww
+bwwwwwwwww
+bbbbbbbqww
+wwwwwwbbww
+wbbbbwbbww
+wwwbbwwrww
+bbwbfwbfbw
+bfbbbrbqqq
+brwwwwwwww
+bbbbbpbbbb`, //3
   map`
-qqwgbwww
-qqwbbwww
-qwwwbwwp
-bbbwfbbb
-bbbwbwwb
-wfbbbbwb
-wbwwwwwb
-bbbfbbbb`, //4
+bbbbbbbbbb
+bwwwwwwwwb
+bwwgbwwbbb
+bwwwbwbbww
+bwbwbbfwwp
+bwbqwbrbbb
+bbfbwwbwwb
+bwrbbbbbwb
+bwbbwwwwwb
+wbbbbrfbbb`, //4
   map`
 bbbbbqbb
 bbbbbfww
@@ -219,10 +246,11 @@ qfbbbfqq
 gqwqqqww`, //8
 ];
 
-setSolids([player, fungi, wall]);
+setSolids([player, fungi, wall, rock]);
 
 setPushables({
-    [player]: [fungi]
+    [player]: [fungi],
+    [fungi]: [rock]
 });
 
 const currentLevel = levels[level];
@@ -253,12 +281,6 @@ onInput("j", () => {
     if (currentLevel !== undefined) setMap(currentLevel);
 });
 
-setSolids([player, fungi, wall]);
-
-setPushables({
-    [player]: [fungi]
-});
-
 afterInput(() => {
     const numberCovered = tilesWith(goal, player).length;
     const targetNumber = tilesWith(goal).length;
@@ -272,7 +294,7 @@ afterInput(() => {
         if (currentLevel !== undefined) {
             setMap(currentLevel);
         } else {
-            addText("you win!", { y: 4, color: color`6` });
+            addText("You win!", { y: 4, color: color`6` });
         }
     }
 });
