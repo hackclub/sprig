@@ -1,4 +1,4 @@
-import { baseEngine } from "../src/lib/engine/1-base/index.ts";
+import { baseEngine } from "npm:sprig@latest/base";
 import { iterateReader } from "https://deno.land/std@0.162.0/streams/conversion.ts";
 import * as pathUtils from "https://deno.land/std/path/mod.ts";
 

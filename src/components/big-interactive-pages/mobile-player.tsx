@@ -1,6 +1,6 @@
 import { useSignal } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
-import { runGame } from '../../lib/engine/3-editor'
+import { runGame } from '../../lib/engine'
 import styles from './mobile-player.module.css'
 
 interface MobilePlayerProps {
