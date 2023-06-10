@@ -199,6 +199,7 @@ var gameLoop = setInterval(() => {
       y: 10,
       color: color`0`
     });
+	score=0;
   } else if (gameRunning) {
     getAll(player).forEach(aPlayer => hitCheck(aPlayer));
     clearText();
