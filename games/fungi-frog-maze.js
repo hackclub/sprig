@@ -20,7 +20,6 @@ There are levels where there are no annoying rocks, yay!
      ___\\ \\     // //___
      >____)/_\---/_\(____<     
 */
-
 // Game code below!!!
 
 const player = "p";
@@ -29,6 +28,7 @@ const goal = "g";
 const wall = "w";
 const rock = "r";
 const fake = "q";
+const ocean = "o";
 const bg = "b"
 
 const frogSound = tune`
@@ -141,6 +141,23 @@ CCCCCFCCCCCCFCCC
 CCCCCFCCCCCCFCCC
 CCCCCFCCCCCCFCCC
 CCCCCFCCCCCCFCCC`],
+  [ ocean, bitmap`
+5777577775777757
+7775772775777557
+7775777777775777
+7777727757777777
+7777777577777577
+7757777777775577
+2777757777777777
+7777755772727757
+7772775777777757
+7577777777777777
+5777757775727777
+7777777275777577
+7727577777777557
+7777557777557777
+7777777277557277
+2777727777777772`],
   [ bg, bitmap`
 4444D4444D4444D4
 444D44344D444DD4
@@ -173,80 +190,88 @@ bbbbbbbbww
 bwwwwwwwww
 bbbbbbbbbb
 wwwwwwwbbw
-bbbbbbbbww
-pbbbbbwwww`, //1
-  map`
-wwwwwwwwwg
-bbbbbbbbbb
-bwwwwwwwww
-bbbbbbbbbb
-wwwwwbwwww
-bbbbbfrqqw
-bbbbwbbbbb
-bbbbwfwbbb
-wwwbwbwqww
-bbbbrbbbbp`, //2
+pbbbbbbbww
+bbbbbbwwww`, // 1
   map`
 bbbbgwwwww
 bwwwwwwwww
-bbbbbbbqww
+bbbbbbbaww
 wwwwwwbbww
 wbbbbwbbww
 wwwbbwwrww
 bbwbfwbfbw
-bfbbbrbqqq
+bfbbbrbaaa
 brwwwwwwww
-bbbbbpbbbb`, //3
+bbbbbpbbbb`, // 2
+  map`
+bbbbgwwwww
+bwwwwwwwww
+bbbbbbbaww
+wwwwwwbbww
+wbbbbwbbww
+wwwbbwwrww
+bbwbfwbfbw
+bfbbbrbaaa
+brwwwwwwww
+bbbbbpbbbb`, // 3
   map`
 bbbbbbbbbb
 bwwwwwwwwb
-bwwgbwwbbb
-bwwwbwbbww
+bwgbbwwbbf
+bwwwbwbbwr
 bwbwbbfwwp
-bwbqwbrbbb
+bwbawbrbbb
 bbfbwwbwwb
 bwrbbbbbwb
 bwbbwwwwwb
-wbbbbrfbbb`, //4
+wbbbbrfbbb`, // 4
   map`
-bbbbbqbb
-bbbbbfww
-wbbwwbbb
-gfwbbbbb
-wqwfbbbb
-pwwbwbbb
-bbwbwbbb
-bbbfbwbb`, //5
+wwwwwwwwww
+wbbbrfabbb
+wbbbwbwwwb
+wbbbarbawb
+wgfwbbfawb
+bwawfrbrbb
+bpwwbwbbwb
+bbbwbwbbwb
+wbbrfbwbwb
+wwbbbbwwww`, // 5
   map`
-bbbbbbwg
-wwbwbfwb
-bbfqqbwb
-bqwqqfwb
-qfbwwbwb
-wwbwwbwb
-wbfqwbqb
-pbwwbbqb`, //6
+barbbbbwwa
+bbwfbbbwgb
+wwwbwbbwrb
+bbbfaabwbb
+bbawwafwbb
+rafbbrrwbb
+bwwbwwbwrr
+bwbfawbafb
+bpbwwbbabb
+wwwwwbbwba`, // 6
   map`
-bbbbbbwb
-bwwqwbfq
-wqfbqwbb
-wqwwwbqb
-qfqbwwwq
-wbqbfqfq
-wqwwwwqw
-pfqwwbqg`, //7
+woobbbbwbb
+oobbbbbwbb
+obwwfwbfab
+wwafbawbbb
+wwawwwbabb
+aafabwwwab
+wwbabfafab
+wwawwwwaww
+bpfawwbagb
+bbbbwwbabb`, // 7
   map`
-qqwwqbfp
-qfbbwqww
-bwwbwqww
-bbwbqqqw
-qfqqqwfb
-qwwwfwqq
-qfbbbfqq
-gqwqqqww`, //8
+ooowwobooo
+oaawwabfpo
+bafbbwawww
+bbwwbwawww
+bbbwbaaaww
+oafaaawfbo
+oawwwfwaao
+oafbbbfaao
+ogawaaawwb
+ooowooobbb`, // 8
 ];
 
-setSolids([player, fungi, wall, rock]);
+setSolids([player, fungi, wall, rock, ocean]);
 
 setPushables({
     [player]: [fungi],
