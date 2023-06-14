@@ -10,6 +10,7 @@ Use WASD to move around and j to restart the level.
 * Help:
 You can push the fungi to move the rocks.
 You can go through the wooden walls.
+You can't go through the water.
 There are levels where there are no annoying rocks, yay!
 ----------------------------------------------------------------------
           \ 
@@ -195,23 +196,23 @@ bbbbbbwwww`, // 1
   map`
 bbbbgwwwww
 bwwwwwwwww
-bbbbbbbaww
+bbbbbbbqww
 wwwwwwbbww
 wbbbbwbbww
 wwwbbwwrww
 bbwbfwbfbw
-bfbbbrbaaa
+bfbbbrbqqq
 brwwwwwwww
 bbbbbpbbbb`, // 2
   map`
 bbbbgwwwww
 bwwwwwwwww
-bbbbbbbaww
+bbbbbbbqww
 wwwwwwbbww
 wbbbbwbbww
 wwwbbwwrww
 bbwbfwbfbw
-bfbbbrbaaa
+bfbbbrbqqq
 brwwwwwwww
 bbbbbpbbbb`, // 3
   map`
@@ -220,54 +221,54 @@ bwwwwwwwwb
 bwgbbwwbbf
 bwwwbwbbwr
 bwbwbbfwwp
-bwbawbrbbb
+bwbqwbrbbb
 bbfbwwbwwb
 bwrbbbbbwb
 bwbbwwwwwb
 wbbbbrfbbb`, // 4
   map`
 wwwwwwwwww
-wbbbrfabbb
+wbbbrfqbbb
 wbbbwbwwwb
-wbbbarbawb
-wgfwbbfawb
-bwawfrbrbb
+wbbbqrbqwb
+wgfwbbfqwb
+bwqwfrbrbb
 bpwwbwbbwb
 bbbwbwbbwb
 wbbrfbwbwb
 wwbbbbwwww`, // 5
   map`
-barbbbbwwa
+bqrbbbbwwq
 bbwfbbbwgb
 wwwbwbbwrb
-bbbfaabwbb
-bbawwafwbb
-rafbbrrwbb
+bbbfqqbwbb
+bbqwwqfwbb
+rqfbbrrwbb
 bwwbwwbwrr
-bwbfawbafb
-bpbwwbbabb
-wwwwwbbwba`, // 6
+bwbfqwbqfb
+bpbwwbbqbb
+wwwwwbbwbq`, // 6
   map`
 woobbbbwbb
 oobbbbbwbb
-obwwfwbfab
-wwafbawbbb
-wwawwwbabb
-aafabwwwab
-wwbabfafab
-wwawwwwaww
-bpfawwbagb
-bbbbwwbabb`, // 7
+obwwfwbfqb
+wwqfbqwbbb
+wwqwwwbqbb
+qqfqbwwwqb
+wwbqbfqfqb
+wwqwwwwqww
+bpfqwwbqgb
+bbbbwwbqbb`, // 7
   map`
 ooowwobooo
-oaawwabfpo
-bafbbwawww
-bbwwbwawww
-bbbwbaaaww
-oafaaawfbo
-oawwwfwaao
-oafbbbfaao
-ogawaaawwb
+oqqwwqbfpo
+bqfbbwqwww
+bbwwbwqwww
+bbbwbqqqww
+oqfqqqwfbo
+oqwwwfwqqo
+oqfbbbfqqo
+ogqwqqqwwb
 ooowooobbb`, // 8
 ];
 
