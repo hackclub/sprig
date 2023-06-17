@@ -84,7 +84,7 @@ setLegend(
 
 setSolids([player, wall, box])
 
-let level = 5
+let level = 1
 const levels = [
   map`
 .........
@@ -103,12 +103,12 @@ wwwwwwwww`,
 p.w.w.w.m
 wwwwwwwww`,
   map`
-p...wwwwww
+....wwwwww
 .....wwwww
 ...w.wwwww
 ...w.w..mw
 ..ww....ww
-..wwwww.ww
+p.wwwww.ww
 wwwwwwwwww`,
   map`
 ..m
@@ -172,7 +172,7 @@ const jump = async () => {
     await promise;
 
     getFirst(player).y -= 1;
-    await wait(100);
+    await wait(300);
   }, Promise.resolve());
 
   await resetGravity();
@@ -184,7 +184,7 @@ const resetGravity = async () => {
 
     getFirst(player).y += 1;
 
-    await wait(100);
+    await wait(500);
   }, Promise.resolve());
 };
 
