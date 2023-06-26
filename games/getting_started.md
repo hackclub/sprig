@@ -1,7 +1,7 @@
 # Welcome to Sprig!!!
 
 **Hit "run" to execute the code and start the game (you can also press `shift+enter`).**  
-**Click "Show Help" to discover your toolkit.**
+**Click "Toolkit" to discover your toolkit.**
 
 The objective is to push the purple boxes onto the green goals.  
 Press `j` to reset the current level.
@@ -46,7 +46,7 @@ Add sound effects when you move.
 <details>
 <summary>Stuck? Show Hint.</summary>
 
-Create a `tune` and use `playTune` to play it. The "Show Help" menu has a lot of information on tunes.
+Create a `tune` and use `playTune` to play it. The "Toolkit" menu has a lot of information on tunes.
 </details>
 
 ## Step 6

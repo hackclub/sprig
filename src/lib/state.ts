@@ -72,7 +72,8 @@ export type PersistenceState = ({
 	kind: 'SHARED'
 	name: string
 	authorName: string
-	code: string
+	code: string,
+	tutorial: undefined | string
 }) & {
 	session: SessionInfo | null
 	stale: boolean

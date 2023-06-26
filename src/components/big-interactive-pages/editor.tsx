@@ -11,6 +11,7 @@ import DraftWarningModal from '../popups-etc/draft-warning'
 import Button from '../design-system/button'
 import { debounce } from 'throttle-debounce'
 import Help from '../popups-etc/help'
+import Tutorial from '../popups-etc/tutorial'
 import { collapseRanges } from '../../lib/codemirror/util'
 import { defaultExampleCode } from '../../lib/examples'
 import MigrateToast from '../popups-etc/migrate-toast'
@@ -284,7 +285,13 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 				<DraftWarningModal persistenceState={persistenceState} />
 			)}
 
-			<Help initialVisible={!cookies.hideHelp} />
+			{!(persistenceState.value.kind === 'SHARED' && persistenceState.value.tutorial) && (
+				<Help initialVisible={!cookies.hideHelp} />
+			)}
+
+			{persistenceState.value.kind === 'SHARED' && persistenceState.value.tutorial && (
+				<Tutorial content={persistenceState.value.tutorial} />
+			)}
 			<MigrateToast persistenceState={persistenceState} />
 		</div>
 	)
