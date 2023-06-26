@@ -4,13 +4,13 @@ import styles from './tutorial.module.css'
 import { compiledContent } from '../../../docs/docs.md'
 import { marked } from 'marked';
 
-interface HelpProps {
+interface TutorialProps {
 	content: string
 }
 
 const helpHtml = compiledContent()
 
-export default function Tutorial(props: HelpProps) {
+export default function Tutorial(props: TutorialProps) {
 	const visible = useSignal(true)
 	const showingTutorial = useSignal(true)
 
