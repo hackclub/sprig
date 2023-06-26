@@ -10,6 +10,7 @@ To solve each step, you'll have to edit the code.
 The code for this game starts below this comment (the brown text).
 
 ## Step 1
+
 Add controls to move up and left, use `w` and `a` as inputs.
 <details>
 <summary>Stuck? Show Hint.</summary>
@@ -18,6 +19,7 @@ Try to add 2 additional `onInput` functions, they should be very similar to the 
 </details>
 
 ## Step 2 
+
 Make the purple blocks pushable.
 <details>
 <summary>Stuck? Show Hint.</summary>
@@ -26,6 +28,7 @@ Try editing `setPushables` to include the purple block.
 </details>
 
 ## Step 3
+
 Edit the third level to make it solvable and add some new levels.
 <details>
 <summary>Stuck? Show Hint.</summary>
@@ -34,6 +37,7 @@ Levels are stored in the `levels` variable. Click the `map` button to edit it. L
 </details>
 
 ## Step 4
+
 Allow the player to push two or more boxes in a row.
 <details>
 <summary>Stuck? Show Hint.</summary>
@@ -42,6 +46,7 @@ Allow boxes to push boxes, you should be editing `setPushables`.
 </details>
 
 ## Step 5
+
 Add sound effects when you move.
 <details>
 <summary>Stuck? Show Hint.</summary>
@@ -50,9 +55,11 @@ Create a `tune` and use `playTune` to play it. The "Toolkit" menu has a lot of i
 </details>
 
 ## Step 6
+
 Solve the game you just created!
 
 ## I'm done, now what?
+
 Congrats! Now make your own game! Try:
  - adding two players.
  - leaving a trail as you move.
