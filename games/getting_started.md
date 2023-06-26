@@ -26,11 +26,11 @@ Try editing `setPushables` to include the purple block.
 </details>
 
 ## Step 3
-Add some new levels.
+Edit the third level to make it solvable and add some new levels.
 <details>
 <summary>Stuck? Show Hint.</summary>
 
-Make a new map in `levels` variable. Look at how other maps are made.
+Levels are stored in the `levels` variable. Click the `map` button to edit it. Look at how other maps are made and make your own unique level.
 </details>
 
 ## Step 4
