@@ -43,7 +43,6 @@ Allow boxes to push boxes, you should be editing `setPushables`.
 
 ## Step 5
 Add sound effects when you move.
- * Tip: Create a "tune" and use "playTune"
 <details>
 <summary>Stuck? Show Hint.</summary>
 
