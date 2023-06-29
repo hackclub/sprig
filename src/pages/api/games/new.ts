@@ -23,7 +23,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 	} catch (error) {
 		return new Response(typeof error === 'string' ? error : 'Bad request body', { status: 400 })
 	}
-
+	
 	let sessionInfo = await getSession(cookies)
 	let user: User
 	let unprotected: boolean
