@@ -1,15 +1,91 @@
 /*
 @title: getting_started
-@author: leo, edits: samliu
+@author: leo
 */
 
-// define the sprites in our game
+/*
+ ______    _______  _______  ______     _______  __   __  ___   _______ 
+|    _ |  |       ||   _   ||      |   |       ||  | |  ||   | |       |
+|   | ||  |    ___||  |_|  ||  _    |  |_     _||  |_|  ||   | |  _____|
+|   |_||_ |   |___ |       || | |   |    |   |  |       ||   | | |_____ 
+|    __  ||    ___||       || |_|   |    |   |  |       ||   | |_____  |
+|   |  | ||   |___ |   _   ||       |    |   |  |   _   ||   |  _____| |
+|___|  |_||_______||__| |__||______|     |___|  |__| |__||___| |_______|
+
+Instructions:
+
+Welcome to Sprig!!!
+
+Hit "run" to execute the code and
+start the game (you can also press shift+enter).
+
+Click the "Show Help" to discover your toolkit.
+
+The objective is to push the purple boxes onto the green goals.
+Press j to reset the current level.
+
+To beat each level you'll have to edit the code.
+
+The code for this game starts below this comment (the brown text).
+
+--------
+Level 1
+--------
+
+Make the purple block pushable. 
+
+--------
+Level 2
+--------
+
+Add controls to move up and left, use "w" and "a" as inputs
+
+Tip: 
+Do you find it annoying restarting at level 0?
+Try adjusting the starting level.
+
+--------
+Level 3
+--------
+
+Edit the map.
+
+--------
+Level 4
+--------
+
+Make boxes push boxes.
+
+--------
+Level 5
+--------
+
+Add sound effects when you move.
+
+--------
+Level 6
+--------
+
+Solve the puzzle!
+
+--------
+END
+--------
+
+Make your own game! Try
+ - adding two players
+ - leaving a trail as you move
+ - having different blocks and goal types
+ - come up with your own mechanic!
+
+*/
+
+
 const player = "p";
 const box = "b";
 const goal = "g";
 const wall = "w";
 
-// assign bitmap art to each sprite
 setLegend(
   [ player, bitmap`
 ................
@@ -81,8 +157,7 @@ setLegend(
 0000000000000000`]
 );
 
-// create game levels
-let level = 0; // this tracks the level we are on
+let level = 0;
 const levels = [
   map`
 p.bg`,
@@ -111,38 +186,35 @@ p.w.
 ..bg`
 ];
 
-// set the map displayed to the current level
 const currentLevel = levels[level];
 setMap(currentLevel);
 
-setSolids([ player, box, wall ]); // these blocks cannot be pushed by others
+setSolids([ player, box, wall ]);
 
-// allow certain sprites to push certain other sprites
 setPushables({
   [player]: []
 });
 
-// inputs for player movement control
+// START - PLAYER MOVEMENT CONTROLS
+
 onInput("s", () => {
-  getFirst(player).y += 1; // positive y is downwards
+  getFirst(player).y += 1;
 });
 
 onInput("d", () => {
   getFirst(player).x += 1;
 });
 
-// input to reset level
-onInput("j", () => {
-  const currentLevel = levels[level]; // get the original map of the level
+// END - PLAYER MOVEMENT CONTROLS
 
-  // make sure the level exists before we load it
+onInput("j", () => {
+  const currentLevel = levels[level];
   if (currentLevel !== undefined) {
     clearText("");
     setMap(currentLevel);
   }
 });
 
-// These get run after every input
 afterInput(() => {
   // count the number of tiles with goals
   const targetNumber = tilesWith(goal).length;
@@ -150,8 +222,6 @@ afterInput(() => {
   // count the number of tiles with goals and boxes
   const numberCovered = tilesWith(goal, box).length;
 
-  // if the number of goals is the same as the number of goals covered
-  // all goals are covered and we can go to the next level
   if (numberCovered === targetNumber) {
     // increase the current level number
     level = level + 1;
@@ -159,8 +229,6 @@ afterInput(() => {
     const currentLevel = levels[level];
 
     // make sure the level exists and if so set the map
-    // otherwise, we have finished the last level, there is no level
-    // after the last level
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
