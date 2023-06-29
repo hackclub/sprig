@@ -52,7 +52,7 @@ const saveGame = debounce(800, (persistenceState: Signal<PersistenceState>, code
 			const res = await fetch('/api/games/save', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ code, gameId: game?.id })
+				body: JSON.stringify({ code, gameId: game?.id, tutorialName: game?.tutorialName })
 			})
 			if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`)
 		} catch (error) {
@@ -71,6 +71,26 @@ const saveGame = debounce(800, (persistenceState: Signal<PersistenceState>, code
 	saveQueueSize++
 	lastSavePromise = (lastSavePromise ?? Promise.resolve()).then(doSave)
 })
+
+const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
+	if (persistenceState.value.kind === 'PERSISTED') {
+		delete persistenceState.value.tutorial
+		if (typeof persistenceState.value.game !== 'string') {
+			delete persistenceState.value.game.tutorialName
+		}
+		persistenceState.value = {
+			...persistenceState.value,
+			stale: true
+		}
+		if (persistenceState.value.kind === 'PERSISTED') {
+			persistenceState.value = {
+				...persistenceState.value,
+				cloudSaveState: 'SAVING'
+			}
+			saveGame(persistenceState, codeMirror.value!.state.doc.toString())
+		}
+	}
+}
 
 export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Resize state storage
@@ -285,12 +305,12 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 				<DraftWarningModal persistenceState={persistenceState} />
 			)}
 
-			{!(persistenceState.value.kind === 'SHARED' && persistenceState.value.tutorial) && (
+			{!((persistenceState.value.kind === 'SHARED' || persistenceState.value.kind === 'PERSISTED') && persistenceState.value.tutorial) && (
 				<Help initialVisible={!cookies.hideHelp} />
 			)}
 
-			{persistenceState.value.kind === 'SHARED' && persistenceState.value.tutorial && (
-				<Tutorial content={persistenceState.value.tutorial} />
+			{(persistenceState.value.kind === 'SHARED' || persistenceState.value.kind === 'PERSISTED') && persistenceState.value.tutorial && (
+				<Tutorial content={persistenceState.value.tutorial} persistenceState={persistenceState} exitTutorial={() => exitTutorial(persistenceState)}/>
 			)}
 			<MigrateToast persistenceState={persistenceState} />
 		</div>

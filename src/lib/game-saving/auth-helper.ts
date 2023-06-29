@@ -15,7 +15,7 @@ export type AuthState =
 	| 'LOGGED_IN'
 
 export type AuthStage = 'IDLE' | 'EMAIL' | 'CODE' | 'LOGGED_IN'
-	
+
 export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: string = '') => {
 	const state = useSignal(initialState)
 	const readonlyState = useComputed(() => state.value)
@@ -26,7 +26,7 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: st
 		return 'IDLE'
 	})
 	const isLoading = useComputed(() => state.value.endsWith('_CHECKING'))
-	
+
 	const email = useSignal(initialEmail)
 	const emailValid = useComputed(() => isValidEmail(email.value))
 
@@ -37,7 +37,7 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: st
 	const startEmailEntry = () => { state.value = 'EMAIL_ENTRY' }
 
 	const submitEmail = async () => {
-		if (![ 'EMAIL_ENTRY', 'EMAIL_INCORRECT' ].includes(state.value)) return
+		if (!['EMAIL_ENTRY', 'EMAIL_INCORRECT'].includes(state.value)) return
 		state.value = 'EMAIL_CHECKING'
 
 		const res = await fetch('/api/auth/email-login-code', {
@@ -54,7 +54,7 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: st
 	}
 
 	const submitCode = async () => {
-		if (![ 'CODE_SENT', 'CODE_INCORRECT' ].includes(state.value)) return
+		if (!['CODE_SENT', 'CODE_INCORRECT'].includes(state.value)) return
 		state.value = 'CODE_CHECKING'
 
 		const res = await fetch('/api/auth/submit-code', {
@@ -102,12 +102,15 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: st
 export const persist = async (persistenceState: Signal<PersistenceState>, email?: string) => {
 	const isShared = persistenceState.value.kind === 'SHARED'
 	const gameName: string | undefined = persistenceState.value.kind === 'SHARED' ? persistenceState.value.name : undefined
+	const tutorialName = persistenceState.value.kind === 'SHARED' ? persistenceState.value.tutorialName : undefined
+	const tutorial = persistenceState.value.kind === 'SHARED' ? persistenceState.value.tutorial : undefined
 	persistenceState.value = {
 		kind: 'PERSISTED',
 		cloudSaveState: 'SAVING',
 		game: 'LOADING',
 		stale: persistenceState.value.stale,
-		session: persistenceState.value.session
+		session: persistenceState.value.session,
+		tutorial: tutorial
 	}
 
 	try {
@@ -120,6 +123,7 @@ export const persist = async (persistenceState: Signal<PersistenceState>, email?
 				partialSessionEmail: email,
 				code: codeMirror.value?.state.doc.toString() ?? '',
 				name: gameName,
+				tutorialName,
 				recaptchaToken
 			})
 		})
@@ -134,7 +138,7 @@ export const persist = async (persistenceState: Signal<PersistenceState>, email?
 				game,
 				session: sessionInfo
 			}
-		
+
 		window.history.replaceState(null, '', `/~/${game.id}`)
 	} catch (error) {
 		console.error(error)

@@ -5,12 +5,14 @@ import { firestore, getGame, getSession } from '../../../lib/game-saving/account
 export const post: APIRoute = async ({ request, cookies }) => {
 	let code: string
 	let gameId: string
+	let tutorialName: string | undefined
 	try {
 		const body = await request.json()
 		if (typeof body.code !== 'string') throw 'Missing/invalid code'
 		code = body.code
 		if (typeof body.gameId !== 'string') throw 'Missing/invalid game id'
 		gameId = body.gameId
+		tutorialName = typeof body.tutorialName === 'string' ? body.tutorialName : undefined
 	} catch (error) {
 		return new Response(typeof error === 'string' ? error : 'Bad request body', { status: 400 })
 	}
@@ -32,7 +34,8 @@ export const post: APIRoute = async ({ request, cookies }) => {
 
 	await firestore.collection('games').doc(gameId).update({
 		code,
-		modifiedAt: Timestamp.now()
+		modifiedAt: Timestamp.now(),
+		tutorialName: tutorialName ?? null
 	})
 	await firestore.collection('daily-edits').doc(`${trackingId}-${trackingDate}`).set({
 		type: trackingType,

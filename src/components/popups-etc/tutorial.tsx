@@ -1,12 +1,21 @@
-import { useSignal, useSignalEffect } from '@preact/signals'
+import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 import { IoCaretDown, IoCaretUp } from 'react-icons/io5'
 import styles from './tutorial.module.css'
 import { compiledContent } from '../../../docs/docs.md'
 import { marked } from 'marked';
+import { PersistenceState } from '../../lib/state';
 
 interface TutorialProps {
 	content: string
+	persistenceState: Signal<PersistenceState>
+	exitTutorial: () => void
 }
+
+marked.use({
+	mangle: false,
+	headerIds: false,
+	headerPrefix: ''
+})
 
 const helpHtml = compiledContent()
 
@@ -38,7 +47,18 @@ export default function Tutorial(props: TutorialProps) {
 					{visible.value ? '' : 'Show Help'}
 				</div>
 			</div>
-			{visible.value && <div class={styles.content} dangerouslySetInnerHTML={{ __html: showingTutorial.value ? tutorialHtml : helpHtml }} />}
+
+			{visible.value && showingTutorial.value && (
+				<div class={styles.content} >
+					<div dangerouslySetInnerHTML={{ __html: tutorialHtml }} />
+					{props.persistenceState.value.kind === 'PERSISTED' && (
+						<p><a onClick={props.exitTutorial}>Exit Tutorial</a>. Your code will not be changed.</p>
+					)}
+				</div>
+			)}
+			{visible.value && !showingTutorial.value && (
+				<div class={styles.content} dangerouslySetInnerHTML={{ __html: helpHtml }} />
+			)}
 		</div>
 	)
 }

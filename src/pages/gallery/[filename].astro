@@ -34,6 +34,7 @@ const persistenceState = signal<PersistenceState>({
 	code: code,
 	stale: false,
 	tutorial,
+	tutorialName: tutorial ? filename : undefined,
 	session
 })
 const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')

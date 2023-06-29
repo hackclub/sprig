@@ -14,6 +14,14 @@ if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 const game = await getGame(Astro.params.id!)
 if (!game || game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
 
+let tutorial = undefined
+if (game.tutorialName) {
+	const tutorialRes = await fetch(`https://raw.githubusercontent.com/samdev-7/sprig/main/games/${encodeURIComponent(game.tutorialName)}.md`)
+	if (tutorialRes.ok) {
+		tutorial = await tutorialRes.text()
+	}
+}
+
 let _persistenceState: PersistenceState
 if (session.session.full) {
 	if (game.unprotected) {
@@ -28,6 +36,7 @@ if (session.session.full) {
 		session,
 		cloudSaveState: 'SAVED',
 		game,
+		tutorial,
 		stale: false
 	}
 } else {
@@ -39,6 +48,7 @@ if (session.session.full) {
 		session,
 		cloudSaveState: 'SAVED',
 		game,
+		tutorial,
 		stale: false
 	}
 }
