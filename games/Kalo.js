@@ -101,7 +101,6 @@ function updateTimeLeft() {
     timer = null;
     displayGameOver();
   } else {
-    timeLeftText.text = `Time left: ${timeLeft / 1000}s (${timeLeft}ms)`;
     timer = setTimeout(updateTimeLeft, 100);
   }
 }
