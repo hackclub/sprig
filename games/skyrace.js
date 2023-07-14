@@ -163,10 +163,6 @@ setBackground('r')
 const currentLevel = levels[level];
 setMap(currentLevel);
 
-setPushables({
-  [plane1]: []
-});
-
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
