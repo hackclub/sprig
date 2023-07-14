@@ -22,6 +22,9 @@ const cloud = "b";
 const plane2 = "g";
 const sky = "r";
 const mountain = "e"
+const gamelost1 = "h"
+const gamelost2 = "w"
+const bbg ="c"
 
 const melody = tune`
 245.9016393442623,
@@ -143,7 +146,58 @@ CCCCCCCCCCCCCCCC`],
 7777777777777777
 7777777777777777
 7777777777777777
-7777777777777777`]
+7777777777777777`],
+  [ gamelost1, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0044400000999990
+0444440009999999
+4404044009909099
+4444444009799979
+4333334009900099
+0433340009099909
+0044400000999990
+0000000000000000`],
+  [ gamelost2, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0444440000099900
+4444444000999990
+4404044009909099
+4744474009999999
+4400044009333339
+4044404000933390
+0444440000099900
+0000000000000000`],
+  [ bbg, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`]
 );
 
 let level = 0;
@@ -156,6 +210,12 @@ rrrrrrr
 rrrrrrr
 rrrrgrr
 rrrprrr`,
+  map`
+p
+h`,
+  map`
+g
+w`,
 
 ];
 setBackground('r')
@@ -220,26 +280,50 @@ let loop = setInterval(() => {
     addSprite(getRandomInt(6), 0, mountain)}
   
 
-
  if(tilesWith(plane1, mountain).length !== 0){
     playback.end()
+   setMap(levels[2])
+   setBackground('c')
     addText("Game Over!", {
       x: 5,
-      y: 6,
+      y: 9,
       color: color`3`
     });
+           
+            addText("Player 2 won", {
+      x: 5,
+      y: 1,
+      color: color`9`
+    }
+                   );
+                  
     clearInterval(loop)
+
+   
   }
   
   
   if(tilesWith(plane2, mountain).length !== 0){
     playback.end()
+    setMap(levels[1])
+    setBackground('c')
     addText("Game Over!", {
       x: 5,
-      y: 6,
+      y: 9,
       color: color`3`
     });
+           
+            addText("Player 1 won", {
+      x: 5,
+      y: 1,
+      color: color`4`
+    }
+                   );
     clearInterval(loop)
+
+    
   }
 
 }, intervalSpeed)
+
+
