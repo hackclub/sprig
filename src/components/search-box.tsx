@@ -3,7 +3,7 @@ import { VscArrowDown, VscArrowUp, VscCaseSensitive, VscClose, VscRegex, VscRepl
 import { closeSearchPanel, findNext, findPrevious, replaceAll, replaceNext, SearchQuery } from '@codemirror/search'
 import { Command } from '@codemirror/view'
 import { Signal } from '@preact/signals'
-import { modIcon } from '../lib/utils/keyboard'
+import { modIcon } from '../lib/utils/events'
 import { useEffect, useRef } from 'preact/hooks'
 import tinykeys from 'tinykeys'
 

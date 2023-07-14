@@ -35,7 +35,7 @@ const code = await codeRes.text()
 			window.__sprig_intitial_code__ = code
 		</script>
 		<script>
-			import { runGame } from '../lib/engine/3-editor'
+			import { runGame } from '../lib/engine'
 
 			const screen = document.getElementById('screen') as HTMLCanvasElement
 			const { __sprig_intitial_code__ } = window as unknown as { __sprig_intitial_code__: string }
