@@ -1,5 +1,5 @@
 import { IoArrowForward, IoBrush, IoColorFill, IoColorWand, IoEllipse, IoEyedrop, IoMove, IoReload, IoSquare, IoSwapHorizontal, IoSwapVertical, IoSync } from 'react-icons/io5'
-import { type PaletteItem, transparent } from '../../lib/engine/1-base/palette'
+import { type PaletteItem, transparent } from 'sprig/base'
 
 export type TempGrid = (PaletteItem | null)[][]
 export type Vector = { x: number, y: number }

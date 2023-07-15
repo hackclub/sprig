@@ -1,6 +1,6 @@
 # :leaves: Hack Club Sprig :leaves: 
 
-**[💻 Online Editor: Make a game](https://sprig.hackclub.com/editor)** | **[👀 Gallery: Find games](https://sprig.hackclub.com/gallery)** | **[🕸 Website](https://sprig.hackclub.com)** | **[🎮 Firmware](https://github.com/hackclub/spade)** | **[See Game Submissions](https://github.com/hackclub/sprig/pulls)**
+**[💻 Online Editor: Make a game](https://sprig.hackclub.com/editor)** | **[👀 Gallery: Find games](https://sprig.hackclub.com/gallery)** | **[🕸 Landing Page](https://sprig.hackclub.com)** | **[🎮 Firmware](https://github.com/hackclub/spade)** | **[👾 Engine](https://github.com/hackclub/sprig-engine)**
 
 [Sprig](https://sprig.hackclub.com) is a game console where **every user is a creator**. It can only be obtained by building a tile-based game in the [web-based game editor](https://sprig.hackclub.com/editor) and shipping it in the [community gallery](https://sprig.hackclub.com/gallery). It's made by [Hack Club](https://hackclub.com).
 
@@ -12,9 +12,9 @@
 
 You should be able to get started in Sprig with very little programming experience. Even if you're an expert, you should still be able to have fun. Sprig games are designed to be shared and hacked on with friends. Every game submitted is easily viewable and editable in our gallery allowing people to learn from and build off each other. 
 
-## Sprig is a
+## Sprig is a...
 
-**custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenage hacker that successfully shares a game they create in our [community gallery](https://sprig.hackclub.com/gallery).
+...**custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenage hacker that successfully shares a game they create in our [community gallery](https://sprig.hackclub.com/gallery).
 
 <p align="left">
 <a>
@@ -22,7 +22,7 @@ You should be able to get started in Sprig with very little programming experien
 </a>
 </p>
 
-**[web-based game editor](https://sprig.hackclub.com/editor)** that transforms learning to code from studying language syntax to making small creative projects. The Sprig game engine exposes a small construction kit for making tile-based games. This construction kit helps you focus on being creative instead of learning big APIs. The games are just JavaScript and we built a custom system to run that same JavaScript on the microcontroller!
+...**[web-based game editor](https://sprig.hackclub.com/editor)** that transforms learning to code from studying language syntax to making small creative projects. The Sprig game engine exposes a small construction kit for making tile-based games. This construction kit helps you focus on being creative instead of learning big APIs. The games are just JavaScript and we built a custom system to run that same JavaScript on the microcontroller!
 
 <p align="left">
 <a href="https://sprig.hackclub.com/editor">
@@ -30,7 +30,7 @@ You should be able to get started in Sprig with very little programming experien
 </a>
 </p>
 
-**[hardware development kit](https://github.com/hackclub/sprig/blob/main/docs/ASSEMBLY.md)**. It’s not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It’s a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.
+...**[hardware development kit](https://github.com/hackclub/sprig/blob/main/docs/ASSEMBLY.md)**. It’s not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It’s a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.
 
 <p align="left">
 <a href="https://sprig.hackclub.com">
@@ -40,7 +40,9 @@ You should be able to get started in Sprig with very little programming experien
 
 ## Fully open source
 
-**Sprig is open source**. Shipping a game to the Sprig Gallery is contributing to an open-source project. Everything about Sprig is transparent and editable. That includes the [hardware designs](https://github.com/hackclub/sprig-hardware), the game engine for the web (this repo), the [embedded game engine for the RP2040 chip](https://github.com/hackclub/spade), and the web-editor itself (this repo)! We did some fun engineering to get Sprig to work and to make your games run the same on your desktop computer and a $4 microcontroller. That involved custom JS runtimes with optimizations in C and even PIO assembly. We also documented some [behind-the-scenes](https://github.com/hackclub/sprig/tree/main/docs).
+**Sprig is open source**. Shipping a game to the Sprig Gallery is contributing to an open-source project. Everything about Sprig is transparent and editable. That includes the [hardware designs](https://github.com/hackclub/sprig-hardware), the [game engine](https://github.com/hackclub/sprig-engine), the [embedded game engine for the RP2040 chip](https://github.com/hackclub/spade), and the editor and website itself (this repo)!
+
+We did some fun engineering to get Sprig to work and to make your games run the same on your desktop computer and a $4 microcontroller. That involved custom JS runtimes with optimizations in C and even PIO assembly. We also documented some [behind-the-scenes](https://github.com/hackclub/sprig/tree/main/docs).
 
 ## You Ship, We Ship
 
@@ -105,6 +107,29 @@ yarn install
 Next, you'll want to give Sprig access to the Firebase credentials you created. Make a `.env` file in the root of the project and enter `FIREBASE_CREDENTIAL=` followed by the base64 string you generated.
 
 To start the dev server, run `yarn dev` and visit <http://localhost:3000> in your web browser! Please create a GitHub issue if you cannot get something to work properly.
+
+### Engine Development
+
+All *engine code* (responsible for running games, playing tunes, etc.) is in a different repo: <https://github.com/hackclub/sprig-engine/>.
+
+If you want to work on the engine and test out your changes in the context of this repo, you'll want to use a feature called linking.
+
+First set up the engine repo:
+
+```
+git clone https://github.com/hackclub/sprig-engine/
+cd sprig-engine
+yarn install
+yarn link
+```
+
+Then, in this website's repo:
+
+```
+yarn link sprig
+```
+
+Now, run `yarn dev` in the engine repo to start the TypeScript build process.
 
 ## Acknowledgements 
 

@@ -2558,5 +2558,213 @@
     "img": "",
     "tags": [],
     "added on": "2023-05-08"
+  },
+  {
+    "filename": "hidden_maze_infinite",
+    "title": "hidden_maze_infinite",
+    "author": "Rylan Berry",
+    "img": "",
+    "tags": ["endless"],
+    "added on": "2023-05-12"
+  },
+  {
+    "filename": "fungi-frog-maze",
+    "title": "fungi-frog-maze",
+    "author": "Javier Zaleta Martínez",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-05-13"
+  },
+  {
+    "filename": "drab_bullets",
+    "title": "drab_bullets",
+    "author": "Chirag",
+    "img": "",
+    "tags": ["endless"],
+    "added on": "2023-05-14"
+  },
+  {
+    "filename": "Spike_Avoider",
+    "title": "Spike_Avoider",
+    "author": "Hrushal Nikhare",
+    "img": "",
+    "tags": ["endless"],
+    "added on": "2023-05-16"
+  },
+  {
+    "filename": "Maths_Speedrun",
+    "title": "Maths_Speedrun",
+    "author": "Anshuman M.",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-05-17"
+  },
+  {
+    "filename": "Recycling_Turtle",
+    "title": "Recycling_Turtle",
+    "author": "ari-tistic",
+    "img": "",
+    "tags": ["puzzle-score"],
+    "added on": "2023-05-19"
+  },
+  {
+    "filename": "Golem-Rush",
+    "title": "Golem-Rush",
+    "author": "Spllit1",
+    "img": "",
+    "tags": ["dodge"],
+    "added on": "2023-05-22"
+  },
+  {
+    "filename": "galloping",
+    "title": "galloping",
+    "author": "Daniel Cui",
+    "img": "",
+    "tags": ["dodge"],
+    "added on": "2023-05-23"
+  },
+  {
+    "filename": "hidden_maze_escape",
+    "title": "hidden_maze_escape",
+    "author": "Rylan Berry",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-05-23"
+  },
+  {
+    "filename": "Operation_Ocean",
+    "title": "Operation_Ocean",
+    "author": "ari-tistic",
+    "img": "",
+    "tags": ["strategy"],
+    "added on": "2023-05-23"
+  },
+  {
+    "filename": "Mirror_Snake",
+    "title": "Mirror_Snake",
+    "author": "funnoodle11",
+    "img": "",
+    "tags": ["strategy"],
+    "added on": "2023-05-26"
+  },
+  {
+    "filename": "Minigame-Mania",
+    "title": "Minigame-Mania",
+    "author": "FlubbedAlpaca, ManushPatell, AiyuuGames, MatiasSharofi",
+    "img": "",
+    "tags": ["strategy"],
+    "added on": "2023-05-27"
+  },
+  {
+    "filename": "DontGetBurnt",
+    "title": "DontGetBurnt",
+    "author": "Alexandra Miller, Mariia Tymoshenko, Elaine Liu, Shenelle Jayakody, Ariane Clarke",
+    "img": "",
+    "tags": [""],
+    "added on": "2023-05-28"
+  },
+  {
+    "filename": "The_Story_of_Grass",
+    "title": "The_Story_of_Grass",
+    "author": "Sarah Wang / Sarinara",
+    "img": "",
+    "tags": ["puzzle-score"],
+    "added on": "2023-05-28"
+  },
+  {
+    "filename": "Womens_roles_during_wartime",
+    "title": "Women's roles during wartime",
+    "author": "cupcakes",
+    "img": "",
+    "tags": ["thematic-puzzle"],
+    "added on": "2023-06-04"
+  },
+  {
+    "filename": "Defend_the_Keep",
+    "title": "Defend_the_Keep",
+    "author": "alphaom33",
+    "img": "",
+    "tags": ["dodge"],
+    "added on": "2023-06-04"
+  },
+  {
+    "filename": "Watermellen_man_and_bluebarry_man",
+    "title": "Watermellen_man_and_bluebarry_man",
+    "author": "Joel Robbins",
+    "img": "",
+    "tags": [],
+    "added on": "2023-06-05"
+  },
+  {
+    "filename": "two-birds_one-stone",
+    "title": "two-birds_one-stone",
+    "author": "t3mp0r4ry",
+    "img": "",
+    "tags": ["dodge"],
+    "added on": "2023-06-06"
+  },
+  {
+    "filename": "Civilization_Builder",
+    "title": "Civilization_Builder",
+    "author": "Ivan S",
+    "img": "",
+    "tags": ["advanced"],
+    "added on": "2023-06-08"
+  },
+  {
+    "filename": "MyForestMaze",
+    "title": "MyForestMaze",
+    "author": "MI2",
+    "img": "",
+    "tags": ["explore"],
+    "added on": "2023-06-15"
+  },
+  {
+    "filename": "yondu's_Arrow",
+    "title": "yondu's_Arrow",
+    "author": "Cayden Robbins",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "added on": "2023-06-15"
+  },
+  {
+    "filename": "Orpheus'_Burger_Dash",
+    "title": "Orpheus'_Burger_Dash",
+    "author": "Samson C",
+    "img": "",
+    "tags": [],
+    "added on": "2023-06-16"
+  },
+  {
+    "filename": "Sprig_Boy",
+    "title": "Sprig_Boy",
+    "author": "Kai Devrim",
+    "img": "",
+    "tags": [],
+    "added on": "2023-06-19"
+  },
+  {
+    "filename": "really_really_bad_music_maker",
+    "title": "really_really_bad_music_maker",
+    "author": "Shav (secondary-smiles)",
+    "img": "",
+    "tags": ["music"],
+    "added on": "2023-06-23"
+  },
+  {
+    "filename": "parachute_panic",
+    "title": "parachute_panic",
+    "author": "Riston Rodrigues",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-06-26"
+  },
+  {
+    "filename": "ROOM",
+    "title": "ROOM",
+    "author": "davnotdev",
+    "img": "",
+    "tags": ["advanced"],
+    "added on": "2023-06-27"
   }
 ]
