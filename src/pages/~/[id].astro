@@ -16,7 +16,7 @@ if (!game || game.ownerId !== session.user.id) return Astro.redirect('/404', 302
 
 let tutorial = undefined
 if (game.tutorialName) {
-	const tutorialRes = await fetch(`https://raw.githubusercontent.com/samdev-7/sprig/main/games/${encodeURIComponent(game.tutorialName)}.md`)
+	const tutorialRes = await fetch(`https://raw.githubusercontent.com/hackclub/sprig/main/games/${encodeURIComponent(game.tutorialName)}.md`)
 	if (tutorialRes.ok) {
 		tutorial = await tutorialRes.text()
 	}
