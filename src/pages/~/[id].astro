@@ -16,10 +16,12 @@ if (!game || game.ownerId !== session.user.id) return Astro.redirect('/404', 302
 
 let tutorial = undefined
 if (game.tutorialName) {
-	const tutorialRes = await fetch(`https://raw.githubusercontent.com/hackclub/sprig/main/games/${encodeURIComponent(game.tutorialName)}.md`)
-	if (tutorialRes.ok) {
-		tutorial = await tutorialRes.text()
-	}
+	const files = await Astro.glob('/games/*.md')
+	files.forEach(async file => {
+		if (file.file.endsWith(`/${game.tutorialName}.md`)) {
+			tutorial = await file.compiledContent()
+		}
+	})
 }
 
 let _persistenceState: PersistenceState

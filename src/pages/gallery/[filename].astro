@@ -17,10 +17,12 @@ if (!res.ok) return Astro.redirect('/404', 302)
 const code = await res.text()
 
 let tutorial = undefined
-const tutorialRes = await fetch(`https://raw.githubusercontent.com/hackclub/sprig/main/games/${encodeURIComponent(filename)}.md`)
-if (tutorialRes.ok) {
-	tutorial = await tutorialRes.text()
-}
+const files = await Astro.glob('/games/*.md')
+files.forEach(async file => {
+	if (file.file.endsWith(`/${filename}.md`)) {
+		tutorial = await file.compiledContent()
+	}
+})
 
 const games = await getGalleryGames()
 const metadata = games.find(game => game.filename === filename)
