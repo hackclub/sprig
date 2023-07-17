@@ -3,6 +3,7 @@ import { IoCaretDown, IoCaretUp } from 'react-icons/io5'
 import styles from './help.module.css'
 import { compiledContent } from '../../../docs/docs.md'
 import { PersistenceState } from '../../lib/state'
+import Button from '../design-system/button'
 
 interface HelpProps {
 	initialVisible?: boolean
@@ -13,7 +14,7 @@ interface HelpProps {
 const helpHtml = compiledContent()
 
 export default function Help(props: HelpProps) {
-	const visible = useSignal(props.initialVisible ?? false)
+	const visible = useSignal(props.tutorialContent ? true : (props.initialVisible ?? false))
 	const showingTutorial = useSignal(props.tutorialContent !== undefined)
 
 	const tutorialHtml = props.tutorialContent
@@ -44,8 +45,8 @@ export default function Help(props: HelpProps) {
 			{tutorialHtml && props.persistenceState && visible.value && showingTutorial.value && (
 				<div class={styles.content} >
 					<div dangerouslySetInnerHTML={{ __html: tutorialHtml }} />
-					{props.persistenceState.value.kind === 'PERSISTED' && props.exitTutorial && (
-						<button class={styles.end} onClick={props.exitTutorial}>End Tutorial</button>
+					{props.exitTutorial && (
+						<Button onClick={props.exitTutorial} accent>I finished! End tutorial</Button>
 					)}
 				</div>
 			)}
