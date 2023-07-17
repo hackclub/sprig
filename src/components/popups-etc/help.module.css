@@ -115,3 +115,7 @@
 .content a:hover {
 	text-decoration: underline;
 }
+
+.content summary {
+	cursor: var(--pointer-interactive);
+}
