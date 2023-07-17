@@ -1,16 +1,25 @@
-import { useSignal, useSignalEffect } from '@preact/signals'
+import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 import { IoCaretDown, IoCaretUp } from 'react-icons/io5'
 import styles from './help.module.css'
 import { compiledContent } from '../../../docs/docs.md'
+import { PersistenceState } from '../../lib/state'
 
 interface HelpProps {
 	initialVisible?: boolean
+	tutorialContent?: string
+	persistenceState?: Signal<PersistenceState>
+	exitTutorial?: () => void
 }
-
-const html = compiledContent()
+const helpHtml = compiledContent()
 
 export default function Help(props: HelpProps) {
 	const visible = useSignal(props.initialVisible ?? false)
+	const showingTutorial = useSignal(props.tutorialContent !== undefined)
+
+	console.log(props.exitTutorial)
+
+	const tutorialHtml = props.tutorialContent
+	console.log(tutorialHtml)
 	
 	useSignalEffect(() => {
 		document.cookie = `hideHelp=${!visible.value};path=/;max-age=${60 * 60 * 24 * 365}`
@@ -18,11 +27,34 @@ export default function Help(props: HelpProps) {
 
 	return (
 		<div class={styles.container}>
-			<div role='button' class={styles.tab} onClick={() => visible.value = !visible.value}>
-				{visible.value ? <IoCaretDown /> : <IoCaretUp />}
-				{visible.value ? 'Hide' : 'Show'} Help
+			<div class={styles.tabs}>
+				{tutorialHtml && visible.value && (
+					<div role='button' className={`${styles.tab} ${showingTutorial.value ? styles.selected : ''}`} onClick={() => showingTutorial.value = true}>
+					Tutorial
+					</div>
+				)}
+				{tutorialHtml && visible.value && (
+					<div role='button' className={`${styles.tab} ${showingTutorial.value ? '': styles.selected}`} onClick={() => showingTutorial.value = false}>
+					Help
+					</div>
+				)}
+				<div role='button' class={styles.tab} onClick={() => visible.value = !visible.value}>
+					{visible.value ? <IoCaretDown /> : <IoCaretUp />}
+					{tutorialHtml ? `${visible.value ? '' : 'Show Help'}` : `${visible.value ? 'Hide' : 'Show'} Help`}
+				</div>
 			</div>
-			{visible.value && <div class={styles.content} dangerouslySetInnerHTML={{ __html: html }} />}
+
+			{tutorialHtml && props.persistenceState && visible.value && showingTutorial.value && (
+				<div class={styles.content} >
+					<div dangerouslySetInnerHTML={{ __html: tutorialHtml }} />
+					{props.persistenceState.value.kind === 'PERSISTED' && props.exitTutorial && (
+						<button class={styles.end} onClick={props.exitTutorial}>End Tutorial</button>
+					)}
+				</div>
+			)}
+			{visible.value && !showingTutorial.value && (
+				<div class={styles.content} dangerouslySetInnerHTML={{ __html: helpHtml }} />
+			)}
 		</div>
 	)
 }

@@ -9,6 +9,11 @@
 	width: 500px;
 }
 
+.tabs {
+	display: flex;
+	flex-direction: row;
+}
+
 .tab {
 	background: var(--accent);
 	width: fit-content;
@@ -21,6 +26,22 @@
 	user-select: none;
 	cursor: var(--pointer-interactive);
 	z-index: 1;
+	border: solid var(--accent-dark);
+	border-width: 0;
+	border-right-width: 1px;
+	border-left-width: 1px;
+}
+
+.tab:first-of-type {
+	border-left-width: 0;
+}
+
+.tab:last-of-type {
+	border-right-width: 0;
+}
+
+.tab.selected {
+	background: var(--accent-dark);
 }
 
 .tab:hover {
