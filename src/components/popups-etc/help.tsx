@@ -16,10 +16,7 @@ export default function Help(props: HelpProps) {
 	const visible = useSignal(props.initialVisible ?? false)
 	const showingTutorial = useSignal(props.tutorialContent !== undefined)
 
-	console.log(props.exitTutorial)
-
 	const tutorialHtml = props.tutorialContent
-	console.log(tutorialHtml)
 	
 	useSignalEffect(() => {
 		document.cookie = `hideHelp=${!visible.value};path=/;max-age=${60 * 60 * 24 * 365}`
