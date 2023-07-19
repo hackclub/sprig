@@ -1,8 +1,3 @@
-/*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-*/
-/*Remember to add the playground at the end where there is no green to prevent the win sound from coming too much.*/
 
 
 const player = "p";
@@ -352,18 +347,6 @@ onInput("s", () => {
     keyCollect = false;
   }
 
-  if (getFirst(player).x === 4 && getFirst(player).y == 5 && level === 5) {
-    getFirst(player).x = 0;
-    getFirst(player).y = 1;
-  }
-    if (getFirst(player).x === 0 && getFirst(player).y == 4 && level === 5) {
-    getFirst(player).y = 1;
-    getFirst(player).x = 2;
-  }
-  if (getFirst(player).x === 1 && getFirst(player).y == 1 && level === 6) {
-    getFirst(player).x = 0;
-    getFirst(player).y = 4;
-  }
 
 
 });
@@ -376,14 +359,6 @@ onInput("w", () => {
   if (getFirst(player).x === 5 && getFirst(player).y == 5 && level === 4 && keyCollect === true) {
     clearTile(6, 5);
     keyCollect = false;
-  }
-  if (getFirst(player).x === 0 && getFirst(player).y == 0 && level === 5) {
-    getFirst(player).y = 5;
-    getFirst(player).x = 4;
-  }
-  if (getFirst(player).x === 4 && getFirst(player).y == 4 && level === 6) {
-    getFirst(player).x = 0;
-    getFirst(player).y = 0;
   }
   if (getFirst(player).x === 2 && getFirst(player).y == 1 && level === 6 && keyCollect === true) {
     clearTile(3, 1);
@@ -504,6 +479,7 @@ afterInput(() => {
     keyCollect = true;
     getFirst(key).remove();
   }
+  if (level == 5 || level == 6 || level == 7) {
   if (getFirst(player).x == getFirst(portalOne).x && getFirst(player).y == getFirst(portalOne).y && level == 5) {
     getFirst(player).x = getFirst(portalTwo).x;
     getFirst(player).y = getFirst(portalTwo).y;
@@ -527,6 +503,7 @@ afterInput(() => {
   else if (getFirst(player).x == getFirst(portalTwo).x && getFirst(player).y == getFirst(portalTwo).y && level == 7) {
     getFirst(player).x = getFirst(portalOne).x;
     getFirst(player).y = getFirst(portalOne).y;
+  }
   }
 });
 
