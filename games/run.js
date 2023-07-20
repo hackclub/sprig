@@ -203,25 +203,25 @@ function die() {
 function update() {
   if (hit1){
     getFirst(rocket1).x = 0
-    getFirst(rocket1).y = getRandomInt(1,height()-2)
+    getFirst(rocket1).y = getRandomInt(1,height()-1)
     hit1 = false
   }
 
   if (hit2){
     getFirst(rocket2).x = width()-1
-    getFirst(rocket2).y = getRandomInt(1,height()-2)
+    getFirst(rocket2).y = getRandomInt(1,height()-1)
     hit2 = false
   }
 
   if (hit3){
     getFirst(rocket3).y = height()-1
-    getFirst(rocket3).x = getRandomInt(1,width()-2)
+    getFirst(rocket3).x = getRandomInt(1,width()-1)
     hit3 = false
   }
 
   if (hit4){
     getFirst(rocket4).y = 0
-    getFirst(rocket4).x = getRandomInt(1,width()-2)
+    getFirst(rocket4).x = getRandomInt(1,width()-1)
     hit4 = false
   }
   
@@ -248,21 +248,25 @@ function update() {
   if (getFirst(player).x == getFirst(rocket4).x 
       && getFirst(player).y == getFirst(rocket4).y) {
     die()
+	return
   }
 
   if (getFirst(player).x == getFirst(rocket3).x 
       && getFirst(player).y == getFirst(rocket3).y) {
     die()
+	return
   }
 
   if (getFirst(player).x == getFirst(rocket2).x 
       && getFirst(player).y == getFirst(rocket2).y) {
     die()
+	return
   }
 
   if (getFirst(player).x == getFirst(rocket1).x 
       && getFirst(player).y == getFirst(rocket1).y) {
     die()
+	return
   }
 
   score += 1
