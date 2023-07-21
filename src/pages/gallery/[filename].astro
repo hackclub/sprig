@@ -18,9 +18,9 @@ const code = await res.text()
 
 let tutorial = undefined
 const files = await Astro.glob('/games/*.md')
-files.forEach(async file => {
+files.forEach(file => {
 	if (file.file.endsWith(`/${filename}.md`)) {
-		tutorial = await file.compiledContent()
+		tutorial = file.compiledContent()
 	}
 })
 

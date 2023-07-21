@@ -17,9 +17,9 @@ if (!game || game.ownerId !== session.user.id) return Astro.redirect('/404', 302
 let tutorial = undefined
 if (game.tutorialName) {
 	const files = await Astro.glob('/games/*.md')
-	files.forEach(async file => {
+	files.forEach(file => {
 		if (file.file.endsWith(`/${game.tutorialName}.md`)) {
-			tutorial = await file.compiledContent()
+			tutorial = file.compiledContent()
 		}
 	})
 }
@@ -41,6 +41,7 @@ if (session.session.full) {
 		tutorial,
 		stale: false
 	}
+
 } else {
 	if (!game.unprotected) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 	if (game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
