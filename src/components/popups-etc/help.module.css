@@ -18,7 +18,7 @@
 	background: var(--accent);
 	width: fit-content;
 	color: #ffffff;
-	padding: 6px 10px;
+	padding: 6px 12px;
 	display: flex;
 	flex-direction: row;
 	gap: 4px;
@@ -37,7 +37,9 @@
 }
 
 .tab:last-of-type {
-	border-right-width: 0;
+    border-right-width: 0;
+    padding-left: 8px;
+    padding-right: 10px;
 }
 
 .tab.selected {
