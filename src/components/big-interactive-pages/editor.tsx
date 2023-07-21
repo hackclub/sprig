@@ -313,7 +313,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			)}
 
 			{(persistenceState.value.kind === 'SHARED' || persistenceState.value.kind === 'PERSISTED') && persistenceState.value.tutorial && (
-				<Help tutorialContent={persistenceState.value.tutorial} persistenceState={persistenceState} exitTutorial={() => exitTutorial(persistenceState)} showingTutorialWarning={showingTutorialWarning}/>
+				<Help tutorialContent={persistenceState.value.tutorial} persistenceState={persistenceState} showingTutorialWarning={showingTutorialWarning}/>
 			)}
 
 			{showingTutorialWarning.value && (

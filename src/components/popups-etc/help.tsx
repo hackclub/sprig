@@ -9,7 +9,6 @@ interface HelpProps {
 	initialVisible?: boolean
 	tutorialContent?: string
 	persistenceState?: Signal<PersistenceState>
-	exitTutorial?: () => void
 	showingTutorialWarning?: Signal<boolean>
 }
 const helpHtml = compiledContent()
