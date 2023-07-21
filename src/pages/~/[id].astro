@@ -14,14 +14,12 @@ if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 const game = await getGame(Astro.params.id!)
 if (!game || game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
 
-let tutorial = undefined
+let tutorial: string | undefined = undefined
 if (game.tutorialName) {
 	const files = await Astro.glob('/games/*.md')
-	files.forEach(file => {
-		if (file.file.endsWith(`/${game.tutorialName}.md`)) {
-			tutorial = file.compiledContent()
-		}
-	})
+	tutorial = files
+		.find(file => file.file.endsWith(`/${game.tutorialName}.md`))
+		?.compiledContent()
 }
 
 let _persistenceState: PersistenceState
