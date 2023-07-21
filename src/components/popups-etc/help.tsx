@@ -10,6 +10,7 @@ interface HelpProps {
 	tutorialContent?: string
 	persistenceState?: Signal<PersistenceState>
 	exitTutorial?: () => void
+	showingTutorialWarning?: Signal<boolean>
 }
 const helpHtml = compiledContent()
 
@@ -45,8 +46,10 @@ export default function Help(props: HelpProps) {
 			{tutorialHtml && props.persistenceState && visible.value && showingTutorial.value && (
 				<div class={styles.content} >
 					<div dangerouslySetInnerHTML={{ __html: tutorialHtml }} />
-					{props.exitTutorial && (
-						<Button onClick={props.exitTutorial} accent>I finished! End tutorial</Button>
+					{props.persistenceState.value.kind === 'PERSISTED' && (
+						<Button onClick={() => {
+							props.showingTutorialWarning!.value = false
+						}} accent>I finished! End tutorial</Button>
 					)}
 				</div>
 			)}

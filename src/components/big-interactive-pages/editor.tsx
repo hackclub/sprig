@@ -16,6 +16,7 @@ import { defaultExampleCode } from '../../lib/examples'
 import MigrateToast from '../popups-etc/migrate-toast'
 import { highlightError, clearErrorHighlight } from '../../lib/engine/error'
 import { nanoid } from 'nanoid'
+import TutorialWarningModal from '../popups-etc/tutorial-warning'
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>
@@ -97,6 +98,9 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	useSignalEffect(() => {
 		document.cookie = `outputAreaSize=${outputAreaSize.value};path=/;max-age=${60 * 60 * 24 * 365}`
 	})
+
+	// Exit tutorial warning modal
+	const showingTutorialWarning = useSignal(false)
 
 	// Max height
 	const maxOutputAreaSize = useSignal(outputAreaSize.value)
@@ -309,7 +313,11 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			)}
 
 			{(persistenceState.value.kind === 'SHARED' || persistenceState.value.kind === 'PERSISTED') && persistenceState.value.tutorial && (
-				<Help tutorialContent={persistenceState.value.tutorial} persistenceState={persistenceState} exitTutorial={() => exitTutorial(persistenceState)}/>
+				<Help tutorialContent={persistenceState.value.tutorial} persistenceState={persistenceState} exitTutorial={() => exitTutorial(persistenceState)} showingTutorialWarning={showingTutorialWarning}/>
+			)}
+
+			{showingTutorialWarning.value && (
+				<TutorialWarningModal exitTutorial={() => exitTutorial(persistenceState)} showingTutorialWarning={showingTutorialWarning} />
 			)}
 			<MigrateToast persistenceState={persistenceState} />
 		</div>

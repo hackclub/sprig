@@ -1,0 +1,86 @@
+.overlay {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 99999;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background: var(--bg-overlay);
+	padding: 10px;
+}
+
+.modal {
+	background: var(--bg-surface);
+	padding: 40px;
+	width: 100%;
+	max-width: 550px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 24px;
+}
+
+.modal h2 {
+	margin: 0;
+}
+
+.modal p {
+	line-height: var(--line-height-copy);
+	font-size: 0.9em;
+	margin: 0;
+}
+
+.stack {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 14px;
+	width: 100%;
+}
+
+p.muted {
+	color: var(--fg-muted);
+	font-size: 0.8rem;
+}
+
+.inputRow {
+	display: flex;
+	flex-direction: row;
+	gap: 12px;
+	width: 100%;
+	justify-content: center;
+}
+
+.inputRow :global(input) {
+	flex: 1;
+}
+
+.inputRow.limited {
+	max-width: 300px;
+}
+
+.center {
+	text-align: center;
+}
+
+.error {
+	color: var(--error);
+}
+
+.warning {
+	background: #fff9db;
+	color: #9f6220;
+	padding: 10px;
+	line-height: var(--line-height-copy);
+	font-size: 0.9rem;
+}
+
+.warning a {
+	color: #000000;
+	text-decoration: underline;
+}
