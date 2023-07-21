@@ -48,7 +48,7 @@ export default function Help(props: HelpProps) {
 					{props.persistenceState.value.kind === 'PERSISTED' && (
 						<Button onClick={() => {
 							props.showingTutorialWarning!.value = true
-						}} accent>I finished! End tutorial</Button>
+						}} accent>Exit Tutorial</Button>
 					)}
 				</div>
 			)}
