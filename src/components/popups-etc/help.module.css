@@ -24,7 +24,7 @@
 	gap: 4px;
 	align-items: center;
 	user-select: none;
-	cursor: var(--pointer-interactive);
+	cursor: var(--cursor-interactive);
 	z-index: 1;
 	border: solid var(--accent-dark);
 	border-width: 0;
@@ -119,5 +119,9 @@
 }
 
 .content summary {
-	cursor: var(--pointer-interactive);
+	cursor: var(--cursor-interactive);
+}
+
+.content summary:hover {
+	color: var(--accent-dark);
 }
