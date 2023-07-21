@@ -47,7 +47,7 @@ export default function Help(props: HelpProps) {
 					<div dangerouslySetInnerHTML={{ __html: tutorialHtml }} />
 					{props.persistenceState.value.kind === 'PERSISTED' && (
 						<Button onClick={() => {
-							props.showingTutorialWarning!.value = false
+							props.showingTutorialWarning!.value = true
 						}} accent>I finished! End tutorial</Button>
 					)}
 				</div>
