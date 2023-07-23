@@ -215,6 +215,9 @@ onInput("d", () => {
   getFirst(player).x += 1
   playTune(move)
 })
+onInput("j", () => {
+  setMap(levels[level])
+})
 
 afterInput(() => {
   // count the number of tiles with goals
