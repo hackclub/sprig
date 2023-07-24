@@ -2774,5 +2774,37 @@
     "img": "",
     "tags": [],
     "added on": "2023-07-15"
+  },
+  {
+    "filename": "skyrace",
+    "title": "skyrace",
+    "author": "Shourya Pandey",
+    "img": "",
+    "tags": ["multiplayer"],
+    "added on": "2023-07-16"
+  },
+  {
+    "filename": "Dragon-RusH",
+    "title": "Dragon-Rush",
+    "author": "Xhaiden, Aaron, and Brenden",
+    "img": "",
+    "tags": ["WIP"],
+    "added on": "2023-07-18"
+  },
+  {
+    "filename": "run",
+    "title": "run",
+    "author": "Nguyễn Gia Bách",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-07-20"
+  },
+  {
+    "filename": "chain_remove",
+    "title": "chain_remove",
+    "author": "imcute",
+    "img": "",
+    "tags": ["endless"],
+    "added on": "2023-07-22"
   }
 ]
