@@ -116,7 +116,7 @@ setLegend([ player, bitmap`
 
 setSolids([player, wall])
 
-let level = 4
+let level = 0
 const levels = [
   map`
 cpcccccccc
@@ -144,7 +144,7 @@ cfcccccfcfcfcfc
 cfcfffffcfcfcfc
 cfcccfcccccfcfc
 cfffcfffcfffffc
-cccccccfccccccc`,
+cccccccgccccccc`,
   map`
 ccccccccccpccccccccc
 cfffcffffcfffffffffc
