@@ -2806,5 +2806,13 @@
     "img": "",
     "tags": ["endless"],
     "added on": "2023-07-22"
+  },
+  {
+    "filename": "maise",
+    "title": "maise",
+    "author": "Urvi Murmuria",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "added on": "2023-07-24"
   }
 ]
