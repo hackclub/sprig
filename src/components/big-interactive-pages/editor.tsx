@@ -80,15 +80,10 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
 		}
 		persistenceState.value = {
 			...persistenceState.value,
-			stale: true
+			stale: true,
+			cloudSaveState: 'SAVING'
 		}
-		if (persistenceState.value.kind === 'PERSISTED') {
-			persistenceState.value = {
-				...persistenceState.value,
-				cloudSaveState: 'SAVING'
-			}
-			saveGame(persistenceState, codeMirror.value!.state.doc.toString())
-		}
+		saveGame(persistenceState, codeMirror.value!.state.doc.toString())
 	}
 }
 
