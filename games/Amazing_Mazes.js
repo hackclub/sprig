@@ -5,7 +5,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 const player = "p"
 const wall = "c"
-const goal = "e"
+const goal = "g"
+const floor = "f"
 const melody = tune`
 112.78195488721805: E4-112.78195488721805 + G4-112.78195488721805,
 112.78195488721805,
@@ -94,103 +95,119 @@ setLegend([ player, bitmap`
 0...............
 0...............
 0...............
-0...............` ],)
+0...............` ], [floor,  bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`])
 
 
 setSolids([player, wall])
 
-let level = 0
+let level = 4
 const levels = [
   map`
 cpcccccccc
-c....c...c
-c.cccc.c.c
-c......c.c
-c.c.cccc.c
-c.c.ccc..c
-c.c...c.cc
-c.ccc.c..c
-c...c.cc.c
-ccccccccec`,
+cffffcfffc
+cfccccfcfc
+cffffffcfc
+cfcfccccfc
+cfcfcccffc
+cfcfffcfcc
+cfcccfcffc
+cfffcfccfc
+ccccccccgc`,
   map`
 cccccccpccccccc
-c.....c.......c
-c.ccc.ccccccc.c
-c.c.c.c.....c.c
-c.c.c.c.ccc.c.c
-c.c.c.c.c.....c
-c.c.ccc.ccccccc
-c.c...........c
-c.ccc.ccccccc.c
-c.....c.....c.c
-c.ccccc.c.c.c.c
-c.c.....c.c.c.c
-c.ccc.ccccc.c.c
-c...c...c.....c
-ccccccceccccccc`,
+cfffffcfffffffc
+cfcccfcccccccfc
+cfcfcfcfffffcfc
+cfcfcfcfcccfcfc
+cfcfcfcfcfffffc
+cfcfcccfccccccc
+cfcfffffffffffc
+cfcccfcccccccfc
+cfffffcfffffcfc
+cfcccccfcfcfcfc
+cfcfffffcfcfcfc
+cfcccfcccccfcfc
+cfffcfffcfffffc
+cccccccfccccccc`,
   map`
 ccccccccccpccccccccc
-c...c....c.........c
-c.c.c.cc.ccccccccc.c
-c.c.c.c.....c....c.c
-c.c.c.c.c.c.c.cccc.c
-c.c.c.c.c.c.c......c
-c.c...c.c.c.c.cccccc
-c.ccccc.c.c...c....c
-c.....c.c.ccc.cccc.c
-c.ccc.c.c...c......c
-c.c...c.ccc.cccccc.c
-c.c.c.c...c......c.c
-c.c.ccccc.cc.c.c.c.c
-c.c.c...c..c.c.c.c.c
-c.c...c.cccccc.c.c.c
-c.ccc.c.c....c.c.c.c
-c.....c.cccc.c.c.c.c
-ccccccc.cccc.c.c.c.c
-c..........c.c.c...c
-cccccccccceccccccccc`,
+cfffcffffcfffffffffc
+cfcfcfccfcccccccccfc
+cfcfcfcfffffcffffcfc
+cfcfcfcfcfcfcfccccfc
+cfcfcfcfcfcfcffffffc
+cfcfffcfcfcfcfcccccc
+cfcccccfcfcfffcffffc
+cfffffcfcfcccfccccfc
+cfcccfcfcfffcffffffc
+cfcfffcfcccfccccccfc
+cfcfcfcfffcffffffcfc
+cfcfcccccfccfcfcfcfc
+cfcfcfffcffcfcfcfcfc
+cfcfffcfccccccfcfcfc
+cfcccfcfcffffcfcfcfc
+cfffffcfccccfcfcfcfc
+cccccccfccccfcfcfcfc
+cffffffffffcfcfcfffc
+ccccccccccgccccccccc`,
   map`
 cccccccccccccccccccc
-c........c.........c
-c.cccc.cccccc.cccc.c
-c.c....c......cccc.c
-c.c.cc.ccccccccccc.c
-c.c.c...c.ccc.cccc.c
-c.c.c.c.c.....cccc.c
-c.c.c.ccccccc.cccc.c
-c.c.c.........cccc.c
-c.c.ccccccccc.cccc.c
-c.c...c.......cccc.c
-c.ccccccccccc.cccc.c
-c.c.........c.cccc.c
-c.c.ccc.c.c.c.cccc.c
-c.c...c.c.c.c......c
-e.c.c.c.c.c.cccccc.c
-c.c.c.c.c.c........c
-c.c.ccc.c.cccccccc.c
-c.c.....c..........p
+cffffffffcfffffffffc
+cfccccfccccccfccccfc
+cfcffffcffffffccccfc
+cfcfccfccccccccffffc
+cfcfcfffcfcccfcfccfc
+cfcfcfcfcfffffcfccfc
+cfcfcfcccccccfcfccfc
+cfcfcfffffffffcffcfc
+cfcfcccccccccfccccfc
+cfcfffcfffffffccfcfc
+cfcccccccccccfccfcfc
+cfcfffffffffcffffcfc
+cfcfcfcfcfcfcfccccfc
+cfcfcfcfcfcfcffffffc
+gfcfcccfcfcfccccccfc
+cccfffcfcfcffffffffc
+cfcccccfcfccccccccfc
+cfffffffcffffffffffp
 cccccccccccccccccccc`,
   map`
 cccccccccccccccccccc
-c...c....c.........c
-c.c.c.cc.ccccccccc.c
-c.c.c.c.....c....c.c
-c.c.c.c.c.c.c.cccc.c
-c.c.c.c.c.c.c......p
-c.c...c.c.c.c.cccccc
-c.ccccc.c.c...c....c
-c.....c.c.ccc.cccc.c
-c.ccc.c.c...c......c
-c.c...c.ccc.cccccc.c
-c.c.c.c...c......c.c
-c.c.ccccc.cc.ccc.c.c
-c.c.c...c..c.c...c.c
-c.c...c.cc.ccc.c.c.c
-c.ccc.c.c....c.c.c.c
-c.....c.cccccc.ccc.c
-ccccccc.cc...c.c.c.c
-c........c.c...c...c
-cccccccccceccccccccc`,
+cfffcffffcfffffffffc
+cfcfcfccfcccccccccfc
+cfcfcfcfffffcffffcfc
+cfcfcfcfcfcfcfccccfc
+cfcfcfcfcfcfcffffffp
+cfcfffcfcfcfcfcccccc
+cfcccccfcfcfffcffffc
+cfffffcfcfcccfccccfc
+cfcccfcfcfffcffffffc
+cfcfffcfcccfccccccfc
+cfcfcfcfffcffffffcfc
+cfcfcccccfccfcccfcfc
+cfcfcfffcffcfcfffcfc
+cfcfffcfccfcccfcfcfc
+cfcccfcfcffffcfcfcfc
+cfffffcfccccccfcccfc
+cccccccfccfffcfcfcfc
+cffffffffcfcfffcfffc
+ccccccccccgccccccccc`,
 ]
 
 setMap(levels[level])
@@ -236,7 +253,7 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("you win!", { y: 4, color: color`3` });
+      addText("you win!", { y: 4, color: color`2` });
       playTune(melody, 3)
     }
   }
