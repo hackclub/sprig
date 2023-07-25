@@ -116,7 +116,7 @@ CC..............` ], [ background,  bitmap`
 
 setSolids([player, wall])
 
-let level = 4
+let level = 0
 const levels = [
   map`
 cpcccccccc
