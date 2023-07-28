@@ -2750,5 +2750,21 @@
     "img": "",
     "tags": ["music"],
     "added on": "2023-06-23"
+  },
+  {
+    "filename": "parachute_panic",
+    "title": "parachute_panic",
+    "author": "Riston Rodrigues",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-06-26"
+  },
+  {
+    "filename": "ROOM",
+    "title": "ROOM",
+    "author": "davnotdev",
+    "img": "",
+    "tags": ["advanced"],
+    "added on": "2023-06-27"
   }
 ]
