@@ -2814,5 +2814,21 @@
     "img": "",
     "tags": ["sokoban-style"],
     "added on": "2023-07-25"
+  },
+  {
+    "filename": "Maze_Escape",
+    "title": "Maze_Escape",
+    "author": "Madison Shaw",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "added on": "2023-07-27"
+  },
+  {
+    "filename": "breakfast_maze!",
+    "title": "breakfast_maze!",
+    "author": "Alex",
+    "img": "breakfast_maze!",
+    "tags": ["sokoban-style"],
+    "added on": "2023-08-01"
   }
 ]
