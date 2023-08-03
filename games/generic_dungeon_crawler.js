@@ -57,7 +57,7 @@ function get_gear(part){
     if (!inv[i].eqip){
       continue;
     }
-    if (inv[i].clas == part){
+    if (inv[i] && inv[i].clas == part){
       return [inv[i].type,inv[i].cond];
     }
   }
@@ -1503,6 +1503,7 @@ let msg = "<^v> move\ni inventory";
 let inv_sel = 0;
 
 function get_price(x){
+  if (!x) return;
   if (x.clas == 'wepn'){
     return Math.ceil((stats.wepn[x.type]*stats.cond[x.cond])**2*8);
   }else if (x.clas == 'potn'){
@@ -1517,6 +1518,7 @@ function get_price(x){
 }
 
 function descr_item_stat(x){
+  if (!x) return;
   if (x.clas == 'wepn'){
     return "attk+"+(~~(stats.wepn[x.type]*stats.cond[x.cond]*100)/100);
   }else if (x.clas == 'potn'){
@@ -1531,6 +1533,7 @@ function descr_item_stat(x){
 }
         
 function descr_item(x){
+  if (!x) return;
   if (x.clas == 'wepn'){
     return `${x.cond} ${x.type}         ${x.eqip?'E':' '}`;
   }else if (x.clas == 'potn'){
@@ -1938,7 +1941,7 @@ onInput('l',function(){
       if (inv[inv_sel].eqip){
         for (let i = 0; i < inv.length; i++){
           if (i == inv_sel) continue;
-          if (inv[i].eqip && inv[i].clas == inv[inv_sel].clas){
+          if (inv[i] && inv[i].eqip && inv[i].clas == inv[inv_sel].clas){
             inv[i].eqip = false;
           }
         }

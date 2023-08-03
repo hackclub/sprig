@@ -1,0 +1,13 @@
+.container, .container :global(.cm-editor) {
+	height: 100%;
+	overflow: auto;
+}
+
+.container :global(.cm-scroller) {
+	font-family: var(--font-code);
+	font-size: 0.9em;
+}
+
+.container :global(.cm-panels) {
+	position: unset;
+}

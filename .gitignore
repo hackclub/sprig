@@ -1,8 +1,7 @@
 *.swp
 .DS_Store
-
 .vercel
-
 node_modules/
-yarn.lock
 yarn-error.log
+.env
+dist/

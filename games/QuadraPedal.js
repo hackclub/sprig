@@ -363,15 +363,17 @@ setPushables({
 
 // START - PLAYER MOVEMENT CONTROLS
 
-const playback = playTune(backgroundMusic, Infinity)
+let playback = playTune(backgroundMusic, Infinity)
 
 onInput("i", () => {
-  playback.end()
+  if (playback) playback.end()
 });
 
 onInput("k", () => {
-  playback.end()
-  playTune(backgroundMusic, Infinity)
+  if (playback) {
+    playback.end()
+    playback = playTune(backgroundMusic, Infinity)
+  }
 });
 
 onInput("s", () => {
@@ -470,7 +472,7 @@ afterInput(() => {
       setMap(currentLevel);
     } else {
       addText("you win!", { y: 4, color: color`3` });
-      playback.end()
+      if (playback) playback.end()
       playTune(winMusic)
     }
   }

@@ -1,0 +1,49 @@
+---
+import '../../global.css'
+import Editor from '../../components/big-interactive-pages/editor'
+import StandardHead from '../../components/standard-head.astro'
+import { signal } from '@preact/signals'
+import type { PersistenceState } from '../../lib/state'
+import { getSession, getSnapshotData } from '../../lib/game-saving/account'
+import MobilePlayer from '../../components/big-interactive-pages/mobile-player'
+import { mobileUserAgent } from '../../lib/utils/mobile'
+
+const session = await getSession(Astro.cookies)
+const snapshotData = await getSnapshotData(Astro.params.snapshotId!)
+if (!snapshotData) return Astro.redirect('/404', 302)
+
+const persistenceState = signal<PersistenceState>({
+	kind: 'SHARED',
+	name: snapshotData.name,
+	authorName: snapshotData.ownerName,
+	code: snapshotData.code,
+	stale: false,
+	session
+})
+const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
+---
+
+<html lang='en'>
+	<head>
+		<StandardHead title={snapshotData.name || 'Shared Game'} />
+	</head>
+	<body>
+		{isMobile ? (
+			<MobilePlayer
+				client:load
+				code={snapshotData.code}
+				gameName={snapshotData.name}
+				authorName={snapshotData.ownerName}
+			/>
+		) : (
+			<Editor
+				client:load
+				persistenceState={persistenceState}
+				cookies={{
+					outputAreaSize: Astro.cookies.get('outputAreaSize').number(),
+					hideHelp: Astro.cookies.get('hideHelp').boolean()
+				}}
+			/>
+		)}
+	</body>
+</html>
