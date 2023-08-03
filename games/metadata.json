@@ -2830,5 +2830,13 @@
     "img": "breakfast_maze!",
     "tags": ["sokoban-style"],
     "added on": "2023-08-01"
+  },
+  {
+    "filename": "thunder_bowl",
+    "title": "thunder_bowl",
+    "author": "Alex",
+    "img": "thunderball",
+    "tags": [],
+    "added on": "2023-08-03"
   }
 ]
