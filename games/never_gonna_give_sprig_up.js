@@ -1,4 +1,7 @@
 /*
+
+LUCAS IS DUMB
+
 We're no strangers to Sprig
 You know the rules and so do I (do I)
 A full commitment's what I'm thinking of
