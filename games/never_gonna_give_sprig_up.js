@@ -1,6 +1,6 @@
 /*
 
-LUCAS IS DUMB
+LUCAS ISN'T DUMB
 
 We're no strangers to Sprig
 You know the rules and so do I (do I)
