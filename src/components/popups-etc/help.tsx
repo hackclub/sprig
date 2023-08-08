@@ -5,6 +5,7 @@ import { compiledContent } from '../../../docs/docs.md'
 import {codeMirror, PersistenceState} from '../../lib/state'
 import Button from '../design-system/button'
 import {saveGame} from "../big-interactive-pages/editor";
+import testStyles from '../design-system/button.module.css';
 
 interface HelpProps {
 	initialVisible?: boolean
@@ -88,7 +89,7 @@ export default function Help(props: HelpProps) {
 							&& props.persistenceState.value.tutorialIndex > 0
 							&& (<Button onClick={previousPage} class={styles.paginationButton}><IoCaretBack/> Back</Button>)}
 
-							<div class={styles.pageIndicator}>Page {(props.persistenceState.value.tutorialIndex || 0) + 1}</div>
+							<div class={styles.pageIndicator}>Page {(props.persistenceState.value.tutorialIndex || 0) + 1}/{props.persistenceState.value.tutorial && props.persistenceState.value.tutorial.length}</div>
 
 						{props.persistenceState.value.tutorialIndex != undefined
 							&& props.persistenceState.value.tutorial
