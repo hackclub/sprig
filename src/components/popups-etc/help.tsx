@@ -1,5 +1,5 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
-import { IoCaretDown, IoCaretUp } from 'react-icons/io5'
+import {IoCaretBack, IoCaretDown, IoCaretForward, IoCaretUp} from 'react-icons/io5'
 import styles from './help.module.css'
 import { compiledContent } from '../../../docs/docs.md'
 import {codeMirror, PersistenceState} from '../../lib/state'
@@ -82,25 +82,26 @@ export default function Help(props: HelpProps) {
 
 					{(props.persistenceState?.value.kind == "PERSISTED" || props.persistenceState?.value.kind == "SHARED") && (
 						<>
+							<br/>
+						<div class={styles.paginationContainer}>
 						{props.persistenceState.value.tutorialIndex != undefined
 							&& props.persistenceState.value.tutorialIndex > 0
-							&& (<Button onClick={previousPage}>{'<'}</Button>)}
+							&& (<Button onClick={previousPage} class={styles.paginationButton}><IoCaretBack/> Back</Button>)}
 
-						Page {(props.persistenceState.value.tutorialIndex || 0) + 1}
+							<div class={styles.pageIndicator}>Page {(props.persistenceState.value.tutorialIndex || 0) + 1}</div>
 
 						{props.persistenceState.value.tutorialIndex != undefined
 							&& props.persistenceState.value.tutorial
 							&& props.persistenceState.value.tutorialIndex < props.persistenceState.value.tutorial.length - 1
-							&& (<Button onClick={nextPage}>{'>'}</Button>)}
+							&& (<Button onClick={nextPage} class={styles.paginationButton}><IoCaretForward/> Next</Button>)}
+						</div>
 						</>
 					)}
 					
 					
-					{props.persistenceState.value.kind === 'PERSISTED' && (
 						<Button onClick={() => {
 							props.showingTutorialWarning!.value = true
 						}} accent>Exit Tutorial</Button>
-					)}
 				</div>
 			)}
 			{visible.value && !showingTutorial.value && (

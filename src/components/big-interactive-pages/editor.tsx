@@ -84,6 +84,9 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
 			cloudSaveState: 'SAVING'
 		}
 		saveGame(persistenceState, codeMirror.value!.state.doc.toString())
+	} else {
+		if (persistenceState.value.kind == 'SHARED')
+			delete persistenceState.value.tutorial
 	}
 }
 
