@@ -17,7 +17,6 @@ interface EmailSpec {
 }
 
 export const mail = async (to: string, spec: EmailSpec): Promise<void> => {
-	return // TODO: revert!
 	await sendgrid.send({
 		from: 'Hack Club Sprig <sprig@hackclub.com>',
 		replyTo: 'Hack Club <team@hackclub.com>',
