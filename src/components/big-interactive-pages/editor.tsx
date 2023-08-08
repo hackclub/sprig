@@ -91,7 +91,6 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
 }
 
 export default function Editor({ persistenceState, cookies }: EditorProps) {
-	console.log(persistenceState.value)
 	// Resize state storage
 	const outputAreaSize = useSignal(Math.max(minOutputAreaSize, cookies.outputAreaSize ?? defaultOutputAreaSize))
 	useSignalEffect(() => {

@@ -88,7 +88,9 @@ export default function Help(props: HelpProps) {
 							&& props.persistenceState.value.tutorialIndex > 0
 							&& (<Button onClick={previousPage} class={styles.paginationButton}><IoCaretBack/> Back</Button>)}
 
-							<div class={styles.pageIndicator}>Page {(props.persistenceState.value.tutorialIndex || 0) + 1}/{props.persistenceState.value.tutorial && props.persistenceState.value.tutorial.length}</div>
+							{props.persistenceState.value.tutorial
+								&& props.persistenceState.value.tutorial.length > 1
+									&& (<div class={styles.pageIndicator}>Page {(props.persistenceState.value.tutorialIndex || 0) + 1}/{props.persistenceState.value.tutorial && props.persistenceState.value.tutorial.length}</div>)}
 
 						{props.persistenceState.value.tutorialIndex != undefined
 							&& props.persistenceState.value.tutorial

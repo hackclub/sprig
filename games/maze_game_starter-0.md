@@ -1,4 +1,4 @@
-### The Plan!
+## The Plan!
 1. Make some characters!
 2. Draw up your levels
 3. Add controls to move your player

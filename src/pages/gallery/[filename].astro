@@ -19,12 +19,13 @@ const code = await res.text()
 const fileRegexp = /.*\/(.+)-(\d+)\.md/;
 
 const files = await Astro.glob('/games/*.md')
-const tutorial = files
+let tutorial: string[] | undefined = files
 	.filter(file => {
 		let regexedFile = file.file.match(fileRegexp)
 		return regexedFile && regexedFile[1] === filename
 	})
 	?.map(md => md.compiledContent())
+if (tutorial.length == 0) tutorial = undefined
 
 const games = await getGalleryGames()
 const metadata = games.find(game => game.filename === filename)
