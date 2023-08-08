@@ -126,7 +126,7 @@
 	color: var(--accent-dark);
 }
 
-img {
+.content img {
 	height: auto;
 	width: 100%;
 }
