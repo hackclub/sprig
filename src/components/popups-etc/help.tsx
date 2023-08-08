@@ -2,12 +2,14 @@ import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 import { IoCaretDown, IoCaretUp } from 'react-icons/io5'
 import styles from './help.module.css'
 import { compiledContent } from '../../../docs/docs.md'
-import { PersistenceState } from '../../lib/state'
+import {codeMirror, PersistenceState} from '../../lib/state'
 import Button from '../design-system/button'
+import {undoDepth} from "@codemirror/commands";
+import {saveGame} from "../big-interactive-pages/editor";
 
 interface HelpProps {
 	initialVisible?: boolean
-	tutorialContent?: string
+	tutorialContent?: string[]
 	persistenceState?: Signal<PersistenceState>
 	showingTutorialWarning?: Signal<boolean>
 }
@@ -17,11 +19,44 @@ export default function Help(props: HelpProps) {
 	const visible = useSignal(props.tutorialContent ? true : (props.initialVisible ?? false))
 	const showingTutorial = useSignal(props.tutorialContent !== undefined)
 
-	const tutorialHtml = props.tutorialContent
+	const tutorialHtml = props.tutorialContent 
+		&& (props.persistenceState?.value.kind == "PERSISTED" || props.persistenceState?.value.kind == "SHARED")
+		&& props.tutorialContent[props.persistenceState?.value.tutorialIndex || 0]
 	
 	useSignalEffect(() => {
 		document.cookie = `hideHelp=${!visible.value};path=/;max-age=${60 * 60 * 24 * 365}`
 	})
+	
+	const setTutorialIndex = (tutorialIndex: number) => {
+		if (props.persistenceState?.value.kind == "PERSISTED") {
+			props.persistenceState.value = {
+				...props.persistenceState.value,
+				stale: true,
+				cloudSaveState: "SAVING",
+				tutorialIndex
+			}
+			saveGame(props.persistenceState, codeMirror.value!.state.doc.toString())
+		} else if (props.persistenceState?.value.kind == "SHARED") {
+			props.persistenceState.value = {
+				...props.persistenceState.value,
+				tutorialIndex
+			}
+		}
+	}
+	
+	const nextPage = () => {
+		const tutorialIndex = 
+			(props.persistenceState?.value.kind == "PERSISTED" || props.persistenceState?.value.kind == "SHARED") && 
+			props.persistenceState.value.tutorialIndex || 0
+		setTutorialIndex(tutorialIndex + 1)
+	}
+	
+	const previousPage = () => {
+		const tutorialIndex =
+			(props.persistenceState?.value.kind == "PERSISTED" || props.persistenceState?.value.kind == "SHARED") &&
+			props.persistenceState.value.tutorialIndex || 0
+		setTutorialIndex(tutorialIndex - 1)
+	}
 
 	return (
 		<div class={styles.container}>
@@ -44,7 +79,24 @@ export default function Help(props: HelpProps) {
 
 			{tutorialHtml && props.persistenceState && visible.value && showingTutorial.value && (
 				<div class={styles.content} >
-					<div dangerouslySetInnerHTML={{ __html: tutorialHtml }} />
+					<div dangerouslySetInnerHTML ={{ __html: tutorialHtml }} />
+
+					{(props.persistenceState?.value.kind == "PERSISTED" || props.persistenceState?.value.kind == "SHARED") && (
+						<>
+						{props.persistenceState.value.tutorialIndex != undefined
+							&& props.persistenceState.value.tutorialIndex > 0
+							&& (<Button onClick={previousPage}>{'<'}</Button>)}
+
+						Page {(props.persistenceState.value.tutorialIndex || 0) + 1}
+
+						{props.persistenceState.value.tutorialIndex != undefined
+							&& props.persistenceState.value.tutorial
+							&& props.persistenceState.value.tutorialIndex < props.persistenceState.value.tutorial.length - 1
+							&& (<Button onClick={nextPage}>{'>'}</Button>)}
+						</>
+					)}
+					
+					
 					{props.persistenceState.value.kind === 'PERSISTED' && (
 						<Button onClick={() => {
 							props.showingTutorialWarning!.value = true
