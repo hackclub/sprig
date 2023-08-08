@@ -4,7 +4,6 @@ import styles from './help.module.css'
 import { compiledContent } from '../../../docs/docs.md'
 import {codeMirror, PersistenceState} from '../../lib/state'
 import Button from '../design-system/button'
-import {undoDepth} from "@codemirror/commands";
 import {saveGame} from "../big-interactive-pages/editor";
 
 interface HelpProps {

@@ -125,3 +125,8 @@
 .content summary:hover {
 	color: var(--accent-dark);
 }
+
+img {
+	height: auto;
+	width: 100%;
+}
