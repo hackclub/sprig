@@ -5,7 +5,6 @@ import { compiledContent } from '../../../docs/docs.md'
 import {codeMirror, PersistenceState} from '../../lib/state'
 import Button from '../design-system/button'
 import {saveGame} from "../big-interactive-pages/editor";
-import testStyles from '../design-system/button.module.css';
 
 interface HelpProps {
 	initialVisible?: boolean
