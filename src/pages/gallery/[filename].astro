@@ -12,7 +12,7 @@ import { mobileUserAgent } from '../../lib/utils/mobile'
 const session = await getSession(Astro.cookies)
 
 const filename = Astro.params.filename ?? ''
-const res = await fetch(`https://raw.githubusercontent.com/hackclub/sprig/main/games/${encodeURIComponent(filename)}.js`)
+const res = await fetch(`https://raw.githubusercontent.com/hackclub/sprig/tutorial-pagination/games/${encodeURIComponent(filename)}.js`)
 if (!res.ok) return Astro.redirect('/404', 302)
 const code = await res.text()
 
