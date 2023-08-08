@@ -130,3 +130,37 @@
 	height: auto;
 	width: 100%;
 }
+
+.paginationContainer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	height: 40px;
+	margin-bottom: 5px;
+}
+
+.paginationButton {
+	height: 100%;
+	background: none;
+	color: var(--accent-dark);
+	border: none;
+	display: flex;
+	align-items: center;
+	font-family: var(--font-text);
+	font-size: 16px;
+}
+
+.content .paginationButton:hover {
+	background-color: var(--accent-light);
+	color: black;
+}
+
+
+.pageIndicator {
+	height: 100%;
+	width: fit-content;
+	padding: 10px 14px;
+	margin: 0 5px 0 5px;
+	background-color: var(--accent-light);
+	color: black;
+}

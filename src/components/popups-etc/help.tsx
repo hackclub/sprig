@@ -93,15 +93,19 @@ export default function Help(props: HelpProps) {
 						{props.persistenceState.value.tutorialIndex != undefined
 							&& props.persistenceState.value.tutorial
 							&& props.persistenceState.value.tutorialIndex < props.persistenceState.value.tutorial.length - 1
-							&& (<Button onClick={nextPage} class={styles.paginationButton}><IoCaretForward/> Next</Button>)}
+							&& (<Button onClick={nextPage} class={styles.paginationButton}>Next <IoCaretForward/></Button>)}
+
+
+							{props.persistenceState.value.tutorialIndex != undefined
+								&& props.persistenceState.value.tutorial
+								&& props.persistenceState.value.tutorialIndex == props.persistenceState.value.tutorial.length - 1
+								&& (<Button class={styles.paginationButton} onClick={() => {
+									props.showingTutorialWarning!.value = true
+								}}>Exit Tutorial</Button>)}
+							
 						</div>
 						</>
 					)}
-					
-					
-						<Button onClick={() => {
-							props.showingTutorialWarning!.value = true
-						}} accent>Exit Tutorial</Button>
 				</div>
 			)}
 			{visible.value && !showingTutorial.value && (
