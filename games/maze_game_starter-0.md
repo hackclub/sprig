@@ -1,3 +1,8 @@
+# Maze Game: Characters, Enemies and Maps.
+
+Welcome to part two of the [Sprig Batch Jam](https://jams.hackclub.com/batch/sprig)!  
+If you haven't already, click [here](https://jams.hackclub.com/batch/sprig/part-2) to view the session that this tutorial is part of.
+
 ## The Plan!
 1. Make some characters!
 2. Draw up your levels

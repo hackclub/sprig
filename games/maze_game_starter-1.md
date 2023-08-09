@@ -1,3 +1,8 @@
+# Maze Game: Adding Gameplay Mechanics
+
+Welcome to part three of the [Sprig Batch Jam](https://jams.hackclub.com/batch/sprig)!  
+If you haven't already, click [here](https://jams.hackclub.com/batch/sprig/part-3) to view the session that this tutorial is part of.
+
 ## Beginning
 ### Keys and locks
 ![](https://cloud-mswaasys4-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_11.12.28.gif)

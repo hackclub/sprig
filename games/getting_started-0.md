@@ -228,4 +228,6 @@ You’re now a Sprig game developer! What games do you want to build? Not sure w
 - having different boxes and goal types.
 - come up with your own mechanic!
 
+Once you're finished with this game, check out parts two, three, and four of the larger [Sprig Batch Jam](https://jams.hackclub.com/batch/sprig)
+
 **If you need help, remember that the toolkit (at the top of this panel) is there for you. You can also ask in the `#sprig` channel in the [Hack Club Slack](https://hackclub.com/slack/).**
