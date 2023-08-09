@@ -33,7 +33,7 @@ export default function Help(props: HelpProps) {
 				)}
 				{tutorialHtml && visible.value && (
 					<div role='button' className={`${styles.tab} ${showingTutorial.value ? '': styles.selected}`} onClick={() => showingTutorial.value = false}>
-					Help
+					Toolkit
 					</div>
 				)}
 				<div role='button' class={styles.tab} onClick={() => visible.value = !visible.value}>
