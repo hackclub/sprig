@@ -279,51 +279,61 @@ afterInput(() => {
   const objetivo = tilesWith(house9).length;
 
   if(objetivoejoga === objetivo){
-    addText("!You win!")
+    clearText();
+    addText("You win!")
   }else{
     const erro = tilesWith(player, house2).length;
     const e1 = tilesWith(house2).length;
     if(erro === e1){
+      clearText();
       addText("very far away!")
       }else{
         const erro2 = tilesWith(player, house3).length;
         const e2 = tilesWith(house3).length;
         if(erro2 === e2){
+          clearText();
           addText("diagon!")
         }else{
           const erro3 = tilesWith(player, house4).length;
           const e3 = tilesWith(house4).length;
           if(erro3 === e3){
+            clearText();
             addText("opposite!")
           }else{
             const erro4 = tilesWith(player, house5).length;
             const e4 = tilesWith(house5).length;
             if(erro4 === e4){
+              clearText();
               addText("diagon!")
             }else{
               const erro5 = tilesWith(player, house6).length;
               const e5 = tilesWith(house6).length;
               if(erro5 === e5){
+                clearText();
                 addText("very far away!")
               }else{
                 const erro6 = tilesWith(player, house7).length;
                 const e6 = tilesWith(house7).length;
                 if(erro6 === e6){
+                  clearText();
                   addText("far away!")
                 }else{
                   const erro7 = tilesWith(player, house8).length;
                   const e7 = tilesWith(house8).length;
                   if(erro7 === e7){
+                    clearText();
                     addText("near!")
                   }else{
                     const erro8 = tilesWith(player, house10).length;
                     const e8 = tilesWith(house10).length;
                     if(erro8 === e8){
+                      clearText();
                       addText("near!")
                     }else{
                       const erro9 = tilesWith(player, house11).length;
                       const e9 = tilesWith(house11).length;
                       if(erro9 === e9){
+                        clearText();
                         addText("very far away!")
                       }else{
                         addText("")

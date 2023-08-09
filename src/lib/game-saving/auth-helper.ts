@@ -102,12 +102,15 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: st
 export const persist = async (persistenceState: Signal<PersistenceState>, email?: string) => {
 	const isShared = persistenceState.value.kind === 'SHARED'
 	const gameName: string | undefined = persistenceState.value.kind === 'SHARED' ? persistenceState.value.name : undefined
+	const tutorialName = persistenceState.value.kind === 'SHARED' ? persistenceState.value.tutorialName : undefined
+	const tutorial = persistenceState.value.kind === 'SHARED' ? persistenceState.value.tutorial : undefined
 	persistenceState.value = {
 		kind: 'PERSISTED',
 		cloudSaveState: 'SAVING',
 		game: 'LOADING',
 		stale: persistenceState.value.stale,
-		session: persistenceState.value.session
+		session: persistenceState.value.session,
+		tutorial: tutorial
 	}
 
 	try {
@@ -120,6 +123,7 @@ export const persist = async (persistenceState: Signal<PersistenceState>, email?
 				partialSessionEmail: email,
 				code: codeMirror.value?.state.doc.toString() ?? '',
 				name: gameName,
+				tutorialName,
 				recaptchaToken
 			})
 		})

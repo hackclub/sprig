@@ -1,6 +1,0 @@
-{
-	"imports": {
-		"./src/lib/engine/1-base/palette": "./src/lib/engine/1-base/palette.ts",
-		"./src/lib/engine/1-base/text": "./src/lib/engine/1-base/text.ts"
-	}
-}

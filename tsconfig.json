@@ -5,7 +5,9 @@
 		"jsxImportSource": "preact",
 		"paths": {
 			"react": ["./node_modules/preact/compat/"],
-			"react-dom": ["./node_modules/preact/compat/"]
+			"react-dom": ["./node_modules/preact/compat/"],
+			"sprig": ["./node_modules/sprig/dist/"],
+			"sprig/*": ["./node_modules/sprig/dist/*"]
 		},
 		"importsNotUsedAsValues": "remove"
 	},

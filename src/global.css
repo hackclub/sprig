@@ -85,3 +85,7 @@ a:hover {
 .grecaptcha-badge {
 	visibility: hidden;
 }
+
+.cm-lineNumbers > .cm-gutterElement[err-line] {
+	background: #ecb2b2!important;
+}
