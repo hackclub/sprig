@@ -102,7 +102,7 @@ export default function Help(props: HelpProps) {
 								&& props.persistenceState.value.tutorial
 								&& props.persistenceState.value.tutorialIndex == props.persistenceState.value.tutorial.length - 1
 								&& (<Button class={styles.paginationButton} onClick={() => {
-									props.showingTutorialWarning!.value = true
+									props.showingTutorialWarning?.value = true
 								}} accent>Exit Tutorial</Button>)}
 							
 						</div>
