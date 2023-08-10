@@ -1,8 +1,8 @@
 ---
-import '../../global.css'
-import Docs2 from '../../components/spriki-components/Docs2.astro'
-import Dark from '../../components/spriki-components/Dark.astro'
-import StandardHead from '../../components/standard-head.astro'
+import '../../../global.css'
+import Docs2 from '../../../components/spriki-components/Docs2.astro'
+import Dark from '../../../components/spriki-components/Dark.astro'
+import StandardHead from '../../../components/standard-head.astro'
 ---
 <html lang="en">
     <head>
@@ -14,13 +14,13 @@ import StandardHead from '../../components/standard-head.astro'
             <p>a enciclopédia Sprig que todos podem editar.</p>
         </div>
         <div class="docs-preview">
-            <Docs2 name="Comece com Sprig!" description="Começando com Sprig? Aqui é o lugar perfeito" links="getting-started" links2="pt-br" />
-            <Docs2 name="Tutoriais" description="Passo a passo para fazer coisas para seu jogo" links="tutorials" links2="pt-br" />
-            <Docs2 name="Firmware" description="Links para Spade, Trowel, Spryg..." links="firmware" links2="pt-br" />
-            <Docs2 name="Hardware" description="Links para nossa PCB, componentes..." links="hardware" links2="pt-br" />
-            <Docs2 name="Equipe" description="Quem faz o Sprig possível" links="team" links2="pt-br" />
-            <Docs2 name="Sobre Sprikipédia" description="A história, propósito, tudo" links="about" links2="pt-br" />
-            <Docs2 name="Marca" description="Todo material de marca para download" links="brand" links2="pt-br" />
+            <Docs name="Comece com Sprig!" description="Começando com Sprig? Aqui é o lugar perfeito" links="pt-br/getting-started" />
+            <Docs name="Tutoriais" description="Passo a passo para fazer coisas para seu jogo" links="pt-br/tutorials" />
+            <Docs name="Firmware" description="Links para Spade, Trowel, Spryg..." links="pt-br/firmware" />
+            <Docs name="Hardware" description="Links para nossa PCB, componentes..." links="pt-br/hardware" />
+            <Docs name="Equipe" description="Quem faz o Sprig possível" links="pt-br/team" />
+            <Docs name="Sobre Sprikipédia" description="A história, propósito, tudo" links="pt-br/about" />
+            <Docs name="Marca" description="Todo material de marca para download" links="pt-br/brand" />
         </div>
         <div class="docs-preview">
             <Dark links="github.com/hackclub/sprig/wiki" info="Venha para o lado negro da força!" />
