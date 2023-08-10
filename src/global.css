@@ -117,16 +117,6 @@ a:hover {
 	margin-right: 10%;
 }
 
-.search-bar {
-	display: block;
-	margin-right: auto;
-	margin-left: auto;
-	background-color: #FAFED7;
-	font-size: large;
-	color: #078969;
-	border: 2px solid #078969;
-}
-
 .home-spriki {
 	display: flex;
 	align-items: center;
