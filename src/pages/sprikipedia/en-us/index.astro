@@ -1,0 +1,29 @@
+---
+import '../../global.css'
+import Docs from '../../components/spriki-components/Docs.astro'
+import Dark from '../../components/spriki-components/Dark.astro'
+import StandardHead from '../../components/standard-head.astro'
+---
+<html lang="en">
+    <head>
+        <StandardHead title='Sprikipedia, the Sprig encyclopedia' />
+    </head>
+    <body>
+        <div class="title-lang">
+            <h1>Welcome to Sprikipedia,</h1>
+            <p>the Sprig encyclopedia that anyone can edit.</p>
+        </div>
+        <div class="docs-preview">
+            <Docs name="Start with Sprig!" description="Starting with Sprig? Here is the perfect place" links="getting-started" />
+            <Docs name="Tutorials" description="Step-by-step to make things for your game" links="tutorials" />
+            <Docs name="Firmware" description="Links to Spade, Trowel, Spryg..." links="firmware" />
+            <Docs name="Hardware" description="Link to our PCB, components..." links="hardware" />
+            <Docs name="Team" description="Who make Sprig possible" links="team" />
+            <Docs name="About Sprikipedia" description="The history, purpose, everthing" links="about" />
+            <Docs name="Brand" description="All branding material for download" links="brand" />
+        </div>
+        <div class="docs-preview">
+            <Dark links="github.com/hackclub/sprig/wiki" info="Come to the dark side!" />
+        </div>
+    </body>
+</html>
