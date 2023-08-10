@@ -1,0 +1,24 @@
+---
+import '../global.css'
+import Navspriki from '../components/spriki-components/Navspriki.astro'
+import StandardHead from '../components/standard-head.astro'
+const { name, title, about, whats, found } = Astro.props
+---
+<html lang="en">
+    <head>
+        <StandardHead title={name} />
+    </head>
+    <body>
+        <Navspriki />
+        <div class="main-spriki">
+            <h1>{title}</h1>
+            <br>
+            <h2>What is {title}?</h2>
+            <p>{whats}</p>
+            <h2>What I will found here?</h2>
+            <p>{found}</p>
+            <p>{about}</p>
+            <slot />
+        </div>
+    </body>
+</html>

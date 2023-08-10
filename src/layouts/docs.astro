@@ -1,0 +1,22 @@
+---
+import '../global.css'
+import StandardHead from '../components/standard-head.astro'
+import Navspriki from '../components/spriki-components/Navspriki.astro'
+const { frontmatter } = Astro.props
+---
+
+<html lang="en">
+    <head>
+        <StandardHead title={frontmatter.spriki} />
+    </head>
+    <body>
+        <Navspriki />
+        <div class="main-spriki">
+            <h1>{frontmatter.title}</h1>
+            <p>by {frontmatter.author}</p>
+            <article>
+                <slot />
+            </article>
+        </div>
+    </body>
+</html>
