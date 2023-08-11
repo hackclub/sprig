@@ -64,6 +64,9 @@ let level = 0;
 ```
 Then search the toolkit for `setMap` and take a look at how lists of levels are defined.
 
+When you want to set the current level, use `setMap(levels[level])`, which sets the current map to the item in the list of levels at the index represented by level.  
+When `level` is 0, `levels[level]` is equivalent to `levels[0]`, because the variable `level` represents the number 0. `levels[level]` will always represent the current level, no matter what `level` is set to.
+
 </details>
 <details>
 <summary>I've tried my best. Show solution.</summary>
