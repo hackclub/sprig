@@ -1,6 +1,6 @@
 # Welcome to Sprig
 
-You found the tutorial! 🎉  
+You found the tutorial! 🎉
 
 ## READ ME FIRST❗
 
@@ -42,11 +42,11 @@ We'll need to add two more for the keys `w` and `a`. Type this out below your `o
 
 ```js
 onInput("w", function() {
-  getFirst(player).y -= 1
+    getFirst(player).y -= 1
 });
 
 onInput("a", function() {
-  getFirst(player).x -= 1;
+    getFirst(player).x -= 1;
 });
 ```
 
@@ -78,7 +78,7 @@ Part of `setPushables` has already been written. Find the lines with the `setPus
 
 ```js
 setPushables({
-  [player]: []
+    [player]: []
 });
 ```
 
@@ -86,7 +86,7 @@ Your code should now look like this:
 
 ```js
 setPushables({
-  [player]: [ box ]
+    [player]: [ box ]
 });
 ```
 
@@ -138,14 +138,14 @@ Remember how you made the boxes pushable in step 2? You'll need to do something 
 <details>
 <summary>I've tried my best. Show Solution.</summary>
 
-Similar to how we made the player push boxes, we'll need to make boxes push boxes.  
+Similar to how we made the player push boxes, we'll need to make boxes push boxes.
 
 So modify setPushables again to add ` [box]: [ box ]` and your code should now look like:
 
 ```js
 setPushables({
-  [player]: [ box ],
-  [box]: [ box ]
+    [player]: [ box ],
+    [box]: [ box ]
 });
 ```
 
@@ -183,7 +183,7 @@ Now that you have a tune, play it using Sprig's `playTune` function.
 playTune(tune);
 ```
 
-But, we only want to play the tune every time the player moves.  
+But, we only want to play the tune every time the player moves.
 
 What is something that related to player movement? Our `onInput` function that runs every time the user presses `w`, `a`, `s`, or `d`.
 
@@ -191,23 +191,23 @@ So, let’s put the `playTune` function inside each of the `onInput` functions.T
 
 ```js
 onInput("w", function() {
-  getFirst(player).y -= 1
-  playTune(tune);
+    getFirst(player).y -= 1
+    playTune(tune);
 });
 
 onInput("a", function() {
-  getFirst(player).x -= 1;
-  playTune(tune);
+    getFirst(player).x -= 1;
+    playTune(tune);
 });
 
 onInput("s", function() {
-  getFirst(player).y += 1; // positive y is downwards
-  playTune(tune);
+    getFirst(player).y += 1; // positive y is downwards
+    playTune(tune);
 });
 
 onInput("d", function() {
-  getFirst(player).x += 1;
-  playTune(tune);
+    getFirst(player).x += 1;
+    playTune(tune);
 });
 ```
 
@@ -221,13 +221,20 @@ Congratulations! You just made your own game. 🥳
 
 ## I'm done, now what?
 
-You’re now a Sprig game developer! What games do you want to build? Not sure where to start, try modifying this game by:
+**You’re now a Sprig game developer! You have a few options for how to continue on your Sprig journey:**
 
-- adding two players.
-- leaving a trail as you move.
-- having different boxes and goal types.
+If you'd like to build a more robust game with some help and guidance, continue to [part two](https://jams.hackclub.com/batch/sprig/part-2) of the Sprig Batch Jam!
+
+If you feel confident with the Sprig editor and ready to create your own games from scratch,
+- Take a look at the [Sprig Gallery](/gallery) and collect ideas from games you look through
+- [Click here](/~/new) to create a new Sprig game
+- Once you're done, [submit](/get) your game to the gallery and get a free Sprig console
+
+If you're enjoying hacking on this Sokoban game, here are some ideas for how to expand on it:
+- edit sprites to make them your own
+- add two players.
+- leave a trail as you move.
+- have different boxes and goal types.
 - come up with your own mechanic!
-
-Once you're finished with this game, check out parts two, three, and four of the larger [Sprig Batch Jam](https://jams.hackclub.com/batch/sprig).
 
 **If you need help, remember that the toolkit (at the top of this panel) is there for you. You can also ask in the `#sprig` channel in the [Hack Club Slack](https://hackclub.com/slack/).**

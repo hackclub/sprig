@@ -1,6 +1,6 @@
 # Maze Game: Characters, Enemies and Maps.
 
-Welcome to part two of the [Sprig Batch Jam](https://jams.hackclub.com/batch/sprig)!  
+Welcome to part two of the [Sprig Batch Jam](https://jams.hackclub.com/batch/sprig)! This and the next two parts will guide you through making your own maze game. While some code is included in the editor, you’ll be largely creating your own! But never fear; as always we have hints and solutions.  
 If you haven't already, click [here](https://jams.hackclub.com/batch/sprig/part-2) to view the session that this tutorial is part of.
 
 ## The Plan!
@@ -13,13 +13,14 @@ If you haven't already, click [here](https://jams.hackclub.com/batch/sprig/part-
 
 ## 1. Make some characters!
 ![](https://cloud-g3a2xtt6b-hack-club-bot.vercel.app/0ezgif.com-video-to-gif.gif)  
-This game needs three sprites. **Create the sprites in code, and design their visuals!**
+A sprite is anything that is visible on your game, except for text and background.      
+Your game needs at least three sprites. **Create the sprites in code, and design their visuals!**
 
 ### Hints:
 <details>
 <summary>What sprites do I need to create?</summary>
 
-Each of the tiles/components of the game must be represented as a sprite, such as characters, blocks, enemies, targets, etc.
+Each of the tiles/components of the game must be represented as a sprite, such as characters, blocks, enemies, targets, etc. - everything that is drawn on the screen, except for text and backgrounds. Make one sprite for each of the things you'll need in your game.
 </details>
 <details>
 <summary>How do I create sprites?</summary>
@@ -61,7 +62,7 @@ Start by creating a variable to keep track of which level you're on, like this:
 ```js
 let level = 0;
 ```
-Then search the toolkit for `setMap` to create a list of levels.
+Then search the toolkit for `setMap` and take a look at how lists of levels are defined.
 
 </details>
 <details>
@@ -74,8 +75,8 @@ let level = 0;
 We'll store our levels in an array. Arrays are lists of elements which we can use to store all our levels.
 ```js
 const levels = [
-  map``,
-  map``
+    map``,
+    map``
 ];
 ```
 Click on each of the green `map` buttons to edit the maps!
@@ -110,19 +111,19 @@ Use `setMap` with the current level (`levels[level]`) to reset the map!
 For player movement, we'll want to use an onInput function for each direction, and in each move the player in a different way.
 ```js
 onInput("w", () => {
-  getFirst(player).y -= 1; // negative y is upwards
+    getFirst(player).y -= 1; // negative y is upwards
 });
 
 onInput("a", () => {
-  getFirst(player).x -= 1;
+    getFirst(player).x -= 1;
 });
 
 onInput("s", () => {
-  getFirst(player).y += 1; // positive y is downwards
+    getFirst(player).y += 1; // positive y is downwards
 });
 
 onInput("d", () => {
-  getFirst(player).x += 1;
+    getFirst(player).x += 1;
 });
 ```
 
@@ -176,13 +177,13 @@ Then, use `tilesWith` (again, search the toolkit) to count how many tiles there 
 Finally, use an if/else statement to run certain code when the number of goals covered is above zero, and other code when it's not.
 ```js
 afterInput(() => {
-const numberOfGoalsCovered = // fill in this part using tilesWith!
-    
-if (numberOfGoalsCovered > 0) {
-    // run code when player overlaps with goal
-} else {
-    // run other code when player is not on goal
-}
+    const numberOfGoalsCovered = // fill in this part using tilesWith!
+
+    if (numberOfGoalsCovered > 0) {
+        // run code when player overlaps with goal
+    } else {
+        // run other code when player is not on goal
+    }
 })
 ```
 </details>
@@ -222,20 +223,20 @@ Search the toolkit for `addText` and have it display something like "you win"!
 ```js
 // these get run after every input
 afterInput(() => {
-  const goalsCovered = tilesWith(player, goal); // tiles that both contain the player and goal
+    const goalsCovered = tilesWith(player, goal); // tiles that both contain the player and goal
 
-  // if at least one goal is overlapping with a player, proceed to the next level
-  if (goalsCovered.length >= 1) {
-    // increase the current level number
-    level = level + 1;
-    
-    // check if current level number is valid
-    if (level < levels.length) {
-      setMap(levels[level]);
-    } else {
-        addText("you win!", { y: 4, color: color`7` });
+    // if at least one goal is overlapping with a player, proceed to the next level
+    if (goalsCovered.length >= 1) {
+        // increase the current level number
+        level = level + 1;
+
+        // check if current level number is valid
+        if (level < levels.length) {
+            setMap(levels[level]);
+        } else {
+            addText("you win!", { y: 4, color: color`7` });
+        }
     }
-  }
 });
 ```
 
