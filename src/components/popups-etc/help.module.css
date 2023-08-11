@@ -164,9 +164,13 @@
 	font-size: 16px;
 }
 
-.backButton {
+.backContainer .backButton {
 	background-color: var(--accent-light);
 	color: black;
+}
+
+.backContainer .backButton:hover {
+	background-color: var(--bg-base);
 }
 
 .pageIndicator {
