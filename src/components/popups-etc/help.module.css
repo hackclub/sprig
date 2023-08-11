@@ -170,7 +170,7 @@
 }
 
 .backContainer .backButton:hover {
-	background-color: var(--bg-base);
+	background-color: var(--bg-base) !important;
 }
 
 .pageIndicator {
