@@ -165,12 +165,12 @@
 }
 
 .backContainer .backButton {
-	background-color: var(--accent-light);
+	background-color: #ebebeb;
 	color: black;
 }
 
 .backContainer .backButton:not(disabled):hover {
-	background-color: var(--bg-base);
+	background-color: #d9d9d9;
 }
 
 .pageIndicator {
