@@ -84,15 +84,19 @@ export default function Help(props: HelpProps) {
 						<>
 							<br/>
 						<div class={styles.paginationContainer}>
+							<div class={styles.backContainer}>
 						{props.persistenceState.value.tutorialIndex != undefined
 							&& props.persistenceState.value.tutorialIndex > 0
-							&& (<Button onClick={previousPage} class={styles.paginationButton}><IoCaretBack/> Back</Button>)}
+							&& (<Button onClick={previousPage} class={`${styles.paginationButton} ${styles.backButton}`}><IoCaretBack/> Back</Button>)}
+							</div>
 
+							<div class={styles.centerContainer}>
 							{props.persistenceState.value.tutorial
 								&& props.persistenceState.value.tutorial.length > 1
 									&& (<div class={styles.pageIndicator}>Page {(props.persistenceState.value.tutorialIndex || 0) + 1}/{props.persistenceState.value.tutorial && props.persistenceState.value.tutorial.length}</div>)}
-
-						{props.persistenceState.value.tutorialIndex != undefined
+							</div>
+							<div class={styles.forwardContainer}>
+							{props.persistenceState.value.tutorialIndex != undefined
 							&& props.persistenceState.value.tutorial
 							&& props.persistenceState.value.tutorialIndex < props.persistenceState.value.tutorial.length - 1
 							&& (<Button onClick={nextPage} class={styles.paginationButton} accent>Next <IoCaretForward/></Button>)}
@@ -104,8 +108,10 @@ export default function Help(props: HelpProps) {
 								&& (<Button class={styles.paginationButton} onClick={() => {
 									props.showingTutorialWarning!.value = true
 								}} accent>Exit Tutorial</Button>)}
+							</div>
+							</div>
 							
-						</div>
+
 						</>
 					)}
 				</div>

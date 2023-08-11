@@ -132,11 +132,27 @@
 }
 
 .paginationContainer {
-	display: flex;
-	flex-direction: row;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
 	align-items: center;
 	height: 40px;
 	margin-bottom: 5px;
+	justify-content: space-between;
+}
+
+.forwardContainer {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.backContainer {
+	display: flex;
+	justify-content: flex-start;
+}
+
+.centerContainer {
+	display: flex;
+	justify-content: center;
 }
 
 .paginationButton {
@@ -146,6 +162,11 @@
 	align-items: center;
 	font-family: var(--font-text);
 	font-size: 16px;
+}
+
+.backButton {
+	background-color: var(--accent-light);
+	color: black;
 }
 
 .pageIndicator {
