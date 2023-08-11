@@ -8,4 +8,4 @@ export interface GameMetadata {
 	isNew: true | undefined
 }
 
-export const getGalleryGames = async () => await fetch('https://raw.githubusercontent.com/hackclub/sprig/main/games/metadata.json').then((res) => res.json()) as GameMetadata[]
+export const getGalleryGames = async () => await fetch('https://raw.githubusercontent.com/hackclub/sprig/cheru-temp-fork/games/metadata.json').then((res) => res.json()) as GameMetadata[]
