@@ -163,7 +163,7 @@ CCCCCCCCCCCCCCCC`],
 7777777777777777`],
 );
 
-let level = 18;
+let level = 0;
 const levels = [
   map`
 ssssssssssss
