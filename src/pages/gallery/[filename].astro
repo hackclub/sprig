@@ -16,10 +16,16 @@ const res = await fetch(`https://raw.githubusercontent.com/hackclub/sprig/main/g
 if (!res.ok) return Astro.redirect('/404', 302)
 const code = await res.text()
 
+const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
+
 const files = await Astro.glob('/games/*.md')
-const tutorial = files
-	.find(file => file.file.endsWith(`/${filename}.md`))
-	?.compiledContent()
+let tutorial: string[] | undefined = files
+	.filter(file => {
+		const regexedFile = file.file.match(fileRegexp)
+		return regexedFile && regexedFile[1] === filename
+	})
+	?.map(md => md.compiledContent())
+if (tutorial.length == 0) tutorial = undefined
 
 const games = await getGalleryGames()
 const metadata = games.find(game => game.filename === filename)
@@ -34,6 +40,7 @@ const persistenceState = signal<PersistenceState>({
 	stale: false,
 	tutorial,
 	tutorialName: tutorial ? filename : undefined,
+	tutorialIndex: 0,
 	session
 })
 const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')

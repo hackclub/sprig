@@ -14,12 +14,19 @@ if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 const game = await getGame(Astro.params.id!)
 if (!game || game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
 
-let tutorial: string | undefined = undefined
+const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
+
+let tutorial: string[] | undefined;
+let tutorialIndex: number | undefined;
 if (game.tutorialName) {
 	const files = await Astro.glob('/games/*.md')
-	tutorial = files
-		.find(file => file.file.endsWith(`/${game.tutorialName}.md`))
-		?.compiledContent()
+		
+		tutorial = files.filter(file => {
+			const regexedFile = file.file.match(fileRegexp)
+			return regexedFile && regexedFile[1] === game.tutorialName
+		})
+		?.map(md => md.compiledContent())
+	tutorialIndex = game.tutorialIndex
 }
 
 let _persistenceState: PersistenceState
@@ -37,6 +44,7 @@ if (session.session.full) {
 		cloudSaveState: 'SAVED',
 		game,
 		tutorial,
+		tutorialIndex,
 		stale: false
 	}
 
@@ -50,6 +58,7 @@ if (session.session.full) {
 		cloudSaveState: 'SAVED',
 		game,
 		tutorial,
+		tutorialIndex,
 		stale: false
 	}
 }

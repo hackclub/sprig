@@ -104,13 +104,15 @@ export const persist = async (persistenceState: Signal<PersistenceState>, email?
 	const gameName: string | undefined = persistenceState.value.kind === 'SHARED' ? persistenceState.value.name : undefined
 	const tutorialName = persistenceState.value.kind === 'SHARED' ? persistenceState.value.tutorialName : undefined
 	const tutorial = persistenceState.value.kind === 'SHARED' ? persistenceState.value.tutorial : undefined
+	const tutorialIndex = persistenceState.value.kind === 'SHARED' ? persistenceState.value.tutorialIndex : undefined
 	persistenceState.value = {
 		kind: 'PERSISTED',
 		cloudSaveState: 'SAVING',
 		game: 'LOADING',
 		stale: persistenceState.value.stale,
 		session: persistenceState.value.session,
-		tutorial: tutorial
+		tutorial: tutorial,
+		tutorialIndex: tutorialIndex
 	}
 
 	try {
@@ -124,6 +126,7 @@ export const persist = async (persistenceState: Signal<PersistenceState>, email?
 				code: codeMirror.value?.state.doc.toString() ?? '',
 				name: gameName,
 				tutorialName,
+				tutorialIndex,
 				recaptchaToken
 			})
 		})
