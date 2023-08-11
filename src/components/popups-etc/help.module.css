@@ -169,7 +169,7 @@
 	color: black;
 }
 
-.backContainer .backButton:hover {
+.backContainer .backButton:not(disabled):hover {
 	background-color: var(--bg-base);
 }
 
