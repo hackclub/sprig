@@ -44,7 +44,7 @@ const foldAllTemplateLiterals = () => {
 
 let lastSavePromise = Promise.resolve()
 let saveQueueSize = 0
-const saveGame = debounce(800, (persistenceState: Signal<PersistenceState>, code: string) => {
+export const saveGame = debounce(800, (persistenceState: Signal<PersistenceState>, code: string) => {
 	const doSave = async () => {
 		let isError = false
 		try {
@@ -52,7 +52,7 @@ const saveGame = debounce(800, (persistenceState: Signal<PersistenceState>, code
 			const res = await fetch('/api/games/save', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ code, gameId: game?.id, tutorialName: game?.tutorialName })
+				body: JSON.stringify({ code, gameId: game?.id, tutorialName: game?.tutorialName, tutorialIndex: game?.tutorialIndex })
 			})
 			if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`)
 		} catch (error) {
@@ -84,6 +84,9 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
 			cloudSaveState: 'SAVING'
 		}
 		saveGame(persistenceState, codeMirror.value!.state.doc.toString())
+	} else {
+		if (persistenceState.value.kind == 'SHARED')
+			delete persistenceState.value.tutorial
 	}
 }
 

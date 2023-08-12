@@ -51,6 +51,7 @@ export interface Game {
 	name: string
 	code: string
 	tutorialName?: string
+	tutorialIndex?: number
 }
 
 export interface LoginCode {
@@ -143,7 +144,7 @@ export const getGame = async (id: string | undefined): Promise<Game | null> => {
 	return { id: _game.id, ..._game.data() } as Game
 }
 
-export const makeGame = async (ownerId: string, unprotected: boolean, name?: string, code?: string, tutorialName?: string): Promise<Game> => {
+export const makeGame = async (ownerId: string, unprotected: boolean, name?: string, code?: string, tutorialName?: string, tutorialIndex?: number): Promise<Game> => {
 	const data = {
 		ownerId,
 		createdAt: Timestamp.now(),
@@ -151,7 +152,8 @@ export const makeGame = async (ownerId: string, unprotected: boolean, name?: str
 		unprotected,
 		name: name ?? generateGameName(),
 		code: code ?? '',
-		tutorialName: tutorialName ?? null
+		tutorialName: tutorialName ?? null,
+		tutorialIndex: tutorialIndex ?? null
 	}
 	const _game = await firestore.collection('games').add(data)
 	return { id: _game.id, ...data } as Game
