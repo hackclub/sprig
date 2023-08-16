@@ -1608,7 +1608,7 @@ function update_sprigs() {
     do {
       var x = Math.floor(Math.random()*(width()-1))
       var y = Math.floor(Math.random()*(height()-3))
-    } while (y == l.y && x >= l.x && x <= l.x + 10)
+    } while ((y == l.y || y+1 == l.y) && x >= l.x && x <= l.x + 10)
     addSprite(x, y, to_add[0])
     addSprite(x+1, y, to_add[1])
     addSprite(x, y+1, to_add[3])
