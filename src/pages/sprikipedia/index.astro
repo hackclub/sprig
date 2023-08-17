@@ -53,7 +53,7 @@ const data = await response.json();
                 links="brand" />
         </div>
         <div class="docs-preview">
-            <Dark links="github.com/hackclub/sprig/wiki" info="Come to the dark side!" />
+            <Dark links="github.com/hackclub/sprig/wiki" info={data["home.dark.info"]} />
         </div>
     </body>
 </html>
