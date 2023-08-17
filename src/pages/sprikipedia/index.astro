@@ -3,6 +3,15 @@ import '../../global.css'
 import Docs from '../../components/spriki-components/Docs.astro'
 import Dark from '../../components/spriki-components/Dark.astro'
 import StandardHead from '../../components/standard-head.astro'
+import Translations from '../../pages/sprikipedia/translations/translations.json'
+
+const response = await fetch(
+    `https://${Astro.url.host}/translations/${
+        Astro.url.searchParams.get("lang") || Translations[0]
+    }.json`
+);
+console.log(response);
+const data = await response.json();
 ---
 <html lang="en">
     <head>
@@ -10,17 +19,38 @@ import StandardHead from '../../components/standard-head.astro'
     </head>
     <body>
         <div class="title-lang">
-            <h1>Welcome to Sprikipedia,</h1>
-            <p>the Sprig encyclopedia that anyone can edit.</p>
+            <h1>{data["home.welcome.welcome"]}</h1>
+            <p>{data["home.welcome.description"]}</p>
         </div>
         <div class="docs-preview">
-            <Docs name="Start with Sprig!" description="Starting with Sprig? Here is the perfect place" links="getting-started" />
-            <Docs name="Tutorials" description="Step-by-step to make things for your game" links="tutorials" />
-            <Docs name="Firmware" description="Links to Spade, Trowel, Spryg..." links="firmware" />
-            <Docs name="Hardware" description="Link to our PCB, components..." links="hardware" />
-            <Docs name="Team" description="Who make Sprig possible" links="team" />
-            <Docs name="About Sprikipedia" description="The history, purpose, everthing" links="about" />
-            <Docs name="Brand" description="All branding material for download" links="brand" />
+            <Docs 
+                name={data["home.docs.start.name"]}
+                description={data["home.docs.start.description"]}
+                links="getting-started" />
+            <Docs
+                name={data["home.docs.tutorials.name"]} 
+                description={data["home.docs.tutorials.description"]}
+                links="tutorials" />
+            <Docs
+                name={data["home.docs.firmware.name"]}
+                description={data["home.docs.firmware.description"]}
+                links="firmware" />
+            <Docs
+                name={data["home.docs.hardware.name"]}
+                description={data["home.docs.hardware.description"]}
+                links="hardware" />
+            <Docs
+                name={data["home.docs.team.name"]}
+                description={data["home.docs.team.description"]}
+                links="team" />
+            <Docs
+                name={data["home.docs.about.name"]}
+                description={data["home.docs.about.description"]}
+                links="about" />
+            <Docs
+                name={data["home.docs.brand.name"]}
+                description={data["home.docs.brand.description"]}
+                links="brand" />
         </div>
         <div class="docs-preview">
             <Dark links="github.com/hackclub/sprig/wiki" info="Come to the dark side!" />
