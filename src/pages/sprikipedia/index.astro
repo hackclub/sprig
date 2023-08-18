@@ -15,7 +15,7 @@ const data = await response.json();
 ---
 <html lang="en">
     <head>
-        <StandardHead title='Sprikipedia, the Sprig encyclopedia' />
+        <StandardHead title={data["home.head.title"]} />
     </head>
     <body>
         <div class="title-lang">

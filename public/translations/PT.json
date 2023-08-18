@@ -1,4 +1,5 @@
 {
+    "home.head.title": "",
     "home.welcome.welcome": "",
     "home.welcome.description": "",
     "home.docs.start.name": "",
@@ -16,4 +17,12 @@
     "home.docs.brand.name": "",
     "home.docs.brand.description": "",
     "home.dark.info": "",
+    "about.head.title": "",
+    "about.content.title": "",
+    "about.blockquote.quote": "",
+    "about.blockquote.citation": "",
+    "about.content.p1": "",
+    "about.content.p2": "",
+    "about.content.p3": "",
+    "about.content.p4": "",
 }
