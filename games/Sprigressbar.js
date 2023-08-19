@@ -1,4 +1,4 @@
-// Based on the mobile game Progressbar95
+// Based on the game Progressbar95
 // Fill your bar with segments to move to the next level
 // At the end of each level you gain 5 points for each blue segment
 // Avoid red segments at all cost!
@@ -341,6 +341,7 @@ const pe = 'Q'
 const ep = 'R'
 const ge = 'S'
 const eg = 'T'
+const heart = 'U'
 
 const error_snd = tune`
 94.9367088607595: C4/94.9367088607595,
@@ -922,6 +923,23 @@ LLLLLLLL........`],
 4444444444444444
 4444444444444444
 4444444444444444`],
+  [heart, bitmap`
+1111111111111111
+1111111111111111
+1111111111111111
+1111331113311111
+1113333133331111
+1133333333333111
+1133333333333111
+1133333333333111
+1133333333333111
+1113333333331111
+1111333333311111
+1111133333111111
+1111113331111111
+1111111311111111
+1111111111111111
+1111111111111111`],
   [gray, bitmap`
 1111111111111111
 1111111111111111
@@ -1164,9 +1182,11 @@ LLLLLLLL........`],
 
 // Game speed, Segemnt freq., Orange prob., Red prob., Sprig freq., Evil Sprig prob., Sprig speed, Pink prob., Gray prob.
 const levels = [
-[250, 0.3, 0.2,  0.1,   0.05,  0.0, 500, 0.05, 0.05],
-[200, 0.2, 0.25, 0.15,  0.06,  0.1, 450, 0.1,  0.1 ],
-[200, 0.2, 0.25, 0.15,  0.07,  0.1, 400, 0.1,  0.1 ],
+[300, 0.3, 0.1,  0.05,   0.03,  0.0, 550, 0.025, 0.025],
+[300, 0.3, 0.15,  0.075,   0.04,  0.0, 550, 0.25, 0.05],
+[250, 0.3, 0.2,  0.1,   0.05,  0.1, 500, 0.05, 0.05],
+[200, 0.2, 0.25, 0.15,  0.06,  0.15, 450, 0.1,  0.1 ],
+[200, 0.2, 0.25, 0.15,  0.07,  0.2, 400, 0.1,  0.1 ],
 [100, 0.1, 0.4,  0.2,   0.1,  0.3, 300, 0.1,  0.1 ],
   ]
 
@@ -1191,7 +1211,7 @@ const desktop = [map`
 ........................
 ........................
 qqqqqqqqqqqqqqqqqqqqqqqq
-pppppppppppppppppppppppp
+pppppppppppppppppppppppU
 pppppppppppppppppppppppp`,map`
 EEEEEEEEEEEEEEEEEEEEEEEE
 ........................
@@ -1210,7 +1230,7 @@ EEEEEEEEEEEEEEEEEEEEEEEE
 ........................
 EEEEEEEEEEEEEEEEEEEEEEEE
 qqqqqqqqqqqqqqqqqqqqqqqq
-pppppppppppppppppppppppp
+pppppppppppppppppppppppU
 pppppppppppppppppppppppp`,map`
 ........................
 ..F..F................F.
@@ -1229,7 +1249,7 @@ pppppppppppppppppppppppp`,map`
 ........................
 ..................F.....
 qqqqqqqqqqqqqqqqqqqqqqqq
-pppppppppppppppppppppppp
+pppppppppppppppppppppppU
 pppppppppppppppppppppppp`,map`
 K.......LK.......LK.....
 ........................
@@ -1248,7 +1268,7 @@ K.......LK.......LK.....
 .....IJ.......IJ.......I
 .....LK.......LK.......L
 qqqqqqqqqqqqqqqqqqqqqqqq
-pppppppppppppppppppppppp
+pppppppppppppppppppppppU
 pppppppppppppppppppppppp`,map`
 ........................
 ........................
@@ -1267,7 +1287,7 @@ pppppppppppppppppppppppp`,map`
 ........................
 ........................
 qqqqqqqqqqqqqqqqqqqqqqqq
-pppppppppppppppppppppppp
+pppppppppppppppppppppppU
 pppppppppppppppppppppppp`]
 const gameover = map`
 ........................
@@ -1309,7 +1329,7 @@ var can_replay = false
 var evil_touch_count
 var game_over = false
 
-set_level(4)
+set_level(1)
 
 setSolids([cursor])
 
@@ -1420,8 +1440,8 @@ function set_level(_level) {
    level = _level
    game_over=false
   progress=0
-  wallpaper = Math.max(wallpaper, Math.min(Math.floor((_level-1)/2),levels.length))
-  _level = _level < 4 ? 0 : (_level > 8 ? (_level > 19?3:2) : 1) 
+  wallpaper = Math.max(wallpaper, Math.min(Math.floor((level-1)/3),4))
+  _level = level == 16 ? 5 : Math.min(Math.floor((level-1)/3),4)
   game_speed = levels[_level][0]
  segment_freq = levels[_level][1]
  orange_prob = levels[_level][2]
@@ -1439,6 +1459,8 @@ function set_level(_level) {
   setMap(desktop[wallpaper])
     setBackground(bg_colors[wallpaper])
   update_text()
+  if (lifes > 1) addSprite(width()-2,height()-2, heart)
+  if (lifes > 2) addSprite(width()-3,height()-2, heart)
 }
 
 function check_segments(hhhh) {
@@ -1503,7 +1525,6 @@ function update_text() {
     clearText()
   addText(points+" points\nLevel "+level, {x:0,y:14,color:color`0`})
   addText(progress+"%", {x:progress > 5 ?17:18,y:15,color:color`0`})
-  addText('H:'+lifes, {x:17,y:14,color:color`0`})
   if (wallpaper == 4) addText("Sprigressbar\n Professional", {x:4, y:4, color:color`2`})
 }
 
