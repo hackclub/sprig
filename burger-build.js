@@ -159,11 +159,11 @@ setLegend(
 ................
 ................
 ................
+................
 ...3333333333...
 ..333939993933..
 ..339393939393..
 ...3333333333...
-................
 ................
 ................
 ................
@@ -489,15 +489,15 @@ function checkWin() {
               y: 4,
               color: color`black`
             });
-    addText(`Level ${level + 1}`, {
+    addText(`Next level: \nLevel ${level + 1}`, {
               x: 6,
               y: 7,
               color: color`L`
             });
-    speed -= 20;
+    speed -= 100;
     if (level < 5) {
       console.log("level is " + level)
-      addText("press I", {x: 6, y: 10, color: color`L`})
+      addText("press I", {x: 6, y: 11, color: color`L`})
       level += 1;
       clearInterval(runGameInterval);
       console.log(win)
@@ -511,11 +511,12 @@ function checkWin() {
     }
     else {
       clearText()
-      addText("You beat the game!", {
+      addText("You beat \nthe game!", {
               x: 6,
-              y: 4,
+              y: 5,
               color: color`H`
             });
+      clearInterval(runGameInterval);
     }
   //win = false;
   }
