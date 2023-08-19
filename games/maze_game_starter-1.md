@@ -296,7 +296,7 @@ afterInput(() => {
 ```
 </details>
 
-### Fragile tiles
+<!-- ### Fragile tiles
 ![](https://cloud-dpqbnhs4n-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_11.31.43.gif)
 
 Add tiles that you can only walk over once before turning into holes that you fall through that reset the level! To do this, create two sprites for fragile and broken tiles. Then, after every input, check if the previous tile was fragile, and if so change it to broken. If the current tile is ever broken, reset the level.
@@ -338,7 +338,7 @@ afterInput(() => {
   /* your existing code */
 });
 ```
-</details>
+</details> -->
 
 ### Two player
 ![](https://cloud-rl05ba3ol-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_17.25.36.gif)
