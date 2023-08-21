@@ -24,6 +24,16 @@ export default function Help(props: HelpProps) {
 	
 	useSignalEffect(() => {
 		document.cookie = `hideHelp=${!visible.value};path=/;max-age=${60 * 60 * 24 * 365}`
+		// @ts-ignore
+		// we're using nutshell, which is written in pure JS
+		import("../../lib/nutshell.js").then(nutshell => {
+			nutshell.default.setOptions({
+				startOnLoad: false,
+				lang: 'en',
+				dontEmbedHeadings: true
+			})
+			nutshell.default.start()
+		})
 	})
 	
 	const setTutorialIndex = (tutorialIndex: number) => {
