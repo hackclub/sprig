@@ -296,7 +296,7 @@ afterInput(() => {
 ```
 </details>
 
-<!-- ### Fragile tiles
+### Fragile tiles
 ![](https://cloud-dpqbnhs4n-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_11.31.43.gif)
 
 Add tiles that you can only walk over once before turning into holes that you fall through that reset the level! To do this, create two sprites for fragile and broken tiles. Then, after every input, check if the previous tile was fragile, and if so change it to broken. If the current tile is ever broken, reset the level.
@@ -306,9 +306,8 @@ Add tiles that you can only walk over once before turning into holes that you fa
 <details>
 <summary>How can I check if the tile my player was previously on was fragile?</summary>
 
-TODO!!! fix toolkit to include sprite.dx/dy
-
-To find which tile your player was previously on, search the toolkit for `Sprites and Tiles` and take a look at the section regarding dx & dy. Take your current position and subtract the distance you just moved to find your previous position.
+We'll want to store the player's past position in two variables (one for X, and one for Y). Declare these variables using `let` (call them `previousX` and `previousY`), outside any blocks or functions, and set them to the player's current position (using `getFirst(player).x/y`).  
+At the end of your `afterInput` block, we'll want to save the current position of the player to those variables (like this: `previousX = `). Next time the afterInput block has run, the player will have moved, so these variables will represent the previous position.
 
 Then, take that position and use `getTile(x,y)[0].type` to get the type of tile you were previously on, and use `==` to check if it is fragile.
 </details>
@@ -317,13 +316,12 @@ Then, take that position and use `getTile(x,y)[0].type` to get the type of tile 
 <summary>I've tried my best. Show solution.</summary>
 
 ```js
+  // ADDED: check if the player was previously on a fragile tile
+const previousX = getFirst(player).x
+const previousY = getFirst(player).y
 afterInput(() => {
   const brokenCovered = tilesWith(player, broken); // ADDED: tiles with players on broken tiles
-
-  // ADDED: check if the player was previously on a fragile tile
-  const pl = getFirst(player);
-  const previousX = pl.x - pl.dx;
-  const previousY = pl.y - pl.dy;
+    
   // check if the previous tile is a fragile one
   const sprite = getTile(previousX, previousY)[0]; // an array of sprites on that tile
     if (sprite.type === fragile) {
@@ -334,11 +332,13 @@ afterInput(() => {
   if (brokenCovered.length >= 1) {
     lose();
   }
-  
+
+    previousX = getFirst(player).x
+    previousY = getFirst(player).y
   /* your existing code */
 });
 ```
-</details> -->
+</details>
 
 ### Two player
 ![](https://cloud-rl05ba3ol-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_17.25.36.gif)
