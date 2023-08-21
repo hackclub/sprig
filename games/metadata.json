@@ -2810,7 +2810,7 @@
   {
     "filename": "Amazing_Mazes",
     "title": "Amazing_Mazes",
-    "author": "DLSFG",
+    "author": "Dexter Speed",
     "img": "",
     "tags": ["sokoban-style"],
     "added on": "2023-07-25"
@@ -2854,5 +2854,29 @@
     "img": "",
     "tags": [],
     "added on": "2023-08-08"
+  },
+  {
+    "filename": "4_Colour_Drawing",
+    "title": "4_Colour_Drawing",
+    "author": "Dexter Speed",
+    "img": "",
+    "tags": ["sandbox"],
+    "added on": "2023-08-18"
+  },
+  {
+    "filename": "Dynamic_Adventure",
+    "title": "Dynamic_Adventure",
+    "author": "Alexis Martel",
+    "img": "",
+    "tags": [],
+    "added on": "2023-08-18"
+  },
+  {
+    "filename": "burger-build",
+    "title": "burger-build",
+    "author": "Emily Yee",
+    "img": "",
+    "tags": ["dodge"],
+    "added on": "2023-08-19"
   }
 ]
