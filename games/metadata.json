@@ -2870,5 +2870,21 @@
     "img": "",
     "tags": [],
     "added on": "2023-08-18"
+  },
+  {
+    "filename": "burger-build",
+    "title": "burger-build",
+    "author": "Emily Yee",
+    "img": "",
+    "tags": ["dodge"],
+    "added on": "2023-08-19"
+  },
+  {
+    "filename": "Sprigressbar",
+    "title": "Sprigressbar",
+    "author": "MathR",
+    "img": "",
+    "tags": ["advanced"],
+    "added on": "2023-08-21"
   }
 ]
