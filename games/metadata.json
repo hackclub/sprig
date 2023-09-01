@@ -2886,5 +2886,37 @@
     "img": "",
     "tags": ["advanced"],
     "added on": "2023-08-21"
+  },
+  {
+    "filename": "Battleship",
+    "title": "Battleship",
+    "author": "Johna-123",
+    "img": "",
+    "tags": ["advanced"],
+    "added on": "2023-08-25"
+  },
+  {
+    "filename": "The_Legend_of_Zelda-Links_Escape",
+    "title": "The_Legend_of_Zelda-Links_Escape",
+    "author": "ItzHex",
+    "img": "",
+    "tags": ["advanced"],
+    "added on": "2023-08-28"
+  },
+  {
+    "filename": "Eat_&_Don't_Be_Eaten",
+    "title": "Eat_&_Don't_Be_Eaten",
+    "author": "Nathan Man",
+    "img": "",
+    "tags": ["catch"],
+    "added on": "2023-08-30"
+  },
+  {
+    "filename": "spirit-bound",
+    "title": "spirit-bound",
+    "author": "Tom-on",
+    "img": "",
+    "tags": ["dungeon"],
+    "added on": "2023-08-31"
   }
 ]
