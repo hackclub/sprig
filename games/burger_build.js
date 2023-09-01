@@ -1,3 +1,8 @@
+/*
+@title: burger build
+@author: emily27yee
+*/
+
 const player = "p"
 const meat = "m"
 const cheese = "c"
