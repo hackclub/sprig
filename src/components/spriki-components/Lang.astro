@@ -1,0 +1,21 @@
+---
+const { name, description, links } = Astro.props;
+---
+<style> 
+    .docs {
+        background-color: #078969;
+        padding: 3px;
+        color: #ffffff;
+    }
+
+    p {
+        color: #8BCAB1;
+    }
+</style>
+
+<a href={`../sprikipedia/${links}/`}>
+    <button class="docs">
+        <h2>{name}</h2>
+        <p>{description}</p>
+    </button>
+</a>
