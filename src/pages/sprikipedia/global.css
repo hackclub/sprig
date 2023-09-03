@@ -3,6 +3,32 @@ html, body { height: 100%; }
 html { box-sizing: border-box; overflow: hidden; }
 body { overflow: auto; }
 
+:root { 
+         --font-text: 'Inter', sans-serif; 
+         --font-code: 'Fira Mono', monospace; 
+  
+         --bg-base: #fafed7; 
+         --bg-overlay: #000000cf; 
+         --bg-drawing-hover: #9b9b9b52; 
+         --bg-floating: #191919; 
+         --bg-surface: #f8f9fa; 
+         --bg-overflow: #dee2e6; 
+         --bg-btn-inactive: #434343; 
+           --bg-btn-inactive-dark: #2e2e2e; 
+  
+         --fg-muted: #9d9d9d; 
+         --fg-muted-on-accent: #8fcabb; 
+         --error: #e03131; 
+         --accent: #078969; 
+         --accent-light: #80c3a0; 
+         --accent-dark: #136853; 
+         --fg-switch-low: #515151; 
+           --fg-switch-high: #f3f3f3; 
+  
+         --cursor-interactive: default; 
+         --line-height-copy: 1.5; 
+ }
+
 body {
 	font-family: var(--font-text);
 	margin: 0;
