@@ -2,18 +2,18 @@
 import '../pages/sprikipedia/global.css'
 import StandardHead from '../components/standard-head.astro'
 import Navspriki from '../components/spriki-components/Navspriki.astro'
-const { frontmatter } = Astro.props
+const { dspriki, dtitle, dauthor } = Astro.props
 ---
 
 <html lang="en">
     <head>
-        <StandardHead title={frontmatter.spriki} />
+        <StandardHead title={dspriki} />
     </head>
     <body>
         <Navspriki />
         <div class="main-spriki">
-            <h1>{frontmatter.title}</h1>
-            <p>by {frontmatter.author}</p>
+            <h1>{dtitle}</h1>
+            <p>by {dauthor}</p>
             <article>
                 <slot />
             </article>

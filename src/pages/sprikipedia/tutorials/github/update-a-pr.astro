@@ -1,6 +1,6 @@
 ---
 import '../../../../global.css'
-import Categories from '../../../../layouts/categories.astro'
+import Docs from '../../../../layouts/docs.astro'
 import Translations from '../../../../pages/sprikipedia/translations/translations.json'
 
 const response = await fetch(
@@ -12,5 +12,6 @@ console.log(response);
 const data = await response.json();
 ---
 
-<Categories name={data["tutorials.categories.name.github.upr"]} title={data["tutorials.categories.title.github.upr"]} whats={data["tutorials.categories.whats.github.upr"]} about={data["tutorials.categories.about.github.upr"]}>
-</Categories>
+<Docs dspriki={data["tutorials.categories.dspriki.github.upr"]} dtitle={data["tutorials.categories.dtitle.github.upr"]} dauthor={data["tutorials.categories.dauthor.github.upr"]} >
+
+</Docs>
