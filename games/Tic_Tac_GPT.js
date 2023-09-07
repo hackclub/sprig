@@ -2,7 +2,7 @@
 @title: TicTacGPT
 @author: 2008wbbv
 
-This isn't 100% made by me, as I heavily modified Northernside's code and added some bugs and a AI player.
+This isn't 100% made by me, as I heavily modified Northernside's code and added some bugs and a AI player.credits : https://sprig.hackclub.com/gallery/Tic_Tac_Toe
 
 @credits: NORTHSIDE-> because this game builds upon their work
 */
