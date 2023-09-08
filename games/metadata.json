@@ -2872,7 +2872,7 @@
     "added on": "2023-08-18"
   },
   {
-    "filename": "burger-build",
+    "filename": "burger_build",
     "title": "burger-build",
     "author": "Emily Yee",
     "img": "",
@@ -2894,5 +2894,45 @@
     "img": "",
     "tags": ["advanced"],
     "added on": "2023-08-25"
+  },
+  {
+    "filename": "The_Legend_of_Zelda-Links_Escape",
+    "title": "The_Legend_of_Zelda-Links_Escape",
+    "author": "ItzHex",
+    "img": "",
+    "tags": ["advanced"],
+    "added on": "2023-08-28"
+  },
+  {
+    "filename": "Eat_&_Don't_Be_Eaten",
+    "title": "Eat_&_Don't_Be_Eaten",
+    "author": "Nathan Man",
+    "img": "",
+    "tags": ["catch"],
+    "added on": "2023-08-30"
+  },
+  {
+    "filename": "spirit-bound",
+    "title": "spirit-bound",
+    "author": "Tom-on",
+    "img": "",
+    "tags": ["dungeon"],
+    "added on": "2023-08-31"
+  },
+  {
+    "filename": "FOOD-CATCH",
+    "title": "FOOD-CATCH",
+    "author": "Jakob",
+    "img": "",
+    "tags": ["catch"],
+    "added on": "2023-09-02"
+  },
+  {
+    "filename": "mailman",
+    "title": "mailman",
+    "author": "Akko",
+    "img": "",
+    "tags": [],
+    "added on": "2023-09-07"
   }
 ]
