@@ -248,7 +248,7 @@ setPushables({
 })
 
 
-onInput("w", () => {
+onInput("s", () => {
   getFirst(sprig_a).y -= 1
   getFirst(sprig_b).y -= 1
   getFirst(sprig_c).y -= 1
@@ -260,7 +260,7 @@ onInput("j", () => {
     clearText()
   }
 })
-onInput("s", () => {
+onInput("w", () => {
   getFirst(sprig_a).y += 1
   getFirst(sprig_b).y += 1
   getFirst(sprig_c).y += 1
@@ -288,7 +288,7 @@ function catchdead() {
 }
 function placepipes() {
   // Generate the start y of pipe
-  pipe_entry_pointy = getRandomInt(3,16)
+  pipe_entry_pointy = getRandomInt(3,14)
   addSprite(15,pipe_entry_pointy,mur2)
   addSprite(15,pipe_entry_pointy - 4,mur3)
   let pipe_entry_pointy_down = pipe_entry_pointy + 1
@@ -305,6 +305,7 @@ function placepipes() {
 
   
 function resetintervals() {
+  isongameoverscreen = false
   setBackground(background)
   setMap(levels[level])
   interval = setInterval(function() {
