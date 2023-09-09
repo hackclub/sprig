@@ -248,7 +248,7 @@ setPushables({
 })
 
 
-onInput("s", () => {
+onInput("w", () => {
   getFirst(sprig_a).y -= 1
   getFirst(sprig_b).y -= 1
   getFirst(sprig_c).y -= 1
@@ -260,7 +260,7 @@ onInput("j", () => {
     clearText()
   }
 })
-onInput("w", () => {
+onInput("s", () => {
   getFirst(sprig_a).y += 1
   getFirst(sprig_b).y += 1
   getFirst(sprig_c).y += 1
