@@ -2,7 +2,7 @@
 import '../pages/sprikipedia/global.css'
 import StandardHead from '../components/standard-head.astro'
 import Navspriki from '../components/spriki-components/Navspriki.astro'
-const { dspriki, dtitle, dauthor } = Astro.props
+const { dspriki, dtitle } = Astro.props
 ---
 
 <html lang="en">
@@ -13,7 +13,6 @@ const { dspriki, dtitle, dauthor } = Astro.props
         <Navspriki />
         <div class="main-spriki">
             <h1>{dtitle}</h1>
-            <p>by {dauthor}</p>
             <article>
                 <slot />
             </article>
