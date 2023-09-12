@@ -2958,5 +2958,13 @@
     "img": "",
     "tags": ["classic"],
     "added on": "2023-09-10"
+  },
+  {
+    "filename": "Two_Player_Tetris",
+    "title": "Two_Player_Tetris",
+    "author": "Spectral",
+    "img": "",
+    "tags": ["classic", "multiplayer"],
+    "added on": "2023-09-11"
   }
 ]
