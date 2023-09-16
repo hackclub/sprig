@@ -3,7 +3,14 @@
 @author: jakjakob
 
 version:
-1.0.0 pre-release
+1.0.1
+
+changelog:
+1.0.1
+more time (6 min instead of 5 min)
+
+1.0.0
+game release
 
 last edited/updated:
 16.09.2023
@@ -14,6 +21,7 @@ last edited/updated:
 TO DO LIST
 1.1.0:
 highscore system
+practice mode (no time limit)
 */
 
 const player = "p";
@@ -421,7 +429,7 @@ setPushables({
 });
 
 function timerreset(){ //as a function, to easily change max. duration
-  timeleft = 300; //this defines the max. game duration
+  timeleft = 360; //this defines the max. game duration
   clearText();
 }
 
@@ -456,7 +464,7 @@ function clrsecpage (){//it also starts the timer
 
 function secondpage (){ //secondpage of instructions
   clearText();
-  addText("You have 5 min", { y: 2, color: color`0` });
+  addText("You have 6 min", { y: 2, color: color`0` });
   addText("to complete all", { y: 3, color: color`0` });
   addText("31 levels. ", { y: 4, color: color`0` });
   addText("You loose 5s if", { y: 6, color: color`0` });
