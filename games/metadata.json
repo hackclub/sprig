@@ -2966,5 +2966,13 @@
     "img": "",
     "tags": ["classic", "multiplayer"],
     "added on": "2023-09-11"
+  },
+  {
+    "filename": "killer_trainig",
+    "title": "killer_trainig",
+    "author": "jakjakob",
+    "img": "",
+    "tags": ["timer-puzzle"],
+    "added on": "2023-09-16"
   }
 ]
