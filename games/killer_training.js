@@ -1,5 +1,5 @@
 /*
-@title: killer_trainig
+@title: killer_training
 @author: jakjakob
 
 version:
