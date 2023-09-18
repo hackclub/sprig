@@ -1,15 +1,13 @@
 ---
 import '../../../../global.css'
 import Docs from '../../../../layouts/docs.astro'
-import Translations from '../../../../pages/sprikipedia/translations/translations.json'
 
-const response = await fetch(
-    `https://${Astro.url.host}/translations/${
-        Astro.url.searchParams.get("lang") || Translations[0]
-    }.json`
-);
-console.log(response);
-const data = await response.json();
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
 ---
 
 <Docs dspriki={data["tutorials.categories.dspriki.github.pr"]} dtitle={data["tutorials.categories.dtitle.github.pr"]} dauthor={data["tutorials.categories.dauthor.github.pr"]} >
