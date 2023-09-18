@@ -2926,5 +2926,61 @@
     "img": "",
     "tags": ["catch"],
     "added on": "2023-09-02"
+  },
+  {
+    "filename": "mailman",
+    "title": "mailman",
+    "author": "Akko",
+    "img": "",
+    "tags": [],
+    "added on": "2023-09-07"
+  },
+  {
+    "filename": "Tic_Tac_GPT",
+    "title": "Tic_Tac_GPT",
+    "author": "2008wbbv",
+    "img": "",
+    "tags": ["classic"],
+    "added on": "2023-09-08"
+  },
+  {
+    "filename": "ding_dong-delivery",
+    "title": "ding_dong-delivery",
+    "author": "Efe Özülkü",
+    "img": "",
+    "tags": [],
+    "added on": "2023-09-09"
+  },
+  {
+    "filename": "flappysprig",
+    "title": "flappysprig",
+    "author": "Spectral",
+    "img": "",
+    "tags": ["classic"],
+    "added on": "2023-09-10"
+  },
+  {
+    "filename": "Two_Player_Tetris",
+    "title": "Two_Player_Tetris",
+    "author": "Spectral",
+    "img": "",
+    "tags": ["classic", "multiplayer"],
+    "added on": "2023-09-11"
+  },
+  {
+    "filename": "killer_training",
+    "title": "killer_training",
+    "author": "jakjakob",
+    "img": "",
+    "tags": ["timer-puzzle"],
+    "added on": "2023-09-16"
+  },
+  {
+    "filename": "wham",
+    "title": "wham",
+    "author": "Aaman Patnaik",
+    "img": "",
+    "tags": ["classic"],
+    "added on": "2023-09-18"
   }
 ]
