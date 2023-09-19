@@ -46,5 +46,21 @@
     "team.categories.name": "Team - Sprikipedia, the Sprig encyclopedia",
     "team.categories.title": "Team",
     "team.categories.whats": "Our staff.",
-    "team.categories.about": "Who make Sprig possible."
+    "team.categories.about": "Who make Sprig possible.",
+    "tutorials.categories.name": "Tutorials - Sprikipedia, the Sprig encyclopedia",
+    "tutorials.categories.title": "Tutorial",
+    "tutorials.categories.whats": "Step-by-step.",
+    "tutorials.categories.about": "TBD",
+    "tutorials.categories.dspriki.github.comment": "",
+    "tutorials.categories.dtitle.github.comment": "",
+    "tutorials.categories.dauthor.github.comment": "",
+    "tutorials.categories.dspriki.github.mcomment": "",
+    "tutorials.categories.dtitle.github.mcomment": "",
+    "tutorials.categories.dauthor.github.mcomment": "",
+    "tutorials.categories.dspriki.github.pr": "",
+    "tutorials.categories.dtitle.github.pr": "",
+    "tutorials.categories.dauthor.github.pr": "",
+    "tutorials.categories.dspriki.github.upr": "",
+    "tutorials.categories.dtitle.github.upr": "",
+    "tutorials.categories.dauthor.github.upr": ""
 }

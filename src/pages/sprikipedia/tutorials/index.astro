@@ -1,4 +1,11 @@
 ---
 import Categories from '../../../layouts/categories.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
 ---
-<Categories name='Tutorials - Sprikipedia, the Sprig encyclopedia' title='Tutorial' whats='Step-by-step.' about='TBD' />
+<Categories name={data["tutorials.categories.name"]} title={data["tutorials.categories.title"]} whats={data["tutorials.categories.whats"]} about={data["translations.categories.about"]} />

@@ -1,0 +1,16 @@
+---
+import '../../../../global.css'
+import Docs from '../../../../layouts/docs.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+
+<Docs dspriki={data["tutorials.categories.dspriki.github.mcomment"]} dtitle={data["tutorials.categories.dtitle.github.mcomment"]} dauthor={data["tutorials.categories.dauthor.github.mcomment"]} >
+    <img src='https://cloud-kevcg5hvj-hack-club-bot.vercel.app/0image.png'>
+    <img src='https://cloud-kevcg5hvj-hack-club-bot.vercel.app/1image.png'>
+</Docs>
