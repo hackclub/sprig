@@ -37,6 +37,19 @@
 	font-weight: bold;
 }
 
+.stopButton {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	font-weight: bold;
+	background: red;
+}
+
+.hiddenButton {
+	z-index: -1;
+}
+
+
 .codeContainer .errors {
 	font-family: var(--font-code);
 	font-size: 0.9em;

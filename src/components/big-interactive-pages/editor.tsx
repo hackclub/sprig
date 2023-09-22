@@ -1,7 +1,7 @@
 import styles from './editor.module.css'
 import CodeMirror from '../codemirror'
 import Navbar from '../navbar-editor'
-import { IoClose, IoPlayCircleOutline, IoVolumeHighOutline, IoVolumeMuteOutline } from 'react-icons/io5'
+import { IoClose, IoPlayCircleOutline, IoStopCircleOutline, IoVolumeHighOutline, IoVolumeMuteOutline } from 'react-icons/io5'
 import { Signal, useComputed, useSignal, useSignalEffect } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
 import { codeMirror, errorLog, muted, PersistenceState } from '../../lib/state'
@@ -126,6 +126,8 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	const screen = useRef<HTMLCanvasElement>(null)
 	const cleanup = useRef<(() => void) | null>(null)
 	const screenShake = useSignal(0)
+	const playButtonText = useRef<HTMLSpanElement>(null)
+	const stopButtonText = useRef<HTMLSpanElement>(null)
 	const onRun = async () => {
 		foldAllTemplateLiterals()
 		if (!screen.current) return
@@ -156,7 +158,26 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		} else {
 			clearErrorHighlight();
 		}
+		
+
+		playButtonText.current?.parentElement?.classList.add(`${styles.hiddenButton}`)
+		stopButtonText.current?.parentElement?.classList.remove(`${styles.hiddenButton}`)
+		// playButtonText.current.parentElement.children.
+		// if (playButtonText.current) {
+		// 	playButtonText.current.remove()
+		// }
+		
 	}
+
+	const onStop = async () => {
+		if (!screen.current) return
+
+		if (cleanup.current) cleanup.current()
+
+		stopButtonText.current?.parentElement?.classList.add(`${styles.hiddenButton}`)
+		playButtonText.current?.parentElement?.classList.remove(`${styles.hiddenButton}`)
+	}
+
 	useEffect(() => () => cleanup.current?.(), [])
 
 	// Warn before leave
@@ -262,7 +283,14 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 						</div>
 					)}
 					<Button accent icon={IoPlayCircleOutline} bigIcon iconSide='right' class={styles.playButton} onClick={onRun}>
-						Run
+						<span ref={playButtonText}>Run</span>
+					</Button>
+					<Button icon={IoStopCircleOutline} bigIcon iconSide='right' class={`
+					${styles.stopButton}
+					${styles.hiddenButton}
+
+					`} onClick={onStop}>
+						<span ref={stopButtonText}>Stop</span>
 					</Button>
 				</div>
 
