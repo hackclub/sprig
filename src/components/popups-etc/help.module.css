@@ -9,18 +9,41 @@
 	width: 500px;
 }
 
+.tabs {
+	display: flex;
+	flex-direction: row;
+}
+
 .tab {
 	background: var(--accent);
 	width: fit-content;
 	color: #ffffff;
-	padding: 6px 10px;
+	padding: 6px 12px;
 	display: flex;
 	flex-direction: row;
 	gap: 4px;
 	align-items: center;
 	user-select: none;
-	cursor: var(--pointer-interactive);
+	cursor: var(--cursor-interactive);
 	z-index: 1;
+	border: solid var(--accent-dark);
+	border-width: 0;
+	border-right-width: 1px;
+	border-left-width: 1px;
+}
+
+.tab:first-of-type {
+	border-left-width: 0;
+}
+
+.tab:last-of-type {
+    border-right-width: 0;
+    padding-left: 8px;
+    padding-right: 10px;
+}
+
+.tab.selected {
+	background: var(--accent-dark);
 }
 
 .tab:hover {
@@ -93,4 +116,67 @@
 
 .content a:hover {
 	text-decoration: underline;
+}
+
+.content summary {
+	cursor: var(--cursor-interactive);
+}
+
+.content summary:hover {
+	color: var(--accent-dark);
+}
+
+.content img {
+	height: auto;
+	width: 100%;
+}
+
+.paginationContainer {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	align-items: center;
+	height: 40px;
+	margin-bottom: 5px;
+	justify-content: space-between;
+}
+
+.forwardContainer {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.backContainer {
+	display: flex;
+	justify-content: flex-start;
+}
+
+.centerContainer {
+	display: flex;
+	justify-content: center;
+}
+
+.paginationButton {
+	height: 100%;
+	border: none;
+	display: flex;
+	align-items: center;
+	font-family: var(--font-text);
+	font-size: 16px;
+}
+
+.backContainer .backButton {
+	background-color: #ebebeb;
+	color: black;
+}
+
+.backContainer .backButton:not(disabled):hover {
+	background-color: #d9d9d9;
+}
+
+.pageIndicator {
+	height: 100%;
+	width: fit-content;
+	padding: 10px 14px;
+	margin: 0 5px 0 5px;
+	color: black;
 }

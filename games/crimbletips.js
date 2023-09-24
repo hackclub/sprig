@@ -61,7 +61,7 @@ BBBBBBBBBB
 BBBBBBBBBB
 BBBBBBBBBB`,
 ];
-const Error = tune`
+const error = tune`
 166.66666666666666: c5/166.66666666666666 + b4/166.66666666666666 + a4/166.66666666666666,
 166.66666666666666: c5/166.66666666666666 + b4/166.66666666666666 + a4/166.66666666666666,
 5000`
@@ -429,7 +429,7 @@ afterInput(() => {
 function cantpass() {
 bodyprint("you can't go there")
 setTimeout(() => {locdefine()}, 2000); //resets to original body after 2 seconds
-playTune(Error)
+playTune(error)
 }
 
 function locdefine() { //prints body text of the area and sets the ID to that area. This ID is used for search, items, and observe. 
