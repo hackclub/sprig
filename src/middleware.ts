@@ -1,11 +1,11 @@
 import metrics from "../metrics";
 
 export async function onRequest({ request }: any, next: () => any) {
-	const url = request.url;
+	const path = new URL(request.url).pathname.slice(1);
 
-	if (!url.includes("api")) return next();
+	if (!path.includes("api")) return next();
 
-	const metricName = url.split("/").slice(3).join("_");
+	const metricName = path.split("/").join("_");
 	const response = await next();
 
 	const metricKey = `${response.status}.${metricName}`;
