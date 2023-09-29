@@ -8,7 +8,7 @@ version:
 const ver = "1.1.0";
 /*
 last edited/updated (DD/MM/YYYY):
-24.09.2023
+29.09.2023
 
 changelog:
 1.1.0
@@ -31,13 +31,6 @@ more time (6 min instead of 5 min)
 
 1.0.0
 game release
-*/
-
-/*
-TO DO LIST
-1.1.0:
-Fix bugs:
-SyntaxError: Unexpected end of script -> ask in slack, no problems caused at all
 */
 
 const player = "p";
