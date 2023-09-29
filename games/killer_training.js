@@ -21,7 +21,7 @@ Complete menu redesign:
   - shows version number
 
 Highscore counter 
-New finish screen with highscore, acore and option to go to main menu
+New finish screen with highscore, score and option to go to main menu
 Go on menu instead button on restarts
 Failing tutorial brings you back to main menu
 2 slight level updates (mazes)
