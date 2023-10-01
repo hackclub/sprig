@@ -1,30 +1,68 @@
 /*
-@title: maze runner
-@author: wetf
+@title: Maze Runner
+@author: Mohamad
+
+Check the tutorial in the bottom right, the run button is in the top right.
+Make sure to remix this tutorial if you want to save your progress!
 */
 
+// define the sprites in our game
 const player = "p";
+const bomb = "b";
+const goal = "g";
 const wall = "w";
-const finnish = "f";
-const lock = "d";
-const key = "k";
-const spikes = "s";
+
+// assign bitmap art to each sprite
 setLegend(
   [ player, bitmap`
 ................
 ................
-..000000000000..
-..044444444440..
-..088884488880..
-..077784487770..
-..088884488880..
-..066666666660..
-..066656656660..
-..066666666660..
-..066566665660..
-..066655556660..
-..066666666660..
-..000000000000..
+................
+.......0........
+.....00.000.....
+....0.....00....
+....0.0.0..0....
+....0......0....
+....0......0....
+....00....0.....
+......00000.....
+......0...0.....
+....000...000...
+................
+................
+................`],
+  [ bomb, bitmap`
+................
+................
+...3....1...3...
+....3..1...3....
+.......1........
+......0000......
+.....000000.....
+.....000000.....
+.....000000.....
+.....000000.....
+......0000......
+...3........3...
+..3..........3..
+................
+................
+................`],
+  [ goal, bitmap`
+........DD......
+.......D........
+.......D........
+...DDDDDDDDDD...
+...D33333333D...
+...D33333333D...
+...D30333303D...
+...D33333333D...
+...D33330333D...
+...D33333333D...
+...D33033333D...
+...D33333033D...
+...D33333333D...
+...DDDDDDDDDD...
 ................
 ................`],
   [ wall, bitmap`
@@ -43,231 +81,197 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000`],
-  [ finnish, bitmap`
-................
-.66666666666666.
-.68888888888886.
-.68..........86.
-.68..........86.
-.68..........86.
-.68..........86.
-.68..........86.
-.68..........86.
-.68..........86.
-.68..........86.
-.68..........86.
-.68..........86.
-.68888888888886.
-.66666666666666.
-................`],
-  [ lock, bitmap`
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLL0000LLLLLL
-LLLLL0LLLL0LLLLL
-LLLLL0LLLL0LLLLL
-LLLL00000000LLLL
-LLLL00000000LLLL
-LLLL00001000LLLL
-LLLL00010000LLLL
-LLLL00000000LLLL
-LLLL00000000LLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL`],
-  [ spikes, bitmap`
-L..L.L.LL.L.L..L
-.L.L.L.LL.L.L.L.
-..000000000000..
-LL000000000000LL
-..000000000000..
-LL000000000000LL
-..000000000000..
-LL000000000000LL
-LL000000000000LL
-..000000000000..
-LL000000000000LL
-..000000000000..
-LL000000000000LL
-..000000000000..
-.L.L.L.LL.L.L.L.
-L..L.L.LL.L.L..L`],
-  [ key, bitmap`
-.......000......
-......06660.....
-.....066060.....
-.....060060.....
-.....060660.....
-.....06660......
-......060.......
-......0600......
-......06660.....
-......0600......
-......0660......
-......0600......
-......06660.....
-......06660.....
-.......000......
-................`]
+0000000000000000`]
 );
 
-setSolids([ player, wall, lock ]);
-
-let level = 0;
+// create game levels
+let level = 0; // this tracks the level we are on
 const levels = [
   map`
-ps...
-.s.s.
-...s.
-ss.sf
-ss...`,
+........w.wgww
+w.wwwwbww.w...
+w..ww...w.www.
+ww.ww.w.w.w.w.
+w..ww.w.w.w...
+....w.w.w.ww.w
+pww.w.w....w..
+.w..w.wwww.ww.
+.w.......w.w..
+.wwwwwww.w.w.w
+.......w.w...w`,
   map`
-p...sf
-wws.w.
-wws.w.
-....s.
-.wwsw.
-......`,
+pw...wwwwwwwww
+..w..w...b...w
+...w.w.ww.wwww
+....ww.w....ww
+.ww......w...w
+.w..wwwwww.w..
+.w.......w.w.w
+.w.wwwww.w.w.w
+.w.....w..bw.w
+.wwwww.wwwww.w
+...........b.g`,
   map`
-fww........s...
-..w.wswwss.w.w.
-w.w.s....w.w.w.
-s.w.w.ww.w.w.w.
-..s.w.wp.s...s.
-.s....wwwwswww.
-.w.wwww......w.
-.w......swww.w.
-.wswwwww....sw.
-.........ws....`,
+wwwwwwwwwwwwww
+wb...w...b...w
+w..w...ww.wwww
+p.w.ww.w....ww
+w.w.....bwb..w
+..w.w.w.ww.w.g
+b.wbw.w..w...w
+w...w.w.ww.w.w
+.w..w.w....w.w
+.w.wwwww.www.w
+...........b..`,
   map`
-pw...w...s...sfs
-.w.w.w.w.w.w.s..
-.w.w.w.w.w.w.ss.
-.w.w.w.w.w.w.s..
-.w.w.w.w.w.w.s.s
-.w.w.w.w.w.w.s..
-.w.w.w.w.w.w.ss.
-.w.w.w.w.w.w....
-.w.w.w.w.w.wswws
-.w.w.w.w.s......
-.w.w.w.w.wwwwww.
-.w.w.w.w........
-.w.w.w.wswwwwwws
-.w.w.s..........
-.w.w.wwwwwwwwww.
-...w............`,
+p.............
+wwwwwwwww.www.
+......b.wbw...
+.w.w..w.w.w.ww
+.w.wwb..www..w
+.w..w.w......w
+.w....w.wwwwww
+.wwww...w....g
+.wwwwbwwwbwww.
+.bw...w...wbb.
+....w...b.....`,
   map`
-p....................
-swwwwwwwwwwwwwwwwwww.
-...................s.
-.wswwwwwwwwwwwwwww.w.
-.w...............s.w.
-.w.wswwwwwwwwwww.w.w.
-.w.w...........s.w.w.
-.w.w.wswwwwwww.w.w.w.
-.w.w.w.......s.w.w.w.
-.w.w.w.wwwsw.w.w.w.w.
-.w.w.w.s...w.w.w.w.w.
-.w.w.w.w.w.w.w.w.w.w.
-.w.w.w.wfs...w.w.w.w.
-.w.w.w.wwwwwsw.w.w.w.
-.w.w.s.........w.w.w.
-.w.w.wwwwwwwwwsw.w.w.
-.w.s.............w.w.
-.w.wwwwwwwwwwwwwsw.w.
-.s.................w.
-.wwwwwwwwwwwwwwwwwsw.
-.....................`,
+p.b....b.bbb..
+b.b..b...bgb.b
+..bbbbb.bb.b..
+b.......b..bb.
+.b..bb.b.b..bb
+bb.b..b....bb.
+bb..b.bb.b.b..
+.........b..b.
+b.bbbb.bbbb.b.
+bb........b.b.
+....bbbbb.....`,
   map`
-f..s...s..............p
-ss.s.s.s.ssss.sss.ssss.
-.s...s.s.s......s.s....
-.sssss.ssssssss.s.s.sss
-.......d.s...s..s.s....
-sssss.ss...s...ss.ssss.
-....s.sssssssssssss....
-.ss.s.s.........s.s.sss
-.ss.s.s.sssssssss.s....
-.ssss.s...........ssss.
-.s.s..s.s.sssssss.s....
-.s.ssssss.s.....s.s.sss
-.s..s...s.s.sssss.s....
-.s.ss.s.s.s.s...s.ss.s.
-.s..s.s...s.s.s.s....s.
-.ss...s.sss.sss.ssssss.
-.s..s.s.s..............
-.ss.s.s.s.ssssssss.ssss
-....s.s.s........s.....
-.ssss.s.sssssssssssssss
-......s...............k`,
+.w..w......w...w......b
+....bw....w......wwww..
+.w.b..ww....b.ww.b.....
+.b....ww.w.w...w....w.w
+....w.w..w..b.b...w....
+pww......w.....bb..b..w
+.www...ww.ww.ww........
+.w....bw.w.ww.....wb.w.
+.w.....w...ww........w.
+.w..b.....wwwwwbwww....
+.w..w.w....ww...w.www..
+www.w.....www.ww....b..
+......ww.....ww..bw..b.
+wwwwwww..b..ww....wb.w.
+....ww......w.ww.w..b..
+.b.w.w...b.w.......b...
+..w.wb..www.w.....b..w.
+.w.....w.....w.w.b.ww..
+ww.w.......w.w.w...wg..
+..w..b...b.w.w..w.ww...
+..w...w.........wwww..b`,
   map`
-.......................................
-.......................................
-.......................................
-.....ww......ww...wwwww...ww...ww......
-.....ww......ww..wwwwwww..ww...ww......
-.....ww......ww..ww...ww..ww...ww......
-.....ww......ww..ww...ww..ww...ww......
-.....ww......ww..ww...ww..ww...ww......
-.....www....www..ww...ww..ww...ww......
-......wwwwwwww...ww...ww..ww...ww......
-.......wwwwww....ww...ww..ww...ww......
-.........ww......ww...ww..ww...ww......
-.........ww......ww...ww..www.www......
-.........ww......wwwwwww..wwwwwww......
-.........ww.......wwwww....wwwww.......
-.........ww............................
-.......................................
-.......................................
-...................ww..................
-......ww...w...ww..ww..ww.....ww.......
-......ww...w...ww......www....ww.......
-......www.www.www..ww..wwww...ww.......
-.......ww.www.ww...ww..wwwww..ww.......
-.......wwwwwwwww...ww..ww.www.ww.......
-........www.www....ww..ww..wwwww.......
-........www.www....ww..ww...wwww.......
-.........w...w.....ww..ww....www.......
-.........w...w.....ww..ww.....ww.......
-.......................................
-.......................................`
+.....ww....b.w.w.ww....
+..wb.w.b....ww..w.....w
+..w..w........ww.b..w..
+..w..w...w.wb.....w...w
+..b..w.ww..w..b.w.....w
+p..w..bw.bww...ww.w...w
+.ww..w...ww..ww......w.
+.b....w..b.....b.....w.
+.w......wb.w....www..w.
+.wwww.w..w..w..w....w..
+..w.w.w..www...wbww.w..
+w...wb...w.............
+...w..w..w...b.w..w.w..
+w.ww..b.w.w..w....w..w.
+..b..w........ww.w..w..
+.....w.w..w.w.....w.w..
+.b...w.w.ww....w.w...w.
+w....w.w..ww.....w.w.b.
+.w....ww..bw.w..w.w..bb
+........b..w.w.ww....gb
+..w..ww....w.w.wwww.bbb`,
+
+
+
+
+  
+  
+
 ];
 
-setMap(levels[level]);
+// set the map displayed to the current level
+const currentLevel = levels[level];
+setMap(currentLevel);
 
-onInput("s", () => {
-  getFirst(player).y += 1
+setSolids([ player, wall ]); // other sprites cannot go inside of these sprites
+
+// allow certain sprites to push certain other sprites
+setPushables({
+  [player]: []
 });
 
+// inputs for player movement control
 onInput("w", () => {
-  getFirst(player).y -= 1
+  getFirst(player).y -= 1; // positive y is downwards
 });
 
 onInput("a", () => {
-  getFirst(player).x -= 1
+  getFirst(player).x -= 1; // positive y is downwards
+});
+
+onInput("s", () => {
+  getFirst(player).y += 1; // positive y is downwards
 });
 
 onInput("d", () => {
-  getFirst(player).x += 1
+  getFirst(player).x += 1;
 });
 
+// input to reset level
+onInput("j", () => {
+  const currentLevel = levels[level]; // get the original map of the level
+
+  // make sure the level exists before we load it
+  if (currentLevel !== undefined) {
+    clearText("");
+    setMap(currentLevel);
+  }
+});
+
+// these get run after every input
 afterInput(() => {
-  const gotSpiked = tilesWith(spikes, player).length
-  if (gotSpiked === 1) {
-    level = 0
-    setMap(levels[level]);
+  // count the number of tiles with goals
+  const targetNumber = tilesWith(goal).length;
+  
+  // count the number of tiles with goals and boxes
+  const boxedCovered = tilesWith(goal, player).length;
+  const bombCovered = tilesWith(bomb, player).length;
+
+  // if the number of goals is the same as the number of goals covered
+  // all goals are covered and we can go to the next level
+  if (bombCovered === 1) {
+    clearText("")
+    addText("Game Over!",  { y: 4, color: color`3` })
+    setMap(levels[0])
+    setTimeout(function(){
+      clearText("")
+    }, 2000); 
   }
-  const gotKey = tilesWith(key, player).length
-  if (gotKey === 1) {
-    setSolids([ player, wall ]);
-  }
-  const numberCovered = tilesWith(finnish, player).length;
-  if (numberCovered === 1) {
-     level = level + 1;
-     setMap(levels[level]);
-     setSolids([ player, wall, lock ]); 
+  
+  if (boxedCovered === 1) {
+    // increase the current level numberds
+    level = level + 1;
+
+    const currentLevel = levels[level];
+
+    // make sure the level exists and if so set the map
+    // otherwise, we have finished the last level, there is no level
+    // after the last level
+    if (currentLevel !== undefined) {
+      setMap(currentLevel);
+    } else {
+      addText("You Win!", { y: 4, color: color`3` });
+    }
   }
 });
