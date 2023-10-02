@@ -257,7 +257,12 @@ setInterval(function() {
   // Game over animation and reset prompt
   if (isPlayerExploded) {
     clearText();
-    addText("  Game Over!\n\nPress I to\nrestart", {
+    addText("  Game Over!\n\nPress I to\nrestart \n \n Score:  " + score,  {
+      x: 3,
+      y: 6,
+      color: color`2`
+    });
+  }{
       x: 3,
       y: 6,
       color: color`2`
