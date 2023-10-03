@@ -224,6 +224,9 @@ setMap(currentLevel);
 
 setSolids([ player, wall ]); // other sprites cannot go inside of these sprites
 
+// set Background to blue
+setBackground(background)
+
 // allow certain sprites to push certain other sprites
 setPushables({
   [player]: []
