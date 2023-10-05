@@ -1,5 +1,5 @@
 /*
-@title: Maze Runner
+@title: Find the Watermelon
 @author: Mohamad
 
 Check the tutorial in the bottom right, the run button is in the top right.
