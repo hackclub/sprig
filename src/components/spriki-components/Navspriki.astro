@@ -1,3 +1,7 @@
+---
+import Lang from "./Lang.astro";
+---
+
 <style>
     .nav-img {
         display: block;
@@ -8,6 +12,7 @@
     
     .nav-bc {
         background-color: #008264;
+        display: flex;
     }
 </style>
 
@@ -15,4 +20,6 @@
     <a href="../">
         <img class="nav-img" src="https://cloud-iy0bytgsh-hack-club-bot.vercel.app/0frame_17.svg">
     </a>
+    <Lang links="EN" lang="English" />
+    <Lang links="PT" lang="Portuguese" />
 </nav>
