@@ -261,7 +261,7 @@ onInput("w", () => {
   playTune(tuneMove);
   
   for (let i = 0; i < 7; i++) {
-    const timeoutId1 = setTimeout(() => {getFirst(player).y += 1; mines();}, 800);
+    const timeoutId1 = setTimeout(() => {getFirst(player).y += 1; mines();}, 1000);
     timeoutIds.push(timeoutId1);
   }
   
@@ -272,7 +272,7 @@ onInput("a", () => {
   playTune(tuneMove);
   
   for (let i = 0; i < 7; i++) {
-    const timeoutId2 = setTimeout(() => {getFirst(player).y += 1; mines();}, 800);
+    const timeoutId2 = setTimeout(() => {getFirst(player).y += 1; mines();}, 1000);
     timeoutIds.push(timeoutId2);
   }
   
@@ -283,7 +283,7 @@ onInput("s", () => {
   playTune(tuneMove);
   
   for (let i = 0; i < 7; i++) {
-    const timeoutId3 = setTimeout(() => {getFirst(player).y += 1; mines();}, 800);
+    const timeoutId3 = setTimeout(() => {getFirst(player).y += 1; mines();}, 1000);
     timeoutIds.push(timeoutId3);
   }
   
@@ -294,7 +294,7 @@ onInput("d", () => {
   playTune(tuneMove);
   
   for (let i = 0; i < 7; i++) {
-    const timeoutId4 = setTimeout(() => {getFirst(player).y += 1; mines();}, 800);
+    const timeoutId4 = setTimeout(() => {getFirst(player).y += 1; mines();}, 1000);
     timeoutIds.push(timeoutId4);
   }
   
