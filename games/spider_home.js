@@ -228,8 +228,8 @@ mmmmmmmm
 mmmmmmmm
 ......mm
 .mmmb..g
-.mmmmpmm
-.mmmmwmm`,
+.mmmm.mm
+pmmmmwmm`,
   map`
 zzzzzzzz
 zzzzzzzz
