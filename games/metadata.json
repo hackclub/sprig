@@ -3006,5 +3006,29 @@
     "img": "",
     "tags": [],
     "added on": "2023-10-04"
+  },
+  {
+    "filename": "find_the_watermelon",
+    "title": "find_the_watermelon",
+    "author": "Mohamad",
+    "img": "",
+    "tags": [],
+    "added on": "2023-10-05"
+  },
+  {
+    "filename": "spider_home",
+    "title": "spider_home",
+    "author": "Usermaatre Setepenre",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "added on": "2023-10-09"
+  },
+  {
+    "filename": "Destroy_The_Hearts",
+    "title": "Destroy_The_Hearts",
+    "author": "Deniz Melik Aktın",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "added on": "2023-10-09"
   }
 ]
