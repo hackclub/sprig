@@ -1,0 +1,15 @@
+---
+import '../../../global.css'
+import Categories from '../../../layouts/categories.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+
+<Categories name={data["team.categories.name"]} title={data["team.categories.title"]} whats={data["team.categories.whats"]} about={data["team.categories.about"]}>
+    <h1>TBD</h1>
+</Categories>

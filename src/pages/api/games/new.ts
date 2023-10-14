@@ -8,6 +8,8 @@ export const post: APIRoute = async ({ request, cookies }) => {
 	let code: string
 	let partialSessionEmail: string | null // For temp games
 	let recaptchaToken: string
+	let tutorialName: string | undefined
+	let tutorialIndex: number | undefined
 	try {
 		const body = await request.json()
 		if (body.name && typeof body.name !== 'string') throw 'Invalid game name'
@@ -18,6 +20,8 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		partialSessionEmail = body.partialSessionEmail
 		if (body.recaptchaToken && typeof body.recaptchaToken !== 'string') throw 'Invalid recaptcha token'
 		recaptchaToken = body.recaptchaToken
+		tutorialName = typeof body.tutorialName === 'string' ? body.tutorialName : undefined
+		tutorialIndex = typeof body.tutorialIndex === 'number' ? body.tutorialIndex : undefined
 	} catch (error) {
 		return new Response(typeof error === 'string' ? error : 'Bad request body', { status: 400 })
 	}
@@ -39,7 +43,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		return new Response('Unauthorized', { status: 401 })
 	}
 
-	const game = await makeGame(user.id, unprotected, name ?? undefined, code ?? undefined)
+	const game = await makeGame(user.id, unprotected, name ?? undefined, code ?? undefined, tutorialName, tutorialIndex)
 	if (unprotected) await mail(user.email, tempGameTemplate(user, game))
 	return new Response(JSON.stringify({ game, sessionInfo }), { status: 200 })
 }

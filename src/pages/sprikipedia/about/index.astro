@@ -1,0 +1,32 @@
+---
+import '../../../global.css'
+import Navspriki from '../../../components/spriki-components/Navspriki.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+<html lang="en">
+    <head>
+        <title>{data["about.head.title"]}</title>
+    </head>
+    <body>
+        <Navspriki />
+        <div class="main-spriki">
+            <h1>{data["about.content.title"]}</h1>
+            <br>
+            <blockquote>
+                <p>"{data["about.blockquote.quote"]}"</p>
+                <p>- {data["about.blockquote.citation"]}</p>
+            </blockquote>
+            <p>Sprikipedia is a encyclopedia.</p>
+            <p>{data["about.content.p4"]}</p>
+            <p>{data["about.content.p3"]}</p>
+            <p>{data["about.content.p4"]}</p>
+        </div>
+    </body>
+</html>
+

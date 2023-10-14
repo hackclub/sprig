@@ -1,7 +1,7 @@
 import { codeMirror, editors, openEditor, type EditorKind } from '../../lib/state'
 import BitmapPreview from '../design-system/bitmap-preview'
 import styles from './open-button.module.css'
-import { runGameHeadless } from '../../lib/engine/3-editor'
+import { runGameHeadless } from '../../lib/engine'
 
 interface OpenButtonProps {
 	kind: EditorKind
