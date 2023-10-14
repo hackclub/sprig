@@ -9,8 +9,9 @@ const data = (
   ) || {}
 ).default;
 ---
-<Categories name={data["firmware.categories.name"]} title={data["firmware.categories.title"]} whats={data["firmware.categories.whats"]} about={data["firmware.categories.about"]}>
-    <ul>
+<Categories name={data["firmware.categories.name"]} title={data["firmware.categories.title"]} >
+  <p>{data["firmware.categories.about"]}</p>  
+  <ul>
         <li><a href="https://github.com/hackclub/spade">Spade</a>{data["firmware.spade.description"]}</li>
         <li><a href="https://github.com/shanecelis/trowel">Trowel</a>{data["firmware.trowel.description"]}</li>
         <li><a href="https://github.com/DedFishy/Spryg">Spryg</a>{data["firmware.spryg.description"]}</li>
