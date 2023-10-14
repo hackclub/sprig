@@ -3030,5 +3030,13 @@
     "img": "",
     "tags": ["sokoban-style"],
     "added on": "2023-10-09"
+  },
+  {
+    "filename": "ocean-maze-escape",
+    "title": "ocean-maze-escape",
+    "author": "michael barrera",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "added on": "2023-10-13"
   }
 ]
