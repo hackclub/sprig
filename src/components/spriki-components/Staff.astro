@@ -1,0 +1,28 @@
+---
+const { img, name, role, site } = Astro.props;
+---
+<style>
+    .member {
+        width: 200px;
+        padding: 5px;
+        display: flex;
+        border-radius: 45px;
+        background-color: #078969;
+    }
+    img {
+        border-radius: 360%
+    }
+    h1 {
+        color: #fafed7;
+    }
+    p {
+        color: white;
+    }
+</style>
+<a class="member" href={`https://${site}`}>
+    <img src={`https://${img}`}>
+    <div>
+        <h1>{name}</h1>
+        <p>{role}</p>
+    </div>
+</a>
