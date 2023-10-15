@@ -25,7 +25,7 @@ const { img, name, site, pronouns, role } = Astro.props;
     h1 {
         color: #fafed7;
     }
-    i {
+    i, b {
         color: white;
         font-size: small;
     }
@@ -34,6 +34,6 @@ const { img, name, site, pronouns, role } = Astro.props;
     <img src={`https://${img}`}>
     <div class="text">
         <h1>{name}</h1>
-        <i>{role} ({pronouns})</i>
+        <b>{role}</b> <i>({pronouns})</i>
     </div>
 </a>
