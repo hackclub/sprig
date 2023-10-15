@@ -1,6 +1,7 @@
 ---
 import '../../../global.css'
 import Categories from '../../../layouts/categories.astro'
+import Staff from '../../../components/spriki-components/Staff.astro'
 
 const data = (
   (await Astro.glob(`/src/translations/*.json`)).find(
@@ -12,4 +13,8 @@ const data = (
 
 <Categories name={data["team.categories.name"]} title={data["team.categories.title"]} >
     <p>{data["team.categories.about"]}</p>
+    <h1>{data["team.categories.review"]}</h1>
+    <p>{data["team.categories.review.permissions"]}</p>
+    <Staff site="github.com/LucasHT22" img="github.com/LucasHT22.png" name="Lucas" />
+    // need to add more ppl
 </Categories>
