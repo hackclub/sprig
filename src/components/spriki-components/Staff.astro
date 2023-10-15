@@ -1,5 +1,5 @@
 ---
-const { img, name, site, pronouns, slack } = Astro.props;
+const { img, name, site, pronouns, role } = Astro.props;
 ---
 <style>
     .member {
@@ -34,6 +34,6 @@ const { img, name, site, pronouns, slack } = Astro.props;
     <img src={`https://${img}`}>
     <div class="text">
         <h1>{name}</h1>
-        <i>({pronouns}) {slack}</i>
+        <i>{role} ({pronouns})</i>
     </div>
 </a>
