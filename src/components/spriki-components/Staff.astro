@@ -1,5 +1,5 @@
 ---
-const { img, name, site } = Astro.props;
+const { img, name, site, pronouns, slack } = Astro.props;
 ---
 <style>
     .member {
@@ -7,6 +7,7 @@ const { img, name, site } = Astro.props;
         height: 100px;
         padding: 5px;
         margin: 20px;
+        line-height: 3px;
         display: flex;
         border-radius: 15px;
         background-color: #078969;
@@ -24,14 +25,15 @@ const { img, name, site } = Astro.props;
     h1 {
         color: #fafed7;
     }
-    p {
+    i {
         color: white;
-
+        font-size: small;
     }
 </style>
 <a class="member" href={`https://${site}`}>
     <img src={`https://${img}`}>
     <div class="text">
         <h1>{name}</h1>
+        <i>({pronouns}) {slack}</i>
     </div>
 </a>
