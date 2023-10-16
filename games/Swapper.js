@@ -479,7 +479,7 @@ const levelbuttons = [
   [ // level 2
     { x: 5, y: 1, activates: [{ x: 2, y: 4, type: doorv }] },
     { x: 3, y: 5, activates: [{ x: 6, y: 2, type: doorv }] },
-    { x: 9, y: 4, activates: [{ x: 11, y: 2, type: doorv }] },
+    { x: 9, y: 4, activates: [{ x: 11, y: 1, type: doorv }] },
     { x: 14, y: 1, activates: [{ x: 6, y: 5, type: doorh }] },
     { x: 8, y: 9, activates: [{ x: 14, y: 4, type: doorh }] },
     { x: 12, y: 3, activates: [{ x: 2, y: 8, type: doorv }] }
