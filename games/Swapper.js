@@ -1,5 +1,5 @@
 /*
-A game featuring simple puzzles with mechanics that bring further depth, can be played alone or with a friend. An introductory adventure of mine into Sprig game development.
+A game featuring simple puzzles involving a swapping mechanic, can be played alone or with a friend. An introductory adventure of mine into Sprig game development.
 */
 
 const player1 = "p"; // player 1
@@ -783,6 +783,20 @@ const howtoplaypages = [
     { x: 1, y: 10, text: "to each other" },
     { x: 1, y: 11, text: "boxes can travel" },
     { x: 1, y: 12, text: "through them." }
+  ],
+  [
+    { x: 1, y: 4, text: "Touching the purple" },
+    { x: 1, y: 5, text: "redo button will" },
+    { x: 1, y: 6, text: "reset the level" },
+    { x: 1, y: 7, text: "if a mistake is" },
+    { x: 1, y: 8, text: "made. Be careful" },
+    { x: 1, y: 9, text: "not to be crushed" },
+    { x: 1, y: 10, text: "in a closing door" },
+    { x: 1, y: 11, text: "if the button-" }
+  ],
+  [
+    { x: 1, y: 4, text: "opening the door" },
+    { x: 1, y: 5, text: "is deactivated!" },
   ]
 ];
 
