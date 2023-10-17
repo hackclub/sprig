@@ -1,5 +1,5 @@
 /*
-Welcome to Basketball Game, a random game that I made.
+Welcome to Interval, a random game that I made.
 */
 const player = "p";
 const wall = "w";
@@ -207,6 +207,11 @@ pb..x
 ....
 mb..
 rps.`,
+  map`
+....
+....
+.b..
+.p..`,
 ]
 const unknownLevels = [
   map`
@@ -259,7 +264,7 @@ onInput("j",() => {
 afterInput(() => {
   if (tilesWith(player, resurrection_stone).length == 1) {
     console.log("Unknown Level.")
-    setMap(unknownLevels[level]);
+    setMap(unknownLevels[0]);
     Text("Level: ???",0,0,color`2`);
   }
 })
