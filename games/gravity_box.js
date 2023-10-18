@@ -195,8 +195,10 @@ onInput("w", () => {
   getFirst(player).y -= 1;
 })
 
+let change = 0;
+let hasChanged = false;
 onInput("d", () => {
-  
+  if (hasChanged) return;
   let result = currentLevel.split("\n").map(i => i.split(""));
   
   rotate90Clockwise(result);
@@ -207,7 +209,7 @@ onInput("d", () => {
 
 
 onInput("a", () => {
-  
+  if (hasChanged) return;
   let result = currentLevel.split("\n").map(i => i.split(""));
   
   rotate90CounterClockwise(result);
@@ -231,9 +233,9 @@ afterInput(() => {
 
 // gravity stuff
 
-let change = 0;
-let hasChanged = false;
+
 const controlInterval = setInterval(() => {
+
   const { x, y } = getFirst(player);
 
   getFirst(player).y += 1;
