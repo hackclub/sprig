@@ -1,5 +1,5 @@
 /*
-Welcome to Interval, a random game that I made.
+Welcome to Basketball Game, a random game that I made.
 */
 const player = "p";
 const wall = "w";
