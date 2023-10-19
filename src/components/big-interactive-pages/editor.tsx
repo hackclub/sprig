@@ -2,7 +2,7 @@ import styles from './editor.module.css'
 import CodeMirror from '../codemirror'
 import Navbar from '../navbar-editor'
 import { IoClose, IoPlayCircleOutline, IoVolumeHighOutline, IoVolumeMuteOutline } from 'react-icons/io5'
-import { Signal, useComputed, useSignal, useSignalEffect } from '@preact/signals'
+import { Signal, useComputed, useSignal, useSignalEffect, signal } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
 import { codeMirror, errorLog, muted, PersistenceState } from '../../lib/state'
 import EditorModal from '../popups-etc/editor-modal'
@@ -91,6 +91,9 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
 }
 
 export default function Editor({ persistenceState, cookies }: EditorProps) {
+	const isDark = signal(false);
+	const toggleEditorTheme = () => { isDark.value = !isDark.value; return isDark.value; }
+
 	// Resize state storage
 	const outputAreaSize = useSignal(Math.max(minOutputAreaSize, cookies.outputAreaSize ?? defaultOutputAreaSize))
 	useSignalEffect(() => {
@@ -220,11 +223,12 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 
 	return (
 		<div class={styles.page}>
-			<Navbar persistenceState={persistenceState} />
+			<Navbar persistenceState={persistenceState} toggleEditorTheme={toggleEditorTheme} theme={isDark} />
 
 			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
+						isDark={isDark}
 						class={styles.code}
 						initialCode={initialCode}
 						onEditorView={(editor) => {
