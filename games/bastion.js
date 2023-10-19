@@ -1,6 +1,6 @@
 /*
 Bastion:
-Simple Fireboy/Watergirl styled game with a few more obstacles (but isn't completely puzzle yet!).
+Simple Fireboy/Watergirl styled game
 
 by de-y (Dheeraj)
 
@@ -97,7 +97,7 @@ try {
       const player_tile_under = getTile(getFirst(char).x,getFirst(char).y + 1)
       if (player_tile_under.length < 1) {
         setTimeout(() => {getFirst(char).y += 1;}, 100)
-        setTimeout(() => {fall(char)},150)
+        setTimeout(() => {fall(char)},100)
       }
       else {
         if (player_tile_under[0]['_type'] == 'l' || player_tile_under[0]['_type'] == 'y' || player_tile_under[0]['_type'] == 'g' || player_tile_under[0]['_type'] == 'd' || player_tile_under[0]['_type'] == 'e' || player_tile_under[0]['_type'] == 's' || player_tile_under[0]['_type'] == 't' || player_tile_under[0]['_type'] == 'b') {        
@@ -463,13 +463,15 @@ wwwww`,  // Level 0
   pggqwb...ww....
   wwwwwwwwww.....`,  // Level 1
       map`
+......................
+......................
 wwwwwwww......wwwwwwww
-.e...................d
-wwwwwwwww.....wwwwwwww
-wwwwwwww.w....wwwwwwww
+e........g.g.........d
+wwwwwwwwwwww.wwwwwwwww
+wwwwwwwwt.....wwwwwwww
 wwwwwwww...w..........
 wwwwwwww..www.....yy.p
-.q..b.c..wwwwwb.yywwww
+.q....c..wwwwwb.yywwww
 wwwwwwwwwwwwwwwwwwwwww`,   // Level 2
       map`
 wwwwwwwwwww...........wwwwww
@@ -528,9 +530,35 @@ w..wwwwwwwwjwwwwww..ww..w
 ..ww..f.w...j.w..ww..ww.w
 ...wwwwwwwwwwwwwwwwwwwwww`,
       map`
-..
-pq
-ww`,
+wwwwwwwwwwwwwwwww
+wtttttttttwwwwwww
+w.........wwwwwww
+.................
+de.lll.yy........
+wwwwwwwwww.......
+tttttttttww......
+.........www.gggg
+..........f..wwww
+pqx.x..cb.w.wwwww
+wwggggggwffwwwwww`,
+      map`
+.............
+........w....
+es......w....
+ww......w....
+.tww....f....
+....wwwfw....
+........w....
+.a.q..p.cbgd.
+.wwwwwwwwwwww`,
+      map`
+..w......
+..w......
+b.c.a....
+wwwww...w
+.......ww
+qp...wwww
+wwwwwwwww`,
   ]
   setBackground(background)
   setMap(levels[level])
@@ -569,7 +597,7 @@ ww`,
     try {
       getFirst(character).y -= 1
       setTimeout((getFirst(character).y -= 1), 300);
-      setTimeout(() => {fall(character); checkIfWaterBoyDied(level)}, 500);    
+      setTimeout(() => {fall(character); checkIfWaterBoyDied(level)}, 250);    
     } catch (exceptionVar) {
       console.log("No moving!")
     }
