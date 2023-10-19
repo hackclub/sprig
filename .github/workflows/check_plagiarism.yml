@@ -26,18 +26,4 @@ jobs:
 
       - name: Trim JavaScript file and Check Plagiarism
         run: |
-          python -c "import re, glob, os, subprocess;\
-          patterns = [r'setLegend\(`.*?`\);', r'map\(`.*?`\);', r'bitmap\(`.*?`\);'];\
-          if not os.path.exists('temp'): os.makedirs('temp');\
-          files = glob.glob('**/*.js', recursive=True);\
-          trimmed_files = [];\
-          for file_path in files:\
-              with open(file_path, 'r') as file: content = file.read();\
-              for pattern in patterns: content = re.sub(pattern, '', content, flags=re.DOTALL);\
-              temp_file_path = f'temp/trimmed_{os.path.basename(file_path)}';\
-              with open(temp_file_path, 'w') as file: file.write(content);\
-              trimmed_files.append(temp_file_path);\
-          result = subprocess.run(['compare50', *trimmed_files, 'sprig/games/'], capture_output=True, text=True);\
-          print(result.stdout);\
-          for file_path in trimmed_files: os.remove(file_path);\
-          os.rmdir('temp');"
+          python -c "import re, glob, os, subprocess;patterns=[r'setLegend\(`.*?`\);',r'map\(`.*?`\);',r'bitmap\(`.*?`\);'];if not os.path.exists('temp'): os.makedirs('temp');files=glob.glob('**/*.js', recursive=True);trimmed_files=[];for file_path in files:with open(file_path,'r') as file: content=file.read();for pattern in patterns: content=re.sub(pattern,'',content,flags=re.DOTALL);temp_file_path=f'temp/trimmed_{os.path.basename(file_path)}';with open(temp_file_path,'w') as file: file.write(content);trimmed_files.append(temp_file_path);result=subprocess.run(['compare50',*trimmed_files,'sprig/games/'],capture_output=True,text=True);print(result.stdout);for file_path in trimmed_files: os.remove(file_path);os.rmdir('temp');"
