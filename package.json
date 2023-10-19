@@ -19,6 +19,7 @@
 		"@codemirror/language": "^6.4.0",
 		"@codemirror/search": "^6.2.3",
 		"@codemirror/state": "^6.2.0",
+		"@codemirror/theme-one-dark": "^6.1.2",
 		"@codemirror/view": "^6.7.3",
 		"@lezer/common": "^1.0.2",
 		"@preact/signals": "^1.1.3",
