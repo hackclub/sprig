@@ -13,6 +13,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Trim JavaScript files
+        run: |
+          const fs = require('fs');
+          const glob = require('glob');
+          const patterns = [/setLegend\(`.*?`\);/gs, /map\(`.*?`\);/gs, /bitmap\(`.*?`\);/gs];
+          if (!fs.existsSync('temp')) { fs.mkdirSync('temp'); }
+          glob.sync('**/*.js', { ignore: 'node_modules/**' }).forEach(file => {
+            let content = fs.readFileSync(file, 'utf8');
+            patterns.forEach(pattern => { content = content.replace(pattern, ''); });
+            const tempFilePath = `temp/trimmed_${path.basename(file)}`;
+            fs.writeFileSync(tempFilePath, content);
+          });
+        shell: node {0}
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -22,13 +41,15 @@ jobs:
         run: pip install compare50
 
       - name: Clone reference repository
-        run: |
-          git clone https://github.com/hackclub/sprig.git
-          if [ $? -ne 0 ]; then
-            echo "Failed to clone repository"
-            exit 1
-          fi
+        run: git clone https://github.com/hackclub/sprig.git
 
-      - name: Trim JavaScript file and Check Plagiarism
+      - name: Check Plagiarism
         run: |
-          python -c "import re, glob, os, subprocess;patterns=[r'setLegend\(`.*?`\);',r'map\(`.*?`\);',r'bitmap\(`.*?`\);'];if not os.path.exists('temp'): os.makedirs('temp');files=glob.glob('**/*.js', recursive=True);trimmed_files=[];for file_path in files:with open(file_path,'r') as file: content=file.read();for pattern in patterns: content=re.sub(pattern,'',content,flags=re.DOTALL);temp_file_path=f'temp/trimmed_{os.path.basename(file_path)}';with open(temp_file_path,'w') as file: file.write(content);trimmed_files.append(temp_file_path);result=subprocess.run(['compare50',*trimmed_files,'sprig/games/'],capture_output=True,text=True);print(result.stdout);for file_path in trimmed_files: os.remove(file_path);os.rmdir('temp');"
+          import subprocess
+          import glob
+
+          files = glob.glob('temp/*.js')
+          result = subprocess.run(['compare50', *files, 'sprig/games/'], capture_output=True, text=True)
+
+          print(result.stdout)
+        shell: python
