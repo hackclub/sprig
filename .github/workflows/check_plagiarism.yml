@@ -19,7 +19,7 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install glob
+        run: npm install glob --force
 
       - name: Trim JavaScript files
         run: |
