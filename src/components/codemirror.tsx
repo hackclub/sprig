@@ -4,7 +4,7 @@ import { StateEffect } from '@codemirror/state'
 import styles from './codemirror.module.css'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorView } from '@codemirror/view'
-import { Signal } from '@preact/signals'
+import { isDark } from '../lib/state'
 
 interface CodeMirrorProps {
 	class?: string | undefined
@@ -12,7 +12,6 @@ interface CodeMirrorProps {
 	onCodeChange?: () => void
 	onRunShortcut?: () => void
 	onEditorView?: (editor: EditorView) => void
-	isDark: Signal<boolean>
 }
 
 export default function CodeMirror(props: CodeMirrorProps) {
@@ -35,15 +34,19 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		onCodeChangeRef.current?.()
 	}, () => onRunShortcutRef.current?.());
 
-	useEffect(() => {
-		if (props.isDark.value) {
+	const setEditorTheme = () => {
+		if (isDark.value) {
 			editorRef?.dispatch({
 				effects: StateEffect.appendConfig.of(oneDark)
 			});
 		} else editorRef?.dispatch({
 			effects: StateEffect.reconfigure.of(restoreInitialConfig())
 		});
-	}, [props.isDark.value]);
+	};
+
+	useEffect(() => {
+		setEditorTheme();
+	}, [isDark.value]);
 
 	useEffect(() => {
 		if (!parent.current) throw new Error('Oh golly! The editor parent ref is null')
@@ -53,6 +56,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				if (editor.state.doc.toString() === lastCode) return
 				lastCode = editor.state.doc.toString()
 				onCodeChangeRef.current?.()
+				setEditorTheme();
 			}, () => onRunShortcutRef.current?.()),
 			parent: parent.current,
 		})

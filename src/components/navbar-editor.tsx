@@ -1,5 +1,5 @@
-import { Signal, useSignal, useSignalEffect,signal } from '@preact/signals'
-import { codeMirror, PersistenceState } from '../lib/state'
+import { Signal, useSignal, useSignalEffect } from '@preact/signals'
+import { codeMirror, PersistenceState, isDark } from '../lib/state'
 import Button from './design-system/button'
 import SavePrompt from './popups-etc/save-prompt'
 import styles from './navbar.module.css'
@@ -47,12 +47,9 @@ const canDelete = (persistenceState: Signal<PersistenceState>) => {
 
 interface EditorNavbarProps {
 	persistenceState: Signal<PersistenceState>
-	theme: Signal<boolean>
-	toggleEditorTheme: () => boolean
 }
 
 export default function EditorNavbar(props: EditorNavbarProps) {
-	const isDark = signal(false);
 	const showNavPopup = useSignal(false)
 
 	const showSavePrompt = useSignal(false)
@@ -144,8 +141,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			</li>
 
 			<li>
-				<Button onClick={() => { isDark.value = props.toggleEditorTheme() }}>
-					{ props.theme.value ? "Light" : "Dark" }
+				<Button onClick={() => { isDark.value = !isDark.value }}>
+					{ isDark.value ? "Light" : "Dark" }
 				</Button>
 			</li>
 
