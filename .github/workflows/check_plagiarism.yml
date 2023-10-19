@@ -14,19 +14,30 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install glob
 
       - name: Trim JavaScript files
         run: |
           const fs = require('fs');
+          const path = require('path');
           const glob = require('glob');
           const patterns = [/setLegend\(`.*?`\);/gs, /map\(`.*?`\);/gs, /bitmap\(`.*?`\);/gs];
-          if (!fs.existsSync('temp')) { fs.mkdirSync('temp'); }
+
+          if (!fs.existsSync('temp')) { 
+            fs.mkdirSync('temp'); 
+          }
+
           glob.sync('**/*.js', { ignore: 'node_modules/**' }).forEach(file => {
             let content = fs.readFileSync(file, 'utf8');
-            patterns.forEach(pattern => { content = content.replace(pattern, ''); });
+            patterns.forEach(pattern => { 
+              content = content.replace(pattern, ''); 
+            });
+            
             const tempFilePath = `temp/trimmed_${path.basename(file)}`;
             fs.writeFileSync(tempFilePath, content);
           });
@@ -43,13 +54,13 @@ jobs:
       - name: Clone reference repository
         run: git clone https://github.com/hackclub/sprig.git
 
-      - name: Check Plagiarism
+      - name: Run compare50
         run: |
           import subprocess
           import glob
 
-          files = glob.glob('temp/*.js')
-          result = subprocess.run(['compare50', *files, 'sprig/games/'], capture_output=True, text=True)
+          trimmed_files = glob.glob('temp/*.js')  # Adjust the path if your files are located differently
+          result = subprocess.run(['compare50', *trimmed_files, 'sprig/games/'], capture_output=True, text=True)
 
           print(result.stdout)
-        shell: python
+        shell: python {0}
