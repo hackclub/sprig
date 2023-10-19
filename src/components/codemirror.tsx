@@ -56,7 +56,6 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				if (editor.state.doc.toString() === lastCode) return
 				lastCode = editor.state.doc.toString()
 				onCodeChangeRef.current?.()
-				setEditorTheme();
 			}, () => onRunShortcutRef.current?.()),
 			parent: parent.current,
 		})
