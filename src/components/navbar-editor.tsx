@@ -1,4 +1,4 @@
-import { Signal, useSignal, useSignalEffect } from '@preact/signals'
+import { Signal, useSignal, useSignalEffect,signal } from '@preact/signals'
 import { codeMirror, PersistenceState } from '../lib/state'
 import Button from './design-system/button'
 import SavePrompt from './popups-etc/save-prompt'
@@ -47,9 +47,12 @@ const canDelete = (persistenceState: Signal<PersistenceState>) => {
 
 interface EditorNavbarProps {
 	persistenceState: Signal<PersistenceState>
+	theme: Signal<boolean>
+	toggleEditorTheme: () => boolean
 }
 
 export default function EditorNavbar(props: EditorNavbarProps) {
+	const isDark = signal(false);
 	const showNavPopup = useSignal(false)
 
 	const showSavePrompt = useSignal(false)
@@ -138,6 +141,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				<a href='https://github.com/hackclub/sprig/' target='_blank'>
 					<IoLogoGithub />
 				</a>
+			</li>
+
+			<li>
+				<Button onClick={() => { isDark.value = props.toggleEditorTheme() }}>
+					{ props.theme.value ? "Light" : "Dark" }
+				</Button>
 			</li>
 
 			<li>

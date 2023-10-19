@@ -4,6 +4,7 @@ import { StateEffect } from '@codemirror/state'
 import styles from './codemirror.module.css'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorView } from '@codemirror/view'
+import { Signal } from '@preact/signals'
 
 interface CodeMirrorProps {
 	class?: string | undefined
@@ -11,10 +12,12 @@ interface CodeMirrorProps {
 	onCodeChange?: () => void
 	onRunShortcut?: () => void
 	onEditorView?: (editor: EditorView) => void
+	isDark: Signal<boolean>
 }
 
 export default function CodeMirror(props: CodeMirrorProps) {
 	const parent = useRef<HTMLDivElement>(null)
+	const [editorRef, setEditorRef] = useState<EditorView>();
 
 	// Alert the parent to code changes (not reactive)
 	const onCodeChangeRef = useRef(props.onCodeChange)
@@ -24,9 +27,26 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	const onRunShortcutRef = useRef(props.onRunShortcut)
 	useEffect(() => { onRunShortcutRef.current = props.onRunShortcut }, [props.onRunShortcut])
 
+	let lastCode: string | undefined = props.initialCode ?? ''
+	// serves to restore config before dark mode was added
+	const restoreInitialConfig = () => initialExtensions(() => {
+		if (editorRef?.state.doc.toString() === lastCode) return
+		lastCode = editorRef?.state.doc.toString()
+		onCodeChangeRef.current?.()
+	}, () => onRunShortcutRef.current?.());
+
+	useEffect(() => {
+		if (props.isDark.value) {
+			editorRef?.dispatch({
+				effects: StateEffect.appendConfig.of(oneDark)
+			});
+		} else editorRef?.dispatch({
+			effects: StateEffect.reconfigure.of(restoreInitialConfig())
+		});
+	}, [props.isDark.value]);
+
 	useEffect(() => {
 		if (!parent.current) throw new Error('Oh golly! The editor parent ref is null')
-		let lastCode: string = props.initialCode ?? ''
 
 		const editor = new EditorView({
 			state: createEditorState(props.initialCode ? props.initialCode : '', () => {
@@ -37,26 +57,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			parent: parent.current,
 		})
 
-		// serves to restore config before dark mode was added
-		const restoreInitialConfig = () => initialExtensions(() => {
-				if (editor.state.doc.toString() === lastCode) return
-				lastCode = editor.state.doc.toString()
-				onCodeChangeRef.current?.()
-			}, () => onRunShortcutRef.current?.());
-
-		// adds dark mode to the editor
-		setTimeout(() => {
-			editor.dispatch({
-				effects: StateEffect.appendConfig.of(oneDark)
-			});
-		}, 2000);
-
-		setTimeout(() => {
-			editor.dispatch({
-				effects: StateEffect.reconfigure.of(restoreInitialConfig())
-			});
-		}, 5000);
-
+		setEditorRef(editor);
 		props.onEditorView?.(editor)
 	}, [])
 
