@@ -3062,5 +3062,37 @@
     "img": "",
     "tags": ["advanced"],
     "added on": "2023-10-18"
+  },
+  {
+    "filename": "gravity_box",
+    "title": "gravity_box",
+    "author": "Josias Aurel",
+    "img": "",
+    "tags": [],
+    "added on": "2023-10-18"
+  },
+  {
+    "filename": "for_Squiggly_myLost_worm",
+    "title": "for_Squiggly_myLost_worm",
+    "author": "Jeremiah Sung",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "added on": "2023-10-19"
+  },
+  {
+    "filename": "basketballgame",
+    "title": "basketballgame",
+    "author": "de-y (Dheeraj Chintapalli)",
+    "img": "",
+    "tags": [],
+    "added on": "2023-10-19"
+  },
+  {
+    "filename": "bastion",
+    "title": "bastion",
+    "author": "de-y (Dheeraj Chintapalli)",
+    "img": "",
+    "tags": [],
+    "added on": "2023-10-19"
   }
 ]
