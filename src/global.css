@@ -36,6 +36,12 @@ body {
 	position: relative;
 }
 
+@media (prefers-color-scheme: dark) {
+	body {
+		background: #2f2f2f; 
+	}
+}
+
 a {
 	color: var(--accent);
 	text-decoration: none;
