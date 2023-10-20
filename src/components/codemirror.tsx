@@ -18,6 +18,9 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	const parent = useRef<HTMLDivElement>(null)
 	const [editorRef, setEditorRef] = useState<EditorView>();
 
+	// set dark mode on render
+	useEffect(() => { if (window.matchMedia("(prefers-color-scheme: dark)").matches) isDark.value = true }, []);
+
 	// Alert the parent to code changes (not reactive)
 	const onCodeChangeRef = useRef(props.onCodeChange)
 	useEffect(() => { onCodeChangeRef.current = props.onCodeChange }, [props.onCodeChange])
@@ -35,6 +38,8 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	}, () => onRunShortcutRef.current?.());
 
 	const setEditorTheme = () => {
+		const shouldBeDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+		console.log("shouldBeDarkMode = ", shouldBeDarkMode);
 		if (isDark.value) {
 			editorRef?.dispatch({
 				effects: StateEffect.appendConfig.of(oneDark)

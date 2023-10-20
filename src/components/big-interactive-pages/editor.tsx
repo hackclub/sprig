@@ -224,7 +224,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		<div class={styles.page}>
 			<Navbar persistenceState={persistenceState} />
 
-			<div class={styles.pageMain} style={{ backgroundColor: isDark.value ? "#2f2f2f" : "#fafed7" }}>
+			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
 						class={styles.code}
