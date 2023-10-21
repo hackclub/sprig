@@ -58,9 +58,9 @@ try {
         console.log(getFirst(blocked_door))
         console.log(getFirst(blocked_door).remove())
       }
-      else {
-        getFirst(blocked_door).y -= 1
-      }
+      // else {
+      //   getFirst(blocked_door).y -= 1
+      // }
     }
     catch (exceptionVar) {
       console.log("Skipping Button Press.")
@@ -100,7 +100,7 @@ try {
         setTimeout(() => {fall(char)},100)
       }
       else {
-        if (player_tile_under[0]['_type'] == 'l' || player_tile_under[0]['_type'] == 'y' || player_tile_under[0]['_type'] == 'g' || player_tile_under[0]['_type'] == 'd' || player_tile_under[0]['_type'] == 'e' || player_tile_under[0]['_type'] == 's' || player_tile_under[0]['_type'] == 't' || player_tile_under[0]['_type'] == 'b') {        
+        if (player_tile_under[0]['_type'] == 'l' || player_tile_under[0]['_type'] == 'y' || player_tile_under[0]['_type'] == 'g' || player_tile_under[0]['_type'] == 'd' || player_tile_under[0]['_type'] == 'e' || player_tile_under[0]['_type'] == 's' || player_tile_under[0]['_type'] == 't' || player_tile_under[0]['_type'] == 'b' || player_tile_under[0]['_type'] == 'i') {        
           try {
             setTimeout(() => {getFirst(char).y +=1;},100)
           }
@@ -131,10 +131,13 @@ try {
   const button = 'b'
   const button2 = 'a'
   const blocked_door = 'c'
+  const blocked_door_pushable = 'o'
   const fakeWall = 'f'
   const obviouslyFakeButRealWall = 'h'
   const obviouslyFakeIsFake = 'j'
   const fakeBlockedWall = 'x'
+  const pushableBlock = 'n'
+  const blockActivator = 'i'
   
   setLegend(
     [character,bitmap`
@@ -427,22 +430,73 @@ LLLLLLLLLLLLLLLL`],
 1111111111111111
 1111111111111111`],
     [fakeBlockedWall, bitmap`
-  7555775575555557
-  5755757575555575
-  5575775775555755
-  5577575755557555
-  5557557775575555
-  5575757757755555
-  5575577757755555
-  5755557775575555
-  5755557755557555
-  7555557575557555
-  5555577577755755
-  5555757575575575
-  5557557557557557
-  5575575557555755
-  5755575555755575
-  7555575555755557`],
+7555775575555557
+5755757575555575
+5575775775555755
+5577575755557555
+5557557775575555
+5575757757755555
+5575577757755555
+5755557775575555
+5755557755557555
+7555557575557555
+5555577577755755
+5555757575575575
+5557557557557557
+5575575557555755
+5755575555755575
+7555575555755557`],
+    [pushableBlock, bitmap`
+LLLLLLLLLLLLLLLL
+L00000000000000L
+L02222222222220L
+L02333333333320L
+L02349999994320L
+L0238499994D320L
+L023884994DD320L
+L02388844DDD320L
+L02388844DDD320L
+L023884FF4DD320L
+L02384FFFF4D320L
+L0234FFFFFF4320L
+L02333333333320L
+L02222222222220L
+L00000000000000L
+LLLLLLLLLLLLLLLL`],
+    [blockActivator, bitmap`
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+..LLLLLLLLLLLL..
+..LLLLLLLLLLLL..
+8888888888888888
+8844444444444448`],
+    [blocked_door_pushable, bitmap`
+7HHHCC88CHHHHHH7
+87HHC8C8CHHHHH7H
+88CHCC8CCHHHH7HH
+88CC8C8CHHHH7HHH
+888C88CCCHH7HHHH
+887378CC0CCHHHHH
+88733CCC0CCHHHHH
+873333CCC997HHHH
+873333CC99997HHH
+733333CH79997HHH
+33333CCH777997HH
+33337HCH7HH7997H
+3337HHCHH7HH7997
+337HH7HHH7HHH799
+37HHH7HHHH7HHH79
+7HHHH7HHHH7HHHH7`],
   )
   
   let level = 0
@@ -481,8 +535,8 @@ wwwwwwwww..w.w.w.w......wwww
 py...ll....yyyyyyyyy....wwww
 wwww.wwwwwwwwwwwwwww....wwww
 qll..yy.............ws......
-wwwwwwwwww.w.w.w.w...w......
-wwwwwwwwwwlllllllll.......ed
+wwwwwwwwwwww.ww.ww...w......
+wwwwwwwwwwllllllll........ed
 wwwwwwwwwwwwwwwwwwwwwwwwwwww`,  // Level 3
       map`
 .......................
@@ -506,7 +560,7 @@ wwfwwwwwwwww`,
       map`
 .....de.......
 ...wwwwwww....
-wwj..ttt..wwjw
+wwj...t...wwjw
 www.......jjjw
 www.gp.qg.wwww
 wwwwwwwwwwwwww`,
@@ -517,7 +571,7 @@ ffh......w.
 www......w.
 ......wwww.
 p...gggwde.
-wwwwfjwwwww
+wwwfwjwwwww
 q.........w
 wwwwwwwwwww`,
       map`
@@ -527,7 +581,7 @@ g.gg....wwwww.........ggg
 wjwws...w...f...sw....wjw
 w..wwwwwwwwjwwwwww..ww..w
 .w.f.w..f...w..w.w.w.w.ww
-..ww..f.w...j.w..ww..ww.w
+..ww..f.wp.qj.w..ww..ww.w
 ...wwwwwwwwwwwwwwwwwwwwww`,
       map`
 wwwwwwwwwwwwwwwww
@@ -552,20 +606,35 @@ ww......w....
 .a.q..p.cbgd.
 .wwwwwwwwwwww`,
       map`
+.......................
+...................w...
+...........gg..ggggw...
+...w..wwwwwwwwhwwwww...
+...f..w...........ww...
+...f..w.........b.c....
+...f..wwfwwwwwwwwwww..w
+...f...w..........o..w.
+...f...w......n.i.www..
+...f...w.....wwwwww....
+...w...w.p.qwwwwwww....
+...w...wgwgwwwffwww....
+...wyy..............de.
+ssswwwwwwwwwwwwwwwwwwww`,
+      map`
 ..w......
 ..w......
 b.c.a....
 wwwww...w
 .......ww
 qp...wwww
-wwwwwwwww`,
+wwwwwwwww`, //Sandbox Map
   ]
   setBackground(background)
   setMap(levels[level])
-  setSolids([character,wall, character2,blocked_door, fakeBlockedWall])
+  setSolids([character,wall, character2,blocked_door, fakeBlockedWall,pushableBlock])
   setPushables({
-    [ character ]: [],
-    [character2]:[],
+    [ character ]: [pushableBlock],
+    [character2]:[pushableBlock],
   })
   
   
@@ -671,7 +740,18 @@ wwwwwwwww`,
     //   getFirst(character2).remove()
     //   text('Player w died!\nRestarting level in \n3 seconds.',0,6,color`2`)
     //   setTimeout(() => {setMap(levels[level]);    clearText()}, 3000)
-    // }
+    // }d
+  })
+  // Check with blockActivator and pushableBlock for activation, leading to a door being opened.
+  afterInput(() => {
+    if (tilesWith(pushableBlock,blockActivator).length == 1) {
+      try {
+        getFirst(blocked_door_pushable).remove()
+      }
+      catch (exceptionVar) {
+        console.log("Something happened or door was removed.")
+      }
+    }
   })
 }
 catch (exceptionVar) {
