@@ -52,6 +52,8 @@ const space = "S";
 const wall = "K";
 
 const usedNumbers = [];
+let levelFlag = false;
+let marks = 0;
 
 const tMove = tune`
 151.5151515151515: D5^151.5151515151515 + A5^151.5151515151515,
@@ -1387,32 +1389,45 @@ onInput("j", () => {
     const currentLevel = levels[level];
     clearText("");
     setMap(levels[level]);
+    addText("score:" + marks + "/36", { y: 1, x: 1, color: color`2` });
   }
   
 });
 
 
 onInput("i", () => {
-  const targetNumber = tilesWith(goal(level)).length;
-  const numberCovered = tilesWith(goal(level), player).length;
-  if (numberCovered === targetNumber) {
-    level = randLevel();
-    const currentLevel = levels[level];
-  if (level !== 100 || level === 0) {
-    clearText("");
-    setMap(levels[level]);
-    playTune(tNextLevel);
+  if (level !== 0) {
+    const targetNumber = tilesWith(goal(level)).length;
+    const numberCovered = tilesWith(goal(level), player).length;
+    if (numberCovered === targetNumber) {
+      level = randLevel();
+    if (level !== 100) {
+      //const currentLevel = levels[level];
+      clearText("");
+      setMap(levels[level]);
+      if (marks < 36) {
+        marks += 1;
+      }
+      addText("score:" + marks + "/36", { y: 1, x: 1, color: color`2` });
+      playTune(tNextLevel);
+    } else {
+      if (marks < 36) {
+        marks += 1;
+      }
+      clearText("");
+      addText("score:" + marks + "/36", { y: 1, x: 1, color: color`2` });
+      addText("you won!", { y: 3, color: color`4` });
+      addText("Morse Master!", { y: 12, color: color`4` });
+      playTune(tWin);
+    }
   } else {
-    addText("you win!", { y: 3, color: color`4` });
-    addText("Morse Master!", { y: 12, color: color`4` });
-    playTune(tWin);
+      addText("try again champ!", { y: 3, color: color`3` });
+      playTune(tTryAgain);
   }
-} else {
-    addText("try again champ!", { y: 3, color: color`3` });
-    playTune(tTryAgain);
+    
+  }
 }
-  
-});
+  );
 
 
 // these get run after every input
@@ -1533,20 +1548,27 @@ function goal(lev) {
 }
 
 function randLevel() {
-  const min = 1;
-  const max = 36;
-
-  let randomNum;
-  do {
-    randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
-  } while (usedNumbers.includes(randomNum));
-
-  usedNumbers.push(randomNum);
-
-  if (usedNumbers.length === max) {
-    return 100;
-  }
-
-  //level = randomNum;
-  return randomNum;
+    if (!levelFlag) {
+      const min = 1;
+      const max = 36;
+    
+      let randomNum;
+      do {
+        randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+      } while (usedNumbers.includes(randomNum));
+    
+      usedNumbers.push(randomNum);
+    
+      if (usedNumbers.length !== 36) {
+          return randomNum;
+      } else {
+          levelFlag = true;
+          return randomNum;
+          
+      }
+    
+      //level = randomNum;
+    } else {
+        return 100;
+    }
 }
