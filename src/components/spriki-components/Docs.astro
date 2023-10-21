@@ -1,0 +1,26 @@
+---
+const { name, description, links } = Astro.props;
+---
+<style> 
+    .docs {
+        background-color: #078969;
+        padding: 10px;
+        margin: 20px;
+        width: 150px;
+        height: 180px;
+        top: 5rem;
+        left: 50px;
+        color: #ffffff;
+    }
+
+    p {
+        color: #8BCAB1;
+    }
+</style>
+
+<a href={`../${links}/`}>
+    <button class="docs">
+        <h2>{name}</h2>
+        <p>{description}</p>
+    </button>
+</a>

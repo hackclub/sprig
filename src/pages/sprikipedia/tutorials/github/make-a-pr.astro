@@ -1,0 +1,15 @@
+---
+import '../../../../global.css'
+import Docs from '../../../../layouts/docs.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+
+<Docs dspriki={data["tutorials.categories.dspriki.github.pr"]} dtitle={data["tutorials.categories.dtitle.github.pr"]} dauthor={data["tutorials.categories.dauthor.github.pr"]} >
+
+</Docs>

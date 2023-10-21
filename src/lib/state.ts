@@ -67,12 +67,17 @@ export type PersistenceState = ({
 } | {
 	kind: 'PERSISTED'
 	cloudSaveState: 'SAVED' | 'SAVING' | 'ERROR'
-	game: 'LOADING' | Game
+	game: 'LOADING' | Game,
+	tutorial?: string[] | undefined,
+	tutorialIndex?: number | undefined
 } | {
 	kind: 'SHARED'
 	name: string
 	authorName: string
-	code: string
+	code: string,
+	tutorial?: string[] | undefined
+	tutorialName?: string | undefined
+	tutorialIndex?: number | undefined
 }) & {
 	session: SessionInfo | null
 	stale: boolean
