@@ -655,7 +655,7 @@ ssss..ss..s.ssss
 sss...s..s..ssss
 sss.sss.ss.sssss
 sss.s......s...s
-sss.....ssss.s.s
+sss..s..ssss.s.s
 sss..s...sss.s.s
 sgss...s..ss.s.s
 s.sssssss..s.s.s
@@ -744,6 +744,7 @@ function showGame() {
 }
 
 function showScore() {
+  inGame = false;
   clearText();
   setMap(emptyScreen);
   addText(String(player1score), { x: 7, y: 8, color: color`7` });
@@ -754,16 +755,19 @@ function showScore() {
     addText("Press A", { x: 6, y: 10, color: color`2` });
     addText("to Play", { x: 6, y: 11, color: color`2` });
     addText("Again", { x: 7, y: 12, color: color`2` });
+    inScore = true;
   } else if (player2score == 3) {
     addText("Green Wins!", { x: 5, y: 4, color: color`4` });
     addText("Press A", { x: 6, y: 10, color: color`2` });
     addText("to Play", { x: 6, y: 11, color: color`2` });
     addText("Again", { x: 7, y: 12, color: color`2` });
+    inScore = true;
   } else if (player1score == 0 && player2score == 0) {
-    addText("New Game", { x: 6, y: 4, color: color`2` })
+    addText("New Game", { x: 6, y: 4, color: color`2` });
     setTimeout(showGame, 3000);
+    inScore = false;
   } else {
-    addText("SCORE", { x: 7, y: 4, color: color`2` })
+    addText("SCORE", { x: 7, y: 4, color: color`2` });
     setTimeout(showGame, 3000);
   }
 }
@@ -873,15 +877,14 @@ onInput("i", () => {
 onInput("k", () => {
   if (inGame) {
     movePlayer("player2");
-    
   }
 });
 
 onInput("a", () => {
-  if (!inGame) {
-    player1score = 0
-    player2score = 0
-    showScore()
+  if (inScore) {
+    player1score = 0;
+    player2score = 0;
+    showScore();
   }
 });
 
@@ -928,6 +931,7 @@ afterInput(() => {
       eval("player1" + player1direction + playerSizes),
     )) {
       player1score += 1;
+      inGame = false;
       setTimeout(showScore, 1000);
     }
     for (const occupiedByPlayer2 of tilesWith(
@@ -935,7 +939,7 @@ afterInput(() => {
       eval("player2" + player2direction + playerSizes),
     )) {
       player2score += 1;
-      inGame = false
+      inGame = false;
       setTimeout(showScore, 500);
     }
   }
@@ -946,8 +950,10 @@ addText("ZAP!", { x: 8, y: 4, color: color`6` });
 addText("Press A", { x: 6, y: 9, color: color`2` });
 addText("to Play", { x: 6, y: 10, color: color`2` });
 let inGame = false;
+let inScore = true;
 
-playTune(tune`
+playTune(
+  tune`
 202.7027027027027: D4~202.7027027027027 + D5~202.7027027027027,
 202.7027027027027: D4~202.7027027027027 + A4~202.7027027027027,
 202.7027027027027: D4~202.7027027027027 + D5~202.7027027027027,
@@ -979,4 +985,6 @@ playTune(tune`
 202.7027027027027: C5^202.7027027027027 + D4^202.7027027027027,
 202.7027027027027: D4^202.7027027027027 + G4^202.7027027027027,
 202.7027027027027: C5^202.7027027027027 + D4^202.7027027027027,
-202.7027027027027: D4^202.7027027027027 + G4^202.7027027027027`, Infinity)
+202.7027027027027: D4^202.7027027027027 + G4^202.7027027027027`,
+  Infinity,
+);
