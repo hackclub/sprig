@@ -8,6 +8,7 @@ body { overflow: auto; }
 	--font-code: 'Fira Mono', monospace;
 	
 	--bg-base: #fafed7;
+	--bg-dark: #2f2f2f;
 	--bg-overlay: #000000cf;
 	--bg-drawing-hover: #9b9b9b52;
 	--bg-floating: #191919;
@@ -38,7 +39,7 @@ body {
 
 @media (prefers-color-scheme: dark) {
 	body {
-		background: #2f2f2f; 
+		background: var(--bg-dark); 
 	}
 	.copy-container {
 		color: white;

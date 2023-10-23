@@ -33,17 +33,13 @@ games
 	<head>
 		<StandardHead title="Gallery" />
 
-		{
-			session.isDark ? (
-				<style>{`
-					body {
-						color: white;
-					}
-			`}</style>
-			) : (
-				""
-			)
-		}
+		<script>
+			if (localStorage.getItem("isDark") === "true") {
+				document.body.style.backgroundColor = "#2f2f2f";
+				document.body.style.color = "white";
+			}
+		</script>
+		
 		<style>
 			body {
 				overflow-y: scroll;
