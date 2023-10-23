@@ -5,6 +5,7 @@ import { compiledContent } from '../../../docs/docs.md'
 import { codeMirror, PersistenceState } from '../../lib/state'
 import Button from '../design-system/button'
 import { saveGame } from '../big-interactive-pages/editor'
+import { isDark } from '../../lib/state'
 
 interface HelpProps {
 	initialVisible?: boolean
@@ -58,7 +59,10 @@ export default function Help(props: HelpProps) {
 	}
 
 	return (
-		<div class={styles.container}>
+		<div class={styles.container} style={isDark ? 
+		{ backgroundColor: "#2f2f2f", color: "white" } : 
+		{ } 
+		}>
 			<div class={styles.tabs}>
 				{tutorialHtml && visible.value && (
 					<div role='button' className={`${styles.tab} ${showingTutorial.value ? styles.selected : ''}`} onClick={() => showingTutorial.value = true}>

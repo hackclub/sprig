@@ -17,7 +17,6 @@ import MigrateToast from '../popups-etc/migrate-toast'
 import { highlightError, clearErrorHighlight } from '../../lib/engine/error'
 import { nanoid } from 'nanoid'
 import TutorialWarningModal from '../popups-etc/tutorial-warning'
-import { isDark } from '../../lib/state'
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>

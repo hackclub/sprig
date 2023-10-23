@@ -1,5 +1,5 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
-import { codeMirror, PersistenceState, isDark } from '../lib/state'
+import { codeMirror, PersistenceState, isDark, toggleTheme } from '../lib/state'
 import Button from './design-system/button'
 import SavePrompt from './popups-etc/save-prompt'
 import styles from './navbar.module.css'
@@ -141,7 +141,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			</li>
 
 			<li>
-				<Button onClick={() => { isDark.value = !isDark.value }}>
+				<Button onClick={() => toggleTheme(isDark)}>
 					{ isDark.value ? "Light" : "Dark" }
 				</Button>
 			</li>
