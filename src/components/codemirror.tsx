@@ -18,12 +18,6 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	const parent = useRef<HTMLDivElement>(null)
 	const [editorRef, setEditorRef] = useState<EditorView>();
 
-	// set dark mode on render
-	// useEffect(() => { if (window.matchMedia("(prefers-color-scheme: dark)").matches) isDark.value = true }, []);
-	useEffect(() => {
-		isDark.value = localStorage.getItem("isDark") === "true";
-	}, []);
-
 	// Alert the parent to code changes (not reactive)
 	const onCodeChangeRef = useRef(props.onCodeChange)
 	useEffect(() => { onCodeChangeRef.current = props.onCodeChange }, [props.onCodeChange])
