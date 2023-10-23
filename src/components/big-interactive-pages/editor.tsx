@@ -17,6 +17,7 @@ import MigrateToast from '../popups-etc/migrate-toast'
 import { highlightError, clearErrorHighlight } from '../../lib/engine/error'
 import { nanoid } from 'nanoid'
 import TutorialWarningModal from '../popups-etc/tutorial-warning'
+import { isDark } from '../../lib/state'
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>
@@ -223,7 +224,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		<div class={styles.page}>
 			<Navbar persistenceState={persistenceState} />
 
-			<div class={styles.pageMain}>
+			<div class={styles.pageMain} style={{ backgroundColor: isDark.value ? "#2f2f2f" : "#fafed7"}}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
 						class={styles.code}

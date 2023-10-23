@@ -59,7 +59,7 @@ export default function Help(props: HelpProps) {
 	}
 
 	return (
-		<div class={styles.container} style={isDark ? 
+		<div class={styles.container} style={isDark.value ? 
 		{ backgroundColor: "#2f2f2f", color: "white" } : 
 		{ } 
 		}>
