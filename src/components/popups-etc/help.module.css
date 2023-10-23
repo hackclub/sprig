@@ -180,3 +180,12 @@
 	margin: 0 5px 0 5px;
 	color: black;
 }
+
+@media (prefers-color-scheme: dark) {
+	.content {
+		background-color: #2f2f2f;
+	}
+	.content p {
+		color: white;
+	}
+}

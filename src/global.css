@@ -40,6 +40,9 @@ body {
 	body {
 		background: #2f2f2f; 
 	}
+	.copy-container {
+		color: white;
+	}
 }
 
 a {
