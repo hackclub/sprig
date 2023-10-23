@@ -37,15 +37,6 @@ body {
 	position: relative;
 }
 
-@media (prefers-color-scheme: dark) {
-	body {
-		background: var(--bg-dark); 
-	}
-	.copy-container {
-		color: white;
-	}
-}
-
 a {
 	color: var(--accent);
 	text-decoration: none;
