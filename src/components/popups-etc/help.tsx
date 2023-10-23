@@ -5,6 +5,8 @@ import { compiledContent } from '../../../docs/docs.md'
 import { codeMirror, PersistenceState } from '../../lib/state'
 import Button from '../design-system/button'
 import { saveGame } from '../big-interactive-pages/editor'
+import { useEffect } from 'preact/hooks'
+import { isDark } from '../../lib/state'
 
 interface HelpProps {
 	initialVisible?: boolean
@@ -17,6 +19,9 @@ const helpHtml = compiledContent()
 export default function Help(props: HelpProps) {
 	const visible = useSignal(props.tutorialContent ? true : (props.initialVisible ?? false))
 	const showingTutorial = useSignal(props.tutorialContent !== undefined)
+
+	useEffect(() => {
+	}, [isDark]);
 
 	const tutorialHtml = props.tutorialContent 
 		&& (props.persistenceState?.value.kind == 'PERSISTED' || props.persistenceState?.value.kind == 'SHARED')
@@ -56,9 +61,9 @@ export default function Help(props: HelpProps) {
 			props.persistenceState.value.tutorialIndex || 0
 		setTutorialIndex(tutorialIndex - 1)
 	}
-
 	return (
-		<div class={styles.container}>
+		<div class={styles.container} >
+			
 			<div class={styles.tabs}>
 				{tutorialHtml && visible.value && (
 					<div role='button' className={`${styles.tab} ${showingTutorial.value ? styles.selected : ''}`} onClick={() => showingTutorial.value = true}>
@@ -117,7 +122,7 @@ export default function Help(props: HelpProps) {
 				</div>
 			)}
 			{visible.value && !showingTutorial.value && (
-				<div class={styles.content} dangerouslySetInnerHTML={{ __html: helpHtml }} />
+				<div class={isDark.value ? styles.content_dark : styles.content} dangerouslySetInnerHTML={{ __html: helpHtml }} />
 			)}
 		</div>
 	)
