@@ -141,7 +141,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			</li>
 
 			<li>
-				<Button onClick={() => toggleTheme(isDark)}>
+				<Button onClick={toggleTheme}>
 					{ isDark.value ? "Light" : "Dark" }
 				</Button>
 			</li>

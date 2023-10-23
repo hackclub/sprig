@@ -89,8 +89,8 @@ export const errorLog = signal<NormalizedError[]>([])
 export const openEditor = signal<OpenEditor | null>(null)
 export const bitmaps = signal<[string, string][]>([])
 export const isDark = signal<boolean>(localStorage.getItem("isDark") == "true");
-export const toggleTheme = (isDarkRef: Signal<boolean>) => {
-	isDarkRef.value = !isDarkRef.value;
-	console.log(isDarkRef.value);
-	localStorage.setItem("isDark", isDarkRef.value.toString());
+export const toggleTheme = () => {
+	isDark.value = !isDark.value;
+	console.log(isDark.value);
+	localStorage.setItem("isDark", isDark.value.toString());
 } 
