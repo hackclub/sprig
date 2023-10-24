@@ -490,7 +490,7 @@ function move(){
     let dy = py + 1
     addSprite(dx, py, detectionL)
     addSprite(dx, dy, detectionDL)
-    if(tilesWith(detectionL, wall).length == 1 || tilesWith(detectionDL, wall).length == 0 && tilesWith(detectionDL, platformON).length == 0 && tilesWith(spring, detectionDL).length == 0 && tilesWith(detectionL, lift).length == 0 && tilesWith(platform, detectionDL).length == 0 && tilesWith(lBelt, detectionDR).length == 0){
+    if(tilesWith(detectionL, wall).length == 1 || tilesWith(detectionDL, wall).length == 0 && tilesWith(detectionDL, platformON).length == 0 && tilesWith(spring, detectionDL).length == 0 && tilesWith(detectionL, lift).length == 0 && tilesWith(platform, detectionDL).length == 0 && tilesWith(lBelt, detectionDL).length == 0){
       getAll(playerL)[i].remove()
       getAll(detectionL)[i].remove()
       getAll(detectionDL)[i].remove()
