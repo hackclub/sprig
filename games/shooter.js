@@ -645,6 +645,14 @@ onInput("l", () => {
   moveTurn = false;
 });
 
+onInput("i", () => {
+  moveTurn = false;
+});
+
+onInput("j", () => {
+  moveTurn = false;
+});
+
 let interval = setInterval(() => {
   let enemies = getAll(enemy[0]).concat(getAll(enemy[1])).concat(getAll(enemy[2])).concat(getAll(enemy[3]));
   let players = getAll(player[0]).concat(getAll(player[1])).concat(getAll(player[2])).concat(getAll(player[3]));
