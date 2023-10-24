@@ -60,11 +60,9 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		props.onEditorView?.(editor)
 	}, [])
 
-	setEditorTheme();
-
 	useEffect(() => {
 		setEditorTheme();
-	}, [isDark]);
+	}, [isDark.value]);
 
 
 	return (
