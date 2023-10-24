@@ -3,33 +3,51 @@
 @author: jakjakob
 
 version:
-1.0.1
+1.1.0
+*/
+const ver = "1.1.0";
+/*
+last edited/updated (DD/MM/YYYY):
+29.09.2023
 
 changelog:
+1.1.0
+Practice mode (not time limit and no restart if enemy touched)
+Complete menu redesign:
+  - main menu has a button interface, with various options
+  - main menu shows highscore
+  - tutorial rewritten
+  - pages are controlled by key input
+  - shows version number
+
+Highscore counter 
+New finish screen with highscore, score and option to go to main menu
+Go on menu instead button on restarts
+Failing tutorial brings you back to main menu
+2 slight level updates (mazes)
+
 1.0.1
 more time (6 min instead of 5 min)
 
 1.0.0
 game release
-
-last edited/updated:
-16.09.2023
-
-*/
-
-/*
-TO DO LIST
-1.1.0:
-highscore system
-practice mode (no time limit)
 */
 
 const player = "p";
 const wall = "w";
 const enemy ="e";
 const bullet ="b";
-const txt ="t";
-
+//b for box for main menu (mmain)
+const bstraight ="s";
+const bleft = "l";
+const bright = "r";
+const bcenter = "c";
+//s for selection for main menu //random letters
+const sstraight ="o";
+const sleft = "j";
+const sright = "k";
+const scenterleft = "m";
+const scenterright = "n";
 
 
 setLegend(
@@ -101,25 +119,159 @@ setLegend(
 ................
 ................
 ................`],
-  [txt, bitmap `
+  [bstraight, bitmap `
 3333333333333333
-3000000000000003
-3020000020000003
-3020000020000003
-3002020200000003
-3000202000000003
-3000000000000003
-3000000000000003
-3000000000000003
-3000200000010003
-3000000000000003
-3010001001000103
-3000000000000003
-3000100000010003
-3000000000000003
-3333333333333333`],
-
-
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+3333333333333333
+................
+................`],
+  [bleft, bitmap `
+.333333333333333
+.3..............
+.3..............
+.3..............
+.3..............
+.3..............
+.3..............
+.3..............
+.3..............
+.3..............
+.3..............
+.3..............
+.3..............
+.333333333333333
+................
+................`],
+  [bright, bitmap `
+333333333333333.
+..............3.
+..............3.
+..............3.
+..............3.
+..............3.
+..............3.
+..............3.
+..............3.
+..............3.
+..............3.
+..............3.
+..............3.
+333333333333333.
+................
+................`],
+  [bcenter, bitmap `
+3333333..3333333
+......3..3......
+......3..3......
+......3..3......
+......3..3......
+......3..3......
+......3..3......
+......3..3......
+......3..3......
+......3..3......
+......3..3......
+......3..3......
+......3..3......
+3333333..3333333
+................
+................`],
+  [sstraight, bitmap `
+5555555555555555
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+5555555555555555
+................
+................`],
+  [sleft, bitmap `
+.555555555555555
+.577777777777777
+.577777777777777
+.577777777777777
+.577777777777777
+.577777777777777
+.577777777777777
+.577777777777777
+.577777777777777
+.577777777777777
+.577777777777777
+.577777777777777
+.577777777777777
+.555555555555555
+................
+................`],
+  [sright, bitmap `
+555555555555555.
+777777777777775.
+777777777777775.
+777777777777775.
+777777777777775.
+777777777777775.
+777777777777775.
+777777777777775.
+777777777777775.
+777777777777775.
+777777777777775.
+777777777777775.
+777777777777775.
+555555555555555.
+................
+................`],
+  [scenterleft, bitmap `
+5555555..3333333
+7777775..3......
+7777775..3......
+7777775..3......
+7777775..3......
+7777775..3......
+7777775..3......
+7777775..3......
+7777775..3......
+7777775..3......
+7777775..3......
+7777775..3......
+7777775..3......
+5555555..3333333
+................
+................`],
+  [scenterright, bitmap `
+3333333..5555555
+......3..5777777
+......3..5777777
+......3..5777777
+......3..5777777
+......3..5777777
+......3..5777777
+......3..5777777
+......3..5777777
+......3..5777777
+......3..5777777
+......3..5777777
+......3..5777777
+3333333..5555555
+................
+................`],
 )
 
 setSolids([ player, wall, bullet ])
@@ -128,7 +280,7 @@ let level = 0
 const levels = [
   map `
 ....e
-..t..
+.....
 .....
 p....`,   //this always first level
   map `
@@ -345,7 +497,7 @@ wwwww.w.w....w..w.w.wwww.w.
 ..........w..w....w......w.
 .........w...w....w........`,
   map `
-wwwwwwwwwewwwww
+wwwwwwwwwpwwwww
 w.w.w...w.....w
 w.w.w.w.w.www.w
 w.w...w...w...w
@@ -359,7 +511,7 @@ w.w.w.www.wwwww
 w.w.w.w...w...w
 w.w.w.w.www.w.w
 w...w.......w.w
-wwwwwwwwwwwwwpw`,   // inspired by https://www.pinclipart.com/maxpin/ohRwhm/
+wwwwwwwwwwwwwew`,   //inspired by https://www.pinclipart.com/maxpin/ohRwhm/
   map `
 pe`,
   map `
@@ -387,7 +539,7 @@ p.........w..............w.
 ...w...w..w.www.w..w.www...
 ....................w....we`,
   map `
-wewwwwwwwwwwwwwwwwwwwwwwwwww
+wpwwwwwwwwwwwwwwwwwwwwwwwwww
 w................w...w.....w
 w.wwwwww.www.www.w.w.w.www.w
 w.w...w..w.....w.w.w.w...w.w
@@ -406,7 +558,7 @@ w.wwwwwwwwwwwwww.wwwwwww.www
 w.w........w.....w.......w.w
 w.w.wwwwwwwwwwww.w.wwwwwww.w
 w................w.........w
-wwwwwwwwwwwwwwwwwwwwwwwwwwpw`,   //inspire by https://www.brik.co/blogs/designs/maze-normal
+wwwwwwwwwwwwwwwwwwwwwwwwwwew`,   //inspired by https://www.brik.co/blogs/designs/maze-normal
   map `
 ..........................
 .w..w..w.w...w...www.wwww.
@@ -417,20 +569,50 @@ eww....w.w...w...ww..www..
 ..........................`,   //this should always be the last level
 ]
 
-setMap(levels[level])
+//setMap(levels[level]) //commented out becasue now we have menu; left just in case
 
 let fired = 0;
-let wait = 1; //to avoid unwanted input, 1 to only w input happen on start
-let frstart =1; //to start welcome sequence
-let timeleft = -42; //time to complete all levels. It doesn't matter which vaslue it has. For error detecting/debugging it is set to -42
+let wait = 0; //to avoid unwanted input, it gets on 1 when menu is called ((almost) instantly)
+let timeleft = -42; //time to complete all levels. For error detecting/debugging it is set to -42 (timer not staretd, NOT intentional). Only place where it is set to -42. 
+let highscore = undefined; 
+let menuon = 0; //1 if menu present (for key inputs)
+let practiceon = 0; //if 1 it ignores timer and highscore
+let timeron = 0; //1 wehen started, to avoid unintentional/multiple executions
+let daborton = 0; //for key input to go back to mmain at given point (restart, end of game, on controls tabi)
+let drestartid = undefined; //for restart after dead
+let drtimer = - 42; //timer for dead function, code same as timeleft
+let timerengineid = undefined;
+let endscreenid = undefined; //id to stop endscreen animation
+let currscore = undefined; //current score of game
+let endscreenidtwo = undefined;//stop endscreen animation second part
 
-setPushables({
-  [player]: []
-});
+const drtdefault = 5; //time in seconds how long timer to restart after restart call (called after 5s, so value + 5 = effective time); this time defines also countdown and the time to get back to menu
+const gameduration = 360; //time in seconds how long the max time is. Also impacts score system. 
+const endscreentime = 2000; //time in ms how long it should switch between 2 screens at end
 
+function mvarreset () { //resets all variables to default when menu called
+  fired = 0;
+  wait = 1;
+  if (timeron){//avoid putting on -69 if not running. Stops it when called. 
+    timeleft = -69
+  }
+  menuon = 1;
+  practiceon = 0;
+  level = 0;
+  daborton = 0; 
+}
+
+//timer engine
 function timerreset(){ //as a function, to easily change max. duration
-  timeleft = 360; //this defines the max. game duration
-  clearText();
+  if (practiceon !== 1){//only if practice isn't used, should be useless
+    timeleft = gameduration; 
+    clearText();
+  }
+}
+
+function timerstop(){
+  clearInterval(timerengineid);
+  timeleft = -42;
 }
 
 function timerengine(){
@@ -451,51 +633,181 @@ function timerengine(){
   }
 }
 
-function timer(){   //starts timer clock with code -69 (not counting)
-  setInterval (timerengine, 1000);
-  timeleft = -69;
+function timer(){   //starts timer clock with code -69 (not counting), if not started yet
+  if (timeron !== 1 || practiceon !== 1){//check that both are 0; should be both useless
+    timeron = 1;
+    timerengineid = setInterval (timerengine, 1000);
+    timeleft = -69;
+  }
+}
+
+let menu = 0;
+const menus = [
+  map `
+.....
+.....
+jomsr
+lscsr`,//main menu, selected upper left
+  map `
+.....
+.....
+lscsr
+jomsr`,//main menu, selected bottom left
+  map `
+.....
+.....
+lsnok
+lscsr`,//main menu, selected upper right
+  map `
+.....
+.....
+lscsr
+lsnok`,//main menu, selected bottom right
+  map `
+.....
+.....
+.....
+.....`, //instructions (blank); 2 blank for input control
+  map `
+.....
+.....
+.....
+.....`, //controls (blank)
+]
+
+function mmain (){
+  clearText(); //clears remainig text from before
+  stopdrestart(); //stops ev. runnning restart timer
+  timerstop(); //stops timerengine; avoids multiple calls
+  endstop();
+  menu = 0;
+  setMap (menus[menu]);
+  mvarreset (); //resets all variables to menustatus
+  addText("Welcome to", { y: 1, color: color`0` });
+  addText("killer_training", { y: 2, color: color`0` });
+  addText("Ver.: "+ver, { x: 1, y: 4, color: color`1` });
+  if (highscore !== undefined){
+    addText("Highscore: "+highscore, { x:1, y: 6, color: color`H` });
+  }
+  addText("Play", { x:3, y: 10, color: color`3` });
+  addText("Practice", { x:1, y: 14, color: color`3` });
+  addText("Tutorial", { x:11, y: 10, color: color`3` });
+  addText("Controls", { x:11, y: 14, color: color`3` });
+}
+
+function mtutorial (){
+  menu = 4;
+  setMap (menus[menu]);
+  clearText ();
+  addText("Tutorial", { y: 1, color: color`5` });
+  addText("Go to the enemy and", { x:1, y: 3, color: color`0` });
+  addText("shoot him, 1 ammo", { x:1, y: 4, color: color`0` });
+  addText("Gun range is 2", { x:1, y: 5, color: color`0` });
+  addText("You loose 5s if you", { x:1, y: 6, color: color`0` });
+  addText("get out off ammo", { x:1, y: 7, color: color`0` });
+  addText("You restart if", { x:1, y: 8, color: color`0` });
+  addText("you touch enemy", { x:1, y: 9, color: color`0` });
+  addText("You have 6 min to", { x:1, y: 10, color: color`0` });
+  addText("complete 31 levels", { x:1, y: 11, color: color`0` });
+  addText("After demo-lvl the", { x:1, y: 12, color: color`0` });
+  addText("time starts!", { x:1, y: 13, color: color`0` });
+  addText("controls (j) (   <)", { x:1, y: 15, color: color`3` });
+}
+
+function mcontrols (){
+  menu = 5;
+  setMap (menus[menu]);
+  clearText ();
+  daborton = 1;
+  addText("Controls", { y: 1, color: color`5` });
+  addText("WASD (left d-pad)", { x:1, y: 3, color: color`0` });
+  addText("to move", { x:1, y: 4, color: color`0` });
+  addText("IJKL (right d-pad)", { x:1, y: 6, color: color`0` });
+  addText("to shoot", { x:1, y: 7, color: color`0` });
+  addText("MENU", { x:1, y: 9, color: color`1` });
+  addText("WASD (left d-pad)", { x:1, y: 10, color: color`1` });
+  addText("to navigate", { x:1, y: 11, color: color`1` });
+  addText("J (<, right d-pad)", { x:1, y: 12, color: color`1` });
+  addText("to select", { x:1, y: 13, color: color`1` });
+  addText("menu (j) (   <)", { x:1, y: 15, color: color`3` });
 }
   
-function clrsecpage (){//it also starts the timer 
-  clearText();
-  wait=0; //to let play
-  timer ();
+
+function mmsconfirm (){
+  if (menu === 0){
+    timer ();
+    wait = 0;
+    level = 0;
+    menuon = 0;
+    clearText ();
+    setMap (levels [level]);
+  } else {
+    if (menu === 1){
+      practiceon = 1;
+      wait = 0;
+      level = 0;
+      menuon = 0;
+      clearText ();
+      setMap (levels [level]);
+    } else {
+      if (menu === 2){
+        mtutorial();
+    } else {
+        if (menu === 3 || menu === 4){
+          mcontrols ();
+        }
+      }
+    }
+  }
 }
 
-function secondpage (){ //secondpage of instructions
-  clearText();
-  addText("You have 6 min", { y: 2, color: color`0` });
-  addText("to complete all", { y: 3, color: color`0` });
-  addText("31 levels. ", { y: 4, color: color`0` });
-  addText("You loose 5s if", { y: 6, color: color`0` });
-  addText("you get out off ammo", { y: 7, color: color`0` });
-  addText("and you restart", { y: 8, color: color`0` });
-  addText("if you touch enemy", { y: 9, color: color`0` });
-  addText("After demo-lvl the", { y: 11, color: color`0` });
-  addText("time starts!", { y: 12, color: color`0` });
-  addText("Good luck!", { y: 14, color: color`3` });
-  setTimeout (clrsecpage, 10000);
-
+function mmainselect (mmsinput){
+  if (menu === 0){
+    if (mmsinput === "s"){
+      menu = 1;
+      setMap (menus[menu]);
+    }
+    if (mmsinput === "d"){
+    menu = 2;
+      setMap (menus[menu]);
+    }
+  }
+  if (menu === 1){
+    if (mmsinput === "w"){
+      menu = 0;      
+      setMap (menus[menu]);
+    }
+    if (mmsinput === "d"){
+    menu = 3;
+      setMap (menus[menu]);
+    }
+  }
+  if (menu === 2){
+    if (mmsinput === "s"){
+      menu = 3;
+      setMap (menus[menu]);
+    }
+    if (mmsinput === "a"){
+    menu = 0;
+      setMap (menus[menu]);
+    }
+  }
+  if (menu === 3){
+    if (mmsinput === "w"){
+      menu = 2;
+      setMap (menus[menu]);
+    }
+    if (mmsinput === "a"){
+    menu = 1;
+      setMap (menus[menu]);
+    }
+  }
 }
 
-function start (){
-  getFirst(txt).remove();
-  frstart =0;
-  addText("Welcome to", { y: 2, color: color`0` });
-  addText("killer_training!", { y: 3, color: color`0` });
-  addText("move with", { y: 5, color: color`0` });
-  addText("wasd (left d-pad)", { y: 6, color: color`0` });
-  addText("shoot with", { y: 7, color: color`0` });
-  addText("ijkl (right d-pad)", { y: 8, color: color`0` });
-  addText("firing range is 2", { y: 10, color: color`0` });
-  addText("you have one bullet", { y: 11, color: color`0` });
-  addText("(loading next page)", { y: 14, color: color`3` });
-  setTimeout (secondpage, 10000);
-}
-
+//controls
 onInput ("w", () => {
-  if (frstart){//starts start sequence
-    start ();
+  if (menuon){
+    mmainselect ("w");
   } else {
     if (wait===0){
     getFirst(player).y -=1;
@@ -504,23 +816,35 @@ onInput ("w", () => {
 });
 
 onInput("s", () => {
-  if (wait===0){
-  getFirst(player).y +=1;
+  if (menuon){
+    mmainselect ("s");
+  } else {
+    if (wait===0){
+    getFirst(player).y +=1;
+    }
   }
 });
 
 onInput("a", () => {
-  if (wait===0){
-  getFirst(player).x -=1;
+  if (menuon){
+    mmainselect ("a");
+  } else {
+    if (wait===0){
+    getFirst(player).x -=1;
+    }
   }
 });
 
 onInput("d", () => {
-  if (wait===0){
-  getFirst(player).x +=1;
+  if (menuon){
+    mmainselect ("d");
+  } else {
+    if (wait===0){
+    getFirst(player).x +=1;
+    }
   }
 });
-//now for the bullet
+//controls for bullet
 
 function spwanbullet(){   //spwans bullet on player
   addSprite(getFirst(player).x,getFirst(player).y,bullet);
@@ -564,17 +888,24 @@ onInput("k", () => {
 });
 
 onInput("j", () => {
-  if (wait===0){
-    spwanbullet();
-    getFirst(bullet).x -=1;
-    if (bullcheck()){
-      //nothing
-      } else {
+  if (daborton){
+    mmain ();    
+  } else {
+    if (menuon){
+      mmsconfirm ();
+    } else {
+      if (wait===0){
+        spwanbullet();
         getFirst(bullet).x -=1;
+        if (bullcheck()){
+          //nothing
+          } else {
+            getFirst(bullet).x -=1;
+          }
+        fired = 1;//for check if fired or not
       }
-      fired = 1;//for check if fired or not
+    }
   }
-
 });
 
 onInput("l", () => {
@@ -590,61 +921,147 @@ onInput("l", () => {
   }
 });
 
+//game 
+
+mmain(); // starts menu at beginning of game
+
+function drrestart (){ //ex dead; restarts from lvl 1
+  stopdrestart();
+  daborton = 0;
+  if (practiceon){//restarts only if not in practice
+    ammout();
+  } else {
+    clearText();
+    wait=0;
+    level=1; 
+    timerreset();
+    setMap(levels[1]);
+  }
+}
+
+function stopdrestart (){
+  clearInterval(drestartid);
+  drtimer = -42;
+  drestartid = undefined;
+}
+
+function drestart (){
+  if (drtimer === -42){
+    addText("BUG, drestart triggered wrongly", {y:13, color: color`3`});
+  } else {
+    drtimer -= 1;
+    }
+  addText(""+drtimer, {y:6, color: color`4`});
+  if (drtimer <= 0 && drtimer >= -35){//the -35 is to avoid that -42 gets catch in case of bugs
+    drrestart();
+  }
+}
+
 function dead (){   //shuld have called it smt like restart from lvl 1 (with timer restart)
+  drtimer = drtdefault + 1; //sets to default countdown for function drestart, +1 to count that it starts at 4
+  drestartid = setInterval(drestart, 1000);
+  daborton = 1;
   clearText();
-  wait=0;
-  level=1; 
-  timerreset();
-  setMap(levels[1]);
+  if (practiceon){
+    addText("Restarting lvl in", {y:4, color: color`4`});
+  } else {
+    addText("Restarting game in", {y:4, color: color`4`});
+  }
+  //+line with countdown
+  addText("abort and go to", {y:13, color: color`3`});
+  addText("menu (j) (   <)", {y:14, color: color`3`});
 }
   
 function ammout (){ //and this should be called restart current level (timer unvaried)
   clearText();
   wait=0;
   setMap(levels[level]);
-  if (level===0){
-    getFirst(txt).remove();//removes starting tile with "w" instructions
+}
+
+function endstwo(){
+  clearText(); 
+  addText("Score: " +currscore, { y: 2, color: color `2`});
+  addText("training", { y: 11, color: color`9` });
+  addText("Highscore: " +highscore, { y: 4, color: color `H`});
+  addText("go to menu", {y:13, color: color`3`});
+  addText("(j) (   <)", {y:14, color: color`3`});
+}
+
+function ends(){
+  addText("Score: " +currscore, { y: 2, color: color `2`});
+  addText("training", { y: 11, color: color`9` });
+  addText("Highscore: " +highscore, { y: 14, color: color `H`});
+}
+
+function endscreen(){
+  clearText();
+  ends();
+  if (practiceon){
+    addText("you finished", { y: 3, color: color`4` });
+    addText("practice mode!", { y: 4, color: color`4` });
+  }else{
+    addText("you won!", { y: 4, color: color`4` });
+  }
+  endscreenidtwo = setTimeout(endstwo, endscreentime);
+}
+
+function endstop(){
+  if (endscreenid!== undefined){
+    clearInterval(endscreenid);
+    clearTimeout(endscreenidtwo);//stops second part of animation
   }
 }
 
 afterInput(() => {
+  if (wait === 0){//this whole prevents multiple executions of afterInput; everytime something is executed obv. wait is set to 1 so, it should fix everything
 
-  if (tilesWith(enemy, player).length){
-    addText("trainig failed,", {y:4, color: color`4`});
-    addText("never touch enemy!", {y:6, color: color`4`});
-    addText("restarting game", {y:10, color: color`4`});
-    if (level===0){
-      addText ("tutorial aborted!", {y:8, color: color`3`});
-    }
-    wait=1;
-    setTimeout(dead,5000);       
-   }
-
-  if (fired){
-          
-    if (tilesWith(enemy, bullet).length) {
-    
-      level = level + 1;
-      const currentLevel = levels[level];
-
-      if (level === 1){
-        timerreset();
-      }
-
-      if (currentLevel !== undefined) {
-        setMap(currentLevel);
+    if (tilesWith(enemy, player).length){
+      addText("trainig failed,", {y:4, color: color`4`});
+      addText("never touch enemy!", {y:6, color: color`4`});
+      wait = 1;
+      if (level===0){
+        addText ("tutorial aborted!", {y:8, color: color`3`}); 
+        addText ("going to main menu", { y: 10, color: color `3`});
+        setTimeout(mmain, 5000);
       } else {
-        addText("you won!", { y: 4, color: color`4` });
-        addText("training", { y: 11, color: color`9` });
-        timeleft = -69; //stops timer
+          addText("restarting game", {y:10, color: color`4`});
+          setTimeout(dead,5000);
       }
-      fired=0;
-    } else {
-      addText("out of ammo,", {y:4, color: color`4`});
-      addText("restarting lvl in 5s", {y:8, color: color`4`});
-      fired=0;
-      wait=1;
-      setTimeout(ammout, 5000);
+     }
+
+    if (fired){
+
+      if (tilesWith(enemy, bullet).length) {
+    
+        level = level + 1;
+        const currentLevel = levels[level];
+
+        if (level === 1 && practiceon !==1){
+          timerreset();
+        }
+
+        if (currentLevel !== undefined) {
+          setMap(currentLevel);
+        } else {
+          wait = 1;
+          if (practiceon !== 1){
+            if (highscore <= timeleft || highscore === undefined){//sets highscore
+              highscore = timeleft;
+            }
+            currscore = timeleft;
+            timeleft = -69; //stops timer
+          }
+          daborton=1;
+          endscreenid = setInterval(endscreen, endscreentime*2); //toggle end screen switcher
+        }
+        fired=0;
+      } else {
+        addText("out of ammo,", {y:4, color: color`4`});
+        addText("restarting lvl in 5s", {y:8, color: color`4`});
+        fired=0;
+        wait=1;
+        setTimeout(ammout, 5000);
+      }
     }
   }
 }); 
