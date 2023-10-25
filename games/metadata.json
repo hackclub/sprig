@@ -3126,5 +3126,13 @@
     "img": "",
     "tags": ["sokoban-style"],
     "added on": "2023-10-23"
+  },
+  {
+    "filename": "shooter",
+    "title": "shooter",
+    "author": "Tyler Sousa",
+    "img": "",
+    "tags": ["strategy"],
+    "added on": "2023-10-24"
   }
 ]
