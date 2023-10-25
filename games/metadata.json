@@ -3118,5 +3118,21 @@
     "img": "",
     "tags": ["multiplayer"],
     "added on": "2023-10-21"
+  },
+  {
+    "filename": "Knight_Post",
+    "title": "Knight_Post",
+    "author": "Aditya PV",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "added on": "2023-10-23"
+  },
+  {
+    "filename": "shooter",
+    "title": "shooter",
+    "author": "Tyler Sousa",
+    "img": "",
+    "tags": ["strategy"],
+    "added on": "2023-10-24"
   }
 ]

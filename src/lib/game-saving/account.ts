@@ -5,6 +5,7 @@ import { getFirestore, Timestamp } from 'firebase-admin/firestore'
 import { customAlphabet } from 'nanoid/async'
 import { lazy } from '../utils/lazy'
 import { generateGameName } from '../words'
+import { isDark } from '../state'
 
 const numberid = customAlphabet('0123456789')
 
@@ -97,7 +98,7 @@ export const getSession = async (cookies: AstroCookies): Promise<SessionInfo | n
 	}
 	const user = { id: _user.id, ..._user.data() } as User
 
-	return { session, user }
+	return { session, user };
 }
 
 export const makeOrUpdateSession = async (cookies: AstroCookies, userId: string, authLevel: 'email' | 'code'): Promise<SessionInfo> => {
