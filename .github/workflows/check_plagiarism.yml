@@ -17,31 +17,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-
+          
       - name: Install dependencies
-        run: npm install glob --force
+        run: npm install
 
       - name: Trim JavaScript files
-        run: |
-          const fs = require('fs');
-          const path = require('path');
-          const glob = require('glob');
-          const patterns = [/setLegend\(`.*?`\);/gs, /map\(`.*?`\);/gs, /bitmap\(`.*?`\);/gs];
-
-          if (!fs.existsSync('temp')) { 
-            fs.mkdirSync('temp'); 
-          }
-
-          glob.sync('**/*.js', { ignore: 'node_modules/**' }).forEach(file => {
-            let content = fs.readFileSync(file, 'utf8');
-            patterns.forEach(pattern => { 
-              content = content.replace(pattern, ''); 
-            });
-            
-            const tempFilePath = `temp/trimmed_${path.basename(file)}`;
-            fs.writeFileSync(tempFilePath, content);
-          });
-        shell: node {0}
+        run: node .github/scripts/trim-js-files.js
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -55,12 +36,4 @@ jobs:
         run: git clone https://github.com/hackclub/sprig.git
 
       - name: Run compare50
-        run: |
-          import subprocess
-          import glob
-
-          trimmed_files = glob.glob('temp/*.js')  # Adjust the path if your files are located differently
-          result = subprocess.run(['compare50', *trimmed_files, 'sprig/games/'], capture_output=True, text=True)
-
-          print(result.stdout)
-        shell: python {0}
+        run: python .github/scripts/run_compare50.py
