@@ -2,7 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import glob from 'glob';
 
-const patterns = [/setLegend\(`.*?`\);/gs, /map\(`.*?`\);/gs, /bitmap\(`.*?`\);/gs];
+const patterns = [
+  /setLegend\(`.*?`\);/gs,
+  /map\(`.*?`\);/gs,
+  /bitmap\(`.*?`\);/gs,
+];
 
 if (!fs.existsSync('temp')) { 
   fs.mkdirSync('temp'); 
