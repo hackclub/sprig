@@ -8,4 +8,6 @@ const data = (
   ) || {}
 ).default;
 ---
-<Categories name={data["tutorials.categories.name"]} title={data["tutorials.categories.title"]} whats={data["tutorials.categories.whats"]} about={data["translations.categories.about"]} />
+<Categories name={data["tutorials.categories.name"]} title={data["tutorials.categories.title"]}>
+  <p>{data["translations.categories.about"]}</p>
+</Categories>

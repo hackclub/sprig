@@ -2,7 +2,7 @@
 import '../pages/sprikipedia/global.css'
 import Navspriki from '../components/spriki-components/Navspriki.astro'
 import StandardHead from '../components/standard-head.astro'
-const { name, title, about, whats } = Astro.props
+const { name, title } = Astro.props
 ---
 <html lang="en">
     <head>
@@ -12,11 +12,6 @@ const { name, title, about, whats } = Astro.props
         <Navspriki />
         <div class="main-spriki">
             <h1>{title}</h1>
-            <br>
-            <h2>What is {title}?</h2>
-            <p>{whats}</p>
-            <br>
-            <p>{about}</p>
             <slot />
         </div>
     </body>
