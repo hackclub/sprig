@@ -1,21 +1,18 @@
 ---
-const { name, description, links } = Astro.props;
+const { links, lang } = Astro.props;
 ---
 <style> 
-    .docs {
+    .lang {
         background-color: #078969;
-        padding: 3px;
+        padding: 5px;
         color: #ffffff;
-    }
-
-    p {
-        color: #8BCAB1;
+        border-radius: 10px;
+        border-color: #078969;
     }
 </style>
 
-<a href={`../sprikipedia/${links}/`}>
-    <button class="docs">
-        <h2>{name}</h2>
-        <p>{description}</p>
+<a href={`?lang=${links}`}>
+    <button class="lang">
+        <h2>{lang}</h2>
     </button>
 </a>
