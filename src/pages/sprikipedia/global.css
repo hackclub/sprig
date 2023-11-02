@@ -82,3 +82,9 @@ a:hover {
 .title-lang {
 	text-align: center;
 }
+
+.spriki-bg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
