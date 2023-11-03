@@ -92,3 +92,7 @@ a:hover {
 .img-tutorial {
 	width: 80%;
 }
+
+.grecaptcha-badge { 
+    visibility: hidden;
+}
