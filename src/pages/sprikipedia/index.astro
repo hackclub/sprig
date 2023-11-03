@@ -1,7 +1,7 @@
 ---
 import "../../pages/sprikipedia/global.css";
 import Docs from "../../components/spriki-components/Docs.astro";
-import Dark from "../../components/spriki-components/Dark.astro";
+import Wiki from "../../components/spriki-components/Wiki.astro";
 import StandardHead from "../../components/standard-head.astro";
 
 const data = (
@@ -51,9 +51,10 @@ const data = (
                 name={data["home.docs.brand.name"]}
                 description={data["home.docs.brand.description"]}
                 links="sprikipedia/brand" />
-        </div>
-        <div class="docs-preview">
-            <Dark links="github.com/hackclub/sprig/wiki" info={data["home.dark.info"]} />
+            <Wiki
+                links="github.com/hackclub/sprig/wiki"
+                name={data["home.wiki.name"]}
+                description={data["home.wiki.description"]} />
         </div>
     </body>
 </html>
