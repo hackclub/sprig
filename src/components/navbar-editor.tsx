@@ -140,11 +140,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				</a>
 			</li>
 
-			{/* <li>
+			<li>
 				<Button onClick={toggleTheme}>
 					{ isDark.value ? "Light" : "Dark" }
 				</Button>
-			</li> */}
+			</li>
 
 			<li>
 				<Button
