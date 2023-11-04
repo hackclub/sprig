@@ -1,0 +1,43 @@
+---
+import '../../../global.css'
+import Categories from '../../../layouts/categories.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+<Categories name={data["brand.categories.name"]} title={data["brand.categories.title"]} >
+    <p>If you're a club leader, hackathon organizer, or community member, you're authorized to print, distribute or translate these for Hack Club-related purposes. You're also welcome to use them personally, or give to friends! This Brand material is copyright Hack Club.</p>
+    
+    <h1>Brand material</h1>
+    <table>
+        <tr>
+            <td>Preview</td>
+            <td>Download</td>
+        </tr>
+        <tr>
+            <td>Gord (Sprig dino)</td>
+            <td><a href="../../../../public/SPRIGDINO.png" download="gord">Download</a></td>
+        </tr>
+    </table>
+
+    <h1>Font</h1>
+
+    <h1>Colors</h1>
+
+    <h1>Sprikipedia Brand material</h1>
+    <table>
+        <tr>
+            <td>Name</td>
+            <td>Download</td>
+        </tr>
+        <tr>
+            <td>Gord (Sprig dino)</td>
+            <td><a href="../../../../public/SPRIGDINO.png" download="gord">Download</a></td>
+        </tr>
+    </table>
+</Categories>
+
