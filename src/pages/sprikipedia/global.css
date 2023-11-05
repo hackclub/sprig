@@ -96,3 +96,14 @@ a:hover {
 .grecaptcha-badge { 
     visibility: hidden;
 }
+
+table, th, td {
+	border: 3px solid;
+	border-collapse: collapse;
+	border-color: #136853;
+}
+
+.stline {
+	background-color: #136853;
+	color: #fafed7;
+}
