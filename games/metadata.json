@@ -3172,7 +3172,7 @@
     "title": "collectcandy",
     "author": "James C",
     "img": "",
-    "tags": ["puzzle"],
+    "tags": ["catch"],
     "added on": "2023-11-04"
   },
   {
@@ -3180,7 +3180,7 @@
     "title": "mazegame",
     "author": "Elian",
     "img": "",
-    "tags": ["maze"],
+    "tags": ["sokoban-style"],
     "added on": "2023-11-04"
   }
 ]
