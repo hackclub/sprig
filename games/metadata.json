@@ -3166,5 +3166,21 @@
     "img": "",
     "tags": ["multiplayer"],
     "added on": "2023-10-30"
+  },
+  {
+    "filename": "collectcandy",
+    "title": "collectcandy",
+    "author": "James C",
+    "img": "",
+    "tags": ["catch"],
+    "added on": "2023-11-04"
+  },
+  {
+    "filename": "mazegame",
+    "title": "mazegame",
+    "author": "Elian",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "added on": "2023-11-04"
   }
 ]
