@@ -82,7 +82,7 @@ export default function Help(props: HelpProps) {
 			</div>
 
 			{tutorialHtml && props.persistenceState && visible.value && showingTutorial.value && (
-				<div class={styles.content} >
+				<div class={isDark.value ? styles.content_dark : styles.content} >
 					<div dangerouslySetInnerHTML ={{ __html: tutorialHtml }} />
 
 					{(props.persistenceState?.value.kind == 'PERSISTED' || props.persistenceState?.value.kind == 'SHARED') && (
