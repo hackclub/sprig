@@ -1,0 +1,67 @@
+---
+import '../../../global.css'
+import Categories from '../../../layouts/categories.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+<Categories name={data["brand.categories.name"]} title={data["brand.categories.title"]} >
+    <p>If you're a club leader, hackathon organizer, or community member, you're authorized to print, distribute or translate these for Hack Club-related purposes. You're also welcome to use them personally, or give to friends! This Brand material is copyright Hack Club.</p>
+    
+    <h3>Brand material</h3>
+    <table>
+        <tr class="stline">
+            <td>Preview</td>
+            <td>Download</td>
+        </tr>
+        <tr>
+            <td>Gord (Sprig dino)</td>
+            <td><a href="../../../../public/SPRIGDINO.png" download="gord">Download</a></td>
+        </tr>
+        <tr>
+            <td>Poster (front)</td>
+            <td><a href="../../../../public/sprikipedia/0sprig_poster_-_front.png" download="Poster-front">Download</a></td>
+        </tr>
+        <tr>
+            <td>Poster (back)</td>
+            <td><a href="../../../../public/sprikipedia/0sprig_poster_-_back.png" download="Poster-back">Download</a></td>
+        </tr>
+    </table>
+
+    <h3>Font</h3>
+    <div class="billy">
+        <h1>Billy</h1>
+    </div>
+
+    <h3>Colors</h3>
+    <div class="color1">
+        <p class="color-text">#078969</p>
+    </div>
+    <div class="color2">
+        <p class="color-text">#</p>
+    </div>
+    <div class="color3">
+        <p class="color-text">#</p>
+    </div>
+
+    <h3>Sprikipedia Brand material</h3>
+    <table>
+        <tr class="stline">
+            <td>Name</td>
+            <td>Download</td>
+        </tr>
+        <tr>
+            <td>Sprikipedia dark version</td>
+            <td><a href="../../../../public/sprikipedia/Frame-2.svg" download="sprikipedia">Download</a></td>
+        </tr>
+        <tr>
+            <td>Sprikipedia white version</td>
+            <td><a href="../../../../public/sprikipedia/Frame-3.svg" download="sprikipedia">Download</a></td>
+        </tr>
+    </table>
+</Categories>
+

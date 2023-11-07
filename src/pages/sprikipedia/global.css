@@ -96,3 +96,59 @@ a:hover {
 .grecaptcha-badge { 
     visibility: hidden;
 }
+
+table, th, td {
+	border: 3px solid;
+	border-collapse: collapse;
+	border-color: #136853;
+}
+
+.stline {
+	background-color: #136853;
+	color: #fafed7;
+}
+
+@font-face {
+	font-family: Billy;
+	src: url('../../../public/fonts/Billy-Regular.otf') format('otf');
+}
+
+.billy {
+	font-family: 'Billy';
+}
+
+.color1 {
+	width: 150px;
+	height: 50px;
+	padding: 1px;
+	border-radius: 5px;
+	background-color: #078969;
+	color: white;
+}
+
+.color2 {
+	margin-top: 5px;
+	width: 150px;
+	height: 50px;
+	padding: 1px;
+	border-radius: 5px;
+	background-color: #136853;
+	color: white;
+}
+
+.color3 {
+	margin-top: 5px;
+	width: 150px;
+	height: 50px;
+	padding: 1px;
+	border-radius: 5px;
+	background-color: #fafed7;
+	color: black;
+
+}
+
+.color-text {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

@@ -26,6 +26,8 @@
 	"about.content.p2": "Sprikipedia's purpose is to benefit readers by containing information on all branches of Sprig, Written collaboratively by members of the Hack Club Community Since its creation, as a wiki page in our GitHub repository, on March 13, 2023 by Graham, it has grown to cover all things Sprig.",
 	"about.content.p3": "Any Hack Clubber can edit Sprikipedia's text, references, and images. Simply doing a PR for our repository on GitHub.",
 	"about.content.p4": "Sprikipedia is inspired in Wikipedia, a huge thanks to them.",
+	"brand.categories.name": "Brand - Sprikipedia, the Sprig encyclopedia",
+	"brand.categories.title": "Brand",
 	"firmware.categories.name": "Firmware - Sprikipedia, the Sprig encyclopedia",
 	"firmware.categories.title": "Firmware",
 	"firmware.categories.whats": "Software that controls basic hardware functions",
