@@ -70,21 +70,21 @@ To get started you can follow [this challenge in the editor](https://sprig.hackc
 
 Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) where you can join the development discussion and ask for help. We also have other channels for Sprig specific stuff:
 
-- `#sprig-gaming-controller`:
-- `#sprig-emulator`:
-- `#sprig-multiplayer`:
-- `#sprig-lora`:
-- `#sprig-platform`:
-- `#sdsprig`:
-- `#sprig-minecraft`:
-- `#sprig-ios-app`:
-- `#sprig-engagement`:
-- `#vs-sprig`:
-- `#stationary-sprig`:
-- `#spriggy-doom`:
-- `#sprigos-development`:
-- `#spade`:
-- `#spaint`:
+- `#sprig-gaming-controller`: Building a case for the Sprig console to make it a portable gaming controller.
+- `#sprig-emulator`: Development of emulator.
+- `#sprig-multiplayer`: Development of multiplayer support.
+- `#sprig-lora`: Development of Sprig-Lora communicator.
+- `#sprig-platform`: For discussion of development of the Sprig platform as a whole. 
+- `#sdsprig`: Development of Sprig loading from an SD Card.
+- `#sprig-minecraft`: Development of Minecraft for Sprig.
+- `#sprig-ios-app`: Development of iOS app.
+- `#sprig-engagement`: Development of a bot to post every new game to `#sprig`.
+- `#vs-sprig`: Development of Sprig extension for VS Code.
+- `#stationary-sprig`: Making Sprig a home console.
+- `#spriggy-doom`: Development of a clone of Doom.
+- `#sprigos-development`: Development of the sprigOS, the sprig game that acts like an operating system.
+- `#spade`: For discussions of Spade firmware/OS of the Sprig.
+- `#spaint`: Make art with your sprig with sPaint and share.
 
 Learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs). 
 
