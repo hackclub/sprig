@@ -68,7 +68,25 @@ To get started you can follow [this challenge in the editor](https://sprig.hackc
 
 ## Development
 
-Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) where you can join the development discussion and ask for help, and to learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs).
+Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) where you can join the development discussion and ask for help. We also have other channels for Sprig specific stuff:
+
+- `#sprig-gaming-controller`:
+- `#sprig-emulator`:
+- `#sprig-multiplayer`:
+- `#sprig-lora`:
+- `#sprig-platform`:
+- `#sdsprig`:
+- `#sprig-minecraft`:
+- `#sprig-ios-app`:
+- `#sprig-engagement`:
+- `#vs-sprig`:
+- `#stationary-sprig`:
+- `#spriggy-doom`:
+- `#sprigos-development`:
+- `#spade`:
+- `#spaint`:
+
+Learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs). 
 
 Sprig's editor and site pages are built with [Astro](https://astro.build/) using [Preact](https://preactjs.com/) for rendering. Perhaps somewhat unusually, we predominantly use [Preact Signals](https://preactjs.com/guide/v10/signals/) for state management. The project structure is as follows:
 
