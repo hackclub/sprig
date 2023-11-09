@@ -70,11 +70,11 @@ To get started you can follow [this challenge in the editor](https://sprig.hackc
 
 Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) where you can join the development discussion and ask for help. We also have other channels for Sprig specific stuff:
 
+- `#sprig-platform`: For discussion of development of the Sprig platform as a whole. 
 - `#sprig-gaming-controller`: Building a case for the Sprig console to make it a portable gaming controller.
 - `#sprig-emulator`: Development of emulator.
 - `#sprig-multiplayer`: Development of multiplayer support.
 - `#sprig-lora`: Development of Sprig-Lora communicator.
-- `#sprig-platform`: For discussion of development of the Sprig platform as a whole. 
 - `#sdsprig`: Development of Sprig loading from an SD Card.
 - `#sprig-minecraft`: Development of Minecraft for Sprig.
 - `#sprig-ios-app`: Development of iOS app.
