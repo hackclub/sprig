@@ -1,16 +1,33 @@
+/*
+@title: Galactic Coconuts
+@author: kcoderhtml (@kieran on slack)
+Keys: 
+- J to fire
+- A to move left
+- D to move right
+- L to mute
+Objective: 
+- Get the highest score you can by moving forward,
+shooting normal coconuts for 2 points,
+and running into or shooting the golden coconuts for
+1.5 times the score decreased by 0.9x every 75 tiles.
+*/
+
 // Define sprites
-const player = "p"
-const coconut = "s"
-const goldenCoconut = "C"
-const dart = "d"
-const borderBottom = "b"
-const borderCornerLeft = "l"
-const borderTop = "t"
-const borderCornerRight = "r"
-const borderTopCornerLeft = "L"
-const borderTopCornerRight = "R"
-const coolDownBar = "c"
-const livesBar = "h"
+const player = "p";
+const coconut = "s";
+const goldenCoconut = "C";
+const dart = "d";
+const borderBottom = "b";
+const borderCornerLeft = "l";
+const borderTop = "t";
+const borderCornerRight = "r";
+const borderTopCornerLeft = "L";
+const borderTopCornerRight = "R";
+const coolDownBar = "c";
+const livesBar = "h";
+const background = "B";
+const muteIcon = "m";
 
 setLegend(
   [ player, bitmap`
@@ -78,30 +95,30 @@ C0C0CCC0CCC0C0C.
 ................
 ................
 ................
-0000000000000000
-0000000000000000
-0000000000000000` ],
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL` ],
   [ borderCornerLeft, bitmap`
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............
-0000000000000000
-0000000000000000
-0000000000000000` ],
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL` ],
   [ borderTop, bitmap`
-0000000000000000
-0000000000000000
-0000000000000000
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
 ................
 ................
 ................
@@ -116,56 +133,56 @@ C0C0CCC0CCC0C0C.
 ................
 ................` ],
   [ borderCornerRight, bitmap`
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000
-0000000000000000
-0000000000000000
-0000000000000000` ],
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL` ],
   [ borderTopCornerRight, bitmap`
-0000000000000000
-0000000000000000
-0000000000000000
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000
-.............000` ],
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL
+.............LLL` ],
   [ borderTopCornerLeft, bitmap`
-0000000000000000
-0000000000000000
-0000000000000000
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............
-000.............` ],
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............
+LLL.............` ],
   [ coolDownBar, bitmap`
 ................
 ................
@@ -202,31 +219,65 @@ D99999999999999D
 ..333333333333..` ],
   [ goldenCoconut, bitmap`
 ................
-....6666C666....
-...66C6C9C6C6...
-..96C6C6C666C6..
-.C669C9996C6696.
-.666C6CC69996C6.
-.69C9CC66CC6966.
-.6C6966C6C9CC96.
-.C69C69C69C6C66.
-.6C9C6666C6C696.
-.C669666C669C66.
-.66C9CC6C696CC6.
-..6C699999C666..
-...C666C6C69C...
-....CC66666C....
-................` ]
-)
+....66666666....
+...6669696696...
+..966666666666..
+.66696696966696.
+.66666666669666.
+.69696966666966.
+.66696666696696.
+.66966966966666.
+.66966669666696.
+.66696966669666.
+.66696666696666.
+..666969696666..
+...6666696696...
+....69666666....
+................` ],
+  [ background, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000` ],
+  [ muteIcon, bitmap`
+................
+........33333333
+....3333.....33.
+...3.........3..
+...3......33333.
+..3......3.3....
+..3.....333.....
+.3......33...33.
+.3.....333...333
+.3.....33.....3.
+.33.....3.......
+..3....3.33..3..
+...33.3...333...
+.....333........
+.....3..33333333
+....3...........` ],
+);
 
-setSolids([player])
+setSolids([player]);
 
 // Sounds
 const loseLife = tune`
 348.83720930232556: G4~348.83720930232556,
 348.83720930232556: F4~348.83720930232556,
 348.83720930232556: E4~348.83720930232556,
-10116.27906976744`
+10116.27906976744`;
 const loseGame = tune`
 750: G5~750 + F5^750,
 750: E5~750 + D5^750,
@@ -234,7 +285,7 @@ const loseGame = tune`
 750: C4/750,
 750: C4/750,
 750: C4/750,
-19500`
+19500`;
 const winGame = tune`
 319.1489361702128: C4/319.1489361702128 + E4~319.1489361702128 + A4~319.1489361702128,
 319.1489361702128: E4/319.1489361702128 + G4-319.1489361702128,
@@ -259,39 +310,41 @@ const winGame = tune`
 319.1489361702128: E4~319.1489361702128 + G4-319.1489361702128,
 319.1489361702128: F4/319.1489361702128 + A4~319.1489361702128,
 319.1489361702128: G4/319.1489361702128 + B4-319.1489361702128,
-2872.340425531915`
+2872.340425531915`;
 const fire = tune`
 140.18691588785046,
 140.18691588785046: C4~140.18691588785046,
-4205.607476635514`
+4205.607476635514`;
 const cash = tune`
 116.73151750972762: G5~116.73151750972762,
 116.73151750972762: A5~116.73151750972762,
 116.73151750972762: B5~116.73151750972762,
-3385.214007782101`
+3385.214007782101`;
 
 // Vars
-let gameRunning = false
-let gameOver = false
-let score = 0
-let winScore = 1000
-let distance = 0
+let gameRunning = false;
+let gameOver = false;
+let muted = false;
+// score
+let score = 0;
+let winScore = 1000;
+let distance = 0;
 // dart
-let dartCooldown = 0
-const dartMaxCooldown = 6
+let dartCooldown = 0;
+const dartMaxCooldown = 4;
 // lives
-let lives = 3
-let maxLives = 3
+let lives = 3;
+let maxLives = 3;
 // Speed
-let speedInterval = 75
-let incrementSpeed = 50
-let startSpeed = 350
+let speedInterval = 75;
+let incrementSpeed = 50;
+let startSpeed = 350;
 // Coconuts
-const goldenCoconutChance = 0.95
-let goldenCoconutMultiplier = 1.5
+const goldenCoconutChance = 0.95;
+let goldenCoconutMultiplier = 1.5;
 
 // Levels
-let level = 0
+let level = 0;
 const levels = [
   map`
 LtttttttttttttR
@@ -306,11 +359,41 @@ lbbbbbbbbbbbbbr
 ...............
 ...............
 ...............`
-]
+];
 
-setMap(levels[level])
+setMap(levels[level]);
+setBackground(background);
 
 // controls
+
+onInput("w", () => {
+  if (!gameRunning) {
+    if (gameOver) {
+      startScreen();
+    }
+    else {
+      startSpeed = 250;
+      winScore = 850;
+      speedInterval = 100;
+      start();
+    }
+  }
+});
+
+onInput("s", () => {
+  if (!gameRunning) {
+    if (gameOver) {
+      startScreen();
+    }
+    else {
+      startSpeed = 250;
+      winScore = 850;
+      speedInterval = 100;
+      start();
+    }
+  }
+});
+
 onInput("a", () => {
   if (gameRunning) {
     getFirst(player).x -= 1;
@@ -320,7 +403,7 @@ onInput("a", () => {
       startScreen();
     }
     else {
-      start()
+      start();
     }
   }
 });
@@ -337,7 +420,24 @@ onInput("d", () => {
       startSpeed = 300;
       winScore = 950;
       speedInterval = 85;
-      start()
+      start();
+    }
+  }
+});
+
+onInput("i", () => {
+  if (gameRunning) {
+    spawnDart();
+  }
+  else {
+    if (gameOver) {
+      startScreen();
+    }
+    else {
+      startSpeed = 250;
+      winScore = 850;
+      speedInterval = 100;
+      start();
     }
   }
 });
@@ -354,19 +454,61 @@ onInput("j", () => {
       startSpeed = 250;
       winScore = 850;
       speedInterval = 100;
-      start()
+      start();
     }
   }
 });
 
+onInput("k", () => {
+  if (!gameRunning) {
+    if (gameOver) {
+      startScreen();
+    }
+    else {
+      startSpeed = 250;
+      winScore = 850;
+      speedInterval = 100;
+      start();
+    }
+  }
+});
+
+onInput("l", () => {
+  if (gameRunning) {
+    if (!muted) {
+      muted = true;
+      addSprite(14, 11, muteIcon);
+    }
+    else {
+      muted = false;
+      clearTile(14, 11);
+    }
+  }
+  else {
+    if (gameOver) {
+      startScreen();
+    }
+    else {
+      start();
+    }
+  }
+});
+
+// Muted Logic
+function playSound(tune) {
+  if (!muted) {
+    playTune(tune);
+  }
+}
+
 // Dart Code
 function spawnDart() {
   if (dartCooldown < 1) {
-    playTune(fire);
+    playSound(fire);
     dartCooldown = dartMaxCooldown;
     let player_pos = getFirst(player);
     addSprite(player_pos.x, player_pos.y, dart);
-    for (let i = 0; i < dartMaxCooldown - 2; i++) {
+    for (let i = 0; i < dartMaxCooldown; i++) {
       addSprite(4+i, 0, coolDownBar);
     }
   }
@@ -383,9 +525,9 @@ function moveDart() {
 // Dart cooldownBar
 function refreshCooldownBar() {
   if (dartCooldown > 0) {
+    clearTile(dartCooldown+3, 0);
+    addSprite(dartCooldown+3, 0, borderTop);
     dartCooldown -= 1;
-    clearTile(dartCooldown+4, 0)
-    addSprite(dartCooldown+4, 0, borderTop);
   }
 }
 
@@ -462,7 +604,7 @@ function hit() {
     for (let n = 0; n < goldenCoconutHit[i].length; n++) {
       goldenCoconutHit[i][n].remove();
       score = Math.floor(score * 1.25);
-      playTune(cash);
+      playSound(cash);
     }
   }
   
@@ -476,13 +618,13 @@ function hit() {
 // kill logic
 function killed() {
   if (tilesWith(coconut, player).length != 0) {
-    return true
+    return true;
   }
 }
 
 function golden() {
   if (tilesWith(goldenCoconut, player).length != 0) {
-    return true
+    return true;
   }
 }
 
@@ -512,7 +654,7 @@ function gameLoop(tps) {
   spawnCoconut();
   if (killed()) {
     if (lives < 1) {
-      playTune(loseGame);
+      playSound(loseGame);
       clearInterval(tick);
       gameRunning = false;
       gameOver = true;
@@ -525,7 +667,7 @@ function gameLoop(tps) {
     }
     else {
       lives -= 1;
-      playTune(loseLife);
+      playSound(loseLife);
       if (score < 100) {
         score = 0;
       }
@@ -543,14 +685,14 @@ function gameLoop(tps) {
           x: 1,
           y: 1,
           color: color`9`
-        })
+        });
         clearScreen();
         addText("You won!", {
           x: 6,
           y: 7,
           color: color`9`
         });
-        playTune(winGame);
+        playSound(winGame);
         gameRunning = false;
     }
     else {
@@ -560,11 +702,11 @@ function gameLoop(tps) {
         x: 1,
         y: 1,
         color: color`9`
-      })
+      });
     }
     if (golden()) {
       score = Math.floor(score * goldenCoconutMultiplier);
-      playTune(cash);
+      playSound(cash);
     }
     if (distance % speedInterval == 0) {
       clearInterval(tick);
@@ -582,7 +724,7 @@ function startScreen() {
   score = 0;
   distance = 0;
   gameOver = false;
-  addText("Galactic Coconuts", {
+  addText("Falling Coconuts", {
     x: 2,
     y: 1,
     color: color`9`
@@ -592,7 +734,7 @@ function startScreen() {
     y: 3,
     color: color`4`
   });
-  addText("Avoid the falling\ncoconuts and shoot\nboth coconuts.\nBe sure to shoot\nthe golden coconuts", {
+  addText("Avoid the falling\ncoconuts and shoot\nboth coconuts.\nThe golden coconuts\ngive a x1.5 bonus", {
     x: 1,
     y: 5,
     color: color`9`
@@ -602,7 +744,7 @@ function startScreen() {
     y: 11,
     color: color`4`
   });
-  addText("(a,d,j) start level", {
+  addText("(a,d,j) lvl sel", {
     x: 1,
     y: 14,
     color: color`3`
