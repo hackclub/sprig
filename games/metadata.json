@@ -139,7 +139,7 @@
     "filename": "pyre",
     "title": "pyre",
     "author": "ced",
-    "img": "",
+    "img": "pyre",
     "tags": ["strategy"],
     "addedOn": "2022-07-18"
   },
@@ -339,7 +339,7 @@
     "filename": "coding_demo_1_linked_sprites",
     "title": "coding_demo_1_linked_sprites",
     "author": "Leonard (Omay)",
-    "img": "",
+    "img": "coding_demo_1_linked_sprites",
     "tags": ["demo", "hackable", "beginner"],
     "addedOn": "2022-09-13"
   },
@@ -1272,8 +1272,8 @@
     "addedOn": "2022-12-01"
   },
   {
-    "filename": "Advent of Sprig",
-    "title": "Advent of Sprig",
+    "filename": "Advent_of_Sprig",
+    "title": "Advent_of_Sprig",
     "author": "Leonard (Omay)",
     "img": "",
     "tags": ["event"],
@@ -1371,7 +1371,7 @@
     "filename": "Worldcraft",
     "title": "Worldcraft",
     "author": "adadyer",
-    "img": "",
+    "img": "Worldcraft",
     "tags": ["explore"],
     "addedOn": "2022-12-09"
   },
@@ -1651,7 +1651,7 @@
     "filename": "pong-multiplayer",
     "title": "pong-multiplayer",
     "author": "sean",
-    "img": "",
+    "img": "pong-multiplayer",
     "tags": ["multiplayer"],
     "addedOn": "2023-01-01"
   },
@@ -1723,7 +1723,7 @@
     "filename": "cube_escape",
     "title": "cube_escape",
     "author": "marios_mitsios",
-    "img": "",
+    "img": "cube_escape",
     "tags": ["logic"],
     "addedOn": "2023-01-07"
   },
@@ -1899,7 +1899,7 @@
     "filename": "explorer",
     "title": "explorer",
     "author": "akshur",
-    "img": "",
+    "img": "explorer",
     "tags": [],
     "addedOn": "2023-01-22"
   },
@@ -2139,7 +2139,7 @@
     "filename": "Cave-Quest",
     "title": "Cave-Quest",
     "author": "OHIO-MAN",
-    "img": "",
+    "img": "Cave-Quest",
     "tags": ["energy-control"],
     "addedOn": "2023-02-18"
   },
@@ -2440,8 +2440,8 @@
     "addedOn": "2023-04-10"
   },
   {
-    "filename": "Among_The_Stars",
-    "title": "AmongTheStars",
+    "filename": "AmongTheStars",
+    "title": "Among_The_Stars",
     "author": "VanGo",
     "img": "",
     "tags": ["endless"],
@@ -2667,7 +2667,7 @@
     "filename": "The_Story_of_Grass",
     "title": "The_Story_of_Grass",
     "author": "Sarah Wang / Sarinara",
-    "img": "",
+    "img": "The_Story_of_Grass",
     "tags": ["puzzle-score"],
     "added on": "2023-05-28"
   },
@@ -2784,7 +2784,7 @@
     "added on": "2023-07-16"
   },
   {
-    "filename": "Dragon-RusH",
+    "filename": "Dragon-Rush",
     "title": "Dragon-Rush",
     "author": "Xhaiden, Aaron, and Brenden",
     "img": "",
@@ -3003,7 +3003,7 @@
     "filename": "far-from-home",
     "title": "far-from-home",
     "author": "hayward",
-    "img": "",
+    "img": "far-from-home",
     "tags": [],
     "added on": "2023-10-04"
   },
@@ -3099,7 +3099,7 @@
     "filename": "Boxxod",
     "title": "Boxxod",
     "author": "Kokonico",
-    "img": "",
+    "img": "Boxxod",
     "tags": ["logic"],
     "added on": "2023-10-20"
   },
@@ -3184,8 +3184,8 @@
     "added on": "2023-11-04"
   },
   {
-    "filename": "froggo's_dunegon_adventures",
-    "title": "froggo's_dunegon_adventures",
+    "filename": "froggo_s_dunegon_adventures",
+    "title": "froggo_s_dunegon_adventures",
     "author": "amuseee (Vikshar Rajesh)",
     "img": "",
     "tags": ["dungeon"],
