@@ -913,6 +913,7 @@ onInput("i", () => {
 							currentOption = 1;
 							break;
 						case upgrade:
+							if (!prevSelectedTile) return;
 							const upgarde = upgrades[prevSelectedTile.type];
 							if (!upgarde) {
 								playTune(removeTune);
