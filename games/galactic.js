@@ -674,7 +674,13 @@ bbpshbb
 bbbbbbb
 bbbbbbb`,
 	how: map`
-.`,
+........
+........
+........
+........
+........
+........
+........`,
 	animation: map`
 b`,
 	planet: map`
@@ -742,6 +748,11 @@ let happiness = 0.7;
 let population = 7;
 let capacity = 10;
 
+let howPage = 0;
+let howPages = 1 + Math.ceil(Object.entries(costs).length / 5);
+
+let wasInGame = false;
+
 // Directional up
 onInput("w", () => {
 	if (currentMap == "planet") {
@@ -804,6 +815,15 @@ onInput("a", () => {
 		} else {
 			rocketSprite.x = 6;
 		}
+	}
+
+	if (currentMap == "how") {
+		if (howPage == 0) {
+			howPage = howPages - 1;
+		} else {
+			howPage--;
+		}
+		displayHow();
 	}
 });
 
@@ -869,6 +889,15 @@ onInput("d", () => {
 		} else {
 			rocketSprite.x = 0;
 		}
+	}
+
+	if (currentMap == "how") {
+		if (howPage == howPages - 1) {
+			howPage = 0;
+		} else {
+			howPage++;
+		}
+		displayHow();
 	}
 });
 
@@ -998,7 +1027,11 @@ onInput("i", () => {
 
 onInput("j", () => {
 	if (currentMap == "how") {
-		newMap = "start";
+		if (wasInGame) {
+			newMap = "planet";
+		} else {
+			newMap = "start";
+		}
 	}
 
 	if (currentMap == "wood" || currentMap == "stone") {
@@ -1018,6 +1051,8 @@ onInput("k", () => {
 	if (currentMap == "animation") {
 		newMap = "planet";
 		playTune(buildTune);
+	} else {
+		newMap = "how";
 	}
 });
 
@@ -1198,53 +1233,102 @@ function displayStart() {
 }
 
 function displayHow() {
-	addText("How To Play", {
-		x: 4,
-		y: 2,
-		color: color`5`,
-	});
+	setBackground(black);
+	clearText();
+	for (let x = 0; x < width(); x++) {
+		for (let y = 0; y < height(); y++) {
+			clearTile(x, y);
+		}
+	}
+	if (howPage == 0) {
+		addText("How To Play", {
+			x: 4,
+			y: 2,
+			color: color`5`,
+		});
 
-	addText("Keep your population", {
-		x: 0,
-		y: 4,
-		color: color`2`,
-	});
+		addText("Keep your population", {
+			x: 0,
+			y: 4,
+			color: color`2`,
+		});
 
-	addText("alive for as long as", {
-		x: 0,
-		y: 5,
-		color: color`2`,
-	});
+		addText("alive for as long as", {
+			x: 0,
+			y: 5,
+			color: color`2`,
+		});
 
-	addText("you can. Don't let", {
-		x: 0,
-		y: 6,
-		color: color`2`,
-	});
+		addText("you can. Don't let", {
+			x: 0,
+			y: 6,
+			color: color`2`,
+		});
 
-	addText("them run out of", {
-		x: 0,
-		y: 7,
-		color: color`2`,
-	});
+		addText("them run out of", {
+			x: 0,
+			y: 7,
+			color: color`2`,
+		});
 
-	addText("space. Use stone and", {
-		x: 0,
-		y: 8,
-		color: color`2`,
-	});
+		addText("space. Use stone and", {
+			x: 0,
+			y: 8,
+			color: color`2`,
+		});
 
-	addText("wood to build your", {
-		x: 0,
-		y: 9,
-		color: color`2`,
-	});
+		addText("wood to build your", {
+			x: 0,
+			y: 9,
+			color: color`2`,
+		});
 
-	addText("city.", {
-		x: 0,
-		y: 10,
-		color: color`2`,
-	});
+		addText("city.", {
+			x: 0,
+			y: 10,
+			color: color`2`,
+		});
+
+		addText("Costs on next page.", {
+			x: 0,
+			y: 12,
+			color: color`2`,
+		});
+
+		addText("L to return to how", {
+			x: 0,
+			y: 13,
+			color: color`2`,
+		});
+	} else {
+		const costEntries = Object.entries(costs);
+		const start = howPage * 5;
+		addText("Costs", {
+			x: 7,
+			y: 2,
+			color: color`5`,
+		});
+		for (let i = 0; i < 5; i++) {
+			const entry = costEntries[(howPage - 1) * 5 + i];
+			if (!entry) break;
+			addSprite(1, i + 2, entry[0]);
+			addText(`${entry[1][0]}`, {
+				x: 6,
+				y: Math.round((i + 2) * 2.5),
+				color: color`C`,
+			});
+			addText(`/`, {
+				x: 9,
+				y: Math.round((i + 2) * 2.5),
+				color: color`2`,
+			});
+			addText(`${entry[1][1]}`, {
+				x: 11,
+				y: Math.round((i + 2) * 2.5),
+				color: color`L`,
+			});
+		}
+	}
 }
 
 async function displayAnimation() {
@@ -1314,6 +1398,7 @@ async function displayAnimation() {
 let populationInterval;
 
 function displayPlanet() {
+	wasInGame = true;
 	setBackground(sky);
 
 	addText(totalWood.toString(), {
