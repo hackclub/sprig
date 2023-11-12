@@ -1,3 +1,11 @@
+---
+name: Games
+about: Submiting your game!
+title: ''
+labels: submission
+assignees: ''
+---
+
 # Your checklist for this pull request
 
 ## Author name
