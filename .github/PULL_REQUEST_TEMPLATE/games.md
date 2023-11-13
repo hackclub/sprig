@@ -1,6 +1,6 @@
 ---
 name: Games
-about: Submiting your game!
+about: Submit your game!
 title: ''
 labels: submission
 assignees: ''
