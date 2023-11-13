@@ -3198,5 +3198,13 @@
     "img": "",
     "tags": ["strategy"],
     "added on": "2023-11-12"
+  },
+  {
+    "filename": "BoxMaze",
+    "title": "BoxMaze",
+    "author": "Kalo",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-11-13"
   }
 ]
