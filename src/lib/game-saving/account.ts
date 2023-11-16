@@ -116,15 +116,15 @@ export const setDocument = async (path: string, documentId: string, fields: any)
 
 type WhereQuery = [string | FieldPath, WhereFilterOp, string];
 type WhereParam = string | WhereQuery;
-export const findDocument = async (path: string, where: WhereParam[] | [WhereParam, WhereParam, WhereParam], limit: number = 1): Promise<any> => {
+export const findDocument = async (path: string, where: WhereParam[] | [WhereParam, WhereFilterOp, WhereParam], limit: number = 1): Promise<any> => {
 	try {
 		let collection: any = firestore.collection(path);
 		if (typeof where[0] === 'object') {
 			for (let condition of where) {
-				collection = collection.where(condition[0], condition[1] as WhereFilterOp, condition[2]);
+				collection = collection.where(condition[0], condition[1], condition[2]);
 			}
 		} else {
-			collection = collection.where(where[0], where[1] as WhereFilterOp, where[2]);
+			collection = collection.where(where[0], where[1], where[2]);
 		}
 
 		const result = await collection.limit(limit).get();
