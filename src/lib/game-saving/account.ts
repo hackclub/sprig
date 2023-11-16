@@ -1,11 +1,11 @@
 import type { AstroCookies } from 'astro'
 import admin from 'firebase-admin'
 import { initializeApp } from 'firebase-admin/app'
-import { getFirestore, Timestamp } from 'firebase-admin/firestore'
+import { FieldPath, getFirestore, Timestamp } from 'firebase-admin/firestore'
 import { customAlphabet } from 'nanoid/async'
 import { lazy } from '../utils/lazy'
 import { generateGameName } from '../words'
-import { isDark } from '../state'
+import metrics from '../../../metrics'
 
 const numberid = customAlphabet('0123456789')
 
@@ -82,6 +82,59 @@ export interface SnapshotData {
 export interface SessionInfo {
 	session: Session
 	user: User
+}
+
+export const deleteDocument = async (path: string, documentId: string): Promise<void> => {
+	try {
+		await firestore.collection(path).doc(documentId).delete();
+		metrics.increment("success.delete", 1);
+	} catch (error) {
+		console.error(`Failed to delete ${documentId}: `, error);
+		metrics.increment("errors.delete", 1);
+	}
+}
+
+export const updateDocument = async (path: string, documentId: string, fields: any): Promise<void> => {
+	try {
+		await firestore.collection(path).doc(documentId).update(fields);
+		metrics.increment("success.update", 1);
+	} catch (error) {
+		console.error(`Failed to update ${documentId}: `, error);
+		metrics.increment("errors.update", 1);
+	}
+}
+
+export const setDocument = async (path: string, documentId: string, fields: any): Promise<void> => {
+	try {
+		await firestore.collection(path).doc(documentId).set(fields);
+		metrics.increment("success.set", 1);
+	} catch (error) {
+		console.error(`Failed to set document ${documentId}: `, error);
+		metrics.increment("errors.set", 1);
+	}
+}
+
+type WhereQuery = [string | FieldPath, string, string];
+type WhereParam = string | WhereQuery;
+export const findDocument = async (path: string, where: WhereParam[] | [WhereParam, WhereParam, WhereParam], limit: number = 1): Promise<any> => {
+	try {
+		let collection = firestore.collection(path);
+		if (typeof where[0] === 'object') {
+			for (let condition of where) {
+				collection = collection.where(condition[0], condition[1] as any, condition[2]) as any;
+			}
+		} else {
+			collection = collection.where(where[0], where[1] as any, where[2]) as any;
+		}
+
+		const result = await collection.limit(limit).get();
+		metrics.increment("success.find", 1);
+		return result;
+	} catch (error) {
+		console.error(`Failed to find: `, error);
+		metrics.increment("errors.find", 1);
+		return {};
+	}
 }
 
 export const getSession = async (cookies: AstroCookies): Promise<SessionInfo | null> => {
