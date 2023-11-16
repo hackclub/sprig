@@ -1,7 +1,7 @@
 import type { AstroCookies } from 'astro'
 import admin from 'firebase-admin'
 import { initializeApp } from 'firebase-admin/app'
-import { FieldPath, getFirestore, Timestamp } from 'firebase-admin/firestore'
+import { FieldPath, getFirestore, Timestamp, WhereFilterOp } from 'firebase-admin/firestore'
 import { customAlphabet } from 'nanoid/async'
 import { lazy } from '../utils/lazy'
 import { generateGameName } from '../words'
@@ -114,17 +114,17 @@ export const setDocument = async (path: string, documentId: string, fields: any)
 	}
 }
 
-type WhereQuery = [string | FieldPath, string, string];
+type WhereQuery = [string | FieldPath, WhereFilterOp, string];
 type WhereParam = string | WhereQuery;
 export const findDocument = async (path: string, where: WhereParam[] | [WhereParam, WhereParam, WhereParam], limit: number = 1): Promise<any> => {
 	try {
-		let collection = firestore.collection(path);
+		let collection: any = firestore.collection(path);
 		if (typeof where[0] === 'object') {
 			for (let condition of where) {
-				collection = collection.where(condition[0], condition[1] as any, condition[2]) as any;
+				collection = collection.where(condition[0], condition[1] as WhereFilterOp, condition[2]);
 			}
 		} else {
-			collection = collection.where(where[0], where[1] as any, where[2]) as any;
+			collection = collection.where(where[0], where[1] as WhereFilterOp, where[2]);
 		}
 
 		const result = await collection.limit(limit).get();
