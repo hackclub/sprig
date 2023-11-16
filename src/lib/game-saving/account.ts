@@ -87,30 +87,54 @@ export interface SessionInfo {
 export const deleteDocument = async (path: string, documentId: string): Promise<void> => {
 	try {
 		await firestore.collection(path).doc(documentId).delete();
-		metrics.increment("success.delete", 1);
+		metrics.increment("database.delete.success", 1);
 	} catch (error) {
 		console.error(`Failed to delete ${documentId}: `, error);
-		metrics.increment("errors.delete", 1);
+		metrics.increment("database.delete.error", 1);
 	}
+}
+
+export const addDocument = async (path: string, data: any): Promise<admin.firestore.DocumentReference<admin.firestore.DocumentData>> => {
+	try {
+		const result = await firestore.collection(path).add(data);
+		metrics.increment("database.add.success", 1);
+		return result;
+	} catch (error) {
+		console.error(`Failed to add document into ${path}: `, error);
+		metrics.increment("database.add.error", 1);
+	}
+	return {} as any;
+}
+
+export const getDocument = async (path: string, documentId: string): Promise<admin.firestore.DocumentSnapshot<admin.firestore.DocumentData>> => {
+	try {
+		const result = await firestore.collection(path).doc(documentId).get();
+		metrics.increment("database.get.success", 1);
+		return result;
+	} catch (error) {
+		console.error(`Failed to get document ${documentId}: `, error);
+		metrics.increment("database.get.error", 1);
+	}
+	return {} as any;
 }
 
 export const updateDocument = async (path: string, documentId: string, fields: any): Promise<void> => {
 	try {
 		await firestore.collection(path).doc(documentId).update(fields);
-		metrics.increment("success.update", 1);
+		metrics.increment("database.update.success", 1);
 	} catch (error) {
 		console.error(`Failed to update ${documentId}: `, error);
-		metrics.increment("errors.update", 1);
+		metrics.increment("database.update.error", 1);
 	}
 }
 
 export const setDocument = async (path: string, documentId: string, fields: any): Promise<void> => {
 	try {
 		await firestore.collection(path).doc(documentId).set(fields);
-		metrics.increment("success.set", 1);
+		metrics.increment("database.set.success", 1);
 	} catch (error) {
 		console.error(`Failed to set document ${documentId}: `, error);
-		metrics.increment("errors.set", 1);
+		metrics.increment("database.set.error", 1);
 	}
 }
 
@@ -128,22 +152,22 @@ export const findDocument = async (path: string, where: WhereParam[] | [WherePar
 		}
 
 		const result = await collection.limit(limit).get();
-		metrics.increment("success.find", 1);
+		metrics.increment("database.find.success", 1);
 		return result;
 	} catch (error) {
 		console.error(`Failed to find: `, error);
-		metrics.increment("errors.find", 1);
+		metrics.increment("database.find.error", 1);
 		return {};
 	}
 }
 
 export const getSession = async (cookies: AstroCookies): Promise<SessionInfo | null> => {
 	if (!cookies.has('sprigSession')) return null
-	const _session = await firestore.collection('sessions').doc(cookies.get('sprigSession').value!).get()
+	const _session = await getDocument('sessions', cookies.get('sprigSession').value!);
 	if (!_session.exists) return null
 	const session = { id: _session.id, ..._session.data() } as Session
 
-	const _user = await firestore.collection('users').doc(session.userId).get()
+	const _user = await getDocument('users', session.userId);
 	if (!_user.exists) {
 		console.warn('Session with invalid user')
 		await _session.ref.delete()
@@ -157,7 +181,7 @@ export const getSession = async (cookies: AstroCookies): Promise<SessionInfo | n
 export const makeOrUpdateSession = async (cookies: AstroCookies, userId: string, authLevel: 'email' | 'code'): Promise<SessionInfo> => {
 	const curSessionId = cookies.get('sprigSession').value
 	const _curSession = curSessionId
-		? await firestore.collection('sessions').doc(curSessionId).get()
+		? await getDocument('sessions', curSessionId)
 		: null
 	if (_curSession && _curSession.exists && _curSession.data()!.userId === userId) {
 		await _curSession.ref.update({ full: authLevel === 'code' })
@@ -172,7 +196,7 @@ export const makeOrUpdateSession = async (cookies: AstroCookies, userId: string,
 		userId,
 		full: authLevel === 'code'
 	}
-	const _session = await firestore.collection('sessions').add(data)
+	const _session = await addDocument('sessions', data);
 	cookies.set('sprigSession', _session.id, {
 		path: '/',
 		maxAge: 60 * 60 * 24 * 365,
@@ -186,14 +210,15 @@ export const makeOrUpdateSession = async (cookies: AstroCookies, userId: string,
 }
 
 export const updateSessionAuthLevel = async (id: string, authLevel: 'email' | 'code'): Promise<void> => {
-	await firestore.collection('sessions').doc(id).update({
+	await updateDocument('sessions', id, {
 		full: authLevel === 'code'
-	})
+	});
 }
 
 export const getGame = async (id: string | undefined): Promise<Game | null> => {
 	if (!id) return null
-	const _game = await firestore.collection('games').doc(id).get()
+	const _game = await getDocument('games', id);
+	// const _game = await firestore.collection('games').doc(id).get()
 	if (!_game.exists) return null
 	return { id: _game.id, ..._game.data() } as Game
 }
@@ -209,18 +234,18 @@ export const makeGame = async (ownerId: string, unprotected: boolean, name?: str
 		tutorialName: tutorialName ?? null,
 		tutorialIndex: tutorialIndex ?? null
 	}
-	const _game = await firestore.collection('games').add(data)
+	const _game = await addDocument('games', data);
 	return { id: _game.id, ...data } as Game
 }
 
 export const getUser = async (id: string): Promise<User | null> => {
-	const _user = await firestore.collection('users').doc(id).get()
+	const _user = await getDocument('users', id);
 	if (!_user.exists) return null
 	return { id: _user.id, ..._user.data() } as User
 }
 
 export const getUserByEmail = async (email: string): Promise<User | null> => {
-	const _users = await firestore.collection('users').where('email', '==', email).limit(1).get()
+	const _users = await findDocument('users', ['email', '==', email]);
 	if (_users.empty) return null
 	return { id: _users.docs[0]!.id, ..._users.docs[0]!.data() } as User
 }
@@ -231,17 +256,18 @@ export const makeUser = async (email: string, username: string | null): Promise<
 		username,
 		createdAt: Timestamp.now()
 	}
-	const _user = await firestore.collection('users').add(data)
+	const _user = await addDocument('users', data);
 	return { id: _user.id, ...data } as User
 }
 
 export const makeLoginCode = async (userId: string): Promise<string> => {
 	const code = await numberid(6)
-	await firestore.collection('loginCodes').add({
+	await addDocument('loginCodes', {
 		code,
 		userId,
 		createdAt: Timestamp.now()
-	})
+	});
+	
 	return code
 }
 
@@ -254,12 +280,12 @@ export const makeSnapshot = async (game: Game): Promise<Snapshot> => {
 		code: game.code,
 		createdAt: Timestamp.now()
 	}
-	const _snapshot = await firestore.collection('snapshots').add(data)
+	const _snapshot = await addDocument('snapshots', data);
 	return { id: _snapshot.id, ...data } as Snapshot
 }
 
 export const getSnapshotData = async (id: string): Promise<SnapshotData | null> => {
-	const _snapshot = await firestore.collection('snapshots').doc(id).get()
+	const _snapshot = await getDocument('snapshots', id);
 	if (!_snapshot.exists) return null
 	const snapshot = { id: _snapshot.id, ..._snapshot.data() } as Snapshot
 
