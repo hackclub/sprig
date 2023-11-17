@@ -139,7 +139,7 @@
     "filename": "pyre",
     "title": "pyre",
     "author": "ced",
-    "img": "",
+    "img": "pyre",
     "tags": ["strategy"],
     "addedOn": "2022-07-18"
   },
@@ -339,7 +339,7 @@
     "filename": "coding_demo_1_linked_sprites",
     "title": "coding_demo_1_linked_sprites",
     "author": "Leonard (Omay)",
-    "img": "",
+    "img": "coding_demo_1_linked_sprites",
     "tags": ["demo", "hackable", "beginner"],
     "addedOn": "2022-09-13"
   },
@@ -1272,8 +1272,8 @@
     "addedOn": "2022-12-01"
   },
   {
-    "filename": "Advent of Sprig",
-    "title": "Advent of Sprig",
+    "filename": "Advent_of_Sprig",
+    "title": "Advent_of_Sprig",
     "author": "Leonard (Omay)",
     "img": "",
     "tags": ["event"],
@@ -1371,7 +1371,7 @@
     "filename": "Worldcraft",
     "title": "Worldcraft",
     "author": "adadyer",
-    "img": "",
+    "img": "Worldcraft",
     "tags": ["explore"],
     "addedOn": "2022-12-09"
   },
@@ -1651,7 +1651,7 @@
     "filename": "pong-multiplayer",
     "title": "pong-multiplayer",
     "author": "sean",
-    "img": "",
+    "img": "pong-multiplayer",
     "tags": ["multiplayer"],
     "addedOn": "2023-01-01"
   },
@@ -1723,7 +1723,7 @@
     "filename": "cube_escape",
     "title": "cube_escape",
     "author": "marios_mitsios",
-    "img": "",
+    "img": "cube_escape",
     "tags": ["logic"],
     "addedOn": "2023-01-07"
   },
@@ -1899,7 +1899,7 @@
     "filename": "explorer",
     "title": "explorer",
     "author": "akshur",
-    "img": "",
+    "img": "explorer",
     "tags": [],
     "addedOn": "2023-01-22"
   },
@@ -2139,7 +2139,7 @@
     "filename": "Cave-Quest",
     "title": "Cave-Quest",
     "author": "OHIO-MAN",
-    "img": "",
+    "img": "Cave-Quest",
     "tags": ["energy-control"],
     "addedOn": "2023-02-18"
   },
@@ -2440,8 +2440,8 @@
     "addedOn": "2023-04-10"
   },
   {
-    "filename": "Among_The_Stars",
-    "title": "AmongTheStars",
+    "filename": "AmongTheStars",
+    "title": "Among_The_Stars",
     "author": "VanGo",
     "img": "",
     "tags": ["endless"],
@@ -2667,7 +2667,7 @@
     "filename": "The_Story_of_Grass",
     "title": "The_Story_of_Grass",
     "author": "Sarah Wang / Sarinara",
-    "img": "",
+    "img": "The_Story_of_Grass",
     "tags": ["puzzle-score"],
     "added on": "2023-05-28"
   },
@@ -2784,7 +2784,7 @@
     "added on": "2023-07-16"
   },
   {
-    "filename": "Dragon-RusH",
+    "filename": "Dragon-Rush",
     "title": "Dragon-Rush",
     "author": "Xhaiden, Aaron, and Brenden",
     "img": "",
@@ -2872,7 +2872,7 @@
     "added on": "2023-08-18"
   },
   {
-    "filename": "burger-build",
+    "filename": "burger_build",
     "title": "burger-build",
     "author": "Emily Yee",
     "img": "",
@@ -2886,5 +2886,325 @@
     "img": "",
     "tags": ["advanced"],
     "added on": "2023-08-21"
+  },
+  {
+    "filename": "Battleship",
+    "title": "Battleship",
+    "author": "Johna-123",
+    "img": "",
+    "tags": ["advanced"],
+    "added on": "2023-08-25"
+  },
+  {
+    "filename": "The_Legend_of_Zelda-Links_Escape",
+    "title": "The_Legend_of_Zelda-Links_Escape",
+    "author": "ItzHex",
+    "img": "",
+    "tags": ["advanced"],
+    "added on": "2023-08-28"
+  },
+  {
+    "filename": "Eat_&_Don't_Be_Eaten",
+    "title": "Eat_&_Don't_Be_Eaten",
+    "author": "Nathan Man",
+    "img": "",
+    "tags": ["catch"],
+    "added on": "2023-08-30"
+  },
+  {
+    "filename": "spirit-bound",
+    "title": "spirit-bound",
+    "author": "Tom-on",
+    "img": "",
+    "tags": ["dungeon"],
+    "added on": "2023-08-31"
+  },
+  {
+    "filename": "FOOD-CATCH",
+    "title": "FOOD-CATCH",
+    "author": "Jakob",
+    "img": "",
+    "tags": ["catch"],
+    "added on": "2023-09-02"
+  },
+  {
+    "filename": "mailman",
+    "title": "mailman",
+    "author": "Akko",
+    "img": "",
+    "tags": [],
+    "added on": "2023-09-07"
+  },
+  {
+    "filename": "Tic_Tac_GPT",
+    "title": "Tic_Tac_GPT",
+    "author": "2008wbbv",
+    "img": "",
+    "tags": ["classic"],
+    "added on": "2023-09-08"
+  },
+  {
+    "filename": "ding_dong-delivery",
+    "title": "ding_dong-delivery",
+    "author": "Efe Özülkü",
+    "img": "",
+    "tags": [],
+    "added on": "2023-09-09"
+  },
+  {
+    "filename": "flappysprig",
+    "title": "flappysprig",
+    "author": "Spectral",
+    "img": "",
+    "tags": ["classic"],
+    "added on": "2023-09-10"
+  },
+  {
+    "filename": "Two_Player_Tetris",
+    "title": "Two_Player_Tetris",
+    "author": "Spectral",
+    "img": "",
+    "tags": ["classic", "multiplayer"],
+    "added on": "2023-09-11"
+  },
+  {
+    "filename": "killer_training",
+    "title": "killer_training",
+    "author": "jakjakob",
+    "img": "",
+    "tags": ["timer-puzzle"],
+    "added on": "2023-09-16"
+  },
+  {
+    "filename": "wham",
+    "title": "wham",
+    "author": "Aaman Patnaik",
+    "img": "",
+    "tags": ["classic"],
+    "added on": "2023-09-18"
+  },
+  {
+    "filename": "fire_boom",
+    "title": "fire_boom",
+    "author": "Samarpan",
+    "img": "",
+    "tags": ["dodge"],
+    "added on": "2023-09-25"
+  },
+  {
+    "filename": "Space-war",
+    "title": "Space-war",
+    "author": "Yash",
+    "img": "",
+    "tags": ["catch"],
+    "added on": "2023-10-02"
+  },
+  {
+    "filename": "far-from-home",
+    "title": "far-from-home",
+    "author": "hayward",
+    "img": "far-from-home",
+    "tags": [],
+    "added on": "2023-10-04"
+  },
+  {
+    "filename": "find_the_watermelon",
+    "title": "find_the_watermelon",
+    "author": "Mohamad",
+    "img": "",
+    "tags": [],
+    "added on": "2023-10-05"
+  },
+  {
+    "filename": "spider_home",
+    "title": "spider_home",
+    "author": "Usermaatre Setepenre",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "added on": "2023-10-09"
+  },
+  {
+    "filename": "Destroy_The_Hearts",
+    "title": "Destroy_The_Hearts",
+    "author": "Deniz Melik Aktın",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "added on": "2023-10-09"
+  },
+  {
+    "filename": "ocean-maze-escape",
+    "title": "ocean-maze-escape",
+    "author": "michael barrera",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "added on": "2023-10-13"
+  },
+  {
+    "filename": "learn_morse",
+    "title": "learn_morse",
+    "author": "Ashen Chathuranga",
+    "img": "",
+    "tags": [],
+    "added on": "2023-10-15"
+  },
+  {
+    "filename": "The_Legend_Of_Sprig",
+    "title": "The_Legend_Of_Sprig",
+    "author": "Medieval Apple",
+    "img": "",
+    "tags": ["advanced"],
+    "added on": "2023-10-15"
+  },
+  {
+    "filename": "Swapper",
+    "title": "Swapper",
+    "author": "RaidTheWeb",
+    "img": "",
+    "tags": ["advanced"],
+    "added on": "2023-10-18"
+  },
+  {
+    "filename": "gravity_box",
+    "title": "gravity_box",
+    "author": "Josias Aurel",
+    "img": "",
+    "tags": [],
+    "added on": "2023-10-18"
+  },
+  {
+    "filename": "for_Squiggly_myLost_worm",
+    "title": "for_Squiggly_myLost_worm",
+    "author": "Jeremiah Sung",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "added on": "2023-10-19"
+  },
+  {
+    "filename": "basketballgame",
+    "title": "basketballgame",
+    "author": "de-y (Dheeraj Chintapalli)",
+    "img": "",
+    "tags": [],
+    "added on": "2023-10-19"
+  },
+  {
+    "filename": "bastion",
+    "title": "bastion",
+    "author": "de-y (Dheeraj Chintapalli)",
+    "img": "",
+    "tags": [],
+    "added on": "2023-10-19"
+  },
+  {
+    "filename": "Boxxod",
+    "title": "Boxxod",
+    "author": "Kokonico",
+    "img": "Boxxod",
+    "tags": ["logic"],
+    "added on": "2023-10-20"
+  },
+  {
+    "filename": "Mario_Platformer_v2",
+    "title": "Mario_Platformer_v2",
+    "author": "Jackson",
+    "img": "",
+    "tags": [],
+    "added on": "2023-10-20"
+  },
+  {
+    "filename": "zap",
+    "title": "zap",
+    "author": "Samvid Konchada",
+    "img": "",
+    "tags": ["multiplayer"],
+    "added on": "2023-10-21"
+  },
+  {
+    "filename": "Knight_Post",
+    "title": "Knight_Post",
+    "author": "Aditya PV",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "added on": "2023-10-23"
+  },
+  {
+    "filename": "shooter",
+    "title": "shooter",
+    "author": "Tyler Sousa",
+    "img": "",
+    "tags": ["strategy"],
+    "added on": "2023-10-24"
+  },
+  {
+    "filename": "Musi",
+    "title": "Musi",
+    "author": "levi - blockish",
+    "img": "image_2023-10-22_152001392",
+    "tags": ["memory"],
+    "added on": "2023-10-25"
+  },
+  {
+    "filename": "turtle_game_(reach_the_beach)",
+    "title": "turtle_game_(reach_the_beach)",
+    "author": "Daniel Dunavetsky",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-10-25"
+  },
+  {
+    "filename": "galactic_coconuts",
+    "title": "galactic_coconuts",
+    "author": "Kieran Klukas",
+    "img": "",
+    "tags": ["dodge"],
+    "added on": "2023-10-30"
+  },
+  {
+    "filename": "Custom_Tic_Tac_Toe",
+    "title": "Custom_Tic_Tac_Toe",
+    "author": "Cael Ganem",
+    "img": "",
+    "tags": ["multiplayer"],
+    "added on": "2023-10-30"
+  },
+  {
+    "filename": "collectcandy",
+    "title": "collectcandy",
+    "author": "James C",
+    "img": "",
+    "tags": ["catch"],
+    "added on": "2023-11-04"
+  },
+  {
+    "filename": "mazegame",
+    "title": "mazegame",
+    "author": "Elian",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "added on": "2023-11-04"
+  },
+  {
+    "filename": "froggo_s_dunegon_adventures",
+    "title": "froggo_s_dunegon_adventures",
+    "author": "amuseee (Vikshar Rajesh)",
+    "img": "",
+    "tags": ["dungeon"],
+    "added on": "2023-11-06"
+  },
+  {
+    "filename": "galactic",
+    "title": "galactic",
+    "author": "polypixeldev",
+    "img": "",
+    "tags": ["strategy"],
+    "added on": "2023-11-12"
+  },
+  {
+    "filename": "BoxMaze",
+    "title": "BoxMaze",
+    "author": "Kalo",
+    "img": "",
+    "tags": ["logic"],
+    "added on": "2023-11-13"
   }
 ]

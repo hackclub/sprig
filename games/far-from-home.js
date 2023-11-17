@@ -1,0 +1,1024 @@
+/*
+@title: far from home
+@author: hayward
+
+Instructions:
+bring the kid home
+*/
+
+const player1 = "0"
+const player2 = "1"
+const x1 = "2"
+const upLaser = "3"
+const downLaser = "4"
+const leftLaser = "5"
+const rightLaser = "6"
+const vert = "7"
+const horz = "8"
+const target = "9"
+const background = "b"
+const wall = "w";
+const wall3 = "s";
+const wall4 = "q";
+const wall5 = "e";
+const wall6 = "r";
+const wall7 = "t";
+const wall8 = "y";
+const wall9 = "u";
+const wall10 = "p";
+const wall11 = "i";
+const wall12 = "o";
+const wall14 = "f";
+const wall15 = "j";
+const wall16 = "k";
+const wall17 = "l";
+const wall18 = "z";
+const wall19 = "d";
+const wall20 = "x";
+const wall21 = "c";
+const wall23 = "m";
+const wall2 = "a";
+const space = "v";
+const wall22 = "n";
+const lazer1 = "m";
+
+setLegend(
+  [ player1, bitmap`
+....00000000....
+...0LLLLLLLL0...
+..0LL666666LL0..
+.0L6666666666L0.
+0LL6666666666LL0
+0L666066660666L0
+0L666666666666L0
+0L666666666666L0
+0L666606606666L0
+0L666660066666L0
+0L666666666666L0
+0LL6666666666LL0
+.0L6666666666L0.
+..0LL666666LL0..
+...0LLLLLLLL0...
+....00000000....` ],
+  [ player2, bitmap`
+................
+................
+.....000000.....
+...00LLLLLL00...
+...0L666666L0...
+..0L66666666L0..
+..0L66066066L0..
+..0L66666666L0..
+..0L66660666L0..
+..0L66666666L0..
+..0L66666666L0..
+...0L666666L0...
+...00LLLLLL00...
+.....000000.....
+................
+................` ],
+  [ x1, bitmap`
+0000000000000000
+0011111111111100
+0L011111111110L0
+0LL0111111110LL0
+0LLL01111110LLL0
+0LLLL011110LLLL0
+0LLLLL0110LLLLL0
+0LLLLLL00LLLLLL0
+0LLLLLL00LLLLLL0
+0LLLLL0110LLLLL0
+0LLLL011110LLLL0
+0LLL01111110LLL0
+0LL0111111110LL0
+0L011111111110L0
+0011111111111100
+0000000000000000` ],
+  [ upLaser, bitmap`
+.......33.......
+.......33.......
+......3333......
+111113.33.311111
+100013.33.310001
+10L01.3..3.10L01
+10L01..33..10L01
+10L0111111110L01
+10L0000000000L01
+10LLLLLLLLLLLL01
+10L1111111111L01
+10L1222222221L01
+10L1111111111L01
+10LLLLLLLLLLLL01
+1000000000000001
+1111111111111111` ],
+  [ rightLaser, bitmap`
+1111111111111...
+1000000000001...
+10LLLLLLLLL01...
+10L111L000001...
+10L121L011111...
+10L121L01..33...
+10L121L01.3..3..
+10L121L013.33333
+10L121L013.33333
+10L121L01.3..3..
+10L121L01..33...
+10L121L011111...
+10L111L000001...
+10LLLLLLLLL01...
+1000000000001...
+1111111111111...` ],
+  [ downLaser, bitmap`
+1111111111111111
+1000000000000001
+10LLLLLLLLLLLL01
+10L1111111111L01
+10L1222222221L01
+10L1111111111L01
+10LLLLLLLLLLLL01
+10L0000000000L01
+10L0111111110L01
+10L01..33..10L01
+10L01.3..3.10L01
+100013.33.310001
+111113.33.311111
+......3333......
+.......33.......
+.......33.......` ],
+  [ leftLaser, bitmap`
+...1111111111111
+...1000000000001
+...10LLLLLLLLL01
+...100000L111L01
+...111110L121L01
+...33..10L121L01
+..3..3.10L121L01
+33333.310L121L01
+33333.310L121L01
+..3..3.10L121L01
+...33..10L121L01
+...111110L121L01
+...100000L111L01
+...10LLLLLLLLL01
+...1000000000001
+...1111111111111`],
+  [ vert, bitmap`
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+.......33.......` ],
+  [ horz, bitmap`
+................
+................
+................
+................
+................
+................
+................
+3333333333333333
+3333333333333333
+................
+................
+................
+................
+................
+................
+................` ],
+  [ target, bitmap`
+.......4DD1L....
+...4DDDD441L....
+44DD4444D41L....
+.4444DD44D1L....
+....444DD41L....
+........441L....
+..........1L....
+..........L1....
+..........L1....
+..........1L....
+..........1L....
+..........1L....
+..........L1....
+..........L1....
+..........L1....
+..........1L....`],
+  [ background, bitmap`
+LLLLLLLLLLLLLLLL
+LLL0LLLLL0LLLLLL
+LLLLL0LLLLLLLLLL
+LLLLLLLLLLL0LLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLL0LL
+LLL0LLLLLLL0LLLL
+LLLLLLLL0LLLLLLL
+LLLLLLLLLLLLLLLL
+0LLL0LLLLLLLLLLL
+LLLLLLLLLLL0LLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLL0LLLLL0LLLLL
+LLLLLLLLLLLLLL0L
+LLLLLLLLLLLLLLLL`],
+  [ "u", bitmap`
+2222222222222222
+1111111111111112
+LLLLLLLLLLLLLL12
+0000000000000L12
+2222222222220L12
+1111111111120L12
+LLLLLLLLLL120L12
+111111111L120L12
+111111111L120L12
+LLLLLLLLLL120L12
+1111111111120L12
+2222222222220L12
+0000000000000L12
+LLLLLLLLLLLLLL12
+1111111111111112
+2222222222222222`],
+  [ "w", bitmap`
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0`],
+  [wall, bitmap`
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0
+21L021L021L021L0`],
+  [ wall3, bitmap`
+0L120L120L120L12
+0L120L120L120L12
+0L120L120L120L12
+0L120L120L120L12
+0L120L120L120L12
+0L120L120L120L12
+0L120L120L120L12
+0L120L120L120L12
+0L120L120L120L12
+0L120L120L120L12
+0L120L120L120L12
+0L120L120L120L12
+0L120L120L120L12
+0L120L120L120L12
+0L120L120L120L12
+0L120L120L120L12`],
+  [ wall4, bitmap`
+0000000000000000
+LLLLLLLLLLLLLLLL
+1111111111111111
+2222222222222222
+0000000000000000
+LLLLLLLLLLLLLLLL
+1111111111111111
+2222222222222222
+0000000000000000
+LLLLLLLLLLLLLLLL
+1111111111111111
+2222222222222222
+0000000000000000
+LLLLLLLLLLLLLLLL
+1111111111111111
+2222222222222222`],
+  [ wall5, bitmap`
+0L120L120L120L12
+0L120L120L120L11
+0L120L120L120LLL
+0L120L120L120000
+0L120L120L122222
+0L120L120L111111
+0L120L120LLLLLLL
+0L120L1200000000
+0L120L1222222222
+0L120L1111111111
+0L120LLLLLLLLLLL
+0L12000000000000
+0L12222222222222
+0L11111111111111
+0LLLLLLLLLLLLLLL
+0000000000000000`],
+  [ wall6, bitmap`
+0000000000000000
+LLLLLLLLLLLLLLL0
+11111111111111L0
+22222222222221L0
+00000000000021L0
+LLLLLLLLLLL021L0
+1111111111L021L0
+2222222221L021L0
+0000000021L021L0
+LLLLLLL021L021L0
+111111L021L021L0
+222221L021L021L0
+000021L021L021L0
+LLL021L021L021L0
+11L021L021L021L0
+21L021L021L021L0`],
+  [ wall7, bitmap`
+0000000000000000
+0LLLLLLLLLLLLLLL
+0L11111111111111
+0L12222222222222
+0L12000000000000
+0L120LLLLLLLLLLL
+0L120L1111111111
+0L120L1222222222
+0L120L1200000000
+0L120L120LLLLLLL
+0L120L120L111111
+0L120L120L122222
+0L120L120L120000
+0L120L120L120LLL
+0L120L120L120L11
+0L120L120L120L12`],
+  [ wall8, bitmap`
+21L021L021L021L0
+11L021L021L021L0
+LLL021L021L021L0
+000021L021L021L0
+222221L021L021L0
+111111L021L021L0
+LLLLLLL021L021L0
+0000000021L021L0
+2222222221L021L0
+1111111111L021L0
+LLLLLLLLLLL021L0
+00000000000021L0
+22222222222221L0
+11111111111111L0
+LLLLLLLLLLLLLLL0
+0000000000000000`],
+  [ wall9, bitmap`
+2222222222222222
+1111111111111112
+LLLLLLLLLLLLLL12
+0000000000000L12
+2222222222220L12
+1111111111120L12
+LLLLLLLLLL120L12
+111111111L120L12
+111111111L120L12
+LLLLLLLLLL120L12
+1111111111120L12
+2222222222220L12
+0000000000000L12
+LLLLLLLLLLLLLL12
+1111111111111112
+2222222222222222`],
+  [ wall10, bitmap`
+2222222222222222
+2111111111111112
+21LLLLLLLLLLLL12
+21L0000000000L12
+21L0222222220L12
+21L0211111120L12
+21L021LLLL120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12`],
+  [ wall15, bitmap`
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021LLLL120L12
+21L0211111120L12
+21L0222222220L12
+21L0000000000L12
+21LLLLLLLLLLLL12
+2111111111111112
+2222222222222222`],
+  [ wall14, bitmap`
+2222222222222222
+2111111111111111
+21LLLLLLLLLLLLLL
+21L0000000000000
+21L0222222222222
+21L0211111111111
+21L021LLLLLLLLLL
+21L021L111111111
+21L021L111111111
+21L021LLLLLLLLLL
+21L0211111111111
+21L0222222222222
+21L0000000000000
+21LLLLLLLLLLLLLL
+2111111111111111
+2222222222222222`],
+  [ wall11, bitmap`
+21L021L11L120L12
+11L021L11L120L11
+LLL021L11L120LLL
+000021L11L120000
+222221L11L122222
+111111L11L111111
+LLLLLLL11LLLLLLL
+1111111111111111
+1111111111111111
+LLLLLLL11LLLLLLL
+111111L11L111111
+222221L11L122222
+000021L11L120000
+LLL021L11L120LLL
+11L021L11L120L11
+21L021L11L120L12`],
+  [ wall18, bitmap`
+21L021L11L120L12
+11L021L11L120L11
+LLL021L11L120LLL
+000021L11L120000
+222221L11L122222
+111111L11L111111
+LLLLLLL11LLLLLLL
+0000000000000000
+2222222222222222
+1111111111111111
+LLLLLLLLLLLLLLLL
+0000000000000000
+2222222222222222
+1111111111111111
+LLLLLLLLLLLLLLLL
+0000000000000000`],
+  [ wall17, bitmap`
+0L120L120L120L12
+0L120L120L120L11
+0L120L120L120LLL
+0L120L120L120000
+0L120L120L122222
+0L120L120L111111
+0L120L120LLLLLLL
+0L120L1201111111
+0L120L1201111111
+0L120L120LLLLLLL
+0L120L120L111111
+0L120L120L122222
+0L120L120L120000
+0L120L120L120LLL
+0L120L120L120L11
+0L120L120L120L12`],
+  [ wall16, bitmap`
+0000000000000000
+LLLLLLLLLLLLLLLL
+1111111111111111
+2222222222222222
+0000000000000000
+LLLLLLLLLLLLLLLL
+1111111111111111
+2222222222222222
+0000000000000000
+LLLLLLL11LLLLLLL
+111111L11L111111
+222221L11L122222
+000021L11L120000
+LLL021L11L120LLL
+11L021L11L120L11
+21L021L11L120L12`],
+  [ wall19, bitmap`
+21L021L021L021L0
+11L021L021L021L0
+LLL021L021L021L0
+000021L021L021L0
+222221L021L021L0
+111111L021L021L0
+LLLLLLL021L021L0
+1111111021L021L0
+1111111021L021L0
+LLLLLLL021L021L0
+111111L021L021L0
+222221L021L021L0
+000021L021L021L0
+LLL021L021L021L0
+11L021L021L021L0
+21L021L021L021L0`],
+  [ wall20, bitmap`
+2222222222222222
+1111111111111111
+LLLLLLLLLLLLLLLL
+0000000000000000
+2222222222222222
+1111111111111111
+LLLLLLLLLLLLLLLL
+1111111111111111
+1111111111111111
+LLLLLLLLLLLLLLLL
+1111111111111111
+2222222222222222
+0000000000000000
+LLLLLLLLLLLLLLLL
+1111111111111111
+2222222222222222`],
+  [ wall21, bitmap`
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12
+21L021L11L120L12`],
+  [ wall12, bitmap`
+2222222222222222
+2000000000000002
+20LLLLLLLLLLLL02
+20L1111111111L02
+20L1222222221L02
+20L1200000021L02
+20L120LLLL021L02
+20L120L11L021L02
+20L120L11L021L02
+20L120LLLL021L02
+20L1200000021L02
+20L1222222221L02
+20L1111111111L02
+20LLLLLLLLLLLL02
+2000000000000002
+2222222222222222`],
+  [ wall23, bitmap`
+1111111111111111
+.1.1.1.1.1.1.1.1
+.1.1.1.1.1.1.1.1
+.1.1.1.1.1.1.1.1
+.1.1.1.1.1.1.1.1
+.1.1.1.1.1.1.1.1
+.1.1.1.1.1.1.1.1
+.1.1.1.1.1.1.1.1
+.1.1.1.1.1.1.1.1
+.1.1.1.1.1.1.1.1
+.1.1.1.1.1.1.1.1
+.1.1.1.1.1.1.1.1
+.1.1.1.1.1.1.1.1
+.1.1.1.1.1.1.1.1
+.1.1.1.1.1.1.1.1
+1111111111111111`],
+   [ wall22, bitmap`
+2222222222222222
+1111111111111112
+LLLLLLLLLLLLLL12
+0000000000000L12
+2222222222220L12
+1111111111120L12
+LLLLLLLLLL120L12
+000000000L120L12
+222222220L120L12
+111111120L120L12
+LLLLLL120L120L12
+00000L120L120L12
+22220L120L120L12
+11120L120L120L12
+LL120L120L120L12
+0L120L120L120L12`],
+  [ wall2, bitmap`
+2222222222222222
+1111111111111111
+LLLLLLLLLLLLLLLL
+0000000000000000
+2222222222222222
+1111111111111111
+LLLLLLLLLLLLLLLL
+0000000000000000
+2222222222222222
+1111111111111111
+LLLLLLLLLLLLLLLL
+0000000000000000
+2222222222222222
+1111111111111111
+LLLLLLLLLLLLLLLL
+0000000000000000`],
+  [ space, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
+  [ lazer1, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
+)
+// Create a tune:
+const melody = tune`
+300,
+300: E4^300,
+300: E4^300,
+300,
+300: D4~300,
+300: D4~300,
+300,
+300: E4^300,
+300: D4^300,
+300,
+300: F4~300,
+300: E4~300,
+300,
+300: F4^300,
+300: E4^300,
+300,
+300: D4~300,
+300: D4~300,
+300,
+300: C4^300,
+300: C4^300,
+300,
+300: F4^300,
+300: D4~300,
+300,
+300: E4^300,
+300: E4^300,
+300,
+300: E4~300,
+300: E4~300,
+300,
+300: D4^300`
+
+// Play it 5 times:
+playTune(melody,100000000000000000000000000000000000000000000000000000000000000000000000000000000 )
+
+
+// setBackground(background);
+
+setSolids([
+    player1, 
+    x1,
+    player2, 
+    wall, 
+    upLaser,
+    downLaser,
+    leftLaser,
+    rightLaser,
+  wall,
+  wall3,
+  wall4,
+  wall5,
+  wall6,
+  wall7,
+  wall8,
+  wall9,
+  wall10,
+  wall15,
+  wall14,
+  wall11,
+  wall18,
+  wall17,
+  wall16,
+  wall19,
+  wall20,
+  wall12,
+  wall2,
+  wall21,
+  wall23,
+  wall22,
+]);
+setBackground("b")
+setPushables({ 
+  [player1]: [ player2,x1, player1 ] 
+})
+
+
+let level = 0;
+const levels = [
+      map`
+trctqqqqqrctr
+eyceaaaaaycey
+xxixxuofxxixx
+trctqqkqqrctr
+swcstrjtrwcsw
+swjseyxeywjsw
+swolucocfdosw
+swpstrxtrwpsw
+swcseypeywcsw
+eyceaazaaycey
+xxixxuofxxixx
+trctqqqqqrctr
+eyceaaaaaycey`,//1
+      map`
+tqqqqqr
+s.....w
+s.1...w
+s..p..w
+s..c..w
+s0.c.9w
+eaazaay`,//2
+      map`
+tqqqqqqqr
+s...7...w
+s...7...w
+s0..7..9w
+s..17..9w
+s...7...w
+s..27...w
+s...3...w
+eaaaaaaay`,//3
+      map`
+tqqqqqr
+s.17.9w
+s..7..w
+s.2885w
+s..7..w
+s0.3.9w
+eaaaaay`,//4
+      map`
+tqqqqqqqr
+s.......w
+s..21...w
+s.......w
+s8888885w
+s6888888w
+s..02...w
+s.......w
+s.99....w
+eaaaaaaay`,//5
+      map`
+tqqqqqqkqqqqqqqqr
+s......c........w
+s......c........w
+s......c.o888885w
+s....2.c.7......w
+s......c.3...1..w
+s..fxxxiu......5w
+s.....4c........w
+s.....7c..tr.o..w
+s.....7c..ey.tprw
+s688p.7c.....fiuw
+s...c.7c.....ejyw
+s...c.7j........w
+s.0.c.7.......2.w
+s9.9c.7.....3...w
+eaaazaaaaaaaaaaay`,//6
+      map`
+tqqqqkqqqr
+s....c...w
+s.0.9c.1.w
+s885fiu..w
+s....j...w
+s........w
+eaaaaaaaay`,//7
+      map`
+tqqqqqqqqqr
+s...7.....w
+s...721...w
+s688888888w
+s...7.0...w
+s...7.....w
+s...3.....w
+eaaaaaaaaay`,//8
+      map`
+tqqqqqqr
+s......w
+s......w
+eaan111w
+vvvs.0.w
+vvvs.9.w
+vvvs999w
+vvveaaay`,//9
+      map`
+tqqqqqqqqr
+s........w
+s....2...w
+s.1......w
+s........w
+ean......w
+vvs......w
+vvs......w
+vvs..0...w
+vvs......w
+vveaaaaaay`,//10
+  
+];
+
+let activePlayer = player1;
+
+const getActivePlayer = () => getFirst(activePlayer);
+
+setMap(levels[level]);
+initLasers();
+
+onInput("w", _ => {
+    const p1 = getFirst(player1);
+    const p2 = getFirst(player2);
+
+    if (!p1 || !p2) return;
+
+    if (p1.y < p2.y) {
+        p1.y -= 1;
+       // p2.y -= 1;
+    } else {
+       // p2.y -= 1;
+        p1.y -= 1;
+    }
+
+})
+
+onInput("s", _ => {
+    const p1 = getFirst(player1);
+    const p2 = getFirst(player2);
+
+    if (!p1 || !p2) return;
+
+    if (p1.y > p2.y) {
+        p1.y += 1;
+       // p2.y += 1;
+    } else {
+       // p2.y += 1;
+        p1.y += 1;
+    }
+})
+
+onInput("a", _ => {
+    const p1 = getFirst(player1);
+    const p2 = getFirst(player2);
+
+    if (!p1 || !p2) return;
+
+    if (p1.x < p2.x) {
+        p1.x -= 1;
+        // p2.x -= 1;
+    } else {
+        // p2.x -= 1;
+        p1.x -= 1;
+    }
+})
+
+onInput("d", _ => {
+    const p1 = getFirst(player1);
+    const p2 = getFirst(player2);
+
+    if (!p1 || !p2) return;
+    
+    if (p1.x > p2.x) {
+        p1.x += 1;
+        // p2.x += 1;
+    } else {
+        // p2.x += 1;
+        p1.x += 1;
+    }
+})
+
+/* reset level */
+onInput("j", _ => setMap(levels[level]));
+
+function isJustLaser(t) {
+  return t.length === 1 
+    && (t.map(x => x.type).includes(vert)
+        || t.map(x => x.type).includes(horz)
+        || t.map(x => x.type).includes(player2));
+}
+
+function initLasers() {
+    // remove all lasers
+    getAll(horz).forEach(s => s.remove());
+    getAll(vert).forEach(s => s.remove());
+
+    // add lasers back in
+    getAll(upLaser).forEach(up => {
+        let { x, y } = up;
+        y -=1
+        while (true) {
+            if (y < 0) break;
+            const t = getTile(x, y);
+            if (t.length === 0 || isJustLaser(t)) addSprite(x, y, vert)
+            else break;
+            y--;
+        }
+    })
+
+    getAll(downLaser).forEach(down => {
+        let { x, y } = down;
+        y +=1
+        while (true) {
+            if (y >= height()) break;
+            const t = getTile(x, y);
+            if (t.length === 0 || isJustLaser(t)) addSprite(x, y, vert)
+            else break;
+            y++;
+        }
+    })
+
+    getAll(rightLaser).forEach(right => {
+        let { x, y } = right;
+        x +=1
+        while (true) {
+            if (x >= width()) break;
+            const t = getTile(x, y);
+            if (t.length === 0 || isJustLaser(t)) addSprite(x, y, horz)
+            else break;
+            x++;
+        }
+    })
+
+   getAll(leftLaser).forEach(left => {
+        let { x, y } = left;
+        x -=1
+        while (true) {
+            if (x < 0) break;
+            const t = getTile(x, y);
+            if (t.length === 0 || isJustLaser(t)) addSprite(x, y, horz)
+            else break;
+            x--;
+        }
+    })
+}
+
+afterInput(_ => {
+    initLasers();
+    let finished = true;
+    getAll(target).forEach(t => {
+        finished = getTile(t.x, t.y).length === 2 && finished;
+    })
+
+    const dead = [
+        ...tilesWith(player2, vert),
+        ...tilesWith(player2, horz)
+    ]
+    if (dead.length) {
+        getFirst(player2).remove()
+        setMap(map`
+tqqqqqqqqqr
+s.........w
+s0........w
+s.........w
+eaaaaanmmmw
+vvvvvvs...w
+vvvvvvs.9.w
+vvvvvveaaay`)
+    }
+
+    if (finished && level+1 < levels.length) setMap(levels[++level]);
+});
