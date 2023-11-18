@@ -12,9 +12,9 @@
 
 You should be able to get started in Sprig with very little programming experience. Even if you're an expert, you should still be able to have fun. Sprig games are designed to be shared and hacked on with friends. Every game submitted is easily viewable and editable in our gallery allowing people to learn from and build off each other. 
 
-## Sprig is a
+## Sprig is a...
 
-**custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenage hacker that successfully shares a game they create in our [community gallery](https://sprig.hackclub.com/gallery).
+...**custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenage hacker that successfully shares a game they create in our [community gallery](https://sprig.hackclub.com/gallery).
 
 <p align="left">
 <a>
@@ -22,7 +22,7 @@ You should be able to get started in Sprig with very little programming experien
 </a>
 </p>
 
-**[web-based game editor](https://sprig.hackclub.com/editor)** that transforms learning to code from studying language syntax to making small creative projects. The Sprig game engine exposes a small construction kit for making tile-based games. This construction kit helps you focus on being creative instead of learning big APIs. The games are just JavaScript and we built a custom system to run that same JavaScript on the microcontroller!
+...**[web-based game editor](https://sprig.hackclub.com/editor)** that transforms learning to code from studying language syntax to making small creative projects. The Sprig game engine exposes a small construction kit for making tile-based games. This construction kit helps you focus on being creative instead of learning big APIs. The games are just JavaScript and we built a custom system to run that same JavaScript on the microcontroller!
 
 <p align="left">
 <a href="https://sprig.hackclub.com/editor">
@@ -30,7 +30,7 @@ You should be able to get started in Sprig with very little programming experien
 </a>
 </p>
 
-**[hardware development kit](https://github.com/hackclub/sprig/blob/main/docs/ASSEMBLY.md)**. It’s not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It’s a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.
+...**[hardware development kit](https://github.com/hackclub/sprig/blob/main/docs/ASSEMBLY.md)**. It’s not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It’s a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.
 
 <p align="left">
 <a href="https://sprig.hackclub.com">
@@ -60,15 +60,29 @@ People learn best when they make things that they care about, which they can the
 
 ## Tutorials
 
-To get started you can follow [this challenge in the editor](https://sprig.hackclub.com/gallery/getting_started), check out some [Sprig workshops](https://workshops.hackclub.com#sprig) or watch some short videos to get acquainted with Sprig:
-
-<!-- [This video shows a quick overview of the editor.](https://youtu.be/GEbDRR_cqJI)
-
-[This video shows making a simple example "game".](https://youtu.be/1UTLS4aO9bQ) -->
+To get started you can follow [this challenge in the editor](https://sprig.hackclub.com/gallery/getting_started), check out some [Sprig workshops](https://workshops.hackclub.com#sprig) or [Sprig jams](https://jams.hackclub.com/batch/sprig).
 
 ## Development
 
-Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) where you can join the development discussion and ask for help, and to learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs).
+Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) where you can join the development discussion and ask for help. We also have other channels for Sprig specific stuff:
+
+- `#sprig-platform`: For discussion of development of the Sprig platform as a whole. 
+- `#sprig-gaming-controller`: Building a case for the Sprig console to make it a portable gaming controller.
+- `#sprig-emulator`: Development of emulator.
+- `#sprig-multiplayer`: Development of multiplayer support.
+- `#sprig-lora`: Development of Sprig-Lora communicator.
+- `#sdsprig`: Development of Sprig loading from an SD Card.
+- `#sprig-minecraft`: Development of Minecraft for Sprig.
+- `#sprig-ios-app`: Development of iOS app.
+- `#sprig-engagement`: Development of a bot to post every new game to `#sprig`.
+- `#vs-sprig`: Development of Sprig extension for VS Code.
+- `#stationary-sprig`: Making Sprig a home console.
+- `#spriggy-doom`: Development of a clone of Doom.
+- `#sprigos-development`: Development of the sprigOS, the sprig game that acts like an operating system.
+- `#spade`: For discussions of Spade firmware/OS of the Sprig.
+- `#spaint`: Make art with your sprig with sPaint and share.
+
+Learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs). 
 
 Sprig's editor and site pages are built with [Astro](https://astro.build/) using [Preact](https://preactjs.com/) for rendering. Perhaps somewhat unusually, we predominantly use [Preact Signals](https://preactjs.com/guide/v10/signals/) for state management. The project structure is as follows:
 

@@ -1,0 +1,60 @@
+---
+import "../../pages/sprikipedia/global.css";
+import Docs from "../../components/spriki-components/Docs.astro";
+import Outside from "../../components/spriki-components/Outside.astro";
+import StandardHead from "../../components/standard-head.astro";
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+<html lang="en">
+    <head>
+        <StandardHead title={data["home.head.title"]} />
+    </head>
+    <body>
+        <div class="spriki-bg">
+            <img src="https://cloud-bba4hojqq-hack-club-bot.vercel.app/0frame_22.svg" width="50%">
+        </div>
+        <div class="title-lang">
+            <p>{data["home.welcome.description"]}</p>
+        </div>
+        <div class="docs-preview">
+            <Docs 
+                name={data["home.docs.start.name"]}
+                description={data["home.docs.start.description"]}
+                links="sprikipedia/getting-started" />
+            <Docs
+                name={data["home.docs.tutorials.name"]} 
+                description={data["home.docs.tutorials.description"]}
+                links="sprikipedia/tutorials" />
+            <Docs
+                name={data["home.docs.firmware.name"]}
+                description={data["home.docs.firmware.description"]}
+                links="sprikipedia/firmware" />
+            <Docs
+                name={data["home.docs.hardware.name"]}
+                description={data["home.docs.hardware.description"]}
+                links="sprikipedia/hardware" />
+            <Docs
+                name={data["home.docs.team.name"]}
+                description={data["home.docs.team.description"]}
+                links="sprikipedia/team" />
+            <Docs
+                name={data["home.docs.about.name"]}
+                description={data["home.docs.about.description"]}
+                links="sprikipedia/about" />
+            <Docs
+                name={data["home.docs.brand.name"]}
+                description={data["home.docs.brand.description"]}
+                links="sprikipedia/brand" />
+            <Outside
+                links="github.com/hackclub/sprig/wiki"
+                name={data["home.wiki.name"]}
+                description={data["home.wiki.description"]} />
+        </div>
+    </body>
+</html>

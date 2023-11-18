@@ -1,0 +1,29 @@
+---
+import '../../../../global.css'
+import Docs from '../../../../layouts/docs.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+
+<Docs dspriki={data["tutorials.categories.dspriki.github.pr"]} dtitle={data["tutorials.categories.dtitle.github.pr"]} dauthor={data["tutorials.categories.dauthor.github.pr"]} >
+    <p>{data["tutorials.categories.dspriki.github.pr.step1"]}<b><code>Contribute</code></b></p>
+    <br />
+    <img class="img-tutorial" src='https://cloud-9jg0ola8h-hack-club-bot.vercel.app/1image.png'>
+    <br />
+    <p>{data["tutorials.categories.dspriki.github.pr.step2"]}<b><code>Open pull request</code></b></p>
+    <br />
+    <img class="img-tutorial" src='https://cloud-9jg0ola8h-hack-club-bot.vercel.app/1image.png'>
+    <br />
+    <p>{data["tutorials.categories.dspriki.github.pr.step3"]}</p>
+    <br />
+    <img class="img-tutorial" src='https://cloud-9jg0ola8h-hack-club-bot.vercel.app/0image.png'>
+    <br />
+    <p>{data["tutorials.categories.dspriki.github.pr.step4"]}<b><code>Create pull requests/code></b></p>
+    <br />
+    <img class="img-tutorial" src='https://cloud-9jg0ola8h-hack-club-bot.vercel.app/0image.png'>
+</Docs>

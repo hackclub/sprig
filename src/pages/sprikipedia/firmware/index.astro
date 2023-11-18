@@ -1,0 +1,21 @@
+---
+import '../../../global.css'
+import Categories from '../../../layouts/categories.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+<Categories name={data["firmware.categories.name"]} title={data["firmware.categories.title"]} >
+  <p>{data["firmware.categories.about"]}</p>  
+  <ul>
+        <li><a href="https://github.com/hackclub/spade">Spade</a>{data["firmware.spade.description"]}</li>
+        <li><a href="https://github.com/shanecelis/trowel">Trowel</a>{data["firmware.trowel.description"]}</li>
+        <li><a href="https://github.com/DedFishy/Spryg">Spryg</a>{data["firmware.spryg.description"]}</li>
+        <li><a href="https://circuitpython.org/board/hack_club_sprig/">CircuitPython</a>{data["firmware.circuitpython.description"]}</li>
+        <li><a href="https://github.com/geschmit/hp-printer-trolling">hp-trolling</a>{data["firmware.hp-trolling.description"]}</li>
+    </ul>
+</Categories>

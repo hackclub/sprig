@@ -1,0 +1,21 @@
+---
+import '../../../global.css'
+import Categories from '../../../layouts/categories.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+<Categories name={data["hardware.categories.name"]} title={data["hardware.categories.title"]} >
+  <p>{data["hardware.categories.about"]}</p>  
+  <ul>
+        <li><a href="https://github.com/hackclub/sprig-hardware/tree/main/hardware/kicad">{data["hardware.kicad.description"]}</a></li>
+        <li><a href="https://github.com/hackclub/sprig-hardware/blob/main/hardware/BOM.md">{data["hardware.bom.description"]}</a></li>
+        <li><a href="https://github.com/hackclub/sprig-hardware/blob/main/hardware/ORDERING.md">{data["hardware.ordering.description"]}</a></li>
+        <li><a href="https://github.com/hackclub/sprig-hardware/blob/main/hardware/schematic.png">{data["hardware.schematic.description"]}</a></li>
+        <li><a href="https://github.com/hackclub/sprig-hardware/tree/main/back_covers">{data["hardware.back-covers.description"]}</a></li>
+    </ul>
+</Categories>

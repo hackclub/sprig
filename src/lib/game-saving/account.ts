@@ -5,6 +5,7 @@ import { getFirestore, Timestamp } from 'firebase-admin/firestore'
 import { customAlphabet } from 'nanoid/async'
 import { lazy } from '../utils/lazy'
 import { generateGameName } from '../words'
+import { isDark } from '../state'
 
 const numberid = customAlphabet('0123456789')
 
@@ -50,6 +51,8 @@ export interface Game {
 	unprotected: boolean // Can be edited by partial user session (email only)
 	name: string
 	code: string
+	tutorialName?: string
+	tutorialIndex?: number
 }
 
 export interface LoginCode {
@@ -95,7 +98,7 @@ export const getSession = async (cookies: AstroCookies): Promise<SessionInfo | n
 	}
 	const user = { id: _user.id, ..._user.data() } as User
 
-	return { session, user }
+	return { session, user };
 }
 
 export const makeOrUpdateSession = async (cookies: AstroCookies, userId: string, authLevel: 'email' | 'code'): Promise<SessionInfo> => {
@@ -142,14 +145,16 @@ export const getGame = async (id: string | undefined): Promise<Game | null> => {
 	return { id: _game.id, ..._game.data() } as Game
 }
 
-export const makeGame = async (ownerId: string, unprotected: boolean, name?: string, code?: string): Promise<Game> => {
+export const makeGame = async (ownerId: string, unprotected: boolean, name?: string, code?: string, tutorialName?: string, tutorialIndex?: number): Promise<Game> => {
 	const data = {
 		ownerId,
 		createdAt: Timestamp.now(),
 		modifiedAt: Timestamp.now(),
 		unprotected,
 		name: name ?? generateGameName(),
-		code: code ?? ''
+		code: code ?? '',
+		tutorialName: tutorialName ?? null,
+		tutorialIndex: tutorialIndex ?? null
 	}
 	const _game = await firestore.collection('games').add(data)
 	return { id: _game.id, ...data } as Game
