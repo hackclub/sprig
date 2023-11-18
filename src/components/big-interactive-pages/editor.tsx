@@ -128,8 +128,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	const screen = useRef<HTMLCanvasElement>(null)
 	const cleanup = useRef<(() => void) | null>(null)
 	const screenShake = useSignal(0)
-	const playButtonText = useRef<HTMLSpanElement>(null)
-	const stopButtonText = useRef<HTMLSpanElement>(null)
 	const onRun = async () => {
 		foldAllTemplateLiterals()
 		if (!screen.current) return
@@ -159,16 +157,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			}
 		} else {
 			clearErrorHighlight();
-		}
-		
-
-		playButtonText.current?.parentElement?.classList.add(`${styles.hiddenButton}`)
-		stopButtonText.current?.parentElement?.classList.remove(`${styles.hiddenButton}`)
-		// playButtonText.current.parentElement.children.
-		// if (playButtonText.current) {
-		// 	playButtonText.current.remove()
-		// }
-		
+		}		
 	}
 
 	const onStop = async () => {
@@ -176,8 +165,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 
 		if (cleanup.current) cleanup.current()
 
-		stopButtonText.current?.parentElement?.classList.add(`${styles.hiddenButton}`)
-		playButtonText.current?.parentElement?.classList.remove(`${styles.hiddenButton}`)
 	}
 
 	useEffect(() => () => cleanup.current?.(), [])
@@ -285,15 +272,9 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 						</div>
 					)}
 					<Button accent icon={IoPlayCircleOutline} bigIcon iconSide='right' class={styles.playButton} onClick={onRun}>
-						<span ref={playButtonText}>Run</span>
+						Run
 					</Button>
-					<Button icon={IoStopCircleOutline} bigIcon iconSide='right' class={`
-					${styles.stopButton}
-					${styles.hiddenButton}
-
-					`} onClick={onStop}>
-						<span ref={stopButtonText}>Stop</span>
-					</Button>
+					
 				</div>
 
 				<div
@@ -325,7 +306,10 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 									? <><IoVolumeMuteOutline /> <span>Unmute</span></>
 									: <><IoVolumeHighOutline /> <span>Mute</span></>}
 							</button>
-							<div class={styles.screenSize}>(Actual Sprig screen is 1/8" / 160&times;128 px)</div>
+							<button className={styles.stop} onClick={() => onStop()}>
+								<IoStopCircleOutline /><span>Stop</span>
+							</button>
+							<div class={styles.screenSize}>(Sprig screen is 1/8" / 160&times;128 px)</div>
 						</div>
 					</div>
 				</div>
