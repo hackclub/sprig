@@ -1053,6 +1053,9 @@ onInput("k", () => {
 		playTune(buildTune);
 	} else {
 		newMap = "how";
+		if (currentMap == "planet") {
+			exportedMap = exportMap();
+		}
 	}
 });
 
@@ -1135,20 +1138,6 @@ function refreshMap() {
 		newMap = null;
 		setMap(maps[currentMap]);
 		clearText();
-
-		// Load sprites back from map
-		if (currentMap == "planet" && exportedMap) {
-			for (let x = 0; x < exportedMap.length; x++) {
-				const row = exportedMap[x];
-				for (let y = 0; y < row.length; y++) {
-					const col = row[y];
-					clearTile(x, y);
-					for (let sprite of col) {
-						addSprite(x, y, sprite.type);
-					}
-				}
-			}
-		}
 	} else {
 		return;
 	}
@@ -1160,6 +1149,21 @@ function refreshMap() {
 	if (currentMap == "wood") displayWood();
 	if (currentMap == "stone") displayStone();
 	if (currentMap == "gameover") displayGameover();
+
+	// Load sprites back from map
+	if (currentMap == "planet" && exportedMap) {
+		for (let x = 0; x < exportedMap.length; x++) {
+			const row = exportedMap[x];
+			for (let y = 0; y < row.length; y++) {
+				const col = row[y];
+				clearTile(x, y);
+				for (let sprite of col) {
+					addSprite(x, y, sprite.type);
+				}
+			}
+		}
+		exportedMap = null;
+	}
 }
 
 afterInput(() => {
@@ -1173,12 +1177,8 @@ function checkWood() {
 		const woodRocket = tilesWith(wood, rocket).length > 0;
 
 		if (woodRocket) {
-			if (Math.random() < 0.3) {
-				playTune(errTune);
-			} else {
-				woodScore++;
-				playTune(doneTune);
-			}
+			woodScore++;
+			playTune(doneTune);
 
 			const rocketSprite = getFirst(rocket);
 			const x = rocketSprite.x;
@@ -1201,12 +1201,8 @@ function checkStone() {
 		const stoneRocket = tilesWith(stone, rocket).length > 0;
 
 		if (stoneRocket) {
-			if (Math.random() < 0.3) {
-				playTune(errTune);
-			} else {
-				stoneScore++;
-				playTune(doneTune);
-			}
+			stoneScore++;
+			playTune(doneTune);
 
 			const rocketSprite = getFirst(rocket);
 			const x = rocketSprite.x;
@@ -1375,7 +1371,7 @@ async function displayAnimation() {
 	if (currentMap != "animation") return;
 
 	clearText();
-	addText("So he set out", {
+	addText("So she set out", {
 		x: 3,
 		y: 5,
 		color: color`2`,
@@ -1457,9 +1453,6 @@ function displayWood() {
 					if (Math.random() < 0.3) {
 						diff = 2;
 					}
-					if (Math.random() < 0.05) {
-						diff = 3;
-					}
 					woodSprite.y += diff;
 				} else {
 					woodScore--;
@@ -1477,7 +1470,7 @@ function displayWood() {
 			const y = Math.round(Math.random()) + Math.round(Math.random()) + 1;
 			addSprite(randomX, y, wood);
 		}
-	}, 500);
+	}, 600);
 
 	checkWood();
 }
@@ -1503,9 +1496,6 @@ function displayStone() {
 					let diff = 1;
 					if (Math.random() < 0.3) {
 						diff = 2;
-					}
-					if (Math.random() < 0.05) {
-						diff = 3;
 					}
 					stoneSprite.y += diff;
 				} else {
