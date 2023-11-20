@@ -1,7 +1,7 @@
 ---
 import "../../pages/sprikipedia/global.css";
 import Docs from "../../components/spriki-components/Docs.astro";
-import Wiki from "../../components/spriki-components/Wiki.astro";
+import Outside from "../../components/spriki-components/Outside.astro";
 import StandardHead from "../../components/standard-head.astro";
 
 const data = (
@@ -51,7 +51,7 @@ const data = (
                 name={data["home.docs.brand.name"]}
                 description={data["home.docs.brand.description"]}
                 links="sprikipedia/brand" />
-            <Wiki
+            <Outside
                 links="github.com/hackclub/sprig/wiki"
                 name={data["home.wiki.name"]}
                 description={data["home.wiki.description"]} />
