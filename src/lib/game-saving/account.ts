@@ -84,9 +84,19 @@ export interface SessionInfo {
 	user: User
 }
 
+const timedOperation = async (callback: Function) => {
+	const startTime = new Date().getTime();
+	const result = await callback();
+	const endTime = (new Date().getTime()) - startTime;
+
+	return { time: endTime, data: result };
+}
+
 export const deleteDocument = async (path: string, documentId: string): Promise<void> => {
 	try {
-		await firestore.collection(path).doc(documentId).delete();
+		const { time } = await timedOperation(async () => await firestore.collection(path).doc(documentId).delete());
+
+		metrics.timing("database.delete", time);
 		metrics.increment("database.delete.success", 1);
 	} catch (error) {
 		console.error(`Failed to delete ${documentId}: `, error);
@@ -94,11 +104,13 @@ export const deleteDocument = async (path: string, documentId: string): Promise<
 	}
 }
 
-export const addDocument = async (path: string, data: any): Promise<admin.firestore.DocumentReference<admin.firestore.DocumentData>> => {
+export const addDocument = async (path: string, fields: any): Promise<admin.firestore.DocumentReference<admin.firestore.DocumentData>> => {
 	try {
-		const result = await firestore.collection(path).add(data);
+		const { time, data } = await timedOperation(async () => await firestore.collection(path).add(fields));
+
+		metrics.timing("database.add", time);
 		metrics.increment("database.add.success", 1);
-		return result;
+		return data;
 	} catch (error) {
 		console.error(`Failed to add document into ${path}: `, error);
 		metrics.increment("database.add.error", 1);
@@ -108,9 +120,12 @@ export const addDocument = async (path: string, data: any): Promise<admin.firest
 
 export const getDocument = async (path: string, documentId: string): Promise<admin.firestore.DocumentSnapshot<admin.firestore.DocumentData>> => {
 	try {
-		const result = await firestore.collection(path).doc(documentId).get();
+
+		const { time, data } = await timedOperation(async () => await firestore.collection(path).doc(documentId).get());
+
+		metrics.timing("database.get", time);
 		metrics.increment("database.get.success", 1);
-		return result;
+		return data;
 	} catch (error) {
 		console.error(`Failed to get document ${documentId}: `, error);
 		metrics.increment("database.get.error", 1);
@@ -120,7 +135,10 @@ export const getDocument = async (path: string, documentId: string): Promise<adm
 
 export const updateDocument = async (path: string, documentId: string, fields: any): Promise<void> => {
 	try {
-		await firestore.collection(path).doc(documentId).update(fields);
+
+		const { time } = await timedOperation(async () => await firestore.collection(path).doc(documentId).update(fields));
+
+		metrics.timing("database.update", time);
 		metrics.increment("database.update.success", 1);
 	} catch (error) {
 		console.error(`Failed to update ${documentId}: `, error);
@@ -130,7 +148,9 @@ export const updateDocument = async (path: string, documentId: string, fields: a
 
 export const setDocument = async (path: string, documentId: string, fields: any): Promise<void> => {
 	try {
-		await firestore.collection(path).doc(documentId).set(fields);
+		const { time } = await timedOperation(async () => await firestore.collection(path).doc(documentId).set(fields));
+
+		metrics.timing("database.set", time);
 		metrics.increment("database.set.success", 1);
 	} catch (error) {
 		console.error(`Failed to set document ${documentId}: `, error);
@@ -151,9 +171,11 @@ export const findDocument = async (path: string, where: WhereParam[] | [WherePar
 			collection = collection.where(where[0], where[1], where[2]);
 		}
 
-		const result = await collection.limit(limit).get();
+		const { time, data } = await timedOperation(async () => await collection.limit(limit).get());
+
+		metrics.timing("database.find", time);
 		metrics.increment("database.find.success", 1);
-		return result;
+		return data;
 	} catch (error) {
 		console.error(`Failed to find: `, error);
 		metrics.increment("database.find.error", 1);
@@ -267,7 +289,7 @@ export const makeLoginCode = async (userId: string): Promise<string> => {
 		userId,
 		createdAt: Timestamp.now()
 	});
-	
+
 	return code
 }
 
