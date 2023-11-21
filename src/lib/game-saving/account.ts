@@ -84,83 +84,83 @@ export interface SessionInfo {
 	user: User
 }
 
-const timedOperation = async (callback: Function) => {
+const timedOperation = async (metricKey: string, callback: Function) => {
 	const startTime = new Date().getTime();
 	const result = await callback();
 	const endTime = (new Date().getTime()) - startTime;
 
-	return { time: endTime, data: result };
+	metrics.timing(metricKey, endTime);
+	return result;
 }
 
 export const deleteDocument = async (path: string, documentId: string): Promise<void> => {
+	const metricKey = "database.delete";
 	try {
-		const { time } = await timedOperation(async () => await firestore.collection(path).doc(documentId).delete());
+		await timedOperation(metricKey, async () => await firestore.collection(path).doc(documentId).delete());
 
-		metrics.timing("database.delete", time);
-		metrics.increment("database.delete.success", 1);
+		metrics.increment(`${metricKey}.success`, 1);
 	} catch (error) {
 		console.error(`Failed to delete ${documentId}: `, error);
-		metrics.increment("database.delete.error", 1);
+		metrics.increment(`${metricKey}.error`, 1);
 	}
 }
 
 export const addDocument = async (path: string, fields: any): Promise<admin.firestore.DocumentReference<admin.firestore.DocumentData>> => {
+	const metricKey = "database.add";
 	try {
-		const { time, data } = await timedOperation(async () => await firestore.collection(path).add(fields));
+		const data = await timedOperation(metricKey, async () => await firestore.collection(path).add(fields));
 
-		metrics.timing("database.add", time);
-		metrics.increment("database.add.success", 1);
+		metrics.increment(`${metricKey}.success`, 1);
 		return data;
 	} catch (error) {
 		console.error(`Failed to add document into ${path}: `, error);
-		metrics.increment("database.add.error", 1);
+		metrics.increment(`${metricKey}.error`, 1);
 	}
 	return {} as any;
 }
 
 export const getDocument = async (path: string, documentId: string): Promise<admin.firestore.DocumentSnapshot<admin.firestore.DocumentData>> => {
+	const metricKey = "database.get";
 	try {
+		const data = await timedOperation(metricKey, async () => await firestore.collection(path).doc(documentId).get());
 
-		const { time, data } = await timedOperation(async () => await firestore.collection(path).doc(documentId).get());
-
-		metrics.timing("database.get", time);
-		metrics.increment("database.get.success", 1);
+		metrics.increment(`${metricKey}.success`, 1);
 		return data;
 	} catch (error) {
 		console.error(`Failed to get document ${documentId}: `, error);
-		metrics.increment("database.get.error", 1);
+		metrics.increment(`${metricKey}.error`, 1);
 	}
 	return {} as any;
 }
 
 export const updateDocument = async (path: string, documentId: string, fields: any): Promise<void> => {
+	const metricKey = "database.update";
 	try {
+		await timedOperation(metricKey, async () => await firestore.collection(path).doc(documentId).update(fields));
 
-		const { time } = await timedOperation(async () => await firestore.collection(path).doc(documentId).update(fields));
-
-		metrics.timing("database.update", time);
-		metrics.increment("database.update.success", 1);
+		metrics.increment(`${metricKey}.success`, 1);
 	} catch (error) {
 		console.error(`Failed to update ${documentId}: `, error);
-		metrics.increment("database.update.error", 1);
+		metrics.increment(`${metricKey}.error`, 1);
 	}
 }
 
 export const setDocument = async (path: string, documentId: string, fields: any): Promise<void> => {
+	const metricKey = "database.set";
 	try {
-		const { time } = await timedOperation(async () => await firestore.collection(path).doc(documentId).set(fields));
+		await timedOperation(metricKey, async () => await firestore.collection(path).doc(documentId).set(fields));
 
-		metrics.timing("database.set", time);
-		metrics.increment("database.set.success", 1);
+		metrics.increment(`${metricKey}.success`, 1);
 	} catch (error) {
 		console.error(`Failed to set document ${documentId}: `, error);
-		metrics.increment("database.set.error", 1);
+		metrics.increment(`${metricKey}.error`, 1);
 	}
 }
 
 type WhereQuery = [string | FieldPath, WhereFilterOp, string];
 type WhereParam = string | WhereQuery;
 export const findDocument = async (path: string, where: WhereParam[] | [WhereParam, WhereFilterOp, WhereParam], limit: number = 1): Promise<any> => {
+	const metricKey = "database.find";
 	try {
 		let collection: any = firestore.collection(path);
 		if (typeof where[0] === 'object') {
@@ -171,14 +171,13 @@ export const findDocument = async (path: string, where: WhereParam[] | [WherePar
 			collection = collection.where(where[0], where[1], where[2]);
 		}
 
-		const { time, data } = await timedOperation(async () => await collection.limit(limit).get());
+		const data = await timedOperation(metricKey, async () => await collection.limit(limit).get());
 
-		metrics.timing("database.find", time);
-		metrics.increment("database.find.success", 1);
+		metrics.increment(`${metricKey}.success`, 1);
 		return data;
 	} catch (error) {
 		console.error(`Failed to find: `, error);
-		metrics.increment("database.find.error", 1);
+		metrics.increment(`${metricKey}.error`, 1);
 		return {};
 	}
 }
