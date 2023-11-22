@@ -69,7 +69,6 @@ export const saveGame = debounce(800, (persistenceState: Signal<PersistenceState
 		}
 
 		while (!await attemptSaveGame()) {
-			if (await attemptSaveGame()) break;
 			await new Promise(resolve => setTimeout(resolve, 2000)); // retry saving the game every 2 seconds
 		}
 
