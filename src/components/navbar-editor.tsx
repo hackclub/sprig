@@ -80,6 +80,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		saveState = props.persistenceState.value.stale
 			? 'Your changes are unsaved!'
 			: 'No changes to save'
+
 		actionButton = <Button icon={IoShuffle} onClick={() => {
 			if (props.persistenceState.value.session?.session.full)
 				persist(props.persistenceState)
