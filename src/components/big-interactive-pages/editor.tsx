@@ -150,7 +150,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 
 		const code = codeMirror.value?.state.doc.toString() ?? ''
 		const res = runGame(code, screen.current, (error) => {
-			errorLog.value = [...errorLog.value, error]
+			errorLog.value = [ ...errorLog.value, error ]
 			if (error.line) {
 				highlightError(error.line);
 			}
@@ -163,7 +163,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		cleanup.current = res.cleanup
 		if (res.error) {
 			console.error(res.error.raw)
-			errorLog.value = [...errorLog.value, res.error]
+			errorLog.value = [ ...errorLog.value, res.error ]
 
 			if (res.error.line) {
 				highlightError(res.error.line);
@@ -212,7 +212,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		initialCode = persistenceState.value.code
 	else if (persistenceState.value.kind === 'IN_MEMORY')
 		initialCode = localStorage.getItem('sprigMemory') ?? defaultExampleCode
-
 	// Firefox has weird tab restoring logic. When you, for example, Ctrl-Shift-T, it opens
 	// a kinda broken cached version of the page. And for some reason this reverts the CM
 	// state. Seems like manipulating Preact state is unpredictable, but sessionStorage is
