@@ -61,6 +61,11 @@ export const saveGame = debounce(800, (persistenceState: Signal<PersistenceState
 			} catch (error) {
 				console.error(error)
 				isError = true
+
+				persistenceState.value = {
+					...persistenceState.value,
+					cloudSaveState: 'ERROR'
+				} as any;
 			}
 		}
 
