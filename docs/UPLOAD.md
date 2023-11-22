@@ -49,4 +49,6 @@ cp -X ~/Downloads/pico-os.uf2 /Volumes/RPI-RP2
 
 Open up your game in the editor, click the "Run on Device" button in the top right, and select the Sprig from the menu (again, like a USB device.)
 
+*Note: Make sure you're using a Chromium-based browser such as Edge or Chrome. On Linux you will also need to add your user to the `dialout` group*
+
 That's it! You're done :)
