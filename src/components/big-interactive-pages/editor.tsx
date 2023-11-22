@@ -68,9 +68,8 @@ export const saveGame = debounce(800, (persistenceState: Signal<PersistenceState
 			}
 		}
 
-		let error = !await attemptSaveGame();
-		while (error) {
-			error = !await attemptSaveGame();
+		while (!await attemptSaveGame()) {
+			if (await attemptSaveGame()) break;
 			await new Promise(resolve => setTimeout(resolve, 2000)); // retry saving the game every 2 seconds
 		}
 
@@ -78,7 +77,7 @@ export const saveGame = debounce(800, (persistenceState: Signal<PersistenceState
 		if (saveQueueSize === 0 && persistenceState.value.kind === 'PERSISTED') {
 			persistenceState.value = {
 				...persistenceState.value,
-				cloudSaveState: error ? 'ERROR' : 'SAVED'
+				cloudSaveState: 'SAVED'
 			}
 		}
 	}
