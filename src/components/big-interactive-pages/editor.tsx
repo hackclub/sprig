@@ -72,7 +72,6 @@ export const saveGame = debounce(800, (persistenceState: Signal<PersistenceState
 
 		saveQueueSize--
 		if (saveQueueSize === 0 && persistenceState.value.kind === 'PERSISTED') {
-			console.log("state update");
 			persistenceState.value = {
 				...persistenceState.value,
 				cloudSaveState: isError ? 'ERROR' : 'SAVED'
