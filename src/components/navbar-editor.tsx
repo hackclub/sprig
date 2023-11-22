@@ -80,7 +80,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		saveState = props.persistenceState.value.stale
 			? 'Your changes are unsaved!'
 			: 'No changes to save'
-
 		actionButton = <Button icon={IoShuffle} onClick={() => {
 			if (props.persistenceState.value.session?.session.full)
 				persist(props.persistenceState)
@@ -123,7 +122,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					</>) : props.persistenceState.value.kind === 'SHARED' ? (<>
 						{props.persistenceState.value.name}
 						<span class={styles.attribution}>
-							{props.persistenceState.value.authorName
+							{props.persistenceState.value.authorName 
 								? ` by ${props.persistenceState.value.authorName}`
 								: ' (shared with you)'}
 						</span>

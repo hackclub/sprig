@@ -327,11 +327,11 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			)}
 
 			{(persistenceState.value.kind === 'SHARED' || persistenceState.value.kind === 'PERSISTED') && persistenceState.value.tutorial && (
-				<Help tutorialContent={persistenceState.value.tutorial} persistenceState={persistenceState} showingTutorialWarning={showingTutorialWarning} />
+				<Help tutorialContent={persistenceState.value.tutorial} persistenceState={persistenceState} showingTutorialWarning={showingTutorialWarning}/>
 			)}
 
 			{showingTutorialWarning.value && (
-				<TutorialWarningModal exitTutorial={() => exitTutorial(persistenceState)} showingTutorialWarning={showingTutorialWarning}/>
+				<TutorialWarningModal exitTutorial={() => exitTutorial(persistenceState)} showingTutorialWarning={showingTutorialWarning} />
 			)}
 			<MigrateToast persistenceState={persistenceState} />
 		</div>
