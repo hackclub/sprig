@@ -92,7 +92,7 @@ export const bitmaps = signal<[string, string][]>([])
 export const isDark = signal<boolean>(false)
 
 export const toggleTheme = () => {
-	// isDark.value = !isDark.value;
+	isDark.value = !isDark.value;
 	// console.log(isDark.value);
-	// localStorage.setItem("isDark", isDark.value.toString());
+	localStorage.setItem("isDark", isDark.value.toString());
 } 
