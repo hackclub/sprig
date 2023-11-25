@@ -11,15 +11,15 @@ const data = (
 ).default;
 ---
 <Categories name={data["start.categories.name.ysws"]} title={data["start.categories.title.ysws"]} >
-<h2>Sprig: You ship, we ship</h2>
-<p>Make a game &rarr; Share it with the community &rarr; Receive your device &rarr; Play Sprig games on it &rarr; Hack on the device for more projects</p>
-<p>Only teenagers and younger can receive Sprigs! All are welcome to submit to the though.</p>
+<h2>{data["start.categories.ysws.p1"]}</h2>
+<p>{data["start.categories.ysws.p2"]}</p>
+<p>{data["start.categories.ysws.p3"]}</p>
 
-<h2>Other we ship, you ship Hack Club projects:</h2>
+<h2>{data["start.categories.ysws.p4"]}</h2>
 <div class="docs-preview">
     <Outside
     links="blot.hackclub.dev"
     name="Blot"
-    description="Write a program that creates art and we'll send you a CNC machine" />
+    description={data["start.categories.ysws.blot.description"]} />
 </div>
 </Categories>
