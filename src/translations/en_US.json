@@ -117,5 +117,8 @@
 	"start.categories.engine-dev.p3": "First set up the engine repo:",
 	"start.categories.engine-dev.p4": "Then, in this website's repo:",
 	"start.categories.engine-dev.p5": "Now, run",
-	"start.categories.engine-dev.p6": "in the engine repo to start the TypeScript build process."
+	"start.categories.engine-dev.p6": "in the engine repo to start the TypeScript build process.",
+    "start.categories.name.philosophy": "Philosophy - Sprikipedia, the Sprig encyclopedia",
+	"start.categories.title.philosophy": "Philosophy",
+    "start.categories.philosophy.p1": "People learn best when they make things that they care about, which they can then share with others. This type of learning philosophy is called constructionism, and Sprig is a type of microworld. A microworld is an environment where you can discover programming by using it to express yourself."
 }
