@@ -10,18 +10,18 @@ const data = (
 ).default;
 ---
 <Categories name={data["start.categories.name.engine-dev"]} title={data["start.categories.title.engine-dev"]} >
-<p>All engine code (responsible for running games, playing tunes, etc.) is in a different repo: https://github.com/hackclub/sprig-engine/.</p>
-<p>If you want to work on the engine and test out your changes in the context of this repo, you'll want to use a feature called linking.</p>
-<p>First set up the engine repo:</p>
+<p>{data["start.categories.engine-dev.p1"]} https://github.com/hackclub/sprig-engine/.</p>
+<p>{data["start.categories.engine-dev.p2"]}</p>
+<p>{data["start.categories.engine-dev.p3"]}</p>
 
 <code>git clone https://github.com/hackclub/sprig-engine/</code>
 <code>cd sprig-engine</code>
 <code>yarn install</code>
 <code>yarn link</code>
     
-<p>Then, in this website's repo:</p>
+<p>{data["start.categories.engine-dev.p4"]}</p>
 
 <code>yarn link sprig</code>
 
-<p>Now, run <code>yarn dev</code> in the engine repo to start the TypeScript build process.</p>
+<p>{data["start.categories.engine-dev.p5"]} <code>yarn dev</code> {data["start.categories.engine-dev.p6"]}</p>
 </Categories>
