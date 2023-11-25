@@ -106,8 +106,8 @@
 	"start.categories.resources.philosophy.description": "Our philosophy",
 	"start.categories.resources.ysws": "You ship, we ship",
 	"start.categories.resources.ysws.description": "Other you ship, we ship Hack Club projects",
-	"start.categories.name.engine-dev": "Acknowledgements - Sprikipedia, the Sprig encyclopedia",
-	"start.categories.title.engine-dev": "Acknowledgements",
-	"start.categories.engine-dev.p1": "The Sprig was developed by a team at Hack Club with assistance from Brian Silverman (who helped develop Scratch and the precursor to Lego Mindstorms), Vadim Gerasimov (engineer at Google who helped create Tetris when he was 15), and Quentin Bolsée (researcher at MIT and Vrije University Brussels), and dozens contributions from teenage open-source developers!",
-	"start.categories.engine-dev.p2": "We're also grateful for amazing open-source projects that make this possible like:"
+	"start.categories.name.acknowledgements": "Acknowledgements - Sprikipedia, the Sprig encyclopedia",
+	"start.categories.title.acknowledgements": "Acknowledgements",
+	"start.categories.acknowledgements.p1": "The Sprig was developed by a team at Hack Club with assistance from Brian Silverman (who helped develop Scratch and the precursor to Lego Mindstorms), Vadim Gerasimov (engineer at Google who helped create Tetris when he was 15), and Quentin Bolsée (researcher at MIT and Vrije University Brussels), and dozens contributions from teenage open-source developers!",
+	"start.categories.acknowledgements.p2": "We're also grateful for amazing open-source projects that make this possible like:"
 }
