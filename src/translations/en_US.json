@@ -144,5 +144,12 @@
 	"start.categories.slack.13": "Development of a clone of Doom.",
 	"start.categories.slack.14": "Development of the sprigOS, the sprig game that acts like an operating system.",
 	"start.categories.slack.15": "For discussions of Spade firmware/OS of the Sprig.",
-	"start.categories.slack.16": "Make art with your sprig with sPaint and share."
+	"start.categories.slack.16": "Make art with your sprig with sPaint and share.",
+	"start.categories.name.ysws": "You ship, we ship - Sprikipedia, the Sprig encyclopedia",
+	"start.categories.title.ysws": "You ship, we ship",
+	"start.categories.ysws.p1": "Sprig: You ship, we ship",
+	"start.categories.ysws.p2": "Make a game &rarr; Share it with the community &rarr; Receive your device &rarr; Play Sprig games on it &rarr; Hack on the device for more projects",
+	"start.categories.ysws.p3": "Only teenagers and younger can receive Sprigs! All are welcome to submit to the though.",
+	"start.categories.ysws.p4": "Other we ship, you ship Hack Club projects:",
+	"start.categories.ysws.blot.description": "Write a program that creates art and we'll send you a CNC machine"
 }
