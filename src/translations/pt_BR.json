@@ -120,5 +120,10 @@
 	"start.categories.engine-dev.p6": "in the engine repo to start the TypeScript build process.",
     "start.categories.name.philosophy": "Philosophy - Sprikipedia, the Sprig encyclopedia",
 	"start.categories.title.philosophy": "Philosophy",
-    "start.categories.philosophy.p1": "People learn best when they make things that they care about, which they can then share with others. This type of learning philosophy is called constructionism, and Sprig is a type of microworld. A microworld is an environment where you can discover programming by using it to express yourself."
+    "start.categories.philosophy.p1": "People learn best when they make things that they care about, which they can then share with others. This type of learning philosophy is called constructionism, and Sprig is a type of microworld. A microworld is an environment where you can discover programming by using it to express yourself.",
+	"start.categories.name.setup": "Project setup - Sprikipedia, the Sprig encyclopedia",
+	"start.categories.title.setup": "Project setup",
+	"start.categories.setup.p1": "In a terminal, clone the repo and install packages:",
+	"start.categories.setup.p2": "Next, you'll want to give Sprig access to the Firebase credentials you created. Make a .env file in the root of the project and enter FIREBASE_CREDENTIAL= followed by the base64 string you generated.",
+	"start.categories.setup.p3": "art the dev server, run yarn dev and visit http://localhost:3000 in your web browser! Please create a GitHub issue if you cannot get something to work properly."
 }
