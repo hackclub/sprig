@@ -1,70 +1,13 @@
 /*
 @title: sprig_dodging
 @author: sam liu and lucas
-
-Instructions:
-
-Welcome to Sprig!!!
-
-Hit "run" to execute the code and
-start the game (you can also press shift+enter).
-
-To complete each step you'll have to edit the code.
-
-The code for this game starts below this comment.
-
-This code has intentional errors.
-
-Made based on this workshop https://workshops.hackclub.com/sprig_dodge/
-
-The goal is to dodge the fireballs.
-
-Click the "open help" to discover your toolkit.
-
---------
-Step 1
---------
-
-Add the player to the map
-
---------
-Step 2
---------
-
-Add controls for moving the player to right, use "d" as input
-
---------
-Step 3
---------
-
-Fix the code!
-This cause this error:
-Uncaught TypeError: Cannot read properties of undefined (reading 'length') on line ... in column 33. Open the browser console for more information.
-
-Tip:
-the getAll() and getFirst() functions are a bit strange, aren't they?
-
---------
-Step 4
---------
-
-Add all functions in the gameLoop interval
-
-Tip: use spawnObstacle(), moveObstacles(), despawnObstacles(), and checkHit()
-
---------
-END
---------
-
-Modify the game to make it your own! Try:
- - adding two players
- - adding powerups
- - come up with your own mechanic!
 */
 
+// define the sprites in our game
 const player = "p";
 const obstacle = "o";
 
+// assign bitmap art to each sprite
 setLegend(
   [obstacle, bitmap`
 .......66.......
