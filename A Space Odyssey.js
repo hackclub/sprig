@@ -243,6 +243,8 @@ bbbbbbb`
 
 setMap(levels[level]);
 
+
+
 addText( "Press j to start" , {
       x: 2,
       y: 3,
@@ -282,74 +284,6 @@ var timeLoop = setInterval(() => {
       color: color`3`
     });
    addText( "J To Start Over" , {
-      x: 2,
-      y: 3,
-      color: color`0`
-    });
-  }
-
-  
-},800)
-
-  
-  
-});
-
-const playback = playTune(gameSong, Infinity)
-
-
-
-
-        
-onInput("s", () => {
-  if (gameRunning) {
-  getFirst(player).y += 1;
-  }
-});
-
-onInput("w", () => {
-  if (gameRunning) {
-  getFirst(player).y -= 1;
-  }
-});
-
-onInput("a", () => {
-  if (gameRunning) {
-  getFirst(player).x -= 1;
-  }
-});
-
-onInput("d", () => {
-  if (gameRunning) {
-  getFirst(player).x += 1;
-  }
-});
-
-afterInput(() => {
-  const playerPosition = getFirst(player);
-
-
-  
-
-  if (checkHit()) {
-
-    gameRunning = false;
-    playTune(overSong);
-    despawnAll();
-    clearInterval(timeLoop);
-    getFirst(player).x = 0
-    getFirst(player).y = 2
-    addText("Womp Womp", {
-      x: 5,
-      y: 6,
-      color: color`7`
-    });
-    addText("Time: "+ String(gameTime), {
-      x: 5,
-      y: 7,
-      color: color`3`
-    });
-    addText( "J To Start Over" , {
       x: 2,
       y: 3,
       color: color`0`
@@ -406,4 +340,77 @@ afterInput(() => {
       color: color`0`
     });
   }
+
+afterInput(() => {
+  const playerPosition = getFirst(player);
+
+
+  
+
+  if (checkHit()) {
+
+    gameRunning = false;
+    playTune(overSong);
+    despawnAll();
+    clearInterval(timeLoop);
+    getFirst(player).x = 0
+    getFirst(player).y = 2
+    addText("Womp Womp", {
+      x: 5,
+      y: 6,
+      color: color`7`
+    });
+    addText("Time: "+ String(gameTime), {
+      x: 5,
+      y: 7,
+      color: color`3`
+    });
+    addText( "J To Start Over" , {
+      x: 2,
+      y: 3,
+      color: color`0`
+    });
+  }
+
+
 })
+
+  
+},800)
+
+  
+  
+});
+
+
+
+const playback = playTune(gameSong, Infinity)
+
+
+
+
+        
+onInput("s", () => {
+  if (gameRunning) {
+  getFirst(player).y += 1;
+  }
+});
+
+onInput("w", () => {
+  if (gameRunning) {
+  getFirst(player).y -= 1;
+  }
+});
+
+onInput("a", () => {
+  if (gameRunning) {
+  getFirst(player).x -= 1;
+  }
+});
+
+onInput("d", () => {
+  if (gameRunning) {
+  getFirst(player).x += 1;
+  }
+});
+
