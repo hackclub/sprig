@@ -80,7 +80,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		saveState = props.persistenceState.value.stale
 			? 'Your changes are unsaved!'
 			: 'No changes to save'
-		
+
 		actionButton = <Button icon={IoShuffle} onClick={() => {
 			if (props.persistenceState.value.session?.session.full)
 				persist(props.persistenceState)
@@ -123,7 +123,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					</>) : props.persistenceState.value.kind === 'SHARED' ? (<>
 						{props.persistenceState.value.name}
 						<span class={styles.attribution}>
-							{props.persistenceState.value.authorName 
+							{props.persistenceState.value.authorName
 								? ` by ${props.persistenceState.value.authorName}`
 								: ' (shared with you)'}
 						</span>
@@ -140,11 +140,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				</a>
 			</li>
 
-			{/* <li>
+			<li>
 				<Button onClick={toggleTheme}>
-					{ isDark.value ? "Light" : "Dark" }
+					{isDark.value ? "Light" : "Dark"}
 				</Button>
-			</li> */}
+			</li>
 
 			<li>
 				<Button
@@ -222,7 +222,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								? props.persistenceState.value.name
 								: 'sprig-game'
 						const code = codeMirror.value?.state.doc.toString() ?? ''
-						const url = URL.createObjectURL(new Blob([ code ], { type: 'application/javascript' }))
+						const url = URL.createObjectURL(new Blob([code], { type: 'application/javascript' }))
 						a.href = url
 						a.download = `${name}.js`
 						a.click()

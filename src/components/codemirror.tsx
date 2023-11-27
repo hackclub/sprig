@@ -44,6 +44,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		});
 	};
 
+
 	useEffect(() => {
 		if (!parent.current) throw new Error('Oh golly! The editor parent ref is null')
 
@@ -62,7 +63,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 
 	useEffect(() => {
 		setEditorTheme();
-	}, [isDark.value]);
+	}, [isDark.value, editorRef]);
 
 
 	return (
