@@ -39,8 +39,8 @@ const heightMargin = 130
 const foldAllTemplateLiterals = () => {
 	if (!codeMirror.value) return
 	const code = codeMirror.value.state.doc.toString() ?? ''
-	const matches = [ ...code.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
-	collapseRanges(codeMirror.value, matches.map((match) => [ match.index!, match.index! + 1 ]))
+	const matches = [...code.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g)];
+	collapseRanges(codeMirror.value, matches.map((match) => [match.index!, match.index! + 1]))
 }
 
 let lastSavePromise = Promise.resolve()
@@ -48,25 +48,36 @@ let saveQueueSize = 0
 export const saveGame = debounce(800, (persistenceState: Signal<PersistenceState>, code: string) => {
 	const doSave = async () => {
 		let isError = false
-		try {
-			const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null
-			const res = await fetch('/api/games/save', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ code, gameId: game?.id, tutorialName: game?.tutorialName, tutorialIndex: game?.tutorialIndex })
-			})
-			if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`)
-		} catch (error) {
-			console.error(error)
-			isError = true
+		const attemptSaveGame = async () => {
+			try {
+				const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null
+				const res = await fetch('/api/games/save', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ code, gameId: game?.id, tutorialName: game?.tutorialName, tutorialIndex: game?.tutorialIndex })
+				})
+				if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`)
+				isError = false
+			} catch (error) {
+				console.error(error)
+				isError = true
+			}
+		}
+
+		await attemptSaveGame();
+		while (isError) {
+			await attemptSaveGame();
+			await new Promise(resolve => setTimeout(resolve, 2000)); // retry saving the game every 2 seconds
 		}
 
 		saveQueueSize--
-		if (saveQueueSize === 0 && persistenceState.value.kind === 'PERSISTED')
+		if (saveQueueSize === 0 && persistenceState.value.kind === 'PERSISTED') {
+			console.log("state update");
 			persistenceState.value = {
 				...persistenceState.value,
 				cloudSaveState: isError ? 'ERROR' : 'SAVED'
 			}
+		}
 	}
 
 	saveQueueSize++
@@ -137,7 +148,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 
 		const code = codeMirror.value?.state.doc.toString() ?? ''
 		const res = runGame(code, screen.current, (error) => {
-			errorLog.value = [ ...errorLog.value, error ]
+			errorLog.value = [...errorLog.value, error]
 			if (error.line) {
 				highlightError(error.line);
 			}
@@ -150,7 +161,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		cleanup.current = res.cleanup
 		if (res.error) {
 			console.error(res.error.raw)
-			errorLog.value = [ ...errorLog.value, res.error ]
+			errorLog.value = [...errorLog.value, res.error]
 
 			if (res.error.line) {
 				highlightError(res.error.line);
@@ -164,7 +175,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Warn before leave
 	useSignalEffect(() => {
 		let needsWarning = false
-		if ([ 'SHARED', 'IN_MEMORY' ].includes(persistenceState.value.kind)) {
+		if (['SHARED', 'IN_MEMORY'].includes(persistenceState.value.kind)) {
 			needsWarning = persistenceState.value.stale
 		} else if (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.stale && persistenceState.value.game !== 'LOADING') {
 			needsWarning = persistenceState.value.cloudSaveState !== 'SAVED'
@@ -179,7 +190,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			window.addEventListener('beforeunload', onBeforeUnload)
 			return () => window.removeEventListener('beforeunload', onBeforeUnload)
 		} else {
-			return () => {}
+			return () => { }
 		}
 	})
 
@@ -199,7 +210,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		initialCode = persistenceState.value.code
 	else if (persistenceState.value.kind === 'IN_MEMORY')
 		initialCode = localStorage.getItem('sprigMemory') ?? defaultExampleCode
-	
+
 	// Firefox has weird tab restoring logic. When you, for example, Ctrl-Shift-T, it opens
 	// a kinda broken cached version of the page. And for some reason this reverts the CM
 	// state. Seems like manipulating Preact state is unpredictable, but sessionStorage is
@@ -218,13 +229,13 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 				window.location.reload()
 			}
 		})
-	}, [ initialCode ])
+	}, [initialCode])
 
 	return (
 		<div class={styles.page}>
 			<Navbar persistenceState={persistenceState} />
 
-			<div class={styles.pageMain} style={{ backgroundColor: isDark.value ? "#2f2f2f" : "#fafed7"}}>
+			<div class={styles.pageMain} style={{ backgroundColor: isDark.value ? "#2f2f2f" : "#fafed7" }}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
 						class={styles.code}
@@ -313,7 +324,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			)}
 
 			{(persistenceState.value.kind === 'SHARED' || persistenceState.value.kind === 'PERSISTED') && persistenceState.value.tutorial && (
-				<Help tutorialContent={persistenceState.value.tutorial} persistenceState={persistenceState} showingTutorialWarning={showingTutorialWarning}/>
+				<Help tutorialContent={persistenceState.value.tutorial} persistenceState={persistenceState} showingTutorialWarning={showingTutorialWarning} />
 			)}
 
 			{showingTutorialWarning.value && (
