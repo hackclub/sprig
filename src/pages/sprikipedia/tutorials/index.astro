@@ -1,5 +1,7 @@
 ---
 import Categories from '../../../layouts/categories.astro'
+import Docs from '../../../layouts/docs.astro'
+import Outside from '../../../components/spriki-components/Outside.astro'
 
 const data = (
   (await Astro.glob(`/src/translations/*.json`)).find(
@@ -9,5 +11,20 @@ const data = (
 ).default;
 ---
 <Categories name={data["tutorials.categories.name"]} title={data["tutorials.categories.title"]}>
-  <p>{data["translations.categories.about"]}</p>
+  <h2>Tutorials</h2>
+  <p>What kind of tutorial you want?</p>
+  <div class="docs-preview">
+    <Outside
+    links="jams.hackclub.com/batch/sprig"
+    name="Hack Club Jams"
+    description="Collaborative coding workshops." />
+  <Outside
+    links="workshops.hackclub.com/batch/sprig"
+    name="Hack Club Workshops"
+    description="Collaborative coding workshops." />
+    <Docs
+      links="../sprikipedia/tutorials/github"
+      name="GitHub tutorials"
+      description="How to update a pull request, how to make a comment..." />
+  </div>
 </Categories>
