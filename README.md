@@ -1,4 +1,4 @@
-# :leaves: Hack Club Sprig :leaves: 
+# :leaves: Hack Club Sprig :leaves:
 
 **[💻 Online Editor: Make a game](https://sprig.hackclub.com/editor)** | **[👀 Gallery: Find games](https://sprig.hackclub.com/gallery)** | **[🕸 Landing Page](https://sprig.hackclub.com)** | **[🎮 Firmware](https://github.com/hackclub/spade)** | **[👾 Engine](https://github.com/hackclub/sprig-engine)**
 
@@ -10,7 +10,7 @@
 </a>
 </p>
 
-You should be able to get started in Sprig with very little programming experience. Even if you're an expert, you should still be able to have fun. Sprig games are designed to be shared and hacked on with friends. Every game submitted is easily viewable and editable in our gallery allowing people to learn from and build off each other. 
+You should be able to get started in Sprig with very little programming experience. Even if you're an expert, you should still be able to have fun. Sprig games are designed to be shared and hacked on with friends. Every game submitted is easily viewable and editable in our gallery allowing people to learn from and build off each other.
 
 ## Sprig is a...
 
@@ -46,17 +46,17 @@ We did some fun engineering to get Sprig to work and to make your games run the 
 
 ## You Ship, We Ship
 
-Make a game 
-&rarr; Share it with the community 
-&rarr; Receive your device 
-&rarr; Play Sprig games on it 
+Make a game
+&rarr; Share it with the community
+&rarr; Receive your device
+&rarr; Play Sprig games on it
 &rarr; Hack on the device for more projects
 
 ***Only teenagers and younger can receive Sprigs!*** All are welcome to submit to the [gallery](https://sprig.hackclub.com/gallery) though.
 
 ## Philosophy
 
-People learn best when they make things that they care about, which they can then share with others. This type of learning philosophy is called constructionism, and Sprig is a type of microworld. A microworld is an environment where you can discover programming by using it to express yourself. 
+People learn best when they make things that they care about, which they can then share with others. This type of learning philosophy is called constructionism, and Sprig is a type of microworld. A microworld is an environment where you can discover programming by using it to express yourself.
 
 ## Tutorials
 
@@ -66,7 +66,7 @@ To get started you can follow [this challenge in the editor](https://sprig.hackc
 
 Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) where you can join the development discussion and ask for help. We also have other channels for Sprig specific stuff:
 
-- `#sprig-platform`: For discussion of development of the Sprig platform as a whole. 
+- `#sprig-platform`: For discussion of development of the Sprig platform as a whole.
 - `#sprig-gaming-controller`: Building a case for the Sprig console to make it a portable gaming controller.
 - `#sprig-emulator`: Development of emulator.
 - `#sprig-multiplayer`: Development of multiplayer support.
@@ -82,7 +82,7 @@ Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) 
 - `#spade`: For discussions of Spade firmware/OS of the Sprig.
 - `#spaint`: Make art with your sprig with sPaint and share.
 
-Learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs). 
+Learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs).
 
 Sprig's editor and site pages are built with [Astro](https://astro.build/) using [Preact](https://preactjs.com/) for rendering. Perhaps somewhat unusually, we predominantly use [Preact Signals](https://preactjs.com/guide/v10/signals/) for state management. The project structure is as follows:
 
@@ -145,11 +145,15 @@ yarn link sprig
 
 Now, run `yarn dev` in the engine repo to start the TypeScript build process.
 
-## Acknowledgements 
+## Acknowledgements
 
 The Sprig was developed by a team at Hack Club with assistance from Brian Silverman (who helped develop Scratch and the precursor to Lego Mindstorms), Vadim Gerasimov (engineer at Google who helped create Tetris when he was 15), and Quentin Bolsée (researcher at MIT and Vrije University Brussels), and dozens contributions from teenage open-source developers!
 
 We're also grateful for amazing open-source projects that make this possible like [Kaluma](https://kalumajs.org/), [JerryScript](https://jerryscript.net/), [uhtml](https://github.com/WebReflection/uhtml), and [CodeMirror](https://codemirror.net/).
+
+## Responsibilities
+
+Please refer to [this document](./RESPONSIBILITIES.md) for a list of current team members who are accountable for maintaining certain aspects of the Sprig platform.
 
 ## License
 
