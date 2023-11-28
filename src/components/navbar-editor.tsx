@@ -1,5 +1,5 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
-import { codeMirror, PersistenceState, isDark, toggleTheme } from '../lib/state'
+import { codeMirror, PersistenceState } from '../lib/state'
 import Button from './design-system/button'
 import SavePrompt from './popups-etc/save-prompt'
 import styles from './navbar.module.css'
