@@ -1,5 +1,5 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
-import { codeMirror, PersistenceState } from '../lib/state'
+import { codeMirror, PersistenceState, isDark, toggleTheme } from '../lib/state'
 import Button from './design-system/button'
 import SavePrompt from './popups-etc/save-prompt'
 import styles from './navbar.module.css'
@@ -222,7 +222,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								? props.persistenceState.value.name
 								: 'sprig-game'
 						const code = codeMirror.value?.state.doc.toString() ?? ''
-						const url = URL.createObjectURL(new Blob([code], { type: 'application/javascript' }))
+						const url = URL.createObjectURL(new Blob([ code ], { type: 'application/javascript' }))
 						a.href = url
 						a.download = `${name}.js`
 						a.click()

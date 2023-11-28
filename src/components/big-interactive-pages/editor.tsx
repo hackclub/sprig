@@ -39,15 +39,14 @@ const heightMargin = 130
 const foldAllTemplateLiterals = () => {
 	if (!codeMirror.value) return
 	const code = codeMirror.value.state.doc.toString() ?? ''
-	const matches = [...code.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g)];
-	collapseRanges(codeMirror.value, matches.map((match) => [match.index!, match.index! + 1]))
+	const matches = [ ...code.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
+	collapseRanges(codeMirror.value, matches.map((match) => [ match.index!, match.index! + 1 ]))
 }
 
 let lastSavePromise = Promise.resolve()
 let saveQueueSize = 0
 export const saveGame = debounce(800, (persistenceState: Signal<PersistenceState>, code: string) => {
 	const doSave = async () => {
-		let isError = false
 		const attemptSaveGame = async () => {
 			try {
 				const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null
@@ -57,21 +56,21 @@ export const saveGame = debounce(800, (persistenceState: Signal<PersistenceState
 					body: JSON.stringify({ code, gameId: game?.id, tutorialName: game?.tutorialName, tutorialIndex: game?.tutorialIndex })
 				})
 				if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`)
-				isError = false
+				return true;
 			} catch (error) {
 				console.error(error)
-				isError = true
 
 				persistenceState.value = {
 					...persistenceState.value,
 					cloudSaveState: 'ERROR'
 				} as any;
+				return false;
 			}
 		}
 
-		await attemptSaveGame();
-		while (isError) {
-			await attemptSaveGame();
+		let error = !await attemptSaveGame();
+		while (error) {
+			error = !await attemptSaveGame();
 			await new Promise(resolve => setTimeout(resolve, 2000)); // retry saving the game every 2 seconds
 		}
 
@@ -79,7 +78,7 @@ export const saveGame = debounce(800, (persistenceState: Signal<PersistenceState
 		if (saveQueueSize === 0 && persistenceState.value.kind === 'PERSISTED') {
 			persistenceState.value = {
 				...persistenceState.value,
-				cloudSaveState: isError ? 'ERROR' : 'SAVED'
+				cloudSaveState: error ? 'ERROR' : 'SAVED'
 			}
 		}
 	}
@@ -179,7 +178,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Warn before leave
 	useSignalEffect(() => {
 		let needsWarning = false
-		if (['SHARED', 'IN_MEMORY'].includes(persistenceState.value.kind)) {
+		if ([ 'SHARED', 'IN_MEMORY' ].includes(persistenceState.value.kind)) {
 			needsWarning = persistenceState.value.stale
 		} else if (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.stale && persistenceState.value.game !== 'LOADING') {
 			needsWarning = persistenceState.value.cloudSaveState !== 'SAVED'
@@ -194,7 +193,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			window.addEventListener('beforeunload', onBeforeUnload)
 			return () => window.removeEventListener('beforeunload', onBeforeUnload)
 		} else {
-			return () => { }
+			return () => {}
 		}
 	})
 
@@ -233,13 +232,13 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 				window.location.reload()
 			}
 		})
-	}, [initialCode])
+	}, [ initialCode ])
 
 	return (
 		<div class={styles.page}>
 			<Navbar persistenceState={persistenceState} />
 
-			<div class={styles.pageMain} style={{ backgroundColor: isDark.value ? "#2f2f2f" : "#fafed7" }}>
+			<div class={styles.pageMain} style={{ backgroundColor: isDark.value ? "#2f2f2f" : "#fafed7"}}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
 						class={styles.code}
@@ -332,7 +331,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			)}
 
 			{showingTutorialWarning.value && (
-				<TutorialWarningModal exitTutorial={() => exitTutorial(persistenceState)} showingTutorialWarning={showingTutorialWarning} />
+				<TutorialWarningModal exitTutorial={() => exitTutorial(persistenceState)} showingTutorialWarning={showingTutorialWarning}/>
 			)}
 			<MigrateToast persistenceState={persistenceState} />
 		</div>
