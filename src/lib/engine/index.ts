@@ -58,7 +58,19 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 	code = `"use strict";\n${code}`
 	
 	try {
-		parseScript(code)
+		const program = parseScript(code, { loc: true })
+		for (let item of program.body) {
+			if (item.type === "FunctionDeclaration" && Object.keys(api).includes(item.id!.name)) {
+				const errorString = `Error: Cannot re-define built-in '${item.id!.name}' \n at line: ${item.loc!.start.line - 1}, col: ${item.loc!.start.column}`;
+				return {
+					error: {
+						description: errorString,
+						raw: errorString, 
+						line: item.loc!.start.line - 1,
+						column: item.loc!.start.column as number
+				}, cleanup };
+			}
+		}
 	} catch (error) {
 		return {
 			error: normalizeGameError({ kind: 'parse', error: error as EsprimaError }),
