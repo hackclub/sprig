@@ -1,7 +1,7 @@
 ---
 import "../../pages/sprikipedia/global.css";
 import Docs from "../../components/spriki-components/Docs.astro";
-import Dark from "../../components/spriki-components/Dark.astro";
+import Outside from "../../components/spriki-components/Outside.astro";
 import StandardHead from "../../components/standard-head.astro";
 
 const data = (
@@ -16,8 +16,10 @@ const data = (
         <StandardHead title={data["home.head.title"]} />
     </head>
     <body>
+        <div class="spriki-bg">
+            <img src="https://cloud-bba4hojqq-hack-club-bot.vercel.app/0frame_22.svg" width="50%">
+        </div>
         <div class="title-lang">
-            <h1>{data["home.welcome.welcome"]}</h1>
             <p>{data["home.welcome.description"]}</p>
         </div>
         <div class="docs-preview">
@@ -49,9 +51,10 @@ const data = (
                 name={data["home.docs.brand.name"]}
                 description={data["home.docs.brand.description"]}
                 links="sprikipedia/brand" />
-        </div>
-        <div class="docs-preview">
-            <Dark links="github.com/hackclub/sprig/wiki" info={data["home.dark.info"]} />
+            <Outside
+                links="github.com/hackclub/sprig/wiki"
+                name={data["home.wiki.name"]}
+                description={data["home.wiki.description"]} />
         </div>
     </body>
 </html>

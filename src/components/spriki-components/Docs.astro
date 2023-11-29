@@ -11,6 +11,14 @@ const { name, description, links } = Astro.props;
         top: 5rem;
         left: 50px;
         color: #ffffff;
+        border-radius: 10px;
+    }
+    .docs:hover {
+        color: #8BCAB1;
+    }
+    .text {
+        font-size: small;
+        margin: 5%;
     }
 
     p {
@@ -18,9 +26,9 @@ const { name, description, links } = Astro.props;
     }
 </style>
 
-<a href={`../${links}/`}>
-    <button class="docs">
+<a href={`../${links}/`} class="docs">
+    <div class="text">
         <h2>{name}</h2>
         <p>{description}</p>
-    </button>
+    </div>
 </a>

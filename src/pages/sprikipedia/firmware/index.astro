@@ -1,6 +1,7 @@
 ---
 import '../../../global.css'
 import Categories from '../../../layouts/categories.astro'
+import Outside from '../../../components/spriki-components/Outside.astro'
 
 const data = (
   (await Astro.glob(`/src/translations/*.json`)).find(
@@ -9,12 +10,28 @@ const data = (
   ) || {}
 ).default;
 ---
-<Categories name={data["firmware.categories.name"]} title={data["firmware.categories.title"]} whats={data["firmware.categories.whats"]} about={data["firmware.categories.about"]}>
-    <ul>
-        <li><a href="https://github.com/hackclub/spade">Spade</a>{data["firmware.spade.description"]}</li>
-        <li><a href="https://github.com/shanecelis/trowel">Trowel</a>{data["firmware.trowel.description"]}</li>
-        <li><a href="https://github.com/DedFishy/Spryg">Spryg</a>{data["firmware.spryg.description"]}</li>
-        <li><a href="https://circuitpython.org/board/hack_club_sprig/">CircuitPython</a>{data["firmware.circuitpython.description"]}</li>
-        <li><a href="https://github.com/geschmit/hp-printer-trolling">hp-trolling</a>{data["firmware.hp-trolling.description"]}</li>
-    </ul>
+<Categories name={data["firmware.categories.name"]} title={data["firmware.categories.title"]} >
+  <p>{data["firmware.categories.about"]}</p>  
+  <div>
+    <Outside
+      links="github.com/hackclub/spade"
+      name="Spade"
+      description={data["firmware.spade.description"]} />
+    <Outside
+      links="github.com/shanecelis/trowel"
+      name="Trowel"
+      description={data["firmware.trowel.description"]} />
+    <Outside
+      links="github.com/DedFishy/Spryg"
+      name="Spryg"
+      description={data["firmware.spryg.description"]} />
+    <Outside
+      links="circuitpython.org/board/hack_club_sprig/"
+      name="CircuitPython"
+      description={data["firmware.circuitpython.description"]} />
+    <Outside
+      links="github.com/geschmit/hp-printer-trolling"
+      name="hp-trolling"
+      description={data["firmware.hp-trolling.description"]} />
+  </div>
 </Categories>

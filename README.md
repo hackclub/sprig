@@ -60,15 +60,29 @@ People learn best when they make things that they care about, which they can the
 
 ## Tutorials
 
-To get started you can follow [this challenge in the editor](https://sprig.hackclub.com/gallery/getting_started), check out some [Sprig workshops](https://workshops.hackclub.com#sprig) or watch some short videos to get acquainted with Sprig:
-
-<!-- [This video shows a quick overview of the editor.](https://youtu.be/GEbDRR_cqJI)
-
-[This video shows making a simple example "game".](https://youtu.be/1UTLS4aO9bQ) -->
+To get started you can follow [this challenge in the editor](https://sprig.hackclub.com/gallery/getting_started), check out some [Sprig workshops](https://workshops.hackclub.com#sprig) or [Sprig jams](https://jams.hackclub.com/batch/sprig).
 
 ## Development
 
-Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) where you can join the development discussion and ask for help, and to learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs).
+Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) where you can join the development discussion and ask for help. We also have other channels for Sprig specific stuff:
+
+- `#sprig-platform`: For discussion of development of the Sprig platform as a whole. 
+- `#sprig-gaming-controller`: Building a case for the Sprig console to make it a portable gaming controller.
+- `#sprig-emulator`: Development of emulator.
+- `#sprig-multiplayer`: Development of multiplayer support.
+- `#sprig-lora`: Development of Sprig-Lora communicator.
+- `#sdsprig`: Development of Sprig loading from an SD Card.
+- `#sprig-minecraft`: Development of Minecraft for Sprig.
+- `#sprig-ios-app`: Development of iOS app.
+- `#sprig-engagement`: Development of a bot to post every new game to `#sprig`.
+- `#vs-sprig`: Development of Sprig extension for VS Code.
+- `#stationary-sprig`: Making Sprig a home console.
+- `#spriggy-doom`: Development of a clone of Doom.
+- `#sprigos-development`: Development of the sprigOS, the sprig game that acts like an operating system.
+- `#spade`: For discussions of Spade firmware/OS of the Sprig.
+- `#spaint`: Make art with your sprig with sPaint and share.
+
+Learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs). 
 
 Sprig's editor and site pages are built with [Astro](https://astro.build/) using [Preact](https://preactjs.com/) for rendering. Perhaps somewhat unusually, we predominantly use [Preact Signals](https://preactjs.com/guide/v10/signals/) for state management. The project structure is as follows:
 
@@ -136,6 +150,10 @@ Now, run `yarn dev` in the engine repo to start the TypeScript build process.
 The Sprig was developed by a team at Hack Club with assistance from Brian Silverman (who helped develop Scratch and the precursor to Lego Mindstorms), Vadim Gerasimov (engineer at Google who helped create Tetris when he was 15), and Quentin Bolsée (researcher at MIT and Vrije University Brussels), and dozens contributions from teenage open-source developers!
 
 We're also grateful for amazing open-source projects that make this possible like [Kaluma](https://kalumajs.org/), [JerryScript](https://jerryscript.net/), [uhtml](https://github.com/WebReflection/uhtml), and [CodeMirror](https://codemirror.net/).
+
+## Responsibilities
+
+Please refer to [this document](./RESPONSIBILITIES.md) for a list of current team members who are accountable for maintaining certain aspects of the Sprig platform.
 
 ## License
 

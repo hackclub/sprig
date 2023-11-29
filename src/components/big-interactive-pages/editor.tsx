@@ -17,6 +17,7 @@ import MigrateToast from '../popups-etc/migrate-toast'
 import { highlightError, clearErrorHighlight } from '../../lib/engine/error'
 import { nanoid } from 'nanoid'
 import TutorialWarningModal from '../popups-etc/tutorial-warning'
+import { isDark } from '../../lib/state'
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>
@@ -46,26 +47,38 @@ let lastSavePromise = Promise.resolve()
 let saveQueueSize = 0
 export const saveGame = debounce(800, (persistenceState: Signal<PersistenceState>, code: string) => {
 	const doSave = async () => {
-		let isError = false
-		try {
-			const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null
-			const res = await fetch('/api/games/save', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ code, gameId: game?.id, tutorialName: game?.tutorialName, tutorialIndex: game?.tutorialIndex })
-			})
-			if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`)
-		} catch (error) {
-			console.error(error)
-			isError = true
+		const attemptSaveGame = async () => {
+			try {
+				const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null
+				const res = await fetch('/api/games/save', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ code, gameId: game?.id, tutorialName: game?.tutorialName, tutorialIndex: game?.tutorialIndex })
+				})
+				if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`)
+				return true;
+			} catch (error) {
+				console.error(error)
+
+				persistenceState.value = {
+					...persistenceState.value,
+					cloudSaveState: 'ERROR'
+				} as any;
+				return false;
+			}
+		}
+
+		while (!await attemptSaveGame()) {
+			await new Promise(resolve => setTimeout(resolve, 2000)); // retry saving the game every 2 seconds
 		}
 
 		saveQueueSize--
-		if (saveQueueSize === 0 && persistenceState.value.kind === 'PERSISTED')
+		if (saveQueueSize === 0 && persistenceState.value.kind === 'PERSISTED') {
 			persistenceState.value = {
 				...persistenceState.value,
-				cloudSaveState: isError ? 'ERROR' : 'SAVED'
+				cloudSaveState: 'SAVED'
 			}
+		}
 	}
 
 	saveQueueSize++
@@ -91,6 +104,7 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
 }
 
 export default function Editor({ persistenceState, cookies }: EditorProps) {
+
 	// Resize state storage
 	const outputAreaSize = useSignal(Math.max(minOutputAreaSize, cookies.outputAreaSize ?? defaultOutputAreaSize))
 	useSignalEffect(() => {
@@ -197,7 +211,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		initialCode = persistenceState.value.code
 	else if (persistenceState.value.kind === 'IN_MEMORY')
 		initialCode = localStorage.getItem('sprigMemory') ?? defaultExampleCode
-	
 	// Firefox has weird tab restoring logic. When you, for example, Ctrl-Shift-T, it opens
 	// a kinda broken cached version of the page. And for some reason this reverts the CM
 	// state. Seems like manipulating Preact state is unpredictable, but sessionStorage is
@@ -222,7 +235,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		<div class={styles.page}>
 			<Navbar persistenceState={persistenceState} />
 
-			<div class={styles.pageMain}>
+			<div class={styles.pageMain} style={{ backgroundColor: isDark.value ? "#2f2f2f" : "#fafed7"}}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
 						class={styles.code}

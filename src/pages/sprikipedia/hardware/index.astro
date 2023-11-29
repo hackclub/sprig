@@ -1,6 +1,7 @@
 ---
 import '../../../global.css'
 import Categories from '../../../layouts/categories.astro'
+import Outside from '../../../components/spriki-components/Outside.astro'
 
 const data = (
   (await Astro.glob(`/src/translations/*.json`)).find(
@@ -9,12 +10,28 @@ const data = (
   ) || {}
 ).default;
 ---
-<Categories name={data["hardware.categories.name"]} title={data["hardware.categories.title"]} whats={data["hardware.categories.whats"]} about={data["hardware.categories.about"]}>
-    <ul>
-        <li><a href="https://github.com/hackclub/sprig-hardware/tree/main/hardware/kicad">{data["hardware.kicad.description"]}</a></li>
-        <li><a href="https://github.com/hackclub/sprig-hardware/blob/main/hardware/BOM.md">{data["hardware.bom.description"]}</a></li>
-        <li><a href="https://github.com/hackclub/sprig-hardware/blob/main/hardware/ORDERING.md">{data["hardware.ordering.description"]}</a></li>
-        <li><a href="https://github.com/hackclub/sprig-hardware/blob/main/hardware/schematic.png">{data["hardware.schematic.description"]}</a></li>
-        <li><a href="https://github.com/hackclub/sprig-hardware/tree/main/back_covers">{data["hardware.back-covers.description"]}</a></li>
-    </ul>
+<Categories name={data["hardware.categories.name"]} title={data["hardware.categories.title"]} >
+  <p>{data["hardware.categories.about"]}</p> 
+  <div class="docs-preview">
+    <Outside
+      links="github.com/hackclub/sprig-hardware/tree/main/hardware/kicad"
+      name={data["hardware.kicad.description"]}
+      description=" " />
+    <Outside
+      links="github.com/hackclub/sprig-hardware/blob/main/hardware/BOM.md"
+      name={data["hardware.bom.description"]}
+      description=" " />
+    <Outside
+      links="github.com/hackclub/sprig-hardware/blob/main/hardware/ORDERING.md"
+      name={data["hardware.ordering.description"]}
+      description=" " />
+    <Outside
+      links="github.com/hackclub/sprig-hardware/blob/main/hardware/schematic.png"
+      name={data["hardware.schematic.description"]}
+      description=" " />
+    <Outside
+      links="github.com/hackclub/sprig-hardware/tree/main/back_covers"
+      name={data["hardware.back-covers.description"]}
+      description="" />
+  </div>
 </Categories>
