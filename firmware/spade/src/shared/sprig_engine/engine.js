@@ -3,8 +3,11 @@ const {
   /* sprite interactions */ setSolids, setPushables,
   /*              see also: sprite.x +=, sprite.y += */
 
-  /* art */ setLegend, setBackground,
-  /* text */ addText, clearText,
+  /* art */ setLegend,
+  setBackground,
+  /* text */ addText,
+  clearText,
+  mountSD,
 
   /*   spawn sprites */ setMap, addSprite,
   /* despawn sprites */ clearTile, /* sprite.remove() */
@@ -63,6 +66,11 @@ exports.addText = (str, opts={}) => {
 
 exports.clearText = () => native.text_clear();
 
+  exports.mountSD = (key) => {
+    exports.addText("mounting SD card!");
+    console.log("engine.js:mountSD");
+    native.mountSD(key);
+  };
 
 exports.setLegend = (...bitmaps) => {
   native.legend_clear();

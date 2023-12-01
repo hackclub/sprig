@@ -257,6 +257,11 @@ static void render_resize_legend(void) {
   }
 }
 
+static void native_mount_sd() {
+  // do the mount
+  state->sd_mounted = 1;
+}
+
 // Self-explanatory... sets the background sprite.
 static void render_set_background(char kind) {
   state->background_sprite = kind;

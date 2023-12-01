@@ -89,6 +89,8 @@ typedef struct {
   uint8_t  *sprite_slot_active;
   uint32_t *sprite_slot_generation;
 
+  int sd_mounted;
+
   uint16_t *map; // Index into sprite_pool + 1 (0 is null)
 
   int tile_size; // How small tiles have to be to fit map on screen
