@@ -30,6 +30,7 @@ Prerequisites:
 - The ability to run Bash scripts.
 - A C build environment, preferably Clang. On Windows, GCC won't work and you must use Clang. Make sure CMake and Make are both working.
 - Entr and uglifyjs installed to use jsdev.sh.
+- libbsd if compiling for PC
 
 Set up your build environment. All folders need to be in your home directory (for now), although they can be symlinked if you prefer.
 
@@ -59,9 +60,11 @@ Download the Pico SDK:
 ```sh
 mkdir ~/raspberrypi
 cd ~/raspberrypi
-git clone -b 1.3.1 https://github.com/raspberrypi/pico-sdk.git
+git clone https://github.com/raspberrypi/pico-sdk.git
 git clone https://github.com/raspberrypi/pico-extras.git
 cd pico-sdk
+# Jank fix due to a couple bugs in pico sdk with spade
+git checkout 7070d230c0cdf1add83fa86b6832b47b2da47788
 git submodule update --init
 cd ../pico-extras
 git submodule update --init

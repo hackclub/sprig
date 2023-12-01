@@ -30,3 +30,5 @@ pico_enable_stdio_uart(spade 0)
 # create map/bin/hex file etc.
 pico_add_extra_outputs(spade)
 
+add_compile_definitions(IS_RPI=1)
+

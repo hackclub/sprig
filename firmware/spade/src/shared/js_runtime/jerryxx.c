@@ -26,6 +26,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if IS_RPI == 0
+  #include <bsd/string.h>
+#endif
 
 #include "jerryscript.h"
 
