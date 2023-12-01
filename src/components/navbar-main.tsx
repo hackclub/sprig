@@ -26,6 +26,7 @@ export default function MainNavbar(props: MainNavbarProps) {
 				) : null}
 				<li><a href='/gallery'>Gallery</a></li>
 				<li><a href='/get'>Get a Sprig</a></li>
+				<li><a href='/sprikipedia'>Sprikipedia</a></li>
 			</ul>
 			<ul class={styles.rightActions}>
 				{props.session?.session.full ? (<>
