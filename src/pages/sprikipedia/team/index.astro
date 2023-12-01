@@ -14,9 +14,19 @@ const data = (
 <Categories name={data["team.categories.name"]} title={data["team.categories.title"]} >
     <p>{data["team.categories.about"]}</p>
     <h2>{data["team.categories.hq"]}</h2>
+	<Staff site="github.com/grymmy" img="github.com/grymmy.png" name="Graham" pronouns="he/him" role={data["team.categories.hq"]} />
+	<Staff site="github.com/karamassie" img="github.com/karmassie.png" name="Kara" pronouns="she/her" role={data["team.categories.hq"]} />
       <p>{data["team.categories.hq.permissions"]}</p>
     <h2>{data["team.categories.review"]}</h2>
+	<Staff site="github.com/LucasHT22" img="github.com/LucasHT22.png" name="Lucas" pronouns="he/him" role={data["team.categories.review.role.lucas"]} />
       <p>{data["team.categories.review.permissions"]}</p>
-      <Staff site="github.com/LucasHT22" img="github.com/LucasHT22.png" name="Lucas" pronouns="he/him" role={data["team.categories.review.role.lucas"]} />
-    <!-- need to add more ppl <Staff site="github.com/USERNAME" img="github.com/USERNAME.png" name="" pronouns="" role="" />-->
+	  <h2>{data["team.categories.hardware"]}</h2>
+	  <Staff site="github.com/hugoyhu" img="github.com/hugoyhu.png" name="Hugo" pronouns="he/him" role={data["team.categories.hardware.role.hugo"]} />
+	  <h2>{data["team.categories.hardware.permissions"]}</h2>
+	  <h2>{data["team.categories.contributor"]}</h2>
+	  <Staff site="github.com/polypixeldev" img="github.com/polypixeldev.png" name="Samuel" pronouns="he/him" role={data["team.categories.review.role.samuel"]} />
+	  <Staff site="github.com/galaxygamingboy" img="github.com/galaxygamingboy.png" name="Marios" pronouns="he/him" role={data["team.categories.contributor.role.marios"]} />
+	  <Staff site="github.com/itsimpeccable" img="github.com/itsimpeccable.png" name="Doruk" pronouns="he/him" role={data["team.categories.contributor.role.doruk"]} />
+	  <h2>{data["team.categories.contributor.permissions"]}</h2>
+	  <!-- need to add more ppl <Staff site="github.com/USERNAME" img="github.com/USERNAME.png" name="" pronouns="" role="" />-->
 </Categories>
