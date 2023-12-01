@@ -30,6 +30,13 @@ if (games.length === 0 && unnamedGames.length > 0) {
 	<head>
 		<StandardHead title='Your Games' />
 		
+		<script>
+			if (localStorage.getItem("isDark") === "true") {
+				document.body.style.backgroundColor = "#2f2f2f";
+				document.body.style.color = "white";
+			}
+		</script>
+
 		<style>
 			body {
 				display: flex;

@@ -168,6 +168,7 @@ function rockUpdate(someRock) {
 var gameLoop = setInterval(() => {
   if (titlescreen) {
     clearText();
+    score=0;
     addText("two birds", {
       x: 5,
       y: 6,

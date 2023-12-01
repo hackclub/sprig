@@ -56,9 +56,21 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 	}
 
 	code = `"use strict";\n${code}`
-	
+	const engineAPIKeys = Object.keys(api);
 	try {
-		parseScript(code)
+		const program = parseScript(code, { loc: true })
+		for (let item of program.body) {
+			if (item.type === "FunctionDeclaration" && engineAPIKeys.includes(item.id!.name)) {
+				const errorString = `Error: Cannot re-define built-in '${item.id!.name}' \n at line: ${item.loc!.start.line - 1}, col: ${item.loc!.start.column}`;
+				return {
+					error: {
+						description: errorString,
+						raw: errorString, 
+						line: item.loc!.start.line - 1,
+						column: item.loc!.start.column as number
+				}, cleanup };
+			}
+		}
 	} catch (error) {
 		return {
 			error: normalizeGameError({ kind: 'parse', error: error as EsprimaError }),
@@ -67,7 +79,7 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 	}
 	
 	try {
-		const fn = new Function(...Object.keys(api), code)
+		const fn = new Function(...engineAPIKeys, code)
 		fn(...Object.values(api))
 		return { error: null, cleanup }
 	} catch (error) {
