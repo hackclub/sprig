@@ -8,9 +8,30 @@ import { history, defaultKeymap, historyKeymap, indentWithTab, insertNewlineAndI
 import { javascript } from '@codemirror/lang-javascript'
 import SearchBox from '../../components/search-box'
 import { EditorView, keymap, lineNumbers, highlightActiveLineGutter, highlightSpecialChars, drawSelection, dropCursor, rectangularSelection, crosshairCursor, highlightActiveLine } from '@codemirror/view'
+import { lintGutter } from "@codemirror/lint";
+import type { NormalizedError } from '../state'
 
+export function diagnosticsFromErrorLog(view: EditorView, errorLog: NormalizedError[]) {
+	return errorLog.filter(error => error.line)
+		.map(error => {
+			const targetLine = view.state.doc.line(error.line!);
+			return {
+				from: targetLine.from,
+				to: targetLine.to,
+				severity: "error",
+				message: error.description
+			};
+		});
+}
 
 export const initialExtensions = (onUpdate: any, onRunShortcut: any) => ([
+	/*
+	linter((view) => { 
+		const diagnostics = diagnosticsFromErrorLog(view, errorLog.value) as any;
+		return diagnostics;
+	}, {}),
+	*/
+	lintGutter(),
 	lineNumbers(),
 	highlightActiveLineGutter(),
 	highlightSpecialChars(),

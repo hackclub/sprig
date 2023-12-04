@@ -170,7 +170,12 @@ export function highlightError(line: number) {
 			cmLineGutter.removeAttribute("err-line");
 			continue;
 		};
+		// not good: codemirror removes the lines that are out of the viewport
+		// meaning that once the highlighted line goes out of view
+		// it is no longer rendered on the DOM
+		// and codemirror will display the line corresponding in the current view
 		cmLineGutter.setAttribute("err-line", "");
+		console.log("highliting line", innerNumber);
 	}
 }
 
