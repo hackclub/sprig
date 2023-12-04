@@ -14,7 +14,6 @@ import Help from '../popups-etc/help'
 import { collapseRanges } from '../../lib/codemirror/util'
 import { defaultExampleCode } from '../../lib/examples'
 import MigrateToast from '../popups-etc/migrate-toast'
-import { highlightError, clearErrorHighlight } from '../../lib/engine/error'
 import { nanoid } from 'nanoid'
 import TutorialWarningModal from '../popups-etc/tutorial-warning'
 import { isDark } from '../../lib/state'
@@ -150,9 +149,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		const code = codeMirror.value?.state.doc.toString() ?? ''
 		const res = runGame(code, screen.current, (error) => {
 			errorLog.value = [ ...errorLog.value, error ]
-			if (error.line) {
-				highlightError(error.line);
-			}
 		})
 
 		screen.current.focus()
@@ -163,12 +159,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		if (res.error) {
 			console.error(res.error.raw)
 			errorLog.value = [ ...errorLog.value, res.error ]
-
-			if (res.error.line) {
-				highlightError(res.error.line);
-			}
-		} else {
-			clearErrorHighlight();
 		}
 	}
 	useEffect(() => () => cleanup.current?.(), [])
