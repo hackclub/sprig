@@ -25,12 +25,6 @@ export function diagnosticsFromErrorLog(view: EditorView, errorLog: NormalizedEr
 }
 
 export const initialExtensions = (onUpdate: any, onRunShortcut: any) => ([
-	/*
-	linter((view) => { 
-		const diagnostics = diagnosticsFromErrorLog(view, errorLog.value) as any;
-		return diagnostics;
-	}, {}),
-	*/
 	lintGutter(),
 	lineNumbers(),
 	highlightActiveLineGutter(),
