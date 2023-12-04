@@ -5,7 +5,7 @@ import styles from './codemirror.module.css'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorView } from '@codemirror/view'
 import { isDark, errorLog } from '../lib/state'
-import { setDiagnosticsEffect } from '@codemirror/lint'
+import { Diagnostic, setDiagnosticsEffect } from '@codemirror/lint'
 
 interface CodeMirrorProps {
 	class?: string | undefined
@@ -70,7 +70,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		errorLog.subscribe(value => {
 			const diagnostics = diagnosticsFromErrorLog(editorRef as EditorView, value);
 			editorRef?.dispatch({
-				effects: setDiagnosticsEffect.of(diagnostics as any)
+				effects: setDiagnosticsEffect.of(diagnostics as Diagnostic[])
 			});
 		});
 	}, [editorRef]);
