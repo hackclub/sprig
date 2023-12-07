@@ -48,15 +48,15 @@ const calculateSimilarity = (code1, code2) => {
 const checkForPlagiarism = (files, galleryDirPath, overlapThreshold = 50) => {
 	let similarityResults = [];
 
-	files.forEach(file => {
+	files.forEach(async file => {
 		try {
 
 			const originalCodeContent = fs.readFileSync(file, 'utf8');
-			const originalCode = preprocessCode(originalCodeContent.toString());
-			fs.readdirSync(galleryDirPath).forEach(galleryFile => {
+			const originalCode = await preprocessCode(originalCodeContent.toString());
+			fs.readdirSync(galleryDirPath).forEach(async galleryFile => {
 				const fullGalleryFilePath = path.join(galleryDirPath, galleryFile);
 				if (path.extname(galleryFile) === '.js' && fullGalleryFilePath !== file) {
-					const galleryCode = preprocessCode(fs.readFileSync(fullGalleryFilePath, 'utf8'));
+					const galleryCode = await preprocessCode(fs.readFileSync(fullGalleryFilePath, 'utf8'));
 					const similarity = calculateSimilarity(originalCode, galleryCode);
 					if (similarity >= overlapThreshold) {
 						similarityResults.push({ similarity, file1: file, file2: galleryFile });
