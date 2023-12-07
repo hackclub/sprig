@@ -5,11 +5,14 @@ import diff from 'fast-diff';
 import { fileURLToPath } from 'url';
 
 const preprocessCode = (code) => {
+	console.log("Type of code before any operation:", typeof code);
 
 	if (typeof code !== 'string') {
 		console.error("Code is not a string. Skipping preprocessing.");
 		return '';
 	}
+
+	console.log("Code content before Prettier formatting:", code);
 
 	try {
 		code = prettier.format(code, { parser: "babel" });
@@ -18,15 +21,17 @@ const preprocessCode = (code) => {
 		return code;
 	}
 
+	console.log("Code content after Prettier formatting:", code);
+
 	try {
-	code = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
-	code = code.replace(/map`[\s\S]*?`/g, '');
-	code = code.replace(/bitmap`[\s\S]*?`/g, '');
+		code = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
+		code = code.replace(/map`[\s\S]*?`/g, '');
+		code = code.replace(/bitmap`[\s\S]*?`/g, '');
 	} catch (replaceError) {
         console.error("Error in replace operations:", replaceError);
         return code;
     }
-	
+
 	return code;
 };
 
