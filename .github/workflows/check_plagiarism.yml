@@ -3,7 +3,7 @@ name: Plagiarism Checker
 on:
   pull_request:
     paths:
-      - "**.js"
+      - "games/**/*.js"
 
 jobs:
   plagiarism-check:
