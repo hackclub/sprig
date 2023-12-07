@@ -3,7 +3,7 @@ name: Plagiarism Checker
 on:
   pull_request:
     paths:
-      - "**.js"
+      - "games/**/*.js"
 
 jobs:
   plagiarism-check:
@@ -20,7 +20,7 @@ jobs:
         run: |
             base_sha="${{ github.event.pull_request.base.sha }}"
             head_sha="${{ github.event.pull_request.head.sha }}"
-            js_files=$(git diff --name-only --diff-filter=AM $base_sha..$head_sha | grep '\.js$' | xargs)
+            js_files=$(git diff --name-only --diff-filter=AM $base_sha..$head_sha | grep 'games/.*\.js$' | xargs)
             echo "JavaScript files:"
             echo "$js_files"
             echo "FILES=$js_files" >> $GITHUB_ENV
