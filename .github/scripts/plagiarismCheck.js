@@ -5,24 +5,29 @@ import diff from 'fast-diff';
 import { fileURLToPath } from 'url';
 
 const preprocessCode = (code) => {
-	
-    if (typeof code !== 'string') {
-        console.error("Code is not a string. Skipping preprocessing.");
-        return '';
-    }
 
-    try {
-        code = prettier.format(code, { parser: "babel" });
-    } catch (error) {
-        console.error("Error formatting code with Prettier:", error);
+	if (typeof code !== 'string') {
+		console.error("Code is not a string. Skipping preprocessing.");
+		return '';
+	}
+
+	try {
+		code = prettier.format(code, { parser: "babel" });
+	} catch (error) {
+		console.error("Error formatting code with Prettier:", error);
+		return code;
+	}
+
+	try {
+	code = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
+	code = code.replace(/map`[\s\S]*?`/g, '');
+	code = code.replace(/bitmap`[\s\S]*?`/g, '');
+	} catch (replaceError) {
+        console.error("Error in replace operations:", replaceError);
         return code;
     }
-
-    code = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
-    code = code.replace(/map`[\s\S]*?`/g, '');
-    code = code.replace(/bitmap`[\s\S]*?`/g, '');
-
-    return code;
+	
+	return code;
 };
 
 const calculateSimilarity = (code1, code2) => {
@@ -39,17 +44,23 @@ const checkForPlagiarism = (files, galleryDirPath, overlapThreshold = 50) => {
 	let similarityResults = [];
 
 	files.forEach(file => {
-		const originalCode = preprocessCode(fs.readFileSync(file, 'utf8'));
-		fs.readdirSync(galleryDirPath).forEach(galleryFile => {
-			const fullGalleryFilePath = path.join(galleryDirPath, galleryFile);
-			if (path.extname(galleryFile) === '.js' && fullGalleryFilePath !== file) {
-				const galleryCode = preprocessCode(fs.readFileSync(fullGalleryFilePath, 'utf8'));
-				const similarity = calculateSimilarity(originalCode, galleryCode);
-				if (similarity >= overlapThreshold) {
-					similarityResults.push({ similarity, file1: file, file2: galleryFile });
+		try {
+
+			const originalCodeContent = fs.readFileSync(file, 'utf8');
+			const originalCode = preprocessCode(originalCodeContent.toString());
+			fs.readdirSync(galleryDirPath).forEach(galleryFile => {
+				const fullGalleryFilePath = path.join(galleryDirPath, galleryFile);
+				if (path.extname(galleryFile) === '.js' && fullGalleryFilePath !== file) {
+					const galleryCode = preprocessCode(fs.readFileSync(fullGalleryFilePath, 'utf8'));
+					const similarity = calculateSimilarity(originalCode, galleryCode);
+					if (similarity >= overlapThreshold) {
+						similarityResults.push({ similarity, file1: file, file2: galleryFile });
+					}
 				}
-			}
-		});
+			});
+		} catch (readError) {
+			console.error(`Error processing file ${file}:`, readError);
+		}
 	});
 
 	similarityResults.sort((a, b) => b.similarity - a.similarity);
