@@ -5,17 +5,24 @@ import diff from 'fast-diff';
 import { fileURLToPath } from 'url';
 
 const preprocessCode = (code) => {
+	
+    if (typeof code !== 'string') {
+        console.error("Code is not a string. Skipping preprocessing.");
+        return '';
+    }
 
-	try {
-		code = prettier.format(code, { parser: 'babel' });
-	} catch (error) {
-		console.log('Error while formatting code with prettier');
-		console.log(error);
-	}
-	code = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
-	code = code.replace(/map`[\s\S]*?`/g, '');
-	code = code.replace(/bitmap`[\s\S]*?`/g, '');
-	return code;
+    try {
+        code = prettier.format(code, { parser: "babel" });
+    } catch (error) {
+        console.error("Error formatting code with Prettier:", error);
+        return code;
+    }
+
+    code = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
+    code = code.replace(/map`[\s\S]*?`/g, '');
+    code = code.replace(/bitmap`[\s\S]*?`/g, '');
+
+    return code;
 };
 
 const calculateSimilarity = (code1, code2) => {
