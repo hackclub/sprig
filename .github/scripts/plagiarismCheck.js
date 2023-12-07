@@ -4,7 +4,7 @@ import prettier from 'prettier';
 import diff from 'fast-diff';
 import { fileURLToPath } from 'url';
 
-const preprocessCode = (code) => {
+const preprocessCode = async (code) => {
 	console.log("Type of code before any operation:", typeof code);
 
 	if (typeof code !== 'string') {
@@ -15,7 +15,7 @@ const preprocessCode = (code) => {
 	console.log("Code content before Prettier formatting:", code);
 
 	try {
-		code = prettier.format(code, { parser: "babel" });
+		code = await prettier.format(code, { parser: "babel" });
 	} catch (error) {
 		console.error("Error formatting code with Prettier:", error);
 		return code;
@@ -28,9 +28,9 @@ const preprocessCode = (code) => {
 		code = code.replace(/map`[\s\S]*?`/g, '');
 		code = code.replace(/bitmap`[\s\S]*?`/g, '');
 	} catch (replaceError) {
-        console.error("Error in replace operations:", replaceError);
-        return code;
-    }
+		console.error("Error in replace operations:", replaceError);
+		return code;
+	}
 
 	return code;
 };
