@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import prettier from 'prettier';
+import diff from 'fast-diff';
 import { fileURLToPath } from 'url';
 
 const preprocessCode = (code) => {
@@ -18,14 +19,16 @@ const preprocessCode = (code) => {
 };
 
 const calculateSimilarity = (code1, code2) => {
-	const words1 = new Set(code1.split(' '));
-	const words2 = new Set(code2.split(' '));
-	const intersection = new Set([...words1].filter(word => words2.has(word)));
-	const union = new Set([...words1, ...words2]);
-	return (intersection.size / union.size) * 100;
+	const diffs = diff(code1, code2);
+	const commonChars = diffs
+		.filter(part => part[0] === 0)
+		.reduce((sum, part) => sum + part[1].length, 0);
+
+	const totalChars = Math.max(code1.length, code2.length);
+	return (commonChars / totalChars) * 100;
 };
 
-const checkForPlagiarism = (files, galleryDirPath, overlapThreshold = 30) => {
+const checkForPlagiarism = (files, galleryDirPath, overlapThreshold = 50) => {
 	let similarityResults = [];
 
 	files.forEach(file => {
