@@ -15,6 +15,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install dependencies
+        run: |
+          yarn add prettier
+          yarn add fast-diff
+
       - name: Get list of changed files
         id: changed-files
         run: |
@@ -30,7 +35,7 @@ jobs:
         run: node .github/scripts/plagiarismCheck.js $FILES games
         env:
           FILES: ${{ env.FILES }}
-      
+
       - name: Post Comment
         if: always()
         uses: actions/github-script@v7
