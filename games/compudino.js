@@ -1,3 +1,5 @@
+/* Credit: Cookie Click! by briyandyju09 (https://sprig.hackclub.com/gallery/Cookie_Click!) */
+
 const next ="d";
 const player = "p";
 const candy = "s";
