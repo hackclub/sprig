@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */
 let score = 0;
-let sounds = [
+const sounds = [
   tune`
 500,
 500: C5~500,
@@ -171,6 +171,10 @@ var gameLoop = startGame();
 
 
 function startGame(){
+  score = 0;
+  difficulty = 2.0;
+  nextTime = 5;
+  soundID = 0;
   setMap(levels[0])
   return setInterval(() => {
   clearExplosion();
