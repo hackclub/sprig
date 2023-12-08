@@ -3238,5 +3238,13 @@
     "img": "",
     "tags": [""],
     "addedOn": "2023-11-30"
+  },
+  {
+    "filename": "Push_The_Box",
+    "title": "Push_The_Box",
+    "author": "Sandy Burger",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "addedOn": "2023-12-07"
   }
 ]
