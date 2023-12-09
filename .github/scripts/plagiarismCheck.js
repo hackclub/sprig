@@ -4,15 +4,13 @@ import prettier from 'prettier';
 import diff from 'fast-diff';
 import { fileURLToPath } from 'url';
 
-const preprocessCode = async (code) => {
+const preprocessCode = async (code, isOriginal = false) => {
 	console.log("Type of code before any operation:", typeof code);
 
 	if (typeof code !== 'string') {
 		console.error("Code is not a string. Skipping preprocessing.");
 		return '';
 	}
-
-	console.log("Code content before Prettier formatting:", code);
 
 	try {
 		code = await prettier.format(code, { parser: "babel" });
@@ -21,59 +19,81 @@ const preprocessCode = async (code) => {
 		return code;
 	}
 
-	console.log("Code content after Prettier formatting:", code);
-
-	try {
-		code = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
-		code = code.replace(/map`[\s\S]*?`/g, '');
-		code = code.replace(/bitmap`[\s\S]*?`/g, '');
-	} catch (replaceError) {
-		console.error("Error in replace operations:", replaceError);
-		return code;
+	if (isOriginal) {
+		try {
+			code = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
+			code = code.replace(/map`[\s\S]*?`/g, '');
+			code = code.replace(/bitmap`[\s\S]*?`/g, '');
+		} catch (replaceError) {
+			console.error("Error in replace operations:", replaceError);
+			return code;
+		}
 	}
 
 	return code;
 };
 
 const calculateSimilarity = (code1, code2) => {
-	const diffs = diff(code1, code2);
-	const commonChars = diffs
-		.filter(part => part[0] === 0)
-		.reduce((sum, part) => sum + part[1].length, 0);
+	const normalizeCode = (code) => code.replace(/\s+/g, ' ').trim();
 
-	const totalChars = Math.max(code1.length, code2.length);
-	return (commonChars / totalChars) * 100;
+	code1 = normalizeCode(code1);
+	code2 = normalizeCode(code2);
+
+	const diffs = diff(code1, code2);
+	let commonChars = 0;
+	let totalChars = 0;
+	let diffContext = [];
+
+	diffs.forEach(([operation, text], index) => {
+		totalChars += text.length;
+		if (operation === 0) {
+			commonChars += text.length;
+		} else {
+			let type = operation === -1 ? "removed" : "added";
+			diffContext.push({ index, type, text });
+		}
+	});
+
+	const similarity = (commonChars / totalChars) * 100;
+	return { similarity, diffContext };
 };
 
-const checkForPlagiarism = (files, galleryDirPath, overlapThreshold = 50) => {
+const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 50) => {
 	let similarityResults = [];
 
-	files.forEach(async file => {
+	for (const file of files) {
 		try {
-
 			const originalCodeContent = fs.readFileSync(file, 'utf8');
-			const originalCode = await preprocessCode(originalCodeContent.toString());
-			fs.readdirSync(galleryDirPath).forEach(async galleryFile => {
+			const originalCode = await preprocessCode(originalCodeContent.toString(), true);
+
+			const galleryFiles = fs.readdirSync(galleryDirPath);
+			for (const galleryFile of galleryFiles) {
 				const fullGalleryFilePath = path.join(galleryDirPath, galleryFile);
 				if (path.extname(galleryFile) === '.js' && fullGalleryFilePath !== file) {
-					const galleryCode = await preprocessCode(fs.readFileSync(fullGalleryFilePath, 'utf8'));
-					const similarity = calculateSimilarity(originalCode, galleryCode);
-					if (similarity >= overlapThreshold) {
-						similarityResults.push({ similarity, file1: file, file2: galleryFile });
+					const galleryCodeContent = fs.readFileSync(fullGalleryFilePath, 'utf8');
+					const galleryCode = await preprocessCode(galleryCodeContent);
+
+					const { similarity, diffContext } = calculateSimilarity(originalCode, galleryCode);
+					if (similarity.similarity >= overlapThreshold) {
+						similarityResults.push({ similarity, diffContext, file1: file, file2: galleryFile });
 					}
 				}
-			});
+			}
 		} catch (readError) {
 			console.error(`Error processing file ${file}:`, readError);
 		}
-	});
+	}
 
 	similarityResults.sort((a, b) => b.similarity - a.similarity);
 
 	let output = 'Here are your results for plagiarism:\n';
 
-	similarityResults.forEach(({ similarity, file1, file2 }) => {
+	similarityResults.forEach(({ similarity, diffContext, file1, file2 }) => {
 		output += `Similarity: ${similarity.toFixed(2)}% between ${file1} and ${file2}\n`;
+		diffContext.forEach(({ index, type, text }) => {
+			output += `Diff #${index + 1}: ${type}, Text: "${text}"\n`;
+		});
+		output += '\n';
 	});
 
 	console.log(output);
