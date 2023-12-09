@@ -42,7 +42,7 @@ const calculateSimilarity = (code1, code2) => {
 	const diffs = diff(code1, code2);
 	let commonChars = 0;
 	let totalChars = 0;
-	let diffContext = [];
+	let detailedDiff = [];
 
 	diffs.forEach(([operation, text], index) => {
 		totalChars += text.length;
@@ -50,24 +50,19 @@ const calculateSimilarity = (code1, code2) => {
 			commonChars += text.length;
 		} else {
 			let type = operation === -1 ? "removed" : "added";
-			diffContext.push({ index, type, text });
+			detailedDiff.push({ index, type, text });
 		}
 	});
 
 	const similarity = (commonChars / totalChars) * 100;
-	return { similarity, diffContext };
+	return { similarity, detailedDiff };
 };
 
 const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 50) => {
 	let similarityResults = [];
 
-	console.log("Checking for plagiarism...");
-	console.log(`Files to check: ${files}`);
-	console.log(`Gallery directory path: ${galleryDirPath}`);
-
 	for (const file of files) {
 		try {
-			console.log(`Processing file: ${file}`);
 			const originalCodeContent = fs.readFileSync(file, 'utf8');
 			const originalCode = await preprocessCode(originalCodeContent.toString(), true);
 
@@ -75,14 +70,12 @@ const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 50) 
 			for (const galleryFile of galleryFiles) {
 				const fullGalleryFilePath = path.join(galleryDirPath, galleryFile);
 				if (path.extname(galleryFile) === '.js' && fullGalleryFilePath !== file) {
-					console.log(`Comparing with gallery file: ${galleryFile}`);
 					const galleryCodeContent = fs.readFileSync(fullGalleryFilePath, 'utf8');
 					const galleryCode = await preprocessCode(galleryCodeContent);
 
-					const { similarity, diffContext } = calculateSimilarity(originalCode, galleryCode);
-					console.log(`Similarity with ${galleryFile}: ${similarity.toFixed(2)}%`);
+					const { similarity, detailedDiff } = calculateSimilarity(originalCode, galleryCode);
 					if (similarity >= overlapThreshold) {
-						similarityResults.push({ similarity, diffContext, file1: file, file2: galleryFile });
+						similarityResults.push({ similarity, detailedDiff, file1: file, file2: galleryFile });
 					}
 				}
 			}
@@ -91,17 +84,13 @@ const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 50) 
 		}
 	}
 
-	if (similarityResults.length === 0) {
-		console.log("No significant similarities found based on the threshold.");
-	}
-
 	similarityResults.sort((a, b) => b.similarity - a.similarity);
 
 	let output = 'Here are your results for plagiarism:\n';
 
-	similarityResults.forEach(({ similarity, diffContext, file1, file2 }) => {
+	similarityResults.forEach(({ similarity, detailedDiff, file1, file2 }) => {
 		output += `Similarity: ${similarity.toFixed(2)}% between ${file1} and ${file2}\n`;
-		diffContext.forEach(({ index, type, text }) => {
+		detailedDiff.forEach(({ index, type, text }) => {
 			output += `Diff #${index + 1}: ${type}, Text: "${text}"\n`;
 		});
 		output += '\n';
