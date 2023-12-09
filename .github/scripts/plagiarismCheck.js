@@ -61,8 +61,13 @@ const calculateSimilarity = (code1, code2) => {
 const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 50) => {
 	let similarityResults = [];
 
+	console.log("Checking for plagiarism...");
+	console.log(`Files to check: ${files}`);
+	console.log(`Gallery directory path: ${galleryDirPath}`);
+
 	for (const file of files) {
 		try {
+			console.log(`Processing file: ${file}`);
 			const originalCodeContent = fs.readFileSync(file, 'utf8');
 			const originalCode = await preprocessCode(originalCodeContent.toString(), true);
 
@@ -70,11 +75,13 @@ const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 50) 
 			for (const galleryFile of galleryFiles) {
 				const fullGalleryFilePath = path.join(galleryDirPath, galleryFile);
 				if (path.extname(galleryFile) === '.js' && fullGalleryFilePath !== file) {
+					console.log(`Comparing with gallery file: ${galleryFile}`);
 					const galleryCodeContent = fs.readFileSync(fullGalleryFilePath, 'utf8');
 					const galleryCode = await preprocessCode(galleryCodeContent);
 
 					const { similarity, diffContext } = calculateSimilarity(originalCode, galleryCode);
-					if (similarity.similarity >= overlapThreshold) {
+					console.log(`Similarity with ${galleryFile}: ${similarity.toFixed(2)}%`);
+					if (similarity >= overlapThreshold) {
 						similarityResults.push({ similarity, diffContext, file1: file, file2: galleryFile });
 					}
 				}
@@ -82,6 +89,10 @@ const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 50) 
 		} catch (readError) {
 			console.error(`Error processing file ${file}:`, readError);
 		}
+	}
+
+	if (similarityResults.length === 0) {
+		console.log("No significant similarities found based on the threshold.");
 	}
 
 	similarityResults.sort((a, b) => b.similarity - a.similarity);
