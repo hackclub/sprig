@@ -5,7 +5,6 @@ import diff from 'fast-diff';
 import { fileURLToPath } from 'url';
 
 const preprocessCode = async (code, isOriginal = false) => {
-
 	if (typeof code !== 'string') {
 		console.error("Code is not a string. Skipping preprocessing.");
 		return '';
@@ -23,7 +22,14 @@ const preprocessCode = async (code, isOriginal = false) => {
 			code = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
 			code = code.replace(/map`[\s\S]*?`/g, '');
 			code = code.replace(/bitmap`[\s\S]*?`/g, '');
-			console.log("Code after removing comments and maps:", code);
+			const commonWords = [
+				'const', 'setLegend', 'setSolids', 'let', 'setMap', 'setPushables',
+				'onInput', 'var', 'clearText', 'addText', 'clearInterval',
+				'getFirst', 'clearTile', 'tilesWith'
+			];
+			const regex = new RegExp(`\\b(${commonWords.join('|')})\\b`, 'g');
+			code = code.replace(regex, '');
+			console.log("Code after preprocessing:", code);
 		} catch (replaceError) {
 			console.error("Error in replace operations:", replaceError);
 			return code;
