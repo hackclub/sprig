@@ -58,7 +58,7 @@ const calculateSimilarity = (code1, code2) => {
 	return { similarity, detailedDiff };
 };
 
-const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 50) => {
+const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 10) => {
 	let similarityResults = [];
 
 	for (const file of files) {
