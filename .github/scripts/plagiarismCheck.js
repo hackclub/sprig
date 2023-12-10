@@ -5,7 +5,6 @@ import diff from 'fast-diff';
 import { fileURLToPath } from 'url';
 
 const preprocessCode = async (code, isOriginal = false) => {
-	console.log("Type of code before any operation:", typeof code);
 
 	if (typeof code !== 'string') {
 		console.error("Code is not a string. Skipping preprocessing.");
@@ -24,6 +23,7 @@ const preprocessCode = async (code, isOriginal = false) => {
 			code = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
 			code = code.replace(/map`[\s\S]*?`/g, '');
 			code = code.replace(/bitmap`[\s\S]*?`/g, '');
+			console.log("Code after removing comments and maps:", code);
 		} catch (replaceError) {
 			console.error("Error in replace operations:", replaceError);
 			return code;
@@ -42,20 +42,16 @@ const calculateSimilarity = (code1, code2) => {
 	const diffs = diff(code1, code2);
 	let commonChars = 0;
 	let totalChars = 0;
-	let detailedDiff = [];
 
-	diffs.forEach(([operation, text], index) => {
+	diffs.forEach(([operation, text]) => {
 		totalChars += text.length;
 		if (operation === 0) {
 			commonChars += text.length;
-		} else {
-			let type = operation === -1 ? "removed" : "added";
-			detailedDiff.push({ index, type, text });
 		}
 	});
 
 	const similarity = (commonChars / totalChars) * 100;
-	return { similarity, detailedDiff };
+	return similarity;
 };
 
 const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 10) => {
@@ -73,9 +69,9 @@ const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 10) 
 					const galleryCodeContent = fs.readFileSync(fullGalleryFilePath, 'utf8');
 					const galleryCode = await preprocessCode(galleryCodeContent);
 
-					const { similarity, detailedDiff } = calculateSimilarity(originalCode, galleryCode);
+					const similarity = calculateSimilarity(originalCode, galleryCode);
 					if (similarity >= overlapThreshold) {
-						similarityResults.push({ similarity, detailedDiff, file1: file, file2: galleryFile });
+						similarityResults.push({ similarity, file1: file, file2: galleryFile });
 					}
 				}
 			}
@@ -87,13 +83,8 @@ const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 10) 
 	similarityResults.sort((a, b) => b.similarity - a.similarity);
 
 	let output = 'Here are your results for plagiarism:\n';
-
-	similarityResults.forEach(({ similarity, detailedDiff, file1, file2 }) => {
+	similarityResults.forEach(({ similarity, file1, file2 }) => {
 		output += `Similarity: ${similarity.toFixed(2)}% between ${file1} and ${file2}\n`;
-		detailedDiff.forEach(({ index, type, text }) => {
-			output += `Diff #${index + 1}: ${type}, Text: "${text}"\n`;
-		});
-		output += '\n';
 	});
 
 	console.log(output);
