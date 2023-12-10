@@ -3262,5 +3262,13 @@
     "img": "",
     "tags": ["sokoban-style"],
     "addedOn": "2023-12-08"
+  },
+  {
+    "filename": "bomb_dodge",
+    "title": "bomb_dodge",
+    "author": "AstralTurtle",
+    "img": "",
+    "tags": ["logic"],
+    "addedOn": "2023-12-10"
   }
 ]
