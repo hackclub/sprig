@@ -25,7 +25,7 @@ const preprocessCode = async (code, isOriginal = false) => {
 			const commonWords = [
 				'const', 'setLegend', 'setSolids', 'let', 'setMap', 'setPushables',
 				'onInput', 'var', 'clearText', 'addText', 'clearInterval',
-				'getFirst', 'clearTile', 'tilesWith'
+				'getFirst', 'clearTile', 'tilesWith', 'level', 'levels', 'if', 'for',
 			];
 			const regex = new RegExp(`\\b(${commonWords.join('|')})\\b`, 'g');
 			code = code.replace(regex, '');
