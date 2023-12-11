@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import prettier from 'prettier';
-import diff from 'fast-diff';
 import { fileURLToPath } from 'url';
 
 const preprocessCode = async (code, isOriginal = false) => {
@@ -40,23 +39,18 @@ const preprocessCode = async (code, isOriginal = false) => {
 };
 
 const calculateSimilarity = (code1, code2) => {
-	const normalizeCode = (code) => code.replace(/\s+/g, ' ').trim();
+	let matchCount = 0;
+	const lines1 = code1.split('\n');
+	const lines2 = code2.split('\n');
+	const totalLines = Math.max(lines1.length, lines2.length);
 
-	code1 = normalizeCode(code1);
-	code2 = normalizeCode(code2);
-
-	const diffs = diff(code1, code2);
-	let commonChars = 0;
-	let totalChars = 0;
-
-	diffs.forEach(([operation, text]) => {
-		totalChars += text.length;
-		if (operation === 0) {
-			commonChars += text.length;
+	for (let i = 0; i < totalLines; i++) {
+		if (lines1[i] && lines2[i] && lines1[i].trim() === lines2[i].trim()) {
+			matchCount++;
 		}
-	});
+	}
 
-	const similarity = (commonChars / totalChars) * 100;
+	const similarity = (matchCount / totalLines) * 100;
 	return similarity;
 };
 
