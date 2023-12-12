@@ -18,7 +18,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 				.slice(0, 10)
 				.forEach(game => (game.isNew = true));
 		}
-		if (order === "alphabetical") games.sort((a, b) => a.title > b.title ? 1 : -1);
+		if (order === "alphabetical") games.sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1);
 
 		// put tutorials first
 		games.sort((a, _) => a.tags.includes("tutorial") ? -1 : 1)
