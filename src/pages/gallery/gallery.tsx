@@ -9,7 +9,7 @@ import "./gallery.css";
 type SortOrder = "chronological" | "alphabetical";
 export default function Gallery({ games, tags }: { games: GameMetadata[], tags: string[] }) {
 	const [gamesState, setGamesState] = useState<GameMetadata[]>([]);
-	const [sortOrder, setSortOrder] = useState<SortOrder>("chronological");
+	const [sortOrder, setSortOrder] = useState<string>("");
 	const [tagFilter, setTagFilter] = useState<string>("");
 	const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -28,7 +28,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 	function filterTags(games: GameMetadata[]): void {
 		if (tagFilter === "") {
 			let otherGames = [...games];
-			sortGames(otherGames, sortOrder);
+			sortGames(otherGames, sortOrder as SortOrder);
 			setGamesState(otherGames);
 			return;
 		}
@@ -37,7 +37,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 
 	useEffect(() => {
 		let otherGames = [...gamesState];
-		sortGames(otherGames, sortOrder)
+		sortGames(otherGames, sortOrder as SortOrder)
 		setGamesState(otherGames);
 	}, [sortOrder]);
 
@@ -127,11 +127,12 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 						</div>
 
 						<div class="select">
-							<select onChange={(event) => {
+							<select value={sortOrder} onChange={(event) => {
 								setSortOrder(() => (event.target! as HTMLSelectElement).value! as SortOrder);
 							}}>
-								<option value="chronological">Chronological</option>
-								<option value="alphabetical">Alphabetical</option>
+								<option value="">Sort by...</option>
+								<option value="chronological">Release date</option>
+								<option value="alphabetical">A-Z</option>
 							</select>
 
 							<IoCaretDown aria-hidden="true" />
