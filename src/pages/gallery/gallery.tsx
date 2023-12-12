@@ -1,5 +1,4 @@
 import { useState, useEffect } from "preact/hooks";
-import { effect, signal } from "@preact/signals";
 import { loadThumbnailUrl } from "../../lib/thumbnail";
 import { GameMetadata } from "../../lib/game-saving/gallery";
 import Button from "../../components/design-system/button";
@@ -11,6 +10,7 @@ type SortOrder = "chronological" | "alphabetical";
 export default function Gallery({ games, tags }: { games: GameMetadata[], tags: string[] }) {
 	const [gamesState, setGamesState] = useState<GameMetadata[]>(games);
 	const [sortOrder, setSortOrder] = useState<SortOrder>("chronological");
+	const [tagFilter, setTagFilter] = useState<string>("");
 
 	function sortGames(games: GameMetadata[], order: SortOrder): void {
 		if (order === "chronological") {
@@ -24,11 +24,23 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 		games.sort((a, _) => a.tags.includes("tutorial") ? -1 : 1)
 	}
 
+	function filterTags(games: GameMetadata[]): void {
+		if (tagFilter === "") {
+			let otherGames = [...games];
+			sortGames(otherGames, sortOrder);
+			setGamesState(otherGames);
+			return;
+		}
+		setGamesState(games.filter(game => game.tags.includes(tagFilter)));
+	}
+
 	useEffect(() => {
 		let otherGames = [...gamesState];
 		sortGames(otherGames, sortOrder)
 		setGamesState(otherGames);
 	}, [sortOrder]);
+
+	useEffect(() => { filterTags(games); }, [tagFilter]);
 
 	useEffect(() => {
 		interface GameCard {
@@ -75,62 +87,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 		setTimeout(() => {
 			for (const gameCard of gameCards) loadImage(gameCard);
 		}, 500);
-
-		const tagSelect = document.getElementById(
-			"tag-select"
-		) as HTMLSelectElement;
-		const searchInput = document.getElementById(
-			"search-input"
-		) as HTMLInputElement;
-		const tag = signal(tagSelect.value);
-		// const order = signal(orderSelect.value);
-		const search = signal(searchInput.value);
-		tagSelect.addEventListener(
-			"change",
-			() => (tag.value = tagSelect.value)
-		);
-
-		searchInput.addEventListener(
-			"input",
-			() => (search.value = searchInput.value)
-		);
-
-		const isVisible = (gameCard: GameCard): boolean => {
-			if (tag.value === "_new") return gameCard.isNew;
-			if (tag.value && !gameCard.tags.includes(tag.value))
-				return false;
-			if (search.value) {
-				if (
-					gameCard.filename
-						.toLowerCase()
-						.includes(search.value.toLowerCase())
-				)
-					return true;
-				if (
-					gameCard.title
-						.toLowerCase()
-						.includes(search.value.toLowerCase())
-				)
-					return true;
-				if (
-					gameCard.author
-						.toLowerCase()
-						.includes(search.value.toLowerCase())
-				)
-					return true;
-				return false;
-			}
-			return true;
-		};
-
-		effect(() => {
-			for (const gameCard of gameCards) {
-				gameCard.element.style.display = isVisible(gameCard)
-					? "block"
-					: "none";
-			}
-		});
-	}, []);
+	}, [gamesState]);
 
 	return (
 		<div>
@@ -144,9 +101,10 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 
 					<div class="search-controls">
 						<div class="select">
-							<select id="tag-select">
+							<select onChange={(event) => {
+								setTagFilter((event.target! as HTMLSelectElement).value);
+							}} id="tag-select">
 								<option value="">Filter by tag...</option>
-								<option value="az">Alphabetical</option>
 								{
 									tags.map((tag) => (
 										<option value={tag}>#{tag}</option>
