@@ -6,7 +6,7 @@ import Input from "../../components/design-system/input";
 import { IoCaretDown, IoSearch } from "react-icons/io5";
 import "./gallery.css";
 
-type SortOrder = "chronological" | "alphabetical";
+type SortOrder = "chronological" | "ascending" | "descending";
 export default function Gallery({ games, tags }: { games: GameMetadata[], tags: string[] }) {
 	const [gamesState, setGamesState] = useState<GameMetadata[]>([]);
 	const [sortOrder, setSortOrder] = useState<string>("");
@@ -19,7 +19,8 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 				.slice(0, 10)
 				.forEach(game => (game.isNew = true));
 		}
-		if (order === "alphabetical") games.sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1);
+		if (order === "ascending") games.sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1);
+		if (order === "descending") games.sort((a, b) => b.title.toLowerCase() > a.title.toLowerCase() ? 1 : -1);
 
 		// put tutorials first
 		games.sort((a, _) => a.tags.includes("tutorial") ? -1 : 1)
@@ -132,7 +133,8 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 							}}>
 								<option value="">Sort by...</option>
 								<option value="chronological">Release date</option>
-								<option value="alphabetical">A-Z</option>
+								<option value="ascending">A-Z</option>
+								<option value="descending">Z-A</option>
 							</select>
 
 							<IoCaretDown aria-hidden="true" />
