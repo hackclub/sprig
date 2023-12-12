@@ -8,7 +8,7 @@ import "./gallery.css";
 
 type SortOrder = "chronological" | "alphabetical";
 export default function Gallery({ games, tags }: { games: GameMetadata[], tags: string[] }) {
-	const [gamesState, setGamesState] = useState<GameMetadata[]>(games);
+	const [gamesState, setGamesState] = useState<GameMetadata[]>([]);
 	const [sortOrder, setSortOrder] = useState<SortOrder>("chronological");
 	const [tagFilter, setTagFilter] = useState<string>("");
 	const [searchQuery, setSearchQuery] = useState<string>("");
@@ -48,6 +48,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 		);
 	}, [searchQuery]);
 
+
 	useEffect(() => {
 		interface GameCard {
 			element: HTMLLIElement;
@@ -56,6 +57,9 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 			author: string;
 			tags: string[];
 			isNew: boolean;
+		}
+		for (const element of document.querySelectorAll("#games > .game")) {
+			element.querySelector("img")?.setAttribute("data-loaded", "false");
 		}
 
 		const loadImage = async (gameCard: GameCard): Promise<void> => {
@@ -175,7 +179,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 							) : null}
 
 							<img
-								src=""
+								src={game.img}
 								alt={`preview of ${game.filename}.js`}
 							/>
 							<h3>{game.title}</h3>
