@@ -11,6 +11,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 	const [gamesState, setGamesState] = useState<GameMetadata[]>(games);
 	const [sortOrder, setSortOrder] = useState<SortOrder>("chronological");
 	const [tagFilter, setTagFilter] = useState<string>("");
+	const [searchQuery, setSearchQuery] = useState<string>("");
 
 	function sortGames(games: GameMetadata[], order: SortOrder): void {
 		if (order === "chronological") {
@@ -41,6 +42,11 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 	}, [sortOrder]);
 
 	useEffect(() => { filterTags(games); }, [tagFilter]);
+	useEffect(() => {
+		setGamesState(
+			games.filter(game => game.title.includes(searchQuery))
+		);
+	}, [searchQuery]);
 
 	useEffect(() => {
 		interface GameCard {
@@ -130,6 +136,10 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 						<div class="search">
 							<IoSearch aria-hidden="true" />
 							<Input
+								value={searchQuery}
+								onChange={event => {
+									setSearchQuery(event.target.value);
+								}}
 								id="search-input"
 								placeholder="Search gallery"
 							/>
