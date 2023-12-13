@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { Timestamp } from 'firebase-admin/firestore'
-import { firestore, getGame, getSession } from '../../../lib/game-saving/account'
+import { getGame, getSession, updateDocument } from '../../../lib/game-saving/account'
 
 export const post: APIRoute = async ({ request, cookies }) => {
 	let gameId: string
@@ -24,9 +24,10 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		if (session.user.id !== game.ownerId) return new Response(`Can't rename a game you don't own`, { status: 403 })
 	}
 
-	await firestore.collection('games').doc(gameId).update({
+	await updateDocument('games', gameId, {
 		name: newName,
 		modifiedAt: Timestamp.now()
-	})
+	});
+
 	return new Response(JSON.stringify({}), { status: 200 })
 }

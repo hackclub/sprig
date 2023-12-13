@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { Timestamp } from 'firebase-admin/firestore'
-import { firestore, getGame, getSession } from '../../../lib/game-saving/account'
+import { getGame, getSession, setDocument, updateDocument } from '../../../lib/game-saving/account'
 
 export const post: APIRoute = async ({ request, cookies }) => {
 	let code: string
@@ -32,15 +32,16 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		trackingType = 'user'
 	}
 
-	await firestore.collection('games').doc(gameId).update({
-		code,
+	await updateDocument('games', gameId, {
+		code, 
 		modifiedAt: Timestamp.now(),
 		tutorialName: tutorialName ?? null
-	})
-	await firestore.collection('daily-edits').doc(`${trackingId}-${trackingDate}`).set({
+	});
+	await setDocument('daily-edits', `${trackingId}-${trackingDate}`, {
 		type: trackingType,
 		id: trackingId,
 		date: Timestamp.now()
-	})
+	});
+
 	return new Response(JSON.stringify({}), { status: 200 })
 }
