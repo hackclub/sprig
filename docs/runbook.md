@@ -32,4 +32,7 @@ Then select the previous deployment.
 
 ## An error you are unsure about
 
-Open the [Grafana Dashboard](https://telemetry.hackclub.com/d/b7ac7960-a18f-4c83-a4e5-767d50ad62c7/sprig?orgId=1) and look at 'Endpoint failures' and 'API Endpoint Latencies' visualizations under the Sprig dashboard.
+- Open the [Grafana Dashboard](https://telemetry.hackclub.com/d/b7ac7960-a18f-4c83-a4e5-767d50ad62c7/sprig?orgId=1) and look at the visualizations. 
+- Open the [Vercel Logs](https://vercel.com/hackclub/sprig/logs?page=1&timeline=past30Minutes&startDate=1702547588649&endDate=1702549388649) and look at logs with log level 'Warning' or 'Error'
+- Alternatively, open the developer console console on the sprig website and look at the client-side logs.
+Problematic situations should most likely be apparent.  
