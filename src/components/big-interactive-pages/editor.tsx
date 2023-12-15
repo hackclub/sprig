@@ -32,11 +32,12 @@ interface ResizeState {
 	startValue: number
 }
 
-const minOutputAreaSize = 360
-const defaultOutputAreaSize = 400
-const widthMargin = 130
+// Output area is the area with the game view and help
+const minOutputAreaWidth = 360
+const defaultOutputAreaWidth = 400
+const outputAreaWidthMargin = 130 // The margin between the editor and output area
 
-const minHelpAreaSize = 200
+const minHelpAreaHeight = 200
 
 const foldAllTemplateLiterals = () => {
 	if (!codeMirror.value) return
@@ -109,8 +110,8 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Resize state storage
 	const outputAreaSize = useSignal(
 		Math.max(
-			minOutputAreaSize,
-			cookies.outputAreaSize ?? defaultOutputAreaSize
+			minOutputAreaWidth,
+			cookies.outputAreaSize ?? defaultOutputAreaWidth
 		)
 	)
 
@@ -127,7 +128,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	const maxOutputAreaSize = useSignal(outputAreaSize.value)
 	useEffect(() => {
 		const updateMaxSize = () => {
-			maxOutputAreaSize.value = (window.innerWidth - widthMargin) / 2.5
+			maxOutputAreaSize.value = (window.innerWidth - outputAreaWidthMargin) / 2.5
 		}
 		window.addEventListener("resize", updateMaxSize, { passive: true })
 		updateMaxSize()
@@ -136,7 +137,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	const realOutputAreaSize = useComputed(() =>
 		Math.min(
 			maxOutputAreaSize.value,
-			Math.max(minOutputAreaSize, outputAreaSize.value)
+			Math.max(minOutputAreaWidth, outputAreaSize.value)
 		)
 	)
 
@@ -324,7 +325,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 
 					<div
 						class={styles.helpContainer}
-						style={{ minHeight: minHelpAreaSize }}
+						style={{ minHeight: minHelpAreaHeight }}
 					>
 						{!(
 							(persistenceState.value.kind === "SHARED" ||
