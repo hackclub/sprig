@@ -36,6 +36,7 @@ if (session && session.session.full) {
 		<title>Sprig</title>
 	</head>
 	<body>
+		
 		<Navbar transparent goldLogo session={session} />
 
 		<div class='magic' id='m'>
@@ -82,14 +83,14 @@ if (session && session.session.full) {
 						<article>
 							<img src='/icons/sound.png' alt='Sound icon' />
 							<div>
-								<h3>Sound &ndash MAX98357A</h3>
+								<h3>Sound &ndash; MAX98357A</h3>
 								<p>5 channels, 4 waveforms</p>
 							</div>
 						</article>
 						<article>
 							<img src='/icons/display.png' alt='Display icon' />
 							<div>
-								<h3>Display &ndash TFT7735</h3>
+								<h3>Display &ndash; TFT7735</h3>
 								<p>160&times128 color LCD</p>
 							</div>
 						</article>
@@ -103,7 +104,7 @@ if (session && session.session.full) {
 						<article>
 							<img src='/icons/processor.png' alt='Processor icon' />
 							<div>
-								<h3>Processor &ndash RP2040</h3>
+								<h3>Processor &ndash; RP2040</h3>
 								<p>2-core, 133 MHz MCU</p>
 							</div>
 						</article>
@@ -223,7 +224,7 @@ if (session && session.session.full) {
 			</div>
 		</section>
 
-		<section class='credits wrapper'>
+		<section style="color: black;" class='credits wrapper'>
 			<div class='container limit-text'>
 				<p>
 					Sprig was developed by a team at Hack Club with assistance from Brian Silverman (who helped develop Scratch and
@@ -243,6 +244,7 @@ if (session && session.session.full) {
 				<p>
 					Sprig is open-source. Read code for:
 					<a href='https://github.com/hackclub/sprig' target='_blank' rel='noopener'>editor</a>,
+					<a href='https://github.com/hackclub/sprig-engine' target='_blank' rel='noopener'>engine</a>,
 					<a href='https://github.com/hackclub/spade' target='_blank' rel='noopener'>firmware</a>,
 					<a href='https://github.com/hackclub/sprig-hardware' target='_blank' rel='noopener'>hardware</a>
 				</p>
@@ -299,9 +301,9 @@ if (session && session.session.full) {
 			import * as THREE from 'three'
 			import { Scene, WebGLRenderer, sRGBEncoding, PerspectiveCamera, AmbientLight, DirectionalLight, HemisphereLight, Raycaster, Vector2, Object3D, Mesh, Texture, BufferGeometry, Material } from 'three'
 			import { OrbitControls } from '../lib/orbit-controls'
-			import { imageDataEngine } from '../lib/engine/3-image-data/index'
+			import { type InputKey, VALID_INPUTS } from 'sprig'
+			import { imageDataEngine } from 'sprig/image-data'
 			import { homepageExampleCode } from '../lib/examples'
-			import { InputKey, VALID_INPUTS } from '../lib/engine/2-web'
 
 			// @ts-ignore
 			import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment'
@@ -389,7 +391,10 @@ if (session && session.session.full) {
 
 						const screen = gltf.scene.getObjectByName('Screen')
 						glass = screen.children.find(({ material }: any) => material?.name === 'Glow Glass')
-						game.run(homepageExampleCode)
+						
+						const fn = new Function(...Object.keys(game.api), homepageExampleCode)
+						fn(...Object.values(game.api))
+
 						glass.material = new THREE.MeshBasicMaterial({ map: new THREE.Texture(game.render()) })
 
 						m.appendChild(renderer.domElement)

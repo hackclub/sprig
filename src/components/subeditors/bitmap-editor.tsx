@@ -2,12 +2,13 @@ import styles from './bitmap-editor.module.css'
 import type { EditorProps } from '../../lib/state'
 import type { IconType } from 'react-icons'
 import { signal, useSignal, useSignalEffect } from '@preact/signals'
-import { palette, type PaletteItem, rgbaToHex, transparentBgUrl, transparent } from '../../lib/engine/1-base/palette'
+import { palette, type PaletteItem, rgbaToHex, transparent } from 'sprig/base'
+import { transparentBgUrl } from '../../lib/utils/transparent-bg'
 import { drawingTools, makeTempGrid, mirrorGrid, TempGrid, transformTools, Vector } from './bitmap-editor-tools'
 import { useEffect, useRef } from 'preact/hooks'
 import tinykeys from 'tinykeys'
 import { IoArrowRedo, IoArrowUndo, IoImage, IoTrash } from 'react-icons/io5'
-import { leftDown, modIcon, rightDown } from '../../lib/utils/keyboard'
+import { leftDown, modIcon, rightDown } from '../../lib/utils/events'
 
 const makePixelGrid = (): PaletteItem[][] => new Array(16).fill(0).map(() => new Array(16).fill(transparent))
 const textToPixelGrid = (text: string): PaletteItem[][] => {
