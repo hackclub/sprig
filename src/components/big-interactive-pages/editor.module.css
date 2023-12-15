@@ -78,19 +78,8 @@
 	background: transparent;
 }
 
-.resizeBar:hover, .resizeBar.resizing {
-	background: var(--accent-light);
-}
-
-.horizontalResizeBar {
-	height: 6px;
-	width: 100%;
-	cursor: row-resize;
-	background: transparent;
-}
-
-.horizontalResizeBar:hover,
-.horizontalResizeBar.resizing {
+.resizeBar:hover,
+.resizeBar.resizing {
 	background: var(--accent-light);
 }
 

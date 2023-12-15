@@ -37,8 +37,6 @@ const defaultOutputAreaSize = 400
 const widthMargin = 130
 
 const minHelpAreaSize = 200
-const defaultHelpAreaSize = 400
-const heightHelpMargin = 60
 
 const foldAllTemplateLiterals = () => {
 	if (!codeMirror.value) return
@@ -115,15 +113,10 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			cookies.outputAreaSize ?? defaultOutputAreaSize
 		)
 	)
-	const helpAreaSize = useSignal(
-		Math.max(minHelpAreaSize, cookies.helpAreaSize ?? defaultHelpAreaSize)
-	)
+
 	useSignalEffect(() => {
 		document.cookie = `outputAreaSize=${
 			outputAreaSize.value
-		};path=/;max-age=${60 * 60 * 24 * 365}`
-		document.cookie = `helpAreaSize=${helpAreaSize.value};=${
-			helpAreaSize.value
 		};path=/;max-age=${60 * 60 * 24 * 365}`
 	})
 
@@ -147,53 +140,16 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		)
 	)
 
-	const maxHelpAreaSize = useSignal(helpAreaSize.value)
-	useEffect(() => {
-		const updateMaxSize = () => {
-			maxHelpAreaSize.value = (window.innerHeight - heightHelpMargin) / 2
-		}
-		window.addEventListener("resize", updateMaxSize, { passive: true })
-		updateMaxSize()
-		return () => window.removeEventListener("resize", updateMaxSize)
-	}, [])
-	const realHelpAreaSize = useComputed(() =>
-		Math.min(
-			maxHelpAreaSize.value,
-			Math.max(minHelpAreaSize, helpAreaSize.value)
-		)
-	)
-
 	// Resize bar logic
 	const resizeState = useSignal<ResizeState | null>(null)
 	useEffect(() => {
 		const onMouseMove = (event: MouseEvent) => {
 			if (!resizeState.value) return
 			event.preventDefault()
-			const start = outputAreaSize.value
 			outputAreaSize.value =
 				resizeState.value.startValue +
 				resizeState.value.startMousePos -
 				event.clientX
-			const diff = outputAreaSize.value - start
-			helpAreaSize.value -= diff
-		}
-		window.addEventListener("mousemove", onMouseMove)
-		return () => window.removeEventListener("mousemove", onMouseMove)
-	}, [])
-
-	// Resize bar logic
-	const horizontalResizeState = useSignal<ResizeState | null>(null)
-	useEffect(() => {
-		const onMouseMove = (event: MouseEvent) => {
-			if (!horizontalResizeState.value) return
-			event.preventDefault()
-			const start = helpAreaSize.value
-			helpAreaSize.value =
-				horizontalResizeState.value.startValue +
-				horizontalResizeState.value.startMousePos -
-				event.clientY
-			const diff = helpAreaSize.value - start
-			outputAreaSize.value -= diff
 		}
 		window.addEventListener("mousemove", onMouseMove)
 		return () => window.removeEventListener("mousemove", onMouseMove)
@@ -367,30 +323,8 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 					</div>
 
 					<div
-						class={`${styles.horizontalResizeBar} ${
-							horizontalResizeState.value ? styles.resizing : ""
-						}`}
-						onMouseDown={(event) => {
-							document.documentElement.style.cursor =
-								"row-resize"
-							horizontalResizeState.value = {
-								startMousePos: event.clientY,
-								startValue: realHelpAreaSize.value,
-							}
-							window.addEventListener(
-								"mouseup",
-								() => {
-									horizontalResizeState.value = null
-									document.documentElement.style.cursor = ""
-								},
-								{ once: true }
-							)
-						}}
-					/>
-
-					<div
 						class={styles.helpContainer}
-						style={{ height: realHelpAreaSize.value }}
+						style={{ minHeight: minHelpAreaSize }}
 					>
 						{!(
 							(persistenceState.value.kind === "SHARED" ||
