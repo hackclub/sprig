@@ -1,12 +1,25 @@
-*, *::before, *::after { box-sizing: inherit; }
-html, body { height: 100%; }
-html { box-sizing: border-box; overflow: hidden; }
-body { overflow: auto; }
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+html,
+body {
+	height: 100%;
+}
+html {
+	box-sizing: border-box;
+	overflow: hidden;
+}
+body {
+	overflow: auto;
+	overflow-x: hidden;
+}
 
 :root {
-	--font-text: 'Inter', sans-serif;
-	--font-code: 'Fira Mono', monospace;
-	
+	--font-text: "Inter", sans-serif;
+	--font-code: "Fira Mono", monospace;
+
 	--bg-base: #fafed7;
 	--bg-dark: #2f2f2f;
 	--bg-overlay: #000000cf;
@@ -15,8 +28,8 @@ body { overflow: auto; }
 	--bg-surface: #f8f9fa;
 	--bg-overflow: #dee2e6;
 	--bg-btn-inactive: #434343;
-  	--bg-btn-inactive-dark: #2e2e2e;
-	
+	--bg-btn-inactive-dark: #2e2e2e;
+
 	--fg-muted: #9d9d9d;
 	--fg-muted-on-accent: #8fcabb;
 	--error: #e03131;
@@ -24,7 +37,7 @@ body { overflow: auto; }
 	--accent-light: #80c3a0;
 	--accent-dark: #136853;
 	--fg-switch-low: #515151;
-  	--fg-switch-high: #f3f3f3;
+	--fg-switch-high: #f3f3f3;
 
 	--cursor-interactive: default;
 	--line-height-copy: 1.5;
@@ -47,19 +60,41 @@ a:hover {
 }
 
 @keyframes shake {
-	0% { transform: translate(2px, 1px) rotate(0deg); } 
-	10% { transform: translate(-1px, -2px) rotate(-1deg); }
-	20% { transform: translate(-3px, 0px) rotate(1deg); }
-	30% { transform: translate(0px, 2px) rotate(0deg); }
-	40% { transform: translate(1px, -1px) rotate(1deg); }
-	50% { transform: translate(-1px, 2px) rotate(-1deg); }
-	60% { transform: translate(-3px, 1px) rotate(0deg); }
-	70% { transform: translate(2px, 1px) rotate(-1deg); }
-	80% { transform: translate(-1px, -1px) rotate(1deg); }
-	90% { transform: translate(2px, 2px) rotate(0deg); }
-	100% { transform: translate(1px, -2px) rotate(-1deg); }
+	0% {
+		transform: translate(2px, 1px) rotate(0deg);
+	}
+	10% {
+		transform: translate(-1px, -2px) rotate(-1deg);
+	}
+	20% {
+		transform: translate(-3px, 0px) rotate(1deg);
+	}
+	30% {
+		transform: translate(0px, 2px) rotate(0deg);
+	}
+	40% {
+		transform: translate(1px, -1px) rotate(1deg);
+	}
+	50% {
+		transform: translate(-1px, 2px) rotate(-1deg);
+	}
+	60% {
+		transform: translate(-3px, 1px) rotate(0deg);
+	}
+	70% {
+		transform: translate(2px, 1px) rotate(-1deg);
+	}
+	80% {
+		transform: translate(-1px, -1px) rotate(1deg);
+	}
+	90% {
+		transform: translate(2px, 2px) rotate(0deg);
+	}
+	100% {
+		transform: translate(1px, -2px) rotate(-1deg);
+	}
 }
-  
+
 .shake {
 	animation-name: shake;
 	animation-duration: 0.5s;
