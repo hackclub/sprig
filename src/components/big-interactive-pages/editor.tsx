@@ -14,7 +14,6 @@ import Help from '../popups-etc/help'
 import { collapseRanges } from '../../lib/codemirror/util'
 import { defaultExampleCode } from '../../lib/examples'
 import MigrateToast from '../popups-etc/migrate-toast'
-import { highlightError, clearErrorHighlight } from '../../lib/engine/error'
 import { nanoid } from 'nanoid'
 import TutorialWarningModal from '../popups-etc/tutorial-warning'
 import { isDark } from '../../lib/state'
@@ -52,26 +51,38 @@ let lastSavePromise = Promise.resolve()
 let saveQueueSize = 0
 export const saveGame = debounce(800, (persistenceState: Signal<PersistenceState>, code: string) => {
 	const doSave = async () => {
-		let isError = false
-		try {
-			const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null
-			const res = await fetch('/api/games/save', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ code, gameId: game?.id, tutorialName: game?.tutorialName, tutorialIndex: game?.tutorialIndex })
-			})
-			if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`)
-		} catch (error) {
-			console.error(error)
-			isError = true
+		const attemptSaveGame = async () => {
+			try {
+				const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null
+				const res = await fetch('/api/games/save', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ code, gameId: game?.id, tutorialName: game?.tutorialName, tutorialIndex: game?.tutorialIndex })
+				})
+				if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`)
+				return true;
+			} catch (error) {
+				console.error(error)
+
+				persistenceState.value = {
+					...persistenceState.value,
+					cloudSaveState: 'ERROR'
+				} as any;
+				return false;
+			}
+		}
+
+		while (!await attemptSaveGame()) {
+			await new Promise(resolve => setTimeout(resolve, 2000)); // retry saving the game every 2 seconds
 		}
 
 		saveQueueSize--
-		if (saveQueueSize === 0 && persistenceState.value.kind === 'PERSISTED')
+		if (saveQueueSize === 0 && persistenceState.value.kind === 'PERSISTED') {
 			persistenceState.value = {
 				...persistenceState.value,
-				cloudSaveState: isError ? 'ERROR' : 'SAVED'
+				cloudSaveState: 'SAVED'
 			}
+		}
 	}
 
 	saveQueueSize++
@@ -202,9 +213,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		const code = codeMirror.value?.state.doc.toString() ?? ''
 		const res = runGame(code, screen.current, (error) => {
 			errorLog.value = [ ...errorLog.value, error ]
-			if (error.line) {
-				highlightError(error.line);
-			}
 		})
 
 		screen.current.focus()
@@ -215,12 +223,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		if (res.error) {
 			console.error(res.error.raw)
 			errorLog.value = [ ...errorLog.value, res.error ]
-
-			if (res.error.line) {
-				highlightError(res.error.line);
-			}
-		} else {
-			clearErrorHighlight();
 		}
 	}
 	useEffect(() => () => cleanup.current?.(), [])
@@ -263,7 +265,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		initialCode = persistenceState.value.code
 	else if (persistenceState.value.kind === 'IN_MEMORY')
 		initialCode = localStorage.getItem('sprigMemory') ?? defaultExampleCode
-	
 	// Firefox has weird tab restoring logic. When you, for example, Ctrl-Shift-T, it opens
 	// a kinda broken cached version of the page. And for some reason this reverts the CM
 	// state. Seems like manipulating Preact state is unpredictable, but sessionStorage is

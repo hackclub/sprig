@@ -1,66 +1,74 @@
-import { useRef } from 'preact/hooks'
-import { Signal, useSignal } from '@preact/signals'
-import { IoCaretBack, IoCaretForward } from 'react-icons/io5'
-import styles from './help.module.css'
-import { compiledContent } from '../../../docs/docs.md'
-import { codeMirror, PersistenceState } from '../../lib/state'
-import Button from '../design-system/button'
-import { saveGame } from '../big-interactive-pages/editor'
-import { isDark } from '../../lib/state'
+import { useRef } from "preact/hooks";
+import { Signal, useSignal } from "@preact/signals";
+import { IoCaretBack, IoCaretForward } from "react-icons/io5";
+import styles from "./help.module.css";
+import { compiledContent } from "../../../docs/docs.md";
+import { codeMirror, PersistenceState } from "../../lib/state";
+import Button from "../design-system/button";
+import { saveGame } from "../big-interactive-pages/editor";
+import { isDark } from "../../lib/state";
 
 interface HelpProps {
-	initialVisible?: boolean
-	tutorialContent?: string[]
-	persistenceState?: Signal<PersistenceState>
-	showingTutorialWarning?: Signal<boolean>
+	initialVisible?: boolean;
+	tutorialContent?: string[];
+	persistenceState?: Signal<PersistenceState>;
+	showingTutorialWarning?: Signal<boolean>;
 }
-const helpHtml = compiledContent()
+const helpHtml = compiledContent();
 
 export default function Help(props: HelpProps) {
-	const showingTutorial = useSignal(props.tutorialContent !== undefined)
-	const toolkitScroll = useSignal(0)
-	const tutorialScroll = useSignal(0)
+	const showingTutorial = useSignal(props.tutorialContent !== undefined);
+	const toolkitScroll = useSignal(0);
+	const tutorialScroll = useSignal(0);
 
-	const toolkitContentRef = useRef<HTMLDivElement>(null)
-	const tutorialContentRef = useRef<HTMLDivElement>(null)
+	const toolkitContentRef = useRef<HTMLDivElement>(null);
+	const tutorialContentRef = useRef<HTMLDivElement>(null);
 
-	const tutorialHtml = props.tutorialContent 
-		&& (props.persistenceState?.value.kind == 'PERSISTED' || props.persistenceState?.value.kind == 'SHARED')
-		&& props.tutorialContent[props.persistenceState?.value.tutorialIndex || 0]
-	
+	const tutorialHtml =
+		props.tutorialContent &&
+		(props.persistenceState?.value.kind == "PERSISTED" ||
+			props.persistenceState?.value.kind == "SHARED") &&
+		props.tutorialContent[props.persistenceState?.value.tutorialIndex || 0];
+
 	const setTutorialIndex = (tutorialIndex: number) => {
-		if (props.persistenceState?.value.kind == 'PERSISTED') {
+		if (props.persistenceState?.value.kind == "PERSISTED") {
 			props.persistenceState.value = {
 				...props.persistenceState.value,
 				stale: true,
-				cloudSaveState: 'SAVING',
-				tutorialIndex
-			}
-			saveGame(props.persistenceState, codeMirror.value!.state.doc.toString())
-		} else if (props.persistenceState?.value.kind == 'SHARED') {
+				cloudSaveState: "SAVING",
+				tutorialIndex,
+			};
+			saveGame(
+				props.persistenceState,
+				codeMirror.value!.state.doc.toString()
+			);
+		} else if (props.persistenceState?.value.kind == "SHARED") {
 			props.persistenceState.value = {
 				...props.persistenceState.value,
-				tutorialIndex
-			}
+				tutorialIndex,
+			};
 		}
-	}
+	};
 
 	const nextPage = () => {
-		const tutorialIndex = 
-			(props.persistenceState?.value.kind == 'PERSISTED' || props.persistenceState?.value.kind == 'SHARED') &&
-			props.persistenceState.value.tutorialIndex || 0
-		setTutorialIndex(tutorialIndex + 1)
-	}
+		const tutorialIndex =
+			((props.persistenceState?.value.kind == "PERSISTED" ||
+				props.persistenceState?.value.kind == "SHARED") &&
+				props.persistenceState.value.tutorialIndex) ||
+			0;
+		setTutorialIndex(tutorialIndex + 1);
+	};
 
 	const previousPage = () => {
 		const tutorialIndex =
-			(props.persistenceState?.value.kind == 'PERSISTED' || props.persistenceState?.value.kind == 'SHARED') &&
-			props.persistenceState.value.tutorialIndex || 0
-		setTutorialIndex(tutorialIndex - 1)
-	}
+			((props.persistenceState?.value.kind == "PERSISTED" ||
+				props.persistenceState?.value.kind == "SHARED") &&
+				props.persistenceState.value.tutorialIndex) ||
+			0;
+		setTutorialIndex(tutorialIndex - 1);
+	};
 	return (
-		<div class={styles.container} >
-			
+		<div class={styles.container}>
 			<div class={styles.tabs}>
 				{tutorialHtml && (
 					<div
@@ -69,9 +77,9 @@ export default function Help(props: HelpProps) {
 							showingTutorial.value ? styles.selected : ""
 						}`}
 						onClick={() => {
-							showingTutorial.value = true
+							showingTutorial.value = true;
 							tutorialContentRef.current!.scrollTop =
-								tutorialScroll.value
+								tutorialScroll.value;
 						}}
 					>
 						Tutorial
@@ -84,9 +92,9 @@ export default function Help(props: HelpProps) {
 							showingTutorial.value ? "" : styles.selected
 						}`}
 						onClick={() => {
-							showingTutorial.value = false
+							showingTutorial.value = false;
 							toolkitContentRef.current!.scrollTop =
-								toolkitScroll.value
+								toolkitScroll.value;
 						}}
 					>
 						Help
@@ -95,7 +103,7 @@ export default function Help(props: HelpProps) {
 			</div>
 
 			<div
-				class={styles.content}
+				class={isDark.value ? styles.content_dark : styles.content}
 				style={{
 					display:
 						tutorialHtml &&
@@ -108,12 +116,13 @@ export default function Help(props: HelpProps) {
 				<div
 					dangerouslySetInnerHTML={{ __html: tutorialHtml || "" }}
 					onScroll={(e) => {
-						tutorialScroll.value = e.currentTarget.scrollTop
+						tutorialScroll.value = e.currentTarget.scrollTop;
 					}}
 					ref={tutorialContentRef}
 				/>
 
-				{(props.persistenceState?.value.kind == 'PERSISTED' || props.persistenceState?.value.kind == 'SHARED') && (
+				{(props.persistenceState?.value.kind == "PERSISTED" ||
+					props.persistenceState?.value.kind == "SHARED") && (
 					<>
 						<br />
 						<div class={styles.paginationContainer}>
@@ -164,12 +173,25 @@ export default function Help(props: HelpProps) {
 										</Button>
 									)}
 
-								{props.persistenceState.value.tutorialIndex != undefined
-								&& props.persistenceState.value.tutorial
-								&& props.persistenceState.value.tutorialIndex == props.persistenceState.value.tutorial.length - 1
-								&& (<Button class={styles.paginationButton} onClick={() => {
-									props.showingTutorialWarning!.value = true
-								}} accent>Exit Tutorial</Button>)}
+								{props.persistenceState.value.tutorialIndex !=
+									undefined &&
+									props.persistenceState.value.tutorial &&
+									props.persistenceState.value
+										.tutorialIndex ==
+										props.persistenceState.value.tutorial
+											.length -
+											1 && (
+										<Button
+											class={styles.paginationButton}
+											onClick={() => {
+												props.showingTutorialWarning!.value =
+													true;
+											}}
+											accent
+										>
+											Exit Tutorial
+										</Button>
+									)}
 							</div>
 						</div>
 					</>
@@ -183,9 +205,9 @@ export default function Help(props: HelpProps) {
 				ref={toolkitContentRef}
 				dangerouslySetInnerHTML={{ __html: helpHtml }}
 				onScroll={(e) => {
-					toolkitScroll.value = e.currentTarget.scrollTop
+					toolkitScroll.value = e.currentTarget.scrollTop;
 				}}
 			/>
 		</div>
-	)
+	);
 }

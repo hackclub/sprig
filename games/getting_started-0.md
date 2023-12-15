@@ -41,11 +41,11 @@ In JavaScript, a [function](https://developer.mozilla.org/en-US/docs/Web/JavaScr
 We'll need to add two more for the keys `w` and `a`. Type this out below your `onInput` functions for `s` and `d`.
 
 ```js
-onInput("w", function() {
-    getFirst(player).y -= 1
+onInput("w", () => {
+    getFirst(player).y -= 1;
 });
 
-onInput("a", function() {
+onInput("a", () => {
     getFirst(player).x -= 1;
 });
 ```
@@ -172,7 +172,7 @@ You need to do 2 things: create a sprig `tune` and figure out a way to play it o
 First, create a tune by adding the below. In Sprig, a `tune` is a set of musical notes created using our in-game music editor. Don’t worry, it’s really easy to navigate.
 
 ```js
-const tune = tune`...`;
+const myTune = tune`...`;
 ```
 
 Click the green `tune` text to enter the tune editor. Create something of your own!
@@ -180,7 +180,7 @@ Click the green `tune` text to enter the tune editor. Create something of your o
 Now that you have a tune, play it using Sprig's `playTune` function.
 
 ```js
-playTune(tune);
+playTune(myTune);
 ```
 
 But, we only want to play the tune every time the player moves.
@@ -190,24 +190,24 @@ What is something that related to player movement? Our `onInput` function that r
 So, let’s put the `playTune` function inside each of the `onInput` functions.The result should be something like this.
 
 ```js
-onInput("w", function() {
-    getFirst(player).y -= 1
-    playTune(tune);
+onInput("w", () => {
+    getFirst(player).y -= 1;
+    playTune(myTune);
 });
 
-onInput("a", function() {
+onInput("a", () => {
     getFirst(player).x -= 1;
-    playTune(tune);
+    playTune(myTune);
 });
 
-onInput("s", function() {
+onInput("s", () => {
     getFirst(player).y += 1; // positive y is downwards
-    playTune(tune);
+    playTune(myTune);
 });
 
-onInput("d", function() {
+onInput("d", () => {
     getFirst(player).x += 1;
-    playTune(tune);
+    playTune(myTune);
 });
 ```
 

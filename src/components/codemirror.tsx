@@ -1,10 +1,11 @@
-import { createEditorState, initialExtensions } from '../lib/codemirror/init'
+import { createEditorState, initialExtensions, diagnosticsFromErrorLog } from '../lib/codemirror/init'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { StateEffect } from '@codemirror/state'
 import styles from './codemirror.module.css'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorView } from '@codemirror/view'
-import { isDark } from '../lib/state'
+import { isDark, errorLog } from '../lib/state'
+import { Diagnostic, setDiagnosticsEffect } from '@codemirror/lint'
 
 interface CodeMirrorProps {
 	class?: string | undefined
@@ -44,6 +45,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		});
 	};
 
+
 	useEffect(() => {
 		if (!parent.current) throw new Error('Oh golly! The editor parent ref is null')
 
@@ -62,8 +64,16 @@ export default function CodeMirror(props: CodeMirrorProps) {
 
 	useEffect(() => {
 		setEditorTheme();
-	}, [isDark.value]);
+	}, [isDark.value, editorRef]);
 
+	useEffect(() => {
+		errorLog.subscribe(value => {
+			const diagnostics = diagnosticsFromErrorLog(editorRef as EditorView, value);
+			editorRef?.dispatch({
+				effects: setDiagnosticsEffect.of(diagnostics as Diagnostic[])
+			});
+		});
+	}, [editorRef]);
 
 	return (
 		<div class={`${styles.container} ${props.class ?? ''}`} ref={parent} />
