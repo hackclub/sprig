@@ -9,34 +9,33 @@ def run_compare50(single_file, directory, output_dir, saved_dir_base):
         directory_abs = os.path.abspath(directory)
 
         all_js_files = glob.glob(os.path.join(directory_abs, "*.js"))
-        counter = 1
+        total_files = len(all_js_files)
+        current_file_number = 0
 
         for file in all_js_files:
+            current_file_number += 1
             if os.path.abspath(file) == os.path.abspath(single_file):
                 continue
 
+            print(f"Processing file {current_file_number} of {total_files}: {os.path.basename(file)}")
+            
             command = [
                 "compare50",
                 single_file,
                 file,
                 "--output", output_dir,
-                "--verbose",
                 "--max-file-size", str(1024 * 1024 * 100)
             ]
 
-            print("Running Compare50 command:", " ".join(command))
             subprocess.run(command, check=True)
 
-            saved_dir = os.path.join(saved_dir_base, str(counter))
-            if not os.path.exists(saved_dir):
-                os.makedirs(saved_dir)
-            if os.path.exists(output_dir):
-                shutil.move(output_dir, saved_dir)
-                print(f"Compare50 results for {file} are saved in {saved_dir}")
-                counter += 1
+            match_file = os.path.join(output_dir, "match_1.html")
 
-            if os.path.exists(output_dir):
-                shutil.rmtree(output_dir)
+            if os.path.exists(match_file):
+                new_filename = os.path.basename(file).replace('.js', '.html')
+                saved_file_path = os.path.join(saved_dir_base, new_filename)
+                shutil.move(match_file, saved_file_path)
+                print(f"Result for {file} saved as {saved_file_path}")
 
     except subprocess.CalledProcessError as e:
         print("Error in running Compare50:", e)
@@ -44,7 +43,7 @@ def run_compare50(single_file, directory, output_dir, saved_dir_base):
         print(f"An error occurred: {e}")
 
 def main():
-    if len(sys.argv) != 5:
+    if len(sys.argv) != 4:
         print("Usage: python plagiarism_check.py <single_file> <directory> <output_dir> <saved_dir_base>")
         sys.exit(1)
 
