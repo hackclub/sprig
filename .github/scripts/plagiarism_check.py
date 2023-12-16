@@ -4,20 +4,23 @@ import os
 
 def run_compare50(single_file, directory, output_dir):
     try:
-        if os.path.exists(os.path.join(directory, single_file)):
-            os.remove(os.path.join(directory, single_file))
-                
+        
+        duplicate_file_path = os.path.join(directory, os.path.basename(single_file))
+
+        if os.path.isfile(duplicate_file_path):
+            os.remove(duplicate_file_path)
+
         command = [
             "compare50",
-            os.path.join(directory, "*.js"),
+            single_file,
+            f"{directory}/*",
             "--output", output_dir,
             "--verbose",
-            "--max-file-size", str(1024 * 1024 * 100),
-            "--exclude", f"{directory}/img/*",
+            "--max-file-size", str(1024 * 1024 * 100)
         ]
-        
-        print("Running Compare50 command:", " ".join(command))
 
+        print("Running Compare50 command:", " ".join(command))
+        
         subprocess.run(command, check=True)
 
         print(f"Compare50 results are saved in {output_dir}")
@@ -36,10 +39,7 @@ def main():
     directory = sys.argv[2]
     output_dir = sys.argv[3]
 
-    if os.path.isabs(single_file):
-        single_file = os.path.relpath(single_file, directory)
-
-    if not os.path.exists(single_file):
+    if not os.path.isfile(single_file):
         print(f"File not found: {single_file}")
         sys.exit(1)
 
