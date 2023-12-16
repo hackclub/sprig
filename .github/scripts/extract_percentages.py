@@ -26,14 +26,14 @@ def process_html_files(directory, threshold=10):
         key=lambda x: x[1], reverse=True
     )
 
-    with open('plagiarism_results.txt', 'w') as file:
-        file.write("All Results:\n")
+    with open('plagiarism_results.txt', 'w') as output_file:
+        output_file.write("All Results:\n")
         for file_name, percent in results.items():
-            file.write(f"{file_name}: {percent}%\n")
+            output_file.write(f"{file_name}: {percent}%\n")
 
-        file.write("\nFiltered and Sorted Results (Above 10%):\n")
+        output_file.write("\nFiltered and Sorted Results (Above 10%):\n")
         for file, percent in filtered_sorted_results:
-            file.write(f"{file}: {percent}%\n")
+            output_file.write(f"{file}: {percent}%\n")
 
 def main():
     if len(sys.argv) != 2:
