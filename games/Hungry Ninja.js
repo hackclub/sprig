@@ -6,6 +6,24 @@ Instructions:
 WASD to control your player
 Collect as many apples as you can and avoid bombs.
 P.S. There are also apple bombs :-)
+
+Game Description:
+🍎🥷 Get ready for the most explosive culinary adventure in "Hungry Ninja!" 
+Join our stealthy, yet seriously snack-hungry ninja as they embark on a 
+perilous quest to satisfy their insatiable apple cravings. Armed with nimble 
+moves and a bottomless stomach, our ninja must navigate through orchards loaded 
+with juicy apples and, of course, the occasional explosive surprise!
+
+Dodge deadly bombs, unleash lightning-fast moves, and master the art of fruit-
+fueled acrobatics to become the ultimate apple-nabbing ninja. It's a race 
+against time and danger as you strive to collect as many apples as possible 
+while avoiding those bomb-erific booby traps.
+
+🏆 Can you outsmart the orchard's explosive guardians and prove that you're the
+top ninja gastronome? Strap on your ninja gear, sharpen your appetite, 
+and get ready for a deliciously dangerous journey in "Hungry Ninja!" 
+It's a feast for the senses, but watch out for those bombshells – they're 
+not part of the recipe! 🍏💣
 */
 
 // All the game sprites
