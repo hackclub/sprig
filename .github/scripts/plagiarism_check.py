@@ -5,21 +5,18 @@ import glob
 
 def run_compare50(single_file, directory, output_base_dir):
     try:
-        directory_abs = os.path.abspath(directory)
-
-        single_file_abs = os.path.abspath(single_file)
-
-        all_js_files = glob.glob(os.path.join(directory_abs, "*.js"))
+        
+        all_js_files = glob.glob(os.path.join(directory, "*.js"))
 
         for file in all_js_files:
-            if os.path.abspath(file) == single_file_abs:
+            if os.path.abspath(file) == single_file:
                 continue
 
             output_dir = os.path.join(output_base_dir, os.path.basename(file).replace('.js', ''))
             
             command = [
                 "compare50",
-                single_file_abs,
+                single_file,
                 file,
                 "--output", output_dir,
                 "--verbose",
