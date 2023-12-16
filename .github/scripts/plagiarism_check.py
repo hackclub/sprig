@@ -1,14 +1,11 @@
 import sys
 import subprocess
 import os
-import shutil
 
 def run_compare50(single_file, directory, output_dir):
     try:
-        if os.path.exists(output_dir):
-            shutil.rmtree(output_dir)
-
-        os.makedirs(output_dir)
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
 
         command = ["compare50", single_file, directory, "--output", output_dir]
 
