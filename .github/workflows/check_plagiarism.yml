@@ -11,46 +11,30 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Install dependencies
-        run: |
-          yarn add prettier
-          yarn add esprima
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Install Compare50
+        run: pip install compare50
 
       - name: Get list of changed files
         id: changed-files
         run: |
-            base_sha="${{ github.event.pull_request.base.sha }}"
-            head_sha="${{ github.event.pull_request.head.sha }}"
-            js_files=$(git diff --name-only --diff-filter=AM $base_sha..$head_sha | grep 'games/.*\.js$' | xargs)
-            echo "JavaScript files:"
-            echo "$js_files"
-            echo "FILES=$js_files" >> $GITHUB_ENV
+          base_sha="${{ github.event.pull_request.base.sha }}"
+          head_sha="${{ github.event.pull_request.head.sha }}"
+          js_files=$(git diff --name-only --diff-filter=AM $base_sha..$head_sha | grep 'games/.*\.js$' | xargs)
+          echo "FILES=$js_files" >> $GITHUB_ENV
 
       - name: Run Plagiarism Detection Script
-        id: plagiarism-detection
-        run: node .github/scripts/plagiarismCheck.js $FILES games
-        env:
-          FILES: ${{ env.FILES }}
+        run: python .github/scripts/plagiarism_check.py ${{ env.FILES }} games output_dir
 
-      - name: Post Comment
-        if: always()
-        uses: actions/github-script@v7
+      - name: Upload Compare50 Results as Artifacts
+        uses: actions/upload-artifact@v3
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const fs = require('fs');
-            const comment = fs.readFileSync('plagiarism-results.txt', 'utf8');
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: comment
-            });
-
-      - name: Fail if Plagiarism Detected
-        if: steps.plagiarism-detection.outcome == 'failure'
-        run: exit 1
+          name: compare50-results
+          path: output_dir/
