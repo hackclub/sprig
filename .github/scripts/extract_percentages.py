@@ -27,10 +27,6 @@ def process_html_files(directory, threshold=10):
     )
 
     with open('plagiarism_results.txt', 'w') as output_file:
-        output_file.write("All Results:\n")
-        for file_name, percent in results.items():
-            output_file.write(f"{file_name}: {percent}%\n")
-
         output_file.write("\nFiltered and Sorted Results (Above 10%):\n")
         for file, percent in filtered_sorted_results:
             output_file.write(f"{file}: {percent}%\n")
