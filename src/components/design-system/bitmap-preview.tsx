@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'preact/hooks'
-import { bitmapTextToImageData } from '../../lib/engine/2-web/bitmap'
+import { bitmapTextToImageData } from 'sprig/image-data'
 import styles from './bitmap-preview.module.css'
 
 interface BitmapPreviewProps {

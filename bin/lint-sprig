@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+# lint-sprig
+#
+# Do some sanity checks on the sprig games.
+
+metadata=games/metadata.json
+
+if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
+  echo "Usage: $0 [games/<name>.js ...]" >&2;
+  cat <<EOF >&2
+
+Perform sanity check on sprig games. Ensures js files in games directory are
+represented in metadata file. Checks name for invalid characters. Suggests a
+record to add to metadata if not present, pulling title and author from
+javascript file. Checks for associated image file.
+
+Does not read metadata to determine if it references files not present.
+EOF
+  exit 2;
+fi
+
+if [[ $# -eq 0 ]]; then
+  files=$(echo games/*.js);
+else
+  files="$@";
+fi
+
+
+err=0
+for game in $files; do
+  name=$(basename "$game" .js);
+  if [[ ! "$name" =~ ^[a-zA-Z0-9_\-]+$ ]]; then
+    echo "warning: Unexpected character in file name '$game'." >&2;
+    err=1;
+  fi
+
+  if ! grep -c "$name" $metadata > /dev/null; then
+    echo "warning: '$name' for $game not present in $metadata." >&2;
+    if ! grep '@title' $game >&-; then
+      echo "error: no @title in $game";
+      title="$name";
+    else
+      title=$(grep '@title' $game | awk '{ print $2 }');
+    fi
+    if ! grep '@author' $game >&-; then
+      echo "error: no @author in $game";
+      author="N/A";
+    else
+      author=$(grep '@author' $game | awk '{ print $2 }');
+    fi
+    img="games/img/$name.png";
+    if [[ ! -f "$img" ]]; then
+      echo "warning: no '$img' image found for $game." >&2;
+      img="";
+      err=1;
+    fi
+    date=$(date +%Y-%m-%d);
+    echo "Suggested fix: add this record to $metadata." >&2;
+cat <<EOF >&2
+  {
+    "filename": "$name.js",
+    "title": "$title",
+    "author": "$author",
+    "img": "$img",
+    "tags": [],
+    "addedOn": "$date"
+  },
+EOF
+    err=1
+  fi
+
+  # img="games/img/$name.png"
+  # if [[ ! -f "$img" ]]; then
+  #   echo "warning: expect image '$img' for $game." >&2;
+  #   err=1
+  # fi
+done
+
+exit $err

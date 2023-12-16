@@ -3,8 +3,8 @@ import { bitmaps, EditorProps } from '../../lib/state'
 import BitmapPreview from '../design-system/bitmap-preview'
 import { Signal, useSignal } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
-import { transparentBgUrl } from '../../lib/engine/1-base/palette'
-import { leftDown, rightDown } from '../../lib/utils/keyboard'
+import { transparentBgUrl } from '../../lib/utils/transparent-bg'
+import { leftDown, rightDown } from '../../lib/utils/events'
 
 const textToGrid = (text: string): string[][] => text.trim().split('\n').map(line => [ ...line.trim() ])
 const gridToText = (grid: string[][]): string => '\n' + grid.map(row => row.join('')).join('\n')

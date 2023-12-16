@@ -842,6 +842,7 @@ const texts = [
   "Final Level!",
   ""
 ];
+let muted = false;
 let level = 0;
 const currentLevel = levels[level];
 setMap(currentLevel);
@@ -908,7 +909,7 @@ const win = tune`
 166.66666666666666: e5~166.66666666666666,
 166.66666666666666: c5~166.66666666666666,
 3000`;
-playTune(bg, Infinity);
+let bgi = playTune(bg, Infinity);
 
 let trails = true;
 // START - PLAYER MOVEMENT CONTROLS
@@ -926,7 +927,9 @@ function everyMove() {
       addSprite(i.x, i.y, traila);
     }
   }
-  playTune(playerstep);
+  if(!muted){
+    playTune(playerstep);
+  }
 }
 let players;
 let i;
@@ -978,6 +981,14 @@ onInput("k", () => {
   }
   trails = !trails;
 });
+onInput("i", () => {
+  muted = !muted;
+  if(muted){
+    bgi.end();
+  }else{
+    bgi = playTune(bg, Infinity);
+  }
+});
 afterInput(() => {
   const targetNumber = tilesWith(goala).length + tilesWith(goalb).length + tilesWith(goaln).length;
   const numberCovered = tilesWith(goala, boxa).length + tilesWith(goalb, boxb).length + tilesWith(goala, boxn).length + tilesWith(goalb, boxn).length + tilesWith(goaln, boxa).length + tilesWith(goaln, boxb).length + tilesWith(goaln, boxn).length;
@@ -986,7 +997,9 @@ afterInput(() => {
     clearText();
     addText(texts[level], {x:1, color:color`1`});
     const currentLevel = levels[level];
-    playTune(cont);
+    if(!muted){
+      playTune(cont);
+    }
     setMap(currentLevel);
   }
   if (level === levels.length-1) {
@@ -994,6 +1007,8 @@ afterInput(() => {
       y: 4,
       color: color`4`
     });
-    playTune(win);
+    if(!muted){
+      playTune(win);
+    }
   }
 });

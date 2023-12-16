@@ -1,6 +1,6 @@
 import { effect, Signal } from '@preact/signals'
-import { InstrumentType, tones, Tune } from '../../lib/engine/1-base/tune'
-import { playFrequency } from '../../lib/engine/3-editor/tune'
+import { type InstrumentType, tones, type Tune } from 'sprig'
+import { playFrequency } from 'sprig/web'
 import { lazy } from '../../lib/utils/lazy'
 
 // Weird representations are used here:

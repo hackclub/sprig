@@ -1,5 +1,6 @@
 import styles from './color-picker.module.css'
-import { palette, rgbaToHex, transparentBgUrl } from '../../lib/engine/1-base/palette'
+import { palette, rgbaToHex } from 'sprig/base'
+import { transparentBgUrl } from '../../lib/utils/transparent-bg'
 import type { EditorProps } from '../../lib/state'
 
 export default function ColorPickerEditor(props: EditorProps) {

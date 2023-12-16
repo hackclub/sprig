@@ -1,5 +1,5 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
-import { codeMirror, PersistenceState } from '../lib/state'
+import { codeMirror, PersistenceState, isDark, toggleTheme } from '../lib/state'
 import Button from './design-system/button'
 import SavePrompt from './popups-etc/save-prompt'
 import styles from './navbar.module.css'
@@ -11,6 +11,7 @@ import { IoChevronDown, IoLogoGithub, IoPlay, IoSaveOutline, IoShareOutline, IoS
 import { usePopupCloseClick } from '../lib/utils/popup-close-click'
 import { upload, uploadState } from '../lib/upload'
 import { VscLoading } from 'react-icons/vsc'
+import { defaultExampleCode } from '../lib/examples'
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -55,10 +56,13 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const showSharePopup = useSignal(false)
 
 	const deleteState = useSignal<'idle' | 'confirm' | 'deleting'>('idle')
+	const resetState = useSignal<'idle' | 'confirm'>('idle')
 	useSignalEffect(() => {
 		const _showNavPopup = showNavPopup.value
 		const _deleteState = deleteState.value
-		if (!_showNavPopup && _deleteState === 'confirm') deleteState.value = 'idle' 
+		const _resetState = resetState.value
+		if (!_showNavPopup && _deleteState === 'confirm') deleteState.value = 'idle'
+		if (!_showNavPopup && _resetState === 'confirm') resetState.value = 'idle'
 	})
 
 	usePopupCloseClick(styles.navPopup!, () => showNavPopup.value = false, showNavPopup.value)
@@ -76,7 +80,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		saveState = props.persistenceState.value.stale
 			? 'Your changes are unsaved!'
 			: 'No changes to save'
-		
+
 		actionButton = <Button icon={IoShuffle} onClick={() => {
 			if (props.persistenceState.value.session?.session.full)
 				persist(props.persistenceState)
@@ -137,6 +141,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			</li>
 
 			<li>
+				<Button onClick={toggleTheme}>
+					{isDark.value ? "Light" : "Dark"}
+				</Button>
+			</li>
+
+			<li>
 				<Button
 					accent
 					icon={{
@@ -176,8 +186,27 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						<li><a href='/~/new'>New game</a></li>
 					</>)
 					: (<>
-						<li><a href='/'>Home</a></li>
 						<li><a href='/~'>Your games (log in)</a></li>
+						<li>
+							<a href='javascript:void' role='button' onClick={() => {
+								if (resetState.value === 'idle') {
+									resetState.value = 'confirm'
+								} else {
+									codeMirror.value?.dispatch({
+										changes: {
+											from: 0,
+											to: codeMirror.value.state.doc.length,
+											insert: defaultExampleCode
+										}
+									})
+									resetState.value = 'idle'
+								}
+							}}>
+								{resetState.value === 'idle'
+									? 'Reset game code'
+									: 'Are you sure?'}
+							</a>
+						</li>
 					</>)}
 				<li><a href='/gallery'>Gallery</a></li>
 				<li><a href='/get'>Get a Sprig</a></li>

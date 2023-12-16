@@ -102,6 +102,9 @@
 .results {
 	font-size: 0.9rem;
 	width: 80px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	user-select: none;
 }
 .results.error {
 	color: var(--error);

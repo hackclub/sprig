@@ -13,6 +13,8 @@ import type { Game, SessionInfo } from './game-saving/account'
 export interface NormalizedError {
 	raw: unknown
 	description: string
+	line?: number | null
+	column?: number | null
 }
 
 // Editor types
@@ -65,12 +67,17 @@ export type PersistenceState = ({
 } | {
 	kind: 'PERSISTED'
 	cloudSaveState: 'SAVED' | 'SAVING' | 'ERROR'
-	game: 'LOADING' | Game
+	game: 'LOADING' | Game,
+	tutorial?: string[] | undefined,
+	tutorialIndex?: number | undefined
 } | {
 	kind: 'SHARED'
 	name: string
 	authorName: string
-	code: string
+	code: string,
+	tutorial?: string[] | undefined
+	tutorialName?: string | undefined
+	tutorialIndex?: number | undefined
 }) & {
 	session: SessionInfo | null
 	stale: boolean
@@ -81,3 +88,11 @@ export const muted = signal<boolean>(false)
 export const errorLog = signal<NormalizedError[]>([])
 export const openEditor = signal<OpenEditor | null>(null)
 export const bitmaps = signal<[string, string][]>([])
+// export const isDark = signal<boolean>(localStorage.getItem("isDark") == "true");
+export const isDark = signal<boolean>(false)
+
+export const toggleTheme = () => {
+	isDark.value = !isDark.value;
+	// console.log(isDark.value);
+	localStorage.setItem("isDark", isDark.value.toString());
+} 

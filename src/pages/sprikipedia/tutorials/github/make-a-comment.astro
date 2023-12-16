@@ -1,0 +1,22 @@
+---
+import '../../../../global.css'
+import Docs from '../../../../layouts/docs.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+
+<Docs dspriki={data["tutorials.categories.dspriki.github.mcomment"]} dtitle={data["tutorials.categories.dtitle.github.mcomment"]} dauthor={data["tutorials.categories.dauthor.github.mcomment"]} >
+    <h1>How to make a comment?</h1>
+    <p>{data["tutorials.categories.dspriki.github.mcomment.step1"]}<b><code>Leave a comment</code></b></p>
+    <br />
+    <img class="img-tutorial" src='https://cloud-kevcg5hvj-hack-club-bot.vercel.app/0image.png'>
+    <br />
+    <p>{data["tutorials.categories.dspriki.github.mcomment.step2"]}<b><code>Comment</code></b></p>
+    <br />
+    <img class="img-tutorial" src='https://cloud-kevcg5hvj-hack-club-bot.vercel.app/1image.png'>
+</Docs>
