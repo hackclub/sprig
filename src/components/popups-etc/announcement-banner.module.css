@@ -1,0 +1,32 @@
+.banner {
+	color: white;
+	cursor: pointer;
+	margin-top: 14px;
+	display: flex;
+	justify-content: center;
+}
+
+.banner > a {
+	color: inherit;
+	align-items: center;
+	display: flex;
+	gap: 14px;
+	background-color: rgba(255, 255, 255, 0.2);
+	border-radius: 1rem;
+	width: fit-content;
+	padding: 0 1rem;
+	transition: all 0.1s;
+	max-width: 400px;
+}
+
+.banner:hover {
+	transform: scale(101%);
+}
+
+.banner > a:hover {
+	color: inherit;
+}
+
+.icon {
+	font-size: 5rem;
+}
