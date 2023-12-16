@@ -4,12 +4,15 @@ import prettier from 'prettier';
 import { fileURLToPath } from 'url';
 
 const preprocessCode = async (code) => {
-    if (typeof code !== 'string') {
-        throw new TypeError('Expected a string as input for code');
-    }
-
-    code = prettier.format(code, { parser: 'babel' });
-    return code.split('\n');
+	try {
+		console.log('Before formatting:', typeof code, code);
+		code = prettier.format(code, { parser: 'babel' });
+		console.log('After formatting:', typeof code, code);
+		return code.split('\n');
+	}
+	catch (err) {
+		console.error('Error processing file:', file, err);
+	}
 };
 
 const calculateSimilarity = (codeLines1, codeLines2) => {
