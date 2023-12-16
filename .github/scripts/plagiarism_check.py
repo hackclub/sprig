@@ -6,10 +6,10 @@ import shutil
 
 def run_compare50(single_file, directory, output_dir, saved_dir_base):
     try:
-        directory_abs = os.path.abspath(directory)
-        saved_dir_base_abs = os.path.abspath(saved_dir_base)
+        if not os.path.exists(saved_dir_base):
+            os.makedirs(saved_dir_base)
 
-        all_js_files = glob.glob(os.path.join(directory_abs, "*.js"))
+        all_js_files = glob.glob(os.path.join(directory, "*.js"))
         total_files = len(all_js_files)
         current_file_number = 0
 
@@ -34,7 +34,7 @@ def run_compare50(single_file, directory, output_dir, saved_dir_base):
 
             if os.path.exists(match_file):
                 new_filename = os.path.basename(file).replace('.js', '.html')
-                saved_file_path = os.path.join(saved_dir_base_abs, new_filename)
+                saved_file_path = os.path.join(saved_dir_base, new_filename)
                 print(f"Moving {match_file} to {saved_file_path}")
                 shutil.move(match_file, saved_file_path)
 
