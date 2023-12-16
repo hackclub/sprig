@@ -6,7 +6,7 @@ import time;
 def run_compare50(single_file, directory, output_dir):
     try:
         print("Running Compare50...")
-        command = ["compare50", single_file, directory, "--output", output_dir]
+        command = ["compare50", single_file, directory, "--output", output_dir, "--verbose", "--max-file-size", str(1024 * 1024 * 100), "--exclude", single_file]
 
         subprocess.run(command, check=True)
 
