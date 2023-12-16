@@ -43,7 +43,7 @@ def run_compare50(single_file, directory, output_dir, saved_dir_base):
         print(f"An error occurred: {e}")
 
 def main():
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 5:
         print("Usage: python plagiarism_check.py <single_file> <directory> <output_dir> <saved_dir_base>")
         sys.exit(1)
 
