@@ -31,10 +31,10 @@ jobs:
           echo "FILES=$js_files" >> $GITHUB_ENV
 
       - name: Run Plagiarism Detection Script
-        run: python .github/scripts/plagiarism_check.py ${{ env.FILES }} games output_dir
+        run: python .github/scripts/plagiarism_check.py ${{ env.FILES }} games output_dir saved_dir
 
       - name: Upload Compare50 Results as Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: compare50-results
-          path: output_dir/
+          path: saved_dir/
