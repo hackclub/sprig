@@ -9,14 +9,10 @@ def run_compare50(single_file, directory, output_base_dir):
         output_base_dir_abs = os.path.abspath(output_base_dir)
 
         all_js_files = glob.glob(os.path.join(directory_abs, "*.js"))
+        js_files_to_compare = [f for f in all_js_files if f != single_file]
 
-        for file in all_js_files:
-            if file == single_file:
-                continue
-
-            output_dir_name = os.path.basename(file).replace('.js', '')
-            output_dir = os.path.join(output_base_dir_abs, output_dir_name)
-            
+        for file in js_files_to_compare:
+            output_dir = os.path.join(output_base_dir_abs, os.path.basename(file).replace('.js', ''))
             command = [
                 "compare50",
                 single_file,
