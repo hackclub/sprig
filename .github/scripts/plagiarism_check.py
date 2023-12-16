@@ -27,7 +27,8 @@ def run_compare50(single_file, directory, output_dir, saved_dir_base):
                 single_file,
                 file,
                 "--output", output_dir,
-                "--max-file-size", str(1024 * 1024 * 100)
+                "--max-file-size", str(1024 * 1024 * 100),
+                "--passes", "text"
             ]
 
             subprocess.run(command, check=True)
