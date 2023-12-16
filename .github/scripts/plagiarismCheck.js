@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import prettier from 'prettier';
+import levenshtein from 'fast-levenshtein';
 import { fileURLToPath } from 'url';
 
 const preprocessCode = async (code) => {
@@ -9,16 +10,21 @@ const preprocessCode = async (code) => {
 };
 
 const calculateSimilarity = (codeLines1, codeLines2) => {
-	let matchingLines = 0;
+	let totalDistance = 0;
+	let totalLength = 0;
 
 	codeLines1.forEach((line1, index) => {
-		if (codeLines2.length > index && line1.trim() === codeLines2[index].trim()) {
-			matchingLines++;
-		}
+		const line2 = codeLines2[index] || '';
+		totalDistance += levenshtein.get(line1.trim(), line2.trim());
+		totalLength += Math.max(line1.trim().length, line2.trim().length);
 	});
 
-	const totalLines = codeLines1.length;
-	const similarity = (matchingLines / totalLines) * 100;
+	for (let i = codeLines1.length; i < codeLines2.length; i++) {
+		totalDistance += codeLines2[i].trim().length;
+		totalLength += codeLines2[i].trim().length;
+	}
+
+	const similarity = (1 - totalDistance / totalLength) * 100;
 	return similarity;
 };
 
