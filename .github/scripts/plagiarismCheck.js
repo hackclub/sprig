@@ -1,14 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 import prettier from 'prettier';
-import diff from 'fast-diff'
 import { fileURLToPath } from 'url';
 
 const preprocessCode = async (code) => {
+    if (typeof code !== 'string') {
+        throw new TypeError('Expected a string as input for code');
+    }
 
-	code = prettier.format(code, { parser: 'babel' });
-	// ignore filter for now!
-	return code.split('\n');;
+    code = prettier.format(code, { parser: 'babel' });
+    return code.split('\n');
 };
 
 const calculateSimilarity = (codeLines1, codeLines2) => {
@@ -31,7 +32,7 @@ const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 10) 
 	for (const file of files) {
 		try {
 			const originalCodeContent = fs.readFileSync(file, 'utf8');
-			const originalCodeLines = await preprocessCode(originalCodeContent.toString());
+			const originalCodeLines = await preprocessCode(originalCodeContent);
 
 			const galleryFiles = fs.readdirSync(galleryDirPath);
 			for (const galleryFile of galleryFiles) {
