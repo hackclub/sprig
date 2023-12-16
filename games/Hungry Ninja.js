@@ -399,6 +399,13 @@ setInterval(function () {
 
 setInterval(function () {
   let enemies = getAll(enemy);
+
+  if (!ninjaDied && enemies.length > 10) {
+    for (var i = 0; !ninjaDied && i < 5; i++) {
+      enemies[i].remove();
+    }
+  }
+  
   if (!ninjaDied && enemies.length < 12) {
     addSprite(getRandomEvenNumberLessThan10(), 0, enemy);
   }
