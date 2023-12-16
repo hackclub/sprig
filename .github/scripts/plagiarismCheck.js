@@ -1,30 +1,25 @@
 import fs from 'fs';
 import path from 'path';
 import prettier from 'prettier';
-import levenshtein from 'fast-levenshtein';
+import esprima from 'esprima';
 import { fileURLToPath } from 'url';
 
-const preprocessCode = async (code) => {
-	code = await prettier.format(code, { parser: 'babel' });
-	return code.split('\n');
+const tokenizeCode = (code) => {
+	try {
+		const tokens = esprima.tokenize(code);
+		return new Set(tokens.map(token => token.value));
+	} catch (error) {
+		console.error('Error tokenizing code:', error);
+		return new Set();
+	}
 };
 
-const calculateSimilarity = (codeLines1, codeLines2) => {
-	let totalDistance = 0;
-	let totalLength = 0;
+const calculateSimilarity = (tokens1, tokens2) => {
+	const totalTokens = new Set([...tokens1, ...tokens2]);
+	const commonTokens = new Set([...tokens1].filter(x => tokens2.has(x)));
 
-	codeLines1.forEach((line1, index) => {
-		const line2 = codeLines2[index] || '';
-		totalDistance += levenshtein.get(line1.trim(), line2.trim());
-		totalLength += Math.max(line1.trim().length, line2.trim().length);
-	});
-
-	for (let i = codeLines1.length; i < codeLines2.length; i++) {
-		totalDistance += codeLines2[i].trim().length;
-		totalLength += codeLines2[i].trim().length;
-	}
-
-	const similarity = (1 - totalDistance / totalLength) * 100;
+	if (totalTokens.size === 0) return 0;
+	const similarity = (commonTokens.size / totalTokens.size) * 100;
 	return similarity;
 };
 
@@ -34,16 +29,16 @@ const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 0) =
 	for (const file of files) {
 		try {
 			const originalCodeContent = fs.readFileSync(file, 'utf8');
-			const originalCodeLines = await preprocessCode(originalCodeContent);
+			const originalTokens = tokenizeCode(originalCodeContent);
 
 			const galleryFiles = fs.readdirSync(galleryDirPath);
 			for (const galleryFile of galleryFiles) {
 				const fullGalleryFilePath = path.join(galleryDirPath, galleryFile);
 				if (path.extname(galleryFile) === '.js' && fullGalleryFilePath !== file) {
 					const galleryCodeContent = fs.readFileSync(fullGalleryFilePath, 'utf8');
-					const galleryCodeLines = await preprocessCode(galleryCodeContent);
+					const galleryTokens = tokenizeCode(galleryCodeContent);
 
-					const similarity = calculateSimilarity(originalCodeLines, galleryCodeLines);
+					const similarity = calculateSimilarity(originalTokens, galleryTokens);
 					if (similarity >= overlapThreshold) {
 						similarityResults.push({ similarity, file1: file, file2: galleryFile });
 					}

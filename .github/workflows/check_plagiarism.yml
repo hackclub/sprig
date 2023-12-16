@@ -18,7 +18,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn add prettier
-          yarn add fast-levenshtein
+          yarn add esprima
 
       - name: Get list of changed files
         id: changed-files
