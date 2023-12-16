@@ -3,29 +3,32 @@ import subprocess
 import os
 import glob
 
-def run_compare50(single_file, directory, output_dir):
+def run_compare50(single_file, directory, output_base_dir):
     try:
-        output_dir_abs = os.path.abspath(output_dir)
+        directory_abs = os.path.abspath(directory)
+        output_base_dir_abs = os.path.abspath(output_base_dir)
 
-        if not os.path.isfile(single_file):
-            print(f"File not found: {single_file}")
-            sys.exit(1)
+        all_js_files = glob.glob(os.path.join(directory_abs, "*.js"))
 
-        all_js_files = glob.glob(os.path.join(directory, "*.js"))
-        js_files_to_compare = [f for f in all_js_files if f != single_file]
+        for file in all_js_files:
+            if file == single_file:
+                continue
 
-        command = [
-            "compare50",
-            single_file,
-            *js_files_to_compare,
-            "--output", output_dir_abs,
-            "--verbose",
-            "--max-file-size", str(1024 * 1024 * 100)
-        ]
+            output_dir_name = os.path.basename(file).replace('.js', '')
+            output_dir = os.path.join(output_base_dir_abs, output_dir_name)
+            
+            command = [
+                "compare50",
+                single_file,
+                file,
+                "--output", output_dir,
+                "--verbose",
+                "--max-file-size", str(1024 * 1024 * 100)
+            ]
 
-        print("Running Compare50 command:", " ".join(command))
-        subprocess.run(command, check=True)
-        print(f"Compare50 results are saved in {output_dir_abs}")
+            print("Running Compare50 command:", " ".join(command))
+            subprocess.run(command, check=True)
+            print(f"Compare50 results for {file} are saved in {output_dir}")
 
     except subprocess.CalledProcessError as e:
         print("Error in running Compare50:", e)
@@ -34,14 +37,14 @@ def run_compare50(single_file, directory, output_dir):
 
 def main():
     if len(sys.argv) != 4:
-        print("Usage: python plagiarism_check.py <single_file> <directory> <output_dir>")
+        print("Usage: python plagiarism_check.py <single_file> <directory> <output_base_dir>")
         sys.exit(1)
 
     single_file = sys.argv[1]
     directory = sys.argv[2]
-    output_dir = sys.argv[3]
+    output_base_dir = sys.argv[3]
 
-    run_compare50(single_file, directory, output_dir)
+    run_compare50(single_file, directory, output_base_dir)
 
 if __name__ == "__main__":
     main()
