@@ -4,8 +4,9 @@ import os
 
 def run_compare50(single_file, directory, output_dir):
     try:
-        single_file_basename = os.path.basename(single_file)
-
+        if os.path.exists(os.path.join(directory, single_file)):
+            os.remove(os.path.join(directory, single_file))
+                
         command = [
             "compare50",
             os.path.join(directory, "*.js"),
@@ -13,7 +14,6 @@ def run_compare50(single_file, directory, output_dir):
             "--verbose",
             "--max-file-size", str(1024 * 1024 * 100),
             "--exclude", f"{directory}/img/*",
-            "--exclude", single_file_basename
         ]
         
         print("Running Compare50 command:", " ".join(command))
