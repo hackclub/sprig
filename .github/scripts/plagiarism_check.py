@@ -4,14 +4,16 @@ import os
 
 def run_compare50(single_file, directory, output_dir):
     try:
+        single_file_basename = os.path.basename(single_file)
+
         command = [
             "compare50",
-            directory,
+            os.path.join(directory, "*.js"),
             "--output", output_dir,
             "--verbose",
             "--max-file-size", str(1024 * 1024 * 100),
-            "--exclude", os.path.basename(single_file),
-            "--include", "*.js"
+            "--exclude", f"{directory}/img/*",
+            "--exclude", single_file_basename
         ]
         
         print("Running Compare50 command:", " ".join(command))
@@ -33,6 +35,9 @@ def main():
     single_file = sys.argv[1]
     directory = sys.argv[2]
     output_dir = sys.argv[3]
+
+    if os.path.isabs(single_file):
+        single_file = os.path.relpath(single_file, directory)
 
     if not os.path.exists(single_file):
         print(f"File not found: {single_file}")
