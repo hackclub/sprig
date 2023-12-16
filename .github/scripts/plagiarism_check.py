@@ -7,6 +7,7 @@ import shutil
 def run_compare50(single_file, directory, output_dir, saved_dir_base):
     try:
         directory_abs = os.path.abspath(directory)
+        saved_dir_base_abs = os.path.abspath(saved_dir_base)
 
         all_js_files = glob.glob(os.path.join(directory_abs, "*.js"))
         total_files = len(all_js_files)
@@ -17,7 +18,7 @@ def run_compare50(single_file, directory, output_dir, saved_dir_base):
             if os.path.abspath(file) == os.path.abspath(single_file):
                 continue
 
-            print(f"Processing file {current_file_number} of {total_files}: {os.path.basename(file)}")
+            print(f"Processing file {current_file_number} of {total_files}: {file}")
             
             command = [
                 "compare50",
@@ -33,9 +34,9 @@ def run_compare50(single_file, directory, output_dir, saved_dir_base):
 
             if os.path.exists(match_file):
                 new_filename = os.path.basename(file).replace('.js', '.html')
-                saved_file_path = os.path.join(saved_dir_base, new_filename)
+                saved_file_path = os.path.join(saved_dir_base_abs, new_filename)
+                print(f"Moving {match_file} to {saved_file_path}")
                 shutil.move(match_file, saved_file_path)
-                print(f"Result for {file} saved as {saved_file_path}")
 
     except subprocess.CalledProcessError as e:
         print("Error in running Compare50:", e)
