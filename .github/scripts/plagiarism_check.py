@@ -10,9 +10,8 @@ def run_compare50(single_file, directory, output_dir):
             "--output", output_dir,
             "--verbose",
             "--max-file-size", str(1024 * 1024 * 100),
-            "--exclude", "*",
-            "--include", "*.js",
-            "--exclude", single_file
+            "--exclude", os.path.basename(single_file),
+            "--include", "*.js"
         ]
         
         print("Running Compare50 command:", " ".join(command))
