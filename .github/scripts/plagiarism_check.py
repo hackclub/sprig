@@ -19,6 +19,8 @@ def run_compare50(single_file, directory, output_dir, saved_dir_base):
                 continue
 
             print(f"Processing file {current_file_number} of {total_files}: {file}")
+            if os.path.exists(output_dir):
+                shutil.rmtree(output_dir)
             
             command = [
                 "compare50",
