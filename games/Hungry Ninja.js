@@ -307,7 +307,7 @@ addText(
 
 function getRandomEvenNumberLessThan10() {
   // Generate a random number between 0 and 9
-  const randomNumber = Math.floor(Math.random() * 10);
+  const randomNumber = Math.floor(Math.random() * 11);
 
   // Check if the random number is even
   if (randomNumber % 2 === 0) {
