@@ -9,12 +9,15 @@ def extract_similarity_percentage(html_file):
         if match:
             return match.group(1)
         else:
+            print(f"No match found in {html_file}")
             return None
 
 def process_html_files(directory):
+    print(f"Processing HTML files in {directory}")
     for filename in os.listdir(directory):
         if filename.endswith(".html"):
             file_path = os.path.join(directory, filename)
+            print(f"Checking {file_path}")
             percentage = extract_similarity_percentage(file_path)
             if percentage:
                 print(f"{filename.replace('.html', '.js')}: {percentage}%")
