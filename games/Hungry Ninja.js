@@ -58,7 +58,7 @@ const music = tune`
 277.77777777777777: B5~277.77777777777777,
 277.77777777777777: B5-277.77777777777777 + A4-277.77777777777777 + B4^277.77777777777777 + C5/277.77777777777777 + D4-277.77777777777777,
 277.77777777777777: C5^277.77777777777777 + B4^277.77777777777777,
-277.77777777777777: G5-277.77777777777777 + F5-277.77777777777777 + E5-277.77777777777777 + B4^277.77777777777777 + C5^277.77777777777777`
+277.77777777777777: G5-277.77777777777777 + F5-277.77777777777777 + E5-277.77777777777777 + B4^277.77777777777777 + C5^277.77777777777777`;
 
 // Setting game background music
 playTune(music, Infinity);
@@ -249,19 +249,27 @@ function updateScore() {
 
 // inputs for player movement control
 onInput("w", () => {
-  getFirst(player).y -= 1;
+  if (!ninjaDied) {
+    getFirst(player).y -= 1;
+  }
 });
 
 onInput("a", () => {
-  getFirst(player).x -= 1;
+  if (!ninjaDied) {
+    getFirst(player).x -= 1;
+  }
 });
 
 onInput("d", () => {
-  getFirst(player).x += 1;
+  if (!ninjaDied) {
+    getFirst(player).x += 1;
+  }
 });
 
 onInput("s", () => {
-  getFirst(player).y += 1;
+  if (!ninjaDied) {
+    getFirst(player).y += 1;
+  }
 });
 
 onInput("j", () => {
