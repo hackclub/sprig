@@ -22,7 +22,7 @@ const calculateSimilarity = (codeLines1, codeLines2) => {
 	return similarity;
 };
 
-const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 10) => {
+const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 0) => {
 	let similarityResults = [];
 
 	for (const file of files) {
