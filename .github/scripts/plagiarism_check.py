@@ -1,12 +1,11 @@
 import sys
 import subprocess
 import os
+import time;
 
 def run_compare50(single_file, directory, output_dir):
     try:
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-
+        print("Running Compare50...")
         command = ["compare50", single_file, directory, "--output", output_dir]
 
         subprocess.run(command, check=True)
