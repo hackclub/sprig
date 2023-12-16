@@ -1,11 +1,9 @@
 import sys
 import subprocess
 import os
-import time;
 
 def run_compare50(single_file, directory, output_dir):
     try:
-        print("Running Compare50 command:", " ".join(command))
         command = [
             "compare50",
             directory,
@@ -16,6 +14,8 @@ def run_compare50(single_file, directory, output_dir):
             "--include", "*.js",
             "--exclude", single_file
         ]
+        
+        print("Running Compare50 command:", " ".join(command))
 
         subprocess.run(command, check=True)
 
