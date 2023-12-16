@@ -4,15 +4,8 @@ import prettier from 'prettier';
 import { fileURLToPath } from 'url';
 
 const preprocessCode = async (code) => {
-	try {
-		console.log('Before formatting:', typeof code, code);
-		code = prettier.format(code, { parser: 'babel' });
-		console.log('After formatting:', typeof code, code);
-		return code.split('\n');
-	}
-	catch (err) {
-		console.error('Error processing file:', file, err);
-	}
+	code = await prettier.format(code, { parser: 'babel' });
+	return code.split('\n');
 };
 
 const calculateSimilarity = (codeLines1, codeLines2) => {
