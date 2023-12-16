@@ -1,56 +1,27 @@
 import fs from 'fs';
 import path from 'path';
 import prettier from 'prettier';
+import diff from 'fast-diff'
 import { fileURLToPath } from 'url';
 
-const preprocessCode = async (code, isOriginal = false) => {
-	if (typeof code !== 'string') {
-		console.error("Code is not a string. Skipping preprocessing.");
-		return '';
-	}
+const preprocessCode = async (code) => {
 
-	try {
-		code = await prettier.format(code, { parser: "babel" });
-	} catch (error) {
-		console.error("Error formatting code with Prettier:", error);
-		return code;
-	}
-
-	if (isOriginal) {
-		try {
-			code = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
-			code = code.replace(/map`[\s\S]*?`/g, '');
-			code = code.replace(/bitmap`[\s\S]*?`/g, '');
-			const commonWords = [
-				'const', 'setLegend', 'setSolids', 'let', 'setMap', 'setPushables',
-				'onInput', 'var', 'clearText', 'addText', 'clearInterval',
-				'getFirst', 'clearTile', 'tilesWith', 'level', 'levels', 'if', 'for',
-			];
-			const regex = new RegExp(`\\b(${commonWords.join('|')})\\b`, 'g');
-			code = code.replace(regex, '');
-			console.log("Code after preprocessing:", code);
-		} catch (replaceError) {
-			console.error("Error in replace operations:", replaceError);
-			return code;
-		}
-	}
-
-	return code;
+	code = prettier.format(code, { parser: 'babel' });
+	// ignore filter for now!
+	return code.split('\n');;
 };
 
-const calculateSimilarity = (code1, code2) => {
-	let matchCount = 0;
-	const lines1 = code1.split('\n');
-	const lines2 = code2.split('\n');
-	const totalLines = Math.max(lines1.length, lines2.length);
+const calculateSimilarity = (codeLines1, codeLines2) => {
+	let matchingLines = 0;
 
-	for (let i = 0; i < totalLines; i++) {
-		if (lines1[i] && lines2[i] && lines1[i].trim() === lines2[i].trim()) {
-			matchCount++;
+	codeLines1.forEach((line1, index) => {
+		if (codeLines2.length > index && line1.trim() === codeLines2[index].trim()) {
+			matchingLines++;
 		}
-	}
+	});
 
-	const similarity = (matchCount / totalLines) * 100;
+	const totalLines = codeLines1.length;
+	const similarity = (matchingLines / totalLines) * 100;
 	return similarity;
 };
 
@@ -60,16 +31,16 @@ const checkForPlagiarism = async (files, galleryDirPath, overlapThreshold = 10) 
 	for (const file of files) {
 		try {
 			const originalCodeContent = fs.readFileSync(file, 'utf8');
-			const originalCode = await preprocessCode(originalCodeContent.toString(), true);
+			const originalCodeLines = await preprocessCode(originalCodeContent.toString());
 
 			const galleryFiles = fs.readdirSync(galleryDirPath);
 			for (const galleryFile of galleryFiles) {
 				const fullGalleryFilePath = path.join(galleryDirPath, galleryFile);
 				if (path.extname(galleryFile) === '.js' && fullGalleryFilePath !== file) {
 					const galleryCodeContent = fs.readFileSync(fullGalleryFilePath, 'utf8');
-					const galleryCode = await preprocessCode(galleryCodeContent);
+					const galleryCodeLines = await preprocessCode(galleryCodeContent);
 
-					const similarity = calculateSimilarity(originalCode, galleryCode);
+					const similarity = calculateSimilarity(originalCodeLines, galleryCodeLines);
 					if (similarity >= overlapThreshold) {
 						similarityResults.push({ similarity, file1: file, file2: galleryFile });
 					}
