@@ -5,24 +5,18 @@ import glob
 
 def run_compare50(single_file, directory, output_dir):
     try:
-        directory_abs = os.path.abspath(directory)
         output_dir_abs = os.path.abspath(output_dir)
 
-        if os.path.isabs(single_file):
-            single_file_abs = single_file
-        else:
-            single_file_abs = os.path.join(directory_abs, single_file)
-
-        if not os.path.isfile(single_file_abs):
-            print(f"{single_file_abs} not found")
+        if not os.path.isfile(single_file):
+            print(f"File not found: {single_file}")
             sys.exit(1)
 
-        all_js_files = glob.glob(os.path.join(directory_abs, "*.js"))
-        js_files_to_compare = [f for f in all_js_files if f != single_file_abs]
+        all_js_files = glob.glob(os.path.join(directory, "*.js"))
+        js_files_to_compare = [f for f in all_js_files if f != single_file]
 
         command = [
             "compare50",
-            single_file_abs,
+            single_file,
             *js_files_to_compare,
             "--output", output_dir_abs,
             "--verbose",
