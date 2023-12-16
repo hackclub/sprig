@@ -219,10 +219,10 @@ const levels = [
 aeaeaeaeaea
 eeeeeeeeeee
 .l.l.l.l.l.
+.l.l.l.l.l.
+.l.l.l.l.l.
+.l.l.l.l.l.
 pl.l.l.l.l.
-.l.l.l.l.l.
-.l.l.l.l.l.
-.l.l.l.l.l.
 ddddddddddd`,
 ];
 
@@ -275,6 +275,17 @@ onInput("s", () => {
 onInput("j", () => {
   reset();
 });
+
+addText(
+  "  Hungry Ninja\n\n Collect Apples" +
+    "\n\n Avoid Bombs &\n  Apple-bombs!" +
+    "\n\n\n Use W,A,S,D to \n move.",
+  {
+    x: 2,
+    y: 4,
+    color: color`2`,
+  }
+);
 
 function getRandomEvenNumberLessThan10() {
   // Generate a random number between 0 and 9
