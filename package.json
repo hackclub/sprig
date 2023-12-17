@@ -33,6 +33,7 @@
 		"nanoid": "^4.0.1",
 		"node-statsd": "^0.1.1",
 		"preact": "^10.6.5",
+		"prettier": "^3.1.0",
 		"react-icons": "^4.7.1",
 		"rehype-external-links": "^2.0.1",
 		"sass": "^1.58.0",
