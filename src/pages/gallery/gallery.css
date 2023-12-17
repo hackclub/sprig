@@ -1,0 +1,165 @@
+body {
+	overflow-y: scroll;
+}
+
+.copy-container > h1 {
+	margin-bottom: 12px;
+}
+
+p {
+	margin: 0;
+}
+
+.info-split {
+	display: flex;
+	flex-direction: row;
+	gap: 40px;
+}
+
+.search-container,
+.join-container {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.search-container {
+	flex: 2;
+}
+
+.join-container {
+	flex: 1;
+}
+
+.search-controls {
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+}
+
+.search-controls .search {
+	flex: 1;
+}
+
+.select,
+.search {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	position: relative;
+}
+
+.select select {
+	line-height: 1.2;
+	background: var(--bg-btn-inactive);
+	color: #ffffff;
+	border: none;
+	border: 2px solid var(--bg-btn-inactive);
+	padding: 8px 12px;
+	padding-right: 20px;
+	appearance: none;
+	display: block;
+	font-size: 0.9rem;
+	font-family: inherit;
+	outline: none;
+	width: 100%;
+	user-select: none;
+}
+
+.select svg {
+	color: var(--fg-muted);
+	pointer-events: none;
+	position: absolute;
+	right: 8px;
+	font-size: 0.9rem;
+}
+
+.search svg {
+	color: #5b5b5b;
+	pointer-events: none;
+	position: absolute;
+	left: 12px;
+}
+
+.search input {
+	padding-left: 32px;
+}
+
+#games {
+	margin-top: 50px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 14px;
+}
+
+.game {
+	background: var(--accent);
+	color: #ffffff;
+	padding: 12px;
+	user-select: none;
+	position: relative;
+}
+
+.game:hover {
+	background: var(--accent-dark);
+	color: #ffffff;
+}
+
+.game .badge {
+	position: absolute;
+	top: 6px;
+	right: 6px;
+	text-align: center;
+	padding: 4px 10px;
+	font-weight: bold;
+	box-shadow: 0 2px 4px 0 #00000037;
+}
+
+.game .badge.new {
+	background: #fcc419;
+	color: #000000;
+}
+
+.game .badge.tutorial {
+	background: #339af0;
+	color: #ffffff;
+}
+
+.game img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 1;
+	background: #ffffff;
+	color: #000000;
+	/* For error messages */
+	object-fit: contain;
+	image-rendering: pixelated;
+}
+
+.game img:not([data-loaded="true"]) {
+	opacity: 0;
+}
+
+.game p,
+.game h3 {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.game h3 {
+	margin: 0;
+	margin-top: 10px;
+	font-size: 1.2rem;
+}
+
+.game .author {
+	color: var(--fg-muted-on-accent);
+	margin-top: 2px;
+}
+
+.game .tags {
+	color: var(--fg-muted-on-accent);
+	margin-top: 2px;
+	font-size: 0.9rem;
+}
