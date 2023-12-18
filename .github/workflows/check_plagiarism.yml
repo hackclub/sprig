@@ -1,11 +1,14 @@
 name: Plagiarism Checker
 
 on:
-  pull_request:
+  pull_request_target:
     paths:
       - "games/**/*.js"
 
-permissions: write-all
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
 
 jobs:
   plagiarism-check:
@@ -15,6 +18,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
       - name: Set up Python
