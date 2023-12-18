@@ -24,14 +24,15 @@ def run_compare50(single_file, directory, output_dir, saved_dir_base):
             
             command = [
                 "compare50",
-                single_file,
-                file,
-                "--output", output_dir,
+                f'"{single_file}"',
+                f'"{file}"',
+                "--output", f'"{output_dir}"',
                 "--max-file-size", str(1024 * 1024 * 100),
                 "--passes", "text"
             ]
 
-            subprocess.run(command, check=True)
+            command_str = ' '.join(command)
+            subprocess.run(command_str, shell=True, check=True)
 
             match_file = os.path.join(output_dir, "match_1.html")
 
