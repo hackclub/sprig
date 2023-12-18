@@ -5,6 +5,10 @@ on:
     paths:
       - "games/**/*.js"
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   plagiarism-check:
     runs-on: ubuntu-latest
@@ -19,6 +23,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+
       - name: Install Compare50 && beautifulsoup4
         run: pip install compare50 beautifulsoup4
 
