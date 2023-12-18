@@ -1,5 +1,5 @@
 /*
-@title: Hungry Ninja
+@title: Hungry-Ninja
 @author: Prajval Raval
 
 Instructions:
