@@ -1,7 +1,7 @@
 name: Plagiarism Checker
 
 on:
-  pull_request:
+  pull_request_target:
     paths:
       - "games/**/*.js"
 
@@ -15,6 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
       - name: Set up Python
@@ -28,15 +29,20 @@ jobs:
       - name: Get list of changed files
         id: changed-files
         run: |
-          base_sha="${{ github.event.pull_request.base.sha }}"
-          head_sha="${{ github.event.pull_request.head.sha }}"
+          base_sha="${{ github.base_ref }}"
+          head_sha="${{ github.sha }}"
           js_files=$(git diff --name-only --diff-filter=AM $base_sha..$head_sha | grep 'games/.*\.js$' | xargs)
           echo "FILES=$js_files" >> $GITHUB_ENV
 
       - name: Run Plagiarism Detection Script
         env:
           FILES: ${{ env.FILES }}
-        run: python .github/scripts/plagiarism_check.py $FILES games output_dir saved_dir
+        run: |
+          IFS=' ' read -ra FILES_ARRAY <<< "$FILES"
+          for FILE in "${FILES_ARRAY[@]}"; do
+            python .github/scripts/plagiarism_check.py "$FILE" games output_dir saved_dir
+          done
+        shell: /usr/bin/bash -e {0}
 
       - name: Extract and Display Similarity Percentages
         run: python .github/scripts/extract_percentages.py saved_dir/
