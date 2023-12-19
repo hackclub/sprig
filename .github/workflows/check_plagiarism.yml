@@ -36,19 +36,15 @@ jobs:
 
       - name: Extract and Display Similarity Percentages
         run: python .github/scripts/extract_percentages.py saved_dir/
+        id: extract-percentages
 
       - name: Upload Compare50 Results as Artifacts
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: compare50-results
           path: saved_dir/
 
       - name: Check for High Plagiarism Percentages
-        if: success()
-        run: |
-          if grep -qE ".*: (\d{1,3})%" plagiarism_results.txt; then
-            echo "Plagiarism percentage over threshold detected."
-            exit 1
-          else
-            echo "No high plagiarism percentages detected."
-          fi
+        if: steps.extract-percentages.outcome == 'failure'
+        run: echo "Plagiarism percentage over threshold detected."

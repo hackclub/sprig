@@ -22,31 +22,17 @@ def extract_similarity_percentage(html_file):
         return None
 
 def process_html_files(directory, threshold=50):
-    results = {}
     log("Processing HTML files for plagiarism results...")
+    high_plagiarism_detected = False
     for filename in os.listdir(directory):
         if filename.endswith(".html"):
             file_path = os.path.join(directory, filename)
             percentage = extract_similarity_percentage(file_path)
-            if percentage is not None:
-                results[filename.replace('.html', '.js')] = percentage
-                log(f"Extracted {percentage}% similarity from {filename}")
+            if percentage is not None and percentage >= threshold:
+                log(f"High plagiarism detected - {filename.replace('.html', '.js')}: {percentage}%")
+                high_plagiarism_detected = True
 
-    filtered_sorted_results = sorted(
-        ((file, percent) for file, percent in results.items() if percent >= threshold),
-        key=lambda x: x[1], reverse=True
-    )
-
-    with open('plagiarism_results.txt', 'w') as output_file:
-        log("Writing results to plagiarism_results.txt")
-        output_file.write("Filtered and Sorted Results (Above Threshold):\n")
-        for file, percent in filtered_sorted_results:
-            line = f"{file}: {percent}%\n"
-            output_file.write(line)
-            log(line.strip())
-        if not filtered_sorted_results:
-            output_file.write("No results exceeding threshold.\n")
-            log("No results exceeding threshold.")
+    return high_plagiarism_detected
 
 def main():
     if len(sys.argv) != 2:
@@ -56,8 +42,11 @@ def main():
 
     saved_dir_path = sys.argv[1]
     log(f"Received saved directory path: {saved_dir_path}")
-    process_html_files(saved_dir_path)
-    log("Extraction of plagiarism percentages completed.")
+    if process_html_files(saved_dir_path):
+        log("High plagiarism percentages detected.")
+        sys.exit(1)
+    else:
+        log("No high plagiarism percentages detected.")
 
 if __name__ == "__main__":
     main()
