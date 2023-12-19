@@ -369,7 +369,18 @@ w.ttt.w
 weg...w
 www..ew
 wr..www
-wwfs..w` //10
+wwfs..w`, //10
+	map `
+..........
+.wwww..w.w
+..w.www.w.
+..w.w.ww.w
+..........
+..........
+..........
+..........
+wr.......w
+wwwwwwwwww`
 ]
 setMap(levels[level]);
 setSolids([platformON, playerR, playerL, wall, spring, platform, lBelt, rBelt]);
