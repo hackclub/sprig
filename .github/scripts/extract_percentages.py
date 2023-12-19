@@ -21,7 +21,7 @@ def extract_similarity_percentage(html_file):
         log(f"Error processing file {html_file}: {e}")
         return None
 
-def process_html_files(directory, threshold=10):
+def process_html_files(directory, threshold=50):
     results = {}
     log("Processing HTML files for plagiarism results...")
     for filename in os.listdir(directory):
