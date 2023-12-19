@@ -57,6 +57,16 @@ def main():
     output_dir = sys.argv[3]
     saved_dir_base = sys.argv[4]
 
+    print(f"Received arguments:")
+    print(f"Single file: {single_file}")
+    print(f"Directory: {directory}")
+    print(f"Output directory: {output_dir}")
+    print(f"Saved directory base: {saved_dir_base}")
+
+    print(f"All files in directory '{directory}':")
+    for f in glob.glob(os.path.join(directory, "*.js")):
+        print(f)
+
     run_compare50(single_file, directory, output_dir, saved_dir_base)
 
 if __name__ == "__main__":

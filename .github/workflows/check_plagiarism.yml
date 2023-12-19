@@ -38,7 +38,9 @@ jobs:
           echo "FILES=$js_files" >> $GITHUB_ENV
 
       - name: Run Plagiarism Detection Script
-        run: python .github/scripts/plagiarism_check.py ${{ env.FILES }} games output_dir saved_dir
+        env:
+          FILES: ${{ env.FILES }}
+        run: python .github/scripts/plagiarism_check.py $FILES games output_dir saved_dir
 
       - name: Extract and Display Similarity Percentages
         run: python .github/scripts/extract_percentages.py saved_dir/
