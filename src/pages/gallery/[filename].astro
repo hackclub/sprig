@@ -27,7 +27,7 @@ let tutorial: string[] | undefined = files
 	?.map(md => md.compiledContent())
 if (tutorial.length == 0) tutorial = undefined
 
-const games = await getGalleryGames()
+const games = getGalleryGames()
 const metadata = games.find(game => game.filename === filename)
 const name = metadata?.title
 const authorName = metadata?.author
