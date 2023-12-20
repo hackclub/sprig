@@ -1,7 +1,7 @@
 const player = "p";
 const wall = "w";
 const gold = "g";
-
+const trap = "t";
 setLegend(
 	[ player, bitmap`
 ................
@@ -53,9 +53,27 @@ setLegend(
 ................
 ................
 ................
-................` ]
+................` ],
+    [trap,bitmap`
+................
+................
+................
+....DDDDDDD.....
+...D4444444D....
+..D44DDDDD44D...
+..D4D44444D4D...
+..D4D4DDD4D4D...
+..D4D4DDD4D4D...
+..D4D44444D4D...
+..D44DDDDD44D...
+...D4444444D....
+....DDDDDDD.....
+................
+................
+................`]
 )
-
+const player_x = player.x
+const trap_x = trap.x
 setSolids([player,wall])
 const walk = tune`
 370.3703703703704: B4-370.3703703703704,
@@ -93,49 +111,54 @@ const win = tune`
 147.05882352941177: C5~147.05882352941177,
 147.05882352941177: F5~147.05882352941177,
 147.05882352941177: A4~147.05882352941177`
-let level = 0
+let level = 1;
 const levels = [
+    map`
+....
+....
+....
+....`,
 	map`
 w.
 gw
-w.
-p.`,
+wt
+pt`,
     map`
 w.w
 wg.
 .ww
-p..`,
+p.t`,
     map`
-g..w
-.w.w
-www.
+gt.w
+twtw
+wwwt
 .pw.`,
     map`
-p.ww
-wwg.
-.w.w
-..ww`,
+ptww
+wwgt
+tw.w
+.tww`,
     map`
-.g.w
-w.ww
-.ww.
-.pw.`,
+.gtw
+wtww
+twwt
+tpw.`,
     map`
 w.g.
 www.
 ..w.
 .wpw`,
     map`
-w.wp
-gw.w
-.ww.
-w...`,
+wtwp
+gwtw
+twwt
+w.t.`,
     map`
-....g
-wwww.
-..w.w
-w.ww.
-pw...`,
+..ttg
+wwwwt
+ttwtw
+w.wwt
+pwtt.`,
     map`
 .w.wg
 w.ww.
@@ -144,9 +167,9 @@ w.ww.
 .....`,
     map`
 .ww.g
-w..w.
-.w.ww
-w.w..
+wt.wt
+twtww
+wtwtt
 .wpww`
 ]
 
@@ -175,15 +198,19 @@ onInput("a", () => {
 onInput("k", () => {
 	setMap(levels[level])
 })
-
+const traps = tilesWith(trap)
+onInput("j", () => {
+  //If the player is next to a tile with a trap
+ getFirst(trap).remove();
+})
 afterInput(() => {
-  if (level === 0){
+  if (level === 1){
     addText("Get the Treasure!", {y: 11, color: color`6` });
     addText("Press k to Restart", {y: 13, color: color`6` });
   }
-  const targetNumber = tilesWith(gold).length;
-  const numberCovered = tilesWith(player, gold).length;
-  if (numberCovered === targetNumber) {
+  const goldnum = tilesWith(gold).length;
+  const playergold = tilesWith(player, gold).length;
+  if (goldnum === playergold) {
     level = level + 1;
     clearText()
     const currentLevel = levels[level];
@@ -194,5 +221,12 @@ afterInput(() => {
       playTune(win, Infinity)
     }
   }
-
+  const playertrap = tilesWith(player, trap).length;
+  if (playertrap> 0) {
+    setMap(levels[0]);
+    clearText()
+    addText("You lose!", {y: 5, color: color`H` });
+    addText("Destroy the traps!", {y: 8, color: color`H` })
+    level = 1
+  }   
 })
