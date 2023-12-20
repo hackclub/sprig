@@ -1,6 +1,6 @@
 /*
-@title: Pluffy The Cage Bird
-@author: Nihal K
+@title: Pluffy_The_Cage_Bird
+@author: Nihal_K
 */
 const pluffy = "p"
 const piller = "u"
