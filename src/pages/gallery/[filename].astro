@@ -13,8 +13,10 @@ import path from 'path'
 
 const session = await getSession(Astro.cookies)
 
+console.log(fs.readdirSync('.'))
+
 const filename = Astro.params.filename ?? ''
-const gameContentPath = path.resolve(process.cwd(), `./dist/games/${filename}.js`)
+const gameContentPath = path.resolve(process.cwd(), `./games/${filename}.js`)
 const code = fs.readFileSync(gameContentPath).toString()
 if (code == null) {
 	return Astro.redirect('/404', 302)
