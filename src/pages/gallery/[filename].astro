@@ -9,10 +9,12 @@ import { getGalleryGames } from '../../lib/game-saving/gallery'
 import MobilePlayer from '../../components/big-interactive-pages/mobile-player'
 import { mobileUserAgent } from '../../lib/utils/mobile'
 import fs from 'fs'
+import path from 'path'
+
 const session = await getSession(Astro.cookies)
 
 const filename = Astro.params.filename ?? ''
-const gameContentPath = `./games/${filename}.js`
+const gameContentPath = path.resolve(process.cwd(), `./games/${filename}.js`)
 const code = fs.readFileSync(gameContentPath).toString()
 if (code == null) {
 	return Astro.redirect('/404', 302)

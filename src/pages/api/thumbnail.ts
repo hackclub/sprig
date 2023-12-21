@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro'
 import { baseEngine, palette } from 'sprig/base'
 import { RawThumbnail, Thumbnail } from '../../lib/thumbnail'
 import fs from 'fs'
+import path from 'path'
 
 const evalGameScript = (script: string) => {
 	const { api } = baseEngine()
@@ -137,7 +138,7 @@ export const get: APIRoute = async ({ url }) => {
 }
 function loadImageBase64FromDisk(name: string) {
 	try {
-		let imgPath = `./games/img/${name}.png`
+		let imgPath = path.resolve(process.cwd(), `./games/img/${name}.png`)
 		if (!fs.existsSync(imgPath)) return null
 		return fs.readFileSync(imgPath).toString("base64")
 	} catch {
@@ -146,7 +147,7 @@ function loadImageBase64FromDisk(name: string) {
 }
 
 function loadGameContentFromDisk(name: string) {	
-	let gameContentPath = `./games/${name}.js`
+	let gameContentPath = path.resolve(process.cwd(), `./games/${name}.js`)
 	if (!fs.existsSync(gameContentPath)) return null
 	return fs.readFileSync(gameContentPath).toString()
 }
