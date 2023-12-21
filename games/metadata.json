@@ -3270,5 +3270,29 @@
     "img": "",
     "tags": ["logic"],
     "addedOn": "2023-12-10"
+  },
+  {
+    "filename": "StickRunner",
+    "title": "StickRunner",
+    "author": "Shahzeb Wali",
+    "img": "",
+    "tags": ["logic"],
+    "addedOn": "2023-12-10"
+  },
+  {
+    "filename": "DoNotConsumeEmptyBowls",
+    "title": " Do Not Consume Empty Bowls",
+    "author": "se1yu",
+    "img": "",
+    "tags": [""],
+    "addedOn": "2023-12-19"
+  },
+  {
+    "filename": "Hungry-Ninja",
+    "title": "Hungry-Ninja",
+    "author": "Prajval Raval",
+    "img": "",
+    "tags": [""],
+    "addedOn": "2023-12-19"
   }
 ]

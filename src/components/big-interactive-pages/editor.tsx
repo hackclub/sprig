@@ -22,6 +22,7 @@ interface EditorProps {
 	persistenceState: Signal<PersistenceState>
 	cookies: {
 		outputAreaSize: number | null
+		helpAreaSize: number | null
 		hideHelp: boolean
 	}
 }
@@ -31,9 +32,12 @@ interface ResizeState {
 	startValue: number
 }
 
-const minOutputAreaSize = 360
-const defaultOutputAreaSize = 400
-const heightMargin = 130
+// Output area is the area with the game view and help
+const minOutputAreaWidth = 360
+const defaultOutputAreaWidth = 400
+const outputAreaWidthMargin = 130 // The margin between the editor and output area
+
+const minHelpAreaHeight = 200
 
 const foldAllTemplateLiterals = () => {
 	if (!codeMirror.value) return
@@ -103,11 +107,18 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
 }
 
 export default function Editor({ persistenceState, cookies }: EditorProps) {
-
 	// Resize state storage
-	const outputAreaSize = useSignal(Math.max(minOutputAreaSize, cookies.outputAreaSize ?? defaultOutputAreaSize))
+	const outputAreaSize = useSignal(
+		Math.max(
+			minOutputAreaWidth,
+			cookies.outputAreaSize ?? defaultOutputAreaWidth
+		)
+	)
+
 	useSignalEffect(() => {
-		document.cookie = `outputAreaSize=${outputAreaSize.value};path=/;max-age=${60 * 60 * 24 * 365}`
+		document.cookie = `outputAreaSize=${
+			outputAreaSize.value
+		};path=/;max-age=${60 * 60 * 24 * 365}`
 	})
 
 	// Exit tutorial warning modal
@@ -116,12 +127,19 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Max height
 	const maxOutputAreaSize = useSignal(outputAreaSize.value)
 	useEffect(() => {
-		const updateMaxSize = () => { maxOutputAreaSize.value = (window.innerHeight - heightMargin) * 5 / 4 }
-		window.addEventListener('resize', updateMaxSize, { passive: true })
+		const updateMaxSize = () => {
+			maxOutputAreaSize.value = (window.innerWidth - outputAreaWidthMargin) / 2.5
+		}
+		window.addEventListener("resize", updateMaxSize, { passive: true })
 		updateMaxSize()
-		return () => window.removeEventListener('resize', updateMaxSize)
+		return () => window.removeEventListener("resize", updateMaxSize)
 	}, [])
-	const realOutputAreaSize = useComputed(() => Math.min(maxOutputAreaSize.value, Math.max(minOutputAreaSize, outputAreaSize.value)))
+	const realOutputAreaSize = useComputed(() =>
+		Math.min(
+			maxOutputAreaSize.value,
+			Math.max(minOutputAreaWidth, outputAreaSize.value)
+		)
+	)
 
 	// Resize bar logic
 	const resizeState = useSignal<ResizeState | null>(null)
@@ -129,10 +147,13 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		const onMouseMove = (event: MouseEvent) => {
 			if (!resizeState.value) return
 			event.preventDefault()
-			outputAreaSize.value = resizeState.value.startValue + resizeState.value.startMousePos - event.clientX
+			outputAreaSize.value =
+				resizeState.value.startValue +
+				resizeState.value.startMousePos -
+				event.clientX
 		}
-		window.addEventListener('mousemove', onMouseMove)
-		return () => window.removeEventListener('mousemove', onMouseMove)
+		window.addEventListener("mousemove", onMouseMove)
+		return () => window.removeEventListener("mousemove", onMouseMove)
 	}, [])
 
 	// We like running games!
@@ -301,20 +322,37 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 							<div class={styles.screenSize}>(Actual Sprig screen is 1/8" / 160&times;128 px)</div>
 						</div>
 					</div>
+
+					<div
+						class={styles.helpContainer}
+						style={{ minHeight: minHelpAreaHeight }}
+					>
+						{!(
+							(persistenceState.value.kind === "SHARED" ||
+								persistenceState.value.kind === "PERSISTED") &&
+							persistenceState.value.tutorial
+						) && <Help initialVisible={!cookies.hideHelp} />}
+
+						{(persistenceState.value.kind === "SHARED" ||
+							persistenceState.value.kind === "PERSISTED") &&
+							persistenceState.value.tutorial && (
+								<Help
+									tutorialContent={
+										persistenceState.value.tutorial
+									}
+									persistenceState={persistenceState}
+									showingTutorialWarning={
+										showingTutorialWarning
+									}
+								/>
+							)}
+					</div>
 				</div>
 			</div>
 
 			<EditorModal />
 			{persistenceState.value.kind === 'IN_MEMORY' && persistenceState.value.showInitialWarning && (
 				<DraftWarningModal persistenceState={persistenceState} />
-			)}
-
-			{!((persistenceState.value.kind === 'SHARED' || persistenceState.value.kind === 'PERSISTED') && persistenceState.value.tutorial) && (
-				<Help initialVisible={!cookies.hideHelp} />
-			)}
-
-			{(persistenceState.value.kind === 'SHARED' || persistenceState.value.kind === 'PERSISTED') && persistenceState.value.tutorial && (
-				<Help tutorialContent={persistenceState.value.tutorial} persistenceState={persistenceState} showingTutorialWarning={showingTutorialWarning}/>
 			)}
 
 			{showingTutorialWarning.value && (
