@@ -1819,7 +1819,7 @@
     "filename": "Mario_Kart",
     "title": "Mario_Kart",
     "author": "nucleiav",
-    "img": "sprig_mario",
+    "img": "",
     "tags": ["endless"],
     "addedOn": "2023-01-13"
   },
@@ -2107,7 +2107,7 @@
     "filename": "The_Maze_of_Sprig",
     "title": "The_Maze_of_Sprig",
     "author": "SahilD",
-    "img": "TheMazeOfSprig",
+    "img": "",
     "tags": ["sokoban-style"],
     "addedOn": "2023-02-14"
   },

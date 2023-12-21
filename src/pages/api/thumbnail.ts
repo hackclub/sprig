@@ -3,6 +3,11 @@ import { baseEngine, palette } from 'sprig/base'
 import { RawThumbnail, Thumbnail } from '../../lib/thumbnail'
 import fs from 'fs'
 import path from 'path'
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename);
 
 const evalGameScript = (script: string) => {
 	const { api } = baseEngine()
@@ -138,7 +143,7 @@ export const get: APIRoute = async ({ url }) => {
 }
 function loadImageBase64FromDisk(name: string) {
 	try {
-		let imgPath = path.resolve(process.cwd(), `./games/img/${name}.png`)
+		let imgPath = path.resolve(__dirname, `../../../games/img/${name}.png`)
 		if (!fs.existsSync(imgPath)) return null
 		return fs.readFileSync(imgPath).toString("base64")
 	} catch {
@@ -147,7 +152,7 @@ function loadImageBase64FromDisk(name: string) {
 }
 
 function loadGameContentFromDisk(name: string) {	
-	let gameContentPath = path.resolve(process.cwd(), `./games/${name}.js`)
+	let gameContentPath = path.resolve(__dirname, `../../../games/${name}.js`)
 	if (!fs.existsSync(gameContentPath)) return null
 	return fs.readFileSync(gameContentPath).toString()
 }
