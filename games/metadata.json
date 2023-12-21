@@ -3310,5 +3310,13 @@
     "img": "",
     "tags": [""],
     "addedOn": "2023-12-21"
+  },
+  {
+    "filename": "starjump",
+    "title": "starjump",
+    "author": "skifli",
+    "img": "",
+    "tags": ["sokoban-style"],
+    "addedOn": "2023-12-21"
   }
 ]
