@@ -200,11 +200,13 @@ onInput("k", () => {
 })
 const traps = tilesWith(trap)
 onInput("j", () => {
-  //If the player is next to a tile with a trap
+  //If the player is ne
  getFirst(trap).remove();
 })
+let restart = 0
 afterInput(() => {
-  if (level === 1){
+  clearText()
+  if (restart === 0){
     addText("Get the Treasure!", {y: 11, color: color`6` });
     addText("Press k to Restart", {y: 13, color: color`6` });
   }
@@ -228,5 +230,6 @@ afterInput(() => {
     addText("You lose!", {y: 5, color: color`H` });
     addText("Destroy the traps!", {y: 8, color: color`H` })
     level = 1
+    restart = 1
   }   
 })
