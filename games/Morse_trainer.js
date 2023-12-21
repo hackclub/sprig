@@ -70,11 +70,11 @@ function drawScreen(){
       color: color`3`
     })
     
-    addText("Press A to start\nD to toggle sound", { 
-      x: 2,
-      y: 12,
-      color: color`3`
-    })
+    //addText("Press A to start\nD to toggle sound", { 
+    //  x: 2,
+    //  y: 12,
+    //  color: color`3`
+    //})
   }
 
   if (currentState == "modeSelect"){
