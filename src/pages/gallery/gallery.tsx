@@ -7,8 +7,9 @@ import { IoCaretDown, IoSearch } from "react-icons/io5";
 import "./gallery.css";
 
 type SortOrder = "chronological" | "ascending" | "descending";
+type GalleryGameMetadata = GameMetadata & { show: boolean };
 export default function Gallery({ games, tags }: { games: GameMetadata[], tags: string[] }) {
-	const [gamesState, setGamesState] = useState<GameMetadata[]>([]);
+	const [gamesState, setGamesState] = useState<GalleryGameMetadata[]>([]);
 	const [sortOrder, setSortOrder] = useState<string>("");
 	const [tagFilter, setTagFilter] = useState<string>("");
 	const [searchQuery, setSearchQuery] = useState<string>("");
@@ -30,10 +31,10 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 		if (tagFilter === "") {
 			let otherGames = [...games];
 			sortGames(otherGames, sortOrder as SortOrder);
-			setGamesState(otherGames);
+			setGamesState(otherGames as GalleryGameMetadata[]);
 			return;
 		}
-		setGamesState(games.filter(game => game.tags.includes(tagFilter)));
+		setGamesState(games.filter(game => game.tags.includes(tagFilter)) as GalleryGameMetadata[]);
 	}
 
 	useEffect(() => {
@@ -44,9 +45,16 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 
 	useEffect(() => { filterTags(games); }, [tagFilter]);
 	useEffect(() => {
-		setGamesState(
-			games.filter(game => game.title.includes(searchQuery))
-		);
+		setGamesState(games.map(game => {
+			let _game: any = { ...game };
+			let query = searchQuery.toLowerCase();
+			const matchesQuery = game.title.toLowerCase().includes(query) ||
+
+			game.author.toLowerCase().includes(query);
+			_game.show = matchesQuery;
+
+			return _game;
+		}));
 	}, [searchQuery]);
 
 
@@ -164,8 +172,9 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 
 			<div id="games">
 				{
-					gamesState.map((game: GameMetadata) => (
+					gamesState.map((game: GalleryGameMetadata) => (
 						<a
+							style={`display:${game.show ? "block" : "none"}`}
 							class="game"
 							href={`/gallery/${game.filename}`}
 							target="_blank"
