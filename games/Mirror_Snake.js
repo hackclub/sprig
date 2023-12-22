@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Mirror_Snake
+@author: funnoodle11
+@tags: ['strategy']
+@img: ""
+@addedOn: 2023-05-26
+*/
+
+    /*
 WASD to move, the blue snake is you, the orange snake is mirrored
 */
 const player1 = "p";

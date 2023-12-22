@@ -1,5 +1,8 @@
 /*
 @title: Mirror_Mirror
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2022-12-19
 @author: Benjamin Grelk
 */
 

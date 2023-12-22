@@ -1,5 +1,8 @@
 /*
 @title: SprigClick
+@tags: ['endless']
+@img: ""
+@addedOn: 2023-01-06
 @author: CatR3kd
 */
 

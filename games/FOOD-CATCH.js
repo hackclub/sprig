@@ -1,4 +1,13 @@
-const player = "p";
+
+/* 
+@title: FOOD-CATCH
+@author: Jakob
+@tags: ['catch']
+@img: ""
+@addedOn: 2023-09-02
+*/
+
+    const player = "p";
 const obstacle = "o";
 let score = 0;
 let floorfoodhit = 0;

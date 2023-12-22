@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Morse_trainer
+@author: Yuuta
+@tags: ['']
+@img: ""
+@addedOn: 2023-12-21
+*/
+
+    /*
 Morse code trainer by Yutaro
 Has two modes: Morse to text and text to morse
 Used for learning morse code

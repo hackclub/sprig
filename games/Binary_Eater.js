@@ -1,5 +1,8 @@
 /*
 @title:  Binary Eater
+@tags: ['logic']
+@img: ""
+@addedOn: 2023-03-10
 @author: Kumaraswamy
 
 Inspired from: https://zac.cy/trashguy/

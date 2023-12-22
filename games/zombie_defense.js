@@ -1,5 +1,8 @@
 /*
 @title: Zombie Defense
+@tags: ['endless']
+@img: ""
+@addedOn: 2022-09-19
 @author: Edmund
 
 Controls:

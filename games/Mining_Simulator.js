@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Mining_Simulator
+@author: MiniCube11
+@tags: ['simulation']
+@img: ""
+@addedOn: 2023-04-10
+*/
+
+    /*
 A D to move player
 W S to move cursor
 J to dig

@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Watermellen_man_and_bluebarry_man
+@author: Joel Robbins
+@tags: []
+@img: ""
+@addedOn: 2023-06-05
+*/
+
+    /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */

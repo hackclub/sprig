@@ -1,4 +1,13 @@
 
+/* 
+@title: rickroll
+@author: Tiger-The-Cat
+@tags: []
+@img: ""
+@addedOn: 2023-03-25
+*/
+
+    
 // set all of the colors
 setLegend(
   [ '0', bitmap`

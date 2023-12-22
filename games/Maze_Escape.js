@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Maze_Escape
+@author: Madison Shaw
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2023-07-27
+*/
+
+    /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */

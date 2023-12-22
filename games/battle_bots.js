@@ -1,5 +1,8 @@
 /*
 @title: battle bots
+@tags: ['multiplayer']
+@img: ""
+@addedOn: 2022-10-20
 @author: kyle
 */
 

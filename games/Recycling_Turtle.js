@@ -1,5 +1,8 @@
 /*
 @title: Recycling_Turtle
+@tags: ['puzzle-score']
+@img: ""
+@addedOn: 2023-05-19
 @author: ari-tistic
 
 Keys: 

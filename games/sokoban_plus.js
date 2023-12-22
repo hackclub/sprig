@@ -1,5 +1,8 @@
 /*
 @title: Sokoban+
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2022-09-06
 @author: Leonard (Omay)
 
 25 levels

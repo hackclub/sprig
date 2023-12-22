@@ -1,5 +1,8 @@
 /*
 @title: Shooter
+@tags: ['strategy']
+@img: ""
+@addedOn: 2023-10-24
 @author: Tyler Sousa
 
 WASD to move

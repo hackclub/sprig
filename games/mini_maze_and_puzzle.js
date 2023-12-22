@@ -1,5 +1,8 @@
 /*
 @title: mini_maze_and_puzzle
+@tags: ['strategy']
+@img: ""
+@addedOn: 2022-09-16
 @author: muhammad tsaqif mukhayyar
 
 Instructions:

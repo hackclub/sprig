@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: MyForestMaze
+@author: MI2
+@tags: ['explore']
+@img: ""
+@addedOn: 2023-06-15
+*/
+
+    /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */

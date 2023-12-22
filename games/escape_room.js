@@ -1,5 +1,8 @@
 /*
 @title: escape_room
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2022-11-01
 @author: Sampanna and Dhruv 
 
 */

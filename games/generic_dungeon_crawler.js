@@ -1,5 +1,8 @@
 /*
 @title: generic_dungeon_crawler
+@tags: ['dungeon']
+@img: ""
+@addedOn: 2022-10-24
 @author: Lingdong Huang
 */
 

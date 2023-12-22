@@ -1,5 +1,8 @@
 /*=
   @title: conway-gol
+@tags: ['sandbox', 'advanced', 'simulation']
+@img: ""
+@addedOn: 2022-11-08
   @author: the456gamer
 
   a game of life

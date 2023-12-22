@@ -1,5 +1,8 @@
 /*
 @title: hex_hubbub
+@tags: ['thematic-puzzle']
+@img: ""
+@addedOn: 2023-01-28
 @author: ajs256
 */
 

@@ -1,4 +1,13 @@
-// entities
+
+/* 
+@title: wham
+@author: Aaman Patnaik
+@tags: ['classic']
+@img: ""
+@addedOn: 2023-09-18
+*/
+
+    // entities
 
 const tunnel = "p";
 const defeated_monster = "d";
