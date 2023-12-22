@@ -32,7 +32,9 @@ const evalGameScript = (script: string) => {
 		const fn = new Function(...Object.keys(patchedApi), script)
 		fn(...Object.values(patchedApi))
 	} catch (err) {
-		console.log(err)
+		// NOTE: We hide this error, because it currently serves no purpose other than muddying the log
+		// HOWEVER, generally this is probably an excellent place to detect broken games in the future
+		//console.log(err)
 	}
 
 	return {
@@ -72,7 +74,9 @@ const blitSprite = (data: Uint8Array, width: number, bitmap: number[], tx: numbe
 
 const drawGameImage = (src: string): RawThumbnail => {
 	const { legend, map, background } = evalGameScript(src)
-	if (!map) throw new Error('No map found')
+	if (!map) { 
+		throw new Error('No map found') 
+	}
 
 	const mapWidth = map.trim().split('\n')[0]!.trim().length
 	const mapHeight = map.trim().split('\n').length
