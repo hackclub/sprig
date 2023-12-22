@@ -1,0 +1,82 @@
+name: Send Plagiarism Result On CI Complete
+
+permissions:
+  actions: read
+  contents: read
+
+on:
+  workflow_run:
+    workflows: ["Plagiarism Checker"]
+    types:
+      - completed
+
+jobs:
+  on_pr_finish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: List available artifacts with detailed logs
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const runId = ${{ github.run_id }};
+            console.log(`Fetching artifacts for workflow run ID: ${runId}`);
+            
+            try {
+              const response = await github.rest.actions.listWorkflowRunArtifacts({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: runId
+              });
+
+              if (response.data.total_count === 0) {
+                console.log('No artifacts found for this workflow run.');
+              } else {
+                console.log(`Total artifacts found: ${response.data.total_count}`);
+                response.data.artifacts.forEach((artifact, index) => {
+                  console.log(`Artifact ${index + 1}:`);
+                  console.log(`  Name: ${artifact.name}`);
+                  console.log(`  ID: ${artifact.id}`);
+                  console.log(`  Size (bytes): ${artifact.size_in_bytes}`);
+                  console.log(`  Archive download URL: ${artifact.archive_download_url}`);
+                });
+              }
+            } catch (error) {
+              console.error('Failed to fetch artifacts:', error);
+            }
+
+      - name: Download Plagiarism Report Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: plagiarism-report
+
+      - name: Display structure of downloaded files
+        run: ls -R
+
+      - name: Post Markdown as Comment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            const markdownPath = path.join(process.env.GITHUB_WORKSPACE, 'plagiarism_report.md');
+            console.log(`Reading the Markdown report from: ${markdownPath}`);
+            const markdownContent = fs.readFileSync(markdownPath, 'utf8');
+
+            console.log("Fetching associated pull request...");
+            const prNumber = ${{ github.event.workflow_run.pull_requests[0].number }};
+            console.log(`Found associated pull request: #${prNumber}`);
+
+            console.log("Posting the Markdown content as a comment...");
+            const commentResponse = await github.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: markdownContent
+            });
+            console.log(`Comment posted successfully: ${commentResponse.data.html_url}`);

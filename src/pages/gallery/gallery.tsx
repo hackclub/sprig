@@ -172,7 +172,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 
 			<div id="games">
 				{
-					gamesState.map((game: GalleryGameMetadata) => (
+					gamesState.map((game: GalleryGameMetadata) => (						
 						<a
 							style={`display:${game.show ? "block" : "none"}`}
 							class="game"
@@ -191,7 +191,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 							) : null}
 
 							<img
-								src={game.img}
+								src={`gallery/${game.img}`}
 								alt={`preview of ${game.filename}.js`}
 							/>
 							<h3>{game.title}</h3>
