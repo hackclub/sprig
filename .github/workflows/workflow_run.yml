@@ -17,35 +17,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: List Artifacts for Workflow Run
-        id: list_artifacts
-        uses: actions/github-script@v7
+      - name: Download Plagiarism Report Artifact
+        uses: actions/download-artifact@v4
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const runId = ${{ github.event.workflow_run.id }};
-            console.log(`Listing artifacts for workflow run ID: ${runId}`);
-            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: runId,
-            });
-            console.log(`Artifacts found: ${artifacts.data.total_count}`);
-            for (const artifact of artifacts.data.artifacts) {
-              console.log(`Artifact name: ${artifact.name}, ID: ${artifact.id}, Size: ${artifact.size_in_bytes} bytes`);
-            }
-            if (artifacts.data.total_count === 0) {
-              throw new Error('No artifacts found for the workflow run');
-            }
-            const artifact = artifacts.data.artifacts.find(a => a.name === 'plagiarism-report');
-            if (!artifact) {
-              throw new Error('Plagiarism report artifact not found');
-            }
-            core.setOutput('artifact_url', artifact.archive_download_url);
+          name: plagiarism-report
 
-      - name: Download Plagiarism Report Artifact Manually
-        run: |
-          curl -v -L -o plagiarism-report.zip -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" ${{ steps.list_artifacts.outputs.artifact_url }}
+      - name: Display structure of downloaded files
+        run: ls -R
 
       - name: Post Markdown as Comment
         uses: actions/github-script@v7
@@ -55,13 +33,10 @@ jobs:
             const fs = require('fs');
             const path = require('path');
             
-            console.log("Reading the Markdown report from the artifact...");
-            const markdownContent = fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE, 'plagiarism_report.md'), 'utf8');
+            const markdownPath = path.join(process.env.GITHUB_WORKSPACE, 'plagiarism_report.md');
+            console.log(`Reading the Markdown report from: ${markdownPath}`);
+            const markdownContent = fs.readFileSync(markdownPath, 'utf8');
 
-            console.log("Fetching associated workflow run...");
-            const runId = process.env.WORKFLOW_RUN_ID;
-            console.log(`Looking for workflow run with ID: ${runId}`);
-            
             console.log("Fetching associated pull request...");
             const prNumber = ${{ github.event.workflow_run.pull_requests[0].number }};
             console.log(`Found associated pull request: #${prNumber}`);
