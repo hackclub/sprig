@@ -5,10 +5,6 @@
 @tags: ['multiplayer']
 @img: ""
 @addedOn: 2023-12-22
-*/
-
-    
-/*
 
 Player 1
 A,D for movement
