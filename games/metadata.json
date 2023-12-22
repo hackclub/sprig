@@ -1219,7 +1219,7 @@
     "filename": "BoxCubeGuy",
     "title": "BoxCubeGuy",
     "author": "CaptainATW",
-    "img": "CaptainATW",
+    "img": "BoxCubeGuy",
     "tags": ["sokoban-style"],
     "addedOn": "2022-11-25"
   },
@@ -1227,7 +1227,7 @@
     "filename": "Asteroid_Field",
     "title": "Asteroid_Field",
     "author": "Kaitlyn",
-    "img": "CaptainATW",
+    "img": "",
     "tags": ["catch"],
     "addedOn": "2022-11-25"
   },
@@ -1491,7 +1491,7 @@
     "filename": "Terminal-Dungeon",
     "title": "Terminal-Dungeon",
     "author": "adadyer",
-    "img": "terminal-dungeon",
+    "img": "",
     "tags": ["puzzle-npc"],
     "addedOn": "2022-12-20"
   },
@@ -1819,7 +1819,7 @@
     "filename": "Mario_Kart",
     "title": "Mario_Kart",
     "author": "nucleiav",
-    "img": "sprig_mario",
+    "img": "",
     "tags": ["endless"],
     "addedOn": "2023-01-13"
   },
@@ -2107,7 +2107,7 @@
     "filename": "The_Maze_of_Sprig",
     "title": "The_Maze_of_Sprig",
     "author": "SahilD",
-    "img": "TheMazeOfSprig",
+    "img": "",
     "tags": ["sokoban-style"],
     "addedOn": "2023-02-14"
   },
@@ -2835,7 +2835,7 @@
     "filename": "thunder_bowl",
     "title": "thunder_bowl",
     "author": "Alex",
-    "img": "thunderball",
+    "img": "",
     "tags": [],
     "addedOn": "2023-08-03"
   },
@@ -3139,7 +3139,7 @@
     "filename": "Musi",
     "title": "Musi",
     "author": "levi - blockish",
-    "img": "image_2023-10-22_152001392",
+    "img": "",
     "tags": ["memory"],
     "addedOn": "2023-10-25"
   },
@@ -3326,5 +3326,13 @@
     "img": "",
     "tags": ["logic"],
     "addedOn": "2023-12-21"
+  },
+  {
+    "filename": "Sprig_Fighter",
+    "title": "Sprig_Fighter",
+    "author": "Akshat Singhania",
+    "img": "",
+    "tags": ["multiplayer"],
+    "addedOn": "2023-12-22"
   }
 ]
