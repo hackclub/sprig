@@ -200,9 +200,8 @@ onInput("k", () => {
 })
 const traps = tilesWith(trap)
 onInput("j", () => {
-  if (getFirst(trap).x === getFirst(player).x + 1 ||getFirst(trap).x === getFirst(player).x - 1 || getFirst(trap).x === getFirst(player).y - 1 || getFirst(trap).y === getFirst(player).y + 1 ){
-    getFirst(trap).remove();
-  }
+ getFirst(trap).remove();
+  
 })
 let restart = 0
 afterInput(() => {
