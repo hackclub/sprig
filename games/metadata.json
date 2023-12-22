@@ -3318,5 +3318,13 @@
     "img": "",
     "tags": ["sokoban-style"],
     "addedOn": "2023-12-21"
+  },
+  {
+    "filename": "move_the_rocks",
+    "title": "move_the_rocks",
+    "author": "playfun24",
+    "img": "",
+    "tags": ["logic"],
+    "addedOn": "2023-12-21"
   }
 ]

@@ -1,5 +1,9 @@
 name: Send Plagiarism Result On CI Complete
 
+permissions:
+  actions: read
+  contents: read
+
 on:
   workflow_run:
     workflows: ["Plagiarism Checker"]
@@ -33,16 +37,32 @@ jobs:
 
             console.log("Fetching associated workflow run...");
             const runId = process.env.WORKFLOW_RUN_ID;
+            console.log(`Looking for workflow run with ID: ${runId}`);
+            
             const runs = await github.actions.listWorkflowRuns({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: '73252545',
+              workflow_id: 'check_plagiarism',
             });
+            
+            console.log(`Workflow runs fetched: ${runs.data.total_count}`);
+            runs.data.workflow_runs.forEach(run => {
+              console.log(`Run ID: ${run.id}, Name: ${run.name}, Event: ${run.event}, Status: ${run.status}`);
+            });
+
             const associatedRun = runs.data.workflow_runs.find(run => run.id == runId);
-            if (!associatedRun || !associatedRun.pull_requests || associatedRun.pull_requests.length == 0) {
-              console.log("No associated pull request found.");
+            if (!associatedRun) {
+              console.log("No associated workflow run found.");
               return;
             }
+
+            console.log(`Operating on workflow: ${associatedRun.name}, ID: ${associatedRun.id}`);
+            
+            if (!associatedRun.pull_requests || associatedRun.pull_requests.length == 0) {
+              console.log("No associated pull request found for this workflow run.");
+              return;
+            }
+            
             const prNumber = associatedRun.pull_requests[0].number;
             console.log(`Found associated pull request: #${prNumber}`);
 
