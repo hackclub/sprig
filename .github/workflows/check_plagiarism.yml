@@ -58,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: plagiarism-report
-          path: plagiarism_report.md
+          path: plagiarism-report.md
 
       - name: Check for High Plagiarism Percentages
         if: steps.extract-percentages.outcome == 'failure'

@@ -17,6 +17,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: List available artifacts with detailed logs
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const runId = ${{ github.run_id }};
+            console.log(`Fetching artifacts for workflow run ID: ${runId}`);
+            
+            try {
+              const response = await github.rest.actions.listWorkflowRunArtifacts({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: runId
+              });
+
+              if (response.data.total_count === 0) {
+                console.log('No artifacts found for this workflow run.');
+              } else {
+                console.log(`Total artifacts found: ${response.data.total_count}`);
+                response.data.artifacts.forEach((artifact, index) => {
+                  console.log(`Artifact ${index + 1}:`);
+                  console.log(`  Name: ${artifact.name}`);
+                  console.log(`  ID: ${artifact.id}`);
+                  console.log(`  Size (bytes): ${artifact.size_in_bytes}`);
+                  console.log(`  Archive download URL: ${artifact.archive_download_url}`);
+                });
+              }
+            } catch (error) {
+              console.error('Failed to fetch artifacts:', error);
+            }
+
       - name: Download Plagiarism Report Artifact
         uses: actions/download-artifact@v4
         with:
