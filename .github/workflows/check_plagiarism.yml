@@ -49,13 +49,13 @@ jobs:
 
       - name: Upload Compare50 Results as Artifacts
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: compare50-results
           path: saved_dir/
 
       - name: Upload Plagiarism Report as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: plagiarism-report
           path: plagiarism_report.md
