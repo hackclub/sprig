@@ -26,12 +26,21 @@ jobs:
       - name: Get list of changed files
         id: changed-files
         run: |
-          base_sha="${{ github.event.pull_request.base.sha }}"
-          head_sha="${{ github.event.pull_request.head.sha }}"
-          js_files=$(git diff --name-only --diff-filter=AM $base_sha..$head_sha | grep 'games/.*\.js$' | xargs)
-          echo "FILES=$js_files" >> $GITHUB_ENV
-          
+          echo "Pull Request Base SHA: ${{ github.event.pull_request.base.sha }}"
+          echo "Pull Request Head SHA: ${{ github.event.pull_request.head.sha }}"
+          echo "Running git diff..."
+          git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}
+          echo "Filtering JS files in games/ directory..."
+          js_files=$(git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep 'games/.*\.js$' | xargs)
+          echo "Found JS files: $js_files"
+          if [ -z "$js_files" ]; then
+            echo "No JavaScript files found in the changes."
+          else
+            echo "FILES=$js_files" >> $GITHUB_ENV
+          fi
+
       - name: Run Plagiarism Detection Script
+        if: env.FILES != ''
         run: python .github/scripts/plagiarism_check.py ${{ env.FILES }} games output_dir saved_dir
 
       - name: Extract and Display Similarity Percentages
@@ -40,10 +49,16 @@ jobs:
 
       - name: Upload Compare50 Results as Artifacts
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: compare50-results
           path: saved_dir/
+
+      - name: Upload Plagiarism Report as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: plagiarism-report
+          path: plagiarism-report.md
 
       - name: Check for High Plagiarism Percentages
         if: steps.extract-percentages.outcome == 'failure'
