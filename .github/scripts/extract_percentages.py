@@ -59,7 +59,7 @@ def main():
     else:
         log("No high plagiarism percentages detected.")
         markdown_lines.append("No high plagiarism percentages detected.")
-        write_to_markdown("plagiarism_report.md", markdown_lines)
+        write_to_markdown("plagiarism-report.md", markdown_lines)
 
 if __name__ == "__main__":
     main()
