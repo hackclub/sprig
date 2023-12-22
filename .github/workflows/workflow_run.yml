@@ -41,16 +41,14 @@ jobs:
             if (!artifact) {
               throw new Error('Plagiarism report artifact not found');
             }
-            return artifact.archive_download_url;
+            core.setOutput('artifact_url', artifact.archive_download_url);
 
       - name: Download Plagiarism Report Artifact Manually
         run: |
-          curl -L -o plagiarism-report.zip -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" ${{ steps.list_artifacts.outputs.result }}
+          curl -v -L -o plagiarism-report.zip -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" ${{ steps.list_artifacts.outputs.artifact_url }}
 
       - name: Post Markdown as Comment
         uses: actions/github-script@v7
-        env:
-          WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
