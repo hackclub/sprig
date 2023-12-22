@@ -29,7 +29,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 
 	function filterTags(games: GameMetadata[]): void {
 		if (tagFilter === "") {
-			let otherGames = [...games];
+			let otherGames = [...games].map(game => ({ ...game, show: true }));
 			sortGames(otherGames, sortOrder as SortOrder);
 			setGamesState(otherGames as GalleryGameMetadata[]);
 			return;
