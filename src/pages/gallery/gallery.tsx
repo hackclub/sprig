@@ -34,7 +34,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 			setGamesState(otherGames as GalleryGameMetadata[]);
 			return;
 		}
-		setGamesState(games.filter(game => game.tags.includes(tagFilter)) as GalleryGameMetadata[]);
+		setGamesState(games.filter(game => game.tags.includes(tagFilter)).map(game => ({ ...game, show: true })) as GalleryGameMetadata[]);
 	}
 
 	useEffect(() => {
@@ -56,7 +56,6 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 			return _game;
 		}));
 	}, [searchQuery]);
-
 
 	useEffect(() => {
 		interface GameCard {
