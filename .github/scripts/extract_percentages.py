@@ -54,7 +54,7 @@ def main():
         log("High plagiarism percentages detected.")
         markdown_lines.append("## High plagiarism percentages detected in the following files:")
         markdown_lines.extend(high_plagiarism_files)
-        write_to_markdown("plagiarism_report.md", markdown_lines)
+        write_to_markdown("plagiarism-report.md", markdown_lines)
         sys.exit(1)
     else:
         log("No high plagiarism percentages detected.")
