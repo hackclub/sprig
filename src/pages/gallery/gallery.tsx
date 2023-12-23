@@ -10,12 +10,12 @@ type SortOrder = "chronological" | "ascending" | "descending";
 type GalleryGameMetadata = GameMetadata & { show: boolean };
 type Filter = {
 	query: string,
-	tag: string,
+	tags: string[],
 	sort: SortOrder
 };
 export default function Gallery({ games, tags }: { games: GameMetadata[], tags: string[] }) {
 	const [gamesState, setGamesState] = useState<GalleryGameMetadata[]>([]);
-	const [filter, setFilter] = useState<Filter>({query: "", sort: "chronological", tag: ""});
+	const [filter, setFilter] = useState<Filter>({query: "", sort: "chronological", tags: [] })
 
 	useEffect(() => {
 		const lowerCaseQuery = filter.query.toLowerCase();
@@ -23,7 +23,13 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 				game => game.title.toLowerCase().includes(lowerCaseQuery) || 
 				game.author.toLowerCase().includes(lowerCaseQuery)
 			) // filter by query
-			.filter(game => filter.tag.length === 0 ? game : game.tags.includes(filter.tag)) // filter by tags
+			.filter(game => { // filter by tags
+				for (const tag of filter.tags) {
+					if (game.tags.indexOf(tag) === -1) return false;
+				}
+				return true;
+			});
+			// .filter(game => filter.tag.length === 0 ? game : game.tags.includes(filter.tag)) // filter by tags
 		setGamesState(sortGames(_games, filter.sort).map(game => ({ ...game, show: true })) as GalleryGameMetadata[]);
 
 	}, [filter]);
@@ -106,7 +112,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 					<div class="search-controls">
 						<div class="select">
 							<select onChange={(event) => {
-								setFilter(_filter => ({ ..._filter, tag: (event.target! as HTMLSelectElement).value }))
+								setFilter(_filter => ({ ..._filter, tags: [ ...filter.tags, (event.target! as HTMLSelectElement).value] }))
 							}} id="tag-select">
 								<option value="">Filter by tag...</option>
 								{
@@ -155,6 +161,20 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 					</p>
 					<a href="/get"><Button accent>Add your game</Button></a>
 				</div>
+			</div>
+
+			<div class="filter-tags">
+				{filter.tags.map(tag => 
+					<span 
+						class="tag-span"
+						onClick={() => {
+							setFilter(filter => ({
+								...filter,
+								tags: filter.tags.filter(_tag => _tag != tag)
+							}));
+						}}
+					>{tag} x</span>
+				)}
 			</div>
 
 			<div id="games">
