@@ -3,6 +3,7 @@ name: Send Plagiarism Result On CI Complete
 permissions:
   actions: read
   contents: read
+  issues: write
 
 on:
   workflow_run:
