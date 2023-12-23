@@ -380,7 +380,7 @@ let widths= {
   3:15,
   4:31,
   5:44,
-  6: 66,
+  6: 48,
 }
 let cooldown2 = 0;
 setMap(levels[level])
