@@ -71,13 +71,14 @@ jobs:
             
             console.log(`Artifact ${artifactName} downloaded to ${artifactPath}`);
 
-      - name: Unzip Plagiarism Report Artifact
-        run: |
-          unzip -q plagiarism-report.zip -d ${{ github.workspace }}
+      - name: List Contents of Zip File
+        run: unzip -l plagiarism-report.zip
 
-      - name: Display structure of unzipped artifact
-        run: |
-          ls -l ${{ github.workspace }}/plagiarism-report
+      - name: Unzip Plagiarism Report Artifact
+        run: unzip -q plagiarism-report.zip -d ${{ github.workspace }}
+
+      - name: Display structure of unzipped files
+        run: ls -l ${{ github.workspace }}
 
       - name: Post Markdown as Comment
         uses: actions/github-script@v7
