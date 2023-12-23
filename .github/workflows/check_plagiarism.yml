@@ -12,18 +12,22 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        if: always()
         with:
           fetch-depth: 0
 
       - name: Set up Python
+        if: always()
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
       - name: Install Compare50 && beautifulsoup4
+        if: always()
         run: pip install compare50 beautifulsoup4
 
       - name: Get list of changed files
+        if: always()
         id: changed-files
         run: |
           echo "Pull Request Base SHA: ${{ github.event.pull_request.base.sha }}"
@@ -44,6 +48,7 @@ jobs:
         run: python .github/scripts/plagiarism_check.py ${{ env.FILES }} games output_dir saved_dir
 
       - name: Extract and Display Similarity Percentages
+        if: always()
         run: python .github/scripts/extract_percentages.py saved_dir/
         id: extract-percentages
 
@@ -55,9 +60,11 @@ jobs:
           path: saved_dir/
 
       - name: Save PR number to file
+        if: always()
         run: echo ${{ github.event.pull_request.number }} > pr_number.txt
 
       - name: Upload PR Number as Artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pr-number
@@ -71,5 +78,5 @@ jobs:
           path: plagiarism-report.md
 
       - name: Check for High Plagiarism Percentages
-        if: steps.extract-percentages.outcome == 'failure'
+        if: always() && steps.extract-percentages.outcome == 'failure'
         run: echo "Plagiarism percentage over threshold detected."
