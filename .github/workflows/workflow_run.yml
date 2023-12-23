@@ -118,7 +118,7 @@ jobs:
             const fs = require('fs');
             const path = require('path');
             
-            const markdownPath = path.join(process.env.GITHUB_WORKSPACE, 'plagiarism_report.md');
+            const markdownPath = path.join(process.env.GITHUB_WORKSPACE, 'plagiarism-report.md');
             console.log(`Reading the Markdown report from: ${markdownPath}`);
             const markdownContent = fs.readFileSync(markdownPath, 'utf8');
 
