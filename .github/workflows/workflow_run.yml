@@ -105,7 +105,7 @@ jobs:
         run: unzip -l plagiarism-report.zip
 
       - name: Unzip Plagiarism Report Artifact
-        run: unzip -q plagiarism-report.zip -d ${{ github.workspace }}
+        run: unzip -o plagiarism-report.zip -d ${{ github.workspace }}
 
       - name: Display structure of unzipped files
         run: ls -l ${{ github.workspace }}
