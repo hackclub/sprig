@@ -55,6 +55,7 @@ jobs:
           path: saved_dir/
 
       - name: Upload Plagiarism Report as Artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: plagiarism-report
