@@ -128,7 +128,7 @@ jobs:
             console.log(`Found associated pull request: #${prNumber}`);
 
             console.log("Posting the Markdown content as a comment...");
-            const commentResponse = await github.issues.createComment({
+            const commentResponse = await github.rest.issues.createComment({
               issue_number: prNumber,
               owner: context.repo.owner,
               repo: context.repo.repo,
