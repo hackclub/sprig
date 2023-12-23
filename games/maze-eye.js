@@ -305,6 +305,8 @@ onInput("i", () => {
   gameRunning = true;
   clearText();
   level = 1;
+  const currentLevel = levels[level]
+  setMap(currentLevel)
 });
 
 // END - PLAYER MOVEMENT CONTROLS
@@ -412,17 +414,19 @@ var gameLoop = setInterval(() => {
   // Step 4 - Add all game functions
 
   if (checkHit()) {
-    clearInterval(gameLoop);
+    //clearInterval(gameLoop);
     gameRunning = false;
     addText("game over!", {x:5, y:6, color: color`6`});
 
-    //addText("press I to restart", {x:1, y:8, color: color`6`});
+    addText("press I to restart", {x:1, y:8, color: color`6`});
   }
 
   if (level == end) {
-    clearInterval(gameLoop);
-    gameRunning = false;
+    //clearInterval(gameLoop);
+    //gameRunning = false;
     addText("you win!", {x:5, y:6, color: color`4`});
+
+    addText("press I to restart", {x:1, y:8, color: color`6`});
   }
 
   if (level >= 1 && level != end) {
