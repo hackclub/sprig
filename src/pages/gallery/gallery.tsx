@@ -29,7 +29,6 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 				}
 				return true;
 			});
-			// .filter(game => filter.tag.length === 0 ? game : game.tags.includes(filter.tag)) // filter by tags
 		setGamesState(sortGames(_games, filter.sort).map(game => ({ ...game, show: true })) as GalleryGameMetadata[]);
 
 	}, [filter]);
