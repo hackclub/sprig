@@ -1,6 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
+created by zhans1951
+
+Instructions:
+cover all circles with the same colored boxes, then go to the flag
 */
 
 const player = "p";
