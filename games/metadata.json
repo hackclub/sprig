@@ -3350,5 +3350,21 @@
     "img": "",
     "tags": ["dodge"],
     "addedOn": "2023-12-23"
+  },
+  {
+    "filename": "Pocketnaut_Adventure",
+    "title": "Pocketnaut_Adventure",
+    "author": "Ray Rumore",
+    "img": "",
+    "tags": [""],
+    "addedOn": "2023-12-24"
+  },
+  {
+    "filename": "Pluffy_The_Cage_Bird",
+    "title": "Pluffy_The_Cage_Bird",
+    "author": "Nihal K",
+    "img": "",
+    "tags": ["timer-puzzle"],
+    "addedOn": "2023-12-24"
   }
 ]
