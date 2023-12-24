@@ -1,6 +1,7 @@
 /*
 @title: Pluffy_The_Cage_Bird
 @author: Nihal_K
+@inspired by 'Flurffy Game'
 */
 const pluffy = "p"
 const piller = "u"
