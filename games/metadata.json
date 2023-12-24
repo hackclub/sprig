@@ -3294,7 +3294,7 @@
     "img": "",
     "tags": [""],
     "addedOn": "2023-12-19"
-  },
+  }, 
   {
     "filename": "Hard-Hat_Helper",
     "title": "Hard-Hat_Helper",
@@ -3326,5 +3326,29 @@
     "img": "",
     "tags": ["logic"],
     "addedOn": "2023-12-21"
+  },
+  {
+    "filename": "Catch_the_star",
+    "title": "Catch the star",
+    "author": "Saumya",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-12-20"
+  },
+  {
+    "filename": "Sprig_Fighter",
+    "title": "Sprig_Fighter",
+    "author": "Akshat Singhania",
+    "img": "",
+    "tags": ["multiplayer"],
+    "addedOn": "2023-12-22"
+  },
+  {
+    "filename": "maze-eye",
+    "title": "maze-eye",
+    "author": "Acon",
+    "img": "",
+    "tags": ["dodge"],
+    "addedOn": "2023-12-23"
   }
 ]
