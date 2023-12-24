@@ -3294,7 +3294,7 @@
     "img": "",
     "tags": [""],
     "addedOn": "2023-12-19"
-  },
+  }, 
   {
     "filename": "Hard-Hat_Helper",
     "title": "Hard-Hat_Helper",
@@ -3326,6 +3326,14 @@
     "img": "",
     "tags": ["logic"],
     "addedOn": "2023-12-21"
+  },
+  {
+    "filename": "Catch_the_star",
+    "title": "Catch the star",
+    "author": "Saumya",
+    "img": "",
+    "tags": [],
+    "addedOn": "2023-12-20"
   },
   {
     "filename": "Sprig_Fighter",
