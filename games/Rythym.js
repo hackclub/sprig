@@ -268,7 +268,8 @@ onInput("i", () => {
     clearText();
     setMap(levels[level])
     addSprite(0,0, wall);
-     playback = playTune(melody, Infinity);
+    playback = playTune(melody, Infinity);
+  	score = 0;
   }
 });
 
