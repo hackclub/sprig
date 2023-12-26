@@ -6,7 +6,7 @@
 	justify-content: center;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .banner {
     display: none;
   }
