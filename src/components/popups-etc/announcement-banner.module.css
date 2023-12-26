@@ -2,6 +2,7 @@
 	color: white;
 	cursor: pointer;
 	margin-top: 14px;
+	margin-bottom: 14px;
 	display: flex;
 	justify-content: center;
 }
