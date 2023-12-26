@@ -249,11 +249,7 @@ afterInput(() => {
     setMap(levels[level])
     blue_points += 1
     getFirst(ba).x -= blue_points
-    addText(`${blue_points}`, {
-    y: 3,
-    x: 13,
-    color: color`5`
-    });
+    getFirst(ra).x += red_points
     if(blue_points === 5){
       addText(`Blue Wins!`, {
       y: 5,
@@ -280,11 +276,7 @@ to rematch`, {
     setMap(levels[level])
     red_points += 1
     getFirst(ra).x += red_points
-    addText(`${red_points}`, {
-    y: 3,
-    x: 6,
-    color: color`3`
-    });
+    getFirst(ba).x -= blue_points
     if(red_points === 5){
       addText(`Red Wins!`, {
       y: 5,
