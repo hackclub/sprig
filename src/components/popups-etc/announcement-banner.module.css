@@ -6,6 +6,12 @@
 	justify-content: center;
 }
 
+@media (max-width: 700px) {
+  .banner {
+    display: none;
+  }
+}
+
 .banner > a {
 	color: inherit;
 	align-items: center;
@@ -30,3 +36,5 @@
 .icon {
 	font-size: 5rem;
 }
+
+
