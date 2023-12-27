@@ -179,6 +179,7 @@ setMap(levels[0]);
 
 // Maze Generation
 function generateMaze() {
+  // Creates 2d array the represents the maze 
   let maze = Array(height()).fill(null).map(() => Array(width()));
   
   function findUnvisitedNeighbours(position, maze, height, width) {
@@ -269,9 +270,11 @@ function generateMaze() {
   
     return unvisitedNeighbours;
   }
-  
+
+  // Stack to keep track of cells
   let cells = Array();
-  
+
+  // Fills maze array with walls, except the cell that has been visited (starting point)
   for (let i = 0; i < height(); i++) {
       for (let j = 0; j < width(); j++) {
         if (i == 1 && j == 1) {
@@ -281,12 +284,15 @@ function generateMaze() {
         }
       }
   }
-  
+
+  // Start at starting point
   cells.push([1, 1]);
   
   while (cells.length > 0) {
+    // Set current cell
     let current_cell = cells.pop();
-    
+
+    // Get unvisited neighbours, pick one, then knock down wall between current cell and randomly chosen cell
     let unvisited_neighbours = findUnvisitedNeighbours(current_cell, maze, height(), width());
   
     if (unvisited_neighbours.length > 0) {
@@ -309,9 +315,11 @@ function generateMaze() {
     }
   }
 
+  // Set target and player position
   maze[height() - 2][width() - 2] = 't';
   maze[1][1] = 'p';
-  
+
+  // Set map to randomly generated maze
   let generated_maze = '';
   
   for (let i = 0; i < height(); i++) {
