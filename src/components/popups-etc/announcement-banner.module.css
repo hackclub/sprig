@@ -2,8 +2,15 @@
 	color: white;
 	cursor: pointer;
 	margin-top: 14px;
+	margin-bottom: 14px;
 	display: flex;
 	justify-content: center;
+}
+
+@media (max-width: 800px) {
+  .banner {
+    display: none;
+  }
 }
 
 .banner > a {
@@ -30,3 +37,5 @@
 .icon {
 	font-size: 5rem;
 }
+
+

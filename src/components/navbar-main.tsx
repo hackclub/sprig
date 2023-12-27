@@ -17,9 +17,6 @@ export default function MainNavbar(props: MainNavbarProps) {
 				props.transparent ? styles.transparent : ""
 			}`}
 		>
-			<div class={styles.mobile}>
-				<AnnouncementBanner />
-			</div>
 			<ul class={styles.navlinks}>
 				<li class={styles.logo}>
 					<a href="/">
