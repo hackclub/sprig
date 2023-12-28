@@ -3,22 +3,42 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */
 
+/* 
+Nickels by Adam Miller. Made on December 28th, 2023.
+Nickels is a fun die game that has players compete to be the first one to fill a board.
+Players roll two dice and cover up the matching sum on their board with a nickel.
+If a player already has already covered the number that he or she rolls,
+the next player has a chance to steal that value for his or her own board.
+Play continues to the next player after the stealer.
+If a player rolls the same number on both dice and does not get stolen from,
+he or she gets to roll again.
+If a player rolls a 7, a random nickel is removed from his or her own board.
+The first player to fill all ten spaces on the board is the winner!
+In this digital version, all decisions are handled randomly and immediately.
+The goal is to beat the computer opponent.
+*/
+
+//Keep Track of Covered Values.
 const pRolledNums = [];
 const cRolledNums = [];
 
+//Random Number Generation.
 function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
 
+//Update Dice Sprites with New Rolls.
 function updateDice(x, y, val) {
   clearTile(x, y);
   addSprite(x, y, val);
 }
 
+//Roll a Die.
 function roll() {
   return getRndInteger(1, 6);
 }
 
+//Find Sprite Information for Any Board Tile.
 function findNumberTileInfo(diceSum, isX, isY, isType, isPlayer) {
   if (diceSum == 2) {
     if (isX) {
@@ -182,6 +202,7 @@ function findNumberTileInfo(diceSum, isX, isY, isType, isPlayer) {
   }
 }
 
+//Check if a Board Value Is Already Covered.
 function checkRolledNums(nums, val) {
   let flag = true;
   for (let i = 0; i < nums.length; i++) {
@@ -192,6 +213,8 @@ function checkRolledNums(nums, val) {
   return flag;
 }
 
+//Run the Player's Turn.
+//Doubles or Stolen Value Both Lead to Another Turn.
 function playerTurn() {
   let pdice1 = roll();
   let pdice2 = roll();
@@ -242,6 +265,8 @@ function playerTurn() {
   }
 }
 
+//Run the Computer's Turn.
+//Doubles or Stolen Value Both Lead to Another Turn.
 function computerTurn() {
   let cdice1 = roll();
   let cdice2 = roll();
@@ -291,7 +316,8 @@ function computerTurn() {
     }
   }
 }
-  
+
+//Graphics, Sound, and Map Organization.
 const dot1Dice = "1"
 const dot2Dice = "2"
 const dot3Dice = "3"
@@ -645,6 +671,7 @@ setMap(levels[level])
 
 setPushables({})
 
+//Decide Who Goes First and Define Variables to Stop Controls When the Game Is Over.
 let canGoC = false;
 let canGoP = true;
 let firstMove = getRndInteger(0, 1);
@@ -657,7 +684,8 @@ else {
   addText("Player Goes First!", {x: 1, y: 7, color: color`3`});
   addText("Press \"l\" to Roll!", {x: 1, y: 8, color: color`3`});
 }
-  
+
+//Play the Player's Turn on Input and Check Win Conditions.
 onInput("l", () => {
   if (canGoP) {
     canGoC = true;
@@ -679,6 +707,7 @@ onInput("l", () => {
   }
 })
 
+//Reset the Game.
 onInput("k", () => {
   canGoC = false;
   canGoP = true;
@@ -698,6 +727,7 @@ onInput("k", () => {
   }
 })
 
+//Play the Computer's Turn After the Player and Check Win Conditions.
 afterInput(() => {
   if (canGoC) {
     computerTurn();
