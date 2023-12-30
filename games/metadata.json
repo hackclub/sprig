@@ -3390,5 +3390,13 @@
     "img": "",
     "tags": ["multiplayer"],
     "addedOn": "2023-12-29"
+  },
+  {
+    "filename": "taikoMania",
+    "title": "taikoMania",
+    "author": "Isaac Wong",
+    "img": "",
+    "tags": [""],
+    "addedOn": "2023-12-29"
   }
 ]
