@@ -4,15 +4,17 @@
 
 Instructions:
 
-Press WASD to move the selection on another dark squares
+Press WASD to move the selection on another dark square
 
 Press J on one of your own pieces to select it and show available moves (cyan squares), 
 Press J on one of the available moves to move your piece there and let the next player play
-Press J on the a selected piece to unselect it
+Press J on the selected piece to unselect it
 
 Press I when the game is over to play another match
 
 Press K to reset the board an an already-running game (5 seconds timeout). Press L to cancel the timeout
+
+Note: you may see some orange squares. Those indicate mandatory jumps. If multiple are present, the player can select which of them to play. When mandatory jumps are present, only those moves can be played
 */
 
 const whiteRegular = "w";
