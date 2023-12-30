@@ -3374,5 +3374,13 @@
     "img": "",
     "tags": [""],
     "addedOn": "2023-12-25"
+  },
+  {
+    "filename": "random_maze_game_with_dfs_algorithm",
+    "title": "random_maze_game_with_dfs_algorithm",
+    "author": "Hanz Po",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2023-12-29"
   }
 ]
