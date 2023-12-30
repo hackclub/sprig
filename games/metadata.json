@@ -3374,5 +3374,37 @@
     "img": "",
     "tags": [""],
     "addedOn": "2023-12-25"
+  },
+  {
+    "filename": "random_maze_game_with_dfs_algorithm",
+    "title": "random_maze_game_with_dfs_algorithm",
+    "author": "Hanz Po",
+    "img": "",
+    "tags": ["endless"],
+    "addedOn": "2023-12-29"
+  },
+  {
+    "filename": "huff_ptegwu",
+    "title": "huff_ptegwu",
+    "author": "PenJonathan",
+    "img": "",
+    "tags": ["multiplayer"],
+    "addedOn": "2023-12-29"
+  },
+  {
+    "filename": "taikoMania",
+    "title": "taikoMania",
+    "author": "Isaac Wong",
+    "img": "",
+    "tags": [""],
+    "addedOn": "2023-12-29"
+  },
+  {
+    "filename": "Nickels",
+    "title": "Nickels",
+    "author": "Adam Miller",
+    "img": "",
+    "tags": ["strategy"],
+    "addedOn": "2023-12-30"
   }
 ]
