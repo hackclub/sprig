@@ -1,5 +1,9 @@
 /*
 A game similar to osu! Mania or Piano Tiles
+
+--How to play--
+Hit the notes on time to the beat when they cross the red bar.
+Controls: a,d,j,l corresponding to the keys going left to right.
 */
 
 /*
@@ -309,6 +313,7 @@ setInterval(() => {
   });
 }, 225);
 
+// Music
 let tracks = [
 tune`
 1428.5705,
