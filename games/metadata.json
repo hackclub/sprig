@@ -3422,5 +3422,13 @@
     "img": "",
     "tags": ["catch"],
     "addedOn": "2023-12-31"
+  },
+  {
+    "filename": "osu-mania",
+    "title": "osu-mania",
+    "author": "Alex Park",
+    "img": "",
+    "tags": [""],
+    "addedOn": "2023-01-01"
   }
 ]
