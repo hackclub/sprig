@@ -1,7 +1,7 @@
 /*
-// @tags: ['timer-puzzle']
-// @img: ""
-// @addedOn: 2023-12-24
+@tags: ['timer-puzzle']
+@img: ""
+@addedOn: 2023-12-24
 @title: Pluffy_The_Cage_Bird
 @author: Nihal_K
 @inspired by 'Flurffy Game'
