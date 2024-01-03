@@ -6,7 +6,11 @@ import Input from "../../components/design-system/input";
 import { IoCaretDown, IoSearch } from "react-icons/io5";
 import "./gallery.css";
 
-type SortOrder = "chronological" | "ascending" | "descending";
+enum SortOrder {
+	CHRONOLOGICAL,
+	ASCENDING,
+	DESCENDING
+}
 type GalleryGameMetadata = GameMetadata & { show: boolean };
 type Filter = {
 	query: string,
@@ -15,7 +19,7 @@ type Filter = {
 };
 export default function Gallery({ games, tags }: { games: GameMetadata[], tags: string[] }) {
 	const [gamesState, setGamesState] = useState<GalleryGameMetadata[]>([]);
-	const [filter, setFilter] = useState<Filter>({query: "", sort: "chronological", tags: [] })
+	const [filter, setFilter] = useState<Filter>({query: "", sort: SortOrder.CHRONOLOGICAL, tags: [] })
 
 	useEffect(() => {
 		const lowerCaseQuery = filter.query.toLowerCase();
@@ -35,13 +39,13 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 
 	function sortGames(games: GameMetadata[], order: SortOrder): GameMetadata[] {
 		const _games = [...games];
-		if (order === "chronological") {
+		if (order === SortOrder.CHRONOLOGICAL) {
 			_games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn))
 				.slice(0, 10)
 				.forEach(game => (game.isNew = true));
 		}
-		if (order === "ascending") _games.sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1);
-		if (order === "descending") _games.sort((a, b) => b.title.toLowerCase() > a.title.toLowerCase() ? 1 : -1);
+		if (order === SortOrder.ASCENDING) _games.sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1);
+		if (order === SortOrder.DESCENDING) _games.sort((a, b) => b.title.toLowerCase() > a.title.toLowerCase() ? 1 : -1);
 
 		// put tutorials first
 		_games.sort((a, _) => a.tags.includes("tutorial") ? -1 : 1)
@@ -129,7 +133,12 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 							<select 
 							value={filter.sort}
 							onChange={(event) => {
-								setFilter(_filter => ({ ..._filter, sort: (event.target! as HTMLSelectElement).value! as SortOrder }));
+								const orderFromString = (str: string): SortOrder => {
+									if (str === "ascending") return SortOrder.ASCENDING;
+									if (str === "descending") return SortOrder.DESCENDING;
+									return SortOrder.CHRONOLOGICAL;
+								}
+								setFilter(_filter => ({ ..._filter, sort: orderFromString((event.target! as HTMLSelectElement).value!) }));
 							}}>
 								<option value="">Sort by...</option>
 								<option value="chronological">Release date</option>
