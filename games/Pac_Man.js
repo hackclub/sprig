@@ -1,5 +1,8 @@
 /*
 @title: Pac Man
+@tags: ['classic']
+@img: ""
+@addedOn: 2022-12-07
 @author: Nico Koundakjian
 
 

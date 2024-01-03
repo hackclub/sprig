@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: hidden_maze_escape
+@author: Rylan Berry
+@tags: ['logic']
+@img: ""
+@addedOn: 2023-05-23
+*/
+
+    /*
               READ ME!
 yes, the marvelous sequel to the 1st and 2nd
 On the topic of the 1st and 2nd games, hidden maze and hidden maze infinite respectively you should play them before this one 

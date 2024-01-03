@@ -1,5 +1,8 @@
 /*
 @title: the_dining_room_in_the_sky 
+@tags: ['puzzle-score']
+@img: ""
+@addedOn: 2023-02-28
 @author: Dylan Tran
 */
 

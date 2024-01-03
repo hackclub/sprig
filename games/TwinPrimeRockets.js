@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: TwinPrimeRockets
+@author: Pradevel
+@tags: ['thematic-puzzle']
+@img: ""
+@addedOn: 2023-03-21
+*/
+
+    /*
 
   Press 'a' if you think the numbers are prime or press 'd' if you think they are not."
 

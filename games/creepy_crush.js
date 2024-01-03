@@ -1,5 +1,8 @@
 /*
 @title: creepy_crush
+@tags: ['logic', 'advanced']
+@img: creepy_crush
+@addedOn: 2022-11-27
 @author: issac
 
 INSTRUCTIONS:

@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Women's roles during wartime
+@author: cupcakes
+@tags: ['thematic-puzzle']
+@img: ""
+@addedOn: 2023-06-04
+*/
+
+    /*
 Women's roles during wartime
 */
 

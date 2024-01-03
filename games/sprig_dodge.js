@@ -1,5 +1,8 @@
 /*
 @title: sprig_dodging
+@tags: ['beginner', 'tutorial']
+@img: sprig_dodge
+@addedOn: 2022-12-15
 @author: sam liu and lucas
 */
 

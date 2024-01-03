@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Two_Player_Tetris
+@author: Spectral
+@tags: ['classic', 'multiplayer']
+@img: ""
+@addedOn: 2023-09-11
+*/
+
+    /*
 A two-player game of tetris. wasd and ijkl control the left and right sides, respectively.
 When one player allows the entire screen to be filled, the other player will gain a point.
 

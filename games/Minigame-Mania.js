@@ -1,4 +1,13 @@
-var cnt = 1;
+
+/* 
+@title: Minigame-Mania
+@author: FlubbedAlpaca, ManushPatell, AiyuuGames, MatiasSharofi
+@tags: ['strategy']
+@img: ""
+@addedOn: 2023-05-27
+*/
+
+    var cnt = 1;
 var cnt2 = 0
 const player = "p";
 const obstacle = "o";

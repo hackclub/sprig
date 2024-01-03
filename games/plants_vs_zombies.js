@@ -1,5 +1,8 @@
 /*
   @title: Plants vs. Zombies
+@tags: []
+@img: ""
+@addedOn: 2023-02-15
   @author: jianmin-chen
 
   Instructions:

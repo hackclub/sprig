@@ -1,4 +1,13 @@
-// Galactic by Samuel Fernandez
+
+/* 
+@title: galactic
+@author: polypixeldev
+@tags: ['strategy']
+@img: ""
+@addedOn: 2023-11-12
+*/
+
+    // Galactic by Samuel Fernandez
 // Created in November 2023
 
 const select = "s";

@@ -1,5 +1,8 @@
 /*
 @title: Cross_The_Road
+@tags: ['endless']
+@img: Cross_The_Road
+@addedOn: 2022-12-27
 @author: Haneesh Pediredla
 
 Play:-

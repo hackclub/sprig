@@ -1,5 +1,8 @@
 /*
 @title: Mastermind
+@tags: ['logic', 'classic']
+@img: ""
+@addedOn: 2022-11-14
 @author: Leonard (Omay)
 
 W and S for color selection, A and D for position selection

@@ -1,5 +1,8 @@
 /*
 @title: Flamin_Finger
+@tags: ['timer-puzzle']
+@img: ""
+@addedOn: 2023-02-23
 @author: Richie Tran
 A computer rendition of the classic game Flamin' Finger! Use WASD to move and colect the white circles!
 Find the secret (not so secret) easter egg!!

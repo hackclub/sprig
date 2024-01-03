@@ -1,5 +1,8 @@
 /*
 @title: Orpheus' Burger Dash
+@tags: []
+@img: ""
+@addedOn: 2023-06-16
 @author: SamsonC
 */
 

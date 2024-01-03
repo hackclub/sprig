@@ -1,5 +1,8 @@
 /*
 @title: Sus_Runner
+@tags: ['endless']
+@img: ""
+@addedOn: 2023-02-10
 @author: Johna
 */
 

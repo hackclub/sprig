@@ -1,4 +1,13 @@
-const player = "p";
+
+/* 
+@title: fire_boom
+@author: Samarpan
+@tags: ['dodge']
+@img: ""
+@addedOn: 2023-09-25
+*/
+
+    const player = "p";
 const fire = "f";
 const water = "w";
 const explode = "e";

@@ -1,5 +1,8 @@
 /*
 @title: rescue_leo
+@tags: ['thematic-puzzle']
+@img: ""
+@addedOn: 2023-02-11
 @author: agentblack_6000
 
 

@@ -1,5 +1,8 @@
 /*
 @title: Super Efficient Bunny
+@tags: ['energy-control']
+@img: ""
+@addedOn: 2023-01-31
 @author: Mihir Surlaker (Mihirsur007)
 */
 //The goal of this game is to advance as many levels as you can in 400 steps. This will challenge you to choose the most efficient movements to get to the carrot.

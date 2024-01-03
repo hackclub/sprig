@@ -1,5 +1,8 @@
 /*
 @title: Maze
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2022-10-06
 @author: Akeell
 */
 

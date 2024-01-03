@@ -1,6 +1,9 @@
 /*
 @title: It_Is_Coming_Out!
-@auther: Onovez
+@tags: []
+@img: It_Is_Coming_Out!
+@addedOn: 2023-03-15
+@author: Onovez
 */
 // Game where you have to go through obstcle to go to toilet to poop
 // 'w','a','s','d': to move, 'j' to reset map, and 'k' to restart game
@@ -249,7 +252,7 @@ bp......vb
 b........b
 b........b
 bbbbbbbbbb`,
-                map`
+map`
 bbbbbbbbbbb
 bn...b....b
 bbbb.b.b..b
@@ -257,13 +260,13 @@ bp...b.b.tb
 bbb..b.b..b
 b..x....b.b
 bbbbbbbbbbb`,
-                map`
+map`
 pbx..bb...
 .bbb.b..b.
 .....bb.b.
 .bb..b..bt
 ..nb...bb.`,
-                map`
+map`
 bbbbbbbbbbb
 bp.......bb
 bbbbb..bx.b
@@ -271,7 +274,7 @@ b.....nbbbb
 b..bbbb..tb
 b.......b.b
 bbbbbbbbbbb`,
-                map`
+map`
 bbbbbbbbbbb
 b......nbpb
 bb.bb.bbb.b
@@ -279,7 +282,7 @@ bb.b..b...b
 bx.b.bb.btb
 bbb.....b.b
 bbbbbbbbbbb`,
-                map`
+map`
 bbbbbbbbbbb
 bx.bb.b..bb
 b.g.....gtb
@@ -288,7 +291,7 @@ b.b.b..bbbb
 bg..b..b.nb
 bpbb...g..b
 bbbbbbbbbbb`,
-                map`
+map`
 bbbbbbbbbbb
 b.g.......b
 bgng.g....b
@@ -297,7 +300,7 @@ b....g...bb
 b......bgtb
 bx.....b..b
 bbbbbbbbbbb`,
-                map`
+map`
 bbbbbbbbbbbbb
 b...nb......b
 b.gx.b......b
@@ -307,7 +310,7 @@ b........b.bb
 bb.......bgtb
 bpg.b....b..b
 bbbbbbbbbbbbb`,
-                map`
+map`
 bbbbbbbbbbbbb
 bp.........nb
 bbbbbbbbbbb.b
@@ -318,7 +321,7 @@ bbbbbbbbbbb.b
 b...........b
 btbbbbbbbbbbb
 b.bbbbbbbbbbb`,
-                map`
+map`
 bbbbbbbbbbbbbb
 bx....b......b
 bbb...b.bbbb.b
@@ -326,7 +329,7 @@ bpb.b.b.b...gb
 b.b.b...b..g.b
 b....btbn....b
 bbbbbb.bbbbbbb`,
-                map`
+map`
 bbbbbbbbbbbbb
 b.g......b..b
 bb.b....gg..b
@@ -336,7 +339,7 @@ b.g.g.g.g.g.b
 bg.g.g.g.g.tb
 b.g.g.g.g.g..
 bbbbbbbbbbbbb`,
-                map`
+map`
 bbbbbbbbbbbbbb
 bng.g.g.g.g.tb
 .g.....g.g.g.b
@@ -347,14 +350,14 @@ bg.g.g.g.g.g.b
 b...g...g.g.gb
 bg.g.g.g.g.x.b
 bbbbbbbbbbbbbb`,
-                map`
+map`
 bbb.bbbbbb
 bpbgg..bnb
 b.b.b.bx.b
 bgb.b.tb.b
 b.g..b...b
 b.bbbbbbbb`,
-                map`
+map`
 bbbbbbbbbbbbbbbb
 bpb............b
 bgb.b.bbbb..bb.b
@@ -366,7 +369,7 @@ bbb.bb...gb.b.bb
 bx.gbb.bb.b.btbb
 bbb...gbb...b.bb
 bbbbbb.bbbbbbbbb`,
-                map`
+map`
 bbbbbbbbbbbbbb
 ....g.bbbbb..b
 b.b.bpbx.g.b.b
@@ -377,7 +380,7 @@ b.b...g...b..b
 bg.bgb.b.btb.b
 b.....b.b.g.gb
 bbbbbbbbbbbb.b`,
-                map`
+map`
 bb.bbbbbbbbb
 bn.bbbbb..g.
 bbgbhhhb.b.b
@@ -386,7 +389,7 @@ b.bbh.hb.b.b
 b..bbgbb.btb
 ...g...x.b.b
 bbbbb.bbbbbb`,
-                map`
+map`
 bbbbbbbbbbbbb
 b...........b
 b...........b
@@ -396,53 +399,53 @@ b...........b
 b...........b
 b...........b
 bbbbbbbbbbbbb`
-               ];
+];
 
 setMap(levels[level])
 
 // The movement of the player
-onInput("w",() => {
-  getFirst(player).y -=1;
-  playTune(move,1);
+onInput("w", () => {
+  getFirst(player).y -= 1;
+  playTune(move, 1);
 });
-onInput("a",() => {
-  getFirst(player).x -=1;
-  playTune(move,1);
+onInput("a", () => {
+  getFirst(player).x -= 1;
+  playTune(move, 1);
 });
-onInput("s",() => {
-  getFirst(player).y +=1;
-  playTune(move,1);
+onInput("s", () => {
+  getFirst(player).y += 1;
+  playTune(move, 1);
 });
-onInput("d",() => {
-  getFirst(player).x +=1;
-  playTune(move,1);
+onInput("d", () => {
+  getFirst(player).x += 1;
+  playTune(move, 1);
 });
-onInput("j",() => {
+onInput("j", () => {
   setMap(levels[level]);
 });
-onInput("k",() => {
+onInput("k", () => {
   level = 0;
   setMap(levels[level]);
   text('Can\'t Hold', 6, 5, color`6`);
 
   text('It In!', 8, 8, color`6`);
-  
-  text('by Onovez',9, 11, color`0`);
+
+  text('by Onovez', 9, 11, color`0`);
 });
 
 afterInput(() => {
   // Eats the Food and turns eaten to True for future use
-  if (tilesWith(player,food).length > 0){
+  if (tilesWith(player, food).length > 0) {
     eaten = !eaten;
     var foodX = getFirst(food).x;
     var foodY = getFirst(food).y;
-    
-    getFirst(player).x +=1;
+
+    getFirst(player).x += 1;
     clearTile(foodX, foodY);
-    getFirst(player).x -=1;
-    playTune(eat,1);
-    
-      
+    getFirst(player).x -= 1;
+    playTune(eat, 1);
+
+
   }
   if (level == 0) {
 
@@ -450,98 +453,98 @@ afterInput(() => {
       win = !win
     }
   }
-  
+
   if (eaten) {
-      if (tilesWith(player, toilet).length > 0 && win == false){
-        eaten = !eaten;
-        win = !win;
-        toiletX = getFirst(toilet).x;
-        toiletY = getFirst(toilet).y;
-        doorx = getFirst(doorClosed).x;
-        doory = getFirst(doorClosed).y;
-        
-        if (level == 1) {
-          addPoop();
-          door();
-        }
-        if (level == 2) {
-          addPoop();
-          door();
-        }
-        if (level == 3) {
-          addPoop();
-          door();
-        }
-        if (level == 4) {
-          addPoop();
-          door();
-        }
-        if (level == 5) {
-          addPoop();
-          door();
-        }
-        if (level == 6) {
-          addPoop();
-          door();
-        }
-        if (level == 7) {
-          addPoop();
-          door();
-        }
-        if (level == 8) {
-          addPoop();
-          door();
-        }
-        if (level == 9) {
-          addPoop();
-          door();
-        }
-        if (level == 10) {
-          addPoop();
-          door();
-        }
-        if (level == 11) {
-          addPoop();
-          door();
-        }
-        if (level == 12) {
-          addPoop();
-          door();
-        }
-        if (level == 13) {
-          addPoop();
-          door();
-        }
-        if (level == 14) {
-          addPoop();
-          door();
-        }
-        if (level == 15) {
-          addPoop();
-          door();
-        }
-        
-      }  
+    if (tilesWith(player, toilet).length > 0 && win == false) {
+      eaten = !eaten;
+      win = !win;
+      toiletX = getFirst(toilet).x;
+      toiletY = getFirst(toilet).y;
+      doorx = getFirst(doorClosed).x;
+      doory = getFirst(doorClosed).y;
+
+      if (level == 1) {
+        addPoop();
+        door();
+      }
+      if (level == 2) {
+        addPoop();
+        door();
+      }
+      if (level == 3) {
+        addPoop();
+        door();
+      }
+      if (level == 4) {
+        addPoop();
+        door();
+      }
+      if (level == 5) {
+        addPoop();
+        door();
+      }
+      if (level == 6) {
+        addPoop();
+        door();
+      }
+      if (level == 7) {
+        addPoop();
+        door();
+      }
+      if (level == 8) {
+        addPoop();
+        door();
+      }
+      if (level == 9) {
+        addPoop();
+        door();
+      }
+      if (level == 10) {
+        addPoop();
+        door();
+      }
+      if (level == 11) {
+        addPoop();
+        door();
+      }
+      if (level == 12) {
+        addPoop();
+        door();
+      }
+      if (level == 13) {
+        addPoop();
+        door();
+      }
+      if (level == 14) {
+        addPoop();
+        door();
+      }
+      if (level == 15) {
+        addPoop();
+        door();
+      }
+
+    }
   }
   // Going up levels
   if (win) {
-    if(tilesWith(player, doorOpen).length > 0) {
-      playTune(inDoor,1);
+    if (tilesWith(player, doorOpen).length > 0) {
+      playTune(inDoor, 1);
       level++;
       win = !win;
       setMap(levels[level]);
       clearText();
 
-      
+
       if (level > 15) {
         text('Finished', 6, 4, color`2`);
         text('by Onovez', 6, 6, color`0`);
         text('Last Updated:', 5, 11, color`5`);
-        text('01-12-2023',7,12,color`7`);
+        text('01-12-2023', 7, 12, color`7`);
         text("(Press k to", 2, 8, color`2`);
         text("Restart)", 10, 9, color`2`);
       }
-      
+
     }
   }
 
@@ -558,22 +561,22 @@ afterInput(() => {
   if (tilesWith(block1, doorOpen).length > 0) {
     setMap(levels[level]);
   }
-  
-  
-  
+
+
+
 })
 
 // Functions
-function addPoop(){
-  addSprite(toiletX, toiletY+1, poop);
+function addPoop() {
+  addSprite(toiletX, toiletY + 1, poop);
 }
-function door(){
+function door() {
   clearTile(doorx, doory);
   addSprite(doorx, doory, doorOpen);
   playTune(door_sound, 1);
 }
 
-function text(label, xpos, ypos, colour){
+function text(label, xpos, ypos, colour) {
   addText(label, {
     x: xpos,
     y: ypos,
@@ -586,7 +589,7 @@ text('Can\'t Hold', 6, 5, color`6`);
 
 text('It In!', 8, 8, color`6`);
 
-text('by Onovez',9, 11, color`0`);
+text('by Onovez', 9, 11, color`0`);
 
 
 

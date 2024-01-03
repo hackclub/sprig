@@ -1,5 +1,8 @@
 /*
 @title: The Bird Feedo
+@tags: ['endless']
+@img: ""
+@addedOn: 2023-01-09
 @author: Arpan Pandey
 */
 const bird = "b";

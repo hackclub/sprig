@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Swapper
+@author: RaidTheWeb
+@tags: ['advanced']
+@img: ""
+@addedOn: 2023-10-18
+*/
+
+    /*
 A game featuring simple puzzles involving a swapping mechanic, can be played alone or with a friend. An introductory adventure of mine into Sprig game development.
 */
 
