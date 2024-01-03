@@ -51,11 +51,11 @@ def embed_metadata(game_metadata, test_results):
     elif (test_results["title"] == True and test_results["author"] == True and test_results["img"] == True and test_results["tags"] == True and test_results["addedOn"] == True):
         print(f"[EMBED] {game_metadata["filename"]}: No Metadata Embed")
     else:
-        if(test_results["addedOn"] == False): game_lines.insert(1, "// @addedOn: " + game_metadata["addedOn"] + "\n")
-        if(test_results["img"] == False): game_lines.insert(1, "// @img: " + (game_metadata["img"] if game_metadata["img"] else "\"\"") + "\n")
-        if(test_results["tags"] == False): game_lines.insert(1, "// @tags: " + str(game_metadata["tags"]) + "\n")
-        if(test_results["author"] == False): game_lines.insert(1, "// @author: " + game_metadata["author"] + "\n")
-        if(test_results["title"] == False): game_lines.insert(1, "// @title: " + game_metadata["title"] + "\n")
+        if(test_results["addedOn"] == False): game_lines.insert(1, "@addedOn: " + game_metadata["addedOn"] + "\n")
+        if(test_results["img"] == False): game_lines.insert(1, "@img: " + (game_metadata["img"] if game_metadata["img"] else "\"\"") + "\n")
+        if(test_results["tags"] == False): game_lines.insert(1, "@tags: " + str(game_metadata["tags"]) + "\n")
+        if(test_results["author"] == False): game_lines.insert(1, "@author: " + game_metadata["author"] + "\n")
+        if(test_results["title"] == False): game_lines.insert(1, "@title: " + game_metadata["title"] + "\n")
 
         print(f"[EMBED] {game_metadata["filename"]}: Some Metadata Embed")
         
