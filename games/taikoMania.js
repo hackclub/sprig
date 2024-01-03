@@ -1,3 +1,11 @@
+/*
+@title: taikoMania
+@author: Isaac Wong
+@tags: ['']
+@img: ""
+@addedOn: 2023-12-29
+*/
+
 const row1 = "1"
 const row2 = "2"
 const note = "n"

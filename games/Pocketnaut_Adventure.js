@@ -1,4 +1,7 @@
 /*
+// @tags: ['']
+// @img: ""
+// @addedOn: 2023-12-24
 @title: Pockenmaut Adventures I
 @author: Ray Rumore
 */
