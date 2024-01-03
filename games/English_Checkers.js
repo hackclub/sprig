@@ -709,7 +709,7 @@ onInput("k", () => {
       // If the cancel button isn't pressed
       if (!cancelButtonPressed) {
         // If there are no seconds left, reset the board
-        if (secondsLeft === 0) {
+        if (secondsLeft <= 0) {
           resetTimeoutRunning = false;
           resetBoard();
         } else {
