@@ -86,6 +86,44 @@ cmake --build --preset=rpi
 
 A UF2 file will be outputted to `rpi_build/src/spade.uf2`. On macOS, with a Pico plugged in and in BOOTSEL mode, you can transfer from the CLI with `cp ./rpi_build/src/spade.uf2 /Volumes/RPI-RP2`.
 
+#### Debugging on the Pico with a probe
+On device debugging is hard, but it's less hard with a [Raspberry Pi Debug Probe](https://www.raspberrypi.com/products/debug-probe/)! Without a debug probe, the most debugging you can do is logging to stdout and viewing it on a serial monitor such as `picocom` (if you'd like to do that, `picocom -b 115200 /dev/ttyACM0` is the command that's worked for me on Linux. Exit with Ctrl+A Ctrl+Q). However, with a debug probe, you can harness the full power of [gdb](https://sourceware.org/gdb/) to debug spade. Setup is a bit complicated though, so here's some instructions:
+
+1. Get a debug probe! You can see where to buy them at the [official product page](https://www.raspberrypi.com/products/debug-probe/)
+2. Connect your Sprig to the probe. Detailed instructions can be found at the [Raspberry Pi docs](https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html), but in short you'll need to connect the 3-wire JST connector to the debug port on your Pico, and connect the other 3-wire connector to TX, RX, and GND on your Pico. These three terminals are broken out on the back of the Sprig (GP0, GP1, and GND respectively), but the design makes it hard to connect without soldering wires directly onto it. A different way to do it is to lift your Pico slightly out of it's terminal, and either wrap wires around the headers, or stick breadboard jumper cables right next to the header you need to connect. You can then connect the other end of the wire directly to the probe, or connect them to a breadboard and then connect the included cables with the debug probe to the breadboard as well. Once you have the Pico connected to the debug probe, connect both the debug probe and the Pico to your computer with USB cables, and that's it! Ask in the Slack if you have any questions.
+3. Continue with the instructions on the Raspberry Pi docs by installing tools. You'll need OpenOCD and GDB.
+
+That's it for setup! You can now use OpenOCD to either flash new firmware to your Sprig or use it in server mode to use GDB.
+To just flash new firmware to your Sprig, first build spade, and then `cd` to `rpi_build/src` and run the following command (these commands are for Linux, but shouldn't differ too much for MacOS or Windows):
+```sh
+sudo openocd -f interface/cmsis-dap.cfg -f target/rp2040.cfg -c "adapter speed 5000" -c "program spade.elf verify reset exit"
+```
+Note that the ELF file is used here, not the UF2.
+
+Using GDB is much more powerful, though. First, build spade as Debug to make sure you get all the debug symbols:
+```sh
+cmake -DCMAKE_BUILD_TYPE=Debug --preset=rpi
+cmake --build --DCMAKE_BUILD_TYPE=Debug --preset=rpi
+```
+Next, use one terminal window to run OpenOCD in server mode:
+```sh
+sudo openocd -f interface/cmsis-dap.cfg -f target/rp2040.cfg -c "adapter speed 5000"
+```
+Then, use a different terminal in the `rpi_build/src` directory to launch GDB:
+```sh
+gdb spade.elf
+```
+This will launch GDB, and prompt you with some introductory docs - press `c` and then enter to enter the GDB console.
+Then, run the following commands in GDB to get started:
+```sh
+target extended-remote :3333 # This attaches GDB to your running OpenOCD server - it should be the first command of each GDB session
+load # This flashes your latest build of spade to the Sprig - only run it when you have a new build
+monitor reset init # Resets the Sprig
+continue # Starts the program
+```
+With GDB now running, you can now do all of the things that GDB supports, such as setting breakpoints, inspecting stack traces, and analyzing memory!
+You can exit GDB with Ctrl+D, and stop the OpenOCD server with Ctrl+C. If you have any questions, ask in the Slack!
+
 ### PC Build
 
 ```sh
@@ -106,7 +144,7 @@ export PICO_EXTRAS_PATH=~/raspberrypi/pico-extras
 
 ## Project Structure
 
-Spade uses CMake to build its binaries across platforms, although it's only tested to work on macOS.
+Spade uses CMake to build its binaries across platforms. It works best on MacOS and Linux, although Windows builds can work.
 
 Shared code, including rendering, JavaScript execution, and Sprig engine code is available in `src/shared/`. The platform-specific harness code for the PC and Pico editions are in `src/pc/` and `src/rpi/`, respectively.
 
