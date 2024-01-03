@@ -52,13 +52,13 @@ def main():
     markdown_lines = ["# Plagiarism Report"]
     if high_plagiarism_detected:
         log("High plagiarism percentages detected.")
-        markdown_lines.append("## High plagiarism percentages detected in the following files:")
+        markdown_lines.append("## Game overlap report:")
         markdown_lines.extend(high_plagiarism_files)
         write_to_markdown("plagiarism-report.md", markdown_lines)
         sys.exit(1)
     else:
         log("No high plagiarism percentages detected.")
-        markdown_lines.append("No high plagiarism percentages detected.")
+        markdown_lines.append("## Game overlap report: \n None detected")
         write_to_markdown("plagiarism-report.md", markdown_lines)
 
 if __name__ == "__main__":
