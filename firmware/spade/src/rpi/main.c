@@ -7,6 +7,10 @@
 #include "pico/util/queue.h"
 #include "pico/multicore.h"
 #include "jerryscript.h"
+#include "f_util.h"
+#include "ff.h"
+#include "rtc.h"
+#include "hw_config.h"
 
 #include <stdio.h>
 #include <stdint.h>
@@ -179,6 +183,14 @@ static int load_new_scripts(void) {
   return upl_stdin_read();
 }
 
+void mount_sd_card() {
+  yell("mounting SD card");
+  // do the mount
+  state->sd_mounted = 1;
+  sd_card_t *pSD = sd_get_by_num(0);
+  FRESULT fr = f_mount(&pSD->fatfs, pSD->pcName, 1);
+}
+
 /**
  * Implementations for PianoOpts (see src/shared/audio/piano.h)
  * 
@@ -199,6 +211,7 @@ static int load_new_scripts(void) {
 #endif
 
 int main() {
+  timer_hw->dbgpause = 0;
   // Overclock the RP2040!
   set_sys_clock_khz(270000, true);
 
@@ -208,6 +221,11 @@ int main() {
   stdio_init_all(); // Init serial port
   st7735_init();    // Init display
   rng_init();       // Init RNG
+
+  printf("so sus");
+
+  // Initialize SD card
+  mount_sd_card();
 
   // Init JerryScript
   jerry_init(JERRY_INIT_MEM_STATS);
@@ -239,6 +257,8 @@ int main() {
   }
 
   // Start a core to listen for keypresses.
+  multicore_reset_core1();
+  sleep_ms(100);
   multicore_launch_core1(core1_entry);
 
   /**

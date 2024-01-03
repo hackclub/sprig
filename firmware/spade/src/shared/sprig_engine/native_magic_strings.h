@@ -32,7 +32,6 @@
 	#define MSTR_NATIVE_tilesWith "tilesWith"
 	#define MSTR_NATIVE_text_add "text_add"
 	#define MSTR_NATIVE_text_clear "text_clear"
-	#define MSTR_NATIVE_mountSD "mountSD"
 
 	#define MSTR_NATIVE_width "width"
 	#define MSTR_NATIVE_height "height"

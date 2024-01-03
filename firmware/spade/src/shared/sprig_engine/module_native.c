@@ -117,16 +117,6 @@ JERRYXX_FUN(native_press_cb_fn) {
   return jerry_create_undefined(); 
 }
 
-JERRYXX_FUN(native_mount_sd_fn) {
-  dbg("module_native::native_mount_sd_fn");
-
-  native_mount_sd();
-
-  yell("mounted sd");
-
-  return jerry_create_undefined();
-}
-
 JERRYXX_FUN(native_frame_cb_fn) {
   if (spade_state.frame_cb) jerry_release_value(spade_state.frame_cb);
 
@@ -697,8 +687,6 @@ static void module_native_init(jerry_value_t exports) {
   memset(&props, 0, sizeof(props));
 
   props_init();
-
-  jerryxx_set_property_function(exports, MSTR_NATIVE_mountSD, native_mount_sd_fn);
 
   // these ones actually need to be in C for perf
   jerryxx_set_property_function(exports, MSTR_NATIVE_setMap,    setMap);

@@ -1,11 +1,6 @@
 #include <stdint.h>
 #include "jerryscript.h"
 
-#include "f_util.h"
-#include "ff.h"
-#include "rtc.h"
-#include "hw_config.h"
-
 #include "shared/ui/errorbuf.h"
 #include "shared/ui/font.h"
 #include "shared/js_runtime/jerry_mem.h"
@@ -260,13 +255,6 @@ static void render_resize_legend(void) {
         if (doodle_pane_read(od->palette3, x, y)) doodle_pane_set_bit(rd->palette3, rx, ry);
       }
   }
-}
-
-static void native_mount_sd() {
-  // do the mount
-  state->sd_mounted = 1;
-  sd_card_t *pSD = sd_get_by_num(0);
-  FRESULT fr = f_mount(&pSD->fatfs, pSD->pcName, 1);
 }
 
 // Self-explanatory... sets the background sprite.

@@ -12,7 +12,7 @@ target_compile_definitions(spade PRIVATE
   # PICO_DEFAULT_UART_RX_PIN=29
 )
 
-add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/no-OS-FatFS/src")
+add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/no-OS-FatFS/FatFs_SPI")
 
 target_link_libraries(spade PRIVATE
   pico_stdlib
