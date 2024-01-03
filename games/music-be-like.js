@@ -1,5 +1,8 @@
 /*
 @title: music-be-like
+@tags: ['logic']
+@img: ""
+@addedOn: 2022-12-04
 @author: trueGrand
 
 Instructions:

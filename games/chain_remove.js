@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: chain_remove
+@author: imcute
+@tags: ['endless']
+@img: ""
+@addedOn: 2023-07-22
+*/
+
+    /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */

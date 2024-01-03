@@ -1,5 +1,8 @@
 /*
 @title: Cookie_Click!
+@tags: []
+@img: ""
+@addedOn: 2023-01-17
 @author: briyandyju09
 
 Use W key to earn and J key to purchase a cookie upgrade

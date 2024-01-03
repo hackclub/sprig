@@ -1,5 +1,8 @@
 /*
 @title: 256
+@tags: ['classic']
+@img: ""
+@addedOn: 2022-08-22
 @author: jzhao
 */
 

@@ -1,5 +1,8 @@
 /*
 @title: offline_t-rex_game
+@tags: ['endless']
+@img: ""
+@addedOn: 2022-12-31
 @author: zoya hussain */
 
 let vy = 0;

@@ -1,5 +1,8 @@
 /*
 @title: far from home
+@tags: []
+@img: far-from-home
+@addedOn: 2023-10-04
 @author: hayward
 
 Instructions:

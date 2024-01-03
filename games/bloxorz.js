@@ -1,5 +1,8 @@
 /*
 @title: bloxorz
+@tags: ['logic']
+@img: ""
+@addedOn: 2023-02-20
 @author: itona
 */
 

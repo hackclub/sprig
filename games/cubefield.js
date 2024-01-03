@@ -1,5 +1,8 @@
 /*
 @title: cubefield
+@tags: ['endless']
+@img: ""
+@addedOn: 2023-01-10
 @author: jai
 */
 

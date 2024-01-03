@@ -1,5 +1,8 @@
 /*
 @title: sudoku
+@tags: ['classic']
+@img: ""
+@addedOn: 2023-01-25
 @author: wyatt
 
 This is a sudoku implementation - difficulty is set as "very-hard" by default, but can be

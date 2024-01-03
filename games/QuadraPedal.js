@@ -1,5 +1,8 @@
 /*
 @title: QuadraPedal
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2022-11-04
 @author: Jamarkis
 
 Hit "run" to execute the code and

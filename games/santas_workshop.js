@@ -1,5 +1,8 @@
 /*
 @title: santas_workshop
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2023-03-10
 @author: ava_sadasivan
 */
 

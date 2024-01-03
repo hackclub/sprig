@@ -1,5 +1,8 @@
 /*
 @title: attack_on_slimes
+@tags: ['endless']
+@img: attack_on_slimes
+@addedOn: 2022-12-26
 @author: OwOSwordsman
 */
 

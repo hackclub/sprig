@@ -1,5 +1,8 @@
 /*
 @title: lights_out
+@tags: ['logic']
+@img: ""
+@addedOn: 2022-12-16
 @author: StarGazer1258 (Nathaniel Johns)
 
 Controls:
