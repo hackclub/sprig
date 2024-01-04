@@ -4,16 +4,12 @@ import "./gallery.css";
 import { getSession } from "../../lib/game-saving/account";
 import Navbar from "../../components/navbar-main";
 import StandardHead from "../../components/standard-head.astro";
-import { GameMetadata, getGalleryGames } from "../../lib/game-saving/gallery";
+import { getGalleryGames } from "../../lib/game-saving/gallery";
 import Gallery from "./gallery";
 
 const session = await getSession(Astro.cookies);
 
-const _games = getGalleryGames().map(game => ({ ...game, title: game.title.trim(), lowerCaseTitle: game.title.toLowerCase(), lowerCaseAuthor: game.author.toLowerCase() }));
-const games = _games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn))
-		.slice(0, 10)
-		.map(game => ({ ...game, isNew: true }) as GameMetadata) // put newest games first
-		.concat(_games.slice(10));
+const games = getGalleryGames().map(game => ({ ...game, title: game.title.trim(), lowerCaseTitle: game.title.trim().toLowerCase(), lowerCaseAuthor: game.author.toLowerCase() }));
 
 const tags = [
 	...new Set(games.reduce<string[]>((p, c) => [...p, ...c.tags], [])),
