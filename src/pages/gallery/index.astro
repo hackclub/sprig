@@ -9,7 +9,7 @@ import Gallery from "./gallery";
 
 const session = await getSession(Astro.cookies);
 
-const _games = getGalleryGames().map(game => ({ ...game, title: game.title.trim(), smallTitle: game.title.toLowerCase(), smallAuthor: game.author.toLowerCase() }));
+const _games = getGalleryGames().map(game => ({ ...game, title: game.title.trim(), lowerCaseTitle: game.title.toLowerCase(), lowerCaseAuthor: game.author.toLowerCase() }));
 const games = _games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn))
 		.slice(0, 10)
 		.map(game => ({ ...game, isNew: true }) as GameMetadata) // put newest games first
