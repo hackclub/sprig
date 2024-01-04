@@ -5,6 +5,7 @@ export interface GameMetadata {
 	title: string
 	smallTitle: string
 	author: string
+	smallAuthor: string
 	img: string
 	tags: string[]
 	addedOn: string
