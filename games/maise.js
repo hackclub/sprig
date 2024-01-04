@@ -1,6 +1,10 @@
 /*
 @title: Maise 
 @author: UrMma
+@addedOn: 2023-07-24
+@img: ""
+@tags: []
+
 Instructions:
 1. Use WASD keys to navigate around mases to reach the PR pad.
 2. Stay away from fires otherwise you shall get burnt and the level will restart
