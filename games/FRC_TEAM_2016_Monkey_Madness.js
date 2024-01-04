@@ -1,4 +1,13 @@
-//By Puppybro11991 aka ANYB0DYTH3R3
+
+/* 
+@title: FRC_TEAM_2016_Monkey_Madness
+@author: Hunter
+@tags: ['dodge']
+@img: ""
+@addedOn: 2023-04-30
+*/
+
+    //By Puppybro11991 aka ANYB0DYTH3R3
 const player = "p"
 const laser = "l"
 const crash1 = "1"

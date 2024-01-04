@@ -1,6 +1,9 @@
 /*
 
 @title: Friendly Figures
+@tags: ['sokoban-style', 'multiplayer']
+@img: ""
+@addedOn: 2022-12-28
 @author: Ali A. Saleh | January 2023
 
 ---

@@ -1,5 +1,8 @@
 /*
 @title: Breakout
+@tags: ['classic']
+@img: ""
+@addedOn: 2022-09-28
 @author: Holly
 */
 

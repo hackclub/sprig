@@ -1,5 +1,8 @@
 /*
 @title: Learn Morse
+@tags: []
+@img: ""
+@addedOn: 2023-10-15
 @author: Ashen Chathuranga
 */
 

@@ -1,4 +1,13 @@
-const player = "p";
+
+/* 
+@title: move_the_rocks
+@author: playfun24
+@tags: ['logic']
+@img: ""
+@addedOn: 2023-12-21
+*/
+
+    const player = "p";
 const wall = "w";
 const gold = "g";
 const trap = "t";

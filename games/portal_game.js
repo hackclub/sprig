@@ -1,5 +1,8 @@
 /*
 @title: portal_game
+@tags: ['logic']
+@img: ""
+@addedOn: 2023-05-05
 @author: DanPlayz (danplayz0)
 @remixed: getting_started by leo
 

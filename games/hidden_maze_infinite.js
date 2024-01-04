@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: hidden_maze_infinite
+@author: Rylan Berry
+@tags: ['endless']
+@img: ""
+@addedOn: 2023-05-12
+*/
+
+    /*
 Welcome to Hidden Maze Infinite (or Hidden Maze 2 if you will), the 2nd game in the planned trilogoy of my Hidden Maze games here one sprig, 
 I would recomend playing the 1st game, its a short introductory for what is to come.
 Controls are the same WASD, don't bother with worrying about getting to the end in this one, there is none, 

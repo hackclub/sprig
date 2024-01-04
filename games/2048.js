@@ -1,5 +1,8 @@
 /*
 @title: 2048
+@tags: ['classic']
+@img: ""
+@addedOn: 2022-09-16
 @author: linkai101
 */
 

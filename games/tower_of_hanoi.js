@@ -1,5 +1,8 @@
 /*
 @title: tower_of_hanoi
+@tags: ['classic']
+@img: ""
+@addedOn: 2022-10-02
 @author: nicholasz2510
 */
 

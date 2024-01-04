@@ -1,4 +1,13 @@
-//I have 5 cats and 2 dogs//
+
+/* 
+@title: Pet_the_Cat
+@author: Nathan Jereb
+@tags: []
+@img: ""
+@addedOn: 2023-05-08
+*/
+
+    //I have 5 cats and 2 dogs//
 
 const player = "p"
 const exstend = "e"

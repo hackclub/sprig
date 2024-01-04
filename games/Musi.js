@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Musi
+@author: levi - blockish
+@tags: ['memory']
+@img: ""
+@addedOn: 2023-10-25
+*/
+
+    /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */

@@ -1,5 +1,8 @@
 /*
 @title: shoot_green_blobs
+@tags: ['classic']
+@img: ""
+@addedOn: 2022-09-07
 @author: otterly-otter
 
 */

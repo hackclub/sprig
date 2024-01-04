@@ -1,5 +1,8 @@
 /*
 @title: 15 puzzle
+@tags: ['advanced']
+@img: ""
+@addedOn: 2022-07-18
 @author: maggie
 
 INSTRUCTIONS:

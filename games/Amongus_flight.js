@@ -1,5 +1,8 @@
 /*
 @title: Amongus flight
+@tags: ['endless']
+@img: ""
+@addedOn: 2023-01-04
 @author: Yashas
 */
 

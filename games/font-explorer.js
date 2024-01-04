@@ -1,5 +1,8 @@
 /*
     @title: Font Explorer
+@tags: ['tool']
+@img: font-explorer
+@addedOn: 2023-01-04
     @author: Shane Celis
              @shanecelis
 */

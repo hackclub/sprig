@@ -1,5 +1,8 @@
 /*
 @title: Desi-Pong
+@tags: ['classic']
+@img: ""
+@addedOn: 2022-09-14
 @author: Arnob Das
 */
 
