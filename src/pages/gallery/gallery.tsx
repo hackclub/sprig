@@ -24,8 +24,8 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 	useEffect(() => {
 		const lowerCaseQuery = filter.query.toLowerCase();
 		const _games = games.filter(
-				game => game.title.toLowerCase().includes(lowerCaseQuery) || 
-				game.author.toLowerCase().includes(lowerCaseQuery)
+				game => game.smallTitle.includes(lowerCaseQuery) || 
+				game.smallAuthor.includes(lowerCaseQuery)
 			) // filter by query
 			.filter(game => { // filter by tags
 				for (const tag of filter.tags) {
