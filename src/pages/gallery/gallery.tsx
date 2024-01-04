@@ -158,7 +158,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 							}}>
 								<option value="">Sort by...</option>
 								<option value="CHRONOLOGICAL">Release date</option>
-								<option value="TUTORIALS_AND_CHRONOLOGICAL">Tutorials + Release date</option>
+								<option value="TUTORIALS_AND_CHRONOLOGICAL">Default</option>
 								<option value="ASCENDING">A-Z</option>
 								<option value="DESCENDING">Z-A</option>
 							</select>
