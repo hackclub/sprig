@@ -44,13 +44,13 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 				.slice(0, 10)
 				.forEach(game => (game.isNew = true));
 		}
-		if (order === SortOrder.ASCENDING) _games.sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1);
-		if (order === SortOrder.DESCENDING) _games.sort((a, b) => b.title.toLowerCase() > a.title.toLowerCase() ? 1 : -1);
+		if (order === SortOrder.ASCENDING) _games.sort((a, b) => a.smallTitle > b.smallTitle ? 1 : -1);
+		if (order === SortOrder.DESCENDING) _games.sort((a, b) => b.smallTitle > a.smallTitle ? 1 : -1);
 
 		// put tutorials first
 		_games.sort((a, _) => a.tags.includes("tutorial") ? -1 : 1)
 		return _games;
-	}
+	}	
 
 	useEffect(() => {
 		interface GameCard {
@@ -131,19 +131,15 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 
 						<div class="select">
 							<select 
-							value={filter.sort}
+							value={SortOrder[filter.sort]}
 							onChange={(event) => {
-								const orderFromString = (str: string): SortOrder => {
-									if (str === "ascending") return SortOrder.ASCENDING;
-									if (str === "descending") return SortOrder.DESCENDING;
-									return SortOrder.CHRONOLOGICAL;
-								}
-								setFilter(_filter => ({ ..._filter, sort: orderFromString((event.target! as HTMLSelectElement).value!) }));
+								console.log(" filter -> ", SortOrder[(event.target! as HTMLSelectElement).value! as keyof typeof SortOrder]);
+								setFilter(_filter => ({ ..._filter, sort: SortOrder[(event.target! as HTMLSelectElement).value! as keyof typeof SortOrder] }));
 							}}>
 								<option value="">Sort by...</option>
-								<option value="chronological">Release date</option>
-								<option value="ascending">A-Z</option>
-								<option value="descending">Z-A</option>
+								<option value="CHRONOLOGICAL">Release date</option>
+								<option value="ASCENDING">A-Z</option>
+								<option value="DESCENDING">Z-A</option>
 							</select>
 
 							<IoCaretDown aria-hidden="true" />
