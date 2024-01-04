@@ -3,6 +3,7 @@ import metadata from '../../../games/metadata.json'
 export interface GameMetadata {
 	filename: string
 	title: string
+	smallTitle: string
 	author: string
 	img: string
 	tags: string[]
