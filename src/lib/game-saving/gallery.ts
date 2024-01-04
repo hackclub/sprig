@@ -3,9 +3,9 @@ import metadata from '../../../games/metadata.json'
 export interface GameMetadata {
 	filename: string
 	title: string
-	smallTitle: string
+	lowerCaseTitle: string
 	author: string
-	smallAuthor: string
+	lowerCaseAuthor: string
 	img: string
 	tags: string[]
 	addedOn: string

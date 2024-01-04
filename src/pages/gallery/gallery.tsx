@@ -24,8 +24,8 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 	useEffect(() => {
 		const lowerCaseQuery = filter.query.toLowerCase();
 		const _games = games.filter(
-				game => game.smallTitle.includes(lowerCaseQuery) || 
-				game.smallAuthor.includes(lowerCaseQuery)
+				game => game.lowerCaseTitle.includes(lowerCaseQuery) || 
+				game.lowerCaseAuthor.includes(lowerCaseQuery)
 			) // filter by query
 			.filter(game => { // filter by tags
 				for (const tag of filter.tags) {
@@ -42,8 +42,8 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 		if (order === SortOrder.CHRONOLOGICAL) {
 			_games =  _games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn));
 		}
-		if (order === SortOrder.ASCENDING) _games.sort((a, b) => a.smallTitle > b.smallTitle ? 1 : -1);
-		if (order === SortOrder.DESCENDING) _games.sort((a, b) => b.smallTitle > a.smallTitle ? 1 : -1);
+		if (order === SortOrder.ASCENDING) _games.sort((a, b) => a.lowerCaseTitle > b.lowerCaseTitle ? 1 : -1);
+		if (order === SortOrder.DESCENDING) _games.sort((a, b) => b.lowerCaseTitle > a.lowerCaseTitle ? 1 : -1);
 
 		// put tutorials first
 		_games.sort((a, _) => a.tags.includes("tutorial") ? -1 : 1)
