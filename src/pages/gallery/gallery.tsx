@@ -7,6 +7,7 @@ import { IoCaretDown, IoSearch } from "react-icons/io5";
 import "./gallery.css";
 
 enum SortOrder {
+	TUTORIALS_AND_CHRONOLOGICAL,
 	CHRONOLOGICAL,
 	ASCENDING,
 	DESCENDING
@@ -19,7 +20,7 @@ type Filter = {
 };
 export default function Gallery({ games, tags }: { games: GameMetadata[], tags: string[] }) {
 	const [gamesState, setGamesState] = useState<GalleryGameMetadata[]>([]);
-	const [filter, setFilter] = useState<Filter>({query: "", sort: SortOrder.CHRONOLOGICAL, tags: [] })
+	const [filter, setFilter] = useState<Filter>({query: "", sort: SortOrder.TUTORIALS_AND_CHRONOLOGICAL, tags: [] })
 
 	useEffect(() => {
 		const lowerCaseQuery = filter.query.toLowerCase();
@@ -38,19 +39,40 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 	}, [filter]);
 
 	function sortGames(games: GameMetadata[], order: SortOrder): GameMetadata[] {
-		let _games = [...games];
-		if (order === SortOrder.CHRONOLOGICAL) {
-			_games =  _games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn));
-		}
-		if (order === SortOrder.ASCENDING) _games.sort((a, b) => a.lowerCaseTitle > b.lowerCaseTitle ? 1 : -1);
-		if (order === SortOrder.DESCENDING) _games.sort((a, b) => b.lowerCaseTitle > a.lowerCaseTitle ? 1 : -1);
 
-		// put tutorials first
-		_games.sort((a, _) => a.tags.includes("tutorial") ? -1 : 1)
+		// mark the newest games first
+		let _games = games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn))
+			.slice(0, 10)
+			.map(game => ({ ...game, isNew: true }) as GameMetadata)
+			.concat(games.slice(10));
+
+		switch (order) {
+			case SortOrder.CHRONOLOGICAL: {
+				 _games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn));
+				break;	
+			}
+			case SortOrder.TUTORIALS_AND_CHRONOLOGICAL: {
+				_games =  _games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn));
+
+				// put tutorials first
+				_games.sort((a, _) => a.tags.includes("tutorial") ? -1 : 1);
+				break;
+			}
+			case SortOrder.ASCENDING: {
+				_games.sort((a, b) => a.lowerCaseTitle > b.lowerCaseTitle ? 1 : -1);
+				break;
+			}
+			case SortOrder.DESCENDING: {
+				_games.sort((a, b) => b.lowerCaseTitle > a.lowerCaseTitle ? 1 : -1);
+				break;
+			}
+		}
 		return _games;
 	}	
 
 	useEffect(() => {
+		sortGames(gamesState, SortOrder.TUTORIALS_AND_CHRONOLOGICAL);
+
 		interface GameCard {
 			element: HTMLLIElement;
 			filename: string;
@@ -136,6 +158,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 							}}>
 								<option value="">Sort by...</option>
 								<option value="CHRONOLOGICAL">Release date</option>
+								<option value="TUTORIALS_AND_CHRONOLOGICAL">Tutorials + Release date</option>
 								<option value="ASCENDING">A-Z</option>
 								<option value="DESCENDING">Z-A</option>
 							</select>
