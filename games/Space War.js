@@ -270,7 +270,7 @@ function checkELCollision() {
       playTune(levelUpSFX)
       playTune(levelUpSFX)
       enemySpeed -= 50
-      if (score >= 0 && score % 10 == 0) {
+      if (score >= 0 && score % 20 == 0) {
         enemyDelay -= 50
       }
     }
