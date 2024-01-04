@@ -38,11 +38,9 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 	}, [filter]);
 
 	function sortGames(games: GameMetadata[], order: SortOrder): GameMetadata[] {
-		const _games = [...games];
+		let _games = [...games];
 		if (order === SortOrder.CHRONOLOGICAL) {
-			_games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn))
-				.slice(0, 10)
-				.forEach(game => (game.isNew = true));
+			_games =  _games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn));
 		}
 		if (order === SortOrder.ASCENDING) _games.sort((a, b) => a.smallTitle > b.smallTitle ? 1 : -1);
 		if (order === SortOrder.DESCENDING) _games.sort((a, b) => b.smallTitle > a.smallTitle ? 1 : -1);
