@@ -2,19 +2,60 @@
 @title English Checkers
 @author Oakchris1955
 
-Instructions:
+This is a port of the english variant of the popular game, checkers, also known as draughts
+The rules can be found here: https://en.wikipedia.org/wiki/English_draughts#Rules
 
-Press WASD to move the selection on another dark square
 
-Press J on one of your own pieces to select it and show available moves (cyan squares), 
-Press J on one of the available moves to move your piece there and let the next player play
-Press J on the selected piece to unselect it
+Instructions: 
 
-Press I when the game is over to play another match
+Moving the selection sprite:
 
-Press K to reset the board an an already-running game (5 seconds timeout). Press L to cancel the timeout
+Move the selection sprite by pressing the WASD keys.
 
-Note: you may see some orange squares. Those indicate mandatory jumps. If multiple are present, the player can select which of them to play. When mandatory jumps are present, only those moves can be played
+
+Moving a piece:
+
+When the selection sprite is on the same tile with the piece which you wanna move, press the J key to select that piece (pressing the J key a second time unselects that piece).
+
+Upon selecting a piece, one of two things may happen:
+    1) Nothing will occur either because the selected piece has no available moves, because it isn't a friendly piece or because there are other friendly pieces with mandatory jumps (see below).
+       In either case, the current player should select another friendly piece
+    2) If none of the above apply, the piece on the same tile with the selection sprite will be selected.
+       The background of the tile the piece is in will be painted dark gold.
+       One or more black squares adjacent to the selected piece will be painted cyan. Those indicate available moves
+       The player must then move the selection sprite to one of those squares.
+       Pressing J moves the piece to the selected square, passing the turn to the next player.
+
+
+Mandatory jumps:
+
+If a player has the option to jump, they must do so. They cannot make any other moves that don't involve jumping or select pieces that don't have such moves.
+
+If the current player's pieces have the opportunity to perform a jump, the square which they occupy will be highlighted in orange.
+
+
+Kings:
+
+When a piece reaches the end of the board (that is, a black piece reaches the rightmost column or a white piece reaches the leftmost column),
+it is crowned a king. Unlike normal pieces, kings can move (and jump) in both directions
+
+
+Winning the game:
+
+In order to end the game, a player must either lose all their pieces or have no available moves to make. When that happens, the opponent wins
+
+
+Resetting the board:
+
+Upon winning the game, the board will automatically reset. If, however, for any other reason, the players want to reset the board mid-game,
+all they have to do is simply press the K key. This will start a 5-second countdown until the board is reset which can be cancelled by pressing the L key.
+
+
+Note on multiple jumps:
+
+In most english checkers games, multiple jumps are possible. I chose to leave this feature out since I think it gives each player performing multiple jumps an unfair advantage.
+Furthermore, I have tested this game extensively and during that testing period, I saw no piece configuration that could result in a multiple jump.
+
 */
 
 const whiteRegular = "w";
