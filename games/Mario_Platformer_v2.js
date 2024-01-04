@@ -1,5 +1,8 @@
 /*
 @title: Mario Platformer
+@tags: []
+@img: ""
+@addedOn: 2023-10-20
 @author: Jackson Flanders
 */
 

@@ -1,4 +1,13 @@
-var Previous = 1;
+
+/* 
+@title: Among_The_Stars
+@author: VanGo
+@tags: ['endless']
+@img: ""
+@addedOn: 2023-04-11
+*/
+
+    var Previous = 1;
 var Player = 1;
 var PlayerMoveSpeed = 3;
 var PlayerX = 40;

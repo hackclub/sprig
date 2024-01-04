@@ -1,5 +1,8 @@
 /*
 @title: spider_home
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2023-10-09
 @author: usermaatre setepenre
 */
 

@@ -1,5 +1,8 @@
 /*
 @title: Operation_Ocean
+@tags: ['strategy']
+@img: ""
+@addedOn: 2023-05-23
 @author: ari-tistic
 
 Keys:

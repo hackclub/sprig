@@ -1,4 +1,13 @@
-const player = "p";
+
+/* 
+@title: Golem-Rush
+@author: Spllit1
+@tags: ['dodge']
+@img: ""
+@addedOn: 2023-05-22
+*/
+
+    const player = "p";
 const obstacle = "o";
 let game = tune`
 153.0612244897959,

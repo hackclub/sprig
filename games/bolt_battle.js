@@ -1,5 +1,8 @@
 /*
 @title: Bolt Battle
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2022-10-10
 @author: Arnav Ambre
 
 INSTRUCTIONS:

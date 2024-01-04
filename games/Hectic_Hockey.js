@@ -1,5 +1,8 @@
 /*
 @title: Hectic Hockey
+@tags: ['dodge']
+@img: ""
+@addedOn: 2022-10-12
 @author: Colton
 
 Instructions:

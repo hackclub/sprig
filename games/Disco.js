@@ -1,5 +1,8 @@
 /*
 @title: disco
+@tags: []
+@img: ""
+@addedOn: 2023-03-05
 @author: rakshit rangaprasad
 
 How to Play:

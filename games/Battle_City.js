@@ -1,5 +1,8 @@
 /*
 @title: Battle_City
+@tags: []
+@img: ""
+@addedOn: 2023-01-09
 @author: DevIos
 */
 const player = "p";

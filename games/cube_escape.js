@@ -1,5 +1,8 @@
 /*
 @title: cube_escape
+@tags: ['logic']
+@img: cube_escape
+@addedOn: 2023-01-07
 @author: marios_mitsios
 */
 

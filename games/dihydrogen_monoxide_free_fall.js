@@ -1,5 +1,8 @@
 /*
 @title: dihydrogen_monoxide_free_fall
+@tags: ['endless']
+@img: ""
+@addedOn: 2022-11-06
 @author: aksel s.
 */
 

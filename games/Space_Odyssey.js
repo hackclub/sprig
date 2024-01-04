@@ -1,4 +1,13 @@
-const player = "p";
+
+/* 
+@title: Space_Odyssey
+@author: Devon S
+@tags: ['dodge']
+@img: ""
+@addedOn: 2023-11-27
+*/
+
+    const player = "p";
 const bottom = "b";
 const top = "t";
 const asteroid = "a";

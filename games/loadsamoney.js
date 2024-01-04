@@ -1,6 +1,9 @@
 
 /*
 @title: loadsamoney
+@tags: ['simulation', 'endless']
+@img: ""
+@addedOn: 2022-11-28
 @author: geschmit
 
 probaly.

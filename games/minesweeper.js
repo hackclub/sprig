@@ -1,5 +1,8 @@
 /*
 @title: minesweeper
+@tags: ['classic']
+@img: ""
+@addedOn: 2022-08-29
 @author: sam liu
 
 Your typical Minesweeper game

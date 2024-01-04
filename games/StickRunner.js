@@ -1,4 +1,13 @@
-const player = "p";
+
+/* 
+@title: StickRunner
+@author: Shahzeb Wali
+@tags: ['logic']
+@img: ""
+@addedOn: 2023-12-10
+*/
+
+    const player = "p";
 const treeShort = "s";
 const treeTall1 = "t";
 const treeTall2 = "u";

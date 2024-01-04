@@ -1,5 +1,8 @@
 /*
 @title: aMAZE
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2023-01-08
 @author: anabia
 */
 const player = "p";

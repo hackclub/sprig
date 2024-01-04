@@ -1,4 +1,13 @@
-const player = "p";
+
+/* 
+@title: collectcandy
+@author: James C
+@tags: ['catch']
+@img: ""
+@addedOn: 2023-11-04
+*/
+
+    const player = "p";
 const obstacle = "o";
 const score = "s";
 const wall = "w";

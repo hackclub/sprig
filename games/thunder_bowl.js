@@ -1,4 +1,13 @@
 
+/* 
+@title: thunder_bowl
+@author: Alex
+@tags: []
+@img: ""
+@addedOn: 2023-08-03
+*/
+
+    
 
 
 const player = "p";
