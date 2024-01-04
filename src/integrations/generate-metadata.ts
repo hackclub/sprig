@@ -43,18 +43,15 @@ const setup = () => {
 
 				metadata.push(metaEntry);
 				console.log(" OK!");
-
-				process.stdout.write("[METADATA] Writing metadata file...");
-				fs.writeFileSync(
-					"./games/metadata.json",
-					JSON.stringify(metadata)
-				);
-				console.log(" OK!");
 			} else {
 				console.log(" ERR!");
 				throw Error("A game metadata field is undefined!");
 			}
 		});
+
+		process.stdout.write("[METADATA] Writing metadata file...");
+		fs.writeFileSync("./games/metadata.json", JSON.stringify(metadata));
+		console.log(" OK!");
 	};
 
 	return integration;
