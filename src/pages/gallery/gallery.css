@@ -163,3 +163,15 @@ p {
 	margin-top: 2px;
 	font-size: 0.9rem;
 }
+
+.filter-tags {
+	margin: 1em 0;
+}
+
+.tag-span {
+	margin: 0 5px 0 0;
+	padding: 2px 4px;
+	background-color: grey;
+	color: white;
+	cursor: pointer;
+}
