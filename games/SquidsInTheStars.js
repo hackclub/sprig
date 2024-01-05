@@ -187,7 +187,7 @@ function ScreenShake() {
   },50)
 }
 function Touching(First, Second) {
-  if (First.x == Second.x && First.y == Second.y) {return true;}
+  if (InGame && First.x == Second.x && First.y == Second.y) {return true;}
   return false;
 }
 
