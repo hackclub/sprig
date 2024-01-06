@@ -10,7 +10,7 @@ const { content } = Astro.props;
         height: 50px;
         width: 50px;
     }
-    .copy {
+    /* .copy {
         background-color: #23262F;
         border-radius: 30%;
         border-color: #43454E;
@@ -20,27 +20,29 @@ const { content } = Astro.props;
     }
     .copy:hover {
         background-color: #43454E;
-    }
+    } */
     .code {
         background-color: #23262F;
         color: #b3b3b3;
+        padding: 5px;
     }
     .codeblock {
-        width: 50%;
+        width: 70%;
     }
-    .functions {
+    /* .functions {
         background-color: #23262F;
         color: #b3b3b3;
         height: 75px;
-    }
-</style>
-
-<div class="codeblock">
+    } 
+    
     <div class="functions">
         <div class="copy">
             <img src="https://cloud-5pvvul7n8-hack-club-bot.vercel.app/0icons8-copy-96.png" alt="">
         </div>
-    </div>
+    </div> */
+</style>
+
+<div class="codeblock">
     <div class="code">
         <p>{content}</p>
     </div>
