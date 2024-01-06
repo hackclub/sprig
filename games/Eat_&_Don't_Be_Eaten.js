@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Eat_&_Don't_Be_Eaten
+@author: Nathan Man
+@tags: ['catch']
+@img: ""
+@addedOn: 2023-08-30
+*/
+
+    /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */

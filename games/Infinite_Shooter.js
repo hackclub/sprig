@@ -1,5 +1,8 @@
 /*
 @title: Infinite Shooter
+@tags: ['endless']
+@img: ""
+@addedOn: 2022-11-05
 @author: not_a_robot
 
 Bad guys drop from the top, shoot them to get points. The faster they are, the

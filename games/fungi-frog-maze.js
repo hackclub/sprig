@@ -1,5 +1,8 @@
 /*
 @title: fungi-frog-maze
+@tags: ['logic']
+@img: ""
+@addedOn: 2023-05-13
 @author: @jzaleta
 
 ◕ ◡ ◕ っ

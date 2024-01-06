@@ -1,4 +1,13 @@
-//my insperation is space invaders//
+
+/* 
+@title: Antivirus
+@author: Nathan Jereb
+@tags: ['dodge']
+@img: ""
+@addedOn: 2023-05-03
+*/
+
+    //my insperation is space invaders//
 
 const background = "b"
 const player = "p"

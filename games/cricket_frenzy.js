@@ -1,5 +1,8 @@
 /*
 @title: cricket_frenzy
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2022-12-10
 @author: aryan.k
 */
 const player = "p";

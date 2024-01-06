@@ -1,5 +1,8 @@
 /*
 @title: LUCK
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2022-09-28
 @author: Ethan
 */
 

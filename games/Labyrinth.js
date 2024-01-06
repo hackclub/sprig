@@ -1,5 +1,8 @@
 /*
 @title: Labyrinth
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2023-02-12
 @author: DorukSarpAlwaysStrikesBack!
 */
 

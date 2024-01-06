@@ -1,5 +1,8 @@
 /*
 @title: sprigle
+@tags: ['classic', 'advanced']
+@img: ""
+@addedOn: 2022-11-19
 @author: jedgrei
 */
 

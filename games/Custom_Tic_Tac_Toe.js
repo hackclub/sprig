@@ -1,5 +1,8 @@
 /*
 @title: Custom Tic Tac Toe
+@tags: ['multiplayer']
+@img: ""
+@addedOn: 2023-10-30
 @author: Cael Ganem
 
 Controls:

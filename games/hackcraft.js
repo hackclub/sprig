@@ -1,5 +1,8 @@
 /*
 @title: hack_craft
+@tags: ['classic', 'simulation']
+@img: hackcraft
+@addedOn: 2022-12-22
 @author: khushraj
 
 Instructions:

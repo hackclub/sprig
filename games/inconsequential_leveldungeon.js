@@ -1,5 +1,8 @@
 /*
 @title: inconsequential leveldungeon
+@tags: ['dungeon']
+@img: ""
+@addedOn: 2022-11-06
 @author: periwinkle
 */
 const playerL = "l";

@@ -1,4 +1,13 @@
-// A "hit-the-target" game for Sprig
+
+/* 
+@title: Dynamic_Adventure
+@author: Alexis Martel
+@tags: []
+@img: ""
+@addedOn: 2023-08-18
+*/
+
+    // A "hit-the-target" game for Sprig
 // By Alexis Martel, 2023
 
 let gameWon = false;

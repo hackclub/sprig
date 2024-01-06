@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Meteor_Dodge
+@author: Kritav
+@tags: ['endless']
+@img: ""
+@addedOn: 2023-04-27
+*/
+
+    /*
 * Meteor Dodge
 * wasd to move
 * don't hit the meteors

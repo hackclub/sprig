@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Dragon-Rush
+@author: Xhaiden, Aaron, and Brenden
+@tags: ['WIP']
+@img: ""
+@addedOn: 2023-07-18
+*/
+
+    /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */

@@ -1,5 +1,8 @@
 /*
 @title: bannai-snake
+@tags: ['thematic-puzzle']
+@img: ""
+@addedOn: 2023-02-13
 @author: aagrim hoysal
 */
 

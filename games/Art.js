@@ -1,5 +1,8 @@
 /*
 @title: Art
+@tags: ['sandbox']
+@img: ""
+@addedOn: 2022-11-06
 @author: Leonard (Omay)
 
 Inspired by this game: https://editor.sprig.hackclub.com/?file=https://raw.githubusercontent.com/hackclub/sprig/main/games/Paint_IT.js

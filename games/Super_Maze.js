@@ -1,5 +1,8 @@
 /*
 @title: Super Maze
+@tags: ['strategy']
+@img: ""
+@addedOn: 2023-02-08
 @author: the_knights_of_rohan
 
 Use wasd to move and get to the present. Try to figure out what the special tiles do!

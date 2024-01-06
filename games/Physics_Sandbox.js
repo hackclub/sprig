@@ -1,5 +1,8 @@
 /*
 @title: Physics Sandbox
+@tags: ['simulation']
+@img: ""
+@addedOn: 2023-03-27
 @author: Henry Bass
 
 Controls:

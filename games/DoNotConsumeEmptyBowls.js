@@ -1,4 +1,13 @@
-const player = "p";
+
+/* 
+@title:  Do Not Consume Empty Bowls
+@author: se1yu
+@tags: ['']
+@img: ""
+@addedOn: 2023-12-19
+*/
+
+    const player = "p";
 const obstacle = "o";
 const sushi2 = "s";
 const rainbow = "r";

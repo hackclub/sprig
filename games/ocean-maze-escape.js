@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: ocean-maze-escape
+@author: michael barrera
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2023-10-13
+*/
+
+    /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */

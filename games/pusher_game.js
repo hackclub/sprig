@@ -1,5 +1,8 @@
 /*
 @title: Pusher game
+@tags: ['strategy']
+@img: ""
+@addedOn: 2023-02-08
 @author: liam
 */
 

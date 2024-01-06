@@ -1,4 +1,13 @@
-// ==lib==
+
+/* 
+@title: really_really_bad_music_maker
+@author: Shav (secondary-smiles)
+@tags: ['music']
+@img: ""
+@addedOn: 2023-06-23
+*/
+
+    // ==lib==
 const wholeNotes = ["C", "D", "E", "F", "G", "A", "B"];
 const allNotes =  ["C", "C#", "D", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 

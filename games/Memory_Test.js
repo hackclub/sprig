@@ -1,5 +1,8 @@
 /*
 @title: Memory_Test
+@tags: ['memory']
+@img: ""
+@addedOn: 2023-03-03
 @author: Albert_M
 A simple memory test. 
 Use WASD to move and L to click the tiles that light up. 

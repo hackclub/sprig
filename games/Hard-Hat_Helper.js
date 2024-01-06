@@ -1,4 +1,13 @@
-//based on Mario vs. Donkey Kong: Mini-Land Mayhem! for the 3DS
+
+/* 
+@title: Hard-Hat_Helper
+@author: Nathan Jereb
+@tags: ['']
+@img: ""
+@addedOn: 2023-12-21
+*/
+
+    //based on Mario vs. Donkey Kong: Mini-Land Mayhem! for the 3DS
 
 const playerR = "r"
 const playerL = "l"

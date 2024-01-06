@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: The_Legend_Of_Sprig
+@author: Medieval Apple
+@tags: ['advanced']
+@img: ""
+@addedOn: 2023-10-15
+*/
+
+    /*
 Welcome to The Legend Of Sprig!
 
 Long ago there was a treasure hunter named Sprig 

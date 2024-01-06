@@ -1,5 +1,8 @@
 /*
 @title: wet-sand
+@tags: ['simulation']
+@img: ""
+@addedOn: 2023-02-20
 @author: mint
 */
 

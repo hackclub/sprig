@@ -1,5 +1,8 @@
 /*
 @title: Number_Nudger
+@tags: ['strategy']
+@img: ""
+@addedOn: 2023-01-02
 @author: Boon
 
 Instructions:

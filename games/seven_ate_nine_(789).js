@@ -1,5 +1,8 @@
 /*
 @title: Seven Ate Nine (789)
+@tags: ['multiplayer']
+@img: ""
+@addedOn: 2022-09-12
 @author: Arjun V
 
 

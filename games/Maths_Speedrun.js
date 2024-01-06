@@ -1,4 +1,13 @@
+
 /* 
+@title: Maths_Speedrun
+@author: Anshuman M.
+@tags: ['logic']
+@img: ""
+@addedOn: 2023-05-17
+*/
+
+    /* 
   @title Maths Speedrun
   @author Anshuman M.
   Controls : A for Addition

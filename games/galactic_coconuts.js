@@ -1,5 +1,8 @@
 /*
 @title: Galactic Coconuts
+@tags: ['dodge']
+@img: ""
+@addedOn: 2023-10-30
 @author: kcoderhtml (@kieran on slack)
 Keys: 
 - J to fire

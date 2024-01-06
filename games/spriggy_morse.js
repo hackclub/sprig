@@ -1,5 +1,8 @@
 /*
 @title: spriggy_morse
+@tags: []
+@img: ""
+@addedOn: 2023-01-29
 @author: Srishti Pandey
 */
 

@@ -1,5 +1,8 @@
 /*
 @title: skyrace
+@tags: ['multiplayer']
+@img: ""
+@addedOn: 2023-07-16
 @author: Shourya Pandey
 
 About game :- 

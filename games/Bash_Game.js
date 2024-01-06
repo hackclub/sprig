@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Bash_Game
+@author: WelchJ
+@tags: ['choice']
+@img: ""
+@addedOn: 2023-04-28
+*/
+
+    /*
 Developer: WelchJ
 :D
 
