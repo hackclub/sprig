@@ -1,6 +1,7 @@
 ---
 import '../../../global.css'
 import Categories from '../../../layouts/categories.astro'
+import Code from '../../../components/spriki-components/Code.astro'
 
 const data = (
   (await Astro.glob(`/src/translations/*.json`)).find(
@@ -14,14 +15,11 @@ const data = (
 <p>If you want to work on the engine and test out your changes in the context of this repo, you'll want to use a feature called linking.</p>
 <p>First set up the engine repo:</p>
 
-<code>git clone https://github.com/hackclub/sprig-engine/</code>
-<code>cd sprig-engine</code>
-<code>yarn install</code>
-<code>yarn link</code>
+<Code content="git clone https://github.com/hackclub/sprig-engine/ <br /> cd sprig-engine <br /> yarn install <br /> yarn link" />
     
 <p>Then, in this website's repo:</p>
 
-<code>yarn link sprig</code>
+<Code content="yarn link sprig" />
 
 <p>Now, run <code>yarn dev</code> in the engine repo to start the TypeScript build process.</p>
 </Categories>

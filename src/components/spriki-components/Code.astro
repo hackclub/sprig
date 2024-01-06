@@ -44,6 +44,6 @@ const { content } = Astro.props;
 
 <div class="codeblock">
     <div class="code">
-        <p>{content}</p>
+        <p set:html={content}/>
     </div>
 </div>

@@ -152,3 +152,9 @@ table, th, td {
 	align-items: center;
 	justify-content: center;
 }
+
+code {
+	background-color: #23262F;
+    color: #b3b3b3;
+	padding: 3px;
+}
