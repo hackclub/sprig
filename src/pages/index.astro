@@ -1,13 +1,13 @@
 ---
-import Card from '../legacy/homepage-card.svelte'
-import Navbar from '../components/navbar-main'
-import StandardHead from '../components/standard-head.astro'
-import '../global.css'
-import '../legacy/homepage.scss'
-import { firestore, getSession } from '../lib/game-saving/account'
-import { getConsolesRemaining } from '../lib/remaining-consoles'
+import Card from '../legacy/homepage-card.svelte';
+import Navbar from '../components/navbar-main';
+import StandardHead from '../components/standard-head.astro';
+import '../global.css';
+import '../legacy/homepage.scss';
+import { firestore, getSession } from '../lib/game-saving/account';
+import { getConsolesRemaining } from '../lib/remaining-consoles';
 
-const remainingConsoles = await getConsolesRemaining()
+const remainingConsoles = await getConsolesRemaining();
 
 const stories = [
 	{ id: 'sprig-front', width: 800, height: 602 },
@@ -16,17 +16,18 @@ const stories = [
 	{ id: 'develop', width: 800, height: 450 },
 	{ id: 'orpheus', width: 800, height: 602 },
 	{ id: 'learn', width: 800, height: 602 },
-]
+];
 
-const session = await getSession(Astro.cookies)
+const session = await getSession(Astro.cookies);
 
-let gameCount = 0
+let gameCount = 0;
 if (session && session.session.full) {
-	const res = await firestore.collection('games')
+	const res = await firestore
+		.collection('games')
 		.where('ownerId', '==', session.user.id)
 		.count()
-		.get()
-	gameCount = res.data().count
+		.get();
+	gameCount = res.data().count;
 }
 ---
 
@@ -36,38 +37,56 @@ if (session && session.session.full) {
 		<title>Sprig</title>
 	</head>
 	<body>
-		
 		<Navbar transparent goldLogo session={session} />
 
 		<div class='magic' id='m'>
-			<img src='/preview.webp' alt='A 3D rendering of the Sprig device.' id='preview' />
+			<img
+				src='/preview.webp'
+				alt='A 3D rendering of the Sprig device.'
+				id='preview'
+			/>
 		</div>
 
 		<section class='fullpage wrapper'>
 			<div class='container'>
+			<img src='/logo.png' class='title'/>
 				<div class='slot magic-container'>
-					<div class='magic' id='m-start' />
+					<div class='magic' id='m-start'></div>
 				</div>
-				<div class='text'>
-					<h1>The game console where every player is a creator.</h1>
-					<p>
-						Draw, make music, and craft games in our web-based editor. Build an original game and we'll ship you a Sprig
-						kit!
-					</p>
-
-					{(session && session.session.full)
-						? gameCount === 0
-							? <a href='/~/new'><button class='btn active'>Get started &raquo;</button></a>
-							: <a href='/~'><button class='btn active'>Your games &raquo;</button></a>
-						: <a href='/editor'><button class='btn active'>{session ? 'Open editor' : 'Get started'} &raquo;</button></a>}
-				</div>
+			</div>
+			<div class='text'>
+				<h1>Make a game, get a free console</h1>
+				{
+					session && session.session.full ? (
+						gameCount === 0 ? (
+							<a href='/~/new'>
+								<button class='btn active'>
+									Get started &raquo;
+								</button>
+							</a>
+						) : (
+							<a href='/~'>
+								<button class='btn active'>
+									Your games &raquo;
+								</button>
+							</a>
+						)
+					) : (
+						<a href='/editor'>
+							<button class='btn active'>
+								{session ? 'Open editor' : 'Get started'}{' '}
+								&raquo;
+							</button>
+						</a>
+					)
+				}
 			</div>
 		</section>
 
 		<section class='specs-split-wrapper wrapper'>
 			<div class='specs-split-container'>
 				<div class='specs-split-slot magic-container'>
-					<div class='magic' id='m-stop' />
+					<div class='magic' id='m-stop'></div>
 				</div>
 
 				<div class='specs'>
@@ -95,28 +114,40 @@ if (session && session.session.full) {
 							</div>
 						</article>
 						<article>
-							<img src='/icons/controls.png' alt='Controls icon' />
+							<img
+								src='/icons/controls.png'
+								alt='Controls icon'
+							/>
 							<div>
 								<h3>Controls</h3>
 								<p>8 buttons (2 D-pads)</p>
 							</div>
 						</article>
 						<article>
-							<img src='/icons/processor.png' alt='Processor icon' />
+							<img
+								src='/icons/processor.png'
+								alt='Processor icon'
+							/>
 							<div>
 								<h3>Processor &ndash; RP2040</h3>
 								<p>2-core, 133 MHz MCU</p>
 							</div>
 						</article>
 						<article>
-							<img src='/icons/dimensions.png' alt='Dimensions icon' />
+							<img
+								src='/icons/dimensions.png'
+								alt='Dimensions icon'
+							/>
 							<div>
 								<h3>Dimensions</h3>
 								<p>140&times64&times28 mm</p>
 							</div>
 						</article>
 						<article>
-							<img src='/icons/language.png' alt='Language icon' />
+							<img
+								src='/icons/language.png'
+								alt='Language icon'
+							/>
 							<div>
 								<h3>Language</h3>
 								<p>JavaScript (JerryScript)</p>
@@ -132,8 +163,11 @@ if (session && session.session.full) {
 					</div>
 
 					<p>
-						Sprig is also hardware development kit! It comes disassembled and every part is reusable for your own projects.
-						It's powered by a Raspberry Pi Pico reflash the firmware with the touch of a button and run whatever you want.
+						Sprig is also hardware development kit! It comes
+						disassembled and every part is reusable for your own
+						projects. It's powered by a Raspberry Pi Pico reflash
+						the firmware with the touch of a button and run whatever
+						you want.
 					</p>
 				</div>
 			</div>
@@ -142,8 +176,12 @@ if (session && session.session.full) {
 		<section class='community wrapper std-padding'>
 			<div class='container limit-text'>
 				<p>
-					<strong> We built you a game engine that&rsquo;s accessible to beginners, yet entertaining for masters. </strong>
-					Start building a Sprig game within minutes using integrated sprite, sound, and map editors.
+					<strong>
+						We built you a game engine that&rsquo;s accessible to
+						beginners, yet entertaining for masters.
+					</strong>
+					Start building a Sprig game within minutes using integrated sprite,
+					sound, and map editors.
 				</p>
 				<div class='cards'>
 					<Card
@@ -180,7 +218,11 @@ if (session && session.session.full) {
 					/>
 				</div>
 
-				<a href='/gallery'><button class='btn big active'>Check out the gallery &raquo;</button></a>
+				<a href='/gallery'
+					><button class='btn big active'
+						>Check out the gallery &raquo;</button
+					></a
+				>
 			</div>
 		</section>
 
@@ -190,15 +232,20 @@ if (session && session.session.full) {
 
 				<div class='prose'>
 					<p>
-						Sprig isn&rsquo;t for sale. Build an original game and we&rsquo;ll personally mail you one &mdash; &ldquo;you
+						Sprig isn&rsquo;t for sale. Build an original game and
+						we&rsquo;ll personally mail you one &mdash; &ldquo;you
 						ship, we ship!&rdquo;
 					</p>
 					<p>
-						It can be your first program, or your thousandth! Oh, and if you're a teenager (or younger), we'll send you a free Sprig. Everyone else can only submit to the gallery. <a
+						It can be your first program, or your thousandth! Oh,
+						and if you're a teenager (or younger), we'll send you a
+						free Sprig. Everyone else can only submit to the
+						gallery. <a
 							href='https://github.com/hackclub/sprig/blob/main/docs/GET_A_SPRIG.md'
 							target='_blank'
 							rel='noopener'
-							style='color: white; text-decoration: underline'>Read more about how to earn your Sprig.</a
+							style='color: white; text-decoration: underline'
+							>Read more about how to earn your Sprig.</a
 						>
 					</p>
 				</div>
@@ -217,200 +264,280 @@ if (session && session.session.full) {
 					<article>
 						<h3>3</h3>
 						<p>Check your mailbox for a Sprig device :)</p>
-						<p class='remaining-consoles'><span>{remainingConsoles}</span> remaining</p>
+						<p class='remaining-consoles'>
+							<span>{remainingConsoles}</span> remaining
+						</p>
 					</article>
 				</div>
 			</div>
 		</section>
 
-		<section style="color: black;" class='credits wrapper'>
+		<section style='color: black;' class='credits wrapper'>
 			<div class='container limit-text'>
 				<p>
-					Sprig was developed by a team at Hack Club with assistance from Brian Silverman (who helped develop Scratch and
-					the precursor to LEGO Mindstorms), Vadim Gerasimov (engineer at Google who helped create Tetris when he was 15),
-					and Quentin Bolsée (researcher at MIT and Vrije Universiteit Brussel). We're also grateful for amazing open-source
-					projects that make this possible like <a href='https://kalumajs.org/'>Kaluma</a>,
-					<a href='https://jerryscript.net/'>JerryScript</a>, <a href='https://github.com/WebReflection/uhtml'>uhtml</a>,
-					and <a href='https://codemirror.net/'>CodeMirror</a>.
+					Sprig was developed by a team at Hack Club with assistance
+					from Brian Silverman (who helped develop Scratch and the
+					precursor to LEGO Mindstorms), Vadim Gerasimov (engineer at
+					Google who helped create Tetris when he was 15), and Quentin
+					Bolsée (researcher at MIT and Vrije Universiteit Brussel).
+					We're also grateful for amazing open-source projects that
+					make this possible like <a href='https://kalumajs.org/'
+						>Kaluma</a
+					>,
+					<a href='https://jerryscript.net/'>JerryScript</a>, <a
+						href='https://github.com/WebReflection/uhtml'>uhtml</a
+					>, and <a href='https://codemirror.net/'>CodeMirror</a>.
 				</p>
 				<p>
-					Dozens of contributors from our community of teen hackers were instrumental to Sprig’s development as well.
-					<strong>Have any questions about Sprig or just want to hang out?</strong>
+					Dozens of contributors from our community of teen hackers
+					were instrumental to Sprig’s development as well.
+					<strong
+						>Have any questions about Sprig or just want to hang
+						out?</strong
+					>
 				</p>
-				<a href='https://hackclub.com/slack/' target='_blank' rel='noopener'>
+				<a
+					href='https://hackclub.com/slack/'
+					target='_blank'
+					rel='noopener'
+				>
 					<button class='btn active'>Join the Hack Club Slack</button>
 				</a>
 				<p>
 					Sprig is open-source. Read code for:
-					<a href='https://github.com/hackclub/sprig' target='_blank' rel='noopener'>editor</a>,
-					<a href='https://github.com/hackclub/sprig-engine' target='_blank' rel='noopener'>engine</a>,
-					<a href='https://github.com/hackclub/spade' target='_blank' rel='noopener'>firmware</a>,
-					<a href='https://github.com/hackclub/sprig-hardware' target='_blank' rel='noopener'>hardware</a>
+					<a
+						href='https://github.com/hackclub/sprig'
+						target='_blank'
+						rel='noopener'>editor</a
+					>,
+					<a
+						href='https://github.com/hackclub/sprig-engine'
+						target='_blank'
+						rel='noopener'>engine</a
+					>,
+					<a
+						href='https://github.com/hackclub/spade'
+						target='_blank'
+						rel='noopener'>firmware</a
+					>,
+					<a
+						href='https://github.com/hackclub/sprig-hardware'
+						target='_blank'
+						rel='noopener'>hardware</a
+					>
 				</p>
 
 				<div class='stories'>
-					{stories.map(story => (
-						<img
-							src={`/stories-tiny/${story.id}.jpeg`}
-							alt={story.id}
-							width={story.width}
-							height={story.height}
-							data-story={story.id}
-						/>
-					))}
+					{
+						stories.map((story) => (
+							<img
+								src={`/stories-tiny/${story.id}.jpeg`}
+								alt={story.id}
+								width={story.width}
+								height={story.height}
+								data-story={story.id}
+							/>
+						))
+					}
 				</div>
 			</div>
 		</section>
 
 		<footer class='wrapper'>
-			<div class='container'>&copy 2023 Hack Club. 501(c)(3) nonprofit (EIN: 81-2908499)</div>
+			<div class='container'>
+				&copy 2023 Hack Club. 501(c)(3) nonprofit (EIN: 81-2908499)
+			</div>
 		</footer>
 
 		<img src='/SPRIGDINO.svg' alt='sprig dino' class='sprig-dino' />
 
 		<!-- Footer lightboxes: -->
 		<script>
-			for (const img of document.querySelectorAll<HTMLImageElement>('.stories > img')) {
+			for (const img of document.querySelectorAll<HTMLImageElement>(
+				'.stories > img'
+			)) {
 				img.addEventListener('click', () => {
-					const id = img.dataset.story!
-					const { width, height } = img
+					const id = img.dataset.story!;
+					const { width, height } = img;
 
-					document.body.style.overflowY = 'hidden'
+					document.body.style.overflowY = 'hidden';
 
-					const lightbox = document.createElement('div')
-					lightbox.classList.add('lightbox')
+					const lightbox = document.createElement('div');
+					lightbox.classList.add('lightbox');
 					lightbox.addEventListener('click', () => {
-						lightbox.remove()
-						document.body.style.overflowY = 'auto'
-					})
+						lightbox.remove();
+						document.body.style.overflowY = 'auto';
+					});
 
-					const lightboxImg = lightbox.appendChild(document.createElement('img'))
-					lightboxImg.src = `/stories-big/${id}.jpeg`
-					lightboxImg.alt = id
-					lightboxImg.width = width
-					lightboxImg.height = height
+					const lightboxImg = lightbox.appendChild(
+						document.createElement('img')
+					);
+					lightboxImg.src = `/stories-big/${id}.jpeg`;
+					lightboxImg.alt = id;
+					lightboxImg.width = width;
+					lightboxImg.height = height;
 
-					document.body.appendChild(lightbox)
-				})
+					document.body.appendChild(lightbox);
+				});
 			}
 		</script>
 
 		<!-- 3D interactive device: -->
 		<script>
-			import * as THREE from 'three'
-			import { Scene, WebGLRenderer, sRGBEncoding, PerspectiveCamera, AmbientLight, DirectionalLight, HemisphereLight, Raycaster, Vector2, Object3D, Mesh, Texture, BufferGeometry, Material } from 'three'
-			import { OrbitControls } from '../lib/orbit-controls'
-			import { type InputKey, VALID_INPUTS } from 'sprig'
-			import { imageDataEngine } from 'sprig/image-data'
-			import { homepageExampleCode } from '../lib/examples'
+			import * as THREE from 'three';
+			import {
+				Scene,
+				WebGLRenderer,
+				sRGBEncoding,
+				PerspectiveCamera,
+				AmbientLight,
+				DirectionalLight,
+				HemisphereLight,
+				Raycaster,
+				Vector2,
+				Object3D,
+				Mesh,
+				Texture,
+				BufferGeometry,
+				Material,
+			} from 'three';
+			import { OrbitControls } from '../lib/orbit-controls';
+			import { type InputKey, VALID_INPUTS } from 'sprig';
+			import { imageDataEngine } from 'sprig/image-data';
+			import { homepageExampleCode } from '../lib/examples';
 
 			// @ts-ignore
-			import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment'
+			import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment';
 			// @ts-ignore
-			import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+			import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 			// @ts-ignore
-			import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
+			import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 
-			const game = imageDataEngine()
+			const game = imageDataEngine();
 
-			const m = document.getElementById('m')!
-			const start = document.getElementById('m-start')!
-			const stop = document.getElementById('m-stop')!
+			const m = document.getElementById('m')!;
+			const start = document.getElementById('m-start')!;
+			const stop = document.getElementById('m-stop')!;
 
-			const lerp = (a: number, b: number, t: number) => a * (1 - t) + b * t
-			const progress = (x: number, a: number, b: number) => (x - a) / (b - a)
-			const clamp = (x: number, a: number, b: number) => Math.max(Math.min(x, b), a)
-			const weirdEase = (t: number) => 1.5 * Math.pow(1 - t, 2) * t + t
+			const lerp = (a: number, b: number, t: number) =>
+				a * (1 - t) + b * t;
+			const progress = (x: number, a: number, b: number) =>
+				(x - a) / (b - a);
+			const clamp = (x: number, a: number, b: number) =>
+				Math.max(Math.min(x, b), a);
+			const weirdEase = (t: number) => 1.5 * Math.pow(1 - t, 2) * t + t;
 
 			const initThree = (m: HTMLElement) => {
-				const [width, height] = [1000, 1000]
+				const [width, height] = [2000, 2000];
 
-				const scene = new Scene()
-				scene.environment = RoomEnvironment as unknown as Texture
+				const scene = new Scene();
+				scene.environment = RoomEnvironment as unknown as Texture;
 
-				const renderer = new WebGLRenderer({ antialias: true, alpha: true })
-				renderer.setSize(width, height, false)
+				const renderer = new WebGLRenderer({
+					antialias: true,
+					alpha: true,
+				});
+				renderer.setSize(width, height, false);
 
-				renderer.outputEncoding = sRGBEncoding
-				renderer.physicallyCorrectLights = true
+				renderer.outputEncoding = sRGBEncoding;
+				renderer.physicallyCorrectLights = true;
 
-				const camera = new PerspectiveCamera(75, width / height, 0.1, 100)
-				scene.add(camera)
-				;(camera as any).position.z = 9.8 // meters per second squared
-				;(camera as any).position.x = 1
+				const camera = new PerspectiveCamera(
+					75,
+					width / height,
+					0.1,
+					100
+				);
+				scene.add(camera);
+				(camera as any).position.z = 9.8; // meters per second squared
+				(camera as any).position.x = 1;
 
-				const raycaster = new Raycaster()
-				const mouse = new Vector2(Infinity, Infinity)
+				const raycaster = new Raycaster();
+				const mouse = new Vector2(Infinity, Infinity);
 				const raycasted: {
-					device: Object3D | null
-					hoveredButton: Object3D | null
-					pressedButton: Object3D | null
+					device: Object3D | null;
+					hoveredButton: Object3D | null;
+					pressedButton: Object3D | null;
 				} = {
 					device: null,
 					hoveredButton: null,
 					pressedButton: null,
-				}
+				};
 
 				const controls = new OrbitControls(
 					camera,
 					document.documentElement,
 					() => !!raycasted.device && !raycasted.pressedButton,
-					() => !raycasted.pressedButton,
-				)
-				controls.autoRotateSpeed = -2.5
-				controls.rotateSpeed = 2.5
+					() => !raycasted.pressedButton
+				);
+				controls.autoRotateSpeed = -7;
+				controls.rotateSpeed = 2.5;
 
-				const ambientLight = new AmbientLight(0xffffff, 1)
-				scene.add(ambientLight)
+				const ambientLight = new AmbientLight(0xffffff, 1);
+				scene.add(ambientLight);
 
-				const dirLight = new DirectionalLight(0xffffff, 0.2)
-				;(dirLight as any).position.set(0, 0, 1000)
-				camera.add(dirLight)
+				const dirLight = new DirectionalLight(0xffffff, 0.2);
+				(dirLight as any).position.set(0, 0, 1000);
+				camera.add(dirLight);
 
-				scene.add(new HemisphereLight())
+				scene.add(new HemisphereLight());
 
-				const dracoLoader = new DRACOLoader().setDecoderPath(`https://cdn.jsdelivr.net/npm/three@0.149.0/examples/jsm/libs/draco/gltf/`)
-				const loader = new GLTFLoader().setDRACOLoader(dracoLoader)
+				const dracoLoader = new DRACOLoader().setDecoderPath(
+					`https://cdn.jsdelivr.net/npm/three@0.149.0/examples/jsm/libs/draco/gltf/`
+				);
+				const loader = new GLTFLoader().setDRACOLoader(dracoLoader);
 
-				let glass: Mesh<BufferGeometry, Material>
+				let glass: Mesh<BufferGeometry, Material>;
 				loader.load(
 					'/sprig.glb',
 					(gltf: any) => {
-						console.log('loaded :)')
-						dracoLoader.dispose()
+						console.log('loaded :)');
+						dracoLoader.dispose();
 
-						gltf.scene.rotation.x = Math.PI / 2
-						gltf.scene.rotation.y = -Math.PI / 2
-						gltf.scene.position.y = 9.4
+						gltf.scene.rotation.x = Math.PI / 2;
+						gltf.scene.rotation.y = -Math.PI / 2;
+						gltf.scene.position.y = 9.4;
 
-						scene.add(gltf.scene)
-						scrollUpdate()
-						controls.autoRotate = true
-						setTimeout(() => (controls.autoRotate = false), 1000)
+						scene.add(gltf.scene);
+						scrollUpdate();
+						controls.autoRotate = true;
+						setTimeout(() => (controls.autoRotate = false), 4451);
 
-						const screen = gltf.scene.getObjectByName('Screen')
-						glass = screen.children.find(({ material }: any) => material?.name === 'Glow Glass')
-						
-						const fn = new Function(...Object.keys(game.api), homepageExampleCode)
-						fn(...Object.values(game.api))
+						const screen = gltf.scene.getObjectByName('Screen');
+						glass = screen.children.find(
+							({ material }: any) =>
+								material?.name === 'Glow Glass'
+						);
 
-						glass.material = new THREE.MeshBasicMaterial({ map: new THREE.Texture(game.render()) })
+						const fn = new Function(
+							...Object.keys(game.api),
+							homepageExampleCode
+						);
+						fn(...Object.values(game.api));
 
-						m.appendChild(renderer.domElement)
-						document.getElementById('preview')!.remove()
+						glass.material = new THREE.MeshBasicMaterial({
+							map: new THREE.Texture(game.render()),
+						});
+
+						m.appendChild(renderer.domElement);
+						document.getElementById('preview')!.remove();
 					},
 					undefined,
-					console.error,
-				)
+					console.error
+				);
 
-				const buttonNames = ['W', 'A', 'S', 'D', 'I', 'J', 'K', 'L']
-				const buttonMovement = 0.08
+				const buttonNames = ['W', 'A', 'S', 'D', 'I', 'J', 'K', 'L'];
+				const buttonMovement = 0.08;
 
 				const raycast = () => {
-					raycaster.setFromCamera(mouse, camera)
-					const object = raycaster.intersectObjects(scene.children)[0]?.object
-					raycasted.device = object || null
-					raycasted.hoveredButton = object && buttonNames.includes(object.name) ? object : null
+					raycaster.setFromCamera(mouse, camera);
+					const object = raycaster.intersectObjects(scene.children)[0]
+						?.object;
+					raycasted.device = object || null;
+					raycasted.hoveredButton =
+						object && buttonNames.includes(object.name)
+							? object
+							: null;
 
 					document.documentElement.style.cursor =
 						raycasted.hoveredButton || raycasted.pressedButton
@@ -419,156 +546,229 @@ if (session && session.session.full) {
 							? 'grabbing'
 							: raycasted.device
 							? 'grab'
-							: 'unset'
+							: 'unset';
 					document.documentElement.style.touchAction =
-						raycasted.pressedButton || controls.isDragging || raycasted.device ? 'none' : 'unset'
-				}
+						raycasted.pressedButton ||
+						controls.isDragging ||
+						raycasted.device
+							? 'none'
+							: 'unset';
+				};
 
-				const mousePageCoords = { x: Infinity, y: Infinity }
+				const mousePageCoords = { x: Infinity, y: Infinity };
 				const updateNormMouse = () => {
 					// Probably faster than getBoundingClientRect()
-					const width = parseInt(m.style.width)
-					const height = parseInt(m.style.height)
-					const left = parseInt(m.style.left)
-					const top = parseInt(m.style.top)
-					
-					const x = mousePageCoords.x - left + document.body.scrollLeft
-					const y = mousePageCoords.y - top + document.body.scrollTop
+					const width = parseInt(m.style.width);
+					const height = parseInt(m.style.height);
+					const left = parseInt(m.style.left);
+					const top = parseInt(m.style.top);
+
+					const x =
+						mousePageCoords.x - left + document.body.scrollLeft;
+					const y = mousePageCoords.y - top + document.body.scrollTop;
 
 					// calculate mouse position in normalized device coordinates
 					// (-1 to +1) for both components
-					mouse.x = (x / width) * 2 - 1
-					mouse.y = -(y / height) * 2 + 1
-				}
+					mouse.x = (x / width) * 2 - 1;
+					mouse.y = -(y / height) * 2 + 1;
+				};
 
 				const pointermove = (event: PointerEvent) => {
-					mousePageCoords.x = event.pageX
-					mousePageCoords.y = event.pageY
-					updateNormMouse()
-				}
+					mousePageCoords.x = event.pageX;
+					mousePageCoords.y = event.pageY;
+					updateNormMouse();
+				};
 				const pointerdown = (event: PointerEvent) => {
 					if (event.pointerType === 'touch') {
-						mousePageCoords.x = event.pageX
-						mousePageCoords.y = event.pageY
-						updateNormMouse()
-						raycast()
+						mousePageCoords.x = event.pageX;
+						mousePageCoords.y = event.pageY;
+						updateNormMouse();
+						raycast();
 					}
 
 					if (raycasted.hoveredButton) {
-						event.preventDefault()
-						if (raycasted.pressedButton) return
-						raycasted.pressedButton = raycasted.hoveredButton
-						;(raycasted.pressedButton as any).position.y -= buttonMovement
+						event.preventDefault();
+						if (raycasted.pressedButton) return;
+						raycasted.pressedButton = raycasted.hoveredButton;
+						(raycasted.pressedButton as any).position.y -=
+							buttonMovement;
 
-						const input = raycasted.pressedButton.name.toLowerCase() as InputKey
-						if (VALID_INPUTS.includes(input)) game.button(input)
+						const input =
+							raycasted.pressedButton.name.toLowerCase() as InputKey;
+						if (VALID_INPUTS.includes(input)) game.button(input);
 					}
-				}
+				};
 				const pointerup = () => {
 					if (raycasted.pressedButton) {
-						(raycasted.pressedButton as any).position.y += buttonMovement
-						raycasted.pressedButton = null
+						(raycasted.pressedButton as any).position.y +=
+							buttonMovement;
+						raycasted.pressedButton = null;
 					}
-				}
+				};
 
-				document.documentElement.addEventListener('pointermove', pointermove)
-				document.documentElement.addEventListener('pointerdown', pointerdown)
-				document.documentElement.addEventListener('pointerup', pointerup)
+				document.documentElement.addEventListener(
+					'pointermove',
+					pointermove
+				);
+				document.documentElement.addEventListener(
+					'pointerdown',
+					pointerdown
+				);
+				document.documentElement.addEventListener(
+					'pointerup',
+					pointerup
+				);
 				const cleanup = () => {
-					game.cleanup()
-					document.documentElement.removeEventListener('pointermove', pointermove)
-					document.documentElement.removeEventListener('pointerdown', pointerdown)
-					document.documentElement.removeEventListener('pointerup', pointerup)
-				}
+					game.cleanup();
+					document.documentElement.removeEventListener(
+						'pointermove',
+						pointermove
+					);
+					document.documentElement.removeEventListener(
+						'pointerdown',
+						pointerdown
+					);
+					document.documentElement.removeEventListener(
+						'pointerup',
+						pointerup
+					);
+				};
 
 				const animate = () => {
-					requestAnimationFrame(animate)
-					controls.update()
-					raycast()
-					
+					requestAnimationFrame(animate);
+					controls.update();
+					raycast();
+
 					if (glass) {
-						const frame = game.render()
-						
+						const frame = game.render();
+
 						/* @ts-ignore */
-						if (frame.width != glass.material.map.source.width || frame.height != glass.material.map.source.height) {
-							glass.material = new THREE.MeshBasicMaterial({ map: new THREE.Texture(frame) })
+						if (
+							frame.width != glass.material.map.source.width ||
+							frame.height != glass.material.map.source.height
+						) {
+							glass.material = new THREE.MeshBasicMaterial({
+								map: new THREE.Texture(frame),
+							});
 						}
-						
-						const sizeRatio = (frame.width / frame.height) * (4 / 5)
+
+						const sizeRatio =
+							(frame.width / frame.height) * (4 / 5);
 						if (sizeRatio >= 1) {
 							/* @ts-ignore */
-							glass.material.map.matrix.scale(1, sizeRatio)
+							glass.material.map.matrix.scale(1, sizeRatio);
 							/* @ts-ignore */
-							glass.material.map.matrix.translate(0, (1 - sizeRatio) / 2)
+							glass.material.map.matrix.translate(
+								0,
+								(1 - sizeRatio) / 2
+							);
 						} else {
 							/* @ts-ignore */
-							glass.material.map.matrix.scale(1 / sizeRatio, 1)
+							glass.material.map.matrix.scale(1 / sizeRatio, 1);
 							/* @ts-ignore */
-							glass.material.map.matrix.translate((1 - 1 / sizeRatio) / 2, 0)
+							glass.material.map.matrix.translate(
+								(1 - 1 / sizeRatio) / 2,
+								0
+							);
 						}
 						/* @ts-ignore */
-						glass.material.map.matrixAutoUpdate = false
-						
+						glass.material.map.matrixAutoUpdate = false;
+
 						/* @ts-ignore */
-						glass.material.map.source.data = frame
+						glass.material.map.source.data = frame;
 						/* @ts-ignore */
-						glass.material.map.source.needsUpdate = true
+						glass.material.map.source.needsUpdate = true;
 						/* @ts-ignore */
-						glass.material.map.needsUpdate = true
+						glass.material.map.needsUpdate = true;
 						/* @ts-ignore */
-						glass.material.needsUpdate = true
-						
+						glass.material.needsUpdate = true;
+
 						/* @ts-ignore */
-						glass.material.map.magFilter = glass.material.map.minFilter = THREE.NearestFilter
-						
+						glass.material.map.magFilter =
+							glass.material.map.minFilter = THREE.NearestFilter;
+
 						/* @ts-ignore */
-						glass.material.map.flipY = false
+						glass.material.map.flipY = false;
 					}
 
-					renderer.render(scene, camera)
-				}
-				animate()
+					renderer.render(scene, camera);
+				};
+				animate();
 
-				return { updateNormMouse, registerListeners: controls.registerListeners, cleanup }
-			}
-			const { updateNormMouse, registerListeners } = initThree(m)
+				return {
+					updateNormMouse,
+					registerListeners: controls.registerListeners,
+					cleanup,
+				};
+			};
+			const { updateNormMouse, registerListeners } = initThree(m);
 
 			let rects: {
-				m: DOMRect
-				start: DOMRect
-				stop: DOMRect
-			}
-			const scrollUpdate = (_?: unknown, needsSecond: boolean = false) => {
-				const { scrollLeft, scrollTop } = document.body
+				m: DOMRect;
+				start: DOMRect;
+				stop: DOMRect;
+			};
+			const scrollUpdate = (
+				_?: unknown,
+				needsSecond: boolean = false
+			) => {
+				const { scrollLeft, scrollTop } = document.body;
 
 				rects = {
 					m: m.getBoundingClientRect(),
 					start: start.getBoundingClientRect(),
 					stop: stop.getBoundingClientRect(),
-				}
+				};
 
 				if (window.innerWidth <= 780) {
-					m.style.width = `${rects.start.width}px`
-					m.style.height = `${rects.start.height}px`
-					m.style.left = `${rects.start.left + scrollLeft}px`
-					m.style.top = `${rects.start.top + scrollTop}px`
+					m.style.width = `${rects.start.width}px`;
+					m.style.height = `${rects.start.height}px`;
+					m.style.left = `${rects.start.left + scrollLeft}px`;
+					m.style.top = `${rects.start.top + scrollTop}px`;
 				} else {
-					const t = clamp(weirdEase(progress(rects.m.top, rects.start.top, rects.stop.top)), 0, 1)
+					const t = clamp(
+						weirdEase(
+							progress(
+								rects.m.top,
+								rects.start.top,
+								rects.stop.top
+							)
+						),
+						0,
+						1
+					);
 
-					m.style.width = `${lerp(rects.start.width, rects.stop.width, t)}px`
-					m.style.height = `${lerp(rects.start.height, rects.stop.height, t)}px`
-					m.style.left = `${lerp(rects.start.left + scrollLeft, rects.stop.left + scrollLeft, t)}px`
-					m.style.top = `${Math.min(rects.start.top + scrollTop * 2, rects.stop.top + scrollTop)}px`
+					m.style.width = `${lerp(
+						rects.start.width,
+						rects.stop.width,
+						t
+					)}px`;
+					m.style.height = `${lerp(
+						rects.start.height,
+						rects.stop.height,
+						t
+					)}px`;
+					m.style.left = `${lerp(
+						rects.start.left + scrollLeft,
+						rects.stop.left + scrollLeft,
+						t
+					)}px`;
+					m.style.top = `${Math.min(
+						rects.start.top + scrollTop * 2,
+						rects.stop.top + scrollTop
+					)}px`;
 				}
 
-				if (needsSecond) scrollUpdate()
-				updateNormMouse()
-			}
+				if (needsSecond) scrollUpdate();
+				updateNormMouse();
+			};
 
-			window.addEventListener('resize', scrollUpdate, { passive: true })
-			document.body.addEventListener('scroll', scrollUpdate, { passive: true })
-			scrollUpdate(null, true)
-			registerListeners()
+			window.addEventListener('resize', scrollUpdate, { passive: true });
+			document.body.addEventListener('scroll', scrollUpdate, {
+				passive: true,
+			});
+			scrollUpdate(null, true);
+			registerListeners();
 		</script>
 	</body>
 </html>

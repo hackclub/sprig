@@ -1,11 +1,16 @@
-@import './_variables.scss';
-@import './_fonts.scss';
-@import './_shared.scss';
+@import "./_variables.scss";
+@import "./_fonts.scss";
+@import "./_shared.scss";
 
 $std-horiz-margin: 15px;
 
-* { margin: 0; }
-html, body { height: 100%; }
+* {
+	margin: 0;
+}
+html,
+body {
+	height: 100%;
+}
 
 html {
 	overflow-x: hidden;
@@ -113,7 +118,7 @@ h6 {
 	display: flex;
 	flex-direction: column;
 	color: #ffffff;
-	background: url('/background.jpg'), $base-background;
+	background: url("/background-new.png"), $base-background;
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center center;
@@ -124,23 +129,40 @@ h6 {
 	padding: 0 $std-horiz-margin;
 	display: flex;
 	flex-direction: row;
-	align-items: center;
-	gap: 60px;
+	align-items: flex-end;
+	justify-content: center;
+	position: relative;
 	flex: 1;
+	max-height: 70vh;
+	max-width: 800px;
+	margin-top: 25vh;
+	margin-bottom: -25vh;
 
-	>div {
+	> div {
 		flex: 7;
 	}
 
-	>.slot {
+	> .slot {
 		flex: 6;
 	}
 
 	.magic {
 		width: 100%;
 		transform: scale(1.45);
-		margin: -400px 0;
+		// margin: -20vh 0;
 		pointer-events: none;
+	}
+
+	.title {
+		position: absolute;
+		width: 100%;
+		top: -13vh;
+		left: 0;
+		z-index: 1;
+	}
+
+	.title:hover {
+		animation: none;
 	}
 }
 
@@ -173,7 +195,7 @@ h6 {
 .pricing .steps article p.remaining-consoles {
 	color: #808080;
 	font-size: 1rem;
-    margin-top: -4px;
+	margin-top: -4px;
 }
 
 @media (max-width: 780px) {
@@ -181,29 +203,61 @@ h6 {
 		height: auto;
 
 		.container {
-			padding: 10px $std-horiz-margin;
-			padding-top: 120px;
-			flex-direction: column-reverse;
 			align-items: center;
 			gap: 10px;
 			text-align: center;
-	
-			>.slot {
-				width: 80%;
-				margin: 20vw 0;
-			}
-	
-			.magic {
-				transform: scale(1.3);
+			margin-top: 13vh;
+			margin-bottom: -13vh;
+
+			.title {
+				position: absolute;
+				width: 100%;
+				top: 0;
+				left: 0;
+				z-index: 1;
 			}
 		}
-	}
 
-	.fullpage .text {
-		align-items: center;
+		.text {
+			align-items: center;
+			max-width: 80vw;
+			padding-bottom: 10vh;
+		}
 	}
 }
 
+@media (max-width: 450px) {
+	.fullpage {
+		height: auto;
+
+		.container {
+			align-items: center;
+			gap: 10px;
+			text-align: center;
+			margin-top: 20vh;
+			margin-bottom: -20vh;
+
+			.title {
+				position: absolute;
+				width: 100%;
+				top: 0;
+				left: 0;
+				z-index: 1;
+			}
+		}
+
+		.text {
+			align-items: center;
+			max-width: 80vw;
+			padding-top: 15vh;
+			padding-bottom: 10vh;
+
+			h1 {
+				font-size: 1.5rem;
+			}
+		}
+	}
+}
 // --- SPECS: ---
 .specs-split-wrapper {
 	background: #ffffff;
@@ -285,7 +339,7 @@ h6 {
 // --- COMMUNITY: ---
 .community {
 	font-size: 1.375rem;
-	background: url('pcb.svg'), var(--accent-dark);
+	background: url("pcb.svg"), var(--accent-dark);
 	background-position: center center;
 	background-size: cover;
 	text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
@@ -342,7 +396,12 @@ h6 {
 	color: #ffffff;
 	font-size: 1.125rem;
 
-	h1, h2, h3, h4, h5, h6 {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
 		color: #66ebb6;
 	}
 
@@ -459,7 +518,7 @@ footer {
 	padding: 0 10px;
 	font-size: 0.85rem;
 	padding-bottom: 50px;
-			font-variant-ligatures: no-common-ligatures;
+	font-variant-ligatures: no-common-ligatures;
 }
 
 nav {
