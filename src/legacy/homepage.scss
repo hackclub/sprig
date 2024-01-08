@@ -149,7 +149,6 @@ h6 {
 	.magic {
 		width: 100%;
 		transform: scale(1.45);
-		// margin: -20vh 0;
 		pointer-events: none;
 	}
 
@@ -196,6 +195,58 @@ h6 {
 	color: #808080;
 	font-size: 1rem;
 	margin-top: -4px;
+}
+
+#container > img {
+	width: 150%;
+	margin-top: -5vh;
+	margin-bottom: -15vh;
+}
+
+#note {
+	position: absolute;
+	right: 0px;
+	top: 10vh;
+	transform: rotate(18deg);
+	z-index: 5;
+	color: #D70000;
+	background-color: #fad231;
+	padding: 5px 10px;
+}
+
+@media (max-width: 770px) {
+	#note {
+		display: none;
+	}
+}
+
+@media (max-width: 1200px) {
+	.fullpage {
+		height: auto;
+
+		.container {
+			align-items: center;
+			gap: 10px;
+			text-align: center;
+			margin-top: 10vh;
+			margin-bottom: -10vh;
+			max-width: 600px;
+
+			.title {
+				position: absolute;
+				width: 100%;
+				top: 0;
+				left: 0;
+				z-index: 1;
+			}
+		}
+
+		.text {
+			align-items: center;
+			max-width: 80vw;
+			padding-bottom: 10vh;
+		}
+	}
 }
 
 @media (max-width: 780px) {

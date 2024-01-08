@@ -49,9 +49,10 @@ if (session && session.session.full) {
 
 		<section class='fullpage wrapper'>
 			<div class='container'>
-			<img src='/logo.png' class='title'/>
-				<div class='slot magic-container'>
-					<div class='magic' id='m-start'></div>
+				<img src='/logo.png' class='title' />
+				<div class='slot magic-container' id='container' draggable='true' ondragstart='startDrag()'>
+					<div class='magic' id='m-start' ></div>
+					<h4 id='note'>Click and drag!<h4>
 				</div>
 			</div>
 			<div class='text'>
@@ -413,362 +414,395 @@ if (session && session.session.full) {
 			// @ts-ignore
 			import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 
-			const game = imageDataEngine();
+			if (window.screen.width > 770) {
+				// GPU meets the requirements, proceed with rendering
 
-			const m = document.getElementById('m')!;
-			const start = document.getElementById('m-start')!;
-			const stop = document.getElementById('m-stop')!;
+				const game = imageDataEngine();
 
-			const lerp = (a: number, b: number, t: number) =>
-				a * (1 - t) + b * t;
-			const progress = (x: number, a: number, b: number) =>
-				(x - a) / (b - a);
-			const clamp = (x: number, a: number, b: number) =>
-				Math.max(Math.min(x, b), a);
-			const weirdEase = (t: number) => 1.5 * Math.pow(1 - t, 2) * t + t;
+				const m = document.getElementById('m')!;
+				const start = document.getElementById('m-start')!;
+				const stop = document.getElementById('m-stop')!;
 
-			const initThree = (m: HTMLElement) => {
-				const [width, height] = [1800, 1800];
+				const lerp = (a: number, b: number, t: number) =>
+					a * (1 - t) + b * t;
+				const progress = (x: number, a: number, b: number) =>
+					(x - a) / (b - a);
+				const clamp = (x: number, a: number, b: number) =>
+					Math.max(Math.min(x, b), a);
+				const weirdEase = (t: number) =>
+					1.5 * Math.pow(1 - t, 2) * t + t;
 
-				const scene = new Scene();
-				scene.environment = RoomEnvironment as unknown as Texture;
+				const initThree = (m: HTMLElement) => {
+					const [width, height] = [1800, 1800];
 
-				const renderer = new WebGLRenderer({
-					antialias: true,
-					alpha: true,
-				});
-				renderer.setSize(width, height, false);
+					const scene = new Scene();
+					scene.environment = RoomEnvironment as unknown as Texture;
 
-				renderer.outputEncoding = sRGBEncoding;
-				renderer.physicallyCorrectLights = true;
+					const renderer = new WebGLRenderer({
+						antialias: true,
+						alpha: true,
+					});
+					renderer.setSize(width, height, false);
 
-				const camera = new PerspectiveCamera(
-					75,
-					width / height,
-					0.1,
-					100
-				);
-				scene.add(camera);
-				(camera as any).position.z = 9.8; // meters per second squared
-				(camera as any).position.x = 1;
+					renderer.outputEncoding = sRGBEncoding;
+					renderer.physicallyCorrectLights = true;
 
-				const raycaster = new Raycaster();
-				const mouse = new Vector2(Infinity, Infinity);
-				const raycasted: {
-					device: Object3D | null;
-					hoveredButton: Object3D | null;
-					pressedButton: Object3D | null;
-				} = {
-					device: null,
-					hoveredButton: null,
-					pressedButton: null,
-				};
+					const camera = new PerspectiveCamera(
+						75,
+						width / height,
+						0.1,
+						100
+					);
+					scene.add(camera);
+					(camera as any).position.z = 9.8; // meters per second squared
+					(camera as any).position.x = 1;
 
-				const controls = new OrbitControls(
-					camera,
-					document.documentElement,
-					() => !!raycasted.device && !raycasted.pressedButton,
-					() => !raycasted.pressedButton
-				);
-				controls.autoRotateSpeed = -7;
-				controls.rotateSpeed = 2.5;
+					const raycaster = new Raycaster();
+					const mouse = new Vector2(Infinity, Infinity);
+					const raycasted: {
+						device: Object3D | null;
+						hoveredButton: Object3D | null;
+						pressedButton: Object3D | null;
+					} = {
+						device: null,
+						hoveredButton: null,
+						pressedButton: null,
+					};
 
-				const ambientLight = new AmbientLight(0xffffff, 1);
-				scene.add(ambientLight);
+					const controls = new OrbitControls(
+						camera,
+						document.documentElement,
+						() => !!raycasted.device && !raycasted.pressedButton,
+						() => !raycasted.pressedButton
+					);
+					controls.autoRotateSpeed = -7;
+					controls.rotateSpeed = 2.5;
 
-				const dirLight = new DirectionalLight(0xffffff, 0.2);
-				(dirLight as any).position.set(0, 0, 1000);
-				camera.add(dirLight);
+					const ambientLight = new AmbientLight(0xffffff, 1);
+					scene.add(ambientLight);
 
-				scene.add(new HemisphereLight());
+					const dirLight = new DirectionalLight(0xffffff, 0.2);
+					(dirLight as any).position.set(0, 0, 1000);
+					camera.add(dirLight);
 
-				const dracoLoader = new DRACOLoader().setDecoderPath(
-					`https://cdn.jsdelivr.net/npm/three@0.149.0/examples/jsm/libs/draco/gltf/`
-				);
-				const loader = new GLTFLoader().setDRACOLoader(dracoLoader);
+					scene.add(new HemisphereLight());
 
-				let glass: Mesh<BufferGeometry, Material>;
-				loader.load(
-					'/sprig.glb',
-					(gltf: any) => {
-						console.log('loaded :)');
-						dracoLoader.dispose();
+					const dracoLoader = new DRACOLoader().setDecoderPath(
+						`https://cdn.jsdelivr.net/npm/three@0.149.0/examples/jsm/libs/draco/gltf/`
+					);
+					const loader = new GLTFLoader().setDRACOLoader(dracoLoader);
 
-						gltf.scene.rotation.x = Math.PI / 2;
-						gltf.scene.rotation.y = -Math.PI / 2;
-						gltf.scene.position.y = 9.4;
+					let glass: Mesh<BufferGeometry, Material>;
+					loader.load(
+						'/sprig.glb',
+						(gltf: any) => {
+							console.log('loaded :)');
+							dracoLoader.dispose();
 
-						scene.add(gltf.scene);
-						scrollUpdate();
-						controls.autoRotate = true;
-						setTimeout(() => (controls.autoRotate = false), 4451);
+							gltf.scene.rotation.x = Math.PI / 2;
+							gltf.scene.rotation.y = -Math.PI / 2;
+							gltf.scene.position.y = 9.4;
 
-						const screen = gltf.scene.getObjectByName('Screen');
-						glass = screen.children.find(
-							({ material }: any) =>
-								material?.name === 'Glow Glass'
-						);
+							scene.add(gltf.scene);
+							scrollUpdate();
+							controls.autoRotate = true;
+							setTimeout(
+								() => (controls.autoRotate = false),
+								4451
+							);
 
-						const fn = new Function(
-							...Object.keys(game.api),
-							homepageExampleCode
-						);
-						fn(...Object.values(game.api));
+							const screen = gltf.scene.getObjectByName('Screen');
+							glass = screen.children.find(
+								({ material }: any) =>
+									material?.name === 'Glow Glass'
+							);
 
-						glass.material = new THREE.MeshBasicMaterial({
-							map: new THREE.Texture(game.render()),
-						});
+							const fn = new Function(
+								...Object.keys(game.api),
+								homepageExampleCode
+							);
+							fn(...Object.values(game.api));
 
-						m.appendChild(renderer.domElement);
-						document.getElementById('preview')!.remove();
-					},
-					undefined,
-					console.error
-				);
+							glass.material = new THREE.MeshBasicMaterial({
+								map: new THREE.Texture(game.render()),
+							});
 
-				const buttonNames = ['W', 'A', 'S', 'D', 'I', 'J', 'K', 'L'];
-				const buttonMovement = 0.08;
+							m.appendChild(renderer.domElement);
+							document.getElementById('preview')!.remove();
+						},
+						undefined,
+						console.error
+					);
 
-				const raycast = () => {
-					raycaster.setFromCamera(mouse, camera);
-					const object = raycaster.intersectObjects(scene.children)[0]
-						?.object;
-					raycasted.device = object || null;
-					raycasted.hoveredButton =
-						object && buttonNames.includes(object.name)
-							? object
-							: null;
+					const buttonNames = [
+						'W',
+						'A',
+						'S',
+						'D',
+						'I',
+						'J',
+						'K',
+						'L',
+					];
+					const buttonMovement = 0.08;
 
-					document.documentElement.style.cursor =
-						raycasted.hoveredButton || raycasted.pressedButton
-							? 'pointer'
-							: controls.isDragging
-							? 'grabbing'
-							: raycasted.device
-							? 'grab'
-							: 'unset';
-					document.documentElement.style.touchAction =
-						raycasted.pressedButton ||
-						controls.isDragging ||
-						raycasted.device
-							? 'none'
-							: 'unset';
-				};
+					const raycast = () => {
+						raycaster.setFromCamera(mouse, camera);
+						const object = raycaster.intersectObjects(
+							scene.children
+						)[0]?.object;
+						raycasted.device = object || null;
+						raycasted.hoveredButton =
+							object && buttonNames.includes(object.name)
+								? object
+								: null;
 
-				const mousePageCoords = { x: Infinity, y: Infinity };
-				const updateNormMouse = () => {
-					// Probably faster than getBoundingClientRect()
-					const width = parseInt(m.style.width);
-					const height = parseInt(m.style.height);
-					const left = parseInt(m.style.left);
-					const top = parseInt(m.style.top);
+						document.documentElement.style.cursor =
+							raycasted.hoveredButton || raycasted.pressedButton
+								? 'pointer'
+								: controls.isDragging
+								? 'grabbing'
+								: raycasted.device
+								? 'grab'
+								: 'unset';
+						document.documentElement.style.touchAction =
+							raycasted.pressedButton ||
+							controls.isDragging ||
+							raycasted.device
+								? 'none'
+								: 'unset';
+					};
 
-					const x =
-						mousePageCoords.x - left + document.body.scrollLeft;
-					const y = mousePageCoords.y - top + document.body.scrollTop;
+					const mousePageCoords = { x: Infinity, y: Infinity };
+					const updateNormMouse = () => {
+						// Probably faster than getBoundingClientRect()
+						const width = parseInt(m.style.width);
+						const height = parseInt(m.style.height);
+						const left = parseInt(m.style.left);
+						const top = parseInt(m.style.top);
 
-					// calculate mouse position in normalized device coordinates
-					// (-1 to +1) for both components
-					mouse.x = (x / width) * 2 - 1;
-					mouse.y = -(y / height) * 2 + 1;
-				};
+						const x =
+							mousePageCoords.x - left + document.body.scrollLeft;
+						const y =
+							mousePageCoords.y - top + document.body.scrollTop;
 
-				const pointermove = (event: PointerEvent) => {
-					mousePageCoords.x = event.pageX;
-					mousePageCoords.y = event.pageY;
-					updateNormMouse();
-				};
-				const pointerdown = (event: PointerEvent) => {
-					if (event.pointerType === 'touch') {
+						// calculate mouse position in normalized device coordinates
+						// (-1 to +1) for both components
+						mouse.x = (x / width) * 2 - 1;
+						mouse.y = -(y / height) * 2 + 1;
+					};
+
+					const pointermove = (event: PointerEvent) => {
 						mousePageCoords.x = event.pageX;
 						mousePageCoords.y = event.pageY;
 						updateNormMouse();
-						raycast();
-					}
+					};
+					const pointerdown = (event: PointerEvent) => {
+						if (event.pointerType === 'touch') {
+							mousePageCoords.x = event.pageX;
+							mousePageCoords.y = event.pageY;
+							updateNormMouse();
+							raycast();
+						}
 
-					if (raycasted.hoveredButton) {
-						event.preventDefault();
-						if (raycasted.pressedButton) return;
-						raycasted.pressedButton = raycasted.hoveredButton;
-						(raycasted.pressedButton as any).position.y -=
-							buttonMovement;
+						if (raycasted.hoveredButton) {
+							event.preventDefault();
+							if (raycasted.pressedButton) return;
+							raycasted.pressedButton = raycasted.hoveredButton;
+							(raycasted.pressedButton as any).position.y -=
+								buttonMovement;
 
-						const input =
-							raycasted.pressedButton.name.toLowerCase() as InputKey;
-						if (VALID_INPUTS.includes(input)) game.button(input);
-					}
-				};
-				const pointerup = () => {
-					if (raycasted.pressedButton) {
-						(raycasted.pressedButton as any).position.y +=
-							buttonMovement;
-						raycasted.pressedButton = null;
-					}
-				};
+							const input =
+								raycasted.pressedButton.name.toLowerCase() as InputKey;
+							if (VALID_INPUTS.includes(input))
+								game.button(input);
+						}
+					};
+					const pointerup = () => {
+						if (raycasted.pressedButton) {
+							(raycasted.pressedButton as any).position.y +=
+								buttonMovement;
+							raycasted.pressedButton = null;
+						}
+					};
 
-				document.documentElement.addEventListener(
-					'pointermove',
-					pointermove
-				);
-				document.documentElement.addEventListener(
-					'pointerdown',
-					pointerdown
-				);
-				document.documentElement.addEventListener(
-					'pointerup',
-					pointerup
-				);
-				const cleanup = () => {
-					game.cleanup();
-					document.documentElement.removeEventListener(
+					document.documentElement.addEventListener(
 						'pointermove',
 						pointermove
 					);
-					document.documentElement.removeEventListener(
+					document.documentElement.addEventListener(
 						'pointerdown',
 						pointerdown
 					);
-					document.documentElement.removeEventListener(
+					document.documentElement.addEventListener(
 						'pointerup',
 						pointerup
 					);
+					const cleanup = () => {
+						game.cleanup();
+						document.documentElement.removeEventListener(
+							'pointermove',
+							pointermove
+						);
+						document.documentElement.removeEventListener(
+							'pointerdown',
+							pointerdown
+						);
+						document.documentElement.removeEventListener(
+							'pointerup',
+							pointerup
+						);
+					};
+
+					const animate = () => {
+						requestAnimationFrame(animate);
+						controls.update();
+						raycast();
+
+						if (glass) {
+							const frame = game.render();
+
+							/* @ts-ignore */
+							if (
+								frame.width !=
+									glass.material.map.source.width ||
+								frame.height != glass.material.map.source.height
+							) {
+								glass.material = new THREE.MeshBasicMaterial({
+									map: new THREE.Texture(frame),
+								});
+							}
+
+							const sizeRatio =
+								(frame.width / frame.height) * (4 / 5);
+							if (sizeRatio >= 1) {
+								/* @ts-ignore */
+								glass.material.map.matrix.scale(1, sizeRatio);
+								/* @ts-ignore */
+								glass.material.map.matrix.translate(
+									0,
+									(1 - sizeRatio) / 2
+								);
+							} else {
+								/* @ts-ignore */
+								glass.material.map.matrix.scale(
+									1 / sizeRatio,
+									1
+								);
+								/* @ts-ignore */
+								glass.material.map.matrix.translate(
+									(1 - 1 / sizeRatio) / 2,
+									0
+								);
+							}
+							/* @ts-ignore */
+							glass.material.map.matrixAutoUpdate = false;
+
+							/* @ts-ignore */
+							glass.material.map.source.data = frame;
+							/* @ts-ignore */
+							glass.material.map.source.needsUpdate = true;
+							/* @ts-ignore */
+							glass.material.map.needsUpdate = true;
+							/* @ts-ignore */
+							glass.material.needsUpdate = true;
+
+							/* @ts-ignore */
+							glass.material.map.magFilter =
+								glass.material.map.minFilter =
+									THREE.NearestFilter;
+
+							/* @ts-ignore */
+							glass.material.map.flipY = false;
+						}
+
+						renderer.render(scene, camera);
+					};
+					animate();
+
+					return {
+						updateNormMouse,
+						registerListeners: controls.registerListeners,
+						cleanup,
+					};
 				};
+				const { updateNormMouse, registerListeners } = initThree(m);
 
-				const animate = () => {
-					requestAnimationFrame(animate);
-					controls.update();
-					raycast();
+				let rects: {
+					m: DOMRect;
+					start: DOMRect;
+					stop: DOMRect;
+				};
+				const scrollUpdate = (
+					_?: unknown,
+					needsSecond: boolean = false
+				) => {
+					const { scrollLeft, scrollTop } = document.body;
 
-					if (glass) {
-						const frame = game.render();
+					rects = {
+						m: m.getBoundingClientRect(),
+						start: start.getBoundingClientRect(),
+						stop: stop.getBoundingClientRect(),
+					};
 
-						/* @ts-ignore */
-						if (
-							frame.width != glass.material.map.source.width ||
-							frame.height != glass.material.map.source.height
-						) {
-							glass.material = new THREE.MeshBasicMaterial({
-								map: new THREE.Texture(frame),
-							});
-						}
+					if (window.innerWidth <= 780) {
+						m.style.width = `${rects.start.width}px`;
+						m.style.height = `${rects.start.height}px`;
+						m.style.left = `${rects.start.left + scrollLeft}px`;
+						m.style.top = `${rects.start.top + scrollTop}px`;
+					} else {
+						const t = clamp(
+							weirdEase(
+								progress(
+									rects.m.top,
+									rects.start.top,
+									rects.stop.top
+								)
+							),
+							0,
+							1
+						);
 
-						const sizeRatio =
-							(frame.width / frame.height) * (4 / 5);
-						if (sizeRatio >= 1) {
-							/* @ts-ignore */
-							glass.material.map.matrix.scale(1, sizeRatio);
-							/* @ts-ignore */
-							glass.material.map.matrix.translate(
-								0,
-								(1 - sizeRatio) / 2
-							);
-						} else {
-							/* @ts-ignore */
-							glass.material.map.matrix.scale(1 / sizeRatio, 1);
-							/* @ts-ignore */
-							glass.material.map.matrix.translate(
-								(1 - 1 / sizeRatio) / 2,
-								0
-							);
-						}
-						/* @ts-ignore */
-						glass.material.map.matrixAutoUpdate = false;
-
-						/* @ts-ignore */
-						glass.material.map.source.data = frame;
-						/* @ts-ignore */
-						glass.material.map.source.needsUpdate = true;
-						/* @ts-ignore */
-						glass.material.map.needsUpdate = true;
-						/* @ts-ignore */
-						glass.material.needsUpdate = true;
-
-						/* @ts-ignore */
-						glass.material.map.magFilter =
-							glass.material.map.minFilter = THREE.NearestFilter;
-
-						/* @ts-ignore */
-						glass.material.map.flipY = false;
+						m.style.width = `${lerp(
+							rects.start.width,
+							rects.stop.width,
+							t
+						)}px`;
+						m.style.height = `${lerp(
+							rects.start.height,
+							rects.stop.height,
+							t
+						)}px`;
+						m.style.left = `${lerp(
+							rects.start.left + scrollLeft,
+							rects.stop.left + scrollLeft,
+							t
+						)}px`;
+						m.style.top = `${Math.min(
+							rects.start.top + scrollTop * 2,
+							rects.stop.top + scrollTop
+						)}px`;
 					}
 
-					renderer.render(scene, camera);
-				};
-				animate();
-
-				return {
-					updateNormMouse,
-					registerListeners: controls.registerListeners,
-					cleanup,
-				};
-			};
-			const { updateNormMouse, registerListeners } = initThree(m);
-
-			let rects: {
-				m: DOMRect;
-				start: DOMRect;
-				stop: DOMRect;
-			};
-			const scrollUpdate = (
-				_?: unknown,
-				needsSecond: boolean = false
-			) => {
-				const { scrollLeft, scrollTop } = document.body;
-
-				rects = {
-					m: m.getBoundingClientRect(),
-					start: start.getBoundingClientRect(),
-					stop: stop.getBoundingClientRect(),
+					if (needsSecond) scrollUpdate();
+					updateNormMouse();
 				};
 
-				if (window.innerWidth <= 780) {
-					m.style.width = `${rects.start.width}px`;
-					m.style.height = `${rects.start.height}px`;
-					m.style.left = `${rects.start.left + scrollLeft}px`;
-					m.style.top = `${rects.start.top + scrollTop}px`;
-				} else {
-					const t = clamp(
-						weirdEase(
-							progress(
-								rects.m.top,
-								rects.start.top,
-								rects.stop.top
-							)
-						),
-						0,
-						1
-					);
-
-					m.style.width = `${lerp(
-						rects.start.width,
-						rects.stop.width,
-						t
-					)}px`;
-					m.style.height = `${lerp(
-						rects.start.height,
-						rects.stop.height,
-						t
-					)}px`;
-					m.style.left = `${lerp(
-						rects.start.left + scrollLeft,
-						rects.stop.left + scrollLeft,
-						t
-					)}px`;
-					m.style.top = `${Math.min(
-						rects.start.top + scrollTop * 2,
-						rects.stop.top + scrollTop
-					)}px`;
-				}
-
-				if (needsSecond) scrollUpdate();
-				updateNormMouse();
-			};
-
-			window.addEventListener('resize', scrollUpdate, { passive: true });
-			document.body.addEventListener('scroll', scrollUpdate, {
-				passive: true,
-			});
-			scrollUpdate(null, true);
-			registerListeners();
+				window.addEventListener('resize', scrollUpdate, {
+					passive: true,
+				});
+				document.body.addEventListener('scroll', scrollUpdate, {
+					passive: true,
+				});
+				scrollUpdate(null, true);
+				registerListeners();
+			} else {
+				console.error('On small device.');
+				const img = document.createElement('img');
+				img.src = '/preview.webp';
+				const container = document.getElementById('container');
+				container.appendChild(img);
+			}
 		</script>
 	</body>
 </html>
