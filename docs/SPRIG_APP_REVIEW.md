@@ -25,8 +25,10 @@
 
 
 2. Communicate your review decision to the PR author via a code review
-  * If you found an issue during your checklist, **Request changes** on the PR, and clearly communicate the issue or issues that the author needs to resolve before being able to land their changes.  After requesting changes, add the author to the current assignees.  Stop here.
-  * If you determine that the game is ready to be landed, **Approve** the PR with a congratulatory comment.
-  * Merge the PR to main.
-  * Add a comment stating that if the author is a teen, they can request their Sprig device at https://sprig-order.hackclub.dev/.  You can also suggest to them to share a few sentences in our #ship Slack channel.
+a) First, give them some positive feedback on the accomplishment so far, like "Thank you! Congrats on getting your game running in the Sprig editor and submitting a PR", for example.
+b) If you found an issue during your checklist, **Request changes** on the PR, and clearly communicate the issue or issues that the author needs to resolve before being able to land their changes.  After requesting changes, add the author to the current assignees.  Try always to copy/paste the pubicly stated metrics/rules for the game being approved. 
+c) If they ask for additional help or feedback, suggest the Slack channel (#sprig), and to copy the URL of their game in the post.
+d) If you determine that the game is ready to be landed, **Approve** the PR with a congratulatory comment.
+e) Merge the PR to main.
+f) Add a comment stating that if the author is a teen, they can request their Sprig device at https://sprig-order.hackclub.dev/.  You can also suggest to them to share a few sentences in our #ship Slack channel.
 
