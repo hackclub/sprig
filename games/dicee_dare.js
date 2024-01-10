@@ -164,7 +164,7 @@ setPushables({
 onInput("s", () => {
 
     if (!gameStarted) {
-    addText("Game started! Press 's' to roll the dice and 'd' to reset.");
+    addText("Press 's' ");
     gameStarted = true;
     return;
   }
@@ -177,29 +177,35 @@ onInput("s", () => {
   }
   switch (result) {
     case d1:
-      addText("Dare 1 - Draw something you are thinking about");
+      addText("Eat chilis");
+      addText("");
       break;
     case d2:
-      addText("Dare 2 - Complete your homework before time");
+      addText("Spin round");
+      addText("");
       break;
     case d3:
-      addText("Dare 3 - Wear a watch in your leg");
+      addText("Prank call");
+      addText("");
       break;
     case d4:
-      addText("Dare 4 - Write hello world in 10 different programming languages");
+      addText("Climb high");
+      addText("");
       break;
     case d5:
-      addText("Dare 5 - Do 25 push-ups with backpack on back");
+      addText("Twerk now ");
+      addText("");
       break;
     case d6:
-      addText("Dare 6 - Cook something that you don't like to eat");
+      addText("Yell loud");
+      addText("");
       break;
     case s:
       for (let i = 1; i <= 10; i++) {
   if (i % 2 == 0) {
-    addText("Mystery Dare : Bad Luck - Do all the dares no matter the consequences");
+    addText("Do all ");
   } else {
-    addText("Mystery Dare : Good Luck - Roll the Dice Once More After this :) ");
+    addText("Roll the Dice Once More:) ");
   }
 }
 
@@ -210,7 +216,8 @@ onInput("s", () => {
 });
 
   onInput("d", () => {
-  addText("Game reset! Press 's' to start again.");
+  addText("Press 's'");
   gameStarted = false;
   setMap(levels[level]);
 });
+
