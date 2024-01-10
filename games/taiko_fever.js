@@ -1183,10 +1183,10 @@ function drawTitleScreen() {
 
       // Add indicators of drum mode
       clearText();
-      addText(drumMode ? "untitled\ntaiko mode" : "untitled\ntaiko game", {
-        x: 5,
+      addText(drumMode ? "taiko\nfever\nmode" : "taiko\nfever", {
+        x: 7,
         y: 4,
-        color: drumMode ? color`7` : color`L`
+        color: drumMode ? color`3` : color`L`
       });
       addText("a              l", {x: 2, y: 10, color: color`7`});
       addText("  d        j", {x: 3, y: 10, color: color`3`});
@@ -1514,7 +1514,7 @@ LLLLLLLLLLLLLLLL`],
   ##########`);
 
   // draw text
-  addText("untitled\ntaiko game", {x: 5, y: 4, color: color`L`});
+  addText("taiko\nfever", {x: 7, y: 4, color: color`L`});
   addText("a              l", {x: 2, y: 10, color: color`7`});
   addText("  d        j", {x: 3, y: 10, color: color`3`});
   addText("(BASH TO CONTINUE)", {x: 1, y: 12, color: color`L`});
