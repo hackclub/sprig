@@ -164,7 +164,7 @@ setPushables({
 onInput("s", () => {
 
     if (!gameStarted) {
-    console.log("Game started! Press 's' to roll the dice and 'd' to reset.");
+    addText("Game started! Press 's' to roll the dice and 'd' to reset.");
     gameStarted = true;
     return;
   }
@@ -177,40 +177,40 @@ onInput("s", () => {
   }
   switch (result) {
     case d1:
-      console.log("Dare 1 - Draw something you are thinking about");
+      addText("Dare 1 - Draw something you are thinking about");
       break;
     case d2:
-      console.log("Dare 2 - Complete your homework before time");
+      addText("Dare 2 - Complete your homework before time");
       break;
     case d3:
-      console.log("Dare 3 - Wear a watch in your leg");
+      addText("Dare 3 - Wear a watch in your leg");
       break;
     case d4:
-      console.log("Dare 4 - Write hello world in 10 different programming languages");
+      addText("Dare 4 - Write hello world in 10 different programming languages");
       break;
     case d5:
-      console.log("Dare 5 - Do 25 push-ups with backpack on back");
+      addText("Dare 5 - Do 25 push-ups with backpack on back");
       break;
     case d6:
-      console.log("Dare 6 - Cook something that you don't like to eat");
+      addText("Dare 6 - Cook something that you don't like to eat");
       break;
     case s:
       for (let i = 1; i <= 10; i++) {
   if (i % 2 == 0) {
-    console.log("Mystery Dare : Bad Luck - Do all the dares no matter the consequences");
+    addText("Mystery Dare : Bad Luck - Do all the dares no matter the consequences");
   } else {
-    console.log("Mystery Dare : Good Luck - Roll the Dice Once More After this :) ");
+    addText("Mystery Dare : Good Luck - Roll the Dice Once More After this :) ");
   }
 }
 
       break;
     default:
-      console.log("Huh?!");
+      addText("Huh?!");
   }
 });
 
   onInput("d", () => {
-  console.log("Game reset! Press 's' to start again.");
+  addText("Game reset! Press 's' to start again.");
   gameStarted = false;
   setMap(levels[level]);
 });
