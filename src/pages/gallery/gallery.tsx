@@ -6,59 +6,73 @@ import Input from "../../components/design-system/input";
 import { IoCaretDown, IoSearch } from "react-icons/io5";
 import "./gallery.css";
 
-type SortOrder = "chronological" | "ascending" | "descending";
+enum SortOrder {
+	TUTORIALS_AND_CHRONOLOGICAL,
+	CHRONOLOGICAL,
+	ASCENDING,
+	DESCENDING
+}
 type GalleryGameMetadata = GameMetadata & { show: boolean };
+type Filter = {
+	query: string,
+	tags: string[],
+	sort: SortOrder
+};
 export default function Gallery({ games, tags }: { games: GameMetadata[], tags: string[] }) {
 	const [gamesState, setGamesState] = useState<GalleryGameMetadata[]>([]);
-	const [sortOrder, setSortOrder] = useState<string>("");
-	const [tagFilter, setTagFilter] = useState<string>("");
-	const [searchQuery, setSearchQuery] = useState<string>("");
+	const [filter, setFilter] = useState<Filter>({query: "", sort: SortOrder.TUTORIALS_AND_CHRONOLOGICAL, tags: [] })
 
-	function sortGames(games: GameMetadata[], order: SortOrder): void {
-		if (order === "chronological") {
-			games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn))
-				.slice(0, 10)
-				.forEach(game => (game.isNew = true));
+	useEffect(() => {
+		const lowerCaseQuery = filter.query.toLowerCase();
+		const _games = games.filter(
+				game => game.lowerCaseTitle.includes(lowerCaseQuery) || 
+				game.lowerCaseAuthor.includes(lowerCaseQuery)
+			) // filter by query
+			.filter(game => { // filter by tags
+				for (const tag of filter.tags) {
+					if (game.tags.indexOf(tag) === -1) return false;
+				}
+				return true;
+			});
+		setGamesState(sortGames(_games, filter.sort).map(game => ({ ...game, show: true })) as GalleryGameMetadata[]);
+
+	}, [filter]);
+
+	function sortGames(games: GameMetadata[], order: SortOrder): GameMetadata[] {
+
+		// mark the newest games first
+		let _games = games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn))
+			.slice(0, 10)
+			.map(game => ({ ...game, isNew: true }) as GameMetadata)
+			.concat(games.slice(10));
+
+		switch (order) {
+			case SortOrder.CHRONOLOGICAL: {
+				 _games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn));
+				break;	
+			}
+			case SortOrder.TUTORIALS_AND_CHRONOLOGICAL: {
+				_games =  _games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn));
+
+				// put tutorials first
+				_games.sort((a, _) => a.tags.includes("tutorial") ? -1 : 1);
+				break;
+			}
+			case SortOrder.ASCENDING: {
+				_games.sort((a, b) => a.lowerCaseTitle > b.lowerCaseTitle ? 1 : -1);
+				break;
+			}
+			case SortOrder.DESCENDING: {
+				_games.sort((a, b) => b.lowerCaseTitle > a.lowerCaseTitle ? 1 : -1);
+				break;
+			}
 		}
-		if (order === "ascending") games.sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1);
-		if (order === "descending") games.sort((a, b) => b.title.toLowerCase() > a.title.toLowerCase() ? 1 : -1);
-
-		// put tutorials first
-		games.sort((a, _) => a.tags.includes("tutorial") ? -1 : 1)
-	}
-
-	function filterTags(games: GameMetadata[]): void {
-		if (tagFilter === "") {
-			let otherGames = [...games];
-			sortGames(otherGames, sortOrder as SortOrder);
-			setGamesState(otherGames as GalleryGameMetadata[]);
-			return;
-		}
-		setGamesState(games.filter(game => game.tags.includes(tagFilter)) as GalleryGameMetadata[]);
-	}
+		return _games;
+	}	
 
 	useEffect(() => {
-		let otherGames = [...gamesState];
-		sortGames(otherGames, sortOrder as SortOrder)
-		setGamesState(otherGames);
-	}, [sortOrder]);
+		sortGames(gamesState, SortOrder.TUTORIALS_AND_CHRONOLOGICAL);
 
-	useEffect(() => { filterTags(games); }, [tagFilter]);
-	useEffect(() => {
-		setGamesState(games.map(game => {
-			let _game: any = { ...game };
-			let query = searchQuery.toLowerCase();
-			const matchesQuery = game.title.toLowerCase().includes(query) ||
-
-			game.author.toLowerCase().includes(query);
-			_game.show = matchesQuery;
-
-			return _game;
-		}));
-	}, [searchQuery]);
-
-
-	useEffect(() => {
 		interface GameCard {
 			element: HTMLLIElement;
 			filename: string;
@@ -121,7 +135,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 					<div class="search-controls">
 						<div class="select">
 							<select onChange={(event) => {
-								setTagFilter((event.target! as HTMLSelectElement).value);
+								setFilter(_filter => ({ ..._filter, tags: [ ...filter.tags, (event.target! as HTMLSelectElement).value] }))
 							}} id="tag-select">
 								<option value="">Filter by tag...</option>
 								{
@@ -136,13 +150,17 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 						</div>
 
 						<div class="select">
-							<select value={sortOrder} onChange={(event) => {
-								setSortOrder(() => (event.target! as HTMLSelectElement).value! as SortOrder);
+							<select 
+							value={SortOrder[filter.sort]}
+							onChange={(event) => {
+								console.log(" filter -> ", SortOrder[(event.target! as HTMLSelectElement).value! as keyof typeof SortOrder]);
+								setFilter(_filter => ({ ..._filter, sort: SortOrder[(event.target! as HTMLSelectElement).value! as keyof typeof SortOrder] }));
 							}}>
 								<option value="">Sort by...</option>
-								<option value="chronological">Release date</option>
-								<option value="ascending">A-Z</option>
-								<option value="descending">Z-A</option>
+								<option value="CHRONOLOGICAL">Release date</option>
+								<option value="TUTORIALS_AND_CHRONOLOGICAL">Default</option>
+								<option value="ASCENDING">A-Z</option>
+								<option value="DESCENDING">Z-A</option>
 							</select>
 
 							<IoCaretDown aria-hidden="true" />
@@ -151,9 +169,9 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 						<div class="search">
 							<IoSearch aria-hidden="true" />
 							<Input
-								value={searchQuery}
+								value={filter.query}
 								onChange={event => {
-									setSearchQuery(event.target.value);
+									setFilter(_filter => ({ ..._filter, query: event.target.value }));
 								}}
 								id="search-input"
 								placeholder="Search gallery"
@@ -170,9 +188,23 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 				</div>
 			</div>
 
+			<div class="filter-tags">
+				{filter.tags.map(tag => 
+					<span 
+						class="tag-span"
+						onClick={() => {
+							setFilter(filter => ({
+								...filter,
+								tags: filter.tags.filter(_tag => _tag != tag)
+							}));
+						}}
+					>{tag} x</span>
+				)}
+			</div>
+
 			<div id="games">
 				{
-					gamesState.map((game: GalleryGameMetadata) => (
+					gamesState.map((game: GalleryGameMetadata) => (						
 						<a
 							style={`display:${game.show ? "block" : "none"}`}
 							class="game"
@@ -191,7 +223,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 							) : null}
 
 							<img
-								src={game.img}
+								src={`gallery/${game.img}`}
 								alt={`preview of ${game.filename}.js`}
 							/>
 							<h3>{game.title}</h3>

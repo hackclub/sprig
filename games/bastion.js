@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: bastion
+@author: de-y (Dheeraj Chintapalli)
+@tags: []
+@img: ""
+@addedOn: 2023-10-19
+*/
+
+    /*
 Bastion:
 Simple Fireboy/Watergirl styled game
 

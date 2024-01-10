@@ -9,7 +9,8 @@ import Gallery from "./gallery";
 
 const session = await getSession(Astro.cookies);
 
-const games = await getGalleryGames();
+const games = getGalleryGames().map(game => ({ ...game, title: game.title.trim(), lowerCaseTitle: game.title.trim().toLowerCase(), lowerCaseAuthor: game.author.toLowerCase() }));
+
 const tags = [
 	...new Set(games.reduce<string[]>((p, c) => [...p, ...c.tags], [])),
 ];

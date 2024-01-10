@@ -1,5 +1,8 @@
 /*
 @title: Mystery of scooter
+@tags: ['WIP']
+@img: ""
+@addedOn: 2022-09-08
 @author: Lucas
 */
 

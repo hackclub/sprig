@@ -1,5 +1,8 @@
 /*
 @title: Trash_IT
+@tags: ['strategy']
+@img: ""
+@addedOn: 2022-09-14
 @author: N Rizwan
 */
 

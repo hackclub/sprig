@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: BoxMaze
+@author: Kalo
+@tags: ['logic']
+@img: ""
+@addedOn: 2023-11-13
+*/
+
+    /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */

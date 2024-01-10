@@ -1,5 +1,8 @@
 /*
 @title: Rolling Obstacles
+@tags: ['puzzle-score']
+@img: ""
+@addedOn: 2023-02-02
 @author: Ruhan Pandit
 */
 

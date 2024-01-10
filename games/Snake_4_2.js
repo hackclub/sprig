@@ -1,5 +1,8 @@
 /*
 @title: Snake_4_2
+@tags: ['endless']
+@img: ""
+@addedOn: 2022-11-18
 @author: Stephen King
 */
 //random function

@@ -1,5 +1,8 @@
 /*
 @title: Apple Skedaddle
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2022-11-06
 @author: DieselFalcon
 
 Rules:

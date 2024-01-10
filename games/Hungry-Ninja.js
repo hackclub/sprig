@@ -1,5 +1,8 @@
 /*
 @title: Hungry-Ninja
+@tags: ['']
+@img: ""
+@addedOn: 2023-12-19
 @author: Prajval Raval
 
 Instructions:

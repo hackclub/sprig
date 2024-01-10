@@ -1,5 +1,8 @@
 /*
 @title: alien_invaders
+@tags: ['classic']
+@img: ""
+@addedOn: 2022-09-28
 @author: stati30241
 
 Controls:

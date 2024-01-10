@@ -1,5 +1,8 @@
 /*
 @title: scrolling_maze
+@tags: []
+@img: ""
+@addedOn: 2023-01-15
 @author: Ben
 */
 /*

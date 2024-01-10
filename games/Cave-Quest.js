@@ -1,5 +1,8 @@
 /*
 @title: Cave-Quest
+@tags: ['energy-control']
+@img: Cave-Quest
+@addedOn: 2023-02-18
 @author: OHIO-MAN
 */
 /*

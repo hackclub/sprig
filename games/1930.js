@@ -1,6 +1,9 @@
 {}
 /*
 @title: 1930
+@tags: ['strategy']
+@img: ""
+@addedOn: 2023-01-16
 @author: tejasag (@tej on slack)
 Keys: 
 - W to jump

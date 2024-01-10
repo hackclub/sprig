@@ -1,5 +1,8 @@
 /*
 @title: Pocket Piano
+@tags: ['simulation']
+@img: ""
+@addedOn: 2023-02-15
 @author: Odysseus Kirikopoulos
 */
 

@@ -1,5 +1,8 @@
 /*
 @title: Flurffy
+@tags: ['classic']
+@img: ""
+@addedOn: 2022-09-13
 @author: Lucas
 */
 const flurffy = "f"

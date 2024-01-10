@@ -1,5 +1,8 @@
 /*
 @title: 13 medium sokoban puzzles
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2022-12-19
 @author: Zachary Miller
 
 Instructions:

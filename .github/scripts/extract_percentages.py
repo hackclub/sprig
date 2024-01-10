@@ -24,15 +24,21 @@ def extract_similarity_percentage(html_file):
 def process_html_files(directory, threshold=50):
     log("Processing HTML files for plagiarism results...")
     high_plagiarism_detected = False
+    high_plagiarism_files = []
     for filename in os.listdir(directory):
         if filename.endswith(".html"):
             file_path = os.path.join(directory, filename)
             percentage = extract_similarity_percentage(file_path)
             if percentage is not None and percentage >= threshold:
                 log(f"High plagiarism detected - {filename.replace('.html', '.js')}: {percentage}%")
+                high_plagiarism_files.append(filename.replace('.html', '.js') + ": " + str(percentage) + "%")
                 high_plagiarism_detected = True
+    return high_plagiarism_detected, high_plagiarism_files
 
-    return high_plagiarism_detected
+def write_to_markdown(file_path, lines):
+    with open(file_path, 'w') as md_file:
+        for line in lines:
+            md_file.write(line + '\n')
 
 def main():
     if len(sys.argv) != 2:
@@ -41,12 +47,19 @@ def main():
         sys.exit(1)
 
     saved_dir_path = sys.argv[1]
-    log(f"Received saved directory path: {saved_dir_path}")
-    if process_html_files(saved_dir_path):
+    high_plagiarism_detected, high_plagiarism_files = process_html_files(saved_dir_path)
+
+    markdown_lines = ["# Plagiarism Report"]
+    if high_plagiarism_detected:
         log("High plagiarism percentages detected.")
+        markdown_lines.append("## Game overlap report:")
+        markdown_lines.extend(high_plagiarism_files)
+        write_to_markdown("plagiarism-report.md", markdown_lines)
         sys.exit(1)
     else:
         log("No high plagiarism percentages detected.")
+        markdown_lines.append("## Game overlap report: \n None detected")
+        write_to_markdown("plagiarism-report.md", markdown_lines)
 
 if __name__ == "__main__":
     main()

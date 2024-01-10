@@ -1,4 +1,13 @@
-const player = "p"
+
+/* 
+@title: breakfast_maze!
+@author: Alex
+@tags: ['sokoban-style']
+@img: breakfast_maze!
+@addedOn: 2023-08-01
+*/
+
+    const player = "p"
 const goal = "g"
 const maze = "m"
 const key = "k"

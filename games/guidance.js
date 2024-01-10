@@ -1,5 +1,8 @@
 /*
 @title: guidance
+@tags: ['strategy']
+@img: ""
+@addedOn: 2022-12-27
 @author: danush_ramanan
 */
 

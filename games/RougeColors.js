@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: RougeColors
+@author: KingstimusPrime
+@tags: ['strategy']
+@img: ""
+@addedOn: 2023-04-19
+*/
+
+    /*
 KingstimusPrime
 
 The goal of the game is to defeat all of the enemies by walking into them with the same color.

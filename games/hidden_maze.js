@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: hidden_maze
+@author: Rylan Berry
+@tags: ['logic']
+@img: ""
+@addedOn: 2023-05-06
+*/
+
+    /*
 This is hidden maze, the first of three, you have 5 mazes to get through until you're done, 
 if you want more out of this, go to hidden maze infinite, it's in the gallery aswell,
 depending on when you're playing this, I recomend checking to see if the 3rd is out yet.

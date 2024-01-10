@@ -1,4 +1,13 @@
-const player = "p"
+
+/* 
+@title: mazegame
+@author: Elian
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2023-11-04
+*/
+
+    const player = "p"
 const wall="w"
 const end="e"
 var gameRunning=true

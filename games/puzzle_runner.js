@@ -1,5 +1,8 @@
 /*
 @title: puzzle_runner
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2022-10-12
 @author: Shanath
 
 In Puzzle Runner, you must navigate through the maze while 
