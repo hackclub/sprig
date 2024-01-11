@@ -3184,8 +3184,8 @@
     "addedOn": "2023-11-04"
   },
   {
-    "filename": "froggo_s_dunegon_adventures",
-    "title": "froggo_s_dunegon_adventures",
+    "filename": "froggo_s_dungeon_adventures",
+    "title": "froggo_s_dungeon_adventures",
     "author": "amuseee (Vikshar Rajesh)",
     "img": "",
     "tags": ["dungeon"],
@@ -3454,5 +3454,13 @@
     "img": "",
     "tags": [""],
     "addedOn": "2023-01-09"
+  },
+  {
+    "filename": "taiko_fever",
+    "title": "taiko_fever",
+    "author": "Joey Lent",
+    "img": "",
+    "tags": ["advanced", "music"],
+    "addedOn": "2023-01-10"
   }
 ]
