@@ -1,6 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
+@title: Blob_Runner
+@tags: ['']
+@img: ""
+@addedOn: 2023-01-09
+@author: Bright Li
 */
 
 const player = "p"
