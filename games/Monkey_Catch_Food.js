@@ -1,4 +1,12 @@
 /*
+@title: Monkey_Catch_Food
+@author: Ahmet Dedeler
+@tags: ['catch']
+@img: ""
+@addedOn: 2023-12-30
+*/
+
+/*
   Fruit Catcher Game:
   Catch falling fruits while avoiding bombs. Use 'A' to move left, 'D' to move right,
   and 'J' to jump. Increase your score, collect life fruits for extra lives, and be careful
