@@ -239,6 +239,34 @@ v...........v
 v..f.......fv
 v........f..v
 vffffff....fv
+nhhhhhhhhhhhm`,
+  map `
+chhhhhhhhhhhb
+v......ff...v
+v.f.....chb.v
+v....f..vfv.v
+v..cb...vfv.v
+v..nm...vfvfv
+v.......vfv.v
+vf....p.vfv.v
+v.cb....vfv.v
+v.vv....vfv.v
+v.nm....vfv.v
+vf...f......v
+nhhhhhhhhhhhm`,
+  map `
+chhhhhhhhhhhb
+vfffffffffffv
+vfffffffffffv
+vfffffffffffv
+vfffffffffffv
+vfffffffffffv
+vffffchbffffv
+vffffvpvffffv
+vffffv.vffffv
+vffffv.vffffv
+v.hhhm.nhhh.v
+v...........v
 nhhhhhhhhhhhm`
 ]
 
