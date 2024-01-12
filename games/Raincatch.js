@@ -1,3 +1,11 @@
+/*
+@title: Raincatch
+@author: A Malladi
+@tags: ['catch']
+@img: ""
+@addedOn: 2023-12-31
+*/
+
 
 const player = "p"
 const raindrop = "d" // Added raindrop symbol
