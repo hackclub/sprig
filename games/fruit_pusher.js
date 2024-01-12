@@ -178,6 +178,17 @@ onInput("d", () => {
   getFirst(player).x += 1
 })
 
+onInput("j", () => {
+  const currentLevel = levels[level]; // get the original map of the level
+
+  // make sure the level exists before we load it
+  if (currentLevel !== undefined) {
+    clearText("");
+    setMap(currentLevel);
+  }
+});
+
+
 afterInput(() => {
   // count the number of tiles with goals
   const targetNumber = tilesWith(goal).length;
