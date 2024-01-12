@@ -177,7 +177,7 @@ onInput("s", () => {
   }
   switch (result) {
     case d1:
-      addText("Eat chilis");
+      addText("Jump rope");
       addText("");
       break;
     case d2:
@@ -185,15 +185,15 @@ onInput("s", () => {
       addText("");
       break;
     case d3:
-      addText("Prank call");
+      addText("Do Moonwalk");
       addText("");
       break;
     case d4:
-      addText("Climb high");
+      addText("Thumb wrestle");
       addText("");
       break;
     case d5:
-      addText("Twerk now ");
+      addText("Dance solo");
       addText("");
       break;
     case d6:
