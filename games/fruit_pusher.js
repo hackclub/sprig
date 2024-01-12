@@ -1,12 +1,10 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
 
-@title: 
-@author: 
-@tags: []
+@title: fruit_pusher
+@author: kirby-b
+@tags: [fun, short]
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-1-12
 */
 
 const player = "p"
