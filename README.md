@@ -1,4 +1,4 @@
-# :leaves: Hack Club Sprig :leaves: 
+# 🍃 Hack Club Sprig 🍃
 
 **[💻 Online Editor: Make a game](https://sprig.hackclub.com/editor)** | **[👀 Gallery: Find games](https://sprig.hackclub.com/gallery)** | **[🕸 Landing Page](https://sprig.hackclub.com)** | **[🎮 Firmware](https://github.com/hackclub/spade)** | **[👾 Engine](https://github.com/hackclub/sprig-engine)**
 
@@ -150,6 +150,10 @@ Now, run `yarn dev` in the engine repo to start the TypeScript build process.
 The Sprig was developed by a team at Hack Club with assistance from Brian Silverman (who helped develop Scratch and the precursor to Lego Mindstorms), Vadim Gerasimov (engineer at Google who helped create Tetris when he was 15), and Quentin Bolsée (researcher at MIT and Vrije University Brussels), and dozens contributions from teenage open-source developers!
 
 We're also grateful for amazing open-source projects that make this possible like [Kaluma](https://kalumajs.org/), [JerryScript](https://jerryscript.net/), [uhtml](https://github.com/WebReflection/uhtml), and [CodeMirror](https://codemirror.net/).
+
+## Responsibilities
+
+Please refer to [this document](./RESPONSIBILITIES.md) for a list of current team members who are accountable for maintaining certain aspects of the Sprig platform.
 
 ## License
 

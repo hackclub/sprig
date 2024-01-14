@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: calculator_puzzle
+@author: aboutdavid
+@tags: ['thematic-puzzle']
+@img: ""
+@addedOn: 2023-04-25
+*/
+
+    /*
 Greetings! The goal of this game is to get to the goal using
 buttons
 

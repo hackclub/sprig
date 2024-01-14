@@ -13,10 +13,17 @@ const data = (
 
 <Categories name={data["team.categories.name"]} title={data["team.categories.title"]} >
     <p>{data["team.categories.about"]}</p>
-    <h2>{data["team.categories.hq"]}</h2>
-      <p>{data["team.categories.hq.permissions"]}</p>
+    <h2>{data["team.categories.product"]}</h2>
+      <Staff site="github.com/leomcelroy" img="github.com/leomcelroy.png" name="Leo" pronouns="he/him" role={data["team.categories.review.role.owner"]} />
+    <h2>{data["team.categories.engineering"]}</h2>
+      <Staff site="github.com/grymmy" img="github.com/grymmy.png" name="Graham" pronouns="he/him" role={data["team.categories.review.role.owner"]} />
+    <h2>{data["team.categories.operations"]}</h2>
+      <Staff site="github.com/sheepy3" img="github.com/sheepy3.png" name="Shawn" pronouns="he/him" role={data["team.categories.review.role.owner"]} />
+    <h2>{data["team.categories.communications"]}</h2>
+    <Staff site="github.com/karamassie" img="github.com/karamassie.png" name="Kara" pronouns="she/her" role={data["team.categories.review.role.owner"]} />
     <h2>{data["team.categories.review"]}</h2>
-      <p>{data["team.categories.review.permissions"]}</p>
-      <Staff site="github.com/LucasHT22" img="github.com/LucasHT22.png" name="Lucas" pronouns="he/him" role={data["team.categories.review.role.lucas"]} />
-    <!-- need to add more ppl <Staff site="github.com/USERNAME" img="github.com/USERNAME.png" name="" pronouns="" role="" />-->
+      <Staff site="github.com/LucasHT22" img="github.com/LucasHT22.png" name="Lucas" pronouns="he/him" role={data["team.categories.review.role.owner"]} />
+      <!-- need to add more ppl <Staff site="github.com/USERNAME" img="github.com/USERNAME.png" name="" pronouns="" role="" />-->
+    <br />
+    <p>{data["team.categories.learn.more"]} <a href="https://github.com/hackclub/sprig/blob/main/RESPONSIBILITIES.md">RESPONSIBILITIES.md</a></p>
 </Categories>

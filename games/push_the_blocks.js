@@ -1,5 +1,8 @@
 /*
 @title: Push the Blocks
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2022-11-10
 @author: aidan
 
 Instructions:

@@ -1,4 +1,7 @@
 //@title: ding_dong-delivery
+@tags: []
+@img: ""
+@addedOn: 2023-09-09
 //@author: cott3-github * efe - slack 
 //controls:
 //wasd to move, j to restart level

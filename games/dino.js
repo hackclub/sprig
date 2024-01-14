@@ -1,5 +1,8 @@
 /*
 @title: dino
+@tags: ['endless']
+@img: ""
+@addedOn: 2023-02-19
 @author: Pfostierer
 */
 

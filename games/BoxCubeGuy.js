@@ -1,5 +1,8 @@
 /*
 @title: BoxCubeGuy
+@tags: ['sokoban-style']
+@img: BoxCubeGuy
+@addedOn: 2022-11-25
 @author: CaptainATW
 */
 

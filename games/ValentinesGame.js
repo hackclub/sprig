@@ -1,5 +1,8 @@
 /*
 @title: ValentinesGame
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2023-02-13
 @author: Markonije
 */
 

@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Defend_the_Keep
+@author: alphaom33
+@tags: ['dodge']
+@img: ""
+@addedOn: 2023-06-04
+*/
+
+    /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */

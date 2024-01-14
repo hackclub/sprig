@@ -1,5 +1,12 @@
-// @name: The Legend of Zelda: Link's Escape
-// @author: ItzHex
+
+/* 
+@title: The_Legend_of_Zelda-Links_Escape
+@author: ItzHex
+@tags: ['advanced']
+@img: ""
+@addedOn: 2023-08-28
+*/
+
 
 // let t1 = 1
 // let t2 = 2

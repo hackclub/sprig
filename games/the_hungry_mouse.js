@@ -1,5 +1,8 @@
 /*
 @title: the_hungry_mouse
+@tags: ['strategy']
+@img: the_hungry_mouse
+@addedOn: 2023-03-01
 @author: KaiEtkin
 */
 

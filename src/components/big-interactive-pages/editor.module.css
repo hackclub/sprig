@@ -77,13 +77,14 @@
 	cursor: col-resize;
 	background: transparent;
 }
-  
-.resizeBar:hover, .resizeBar.resizing {
+
+.resizeBar:hover,
+.resizeBar.resizing {
 	background: var(--accent-light);
 }
 
 .canvasWrapper {
-	max-height: 80%;
+	max-height: 100%;
 }
 
 .screen {
@@ -141,4 +142,17 @@
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+}
+
+.outputArea {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	max-width: 100%;
+	overflow: hidden;
+}
+
+.helpContainer {
+	max-width: 100%;
 }

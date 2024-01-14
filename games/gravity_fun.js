@@ -1,5 +1,8 @@
 /*
 @title: gravity_fun
+@tags: ['classic']
+@img: gravity_fun
+@addedOn: 2022-12-22
 @author: phantomeniasll
 */
 

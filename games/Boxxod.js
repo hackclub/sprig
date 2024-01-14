@@ -1,5 +1,8 @@
 /*
 @title: Boxxod
+@tags: ['logic']
+@img: Boxxod
+@addedOn: 2023-10-20
 @author: Kokonico
 
 a game about gravity and boxes.

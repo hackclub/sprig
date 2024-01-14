@@ -1,5 +1,8 @@
 /*
 @title: the RUN
+@tags: []
+@img: ""
+@addedOn: 2022-11-21
 @author: lumos studio
 */
 

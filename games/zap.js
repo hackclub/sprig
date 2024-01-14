@@ -1,4 +1,13 @@
-// Zap by Samvid Konchada (theamazing0)
+
+/* 
+@title: zap
+@author: Samvid Konchada
+@tags: ['multiplayer']
+@img: ""
+@addedOn: 2023-10-21
+*/
+
+    // Zap by Samvid Konchada (theamazing0)
 
 // 2 Players compete to get to a white "goal" box in multiple rounds.
 // When a player wins 3 rounds, they win the game

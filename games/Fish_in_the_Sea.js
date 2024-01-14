@@ -1,5 +1,8 @@
 /*
 @title: Fish_in_the_Sea
+@tags: ['energy-control']
+@img: ""
+@addedOn: 2022-12-01
 @author: Hugh Wilks
 */
 

@@ -1,5 +1,8 @@
 /*
 @title: floppyMatch
+@tags: ['logic']
+@img: ""
+@addedOn: 2022-10-05
 @author: GBan22
 Instructions:
 

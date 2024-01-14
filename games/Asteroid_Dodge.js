@@ -1,5 +1,8 @@
 /*
 @title: Asteroid_Dodge!
+@tags: ['dodge']
+@img: ""
+@addedOn: 2023-08-09
 @author: V205
 */
 // Thanks to Hackclub and tutorials!

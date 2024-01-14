@@ -1,5 +1,8 @@
 /*
 @title: Maze_Runner3
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2023-03-19
 @author: Charlie
 
 First time? Check out the tutorial game:

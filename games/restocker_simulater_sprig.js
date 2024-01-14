@@ -1,5 +1,8 @@
 /*
 @title: restocker simulater
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2022-11-23
 @author: omegakitty
 */
 

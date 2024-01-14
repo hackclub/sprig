@@ -1,12 +1,9 @@
 .container {
-	z-index: 99;
-	position: fixed;
-	bottom: 0;
-	right: 10px;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
-	width: 500px;
+	height: 100%;
+	max-width: 100%;
 }
 
 .tabs {
@@ -53,13 +50,12 @@
 .content {
 	background: var(--bg-surface);
 	border: 2px solid var(--accent);
-	border-bottom: none;
 	padding: 10px;
 	width: 100%;
-	overflow: auto;
+	overflow: scroll;
 	height: 100%;
-	max-height: 500px;
 	box-shadow: 0 0 20px 0 #00000038;
+	display: inline-block;
 }
 
 .content strong {
@@ -134,13 +130,12 @@
 .content_dark {
 	background: #2f2f2f;
 	border: 2px solid var(--accent);
-	border-bottom: none;
 	padding: 10px;
 	width: 100%;
-	overflow: auto;
+	overflow: scroll;
 	height: 100%;
-	max-height: 500px;
 	box-shadow: 0 0 20px 0 #00000038;
+	display: inline-block;
 }
 
 .content_dark strong {

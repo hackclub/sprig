@@ -1,6 +1,9 @@
 /*
 @author: @Soumay Manderna
 @title: air_hockey
+@tags: ['classic']
+@img: ""
+@addedOn: 2023-04-01
 
 Controls--
 

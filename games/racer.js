@@ -1,5 +1,8 @@
 /*
 @title: racer
+@tags: ['logic']
+@img: ""
+@addedOn: 2022-11-08
 @author: Snow
 */
 

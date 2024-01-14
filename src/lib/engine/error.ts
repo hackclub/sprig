@@ -153,34 +153,3 @@ function findErrorLineCol(stack: string | undefined): [number | null, number | n
 
 	return [line, col]
 }
-
-/*
- * Highlights the line gutter of the speciefied line number to indicate an error.
- * This uses a custom attribute to style the gutter.
- * This is modified code from V1.
- */
-export function highlightError(line: number) {
-	const cmLineGutters = document.querySelectorAll(".cm-lineNumbers > .cm-gutterElement") // Get all the line gutters
-	// Find the gutter that matches the line number and is not hidden
-	for (let i = 0; i < cmLineGutters.length; i++) {
-		const cmLineGutter = cmLineGutters[i] as HTMLElement;
-		const innerNumber = cmLineGutter.innerText;
-		const height = cmLineGutter.style.height;
-		if (Number(innerNumber) !== line || height === "0px") {
-			cmLineGutter.removeAttribute("err-line");
-			continue;
-		};
-		cmLineGutter.setAttribute("err-line", "");
-	}
-}
-
-/*
- * Clears all exsisting error highlighted from the gutter
- */
-export function clearErrorHighlight() {
-	const cmLineGutters = document.querySelectorAll(".cm-lineNumbers > .cm-gutterElement")
-	for (let i = 0; i < cmLineGutters.length; i++) {
-		const cmLineGutter = cmLineGutters[i] as HTMLElement;
-		cmLineGutter.removeAttribute("err-line");
-	}
-}

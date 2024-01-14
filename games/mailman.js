@@ -1,4 +1,13 @@
-let badtime = 0; // Initialize badtime
+
+/* 
+@title: mailman
+@author: Akko
+@tags: []
+@img: ""
+@addedOn: 2023-09-07
+*/
+
+    let badtime = 0; // Initialize badtime
 let eviltime = 0;
 const tunee = tune`
 500: G4~500 + E5^500,

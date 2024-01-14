@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Space-war
+@author: Yash
+@tags: ['catch']
+@img: ""
+@addedOn: 2023-10-02
+*/
+
+    /*
 
   Game: Space War
   Author: Yash

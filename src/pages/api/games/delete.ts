@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import { firestore, getGame, getSession } from '../../../lib/game-saving/account'
+import {  deleteDocument, getGame, getSession } from '../../../lib/game-saving/account'
 
 export const post: APIRoute = async ({ request, cookies }) => {
 	let gameId: string
@@ -18,6 +18,6 @@ export const post: APIRoute = async ({ request, cookies }) => {
 	if (!session) return new Response('Unauthorized', { status: 401 })
 	if (session.user.id !== game.ownerId) return new Response(`Can't delete a game you don't own`, { status: 403 })
 
-	await firestore.collection('games').doc(gameId).delete()
+	await deleteDocument('games', gameId);
 	return new Response(JSON.stringify({}), { status: 200 })
 }

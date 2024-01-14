@@ -1,4 +1,13 @@
-const player = "p"
+
+/* 
+@title: drab_bullets
+@author: Chirag
+@tags: ['endless']
+@img: ""
+@addedOn: 2023-05-14
+*/
+
+    const player = "p"
 const ground = "g"
 const bullet = "b"
 const curse = "c"

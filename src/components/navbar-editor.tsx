@@ -80,7 +80,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		saveState = props.persistenceState.value.stale
 			? 'Your changes are unsaved!'
 			: 'No changes to save'
-		
+
 		actionButton = <Button icon={IoShuffle} onClick={() => {
 			if (props.persistenceState.value.session?.session.full)
 				persist(props.persistenceState)
@@ -140,11 +140,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				</a>
 			</li>
 
-			{/* <li>
+			<li>
 				<Button onClick={toggleTheme}>
-					{ isDark.value ? "Light" : "Dark" }
+					{isDark.value ? "Light" : "Dark"}
 				</Button>
-			</li> */}
+			</li>
 
 			<li>
 				<Button

@@ -1,5 +1,8 @@
 /*
 @title: Christmas_Themed_Sokoban 
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2023-01-19
 @author: Joshua
 */
 
