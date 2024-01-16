@@ -2,9 +2,9 @@
 
 @title: fruit_pusher
 @author: kirby-b
-@tags: [fun, short]
+@tags: ["puzzle"]
 @img: ""
-@addedOn: 2024-1-12
+@addedOn: 2024-01-15
 */
 
 const player = "p"
