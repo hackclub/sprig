@@ -1,4 +1,4 @@
-export async function getConsolesRemaining(): Promise<number> {
+export async function getTotalConsoles(): Promise<number> {
 	const jsonText = await fetch('https://airbridge.hackclub.com/v0.1/Sprig%20Waitlist/Requests')
 	const data = await jsonText.json()
 	if (!data) {
