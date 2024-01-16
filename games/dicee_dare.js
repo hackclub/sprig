@@ -1,3 +1,10 @@
+/*
+@title: dicee_dare
+@author: Antime02
+@tags: ['']
+@img: ""
+@addedOn: 2024-01-15
+*/
 const player = "p";
 const d1 = "H";
 const d2 = "T";
