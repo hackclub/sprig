@@ -3478,5 +3478,21 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2023-01-15"
+  },
+  {
+    "filename": "Catch-the-apples",
+    "title": "Catch-the-apples",
+    "author": "Jack",
+    "img": "",
+    "tags": ["endless", "catch"],
+    "addedOn": "2023-01-15"
+  },
+  {
+    "filename": "dicee_dare",
+    "title": "dicee_dare",
+    "author": "Harsh Kumar",
+    "img": "",
+    "tags": [""],
+    "addedOn": "2023-01-15"
   }
 ]
