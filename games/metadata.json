@@ -3462,5 +3462,13 @@
     "img": "",
     "tags": ["advanced", "music"],
     "addedOn": "2023-01-10"
+  },
+  {
+    "filename": "fruit_pusher",
+    "title": "fruit_pusher",
+    "author": "kirby-b",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-15"
   }
 ]
