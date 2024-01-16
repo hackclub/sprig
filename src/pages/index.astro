@@ -5,9 +5,9 @@ import StandardHead from '../components/standard-head.astro'
 import '../global.css'
 import '../legacy/homepage.scss'
 import { firestore, getSession } from '../lib/game-saving/account'
-import { getConsolesRemaining } from '../lib/remaining-consoles'
+import { getTotalConsoles } from '../lib/total-consoles'
 
-const remainingConsoles = await getConsolesRemaining()
+const totalConsoles = await getTotalConsoles()
 
 const stories = [
 	{ id: 'sprig-front', width: 800, height: 602 },
@@ -217,7 +217,7 @@ if (session && session.session.full) {
 					<article>
 						<h3>3</h3>
 						<p>Check your mailbox for a Sprig device :)</p>
-						<p class='remaining-consoles'><span>{remainingConsoles}</span> remaining</p>
+						<p class='remaining-consoles'><span>{totalConsoles}</span> Hack Clubbers have received a sprig</p>
 					</article>
 				</div>
 			</div>
