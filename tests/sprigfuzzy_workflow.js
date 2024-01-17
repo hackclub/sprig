@@ -1,5 +1,5 @@
 import { baseEngine } from "npm:sprig@latest/base"
-import { assert } from "https://deno.land/std@0.212.0/assert/mod.ts";
+import { assert, assertEquals } from "https://deno.land/std@0.212.0/assert/mod.ts";
 import { deadline } from "https://deno.land/std/async/deadline.ts";
 import seedrandom from "npm:seedrandom@latest";
 // import { iterateReader } from "https://deno.land/std@0.162.0/streams/conversion.ts";
@@ -31,43 +31,37 @@ import seedrandom from "npm:seedrandom@latest";
 //   };
 // }
 
-const SKIP = ["mandelbrot.js"];
 
+async function testRoutine(name) {
+	setTimeout(() => Promise.reject(), 100);
+	await deadline(testScript(name), 100);
+}
+
+// get games specified via cli arguments
 const ONLY = Deno.args.filter(x => x.startsWith('games/')).map(x => x.slice(6)).concat(Deno.args.filter(x => !x.startsWith('games/')));
 
-function testRoutine(name) {
-	Deno.test(`Fuzzying ${name}`, async () => {
-		try {
-			await deadline(testScript(name), 100);
-			// await testScript(name)
-			assert(true, "game passed");
-		} catch {
-			await Promise.reject()
-			assert(false, "game failed");
-		}
-	});
-}
-
-Deno.test("one-game", async () => {
-	await Promise.all(ONLY.map(game => testRoutine(game)));
+Deno.test("one-game", async (t) => {
+	for (const game of ONLY) {
+		await t.step(`Test ${game}`, async () => {
+			await testRoutine(game);
+		});
+	}
 });
 
-brokenGames = [];
-const tasks = [];
+Deno.test("all-games", async (t) => {
+	if (ONLY.length != 0) return;
 
-if (ONLY.length === 0) {
-	const games = [];
+	const SKIP = ["mandelbrot.js"];
 	for await (const game of Deno.readDir("./games")) {
-		games.push(game);
+		const name = (await game).name;
+		await t.step(`Test ${name}`, async () => {
+			const isJS = name.slice(-3) === ".js";
+			if (!isJS || SKIP.some(x => x === name)) return;
+			await testRoutine(name);
+		});
 	}
-	await Promise.all(games.map(async g => {
-		const name = (await g).name;
-		const isJS = name.slice(-3) === ".js";
-		if (!isJS || SKIP.some(x => x === name)) return;
-		testRoutine(name);
-	}));
-}
-await Promise.all(ONLY.map(g => testRoutine(g)));
+
+});
 
 async function testScript(name) {
 	const script = await Deno.readTextFile(`./games/${name}`);
@@ -96,7 +90,7 @@ async function testScript(name) {
 
 	for (const key of shakespeareMonKeys) {
 		// await comparemaps();
-		simulatekey(key);
+		simulateKey(key);
 		// await spade.simkey(key);
 
 		// if (log) console.log(`<<< pressing ${key} >>>`);
@@ -113,6 +107,8 @@ async function testScript(name) {
 	cleanup();
 	// spade.cleanup();
 	// }
+	// 
+	// indicator the test passed
 }
 
 function gridToString(api) {
