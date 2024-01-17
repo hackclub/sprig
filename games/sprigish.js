@@ -1,4 +1,10 @@
 /*
+@title: sprigish
+@author: dom
+@tags: ["puzzle"]
+@img: ""
+@addedOn: 2024-01-16
+
 A Sprig recreaction(ish) of Dadish.
 "He's a dad AND a radish! 
 His kids have gone missing from the vegetable patch,
