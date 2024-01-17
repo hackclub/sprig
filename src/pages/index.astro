@@ -49,20 +49,23 @@ if (session && session.session.full) {
 
 		<section class='fullpage wrapper'>
 			<div class='container'>
-				<img src='/logo.png' class='title' />
-				<div class='slot magic-container' id='container' draggable='true' ondragstart='startDrag()'>
+				<img src='/logo4.png' class='title' />
+				<div class='slot magic-container' id='container'>
 					<div class='magic' id='m-start' ></div>
-					<h4 id='note'>Click and drag!<h4>
+					<img id="note" src="/interact.png" />
+					<!-- <h4 id='note'>Click and drag!<h4> -->
 				</div>
 			</div>
 			<div class='text'>
-				<h1>Make a game, get a free console</h1>
+				<h1>Every player is a creator.</h1>
+				<p>Explore 430+ games built by other teenagers, or make your own and we'll send you a console!</p>
+				<div>
 				{
 					session && session.session.full ? (
 						gameCount === 0 ? (
 							<a href='/~/new'>
 								<button class='btn active'>
-									Get started &raquo;
+									Make a game &raquo;
 								</button>
 							</a>
 						) : (
@@ -75,12 +78,18 @@ if (session && session.session.full) {
 					) : (
 						<a href='/editor'>
 							<button class='btn active'>
-								{session ? 'Open editor' : 'Get started'}{' '}
+								{session ? 'Open editor' : 'Make a game'}{' '}
 								&raquo;
 							</button>
 						</a>
 					)
 				}
+				<!-- <a href='/~/new'>
+					<button class='btn active'>
+						Play a game &raquo;
+					</button>
+				</a> -->
+				</div>
 			</div>
 		</section>
 
@@ -406,6 +415,12 @@ if (session && session.session.full) {
 			import { type InputKey, VALID_INPUTS } from 'sprig';
 			import { imageDataEngine } from 'sprig/image-data';
 			import { homepageExampleCode } from '../lib/examples';
+			// @ts-ignore
+			import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
+			// @ts-ignore
+			import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+			// @ts-ignore
+			import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 
 			// @ts-ignore
 			import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment';
@@ -415,6 +430,7 @@ if (session && session.session.full) {
 			import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 
 			if (window.screen.width > 770) {
+				console.log(window.screen.width)
 				// GPU meets the requirements, proceed with rendering
 
 				const game = imageDataEngine();
@@ -433,7 +449,7 @@ if (session && session.session.full) {
 					1.5 * Math.pow(1 - t, 2) * t + t;
 
 				const initThree = (m: HTMLElement) => {
-					const [width, height] = [1800, 1800];
+					const [width, height] = [1500, 1500];
 
 					const scene = new Scene();
 					scene.environment = RoomEnvironment as unknown as Texture;
@@ -714,12 +730,12 @@ if (session && session.session.full) {
 
 							/* @ts-ignore */
 							glass.material.map.flipY = false;
-						}
 
+							// outlinePass.selectedObjects = [glass]
+						}
 						renderer.render(scene, camera);
 					};
 					animate();
-
 					return {
 						updateNormMouse,
 						registerListeners: controls.registerListeners,
@@ -799,7 +815,7 @@ if (session && session.session.full) {
 			} else {
 				console.error('On small device.');
 				const img = document.createElement('img');
-				img.src = '/preview.webp';
+				img.src = '/preview.png';
 				const container = document.getElementById('container');
 				container.appendChild(img);
 			}

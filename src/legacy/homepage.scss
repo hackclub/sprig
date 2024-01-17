@@ -133,10 +133,16 @@ h6 {
 	justify-content: center;
 	position: relative;
 	flex: 1;
-	max-height: 70vh;
-	max-width: 800px;
-	margin-top: 25vh;
-	margin-bottom: -25vh;
+	// max-height: 70vh;
+	max-width: 700px;
+	margin-top: 150px;
+	margin-bottom: -200px;
+
+	.text {
+		align-items: center;
+		max-width: 80vw;
+		padding-bottom: 5vh;
+	}
 
 	> div {
 		flex: 7;
@@ -154,10 +160,11 @@ h6 {
 
 	.title {
 		position: absolute;
-		width: 100%;
-		top: -13vh;
-		left: 0;
+		width: 80%;
+		left: 10%;
+		top: 0;
 		z-index: 1;
+		margin-top: -60px
 	}
 
 	.title:hover {
@@ -168,17 +175,21 @@ h6 {
 .fullpage .text {
 	display: flex;
 	flex-direction: column;
-	gap: 35px;
+	gap: 20px;
 	align-items: flex-start;
+	padding-bottom: 100px;
+	max-width: 700px;
 
 	h1 {
 		font-size: 2.625rem;
+		background-color: #0a452812;
 	}
 
 	p {
 		font-family: $pixel-text-font;
 		font-weight: 300;
 		font-size: 1.3em;
+		background-color: #0a452812;
 	}
 
 	.cards {
@@ -199,19 +210,29 @@ h6 {
 
 #container > img {
 	width: 150%;
-	margin-top: -5vh;
-	margin-bottom: -15vh;
 }
 
 #note {
 	position: absolute;
-	right: 0px;
-	top: 10vh;
+	right: -120px;
+	top: 100px;
+	width: 200px !important;
+	height: auto;
 	transform: rotate(18deg);
 	z-index: 5;
 	color: #D70000;
-	background-color: #fad231;
 	padding: 5px 10px;
+}
+
+#m::before {
+	content: " ";
+	position: absolute;
+	top: 50%;
+	left: 45%;
+	width: 10%;
+	box-shadow: 
+	0 0 175px 110px #fff; 
+	// 0 0 180px 95px #D3B947;
 }
 
 @media (max-width: 770px) {
@@ -228,25 +249,43 @@ h6 {
 			align-items: center;
 			gap: 10px;
 			text-align: center;
-			margin-top: 10vh;
-			margin-bottom: -10vh;
+			margin-top: 150px;
+			margin-bottom: -150px;
 			max-width: 600px;
 
 			.title {
 				position: absolute;
-				width: 100%;
+				left: 10%;
 				top: 0;
-				left: 0;
 				z-index: 1;
 			}
 		}
 
 		.text {
 			align-items: center;
-			max-width: 80vw;
+			max-width: 600px;
 			padding-bottom: 10vh;
 		}
 	}
+
+	#note {
+		top: 70px;
+		right: -80px;
+		width: 160px !important;
+	}
+
+	#m::before {
+		content: " ";
+		position: absolute;
+		top: 48%;
+		left: 45%;
+		width: 10%;
+		box-shadow: 
+		0 0 140px 40px #fff, 
+		0 0 145px 45px #9f9839,
+		0 0 150px 60px #399F6E;
+	}
+	
 }
 
 @media (max-width: 780px) {
@@ -257,23 +296,29 @@ h6 {
 			align-items: center;
 			gap: 10px;
 			text-align: center;
-			margin-top: 13vh;
-			margin-bottom: -13vh;
+			margin-top: 150px;
+			margin-bottom: -100px;
 
 			.title {
 				position: absolute;
-				width: 100%;
+				left: 10%;
 				top: 0;
-				left: 0;
 				z-index: 1;
 			}
 		}
 
 		.text {
 			align-items: center;
-			max-width: 80vw;
 			padding-bottom: 10vh;
 		}
+
+		#container > img {
+			margin-top: 100px;
+		}
+	}
+	#note {
+		top: -20px;
+		right: -80px;
 	}
 }
 
@@ -285,16 +330,19 @@ h6 {
 			align-items: center;
 			gap: 10px;
 			text-align: center;
-			margin-top: 20vh;
-			margin-bottom: -20vh;
+			margin-top: 200px;
+			margin-bottom: -200px;
 
 			.title {
 				position: absolute;
-				width: 100%;
-				top: 0;
-				left: 0;
+				top: -10px;
+				left: 10%;
 				z-index: 1;
 			}
+		}
+
+		#container img {
+			margin-top: 10px;
 		}
 
 		.text {
@@ -302,11 +350,19 @@ h6 {
 			max-width: 80vw;
 			padding-top: 15vh;
 			padding-bottom: 10vh;
+			text-align: center;
 
 			h1 {
 				font-size: 1.5rem;
 			}
 		}
+	}
+}
+
+@media (max-width: 281px) {
+	.fullpage .container {
+		margin-top: 150px;
+			margin-bottom: -150px;
 	}
 }
 // --- SPECS: ---
@@ -453,7 +509,7 @@ h6 {
 	h4,
 	h5,
 	h6 {
-		color: #66ebb6;
+		color: #399F6E;
 	}
 
 	h2 {
