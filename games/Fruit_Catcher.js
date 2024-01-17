@@ -1,9 +1,9 @@
 /*
 @title: Fruit Catcher 
 @author: Navneet Saxena
-@tags: ['beginner']
+@tags: ['catch']
 @img: ""
-@addedOn: 2024-01-14
+@addedOn: 2024-01-16
 */
 
 //Contorls:
