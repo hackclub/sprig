@@ -4,6 +4,12 @@
 @tags: ['maze']
 @addedOn: 2024-01-15
 @author: Kartikey Singh Chauhan
+
+In this game, you are a robot navigating through maze-like sprinkled with enemies. 
+The primary objective is to outmaneuver enemies, strategically use boxes to block enemy attacks, and eliminate hostile turrets with a lasers 
+and reach the portal (goal) which progresses to the next level and eventually win.
+
+WASD keys handle movement. Laser firing is executed with 'K' (westward) and 'L' (eastward) keys, and J is used to reset to the game.
 */
 
 const player = "p";
