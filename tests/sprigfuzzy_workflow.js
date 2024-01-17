@@ -33,7 +33,6 @@ import seedrandom from "npm:seedrandom@latest";
 
 
 async function testRoutine(name) {
-	setTimeout(() => Promise.reject(), 100);
 	await deadline(testScript(name), 100);
 }
 
