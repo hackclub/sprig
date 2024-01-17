@@ -1,5 +1,5 @@
 /*
-@title: Fruit Catcher 
+@title: Fruit_Catcher 
 @author: Navneet Saxena
 @tags: ['catch']
 @img: ""
