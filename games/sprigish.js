@@ -304,8 +304,8 @@ onInput("w", () => {
       setTimeout(() => {
         jump = false;
         bringToGround();
-      }, 200);
-    }, 300);
+      }, 100);
+    }, 550);
   }
 });
 
