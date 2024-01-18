@@ -1,4 +1,12 @@
 /*
+@title: Blob_Runner
+@author: Bright Li
+@tags: ['']
+@img: ""
+@addedOn: 2023-01-09
+*/
+
+/*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */

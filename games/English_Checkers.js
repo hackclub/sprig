@@ -1,4 +1,12 @@
 /*
+@title: English_Checkers
+@author: Oakchris1955
+@tags: ['classic']
+@img: ""
+@addedOn: 2023-01-04
+*/
+
+/*
 @title English Checkers
 @author Oakchris1955
 
