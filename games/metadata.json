@@ -3430,5 +3430,85 @@
     "img": "",
     "tags": [""],
     "addedOn": "2023-01-01"
+  },
+  {
+    "filename": "English_Checkers",
+    "title": "English_Checkers",
+    "author": "Oakchris1955",
+    "img": "",
+    "tags": ["classic"],
+    "addedOn": "2023-01-04"
+  },
+  {
+    "filename": "Squilium_Escape",
+    "title": "Squilium_Escape",
+    "author": "Ali Mustafa",
+    "img": "",
+    "tags": [""],
+    "addedOn": "2023-01-06"
+  },
+  {
+    "filename": "Blob_Runner",
+    "title": "Blob_Runner",
+    "author": "Bright Li",
+    "img": "",
+    "tags": [""],
+    "addedOn": "2023-01-09"
+  },
+  {
+    "filename": "taiko_fever",
+    "title": "taiko_fever",
+    "author": "Joey Lent",
+    "img": "",
+    "tags": ["advanced", "music"],
+    "addedOn": "2023-01-10"
+  },
+  {
+    "filename": "fruit_pusher",
+    "title": "fruit_pusher",
+    "author": "kirby-b",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-15"
+  },
+  {
+    "filename": "bone_hunt",
+    "title": "bone_hunt",
+    "author": "Andrew Cromar",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-15"
+  },
+  {
+    "filename": "Catch-the-apples",
+    "title": "Catch-the-apples",
+    "author": "Jack",
+    "img": "",
+    "tags": ["endless", "catch"],
+    "addedOn": "2023-01-15"
+  },
+  {
+    "filename": "dicee_dare",
+    "title": "dicee_dare",
+    "author": "Harsh Kumar",
+    "img": "",
+    "tags": [""],
+    "addedOn": "2023-01-15"
+  },
+  {
+    "filename": "sprigish",
+    "title": "sprigish",
+    "author": "dom",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-16"
+  },
+  {
+    "filename": "Fruit_Catcher",
+    "title": "Fruit_Catcher",
+    "author": "Navneet Saxena",
+    "img": "",
+    "tags": ["catch"],
+    "addedOn": "2023-01-16"
   }
 ]
