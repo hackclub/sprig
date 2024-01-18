@@ -1,3 +1,12 @@
+/**
+ * Astro integration that generatest the game/metadata.json
+ * 
+ * How it works:
+ * 1. It walks/scans the ./games/ directory
+ * 2. It searches each file for metadata, if anything isn't found it halts the build/dev
+ * 3. If found it checks if everything is valid
+ * 4. Write metadata.json
+ */
 import type { AstroIntegration } from "astro";
 import fs from "fs";
 
@@ -9,17 +18,17 @@ const regexExpr = {
 	author: /@author: (.+)/,
 	tags: /@tags: (.+)/,
 	img: /@img: (.+)/,
-	addedOn: /@addedOn: (.+)/
-}
+	addedOn: /@addedOn: (.+)/,
+};
 
 /**
  * Checks if the metadata is valid
- * 
+ *
  * TODO!
  */
 const isMetadataValid = (meta: any): boolean => {
 	return true;
-}
+};
 
 /**
  * Walks the ./games/ directory and returns all of the .js files
@@ -78,11 +87,11 @@ const setup = () => {
 		});
 
 		process.stdout.write("[METADATA] Writing metadata file...");
-		if (isMetadataValid()) {
+		if (isMetadataValid(metadata)) {
 			fs.writeFileSync("./games/metadata.json", JSON.stringify(metadata));
 			console.log(" OK!");
 		} else {
-			console.log(" ERR!")
+			console.log(" ERR!");
 		}
 	};
 
