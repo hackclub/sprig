@@ -1,42 +1,70 @@
 import type { AstroIntegration } from "astro";
 import fs from "fs";
 
-const rTitle = /@title: (.+)/;
-const rAuthor = /@author: (.+)/;
-const rTags = /@tags: (.+)/;
-const rImg = /@img: (.+)/;
-const rAddedOn = /@addedOn: (.+)/;
+/**
+ * An object containing all of the regex expressions that can be used
+ */
+const regexExpr = {
+	title: /@title: (.+)/,
+	author: /@author: (.+)/,
+	tags: /@tags: (.+)/,
+	img: /@img: (.+)/,
+	addedOn: /@addedOn: (.+)/
+}
 
+/**
+ * Checks if the metadata is valid
+ * 
+ * TODO!
+ */
+const isMetadataValid = (meta: any): boolean => {
+	return true;
+}
+
+/**
+ * Walks the ./games/ directory and returns all of the .js files
+ */
 const walk = () => {
 	const files = fs.readdirSync("./games/");
 	return files.filter((file) => file.endsWith(".js"));
 };
 
+/**
+ * The function that runs on integration setup
+ */
 const setup = () => {
+	// Create an astro integration
 	const integration: AstroIntegration = {
 		name: "generate-metadata",
 		hooks: {},
 	};
 
+	// Hook a function on the config:done integration
+	// More info: https://docs.astro.build/en/reference/integrations-reference/#astroconfigdone
 	integration.hooks["astro:config:done"] = () => {
 		const metadata: any = [];
 
+		// Loop for each game
 		walk().forEach((gameFile) => {
 			process.stdout.write(`[${gameFile}] Looking for metadata...`);
 
 			const fileData = fs.readFileSync(`./games/${gameFile}`).toString();
 
-			const title = rTitle.exec(fileData);
-			const author = rAuthor.exec(fileData);
-			const tags = rTags.exec(fileData);
-			const img = rImg.exec(fileData);
-			const addedOn = rAddedOn.exec(fileData);
+			// Extract the file data
+			const title = regexExpr.title.exec(fileData);
+			const author = regexExpr.author.exec(fileData);
+			const tags = regexExpr.tags.exec(fileData);
+			const img = regexExpr.img.exec(fileData);
+			const addedOn = regexExpr.addedOn.exec(fileData);
+
+			// Check if all of the fields are defined
 			if (title && author && tags && img && addedOn && tags[1]) {
+				// Create a meta entry
 				const metaEntry = {
 					filename: gameFile.replace(".js", ""),
 					title: title[1],
 					author: author[1],
-					tags: JSON.parse(tags[1].replaceAll("'", '"')),
+					tags: JSON.parse(tags[1].replaceAll("'", '"')), // Replace all ' with " in order for compatibility issues
 					img: img[1] == '""' ? "" : img[1],
 					addedOn: addedOn[1],
 				};
@@ -50,10 +78,15 @@ const setup = () => {
 		});
 
 		process.stdout.write("[METADATA] Writing metadata file...");
-		fs.writeFileSync("./games/metadata.json", JSON.stringify(metadata));
-		console.log(" OK!");
+		if (isMetadataValid()) {
+			fs.writeFileSync("./games/metadata.json", JSON.stringify(metadata));
+			console.log(" OK!");
+		} else {
+			console.log(" ERR!")
+		}
 	};
 
+	// Return the astro integration
 	return integration;
 };
 
