@@ -53,6 +53,7 @@ if (session && session.session.full) {
 				<div class='slot magic-container' id='container'>
 					<div class='magic' id='m-start' ></div>
 					<img id="note" src="/interact.png" />
+					<img src='/preview.png' id="sprig" />
 					<!-- <h4 id='note'>Click and drag!<h4> -->
 				</div>
 			</div>
@@ -436,7 +437,7 @@ if (session && session.session.full) {
 			}
 
 			if (window.screen.width > 770 && gl) {
-				console.log(window.screen.width)
+				document.getElementById("sprig").remove();
 				// GPU meets the requirements, proceed with rendering
 
 				const game = imageDataEngine();
@@ -820,10 +821,6 @@ if (session && session.session.full) {
 				console.error('On small device.');
 				const element = document.getElementById("m");
 				element.remove();
-				const img = document.createElement('img');
-				img.src = '/preview.png';
-				const container = document.getElementById('container');
-				container.appendChild(img);
 			}
 		</script>
 	</body>
