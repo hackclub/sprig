@@ -37,15 +37,12 @@ export default function MainNavbar(props: MainNavbarProps) {
 					</li>
 				) : null}
 				<li>
-					<a href="/gallery">Gallery</a>
+					<a href="/gallery">Play Sprig games</a>
 				</li>
 				<li>
 					<a href="/get">Get a Sprig</a>
 				</li>
 			</ul>
-			{/* <div class={styles.desktop}>
-				<AnnouncementBanner />
-			</div> */}
 			<ul class={styles.rightActions}>
 				{props.session?.session.full ? (
 					<>
@@ -70,7 +67,7 @@ export default function MainNavbar(props: MainNavbarProps) {
 								href="https://github.com/hackclub/sprig/"
 								target="_blank"
 							>
-								GitHub{" "}
+								Fully open-sourced{" "}
 								<span
 									style={{
 										verticalAlign: "middle",

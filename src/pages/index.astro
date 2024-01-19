@@ -1,13 +1,13 @@
 ---
-import Card from '../legacy/homepage-card.svelte';
-import Navbar from '../components/navbar-main';
-import StandardHead from '../components/standard-head.astro';
-import '../global.css';
-import '../legacy/homepage.scss';
-import { firestore, getSession } from '../lib/game-saving/account';
-import { getConsolesRemaining } from '../lib/remaining-consoles';
+import Card from '../legacy/homepage-card.svelte'
+import Navbar from '../components/navbar-main'
+import StandardHead from '../components/standard-head.astro'
+import '../global.css'
+import '../legacy/homepage.scss'
+import { firestore, getSession } from '../lib/game-saving/account'
+import { getConsolesRemaining } from '../lib/remaining-consoles'
 
-const remainingConsoles = await getConsolesRemaining();
+const remainingConsoles = await getConsolesRemaining()
 
 const stories = [
 	{ id: 'sprig-front', width: 800, height: 602 },
@@ -18,16 +18,15 @@ const stories = [
 	{ id: 'learn', width: 800, height: 602 },
 ];
 
-const session = await getSession(Astro.cookies);
+const session = await getSession(Astro.cookies)
 
 let gameCount = 0;
 if (session && session.session.full) {
-	const res = await firestore
-		.collection('games')
+	const res = await firestore.collection('games')
 		.where('ownerId', '==', session.user.id)
 		.count()
-		.get();
-	gameCount = res.data().count;
+		.get()
+	gameCount = res.data().count
 }
 ---
 
@@ -40,10 +39,7 @@ if (session && session.session.full) {
 		<Navbar transparent goldLogo session={session} />
 
 		<div class='magic' id='m'>
-			<img
-				src='/preview.webp'
-				alt='A 3D rendering of the Sprig device.'
-				id='preview'
+			<img src='/preview.webp' alt='A 3D rendering of the Sprig device.' id='preview'
 			/>
 		</div>
 
@@ -51,7 +47,7 @@ if (session && session.session.full) {
 			<div class='container'>
 				<img src='/logo4.png' class='title' />
 				<div class='slot magic-container' id='container'>
-					<div class='magic' id='m-start' ></div>
+					<div class='magic' id='m-start' />
 					<img src='/preview.png' id="sprig" />
 				</div>
 			</div>
@@ -95,7 +91,7 @@ if (session && session.session.full) {
 		<section class='specs-split-wrapper wrapper'>
 			<div class='specs-split-container'>
 				<div class='specs-split-slot magic-container'>
-					<div class='magic' id='m-stop'></div>
+					<div class='magic' id='m-stop' />
 				</div>
 
 				<div class='specs'>
@@ -281,7 +277,7 @@ if (session && session.session.full) {
 			</div>
 		</section>
 
-		<section style='color: black;' class='credits wrapper'>
+		<section style="color: black;" class='credits wrapper'>
 			<div class='container limit-text'>
 				<p>
 					Sprig was developed by a team at Hack Club with assistance
@@ -314,31 +310,14 @@ if (session && session.session.full) {
 				</a>
 				<p>
 					Sprig is open-source. Read code for:
-					<a
-						href='https://github.com/hackclub/sprig'
-						target='_blank'
-						rel='noopener'>editor</a
-					>,
-					<a
-						href='https://github.com/hackclub/sprig-engine'
-						target='_blank'
-						rel='noopener'>engine</a
-					>,
-					<a
-						href='https://github.com/hackclub/spade'
-						target='_blank'
-						rel='noopener'>firmware</a
-					>,
-					<a
-						href='https://github.com/hackclub/sprig-hardware'
-						target='_blank'
-						rel='noopener'>hardware</a
-					>
+					<a href='https://github.com/hackclub/sprig' target='_blank' rel='noopener'>editor</a>,
+					<a href='https://github.com/hackclub/sprig-engine' target='_blank' rel='noopener'>engine</a>,
+					<a href='https://github.com/hackclub/spade' target='_blank' rel='noopener'>firmware</a>,
+					<a href='https://github.com/hackclub/sprig-hardware' target='_blank' rel='noopener'>hardware</a>
 				</p>
 
 				<div class='stories'>
-					{
-						stories.map((story) => (
+					{stories.map((story) => (
 							<img
 								src={`/stories-tiny/${story.id}.jpeg`}
 								alt={story.id}
@@ -346,16 +325,13 @@ if (session && session.session.full) {
 								height={story.height}
 								data-story={story.id}
 							/>
-						))
-					}
+						))}
 				</div>
 			</div>
 		</section>
 
 		<footer class='wrapper'>
-			<div class='container'>
-				&copy 2023 Hack Club. 501(c)(3) nonprofit (EIN: 81-2908499)
-			</div>
+			<div class='container'> &copy 2023 Hack Club. 501(c)(3) nonprofit (EIN: 81-2908499)</div>
 		</footer>
 
 		<img src='/SPRIGDINO.svg' alt='sprig dino' class='sprig-dino' />
@@ -366,67 +342,47 @@ if (session && session.session.full) {
 				'.stories > img'
 			)) {
 				img.addEventListener('click', () => {
-					const id = img.dataset.story!;
-					const { width, height } = img;
+					const id = img.dataset.story!
+					const { width, height } = img
 
-					document.body.style.overflowY = 'hidden';
+					document.body.style.overflowY = 'hidden'
 
-					const lightbox = document.createElement('div');
-					lightbox.classList.add('lightbox');
+					const lightbox = document.createElement('div')
+					lightbox.classList.add('lightbox')
 					lightbox.addEventListener('click', () => {
-						lightbox.remove();
-						document.body.style.overflowY = 'auto';
-					});
+						lightbox.remove()
+						document.body.style.overflowY = 'auto'
+					})
 
-					const lightboxImg = lightbox.appendChild(
-						document.createElement('img')
-					);
-					lightboxImg.src = `/stories-big/${id}.jpeg`;
-					lightboxImg.alt = id;
-					lightboxImg.width = width;
-					lightboxImg.height = height;
+					const lightboxImg = lightbox.appendChild(document.createElement('img'))
+					lightboxImg.src = `/stories-big/${id}.jpeg`
+					lightboxImg.alt = id
+					lightboxImg.width = width
+					lightboxImg.height = height
 
-					document.body.appendChild(lightbox);
+					document.body.appendChild(lightbox)
 				});
 			}
 		</script>
 
 		<!-- 3D interactive device: -->
 		<script>
-			import * as THREE from 'three';
-			import {
-				Scene,
-				WebGLRenderer,
-				sRGBEncoding,
-				PerspectiveCamera,
-				AmbientLight,
-				DirectionalLight,
-				HemisphereLight,
-				Raycaster,
-				Vector2,
-				Object3D,
-				Mesh,
-				Texture,
-				BufferGeometry,
-				Material,
-			} from 'three';
-			import { OrbitControls } from '../lib/orbit-controls';
-			import { type InputKey, VALID_INPUTS } from 'sprig';
-			import { imageDataEngine } from 'sprig/image-data';
-			import { homepageExampleCode } from '../lib/examples';
+			import * as THREE from 'three'
+			import { Scene, WebGLRenderer, sRGBEncoding, PerspectiveCamera, AmbientLight, DirectionalLight, HemisphereLight, Raycaster, Vector2, Object3D, Mesh, Texture, BufferGeometry, Material } from 'three'
+			import { OrbitControls } from '../lib/orbit-controls'
+			import { type InputKey, VALID_INPUTS } from 'sprig'
+			import { imageDataEngine } from 'sprig/image-data'
+			import { homepageExampleCode } from '../lib/examples'
 			
 			// @ts-ignore
-			import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment';
+			import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment'
 			// @ts-ignore
-			import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+			import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 			// @ts-ignore
-			import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
+			import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 			
-			var canvas = document.createElement('canvas');
-			var gl;
-			var debugInfo;
-			var vendor;
-			var renderer;
+			var canvas = document.createElement('canvas')
+			var gl
 
 			try {
 				gl = canvas.getContext('webgl', { powerPreference: "high-performance" }) || canvas.getContext('experimental-webgl', { powerPreference: "high-performance" });
