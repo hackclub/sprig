@@ -52,9 +52,7 @@ if (session && session.session.full) {
 				<img src='/logo4.png' class='title' />
 				<div class='slot magic-container' id='container'>
 					<div class='magic' id='m-start' ></div>
-					<img id="note" src="/interact.png" />
 					<img src='/preview.png' id="sprig" />
-					<!-- <h4 id='note'>Click and drag!<h4> -->
 				</div>
 			</div>
 			<div class='text'>
@@ -438,6 +436,12 @@ if (session && session.session.full) {
 
 			if (window.screen.width > 770 && gl) {
 				document.getElementById("sprig").remove();
+				var el = document.createElement("img");
+				el.src = "/interact.png"
+				el.id = "note"
+				var cont = document.getElementById("container")
+				cont.appendChild(el)
+			
 				// GPU meets the requirements, proceed with rendering
 
 				const game = imageDataEngine();
