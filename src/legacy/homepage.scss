@@ -176,20 +176,21 @@ h6 {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-	align-items: flex-start;
+	align-items: center;
 	padding-bottom: 100px;
 	max-width: 700px;
+	text-align: center;
 
 	h1 {
 		font-size: 2.625rem;
-		background-color: #0a452812;
+		background-color: #00000009;
 	}
 
 	p {
 		font-family: $pixel-text-font;
 		font-weight: 300;
 		font-size: 1.3em;
-		background-color: #0a452812;
+		background-color: #00000009;
 	}
 
 	.cards {
@@ -210,6 +211,8 @@ h6 {
 
 #container > img {
 	width: 150%;
+	margin-top: 80px;
+	margin-bottom: 30px;
 }
 
 #note {
@@ -228,10 +231,10 @@ h6 {
 	content: " ";
 	position: absolute;
 	top: 50%;
-	left: 45%;
-	width: 10%;
+	left: 46%;
+	width: 8%;
 	box-shadow: 
-	0 0 175px 110px #fff; 
+	0 0 200px 130px #fff; 
 	// 0 0 180px 95px #D3B947;
 }
 
@@ -281,9 +284,14 @@ h6 {
 		left: 45%;
 		width: 10%;
 		box-shadow: 
-		0 0 140px 40px #fff, 
-		0 0 145px 45px #9f9839,
-		0 0 150px 60px #399F6E;
+		0 0 170px 90px #fff, 
+		// 0 0 145px 45px #9f9839,
+		// 0 0 150px 60px #399F6E;
+	}
+
+	#container > img {
+		margin-top: 60px;
+		margin-bottom: 30px;
 	}
 	
 }

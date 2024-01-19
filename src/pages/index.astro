@@ -58,7 +58,7 @@ if (session && session.session.full) {
 			</div>
 			<div class='text'>
 				<h1>Every player is a creator.</h1>
-				<p>Explore 430+ games built by other teenagers, or make your own and we'll send you a console!</p>
+				<p>Explore 430+ games built by other teenagers, <br />or make your own and we'll send you a console!</p>
 				<div>
 				{
 					session && session.session.full ? (
@@ -230,7 +230,7 @@ if (session && session.session.full) {
 
 				<a href='/gallery'
 					><button class='btn big active'
-						>Check out the gallery &raquo;</button
+						>Check out other games &raquo;</button
 					></a
 				>
 			</div>
@@ -429,7 +429,20 @@ if (session && session.session.full) {
 			// @ts-ignore
 			import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 
-			if (window.screen.width > 770) {
+			var canvas = document.createElement('canvas');
+			var gl;
+			var debugInfo;
+			var vendor;
+			var renderer;
+
+			try {
+			gl = canvas.getContext('webgl', { powerPreference: "high-performance" }) || canvas.getContext('experimental-webgl', { powerPreference: "high-performance" });
+				console.log(gl)
+			} catch (e) {
+				console.log(e)
+			}
+
+			if (window.screen.width > 770 && gl) {
 				console.log(window.screen.width)
 				// GPU meets the requirements, proceed with rendering
 
@@ -494,10 +507,10 @@ if (session && session.session.full) {
 					controls.autoRotateSpeed = -7;
 					controls.rotateSpeed = 2.5;
 
-					const ambientLight = new AmbientLight(0xffffff, 1);
+					const ambientLight = new AmbientLight(0xFCF4D5, 1);
 					scene.add(ambientLight);
 
-					const dirLight = new DirectionalLight(0xffffff, 0.2);
+					const dirLight = new DirectionalLight(0xD3B947, 0.2);
 					(dirLight as any).position.set(0, 0, 1000);
 					camera.add(dirLight);
 
