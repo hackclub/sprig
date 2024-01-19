@@ -1,7 +1,9 @@
 /*
 @title: untitled taiko game
 @tags: ['advanced', 'music']
-@author: Joey Lent (@supercolbat)
+@img: ""
+@addedOn: 2023-01-10
+@author: Joey Lent
 */
 
 /**************************
