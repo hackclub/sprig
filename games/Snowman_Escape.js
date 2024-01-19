@@ -1,9 +1,9 @@
 /*
-@title: Snowman's Escape
+@title: Snowman_Escape
 @author: Michael Q
-@tags: ['sokoban-style']
+@tags: ['puzzle']
 @img: ""
-@addedOn: 2024-1-15
+@addedOn: 2024-01-18
 
 Instructions:
 Rocks are pushable.
