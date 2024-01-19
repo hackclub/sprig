@@ -211,8 +211,8 @@ h6 {
 
 #container > img {
 	width: 150%;
-	margin-top: 80px;
-	margin-bottom: 30px;
+	margin-top: 50px;
+	margin-right: -10px;
 }
 
 #note {
@@ -231,8 +231,8 @@ h6 {
 	content: " ";
 	position: absolute;
 	top: 52%;
-	left: 42%;
-	width: 15%;
+	left: 40%;
+	width: 23%;
 	box-shadow: 
 	0 0 200px 130px #fff; 
 	// 0 0 180px 95px #D3B947;
@@ -280,9 +280,9 @@ h6 {
 	#m::before {
 		content: " ";
 		position: absolute;
-		top: 48%;
-		left: 45%;
-		width: 10%;
+		top: 50%;
+		left: 38%;
+		width: 25%;
 		box-shadow: 
 		0 0 170px 90px #fff, 
 		// 0 0 145px 45px #9f9839,

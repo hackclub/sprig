@@ -430,8 +430,11 @@ if (session && session.session.full) {
 			var renderer;
 
 			try {
-			gl = canvas.getContext('webgl', { powerPreference: "high-performance" }) || canvas.getContext('experimental-webgl', { powerPreference: "high-performance" });
-				console.log(gl)
+			// gl = canvas.getContext('webgl', { powerPreference: "high-performance" }) || canvas.getContext('experimental-webgl', { powerPreference: "high-performance" });
+			var gl = canvas.getContext('webgl');
+			var contextAttributes = gl.getContextAttributes();
+			var actualPowerPreference = contextAttributes.powerPreference;
+				console.log(contextAttributes)
 			} catch (e) {
 				console.log(e)
 			}
