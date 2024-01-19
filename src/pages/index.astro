@@ -430,11 +430,7 @@ if (session && session.session.full) {
 			var renderer;
 
 			try {
-			// gl = canvas.getContext('webgl', { powerPreference: "high-performance" }) || canvas.getContext('experimental-webgl', { powerPreference: "high-performance" });
-			var gl = canvas.getContext('webgl');
-			var contextAttributes = gl.getContextAttributes();
-			var actualPowerPreference = contextAttributes.powerPreference;
-				console.log(contextAttributes)
+				gl = canvas.getContext('webgl', { powerPreference: "high-performance" }) || canvas.getContext('experimental-webgl', { powerPreference: "high-performance" });
 			} catch (e) {
 				console.log(e)
 			}
@@ -822,6 +818,8 @@ if (session && session.session.full) {
 				registerListeners();
 			} else {
 				console.error('On small device.');
+				const element = document.getElementById("m");
+				element.remove();
 				const img = document.createElement('img');
 				img.src = '/preview.png';
 				const container = document.getElementById('container');
