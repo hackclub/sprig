@@ -21,7 +21,7 @@ https://github.com/carlk3/no-OS-FatFS-SD-SDIO-SPI-RPi-Pico/tree/main#customizing
 #include "hw_config.h"
 
 /* Configuration of RP2040 hardware SPI object */
-static spi_t spi = {  
+static spi_t __scratch_x("sd") spi = {  
     .hw_inst = spi0,  // RP2040 SPI component
     .sck_gpio = 18,    // GPIO number (not Pico pin number)
     .mosi_gpio = 19,
@@ -30,7 +30,7 @@ static spi_t spi = {
 };
 
 /* Configuration of the SD Card socket object */
-static sd_card_t sd_card = {   
+static sd_card_t __scratch_x("sd") sd_card = {   
     /* "pcName" is the FatFs "logical drive" identifier.
     (See http://elm-chan.org/fsw/ff/doc/filename.html#vol) */
     .pcName = "0:",

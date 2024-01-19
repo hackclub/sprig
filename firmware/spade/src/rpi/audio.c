@@ -23,7 +23,7 @@ static struct audio_buffer_pool *audio_buffer_pool_init() {
     .sample_stride = 2
   };
 
-  struct audio_buffer_pool *producer_pool = audio_new_producer_pool(&producer_format, 3,
+  struct audio_buffer_pool  *producer_pool = audio_new_producer_pool(&producer_format, 3,
                                     SAMPLES_PER_BUFFER); // todo correct size
   bool __unused ok;
   const struct audio_format *output_format;
@@ -47,7 +47,7 @@ static struct audio_buffer_pool *audio_buffer_pool_init() {
   return producer_pool;
 }
 
-struct audio_buffer_pool *audio_bufpool;
+struct audio_buffer_pool __scratch_x("button") *audio_bufpool;
 
 void audio_init(void) {
   audio_bufpool = audio_buffer_pool_init();

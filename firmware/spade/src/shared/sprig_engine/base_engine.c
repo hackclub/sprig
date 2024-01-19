@@ -6,7 +6,7 @@
 #include "shared/js_runtime/jerry_mem.h"
 #include "base_engine.h"
 
-static State *state = NULL;
+static State __scratch_x("state") *state = NULL;
 
 // Get the sign of an integer. Returns -1 if negative, 1 if positive, 0 if 0.
 static int sign(int i) {
