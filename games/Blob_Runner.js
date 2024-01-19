@@ -1,6 +1,6 @@
 /*
 @title: Blob_Runner
-@tags: ['']
+@tags: []
 @img: ""
 @addedOn: 2023-01-09
 @author: Bright Li
