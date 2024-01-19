@@ -415,20 +415,14 @@ if (session && session.session.full) {
 			import { type InputKey, VALID_INPUTS } from 'sprig';
 			import { imageDataEngine } from 'sprig/image-data';
 			import { homepageExampleCode } from '../lib/examples';
-			// @ts-ignore
-			import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
-			// @ts-ignore
-			import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-			// @ts-ignore
-			import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-
+			
 			// @ts-ignore
 			import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment';
 			// @ts-ignore
 			import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 			// @ts-ignore
 			import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
-
+			
 			var canvas = document.createElement('canvas');
 			var gl;
 			var debugInfo;
@@ -743,8 +737,6 @@ if (session && session.session.full) {
 
 							/* @ts-ignore */
 							glass.material.map.flipY = false;
-
-							// outlinePass.selectedObjects = [glass]
 						}
 						renderer.render(scene, camera);
 					};
