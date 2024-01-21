@@ -2,11 +2,14 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: pacman uwu
-@author: 
+@title: Inhale the marshmallows
+@author: Ploewn
 @tags: []
 @img: ""
 @addedOn: 2024-00-00
+
+wasd to move, k to reload, l for next level.
+
 */
 var score = 0;
 var next = false;
