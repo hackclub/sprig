@@ -1,0 +1,138 @@
+name: Send Plagiarism Result On CI Complete
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+  pull-requests: write
+
+on:
+  workflow_run:
+    workflows: ["Plagiarism Checker"]
+    types:
+      - completed
+
+jobs:
+  on_pr_finish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: List available artifacts with detailed logs
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const runId = ${{ github.event.workflow_run.id }};
+            console.log(`Fetching artifacts for workflow run ID: ${runId}`);
+            
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: runId
+            });
+            console.log(`Artifacts found: ${artifacts.data.total_count}`);
+            for (const artifact of artifacts.data.artifacts) {
+              console.log(`Artifact name: ${artifact.name}, ID: ${artifact.id}, Size: ${artifact.size_in_bytes} bytes`);
+            }
+
+      - name: Download PR Number Artifact
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const runId = ${{ github.event.workflow_run.id }};
+            const artifactName = 'pr-number';
+            
+            console.log(`Downloading artifact ${artifactName} from workflow run ID: ${runId}`);
+            const artifactData = await github.rest.actions.downloadArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: (await github.rest.actions.listWorkflowRunArtifacts({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: runId
+              })).data.artifacts.find(a => a.name === artifactName).id,
+              archive_format: 'zip',
+            });
+            
+            const artifactPath = path.join(process.env.GITHUB_WORKSPACE, `${artifactName}.zip`);
+            fs.writeFileSync(artifactPath, Buffer.from(artifactData.data));
+            
+            console.log(`Artifact ${artifactName} downloaded to ${artifactPath}`);
+            require('child_process').execSync(`unzip -o ${artifactPath} -d ${process.env.GITHUB_WORKSPACE}`);
+            const prNumber = fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE, 'pr_number.txt'), 'utf8').trim();
+            console.log(`PR Number: ${prNumber}`);
+
+      - name: Download Plagiarism Report Artifact from Another Workflow Run
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const runId = ${{ github.event.workflow_run.id }};
+            const artifactName = 'plagiarism-report';
+            
+            console.log(`Fetching artifacts for workflow run ID: ${runId}`);
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: runId,
+            });
+            
+            const artifact = artifacts.data.artifacts.find(a => a.name === artifactName);
+            if (!artifact) {
+              throw new Error(`Artifact with name ${artifactName} not found`);
+            }
+            
+            console.log(`Downloading artifact ${artifactName} from workflow run ID: ${runId}`);
+            const artifactData = await github.rest.actions.downloadArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: artifact.id,
+              archive_format: 'zip',
+            });
+            
+            const artifactPath = path.join(process.env.GITHUB_WORKSPACE, `${artifactName}.zip`);
+            fs.writeFileSync(artifactPath, Buffer.from(artifactData.data));
+            
+            console.log(`Artifact ${artifactName} downloaded to ${artifactPath}`);
+            require('child_process').execSync(`unzip -o ${artifactPath} -d ${process.env.GITHUB_WORKSPACE}`);
+
+      - name: List Contents of Zip File
+        run: unzip -l plagiarism-report.zip
+
+      - name: Unzip Plagiarism Report Artifact
+        run: unzip -o plagiarism-report.zip -d ${{ github.workspace }}
+
+      - name: Display structure of unzipped files
+        run: ls -l ${{ github.workspace }}
+
+      - name: Post Markdown as Comment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            const prNumber = fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE, 'pr_number.txt'), 'utf8').trim();
+            const markdownPath = path.join(process.env.GITHUB_WORKSPACE, 'plagiarism-report.md');
+            console.log(`Reading the Markdown report from: ${markdownPath}`);
+            const markdownContent = fs.readFileSync(markdownPath, 'utf8');
+
+            console.log("Fetching associated pull request...");
+            console.log(`Found associated pull request: #${prNumber}`);
+
+            console.log("Posting the Markdown content as a comment...");
+            const commentResponse = await github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: markdownContent
+            });
+            console.log(`Comment posted successfully: ${commentResponse.data.html_url}`);

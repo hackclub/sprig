@@ -1,5 +1,8 @@
 /*
 @title: CatchIt
+@tags: []
+@img: ""
+@addedOn: 2023-03-14
 @author: Shrey Mehra
 
 Creds:-

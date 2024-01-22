@@ -1,5 +1,8 @@
 /*
 @title: Goaled
+@tags: ['catch']
+@img: ""
+@addedOn: 2022-09-24
 @author: Ronan Verma
 
 In this game, you are the purple player, the ball is the gray circle, and the goal 

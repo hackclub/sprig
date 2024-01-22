@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: basketballgame
+@author: de-y (Dheeraj Chintapalli)
+@tags: []
+@img: ""
+@addedOn: 2023-10-19
+*/
+
+    /*
 Welcome to Basketball Game, a random game that I made.
 */
 const player = "p";

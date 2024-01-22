@@ -1,5 +1,8 @@
 /*
 @title: Limits
+@tags: ['energy-control']
+@img: ""
+@addedOn: 2022-09-15
 @author: Nathan Pease
 */
 

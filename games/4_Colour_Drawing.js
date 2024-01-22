@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: 4_Colour_Drawing
+@author: Dexter Speed
+@tags: ['sandbox']
+@img: ""
+@addedOn: 2023-08-18
+*/
+
+    /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */

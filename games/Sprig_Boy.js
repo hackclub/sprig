@@ -1,6 +1,9 @@
 /*
 @title: SprigBoy
-@author: 
+@tags: []
+@img: ""
+@addedOn: 2023-06-19
+@author: NA
 */
 const createArray = (size) => [...Array(size).keys()];
 const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
@@ -154,7 +157,7 @@ w.w..ww...w.w...w.......w.www.w...w.w..
 setMap(levels[level])
 
 setPushables({
-  [ player ]: [ box ]
+  [player]: [box]
 })
 
 onInput("w", () => {
@@ -219,15 +222,15 @@ onInput("j", () => {
 })
 
 function makeBox(huh) {
-  
-  if (getTile(getFirst(player).x+huh, getFirst(player).y)[0] != undefined) {
+
+  if (getTile(getFirst(player).x + huh, getFirst(player).y)[0] != undefined) {
     isWall = true
   }
   else {
     isWall = false
   }
   if (!boxExists && !isWall) {
-    addSprite(getFirst(player).x+huh, getFirst(player).y, box)
+    addSprite(getFirst(player).x + huh, getFirst(player).y, box)
     boxExists = true
   }
   else if (boxExists) {
@@ -240,10 +243,10 @@ function checkFlag() {
   let px = getFirst(player).x;
   let py = getFirst(player).y;
   getTile(px, py).forEach(tile => {
-       if(tile._type == "m") {
-         level++;
-         boxExists = false
-         setMap(levels[level]);
-      }
+    if (tile._type == "m") {
+      level++;
+      boxExists = false
+      setMap(levels[level]);
+    }
   })
 }

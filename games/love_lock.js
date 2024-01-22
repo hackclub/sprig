@@ -1,5 +1,8 @@
 /*
 @title: love_lock
+@tags: ['strategy']
+@img: ""
+@addedOn: 2022-09-15
 @author: N Rizwan
 
 Initial Script of Leo Mcelroy (@leo)

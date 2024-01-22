@@ -1,5 +1,8 @@
 /*
 @title: the_invisible_man
+@tags: ['puzzle-score']
+@img: ""
+@addedOn: 2022-11-14
 @author: Gárdonyi Bálint (Valentine)
 MOVEMENT: WASD
 In this game, you have to collect coins. The catch? You are invisible! (the player is invisible, but it is there somewhere)

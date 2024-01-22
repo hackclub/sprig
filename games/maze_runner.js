@@ -1,5 +1,8 @@
 /*
 @title: maze runner
+@tags: ['timer-puzzle']
+@img: ""
+@addedOn: 2022-09-26
 @author: wetf
 */
 

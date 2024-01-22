@@ -8,13 +8,23 @@ import { getSession } from '../../lib/game-saving/account'
 import { getGalleryGames } from '../../lib/game-saving/gallery'
 import MobilePlayer from '../../components/big-interactive-pages/mobile-player'
 import { mobileUserAgent } from '../../lib/utils/mobile'
+import fs from 'fs'
+import path from 'path'
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename);
+
 
 const session = await getSession(Astro.cookies)
 
 const filename = Astro.params.filename ?? ''
-const res = await fetch(`https://raw.githubusercontent.com/hackclub/sprig/main/games/${encodeURIComponent(filename)}.js`)
-if (!res.ok) return Astro.redirect('/404', 302)
-const code = await res.text()
+const gameContentPath = path.resolve(__dirname, `../../../games/${filename}.js`)
+const code = fs.readFileSync(gameContentPath).toString()
+if (code == null) {
+	return Astro.redirect('/404', 302)
+}
 
 const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
 
@@ -27,7 +37,7 @@ let tutorial: string[] | undefined = files
 	?.map(md => md.compiledContent())
 if (tutorial.length == 0) tutorial = undefined
 
-const games = await getGalleryGames()
+const games = getGalleryGames()
 const metadata = games.find(game => game.filename === filename)
 const name = metadata?.title
 const authorName = metadata?.author

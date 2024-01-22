@@ -1,5 +1,8 @@
 /*
 @title: DVD logo Simulator
+@tags: ['simulation', 'demo', 'endless']
+@img: dvd_logo_simulator
+@addedOn: 2022-12-18
 @author: the456gamer
 
 hit run, enjoy.

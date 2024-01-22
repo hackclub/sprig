@@ -1,5 +1,8 @@
 /*
 @title: sprig_shoot
+@tags: ['endless']
+@img: ""
+@addedOn: 2023-02-11
 @author: Holden L
 */
 

@@ -1,5 +1,8 @@
 /*
 @title: Builder
+@tags: ['strategy']
+@img: ""
+@addedOn: 2022-11-06
 @author: Leonard (Omay)
 
 WAD to move

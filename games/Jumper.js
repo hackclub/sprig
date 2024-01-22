@@ -1,5 +1,8 @@
 /*
 @title: Jumper
+@tags: ['endless']
+@img: ""
+@addedOn: 2022-11-13
 @author: TC
 */
 

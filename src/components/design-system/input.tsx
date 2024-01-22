@@ -9,6 +9,8 @@ interface InputProps {
 	class?: string | undefined
 	maxLength?: number
 	bind?: Signal<string>
+	onChange: (event: any) => void
+	value: string
 }
 
 export default function Input(props: InputProps) {
@@ -21,6 +23,8 @@ export default function Input(props: InputProps) {
 				value: props.bind,
 				onInput: event => { if (props.bind) props.bind.value = event.currentTarget.value }
 			} : {})}
+			value={props.value}
+			onChange={props.onChange}
 			autoComplete={props.autoComplete ?? 'off'}
 			placeholder={props.placeholder ?? ''}
 			maxLength={props.maxLength ?? Number.MAX_SAFE_INTEGER}

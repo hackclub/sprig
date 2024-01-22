@@ -1,4 +1,13 @@
-// Based on the game Progressbar95
+
+/* 
+@title: Sprigressbar
+@author: MathR
+@tags: ['advanced']
+@img: ""
+@addedOn: 2023-08-21
+*/
+
+    // Based on the game Progressbar95
 // Fill your bar with segments to move to the next level
 // At the end of each level you gain 5 points for each blue segment
 // Avoid red segments at all cost!

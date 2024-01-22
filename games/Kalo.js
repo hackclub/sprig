@@ -1,4 +1,13 @@
-const player = "p";
+
+/* 
+@title: Kalo
+@author: Fatiha
+@tags: []
+@img: ""
+@addedOn: 2023-07-15
+*/
+
+    const player = "p";
 let promptText = null;
 let scoreText = null;
 let gameOverText = null;

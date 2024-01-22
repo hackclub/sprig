@@ -1,5 +1,8 @@
 /*
 @title: squarey_runs_away_from_the_fireball
+@tags: ['multiplayer']
+@img: ""
+@addedOn: 2023-01-28
 @author: jack_mole_and_sam_poder
 */
 

@@ -1,5 +1,8 @@
 /*
 @title: randomworld
+@tags: ['explore']
+@img: randomworld
+@addedOn: 2022-12-11
 @author: Wojtek Widomski
 */
 

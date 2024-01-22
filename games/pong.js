@@ -1,5 +1,8 @@
 /*
 @title: pong
+@tags: ['classic']
+@img: ""
+@addedOn: 2022-09-07
 @author: neesh
 */
 

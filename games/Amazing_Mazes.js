@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: Amazing_Mazes
+@author: Dexter Speed
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2023-07-25
+*/
+
+    /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */

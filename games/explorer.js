@@ -1,5 +1,8 @@
 /*
 @title: explorer
+@tags: []
+@img: explorer
+@addedOn: 2023-01-22
 @author: akshur
 
 Instructions:

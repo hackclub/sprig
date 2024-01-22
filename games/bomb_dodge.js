@@ -1,4 +1,13 @@
-/*
+
+/* 
+@title: bomb_dodge
+@author: AstralTurtle
+@tags: ['logic']
+@img: ""
+@addedOn: 2023-12-10
+*/
+
+    /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */

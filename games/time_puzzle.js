@@ -1,5 +1,8 @@
 /*
 @title: Time puzzle
+@tags: ['timer-puzzle']
+@img: ""
+@addedOn: 2022-10-13
 @author: Akeell
 */
 

@@ -1,5 +1,8 @@
 /*
 @title: The Tomb of a Thousand (T)errors
+@tags: ['logic']
+@img: ""
+@addedOn: 2022-09-13
 @author: Fabian
 */
 

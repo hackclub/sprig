@@ -1,5 +1,8 @@
 /*
 @title: Robot_Party | Basic Build v1
+@tags: ['puzzle-score']
+@img: Robot_Party_Basic_Buildv1
+@addedOn: 2022-12-20
 @author: Gam3rrXD
 */
 function reset(){

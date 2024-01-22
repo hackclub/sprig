@@ -1,5 +1,8 @@
 /*
 @title: BreadMaze
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2022-10-20
 @author: Aiden
 */
 

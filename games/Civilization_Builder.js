@@ -1,4 +1,13 @@
-//FUNCTIONS
+
+/* 
+@title: Civilization_Builder
+@author: Ivan S
+@tags: ['advanced']
+@img: ""
+@addedOn: 2023-06-08
+*/
+
+    //FUNCTIONS
 
 //get attack value
 function getAttackVal(atck_val) {if (atck_val[2] == null) {return false} else {return atck_val[2]}}
