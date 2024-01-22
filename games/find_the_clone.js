@@ -2,11 +2,11 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: 
-@author: 
-@tags: []
+@title: find_the_clone
+@author: TheGoldenBlock
+@tags: ['puzzle']
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-01-21
 */
 
 const player = "p"
