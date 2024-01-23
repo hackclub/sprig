@@ -47,7 +47,7 @@ Each word is 3 letters long, but there are some 4 letter words, so be fast.
 
 // variables //
 let points = 0
-let maxTime = 8
+let maxTime = 15
 let timeLeft = maxTime
 let fps = 800
 const maps = {
