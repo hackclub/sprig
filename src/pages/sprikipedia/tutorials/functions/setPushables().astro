@@ -1,6 +1,7 @@
 ---
 import '../../../../global.css'
 import Docs from '../../../../layouts/docs.astro'
+import Code from '../../../../components/spriki-components/Code.astro'
 
 const data = (
   (await Astro.glob(`/src/translations/*.json`)).find(
@@ -10,4 +11,17 @@ const data = (
 ).default;
 ---
 <Docs dspriki="setPushables() - Sprikipedia, the Sprig encyclopedia" dtitle="setPushables()" dauthor="" >
+<p>Use setPushables to make sprites push other sprites around. The sprite on the left will be able to push all sprites listed on the right.</p>
+
+<Code content={`const player = "p" <br /> const block = "b" <br /> <br /> setPushables({ <br />  [player]: [ block, player ] <br /> })`} />
+
+<p><b>Watch out!</b>Make sure everything you pass to setPushables is also marked as a solid or they won’t be pushed around.</p>
+
+<h2>width()</h2>
+
+<p>Get the width of the current map.</p>
+
+<h2>height()</h2>
+
+<p>Get the height of the current map.</p>
 <Docs />

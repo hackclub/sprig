@@ -1,6 +1,7 @@
 ---
 import '../../../../global.css'
 import Docs from '../../../../layouts/docs.astro'
+import Code from '../../../../components/spriki-components/Code.astro'
 
 const data = (
   (await Astro.glob(`/src/translations/*.json`)).find(
@@ -10,4 +11,7 @@ const data = (
 ).default;
 ---
 <Docs dspriki="setSolids() - Sprikipedia, the Sprig encyclopedia" dtitle="setSolids()" dauthor="" >
+<p>Solid sprites can’t overlap with each other. This is useful for creating things like walls:  </p>
+
+<Code content={`const player = "p" <br /> const wall = "w" <br /. <br /> setSolids([ player, wall ])`} />
 <Docs />

@@ -1,6 +1,7 @@
 ---
 import '../../../../global.css'
 import Docs from '../../../../layouts/docs.astro'
+import Code from '../../../../components/spriki-components/Code.astro'
 
 const data = (
   (await Astro.glob(`/src/translations/*.json`)).find(
@@ -10,4 +11,15 @@ const data = (
 ).default;
 ---
 <Docs dspriki="setMap() - Sprikipedia, the Sprig encyclopedia" dtitle="setMap()" dauthor="" >
+<p>Designing a level is like drawing a bitmap:</p>
+
+<Code content="map`...`" />
+
+<p>The characters in the map come from the order of your bitmap legend. Levels don’t have to be kept track of in a legend, you should store them in a variable yourself. You can call setMap to clear the game and load a new level:</p>
+
+<Code content="const level = map`...` <br /> setMap(level)" />
+
+<p>You might want to keep track of multiple levels using an array to switch between them mid-game:</p>
+
+<Code content="const levels = [ <br />  map`...`, <br />  map`...`, <br />  // etc. <br /> ] <br /> setMap(levels[0]) <br /> </br /> // Later: <br /> setMap(levels[1])" />
 <Docs />

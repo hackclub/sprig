@@ -1,6 +1,7 @@
 ---
 import '../../../../global.css'
 import Docs from '../../../../layouts/docs.astro'
+import Code from '../../../../components/spriki-components/Code.astro'
 
 const data = (
   (await Astro.glob(`/src/translations/*.json`)).find(
@@ -10,4 +11,9 @@ const data = (
 ).default;
 ---
 <Docs dspriki="setBackground() - Sprikipedia, the Sprig encyclopedia" dtitle="setBackground()" dauthor="" >
+<p>Tiles a bitmap as the background of the game:</p>
+
+<Code content="setBackground(spriteKey)" />
+
+<p>This only changes the visuals of the game.</p>
 <Docs />

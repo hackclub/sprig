@@ -1,6 +1,7 @@
 ---
 import '../../../../global.css'
 import Docs from '../../../../layouts/docs.astro'
+import Code from '../../../../components/spriki-components/Code.astro'
 
 const data = (
   (await Astro.glob(`/src/translations/*.json`)).find(
@@ -10,4 +11,14 @@ const data = (
 ).default;
 ---
 <Docs dspriki="setLegend() - Sprikipedia, the Sprig encyclopedia" dtitle="setLegend()" dauthor="" >
+<p>Tell Sprig what types of sprites are available in your game. Bitmap keys must be a single character. We recommend storing character keys in variables.</p>
+
+<Code content="" />
+
+<p>To create a new bitmap, type</p>
+
+<Code content="bitmap`.`" />
+
+<p>Those are backticks! Click on the highlighted “bitmap” button to edit your drawing.</p>
+<p>The order of sprite types in your legend also determines the z-order of drawing them. Sprite types that come first are drawn on top.</p>
 <Docs />

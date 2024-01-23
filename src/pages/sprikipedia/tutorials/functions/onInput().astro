@@ -1,6 +1,7 @@
 ---
 import '../../../../global.css'
 import Docs from '../../../../layouts/docs.astro'
+import Code from '../../../../components/spriki-components/Code.astro'
 
 const data = (
   (await Astro.glob(`/src/translations/*.json`)).find(
@@ -10,4 +11,7 @@ const data = (
 ).default;
 ---
 <Docs dspriki="onInput() - Sprikipedia, the Sprig encyclopedia" dtitle="onInput()" dauthor="" >
+<p>Do something when the player presses a control:</p>
+
+<Code content={`onInput("d", () => { <br />  // Move the player one tile to the right <br />  getFirst(player).x += 1 <br /> })`} />
 <Docs />

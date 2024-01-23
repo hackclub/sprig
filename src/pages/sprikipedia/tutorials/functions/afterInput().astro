@@ -1,6 +1,7 @@
 ---
 import '../../../../global.css'
 import Docs from '../../../../layouts/docs.astro'
+import Code from '../../../../components/spriki-components/Code.astro'
 
 const data = (
   (await Astro.glob(`/src/translations/*.json`)).find(
@@ -10,4 +11,7 @@ const data = (
 ).default;
 ---
 <Docs dspriki="afterInput() - Sprikipedia, the Sprig encyclopedia" dtitle="afterInput()" dauthor="" >
+<p>Runs after every input event has finished being handled. Useful for tasks like checking win states:</p>
+
+<Code content={`afterInput(() => { <br />  if (getAll(block).length > 0) { <br />    console.log("you win") <br />  } <br /> })`} />
 <Docs />

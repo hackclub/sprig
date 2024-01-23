@@ -1,6 +1,7 @@
 ---
 import '../../../../global.css'
 import Docs from '../../../../layouts/docs.astro'
+import Code from '../../../../components/spriki-components/Code.astro'
 
 const data = (
   (await Astro.glob(`/src/translations/*.json`)).find(
@@ -10,4 +11,11 @@ const data = (
 ).default;
 ---
 <Docs dspriki="tilesWith() - Sprikipedia, the Sprig encyclopedia" dtitle="tilesWith()" dauthor="" >
+<p>Returns a list of the tiles that contain type.  </p>
+
+<Code content="tilesWith(block)" />
+
+<code>tilesWith</code><p> accepts multiple sprite types.</p>
+
+<Code content="tilesWith(block, player, ...)" />
 <Docs />

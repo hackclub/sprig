@@ -1,6 +1,7 @@
 ---
 import '../../../../global.css'
 import Docs from '../../../../layouts/docs.astro'
+import Code from '../../../../components/spriki-components/Code.astro'
 
 const data = (
   (await Astro.glob(`/src/translations/*.json`)).find(
@@ -10,4 +11,11 @@ const data = (
 ).default;
 ---
 <Docs dspriki="addText() - Sprikipedia, the Sprig encyclopedia" dtitle="addText()" dauthor="" >
+<p>You can add text with optional x, y, and color.</p>
+
+<p>In Sprig, each color is represented by a single character. Like bitmap and map, you can use the color keyword to pick a color for your text. A preview of your selected color will also show next to the character.</p>
+
+<p>For example:</p>
+
+<Code content="" />
 <Docs />
