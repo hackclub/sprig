@@ -43,9 +43,6 @@ export default function MainNavbar(props: MainNavbarProps) {
 					<a href="/get">Get a Sprig</a>
 				</li>
 			</ul>
-			<div class={styles.desktop}>
-				<AnnouncementBanner />
-			</div>
 			<ul class={styles.rightActions}>
 				{props.session?.session.full ? (
 					<>
