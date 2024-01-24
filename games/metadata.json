@@ -3534,5 +3534,13 @@
     "img": "",
     "tags": ["dungeon"],
     "addedOn": "2023-01-22"
+  },
+  {
+    "filename": "type_or_die",
+    "title": "type_or_die",
+    "author": "Jesse Blum (@jblum-coder)",
+    "img": "",
+    "tags": [""],
+    "addedOn": "2023-01-23"
   }
 ]
