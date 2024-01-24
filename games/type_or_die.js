@@ -1,9 +1,9 @@
 /*
-@title: Type or Die
+@title: type_or_die
 @author: Jesse Blum (@jblum-coder)
-@tags: [typing, fast, timed]
+@tags: []
 @img: ""
-@addedOn: 2024-01-21
+@addedOn: 2024-01-23
 */
 
 
