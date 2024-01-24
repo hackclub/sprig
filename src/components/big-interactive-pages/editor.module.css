@@ -37,6 +37,19 @@
 	font-weight: bold;
 }
 
+.stopButton {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	font-weight: bold;
+	background: red;
+}
+
+.hiddenButton {
+	z-index: -1;
+}
+
+
 .codeContainer .errors {
 	font-family: var(--font-code);
 	font-size: 0.9em;
@@ -114,7 +127,7 @@
 	padding: 8px 0;
 }
 
-.screenControls .mute {
+.screenControls .mute, .screenControls .stop {
 	cursor: var(--cursor-interactive);
 	user-select: none;
 	color: inherit;
@@ -129,7 +142,7 @@
 	gap: 6px;
 }
 
-.screenControls .mute :global(svg) {
+.screenControls .mute :global(svg), .screenControls .stop :global(svg) {
 	--size: 24px;
 	display: block;
 	width: var(--size);

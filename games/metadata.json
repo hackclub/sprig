@@ -3526,5 +3526,13 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2023-01-21"
+  },
+  {
+    "filename": "CaveGame",
+    "title": "CaveGame",
+    "author": "AlexL",
+    "img": "",
+    "tags": ["dungeon"],
+    "addedOn": "2023-01-22"
   }
 ]
