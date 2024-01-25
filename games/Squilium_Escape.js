@@ -1,12 +1,10 @@
 /*
 @title: Squilium_Escape
-@author: Ali Mustafa
-@tags: ['']
+@tags: []
 @img: ""
 @addedOn: 2023-01-06
-*/
+@author: Ali Mustafa
 
-/*
 Use WASD to move the player(s) around. use J to reset the level. The goal is to move every player into a X.
 A player can only move one box at a time. Try beat my highscore of 181
 */

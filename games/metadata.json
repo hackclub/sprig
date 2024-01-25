@@ -3510,5 +3510,45 @@
     "img": "",
     "tags": ["catch"],
     "addedOn": "2023-01-16"
+  },
+  {
+    "filename": "Snowman_Escape",
+    "title": "Snowman_Escape",
+    "author": "Michael Q",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-18"
+  },
+  {
+    "filename": "find_the_clone",
+    "title": "find_the_clone",
+    "author": "TheGoldenBlock",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-21"
+  },
+  {
+    "filename": "CaveGame",
+    "title": "CaveGame",
+    "author": "AlexL",
+    "img": "",
+    "tags": ["dungeon"],
+    "addedOn": "2023-01-22"
+  },
+  {
+    "filename": "type_or_die",
+    "title": "type_or_die",
+    "author": "Jesse Blum (@jblum-coder)",
+    "img": "",
+    "tags": [""],
+    "addedOn": "2023-01-23"
+  },
+  {
+    "filename": "MicroBot_Adventure",
+    "title": "MicroBot_Adventure",
+    "author": "Kartikey Singh Chauhan",
+    "img": "",
+    "tags": ["puzzle"],
+    "addedOn": "2023-01-24"
   }
 ]

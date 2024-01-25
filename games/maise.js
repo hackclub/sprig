@@ -1,9 +1,9 @@
 /*
 @title: Maise 
-@author: UrMma
-@addedOn: 2023-07-24
-@img: ""
 @tags: []
+@img: ""
+@addedOn: 2023-07-24
+@author: UrMma
 
 Instructions:
 1. Use WASD keys to navigate around mases to reach the PR pad.

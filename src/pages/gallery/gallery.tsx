@@ -24,10 +24,17 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 
 	useEffect(() => {
 		const lowerCaseQuery = filter.query.toLowerCase();
-		const _games = games.filter(
-				game => game.lowerCaseTitle.includes(lowerCaseQuery) || 
+
+		// label the newest games first
+		const filteredGames = games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn))
+			.slice(0, 10)
+			.map(game => ({ ...game, isNew: true }) as GameMetadata)
+			.concat(games.slice(10));
+
+		const _games = filteredGames.filter(
+			game => game.lowerCaseTitle.includes(lowerCaseQuery) ||
 				game.lowerCaseAuthor.includes(lowerCaseQuery)
-			) // filter by query
+		) // filter by query
 			.filter(game => { // filter by tags
 				for (const tag of filter.tags) {
 					if (game.tags.indexOf(tag) === -1) return false;
@@ -40,34 +47,28 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 
 	function sortGames(games: GameMetadata[], order: SortOrder): GameMetadata[] {
 
-		// mark the newest games first
-		let _games = games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn))
-			.slice(0, 10)
-			.map(game => ({ ...game, isNew: true }) as GameMetadata)
-			.concat(games.slice(10));
-
 		switch (order) {
 			case SortOrder.CHRONOLOGICAL: {
-				 _games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn));
+				 games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn));
 				break;	
 			}
 			case SortOrder.TUTORIALS_AND_CHRONOLOGICAL: {
-				_games =  _games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn));
+				games =  games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn));
 
 				// put tutorials first
-				_games.sort((a, _) => a.tags.includes("tutorial") ? -1 : 1);
+				games.sort((a, _) => a.tags.includes("tutorial") ? -1 : 1);
 				break;
 			}
 			case SortOrder.ASCENDING: {
-				_games.sort((a, b) => a.lowerCaseTitle > b.lowerCaseTitle ? 1 : -1);
+				games.sort((a, b) => a.lowerCaseTitle > b.lowerCaseTitle ? 1 : -1);
 				break;
 			}
 			case SortOrder.DESCENDING: {
-				_games.sort((a, b) => b.lowerCaseTitle > a.lowerCaseTitle ? 1 : -1);
+				games.sort((a, b) => b.lowerCaseTitle > a.lowerCaseTitle ? 1 : -1);
 				break;
 			}
 		}
-		return _games;
+		return games;
 	}	
 
 	useEffect(() => {
