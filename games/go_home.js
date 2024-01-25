@@ -1,9 +1,9 @@
 /*
 @title: go_home
 @author: Arthur Beck
-@tags: [sokoban, variation]
+@tags: ['puzzle']
 @img: go_home
-@addedOn: 2024-00-00
+@addedOn: 2024-01-25
 */
 
 const player = "p"
