@@ -1,8 +1,8 @@
 /*
-@title: MicroBot Adventure
+@title: MicroBot_Adventure
 @img: "MicroBot_Adventure"
-@tags: ['maze']
-@addedOn: 2024-01-15
+@tags: ['puzzle']
+@addedOn: 2024-01-24
 @author: Kartikey Singh Chauhan
 
 In this game, you are a robot navigating through maze-like sprinkled with enemies. 
