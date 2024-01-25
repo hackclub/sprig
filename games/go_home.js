@@ -696,19 +696,18 @@ afterInput(() => {
   let boxes = getAll(box)
   let valid = tilesWith(target, box).length;
   if (valid == boxes.length) {
-    if (
-        getFirst(player).x <= 0 ||
-        getFirst(player).x >= 7 ||
-        getFirst(player).y <= 0 ||
-        getFirst(player).y >= 5
-    ) {
-      nextMap()
-    } else {
       let opens = getAll(open)
       for (let i = 0; i<opens.length; i++) {
         opens[i].remove()
-      }
     }
+  }
+  if (
+      getFirst(player).x <= 0 ||
+      getFirst(player).x >= 7 ||
+      getFirst(player).y <= 0 ||
+      getFirst(player).y >= 5
+  ) {
+    nextMap()
   }
   if (tilesWith(player, activator).length>0) {
     getAll(nonoTarget).forEach((item) => {
