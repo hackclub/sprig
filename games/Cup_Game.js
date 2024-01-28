@@ -2,9 +2,9 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: CupGame
+@title: Cup_Game
 @author: Dante Squires
-@tags: ['guessing game']
+@tags: ['guess']
 @img: ""
 @addedOn: 2024-00-00
 */
