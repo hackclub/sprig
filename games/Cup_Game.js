@@ -195,8 +195,8 @@ const levels = [
 ..b..`
 ]
 //creating our starting text
-addText("Start Game!", {
-  x: 5,
+addText("Press 'J' To Start!", {
+  x: 1,
   y:3,
   color: `9`
 })
@@ -254,8 +254,8 @@ function mix(){
 //Begin guessing
 function guessCup(){ 
   guessingTime = true
-  addText("Guess!", {
-    x: 7,
+  addText("Use 'A' and 'D' to \nchange selected cup \nUse 'J' to guess!", {
+    x: 1,
     y:5,
     color: `9`
   })
@@ -276,11 +276,11 @@ function runMix(){
 //function to reset everything so you can play multiple times
 function restart(){
   clearText();
-  addText("Start Game!", {
-    x: 5,
-    y:3,
-    color: `9`
-  })
+  addText("Press 'J' To Start!", {
+  x: 1,
+  y:3,
+  color: `9`
+})
   
   guessingTime = false;
   mixingTime = false;
