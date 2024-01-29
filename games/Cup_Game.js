@@ -4,9 +4,9 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Cup_Game
 @author: Dante Squires
-@tags: ['guess']
+@tags: []
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-01-29
 */
 
 /*
