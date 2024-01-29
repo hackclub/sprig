@@ -47,7 +47,7 @@ static struct audio_buffer_pool *audio_buffer_pool_init() {
   return producer_pool;
 }
 
-struct audio_buffer_pool __scratch_x("button") *audio_bufpool;
+struct audio_buffer_pool *audio_bufpool;
 
 void audio_init(void) {
   audio_bufpool = audio_buffer_pool_init();

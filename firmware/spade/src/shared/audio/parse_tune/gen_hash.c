@@ -30,7 +30,7 @@ typedef struct {
   uint16_t freq;
 } Tone;
 
-Tone __scratch_x("audio") tones[] = {
+Tone tones[] = {
   {  "b0",   31, },
   {  "c1",   33, },
   { "c#1",   35, },

@@ -45,8 +45,8 @@
 #include "shared/js_runtime/js.h"
 
 // Externs for shared/ui/errorbuf.h
-char __scratch_x("errorbuf") errorbuf[512] = "";
-Color __scratch_x("errorbuf") errorbuf_color; // Initialized in main()
+char errorbuf[512] = "";
+Color errorbuf_color; // Initialized in main()
 static void fatal_error() {
   // On fatal error, start an infinite loop rendering the errorbuf.
   errorbuf_color = color16(255, 0, 0); // Make sure it's red
@@ -75,8 +75,8 @@ typedef struct {
   uint8_t last_state;
   uint8_t ring_i;
 } ButtonState;
-uint __scratch_x("button") button_pins[] = {  5,  7,  6,  8, 12, 14, 13, 15 };
-static ButtonState __scratch_x("button") button_states[ARR_LEN(button_pins)] = {0};
+uint button_pins[] = {  5,  7,  6,  8, 12, 14, 13, 15 };
+static ButtonState button_states[ARR_LEN(button_pins)] = {0};
 
 static bool button_history_read(ButtonState *bs, int i) {
   // We want to store bools compactly so we have to do some bit twiddling.

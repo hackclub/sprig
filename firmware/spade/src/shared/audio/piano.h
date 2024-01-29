@@ -6,7 +6,7 @@ float strtof(const char *restrict nptr, char **restrict endptr);
 
 // gaps in your audio? increase this
 #define SAMPLES_PER_BUFFER (256*8)
-#define SAMPLES_PER_SECOND 24000
+#define SAMPLES_PER_SECOND 12000
 
 typedef struct {
   void (*song_free)(void *);

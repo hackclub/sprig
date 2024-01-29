@@ -46,7 +46,7 @@ typedef struct {
 } Song;
 
 #define SONG_COUNT 4
-const float __scratch_x("audio") sound_weights[Sound_COUNT] = {
+const float sound_weights[Sound_COUNT] = {
   [Sound_Sine]     = 1.00f,
   [Sound_Triangle] = 0.59f,
   [Sound_Square]   = 0.08f,

@@ -6,9 +6,9 @@ static void core1_entry(void);
 // NOTE: this has to be a multiple of 4096 (FLASH_SECTOR_SIZE)
 #define FLASH_TARGET_OFFSET (800 * 1024)
 
-const uint8_t __scratch_x("flash") *flash_target_contents = (const uint8_t *) (XIP_BASE + FLASH_TARGET_OFFSET);
+const uint8_t *flash_target_contents = (const uint8_t *) (XIP_BASE + FLASH_TARGET_OFFSET);
 
-uint16_t __scratch_x("flash") SPRIG_MAGIC[FLASH_PAGE_SIZE/2] = { 1337, 42, 69, 420, 420, 1337 };
+uint16_t SPRIG_MAGIC[FLASH_PAGE_SIZE/2] = { 1337, 42, 69, 420, 420, 1337 };
 
 static const char *save_read(void) {
   if (memcmp(&SPRIG_MAGIC, flash_target_contents, sizeof(SPRIG_MAGIC)) != 0) {
