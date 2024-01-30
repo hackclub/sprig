@@ -3550,5 +3550,29 @@
     "img": "",
     "tags": ["puzzle"],
     "addedOn": "2023-01-24"
+  },
+  {
+    "filename": "go_home",
+    "title": "go_home",
+    "author": "Arthur Beck",
+    "img": "",
+    "tags": ["puzzle", "advanced"],
+    "addedOn": "2023-01-25"
+  },
+  {
+    "filename": "Bad_Apple",
+    "title": "Bad_Apple",
+    "author": "Sychamis",
+    "img": "",
+    "tags": ["advanced"],
+    "addedOn": "2023-01-27"
+  },
+  {
+    "filename": "Cup_Game",
+    "title": "Cup_Game",
+    "author": "Dante Squires",
+    "img": "",
+    "tags": [""],
+    "addedOn": "2023-01-29"
   }
 ]

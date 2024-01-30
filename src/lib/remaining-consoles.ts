@@ -8,5 +8,5 @@ export async function getConsolesRemaining(): Promise<number> {
 		let status = console.fields.Status
 		return (status === 'Pending' || status === 'Approved')
 	}).length
-	return 420 - consoleCount
+	return consoleCount
 }
