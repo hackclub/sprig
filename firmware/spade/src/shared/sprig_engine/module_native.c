@@ -682,11 +682,50 @@ JERRYXX_FUN(native_text_clear_fn) {
   dbg("module_native::native_text_clear_fn");
   text_clear(); return jerry_create_undefined(); }
 
+JERRYXX_FUN(set_value_fn) {
+  dbg("module_native::write_kv_value_fn");
+
+  char *key = temp_str_mem();
+  jerry_size_t nbytes = jerry_string_to_char_buffer(
+    JERRYXX_GET_ARG(0),
+    (jerry_char_t *)key,
+    sizeof(state->temp_str_mem) - 1
+  );
+  key[nbytes] = '\0'; 
+
+  FIL fil;
+  char *filename = (char*)malloc(64 * sizeof(char));
+  snprintf(filename, 64, "sprig/kv/%s", key);
+  FRESULT fr = f_open(&fil, filename, FA_CREATE_ALWAYS | FA_WRITE);
+
+  char *data = temp_str_mem();
+  nbytes = jerry_string_to_char_buffer(
+    JERRYXX_GET_ARG(1),
+    (jerry_char_t *)data,
+    sizeof(state->temp_str_mem) - 1
+  );
+  data[nbytes] = '\0'; 
+
+  printf("writing %s to %s", data, filename);
+
+  int bw;
+  if (FR_OK != fr && FR_EXIST != fr)
+      panic("f_open(%s) error: %s (%d)\n", filename, FRESULT_str(fr), fr);
+  if (f_write(&fil, data, strlen(data) * sizeof (char), &bw) < 0) {
+      printf("f_write failed\n");
+  }
+  fr = f_close(&fil);
+  if (FR_OK != fr) {
+      printf("f_close error: %s (%d)\n", FRESULT_str(fr), fr);
+  }
+}
 
 static void module_native_init(jerry_value_t exports) {
   memset(&props, 0, sizeof(props));
 
   props_init();
+
+  jerryxx_set_property_function(exports, MSTR_NATIVE_setValue, set_value_fn);
 
   // these ones actually need to be in C for perf
   jerryxx_set_property_function(exports, MSTR_NATIVE_setMap,    setMap);

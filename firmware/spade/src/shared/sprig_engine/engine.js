@@ -1,5 +1,8 @@
 let setTimeout, setInterval, clearInterval, clearTimeout;
 const {
+  setValue,
+  /* sprite interactions */ setSolids,
+  setPushables,
   /* sprite interactions */ setSolids, setPushables,
   /*              see also: sprite.x +=, sprite.y += */
 
@@ -46,10 +49,14 @@ exports.playTune = (str, times) => {
   }
 }
 
-/* opts: x, y, color (all optional) */
-exports.addText = (str, opts={}) => {
-  const CHARS_MAX_X = 21;
-  const padLeft = Math.floor((CHARS_MAX_X - str.length)/2);
+  exports.setValue = (key, value) => {
+    native.setValue(key.toString(), JSON.stringify(value));
+  }
+
+  /* opts: x, y, color (all optional) */
+  exports.addText = (str, opts = {}) => {
+    const CHARS_MAX_X = 21;
+    const padLeft = Math.floor((CHARS_MAX_X - str.length) / 2);
 
   for (const char of str.split('')) {
     if (" !\"#%&\'()*+,./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\\^_-`abcdefghijklmnopqrstuvwxyz|~¦§¨©¬®¯°±´¶·¸ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ÙÚÛÜÝÞßàáâãäåæçèéêëìíîïñòóôõö÷ùúûüýþÿĀāĂăĄąĆćĊċČčĎĐđĒēĖėĘęĚěĞğĠġĦħĪīĮįİıŃńŇňŌōŒœŞşŨũŪūŮůŲųŴŵŶŷŸǍǎǏǐǑǒǓǔˆˇ˘˙˚˛˜˝ẀẁẂẃẄẅỲỳ†‡•…‰⁄™∂∅∏∑−√∞∫≈≠≤≥◊".indexOf(char) === -1)
