@@ -2,7 +2,18 @@
 
 ## Synopsis
 The goal of this document is to make ownership of responsibilities / decision-making on the Sprig project crystal clear.
-## Product
+
+## Project Management
+**Owner**: Graham\
+**Responsibilities**:
+* Responsible for keeping regularly scheduled meetings with all relevant stakeholders to ensure all of team's alignment
+* Gathers metrics on progress and reports them to the rest of team/mgmt, and to comms/marketing when appropriate
+* Ensures that best practices are followed consistently across the entire project
+* Ensures that gaps in staffing are filled appropriately when necessary
+* Follows general status (especially the critical paths) of the project to ensure smooth overall operation, escalating issues within the team when appropriate
+
+
+## Product Management
 **Owner**: Leo\
 **Responsibilities**:
 * approves/denies of all end-user-facing Sprig and Spade features
