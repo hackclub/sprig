@@ -4,11 +4,11 @@ https://sprig.hackclub.com/gallery/getting_started
 
 Goal: push the box adjacent to the goal to score points, push the goal if necessary, press l if you lose
 
-@title: Snake
+@title: Snake_Boxes
 @author: Aryavrat Mishra
-@tags: [snake, fun, game]
+@tags: ['classic']
 @img: ""
-@addedOn: 2024-01-12
+@addedOn: 2024-01-30
 */
 
 const body = "b"
