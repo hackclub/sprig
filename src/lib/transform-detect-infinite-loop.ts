@@ -1,8 +1,5 @@
 // Based on https://repl.it/site/blog/infinite-loops by Amjad Masad.
 
-const MAX_ITERATIONS = 2000;
-const MAX_LOOP_TIME_MS = 1500;
-
 /*
 * The infinite loop detection transform will detect infinite loops if the following conditions are met
 * 1. There are more than 2000 iterations in the loop
@@ -12,6 +9,8 @@ const MAX_LOOP_TIME_MS = 1500;
 *       Add new tests if new functionality is added in this infinite-loop detection code
 */
 export default function TransformDetectInfiniteLoop({ types: t }: { types: any }) {
+	const MAX_ITERATIONS = +import.meta.env.PUBLIC_MAX_ITERATIONS;
+	const MAX_LOOP_TIME_MS = +import.meta.env.PUBLIC_MAX_LOOP_TIME_MS;
 	return {
 		visitor: {
 			'WhileStatement|ForStatement|DoWhileStatement': (path: any) => {
