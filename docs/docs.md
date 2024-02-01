@@ -8,6 +8,23 @@ and sharing them with others. You can watch [this video](https://www.youtube.com
 
 Run games by hitting the `Run` button or pressing `Shift+Enter`.
 
+### Infinite loop detection
+The Sprig editor will automatically insert a heuristic in your `for`, `while` and or `do-while` loops to detect potential infinite loops.
+Code looking like
+```js
+while (condition) {
+  // do stuff
+}
+```
+will become
+```js
+startTime = performance.now()
+while (condition) {if (++_loopIt > 2000 && performance.now() - startTime > 1500) throw new RangeError("Potential infinite loop")
+  // do stuff
+}
+```
+Note that all original line numbers in your code will be preserved.
+
 ## Getting Help
 
 If this is your first time using Sprig, try playing through the [tutorial](https://sprig.hackclub.com/gallery/getting_started). From there, we suggest hacking on any of the [current games](https://sprig.hackclub.com/gallery) or starting from scratch.
