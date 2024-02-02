@@ -4734,10 +4734,10 @@ space-separated-tokens@^2.0.0:
   resolved "https://registry.yarnpkg.com/space-separated-tokens/-/space-separated-tokens-2.0.2.tgz#1ecd9d2350a3844572c3f4a312bceb018348859f"
   integrity sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==
 
-sprig@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/sprig/-/sprig-1.0.1.tgz#3d08cd95b77b22bdbb180d201bca61b0e98e8b94"
-  integrity sha512-3eXrmItvN7Gwts1dHl3KHHaGWR98W7p0LRQsVas0MsCGiTgEVKyqP8hS+hUdosL5vONBp1LvJ0IVQ6Wg7ujgvw==
+sprig@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/sprig/-/sprig-1.0.2.tgz#05f23e9c78cc4adea98e97fec3c73f4723ff605b"
+  integrity sha512-FuUqqZQ7EyomSB8lhegHTSUBwwZ7cXFQ2EuR4ntoJIWq6ub5de939BxHgO8mq7b2X9UZBnJqori7yQyQTGjp5A==
 
 sprintf-js@~1.0.2:
   version "1.0.3"
