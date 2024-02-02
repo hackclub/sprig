@@ -41,6 +41,7 @@ const move =tune`
 const green = "g"
 const help = "h"
 const help2 = "b"
+const help3 = "o"
 const win2 = tune`
 147.05882352941177: B4~147.05882352941177,
 147.05882352941177: G4~147.05882352941177,
@@ -74,6 +75,7 @@ const win2 = tune`
 147.05882352941177: C5~147.05882352941177,
 147.05882352941177: F5~147.05882352941177,
 147.05882352941177: A4~147.05882352941177`
+
 
 setLegend(
   [ player, bitmap`
@@ -381,7 +383,24 @@ DDDDDDDDDDDDDDDD`],
 6666666666666666
 .66666666666666.
 ..666666666666..
-...6666666666...` ]
+...6666666666...` ],
+  [ help3, bitmap`
+................
+...DDD....DDD...
+..DDDDD..DDDDD..
+.DDDDDDDDDDDDDD.
+.DDDDDDDDDDDDDD.
+.DDDDDDDDDDDDDD.
+.DDDDDDDDDDDDDD.
+.DDDDDDDDDDDDDD.
+.DDDDDDDDDDDDDD.
+.DDDDDDDDDDDDDD.
+.DDDDDDDDDDDDDD.
+.DDDDDDDDDDDDDD.
+.DDDDDDDDDDDDDD.
+..DDDDDDDDDDDD..
+...DDDDDDDDDD...
+................`]
   
   
 )
@@ -392,7 +411,7 @@ let level = 0
 const levels = [
   
   map`
-h........................
+h.......................o
 .ggggg.gggg...ggg...ggg..
 .g.....g...g.g...g.g...g.
 .g.....g...g.g...g.g.....
@@ -704,6 +723,26 @@ wwgwgwgwwwgwwwgwwwgww
 wwwgwgwwwgggwwgwwwgww
 wwwwwwwwwwwwwwwwwwwww
 wwwwwwwwwwwwwwwwwwwww`,
+  map`
+wwwwwwwwwwwwwwwwwwwww
+wgwwwgwwgggwwgwwwgwww
+wgwwwgwwwgwwwggwwgwww
+wgwwwgwwwgwwwgwgwgwww
+wgwgwgwwwgwwwgwwggwww
+wgwgwgwwwgwwwgwwwgwww
+wwgwgwwwgggwwgwwwgwww
+wwwwwwwwwwwwwwwwwwwww
+wgwwwgwwgggwwgwwwgwww
+wgwwwgwwwgwwwggwwgwww
+wgwwwgwwwgwwwgwgwgwww
+wgwgwgwwwgwwwgwwggwww
+wgwgwgwwwgwwwgwwwgwww
+wwgwgwwwgggwwgwwwgwww
+wwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwww
+wwp...............bww
+wwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwww`,
 ]
 
 setMap(levels[level])
@@ -759,8 +798,8 @@ afterInput(() => {
     level =+ 5
     setMap(levels[level])
     clearText()
-  } else if(tilesWith(l6, player) !=0) {
-    level =+ 6
+  } else if(tilesWith(help3, player) !=0) {
+    level =+ 5
     setMap(levels[level])
     clearText()
   
@@ -784,39 +823,31 @@ afterInput(() => {
     setMap(levels[level])
     clearText()
   }else if(tilesWith(pad5, player) !=0) {
-    level =+ 5
+    level =+ 7
     setMap(levels[level])
     clearText()
+      const playback = playTune(win2, Infinity)
+
   } else if(tilesWith(pad6, player) !=0) {
-    level =+ 7
+    level =+ 8
     setMap(levels[level])
     clearText()
   const playback = playTune(win2, Infinity)
   
   }
-
-
   
   const helpCheck = tilesWith(player, help).length
   const helpCheck2 = tilesWith(player, help2).length
-  const helpLevel = level + 6
-  
-
+  const helpLevel =  6
+  const spawnLevel = 0
 
  if( helpCheck > 0){
   setMap(levels[helpLevel])
    
  } 
   if (helpCheck2 > 0){
-  setMap(levels[level])
+  setMap(levels[spawnLevel])
    
   }
-  
-  
-
-
-
-  
-
   
 })
