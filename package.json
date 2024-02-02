@@ -43,7 +43,9 @@
 		"tinykeys": "^1.4.0"
 	},
 	"devDependencies": {
+		"@babel/standalone": "^7.23.8",
 		"@prefresh/vite": "^2.2.9",
+		"@types/babel__standalone": "^7.1.7",
 		"@types/debounce": "^1.2.1",
 		"@types/esprima": "^4.0.3",
 		"@types/grecaptcha": "^3.0.4",

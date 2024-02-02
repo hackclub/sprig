@@ -18,6 +18,9 @@ import { nanoid } from 'nanoid'
 import TutorialWarningModal from '../popups-etc/tutorial-warning'
 import { isDark } from '../../lib/state'
 
+import * as Babel from "@babel/standalone";
+import TransformDetectInfiniteLoop from '../../lib/transform-detect-infinite-loop'
+
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>
 	cookies: {
@@ -168,8 +171,13 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		errorLog.value = []
 
 		const code = codeMirror.value?.state.doc.toString() ?? ''
-		const res = runGame(code, screen.current, (error) => {
-			errorLog.value = [ ...errorLog.value, error ]
+		const transformResult = Babel.transform(code, {
+			plugins: [ TransformDetectInfiniteLoop ],
+			retainLines: true
+		});
+
+		const res = runGame(transformResult.code!, screen.current, (error) => {
+			errorLog.value = [...errorLog.value, error]
 		})
 
 		screen.current.focus()
