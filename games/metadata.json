@@ -3558,5 +3558,29 @@
     "img": "",
     "tags": ["puzzle", "advanced"],
     "addedOn": "2023-01-25"
+  },
+  {
+    "filename": "Bad_Apple",
+    "title": "Bad_Apple",
+    "author": "Sychamis",
+    "img": "",
+    "tags": ["advanced"],
+    "addedOn": "2023-01-27"
+  },
+  {
+    "filename": "Cup_Game",
+    "title": "Cup_Game",
+    "author": "Dante Squires",
+    "img": "",
+    "tags": [""],
+    "addedOn": "2023-01-29"
+  },
+  {
+    "filename": "Snake_Boxes",
+    "title": "Snake_Boxes",
+    "author": "Aryavrat Mishra",
+    "img": "",
+    "tags": ["classic"],
+    "addedOn": "2023-01-30"
   }
 ]
