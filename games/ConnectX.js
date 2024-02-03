@@ -1,3 +1,11 @@
+/*
+@title: ConnectX
+@author: Siddh Patel
+@tags: []
+@img: ""
+@addedOn: 2024-02-03
+*/
+
 // Define sprites
 const yellow_cursor = "i"
 const red_cursor = "j"
