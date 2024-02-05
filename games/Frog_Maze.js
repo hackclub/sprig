@@ -1,11 +1,9 @@
 /*
-
-
-@title: Frog Mazes
+@title: Frog_Maze
 @author: Jeremiah Kellison
-@tags: ['maze','puzzle']
+@tags: ['puzzle']
 @img: ""
-@addedOn: 2024-01-30
+@addedOn: 2024-02-04
 */
 /*
 The goal of the game is to navigate your frog player character to get the lilypad at the end of the level.
