@@ -11,7 +11,7 @@
 The goal of the game is to navigate your frog player character to get the lilypad at the end of the level.
 
 Controls:
-WASD to move
+WASD to move And J to restart
 
 */
 
@@ -771,6 +771,10 @@ onInput("a", () => {
 onInput("d", () => {
   getFirst(player).x += 1;
     playTune(move)
+});
+onInput("j", () => {
+  setMap(levels[0])
+    
 });
 
 
