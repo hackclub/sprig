@@ -307,3 +307,20 @@ const tileHasType = (x, y, type) => getTile(x, y).some(s => s.type === type)
 const getTypeFromTile = (x, y, type) => getTile(x, y, type).find(s => s.type === type)
 ```
  -->
+
+## Infinite loop detection
+The Sprig editor will automatically insert a heuristic in your `for`, `while` and or `do-while` loops to detect potential infinite loops.
+Code looking like
+```js
+while (condition) {
+  // do stuff
+}
+```
+will become
+```js
+startTime = performance.now()
+while (condition) {if (++_loopIt > 2000 && performance.now() - startTime > 1500) throw new RangeError("Potential infinite loop")
+  // do stuff
+}
+```
+Note that all original line numbers in your code will be preserved.
