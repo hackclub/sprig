@@ -93,6 +93,8 @@ export const isDark = signal<boolean>(false)
 
 export const toggleTheme = () => {
 	isDark.value = !isDark.value;
-	// console.log(isDark.value);
-	localStorage.setItem("isDark", isDark.value.toString());
+	
+	// store true as "true" or false as ""
+	// empty strings coerce to false 
+	localStorage.setItem("isDark", isDark.value ? isDark.value.toString() : "");
 } 
