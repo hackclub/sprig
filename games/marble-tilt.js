@@ -302,17 +302,17 @@ fbbbbbbbbbf
 fffffffffff`,
 ]
 
-// FIXME: Add W 
 const youWin = map`
-fffffffffffffffffffffffffff
-fffffffffffffiiiiififffffif
-fffffffffffffffifffiiffffif
-fffffffffffffffifffififffif
-fffffffffffffffifffiffiffif
-fffffffffffffffifffifffifif
-fffffffffffffffifffiffffiif
-fffffffffffffiiiiififffffif
+fffffffffifffffffffffffffff
+fifffffffifffiiiiififffffif
+fiifffiffifffffifffiiffffif
+ffiiffiffifffffifffififffif
+fffifiififfffffifffiffiffif
+fffifiiiiffffffifffifffifif
+fffiiifiiffffffifffiffffiif
+ffffifffiffffiiiiififffffif
 fffffffffffffffffffffffffff`
+
 
 setMap(levels[level])
 
