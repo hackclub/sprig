@@ -130,6 +130,9 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Max height
 	const maxOutputAreaSize = useSignal(outputAreaSize.value)
 	useEffect(() => {
+		// load the dark mode value from localstorage
+		isDark.value = Boolean(localStorage.getItem("isDark") ?? "")
+		
 		const updateMaxSize = () => {
 			maxOutputAreaSize.value = (window.innerWidth - outputAreaWidthMargin) / 2.5
 		}
