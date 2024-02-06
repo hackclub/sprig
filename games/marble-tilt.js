@@ -1,9 +1,9 @@
 /*
-@title: Marble Tilt 
+@title: marble-tilt
 @author: @jdogcoder (Jasper Mayone)
-@tags: []
-@img: "https://cloud-pfh6jdg27-hack-club-bot.vercel.app/0image__1_.png"
-@addedOn: 2024-00-00
+@tags: ['puzzle']
+@img: ""
+@addedOn: 2024-02-06
 */
 
 /*
