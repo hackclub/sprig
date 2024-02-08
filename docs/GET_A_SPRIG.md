@@ -11,6 +11,6 @@ There are only a few requirements to get a Sprig console:
 
 Note: for games made by a group, we only ship ONE device. (One device per PR / game).
 
-<small>(* Our aim is to ship everywhere except US-sanctioned and trade-/mail-restricted nations.)</small>
+<small>* Hackers outside USA take note: Our aim is to ship everywhere except US-sanctioned and trade-/mail-restricted nations. While we do cover shipping costs, you may be subject to customs fees. We can't predict what those will be. Your device will be held up in your local customs until it is paid.</small>
 
 Happy hacking!

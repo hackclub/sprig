@@ -7,8 +7,6 @@
 @addedOn: 2023-08-28
 */
 
-    // @name: The Legend of Zelda: Link's Escape
-// @author: ItzHex
 
 // let t1 = 1
 // let t2 = 2
