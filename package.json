@@ -36,7 +36,7 @@
 		"react-icons": "^4.7.1",
 		"rehype-external-links": "^2.0.1",
 		"sass": "^1.58.0",
-		"sprig": "^1.0.0",
+		"sprig": "^1.0.2",
 		"svelte": "^3.54.0",
 		"three": "^0.149.0",
 		"throttle-debounce": "^5.0.0",
