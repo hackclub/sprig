@@ -1,4 +1,7 @@
-
+/*
+@title: Save The Flower
+@author: Mahir Ishum
+*/
 const player = "p"
 const fireLUP = "l"
 const fireLDOWN = "m"
