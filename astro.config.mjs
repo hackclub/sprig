@@ -5,11 +5,14 @@ import prefresh from '@prefresh/vite'
 import svelte from '@astrojs/svelte'
 import rehypeExternalLinks from 'rehype-external-links'
 
+import generateMetadata from "./src/integrations/generate-metadata"
+
 export default defineConfig({
 	site: 'https://sprig.hackclub.com',
 	integrations: [
 		preact({ compat: true }),
-		svelte()
+		svelte(),
+		generateMetadata()
 	],
 	output: 'server',
 	adapter: vercel(),
