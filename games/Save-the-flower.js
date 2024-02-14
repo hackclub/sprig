@@ -1,5 +1,5 @@
 /*
-@title: Save The Flower
+@title: Save-The-Flower
 @author: Mahir Ishum
 */
 const player = "p"
