@@ -683,7 +683,7 @@ JERRYXX_FUN(native_text_clear_fn) {
   text_clear(); return jerry_create_undefined(); }
 
 JERRYXX_FUN(set_value_fn) {
-  dbg("module_native::write_kv_value_fn");
+  dbg("module_native::set_value_fn");
 
   char *key = temp_str_mem();
   jerry_size_t nbytes = jerry_string_to_char_buffer(
@@ -720,12 +720,48 @@ JERRYXX_FUN(set_value_fn) {
   }
 }
 
+JERRYXX_FUN(get_value_fn) {
+  dbg("module_native::get_value_fn");
+
+  char *key = temp_str_mem();
+  jerry_size_t nbytes = jerry_string_to_char_buffer(
+    JERRYXX_GET_ARG(0),
+    (jerry_char_t *)key,
+    sizeof(state->temp_str_mem) - 1
+  );
+  key[nbytes] = '\0'; 
+
+  FIL fil;
+  char *filename = (char*)malloc(64 * sizeof(char));
+  snprintf(filename, 64, "sprig/kv/%s", key);
+  FRESULT fr = f_open(&fil, filename, FA_READ);
+
+  if (FR_OK != fr) {
+    printf("f_open(%s) error: %s (%d)\n", filename, FRESULT_str(fr), fr);
+    return jerry_create_undefined();
+  }
+
+  char *data = temp_str_mem();
+  char line[100];
+  while (f_gets(line, sizeof line, &fil)) {
+    strcat(data, line);
+  }
+
+  fr = f_close(&fil);
+  if (FR_OK != fr) {
+      printf("f_close error: %s (%d)\n", FRESULT_str(fr), fr);
+  }
+
+  return jerry_create_string((jerry_char_t *)data);
+}
+
 static void module_native_init(jerry_value_t exports) {
   memset(&props, 0, sizeof(props));
 
   props_init();
 
   jerryxx_set_property_function(exports, MSTR_NATIVE_setValue, set_value_fn);
+  jerryxx_set_property_function(exports, MSTR_NATIVE_getValue, get_value_fn);
 
   // these ones actually need to be in C for perf
   jerryxx_set_property_function(exports, MSTR_NATIVE_setMap,    setMap);
