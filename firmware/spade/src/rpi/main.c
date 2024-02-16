@@ -69,7 +69,7 @@ static void fatal_error() {
  * 
  * (gpio_set_input_hysteresis_enabled was too slow.)
  */
-#define HISTORY_LEN (16)
+#define HISTORY_LEN (64)
 typedef struct {
   uint8_t history[HISTORY_LEN/8];
   uint8_t last_state;
@@ -224,8 +224,6 @@ int main() {
   stdio_init_all(); // Init serial port
   st7735_init();    // Init display
   rng_init();       // Init RNG
-
-  printf("so sus");
 
   // Initialize SD card
   mount_sd_card();

@@ -25,37 +25,11 @@ static char jerry_value_to_char(jerry_value_t val) {
   if (nbytes == 0) {
 
     yell("uh non-char given as char input!");
-    jerryxx_print_value(val);
+    // jerryxx_print_value(val);
     return '.';
   }
   return tmp[0];
 }
-
-// JERRYXX_FUN(readData) {
-//   dbg("sussy data hehe");
-
-//   dbg("module_native::readData");
-//   JERRYXX_CHECK_ARG(0, "str");
-
-//   dbg("thats a nice str u got dere");
-
-//   char *tmp = temp_str_mem();
-//   jerry_size_t nbytes = jerry_string_to_char_buffer(
-//     JERRYXX_GET_ARG(0),
-//     (jerry_char_t *)tmp,
-//     sizeof(state->temp_str_mem) - 1
-//   );
-//   tmp[nbytes] = '\0';
-
-//   dbgf("read in %d bytes from a js str (it was %d long, we have %d in our strmem)",
-//          nbytes,
-//          jerry_get_string_length(JERRYXX_GET_ARG(0)),
-//          sizeof(state->temp_str_mem)
-//          );
-
-//   // sussy sd card logic? idk
-  
-// }
 
 JERRYXX_FUN(setMap) {
   dbg("aight mofos we settin a map");
