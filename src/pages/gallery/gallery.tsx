@@ -162,11 +162,10 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 					<div class="search-controls">
 						<div class="select">
 							<select onChange={(event) => {
-								const target = (event.target! as HTMLSelectElement)
-								const value = target.value;
+								const target = (event.target! as HTMLSelectElement).value;
 
 								// do not filter if empty string or duplicate
-								if (value != "" && !filter.tags.includes(value)) setFilter(_filter => ({ ..._filter, tags: [...filter.tags, value] }));
+								if (target != "" && !filter.tags.includes(target)) setFilter(_filter => ({ ..._filter, tags: [...filter.tags, target] }));
 							}} id="tag-select">
 								<option value="">Filter by tag(s)...</option>
 								<option value="" hidden>Filtering by tag {filter.tags[0]}...</option>
