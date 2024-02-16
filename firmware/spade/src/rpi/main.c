@@ -189,6 +189,9 @@ void mount_sd_card() {
   state->sd_mounted = 1;
   sd_card_t *pSD = sd_get_by_num(0);
   FRESULT fr = f_mount(&pSD->fatfs, pSD->pcName, 1);
+
+  f_mkdir("sprig");
+  f_mkdir("sprig/kv");
 }
 
 /**
