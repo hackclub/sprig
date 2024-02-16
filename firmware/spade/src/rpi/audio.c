@@ -23,7 +23,7 @@ static struct audio_buffer_pool *audio_buffer_pool_init() {
     .sample_stride = 2
   };
 
-  struct audio_buffer_pool  *producer_pool = audio_new_producer_pool(&producer_format, 3,
+  struct audio_buffer_pool  *producer_pool = audio_new_producer_pool(&producer_format, 2,
                                     SAMPLES_PER_BUFFER); // todo correct size
   bool __unused ok;
   const struct audio_format *output_format;
@@ -31,7 +31,7 @@ static struct audio_buffer_pool *audio_buffer_pool_init() {
   struct audio_i2s_config config = {
     .data_pin = PICO_AUDIO_I2S_DATA_PIN,
     .clock_pin_base = PICO_AUDIO_I2S_CLOCK_PIN_BASE,
-    .dma_channel = 0,
+    .dma_channel = 2,
     .pio_sm = 0,
   };
 
