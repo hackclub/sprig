@@ -77,6 +77,15 @@ const normalizeStack = (stack: string): StackItem[] | null => {
 export const normalizeGameError = (gameError: GameError): NormalizedError => {
 	const lineOffset = 3
 
+	if ((gameError.error as any).code === "BABEL_PARSE_ERROR") {
+		let gamerr = gameError.error as any;
+		return {
+			raw: gamerr,
+			description: gamerr.message,
+			line: gamerr.loc.line,
+			column: gamerr.loc.column,
+		}
+	}
 	if (gameError.kind === 'parse') {
 		const { description, lineNumber, column } = gameError.error
 		const line = lineNumber - 1

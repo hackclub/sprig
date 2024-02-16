@@ -17,6 +17,7 @@ import MigrateToast from '../popups-etc/migrate-toast'
 import { nanoid } from 'nanoid'
 import TutorialWarningModal from '../popups-etc/tutorial-warning'
 import { isDark } from '../../lib/state'
+import { normalizeGameError } from '../../lib/engine/error'
 
 import * as Babel from "@babel/standalone";
 import TransformDetectInfiniteLoop from '../../lib/transform-detect-infinite-loop'
@@ -174,29 +175,33 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		errorLog.value = []
 
 		const code = codeMirror.value?.state.doc.toString() ?? ''
-		const transformResult = Babel.transform(code, {
-			plugins: [ TransformDetectInfiniteLoop ],
-			retainLines: true
-		});
+		try {
+			const transformResult = Babel.transform(code, {
+				plugins: [TransformDetectInfiniteLoop],
+				retainLines: true,
+				parserOpts: { errorRecovery: true }
+			});
 
-		const res = runGame(transformResult.code!, screen.current, (error) => {
-			errorLog.value = [...errorLog.value, error]
-		})
+			const res = runGame(transformResult.code!, screen.current, (error) => {
+				errorLog.value = [...errorLog.value, error]
+			})
 
-		screen.current.focus()
-		screenShake.value++
-		setTimeout(() => screenShake.value--, 200)
+			screen.current.focus()
+			screenShake.value++
+			setTimeout(() => screenShake.value--, 200)
 
-		cleanup.current = res.cleanup
-		if (res.error) {
-			console.error(res.error.raw)
-			errorLog.value = [ ...errorLog.value, res.error ]
-			if (res.error.line) {
-				highlightError(res.error.line);
+			cleanup.current = res.cleanup
+			if (res.error) {
+				// console.error(res.error.raw)
+				errorLog.value = [...errorLog.value, res.error]
 			}
-		} else {
-			clearErrorHighlight();
-		}		
+
+		} catch (err) { 
+			errorLog.value = [...errorLog.value,
+				normalizeGameError({ kind: "page", error: err })
+			]
+		}
+
 	}
 
 	const onStop = async () => {
