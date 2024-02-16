@@ -7,6 +7,8 @@ https://sprig.hackclub.com/gallery/getting_started
 @tags: []
 @img: ""
 @addedOn: 2024-02-06
+
+use WASD to move the cursor and J to select and use an action, the enemy will automatically deal damage to you after every action you take
 */
 
 const winLevel = 6
