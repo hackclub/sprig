@@ -1,6 +1,9 @@
 /*
 @title: Save-The-Flower
 @author: Mahir Ishum
+@tags: ['strategy']
+@img: ""
+@addedOn: 2024-02-17
 
 About the game:
 This game is about saving a fire. There is a flower in the middle. Fires will come towards the flower from two corners. You are driving a firetruck. 
