@@ -1,7 +1,7 @@
 import styles from './editor.module.css'
 import CodeMirror from '../codemirror'
 import Navbar from '../navbar-editor'
-import { IoClose, IoPlayCircleOutline, IoVolumeHighOutline, IoVolumeMuteOutline } from 'react-icons/io5'
+import { IoClose, IoPlayCircleOutline, IoStopCircleOutline, IoVolumeHighOutline, IoVolumeMuteOutline } from 'react-icons/io5'
 import { Signal, useComputed, useSignal, useSignalEffect } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
 import { codeMirror, errorLog, muted, PersistenceState } from '../../lib/state'
@@ -17,6 +17,9 @@ import MigrateToast from '../popups-etc/migrate-toast'
 import { nanoid } from 'nanoid'
 import TutorialWarningModal from '../popups-etc/tutorial-warning'
 import { isDark } from '../../lib/state'
+
+import * as Babel from "@babel/standalone";
+import TransformDetectInfiniteLoop from '../../lib/transform-detect-infinite-loop'
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>
@@ -127,6 +130,9 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Max height
 	const maxOutputAreaSize = useSignal(outputAreaSize.value)
 	useEffect(() => {
+		// load the dark mode value from localstorage
+		isDark.value = Boolean(localStorage.getItem("isDark") ?? "")
+		
 		const updateMaxSize = () => {
 			maxOutputAreaSize.value = (window.innerWidth - outputAreaWidthMargin) / 2.5
 		}
@@ -168,8 +174,13 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		errorLog.value = []
 
 		const code = codeMirror.value?.state.doc.toString() ?? ''
-		const res = runGame(code, screen.current, (error) => {
-			errorLog.value = [ ...errorLog.value, error ]
+		const transformResult = Babel.transform(code, {
+			plugins: [ TransformDetectInfiniteLoop ],
+			retainLines: true
+		});
+
+		const res = runGame(transformResult.code!, screen.current, (error) => {
+			errorLog.value = [...errorLog.value, error]
 		})
 
 		screen.current.focus()
@@ -180,8 +191,21 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		if (res.error) {
 			console.error(res.error.raw)
 			errorLog.value = [ ...errorLog.value, res.error ]
-		}
+			if (res.error.line) {
+				highlightError(res.error.line);
+			}
+		} else {
+			clearErrorHighlight();
+		}		
 	}
+
+	const onStop = async () => {
+		if (!screen.current) return
+
+		if (cleanup.current) cleanup.current()
+
+	}
+
 	useEffect(() => () => cleanup.current?.(), [])
 
 	// Warn before leave
@@ -288,6 +312,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 					<Button accent icon={IoPlayCircleOutline} bigIcon iconSide='right' class={styles.playButton} onClick={onRun}>
 						Run
 					</Button>
+					
 				</div>
 
 				<div
@@ -319,7 +344,10 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 									? <><IoVolumeMuteOutline /> <span>Unmute</span></>
 									: <><IoVolumeHighOutline /> <span>Mute</span></>}
 							</button>
-							<div class={styles.screenSize}>(Actual Sprig screen is 1/8" / 160&times;128 px)</div>
+							<button className={styles.stop} onClick={() => onStop()}>
+								<IoStopCircleOutline /><span>Stop</span>
+							</button>
+							<div class={styles.screenSize}>(Sprig screen is 1/8" / 160&times;128 px)</div>
 						</div>
 					</div>
 
