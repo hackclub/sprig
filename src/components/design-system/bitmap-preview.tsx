@@ -14,7 +14,7 @@ export default function BitmapPreview(props: BitmapPreviewProps) {
 		const ctx = canvas.current.getContext('2d')!
 		ctx.imageSmoothingEnabled = false
 		try {
-			const data = bitmapTextToImageData(props.text)
+			const data = bitmapTextToImageData('.', props.text)
 			canvas.current.width = data.width
 			canvas.current.height = data.height
 			ctx.clearRect(0, 0, data.width, data.height)
