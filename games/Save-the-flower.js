@@ -1,6 +1,17 @@
 /*
 @title: Save-The-Flower
 @author: Mahir Ishum
+
+About the game:
+This game is about saving a fire. There is a flower in the middle. Fires will come towards the flower from two corners. You are driving a firetruck. 
+Your mission should you choose to accept it is to save the flower from the fires. Do you have the speed and courage to complete this mission? 
+(Actually you cannot because it is a game with no end but let's see how much can you withstand?) 
+
+Instructions:
+Press I to start the game. The fires will come from the upper left and bottom right. As time goes by, the speed of the fires will increase. 
+You need to run over a fire to extinguish it. Use the keys WASD to move up, left, down and right respectively. After a certain amount of time walls will start to block your way. 
+I also wrote functions for the fires to come from other two corners also but there seems to be a problem with those two function, so I'm keeping them as a comment in the code for now.
+
 */
 const player = "p"
 const fireLUP = "l"
