@@ -763,14 +763,14 @@ const levelModifiers = [
   [2, 30, 10, 10], //5 red guy introduced
   [2, 35, 10, 40], //6 red guy threat
   [2, 35, 1, 40], //7 
-  [1, 40, 3, 12], //8 make darker
-  [1, 40, 4, 12], //9 more enemies
-  [1, 40, 0, 12], //10
-  [1, 40, 0, 12], //11
+  [2, 40, 3, 12], //8 make darker
+  [2, 40, 4, 12], //9 more enemies
+  [2, 40, 0, 12], //10
+  [2, 40, 0, 12], //11
   [0, 2.7, 0, 0], // 12 introduce flash
   [0, 2.7, 0, 0], //13
-  [1, 40, 10, 20], // 14 Flash enemiesmies
-  [1, 35, 10, 40], //15
+  [3, 40, 10, 20], // 14 Flash enemiesmies
+  [3, 35, 10, 40], //15
   [2, 35, 8, 12], // 16 Mazing
   [2, 33, 8, 12], //17 enemies get faster, more enemies map bigger
   [2, 33, 10, 12], //18
@@ -779,9 +779,9 @@ const levelModifiers = [
   [2, 30, 20, 12], //21 //Final 5 levels are just big maps, like a final challenge
   [2, 30, 20, 12], //22
   [2, 30, 20, 12], //23
-  [2, 25, 20, 12], //24
-  [2, 15, 10, 40], //25
-  [2, 15, 10, 40], //26
+  [2, 30, 20, 12], //24
+  [3, 25, 10, 40], //25
+  [2, 25, 10, 40], //26
   [2, 0, 0, 0] //27 finsih
   
 
@@ -1257,11 +1257,13 @@ function exitDoorManager(){
       levelModifiers[resetLevelVariables][2] += retries;
       levelModifiers[resetLevelVariables][3] -= 2 * retries;
       }
+      retries = 0;
       changeLevel();
       
     }
     else if(getFirst(player).x == getFirst(afterLifeDoor).x && getFirst(player).y == getFirst(afterLifeDoor).y)
     {
+    if(retries > 3){
       for(let makeLevelsHarder = 0; makeLevelsHarder < levelModifiers.length; makeLevelsHarder ++){
         levelModifiers[makeLevelsHarder][1] -= 3;
         levelModifiers[makeLevelsHarder][2] --;
@@ -1275,6 +1277,7 @@ function exitDoorManager(){
           levelModifiers[makeLevelsHarder][2] = 1;
         }
       }
+    }
          
       isFleeing = [];
       lives = 3;
@@ -1304,7 +1307,9 @@ function textManager(){
   addText(""+ (level+1), {x: 18,y: 1,color: color`2`}) 
 
   //timer display
-  //addText("T: " + timer , {x: 1,y: 14, color: color`2`})
+  if(level > 19)
+  addText("" + timer , {x: 17,y: 15, color: color`L`})
+  
   //Lives display
   lifeSymbol = "";
   for(let i = 0; i < lives; i++){
@@ -1394,8 +1399,8 @@ function textManager(){
     break;
 
     case 13:
-      addText("Use it on", {x: 3, y: 10, color: color`2`})
-      addText(" Them", {x: 12, y: 10, color: color`3`})
+      addText("Flash stuns", {x: 1, y: 4, color: color`2`})
+      addText("enemies", {x: 1, y: 7, color: color`3`})
       break;
 
     case 26:
@@ -1414,23 +1419,23 @@ function textManager(){
   
   if(hasFlash == 1){
     if(flashCooldown <= 1){
-      addText("<++++>" , { x: 5, y: 1, color: color`2`})
+      addText("<++++>" , { x: 7, y: 1, color: color`2`})
     }
     else if(flashCooldown > 6)
     {
-      addText("<+   >", { x: 5, y: 1, color: color`3`})
+      addText("<+   >", { x: 7, y: 1, color: color`3`})
     }
     else if(flashCooldown > 4)
     {
-      addText("<++  >", { x: 5, y: 1, color: color`3`})
+      addText("<++  >", { x: 7, y: 1, color: color`3`})
     }
     else if(flashCooldown > 2)
     {
-      addText("<+++ >", { x: 5, y: 1, color: color`3`})
+      addText("<+++ >", { x: 7, y: 1, color: color`3`})
     } 
     else if(flashCooldown > 1)
     {
-      addText("<++++>", { x: 5, y: 1, color: color`3`})
+      addText("<++++>", { x: 7, y: 1, color: color`3`})
     }
   }
 
@@ -1441,17 +1446,4 @@ function textManager(){
     addText("o---->", {x:12, y:9, color:color`2`})
   }
 
-
 }
-
-
-  
-
-
-
-
-
-
-
-
-
