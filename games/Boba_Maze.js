@@ -1,9 +1,9 @@
 /*
-@title: Boba Maze
+@title: Boba_Maze
 @author: audreyolafz
-@tags: []
+@tags: ['puzzle']
 @img: ""
-@addedOn: 2024-02-19
+@addedOn: 2024-02-20
 Get through the levels of boba creation to make your own drink!
 Two special keys let you advance to the next level with ease.
 */
