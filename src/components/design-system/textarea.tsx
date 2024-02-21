@@ -21,7 +21,7 @@ export default function Textarea(props: TextareaProps) {
 			onChange={props.onChange}
 			placeholder={props.placeholder ?? ""}
 			cols={props.cols ?? 30}
-			rows={props.rows ?? 30}
+			rows={props.rows ?? 10}
 		 />
 	)
 }
