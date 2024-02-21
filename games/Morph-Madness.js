@@ -1,9 +1,9 @@
 /*
-@title: Morph Madness
+@title: Morph-Madness
 @author: SimonDMC
-@tags: ["puzzle", "sokoban-style", "logic"]
+@tags: ["puzzle", "logic"]
 @img: ""
-@addedOn: 2024-02-20
+@addedOn: 2024-02-21
 */
 
 /////////////////////////////////////////////////////////////////////////////////////////
