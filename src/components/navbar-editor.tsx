@@ -85,7 +85,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		if (!_showNavPopup && _resetState === 'confirm') resetState.value = 'idle'
 	})
 
+	// usePopupCloseClick closes a popup when you click outside of its area
 	usePopupCloseClick(styles.navPopup!, () => showNavPopup.value = false, showNavPopup.value)
+	usePopupCloseClick(styles.stuckPopup!, () => showStuckPopup.value = false, showStuckPopup.value)
 
 	let saveState
 	let actionButton
@@ -161,9 +163,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			</li>
 
 			<li>
-				<Button class={styles.stuckBtn} onClick={() => {
-					showStuckPopup.value = !showStuckPopup.value;
-				}}>
+				<Button class={styles.stuckBtn} onClick={() => showStuckPopup.value = !showStuckPopup.value}>
 					I'm stuck
 				</Button>
 			</li>
