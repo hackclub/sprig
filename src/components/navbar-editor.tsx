@@ -1,6 +1,8 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 import { codeMirror, PersistenceState, isDark, toggleTheme } from '../lib/state'
 import Button from './design-system/button'
+import Input from './design-system/input'
+import Textarea from './design-system/textarea'
 import SavePrompt from './popups-etc/save-prompt'
 import styles from './navbar.module.css'
 import { persist } from '../lib/game-saving/auth-helper'
@@ -49,8 +51,26 @@ interface EditorNavbarProps {
 	persistenceState: Signal<PersistenceState>
 }
 
+enum StuckCategory {
+	LogicError,
+	SyntaxError,
+	Other
+}
+type StuckData = {
+	name: string
+	category: StuckCategory
+	description: string
+}
+
 export default function EditorNavbar(props: EditorNavbarProps) {
 	const showNavPopup = useSignal(false)
+	const showStuckPopup = useSignal(false)
+	
+	const stuckData = useSignal<StuckData>({
+		name: "",
+		category: "Other" as any,
+		description: ""
+	});
 
 	const showSavePrompt = useSignal(false)
 	const showSharePopup = useSignal(false)
@@ -141,6 +161,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			</li>
 
 			<li>
+				<Button class={styles.stuckBtn} onClick={() => {
+					showStuckPopup.value = !showStuckPopup.value;
+				}}>
+					I'm stuck
+				</Button>
+			</li>
+
+			<li>
 				<Button onClick={toggleTheme}>
 					{isDark.value ? "Light" : "Dark"}
 				</Button>
@@ -178,6 +206,36 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			onClose={() => showSharePopup.value = false}
 		/>}
 
+		{showStuckPopup.value && (
+			<div class={styles.stuckPopup}>
+				<form onSubmit={(event) => {
+					// do some airtable shenanigans here :D
+					event.preventDefault();
+					console.log(stuckData.value);
+				}}>
+					<label htmlFor="slack username">What is your slack username?</label>
+					<Input value={stuckData.value.name} onChange={(event) => {
+						stuckData.value = { ...stuckData.value, name: event.target.value }
+					}} type="text" placeholder='@Mike' />
+					<label htmlFor="issue category">What is the type of issue you're facing?</label>
+					<select value={stuckData.value.category} onChange={(event) => {
+						stuckData.value = { ...stuckData.value, category: (event.target! as HTMLSelectElement).value as any }
+					}} name="" id="">
+						<option value={"LogicError"}>Logic Error</option>
+						<option value={"SyntaxError"}>Syntax Error</option>
+						<option value={"Other"}>Other</option>
+					</select>
+					<label htmlFor="Description">Please describe the issue you're facing below</label>
+					<Textarea value={stuckData.value.description} onChange={event => {
+						stuckData.value = { ...stuckData.value, description: event.target.value }
+					}} placeholder='Example: After 2 seconds, the browser tab suddenly freezes and I do not know why.' />
+					<br />
+					<Button type='submit'>
+						Send
+					</Button>
+				</form>
+			</div>
+		)}
 		{showNavPopup.value && <div class={styles.navPopup}>
 			<ul>
 				{props.persistenceState.value.session?.session.full
