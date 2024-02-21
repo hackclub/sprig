@@ -208,7 +208,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 		{showStuckPopup.value && (
 			<div class={styles.stuckPopup}>
-				<form onSubmit={async (event) => {
+				<form class={styles.stuckForm} onSubmit={async (event) => {
 					// do some airtable shenanigans here :D
 					event.preventDefault();
 					const payload = {

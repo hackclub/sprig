@@ -158,6 +158,17 @@
 	background-color: rgb(255, 66, 66);
 }
 
+.stuckForm label {
+	margin: 0.5em 0;
+}
+.stuckForm input, .stuckForm textarea {
+	margin-bottom: 0.5em;
+}
+
+.stuckForm button {
+	justify-content: center;
+}
+
 /* Transparency! */
 .transparent {
 	background: transparent;
