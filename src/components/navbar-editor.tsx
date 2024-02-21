@@ -208,10 +208,18 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 		{showStuckPopup.value && (
 			<div class={styles.stuckPopup}>
-				<form onSubmit={(event) => {
+				<form onSubmit={async (event) => {
 					// do some airtable shenanigans here :D
 					event.preventDefault();
-					console.log(stuckData.value);
+					const payload = {
+						code: codeMirror.value?.state.doc.toString(),
+						...stuckData.value
+					};
+					const response = await fetch("/api/stuck-request", {
+						method: "POST",
+						body: JSON.stringify(payload)
+					})
+					if (response.ok) alert("We received your request. We'll get back to you in a bit.") 
 				}}>
 					<label htmlFor="slack username">What is your slack username?</label>
 					<Input value={stuckData.value.name} onChange={(event) => {
