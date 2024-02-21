@@ -121,3 +121,20 @@ a:hover {
 .grecaptcha-badge {
 	visibility: hidden;
 }
+
+select {
+	line-height: 1.2;
+	background: var(--bg-btn-inactive);
+	background: white;
+	color: var(--bg-btn-inactive);
+	border: 2px solid var(--bg-btn-inactive);
+	padding: 8px 12px;
+	padding-right: 20px;
+	appearance: none;
+	display: block;
+	font-size: 0.9rem;
+	font-family: inherit;
+	outline: none;
+	width: 100%;
+	user-select: none;
+}
