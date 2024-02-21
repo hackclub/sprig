@@ -10,7 +10,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 
 // instructions; wasd to move, player can push boxes and boxes can push goblins.
-//ins. cont.; your goal is to move the goblins into the holes.
+// your goal is to move the goblins into the holes.
 // j to rest level, i to skip level, k to go back a level, l increments the frogger variable
 
 
