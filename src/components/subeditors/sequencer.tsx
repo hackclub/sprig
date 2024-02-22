@@ -5,7 +5,7 @@ import { IoPause, IoPlay, IoStop } from 'react-icons/io5'
 import { cellsToTune, height, tuneToCells, beats, Cells, yNoteMap, playNote, play, cellsEq } from './sequencer-utils'
 import { instruments, type InstrumentType, reverseInstrumentKey } from 'sprig'
 import { textToTune, tuneToText } from 'sprig/base'
-import { leftDown } from '../../lib/utils/events'
+import { leftDown, rightDown } from '../../lib/utils/events'
 import { useEffect } from 'preact/hooks'
 import Button from '../design-system/button'
 
@@ -40,11 +40,11 @@ const line = (from: [number, number], to: [number, number]): [number, number][] 
 	const sy = from[1] < to[1] ? 1 : -1
 
 	let err = dx - dy
-	let [ _fromX, _fromY ] = [ from[0], from[1] ]
+	let [_fromX, _fromY] = [from[0], from[1]]
 
 	const line: [number, number][] = []
 	while (true) {
-		line.push([ _fromX, _fromY ])
+		line.push([_fromX, _fromY])
 		if (_fromX === to[0] && _fromY === to[1]) break
 		const e2 = 2 * err
 		if (e2 > -dy) { err -= dy; _fromX += sx }
@@ -54,10 +54,10 @@ const line = (from: [number, number], to: [number, number]): [number, number][] 
 }
 
 function Cell(props: CellProps) {
-	const classes = [ styles.cell ]
-    if (props.x % 2 === 0) classes.push(styles.beat)
-    if (props.x % 8 === 0) classes.push(styles.downbeat)
-    if ((height - props.y) % 8 === 0) classes.push(styles.root)
+	const classes = [styles.cell]
+	if (props.x % 2 === 0) classes.push(styles.beat)
+	if (props.x % 8 === 0) classes.push(styles.downbeat)
+	if ((height - props.y) % 8 === 0) classes.push(styles.root)
 
 	const cell = props.cells.value[`${props.x}_${props.y}`]
 	const backgroundColor = cell ? colorMap[cell] : 'transparent'
@@ -70,7 +70,7 @@ function Cell(props: CellProps) {
 		if (props.cells.value[key] !== props.instrument.value) {
 			props.cells.value = { ...props.cells.value, [key]: props.instrument.value }
 			const note = yNoteMap[y]!
-			const duration = 1000*60 / props.bpm.value
+			const duration = 1000 * 60 / props.bpm.value
 			playNote(note, duration, props.instrument.value)
 		}
 	}
@@ -92,14 +92,20 @@ function Cell(props: CellProps) {
 						drawAndPlay(props.x, props.y)
 						props.erasing.value = false
 					}
-					props.lastDraw.value = [ props.x, props.y ]
+					props.lastDraw.value = [props.x, props.y]
+				}
+				if (rightDown(event)) {
+					const key = `${props.x}_${props.y}` as const
+					const newValue = { ...props.cells.value }
+					delete newValue[key]
+					props.cells.value = newValue
 				}
 			}}
 			onMouseOver={(event) => {
 				event.preventDefault()
 				if (leftDown(event)) {
-					const pos: [number, number] = [ props.x, props.y ]
-					for (const [ x, y ] of line(props.lastDraw.value ?? pos, pos)) {
+					const pos: [number, number] = [props.x, props.y]
+					for (const [x, y] of line(props.lastDraw.value ?? pos, pos)) {
 						if (props.erasing.value) {
 							const newValue = { ...props.cells.value }
 							delete newValue[`${x}_${y}`]
@@ -125,11 +131,15 @@ export default function SequencerEditor(props: EditorProps) {
 	const cells = useSignal<Cells>({})
 	const lastDraw = useSignal<[number, number] | null>(null)
 
+	// Prevent right click context menu
+	const preventContextMenu = (event: MouseEvent) => { event.preventDefault(); }
+	window.addEventListener('contextmenu', preventContextMenu)
+
 	// Sync text changes with cells
 	useSignalEffect(() => {
 		const newCells = tuneToCells(textToTune(props.text.value))
 		const count = props.text.value.match(/(.+):/)
-		bpm.value = count ? Math.round(60*1000 / Number(count[1])) : 120
+		bpm.value = count ? Math.round(60 * 1000 / Number(count[1])) : 120
 		if (!cellsEq(newCells, cells.peek())) // Perf boost for rapid BPM changes
 			cells.value = newCells
 	})
@@ -141,7 +151,12 @@ export default function SequencerEditor(props: EditorProps) {
 	// Playback state
 	const beat = useSignal(0)
 	const stop = useSignal<(() => void) | null>(null)
-	useEffect(() => () => stop.value?.(), []) // Stop on unmount
+
+	// On Unmount
+	useEffect(() => () => {
+		window.removeEventListener('contextmenu', preventContextMenu) // Remove context name block
+		stop.value?.() // Stop music
+	}, []) // Stop on unmount
 
 	return (
 		<div class={styles.container}>
