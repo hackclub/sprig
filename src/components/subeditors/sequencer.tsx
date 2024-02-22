@@ -94,10 +94,11 @@ function Cell(props: CellProps) {
 					}
 					props.lastDraw.value = [props.x, props.y]
 				}
+
+				// props.erasing.value = rightDown(event)
 				if (rightDown(event)) {
-					const key = `${props.x}_${props.y}` as const
 					const newValue = { ...props.cells.value }
-					delete newValue[key]
+					delete newValue[`${props.x}_${props.y}`]
 					props.cells.value = newValue
 				}
 			}}
