@@ -1,5 +1,5 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
-import { codeMirror, PersistenceState, isDark, toggleTheme } from '../lib/state'
+import { codeMirror, PersistenceState, isDark, toggleTheme, errorLog } from '../lib/state'
 import Button from './design-system/button'
 import Input from './design-system/input'
 import Textarea from './design-system/textarea'
@@ -65,7 +65,7 @@ type StuckData = {
 export default function EditorNavbar(props: EditorNavbarProps) {
 	const showNavPopup = useSignal(false)
 	const showStuckPopup = useSignal(false)
-	
+
 	const stuckData = useSignal<StuckData>({
 		name: "",
 		category: "Other" as any,
@@ -145,7 +145,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					</>) : props.persistenceState.value.kind === 'SHARED' ? (<>
 						{props.persistenceState.value.name}
 						<span class={styles.attribution}>
-							{props.persistenceState.value.authorName 
+							{props.persistenceState.value.authorName
 								? ` by ${props.persistenceState.value.authorName}`
 								: ' (shared with you)'}
 						</span>
@@ -213,13 +213,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					event.preventDefault();
 					const payload = {
 						code: codeMirror.value?.state.doc.toString(),
+						error: errorLog.value,
 						...stuckData.value
 					};
 					const response = await fetch("/api/stuck-request", {
 						method: "POST",
 						body: JSON.stringify(payload)
 					})
-					if (response.ok) alert("We received your request. We'll get back to you in a bit.") 
+					if (response.ok) alert("We received your request. We'll get back to you in a bit.")
 				}}>
 					<label htmlFor="slack username">What is your slack username?</label>
 					<Input value={stuckData.value.name} onChange={(event) => {
