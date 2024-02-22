@@ -30,6 +30,6 @@ export const post: APIRoute = async ({ request }) => {
 		})
 	});
 
-	const records = await response.json();
-	return new Response(records)
+	const data = await response.json();
+	return new Response(data, { status: response.status })
 }
