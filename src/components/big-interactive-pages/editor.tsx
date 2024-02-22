@@ -18,9 +18,6 @@ import { nanoid } from 'nanoid'
 import TutorialWarningModal from '../popups-etc/tutorial-warning'
 import { isDark } from '../../lib/state'
 
-import * as Babel from "@babel/standalone";
-import TransformDetectInfiniteLoop from '../../lib/transform-detect-infinite-loop'
-
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>
 	cookies: {
@@ -132,7 +129,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	useEffect(() => {
 		// load the dark mode value from localstorage
 		isDark.value = Boolean(localStorage.getItem("isDark") ?? "")
-		
+
 		const updateMaxSize = () => {
 			maxOutputAreaSize.value = (window.innerWidth - outputAreaWidthMargin) / 2.5
 		}
@@ -174,12 +171,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		errorLog.value = []
 
 		const code = codeMirror.value?.state.doc.toString() ?? ''
-		const transformResult = Babel.transform(code, {
-			plugins: [ TransformDetectInfiniteLoop ],
-			retainLines: true
-		});
-
-		const res = runGame(transformResult.code!, screen.current, (error) => {
+		const res = runGame(code, screen.current, (error) => {
 			errorLog.value = [...errorLog.value, error]
 		})
 
@@ -191,12 +183,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		if (res.error) {
 			console.error(res.error.raw)
 			errorLog.value = [ ...errorLog.value, res.error ]
-			if (res.error.line) {
-				highlightError(res.error.line);
-			}
-		} else {
-			clearErrorHighlight();
-		}		
+		}
 	}
 
 	const onStop = async () => {
@@ -312,7 +299,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 					<Button accent icon={IoPlayCircleOutline} bigIcon iconSide='right' class={styles.playButton} onClick={onRun}>
 						Run
 					</Button>
-					
+
 				</div>
 
 				<div
