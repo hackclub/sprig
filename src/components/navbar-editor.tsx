@@ -51,11 +51,8 @@ interface EditorNavbarProps {
 	persistenceState: Signal<PersistenceState>
 }
 
-enum StuckCategory {
-	LogicError,
-	SyntaxError,
-	Other
-}
+type StuckCategory = "LogicError" | "SyntaxError" | "Other";
+
 type StuckData = {
 	name: string
 	category: StuckCategory
@@ -66,9 +63,13 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const showNavPopup = useSignal(false)
 	const showStuckPopup = useSignal(false)
 
+	// we will accept the current user's
+	// - name,
+	// - the category of issue they
+	// - their description of the issue
 	const stuckData = useSignal<StuckData>({
 		name: "",
-		category: "Other" as any,
+		category: "Other",
 		description: ""
 	});
 
@@ -209,19 +210,24 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		{showStuckPopup.value && (
 			<div class={styles.stuckPopup}>
 				<form class={styles.stuckForm} onSubmit={async (event) => {
-					// do some airtable shenanigans here :D
-					event.preventDefault();
+					event.preventDefault(); // prevent the browser from reloading after form submit
+
+					// Store a copy of the user's code, currently active errors and the length of their editing session
+					// along with their description of the issue
 					const payload = {
 						code: codeMirror.value?.state.doc.toString(),
 						error: errorLog.value,
 						sessionLength: (new Date().getTime() - editSessionLength.value.getTime()) / 1000, // calculate the session length in seconds
 						...stuckData.value
 					};
+
 					const response = await fetch("/api/stuck-request", {
 						method: "POST",
 						body: JSON.stringify(payload)
 					})
-					if (response.ok) alert("We received your request. We'll get back to you in a bit.")
+
+					// Let the user know we'll get back to them after we've receive their complaint
+					if (response.ok) alert("We received your request. We'll get back with help within a week.")
 				}}>
 					<label htmlFor="slack username">What is your slack username?</label>
 					<Input value={stuckData.value.name} onChange={(event) => {
@@ -229,7 +235,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					}} type="text" placeholder='@Mike' />
 					<label htmlFor="issue category">What is the type of issue you're facing?</label>
 					<select value={stuckData.value.category} onChange={(event) => {
-						stuckData.value = { ...stuckData.value, category: (event.target! as HTMLSelectElement).value as any }
+						stuckData.value = { ...stuckData.value, category: (event.target! as HTMLSelectElement).value as StuckCategory }
 					}} name="" id="">
 						<option value={"LogicError"}>Logic Error</option>
 						<option value={"SyntaxError"}>Syntax Error</option>
