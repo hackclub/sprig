@@ -127,7 +127,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Max height
 	const maxOutputAreaSize = useSignal(outputAreaSize.value)
 	useEffect(() => {
-	  // re-intialize the initial value of the editing session length to since the editor was opened
+	  // re-intialize the value of the editing session length to since the editor was opened
 		editSessionLength.value = new Date();
 
 		// load the dark mode value from localstorage

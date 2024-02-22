@@ -2,9 +2,12 @@ import { APIRoute } from "astro"
 
 
 export const post: APIRoute = async ({ request }) => {
-	const AIRTABLE_PAT = process.env.AIRTABLE_TOKEN;
-	const AIRTABLE_BASE = process.env.STUCK_AIRTABLE_BASE;
+	const AIRTABLE_PAT = process.env.AIRTABLE_TOKEN; // get the airtable base personal access token
+	const AIRTABLE_BASE = process.env.STUCK_AIRTABLE_BASE; // get the airtable base id
+
 	const payload = await request.json();
+
+	// create a new record in airtable with the payload data
 	const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE}/Stuck%20Data`, {
 		method: "POST",
 		headers: {
