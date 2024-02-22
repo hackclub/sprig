@@ -228,7 +228,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 					// Let the user know we'll get back to them after we've receive their complaint
 					if (response.ok) {
-					   alert("We received your request. We'll get back with help within a week.")
+					   alert("We received your request. We'll get back to you on Slack within a week.")
 					} else alert("We couldn't send your request. Please make sure you're connected and try again.")
 				}}>
 					<label htmlFor="slack username">What is your slack username?</label>
