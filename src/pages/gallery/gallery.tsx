@@ -82,17 +82,10 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 	}
 
 	function countTags(games: GameMetadata[]) {
-		const tags: { [tags: string]: number } = {};
-
-		games.forEach(game => {
-			game.tags.forEach(tag => {
-				if (!tags[tag]) {
-					tags[tag] = 0;
-				}
-
-				tags[tag]++;
-			})
-		})
+		const tags: { [tags: string]: number } = games.reduce<{ [tags: string]: number }>((acc, game) => {
+			game.tags.forEach(tag => acc[tag] ? acc[tag]++ : acc[tag] = 1)
+			return acc
+		}, {})
 
 		setTagCount(tags)
 	}
