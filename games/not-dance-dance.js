@@ -4,9 +4,9 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: not dance dance revolution
 @author: Victor Lee
-@tags: [music]
+@tags: ['music']
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-02-22
 */
 
 class Note {
