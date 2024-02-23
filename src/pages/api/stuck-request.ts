@@ -17,6 +17,7 @@ export const post: APIRoute = async ({ request }) => {
 					fields: {
 						"Slack Username": payload.name,
 						"Error Log": JSON.stringify(payload.error),
+						"Session Length": payload.sessionLength,
 						Code: payload.code,
 						Category: payload.category,
 						Description: payload.description

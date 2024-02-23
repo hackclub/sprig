@@ -16,7 +16,7 @@ import { defaultExampleCode } from '../../lib/examples'
 import MigrateToast from '../popups-etc/migrate-toast'
 import { nanoid } from 'nanoid'
 import TutorialWarningModal from '../popups-etc/tutorial-warning'
-import { isDark } from '../../lib/state'
+import { isDark, editSessionLength } from '../../lib/state'
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>
@@ -127,6 +127,9 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Max height
 	const maxOutputAreaSize = useSignal(outputAreaSize.value)
 	useEffect(() => {
+	  // re-intialize the initial value of the editing session length to since the editor was opened
+		editSessionLength.value = new Date();
+
 		// load the dark mode value from localstorage
 		isDark.value = Boolean(localStorage.getItem("isDark") ?? "")
 

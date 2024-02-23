@@ -1,5 +1,5 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
-import { codeMirror, PersistenceState, isDark, toggleTheme, errorLog } from '../lib/state'
+import { codeMirror, PersistenceState, isDark, toggleTheme, errorLog, editSessionLength } from '../lib/state'
 import Button from './design-system/button'
 import Input from './design-system/input'
 import Textarea from './design-system/textarea'
@@ -214,6 +214,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					const payload = {
 						code: codeMirror.value?.state.doc.toString(),
 						error: errorLog.value,
+						sessionLength: (new Date().getTime() - editSessionLength.value.getTime()) / 1000, // calculate the session length in seconds
 						...stuckData.value
 					};
 					const response = await fetch("/api/stuck-request", {
