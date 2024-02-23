@@ -213,7 +213,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 					// Store a copy of the user's code, currently active errors and the length of their editing session
 					// along with their description of the issue
+					const selectionRange = codeMirror.value?.state.selection.ranges[0] ?? { from: -1, to: -1 };
 					const payload = {
+					  selection: JSON.stringify({ from: selectionRange.from, to: selectionRange.to }),
 					  email: props.persistenceState.value.session?.user.email,
 						code: codeMirror.value?.state.doc.toString(),
 						error: errorLog.value,

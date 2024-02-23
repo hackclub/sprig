@@ -18,6 +18,7 @@ export const post: APIRoute = async ({ request }) => {
 			records: [
 				{
 					fields: {
+					  Selection: payload.selection,
 						Email: payload.email,
 						"Error Log": JSON.stringify(payload.error),
 						"Session Length": payload.sessionLength,
