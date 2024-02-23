@@ -50,7 +50,7 @@ interface EditorNavbarProps {
 	persistenceState: Signal<PersistenceState>
 }
 
-type StuckCategory = "LogicError" | "SyntaxError" | "Other";
+type StuckCategory = "Logic Error" | "Syntax Error" | "Other";
 
 type StuckData = {
 	category: StuckCategory
@@ -234,15 +234,15 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 					// Let the user know we'll get back to them after we've receive their complaint
 					if (response.ok) {
-					   alert("We received your request and will get back to.")
+					   alert("We received your request and will get back to you via email.")
 					} else alert("We couldn't send your request. Please make sure you're connected and try again.")
 				}}>
 					<label htmlFor="issue category">What is the type of issue you're facing?</label>
 					<select value={stuckData.value.category} onChange={(event) => {
 						stuckData.value = { ...stuckData.value, category: (event.target! as HTMLSelectElement).value as StuckCategory }
 					}} name="" id="">
-						<option value={"LogicError"}>Logic Error</option>
-						<option value={"SyntaxError"}>Syntax Error</option>
+						<option value={"Logic Error"}>Logic Error</option>
+						<option value={"Syntax Error"}>Syntax Error</option>
 						<option value={"Other"}>Other</option>
 					</select>
 					<label htmlFor="Description">Please describe the issue you're facing below</label>
