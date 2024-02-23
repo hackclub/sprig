@@ -234,7 +234,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 					// Let the user know we'll get back to them after we've receive their complaint
 					if (response.ok) {
-					   alert("We received your request. We'll get back to you via email within a week.")
+					   alert("We received your request and will get back to.")
 					} else alert("We couldn't send your request. Please make sure you're connected and try again.")
 				}}>
 					<label htmlFor="issue category">What is the type of issue you're facing?</label>
