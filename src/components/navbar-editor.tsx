@@ -211,9 +211,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				<form class={styles.stuckForm} onSubmit={async (event) => {
 					event.preventDefault(); // prevent the browser from reloading after form submit
 
+					// 'from' and 'to' represent the index of character where the selection is started to where it's ended
+					// if 'from' and 'to' are equal, then it's the cursor position
+					const selectionRange = codeMirror.value?.state.selection.ranges[0] ?? { from: -1, to: -1 };
+
 					// Store a copy of the user's code, currently active errors and the length of their editing session
 					// along with their description of the issue
-					const selectionRange = codeMirror.value?.state.selection.ranges[0] ?? { from: -1, to: -1 };
 					const payload = {
 					  selection: JSON.stringify({ from: selectionRange.from, to: selectionRange.to }),
 					  email: props.persistenceState.value.session?.user.email,
