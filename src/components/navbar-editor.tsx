@@ -213,6 +213,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 					// 'from' and 'to' represent the index of character where the selection is started to where it's ended
 					// if 'from' and 'to' are equal, then it's the cursor position
+					// from && to being -1 means the cursor is not in the editor
 					const selectionRange = codeMirror.value?.state.selection.ranges[0] ?? { from: -1, to: -1 };
 
 					// Store a copy of the user's code, currently active errors and the length of their editing session
