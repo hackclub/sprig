@@ -1,7 +1,6 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 import { codeMirror, PersistenceState, isDark, toggleTheme, errorLog, editSessionLength } from '../lib/state'
 import Button from './design-system/button'
-import Input from './design-system/input'
 import Textarea from './design-system/textarea'
 import SavePrompt from './popups-etc/save-prompt'
 import styles from './navbar.module.css'
@@ -54,7 +53,6 @@ interface EditorNavbarProps {
 type StuckCategory = "LogicError" | "SyntaxError" | "Other";
 
 type StuckData = {
-	name: string
 	category: StuckCategory
 	description: string
 }
@@ -68,10 +66,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	// - the category of issue they
 	// - their description of the issue
 	const stuckData = useSignal<StuckData>({
-		name: "",
 		category: "Other",
 		description: ""
 	});
+
+	const isLoggedIn = props.persistenceState.value.session ? true : false;
 
 	const showSavePrompt = useSignal(false)
 	const showSharePopup = useSignal(false)
@@ -164,7 +163,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			</li>
 
 			<li>
-				<Button class={styles.stuckBtn} onClick={() => showStuckPopup.value = !showStuckPopup.value}>
+				<Button class={styles.stuckBtn} onClick={() => showStuckPopup.value = !showStuckPopup.value} disabled={!isLoggedIn}>
 					I'm stuck
 				</Button>
 			</li>
@@ -215,6 +214,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					// Store a copy of the user's code, currently active errors and the length of their editing session
 					// along with their description of the issue
 					const payload = {
+					  email: props.persistenceState.value.session?.user.email,
 						code: codeMirror.value?.state.doc.toString(),
 						error: errorLog.value,
 						sessionLength: (new Date().getTime() - editSessionLength.value.getTime()) / 1000, // calculate the session length in seconds
@@ -228,13 +228,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 					// Let the user know we'll get back to them after we've receive their complaint
 					if (response.ok) {
-					   alert("We received your request. We'll get back to you on Slack within a week.")
+					   alert("We received your request. We'll get back to you via email within a week.")
 					} else alert("We couldn't send your request. Please make sure you're connected and try again.")
 				}}>
-					<label htmlFor="slack username">What is your slack username?</label>
-					<Input value={stuckData.value.name} onChange={(event) => {
-						stuckData.value = { ...stuckData.value, name: event.target.value }
-					}} type="text" placeholder='@Mike' />
 					<label htmlFor="issue category">What is the type of issue you're facing?</label>
 					<select value={stuckData.value.category} onChange={(event) => {
 						stuckData.value = { ...stuckData.value, category: (event.target! as HTMLSelectElement).value as StuckCategory }
