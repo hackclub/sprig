@@ -74,7 +74,6 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 			}
 		}
 	} catch (error) {
-	  console.log("esprima error", error)
 		return {
 			error: normalizeGameError({ kind: 'parse', error: error as EsprimaError }),
 			cleanup
