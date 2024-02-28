@@ -336,6 +336,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						</a>
 					</li>
 				) : null}
+				{props.persistenceState.value.session?.session.full && 
+				(<li>
+					<a href="/logout">Log out</a>
+				</li>)}
 			</ul>
 		</div>}
 	</>)
