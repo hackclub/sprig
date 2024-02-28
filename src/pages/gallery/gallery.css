@@ -179,7 +179,7 @@ p {
 .tag-span:hover {
 	text-decoration: underline;
 	background-color: #363636;
-	animation: shadow .5s forwards;
+	animation: shadow 0.5s forwards;
 }
 
 .game-tag:hover {
@@ -190,7 +190,7 @@ p {
 .tag-clear:hover {
 	text-decoration: none;
 	font-weight: 600;
-	color: #FF3333;
+	color: #ff3333;
 }
 
 .tag-close {
@@ -199,7 +199,7 @@ p {
 .tag-close:hover {
 	text-decoration: none;
 	font-weight: 800;
-	color: #FF3333;
+	color: #ff3333;
 }
 
 @keyframes shadow {
@@ -212,14 +212,27 @@ p {
 	}
 }
 @media screen and (max-width: 600px) {
-	.search-controls{
-		flex-direction: column;
-		
-	}
-	.info-split{
+	.search-controls {
 		flex-direction: column;
 	}
-	.join-container button{
+	.info-split {
+		flex-direction: column;
+	}
+	.join-container button {
+		display: table-cell;
+		vertical-align: middle;
+		width: 100%;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.search-controls {
+		flex-direction: column;
+	}
+	.info-split {
+		flex-direction: column;
+	}
+	.join-container button {
 		display: table-cell;
 		vertical-align: middle;
 		width: 100%;
