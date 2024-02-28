@@ -16,11 +16,14 @@
 @media (orientation: portrait) {
 	.root {
 		transform: rotate(-90deg);
-		width: 100vh;
 		height: 100vw;
 		overflow-x: hidden;
 		top: 100%;
 		left: 0;
+
+		/* Custom vh implementation */
+		/* Fallback value is 93.5vh */
+		width: calc(var(--vh, 0.935vh) * 100);
 	}
 }
 
