@@ -118,7 +118,7 @@ cd sprig
 yarn install
 ```
 
-Next, you'll want to give Sprig access to the Firebase credentials you created. Make a `.env` file in the root of the project and enter `FIREBASE_CREDENTIAL=` followed by the base64 string you generated.
+Next, you'll want to give Sprig access to the Firebase credentials you created. Make a `.env` file in the root of the project and enter `FIREBASE_CREDENTIAL=` followed by the base64 string you generated. You will also need to request some extra credentials from the @creds team on Slack to get all the login functionality working.
 
 To start the dev server, run `yarn dev` and visit <http://localhost:3000> in your web browser! Please create a GitHub issue if you cannot get something to work properly.
 
