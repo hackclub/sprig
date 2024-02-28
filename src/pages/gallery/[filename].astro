@@ -64,7 +64,6 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 		{isMobile ? (
 			<MobilePlayer
 				client:load
-				client:only="preact"
 				code={code}
 				gameName={(name ?? filename) || 'Untitled'}
 				authorName={authorName || ''}
@@ -87,8 +86,17 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 				document.documentElement.style.setProperty('--vw', `${window.innerWidth * 0.01}px`);
 			}
 
+			const toggleFullscreen = () => {
+				if (document.fullscreenElement) {
+					document.exitFullscreen()
+				} else {
+					document.documentElement.requestFullscreen()
+				}
+			}
+
 			calculateCSS()
 			window.addEventListener("resize", calculateCSS)
+			document.getElementById("toggle-fullscreen")?.addEventListener("click", toggleFullscreen)
 		</script>
 	</body>
 </html>

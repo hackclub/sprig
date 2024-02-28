@@ -18,14 +18,6 @@ export default function MobilePlayer(props: MobilePlayerProps) {
 		return res.cleanup
 	}
 
-	const toggleFullscreen = () => {
-		if (document.fullscreenElement) {
-			document.exitFullscreen()
-		} else {
-			document.documentElement.requestFullscreen()
-		}
-	}
-
 	useEffect(() => {
 		return run()
 	}, [props.code])
@@ -48,7 +40,7 @@ export default function MobilePlayer(props: MobilePlayerProps) {
 			</div>
 
 			<div class={styles.actionItems}>
-				<a href="#fullscreen" class={styles.action} onClick={toggleFullscreen}>Fullscreen</a>
+				<a href="#fullscreen" class={styles.action} id="toggle-fullscreen">Fullscreen</a>
 				<div class={styles.disclaimer}>This is a playable preview. The full editor is not yet supported on mobile.</div>
 				<a href="#reset" class={styles.action} onClick={run}>Reset</a>
 			</div>
