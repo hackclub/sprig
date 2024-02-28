@@ -87,10 +87,18 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 			}
 
 			const toggleFullscreen = () => {
-				if (document.fullscreenElement) {
-					document.exitFullscreen()
+				// @ts-expect-error
+				if (document.fullscreenElement || document.webkitFullscreenElement) {
+					if (document.exitFullscreen) document.exitFullscreen()
+
+					// @ts-expect-error
+					if (document.webkitExitFullscreen) document.webkitExitFullscreen()
 				} else {
-					document.documentElement.requestFullscreen()
+					const element= document.documentElement  
+					if (element.requestFullscreen) element.requestFullscreen()
+
+					// @ts-expect-error
+					if (element.webkitRequestFullscreen) element.webkitRequestFullscreen()
 				}
 			}
 
