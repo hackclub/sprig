@@ -4,8 +4,8 @@
 	left: 0;
 	top: 0;
 	transform-origin: left top;
-	width: 100vw;
-	height: 100vh;
+	width: calc(var(--vw, 0.935vw) * 100);
+	height: calc(var(--vh, 0.935vh) * 100);
 	background: url('/pcb.svg'), var(--accent-dark);
 	background-position: center center;
 	background-size: cover;
@@ -16,7 +16,7 @@
 @media (orientation: portrait) {
 	.root {
 		transform: rotate(-90deg);
-		height: 100vw;
+		height: calc(var(--vw, 0.935vw) * 100);
 		overflow-x: hidden;
 		top: 100%;
 		left: 0;
@@ -104,3 +104,18 @@
 .a { top: calc(50% - 25px);	left: calc(5% - 25px); }
 .s { top: calc(50% + 25px);	left: calc(5% + 25px); }
 .d { top: calc(50% - 25px);	left: calc(5% + 75px); }
+
+.actionItems {
+	justify-content: space-between;
+	margin: 0px 25px 0px 25px;
+	display: flex;
+}
+
+.action {
+	color: var(--fg-muted-on-accent);
+	background-color: var(--accent);
+	padding: 10px 20px 10px 20px;
+	border-radius: 8px;
+	font-weight: 600;
+	user-select: none;
+}

@@ -64,6 +64,7 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 		{isMobile ? (
 			<MobilePlayer
 				client:load
+				client:only="preact"
 				code={code}
 				gameName={(name ?? filename) || 'Untitled'}
 				authorName={authorName || ''}
@@ -81,7 +82,13 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 
 		<script>
 			// There is no clear guidance there when it comes to handling device and browser-specific differentiations on mobile browsers,as such we need to do a custom implementation of vh
-			document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+			const calculateCSS = () => {
+				document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+				document.documentElement.style.setProperty('--vw', `${window.innerWidth * 0.01}px`);
+			}
+
+			calculateCSS()
+			window.addEventListener("resize", calculateCSS)
 		</script>
 	</body>
 </html>
