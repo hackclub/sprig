@@ -1,5 +1,3 @@
-# This repository has been deprecated. All sprighax related stuff(s) can be found at 
-
 # SPRIGHAX
 
 Hacking the sprig with experimental hardware and software features.
