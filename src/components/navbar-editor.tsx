@@ -69,6 +69,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		category: "Other",
 		description: ""
 	});
+	// keep track of the submit status for "I'm stuck" requests
+	const isSubmitting = useSignal<boolean>(false);
 
 	const isLoggedIn = props.persistenceState.value.session ? true : false;
 
@@ -211,6 +213,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				<form class={styles.stuckForm} onSubmit={async (event) => {
 					event.preventDefault(); // prevent the browser from reloading after form submit
 
+					isSubmitting.value = true;
+
 					// 'from' and 'to' represent the index of character where the selection is started to where it's ended
 					// if 'from' and 'to' are equal, then it's the cursor position
 					// from && to being -1 means the cursor is not in the editor
@@ -227,16 +231,22 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						...stuckData.value
 					};
 
-					const response = await fetch("/api/stuck-request", {
-						method: "POST",
-						body: JSON.stringify(payload)
-					})
+					try {
+						const response = await fetch("/api/stuck-request", {
+							method: "POST",
+							body: JSON.stringify(payload)
+						})
+						// Let the user know we'll get back to them after we've receive their complaint
+						if (response.ok) {
+							alert("We received your request and will get back to you via email.")
+						} else alert("We couldn't send your request. Please make sure you're connected and try again.")
 
-					// Let the user know we'll get back to them after we've receive their complaint
-					if (response.ok) {
-					   alert("We received your request and will get back to you via email.")
-					} else alert("We couldn't send your request. Please make sure you're connected and try again.")
-				}}>
+					} catch (err) {
+						console.error(err);
+					} finally {
+						isSubmitting.value = false;
+					}
+			}}>
 					<label htmlFor="issue category">What is the type of issue you're facing?</label>
 					<select value={stuckData.value.category} onChange={(event) => {
 						stuckData.value = { ...stuckData.value, category: (event.target! as HTMLSelectElement).value as StuckCategory }
@@ -250,8 +260,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						stuckData.value = { ...stuckData.value, description: event.target.value }
 					}} placeholder='Example: After 2 seconds, the browser tab suddenly freezes and I do not know why.' />
 					<br />
-					<Button type='submit'>
-						Send
+					<Button type='submit' disabled={isSubmitting.value}>
+						{isSubmitting.value ? "Sending..." : "Send"}
 					</Button>
 				</form>
 			</div>
