@@ -212,8 +212,9 @@ p {
 	}
 }
 @media screen and (max-width: 600px) {
-	.search-controls {
+	.search-controls{
 		flex-direction: column;
+		
 	}
 	.info-split {
 		flex-direction: column;
@@ -222,19 +223,5 @@ p {
 		display: table-cell;
 		vertical-align: middle;
 		width: 100%;
-	}
-}
-
-@media screen and (max-width: 600px) {
-	.search-controls {
-		flex-direction: column;
-	}
-	.info-split {
-		flex-direction: column;
-	}
-	.join-container button {
-		display: table-cell;
-		vertical-align: middle;
 		width: 100%;
-	}
 }
