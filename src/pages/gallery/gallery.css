@@ -210,6 +210,7 @@ p {
 	to {
 		box-shadow: 2px 2px 2px 0px #078969;
 	}
+}
 @media screen and (max-width: 600px) {
 	.search-controls{
 		flex-direction: column;
@@ -222,4 +223,5 @@ p {
 		display: table-cell;
 		vertical-align: middle;
 		width: 100%;
+	}
 }
