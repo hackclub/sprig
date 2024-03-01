@@ -2443,6 +2443,11 @@ espree@^9.0.0:
     acorn-jsx "^5.3.2"
     eslint-visitor-keys "^3.3.0"
 
+esprima-next@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/esprima-next/-/esprima-next-6.0.2.tgz#4a93368e7b0eed803ee9322920b43cadad6f201e"
+  integrity sha512-2qIj1i/S5nK4piHwMY5NfYpcllx0PzDbILbb5+x6Wj6uj5+vNLgezGQeAqW0QVqaMFmJAcSnvFV/xaRXUKVtjQ==
+
 esprima@^4.0.0, esprima@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/esprima/-/esprima-4.0.1.tgz#13b04cdb3e6c5d19df91ab6987a8695619b0aa71"

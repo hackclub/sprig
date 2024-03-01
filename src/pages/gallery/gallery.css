@@ -169,9 +169,45 @@ p {
 }
 
 .tag-span {
-	margin: 0 5px 0 0;
-	padding: 2px 4px;
-	background-color: grey;
+	margin: 0 7px 0 0;
+	padding: 4px 8px;
+	background-color: #434343;
 	color: white;
 	cursor: pointer;
+}
+
+.tag-span:hover {
+	text-decoration: underline;
+	background-color: #363636;
+	animation: shadow .5s forwards;
+}
+
+.game-tag:hover {
+	text-decoration: underline;
+	font-weight: 600;
+}
+
+.tag-clear:hover {
+	text-decoration: none;
+	font-weight: 600;
+	color: #FF3333;
+}
+
+.tag-close {
+}
+
+.tag-close:hover {
+	text-decoration: none;
+	font-weight: 800;
+	color: #FF3333;
+}
+
+@keyframes shadow {
+	from {
+		box-shadow: 0px 0px 0px 0px #078969;
+	}
+
+	to {
+		box-shadow: 2px 2px 2px 0px #078969;
+	}
 }
