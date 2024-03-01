@@ -246,7 +246,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						<option value={"Other"}>Other</option>
 					</select>
 					<label htmlFor="Description">Please describe the issue you're facing below</label>
-					<Textarea value={stuckData.value.description} onChange={event => {
+					<Textarea required value={stuckData.value.description} onChange={event => {
 						stuckData.value = { ...stuckData.value, description: event.target.value }
 					}} placeholder='Example: After 2 seconds, the browser tab suddenly freezes and I do not know why.' />
 					<br />
