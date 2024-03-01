@@ -1,5 +1,5 @@
 import { playTune } from './tune'
-import { parseScript } from 'esprima'
+import { parseScript } from "esprima-next"
 import { normalizeGameError, type EsprimaError } from './error'
 import { bitmaps, NormalizedError } from '../state'
 import type { PlayTuneRes } from 'sprig'
