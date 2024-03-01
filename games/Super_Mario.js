@@ -9,31 +9,33 @@ https://sprig.hackclub.com/gallery/getting_started
 @addedOn: 2024-03-01
 */
 
-const player = "p"
-const block = "b"
-const mystery = "m"
-const usedMystery = "u"
-const pipeBody = "i"
-const pipeHead = "h"
-const mushroom = "w"
-const enemy = "e"
-const explosion = "x"
-const red = "r"
-const heart = "l"
-const blue = "q"
-const cloud1 = "k"
-const cloud2 = "j"
-const cloud3 = "z"
-const lava = "y"
+const player = "p";
+const block = "b";
+const mystery = "m";
+const usedMystery = "u";
+const pipeBody = "i";
+const pipeHead = "h";
+const mushroom = "w";
+const enemy = "e";
+const explosion = "x";
+const red = "r";
+const heart = "l";
+const blue = "q";
+const cloud1 = "k";
+const cloud2 = "j";
+const cloud3 = "z";
+const lava = "y";
 
-let playerUpwardsVel = -1
+let playerUpwardsVel = -1;
 let mushroomSpawn = 0;
 let maxJump = 2;
 let health = 3;
 let gameover = false;
 
 setLegend(
-  [ player, bitmap`
+	[
+		player,
+		bitmap`
 ....33333.......
 ...333333333....
 ...CCC9909......
@@ -49,8 +51,11 @@ setLegend(
 .995555555599...
 ...555..555.....
 ..CCC...CCCC....
-.CCCC...CCCCC...` ],
-  [ block, bitmap`
+.CCCC...CCCCC...`,
+	],
+	[
+		block,
+		bitmap`
 CCCCCCC0CCCCCCC0
 CCCCCCC0CCCCCCC0
 0000000000000000
@@ -66,8 +71,11 @@ CCC0CCCCCCC0CCCC
 0000000000000000
 CCCCCCC0CCCCCCC0
 CCCCCCC0CCCCCCC0
-CCCCCCC0CCCCCCC0`],
-  [ mystery, bitmap`
+CCCCCCC0CCCCCCC0`,
+	],
+	[
+		mystery,
+		bitmap`
 0000000000000000
 0666666666666660
 0666666666666660
@@ -83,8 +91,11 @@ CCCCCCC0CCCCCCC0`],
 0666666226666660
 0666666666666660
 0666666666666660
-0000000000000000`],
-  [ usedMystery, bitmap`
+0000000000000000`,
+	],
+	[
+		usedMystery,
+		bitmap`
 LLLLLLLLLLLLLLLL
 LFFFFFFFFFFFFFFL
 LFFFFFFFFFFFFFFL
@@ -100,8 +111,11 @@ LFFFFFF11FFFFFFL
 LFFFFFF11FFFFFFL
 LFFFFFFFFFFFFFFL
 LFFFFFFFFFFFFFFL
-LLLLLLLLLLLLLLLL`],
-  [ pipeBody, bitmap`
+LLLLLLLLLLLLLLLL`,
+	],
+	[
+		pipeBody,
+		bitmap`
 .0D44DDDD4D4D40.
 .0D44DDDDD4D4D0.
 .0D44DDDD4D4D40.
@@ -117,8 +131,11 @@ LLLLLLLLLLLLLLLL`],
 .0D44DDDD4D4D40.
 .0D44DDDDD4D4D0.
 .0D44DDDD4D4D40.
-.0D44DDDDD4D4D0.`],
-  [ pipeHead, bitmap`
+.0D44DDDDD4D4D0.`,
+	],
+	[
+		pipeHead,
+		bitmap`
 ...0000000000...
 ..00DDDDDDDD00..
 000DD000000DD000
@@ -134,8 +151,11 @@ LLLLLLLLLLLLLLLL`],
 04D44DDDD4D4D4D0
 04D44DDDDD4D4D40
 04D44DDDD4D4D4D0
-00D44DDDDD4D4D00`],
-  [ mushroom, bitmap`
+00D44DDDDD4D4D00`,
+	],
+	[
+		mushroom,
+		bitmap`
 ................
 ................
 .....000000.....
@@ -151,8 +171,11 @@ LLLLLLLLLLLLLLLL`],
 ..022202202220..
 ..022222222220..
 ...0222222220...
-....00000000....`],
-  [ enemy, bitmap`
+....00000000....`,
+	],
+	[
+		enemy,
+		bitmap`
 ......CCCC......
 .....CCCCCC.....
 ....CCCCCCCC....
@@ -168,8 +191,11 @@ CCCCCCCCCCCCCCCC
 ..002222222200..
 .0000022220000..
 .000000..00000..
-..00000..00000..`],
-  [ explosion, bitmap`
+..00000..00000..`,
+	],
+	[
+		explosion,
+		bitmap`
 ................
 ....00000.......
 ..00099900000...
@@ -185,8 +211,11 @@ CCCCCCCCCCCCCCCC
 .09333399939900.
 .0939963663900..
 .000009963300...
-.....0000000....`],
-  [ red, bitmap`
+.....0000000....`,
+	],
+	[
+		red,
+		bitmap`
 3333333333333333
 3333333333333333
 3333333333333333
@@ -202,8 +231,11 @@ CCCCCCCCCCCCCCCC
 3333333333333333
 3333333333333333
 3333333333333333
-3333333333333333`],
-  [ heart, bitmap`
+3333333333333333`,
+	],
+	[
+		heart,
+		bitmap`
 ................
 ................
 ................
@@ -219,8 +251,11 @@ CCCCCCCCCCCCCCCC
 ....03333330....
 .....033330.....
 ......0330......
-.......00.......`],
-  [ blue, bitmap`
+.......00.......`,
+	],
+	[
+		blue,
+		bitmap`
 7777777777777777
 7777777777777777
 7777777777777777
@@ -236,8 +271,11 @@ CCCCCCCCCCCCCCCC
 7777777777777777
 7777777777777777
 7777777777777777
-7777777777777777`],
-  [ cloud1, bitmap`
+7777777777777777`,
+	],
+	[
+		cloud1,
+		bitmap`
 ................
 ................
 ................
@@ -253,8 +291,11 @@ CCCCCCCCCCCCCCCC
 .....2222.......
 ................
 ................
-................`],
-  [ cloud2, bitmap`
+................`,
+	],
+	[
+		cloud2,
+		bitmap`
 ................
 ................
 ................
@@ -270,8 +311,11 @@ CCCCCCCCCCCCCCCC
 .......222......
 ................
 ................
-................`],
-  [ cloud3, bitmap`
+................`,
+	],
+	[
+		cloud3,
+		bitmap`
 ................
 ................
 ................
@@ -287,8 +331,11 @@ CCCCCCCCCCCCCCCC
 .....2222.222222
 ...........22...
 ................
-................`],
-  [ lava, bitmap`
+................`,
+	],
+	[
+		lava,
+		bitmap`
 6363636369966336
 3936966696999363
 6996399939939999
@@ -304,14 +351,15 @@ CCCCCCCCCCCCCCCC
 3399999696993369
 6993999339966363
 9936993699666366
-3663933693366336`]
-)
+3663933693366336`,
+	]
+);
 
-setSolids([player, block, mystery, usedMystery, pipeBody, pipeHead])
+setSolids([player, block, mystery, usedMystery, pipeBody, pipeHead]);
 
-let level = 0
+let level = 0;
 const levels = [
-  map`
+	map`
 lll....kk..........
 ....kkk..kkkk......
 .kk...jj...........
@@ -321,7 +369,8 @@ lll....kk..........
 ..............bbbbb
 ..............bbbbb
 p.bbb....e...bbbbbb
-bbbbbbbbbbbbbbbbbbb`,map`
+bbbbbbbbbbbbbbbbbbb`,
+	map`
 lll................
 ......mbb..........
 ...................
@@ -331,7 +380,8 @@ bb.b.bb.......bb...
 bb.b.bb.....bbb....
 bbybybb...........h
 bbybybbe.ee...e...i
-bbbbbbbbbbbbbbbbbbb`,map`
+bbbbbbbbbbbbbbbbbbb`,
+	map`
 lll................
 ..................h
 ..................i
@@ -341,7 +391,8 @@ lll................
 ...bbb.....bbyyyybb
 ........byyybyyyybb
 pe....bybyyybyyyybb
-bbbbybbbbbbbbbbbbbb`,map`
+bbbbybbbbbbbbbbbbbb`,
+	map`
 lll................
 ...................
 ..byeyeebb.........
@@ -351,7 +402,8 @@ i.....beeeb........
 i....b.bbb.........
 ip..b..............
 bbybyyyyyyyybbbbbbb
-bbbbbbbbbbbbbbbbbbb`,map`
+bbbbbbbbbbbbbbbbbbb`,
+	map`
 lll..........b.....
 by.....be.......b..
 .bb.....bbbbbbbbbb.
@@ -361,207 +413,199 @@ by.....be.......b..
 .b.bybybbb..b..m..b
 ...bb..bb....b.....
 ...................
-bbbbbbbbbbbbbbbbbbb`]
+bbbbbbbbbbbbbbbbbbb`,
+];
 
-setMap(levels[level])
+setMap(levels[level]);
 
 setPushables({
-  [ player ]: []
-})
+	[player]: [],
+});
 
 onInput("d", () => {
-  if(!gameover)
-  getFirst(player).x += 1
-})
+	if (!gameover) getFirst(player).x += 1;
+});
 
 onInput("a", () => {
-  if(!gameover)
-  getFirst(player).x -= 1
-})
+	if (!gameover) getFirst(player).x -= 1;
+});
 
 onInput("w", () => {
-  if(!gameover)
-  jump();
-})
+	if (!gameover) jump();
+});
 
 onInput("i", () => {
-  if(!gameover)
-  jump();
-})
-onInput("k", () =>{
-  if(gameover)
-    restart()
-})
-onInput("l", () =>{
-  if(gameover){
-    level = 0;
-    restart()
-  }
-})
-afterInput(() => {
-  
-})
+	if (!gameover) jump();
+});
+onInput("k", () => {
+	if (gameover) restart();
+});
+onInput("l", () => {
+	if (gameover) {
+		level = 0;
+		restart();
+	}
+});
+afterInput(() => {});
 
-function jump(){
-  if(getTile(getFirst(player).x, getFirst(player).y+1) != 0)
-    playerUpwardsVel = maxJump;
+function jump() {
+	if (getTile(getFirst(player).x, getFirst(player).y + 1) != 0)
+		playerUpwardsVel = maxJump;
 }
 
-function spawnMushroom(x,y){
-  
-  addSprite(x, y, mushroom)
+function spawnMushroom(x, y) {
+	addSprite(x, y, mushroom);
 }
 
-function powerUp(){
-  maxJump=5;
+function powerUp() {
+	maxJump = 5;
 }
 
-function calculateGravity(playerX, playerY){
-  let downTile = getTile(playerX, playerY+1)
-  if(playerUpwardsVel > 0) {
-      getFirst(player).y--
-    playerUpwardsVel--;
-  } else if(playerUpwardsVel < 0) {
-      getFirst(player).y++
-  } else if(downTile == 0)
-      playerUpwardsVel = -1;
-  else if (downTile.type == cloud1 || downTile.type == cloud2 || downTile.type == cloud3){
-    playerUpwardsVel = -1
-  }
+function calculateGravity(playerX, playerY) {
+	let downTile = getTile(playerX, playerY + 1);
+	if (playerUpwardsVel > 0) {
+		getFirst(player).y--;
+		playerUpwardsVel--;
+	} else if (playerUpwardsVel < 0) {
+		getFirst(player).y++;
+	} else if (downTile == 0) playerUpwardsVel = -1;
+	else if (
+		downTile.type == cloud1 ||
+		downTile.type == cloud2 ||
+		downTile.type == cloud3
+	) {
+		playerUpwardsVel = -1;
+	}
 }
 
-function moveEnemies(){
-  for(const character of getAll(enemy)){
-    const num = Math.floor(Math.random() * 2)
-    let characterX = character.x;
-    let characterY = character.y
-    if(num == 0){
-      let tile = getTile(characterX-1, characterY)
-      if(tile != 0){
-        if(tile[0].type != block && tile[0].type != pipeBody)
-          character.x--
-      } else character.x--
-    }
-    if(num == 1){
-      let tile = getTile(characterX+1, characterY)
-      if(tile != 0){
-        if(tile[0].type != block && tile[0].type != pipeBody)
-          character.x++
-      } else character.x++
-    }
-  }
+function moveEnemies() {
+	for (const character of getAll(enemy)) {
+		const num = Math.floor(Math.random() * 2);
+		let characterX = character.x;
+		let characterY = character.y;
+		if (num == 0) {
+			let tile = getTile(characterX - 1, characterY);
+			if (tile != 0) {
+				if (tile[0].type != block && tile[0].type != pipeBody)
+					character.x--;
+			} else character.x--;
+		}
+		if (num == 1) {
+			let tile = getTile(characterX + 1, characterY);
+			if (tile != 0) {
+				if (tile[0].type != block && tile[0].type != pipeBody)
+					character.x++;
+			} else character.x++;
+		}
+	}
 }
 
-function takeDamage(){
-  health--;
-  clearTile(health, 0)
-  if(health == 0){
-    gameOver(false)
-    return;
-  }
-  setBackground(red);
+function takeDamage() {
+	health--;
+	clearTile(health, 0);
+	if (health == 0) {
+		gameOver(false);
+		return;
+	}
+	setBackground(red);
 }
 
-function nextLevel(){
-  level++;
-  if(levels.length == level) gameOver(true)
-  restart();
+function nextLevel() {
+	level++;
+	if (levels.length == level) gameOver(true);
+	restart();
 }
 
-function gameOver(won){
-  gameover = true;
-  if(!won){
-    addText("The more you lose", {x: 1, y: 4, color: color`3`})
-    addText("The more you gain", {x: 1, y: 5, color: color`3`})
-    addText("Press K to restart", {x: 1, y: 6, color: color`0`})
-    addText("L to go to level 1", {x:1, y:7, color: color`0`})
-  }
-  if(won){
-    addText("It's never just", {x: 3, y: 4, color: color`0`})
-    addText("A game when you're", {x: 1, y: 5, color: color`0`})
-    addText("Winning", {x: 6, y: 6, color: color`0`})
-    addText("Press L to restart", {x: 1, y: 9, color: color`0`})
-  }
+function gameOver(won) {
+	gameover = true;
+	if (!won) {
+		addText("The more you lose", { x: 1, y: 4, color: color`3` });
+		addText("The more you gain", { x: 1, y: 5, color: color`3` });
+		addText("Press K to restart", { x: 1, y: 6, color: color`0` });
+		addText("L to go to level 1", { x: 1, y: 7, color: color`0` });
+	}
+	if (won) {
+		addText("It's never just", { x: 3, y: 4, color: color`0` });
+		addText("A game when you're", { x: 1, y: 5, color: color`0` });
+		addText("Winning", { x: 6, y: 6, color: color`0` });
+		addText("Press L to restart", { x: 1, y: 9, color: color`0` });
+	}
 }
 
-function restart(){
-  health = 3;
-  maxJump = 2;
-  setMap(levels[level])
-  clearText()
-  gameover = false;
+function restart() {
+	health = 3;
+	maxJump = 2;
+	setMap(levels[level]);
+	clearText();
+	gameover = false;
 }
 
-const explosionTimeout = 10
-const damageTimeout = 10
-const resetBackgroundTimeout = 5
+const explosionTimeout = 10;
+const damageTimeout = 10;
+const resetBackgroundTimeout = 5;
 let lastExplosion = -1;
-let lastDamage = -1
+let lastDamage = -1;
 let tick = 0;
-let playerX
-let playerY
-  setBackground(blue)
-addText("w or i to jump", {x:3, y:4, color: color`0`})
-function onTick(){
-  if(tick == 40) clearText();
-  if(gameover) return;
-  if(typeof getFirst(player) == 'undefined'){
-    addSprite(playerX, playerY, player)
-  }
-  playerX = getFirst(player).x
-  playerY = getFirst(player).y
-  tick++
-  try{
-    if(getTile(playerX, playerY-1)[0].type == mystery){
-      spawnMushroom(playerX, playerY+1)
-      getTile(playerX, playerY-1)[0].type = usedMystery
-    }
-  } catch(e) {
-  }
-  try{
-    if(getTile(playerX, playerY)[1].type == mushroom){
-      powerUp();
-      clearTile(playerX, playerY)
-      addSprite(playerX, playerY, player)
-    }
-  } catch(e){
-  }
-  try{
-    if(getTile(playerX, playerY+1)[0].type == enemy){
-      clearTile(playerX, playerY+1);
-      addSprite(playerX, playerY+1, explosion);
-      lastExplosion = tick;
-    }
-  } catch(e){
-  }
+let playerX;
+let playerY;
+setBackground(blue);
+addText("w or i to jump", { x: 3, y: 4, color: color`0` });
+function onTick() {
+	if (tick == 40) clearText();
+	if (gameover) return;
+	if (typeof getFirst(player) == "undefined") {
+		addSprite(playerX, playerY, player);
+	}
+	playerX = getFirst(player).x;
+	playerY = getFirst(player).y;
+	tick++;
+	try {
+		if (getTile(playerX, playerY - 1)[0].type == mystery) {
+			spawnMushroom(playerX, playerY + 1);
+			getTile(playerX, playerY - 1)[0].type = usedMystery;
+		}
+	} catch (e) {}
+	try {
+		if (getTile(playerX, playerY)[1].type == mushroom) {
+			powerUp();
+			clearTile(playerX, playerY);
+			addSprite(playerX, playerY, player);
+		}
+	} catch (e) {}
+	try {
+		if (getTile(playerX, playerY + 1)[0].type == enemy) {
+			clearTile(playerX, playerY + 1);
+			addSprite(playerX, playerY + 1, explosion);
+			lastExplosion = tick;
+		}
+	} catch (e) {}
 
-  try{
-    if(getTile(playerX, playerY+1)[0].type == pipeHead){
-      nextLevel();
-    }
-  } catch(e){
-  }
+	try {
+		if (getTile(playerX, playerY + 1)[0].type == pipeHead) {
+			nextLevel();
+		}
+	} catch (e) {}
 
-  try{
-    if(getTile(playerX, playerY)[1].type == enemy || getTile(playerX, playerY)[1].type == lava){
-      if(tick-lastDamage > damageTimeout){
-        takeDamage();
-        lastDamage = tick;
-      }
-    }
-  } catch(e){
-  }
-  calculateGravity(playerX, playerY);
-  if(tick%5 == 0)
-    moveEnemies();
+	try {
+		if (
+			getTile(playerX, playerY)[1].type == enemy ||
+			getTile(playerX, playerY)[1].type == lava
+		) {
+			if (tick - lastDamage > damageTimeout) {
+				takeDamage();
+				lastDamage = tick;
+			}
+		}
+	} catch (e) {}
+	calculateGravity(playerX, playerY);
+	if (tick % 5 == 0) moveEnemies();
 
-  if(tick-lastExplosion == explosionTimeout){
-    for(let ex of getAll(explosion)){
-      clearTile(ex.x, ex.y)
-    }
-  }
-  if(tick-lastDamage > resetBackgroundTimeout)
-  setBackground(blue)
+	if (tick - lastExplosion == explosionTimeout) {
+		for (let ex of getAll(explosion)) {
+			clearTile(ex.x, ex.y);
+		}
+	}
+	if (tick - lastDamage > resetBackgroundTimeout) setBackground(blue);
 }
 
-setInterval(onTick, 50)
+setInterval(onTick, 50);
