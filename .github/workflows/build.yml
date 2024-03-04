@@ -1,0 +1,94 @@
+name: Build Spade UF2
+on: # This workflow should run on...
+  push: # a push...
+    branches: # to one of these branches:
+      - 'main'
+      - 'add-ci' # TEMP for testing
+  workflow_dispatch: # or when manually triggered
+
+defaults:
+  run:
+    shell: 'bash'
+
+jobs:
+  build-uf2:
+      runs-on: 'ubuntu-latest' # Run on the latest stable Ubuntu version
+      steps:
+      - name: 'Setup'
+        run: |
+          mkdir ~/firmware/spade/jerryscript_build
+          mkdir ~/firmware/spade/raspberrypi
+          sudo apt-get install -y build-essential
+          VER=15:10.3-2021.10-9
+          URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
+          echo "Creating gcc-arm-none-eabi debian package version $VER"
+
+          echo "Entering temporary directory..."
+          cd /tmp
+
+          echo "Downloading..."
+          curl -fSL -A "Mozilla/4.0" -o gcc-arm-none-eabi.tar "$URL"
+
+          echo "Extracting..."
+          tar -xf gcc-arm-none-eabi.tar
+          rm gcc-arm-none-eabi.tar
+
+          echo "Generating debian package..."
+          mkdir gcc-arm-none-eabi
+          mkdir gcc-arm-none-eabi/DEBIAN
+          mkdir gcc-arm-none-eabi/usr
+          echo "Package: gcc-arm-none-eabi"          >  gcc-arm-none-eabi/DEBIAN/control
+          echo "Version: $VER"                       >> gcc-arm-none-eabi/DEBIAN/control
+          echo "Architecture: amd64"                 >> gcc-arm-none-eabi/DEBIAN/control
+          echo "Maintainer: maintainer"              >> gcc-arm-none-eabi/DEBIAN/control
+          echo "Description: Arm Embedded toolchain" >> gcc-arm-none-eabi/DEBIAN/control
+          mv gcc-arm-none-eabi-*/* gcc-arm-none-eabi/usr/
+          dpkg-deb --build --root-owner-group gcc-arm-none-eabi
+
+          echo "Installing..."
+          sudo apt install ./gcc-arm-none-eabi.deb -y --allow-downgrades
+
+          echo "Removing temporary files..."
+          rm -r gcc-arm-none-eabi*
+
+          echo "Done."
+
+      - name: 'Clone Spade repo'
+        run: |
+          cd ~/firmware/spade/
+          git clone https://github.com/hackclub/spade.git
+      
+      - name: 'Clone JerryScript'
+        run: |
+          cd ~/firmware/spade/jerryscript_build
+          git clone https://github.com/jerryscript-project/jerryscript.git
+          cd jerryscript
+          git checkout 8ba0d1b6ee5a065a42f3b306771ad8e3c0d819bc
+          cd ~/firmware/spade/spade
+          ./src/pc/jerry/refresh.sh
+      
+      - name: 'Clone pico-sdk'
+        run: |
+          cd ~/firmware/spade/raspberrypi
+          git clone -b 1.3.1 https://github.com/raspberrypi/pico-sdk.git
+          git clone https://github.com/raspberrypi/pico-extras.git
+          cd pico-sdk
+          git submodule update --init
+          cd ../pico-extras
+          git submodule update --init
+      
+      - name: 'Build Spade'
+        run: |
+          cd ~/firmware/spade/spade
+          mkdir ./src/shared/sprig_engine/build
+          ./tools/cstringify.py ./src/shared/sprig_engine/engine.js > ./src/shared/sprig_engine/build/engine.min.js.cstring
+          cmake --preset=rpi
+          cd rpi_build
+          make
+      
+      - name: 'Upload artifact'
+        uses: 'actions/upload-artifact@v3'
+        with:
+          name: 'spade.uf2'
+          path: '~/firmware/spade/spade/rpi_build/src/spade.uf2'
+          if-no-files-found: error
