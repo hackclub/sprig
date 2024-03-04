@@ -88,13 +88,13 @@ export const muted = signal<boolean>(false)
 export const errorLog = signal<NormalizedError[]>([])
 export const openEditor = signal<OpenEditor | null>(null)
 export const bitmaps = signal<[string, string][]>([])
-// export const isDark = signal<boolean>(localStorage.getItem("isDark") == "true");
 export const isDark = signal<boolean>(false)
+export const editSessionLength = signal<Date>(new Date());
 
 export const toggleTheme = () => {
 	isDark.value = !isDark.value;
-	
+
 	// store true as "true" or false as ""
-	// empty strings coerce to false 
+	// empty strings coerce to false
 	localStorage.setItem("isDark", isDark.value ? isDark.value.toString() : "");
-} 
+}
