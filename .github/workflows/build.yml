@@ -16,6 +16,9 @@ jobs:
       steps:
       - name: 'Setup'
         run: |
+          pwd
+          ls
+          ls ~/
           set -e -x
           cd ~/firmware/spade
           mkdir ~/firmware/spade/jerryscript_build
