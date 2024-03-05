@@ -58,7 +58,7 @@ type StuckData = {
 	description: string
 }
 
-const stripWhitespaceAndUpdate = () => {
+const prettifyCode = () => {
     // Check if the CodeMirror editor is empty to avoid unnecessary processing
     if (!codeMirror.value) return;
 
@@ -329,7 +329,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					</>)}
 				<li><a href='/gallery'>Gallery</a></li>
 				<li><a href='/get'>Get a Sprig</a></li>
-				<li><a href='javascript:void' role='button' onClick={stripWhitespaceAndUpdate}>Prettify code</a></li>
+				<li><a href='javascript:void' role='button' onClick={prettifyCode}>Prettify code</a></li>
 			</ul>
 			<div class={styles.divider} />
 			<ul>
