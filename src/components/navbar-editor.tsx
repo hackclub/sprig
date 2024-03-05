@@ -59,31 +59,33 @@ type StuckData = {
 }
 
 const stripWhitespaceAndUpdate = () => {
+    // Check if the CodeMirror editor is empty to avoid unnecessary processing
     if (!codeMirror.value) return;
 
+    // Retrieve the current text from the CodeMirror editor
     const currentText = codeMirror.value.state.doc.toString();
 
+    // Configuration options for beautifying JavaScript code
     const beautifyOptions = {
-        indent_size: 2,
-        space_in_empty_paren: true,
-        e4x: true,
-        end_with_newline: true,
-        wrap_line_length: 0,
-        preserve_newlines: false,
-        max_preserve_newlines: 2,
-        jslint_happy: false,
-        brace_style: "end-expand",
-        keep_array_indentation: false,
-        keep_function_indentation: false,
-        space_after_anon_function: true
+        indent_size: 2, // Sets indentation to 2 spaces for readability
+        space_in_empty_paren: true, // Adds a space inside empty parentheses for clarity
+        end_with_newline: true, // Ensures the file ends with a newline, a common coding standard
+        wrap_line_length: 0, // No wrapping, to avoid breaking code into unintended lines
+        preserve_newlines: false, // Removes extra newlines to tidy up the code
+        max_preserve_newlines: 2, // Limits consecutive newlines to 2 for spacing consistency
+        brace_style: "end-expand", // Places closing braces on a new line for blocks, improving readability
+        space_after_anon_function: true, // Adds a space after anonymous function declarations
     };
 
+    // Beautify the current text using the configured options
     const formattedText = js_beautify(currentText, beautifyOptions);
 
+    // Update the CodeMirror editor with the beautified text
     const updateTransaction = codeMirror.value.state.update({
         changes: { from: 0, to: codeMirror.value.state.doc.length, insert: formattedText }
     });
 
+    // Apply the update to the editor
     codeMirror.value.dispatch(updateTransaction);
 };
 export default function EditorNavbar(props: EditorNavbarProps) {
