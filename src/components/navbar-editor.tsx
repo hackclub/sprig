@@ -13,6 +13,7 @@ import { usePopupCloseClick } from '../lib/utils/popup-close-click'
 import { upload, uploadState } from '../lib/upload'
 import { VscLoading } from 'react-icons/vsc'
 import { defaultExampleCode } from '../lib/examples'
+import { js_beautify } from 'js-beautify';
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -57,6 +58,34 @@ type StuckData = {
 	description: string
 }
 
+const stripWhitespaceAndUpdate = () => {
+    if (!codeMirror.value) return;
+
+    const currentText = codeMirror.value.state.doc.toString();
+
+    const beautifyOptions = {
+        indent_size: 2,
+        space_in_empty_paren: true,
+        e4x: true,
+        end_with_newline: true,
+        wrap_line_length: 0,
+        preserve_newlines: false,
+        max_preserve_newlines: 2,
+        jslint_happy: false,
+        brace_style: "end-expand",
+        keep_array_indentation: false,
+        keep_function_indentation: false,
+        space_after_anon_function: true
+    };
+
+    const formattedText = js_beautify(currentText, beautifyOptions);
+
+    const updateTransaction = codeMirror.value.state.update({
+        changes: { from: 0, to: codeMirror.value.state.doc.length, insert: formattedText }
+    });
+
+    codeMirror.value.dispatch(updateTransaction);
+};
 export default function EditorNavbar(props: EditorNavbarProps) {
 	const showNavPopup = useSignal(false)
 	const showStuckPopup = useSignal(false)
@@ -298,6 +327,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					</>)}
 				<li><a href='/gallery'>Gallery</a></li>
 				<li><a href='/get'>Get a Sprig</a></li>
+				<li><a href='javascript:void' role='button' onClick={stripWhitespaceAndUpdate}>Prettify code</a></li>
 			</ul>
 			<div class={styles.divider} />
 			<ul>
