@@ -1,26 +1,30 @@
 /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
-
 @title: Goblin Gobbler
 @author: Tyler P. Evans
 @tags: [puzzle,goblin,rpg]
 @img: ""
 @addedOn: 2024-00-00
-
 // instructions; wasd to move, player can push boxes and boxes can push goblins.
 // your goal is to move the goblins into the holes.
-// j to rest level, i to skip level, k to go back a level, l increments the frogger variable
-
-
+// j to rest level, i to skip level, k to go back a level, l displays move counts per level
 */
 
 var frogger = 0
 
     var playernum = 0
-  
+
 
   var icedplayernum = 0
+
+var movecount = 0
+
+var movecountcount = 0
+
+var movecountlvl = []
+
+var movetext = ""
 
 addText("Shove the goblin",{
   x: 2,
@@ -1219,7 +1223,7 @@ pppp
 pC1p
 pcvp
 pppp`,
-  
+
   map`
 .pc..
 .....
@@ -1702,7 +1706,7 @@ I..p
    _
    p
    _`,
-  
+
   map`
    ..e..
    ..e.p
@@ -1767,7 +1771,7 @@ I..p
    .yey..
    .yeGgp
    .yE...`,
-  
+
   map`
    ....
    2.C.
@@ -1844,7 +1848,7 @@ c
 C
 .
 1`,
-  
+
   map`
    .H.
    ...
@@ -1881,6 +1885,7 @@ setPushables({
 })
 
 onInput("w", () => {
+movecount = movecount + 1
   if (getAll(player3).length>0) {
   getFirst(player3).type = player1
   }
@@ -1904,7 +1909,7 @@ getFirst(player1).y += -1
     if (getAll(leftcrate).length>0) {
   getFirst(leftcrate).x += -1
   }
-  
+
         if (getAll(mutantgoblinup).length>0) {
   getFirst(mutantgoblinup).y += -1
   }
@@ -1918,9 +1923,9 @@ getFirst(player1).y += -1
   getFirst(mutantgoblinleft).x += -1
   }
 
-  
+
     playernum = tilesWith(player1).length + tilesWith(player2).length + tilesWith(player3).length + tilesWith(player4).length;
-  
+
 
   icedplayernum = tilesWith(ice, player1).length + tilesWith(ice, player2).length + tilesWith(ice, player3).length + tilesWith(ice, player4).length;
 
@@ -1930,7 +1935,7 @@ getFirst(player1).y += -1
    getFirst(player1).y += -1
 
        playernum = tilesWith(player1).length + tilesWith(player2).length + tilesWith(player3).length + tilesWith(player4).length;
-  
+
 
   icedplayernum = tilesWith(ice, player1).length + tilesWith(ice, player2).length + tilesWith(ice, player3).length + tilesWith(ice, player4).length;
 
@@ -1938,7 +1943,7 @@ getFirst(player1).y += -1
  }
   },500)
     const holedplayernum = tilesWith(blackhole, player1).length + tilesWith(blackhole, player2).length + tilesWith(blackhole, player3).length + tilesWith(blackhole, player4).length;
-  
+
   if (holedplayernum === playernum) {
 getFirst(player1).remove()
 addSprite(getFirst(whitehole).x,getFirst(whitehole).y,player1)
@@ -1958,6 +1963,7 @@ getFirst(player1).y += -frogger
 })
 
 onInput("s", () => {
+movecount = movecount + 1
   if (getAll(player1).length>0) {
   getFirst(player1).type = player3 
 }
@@ -1994,33 +2000,33 @@ onInput("s", () => {
     if (getAll(mutantgoblinleft).length>0) {
   getFirst(mutantgoblinleft).x += -1
   }
-    
+
     playernum = tilesWith(player1).length + tilesWith(player2).length + tilesWith(player3).length + tilesWith(player4).length;
-  
+
 
   icedplayernum = tilesWith(ice, player1).length + tilesWith(ice, player2).length + tilesWith(ice, player3).length + tilesWith(ice, player4).length;
 
   setInterval(() =>{
-  
+
  if (icedplayernum === playernum) { 
 
 
    getFirst(player3).y += 1
-   
+
        playernum = tilesWith(player1).length + tilesWith(player2).length + tilesWith(player3).length + tilesWith(player4).length;
-  
+
 
   icedplayernum = tilesWith(ice, player1).length + tilesWith(ice, player2).length + tilesWith(ice, player3).length + tilesWith(ice, player4).length;
-    
+
  }
   },500)
     const holedplayernum = tilesWith(blackhole, player1).length + tilesWith(blackhole, player2).length + tilesWith(blackhole, player3).length + tilesWith(blackhole, player4).length;
-  
+
   if (holedplayernum === playernum) {
 getFirst(player3).remove()
 addSprite(getFirst(whitehole).x,getFirst(whitehole).y,player3)
 }
-  
+
   var lilypadnum = tilesWith(lilypad).length;
 
 var paddedplayernum = tilesWith(lilypad, player1).length + tilesWith(lilypad, player2).length + tilesWith(lilypad, player3).length + tilesWith(lilypad, player4).length;
@@ -2034,6 +2040,7 @@ getFirst(player3).y += frogger
 })
 
 onInput("a", () => {
+movecount = movecount + 1
     if (getAll(player1).length>0) {
   getFirst(player1).type = player4 
   }
@@ -2070,23 +2077,23 @@ onInput("a", () => {
     if (getAll(mutantgoblinleft).length>0) {
   getFirst(mutantgoblinleft).x += -1
   }
-    
+
     playernum = tilesWith(player1).length + tilesWith(player2).length + tilesWith(player3).length + tilesWith(player4).length;
-  
+
 
   icedplayernum = tilesWith(ice, player1).length + tilesWith(ice, player2).length + tilesWith(ice, player3).length + tilesWith(ice, player4).length;
   setInterval(() =>{
  if (icedplayernum === playernum) { 
    getFirst(player4).x += -1
        playernum = tilesWith(player1).length + tilesWith(player2).length + tilesWith(player3).length + tilesWith(player4).length;
-  
+
 
   icedplayernum = tilesWith(ice, player1).length + tilesWith(ice, player2).length + tilesWith(ice, player3).length + tilesWith(ice, player4).length;
- 
+
  }
  },500)
     const holedplayernum = tilesWith(blackhole, player1).length + tilesWith(blackhole, player2).length + tilesWith(blackhole, player3).length + tilesWith(blackhole, player4).length;
-  
+
   if (holedplayernum === playernum) {
 getFirst(player4).remove()
 addSprite(getFirst(whitehole).x,getFirst(whitehole).y,player4)
@@ -2105,6 +2112,7 @@ getFirst(player4).x += -frogger
 })
 
 onInput("d", () => {
+movecount = movecount + 1
     if (getAll(player1).length>0) {
   getFirst(player1).type = player2 
   }
@@ -2141,9 +2149,9 @@ onInput("d", () => {
     if (getAll(mutantgoblinleft).length>0) {
   getFirst(mutantgoblinleft).x += -1
   }
-    
+
     playernum = tilesWith(player1).length + tilesWith(player2).length + tilesWith(player3).length + tilesWith(player4).length;
-  
+
 
   icedplayernum = tilesWith(ice, player1).length + tilesWith(ice, player2).length + tilesWith(ice, player3).length + tilesWith(ice, player4).length;
   setInterval(() =>{
@@ -2151,14 +2159,14 @@ onInput("d", () => {
 
    getFirst(player2).x += 1
        playernum = tilesWith(player1).length + tilesWith(player2).length + tilesWith(player3).length + tilesWith(player4).length;
-  
+
 
   icedplayernum = tilesWith(ice, player1).length + tilesWith(ice, player2).length + tilesWith(ice, player3).length + tilesWith(ice, player4).length;
 
  }
  },500)
     const holedplayernum = tilesWith(blackhole, player1).length + tilesWith(blackhole, player2).length + tilesWith(blackhole, player3).length + tilesWith(blackhole, player4).length;
-  
+
   if (holedplayernum === playernum) {
 getFirst(player2).remove()
 addSprite(getFirst(whitehole).x,getFirst(whitehole).y,player2)
@@ -2177,26 +2185,30 @@ getFirst(player2).x += frogger
 })
 
 afterInput(() => {
-  
+
   if (getAll(fire1).length>0) {
   getFirst(fire1).type = fire2 
   }
   if (getAll(fire2).length>0) {
   getFirst(fire2).type = fire1 
   }
-  
+
     const targetNumber = tilesWith(goblin).length + tilesWith(bluegoblin).length + tilesWith(redgoblin).length + tilesWith(greengoblin).length + tilesWith(yellowgoblin).length + tilesWith(catgoblin).length + tilesWith(snowgoblin).length + tilesWith(voidgoblin).length + tilesWith(mutantgoblinup).length + tilesWith(mutantgoblinright).length + tilesWith(mutantgoblindown).length + tilesWith(mutantgoblinleft).length;
-  
+
 
   const numberCovered = tilesWith(pit, goblin).length + tilesWith(pit, bluegoblin).length + tilesWith(pit, redgoblin).length + tilesWith(pit, greengoblin).length + tilesWith(pit, yellowgoblin).length + tilesWith(pit, catgoblin).length + tilesWith(pit, snowgoblin).length + tilesWith(pit, voidgoblin).length + tilesWith(pit, mutantgoblinup).length + tilesWith(pit, mutantgoblinright).length + tilesWith(pit, mutantgoblindown).length + tilesWith(pit, mutantgoblinleft).length;
 
 
   if (numberCovered === targetNumber) { 
 
+    movecountlvl.push(movecount)
+
+    movecount = 0
+
     playTune(win)
-    
+
     level = level + 1;
-    
+
     clearText()
 
     const currentLevel = levels[level];
@@ -2287,9 +2299,16 @@ onInput("j", () => {
 const currentLevel = levels[level];
   setMap(currentLevel);
   frogger = 0
+
+    movecount = 0
 })
 
 onInput("i", () => {
+
+      movecountlvl.push(movecount)
+
+    movecount = 0
+  
   frogger = 0
   level = level + 1;
   const currentLevel = levels[level];
@@ -2368,10 +2387,13 @@ setBackground(floor)
 }
 }
 }
-  
+
 })
 
 onInput("k", () => {
+
+    movecount = 0
+  
   frogger = 0
   level = level - 1;
 const currentLevel = levels[level];  
@@ -2453,5 +2475,28 @@ setBackground(floor)
 })
 
 onInput("l", () => {
-  frogger += 1
+  
+movetext = toString(moveCount)
+  
+addText(" done in: " + movecountlvl[movecountcount] + " moves", {
+x:1,
+y:3,
+color: color`2`
 })
+  
+movecountcount = movecountcount + 1   
+
+addText(" level: " + movecountcount, {
+x:1,
+y:2,
+color: color`2`
+})
+ 
+  })
+
+function moveCount() {
+
+return movecountlvl[movecountcount]
+  
+}
+  
