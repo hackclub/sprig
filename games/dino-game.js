@@ -105,8 +105,11 @@ var runmap = map`
 dggggggg`
 setMap(runmap)
 
-var time = 500
+var const_time = 500
+var time = const_time
+var const_jump_time = 800
 var jump_time = 800
+var min_time = 200
 var jump = 0
 var top_map = "........"
 var bot_map = "gggggggg"
@@ -116,7 +119,10 @@ var top_first = "."
 var bot_first = "."
 var last = ground
 var tick_timer
+var jump_timer
 var playing = 0
+var score = 0
+var waiting = false
 
 
 function do_jump(){
@@ -126,22 +132,26 @@ function do_jump(){
         if(top_map[0] == raptor){
             game_over()
         }
-        getFirst(dino).y -= 1
-        jump = 1
+        if(getFirst(dino).y){
+          getFirst(dino).y -= 1
+          jump = 1
+          jump_timer = setTimeout(end_jump, jump_time);
+        }
     }
-    setTimeout(end_jump, jump_time);
 }
   
 function end_jump(){
         if(bot_map[0] != ground){
             game_over()
         }
-      getFirst(dino).y += 1
-      jump = 0
+        if(getFirst(dino).y == 0){ // ==0 bc otherwise it'll be false
+          getFirst(dino).y += 1
+          jump = 0
+        }
 }
   
 onInput("w", () => {
-    if(playing == 0){
+    if(playing == 0 && !waiting){
       playing = 1
       addText("                   ", {
           x: 0,
@@ -155,7 +165,7 @@ onInput("w", () => {
       addSprite(0, 1, dino)
       jump = 0
       tick()
-    }else{
+    }else if(!waiting){
       do_jump()
     } 
 })
@@ -194,17 +204,33 @@ function tick(){
         }
         addSprite(0, 0, dino)
     }
+    if(time > min_time){
+      time -= 10
+      jump_time -= 10
+    }
+    score += const_time - time
+    addText(String(1000000+score).slice(1), {
+        x: 14,
+        y: 6,
+        color: color`0`
+    });
     tick_timer = setTimeout(tick, time)
 }
 
 function game_over(){
     clearTimeout(tick_timer)
-    playing = 0;
-    addText("Game Over        ", {
+    clearTimeout(jump_timer)
+    playing = 0
+    score = 0
+    time = const_time
+    jump_time = const_jump_time
+    addText("Game Over", {
         x: 0,
         y: 6,
         color: color`0`
     });
+    waiting = true
+    setTimeout(()=>{waiting = false}, 2000)
 }
 
 addText("Press W to start", {
