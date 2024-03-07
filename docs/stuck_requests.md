@@ -50,26 +50,12 @@ After sending the email, please create a new record in Airtable with the your na
 ### Data Schema for Stuck Requests
 
 Stuck Request
-
-```ts
-ErrorLog = {
-	description: String,
-	raw: {
-		index: Number,
-		lineNumber: Number,
-		description: String
-	},
-	line: Number,
-	column: Number
-}
-```
-
 ```ts
 StuckRequest = {
 	Code: String,
 	Email: String
 	Session Length: Float // time in seconds
-	Error Log: JSONSerializable<List<ErrorLog>>,
+	Error Log: String, // list of errors in captured
 	Description: String,
 	Category: "Logic Error" | "Syntax Error" | "Other"
 }
