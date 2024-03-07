@@ -147,6 +147,7 @@ export default function SequencerEditor(props: EditorProps) {
 		cells.value = {}; // Remove all cells from the sequencer
 		lastDraw.value = null; // Reset the draw cursor
 		props.text.value = ""; // Clear the text in the editor
+	}
 
 	// Sync text changes with cells
 	useSignalEffect(() => {
