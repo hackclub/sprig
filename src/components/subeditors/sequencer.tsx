@@ -136,11 +136,17 @@ export default function SequencerEditor(props: EditorProps) {
 	const preventContextMenu = (event: MouseEvent) => { event.preventDefault(); }
 	window.addEventListener('contextmenu', preventContextMenu)
 
+	/**
+	 * Clear the sequencer editor.
+	 * This function:
+	 *   - Clears the cells from the sequencer
+	 *   - Sets the lastDraw (used for drawing lines) to null
+	 *   - Clears the text in the editor
+	 */
 	const clearSequencer = () => {
-		cells.value = {};
-		lastDraw.value = null;
-		props.text.value = "";
-	};
+		cells.value = {}; // Remove all cells from the sequencer
+		lastDraw.value = null; // Reset the draw cursor
+		props.text.value = ""; // Clear the text in the editor
 
 	// Sync text changes with cells
 	useSignalEffect(() => {
