@@ -2,7 +2,11 @@
 ## Getting new Sprig Stuck Action Items
 Run `/slacker list sprig stuck` to get all action items regarding sprig-stuck-requests.
 
+You can also find the stuck requests in [this Airtable](https://airtable.com/appN9cSnDgORAM2bp/tblmTt3QRC1keqBh6/viw4MPdvZbRM0XASL?blocks=hide).
+
 ## Following up with stuck-requests
+
+Add the code with a fix under the "Fixed Code" column in [this Airtale](https://airtable.com/appN9cSnDgORAM2bp/tblmTt3QRC1keqBh6/viw4MPdvZbRM0XASL?blocks=hide)
 
 ### Email template
 
@@ -43,7 +47,7 @@ Thank you for your understanding.
 Kindly,
 `Name`
 
-After sending the email, please create a new record in Airtable with the your name, the email you sent and a reference to the request you sent.
+After sending the email, please create a new record in [this Airtable](https://airtable.com/appN9cSnDgORAM2bp/tblU5A9l1H53a18yy/viwgD4xFcb4RVV0u1?blocks=hide) with the your name, the email you sent and a reference to the request you sent.
 
 ![stuck request response](./assets/stuck_response_ex1.png)
 
