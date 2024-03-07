@@ -8,6 +8,8 @@ You can also find the stuck requests in [this Airtable](https://airtable.com/app
 
 Add the code with a fix under the "Fixed Code" column in [this Airtale](https://airtable.com/appN9cSnDgORAM2bp/tblmTt3QRC1keqBh6/viw4MPdvZbRM0XASL?blocks=hide)
 
+If there's no code change to make, or there is no possible answer to the request. Fill in `N/A` under the "Fixed Code" column.
+
 ### Email template
 
 Hey,
