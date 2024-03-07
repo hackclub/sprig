@@ -1,39 +1,35 @@
 
 ## Getting new Sprig Stuck Action Items
-Run `/slacker list sprig stuck` to get all action items regarding sprig stuck requests. All requests are sent to [#-sprig-stuck-requests](https://hackclub.slack.com/archives/C06L5SNPPL6) on Slack.
+Run `/slacker list sprig stuck` to get all action items regarding sprig-stuck-requests.
 
 ## Following up with stuck-requests
 
 ### Email template
 
-```
 Hey,
 
 This is a response to the stuck request you sent.
 
-In the description you wrote: <Description>
+In the description you wrote: `Description`
 
 After careful investigation, we have identified the following issues in your code:
 
-1. <Issue> on line <Line>.
+1. `Issue` on line `Line`.
 2. ...
 
 Here is a fix for the issues stated above, respectively
 
-1. <Explanation>
-   <Fix>
+1. `Explanation`
+   `Fix`
 2. ...
 
 Thank you for your patience.
 
 Kindly,
-<Name>.
-
-```
+`Name`.
 
 ### Email template to use if there are no errors or description
 
-```
 Hey,
 
 This is a response to your stuck request.
@@ -45,10 +41,15 @@ This information will enable us to offer a more accurate and timely solution to 
 Thank you for your understanding.
 
 Kindly,
-<Name>
-```
+`Name`
+
+After sending the email, please create a new record in Airtable with the your name, the email you sent and a reference to the request you sent.
+
+![stuck request response](./assets/stuck_response_ex1.png)
 
 ### Data Schema for Stuck Requests
+
+Stuck Request
 
 ```ts
 ErrorLog = {
@@ -74,6 +75,10 @@ StuckRequest = {
 }
 ```
 
-### Where to store data
+Structure of truth data
 
-All data will be stored in
+```ts
+Responder: String, // name of person responding to the stuck request
+Email: String // email text being sent
+Stuck Data: StuckData // a reference to the stuck request being responded to
+```
