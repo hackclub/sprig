@@ -6,3 +6,4 @@ cmake --preset=rpi
 cmake --build --preset=rpi
 
 cp rpi_build/src/spade.uf2 ~/spade
+cp rpi_build/src/spade.elf ~/spade
