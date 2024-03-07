@@ -23,7 +23,6 @@ export default function UploadWarningModal(props: UploadWarningModalProps) {
           <Button accent onClick={() => window.location.reload()}>
             Reload Page
           </Button>
-          <p class={styles.muted}>If this doesn't solve the problem, please check your internet connection or try again later.</p>
         </div>
       </div>
     </div>
