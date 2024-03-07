@@ -1,0 +1,13 @@
+FROM fedora:39
+
+COPY ./importBuildRepos.sh /opt/importBuildRepos.sh
+
+RUN chmod +x /opt/importBuildRepos.sh
+
+COPY ./buildScript.sh /opt/buildScript.sh
+
+RUN chmod +x /opt/buildScript.sh
+
+RUN /opt/importBuildRepos.sh
+
+CMD /opt/buildScript.sh
