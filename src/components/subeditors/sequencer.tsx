@@ -136,6 +136,12 @@ export default function SequencerEditor(props: EditorProps) {
 	const preventContextMenu = (event: MouseEvent) => { event.preventDefault(); }
 	window.addEventListener('contextmenu', preventContextMenu)
 
+	const clearSequencer = () => {
+		cells.value = {};
+		lastDraw.value = null;
+		props.text.value = "";
+	};
+
 	// Sync text changes with cells
 	useSignalEffect(() => {
 		const newCells = tuneToCells(textToTune(props.text.value))
@@ -196,6 +202,15 @@ export default function SequencerEditor(props: EditorProps) {
 							beat.value = 0
 						}}
 					/>
+					<Button
+						onClick={() => {
+							const isConfirmed = confirm('Are you sure you want to clear the sequencer?');
+							if (isConfirmed) {
+								clearSequencer();
+							}
+						}}
+					> {'Clear'}
+					</Button>
 				</div>
 
 				<div class={styles.bpm}>
