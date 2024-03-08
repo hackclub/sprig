@@ -13,7 +13,6 @@ import { usePopupCloseClick } from '../lib/utils/popup-close-click'
 import { upload, uploadState } from '../lib/upload'
 import { VscLoading } from 'react-icons/vsc'
 import { defaultExampleCode } from '../lib/examples'
-import { js_beautify } from 'js-beautify';
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -58,36 +57,6 @@ type StuckData = {
 	description: string
 }
 
-const prettifyCode = () => {
-    // Check if the CodeMirror editor is empty to avoid unnecessary processing
-    if (!codeMirror.value) return;
-
-    // Retrieve the current text from the CodeMirror editor
-    const currentText = codeMirror.value.state.doc.toString();
-
-    // Configuration options for beautifying JavaScript code
-    const beautifyOptions = {
-        indent_size: 2, // Sets indentation to 2 spaces for readability
-        space_in_empty_paren: true, // Adds a space inside empty parentheses for clarity
-        end_with_newline: true, // Ensures the file ends with a newline, a common coding standard
-        wrap_line_length: 0, // No wrapping, to avoid breaking code into unintended lines
-        preserve_newlines: false, // Removes extra newlines to tidy up the code
-        max_preserve_newlines: 2, // Limits consecutive newlines to 2 for spacing consistency
-        brace_style: "end-expand", // Places closing braces on a new line for blocks, improving readability
-        space_after_anon_function: true, // Adds a space after anonymous function declarations
-    };
-
-    // Beautify the current text using the configured options
-    const formattedText = js_beautify(currentText, beautifyOptions);
-
-    // Update the CodeMirror editor with the beautified text
-    const updateTransaction = codeMirror.value.state.update({
-        changes: { from: 0, to: codeMirror.value.state.doc.length, insert: formattedText }
-    });
-
-    // Apply the update to the editor
-    codeMirror.value.dispatch(updateTransaction);
-};
 export default function EditorNavbar(props: EditorNavbarProps) {
 	const showNavPopup = useSignal(false)
 	const showStuckPopup = useSignal(false)
@@ -329,7 +298,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					</>)}
 				<li><a href='/gallery'>Gallery</a></li>
 				<li><a href='/get'>Get a Sprig</a></li>
-				<li><a href='javascript:void' role='button' onClick={prettifyCode}>Prettify code</a></li>
 			</ul>
 			<div class={styles.divider} />
 			<ul>
