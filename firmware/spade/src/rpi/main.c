@@ -266,7 +266,7 @@ int main() {
                      "                    \n"
                      "                    \n"
                      "                    \n"
-                     "    PRESS ANY KEY   \n"
+                     "  PRESS ANY BUTTON  \n"
                      "       TO RUN       \n"
                      "                    \n"
                      "                    \n"
