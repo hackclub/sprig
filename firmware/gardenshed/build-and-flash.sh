@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#broken in gardenshed
 set -e
 
 echo Building firmware...
