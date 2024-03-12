@@ -657,6 +657,11 @@ JERRYXX_FUN(native_text_clear_fn) {
 JERRYXX_FUN(set_value_fn) {
   dbg("module_native::set_value_fn");
 
+  if (state->game_id == NULL) {
+      printf("Game ID is not set\n");
+      return jerry_create_undefined();
+  }
+
   char *key = temp_str_mem();
   jerry_size_t nbytes = jerry_string_to_char_buffer(
     JERRYXX_GET_ARG(0),
@@ -666,8 +671,9 @@ JERRYXX_FUN(set_value_fn) {
   key[nbytes] = '\0'; 
 
   FIL fil;
-  char *filename = (char*)malloc(64 * sizeof(char));
-  snprintf(filename, 64, "sprig/kv/%s", key);
+  int namebytes = strlen(state->game_id) + nbytes + 10;
+  char *filename = (char*)malloc(namebytes * sizeof(char));
+  snprintf(filename, namebytes, "sprig/kv/%s/%s", state->game_id, key);
   FRESULT fr = f_open(&fil, filename, FA_CREATE_ALWAYS | FA_WRITE);
 
   char *data = temp_str_mem();
@@ -683,17 +689,24 @@ JERRYXX_FUN(set_value_fn) {
   int bw;
   if (FR_OK != fr && FR_EXIST != fr)
       panic("f_open(%s) error: %s (%d)\n", filename, FRESULT_str(fr), fr);
-  if (f_write(&fil, data, strlen(data) * sizeof (char), &bw) < 0) {
-      printf("f_write failed\n");
-  }
+
   fr = f_close(&fil);
   if (FR_OK != fr) {
       printf("f_close error: %s (%d)\n", FRESULT_str(fr), fr);
   }
+
+  free(filename);
+
+  return jerry_create_undefined();
 }
 
 JERRYXX_FUN(get_value_fn) {
   dbg("module_native::get_value_fn");
+
+  if (state->game_id == NULL) {
+    printf("Game ID is not set\n");
+    return jerry_create_undefined();
+  }
 
   char *key = temp_str_mem();
   jerry_size_t nbytes = jerry_string_to_char_buffer(
@@ -704,8 +717,9 @@ JERRYXX_FUN(get_value_fn) {
   key[nbytes] = '\0'; 
 
   FIL fil;
-  char *filename = (char*)malloc(64 * sizeof(char));
-  snprintf(filename, 64, "sprig/kv/%s", key);
+  int namebytes = strlen(state->game_id) + nbytes + 10;
+  char *filename = (char*)malloc(namebytes * sizeof(char));
+  snprintf(filename, namebytes, "sprig/kv/%s/%s", state->game_id, key);
   FRESULT fr = f_open(&fil, filename, FA_READ);
 
   if (FR_OK != fr) {
@@ -724,12 +738,35 @@ JERRYXX_FUN(get_value_fn) {
       printf("f_close error: %s (%d)\n", FRESULT_str(fr), fr);
   }
 
+  free(filename);
   return jerry_create_string((jerry_char_t *)data);
 }
 
 JERRYXX_FUN(is_sd_mounted_fn) {
   dbg("module_native::is_sd_mounted_fn");
   return jerry_create_boolean(state->sd_mounted);
+}
+
+JERRYXX_FUN(set_game_id) {
+  char *tmp = temp_str_mem();
+  jerry_size_t nbytes = jerry_string_to_char_buffer(
+          JERRYXX_GET_ARG(0),
+          (jerry_char_t *)tmp,
+          sizeof(state->temp_str_mem) - 1
+  );
+  tmp[nbytes] = '\0';
+  char* game_id_cpy = (char*)malloc(nbytes * sizeof(char));
+  strcpy(game_id_cpy, tmp);
+  state->game_id = game_id_cpy;
+
+  int namebytes = strlen(state->game_id) + 9;
+  char *filename = (char*)malloc(namebytes * sizeof(char));
+  snprintf(filename, namebytes, "sprig/kv/%s", state->game_id);
+
+  f_mkdir(filename);
+
+  free(filename);
+  return jerry_create_undefined();
 }
 
 static void module_native_init(jerry_value_t exports) {
@@ -741,6 +778,7 @@ static void module_native_init(jerry_value_t exports) {
   jerryxx_set_property_function(exports, MSTR_NATIVE_setValue, set_value_fn);
   jerryxx_set_property_function(exports, MSTR_NATIVE_getValue, get_value_fn);
   jerryxx_set_property_function(exports, MSTR_NATIVE_isSdMounted, is_sd_mounted_fn);
+  jerryxx_set_property_function(exports, MSTR_NATIVE_setID, set_game_id);
 
   // these ones actually need to be in C for perf
   jerryxx_set_property_function(exports, MSTR_NATIVE_setMap,    setMap);

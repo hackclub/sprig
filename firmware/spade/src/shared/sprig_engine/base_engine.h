@@ -90,6 +90,7 @@ typedef struct {
   uint32_t *sprite_slot_generation;
 
   bool sd_mounted;
+  char *game_id;
 
   uint16_t *map; // Index into sprite_pool + 1 (0 is null)
 
