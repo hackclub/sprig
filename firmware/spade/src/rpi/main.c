@@ -186,12 +186,17 @@ static int load_new_scripts(void) {
 void mount_sd_card() {
   yell("mounting SD card");
   // do the mount
-  state->sd_mounted = 1;
   sd_card_t *pSD = sd_get_by_num(0);
   FRESULT fr = f_mount(&pSD->fatfs, pSD->pcName, 1);
 
-  f_mkdir("sprig");
-  f_mkdir("sprig/kv");
+  if (fr == FR_OK) {
+      state->sd_mounted = true;
+
+      f_mkdir("sprig");
+      f_mkdir("sprig/kv");
+  } else {
+      state->sd_mounted = false;
+  }
 }
 
 /**
@@ -225,12 +230,12 @@ int main() {
   st7735_init();    // Init display
   rng_init();       // Init RNG
 
-  // Initialize SD card
-  mount_sd_card();
-
   // Init JerryScript
   jerry_init(JERRY_INIT_MEM_STATS);
   init(sprite_free_jerry_object); // TODO: document
+
+  // Initialize SD card
+  mount_sd_card();
 
   while(!save_read()) {
     // No game stored in memory

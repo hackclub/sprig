@@ -3,14 +3,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-#include <stdlib.h>
 #include <string.h>
+
 #include "jerryscript.h"
 #include "native_magic_strings.h"
 
 #include "shared/js_runtime/js.h"
-#include "shared/js_runtime/jerryxx.h"
-#include "shared/audio/piano.h"
 
 static struct {
   jerry_value_t x, y, dx, dy, addr, type, _x, _y, _type, push, remove, generation;
@@ -729,6 +727,11 @@ JERRYXX_FUN(get_value_fn) {
   return jerry_create_string((jerry_char_t *)data);
 }
 
+JERRYXX_FUN(is_sd_mounted_fn) {
+  dbg("module_native::is_sd_mounted_fn");
+  return jerry_create_boolean(state->sd_mounted);
+}
+
 static void module_native_init(jerry_value_t exports) {
   memset(&props, 0, sizeof(props));
 
@@ -736,6 +739,7 @@ static void module_native_init(jerry_value_t exports) {
 
   jerryxx_set_property_function(exports, MSTR_NATIVE_setValue, set_value_fn);
   jerryxx_set_property_function(exports, MSTR_NATIVE_getValue, get_value_fn);
+  jerryxx_set_property_function(exports, MSTR_NATIVE_isSdMounted, is_sd_mounted_fn);
 
   // these ones actually need to be in C for perf
   jerryxx_set_property_function(exports, MSTR_NATIVE_setMap,    setMap);

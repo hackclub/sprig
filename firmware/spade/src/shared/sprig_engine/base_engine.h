@@ -89,7 +89,7 @@ typedef struct {
   uint8_t  *sprite_slot_active;
   uint32_t *sprite_slot_generation;
 
-  int sd_mounted;
+  bool sd_mounted;
 
   uint16_t *map; // Index into sprite_pool + 1 (0 is null)
 
