@@ -1,10 +1,12 @@
 import { playTune } from './tune'
-import { parseScript } from 'esprima'
+import { parseScript } from "esprima-next"
 import { normalizeGameError, type EsprimaError } from './error'
 import { bitmaps, NormalizedError } from '../state'
 import type { PlayTuneRes } from 'sprig'
 import { textToTune } from 'sprig/base'
 import { webEngine } from 'sprig/web'
+import * as Babel from "@babel/standalone"
+import TransformDetectInfiniteLoop from '../transform-detect-infinite-loop'
 
 interface RunResult {
 	error: NormalizedError | null
@@ -13,7 +15,7 @@ interface RunResult {
 
 export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (error: NormalizedError) => void): RunResult {
 	const game = webEngine(canvas)
-	
+
 	const tunes: PlayTuneRes[] = []
 	const timeouts: number[] = []
 	const intervals: number[] = []
@@ -22,7 +24,7 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 		onPageError(normalizeGameError({ kind: 'page', error: event.error }))
 	}
 	window.addEventListener('error', errorListener)
-	
+
 	const cleanup = () => {
 		game.cleanup()
 		tunes.forEach(tune => tune.end())
@@ -65,7 +67,7 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 				return {
 					error: {
 						description: errorString,
-						raw: errorString, 
+						raw: errorString,
 						line: item.loc!.start.line - 1,
 						column: item.loc!.start.column as number
 				}, cleanup };
@@ -77,9 +79,14 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 			cleanup
 		}
 	}
-	
+
+	const transformResult = Babel.transform(code, {
+	 plugins: [TransformDetectInfiniteLoop],
+		retainLines: true
+	})
+
 	try {
-		const fn = new Function(...engineAPIKeys, code)
+		const fn = new Function(...engineAPIKeys, transformResult.code!)
 		fn(...Object.values(api))
 		return { error: null, cleanup }
 	} catch (error) {
@@ -109,6 +116,6 @@ export function runGameHeadless(code: string): void {
 		const fn = new Function(...Object.keys(api), code)
 		fn(...Object.values(api))
 	} catch {}
-	
+
 	game.cleanup()
 }
