@@ -1,11 +1,11 @@
 /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
-@title: Goblin Gobbler
-@author: Tyler P. Evans
-@tags: [puzzle,goblin,rpg]
+@title: Goblin_Gobbler
+@author: Tyler P Evans
+@tags: ['advanced']
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-03-11
 // instructions; wasd to move, player can push boxes and boxes can push goblins.
 // your goal is to move the goblins into the holes.
 // j to rest level, i to skip level, k to go back a level, l displays move counts per level
