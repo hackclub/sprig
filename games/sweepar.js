@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @tags: [fun, minesweeper]
 @img: ""
 @addedOn: 09/03/2024
+instructions: WASD to move the cursor around the grid, J to open squares, K to flag squares and I to reset the game
 */
 const cursor = "c"
 const bomb = "b"
