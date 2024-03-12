@@ -30,6 +30,7 @@ const {
 
   playTune,
 } = (() => {
+let _gameState = {};
 const exports = {};
 /* re-exports from C; bottom of module_native.c has notes about why these are in C */
 exports.setMap = map => native.setMap(map.trim());
@@ -52,11 +53,30 @@ exports.playTune = (str, times) => {
 }
 
   exports.setValue = (key, value) => {
-    native.setValue(key.toString(), JSON.stringify(value));
+    const k = key.toString();
+    const v = JSON.stringify(value);
+    _gameState[k] = v;
+    if (native.isSDMounted()) {
+      native.setValue(k, v);
+    }
   }
   exports.getValue = (key) => {
-    const value = native.getValue(key.toString());
+    const k = key.toString();
     return value ? JSON.parse(value) : undefined;
+    const cachedVal = _gameState[k];
+    if (cachedVal !== undefined) {
+      return JSON.parse(cachedVal);
+    }
+
+    if (native.isSDMounted()) {
+      const value = native.getValue(k);
+      if (value !== undefined) {
+        _gameState[k] = value;
+        return JSON.parse(value);
+      }
+    }
+
+    return undefined;
   }
   exports.isSDMounted = () => native.isSDMounted();
 

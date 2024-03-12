@@ -737,6 +737,7 @@ static void module_native_init(jerry_value_t exports) {
 
   props_init();
 
+  // SD card functions and initialization
   jerryxx_set_property_function(exports, MSTR_NATIVE_setValue, set_value_fn);
   jerryxx_set_property_function(exports, MSTR_NATIVE_getValue, get_value_fn);
   jerryxx_set_property_function(exports, MSTR_NATIVE_isSdMounted, is_sd_mounted_fn);
