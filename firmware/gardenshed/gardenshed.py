@@ -38,12 +38,6 @@ match args:
     case "start-debugger":  
         pass
 
-<<<<<<< HEAD
-    case _:
-        print("Unknown command!!")
-
-=======
->>>>>>> Sheepy3-shellscriptchanges
 if args.flash:
 
     if not override:
