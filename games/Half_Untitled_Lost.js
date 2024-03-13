@@ -901,6 +901,10 @@ onInput("j", () => {
         setTimeout(function() {slashattackdeleteleft()}, 100)
         movesleft -= 1
     }
+		else 
+	{
+		setMap(levels[actuallevel])
+	}
   }
 })
   
