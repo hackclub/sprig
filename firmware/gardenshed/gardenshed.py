@@ -38,9 +38,6 @@ match args:
     case "start-debugger":  
         pass
 
-    case _:
-        print("Unknown command!!")
-
 if args.flash:
 
     if not override:
