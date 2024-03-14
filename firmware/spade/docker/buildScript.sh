@@ -4,6 +4,7 @@ cd ~/spade
 touch game.js
 
 mkdir -p src/build
+mkdir -p src/shared/sprig_engine/build
 ./tools/cstringify.py ./src/shared/sprig_engine/engine.js > ./src/shared/sprig_engine/build/engine.min.js.cstring
 
 cmake --preset=rpi
