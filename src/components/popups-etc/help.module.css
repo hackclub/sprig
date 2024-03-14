@@ -52,7 +52,7 @@
 	border: 2px solid var(--accent);
 	padding: 10px;
 	width: 100%;
-	overflow: scroll;
+	overflow-y: scroll;
 	height: 100%;
 	box-shadow: 0 0 20px 0 #00000038;
 	display: inline-block;
@@ -132,7 +132,7 @@
 	border: 2px solid var(--accent);
 	padding: 10px;
 	width: 100%;
-	overflow: scroll;
+	overflow-y: scroll;
 	height: 100%;
 	box-shadow: 0 0 20px 0 #00000038;
 	display: inline-block;
