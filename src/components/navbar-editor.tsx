@@ -327,8 +327,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					</>)}
 				<li><a href='/gallery'>Gallery</a></li>
 				<li><a href='/get'>Get a Sprig</a></li>
-				<li><a href='javascript:void(0);' role='button' onClick={prettifyCode}>Prettify code</a></li>
-			</ul>
+				<li><a href='javascript:void(0);' role='button' onClick={() => { showNavPopup.value = false; prettifyCode(); }}> Prettify code </a></li></ul>
 			<div class={styles.divider} />
 			<ul>
 				<li>
