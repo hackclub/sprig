@@ -79,36 +79,61 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 			/>
 		)}
 
-		<script>
-			interface WebkitDocument extends Document {
-				webkitExitFullscreen: () => Promise<void>
-				webkitFullscreenElement: Element
-			}
+    <script is:inline>
+        // There is no clear guidance there when it comes to handling device and browser-specific differentiations on mobile browsers,as such we need to do a custom implementation of vh
+        const calculateCSS = () => {
+            document.documentElement.style.setProperty(
+                "--vh",
+                `${window.innerHeight * 0.01}px`
+            );
+            document.documentElement.style.setProperty(
+                "--vw",
+                `${window.innerWidth * 0.01}px`
+            );
+        };
 
-			interface WebkitElement extends HTMLElement {
-				webkitRequestFullscreen: () => Promise<void>
-			}
+        // Vendor Agnostic Fullscreen Functions
+        const requestFullscreen = (element) => {
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen();
+            }
+        };
 
-			// There is no clear guidance there when it comes to handling device and browser-specific differentiations on mobile browsers,as such we need to do a custom implementation of vh
-			const calculateCSS = () => {
-				document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-				document.documentElement.style.setProperty('--vw', `${window.innerWidth * 0.01}px`);
-			}
+        const exitFullscreen = () => {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            }
+        };
 
-			const toggleFullscreen = () => {
-				if (document.fullscreenElement || (document as WebkitDocument).webkitFullscreenElement) {
-					if (document.exitFullscreen) document.exitFullscreen()
-					if ((document as WebkitDocument).webkitExitFullscreen) (document as WebkitDocument).webkitExitFullscreen()
-				} else {
-					const element = document.documentElement  
-					if (element.requestFullscreen) element.requestFullscreen()
-					if ((element as WebkitElement).webkitRequestFullscreen) (element as WebkitElement).webkitRequestFullscreen()
-				}
-			}
+        const fullscreenElement = () => {
+            return (
+                document.fullscreenElement ||
+                document.mozFullScreenElemen ||
+                document.webkitFullscreenElement
+            );
+        };
 
-			calculateCSS()
-			window.addEventListener("resize", calculateCSS)
-			document.getElementById("toggle-fullscreen")?.addEventListener("click", toggleFullscreen)
-		</script>
+        const toggleFullscreen = async () => {
+            if (fullscreenElement()) {
+                exitFullscreen();
+            } else {
+                requestFullscreen(document.documentElement);
+            }
+        };
+
+        calculateCSS();
+        window.addEventListener("resize", calculateCSS);
+        document
+            .getElementById("toggle-fullscreen")
+            ?.addEventListener("click", toggleFullscreen);
+    </script>
 	</body>
 </html>
