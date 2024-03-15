@@ -2,10 +2,6 @@
 
 dependencies=("docker" "echo" "whoami" "grep")
 
-if [[ $OSTYPE == *"linux"* ]]; then
-    dependencies+=("chcon")
-fi
-
 for dep in "${dependencies[@]}"; do
     if ! command -v $dep > /dev/null; then
         printf "%s not found, please install %s\n" "$dep" "$dep"
@@ -29,7 +25,7 @@ if [ -f dockerBuildLog.txt ]; then
 	rm -f dockerBuildLog.txt
 fi
 
-# Ensure docker group stuff for linux
+# Ensure user in docker group if on linux
 if id -nG $(whoami) | grep -qw "docker"; then
     echo User in docker group, continuing
 else
@@ -42,10 +38,9 @@ else
 fi
 
 
-docker build ./docker
-
-if [[ $OSTYPE == *"linux"* ]]; then
-    chcon -R -t container_file_t ./
-fi
-
-docker run -it --rm --volume `pwd`:/root/spade $(docker images | awk '{print $3}' | awk 'NR==2')
+case $1 in
+    "--log") docker build ./docker | tee dockerBuildLog.txt
+             docker run -it --security-opt label:disable --rm --volume `pwd`:/root/spade $(docker images | awk '{print $3}' | awk 'NR==2') | tee -a dockerBuildLog.txt ;;
+    *) docker build ./docker
+       docker run -it --security-opt label:disable --rm --volume `pwd`:/root/spade $(docker images | awk '{print $3}' | awk 'NR==2') ;;
+esac

@@ -1,7 +1,12 @@
 cd ~/spade
+./src/pc/jerry/refresh.sh
+
 touch game.js
 
-timeout 10s ./tools/jsdev.sh
+mkdir -p src/build
+mkdir -p src/shared/sprig_engine/build
+./tools/cstringify.py ./src/shared/sprig_engine/engine.js > ./src/shared/sprig_engine/build/engine.min.js.cstring
+
 cmake --preset=rpi
 cmake --build --preset=rpi
 
