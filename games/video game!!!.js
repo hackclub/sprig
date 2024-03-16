@@ -10,8 +10,9 @@ const backround = "b"
 const solid = "s"
 const wall = "w"
 const music = tune`
-500: C4-500 + D4-500 + B5~500 + B4^500 + C5^500,
-15500`
+10000: C4-10000 + B4^10000 + C5^10000 + D4-10000 + G5~10000,
+310000`
+playTune(music)
 
 setLegend(
   [ player, bitmap`
@@ -116,6 +117,7 @@ setLegend(
 5700000000000075
 5777777777777775
 5555555555555555` ]
+  
 )
 
 
@@ -146,18 +148,36 @@ ws..s..s.s.
   map `
 ssssssssss
 ssssssssss
-sssfs...ss
+sssfw...ss
+ss..w.s.ss
 sss.w.s.ss
-sss.w.s.ss
-sssssss.ss
+ssss.ss.ss
 sswpws..ss
-ss.w.s.sss
-s.w.ws..ss
-s..s.ss.ss
-s.....s.ss
+ss...s.sss
+sw...s..ss
+s..swss.ss
+s.w...s.ss
 s...s...ss
 ssssssssss
-ssssssssss`
+ssssssssss`,
+    map `
+pw.swbbbbbbbbbbbbss
+sbswwbbbbbbbbbbbbss
+bwbswwbbbbbbss.s.ss
+bwbbwbwwww.b...s..s
+s1sswwbbsw.swbw..ss
+wsssbbwwbw.w..ws..s
+sw.sbw1wbw....ss.ss
+swssbwwwbwss..s..ss
+sbbswbbbsw........s
+fwsswwwwwwww..bssss
+sbs..wss......w...s
+sss.bbbwwbbbb.wb..s
+s......b.wwsb.b..ss
+s..s.s...bb.......s
+s.....sss....ss..ss
+s....ssss.s.....s.s
+ssss......sssssssss`
 ]
 
 setMap(levels[level])
