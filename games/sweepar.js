@@ -394,6 +394,7 @@ onInput("j", openSquare);
 onInput("k", flagSquare);
 onInput("l", gameover);
 onInput("i", () => {
+	clearText()
   clear();
   placeBombs();
   setMap(initialMap);
