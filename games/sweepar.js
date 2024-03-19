@@ -254,8 +254,10 @@ const openSquare = () => {
     }
     addSprite(cursorX, cursorY, cursor);
     console.log("Square opened.");
+    checkWin(); // Call the checkWin function after opening a square
   }
 };
+
 
 const countAdjacentBombs = (x, y) => {
   let count = 0;
@@ -331,6 +333,43 @@ const clear = () => {
       clearTile(x, y);
       gameGrid[y][x] = normal;
     }
+  }
+};
+const checkWin = () => {
+  let nonBombCount = 0;
+  let flaggedCount = 0;
+  for (let y = 0; y < 8; y++) {
+    for (let x = 0; x < 8; x++) {
+      if (gameGrid[y][x] === normal || gameGrid[y][x] === flag) {
+        nonBombCount++;
+        if (gameGrid[y][x] === flag) {
+          flaggedCount++;
+        }
+      }
+    }
+  }
+  if (nonBombCount === 64 - 5 && flaggedCount === 5) { // All non-bomb squares opened and all bombs flagged
+    // Player wins
+    const winMap = map`
+wwwwwwww
+wwwwwwww
+wwwwwwww
+wwwwwwww
+wwwwwwww
+wwwwwwww
+wwwwwwww
+wwwwwwww`;
+    setMap(winMap);
+    addText("YOU WIN!", { 
+      x: 6,
+      y: 4,
+      color: color`3`
+    });
+    addText("press i to reset", { 
+      x: 2,
+      y: 5,
+      color: color`L`
+    });
   }
 };
 
