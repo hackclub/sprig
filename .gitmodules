@@ -1,0 +1,3 @@
+[submodule "firmware/spade/src/rpi/no-OS-FatFS"]
+	path = firmware/spade/src/rpi/no-OS-FatFS
+	url = https://github.com/carlk3/no-OS-FatFS-SD-SPI-RPi-Pico
