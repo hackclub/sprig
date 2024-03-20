@@ -7,6 +7,7 @@ if (SPADE_TARGET STREQUAL "rpi")
 else()
   add_executable(spade "${SPADE_TARGET}/main.c")
 endif()
+include("${SPADE_TARGET}/CMakeLists.txt")
 
 target_link_libraries(spade
   PRIVATE
@@ -14,7 +15,6 @@ target_link_libraries(spade
   "${CMAKE_CURRENT_SOURCE_DIR}/${SPADE_TARGET}/jerry/lib/libjerry-ext.a"
   "${CMAKE_CURRENT_SOURCE_DIR}/${SPADE_TARGET}/jerry/lib/libjerry-port-default.a"
 )
-include("${SPADE_TARGET}/CMakeLists.txt")
 include_directories(${SPADE_TARGET}/jerry/include)
 include_directories(./)
 

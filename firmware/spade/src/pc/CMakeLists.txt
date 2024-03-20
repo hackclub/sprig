@@ -1,6 +1,4 @@
-set(DIR_TO_BSD_LIB_FILE /usr/lib64/libbsd.so)
-
-target_link_libraries(spade PRIVATE -fno-omit-frame-pointer -fsanitize=undefined "${DIR_TO_BSD_LIB_FILE}")
+target_link_libraries(spade PRIVATE -fno-omit-frame-pointer -fsanitize=undefined)
 
 if (APPLE)
   add_definitions(-DSPADE_AUDIO)
@@ -26,5 +24,3 @@ set(CMAKE_CXX_CLANG_TIDY
   -format-style='file';
   -header-filter=${CMAKE_CURRENT_SOURCE_DIR};
 )
-
-add_compile_definitions(IS_RPI=0)
