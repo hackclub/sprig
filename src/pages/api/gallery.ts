@@ -25,7 +25,7 @@ export const get: APIRoute = async ({ request }) => {
 	}
 
 	if (params.has("query")) {
-		const query = params.get("query")?.toLowerCase() || "";
+		const query = params.get("query")!.toLowerCase() || "";
 
 		games = games.filter(
 			(game) =>
@@ -35,7 +35,7 @@ export const get: APIRoute = async ({ request }) => {
 	}
 
 	if (params.has("tags")) {
-		const tags = params.get("tags")?.split(",") || [];
+		const tags = params.get("tags")!.split(",") || [];
 
 		games = games.filter((game) => {
 			for (const tag of tags) {
