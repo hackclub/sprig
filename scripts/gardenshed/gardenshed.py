@@ -14,7 +14,6 @@ def runscript(script):
 #argparse arg definitions
 parser = argparse.ArgumentParser()
 parser.add_argument("command",type=str, help="build, flash, log, restart, gdb-server, gdb-client")
-#parser.add_argument("-f","--flash", help="flash device before/after completing action",action="store_true")
 
 
 #argparse arg interpreting
