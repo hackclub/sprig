@@ -32,6 +32,7 @@
 	color: #ffffff;
 	user-select: none;
 	padding-top: 8px;
+	margin-bottom: 8px;
 }
 
 .meta .author {
@@ -52,7 +53,7 @@
 }
 
 .screenContainer {
-	height: 100%;
+	height: 95%;
 }
 
 .screen {
@@ -115,6 +116,7 @@
 	color: var(--fg-muted-on-accent);
 	background-color: var(--accent);
 	padding: 10px 20px 10px 20px;
+	margin:  0px 8px 0px 8px;
 	border-radius: 8px;
 	font-weight: 600;
 	user-select: none;

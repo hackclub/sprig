@@ -41,7 +41,7 @@ export default function MobilePlayer(props: MobilePlayerProps) {
 
 			<div class={styles.actionItems}>
 				<a href="#fullscreen" class={styles.action} id="toggle-fullscreen">Fullscreen</a>
-				<div class={styles.disclaimer}>This is a playable preview. The full editor is not yet supported on mobile.</div>
+				<div class={styles.disclaimer}>This is a playable preview. </div>
 				<a href="#reset" class={styles.action} onClick={run}>Reset</a>
 			</div>
 
