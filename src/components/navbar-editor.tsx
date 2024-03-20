@@ -13,7 +13,8 @@ import { usePopupCloseClick } from '../lib/utils/popup-close-click'
 import { upload, uploadState } from '../lib/upload'
 import { VscLoading } from 'react-icons/vsc'
 import { defaultExampleCode } from '../lib/examples'
-import { js_beautify } from 'js-beautify';
+import beautifier from "js-beautify";
+// import { js_beautify } from 'js-beautify';
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -72,6 +73,7 @@ const prettifyCode = () => {
 			"brace_style": "collapse,preserve-inline", // Collapse braces and preserve inline
 		};
 
+		const { js_beautify } = beautifier;
 		// Format the code
 		const formattedCode = js_beautify(code, options);
 
