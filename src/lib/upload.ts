@@ -3,6 +3,7 @@ import { signal } from '@preact/signals'
 export type UploadState = 'IDLE' | 'LOADING' | 'ERROR'
 
 export const uploadState = signal<UploadState>('IDLE')
+export const showUploadWarningModal = signal(false);
 
 const getPort = async (): Promise<SerialPort> => {
 	if (!navigator.serial) {
@@ -39,8 +40,15 @@ export const uploadToSerial = async (message: string, writer: WritableStreamDefa
 	await writer.ready
 	console.log('[UPLOAD > SERIAL] Checkpoint 3 - writing source code')
 	const ticker = setInterval(() => console.warn('[UPLOAD > SERIAL] 300ms passed writing source code'), 300)
+    const timeoutId = setTimeout(() => {
+        console.error('[UPLOAD > SERIAL] Upload timeout. Please reload the page and try again.');
+		showUploadWarningModal.value = true;
+		clearInterval(ticker);
+    }, 30000);
+	
 	await writer.write(buf)
 	clearInterval(ticker)
+	clearTimeout(timeoutId)
 	console.log(`[UPLOAD > SERIAL] Wrote ${buf.length} chars`)
 
 	// Ensure everything is written before continuing
