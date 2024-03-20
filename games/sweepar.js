@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 @title: Sweepar
 @author: eshangonemad
-@tags: [fun, minesweeper]
+@tags: []
 @img: ""
-@addedOn: 09/03/2024
+@addedOn: 2024-03-20
 */
 const cursor = "c"
 const bomb = "b"
