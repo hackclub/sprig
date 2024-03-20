@@ -13,43 +13,14 @@ def runscript(script):
 
 #argparse arg definitions
 parser = argparse.ArgumentParser()
-parser.add_argument("command",type=str, help="build, log, restart, enable-gdb, start-debugger")
-parser.add_argument("-f","--flash", help="flash device before/after completing action",action="store_true")
+parser.add_argument("command",type=str, help="build, flash, log, restart, gdb-server, gdb-client")
+#parser.add_argument("-f","--flash", help="flash device before/after completing action",action="store_true")
 
 
 #argparse arg interpreting
 args = parser.parse_args()
-override = False
 
-match args:
-
-    case "build":
-        override = True    
-
-    case "log":
-        pass
-
-    case "restart":
-        pass
-
-    case "enable-gdb": 
-        args.flash = False
-
-    case "start-debugger":  
-        pass
-
-if args.flash:
-
-    if not override:
-        runscript("reflash.sh")
-    
-    runscript(args.command+".sh")
-
-    if override:
-        runscript("reflash.sh")                
-else:
-    runscript(args.command+".sh")
-    
+runscript(args.command+".sh") 
 
 
 
