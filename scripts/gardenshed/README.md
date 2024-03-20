@@ -1,23 +1,10 @@
 ## Alias configuration
 
-### Mac
-add the following to the end of your `.zprofile`:
+Shells users should add the following to their terminal startup scripts, such as `.zprofile` on mac or `.bash-rc` on ubuntu: 
 ```
-alias spade="cd ~../sprig/firmware/spade"
-export PATH=../sprig/scripts/gardenshed:$PATH
-alias gardenshed="python3 ../sprig/scripts/gardenshed/gardenshed.py"
-alias gs="python3 ../sprig/scripts/gardenshed/gardenshed.py"
+export SPRIG_DIR=sprig/ #replace with directory of your sprig repo
+alias spade="cd $SPRIG_DIR/firmware/spade"
+alias gardenshed="python3 $SPRIG_DIR/scripts/gardenshed/gardenshed.py"
+alias gs="python3 $SPRIG_DIR/scripts/gardenshed/gardenshed.py"
 ```
 
-**replace the `../sprig/` directory with the proper directory to your sprig folder.**
-
-
-### Ubuntu
-add the following to the end of your `.bash-rc`:
-```
-alias spade="cd ~../sprig/firmware/spade"
-export PATH=../sprig/scripts/gardenshed:$PATH
-alias gardenshed="python3 ../sprig/scripts/gardenshed/gardenshed.py"
-alias gs="python3 ../sprig/scripts/gardenshed/gardenshed.py"
-```
-**replace the `../sprig/` directory with the proper directory to your sprig folder.**
