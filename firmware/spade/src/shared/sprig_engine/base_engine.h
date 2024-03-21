@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BASE_ENGINE_H
+#define BASE_ENGINE_H
 
 #include <stdint.h>
 #include "jerryscript.h"
@@ -101,3 +102,5 @@ typedef struct {
    * across the C <-> JS barrier. */
   char temp_str_mem[(1 << 12)];
 } State;
+
+#endif //BASE_ENGINE_H

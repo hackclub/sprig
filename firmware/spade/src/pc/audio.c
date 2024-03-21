@@ -11,7 +11,6 @@
   #define printf(...) ;
 #endif
 
-#include "shared/audio/piano.c"
 #include "shared/audio/audio.h"
 
 static  int audio_hw_init   (void);
