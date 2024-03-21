@@ -14,7 +14,7 @@ import { upload, uploadState } from '../lib/upload'
 import { VscLoading } from 'react-icons/vsc'
 import { defaultExampleCode } from '../lib/examples'
 import beautifier from "js-beautify";
-// import { js_beautify } from 'js-beautify';
+import { collapseRanges } from '../lib/codemirror/util'
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -79,13 +79,17 @@ const prettifyCode = () => {
 
 		// Create an update transaction with the formatted code
 		const updateTransaction = codeMirror.value.state.update({
-
 			changes: { from: 0, to: codeMirror.value.state.doc.length, insert: formattedCode }
-
 		});
+
+		// Find all the matches of the code, bitmap and tune blocks
+		const matches = [ ...formattedCode.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
 
 		// Apply the update to the editor
 		codeMirror.value.dispatch(updateTransaction);
+
+		// Collapse the ranges of the matches
+		collapseRanges(codeMirror.value, matches.map((match) => [ match.index!, match.index! + 1 ]))
 };
 
 export default function EditorNavbar(props: EditorNavbarProps) {
