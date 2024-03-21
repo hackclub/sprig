@@ -1,4 +1,5 @@
-#pragma once
+#ifndef JERRY_MEM_H
+#define JERRY_MEM_H
 
 #include "jerryscript.h"
 
@@ -29,3 +30,4 @@ static void *jerry_realloc(void *old_ptr, size_t old_size, size_t new_size) {
   return new_ptr;
 }
 
+#endif //JERRY_MEM_H

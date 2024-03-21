@@ -5,18 +5,8 @@
 #include <string.h>
 #include <math.h>
 
-#define ARR_LEN(arr) (sizeof(arr) / sizeof(arr[0]))
-
-typedef enum {
-  Sound_Sine,
-  Sound_Triangle,
-  Sound_Sawtooth,
-  Sound_Square,
-  Sound_COUNT,
-} Sound;
-
 #include "piano.h"
-#include "parse_tune/parse_tune.h"
+#include "parse_tune.h"
 
 #define TABLE_LEN 2048
 
@@ -77,7 +67,7 @@ int piano_queue_song(void *char_source, double times) {
   return 0;
 }
 
-static void piano_chan_free(Song *song) {
+void piano_chan_free(Song *song) {
   if (song->char_source) piano_state.opts.song_free(song->char_source);
   memset(song, 0, sizeof(Song));
   song->active = 0; // just to make sure >:)
@@ -124,7 +114,7 @@ void piano_init(PianoOpts opts) {
   }
 }
 
-static int32_t piano_compute_sample(Song *song) {
+int32_t piano_compute_sample(Song *song) {
   if (!song->active) return 0;
 
   song->samples_into_note++;
