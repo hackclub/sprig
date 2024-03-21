@@ -191,11 +191,13 @@ void mount_sd_card() {
 
   if (fr == FR_OK) {
       state->sd_mounted = true;
+      yell("mounted SD card");
 
       f_mkdir("sprig");
       f_mkdir("sprig/kv");
   } else {
       state->sd_mounted = false;
+      yell("failed to mount SD card");
   }
 }
 
