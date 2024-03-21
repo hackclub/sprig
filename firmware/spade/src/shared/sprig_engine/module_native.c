@@ -9,6 +9,7 @@
 #include "native_magic_strings.h"
 
 #include "shared/js_runtime/js.h"
+#include "shared/FatFs_SPI/ff15/source/ff.h"
 
 static struct {
   jerry_value_t x, y, dx, dy, addr, type, _x, _y, _type, push, remove, generation;

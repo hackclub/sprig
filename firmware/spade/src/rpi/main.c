@@ -7,10 +7,10 @@
 #include "pico/util/queue.h"
 #include "pico/multicore.h"
 #include "jerryscript.h"
-#include "f_util.h"
-#include "ff.h"
-#include "rtc.h"
-#include "hw_config.h"
+#include "shared/FatFs_SPI/include/f_util.h"
+#include "shared/FatFs_SPI/ff15/source/ff.h"
+#include "shared/FatFs_SPI/include/rtc.h"
+#include "shared/hw_config.c"
 
 #include <stdio.h>
 #include <stdint.h>

@@ -12,8 +12,6 @@ target_compile_definitions(spade PRIVATE
   # PICO_DEFAULT_UART_RX_PIN=29
 )
 
-add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/no-OS-FatFS/FatFs_SPI")
-
 target_link_libraries(spade PRIVATE
   pico_stdlib
   pico_audio_i2s
@@ -23,7 +21,6 @@ target_link_libraries(spade PRIVATE
   hardware_pwm
   hardware_adc
   pico_stdlib
-  FatFs_SPI
 )
 
 add_compile_definitions(PICO_HEAP_SIZE=16384)
