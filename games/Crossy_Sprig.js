@@ -2,9 +2,9 @@
 
 @title: Crossy_Sprig
 @author: hatanuk
-@tags: ['endless', 'froggerlike']
-@img: "CrossySprig.png"
-@addedOn: 2024-04-13
+@tags: ['endless']
+@img: ""
+@addedOn: 2024-03-21
 
 j
 CONTROLS:
