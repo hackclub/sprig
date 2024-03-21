@@ -674,6 +674,10 @@ JERRYXX_FUN(set_value_fn) {
   FIL fil;
   int namebytes = strlen(state->game_id) + nbytes + 10;
   char *filename = (char*)malloc(namebytes * sizeof(char));
+  if (filename == NULL) {
+    printf("malloc failed\n");
+    return jerry_create_undefined();
+  }
   snprintf(filename, namebytes, "sprig/kv/%s/%s", state->game_id, key);
   FRESULT fr = f_open(&fil, filename, FA_CREATE_ALWAYS | FA_WRITE);
 
@@ -720,6 +724,10 @@ JERRYXX_FUN(get_value_fn) {
   FIL fil;
   int namebytes = strlen(state->game_id) + nbytes + 10;
   char *filename = (char*)malloc(namebytes * sizeof(char));
+  if (filename == NULL) {
+    printf("malloc failed\n");
+    return jerry_create_undefined();
+  }
   snprintf(filename, namebytes, "sprig/kv/%s/%s", state->game_id, key);
   FRESULT fr = f_open(&fil, filename, FA_READ);
 
@@ -749,6 +757,7 @@ JERRYXX_FUN(is_sd_mounted_fn) {
 }
 
 JERRYXX_FUN(set_game_id) {
+  dbg("module_native::set_game_id");
   char *tmp = temp_str_mem();
   jerry_size_t nbytes = jerry_string_to_char_buffer(
           JERRYXX_GET_ARG(0),
@@ -757,14 +766,25 @@ JERRYXX_FUN(set_game_id) {
   );
   tmp[nbytes] = '\0';
   char* game_id_cpy = (char*)malloc(nbytes * sizeof(char));
+  if (game_id_cpy == NULL) {
+    printf("malloc failed\n");
+    return jerry_create_undefined();
+  }
   strcpy(game_id_cpy, tmp);
   state->game_id = game_id_cpy;
 
   int namebytes = strlen(state->game_id) + 9;
   char *filename = (char*)malloc(namebytes * sizeof(char));
+  if (filename == NULL) {
+    printf("malloc failed\n");
+    return jerry_create_undefined();
+  }
   snprintf(filename, namebytes, "sprig/kv/%s", state->game_id);
 
-  f_mkdir(filename);
+  FRESULT fr = f_mkdir(filename);
+  if (fr != FR_OK && fr != FR_EXIST) {
+    printf("f_mkdir(%s) error: %s (%d)\n", filename, FRESULT_str(fr), fr);
+  }
 
   free(filename);
   return jerry_create_undefined();
