@@ -33,11 +33,11 @@ Prerequisites:
 
 Set up your build environment. All folders need to be in your home directory (for now), although they can be symlinked if you prefer.
 
-Clone Spade (recursive is needed for the dependency on `no-OS-FatFS-SD-SPI-RPi-Pico`, the library used for SD cards):
+Clone Spade:
 
 ```sh
 cd ~
-git clone --recursive https://github.com/hackclub/spade.git
+git clone https://github.com/hackclub/spade.git
 cd spade
 ```
 
