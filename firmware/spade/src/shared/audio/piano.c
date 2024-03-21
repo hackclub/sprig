@@ -7,6 +7,7 @@
 
 #include "piano.h"
 #include "parse_tune.h"
+#include "jerryscript.h"
 
 #define TABLE_LEN 2048
 
@@ -209,4 +210,23 @@ void piano_fill_sample_buf(int16_t *samples, int size) {
       samples[i] = 0;
     }
   }
+}
+
+/**
+ * Implementations for PianoOpts (see src/shared/audio/piano.h)
+ *
+ * p (the song object) is type erased because that's an implementation detail
+ * for us. It's actually a jerry_value_t, not a void pointer, so we gotta cast.
+ */
+void piano_jerry_song_free(void *p)
+{
+	jerry_value_t jvt = (jerry_value_t)p;
+	jerry_release_value(jvt);
+}
+
+int piano_jerry_song_chars(void *p, char *buf, int buf_len)
+{
+	jerry_value_t jvt = (jerry_value_t)p;
+	int read = jerry_string_to_char_buffer(jvt, (jerry_char_t *)buf, (jerry_size_t)buf_len);
+	return read;
 }
