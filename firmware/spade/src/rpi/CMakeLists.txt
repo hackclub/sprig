@@ -20,7 +20,6 @@ target_link_libraries(spade PRIVATE
   hardware_timer
   hardware_pwm
   hardware_adc
-  pico_stdlib
 )
 
 add_compile_definitions(PICO_HEAP_SIZE=16384)
