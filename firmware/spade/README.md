@@ -141,7 +141,7 @@ export PICO_EXTRAS_PATH=~/raspberrypi/pico-extras
 
 ## Project Structure
 
-Spade uses CMake to build its binaries across platforms. It works best on MacOS and Linux, although Windows builds can work.
+Spade uses CMake to build its binaries across platforms, although it's only tested to work on macOS.
 
 Shared code, including rendering, JavaScript execution, and Sprig engine code is available in `src/shared/`. The platform-specific harness code for the PC and Pico editions are in `src/pc/` and `src/rpi/`, respectively.
 
