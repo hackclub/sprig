@@ -24,6 +24,8 @@ typedef struct {
   int (*song_chars)(void *p, char *buf, int buf_len);
 } PianoOpts;
 
+extern int piano_jerry_song_chars(void *p, char *buf, int buf_len);
+extern void piano_jerry_song_free(void *p);
 extern void piano_init(PianoOpts);
 extern void piano_fill_sample_buf(int16_t *samples, int size);
 extern int piano_queue_song(void *, double times);
