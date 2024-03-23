@@ -5838,24 +5838,62 @@ const drawScore = () => {
 		.reduce((acc, c) => acc + c.best, 0);
 	const secondsSoFar = loadedCourses.reduce((acc, c) => acc + c.seconds, 0);
 
-	addText(`${gameSelectOptions[gameSelect]}:`, {
-		x: 1,
-		y: 12,
-		color: color`2`,
-	});
-	addText(
-		` ${strokesSoFar} (${parScore(strokesSoFar, parSoFar)}) ${formatSeconds(
-			secondsSoFar
-		)}`,
-		{
+	const bigScore = secondsSoFar > 60 * 60 || strokesSoFar > 500;
+	const flawless = strokesSoFar === bestSoFar;
+
+	if (bigScore && flawless) {
+		addText(`${gameSelectOptions[gameSelect]}:`, {
+			x: 1,
+			y: 11,
+			color: color`2`,
+		});
+		addText(` ${strokesSoFar} (${parScore(strokesSoFar, parSoFar)})`, {
+			x: 1,
+			y: 12,
+			color: color`2`,
+		});
+		addText(` ${formatSeconds(secondsSoFar)}`, {
 			x: 1,
 			y: 13,
 			color: color`2`,
-		}
-	);
-
-	if (strokesSoFar === bestSoFar) {
+		});
 		addText(" flawless!", { x: 1, y: 14, color: color`2` });
+	} else if (bigScore) {
+		addText(`${gameSelectOptions[gameSelect]}:`, {
+			x: 1,
+			y: 12,
+			color: color`2`,
+		});
+		addText(` ${strokesSoFar} (${parScore(strokesSoFar, parSoFar)})`, {
+			x: 1,
+			y: 13,
+			color: color`2`,
+		});
+		addText(` ${formatSeconds(secondsSoFar)}`, {
+			x: 1,
+			y: 14,
+			color: color`2`,
+		});
+	} else {
+		addText(`${gameSelectOptions[gameSelect]}:`, {
+			x: 1,
+			y: 12,
+			color: color`2`,
+		});
+		addText(
+			` ${strokesSoFar} (${parScore(
+				strokesSoFar,
+				parSoFar
+			)}) ${formatSeconds(secondsSoFar)}`,
+			{
+				x: 1,
+				y: 13,
+				color: color`2`,
+			}
+		);
+		if (flawless) {
+			addText(" flawless!", { x: 1, y: 14, color: color`2` });
+		}
 	}
 };
 
