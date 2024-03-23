@@ -5786,7 +5786,7 @@ const drawVictory = () => {
 		addText("nice shooting!", { x: 1, y: 4, color: color`0` });
 	}
 
-	addText("play again?", { x: 1, y: 6, color: color`0` });
+	addText("you win!", { x: 1, y: 6, color: color`0` });
 
 	drawScore();
 };
