@@ -14,6 +14,9 @@ decreases by one each time the ball is hit. Balls can cross blue water hazard
 tiles but not land on them. You can hit a ball backwards to undo but a stroke
 will be added to your score.
 
+Use WASD to move the cursor and J to select. Once a ball is selected, choose a
+direction to hit it in with WASD.
+
 Countdown Golf has 360 original courses. Each course has only one solution. In
 higher-numbered courses you can score under par with perfect play.
 
@@ -69,7 +72,7 @@ let selected = false;
 let screen = "gameTitle";
 let wonOnce = false;
 
-const gameSelectOptions = ["18 courses", "front 9", "back 9"];
+const gameSelectOptions = ["18 courses", "front 9", "back 9", "endless"];
 let gameSelect = 0;
 
 // store the value of the ball that is sunk in each hole, for undo
@@ -5679,28 +5682,45 @@ const addArrows = (x1, y1, x2, y2) => {
 const loadCourses = () => {
 	loadedCourses = [];
 
-	let starti = 0;
-	let endi = 17;
+	if (gameSelect === 3) {
+		const allCourses = courseGroups.flat();
+		const shuffledCourses = allCourses.sort(() => Math.random() - 0.5);
 
-	if (gameSelect === 1) {
-		endi = 8;
-	} else if (gameSelect === 2) {
-		starti = 9;
-	}
-
-	for (let i = starti; i < endi + 1; i++) {
-		const group = courseGroups[i];
-		const course = group[getRandomInt(group.length)];
-
-		loadedCourses.push({
-			map: course[0],
-			par: course[1],
-			best: course[2],
-			strokes: 0,
-			number: i + 1,
-			seconds: 0,
-			startTime: null,
+		shuffledCourses.forEach((course, i) => {
+			loadedCourses.push({
+				map: course[0],
+				par: course[1],
+				best: course[2],
+				strokes: 0,
+				number: i + 1,
+				seconds: 0,
+				startTime: null,
+			});
 		});
+	} else {
+		let starti = 0;
+		let endi = 17;
+
+		if (gameSelect === 1) {
+			endi = 8;
+		} else if (gameSelect === 2) {
+			starti = 9;
+		}
+
+		for (let i = starti; i < endi + 1; i++) {
+			const group = courseGroups[i];
+			const course = group[getRandomInt(group.length)];
+
+			loadedCourses.push({
+				map: course[0],
+				par: course[1],
+				best: course[2],
+				strokes: 0,
+				number: i + 1,
+				seconds: 0,
+				startTime: null,
+			});
+		}
 	}
 };
 
