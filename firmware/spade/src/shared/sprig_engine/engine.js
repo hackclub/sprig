@@ -50,7 +50,7 @@ exports.addText = (str, opts={}) => {
 
   for (const char of str.split('')) {
     if (" !\"#%&\'()*+,./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\\^_-`abcdefghijklmnopqrstuvwxyz|~¦§¨©¬®¯°±´¶·¸ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ÙÚÛÜÝÞßàáâãäåæçèéêëìíîïñòóôõö÷ùúûüýþÿĀāĂăĄąĆćĊċČčĎĐđĒēĖėĘęĚěĞğĠġĦħĪīĮįİıŃńŇňŌōŒœŞşŨũŪūŮůŲųŴŵŶŷŸǍǎǏǐǑǒǓǔˆˇ˘˙˚˛˜˝ẀẁẂẃẄẅỲỳ†‡•…‰⁄™∂∅∏∑−√∞∫≈≠≤≥◊".indexOf(char) === -1)
-    console.log(`WARN: Character ${char} is no longer in supported in the Sprig editor.`);  
+    console.log(`WARN: Character ${char} is no longer supported in the Sprig editor.`);
   }
 
   native.text_add(

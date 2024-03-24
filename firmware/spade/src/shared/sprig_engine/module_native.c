@@ -13,10 +13,11 @@
 #include "shared/audio/piano.h"
 
 static struct {
-  jerry_value_t x, y, dx, dy, addr, type, _x, _y, _type, push, remove, generation;
+  jerry_value_t x, y, dx, dy, addr, type, _x, _y, _type, push, remove, teleport, generation;
   jerry_property_descriptor_t  x_prop_desc,  y_prop_desc, type_prop_desc,
                               dx_prop_desc, dy_prop_desc;
   jerry_value_t sprite_remove;
+  jerry_value_t sprite_teleport;
 } props = {0};
 
 static char jerry_value_to_char(jerry_value_t val) {
@@ -195,6 +196,23 @@ static jerry_value_t sprite_remove(
   return jerry_create_undefined();
 }
 
+static jerry_value_t sprite_teleport(
+    const jerry_value_t func_obj,
+    const jerry_value_t this_obj,
+    const jerry_value_t args[],
+    const jerry_length_t argc
+) {
+    Sprite *s = sprite_from_jerry_object(this_obj);
+    if (!s) return jerry_create_error_sprite_freed();
+
+    int new_x = jerry_get_number_value(args[0]);
+    int new_y = jerry_get_number_value(args[1]);
+    int intoSolids = argc > 2 ? jerry_get_boolean_value(args[2]) : 0;
+
+    int result = map_teleport(s, new_x, new_y, intoSolids);
+
+    return jerry_create_boolean(result);
+}
 
 static jerry_value_t sprite_x_getter(
   const jerry_value_t func_obj,
@@ -309,6 +327,7 @@ static void props_init(void) {
   props.      type = jerry_create_string((const jerry_char_t *)       "type");
   props.      push = jerry_create_string((const jerry_char_t *)       "push");
   props.    remove = jerry_create_string((const jerry_char_t *)     "remove");
+  props.  teleport = jerry_create_string((const jerry_char_t *)   "teleport");
   props.generation = jerry_create_string((const jerry_char_t *) "generation");
 
   // this is why we can't fucking have nice things
@@ -319,6 +338,7 @@ static void props_init(void) {
   // i shouldn't let this bother me so much ...
 
   props.sprite_remove = jerry_create_external_function(sprite_remove);
+  props.sprite_teleport = jerry_create_external_function(sprite_teleport);
 
   jerry_init_property_descriptor_fields(&props.x_prop_desc);
   props.x_prop_desc.is_configurable_defined = 1;
@@ -374,6 +394,7 @@ static jerry_value_t sprite_alloc_jerry_object(Sprite *s) {
 
   // add methods
   jerry_release_value(jerry_set_property(ret, props.remove, props.sprite_remove));
+  jerry_release_value(jerry_set_property(ret, props.teleport, props.sprite_teleport));
 
   // add getters, setters
   jerry_release_value(jerry_define_own_property(ret, props.x, &props.x_prop_desc));

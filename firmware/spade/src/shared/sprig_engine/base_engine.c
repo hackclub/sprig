@@ -677,6 +677,37 @@ static void map_move(Sprite *s, int big_dx, int big_dy) {
   else             s->dy = moved;
 }
 
+static int map_teleport(Sprite *s, uint16_t new_x, uint16_t new_y, int into_solids) {
+    if (new_x >= state->width) return 0;
+    if (new_y >= state->height) return 0;
+    if (into_solids) {
+        sprite_pluck_from_map(s);
+        s->x = new_x;
+        s->y = new_y;
+        s->dx = s->dy = 0;
+        sprite_plop_into_map(s);
+    } else {
+        Sprite *top = get_sprite(state->map[new_x + new_y * state->width]);
+        int hit_solid = 0;
+        for (; top; top = get_sprite(top->next)) {
+            if (state->solid[(int)top->kind]) {
+                hit_solid = 1;
+                break;
+            }
+        }
+        if(!hit_solid) {
+            sprite_pluck_from_map(s);
+            s->x = new_x;
+            s->y = new_y;
+            s->dx = s->dy = 0;
+            sprite_plop_into_map(s);
+        } else {
+            return 0;
+        }
+    }
+    return 1;
+}
+
 static void map_clear_deltas(void) {
   for (int y = 0; y < state->height; y++)
     for (int x = 0; x < state->width; x++) {
