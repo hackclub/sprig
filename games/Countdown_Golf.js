@@ -5380,10 +5380,10 @@ const cy = () => getFirst(cursor).y;
 const moveCursor = (dx, dy) => {
 	const sCols = selectableTiles()
 		.map((s) => s.x)
-		.sort();
+		.sort((a, b) => a - b);
 	const sRows = selectableTiles()
 		.map((s) => s.y)
-		.sort();
+		.sort((a, b) => a - b);
 	let nextCol = getFirst(cursor).x;
 	let nextRow = getFirst(cursor).y;
 
