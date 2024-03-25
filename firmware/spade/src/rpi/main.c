@@ -8,6 +8,7 @@
 #include "pico/multicore.h"
 #include "jerryscript.h"
 #include "shared/sprig_sd/sd_imports.h"
+#include "shared/sprig_sd/hw_config.c"
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
