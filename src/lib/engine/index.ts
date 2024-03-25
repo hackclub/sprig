@@ -6,7 +6,7 @@ import type { PlayTuneRes } from 'sprig'
 import { textToTune } from 'sprig/base'
 import { webEngine } from 'sprig/web'
 import * as Babel from "@babel/standalone"
-import TransformDetectInfiniteLoop from '../transform-detect-infinite-loop'
+import TransformDetectInfiniteLoop, { BuildDuplicateFunctionDetector } from '../custom-babel-transforms'
 
 interface RunResult {
 	error: NormalizedError | null
@@ -57,41 +57,24 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 		}
 	}
 
-	code = `"use strict";\n${code}`
 	const engineAPIKeys = Object.keys(api);
 	try {
-		const program = parseScript(code, { loc: true })
-		for (let item of program.body) {
-			if (item.type === "FunctionDeclaration" && engineAPIKeys.includes(item.id!.name)) {
-				const errorString = `Error: Cannot re-define built-in '${item.id!.name}' \n at line: ${item.loc!.start.line - 1}, col: ${item.loc!.start.column}`;
-				return {
-					error: {
-						description: errorString,
-						raw: errorString,
-						line: item.loc!.start.line - 1,
-						column: item.loc!.start.column as number
-				}, cleanup };
-			}
-		}
-	} catch (error) {
-		return {
-			error: normalizeGameError({ kind: 'parse', error: error as EsprimaError }),
-			cleanup
-		}
-	}
+		const transformResult = Babel.transform(code, {
+			plugins: [TransformDetectInfiniteLoop, BuildDuplicateFunctionDetector(engineAPIKeys)],
+			retainLines: true
+		})
 
-	const transformResult = Babel.transform(code, {
-	 plugins: [TransformDetectInfiniteLoop],
-		retainLines: true
-	})
-
-	try {
 		const fn = new Function(...engineAPIKeys, transformResult.code!)
 		fn(...Object.values(api))
 		return { error: null, cleanup }
-	} catch (error) {
+	} catch (error: any) {
 		return {
-			error: normalizeGameError({ kind: 'runtime', error }),
+			error: {
+				raw: error,
+				description: error.message,
+				line: error.loc.line,
+				column: error.loc.column
+			},
 			cleanup
 		}
 	}
