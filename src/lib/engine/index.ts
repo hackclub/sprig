@@ -1,6 +1,5 @@
 import { playTune } from './tune'
-import { parseScript } from "esprima-next"
-import { normalizeGameError, type EsprimaError } from './error'
+import { normalizeGameError } from './error'
 import { bitmaps, NormalizedError } from '../state'
 import type { PlayTuneRes } from 'sprig'
 import { textToTune } from 'sprig/base'
@@ -68,6 +67,13 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 		fn(...Object.values(api))
 		return { error: null, cleanup }
 	} catch (error: any) {
+		// if there's an error code, it's most likely a babel error of some kind 
+		// other errors do not have an error code attached
+		if (!error.code) {
+			const normalizedError = normalizeGameError({ kind: "runtime", error });
+			normalizedError!.line! += 1;
+			return { error: normalizedError, cleanup };
+		} 
 		return {
 			error: {
 				raw: error,
