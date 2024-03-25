@@ -190,8 +190,17 @@ void mount_sd_card() {
       state->sd_mounted = true;
       yell("mounted SD card");
 
-      f_mkdir("sprig");
-      f_mkdir("sprig/kv");
+      fr = f_mkdir("sprig");
+      if (fr == FR_OK) {
+        fr = f_mkdir("sprig/kv");
+        if (fr == FR_OK) {
+          printf("created sprig/kv directory");
+        } else if (fr != FR_EXIST) {
+          yell("failed to create sprig/kv directory");
+        }
+      } else if (fr != FR_EXIST) {
+        yell("failed to create sprig directory");
+      }
   } else {
       state->sd_mounted = false;
       yell("failed to mount SD card");
