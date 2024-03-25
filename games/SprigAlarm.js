@@ -10,6 +10,14 @@ https://sprig.hackclub.com/gallery/getting_started
 */
 
 /*
+	How to use Sprig Alarm?
+	Sprig Alarm can be controlled using the WASD keys.
+	
+ 	At the clock, use any of the WASD keys to open the menu. You can control the menu using WASD, including modifying clock time, enabling/disabling the clock, and test the clock.
+  	When the clock goes off, a tune will play. You will need to memorize the on screen code and then re-enter that code in the following page to disable the clock.
+*/
+
+/*
   Song Stuff
 */
 // PASTED FROM GEN
