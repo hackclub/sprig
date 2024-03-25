@@ -18,7 +18,7 @@ See
 https://github.com/carlk3/no-OS-FatFS-SD-SDIO-SPI-RPi-Pico/tree/main#customizing-for-the-hardware-configuration
 */
 
-#include "shared/FatFs_SPI/sd_driver/hw_config.h"
+#include "shared/sprig_sd/FatFs_SPI/sd_driver/hw_config.h"
 
 /* Configuration of RP2040 hardware SPI object */
 static spi_t spi = {  

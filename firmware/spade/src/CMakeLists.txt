@@ -5,7 +5,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-void-pointer-to-int-cast -Wno-int-to-vo
 add_executable(spade "${SPADE_TARGET}/main.c")
 include("${SPADE_TARGET}/CMakeLists.txt")
 
-add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/shared/FatFs_SPI")
+add_subdirectory("shared/sprig_sd/FatFs_SPI")
 
 target_link_libraries(spade
   PRIVATE

@@ -7,11 +7,7 @@
 #include "pico/util/queue.h"
 #include "pico/multicore.h"
 #include "jerryscript.h"
-#include "shared/FatFs_SPI/include/f_util.h"
-#include "shared/FatFs_SPI/ff15/source/ff.h"
-#include "shared/FatFs_SPI/include/rtc.h"
-#include "shared/hw_config.c"
-
+#include "shared/sprig_sd/sd_imports.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
