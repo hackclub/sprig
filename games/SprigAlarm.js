@@ -4,9 +4,9 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: SprigAlarm
 @author: Manitej Boorgu
-@tags: [utility]
-@img: "SprigAlarm.PNG"
-@addedOn: 2024-00-00
+@tags: []
+@img: 
+@addedOn: 2024-03-26
 */
 
 /*
