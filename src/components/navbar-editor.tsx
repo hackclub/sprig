@@ -13,6 +13,8 @@ import { usePopupCloseClick } from '../lib/utils/popup-close-click'
 import { upload, uploadState } from '../lib/upload'
 import { VscLoading } from 'react-icons/vsc'
 import { defaultExampleCode } from '../lib/examples'
+import beautifier from "js-beautify";
+import { collapseRanges } from '../lib/codemirror/util'
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -56,6 +58,39 @@ type StuckData = {
 	category: StuckCategory
 	description: string
 }
+
+const prettifyCode = () => {
+
+		// Check if the codeMirror is ready
+		if (!codeMirror.value) return;
+
+		// Get the code
+		const code = codeMirror.value.state.doc.toString();
+
+		// Set the options for js_beautify
+		const options = {
+			indent_size: 2, // Indent by 2 spaces
+			"brace_style": "collapse,preserve-inline", // Collapse braces and preserve inline
+		};
+
+		const { js_beautify } = beautifier;
+		// Format the code
+		const formattedCode = js_beautify(code, options);
+
+		// Create an update transaction with the formatted code
+		const updateTransaction = codeMirror.value.state.update({
+			changes: { from: 0, to: codeMirror.value.state.doc.length, insert: formattedCode }
+		});
+
+		// Find all the matches of the code, bitmap and tune blocks
+		const matches = [ ...formattedCode.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
+
+		// Apply the update to the editor
+		codeMirror.value.dispatch(updateTransaction);
+
+		// Collapse the ranges of the matches
+		collapseRanges(codeMirror.value, matches.map((match) => [ match.index!, match.index! + 1 ]))
+};
 
 export default function EditorNavbar(props: EditorNavbarProps) {
 	const showNavPopup = useSignal(false)
@@ -298,7 +333,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					</>)}
 				<li><a href='/gallery'>Gallery</a></li>
 				<li><a href='/get'>Get a Sprig</a></li>
-			</ul>
+				<li><a href='javascript:void(0);' role='button' onClick={() => { showNavPopup.value = false; prettifyCode(); }}> Prettify code </a></li></ul>
 			<div class={styles.divider} />
 			<ul>
 				<li>
