@@ -676,31 +676,31 @@ JERRYXX_FUN(set_value_fn) {
   char *filename = (char*)malloc(namebytes * sizeof(char));
   if (filename == NULL) {
     printf("malloc failed\n");
-    return jerry_create_undefined();
-  }
-  snprintf(filename, namebytes, "sprig/kv/%s/%s", state->game_id, key);
-  FRESULT fr = f_open(&fil, filename, FA_CREATE_ALWAYS | FA_WRITE);
+  } else {
+    snprintf(filename, namebytes, "sprig/kv/%s/%s", state->game_id, key);
+    FRESULT fr = f_open(&fil, filename, FA_CREATE_ALWAYS | FA_WRITE);
 
-  char *data = temp_str_mem();
-  nbytes = jerry_string_to_char_buffer(
-    JERRYXX_GET_ARG(1),
-    (jerry_char_t *)data,
-    sizeof(state->temp_str_mem) - 1
-  );
-  data[nbytes] = '\0'; 
+    char *data = temp_str_mem();
+    nbytes = jerry_string_to_char_buffer(
+            JERRYXX_GET_ARG(1),
+            (jerry_char_t *)data,
+            sizeof(state->temp_str_mem) - 1
+    );
+    data[nbytes] = '\0';
 
-  printf("writing %s to %s", data, filename);
+    printf("writing %s to %s", data, filename);
 
-  int bw;
-  if (FR_OK != fr && FR_EXIST != fr)
+    int bw;
+    if (FR_OK != fr && FR_EXIST != fr)
       panic("f_open(%s) error: %s (%d)\n", filename, FRESULT_str(fr), fr);
 
-  fr = f_close(&fil);
-  if (FR_OK != fr) {
+    fr = f_close(&fil);
+    if (FR_OK != fr) {
       printf("f_close error: %s (%d)\n", FRESULT_str(fr), fr);
-  }
+    }
 
-  free(filename);
+    free(filename);
+  }
 
   return jerry_create_undefined();
 }
@@ -719,36 +719,40 @@ JERRYXX_FUN(get_value_fn) {
     (jerry_char_t *)key,
     sizeof(state->temp_str_mem) - 1
   );
-  key[nbytes] = '\0'; 
+  key[nbytes] = '\0';
+
+  jerry_value_t ret = jerry_create_undefined();
 
   FIL fil;
   int namebytes = strlen(state->game_id) + nbytes + 10;
   char *filename = (char*)malloc(namebytes * sizeof(char));
   if (filename == NULL) {
     printf("malloc failed\n");
-    return jerry_create_undefined();
-  }
-  snprintf(filename, namebytes, "sprig/kv/%s/%s", state->game_id, key);
-  FRESULT fr = f_open(&fil, filename, FA_READ);
+  } else {
+    snprintf(filename, namebytes, "sprig/kv/%s/%s", state->game_id, key);
+    FRESULT fr = f_open(&fil, filename, FA_READ);
 
-  if (FR_OK != fr) {
-    printf("f_open(%s) error: %s (%d)\n", filename, FRESULT_str(fr), fr);
-    return jerry_create_undefined();
+    if (FR_OK != fr) {
+      printf("f_open(%s) error: %s (%d)\n", filename, FRESULT_str(fr), fr);
+    } else {
+      char *data = temp_str_mem();
+      char line[100];
+      while (f_gets(line, sizeof line, &fil)) {
+        strcat(data, line);
+      }
+
+      fr = f_close(&fil);
+      if (FR_OK != fr) {
+        printf("f_close error: %s (%d)\n", FRESULT_str(fr), fr);
+      }
+
+      ret = jerry_create_string((jerry_char_t *)data);
+    }
+
+    free(filename);
   }
 
-  char *data = temp_str_mem();
-  char line[100];
-  while (f_gets(line, sizeof line, &fil)) {
-    strcat(data, line);
-  }
-
-  fr = f_close(&fil);
-  if (FR_OK != fr) {
-      printf("f_close error: %s (%d)\n", FRESULT_str(fr), fr);
-  }
-
-  free(filename);
-  return jerry_create_string((jerry_char_t *)data);
+  return ret;
 }
 
 JERRYXX_FUN(is_sd_mounted_fn) {
@@ -768,25 +772,28 @@ JERRYXX_FUN(set_game_id) {
   char* game_id_cpy = (char*)malloc(nbytes * sizeof(char));
   if (game_id_cpy == NULL) {
     printf("malloc failed\n");
-    return jerry_create_undefined();
-  }
-  strcpy(game_id_cpy, tmp);
-  state->game_id = game_id_cpy;
+  } else {
+    strcpy(game_id_cpy, tmp);
+    state->game_id = game_id_cpy;
 
-  int namebytes = strlen(state->game_id) + 9;
-  char *filename = (char*)malloc(namebytes * sizeof(char));
-  if (filename == NULL) {
-    printf("malloc failed\n");
-    return jerry_create_undefined();
-  }
-  snprintf(filename, namebytes, "sprig/kv/%s", state->game_id);
+    int namebytes = strlen(state->game_id) + 9;
+    char *filename = (char*)malloc(namebytes * sizeof(char));
+    if (filename == NULL) {
+      printf("malloc failed\n");
+    } else {
+      snprintf(filename, namebytes, "sprig/kv/%s", state->game_id);
 
-  FRESULT fr = f_mkdir(filename);
-  if (fr != FR_OK && fr != FR_EXIST) {
-    printf("f_mkdir(%s) error: %s (%d)\n", filename, FRESULT_str(fr), fr);
+      FRESULT fr = f_mkdir(filename);
+      if (fr != FR_OK && fr != FR_EXIST) {
+        printf("f_mkdir(%s) error: %s (%d)\n", filename, FRESULT_str(fr), fr);
+      }
+
+      free(filename);
+    }
+
+    free(game_id_cpy);
   }
 
-  free(filename);
   return jerry_create_undefined();
 }
 
