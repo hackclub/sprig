@@ -1,4 +1,5 @@
-#pragma once
+#ifndef JS_H
+#define JS_H
 
 #include "jerryscript.h"
 #include "jerryxx.h"
@@ -159,3 +160,5 @@ static void spade_call_frame(double dt) {
   jerry_release_value(args[0]);
   jerry_release_value(this_value);
 }
+
+#endif //JS_H

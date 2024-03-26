@@ -228,24 +228,6 @@ static void js_init(char *file, int file_size) {
   js_run(combined, combined_size);
 }
 
-/**
- * Implementations for PianoOpts (see src/shared/audio/piano.h)
- * 
- * p (the song object) is type erased because that's an implementation detail
- * for us. It's actually a jerry_value_t, not a void pointer, so we gotta cast.
- */
-#ifdef SPADE_AUDIO
-  void piano_jerry_song_free(void *p) {
-    jerry_value_t jvt = (jerry_value_t)p;
-    jerry_release_value(jvt);
-  }
-
-  int piano_jerry_song_chars(void *p, char *buf, int buf_len) {
-    jerry_value_t jvt = (jerry_value_t)p;
-    int read = jerry_string_to_char_buffer(jvt, (jerry_char_t *)buf, (jerry_size_t)buf_len);
-    return read;
-  }
-#endif
 
 // The screen! This will be non-null before we render.
 Color *write_pixel_screen = NULL;
