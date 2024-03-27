@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: SprigAlarm
 @author: Manitej Boorgu
 @tags: []
-@img: 
+@img: ""
 @addedOn: 2024-03-26
 */
 
