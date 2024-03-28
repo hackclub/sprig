@@ -34,7 +34,7 @@ export const uploadToSerial = async (message: string, writer: WritableStreamDefa
 	console.log('[UPLOAD > SERIAL] Checkpoint 2')
 	await writer.ready
 	console.log('[UPLOAD > SERIAL] Checkpoint 2 - writing length')
-	console.log(buf.length)
+	console.log(new Uint32Array([ buf.length ]))
 	await writer.write(new Uint32Array([ buf.length ]).buffer)
 
 	console.log('[UPLOAD > SERIAL] Checkpoint 3')

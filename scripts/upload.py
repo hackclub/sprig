@@ -25,7 +25,7 @@ length_uint32_array = bytearray(byte_array_length.to_bytes(4, byteorder='little'
 
 print('writing game length')
 ser.write(length_uint32_array)
-print(length_uint32_array)
+print(byte_array_length)
 #ser.flush()
 #time.sleep(1)
 
