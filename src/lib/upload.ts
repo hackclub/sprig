@@ -1,4 +1,5 @@
 import { signal } from '@preact/signals'
+import { number } from 'astro/zod';
 
 export type UploadState = 'IDLE' | 'LOADING' | 'ERROR'
 
@@ -22,6 +23,19 @@ const getPort = async (): Promise<SerialPort> => {
 		filters: [ { usbVendorId: 0x2e8a, usbProductId: 10 } ]
 	})
 }
+function _arrayBufferToBase64( buffer:ArrayBuffer ) {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+		const num = bytes[ i ] as number   
+        binary += String.fromCharCode(num);
+    }
+    return window.btoa( binary );
+}
+const printBuffer= function(buffer:ArrayBuffer){
+	console.log(_arrayBufferToBase64(buffer))
+}
 
 export const uploadToSerial = async (message: string, writer: WritableStreamDefaultWriter<ArrayBuffer>) => {
 	const buf = new TextEncoder().encode(message)
@@ -29,13 +43,16 @@ export const uploadToSerial = async (message: string, writer: WritableStreamDefa
 	console.log('[UPLOAD > SERIAL] Checkpoint 1')
 	await writer.ready
 	console.log('[UPLOAD > SERIAL] Checkpoint 1 - writing startup sequence')
-	await writer.write(new Uint8Array([ 0, 1, 2, 3, 4 ]).buffer)
+	const payload1 = new Uint8Array([ 0, 1, 2, 3, 4 ]).buffer
+	await writer.write(payload1)
+	printBuffer(payload1)
 
 	console.log('[UPLOAD > SERIAL] Checkpoint 2')
 	await writer.ready
 	console.log('[UPLOAD > SERIAL] Checkpoint 2 - writing length')
-	console.log(new Uint32Array([ buf.length ]))
-	await writer.write(new Uint32Array([ buf.length ]).buffer)
+	const payload2 = new Uint32Array([ buf.length ]).buffer
+	await writer.write(payload2)
+	printBuffer(payload2)
 
 	console.log('[UPLOAD > SERIAL] Checkpoint 3')
 	await writer.ready
@@ -48,6 +65,7 @@ export const uploadToSerial = async (message: string, writer: WritableStreamDefa
     }, 30000);
 	
 	await writer.write(buf)
+	printBuffer(buf)
 	clearInterval(ticker)
 	clearTimeout(timeoutId)
 	console.log(`[UPLOAD > SERIAL] Wrote ${buf.length} chars`)
