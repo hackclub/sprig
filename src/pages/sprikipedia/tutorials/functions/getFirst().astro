@@ -1,0 +1,16 @@
+---
+import '../../../../global.css'
+import Docs from '../../../../layouts/docs.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+<Docs dspriki="getFirst() - Sprikipedia, the Sprig encyclopedia" dtitle="getFirst()" dauthor="" >
+<p>Returns the first sprite of a given type. Useful if you know there’s only one of a sprite, such as with a player character.  </p>
+<br />
+<p>Shortcut for </p><code>getAll(type)[0]</code>
+<Docs />

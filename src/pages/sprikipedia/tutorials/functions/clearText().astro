@@ -1,0 +1,14 @@
+---
+import '../../../../global.css'
+import Docs from '../../../../layouts/docs.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+<Docs dspriki="clearText() - Sprikipedia, the Sprig encyclopedia" dtitle="clearText()" dauthor="" >
+<p>Clears all text on the screen. </p>
+<Docs />
