@@ -1,10 +1,19 @@
 let setTimeout, setInterval, clearInterval, clearTimeout;
 const {
+  setValue,
+  getValue,
+  isSDMounted,
+  setID,
+  /* sprite interactions */ setSolids,
+  setPushables,
   /* sprite interactions */ setSolids, setPushables,
   /*              see also: sprite.x +=, sprite.y += */
 
-  /* art */ setLegend, setBackground,
-  /* text */ addText, clearText,
+  /* art */ setLegend,
+  setBackground,
+  /* text */ addText,
+  clearText,
+  mountSD,
 
   /*   spawn sprites */ setMap, addSprite,
   /* despawn sprites */ clearTile, /* sprite.remove() */
@@ -22,6 +31,8 @@ const {
 
   playTune,
 } = (() => {
+let _gameState = {};
+let _gameId = null;
 const exports = {};
 /* re-exports from C; bottom of module_native.c has notes about why these are in C */
 exports.setMap = map => native.setMap(map.trim());
@@ -43,14 +54,62 @@ exports.playTune = (str, times) => {
   }
 }
 
-/* opts: x, y, color (all optional) */
-exports.addText = (str, opts={}) => {
-  const CHARS_MAX_X = 21;
-  const padLeft = Math.floor((CHARS_MAX_X - str.length)/2);
+  exports.setValue = (key, value) => {
+    if (typeof _gameId !== "string") {
+      throw new Error("setID must be called before setValue");
+    }
+
+    const k = key.toString();
+    const v = JSON.stringify(value);
+    _gameState[k] = v;
+    if (native.isSDMounted()) {
+      native.setValue(k, v);
+    }
+  }
+  exports.getValue = (key) => {
+    if (typeof _gameId !== "string") {
+      throw new Error("setID must be called before getValue");
+    }
+
+    const k = key.toString();
+    return value ? JSON.parse(value) : undefined;
+    const cachedVal = _gameState[k];
+    if (cachedVal !== undefined) {
+      return JSON.parse(cachedVal);
+    }
+
+    if (native.isSDMounted()) {
+      const value = native.getValue(k);
+      if (value !== undefined) {
+        _gameState[k] = value;
+        return JSON.parse(value);
+      }
+    }
+
+    return undefined;
+  }
+  exports.isSDMounted = () => native.isSDMounted();
+  exports.setID = (id) => {
+    if (typeof(id) !== "string" || id.length === 0) {
+      throw new Error("setID must be called with a non-empty string");
+    }
+
+    if (_gameId !== null) {
+      throw new Error("setID can only be called once");
+    }
+
+    _gameId = id;
+    native.setID(id);
+  };
+
+  /* opts: x, y, color (all optional) */
+  exports.addText = (str, opts = {}) => {
+    const CHARS_MAX_X = 21;
+    const padLeft = Math.floor((CHARS_MAX_X - str.length) / 2);
 
   for (const char of str.split('')) {
     if (" !\"#%&\'()*+,./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\\^_-`abcdefghijklmnopqrstuvwxyz|~¦§¨©¬®¯°±´¶·¸ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ÙÚÛÜÝÞßàáâãäåæçèéêëìíîïñòóôõö÷ùúûüýþÿĀāĂăĄąĆćĊċČčĎĐđĒēĖėĘęĚěĞğĠġĦħĪīĮįİıŃńŇňŌōŒœŞşŨũŪūŮůŲųŴŵŶŷŸǍǎǏǐǑǒǓǔˆˇ˘˙˚˛˜˝ẀẁẂẃẄẅỲỳ†‡•…‰⁄™∂∅∏∑−√∞∫≈≠≤≥◊".indexOf(char) === -1)
-    console.log(`WARN: Character ${char} is no longer in supported in the Sprig editor.`);  
+    console.log(`WARN: Character ${char} is no longer in supported in the Sprig editor.`);
   }
 
   native.text_add(
@@ -63,6 +122,10 @@ exports.addText = (str, opts={}) => {
 
 exports.clearText = () => native.text_clear();
 
+  exports.mountSD = (key) => {
+    console.log("engine.js:mountSD");
+    native.mountSD(key);
+  };
 
 exports.setLegend = (...bitmaps) => {
   native.legend_clear();

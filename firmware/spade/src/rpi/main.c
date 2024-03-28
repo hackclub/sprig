@@ -7,7 +7,8 @@
 #include "pico/util/queue.h"
 #include "pico/multicore.h"
 #include "jerryscript.h"
-
+#include "shared/sprig_sd/sd_imports.h"
+#include "shared/sprig_sd/hw_config.c"
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -179,6 +180,33 @@ static int load_new_scripts(void) {
   return upl_stdin_read();
 }
 
+void mount_sd_card() {
+  yell("mounting SD card");
+  // do the mount
+  sd_card_t *pSD = sd_get_by_num(0);
+  FRESULT fr = f_mount(&pSD->fatfs, pSD->pcName, 1);
+
+  if (fr == FR_OK) {
+      state->sd_mounted = true;
+      yell("mounted SD card");
+
+      fr = f_mkdir("sprig");
+      if (fr == FR_OK) {
+        fr = f_mkdir("sprig/kv");
+        if (fr == FR_OK) {
+          printf("created sprig/kv directory");
+        } else if (fr != FR_EXIST) {
+          yell("failed to create sprig/kv directory");
+        }
+      } else if (fr != FR_EXIST) {
+        yell("failed to create sprig directory");
+      }
+  } else {
+      state->sd_mounted = false;
+      yell("failed to mount SD card");
+  }
+}
+
 /**
  * Implementations for PianoOpts (see src/shared/audio/piano.h)
  * 
@@ -199,6 +227,7 @@ static int load_new_scripts(void) {
 #endif
 
 int main() {
+  timer_hw->dbgpause = 0;
   // Overclock the RP2040!
   set_sys_clock_khz(270000, true);
 
@@ -212,6 +241,9 @@ int main() {
   // Init JerryScript
   jerry_init(JERRY_INIT_MEM_STATS);
   init(sprite_free_jerry_object); // TODO: document
+
+  // Initialize SD card
+  mount_sd_card();
 
   while(!save_read()) {
     // No game stored in memory
@@ -239,6 +271,8 @@ int main() {
   }
 
   // Start a core to listen for keypresses.
+  multicore_reset_core1();
+  sleep_ms(100);
   multicore_launch_core1(core1_entry);
 
   /**

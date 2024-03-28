@@ -22,6 +22,11 @@
 #ifndef __NATIVE_MAGIC_STRINGS_H
 	#define __NATIVE_MAGIC_STRINGS_H
 
+	#define MSTR_NATIVE_setValue "setValue"
+	#define MSTR_NATIVE_getValue "getValue"
+  #define MSTR_NATIVE_setID "setID"
+
+	#define MSTR_NATIVE_isSdMounted "isSDMounted"
 	#define MSTR_NATIVE_setMap "setMap"
 	#define MSTR_NATIVE_setBackground "setBackground"
 	#define MSTR_NATIVE_getFirst "getFirst"

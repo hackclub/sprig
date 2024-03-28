@@ -3,14 +3,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-#include <stdlib.h>
 #include <string.h>
+
 #include "jerryscript.h"
 #include "native_magic_strings.h"
 
 #include "shared/js_runtime/js.h"
-#include "shared/js_runtime/jerryxx.h"
-#include "shared/audio/piano.h"
+#include "shared/sprig_sd/sd_imports.h"
 
 static struct {
   jerry_value_t x, y, dx, dy, addr, type, _x, _y, _type, push, remove, generation;
@@ -656,11 +655,158 @@ JERRYXX_FUN(native_text_clear_fn) {
   dbg("module_native::native_text_clear_fn");
   text_clear(); return jerry_create_undefined(); }
 
+JERRYXX_FUN(set_value_fn) {
+  dbg("module_native::set_value_fn");
+
+  if (state->game_id == NULL) {
+      printf("Game ID is not set\n");
+      return jerry_create_undefined();
+  }
+
+  char *key = temp_str_mem();
+  jerry_size_t nbytes = jerry_string_to_char_buffer(
+    JERRYXX_GET_ARG(0),
+    (jerry_char_t *)key,
+    sizeof(state->temp_str_mem) - 1
+  );
+  key[nbytes] = '\0'; 
+
+  FIL fil;
+  int namebytes = strlen(state->game_id) + nbytes + 10;
+  char *filename = (char*)malloc(namebytes * sizeof(char));
+  if (filename == NULL) {
+    printf("malloc failed\n");
+  } else {
+    snprintf(filename, namebytes, "sprig/kv/%s/%s", state->game_id, key);
+    FRESULT fr = f_open(&fil, filename, FA_CREATE_ALWAYS | FA_WRITE);
+
+    char *data = temp_str_mem();
+    nbytes = jerry_string_to_char_buffer(
+            JERRYXX_GET_ARG(1),
+            (jerry_char_t *)data,
+            sizeof(state->temp_str_mem) - 1
+    );
+    data[nbytes] = '\0';
+
+    printf("writing %s to %s", data, filename);
+
+    int bw;
+    if (FR_OK != fr && FR_EXIST != fr)
+      panic("f_open(%s) error: %s (%d)\n", filename, FRESULT_str(fr), fr);
+
+    fr = f_close(&fil);
+    if (FR_OK != fr) {
+      printf("f_close error: %s (%d)\n", FRESULT_str(fr), fr);
+    }
+
+    free(filename);
+  }
+
+  return jerry_create_undefined();
+}
+
+JERRYXX_FUN(get_value_fn) {
+  dbg("module_native::get_value_fn");
+
+  if (state->game_id == NULL) {
+    printf("Game ID is not set\n");
+    return jerry_create_undefined();
+  }
+
+  char *key = temp_str_mem();
+  jerry_size_t nbytes = jerry_string_to_char_buffer(
+    JERRYXX_GET_ARG(0),
+    (jerry_char_t *)key,
+    sizeof(state->temp_str_mem) - 1
+  );
+  key[nbytes] = '\0';
+
+  jerry_value_t ret = jerry_create_undefined();
+
+  FIL fil;
+  int namebytes = strlen(state->game_id) + nbytes + 10;
+  char *filename = (char*)malloc(namebytes * sizeof(char));
+  if (filename == NULL) {
+    printf("malloc failed\n");
+  } else {
+    snprintf(filename, namebytes, "sprig/kv/%s/%s", state->game_id, key);
+    FRESULT fr = f_open(&fil, filename, FA_READ);
+
+    if (FR_OK != fr) {
+      printf("f_open(%s) error: %s (%d)\n", filename, FRESULT_str(fr), fr);
+    } else {
+      char *data = temp_str_mem();
+      char line[100];
+      while (f_gets(line, sizeof line, &fil)) {
+        strcat(data, line);
+      }
+
+      fr = f_close(&fil);
+      if (FR_OK != fr) {
+        printf("f_close error: %s (%d)\n", FRESULT_str(fr), fr);
+      }
+
+      ret = jerry_create_string((jerry_char_t *)data);
+    }
+
+    free(filename);
+  }
+
+  return ret;
+}
+
+JERRYXX_FUN(is_sd_mounted_fn) {
+  dbg("module_native::is_sd_mounted_fn");
+  return jerry_create_boolean(state->sd_mounted);
+}
+
+JERRYXX_FUN(set_game_id) {
+  dbg("module_native::set_game_id");
+  char *tmp = temp_str_mem();
+  jerry_size_t nbytes = jerry_string_to_char_buffer(
+          JERRYXX_GET_ARG(0),
+          (jerry_char_t *)tmp,
+          sizeof(state->temp_str_mem) - 1
+  );
+  tmp[nbytes] = '\0';
+  char* game_id_cpy = (char*)malloc(nbytes * sizeof(char));
+  if (game_id_cpy == NULL) {
+    printf("malloc failed\n");
+  } else {
+    strcpy(game_id_cpy, tmp);
+    state->game_id = game_id_cpy;
+
+    int namebytes = strlen(state->game_id) + 9;
+    char *filename = (char*)malloc(namebytes * sizeof(char));
+    if (filename == NULL) {
+      printf("malloc failed\n");
+    } else {
+      snprintf(filename, namebytes, "sprig/kv/%s", state->game_id);
+
+      FRESULT fr = f_mkdir(filename);
+      if (fr != FR_OK && fr != FR_EXIST) {
+        printf("f_mkdir(%s) error: %s (%d)\n", filename, FRESULT_str(fr), fr);
+      }
+
+      free(filename);
+    }
+
+    free(game_id_cpy);
+  }
+
+  return jerry_create_undefined();
+}
 
 static void module_native_init(jerry_value_t exports) {
   memset(&props, 0, sizeof(props));
 
   props_init();
+
+  // SD card functions and initialization
+  jerryxx_set_property_function(exports, MSTR_NATIVE_setValue, set_value_fn);
+  jerryxx_set_property_function(exports, MSTR_NATIVE_getValue, get_value_fn);
+  jerryxx_set_property_function(exports, MSTR_NATIVE_isSdMounted, is_sd_mounted_fn);
+  jerryxx_set_property_function(exports, MSTR_NATIVE_setID, set_game_id);
 
   // these ones actually need to be in C for perf
   jerryxx_set_property_function(exports, MSTR_NATIVE_setMap,    setMap);
