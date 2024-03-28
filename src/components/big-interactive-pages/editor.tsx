@@ -256,11 +256,17 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		})
 	}, [ initialCode ])
 
+	let editorCssClasses = `${styles.pageMain} `;
+	if (isDark.value) {
+		const classes = editorCssClasses.split(" ");
+		classes.push("darkMode");
+		editorCssClasses = classes.join(" ");
+	}
 	return (
 		<div class={styles.page}>
 			<Navbar persistenceState={persistenceState} />
 
-			<div class={styles.pageMain} style={{ backgroundColor: isDark.value ? "#2f2f2f" : "#fafed7"}}>
+			<div class={editorCssClasses}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
 						class={styles.code}

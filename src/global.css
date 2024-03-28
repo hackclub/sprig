@@ -43,6 +43,11 @@ body {
 	--line-height-copy: 1.5;
 }
 
+.darkMode {
+	background: var(--bg-dark) !important;
+	color: white !important;
+}
+
 body {
 	font-family: var(--font-text);
 	margin: 0;
