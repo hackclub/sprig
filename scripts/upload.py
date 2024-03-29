@@ -35,3 +35,5 @@ ser.flush()
 #time.sleep(0.5)
 ser.close()
 
+
+# new function takes in base64 encoded string, and returns a byte array 
