@@ -31,9 +31,17 @@ if (games.length === 0 && unnamedGames.length > 0) {
 		<StandardHead title='Your Games' />
 		
 		<script>
+			import { theme, switchTheme } from "../../lib/state";
+			const currentTheme = localStorage.getItem("theme") ?? localStorage.getItem("isDark") ?? "light"
+			theme.value = currentTheme;	
+			
+			switchTheme(theme.value);
+			
+			/*
 			if (localStorage.getItem("isDark") === "true") {
 				document.body.classList.add("darkMode")
 			}
+			*/
 		</script>
 
 		<style>

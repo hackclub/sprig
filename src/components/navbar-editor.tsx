@@ -1,5 +1,6 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
-import { codeMirror, PersistenceState, isDark, toggleTheme, errorLog, editSessionLength } from '../lib/state'
+import { codeMirror, PersistenceState, isDark, toggleTheme, errorLog, editSessionLength, themes, theme, switchTheme } from '../lib/state'
+import type { ThemeType } from "../lib/state";
 import Button from './design-system/button'
 import Textarea from './design-system/textarea'
 import SavePrompt from './popups-etc/save-prompt'
@@ -8,7 +9,8 @@ import { persist } from '../lib/game-saving/auth-helper'
 import InlineInput from './design-system/inline-input'
 import { throttle } from 'throttle-debounce'
 import SharePopup from './popups-etc/share-popup'
-import { IoChevronDown, IoLogoGithub, IoPlay, IoSaveOutline, IoShareOutline, IoShuffle, IoWarning } from 'react-icons/io5'
+import { IoChevronDown, IoLogoGithub, IoPlay, IoSaveOutline, IoShareOutline, IoShuffle, IoWarning, IoBrush } from 'react-icons/io5'
+import { FaBrush } from "react-icons/fa";
 import { usePopupCloseClick } from '../lib/utils/popup-close-click'
 import { upload, uploadState } from '../lib/upload'
 import { VscLoading } from 'react-icons/vsc'
@@ -95,6 +97,7 @@ const prettifyCode = () => {
 export default function EditorNavbar(props: EditorNavbarProps) {
 	const showNavPopup = useSignal(false)
 	const showStuckPopup = useSignal(false)
+	const showThemePicker = useSignal(false)
 
 	// we will accept the current user's
 	// - name,
@@ -125,6 +128,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	// usePopupCloseClick closes a popup when you click outside of its area
 	usePopupCloseClick(styles.navPopup!, () => showNavPopup.value = false, showNavPopup.value)
 	usePopupCloseClick(styles.stuckPopup!, () => showStuckPopup.value = false, showStuckPopup.value)
+	usePopupCloseClick(styles.themePicker!, () => showThemePicker.value = false, showThemePicker.value)
 
 	let saveState
 	let actionButton
@@ -199,17 +203,26 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				</a>
 			</li>
 
+			<li class={styles.actionIcon}>
+				<a onClick={() => showThemePicker.value = !showThemePicker.value}  target='_blank'>
+					<FaBrush />
+				</a>
+			</li>
+
+
 			<li>
 				<Button class={styles.stuckBtn} onClick={() => showStuckPopup.value = !showStuckPopup.value} disabled={!isLoggedIn}>
 					I'm stuck
 				</Button>
 			</li>
 
+			{/*
 			<li>
 				<Button onClick={toggleTheme}>
 					{isDark.value ? "Light" : "Dark"}
 				</Button>
 			</li>
+			*/}
 
 			<li>
 				<Button
@@ -242,6 +255,32 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			persistenceState={props.persistenceState}
 			onClose={() => showSharePopup.value = false}
 		/>}
+
+		{showThemePicker.value && (
+			<ul class={styles.themePicker}>
+				{Object.keys(themes).map(themeKey => {
+					const themeValue = themes[themeKey as ThemeType];
+					return (
+						<li onClick={() => {
+							theme.value = themeKey as ThemeType;
+							switchTheme(theme.value);
+						}}>
+							<span style={{
+								display: "inline-block",
+								backgroundColor: themeValue.background,
+								border: "solid 2px",
+								borderColor: themeValue.accent,
+								width: "25px",
+								height: "25px",
+								borderRadius: "50%"
+							}}>
+							</span>
+							{themeKey}
+						</li>
+					)
+				})}
+			</ul>
+		)}
 
 		{showStuckPopup.value && (
 			<div class={styles.stuckPopup}>
