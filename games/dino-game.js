@@ -2,8 +2,8 @@
 @title: Save Orpheus - Chrome Dino Game Remake
 @author: @thetridentguy
 @tags: ['classic']
-@img: "dino-game"
-@addedOn: 2024-03-04
+@img: "dino-game.png"
+@addedOn: 2024-03-29
 */
 
 const dino = "d"
