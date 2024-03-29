@@ -16,7 +16,7 @@ import { defaultExampleCode } from '../../lib/examples'
 import MigrateToast from '../popups-etc/migrate-toast'
 import { nanoid } from 'nanoid'
 import TutorialWarningModal from '../popups-etc/tutorial-warning'
-import { isDark, editSessionLength } from '../../lib/state'
+import { isDark, editSessionLength, theme, switchTheme, ThemeType } from '../../lib/state'
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>
@@ -131,7 +131,8 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		editSessionLength.value = new Date();
 
 		// load the dark mode value from localstorage
-		isDark.value = Boolean(localStorage.getItem("isDark") ?? "")
+		// isDark.value = Boolean(localStorage.getItem("isDark") ?? "")
+		switchTheme((localStorage.getItem("theme") ?? "light") as ThemeType);
 
 		const updateMaxSize = () => {
 			maxOutputAreaSize.value = (window.innerWidth - outputAreaWidthMargin) / 2.5
@@ -257,11 +258,13 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	}, [ initialCode ])
 
 	let editorCssClasses = `${styles.pageMain} `;
+	/*
 	if (isDark.value) {
 		const classes = editorCssClasses.split(" ");
 		classes.push("darkMode");
 		editorCssClasses = classes.join(" ");
 	}
+	*/
 	return (
 		<div class={styles.page}>
 			<Navbar persistenceState={persistenceState} />

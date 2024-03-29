@@ -91,10 +91,43 @@ export const bitmaps = signal<[string, string][]>([])
 export const isDark = signal<boolean>(false)
 export const editSessionLength = signal<Date>(new Date());
 
-export const toggleTheme = () => {
-	isDark.value = !isDark.value;
+export type ThemeType = "dark" | "light" | "busker";
+export const theme = signal<ThemeType>("dark");
+type Theme = {
+	accent: string,
+	background: string,
+	color: string
+};
 
-	// store true as "true" or false as ""
-	// empty strings coerce to false
-	localStorage.setItem("isDark", isDark.value ? isDark.value.toString() : "");
+export const themes: Record<ThemeType, Theme> = {
+	"dark": {
+		accent: "#078969",
+		background: "#2f2f2f",
+		color: "white"
+	},
+	"light": {
+		accent: "#078969",
+		background: "#fafed7",
+		color: "black",
+	},
+	"busker": {
+		accent: "#FFAE06",
+		background: "#3E29ED",
+		color: "black",
+	}
+};
+
+export const switchTheme = (themeType: ThemeType) => {
+	theme.value = themeType;
+	
+	// store the new theme value in local storage
+	localStorage.setItem("theme", themeType);
+
+	const themeValue = themes[themeType];
+	// set the document values
+	const documentStyle = document.body.style;
+	documentStyle.background = themeValue.background;
+	document.documentElement.style.setProperty(`--accent`, themeValue.accent);
+	document.documentElement.style.setProperty(`--accent-dark`, themeValue.background);
+	documentStyle.color = themeValue.color;
 }
