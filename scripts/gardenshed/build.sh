@@ -42,7 +42,7 @@ else
 fi
 
 
-docker build ./docker | tee ./dockerBuildLog.txt
+docker build ./docker
 
 if [[ $OSTYPE == *"linux"* ]]; then
     chcon -R -t container_file_t ./
