@@ -4,7 +4,7 @@ import { StateEffect } from '@codemirror/state'
 import styles from './codemirror.module.css'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorView } from '@codemirror/view'
-import { theme, isDark, errorLog } from '../lib/state'
+import { theme, errorLog } from '../lib/state'
 import { Diagnostic, setDiagnosticsEffect } from '@codemirror/lint'
 
 interface CodeMirrorProps {
