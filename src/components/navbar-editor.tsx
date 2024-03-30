@@ -1,5 +1,5 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
-import { codeMirror, PersistenceState, isDark, toggleTheme, errorLog, editSessionLength, themes, theme, switchTheme } from '../lib/state'
+import { codeMirror, PersistenceState, errorLog, editSessionLength, themes, theme, switchTheme } from '../lib/state'
 import type { ThemeType } from "../lib/state";
 import Button from './design-system/button'
 import Textarea from './design-system/textarea'
@@ -215,14 +215,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					I'm stuck
 				</Button>
 			</li>
-
-			{/*
-			<li>
-				<Button onClick={toggleTheme}>
-					{isDark.value ? "Light" : "Dark"}
-				</Button>
-			</li>
-			*/}
 
 			<li>
 				<Button
