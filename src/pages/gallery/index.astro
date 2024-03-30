@@ -28,6 +28,9 @@ const tags = [
 			
 			switchTheme(theme.value);
 
+			const copyContainer = document.querySelector(".copy-container");
+			if (theme.value != "light") copyContainer.style.color = "white";
+			// console.log(copyContainer);
 			/*
 			if (localStorage.getItem("isDark") === "true") {
 				document.body.classList.add("darkMode");
