@@ -45,8 +45,16 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 			return timer
 		},
 		setLegend: (..._bitmaps: [string, string][]) => {
-			bitmaps.value = _bitmaps
-			return game.api.setLegend(..._bitmaps)
+			// this is bad; but for some reason i could not do _bitmaps === [undefined]
+			// @ts-ignore
+			if(JSON.stringify(_bitmaps) === "[null]") {
+				// @ts-ignore
+				bitmaps.value = [[]];
+				throw new Error('The sprites passed into setLegend each need to be in square brackets, like setLegend([player, bitmap`...`]).')
+			} else {
+				bitmaps.value = _bitmaps;
+			}
+			return game.api.setLegend(...bitmaps.value)
 		},
 		playTune: (text: string, n: number) => {
 			const tune = textToTune(text)
@@ -94,7 +102,13 @@ export function runGameHeadless(code: string): void {
 		setTimeout: () => {},
 		setInterval: () => {},
 		setLegend: (..._bitmaps: [string, string][]) => {
-			bitmaps.value = _bitmaps
+			// this is bad; but for some reason i could not do _bitmaps === [undefined]
+			if(JSON.stringify(_bitmaps) === "[null]") { 
+				// @ts-ignore
+				bitmaps.value = [[]];
+				throw new Error('The sprites passed into setLegend each need to be in square brackets, like setLegend([player, bitmap`...`]).');
+			} else 
+				bitmaps.value = _bitmaps
 			return game.api.setLegend(..._bitmaps)
 		},
 		playTune: () => {}
