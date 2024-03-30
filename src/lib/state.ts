@@ -95,23 +95,37 @@ export type ThemeType = "dark" | "light" | "busker";
 export const theme = signal<ThemeType>("dark");
 type Theme = {
 	accent: string,
+	accentDark: string,
+	fgMutedOnAccent: string,
 	background: string,
 	color: string
 };
 
+const baseTheme: Theme = {
+	accent: "#078969",
+	accentDark: "#136853",
+	fgMutedOnAccent: "#8fcabb",
+	background: "#2f2f2f",
+	color: "white"
+
+};
+
 export const themes: Record<ThemeType, Theme> = {
 	"dark": {
-		accent: "#078969",
+		...baseTheme,
 		background: "#2f2f2f",
-		color: "white"
+		color: "white",
 	},
 	"light": {
-		accent: "#078969",
+		...baseTheme,
 		background: "#fafed7",
 		color: "black",
 	},
 	"busker": {
+		...baseTheme,
 		accent: "#FFAE06",
+		accentDark: "#ff9d00",
+		fgMutedOnAccent: "#6d83ff",
 		background: "#3E29ED",
 		color: "black",
 	}
@@ -128,6 +142,7 @@ export const switchTheme = (themeType: ThemeType) => {
 	const documentStyle = document.body.style;
 	documentStyle.background = themeValue.background;
 	document.documentElement.style.setProperty(`--accent`, themeValue.accent);
-	document.documentElement.style.setProperty(`--accent-dark`, themeValue.background);
+	document.documentElement.style.setProperty(`--accent-dark`, themeValue.accentDark);
+	document.documentElement.style.setProperty(`--fg-muted-on-accent`, themeValue.fgMutedOnAccent);
 	documentStyle.color = themeValue.color;
 }
