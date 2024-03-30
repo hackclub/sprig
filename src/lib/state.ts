@@ -99,6 +99,7 @@ type Theme = {
 	fgMutedOnAccent: string,
 	background: string,
 	color: string
+	copyContainerText: string
 };
 
 const baseTheme: Theme = {
@@ -106,8 +107,8 @@ const baseTheme: Theme = {
 	accentDark: "#136853",
 	fgMutedOnAccent: "#8fcabb",
 	background: "#2f2f2f",
-	color: "black"
-
+	color: "black",
+	copyContainerText: "white",
 };
 
 export const themes: Record<ThemeType, Theme> = {
@@ -118,6 +119,7 @@ export const themes: Record<ThemeType, Theme> = {
 	"light": {
 		...baseTheme,
 		background: "#fafed7",
+		copyContainerText: "black"
 	},
 	"busker": {
 		...baseTheme,
@@ -142,4 +144,9 @@ export const switchTheme = (themeType: ThemeType) => {
 	document.documentElement.style.setProperty(`--accent-dark`, themeValue.accentDark);
 	document.documentElement.style.setProperty(`--fg-muted-on-accent`, themeValue.fgMutedOnAccent);
 	documentStyle.color = themeValue.color;
+	
+	// change the color of the text in elements having .copy-container style
+	// These includes pages such as 'Gallery' and 'Your Games'
+	const copyContainer = document.querySelector(".copy-container");
+	copyContainer.style.color = themeValue.copyContainerText;
 }
