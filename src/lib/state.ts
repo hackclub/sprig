@@ -88,7 +88,6 @@ export const muted = signal<boolean>(false)
 export const errorLog = signal<NormalizedError[]>([])
 export const openEditor = signal<OpenEditor | null>(null)
 export const bitmaps = signal<[string, string][]>([])
-export const isDark = signal<boolean>(false)
 export const editSessionLength = signal<Date>(new Date());
 
 export type ThemeType = "dark" | "light" | "busker";
