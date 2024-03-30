@@ -106,7 +106,7 @@ const baseTheme: Theme = {
 	accentDark: "#136853",
 	fgMutedOnAccent: "#8fcabb",
 	background: "#2f2f2f",
-	color: "white"
+	color: "black"
 
 };
 
@@ -114,12 +114,10 @@ export const themes: Record<ThemeType, Theme> = {
 	"dark": {
 		...baseTheme,
 		background: "#2f2f2f",
-		color: "white",
 	},
 	"light": {
 		...baseTheme,
 		background: "#fafed7",
-		color: "black",
 	},
 	"busker": {
 		...baseTheme,
@@ -127,7 +125,6 @@ export const themes: Record<ThemeType, Theme> = {
 		accentDark: "#ff9d00",
 		fgMutedOnAccent: "#6d83ff",
 		background: "#3E29ED",
-		color: "black",
 	}
 };
 
