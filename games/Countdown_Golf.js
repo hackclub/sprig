@@ -1,9 +1,9 @@
 /*
 @title: Countdown Golf
 @author: schoblaska
-@tags: ["logic", "golf", "nikoli"]
+@tags: ["logic"]
 @img: "Countdown_Golf.png"
-@addedOn: 2024-03-23
+@addedOn: 2024-03-30
 
 Countdown Golf is based on Herugolf
 (https://www.nikoli.co.jp/en/puzzles/herugolf/) by NIKOLI.
