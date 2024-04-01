@@ -93,6 +93,7 @@ export const editSessionLength = signal<Date>(new Date());
 export type ThemeType = "dark" | "light" | "busker";
 export const theme = signal<ThemeType>("dark");
 type Theme = {
+	navbarIcon: string,
 	accent: string,
 	accentDark: string,
 	fgMutedOnAccent: string,
@@ -102,6 +103,7 @@ type Theme = {
 };
 
 const baseTheme: Theme = {
+	navbarIcon: "./SPRIGDINO.png",
 	accent: "#078969",
 	accentDark: "#136853",
 	fgMutedOnAccent: "#8fcabb",
@@ -122,6 +124,7 @@ export const themes: Record<ThemeType, Theme> = {
 	},
 	"busker": {
 		...baseTheme,
+		navbarIcon: "PENNY_HEAD.png",
 		accent: "#FFAE06",
 		accentDark: "#ff9d00",
 		fgMutedOnAccent: "#6d83ff",
