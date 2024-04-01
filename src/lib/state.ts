@@ -103,7 +103,7 @@ type Theme = {
 };
 
 const baseTheme: Theme = {
-	navbarIcon: "./SPRIGDINO.png",
+	navbarIcon: "/SPRIGDINO.png",
 	accent: "#078969",
 	accentDark: "#136853",
 	fgMutedOnAccent: "#8fcabb",
