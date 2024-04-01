@@ -171,7 +171,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				<li class={`${styles.logo} ${showNavPopup.value ? styles.active : ''}`}>
 					<button onClick={() => showNavPopup.value = !showNavPopup.value}>
 						{/* <SprigIcon /> */}
-						<img class={styles.dino} src='/SPRIGDINO.png' height={38} />
+						<img class={styles.dino} src={themes[theme.value].navbarIcon} height={38} />
 						<div class={styles.caret}><IoChevronDown /></div>
 					</button>
 				</li>
