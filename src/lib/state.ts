@@ -112,7 +112,7 @@ const baseTheme: Theme = {
 	copyContainerText: "white",
 };
 
-export const themes: Record<ThemeType, Theme> = {
+export const themes: Partial<Record<ThemeType, Theme>> = {
 	"dark": {
 		...baseTheme,
 		background: "#2f2f2f",
@@ -149,6 +149,8 @@ export const switchTheme = (themeType: ThemeType) => {
 	
 	// change the color of the text in elements having .copy-container style
 	// These includes pages such as 'Gallery' and 'Your Games'
-	const copyContainer = document.querySelector(".copy-container");
-	copyContainer.style.color = themeValue.copyContainerText;
+	const copyContainer = document.querySelector(".copy-container") as HTMLDivElement;
+	if (copyContainer) {
+		copyContainer.style.color = themeValue.copyContainerText;
+	}
 }
