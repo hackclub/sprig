@@ -1482,6 +1482,11 @@
   dependencies:
     "@types/unist" "*"
 
+"@types/js-beautify@^1.14.3":
+  version "1.14.3"
+  resolved "https://registry.yarnpkg.com/@types/js-beautify/-/js-beautify-1.14.3.tgz#6ced76f79935e37e0d613110dea369881d93c1ff"
+  integrity sha512-FMbQHz+qd9DoGvgLHxeqqVPaNRffpIu5ZjozwV8hf9JAGpIOzuAf4wGbRSo8LNITHqGjmmVjaMggTT5P4v4IHg==
+
 "@types/json5@^0.0.30":
   version "0.0.30"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.30.tgz#44cb52f32a809734ca562e685c6473b5754a7818"
