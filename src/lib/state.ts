@@ -88,13 +88,69 @@ export const muted = signal<boolean>(false)
 export const errorLog = signal<NormalizedError[]>([])
 export const openEditor = signal<OpenEditor | null>(null)
 export const bitmaps = signal<[string, string][]>([])
-export const isDark = signal<boolean>(false)
 export const editSessionLength = signal<Date>(new Date());
 
-export const toggleTheme = () => {
-	isDark.value = !isDark.value;
+export type ThemeType = "dark" | "light" | "busker";
+export const theme = signal<ThemeType>("dark");
+type Theme = {
+	navbarIcon: string,
+	accent: string,
+	accentDark: string,
+	fgMutedOnAccent: string,
+	background: string,
+	color: string
+	copyContainerText: string
+};
 
-	// store true as "true" or false as ""
-	// empty strings coerce to false
-	localStorage.setItem("isDark", isDark.value ? isDark.value.toString() : "");
+const baseTheme: Theme = {
+	navbarIcon: "/SPRIGDINO.png",
+	accent: "#078969",
+	accentDark: "#136853",
+	fgMutedOnAccent: "#8fcabb",
+	background: "#2f2f2f",
+	color: "black",
+	copyContainerText: "white",
+};
+
+export const themes: Partial<Record<ThemeType, Theme>> = {
+	"dark": {
+		...baseTheme,
+		background: "#2f2f2f",
+	},
+	"light": {
+		...baseTheme,
+		background: "#fafed7",
+		copyContainerText: "black"
+	},
+	// "busker": {
+	// 	...baseTheme,
+	// 	navbarIcon: "PENNY_HEAD.png",
+	// 	accent: "#FFAE06",
+	// 	accentDark: "#ff9d00",
+	// 	fgMutedOnAccent: "#6d83ff",
+	// 	background: "#3E29ED",
+	// }
+};
+
+export const switchTheme = (themeType: ThemeType) => {
+	theme.value = themeType;
+	
+	// store the new theme value in local storage
+	localStorage.setItem("theme", themeType);
+
+	const themeValue = themes[themeType];
+	// set the document values
+	const documentStyle = document.body.style;
+	documentStyle.background = themeValue.background;
+	document.documentElement.style.setProperty(`--accent`, themeValue.accent);
+	document.documentElement.style.setProperty(`--accent-dark`, themeValue.accentDark);
+	document.documentElement.style.setProperty(`--fg-muted-on-accent`, themeValue.fgMutedOnAccent);
+	documentStyle.color = themeValue.color;
+	
+	// change the color of the text in elements having .copy-container style
+	// These includes pages such as 'Gallery' and 'Your Games'
+	const copyContainer = document.querySelector(".copy-container") as HTMLDivElement;
+	if (copyContainer) {
+		copyContainer.style.color = themeValue.copyContainerText;
+	}
 }
