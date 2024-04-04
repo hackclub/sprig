@@ -1,4 +1,5 @@
 import _sendgrid from '@sendgrid/mail'
+import { LoopsClient } from 'loops'
 import type { Game, User } from './account'
 import { lazy } from '../utils/lazy'
 
@@ -8,6 +9,10 @@ const sendgrid = lazy(() => {
 	// Sekurity
 	_sendgrid.setApiKey(import.meta.env.SENDGRID_API_KEY)
 	return _sendgrid
+})
+
+const loops = lazy(() => {
+	return new LoopsClient(import.meta.env.LOOPS_API_KEY)
 })
 
 interface EmailSpec {
@@ -22,6 +27,33 @@ export const mail = async (to: string, spec: EmailSpec): Promise<void> => {
 		replyTo: 'Hack Club <team@hackclub.com>',
 		to,
 		...spec
+	})
+}
+
+const findOrCreateEmailListContact = async (email: string): Promise<Object | undefined> => {
+	const foundContacts = await loops.findContact(email)
+
+	if (foundContacts.length == 0) { // if the contact isn't already in the DB
+		return await loops.createContact(email, {
+			source: 'Sprig editor',
+			userGroup: 'Hack Clubber'
+		})
+	} else {
+		return foundContacts[0]
+	}
+}
+
+export const addToEmailList = async (email: string, userId: string): Promise<void> => {
+	await findOrCreateEmailListContact(email)
+	await loops.updateContact(email, {
+		sprigEditorUserId: userId
+	})
+}
+
+export const updateEmailListLastModifiedTime = async (email: string, lastModified: Date): Promise<void> => {
+	await findOrCreateEmailListContact(email)
+	await loops.updateContact(email, {
+		sprigEditorGameLastModifiedAt: lastModified.getTime()
 	})
 }
 
