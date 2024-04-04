@@ -122,14 +122,14 @@ export const themes: Partial<Record<ThemeType, Theme>> = {
 		background: "#fafed7",
 		copyContainerText: "black"
 	},
-	// "busker": {
-	// 	...baseTheme,
-	// 	navbarIcon: "PENNY_HEAD.png",
-	// 	accent: "#FFAE06",
-	// 	accentDark: "#ff9d00",
-	// 	fgMutedOnAccent: "#6d83ff",
-	// 	background: "#3E29ED",
-	// }
+	"busker": {
+		...baseTheme,
+		navbarIcon: "PENNY_HEAD.png",
+		accent: "#FFAE06",
+	 	accentDark: "#ff9d00",
+		fgMutedOnAccent: "#6d83ff",
+		background: "#3E29ED",
+	}
 };
 
 export const switchTheme = (themeType: ThemeType) => {
