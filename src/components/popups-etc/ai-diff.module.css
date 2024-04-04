@@ -17,7 +17,7 @@
 	background: var(--bg-surface);
 	padding: 40px;
 	width: 100%;
-	max-width: 550px;
+	max-width: 750px;
 	text-align: center;
 	display: flex;
 	flex-direction: column;
@@ -25,8 +25,10 @@
 	gap: 24px;
 }
 
-.modal h2 {
+.stack h3 {
 	margin: 0;
+	text-align: left;
+	margin-bottom: 8px;
 }
 
 .modal p {
@@ -38,29 +40,45 @@
 .stack {
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: start;
 	gap: 14px;
 	width: 100%;
+}
+
+.rejectBtn {
+	background-color: rgb(255, 66, 66);
+}
+
+.colContainer {
+	display: flex;
+	align-items: start;
+	justify-content: space-between;
+	width: 100%;
+	height: 100%;
+	gap: 10px;
+}
+
+.section {
+	flex: 1;
+	max-width: 50%;
+	height: 100%;
+}
+
+.code {
+	border: 2px solid var(--accent);
+	max-height: 350px;
+	overflow-y: auto;
+	text-align: left;
+	min-height: 350px;
+}
+
+.code pre {
+	margin: 0;
 }
 
 p.muted {
 	color: var(--fg-muted);
 	font-size: 0.8rem;
-}
-
-.inputRow {
-	display: flex;
-	flex-direction: row;
-	gap: 6px;
-	width: 100%;
-}
-
-.inputRow :global(input) {
-	flex: 1;
-}
-
-.inputRow.limited {
-	max-width: 300px;
 }
 
 .center {
@@ -69,17 +87,4 @@ p.muted {
 
 .error {
 	color: var(--error);
-}
-
-.warning {
-	background: #fff9db;
-	color: #9f6220;
-	padding: 10px;
-	line-height: var(--line-height-copy);
-	font-size: 0.9rem;
-}
-
-.warning a {
-	color: #000000;
-	text-decoration: underline;
 }

@@ -13,6 +13,7 @@ interface StuckPopupProps {
 	persistenceState: Signal<PersistenceState>;
 	showStuckPopup: Signal<boolean>;
 	showAiModal: Signal<boolean>;
+	aiContent: Signal<{ code: string; description: string }>;
 }
 
 type StuckCategory = "Logic Error" | "Syntax Error" | "Other";
@@ -69,15 +70,18 @@ export default function StuckPopup(props: StuckPopupProps) {
 						};
 
 						try {
-							const response = await fetch("/api/stuck-request", {
+							const response = await fetch("/api/generate-ai", {
 								method: "POST",
 								body: JSON.stringify(payload),
 							});
 							// Let the user know we'll get back to them after we've receive their complaint
 							if (response.ok) {
-								alert(
-									"We received your request and will get back to you via email."
-								);
+								const data = await response.json();
+								props.aiContent.value.code = data.code;
+								props.aiContent.value.description =
+									data.description;
+								props.showStuckPopup.value = false;
+								props.showAiModal.value = true;
 							} else
 								alert(
 									"We couldn't send your request. Please make sure you're connected and try again."
@@ -130,13 +134,7 @@ export default function StuckPopup(props: StuckPopupProps) {
 							gap: "1rem",
 						}}
 					>
-						<Button
-							disabled={isSubmitting.value}
-							onClick={() => {
-								props.showStuckPopup.value = false;
-								props.showAiModal.value = true;
-							}}
-						>
+						<Button type="submit" disabled={isSubmitting.value}>
 							Get Solution
 						</Button>
 						<Button disabled={isSubmitting.value}>

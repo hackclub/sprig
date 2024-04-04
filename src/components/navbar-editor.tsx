@@ -129,6 +129,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const showSavePrompt = useSignal(false);
 	const showSharePopup = useSignal(false);
 
+	const aiContent = useSignal<{ code: string; description: string }>({
+		code: "",
+		description: "",
+	});
+
 	const deleteState = useSignal<"idle" | "confirm" | "deleting">("idle");
 	const resetState = useSignal<"idle" | "confirm">("idle");
 	useSignalEffect(() => {
@@ -386,6 +391,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					persistenceState={props.persistenceState}
 					showStuckPopup={showStuckPopup}
 					showAiModal={showAiModal}
+					aiContent={aiContent}
 				/>
 			)}
 
@@ -393,6 +399,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				<AiDiffModal
 					persistenceState={props.persistenceState}
 					showAiModal={showAiModal}
+					aiContent={aiContent}
 				/>
 			)}
 

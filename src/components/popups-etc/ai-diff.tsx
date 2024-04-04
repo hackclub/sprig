@@ -1,21 +1,17 @@
 import type { Signal } from "@preact/signals";
-import { persist, useAuthHelper } from "../../lib/game-saving/auth-helper";
-import { useNeedsManualMigration } from "../../lib/game-saving/legacy-migration";
-import type { PersistenceState } from "../../lib/state";
-import LinkButton from "../design-system/link-button";
-import styles from "./draft-warning.module.css";
 import { useEffect } from "preact/hooks";
 import tinykeys from "tinykeys";
+import type { PersistenceState } from "../../lib/state";
+import Button from "../design-system/button";
+import styles from "./ai-diff.module.css";
 
-export interface DraftWarningModalProps {
+export interface AiDiffModalProps {
 	persistenceState: Signal<PersistenceState>;
 	showAiModal: Signal<boolean>;
+	aiContent: Signal<{ code: string; description: string }>;
 }
 
-export default function AiDiffModal(props: DraftWarningModalProps) {
-	const auth = useAuthHelper("EMAIL_ENTRY");
-	const needsManualMigration = useNeedsManualMigration();
-
+export default function AiDiffModal(props: AiDiffModalProps) {
 	useEffect(
 		() =>
 			tinykeys(window, {
@@ -27,50 +23,67 @@ export default function AiDiffModal(props: DraftWarningModalProps) {
 	return (
 		<div class={styles.overlay}>
 			<div class={styles.modal}>
-				{needsManualMigration.value ? (
-					<div class={styles.warning}>
-						<strong>Where did my games go?</strong> If you've used
-						Sprig before on this browser, you may want to{" "}
-						<a href="/migrate">migrate your games</a>.
-					</div>
-				) : null}
-
 				<div class={styles.stack}>
-					<h2>Start building right away</h2>
-					<p>
-						Enter your email and we will save your code and send you
-						a link. We'll never use this for marketing purposes.
-					</p>
-				</div>
+					<div class={styles.colContainer}>
+						<div class={styles.section}>
+							<h3>Your code</h3>
+							<div class={styles.code}>
+								<pre>
+									<code>
+										{`import { APIRoute } from "astro";
 
-				<form
-					onSubmit={async (event) => {
-						event.preventDefault();
-						await auth.submitEmail();
-						if (auth.state.value === "EMAIL_INCORRECT")
-							persist(props.persistenceState, auth.email.value);
-					}}
-					class={styles.stack}
-				>
-					<p class={styles.muted}>
-						<LinkButton
-							onClick={() => {
-								if (
-									props.persistenceState.value.kind !==
-									"IN_MEMORY"
-								)
-									return;
-								props.persistenceState.value = {
-									...props.persistenceState.value,
-									showInitialWarning: false,
-								};
-							}}
-							disabled={auth.isLoading.value}
+export const post: APIRoute = async ({ request }) => {
+	const payload = await request.json();
+
+	const data = {
+		Selection: payload.selection,
+		Email: payload.email,
+		"Error Log": JSON.stringify(payload.error),
+		"Session Length": payload.sessionLength,
+		Code: payload.code,
+		Category: payload.category,
+		Description: payload.description,
+	};
+
+	// GENERATE AI HERE
+
+	const response = {
+		content: "Some AI generated content",
+	};
+
+	return new Response(JSON.stringify(response), { status: 200 });
+};`}
+									</code>
+								</pre>
+							</div>
+						</div>
+						<div class={styles.section}>
+							<h3>Suggested code</h3>
+							<div class={styles.code}>
+								<pre>
+									<code>{props.aiContent.value.code}</code>
+								</pre>
+							</div>
+						</div>
+					</div>
+					<p>Description: {props.aiContent.value.description}</p>
+					<div
+						style={{
+							display: "flex",
+							alignItems: "center",
+							gap: "1rem",
+							width: "100%",
+						}}
+					>
+						<Button accent>Accept</Button>
+						<Button
+							class={styles.rejectBtn}
+							onClick={() => (props.showAiModal.value = false)}
 						>
-							or continue without saving your work
-						</LinkButton>
-					</p>
-				</form>
+							Reject
+						</Button>
+					</div>
+				</div>
 			</div>
 		</div>
 	);
