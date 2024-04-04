@@ -43,17 +43,22 @@ const findOrCreateEmailListContact = async (email: string): Promise<Object | und
 	}
 }
 
-export const addToEmailList = async (email: string, userId: string): Promise<void> => {
-	await findOrCreateEmailListContact(email)
-	await loops.updateContact(email, {
-		sprigEditorUserId: userId
-	})
+const emailListAttrs = (user: User): any => {
+	return {
+		sprigEditorUserId: user.id
+	}
 }
 
-export const updateEmailListLastModifiedTime = async (email: string, lastModified: Date): Promise<void> => {
-	await findOrCreateEmailListContact(email)
-	await loops.updateContact(email, {
-		sprigEditorGameLastModifiedAt: lastModified.getTime()
+export const addToEmailList = async (user: User): Promise<void> => {
+	await findOrCreateEmailListContact(user.email)
+	await loops.updateContact(user.email, emailListAttrs(user))
+}
+
+export const updateEmailListLastModifiedTime = async (user: User, lastModified: Date): Promise<void> => {
+	await findOrCreateEmailListContact(user.email)
+	await loops.updateContact(user.email, {
+		sprigEditorGameLastModifiedAt: lastModified.getTime(),
+		...emailListAttrs(user)
 	})
 }
 
