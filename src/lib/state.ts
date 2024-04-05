@@ -124,7 +124,7 @@ export const themes: Partial<Record<ThemeType, Theme>> = {
 	},
 	"busker": {
 		...baseTheme,
-		navbarIcon: "PENNY_HEAD.png",
+		navbarIcon: "/PENNY_HEAD.png",
 		accent: "#FFAE06",
 	 	accentDark: "#ff9d00",
 		fgMutedOnAccent: "#6d83ff",
