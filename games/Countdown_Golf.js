@@ -5654,8 +5654,8 @@ const addArrows = (x1, y1, x2, y2) => {
 				? upIn
 				: downIn
 			: xStep > 0
-				? leftIn
-				: rightIn;
+			? leftIn
+			: rightIn;
 
 	const outArrow =
 		xStep === 0
