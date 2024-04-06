@@ -1,9 +1,9 @@
 /*
-@title: 
+@title: Mind_game
 @author: brunoblaise 
-@tags: ['classic']
+@tags: ['logic']
 @img: ""
-@addedOn: 2024-03-24
+@addedOn: 2024-04-05
 
 */
 
