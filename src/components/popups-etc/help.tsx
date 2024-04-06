@@ -6,7 +6,6 @@ import { compiledContent } from "../../../docs/docs.md";
 import { codeMirror, PersistenceState } from "../../lib/state";
 import Button from "../design-system/button";
 import { saveGame } from "../big-interactive-pages/editor";
-import { isDark } from "../../lib/state";
 
 interface HelpProps {
 	initialVisible?: boolean;
@@ -103,7 +102,7 @@ export default function Help(props: HelpProps) {
 			</div>
 
 			<div
-				class={isDark.value ? styles.content_dark : styles.content}
+				class={styles.content}
 				style={{
 					display:
 						tutorialHtml &&
@@ -198,7 +197,7 @@ export default function Help(props: HelpProps) {
 				)}
 			</div>
 			<div
-				class={isDark.value ? styles.content_dark : styles.content}
+				class={styles.content}
 				style={{
 					display: !showingTutorial.value ? "block" : "none",
 				}}
