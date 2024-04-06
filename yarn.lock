@@ -3469,6 +3469,11 @@ longest-streak@^3.0.0:
   resolved "https://registry.yarnpkg.com/longest-streak/-/longest-streak-3.1.0.tgz#62fa67cd958742a1574af9f39866364102d90cd4"
   integrity sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g==
 
+loops@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/loops/-/loops-1.0.1.tgz#bb652a85afc60b7fb90ba788c9cb04c13d50b5c2"
+  integrity sha512-Nd8vRvYj+BFVLHSQmODsLQ+GFHsS/rcFlwAWdmwtuANMd1aqBpiCFq1snlryXWlgtPilLsjZyz1THaU4b2vtwg==
+
 lower-case@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/lower-case/-/lower-case-2.0.2.tgz#6fa237c63dbdc4a82ca0fd882e4722dc5e634e28"

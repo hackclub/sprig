@@ -24,7 +24,8 @@ export const post: APIRoute = async ({ request }) => {
 						"Session Length": payload.sessionLength,
 						Code: payload.code,
 						Category: payload.category,
-						Description: payload.description
+						Description: payload.description,
+						"Fixed Code": ""
 					}
 				}
 			]
