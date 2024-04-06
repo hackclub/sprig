@@ -5661,11 +5661,11 @@ const addArrows = (x1, y1, x2, y2) => {
 	const outArrow =
 		xStep === 0
 			? yStep > 0
-				? downOut
-				: upOut
+			? downOut
+			: upOut
 			: xStep > 0
-				? rightOut
-				: leftOut;
+			? rightOut
+			: leftOut;
 
 	addSprite(x1, y1, outArrow);
 	addSprite(x2, y2, inArrow);
