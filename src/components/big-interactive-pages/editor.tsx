@@ -37,7 +37,9 @@ const minOutputAreaWidth = 360
 const defaultOutputAreaWidth = 400
 const outputAreaWidthMargin = 130 // The margin between the editor and output area
 
-const minHelpAreaHeight = 200
+const minHelpAreaHeight = 32
+const defaultHelpAreaHeight = 335
+const helpAreaHeightMargin = 0 // The margin between the screen and help area
 
 const foldAllTemplateLiterals = () => {
 	if (!codeMirror.value) return
@@ -115,17 +117,31 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		)
 	)
 
+	const helpAreaSize = useSignal(
+		Math.max(
+			minHelpAreaHeight,
+			cookies.helpAreaSize ?? defaultHelpAreaHeight
+		)
+	)
+
 	useSignalEffect(() => {
 		document.cookie = `outputAreaSize=${
 			outputAreaSize.value
 		};path=/;max-age=${60 * 60 * 24 * 365}`
 	})
 
+	useSignalEffect(() => {
+		document.cookie = `helpAreaSize=${
+			helpAreaSize.value
+		};path=/;max-age=${60 * 60 * 24 * 365}`
+	})
+
 	// Exit tutorial warning modal
 	const showingTutorialWarning = useSignal(false)
 
-	// Max height
+	// Max width of the output area
 	const maxOutputAreaSize = useSignal(outputAreaSize.value)
+	const maxHelpAreaSize = useSignal(helpAreaSize.value);
 	useEffect(() => {
 	  // re-intialize the value of the editing session length to since the editor was opened
 		editSessionLength.value = new Date();
@@ -134,7 +150,8 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		switchTheme((localStorage.getItem("theme") ?? "light") as ThemeType);
 
 		const updateMaxSize = () => {
-			maxOutputAreaSize.value = (window.innerWidth - outputAreaWidthMargin) / 2.5
+			maxOutputAreaSize.value = window.innerWidth - outputAreaWidthMargin - 100
+			maxHelpAreaSize.value = window.innerHeight - helpAreaHeightMargin;
 		}
 		window.addEventListener("resize", updateMaxSize, { passive: true })
 		updateMaxSize()
@@ -147,8 +164,16 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		)
 	)
 
+	const realHelpAreaSize = useComputed(() =>
+		Math.min(
+			maxHelpAreaSize.value,
+			Math.max(minHelpAreaHeight, helpAreaSize.value)
+		)
+	)
+
 	// Resize bar logic
 	const resizeState = useSignal<ResizeState | null>(null)
+	const horizontalResizeState = useSignal<ResizeState | null>(null)
 	useEffect(() => {
 		const onMouseMove = (event: MouseEvent) => {
 			if (!resizeState.value) return
@@ -157,6 +182,19 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 				resizeState.value.startValue +
 				resizeState.value.startMousePos -
 				event.clientX
+		}
+		window.addEventListener("mousemove", onMouseMove)
+		return () => window.removeEventListener("mousemove", onMouseMove)
+	}, [])
+
+	useEffect(() => {
+		const onMouseMove = (event: MouseEvent) => {
+			if (!horizontalResizeState.value) return
+			event.preventDefault()
+			helpAreaSize.value =
+				horizontalResizeState.value.startValue +
+				horizontalResizeState.value.startMousePos -
+				event.clientY
 		}
 		window.addEventListener("mousemove", onMouseMove)
 		return () => window.removeEventListener("mousemove", onMouseMove)
@@ -340,30 +378,46 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 							<div class={styles.screenSize}>(Sprig screen is 1/8" / 160&times;128 px)</div>
 						</div>
 					</div>
+					<div class={styles.helpContainer}>
+						<div
+							class={`${styles.horizontalResizeBar} ${horizontalResizeState.value ? styles.resizing : ''}`}
+							onMouseDown={(event) => {
+								document.documentElement.style.cursor = 'col-resize'
+								horizontalResizeState.value = {
+									startMousePos: event.clientY,
+									startValue: realHelpAreaSize.value,
+								};
+								window.addEventListener('mouseup', () => {
+									horizontalResizeState.value = null;
+									document.documentElement.style.cursor = ''
+								}, { once: true })
+							}}
+						/>
 
-					<div
-						class={styles.helpContainer}
-						style={{ minHeight: minHelpAreaHeight }}
-					>
-						{!(
-							(persistenceState.value.kind === "SHARED" ||
+						<div
+							class={styles.helpContainer}
+							style={{ height: realHelpAreaSize.value }}
+						>
+							{!(
+								(persistenceState.value.kind === "SHARED" ||
+									persistenceState.value.kind === "PERSISTED") &&
+								persistenceState.value.tutorial
+							) && <Help helpAreaSize={helpAreaSize} initialVisible={!cookies.hideHelp} />}
+
+							{(persistenceState.value.kind === "SHARED" ||
 								persistenceState.value.kind === "PERSISTED") &&
-							persistenceState.value.tutorial
-						) && <Help initialVisible={!cookies.hideHelp} />}
-
-						{(persistenceState.value.kind === "SHARED" ||
-							persistenceState.value.kind === "PERSISTED") &&
-							persistenceState.value.tutorial && (
-								<Help
-									tutorialContent={
-										persistenceState.value.tutorial
-									}
-									persistenceState={persistenceState}
-									showingTutorialWarning={
-										showingTutorialWarning
-									}
-								/>
-							)}
+								persistenceState.value.tutorial && (
+									<Help helpAreaSize={helpAreaSize}
+										tutorialContent={
+											persistenceState.value.tutorial
+										}
+										persistenceState={persistenceState}
+										showingTutorialWarning={
+											showingTutorialWarning
+										}
+									/>
+								)}
+						</div>
 					</div>
 				</div>
 			</div>

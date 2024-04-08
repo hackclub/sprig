@@ -49,7 +49,6 @@
 	z-index: -1;
 }
 
-
 .codeContainer .errors {
 	font-family: var(--font-code);
 	font-size: 0.9em;
@@ -96,6 +95,19 @@
 	background: var(--accent-light);
 }
 
+.horizontalResizeBar {
+	width: 100%;
+	height: 6px;
+	min-height: 6px;
+	cursor: row-resize;
+	background: transparent;
+}
+
+.horizontalResizeBar:hover,
+.horizontalResizeBar.resizing {
+	background: var(--accent-light);
+}
+
 .canvasWrapper {
 	max-height: 100%;
 }
@@ -127,7 +139,8 @@
 	padding: 8px 0;
 }
 
-.screenControls .mute, .screenControls .stop {
+.screenControls .mute,
+.screenControls .stop {
 	cursor: var(--cursor-interactive);
 	user-select: none;
 	color: inherit;
@@ -142,7 +155,8 @@
 	gap: 6px;
 }
 
-.screenControls .mute :global(svg), .screenControls .stop :global(svg) {
+.screenControls .mute :global(svg),
+.screenControls .stop :global(svg) {
 	--size: 24px;
 	display: block;
 	width: var(--size);
