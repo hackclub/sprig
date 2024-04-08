@@ -4,9 +4,9 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: orbit_blaster
 @author: blackpolygon
-@tags: []
-@img: "orbit_blaster"
-@addedOn: 2024-04-03
+@tags: ["dodge"]
+@img: "orbit_blaster.png"
+@addedOn: 2024-04-08
 */
 
 const player = "p"
