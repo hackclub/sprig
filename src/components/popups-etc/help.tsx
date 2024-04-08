@@ -12,11 +12,13 @@ interface HelpProps {
 	tutorialContent?: string[];
 	persistenceState?: Signal<PersistenceState>;
 	showingTutorialWarning?: Signal<boolean>;
+	helpAreaSize?: Signal<number>;
 }
 const helpHtml = compiledContent();
 
 export default function Help(props: HelpProps) {
 	const showingTutorial = useSignal(props.tutorialContent !== undefined);
+	const showingChat = useSignal(false);
 	const toolkitScroll = useSignal(0);
 	const tutorialScroll = useSignal(0);
 
@@ -99,6 +101,28 @@ export default function Help(props: HelpProps) {
 						Help
 					</div>
 				)}
+				<div
+					role="button"
+					className={`${styles.tab} ${
+						showingChat.value ? "" : styles.selected
+					}`}
+					onClick={() => {
+						showingChat.value = false;
+					}}
+				>
+					Chat
+				</div>
+				<div
+					role="button"
+					className={styles.tab}
+					onClick={() => {
+						if (!props.helpAreaSize) return;
+						props.helpAreaSize.value =
+							props.helpAreaSize.value == 0 ? 335 : 0;
+					}}
+				>
+					{props.helpAreaSize?.value == 0 ? "Show" : "Hide"}
+				</div>
 			</div>
 
 			<div
