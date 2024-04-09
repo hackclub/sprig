@@ -16,10 +16,7 @@ import { defaultExampleCode } from '../../lib/examples'
 import MigrateToast from '../popups-etc/migrate-toast'
 import { nanoid } from 'nanoid'
 import TutorialWarningModal from '../popups-etc/tutorial-warning'
-import { isDark } from '../../lib/state'
-
-import * as Babel from "@babel/standalone";
-import TransformDetectInfiniteLoop from '../../lib/transform-detect-infinite-loop'
+import { editSessionLength, switchTheme, ThemeType } from '../../lib/state'
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>
@@ -130,9 +127,12 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Max height
 	const maxOutputAreaSize = useSignal(outputAreaSize.value)
 	useEffect(() => {
-		// load the dark mode value from localstorage
-		isDark.value = Boolean(localStorage.getItem("isDark") ?? "")
-		
+	  // re-intialize the value of the editing session length to since the editor was opened
+		editSessionLength.value = new Date();
+
+		// load the theme value from localstorage
+		switchTheme((localStorage.getItem("theme") ?? "light") as ThemeType);
+
 		const updateMaxSize = () => {
 			maxOutputAreaSize.value = (window.innerWidth - outputAreaWidthMargin) / 2.5
 		}
@@ -174,12 +174,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		errorLog.value = []
 
 		const code = codeMirror.value?.state.doc.toString() ?? ''
-		const transformResult = Babel.transform(code, {
-			plugins: [ TransformDetectInfiniteLoop ],
-			retainLines: true
-		});
-
-		const res = runGame(transformResult.code!, screen.current, (error) => {
+		const res = runGame(code, screen.current, (error) => {
 			errorLog.value = [...errorLog.value, error]
 		})
 
@@ -191,12 +186,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		if (res.error) {
 			console.error(res.error.raw)
 			errorLog.value = [ ...errorLog.value, res.error ]
-			if (res.error.line) {
-				highlightError(res.error.line);
-			}
-		} else {
-			clearErrorHighlight();
-		}		
+		}
 	}
 
 	const onStop = async () => {
@@ -270,7 +260,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		<div class={styles.page}>
 			<Navbar persistenceState={persistenceState} />
 
-			<div class={styles.pageMain} style={{ backgroundColor: isDark.value ? "#2f2f2f" : "#fafed7"}}>
+			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
 						class={styles.code}
@@ -312,7 +302,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 					<Button accent icon={IoPlayCircleOutline} bigIcon iconSide='right' class={styles.playButton} onClick={onRun}>
 						Run
 					</Button>
-					
+
 				</div>
 
 				<div

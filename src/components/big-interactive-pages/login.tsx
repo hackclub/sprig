@@ -56,7 +56,7 @@ export default function Login({ session, email, to }: LoginProps) {
 						</p>
 						
 						<label for='code'>Code:</label>
-						<Input id='code' type='text' maxLength={6} placeholder='123456' bind={auth.code} />
+						<Input id='code' type='text' value='' maxLength={6} placeholder='123456'  bind={auth.code} />
 						{auth.state.value === 'CODE_INCORRECT' && <p class={styles.error}>Incorrect login code.</p>}
 
 						<Button class={styles.submit} accent type='submit' disabled={!auth.codeValid.value} loading={auth.isLoading.value}>

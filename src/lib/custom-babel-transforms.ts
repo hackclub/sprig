@@ -94,3 +94,31 @@ export default function TransformDetectInfiniteLoop({ types: t }: { types: any }
 		}
 	}
 }
+
+// this exists for the sole purpose of carrying along the line and column number
+// when throwing an error in the 'BuildDuplicateFunctionDetector' traversal below
+class TransformError extends SyntaxError {
+	public loc: any
+	constructor(message: string, loc: any) {
+		super(message)
+		this.loc = loc
+	}
+}
+
+export function BuildDuplicateFunctionDetector(engineApiKeys: string[]) {
+	return function () {
+		return {
+			visitor: {
+				"FunctionDeclaration": (path: any) => {
+					const functionName = path.node.id.name;
+					if (engineApiKeys.includes(functionName)) {
+						const loc = path.node.loc.start;
+						throw new TransformError(`Cannot redeclare built-in function: ${functionName} (${loc.line}:${loc.column})`, loc);
+						// throw path.buildCodeFrameError(`Cannot redeclare built-in function: ${functionName}`);
+					}
+				}
+			}
+		}
+	}
+
+}
