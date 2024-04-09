@@ -303,11 +303,11 @@ onInput("w", async () => {
 const playerGravityPromise = (async () => {
   while (true) {
     if (!isGround(getFirst(player).x, getFirst(player).y + 1)) {
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 250));
       getFirst(player).y += 1;
       onUpdatePosition();
     }
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 250));
   }
 })();
 function onUpdatePosition() {
@@ -328,7 +328,7 @@ afterInput(async () => {
     isBoxPromiseRunning = true;
     const boxGravityPromise = (async () => {
       while (!isGround(getFirst(box).x, getFirst(box).y + 1)) {
-        await new Promise(resolve => setTimeout(resolve, 200));
+        await new Promise(resolve => setTimeout(resolve, 250));
         getFirst(box).y += 1;
       }
       isBoxPromiseRunning = false;
