@@ -26,14 +26,16 @@ const chromeAsRegex = /\[as (.+)\]/
 const chromeStackUrlRegex = /\((.+?):(\d+):(\d+)\)/
 const normalizeStack = (stack: string): StackItem[] | null => {
 	const lines = stack.trim().split('\n')
-
+	const lineOffset = 2
+	
 	if (lines.every(line => firefoxStackRegex.test(line))) {
+		// Error in Firefox
 		return lines.map(line => {
 			const match = line.match(firefoxStackRegex)!
 			return {
 				callSite: match[1]!.split('/<')[0]! || '<unknown>',
 				fileUrl: match[2]!.split(' ')[0]!,
-				lineNumber: match[4] ? Number(match[4]) : null,
+				lineNumber: match[4] ? Number(match[4]) - lineOffset : null,
 				column: match[5] ? Number(match[5]) : null
 			}
 		})
@@ -52,11 +54,11 @@ const normalizeStack = (stack: string): StackItem[] | null => {
 				let fileUrl = match[2]!
 				while (chromeStackUrlRegex.test(fileUrl))
 					fileUrl = fileUrl.match(chromeStackUrlRegex)![1]!
-
+				// Error in Chrome
 				return {
 					callSite,
 					fileUrl,
-					lineNumber: Number(match[3]),
+					lineNumber: Number(match[3]) - lineOffset,
 					column: Number(match[4])
 				}
 			}
@@ -75,8 +77,6 @@ const normalizeStack = (stack: string): StackItem[] | null => {
 }
 
 export const normalizeGameError = (gameError: GameError): NormalizedError => {
-	const lineOffset = 3
-
 	if (gameError.kind === 'parse') {
 		const { description, lineNumber, column } = gameError.error
 		const line = lineNumber - 1
@@ -99,7 +99,7 @@ export const normalizeGameError = (gameError: GameError): NormalizedError => {
 		for (const item of stack) {
 			if (!foundEval && ['eval', 'anonymous'].includes(item.callSite)) {
 				foundEval = true
-				if (item.lineNumber) item.lineNumber -= lineOffset
+				if (item.lineNumber) item.lineNumber
 			}
 			if (!foundEval) continue
 
