@@ -1,6 +1,9 @@
 /*
 @title: jeff boxos
 @author: snwy
+@tags: ["puzzle"]
+@img: ""
+@addedOn: 2024-04-12
 */
 
 const player = "p";
