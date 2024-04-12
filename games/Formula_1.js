@@ -4,9 +4,9 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Formula 1
 @author: Mary
-@tags: [cars]
+@tags: ["multiplayer"]
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-04-12
 */
 
 const ferrari = "f"
