@@ -330,6 +330,7 @@ function onUpdatePosition() {
 }
 afterInput(async () => {
   onUpdatePosition();
+  let isBoxPromiseRunning;
   if (!isBoxPromiseRunning) {
     isBoxPromiseRunning = true;
     const boxGravityPromise = (async () => {
