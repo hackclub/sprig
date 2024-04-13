@@ -348,5 +348,5 @@ afterInput(async () => {
       isPlayerPromiseRunning = false;
     });
   }
-  await Promise.all([playerGravityPromise, boxGravityPromise]);
+  await Promise.all([playerGravityPromise, /*boxGravityPromise*/]);
 });
