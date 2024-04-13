@@ -1,6 +1,12 @@
 /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
+
+@title: Super_Platformer
+@author: KinjalPriya000
+@tags: []
+@img: ""
+@addedOn: 2024-04-11
 */
 
 const player = "p";
@@ -324,6 +330,8 @@ function onUpdatePosition() {
 }
 afterInput(async () => {
   onUpdatePosition();
+  let isBoxPromiseRunning;
+  let isPlayerPromiseRunning;
   if (!isBoxPromiseRunning) {
     isBoxPromiseRunning = true;
     const boxGravityPromise = (async () => {
@@ -340,5 +348,5 @@ afterInput(async () => {
       isPlayerPromiseRunning = false;
     });
   }
-  await Promise.all([gravityPromise, boxGravityPromise]);
+  await Promise.all([playerGravityPromise, /*boxGravityPromise*/]);
 });
