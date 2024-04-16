@@ -1,3 +1,10 @@
+/*
+@title: Chase Escape
+@author: Edward Hsing
+@tags: ["dodge"]
+@img: ""
+@addedOn: 2024-04-15
+*/
 const player = "p";
 const eat = "e";
 const sky = "s";
