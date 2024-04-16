@@ -8,9 +8,9 @@
 }
 
 @media (max-width: 800px) {
-  .banner {
-    display: none;
-  }
+	.banner {
+		display: none;
+	}
 }
 
 .banner > a {
@@ -18,10 +18,10 @@
 	align-items: center;
 	display: flex;
 	gap: 14px;
-	background-color: rgba(255, 255, 255, 0.2);
+	background-color: #ffaf07;
 	border-radius: 1rem;
 	width: fit-content;
-	padding: 0 1rem;
+	padding: 1rem;
 	transition: all 0.1s;
 	max-width: 400px;
 }
@@ -37,5 +37,3 @@
 .icon {
 	font-size: 5rem;
 }
-
-
