@@ -25,8 +25,7 @@ export default function AnnouncementBanner() {
 							fontSize: "14px",
 						}}
 					>
-						Make a Sprig game and receive a free copy of Penny's Big
-						Breakaway!
+						Make a game and receive a copy of Penny's Big Breakaway!
 					</p>
 				</div>
 			</a>

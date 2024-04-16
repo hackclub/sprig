@@ -23,7 +23,7 @@
 	width: fit-content;
 	padding: 1rem;
 	transition: all 0.1s;
-	max-width: 400px;
+	max-width: 500px;
 }
 
 .banner:hover {
