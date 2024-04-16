@@ -2,11 +2,11 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: 
-@author: 
-@tags: []
+@title: Cheese-Hunt
+@author: Sophia E
+@tags: ["puzzle"]
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-04-15
 */
 
 const player = "p";
