@@ -1,5 +1,6 @@
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
-import { codeMirror, PersistenceState, isDark, toggleTheme, errorLog, editSessionLength } from '../lib/state'
+import { codeMirror, PersistenceState, errorLog, editSessionLength, themes, theme, switchTheme } from '../lib/state'
+import type { ThemeType } from "../lib/state";
 import Button from './design-system/button'
 import Textarea from './design-system/textarea'
 import SavePrompt from './popups-etc/save-prompt'
@@ -8,11 +9,14 @@ import { persist } from '../lib/game-saving/auth-helper'
 import InlineInput from './design-system/inline-input'
 import { throttle } from 'throttle-debounce'
 import SharePopup from './popups-etc/share-popup'
-import { IoChevronDown, IoLogoGithub, IoPlay, IoSaveOutline, IoShareOutline, IoShuffle, IoWarning } from 'react-icons/io5'
+import { IoChevronDown, IoLogoGithub, IoPlay, IoSaveOutline, IoShareOutline, IoShuffle, IoWarning, IoBrush } from 'react-icons/io5'
+import { FaBrush } from "react-icons/fa";
 import { usePopupCloseClick } from '../lib/utils/popup-close-click'
 import { upload, uploadState } from '../lib/upload'
 import { VscLoading } from 'react-icons/vsc'
 import { defaultExampleCode } from '../lib/examples'
+import beautifier from "js-beautify";
+import { collapseRanges } from '../lib/codemirror/util'
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -57,9 +61,43 @@ type StuckData = {
 	description: string
 }
 
+const prettifyCode = () => {
+
+		// Check if the codeMirror is ready
+		if (!codeMirror.value) return;
+
+		// Get the code
+		const code = codeMirror.value.state.doc.toString();
+
+		// Set the options for js_beautify
+		const options = {
+			indent_size: 2, // Indent by 2 spaces
+			"brace_style": "collapse,preserve-inline", // Collapse braces and preserve inline
+		};
+
+		const { js_beautify } = beautifier;
+		// Format the code
+		const formattedCode = js_beautify(code, options);
+
+		// Create an update transaction with the formatted code
+		const updateTransaction = codeMirror.value.state.update({
+			changes: { from: 0, to: codeMirror.value.state.doc.length, insert: formattedCode }
+		});
+
+		// Find all the matches of the code, bitmap and tune blocks
+		const matches = [ ...formattedCode.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g) ];
+
+		// Apply the update to the editor
+		codeMirror.value.dispatch(updateTransaction);
+
+		// Collapse the ranges of the matches
+		collapseRanges(codeMirror.value, matches.map((match) => [ match.index!, match.index! + 1 ]))
+};
+
 export default function EditorNavbar(props: EditorNavbarProps) {
 	const showNavPopup = useSignal(false)
 	const showStuckPopup = useSignal(false)
+	const showThemePicker = useSignal(false)
 
 	// we will accept the current user's
 	// - name,
@@ -90,6 +128,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	// usePopupCloseClick closes a popup when you click outside of its area
 	usePopupCloseClick(styles.navPopup!, () => showNavPopup.value = false, showNavPopup.value)
 	usePopupCloseClick(styles.stuckPopup!, () => showStuckPopup.value = false, showStuckPopup.value)
+	usePopupCloseClick(styles.themePicker!, () => showThemePicker.value = false, showThemePicker.value)
 
 	let saveState
 	let actionButton
@@ -132,7 +171,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				<li class={`${styles.logo} ${showNavPopup.value ? styles.active : ''}`}>
 					<button onClick={() => showNavPopup.value = !showNavPopup.value}>
 						{/* <SprigIcon /> */}
-						<img class={styles.dino} src='/SPRIGDINO.png' height={38} />
+						<img class={styles.dino} src={themes[theme.value]?.navbarIcon ?? "/SPRIGDINO.png"} height={38} />
 						<div class={styles.caret}><IoChevronDown /></div>
 					</button>
 				</li>
@@ -164,15 +203,16 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				</a>
 			</li>
 
+			<li class={styles.actionIcon}>
+				<a onClick={() => showThemePicker.value = !showThemePicker.value}  target='_blank'>
+					<FaBrush />
+				</a>
+			</li>
+
+
 			<li>
 				<Button class={styles.stuckBtn} onClick={() => showStuckPopup.value = !showStuckPopup.value} disabled={!isLoggedIn}>
 					I'm stuck
-				</Button>
-			</li>
-
-			<li>
-				<Button onClick={toggleTheme}>
-					{isDark.value ? "Light" : "Dark"}
 				</Button>
 			</li>
 
@@ -207,6 +247,32 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			persistenceState={props.persistenceState}
 			onClose={() => showSharePopup.value = false}
 		/>}
+
+		{showThemePicker.value && (
+			<ul class={styles.themePicker}>
+				{Object.keys(themes).map(themeKey => {
+					const themeValue = themes[themeKey as ThemeType];
+					return (
+						<li onClick={() => {
+							theme.value = themeKey as ThemeType;
+							switchTheme(theme.value);
+						}}>
+							<span style={{
+								display: "inline-block",
+								backgroundColor: themeValue.background,
+								border: "solid 2px",
+								borderColor: themeValue.accent,
+								width: "25px",
+								height: "25px",
+								borderRadius: "50%"
+							}}>
+							</span>
+							{themeKey}
+						</li>
+					)
+				})}
+			</ul>
+		)}
 
 		{showStuckPopup.value && (
 			<div class={styles.stuckPopup}>
@@ -298,7 +364,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					</>)}
 				<li><a href='/gallery'>Gallery</a></li>
 				<li><a href='/get'>Get a Sprig</a></li>
-			</ul>
+				<li><a href='javascript:void(0);' role='button' onClick={() => { showNavPopup.value = false; prettifyCode(); }}> Prettify code </a></li></ul>
 			<div class={styles.divider} />
 			<ul>
 				<li>

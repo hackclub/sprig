@@ -22,10 +22,11 @@ const tags = [
 		<StandardHead title="Gallery" />
 
 		<script>
-			if (localStorage.getItem("isDark") === "true") {
-				document.body.style.backgroundColor = "#2f2f2f";
-				document.body.style.color = "white";
-			}
+			import { theme, switchTheme } from "../../lib/state";
+			const currentTheme = localStorage.getItem("theme") ?? localStorage.getItem("isDark") ?? "light"
+			theme.value = currentTheme;	
+			
+			switchTheme(theme.value);
 		</script>
 	</head>
 	<body>

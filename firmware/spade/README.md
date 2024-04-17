@@ -14,7 +14,6 @@ However, on-device debugging is hard, so the engine can also be compiled to run 
  - Working Linux/MacOS system with Docker environment
  - Dependencies commands:
    - docker
-   - chcon (Linux only)
 
 #### Building
  - Clone the repository
