@@ -1,9 +1,9 @@
 /*
-@title: russian_roulette
+@title: Catch_the_Egg
 @author: Jonak-Adipta-Kalita
-@tags: ["catching", "chicken", "egg"]
+@tags: ["catch"]
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-04-18
 */
 
 const MAX_SCORE = 1000000;
