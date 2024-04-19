@@ -14,13 +14,16 @@ const player2 = "t";
 
 
 const grass = "g";
-const water = "c";
+const clear = "c";
+const water  = "6"
 const fire = "f";
 const unmoveable = "m";
 
 
 
 const exit = "e";
+const exit2 = "2";
+
 const upwall = "w";
 const sdwall = "u";
 const suwall = "a";
@@ -101,6 +104,24 @@ DDDDDDDDDDDD4DDD`],
 ..F66F6666666FF.
 ..F6F666666F66F.
 ..F66666666666F.`],
+  [exit2, bitmap`
+................
+................
+................
+................
+................
+................
+................
+.......FF.......
+......FF6F......
+....FF6666FF....
+....F6666666F...
+....F666F6666F..
+...F66666F6666F.
+..F66F6666666FF.
+..F6F666666F66F.
+..F66666666666F.`],
+
   [water, bitmap`
 ................
 ................
@@ -261,7 +282,24 @@ DDDDDDDDDDDD4DDD`],
 ................
 ................
 0000000000000000
-0000000000000000`])
+0000000000000000`],
+  [clear, bitmap`
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222`])
 
 
 setBackground(road)
@@ -343,11 +381,17 @@ mmmmmmmmb
 .t.......
 .........`,
   map`
-p..mm
-.m..m
-.m...
-bemm.
-.b..t`,
+dtd....ddd.
+d.d...d...d
+d.dd.d..d..
+d..dd..d.d.
+.d.dd.d.dd.
+...ddedd...
+.dd.d.dd.d.
+.d.d..dd..d
+..d..d.dd.d
+d...d...d.d
+.ddd....dpd`,
   map`
 dtd....ddd.
 d.d...d...d
@@ -369,13 +413,20 @@ d...d...d.d
 .....d...d.....
 .....d...d.....
 ....d..d..d....
-...d..ddd..d...
-ddd..ddedd..ddd
+...d..d2d..d...
+ddd..d...d..ddd
 d...d..d..d...d
 ddd...ddd...ddd`
 
 
 ];
+
+const finalScoreLevel = map`
+cccc
+cccc
+cccc
+cccc`;
+
 
 setMap(levels[level]);
 
@@ -427,6 +478,8 @@ onInput("i", () => {
 
 let player1Score = 0;
 let player2Score = 0;
+let finalLevelReached = false;
+
 afterInput(() => {
   // Check if player 1 has reached the exit
 
@@ -434,17 +487,14 @@ afterInput(() => {
 
   const exitTilesPlayer1 = tilesWith(exit, player1).length;
   if (exitTilesPlayer1 !== 0) {
-    player1Score++;
     level++;
+
+    player1Score++;
     const nextLevel = levels[level];
     if (nextLevel !== undefined) {
       setMap(nextLevel);
     }
-    addText("p1: " + player1Score, {
-      x: 3,
-      y: 1,
-      color: color`0`
-    })
+
   }
 
   // Check if player 2 has reached the exit
@@ -457,10 +507,86 @@ afterInput(() => {
     if (nextLevel !== undefined) {
       setMap(nextLevel);
     }
-    addText("p2: " + player2Score, {
-      x: 12,
+
+  }
+  
+  const exit2TilesPlayer1 = tilesWith(exit2, player1).length;
+  if (exit2TilesPlayer1 !== 0) {
+    player1Score++;
+    setMap(finalScoreLevel);
+    addText("Final Score:", {
+      x: 4,
       y: 1,
       color: color`0`
-    })
+    });
+    addText("Player 1: " + player1Score, {
+      x: 4,
+      y: 3,
+      color: color`0`
+    });
+    addText("Player 2: " + player2Score, {
+      x: 4,
+      y: 4,
+      color: color`0`
+    });
+    if (player1Score > player2Score) {
+      addText("Player 1 wins!", {
+        x: 4,
+        y: 6,
+        color: color`0`
+      });
+    } else if (player1Score < player2Score) {
+      addText("Player 2 wins!", {
+        x: 4,
+        y: 6,
+        color: color`0`
+      });
+    } else {
+      addText("It's a tie!", {
+        x: 4,
+        y: 6,
+        color: color`0`
+      });
+    }
+  }
+  
+  const exit2TilesPlayer2 = tilesWith(exit2, player2).length;
+  if (exit2TilesPlayer2 !== 0) {
+    player2Score++;
+    setMap(finalScoreLevel);
+    addText("Final Score:", {
+      x: 4,
+      y: 1,
+      color: color`0`
+    });
+    addText("Player 1: " + player1Score, {
+      x: 4,
+      y: 3,
+      color: color`0`
+    });
+    addText("Player 2: " + player2Score, {
+      x: 4,
+      y: 4,
+      color: color`0`
+    });
+    if (player1Score > player2Score) {
+      addText("Player 1 wins!", {
+        x: 4,
+        y: 6,
+        color: color`0`
+      });
+    } else if (player1Score < player2Score) {
+      addText("Player 2 wins!", {
+        x: 4,
+        y: 6,
+        color: color`0`
+      });
+    } else {
+      addText("It's a tie!", {
+        x: 4,
+        y: 6,
+        color: color`0`
+      });
+    }
   }
 });
