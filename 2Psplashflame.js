@@ -2,11 +2,11 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title:  
+@title: 2Psplashflame
 @author: Josh Deba
 @tags: []
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-04-19
 */
 
 const player1 = "p";
