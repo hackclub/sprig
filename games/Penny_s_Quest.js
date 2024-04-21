@@ -2,11 +2,11 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: 
+@title: Pennys Quest
 @author: OHIO-MAN
-@tags: []
+@tags: ["penny"]
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-04-20
 */
 /*
 Controls:
