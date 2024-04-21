@@ -2,7 +2,7 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Pennys Quest
+@title: Penny s Quest
 @author: OHIO-MAN
 @tags: ["penny"]
 @img: ""
