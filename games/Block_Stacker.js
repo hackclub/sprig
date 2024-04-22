@@ -278,6 +278,14 @@ function nextRound() {
   if (!running) {
     if (len != 0) {
       if (stackSize < 12) {
+        clearText()
+        if (stackSize == 0) {
+          addText("s to place", {
+            x: 5,
+            y: 10,
+            color: color`7`
+          })
+        }
         addText("Score: " + stackSize, {
           x: 1,
           y: 1,
