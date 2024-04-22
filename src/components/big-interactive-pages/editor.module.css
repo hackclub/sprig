@@ -95,7 +95,7 @@
 	background: var(--accent-light);
 }
 
-.horizontalResizeBar {
+/* .horizontalResizeBar {
 	width: 100%;
 	height: 6px;
 	min-height: 6px;
@@ -106,7 +106,7 @@
 .horizontalResizeBar:hover,
 .horizontalResizeBar.resizing {
 	background: var(--accent-light);
-}
+} */
 
 .canvasWrapper {
 	max-height: 100%;
@@ -182,4 +182,8 @@
 
 .helpContainer {
 	max-width: 100%;
+	width: 100%;
+	max-height: 100%;
+	height: 100%;
+	overflow: auto;
 }
