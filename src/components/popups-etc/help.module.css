@@ -4,6 +4,7 @@
 	align-items: flex-end;
 	height: 100%;
 	max-width: 100%;
+	width: 100%;
 }
 
 .tabs {
@@ -45,6 +46,18 @@
 
 .tab:hover {
 	background: var(--accent-dark);
+}
+
+.chatContent {
+	background: var(--bg-surface);
+	border: 2px solid var(--accent);
+	padding: 10px;
+	width: 100%;
+	overflow-y: scroll;
+	height: 100%;
+	box-shadow: 0 0 20px 0 #00000038;
+	display: flex;
+	flex-direction: column-reverse;
 }
 
 .content {

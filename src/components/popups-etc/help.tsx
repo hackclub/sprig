@@ -6,13 +6,13 @@ import { compiledContent } from "../../../docs/docs.md";
 import { codeMirror, PersistenceState } from "../../lib/state";
 import Button from "../design-system/button";
 import { saveGame } from "../big-interactive-pages/editor";
+import ChatComponent from "./chat-component";
 
 interface HelpProps {
 	initialVisible?: boolean;
 	tutorialContent?: string[];
 	persistenceState?: Signal<PersistenceState>;
 	showingTutorialWarning?: Signal<boolean>;
-	helpAreaSize?: Signal<number>;
 }
 const helpHtml = compiledContent();
 
@@ -24,6 +24,7 @@ export default function Help(props: HelpProps) {
 
 	const toolkitContentRef = useRef<HTMLDivElement>(null);
 	const tutorialContentRef = useRef<HTMLDivElement>(null);
+	const chatContentRef = useRef<HTMLDivElement>(null);
 
 	const tutorialHtml =
 		props.tutorialContent &&
@@ -68,6 +69,7 @@ export default function Help(props: HelpProps) {
 			0;
 		setTutorialIndex(tutorialIndex - 1);
 	};
+
 	return (
 		<div class={styles.container}>
 			<div class={styles.tabs}>
@@ -107,21 +109,11 @@ export default function Help(props: HelpProps) {
 						showingChat.value ? "" : styles.selected
 					}`}
 					onClick={() => {
-						showingChat.value = false;
+						showingChat.value = !showingChat.value;
+						showingTutorial.value = false;
 					}}
 				>
 					Chat
-				</div>
-				<div
-					role="button"
-					className={styles.tab}
-					onClick={() => {
-						if (!props.helpAreaSize) return;
-						props.helpAreaSize.value =
-							props.helpAreaSize.value == 0 ? 335 : 0;
-					}}
-				>
-					{props.helpAreaSize?.value == 0 ? "Show" : "Hide"}
 				</div>
 			</div>
 
@@ -220,17 +212,24 @@ export default function Help(props: HelpProps) {
 					</>
 				)}
 			</div>
-			<div
-				class={styles.content}
-				style={{
-					display: !showingTutorial.value ? "block" : "none",
-				}}
-				ref={toolkitContentRef}
-				dangerouslySetInnerHTML={{ __html: helpHtml }}
-				onScroll={(e) => {
-					toolkitScroll.value = e.currentTarget.scrollTop;
-				}}
-			/>
+			{!showingChat.value && (
+				<div
+					class={styles.content}
+					style={{
+						display: !showingTutorial.value ? "block" : "none",
+					}}
+					ref={toolkitContentRef}
+					dangerouslySetInnerHTML={{ __html: helpHtml }}
+					onScroll={(e) => {
+						toolkitScroll.value = e.currentTarget.scrollTop;
+					}}
+				/>
+			)}
+			{showingChat.value && (
+				<div class={styles.chatContent} ref={chatContentRef}>
+					<ChatComponent />
+				</div>
+			)}
 		</div>
 	);
 }

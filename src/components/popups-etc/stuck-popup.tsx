@@ -135,10 +135,7 @@ export default function StuckPopup(props: StuckPopupProps) {
 						}}
 					>
 						<Button type="submit" disabled={isSubmitting.value}>
-							Get Solution
-						</Button>
-						<Button disabled={isSubmitting.value}>
-							Get Therapy
+							Get Help
 						</Button>
 					</div>
 				</form>
