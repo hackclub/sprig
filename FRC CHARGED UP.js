@@ -1,0 +1,453 @@
+/*
+@FRC CHARGED UP: 
+@Wyatt459: 
+@tags: []
+@img: ""
+@addedOn: 2024-04-22
+*/
+
+/* Instructions: 
+Use the robots to move the cones and cubes to your alliance grid trying to score as many as possible
+in the fastest amount of time. Each grid can hold 10 game pieces. Game pieces can not be used to
+move other game pieces. the first one to fill their grid wins. Game pieces can be moved over the
+charging station. To restart the game turn the console off and back on again. Game pieces can NOT be 
+moved away from walls so stay clear. Robots can make contact so you can play some defense.
+
+Blue controls: W = up
+               S = down
+               A = left
+               D = right
+
+Red controls: I = up
+              K = down
+              J = left
+              L = right               
+         
+*/
+
+const player = "R"
+const player2 = "B"
+const cone = "C"
+const cube = "c"
+const chargingstationr = "S"
+const chargingstationl = "s"
+const chargingstationm = "T"
+const gridb1 = "0"
+const gridb2 = "1"
+const gridb3 = "2"
+const gridb4 = "3"
+const gridb5 = "4"
+const gridr1 = "5"
+const gridr2 = "6"
+const gridr3 = "7"
+const gridr4 = "8"
+const gridr5 = "9"
+const field = "F"
+
+setLegend(
+  [player, bitmap`
+3333333333333333
+3333333333333333
+33.LLL....LLL.33
+33.LLL....LLL.33
+3311111111111133
+3311111111111133
+33............33
+33............33
+33........99..33
+33........99..33
+3311111111111133
+3311111111111133
+33.LLL....LLL.33
+33.LLL....LLL.33
+3333333333333333
+3333333333333333`],
+  [player2, bitmap`
+5555555555555555
+5555555555555555
+55.LLL....LLL.55
+55.LLL....LLL.55
+5511111111111155
+5511111111111155
+55..99........55
+55..99........55
+55............55
+55............55
+5511111111111155
+5511111111111155
+55.LLL....LLL.55
+55.LLL....LLL.55
+5555555555555555
+5555555555555555`],
+  [cone, bitmap`
+................
+................
+................
+................
+....66666666....
+....66666666....
+....66666666....
+....66666666....
+....66666666....
+....66666666....
+....66666666....
+....66666666....
+................
+................
+................
+................`],
+  [cube, bitmap`
+................
+................
+................
+................
+....HHHHHHHH....
+....HHHHHHHH....
+....HHHHHHHH....
+....HHHHHHHH....
+....HHHHHHHH....
+....HHHHHHHH....
+....HHHHHHHH....
+....HHHHHHHH....
+................
+................
+................
+................`],
+  [chargingstationr, bitmap`
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL`],
+  [chargingstationl, bitmap`
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL
+LLLLLLL11LLLLLLL`],
+  [chargingstationm, bitmap`
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL`],
+  [gridb1, bitmap`
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555`],
+  [gridb2, bitmap`
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111`],
+  [gridb3, bitmap`
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+5555555555555555
+5555555555555555`],
+  [gridb4, bitmap`
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+1111111111111111
+1111111111111111`],
+  [gridb5, bitmap`
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+5555555555555555
+5555555555555555`],
+  [gridr1, bitmap`
+1111111111111111
+1111111111111111
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333`],
+  [gridr2, bitmap`
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111`],
+  [gridr3, bitmap`
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
+  [gridr4, bitmap`
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
+  [gridr5, bitmap`
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111`],
+
+  [field, bitmap`
+LL11LL11LL11LL11
+LL11LL11LL11LL11
+11LL11LL11LL11LL
+11LL11LL11LL11LL
+LL11LL11LL11LL11
+LL11LL11LL11LL11
+11LL11LL11LL11LL
+11LL11LL11LL11LL
+LL11LL11LL11LL11
+LL11LL11LL11LL11
+11LL11LL11LL11LL
+11LL11LL11LL11LL
+LL11LL11LL11LL11
+LL11LL11LL11LL11
+11LL11LL11LL11LL
+11LL11LL11LL11LL`],
+
+);
+
+setBackground(field)
+
+setSolids([player, player2, cube, cone, ])
+
+let level = 0
+const levels = [
+  map`
+.....................
+........cCcCc........
+..........C..........
+.........c.c.........
+.........C.C.........
+44.......c.c.......99
+33...STS.C.C.STS...88
+22B..STS.c.c.STS..R77
+11...STS.C.C.STS...66
+00.................55`
+]
+
+setPushables({
+  [player]: [cone, cube, player2],
+  [player2]: [cone, cube, player],
+  [cone]: [cone, cube, ],
+  [cube]: [cone, cube, ],
+})
+
+
+
+setMap(levels[level])
+// player controls start
+
+onInput("s", () => {
+  getFirst(player2).y += 1
+})
+
+onInput("w", () => {
+  getFirst(player2).y -= 1
+})
+
+onInput("a", () => {
+  getFirst(player2).x -= 1
+})
+
+onInput("d", () => {
+  getFirst(player2).x += 1
+})
+// player controls finish
+
+// player2 controls start
+
+onInput("k", () => {
+  getFirst(player).y += 1
+})
+
+onInput("i", () => {
+  getFirst(player).y -= 1
+})
+
+onInput("j", () => {
+  getFirst(player).x -= 1
+})
+
+onInput("l", () => {
+  getFirst(player).x += 1
+})
+// player2 controls finish
+afterInput(() => {})
+
+afterInput(() => {
+
+  // start cone
+  const numberCovered = tilesWith(cone).length;
+  const targetNumber = tilesWith(cone, gridb1).length;
+  const targetNumber1 = tilesWith(cone, gridb2).length;
+
+  // count the number of tiles with goals and boxes
+
+  if (numberCovered === targetNumber) {
+    wwss
+  }
+
+  //start cube
+  const numberCovered1 = tilesWith(cone).length;
+  const targetNumber2 = tilesWith(cone, gridr1).length;
+
+  // count the number of tiles with goals and boxes
+
+  if (numberCovered === targetNumber) {
+    for (const pop of tilesWith(cone)) {
+      for (const pop1 of pop) {
+        clearTile(pop1.x, pop1.y)
+        addSprite(pop1.x, pop1.y)
+      }
+    }
+  }
+})
