@@ -152,7 +152,7 @@ export const upload = async (code: string): Promise<void> => {
 		const isLegacySerial = await getIsLegacySerial(writer, reader)
 
 		if (isLegacySerial) {
-			alert("Your console is running a legacy version! Please update to continue.\nhttps://hack.club/sprig-upload") // TODO: error message
+			alert("Your console is running a legacy version! Please update to continue.\nhttps://hack.club/sprig-upload")
 			return
 		} else {
 			console.log("[UPLOAD] Not legacy!")
@@ -162,7 +162,7 @@ export const upload = async (code: string): Promise<void> => {
 		console.log(versionNum)
 
 		if (versionNum != latestVersion) {
-			alert("Your console is not updated to the latest version! You may encounter unexpected behavior.\nhttps://hack.club/sprig-upload") // TODO: error message
+			alert("Your console is not updated to the latest version! You may encounter unexpected behavior.\nhttps://hack.club/sprig-upload")
 		} else {
 			console.log("[UPLOAD] Version up to date!")
 		}
