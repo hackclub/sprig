@@ -1,3 +1,11 @@
+/*
+   ___  __         __     ______           __          
+  / _ )/ /__  ____/ /__  / __/ /____ _____/ /_____ ____
+ / _  / / _ \/ __/  '_/ _\ \/ __/ _ `/ __/  '_/ -_) __/
+/____/_/\___/\__/_/\_\ /___/\__/\_,_/\__/_/\_\\__/_/  
+*/
+
+
 const blocks = "roygdblip".split("")
 let curBlock;
 let len = 5;
@@ -29,6 +37,7 @@ const sounds = {
 250: A5-250,`
 }
 
+//different colored blocks
 setLegend(
   ["1", bitmap`
 .............222
@@ -219,6 +228,7 @@ HHHHHHHHHHHHHHHH`],
 8888888888888888`],
 )
 
+//empty level
 let level = 0
 const levels = [
   map`
@@ -238,6 +248,7 @@ const levels = [
 
 setMap(levels[level])
 
+//wait function (unused because it stops visual updates)
 function wait(t) {
   let start = performance.now()
   while (performance.now() - start < t) {}
@@ -245,8 +256,10 @@ function wait(t) {
 
 let mInterval
 
+//movement of block(s) from left to right
 function movement() {
   let diff = 1
+  //get only the blocks that shouuld be moving, not ones that have been placed
   const z = getAll(curBlock).reverse()[0]
   if (z.x == 14) {
     diff = -1
@@ -263,6 +276,7 @@ function movement() {
         a.x += diff
       }
     }
+	//z is used to keep track of when to switch direction
     const z = getAll(curBlock).reverse()[0]
     if (z.x == 14) {
       diff = -1
@@ -271,15 +285,17 @@ function movement() {
       diff = 1
     }
     blockX = z.x
-  }, stackSize < 8 ? -45 / 2.5 * stackSize + 200 : -26 / 4 * stackSize + 108)
+  }, /*function to increase speed the higher you go*/ stackSize < 8 ? -45 / 2.5 * stackSize + 200 : -26 / 4 * stackSize + 108)
 }
 
+//checks to see for game over and win, or to spawn new blocks
 function nextRound() {
   if (!running) {
     if (len != 0) {
       if (stackSize < 12) {
         clearText()
         if (stackSize == 0) {
+		  //instructions
           addText("s to place", {
             x: 5,
             y: 10,
@@ -357,14 +373,17 @@ function nextRound() {
 start = performance.now()
 nextRound()
 
+//detect when `s` is pressed and drop block
 onInput("s", () => {
   if (running) {
     playTune(sounds.place)
     running = false;
     clearInterval(mInterval);
     stackSize++;
+	//detect range of where next stack can be placed
     range[0] = Math.max(range[0], blockX - len + 1)
     range[1] = Math.min(range[1], blockX)
+	//block drop animation
     if (range[1] - range[0] + 1 < len) {
       const orig = len
       len = Math.max(range[1] - range[0] + 1, 0)
