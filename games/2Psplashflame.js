@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: 2Psplashflame
-@author: Josh Deba
+@author: Josh Deva
 @tags: []
 @img: ""
 @addedOn: 2024-04-19
