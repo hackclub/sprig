@@ -191,7 +191,7 @@ static int read_command() {
 
         timeout = 100;
 
-/*        int moved = 0;
+        int moved = 0;
 
         for (int i = 0; i < ARR_LEN(serial_commands); i++) {
             if (strlen(serial_commands[i]) > serial_command_indexes[i]
@@ -203,7 +203,7 @@ static int read_command() {
                 return i;
             }
         }
-        if (!moved) return -1;*/
+        if (!moved) return -1;
     }
 }
 
