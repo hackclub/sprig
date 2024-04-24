@@ -1,4 +1,5 @@
-import { signal } from '@preact/signals'
+import {signal} from '@preact/signals'
+import {version as latestVersion} from '../../firmware/spade/src/version.json'
 
 export type UploadState = 'IDLE' | 'LOADING' | 'ERROR'
 
@@ -23,13 +24,35 @@ const getPort = async (): Promise<SerialPort> => {
 	})
 }
 
-export const uploadToSerial = async (message: string, writer: WritableStreamDefaultWriter<ArrayBuffer>) => {
+export const logSerialOutput = (value: string) => (value.trim().length > 0) && console.log(`%c< ${value.trim()}`, 'color: #999')
+
+
+export const uploadToSerial = async (message: string,
+																		 writer: WritableStreamDefaultWriter<ArrayBuffer>,
+																		 reader: ReadableStreamDefaultReader<string>) => {
+
+	const receivedEOT = new Promise<void>(resolve => {
+		(async () => {
+			try {
+				while (true) {
+					const { value, done } = await reader.read()
+					if (done) break
+					logSerialOutput(value)
+
+					if (value.indexOf('ALL_GOOD') >= 0) resolve()
+				}
+			} catch (error) {
+				console.error(error)
+			}
+		})()
+	})
+
 	const buf = new TextEncoder().encode(message)
 
 	console.log('[UPLOAD > SERIAL] Checkpoint 1')
 	await writer.ready
 	console.log('[UPLOAD > SERIAL] Checkpoint 1 - writing startup sequence')
-	await writer.write(new Uint8Array([ 0, 1, 2, 3, 4 ]).buffer)
+	await writer.write(new TextEncoder().encode("UPLOAD"))
 
 	console.log('[UPLOAD > SERIAL] Checkpoint 2')
 	await writer.ready
@@ -45,7 +68,7 @@ export const uploadToSerial = async (message: string, writer: WritableStreamDefa
 		showUploadWarningModal.value = true;
 		clearInterval(ticker);
     }, 30000);
-	
+
 	await writer.write(buf)
 	clearInterval(ticker)
 	clearTimeout(timeoutId)
@@ -53,6 +76,55 @@ export const uploadToSerial = async (message: string, writer: WritableStreamDefa
 
 	// Ensure everything is written before continuing
 	await writer.ready
+	await receivedEOT
+}
+
+export const getVersionNumber = async (
+	writer: WritableStreamDefaultWriter<ArrayBuffer>,
+	reader: ReadableStreamDefaultReader<string>): Promise<string | null> => {
+	await writer.ready
+	await writer.write(new TextEncoder().encode("VERSION"))
+
+	// 128-char buffer
+	let serialBuffer = " ".repeat(128)
+
+	while (true) {
+		const { value, done } = await reader.read()
+
+		if (done) return null;
+		logSerialOutput(value)
+
+		serialBuffer  = serialBuffer.concat(value)
+		serialBuffer = serialBuffer.slice(serialBuffer.length - 128, serialBuffer.length)
+
+
+		const versionPrefix = "SPADE:"
+		const responseIndex = serialBuffer?.indexOf(versionPrefix) + versionPrefix.length
+		const endIndex = serialBuffer?.indexOf("END")
+		if (endIndex - responseIndex > 3) {
+			return serialBuffer?.substring(
+				responseIndex, endIndex
+			)
+		}
+
+	}
+}
+
+export const getIsLegacySerial = async (
+	writer: WritableStreamDefaultWriter<ArrayBuffer>,
+	reader: ReadableStreamDefaultReader<string>): Promise<boolean | null> => {
+
+	await writer.ready
+	await writer.write(new Uint8Array([ 0, 1, 2, 3, 4 ]).buffer)
+
+	while (true) {
+		const { value, done } = await reader.read()
+		if (done) return null
+		logSerialOutput(value)
+
+		if (value.indexOf('found startup seq!') >= 0) return true
+		if (value.indexOf('legacy detected') >= 0) return false
+	}
 }
 
 export const upload = async (code: string): Promise<void> => {
@@ -75,29 +147,31 @@ export const upload = async (code: string): Promise<void> => {
 		const readableStreamClosed = port.readable!.pipeTo(textDecoder.writable)
 		const reader = textDecoder.readable.getReader()
 
-		const receivedEOT = new Promise<void>(resolve => {
-			(async () => {
-				try {
-					while (true) {
-						const { value, done } = await reader.read()
-						if (done) break
-						if (value.indexOf('ALL_GOOD') >= 0) resolve()
-						if (value.trim().length > 0) console.log(`%c< ${value.trim()}`, 'color: #999')
-					}
-				} catch (error) {
-					console.error(error)
-				} finally {
-					reader.releaseLock()
-				}
-			})()
-		})
-
 		const writer = port.writable!.getWriter()
-		await uploadToSerial(code, writer)
-		await receivedEOT
 
-		reader.cancel()
+		const isLegacySerial = await getIsLegacySerial(writer, reader)
+
+		if (isLegacySerial) {
+			alert("Spade is running a legacy version! Please update to continue.") // TODO: error message
+			return
+		} else {
+			console.log("[UPLOAD] Not legacy!")
+		}
+
+		const versionNum = await getVersionNumber(writer, reader)
+		console.log(versionNum)
+
+		if (versionNum != latestVersion) {
+			alert("Spade is not updated to the latest version! You may encounter unexpected behavior.") // TODO: error message
+		} else {
+			console.log("[UPLOAD] Version up to date!")
+		}
+
+		await uploadToSerial(code, writer, reader)
+
 		console.log('[UPLOAD] Waiting on stream close and writer lock release...')
+		//reader.releaseLock()
+		reader.cancel()
 		await readableStreamClosed.catch(_ => { /* ignore */ })
 		writer.releaseLock()
 

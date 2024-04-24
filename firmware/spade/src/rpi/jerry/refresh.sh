@@ -11,8 +11,9 @@ rm -rf example-*
 python3 jerryscript/tools/build.py \
   --toolchain=../rp2-toolchain.cmake \
   --builddir=$(pwd)/example_build \
-  --cmake-param="-DCMAKE_INSTALL_PREFIX=$(pwd)/example_install/ -G 'Unix Makefiles'" \
-  --mem-heap=202 \
+  --cmake-param="-DCMAKE_INSTALL_PREFIX=$(pwd)/example_install/" \
+  --jerry-debugger=OFF \
+  --mem-heap=150 \
   --clean \
   --lto=OFF \
   --error-messages=ON \
