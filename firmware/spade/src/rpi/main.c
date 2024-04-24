@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include "shared/version.h"
 
 // Set to false to enable debug prints for development (this is janky)
 #if true
