@@ -1,4 +1,10 @@
 /*
+@title: Penny Platformer
+@author: Bright Li
+@tags: ["penny"]
+@img: ""
+@addedOn: 2024-04-23
+
 If you build a game using assets from the new Penny's Big Breakaway asset pack, 
 the top 5 games as voted by the community will receive a free copy of Penny's Big Breakaway 
 on Windows (or Linux via Proton!)
