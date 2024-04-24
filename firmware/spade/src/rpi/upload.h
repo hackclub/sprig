@@ -56,6 +56,10 @@ static int upl_stdin_read(void) {
 
     switch (upl_state.prog) {
       case UplProg_StartSeq: {
+          if (c != upl_state.len_i) {
+              upl_state.len_i = 0;
+          }
+
         if (c == upl_state.len_i) {
           upl_state.len_i++;
 
@@ -64,8 +68,6 @@ static int upl_stdin_read(void) {
             memset(&upl_state, 0, sizeof(upl_state));
             upl_state.prog = UplProg_Header;
           }
-        } else {
-          upl_state.len_i = 0;
         }
       } break;
       case UplProg_Header: {
