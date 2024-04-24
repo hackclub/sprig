@@ -153,6 +153,7 @@ export const upload = async (code: string): Promise<void> => {
 
 		if (isLegacySerial) {
 			alert("Your console is running a legacy version! Please update to continue.\nhttps://hack.club/sprig-upload")
+			uploadState.value = "ERROR"
 			return
 		} else {
 			console.log("[UPLOAD] Not legacy!")
