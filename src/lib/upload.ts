@@ -2,8 +2,10 @@ import {signal} from '@preact/signals'
 import {version as latestVersion} from '../../firmware/spade/src/version.json'
 
 export type UploadState = 'IDLE' | 'LOADING' | 'ERROR'
+export type VersionState = 'OK' | 'LEGACY' | 'OLD'
 
 export const uploadState = signal<UploadState>('IDLE')
+export const versionState = signal<VersionState>('OK')
 export const showUploadWarningModal = signal(false);
 
 const getPort = async (): Promise<SerialPort> => {
@@ -152,8 +154,8 @@ export const upload = async (code: string): Promise<void> => {
 		const isLegacySerial = await getIsLegacySerial(writer, reader)
 
 		if (isLegacySerial) {
-			alert("Your console is running a legacy version! Please update to continue.\nhttps://hack.club/sprig-upload")
 			uploadState.value = "ERROR"
+			versionState.value = "LEGACY"
 			return
 		} else {
 			console.log("[UPLOAD] Not legacy!")
@@ -163,7 +165,7 @@ export const upload = async (code: string): Promise<void> => {
 		console.log(versionNum)
 
 		if (versionNum != latestVersion) {
-			alert("Your console is not updated to the latest version! You may encounter unexpected behavior.\nhttps://hack.club/sprig-upload")
+			versionState.value = "OLD"
 		} else {
 			console.log("[UPLOAD] Version up to date!")
 		}
