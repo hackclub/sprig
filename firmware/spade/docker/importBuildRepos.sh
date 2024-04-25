@@ -1,6 +1,6 @@
 mkdir ~/jerryscript_build
 cd ~/jerryscript_build
-git clone https://github.com/recursiveforte/jerryscript-pico.git jerryscript
+git clone https://github.com/hackclub/jerryscript-pico.git jerryscript
 cd jerryscript
 
 mkdir ~/raspberrypi
