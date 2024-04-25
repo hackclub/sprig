@@ -23,11 +23,9 @@ else
     fi
 fi
 
-IP=$(docker network inspect bridge -f '{{range .IPAM.Config}}{{.Gateway}}{{end}}')
-
 case $1 in
     "--log") docker build ./docker | tee dockerBuildLog.txt
-             docker run -it --security-opt label:disable --rm --volume `pwd`:/root/spade $(docker images | awk '{print $3}' | awk 'NR==2') /usr/bin/gdb-multiarch -ex "target remote $IP:3333" /root/spade/spade.elf | tee -a dockerBuildLog.txt ;;
+             docker run -it --security-opt label:disable --network host --rm --volume `pwd`:/root/spade $(docker images | awk '{print $3}' | awk 'NR==2') /usr/bin/gdb-multiarch -ex "target remote :3333" /root/spade/spade.elf | tee -a dockerBuildLog.txt ;;
     *) docker build ./docker
-       docker run -it --security-opt label:disable --rm --volume `pwd`:/root/spade $(docker images | awk '{print $3}' | awk 'NR==2') /usr/bin/gdb-multiarch -ex "target remote $IP:3333" /root/spade/spade.elf ;;
+       docker run -it --security-opt label:disable --network host --rm --volume `pwd`:/root/spade $(docker images | awk '{print $3}' | awk 'NR==2') /usr/bin/gdb-multiarch -ex "target remote :3333" /root/spade/spade.elf ;;
 esac
