@@ -10,7 +10,7 @@ https://sprig.hackclub.com/gallery/getting_started
 */
 
 const player = "p"
-const pavement = "r"
+const grass = "r"
 const talisman = "t"
 const goal = "g"
 const box = "b"
@@ -120,7 +120,24 @@ LLLLLLLLLLLLLLLL`],
 ...CLCCCCCCLC...
 ...CLCCCCCCLC...
 ...CLCCCCCCLC...
-...CLCCCCCCLC...`]
+...CLCCCCCCLC...`],
+  [grass, bitmap`
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC`]
 )
 
 
@@ -212,7 +229,14 @@ bbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 ...b...b...b...b...b...b...b.
 ...b...b...b...b...b...b...b.
 ...b...b...b...b...b...b...b.`,
-  map`p`
+  map`
+...........
+...........
+...........
+...........
+...........
+.....p.....
+rrrrrrrrrrr`
 ]
 
 addText("Escape maze \nfrom spooky ghost \n\npress k for \nregular gameplay \n\n\npress l for \nsore fingers", {
@@ -260,7 +284,8 @@ afterInput(() => {
 })
 
 function begin() {
-  setInterval(chase, interval)
+  clearInterval(game);
+  game = setInterval(chase, interval)
 }
 
 function chase() {
@@ -294,11 +319,14 @@ function chase() {
       getFirst(talisman).remove()
       stun = 3
     }
-  } else if (level == 8) {
-    addText("You escaped the maze!\nNow enjoy your life", {
+  }
+  if (level == 8) {
+    clearInterval()
+    addText("You escaped \nthe maze!\n\nNow enjoy \nyour life\nOr restart by\npressing k or l", {
       x: 1,
       y: 3,
       color: color`0`
     });
   }
 }
+var game = setInterval(chase, interval)
