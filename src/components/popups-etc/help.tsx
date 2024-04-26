@@ -227,7 +227,7 @@ export default function Help(props: HelpProps) {
 			)}
 			{showingChat.value && (
 				<div class={styles.chatContent} ref={chatContentRef}>
-					<ChatComponent />
+					<ChatComponent persistenceState={props.persistenceState} />
 				</div>
 			)}
 		</div>

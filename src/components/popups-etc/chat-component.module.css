@@ -12,11 +12,14 @@
 }
 
 .message {
+	font-size: 14px;
 	margin-bottom: 10px;
-	padding: 8px;
+	padding: 12px;
+	overflow-x: auto;
 	background-color: lightgrey;
 	border-radius: 5px;
-	max-width: 80%;
+	max-width: 85%;
+	white-space: pre-wrap;
 }
 
 .messageUser {
@@ -27,18 +30,44 @@
 
 .messageBot {
 	align-self: flex-start;
-	background-color: var(--accent-dark);
-	color: white;
+	background-color: #e5e5e5;
+	color: black;
+}
+
+.message p {
+	margin: 0;
+}
+
+.message pre {
+	margin: 0;
+	padding: 4px;
+}
+
+.message ol {
+	margin: 0;
+	padding-left: 16px;
+}
+
+.message ul {
+	margin: 0;
+	padding-left: 16px;
 }
 
 .inputArea {
+	border: 1px solid var(--accent);
 	display: flex;
-	padding: 10px;
+	align-items: flex-end;
 }
 
-.inputArea input {
+.inputArea textarea {
+	background: transparent;
+	border: none;
+	outline: none;
 	flex-grow: 1;
-	margin-right: 10px;
 	padding: 5px;
+	height: 38px;
 }
 
+.inputArea button {
+	height: 38px;
+}
