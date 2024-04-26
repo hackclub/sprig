@@ -10,7 +10,7 @@ const blocks = "roygdblip".split("")
 let curBlock;
 let len = 5;
 let stackSize = 0;
-let running = false
+let running = false,gameOver = false
 let blockX = 0;
 let range = [0, 14]
 let start
@@ -23,21 +23,23 @@ const sounds = {
   "destroy": tune`
 500: F4/500 + E4/500 + D4/500,`,
   "place": tune`
-500: E5-500,`,
+500: E5-500,
+15500`,
   "gameover": tune`
 250: F5~250,
 400: B4~250,
 400: F4~250,
-250: E4~250,`,
+400: E4~250,
+250: D4~250,
+6750`,
   "win": tune`
-250: E4-250,
+400: E4-250,
 400: F4-250,
-400: B4-250,
+250: B4-250,
 250: F5-250,
-250: A5-250,`
+250: A5-250,`,
 }
 
-//different colored blocks
 setLegend(
   ["1", bitmap`
 .............222
@@ -228,7 +230,6 @@ HHHHHHHHHHHHHHHH`],
 8888888888888888`],
 )
 
-//empty level
 let level = 0
 const levels = [
   map`
@@ -248,7 +249,6 @@ const levels = [
 
 setMap(levels[level])
 
-//wait function (unused because it stops visual updates)
 function wait(t) {
   let start = performance.now()
   while (performance.now() - start < t) {}
@@ -256,10 +256,8 @@ function wait(t) {
 
 let mInterval
 
-//movement of block(s) from left to right
 function movement() {
   let diff = 1
-  //get only the blocks that shouuld be moving, not ones that have been placed
   const z = getAll(curBlock).reverse()[0]
   if (z.x == 14) {
     diff = -1
@@ -276,7 +274,6 @@ function movement() {
         a.x += diff
       }
     }
-	//z is used to keep track of when to switch direction
     const z = getAll(curBlock).reverse()[0]
     if (z.x == 14) {
       diff = -1
@@ -285,17 +282,15 @@ function movement() {
       diff = 1
     }
     blockX = z.x
-  }, /*function to increase speed the higher you go*/ stackSize < 8 ? -45 / 2.5 * stackSize + 200 : -26 / 4 * stackSize + 108)
+  }, stackSize < 8 ? -45 / 2.5 * stackSize + 200 : -26 / 4 * stackSize + 108)
 }
 
-//checks to see for game over and win, or to spawn new blocks
 function nextRound() {
   if (!running) {
     if (len != 0) {
       if (stackSize < 12) {
         clearText()
         if (stackSize == 0) {
-		  //instructions
           addText("s to place", {
             x: 5,
             y: 10,
@@ -343,6 +338,14 @@ function nextRound() {
             color: color`4`
           })
         }, 1050)
+        setTimeout(function() {
+          addText("w to restart", {
+            x: 4,
+            y: 8,
+            color: color`4`
+          })
+          gameOver = true
+        }, 1300)
       }
     } else {
       playTune(sounds.gameover)
@@ -366,6 +369,14 @@ function nextRound() {
           color: color`3`
         })
       }, 800)
+      setTimeout(function() {
+        addText("w to restart", {
+          x: 4,
+          y: 8,
+          color: color`3`
+        })
+        gameOver = true
+      }, 1200)
     }
   }
 }
@@ -373,17 +384,16 @@ function nextRound() {
 start = performance.now()
 nextRound()
 
-//detect when `s` is pressed and drop block
 onInput("s", () => {
   if (running) {
-    playTune(sounds.place)
+    if (stackSize<11){
+      playTune(sounds.place)
+    }
     running = false;
     clearInterval(mInterval);
     stackSize++;
-	//detect range of where next stack can be placed
     range[0] = Math.max(range[0], blockX - len + 1)
     range[1] = Math.min(range[1], blockX)
-	//block drop animation
     if (range[1] - range[0] + 1 < len) {
       const orig = len
       len = Math.max(range[1] - range[0] + 1, 0)
@@ -412,5 +422,22 @@ onInput("s", () => {
     } else {
       nextRound()
     }
+  }
+})
+
+onInput("w",()=>{
+  if (gameOver){
+    gameOver = false
+    start = performance.now()
+    len = 5;
+    stackSize = 0;
+    blockX = 0
+    range = [0, 14]
+    for (let x = 0;x<15;x++){
+      for (let y = 0;y<12;y++){
+        clearTile(x, y)
+      }
+    }
+    nextRound()
   }
 })
