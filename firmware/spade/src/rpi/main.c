@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include "shared/version.h"
 
 // Set to false to enable debug prints for development (this is janky)
 #if true
@@ -71,6 +72,7 @@ typedef struct {
   uint8_t last_state;
   uint8_t ring_i;
 } ButtonState;
+// W, S, A, D, I, K, J, L
 uint button_pins[] = {  5,  7,  6,  8, 12, 14, 13, 15 };
 static ButtonState button_states[ARR_LEN(button_pins)] = {0};
 
@@ -215,74 +217,88 @@ int main() {
   jerry_init(JERRY_INIT_MEM_STATS);
   init(sprite_free_jerry_object); // TODO: document
 
-  while(!save_read()) {
-    // No game stored in memory
-    strcpy(errorbuf, "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "    PLEASE UPLOAD   \n"
-                     "       A GAME       \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     " sprig.hackclub.com \n");
-    render_errorbuf();
-    st7735_fill_start();
-    render(st7735_fill_send);
-    st7735_fill_finish();
+    // Start a core to listen for keypresses.
+    multicore_launch_core1(core1_entry);
 
-    load_new_scripts();
-  }
+    /**
+       * We get a bunch of fake keypresses at startup, so we need to
+       * drain them from the FIFO queue.
+       *
+       * What really needs to be done here is to have button_init
+       * record when it starts so that we can ignore keypresses after
+       * that timestamp.
+       */
+    sleep_ms(50);
+    while (multicore_fifo_rvalid()) multicore_fifo_pop_blocking();
 
-  // Start a core to listen for keypresses.
-  multicore_launch_core1(core1_entry);
+    Game games[MAX_SLOTS + 1];
+    uint8_t games_len = get_games(games);
+    uint8_t games_i = 0;
 
-  /**
-   * We get a bunch of fake keypresses at startup, so we need to
-   * drain them from the FIFO queue.
-   *
-   * What really needs to be done here is to have button_init
-   * record when it starts so that we can ignore keypresses after
-   * that timestamp.
-   */
-  sleep_ms(50);
-  while (multicore_fifo_rvalid()) multicore_fifo_pop_blocking();
+    for (;;) {
 
-  /**
-   * Wait for a keypress to start the game.
-   * 
-   * This is important so games with e.g. infinite loops don't
-   * brick the device as soon as they start up.
-   */
-  while(!multicore_fifo_rvalid()) {
-    strcpy(errorbuf, "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "  PRESS ANY BUTTON  \n"
-                     "       TO RUN       \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     " sprig.hackclub.com \n");
-    render_errorbuf();
-    st7735_fill_start();
-    render(st7735_fill_send);
-    st7735_fill_finish();
+        /**
+         * Wait for a keypress to start the game.
+         * This is important so games with e.g. infinite loops don't
+         * brick the device as soon as they start up.
+         */
 
-    load_new_scripts();
-  }
+        if (multicore_fifo_rvalid()) {
+            uint32_t c = multicore_fifo_pop_blocking();
+            if (c == 6) { // A
+                if (slot > 0) set_game(--games_i);
+            } else if (c == 8) { // D
+                if (slot < MAX_SLOTS - 1) set_game(++games_i);
+            } else if (save_read()) {
+                break;
+            }
+        }
+
+        if (!save_read()) {
+
+            // No game stored in memory
+            sprintf(errorbuf, "                    \n"
+                              "                    \n"
+                              "                    \n"
+                              "                    \n"
+                              "                    \n"
+                              "                    \n"
+                              "    PLEASE UPLOAD   \n"
+                              "       A GAME       \n"
+                              "                    \n"
+                              "   Push A or D to   \n"
+                              "  switch game slot  \n"
+                              "                    \n"
+                              "      Slot %d/%d      \n"
+                              "                    \n"
+                              " sprig.hackclub.com \n",
+                    games_i, games_len);
+        } else {
+            sprintf(errorbuf, "                    \n"
+                              "                    \n"
+                              "                    \n"
+                              "                    \n"
+                              "                    \n"
+                              "                    \n"
+                              "  PRESS ANY BUTTON  \n"
+                              "       TO RUN       \n"
+                              "                    \n"
+                              "   Push A or D to   \n"
+                              "  switch game slot  \n"
+                              "                    \n"
+                              "      Slot %d/%d      \n"
+                              "                    \n"
+                              " sprig.hackclub.com \n",
+                    games_i, games_len);
+        }
+
+        render_errorbuf();
+        st7735_fill_start();
+        render(st7735_fill_send);
+        st7735_fill_finish();
+
+        load_new_scripts();
+    }
 
   // Wow, we can actually run a game now!
 
