@@ -208,7 +208,7 @@ onInput("d", () => {
     ballDx = Math.random() < 0.5 ? -1 : 1;
     ballDy = Math.random() < 0.5 ? -2 : 2;
   }, 1000);
-  console.log("Game Restarted");
+  // console.log("Game Restarted");
 });
 
 setPushables({

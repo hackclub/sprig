@@ -233,14 +233,14 @@ const openSquare = () => {
   if (gameGrid[cursorY][cursorX] === bomb) {
     // Handle bomb hit (game over logic)
     addSprite(cursorX, cursorY, bomb);
-    console.log("Game over! You hit a bomb.");
+    // console.log("Game over! You hit a bomb.");
     gameover();
   } else if (gameGrid[cursorY][cursorX] === flag) {
     // Handle unflagging logic
     clearTile(cursorX, cursorY);
     addSprite(cursorX, cursorY, normal);
     addSprite(cursorX, cursorY, cursor);
-    console.log("Square unflagged.");
+    // console.log("Square unflagged.");
   } else if (gameGrid[cursorY][cursorX] === normal) {
     // Handle opening logic
     const adjacentBombs = countAdjacentBombs(cursorX, cursorY);
@@ -253,7 +253,7 @@ const openSquare = () => {
       addSprite(cursorX, cursorY, open);
     }
     addSprite(cursorX, cursorY, cursor);
-    console.log("Square opened.");
+    // console.log("Square opened.");
     checkWin(); // Call the checkWin function after opening a square
   }
 };
@@ -317,13 +317,13 @@ const flagSquare = () => {
   if (gameGrid[cursorY][cursorX] === normal || gameGrid[cursorY][cursorX] === bomb) {
     addSprite(cursorX, cursorY, flag);
     gameGrid[cursorY][cursorX] = flag;
-    console.log("Square flagged.");
+    // console.log("Square flagged.");
   } else if (gameGrid[cursorY][cursorX] === flag) {
     clearTile(cursorX,cursorY);
     addSprite(cursorX,cursorY,normal);
     addSprite(cursorX,cursorY,cursor);
     gameGrid[cursorY][cursorX] = normal;
-    console.log("Flag removed.");
+    // console.log("Flag removed.");
   }
 };
 
