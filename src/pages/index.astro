@@ -6,6 +6,10 @@ import '../global.css'
 import '../legacy/homepage.scss'
 import { firestore, getSession } from '../lib/game-saving/account'
 import { getConsolesRemaining } from '../lib/remaining-consoles'
+import fs from "fs";
+import path from "path";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
 const remainingConsoles = await getConsolesRemaining()
 
@@ -28,6 +32,29 @@ if (session && session.session.full) {
 		.get()
 	gameCount = res.data().count
 }
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+async function getGameSourceCode() {
+	const response = await fetch("http://localhost:3000/api/gallery?new");
+	const gameList = await response.json();
+	const randomIndex = Math.floor(Math.random() * gameList.length);
+	const selectedGame = gameList[randomIndex];
+	let gameTitle = selectedGame.filename;
+	gameTitle = gameTitle.replace(/\s/g, "");
+	const gameContentPath = path.resolve(
+		__dirname,
+		`../../games/${gameTitle}.js`
+	);
+
+	console.log(gameContentPath);
+	let gameSourceCode = fs.readFileSync(gameContentPath, "utf-8").toString();
+
+	return gameSourceCode;
+}
+
+const gamesource = await getGameSourceCode();
 ---
 
 <html lang='en'>
@@ -294,7 +321,7 @@ if (session && session.session.full) {
 				})
 			}
 		</script>
-
+		<div id='gamesource-data' data-gamesource={gamesource} style={{ displa: "none", visibility: "hidden"}}></div>
 		<!-- 3D interactive device: -->
 		<script>
 			import * as THREE from 'three'
@@ -302,7 +329,6 @@ if (session && session.session.full) {
 			import { OrbitControls } from '../lib/orbit-controls'
 			import { type InputKey, VALID_INPUTS } from 'sprig'
 			import { imageDataEngine } from 'sprig/image-data'
-			import { homepageExampleCode } from '../lib/examples'
 
 			// @ts-ignore
 			import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment'
@@ -390,8 +416,9 @@ if (session && session.session.full) {
 
 						const screen = gltf.scene.getObjectByName('Screen')
 						glass = screen.children.find(({ material }: any) => material?.name === 'Glow Glass')
-						
-						const fn = new Function(...Object.keys(game.api), homepageExampleCode)
+						const gameSourceContainer = document.getElementById("gamesource-data");
+						const gamesource = gameSourceContainer?.dataset.gamesource || '';
+						const fn = new Function(...Object.keys(game.api), gamesource);
 						fn(...Object.values(game.api))
 
 						glass.material = new THREE.MeshBasicMaterial({ map: new THREE.Texture(game.render()) })
