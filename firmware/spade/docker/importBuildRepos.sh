@@ -1,8 +1,7 @@
 mkdir ~/jerryscript_build
 cd ~/jerryscript_build
-git clone https://github.com/jerryscript-project/jerryscript.git
+git clone https://github.com/hackclub/jerryscript-pico.git jerryscript
 cd jerryscript
-git checkout 8ba0d1b6ee5a065a42f3b306771ad8e3c0d819bc # version 2.4.0
 
 mkdir ~/raspberrypi
 cd ~/raspberrypi
