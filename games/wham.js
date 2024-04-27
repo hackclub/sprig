@@ -295,7 +295,7 @@ onInput("s", () => {
   }
 
   addText(vertical_cursor.toString(), {x: 15, y: 4, color: color`3`})
-  console.log(current_screen.flat().join(""))
+  // console.log(current_screen.flat().join(""))
   const levels = [current_screen.flat().join("")];
   const currentLevel = levels[level];
   setMap(currentLevel);}

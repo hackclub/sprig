@@ -413,7 +413,7 @@ onInput("d", () => {
 });
 
 afterInput(() => {
-  console.log("yes");
+  // console.log("yes");
 });
 
 // movement
