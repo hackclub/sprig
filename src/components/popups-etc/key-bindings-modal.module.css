@@ -1,0 +1,98 @@
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.6);
+	display: none;
+	z-index: 1000;
+  }
+  
+  .overlay.show {
+	display: block;
+  }
+  
+  .modal {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: #ffffff;
+	padding: 20px;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+	width: 700px;
+  }
+  
+  .modalTitle {
+	font-size: 1.5em;
+	margin-bottom: 20px;
+	text-align: center;
+	font-weight: bold;
+  }
+  
+  .modalDescription {
+	text-align: center;
+	margin-bottom: 15px;
+	color: #333333;
+  }
+  
+  .bindingsContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	margin-bottom: 20px;
+  }
+  
+  .binding {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	margin-bottom: 10px;
+  }
+  
+  .label {
+	flex-basis: 30%;
+	text-align: right;
+	padding-right: 10px;
+	font-weight: 500;
+  }
+  
+  .input {
+	flex-basis: 120%;
+	padding: 8px;
+	border: 1px solid #ccc;
+	transition: border-color 0.2s;
+  }
+  
+  .input:hover,
+  .input:focus {
+	border-color: #aaaaaa;
+	outline: none;
+  }
+  
+  .buttonContainer {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+  }
+  
+  .buttonContainer > button {
+	padding: 10px 20px;
+	font-weight: 600;
+	border: 1px solid #ccc;
+	background: #078969;
+	cursor: pointer;
+	transition: background-color 0.2s;
+	color: #ffffff;
+  }
+  
+  .buttonContainer > button:hover {
+	background-color: #056d54;
+  }
+  
+  .buttonContainer > button:focus {
+	outline: none;
+	border-color: #078969;
+  }  

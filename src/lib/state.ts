@@ -89,6 +89,7 @@ export const errorLog = signal<NormalizedError[]>([])
 export const openEditor = signal<OpenEditor | null>(null)
 export const bitmaps = signal<[string, string][]>([])
 export const editSessionLength = signal<Date>(new Date());
+export const showKeyBinding = signal(false);
 
 export type ThemeType = "dark" | "light" | "busker";
 export const theme = signal<ThemeType>("dark");
@@ -141,16 +142,16 @@ export const switchTheme = (themeType: ThemeType) => {
 	const themeValue = themes[themeType];
 	// set the document values
 	const documentStyle = document.body.style;
-	documentStyle.background = themeValue.background;
-	document.documentElement.style.setProperty(`--accent`, themeValue.accent);
-	document.documentElement.style.setProperty(`--accent-dark`, themeValue.accentDark);
-	document.documentElement.style.setProperty(`--fg-muted-on-accent`, themeValue.fgMutedOnAccent);
-	documentStyle.color = themeValue.color;
+	documentStyle.background = themeValue?.background?? '';
+	document.documentElement.style.setProperty(`--accent`, themeValue?.accent?? '');
+	document.documentElement.style.setProperty(`--accent-dark`, themeValue?.accentDark?? '');
+	document.documentElement.style.setProperty(`--fg-muted-on-accent`, themeValue?.fgMutedOnAccent?? '');
+	documentStyle.color = themeValue?.color ?? '';
 	
 	// change the color of the text in elements having .copy-container style
 	// These includes pages such as 'Gallery' and 'Your Games'
 	const copyContainer = document.querySelector(".copy-container") as HTMLDivElement;
 	if (copyContainer) {
-		copyContainer.style.color = themeValue.copyContainerText;
+		copyContainer.style.color = themeValue?.copyContainerText ?? '';
 	}
 }

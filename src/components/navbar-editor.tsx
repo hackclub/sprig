@@ -17,6 +17,7 @@ import { VscLoading } from 'react-icons/vsc'
 import { defaultExampleCode } from '../lib/examples'
 import beautifier from "js-beautify";
 import { collapseRanges } from '../lib/codemirror/util'
+import { showKeyBinding } from '../lib/state';
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -259,9 +260,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						}}>
 							<span style={{
 								display: "inline-block",
-								backgroundColor: themeValue.background,
+								backgroundColor: themeValue?.background,
 								border: "solid 2px",
-								borderColor: themeValue.accent,
+								borderColor: themeValue?.accent,
 								width: "25px",
 								height: "25px",
 								borderRadius: "50%"
@@ -364,7 +365,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					</>)}
 				<li><a href='/gallery'>Gallery</a></li>
 				<li><a href='/get'>Get a Sprig</a></li>
-				<li><a href='javascript:void(0);' role='button' onClick={() => { showNavPopup.value = false; prettifyCode(); }}> Prettify code </a></li></ul>
+				<li><a href='javascript:void(0);' role='button' onClick={() => { showNavPopup.value = false; prettifyCode(); }}> Prettify code </a></li>
+				<li><a href='javascript:void(0);' role='button' onClick={() => { showKeyBinding.value = true,showNavPopup.value = false; }}> Rebinding key </a></li></ul>
 			<div class={styles.divider} />
 			<ul>
 				<li>
