@@ -11,7 +11,9 @@ import ChatComponent from "./chat-component";
 interface HelpProps {
 	initialVisible?: boolean;
 	tutorialContent?: string[];
-	persistenceState?: Signal<PersistenceState>;
+	persistenceState: Signal<PersistenceState>;
+	defaultHelpAreaHeight: number;
+	helpAreaSize: Signal<number>;
 	showingTutorialWarning?: Signal<boolean>;
 }
 const helpHtml = compiledContent();
@@ -103,18 +105,34 @@ export default function Help(props: HelpProps) {
 						Help
 					</div>
 				)}
-				<div
-					role="button"
-					className={`${styles.tab} ${
+				<Button
+					accent
+					class={`${styles.tab} ${
 						showingChat.value ? "" : styles.selected
 					}`}
+					disabled={
+						props.persistenceState?.value.session?.user == null
+					}
 					onClick={() => {
 						showingChat.value = !showingChat.value;
 						showingTutorial.value = false;
 					}}
 				>
 					Chat
-				</div>
+				</Button>
+				<Button
+					accent
+					class={styles.tab}
+					onClick={() => {
+						if (!props.helpAreaSize) return;
+						props.helpAreaSize.value =
+							props.helpAreaSize.value == 0
+								? props.defaultHelpAreaHeight
+								: 0;
+					}}
+				>
+					{props.helpAreaSize?.value == 0 ? "Show" : "Hide"}
+				</Button>
 			</div>
 
 			<div
