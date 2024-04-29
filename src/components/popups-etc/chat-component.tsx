@@ -67,7 +67,10 @@ Answer the questions that follow based on this unless new code is provided.`;
 					body: JSON.stringify({
 						model: "chatgpt",
 						messages: [
-							...messages,
+							...messages.map((message) => ({
+								content: message.content,
+								role: message.role,
+							})),
 							{ content: systemPrompt, role: "user" },
 							newMessage,
 						],
