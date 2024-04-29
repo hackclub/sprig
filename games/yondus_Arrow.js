@@ -1,6 +1,6 @@
 
 /* 
-@title: yondu's_Arrow
+@title: yondus_Arrow
 @author: Cayden Robbins
 @tags: ['sokoban-style']
 @addedOn: 2023-06-15
