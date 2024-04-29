@@ -1,6 +1,6 @@
 
 /* 
-@title: Eat_&_Don't_Be_Eaten
+@title: Eat_&_Dont_Be_Eaten
 @author: Nathan Man
 @tags: ['catch']
 @addedOn: 2023-08-30
