@@ -1,7 +1,6 @@
 /*
 @title: Knight Post
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2023-10-23
 @author: Aditya P Venugopal
 Keys: 

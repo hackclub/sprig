@@ -3,7 +3,6 @@
 @title: hidden_maze
 @author: Rylan Berry
 @tags: ['logic']
-@img: ""
 @addedOn: 2023-05-06
 */
 

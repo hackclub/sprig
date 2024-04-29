@@ -1,7 +1,6 @@
 /*
 @title: catch_orpheus
 @tags: ['catch']
-@img: ""
 @addedOn: 2022-10-08
 @author: sampoder
 

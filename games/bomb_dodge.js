@@ -3,7 +3,6 @@
 @title: bomb_dodge
 @author: AstralTurtle
 @tags: ['logic']
-@img: ""
 @addedOn: 2023-12-10
 */
 

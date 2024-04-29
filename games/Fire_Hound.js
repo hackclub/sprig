@@ -1,7 +1,6 @@
 /*
 @title: Fire Hound
 @tags: ['puzzle-score']
-@img: ""
 @addedOn: 2023-01-30
 @author: Himir Desai
 */

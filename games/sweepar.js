@@ -4,7 +4,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Sweepar
 @author: eshangonemad
 @tags: []
-@img: ""
 @addedOn: 2024-03-20
 */
 const cursor = "c"

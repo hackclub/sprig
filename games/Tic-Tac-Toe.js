@@ -1,7 +1,6 @@
 /*
 @title: Tic-Tac-Toe
 @tags: ['classic']
-@img: ""
 @addedOn: 2023-01-19
 @author: Atharv Gupta
 */

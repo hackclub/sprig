@@ -3,7 +3,6 @@
 @title: Sprigressbar
 @author: MathR
 @tags: ['advanced']
-@img: ""
 @addedOn: 2023-08-21
 */
 

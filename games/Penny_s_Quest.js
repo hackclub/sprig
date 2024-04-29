@@ -5,7 +5,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Penny s Quest
 @author: OHIO-MAN
 @tags: ["penny"]
-@img: ""
 @addedOn: 2024-04-20
 */
 /*

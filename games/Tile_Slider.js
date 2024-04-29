@@ -3,7 +3,6 @@
 @title: Tile_Slider
 @author: Susman
 @tags: ['']
-@img: ""
 @addedOn: 2023-11-30
 */
 

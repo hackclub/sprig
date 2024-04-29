@@ -3,7 +3,6 @@
 @title: Among_The_Stars
 @author: VanGo
 @tags: ['endless']
-@img: ""
 @addedOn: 2023-04-11
 */
 

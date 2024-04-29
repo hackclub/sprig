@@ -5,7 +5,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Bad_Apple
 @author: Sychamis
 @tags: ['advanced']
-@img: ""
 @addedOn: 2024-01-27
 */
 

@@ -3,7 +3,6 @@
 @title: wham
 @author: Aaman Patnaik
 @tags: ['classic']
-@img: ""
 @addedOn: 2023-09-18
 */
 

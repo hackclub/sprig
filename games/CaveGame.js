@@ -2,7 +2,6 @@
 @title: CaveGame
 @author: AlexL
 @tags: ['dungeon']
-@img: ""
 @addedOn: 2024-01-22
 
 CONTROLS

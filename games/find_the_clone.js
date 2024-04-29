@@ -5,7 +5,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: find_the_clone
 @author: TheGoldenBlock
 @tags: ['puzzle']
-@img: ""
 @addedOn: 2024-01-21
 */
 

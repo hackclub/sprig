@@ -3,7 +3,6 @@
 @title: Antivirus
 @author: Nathan Jereb
 @tags: ['dodge']
-@img: ""
 @addedOn: 2023-05-03
 */
 

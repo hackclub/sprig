@@ -1,7 +1,6 @@
 /*
 @title: Dogs vs Cats
 @tags: ['endless']
-@img: ""
 @addedOn: 2022-11-12
 @author: Theodor
 */
