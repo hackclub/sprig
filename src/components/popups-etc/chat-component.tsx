@@ -1,5 +1,5 @@
 import useLocalStorage from "../../lib/hooks/use-local-storage";
-import { PersistenceState } from "../../lib/state";
+import { codeMirror, errorLog, PersistenceState } from "../../lib/state";
 import Button from "../design-system/button";
 import styles from "./chat-component.module.css";
 import { Signal, useSignal } from "@preact/signals";
@@ -7,7 +7,7 @@ import { RiChatDeleteLine } from "react-icons/ri";
 import markdown from "@wcj/markdown-to-html";
 
 interface ChatProps {
-	persistenceState: Signal<PersistenceState> | undefined;
+	persistenceState: Signal<PersistenceState>;
 }
 
 const ChatComponent = ({ persistenceState }: ChatProps) => {
@@ -20,8 +20,24 @@ const ChatComponent = ({ persistenceState }: ChatProps) => {
 				: ""
 			: persistenceState?.value.name || "";
 
+	const systemPrompt = `Here is the current code:
+\`\`\`
+${codeMirror.value?.state.doc.toString()}
+\`\`\`
+
+${
+	errorLog.value.length > 0
+		? `I am facing the following errors:
+\`\`\`
+${errorLog.value[0]?.description}
+\`\`\``
+		: ""
+}
+
+Answer the questions that follow based on this unless new code is provided.`;
+
 	const [messages, setMessages] = useLocalStorage<
-		{ content: string; role: string }[]
+		{ content: string; role: string; render?: boolean }[]
 	>(`chat-${game}`, [
 		{ content: "Hello! How can I help you today?", role: "assistant" },
 	]);
@@ -33,12 +49,14 @@ const ChatComponent = ({ persistenceState }: ChatProps) => {
 			if (!input.value.trim()) return;
 			loading.value = true;
 
-			const newMessage = {
-				content: input.value.trim(),
+			const newSystemMessage = {
+				content: systemPrompt,
 				role: "user",
+				render: false,
 			};
+			const newMessage = { content: input.value.trim(), role: "user" };
 
-			setMessages([...messages, newMessage]);
+			setMessages([...messages, newSystemMessage, newMessage]);
 			input.value = "";
 
 			const response = await fetch(
@@ -48,7 +66,11 @@ const ChatComponent = ({ persistenceState }: ChatProps) => {
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({
 						model: "chatgpt",
-						messages: [...messages, newMessage],
+						messages: [
+							...messages,
+							{ content: systemPrompt, role: "user" },
+							newMessage,
+						],
 					}),
 				}
 			);
@@ -60,6 +82,7 @@ const ChatComponent = ({ persistenceState }: ChatProps) => {
 
 			setMessages([
 				...messages,
+				newSystemMessage,
 				newMessage,
 				{ content: data.raw, role: "assistant" },
 			]);
@@ -73,22 +96,28 @@ const ChatComponent = ({ persistenceState }: ChatProps) => {
 	return (
 		<div class={styles.chatUI}>
 			<div class={styles.chatArea}>
-				{messages.map((message, i) => (
-					<div
-						key={i}
-						class={`${styles.message} ${
-							message.role === "user"
-								? styles.messageUser
-								: styles.messageBot
-						}`}
-						dangerouslySetInnerHTML={{
-							__html: (markdown(message.content) as string) || "",
-						}}
-					></div>
-				))}
+				{messages
+					.filter((message) => message.render !== false)
+					.map((message, i) => (
+						<div
+							key={i}
+							class={`${styles.message} ${
+								message.role === "user"
+									? styles.messageUser
+									: styles.messageBot
+							}`}
+							dangerouslySetInnerHTML={{
+								__html:
+									(markdown(message.content) as string) || "",
+							}}
+						></div>
+					))}
 			</div>
 			<div class={styles.inputArea}>
-				<Button accent onClick={() => setMessages([])}>
+				<Button
+					accent
+					onClick={() => setMessages(messages.slice(0, 1))}
+				>
 					<RiChatDeleteLine />
 				</Button>
 				<textarea
