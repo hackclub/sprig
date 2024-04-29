@@ -118,7 +118,7 @@ export default function Help(props: HelpProps) {
 						showingTutorial.value = false;
 					}}
 				>
-					Chat
+					Get AI Help
 				</Button>
 				<Button
 					accent
