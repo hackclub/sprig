@@ -252,7 +252,6 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 							) : null}
 
 							<img
-								src={`gallery/${game.img}`}
 								alt={`preview of ${game.filename}.js`}
 							/>
 							<h3>{game.title}</h3>
