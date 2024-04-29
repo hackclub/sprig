@@ -137,9 +137,11 @@ p......
 
 setMap(levels[level]);
 
+/* TEST FAILED - Error: Your sprite name must be wrapped in [] brackets here.
 setPushables({
   [ dog ]: [],
 });
+*/
 
 afterInput(() => {
   if (dog()) {
