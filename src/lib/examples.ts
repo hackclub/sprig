@@ -3,11 +3,15 @@ export const defaultExampleCode = `
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: 
-@author: 
-@tags: []
-@img: ""
-@addedOn: 2024-00-00
+
+# Game Metadata for Gallery (optional)
+Below you will find the necessary metadata that you need to fill in order for the game to be published to the sprig gallery.
+## Fill Instructions: https://sprig.hackclub.com/get (Step 0)
+
+@title: GAME_TITLE
+@author: YOUR_NAME
+@tags: [GAME_TAGS(see gallery for existing)]
+@addedOn: YYYY-MM-DD
 */
 
 const player = "p"

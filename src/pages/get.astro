@@ -1,68 +1,184 @@
 ---
-import '../global.css'
-import '../legacy/get.scss'
-import { getSession } from '../lib/game-saving/account'
-import { getConsolesRemaining } from '../lib/remaining-consoles'
-import Navbar from '../components/navbar-main'
-import StandardHead from '../components/standard-head.astro'
+import "../global.css";
+import "../legacy/get.scss";
+import { getSession } from "../lib/game-saving/account";
+import { getConsolesRemaining } from "../lib/remaining-consoles";
+import Navbar from "../components/navbar-main";
+import StandardHead from "../components/standard-head.astro";
 
-const remainingConsoles = await getConsolesRemaining()
-const session = await getSession(Astro.cookies)
+const remainingConsoles = await getConsolesRemaining();
+const session = await getSession(Astro.cookies);
 ---
 
-<html lang='en'>
+<html lang="en">
 	<head>
-		<StandardHead title='Get a Sprig' />
+		<StandardHead title="Get a Sprig" />
 	</head>
 	<body>
 		<Navbar transparent session={session} />
-		
+
 		<div class="wrapper">
 			<div class="heading-outer">
 				<div class="heading-inner">
 					<h1>Share your game, get a Sprig</h1>
-					<p>After you create your own game, we'd love for you to share it with other makers on the internet!</p>
-		
 					<p>
-						If you're looking to submit your game to get a Sprig, make sure to read over the <a
-							href="https://github.com/hackclub/sprig/blob/main/docs/GET_A_SPRIG.md" target="_blank">rules here</a
+						After you create your own game, we'd love for you to
+						share it with other makers on the internet!
+					</p>
+
+					<p>
+						If you're looking to submit your game to get a Sprig,
+						make sure to read over the <a
+							href="https://github.com/hackclub/sprig/blob/main/docs/GET_A_SPRIG.md"
+							target="_blank">rules here</a
 						>.
 					</p>
 
 					<p>
-						<strong>{remainingConsoles}</strong> teenagers have already claimed their sprig!
+						<strong>{remainingConsoles}</strong> teenagers have already
+						claimed their sprig!
 					</p>
 				</div>
 			</div>
-		
+
 			<div class="inner">
 				<div class="step">
 					<div>
 						<p class="step-number">Step 0:</p>
-						<h2>Download your game file</h2>
-						<p>In the top left Sprig menu, press "Download". Your file should start downloading immediately.</p>
+						<h2>Fill in the game metadata</h2>
+						<p>
+							In the header of your game you should see a section
+							about game metadata. In order to publish your game
+							to the sprig gallery website you will need to fill
+							it in according to the following instructions. For
+							any assistance feel free to sent a message on the
+							#sprig channel on the slack
+						</p>
+						<code>
+							@title: GAME_TITLE <br />
+							@author: YOUR_NAME <br />
+							@tags: [GAME_TAGS] <br />
+							@addedOn: YYYY-MM-DD
+						</code>
 					</div>
-					<img class="media" src="/screenshots/export.png" alt="screenshot of where to export the game file" />
 				</div>
-		
+
+				<div class="step">
+					<div>
+						<p class="step-number">Step 0A:</p>
+						<h2>Filling out your details</h2>
+						<p>
+							The first step into completing the game metadata is
+							to fill out your and your games details. First and
+							foremost replace GAME_TITLE on the @title tag to
+							your game title without quotes. A similar process we
+							follow for the @author tag, replace YOUR_NAME with
+							your name. For example here is the header so far:
+						</p>
+						<code>
+							@title: Orpheus Marathon <br />
+							@author: Orpheus <br />
+							@tags: [GAME_TAGS] <br />
+							@addedOn: YYYY-MM-DD
+						</code>
+					</div>
+				</div>
+
+				<div class="step">
+					<div>
+						<p class="step-number">Step 0B:</p>
+						<h2>Adding tags</h2>
+						<p>
+							Tags on sprig are an easy way for players to
+							categorize their games based on their content. For
+							example a game that has a tag adventure will have
+							adventurous gameplay. You can see all of the tags
+							that are curently used fore reference on the <a
+								href="/gallery">Sprig Gallery</a
+							> but you can always add new ones. The metadata tag @tags
+							takes an array of comma-seperated strings, for example:
+							@tags: ['puzzle', 'adventure'].
+						</p>
+						<code>
+							@title: Orpheus Marathon <br />
+							@author: Orpheus <br />
+							@tags: ['puzzle', 'adventure'] <br />
+							@addedOn: YYYY-MM-DD
+						</code>
+					</div>
+				</div>
+
+				<div class="step">
+					<div>
+						<p class="step-number">Step 0C:</p>
+						<h2>Filling the date</h2>
+						<p>
+							The @addedOn tag is there to act as the day that the
+							game was published. The format is YYYY-MM-DD where
+							YYYY is the current year, MM is the current month
+							and DD is the current day. Make sure to fill it out
+							correctly in order for your game to appear in the
+							recently added :) The current value for today would
+							be: {new Date().toISOString().split("T")[0]}
+						</p>
+						<code>
+							@title: Orpheus Marathon <br />
+							@author: Orpheus <br />
+							@tags: ['puzzle', 'adventure'] <br />
+							@addedOn: {new Date().toISOString().split("T")[0]}
+						</code>
+					</div>
+				</div>
+
 				<div class="step">
 					<div>
 						<p class="step-number">Step 1:</p>
-						<h2>Fork the Sprig repository</h2>
-						<p>Click below to create a fork of the Sprig repository.</p>
-						<p>You might have to sign up for a GitHub account.</p>
-						<a href="https://github.com/hackclub/sprig/fork" target="_blank">
-							<button class="btn active">Fork hackclub/sprig</button>
-						</a>
-		
-						<p>Optional: while you're here it'd be nice to give us a star!</p>
+						<h2>Download your game file</h2>
+						<p>
+							In the top left Sprig menu, press "Download". Your
+							file should start downloading immediately.
+						</p>
 					</div>
-					<img class="media" src="/screenshots/fork.png" alt="screenshot of github's fork page" />
+					<img
+						class="media"
+						src="/screenshots/export.png"
+						alt="screenshot of where to export the game file"
+					/>
 				</div>
-		
+
 				<div class="step">
 					<div>
 						<p class="step-number">Step 2:</p>
+						<h2>Fork the Sprig repository</h2>
+						<p>
+							Click below to create a fork of the Sprig
+							repository.
+						</p>
+						<p>You might have to sign up for a GitHub account.</p>
+						<a
+							href="https://github.com/hackclub/sprig/fork"
+							target="_blank"
+						>
+							<button class="btn active"
+								>Fork hackclub/sprig</button
+							>
+						</a>
+
+						<p>
+							Optional: while you're here it'd be nice to give us
+							a star!
+						</p>
+					</div>
+					<img
+						class="media"
+						src="/screenshots/fork.png"
+						alt="screenshot of github's fork page"
+					/>
+				</div>
+
+				<div class="step">
+					<div>
+						<p class="step-number">Step 3:</p>
 						<h2>Upload your game to your fork</h2>
 						<ul>
 							<li>Open the "Games" folder within your fork</li>
@@ -71,52 +187,89 @@ const session = await getSession(Astro.cookies)
 							<li>Add your file and click "Commit File"</li>
 						</ul>
 					</div>
-					<img class="media" src="/screenshots/upload.png" alt="screenshot of where to upload the game file on github" />
+					<img
+						class="media"
+						src="/screenshots/upload.png"
+						alt="screenshot of where to upload the game file on github"
+					/>
 				</div>
-		
+
 				<div class="step">
 					<div>
-						<p class="step-number">(Optional) Step 3:</p>
+						<p class="step-number">(Optional) Step 4:</p>
 						<h2>Add custom thumbnail</h2>
 						<p>
-							By default, the thumbnail that shows up in the gallery will be the first map of your game. If you want to
-							change this, you can:
+							By default, the thumbnail that shows up in the
+							gallery will be the first map of your game. If you
+							want to change this, you can:
 						</p>
 						<ul>
-							<li>Take a screenshot of your game (PNG format only)</li>
+							<li>
+								Take a screenshot of your game (PNG format only)
+							</li>
 							<li>Click back to the gallery folder</li>
 							<li>Open the img folder in gallery</li>
 							<li>Click "Add File"</li>
 							<li>Select "Upload File"</li>
-							<li>Name your image file the file name for your game</li>
+							<li>
+								Name your image file the file name for your game
+							</li>
 							<li>Click "Commit File"</li>
 						</ul>
 					</div>
-					<img class="media" src="/screenshots/thumbnail.png" alt="screenshot of where to add a thumbnail" />
+					<img
+						class="media"
+						src="/screenshots/thumbnail.png"
+						alt="screenshot of where to add a thumbnail"
+					/>
 				</div>
-		
+
 				<div class="step">
 					<div>
-						<p class="step-number">Step 4:</p>
+						<p class="step-number">Step 5:</p>
 						<h2>Create a pull request</h2>
 						<ul>
 							<li>On your fork's page, click on "Contribute"</li>
 							<li>Select "Open Pull Request"</li>
 							<li>Click "Create Pull Request"</li>
-							<li>Name your pull request with the name of your game</li>
-							<li>Complete the information requested in the Pull Request body</li>
+							<li>
+								Name your pull request with the name of your
+								game
+							</li>
+							<li>
+								Complete the information requested in the Pull
+								Request body
+							</li>
 							<li>Click "Create Pull Request"</li>
 						</ul>
-						<p>We'll take a look at your game! Once approved, your game will appear in the gallery :)</p>
-						<p>If you're a high schooler or younger and your game meets <a href="https://github.com/hackclub/sprig/blob/main/docs/GET_A_SPRIG.md" target="_blank">the requirements</a> we'll also get in touch to mail you a physical Sprig of your own.</p>
+						<p>
+							We'll take a look at your game! Once approved, your
+							game will appear in the gallery :)
+						</p>
+						<p>
+							If you're a high schooler or younger and your game
+							meets <a
+								href="https://github.com/hackclub/sprig/blob/main/docs/GET_A_SPRIG.md"
+								target="_blank">the requirements</a
+							> we'll also get in touch to mail you a physical Sprig
+							of your own.
+						</p>
 					</div>
-					<img class="media" src="/screenshots/contribute.png" alt="screenshot of the create pull request button" />
+					<img
+						class="media"
+						src="/screenshots/contribute.png"
+						alt="screenshot of the create pull request button"
+					/>
 				</div>
-		
-				<a href="/gallery" class="bottom-cta"><button class="btn big active">Check out the gallery &raquo;</button></a>
+
+				<a href="/gallery" class="bottom-cta"
+					><button class="btn big active"
+						>Check out the gallery &raquo;</button
+					></a
+				>
 			</div>
 		</div>
-		
+
 		<img src="/SPRIGDINO.svg" alt="sprig dino" class="sprig-dino" />
 	</body>
 </html>
