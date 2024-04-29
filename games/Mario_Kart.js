@@ -204,7 +204,7 @@ function gameScore() {
 
 function lost() {
   GameOver = true;
-  console.log("You lost");
+  // console.log("You lost");
   setMap(map`
 llllll
 llllll

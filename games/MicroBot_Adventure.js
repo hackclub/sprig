@@ -543,7 +543,7 @@ setInterval(function () {
 
   getAll(laserEast).forEach((laserEastObj) => {
     getTile(laserEastObj.x, laserEastObj.y).forEach((sprite) => {
-      console.log(sprite.type);
+      // console.log(sprite.type);
       if (
         sprite.type === enemyEast ||
         sprite.type === enemySouth ||
@@ -562,7 +562,7 @@ setInterval(function () {
   });
   getAll(laserWest).forEach((laserWestObj) => {
     getTile(laserWestObj.x, laserWestObj.y).forEach((sprite) => {
-      console.log(sprite.type);
+      // console.log(sprite.type);
       if (
         sprite.type === enemyEast ||
         sprite.type === enemySouth ||

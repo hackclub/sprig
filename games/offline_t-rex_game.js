@@ -180,7 +180,7 @@ function gameLoop() {
 
 function lost() {
   gameOver = true;
-  console.log("You lost");
+  // console.log("You lost");
   setMap(map`
 ssssss
 ssssss
