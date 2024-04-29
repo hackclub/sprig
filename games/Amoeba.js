@@ -425,7 +425,7 @@ function getSequenceOfMarks(initialX, initialY, xStepDirection, yStepDirection, 
 
 function checkForWin() {
   const marks = marksPlaced.filter(mark => mark.type === currentTurn);
-  console.log("M", marks);
+  // console.log("M", marks);
 
   const sequenceChecks = [[-1, 1], /*[1, -1],*/ [1, 1], /*[-1, -1],*/ [0, 1], /*[0, -1],*/ [-1, 0], /*[1, 0]*/];
 

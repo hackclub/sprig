@@ -318,7 +318,7 @@ afterInput(() => {
     // increase the current level number
     level = level + 1;
     const currentLevel = levels[level];
-    console.log(level);
+    // console.log(level);
     // make sure the level exists and if so set the map
     // otherwise, we have finished the last level, there is no level
     // after the last level
@@ -339,8 +339,8 @@ function checkHit() {
 
   if (baddamage > 0) {
     // You're being hit
-      console.log("evilHIT!");
-      console.log(evildamage);
+      // console.log("evilHIT!");
+      // console.log(evildamage);
       setMap(currentLevelMap); // Reset the current level
     }
   }
@@ -361,6 +361,6 @@ function checkHit() {
   if (badBoxDamage > 0 || evilBoxDamage > 0) {
     // You're being hit by either BADBOX or EVILBOX
     setMap(currentLevelMap); // Reset the current level
-    console.log("HIT!");
+    // console.log("HIT!");
   }
 }
