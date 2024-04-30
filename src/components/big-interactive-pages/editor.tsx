@@ -1,7 +1,7 @@
 import styles from './editor.module.css'
 import CodeMirror from '../codemirror'
 import Navbar from '../navbar-editor'
-import { IoClose, IoPlayCircleOutline, IoVolumeHighOutline, IoVolumeMuteOutline } from 'react-icons/io5'
+import { IoClose, IoPlayCircleOutline, IoStopCircleOutline, IoVolumeHighOutline, IoVolumeMuteOutline } from 'react-icons/io5'
 import { Signal, useComputed, useSignal, useSignalEffect } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
 import { codeMirror, errorLog, muted, PersistenceState } from '../../lib/state'
@@ -16,7 +16,7 @@ import { defaultExampleCode } from '../../lib/examples'
 import MigrateToast from '../popups-etc/migrate-toast'
 import { nanoid } from 'nanoid'
 import TutorialWarningModal from '../popups-etc/tutorial-warning'
-import { isDark } from '../../lib/state'
+import { editSessionLength, switchTheme, ThemeType } from '../../lib/state'
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>
@@ -127,6 +127,12 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Max height
 	const maxOutputAreaSize = useSignal(outputAreaSize.value)
 	useEffect(() => {
+	  // re-intialize the value of the editing session length to since the editor was opened
+		editSessionLength.value = new Date();
+
+		// load the theme value from localstorage
+		switchTheme((localStorage.getItem("theme") ?? "light") as ThemeType);
+
 		const updateMaxSize = () => {
 			maxOutputAreaSize.value = (window.innerWidth - outputAreaWidthMargin) / 2.5
 		}
@@ -169,7 +175,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 
 		const code = codeMirror.value?.state.doc.toString() ?? ''
 		const res = runGame(code, screen.current, (error) => {
-			errorLog.value = [ ...errorLog.value, error ]
+			errorLog.value = [...errorLog.value, error]
 		})
 
 		screen.current.focus()
@@ -182,6 +188,14 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			errorLog.value = [ ...errorLog.value, res.error ]
 		}
 	}
+
+	const onStop = async () => {
+		if (!screen.current) return
+
+		if (cleanup.current) cleanup.current()
+
+	}
+
 	useEffect(() => () => cleanup.current?.(), [])
 
 	// Warn before leave
@@ -246,7 +260,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		<div class={styles.page}>
 			<Navbar persistenceState={persistenceState} />
 
-			<div class={styles.pageMain} style={{ backgroundColor: isDark.value ? "#2f2f2f" : "#fafed7"}}>
+			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
 						class={styles.code}
@@ -288,6 +302,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 					<Button accent icon={IoPlayCircleOutline} bigIcon iconSide='right' class={styles.playButton} onClick={onRun}>
 						Run
 					</Button>
+
 				</div>
 
 				<div
@@ -319,7 +334,10 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 									? <><IoVolumeMuteOutline /> <span>Unmute</span></>
 									: <><IoVolumeHighOutline /> <span>Mute</span></>}
 							</button>
-							<div class={styles.screenSize}>(Actual Sprig screen is 1/8" / 160&times;128 px)</div>
+							<button className={styles.stop} onClick={() => onStop()}>
+								<IoStopCircleOutline /><span>Stop</span>
+							</button>
+							<div class={styles.screenSize}>(Sprig screen is 1/8" / 160&times;128 px)</div>
 						</div>
 					</div>
 

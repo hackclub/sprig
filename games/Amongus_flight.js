@@ -135,7 +135,7 @@ getAll(blocker).forEach((w) => {
 
 function lost() {
   death = true;
-  console.log("You lost");
+  // console.log("You lost");
   setMap(map`
 ........
 ........

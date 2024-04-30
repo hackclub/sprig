@@ -1,6 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
+@title: Blob_Runner
+@tags: []
+@img: ""
+@addedOn: 2023-01-09
+@author: Bright Li
 */
 
 const player = "p"
@@ -431,7 +434,7 @@ function isDead(){
     }else{
         setMap(levels[loseindex])
     stop = 1;
-    console.log('STOP')
+    // console.log('STOP')
     level = 0
     clearText()
     }
@@ -483,7 +486,7 @@ onInput("d", ()=>{
 
 afterInput(() => {
   
-  console.log(getFirst(player).x)
+  // console.log(getFirst(player).x)
   if(level==6){
     if(getTile(21, 15).length == 2){
       clearTile(47, 0)
@@ -515,7 +518,7 @@ afterInput(() => {
   }
   if(getFirst(player).x == widths[level]){
     
-      console.log(widths[level])
+      // console.log(widths[level])
       level ++
       setMap(levels[level])
     }

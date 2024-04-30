@@ -272,8 +272,8 @@ afterInput(() => {
   const buttonNumber = tilesWith(button).length;
   const Coveredbuttons = tilesWith(button, box).length;
   const wallTiles = tilesWith(wall);
-  console.log("buttonNumber", buttonNumber);
-  console.log("Coveredbuttons", Coveredbuttons);
+  // console.log("buttonNumber", buttonNumber);
+  // console.log("Coveredbuttons", Coveredbuttons);
   //check level buttons
   if (level == 5) {
     if (buttonNumber === Coveredbuttons){

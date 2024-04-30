@@ -249,7 +249,7 @@ function startTimer() {
 
 
 var gameLoop = setInterval(() => {
-  console.log("Game loop is running");
+  // console.log("Game loop is running");
   // Step 4 - Add all game functions
 despawnfire();
   movefire();

@@ -1,10 +1,11 @@
 import { playTune } from './tune'
-import { parseScript } from 'esprima'
-import { normalizeGameError, type EsprimaError } from './error'
+import { normalizeGameError } from './error'
 import { bitmaps, NormalizedError } from '../state'
 import type { PlayTuneRes } from 'sprig'
 import { textToTune } from 'sprig/base'
 import { webEngine } from 'sprig/web'
+import * as Babel from "@babel/standalone"
+import TransformDetectInfiniteLoop, { BuildDuplicateFunctionDetector } from '../custom-babel-transforms'
 
 interface RunResult {
 	error: NormalizedError | null
@@ -13,7 +14,7 @@ interface RunResult {
 
 export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (error: NormalizedError) => void): RunResult {
 	const game = webEngine(canvas)
-	
+
 	const tunes: PlayTuneRes[] = []
 	const timeouts: number[] = []
 	const intervals: number[] = []
@@ -22,7 +23,7 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 		onPageError(normalizeGameError({ kind: 'page', error: event.error }))
 	}
 	window.addEventListener('error', errorListener)
-	
+
 	const cleanup = () => {
 		game.cleanup()
 		tunes.forEach(tune => tune.end())
@@ -44,8 +45,16 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 			return timer
 		},
 		setLegend: (..._bitmaps: [string, string][]) => {
-			bitmaps.value = _bitmaps
-			return game.api.setLegend(..._bitmaps)
+			// this is bad; but for some reason i could not do _bitmaps === [undefined]
+			// @ts-ignore
+			if(JSON.stringify(_bitmaps) === "[null]") {
+				// @ts-ignore
+				bitmaps.value = [[]];
+				throw new Error('The sprites passed into setLegend each need to be in square brackets, like setLegend([player, bitmap`...`]).')
+			} else {
+				bitmaps.value = _bitmaps;
+			}
+			return game.api.setLegend(...bitmaps.value)
 		},
 		playTune: (text: string, n: number) => {
 			const tune = textToTune(text)
@@ -55,36 +64,31 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 		}
 	}
 
-	code = `"use strict";\n${code}`
 	const engineAPIKeys = Object.keys(api);
 	try {
-		const program = parseScript(code, { loc: true })
-		for (let item of program.body) {
-			if (item.type === "FunctionDeclaration" && engineAPIKeys.includes(item.id!.name)) {
-				const errorString = `Error: Cannot re-define built-in '${item.id!.name}' \n at line: ${item.loc!.start.line - 1}, col: ${item.loc!.start.column}`;
-				return {
-					error: {
-						description: errorString,
-						raw: errorString, 
-						line: item.loc!.start.line - 1,
-						column: item.loc!.start.column as number
-				}, cleanup };
-			}
-		}
-	} catch (error) {
-		return {
-			error: normalizeGameError({ kind: 'parse', error: error as EsprimaError }),
-			cleanup
-		}
-	}
-	
-	try {
-		const fn = new Function(...engineAPIKeys, code)
+		const transformResult = Babel.transform(code, {
+			plugins: [TransformDetectInfiniteLoop, BuildDuplicateFunctionDetector(engineAPIKeys)],
+			retainLines: true
+		})
+
+		const fn = new Function(...engineAPIKeys, transformResult.code!)
 		fn(...Object.values(api))
 		return { error: null, cleanup }
-	} catch (error) {
+	} catch (error: any) {
+		// if there's an error code, it's most likely a babel error of some kind 
+		// other errors do not have an error code attached
+		if (!error.code) {
+			const normalizedError = normalizeGameError({ kind: "runtime", error });
+			normalizedError!.line! += 1;
+			return { error: normalizedError, cleanup };
+		} 
 		return {
-			error: normalizeGameError({ kind: 'runtime', error }),
+			error: {
+				raw: error,
+				description: error.message,
+				line: error.loc.line,
+				column: error.loc.column
+			},
 			cleanup
 		}
 	}
@@ -98,7 +102,13 @@ export function runGameHeadless(code: string): void {
 		setTimeout: () => {},
 		setInterval: () => {},
 		setLegend: (..._bitmaps: [string, string][]) => {
-			bitmaps.value = _bitmaps
+			// this is bad; but for some reason i could not do _bitmaps === [undefined]
+			if(JSON.stringify(_bitmaps) === "[null]") { 
+				// @ts-ignore
+				bitmaps.value = [[]];
+				throw new Error('The sprites passed into setLegend each need to be in square brackets, like setLegend([player, bitmap`...`]).');
+			} else 
+				bitmaps.value = _bitmaps
 			return game.api.setLegend(..._bitmaps)
 		},
 		playTune: () => {}
@@ -109,6 +119,6 @@ export function runGameHeadless(code: string): void {
 		const fn = new Function(...Object.keys(api), code)
 		fn(...Object.values(api))
 	} catch {}
-	
+
 	game.cleanup()
 }
