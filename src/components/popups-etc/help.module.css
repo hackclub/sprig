@@ -35,9 +35,9 @@
 }
 
 .tab:last-of-type {
-    border-right-width: 0;
-    padding-left: 8px;
-    padding-right: 10px;
+	border-right-width: 0;
+	padding-left: 8px;
+	padding-right: 10px;
 }
 
 .tab.selected {
@@ -100,13 +100,16 @@
 	font-size: 1.125em;
 }
 
-.content p, .content ul, .content pre {
+.content p,
+.content ul,
+.content pre {
 	color: #495057;
 	margin: 16px 0;
 	line-height: var(--line-height-copy);
 }
 
-.content code, .content pre {
+.content code,
+.content pre {
 	font-family: var(--font-code);
 	font-size: 0.9rem;
 	background: #e9ecef;
@@ -181,13 +184,16 @@
 	color: var(--accent);
 }
 
-.content_dark p, .content_dark ul, .content_dark pre {
+.content_dark p,
+.content_dark ul,
+.content_dark pre {
 	color: white;
 	margin: 16px 0;
 	line-height: var(--line-height-copy);
 }
 
-.content_dark code, .content_dark pre {
+.content_dark code,
+.content_dark pre {
 	font-family: var(--font-code);
 	font-size: 0.9rem;
 	background: #e9ecef;
@@ -269,4 +275,34 @@
 	padding: 10px 14px;
 	margin: 0 5px 0 5px;
 	color: black;
+}
+
+.tooltipContainer {
+	position: relative;
+	display: inline-block;
+}
+
+.tooltipText {
+	display: hidden;
+	width: 200px;
+	background-color: black;
+	color: white;
+	text-align: center;
+	border-radius: 6px;
+	padding: 8px;
+	font-size: 12px;
+	position: absolute;
+	z-index: 30;
+	bottom: 100%;
+	left: 50%;
+	margin-left: -110px;
+	margin-bottom: 2px;
+	opacity: 0;
+	transition: opacity 0.3s;
+	box-shadow: 0 0 10px 0 #00000038;
+}
+
+.tooltipContainer:hover .tooltipText {
+	display: inline;
+	opacity: 1;
 }

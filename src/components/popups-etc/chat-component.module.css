@@ -54,7 +54,7 @@
 }
 
 .inputArea {
-	border: 1px solid var(--accent);
+	border-bottom: 1px solid var(--accent);
 	display: flex;
 	align-items: flex-end;
 }
@@ -70,4 +70,34 @@
 
 .inputArea button {
 	height: 38px;
+}
+
+.tooltipContainer {
+	position: relative;
+	display: inline-block;
+}
+
+.tooltipText {
+	display: hidden;
+	width: 80px;
+	background-color: black;
+	color: white;
+	text-align: center;
+	border-radius: 6px;
+	padding: 4px;
+	font-size: 12px;
+	position: absolute;
+	z-index: 10;
+	bottom: 100%;
+	left: 50%;
+	margin-left: -30px;
+	margin-bottom: 2px;
+	opacity: 0;
+	transition: opacity 0.3s;
+	box-shadow: 0 0 10px 0 #00000038;
+}
+
+.tooltipContainer:hover .tooltipText {
+	display: inline;
+	opacity: 1;
 }

@@ -105,21 +105,28 @@ export default function Help(props: HelpProps) {
 						Help
 					</div>
 				)}
-				<Button
-					accent
-					class={`${styles.tab} ${
-						showingChat.value ? "" : styles.selected
-					}`}
-					disabled={
-						props.persistenceState?.value.session?.user == null
-					}
-					onClick={() => {
-						showingChat.value = !showingChat.value;
-						showingTutorial.value = false;
-					}}
-				>
-					Get AI Help
-				</Button>
+				<div className={styles.tooltipContainer}>
+					<Button
+						accent
+						class={`${styles.tab} ${
+							showingChat.value ? "" : styles.selected
+						}`}
+						disabled={
+							props.persistenceState?.value.session?.user === null
+						}
+						onClick={() => {
+							showingChat.value = !showingChat.value;
+							showingTutorial.value = false;
+						}}
+					>
+						Get AI Help
+					</Button>
+					<span className={styles.tooltipText}>
+						{props.persistenceState?.value.session?.user === null
+							? "You must be logged in to use this feature!"
+							: "Ask AI for help with your code"}
+					</span>
+				</div>
 				<Button
 					accent
 					class={styles.tab}

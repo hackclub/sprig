@@ -116,9 +116,8 @@
 	border: 2px solid var(--accent);
 	display: block;
 	background: #000000;
+	width: 100%;
 	height: auto;
-	max-width: 100%;
-	aspect-ratio: 160 / 128;
 	max-height: 80%;
 	image-rendering: crisp-edges;
 	image-rendering: pixelated;

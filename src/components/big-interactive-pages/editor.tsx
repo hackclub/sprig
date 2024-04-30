@@ -450,8 +450,8 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 								}`}
 								ref={screen}
 								tabIndex={0}
-								width={realOutputAreaSize.value}
-								// height="800"
+								width="1000"
+								height="800"
 							/>
 						</div>
 						<div class={styles.screenControls}>

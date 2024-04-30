@@ -311,7 +311,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						}
 						disabled={!isLoggedIn}
 					>
-						I'm stuck
+						Report Bug
 					</Button>
 				</li>
 
@@ -390,8 +390,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				<StuckPopup
 					persistenceState={props.persistenceState}
 					showStuckPopup={showStuckPopup}
-					showAiModal={showAiModal}
-					aiContent={aiContent}
 				/>
 			)}
 

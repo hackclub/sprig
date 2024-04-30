@@ -44,10 +44,13 @@ Answer the questions that follow based on this unless new code is provided.`;
 	const loading = useSignal(false);
 	const input = useSignal("");
 
+	const info = useSignal("");
+
 	const handleSendClick = async () => {
 		try {
 			if (!input.value.trim()) return;
 			loading.value = true;
+			info.value = "...";
 
 			const newSystemMessage = {
 				content: systemPrompt,
@@ -91,8 +94,11 @@ Answer the questions that follow based on this unless new code is provided.`;
 			]);
 
 			loading.value = false;
+			info.value = "";
 		} catch (err) {
 			console.error(err);
+			loading.value = false;
+			info.value = "An error occurred...";
 		}
 	};
 
@@ -115,14 +121,20 @@ Answer the questions that follow based on this unless new code is provided.`;
 							}}
 						></div>
 					))}
+				{info.value && <div class={styles.message}>{info.value}</div>}
 			</div>
 			<div class={styles.inputArea}>
-				<Button
-					accent
-					onClick={() => setMessages(messages.slice(0, 1))}
-				>
-					<RiChatDeleteLine />
-				</Button>
+				<div className={styles.tooltipContainer}>
+					<Button
+						accent
+						onClick={() => setMessages(messages.slice(0, 1))}
+					>
+						<RiChatDeleteLine />
+					</Button>
+					<span className={styles.tooltipText}>
+						Clear Chat
+					</span>
+				</div>
 				<textarea
 					disabled={loading.value}
 					type="text"
