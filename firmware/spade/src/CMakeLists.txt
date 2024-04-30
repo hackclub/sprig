@@ -1,3 +1,5 @@
+
+set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-void-pointer-to-int-cast -Wno-int-to-void-pointer-cast -Wno-pointer-sign -Werror=implicit-function-declaration")
 
 add_executable(spade "${SPADE_TARGET}/main.c")
@@ -11,3 +13,6 @@ target_link_libraries(spade
 )
 include_directories(${SPADE_TARGET}/jerry/include)
 include_directories(./)
+
+pico_enable_stdio_usb(${PROJECT_NAME} 1)
+pico_enable_stdio_uart(${PROJECT_NAME} 1)

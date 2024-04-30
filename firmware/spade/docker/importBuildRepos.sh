@@ -1,13 +1,7 @@
-dnf install git python3 clang make cmake entr uglify-js gcc-arm-linux-gnu arm-none-eabi-gcc-cs-c++ arm-none-eabi-gcc-cs arm-none-eabi-binutils arm-none-eabi-newlib -y
-
 mkdir ~/jerryscript_build
 cd ~/jerryscript_build
-git clone https://github.com/jerryscript-project/jerryscript.git
+git clone https://github.com/hackclub/jerryscript-pico.git jerryscript
 cd jerryscript
-git checkout 8ba0d1b6ee5a065a42f3b306771ad8e3c0d819bc # version 2.4.0
-
-cd ~/spade
-./src/pc/jerry/refresh.sh
 
 mkdir ~/raspberrypi
 cd ~/raspberrypi
@@ -18,5 +12,3 @@ git checkout 7070d230c0cdf1add83fa86b6832b47b2da47788
 git submodule update --init
 cd ../pico-extras
 git submodule update --init
-
-mkdir /artifacts

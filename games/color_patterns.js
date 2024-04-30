@@ -165,7 +165,7 @@ onInput("k", _ => {
 
 afterInput(_ => {
   if(checkResult()){
-      console.log('done');
+      // console.log('done');
       nextLevel();
   } 
 })

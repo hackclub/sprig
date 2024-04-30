@@ -207,32 +207,32 @@ let focal_length = 30;
 // i
 onInput("i", () => {
   translationy += 1;
-  console.log("translationy: ", translationy)
+  // console.log("translationy: ", translationy)
 })
 // k
 onInput("k", () => {
   translationy += -1;
-  console.log("translationy: ", translationy)
+  // console.log("translationy: ", translationy)
 })
 // a
 onInput("a", () => {
   translationx += -1;
-  console.log("translationx: ", translationx)
+  // console.log("translationx: ", translationx)
 })
 // d
 onInput("d", () => {
   translationx += 1;
-  console.log("translationx: ", translationx)
+  // console.log("translationx: ", translationx)
 })
 // s
 onInput("s", () => {
   translationz += -1;
-  console.log("translationz: ", translationz)
+  // console.log("translationz: ", translationz)
 })
 // w
 onInput("w", () => {
   translationz += 1;
-  console.log("translationz: ", translationz)
+  // console.log("translationz: ", translationz)
 })
 // j to stop
 onInput("j", () => {
@@ -260,7 +260,7 @@ function draw_line(x1, y1, x2, y2) {    // Iterators, counters required by algor
           addSprite(Math.round(x), (y), blue_pixel); // Draw first pixel        // Rasterize the line
         }
         catch (error) {
-          console.log("outside of screen")
+          // console.log("outside of screen")
         }
         for (i = 0; x < xe; i++) {
             x = x + 1;            // Deal with octants...
@@ -279,7 +279,7 @@ function draw_line(x1, y1, x2, y2) {    // Iterators, counters required by algor
               addSprite(Math.round(x), Math.round(y), blue_pixel);
             }
             catch (error) {
-              console.log("outside of screen")
+              // console.log("outside of screen")
             }
         }    } else { // The line is Y-axis dominant        // Line is drawn bottom to top
         if (dy >= 0) {
@@ -291,7 +291,7 @@ function draw_line(x1, y1, x2, y2) {    // Iterators, counters required by algor
           addSprite(Math.round(x), Math.round(y), blue_pixel); // Draw first pixel        // Rasterize the line
         }
         catch (error) {
-          console.log("outside of screen")
+          // console.log("outside of screen")
         }
         for (i = 0; y < ye; i++) {
             y = y + 1;            // Deal with octants...
@@ -310,7 +310,7 @@ function draw_line(x1, y1, x2, y2) {    // Iterators, counters required by algor
               addSprite(Math.round(x), Math.round(y), blue_pixel);
             }
             catch (error) {
-              console.log("outside of screen")
+              // console.log("outside of screen")
             }
         }
     }
