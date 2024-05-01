@@ -54,18 +54,21 @@
 }
 
 .inputArea {
-	border-bottom: 1px solid var(--accent);
+	border: 1px solid var(--accent);
 	display: flex;
-	align-items: flex-end;
+	align-items: stretch;
+	position: sticky;
+	bottom: 0;
 }
 
 .inputArea textarea {
-	background: transparent;
+	background: white;
 	border: none;
 	outline: none;
 	flex-grow: 1;
 	padding: 5px;
 	height: 38px;
+	resize: none;
 }
 
 .inputArea button {

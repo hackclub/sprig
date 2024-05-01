@@ -105,6 +105,18 @@ export default function Help(props: HelpProps) {
 						Help
 					</div>
 				)}
+				<Button
+					accent
+					class={`${styles.tab} ${
+						!showingChat.value ? "" : styles.selected
+					}`}
+					onClick={() => {
+						showingChat.value = false;
+						showingTutorial.value = false;
+					}}
+				>
+					Toolkit
+				</Button>
 				<div className={styles.tooltipContainer}>
 					<Button
 						accent
@@ -115,7 +127,7 @@ export default function Help(props: HelpProps) {
 							props.persistenceState?.value.session?.user === null
 						}
 						onClick={() => {
-							showingChat.value = !showingChat.value;
+							showingChat.value = true;
 							showingTutorial.value = false;
 						}}
 					>
