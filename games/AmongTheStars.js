@@ -310,7 +310,7 @@ setPushables({
             addSprite(PlayerX + 1, PlayerY, FlyLazerRight);
             break;
           default:
-            console.log("I don't know what fruit that is.");
+            // console.log("I don't know what fruit that is.");
         }
       }
     }
