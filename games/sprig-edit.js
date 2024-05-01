@@ -17,9 +17,9 @@ K - Delete Character
 S - Space
 */
 
-const player = "p"
+const player = "p";
 
-var matrix = Array.from({ length: 15 }, () => Array(16).fill(' '));
+var matrix = Array.from({ length: 15 }, () => Array(16).fill(" "));
 
 const BACKGROUND_BLACK = "B";
 
@@ -34,7 +34,7 @@ var MATRIX_X = 0;
 var MATRIX_Y = 0;
 
 var currentColor = 0;
-var currentCharacter = 1; // 1-26: a-z, 27-52: A-Z, 53: !, 54: ., 55: ?, 56: ,
+var currentCharacter = 1;
 var currentHeldCharacter = "a";
 var textColor = color`2`;
 
@@ -42,12 +42,14 @@ const SPRIG_EDIT = {
   VERSION: {
     MAJOR: 0,
     MINOR: 1,
-    PATCH: 0
-  }
-}
+    PATCH: 1,
+  },
+};
 
 setLegend(
-  [ BACKGROUND_BLACK, bitmap`
+  [
+    BACKGROUND_BLACK,
+    bitmap`
 0000000000000000
 0000000000000000
 0000000000000000
@@ -63,8 +65,11 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000`],
-  [ LOGO_1, bitmap`
+0000000000000000`,
+  ],
+  [
+    LOGO_1,
+    bitmap`
 ................
 ................
 ................
@@ -80,8 +85,11 @@ setLegend(
 ........22002000
 ........20020000
 ........20200700
-........20202000`],
-  [ LOGO_2, bitmap`
+........20202000`,
+  ],
+  [
+    LOGO_2,
+    bitmap`
 ................
 ........2222....
 ........20022...
@@ -97,8 +105,11 @@ setLegend(
 0000002007000002
 0000022077700002
 0000022020070002
-0000022070070002`],
-  [ LOGO_3, bitmap`
+0000022070070002`,
+  ],
+  [
+    LOGO_3,
+    bitmap`
 ........20207000
 ........20207000
 ........20207000
@@ -114,8 +125,11 @@ setLegend(
 .......220222000
 ........22022000
 ........22002000
-.........2200000`],
-  [ LOGO_4, bitmap`
+.........2200000`,
+  ],
+  [
+    LOGO_4,
+    bitmap`
 0000222070070002
 0000222070070002
 0000022070070002
@@ -131,12 +145,13 @@ setLegend(
 6666660600002202
 0660006000000002
 0660066000000022
-006666000000022.`],
-)
+006666000000022.`,
+  ],
+);
 
-setSolids([])
+setSolids([]);
 
-let level = 0
+let level = 0;
 const levels = [
   map`
 ................
@@ -188,19 +203,33 @@ const levels = [
 ................
 ................
 ................
-................`
-]
+................`,
+  map`
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................`,
+];
 
 function changeCharacter() {
   if (currentCharacter >= 1 && currentCharacter <= 56) {
     if (currentCharacter <= 26) {
-      // Lowercase letters
       currentHeldCharacter = String.fromCharCode(currentCharacter + 96);
     } else if (currentCharacter <= 52) {
-      // Uppercase letters
       currentHeldCharacter = String.fromCharCode(currentCharacter + 64 - 26);
     } else {
-      // Special characters
       switch (currentCharacter) {
         case 53:
           currentHeldCharacter = "!";
@@ -218,7 +247,6 @@ function changeCharacter() {
     }
   }
 }
-
 
 function changeTextColor() {
   switch (currentColor) {
@@ -245,151 +273,73 @@ function changeTextColor() {
 
 function createScreens(screen) {
   switch (screen) {
-    case 0: // Title Screen
+    case 0:
       setBackground(BACKGROUND_BLACK);
 
       clearText();
 
-      addText("Sprig Edit", {
-        x: 5,
-        y: 0,
-        color: color`2`
-      });
+      addText("Sprig Edit", {x: 5,y: 0,color: color`2`,});
+      addText("----------------", {x: 2,y: 1,color: color`2`,});
+      addText(`v${SPRIG_EDIT.VERSION.MAJOR}.${SPRIG_EDIT.VERSION.MINOR}.${SPRIG_EDIT.VERSION.PATCH}`,{x: 7,y: 4,color: color`2`,});
+      addText("Press S To", {x: 5,y: 7,color: color`2`,});
+      addText("Start", {x: 8,y: 9,color: color`2`,});
+      addText("Colack 2024", {x: 2,y: 15,color: color`2`});
 
-      addText("----------------", {
-        x:2,
-        y:1,
-        color: color`2`
-      });
-
-      addText(`v${SPRIG_EDIT.VERSION.MAJOR}.${SPRIG_EDIT.VERSION.MINOR}.${SPRIG_EDIT.VERSION.PATCH}`, {
-        x: 7,
-        y: 4,
-        color: color`2`
-      });
-
-      addText("Press S To", {
-        x: 5,
-        y: 7,
-        color: color`2`
-      });
-
-      addText("Start", {
-        x: 8,
-        y: 9,
-        color: color`2`
-      });
-
-      addText("Colack 2024", {
-        x: 2,
-        y: 15,
-        color: color`2`
-      });
-      
       break;
     case 1:
       clearText();
 
-      addText("Controls", {
-        x: 6,
-        y: 0,
-        color: color`2`
-      });
+      addText("Controls", {x: 6,y: 0,color: color`2`,});
+      addText("----------------", {x: 2,y: 1,color: color`2`,});
+      addText("AD - Move Cursor", {x: 2,y: 2,color: color`2`,});
+      addText("JL - Change Char", {x: 2,y: 3,color: color`2`,});
+      addText("I  - Place Char", {x: 2,y: 4,color: color`2`,});
+      addText("K  - Remove Char", {x: 2,y: 5,color: color`2`,});
+      addText("S  - Space", {x: 2,y: 6,color: color`2`,});
+      addText("W  -", {x: 2,y: 7,color: color`2`,});
+      addText("C", {x: 7,y: 7,color: color`3`,});
+      addText("o", {x: 8,y: 7,color: color`9`,});
+      addText("l", {x: 9,y: 7,color: color`6`,});
+      addText("o", {x: 10,y: 7,color: color`D`,});
+      addText("r", {x: 11,y: 7,color: color`5`,});
+      addText("s", {x: 12,y: 7,color: color`H`,});
+      addText("Press S to Start", {x: 2,y: 9,color: color`2`,});
+      addText("Press W for cred", {x: 2, y:11,color:color`2`});
 
-      addText("----------------", {
-        x:2,
-        y:1,
-        color: color`2`
-      });
-
-      addText("AD - Move Cursor", {
-        x: 2,
-        y: 2,
-        color: color`2`
-      });
-
-      addText("JL - Change Char", {
-        x: 2,
-        y: 3,
-        color: color`2`
-      });
-      
-      addText("I  - Place Char", {
-        x: 2,
-        y: 4,
-        color: color`2`
-      });
-
-      addText("K  - Remove Char", {
-        x: 2,
-        y: 5,
-        color: color`2`
-      });
-
-      addText("S  - Space", {
-        x: 2,
-        y: 6,
-        color: color`2`
-      });
-
-      addText("W  -", {
-        x: 2,
-        y: 7,
-        color: color`2`
-      });
-
-      addText("C", {
-        x: 7,
-        y: 7,
-        color: color`3`
-      });
-
-      addText("o", {
-        x: 8,
-        y: 7,
-        color: color`9`
-      });
-
-      addText("l", {
-        x: 9,
-        y: 7,
-        color: color`6`
-      });
-
-      addText("o", {
-        x: 10,
-        y: 7,
-        color: color`D`
-      });
-
-      addText("r", {
-        x: 11,
-        y: 7,
-        color: color`5`
-      });
-
-      addText("s", {
-        x: 12,
-        y: 7,
-        color: color`H`
-      });
-      
       break;
     case 2:
       clearText();
 
-      // Display the characters from the matrix in their specific slots
       for (let y = 0; y < 15; y++) {
         for (let x = 0; x < 16; x++) {
-          addText(matrix[y][x], { x, y, color: textColor });
+          if (x === MATRIX_X && y === MATRIX_Y) {
+            addText("/", { x: x + 2, y, color: textColor });
+          } else {
+            addText(matrix[y][x], { x: x + 2, y, color: textColor });
+          }
         }
       }
 
-      // Display other UI elements
       addText("Color", { x: 2, y: 15, color: textColor });
       addText(currentHeldCharacter, { x: 8, y: 15, color: color`2` });
       addText(`${MATRIX_X}`, { x: 10, y: 15, color: color`2` });
       addText(`${MATRIX_Y}`, { x: 13, y: 15, color: color`2` });
+      break;
+    case 3:
+      clearText();
+      
+      addText("Credits", {x: 6,y: 0,color: color`2`,});
+      addText("----------------", {x: 2,y: 1,color: color`2`,});
+      addText("By: Jack S.", {x: 2, y: 3,color: color`2`});
+      addText("Testers:", {x:2,y:5, color:color`2`});
+      addText("   Joe",{x:2,y:6,color:color`2`});
+      addText("   Nat",{x:2,y:7,color:color`2`});
+      addText("   Trent",{x:2,y:8,color:color`2`});
+      addText("   Jared",{x:2,y:9,color:color`2`});
+      addText("   Phin",{x:2,y:10,color:color`2`});
+      addText("Thanks for using",{x:2,y:14,color:color`2`});
+      addText("Sprig Edit",{x:5,y:15,color:color`2`});
+      
       break;
   }
 }
@@ -398,7 +348,7 @@ function onGameStart() {
   createScreens(level);
 }
 
-setMap(levels[level])
+setMap(levels[level]);
 
 onInput("w", () => {
   if (level == 2) {
@@ -408,31 +358,24 @@ onInput("w", () => {
       currentColor++;
     }
     changeTextColor();
+  } else if (level == 1) {
+    level = 3;
+    setMap(levels[level]);
+    createScreens(level);
   }
 });
 
 onInput("i", () => {
   if (level == 2) {
-    // Insert the current held character into the matrix at the cursor position
-    // Assuming you have a 16x16 matrix called 'matrix'
     matrix[MATRIX_Y][MATRIX_X] = currentHeldCharacter;
-    // Move cursor to the next position
-    if (MATRIX_X < 15) {
-      MATRIX_X++;
-    } else if (MATRIX_Y < 15) {
-      MATRIX_X = 0;
-      MATRIX_Y++;
-    }
   }
 });
 
 onInput("k", () => {
   if (level == 2) {
-    // Delete the character at the current cursor position in the matrix
-    matrix[MATRIX_Y][MATRIX_X] = ' ';
+    matrix[MATRIX_Y][MATRIX_X] = " ";
   }
 });
-
 
 onInput("a", () => {
   if (level == 2) {
@@ -487,9 +430,18 @@ onInput("s", () => {
       setMap(levels[level]);
       createScreens(level);
       canPress = false;
-      setTimeout(function() {
+      setTimeout(function () {
         canPress = true;
       }, 100);
+      break;
+    case 2:
+      matrix[MATRIX_Y][MATRIX_X+1] = " ";
+      if (MATRIX_X < 15) {
+        MATRIX_X+=2;
+      } else if (MATRIX_Y < 14) {
+        MATRIX_X = 0;
+        MATRIX_Y++;
+      }
       break;
   }
 });
@@ -502,10 +454,10 @@ afterInput(() => {
   }
 });
 
-setInterval(function() {
+setInterval(function () {
   if (level == 2) {
     createScreens(level);
   }
 }, 30);
 
-onGameStart()
+onGameStart();
