@@ -1,8 +1,8 @@
 /*
 @title: blokl the hole
-@tags: ['']
+@tags: ['puzzle']
 @img: ""
-@addedOn: 2022-07-26
+@addedOn: 2024-05-02
 @author:  chase .A
 
 
