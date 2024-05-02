@@ -48,7 +48,6 @@ Answer the questions that follow based on this unless new code is provided.`;
 
 	const info = useSignal("");
 	const [sessionId, setSessionId] = useState(nanoid(10));
-	console.log(sessionId)
 	const email = persistenceState?.value?.session?.user.email;
 	const SPRIG_LLM_API = import.meta.env.PUBLIC_SPRIG_LLM_API;
 
