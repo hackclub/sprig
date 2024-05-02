@@ -5,6 +5,8 @@ import styles from "./chat-component.module.css";
 import { Signal, useSignal } from "@preact/signals";
 import { RiChatDeleteLine } from "react-icons/ri";
 import markdown from "@wcj/markdown-to-html";
+import { nanoid } from "nanoid";
+import jwt from "jsonwebtoken";
 
 interface ChatProps {
 	persistenceState: Signal<PersistenceState>;
@@ -45,6 +47,30 @@ Answer the questions that follow based on this unless new code is provided.`;
 	const input = useSignal("");
 
 	const info = useSignal("");
+	const chatSession = nanoid(10);
+	const email = persistenceState?.value?.session?.user.email;
+
+	const sendMessage = async (message: string) => {
+		const response = await fetch(
+			// "https://llm-api-production.up.railway.app/generate",
+			"http://localhost:8000/generate",
+			{
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					session_id: chatSession,
+					message: message,
+					email,
+				}),
+			}
+		);
+
+		const data = (await response.json()) as {
+			raw: string;
+			codes: string[];
+		};
+		return data;
+	}
 
 	const handleSendClick = async () => {
 		try {
@@ -62,29 +88,10 @@ Answer the questions that follow based on this unless new code is provided.`;
 			setMessages([...messages, newSystemMessage, newMessage]);
 			input.value = "";
 
-			const response = await fetch(
-				"https://llm-api-production.up.railway.app/generate",
-				{
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({
-						model: "chatgpt",
-						messages: [
-							...messages.map((message) => ({
-								content: message.content,
-								role: message.role,
-							})),
-							{ content: systemPrompt, role: "user" },
-							newMessage,
-						],
-					}),
-				}
-			);
+			// send code as message to give context to the llm for future questions
+			await sendMessage(newSystemMessage.content);
 
-			const data = (await response.json()) as {
-				raw: string;
-				codes: string[];
-			};
+			const data = await sendMessage(newMessage.content);
 
 			setMessages([
 				...messages,
