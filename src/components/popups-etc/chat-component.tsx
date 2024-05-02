@@ -3,10 +3,10 @@ import { codeMirror, errorLog, PersistenceState } from "../../lib/state";
 import Button from "../design-system/button";
 import styles from "./chat-component.module.css";
 import { Signal, useSignal } from "@preact/signals";
+import { useState } from "preact/hooks";
 import { RiChatDeleteLine } from "react-icons/ri";
 import markdown from "@wcj/markdown-to-html";
 import { nanoid } from "nanoid";
-import jwt from "jsonwebtoken";
 
 interface ChatProps {
 	persistenceState: Signal<PersistenceState>;
@@ -47,18 +47,20 @@ Answer the questions that follow based on this unless new code is provided.`;
 	const input = useSignal("");
 
 	const info = useSignal("");
-	const chatSession = nanoid(10);
+	const [sessionId, setSessionId] = useState(nanoid(10));
+	console.log(sessionId)
 	const email = persistenceState?.value?.session?.user.email;
+	const SPRIG_LLM_API = import.meta.env.PUBLIC_SPRIG_LLM_API;
 
 	const sendMessage = async (message: string) => {
+		console.log("sending message with session id", sessionId)
 		const response = await fetch(
-			// "https://llm-api-production.up.railway.app/generate",
-			"http://localhost:8000/generate",
+			`${SPRIG_LLM_API}/generate`,
 			{
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
-					session_id: chatSession,
+					session_id: sessionId,
 					message: message,
 					email,
 				}),
@@ -66,9 +68,13 @@ Answer the questions that follow based on this unless new code is provided.`;
 		);
 
 		const data = (await response.json()) as {
+			success: boolean,
 			raw: string;
 			codes: string[];
+			msg?: string;
 		};
+
+		if (!data.success) return { raw: `${data.msg}. Refresh this page or open a new one to start a new chat session.` }
 		return data;
 	}
 
@@ -108,6 +114,22 @@ Answer the questions that follow based on this unless new code is provided.`;
 			info.value = "An error occurred...";
 		}
 	};
+
+	const closeChatSession = async () => {
+		await fetch(
+			`${SPRIG_LLM_API}/end-session`,
+			{
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					session_id: sessionId,
+				}),
+			}
+		);
+	}
+
+	// mark the chat session as ended before closing the page
+	window.addEventListener("beforeunload", () => closeChatSession())
 
 	return (
 		<div class={styles.chatUI}>
