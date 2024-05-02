@@ -426,7 +426,7 @@ afterInput(() => {
   if (check2 > 0) {
     level = 2
 
-    console.log("Load trash");
+    // console.log("Load trash");
     
     const currentLevel = levels[level];
     if (currentLevel !== "") {
