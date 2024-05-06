@@ -54,10 +54,8 @@ interface EditorNavbarProps {
 	persistenceState: Signal<PersistenceState>
 }
 
-type StuckCategory = "Logic Error" | "Syntax Error" | "Other";
-
 type StuckData = {
-	category: StuckCategory
+	category: string
 	description: string
 }
 
@@ -212,7 +210,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 			<li>
 				<Button class={styles.stuckBtn} onClick={() => showStuckPopup.value = !showStuckPopup.value} disabled={!isLoggedIn}>
-					I'm stuck
+					Report a bug
 				</Button>
 			</li>
 
@@ -298,13 +296,13 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					};
 
 					try {
-						const response = await fetch("/api/stuck-request", {
+						const response = await fetch("/api/bug-report", {
 							method: "POST",
 							body: JSON.stringify(payload)
 						})
 						// Let the user know we'll get back to them after we've receive their complaint
 						if (response.ok) {
-							alert("We received your request and will get back to you via email.")
+							alert("We received your bug report!  Thanks!")
 						} else alert("We couldn't send your request. Please make sure you're connected and try again.")
 
 					} catch (err) {
@@ -317,9 +315,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					<select value={stuckData.value.category} onChange={(event) => {
 						stuckData.value = { ...stuckData.value, category: (event.target! as HTMLSelectElement).value as StuckCategory }
 					}} name="" id="">
-						<option value={"Logic Error"}>Logic Error</option>
-						<option value={"Syntax Error"}>Syntax Error</option>
-						<option value={"Other"}>Other</option>
+						<option value={"UI"}>UI</option>
+						<option value={"Code Compilation"}>Code Compilation</option>
+						<option value={"Bitmap Editor"}>Bitmap Editor</option>
+						<option value={"Tune Editor"}>Tune Editor</option>
+						<option value={"Help/Tutorial Window"}>Help Window</option>
+						<option value={"AI Chat"}>AI Chat</option>
+						<option value={"Website"}>Website</option>
+						<option value={"Other"}>Website</option>
 					</select>
 					<label htmlFor="Description">Please describe the issue you're facing below</label>
 					<Textarea required value={stuckData.value.description} onChange={event => {
