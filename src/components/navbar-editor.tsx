@@ -324,7 +324,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						<option value={"Tune Editor"}>Tune Editor</option>
 						<option value={"Help/Tutorial Window"}>Help/Tutorial Window</option>
 						<option value={"AI Chat"}>AI Chat</option>
-						<option value={"Website"}>Other</option>
+						<option value={"Website"}>Website</option>
 					</select>
 					<label htmlFor="Description">Please describe the issue you're facing below</label>
 					<Textarea required value={stuckData.value.description} onChange={event => {
