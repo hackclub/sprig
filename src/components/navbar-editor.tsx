@@ -54,8 +54,10 @@ interface EditorNavbarProps {
 	persistenceState: Signal<PersistenceState>
 }
 
+type StuckCategory = "Logic Error" | "Syntax Error" | "Other" | "UI" | "Code Compilation" | "Bitmap Editor" | "Tune Editor" | "Help/Tutorial Window" | "AI Chat" | "Website";
+
 type StuckData = {
-	category: string
+	category: StuckCategory
 	description: string
 }
 
@@ -313,7 +315,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			}}>
 					<label htmlFor="issue category">What is the type of issue you're facing?</label>
 					<select value={stuckData.value.category} onChange={(event) => {
-						stuckData.value = { ...stuckData.value, category: (event.target! as HTMLSelectElement).value as string }
+						stuckData.value = { ...stuckData.value, category: (event.target! as HTMLSelectElement).value as StuckCategory }
 					}} name="" id="">
 						<option value={"UI"}>UI</option>
 						<option value={"Code Compilation"}>Code Compilation</option>
