@@ -313,7 +313,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			}}>
 					<label htmlFor="issue category">What is the type of issue you're facing?</label>
 					<select value={stuckData.value.category} onChange={(event) => {
-						stuckData.value = { ...stuckData.value, category: (event.target! as HTMLSelectElement).value as StuckCategory }
+						stuckData.value = { ...stuckData.value, category: (event.target! as HTMLSelectElement).value as string }
 					}} name="" id="">
 						<option value={"UI"}>UI</option>
 						<option value={"Code Compilation"}>Code Compilation</option>
