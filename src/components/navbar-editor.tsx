@@ -317,6 +317,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					<select value={stuckData.value.category} onChange={(event) => {
 						stuckData.value = { ...stuckData.value, category: (event.target! as HTMLSelectElement).value as StuckCategory }
 					}} name="" id="">
+						<option value={"Other"}>Other</option>
 						<option value={"UI"}>UI</option>
 						<option value={"Code Compilation"}>Code Compilation</option>
 						<option value={"Bitmap Editor"}>Bitmap Editor</option>
@@ -324,7 +325,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						<option value={"Help/Tutorial Window"}>Help/Tutorial Window</option>
 						<option value={"AI Chat"}>AI Chat</option>
 						<option value={"Website"}>Website</option>
-						<option value={"Other"}>Other</option>
 					</select>
 					<label htmlFor="Description">Please describe the issue you're facing below</label>
 					<Textarea required value={stuckData.value.description} onChange={event => {

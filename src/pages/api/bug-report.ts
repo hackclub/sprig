@@ -23,9 +23,8 @@ export const post: APIRoute = async ({ request }) => {
 						"Error Log": JSON.stringify(payload.error),
 						"Session Length": payload.sessionLength,
 						Code: payload.code,
-						Category: payload.category,
-						Description: payload.description,
-						"Fixed Code": ""
+						"Bug category": payload.category,
+						Description: payload.description
 					}
 				}
 			]
