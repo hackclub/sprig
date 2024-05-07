@@ -235,6 +235,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		return () => window.removeEventListener("mousemove", onMouseMove);
 	}, []);
 
+	const helpAreaTopPosition = useSignal<number | null>(null);
 	useEffect(() => {
 		const onMouseMove = (event: MouseEvent) => {
 			if (!horizontalResizeState.value) return;
@@ -243,6 +244,9 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 				horizontalResizeState.value.startValue +
 				horizontalResizeState.value.startMousePos -
 				event.clientY;
+			const heightTravelled = event.clientY - horizontalResizeState.value.startMousePos;
+			helpAreaTopPosition.value = heightTravelled;
+			// console.log("travelled by height", heightTravelled);
 		};
 		window.addEventListener("mousemove", onMouseMove);
 		return () => window.removeEventListener("mousemove", onMouseMove);
@@ -483,7 +487,9 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 							</div>
 						</div>
 					</div>
-					<div class={styles.helpContainer}>
+					<div class={styles.helpContainer}
+						style={ helpAreaTopPosition.value ? { top: helpAreaTopPosition.value, height: realHelpAreaSize.value + helpAreaTopPosition.value } : { height: realHelpAreaSize.value } }
+					>
 						<div
 							class={`${styles.horizontalResizeBar} ${
 								horizontalResizeState.value

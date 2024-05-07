@@ -96,6 +96,7 @@
 }
 
 .horizontalResizeBar {
+	position: relative;
 	width: 100%;
 	height: 6px;
 	min-height: 6px;
@@ -181,6 +182,8 @@
 }
 
 .helpContainer {
+	position: relative;
+	height: auto;
 	max-width: 100%;
 	width: 100%;
 }
