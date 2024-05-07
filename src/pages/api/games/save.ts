@@ -9,13 +9,10 @@ import {
 import { updateEmailListLastModifiedTime } from "../../../lib/game-saving/email";
 
 export const post: APIRoute = async ({ request, cookies }) => {
-	let code: string;
 	let gameId: string;
 	let tutorialName: string | undefined;
 	try {
 		const body = await request.json();
-		if (typeof body.code !== "string") throw "Missing/invalid code";
-		code = body.code;
 		if (typeof body.gameId !== "string") throw "Missing/invalid game id";
 		gameId = body.gameId;
 		tutorialName =

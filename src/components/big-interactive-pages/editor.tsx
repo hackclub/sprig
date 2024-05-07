@@ -28,7 +28,7 @@ import MigrateToast from "../popups-etc/migrate-toast";
 import { nanoid } from "nanoid";
 import TutorialWarningModal from "../popups-etc/tutorial-warning";
 import { editSessionLength, switchTheme, ThemeType } from "../../lib/state";
-import {versionState} from "../../lib/upload";
+import { versionState } from "../../lib/upload";
 import VersionWarningModal from "../popups-etc/version-warning";
 
 interface EditorProps {
@@ -66,63 +66,85 @@ const foldAllTemplateLiterals = () => {
 
 let lastSavePromise = Promise.resolve();
 let saveQueueSize = 0;
-export const saveGame = debounce(
-	800,
-	(persistenceState: Signal<PersistenceState>, code: string) => {
-		const doSave = async () => {
-			const attemptSaveGame = async () => {
-				try {
-					const game =
-						persistenceState.value.kind === "PERSISTED" &&
-						persistenceState.value.game !== "LOADING"
-							? persistenceState.value.game
-							: null;
-					const res = await fetch("/api/games/save", {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({
-							code,
-							gameId: game?.id,
-							tutorialName: game?.tutorialName,
-							tutorialIndex: game?.tutorialIndex,
-						}),
-					});
-					if (!res.ok)
-						throw new Error(
-							`Error saving game: ${await res.text()}`
-						);
-					return true;
-				} catch (error) {
-					console.error(error);
+// export const saveGame = debounce(800, (persistenceState: Signal<PersistenceState>, code: string) => {
+// 	const doSave = async () => {
+// 		const attemptSaveGame = async () => {
+// 			try {
+// 				const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null
+// 				const res = await fetch('/api/games/save', {
+// 					method: 'POST',
+// 					headers: { 'Content-Type': 'application/json' },
+// 					body: JSON.stringify({ code, gameId: game?.id, tutorialName: game?.tutorialName, tutorialIndex: game?.tutorialIndex })
+// 				})
+// 				if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`)
+// 				return true;
+// 			} catch (error) {
+// 				console.error(error)
 
-					persistenceState.value = {
-						...persistenceState.value,
-						cloudSaveState: "ERROR",
-					} as any;
-					return false;
-				}
-			};
+// 				persistenceState.value = {
+// 					...persistenceState.value,
+// 					cloudSaveState: 'ERROR'
+// 				} as any;
+// 				return false;
+// 			}
+// 		}
 
-			while (!(await attemptSaveGame())) {
-				await new Promise((resolve) => setTimeout(resolve, 2000)); // retry saving the game every 2 seconds
-			}
+// 		while (!await attemptSaveGame()) {
+// 			await new Promise(resolve => setTimeout(resolve, 2000)); // retry saving the game every 2 seconds
+// 		}
 
-			saveQueueSize--;
-			if (
-				saveQueueSize === 0 &&
-				persistenceState.value.kind === "PERSISTED"
-			) {
-				persistenceState.value = {
-					...persistenceState.value,
-					cloudSaveState: "SAVED",
-				};
-			}
-		};
+// 		saveQueueSize--
+// 		if (saveQueueSize === 0 && persistenceState.value.kind === 'PERSISTED') {
+// 			persistenceState.value = {
+// 				...persistenceState.value,
+// 				cloudSaveState: 'SAVED'
+// 			}
+// 		}
+// 	}
 
-		saveQueueSize++;
-		lastSavePromise = (lastSavePromise ?? Promise.resolve()).then(doSave);
+// 	saveQueueSize++
+// 	lastSavePromise = (lastSavePromise ?? Promise.resolve()).then(doSave)
+// })
+
+async function saveGame(persistenceState: Signal<PersistenceState>) {
+	const attemptSaveGame = async () => {
+		try {
+			const game =
+				persistenceState.value.kind === "PERSISTED" &&
+				persistenceState.value.game !== "LOADING"
+					? persistenceState.value.game
+					: null;
+			const res = await fetch("/api/games/save", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					gameId: game?.id,
+					tutorialName: game?.tutorialName,
+				}),
+			});
+			if (!res.ok)
+				throw new Error(`Error saving game: ${await res.text()}`);
+			return true;
+		} catch (error) {
+			console.error(error);
+
+			persistenceState.value = {
+				...persistenceState.value,
+				cloudSaveState: "ERROR",
+			} as any;
+			return false;
+		}
+	};
+
+	while (!(await attemptSaveGame())) {
+		await new Promise((resolve) => setTimeout(resolve, 2000));
 	}
-);
+	if (persistenceState.value.kind === "PERSISTED")
+		persistenceState.value = {
+			...persistenceState.value,
+			cloudSaveState: "SAVED",
+		};
+}
 
 const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
 	if (persistenceState.value.kind === "PERSISTED") {
@@ -164,8 +186,11 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	);
 
 	const canvasScreenSize = useSignal({
-		height: outputArea.current?.clientHeight! - helpAreaSize.value - screenControls.current?.clientHeight!,
-		maxHeight: screenContainer.current?.clientHeight
+		height:
+			outputArea.current?.clientHeight! -
+			helpAreaSize.value -
+			screenControls.current?.clientHeight!,
+		maxHeight: screenContainer.current?.clientHeight,
 	});
 
 	// this runs when the screenContainer and the outputArea refs change
@@ -185,12 +210,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		};path=/;max-age=${60 * 60 * 24 * 365}`;
 	});
 
-	useSignalEffect(() => {
-		document.cookie = `helpAreaSize=${helpAreaSize.value};path=/;max-age=${
-			60 * 60 * 24 * 365
-		}`;
-	});
-
 	// Exit tutorial warning modal
 	const showingTutorialWarning = useSignal(false);
 
@@ -205,14 +224,13 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		editSessionLength.value = new Date();
 
 		try {
-			const themeStr = localStorage.getItem("theme") ?? "light"
-			let theme : ThemeType = themeStr as ThemeType
-			switchTheme(theme)
+			const themeStr = localStorage.getItem("theme") ?? "light";
+			let theme: ThemeType = themeStr as ThemeType;
+			switchTheme(theme);
 		} catch (e) {
-			console.log('Weird theme error (unknown theme?): ' + e)
-			switchTheme("light" as ThemeType)
+			console.log("Weird theme error (unknown theme?): " + e);
+			switchTheme("light" as ThemeType);
 		}
-
 
 		const updateMaxSize = () => {
 			maxOutputAreaSize.value =
@@ -241,7 +259,10 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// compute the height and max height of the canvas screen
 	function computeCanvasScreenHeights() {
 		// compute the new canvas screen height
-		const canvasScreenHeight = outputArea.current?.clientHeight! - realHelpAreaSize.value - screenControls.current?.clientHeight!;
+		const canvasScreenHeight =
+			outputArea.current?.clientHeight! -
+			realHelpAreaSize.value -
+			screenControls.current?.clientHeight!;
 
 		// calculate canvas screen max height
 		// the max height is such that (width/height) == 1.25
@@ -250,7 +271,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 
 		canvasScreenSize.value = {
 			height: canvasScreenHeight,
-			maxHeight: canvasScreenMaxHeight
+			maxHeight: canvasScreenMaxHeight,
 		};
 	}
 
@@ -281,8 +302,8 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 				horizontalResizeState.value.startMousePos -
 				event.clientY;
 
-		computeCanvasScreenHeights();
-	};
+			computeCanvasScreenHeights();
+		};
 		window.addEventListener("mousemove", onMouseMove);
 		return () => window.removeEventListener("mousemove", onMouseMove);
 	}, []);
@@ -413,10 +434,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 									...persistenceState.value,
 									cloudSaveState: "SAVING",
 								};
-								saveGame(
-									persistenceState,
-									codeMirror.value!.state.doc.toString()
-								);
 							}
 
 							if (persistenceState.value.kind === "IN_MEMORY") {
@@ -487,14 +504,13 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 								class={`${styles.screen} ${
 									screenShake.value > 0 ? "shake" : ""
 								}`}
-								style={ outputArea.current ? { height: canvasScreenSize.value.height, maxHeight:  canvasScreenSize.value.maxHeight }: { } }
 								ref={screen}
 								tabIndex={0}
 								width="1000"
 								height="800"
 							/>
 						</div>
-						<div ref={screenControls} class={styles.screenControls}>
+						<div class={styles.screenControls}>
 							<button
 								className={styles.mute}
 								onClick={() => (muted.value = !muted.value)}
@@ -550,7 +566,13 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 						/>
 						<div
 							class={styles.helpContainer}
-							style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenControls.current?.clientHeight! + screenContainer.current?.clientHeight!) }}
+							style={{
+								height: realHelpAreaSize.value,
+								maxHeight:
+									outputArea.current?.clientHeight! -
+									(screenControls.current?.clientHeight! +
+										screenContainer.current?.clientHeight!),
+							}}
 						>
 							{!(
 								(persistenceState.value.kind === "SHARED" ||
@@ -595,10 +617,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 				persistenceState.value.showInitialWarning && (
 					<DraftWarningModal persistenceState={persistenceState} />
 				)}
-
-			{versionState.value != "OK" && (
-				<VersionWarningModal versionState={versionState} />
-			)}
 
 			{showingTutorialWarning.value && (
 				<TutorialWarningModal
