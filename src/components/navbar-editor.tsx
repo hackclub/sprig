@@ -55,7 +55,6 @@ interface EditorNavbarProps {
 }
 
 type StuckCategory = "Logic Error" | "Syntax Error" | "Other" | "UI" | "Code Compilation" | "Bitmap Editor" | "Tune Editor" | "Help/Tutorial Window" | "AI Chat" | "Website";
-
 type StuckData = {
 	category: StuckCategory
 	description: string
