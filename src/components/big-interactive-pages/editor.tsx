@@ -198,7 +198,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		const updateMaxSize = () => {
 			maxOutputAreaSize.value =
 				window.innerWidth - outputAreaWidthMargin - 100;
-			// maxHelpAreaSize.value = window.innerHeight - helpAreaHeightMargin;
+			maxHelpAreaSize.value = window.innerHeight - helpAreaHeightMargin;
 		};
 		window.addEventListener("resize", updateMaxSize, { passive: true });
 		updateMaxSize();
