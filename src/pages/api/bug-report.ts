@@ -18,7 +18,7 @@ export const post: APIRoute = async ({ request }) => {
 			records: [
 				{
 					fields: {
-					  Selection: payload.selection,
+						Selection: payload.selection,
 						Email: payload.email,
 						"Error Log": JSON.stringify(payload.error),
 						"Session Length": payload.sessionLength,
@@ -31,6 +31,11 @@ export const post: APIRoute = async ({ request }) => {
 		})
 	});
 
+	if (response.status != 200) {
+		console.log(response)
+		console.log("Failed uploading to bug airtable db!")
+	}
 	const data = await response.json();
-	return new Response(JSON.stringify(data), { status: response.status })
+	const resp = new Response(JSON.stringify(data), { status: response.status })
+	return resp
 }
