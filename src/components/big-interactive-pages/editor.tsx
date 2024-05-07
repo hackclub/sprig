@@ -130,8 +130,15 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	  // re-intialize the value of the editing session length to since the editor was opened
 		editSessionLength.value = new Date();
 
-		// load the theme value from localstorage
-		switchTheme((localStorage.getItem("theme") ?? "light") as ThemeType);
+		try {
+			const themeStr = localStorage.getItem("theme") ?? "light"
+			let theme : ThemeType = themeStr as ThemeType
+			switchTheme(theme)
+		} catch (e) {
+			console.log('Weird theme error (unknown theme?): ' + e)
+			switchTheme("light" as ThemeType)
+		}
+
 
 		const updateMaxSize = () => {
 			maxOutputAreaSize.value = (window.innerWidth - outputAreaWidthMargin) / 2.5
