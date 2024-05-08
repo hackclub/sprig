@@ -6,7 +6,6 @@ import { Signal, useSignal } from "@preact/signals";
 import { RiChatDeleteLine } from "react-icons/ri";
 import markdown from "@wcj/markdown-to-html";
 import { nanoid } from "nanoid";
-import jwt from "jsonwebtoken";
 
 interface ChatProps {
 	persistenceState: Signal<PersistenceState>;
@@ -52,8 +51,7 @@ Answer the questions that follow based on this unless new code is provided.`;
 
 	const sendMessage = async (message: string) => {
 		const response = await fetch(
-			"https://llm-api-production.up.railway.app/generate",
-			// "http://localhost:8000/generate",
+			`${import.meta.env.PUBLIC_SPRIG_LLM_API}/generate`,
 			{
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
