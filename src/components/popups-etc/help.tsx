@@ -82,6 +82,7 @@ export default function Help(props: HelpProps) {
 							showingTutorial.value ? styles.selected : ""
 						}`}
 						onClick={() => {
+							showingChat.value = false;
 							showingTutorial.value = true;
 							tutorialContentRef.current!.scrollTop =
 								tutorialScroll.value;
@@ -94,9 +95,12 @@ export default function Help(props: HelpProps) {
 					<div
 						role="button"
 						className={`${styles.tab} ${
-							showingTutorial.value ? "" : styles.selected
+							showingTutorial.value || showingChat.value
+								? ""
+								: styles.selected
 						}`}
 						onClick={() => {
+							showingChat.value = false;
 							showingTutorial.value = false;
 							toolkitContentRef.current!.scrollTop =
 								toolkitScroll.value;
@@ -105,23 +109,25 @@ export default function Help(props: HelpProps) {
 						Help
 					</div>
 				)}
-				<Button
-					accent
-					class={`${styles.tab} ${
-						!showingChat.value ? "" : styles.selected
-					}`}
-					onClick={() => {
-						showingChat.value = false;
-						showingTutorial.value = false;
-					}}
-				>
-					Toolkit
-				</Button>
+				{!tutorialHtml && (
+					<Button
+						accent
+						class={`${styles.tab} ${
+							!showingChat.value ? styles.selected : ""
+						}`}
+						onClick={() => {
+							showingChat.value = false;
+							showingTutorial.value = false;
+						}}
+					>
+						Toolkit
+					</Button>
+				)}
 				<div className={styles.tooltipContainer}>
 					<Button
 						accent
 						class={`${styles.tab} ${
-							showingChat.value ? "" : styles.selected
+							showingChat.value ? styles.selected : ""
 						}`}
 						disabled={
 							props.persistenceState?.value.session?.user === null
