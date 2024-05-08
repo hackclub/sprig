@@ -235,7 +235,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		return () => window.removeEventListener("mousemove", onMouseMove);
 	}, []);
 
-	const helpAreaTopPosition = useSignal<number | null>(0);
 	useEffect(() => {
 		const onMouseMove = (event: MouseEvent) => {
 			if (!horizontalResizeState.value) return;
@@ -484,20 +483,13 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 							</div>
 						</div>
 					</div>
-					<div class={styles.helpContainer}
-						style={ helpAreaTopPosition.value ? { transform: `translateY(${helpAreaTopPosition.value}px)`, height: realHelpAreaSize.value + helpAreaTopPosition.value } : { height: realHelpAreaSize.value } }
-					>
+					<div class={styles.helpContainer}>
 						<div
 							class={`${styles.horizontalResizeBar} ${
 								horizontalResizeState.value
 									? styles.resizing
 									: ""
 							}`}
-							style={{
-								position: "relative",
-								zIndex: 2, 
-								top: "30px"	
-							}}
 							onMouseDown={(event) => {
 								document.documentElement.style.cursor =
 									"col-resize";
@@ -505,8 +497,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 									startMousePos: event.clientY,
 									startValue: realHelpAreaSize.value,
 								};
-								const heightTravelled = event.clientY - realHelpAreaSize.value; 
-								helpAreaTopPosition.value = heightTravelled;
 								window.addEventListener(
 									"mouseup",
 									() => {
@@ -520,6 +510,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 						/>
 						<div
 							class={styles.helpContainer}
+							style={{ height: realHelpAreaSize.value }}
 						>
 							{!(
 								(persistenceState.value.kind === "SHARED" ||
