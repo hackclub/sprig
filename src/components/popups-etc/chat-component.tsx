@@ -52,8 +52,8 @@ Answer the questions that follow based on this unless new code is provided.`;
 
 	const sendMessage = async (message: string) => {
 		const response = await fetch(
-			// "https://llm-api-production.up.railway.app/generate",
-			"http://localhost:8000/generate",
+			"https://llm-api-production.up.railway.app/generate",
+			// "http://localhost:8000/generate",
 			{
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
