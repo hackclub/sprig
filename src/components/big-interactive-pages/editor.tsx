@@ -143,6 +143,7 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
 export default function Editor({ persistenceState, cookies }: EditorProps) {
 	const outputArea = useRef<HTMLDivElement>(null);
 	const screenContainer = useRef<HTMLDivElement>(null);
+	const screenControls = useRef<HTMLDivElement>(null);
 
 	// Resize state storage
 	const outputAreaSize = useSignal(
@@ -152,6 +153,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		)
 	);
 
+	// this is initially setting the helpAreaSize
 	const helpAreaSize = useSignal(
 		Math.max(
 			minHelpAreaHeight,
@@ -159,6 +161,12 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		)
 	);
 
+	const canvasScreenSize = useSignal({
+		height: outputArea.current?.clientHeight! - helpAreaSize.value - screenControls.current?.clientHeight!,
+		maxHeight: screenContainer.current?.clientHeight
+	});
+
+	// this runs when the screenContainer and the outputArea refs change
 	useEffect(() => {
 		if (!outputArea.current || !screenContainer.current) return;
 		defaultHelpAreaHeight =
@@ -186,6 +194,8 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 
 	// Max width of the output area
 	const maxOutputAreaSize = useSignal(outputAreaSize.value);
+
+	// Max height of help area
 	const maxHelpAreaSize = useSignal(helpAreaSize.value);
 
 	useEffect(() => {
@@ -219,6 +229,22 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		)
 	);
 
+	// compute the height and max height of the canvas screen 
+	function computeCanvasScreenHeights() {
+		// compute the new canvas screen height
+		const canvasScreenHeight = outputArea.current?.clientHeight! - realHelpAreaSize.value - screenControls.current?.clientHeight!;
+
+		// calculate canvas screen max height
+		// the max height is such that (width/height) == 1.25
+		// that is to respect the 1000 / 800 aspect ratio
+		const canvasScreenMaxHeight = outputArea.current?.clientWidth! / 1.25;
+
+		canvasScreenSize.value = {
+			height: canvasScreenHeight,
+			maxHeight: canvasScreenMaxHeight
+		};
+	}
+
 	// Resize bar logic
 	const resizeState = useSignal<ResizeState | null>(null);
 	const horizontalResizeState = useSignal<ResizeState | null>(null);
@@ -230,11 +256,13 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 				resizeState.value.startValue +
 				resizeState.value.startMousePos -
 				event.clientX;
+			computeCanvasScreenHeights();
 		};
 		window.addEventListener("mousemove", onMouseMove);
 		return () => window.removeEventListener("mousemove", onMouseMove);
 	}, []);
 
+	// this reacts to change of the helpArea resizes and adjusts things accordingly
 	useEffect(() => {
 		const onMouseMove = (event: MouseEvent) => {
 			if (!horizontalResizeState.value) return;
@@ -243,7 +271,9 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 				horizontalResizeState.value.startValue +
 				horizontalResizeState.value.startMousePos -
 				event.clientY;
-		};
+
+		computeCanvasScreenHeights();
+	};
 		window.addEventListener("mousemove", onMouseMove);
 		return () => window.removeEventListener("mousemove", onMouseMove);
 	}, []);
@@ -448,13 +478,14 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 								class={`${styles.screen} ${
 									screenShake.value > 0 ? "shake" : ""
 								}`}
+								style={ outputArea.current ? { height: canvasScreenSize.value.height, maxHeight:  canvasScreenSize.value.maxHeight }: { } }
 								ref={screen}
 								tabIndex={0}
 								width="1000"
 								height="800"
 							/>
 						</div>
-						<div class={styles.screenControls}>
+						<div ref={screenControls} class={styles.screenControls}>
 							<button
 								className={styles.mute}
 								onClick={() => (muted.value = !muted.value)}
