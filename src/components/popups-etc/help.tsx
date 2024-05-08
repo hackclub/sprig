@@ -159,7 +159,6 @@ export default function Help(props: HelpProps) {
 					{props.helpAreaSize?.value == 0 ? "Show" : "Hide"}
 				</Button>
 			</div>
-
 			<div
 				class={styles.content}
 				style={{
