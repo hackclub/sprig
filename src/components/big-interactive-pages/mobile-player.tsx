@@ -11,12 +11,16 @@ interface MobilePlayerProps {
 
 export default function MobilePlayer(props: MobilePlayerProps) {
 	const screen = useRef<HTMLCanvasElement>(null)
-	
-	useEffect(() => {
-		const res = runGame(props.code, screen.current!, (_) => {})
+
+	const run = () => {
+		const res = runGame(props.code, screen.current!, (_) => { })
 		if (res.error) console.error(res.error.raw)
 		return res.cleanup
-	}, [ props.code ])
+	}
+
+	useEffect(() => {
+		return run()
+	}, [props.code])
 
 	const pressKey = (key: string) => {
 		screen.current!.dispatchEvent(new KeyboardEvent('keydown', { key }))
@@ -34,15 +38,20 @@ export default function MobilePlayer(props: MobilePlayerProps) {
 					</span>
 				) : null}
 			</div>
-			<div class={styles.disclaimer}>This is a playable preview. The full editor is not yet supported on mobile.</div>
 
-			<div class={styles.player}>
+			<div class={styles.actionItems}>
+				<a href="#fullscreen" class={styles.action} id="toggle-fullscreen">Fullscreen</a>
+				<div class={styles.disclaimer}>This is a playable preview. </div>
+				<a href="#reset" class={styles.action} onClick={run}>Reset</a>
+			</div>
+
+			<div class={styles.player} id="player">
 				<div class={styles.screenContainer}>
 					<canvas class={styles.screen} ref={screen} width='1000' height='800' />
 				</div>
 
 
-				{[ 'i', 'j', 'k', 'l', 'w', 'a', 's', 'd' ].map(key => (
+				{['i', 'j', 'k', 'l', 'w', 'a', 's', 'd'].map(key => (
 					<div
 						role='button'
 						class={`${styles.key} ${styles[key]} ${keyTouches.value[key]! > 0 ? styles.pressing : ''}`}

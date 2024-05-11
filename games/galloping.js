@@ -544,7 +544,7 @@ let gameloop = setInterval(() => {
 }, 0);
 
 function setLevel(newLevel) {
-  console.log(newLevel);
+  // console.log(newLevel);
   isRunning = false;
   level = newLevel;
   clearText();
