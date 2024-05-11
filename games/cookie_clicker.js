@@ -395,7 +395,7 @@ onInput("i", () => {
   let price = calculatePrice(cpsOwned + 1,2)
   if(money >= price) {
     cpsOwned += 1;
-    console.log(price);
+    // console.log(price);
     money -= price;
     playTune(buy);
   }
@@ -405,7 +405,7 @@ onInput("k", () => {
   let price = calculatePrice(cpcOwned + 1,1)
   if(money >= price) {
     cpcOwned += 1;
-    console.log(price);
+    // console.log(price);
     money -= price;
     playTune(buy);
   }
