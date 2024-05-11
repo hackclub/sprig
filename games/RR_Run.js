@@ -4,9 +4,9 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: RR Run
 @author: Weston Bui
-@tags: [#beginer]
+@tags: ['puzzle']
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-05-10
 */
 
 const player = "p"
