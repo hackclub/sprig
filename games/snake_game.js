@@ -321,7 +321,7 @@ onInput("s", () => {
     keyPressed = "s";
   }
 });
-console.log(keyPressed);
+// console.log(keyPressed);
 
 const resetGame = () => {
   keyPressed = "";

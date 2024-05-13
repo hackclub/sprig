@@ -329,7 +329,7 @@ function startGame() {
   game = true;
   updateScore(score, lives);
   function gameInterval () {
-    console.log(lives)
+    // console.log(lives)
     if (lives <= 0) {
       clearText()
       playTune(music.gameOver)
@@ -350,7 +350,7 @@ function startGame() {
       if (speed >= 350) {
         speed -= 5;
       }
-      console.log(speed)
+      // console.log(speed)
       setTimeout(gameInterval, speed)
     }
   }
