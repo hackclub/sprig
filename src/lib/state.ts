@@ -91,6 +91,7 @@ export const bitmaps = signal<[string, string][]>([])
 export const editSessionLength = signal<Date>(new Date());
 export const showSaveConflictModal = signal<boolean>(false);
 export const continueSaving = signal<boolean>(true);
+export const LAST_SAVED_SESSION_ID = 'lastSavedSessionId';
 
 export type ThemeType = "dark" | "light" | "busker";
 export const theme = signal<ThemeType>("dark");

@@ -1,6 +1,6 @@
 import Button from '../design-system/button';
 import styles from './session-conflict-warning.module.css';
-import { showSaveConflictModal, continueSaving } from '../../lib/state';
+import { showSaveConflictModal, continueSaving, LAST_SAVED_SESSION_ID } from '../../lib/state';
 
 interface SessionConflictWarningModalProps {
     sessionId: string;
@@ -13,8 +13,8 @@ export default function SessionConflictWarningModal({ sessionId, gameId }: Sessi
     };
 
 	const handleOverwrite = () => {
-		localStorage.setItem('lastSavedSessionId', JSON.stringify({ sessionId, gameId: gameId }));
-		console.log(localStorage.getItem('lastSavedSessionId'));
+		localStorage.setItem(LAST_SAVED_SESSION_ID, JSON.stringify({ sessionId, gameId: gameId }));
+		console.log(localStorage.getItem(LAST_SAVED_SESSION_ID));
 		showSaveConflictModal.value = false;
 		continueSaving.value = true;
 	};	

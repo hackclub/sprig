@@ -27,7 +27,7 @@ import { defaultExampleCode } from "../../lib/examples";
 import MigrateToast from "../popups-etc/migrate-toast";
 import { nanoid } from "nanoid";
 import TutorialWarningModal from "../popups-etc/tutorial-warning";
-import { editSessionLength, switchTheme, ThemeType, continueSaving } from '../../lib/state'
+import { editSessionLength, switchTheme, ThemeType, continueSaving, LAST_SAVED_SESSION_ID } from '../../lib/state'
 import { showSaveConflictModal } from '../../lib/state';
 import SessionConflictWarningModal from '../popups-etc/session-conflict-warning-modal'
 
@@ -73,7 +73,7 @@ export const saveGame = debounce(
 			const attemptSaveGame = async () => {
 				const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null;
 				if (!game) return false;
-				const lastSavedSessionInfo = localStorage.getItem('lastSavedSessionId');
+				const lastSavedSessionInfo = localStorage.getItem(LAST_SAVED_SESSION_ID);
 				const lastSavedData = lastSavedSessionInfo ? JSON.parse(lastSavedSessionInfo) : null;
 				const lastSavedSessionId = lastSavedData ? lastSavedData.sessionId : null;
 				const lastSavedGameId = lastSavedData ? lastSavedData.gameId : null;
@@ -105,7 +105,7 @@ export const saveGame = debounce(
 						throw new Error(
 							`Error saving game: ${await res.text()}`
 						);
-					localStorage.setItem('lastSavedSessionId', JSON.stringify({ sessionId, gameId: game?.id }));
+					localStorage.setItem(LAST_SAVED_SESSION_ID, JSON.stringify({ sessionId, gameId: game?.id }));
 					console.log('Game saved successfully.');
 					return true;
 				} catch (error) {
@@ -180,7 +180,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	useEffect(() => {
 
 		const handleUnload = () => {
-			localStorage.removeItem('lastSavedSessionId');
+			localStorage.removeItem(LAST_SAVED_SESSION_ID);
 			console.log('Session ID removed from localStorage');
 		};
 
