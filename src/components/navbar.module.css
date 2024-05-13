@@ -220,6 +220,36 @@
 	flex-direction: column;
 }
 
+/* nav theme picker */
+.themePicker {
+	background: white;
+	color: black;
+	z-index: 9;
+	position: absolute;
+	top: 30px;
+	right: 20vw;
+	padding: 8px;
+	box-shadow: 0 4px 8px 0 #0000005e;
+	min-width: 120px;
+}
+
+.themePicker li {
+	list-style-type: none;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	text-transform: capitalize;
+	text-align: start;
+	margin: 2px;
+	padding: 4px 8px;
+}
+
+.themePicker li:hover {
+	background: var(--accent);
+	color: white;
+}
+
 /* Nav popup */
 .navPopup {
 	background: var(--accent-dark);

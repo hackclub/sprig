@@ -246,7 +246,7 @@ function Text(string,x,y,color) {
 Text("WASD to move.",4,0,color`2`)
 
 function onceMovedToExit() {
-  console.log("Stage 1 Completed.")
+  // console.log("Stage 1 Completed.")
 }
 onInput("w", () => {
   getFirst(player).y -= 1
@@ -272,16 +272,16 @@ onInput("j",() => {
 // })
 afterInput(() => {
   if (tilesWith(player, resurrection_stone).length == 1) {
-    console.log("Unknown Level.")
+    // console.log("Unknown Level.")
     setMap(unknownLevels[0]);
     Text("Level: ???",0,0,color`2`);
   }
 })
 afterInput(() => {
-  console.log("Stage Check")
+  // console.log("Stage Check")
   if (tilesWith(block,goal_point).length == 1) {
-    console.log('Alright. Stage is over. Moving on.')
-    console.log((levels[level + 1]))
+    // console.log('Alright. Stage is over. Moving on.')
+    // console.log((levels[level + 1]))
     setMap(levels[level + 1])
     level = level + 1
     onceMovedToExit()
@@ -289,14 +289,14 @@ afterInput(() => {
     
   }
   else {
-    console.log("Stage Check Failed, conditions not met.")
+    // console.log("Stage Check Failed, conditions not met.")
   }
   if (tilesWith(player, spikes).length == 1 || tilesWith(player,enemy).length == 1) {
-      console.log("Death 💀");
+      // console.log("Death 💀");
       Text("You died!\nPress J to \nrestart.",5,7,color`2` )
       var x = tilesWith(player)[0][0]['_x']
       var y = tilesWith(player)[0][0]['_x']
-      console.log(x,y)
+      // console.log(x,y)
       clearTile(tilesWith(player)[0][0]['_x'],tilesWith(player)[0][0]['_y'])
       addSprite(x,y,ghost_model)
   }

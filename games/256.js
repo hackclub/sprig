@@ -248,7 +248,7 @@ function moveAll(dx, dy) {
       blocks.forEach(block => getAll(block).forEach(sprite => {
         // check if neighbour is of same type
         const neighbourTiles = getTile(sprite.x + dx, sprite.y + dy).map(t => t.type);
-        console.log(neighbourTiles);
+        // console.log(neighbourTiles);
         if (neighbourTiles.includes(block) || neighbourTiles.length === 0) {
           sprite.x += dx;
           sprite.y += dy;

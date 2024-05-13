@@ -588,7 +588,7 @@ function drawCard(val, num, x, y) {
 function showHand(cards, is_dealer) {
     let i = 0;
     cards.forEach(card => {
-        console.log(card);
+        // console.log(card);
         drawCard(lookup[card[0]], card.slice(1), 4 * !is_dealer + i * 2, 1 + 3 * !is_dealer);
         i++;
     })
