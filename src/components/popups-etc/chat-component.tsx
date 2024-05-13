@@ -6,6 +6,7 @@ import { Signal, useSignal } from "@preact/signals";
 import { RiChatDeleteLine } from "react-icons/ri";
 import markdown from "@wcj/markdown-to-html";
 import { nanoid } from "nanoid";
+import { useState } from "preact/hooks";
 
 interface ChatProps {
 	persistenceState: Signal<PersistenceState>;
@@ -46,7 +47,7 @@ Answer the questions that follow based on this unless new code is provided.`;
 	const input = useSignal("");
 
 	const info = useSignal("");
-	const chatSession = nanoid(10);
+	const [chatSession, _setChatSession] = useState(nanoid(10));
 	const email = persistenceState?.value?.session?.user.email;
 
 	const sendMessage = async (message: string) => {
