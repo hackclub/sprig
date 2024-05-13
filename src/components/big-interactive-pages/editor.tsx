@@ -400,12 +400,17 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Disable native save shortcut
 	useEffect(() => {
 		const handler = (event: KeyboardEvent) => {
-			if (event.key === "s" && (event.metaKey || event.ctrlKey))
+			if (event.key === "s" && (event.metaKey || event.ctrlKey)) { 
 				event.preventDefault();
+				if (!continueSaving.value) { 
+					continueSaving.value = true;
+					saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
+				}
+			}
 		};
 		window.addEventListener("keydown", handler);
 		return () => window.removeEventListener("keydown", handler);
-	}, []);
+	}, [continueSaving.value]);
 
 	let initialCode = "";
 	let gameId = '';
