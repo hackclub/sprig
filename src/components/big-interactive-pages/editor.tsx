@@ -14,7 +14,7 @@ import {
 	useSignal,
 	useSignalEffect,
 } from "@preact/signals";
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef, useState} from "preact/hooks";
 import { codeMirror, errorLog, muted, PersistenceState } from "../../lib/state";
 import EditorModal from "../popups-etc/editor-modal";
 import { runGame } from "../../lib/engine";
@@ -27,7 +27,9 @@ import { defaultExampleCode } from "../../lib/examples";
 import MigrateToast from "../popups-etc/migrate-toast";
 import { nanoid } from "nanoid";
 import TutorialWarningModal from "../popups-etc/tutorial-warning";
-import { editSessionLength, switchTheme, ThemeType } from "../../lib/state";
+import { editSessionLength, switchTheme, ThemeType, continueSaving } from '../../lib/state'
+import { showSaveConflictModal } from '../../lib/state';
+import SessionConflictWarningModal from '../popups-etc/session-conflict-warning-modal'
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
@@ -66,9 +68,23 @@ let lastSavePromise = Promise.resolve();
 let saveQueueSize = 0;
 export const saveGame = debounce(
 	800,
-	(persistenceState: Signal<PersistenceState>, code: string) => {
+	(persistenceState: Signal<PersistenceState>, code: string, sessionId: string) => {
 		const doSave = async () => {
 			const attemptSaveGame = async () => {
+				const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null;
+				if (!game) return false;
+				const lastSavedSessionInfo = localStorage.getItem('lastSavedSessionId');
+				const lastSavedData = lastSavedSessionInfo ? JSON.parse(lastSavedSessionInfo) : null;
+				const lastSavedSessionId = lastSavedData ? lastSavedData.sessionId : null;
+				const lastSavedGameId = lastSavedData ? lastSavedData.gameId : null;
+				
+				console.log('Attempting to save. Current session:', sessionId, 'Last saved session:', lastSavedSessionId);
+				
+				if (lastSavedGameId === game.id && lastSavedSessionId !== sessionId) {
+					showSaveConflictModal.value = true;
+					continueSaving.value = false;
+					return false;
+				}
 				try {
 					const game =
 						persistenceState.value.kind === "PERSISTED" &&
@@ -89,6 +105,8 @@ export const saveGame = debounce(
 						throw new Error(
 							`Error saving game: ${await res.text()}`
 						);
+					localStorage.setItem('lastSavedSessionId', JSON.stringify({ sessionId, gameId: game?.id }));
+					console.log('Game saved successfully.');
 					return true;
 				} catch (error) {
 					console.error(error);
@@ -101,7 +119,7 @@ export const saveGame = debounce(
 				}
 			};
 
-			while (!(await attemptSaveGame())) {
+			while (continueSaving.value && !(await attemptSaveGame())) {
 				await new Promise((resolve) => setTimeout(resolve, 2000)); // retry saving the game every 2 seconds
 			}
 
@@ -122,7 +140,7 @@ export const saveGame = debounce(
 	}
 );
 
-const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
+const exitTutorial = (persistenceState: Signal<PersistenceState>, sessionId: string) => {
 	if (persistenceState.value.kind === "PERSISTED") {
 		delete persistenceState.value.tutorial;
 		if (typeof persistenceState.value.game !== "string") {
@@ -133,7 +151,7 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
 			stale: true,
 			cloudSaveState: "SAVING",
 		};
-		saveGame(persistenceState, codeMirror.value!.state.doc.toString());
+        saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
 	} else {
 		if (persistenceState.value.kind == "SHARED")
 			delete persistenceState.value.tutorial;
@@ -144,6 +162,38 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	const outputArea = useRef<HTMLDivElement>(null);
 	const screenContainer = useRef<HTMLDivElement>(null);
 	const screenControls = useRef<HTMLDivElement>(null);
+
+	const [sessionId] = useState(nanoid());
+
+	useEffect(() => {
+		console.log('New session started with ID:', sessionId);
+		const channel = new BroadcastChannel('session_channel');
+		channel.onmessage = (event) => {
+			if (event.data.type === 'SESSION_UPDATE' && event.data.sessionId !== sessionId) {
+				console.log('New session detected:', event.data.sessionId);
+			}
+		};
+		channel.postMessage({ type: 'SESSION_UPDATE', sessionId });
+		return () => channel.close();
+	}, [sessionId]);
+
+	useEffect(() => {
+
+		const handleUnload = () => {
+			localStorage.removeItem('lastSavedSessionId');
+			console.log('Session ID removed from localStorage');
+		};
+
+		window.addEventListener('unload', handleUnload);
+
+		return () => {
+			window.removeEventListener('unload', handleUnload);
+		};
+	}, []);
+
+	const handleSave = (code: string) => {
+		saveGame(persistenceState, code, sessionId);
+	};
 
 	// Resize state storage
 	const outputAreaSize = useSignal(
@@ -358,11 +408,15 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	}, []);
 
 	let initialCode = "";
+	let gameId = '';
 	if (
 		persistenceState.value.kind === "PERSISTED" &&
 		persistenceState.value.game !== "LOADING"
-	)
+	){
 		initialCode = persistenceState.value.game.code;
+		gameId = persistenceState.value.game?.id ?? '';
+
+	}
 	else if (persistenceState.value.kind === "SHARED")
 		initialCode = persistenceState.value.code;
 	else if (persistenceState.value.kind === "IN_MEMORY")
@@ -411,10 +465,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 									...persistenceState.value,
 									cloudSaveState: "SAVING",
 								};
-								saveGame(
-									persistenceState,
-									codeMirror.value!.state.doc.toString()
-								);
+								handleSave(codeMirror.value!.state.doc.toString());
 							}
 
 							if (persistenceState.value.kind === "IN_MEMORY") {
@@ -596,11 +647,12 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 
 			{showingTutorialWarning.value && (
 				<TutorialWarningModal
-					exitTutorial={() => exitTutorial(persistenceState)}
+					exitTutorial={() => exitTutorial(persistenceState, sessionId)}
 					showingTutorialWarning={showingTutorialWarning}
 				/>
 			)}
 			<MigrateToast persistenceState={persistenceState} />
+			<SessionConflictWarningModal sessionId={sessionId} gameId={gameId} />
 		</div>
 	);
 }
