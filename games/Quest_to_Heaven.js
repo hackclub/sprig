@@ -1,4 +1,11 @@
-    const player = "p"
+/*
+@title: Quest_to_Heaven
+@author: Alainy R
+@tags: ["puzzle"]
+@img: ""
+@addedOn: 2024-05-14
+*/
+	const player = "p"
     const goal = "e"
     const wall = "w"
     const trap = "l"
