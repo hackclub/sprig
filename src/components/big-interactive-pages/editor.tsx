@@ -548,7 +548,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 						/>
 						<div
 							class={styles.helpContainer}
-							style={{ height: realHelpAreaSize.value }}
+							style={{ height: realHelpAreaSize.value, maxHeight: (outputArea.current?.clientHeight! - screenControls.current?.clientHeight!) - 5 }}
 						>
 							{!(
 								(persistenceState.value.kind === "SHARED" ||
