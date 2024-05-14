@@ -1,3 +1,10 @@
+/*
+@title: Castle_Drop
+@author: aISaidJak
+@tags: ["dodge"]
+@img: ""
+@addedOn: 2024-05-14
+*/
 const player = "p"
 const window = "w"
 const spike = "s"
