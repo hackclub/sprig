@@ -2,9 +2,7 @@
 
 @title: Haunted Office
 @author: Aleyah
-@tags: []
-@img: ""
-@addedOn: 2024-00-00
+
 */
 
 const win = tune`
@@ -428,13 +426,13 @@ mwqeqqwqqqqeqwqqqwqqdqO`, // level 2
 l.4qqeqt....3.l
 l......3.r.r3.l
 3....1.3....3.l
-3......3r.r.3bl
+3......3r.r.3.l
 3.4ewqqO....3bl
-3.3k...r...r3.l
+3.3k...r...r3bl
 3.mqwqt..r..3dl
 3b....3r....mqO
-32b...3....r..3
-mqqqqqllllqqqpl`, //level3
+32b...3....r.p3
+mqqqqqllllqqq.l`, //level3
   map`
 4weqqqllleqwqqt
 3r...r.......13
@@ -445,11 +443,11 @@ l..3..4q.3..3.l
 lr.3r.3..3..3.l
 3..3..3kb3..3.3
 3..3.rmweO.b3.3
-31........bb3.3
-mqqwqqlllqewqpO`, // level 4
+31........bb3p3
+mqqwqqlllqewq.O`, // level 4
   map`
 lqellleqllwdl
-lk.......32.l
+lk.......32bl
 l........3r.l
 llllwe.qeO..l
 l.r......b..l
@@ -459,8 +457,8 @@ l......32b..l
 lllllllllllll`, // level 5
   map`
 4qqqwqe.p.wqqwel4qqelqt
-l.......r..4db.23....1l
-lr..4qqq...3....3.....l
+l.......r..4d..23....1l
+lr..4qqq...3b...3.....l
 l...3..r...3....3.....l
 l..r3....r.3....32....l
 l...3k.....mqewqO.....l
@@ -604,6 +602,7 @@ function movePumpkins(currentLevel){
          checkForPlayer(7,2) ||
          checkForPlayer(5,6) ||
          checkForPlayer(10,2)||
+         checkForPlayer(10,6)||
          checkForPlayer(18,8)) &&
          moveP){
       clearTile(2,5);
@@ -633,8 +632,17 @@ function movePumpkins(currentLevel){
        checkForPlayer(9,4)||
       checkForPlayer(8,7)||
        checkForPlayer(10,8)||
-      
+        checkForPlayer(10,10)||
+       checkForPlayer(10,9)||
+       checkForPlayer(12,8)||
+       // checkForPlayer(10,11)||
+       // checkForPlayer(10,12)||
        checkForPlayer(16,9)||
+        checkForPlayer(16,8)||
+          checkForPlayer(14,9)||
+          checkForPlayer(14,8)||
+          checkForPlayer(10,8)||
+       
          checkForPlayer(18,9)) &&
          !moveP){
       clearTile(7,1);
@@ -653,7 +661,7 @@ function movePumpkins(currentLevel){
      addSprite(9,4,pumpkin);
      clearTile(7,7);
     addSprite(8,7,pumpkin);
-    clearTile(9,8);
+   // clearTile(9,8);
       addSprite(8,5,pumpkin);
      clearTile(10,8);
       addSprite(10,9,pumpkin);
@@ -679,8 +687,19 @@ function movePumpkins(currentLevel){
               checkForPlayer(7,7)||
               checkForPlayer(10,9)||
               checkForPlayer(14,9)||
-          checkForPlayer(16,8)||
-         checkForPlayer(9,8)) &&
+          checkForPlayer(10,8)||
+              checkForPlayer(12,10)||
+              checkForPlayer(12,8)||
+               checkForPlayer(12,9)||
+                 checkForPlayer(14,9)||
+                 checkForPlayer(14,8)||
+            
+            
+             checkForPlayer(16,8)||
+               checkForPlayer(16,10)||
+               checkForPlayer(16,9)||
+            
+         checkForPlayer(18,8)) &&
          moveP){
       clearTile(8,1);
       addSprite(7,1,pumpkin);
@@ -719,7 +738,9 @@ function movePumpkins(currentLevel){
         checkForPlayer(8,5) ||
        checkForPlayer(10,5)||
       checkForPlayer(7,7)||
+         checkForPlayer(7,3)||
      checkForPlayer(7,8)||
+            checkForPlayer(7,9)||
        checkForPlayer(9,8)||
       
      checkForPlayer(11,7)||
@@ -758,6 +779,10 @@ function movePumpkins(currentLevel){
        checkForPlayer(9,5) ||
       checkForPlayer(11,5) ||
       checkForPlayer(7,8)||
+              checkForPlayer(8,2)||
+              checkForPlayer(8,3)||
+              
+                 checkForPlayer(7,9)||
           checkForPlayer(8,9)||
              checkForPlayer(10,8)||
               checkForPlayer(10,7)||
@@ -796,6 +821,9 @@ function movePumpkins(currentLevel){
          checkForPlayer(6,2) ||
          checkForPlayer(6,6) ||
          checkForPlayer(11,2)||
+          checkForPlayer(9,6)||
+         checkForPlayer(10,6)||
+         checkForPlayer(8,6)||
          checkForPlayer(11,6)) &&
          !moveP){
       clearTile(2,6);
@@ -821,6 +849,9 @@ function movePumpkins(currentLevel){
          checkForPlayer(7,2) ||
          checkForPlayer(5,6) ||
          checkForPlayer(10,2)||
+              checkForPlayer(9,6)||
+         checkForPlayer(10,6)||
+         checkForPlayer(8,6)||
          checkForPlayer(18,8)) &&
          moveP){
       clearTile(2,5);
@@ -850,8 +881,17 @@ function movePumpkins(currentLevel){
        checkForPlayer(9,4)||
       checkForPlayer(8,7)||
        checkForPlayer(10,8)||
-      
+        checkForPlayer(10,10)||
+       checkForPlayer(10,9)||
+       checkForPlayer(12,8)||
+       // checkForPlayer(10,11)||
+       // checkForPlayer(10,12)||
        checkForPlayer(16,9)||
+        checkForPlayer(16,8)||
+          checkForPlayer(14,9)||
+          checkForPlayer(14,8)||
+          checkForPlayer(10,8)||
+       
          checkForPlayer(18,9)) &&
          !moveP){
       clearTile(7,1);
@@ -870,7 +910,7 @@ function movePumpkins(currentLevel){
      addSprite(9,4,pumpkin);
      clearTile(7,7);
     addSprite(8,7,pumpkin);
-    clearTile(9,8);
+   // clearTile(9,8);
       addSprite(8,5,pumpkin);
      clearTile(10,8);
       addSprite(10,9,pumpkin);
@@ -896,8 +936,19 @@ function movePumpkins(currentLevel){
               checkForPlayer(7,7)||
               checkForPlayer(10,9)||
               checkForPlayer(14,9)||
-          checkForPlayer(16,8)||
-         checkForPlayer(9,8)) &&
+          checkForPlayer(10,8)||
+              checkForPlayer(12,10)||
+              checkForPlayer(12,8)||
+               checkForPlayer(12,9)||
+                 checkForPlayer(14,9)||
+                 checkForPlayer(14,8)||
+            
+            
+             checkForPlayer(16,8)||
+               checkForPlayer(16,10)||
+               checkForPlayer(16,9)||
+            
+         checkForPlayer(18,8)) &&
          moveP){
       clearTile(8,1);
       addSprite(7,1,pumpkin);
@@ -936,7 +987,9 @@ function movePumpkins(currentLevel){
         checkForPlayer(8,5) ||
        checkForPlayer(10,5)||
       checkForPlayer(7,7)||
+         checkForPlayer(7,3)||
      checkForPlayer(7,8)||
+            checkForPlayer(7,9)||
        checkForPlayer(9,8)||
       
      checkForPlayer(11,7)||
@@ -975,6 +1028,10 @@ function movePumpkins(currentLevel){
        checkForPlayer(9,5) ||
       checkForPlayer(11,5) ||
       checkForPlayer(7,8)||
+              checkForPlayer(8,2)||
+              checkForPlayer(8,3)||
+              
+                 checkForPlayer(7,9)||
           checkForPlayer(8,9)||
              checkForPlayer(10,8)||
               checkForPlayer(10,7)||
