@@ -162,7 +162,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	);
 
 	const canvasScreenSize = useSignal({
-		height: outputArea.current?.clientHeight! - helpAreaSize.value - screenControls.current?.clientHeight!,
+		height: outputArea.current?.clientHeight! - helpAreaSize.value, // - screenControls.current?.clientHeight!,
 		maxHeight: screenContainer.current?.clientHeight
 	});
 
@@ -236,10 +236,10 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		)
 	);
 
-	// compute the height and max height of the canvas screen 
+	// compute the height and max height of the canvas screen
 	function computeCanvasScreenHeights() {
 		// compute the new canvas screen height
-		const canvasScreenHeight = outputArea.current?.clientHeight! - realHelpAreaSize.value - screenControls.current?.clientHeight!;
+		const canvasScreenHeight = outputArea.current?.clientHeight! - realHelpAreaSize.value + screenControls.current?.clientHeight!;
 
 		// calculate canvas screen max height
 		// the max height is such that (width/height) == 1.25
@@ -479,13 +479,16 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 					ref={outputArea}
 					style={{ width: realOutputAreaSize.value }}
 				>
-					<div ref={screenContainer}>
-						<div class={styles.canvasWrapper}>
+					<div ref={screenContainer} style={{ overflow: "hidden" }}>
+						<div class={styles.canvasWrapper}
+						style={outputArea.current ? {
+						  height: canvasScreenSize.value.height,
+						  maxHeight: canvasScreenSize.value.maxHeight
+						} : {} }>
 							<canvas
 								class={`${styles.screen} ${
 									screenShake.value > 0 ? "shake" : ""
 								}`}
-								style={ outputArea.current ? { height: canvasScreenSize.value.height, maxHeight:  canvasScreenSize.value.maxHeight }: { } }
 								ref={screen}
 								tabIndex={0}
 								width="1000"

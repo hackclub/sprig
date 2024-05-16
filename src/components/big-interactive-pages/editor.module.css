@@ -110,7 +110,9 @@
 }
 
 .canvasWrapper {
-	max-height: 100%;
+	width: 100%;
+	overflow: hidden;
+	position: relative;
 }
 
 .screen {
@@ -119,7 +121,7 @@
 	background: #000000;
 	width: 100%;
 	height: auto;
-	max-height: 80%;
+	aspect-ratio: 1000 / 800;
 	image-rendering: crisp-edges;
 	image-rendering: pixelated;
 	outline: none;
