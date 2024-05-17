@@ -20,7 +20,6 @@ import EditorModal from "../popups-etc/editor-modal";
 import { runGame } from "../../lib/engine";
 import DraftWarningModal from "../popups-etc/draft-warning";
 import Button from "../design-system/button";
-import { debounce } from "throttle-debounce";
 import Help from "../popups-etc/help";
 import { collapseRanges } from "../../lib/codemirror/util";
 import { defaultExampleCode } from "../../lib/examples";
@@ -64,8 +63,8 @@ const foldAllTemplateLiterals = () => {
 	);
 };
 
-let lastSavePromise = Promise.resolve();
-let saveQueueSize = 0;
+// let lastSavePromise = Promise.resolve();
+// let saveQueueSize = 0;
 // export const saveGame = debounce(800, (persistenceState: Signal<PersistenceState>, code: string) => {
 // 	const doSave = async () => {
 // 		const attemptSaveGame = async () => {
@@ -105,9 +104,10 @@ let saveQueueSize = 0;
 // 	saveQueueSize++
 // 	lastSavePromise = (lastSavePromise ?? Promise.resolve()).then(doSave)
 // })
-
-async function saveGame(persistenceState: Signal<PersistenceState>) {
+let count = 0;
+export async function saveGame(persistenceState: Signal<PersistenceState>) {
 	const attemptSaveGame = async () => {
+		console.log("trying save"+count++);
 		try {
 			const game =
 				persistenceState.value.kind === "PERSISTED" &&
@@ -122,6 +122,7 @@ async function saveGame(persistenceState: Signal<PersistenceState>) {
 					tutorialName: game?.tutorialName,
 				}),
 			});
+			console.log(res.text());
 			if (!res.ok)
 				throw new Error(`Error saving game: ${await res.text()}`);
 			return true;
@@ -135,10 +136,10 @@ async function saveGame(persistenceState: Signal<PersistenceState>) {
 			return false;
 		}
 	};
-
 	while (!(await attemptSaveGame())) {
 		await new Promise((resolve) => setTimeout(resolve, 2000));
 	}
+	console.log("SUCCESS SAVE")
 	if (persistenceState.value.kind === "PERSISTED")
 		persistenceState.value = {
 			...persistenceState.value,
@@ -157,7 +158,7 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
 			stale: true,
 			cloudSaveState: "SAVING",
 		};
-		saveGame(persistenceState, codeMirror.value!.state.doc.toString());
+		saveGame(persistenceState);
 	} else {
 		if (persistenceState.value.kind == "SHARED")
 			delete persistenceState.value.tutorial;
@@ -176,6 +177,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			cookies.outputAreaSize ?? defaultOutputAreaWidth
 		)
 	);
+	const roomId = useSignal<string>("");
 
 	// this is initially setting the helpAreaSize
 	const helpAreaSize = useSignal(
@@ -417,6 +419,8 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
+						persistenceState={persistenceState}
+						roomId={roomId}
 						class={styles.code}
 						initialCode={initialCode}
 						onEditorView={(editor) => {
