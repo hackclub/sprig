@@ -239,7 +239,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// compute the height and max height of the canvas screen
 	function computeCanvasScreenHeights() {
 		// compute the new canvas screen height
-		const canvasScreenHeight = outputArea.current?.clientHeight! - realHelpAreaSize.value + screenControls.current?.clientHeight!;
+		const canvasScreenHeight = outputArea.current?.clientHeight! - realHelpAreaSize.value - screenControls.current?.clientHeight!;
 
 		// calculate canvas screen max height
 		// the max height is such that (width/height) == 1.25
@@ -479,12 +479,11 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 					ref={outputArea}
 					style={{ width: realOutputAreaSize.value }}
 				>
-					<div ref={screenContainer} style={{ overflow: "hidden" }}>
-						<div class={styles.canvasWrapper}
-						style={outputArea.current ? {
-						  height: canvasScreenSize.value.height,
-						  maxHeight: canvasScreenSize.value.maxHeight
-						} : {} }>
+					<div ref={screenContainer} style={ outputArea.current ? {
+					  height: canvasScreenSize.value.height,
+						maxHeight: canvasScreenSize.value.maxHeight,
+					} : {} }>
+						<div class={styles.canvasWrapper}>
 							<canvas
 								class={`${styles.screen} ${
 									screenShake.value > 0 ? "shake" : ""
@@ -551,7 +550,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 						/>
 						<div
 							class={styles.helpContainer}
-							style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenControls.current?.clientHeight! + screenContainer.current?.clientHeight!) }}
+							style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! + screenContainer.current?.clientHeight! }}
 						>
 							{!(
 								(persistenceState.value.kind === "SHARED" ||

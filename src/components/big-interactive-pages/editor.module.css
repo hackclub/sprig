@@ -96,10 +96,11 @@
 }
 
 .horizontalResizeBar {
-	position: relative;
+	position: absolute;
 	width: 100%;
-	height: 6px;
-	min-height: 6px;
+	top: 30px;
+	z-index: 2;
+	height: 1px;
 	cursor: row-resize;
 	background: transparent;
 }
@@ -107,6 +108,7 @@
 .horizontalResizeBar:hover,
 .horizontalResizeBar.resizing {
 	background: var(--accent-light);
+	height: 6px;
 }
 
 .canvasWrapper {
