@@ -41,7 +41,10 @@
 		"svelte": "^3.54.0",
 		"three": "^0.149.0",
 		"throttle-debounce": "^5.0.0",
-		"tinykeys": "^1.4.0"
+		"tinykeys": "^1.4.0",
+		"y-codemirror.next": "^0.3.3",
+		"y-webrtc": "^10.3.0",
+		"yjs": "^13.6.15"
 	},
 	"devDependencies": {
 		"@babel/standalone": "^7.23.8",
