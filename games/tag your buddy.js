@@ -167,37 +167,22 @@ eeeeee.eee.e.e.e.ee..eee.eeee
 p...ee.eee.e.e...ee.ee...eeee
 eee....eee...eeeeee....eeeeee`,
     map`
-t..e...e...e...e...e...e...e...e...e...e...e...e...e...
-.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.
-.e...e...e...e...e...e...e...e...e...e...e...e...e...e.
-.eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.
-.e...e...e...e...e...e...e...e...e...e...e...e...e...e.
-.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.
-.e.e...e...e...e...e...e...e...e...e...e...e...e...e...
-.e.eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-.e.e...e...e...e...e...e...e...e...e...e...e...e...e...
-.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.
-.e...e...e...e...e...e...e...e...e...e...e...e...e...e.
-.eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.
-.e...e...e...e...e...e...e...e...e...e...e...e...e...e.
-.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.
-.e.e...e...e...e...e...e...e...e...e...e...e...e...e...
-.e.eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-.e.e...e...e...e...e...e...e...e...e...e...e...e...e...
-.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.
-.e...e...e...e...e...e...e...e...e...e...e...e...e...e.
-.eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.
-.e...e...e...e...e...e...e...e...e...e...e...e...e...e.
-.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.
-.e.e...e...e...e...e...e...e...e...e...e...e...e...e...
-.e.eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-.e.e...e...e...e...e...e...e...e...e...e...e...e...e...
-.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.
-.e...e...e...e...e...e...e...e...e...e...e...e...e.....
-.eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.
-.eeerrde...e...e...e...e...e...e...e...e...e...e...e...
-.eeeuede.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.ee
-prrrue...e...e...e...e...e...e...e...e...e...e...e...ee`,
+te.e...e...e...e...e...e...e...e...e...e
+.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e
+.e...e...e...e...e...e...e...e...e...e..
+.eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.
+.e...e...e...e...e...e...e...e...e...e..
+.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e
+.e.e...e...e...e...e...e...e...e...e...e
+.e.eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+.e.e...e...e...e...e...e...e...e...e...e
+.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e
+.e...e...e...e...e...e...e...e...e...e..
+.eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.
+.err.e...e...e...e...e...e...e...e...e..
+.eue.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e.e
+.eue...e...e...e...e...e...e...e...e...e
+prueeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`,
   map`
 .........................
 ....eeeeeeeeeeeeeeeeee...
@@ -246,9 +231,8 @@ setMap(levels[currentLevel]);
 
 setSolids([ player1, player3]);
 
-// inputs for player movement control
 onInput("s", () => {
-  getFirst(player1).y += 1; // positive y is downwards
+  getFirst(player1).y += 1; 
 });
 
 onInput("d", () => {
@@ -263,20 +247,17 @@ onInput("w", () => {
   getFirst(player1).y -= 1;
 });
 
-//resets the game
 onInput("i", () => {
   currentLevel = 0;
   clearText("");
   setMap(levels[currentLevel]);
 });
 
-// input to reset level
 onInput("j", () => {
     clearText("");
     setMap(levels[currentLevel]);
 });
 
-// these get run after every input
 afterInput(() => {
 
   const oneTiles = tilesWith(player1);
@@ -284,12 +265,8 @@ afterInput(() => {
   const twoTiles = tilesWith(player2);
 
   if (oneTiles[0][0]._x == twoTiles[0][0]._x && oneTiles[0][0]._y == twoTiles[0][0]._y) {
-    // increase the current level number
     currentLevel = currentLevel + 1;
 
-    // make sure the level exists and if so set the map
-    // otherwise, we have finished the last level, there is no level
-    // after the last level
     if (levels[currentLevel] !== undefined) {
       setMap(levels[currentLevel]);
     } else {
