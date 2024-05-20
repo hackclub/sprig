@@ -1,5 +1,5 @@
 pico_sdk_init()
-add_definitions(-DSPADE_EMBEDDED -DSPADE_AUDIO)
+add_definitions(-DSPADE_EMBEDDED -DSPADE_AUDIO -DPICO_NO_BI_PROGRAM_BUILD_DATE)
 set(DCMAKE_BUILD_TYPE Debug)
 target_compile_definitions(spade PRIVATE
   # compile time configuration of I2S

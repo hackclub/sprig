@@ -772,14 +772,14 @@ afterInput(() => {
   if (level == 0) {
     if(unmowedCounter >= totalGrass) {
       const cowPlacement = tilesWith(cow)
-      console.log(cowPlacement)
+      // console.log(cowPlacement)
       addSprite(cowPlacement[0][0]._x, cowPlacement[0][0]._y, mowed)
       addSprite(cowPlacement[0][0]._x, cowPlacement[0][0]._y, cow)
       unmowedCounter += 1
       const grassEating = tilesWith(cow, mowed).length //cow dirt lvl 2
       if (grassEating > 0) {
         const tile = tilesWith(cow, mowed)
-        console.log(tile)
+        // console.log(tile)
         clearTile(tile[0][0]._x, tile[0][0]._y)
         addSprite(tile[0][0]._x, tile[0][0]._y, cow)
         addSprite(tile[0][0]._x, tile[0][0]._y, dirt)
@@ -812,7 +812,7 @@ afterInput(() => {
       const mowingGrass = tilesWith(lawnmower, unmowed).length
       if (mowingGrass > 0) {
         const tile = tilesWith(lawnmower, unmowed)
-        console.log(tile[0][0]._x)
+        // console.log(tile[0][0]._x)
         clearTile(tile[0][0]._x, tile[0][0]._y)
         addSprite(tile[0][0]._x, tile[0][0]._y, mowed)
         addSprite(tile[0][0]._x, tile[0][0]._y, lawnmower)

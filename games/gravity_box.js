@@ -231,7 +231,7 @@ afterInput(() => {
   */
   
   
-  console.log("doesn't really do anything that cool");
+  // console.log("doesn't really do anything that cool");
 })
 
 // gravity stuff

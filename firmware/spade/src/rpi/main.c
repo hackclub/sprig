@@ -199,6 +199,8 @@ static int load_new_scripts(void) {
 #endif
 
 int main() {
+    timer_hw->dbgpause = 0;
+
   // Overclock the RP2040!
   set_sys_clock_khz(270000, true);
 
@@ -266,7 +268,7 @@ int main() {
                      "                    \n"
                      "                    \n"
                      "                    \n"
-                     "    PRESS ANY KEY   \n"
+                     "  PRESS ANY BUTTON  \n"
                      "       TO RUN       \n"
                      "                    \n"
                      "                    \n"

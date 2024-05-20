@@ -1,3 +1,4 @@
+.vscode
 build/
 pc_build/
 rpi_build/
@@ -15,3 +16,4 @@ game.js.cstring
 game.min.js
 dockerBuildLog.txt
 spade.uf2
+spade.elf
