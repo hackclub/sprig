@@ -18,24 +18,23 @@ const ChatComponent = ({ persistenceState }: ChatProps) => {
 		persistenceState?.value.kind === "IN_MEMORY"
 			? ""
 			: persistenceState?.value.kind === "PERSISTED"
-			? persistenceState?.value.game !== "LOADING"
-				? persistenceState?.value.game.name
-				: ""
-			: persistenceState?.value.name || "";
+				? persistenceState?.value.game !== "LOADING"
+					? persistenceState?.value.game.name
+					: ""
+				: persistenceState?.value.name || "";
 
 	const systemPrompt = () => `Here is the current code:
 \`\`\`
 ${codeMirror.value?.state.doc.toString()}
 \`\`\`
 
-${
-	errorLog.value.length > 0
-		? `I am facing the following errors:
+${errorLog.value.length > 0
+			? `I am facing the following errors:
 \`\`\`
 ${errorLog.value[0]?.description}
 \`\`\``
-		: ""
-}
+			: ""
+		}
 
 Answer the questions that follow based on this unless new code is provided.`;
 
@@ -53,24 +52,29 @@ Answer the questions that follow based on this unless new code is provided.`;
 	const email = persistenceState?.value?.session?.user.email;
 
 	const sendMessage = async (message: string) => {
-		const response = await fetch(
-			`${import.meta.env.PUBLIC_SPRIG_LLM_API}/generate`,
-			{
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					session_id: chatSession,
-					message: message,
-					email,
-				}),
-			}
-		);
+		try {
+			const response = await fetch(
+				`${import.meta.env.PUBLIC_SPRIG_LLM_API}/generate`,
+				{
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+						session_id: chatSession,
+						message: message,
+						email,
+					}),
+				}
+			);
 
-		const data = (await response.json()) as {
-			raw: string;
-			codes: string[];
-		};
-		return data;
+			const data = (await response.json()) as {
+				raw: string;
+				codes: string[];
+			};
+
+			return data;
+		} catch {
+			throw new Error("Failed to reach the server. Please make sure you're connected to the internet and try again!")
+		}
 	}
 
 	const handleSendClick = async () => {
@@ -93,8 +97,9 @@ Answer the questions that follow based on this unless new code is provided.`;
 			// send new code only if the code has changed since the last one
 			const newCodeHash = await sha256Hash(codeMirror.value?.state.doc.toString()!);
 			if (newCodeHash !== codeHash) {
-			    setCodeHash(newCodeHash);
-					await sendMessage(newSystemMessage.content);
+				sendMessage(newSystemMessage.content)
+					.then(() => setCodeHash(newCodeHash))
+			    .catch(err => { throw new Error(err.message) } );
 			}
 
 			const data = await sendMessage(newMessage.content);
@@ -109,9 +114,9 @@ Answer the questions that follow based on this unless new code is provided.`;
 			loading.value = false;
 			info.value = "";
 		} catch (err) {
-			console.error(err);
 			loading.value = false;
-			info.value = "An error occurred...";
+			// info.value = "An error occurred...";
+			info.value = err.message;
 		}
 	};
 
@@ -123,11 +128,10 @@ Answer the questions that follow based on this unless new code is provided.`;
 					.map((message, i) => (
 						<div
 							key={i}
-							class={`${styles.message} ${
-								message.role === "user"
-									? styles.messageUser
-									: styles.messageBot
-							}`}
+							class={`${styles.message} ${message.role === "user"
+								? styles.messageUser
+								: styles.messageBot
+								}`}
 							dangerouslySetInnerHTML={{
 								__html:
 									(markdown(message.content) as string) || "",
