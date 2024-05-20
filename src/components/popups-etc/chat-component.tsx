@@ -7,6 +7,7 @@ import { RiChatDeleteLine } from "react-icons/ri";
 import markdown from "@wcj/markdown-to-html";
 import { nanoid } from "nanoid";
 import { useState } from "preact/hooks";
+import { sha256Hash } from "../../lib/codemirror/util";
 
 interface ChatProps {
 	persistenceState: Signal<PersistenceState>;
@@ -22,7 +23,7 @@ const ChatComponent = ({ persistenceState }: ChatProps) => {
 				: ""
 			: persistenceState?.value.name || "";
 
-	const systemPrompt = `Here is the current code:
+	const systemPrompt = () => `Here is the current code:
 \`\`\`
 ${codeMirror.value?.state.doc.toString()}
 \`\`\`
@@ -48,6 +49,7 @@ Answer the questions that follow based on this unless new code is provided.`;
 
 	const info = useSignal("");
 	const [chatSession, _setChatSession] = useState(nanoid(10));
+	const [codeHash, setCodeHash] = useState<string>('');
 	const email = persistenceState?.value?.session?.user.email;
 
 	const sendMessage = async (message: string) => {
@@ -78,7 +80,7 @@ Answer the questions that follow based on this unless new code is provided.`;
 			info.value = "...";
 
 			const newSystemMessage = {
-				content: systemPrompt,
+				content: systemPrompt(),
 				role: "user",
 				render: false,
 			};
@@ -88,7 +90,12 @@ Answer the questions that follow based on this unless new code is provided.`;
 			input.value = "";
 
 			// send code as message to give context to the llm for future questions
-			await sendMessage(newSystemMessage.content);
+			// send new code only if the code has changed since the last one
+			const newCodeHash = await sha256Hash(codeMirror.value?.state.doc.toString()!);
+			if (newCodeHash !== codeHash) {
+			    setCodeHash(newCodeHash);
+					await sendMessage(newSystemMessage.content);
+			}
 
 			const data = await sendMessage(newMessage.content);
 
