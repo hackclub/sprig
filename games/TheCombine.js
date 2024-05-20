@@ -1,5 +1,5 @@
 /* 
-@title: The Combine
+@title: TheCombine
 @author: Sidharth B
 @tags: []
 @img: ""
