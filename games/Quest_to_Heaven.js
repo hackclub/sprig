@@ -3,7 +3,7 @@
 @author: Alainy R
 @tags: ["puzzle"]
 @img: ""
-@addedOn: 2024-05-14
+@addedOn: 2024-05-20
 */
 	const player = "p"
     const goal = "e"
