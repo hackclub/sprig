@@ -3,7 +3,7 @@
 @tags: ['beginner', 'tutorial']
 @img: ""
 @addedOn: 2024-05-20
-@author: Vincent Villarreal
+@author: Luis Guerrero
 
 Check the tutorial in the bottom right, the run button is in the top right.
 Make sure to remix this tutorial if you want to save your progress!
