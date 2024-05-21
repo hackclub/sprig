@@ -2,7 +2,9 @@
 
 @title: Haunted Office
 @author: Aleyah
-
+@tags: []
+@img: ""
+@addedOn: 2024-4-20
 */
 
 const win = tune`
