@@ -1,6 +1,6 @@
 /*
-@FRC CHARGED UP: 
-@Wyatt459: 
+@title: FRC CHARGED UP 
+@author: Wyatt459
 @tags: []
 @img: ""
 @addedOn: 2024-04-22
