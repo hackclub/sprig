@@ -2,6 +2,8 @@
 @title: Lost Alien
 @author: Joseph Smesny
 @addedOn: 2024-05-20
+@tags: []
+@img: ""
 */
 
 const song = tune`
