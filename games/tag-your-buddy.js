@@ -1,6 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
+@title: Tag Your Buddy
+@author: Aadarsh Jonnalagadda
+@tags: []
+@img: ""
+@addedOn: 2024-05-20
 */
 
 const player1 = "p"
