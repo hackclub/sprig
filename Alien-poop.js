@@ -1,9 +1,9 @@
 /*
-@title: getting_started
+@title: Alien poop
 @tags: ['beginner', 'tutorial']
 @img: ""
-@addedOn: 2022-07-26
-@author: leo, edits: samliu, belle, kara
+@addedOn: 2024-05-20
+@author: Vincent Villarreal
 
 Check the tutorial in the bottom right, the run button is in the top right.
 Make sure to remix this tutorial if you want to save your progress!
