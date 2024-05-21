@@ -116,7 +116,7 @@ function changeMap(){
     }
   }
 
-  console.log(final)
+  // console.log(final)
   return map`${final}`;
 }
 

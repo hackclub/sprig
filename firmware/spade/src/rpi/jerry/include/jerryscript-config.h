@@ -18,7 +18,7 @@
 
 // Generated differences from default by CMake based on build options:
 #define JERRY_ERROR_MESSAGES 1
-#define JERRY_GLOBAL_HEAP_SIZE 202
+#define JERRY_GLOBAL_HEAP_SIZE 190
 #define JERRY_GC_LIMIT (0)
 #define JERRY_LINE_INFO 1
 #define JERRY_LOGGING 1

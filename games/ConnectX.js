@@ -272,7 +272,7 @@ function drawBoard() {
 function placeChip(col) {
   const numRows = board.length;
   for (let row = board.length; row > 0; row --) {
-    console.log(board[row-1][col]);
+    // console.log(board[row-1][col]);
     if (board[row-1][col] == '_') {
       board[row-1][col] = turn;
       if (turn == 'y') {
