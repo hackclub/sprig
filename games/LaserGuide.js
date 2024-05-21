@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: LaserGuide
 @author: Extner
-@tags: [laser, puzzle]
+@tags: ['laser', 'puzzle']
 @img: ""
 @addedOn: 2024-05-20
 */
@@ -147,7 +147,7 @@ LLLLLLLLLLLLLLLL
 44444......44444
 44444......44444`],
 
-  
+
   [LASER_H, bitmap`
 ................
 ................
@@ -182,7 +182,7 @@ LLLLLLLLLLLLLLLL
 ......3223......
 ......3223......
 ......3223......`],
-  
+
 
   [MIRROR_NE, bitmap`
 12..............
@@ -395,16 +395,16 @@ function finish_level() {
   selector_idx = 0
   set_selector(selector_idx)
 
-  addText("Press L to \ncontinue", { 
+  addText("Press L to \ncontinue", {
       x: 5,
       y: 4,
       color: color`2`
   })
-  
-  
+
+
   if (current_map >= (maps.length)) {
     current_map = (maps.length -1)
-    addText("You did it! \n thanks for \n playing!", { 
+    addText("You did it! \n thanks for \n playing!", {
       x: 5,
       y: 4,
       color: color`2`
@@ -433,12 +433,12 @@ class Emitter {
 
   activate_mirror(pos) {
     let result = null
-    
+
     for (let i=0; i<this.mirrors.length; i++) {
       if (equal_arr(this.mirrors[i].pos, pos)) {
         result = this.mirrors[i]
       }
-      
+
     }
 
     return result
@@ -446,7 +446,7 @@ class Emitter {
 
   new_laser_dir(mirror_dir, laser_dir) {
     //this is such a horrible mess
-    
+
     if (mirror_dir == 0) {
         if (equal_arr(laser_dir, [0, 1])) {return [1, 0]}
         if (equal_arr(laser_dir, [-1, 0])) {return [0, -1]}
@@ -471,17 +471,17 @@ class Emitter {
 
   render() {
     addSprite(this.pos[0], this.pos[1], EMITTER)
-    
+
     //laser drawing and path calculation
     let laser_dir = [1, 0]
     let laser_pos = deepcopy_arr(this.pos)
 
     laser_pos[0] += laser_dir[0]
     laser_pos[1] += laser_dir[1]
-    
-    
+
+
     while (true) {
-      
+
       if ((!in_bounds(laser_pos[0], 0, MAP_W-1) || !in_bounds(laser_pos[1], 0, MAP_H-1))) {
         break
       }
@@ -493,11 +493,11 @@ class Emitter {
       if (equal_arr(laser_pos ,this.target.pos)) {
         finish_level()
         break
-        
+
       }
 
       let current_mirror = this.activate_mirror(laser_pos)
-      
+
 
       if (current_mirror != null) {
         let new_dir = this.new_laser_dir(current_mirror.dir, laser_dir)
@@ -511,12 +511,12 @@ class Emitter {
 
       laser_pos[0] += laser_dir[0]
       laser_pos[1] += laser_dir[1]
-      
+
     }
-    
+
   }
 
-  
+
 }
 
 class Target {
@@ -549,17 +549,17 @@ class Mirror {
 
 class Map {
   constructor(original_map_data) {
-    
+
     this.original_map_data = original_map_data.replace(/\n|\r/g, "");
     this.map_data = ""
-    
+
     this.mirrors = []
     this.mirror_positions = []
     this.solid_positions = []
     this.target = null
 
     this.emitter_pos = [0, 0]
-      
+
     for (let y=0; y<MAP_H; y++){
       for (let x=0; x<MAP_W; x++){
         let char = this.original_map_data.charAt(x + y*MAP_W)
@@ -576,14 +576,14 @@ class Map {
         else if (char == WALL) {
           this.solid_positions.push([x, y])
           new_char = WALL
-          
+
         }
 
         //emitter
         else if (char == EMITTER) {
           this.emitter_pos = [x, y]
           this.solid_positions.push([x, y])
-          
+
         }
 
         //target
@@ -592,16 +592,16 @@ class Map {
         }
 
         this.map_data += new_char
-            
+
       }
       this.map_data += "\n"
     }
 
     this.map_data = eval("map`"+this.map_data+"`")
-    
-    
+
+
     this.emitter = new Emitter(this.emitter_pos, this.mirrors, this.solid_positions, this.target)
-    
+
   }
 
   render() {
@@ -609,10 +609,10 @@ class Map {
     for (let i=0; i<this.mirrors.length; i++) {
       this.mirrors[i].active = false
     }
-    
+
     this.emitter.render()
     this.target.render()
-    
+
     for (let i=0; i<this.mirrors.length; i++) {
       this.mirrors[i].render()
     }
@@ -732,7 +732,7 @@ setBackground(BACKGROUND)
 set_selector(0)
 maps[current_map].render()
 
-addText("  Use j and l\n    to move.\nUse k to rotate\n    mirrors.", { 
+addText("  Use j and l\n    to move.\nUse k to rotate\n    mirrors.", {
   x: 2,
   y: 4,
   color: color`2`
@@ -774,6 +774,6 @@ afterInput(() => {
       clearTile(x, y)
     }
   }
-  
+
   maps[current_map].render()
 })
