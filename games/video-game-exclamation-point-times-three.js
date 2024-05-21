@@ -1,6 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
+@title: video-game-exclamation-point-times-three
+@author: arc
+@tags: []
+@img: ""
+@addedOn: 2024-05-20
 */
 
 const player = "p"
