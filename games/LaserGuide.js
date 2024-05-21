@@ -6,7 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: Extner
 @tags: [laser, puzzle]
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-05-20
 */
 
 const BACKGROUND = "0"
