@@ -93,23 +93,27 @@ Answer the questions that follow based on this unless new code is provided.`;
 			setMessages([...messages, newSystemMessage, newMessage]);
 			input.value = "";
 
+			// sends the message to the server and appends it to the messages list
+			const sendAndAppendMessage = async () => {
+					const data = await sendMessage(newMessage.content);
+
+					setMessages([
+						...messages,
+						newSystemMessage,
+						newMessage,
+						{ content: data.raw, role: "assistant" },
+					]);
+			}
+
+			const newCodeHash = await sha256Hash(codeMirror.value?.state.doc.toString()!);
 			// send code as message to give context to the llm for future questions
 			// send new code only if the code has changed since the last one
-			const newCodeHash = await sha256Hash(codeMirror.value?.state.doc.toString()!);
 			if (newCodeHash !== codeHash) {
 				sendMessage(newSystemMessage.content)
 					.then(() => setCodeHash(newCodeHash))
-			    .catch(err => { throw new Error(err.message) } );
-			}
-
-			const data = await sendMessage(newMessage.content);
-
-			setMessages([
-				...messages,
-				newSystemMessage,
-				newMessage,
-				{ content: data.raw, role: "assistant" },
-			]);
+					.then(async () => { await sendAndAppendMessage() })
+			    .catch(err => { throw err } );
+			} else { await sendAndAppendMessage() };
 
 			loading.value = false;
 			info.value = "";
