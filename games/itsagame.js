@@ -1,4 +1,10 @@
-
+/*
+@title: Chest Game
+@author: Izaiaz2121
+@tags: []
+@img: ""
+@addedOn: 2024-05-20
+*/
 
 const player = "p";
 const box = "b";
