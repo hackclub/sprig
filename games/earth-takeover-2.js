@@ -1,6 +1,6 @@
 /*
 @title: EARTH TAKEOVER (maze)
-@tags: [']
+@tags: []
 @img: ""
 @addedOn: 2024-4-20
 @author: @SeanK
