@@ -7,6 +7,8 @@ import { signal } from '@preact/signals'
 import { PersistenceState } from '../lib/state'
 import { mobileUserAgent } from '../lib/utils/mobile'
 import MobileUnsupported from '../components/popups-etc/mobile-unsupported'
+import UploadWarningModal from '../components/popups-etc/upload-failed-warning'
+import { showUploadWarningModal } from '../lib/upload'
 
 // Redirects for legacy Sprig URLs
 const galleryRegex = /^https:\/\/raw\.githubusercontent\.com\/hackclub\/sprig\/main\/games\/(.+)\.js$/
@@ -44,5 +46,6 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 			}}
 		/>
 		{isMobile ? <MobileUnsupported /> : null}
+		<UploadWarningModal client:load showWarning={showUploadWarningModal} />
 	</body>
 </html>

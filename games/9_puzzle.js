@@ -115,7 +115,7 @@ onInput("k", _ => {
 })
 
 afterInput(_ => {
-  console.log(tilesWith(red,target));
+  // console.log(tilesWith(red,target));
 })
 
 const moveTileTo = (x,y) => {

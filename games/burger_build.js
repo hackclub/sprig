@@ -478,7 +478,7 @@ let win = false;
 function checkWin() {
   if (burgerLevels[level - 1].length !== collectedFood2.length) {
     win = false;
-    console.log("diff length")
+    // console.log("diff length")
   }
   
   for (let i = 0; i < burgerLevels[level - 1].length && i < collectedFood2.length; i++) {
@@ -487,7 +487,7 @@ function checkWin() {
     }
     else {
       win = false;
-      console.log("diff ingredients")
+      // console.log("diff ingredients")
       break;
     }
   }
@@ -504,11 +504,11 @@ function checkWin() {
             });
     speed -= 100;
     if (level < 5) {
-      console.log("level is " + level)
+      // console.log("level is " + level)
       addText("press I", {x: 6, y: 11, color: color`L`})
       level += 1;
       clearInterval(runGameInterval);
-      console.log(win)
+      // console.log(win)
       onInput("i", () => {
         if (win) {
           setLevel();
@@ -566,8 +566,8 @@ function gameLoop() {
     stackingFood();
     
     if (collectedFood2.includes(topBun)) {
-      console.log(collectedFood2)
-      console.log("Finished")
+      // console.log(collectedFood2)
+      // console.log("Finished")
       checkWin();
     }
   }

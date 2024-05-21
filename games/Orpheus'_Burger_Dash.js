@@ -490,7 +490,7 @@ function itemFall(type) {
   let items = getAll(type);
 
   // Log the items array to the console for debugging
-  console.log('items of type ' + type + ':', items);
+  // console.log('items of type ' + type + ':', items);
 
   // Increment the y property of each sprite
   for (let i = 0; i < items.length; i++) {

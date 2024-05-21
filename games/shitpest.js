@@ -252,7 +252,7 @@ function spawnEnemies() {
         addSprite(4, 0, enemy)
       break
     default:
-      console.log(chance)
+      // console.log(chance)
   }
 }
 
