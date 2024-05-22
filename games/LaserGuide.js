@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: LaserGuide
 @author: Extner
-@tags: [laser, puzzle]
+@tags: ['laser', 'puzzle']
 @img: ""
 @addedOn: 2024-05-20
 */
