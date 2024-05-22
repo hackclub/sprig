@@ -10,8 +10,6 @@ Below you will find the necessary metadata that you need to fill in order for th
 
 @title: GAME_TITLE
 @author: YOUR_NAME
-@tags: [GAME_TAGS(see gallery for existing)]
-@addedOn: YYYY-MM-DD
 */
 
 const player = "p"
