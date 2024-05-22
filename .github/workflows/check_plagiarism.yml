@@ -45,7 +45,7 @@ jobs:
 
       - name: Run Plagiarism Detection Script
         if: env.FILES != ''
-        run: python .github/scripts/plagiarism_check.py ${{ env.FILES }} games output_dir saved_dir
+        run: python .github/scripts/plagiarism_check.py "${{ env.FILES }}" games output_dir saved_dir
 
       - name: Extract and Display Similarity Percentages
         if: always()
