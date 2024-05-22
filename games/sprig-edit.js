@@ -3,7 +3,7 @@
 @author: Colack
 @tags: ['utility']
 @img: ""
-@addedOn: 2024-04-30
+@addedOn: 2024-05-22
 
 This is Sprig-Edit, a basic text editor for Sprig.
 
