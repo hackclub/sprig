@@ -64,59 +64,69 @@ const foldAllTemplateLiterals = () => {
 	);
 };
 
+const shouldShowConflict = (persistenceState: Signal<PersistenceState>, sessionId: string) => {
+	const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null;
+	if (!game) return false;
+
+	const lastSavedSessionInfo = localStorage.getItem(LAST_SAVED_SESSION_ID);
+	const lastSavedData = lastSavedSessionInfo ? JSON.parse(lastSavedSessionInfo) : null;
+	const lastSavedSessionId = lastSavedData ? lastSavedData.sessionId : null;
+	const lastSavedGameId = lastSavedData ? lastSavedData.gameId : null;
+
+	return lastSavedGameId === game.id && lastSavedSessionId !== sessionId;
+};
+
+const showConflict = () => {
+	showSaveConflictModal.value = true;
+	continueSaving.value = false;
+};
+
+const performSave = async (persistenceState: Signal<PersistenceState>, code: string, game: any, sessionId: string) => {
+	try {
+		const res = await fetch("/api/games/save", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				code,
+				gameId: game.id,
+				tutorialName: game.tutorialName,
+				tutorialIndex: game.tutorialIndex,
+			}),
+		});
+
+		if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`);
+
+		localStorage.setItem(LAST_SAVED_SESSION_ID, JSON.stringify({ sessionId: sessionId, gameId: game.id }));
+		console.log('Game saved successfully.');
+		return true;
+	} catch (error) {
+		console.error(error);
+		persistenceState.value = {
+			...persistenceState.value,
+			cloudSaveState: "ERROR",
+		} as any;
+		return false;
+	}
+};
+
 let lastSavePromise = Promise.resolve();
 let saveQueueSize = 0;
+
 export const saveGame = debounce(
 	800,
 	(persistenceState: Signal<PersistenceState>, code: string, sessionId: string) => {
 		const doSave = async () => {
 			const attemptSaveGame = async () => {
 				const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null;
-				if (!game) return false;
-				const lastSavedSessionInfo = localStorage.getItem(LAST_SAVED_SESSION_ID);
-				const lastSavedData = lastSavedSessionInfo ? JSON.parse(lastSavedSessionInfo) : null;
-				const lastSavedSessionId = lastSavedData ? lastSavedData.sessionId : null;
-				const lastSavedGameId = lastSavedData ? lastSavedData.gameId : null;
-				
-				console.log('Attempting to save. Current session:', sessionId, 'Last saved session:', lastSavedSessionId);
-				
-				if (lastSavedGameId === game.id && lastSavedSessionId !== sessionId) {
-					showSaveConflictModal.value = true;
-					continueSaving.value = false;
-					return false;
-				}
-				try {
-					const game =
-						persistenceState.value.kind === "PERSISTED" &&
-						persistenceState.value.game !== "LOADING"
-							? persistenceState.value.game
-							: null;
-					const res = await fetch("/api/games/save", {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({
-							code,
-							gameId: game?.id,
-							tutorialName: game?.tutorialName,
-							tutorialIndex: game?.tutorialIndex,
-						}),
-					});
-					if (!res.ok)
-						throw new Error(
-							`Error saving game: ${await res.text()}`
-						);
-					localStorage.setItem(LAST_SAVED_SESSION_ID, JSON.stringify({ sessionId, gameId: game?.id }));
-					console.log('Game saved successfully.');
-					return true;
-				} catch (error) {
-					console.error(error);
 
-					persistenceState.value = {
-						...persistenceState.value,
-						cloudSaveState: "ERROR",
-					} as any;
+				if (!game) return false;
+
+				if (shouldShowConflict(persistenceState, sessionId)) {
+					showConflict();
 					return false;
 				}
+
+				return await performSave(persistenceState, code, game, sessionId);
 			};
 
 			while (continueSaving.value && !(await attemptSaveGame())) {
