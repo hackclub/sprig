@@ -1,6 +1,6 @@
 /**
  * Astro integration that generatest the game/metadata.json
- * 
+ *
  * How it works:
  * 1. It walks/scans the ./games/ directory
  * 2. It searches each file for metadata, if anything isn't found it halts the build/dev
