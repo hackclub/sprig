@@ -23,5 +23,5 @@ jobs:
 
       - name: Build Project
         run: |
-          node generate-meta.js
+          node .github/scripts/generate-metadata.js
           yarn tsc --noEmit
