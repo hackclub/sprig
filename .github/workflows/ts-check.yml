@@ -1,0 +1,26 @@
+name: TypeScript Check
+
+on:
+  pull_request:
+    types: [opened, reopened, edited]
+
+jobs:
+  # Test job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - name: Install Dependencies
+        run: |
+          yarn install
+
+      - name: Build Project
+        run: |
+          yarn tsc --noEmit
