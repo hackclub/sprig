@@ -23,5 +23,5 @@ jobs:
 
       - name: Build Project
         run: |
-          ls
+          node generate-meta.js
           yarn tsc --noEmit
