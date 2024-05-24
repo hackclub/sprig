@@ -26,7 +26,7 @@ const regexExpr = {
  *
  * TODO!
  */
-const isMetadataValid = (meta: any): boolean => {
+const isMetadataValid = (_: any): boolean => {
 	return true;
 };
 
