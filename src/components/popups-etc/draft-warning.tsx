@@ -39,7 +39,7 @@ export default function DraftWarningModal(props: DraftWarningModalProps) {
 						if (auth.state.value === 'EMAIL_INCORRECT') persist(props.persistenceState, auth.email.value)
 					}} class={styles.stack}>
 						<div class={styles.inputRow}>
-							<Input type='email' autoComplete='email' placeholder='fiona@hackclub.com' bind={auth.email} />
+							<Input onChange={() => undefined} value={auth.email.value} type='email' autoComplete='email' placeholder='fiona@hackclub.com' bind={auth.email} />
 							<Button accent type='submit' disabled={!auth.emailValid.value} loading={auth.isLoading.value}>
 								Start coding
 							</Button>
@@ -70,7 +70,7 @@ export default function DraftWarningModal(props: DraftWarningModalProps) {
 						<p>You've used Sprig before, so we emailed you a code to log in and access all your games. Enter login code:</p>
 
 						<div class={`${styles.inputRow} ${styles.limited}`}>
-							<Input maxLength={6} class={styles.center} type='text' bind={auth.code} placeholder='123456' />
+							<Input onChange={() => undefined} value={auth.code.value} maxLength={6} class={styles.center} type='text' bind={auth.code} placeholder='123456' />
 							<Button accent type='submit' disabled={!auth.codeValid.value} loading={auth.isLoading.value}>
 								Log in
 							</Button>
