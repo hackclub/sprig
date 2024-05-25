@@ -57,7 +57,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		apiKey: apiKey,
 	};
 
-	const response = await fetch(`${apiUrl}listen`, {
+	const response = await fetch(`${apiUrl}/listen`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
