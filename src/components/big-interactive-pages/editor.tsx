@@ -49,7 +49,7 @@ const outputAreaWidthMargin = 130; // The margin between the editor and output a
 
 const minHelpAreaHeight = 200;
 
-const foldAllTemplateLiterals = () => {
+export const foldAllTemplateLiterals = () => {
 	if (!codeMirror.value) return;
 	const code = codeMirror.value.state.doc.toString() ?? "";
 	const matches = [...code.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g)];
