@@ -100,10 +100,8 @@ export const foldAllTemplateLiterals = () => {
 // 	saveQueueSize++
 // 	lastSavePromise = (lastSavePromise ?? Promise.resolve()).then(doSave)
 // })
-let count = 0;
 export async function saveGame(persistenceState: Signal<PersistenceState>) {
 	const attemptSaveGame = async () => {
-		console.log("trying save"+count++);
 		try {
 			const game =
 				persistenceState.value.kind === "PERSISTED" &&
