@@ -10,7 +10,7 @@ import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 import { WebrtcProvider } from 'y-webrtc'
 import * as Y from 'yjs'
 import { yCollab } from "y-codemirror.next";
-import { saveGame } from './big-interactive-pages/editor'
+import { foldAllTemplateLiterals, saveGame } from './big-interactive-pages/editor'
 interface CodeMirrorProps {
 	persistenceState: Signal<PersistenceState>
 	roomId: Signal<string>
@@ -56,7 +56,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	};
 
 
-	useEffect(() => {
+	useSignalEffect(() => {
 		if (!parent.current) throw new Error('Oh golly! The editor parent ref is null')
 
 		const editor = new EditorView({
@@ -70,22 +70,6 @@ export default function CodeMirror(props: CodeMirrorProps) {
 
 		setEditorRef(editor);
 		props.onEditorView?.(editor)
-	}, [])
-
-	useEffect(() => {
-		setEditorTheme();
-	}, [theme.value, editorRef]);
-
-	useEffect(() => {
-		errorLog.subscribe(value => {
-			const diagnostics = diagnosticsFromErrorLog(editorRef as EditorView, value);
-			editorRef?.dispatch({
-				effects: setDiagnosticsEffect.of(diagnostics as Diagnostic[])
-			});
-		});
-	}, [editorRef]);
-
-	useSignalEffect(() => {
 		if (props.roomId.value === "") return;
 
 		const yDoc = new Y.Doc();
@@ -136,16 +120,15 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			}
 			if (!parent.current)
 				throw new Error("Oh golly! The editor parent ref is null");
-			if(yCollabSignal.value === undefined) {console.log("yCollabSignal is undefined"); return;}
-			editorRef?.dispatch({
+			editor.dispatch({
 				effects: StateEffect.appendConfig.of(yCollabSignal.peek() as Extension),
 				changes: {
 					from: 0,
-					to: editorRef.state.doc.length,
+					to: editor.state.doc.length,
 					insert: ytext.toString(),
 				},
 			});
-			console.log(props.roomId.value);
+			foldAllTemplateLiterals();
 		});
 		yDoc.on("update", () => {
 			if (!initialUpdate) return;
@@ -154,6 +137,20 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			initialUpdate = false;
 		});
 	})
+	
+
+	useEffect(() => {
+		setEditorTheme();
+	}, [theme.value, editorRef]);
+
+	useEffect(() => {
+		errorLog.subscribe(value => {
+			const diagnostics = diagnosticsFromErrorLog(editorRef as EditorView, value);
+			editorRef?.dispatch({
+				effects: setDiagnosticsEffect.of(diagnostics as Diagnostic[])
+			});
+		});
+	}, [editorRef]);
 
 	return (
 		<div
