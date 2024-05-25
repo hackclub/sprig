@@ -49,7 +49,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 			status: 403,
 		});
 	const apiUrl = process.env.SAVING_SERVER_HOST;
-	const apiKey = process.env.SAVING_SERVER_API;
+	const apiKey = process.env.SAVING_SERVER_API_KEY;
 	const data = {
 		room: gameId,
 		tutorialName: tutorialName,
@@ -57,7 +57,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		apiKey: apiKey,
 	};
 
-	const response = await fetch(`${apiUrl}/listen`, {
+	const response = await fetch(`${apiUrl}listen`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
