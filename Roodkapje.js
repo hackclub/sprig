@@ -300,7 +300,7 @@ onInput("w", () => {
 onInput("d", () => {
   getFirst(player).x += 1
 })
-onInput("w", () => {
+onInput("a", () => {
   getFirst(player).x -= 1
 })
 
