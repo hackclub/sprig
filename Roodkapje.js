@@ -294,7 +294,7 @@ setPushables({
 onInput("s", () => {
   getFirst(player).y += 1
 })
-onInput("a", () => {
+onInput("w", () => {
   getFirst(player).y -= 1
 })
 onInput("d", () => {
