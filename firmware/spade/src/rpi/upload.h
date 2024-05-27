@@ -48,12 +48,10 @@ static void upl_flush_buf(void) {
 static int upl_stdin_read(void) {
     memset(&upl_state, 0, sizeof(upl_state));
 
-    int timeout = 0;
+    int timeout = 1000; // 1ms; we're already in upload mode
   for (;;) {
     int c = getchar_timeout_us(timeout);
     if (c == PICO_ERROR_TIMEOUT) return 0;
-
-    timeout = 1000; // we in upload mode now
 
     switch (upl_state.prog) {
       case UplProg_Header: {
