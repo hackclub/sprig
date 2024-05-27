@@ -1630,7 +1630,7 @@ function next_map(){
   [npcs,objs] = generate_npcs_objs(mar,area);
   shop = generate_shop(area);
   // console.log(shop);
-  console.log(print_bmp(mar));
+  // console.log(print_bmp(mar));
   setMap(make_display(player.x-W/2,player.y-H/2));
   draw_texts();
 

@@ -235,7 +235,7 @@ setInterval(() => {
     ballX = Math.abs(ballX);
   }
   } catch(e) {
-    console.log(e)
+    // console.log(e)
   }
 }, 60)
 // Scoring

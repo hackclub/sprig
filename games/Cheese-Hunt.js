@@ -347,7 +347,7 @@ onInput("k", () => {
     const decoyTiles = tilesWith(decoy);
     const decoyTile = decoyTiles[0];
 
-    console.log(decoyTile[0].x);
+    // console.log(decoyTile[0].x);
     decoyTiles.forEach(checkDecoy);
 
     function checkDecoy(decoy) {
@@ -366,7 +366,7 @@ function checkNext() {
   boxPositionX = boxPosition[0].x;
   boxPositionY = boxPosition[0].y;
 
-  console.log(boxPosition[0].x);
+  // console.log(boxPosition[0].x);
 
   if ((getFirst(player).x === boxPositionX) && (getFirst(player).y === boxPositionY)) {
     return true;
@@ -390,7 +390,7 @@ function checkCheese() {
 
 function checkTrap() {
   const traps = tilesWith(trap);
-  console.log(traps);
+  // console.log(traps);
 
 
   traps.forEach(trapLoop);
@@ -428,7 +428,7 @@ function checkTunnel() {
 
 function bigTrapCheck() {
   const traps = tilesWith(bigTrap);
-  console.log(traps);
+  // console.log(traps);
 
 
   traps.forEach(trapLoop);

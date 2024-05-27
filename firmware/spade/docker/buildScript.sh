@@ -1,8 +1,8 @@
 cd ~/spade
 ./src/pc/jerry/refresh.sh
 
-#cd ~/spade
-#./src/rpi/jerry/refresh.sh
+cd ~/spade
+./src/rpi/jerry/refresh.sh
 
 touch game.js
 

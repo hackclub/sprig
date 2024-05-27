@@ -867,7 +867,7 @@ let level = 1
 let coincount = 0
 setInterval(()=>{
   
-  console.log(getTile(coinPos[2][0], coinPos[2][1]))
+  // console.log(getTile(coinPos[2][0], coinPos[2][1]))
   getFirst(p_head2).y = getFirst(p_stand).y -1
   getFirst(p_head2).x = getFirst(p_stand).x
   if(getTile(coinPos[1][0], coinPos[1][1]).length==2){
@@ -1002,7 +1002,7 @@ function isDead(){
 }
 function dead(){
   deader=true
-  console.log('test')
+  // console.log('test')
   setMap(map `
 .............................
 .............................

@@ -9,11 +9,10 @@ rm -rf example-*
 
   # --debug \
 python3 jerryscript/tools/build.py \
-  --toolchain=../rp2-toolchain.cmake \
+  --toolchain=cmake/toolchain-pico.cmake \
   --builddir=$(pwd)/example_build \
   --cmake-param="-DCMAKE_INSTALL_PREFIX=$(pwd)/example_install/" \
-  --jerry-debugger=OFF \
-  --mem-heap=150 \
+  --mem-heap=190 \
   --clean \
   --lto=OFF \
   --error-messages=ON \
@@ -22,7 +21,7 @@ python3 jerryscript/tools/build.py \
   --jerry-cmdline=OFF
 make -C $(pwd)/example_build install\
 
-cd ~/spade/rpi/jerry
+cd ~/spade/src/rpi/jerry
 cp ~/jerryscript_build/example_build/lib/* lib/
 # cp ~/jerryscript_build/example_install/include
 rm -rf include
