@@ -44,7 +44,6 @@ export default function Help(props: HelpProps) {
 			};
 			saveGame(
 				props.persistenceState,
-				codeMirror.value!.state.doc.toString()
 			);
 		} else if (props.persistenceState?.value.kind == "SHARED") {
 			props.persistenceState.value = {

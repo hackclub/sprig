@@ -20,7 +20,6 @@ import EditorModal from "../popups-etc/editor-modal";
 import { runGame } from "../../lib/engine";
 import DraftWarningModal from "../popups-etc/draft-warning";
 import Button from "../design-system/button";
-import { debounce } from "throttle-debounce";
 import Help from "../popups-etc/help";
 import { collapseRanges } from "../../lib/codemirror/util";
 import { defaultExampleCode } from "../../lib/examples";
@@ -52,7 +51,7 @@ const minHelpAreaHeight = 32;
 let defaultHelpAreaHeight = 350;
 const helpAreaHeightMargin = 0; // The margin between the screen and help area
 
-const foldAllTemplateLiterals = () => {
+export const foldAllTemplateLiterals = () => {
 	if (!codeMirror.value) return;
 	const code = codeMirror.value.state.doc.toString() ?? "";
 	const matches = [...code.matchAll(/(map|bitmap|tune)`[\s\S]*?`/g)];
@@ -62,65 +61,87 @@ const foldAllTemplateLiterals = () => {
 	);
 };
 
-let lastSavePromise = Promise.resolve();
-let saveQueueSize = 0;
-export const saveGame = debounce(
-	800,
-	(persistenceState: Signal<PersistenceState>, code: string) => {
-		const doSave = async () => {
-			const attemptSaveGame = async () => {
-				try {
-					const game =
-						persistenceState.value.kind === "PERSISTED" &&
-						persistenceState.value.game !== "LOADING"
-							? persistenceState.value.game
-							: null;
-					const res = await fetch("/api/games/save", {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({
-							code,
-							gameId: game?.id,
-							tutorialName: game?.tutorialName,
-							tutorialIndex: game?.tutorialIndex,
-						}),
-					});
-					if (!res.ok)
-						throw new Error(
-							`Error saving game: ${await res.text()}`
-						);
-					return true;
-				} catch (error) {
-					console.error(error);
+// let lastSavePromise = Promise.resolve();
+// let saveQueueSize = 0;
+// export const saveGame = debounce(800, (persistenceState: Signal<PersistenceState>, code: string) => {
+// 	const doSave = async () => {
+// 		const attemptSaveGame = async () => {
+// 			try {
+// 				const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null
+// 				const res = await fetch('/api/games/save', {
+// 					method: 'POST',
+// 					headers: { 'Content-Type': 'application/json' },
+// 					body: JSON.stringify({ code, gameId: game?.id, tutorialName: game?.tutorialName, tutorialIndex: game?.tutorialIndex })
+// 				})
+// 				if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`)
+// 				return true;
+// 			} catch (error) {
+// 				console.error(error)
 
-					persistenceState.value = {
-						...persistenceState.value,
-						cloudSaveState: "ERROR",
-					} as any;
-					return false;
-				}
-			};
+// 				persistenceState.value = {
+// 					...persistenceState.value,
+// 					cloudSaveState: 'ERROR'
+// 				} as any;
+// 				return false;
+// 			}
+// 		}
 
-			while (!(await attemptSaveGame())) {
-				await new Promise((resolve) => setTimeout(resolve, 2000)); // retry saving the game every 2 seconds
-			}
+// 		while (!await attemptSaveGame()) {
+// 			await new Promise(resolve => setTimeout(resolve, 2000)); // retry saving the game every 2 seconds
+// 		}
 
-			saveQueueSize--;
-			if (
-				saveQueueSize === 0 &&
-				persistenceState.value.kind === "PERSISTED"
-			) {
-				persistenceState.value = {
-					...persistenceState.value,
-					cloudSaveState: "SAVED",
-				};
-			}
-		};
+// 		saveQueueSize--
+// 		if (saveQueueSize === 0 && persistenceState.value.kind === 'PERSISTED') {
+// 			persistenceState.value = {
+// 				...persistenceState.value,
+// 				cloudSaveState: 'SAVED'
+// 			}
+// 		}
+// 	}
 
-		saveQueueSize++;
-		lastSavePromise = (lastSavePromise ?? Promise.resolve()).then(doSave);
+// 	saveQueueSize++
+// 	lastSavePromise = (lastSavePromise ?? Promise.resolve()).then(doSave)
+// })
+export async function saveGame(persistenceState: Signal<PersistenceState>) {
+	const attemptSaveGame = async () => {
+		try {
+			const game =
+				persistenceState.value.kind === "PERSISTED" &&
+				persistenceState.value.game !== "LOADING"
+					? persistenceState.value.game
+					: null;
+			const res = await fetch("/api/games/save", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					gameId: game?.id,
+					tutorialName: game?.tutorialName,
+				}),
+			});
+			console.log(res.text());
+			if (!res.ok)
+				throw new Error(`Error saving game: ${await res.text()}`);
+			return true;
+		} catch (error) {
+			console.error(error);
+
+			persistenceState.value = {
+				...persistenceState.value,
+				cloudSaveState: "ERROR",
+			} as any;
+			return false;
+		}
+	};
+	while (!(await attemptSaveGame())) {
+		await new Promise((resolve) => setTimeout(resolve, 2000));
 	}
-);
+	console.log("SUCCESS SAVE")
+	if (persistenceState.value.kind === "PERSISTED")
+		persistenceState.value = {
+			...persistenceState.value,
+			cloudSaveState: "SAVED",
+		};
+}
 
 const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
 	if (persistenceState.value.kind === "PERSISTED") {
@@ -133,7 +154,7 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
 			stale: true,
 			cloudSaveState: "SAVING",
 		};
-		saveGame(persistenceState, codeMirror.value!.state.doc.toString());
+		saveGame(persistenceState);
 	} else {
 		if (persistenceState.value.kind == "SHARED")
 			delete persistenceState.value.tutorial;
@@ -165,6 +186,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		height: outputArea.current?.clientHeight! - helpAreaSize.value - screenControls.current?.clientHeight!,
 		maxHeight: screenContainer.current?.clientHeight
 	});
+	const roomId = useSignal<string>("");
 
 	// this runs when the screenContainer and the outputArea refs change
 	useEffect(() => {
@@ -221,7 +243,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		updateMaxSize();
 		return () => window.removeEventListener("resize", updateMaxSize);
 	}, []);
-
 	const realOutputAreaSize = useComputed(() =>
 		Math.min(
 			maxOutputAreaSize.value,
@@ -394,6 +415,8 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
+						persistenceState={persistenceState}
+						roomId={roomId}
 						class={styles.code}
 						initialCode={initialCode}
 						onEditorView={(editor) => {
@@ -411,10 +434,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 									...persistenceState.value,
 									cloudSaveState: "SAVING",
 								};
-								saveGame(
-									persistenceState,
-									codeMirror.value!.state.doc.toString()
-								);
 							}
 
 							if (persistenceState.value.kind === "IN_MEMORY") {
