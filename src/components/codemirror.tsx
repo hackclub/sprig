@@ -95,7 +95,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 
 		setEditorRef(editor);
 		props.onEditorView?.(editor)
-		if (props.roomId.value === "") return;
+		if (props.roomId.value === "" || props.persistenceState.peek().session === null) return;
 
 		const yDoc = new Y.Doc();
 		const provider = new WebrtcProvider(props.roomId.value, yDoc, {
