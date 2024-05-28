@@ -6,6 +6,8 @@ import { Signal, useSignal } from "@preact/signals";
 import { RiChatDeleteLine } from "react-icons/ri";
 import markdown from "@wcj/markdown-to-html";
 import { nanoid } from "nanoid";
+import { useState } from "preact/hooks";
+import { sha256Hash } from "../../lib/codemirror/util";
 
 interface ChatProps {
 	persistenceState: Signal<PersistenceState>;
@@ -16,24 +18,23 @@ const ChatComponent = ({ persistenceState }: ChatProps) => {
 		persistenceState?.value.kind === "IN_MEMORY"
 			? ""
 			: persistenceState?.value.kind === "PERSISTED"
-			? persistenceState?.value.game !== "LOADING"
-				? persistenceState?.value.game.name
-				: ""
-			: persistenceState?.value.name || "";
+				? persistenceState?.value.game !== "LOADING"
+					? persistenceState?.value.game.name
+					: ""
+				: persistenceState?.value.name || "";
 
-	const systemPrompt = `Here is the current code:
+	const systemPrompt = () => `Here is the current code:
 \`\`\`
 ${codeMirror.value?.state.doc.toString()}
 \`\`\`
 
-${
-	errorLog.value.length > 0
-		? `I am facing the following errors:
+${errorLog.value.length > 0
+			? `I am facing the following errors:
 \`\`\`
 ${errorLog.value[0]?.description}
 \`\`\``
-		: ""
-}
+			: ""
+		}
 
 Answer the questions that follow based on this unless new code is provided.`;
 
@@ -46,28 +47,34 @@ Answer the questions that follow based on this unless new code is provided.`;
 	const input = useSignal("");
 
 	const info = useSignal("");
-	const chatSession = nanoid(10);
+	const [chatSession, _setChatSession] = useState(nanoid(10));
+	const [codeHash, setCodeHash] = useState<string>('');
 	const email = persistenceState?.value?.session?.user.email;
 
 	const sendMessage = async (message: string) => {
-		const response = await fetch(
-			`${import.meta.env.PUBLIC_SPRIG_LLM_API}/generate`,
-			{
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					session_id: chatSession,
-					message: message,
-					email,
-				}),
-			}
-		);
+		try {
+			const response = await fetch(
+				`${import.meta.env.PUBLIC_SPRIG_LLM_API}/generate`,
+				{
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+						session_id: chatSession,
+						message: message,
+						email,
+					}),
+				}
+			);
 
-		const data = (await response.json()) as {
-			raw: string;
-			codes: string[];
-		};
-		return data;
+			const data = (await response.json()) as {
+				raw: string;
+				codes: string[];
+			};
+
+			return data;
+		} catch {
+			throw new Error("Failed to reach the server. Please make sure you're connected to the internet and try again!")
+		}
 	}
 
 	const handleSendClick = async () => {
@@ -77,7 +84,7 @@ Answer the questions that follow based on this unless new code is provided.`;
 			info.value = "...";
 
 			const newSystemMessage = {
-				content: systemPrompt,
+				content: systemPrompt(),
 				role: "user",
 				render: false,
 			};
@@ -86,24 +93,34 @@ Answer the questions that follow based on this unless new code is provided.`;
 			setMessages([...messages, newSystemMessage, newMessage]);
 			input.value = "";
 
+			// sends the message to the server and appends it to the messages list
+			const sendAndAppendMessage = async () => {
+					const data = await sendMessage(newMessage.content);
+
+					setMessages([
+						...messages,
+						newSystemMessage,
+						newMessage,
+						{ content: data.raw, role: "assistant" },
+					]);
+			}
+
+			const newCodeHash = await sha256Hash(codeMirror.value?.state.doc.toString()!);
 			// send code as message to give context to the llm for future questions
-			await sendMessage(newSystemMessage.content);
-
-			const data = await sendMessage(newMessage.content);
-
-			setMessages([
-				...messages,
-				newSystemMessage,
-				newMessage,
-				{ content: data.raw, role: "assistant" },
-			]);
+			// send new code only if the code has changed since the last one
+			if (newCodeHash !== codeHash) {
+				sendMessage(newSystemMessage.content)
+					.then(() => setCodeHash(newCodeHash))
+					.then(async () => { await sendAndAppendMessage() })
+			    .catch(err => { throw err } );
+			} else { await sendAndAppendMessage() };
 
 			loading.value = false;
 			info.value = "";
 		} catch (err) {
-			console.error(err);
 			loading.value = false;
-			info.value = "An error occurred...";
+			// info.value = "An error occurred...";
+			info.value = (err as Error).message;
 		}
 	};
 
@@ -115,11 +132,10 @@ Answer the questions that follow based on this unless new code is provided.`;
 					.map((message, i) => (
 						<div
 							key={i}
-							class={`${styles.message} ${
-								message.role === "user"
-									? styles.messageUser
-									: styles.messageBot
-							}`}
+							class={`${styles.message} ${message.role === "user"
+								? styles.messageUser
+								: styles.messageBot
+								}`}
 							dangerouslySetInnerHTML={{
 								__html:
 									(markdown(message.content) as string) || "",
