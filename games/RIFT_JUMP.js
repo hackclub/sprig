@@ -2,11 +2,11 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: 
-@author: 
-@tags: []
+@title: Rift Jump
+@author: sharonbasovich
+@tags: ["platformer"]
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-05-28
 */
 
 const coin = "c"
