@@ -285,6 +285,10 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		return () => window.removeEventListener("mousemove", onMouseMove);
 	}, []);
 
+	useEffect(() => {
+		console.log("First render of this editor");
+	}, []);
+
 	// We like running games!
 	const screen = useRef<HTMLCanvasElement>(null);
 	const cleanup = useRef<(() => void) | null>(null);
