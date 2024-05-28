@@ -76,6 +76,13 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	}, [editorRef]);
 
 	return (
-		<div class={`${styles.container} ${props.class ?? ''}`} ref={parent} />
+		<div
+			class={`${styles.container} ${
+				editorRef === undefined
+					? styles.containerSkeleton
+					: ""
+			} ${props.class ?? ""}`}
+			ref={parent}
+		/>
 	)
 }

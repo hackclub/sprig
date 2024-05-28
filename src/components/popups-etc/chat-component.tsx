@@ -120,7 +120,7 @@ Answer the questions that follow based on this unless new code is provided.`;
 		} catch (err) {
 			loading.value = false;
 			// info.value = "An error occurred...";
-			info.value = err.message;
+			info.value = (err as Error).message;
 		}
 	};
 
