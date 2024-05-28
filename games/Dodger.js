@@ -1,6 +1,8 @@
 /*
 @title: Dodger
+@tags: ['simulation']
 @author: Chaste
+@addedOn: 2024-05-28
 */
 
 const player = "p";
