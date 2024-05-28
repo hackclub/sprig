@@ -1,9 +1,7 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
 @title: Gold RUSH'd
 @author: DevTechJr
-@tags: ['catch','gold]
+@tags: ['simulation']
 @img: ""
 @addedOn: 2024-05-23
 
