@@ -2,7 +2,7 @@
 @title: Slot Machine
 @author: Alexander Li
 @discord: thefaix.
-@tags: []
+@tags: ["classic", "tool"]
 @img: ""
 @addedOn: 2024-05-23
 */
