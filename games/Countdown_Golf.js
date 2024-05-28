@@ -1,6 +1,7 @@
 /*
 @title: Countdown Golf
 @author: schoblaska
+@img: ""
 @tags: ["logic"]
 @addedOn: 2024-03-30
 
