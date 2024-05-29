@@ -27,6 +27,8 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	const [editorRef, setEditorRef] = useState<EditorView>();
 	const yCollabSignal = useSignal<Extension | undefined>(undefined);
 	const yProviderAwarenessSignal = useSignal<Awareness | undefined>(undefined); 
+	let yDoc: Y.Doc;
+	let provider: WebrtcProvider;
 
 	// Alert the parent to code changes (not reactive)
 	const onCodeChangeRef = useRef(props.onCodeChange)
@@ -96,9 +98,14 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		setEditorRef(editor);
 		props.onEditorView?.(editor)
 		if (props.roomId.value === "" || props.persistenceState.peek().session === null) return;
-
-		const yDoc = new Y.Doc();
-		const provider = new WebrtcProvider(props.roomId.value, yDoc, {
+		if(yDoc !== undefined){
+			yDoc.destroy();
+		}
+		if(provider !== undefined){
+			provider.destroy();
+		}
+		yDoc = new Y.Doc();
+		provider = new WebrtcProvider(props.roomId.value, yDoc, {
 			signaling: [
 				"wss://yjs-signaling-server-5fb6d64b3314.herokuapp.com",
 			],
