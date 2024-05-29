@@ -1,5 +1,5 @@
 /*
-@title: marble-run
+@title: Marble Run
 @author: @KrishanuIyengar
 @tags: ['puzzle']
 @img: ""
