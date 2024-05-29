@@ -1,12 +1,9 @@
 /*
-@title: getting_started
-@tags: ['beginner', 'tutorial']
+@title: Banana Man
+@tags: []
 @img: ""
-@addedOn: 2022-07-26
-@author: leo, edits: samliu, belle, kara
-
-Check the tutorial in the bottom right, the run button is in the top right.
-Make sure to remix this tutorial if you want to save your progress!
+@addedOn: 2024-05-29
+@author: Zomb1ePP
 */
 
 // define the sprites in our game
