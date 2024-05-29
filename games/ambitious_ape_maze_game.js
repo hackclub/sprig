@@ -1,5 +1,5 @@
 /* 
-@title: the_ambitious_ape_maze_game
+@title: The Ambitious Ape Maze Game
 @author: atharv gupta
 @tags: ['maze']
 @img: ""
