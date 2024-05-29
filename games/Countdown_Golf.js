@@ -2,7 +2,7 @@
 @title: Countdown Golf
 @author: schoblaska
 @tags: ["logic"]
-@img: "Countdown_Golf.png"
+@img: ""
 @addedOn: 2024-03-30
 
 Countdown Golf is based on Herugolf
