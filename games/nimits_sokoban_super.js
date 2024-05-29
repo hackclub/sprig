@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Sokoban Super
 @author: Nimit Vijayvargee
 @tags: [Sokoban]
-@img: "sokobansuper.png"
+@img: "nimits_sokoban_super.png"
 @addedOn: 2024-05-29
 */
 
