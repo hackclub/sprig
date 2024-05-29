@@ -161,7 +161,7 @@ function gameLoop() {
 }
 function lost() {
   isGameOver = true;
-  console.log("You lost");
+  // console.log("You lost");
   setMap(map`
 ........
 ........

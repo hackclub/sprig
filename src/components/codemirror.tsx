@@ -4,7 +4,7 @@ import { StateEffect } from '@codemirror/state'
 import styles from './codemirror.module.css'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorView } from '@codemirror/view'
-import { isDark, errorLog } from '../lib/state'
+import { theme, errorLog } from '../lib/state'
 import { Diagnostic, setDiagnosticsEffect } from '@codemirror/lint'
 
 interface CodeMirrorProps {
@@ -36,7 +36,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	}, () => onRunShortcutRef.current?.());
 
 	const setEditorTheme = () => {
-		if (isDark.value) {
+		if (theme.value === "dark") {
 			editorRef?.dispatch({
 				effects: StateEffect.appendConfig.of(oneDark)
 			});
@@ -64,7 +64,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 
 	useEffect(() => {
 		setEditorTheme();
-	}, [isDark.value, editorRef]);
+	}, [theme.value, editorRef]);
 
 	useEffect(() => {
 		errorLog.subscribe(value => {
@@ -76,6 +76,13 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	}, [editorRef]);
 
 	return (
-		<div class={`${styles.container} ${props.class ?? ''}`} ref={parent} />
+		<div
+			class={`${styles.container} ${
+				editorRef === undefined
+					? styles.containerSkeleton
+					: ""
+			} ${props.class ?? ""}`}
+			ref={parent}
+		/>
 	)
 }

@@ -392,7 +392,7 @@ onInput("s", () => {
     keyPressed = "s";
   }
 });
-console.log(keyPressed);
+// console.log(keyPressed);
 
 const resetGame = () => {
   keyPressed = "";
@@ -417,7 +417,7 @@ const resetGame = () => {
       addSprite(tail.xPos, tail.yPos, green1);
     }
   }catch(error){
-    console.log(error)
+    // console.log(error)
   }
   clearText() // Clearing all Text in playing Area
   score = 0; // Resetting Score
