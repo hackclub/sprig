@@ -1,6 +1,6 @@
 /*
 @title: Alien poop
-@tags: ['beginner', 'tutorial']
+@tags: ['beginner']
 @img: ""
 @addedOn: 2024-05-20
 @author: Luis Guerrero
