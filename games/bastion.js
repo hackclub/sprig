@@ -64,20 +64,20 @@ try {
       try {
       if(tilesWith(character,button).length == 1 || tilesWith(character2,button).length == 1) {
         // getFirst(blocked_door).y += 1
-        console.log(getFirst(blocked_door))
-        console.log(getFirst(blocked_door).remove())
+        // console.log(getFirst(blocked_door))
+        // console.log(getFirst(blocked_door).remove())
       }
       // else {
       //   getFirst(blocked_door).y -= 1
       // }
     }
     catch (exceptionVar) {
-      console.log("Skipping Button Press.")
+      // console.log("Skipping Button Press.")
     }
   }
   function checkIfWaterBoyDied(level) {
     if (tilesWith(character,lava).length == 1 || tilesWith(character,green_goo).length == 1 || tilesWith(character,spikes).length == 1 || tilesWith(character,spikes_upsidedown).length == 1) {
-        console.log("Player 1(Waterboy) WASD died.");
+        // console.log("Player 1(Waterboy) WASD died.");
         getFirst(character).remove()
         text('Player 1 died!\nRestarting level in \n3 seconds.',0,6,color`2`)
         level = level
@@ -88,10 +88,10 @@ try {
   }
   function checkIfLavaGirlDied(level) {
     if (tilesWith(character2,water).length == 1 || tilesWith(character2,green_goo).length == 1 || tilesWith(character2,spikes).length == 1 || tilesWith(character2,spikes_upsidedown).length == 1) {
-        console.log("Player 2(LavaGirl) IJKL died.");
+        // console.log("Player 2(LavaGirl) IJKL died.");
         getFirst(character2).remove()
         text('Player 2 died!\nRestarting level in \n3 seconds.',0,6,color`2`)
-        console.log(level)
+        // console.log(level)
         level = level
         setTimeout(() => {setMap(levels[level]);    clearText()}, 3000)
         // level = level + 1
@@ -114,13 +114,13 @@ try {
             setTimeout(() => {getFirst(char).y +=1;},100)
           }
           catch (exceptionVar) {
-            console.log("Already dead, bypassing.")
+            // console.log("Already dead, bypassing.")
           }
         }
       }
     }
     catch (exceptionVar) {
-      console.log("Player is dead so...");
+      // console.log("Player is dead so...");
     }
   }
   
@@ -664,7 +664,7 @@ wwwwwwwww`, //Sandbox Map
       fall(character)
     }
     catch (exceptionVar) {
-      console.log("No moving!")
+      // console.log("No moving!")
     }
   })
   
@@ -677,7 +677,7 @@ wwwwwwwww`, //Sandbox Map
       setTimeout((getFirst(character).y -= 1), 300);
       setTimeout(() => {fall(character); checkIfWaterBoyDied(level)}, 250);    
     } catch (exceptionVar) {
-      console.log("No moving!")
+      // console.log("No moving!")
     }
   })
   onInput("d", () => {
@@ -685,7 +685,7 @@ wwwwwwwww`, //Sandbox Map
       getFirst(character).x += 1
       setTimeout(() => {fall(character); checkIfWaterBoyDied(level)}, 1000);    
     } catch (exceptionVar) {
-      console.log("No moving!")
+      // console.log("No moving!")
     }
   })
   onInput("j", () => {
@@ -694,7 +694,7 @@ wwwwwwwww`, //Sandbox Map
       setTimeout(() => {fall(character2); checkIfLavaGirlDied(level)}, 1000);    
     }
     catch (exceptionVar) {
-      console.log("No moving!")
+      // console.log("No moving!")
     }
   })
   onInput("i", () => {
@@ -703,7 +703,7 @@ wwwwwwwww`, //Sandbox Map
       setTimeout((getFirst(character2).y -= 1), 200);
       setTimeout(() => {fall(character2); checkIfLavaGirlDied(level)}, 1000);    
     } catch (exceptionVar) {
-      console.log("No moving!")
+      // console.log("No moving!")
     }
   })
   // onInput("s", () => {
@@ -715,7 +715,7 @@ wwwwwwwww`, //Sandbox Map
       fall(character2)
     }
     catch (exceptionVar) {
-      console.log("No moving!")
+      // console.log("No moving!")
     }
   })
   
@@ -758,11 +758,11 @@ wwwwwwwww`, //Sandbox Map
         getFirst(blocked_door_pushable).remove()
       }
       catch (exceptionVar) {
-        console.log("Something happened or door was removed.")
+        // console.log("Something happened or door was removed.")
       }
     }
   })
 }
 catch (exceptionVar) {
-  console.log("Some error here.")
+  // console.log("Some error here.")
 }

@@ -347,7 +347,7 @@ addSprite(6, 6, obstacle);
 
 
 function stop() {
-  console.log('game stopped');
+  // console.log('game stopped');
   running = false;
   intervals.forEach((interval) => clearInterval(interval));
 }
@@ -400,7 +400,7 @@ function setupGamescoreInterval(){
   const interval = setInterval(()=> {
     
     gameScore*= gameScoreMultipliciator;
-    console.log(gameScore.toFixed(0));
+    // console.log(gameScore.toFixed(0));
     
     
   },500);
@@ -425,7 +425,7 @@ if(getFirst(obstacle)!=undefined){
     getFirst(obstacle).x -= 1;
 }
 
-console.log("running");
+// console.log("running");
 
 
 
