@@ -1707,7 +1707,7 @@ function Boss1() {
     Boss1attack = Math.floor(Math.random() * 51);
     // 0 dash
     if (Boss1attack > 25 && canAttack) {
-       console.log("dash")
+       // console.log("dash")
         canAttack = false
         if (getFirst(boss1p1).x == 1) {
             let plat1x = Math.floor(Math.random() * 3);
@@ -1920,7 +1920,7 @@ function Boss1() {
     }  
     // 1 stars
     if (Boss1attack < 25 && canAttack) {
-        console.log("stars")
+        // console.log("stars")
         canAttack = false
         if (getFirst(boss1p1).x == 1) {
             let interval = 0

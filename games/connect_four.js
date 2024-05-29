@@ -276,7 +276,7 @@ const win = () => {
       color: color`0`
     });
   };
-  console.log(`${turn} Wins!`)
+  // console.log(`${turn} Wins!`)
 }
 
 const checkWin = () => {
