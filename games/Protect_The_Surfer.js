@@ -266,7 +266,7 @@ afterInput(() => {
         playTune(goalSound);
         score++;
         updateScore();
-        console.log(tilesWith(surfer,powerup));
+        // console.log(tilesWith(surfer,powerup));
         getAll(powerup).forEach((powerupObj) => {
         powerupObj.remove();
   })
