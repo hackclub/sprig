@@ -2,59 +2,25 @@
 #include "hardware/flash.h"
 static void core1_entry(void);
 
-// do not modify outside of wrapper functions!
-uint8_t slot = 0;
-
 // rationale: half engine, half games?
 // NOTE: this has to be a multiple of 4096 (FLASH_SECTOR_SIZE)
-#define SLOT_SIZE (100 * 1024)
-#define MAX_SLOTS 8
-#define FLASH_TARGET_OFFSET(slot_num) (800 * 1024) + slot_num * SLOT_SIZE
+#define FLASH_TARGET_OFFSET (800 * 1024)
 
-#define FLASH_TARGET_CONTENTS(slot_num) ((const uint8_t *) (XIP_BASE + FLASH_TARGET_OFFSET(slot_num)))
+const uint8_t *flash_target_contents = (const uint8_t *) (XIP_BASE + FLASH_TARGET_OFFSET);
 
-uint16_t SPRIG_MAGIC[] = { 1337, 42, 69, 420, 420, 1337 };
+uint16_t SPRIG_MAGIC[FLASH_PAGE_SIZE/2] = { 1337, 42, 69, 420, 420, 1337 };
 
 static const char *save_read(void) {
-    if (memcmp(&SPRIG_MAGIC, FLASH_TARGET_CONTENTS(slot), sizeof(SPRIG_MAGIC)) != 0) {
+  if (memcmp(&SPRIG_MAGIC, flash_target_contents, sizeof(SPRIG_MAGIC)) != 0) {
     puts("no magic :(");
     return NULL;
   }
 
   // add a page to get what's after the magic
-    const char *save = FLASH_TARGET_CONTENTS(slot) + FLASH_PAGE_SIZE;
+  const char *save = flash_target_contents + FLASH_PAGE_SIZE;
   return save;
 }
 
-void set_game(uint8_t aSlot) {
-    slot = aSlot;
-}
-
-typedef struct {
- //   char[100] name;
-    uint8_t slot;
-} Game;
-
-uint8_t get_games(Game* games) {
-    int games_i = 0;
-    for (int i = 0; i < MAX_SLOTS; i++) {
-        if (memcmp(FLASH_TARGET_OFFSET(slot), &SPRIG_MAGIC, sizeof SPRIG_MAGIC) == 0) { // there is a game
-            games[games_i++] = (Game) {
-                    //.name = (*char)(FLASH_TARGET_OFFSET(slot) + sizeof SPRIG_MAGIC),
-                    .slot = i
-            };
-        }
-    }
-    return games_i; // legnth of array
-}
-
-void delete_game(uint8_t slot) {
-    flash_range_erase(FLASH_TARGET_OFFSET(slot), FLASH_PAGE_SIZE);
-}
-
-uint16_t get_slots_remaining() {
-
-}
 
 typedef enum {
   UplProg_StartSeq,
@@ -70,7 +36,7 @@ static struct {
 
 static void upl_flush_buf(void) {
   uint32_t interrupts = save_and_disable_interrupts();
-  flash_range_program(FLASH_TARGET_OFFSET(slot) + (upl_state.page++) * 256,
+  flash_range_program(FLASH_TARGET_OFFSET + (upl_state.page++) * 256,
                       (void *)upl_state.buf,
                       256);
   restore_interrupts(interrupts);
@@ -122,7 +88,7 @@ static int upl_stdin_read(void) {
           multicore_reset_core1();
           
           uint32_t interrupts = save_and_disable_interrupts();
-          flash_range_erase(FLASH_TARGET_OFFSET(slot), sector_len);
+          flash_range_erase(FLASH_TARGET_OFFSET, sector_len);
           restore_interrupts(interrupts);
 
           for (int i = 0; i < sizeof(engine_script) - 1; i++) {
@@ -148,7 +114,7 @@ static int upl_stdin_read(void) {
           upl_flush_buf();
 
           uint32_t interrupts = save_and_disable_interrupts();
-          flash_range_program(FLASH_TARGET_OFFSET(slot), (void *)SPRIG_MAGIC, FLASH_PAGE_SIZE);
+          flash_range_program(FLASH_TARGET_OFFSET, (void *)SPRIG_MAGIC, FLASH_PAGE_SIZE);
           restore_interrupts(interrupts);
           
           // printf("read in %d chars\n", upl_state.len);
