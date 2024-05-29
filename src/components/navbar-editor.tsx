@@ -106,7 +106,7 @@ const prettifyCode = () => {
 	// Set the options for js_beautify
 	const options = {
 		indent_size: 2, // Indent by 2 spaces
-		brace_style: "collapse,preserve-inline", // Collapse braces and preserve inline
+		brace_style: "collapse,preserve-inline" as any, // Collapse braces and preserve inline
 	};
 
 	const { js_beautify } = beautifier;

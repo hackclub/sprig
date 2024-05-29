@@ -1570,6 +1570,13 @@
   dependencies:
     "@types/unist" "*"
 
+"@types/node-statsd@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@types/node-statsd/-/node-statsd-0.1.6.tgz#87c2de1f1a1eda6ab4187f4475ee3dc3caa56b8b"
+  integrity sha512-C3E7STmDzLmXLbIK+C9P5Su6FFW1Ki+Uzjfh6NCBU+5iveeDJl69bmc+0wMSOEymSbPLqPvBsF84mtYDGILlPw==
+  dependencies:
+    "@types/node" "*"
+
 "@types/node@*", "@types/node@>=12.12.47", "@types/node@>=13.7.0":
   version "18.13.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.13.0.tgz#0400d1e6ce87e9d3032c19eb6c58205b0d3f7850"
