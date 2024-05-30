@@ -23,7 +23,6 @@ static const char *save_read(void) {
 
 
 typedef enum {
-  UplProg_StartSeq,
   UplProg_Header,
   UplProg_Body,
 } UplProg;
@@ -47,29 +46,14 @@ static void upl_flush_buf(void) {
 }
 
 static int upl_stdin_read(void) {
-  int timeout = 0;
-  while (1) {
+    memset(&upl_state, 0, sizeof(upl_state));
+
+    int timeout = 1000; // 1ms; we're already in upload mode
+  for (;;) {
     int c = getchar_timeout_us(timeout);
     if (c == PICO_ERROR_TIMEOUT) return 0;
 
-    timeout = 100; // we in upload mode now
-
     switch (upl_state.prog) {
-      case UplProg_StartSeq: {
-          if (c != upl_state.len_i) {
-              upl_state.len_i = 0;
-          }
-
-        if (c == upl_state.len_i) {
-          upl_state.len_i++;
-
-          if (upl_state.len_i == 5) {
-            puts("found startup seq!");
-            memset(&upl_state, 0, sizeof(upl_state));
-            upl_state.prog = UplProg_Header;
-          }
-        }
-      } break;
       case UplProg_Header: {
         ((char *)(&upl_state.len))[upl_state.len_i++] = c;
         if (upl_state.len_i >= sizeof(uint32_t)) {
