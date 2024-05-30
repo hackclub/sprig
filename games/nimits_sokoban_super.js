@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Sokoban Super
 @author: Nimit Vijayvargee
-@tags: ['sokoban-style']
-@img: "nimits_sokoban_super.png"
+@tags: [Sokoban]
+@img: "sokobansuper.png"
 @addedOn: 2024-05-29
 */
 
@@ -20,6 +20,7 @@ const box = "b"
 const goal = "g"
 const flag = "f"
 const tile = "t"
+const teleporter = "p"
 let inputtype
 let boxes_in
 setLegend(
@@ -175,25 +176,42 @@ LLLLLLLLLLLLLLLL
 1111111111111111
 1111111111111111
 1L111111111111L1
-1111111111111111`] //for later when i make a tutorial
+1111111111111111`],
+  [ teleporter, bitmap`
+....77777777....
+...7777777777...
+..777555555777..
+.77555555555577.
+7775577777755777
+7755772777775577
+7755727777775577
+7755777777775577
+7755777777775577
+7755777777775577
+7755777777775577
+7775577777755777
+.77555555555577.
+..777555555777..
+...7777777777...
+....77777777....`] //future use idk
 )
 
 setBackground(tile)
 setSolids([playerup, playerdown, playerleft, playerright, box, wall])
 
-let level = 7
+let level = 9
 const levels = [
   map`
 wwwww
 wd..w
 wfbgw
-wwwww`, //1
+wwwww`, //1- tutorial 1box
   map`
 wwwww
 wd.fw
 wbbbw
 wgggw
-wwwww`, //2
+wwwww`, //2- tutorial 3box
   map`
 wwwww
 wgbdw
@@ -202,7 +220,7 @@ w.bgw
 w.w.w
 wbbgw
 wg.fw
-wwwww`, //3
+wwwww`, //3- hall
   map`
 wwwwwww
 wgg.ggw
@@ -210,7 +228,7 @@ wbb.bbw
 w..d..w
 wbb.bbw
 wggfggw
-wwwwwww`, //4
+wwwwwww`, //4- square
   map`
 wwwwwwwwww
 w.dw....fw
@@ -219,7 +237,7 @@ w..w..w..w
 w..w..w..w
 w.....w..w
 w.....w.gw
-wwwwwwwwww`, //5
+wwwwwwwwww`, //5- snake
   map`
 wwwwwwww
 wg..w..w
@@ -228,7 +246,7 @@ w.d.w..w
 wbw.g.ww
 w..f...w
 w.w...gw
-wwwwwwww`, //6
+wwwwwwww`, //6- room
   map`
 wwwwwwwwwwww
 w..dwwwwwfww
@@ -239,12 +257,33 @@ w...w.b..www
 w.b.ww..gwww
 w...gwwwwwww
 w...wwwwwwww
-wwwwwwwwwwww`, //7
+wwwwwwwwwwww`, //7- rooms and hallways
   map`
-wwwww
-wfbgw
-wdbgw
-wwwww`, //7
+wwwwwwwwwww
+w..bg.f...w
+wdgbg.....w
+w.b.gb....w
+w...gb....w
+wwwwwwwwwww`, //8- lock in
+  map`
+wwwwwwwwww
+wdw...w.gw
+w.gb..w.bw
+wbw.b.wb.w
+wgw..g...w
+www..g..fw
+www..w...w
+wwwwwwwwww`, //9- doors
+  map`
+wwwwwwwww
+wwgggggww
+wwbbbbbgw
+wgbdfbbgw
+wg.bbbbgw
+wg.bbbbww
+wwgggggww
+wwwwwwwww`  //10- claustrophobia (there needs to be a level named after a phobia, that is not cliche)
+  //level 10 is possible, i have beaten it myself. Keep trying kid!
 ]
 
 setMap(levels[level])
@@ -283,6 +322,12 @@ onInput("i", () => {
   setMap(levels[level])
   playerdirection = "d"
 })  
+onInput("j", () => {
+  level = 0
+  setMap(levels[level])
+  playerdirection = "d"
+  clearText()
+})  
 afterInput(() => {
   if(inputtype == "m"){
     let player = getFirst(prevdir)
@@ -294,27 +339,60 @@ afterInput(() => {
     let boxes = getAll(box)
     if(player.x == flagsprite.x && player.y == flagsprite.y && boxes.length == 0){
       playTune(tune`
-123.96694214876032: C4~123.96694214876032,
-123.96694214876032: D4~123.96694214876032,
-123.96694214876032: E4~123.96694214876032,
-123.96694214876032: F4~123.96694214876032,
-123.96694214876032: G4~123.96694214876032,
-123.96694214876032: A4~123.96694214876032,
-123.96694214876032: B4~123.96694214876032,
-123.96694214876032: C5~123.96694214876032,
+123.96694214876032: C4^123.96694214876032,
+123.96694214876032: D4^123.96694214876032,
+123.96694214876032: E4^123.96694214876032,
+123.96694214876032: F4^123.96694214876032,
+123.96694214876032: G4^123.96694214876032,
+123.96694214876032: A4^123.96694214876032,
+123.96694214876032: B4^123.96694214876032,
+123.96694214876032: C5^123.96694214876032,
 2975.206611570248`)
       console.log("WIN")
-      if(level < 1){
+      if(level < 9){ //set 10 to your level count
         level += 1
         setMap(levels[level])
         playerdirection = "d"
       }else{
-        addText("You Win!", { 
+        addText("You Win! \n Restart? (J)", { 
         x: 4,
         y: 4,
         color: color`2`
         })
-    }
+        playTune(tune`
+123.96694214876032: C4^123.96694214876032,
+123.96694214876032: D4^123.96694214876032,
+123.96694214876032: E4^123.96694214876032,
+123.96694214876032: F4^123.96694214876032,
+123.96694214876032: G4^123.96694214876032,
+123.96694214876032: A4^123.96694214876032,
+123.96694214876032: B4^123.96694214876032,
+123.96694214876032: C5^123.96694214876032,
+123.96694214876032: C4^123.96694214876032,
+123.96694214876032: D4^123.96694214876032,
+123.96694214876032: E4^123.96694214876032,
+123.96694214876032: F4^123.96694214876032,
+123.96694214876032: G4^123.96694214876032,
+123.96694214876032: A4^123.96694214876032,
+123.96694214876032: B4^123.96694214876032,
+123.96694214876032: C5^123.96694214876032,
+123.96694214876032: C4^123.96694214876032,
+123.96694214876032: D4^123.96694214876032,
+123.96694214876032: E4^123.96694214876032,
+123.96694214876032: F4^123.96694214876032,
+123.96694214876032: G4^123.96694214876032,
+123.96694214876032: A4^123.96694214876032,
+123.96694214876032: B4^123.96694214876032,
+123.96694214876032: C5^123.96694214876032,
+123.96694214876032: C4^123.96694214876032,
+123.96694214876032: D4^123.96694214876032,
+123.96694214876032: E4^123.96694214876032,
+123.96694214876032: F4^123.96694214876032,
+123.96694214876032: G4^123.96694214876032,
+123.96694214876032: A4^123.96694214876032,
+123.96694214876032: B4^123.96694214876032,
+123.96694214876032: C5^123.96694214876032`)
+      }
     }
   inputtype = null
   boxes = getAll(box)
