@@ -1,12 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Roodkapje
 @author: Ebit22
-@tags: [beginner, maze]
+@tags: ['beginner', 'maze']
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-05-30
 
 move with WASD, go to the house and dogde the wolfs.
 */
