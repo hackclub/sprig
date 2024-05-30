@@ -1,12 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Sokoban Super
 @author: Nimit Vijayvargee
-@tags: [Sokoban]
-@img: "sokobansuper.png"
-@addedOn: 2024-05-29
+@tags: ['sokoban-style']
+@img: ""
+@addedOn: 2024-05-30
 */
 
 const playerup = "u"
