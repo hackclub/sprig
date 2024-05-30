@@ -199,7 +199,7 @@ LLLLLLLLLLLLLLLL
 setBackground(tile)
 setSolids([playerup, playerdown, playerleft, playerright, box, wall])
 
-let level = 9
+let level = 0
 const levels = [
   map`
 wwwww
