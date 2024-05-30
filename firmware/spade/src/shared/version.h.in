@@ -1,0 +1,3 @@
+#pragma once
+
+#define SPADE_VERSION "@VERSION@"
