@@ -178,10 +178,12 @@ static void rng_init(void) {
 char serial_commands[][128] = {
         "UPLOAD",
         "VERSION",
-        {1, 2, 3, 4, '\0'}
+        {1, 2, 3, 4, '\0'} // null terminator so strlen() returns 4
 };
 
+// returns which command is being sent from serial, or -1 for none
 static int read_command() {
+	// each index keeps track of how many characters we've matched to each command
     int serial_command_indexes[] = {0, 0, 0};
 
     int timeout = 0;
