@@ -2,6 +2,7 @@ import useLocalStorage from "../../lib/hooks/use-local-storage";
 import { codeMirror, errorLog, PersistenceState } from "../../lib/state";
 import Button from "../design-system/button";
 import styles from "./chat-component.module.css";
+import "./chat-syntax.css";
 import { Signal, useSignal } from "@preact/signals";
 import { RiChatDeleteLine } from "react-icons/ri";
 import markdown from "@wcj/markdown-to-html";
