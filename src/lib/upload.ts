@@ -2,6 +2,9 @@ import {signal} from '@preact/signals'
 import {version as latestVersion} from '../../firmware/spade/src/version.json'
 
 export type UploadState = 'IDLE' | 'LOADING' | 'ERROR'
+
+// LEGACY = spade doesn't have the new serial code, so you can't upload games
+// OLD = you can upload games, but your firmware is out-of-date
 export type VersionState = 'OK' | 'LEGACY' | 'OLD'
 
 export const uploadState = signal<UploadState>('IDLE')
