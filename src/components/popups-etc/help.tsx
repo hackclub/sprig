@@ -130,7 +130,7 @@ export default function Help(props: HelpProps) {
 							showingChat.value ? styles.selected : ""
 						}`}
 						disabled={
-							props.persistenceState?.value.session?.user === null
+							props.persistenceState?.value.session === null
 						}
 						onClick={() => {
 							showingChat.value = true;
