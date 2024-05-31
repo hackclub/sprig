@@ -1,3 +1,10 @@
+/*
+@title: Kitchen Nightmares
+@tags: []
+@img: ""
+@addedOn: 2024-05-31
+@author: Aditya Nair
+*/
 const background = "b"; 
 const player = "p";
 const tomatoV = "v";
