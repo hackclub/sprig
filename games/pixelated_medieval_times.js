@@ -1,4 +1,10 @@
-
+/*
+@title: Pixelated Medieval Times
+@tags: ['rpg']
+@img: ""
+@addedOn: 2024-05-31
+@author: TabishAhmad
+*/
 
 const player = "p";
 const boss = "b";
