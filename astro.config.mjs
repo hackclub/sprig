@@ -17,6 +17,9 @@ export default defineConfig({
 	output: 'server',
 	adapter: vercel(),
 	vite: {
+		optimizeDeps: {
+			exclude: ['https']
+		},
 		plugins: [ prefresh() ],
 		ssr: {
 			// If an import is broken in the Vercel deployment, adding it here might fix it!

@@ -137,19 +137,20 @@ export const themes: Partial<Record<ThemeType, Theme>> = {
 
 export const switchTheme = (themeType: ThemeType) => {
 	theme.value = themeType;
-	
+
 	// store the new theme value in local storage
 	localStorage.setItem("theme", themeType);
 
 	const themeValue = themes[themeType];
 	// set the document values
 	const documentStyle = document.body.style;
+
 	documentStyle.background = themeValue?.background ?? '';
 	document.documentElement.style.setProperty(`--accent`, themeValue?.accent ?? '');
 	document.documentElement.style.setProperty(`--accent-dark`, themeValue?.accentDark ?? '');
 	document.documentElement.style.setProperty(`--fg-muted-on-accent`, themeValue?.fgMutedOnAccent ?? '');
 	documentStyle.color = themeValue?.color ?? '';
-	
+
 	// change the color of the text in elements having .copy-container style
 	// These includes pages such as 'Gallery' and 'Your Games'
 	const copyContainer = document.querySelector(".copy-container") as HTMLDivElement;

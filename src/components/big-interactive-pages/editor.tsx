@@ -27,9 +27,10 @@ import { defaultExampleCode } from "../../lib/examples";
 import MigrateToast from "../popups-etc/migrate-toast";
 import { nanoid } from "nanoid";
 import TutorialWarningModal from "../popups-etc/tutorial-warning";
-import { editSessionLength, switchTheme, ThemeType, continueSaving, LAST_SAVED_SESSION_ID } from '../../lib/state'
-import { showSaveConflictModal } from '../../lib/state';
+import { editSessionLength, switchTheme, ThemeType, continueSaving, LAST_SAVED_SESSION_ID, showSaveConflictModal } from '../../lib/state'
 import SessionConflictWarningModal from '../popups-etc/session-conflict-warning-modal'
+import {versionState} from "../../lib/upload";
+import VersionWarningModal from "../popups-etc/version-warning";
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
@@ -296,7 +297,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		)
 	);
 
-	// compute the height and max height of the canvas screen 
+	// compute the height and max height of the canvas screen
 	function computeCanvasScreenHeights() {
 		// compute the new canvas screen height
 		const canvasScreenHeight = outputArea.current?.clientHeight! - realHelpAreaSize.value - screenControls.current?.clientHeight!;
@@ -614,7 +615,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 						/>
 						<div
 							class={styles.helpContainer}
-							style={{ height: realHelpAreaSize.value }}
+							style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenControls.current?.clientHeight! + screenContainer.current?.clientHeight!) }}
 						>
 							{!(
 								(persistenceState.value.kind === "SHARED" ||
@@ -659,6 +660,10 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 				persistenceState.value.showInitialWarning && (
 					<DraftWarningModal persistenceState={persistenceState} />
 				)}
+
+			{versionState.value != "OK" && (
+				<VersionWarningModal versionState={versionState} />
+			)}
 
 			{showingTutorialWarning.value && (
 				<TutorialWarningModal
