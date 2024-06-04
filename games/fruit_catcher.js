@@ -1,6 +1,8 @@
 /*
 @title: Fruit Catcher
-@addedOn: 2022-07-26
+@tags: []
+@img: ""
+@addedOn: 2022-06-4
 @author: Prathyush Yeturi
 */
 
