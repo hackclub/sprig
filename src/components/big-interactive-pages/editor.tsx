@@ -27,6 +27,8 @@ import MigrateToast from "../popups-etc/migrate-toast";
 import { nanoid } from "nanoid";
 import TutorialWarningModal from "../popups-etc/tutorial-warning";
 import { editSessionLength, switchTheme, ThemeType } from "../../lib/state";
+import {versionState} from "../../lib/upload";
+import VersionWarningModal from "../popups-etc/version-warning";
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
@@ -257,7 +259,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		)
 	);
 
-	// compute the height and max height of the canvas screen 
+	// compute the height and max height of the canvas screen
 	function computeCanvasScreenHeights() {
 		// compute the new canvas screen height
 		const canvasScreenHeight = outputArea.current?.clientHeight! - realHelpAreaSize.value - screenControls.current?.clientHeight!;
@@ -612,6 +614,10 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 				persistenceState.value.showInitialWarning && (
 					<DraftWarningModal persistenceState={persistenceState} />
 				)}
+
+			{versionState.value != "OK" && (
+				<VersionWarningModal versionState={versionState} />
+			)}
 
 			{showingTutorialWarning.value && (
 				<TutorialWarningModal
