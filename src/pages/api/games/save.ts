@@ -64,6 +64,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		},
 		body: JSON.stringify(data),
 	});
+	console.log(response)
 
 	return response;
 };
