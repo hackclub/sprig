@@ -33,6 +33,7 @@ import { VscLoading } from "react-icons/vsc";
 import { defaultExampleCode } from "../lib/examples";
 import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
+import { saveGame } from "./big-interactive-pages/editor";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -208,8 +209,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			<Button
 				icon={IoShuffle}
 				onClick={() => {
-					if (props.persistenceState.value.session?.session.full)
+					if (props.persistenceState.value.session?.session.full){
 						persist(props.persistenceState);
+						// window.location.reload()
+					}
 					showSavePrompt.value = true;
 				}}
 			>
