@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include "shared/version.h"
 
 // Set to false to enable debug prints for development (this is janky)
 #if true
@@ -174,9 +175,58 @@ static void rng_init(void) {
   srand(seed);
 }
 
+char serial_commands[][128] = {
+        "UPLOAD",
+        "VERSION",
+        {1, 2, 3, 4, '\0'} // null terminator so strlen() returns 4
+};
+
+// returns which command is being sent from serial, or -1 for none
+static int read_command() {
+	// each index keeps track of how many characters we've matched to each command
+    int serial_command_indexes[] = {0, 0, 0};
+
+    int timeout = 0;
+
+    for (;;) {
+        int c = getchar_timeout_us(timeout);
+        if (c == PICO_ERROR_TIMEOUT) return -1;
+
+        timeout = 100;
+
+        int moved = 0;
+
+        for (int i = 0; i < ARR_LEN(serial_commands); i++) {
+            if (strlen(serial_commands[i]) > serial_command_indexes[i]
+                && serial_commands[i][serial_command_indexes[i]] == c) {
+                serial_command_indexes[i]++;
+                moved = 1;
+            }
+            if (strlen(serial_commands[i]) == serial_command_indexes[i]) {
+                return i;
+            }
+        }
+        if (!moved) return -1;
+    }
+}
+
 // Wait for a game to be uploaded.
 static int load_new_scripts(void) {
-  return upl_stdin_read();
+    int current_command = read_command();
+
+    switch (current_command) {
+        case 0: // upload
+            return upl_stdin_read();
+        case 1: // version
+            printf("SPADE:%sEND", SPADE_VERSION);
+            return 0;
+        case 2: // legacy (1,2,3,4)
+            puts("legacy detected");
+            return 0;
+        default:
+            return 0;
+    }
+
 }
 
 /**
@@ -256,7 +306,7 @@ int main() {
 
   /**
    * Wait for a keypress to start the game.
-   * 
+   *
    * This is important so games with e.g. infinite loops don't
    * brick the device as soon as they start up.
    */
