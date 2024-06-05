@@ -1,5 +1,5 @@
 import { useState, useEffect } from "preact/hooks";
-import { loadThumbnailUrl } from "../../lib/thumbnail";
+import { loadThumbnailUrl, decodeThumbnailJson } from "../../lib/thumbnail";
 import { GameMetadata } from "../../lib/game-saving/gallery";
 import Button from "../../components/design-system/button";
 import Input from "../../components/design-system/input";
@@ -116,15 +116,20 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 			) as HTMLImageElement;
 			if (["loading", "true"].includes(img.dataset.loaded!)) return;
 			img.dataset.loaded = "loading";
-			if (gameImages.value[gameCard.filename]) {
-				img.src = gameImages.value[gameCard.filename]!;
-			} else {
 				const thumbnail = await loadThumbnailUrl(gameCard.filename);
-				img.src = thumbnail;
-				const newGameImages = { ...gameImages.value };
-				newGameImages[gameCard.filename] = thumbnail;
-				gameImages.value = newGameImages;
-			}
+				img.src = decodeThumbnailJson(thumbnail);
+				// const newGameImages = { ...gameImages.value };
+				// newGameImages[gameCard.filename] = thumbnail;
+				// gameImages.value = newGameImages;
+			// if (gameImages.value[gameCard.filename]) {
+			// 	img.src = gameImages.value[gameCard.filename]!;
+			// } else {
+			// 	const thumbnail = await loadThumbnailUrl(gameCard.filename);
+			// 	img.src = thumbnail;
+			// 	const newGameImages = { ...gameImages.value };
+			// 	newGameImages[gameCard.filename] = thumbnail;
+			// 	gameImages.value = newGameImages;
+			// }
 			img.dataset.loaded = "true";
 		};
 
@@ -265,7 +270,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 							) : null}
 
 							<img
-								src={`gallery/${game.img}`}
+								// src={`gallery/${game.img}`}
 								alt={`preview of ${game.filename}.js`}
 							/>
 							<h3>{game.title}</h3>

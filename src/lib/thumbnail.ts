@@ -24,10 +24,13 @@ const decode = ({ data, width }: RawThumbnail) => {
 	return new ImageData(buf, width)
 }
 
-export const loadThumbnailUrl = async (key: string): Promise<string> => {
-	const res = await fetch(`/api/thumbnail?key=${encodeURIComponent(key)}`)
+export const loadThumbnailUrl = async (key: string): Promise<Thumbnail> => {
+	const res = await fetch(`/${key}.json`)
 	const json = await res.json() as Thumbnail
+	return json;
+}
 
+export function decodeThumbnailJson(json: any) {
 	if (json.kind === 'png') {
 		return `data:image/png;base64,${json.data}`
 	} else {
