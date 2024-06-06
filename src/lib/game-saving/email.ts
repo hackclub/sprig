@@ -22,9 +22,12 @@ interface EmailSpec {
 }
 
 export const mail = async (to: string, spec: EmailSpec): Promise<void> => {
+  const EMAIL_FROM = import.meta.env.EMAIL_FROM;
+  const EMAIL_REPLY_TO = import.meta.env.EMAIL_REPLY_TO;
+
 	await sendgrid.send({
-		from: 'Hack Club Sprig <sprig@hackclub.com>',
-		replyTo: 'Hack Club <team@hackclub.com>',
+		from: `Hack Club Sprig <${EMAIL_FROM}>`,
+		replyTo: `Hack Club <${EMAIL_REPLY_TO}>`,
 		to,
 		...spec
 	})
