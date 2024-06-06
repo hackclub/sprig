@@ -371,10 +371,14 @@ const gamesource = await getGameSourceCode();
 					device: Object3D | null
 					hoveredButton: Object3D | null
 					pressedButton: Object3D | null
+					hoveredScreen: Object3D | boolean
+					pressedScreen: Object3D | boolean
 				} = {
 					device: null,
 					hoveredButton: null,
 					pressedButton: null,
+					hoveredScreen: false,
+					pressedScreen: false,
 				}
 
 				const controls = new OrbitControls(
@@ -435,20 +439,38 @@ const gamesource = await getGameSourceCode();
 
 				const raycast = () => {
 					raycaster.setFromCamera(mouse, camera)
-					const object = raycaster.intersectObjects(scene.children)[0]?.object
-					raycasted.device = object || null
-					raycasted.hoveredButton = object && buttonNames.includes(object.name) ? object : null
+					const intersects = raycaster.intersectObjects(scene.children, true);
+					raycasted.device = null;
+					raycasted.hoveredButton = null;
+					raycasted.hoveredScreen = true;
+
+					for (const intersect of intersects) {
+						const intersectObject = intersect.object;
+
+						if (!raycasted.device) {
+							raycasted.device = intersectObject;
+						}
+
+						if (buttonNames.includes(intersectObject.name) && !raycasted.hoveredButton) {
+							raycasted.hoveredButton = intersectObject;
+						}
+
+						if (intersectObject.name === 'Screen') {
+							raycasted.hoveredScreen = true;
+						}
+					}
 
 					document.documentElement.style.cursor =
-						raycasted.hoveredButton || raycasted.pressedButton
+						raycasted.hoveredButton || raycasted.pressedButton || raycasted.hoveredScreen
 							? 'pointer'
 							: controls.isDragging
 							? 'grabbing'
 							: raycasted.device
 							? 'grab'
 							: 'unset'
+
 					document.documentElement.style.touchAction =
-						raycasted.pressedButton || controls.isDragging || raycasted.device ? 'none' : 'unset'
+                    raycasted.pressedButton || controls.isDragging || raycasted.device ? 'none' : 'unset';
 				}
 
 				const mousePageCoords = { x: Infinity, y: Infinity }
@@ -489,6 +511,11 @@ const gamesource = await getGameSourceCode();
 
 						const input = raycasted.pressedButton.name.toLowerCase() as InputKey
 						if (VALID_INPUTS.includes(input)) game.button(input)
+					} else if(raycasted.hoveredScreen)
+					{
+						console.log("Screen clicked");
+						raycasted.hoveredScreen = true;
+						event.preventDefault()
 					}
 				}
 				const pointerup = () => {
@@ -496,6 +523,10 @@ const gamesource = await getGameSourceCode();
 						(raycasted.pressedButton as any).position.y += buttonMovement
 						raycasted.pressedButton = null
 					}
+					if (raycasted.hoveredScreen) {
+						raycasted.hoveredScreen = false;
+					}
+
 				}
 
 				document.documentElement.addEventListener('pointermove', pointermove)
