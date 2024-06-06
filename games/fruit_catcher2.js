@@ -1,5 +1,5 @@
 /*
-@title: Fruit Catcher
+@title: Fruit Catcher Deluxe
 @tags: []
 @img: ""
 @addedOn: 2022-06-4
