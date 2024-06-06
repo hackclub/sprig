@@ -6,7 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: Konstantinos Fragkoulis
 @tags: []
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-06-06
 */
 
 const player = "p"
