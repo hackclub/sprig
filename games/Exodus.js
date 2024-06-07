@@ -1,8 +1,9 @@
-/*@title: Exodus
+/*
+@title: Exodus
 @author: Jarsa 
 @tags: []
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-06-07
 */
 
 const player = "p"
