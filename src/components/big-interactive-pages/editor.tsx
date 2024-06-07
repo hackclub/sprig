@@ -10,6 +10,7 @@ import {
 } from "react-icons/io5";
 import {
 	Signal,
+	signal,
 	useComputed,
 	useSignal,
 	useSignalEffect,
@@ -32,7 +33,7 @@ import VersionWarningModal from "../popups-etc/version-warning";
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
-	roomState: Signal<RoomState>;
+	roomState?: Signal<RoomState>;
 	cookies: {
 		outputAreaSize: number | null;
 		helpAreaSize: number | null;
@@ -412,7 +413,7 @@ export default function Editor({ persistenceState, cookies, roomState}: EditorPr
 
 	return (
 		<div class={styles.page}>
-			<Navbar persistenceState={persistenceState} />
+			<Navbar persistenceState={persistenceState} roomState={roomState}/>
 
 			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>

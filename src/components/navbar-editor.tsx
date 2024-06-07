@@ -8,7 +8,7 @@ import {
 	theme,
 	switchTheme,
 } from "../lib/state";
-import type { ThemeType } from "../lib/state";
+import type { RoomState, ThemeType } from "../lib/state";
 import Button from "./design-system/button";
 import Textarea from "./design-system/textarea";
 import SavePrompt from "./popups-etc/save-prompt";
@@ -79,6 +79,7 @@ const canDelete = (persistenceState: Signal<PersistenceState>) => {
 
 interface EditorNavbarProps {
 	persistenceState: Signal<PersistenceState>;
+	roomState?: Signal<RoomState>;
 }
 
 type StuckCategory =
@@ -220,9 +221,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			</Button>
 		);
 	} else if (props.persistenceState.value.kind === "PERSISTED") {
+		console.log(props.roomState?.value.participants.filter((participant) => {
+			if(participant.isHost) return true
+		}))
 		saveState = {
 			SAVED: `Saved to ${
-				props.persistenceState.value.session?.user.email ?? "???"
+				props.roomState?.value.participants.filter((participant) => {
+					if(participant.isHost) return true
+				})[0]?.userEmail ?? "???"
 			}`,
 			SAVING: "Saving...",
 			ERROR: "Error saving to cloud",
@@ -284,7 +290,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 										)
 									}
 								/>
-								<span class={styles.attribution}> by you</span>
+								<span class={styles.attribution}> by {
+								props.roomState?.value.participants.filter((participant) => {
+									if(participant.isHost) return true
+								})[0]?.userEmail.split("@")[0] ?? "???"}</span>
 							</>
 						) : props.persistenceState.value.kind === "SHARED" ? (
 							<>

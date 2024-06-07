@@ -4,7 +4,7 @@ import { Extension, StateEffect } from '@codemirror/state'
 import styles from './codemirror.module.css'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorView } from '@codemirror/view'
-import { theme, errorLog, PersistenceState, RoomState, RoomStatus } from '../lib/state'
+import { theme, errorLog, PersistenceState, RoomState, RoomStatus, RoomParticipant } from '../lib/state'
 import { Diagnostic, setDiagnosticsEffect } from '@codemirror/lint'
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 import { WebrtcProvider } from 'y-webrtc'
@@ -14,7 +14,7 @@ import { foldAllTemplateLiterals, saveGame } from './big-interactive-pages/edito
 import { Awareness } from 'y-protocols/awareness'
 interface CodeMirrorProps {
 	persistenceState: Signal<PersistenceState>
-	roomState: Signal<RoomState>
+	roomState?: Signal<RoomState>
 	class?: string | undefined
 	initialCode?: string
 	onCodeChange?: () => void
@@ -86,7 +86,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		if (editorRef !== undefined) {
 			editorRef.destroy();
 		}
-		if (props.roomState.value.roomId === "" || props.persistenceState.peek().session === null) {
+		if (props.roomState?.value.roomId === "" || props.persistenceState.peek().session === null) {
 			const editor = new EditorView({
 				state: createEditorState(props.initialCode ? props.initialCode : '', () => {
 					if (editor.state.doc.toString() === lastCode) return
@@ -101,6 +101,8 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			return
 		}
 
+		if(!props.roomState) return
+
 		try{
 			if(yDoc !== undefined){
 				yDoc.destroy();
@@ -109,7 +111,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				provider.destroy();
 			}
 			yDoc = new Y.Doc();
-			provider = new WebrtcProvider(props.roomState.peek().roomId, yDoc, {
+			provider = new WebrtcProvider(props.roomState.value.roomId, yDoc, {
 				signaling: [
 					"wss://yjs-signaling-server-5fb6d64b3314.herokuapp.com",
 				],
@@ -120,7 +122,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 
 			yProviderAwarenessSignal.value = provider.awareness
 			console.log(props.persistenceState.peek().session?.user)
-			const isHost = ((!(props.persistenceState.peek().kind == "PERSISTED" && props.persistenceState.peek().game != "LOADING")) && props.persistenceState.peek().session?.user.id === props.persistenceState.peek().game.id)
+			const isHost = ((props.persistenceState.peek().kind == "PERSISTED" && props.persistenceState.peek().game != "LOADING") && props.persistenceState.peek().session?.user.id === props.persistenceState.peek().game.ownerId)
 			provider.awareness.setLocalStateField("user", {
 				name:
 					props.persistenceState.peek().session?.user.email ??
@@ -175,9 +177,23 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			yDoc.on("update", () => {
 				console.log(provider.awareness.getStates());
 				if (!initialUpdate) return;
+				let participants: RoomParticipant[] = [];
+				provider.awareness.getStates().forEach((state) => {
+					try{
+						participants.push({
+							userEmail: state.user.name,
+							isHost: state.user.host
+						})
+					} catch(e){
+						return
+					}
+				});
+				if(props.roomState)
+					props.roomState.value.participants = participants;
+
 				let persistenceState = props.persistenceState.peek();
 				if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING"){
-					if(persistenceState.game.id === persistenceState.session?.user.id){
+					if(persistenceState.game.ownerId === persistenceState.session?.user.id){
 						console.log("SFahfsahf")
 						saveGame(props.persistenceState);
 					}

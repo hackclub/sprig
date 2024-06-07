@@ -9,7 +9,10 @@ import MobileUnsupported from '../../components/popups-etc/mobile-unsupported'
 import { mobileUserAgent } from '../../lib/utils/mobile'
 
 const session = await getSession(Astro.cookies)
-if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
+console.log(session)
+if (!session) {
+	return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
+}
 let checkRoom = false;
 const game = await getGame(Astro.params.id!)
 if (!game){

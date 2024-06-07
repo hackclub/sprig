@@ -90,7 +90,7 @@ export enum RoomStatus {
 
 export type RoomParticipant = {
 	userEmail: string
-	host: boolean
+	isHost: boolean
 }
 
 export type RoomState = {
