@@ -15,7 +15,7 @@ import {
 	useSignalEffect,
 } from "@preact/signals";
 import { useEffect, useRef } from "preact/hooks";
-import { codeMirror, errorLog, muted, PersistenceState } from "../../lib/state";
+import { codeMirror, errorLog, muted, PersistenceState, RoomState } from "../../lib/state";
 import EditorModal from "../popups-etc/editor-modal";
 import { runGame } from "../../lib/engine";
 import DraftWarningModal from "../popups-etc/draft-warning";
@@ -32,6 +32,7 @@ import VersionWarningModal from "../popups-etc/version-warning";
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
+	roomState: Signal<RoomState>;
 	cookies: {
 		outputAreaSize: number | null;
 		helpAreaSize: number | null;
@@ -163,7 +164,7 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
 	}
 };
 
-export default function Editor({ persistenceState, cookies }: EditorProps) {
+export default function Editor({ persistenceState, cookies, roomState}: EditorProps) {
 	const outputArea = useRef<HTMLDivElement>(null);
 	const screenContainer = useRef<HTMLDivElement>(null);
 	const screenControls = useRef<HTMLDivElement>(null);
@@ -175,7 +176,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			cookies.outputAreaSize ?? defaultOutputAreaWidth
 		)
 	);
-	const roomId = useSignal<string>("");
 
 	// this is initially setting the helpAreaSize
 	const helpAreaSize = useSignal(
@@ -418,7 +418,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 				<div className={styles.codeContainer}>
 					<CodeMirror
 						persistenceState={persistenceState}
-						roomId={roomId}
+						roomState={roomState}
 						class={styles.code}
 						initialCode={initialCode}
 						onEditorView={(editor) => {

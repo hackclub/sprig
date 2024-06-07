@@ -82,6 +82,23 @@ export type PersistenceState = ({
 	session: SessionInfo | null
 	stale: boolean
 }
+export enum RoomStatus {
+	CONNECTED,
+	CONNECTING,
+	DISCONNECTED
+}
+
+export type RoomParticipant = {
+	userEmail: string
+	host: boolean
+}
+
+export type RoomState = {
+	status: RoomStatus
+	roomId: string
+	password: string
+	participants: RoomParticipant[]
+}
 
 export const codeMirror = signal<EditorView | null>(null)
 export const muted = signal<boolean>(false)

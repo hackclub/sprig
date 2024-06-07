@@ -4,7 +4,7 @@ import { Extension, StateEffect } from '@codemirror/state'
 import styles from './codemirror.module.css'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorView } from '@codemirror/view'
-import { theme, errorLog, PersistenceState } from '../lib/state'
+import { theme, errorLog, PersistenceState, RoomState, RoomStatus } from '../lib/state'
 import { Diagnostic, setDiagnosticsEffect } from '@codemirror/lint'
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 import { WebrtcProvider } from 'y-webrtc'
@@ -14,7 +14,7 @@ import { foldAllTemplateLiterals, saveGame } from './big-interactive-pages/edito
 import { Awareness } from 'y-protocols/awareness'
 interface CodeMirrorProps {
 	persistenceState: Signal<PersistenceState>
-	roomId: Signal<string>
+	roomState: Signal<RoomState>
 	class?: string | undefined
 	initialCode?: string
 	onCodeChange?: () => void
@@ -37,8 +37,6 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	// Run button
 	const onRunShortcutRef = useRef(props.onRunShortcut)
 	useEffect(() => { onRunShortcutRef.current = props.onRunShortcut }, [props.onRunShortcut])
-
-	useEffect(() => { if (props.persistenceState.value.kind === "PERSISTED" && props.persistenceState.value.game !== "LOADING") props.roomId.value = props.persistenceState.value.game.id })
 
 	let lastCode: string | undefined = props.initialCode ?? ''
 	// serves to restore config before dark mode was added
@@ -88,7 +86,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		if (editorRef !== undefined) {
 			editorRef.destroy();
 		}
-		if (props.roomId.value === "" || props.persistenceState.peek().session === null) {
+		if (props.roomState.value.roomId === "" || props.persistenceState.peek().session === null) {
 			const editor = new EditorView({
 				state: createEditorState(props.initialCode ? props.initialCode : '', () => {
 					if (editor.state.doc.toString() === lastCode) return
@@ -102,84 +100,95 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			props.onEditorView?.(editor)
 			return
 		}
-		
-		if(yDoc !== undefined){
-			yDoc.destroy();
-		}
-		if(provider !== undefined){
-			provider.destroy();
-		}
-		yDoc = new Y.Doc();
-		provider = new WebrtcProvider(props.roomId.value, yDoc, {
-			signaling: [
-				"wss://yjs-signaling-server-5fb6d64b3314.herokuapp.com",
-			],
-		});
-		//get yjs document from provider
-		let ytext = yDoc.getText("codemirror");
-		const yUndoManager = new Y.UndoManager(ytext);
 
-		yProviderAwarenessSignal.value = provider.awareness
+		try{
+			if(yDoc !== undefined){
+				yDoc.destroy();
+			}
+			if(provider !== undefined){
+				provider.destroy();
+			}
+			yDoc = new Y.Doc();
+			provider = new WebrtcProvider(props.roomState.peek().roomId, yDoc, {
+				signaling: [
+					"wss://yjs-signaling-server-5fb6d64b3314.herokuapp.com",
+				],
+			});
+			//get yjs document from provider
+			let ytext = yDoc.getText("codemirror");
+			const yUndoManager = new Y.UndoManager(ytext);
 
-		provider.awareness.setLocalStateField("user", {
-			name:
-				props.persistenceState.peek().session?.user.username ??
-				"Anonymous",
-		});
-		let yCollabExtension = yCollab(ytext, provider.awareness, {
-			undoManager: yUndoManager,
-		});
-		yCollabSignal.value = yCollabExtension;
-		
-		//get the initial code from the yjs document
-		// Wait for document state to be received from provider
-		let initialUpdate = true;
-		const waitInitialUpdate = function () {
-			return new Promise<void>((resolve) => {
-				let timer: NodeJS.Timeout;
-				const checkUpdated = () => {
-					if (initialUpdate === false) {
+			yProviderAwarenessSignal.value = provider.awareness
+			console.log(props.persistenceState.peek().session?.user)
+			const isHost = ((!(props.persistenceState.peek().kind == "PERSISTED" && props.persistenceState.peek().game != "LOADING")) && props.persistenceState.peek().session?.user.id === props.persistenceState.peek().game.id)
+			provider.awareness.setLocalStateField("user", {
+				name:
+					props.persistenceState.peek().session?.user.email ??
+					"Anonymous",
+				host: isHost
+			});
+			let yCollabExtension = yCollab(ytext, provider.awareness, {
+				undoManager: yUndoManager,
+			});
+			yCollabSignal.value = yCollabExtension;
+			
+			//get the initial code from the yjs document
+			// Wait for document state to be received from provider
+			let initialUpdate = true;
+			const waitInitialUpdate = function () {
+				return new Promise<void>((resolve) => {
+					let timer: NodeJS.Timeout;
+					const checkUpdated = () => {
+						if (initialUpdate === false) {
+							clearTimeout(timer);
+							resolve();
+						} else {
+							setTimeout(checkUpdated, 500);
+						}
+					};
+					timer = setTimeout(() => {
 						clearTimeout(timer);
 						resolve();
-					} else {
-						setTimeout(checkUpdated, 500);
-					}
-				};
-				timer = setTimeout(() => {
-					clearTimeout(timer);
-					resolve();
-				}, 1500);
+					}, 1500);
 
-				checkUpdated();
+					checkUpdated();
+				});
+			};
+			waitInitialUpdate().then(() => {
+				if (ytext.toString() === "") {
+					ytext.insert(0, lastCode ?? "");
+				}
+				if (!parent.current)
+					throw new Error("Oh golly! The editor parent ref is null");
+				const editor = new EditorView({
+					state: createEditorState(ytext.toString(), () => {
+						if (editor.state.doc.toString() === lastCode) return
+						lastCode = editor.state.doc.toString()
+						onCodeChangeRef.current?.()
+					}, () => onRunShortcutRef.current?.(), yCollabSignal.peek() as Extension),
+					parent: parent.current,
+				})
+
+				setEditorRef(editor);
+				props.onEditorView?.(editor)
 			});
-		};
-		waitInitialUpdate().then(() => {
-			if (ytext.toString() === "") {
-				ytext.insert(0, lastCode ?? "");
-			}
-			if (!parent.current)
-				throw new Error("Oh golly! The editor parent ref is null");
-			const editor = new EditorView({
-				state: createEditorState(ytext.toString(), () => {
-					if (editor.state.doc.toString() === lastCode) return
-					lastCode = editor.state.doc.toString()
-					onCodeChangeRef.current?.()
-				}, () => onRunShortcutRef.current?.(), yCollabSignal.peek() as Extension),
-				parent: parent.current,
-			})
-
-			setEditorRef(editor);
-			props.onEditorView?.(editor)
-			foldAllTemplateLiterals();
-		});
-		yDoc.on("update", () => {
-			if (!initialUpdate) return;
-			saveGame(props.persistenceState);
-			ytext = yDoc.getText("codemirror");
-			initialUpdate = false;
-		});
+			yDoc.on("update", () => {
+				console.log(provider.awareness.getStates());
+				if (!initialUpdate) return;
+				let persistenceState = props.persistenceState.peek();
+				if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING"){
+					if(persistenceState.game.id === persistenceState.session?.user.id){
+						console.log("SFahfsahf")
+						saveGame(props.persistenceState);
+					}
+				}
+				ytext = yDoc.getText("codemirror");
+				initialUpdate = false;
+			});
+		} catch(e){
+			console.log(e)
+		}
 	})
-	
 
 	useEffect(() => {
 		setEditorTheme();
