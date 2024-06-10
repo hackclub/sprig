@@ -15,7 +15,9 @@ export default defineConfig({
 		generateMetadata()
 	],
 	output: 'server',
-	adapter: vercel(),
+	adapter: vercel({
+		imageService: true
+	}),
 	vite: {
 		optimizeDeps: {
 			exclude: ['https']
