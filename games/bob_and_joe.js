@@ -3,7 +3,6 @@
 @title: bob_and_joe
 @author: aramshiva
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2023-12-08
 */
 

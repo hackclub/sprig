@@ -1,7 +1,6 @@
 /*
 @title: the impossible puzzle
 @tags: ['logic']
-@img: ""
 @addedOn: 2022-11-13
 @author: monish
 

@@ -1,7 +1,6 @@
 /*
 @title: SOS_Game
 @tags: ['multiplayer']
-@img: ""
 @addedOn: 2022-11-13
 @author: Milán Leskó
 

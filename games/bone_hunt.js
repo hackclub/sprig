@@ -5,7 +5,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: bone_hunt
 @author: Andrew Cromar
 @tags: ["puzzle"]
-@img: ""
 @addedOn: 2024-01-15
 */
 

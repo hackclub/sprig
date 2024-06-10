@@ -3,7 +3,6 @@
 @title: Minigame-Mania
 @author: FlubbedAlpaca, ManushPatell, AiyuuGames, MatiasSharofi
 @tags: ['strategy']
-@img: ""
 @addedOn: 2023-05-27
 */
 

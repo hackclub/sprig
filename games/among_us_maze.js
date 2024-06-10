@@ -1,7 +1,6 @@
 /*
 @title: among_us_maze
 @tags: ['advanced', 'web-only']
-@img: ""
 @addedOn: 2022-08-16
 @author: Riya and Christy
 */

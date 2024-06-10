@@ -3,7 +3,6 @@
 @title: Kalo
 @author: Fatiha
 @tags: []
-@img: ""
 @addedOn: 2023-07-15
 */
 

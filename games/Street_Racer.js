@@ -1,7 +1,6 @@
 /*
 @title: Street Racer
 @tags: ['dodge']
-@img: ""
 @addedOn: 2023-02-24
 @author: Cdogo
 

@@ -3,7 +3,6 @@
 @title: Mirror_Snake
 @author: funnoodle11
 @tags: ['strategy']
-@img: ""
 @addedOn: 2023-05-26
 */
 

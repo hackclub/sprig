@@ -1,7 +1,6 @@
 /*
 @title: bobs_bad_apple
 @tags: ['logic']
-@img: ""
 @addedOn: 2023-03-01
 @author: L. Clark
 */

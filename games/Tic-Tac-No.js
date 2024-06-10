@@ -1,7 +1,6 @@
 /*
 @title: Tic-Tac-No
 @tags: ['multiplayer']
-@img: ""
 @addedOn: 2023-02-02
 @author: Ojas Somethin'
 */

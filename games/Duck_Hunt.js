@@ -2,7 +2,6 @@
 /*
 @title: DCKHNT
 @tags: []
-@img: ""
 @addedOn: 2023-03-25
 @author: el
 */

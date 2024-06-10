@@ -1,7 +1,6 @@
 /*
 @title: Squilium_Escape
 @tags: []
-@img: ""
 @addedOn: 2023-01-06
 @author: Ali Mustafa
 

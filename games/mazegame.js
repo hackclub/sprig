@@ -3,7 +3,6 @@
 @title: mazegame
 @author: Elian
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2023-11-04
 */
 

@@ -5,7 +5,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: orbit_blaster
 @author: blackpolygon
 @tags: ["dodge"]
-@img: "orbit_blaster.png"
 @addedOn: 2024-04-08
 */
 

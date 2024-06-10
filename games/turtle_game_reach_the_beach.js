@@ -1,9 +1,8 @@
 
 /* 
-@title: turtle_game_(reach_the_beach)
+@title: turtle_game_reach_the_beach
 @author: Daniel Dunavetsky
 @tags: ['logic']
-@img: ""
 @addedOn: 2023-10-25
 */
 

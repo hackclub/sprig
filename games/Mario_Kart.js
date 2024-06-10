@@ -1,7 +1,6 @@
 /*
 @title: Mario_Kart
 @tags: ['endless']
-@img: ""
 @addedOn: 2023-01-13
 @author: nucleiav */
 

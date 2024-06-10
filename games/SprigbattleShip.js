@@ -4,7 +4,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: SprigbattleShip
 @author: Legonathanjereb
 @tags: ["classic"]
-@img: ""
 @addedOn: 2024-04-26
 */
 

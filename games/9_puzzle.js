@@ -2,7 +2,6 @@
 
 @title: 9_puzzle
 @tags: ['logic']
-@img: ""
 @addedOn: 2022-07-14
 @author: brian
 
