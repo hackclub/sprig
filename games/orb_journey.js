@@ -2,11 +2,11 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: 
-@author: 
+@title: Orb Journey
+@author: trungu
 @tags: []
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-06-10
 */
 
 // Introduction
