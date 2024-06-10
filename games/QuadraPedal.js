@@ -1,7 +1,6 @@
 /*
 @title: QuadraPedal
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2022-11-04
 @author: Jamarkis
 

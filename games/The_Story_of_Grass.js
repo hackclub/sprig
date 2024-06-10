@@ -3,7 +3,6 @@
 @title: The_Story_of_Grass
 @author: Sarah Wang / Sarinara
 @tags: ['puzzle-score']
-@img: The_Story_of_Grass
 @addedOn: 2023-05-28
 */
 

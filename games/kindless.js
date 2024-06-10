@@ -1,7 +1,6 @@
 /*
 @title: kindless
 @tags: ['advanced']
-@img: ""
 @addedOn: 2022-07-26
 @author: Ishan (@quackduck)
 

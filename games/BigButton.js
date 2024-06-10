@@ -1,7 +1,6 @@
 /*
 @title: BigButton
 @tags: []
-@img: BigButton
 @addedOn: 2022-12-17
 @author: LinusSkucas
 */

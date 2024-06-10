@@ -3,7 +3,6 @@
 @title: rickroll
 @author: Tiger-The-Cat
 @tags: []
-@img: ""
 @addedOn: 2023-03-25
 */
 

@@ -1,7 +1,6 @@
 /*
 @title: snake_game
 @tags: ['classic']
-@img: ""
 @addedOn: 2022-09-13
 @author: souvikpal2000
 */

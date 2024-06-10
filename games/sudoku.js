@@ -1,7 +1,6 @@
 /*
 @title: sudoku
 @tags: ['classic']
-@img: ""
 @addedOn: 2023-01-25
 @author: wyatt
 
