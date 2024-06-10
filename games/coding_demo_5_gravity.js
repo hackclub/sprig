@@ -1,7 +1,6 @@
 /*
 @title: Coding Demo 5: Gravity
 @tags: ['demo', 'hackable', 'simulation', 'beginner']
-@img: ""
 @addedOn: 2022-11-12
 @author: Leonard (Omay)
 

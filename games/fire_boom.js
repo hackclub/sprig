@@ -3,7 +3,6 @@
 @title: fire_boom
 @author: Samarpan
 @tags: ['dodge']
-@img: ""
 @addedOn: 2023-09-25
 */
 

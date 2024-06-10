@@ -2,7 +2,6 @@
 @title: type_or_die
 @author: Jesse Blum (@jblum-coder)
 @tags: []
-@img: ""
 @addedOn: 2024-01-23
 */
 

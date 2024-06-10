@@ -1,7 +1,6 @@
 /*
 @title: Coding Demo 4 - Screen Scrolling
 @tags: ['demo', 'hackable', 'beginner']
-@img: ""
 @addedOn: 2022-11-7
 @author: Leonard (Omay)
 

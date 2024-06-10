@@ -5,7 +5,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Cheese-Hunt
 @author: Sophia E
 @tags: ["puzzle"]
-@img: ""
 @addedOn: 2024-04-15
 */
 

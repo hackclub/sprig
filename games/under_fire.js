@@ -1,7 +1,6 @@
   /*
 @title: under_fire
 @tags: ['strategy']
-@img: ""
 @addedOn: 2023-02-08
 @author: alex_dvc
 */

@@ -2,7 +2,6 @@
 @title: SquidsInTheStarts
 @author: Lucas4680 
 @tags: []
-@img: ""
 @addedOn: 2024-02-11
 
 First time? Check out the tutorial game:
