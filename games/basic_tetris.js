@@ -1,5 +1,5 @@
 /*
-@title: Basis Tetris
+@title: Basic Tetris
 @author: Ivan-Jehad
 @tags: []
 @img: ""
