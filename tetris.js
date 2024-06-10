@@ -1,5 +1,9 @@
 /*
-@title: Basic Tetris
+@title: Basis Tetris
+@author: Ivan-Jehad
+@tags: []
+@img: ""
+@addedOn: 2024-06-10
 */
 
 const empty = "e";
