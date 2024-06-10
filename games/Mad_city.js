@@ -3,7 +3,6 @@
 @title: Mad_city
 @author: Andromeda
 @tags: ['endless']
-@img: ""
 @addedOn: 2023-04-26
 */
 

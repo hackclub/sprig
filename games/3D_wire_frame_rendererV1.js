@@ -1,7 +1,6 @@
 /*
 @title: 3d_wire_frame_renderer
 @tags: ['simulation']
-@img: ""
 @addedOn: 2023-02-12
 @author: Patcybermind
 */

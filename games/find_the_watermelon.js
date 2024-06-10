@@ -1,7 +1,6 @@
 /*
 @title: Find the Watermelon
 @tags: []
-@img: ""
 @addedOn: 2023-10-05
 @author: Mohamad
 

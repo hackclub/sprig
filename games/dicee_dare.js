@@ -2,7 +2,6 @@
 @title: dicee_dare
 @author: Harsh Kumar
 @tags: ['']
-@img: ""
 @addedOn: 2024-01-15
 */
 const player = "p";

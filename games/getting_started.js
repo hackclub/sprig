@@ -1,7 +1,6 @@
 /*
 @title: getting_started
 @tags: ['beginner', 'tutorial']
-@img: ""
 @addedOn: 2022-07-26
 @author: leo, edits: samliu, belle, kara
 

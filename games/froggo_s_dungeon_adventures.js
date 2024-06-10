@@ -1,6 +1,5 @@
 /*
 @tags: ['dungeon']
-@img: ""
 @addedOn: 2023-11-06
 @title: Froggo's Dunegon Adventures
 @author: amuseee (slack: @vik/vikshar rajesh)

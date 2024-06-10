@@ -1,7 +1,6 @@
 /*
 @title: pyre
 @tags: ['strategy']
-@img: pyre
 @addedOn: 2022-07-18
 @author: ced
 

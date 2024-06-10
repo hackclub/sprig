@@ -5,7 +5,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: 2Psplashflame
 @author: Josh Deva
 @tags: []
-@img: ""
 @addedOn: 2024-04-19
 */
 

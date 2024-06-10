@@ -1,7 +1,6 @@
 /*
 @title: Monty Hall
 @tags: ['beginner', 'simulation']
-@img: ""
 @addedOn: 2022-11-06
 @author: Leonard (Omay)
 

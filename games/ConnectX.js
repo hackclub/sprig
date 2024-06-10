@@ -2,7 +2,6 @@
 @title: ConnectX
 @author: Siddh Patel
 @tags: []
-@img: ""
 @addedOn: 2024-02-03
 */
 

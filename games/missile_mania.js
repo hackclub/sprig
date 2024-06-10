@@ -2,7 +2,6 @@
 
 @title: Missile Mania
 @tags: ['endless']
-@img: ""
 @addedOn: 2023-01-01
 @author: Nisarga (https://github.com/nisarga-developer)
 

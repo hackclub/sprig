@@ -1,7 +1,6 @@
 /*
 @title: Gravity Box
 @tags: []
-@img: ""
 @addedOn: 2023-10-18
 @author: Josias Aurel
 */

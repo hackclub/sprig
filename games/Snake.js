@@ -1,7 +1,6 @@
 /*
 @title: Snake
 @tags: ['endless']
-@img: ""
 @addedOn: 2022-11-10
 @author: Boyne
 */

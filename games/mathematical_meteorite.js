@@ -1,7 +1,6 @@
 /*
 @title: mathematical_meteorite
 @tags: ['thematic-puzzle']
-@img: ""
 @addedOn: 2023-02-23
 @author: Arash
 

@@ -1,7 +1,6 @@
 /*
 @title: Super Efficient Bunny
 @tags: ['energy-control']
-@img: ""
 @addedOn: 2023-01-31
 @author: Mihir Surlaker (Mihirsur007)
 */

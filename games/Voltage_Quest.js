@@ -5,7 +5,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Voltage_Quest
 @author: Jase
 @tags: ['puzzle']
-@img: ""
 @addedOn: 2024-03-29
 */
 

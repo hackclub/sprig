@@ -1,5 +1,4 @@
 /*
-@img: ""
 @addedOn: 2023-01-10
 @title: untitled taiko game
 @tags: ['advanced', 'music']
