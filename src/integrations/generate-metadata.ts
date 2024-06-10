@@ -9,6 +9,7 @@
  */
 import type { AstroIntegration } from "astro";
 import fs from "fs";
+import { generateImageJson } from "./thumbnail";
 
 /**
  * An object containing all of the regex expressions that can be used
@@ -77,6 +78,9 @@ const setup = () => {
 					img: img[1] == '""' ? "" : img[1],
 					addedOn: addedOn[1],
 				};
+
+				// generate game image json data
+				generateImageJson(metaEntry.filename);
 
 				metadata.push(metaEntry);
 				console.log(" OK!");
