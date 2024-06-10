@@ -1,7 +1,6 @@
 /*
 @title: Space Invasion
 @tags: ['endless']
-@img: ""
 @addedOn: 2022-10-18
 @author: Agent-Shu
 */

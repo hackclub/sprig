@@ -1,6 +1,6 @@
 /*
 @title: 3d_wire_frame_renderer
-@author: Patcybermind, optimised by The456gamer
+@author: Patcybermind
 */
 /* HOW TO USE :
   w = forward

@@ -1,7 +1,6 @@
 /*
 @title: bullet-dodge
 @tags: ['dodge']
-@img: bullet_dodge
 @addedOn: 2023-01-13
 @author: vishram1123
 

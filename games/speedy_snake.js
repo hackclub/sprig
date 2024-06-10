@@ -1,7 +1,6 @@
 /*
 @title: speedy_snake
 @tags: ['endless']
-@img: ""
 @addedOn: 2022-11-11
 @author: ItsAStarryKnight
 */

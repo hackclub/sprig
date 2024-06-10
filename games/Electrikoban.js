@@ -1,7 +1,6 @@
 /*
 @title: Electrikoban
 @tags: ['strategy']
-@img: ""
 @addedOn: 2022-11-16
 @author: algov
 */

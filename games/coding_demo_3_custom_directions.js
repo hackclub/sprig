@@ -1,7 +1,6 @@
 /*
 @title: Coding Demo 3: Custom Directional Solids
 @tags: ['demo', 'hackable', 'beginner']
-@img: ""
 @addedOn: 2022-10-20
 @author: Leonard (Omay)
 Go to line 120 for the important code of this demo.

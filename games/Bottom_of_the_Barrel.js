@@ -1,7 +1,6 @@
 /*
 @title: Bottom_of_the_Barrel
 @tags: ['advanced', 'strategy']
-@img: ""
 @addedOn: 2022-12-01
 @author: Ozfolo
 */

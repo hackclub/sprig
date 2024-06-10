@@ -3,7 +3,6 @@
 @title:  Do Not Consume Empty Bowls
 @author: se1yu
 @tags: ['']
-@img: ""
 @addedOn: 2023-12-19
 */
 

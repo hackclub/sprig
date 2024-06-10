@@ -2,7 +2,6 @@
 @title: marble-tilt
 @author: @jdogcoder (Jasper Mayone)
 @tags: ['puzzle']
-@img: ""
 @addedOn: 2024-02-06
 */
 

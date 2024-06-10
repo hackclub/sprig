@@ -1,7 +1,6 @@
 /*
 @title: Box Jump
 @tags: ['puzzle-score']
-@img: ""
 @addedOn: 2022-12-19
 @author: Elijah Schneider 
 

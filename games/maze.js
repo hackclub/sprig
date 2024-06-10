@@ -1,7 +1,6 @@
 /*
 @title: maze_game
 @tags: ['beginner', 'hackable']
-@img: ""
 @addedOn: 2022-07-15
 @author: leo mcelroy
 

@@ -1,7 +1,6 @@
 /* 
 @title: Meteorshower
 @tags: ['strategy']
-@img: ""
 @addedOn: 2022-11-22
 @author: Mate P.
 */
