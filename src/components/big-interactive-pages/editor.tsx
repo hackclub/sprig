@@ -177,7 +177,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	const [sessionId] = useState(nanoid());
 
 	useEffect(() => {
-		console.log('New session started with ID:', sessionId);
 		const channel = new BroadcastChannel('session_channel');
 		channel.onmessage = (event) => {
 			if (event.data.type === 'SESSION_UPDATE' && event.data.sessionId !== sessionId) {

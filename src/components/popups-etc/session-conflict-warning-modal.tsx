@@ -14,7 +14,6 @@ export default function SessionConflictWarningModal({ sessionId, gameId }: Sessi
 
 	const handleOverwrite = () => {
 		localStorage.setItem(LAST_SAVED_SESSION_ID, JSON.stringify({ sessionId, gameId: gameId }));
-		console.log(localStorage.getItem(LAST_SAVED_SESSION_ID));
 		showSaveConflictModal.value = false;
 		continueSaving.value = true;
 	};	
