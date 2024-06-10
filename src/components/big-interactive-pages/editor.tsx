@@ -14,7 +14,7 @@ import {
 	useSignal,
 	useSignalEffect,
 } from "@preact/signals";
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef, useState} from "preact/hooks";
 import { codeMirror, errorLog, muted, PersistenceState } from "../../lib/state";
 import EditorModal from "../popups-etc/editor-modal";
 import { runGame } from "../../lib/engine";
@@ -27,7 +27,8 @@ import { defaultExampleCode } from "../../lib/examples";
 import MigrateToast from "../popups-etc/migrate-toast";
 import { nanoid } from "nanoid";
 import TutorialWarningModal from "../popups-etc/tutorial-warning";
-import { editSessionLength, switchTheme, ThemeType } from "../../lib/state";
+import { editSessionLength, switchTheme, ThemeType, continueSaving, LAST_SAVED_SESSION_ID, showSaveConflictModal } from '../../lib/state'
+import SessionConflictWarningModal from '../popups-etc/session-conflict-warning-modal'
 import {versionState} from "../../lib/upload";
 import VersionWarningModal from "../popups-etc/version-warning";
 
@@ -64,46 +65,72 @@ const foldAllTemplateLiterals = () => {
 	);
 };
 
+const shouldShowConflict = (persistenceState: Signal<PersistenceState>, sessionId: string) => {
+	const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null;
+	if (!game) return false;
+
+	const lastSavedSessionInfo = localStorage.getItem(LAST_SAVED_SESSION_ID);
+	const lastSavedData = lastSavedSessionInfo ? JSON.parse(lastSavedSessionInfo) : null;
+	const lastSavedSessionId = lastSavedData ? lastSavedData.sessionId : null;
+	const lastSavedGameId = lastSavedData ? lastSavedData.gameId : null;
+
+	return lastSavedGameId === game.id && lastSavedSessionId !== sessionId;
+};
+
+const showConflict = () => {
+	showSaveConflictModal.value = true;
+	continueSaving.value = false;
+};
+
+const performSave = async (persistenceState: Signal<PersistenceState>, code: string, game: any, sessionId: string) => {
+	try {
+		const res = await fetch("/api/games/save", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				code,
+				gameId: game.id,
+				tutorialName: game.tutorialName,
+				tutorialIndex: game.tutorialIndex,
+			}),
+		});
+
+		if (!res.ok) throw new Error(`Error saving game: ${await res.text()}`);
+
+		localStorage.setItem(LAST_SAVED_SESSION_ID, JSON.stringify({ sessionId: sessionId, gameId: game.id }));
+		console.log('Game saved successfully.');
+		return true;
+	} catch (error) {
+		console.error(error);
+		persistenceState.value = {
+			...persistenceState.value,
+			cloudSaveState: "ERROR",
+		} as any;
+		return false;
+	}
+};
+
 let lastSavePromise = Promise.resolve();
 let saveQueueSize = 0;
+
 export const saveGame = debounce(
 	800,
-	(persistenceState: Signal<PersistenceState>, code: string) => {
+	(persistenceState: Signal<PersistenceState>, code: string, sessionId: string) => {
 		const doSave = async () => {
 			const attemptSaveGame = async () => {
-				try {
-					const game =
-						persistenceState.value.kind === "PERSISTED" &&
-						persistenceState.value.game !== "LOADING"
-							? persistenceState.value.game
-							: null;
-					const res = await fetch("/api/games/save", {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({
-							code,
-							gameId: game?.id,
-							tutorialName: game?.tutorialName,
-							tutorialIndex: game?.tutorialIndex,
-						}),
-					});
-					if (!res.ok)
-						throw new Error(
-							`Error saving game: ${await res.text()}`
-						);
-					return true;
-				} catch (error) {
-					console.error(error);
+				const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null;
 
-					persistenceState.value = {
-						...persistenceState.value,
-						cloudSaveState: "ERROR",
-					} as any;
+				if (!game) return false;
+
+				if (shouldShowConflict(persistenceState, sessionId)) {
+					showConflict();
 					return false;
 				}
+
+				return await performSave(persistenceState, code, game, sessionId);
 			};
 
-			while (!(await attemptSaveGame())) {
+			while (continueSaving.value && !(await attemptSaveGame())) {
 				await new Promise((resolve) => setTimeout(resolve, 2000)); // retry saving the game every 2 seconds
 			}
 
@@ -124,7 +151,7 @@ export const saveGame = debounce(
 	}
 );
 
-const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
+const exitTutorial = (persistenceState: Signal<PersistenceState>, sessionId: string) => {
 	if (persistenceState.value.kind === "PERSISTED") {
 		delete persistenceState.value.tutorial;
 		if (typeof persistenceState.value.game !== "string") {
@@ -135,7 +162,7 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>) => {
 			stale: true,
 			cloudSaveState: "SAVING",
 		};
-		saveGame(persistenceState, codeMirror.value!.state.doc.toString());
+        saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
 	} else {
 		if (persistenceState.value.kind == "SHARED")
 			delete persistenceState.value.tutorial;
@@ -146,6 +173,37 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	const outputArea = useRef<HTMLDivElement>(null);
 	const screenContainer = useRef<HTMLDivElement>(null);
 	const screenControls = useRef<HTMLDivElement>(null);
+
+	const [sessionId] = useState(nanoid());
+
+	useEffect(() => {
+		const channel = new BroadcastChannel('session_channel');
+		channel.onmessage = (event) => {
+			if (event.data.type === 'SESSION_UPDATE' && event.data.sessionId !== sessionId) {
+				console.log('New session detected:', event.data.sessionId);
+			}
+		};
+		channel.postMessage({ type: 'SESSION_UPDATE', sessionId });
+		return () => channel.close();
+	}, [sessionId]);
+
+	useEffect(() => {
+
+		const handleUnload = () => {
+			localStorage.removeItem(LAST_SAVED_SESSION_ID);
+			console.log('Session ID removed from localStorage');
+		};
+
+		window.addEventListener('unload', handleUnload);
+
+		return () => {
+			window.removeEventListener('unload', handleUnload);
+		};
+	}, []);
+
+	const handleSave = (code: string) => {
+		saveGame(persistenceState, code, sessionId);
+	};
 
 	// Resize state storage
 	const outputAreaSize = useSignal(
@@ -352,19 +410,28 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	// Disable native save shortcut
 	useEffect(() => {
 		const handler = (event: KeyboardEvent) => {
-			if (event.key === "s" && (event.metaKey || event.ctrlKey))
+			if (event.key === "s" && (event.metaKey || event.ctrlKey)) { 
 				event.preventDefault();
+				if (!continueSaving.value) { 
+					continueSaving.value = true;
+					saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
+				}
+			}
 		};
 		window.addEventListener("keydown", handler);
 		return () => window.removeEventListener("keydown", handler);
-	}, []);
+	}, [continueSaving.value]);
 
 	let initialCode = "";
+	let gameId = '';
 	if (
 		persistenceState.value.kind === "PERSISTED" &&
 		persistenceState.value.game !== "LOADING"
-	)
+	){
 		initialCode = persistenceState.value.game.code;
+		gameId = persistenceState.value.game?.id ?? '';
+
+	}
 	else if (persistenceState.value.kind === "SHARED")
 		initialCode = persistenceState.value.code;
 	else if (persistenceState.value.kind === "IN_MEMORY")
@@ -413,10 +480,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 									...persistenceState.value,
 									cloudSaveState: "SAVING",
 								};
-								saveGame(
-									persistenceState,
-									codeMirror.value!.state.doc.toString()
-								);
+								handleSave(codeMirror.value!.state.doc.toString());
 							}
 
 							if (persistenceState.value.kind === "IN_MEMORY") {
@@ -602,11 +666,12 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 
 			{showingTutorialWarning.value && (
 				<TutorialWarningModal
-					exitTutorial={() => exitTutorial(persistenceState)}
+					exitTutorial={() => exitTutorial(persistenceState, sessionId)}
 					showingTutorialWarning={showingTutorialWarning}
 				/>
 			)}
 			<MigrateToast persistenceState={persistenceState} />
+			<SessionConflictWarningModal sessionId={sessionId} gameId={gameId} />
 		</div>
 	);
 }
