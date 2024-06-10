@@ -1,4 +1,12 @@
-  const player = "p"
+/*
+@title: Help Bob Go Home 
+@author: Awesomeabfab
+@tags: []
+@img: ""
+@addedOn: 2024-06-10
+*/
+
+const player = "p"
   const wall = "w"
   const goal = "g"
 
