@@ -1,0 +1,30 @@
+/*
+    Pulled from CodeMirror's default syntax highlighting theme:
+
+    https://github.com/codemirror/language/blob/3c9ad8ffee32e158512d252fee9457a0e6469e2e/src/highlight.ts#L199
+*/
+
+.code-highlight .token.string {
+	color: #a11;
+}
+
+.code-highlight .token.keyword {
+	color: #708;
+}
+
+.code-highlight .token.number {
+	color: #164;
+}
+
+.code-highlight .token.comment {
+	color: #940;
+}
+
+.code-highlight .token.constant,
+.code-highlight .token.function {
+	color: #00f;
+}
+
+.code-highlight .token.class-name {
+	color: #167;
+}

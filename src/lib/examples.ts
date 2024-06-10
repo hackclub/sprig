@@ -3,7 +3,6 @@ export const defaultExampleCode = `
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-
 # Game Metadata for Gallery (optional)
 Below you will find the necessary metadata that you need to fill in order for the game to be published to the sprig gallery.
 ## Fill Instructions: https://sprig.hackclub.com/get (Step 0)

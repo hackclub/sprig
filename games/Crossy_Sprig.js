@@ -3,7 +3,6 @@
 @title: Crossy_Sprig
 @author: hatanuk
 @tags: ['endless']
-@img: ""
 @addedOn: 2024-03-21
 
 j

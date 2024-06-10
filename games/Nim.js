@@ -1,7 +1,6 @@
 /*
 @title: Nim
 @tags: ['strategy', 'classic']
-@img: ""
 @addedOn: 2022-11-15
 @author: Leonard (Omay)
 */

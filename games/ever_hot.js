@@ -1,7 +1,6 @@
 /*
 @title: ever_hot
 @tags: ['endless']
-@img: ""
 @addedOn: 2022-11-11
 @author: Leo H
 */

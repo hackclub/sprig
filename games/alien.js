@@ -1,7 +1,6 @@
 /*
 @title: alien
 @tags: ['endless']
-@img: ""
 @addedOn: 2022-09-06
 @author: anshimathur0325
 Move the player with "a" and "d" for left and right

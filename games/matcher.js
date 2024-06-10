@@ -1,7 +1,6 @@
 /*
 @title: matcher
 @tags: ['logic']
-@img: ""
 @addedOn: 2022-08-12
 @author: Brian
 

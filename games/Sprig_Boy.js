@@ -1,7 +1,6 @@
 /*
 @title: SprigBoy
 @tags: []
-@img: ""
 @addedOn: 2023-06-19
 @author: NA
 */

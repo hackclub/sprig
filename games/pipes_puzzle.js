@@ -1,7 +1,6 @@
 /*
 @title: Pipes Puzzle
 @tags: ['logic']
-@img: pipes_puzzle
 @addedOn: 2022-10-14
 @author: RayhanADev
 */

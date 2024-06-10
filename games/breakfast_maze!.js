@@ -3,7 +3,6 @@
 @title: breakfast_maze!
 @author: Alex
 @tags: ['sokoban-style']
-@img: breakfast_maze!
 @addedOn: 2023-08-01
 */
 

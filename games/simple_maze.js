@@ -1,7 +1,6 @@
 /*
 @title: simple maze
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2022-09-13
 @author: Itamar Davidyan
 */

@@ -5,7 +5,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: spiano
 @author: thezebix
 @tags: ["music"]
-@img: ""
 @addedOn: 2024-04-19
 */
 

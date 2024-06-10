@@ -1,7 +1,6 @@
 /*
 @title: killer_training
 @tags: ['timer-puzzle']
-@img: ""
 @addedOn: 2023-09-16
 @author: jakjakob
 

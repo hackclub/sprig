@@ -1,7 +1,6 @@
 /*
 @title: spongebob_squaremaze
 @tags: ['maze']
-@img: ""
 @addedOn: 2023-01-26
 @author: Jainam_Jain
 

@@ -1,7 +1,6 @@
 /*
 @title: the journey of the box[a sokoban saga] 
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2023-04-15
 @author: Ethan Francis
 //INSTRUCTIONS

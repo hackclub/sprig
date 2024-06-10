@@ -2,7 +2,6 @@
 @title: Fruit_Catcher 
 @author: Navneet Saxena
 @tags: ['catch']
-@img: ""
 @addedOn: 2024-01-16
 */
 

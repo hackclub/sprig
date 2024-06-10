@@ -2,11 +2,12 @@ import useLocalStorage from "../../lib/hooks/use-local-storage";
 import { codeMirror, errorLog, PersistenceState } from "../../lib/state";
 import Button from "../design-system/button";
 import styles from "./chat-component.module.css";
+import "./chat-syntax.css";
 import { Signal, useSignal } from "@preact/signals";
 import { RiChatDeleteLine } from "react-icons/ri";
 import markdown from "@wcj/markdown-to-html";
 import { nanoid } from "nanoid";
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import { sha256Hash } from "../../lib/codemirror/util";
 
 interface ChatProps {
@@ -120,9 +121,30 @@ Answer the questions that follow based on this unless new code is provided.`;
 		} catch (err) {
 			loading.value = false;
 			// info.value = "An error occurred...";
-			info.value = err.message;
+			info.value = (err as Error).message;
 		}
 	};
+
+	async function endSession() {
+		const response = await fetch(`${import.meta.env.PUBLIC_SPRIG_LLM_API}/end-session`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				session_id: chatSession
+			})
+		});
+		const result = await response.json();
+
+		if (!result.success) throw new Error("Failed to end session");
+	}
+
+	useEffect(() => {
+		window.addEventListener("beforeunload", async () => {
+			await endSession();
+		});
+	}, []);
 
 	return (
 		<div class={styles.chatUI}>
