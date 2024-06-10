@@ -1,7 +1,6 @@
 /*
 @title: Desine Mini
 @tags: ['advanced']
-@img: ""
 @addedOn: 2023-11-18
 @author: Guy Sandler
 full, more playable, unity version: https://webeaftos.olive2.repl.co/

@@ -1,7 +1,6 @@
 /*
 @title: color_patterns
 @tags: ['logic']
-@img: ""
 @addedOn: 2022-07-14
 @author: brian
 

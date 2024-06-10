@@ -3,7 +3,6 @@
 @title: Watermellen_man_and_bluebarry_man
 @author: Joel Robbins
 @tags: []
-@img: ""
 @addedOn: 2023-06-05
 */
 

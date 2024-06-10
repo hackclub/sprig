@@ -1,7 +1,6 @@
 /*
 @title: Virtual_Machine
 @tags: ['strategy']
-@img: ""
 @addedOn: 2022-09-08
 @author: N_Rizwan
 */

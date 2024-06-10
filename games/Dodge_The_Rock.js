@@ -1,7 +1,6 @@
 /*
 @title: Dodge_The_Rock
 @tags: []
-@img: ""
 @addedOn: 2023-03-09
 @author: dutamot
 */

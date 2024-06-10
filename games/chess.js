@@ -1,7 +1,6 @@
 /*
 @title: Chess
 @tags: ['multiplayer', 'classic']
-@img: ""
 @addedOn: 2022-10-31
 @author: Thomas Stubblefield
 

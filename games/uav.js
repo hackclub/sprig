@@ -2,7 +2,6 @@
 @title: uav
 @author: malted
 @tags: []
-@img: ""
 @addedOn: 2024-03-04
 */
 const player = "p"

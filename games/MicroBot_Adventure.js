@@ -1,6 +1,5 @@
 /*
 @title: MicroBot_Adventure
-@img: ""
 @tags: ['puzzle']
 @addedOn: 2024-01-24
 @author: Kartikey Singh Chauhan

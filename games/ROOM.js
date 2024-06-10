@@ -3,7 +3,6 @@
 @title: ROOM
 @author: davnotdev
 @tags: ['advanced']
-@img: ""
 @addedOn: 2023-06-27
 */
 

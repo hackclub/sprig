@@ -1,7 +1,6 @@
 /*
 @title: Zooter
 @tags: ['dodge']
-@img: ""
 @addedOn: 2022-10-21
 @author: PerrinPerson
 */
