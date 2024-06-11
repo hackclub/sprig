@@ -1,5 +1,7 @@
 /*
-@title: 3d_wire_frame_renderer
+@title: 3D Wireframe Renderer (v2)
+@tags: ['simulation']
+@addedOn: 2023-06-11
 @author: Patcybermind
 */
 /* HOW TO USE :
