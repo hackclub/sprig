@@ -4,15 +4,20 @@ import { firestore, getGame, getSession } from '../../lib/game-saving/account'
 import Editor from '../../components/big-interactive-pages/editor'
 import StandardHead from '../../components/standard-head.astro'
 import { signal } from '@preact/signals'
-import type { PersistenceState } from '../../lib/state'
+import { RoomState, RoomStatus, type PersistenceState } from '../../lib/state'
 import MobileUnsupported from '../../components/popups-etc/mobile-unsupported'
 import { mobileUserAgent } from '../../lib/utils/mobile'
+import { isNewSaveStrat } from '../../lib/state'
+
+isNewSaveStrat.value = false
 
 const session = await getSession(Astro.cookies)
 if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 
+let checkRoom = false;
 const game = await getGame(Astro.params.id!)
-if (!game || game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
+if (!game) return Astro.redirect('/404', 302)
+if(game.ownerId !== session.user.id) checkRoom = true;
 
 const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
 
@@ -64,6 +69,17 @@ if (session.session.full) {
 }
 
 const persistenceState = signal<PersistenceState>(_persistenceState)
+	let _roomState = {
+	status: checkRoom ? RoomStatus.CONNECTED : RoomStatus.DISCONNECTED,
+	roomId: game.id,
+	password: "",
+	participants: [],
+}
+if ((persistenceState.value.kind === "PERSISTED" && persistenceState.value.game !== "LOADING") &&
+		((persistenceState.value.session?.user.id == persistenceState.value.game.ownerId) ||
+		(_roomState.status == RoomStatus.CONNECTING && _roomState.roomId == ""))) 
+		_roomState = {..._roomState, roomId: persistenceState.value.game.id} 
+const roomState = signal<RoomState>(_roomState)
 const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 ---
 
@@ -75,6 +91,7 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 		<Editor
 			client:load
 			persistenceState={persistenceState}
+			roomState={roomState}
 			cookies={{
 				outputAreaSize: Astro.cookies.get('outputAreaSize').number(),
 				hideHelp: Astro.cookies.get('hideHelp').boolean()
