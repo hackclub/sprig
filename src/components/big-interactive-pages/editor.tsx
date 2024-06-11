@@ -160,7 +160,7 @@ export async function saveGame2(persistenceState: Signal<PersistenceState>) {
 				persistenceState.value.game !== "LOADING"
 					? persistenceState.value.game
 					: null;
-			const res = await fetch("/api/games/save", {
+			const res = await fetch("/api/games/start-saving", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
