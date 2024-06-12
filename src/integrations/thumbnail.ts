@@ -4,6 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
+import metrics from '../../metrics'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename);
@@ -134,7 +135,14 @@ export const generateImageJson = async (name: string) => {
 
 	// write/overwrite image json to public folder
 	let imgFilePath = path.resolve(__dirname, `../../public/${name}.json`);
-	fs.writeFileSync(imgFilePath, JSON.stringify(thumbnail), { encoding: "utf-8" });
+	fs.writeFile(imgFilePath, JSON.stringify(thumbnail), (err) => {
+		if (err) {
+			console.log("got error", err)
+			metrics.increment("errors.write_thumbnail_json");
+			return;
+		}
+	})
+	// fs.writeFileSync(imgFilePath, JSON.stringify(thumbnail), { encoding: "utf-8" });
 }
 
 function loadImageBase64FromDisk(name: string) {
