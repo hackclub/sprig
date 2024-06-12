@@ -63,6 +63,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		if(yProviderAwarenessSignal.value === undefined) return;
 		yProviderAwarenessSignal.value.on("change", () => {
 			yProviderAwarenessSignal.value?.getStates().forEach((state) => {
+				console.log(state)
 				try{
 					if(props.persistenceState === undefined) return;
 					if(state.saved == "saved"){
@@ -144,6 +145,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 					let timer: NodeJS.Timeout;
 					const checkUpdated = () => {
 						if (initialUpdate === false) {
+							console.log("Fjsakfjsa")
 							clearTimeout(timer);
 							resolve();
 						} else {
@@ -193,11 +195,9 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				});
 				if(props.roomState)
 					props.roomState.value.participants = participants;
-
 				let persistenceState = props.persistenceState.peek();
 				if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING"){
 					if(persistenceState.game.ownerId === persistenceState.session?.user.id){
-						console.log("SFahfsahf")
 						saveGame2(props.persistenceState);
 					}
 				}
