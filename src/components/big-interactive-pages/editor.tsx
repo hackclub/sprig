@@ -526,9 +526,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 									...persistenceState.value,
 									cloudSaveState: "SAVING",
 								};
-								if(isNewSaveStrat.value)
-									saveGame2(persistenceState);
-								else
+								if(!isNewSaveStrat.value)
 									saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
 							}
 

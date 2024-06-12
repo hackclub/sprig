@@ -57,6 +57,9 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		apiKey: apiKey,
 	};
 
+	console.log(data)
+	console.log(apiUrl)
+	console.log(apiKey)
 	const response = await fetch(`${apiUrl}/listen`, {
 		method: "POST",
 		headers: {
