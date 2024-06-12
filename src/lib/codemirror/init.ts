@@ -105,6 +105,7 @@ export const initialExtensions = (onUpdate: any, onRunShortcut: any, yCollab?: a
 	javascript(),
 	EditorView.updateListener.of(onUpdate),
 	widgets,
+	yCollab ? yCollab : []
 ]
 )
 

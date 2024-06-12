@@ -502,7 +502,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 
 	return (
 		<div class={styles.page}>
-			<Navbar persistenceState={persistenceState}   />
+			<Navbar persistenceState={persistenceState} roomState={roomState}/>
 
 			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>
