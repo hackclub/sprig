@@ -176,4 +176,4 @@ export const switchTheme = (themeType: ThemeType) => {
 		copyContainer.style.color = themeValue?.copyContainerText ?? '';
 	}
 }
-export const isNewSaveStrat = signal<boolean>(true)
+export const isNewSaveStrat = signal<boolean>(false)
