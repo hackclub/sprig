@@ -1,7 +1,7 @@
 {
 	"headers": [
 		{
-			"source": "/(.*)",
+			"source": "/(.*\\.json)",
 			"headers": [
 				{
 					"key": "Cache-Control",
