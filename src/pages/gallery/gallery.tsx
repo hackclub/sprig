@@ -13,6 +13,8 @@ enum SortOrder {
 	DESCENDING
 }
 type GalleryGameMetadata = GameMetadata & { show: boolean };
+type GameImageUri = string;
+type GameImages =  Record<string, GameImageUri>;
 type Filter = {
 	query: string,
 	tags: string[],
@@ -20,6 +22,7 @@ type Filter = {
 };
 export default function Gallery({ games, tags }: { games: GameMetadata[], tags: string[] }) {
 	const [gamesState, setGamesState] = useState<GalleryGameMetadata[]>([]);
+	const [gameImages, setGameImages] = useState<GameImages>({});
 	const [filter, setFilter] = useState<Filter>({ query: "", sort: SortOrder.TUTORIALS_AND_CHRONOLOGICAL, tags: [] })
 	const [tagCount, setTagCount] = useState<{ [tags: string]: number }>({})
 
@@ -111,7 +114,18 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 			) as HTMLImageElement;
 			if (["loading", "true"].includes(img.dataset.loaded!)) return;
 			img.dataset.loaded = "loading";
-			img.src = await loadThumbnailUrl(gameCard.filename);
+			if (gameImages[gameCard.filename]) {
+				img.src = gameImages[gameCard.filename]!;
+			} else {
+				const thumbnail = await loadThumbnailUrl(gameCard.filename);
+				img.src = thumbnail;
+				setGameImages(previousImages => {
+					const newGameImages = { ...previousImages };
+					newGameImages[gameCard.filename] = thumbnail;
+					return newGameImages;
+				}
+				);
+			}
 			img.dataset.loaded = "true";
 		};
 
