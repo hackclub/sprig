@@ -33,6 +33,7 @@ import { VscLoading } from "react-icons/vsc";
 import { defaultExampleCode } from "../lib/examples";
 import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
+import { foldAllTemplateLiterals } from "./big-interactive-pages/editor";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -578,6 +579,15 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							>
 								{" "}
 								Prettify code{" "}
+							</a>
+						</li>
+						<li>
+							<a href={"javascript:void"}
+							role="button"
+							onClick={
+								foldAllTemplateLiterals
+							}> 
+								Collapse all bitmaps
 							</a>
 						</li>
 					</ul>
