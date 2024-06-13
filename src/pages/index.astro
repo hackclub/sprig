@@ -37,7 +37,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 async function getGameSourceCode() {
-	const response = await fetch("http://localhost:3000/api/gallery?new");
+	const response = await fetch("http://sprig.hackclub.com/api/gallery?new");
 	const gameList = await response.json();
 	const randomIndex = Math.floor(Math.random() * gameList.length);
 	const selectedGame = gameList[randomIndex];
@@ -371,14 +371,10 @@ const gamesource = await getGameSourceCode();
 					device: Object3D | null
 					hoveredButton: Object3D | null
 					pressedButton: Object3D | null
-					hoveredScreen: Object3D | boolean
-					pressedScreen: Object3D | boolean
 				} = {
 					device: null,
 					hoveredButton: null,
 					pressedButton: null,
-					hoveredScreen: false,
-					pressedScreen: false,
 				}
 
 				const controls = new OrbitControls(
@@ -442,7 +438,6 @@ const gamesource = await getGameSourceCode();
 					const intersects = raycaster.intersectObjects(scene.children, true);
 					raycasted.device = null;
 					raycasted.hoveredButton = null;
-					raycasted.hoveredScreen = true;
 
 					for (const intersect of intersects) {
 						const intersectObject = intersect.object;
@@ -456,12 +451,12 @@ const gamesource = await getGameSourceCode();
 						}
 
 						if (intersectObject.name === 'Screen') {
-							raycasted.hoveredScreen = true;
+							// future work on redirecting to game link for clicking on the screen
 						}
 					}
 
 					document.documentElement.style.cursor =
-						raycasted.hoveredButton || raycasted.pressedButton || raycasted.hoveredScreen
+						raycasted.hoveredButton || raycasted.pressedButton
 							? 'pointer'
 							: controls.isDragging
 							? 'grabbing'
@@ -511,11 +506,6 @@ const gamesource = await getGameSourceCode();
 
 						const input = raycasted.pressedButton.name.toLowerCase() as InputKey
 						if (VALID_INPUTS.includes(input)) game.button(input)
-					} else if(raycasted.hoveredScreen)
-					{
-						console.log("Screen clicked");
-						raycasted.hoveredScreen = true;
-						event.preventDefault()
 					}
 				}
 				const pointerup = () => {
@@ -523,10 +513,6 @@ const gamesource = await getGameSourceCode();
 						(raycasted.pressedButton as any).position.y += buttonMovement
 						raycasted.pressedButton = null
 					}
-					if (raycasted.hoveredScreen) {
-						raycasted.hoveredScreen = false;
-					}
-
 				}
 
 				document.documentElement.addEventListener('pointermove', pointermove)
