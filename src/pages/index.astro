@@ -10,6 +10,7 @@ import fs from "fs";
 import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import { homepageExampleCode } from '../lib/examples'
 
 const remainingConsoles = await getConsolesRemaining()
 
@@ -37,21 +38,32 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 async function getGameSourceCode() {
-	const response = await fetch("http://sprig.hackclub.com/api/gallery?new");
-	const gameList = await response.json();
-	const randomIndex = Math.floor(Math.random() * gameList.length);
-	const selectedGame = gameList[randomIndex];
-	let gameTitle = selectedGame.filename;
-	gameTitle = gameTitle.replace(/\s/g, "");
-	const gameContentPath = path.resolve(
-		__dirname,
-		`../../games/${gameTitle}.js`
-	);
+    let gameList = [];
+    try {
+        const response = await fetch("http://sprig.hackclub.com/api/gallery?new");
+        gameList = await response.json();
+    } catch (error) {
+        console.error("Failed to fetch or parse game list:", error);
+        return homepageExampleCode;
+    }
 
-	console.log(gameContentPath);
-	let gameSourceCode = fs.readFileSync(gameContentPath, "utf-8").toString();
+    if (gameList.length === 0) {
+        console.log("No games available in the gallery.");
+        return homepageExampleCode;
+    }
 
-	return gameSourceCode;
+    const randomIndex = Math.floor(Math.random() * gameList.length);
+    const selectedGame = gameList[randomIndex];
+    let gameTitle = selectedGame.filename.replace(/\s/g, "");
+    const gameContentPath = path.resolve(__dirname, `../../games/${gameTitle}.js`);
+
+    try {
+        console.log("Loading game from:", gameContentPath);
+        return fs.readFileSync(gameContentPath, "utf-8");
+    } catch (fileError) {
+        console.error("Failed to read game file:", fileError);
+        return homepageExampleCode;
+    }
 }
 
 const gamesource = await getGameSourceCode();
