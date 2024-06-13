@@ -623,6 +623,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 								persistenceState.value.tutorial
 							) && (
 								<Help
+									sessionId={sessionId}
 									defaultHelpAreaHeight={
 										defaultHelpAreaHeight
 									}
@@ -636,6 +637,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 								persistenceState.value.kind === "PERSISTED") &&
 								persistenceState.value.tutorial && (
 									<Help
+										sessionId={sessionId}
 										defaultHelpAreaHeight={
 											defaultHelpAreaHeight
 										}
