@@ -137,12 +137,9 @@ export const generateImageJson = async (name: string) => {
 	let imgFilePath = path.resolve(__dirname, `../../public/${name}.json`);
 	fs.writeFile(imgFilePath, JSON.stringify(thumbnail), (err) => {
 		if (err) {
-			console.log("got error", err)
-			metrics.increment("errors.write_thumbnail_json");
-			return;
+			metrics.increment("errors.thumbnail_json");
 		}
-	})
-	// fs.writeFileSync(imgFilePath, JSON.stringify(thumbnail), { encoding: "utf-8" });
+	});
 }
 
 function loadImageBase64FromDisk(name: string) {
