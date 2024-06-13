@@ -7,7 +7,6 @@ Goal: push the box adjacent to the goal to score points, push the goal if necess
 @title: Snake_Boxes
 @author: Aryavrat Mishra
 @tags: ['classic']
-@img: ""
 @addedOn: 2024-01-30
 */
 

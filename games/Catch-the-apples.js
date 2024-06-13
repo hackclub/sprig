@@ -4,7 +4,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Catch the apples
 @author: Jack
 @tags: ['endless', 'catch']
-@img: ""
 @addedOn: 2024-01-13
 
 Instructions:

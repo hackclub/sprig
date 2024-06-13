@@ -15,6 +15,7 @@ interface HelpProps {
 	defaultHelpAreaHeight: number;
 	helpAreaSize: Signal<number>;
 	showingTutorialWarning?: Signal<boolean>;
+	sessionId: string
 }
 const helpHtml = compiledContent();
 
@@ -44,7 +45,8 @@ export default function Help(props: HelpProps) {
 			};
 			saveGame(
 				props.persistenceState,
-				codeMirror.value!.state.doc.toString()
+				codeMirror.value!.state.doc.toString(),
+				props.sessionId
 			);
 		} else if (props.persistenceState?.value.kind == "SHARED") {
 			props.persistenceState.value = {

@@ -1,7 +1,6 @@
 /*
 @title: black_jack
 @tags: ['classic']
-@img: black_jack
 @addedOn: 2022-12-21
 @author: xevaly
 

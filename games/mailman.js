@@ -3,7 +3,6 @@
 @title: mailman
 @author: Akko
 @tags: []
-@img: ""
 @addedOn: 2023-09-07
 */
 

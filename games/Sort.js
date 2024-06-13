@@ -1,7 +1,6 @@
 /*
 @title: Sort
 @tags: []
-@img: Sort
 @addedOn: 2022-12-26
 @author: Mohan
 */

@@ -2,7 +2,6 @@
 @title: Frog_Maze
 @author: Jeremiah Kellison
 @tags: ['puzzle']
-@img: ""
 @addedOn: 2024-02-04
 */
 /*

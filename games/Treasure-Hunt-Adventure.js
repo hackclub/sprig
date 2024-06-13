@@ -5,7 +5,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Treasure-Hunt-Adventure
 @author: Sophia E
 @tags: ["puzzle"]
-@img: ""
 @addedOn: 2024-04-05
 */
 

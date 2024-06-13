@@ -1,7 +1,6 @@
 /*
 @title: Mastermind
 @tags: ['logic', 'classic']
-@img: ""
 @addedOn: 2022-11-14
 @author: Leonard (Omay)
 

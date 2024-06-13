@@ -1,7 +1,6 @@
 /*
 @title: dual_state_machine
 @tags: ['strategy']
-@img: ""
 @addedOn: 2022-11-11
 @author: Leonard (Omay)
 

@@ -1,7 +1,6 @@
 /*
 @title: the_invisible_man
 @tags: ['puzzle-score']
-@img: ""
 @addedOn: 2022-11-14
 @author: Gárdonyi Bálint (Valentine)
 MOVEMENT: WASD

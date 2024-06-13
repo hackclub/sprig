@@ -3,7 +3,6 @@
 @title: zap
 @author: Samvid Konchada
 @tags: ['multiplayer']
-@img: ""
 @addedOn: 2023-10-21
 */
 

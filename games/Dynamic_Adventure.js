@@ -3,7 +3,6 @@
 @title: Dynamic_Adventure
 @author: Alexis Martel
 @tags: []
-@img: ""
 @addedOn: 2023-08-18
 */
 

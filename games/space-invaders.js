@@ -3,7 +3,6 @@
 /*
 @title: Space_Invaders
 @tags: ['strategy']
-@img: ""
 @addedOn: 2023-04-19
 @author: Carmel132
 

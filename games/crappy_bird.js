@@ -1,7 +1,6 @@
 /*
 @title: crappy_bird
 @tags: ['classic', 'endless']
-@img: ""
 @addedOn: 2022-07-14
 @author: ced
 */

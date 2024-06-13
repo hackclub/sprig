@@ -1,7 +1,6 @@
 /*
 @title: 3072: A 2048 Spin-Off
 @tags: ['strategy']
-@img: ""
 @addedOn: 2022-10-14
 @author: sahitid
 
