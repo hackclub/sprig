@@ -3,6 +3,7 @@ import { loadThumbnailUrl } from "../../lib/thumbnail";
 import { GameMetadata } from "../../lib/game-saving/gallery";
 import Button from "../../components/design-system/button";
 import Input from "../../components/design-system/input";
+import { signal } from "@preact/signals";
 import { IoCaretDown, IoSearch } from "react-icons/io5";
 import "./gallery.css";
 
@@ -20,9 +21,10 @@ type Filter = {
 	tags: string[],
 	sort: SortOrder
 };
+const gameImages = signal<GameImages>({});
+
 export default function Gallery({ games, tags }: { games: GameMetadata[], tags: string[] }) {
 	const [gamesState, setGamesState] = useState<GalleryGameMetadata[]>([]);
-	const [gameImages, setGameImages] = useState<GameImages>({});
 	const [filter, setFilter] = useState<Filter>({ query: "", sort: SortOrder.TUTORIALS_AND_CHRONOLOGICAL, tags: [] })
 	const [tagCount, setTagCount] = useState<{ [tags: string]: number }>({})
 
@@ -114,17 +116,14 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 			) as HTMLImageElement;
 			if (["loading", "true"].includes(img.dataset.loaded!)) return;
 			img.dataset.loaded = "loading";
-			if (gameImages[gameCard.filename]) {
-				img.src = gameImages[gameCard.filename]!;
+			if (gameImages.value[gameCard.filename]) {
+				img.src = gameImages.value[gameCard.filename]!;
 			} else {
 				const thumbnail = await loadThumbnailUrl(gameCard.filename);
 				img.src = thumbnail;
-				setGameImages(previousImages => {
-					const newGameImages = { ...previousImages };
-					newGameImages[gameCard.filename] = thumbnail;
-					return newGameImages;
-				}
-				);
+				const newGameImages = { ...gameImages.value };
+				newGameImages[gameCard.filename] = thumbnail;
+				gameImages.value = newGameImages;
 			}
 			img.dataset.loaded = "true";
 		};
