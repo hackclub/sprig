@@ -3,7 +3,6 @@ import { loadThumbnailUrl } from "../../lib/thumbnail";
 import { GameMetadata } from "../../lib/game-saving/gallery";
 import Button from "../../components/design-system/button";
 import Input from "../../components/design-system/input";
-import { signal } from "@preact/signals";
 import { IoCaretDown, IoSearch } from "react-icons/io5";
 import "./gallery.css";
 
@@ -14,14 +13,11 @@ enum SortOrder {
 	DESCENDING
 }
 type GalleryGameMetadata = GameMetadata & { show: boolean };
-type GameImageUri = string;
-type GameImages =  Record<string, GameImageUri>;
 type Filter = {
 	query: string,
 	tags: string[],
 	sort: SortOrder
-};
-const gameImages = signal<GameImages>({});
+}
 
 export default function Gallery({ games, tags }: { games: GameMetadata[], tags: string[] }) {
 	const [gamesState, setGamesState] = useState<GalleryGameMetadata[]>([]);
@@ -116,15 +112,8 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 			) as HTMLImageElement;
 			if (["loading", "true"].includes(img.dataset.loaded!)) return;
 			img.dataset.loaded = "loading";
-			if (gameImages.value[gameCard.filename]) {
-				img.src = gameImages.value[gameCard.filename]!;
-			} else {
-				const thumbnail = await loadThumbnailUrl(gameCard.filename);
-				img.src = thumbnail;
-				const newGameImages = { ...gameImages.value };
-				newGameImages[gameCard.filename] = thumbnail;
-				gameImages.value = newGameImages;
-			}
+			const thumbnail = await loadThumbnailUrl(gameCard.filename);
+			img.src = thumbnail;
 			img.dataset.loaded = "true";
 		};
 
