@@ -126,11 +126,12 @@ export const generateImageJson = async (name: string) => {
 	} catch (error) {
 		// If everything breaks, use a default image
 		// console.error(error)
-		const image = await fetch('https://cloud-i203j2e6a-hack-club-bot.vercel.app/1confused_dinosaur.png')
-		thumbnail = {
-			kind: 'png',
-			data: Buffer.from(await image.arrayBuffer()).toString('base64')
-		}
+		// const image = await fetch('https://cloud-i203j2e6a-hack-club-bot.vercel.app/1confused_dinosaur.png')
+		// thumbnail = {
+		// 	kind: 'png',
+		// 	data: Buffer.from(await image.arrayBuffer()).toString('base64')
+		// }
+		thumbnail = undefined as any
 	}
 
 	// write/overwrite image json to public folder
