@@ -3,9 +3,9 @@ Celeste: Sprig Editon is directly inspired by https://celestegame.com and is a v
 
 @title: Celeste: Sprig Edition
 @author: DillonB07
-@tags: []
+@tags: ["platformer"]
 @img: ""
-@addedOn: 2024-00-00
+@addedOn: 2024-06-14
 */
 
 const strawberry = "a"
