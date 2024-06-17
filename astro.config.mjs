@@ -4,7 +4,9 @@ import vercel from '@astrojs/vercel/serverless'
 import prefresh from '@prefresh/vite'
 import svelte from '@astrojs/svelte'
 import rehypeExternalLinks from 'rehype-external-links'
+import fs from "node:fs";
 
+const gameFiles = fs.readdirSync("games").filter(f => f.endsWith(".js")).map(game => `./games/${game}`);
 import generateMetadata from "./src/integrations/generate-metadata"
 
 export default defineConfig({
@@ -15,7 +17,9 @@ export default defineConfig({
 		generateMetadata()
 	],
 	output: 'server',
-	adapter: vercel(),
+	adapter: vercel({
+		includeFiles: gameFiles,
+	}),
 	vite: {
 		optimizeDeps: {
 			exclude: ['https']
