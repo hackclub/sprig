@@ -5,7 +5,7 @@ import styles from "./help.module.css";
 import { compiledContent } from "../../../docs/docs.md";
 import { codeMirror, isNewSaveStrat, PersistenceState } from "../../lib/state";
 import Button from "../design-system/button";
-import { saveGame, saveGame2 } from "../big-interactive-pages/editor";
+import { saveGame, startSavingGame } from "../big-interactive-pages/editor";
 import ChatComponent from "./chat-component";
 
 interface HelpProps {
@@ -45,7 +45,7 @@ export default function Help(props: HelpProps) {
 				tutorialIndex,
 			};
 			if(isNewSaveStrat.value)
-				saveGame2(props.persistenceState)
+				startSavingGame(props.persistenceState)
 			else
 				saveGame(
 					props.persistenceState,

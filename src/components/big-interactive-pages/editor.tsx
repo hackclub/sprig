@@ -152,7 +152,7 @@ export const saveGame = debounce(
 	}
 );
 
-export async function saveGame2(persistenceState: Signal<PersistenceState>) {
+export async function startSavingGame(persistenceState: Signal<PersistenceState>) {
 	const attemptSaveGame = async () => {
 		try {
 			const game =
@@ -205,7 +205,7 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>, sessionId: str
 			cloudSaveState: "SAVING",
 		};
 		if(isNewSaveStrat.value)
-			saveGame2(persistenceState);
+			startSavingGame(persistenceState);
 		else
         	saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
 
@@ -221,6 +221,14 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	const screenControls = useRef<HTMLDivElement>(null);
 
 	const [sessionId] = useState(nanoid());
+
+	useEffect(() => {
+		if(roomState){
+			isNewSaveStrat.value = true;
+		} else {
+			isNewSaveStrat.value = false;
+		}
+	})
 
 	useEffect(() => {
 		const channel = new BroadcastChannel('session_channel');
