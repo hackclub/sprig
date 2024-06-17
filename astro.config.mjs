@@ -5,9 +5,9 @@ import prefresh from '@prefresh/vite'
 import svelte from '@astrojs/svelte'
 import rehypeExternalLinks from 'rehype-external-links'
 import fs from "node:fs";
+import generateMetadata from "./src/integrations/generate-metadata"
 
 const gameFiles = fs.readdirSync("games").filter(f => f.endsWith(".js")).map(game => `./games/${game}`);
-import generateMetadata from "./src/integrations/generate-metadata"
 
 export default defineConfig({
 	site: 'https://sprig.hackclub.com',
