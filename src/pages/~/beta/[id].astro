@@ -4,11 +4,10 @@ import { firestore, getGame, getSession } from '../../../lib/game-saving/account
 import Editor from '../../../components/big-interactive-pages/editor'
 import StandardHead from '../../../components/standard-head.astro'
 import { signal } from '@preact/signals'
-import { RoomState, RoomStatus, isNewSaveStrat, type PersistenceState } from '../../../lib/state'
+import { RoomState, RoomStatus, type PersistenceState } from '../../../lib/state'
 import MobileUnsupported from '../../../components/popups-etc/mobile-unsupported'
 import { mobileUserAgent } from '../../../lib/utils/mobile'
 
-if(!isNewSaveStrat.value) return Astro.redirect(`/~/${Astro.params.id}`, 302)
 
 const session = await getSession(Astro.cookies)
 if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)

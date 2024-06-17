@@ -7,9 +7,6 @@ import { signal } from '@preact/signals'
 import type { PersistenceState } from '../../lib/state'
 import MobileUnsupported from '../../components/popups-etc/mobile-unsupported'
 import { mobileUserAgent } from '../../lib/utils/mobile'
-import { isNewSaveStrat } from '../../lib/state'
-
-if(isNewSaveStrat.value) return Astro.redirect(`/~/beta/${Astro.params.id}`, 302)
 
 const session = await getSession(Astro.cookies)
 if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)

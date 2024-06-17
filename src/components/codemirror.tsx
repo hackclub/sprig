@@ -10,7 +10,7 @@ import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 import { Awareness } from 'y-protocols/awareness'
 import { WebrtcProvider } from 'y-webrtc'
 import * as Y from 'yjs'
-import { saveGame, saveGame2 } from './big-interactive-pages/editor'
+import { saveGame, startSavingGame } from './big-interactive-pages/editor'
 import { yCollab } from 'y-codemirror.next'
 
 interface CodeMirrorProps {
@@ -30,6 +30,27 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	const yProviderAwarenessSignal = useSignal<Awareness | undefined>(undefined);
 	let yDoc: Y.Doc
 	let provider: WebrtcProvider
+
+	const waitInitialUpdate = function (initialUpdate: boolean) {
+		return new Promise<void>((resolve) => {
+			let timer: NodeJS.Timeout;
+			const checkUpdated = () => {
+				if (initialUpdate === false) {
+					console.log("Fjsakfjsa")
+					clearTimeout(timer);
+					resolve();
+				} else {
+					setTimeout(checkUpdated, 500);
+				}
+			};
+			timer = setTimeout(() => {
+				clearTimeout(timer);
+				resolve();
+			}, 1500);
+
+			checkUpdated();
+		});
+	};
 
 	// Alert the parent to code changes (not reactive)
 	const onCodeChangeRef = useRef(props.onCodeChange)
@@ -63,9 +84,8 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		if(yProviderAwarenessSignal.value === undefined) return;
 		yProviderAwarenessSignal.value.on("change", () => {
 			yProviderAwarenessSignal.value?.getStates().forEach((state) => {
-				console.log(state)
 				try{
-					if(props.persistenceState === undefined) return;
+					if(props.persistenceState === undefined) throw new Error("Persistence state is undefined");
 					if(state.saved == "saved"){
 						let persistenceState = props.persistenceState.peek();
 						if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING"){
@@ -78,7 +98,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 						}
 					}
 				} catch(e){
-					console.log(e)
+					// DO something
 				}	
 			});
 		});
@@ -114,9 +134,10 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				provider.destroy();
 			}
 			yDoc = new Y.Doc();
+			console.log(import.meta.env.PUBLIC_SIGNALING_SERVER_HOST)
 			provider = new WebrtcProvider(props.roomState.value.roomId, yDoc, {
 				signaling: [
-					"wss://yjs-signaling-server-5fb6d64b3314.herokuapp.com",
+					import.meta.env.PUBLIC_SIGNALING_SERVER_HOST,
 				],
 			});
 			//get yjs document from provider
@@ -140,27 +161,8 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			//get the initial code from the yjs document
 			// Wait for document state to be received from provider
 			let initialUpdate = true;
-			const waitInitialUpdate = function () {
-				return new Promise<void>((resolve) => {
-					let timer: NodeJS.Timeout;
-					const checkUpdated = () => {
-						if (initialUpdate === false) {
-							console.log("Fjsakfjsa")
-							clearTimeout(timer);
-							resolve();
-						} else {
-							setTimeout(checkUpdated, 500);
-						}
-					};
-					timer = setTimeout(() => {
-						clearTimeout(timer);
-						resolve();
-					}, 1500);
-
-					checkUpdated();
-				});
-			};
-			waitInitialUpdate().then(() => {
+			
+			waitInitialUpdate(initialUpdate).then(() => {
 				if (ytext.toString() === "") {
 					ytext.insert(0, lastCode ?? "");
 				}
@@ -180,7 +182,6 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			});
 			yDoc.on("update", () => {
 				if(!props.persistenceState) return;
-				console.log(provider.awareness.getStates());
 				if (!initialUpdate) return;
 				let participants: RoomParticipant[] = [];
 				provider.awareness.getStates().forEach((state) => {
@@ -198,14 +199,14 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				let persistenceState = props.persistenceState.peek();
 				if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING"){
 					if(persistenceState.game.ownerId === persistenceState.session?.user.id){
-						saveGame2(props.persistenceState);
+						startSavingGame(props.persistenceState);
 					}
 				}
 				ytext = yDoc.getText("codemirror");
 				initialUpdate = false;
 			});
 		} catch(e){
-			console.log(e)
+			window.location.reload();
 		}
 	})
 

@@ -7,6 +7,9 @@ import {
 import { updateEmailListLastModifiedTime } from "../../../lib/game-saving/email";
 import { Timestamp } from "firebase-admin/firestore";
 
+/* This route is used to start saving a game. The way this is done is update some fields on the database,
+and another service will listen to these changes and start savin the game code to the db by connecting
+to the yjs room */
 export const post: APIRoute = async ({ request, cookies }) => {
 	let gameId: string;
 	let tutorialName: string | undefined;
@@ -50,31 +53,16 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		return new Response(`Can't edit a game you don't own`, {
 			status: 403,
 		});
-	// const apiUrl = process.env.SAVING_SERVER_HOST;
-	// const apiKey = process.env.SAVING_SERVER_API_KEY;
-	// const data = {
-	// 	room: gameId,
-	// 	tutorialName: tutorialName,
-	// 	trackingId: trackingId,
-	// 	apiKey: apiKey,
-	// };
 
-	// console.log(data)
-	// console.log(apiUrl)
-	// console.log(apiKey)
-	// const response = await fetch(`${apiUrl}/listen`, {
-	// 	method: "POST",
-	// 	headers: {
-	// 		"Content-Type": "application/json",
-	// 	},
-	// 	body: JSON.stringify(data),
-	// });
-	// console.log(response)
-
-	updateDocument("games", gameId, { 
-		tutorialName: tutorialName ?? "",
-		modifiedAt: Timestamp.now(),
-	 });
+	try{
+		updateDocument("games", gameId, { 
+			tutorialName: tutorialName ?? "",
+			modifiedAt: Timestamp.now(),
+		});
+		return new Response(JSON.stringify({}), { status: 200 })
+	} catch (error) {
+		return new Response("Internal server error", { status: 500 })
+	}
 
 	 return new Response(JSON.stringify({}), { status: 200 })
 
