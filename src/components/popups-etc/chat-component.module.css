@@ -25,6 +25,9 @@
 .messageUser {
 	align-self: flex-end;
 	background-color: var(--accent);
+}
+
+.messageUser p {
 	color: white;
 }
 
@@ -67,7 +70,6 @@
 	outline: none;
 	flex-grow: 1;
 	padding: 5px;
-	height: 38px;
 	resize: none;
 }
 

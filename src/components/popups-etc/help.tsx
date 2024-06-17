@@ -142,9 +142,9 @@ export default function Help(props: HelpProps) {
 						Get AI Help
 					</Button>
 					<span className={styles.tooltipText}>
-						{props.persistenceState?.value.session?.user === null
+						{!props.persistenceState?.value.session?.user
 							? "You must be logged in to use this feature!"
-							: "Ask AI for help with your code"}
+							: "Ask AI for help with your code" }
 					</span>
 				</div>
 				<Button
