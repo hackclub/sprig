@@ -16,7 +16,6 @@ const regexExpr = {
 	title: /@title: (.+)/,
 	author: /@author: (.+)/,
 	tags: /@tags: (.+)/,
-	img: /@img: (.+)/,
 	addedOn: /@addedOn: (.+)/,
 };
 
@@ -48,18 +47,16 @@ walk().forEach((gameFile) => {
 	const title = regexExpr.title.exec(fileData);
 	const author = regexExpr.author.exec(fileData);
 	const tags = regexExpr.tags.exec(fileData);
-	const img = regexExpr.img.exec(fileData);
 	const addedOn = regexExpr.addedOn.exec(fileData);
 
 	// Check if all of the fields are defined
-	if (title && author && tags && img && addedOn && tags[1]) {
+	if (title && author && tags && addedOn && tags[1]) {
 		// Create a meta entry
 		const metaEntry = {
 			filename: gameFile.replace(".js", ""),
 			title: title[1],
 			author: author[1],
 			tags: JSON.parse(tags[1].replaceAll("'", '"')), // Replace all ' with " in order for compatibility issues
-			img: img[1] == '""' ? "" : img[1],
 			addedOn: addedOn[1],
 		};
 
