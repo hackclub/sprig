@@ -9,6 +9,8 @@ https://sprig.hackclub.com/gallery/getting_started
 */
 let jumped = 0
 const player = "p"
+let point = 0
+let coin = "c"
 const floor = "f"
 let x = 0
 let y = 0
@@ -49,7 +51,24 @@ setLegend(
 4444444444444444
 4444444444444444
 4444444444444444
-4444444444444444`]
+4444444444444444`],
+  [coin, bitmap`
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666`]
 )
 function sleepbypass(){
 
@@ -65,13 +84,27 @@ setSolids([floor, player])
 let level = 0
 const levels = [
   map`
-.........
-.........
-.........
-.........
-.........
-p........
-fffffffff`
+...........................
+...........................
+...........................
+...........................
+...........................
+...........................
+...........................
+...........................
+...........................
+...........................
+...........................
+...........................
+...........................
+...........................
+...........................
+...........................
+...........................
+...........................
+..c.c.c.c.c.c.c.c.c.c.c.c.c
+pc.c.c.c.c.c.c.c.c.c.c.c.c.
+fffffffffffffffffffffffffff`
 ]
 
 setMap(levels[level])
@@ -84,23 +117,41 @@ onInput("w", () => {
   getFirst(player).y -= 1
   jumped = 1
   }
+  if (tilesWith(player,coin)[0] != null) {
+  point += 1
+  clearText()
+  addText(String(point), {x: 1, y: 1, color: color`5`})
+  }
 })
 onInput("a", () => {
   getFirst(player).x -= 1
+  if (tilesWith(player,coin)[0] != null) {
+  point += 1
+  clearText()
+  addText(String(point), {x: 1, y: 1, color: color`5`})
+  }
 })
 onInput("d", () => {
   getFirst(player).x += 1
+  if (tilesWith(player,coin)[0] != null) {
+  point += 1
+  clearText()
+  addText(String(point), {x: 1, y: 1, color: color`5`})
+  }
 })
 
 afterInput(() => {
   
-})
-while (1==1){
-if (getFirst(player).y > 1) {
-  while (i < 999999) {
-    sleepbypass()
+  if (jumped == 2){
+    getFirst(player).y += 1
+    jumped = 0
+    if (tilesWith(player,coin)[0] != null) {
+  point += 1
+  clearText()
+  addText(String(point), {x: 1, y: 1, color: color`5`})
   }
-  i = 0
-  getFirst(player).y += 1
-  jumped = 0
-}}
+  }
+  if (jumped == 1){
+    jumped = 2
+  }
+})
