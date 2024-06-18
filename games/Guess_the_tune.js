@@ -1,14 +1,25 @@
 /*
-
 @title: Guess the tune
 @author: Sajeg
-@tags: []
-@addedOn: 2024-00-00
+@tags: [music]
+@addedOn: 2024-06-19
 */
-// Changeable global variable
+
+/* Instructions:
+If you press i you'll hear a series of tunes. 
+Remember them and then play the series with the buttons a, w, s, d
+
+You can change the length of the series with j and l
+*/
+
+// Global variable
 let length = 5
 let pressed = []
 let need = []
+let renderInput = true
+
+// Global constant
+const hudOn = true // set to false for hiding Undo and change of length hints
 
 // Sprites of notes
 const tune0Key = "p"
@@ -186,6 +197,7 @@ onInput("a", () => {
 })
 
 onInput("i", () => {
+  renderInput = true
   clearText()
   generateSong();
   updateHud()
@@ -200,8 +212,10 @@ onInput("j", () => {
 })
 
 onInput("l", () => {
-  length += 1
-  playTune(lengthUp)
+  if (length < 42) {
+    length += 1
+    playTune(lengthUp)
+  }
 })
 
 onInput("k", () => {
@@ -214,6 +228,8 @@ afterInput(() => {
   console.log(pressed)
   console.log(need)
   if (pressed.length === need.length && need.length > 0) {
+    clearNotes()
+    renderInput = false
     if (pressed.toString() === need.toString()) {
       playTune(win)
       addText("YOU WIN", {
@@ -255,35 +271,52 @@ function generateSong() {
 }
 
 function updateHud() {
-  addText("Undo: k", {
-    x: 12,
-    y: 14,
-    color: color`0`
-  })
-  addText("Length: " + length, {
+  clearNotes()
+  let lengthText = ``
+  if (hudOn) {
+    addText("-/+: j/l", {
+      x: 1,
+      y: 14,
+      color: color`0`
+    })
+    addText("Undo: k", {
+      x: 12,
+      y: 14,
+      color: color`0`
+    })
+    lengthText = "Length: " + length
+  } else {
+    lengthText += length.toString()
+  }
+  addText(lengthText, {
     x: 10,
     y: 1,
     color: color`0`
   })
+  if (!renderInput) {
+    return
+  }
   for (let i = 0; i < pressed.length; i++) {
-    console.log(name)
-    if (i === 0) {
-      if (i < 14) {
-        addSprite(1 + i, 6, tune0Key)
-      } else if (i < 28) {
-        addSprite(1 + (i - 14), 7, tune0Key)
-      } else if (i < 42) {
-        addSprite(1 + (i - 28), 8, tune0Key)
-      }
-    } else if (i === 1) {
-      if (i < 14) {
-        addSprite(1 + i, 6, tune1Key)
-      } else if (i < 28) {
-        addSprite(1 + (i - 14), 7, tune1Key)
-      } else if (i < 42) {
-        addSprite(1 + (i - 28), 8, tune1Key)
-      }
+    const row = Math.floor(i / 14) + 6;
+    const column = (i % 14) + 1;
+
+    if (pressed[i] === 0) {
+      addSprite(column, row, tune0Key)
+    } else if (pressed[i] === 1) {
+      addSprite(column, row, tune1Key)
+    } else if (pressed[i] === 2) {
+      addSprite(column, row, tune2Key)
+    } else if (pressed[i] === 3) {
+      addSprite(column, row, tune3Key)
     }
+  }
+}
+
+function clearNotes() {
+  for (let i = 0; i < pressed.length; i++) {
+    const row = Math.floor(i / 14) + 6;
+    const column = (i % 14) + 1;
+    clearTile(column, row)
   }
 }
 
