@@ -83,6 +83,24 @@ export type PersistenceState = ({
 	stale: boolean
 }
 
+export enum RoomStatus {
+	CONNECTED,
+	CONNECTING,
+	DISCONNECTED
+}
+
+export type RoomParticipant = {
+	userEmail: string
+	isHost: boolean
+}
+
+export type RoomState = {
+	status: RoomStatus
+	roomId: string
+	password: string
+	participants: RoomParticipant[]
+}	
+
 export const codeMirror = signal<EditorView | null>(null)
 export const muted = signal<boolean>(false)
 export const errorLog = signal<NormalizedError[]>([])
@@ -158,3 +176,4 @@ export const switchTheme = (themeType: ThemeType) => {
 		copyContainer.style.color = themeValue?.copyContainerText ?? '';
 	}
 }
+export const isNewSaveStrat = signal<boolean>(true)

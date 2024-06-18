@@ -3,12 +3,13 @@ import { Signal, useSignal } from "@preact/signals";
 import { IoCaretBack, IoCaretForward } from "react-icons/io5";
 import styles from "./help.module.css";
 import { compiledContent } from "../../../docs/docs.md";
-import { codeMirror, PersistenceState } from "../../lib/state";
+import { codeMirror, isNewSaveStrat, PersistenceState } from "../../lib/state";
 import Button from "../design-system/button";
-import { saveGame } from "../big-interactive-pages/editor";
+import { saveGame, startSavingGame } from "../big-interactive-pages/editor";
 import ChatComponent from "./chat-component";
 
 interface HelpProps {
+	sessionId: string;
 	initialVisible?: boolean;
 	tutorialContent?: string[];
 	persistenceState: Signal<PersistenceState>;
@@ -43,11 +44,14 @@ export default function Help(props: HelpProps) {
 				cloudSaveState: "SAVING",
 				tutorialIndex,
 			};
-			saveGame(
-				props.persistenceState,
-				codeMirror.value!.state.doc.toString(),
-				props.sessionId
-			);
+			if(isNewSaveStrat.value)
+				startSavingGame(props.persistenceState)
+			else
+				saveGame(
+					props.persistenceState,
+					codeMirror.value!.state.doc.toString(),
+					props.sessionId
+				);
 		} else if (props.persistenceState?.value.kind == "SHARED") {
 			props.persistenceState.value = {
 				...props.persistenceState.value,
@@ -142,9 +146,9 @@ export default function Help(props: HelpProps) {
 						Get AI Help
 					</Button>
 					<span className={styles.tooltipText}>
-						{props.persistenceState?.value.session?.user === null
+						{!props.persistenceState?.value.session?.user
 							? "You must be logged in to use this feature!"
-							: "Ask AI for help with your code"}
+							: "Ask AI for help with your code" }
 					</span>
 				</div>
 				<Button
