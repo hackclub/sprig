@@ -15,7 +15,7 @@ import {
 	useSignalEffect,
 } from "@preact/signals";
 import { useEffect, useRef, useState} from "preact/hooks";
-import { codeMirror, errorLog, muted, PersistenceState } from "../../lib/state";
+import { codeMirror, errorLog, isNewSaveStrat, muted, PersistenceState, RoomState } from "../../lib/state";
 import EditorModal from "../popups-etc/editor-modal";
 import { runGame } from "../../lib/engine";
 import DraftWarningModal from "../popups-etc/draft-warning";
@@ -34,6 +34,7 @@ import VersionWarningModal from "../popups-etc/version-warning";
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
+	roomState?: Signal<RoomState>;
 	cookies: {
 		outputAreaSize: number | null;
 		helpAreaSize: number | null;
@@ -151,6 +152,47 @@ export const saveGame = debounce(
 	}
 );
 
+export async function startSavingGame(persistenceState: Signal<PersistenceState>) {
+	const attemptSaveGame = async () => {
+		try {
+			const game =
+				persistenceState.value.kind === "PERSISTED" &&
+				persistenceState.value.game !== "LOADING"
+					? persistenceState.value.game
+					: null;
+			const res = await fetch("/api/games/start-saving", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					gameId: game?.id,
+					tutorialName: game?.tutorialName,
+				}),
+			});
+			console.log(res.text());
+			if (!res.ok)
+				throw new Error(`Error saving game: ${await res.text()}`);
+			return true;
+		} catch (error) {
+			console.error(error);
+
+			persistenceState.value = {
+				...persistenceState.value,
+				cloudSaveState: "ERROR",
+			} as any;
+			return false;
+		}
+	};
+	while (!(await attemptSaveGame())) {
+		await new Promise((resolve) => setTimeout(resolve, 2000));
+	}
+	console.log("SUCCESS SAVE")
+	if (persistenceState.value.kind === "PERSISTED")
+		persistenceState.value = {
+			...persistenceState.value,
+			cloudSaveState: "SAVED",
+		};
+}
+
 const exitTutorial = (persistenceState: Signal<PersistenceState>, sessionId: string) => {
 	if (persistenceState.value.kind === "PERSISTED") {
 		delete persistenceState.value.tutorial;
@@ -162,19 +204,31 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>, sessionId: str
 			stale: true,
 			cloudSaveState: "SAVING",
 		};
-        saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
+		if(isNewSaveStrat.value)
+			startSavingGame(persistenceState);
+		else
+        	saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
+
 	} else {
 		if (persistenceState.value.kind == "SHARED")
 			delete persistenceState.value.tutorial;
 	}
 };
 
-export default function Editor({ persistenceState, cookies }: EditorProps) {
+export default function Editor({ persistenceState, cookies, roomState }: EditorProps) {
 	const outputArea = useRef<HTMLDivElement>(null);
 	const screenContainer = useRef<HTMLDivElement>(null);
 	const screenControls = useRef<HTMLDivElement>(null);
 
 	const [sessionId] = useState(nanoid());
+
+	useEffect(() => {
+		if(roomState){
+			isNewSaveStrat.value = true;
+		} else {
+			isNewSaveStrat.value = false;
+		}
+	})
 
 	useEffect(() => {
 		const channel = new BroadcastChannel('session_channel');
@@ -200,10 +254,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			window.removeEventListener('unload', handleUnload);
 		};
 	}, []);
-
-	const handleSave = (code: string) => {
-		saveGame(persistenceState, code, sessionId);
-	};
 
 	// Resize state storage
 	const outputAreaSize = useSignal(
@@ -409,17 +459,19 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 
 	// Disable native save shortcut
 	useEffect(() => {
-		const handler = (event: KeyboardEvent) => {
-			if (event.key === "s" && (event.metaKey || event.ctrlKey)) { 
-				event.preventDefault();
-				if (!continueSaving.value) { 
-					continueSaving.value = true;
-					saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
+		if(!isNewSaveStrat.value){
+			const handler = (event: KeyboardEvent) => {
+				if (event.key === "s" && (event.metaKey || event.ctrlKey)) { 
+					event.preventDefault();
+					if (!continueSaving.value) { 
+						continueSaving.value = true;
+						saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
+					}
 				}
-			}
-		};
-		window.addEventListener("keydown", handler);
-		return () => window.removeEventListener("keydown", handler);
+			};
+			window.addEventListener("keydown", handler);
+			return () => window.removeEventListener("keydown", handler);
+		}
 	}, [continueSaving.value]);
 
 	let initialCode = "";
@@ -458,11 +510,13 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 
 	return (
 		<div class={styles.page}>
-			<Navbar persistenceState={persistenceState} />
+			<Navbar persistenceState={persistenceState} roomState={roomState}/>
 
 			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
+						persistenceState={persistenceState}
+						roomState={roomState}
 						class={styles.code}
 						initialCode={initialCode}
 						onEditorView={(editor) => {
@@ -480,7 +534,8 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 									...persistenceState.value,
 									cloudSaveState: "SAVING",
 								};
-								handleSave(codeMirror.value!.state.doc.toString());
+								if(!isNewSaveStrat.value)
+									saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
 							}
 
 							if (persistenceState.value.kind === "IN_MEMORY") {
