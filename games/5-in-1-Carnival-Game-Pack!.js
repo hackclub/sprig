@@ -1,7 +1,6 @@
 /*
 @title: 5-in-1 Carnival Game Pack!
 @tags: []
-@img: ""
 @addedOn: 2023-01-07
 @author: Ada Dyer
 

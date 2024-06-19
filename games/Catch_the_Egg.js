@@ -2,7 +2,6 @@
 @title: Catch_the_Egg
 @author: Jonak-Adipta-Kalita
 @tags: ["catch"]
-@img: ""
 @addedOn: 2024-04-18
 */
 

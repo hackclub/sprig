@@ -1,7 +1,6 @@
 /*
 @title: The_Pet
 @tags: ['simulation']
-@img: The_Pet
 @addedOn: 2022-12-07
 @author: wyn-cmd
 */

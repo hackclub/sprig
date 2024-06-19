@@ -1,7 +1,6 @@
 /*
 @title: chase_bob
 @tags: []
-@img: ""
 @addedOn: 2023-04-01
 @author: garfieldfatcat3pack
 */

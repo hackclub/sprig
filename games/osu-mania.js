@@ -2,7 +2,6 @@
 @title: osu-mania
 @author: Alex Park
 @tags: ['']
-@img: ""
 @addedOn: 2023-01-01
 */
 

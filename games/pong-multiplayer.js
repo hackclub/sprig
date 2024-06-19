@@ -1,7 +1,6 @@
 /*
 @title: pong-multiplayer
 @tags: ['multiplayer']
-@img: pong-multiplayer
 @addedOn: 2023-01-01
 @author: sean
 */

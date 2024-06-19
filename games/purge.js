@@ -1,7 +1,6 @@
 /*
 @title: purge
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2022-09-08
 @author: noviicee
 

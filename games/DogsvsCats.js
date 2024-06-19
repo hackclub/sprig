@@ -1,7 +1,6 @@
 /*
 @title: Dogs vs Cats
 @tags: ['endless']
-@img: ""
 @addedOn: 2022-11-12
 @author: Theodor
 */
@@ -138,9 +137,11 @@ p......
 
 setMap(levels[level]);
 
+/* TEST FAILED - Error: Your sprite name must be wrapped in [] brackets here.
 setPushables({
   [ dog ]: [],
 });
+*/
 
 afterInput(() => {
   if (dog()) {

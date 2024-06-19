@@ -1,7 +1,6 @@
 /*
 @title: simon
 @tags: ['classic']
-@img: ""
 @addedOn: 2022-09-29
 @author: riley
 */

@@ -3,7 +3,6 @@
 @title: FOOD-CATCH
 @author: Jakob
 @tags: ['catch']
-@img: ""
 @addedOn: 2023-09-02
 */
 
