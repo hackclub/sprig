@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Get 500 Coins
 @author: oliverlinux
 @tags: ["time-waster"]
-@addedOn: 2024-00-00
+@addedOn: 2024-06-19
 */
 let jumped = 0
 const player = "p"
