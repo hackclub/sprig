@@ -495,7 +495,6 @@ function update() {
     addSprite(Math.floor(Math.random() * width()), Math.floor(Math.random() * height()), _apple)
   } else {
     snake_green.shift()
-    console.log(snake_green.length)
   }
 
   snake_green.forEach((snake) => {
@@ -572,31 +571,26 @@ function update() {
   old_direction_blue = direction_blue
   //win logic
   if (green_head.x == blue_head.x && green_head.y == blue_head.y) {
-    console.log("Tie")
     blue_did_win = true
     green_did_win = true
     clearInterval(interval)
   }
   snake_blue.forEach((snake) => {
     if (snake.x == green_head.x && snake.y == green_head.y) {
-      console.log("Blue wins")
       blue_did_win = true
       clearInterval(interval)
     }
     if (snake.x == blue_head.x && snake.y == blue_head.y) {
-      console.log("Green wins")
       green_did_win = true
       clearInterval(interval)
     }
   })
   snake_green.forEach((snake) => {
     if (snake.x == blue_head.x && snake.y == blue_head.y) {
-      console.log("Green wins")
       green_did_win = true
       clearInterval(interval)
     }
     if (snake.x == green_head.x && snake.y == green_head.y) {
-      console.log("Blue wins")
       blue_did_win = true
       clearInterval(interval)
     }
@@ -619,7 +613,6 @@ function update() {
       })
       reset()
     } else {
-      console.log("Tie")
       addText("Tie", {
         x: 8,
         y: 7,
