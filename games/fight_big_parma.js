@@ -1,7 +1,6 @@
 /*
 @title: fight_big_parma
 @tags: []
-@img: ""
 @addedOn: 2023-03-13
 @author: jakempock
 */

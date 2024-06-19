@@ -1,7 +1,6 @@
 /*
 @title: Worldcraft
 @tags: ['explore']
-@img: Worldcraft
 @addedOn: 2022-12-09
 @author: adadyer
 

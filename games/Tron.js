@@ -1,7 +1,6 @@
 /*
 @title: Tron
 @tags: ['multiplayer']
-@img: ""
 @addedOn: 2022-10-30
 @author: Robert Carmen
 

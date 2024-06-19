@@ -3,7 +3,6 @@
 @title: 4_Colour_Drawing
 @author: Dexter Speed
 @tags: ['sandbox']
-@img: ""
 @addedOn: 2023-08-18
 */
 

@@ -3,7 +3,6 @@
 @title: two-birds_one-stone
 @author: t3mp0r4ry
 @tags: ['dodge']
-@img: ""
 @addedOn: 2023-06-06
 */
 

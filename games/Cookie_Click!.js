@@ -1,7 +1,6 @@
 /*
 @title: Cookie_Click!
 @tags: []
-@img: ""
 @addedOn: 2023-01-17
 @author: briyandyju09
 
