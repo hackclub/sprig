@@ -3,7 +3,7 @@
 @author: hatanuk
 @tags: ['endless']
 @img: ""
-@addedOn: 2024-03-21
+@addedOn: 2024-06-19
 
 CONTROLS:
 w - Up
