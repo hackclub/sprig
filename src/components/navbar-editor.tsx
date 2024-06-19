@@ -253,7 +253,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
                             showNavPopup.value ? styles.active : ""
                         }`}
                         onMouseEnter={() => (showNavPopup.value = true)}
-                        onMouseLeave={() => (showNavPopup.value = false)}
                     >
                         <button
                             onClick={() =>
@@ -534,7 +533,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
                 </div>
             )}
             {showNavPopup.value && (
-                <div class={styles.navPopup}>
+                <div
+                    class={styles.navPopup}
+                    onMouseEnter={() => (showNavPopup.value = true)}
+                    onMouseLeave={() => (showNavPopup.value = false)}
+                >
                     <ul>
                         {props.persistenceState.value.session?.session.full ? (
                             <>
