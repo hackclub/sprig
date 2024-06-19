@@ -1,7 +1,7 @@
 /*
 @title: Guess the tune
 @author: Sajeg
-@tags: [music]
+@tags: ['music']
 @addedOn: 2024-06-19
 */
 
