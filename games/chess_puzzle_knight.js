@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: 
-@author: 
+@title: Chess Puzzle (Knight)
+@author: SilverCanvas72
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-06-19
 */
 
 const rook = "r"
