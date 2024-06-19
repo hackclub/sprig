@@ -1,7 +1,6 @@
 /*
 @title: Gravity is a Thing
 @tags: ['logic']
-@img: ""
 @addedOn: 2022-09-30
 @author: Will_Rigney
 */

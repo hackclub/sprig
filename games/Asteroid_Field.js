@@ -1,7 +1,6 @@
 /*
 @title: Asteroid Field
 @tags: ['catch']
-@img: ""
 @addedOn: 2022-11-25
 @author: Kaitlyn
 */

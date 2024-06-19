@@ -3,7 +3,6 @@
 @title: drab_bullets
 @author: Chirag
 @tags: ['endless']
-@img: ""
 @addedOn: 2023-05-14
 */
 

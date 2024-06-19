@@ -1,7 +1,6 @@
 /*
 @title: whack_a_mole
 @tags: ['endless']
-@img: ""
 @addedOn: 2023-03-01
 @author: Sameer Murthy
 

@@ -2,7 +2,6 @@
 @title: Penny Platformer
 @author: Bright Li
 @tags: ["penny"]
-@img: ""
 @addedOn: 2024-04-23
 
 If you build a game using assets from the new Penny's Big Breakaway asset pack, 

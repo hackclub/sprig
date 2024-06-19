@@ -1,7 +1,6 @@
 /*
 @title: RandomDungeon
 @tags: ['dungeon']
-@img: ""
 @addedOn: 2023-02-20
 @author: JonathanLevi
 

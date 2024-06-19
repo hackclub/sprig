@@ -1,7 +1,6 @@
 /*
 @title: galloping!
 @tags: ['dodge']
-@img: ""
 @addedOn: 2023-05-23
 @author: Daniel Cui
 

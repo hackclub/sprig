@@ -1,0 +1,52 @@
+{
+	"name": "sprig",
+	"version": "1.0.3",
+	"description": "The standalone Sprig game engine",
+	"main": "dist/api.js",
+	"types": "dist/api.d.ts",
+	"scripts": {
+		"build": "tsc",
+		"api-reference": "node scripts/api-reference.js",
+		"toc": "markdown-toc -i --bullets '-' README.md",
+		"prepublishOnly": "yarn build && yarn api-reference && yarn toc",
+		"dev": "tsc --watch"
+	},
+	"exports": {
+		".": {
+			"import": "./dist/api.js",
+			"types": "./dist/api.d.ts"
+		},
+		"./base": {
+			"import": "./dist/base/index.js",
+			"types": "./dist/base/index.d.ts"
+		},
+		"./image-data": {
+			"import": "./dist/image-data/index.js",
+			"types": "./dist/image-data/index.d.ts"
+		},
+		"./web": {
+			"import": "./dist/web/index.js",
+			"types": "./dist/web/index.d.ts"
+		}
+	},
+	"repository": "https://github.com/hackclub/sprig/",
+	"license": "MIT",
+	"private": false,
+	"type": "module",
+	"devDependencies": {
+		"markdown-toc": "^1.2.0",
+		"typescript": "^5.1.3"
+	},
+	"files": [
+		"README.md",
+		"LICENSE",
+		"dist/",
+		"src/",
+		"base.js",
+		"base.d.ts",
+		"image-data.js",
+		"image-data.d.ts",
+		"web.js",
+		"web.d.ts"
+	]
+}

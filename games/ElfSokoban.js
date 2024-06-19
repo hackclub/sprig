@@ -1,7 +1,6 @@
 /*
 @title: ElfSokoban
 @tags: []
-@img: ""
 @addedOn: 2023-03-15
 @author: Markonije
 */

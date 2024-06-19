@@ -1,7 +1,6 @@
 /*
 @title: Art
 @tags: ['sandbox']
-@img: ""
 @addedOn: 2022-11-06
 @author: Leonard (Omay)
 

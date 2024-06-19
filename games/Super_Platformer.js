@@ -5,7 +5,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Super_Platformer
 @author: KinjalPriya000
 @tags: []
-@img: ""
 @addedOn: 2024-04-11
 */
 

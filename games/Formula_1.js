@@ -5,7 +5,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Formula 1
 @author: Mary
 @tags: ["multiplayer"]
-@img: ""
 @addedOn: 2024-04-12
 */
 

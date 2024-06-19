@@ -1,7 +1,6 @@
 /*
 @title: Starjump
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2023-12-21
 @author: skifli
 

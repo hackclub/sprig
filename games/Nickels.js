@@ -2,7 +2,6 @@
 @title: Nickels
 @author: Adam Miller
 @tags: ['strategy']
-@img: ""
 @addedOn: 2023-12-30
 */
 

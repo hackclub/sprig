@@ -1,7 +1,6 @@
 /*
 @title: Call 911
 @tags: ['strategy']
-@img: ""
 @addedOn: 2022-10-18
 @author: Rohit
 */

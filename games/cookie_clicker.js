@@ -1,7 +1,6 @@
 /*
 @title: cookie_clicker
 @tags: ['endless']
-@img: cookie_clicker
 @addedOn: 2022-12-16
 @author: kunevi
   _    _  ______          __  _______ ____    _____  _           __     __

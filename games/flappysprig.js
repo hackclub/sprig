@@ -3,7 +3,6 @@
 @title: flappysprig
 @author: Spectral
 @tags: ['classic']
-@img: ""
 @addedOn: 2023-09-10
 */
 

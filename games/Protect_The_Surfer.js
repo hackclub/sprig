@@ -1,7 +1,6 @@
 /*
 @title: Protect The Surfer
 @tags: []
-@img: ""
 @addedOn: 2023-01-03
 @author: thinkingjet
 Thanks to @Colton for his inspiration with Hectic Hockey

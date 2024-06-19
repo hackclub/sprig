@@ -1,7 +1,6 @@
 /*
 @title: Colour_Game
 @tags: ['endless']
-@img: ""
 @addedOn: 2022-12-26
 @author: Thuvaragan
 
