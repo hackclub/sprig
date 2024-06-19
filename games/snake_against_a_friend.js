@@ -29,6 +29,15 @@ const _body_green = "j"
 const _body_blue = "k"
 const _background = "l"
 
+const player_move = tune`
+500: D4-500,
+15500`
+
+const apple_collected = tune`
+500: G4~500,
+500: C5~500,
+500: G5~500,
+14500`
 
 const Direction = {
   Up: 'UP',
@@ -292,24 +301,28 @@ onInput("w", () => {
     return
   }
   direction_green = Direction.Up
+  playTune(player_move)
 })
 onInput("d", () => {
   if (direction_green == Direction.Left && getAll(_body_green).length > 0) {
     return
   }
   direction_green = Direction.Right
+  playTune(player_move)
 })
 onInput("s", () => {
   if (direction_green == Direction.Up && getAll(_body_green).length > 0) {
     return
   }
   direction_green = Direction.Down
+  playTune(player_move)
 })
 onInput("a", () => {
   if (direction_green == Direction.Right && getAll(_body_green).length > 0) {
     return
   }
   direction_green = Direction.Left
+  playTune(player_move)
 })
 
 onInput("i", () => {
@@ -317,24 +330,28 @@ onInput("i", () => {
     return
   }
   direction_blue = Direction.Up
+  playTune(player_move)
 })
 onInput("l", () => {
   if (direction_blue == Direction.Left) {
     return
   }
   direction_blue = Direction.Right
+  playTune(player_move)
 })
 onInput("k", () => {
   if (direction_blue == Direction.Up) {
     return
   }
   direction_blue = Direction.Down
+  playTune(player_move)
 })
 onInput("j", () => {
   if (direction_blue == Direction.Right) {
     return
   }
   direction_blue = Direction.Left
+  playTune(player_move)
 })
 
 
@@ -493,6 +510,7 @@ function update() {
   if (green_head.x == apple.x && green_head.y == apple.y) {
     apple.remove()
     addSprite(Math.floor(Math.random() * width()), Math.floor(Math.random() * height()), _apple)
+    playTune(apple_collected)
   } else {
     snake_green.shift()
   }
@@ -560,6 +578,7 @@ function update() {
   if (blue_head.x == apple.x && blue_head.y == apple.y) {
     apple.remove()
     addSprite(Math.floor(Math.random() * width()), Math.floor(Math.random() * height()), _apple)
+    playTune(apple_collected)
   } else {
     snake_blue.shift()
   }
