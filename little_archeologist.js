@@ -1,6 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
+@title: Little Archeologist
+@author: Ro-ry
+@tags: []
+@addedOn: 2024-06-19
 */
 
 const player = "p"
