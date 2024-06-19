@@ -111,7 +111,7 @@ export const showSaveConflictModal = signal<boolean>(false);
 export const continueSaving = signal<boolean>(true);
 export const LAST_SAVED_SESSION_ID = 'lastSavedSessionId';
 
-export type ThemeType = "dark" | "light" | "busker";
+export type ThemeType = "dark" | "light" | "busker" | "vscode";
 export const theme = signal<ThemeType>("dark");
 type Theme = {
 	navbarIcon: string,
@@ -147,9 +147,18 @@ export const themes: Partial<Record<ThemeType, Theme>> = {
 		...baseTheme,
 		navbarIcon: "/PENNY_HEAD.png",
 		accent: "#FFAE06",
-	 	accentDark: "#ff9d00",
+		accentDark: "#ff9d00",
 		fgMutedOnAccent: "#6d83ff",
 		background: "#3E29ED",
+	},
+	"vscode": {
+		...baseTheme,
+		accent: "#0078d4",
+		accentDark: "#0062ac",
+		fgMutedOnAccent: "#b6b6b6",
+		background: "#1f1f1f",
+		color: "#cccccc",
+		copyContainerText: "#ffffff",
 	}
 };
 
