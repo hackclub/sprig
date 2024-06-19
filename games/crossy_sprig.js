@@ -1,12 +1,10 @@
 /*
-
-@title: Crossy_Sprig
+@title: Crossy Sprig
 @author: hatanuk
 @tags: ['endless']
 @img: ""
 @addedOn: 2024-03-21
 
-j
 CONTROLS:
 w - Up
 a - Left
