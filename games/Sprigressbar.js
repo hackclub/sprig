@@ -3,7 +3,6 @@
 @title: Sprigressbar
 @author: MathR
 @tags: ['advanced']
-@img: ""
 @addedOn: 2023-08-21
 */
 
@@ -1489,7 +1488,7 @@ function check_segments(hhhh) {
             if (progress == 0) return
             progress -= 5
             getTile(bar_pos.x + Math.floor(progress/10),bar_pos.y).forEach((the) => {
-                console.log(the.type)
+                // console.log(the.type)
               if (progress % 10){
                 if (the.type == beb || the.type == beo) the.remove()
               } else {

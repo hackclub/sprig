@@ -2,7 +2,6 @@
 @title: random_maze_game_with_dfs_algorithm
 @author: Hanz Po
 @tags: ['endless']
-@img: ""
 @addedOn: 2023-12-29
 */
 

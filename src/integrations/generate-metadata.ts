@@ -1,6 +1,6 @@
 /**
  * Astro integration that generatest the game/metadata.json
- * 
+ *
  * How it works:
  * 1. It walks/scans the ./games/ directory
  * 2. It searches each file for metadata, if anything isn't found it halts the build/dev
@@ -9,6 +9,7 @@
  */
 import type { AstroIntegration } from "astro";
 import fs from "fs";
+import { generateImageJson } from "./thumbnail";
 
 /**
  * An object containing all of the regex expressions that can be used
@@ -17,7 +18,6 @@ const regexExpr = {
 	title: /@title: (.+)/,
 	author: /@author: (.+)/,
 	tags: /@tags: (.+)/,
-	img: /@img: (.+)/,
 	addedOn: /@addedOn: (.+)/,
 };
 
@@ -26,7 +26,7 @@ const regexExpr = {
  *
  * TODO!
  */
-const isMetadataValid = (meta: any): boolean => {
+const isMetadataValid = (_: any): boolean => {
 	return true;
 };
 
@@ -63,20 +63,21 @@ const setup = () => {
 			const title = regexExpr.title.exec(fileData);
 			const author = regexExpr.author.exec(fileData);
 			const tags = regexExpr.tags.exec(fileData);
-			const img = regexExpr.img.exec(fileData);
 			const addedOn = regexExpr.addedOn.exec(fileData);
 
 			// Check if all of the fields are defined
-			if (title && author && tags && img && addedOn && tags[1]) {
+			if (title && author && tags && addedOn && tags[1]) {
 				// Create a meta entry
 				const metaEntry = {
 					filename: gameFile.replace(".js", ""),
 					title: title[1],
 					author: author[1],
 					tags: JSON.parse(tags[1].replaceAll("'", '"')), // Replace all ' with " in order for compatibility issues
-					img: img[1] == '""' ? "" : img[1],
 					addedOn: addedOn[1],
 				};
+
+				// generate game image json data
+				generateImageJson(metaEntry.filename);
 
 				metadata.push(metaEntry);
 				console.log(" OK!");

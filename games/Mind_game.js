@@ -2,7 +2,6 @@
 @title: Mind_game
 @author: brunoblaise 
 @tags: ['logic']
-@img: ""
 @addedOn: 2024-04-05
 
 */

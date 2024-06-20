@@ -1,7 +1,6 @@
 /*
 @title: sudoku
 @tags: ['classic']
-@img: ""
 @addedOn: 2023-01-25
 @author: wyatt
 
@@ -1146,7 +1145,7 @@ const sudokuJS = () => {
             }
         }
 
-        console.log(display_string);
+        // console.log(display_string);
     };
 
     sudoku.validate_board = function(board){

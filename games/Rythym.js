@@ -1,6 +1,5 @@
 /*
 @tags: ['']
-@img: ""
 @addedOn: 2023-12-25
   @title: Rythym
   @author: Shadman
@@ -331,7 +330,7 @@ function clearPoweredPads() {
   let ret = false;
   for(let i = 0; i < powered.length; i++) {
     let tile = getTile(powered[i].x, powered[i].y);
-    console.log(tile[0]);
+    // console.log(tile[0]);
     if(tile[0].type != poweredPad) {
       tile[0].remove();
       score++;

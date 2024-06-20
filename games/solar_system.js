@@ -1,7 +1,6 @@
 /*
 @title: solar_system
 @tags: ['simulation']
-@img: ""
 @addedOn: 2022-11-23
 @author: CD
 */

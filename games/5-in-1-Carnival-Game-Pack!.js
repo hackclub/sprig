@@ -1,7 +1,6 @@
 /*
 @title: 5-in-1 Carnival Game Pack!
 @tags: []
-@img: ""
 @addedOn: 2023-01-07
 @author: Ada Dyer
 
@@ -130,7 +129,7 @@ class WhackOrpheus {
       o.y = Math.floor(Math.random() * 3)
       
       if (i[0]) {
-        console.log(i)
+        // console.log(i)
         if (i[0]._type == "s") {
           addText("You caught him!", {color: color`H`})
           setTimeout(()=> {
@@ -181,7 +180,7 @@ class Piano {
     let s = getFirst(selector2)
     let i = getTile(s.x, s.y)
 
-    console.log(i)
+    // console.log(i)
     
     if (i[0]._type == "3") {
         playTune(a)
@@ -982,9 +981,9 @@ p..........
 
 setMap(levels[level]);
 
-console.log("hoi1")
+// console.log("hoi1")
 if (game == "none") {
-  console.log("menu setup")
+  // console.log("menu setup")
   setBackground(bg);
   mapNat = getMapV2();
   setMapV2(trimMapV2(px-5, py-4, 10, 8, mapNat));

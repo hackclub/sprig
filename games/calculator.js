@@ -1,7 +1,6 @@
 /*
 @title: calculator
 @tags: ['tool', 'simulation']
-@img: ""
 @addedOn: 2023-03-03
 @author: Sameer Murthy
 

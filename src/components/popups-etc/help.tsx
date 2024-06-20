@@ -3,25 +3,32 @@ import { Signal, useSignal } from "@preact/signals";
 import { IoCaretBack, IoCaretForward } from "react-icons/io5";
 import styles from "./help.module.css";
 import { compiledContent } from "../../../docs/docs.md";
-import { codeMirror, PersistenceState } from "../../lib/state";
+import { codeMirror, isNewSaveStrat, PersistenceState } from "../../lib/state";
 import Button from "../design-system/button";
-import { saveGame } from "../big-interactive-pages/editor";
+import { saveGame, startSavingGame } from "../big-interactive-pages/editor";
+import ChatComponent from "./chat-component";
 
 interface HelpProps {
+	sessionId: string;
 	initialVisible?: boolean;
 	tutorialContent?: string[];
-	persistenceState?: Signal<PersistenceState>;
+	persistenceState: Signal<PersistenceState>;
+	defaultHelpAreaHeight: number;
+	helpAreaSize: Signal<number>;
 	showingTutorialWarning?: Signal<boolean>;
+	sessionId: string
 }
 const helpHtml = compiledContent();
 
 export default function Help(props: HelpProps) {
 	const showingTutorial = useSignal(props.tutorialContent !== undefined);
+	const showingChat = useSignal(false);
 	const toolkitScroll = useSignal(0);
 	const tutorialScroll = useSignal(0);
 
 	const toolkitContentRef = useRef<HTMLDivElement>(null);
 	const tutorialContentRef = useRef<HTMLDivElement>(null);
+	const chatContentRef = useRef<HTMLDivElement>(null);
 
 	const tutorialHtml =
 		props.tutorialContent &&
@@ -37,10 +44,14 @@ export default function Help(props: HelpProps) {
 				cloudSaveState: "SAVING",
 				tutorialIndex,
 			};
-			saveGame(
-				props.persistenceState,
-				codeMirror.value!.state.doc.toString()
-			);
+			if(isNewSaveStrat.value)
+				startSavingGame(props.persistenceState)
+			else
+				saveGame(
+					props.persistenceState,
+					codeMirror.value!.state.doc.toString(),
+					props.sessionId
+				);
 		} else if (props.persistenceState?.value.kind == "SHARED") {
 			props.persistenceState.value = {
 				...props.persistenceState.value,
@@ -66,6 +77,7 @@ export default function Help(props: HelpProps) {
 			0;
 		setTutorialIndex(tutorialIndex - 1);
 	};
+
 	return (
 		<div class={styles.container}>
 			<div class={styles.tabs}>
@@ -76,6 +88,7 @@ export default function Help(props: HelpProps) {
 							showingTutorial.value ? styles.selected : ""
 						}`}
 						onClick={() => {
+							showingChat.value = false;
 							showingTutorial.value = true;
 							tutorialContentRef.current!.scrollTop =
 								tutorialScroll.value;
@@ -88,9 +101,12 @@ export default function Help(props: HelpProps) {
 					<div
 						role="button"
 						className={`${styles.tab} ${
-							showingTutorial.value ? "" : styles.selected
+							showingTutorial.value || showingChat.value
+								? ""
+								: styles.selected
 						}`}
 						onClick={() => {
+							showingChat.value = false;
 							showingTutorial.value = false;
 							toolkitContentRef.current!.scrollTop =
 								toolkitScroll.value;
@@ -99,8 +115,56 @@ export default function Help(props: HelpProps) {
 						Help
 					</div>
 				)}
+				{!tutorialHtml && (
+					<Button
+						accent
+						class={`${styles.tab} ${
+							!showingChat.value ? styles.selected : ""
+						}`}
+						onClick={() => {
+							showingChat.value = false;
+							showingTutorial.value = false;
+						}}
+					>
+						Toolkit
+					</Button>
+				)}
+				<div className={styles.tooltipContainer}>
+					<Button
+						accent
+						class={`${styles.tab} ${
+							showingChat.value ? styles.selected : ""
+						}`}
+						disabled={
+							props.persistenceState?.value.session === null
+						}
+						onClick={() => {
+							showingChat.value = true;
+							showingTutorial.value = false;
+						}}
+					>
+						Get AI Help
+					</Button>
+					<span className={styles.tooltipText}>
+						{!props.persistenceState?.value.session?.user
+							? "You must be logged in to use this feature!"
+							: "Ask AI for help with your code" }
+					</span>
+				</div>
+				<Button
+					accent
+					class={styles.tab}
+					onClick={() => {
+						if (!props.helpAreaSize) return;
+						props.helpAreaSize.value =
+							props.helpAreaSize.value == 0
+								? props.defaultHelpAreaHeight
+								: 0;
+					}}
+				>
+					{props.helpAreaSize?.value == 0 ? "Show" : "Hide"}
+				</Button>
 			</div>
-
 			<div
 				class={styles.content}
 				style={{
@@ -196,17 +260,24 @@ export default function Help(props: HelpProps) {
 					</>
 				)}
 			</div>
-			<div
-				class={styles.content}
-				style={{
-					display: !showingTutorial.value ? "block" : "none",
-				}}
-				ref={toolkitContentRef}
-				dangerouslySetInnerHTML={{ __html: helpHtml }}
-				onScroll={(e) => {
-					toolkitScroll.value = e.currentTarget.scrollTop;
-				}}
-			/>
+			{!showingChat.value && (
+				<div
+					class={styles.content}
+					style={{
+						display: !showingTutorial.value ? "block" : "none",
+					}}
+					ref={toolkitContentRef}
+					dangerouslySetInnerHTML={{ __html: helpHtml }}
+					onScroll={(e) => {
+						toolkitScroll.value = e.currentTarget.scrollTop;
+					}}
+				/>
+			)}
+			{showingChat.value && (
+				<div class={styles.chatContent} ref={chatContentRef}>
+					<ChatComponent persistenceState={props.persistenceState} />
+				</div>
+			)}
 		</div>
 	);
 }

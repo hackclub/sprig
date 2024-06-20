@@ -2,7 +2,6 @@
 @title: Countdown Golf
 @author: schoblaska
 @tags: ["logic"]
-@img: "Countdown_Golf.png"
 @addedOn: 2024-03-30
 
 Countdown Golf is based on Herugolf
@@ -5661,8 +5660,8 @@ const addArrows = (x1, y1, x2, y2) => {
 	const outArrow =
 		xStep === 0
 			? yStep > 0
-				? downOut
-				: upOut
+			? downOut
+			: upOut
 			: xStep > 0
 			? rightOut
 			: leftOut;

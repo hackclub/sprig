@@ -1,7 +1,6 @@
 /*
 @title: 2D Life
 @tags: ['simulation', 'hackable', 'classic', 'sandbox']
-@img: ""
 @addedOn: 2022-09-25
 @author: Leonard (Omay)
 

@@ -3,7 +3,6 @@
 @title: Space_Odyssey
 @author: Devon S
 @tags: ['dodge']
-@img: ""
 @addedOn: 2023-11-27
 */
 

@@ -3,7 +3,6 @@
 @title: Swapper
 @author: RaidTheWeb
 @tags: ['advanced']
-@img: ""
 @addedOn: 2023-10-18
 */
 

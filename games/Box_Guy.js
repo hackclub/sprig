@@ -2,7 +2,6 @@
 @title: Box Guy
 @author: jli46
 @tags: ["puzzle"]
-@img: "Box_Guy.png"
 @addedOn: 2024-04-23
 */
 

@@ -5,7 +5,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: orbit_blaster
 @author: blackpolygon
 @tags: ["dodge"]
-@img: "orbit_blaster.png"
 @addedOn: 2024-04-08
 */
 
@@ -271,10 +270,10 @@ let moveObstacleInterval;
 
 
 function startGame() {
-  console.log('srart game working ')
+  // console.log('srart game working ')
   FIRSTSTART = true
   if (GAMESTARTED) {
-    console.log('srart game  ')
+    // console.log('srart game  ')
     clearText()
     addSprite(1, 8, player);
     moveBulletsInterval = setInterval(moveBullets, 50);

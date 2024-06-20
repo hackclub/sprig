@@ -1,7 +1,6 @@
 /*
 @title: mini_maze_and_puzzle
 @tags: ['strategy']
-@img: ""
 @addedOn: 2022-09-16
 @author: muhammad tsaqif mukhayyar
 
@@ -600,7 +599,7 @@ onInput("j", () => {
 
 onInput("k", () => {
   const currentLevel = levels[0];
-  console.log(levels[level]);
+  // console.log(levels[level]);
   if (currentLevel !== undefined) {
     clearText("");
     setMap(currentLevel);
@@ -639,7 +638,7 @@ afterInput(() => {
   } else {
     const currentLevelCheck = levels[level];
     if(currentLevelCheck == levels[5]){
-      console.log("test")
+      // console.log("test")
       addSprite(uBarrierX, uBarrierY, barrier);
       button_status="unpressed";
     }

@@ -2,7 +2,6 @@
 @title: silicon-valley-obby
 @author: Savina Jabbo
 @tags: []
-@img: ""
 @addedOn: 2024-03-20
 
 How To Play:
@@ -1125,7 +1124,7 @@ onInput("i", () => {
       setTimeout((getFirst(player).y -= 1), 1000);
       setTimeout(() => {fall(player); richardDied(level)}, 250);    
     } catch (exceptionVar) {
-      console.log("not moving")
+      // console.log("not moving")
     }
 });
 
@@ -1135,7 +1134,7 @@ onInput("a", () => {
     fall(player)
   }
   catch (exceptionVar) {
-    console.log("not moving")
+    // console.log("not moving")
   }
 });
 
@@ -1144,7 +1143,7 @@ onInput("d", () => {
     getFirst(player).x += 1
     setTimeout(() => {fall(player); richardDied(level)}, 100);    
   } catch (exceptionVar) {
-    console.log("not moving")
+    // console.log("not moving")
   }
 });
 

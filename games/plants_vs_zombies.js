@@ -1,7 +1,6 @@
 /*
   @title: Plants vs. Zombies
 @tags: []
-@img: ""
 @addedOn: 2023-02-15
   @author: jianmin-chen
 
@@ -949,7 +948,7 @@ function Game() {
         addText(String(this.amount), { x: 0, y: 0, color: color`6` })
         addText(String(this.score), { x: 19, y: 0, color: color`4` })
       } catch (err) {
-        console.log('Found the error!', err)
+        // console.log('Found the error!', err)
       }
     },
     cleanup: function (text, x, y) {
@@ -1081,7 +1080,7 @@ let gameloop = setInterval(() => {
   if (zombieCount >= newZombie) {
     zombieCount = 0
     const pos = [width() - 1, random(1, height() - 2)]
-    console.log(pos)
+    // console.log(pos)
     const newZombie = Zombie(...pos)
     addSprite(newZombie.x, newZombie.y, newZombie.letter)
     game.zombieSprites.push(newZombie)

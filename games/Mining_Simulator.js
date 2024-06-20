@@ -3,7 +3,6 @@
 @title: Mining_Simulator
 @author: MiniCube11
 @tags: ['simulation']
-@img: ""
 @addedOn: 2023-04-10
 */
 
@@ -413,7 +412,7 @@ onInput("d", () => {
 });
 
 afterInput(() => {
-  console.log("yes");
+  // console.log("yes");
 });
 
 // movement

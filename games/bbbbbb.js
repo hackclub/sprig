@@ -1,7 +1,6 @@
 /*
 @title: bbbbbb
 @tags: ['logic']
-@img: bbbbbb
 @addedOn: 2022-12-06
 @author: hoggie
 */

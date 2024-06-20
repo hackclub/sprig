@@ -1,7 +1,6 @@
 /*
 @title: Sort
 @tags: []
-@img: Sort
 @addedOn: 2022-12-26
 @author: Mohan
 */
@@ -115,23 +114,23 @@ function runLoop() {
   }
   
   let rights = getAll(right);
-  console.log(rights);
+  // console.log(rights);
   
   let wrongs = getAll(wrong);
-  console.log(wrongs);
+  // console.log(wrongs);
   
   if(clicked == true){
     if(rights[1] != undefined){
       for (let i = 1; i < rights.length ; i++) {
          rights[i].remove();
-         console.log(rights);
+         // console.log(rights);
        }
       clicked = false;
   }
     else if (wrongs[1] != undefined) {
       for (let i = 1; i < wrongs.length ; i++) {
          wrongs[i].remove();
-         console.log(wrongs);
+         // console.log(wrongs);
        }
       clicked = false;
     }

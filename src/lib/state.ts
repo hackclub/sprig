@@ -83,6 +83,24 @@ export type PersistenceState = ({
 	stale: boolean
 }
 
+export enum RoomStatus {
+	CONNECTED,
+	CONNECTING,
+	DISCONNECTED
+}
+
+export type RoomParticipant = {
+	userEmail: string
+	isHost: boolean
+}
+
+export type RoomState = {
+	status: RoomStatus
+	roomId: string
+	password: string
+	participants: RoomParticipant[]
+}	
+
 export const codeMirror = signal<EditorView | null>(null)
 export const muted = signal<boolean>(false)
 export const errorLog = signal<NormalizedError[]>([])
@@ -90,6 +108,9 @@ export const openEditor = signal<OpenEditor | null>(null)
 export const bitmaps = signal<[string, string][]>([])
 export const editSessionLength = signal<Date>(new Date());
 export const showKeyBinding = signal(false);
+export const showSaveConflictModal = signal<boolean>(false);
+export const continueSaving = signal<boolean>(true);
+export const LAST_SAVED_SESSION_ID = 'lastSavedSessionId';
 
 export type ThemeType = "dark" | "light" | "busker";
 export const theme = signal<ThemeType>("dark");
@@ -135,13 +156,14 @@ export const themes: Partial<Record<ThemeType, Theme>> = {
 
 export const switchTheme = (themeType: ThemeType) => {
 	theme.value = themeType;
-	
+
 	// store the new theme value in local storage
 	localStorage.setItem("theme", themeType);
 
 	const themeValue = themes[themeType];
 	// set the document values
 	const documentStyle = document.body.style;
+
 	documentStyle.background = themeValue?.background?? '';
 	document.documentElement.style.setProperty(`--accent`, themeValue?.accent?? '');
 	document.documentElement.style.setProperty(`--accent-dark`, themeValue?.accentDark?? '');
@@ -155,3 +177,4 @@ export const switchTheme = (themeType: ThemeType) => {
 		copyContainer.style.color = themeValue?.copyContainerText ?? '';
 	}
 }
+export const isNewSaveStrat = signal<boolean>(true)

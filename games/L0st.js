@@ -1,7 +1,6 @@
 /*...
 @title: L0st 
 @tags: ['puzzle-npc']
-@img: ""
 @addedOn: 2022-11-07
 @author: B00
 @Instructi0ns: WASD to move, I to restart level, K to talk, Get to the green and black thing (that looks like a cabbage), Push orange and blue things.

@@ -1,7 +1,6 @@
 /*
 @title: catch_orpheus
 @tags: ['catch']
-@img: ""
 @addedOn: 2022-10-08
 @author: sampoder
 
@@ -94,25 +93,25 @@ setPushables({
 
 onInput("s", () => {
   getFirst(player).y += 1
-  console.log(Math.floor(Math.random() * 10) - 5)
+  // console.log(Math.floor(Math.random() * 10) - 5)
   getFirst(orpheus).y += Math.floor(Math.random() * 5) - 2
 });
 
 onInput("w", () => {
   getFirst(player).y -= 1
-  console.log(Math.floor(Math.random() * 10) - 5)
+  // console.log(Math.floor(Math.random() * 10) - 5)
   getFirst(orpheus).y += Math.floor(Math.random() * 5) - 2
 });
 
 onInput("a", () => {
   getFirst(player).x -= 1
-  console.log(Math.floor(Math.random() * 10) - 5)
+  // console.log(Math.floor(Math.random() * 10) - 5)
   getFirst(orpheus).x += Math.floor(Math.random() * 5) - 2
 });
 
 onInput("d", () => {
   getFirst(player).x += 1
-  console.log(Math.floor(Math.random() * 10) - 5)
+  // console.log(Math.floor(Math.random() * 10) - 5)
   getFirst(orpheus).x += Math.floor(Math.random() * 5) - 2
 });
 
