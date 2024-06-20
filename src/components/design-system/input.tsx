@@ -11,6 +11,7 @@ interface InputProps {
 	bind?: Signal<string>
 	onChange: (event: any) => void
 	value: string
+	readonly?: boolean
 }
 
 export default function Input(props: InputProps) {
@@ -28,6 +29,7 @@ export default function Input(props: InputProps) {
 			autoComplete={props.autoComplete ?? 'off'}
 			placeholder={props.placeholder ?? ''}
 			maxLength={props.maxLength ?? Number.MAX_SAFE_INTEGER}
+			readOnly={props.readonly || false}
 		/>
 	)
 }
