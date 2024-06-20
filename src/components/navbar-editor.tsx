@@ -339,7 +339,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
                         <FaBrush />
                     </a>
                 </li>
-
                 <li>
                     <Button
                         class={styles.stuckBtn}
@@ -351,7 +350,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
                         Report a bug
                     </Button>
                 </li>
-
                 <li>
                     <Button
                         accent
@@ -371,10 +369,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
                         Run on Device
                     </Button>
                 </li>
-
                 <li>{actionButton}</li>
             </nav>
-
+            
             {/* <LoginPrompt persistenceState={props.persistenceState} /> */}
             {showSavePrompt.value && (
                 <SavePrompt
