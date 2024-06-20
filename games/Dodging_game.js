@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: 
-@author: 
+@title: Dodging Game
+@author: Swamstick911
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-06-20
 */
 
 const player = "p"
