@@ -1,15 +1,8 @@
 /*
-First time? Check out the tutorial game:
 @title: The Impossible Game
 @author: @SahilChess
-@tags: [#arcade #sprig]
+@tags: []
 @addedOn: 2024-06-18
-*/
-
-
-/*
-@title: dodge_the_fireball
-@author: sam liu
 */
 
 const player = "p";
