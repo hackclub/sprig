@@ -2,7 +2,7 @@
 @title: racing_game_shrek
 @tags: ['strategy']
 @addedOn: 2024-06-20
-@by : saumil
+@author: saumil
 about : collect all green stuff (grass) and go to the blue thing(the destination)
 */
 
