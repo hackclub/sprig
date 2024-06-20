@@ -18,6 +18,8 @@ import { persist } from "../lib/game-saving/auth-helper";
 import InlineInput from "./design-system/inline-input";
 import { throttle } from "throttle-debounce";
 import SharePopup from "./popups-etc/share-popup";
+import ShareRoomPopup from "./popups-etc/share-room";
+
 import {
 	IoChevronDown,
 	IoLogoGithub,
@@ -142,6 +144,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const showNavPopup = useSignal(false);
 	const showStuckPopup = useSignal(false);
 	const showThemePicker = useSignal(false);
+	const shareRoomPopup = useSignal(false);
+
 
 	// we will accept the current user's
 	// - name,
@@ -394,6 +398,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				/>
 			)}
 
+			{shareRoomPopup.value && (
+				<ShareRoomPopup
+					persistenceState={props.persistenceState}
+					roomState={props.roomState}
+					onClose={() => (shareRoomPopup.value = false)}
+				/>
+			)}	
+
 			{showThemePicker.value && (
 				<ul class={styles.themePicker}>
 					{Object.keys(themes).map((themeKey) => {
@@ -576,6 +588,28 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								</li>
 							</>
 						)}
+
+						{(props.persistenceState.value.session?.session.full && isNewSaveStrat.value===true) ?(
+							<>
+								<li>
+								<a
+								href="javascript:void(0);"
+								role="button"
+						
+								onClick={() => (shareRoomPopup.value = !shareRoomPopup.value)}
+							>
+								{" "}
+								New Room{" "}
+							</a>
+								</li>
+							</>
+						) : (
+							<>
+								<li>
+									
+								</li>
+							</>
+						)}	
 						<li>
 							<a href="/gallery">Gallery</a>
 						</li>
