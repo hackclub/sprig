@@ -170,8 +170,8 @@ if (session && session.session.full) {
 					<p>
 						Sprig is also hardware development kit! It comes
 						disassembled and every part is reusable for your own
-						projects. It's powered by a Raspberry Pi Pico reflash
-						the firmware with the touch of a button and run whatever
+						projects. It's powered by a Raspberry Pi Pico, so you can reflash
+						the firmware with the touch of a button and run anything
 						you want.
 					</p>
 				</div>
@@ -385,7 +385,7 @@ if (session && session.session.full) {
 			var gl
 
 			try {
-				gl = canvas.getContext('webgl', { powerPreference: "high-performance" }) || canvas.getContext('experimental-webgl', { powerPreference: "high-performance" });
+				gl = canvas.getContext('webgl', { powerPreference: "low-power" }) || canvas.getContext('experimental-webgl', { powerPreference: "low-power" });
 			} catch (e) {
 				console.log(e)
 			}
@@ -424,6 +424,7 @@ if (session && session.session.full) {
 					const renderer = new WebGLRenderer({
 						antialias: true,
 						alpha: true,
+						powerPreference: 'low-power',
 					});
 					renderer.setSize(width, height, false);
 
