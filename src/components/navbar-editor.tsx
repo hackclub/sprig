@@ -80,7 +80,7 @@ const canDelete = (persistenceState: Signal<PersistenceState>) => {
 
 interface EditorNavbarProps {
 	persistenceState: Signal<PersistenceState>
-	roomState?: Signal<RoomState>
+	roomState: Signal<RoomState> | undefined
 }
 
 type StuckCategory =
@@ -227,6 +227,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				:
 					props.roomState?.value.participants.filter((participant) => {
 						if(participant.isHost) return true
+						return false
 					})[0]?.userEmail === props.persistenceState.value.session?.user.email ? props.persistenceState.value.session?.user.email : "???"
 			}`,
 			SAVING: "Saving...",
@@ -292,6 +293,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								<span class={styles.attribution}> by {
 										(!isNewSaveStrat.value || props.roomState?.value.participants.filter((participant) => {
 												if(participant.isHost) return true
+												return false
 											})[0]?.userEmail === props.persistenceState.value.session?.user.email)
 											? "you"
 											: "???"

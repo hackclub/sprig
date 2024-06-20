@@ -472,6 +472,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 			window.addEventListener("keydown", handler);
 			return () => window.removeEventListener("keydown", handler);
 		}
+		return
 	}, [continueSaving.value]);
 
 	let initialCode = "";
