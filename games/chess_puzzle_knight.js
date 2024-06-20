@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Chess Puzzle (Knight)
-@author: SilverCanvas72
+@title: Chess Puzzle
+@author: Silver Canvas
 @tags: []
-@addedOn: 2024-06-19
+@addedOn: 2024-00-00
 */
 
 const rook = "r"
@@ -50,6 +50,10 @@ const BackgroundTune = tune`
 256.4102564102564: C4^256.4102564102564 + E5~256.4102564102564 + D5~256.4102564102564 + C5~256.4102564102564,
 256.4102564102564: B4~256.4102564102564 + A4~256.4102564102564,
 256.4102564102564: E4^256.4102564102564 + A4~256.4102564102564`
+const dieSound = tune`
+500,
+500: G4-500 + B4-500 + A4/500,
+15000`
 
 playTune(BackgroundTune, Infinity)
 
@@ -300,13 +304,33 @@ onInput("d", () => {
 })
 
 onInput("j", () => {
-  getFirst(player).x = getFirst(cursor).x
-  getFirst(player).y = getFirst(cursor).y
-})
+  let cx = getFirst(cursor).x;
+  let cy = getFirst(cursor).y;
+  let px = getFirst(player).x;
+  let py = getFirst(player).y;
+
+
+  if ((Math.abs(px - cx) == 2) && (Math.abs(py - cy) == 1)) {
+    getFirst(player).x = cx;
+    getFirst(player).y = cy;
+  } else if ((Math.abs(px - cx) == 1) && (Math.abs(py - cy) == 2)) {
+    getFirst(player).x = cx;
+    getFirst(player).y = cy;
+  }
+});
+
+
 
 
 afterInput(() => {
   clearText()
+  if (tilesWith(player, wallw).length >= 1) {
+    playTune(dieSound)
+    setMap(levels[level])
+  } else if (tilesWith(player, wallb).length >= 1) {
+    playTune(dieSound)
+    setMap(levels[level])
+  }
   if (tilesWith(player, goal).length >= 1) {
     level += 1
     if (level == 10) {
