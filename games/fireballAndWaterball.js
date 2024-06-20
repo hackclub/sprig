@@ -1,3 +1,9 @@
+/*
+@title: Fireball and Waterball
+@author: JesseDoesStuff
+@tags: []
+@addedOn: 2024-06-20
+*/
 // define some of the sprites for my levels
 const p1 = "1"
 const p2 = "2"
