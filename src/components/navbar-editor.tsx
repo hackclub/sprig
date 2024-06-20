@@ -596,17 +596,18 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								Prettify code{" "}
 							</a>
 						</li>
-            <li>
-              <a
-                href="javascript:void(0);"
-                role="button"
-                onClick={() => {
-                  showKeyBinding.value = true;
-                  showNavPopup.value = false;
-                }}
-              >
-               Rebinding key
-              </a>
+						<li>
+							<a
+								href="javascript:void(0);"
+								role="button"
+								onClick={() => {
+									showKeyBinding.value = true;
+									showNavPopup.value = false;
+								}}
+							>
+								Rebinding key
+							</a>
+						</li>
 						<li>
 							<a href={"javascript:void"}
 							role="button"
