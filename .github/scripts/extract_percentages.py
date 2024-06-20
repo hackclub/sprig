@@ -58,8 +58,5 @@ def main():
         sys.exit(1)
     else:
         log("No high plagiarism percentages detected.")
-        markdown_lines.append("## Game overlap report: \n None detected")
-        write_to_markdown("plagiarism-report.md", markdown_lines)
-
 if __name__ == "__main__":
     main()

@@ -1,4 +1,11 @@
 /*
+@title: Nickels
+@author: Adam Miller
+@tags: ['strategy']
+@addedOn: 2023-12-30
+*/
+
+/*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 */

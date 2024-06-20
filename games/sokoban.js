@@ -1,7 +1,6 @@
 /*
 @title: sokoban
 @tags: ['beginner', 'hackable', 'sokoban-style']
-@img: ""
 @addedOn: 2022-07-18
 @author: leo
 

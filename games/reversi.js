@@ -1,7 +1,6 @@
 /*
 @title: reversi
 @tags: ['classic', 'multiplayer']
-@img: ""
 @addedOn: 2022-09-13
 @author: veehj
 */
@@ -67,7 +66,7 @@ const game = {
 
   /** Play at (x,y) */
   play(x, y) {
-    console.log("play", x, y, this.player, this.getScore(x, y, this.player));
+    // console.log("play", x, y, this.player, this.getScore(x, y, this.player));
     if (this.getScore(x, y, this.player) === 0) return false;
     this.board[x][y] = this.player;
     this.score[this.player]++;
@@ -397,7 +396,7 @@ function startGame() {
 }
 
 async function gameOnKey(key) {
-  console.log(key);
+  // console.log(key);
   if (key == "w") {
     if (cursor.y > 0) cursor.y--;
   } else if (key == "s") {
@@ -421,7 +420,7 @@ async function gameOnKey(key) {
       }, 500);
     });
     if(game.player != 1){
-      console.log("bug");
+      // console.log("bug");
       break;
     }
     game.play(...game.bestMove());

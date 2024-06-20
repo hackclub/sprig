@@ -1,7 +1,6 @@
 /*
 @title: platform_rogue
 @tags: ['advanced']
-@img: ""
 @addedOn: 2022-08-22
 @author: @farreltobias
 */

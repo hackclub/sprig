@@ -1,7 +1,6 @@
 /*
 @title: Space Invasion
 @tags: ['endless']
-@img: ""
 @addedOn: 2022-10-18
 @author: Agent-Shu
 */
@@ -483,7 +482,7 @@ const collision = () =>{
       if(getAll(eship)[0].y == getAll(laser)[0].y){
 
         score += 1
-        console.log("boom")
+        // console.log("boom")
         playTune(boom)
 
         clearInterval(y_laser)

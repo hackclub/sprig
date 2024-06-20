@@ -1,7 +1,6 @@
 /*
 @title: Rock, Paper, Scissors!
 @tags: ['classic']
-@img: ""
 @addedOn: 2022-09-13
 @author: ezefranca
 */

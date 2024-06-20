@@ -1,3 +1,10 @@
+/*
+@title: Catch the star
+@author: Saumya
+@tags: []
+@addedOn: 2023-12-20
+*/
+
 const reindeer = "p";
 const grass = "g";
 const star = "h";

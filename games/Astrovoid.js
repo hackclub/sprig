@@ -1,8 +1,10 @@
-// @title: Astrovoid
+/*
+@title: Astrovoid
 @tags: ['endless']
-@img: ""
 @addedOn: 2023-01-23
-// @author: Aspen :D
+@author: Aspen :D
+*/
+
 // Description: Avoid astroids by moving using WASD, pause the game using I
 
 

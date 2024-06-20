@@ -1,7 +1,6 @@
 /*
 @title: fogged
 @tags: ['WIP']
-@img: ""
 @addedOn: 2022-08-15
 @author: Jay Reddy
 
@@ -116,7 +115,7 @@ function changeMap(){
     }
   }
 
-  console.log(final)
+  // console.log(final)
   return map`${final}`;
 }
 

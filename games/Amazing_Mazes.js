@@ -3,7 +3,6 @@
 @title: Amazing_Mazes
 @author: Dexter Speed
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2023-07-25
 */
 

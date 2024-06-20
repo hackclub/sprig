@@ -1,7 +1,6 @@
 /*
 @title: racer
 @tags: ['logic']
-@img: ""
 @addedOn: 2022-11-08
 @author: Snow
 */
@@ -300,13 +299,13 @@ setInterval(() => {
 let lastTime = Date.now()
 
 setInterval(() => {
-  console.log(lastTime)
+  // console.log(lastTime)
   if (!hasLost && raceStarted <= -1 && Date.now() - lastTime >= levelSpeeds[level] && level > 1) {
     
   getFirst(player).y -= 1;
     checkWin()
     lastTime = Date.now()
-    console.log("inside", lastTime)
+    // console.log("inside", lastTime)
     
   }
 }, 100)

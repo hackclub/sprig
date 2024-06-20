@@ -1,7 +1,6 @@
 /*
 @title: Coding Demo 1 - Linked sprites
 @tags: ['demo', 'hackable', 'beginner']
-@img: coding_demo_1_linked_sprites
 @addedOn: 2022-09-13
 @author: Leonard (Omay)
 

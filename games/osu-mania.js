@@ -1,4 +1,11 @@
 /*
+@title: osu-mania
+@author: Alex Park
+@tags: ['']
+@addedOn: 2023-01-01
+*/
+
+/*
 A game similar to osu! Mania or Piano Tiles
 
 --How to play--
@@ -274,7 +281,7 @@ function placeRowOfNotes(beatmapNum, row) {
   const beatmap = beatmaps[beatmapNum];
   let notes = beatmap.split("\n");
   notes.reverse();
-  console.log(notes);
+  // console.log(notes);
   for (let noteIndex=0;noteIndex<4;noteIndex++) {
     if (notes[row].charAt(noteIndex) == "0") {
       // random chance to spawn in an Amogus instead of normal note sprite

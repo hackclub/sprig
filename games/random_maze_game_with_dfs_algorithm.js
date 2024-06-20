@@ -1,4 +1,11 @@
 /*
+@title: random_maze_game_with_dfs_algorithm
+@author: Hanz Po
+@tags: ['endless']
+@addedOn: 2023-12-29
+*/
+
+/*
 Sprig is perfect for maze games and I wanted to learn more about graph theory, so I decided to combine them into this project
 This project incorporates the iterative implementation of a randomized depth-first search (DFS) generation algorithm, 
 as described in this Wikipedia article: https://en.wikipedia.org/wiki/Maze_generation_algorithm

@@ -1,7 +1,6 @@
 /*
 @title: snek
 @tags: ['classic']
-@img: ""
 @addedOn: 2022-08-30
 @author: userjhansen
 

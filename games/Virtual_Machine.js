@@ -1,7 +1,6 @@
 /*
 @title: Virtual_Machine
 @tags: ['strategy']
-@img: ""
 @addedOn: 2022-09-08
 @author: N_Rizwan
 */
@@ -426,7 +425,7 @@ afterInput(() => {
   if (check2 > 0) {
     level = 2
 
-    console.log("Load trash");
+    // console.log("Load trash");
     
     const currentLevel = levels[level];
     if (currentLevel !== "") {

@@ -1,7 +1,6 @@
 /*
 @title: Goaled
 @tags: ['catch']
-@img: ""
 @addedOn: 2022-09-24
 @author: Ronan Verma
 

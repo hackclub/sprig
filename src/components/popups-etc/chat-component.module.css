@@ -1,0 +1,108 @@
+.chatUI {
+	display: flex;
+	flex-direction: column;
+}
+
+.chatArea {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	overflow-y: auto;
+	padding: 10px;
+}
+
+.message {
+	font-size: 14px;
+	margin-bottom: 10px;
+	padding: 12px;
+	overflow-x: auto;
+	background-color: lightgrey;
+	border-radius: 5px;
+	max-width: 85%;
+	white-space: pre-wrap;
+}
+
+.messageUser {
+	align-self: flex-end;
+	background-color: var(--accent);
+}
+
+.messageUser p {
+	color: white;
+}
+
+.messageBot {
+	align-self: flex-start;
+	background-color: #e5e5e5;
+	color: black;
+}
+
+.message p {
+	margin: 0;
+}
+
+.message pre {
+	margin: 0;
+	padding: 4px;
+}
+
+.message ol {
+	margin: 0;
+	padding-left: 16px;
+}
+
+.message ul {
+	margin: 0;
+	padding-left: 16px;
+}
+
+.inputArea {
+	border: 1px solid var(--accent);
+	display: flex;
+	align-items: stretch;
+	position: sticky;
+	bottom: 0;
+}
+
+.inputArea textarea {
+	background: white;
+	border: none;
+	outline: none;
+	flex-grow: 1;
+	padding: 5px;
+	resize: none;
+}
+
+.inputArea button {
+	height: 38px;
+}
+
+.tooltipContainer {
+	position: relative;
+	display: inline-block;
+}
+
+.tooltipText {
+	display: hidden;
+	width: 80px;
+	background-color: black;
+	color: white;
+	text-align: center;
+	border-radius: 6px;
+	padding: 4px;
+	font-size: 12px;
+	position: absolute;
+	z-index: 10;
+	bottom: 100%;
+	left: 50%;
+	margin-left: -30px;
+	margin-bottom: 2px;
+	opacity: 0;
+	transition: opacity 0.3s;
+	box-shadow: 0 0 10px 0 #00000038;
+}
+
+.tooltipContainer:hover .tooltipText {
+	display: inline;
+	opacity: 1;
+}

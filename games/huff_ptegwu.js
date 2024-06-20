@@ -1,3 +1,10 @@
+/*
+@title: huff_ptegwu
+@author: PenJonathan
+@tags: ['multiplayer']
+@addedOn: 2023-12-29
+*/
+
 const pr = "r"
 const pb = "b"
 const ball = "x"

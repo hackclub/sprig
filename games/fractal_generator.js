@@ -1,7 +1,6 @@
 /*
 @title: fractal_generator
 @tags: ['sandbox', 'simulation']
-@img: ""
 @addedOn: 2023-01-10
 @author: Graham Darcey
 

@@ -1,7 +1,6 @@
 /*
 @title: Tic-Tac-No
 @tags: ['multiplayer']
-@img: ""
 @addedOn: 2023-02-02
 @author: Ojas Somethin'
 */
@@ -175,7 +174,7 @@ const allEqual = arr => arr.every( v => v === arr[0] )
 //Check if win
 function checkVic(){
     for( let i = 0; i < 3; i++ ){
-        console.log(board[i])
+        // console.log(board[i])
         if(board[i][0] != 0 && allEqual( board[i] )){
             onVic();
             break;
@@ -234,13 +233,13 @@ function click(x, y){
     turn = !turn;
     board[y][x] = 1;
     playTune(clickRed);
-    console.log(turn, x, y);
+    // console.log(turn, x, y);
   } 
   else if(turn && board[y][x] == 0) {
     addSprite(x, y, crossblue);
     turn = !turn;
     board[y][x] = 1;
-    console.log(turn, x, y);
+    // console.log(turn, x, y);
     playTune(clickBlue);
   }
   checkVic();

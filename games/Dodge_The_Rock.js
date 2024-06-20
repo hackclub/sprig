@@ -1,7 +1,6 @@
 /*
 @title: Dodge_The_Rock
 @tags: []
-@img: ""
 @addedOn: 2023-03-09
 @author: dutamot
 */
@@ -161,7 +160,7 @@ function gameLoop() {
 }
 function lost() {
   isGameOver = true;
-  console.log("You lost");
+  // console.log("You lost");
   setMap(map`
 ........
 ........

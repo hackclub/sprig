@@ -1,7 +1,6 @@
 /*
 @title: Candy Rush
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2022-10-07
 @author: Tasbia Uddin
 */
