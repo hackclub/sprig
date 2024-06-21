@@ -331,7 +331,7 @@ if (session && session.session.full) {
 		</section>
 
 		<footer class='wrapper'>
-			<div class='container'> &copy 2023 Hack Club. 501(c)(3) nonprofit (EIN: 81-2908499)</div>
+			<div class='container'> &copy 2024 Hack Club. 501(c)(3) nonprofit (EIN: 81-2908499)</div>
 		</footer>
 
 		<img src='/SPRIGDINO.svg' alt='sprig dino' class='sprig-dino' />
@@ -382,10 +382,9 @@ if (session && session.session.full) {
 			import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 			
 			var canvas = document.createElement('canvas')
-			var gl
-
+			var gl = false
 			try {
-				gl = canvas.getContext('webgl', { powerPreference: "low-power" }) || canvas.getContext('experimental-webgl', { powerPreference: "low-power" });
+				gl = (canvas.getContext('webgl', { powerPreference: "low-power" }) || canvas.getContext('experimental-webgl', { powerPreference: "low-power" })) != null;
 			} catch (e) {
 				console.log(e)
 			}
