@@ -1,9 +1,10 @@
 /*
-@title: car_race
+@title: Car Race
 @tags: ['strategy']
 @addedOn: 2024-06-20
-@by : saumil
-about : collect all green stuff (grass) and go to the blue thing(the destination) 
+@author: saumil
+
+Collect all green stuff (grass) and go to the blue thing (the destination) 
 */
 
 const car = 'c';
