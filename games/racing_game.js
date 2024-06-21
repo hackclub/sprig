@@ -1,9 +1,9 @@
 /*
-@title: racing_game_shrek
+@title: car_race
 @tags: ['strategy']
 @addedOn: 2024-06-20
-@author: saumil
-about : collect all green stuff (grass) and go to the blue thing(the destination)
+@by : saumil
+about : collect all green stuff (grass) and go to the blue thing(the destination) 
 */
 
 const car = 'c';
@@ -113,11 +113,12 @@ setLegend(
 ................
 ................
 ................`]
-)
+);
 
 setSolids([player, obstacle, car]);
 setPushables({
-  [player]: [] });
+  [player]: []
+});
 
 let level = 0;
 const levels = [
@@ -157,7 +158,14 @@ g.gg.gg..
 ggggggggg`
 ];
 
-setMap(levels[level]);
+let destinationPosition = null;
+
+const setLevel = (lvl) => {
+  setMap(levels[lvl]);
+  destinationPosition = getFirst(destination); // Save the destination position
+}
+
+setLevel(level);
 
 const pushPlayer = (dx, dy) => {
   const playerTile = getFirst(player);
@@ -169,17 +177,29 @@ const pushPlayer = (dx, dy) => {
       if (!targetTile.some(tile => tile.type === obstacle) && !targetTile.some(tile => tile.type === car)) {
         clearTile(playerTile.x, playerTile.y);
         addSprite(newX, newY, player);
+      }
+    }
+  }
+};
 
-        if (targetTile.some(tile => tile.type === destination)) {
-          setTimeout(() => {
-            level++;
-            if (level < levels.length) {
-              setMap(levels[level]);
-            } else {
-              addText("You win!", { y: 6, color: color`3` });
-            }
-          }, 200);
-        }
+const checkDestination = () => {
+  const playerTile = getFirst(player);
+  if (playerTile) {
+    const targetTile = getTile(playerTile.x, playerTile.y);
+    if (targetTile.some(tile => tile.type === destination)) {
+      if (getAll(grass).length === 0) { // Check if all grass is collected
+        setTimeout(() => {
+          level++;
+          if (level < levels.length) {
+            setLevel(level);
+          } else {
+            addText("You win!", { y: 6, color: color`3` });
+          }
+        }, 200);
+      } else {
+        addText("Collect all grass!", { y: 15, color: color`3`, duration: 0.5 });
+        addText("Press J to Reset", { y: 1, color: color`3`, duration: 0.5 });
+        addSprite(destinationPosition.x, destinationPosition.y, destination);
       }
     }
   }
@@ -189,12 +209,8 @@ onInput('a', () => pushPlayer(-1, 0));
 onInput('d', () => pushPlayer(1, 0));
 onInput('w', () => pushPlayer(0, -1));
 onInput('s', () => pushPlayer(0, 1));
+onInput('j', () => setLevel(level)); // Reset the current level when 'j' is pressed
 
 afterInput(() => {
-  // Remove destination tile when player reaches it
-  for (const { x, y } of getAll(player)) {
-    for (const d of getTile(x, y).filter(tile => tile.type === destination)) {
-      d.remove();
-    }
-  }
+  checkDestination();
 });
