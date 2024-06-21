@@ -43,7 +43,8 @@ const saveName = throttle(500, async (gameId: string, newName: string) => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ gameId, newName }),
         });
-        if (!res.ok) throw new Error(`Error renaming game: ${await res.text()}`);
+        if (!res.ok) 
+			throw new Error(`Error renaming game: ${await res.text()}`);
     } catch (error) {
         console.error(error);
     }
