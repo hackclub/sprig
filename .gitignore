@@ -7,3 +7,4 @@ yarn-error.log
 dist/
 games/metadata.json
 public/*.json
+.env
