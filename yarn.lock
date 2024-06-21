@@ -5209,6 +5209,11 @@ postcss@^8.4.27:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
+postprocessing@^7.0.0-alpha-1:
+  version "7.0.0-alpha-1"
+  resolved "https://registry.yarnpkg.com/postprocessing/-/postprocessing-7.0.0-alpha-1.tgz#f5205393257dbc44205f90007db35e6180908fc7"
+  integrity sha512-+qHQykCpAfeRzasNHPrRZhjJo5ZFVF+uKTqFxN/0+r62Omm7HEos0HUAN73UMhchn9h7pZyi5JcfcjY5PZwYCA==
+
 preact-render-to-string@^5.2.4:
   version "5.2.6"
   resolved "https://registry.yarnpkg.com/preact-render-to-string/-/preact-render-to-string-5.2.6.tgz#0ff0c86cd118d30affb825193f18e92bd59d0604"
