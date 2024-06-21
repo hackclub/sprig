@@ -2,8 +2,7 @@ import { IoAdd, IoLogoGithub, IoOpenOutline } from "react-icons/io5";
 import Button from "./design-system/button";
 import styles from "./navbar.module.css";
 import { SessionInfo } from "../lib/game-saving/account";
-import { isDark } from "../lib/state";
-import AnnouncementBanner from "./popups-etc/announcement-banner";
+// import AnnouncementBanner from "./popups-etc/announcement-banner";
 interface MainNavbarProps {
 	session: SessionInfo | null;
 	transparent?: boolean;
@@ -37,12 +36,15 @@ export default function MainNavbar(props: MainNavbarProps) {
 					</li>
 				) : null}
 				<li>
-					<a href="/gallery">Play Sprig games</a>
+					<a href="/gallery">Gallery</a>
 				</li>
 				<li>
 					<a href="/get">Get a Sprig</a>
 				</li>
 			</ul>
+			{/* <div class={styles.desktop}>
+				<AnnouncementBanner />
+			</div> */}
 			<ul class={styles.rightActions}>
 				{props.session?.session.full ? (
 					<>
@@ -67,7 +69,7 @@ export default function MainNavbar(props: MainNavbarProps) {
 								href="https://github.com/hackclub/sprig/"
 								target="_blank"
 							>
-								Fully open-sourced{" "}
+								GitHub{" "}
 								<span
 									style={{
 										verticalAlign: "middle",
