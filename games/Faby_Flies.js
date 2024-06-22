@@ -707,7 +707,6 @@ function loseScreen() {
   addSprite(5, 1, overFive)
 
   let adjustedScore = Math.max((difficulty / 2), 0.75) * score
-  console.log(adjustedScore)
 
   if (adjustedScore > 150) {
     addSprite(5, 2, goldMedal)
@@ -735,7 +734,6 @@ function gameLoop() {
 
   pipes.forEach((pipe) => {
     if (p.x == pipe.x && p.y == pipe.y) {
-      console.log("Game Over!")
       loseScreen()
       inGame = false
       collided = true
@@ -760,7 +758,6 @@ onInput("w", () => {
     movePlayer(-1)
   } else if (score != 0 && cheatCode < 2) {
     cheatCode += 1
-    console.log(cheatCode)
   } else if (cheatCode != -1) {
     cheatCode = 0
   }
@@ -770,7 +767,6 @@ onInput("s", () => {
     movePlayer(1)
   } else if (score != 0 && 1 < cheatCode && cheatCode < 4) {
     cheatCode += 1
-    console.log(cheatCode)
   } else if (cheatCode != -1) {
     cheatCode = 0
   }
@@ -781,7 +777,6 @@ onInput("a", () => {
     movePlayerDifficulty(-1)
   } else if (score != 0 && ((3 < cheatCode && cheatCode < 5) || (5 < cheatCode && cheatCode < 7))) {
     cheatCode += 1
-    console.log(cheatCode)
   } else if (cheatCode != -1) {
     cheatCode = 0
   }
@@ -791,7 +786,6 @@ onInput("d", () => {
     movePlayerDifficulty(1)
   } else if (score != 0 && ((4 < cheatCode && cheatCode < 6) || (6 < cheatCode && cheatCode < 8))) {
     cheatCode += 1
-    console.log(cheatCode)
   } else if (cheatCode != -1) {
     cheatCode = 0
   }
@@ -800,7 +794,6 @@ onInput("d", () => {
 onInput("k", () => {
   if (!inGame && score != 0 && 7 < cheatCode && cheatCode < 9) {
     cheatCode += 1
-    console.log(cheatCode)
   } else if (cheatCode != -1) {
     cheatCode = 0
   }
@@ -820,7 +813,6 @@ onInput("l", () => {
 
 onInput("j", () => {
   if (!inGame && score == 0) {
-    console.log(speed)
     let p = getFirst(player) || getFirst(playerFlapping)
     p.x = 1
     setMap(levels[0])
