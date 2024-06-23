@@ -683,7 +683,9 @@ function updateBird() {
 
 function movePlayer(offset) {
   let p = getFirst(player) || getFirst(playerFlapping)
-  p.y += offset
+  if (p.y + offset < 7) {
+    p.y += offset
+  }
 }
 
 function movePlayerDifficulty(dir) {
