@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Ghosbly: Turn Based Combat
 @author: SlimeBind
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-06-24
 */
 let inputEnabled = true;
 const player = "p"
