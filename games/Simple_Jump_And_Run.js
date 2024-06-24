@@ -1,8 +1,8 @@
 /*
-
 @title: Little jump and run game
 @author: Vincent Abeln
-@tags: [JumpAndRun]
+@tags: []
+@addedOn: 2024-06-24
 */
 
 const player = "p"
