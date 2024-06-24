@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Party Games
-@author: 
+@author: iambodha
 @tags: ['multiplayer']
 @img: ""
 @addedOn: 2024-06-22
