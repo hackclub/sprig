@@ -320,6 +320,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						{saveState}
 					</li>
 				</ul>
+				
+				
 
 				<li class={styles.actionIcon}>
 					<a
@@ -370,6 +372,15 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						}
 					>
 						Run on Device
+					</Button>
+				</li>
+				<li>
+					<Button
+						onClick={() => {
+							window.open('https://sprig.hackclub.com/get')
+						}}
+					>
+						Submit Game
 					</Button>
 				</li>
 
