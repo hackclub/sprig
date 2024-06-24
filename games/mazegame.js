@@ -1,216 +1,227 @@
-/*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
 
-@title: 
-@author: 
-@tags: []
-@addedOn: 2024-00-00
+/* 
+@title: mazegame
+@author: Elian
+@tags: ['sokoban-style']
+@addedOn: 2023-11-04
 */
 
-const player = "p"
-const sky = "s"
-const border = "b"
-const end = "e"
+    const player = "p"
+const wall="w"
+const end="e"
+var gameRunning=true
+setSolids([player,wall])
+
+setLegend(
+  [ player, bitmap`
+................
+.......999......
+....999..999....
+...9........9...
+..99..9......9..
+..99......9..9..
+...99..99....99.
+.....99......99.
+......9...9999..
+....999999......
+9999...999999...
+.......9999.....
+......999..99...
+......99....99..
+......9......99.
+................` ],
+  [ wall, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
+  [ end, bitmap`
+3333333333333333
+3..............3
+3.333333333333.3
+3.3..........3.3
+3.3.33333333.3.3
+3.3.3......3.3.3
+3.3.3.3333.3.3.3
+3.3.3.3663.3.3.3
+3.3.3.3663.3.3.3
+3.3.3.3333.3.3.3
+3.3.3......3.3.3
+3.3.33333333.3.3
+3.3..........3.3
+3.333333333333.3
+3..............3
+3333333333333333`]
+)
 
 let level = 0
 const levels = [
   map`
-bbbbbbb
-bpb...b
-b.b.b.b
-b.b.b.b
-b.b.b.b
-b...beb
-bbbbbbb`,
+................
+..wwwwww...ww...
+......ew....w..w
+.w.wwwww....w..w
+.w..............
+..ww.......ww...
+........ww..w...
+..w...w..www..w.
+w.w.wwwp...w..w.
+..w.....ww.w..w.
+.ww......www.ww.
+.....www..w..w..
+.w.w...ww......w
+.w.www..w.....ww
+.w......wwwwwww.
+................`,
   map`
-bbbbbbbbbb
-bpb......b
-b.b.bbbb.b
-b.b.b....b
-b.b.b.bb.b
-b.b.b.bb.b
-b.b.b.eb.b
-b.b.bbbb.b
-b.....bb.b
-bbbbbbbbbb`,
+.....w.........p
+.www.w.wwwwwwww.
+.w.w.w........w.
+.w.w.www.wwwwww.
+.w.w.....w......
+...wwwwwww.wwwww
+.w......w.......
+wwwwwww.w.w..w.w
+........w.wwww.w
+...w.w.........w
+ww......www.wwww
+ew.w.w....w...w.
+.w.....w..www.w.
+.wwwwwwwwww.w.w.
+................
+.wwwwwwwwwwwwwww`,
   map`
-bbbbbbbbbb
-bp.......b
-bbbbb.bb.b
-bbbbb..b.b
-bb..eb.b.b
-bb.bbb.b.b
-bb.....b.b
-b..bbbbb.b
-b.bb.....b
-bbbbbbbbbb`,
+............w.ww
+.w.wwwww.ww.w...
+.w.....w..w.ww..
+ww.wwwwww.w.w.w.
+...w...w..w.w...
+.www.w.w..www.ww
+...w...ww..w....
+wwew.w....ww..ww
+.www.wwww..w..w.
+.......ww..w..w.
+.w.ww...ww......
+ww.w..w..w...w..
+...ww.www.w..www
+.wwwwww.w...w..w
+.........ww..w..
+pww.www.ww.w....`,
   map`
-bbbbbbbbbbbbbbbbb
-b...p...........b
-b.bb.bbbbbbbbbbbb
-b.b...........b.b
-b.b..bbbbbbbbbb.b
-b.b..be.........b
-b.b..bbbbbbbbbb.b
-b.b.bbbbbbbbbbb.b
-b.b.b.........b.b
-b.b.bbbbbbbbb.b.b
-b.b.......bbb.b.b
-b.b.bbbbb.......b
-b.b.....bbbbbbbbb
-b.b.bbb.........b
-b.b.b...bbbbbbb.b
-b...bbbbb.......b
-bbbbbbbbbbbbbbbbb`,
+................
+ewwwwwwwwwwww...
+w............w..
+wwwww.........w.
+w...ww...wwww.w.
+w..w..w....w..w.
+w.w.w.....w.w.w.
+w.w.w.....w.w.w.
+w..w.......w..w.
+w.....w.w.....w.
+w.............w.
+w...wwwwwwww..w.
+w.............w.
+pww.........ww..
+..wwwwwwwwwww...
+................`,
   map`
-bbbbbbbbbbbbbbbbbbbb
-b............b.b...b
-b.bb..bbbbbbbb.b.b.b
-b.b...b........b.b.b
-b.bbbbb.b.bbbb.b.b.b
-b.......b.b..b.b.b.b
-bbbbbbbbb....b...b.b
-b.......bbbb.bbbbb.b
-b.bbbbb.b..b...b.b.b
-b.b...b.b..bbb.b.b.b
-b.b.b........b.b.b.b
-b.bbbb.b.bbbbb.b.b.b
-b....b.b.b.....b.b.b
-bbbb.b.b.b.bbb.b.b.b
-b....b.b.b.b.b.b.b.b
-b.bbbbbbbb.b...b.b.b
-b.be.......b.b.b...b
-b.bbbbbbbbbbbbbbbb.b
-b....p.............b
-bbbbbbbbbbbbbbbbbbbb`,
-  map`
-bbbbbbbbbbbbbbbbbbbbbbbbbbb
-b...................p.....b
-bbbbbbbbbb.b.bbbbbbb.bbbb.b
-b..........b.b.b...b.b.bb.b
-b.bbbbbbbb.b.....b.b.b..b.b
-b.b........b.bbb.b.b.bb.b.b
-b.b.bbbbbbbb.b.b.b.b....b.b
-b.bbb........b.bbb.b.bbbb.b
-b.....bbbbbb.b.bb..b......b
-bbbbb.b......b....bbbbb.b.b
-b...bbbbbbbb.bbb.bb.b.b.b.b
-b.b.b......b...bbbb.b.bbb.b
-b.b.b..bbbbbbb......b.b...b
-b.b.bb.be....bbbbbbbb.b.b.b
-b.b....bbbbb........b...b.b
-b.b.bb.b...b.bbbbbbbbbbbb.b
-b.b.b...bb.b.b..........b.b
-b.b.bbb.bb.b.b.bbbbbbbb.b.b
-b.b...b..b.b.b.b...b..b.b.b
-b.b.b.bb.b.b.b...b....b.b.b
-bbb.b.b..b.b.bbbbbbbb.b.b.b
-b.b.b.b.bb.b........b.b...b
-b.b.b.b..b.bbbbbb.bbb.bbbbb
-b.b.b.b.............b.....b
-b.b.bbbbbbbbbbbbbbbbbbb.bbb
-b.........................b
-bbbbbbbbbbbbbbbbbbbbbbbbbbb`,
-  map`
-...............
-...............
-...............
-...............
-...............
-...............
-...............
-...............
-...............
-...............
-...............
-...............
-...............
-...............
-.........p.....`,
-];
-
-setLegend(
-  [player, bitmap`
-................
-......00000.....
-.....00...0.....
-....00....00....
-....0......0....
-....00...000....
-.....00..0......
-......0000......
-.......00.......
-....00000000....
-.......00.......
-.......00.......
-......0000......
-.....00..00.....
-.....0....0.....
-.....0....0.....`],
-  [border, bitmap`
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL`],
-  [end, bitmap`
+...............p
+.wwwwwwwwwwwwwww
+.w..............
+.w.wwwwwwwwwwww.
+.w.w..........w.
+.w.w.wwwwwwww.w.
+.w.w.w......w.w.
+.w.w.w.wwww.w.w.
+.w.w.w.w.ew.w.w.
+.w.w.w....w.w.w.
+.w.w.wwwwww.w.w.
+.w.w........w.w.
+.w.wwwwwwwwww.w.
+.w............w.
+.wwwwwwwwwwwwww.
+................`,
+  map`.w.......wwe.w..
+w.......w..w.w..
+...ww...w..w..ww
+..w..w...ww.....
+..w..w..........
+...ww......ww..w
+w.....ww..w..w.w
+.w...w..w.w..w..
+.w...w..w..ww...
+w.....ww........
+...ww....ww.....
+..w..w..w..w....
+..w..w..w..w...w
+...ww....ww...w.
+wwp...w.....w.w.
+wwww..ww...ww..w`,
+map`
 ................
 ................
 ................
-................
-....HHHHHHHH....
-....H555555H....
-....H5HHHH5H....
-....H5H55H5H....
-....H5H55H5H....
-....H5HHHH5H....
-....H555555H....
-....HHHHHHHH....
+..w.w.www.w.w...
+...w..w.w.w.w...
+...w..w.w.w.w...
+...w..www.www...
 ................
 ................
+..w.w.w.www.w..w
+..w.w.w..w..ww.w
+..w.w.w..w..wwww
+..w.w.w..w..w.ww
+...w.w..www.w..w
 ................
-................`],
-);
-
-setSolids([player, border])
+................`
+]
 setMap(levels[level])
 
-setPushables({
-  [player]: []
-})
+function checkHit(){
+  let obstacles=getAll(end)
+  let p=getFirst(player)
 
-
-onInput("w", () => {
-  getFirst(player).y -= 1;
-});
-onInput("a", () => {
-  getFirst(player).x -= 1;
-});
-onInput("s", () => {
-  getFirst(player).y += 1;
-});
-onInput("d", () => {
-  getFirst(player).x += 1;
-});
-
-
-afterInput(() => {
-  if (tilesWith(end, player).length == 1 && level < 6) {
-    level = level + 1;
-    setMap(levels[level])
-  } else if (level == 6) {
-    addText("you win!", { y: 4, color: color`5` });
+  for(let i=0; i<obstacles.length;i++){
+    if(obstacles[i].y==p.y && obstacles[i].x==p.x){
+      return true
+    }
   }
+  return false
+}
+function nextLevel(){
+  if(checkHit()){
+    level+=1
+    setMap(levels[level])
+  }
+}
+
+onInput("s", () => {
+  getFirst(player).y += 1
 })
+onInput("w", () => {
+  getFirst(player).y -= 1
+})
+onInput("a", () => {
+  getFirst(player).x -= 1
+})
+onInput("d", () => {
+  getFirst(player).x += 1
+}) 
+
+
+var gameLoop=setInterval(()=>{
+  checkHit()
+  nextLevel()
+},300)
