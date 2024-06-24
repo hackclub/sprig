@@ -118,7 +118,6 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				}, () => onRunShortcutRef.current?.()),
 				parent: parent.current,
 			})
-
 			setEditorRef(editor);
 			props.onEditorView?.(editor)
 			return
@@ -134,7 +133,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				provider.destroy();
 			}
 			yDoc = new Y.Doc();
-			console.log(import.meta.env.PUBLIC_SIGNALING_SERVER_HOST)
+			console.log(props.roomState.value)
 			provider = new WebrtcProvider(props.roomState.value.roomId, yDoc, {
 				signaling: [
 					import.meta.env.PUBLIC_SIGNALING_SERVER_HOST,
@@ -177,13 +176,15 @@ export default function CodeMirror(props: CodeMirrorProps) {
 					}, () => onRunShortcutRef.current?.(), yCollabSignal.peek() as Extension),
 					parent: parent.current,
 				})
-
+				console.log("MEOW")
 				setEditorRef(editor);
 				props.onEditorView?.(editor)
 			});
 			yDoc.on("update", () => {
+				console.log(provider.awareness.getStates())
 				if(!props.persistenceState) return;
 				if (!initialUpdate) return;
+				console.log("UPDATE")
 				let participants: RoomParticipant[] = [];
 				provider.awareness.getStates().forEach((state) => {
 					try{
@@ -200,7 +201,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				let persistenceState = props.persistenceState.peek();
 				if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING"){
 					if(persistenceState.game.ownerId === persistenceState.session?.user.id){
-						startSavingGame(props.persistenceState);
+						startSavingGame(props.persistenceState, props.roomState);
 					}
 				}
 				ytext = yDoc.getText("codemirror");

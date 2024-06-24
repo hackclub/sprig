@@ -152,7 +152,7 @@ export const saveGame = debounce(
 	}
 );
 
-export async function startSavingGame(persistenceState: Signal<PersistenceState>) {
+export async function startSavingGame(persistenceState: Signal<PersistenceState>, roomState: Signal<RoomState> | undefined) {
 	const attemptSaveGame = async () => {
 		try {
 			const game =
@@ -166,6 +166,7 @@ export async function startSavingGame(persistenceState: Signal<PersistenceState>
 				body: JSON.stringify({
 					gameId: game?.id,
 					tutorialName: game?.tutorialName,
+					roomParticipants: roomState?.value.participants
 				}),
 			});
 			console.log(res.text());
@@ -205,7 +206,7 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>, sessionId: str
 			cloudSaveState: "SAVING",
 		};
 		if(isNewSaveStrat.value)
-			startSavingGame(persistenceState);
+			startSavingGame(persistenceState, undefined);
 		else
         	saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
 
