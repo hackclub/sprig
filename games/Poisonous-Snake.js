@@ -1,7 +1,6 @@
 /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
-
 @title: Poisonous Snake
 @author: dkim19375
 @tags: []
@@ -13,7 +12,6 @@ const snakeHead = "h"
 const snakeTail = "t"
 const apple = "a"
 const poisonedApple = "x"
-const border = "r"
 
 setLegend(
   [ player, bitmap`
@@ -101,23 +99,6 @@ setLegend(
 ..0CCCCCCCDC0...
 ...0CCC0CCC0....
 ....000.000.....` ],
-  [ border, bitmap`
-3333333333333333
-3000000000000003
-3000000000000003
-3000000000000003
-3000000000000003
-30000LLLLLL00003
-30000LLLLLL00003
-30000LLLLLL00003
-30000LLLLLL00003
-30000LLLLLL00003
-30000LLLLLL00003
-3000000000000003
-3000000000000003
-3000000000000003
-3000000000000003
-3333333333333333` ]
 )
 
 setSolids([ snakeHead ])
@@ -125,20 +106,18 @@ setSolids([ snakeHead ])
 let level = 0
 const levels = [
   map`
-rrrrrrrrrrr
-r.........r
-r....x....r
-r.........r
-r.........r
-r.h.....a.r
-r.........r
-r.........r
-r....x....r
-r.........r
-rrrrrrrrrrr`,
+.........
+....x....
+.........
+.........
+.h.....a.
+.........
+.........
+....x....
+.........`,
 ]
-let mapWidth = 10;
-let mapHeight = 10;
+let mapWidth = 9;
+let mapHeight = 9;
 
 setMap(levels[level])
 
@@ -176,7 +155,7 @@ function afterMove(position) {
     if (sprite.type == apple) isOnApple = true;
     if (sprite.type == poisonedApple) isOnPoison = true;
   }
-  let outOfBounds = position.x >= mapWidth || position.x < 1 || position.y >= mapHeight || position.y < 1;
+  let outOfBounds = position.x >= mapWidth || position.x < 0 || position.y >= mapHeight || position.y < 0;
   if (isOnTail || outOfBounds || isOnPoison) {
     gameOver = true;
     addText("Game Over!\n You Lose", {
