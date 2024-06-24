@@ -107,6 +107,7 @@ export const errorLog = signal<NormalizedError[]>([])
 export const openEditor = signal<OpenEditor | null>(null)
 export const bitmaps = signal<[string, string][]>([])
 export const editSessionLength = signal<Date>(new Date());
+export const showKeyBinding = signal(false);
 export const showSaveConflictModal = signal<boolean>(false);
 export const continueSaving = signal<boolean>(true);
 export const LAST_SAVED_SESSION_ID = 'lastSavedSessionId';
@@ -163,12 +164,12 @@ export const switchTheme = (themeType: ThemeType) => {
 	// set the document values
 	const documentStyle = document.body.style;
 
-	documentStyle.background = themeValue?.background ?? '';
-	document.documentElement.style.setProperty(`--accent`, themeValue?.accent ?? '');
-	document.documentElement.style.setProperty(`--accent-dark`, themeValue?.accentDark ?? '');
-	document.documentElement.style.setProperty(`--fg-muted-on-accent`, themeValue?.fgMutedOnAccent ?? '');
+	documentStyle.background = themeValue?.background?? '';
+	document.documentElement.style.setProperty(`--accent`, themeValue?.accent?? '');
+	document.documentElement.style.setProperty(`--accent-dark`, themeValue?.accentDark?? '');
+	document.documentElement.style.setProperty(`--fg-muted-on-accent`, themeValue?.fgMutedOnAccent?? '');
 	documentStyle.color = themeValue?.color ?? '';
-
+	
 	// change the color of the text in elements having .copy-container style
 	// These includes pages such as 'Gallery' and 'Your Games'
 	const copyContainer = document.querySelector(".copy-container") as HTMLDivElement;
