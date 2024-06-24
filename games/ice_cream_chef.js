@@ -2,10 +2,10 @@
 Select the correct ingredients to match the ice cream sundae order
 Finish orders to increase your score
 If you run out of time or select the wrong topping you lose a life and have to start the order over
-@title: 
+@title: Ice Cream Chef
 @author: sophia
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-06-24
 */
 const cursor = "c";
 const bowl = "b";
