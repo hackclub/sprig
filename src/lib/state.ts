@@ -92,6 +92,7 @@ export enum RoomStatus {
 export type RoomParticipant = {
 	userEmail: string
 	isHost: boolean
+	isBanned?: boolean
 }
 
 export type RoomState = {
