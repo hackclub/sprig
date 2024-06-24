@@ -53,7 +53,7 @@ if (session.session.full) {
 
 } else {
 	if (!game.unprotected) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
-	if (game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
+	if (game.ownerId !== session.user.id) checkRoom = true
 
 	_persistenceState = {
 		kind: 'PERSISTED',
@@ -66,17 +66,17 @@ if (session.session.full) {
 	}
 }
 
+if(checkRoom){
+	if(game.roomParticipants?.filter(participant => participant.userEmail === session.user.email)[0]?.isBanned) return Astro.redirect('/404', 302)
+}
+
 const persistenceState = signal<PersistenceState>(_persistenceState)
-	let _roomState = {
-	status: checkRoom ? RoomStatus.CONNECTED : RoomStatus.DISCONNECTED,
+let _roomState = {
+	status: RoomStatus.CONNECTING,
 	roomId: game.id,
 	password: "",
 	participants: [],
 }
-if ((persistenceState.value.kind === "PERSISTED" && persistenceState.value.game !== "LOADING") &&
-		((persistenceState.value.session?.user.id == persistenceState.value.game.ownerId) ||
-		(_roomState.status == RoomStatus.CONNECTING && _roomState.roomId == ""))) 
-		_roomState = {..._roomState, roomId: persistenceState.value.game.id} 
 const roomState = signal<RoomState>(_roomState)
 const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 ---
