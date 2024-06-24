@@ -48,28 +48,28 @@ export default function KeyBindingsModal() {
     };
 
     return (
-        <div className={`${styles.overlay} ${showKeyBinding.value ? styles.show : ''}`}>
-            <div className={styles.modal}>
-                <h2 className={styles.modalTitle}>Change Key Bindings</h2>
-                <div className={styles.bindingsContainer}>
-                    {Object.entries(bindings).map(([key, value]) => (
-                        <div className={styles.binding} key={key}>
-                            <label className={styles.label}>Key {key}:</label>
-                            <input
-                                className={styles.input}
-                                type="text"
-                                value={value}
-                                onKeyDown={(e) => handleKeyDown(key, e)}
-                                readOnly
-                            />
-                        </div>
-                    ))}
-                </div>
-                <div className={styles.buttonContainer}>
-                    <Button onClick={handleSave}>Save Changes</Button>
-                    <Button onClick={() => (showKeyBinding.value = false)}>Cancel</Button>
-                </div>
-            </div>
-        </div>
-    );
+	<div className={`${styles.overlay} ${showKeyBinding.value ? styles.show : ''}`}><div className={styles.modal}>
+		<h2 className={styles.modalTitle}>Change Key Bindings</h2>
+		<div className={styles.modalDescription}>To remap, select the input field and press your chosen key.</div>
+		<div className={styles.bindingsContainer}>
+			{Object.entries(bindings).map(([key, value]) => (
+				<div className={styles.binding} key={key}>
+					<label className={styles.label}>Key {key}:</label>
+					<input
+						className={styles.input}
+						type="text"
+						value={value}
+						onKeyDown={(e) => handleKeyDown(key, e)}
+						readOnly
+					/>
+				</div>
+			))}
+		</div>
+		<div className={styles.buttonContainer}>
+			<Button onClick={handleSave}>Save Changes</Button>
+			<Button onClick={() => (showKeyBinding.value = false)}>Cancel</Button>
+		</div>
+	</div>
+	</div>
+);
 }

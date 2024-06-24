@@ -60,16 +60,17 @@
   }
   
   .input {
-	flex-basis: 120%;
-	padding: 8px;
-	border: 1px solid #ccc;
-	transition: border-color 0.2s;
+    flex-basis: 120%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
   
   .input:hover,
   .input:focus {
-	border-color: #aaaaaa;
-	outline: none;
+    border-color: #078969;
+    outline: none;
+    box-shadow: 0 0 5px rgba(7, 137, 105, 0.5);
   }
   
   .buttonContainer {
@@ -95,4 +96,11 @@
   .buttonContainer > button:focus {
 	outline: none;
 	border-color: #078969;
-  }  
+  } 
+
+  .modalDescription {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #333333;
+    font-size: 1.1em;
+}
