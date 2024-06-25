@@ -103,8 +103,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			});
 		});
 	});
-
-	useEffect(() => {
+	useSignalEffect(() => {
 		if(editorRef !== undefined) {
 			editorRef.destroy()
 		}
@@ -209,7 +208,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		} catch(e){
 			window.location.reload();
 		}
-	}, [])
+	})
 
 	useEffect(() => {
 		setEditorTheme();
