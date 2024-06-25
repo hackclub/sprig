@@ -6,6 +6,7 @@ import { textToTune } from 'sprig/base'
 import { webEngine } from 'sprig/web'
 import * as Babel from "@babel/standalone"
 import TransformDetectInfiniteLoop, { BuildDuplicateFunctionDetector } from '../custom-babel-transforms'
+import {logInfo} from "../../components/popups-etc/help";
 
 interface RunResult {
 	error: NormalizedError | null
@@ -24,6 +25,10 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 	}
 	window.addEventListener('error', errorListener)
 
+	function getErrorObject(){
+		try { throw Error('') } catch(err) { return err; }
+	}
+	
 	const cleanup = () => {
 		game.cleanup()
 		tunes.forEach(tune => tune.end())
@@ -61,6 +66,27 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 			const playTuneRes = playTune(tune, n)
 			tunes.push(playTuneRes)
 			return playTuneRes
+		},
+		console: {
+			...console,
+			log: (...args: any[]) => {
+				console.log(...args)
+				logInfo.value = [...logInfo.value, {
+					args: args,
+					nums: (()=>{
+						var err = getErrorObject();
+						// @ts-ignore
+						var caller_line = err.stack.split("\n")[3];
+						var index = caller_line.indexOf("at ");
+						var arr = caller_line.slice(index+2, caller_line.length).split(":")
+						var nums = arr.slice(Math.max(arr.length - 2, 0)).map(
+							(num: string) => parseInt(num)
+						)
+						nums[0] -= 2
+						return nums
+					})()
+				}]
+			}
 		}
 	}
 
@@ -70,6 +96,7 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 			plugins: [TransformDetectInfiniteLoop, BuildDuplicateFunctionDetector(engineAPIKeys)],
 			retainLines: true
 		})
+		logInfo.value = []
 
 		const fn = new Function(...engineAPIKeys, transformResult.code!)
 		fn(...Object.values(api))

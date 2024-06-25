@@ -1,11 +1,11 @@
-import { useRef } from "preact/hooks";
-import { Signal, useSignal } from "@preact/signals";
-import { IoCaretBack, IoCaretForward } from "react-icons/io5";
+import {useRef} from "preact/hooks";
+import {signal, Signal, useSignal} from "@preact/signals";
+import {IoCaretBack, IoCaretForward} from "react-icons/io5";
 import styles from "./help.module.css";
-import { compiledContent } from "../../../docs/docs.md";
-import { codeMirror, isNewSaveStrat, PersistenceState } from "../../lib/state";
+import {compiledContent} from "../../../docs/docs.md";
+import {codeMirror, isNewSaveStrat, PersistenceState} from "../../lib/state";
 import Button from "../design-system/button";
-import { saveGame, startSavingGame } from "../big-interactive-pages/editor";
+import {saveGame, startSavingGame} from "../big-interactive-pages/editor";
 import ChatComponent from "./chat-component";
 
 interface HelpProps {
@@ -20,13 +20,20 @@ interface HelpProps {
 }
 const helpHtml = compiledContent();
 
+export const logInfo = signal<Array<{
+	args: any[];
+	nums: number[];
+}>>([]);
+
 export default function Help(props: HelpProps) {
 	const showingTutorial = useSignal(props.tutorialContent !== undefined);
 	const showingChat = useSignal(false);
+	const showingLog = useSignal(false);
 	const toolkitScroll = useSignal(0);
 	const tutorialScroll = useSignal(0);
 
 	const toolkitContentRef = useRef<HTMLDivElement>(null);
+	const logContentRef = useRef<HTMLDivElement>(null);
 	const tutorialContentRef = useRef<HTMLDivElement>(null);
 	const chatContentRef = useRef<HTMLDivElement>(null);
 
@@ -78,6 +85,7 @@ export default function Help(props: HelpProps) {
 		setTutorialIndex(tutorialIndex - 1);
 	};
 
+	// @ts-ignore
 	return (
 		<div class={styles.container}>
 			<div class={styles.tabs}>
@@ -90,6 +98,7 @@ export default function Help(props: HelpProps) {
 						onClick={() => {
 							showingChat.value = false;
 							showingTutorial.value = true;
+							showingLog.value = false;
 							tutorialContentRef.current!.scrollTop =
 								tutorialScroll.value;
 						}}
@@ -97,38 +106,24 @@ export default function Help(props: HelpProps) {
 						Tutorial
 					</div>
 				)}
-				{tutorialHtml && (
 					<div
 						role="button"
 						className={`${styles.tab} ${
-							showingTutorial.value || showingChat.value
+							showingTutorial.value || showingChat.value || showingLog.value
 								? ""
 								: styles.selected
 						}`}
 						onClick={() => {
 							showingChat.value = false;
 							showingTutorial.value = false;
+							showingLog.value = false;
 							toolkitContentRef.current!.scrollTop =
 								toolkitScroll.value;
 						}}
 					>
-						Help
-					</div>
-				)}
-				{!tutorialHtml && (
-					<Button
-						accent
-						class={`${styles.tab} ${
-							!showingChat.value ? styles.selected : ""
-						}`}
-						onClick={() => {
-							showingChat.value = false;
-							showingTutorial.value = false;
-						}}
-					>
 						Toolkit
-					</Button>
-				)}
+					</div>
+
 				<div className={styles.tooltipContainer}>
 					<Button
 						accent
@@ -141,6 +136,7 @@ export default function Help(props: HelpProps) {
 						onClick={() => {
 							showingChat.value = true;
 							showingTutorial.value = false;
+							showingLog.value = false;
 						}}
 					>
 						Get AI Help
@@ -148,8 +144,23 @@ export default function Help(props: HelpProps) {
 					<span className={styles.tooltipText}>
 						{!props.persistenceState?.value.session?.user
 							? "You must be logged in to use this feature!"
-							: "Ask AI for help with your code" }
+							: "Ask AI for help with your code"}
 					</span>
+				</div>
+				<div className={styles.tooltipContainer}>
+					<Button
+						accent
+						class={`${styles.tab} ${
+							showingLog.value ? styles.selected : ""
+						}`}
+						onClick={() => {
+							showingChat.value = false
+							showingTutorial.value = false;
+							showingLog.value = true;
+						}}
+					>
+						Log
+					</Button>
 				</div>
 				<Button
 					accent
@@ -177,7 +188,7 @@ export default function Help(props: HelpProps) {
 				}}
 			>
 				<div
-					dangerouslySetInnerHTML={{ __html: tutorialHtml || "" }}
+					dangerouslySetInnerHTML={{__html: tutorialHtml || ""}}
 					onScroll={(e) => {
 						tutorialScroll.value = e.currentTarget.scrollTop;
 					}}
@@ -187,7 +198,7 @@ export default function Help(props: HelpProps) {
 				{(props.persistenceState?.value.kind == "PERSISTED" ||
 					props.persistenceState?.value.kind == "SHARED") && (
 					<>
-						<br />
+						<br/>
 						<div class={styles.paginationContainer}>
 							<div class={styles.backContainer}>
 								{props.persistenceState.value.tutorialIndex !=
@@ -260,7 +271,7 @@ export default function Help(props: HelpProps) {
 					</>
 				)}
 			</div>
-			{!showingChat.value && (
+			{!showingChat.value && !showingLog.value && (
 				<div
 					class={styles.content}
 					style={{
@@ -273,9 +284,41 @@ export default function Help(props: HelpProps) {
 					}}
 				/>
 			)}
-			{showingChat.value && (
+			{showingChat.value && !showingLog.value && (
 				<div class={styles.chatContent} ref={chatContentRef}>
 					<ChatComponent persistenceState={props.persistenceState} />
+				</div>
+			)}
+			{showingLog.value && (
+				<div class={styles.content} ref={logContentRef}>
+					<ul style={
+						{
+							overflowY: 'scroll',
+							height: '100%',
+							listStyleType: 'none',
+							padding: 0,
+							margin: 0,
+						}
+					}>
+						{logInfo.value.map((log) => (
+							<>
+								<li>{
+									log.args.join(' ')
+								}
+								<span style={{
+									color: 'gray',
+									float: 'right',
+								}}>
+									{"[" + log.nums.join(':') + "]"}
+								</span>
+								</li>
+								<hr style={{
+									margin: '0.5em 0',
+									border: '0.5px solid #ccc',
+								}}></hr>
+							</>
+						))}
+					</ul>
 				</div>
 			)}
 		</div>
