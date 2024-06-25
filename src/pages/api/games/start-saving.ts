@@ -63,7 +63,4 @@ export const post: APIRoute = async ({ request, cookies }) => {
 	} catch (error) {
 		return new Response("Internal server error", { status: 500 })
 	}
-
-	 return new Response(JSON.stringify({}), { status: 200 })
-
 };
