@@ -272,7 +272,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	);
 
 	const canvasScreenSize = useSignal({
-		height: outputArea.current?.clientHeight! - helpAreaSize.value - screenControls.current?.clientHeight!,
+		height: outputArea.current?.clientHeight! - helpAreaSize.value, // - screenControls.current?.clientHeight!,
 		maxHeight: screenContainer.current?.clientHeight
 	});
 
@@ -600,13 +600,21 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 					ref={outputArea}
 					style={{ width: realOutputAreaSize.value }}
 				>
-					<div ref={screenContainer}>
+					<div ref={screenContainer} style={ outputArea.current ? {
+					  height: canvasScreenSize.value.height,
+						maxHeight: canvasScreenSize.value.maxHeight,
+					} : {} }>
 						<div class={styles.canvasWrapper}>
 							<canvas
 								class={`${styles.screen} ${
 									screenShake.value > 0 ? "shake" : ""
 								}`}
-								style={ outputArea.current ? { height: canvasScreenSize.value.height, maxHeight:  canvasScreenSize.value.maxHeight }: { } }
+								style={ outputArea.current ? {
+								  height: canvasScreenSize.value.height,
+								  maxHeight:  canvasScreenSize.value.maxHeight,
+									width: (1.25 * canvasScreenSize.value.height),
+									maxWidth: "100%",
+								}: { } }
 								ref={screen}
 								tabIndex={0}
 								width="1000"
@@ -669,7 +677,8 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 						/>
 						<div
 							class={styles.helpContainer}
-							style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenControls.current?.clientHeight! + screenContainer.current?.clientHeight!) }}
+							// style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenControls.current?.clientHeight! + screenContainer.current?.clientHeight!) }}
+							style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenContainer.current?.clientHeight! - screenControls.current?.clientHeight!) }}
 						>
 							{!(
 								(persistenceState.value.kind === "SHARED" ||
