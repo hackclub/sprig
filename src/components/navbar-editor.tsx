@@ -405,7 +405,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				<ShareRoomPopup
 					persistenceState={props.persistenceState}
 					roomState={props.roomState}
-					onClose={() => (shareRoomPopup.value = false)}
+					onClose={() => shareRoomPopup.value = false}
 				/>
 			)}	
 
@@ -592,14 +592,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							</>
 						)}
 
-						{(props.persistenceState.value.session?.session.full) ?(
+						{(props.persistenceState.value.session?.session.full && isNewSaveStrat.value) ?(
 							<>
 								<li>
 								<a
-								href="javascript:void(0);"
+								href="javascript:void"
 								role="button"
 						
-								onClick={() => (shareRoomPopup.value = !shareRoomPopup.value)}
+								onClick={() => (shareRoomPopup.value = true)}
 							>
 								{" "}
 								New Room{" "}

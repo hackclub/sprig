@@ -59,11 +59,36 @@
 }
 
 .close {
-	position: absolute;
-    top: 10px;
-    right: 10px;
+	align-self: flex-end;
+	background: none;
+	border: none;
+	font-size: 1.8em;
+	height: 1em;
+	width: 1em;
+	color: var(--fg-switch-low);
+	padding: 0;
+	display: block;
+	line-height: 1;
+	cursor: pointer;
+	margin-top: -30px;
+	margin-right: -30px;
+
+
 }
 
+.close-button{
+	align-self: flex-end;
+	background: none;
+	border: none;
+	font-size: 1.8em;
+	height: 1em;
+	width: 1em;
+	color: var(--fg-switch-low);
+	padding: 0;
+	display: block;
+	line-height: 1;
+	cursor: var(--cursor-interactive);
+}
 
 p.muted {
 	color: var(--bg-overlay);

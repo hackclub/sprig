@@ -6,19 +6,21 @@ import Button from '../design-system/button'
 import Input from '../design-system/input'
 import LinkButton from '../design-system/link-button'
 import styles from './share-room.module.css'
+import { IoClose } from 'react-icons/io5'
+
 
 
 
 const conditional = false; //This conditional need to be if there has been a room created or not
 
-export interface ShareRoomPopup {
-	roomState?: Signal<RoomState>;
+export interface ShareRoomPopupProps {
+	roomState: Signal<RoomState> | undefined;
 	persistenceState: Signal<PersistenceState>
 	onClose: () => void
 }
 
 
-export default function ShareRoomPopup(props: ShareRoomPopup) {
+export default function ShareRoomPopup(props: ShareRoomPopupProps) {
 	const needsManualMigration = useNeedsManualMigration()
 	var roomLink = "sprig.hackclub.com/~/beta/" + props.roomState?.value.roomId;
 
@@ -26,6 +28,10 @@ if (conditional) {
 	return (
 		<div class={styles.overlay}>
 			<div class={styles.modal}>
+
+				<button class={styles.close} onClick={props.onClose}><IoClose /></button> 	
+
+
 					<div class={styles.stack}>
 						<h2>Create a new room</h2>
 						<p>
@@ -65,17 +71,10 @@ if (conditional) {
 	return (
 
 		<div class={styles.overlay}>
+
 			<div class={styles.modal}>
 
-						<button class={styles.close}>
-							<img
-								class={styles.dino}
-								src={"/SPRIGDINO.png"}
-								height={50}
-							/>
-						</button>
-
-						
+			<button class={styles.close} onClick={props.onClose}><IoClose /></button> 	
 
 					<div class={styles.stack}>
 						<h2>Share your room</h2>
@@ -83,7 +82,7 @@ if (conditional) {
 								Send this link to your friends to share your project with them. They'll be able to view and edit it.
 						</p>
 					</div>
-
+					
 					<div class={styles.info}>
 						<p>Room ID: {props.roomState?.value.roomId}</p>
 						<p>Participants: {props.roomState?.value.participants.length}</p>
@@ -97,14 +96,7 @@ if (conditional) {
 					/>
 					<Button accent type='submit' disabled={false}
 					onClick={() => {
-   						 navigator.clipboard.writeText(roomLink)
-    					  .then(() => {
-      						  console.log('Text copied to clipboard');
-     						 })
-     					 .catch(err => {
-       						 console.error('Failed to copy text: ', err);
-   						   });
-						}}>
+   						 navigator.clipboard.writeText(roomLink)}}>
 								Copy
 							</Button>
 					</div>
@@ -128,8 +120,7 @@ if (conditional) {
 						<p class={styles.muted}>
 							<LinkButton
 								onClick={() => {	
-								//closes the popup
-								
+									//Cosmin implements removing password from room
 
 								}}
 							>Remove the password from your room</LinkButton>
