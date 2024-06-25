@@ -103,13 +103,14 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			});
 		});
 	});
+
 	useSignalEffect(() => {
 		if(editorRef !== undefined) {
 			editorRef.destroy()
 		}
 		if (!parent.current) throw new Error('Oh golly! The editor parent ref is null')
 
-		if(!isNewSaveStrat.value || (props.roomState?.value.roomId === "" || props.persistenceState?.peek().session === null)){
+		if (!isNewSaveStrat.peek() || (props.roomState?.peek().roomId === "" || props.persistenceState?.peek().session === null)) {
 			const editor = new EditorView({
 				state: createEditorState(props.initialCode ? props.initialCode : '', () => {
 					if (editor.state.doc.toString() === lastCode) return
@@ -135,7 +136,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			}
 			yDoc = new Y.Doc();
 			console.log(import.meta.env.PUBLIC_SIGNALING_SERVER_HOST)
-			provider = new WebrtcProvider(props.roomState.value.roomId, yDoc, {
+			provider = new WebrtcProvider(props.roomState.peek().roomId, yDoc, {
 				signaling: [
 					import.meta.env.PUBLIC_SIGNALING_SERVER_HOST,
 				],
