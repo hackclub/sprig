@@ -604,13 +604,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							</a>
 								</li>
 							</>
-						) : (
-							<>
-								<li>
-									
-								</li>
-							</>
-						)}	
+						) : null}	
 						<li>
 							<a href="/gallery">Gallery</a>
 						</li>
