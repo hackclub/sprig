@@ -99,19 +99,17 @@ export default function CodeMirror(props: CodeMirrorProps) {
 					}
 				} catch(e){
 					// DO something
-				}
+				}	
 			});
 		});
 	});
-
-
 	useSignalEffect(() => {
 		if(editorRef !== undefined) {
 			editorRef.destroy()
 		}
 		if (!parent.current) throw new Error('Oh golly! The editor parent ref is null')
 
-		if (!isNewSaveStrat.value || (props.roomState?.peek().roomId === "" || props.persistenceState?.peek().session === null)) {
+		if(!isNewSaveStrat.value || (props.roomState?.value.roomId === "" || props.persistenceState?.peek().session === null)){
 			const editor = new EditorView({
 				state: createEditorState(props.initialCode ? props.initialCode : '', () => {
 					if (editor.state.doc.toString() === lastCode) return
@@ -137,7 +135,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			}
 			yDoc = new Y.Doc();
 			console.log(import.meta.env.PUBLIC_SIGNALING_SERVER_HOST)
-			provider = new WebrtcProvider(props.roomState.peek().roomId, yDoc, {
+			provider = new WebrtcProvider(props.roomState.value.roomId, yDoc, {
 				signaling: [
 					import.meta.env.PUBLIC_SIGNALING_SERVER_HOST,
 				],
@@ -163,7 +161,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			//get the initial code from the yjs document
 			// Wait for document state to be received from provider
 			let initialUpdate = true;
-
+			
 			waitInitialUpdate(initialUpdate).then(() => {
 				if (ytext.toString() === "") {
 					ytext.insert(0, lastCode ?? "");
