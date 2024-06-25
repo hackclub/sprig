@@ -99,7 +99,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 					}
 				} catch(e){
 					// DO something
-				}	
+				}
 			});
 		});
 	});
@@ -163,7 +163,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			//get the initial code from the yjs document
 			// Wait for document state to be received from provider
 			let initialUpdate = true;
-			
+
 			waitInitialUpdate(initialUpdate).then(() => {
 				if (ytext.toString() === "") {
 					ytext.insert(0, lastCode ?? "");
