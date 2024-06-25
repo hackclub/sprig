@@ -1,30 +1,28 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-@title: Tech Catchers
-@author: Jack
-@tags: ['endless', 'tech','SSD']
-@addedOn: 2024-06-23
+@title: Tech Catchers V2
+@author: Shaheer 
+@tags: ['endless', 'tech','SSD', 'Shooter']
+@addedOn: 2024-06-25
 
 Instructions:
-What a lovely day, rain then sun and now SSD's. Catch the raining tech! Each piece of tech gives 1 point
-But each Robot takes 5 points away.
-(Their is a mechanism which groups them after time and the points values change)
+Catch the raining tech and shoot the robots with screws!
+Each piece of tech gives 1 point.
+Each Robot takes 5 points away if caught.
+Shooting a robot gives 1 point.
 
 The Controls are:
-
 A: Left
 D: Right
-
+W: Shoot
 */
 
-const player = "p"; // Player character
-const techItem = "t"; // Tech item to collect
-const ground = "g"; // Ground tiles
-const basket = "b"; // Basket for collecting tech items
-const robot = "r"; // Robot character
+const player = "p";
+const techItem = "t";
+const ground = "g";
+const basket = "b";
+const robot = "r";
+const bullet = "u"; 
 
-// Corrected sprite definitions with consistent sizes
 setLegend(
   [basket, bitmap`
 ................
@@ -59,7 +57,7 @@ setLegend(
 ......0C0.......
 ......0C0.......
 ......0C0.......
-.......0........`], // Player character
+.......0........`],
   [techItem, bitmap`
 ................
 ................
@@ -76,7 +74,7 @@ setLegend(
 ....D00000D.....
 ....4DD6DDD.....
 ....DD6.6DD.....
-................`], // Tech item
+................`],
   [ground, bitmap`
 4444444444444444
 4444444444444444
@@ -110,7 +108,24 @@ CCCCCCCCCCCCCCCC
 ...0C11111110...
 ...0C00000010...
 ....0......0....
-................`] // Robot character
+................`],
+  [bullet, bitmap`
+................
+................
+................
+................
+................
+.......66.......
+.......FF.......
+.......FF.......
+.......00.......
+.......00.......
+................
+................
+................
+................
+................
+................`]
 );
 
 setSolids([]);
@@ -140,7 +155,6 @@ function stopGame() {
   clearInterval(gameLoop);
 }
 
-// Stop the game after 180 seconds or 3 minutes
 setTimeout(stopGame, 180000);
 
 onInput("a", () => {
@@ -155,6 +169,13 @@ onInput("d", () => {
   }
 });
 
+onInput("w", () => {
+  if (gameRunning) {
+    let b = getFirst(basket);
+    addSprite(b.x, b.y - 1, bullet);
+  }
+});
+
 function spawnTechItem() {
   let x = Math.floor(Math.random() * 8);
   let y = 0;
@@ -163,7 +184,6 @@ function spawnTechItem() {
 
 function moveTechItems() {
   let techItems = getAll(techItem);
-
   for (let i = 0; i < techItems.length; i++) {
     techItems[i].y += 1;
   }
@@ -171,7 +191,6 @@ function moveTechItems() {
 
 function despawnTechItems() {
   let techItems = getAll(techItem);
-
   for (let i = 0; i < techItems.length; i++) {
     if (techItems[i].y === 7) {
       techItems[i].remove();
@@ -187,20 +206,40 @@ function spawnRobot() {
 
 function moveRobots() {
   let robots = getAll(robot);
-
   for (let j = 0; j < robots.length; j++) {
     robots[j].y += 1;
   }
 }
 
 function despawnRobots() {
-  const basketX = getFirst(basket).x;
-  const basketY = getFirst(basket).y;
   let robots = getAll(robot);
-
   for (let j = 0; j < robots.length; j++) {
     if (robots[j].y === 7) {
       robots[j].remove();
+    }
+  }
+}
+
+function moveBullets() {
+  let bullets = getAll(bullet);
+  for (let i = 0; i < bullets.length; i++) {
+    bullets[i].y -= 1;
+    if (bullets[i].y < 0) {
+      bullets[i].remove();
+    }
+  }
+}
+
+function checkBulletCollisions() {
+  let bullets = getAll(bullet);
+  let robots = getAll(robot);
+  for (let i = 0; i < bullets.length; i++) {
+    for (let j = 0; j < robots.length; j++) {
+      if (bullets[i].x === robots[j].x && bullets[i].y === robots[j].y) {
+        bullets[i].remove();
+        robots[j].remove();
+        score += 1;
+      }
     }
   }
 }
@@ -238,9 +277,13 @@ var gameLoop = setInterval(() => {
   moveRobots();
   spawnRobot();
   despawnRobots();
+
+  moveBullets();
+  checkBulletCollisions();
+
   if (checkHit()) {
     // No need to manually increment score here since checkHit does it
   }
 
-  addText(`Score:${score}`, { x: 2, y: 1, color: "blue" });
-}, 250);
+  addText(`Score:${score}`, { x: 2, y: 1, color: "" });
+}, 250)
