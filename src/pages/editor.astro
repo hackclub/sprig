@@ -9,6 +9,7 @@ import { mobileUserAgent } from '../lib/utils/mobile'
 import MobileUnsupported from '../components/popups-etc/mobile-unsupported'
 import UploadWarningModal from '../components/popups-etc/upload-failed-warning'
 import { showUploadWarningModal } from '../lib/upload'
+import KeyBindingsModal from '../components/popups-etc/KeyBindingsModal'
 
 // Redirects for legacy Sprig URLs
 const galleryRegex = /^https:\/\/raw\.githubusercontent\.com\/hackclub\/sprig\/main\/games\/(.+)\.js$/
@@ -47,5 +48,6 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 		/>
 		{isMobile ? <MobileUnsupported /> : null}
 		<UploadWarningModal client:load showWarning={showUploadWarningModal} />
+		<KeyBindingsModal client:load />
 	</body>
 </html>
