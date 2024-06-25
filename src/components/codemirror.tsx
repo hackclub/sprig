@@ -111,7 +111,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		}
 		if (!parent.current) throw new Error('Oh golly! The editor parent ref is null')
 
-		if (!isNewSaveStrat.peek() || (props.roomState?.peek().roomId === "" || props.persistenceState?.peek().session === null)) {
+		if (!isNewSaveStrat.value || (props.roomState?.peek().roomId === "" || props.persistenceState?.peek().session === null)) {
 			const editor = new EditorView({
 				state: createEditorState(props.initialCode ? props.initialCode : '', () => {
 					if (editor.state.doc.toString() === lastCode) return
