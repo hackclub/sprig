@@ -1,3 +1,9 @@
+/*
+@title: Dodge the Tacos
+@tags: ['dodging']
+@addedOn: 2024-06-24
+@author: 46-HA
+*/
 const player = "p"
 const tacos = "t"
 
