@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Miku's_Doors_Galore!
 @author: tqbed
-@tags: ['beginner' 'simple' 'puzzle' 'maze']
+@tags: ['beginner', 'simple', 'puzzle', 'maze']
 @addedOn: 2024-06-22
 */
 
