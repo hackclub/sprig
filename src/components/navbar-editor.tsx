@@ -592,7 +592,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							</>
 						)}
 
-						{(props.persistenceState.value.session?.session.full && isNewSaveStrat.value===true) ?(
+						{(props.persistenceState.value.session?.session.full) ?(
 							<>
 								<li>
 								<a
