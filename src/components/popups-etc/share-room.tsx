@@ -11,18 +11,19 @@ import styles from './share-room.module.css'
 
 const conditional = false; //This conditional need to be if there has been a room created or not
 
-
-
 export interface ShareRoomPopup {
 	roomState?: Signal<RoomState>;
 	persistenceState: Signal<PersistenceState>
+	onClose: () => void
 }
+
 
 export default function ShareRoomPopup(props: ShareRoomPopup) {
 	const needsManualMigration = useNeedsManualMigration()
+	var roomLink = "sprig.hackclub.com/~/beta/" + props.roomState?.value.roomId;
+
 if (conditional) {
 	return (
-
 		<div class={styles.overlay}>
 			<div class={styles.modal}>
 					<div class={styles.stack}>
@@ -65,6 +66,17 @@ if (conditional) {
 
 		<div class={styles.overlay}>
 			<div class={styles.modal}>
+
+						<button class={styles.close}>
+							<img
+								class={styles.dino}
+								src={"/SPRIGDINO.png"}
+								height={50}
+							/>
+						</button>
+
+						
+
 					<div class={styles.stack}>
 						<h2>Share your room</h2>
 						<p>
@@ -80,13 +92,12 @@ if (conditional) {
 
 					<div class={styles.inputRow}>
 					<Input onChange={() => undefined} 
-					value="www.example.com" 
+					value={roomLink}
 					readonly
 					/>
 					<Button accent type='submit' disabled={false}
 					onClick={() => {
-						const textToCopy = "www.example.com";
-   						 navigator.clipboard.writeText(textToCopy)
+   						 navigator.clipboard.writeText(roomLink)
     					  .then(() => {
       						  console.log('Text copied to clipboard');
      						 })
