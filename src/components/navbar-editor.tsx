@@ -35,6 +35,7 @@ import { defaultExampleCode } from "../lib/examples";
 import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals } from "./big-interactive-pages/editor";
+import { showKeyBinding } from '../lib/state';
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -593,6 +594,18 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							>
 								{" "}
 								Prettify code{" "}
+							</a>
+						</li>
+						<li>
+							<a
+								href="javascript:void(0);"
+								role="button"
+								onClick={() => {
+									showKeyBinding.value = true;
+									showNavPopup.value = false;
+								}}
+							>
+								Rebinding key
 							</a>
 						</li>
 						<li>
