@@ -137,7 +137,7 @@ export const generateImageJson = async (name: string) => {
 	let imgFilePath = path.resolve(__dirname, `../../public/${name}.json`);
 	fs.writeFile(imgFilePath, JSON.stringify(thumbnail), (err) => {
 		if (err) {
-			metrics.increment("errors.thumbnail_json");
+			metrics.increment("http.errors.thumbnail_json");
 		}
 	});
 }

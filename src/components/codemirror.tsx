@@ -104,7 +104,6 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		});
 	});
 
-
 	useSignalEffect(() => {
 		if(editorRef !== undefined) {
 			editorRef.destroy()
