@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Timing
 @author: Darsh Gupta 
 @tags: []
-@addedOn: 2024-06-23
+@addedOn: 2024-06-24
 */
 
 const player = "p"
@@ -291,9 +291,9 @@ function gameStop() {
   clearInterval(gameupdate)
   clearInterval(bossproj)
   clearInterval(playerproj)
-  let projs = []
-  let lastproj = Date.now()
-  let bossprojs = []
+  projs = []
+  lastproj = Date.now()
+  bossprojs = []
 }
 
 function fullWin() {
@@ -307,6 +307,8 @@ const gameupdate = setInterval(() => {
   if ((getTile(getFirst(boss).x, getFirst(boss).y)).length > 1) {
     // win
     playTune(winsfx)
+    bossprojs = []
+    projs = []
     if (level+1 > 3) {
       fullWin()
       return
