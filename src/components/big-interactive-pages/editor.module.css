@@ -117,6 +117,9 @@
 	width: 100%;
 	overflow: hidden;
 	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .screen {
