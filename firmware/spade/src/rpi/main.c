@@ -72,6 +72,7 @@ typedef struct {
   uint8_t last_state;
   uint8_t ring_i;
 } ButtonState;
+// W, S, A, D, I, K, J, L
 uint button_pins[] = {  5,  7,  6,  8, 12, 14, 13, 15 };
 static ButtonState button_states[ARR_LEN(button_pins)] = {0};
 
@@ -248,6 +249,12 @@ static int load_new_scripts(void) {
   }
 #endif
 
+typedef enum {
+  NEW_SLOT,
+  OUT_OF_SLOTS,
+  RUN_GAME
+  } Welcome_Screen;
+
 int main() {
     timer_hw->dbgpause = 0;
 
@@ -261,78 +268,132 @@ int main() {
   st7735_init();    // Init display
   rng_init();       // Init RNG
 
+  erase_user_portion_of_flash_this_is_dangerous(); // TODO: remove! instead, use version update thingy
+
   // Init JerryScript
   jerry_init(JERRY_INIT_MEM_STATS);
   init(sprite_free_jerry_object); // TODO: document
 
-  while(!save_read()) {
-    // No game stored in memory
-    strcpy(errorbuf, "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "    PLEASE UPLOAD   \n"
-                     "       A GAME       \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     " sprig.hackclub.com \n");
-    render_errorbuf();
-    st7735_fill_start();
-    render(st7735_fill_send);
-    st7735_fill_finish();
+    // Start a core to listen for keypresses.
+    //multicore_reset_core1();
+    multicore_launch_core1(core1_entry);
 
-    load_new_scripts();
-  }
+    /**
+       * We get a bunch of fake keypresses at startup, so we need to
+       * drain them from the FIFO queue.
+       *
+       * What really needs to be done here is to have button_init
+       * record when it starts so that we can ignore keypresses after
+       * that timestamp.
+       */
+    sleep_ms(50);
+    while (multicore_fifo_rvalid()) multicore_fifo_pop_blocking();
 
-  // Start a core to listen for keypresses.
-  multicore_launch_core1(core1_entry);
+    int games_i = 0;
 
-  /**
-   * We get a bunch of fake keypresses at startup, so we need to
-   * drain them from the FIFO queue.
-   *
-   * What really needs to be done here is to have button_init
-   * record when it starts so that we can ignore keypresses after
-   * that timestamp.
-   */
-  sleep_ms(50);
-  while (multicore_fifo_rvalid()) multicore_fifo_pop_blocking();
+    int games_len = 8;
+    Game* games = malloc(games_len * sizeof(Game));
 
-  /**
-   * Wait for a keypress to start the game.
-   *
-   * This is important so games with e.g. infinite loops don't
-   * brick the device as soon as they start up.
-   */
-  while(!multicore_fifo_rvalid()) {
-    strcpy(errorbuf, "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "  PRESS ANY BUTTON  \n"
-                     "       TO RUN       \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     " sprig.hackclub.com \n");
-    render_errorbuf();
-    st7735_fill_start();
-    render(st7735_fill_send);
-    st7735_fill_finish();
+    for (;;) {
+        games_len = get_games(&games, games_len);
+        Welcome_Screen welcome_state = NEW_SLOT;
 
-    load_new_scripts();
-  }
+        if (games_len == 0) {
+            welcome_state = NEW_SLOT;
+        } else if (games_len == games_i) {
+
+            if (get_available_game_slots() == 0) {
+                welcome_state = OUT_OF_SLOTS;
+            } else {
+                welcome_state = NEW_SLOT;
+            }
+        } else {
+            welcome_state = RUN_GAME;
+            set_game(games[games_i]);
+        }
+
+        /**
+        * Wait for a keypress to start the game.
+        * This is important so games with e.g. infinite loops don't
+        * brick the device as soon as they start up.
+        */
+
+        if (multicore_fifo_rvalid()) {
+            uint32_t c = multicore_fifo_pop_blocking();
+            if (c == 6) { // A
+                if (games_i > 0) games_i--;
+            } else if (c == 8) { // D
+                if (games_i < games_len) games_i++;
+            } else if (welcome_state == RUN_GAME) { // other button
+                break;
+            }
+        }
+
+        switch (welcome_state) {
+            case NEW_SLOT:
+                strcpy(errorbuf, "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "    PLEASE UPLOAD   \n"
+                                  "       A GAME       \n"
+                                  "                    \n"
+                                  "   Push A or D to   \n"
+                                  "  switch game slot  \n"
+                                  "                    \n"
+                                  "      NEW SLOT      \n"
+                                  "                    \n"
+                                  " sprig.hackclub.com \n"
+                        );
+                break;
+            case OUT_OF_SLOTS:
+                sprintf(errorbuf, "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "OUT OF SLOTS   \n"
+                                  "       A GAME       \n"
+                                  "                    \n"
+                                  "   Push A or D to   \n"
+                                  "  switch game slot  \n"
+                                  "                    \n"
+                                  "      Game %d/%d      \n"
+                                  "                    \n"
+                                  " sprig.hackclub.com \n",
+                        games_i + 1, games_len);
+                break;
+            case RUN_GAME:
+                sprintf(errorbuf, "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "  PRESS ANY BUTTON  \n" // TODO: show game name and split between lines
+                                  "       TO RUN       \n"
+                                  "                    \n"
+                                  "   Push A or D to   \n"
+                                  "  switch game slot  \n"
+                                  "                    \n"
+                                  "      Game %d/%d    \n"
+                                  "                    \n"
+                                  " sprig.hackclub.com \n",
+                        games_i+1, games_len);
+                break;
+        }
+
+        render_errorbuf();
+        st7735_fill_start();
+        render(st7735_fill_send);
+        st7735_fill_finish();
+
+        // if game is uploaded, replace game in current slot
+        if (welcome_state == NEW_SLOT || welcome_state == RUN_GAME) load_new_scripts();
+    }
 
   // Wow, we can actually run a game now!
 

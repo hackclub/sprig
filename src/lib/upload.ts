@@ -32,7 +32,7 @@ const getPort = async (): Promise<SerialPort> => {
 export const logSerialOutput = (value: string) => (value.trim().length > 0) && console.log(`%c< ${value.trim()}`, 'color: #999')
 
 
-export const uploadToSerial = async (message: string,
+export const uploadToSerial = async (name: string, message: string,
 																		 writer: WritableStreamDefaultWriter<ArrayBuffer>,
 																		 reader: ReadableStreamDefaultReader<string>) => {
 
@@ -61,6 +61,14 @@ export const uploadToSerial = async (message: string,
 
 	console.log('[UPLOAD > SERIAL] Checkpoint 2')
 	await writer.ready
+
+	console.log('[UPLOAD > SERIAL] Checkpoint 2 - writing name')
+	// send name + padding to total 128b
+	// TODO: game titles shouldn't be able to have special characters
+	const nameString = new Uint8Array(128)
+	new TextEncoder().encodeInto(name + "\0".repeat(128 - name.length), nameString)
+	await writer.write(nameString)
+	
 	console.log('[UPLOAD > SERIAL] Checkpoint 2 - writing length')
 	await writer.write(new Uint32Array([ buf.length ]).buffer)
 
@@ -132,7 +140,7 @@ export const getIsLegacySerial = async (
 	}
 }
 
-export const upload = async (code: string): Promise<void> => {
+export const upload = async (code: string, name: string): Promise<void> => {
 	if (uploadState.value === 'LOADING') return
 	uploadState.value = 'LOADING'
 
@@ -173,7 +181,7 @@ export const upload = async (code: string): Promise<void> => {
 			console.log("[UPLOAD] Version up to date!")
 		}
 
-		await uploadToSerial(code, writer, reader)
+		await uploadToSerial(name, code, writer, reader)
 
 		console.log('[UPLOAD] Waiting on stream close and writer lock release...')
 		//reader.releaseLock()
