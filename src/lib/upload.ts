@@ -39,12 +39,18 @@ export const uploadToSerial = async (message: string,
 	const receivedEOT = new Promise<void>(resolve => {
 		(async () => {
 			try {
+				// 128-char buffer
+				let serialBuffer = " ".repeat(128)
+				
 				while (true) {
 					const { value, done } = await reader.read()
 					if (done) break
 					logSerialOutput(value)
 
-					if (value.indexOf('ALL_GOOD') >= 0) resolve()
+					serialBuffer  = serialBuffer.concat(value)
+					serialBuffer = serialBuffer.slice(serialBuffer.length - 128, serialBuffer.length)
+
+					if (serialBuffer.indexOf('ALL_GOOD') >= 0) resolve()
 				}
 			} catch (error) {
 				console.error(error)
