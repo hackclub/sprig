@@ -75,16 +75,58 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 					args: args,
 					nums: (()=>{
 						var err = getErrorObject();
+						// get <anonymous>:x:x if on chrome, Function:x:x on firefox
 						// @ts-ignore
-						var caller_line = err.stack.split("\n")[3];
-						var index = caller_line.indexOf("at ");
-						var arr = caller_line.slice(index+2, caller_line.length).split(":")
-						var nums = arr.slice(Math.max(arr.length - 2, 0)).map(
-							(num: string) => parseInt(num)
-						)
-						nums[0] -= 2
-						return nums
-					})()
+						var stack = err.stack
+						// check browser
+						var browser = navigator.userAgent;
+						if(browser.indexOf("Chrome") != -1) {
+							// chrome
+							var offset = stack.indexOf("<anonymous>:") + 12;
+							// slice from there until ')'
+							var line = stack.slice(offset, stack.indexOf(")", offset))
+							var strs = line.split(":")
+							return [parseInt(strs[0]) - 2, parseInt(strs[1])]
+						} else {
+							// firefox/etc.
+							var offset = stack.indexOf("Function:") + 9;
+							// slice from there until ')'
+							var line = stack.slice(offset, stack.indexOf("\n", offset))
+							var strs = line.split(":")
+							return [parseInt(strs[0]) - 2, parseInt(strs[1])]
+						}
+					})(),
+					isErr: false
+				}]
+			},
+			error: (...args: any[]) => {
+				console.error(...args)
+				logInfo.value = [...logInfo.value, {
+					args: args,
+					nums: (()=>{
+						var err = getErrorObject();
+						// get <anonymous>:x:x if on chrome, Function:x:x on firefox
+						// @ts-ignore
+						var stack = err.stack
+						// check browser
+						var browser = navigator.userAgent;
+						if(browser.indexOf("Chrome") != -1) {
+							// chrome
+							var offset = stack.indexOf("<anonymous>:") + 12;
+							// slice from there until ')'
+							var line = stack.slice(offset, stack.indexOf(")", offset))
+							var strs = line.split(":")
+							return [parseInt(strs[0]) - 2, parseInt(strs[1])]
+						} else {
+							// firefox/etc.
+							var offset = stack.indexOf("Function:") + 9;
+							// slice from there until ')'
+							var line = stack.slice(offset, stack.indexOf("\n", offset))
+							var strs = line.split(":")
+							return [parseInt(strs[0]) - 2, parseInt(strs[1])]
+						}
+					})(),
+					isErr: true
 				}]
 			}
 		}

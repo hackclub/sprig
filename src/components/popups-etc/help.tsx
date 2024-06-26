@@ -1,5 +1,5 @@
 import {useRef} from "preact/hooks";
-import {signal, Signal, useSignal} from "@preact/signals";
+import {effect, signal, Signal, useSignal, useSignalEffect} from "@preact/signals";
 import {IoCaretBack, IoCaretForward} from "react-icons/io5";
 import styles from "./help.module.css";
 import {compiledContent} from "../../../docs/docs.md";
@@ -23,6 +23,7 @@ const helpHtml = compiledContent();
 export const logInfo = signal<Array<{
 	args: any[];
 	nums: number[];
+	isErr: boolean;
 }>>([]);
 
 export default function Help(props: HelpProps) {
@@ -34,9 +35,20 @@ export default function Help(props: HelpProps) {
 
 	const toolkitContentRef = useRef<HTMLDivElement>(null);
 	const logContentRef = useRef<HTMLDivElement>(null);
+	const logListRef = useRef<HTMLUListElement>(null);
 	const tutorialContentRef = useRef<HTMLDivElement>(null);
 	const chatContentRef = useRef<HTMLDivElement>(null);
 
+	useSignalEffect(() => {
+		logInfo.value;
+		// this auto-scrolls to the bottom upon re-render
+		// timeout is to make sure it's finished rendering, otherwise it's off by one log entry
+		setTimeout(()=>{
+			if(logListRef.current)
+				logListRef.current.scrollTop = logListRef.current.scrollHeight
+		}, 10)
+	})
+	
 	const tutorialHtml =
 		props.tutorialContent &&
 		(props.persistenceState?.value.kind == "PERSISTED" ||
@@ -290,35 +302,52 @@ export default function Help(props: HelpProps) {
 				</div>
 			)}
 			{showingLog.value && (
-				<div class={styles.content} ref={logContentRef}>
-					<ul style={
-						{
-							overflowY: 'scroll',
-							height: '100%',
-							listStyleType: 'none',
-							padding: 0,
-							margin: 0,
+				<div style={{
+					padding: 0
+				}} class={styles.content}
+					 ref={logContentRef}>
+					{logInfo.value.length === 0 ? 
+						<h1 style={{textAlign: "center", fontSize: "1.5em", marginTop: "2em"}}>Logs will show here...</h1> 
+						: <ul style={
+							{
+								overflowY: 'scroll',
+								height: '100%',
+								listStyleType: 'none',
+								padding: 0,
+								margin: 0,
+							}
 						}
-					}>
-						{logInfo.value.map((log) => (
-							<>
-								<li>{
-									log.args.join(' ')
-								}
-								<span style={{
-									color: 'gray',
-									float: 'right',
-								}}>
-									{"[" + log.nums.join(':') + "]"}
-								</span>
-								</li>
-								<hr style={{
-									margin: '0.5em 0',
-									border: '0.5px solid #ccc',
-								}}></hr>
-							</>
-						))}
-					</ul>
+							ref={logListRef}
+						>
+							{logInfo.value.map((log) => (
+								<>
+									<li>
+										<p style={{
+											color: log.isErr ? '#000000' : 'black',
+											backgroundColor: log.isErr ? '#f9e3e3' : '',
+											padding: '0.5em',
+											margin: 0
+										}}>
+											{log.args.length === 0 ? "(empty)" : log.args.join(' ')} {
+											// @ts-ignore
+											// if the nums are NaN, then the browser doesn't support retrieving them, so don't display
+											!isNaN(log.nums[0]) ? 
+											<span style={{
+												color: 'gray',
+												float: 'right',
+											}}>
+												{"[" + log.nums.join(':') + "]"}
+											</span> : ""}
+										</p>
+									</li>
+									<hr style={{
+										margin: 0,
+										border: '0.5px solid #d0d0d0',
+									}}></hr>
+								</>
+							))}
+						</ul>
+					}
 				</div>
 			)}
 		</div>
