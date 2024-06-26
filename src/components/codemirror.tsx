@@ -36,7 +36,6 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			let timer: NodeJS.Timeout;
 			const checkUpdated = () => {
 				if (initialUpdate === false) {
-					console.log("Fjsakfjsa")
 					clearTimeout(timer);
 					resolve();
 				} else {
@@ -103,13 +102,13 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			});
 		});
 	});
-	useSignalEffect(() => {
-		if(editorRef !== undefined) {
-			editorRef.destroy()
-		}
+	useEffect(() => {
+		console.log(props.roomState?.value)
 		if (!parent.current) throw new Error('Oh golly! The editor parent ref is null')
 
-		if(!isNewSaveStrat.value || (props.roomState?.value.roomId === "" || props.persistenceState?.peek().session === null)){
+		console.log(isNewSaveStrat.value)
+		if(!isNewSaveStrat.value){
+			console.log(":JSAKFLJASNLFKCKJns,")
 			const editor = new EditorView({
 				state: createEditorState(props.initialCode ? props.initialCode : '', () => {
 					if (editor.state.doc.toString() === lastCode) return
@@ -133,10 +132,9 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				provider.destroy();
 			}
 			yDoc = new Y.Doc();
-			console.log(props.roomState.value)
 			provider = new WebrtcProvider(props.roomState.value.roomId, yDoc, {
 				signaling: [
-					import.meta.env.PUBLIC_SIGNALING_SERVER_HOST,
+					"wss://yjs-signaling-server-5fb6d64b3314.herokuapp.com",
 				],
 			});
 			//get yjs document from provider
@@ -144,7 +142,6 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			const yUndoManager = new Y.UndoManager(ytext);
 
 			yProviderAwarenessSignal.value = provider.awareness
-			console.log(props.persistenceState.peek().session?.user)
 			let persistenceState = props.persistenceState.peek();
 			const isHost = ((persistenceState.kind == "PERSISTED" && persistenceState.game != "LOADING") && persistenceState.session?.user.id === persistenceState.game.ownerId)
 			provider.awareness.setLocalStateField("user", {
@@ -166,25 +163,27 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				if (ytext.toString() === "") {
 					ytext.insert(0, lastCode ?? "");
 				}
-				if (!parent.current)
-					throw new Error("Oh golly! The editor parent ref is null");
-				const editor = new EditorView({
-					state: createEditorState(ytext.toString(), () => {
-						if (editor.state.doc.toString() === lastCode) return
-						lastCode = editor.state.doc.toString()
-						onCodeChangeRef.current?.()
-					}, () => onRunShortcutRef.current?.(), yCollabSignal.peek() as Extension),
-					parent: parent.current,
+				if(editorRef === undefined) {
+					if (!parent.current)
+						throw new Error("Oh golly! The editor parent ref is null");
+					const editor = new EditorView({
+						state: createEditorState(ytext.toString(), () => {
+							if (editor.state.doc.toString() === lastCode) return
+							lastCode = editor.state.doc.toString()
+							onCodeChangeRef.current?.()
+						}, () => onRunShortcutRef.current?.(), yCollabSignal.peek() as Extension),
+						parent: parent.current,
+					})
+					setEditorRef(editor);
+					props.onEditorView?.(editor)
+				} else editorRef?.dispatch({
+					effects: StateEffect.reconfigure.of(restoreInitialConfig())
 				})
-				console.log("MEOW")
-				setEditorRef(editor);
-				props.onEditorView?.(editor)
 			});
 			yDoc.on("update", () => {
-				console.log(provider.awareness.getStates())
+				console.log(provider.connected)
 				if(!props.persistenceState) return;
 				if (!initialUpdate) return;
-				console.log("UPDATE")
 				let participants: RoomParticipant[] = [];
 				provider.awareness.getStates().forEach((state) => {
 					try{
@@ -210,7 +209,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		} catch(e){
 			window.location.reload();
 		}
-	})
+	}, [])
 
 	useEffect(() => {
 		setEditorTheme();

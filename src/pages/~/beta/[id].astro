@@ -81,6 +81,11 @@ const roomState = signal<RoomState>(_roomState)
 const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 ---
 
+<script>
+	import { isNewSaveStrat } from "../../../lib/state";
+	isNewSaveStrat.value = true;
+</script>
+
 <html lang='en'>
 	<head>
 		<StandardHead title='Editor' />

@@ -229,7 +229,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 		} else {
 			isNewSaveStrat.value = false;
 		}
-	})
+	}, [])
 
 	useEffect(() => {
 		const channel = new BroadcastChannel('session_channel');
