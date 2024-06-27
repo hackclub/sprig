@@ -65,8 +65,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		if (editorRef?.state.doc.toString() === lastCode) return
 		lastCode = editorRef?.state.doc.toString()
 		onCodeChangeRef.current?.()
-		yCollabSignal.value
-	}, () => onRunShortcutRef.current?.());
+	}, () => onRunShortcutRef.current?.(), yCollabSignal.value as Extension);
 
 	const setEditorTheme = () => {
 		if (theme.value === "dark") {
@@ -176,12 +175,11 @@ export default function CodeMirror(props: CodeMirrorProps) {
 					})
 					setEditorRef(editor);
 					props.onEditorView?.(editor)
-				} else editorRef?.dispatch({
+				} else editorRef.dispatch({
 					effects: StateEffect.reconfigure.of(restoreInitialConfig())
 				})
 			});
 			yDoc.on("update", () => {
-				console.log(provider.connected)
 				if(!props.persistenceState) return;
 				if (!initialUpdate) return;
 				let participants: RoomParticipant[] = [];
