@@ -12,7 +12,6 @@
 			const allowed = [ 'localhost', '127.0.0.1' ].includes(referrer.hostname)
 				|| referrer.hostname.endsWith('.hackclub.dev')
 				|| referrer.hostname.endsWith('.hackclub.com')
-				|| referrer.hostname.endsWith('.herokuapp.com')
 			if (!allowed) throw new Error('Disallowed referrer')
 				
 			window.parent.postMessage({
