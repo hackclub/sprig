@@ -1,4 +1,9 @@
-
+/*
+@title: Stopwatch
+@tags: ['utility', 'clock', 'timekeeping']
+@addedOn: 2024-06-26
+@author: DominantDuck
+*/
 let startTime = 0;
 let elapsedTime = 0;
 let intervalId = null;
