@@ -71,11 +71,13 @@ setSolids([player1, player2])
 let level = 0
 const levels = [
   map`
-p....q
-......
-..b...
-......
-......`
+.........
+.........
+.........
+p...b...q
+.........
+.........
+.........`
 ]
 
 setMap(levels[level])
@@ -97,19 +99,21 @@ const moveBall = () => {
     ballSpeed.y = -ballSpeed.y
   }
 
-  if (b.x <= 0) {
+  if (b.x === getFirst(player1).x  && b.y === getFirst(player1).y) {
+    ballSpeed.x = -ballSpeed.x
+  } else if (b.x === getFirst(player2).x  && b.y === getFirst(player2).y) {
+    ballSpeed.x = -ballSpeed.x
+  }
+
+  if (b.x <= 0 && b.y != getFirst(player1).y) {
     addText("Player 2 Wins!", { x: 4, y: 4, color: color`3` })
     clearInterval(ballInterval)
-  } else if (b.x >= width() - 1) {
+  } else if (b.x >= width() - 1 && b.y != getFirst(player2).y ) {
     addText("Player 1 Wins!", { x: 4, y: 4, color: color`3` })
     clearInterval(ballInterval)
   }
 
-  if (b.x === getFirst(player1).x + 1 && b.y === getFirst(player1).y) {
-    ballSpeed.x = -ballSpeed.x
-  } else if (b.x === getFirst(player2).x - 1 && b.y === getFirst(player2).y) {
-    ballSpeed.x = -ballSpeed.x
-  }
+  
 }
 
 const resetGame = () => {
@@ -146,4 +150,3 @@ onInput("i", () => {
 onInput("a", () => {
   resetGame()
 })
-
