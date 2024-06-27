@@ -26,7 +26,6 @@ jobs:
           script: |
             const runId = ${{ github.event.workflow_run.id }};
             console.log(`Fetching artifacts for workflow run ID: ${runId}`);
-            
             const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -46,7 +45,6 @@ jobs:
             const path = require('path');
             const runId = ${{ github.event.workflow_run.id }};
             const artifactName = 'pr-number';
-            
             console.log(`Downloading artifact ${artifactName} from workflow run ID: ${runId}`);
             const artifactData = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
@@ -58,10 +56,8 @@ jobs:
               })).data.artifacts.find(a => a.name === artifactName).id,
               archive_format: 'zip',
             });
-            
             const artifactPath = path.join(process.env.GITHUB_WORKSPACE, `${artifactName}.zip`);
             fs.writeFileSync(artifactPath, Buffer.from(artifactData.data));
-            
             console.log(`Artifact ${artifactName} downloaded to ${artifactPath}`);
             require('child_process').execSync(`unzip -o ${artifactPath} -d ${process.env.GITHUB_WORKSPACE}`);
             const prNumber = fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE, 'pr_number.txt'), 'utf8').trim();
@@ -76,19 +72,16 @@ jobs:
             const path = require('path');
             const runId = ${{ github.event.workflow_run.id }};
             const artifactName = 'plagiarism-report';
-            
             console.log(`Fetching artifacts for workflow run ID: ${runId}`);
             const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: runId,
             });
-            
             const artifact = artifacts.data.artifacts.find(a => a.name === artifactName);
             if (!artifact) {
               throw new Error(`Artifact with name ${artifactName} not found`);
             }
-            
             console.log(`Downloading artifact ${artifactName} from workflow run ID: ${runId}`);
             const artifactData = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
@@ -96,10 +89,8 @@ jobs:
               artifact_id: artifact.id,
               archive_format: 'zip',
             });
-            
             const artifactPath = path.join(process.env.GITHUB_WORKSPACE, `${artifactName}.zip`);
             fs.writeFileSync(artifactPath, Buffer.from(artifactData.data));
-            
             console.log(`Artifact ${artifactName} downloaded to ${artifactPath}`);
             require('child_process').execSync(`unzip -o ${artifactPath} -d ${process.env.GITHUB_WORKSPACE}`);
 
@@ -141,17 +132,13 @@ jobs:
           script: |
             const fs = require('fs');
             const path = require('path');
-            
             const prNumber = fs.readFileSync(path.join(process.env.GITHUB_WORKSPACE, 'pr_number.txt'), 'utf8').trim();
             const markdownPath = path.join(process.env.GITHUB_WORKSPACE, 'plagiarism-report.md');
             console.log(`Reading the Markdown report from: ${markdownPath}`);
             let markdownContent = fs.readFileSync(markdownPath, 'utf8');
-
             markdownContent = '[Plagiarism Check Result]\n\n' + markdownContent;
-
             console.log("Fetching associated pull request...");
             console.log(`Found associated pull request: #${prNumber}`);
-
             console.log("Posting the Markdown content as a comment...");
             const commentResponse = await github.rest.issues.createComment({
               issue_number: prNumber,
