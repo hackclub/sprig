@@ -55,6 +55,9 @@ export interface Game {
 	tutorialName?: string
 	tutorialIndex?: number
 	roomParticipants?: RoomParticipant[]
+	isRoomOpen?: boolean
+	password?: string
+	salt?: string
 }
 
 export interface LoginCode {

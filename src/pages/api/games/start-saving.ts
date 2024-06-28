@@ -16,6 +16,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 	let gameId: string;
 	let tutorialName: string | undefined;
 	let roomParticipants: RoomParticipant[]
+	let isOpen: boolean = false;
 	try {
 		const body = await request.json();
 		if (typeof body.gameId !== "string") throw "Missing/invalid game id";
@@ -26,6 +27,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 				: undefined;
 		if(typeof body.roomParticipants !== "object") throw "Missing/invalid room participants"
 		roomParticipants = body.roomParticipants
+		isOpen = body.isOpen ?? false;
 	} catch (error) {
 		console.log(error)
 		return new Response(
@@ -67,12 +69,14 @@ export const post: APIRoute = async ({ request, cookies }) => {
 			await updateDocument("games", gameId, { 
 				tutorialName: tutorialName ?? "",
 				modifiedAt: Timestamp.now(),
-				roomParticipants: roomParticipants
+				roomParticipants: roomParticipants,
+				isOpen: isOpen
 			});
 		else 
 			await updateDocument("games", gameId, { 
 				tutorialName: tutorialName ?? "",
 				modifiedAt: Timestamp.now(),
+				isOpen: isOpen
 			});
 			getGame(gameId).then((game) => console.log(game?.modifiedAt))
 		await setDocument('daily-edits', `${trackingId}-${trackingDate}`, {
