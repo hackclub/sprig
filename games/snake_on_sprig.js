@@ -1,6 +1,8 @@
 /*
 @title: Snake on Sprig
 @author: anirudh paldugula
+@tags: []
+@addedOn: 2024-06-28
 */
 
 const logo1 = "1";
