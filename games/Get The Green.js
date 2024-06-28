@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Get the GREEN!
 @author: Dhyan99
-@tags: []
-@addedOn: 2024-00-00
+@tags: [Casual]
+@addedOn: 2024-06-28
 */
 
 const player = "p"
