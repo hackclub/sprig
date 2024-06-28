@@ -83,7 +83,7 @@ export type PersistenceState = ({
 	stale: boolean
 }
 
-export enum RoomStatus {
+export enum ConnectionStatus {
 	CONNECTED,
 	CONNECTING,
 	DISCONNECTED
@@ -96,7 +96,7 @@ export type RoomParticipant = {
 }
 
 export type RoomState = {
-	status: RoomStatus
+	connectionStatus: ConnectionStatus
 	roomId: string
 	password: string
 	participants: RoomParticipant[]

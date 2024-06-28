@@ -601,8 +601,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						
 								onClick={() => (shareRoomPopup.value = true)}
 							>
-								{" "}
-								New Room{" "}
+								{!(props.persistenceState.value.kind == "PERSISTED" && props.persistenceState.value.game !== "LOADING" && props.persistenceState.value.game.isRoomOpen) ? "Create a room" : "Share room"}
 							</a>
 								</li>
 							</>

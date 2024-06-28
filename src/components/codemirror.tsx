@@ -4,7 +4,7 @@ import { Extension, StateEffect } from '@codemirror/state'
 import styles from './codemirror.module.css'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorView } from '@codemirror/view'
-import { theme, errorLog, PersistenceState, isNewSaveStrat, RoomState, RoomParticipant } from '../lib/state'
+import { theme, errorLog, PersistenceState, isNewSaveStrat, RoomState, RoomParticipant, ConnectionStatus } from '../lib/state'
 import { Diagnostic, setDiagnosticsEffect } from '@codemirror/lint'
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 import { Awareness } from 'y-protocols/awareness'
@@ -81,6 +81,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		if(!isNewSaveStrat.value) return
 		if(yProviderAwarenessSignal.value === undefined) return;
 		yProviderAwarenessSignal.value.on("change", () => {
+			console.log(props.roomState?.peek().participants)
 			yProviderAwarenessSignal.value?.getStates().forEach((state) => {
 				try{
 					if(props.persistenceState === undefined) throw new Error("Persistence state is undefined");
@@ -130,6 +131,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			if(provider !== undefined){
 				provider.destroy();
 			}
+			props.roomState.value = { ...props.roomState.value, connectionStatus: ConnectionStatus.CONNECTING };
 			yDoc = new Y.Doc();
 			provider = new WebrtcProvider(props.roomState.value.roomId, yDoc, {
 				signaling: [
@@ -178,7 +180,9 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				} else editorRef.dispatch({
 					effects: StateEffect.reconfigure.of(restoreInitialConfig())
 				})
-			});
+				if(props.roomState)
+					props.roomState.value = { ...props.roomState?.value, connectionStatus: ConnectionStatus.CONNECTED };
+		});
 			yDoc.on("update", () => {
 				if(!props.persistenceState) return;
 				if (!initialUpdate) return;
