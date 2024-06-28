@@ -29,7 +29,11 @@ export default function Input(props: InputProps) {
 			autoComplete={props.autoComplete ?? 'off'}
 			placeholder={props.placeholder ?? ''}
 			maxLength={props.maxLength ?? Number.MAX_SAFE_INTEGER}
+<<<<<<< HEAD
 			readOnly={props.readonly || false}
+=======
+			readOnly={props.readonly ?? false}
+>>>>>>> baf2326542f189a9aff3005de6d042f5c21c2b4f
 		/>
 	)
 }

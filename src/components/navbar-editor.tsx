@@ -37,6 +37,7 @@ import { defaultExampleCode } from "../lib/examples";
 import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals } from "./big-interactive-pages/editor";
+import { showKeyBinding } from '../lib/state';
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -402,7 +403,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				<ShareRoomPopup
 					persistenceState={props.persistenceState}
 					roomState={props.roomState}
+<<<<<<< HEAD
 					onClose={() => (shareRoomPopup.value = false)}
+=======
+					onClose={() => shareRoomPopup.value = false}
+>>>>>>> baf2326542f189a9aff3005de6d042f5c21c2b4f
 				/>
 			)}	
 
@@ -589,6 +594,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							</>
 						)}
 
+<<<<<<< HEAD
 						{props.persistenceState.value.session?.session.full ? (
 							<>
 								<li>
@@ -597,12 +603,23 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								role="button"
 						
 								onClick={() => (shareRoomPopup.value = !shareRoomPopup.value)}
+=======
+						{(props.persistenceState.value.session?.session.full && isNewSaveStrat.value) ?(
+							<>
+								<li>
+								<a
+								href="javascript:void"
+								role="button"
+						
+								onClick={() => (shareRoomPopup.value = true)}
+>>>>>>> baf2326542f189a9aff3005de6d042f5c21c2b4f
 							>
 								{" "}
 								New Room{" "}
 							</a>
 								</li>
 							</>
+<<<<<<< HEAD
 						) : (
 							<>
 								<li>
@@ -610,6 +627,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								</li>
 							</>
 						)}	
+=======
+						) : null}	
+>>>>>>> baf2326542f189a9aff3005de6d042f5c21c2b4f
 						<li>
 							<a href="/gallery">Gallery</a>
 						</li>
@@ -627,6 +647,18 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							>
 								{" "}
 								Prettify code{" "}
+							</a>
+						</li>
+						<li>
+							<a
+								href="javascript:void(0);"
+								role="button"
+								onClick={() => {
+									showKeyBinding.value = true;
+									showNavPopup.value = false;
+								}}
+							>
+								Rebinding key
 							</a>
 						</li>
 						<li>
