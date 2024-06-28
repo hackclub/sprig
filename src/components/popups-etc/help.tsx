@@ -35,7 +35,6 @@ export default function Help(props: HelpProps) {
 
 	const toolkitContentRef = useRef<HTMLDivElement>(null);
 	const logContentRef = useRef<HTMLDivElement>(null);
-	const logListRef = useRef<HTMLUListElement>(null);
 	const tutorialContentRef = useRef<HTMLDivElement>(null);
 	const chatContentRef = useRef<HTMLDivElement>(null);
 
@@ -44,8 +43,8 @@ export default function Help(props: HelpProps) {
 		// this auto-scrolls to the bottom upon re-render
 		// timeout is to make sure it's finished rendering, otherwise it's off by one log entry
 		setTimeout(()=>{
-			if(logListRef.current)
-				logListRef.current.scrollTop = logListRef.current.scrollHeight
+			if(logContentRef.current)
+				logContentRef.current.scrollTop = logContentRef.current.scrollHeight
 		}, 10)
 	})
 	
@@ -129,8 +128,10 @@ export default function Help(props: HelpProps) {
 							showingChat.value = false;
 							showingTutorial.value = false;
 							showingLog.value = false;
-							toolkitContentRef.current!.scrollTop =
-								toolkitScroll.value;
+							setTimeout(() => {
+								toolkitContentRef.current!.scrollTop =
+									toolkitScroll.value;
+							}, 10)
 						}}
 					>
 						Toolkit
@@ -303,47 +304,54 @@ export default function Help(props: HelpProps) {
 			)}
 			{showingLog.value && (
 				<div style={{
-					padding: 0
+					padding: 0,
+					overflow: 'auto',
 				}} class={styles.content}
 					 ref={logContentRef}>
 					{logInfo.value.length === 0 ? 
 						<h1 style={{textAlign: "center", fontSize: "1.5em", marginTop: "2em"}}>Logs will show here...</h1> 
 						: <ul style={
 							{
-								overflowY: 'scroll',
 								height: '100%',
 								listStyleType: 'none',
 								padding: 0,
 								margin: 0,
 							}
 						}
-							ref={logListRef}
 						>
 							{logInfo.value.map((log) => (
 								<>
 									<li>
-										<p style={{
-											color: log.isErr ? '#000000' : 'black',
-											backgroundColor: log.isErr ? '#f9e3e3' : '',
-											padding: '0.5em',
-											margin: 0
+										<div style={{
+											display: 'flex',
+											justifyContent: 'space-between',
 										}}>
-											{log.args.length === 0 ? "(empty)" : log.args.join(' ')} {
-											// @ts-ignore
-											// if the nums are NaN, then the browser doesn't support retrieving them, so don't display
-											!isNaN(log.nums[0]) ? 
-											<span style={{
-												color: 'gray',
-												float: 'right',
+											<p style={{
+												color: log.isErr ? '#000000' : 'black',
+												backgroundColor: log.isErr ? '#f9e3e3' : '',
+												padding: '0.5em',
+												margin: '0',
+												alignSelf: 'center',
+												overflowWrap: 'break-word',
 											}}>
+												{log.args.length === 0 ? "(empty)" : log.args.join(' ')}
+											</p>
+											{// @ts-ignore
+											// if the nums are NaN, then the browser doesn't support retrieving them, so don't display
+											!isNaN(log.nums[0]) ?
+												<span style={{
+													color: 'gray',
+													padding: '0.5em',
+													alignSelf: 'center',
+												}}>
 												{"[" + log.nums.join(':') + "]"}
 											</span> : ""}
-										</p>
+										</div>
+										<hr style={{
+											margin: 0,
+											border: '0.5px solid #d0d0d0',
+										}}></hr>
 									</li>
-									<hr style={{
-										margin: 0,
-										border: '0.5px solid #d0d0d0',
-									}}></hr>
 								</>
 							))}
 						</ul>
