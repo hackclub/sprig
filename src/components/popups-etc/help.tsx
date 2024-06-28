@@ -16,7 +16,6 @@ interface HelpProps {
 	defaultHelpAreaHeight: number;
 	helpAreaSize: Signal<number>;
 	showingTutorialWarning?: Signal<boolean>;
-	sessionId: string
 }
 const helpHtml = compiledContent();
 
