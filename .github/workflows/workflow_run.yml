@@ -117,6 +117,7 @@ jobs:
             echo "REPORT_EXISTS=true" >> $GITHUB_ENV
           else
             echo "REPORT_EXISTS=false" >> $GITHUB_ENV
+          fi
 
       - name: Unzip Plagiarism Report Artifact
         if: env.REPORT_EXISTS == 'true'
