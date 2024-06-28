@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Pixel Peril
-@author: Outdatedcandy92 
+@author: outdatedcandy92
 @tags: []
 @addedOn: 2024-00-00
 */
@@ -521,17 +521,33 @@ setPushables({
 setSolids([player, wall,pushwall ])
 
 onInput("w", () => {
-  getFirst(player).y -= 1
-})
+  const playerSprite = getFirst(player);
+  if (playerSprite) {
+    playerSprite.y -= 1; // Move up if the player sprite exists
+  }
+});
+
 onInput("a", () => {
-  getFirst(player).x -= 1
-})
+  const playerSprite = getFirst(player);
+  if (playerSprite) {
+    playerSprite.x -= 1; // Move left if the player sprite exists
+  }
+});
+
 onInput("s", () => {
-  getFirst(player).y += 1
-})
+  const playerSprite = getFirst(player);
+  if (playerSprite) {
+    playerSprite.y += 1; // Move down if the player sprite exists
+  }
+});
+
 onInput("d", () => {
-  getFirst(player).x += 1
-})
+  const playerSprite = getFirst(player);
+  if (playerSprite) {
+    playerSprite.x += 1; // Move right if the player sprite exists
+  }
+});
+
 onInput("l", () => {
   playerWin = true
 })
