@@ -4,7 +4,7 @@
 	height: 100%;
 	background-image:
 		linear-gradient(to right, #000000 60%, #00000000 80%),
-		url('/background.jpg');
+		url('/background-new.png');
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 100% 80%;
