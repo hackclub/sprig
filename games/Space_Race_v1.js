@@ -2,7 +2,7 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Space Race V1
+@title: Space Race v1
 @author: Ler
 @tags: ['catch', 'dodge', 'multiplayer', 'WIP']
 @addedOn: 2024-06-28
@@ -26,7 +26,7 @@ https://sprig.hackclub.com/gallery/getting_started
 // There are also definitely some prominent bugs, but I dont know if they are code or computer issues, so if they are still present when I recieve my Sprig console I'll try to fix them.
 // The most prominent one is disappearing sprites, forgive me for that lol! :D
 // In the future I might release a much better part two!
-// Thank you for playing my kinda silly game, and I hope you enjoy!
+// Thank you for playing my kinda silly game, and I hope you enjoy! :D
 
 
 //
