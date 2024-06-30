@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Get the GREEN!
 @author: Dhyan99
-@tags: ["Endless"]
+@tags: ["endless"]
 @addedOn: 2024-06-28
 */
 
