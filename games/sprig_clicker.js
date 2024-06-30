@@ -20,8 +20,9 @@ let clickCounter = 0
 let sprigTeleportLimit = 10
 let sprigsPerClick = 1
 let additionalSpc = 1
-let sprigs = 0
+let sprigs = 200
 let multiplier = 1
+let nextMult = 0.1
 
 //upgrade levels 
 let soilLv = 0
@@ -30,7 +31,7 @@ let scytheLv = 0
 let multLv = 0
 
 let soilCost = 10
-let fertCost = 10
+let fertCost = 2
 let scytheCost = 100
 let multCost = 200
   
@@ -196,7 +197,7 @@ const levels = [
 .........
 .........
 .........
-.........`, // upgrade info screen
+.........`, // upgrade info screen (1+2)
   map`
 .........
 .........
@@ -205,7 +206,16 @@ const levels = [
 .........
 .........
 .........
-.........` // win screen after 10 million sprigs
+.........`, // upgrade info screen 2 (3+4)
+  map`
+.........
+.........
+.........
+.........
+.........
+.........
+.........
+.........` // win screen after 2 million sprigs
 ]
 
 setMap(levels[level])
@@ -277,7 +287,7 @@ onInput("i", () => {
       color: color`2`})
     
     // add text for upgrades
-    addText("\"calning\" soil: lv " + soilLv + "\nmore clicks before\nsprig moves\ncost: " + soilCost, {
+    addText("\"calning\" soil\nmore clicks before\nsprig moves: lv " + soilLv + "\ncost: " + soilCost, {
       x: 0,
       y: 3,
       color: color`2`
@@ -296,13 +306,13 @@ onInput("i", () => {
       y: 14,
       color: color`2`})
 
-    addText("scythe: lv " + scytheLv + "\nautoclicker\nsprig will not move", {
+    addText("scythe: lv " + scytheLv + "\nautoclicker\nsprig will not move\ncost: " + scytheCost, {
       x: 0,
       y: 3,
       color: color`2`
     })
 
-    addText("multiplier: lv " + multLv + "\nflat multiplier to\nsprig per click gain", {
+    addText("multiplier: lv " + multLv + "\nflat multiplier to\nsprig per click gain\ncost: " + multCost, {
       x: 0,
       y: 8,
       color: color`2`
@@ -312,15 +322,11 @@ onInput("i", () => {
 })
 
 onInput("l", () => {
-  if (level === 0) {
-    setInterval( () => { scytheClicker() }, 1000)
-  }
-  
   if ( level === 0 && 
       getFirst(player).x === getFirst(sprig).x &&
        getFirst(player).y === getFirst(sprig).y ) {
 
-    sprigs += (sprigsPerClick * multiplier)
+    sprigs += Math.round(sprigsPerClick * multiplier)
 
     clickCounter++
     
@@ -354,9 +360,9 @@ onInput("l", () => {
       fertLv++
       sprigs -= fertCost
       sprigsPerClick += additionalSpc
-      additionalSpc *= 2
-      fertCost *= 1.15
-      fertCost = Math.floor(fertCost)
+      additionalSpc += 1
+      fertCost *= 1.75 // 75% increase for balancing purposes
+      fertCost = Math.ceil(fertCost)
       
       
     }
@@ -371,16 +377,19 @@ onInput("l", () => {
 
       scytheLv++
       sprigs -= scytheCost
-      
-      
-      
+      scytheCost *= 1.15
+      scytheCost = Math.floor(scytheCost)
       
     }
 
     if (getFirst(player).x === getFirst(mult).x &&
        getFirst(player).y === getFirst(mult).y && sprigs >= multCost) {
 
-      
+      multLv++
+      sprigs -= multCost
+      multiplier += nextMult
+      multCost *= 1.15
+      multCost = Math.floor(multCost)
       
     }
     
@@ -388,9 +397,83 @@ onInput("l", () => {
   
 })
 
-function redrawSprigs() {
+onInput("j", () => {
 
-  addText("                ", {
+  level = level <= 2 ? 3 :
+          level === 3 ? 4 : 0
+  setMap(levels[level])
+
+  if (level === 0) {
+    clearText()
+    addText("press i for shop", {
+    x: 0,
+    y: 14,
+    color: color`2`})
+
+    addText("press j for info", {
+      x: 0,
+      y: 15,
+      color: color`2`})
+  
+  }
+
+  if (level === 3) {
+
+    clearText()
+  
+     addText("\"calning\" soil\nadds 5 clicks before\nsprig moves", {
+      x: 0,
+      y: 3,
+      color: color`2`
+    })
+
+    addText(`fertilizer\nwill add '${additionalSpc}' to\nsprigs per click`, {
+      x: 0,
+      y: 8,
+      color: color`2`
+    })
+  
+  }
+
+  if (level === 4) {
+    
+    clearText()
+    addText("the scythe\nclicks for you\nevery second", {
+      x: 0,
+      y: 3,
+      color: color`2`
+    })
+
+    addText(`multiplier\ncurrently multiplies\nyour sprigs by ${Math.round(multiplier * 10) / 10}\nand will increase by\n${nextMult} next level`, {
+      x: 0,
+      y: 8,
+      color: color`2`
+    })
+  
+  }
+})
+
+// go back to main screen
+onInput("k", () => {
+
+  level = 0
+  setMap(levels[level])
+  clearText()
+  addText("press i for shop", {
+      x: 0,
+      y: 14,
+      color: color`2`})
+    addText("press j for info", {
+      x: 0,
+      y: 15,
+      color: color`2`})
+  
+  
+})
+
+async function redrawSprigs() {
+
+  addText("                    ", { // hacky ahh solution (overwrite text with nothing so that the old text is not shown)
     x: 0,
     y: 0,
     color: color`2`
@@ -404,11 +487,13 @@ function redrawSprigs() {
   
 }
 
-function scytheClicker() {
-  sprigs += 0.5 * mult * scytheLv * sprigsPerClick
-  sprigs = Math.floor(sprigs)
+async function scytheClicker() {
+  sprigs += 0.5 * multiplier * scytheLv * sprigsPerClick
+  sprigs = Math.ceil(sprigs)
 }
 
+setInterval( () => { scytheClicker() }, 1000)
+setInterval( () => { redrawSprigs() }, 200)
 
 afterInput(() => {
   addText("sprigs: " + sprigs, {
@@ -417,7 +502,7 @@ afterInput(() => {
     color: color`2`
   })
   if (level === 1) {
-    addText("\"calning\" soil: lv " + soilLv + "\nmore clicks before\nsprig moves\ncost: " + soilCost, {
+    addText("\"calning\" soil\nmore clicks before\nsprig moves\ncost: " + soilCost, {
       x: 0,
       y: 3,
       color: color`2`
@@ -429,13 +514,13 @@ afterInput(() => {
     })
   }
   if (level === 2) {
-    addText("scythe: lv " + scytheLv + "\nautoclicker", {
+    addText("scythe: lv " + scytheLv + "\nautoclicker\nsprig will not move\ncost: " + scytheCost, {
       x: 0,
       y: 3,
       color: color`2`
     })
 
-    addText("multiplier: lv " + multLv + "\nflat multiplier to\nsprig per click gain", {
+    addText("multiplier: lv " + multLv + "\nflat multiplier to\nsprig per click gain\ncost: " + multCost, {
       x: 0,
       y: 8,
       color: color`2`
