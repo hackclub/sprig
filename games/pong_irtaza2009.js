@@ -1,8 +1,8 @@
 /*
-@title: pong
+@title: Pong
 @tags: ['classic']
-@addedOn: 2022-09-07
-@author: neesh
+@addedOn: 2024-07-01
+@author: Irtaza2009
 */
 
 const player1 = "1";
