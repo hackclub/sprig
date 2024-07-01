@@ -153,7 +153,6 @@ jobs:
             const markdownPath = path.join(process.env.GITHUB_WORKSPACE, 'plagiarism-report.md');
             console.log(`Reading the Markdown report from: ${markdownPath}`);
             let markdownContent = fs.readFileSync(markdownPath, 'utf8');
-            markdownContent = '[Plagiarism Check Result]\n\n' + markdownContent;
             console.log("Fetching associated pull request...");
             console.log(`Found associated pull request: #${prNumber}`);
             console.log("Posting the Markdown content as a comment...");
