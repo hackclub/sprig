@@ -1,7 +1,8 @@
 /*
 @title: Hey Hay Cow
 @author: Valeria DA
-@addedOn: Jun 27, 2024
+@addedOn: 2024-06-27
+@tags: []
 */
 
 // Create a tune:
