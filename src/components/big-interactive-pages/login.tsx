@@ -1,7 +1,7 @@
 import { useSignalEffect } from '@preact/signals'
 import { IoPaperPlaneOutline } from 'react-icons/io5'
 import { SessionInfo } from '../../lib/game-saving/account'
-import { useAuthHelper } from '../../lib/game-saving/auth-helper'
+import {DevEmail, useAuthHelper} from '../../lib/game-saving/auth-helper'
 import Button from '../design-system/button'
 import Input from '../design-system/input'
 import LinkButton from '../design-system/link-button'
@@ -56,7 +56,7 @@ export default function Login({ session, email, to }: LoginProps) {
 						</p>
 
 						<label for='code'>Code:</label>
-						<Input onChange={() => undefined} value={auth.code.value} id='code' type='text' maxLength={6} placeholder='123456'  bind={auth.code} />
+						<Input onChange={() => undefined} value={auth.code.value} id='code' type='text' maxLength={auth.email.value == DevEmail ? 70 : 6} placeholder='123456'  bind={auth.code} />
 						{auth.state.value === 'CODE_INCORRECT' && <p class={styles.error}>Incorrect login code.</p>}
 
 						<Button class={styles.submit} accent type='submit' disabled={!auth.codeValid.value} loading={auth.isLoading.value}>
