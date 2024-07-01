@@ -67,7 +67,7 @@ CCCCCCCCCCCCCCCC
 ................`]
 )
 
-setSolids([])dddda
+setSolids([])
 let score = 0
 let level = 0
 const levels = [
