@@ -35,10 +35,10 @@ def run_compare50(file_tuple):
 
         log(f"Running command: {' '.join(command)}")
         result = subprocess.run(command, capture_output=True, text=True)
-        
         if result.returncode != 0:
             log(f"Error in running Compare50: {result.stderr}")
-            return  
+            log(f"Standard output: {result.stdout}")
+            return
         log("Compare50 command executed successfully.")
         match_file = os.path.join(output_dir, "match_1.html")
 
