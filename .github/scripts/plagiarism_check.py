@@ -26,18 +26,20 @@ def run_compare50(file_tuple):
         os.makedirs(output_dir, exist_ok=True)
         command = [
             "compare50",
-            f'"{single_file}"',
-            f'"{file}"',
-            "--output", f'"{output_dir}"',
+            single_file,
+            file,
+            "--output", output_dir,
             "--max-file-size", str(1024 * 1024 * 100),
             "--passes", "text"
         ]
 
-        command_str = ' '.join(command)
-        log(f"Running command: {command_str}")
-        subprocess.run(command_str, shell=True, check=True)
+        log(f"Running command: {' '.join(command)}")
+        result = subprocess.run(command, capture_output=True, text=True)
+        
+        if result.returncode != 0:
+            log(f"Error in running Compare50: {result.stderr}")
+            return  
         log("Compare50 command executed successfully.")
-
         match_file = os.path.join(output_dir, "match_1.html")
 
         if os.path.exists(match_file):
@@ -48,8 +50,6 @@ def run_compare50(file_tuple):
         else:
             log(f"No match found for file: {file}")
 
-    except subprocess.CalledProcessError as e:
-        log(f"Error in running Compare50: {e}")
     except Exception as e:
         log(f"An error occurred: {e}")
 
