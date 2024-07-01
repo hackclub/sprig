@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Catching game
 @author: Swastik Bajpai 
-@tags: [Dodging game]
+@tags: []
 @addedOn: 2024-06-20
 */
 
