@@ -28,6 +28,7 @@
 	border-width: 0;
 	border-right-width: 1px;
 	border-left-width: 1px;
+	height: 100%;
 }
 
 .tab:first-of-type {

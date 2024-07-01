@@ -6,6 +6,7 @@ import { textToTune } from 'sprig/base'
 import { webEngine } from 'sprig/web'
 import * as Babel from "@babel/standalone"
 import TransformDetectInfiniteLoop, { BuildDuplicateFunctionDetector } from '../custom-babel-transforms'
+import {logInfo} from "../../components/popups-etc/help";
 
 interface RunResult {
 	error: NormalizedError | null
@@ -24,6 +25,10 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 	}
 	window.addEventListener('error', errorListener)
 
+	function getErrorObject(){
+		try { throw Error('') } catch(err) { return err; }
+	}
+	
 	const cleanup = () => {
 		game.cleanup()
 		tunes.forEach(tune => tune.end())
@@ -61,6 +66,69 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 			const playTuneRes = playTune(tune, n)
 			tunes.push(playTuneRes)
 			return playTuneRes
+		},
+		console: {
+			...console,
+			log: (...args: any[]) => {
+				console.log(...args)
+				logInfo.value = [...logInfo.value, {
+					args: args,
+					nums: (()=>{
+						var err = getErrorObject();
+						// get <anonymous>:x:x if on chrome, Function:x:x on firefox
+						// @ts-ignore
+						var stack = err.stack
+						// check browser
+						var browser = navigator.userAgent;
+						if(browser.indexOf("Chrome") != -1) {
+							// chrome
+							var offset = stack.indexOf("<anonymous>:") + 12;
+							// slice from there until ')'
+							var line = stack.slice(offset, stack.indexOf(")", offset))
+							var strs = line.split(":")
+							return [parseInt(strs[0]) - 2, parseInt(strs[1])]
+						} else {
+							// firefox/etc.
+							var offset = stack.indexOf("Function:") + 9;
+							// slice from there until ')'
+							var line = stack.slice(offset, stack.indexOf("\n", offset))
+							var strs = line.split(":")
+							return [parseInt(strs[0]) - 2, parseInt(strs[1])]
+						}
+					})(),
+					isErr: false
+				}]
+			},
+			error: (...args: any[]) => {
+				console.error(...args)
+				logInfo.value = [...logInfo.value, {
+					args: args,
+					nums: (()=>{
+						var err = getErrorObject();
+						// get <anonymous>:x:x if on chrome, Function:x:x on firefox
+						// @ts-ignore
+						var stack = err.stack
+						// check browser
+						var browser = navigator.userAgent;
+						if(browser.indexOf("Chrome") != -1) {
+							// chrome
+							var offset = stack.indexOf("<anonymous>:") + 12;
+							// slice from there until ')'
+							var line = stack.slice(offset, stack.indexOf(")", offset))
+							var strs = line.split(":")
+							return [parseInt(strs[0]) - 2, parseInt(strs[1])]
+						} else {
+							// firefox/etc.
+							var offset = stack.indexOf("Function:") + 9;
+							// slice from there until ')'
+							var line = stack.slice(offset, stack.indexOf("\n", offset))
+							var strs = line.split(":")
+							return [parseInt(strs[0]) - 2, parseInt(strs[1])]
+						}
+					})(),
+					isErr: true
+				}]
+			}
 		}
 	}
 
@@ -70,6 +138,7 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 			plugins: [TransformDetectInfiniteLoop, BuildDuplicateFunctionDetector(engineAPIKeys)],
 			retainLines: true
 		})
+		logInfo.value = []
 
 		const fn = new Function(...engineAPIKeys, transformResult.code!)
 		fn(...Object.values(api))
