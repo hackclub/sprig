@@ -78,10 +78,14 @@ def main():
 
     file_tuples = [(single_file, file, base_output_dir, saved_dir_base) for file in all_js_files]
 
+    log(f"Total files to process: {len(all_js_files)}")
     with Pool(processes=os.cpu_count()) as pool:
         pool.map(run_compare50, file_tuples)
 
     log("Plagiarism check completed.")
+    log(f"Listing files in saved directory ({saved_dir_base}):")
+    for f in os.listdir(saved_dir_base):
+        log(f)
 
 if __name__ == "__main__":
     main()
