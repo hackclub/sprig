@@ -1,11 +1,10 @@
-import { signal, useSignal, useSignalEffect, type Signal } from '@preact/signals'
-import { ConnectionStatus, type PersistenceState, type RoomState } from '../../lib/state'
+import { useSignal, useSignalEffect, type Signal } from '@preact/signals'
+import { type PersistenceState, type RoomState } from '../../lib/state'
 import Button from '../design-system/button'
 import Input from '../design-system/input'
 import LinkButton from '../design-system/link-button'
 import styles from './share-room.module.css'
 import { IoClose } from 'react-icons/io5'
-import { useEffect } from 'preact/hooks'
 
 export interface ShareRoomPopupProps {
 	roomState: Signal<RoomState>;

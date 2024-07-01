@@ -7,6 +7,7 @@ import { signal } from '@preact/signals'
 import { RoomState, ConnectionStatus, type PersistenceState } from '../../../lib/state'
 import MobileUnsupported from '../../../components/popups-etc/mobile-unsupported'
 import { mobileUserAgent } from '../../../lib/utils/mobile'
+import RoomPasswordPopup from '../../../components/popups-etc/room-password'
 
 
 const session = await getSession(Astro.cookies)
@@ -33,41 +34,51 @@ if (game.tutorialName) {
 }
 
 let _persistenceState: PersistenceState
-if (session.session.full) {
-	if (game.unprotected) {
-		await firestore.collection('games').doc(game.id).update({ unprotected: false })
-		game.unprotected = false
-	}
-	if (Astro.cookies.get('sprigTempGame').value === game.id)
-		Astro.cookies.delete('sprigTempGame', { path: '/' })
-
+if(checkRoom){
 	_persistenceState = {
-		kind: 'PERSISTED',
-		session,
-		cloudSaveState: 'SAVED',
-		game,
-		tutorial,
-		tutorialIndex,
+		kind: 'COLLAB',
+		game: game.id,
+		password: undefined,
+		session: session,
 		stale: false
 	}
-
 } else {
-	if (!game.unprotected) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
-	if (game.ownerId !== session.user.id) checkRoom = true
+	if (session.session.full) {
+		if (game.unprotected) {
+			await firestore.collection('games').doc(game.id).update({ unprotected: false })
+			game.unprotected = false
+		}
+		if (Astro.cookies.get('sprigTempGame').value === game.id)
+			Astro.cookies.delete('sprigTempGame', { path: '/' })
 
-	_persistenceState = {
-		kind: 'PERSISTED',
-		session,
-		cloudSaveState: 'SAVED',
-		game,
-		tutorial,
-		tutorialIndex,
-		stale: false
+		_persistenceState = {
+			kind: 'PERSISTED',
+			session,
+			cloudSaveState: 'SAVED',
+			game,
+			tutorial,
+			tutorialIndex,
+			stale: false
+		}
+
+	} else {
+		if (!game.unprotected) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
+		if (game.ownerId !== session.user.id) checkRoom = true
+
+		_persistenceState = {
+			kind: 'PERSISTED',
+			session,
+			cloudSaveState: 'SAVED',
+			game,
+			tutorial,
+			tutorialIndex,
+			stale: false
+		}
 	}
 }
-
 if(checkRoom){
 	if(game.roomParticipants?.filter(participant => participant.userEmail === session.user.email)[0]?.isBanned) return Astro.redirect('/404', 302)
+	if(game.password == undefined) return Astro.redirect('/404', 302)
 }
 
 const persistenceState = signal<PersistenceState>(_persistenceState)
