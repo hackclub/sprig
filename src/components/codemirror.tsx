@@ -133,17 +133,18 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			}
 			props.roomState.value = { ...props.roomState.value, connectionStatus: ConnectionStatus.CONNECTING };
 			yDoc = new Y.Doc();
+			let persistenceState = props.persistenceState.peek();
 			provider = new WebrtcProvider(props.roomState.value.roomId, yDoc, {
 				signaling: [
 					"wss://yjs-signaling-server-5fb6d64b3314.herokuapp.com",
 				],
+				password: ((persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING" && persistenceState.game.password) ? persistenceState.game.password : "")
 			});
 			//get yjs document from provider
 			let ytext = yDoc.getText("codemirror");
 			const yUndoManager = new Y.UndoManager(ytext);
 
 			yProviderAwarenessSignal.value = provider.awareness
-			let persistenceState = props.persistenceState.peek();
 			const isHost = ((persistenceState.kind == "PERSISTED" && persistenceState.game != "LOADING") && persistenceState.session?.user.id === persistenceState.game.ownerId)
 			provider.awareness.setLocalStateField("user", {
 				name:

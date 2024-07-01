@@ -78,6 +78,10 @@ export type PersistenceState = ({
 	tutorial?: string[] | undefined
 	tutorialName?: string | undefined
 	tutorialIndex?: number | undefined
+} | {
+	kind: 'COLLAB'
+	game: string | 'LOADING' | Game // String means the game is restricted and only the roomId needs to be shown to the user
+	password: string | undefined
 }) & {
 	session: SessionInfo | null
 	stale: boolean
@@ -98,7 +102,6 @@ export type RoomParticipant = {
 export type RoomState = {
 	connectionStatus: ConnectionStatus
 	roomId: string
-	password: string
 	participants: RoomParticipant[]
 }	
 
