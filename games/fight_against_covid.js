@@ -1,6 +1,8 @@
 /*
 @title: Fight against COVID
 @author: Swaraj Singh
+@tags: []
+@addedOn: 2024-07-01
 */
 
 const player = "p";
