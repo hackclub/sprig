@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Sprig Clicker
 @author: xriiitox (Josh Baron)
-@tags: []
+@tags: ['endless']
 @addedOn: 2024-06-29
 */
 
@@ -20,9 +20,11 @@ let clickCounter = 0
 let sprigTeleportLimit = 10
 let sprigsPerClick = 1
 let additionalSpc = 1
-let sprigs = 200
+let sprigs = 0
 let multiplier = 1
 let nextMult = 0.1
+let sprigsToWin = 2e6
+let wonGame = false
 
 //upgrade levels 
 let soilLv = 0
@@ -30,6 +32,7 @@ let fertLv = 0
 let scytheLv = 0
 let multLv = 0
 
+// probably not balanced at all
 let soilCost = 10
 let fertCost = 2
 let scytheCost = 100
@@ -214,15 +217,75 @@ const levels = [
 .........
 .........
 .........
-.........
+....p....
 .........` // win screen after 2 million sprigs
 ]
+
+const music = tune`
+500: A4~500 + F4~500 + C4~500,
+1500,
+500: E4~500 + C4~500 + A4~500,
+1500,
+500: A4~500 + F4~500 + C4~500,
+1500,
+500: A4~500 + E4~500 + C4~500,
+1500,
+500: A4~500 + C4~500 + F4~500 + D5^500,
+500: E5^500,
+500: F5^500,
+500: E5^500,
+500: E4~500 + C4~500 + A4~500 + E5^500,
+500: D5^500,
+500: E5^500,
+500: D5^500,
+500: F4~500 + C4~500 + A4~500,
+500: C5^500,
+500: E5^500,
+500,
+500: E4~500 + C4~500 + A4~500,
+500,
+500: C5^500,
+500`
+const musicPlaying = playTune(music, Infinity)
+
+const clickFx = tune`
+79.7872340425532: F4/79.7872340425532,
+2473.404255319149`
+
+const failClickFx = tune`
+87.20930232558139: B4^87.20930232558139,
+87.20930232558139: A4^87.20930232558139,
+87.20930232558139: G4~87.20930232558139,
+87.20930232558139: F4^87.20930232558139,
+87.20930232558139: E4^87.20930232558139,
+2354.6511627906975`
+
+const winJingle = tune`
+229.00763358778627: C5/229.00763358778627,
+229.00763358778627: C5/229.00763358778627,
+229.00763358778627: C5/229.00763358778627,
+229.00763358778627: C5/229.00763358778627,
+458.01526717557255,
+229.00763358778627: G4/229.00763358778627,
+458.01526717557255,
+229.00763358778627: A4/229.00763358778627,
+458.01526717557255,
+229.00763358778627: C5/229.00763358778627,
+229.00763358778627,
+229.00763358778627: B4/229.00763358778627,
+229.00763358778627: C5/229.00763358778627,
+3664.1221374045804`
 
 setMap(levels[level])
 
 setPushables({
   [ player ]: []
 })
+
+function onTile(bmp) {
+  return getFirst(player).x === getFirst(bmp).x &&
+       getFirst(player).y === getFirst(bmp).y
+}
 
 addText("press i for shop", {
 
@@ -262,6 +325,7 @@ onInput("d", () => {
 
 //functional keys
 
+// rotate through shop screens and add text + etc
 onInput("i", () => {
   //open shop if main screen, else back to main screen
   level = level === 0 ? 1 : 
@@ -321,10 +385,11 @@ onInput("i", () => {
   }
 })
 
+// selection key
 onInput("l", () => {
+  playTune(clickFx) // intended double equals 8)
   if ( level === 0 && 
-      getFirst(player).x === getFirst(sprig).x &&
-       getFirst(player).y === getFirst(sprig).y ) {
+      onTile(sprig) ) {
 
     sprigs += Math.round(sprigsPerClick * multiplier)
 
@@ -343,8 +408,7 @@ onInput("l", () => {
   // upgrade purchase checking
   if (level === 1) {
 
-    if (getFirst(player).x === getFirst(calmSoil).x &&
-       getFirst(player).y === getFirst(calmSoil).y && sprigs >= soilCost) {
+    if (onTile(calmSoil) && sprigs >= soilCost) {
 
       soilLv++
       sprigs -= soilCost
@@ -354,8 +418,7 @@ onInput("l", () => {
       sprigTeleportLimit += 5
       
     }
-    else if (getFirst(player).x === getFirst(fert).x &&
-       getFirst(player).y === getFirst(fert).y && sprigs >= fertCost) {
+    else if (onTile(fert) && sprigs >= fertCost) {
 
       fertLv++
       sprigs -= fertCost
@@ -365,15 +428,14 @@ onInput("l", () => {
       fertCost = Math.ceil(fertCost)
       
       
-    }
+    } else if ((onTile(calmSoil) && sprigs < soilCost) || (onTile(fert) && sprigs < fertCost) ) playTune(failClickFx)
     redrawSprigs()
     
   }
 
   if (level === 2) {
 
-    if (getFirst(player).x === getFirst(scythe).x &&
-       getFirst(player).y === getFirst(scythe).y && sprigs >= scytheCost) {
+    if (onTile(scythe) && sprigs >= scytheCost) {
 
       scytheLv++
       sprigs -= scytheCost
@@ -381,9 +443,7 @@ onInput("l", () => {
       scytheCost = Math.floor(scytheCost)
       
     }
-
-    if (getFirst(player).x === getFirst(mult).x &&
-       getFirst(player).y === getFirst(mult).y && sprigs >= multCost) {
+    else if (onTile(mult) && sprigs >= multCost) {
 
       multLv++
       sprigs -= multCost
@@ -391,12 +451,13 @@ onInput("l", () => {
       multCost *= 1.15
       multCost = Math.floor(multCost)
       
-    }
+    } else if ((onTile(scythe) && sprigs < scytheCost) || (onTile(mult) && sprigs < multCost) ) playTune(failClickFx)
     
   }
   
 })
 
+// rotate through info screens
 onInput("j", () => {
 
   level = level <= 2 ? 3 :
@@ -444,7 +505,7 @@ onInput("j", () => {
       color: color`2`
     })
 
-    addText(`multiplier\ncurrently multiplies\nyour sprigs by ${Math.round(multiplier * 10) / 10}\nand will increase by\n${nextMult} next level`, {
+    addText(`multiplier\ncurrently multiplies\nyour sprigs by ${multiplier.toFixed(1)}\nand will increase by\n${nextMult} next level`, {
       x: 0,
       y: 8,
       color: color`2`
@@ -492,8 +553,36 @@ async function scytheClicker() {
   sprigs = Math.ceil(sprigs)
 }
 
+async function checkForWin() {
+  if (!wonGame && sprigs >= sprigsToWin) {
+    wonGame = true
+    playTune(winJingle)
+    level = 5
+    setMap(levels[level])
+    clearText()
+    addText("Congratuations!", {
+      x: 3,
+      y: 3,
+      color: color`2`
+    })
+
+    addText("You got 2 million\nsprigs! (this means that\nyou win!)", {
+      x: 1,
+      y: 5,
+      color: color`2`
+    })
+
+    addText("Press k to continue\nplaying.", {
+      x: 1,
+      y: 9,
+      color: color`2`
+    })
+  }
+}
+
 setInterval( () => { scytheClicker() }, 1000)
 setInterval( () => { redrawSprigs() }, 200)
+setInterval( () => { checkForWin() }, 500)
 
 afterInput(() => {
   addText("sprigs: " + sprigs, {
