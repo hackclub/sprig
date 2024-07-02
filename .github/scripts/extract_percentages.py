@@ -39,6 +39,7 @@ def write_to_markdown(file_path, lines):
     with open(file_path, 'w') as md_file:
         for line in lines:
             md_file.write(line + '\n')
+    log(f"Markdown file written to {file_path}")
 
 def main():
     if len(sys.argv) != 2:
@@ -58,5 +59,6 @@ def main():
         sys.exit(1)
     else:
         log("No high plagiarism percentages detected.")
+    log("Plagiarism report generation completed.")
 if __name__ == "__main__":
     main()
