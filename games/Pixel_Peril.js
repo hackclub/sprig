@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Pixel Peril
-@author: outdatedcandy92
+@author: 
 @tags: []
 @addedOn: 2024-00-00
 */
@@ -223,7 +223,7 @@ rrrrrrrrrrrrrrrrrrrrrr`,
 ......................
 ......................
 rrrrrrrrrrrrrrrrrrrrrr
-r.....r............rrr
+rw....r............rrr
 r....rrr....r.....rr.r
 r...rrrrrrr.r...rrr..r
 r...r.......r........r
@@ -242,7 +242,7 @@ r..rr..r.r...r....r..r
 r......rrrr..r...rrrrr
 r........r...rr...r..r
 r...r....r....rr..r..r
-rw.rrr.........rr....r
+r..rrr.........rr....r
 rrrrrrrrrrrrrrrrrrrrrr`,
   map`
 ......................
@@ -555,6 +555,7 @@ onInput("j", () => {
   setMap(levels[0]);
   gameOver = false;
   playerWin = false; 
+  levelstat = 0;
   clearText();
 })
 
@@ -562,7 +563,7 @@ onInput("k", () => {
   toggleBackgroundMusic(); // Toggle background music on key press
 });
 
-
+let moveInterval = 500;
 
 
 let playback; // Declare playback variable globally
@@ -589,7 +590,6 @@ function gameStart() {
 gameStart()
 
 let lastMoveTime = performance.now(); // Initialize lastMoveTime
-let moveInterval = 400;
 
 function moveEnemy() {
   const currentTime = performance.now();
@@ -641,37 +641,35 @@ function checkWinCondition() {
 function checkGameStatus() {
   const playerSprite = getFirst(player);
   const enemySprite = getFirst(enemy);
-  const spikeSprite = getAll(spike);
 
   if (playerSprite && enemySprite && checkCollision(playerSprite, enemySprite)) {
     gameOver = true;
     clearInterval(enemyMovementInterval);
     console.log("Game Over! Enemy touched the player.");
     clearTile(enemySprite.x, enemySprite.y);
+    clearTile(playerSprite.x, playerSprite.y);
     addText("Game Over", { x: 5, y: 5, color: color`3` });
+    addText("Press J to restart", { x: 1, y: 7, color: color`3` });
     playTune(sad);
-    levelstat += 0
-    setTimeout(() => {
-      gameOver = false;
-      playerWin = false; // Reset gameOver flag for the next level
-      clearText(); // Clear the victory message
-    }, 3000); // Delay for 5 seconds (5000 milliseconds)
   }
 
   
-  if (playerSprite && spikeSprite && checkCollision(playerSprite, spikeSprite)) {
-  gameOver = true;
-  clearInterval(enemyMovementInterval);
-  console.log("Game Over! Spike touched the player.");
-  clearTile(spikeSprite.x, spikeSprite.y);
-  addText("Game Over", { x: 5, y: 5, color: color`3` });
-  playTune(sad);
-  setTimeout(() => {
-    levelstat = 0
-    gameOver = false;
-    playerWin = false; // Reset gameOver flag for the next level
-    clearText(); // Clear the victory message
-  }, 3000); // Delay for 5 seconds (5000 milliseconds)
+  const spikeSprites = getAll(spike);
+  for (const spikeSprite of spikeSprites) {
+    if (playerSprite && checkCollision(playerSprite, spikeSprite)) {
+      gameOver = true;
+      clearInterval(enemyMovementInterval);
+      console.log("Game Over! Spike touched the player.");
+      clearTile(spikeSprite.x, spikeSprite.y);
+      clearTile(playerSprite.x, playerSprite.y);
+      addText("Game Over", { x: 5, y: 5, color: color`3` });
+      addText("Press J to restart", { x: 1, y: 7, color: color`3` });
+      playTune(sad);
+      break; // Exit the loop when a collision is detected
+    }
+  
+
+
 }
 
   if (playerWin) {
@@ -680,16 +678,28 @@ function checkGameStatus() {
     clearInterval(enemyMovementInterval);
     console.log("You Win! Player reached the reward.");
     clearTile(enemySprite.x, enemySprite.y);
-    addText("You Win!", { x: 6, y: 6, color: color`7` });
+    addText("You Win!", { x: 6, y: 6, color: color`3` });
     playTune(victory);
     levelstat +=1
+    let countdown =5;
+    const countdownInterval = setInterval(() => {
+      countdown -= 1;
+      if (countdown > 0) {
+        clearText();
+        addText("You Win!", { x: 6, y: 6, color: color`3` });
+        addText(`Next level in ${countdown}`, { x: 3, y: 8, color: color`3` });
+      } else {
+        clearInterval(countdownInterval); // Stop the countdown interval
+        }
+      }, 1000);
     if (levelstat < 9) {
+      
         setTimeout(() => {
-          setMap(levels[levelstat]); // Switch to the next level after 5 seconds
+          setMap(levels[levelstat]); 
           gameOver = false;
-          playerWin = false; // Reset gameOver flag for the next level
-          clearText(); // Clear the victory message
-          }, 3000); // Delay for 5 seconds (5000 milliseconds)
+          playerWin = false;
+          clearText();
+          }, 5000); 
     }
     if (levelstat >= 9) {
       clearText();
