@@ -1,30 +1,73 @@
-import type { Signal } from '@preact/signals'
-import { persist, useAuthHelper } from '../../lib/game-saving/auth-helper'
-import { useNeedsManualMigration } from '../../lib/game-saving/legacy-migration'
-import type { PersistenceState, RoomState } from '../../lib/state'
+import { useSignal, useSignalEffect, type Signal } from '@preact/signals'
+import { type PersistenceState, type RoomState } from '../../lib/state'
 import Button from '../design-system/button'
 import Input from '../design-system/input'
 import LinkButton from '../design-system/link-button'
 import styles from './share-room.module.css'
 import { IoClose } from 'react-icons/io5'
 
-
-
-
-const conditional = false; //This conditional need to be if there has been a room created or not
-
 export interface ShareRoomPopupProps {
-	roomState: Signal<RoomState> | undefined;
+	roomState: Signal<RoomState>;
 	persistenceState: Signal<PersistenceState>
 	onClose: () => void
 }
 
-
 export default function ShareRoomPopup(props: ShareRoomPopupProps) {
-	const needsManualMigration = useNeedsManualMigration()
 	var roomLink = "sprig.hackclub.com/~/beta/" + props.roomState?.value.roomId;
+	let password = useSignal("");
+	let showChangeConfirmation = useSignal(false);
 
-if (conditional) {
+	const openCloseRoom = async (roomId: string, isRoomOpen: boolean) => {
+		try {
+			const res = await fetch("/api/rooms/change-status", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ roomId, isRoomOpen }),
+			});
+			if (!res.ok)
+				throw new Error(`Error renaming game: ${await res.text()}`);
+			if(isRoomOpen){
+				const res2 = await fetch("/api/rooms/change-password", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ roomId, password: password.value }),
+				});
+				if (!res2.ok)
+					throw new Error(`Error renaming game: ${await res.text()}`);
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	}
+	
+	const onOpenCloseRoom = (
+		persistenceState: Signal<PersistenceState>,
+		roomOpen: boolean
+	) => {
+		if (
+			persistenceState.value.kind !== "PERSISTED" ||
+			persistenceState.value.game === "LOADING"
+		)
+			return;
+		openCloseRoom(persistenceState.value.game.id, roomOpen);
+		persistenceState.value = {
+			...persistenceState.value,
+			game: {
+				...persistenceState.value.game,
+				isRoomOpen: roomOpen,
+			},
+		};
+	};
+
+	useSignalEffect(() => {
+		password.value
+		showChangeConfirmation.value = true;
+		setTimeout(() => {
+			showChangeConfirmation.value = false;
+		}, 2000);
+	})
+
+if (!(props.persistenceState.value.kind == "PERSISTED" && props.persistenceState.value.game !== "LOADING" && props.persistenceState.value.game.isRoomOpen)) {
 	return (
 		<div class={styles.overlay}>
 			<div class={styles.modal}>
@@ -38,31 +81,29 @@ if (conditional) {
 								Create a new room to collaborate with others.
 						</p>
 					</div>
-
-					<form onSubmit={async (event) => {
-						
-					}} class={styles.stack}>
+					<form onSubmit={
+						async (event) => {
+							event.preventDefault();
+							onOpenCloseRoom(props.persistenceState, true);
+						}
+					}>
 						<div class={styles.inputRow}>
-							<Input onChange={() => undefined} value = {""} placeholder='Enter a room password here' />
-							<Button accent type='submit' disabled={false}>
+							<Input onChange={() => undefined} value={password.value} bind={password} placeholder='Enter a room password here' />
+							<Button accent type='submit' disabled={password.value.length == 0}>
 								Create Room
 							</Button>
 						</div>
+					</form>	
 
-						<p class={styles.muted}>
-							<LinkButton
-								onClick={() => {
-									if (props.persistenceState.value.kind !== 'IN_MEMORY') return
-									props.persistenceState.value = {
-										...props.persistenceState.value,
-										showInitialWarning: false
-									}
-
-								}}
-								
-							>Create room without password</LinkButton>
-						</p>
-					</form>
+					<p class={styles.muted}>
+						<LinkButton
+							onClick={() => {	
+								password.value = "";
+								onOpenCloseRoom(props.persistenceState, true);
+							}}
+							
+						>Create room without password</LinkButton>
+					</p>
 			</div>
 		</div>
 		)
@@ -86,7 +127,6 @@ if (conditional) {
 					<div class={styles.info}>
 						<p>Room ID: {props.roomState?.value.roomId}</p>
 						<p>Participants: {props.roomState?.value.participants.length}</p>
-						<p>Room Password: {props.roomState?.value.password}</p>	
 					</div>
 
 					<div class={styles.inputRow}>
@@ -102,26 +142,23 @@ if (conditional) {
 					</div>
 
 					
-					<form onSubmit={async (event) => {
-						
-					}} class={styles.stack}>
+					<form onSubmit={
+						async (event) => {
+							event.preventDefault();
+							onOpenCloseRoom(props.persistenceState, true);
+						}
+					} class={styles.stack}>
 						<div class={styles.inputRow}>
-							<Input onChange={() => undefined} value={""} placeholder='Enter a room password here'/> 
-							
-
-							<Button accent type='submit' disabled={false}>
-								Change Password
+							<Input onChange={() => undefined} value={password.value} bind={password} placeholder='Enter a room password here' />
+							<Button accent type='submit' disabled={password.value.length == 0}>
+								Change password
 							</Button>
 						</div>
-
-
-
-
 						<p class={styles.muted}>
 							<LinkButton
 								onClick={() => {	
-									//Cosmin implements removing password from room
-
+									password.value = "";
+									onOpenCloseRoom(props.persistenceState, true);
 								}}
 							>Remove the password from your room</LinkButton>
 						</p>
