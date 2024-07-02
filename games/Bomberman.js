@@ -2,7 +2,7 @@
 @title: Bomberman
 @author: Jahn
 @tags: [Bombs, Bomberman, Multiplayer, Versus]
-@addedOn: 2024-00-00
+@addedOn: 2024-07-02
 */
 
 /*
