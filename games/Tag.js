@@ -12,6 +12,7 @@ const player1 = "p"
 const player2 = "a"
 const box = 'b'
 const planks = 'c'
+const movingBox = 'm'
 
 setLegend(
   [player1, bitmap`
@@ -81,7 +82,24 @@ CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCC`]
+CCCCCCCCCCCCCCCC`],
+  [movingBox, bitmap`
+0000000000000000
+0999999999999990
+0999999999999990
+0000000000000000
+0990990990990990
+0990909909900990
+0990093333090990
+0990993333990990
+0990903333900990
+0990093333090990
+0990990990990990
+0990909909900990
+0000000000000000
+0999999999999990
+0999999999999990
+0000000000000000`]
 )
 
 
@@ -90,46 +108,46 @@ let level = 0
 const levels = [
   map`
 .....p
-..bb..
-......
+m.bb.m
+..m...
 .b..b.
 ..b.b.
-a.....`,
+a..m..`,
   map`
-p.....
+p.m...
 bbb..b
-......
+.....m
 ..b.b.
-......
+..m...
 a..b..`,
   map`
-a....p
+am..mp
 .bb.b.
 ....b.
-.b....
-.b.bb.
+.b..m.
+mb.bb.
 ......`,
   map`
 pb.b.b
 .b.b.b
-.b....
-....b.
+.b.m.m
+.m..b.
 b.b.b.
 b.b.ba`,
   map`
-......
+.m....
 ..p..b
-.bbb.b
-..a..b
+.bbbmb
+m.a..b
 ...bb.
 ......`,
   map`
-......
+m....m
 .bbbb.
 .abb..
 ..bbp.
 .bbbb.
-......`,
+m....m`,
 ]
 
 const levelComplete = tune`
@@ -149,11 +167,11 @@ setMap(levels[level])
 var currentColour = color`0`
 
 if (level % 2) {
-  setSolids([player1, box])
+  setSolids([player1, box, movingBox])
   currentColour = color`3`
   addText('Red is IT!', options = { x: 5, y: 1, color: currentColour })
 } else {
-  setSolids([player2, box])
+  setSolids([player2, box, movingBox])
   currentColour = color`5`
   addText('Blue is IT!', options = { x: 5, y: 1, color: currentColour })
 }
@@ -187,7 +205,44 @@ onInput("l", () => {
   getFirst(player2).x += 1
 })
 
+const removeAndRespawnMovingBoxes = () => {
+  if (Math.random() < 0.4) {
+    const tiles = getAll(movingBox) // Retrieve all movingBox sprites
+
+    tiles.forEach(sprite => {
+      const x = sprite.x
+      const y = sprite.y
+  
+      // Randomly determine if the sprite should disappear and reappear
+      if (Math.random() < 0.5) {
+        // Check if the spawning position is occupied by a player
+        const occupiedByPlayer = tilesWith(player1, player2).some(tile => tile.x === x && tile.y === y)
+
+        if (!occupiedByPlayer) {
+          // Remove the movingBox sprite
+          clearTile(x, y)
+          addSprite(x, y, planks)
+    
+          // Generate a random delay between 500ms and 2000ms for the sprite to reappear
+          const randomDelay = Math.floor(Math.random() * 1500) + 500
+    
+          // Add the movingBox sprite back to the same tile after a random delay
+          setTimeout(() => {
+            clearTile(x, y)
+            addSprite(x, y, movingBox)
+          }, randomDelay); 
+        } else {
+          getFirst(player1).x += 1
+          getFirst(player2).x += 1
+        }
+      }
+    })
+  }
+}
+
 afterInput(() => {
+  removeAndRespawnMovingBoxes()
+
   var tiles = tilesWith(player1, player2)
   if (tiles.length > 0) {
     clearText()
@@ -195,16 +250,17 @@ afterInput(() => {
     playTune(levelComplete)
 
     if (level === 5) {
-        addText('Thank you!', options = {x: 5, y: 1, color: color`0`})
-        return
+      addText('Thank you!', options = { x: 5, y: 1, color: color`0` })
+      level += 1
+      return
     }
 
     setTimeout(() => {
       level += 1
-      
+
       setMap(levels[level])
       clearText()
-  
+
       if (level % 2) {
         setSolids([player1, box])
         currentColour = color`3`
@@ -215,7 +271,7 @@ afterInput(() => {
         addText('Blue is IT!', options = { x: 5, y: 1, color: currentColour })
       }
     }, 1000);
-    
-    
+
+
   }
 })
