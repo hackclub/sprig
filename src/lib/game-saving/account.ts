@@ -57,7 +57,6 @@ export interface Game {
 	roomParticipants?: RoomParticipant[]
 	isRoomOpen?: boolean
 	password?: string
-	salt?: string
 }
 
 export interface LoginCode {

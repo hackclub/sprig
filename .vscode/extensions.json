@@ -1,0 +1,8 @@
+{
+	"recommendations": [
+		"clinyong.vscode-css-modules",
+		"EditorConfig.EditorConfig",
+		"svelte.svelte-vscode",
+		"astro-build.astro-vscode"
+	]
+}
