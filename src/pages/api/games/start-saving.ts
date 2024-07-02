@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import {
 	getGame,
 	getSession,
+	setDocument,
 	updateDocument,
 } from "../../../lib/game-saving/account";
 import { updateEmailListLastModifiedTime } from "../../../lib/game-saving/email";
@@ -34,6 +35,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 
 	let trackingId = game.id;
 	let trackingType = "game";
+	const trackingDate = new Date().toDateString()
 
 	if (!game.unprotected) {
 		const session = await getSession(cookies);
@@ -55,15 +57,19 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		});
 
 	try{
-		updateDocument("games", gameId, { 
+		await updateDocument("games", gameId, { 
 			tutorialName: tutorialName ?? "",
 			modifiedAt: Timestamp.now(),
+		});
+
+		await setDocument('daily-edits', `${trackingId}-${trackingDate}`, {
+			type: trackingType,
+			id: trackingId,
+			date: Timestamp.now()
 		});
 		return new Response(JSON.stringify({}), { status: 200 })
 	} catch (error) {
 		return new Response("Internal server error", { status: 500 })
 	}
-
-	 return new Response(JSON.stringify({}), { status: 200 })
 
 };

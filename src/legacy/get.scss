@@ -54,7 +54,7 @@ nav {
 		font-weight: normal;
 		font-size: 2rem;
 		margin: 4px 0 20px 0;
-		color: #66ebb6;
+		color: #399F6E;
 	}
 	
 	li {
@@ -72,7 +72,8 @@ nav {
 		margin: 0;
 		margin-bottom: 5vh;
 		color: white;
-		background: url('/background.jpg'), $base-background;
+		text-shadow: 0 0 10px black;
+		background: url('/background-new.png'), $base-background;
 		background-size: cover;
 		background-attachment: fixed;
 		background-position: bottom 200px center;
