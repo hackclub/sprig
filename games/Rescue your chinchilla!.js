@@ -4,10 +4,10 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Rescue your chinchilla!
 @author: KamilloDev
-@tags: [Animal, Rescue]
-@addedOn: 2024-29-06
+@tags: [Animal, Rescue, Teleporters]
+@addedOn: 2024-02-07
 */
-
+const lever = 'y'
 const player = "p"
 const chinchilla = 'c'
 const background = 'g'
@@ -15,6 +15,12 @@ const bush = 'b'
 const wall = 'w'
 const house = 'h'
 const coin = 'l'
+const teleporter_f = 't'
+const teleporter_t = 'f'
+const teleporter_f1 = 's'
+const teleporter_t1 = 'v'
+
+const fake_wall = 'r'
 const music = tune`
 217.3913043478261: C4^217.3913043478261 + C5-217.3913043478261,
 217.3913043478261: C4^217.3913043478261 + C5-217.3913043478261,
@@ -156,7 +162,7 @@ L2222C111CC2222L
 LCCCCCL11CCCCCCL
 LCCCCC111CCCCCCL
 LLLLLLLLLLLLLLLL` ],
-    [coin, bitmap `
+  [coin, bitmap `
 ....66666666....
 ...666FFF6666...
 ..66FFF6666666..
@@ -172,13 +178,112 @@ LLLLLLLLLLLLLLLL` ],
 .666666666FF666.
 ..6666666FF666..
 ...6666FFF666...
-....66666666....`]
+....66666666....`],
+  [teleporter_f, bitmap `
+HHHHHHHHHHHHHHHH
+H88888888888888H
+H8HHHHHHHHHHHH8H
+H8H8888888888H8H
+H8H8HHHHHHH88H8H
+H8H88888888H8H8H
+H8H88HHHHH8H8H8H
+H8H8H8888H8H8H8H
+H8H8H8HH8H8H8H8H
+H8H8H8H88H8H8H8H
+H8H8H8HHH88H8H8H
+H8H88HHHHHH88H8H
+H8H8888888888H8H
+H8HHHHHHHHHHHH8H
+H88888888888888H
+HHHHHHHHHHHHHHHH`],
+  [teleporter_t, bitmap `
+HHHHHHHHHHHHHHHH
+H77777777777777H
+H7HHHHHHHHHHHH7H
+H7H7777777777H7H
+H7H7HHHHHHH77H7H
+H7H77777777H7H7H
+H7H77HHHHH7H7H7H
+H7H7H7777H7H7H7H
+H7H7H7HH7H7H7H7H
+H7H7H7H77H7H7H7H
+H7H7H7HHH77H7H7H
+H7H77HHHHHH77H7H
+H7H7777777777H7H
+H7HHHHHHHHHHHH7H
+H77777777777777H
+HHHHHHHHHHHHHHHH`],
+  [teleporter_f1, bitmap `
+DDDDDDDDDDDDDDDD
+D66666666666666D
+D6DDDDDDDDDDDD6D
+D6D6666666666D6D
+D6D6DDDDDDD66D6D
+D6D66666666D6D6D
+D6D66DDDDD6D6D6D
+D6D6D6666D6D6D6D
+D6D6D6DD6D6D6D6D
+D6D6D6D66D6D6D6D
+D6D6D6DDD66D6D6D
+D6D66DDDDDD66D6D
+D6D6666666666D6D
+D6DDDDDDDDDDDD6D
+D66666666666666D
+DDDDDDDDDDDDDDDD`],
+  [teleporter_t1, bitmap `
+DDDDDDDDDDDDDDDD
+D99999999999999D
+D9DDDDDDDDDDDD9D
+D9D9999999999D9D
+D9D9DDDDDDD99D9D
+D9D99999999D9D9D
+D9D99DDDDD9D9D9D
+D9D9D9999D9D9D9D
+D9D9D9DD9D9D9D9D
+D9D9D9D99D9D9D9D
+D9D9D9DDD99D9D9D
+D9D99DDDDDD99D9D
+D9D9999999999D9D
+D9DDDDDDDDDDDD9D
+D99999999999999D
+DDDDDDDDDDDDDDDD`],
+  [lever, bitmap `
+................
+............33..
+............33..
+...........22...
+..........22....
+..........2.....
+.........22.....
+........22......
+........2.......
+.......22.......
+.......2........
+....CCCCCCCC....
+...CCCCCCCCCC...
+..CCCCCCCCCCCC..
+.CCCCCCCCCCCCCC.
+CCCCCCCCCCCCCCCC`],
+  [fake_wall, bitmap`
+CCCCCCCCCCCCCCCC
+11C111111111C111
+CCCCCCCCCCCCCCCC
+1111C111111111C1
+CCCCCCCCCCCCCCCC
+11C1111111C11111
+CCCCCCCCCCCCCCCC
+111C1111C11111C1
+CCCCCCCCCCCCCCCC
+11111C11111C1111
+CCCCCCCCCCCCCCCC
+11C11111C1111C11
+CCCCCCCCCCCCCCCC
+1C111C11111C1111
+CCCCCCCCCCCCCCCC
+111C11111C1111C1`]
 )
 
-
-
-
-setSolids([player, wall, bush, chinchilla])
+setSolids([player, wall, bush, chinchilla, fake_wall])
 
 setPushables({
   [ player ]: [chinchilla, bush]
@@ -187,7 +292,7 @@ setPushables({
 let level = 0
 let coins = 0
 const levels = [
-  map`
+ map`
 ...wpw...
 wwww.lw..
 w...b.w..
@@ -197,39 +302,69 @@ wwww.w...
 ...wlw...
 ...whw...`,
   map`
-hlw...ww..w
-..w...w...w
-.bw.b.w.c.w
-.ww....w..w
-.w.....ww..
-......b....
-.www..www.w
-..lw.w.b..w
-.....wpb..w`,
+.........
+wwww.wwww
+..lw.w...
+...w.wf.h
+pctw.w...
+...w.wl..
+wwww.wwww
+.........`,
   map`
-...b.bw.....
+.........
+wwww.wwww
+y..www...
+...rlr..h
+pc.www...
+...w.w...
+wwww.wwww
+.........`,
+  map`
+..rb.bw.....
 .lw...w.c...
-.bw.b.ww....
+.bw.b.ww..rr
 .ww....w.wb.
 .w.b...ww...
-.........b..
-.www..w.ww..
+.r......rb..
+.www..wrww..
 .b.wbww.....
 ...w.wpb....
-h.bw.w.b...l`,
+h.bw.wyb...l`,
   map`
-hlwb.l..wwp.
+lb...bw......
+...s..w..t..b
+.b....w......
+...p..wb.cb..
+......w......
+wwwwwwwwwwwww
+...b..rh...b.
+b.....r......
+......rb....b
+b..f..r..v...
+l.b...r....by`,
+  map`
+hlwbrlr.wwp.
 ..ww.w..ww..
 .bw..b..wwbw
-.wwww.w.....
+rwwwwrw.....
 .w..wcw.....
-....w.w.....
+....wrw.....
 .w...b.....w
-....b..www.w
+....b..wwbww
 ...w...b....
-.....w.b....`
+.....w.b...y`
 ]
-
+/*map`
+s.lwf..lywtp
+.c.ww.wwwwwr
+...w......w.
+rwww..w...b.
+.w.b........
+.r......w..b
+.w..w.......
+.w.b...wb...
+.ww.....wwww
+.....b...v.h`,*/
 setMap(levels[level])
 
 let prechin = {"x": getFirst(chinchilla).x, "y": getFirst(chinchilla).y} 
@@ -254,37 +389,153 @@ addText('Press J to ', {x:4, y:7, color:color`3`})
 addText('reset level', {x:4, y:8, color:color`3`})
 
 afterInput(() => {
-  clearText()
-  let poschin = {"x": getFirst(chinchilla).x, "y": getFirst(chinchilla).y}
+  clearText();
+
+  let lever_pos = getAll(lever)
+  let poschin = { "x": getFirst(chinchilla).x, "y": getFirst(chinchilla).y };
   let obstacles = getAll(coin);
-  let playerpos = {"x": getFirst(player).x, "y": getFirst(player).y}
+  let fakeWalls = getAll(fake_wall); // Change variable name to avoid naming conflict
+  
+  let playerpos = { "x": getFirst(player).x, "y": getFirst(player).y };
+  
   for (let i = 0; i < obstacles.length; i++) {
     if (obstacles[i].y == playerpos.y && obstacles[i].x == playerpos.x) {
-      coins += 1
+      coins += 1;
       obstacles[i].remove();
     }
   }
   
-  addText(`${coins} coins`, {x:1, y:1, color:color`8`})
-  if(tilesWith(chinchilla, house).length >= 1 && level == 3){
-      addText("you've won!", {x:4, y:9, color:color`8`})
-      addText(`you've collected`, {x:4, y:10, color:color`8`})
-      addText(`${coins} coins`, {x:4, y:11, color:color`8`})
-  }else if(tilesWith(chinchilla, house).length >= 1){
-    level += 1
-    setMap(levels[level])
-    
+  
+  if (tilesWith(lever, player).length >= 1) {
+  let fakes = getAll(fake_wall);
+
+  for (let i = 0; i < fakes.length; i++) {
+    fakes[i].remove();
   }
+}
+  
+  addText(`${coins} coins`, { x: 1, y: 1, color: color`8` });
+  
+  if (tilesWith(chinchilla, house).length >= 1 && level == 5) {
+    addText("you've won!", { x: 4, y: 9, color: color`8` });
+    addText("you've collected", { x: 4, y: 10, color: color`8` });
+    addText(`${coins} coins`, { x: 4, y: 11, color: color`8` });
+  } else if (tilesWith(chinchilla, house).length >= 1) {
+    level += 1;
+    setMap(levels[level]);
+  }
+ /* Check if the chinchilla overlaps with the teleporter F
+  if (tilesWith(chinchilla, teleporter_f).length >= 1) {
+    const t_f = getFirst(teleporter_f);
+    const t_t = getFirst(teleporter_t);
+
+    // Teleport the chinchilla to the position of teleporter T
+    getFirst(chinchilla).x = t_t.x;
+    getFirst(chinchilla).y = t_t.y;
+  */
+
+
+  
+   // Chinchilla teleportation outside the teleporter
+   if (tilesWith(chinchilla, teleporter_f).length >= 1) {
+    const t_f = getFirst(teleporter_f);
+    const chinchillaPos = getFirst(chinchilla);
+    
+    // Move the chinchilla to be one tile away from teleporter_t
+    const t_t = getFirst(teleporter_t);
+    const dx = t_t.x - t_f.x;
+    const dy = t_t.y - t_f.y;
+    if (level == 1){
+      chinchillaPos.x = t_t.x + 1;
+      chinchillaPos.y = t_t.y + 1;
+    } else {
+      chinchillaPos.y = t_t.y + -1;
+    }
+    
+    
+  }else if (tilesWith(chinchilla, teleporter_t).length >= 1) {
+    const t_f = getFirst(teleporter_t);
+    const chinchillaPos = getFirst(chinchilla);
+    
+    // Move the chinchilla to be one tile away from teleporter_t
+    const t_t = getFirst(teleporter_f);
+    const dx = t_t.x - t_f.x;
+    const dy = t_t.y - t_f.y;
+
+    if (level == 1){
+      chinchillaPos.x = t_t.x + -1;
+      chinchillaPos.y = t_t.y + -1;
+    }else{
+      chinchillaPos.y = t_t.y + 1;
+    }
+    //chinchillaPos.x = t_t.x + 1;
+    chinchillaPos.y = t_t.y + 1;
+   }
+
+  // Player teleportation within the teleporter
+  if (tilesWith(player, teleporter_f).length >= 1) {
+    const t_f = getFirst(teleporter_f);
+    const t_t = getFirst(teleporter_t);
+    const playerPos = getFirst(player);
+
+    // Teleport the player within the teleporter
+    playerPos.x = t_t.x;
+    playerPos.y = t_t.y;
+  }else if (tilesWith(player, teleporter_t).length >= 1) {
+    const t_f = getFirst(teleporter_f);
+    const t_t = getFirst(teleporter_t);
+    const playerPos = getFirst(player);
+
+    // Teleport the player within the teleporter
+    playerPos.x = t_f.x;
+    playerPos.y = t_f.y;
+  }
+  
+  //------------------------------------------------------------------//
+  if (tilesWith(chinchilla, teleporter_f1).length >= 1) {
+    const t_f1 = getFirst(teleporter_f1);
+    const chinchillaPos1 = getFirst(chinchilla);
+    
+    // Move the chinchilla to be one tile away from teleporter_t
+    const t_t1 = getFirst(teleporter_t1);
+
+
+    //chinchillaPos1.x = t_t1.x + -1;
+    chinchillaPos1.y = t_t1.y + -1;
+  }else if (tilesWith(chinchilla, teleporter_t1).length >= 1) {
+    const t_f1 = getFirst(teleporter_t1);
+    const chinchillaPos1 = getFirst(chinchilla);
+    
+    // Move the chinchilla to be one tile away from teleporter_t
+    const t_t1 = getFirst(teleporter_f1);
+
+    //chinchillaPos1.x = t_t1.x + 1;
+    chinchillaPos1.y = t_t1.y + 1;
+   }
+
+  // Player teleportation within the teleporter
+  if (tilesWith(player, teleporter_f1).length >= 1) {
+    const t_f1 = getFirst(teleporter_f1);
+    const t_t1 = getFirst(teleporter_t1);
+    const playerPos = getFirst(player);
+
+    // Teleport the player within the teleporter
+    playerPos.x = t_t1.x;
+    playerPos.y = t_t1.y;
+  }else if (tilesWith(player, teleporter_t1).length >= 1) {
+    const t_f1 = getFirst(teleporter_f1);
+    const t_t1 = getFirst(teleporter_t1);
+    const playerPos = getFirst(player);
+
+    // Teleport the player within the teleporter
+    playerPos.x = t_f1.x;
+    playerPos.y = t_f1.y;
+  }
+  
   if (prechin.x != poschin.x || prechin.y != poschin.y){
     playTune(movechin, 1)
     prechin = poschin
   }
-
- 
-
-  
- 
-
 
 }
 )
