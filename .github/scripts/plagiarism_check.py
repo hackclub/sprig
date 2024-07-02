@@ -1,61 +1,87 @@
-import os
-import shutil
+import sys
 import subprocess
-import uuid
-from datetime import datetime
-import multiprocessing
+import os
+import glob
+import shutil
+import time
 
 def log(message):
-    """Log message with a timestamp."""
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
     print(f"[{timestamp}] {message}")
 
-def run_compare50(args):
-    """Run the compare50 command on a single file against another."""
-    single_file, file, output_dir_base, saved_dir_base = args
-    unique_output_dir = os.path.join(output_dir_base, uuid.uuid4().hex)
-
-    if os.path.exists(unique_output_dir):
-        shutil.rmtree(unique_output_dir)
-    os.makedirs(unique_output_dir, exist_ok=True)
-
-    command = [
-        "compare50",
-        single_file,
-        file,
-        "--output", unique_output_dir,
-        "--max-file-size", str(1024 * 1024 * 100),
-        "--passes", "text"
-    ]
-
-    log(f"Running command: {' '.join(command)}")
+def run_compare50(single_file, directory, output_dir, saved_dir_base):
     try:
-        result = subprocess.run(command, check=True, text=True, capture_output=True)
-        log("Compare50 command executed successfully.")
+        if not os.path.exists(saved_dir_base):
+            os.makedirs(saved_dir_base)
+            log("Created base directory for saved files.")
+
+        all_js_files = glob.glob(os.path.join(directory, "*.js"))
+        total_files = len(all_js_files)
+        current_file_number = 0
+
+        for file in all_js_files:
+            current_file_number += 1
+            if os.path.abspath(file) == os.path.abspath(single_file):
+                log(f"Skipping comparison for the same file: {file}")
+                continue
+
+            log(f"Processing file {current_file_number} of {total_files}: {file}")
+            if os.path.exists(output_dir):
+                shutil.rmtree(output_dir)
+                log(f"Cleaned existing output directory: {output_dir}")
+            
+            command = [
+                "compare50",
+                f'"{single_file}"',
+                f'"{file}"',
+                "--output", f'"{output_dir}"',
+                "--max-file-size", str(1024 * 1024 * 100),
+                "--passes", "text"
+            ]
+
+            command_str = ' '.join(command)
+            log(f"Running command: {command_str}")
+            subprocess.run(command_str, shell=True, check=True)
+            log("Compare50 command executed successfully.")
+
+            match_file = os.path.join(output_dir, "match_1.html")
+
+            if os.path.exists(match_file):
+                new_filename = os.path.basename(file).replace('.js', '.html')
+                saved_file_path = os.path.join(saved_dir_base, new_filename)
+                log(f"Match found. Moving {match_file} to {saved_file_path}")
+                shutil.move(match_file, saved_file_path)
+            else:
+                log(f"No match found for file: {file}")
+
     except subprocess.CalledProcessError as e:
-        log(f"Error in running Compare50: {e.stderr}")
+        log(f"Error in running Compare50: {e}")
     except Exception as e:
-        log(f"An unexpected error occurred: {e}")
-    finally:
-        shutil.rmtree(unique_output_dir)
+        log(f"An error occurred: {e}")
 
-def main(single_file, directory, output_dir_base, saved_dir_base):
-    """Main function to process all JavaScript files in a directory using multiprocessing."""
-    log("Starting plagiarism check...")
-    all_js_files = [os.path.join(directory, f) for f in os.listdir(directory) if f.endswith('.js')]
-    
-    tasks = [(single_file, file, output_dir_base, saved_dir_base) for file in all_js_files if file != single_file]
+def main():
+    if len(sys.argv) != 5:
+        log("Incorrect number of arguments provided.")
+        print("Usage: python plagiarism_check.py <single_file> <directory> <output_dir> <saved_dir_base>")
+        sys.exit(1)
 
-    with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
-        pool.map(run_compare50, tasks)
+    single_file = sys.argv[1]
+    directory = sys.argv[2]
+    output_dir = sys.argv[3]
+    saved_dir_base = sys.argv[4]
 
+    log(f"Starting plagiarism check with the following arguments:")
+    log(f"Single file: {single_file}")
+    log(f"Directory: {directory}")
+    log(f"Output directory: {output_dir}")
+    log(f"Saved directory base: {saved_dir_base}")
+
+    log(f"Listing all JavaScript files in directory '{directory}':")
+    for f in glob.glob(os.path.join(directory, "*.js")):
+        log(f)
+
+    run_compare50(single_file, directory, output_dir, saved_dir_base)
     log("Plagiarism check completed.")
 
 if __name__ == "__main__":
-    import sys
-    if len(sys.argv) != 5:
-        log("Incorrect number of arguments provided.")
-        print("Usage: python plagiarism_check.py <single_file> <directory> <output_dir_base> <saved_dir_base>")
-        sys.exit(1)
-
-    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    main()
