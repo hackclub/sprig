@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: TicTacToe
 @author: Benjamin
-@tags: [tictactoe,tic-tac-toe]
-@addedOn: 2024-00-00
+@tags: ['tictactoe','tic-tac-toe']
+@addedOn: 2024-07-01
 */
 
 const player = "p";
