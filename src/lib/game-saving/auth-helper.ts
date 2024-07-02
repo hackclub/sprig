@@ -15,6 +15,8 @@ export type AuthState =
 	| 'LOGGED_IN'
 
 export type AuthStage = 'IDLE' | 'EMAIL' | 'CODE' | 'LOGGED_IN'
+
+export const DevEmail = "development@hackclub.com"
 	
 export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: string = '') => {
 	const state = useSignal(initialState)
@@ -31,7 +33,7 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: st
 	const emailValid = useComputed(() => isValidEmail(email.value))
 
 	const code = useSignal('')
-	const codeValid = useComputed(() => code.value.length === 6)
+	const codeValid = useComputed(() => code.value.length === 6 || email.value === DevEmail)
 	useSignalEffect(() => { code.value = code.value.replace(/[^0-9]/g, '') })
 
 	const startEmailEntry = () => { state.value = 'EMAIL_ENTRY' }
