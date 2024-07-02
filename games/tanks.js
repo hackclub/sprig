@@ -3,7 +3,7 @@ Shoot your projectile at the other tank before they get you!
 
 @title: Tanks
 @author: Om Raheja
-@tags: [two-player, fighting, pvp]
+@tags: ['two-player', 'fighting', 'pvp']
 @addedOn: 2024-06-30
 */
 
