@@ -1,6 +1,5 @@
 import type { APIRoute } from 'astro'
-import { Timestamp } from 'firebase-admin/firestore'
-import { getGame, getSession, updateDocument } from '../../../lib/game-saving/account'
+import { getGame } from '../../../lib/game-saving/account'
 import bcrypt from 'bcryptjs'
 
 export const post: APIRoute = async ({ request }) => {
@@ -18,9 +17,7 @@ export const post: APIRoute = async ({ request }) => {
 
 	const game = await getGame(roomId)
 	if (!game) return new Response('Room does not exist', { status: 404 })
-
-	if(bcrypt.compareSync(password, game.password)) {
+	if(game.password && bcrypt.compareSync(password, game.password)) 
 		return new Response(JSON.stringify({game}), { status: 200 })
-	}
 	return new Response('Incorrect password', { status: 401 })
 }
