@@ -401,7 +401,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				/>
 			)}
 
-			{shareRoomPopup.value && (
+			{shareRoomPopup.value && props.roomState && (
 				<ShareRoomPopup
 					persistenceState={props.persistenceState}
 					roomState={props.roomState}

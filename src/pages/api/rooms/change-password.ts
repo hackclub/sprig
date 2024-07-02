@@ -1,5 +1,4 @@
 import type { APIRoute } from 'astro'
-import { Timestamp } from 'firebase-admin/firestore'
 import { getGame, getSession, updateDocument } from '../../../lib/game-saving/account'
 import bcrypt from 'bcryptjs'
 

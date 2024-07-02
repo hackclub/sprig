@@ -11,9 +11,9 @@ export interface RoomPasswordPopupProps {
 }
 
 export default function RoomPasswordPopup(props: RoomPasswordPopupProps) {
-	if(props.persistenceState.value.kind !== "COLLAB") return
 	let password = useSignal("");
 	function checkPassword() {
+		if(props.persistenceState.value.kind !== "COLLAB") return
 		fetch("/api/rooms/check-password", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
