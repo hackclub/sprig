@@ -24,7 +24,7 @@ def run_compare50(args):
         single_file,
         file,
         "--output", unique_output_dir,
-        "--max-file-size", "100M",
+        "--max-file-size", str(1024 * 1024 * 100),
         "--passes", "text"
     ]
 
