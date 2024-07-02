@@ -1,4 +1,4 @@
-import { EditorState, Extension } from '@codemirror/state'
+import { EditorState } from '@codemirror/state'
 import { getSearchQuery, highlightSelectionMatches, search, searchKeymap, setSearchQuery } from '@codemirror/search'
 import widgets from './widgets'
 import { effect, signal } from '@preact/signals'

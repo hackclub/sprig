@@ -10,13 +10,13 @@ import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 import { Awareness } from 'y-protocols/awareness'
 import { WebrtcProvider } from 'y-webrtc'
 import * as Y from 'yjs'
-import { saveGame, startSavingGame } from './big-interactive-pages/editor'
+import { startSavingGame } from './big-interactive-pages/editor'
 import { yCollab } from 'y-codemirror.next'
 
 interface CodeMirrorProps {
 	class?: string | undefined
-	persistenceState?: Signal<PersistenceState>
-	roomState?: Signal<RoomState>
+	persistenceState: Signal<PersistenceState> | undefined
+	roomState: Signal<RoomState> | undefined
 	initialCode?: string
 	onCodeChange?: () => void
 	onRunShortcut?: () => void
@@ -146,7 +146,8 @@ export default function CodeMirror(props: CodeMirrorProps) {
 
 			yProviderAwarenessSignal.value = provider.awareness
 			console.log(props.persistenceState.peek().session?.user)
-			const isHost = ((props.persistenceState.peek().kind == "PERSISTED" && props.persistenceState.peek().game != "LOADING") && props.persistenceState.peek().session?.user.id === props.persistenceState.peek().game.ownerId)
+			let persistenceState = props.persistenceState.peek();
+			const isHost = ((persistenceState.kind == "PERSISTED" && persistenceState.game != "LOADING") && persistenceState.session?.user.id === persistenceState.game.ownerId)
 			provider.awareness.setLocalStateField("user", {
 				name:
 					props.persistenceState.peek().session?.user.email ??
