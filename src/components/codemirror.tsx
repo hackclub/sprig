@@ -138,7 +138,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				signaling: [
 					"wss://yjs-signaling-server-5fb6d64b3314.herokuapp.com",
 				],
-				password: ((persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING" && persistenceState.game.password) ? persistenceState.game.password : "")
+				// password: ((persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING" && persistenceState.game.password) ? persistenceState.game.password : "")
 			});
 			//get yjs document from provider
 			let ytext = yDoc.getText("codemirror");
