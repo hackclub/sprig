@@ -132,7 +132,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			let persistenceState = props.persistenceState.peek();
 			provider = new WebrtcProvider(props.roomState.value.roomId, yDoc, {
 				signaling: [
-					"wss://yjs-signaling-server-5fb6d64b3314.herokuapp.com",
+					import.meta.env.PUBLIC_SIGNALING_SERVER_HOST as string,
 				],
 				// password: ((persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING" && persistenceState.game.password) ? persistenceState.game.password : "")
 			});
