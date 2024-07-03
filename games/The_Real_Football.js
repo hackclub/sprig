@@ -84,38 +84,38 @@ setLegend(
 4444440L04444444`],
   [ grass, bitmap`
 4444444444444444
+44444444D44444D4
 4444444444444444
 4444444444444444
+444D444444444444
 4444444444444444
 4444444444444444
+4444444D44444444
+D44444444444D444
 4444444444444444
 4444444444444444
+444D444444444444
 4444444444444444
+444444444D4444D4
 4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444
-4444444444444444`],
+4444D44444444444`],
   [ bounds, bitmap`
 DDDDDDDDDDDDDDDD
+DDDDDDDDDD4DDDDD
+DDD4DDDDD4DDDDD4
+DD4DDDDDDDDDDD4D
 DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD`]
+DDDDDD4DDDDDDDDD
+DDDDD4DDDDD4DDDD
+4DDDDDDDDD4DDDD4
+DDDDDDDDDDDDDD4D
+DDD4DDDDDDDDDDDD
+DD4DDDDD4DDDDDDD
+DDDDDDD4DDDDDDDD
+DDDDDDDDDDDD4DDD
+DDDDDDDDDDD4DDDD
+DDDD4DDDDDDDDDDD
+DDD4DDDDDDDDDDDD`]
 );
 
 
@@ -265,6 +265,44 @@ afterInput(() => {
   const numberCovered = tilesWith(player, ball).length;
 })
 
+// mech 1 - timer
+let timer = 500;
+
+// Timer display
+let timerText = addText("", { x: 1, y: 1, color: color`1` });
+
+// timer updater
+setInterval(() => {
+    if (timerText) {
+        timerText.remove();
+    }
+    timerText = addText(`Time: ${timer}`, { x: 5, y: 0, color: color`9` });
+    
+    if (timer <= 0) {
+        addText("Time's up! You lose", { y: 4, color: color`3` });
+        playTune(tunes.reset);
+    }
+    
+    timer--;
+}, 1000); 
+
+// goalpost modifier
+afterInput(() => {
+    const targetNumber = tilesWith(goalpost).length;
+    const numberCovered = tilesWith(goalpost, ball).length;
+  
+    // goalpost checker
+    if (numberCovered === targetNumber && timer > 0) {
+        level = level + 1;
+        const currentLevel = levels[level];
+  
+        // Game completion check
+        if (currentLevel !== undefined) {
+            setMap(currentLevel);
+        }
+    }
+});
+
 // makes sprite solid
 setSolids([ player, ball, hurdle, bounds]); 
 
@@ -288,6 +326,8 @@ onInput("a", () => {
 onInput("s", () => {
     getFirst(player).y += 1;
     });
+
+
 
 // reset button
 onInput("j", () => {
