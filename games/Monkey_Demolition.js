@@ -1,8 +1,4 @@
-// Goal of the game is to break buildings
-// Controlls are "a" to go left, "d" to go right, and "i" to break buildings
-// You must be facing and right beside the block you want to break
-
-let isKeyDown = {};
+let isKeyDown = {} 
 const monkeyRight = "m"
 const monkeyLeft = "l"
 const monkeyAttackLeft = "8"
@@ -13,6 +9,7 @@ const building1 = "1"
 const building2 = "2"
 const building3 = "3"
 
+let isWon = false
 let isAttacking = false
 let player = monkeyRight
 let isFacingRight = true
@@ -21,8 +18,16 @@ let buildingCountText = {}
 let countdown = 60
 let countdownInterval
 
+const clearAllTiles = () => {
+  for (let x = 0; x < width(); x++) {
+    for (let y = 0; y < height(); y++) {
+      clearTile(x, y);
+    }
+  }
+}
+
 const checkBlock = () => {
-  const playerSprite = getFirst(player);
+  const playerSprite = getFirst(player) 
   let nextX = playerSprite.x + (isFacingRight ? 1 : -1)
   const nextTile = getTile(nextX, playerSprite.y)
 
@@ -34,64 +39,29 @@ const checkBlock = () => {
 }
 
 const getRandomInt = (max) => {
-  return Math.floor(Math.random() * max);
-}
-
-const breakBuilding = (block) => {
-  if (block) {
-    const y = block.y;
-    block.remove();
-    respawnBuilding(block.x, y);
-    brokenBuildingCount++;
-    buildingCountText = addText(`Buildings Broken: ${brokenBuildingCount}`, {
-      x: 0,
-      y: 3,
-      size: 25
-    });
-  } else {
-    console.log("Error: Attempting to break a non-existing building.");
-  }
+  return Math.floor(Math.random() * max) 
 } 
 
 const checkBrokenBuildings = () => {
   getAll(building2).forEach(block => {
     if (block.type === building2) {
-      const adjacentTileRight = getTile(block.x + 1, block.y);
-      const adjacentTileLeft = getTile(block.x - 1, block.y);
+      const adjacentTileRight = getTile(block.x + 1, block.y) 
+      const adjacentTileLeft = getTile(block.x - 1, block.y) 
       if (adjacentTileRight.some(sprite => sprite.type === monkeyAttackRight) ||
           adjacentTileLeft.some(sprite => sprite.type === monkeyAttackLeft)) {
-        breakBuilding(block);
+        breakBuilding(block) 
       }
     }
-  });
+  }) 
 }
 
 const respawnBuilding = (y) => {
-  let newX = getRandomInt(24);
-  const maxAttempts = 100;
-  let loopCount = 0;
-
-  // Limit newX within the bounds of the game map
-  while (getTile(newX, y).length > 0 && loopCount < maxAttempts) {
-    newX = getRandomInt(24);
-    loopCount++;
-  }
-
-  // Check if newX is within the bounds, then add the sprite while keeping the y coordinate constant
-  if (loopCount < maxAttempts) {
-    const boundedX = Math.min(Math.max(newX, 0), width() - 1);
-    if (getTile(boundedX, y).length === 0) {
-      addSprite(boundedX, 5, building1);
-    } else {
-      console.log("Sprite cannot be placed out of bounds.");
-    }
-  } else {
-    console.log("Unable to respawn building after 100 attempts.");
-  }
+  let newX = getRandomInt(24) 
+  addSprite(newX, 5, building1) 
 } 
 
 const changeBlockToBuilding3 = (block) => {
-  block.type = building3;
+  block.type = building3 
 }
 setLegend(
   [monkeyRight, bitmap`
@@ -243,50 +213,87 @@ const levels = [
 ........................
 ........................
 m....1..................
-gggggggggggggggggggggggg`
+gggggggggggggggggggggggg`,
+  map `
+......
+......
+......`
 ]
 
 setMap(levels[level])
-  
+
+
+const breakBuilding = (block) => {
+  if (block) {
+    const y = block.y 
+    block.remove()
+    respawnBuilding(block.x, y) 
+    brokenBuildingCount++ 
+    buildingCountText = addText(`Buildings Broken: ${brokenBuildingCount}`, {
+      x: 0,
+      y: 3,
+      size: 25
+    })
+    if (brokenBuildingCount >= 50) {
+      clearAllTiles()
+      clearText()
+      isWon = true
+      level = 1
+      const winText = addText(`You Won`, {
+        x: 6,
+        y: 8,
+        color: color`H`
+      })
+    }
+  } 
+}
 onInput("d", () => {
-  getFirst(player).x += 1
-  getFirst(player).type = monkeyRight
-  player = monkeyRight
-  isFacingRight = true
+  if(!isWon) {
+    getFirst(player).x += 1
+    getFirst(player).type = monkeyRight
+    player = monkeyRight
+    isFacingRight = true
+  }
 })
 
 onInput("a", () => {
-  getFirst(player).x -= 1
-  getFirst(player).type = monkeyLeft
-  player = monkeyLeft
-  isFacingRight = false
+  if(!isWon) {
+    getFirst(player).x -= 1
+    getFirst(player).type = monkeyLeft
+    player = monkeyLeft
+    isFacingRight = false
+  }
 })
 
 onInput("i", () => {
-  const playerSprite = getFirst(player);
-  if (playerSprite && playerSprite.x !== undefined && playerSprite.y !== undefined) {
-    if (isFacingRight) {
-      playerSprite.type = monkeyAttackRight;
-      player = monkeyAttackRight;
-    } else {
-      playerSprite.type = monkeyAttackLeft;
-      player = monkeyAttackLeft;
-    }
-  
-    checkBlock();
-
-    const nextX = playerSprite.x + (isFacingRight ? 1 : -1)
-    const nextTile = getTile(nextX, playerSprite.y);
-
-    nextTile.forEach(sprite => {
-      if (sprite.type === building2) {
-        changeBlockToBuilding3(sprite);
-        breakBuilding(sprite);
+  if(!isWon) {
+    const playerSprite = getFirst(player) 
+    if (playerSprite && playerSprite.x !== undefined && playerSprite.y !== undefined) {
+      if (isFacingRight) {
+        playerSprite.type = monkeyAttackRight
+        player = monkeyAttackRight
+      } else {
+        playerSprite.type = monkeyAttackLeft
+        player = monkeyAttackLeft
       }
-    })
+  
+      checkBlock()
+
+      const nextX = playerSprite.x + (isFacingRight ? 1 : -1)
+      const nextTile = getTile(nextX, playerSprite.y)
+
+      nextTile.forEach(sprite => {
+        if (sprite.type === building2) {
+          setTimeout(() => {
+            changeBlockToBuilding3(sprite)
+            breakBuilding(sprite)
+          }, 500)
+        }
+      })
+    }
   }
 })
 
 afterInput(() => {
-  checkBrokenBuildings();
-});
+  checkBrokenBuildings() 
+})
