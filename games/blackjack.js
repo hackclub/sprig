@@ -17,18 +17,53 @@ const faceDown = "f"
 let credits = 20
 let bet = 0;
 
-let doubleDown = false
-
 const backupDeck = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]
 
 let cards = [backupDeck.slice(), backupDeck.slice(), backupDeck.slice(), backupDeck.slice()]
 
 let dealerHand = []
 let playerHand = []
-let dealerHiddenCard = []
 
 let initialDrawDone = false
 let gameOver = false
+
+const drawSfx = tune`
+83.10249307479225: A4/83.10249307479225,
+83.10249307479225: C5/83.10249307479225,
+83.10249307479225: A4/83.10249307479225,
+83.10249307479225: C5/83.10249307479225,
+83.10249307479225: A4/83.10249307479225,
+2243.7673130193907`
+const hitSfx = tune`
+54.844606946983546: B4~54.844606946983546,
+54.844606946983546: C5~54.844606946983546,
+54.844606946983546: E5~54.844606946983546,
+54.844606946983546: B5~54.844606946983546,
+1535.6489945155392`
+const loseSfx = tune`
+111.11111111111111: B4~111.11111111111111,
+111.11111111111111: A4~111.11111111111111,
+111.11111111111111: E4~111.11111111111111,
+111.11111111111111: C4~111.11111111111111,
+3111.1111111111113`
+const creditSfx = tune`
+101.35135135135135: B5-101.35135135135135,
+3141.891891891892`
+const winSfx = tune`
+112.35955056179775: A4^112.35955056179775 + C5^112.35955056179775 + F5^112.35955056179775,
+224.7191011235955,
+112.35955056179775: C5^112.35955056179775,
+112.35955056179775: D5^112.35955056179775,
+112.35955056179775: E5^112.35955056179775,
+112.35955056179775: F5^112.35955056179775,
+224.7191011235955,
+112.35955056179775: F5^112.35955056179775,
+2471.9101123595506`
+const pushSfx = tune`
+135.74660633484163: E4^135.74660633484163,
+271.49321266968326,
+135.74660633484163: E4^135.74660633484163,
+3800.9049773755655`
 
 setLegend(
   [spade, bitmap`
@@ -118,8 +153,7 @@ setLegend(
 .00000000000000.`]
 ) // suits are mostly for fun in display, could work without
 // although harder to count cards without it
-
-setSolids([])
+// makes the game look wayyy better ok
 
 let level = 0
 const levels = [
@@ -145,16 +179,17 @@ addText("Dealer's hand", { x: 3, y: 2, color: color`0` })
 addText("Your hand", { x: 3, y: 7, color: color`0` })
 
 function creditToBet(amount) {
-  amount = credits === 0 ? 0 : amount // do nothing if player has no credits
+  amount = credits <= 0 ? 0 : amount // do nothing if player has no credits or negative credits
   credits -= amount;
   bet += amount
-  addText("           " + bet, { x: 0, y: 0, color: color`0` })
+  addText("                ", { x: 0, y: 0, color: color`0` })
   addText("Total bet: " + bet, { x: 0, y: 0, color: color`0` })
 
-  addText("               " + credits, { x: 0, y: 15, color: color`0` })
+  addText("                   ", { x: 0, y: 15, color: color`0` })
   addText("Total credits: " + credits, { x: 0, y: 15, color: color`0` })
 }
 
+// card data structure: [suit (number), value (number or single char string)]
 function getRandomCard() {
   let suitIndex = Math.floor(Math.random() * 4)
   return [suitIndex, cards[suitIndex].splice(Math.floor(Math.random() * cards[suitIndex].length), 1)]
@@ -171,7 +206,7 @@ function numToSuit(num) {
     case 3:
       return diamond;
     default:
-      return spade;
+      return spade; // just in case :P
   }
 }
 
@@ -212,43 +247,43 @@ function handTotal(hand) {
 }
 
 function playerWin(blackjack) {
-  doubleDown = false
+  playTune(winSfx)
   addText("You Win!", { x: 0, y: 14, color: color`0` })
-  if (blackjack) { credits += 2.5 * bet } 
-  else { credits += bet * 2 } // if double down, will become *4
+  if (blackjack) { credits += 2.5 * bet } else { credits += bet * 2 } // if double down, will become *4
   bet = 0
   gameOver = true
   initialDrawDone = false
-  addText("           " + bet, { x: 0, y: 0, color: color`0` })
+  addText("                 ", { x: 0, y: 0, color: color`0` })
   addText("Total bet: " + bet, { x: 0, y: 0, color: color`0` })
 
-  addText("               " + credits, { x: 0, y: 15, color: color`0` })
+  addText("                    ", { x: 0, y: 15, color: color`0` })
   addText("Total credits: " + credits, { x: 0, y: 15, color: color`0` })
 }
 
 function dealerWin() {
-  doubleDown = false
+  playTune(loseSfx)
   addText("You Lose!", { x: 0, y: 14, color: color`0` })
   bet = 0
   gameOver = true
   initialDrawDone = false
-  addText("           " + bet, { x: 0, y: 0, color: color`0` })
+  addText("                 ", { x: 0, y: 0, color: color`0` })
   addText("Total bet: " + bet, { x: 0, y: 0, color: color`0` })
 
-  addText("               " + credits, { x: 0, y: 15, color: color`0` })
+  addText("                    ", { x: 0, y: 15, color: color`0` })
   addText("Total credits: " + credits, { x: 0, y: 15, color: color`0` })
 }
 
 function pushGame() {
-  doubleDown = false
+  playTune(pushSfx)
   addText("Push!", { x: 0, y: 14, color: color`0` })
   credits += bet // player gets bet back
+  bet = 0
   gameOver = true
   initialDrawDone = false
-  addText("           " + bet, { x: 0, y: 0, color: color`0` })
+  addText("                 ", { x: 0, y: 0, color: color`0` })
   addText("Total bet: " + bet, { x: 0, y: 0, color: color`0` })
 
-  addText("               " + credits, { x: 0, y: 15, color: color`0` })
+  addText("                    ", { x: 0, y: 15, color: color`0` })
   addText("Total credits: " + credits, { x: 0, y: 15, color: color`0` })
 }
 
@@ -271,7 +306,7 @@ function resetGame() {
 function dealerTurn() {
   let playerTotal = handTotal(playerHand)
   displayDealerCards(true)
-  while (handTotal(dealerHand) <= 16 || dealerHand.length === 5) {
+  while (handTotal(dealerHand) <= 16 && dealerHand.length < 5) {
     dealerHand.push(getRandomCard())
     displayDealerCards(true)
   }
@@ -290,6 +325,7 @@ function dealerTurn() {
 onInput("j", () => {
   if (!initialDrawDone) {
     resetGame()
+    playTune(creditSfx)
     creditToBet(1)
   }
 })
@@ -303,6 +339,7 @@ onInput("l", () => {
     dealerHand.push(getRandomCard())
     playerHand.push(getRandomCard())
     dealerHand.push(getRandomCard())
+    playTune(drawSfx)
 
     displayDealerCards(false)
     displayPlayerCards()
@@ -314,6 +351,7 @@ onInput("l", () => {
   } else if (!gameOver) {
     playerHand.push(getRandomCard())
     displayPlayerCards()
+    playTune(hitSfx)
 
     // Five card charlie rule (also so that i can fit the cards on screen)
     if (playerHand.length === 5 && handTotal(playerHand) < 21) {
@@ -345,12 +383,17 @@ onInput("k", () => {
 // double down
 onInput("d", () => {
   if (initialDrawDone && playerHand.length === 2) {
+    addText("Double down!", { x: 0, y: 13, color: color`0` })
     creditToBet(bet) // double bet
-    playerHand.push(getRandomCard())
-    dealerTurn()
+    playerHand.push(getRandomCard()) // one card only
+    displayPlayerCards()
+
+    if (handTotal(playerHand) > 21) {
+      displayDealerCards(true)
+      dealerWin()
+    } else if (handTotal(playerHand) === 21) { // player wins immediately if 21
+      displayDealerCards(true)
+      playerWin()
+    } else dealerTurn() // otherwise check for dealer cards if less than 21
   }
-})
-
-afterInput(() => {
-
 })
