@@ -158,7 +158,7 @@ export const themes: Partial<Record<ThemeType, Theme>> = {
 		accentDark: "#0062ac",
 		fgMutedOnAccent: "#b6b6b6",
 		background: "#1f1f1f",
-		color: "#cccccc",
+		color: "#545454",
 		copyContainerText: "#ffffff",
 	}
 };
