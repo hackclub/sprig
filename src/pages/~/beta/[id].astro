@@ -94,7 +94,7 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 
 <script>
 	import { isNewSaveStrat } from "../../../lib/state";
-	isNewSaveStrat.value = true;
+	isNewSaveStrat.value = true; // This code is executed on the client side and it enables the new features implemented (save-strat and collab)
 </script>
 
 <html lang='en'>

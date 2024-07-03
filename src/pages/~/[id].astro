@@ -68,7 +68,7 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 ---
 <script>
 	import { isNewSaveStrat } from "../../lib/state";
-	isNewSaveStrat.value = false;
+	isNewSaveStrat.value = false; // This code is executed on the client side and it disables the new features implemented (save strat and collab)
 </script>
 <html lang='en'>
 	<head>
