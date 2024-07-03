@@ -1,4 +1,4 @@
-let isKeyDown = {} 
+
 const monkeyRight = "m"
 const monkeyLeft = "l"
 const monkeyAttackLeft = "8"
@@ -17,6 +17,7 @@ let brokenBuildingCount = 0
 let buildingCountText = {}
 let countdown = 60
 let countdownInterval
+let level = 0;
 
 const clearAllTiles = () => {
   for (let x = 0; x < width(); x++) {
@@ -204,7 +205,7 @@ LLLLLLLLLLLLL.L.
 )
 
 setSolids([monkeyRight, monkeyLeft, ground, building1, building2, monkeyAttackRight, monkeyAttackLeft])
-let level = 0
+level = 0
 const levels = [
   map`
 ........................
@@ -265,6 +266,20 @@ onInput("a", () => {
   }
 })
 
+onInput("j", () => {
+  level = 0
+  brokenBuildingCount = 0
+  getFirst(player).type = monkeyRight
+  player = monkeyRight
+  isFacingRight = true
+  clearText()
+  buildingCountText = addText(`Buildings Broken: ${brokenBuildingCount}`, {
+    x: 0,
+    y: 3
+  })
+  setMap(levels[level])
+})
+  
 onInput("i", () => {
   if(!isWon) {
     const playerSprite = getFirst(player) 
@@ -296,4 +311,4 @@ onInput("i", () => {
 
 afterInput(() => {
   checkBrokenBuildings() 
-})
+}) 
