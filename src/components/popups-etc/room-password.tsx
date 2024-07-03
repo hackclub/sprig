@@ -22,7 +22,6 @@ export default function RoomPasswordPopup(props: RoomPasswordPopupProps) {
 			if (res.status === 200) {
 					res.json().then((game) => {
 						if(props.persistenceState.value.kind !== "COLLAB") return
-						console.log(game)
 						props.persistenceState.value = {
 							...props.persistenceState.value,
 							game: game as Game,
@@ -32,12 +31,6 @@ export default function RoomPasswordPopup(props: RoomPasswordPopupProps) {
 			}
 		});
 	}
-	useEffect(() => {
-		console.log("FJAKFALKF")
-	}, [])
-	useSignalEffect(() => {
-		console.log(password.value)
-	})
 	return (
 		<div class={styles.overlay}>
 			<div class={styles.modal}>
@@ -54,7 +47,7 @@ export default function RoomPasswordPopup(props: RoomPasswordPopupProps) {
 						}
 					}>
 						<div class={styles.inputRow}>
-							<Input onChange={() => console.log("A")} value={password.value} bind={password} placeholder='Enter the room password here' />
+							<Input onChange={() => undefined} value={password.value} bind={password} placeholder='Enter the room password here' />
 							<Button accent type='submit' disabled={password.value.length == 0}>
 								Enter room
 							</Button>

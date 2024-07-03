@@ -170,7 +170,6 @@ export async function startSavingGame(persistenceState: Signal<PersistenceState>
 					roomParticipants: roomState?.value.participants
 				}),
 			});
-			console.log(res.text());
 			if (!res.ok)
 				throw new Error(`Error saving game: ${await res.text()}`);
 			return true;

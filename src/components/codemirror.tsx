@@ -81,7 +81,6 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		if(!isNewSaveStrat.value) return
 		if(yProviderAwarenessSignal.value === undefined) return;
 		yProviderAwarenessSignal.value.on("change", () => {
-			console.log(props.roomState?.peek().participants)
 			yProviderAwarenessSignal.value?.getStates().forEach((state) => {
 				try{
 					if(props.persistenceState === undefined) throw new Error("Persistence state is undefined");
@@ -103,12 +102,9 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		});
 	});
 	useEffect(() => {
-		console.log(props.roomState?.value)
 		if (!parent.current) throw new Error('Oh golly! The editor parent ref is null')
 
-		console.log(isNewSaveStrat.value)
 		if(!isNewSaveStrat.value){
-			console.log(":JSAKFLJASNLFKCKJns,")
 			const editor = new EditorView({
 				state: createEditorState(props.initialCode ? props.initialCode : '', () => {
 					if (editor.state.doc.toString() === lastCode) return
