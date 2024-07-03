@@ -14,7 +14,7 @@ const diamond = "d"
 const heart = "h"
 const faceDown = "f"
 
-let credits = 50
+let credits = 20
 let bet = 0;
 
 let doubleDown = false
@@ -28,6 +28,7 @@ let playerHand = []
 let dealerHiddenCard = []
 
 let initialDrawDone = false
+let gameOver = false
 
 setLegend(
   [spade, bitmap`
@@ -144,6 +145,7 @@ addText("Dealer's hand", { x: 3, y: 2, color: color`0` })
 addText("Your hand", { x: 3, y: 7, color: color`0` })
 
 function creditToBet(amount) {
+  amount = credits === 0 ? 0 : amount // do nothing if player has no credits
   credits -= amount;
   bet += amount
   addText("           " + bet, { x: 0, y: 0, color: color`0` })
@@ -178,7 +180,7 @@ function displayDealerCards(end) {
     if (!end && i === dealerHand.length - 1) {
       addSprite(i * 2 + 1, 2, faceDown) // hide card
       continue
-    }
+    } else if (end) clearTile(i * 2 + 1, 2)
     addSprite(i * 2 + 1, 2, numToSuit(dealerHand[i][0]))
     addText(`${dealerHand[i][1]}`, { y: 5, x: i * 4 })
   }
@@ -192,87 +194,161 @@ function displayPlayerCards() {
 }
 
 function handTotal(hand) {
+  let aces = 0
   let sum = 0
-  let altSum = 0; // for keeping track of alternate scores with aces
   for (let i = 0; i < hand.length; i++) {
-    if (typeof hand[i][1] === "string" && hand[i][1] === "A") {
-      sum += 1
-      altSum += 11
+    if ((typeof hand[i][1][0] === "string") && hand[i][1][0] === "A") {
+      aces++
+      sum += 11
+    } else if ((typeof hand[i][1][0] === "string")) { // i.e. "K" "Q" or "J"
+      sum += 10;
+    } else {
+      sum += hand[i][1][0];
     }
-    else if (typeof hand[i][1] === "string") { // i.e. "K" "Q" or "J"
-      sum += 10; 
-      altSum += 10; 
-    }
-    else { 
-      sum += hand[i][1]
-      altSum += hand[i][1]; 
-    }
-    
-  }
-  return [ sum, altSum ]
-} 
 
-function playerWin() {
+  }
+  if (aces > 0 && sum > 21) sum -= 10
+  return sum
+}
+
+function playerWin(blackjack) {
   doubleDown = false
-  addText("You Win!", {x:0, y:14, color: color`0`})
-  credits += bet * 2 // if double down, will become *4
+  addText("You Win!", { x: 0, y: 14, color: color`0` })
+  if (blackjack) { credits += 2.5 * bet } 
+  else { credits += bet * 2 } // if double down, will become *4
   bet = 0
+  gameOver = true
+  initialDrawDone = false
+  addText("           " + bet, { x: 0, y: 0, color: color`0` })
+  addText("Total bet: " + bet, { x: 0, y: 0, color: color`0` })
+
+  addText("               " + credits, { x: 0, y: 15, color: color`0` })
+  addText("Total credits: " + credits, { x: 0, y: 15, color: color`0` })
 }
 
 function dealerWin() {
   doubleDown = false
-  addText("You Lose!", {x:0, y:14, color: color`0`})
+  addText("You Lose!", { x: 0, y: 14, color: color`0` })
   bet = 0
+  gameOver = true
+  initialDrawDone = false
+  addText("           " + bet, { x: 0, y: 0, color: color`0` })
+  addText("Total bet: " + bet, { x: 0, y: 0, color: color`0` })
+
+  addText("               " + credits, { x: 0, y: 15, color: color`0` })
+  addText("Total credits: " + credits, { x: 0, y: 15, color: color`0` })
+}
+
+function pushGame() {
+  doubleDown = false
+  addText("Push!", { x: 0, y: 14, color: color`0` })
+  credits += bet // player gets bet back
+  gameOver = true
+  initialDrawDone = false
+  addText("           " + bet, { x: 0, y: 0, color: color`0` })
+  addText("Total bet: " + bet, { x: 0, y: 0, color: color`0` })
+
+  addText("               " + credits, { x: 0, y: 15, color: color`0` })
+  addText("Total credits: " + credits, { x: 0, y: 15, color: color`0` })
+}
+
+function resetGame() {
+  gameOver = false
+  clearText()
+  cards = [backupDeck.slice(), backupDeck.slice(), backupDeck.slice(), backupDeck.slice()]
+  playerHand = []
+  dealerHand = []
+  for (let i = 0; i < width(); i++) {
+    clearTile(i, 2)
+    clearTile(i, 4)
+  }
+  addText("Dealer's hand", { x: 3, y: 2, color: color`0` })
+  addText("Your hand", { x: 3, y: 7, color: color`0` })
+  addText("Total bet: " + bet, { x: 0, y: 0, color: color`0` })
+  addText("Total credits: " + credits, { x: 0, y: 15, color: color`0` })
+}
+
+function dealerTurn() {
+  let playerTotal = handTotal(playerHand)
+  displayDealerCards(true)
+  while (handTotal(dealerHand) <= 16 || dealerHand.length === 5) {
+    dealerHand.push(getRandomCard())
+    displayDealerCards(true)
+  }
+  if (handTotal(dealerHand) > 21) {
+    playerWin()
+  } else if (handTotal(dealerHand) > playerTotal) {
+    dealerWin()
+  } else if (handTotal(dealerHand) === playerTotal) {
+    pushGame()
+  } else if (handTotal(dealerHand) < playerTotal) {
+    playerWin()
+  }
 }
 
 // add credits to current bet
 onInput("j", () => {
-  if (!initialDrawDone) creditToBet(1);
+  if (!initialDrawDone) {
+    resetGame()
+    creditToBet(1)
+  }
 })
 
 // draw cards to dealer and player
 onInput("l", () => {
-  if (!initialDrawDone) {
+  if (gameOver) {
+    resetGame()
+  } else if (!initialDrawDone) {
     playerHand.push(getRandomCard())
     dealerHand.push(getRandomCard())
     playerHand.push(getRandomCard())
     dealerHand.push(getRandomCard())
 
-    displayDealerCards()
+    displayDealerCards(false)
     displayPlayerCards()
     initialDrawDone = true
-    if (handTotal(playerHand)[0] === 21 || handTotal(playerHand)[1] === 21) {
+    if (handTotal(playerHand) === 21) {
       displayDealerCards(true)
       playerWin()
     }
-  } else {
-    let noAces = (handTotal(playerHand)[0] === handTotal(playerHand)[1])
+  } else if (!gameOver) {
     playerHand.push(getRandomCard())
     displayPlayerCards()
-    
-    if (noAces && handTotal(playerHand)[0] === 21) {
+
+    // Five card charlie rule (also so that i can fit the cards on screen)
+    if (playerHand.length === 5 && handTotal(playerHand) < 21) {
       displayDealerCards(true)
       playerWin()
-    } else if (noAces && handTotal(playerHand)[0] >= 22) {
+    }
+
+    if (handTotal(playerHand) === 21 && handTotal(dealerHand) === 21) {
+      displayDealerCards(true)
+      pushGame()
+    } else if (handTotal(playerHand) === 21) {
+      displayDealerCards(true)
+      playerWin(true)
+    } else if (handTotal(playerHand) > 21) {
       displayDealerCards(true)
       dealerWin()
     }
+
   }
 })
 
-// stay/stand
+// stay/stand when player does not have 21
 onInput("k", () => {
-
+  if (initialDrawDone) {
+    dealerTurn()
+  }
 })
 
 // double down
-onInput("j", () => {
-  
-})
-
-// reset everything but credit count
-onInput("i", () => {
-  
+onInput("d", () => {
+  if (initialDrawDone && playerHand.length === 2) {
+    creditToBet(bet) // double bet
+    playerHand.push(getRandomCard())
+    dealerTurn()
+  }
 })
 
 afterInput(() => {
