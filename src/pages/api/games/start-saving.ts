@@ -66,8 +66,6 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		});
 
 	try{
-		console.log(Timestamp.now())
-
 		if(roomParticipants)
 			await updateDocument("games", gameId, { 
 				tutorialName: tutorialName ?? "",
@@ -81,7 +79,6 @@ export const post: APIRoute = async ({ request, cookies }) => {
 				modifiedAt: Timestamp.now(),
 				isOpen: isOpen
 			});
-			getGame(gameId).then((game) => console.log(game?.modifiedAt))
 		await setDocument('daily-edits', `${trackingId}-${trackingDate}`, {
 			type: trackingType,
 			id: trackingId,
