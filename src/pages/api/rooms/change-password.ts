@@ -28,7 +28,6 @@ export const post: APIRoute = async ({ request, cookies }) => {
 	await updateDocument('games', roomId, {
 		password: hashedPassword
 	});
-	console.log(hashedPassword)
 
 	return new Response(JSON.stringify({}), { status: 200 })
 }
