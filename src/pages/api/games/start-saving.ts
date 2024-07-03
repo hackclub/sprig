@@ -25,8 +25,11 @@ export const post: APIRoute = async ({ request, cookies }) => {
 			typeof body.tutorialName === "string"
 				? body.tutorialName
 				: undefined;
-		if(typeof body.roomParticipants !== "object") throw "Missing/invalid room participants"
-		roomParticipants = body.roomParticipants
+		try{
+			roomParticipants = body.roomParticipants as RoomParticipant[]
+		} catch(e){
+			throw Error("Invalid room participants")
+		}
 		isOpen = body.isOpen ?? false;
 	} catch (error) {
 		console.log(error)
