@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Hallowed Knight
 @author: phthallo
-@tags: [metroidvania]
+@tags: []
 @addedOn: 2024-00-00
 */
 
