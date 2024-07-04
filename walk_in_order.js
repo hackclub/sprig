@@ -448,10 +448,10 @@ wwwwwwwwwww`,
 ...roygbcd.
 wwwwwwwwwww
 w......c..w
-wpwwrwwww.w
+wpwwrw.ww.w
 www..d..w.w
 w.w.wwwbw.w
-w.o.www...w
+w.o.www.w.w
 w.w...g.w.w
 w.wwywwww.w
 w.....w...w
