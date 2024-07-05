@@ -32,6 +32,7 @@ import SessionConflictWarningModal from '../popups-etc/session-conflict-warning-
 import {versionState} from "../../lib/upload";
 import VersionWarningModal from "../popups-etc/version-warning";
 import RoomPasswordPopup from "../popups-etc/room-password";
+import KeyBindingsModal from '../popups-etc/KeyBindingsModal'
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
@@ -744,6 +745,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 				)}
 				<MigrateToast persistenceState={persistenceState} />
 				<SessionConflictWarningModal sessionId={sessionId} gameId={gameId} />
+				<KeyBindingsModal />
 			</div>
 		);
 }
