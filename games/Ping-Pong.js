@@ -1,3 +1,9 @@
+/*
+@title: Ping Pong
+@tags: ['classic']
+@addedOn: 2024-07-05
+@author: Cral-Cactus
+*/
 const paddle = "p";
 const ball = "b";
 const darkBackground = "d";
