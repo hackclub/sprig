@@ -1,7 +1,7 @@
 /*
 @title: Bomberman
 @author: Jahn
-@tags: [Bombs, Bomberman, Multiplayer, Versus]
+@tags: ['Bombs', 'Bomberman', 'Multiplayer', 'Versus']
 @addedOn: 2024-07-02
 */
 
