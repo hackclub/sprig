@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Reaction Time
 @author: Tyler Bordeaux
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-07-05
 */
 
 const button = "b"
