@@ -10,13 +10,14 @@ https://sprig.hackclub.com/gallery/getting_started
 
 const player = "p"
 const box = "k"
-const catbox = "b"
+const catbox = "t"
 const background = "b"
 const hous = "h"
 const cat = "c"
 const cathous = "z"
 const wall = "w"
 const destroyablething = "d"
+const transparent = "u"
 const backgroundTune = tune`
 172.41379310344828: D4~172.41379310344828,
 172.41379310344828: D4~172.41379310344828,
@@ -190,6 +191,23 @@ C11CC66CC66CC11C
 11LLLLLLLLLLLL11
 1111111111111111
 1111111111111111`],
+  [transparent, bitmap`
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+1...............`],
   [destroyablething, bitmap`
 L1LL1111111L1LL1
 L1111LL1LLLL11L1
@@ -209,12 +227,12 @@ L1LL1L1LL1LLLLLL
 11LLL1LLLLLL11L1`],
 )
 
-setSolids([player, wall, box, catbox, cat])
+setSolids([player, wall, box, catbox, cat, transparent])
 setBackground(background)
 
 let level = 0
 let text_level = 1
-let playable_levels = 10
+let playable_levels = 14
 let destroyabelthinksperlevel = 5
 let thinksdestoy = 0
 const levels = [
@@ -269,9 +287,9 @@ wwhw.d....
 w..kkwwkw.
 wwww.w..wk
 .w.ww..wd.
-.w..wk.w..
+dw..wk.w..
 kwwww.ww..
-pkd..d.w.d`,
+pk...d.w.d`,
   map`
 wwwww.wdw.
 w..d..w...
@@ -309,6 +327,42 @@ ww.wwwwkw.
 ..ww.d.d.h
 ..wwwwwwww`,
   map`
+wwwwwwwwww
+w........w
+w........w
+w......c.w
+ww.......w
+.wtwww...w
+.w..hw..pw
+.w.wwwwwww`,
+  map`
+p.k.....w.
+wwwwww.ww.
+.....w.ww.
+.....wc.w.
+.wwwww..w.
+.w.t....w.
+.ww.wwwww.
+.ww..hw...`,
+  map`
+wwwwwwwwww
+w........w
+w.wwwwww.w
+w.wh...w.w
+w.wwww.w.w
+w.wwww.w.w
+w......wpw
+wwwwwwwwww`,
+  map`
+wwwwwwwwww
+w.......w.
+w..www.ww.
+w.w..tc...
+w..www.ww.
+w.....u.w.
+wwwwwww.wk
+........wp`,
+  map`
 ..........
 ...wwwww..
 ...w...w..
@@ -323,7 +377,8 @@ ww.wwwwkw.
 setMap(levels[level])
 
 setPushables({
-  [player]: [box]
+  [player]: [box, cat],
+  [cat]: [catbox]
 })
 
 onInput("s", () => {
@@ -368,6 +423,7 @@ onInput("k", () => {
 
 
 addText("Press J to rest", { x: 2, y: 7, color: color`9` })
+addText("if you are stuck", { x: 2, y: 9, color: color`9` })
   
 
 afterInput(() => {
