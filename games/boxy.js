@@ -1,8 +1,16 @@
 /*
-@title: first game
-@tags: ['beginner']
+Get the package (box) to mr poptato! (the green thing)
+Watch out! Yellow enemies try to take your parcels!
+@title: boxy
+@tags: ['classic', 'fun']
 @addedOn: 2024-07-05
-@author: oli
+@author: olii-dev
+
+Instructions:
+
+Use W, A, S, D to move
+Hit J to restart the level you're currently on
+Hit K to restart to level one (also if you want to play again)
 */
 
 const player = "p";
@@ -99,13 +107,6 @@ LLLLLLLLLLLLLLLL`],
 ................`],
 );
 
-const myTune = tune`
-500,
-500: C4/500,
-15000`
-
-playTune(myTune)
-
 let level = 0;
 const levels = [
   map`
@@ -166,7 +167,25 @@ pw.......wg
 .w....ww.w.
 .w.ww.w.bw.
 ...w..w....
-wwwwwww....`,
+.bgwwww....`,
+  map`
+wwweww...ew
+www.......w
+.b...we...w
+pww..www..w
+wwwwwwww..w
+g.........w
+wwwwwwwwwww`,
+  map`
+wwwwwg..wwwwwwwwwwwww
+ww...w............gww
+.b...w..www..wwwwwwww
+.ww..w..www........ww
+..w..w..b.w.ew..b..ww
+w.w.......w..w.www..w
+p.wwww..eww..w......w
+wwwwwwwwwww..w.....ew
+g............wwwwwwww`
 ];
 
 setMap(levels[level]);
@@ -181,7 +200,7 @@ setPushables({
 let time = 0;
 let timerInterval;
 let gameStarted = false;
-let bestTime = Infinity; // Initialize best time to infinity
+let bestTime = localStorage.getItem('bestTime') ? parseInt(localStorage.getItem('bestTime')) : Infinity;
 
 function formatTime(milliseconds) {
   let seconds = Math.floor(milliseconds / 1000);
@@ -191,7 +210,7 @@ function formatTime(milliseconds) {
 
 function startTimer() {
   timerInterval = setInterval(() => {
-    time += 100; // increment by 100 milliseconds
+    time += 100;
     addText(`Time: ${formatTime(time)}`, { x: 0, y: 0, color: color`2` });
   }, 100);
 }
@@ -216,6 +235,10 @@ function resetGame() {
   stopTimer();
 }
 
+function saveBestTime(milliseconds) {
+  localStorage.setItem('bestTime', milliseconds.toString());
+}
+
 function checkCollision() {
   const playerTile = getFirst(player);
   const enemyTiles = getAll(enemy);
@@ -231,28 +254,24 @@ function checkCollision() {
 onInput("s", () => {
   startGame();
   getFirst(player).y += 1;
-  playTune(myTune);
   checkCollision();
-});
+})
 
 onInput("d", () => {
   startGame();
   getFirst(player).x += 1;
-  playTune(myTune);
   checkCollision();
 });
 
 onInput("a", () => {
   startGame();
   getFirst(player).x -= 1;
-  playTune(myTune);
   checkCollision();
 });
 
 onInput("w", () => {
   startGame();
   getFirst(player).y -= 1;
-  playTune(myTune);
   checkCollision();
 });
 
@@ -280,8 +299,9 @@ afterInput(() => {
       stopTimer();
       if (time < bestTime) {
         bestTime = time;
+        saveBestTime(bestTime);
       }
-      addText(`You won!\nYour time: ${formatTime(time)}\nBest time: ${formatTime(bestTime)}`, { x: 1, y: 6, color: color`3` });
+      addText(`      You won!\nYour time: ${formatTime(time)}\nBest time: ${formatTime(bestTime)}`, { x: 1, y: 6, color: color`3` });
     }
   }
 });
