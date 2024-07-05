@@ -1,3 +1,10 @@
+/*
+Slimer
+@title: Slimer
+@author: DevCmb
+@tags: []
+@addedOn: 2024-07-04
+*/
 const player = "p"
 const goal = "g"
 const winnertext = "w"
