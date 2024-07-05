@@ -1,6 +1,6 @@
 /*
 8-Sprig is inspired by the popular 8-puzzle game, especially the version inside of https://conicgames.github.io/exponentialidle/. There are some
-new changes and tweaks to accommodate for the Sprig platform.
+new changes and tweaks to accommodate for the Sprig platform. Music by FructosePear.
 
 @title: 8-Sprig
 @author: NoozAbooz
@@ -19,6 +19,7 @@ const five = "F"
 const six = "s"
 const seven = "S"
 const eight = "e"
+const blocks = ["o", "t", "T", "f", "F", "s", "S", "e"];
 
 let level = 0;
 let gameStarted = false;
@@ -64,7 +65,7 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000`],
-  
+
   [one, bitmap`
 ................
 ..222222222222..
@@ -203,8 +204,6 @@ setLegend(
 ................`]
 );
 
-const blocks = ["o", "t", "T", "f", "F", "s", "S", "e"];
-
 const levels = [
   map`
 .................
@@ -234,7 +233,7 @@ f.T
 est`
 ];
 
-const endScreen = [
+const endScreenLevel = [
   map`
 .................
 .................
@@ -252,80 +251,81 @@ const endScreen = [
 ];
 
 setSolids(
-  [ one, two, three, four, five, six, seven, eight]
+  [one, two, three, four, five, six, seven, eight]
 )
 setBackground(background)
 
-// game start, show text and stuffs
+// game start, show text and instructions
 setMap(levels[level])
 addSprite(14, 10, cursor)
 
-addText("Welcome to 8-Sprig!", { 
+addText("Welcome to 8-Sprig!", {
   x: 0,
   y: 1,
   color: color`2`
 })
-addText("-Arrange the blocks", { 
+addText("-Arrange the blocks", {
   x: 0,
   y: 3,
   color: color`2`
 })
-addText("in order (see below)", { 
+addText("in order (see below)", {
   x: 0,
   y: 4,
   color: color`2`
 })
-addText("-Right D-pad to move", { 
+addText("-Right D-pad to move", {
   x: 0,
   y: 6,
   color: color`2`
 })
-addText("your", { 
+addText("your", {
   x: 0,
   y: 7,
   color: color`2`
 })
-addText("cursor", { 
+addText("cursor", {
   x: 5,
   y: 7,
   color: color`6`
 })
-addText(", left", { 
+addText(", left", {
   x: 11,
   y: 7,
   color: color`2`
 })
-addText("D-pad to move the", { 
+addText("D-pad to move the", {
   x: 0,
   y: 8,
   color: color`2`
 })
-addText("block", { 
+addText("block", {
   x: 0,
   y: 9,
   color: color`7`
 })
-addText("Press Left-Up for", { 
+addText("Press Left-Up for", {
   x: 0,
   y: 11,
   color: color`3`
 })
-addText("speedrun", { 
+addText("speedrun", {
   x: 0,
   y: 12,
   color: color`3`
 })
-addText("Press Right-Up", { 
+addText("Press Right-Up", {
   x: 0,
   y: 14,
   color: color`8`
 })
-addText("for endless", { 
+addText("for endless", {
   x: 0,
   y: 15,
   color: color`8`
 })
 
+// music, define sound effects
 const melody = tune`
 245.9016393442623: D5^245.9016393442623,
 245.9016393442623: E4/245.9016393442623 + C5^245.9016393442623,
@@ -359,14 +359,23 @@ const melody = tune`
 245.9016393442623: E4/245.9016393442623 + E5-245.9016393442623 + A4^245.9016393442623 + B5~245.9016393442623,
 245.9016393442623: E4~245.9016393442623,
 245.9016393442623: E4/245.9016393442623 + C5^245.9016393442623`
+const click = tune`
+96.7741935483871,
+96.7741935483871: E4^96.7741935483871,
+2903.225806451613`
+const thock = tune`
+312.5,
+312.5: C4/312.5,
+9375` 
 const playback = playTune(melody, Infinity)
 
 // handle cursor input movement
 onInput("i", () => {
+  playTune(click)
   if (statsShowing === false) {
     getFirst(cursor).y -= 1
   }
-  
+
   if (gameStarted === false) {
     speedrun = false;
     startGame();
@@ -375,16 +384,19 @@ onInput("i", () => {
   }
 })
 onInput("k", () => {
+  playTune(click)
   getFirst(cursor).y += 1
 })
 onInput("j", () => {
+  playTune(click)
   getFirst(cursor).x -= 1
 })
 onInput("l", () => {
+  playTune(click)
   getFirst(cursor).x += 1
 })
 
-// handle movements for moving the entire cursor and the block under it
+// handle movements for moving the entire cursor and the block selected under it
 onInput("w", () => {
   const cursorSprite = getFirst(cursor);
   const spritesOnCursor = getTile(cursorSprite.x, cursorSprite.y);
@@ -408,6 +420,7 @@ onInput("w", () => {
   // Move the cursor sprite if conditions allow
   if (shouldMove) {
     cursorSprite.y -= 1;
+    playTune(thock)
   }
 
   if (gameStarted === false) {
@@ -439,6 +452,7 @@ onInput("s", () => {
   // Move the cursor sprite if conditions allow
   if (shouldMove) {
     cursorSprite.y += 1;
+    playTune(thock)
   }
 })
 
@@ -465,6 +479,7 @@ onInput("a", () => {
   // Move the cursor sprite if conditions allow
   if (shouldMove) {
     cursorSprite.x -= 1;
+    playTune(thock)
   }
 })
 
@@ -491,9 +506,11 @@ onInput("d", () => {
   // Move the cursor sprite if conditions allow
   if (shouldMove) {
     cursorSprite.x += 1;
+    playTune(thock)
   }
 })
 
+// called upon main menu input
 function startGame() {
   gameStarted = true;
   clearText()
@@ -501,9 +518,11 @@ function startGame() {
   startTime = performance.now()
 }
 
-function nextLevel() {
-  setSolids([])
-  if (speedrun === true) {
+// special level switcher logic
+function next level() {
+  setSolids([]) // allow block collisions temporarily to allow setting random puzzle config
+  
+  if (speedrun === true) { // actually switch levels since we are in speedrun mode
     if (levels.length - 1 == level) {
       gameOver();
     } else {
@@ -515,14 +534,14 @@ function nextLevel() {
   } else { // if in endless mode
     clearText()
     statsShowing = false;
-    level = 1;
+    level = 1; // keep level the same for simplicity
     setMap(levels[level])
     addSprite(0, 0, cursor)
     startTime = performance.now()
 
-    // generate new puzzle setup
+    // generate new puzzle configuration
     let puzzle = generateRandomPuzzle();
-    for (let i = 0; i < blocks.length; i++) {
+    for (let i = 0; i < blocks.length; i++) { // loop for every tile and get its position from the configuration
       let tile = i + 1;
       let position = getTilePosition(puzzle, tile);
 
@@ -533,15 +552,15 @@ function nextLevel() {
     }
     printPuzzle(puzzle);
   }
-  setSolids(
-    [ one, two, three, four, five, six, seven, eight]
+  setSolids( // bring collisions back now that we've set all positions
+    [one, two, three, four, five, six, seven, eight]
   )
 }
 
-function endlessStats() {
+function endlessStats() { // stats screen after every solve in endless mode
   statsShowing = true;
-  setMap(endScreen[0])
-  
+  setMap(endScreenLevel[0])
+
   endTime = performance.now()
   var timeDiff = endTime - startTime; //in ms
   // strip the ms and convert to seconds
@@ -555,45 +574,45 @@ function endlessStats() {
 
   addText(`Time: ${seconds} sec`, { x: 3, y: 2, color: color`3` })
   addText(`PB: ${personalBest} sec`, { x: 4, y: 4, color: color`3` })
-  addText("Press Right-Up", { 
+  addText("Press Right-Up", {
     x: 3,
     y: 10,
     color: color`3`
   })
-  addText("to continue", { 
+  addText("to continue", {
     x: 4,
     y: 11,
     color: color`3`
   })
 }
 
-function gameOver() {
-  //console.log("game over");
-  setMap(endScreen[0])
+function gameOver() { // only in speedrun mode
+  setMap(endScreenLevel[0])
 
   endTime = performance.now()
   var timeDiff = endTime - startTime; //in ms
   // strip the ms and convert to seconds
   timeDiff /= 1000;
   var seconds = +timeDiff.toFixed(2);
-  
-  addText("Game Over!", { 
+
+  addText("Game Over!", {
     x: 5,
     y: 2,
     color: color`2`
   })
   addText(`Time: ${seconds} sec`, { x: 4, y: 4, color: color`4` })
-  addText("Did you beat my PB?", { 
+  addText("Did you beat my PB?", {
     x: 1,
     y: 7,
     color: color`2`
   })
-  addText("It was 135s", { 
+  addText("It was 135s", {
     x: 4,
     y: 8,
     color: color`2`
   })
   playback.end()
+  
 }
 
 afterInput(() => {
@@ -601,9 +620,7 @@ afterInput(() => {
   const secondRowAligned = getFirst(four).x < getFirst(five).x && getFirst(five).x < getFirst(six).x && [four, five, six].every(type => getFirst(type).y === 1);
   const thirdRowAligned = getFirst(seven).x === 0 && getFirst(eight).x === 1 && [seven, eight].every(type => getFirst(type).y === 2);
 
-  //console.log(firstRowAligned && secondRowAligned && thirdRowAligned)
-  
-  if (firstRowAligned && secondRowAligned && thirdRowAligned){
+  if (firstRowAligned && secondRowAligned && thirdRowAligned) {
     if (speedrun === true) {
       nextLevel();
     } else {
@@ -614,15 +631,17 @@ afterInput(() => {
   }
 })
 
-// all of this is dedicated to endless mode random setup generation
+// all of this is dedicated to endless mode random setup generation, geeksforgeeks FTW
 function generateRandomPuzzle() {
   const puzzle = [...Array(9).keys()];
+
   function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
     }
   }
+
   function countInversions(array) {
     let inversions = 0;
     for (let i = 0; i < array.length - 1; i++) {
@@ -642,11 +661,13 @@ function generateRandomPuzzle() {
   }
   return puzzle;
 }
+
 function printPuzzle(puzzle) {
   for (let i = 0; i < 9; i += 3) {
     //console.log(puzzle.slice(i, i + 3).join(" "));
   }
 }
+
 function getTilePosition(puzzle, tile) {
   const index = puzzle.indexOf(tile);
   if (index === -1) {
