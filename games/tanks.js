@@ -3,8 +3,15 @@ Shoot your projectile at the other tank before they get you!
 
 @title: Tanks
 @author: Om Raheja
-@tags: ['two-player', 'fighting', 'pvp']
+@tags: [two-player, fighting, pvp]
 @addedOn: 2024-06-30
+
+WASD for player one to move,
+IJKL for player two to move.
+
+The game moves the players automatically every 500 ms. 
+Each keypress shoots a projectile and changes direction.
+Shoot the other tank to win!
 */
 
 const player = "a";
@@ -12,40 +19,10 @@ const player2 = "b";
 const wall = "w";
 const projectile = "p";
 
-const playerBitmap = bitmap`
-................
-................
-................
-...0000000......
-..0DDDDDDD0...00
-.0D00DD0DD000000
-.0DDDDDDDDD0..00
-.0000000000.....
-0DD34343400.....
-000000000000....
-00DFCD0FCD0F0...
-.0FDF0FDF0FDF0..
-..0F0DCF0DCF0...
-...000000000....
-................
-................`;
-const player2Bitmap = bitmap`
-................
-................
-................
-......0000000...
-00...099999990..
-000000990990090.
-00..09999999990.
-.....0000000000.
-.....00434343990
-....000000000000
-...0F09CF09CF900
-..0F9F0F9F0F9F0.
-...0FC90FC90F0..
-....000000000...
-................
-................`;
+// direction of the tanks
+var direction1 = ">";
+var direction2 = "<";
+
 const wallBitmap = bitmap`
 10LLLLLLLLLLLL01
 010LLLLLLLLLL010
@@ -81,9 +58,11 @@ const projectileBitmap = bitmap`
 ................
 ................`;
 
+var musicPlaying = null;
+
 setLegend(
-  [player, playerBitmap],
-  [player2, player2Bitmap],
+  [player, playerBitmap()],
+  [player2, player2Bitmap()],
   [wall, wallBitmap],
   [projectile, projectileBitmap]
 );
@@ -112,9 +91,7 @@ wwwww`
 
 setMap(levels[level])
 
-// direction of the tanks
-var direction1 = ">";
-var direction2 = "<";
+
 
 // holds all the flying bullets
 var projEntities = [];
@@ -129,6 +106,160 @@ function addProjectile(x, y, direction) {
     }
 
     checkWinLose(x, y);
+  }
+}
+
+function playerBitmap() {
+  switch (direction1) {
+    case '^':
+      return bitmap`
+......0000......
+......0000......
+.......00.......
+.......00.......
+...00DD00DD00...
+..C0DD0000DD0C..
+..CDD0DDDD0DDC..
+..CD0D0D0DD0DC..
+..CD0DD0D0D0DC..
+..CD0DDDDDD0DC..
+..CDD0DDDD0DDC..
+..CDDD0000DDDC..
+..C0DDDDDDDD0C..
+..C00DDDDDD00C..
+..C0000000000C..
+..C..........C..`;
+    case '>':
+      return bitmap`
+................
+................
+................
+...0000000......
+..0DDDDDDD0...00
+.0D00DD0DD000000
+.0DDDDDDDDD0..00
+.0000000000.....
+0DD34343400.....
+000000000000....
+00DFCD0FCD0F0...
+.0FDF0FDF0FDF0..
+..0F0DCF0DCF0...
+...000000000....
+................
+................`;
+    case '<':
+      return bitmap`
+................
+................
+................
+......0000000...
+00...0DDDDDDD0..
+000000DD0DD00D0.
+00..0DDDDDDDDD0.
+.....0000000000.
+.....00434343DD0
+....000000000000
+...0F0DCF0DCFD00
+..0FDF0FDF0FDF0.
+...0FCD0FCD0F0..
+....000000000...
+................
+................`;
+    case '.':
+      return `
+................
+................
+...00DDDDDD00...
+..C0DDDDDDDD0C..
+..CDDD0000DDDC..
+..CDD0DDDD0DDC..
+..CD0D0D0DD0DC..
+..CD0DD0D0D0DC..
+..CD0DDDDDD0DC..
+..CDD0DDDD0DDC..
+..C0DD0000DD0C..
+..C00DD00DD00C..
+..C0000000000C..
+..C....00....C..
+......0000......
+......0000......`;
+  }
+}
+
+function player2Bitmap() {
+  switch (direction2) {
+    case '^':
+      return bitmap`
+......0000......
+......0000......
+.......00.......
+.......00.......
+...0099009900...
+..C0990000990C..
+..C9909999099C..
+..C9090909909C..
+..C9099090909C..
+..C9099999909C..
+..C9909999099C..
+..C9990000999C..
+..C0999999990C..
+..C0099999900C..
+..C0000000000C..
+..C..........C..`;
+    case '>':
+      return bitmap`
+................
+................
+................
+...0000000......
+..099999990...00
+.090099099000000
+.09999999990..00
+.0000000000.....
+0DD34343400.....
+000000000000....
+00DFCD0FCD0F0...
+.0FDF0FDF0FDF0..
+..0F0DCF0DCF0...
+...000000000....
+................
+................`;
+    case '<':
+      return bitmap`
+................
+................
+................
+......0000000...
+00...099999990..
+000000990990090.
+00..09999999990.
+.....0000000000.
+.....00434343990
+....000000000000
+...0F09CF09CF900
+..0F9F0F9F0F9F0.
+...0FC90FC90F0..
+....000000000...
+................
+................`;
+    case '.':
+      return bitmap`
+................
+................
+...0099999900...
+..C0999999990C..
+..C9990000999C..
+..C9909999099C..
+..C9090909909C..
+..C9099090909C..
+..C9099999909C..
+..C9909999099C..
+..C0990000990C..
+..C0099009900C..
+..C0000000000C..
+..C....00....C..
+......0000......
+......0000......`;
   }
 }
 
@@ -165,12 +296,18 @@ function checkWinLose(x, y) {
 283.0188679245283: G4~283.0188679245283 + D4^283.0188679245283,
 1132.0754716981132`;
     setLegend(
+      [player, playerBitmap()],
+      [player2, player2Bitmap()],
       [wall, wallBitmap],
-      [projectile, projectileBitmap]);
+      [projectile, projectileBitmap]
+    );
     try {
       if (getFirst(player).x == x && getFirst(player).y == y) {
         level = 1;
-        playTune(loseMusic);
+        try {
+          musicPlaying.end();
+        } catch (e) {}
+        musicPlaying = playTune(loseMusic);
 
         setMap(levels[level]);
         addText("ORANGE WIN", { x: 0, y: 0, color: color`9` });
@@ -416,16 +553,16 @@ onInput("l", () => {
 afterInput(() => {
   if (level == 1) {
     clearText();
+    direction1 = ">";
+    direction2 = "<";
     setLegend(
-      [player, playerBitmap],
-      [player2, player2Bitmap],
+      [player, playerBitmap()],
+      [player2, player2Bitmap()],
       [wall, wallBitmap],
       [projectile, projectileBitmap]
     );
     level = 0;
     setMap(levels[level]);
-    direction1 = ">";
-    direction2 = "<";
   }
 });
 
@@ -434,7 +571,10 @@ function run() {
   if (level == 0) {
     // projectiles go first
     setLegend(
-      [projectile, projectileBitmap],
+      [player, playerBitmap()],
+      [player2, player2Bitmap()],
+      [wall, wallBitmap],
+      [projectile, projectileBitmap]
     );
     for (var i = 0; i < projEntities.length;) {
       clearTile(projEntities[i][0], projEntities[i][1]);
