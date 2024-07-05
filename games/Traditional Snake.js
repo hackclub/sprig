@@ -1,3 +1,9 @@
+/*
+@title: Traditional Snake
+@tags: ['classic']
+@addedOn: 2024-07-05
+@author: dmcegan
+*/
 const snakeBody = "s";
 const apple = "a";
 const wall = "w";
