@@ -1,12 +1,68 @@
+// this game was made by Abhay Gupta
+// WASD for movement
+//J to restart the game
+//You are Half-fry, who wants to become a full fry...Collect volts and enter the "pan"!
+//beware of the traps and enjoy the game :)
+
 const player = "f";
 const wall = "w";
 const box = "b";
 const voltage = "v";
 const pan = "p";
+const portalA = "a"; // Entry portal
+const portalB = "t"; // Exit portal
+const trap = "x";
 
 let hasDisplayedText = false;
+let hasVoltage = false;
 
+const bgmusic = tune`
+500: B4~500 + G5^500 + B5^500,
+500: F4~500 + A5^500 + F5^500 + D5^500,
+500: B4~500 + D4-500 + E5^500,
+500: G4~500 + C4-500 + A4~500,
+500: D5^500 + E4^500 + B4/500 + G4/500,
+500: B4~500 + G4~500 + C4-500 + E5~500,
+500: A4/500 + C5/500,
+500: B4~500 + G4~500 + E4~500 + C4-500 + D5^500,
+500: G4~500 + C5/500,
+500: D4-500 + A5^500 + F5^500,
+500: G4~500,
+500: B4/500 + C4-500,
+500: F4~500 + D5^500,
+500: A4~500 + D4-500,
+500: B4/500 + G4~500 + F5^500,
+500: F4~500 + C5~500 + A4~500 + D4-500 + D5/500,
+500: A4~500 + B4~500 + G4~500 + C4-500 + E4-500,
+500: C5~500 + A4~500 + F4~500 + D5^500 + A5^500,
+500: C5~500 + B4~500 + G4~500 + F5^500 + D5/500,
+500: D5~500 + F4~500 + A4~500 + C4-500,
+500: A4~500 + B4~500 + E5^500,
+500: A4~500 + G4~500 + D4-500 + G5^500,
+500: B4^500 + A4^500 + E5^500,
+500: A4^500 + G4^500 + E4-500,
+500: B4-500,
+500: F5-500 + C5-500 + A4-500 + D4-500,
+500: G4-500,
+500: C4-500 + A4/500,
+500: B4/500,
+1500`
 
+const playback = playTune(bgmusic, Infinity)
+
+const lose = tune`
+321.71581769436995,
+80.42895442359249: B4/80.42895442359249 + A4~80.42895442359249 + A5^80.42895442359249 + D5-80.42895442359249,
+80.42895442359249: G4/80.42895442359249 + F4~80.42895442359249 + G5^80.42895442359249 + C5-80.42895442359249,
+80.42895442359249,
+80.42895442359249: A4/80.42895442359249 + G4~80.42895442359249 + G5^80.42895442359249 + B4-80.42895442359249,
+80.42895442359249: G4/80.42895442359249 + F4~80.42895442359249 + F5^80.42895442359249 + A4-80.42895442359249,
+80.42895442359249: F4/80.42895442359249 + E4~80.42895442359249 + E5^80.42895442359249 + G4-80.42895442359249,
+80.42895442359249: E4/80.42895442359249 + D4~80.42895442359249 + D5^80.42895442359249 + F4-80.42895442359249,
+80.42895442359249: D4/80.42895442359249 + C4~80.42895442359249 + C5^80.42895442359249 + E4-80.42895442359249,
+80.42895442359249: C4/80.42895442359249 + B4^80.42895442359249 + D4-80.42895442359249,
+80.42895442359249: C4-80.42895442359249,
+1447.7211796246647`
 
 setLegend(
   [player, bitmap`
@@ -94,6 +150,57 @@ setLegend(
 ................
 ................
 ................`],
+  [portalA, bitmap`
+................
+................
+................
+.....00000......
+....0444440.....
+...044444440....
+..04444444440...
+..04444444440...
+..04444444440...
+...044444440....
+....0444440.....
+.....00000......
+................
+................
+................
+................`],
+  [portalB, bitmap`
+................
+................
+................
+.....11111......
+....1555551.....
+...155555551....
+..15555555551...
+..15555555551...
+..15555555551...
+...155555551....
+....1555551.....
+.....11111......
+................
+................
+................
+................`],
+  [trap, bitmap`
+................
+................
+................
+................
+................
+......333.......
+.....32223......
+.....332233.....
+....33222333....
+....32222223....
+...3322222233...
+...3222222223...
+..332222222233..
+..333333333333..
+..333333333333..
+................`]
 );
 
 setSolids([player, wall, box]);
@@ -108,161 +215,171 @@ const levels = [
   map`
 ...................
 ...................
-bbb.bbb.bbb.bb..bbb
-b....b..bvb.bpb..b.
-bbb..b..bbb.bb...b.
-f.b..b..b.b.b.b..b.
-bbb..b..b.b.b.b..b.
+xxx.bbb.bbb.bb..bbb
+xab..x..xvx.xpx..b.
+xxx..b..bxb.bx...b.
+ftx..x..b.b.b.b..b.
+xxx..b..b.b.b.b..b.
 ...................`,
   map`
-wwww
-wf.w
-wbvw
-w..p
-wwww`,
+xxxxx
+x....
+..xx.
+bxxx.
+.fax.
+xxvx.
+xxtp.
+xxxxx`,
   map`
-wwwwww
-w...bw
-wbfbvw
-w...bw
-w....p
-wwwwww`,
+xxxxxx
+xt..ax
+xxbxvx
+xf..xx
+xbxbpx
+xxxxxx`,
   map`
-wwwwww
-wfb..w
-wwb..w
-w.b..w
-wbvb.w
-w.b..p
-wwwwww`,
+xxxxxx
+xfb..x
+xxb.tx
+xxb..x
+xbvbwx
+xxbwap
+xxxxxx`,
   map`
-wwwwww
-wf..pw
-wwb..w
-wwbbbw
-www..w
-w.v..b
-wwwwww`,
+axxxxxx
+bxxxxxx
+.wf.xxx
+.xwb.tx
+..wbbbx
+..wxx.x
+.xxv..b
+.pxwxxx`,
   map`
-wwwwww
-ww..vw
-wb..bw
-w.bb.w
-w..b.w
-wwf..p
-wwwwww`,
+xxxxxxxxx
+xxxxxxb.x
+xwxxavb.x
+bwbxxbx.x
+btbbxx..x
+xw..xx..x
+xwwf.xx.x
+xwwwwwxpx
+xxxxxxxxx`,
   map`
-wwwwwww
-wwfb..w
-wb.bb.w
-ww....w
-w.bb.bp
-wwv.b.w
-wwwwwww`,
+xxxwwxw
+wxxxx.w
+tb.xbxx
+w..xapx
+xxbbxxx
+xwv..fw
+wxxwwxw`,
   map`
-wwwwww
-wf..ww
-wwb..w
-wvwbbw
-w....w
-wbb..p
-wwwwww`,
+.....a
+pxxxxx
+xxxxxx
+xxxvbf
+xtwxb.
+x.b...
+wbb...
+wwwwx.`,
   map`
-wwwwww
-wf...w
-w..bvw
-wbb.b.
-w...ww
-w.w..p
-wwwwww`,
+xxxxxxxxx
+xxxxbxvxx
+x.xb.b..x
+x.tbbxxxx
+x.xb.xxxx
+x..bfxbap
+xxxwwx.ww`,
   map`
-wwwwww
-ww...w
-w..v.w
-wbbwww
-w...ww
-wfbb.p
-www.ww`,
+xwwwxx
+xw..ax
+xxxv.x
+xxxxbx
+x....x
+xfxtbp
+xxxxxw`,
   map`
-wwwwww
-wbwvbw
-w.bb.w
-wbww.w
-wb.b.w
-wbf..p
-wwwwww`,
+xxxxxx
+xb.vbx
+xabbtx
+xxx..x
+xx.x.x
+xxf..p
+xxxxxx`,
   map`
-..pw..
-..wv.w
-b.bb.w
-....bw
-...bbw
-bbf...
-bwww.w`,
+xxxxxx
+..pxtx
+.xxv.x
+b.bb.x
+....bx
+...bbx
+bbf.xx
+bxxxax`,
   map`
-vb.pb
-..bb.
-...b.
-wbb..
-w...w
-w.f.w
-wwwww`,
+xxxxa
+v.xpb
+tbbxx
+..xxx
+x.xxx
+x..xx
+x.fxx
+xwxwx`,
   map`
-wv.b..f
-.bb...w
-w.b.b.w
-pwb...w
-.bb...w
-...bbbb
-bbw.bbw`,
+..v.bx.f
+bxbb.x.x
+bxxt.b.x
+xpxb.b.x
+axbbb..x
+xbbbbbbb
+xbbxbbbx`,
   map`
-wbp.b.
-.bbb..
-w.....
-..bbbw
+xxxxxx
+wxxpb.
+.xxx..
+w.b...
+t.bbbw
 w.bvb.
-w.bbb.
+w.bbba
 .wfwww`,
   map`
-bbbbbb
-bf...b
-b...bb
-b..bpb
-b.bbb.
-bb.vbb
-bbbbbb`,
+xxbxxx
+xf.x.x
+x.xxbx
+x.xapx
+x.bxxx
+xx.vbb
+xxbtbx`,
   map`
-pwf...
-..w...
-..www.
-...bw.
-..bvw.
-.w.w.b
-......`,
+pxf...
+.xxx..
+axxx.x
+xxtbb.
+xxbvx.
+xw.w.b
+xxxxxx`,
   map`
-..b.w
-wvw.w
-.wf.w
-..w.w
-.b..w
-pb..w
-b..ww`,
+x.b.x
+xvxxx
+.bfax
+..xxx
+tb..x
+p...x
+b..xx`,
   map`
-..b.w
-wvw.w
-.wf.w
-..w.w
-.b..w
-pb..w
-b..ww`,
+xtxb.x
+x.vx.x
+x.xf.x
+x.xx.x
+..b..x
+xpb..x
+xb.axx`,
   map`
-bbbbbw
-b...vb
-.bbbb.
-.....b
-.bb.pb
-...bbb
-wb..fw`
+xxxxxf.
+x..tvbb
+.bbbbxb
+....xb.
+.bxxab.
+x..bbbx
+wb..p.x`
 ];
 
 setMap(levels[level]);
@@ -284,7 +401,6 @@ onInput("a", () => {
 
 onInput("j", () => {
   const currentLevel = levels[level];
-
 
   if (currentLevel !== undefined) {
     clearText("");
@@ -310,5 +426,30 @@ afterInput(() => {
     } else {
       addText("You made a full-fry!!", { x: 5, y: 1, color: color`4` });
     }
+  }
+
+  // Check if player is on entry portal
+  if (tilesWith(player, portalA).length) {
+    const exitPortal = getFirst(portalB);
+    if (exitPortal) {
+      playerPos.x = exitPortal.x;
+      playerPos.y = exitPortal.y;
+    }
+  }
+
+  // Check if player is on exit portal
+  if (tilesWith(player, portalB).length) {
+    const entryPortal = getFirst(portalA);
+    if (entryPortal) {
+      playerPos.x = entryPortal.x;
+      playerPos.y = entryPortal.y;
+    }
+  }
+
+  // Check if player is on a trap
+  if (tilesWith(player, trap).length) {
+    setMap(levels[level]);
+    playTune(lose)
+    // Reset the level
   }
 });
