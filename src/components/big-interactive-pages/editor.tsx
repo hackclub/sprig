@@ -31,6 +31,8 @@ import { editSessionLength, switchTheme, ThemeType, continueSaving, LAST_SAVED_S
 import SessionConflictWarningModal from '../popups-etc/session-conflict-warning-modal'
 import {versionState} from "../../lib/upload";
 import VersionWarningModal from "../popups-etc/version-warning";
+import RoomPasswordPopup from "../popups-etc/room-password";
+import KeyBindingsModal from '../popups-etc/KeyBindingsModal'
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
@@ -152,7 +154,7 @@ export const saveGame = debounce(
 	}
 );
 
-export async function startSavingGame(persistenceState: Signal<PersistenceState>) {
+export async function startSavingGame(persistenceState: Signal<PersistenceState>, roomState: Signal<RoomState> | undefined) {
 	const attemptSaveGame = async () => {
 		try {
 			const game =
@@ -166,9 +168,9 @@ export async function startSavingGame(persistenceState: Signal<PersistenceState>
 				body: JSON.stringify({
 					gameId: game?.id,
 					tutorialName: game?.tutorialName,
+					roomParticipants: roomState?.value.participants
 				}),
 			});
-			console.log(res.text());
 			if (!res.ok)
 				throw new Error(`Error saving game: ${await res.text()}`);
 			return true;
@@ -205,7 +207,7 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>, sessionId: str
 			cloudSaveState: "SAVING",
 		};
 		if(isNewSaveStrat.value)
-			startSavingGame(persistenceState);
+			startSavingGame(persistenceState, undefined);
 		else
         	saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
 
@@ -228,7 +230,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 		} else {
 			isNewSaveStrat.value = false;
 		}
-	})
+	}, [])
 
 	useEffect(() => {
 		const channel = new BroadcastChannel('session_channel');
@@ -508,237 +510,242 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 			}
 		});
 	}, [initialCode]);
+	if(isNewSaveStrat.value && persistenceState.value.kind === "COLLAB" && typeof persistenceState.value.game === 'string')
+		return (
+			<RoomPasswordPopup persistenceState={persistenceState} />
+		)
+	else
+		return (
+			<div class={styles.page}>
+				<Navbar persistenceState={persistenceState} roomState={roomState}/>
 
-	return (
-		<div class={styles.page}>
-			<Navbar persistenceState={persistenceState} roomState={roomState}/>
-
-			<div class={styles.pageMain}>
-				<div className={styles.codeContainer}>
-					<CodeMirror
-						persistenceState={persistenceState}
-						roomState={roomState}
-						class={styles.code}
-						initialCode={initialCode}
-						onEditorView={(editor) => {
-							codeMirror.value = editor;
-							setTimeout(() => foldAllTemplateLiterals(), 100); // Fold after the document is parsed (gross)
-						}}
-						onRunShortcut={onRun}
-						onCodeChange={() => {
-							persistenceState.value = {
-								...persistenceState.value,
-								stale: true,
-							};
-							if (persistenceState.value.kind === "PERSISTED") {
+				<div class={styles.pageMain}>
+					<div className={styles.codeContainer}>
+						<CodeMirror
+							persistenceState={persistenceState}
+							roomState={roomState}
+							class={styles.code}
+							initialCode={initialCode}
+							onEditorView={(editor) => {
+								codeMirror.value = editor;
+								setTimeout(() => foldAllTemplateLiterals(), 100); // Fold after the document is parsed (gross)
+							}}
+							onRunShortcut={onRun}
+							onCodeChange={() => {
 								persistenceState.value = {
 									...persistenceState.value,
-									cloudSaveState: "SAVING",
+									stale: true,
 								};
-								if(!isNewSaveStrat.value)
-									saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
-							}
+								if (persistenceState.value.kind === "PERSISTED") {
+									persistenceState.value = {
+										...persistenceState.value,
+										cloudSaveState: "SAVING",
+									};
+									if(!isNewSaveStrat.value)
+										saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
+								}
 
-							if (persistenceState.value.kind === "IN_MEMORY") {
-								localStorage.setItem(
-									"sprigMemory",
-									codeMirror.value!.state.doc.toString()
-								);
-							}
-						}}
-					/>
-					{errorLog.value.length > 0 && (
-						<div class={styles.errors}>
-							<button
-								class={styles.errorClose}
-								onClick={() => (errorLog.value = [])}
-							>
-								<IoClose />
-							</button>
-
-							{errorLog.value.map((error, i) => (
-								<div key={`${i}-${error.description}`}>
-									{error.description}
-								</div>
-							))}
-						</div>
-					)}
-					<Button
-						accent
-						icon={IoPlayCircleOutline}
-						bigIcon
-						iconSide="right"
-						class={styles.playButton}
-						onClick={onRun}
-					>
-						Run
-					</Button>
-				</div>
-
-				<div
-					class={`${styles.resizeBar} ${
-						resizeState.value ? styles.resizing : ""
-					}`}
-					onMouseDown={(event) => {
-						document.documentElement.style.cursor = "col-resize";
-						resizeState.value = {
-							startMousePos: event.clientX,
-							startValue: realOutputAreaSize.value,
-						};
-						window.addEventListener(
-							"mouseup",
-							() => {
-								resizeState.value = null;
-								document.documentElement.style.cursor = "";
-							},
-							{ once: true }
-						);
-					}}
-				/>
-
-				<div
-					class={styles.outputArea}
-					ref={outputArea}
-					style={{ width: realOutputAreaSize.value }}
-				>
-					<div ref={screenContainer} style={ outputArea.current ? {
-					  height: canvasScreenSize.value.height,
-						maxHeight: canvasScreenSize.value.maxHeight,
-					} : {} }>
-						<div class={styles.canvasWrapper}>
-							<canvas
-								class={`${styles.screen} ${
-									screenShake.value > 0 ? "shake" : ""
-								}`}
-								style={ outputArea.current ? {
-								  height: canvasScreenSize.value.height,
-								  maxHeight:  canvasScreenSize.value.maxHeight,
-									width: (1.25 * canvasScreenSize.value.height),
-									maxWidth: "100%",
-								}: { } }
-								ref={screen}
-								tabIndex={0}
-								width="1000"
-								height="800"
-							/>
-						</div>
-						<div ref={screenControls} class={styles.screenControls}>
-							<button
-								className={styles.mute}
-								onClick={() => (muted.value = !muted.value)}
-							>
-								{muted.value ? (
-									<>
-										<IoVolumeMuteOutline />{" "}
-										<span>Unmute</span>
-									</>
-								) : (
-									<>
-										<IoVolumeHighOutline />{" "}
-										<span>Mute</span>
-									</>
-								)}
-							</button>
-							<button
-								className={styles.stop}
-								onClick={() => onStop()}
-							>
-								<IoStopCircleOutline />
-								<span>Stop</span>
-							</button>
-							<div class={styles.screenSize}>
-								(Sprig screen is 1/8" / 160&times;128 px)
-							</div>
-						</div>
-					</div>
-					<div class={styles.helpContainer}>
-						<div
-							class={`${styles.horizontalResizeBar} ${
-								horizontalResizeState.value
-									? styles.resizing
-									: ""
-							}`}
-							onMouseDown={(event) => {
-								document.documentElement.style.cursor =
-									"col-resize";
-								horizontalResizeState.value = {
-									startMousePos: event.clientY,
-									startValue: realHelpAreaSize.value,
-								};
-								window.addEventListener(
-									"mouseup",
-									() => {
-										horizontalResizeState.value = null;
-										document.documentElement.style.cursor =
-											"";
-									},
-									{ once: true }
-								);
+								if (persistenceState.value.kind === "IN_MEMORY") {
+									localStorage.setItem(
+										"sprigMemory",
+										codeMirror.value!.state.doc.toString()
+									);
+								}
 							}}
 						/>
-						<div
-							class={styles.helpContainer}
-							// style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenControls.current?.clientHeight! + screenContainer.current?.clientHeight!) }}
-							style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenContainer.current?.clientHeight! - screenControls.current?.clientHeight!) }}
-						>
-							{!(
-								(persistenceState.value.kind === "SHARED" ||
-									persistenceState.value.kind ===
-										"PERSISTED") &&
-								persistenceState.value.tutorial
-							) && (
-								<Help
-									sessionId={sessionId}
-									defaultHelpAreaHeight={
-										defaultHelpAreaHeight
-									}
-									helpAreaSize={helpAreaSize}
-									persistenceState={persistenceState}
-									initialVisible={!cookies.hideHelp}
-								/>
-							)}
+						{errorLog.value.length > 0 && (
+							<div class={styles.errors}>
+								<button
+									class={styles.errorClose}
+									onClick={() => (errorLog.value = [])}
+								>
+									<IoClose />
+								</button>
 
-							{(persistenceState.value.kind === "SHARED" ||
-								persistenceState.value.kind === "PERSISTED") &&
-								persistenceState.value.tutorial && (
+								{errorLog.value.map((error, i) => (
+									<div key={`${i}-${error.description}`}>
+										{error.description}
+									</div>
+								))}
+							</div>
+						)}
+						<Button
+							accent
+							icon={IoPlayCircleOutline}
+							bigIcon
+							iconSide="right"
+							class={styles.playButton}
+							onClick={onRun}
+						>
+							Run
+						</Button>
+					</div>
+
+					<div
+						class={`${styles.resizeBar} ${
+							resizeState.value ? styles.resizing : ""
+						}`}
+						onMouseDown={(event) => {
+							document.documentElement.style.cursor = "col-resize";
+							resizeState.value = {
+								startMousePos: event.clientX,
+								startValue: realOutputAreaSize.value,
+							};
+							window.addEventListener(
+								"mouseup",
+								() => {
+									resizeState.value = null;
+									document.documentElement.style.cursor = "";
+								},
+								{ once: true }
+							);
+						}}
+					/>
+
+					<div
+						class={styles.outputArea}
+						ref={outputArea}
+						style={{ width: realOutputAreaSize.value }}
+					>
+						<div ref={screenContainer} style={ outputArea.current ? {
+						height: canvasScreenSize.value.height,
+							maxHeight: canvasScreenSize.value.maxHeight,
+						} : {} }>
+							<div class={styles.canvasWrapper}>
+								<canvas
+									class={`${styles.screen} ${
+										screenShake.value > 0 ? "shake" : ""
+									}`}
+									style={ outputArea.current ? {
+									height: canvasScreenSize.value.height,
+									maxHeight:  canvasScreenSize.value.maxHeight,
+										width: (1.25 * canvasScreenSize.value.height),
+										maxWidth: "100%",
+									}: { } }
+									ref={screen}
+									tabIndex={0}
+									width="1000"
+									height="800"
+								/>
+							</div>
+							<div ref={screenControls} class={styles.screenControls}>
+								<button
+									className={styles.mute}
+									onClick={() => (muted.value = !muted.value)}
+								>
+									{muted.value ? (
+										<>
+											<IoVolumeMuteOutline />{" "}
+											<span>Unmute</span>
+										</>
+									) : (
+										<>
+											<IoVolumeHighOutline />{" "}
+											<span>Mute</span>
+										</>
+									)}
+								</button>
+								<button
+									className={styles.stop}
+									onClick={() => onStop()}
+								>
+									<IoStopCircleOutline />
+									<span>Stop</span>
+								</button>
+								<div class={styles.screenSize}>
+									(Sprig screen is 1/8" / 160&times;128 px)
+								</div>
+							</div>
+						</div>
+						<div class={styles.helpContainer}>
+							<div
+								class={`${styles.horizontalResizeBar} ${
+									horizontalResizeState.value
+										? styles.resizing
+										: ""
+								}`}
+								onMouseDown={(event) => {
+									document.documentElement.style.cursor =
+										"col-resize";
+									horizontalResizeState.value = {
+										startMousePos: event.clientY,
+										startValue: realHelpAreaSize.value,
+									};
+									window.addEventListener(
+										"mouseup",
+										() => {
+											horizontalResizeState.value = null;
+											document.documentElement.style.cursor =
+												"";
+										},
+										{ once: true }
+									);
+								}}
+							/>
+							<div
+								class={styles.helpContainer}
+								// style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenControls.current?.clientHeight! + screenContainer.current?.clientHeight!) }}
+								style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenContainer.current?.clientHeight! - screenControls.current?.clientHeight!) }}
+							>
+								{!(
+									(persistenceState.value.kind === "SHARED" ||
+										persistenceState.value.kind ===
+											"PERSISTED") &&
+									persistenceState.value.tutorial
+								) && (
 									<Help
 										sessionId={sessionId}
 										defaultHelpAreaHeight={
 											defaultHelpAreaHeight
 										}
 										helpAreaSize={helpAreaSize}
-										tutorialContent={
-											persistenceState.value.tutorial
-										}
 										persistenceState={persistenceState}
-										showingTutorialWarning={
-											showingTutorialWarning
-										}
+										initialVisible={!cookies.hideHelp}
 									/>
 								)}
+
+								{(persistenceState.value.kind === "SHARED" ||
+									persistenceState.value.kind === "PERSISTED") &&
+									persistenceState.value.tutorial && (
+										<Help
+											sessionId={sessionId}
+											defaultHelpAreaHeight={
+												defaultHelpAreaHeight
+											}
+											helpAreaSize={helpAreaSize}
+											tutorialContent={
+												persistenceState.value.tutorial
+											}
+											persistenceState={persistenceState}
+											showingTutorialWarning={
+												showingTutorialWarning
+											}
+										/>
+									)}
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
 
-			<EditorModal />
-			{persistenceState.value.kind === "IN_MEMORY" &&
-				persistenceState.value.showInitialWarning && (
-					<DraftWarningModal persistenceState={persistenceState} />
+				<EditorModal />
+				{persistenceState.value.kind === "IN_MEMORY" &&
+					persistenceState.value.showInitialWarning && (
+						<DraftWarningModal persistenceState={persistenceState} />
+					)}
+
+				{versionState.value != "OK" && (
+					<VersionWarningModal versionState={versionState} />
 				)}
 
-			{versionState.value != "OK" && (
-				<VersionWarningModal versionState={versionState} />
-			)}
-
-			{showingTutorialWarning.value && (
-				<TutorialWarningModal
-					exitTutorial={() => exitTutorial(persistenceState, sessionId)}
-					showingTutorialWarning={showingTutorialWarning}
-				/>
-			)}
-			<MigrateToast persistenceState={persistenceState} />
-			<SessionConflictWarningModal sessionId={sessionId} gameId={gameId} />
-		</div>
-	);
+				{showingTutorialWarning.value && (
+					<TutorialWarningModal
+						exitTutorial={() => exitTutorial(persistenceState, sessionId)}
+						showingTutorialWarning={showingTutorialWarning}
+					/>
+				)}
+				<MigrateToast persistenceState={persistenceState} />
+				<SessionConflictWarningModal sessionId={sessionId} gameId={gameId} />
+				<KeyBindingsModal />
+			</div>
+		);
 }
