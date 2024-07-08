@@ -752,9 +752,7 @@ const get_number_sprites = (num) => {
     for(var i = 0; i < num_str.length; i++) {
         digs.push(num_str[i]);
     }
-    
-    // console.log(digs);
-
+  
     if(digs.length == 0) return [zero, zero_2];
   
     let first = digs[0];
@@ -764,21 +762,23 @@ const get_number_sprites = (num) => {
         second = get_char_from_ascii(aCharCode + parseInt(digs[1]));
     }
 
-    console.log([first, second]);
-
     return [first, second];
-}
+};
+
+const render_data_box = (box_sprite, i) => {
+    clearTile(3 + i, 2);
+    addSprite(3 + i, 2, box_sprite);
+
+    const nums = get_number_sprites(data_cells[i]);
+    addSprite(3 + i, 2, nums[0]);
+    addSprite(3 + i, 2, nums[1]);
+};
 
 const render_data_boxes = () => {
     for(var i = 0; i < data_cells_size; i++) {
-        clearTile(3 + i, 2);
-        addSprite(3 + i, 2, box);
-
-        const nums = get_number_sprites(data_cells[i]);
-        addSprite(3 + i, 2, nums[0]);
-        addSprite(3 + i, 2, nums[1]);
+        render_data_box(box, i);
     }
-}
+};
 
 const program_step = (instr) => {
     // console.log(`Program step! (${curr_instr}) (${instr})`);
