@@ -2,7 +2,7 @@
 @title: Slap-a-Fish
 @author: Ben Park
 @tags: []
-@addedOn: 2024-6-28
+@addedOn: 2024-06-28
 */
 
 //My High Score: --
