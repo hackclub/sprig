@@ -2,7 +2,7 @@
 @title: OG Space Invaders
 @author: Atharva Malik
 @tags: ['space', 'invaders', 'space invaders', 'invader']
-@addedOn: 2024-07-08
+@addedOn: 2024-00-00
 
 Controls:
 [W]: Shoot
@@ -129,8 +129,6 @@ setLegend(
 .......333......`]
 )
 
-setSolids([player, cEnemy, rEnemy, eEnemy])
-
 let level = 1
 const levels = [
   map`
@@ -205,10 +203,9 @@ function enemyShootUpdate(){
         let a = getTile(proj.x, proj.y)[0]['_type']
         let b = getTile(proj.x, proj.y)[1]['_type']
         if (a == "p" || b == "p"){
+          proj.remove();
           lost = true;
         }
-        proj.remove();
-        numOfEnemies--;
         return;
       }
       if (proj.y == 7){proj.remove();}
@@ -219,12 +216,26 @@ function enemyShootUpdate(){
 function isGameOver(){
   if (lost){
     setLevel(0, "You lost!", 'Press J to restart');
+    gameOver = false;
+    gameHasStarted = false;
   }
   if (numOfEnemies<=0){
     numOfEnemies = 35;
     gameOver = true;
-    return;
   }
+  if (gameOver){
+    level++;
+    if (level == levels.length){
+      level = 1;
+      setLevel(0, "You beat the game!", 'Press J to restart');
+    }else
+      setLevel(0, "You finished level" + (level-1).toString(), 'Press J to continue');
+    gameOver = false;
+    gameHasStarted = false;
+  }
+}
+
+function resetGame(){
   if (gameOver){
     level++;
     if (level == levels.length){
@@ -243,20 +254,24 @@ function randint(max) {
 
 function enemyShoot(){
   for (let enemy of getAll(cEnemy)){
-    if (randint(1000)*level > 999){
+    if (randint(1000) > 990){
       eShoot(enemy.x, enemy.y)
     }
   }
   for (let enemy of getAll(rEnemy)){
-    if (randint(1000)*level > 989){
+    if (randint(1000) > 975){
       eShoot(enemy.x, enemy.y)
     }
   }
   for (let enemy of getAll(eEnemy)){
-    if (randint(1000)*level > 975){
+    if (randint(1000) > 950){
       eShoot(enemy.x, enemy.y)
     }
   }
+}
+
+function gameUpdateFun(){
+  
 }
 
 function setLevel(l, text1, text2){
@@ -280,16 +295,10 @@ function setLevel(l, text1, text2){
 
 setLevel(0, `Press "J" to start!`, ``)
 
-setPushables({
-  [ cEnemy ]: [cEnemy, rEnemy, eEnemy],
-  [ rEnemy ]: [cEnemy, rEnemy, eEnemy],
-  [ eEnemy ]: [cEnemy, rEnemy, eEnemy],
-})
-
 let shootUpdateInt = setInterval(shootUpdate, 200);
 let enemyShootInt = setInterval(enemyShoot, 200);
 let enemyShootUpdateInt = setInterval(enemyShootUpdate, 200);
-// let gameUpdate = setInterval(gameUpdate, 10);
+let gameUpdate = setInterval(isGameOver, 10);
 
 onInput("w", () => {
   if (gameHasStarted)
@@ -309,13 +318,6 @@ onInput("j", () => {
     setLevel(level, "", "");
   }
   if (gameOver){
-    isGameOver();
+    resetGame()
   }
-})
-onInput("i", () => {
-  gameOver();
-})
-
-afterInput(() => {
-  isGameOver();
 })
