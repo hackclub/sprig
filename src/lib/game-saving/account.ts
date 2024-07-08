@@ -6,6 +6,7 @@ import { customAlphabet } from 'nanoid/async'
 import { lazy } from '../utils/lazy'
 import { generateGameName } from '../words'
 import metrics from '../../../metrics'
+import { RoomParticipant } from '../state'
 
 const numberid = customAlphabet('0123456789')
 
@@ -53,6 +54,9 @@ export interface Game {
 	code: string
 	tutorialName?: string
 	tutorialIndex?: number
+	roomParticipants?: RoomParticipant[]
+	isRoomOpen?: boolean
+	password?: string
 }
 
 export interface LoginCode {
