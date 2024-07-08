@@ -1,6 +1,9 @@
 /*
 @title: Path Master
 @author: Mir Muhammad Abidul Haq (Ahnaf)
+@addedOn: 2024-07-08
+@tags: ['sokoban']
+
 Instructions:
 
 Hit "run" to execute the code and
