@@ -1,15 +1,15 @@
 /*
+@title: OG Space Invaders
+@author: Atharva Malik
+@tags: ['space', 'invaders', 'space invaders', 'invader']
+@addedOn: 2024-07-08
+
 Controls:
 [W]: Shoot
 [A]: Move Left
 [S]: Move Right
 
 [J]: Navigate the UI
-
-@title: OG Space Invaders
-@author: Atharva Malik
-@tags: ['space', 'invaders', 'space invaders', 'invader']
-@addedOn: 2024-00-00
 */
 
 const player = "p"
