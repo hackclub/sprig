@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Little Spring Game
 @author: Jonas Heilig
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-07-08
 */
 
 const player = "p"
