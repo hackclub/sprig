@@ -2,7 +2,7 @@
 
 @title: Runaway
 @author: Theenash Muneeswaran
-@tags: [Maze]
+@tags: []
 @addedOn: 2024-07-08
 
 Welcome to Runaway!
