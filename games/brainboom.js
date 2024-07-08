@@ -298,25 +298,54 @@ let output_cells = [];
 let output_size = 5;
 let output_pointer = output_size-1; // back to front
 
-// Fill data cells with 0
-for(let i = 0; i < data_cells_size; i++) {
-  data_cells.push(0);
-}
-
-// Fill output cells with 0
-for(let i = 0; i < output_size; i++) {
-  output_cells.push(0);
-}
-
 let loop_stack = [];
 let curr_instr = 0;
 let curr_tile = 0;
 let code = [];
 
+const reset_interpreter_data = () => {
+    data_cells = [];
+    data_pointer = 0;   
+    
+    for(let i = 0; i < data_cells_size; i++) {
+        data_cells.push(0);
+    }
+
+    output_cells = [];
+    output_pointer = output_size-1;
+  
+    // Fill output cells with 0
+    for(let i = 0; i < output_size; i++) {
+        output_cells.push(0);
+    }
+    
+    loop_stack = [];
+    curr_instr = 0;
+    curr_tile = 0;
+    code = [];
+
+    selected = 0;
+    offset = 0;
+    render_all_boxes();
+    render_box(sel_box);
+};
+
+const stop_exec = () => {
+    console.log("Executed successfully!");
+    console.log(`Data cells: ${data_cells}`);
+    console.log(`Output cells: ${output_cells}`);
+
+    setTimeout(() => {
+      reset_interpreter_data();
+      input_disabled = false;
+    }, 3000);
+};
+
 const program_loop = () => {
     setTimeout(() => {
-        if(curr_instr > code.length) {
-            console.log("Executed successfully!");
+        console.log(`${curr_instr} vs ${code.length}`);
+        if(curr_instr >= code.length) {
+            stop_exec();
             return;
         }
 
@@ -325,41 +354,69 @@ const program_loop = () => {
     }, 1000);
 }
 
+const advance_box = () => {
+    if(selected === max_selected) offset++;
+    else selected++;
+    console.log(`Advancing: ${selected + offset}`);
+    let temp = selected;
+    render_all_boxes();
+    selected = temp;
+    render_box(interpret_box);
+}
+
+const render_data_boxes = () => {
+    for(var i = 0; i < data_cells_size; i++) {
+        
+    }
+}
+
 const program_step = (instr) => {
-    console.log("Program step!");
+    console.log(`Program step! (${curr_instr}) (${instr})`);
+    if(instr === "E" || offset === max_offset) {
+        // if(!(curr_instr+1 >= code.length)) advance_box();
+        stop_exec();
+        return;
+    }
+
+    // if(!(curr_instr+1 >= code.length)) advance_box();
   
     if(program[curr_tile] == -1) {
-        draw_box(box);
-        curr_tile++
+        if(!(curr_instr+1 > code.length)) advance_box();
         program_loop(); // basically continue;
         return;
     }
   
-    if(instr === "E") return;
-  
     if(instr === "[") {
-        loop_stack.push(i);
-        program_loop();
+        loop_stack.push(curr_instr);
+
+        curr_instr++;
+        if(!(curr_instr+1 > code.length)) advance_box();
+        program_loop(); // basically continue;
         return;
     }
     
     if(instr === "]") {
         let start = loop_stack.pop();
         if(data_cells[data_pointer] !== 0) {
-            i = start-1;
+            console.log(`${selected}, ${start}, ${offset}`);
+            selected = start - offset-1;
+            curr_instr = start-1;
         }
 
-        program_loop();
+        curr_instr++;
+        if(!(curr_instr+1 > code.length)) advance_box();
+        program_loop(); // basically continue;
         return;
     }
   
     run_instruction(instr);
-    program_loop();
+    curr_instr++;
+    if(!(curr_instr+1 > code.length)) advance_box();
+    program_loop(); // basically continue;
 }
 
 const run_program = () => {
     console.log(`Running program -> ${code}`);
-
     program_loop();
   
     // setTimeout(() => {
@@ -404,8 +461,8 @@ const run_program = () => {
     //     run_instruction(program[i]);
     // }
 
-    console.log(`Data cells: ${data_cells}`);
-    console.log(`Output cells: ${output_cells}`);
+    // console.log(`Data cells: ${data_cells}`);
+    // console.log(`Output cells: ${output_cells}`);
 };
 
 const run_instruction = (instruction) => {
@@ -419,12 +476,13 @@ const run_instruction = (instruction) => {
             data_cells[data_pointer]--;
             break;
         case ">":
-            data_pointer--;
+            if(data_pointer - 1 !== -1) data_pointer++;
             break;
         case "<":
-            data_pointer++;
+            if(data_pointer + 1 !== data_cells_size) data_pointer++;
             break;
         case ".":
+            console.log("Inserting to output!");
             output_cells[output_pointer] = data_cells[data_pointer];
             if(output_pointer !== 0) output_pointer--;
             break;
@@ -447,7 +505,7 @@ const levels = [
   map`
 p.........
 ..........
-..........
+...bbbbbb.
 ..........
 ..........
 .sbbbbbbbr
@@ -589,4 +647,7 @@ onInput("i", () => {
 
 afterInput(() => {
   
-})
+});
+
+addText("H", {x: 7, y: 5, color: color`0`});
+reset_interpreter_data();
