@@ -12,9 +12,10 @@ const player = "p"
 const vBomb = "b"
 const hBomb = "h"
 const heart = "e"
+const tBomb = 't'
 
 setLegend(
-  [ player, bitmap`
+  [player, bitmap`
 ......0000......
 .....000000.....
 .....000000.....
@@ -30,7 +31,7 @@ setLegend(
 ......0..0......
 ......0..0......
 ......0..0......
-......0..0......` ],
+......0..0......`],
   [vBomb, bitmap`
 ................
 ................
@@ -81,7 +82,24 @@ setLegend(
 ....99999999....
 ......99999.....
 ........99......
-................`]
+................`],
+  [tBomb, bitmap`
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL`]
 )
 
 setSolids([])
@@ -110,7 +128,7 @@ h..............
 setMap(levels[level])
 
 setPushables({
-  [ player ]: []
+  [player]: []
 })
 
 // Movement Input
@@ -131,12 +149,12 @@ onInput("d", () => {
 })
 
 afterInput(() => {
-  
+
 })
 
 // Random Number Gen
 function getRndInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 // player died
@@ -144,7 +162,7 @@ function PlayerOver() {
   playerObj.remove();
   addText("GAME OVER\nScore: " + timeSecs, {
     x: 5,
-    y: 12, 
+    y: 12,
     color: color`5`
   });
   // gameOver = true;
@@ -154,22 +172,65 @@ function PlayerOver() {
 }
 
 // Spawn bomb
-function SpawnBomb(type) {
+function SpawnBombOld(type) {
   if (type === vBomb) {
-    addSprite(getRndInt(0,width()-1),0,type);
+    //addSprite(getRndInt(0, width() - 1), 0, type);
+    addSprite(playerObj.x + getRndInt(-1,1), 0, type);
   } else if (type === hBomb) {
-    addSprite(0,getRndInt(0,height()-1),type);
+    //addSprite(0, getRndInt(0, height() - 1), type);
+    addSprite(0, playerObj.y + getRndInt(-1,1), type);
   }
 }
 
+// New Spawn Logic
+function SpawnBombNew(type) {
+  if (type === vBomb) {
+    addSprite(getRndInt(0, width() - 1), 0, tBomb);
+  } else if (type === hBomb) {
+    addSprite(0, getRndInt(0, height() - 1), tBomb);
+  }
+}
+
+// Bomb Logic New
+function BombLogicNew() {
+  var vBombSprites = getAll(vBomb);
+  var hBombSprites = getAll(hBomb);
+  var tBombSprites = getAll(tBomb);
+
+
+  // temp bombs
+  
+  // vertical bombs
+  vBombSprites.forEach(vBSprite => {
+    if (vBSprite.y == height() - 1) {
+      // Spawn New Bomb
+      SpawnBombNew(vBomb);
+      vBSprite.remove()
+      IncreaseSpeed();
+    }
+    vBSprite.y += 1;
+  });
+
+  // Horizontal bombs
+  hBombSprites.forEach(hBSprite => {
+    if (hBSprite.x == width() - 1) {
+      // Spawn New Bomb
+      SpawnBombNew(hBomb);
+      hBSprite.remove();
+      IncreaseSpeed();
+    }
+    hBSprite.x += 1
+  });
+}
+
 // Bomb Checks
-function BombLogic() {
+function BombLogicOld() {
   var vBombSprites = getAll(vBomb)
   var hBombSprites = getAll(hBomb);
 
   // vertical bombs
   vBombSprites.forEach(vBSprite => {
-    if (vBSprite.y == height()-1) {
+    if (vBSprite.y == height() - 1) {
       // Spawn New Bomb
       SpawnBomb(vBomb);
       vBSprite.remove()
@@ -180,7 +241,7 @@ function BombLogic() {
 
   // Horizontal bombs
   hBombSprites.forEach(hBSprite => {
-    if (hBSprite.x == width()-1) {
+    if (hBSprite.x == width() - 1) {
       // Spawn New Bomb
       SpawnBomb(hBomb);
       hBSprite.remove();
@@ -193,12 +254,16 @@ function BombLogic() {
 // Increase speed
 function IncreaseSpeed() {
   clearInterval(bombInterval);
-  bombInterval = setInterval(BombLogic, 1000-timeSecs*2);
+  let bombDelay = 800 - timeSecs * 20;
+  if (bombDelay < 300)
+    bombDelay = 300;
+  bombInterval = setInterval(BombLogicNew, bombDelay);
 }
-  
+
 var hit = false;
 // Main Game Loop
 const playerObj = getFirst(player);
+
 function GameLoop() {
   var playerTile = getTile(playerObj.x, playerObj.y);
   // loop through the sprites at the tile
@@ -232,7 +297,6 @@ function UpdateTime() {
 
 const gameInterval = setInterval(GameLoop, 100);
 
-var bombInterval = setInterval(BombLogic, 1000);
+var bombInterval = setInterval(BombLogicNew, 800);
 
 const timeInterval = setInterval(UpdateTime, 1000);
-
