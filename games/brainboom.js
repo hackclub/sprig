@@ -726,12 +726,18 @@ const stop_exec = () => {
         render_output_boxes();
     }
 
+    render_data_boxes();
+
     console.log(`Data cells: ${data_cells}`);
     console.log(`Output cells: ${output_cells}`);
-      
+  
     setTimeout(() => {
+      const passed = curr_puzzle !== -1 && puzzles[curr_puzzle].verify_function();
+      console.log(`Puzzle ${curr_puzzle} -> ${passed}`);
+      
       reset_interpreter_data();
       input_disabled = false;
+      if(passed) puzzle_success();
     }, 3000);
 };
 
@@ -787,6 +793,22 @@ const program_step = (instr) => {
     if(instr === "[") {
         loop_stack.push(curr_instr);
 
+        // Get the next ']' from the `code`
+        let next = curr_instr+1;
+        while(code[next] !== "]" && next < code.length) {
+            next++;
+        }
+
+        if(code[next] === "]" && data_cells[data_pointer] === 0) {
+            curr_instr = next-1;
+            selected = next - offset-1;
+
+            if(selected > max_selected) {
+                offset = selected - max_selected;
+                selected = max_selected;
+            }
+        }
+
         curr_instr++;
         if(!(curr_instr+1 > code.length)) advance_box();
         program_loop(); // basically continue;
@@ -797,8 +819,13 @@ const program_step = (instr) => {
         let start = loop_stack.pop();
         if(data_cells[data_pointer] !== 0) {
             // console.log(`${selected}, ${start}, ${offset}`);
-            selected = start - offset-1;
             curr_instr = start-1;
+            selected = start - offset-1;
+
+            if(selected < 0) {
+                offset += selected;
+                selected = 0;
+            }
         }
 
         curr_instr++;
@@ -943,6 +970,87 @@ const render_interpret_boxes = () => {
     render_num_box(data_cells[data_pointer], interpret_box, 3 + data_pointer, 3);
 }
 
+let level_selected = 0;
+let max_level = 5;
+
+const render_level_boxes = () => {
+    for(var i = 0; i < max_level+1; i++) {
+        render_num_box(i, box, i, 2);
+    }
+}
+
+const render_level_select = () => {
+    render_level_boxes();
+    render_num_box(level_selected, sel_box, level_selected, 2);
+}
+
+// -------------------
+// Prompts
+// -------------------
+let prompted_game_state = -1;
+const prompt_multiline = (text, clr, to) => {
+    switch_game_state(IN_PROMPT);
+    prompted_game_state = -1;
+
+    // Set one second timeout on prompt exit
+    setTimeout(() => {
+        prompted_game_state = to;  
+    }, 1000);
+    
+    let lines = [];
+
+    let temp = "";
+    let curr = 0;
+    for(var i = 0; i < text.length; i++) {
+        temp += text[i];
+      
+        if(text[i] === '\n' || curr === 13 || i+1 === text.length) {
+            lines.push(temp);
+            temp = "";
+            curr = 0;
+        } else {
+            curr++;
+        }
+    }
+    
+    for(var i = 0; i < lines.length; i++) {
+        addText(lines[i], {x: 3, y: 3+i, color: clr });
+    }
+
+    addText("Press anything", {x: 3, y: 10, color: color`0`});
+    addText("to continue",  {x: 3, y: 11, color: color`0`});
+}
+
+// -------------------
+// Puzzles
+// -------------------
+let puzzles = []; // Contains {text, verify_function}
+let curr_puzzle = -1;
+
+// Puzzle #0 -> Output 3
+const puzzle_0_verify = () => {
+    if(output_cells[0] === 3) return true;
+
+    return false;
+}
+
+// Puzzle #0 -> Print 5, 4, 3, 2, 1, 0
+const puzzle_1_verify = () => {
+    for(var i = 0; i < 6; i++) {
+        if(output_cells[i] !== 5-i) return false;
+    }
+
+    return true;
+}
+
+puzzles.push({ text: "Output 3", verify_function: puzzle_0_verify });
+puzzles.push({ text: "Output 5,4,3,2,1,0 ", verify_function: puzzle_1_verify });
+
+const puzzle_success = () => {
+    prompt_multiline("  Well done!\n", color`4`, LEVEL_SELECT);
+}
+
+
 // -------------------
 // Game implementation
 // -------------------
@@ -964,7 +1072,11 @@ const levels = [
 ...
 ...`,
   map`
-.`,
+......
+......
+bbbbbb
+......
+......`,
   map`
 p.........
 ...bbbbbb.
@@ -1013,6 +1125,10 @@ onInput("d", () => {
         selected++;
         render_box(sel_box);
         render_arrows();
+    } else if(game_state === LEVEL_SELECT) {
+        if(level_selected !== max_level) level_selected++;
+
+        render_level_select();
     }
 });
 
@@ -1035,13 +1151,18 @@ onInput("a", () => {
         selected--;
         render_box(sel_box);
         render_arrows();
+    } else if(game_state === LEVEL_SELECT) {
+        if(level_selected !== 0) level_selected--;
+
+        render_level_select();
     }
 });
 
 onInput("j", () => {
     if(game_state === MAIN_MENU && menu_tutorial_prompt) {
         menu_tutorial_prompt = false;
-        prompt_multiline("Task:\nWrite from\n0 to 5 to the output cells", color`0`, IN_INTERPRETER);
+        // prompt_multiline("Task:\nWrite from\n0 to 5 to the output cells", color`0`, IN_INTERPRETER);
+        
     } else if(game_state == IN_INTERPRETER) {
         if(input_disabled) return;
       
@@ -1055,7 +1176,7 @@ onInput("j", () => {
 onInput("l", () => {
     if(game_state === MAIN_MENU && menu_tutorial_prompt) {
         menu_tutorial_prompt = false;
-        // switch_game_state(IN_INTERPRETER);
+        switch_game_state(LEVEL_SELECT);
     } else if(game_state == IN_INTERPRETER) {
         if(input_disabled) return;
       
@@ -1094,6 +1215,11 @@ onInput("k", () => {
         if(!input_disabled || should_stop) return;
 
         should_stop = true;
+    } else if(game_state === LEVEL_SELECT) {
+        console.log(`Selected level: ${level_selected}!`);
+
+        curr_puzzle = level_selected;
+        prompt_multiline("Task:\n" + puzzles[level_selected].text, color`0`, IN_INTERPRETER);
     }
 });
 
@@ -1102,43 +1228,15 @@ const switch_game_state = (to) => {
     setMap(levels[to]);
     if(to === IN_INTERPRETER) {
         reset_interpreter_data();
+    } else if(to === LEVEL_SELECT) {
+        addText("Level Select", {x:4, y: 2, color: color`0`});
+        render_level_select();
     }
 
     game_state = to;
 }
 
 let menu_tutorial_prompt = false;
-
-let prompted_game_state = -1;
-const prompt_multiline = (text, color, to) => {
-    switch_game_state(IN_PROMPT);
-    prompted_game_state = -1;
-
-    // Set one second timeout on prompt exit
-    setTimeout(() => {
-        prompted_game_state = to;  
-    }, 1000);
-    
-    let lines = [];
-
-    let temp = "";
-    let curr = 0;
-    for(var i = 0; i < text.length; i++) {
-        temp += text[i];
-      
-        if(text[i] === '\n' || curr === 13 || i+1 === text.length) {
-            lines.push(temp);
-            temp = "";
-            curr = 0;
-        } else {
-            curr++;
-        }
-    }
-    
-    for(var i = 0; i < lines.length; i++) {
-        addText(lines[i], {x: 3, y: 3+i, color });
-    }
-}
 
 afterInput(() => {
     // console.log(game_state);
