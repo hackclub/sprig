@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Dodgy Day
 @author: Neelesh Chevuri
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-06-09
 */
 
 const player = "p"
@@ -13,6 +13,14 @@ const vBomb = "b"
 const hBomb = "h"
 const heart = "e"
 const tBomb = 't'
+const rBomb = 'r'
+const dBomb = 'd'
+const difuse1 = 'f'
+const difuse2 = 'g'
+const difuse3 = 'h'
+const difuse4 = 'j'
+const difuse5 = 'k'
+const difuse6 = 'l'
 
 setLegend(
   [player, bitmap`
@@ -99,7 +107,143 @@ LLLLLLLLLLLLLLLL
 LLLLLLLLLLLLLLLL
 LLLLLLLLLLLLLLLL
 LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL`]
+LLLLLLLLLLLLLLLL`],
+  [dBomb, bitmap`
+................
+................
+.....333333.....
+...3333333333...
+...3333333333...
+..333333333333..
+..333333333333..
+..333333333333..
+..333333333333..
+..333333333333..
+..333333333333..
+...3333333333...
+...3333333333...
+.....333333.....
+................
+................`],
+  [rBomb, bitmap`
+................
+................
+.....HHHHHH.....
+...HHHHHHHHHH...
+...HHHHHHHHHH...
+..HHHHHHHHHHHH..
+..HHHHHHHHHHHH..
+..HHHHHHHHHHHH..
+..HHHHHHHHHHHH..
+..HHHHHHHHHHHH..
+..HHHHHHHHHHHH..
+...HHHHHHHHHH...
+...HHHHHHHHHH...
+.....HHHHHH.....
+................
+................`],
+  [difuse1, bitmap`
+................
+................
+.....777777.....
+...7777777777...
+...7777777777...
+..777777777777..
+..777777777777..
+..777777777777..
+..777777777777..
+..777777777777..
+..777777777777..
+...7777777777...
+...7777777777...
+.....777777.....
+................
+................`],
+  [difuse2, bitmap`
+................
+................
+.....777777.....
+...7777777777...
+...7777777777...
+..777777777777..
+..777737737777..
+..777773377777..
+..777773377777..
+..777737737777..
+..777777777777..
+...7777777777...
+...7777777777...
+.....777777.....
+................
+................`],
+  [difuse3, bitmap`
+................
+................
+.....777777.....
+...7777777777...
+...7777777777...
+..777377773777..
+..777733337777..
+..777733337777..
+..777733337777..
+..777733337777..
+..777377773777..
+...7777777777...
+...7777777777...
+.....777777.....
+................
+................`],
+  [difuse4, bitmap`
+................
+................
+.....777777.....
+...7777777777...
+...7377777737...
+..777333333777..
+..777333333777..
+..777333333777..
+..777333333777..
+..777333333777..
+..777333333777..
+...7377777737...
+...7777777777...
+.....777777.....
+................
+................`],
+  [difuse5, bitmap`
+................
+................
+.....777777.....
+...3777777773...
+...7333333337...
+..773333333377..
+..773333333377..
+..773333333377..
+..773333333377..
+..773333333377..
+..773333333377..
+...7333333337...
+...3777777773...
+.....777777.....
+................
+................`],
+  [difuse6, bitmap`
+................
+................
+.....777777.....
+...3333333333...
+...3333333333...
+..733333333337..
+..733333333337..
+..733333333337..
+..733333333337..
+..733333333337..
+..733333333337..
+...3333333333...
+...3333333333...
+.....777777.....
+................
+................`]
 )
 
 setSolids([])
@@ -114,10 +258,10 @@ const levels = [
 eee..........h.
 ..........b....
 ...............
+........r......
 ...............
 ...............
-...............
-...............
+..d............
 h..............
 ...............
 ...............
@@ -160,7 +304,7 @@ function getRndInt(min, max) {
 function getRandomInt(max) {
   const typedArray = new Uint32Array(1);
   crypto.getRandomValues(typedArray);
-  const res = typedArray % (max+1); 
+  const res = typedArray % (max + 1);
 
   return res;
 }
@@ -179,33 +323,36 @@ function PlayerOver() {
   clearInterval(timeInterval);
 }
 
-// Spawn bomb
-function SpawnBombOld(type) {
-  if (type === vBomb) {
-    //addSprite(getRndInt(0, width() - 1), 0, type);
-    addSprite(playerObj.x + getRndInt(-1,1), 0, type);
-  } else if (type === hBomb) {
-    //addSprite(0, getRndInt(0, height() - 1), type);
-    addSprite(0, playerObj.y + getRndInt(-1,1), type);
-  }
-}
-
 // New Spawn Logic
 function SpawnBombNew(type) {
   if (type === vBomb) {
-    let x = playerObj.x + getRandomInt(2)-1//getRndInt(-1,1);
+    let x = playerObj.x + getRandomInt(2) - 1 //getRndInt(-1,1);
     if (x < 0)
       x = 0;
-    if (x > width()-1)
-      x = width()-1;
+    if (x > width() - 1)
+      x = width() - 1;
     addSprite(x, 0, tBomb);
   } else if (type === hBomb) {
-    let y = playerObj.y + getRandomInt(2)-1//getRndInt(-1,1);
+    let y = playerObj.y + getRandomInt(2) - 1 //getRndInt(-1,1);
     if (y < 0)
       y = 0;
-    if (y > height()-1)
-      y = height()-1;
+    if (y > height() - 1)
+      y = height() - 1;
     addSprite(0, y, tBomb);
+  } else if (type === dBomb) {
+    let x = playerObj.x + getRandomInt(2) - 1 //getRndInt(-1,1);
+    if (x < 0)
+      x = 0;
+    if (x > width() - 1)
+      x = width() - 1;
+    addSprite(x, height() - 1, tBomb);
+  } else if (type === rBomb) {
+    let y = playerObj.y + getRandomInt(2) - 1 //getRndInt(-1,1);
+    if (y < 0)
+      y = 0;
+    if (y > height() - 1)
+      y = height() - 1;
+    addSprite(width() - 1, y, tBomb);
   }
 }
 
@@ -213,6 +360,8 @@ function SpawnBombNew(type) {
 function BombLogicNew() {
   var vBombSprites = getAll(vBomb);
   var hBombSprites = getAll(hBomb);
+  var rBombSprites = getAll(rBomb);
+  var dBombSprites = getAll(dBomb);
   var tBombSprites = getAll(tBomb);
 
 
@@ -224,11 +373,16 @@ function BombLogicNew() {
     let typ = hBomb;
     if (y == 0)
       typ = vBomb;
-    
+    else if (y == height() - 1)
+      typ = dBomb;
+
+    if (x == width() - 1)
+      typ = rBomb;
+
     tBSprite.remove();
-    addSprite(x,y,typ);
+    addSprite(x, y, typ);
   });
-  
+
   // vertical bombs
   vBombSprites.forEach(vBSprite => {
     if (vBSprite.y == height() - 1) {
@@ -238,6 +392,16 @@ function BombLogicNew() {
       IncreaseSpeed();
     }
     vBSprite.y += 1;
+  });
+
+  dBombSprites.forEach(dBSprite => {
+    if (dBSprite.y == 0) {
+      // Spawn New Bomb
+      SpawnBombNew(dBomb);
+      dBSprite.remove()
+      IncreaseSpeed();
+    }
+    dBSprite.y -= 1;
   });
 
   // Horizontal bombs
@@ -250,15 +414,25 @@ function BombLogicNew() {
     }
     hBSprite.x += 1
   });
+
+  rBombSprites.forEach(rBSprite => {
+    if (rBSprite.x == 0) {
+      // Spawn New Bomb
+      SpawnBombNew(rBomb);
+      rBSprite.remove();
+      IncreaseSpeed();
+    }
+    rBSprite.x -= 1
+  });
 }
 
 
 // Increase speed
 function IncreaseSpeed() {
   clearInterval(bombInterval);
-  let bombDelay = 800 - timeSecs * 20;
-  if (bombDelay < 300)
-    bombDelay = 300;
+  let bombDelay = 800 - timeSecs * 10;
+  if (bombDelay < 200)
+    bombDelay = 200;
   bombInterval = setInterval(BombLogicNew, bombDelay);
 }
 
