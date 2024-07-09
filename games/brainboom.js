@@ -25,7 +25,7 @@ const open_loop = "[";
 const close_loop = "]";
 const output = "="; // i hate this so much
 const input = ",";
-const end = "E";
+const end = "N";
 
 const arr_left = "l";
 const arr_right = "r";
@@ -34,30 +34,30 @@ const arr_right = "r";
 // Numbers
 // -------------------
 
-const zero = "0";
-const one = "1";
-const two = "2";
-const three = "3";
-const four = "4";
-const five = "5";
-const six = "6";
-const seven = "7";
-const eight = "8";
-const nine = "9";
+const zero = "A";
+const one = "B";
+const two = "C";
+const three = "D";
+const four = "E";
+const five = "F";
+const six = "G";
+const seven = "H";
+const eight = "I";
+const nine = "J";
 
 // You know whats better than creating bitmaps for numbers 0-9?
 // Creating bitmaps not for one set of numbers 0-9 but two! (since you cant displace sprites with floating point precision :))))))))))))))))
 
-const zero_2 = "A";
-const one_2 = "B";
-const two_2 = "C";
-const three_2 = "D";
-const four_2 = "E";
-const five_2 = "F";
-const six_2 = "G";
-const seven_2 = "H";
-const eight_2 = "I";
-const nine_2 = "J";
+const zero_2 = "0";
+const one_2 = "1";
+const two_2 = "2";
+const three_2 = "3";
+const four_2 = "4";
+const five_2 = "5";
+const six_2 = "6";
+const seven_2 = "7";
+const eight_2 = "8";
+const nine_2 = "9";
 
 // I hate my life
 
@@ -664,6 +664,8 @@ setLegend(
 // BF implementation
 // -------------------
 
+let should_stop = false;
+
 // Data cells
 let data_cells = [];
 let data_cells_size = 6;
@@ -671,8 +673,8 @@ let data_pointer = 0;
 
 // Output cells
 let output_cells = [];
-let output_size = 5;
-let output_pointer = output_size-1; // back to front
+let output_size = 6;
+let output_pointer = 0;
 
 let loop_stack = [];
 let curr_instr = 0;
@@ -680,6 +682,8 @@ let curr_tile = 0;
 let code = [];
 
 const reset_interpreter_data = () => {
+    should_stop = false;
+  
     data_cells = [];
     data_pointer = 0;   
     
@@ -688,7 +692,7 @@ const reset_interpreter_data = () => {
     }
 
     output_cells = [];
-    output_pointer = output_size-1;
+    output_pointer = 0;
   
     // Fill output cells with 0
     for(let i = 0; i < output_size; i++) {
@@ -703,14 +707,28 @@ const reset_interpreter_data = () => {
     selected = 0;
     offset = 0;
     render_all_boxes();
+    render_data_boxes();
+    render_output_boxes();
     render_box(sel_box);
 };
 
 const stop_exec = () => {
     console.log("Executed successfully!");
+
+    // im lazy (this is to make the eventual tests not pass based on stuff)
+    if(should_stop) {
+        output_cells = [];
+        output_pointer = 0;
+        for(let i = 0; i < output_size; i++) {
+            output_cells.push(0);
+        }
+    } else {
+        render_output_boxes();
+    }
+
     console.log(`Data cells: ${data_cells}`);
     console.log(`Output cells: ${output_cells}`);
-
+      
     setTimeout(() => {
       reset_interpreter_data();
       input_disabled = false;
@@ -720,7 +738,7 @@ const stop_exec = () => {
 const program_loop = () => {
     setTimeout(() => {
         // console.log(`${curr_instr} vs ${code.length}`);
-        if(curr_instr >= code.length) {
+        if(curr_instr >= code.length || should_stop) {
             stop_exec();
             return;
         }
@@ -730,12 +748,30 @@ const program_loop = () => {
     }, 1000);
 }
 
+const render_output_boxes = () => {
+   for(var i = 0; i < output_size; i++) {
+        render_num_box(output_cells[i], box, 3 + i, 1);
+    }
+
+    // this is so ugly but idc
+    // if(with_intepr && output_pointer !== 0) render_num_box(output_cells[output_pointer-1], interpret_box, 3 + output_pointer-1, 1);
+}
+
+const render_interpret_boxes = () => {
+    render_num_box(output_cells[output_pointer], interpret_box, 3 + output_pointer, 1);
+    render_num_box(data_cells[data_pointer], interpret_box, 3 + data_pointer, 3);
+}
+
 const advance_box = () => {
     if(selected === max_selected) offset++;
     else selected++;
     // console.log(`Advancing: ${selected + offset}`);
     let temp = selected;
     render_all_boxes();
+    render_data_boxes();
+    render_output_boxes();
+    // render_data_box(interpret_box, data_pointer);
+    render_interpret_boxes();
     selected = temp;
     render_box(interpret_box);
 }
@@ -755,34 +791,35 @@ const get_number_sprites = (num) => {
   
     if(digs.length == 0) return [zero, zero_2];
   
-    let first = digs[0];
-    let second = zero_2;
+    let first = zero;
+    let second = digs[0];
 
     if(digs.length >= 2) {
-        second = get_char_from_ascii(aCharCode + parseInt(digs[1]));
+        first = get_char_from_ascii(aCharCode + parseInt(digs[1]));
     }
 
     return [first, second];
 };
 
-const render_data_box = (box_sprite, i) => {
-    clearTile(3 + i, 2);
-    addSprite(3 + i, 2, box_sprite);
+const render_num_box = (num, box_sprite, x, y) => {
+    clearTile(x, y);
+    addSprite(x, y, box_sprite);
 
-    const nums = get_number_sprites(data_cells[i]);
-    addSprite(3 + i, 2, nums[0]);
-    addSprite(3 + i, 2, nums[1]);
+    const nums = get_number_sprites(num);
+    // console.log(nums);
+    addSprite(x, y, nums[0]);
+    addSprite(x, y, nums[1]);
 };
 
 const render_data_boxes = () => {
     for(var i = 0; i < data_cells_size; i++) {
-        render_data_box(box, i);
+        render_num_box(data_cells[i], box, 3 + i, 3);
     }
 };
 
 const program_step = (instr) => {
     // console.log(`Program step! (${curr_instr}) (${instr})`);
-    if(instr === "E" || offset === max_offset) {
+    if(instr === "N" || offset === max_offset) {
         // if(!(curr_instr+1 >= code.length)) advance_box();
         stop_exec();
         return;
@@ -806,12 +843,9 @@ const program_step = (instr) => {
     }
     
     if(instr === "]") {
-        console.log(`Data cells: ${data_cells}`);
-        console.log(`Output cells: ${output_cells}`);
-      
         let start = loop_stack.pop();
         if(data_cells[data_pointer] !== 0) {
-            console.log(`${selected}, ${start}, ${offset}`);
+            // console.log(`${selected}, ${start}, ${offset}`);
             selected = start - offset-1;
             curr_instr = start-1;
         }
@@ -834,9 +868,9 @@ const run_program = () => {
 };
 
 const run_instruction = (instruction) => {
-    console.log(`Running inst => ${instruction}`);
-    console.log(`Data cells: ${data_cells}`);
-    console.log(`Output cells: ${output_cells}`);
+    // console.log(`Running inst => ${instruction}`);
+    // console.log(`Data cells: ${data_cells}`);
+    // console.log(`Output cells: ${output_cells}`);
     
     switch(instruction) {
         case "+":
@@ -854,7 +888,7 @@ const run_instruction = (instruction) => {
         case ".":
             console.log("Inserting to output!");
             output_cells[output_pointer] = data_cells[data_pointer];
-            if(output_pointer !== 0) output_pointer--;
+            if(output_pointer+1 !== output_size) output_pointer++;
             break;
         case ",":
             // Not implemented
@@ -865,7 +899,7 @@ const run_instruction = (instruction) => {
     }
 };
 
-let instruction_set = ["+", "-", "<", ">", "[", "]", ".", ",", "E"];
+let instruction_set = ["+", "-", "<", ">", "[", "]", ".", ",", "N"];
 
 // -------------------
 // Game implementation
@@ -874,9 +908,9 @@ let level = 0
 const levels = [
   map`
 p.........
-..........
 ...bbbbbb.
 ..........
+...bbbbbb.
 ..........
 .sbbbbbbbr
 ..........
@@ -1021,11 +1055,14 @@ onInput("i", () => {
     run_program();
 });
 
+onInput("k", () => {
+    if(!input_disabled || should_stop) return;
+
+    should_stop = true;
+});
+
 afterInput(() => {
   
 });
 
-// console.log(get_number_sprites(99));
-
 reset_interpreter_data();
-render_data_boxes();
