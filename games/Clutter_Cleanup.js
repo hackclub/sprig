@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Clutter Cleanup
 @author: CmdrApollo
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-07-09
 */
 
 const player = 'p';
