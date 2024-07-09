@@ -111,17 +111,17 @@ var health = 3;
 
 const levels = [
   map`
-eee............
+eee..........h.
 ..........b....
-.h.............
 ...............
-......b........
+...............
+...............
 ...............
 ...............
 h..............
 ...............
 ...............
-.............p.
+......b......p.
 ...............`
 ]
 
@@ -157,6 +157,14 @@ function getRndInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
+function getRandomInt(max) {
+  const typedArray = new Uint32Array(1);
+  crypto.getRandomValues(typedArray);
+  const res = typedArray % (max+1); 
+
+  return res;
+}
+
 // player died
 function PlayerOver() {
   playerObj.remove();
@@ -185,9 +193,19 @@ function SpawnBombOld(type) {
 // New Spawn Logic
 function SpawnBombNew(type) {
   if (type === vBomb) {
-    addSprite(getRndInt(0, width() - 1), 0, tBomb);
+    let x = playerObj.x + getRandomInt(2)-1//getRndInt(-1,1);
+    if (x < 0)
+      x = 0;
+    if (x > width()-1)
+      x = width()-1;
+    addSprite(x, 0, tBomb);
   } else if (type === hBomb) {
-    addSprite(0, getRndInt(0, height() - 1), tBomb);
+    let y = playerObj.y + getRandomInt(2)-1//getRndInt(-1,1);
+    if (y < 0)
+      y = 0;
+    if (y > height()-1)
+      y = height()-1;
+    addSprite(0, y, tBomb);
   }
 }
 
@@ -199,6 +217,17 @@ function BombLogicNew() {
 
 
   // temp bombs
+  tBombSprites.forEach(tBSprite => {
+    let x = tBSprite.x;
+    let y = tBSprite.y;
+
+    let typ = hBomb;
+    if (y == 0)
+      typ = vBomb;
+    
+    tBSprite.remove();
+    addSprite(x,y,typ);
+  });
   
   // vertical bombs
   vBombSprites.forEach(vBSprite => {
@@ -223,33 +252,6 @@ function BombLogicNew() {
   });
 }
 
-// Bomb Checks
-function BombLogicOld() {
-  var vBombSprites = getAll(vBomb)
-  var hBombSprites = getAll(hBomb);
-
-  // vertical bombs
-  vBombSprites.forEach(vBSprite => {
-    if (vBSprite.y == height() - 1) {
-      // Spawn New Bomb
-      SpawnBomb(vBomb);
-      vBSprite.remove()
-      IncreaseSpeed();
-    }
-    vBSprite.y += 1;
-  });
-
-  // Horizontal bombs
-  hBombSprites.forEach(hBSprite => {
-    if (hBSprite.x == width() - 1) {
-      // Spawn New Bomb
-      SpawnBomb(hBomb);
-      hBSprite.remove();
-      IncreaseSpeed();
-    }
-    hBSprite.x += 1
-  });
-}
 
 // Increase speed
 function IncreaseSpeed() {
