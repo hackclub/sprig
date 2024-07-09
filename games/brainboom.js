@@ -1,8 +1,8 @@
 /*
-@title:  BrainBoom
-@author: Kapilarny
-@tags: []
-@addedOn: 2024-00-00
+  @title:  BrainBoom
+  @author: Kapilarny
+  @tags: []
+  @addedOn: 2024-00-00
 */
 
 // -------------------
@@ -60,6 +60,41 @@ const eight_2 = "8";
 const nine_2 = "9";
 
 // I hate my life
+
+const main_theme = tune`
+150: D5~150,
+150: D5~150,
+150: G5^150 + D5~150,
+150: D5~150,
+150: G5^150,
+150,
+150: F5^150,
+150,
+150: G5^150,
+150,
+150: A5^150,
+150: A5^150,
+150: D5~150,
+150: D5~150,
+150: D5~150 + G5^150,
+150: D5~150 + F5^150,
+150: G5^150,
+150: F5^150,
+150: G5^150,
+150: A5^150,
+150: G5^150,
+150: F5^150,
+150: D5^150,
+150,
+150: D5~150,
+150: D5~150,
+150: D5~150,
+150: D5~150,
+150: G5^150,
+150,
+150: E5^150,
+150: G5^150`
+let playback = playTune(main_theme, Infinity);
 
 setLegend(
     [ player, bitmap`
@@ -734,6 +769,8 @@ const stop_exec = () => {
     setTimeout(() => {
       const passed = curr_puzzle !== -1 && puzzles[curr_puzzle].verify_function();
       console.log(`Puzzle ${curr_puzzle} -> ${passed}`);
+      last_gen = -1;
+      last_gen_2 = -1;
       
       reset_interpreter_data();
       input_disabled = false;
@@ -844,6 +881,8 @@ const program_step = (instr) => {
 
 const run_program = () => {
     console.log(`Running program -> ${code}`);
+    last_gen = -1;
+    last_gen_2 = -1;
     program_loop();
 };
 
@@ -857,7 +896,7 @@ const run_instruction = (instruction) => {
             data_cells[data_pointer]++;
             break;
         case "-":
-            data_cells[data_pointer]--;
+            if(data_cells[data_pointer] !== 0) data_cells[data_pointer]--;
             break;
         case ">":
             if(data_pointer - 1 !== -1) data_pointer--;
@@ -1034,6 +1073,7 @@ const prompt_multiline = (text, clr, to, callback = () => {}) => {
 let puzzles = []; // Contains {text, verify_function, code_size }
 let curr_puzzle = -1;
 let last_gen = -1;
+let last_gen_2 = -1;
 
 let input_op_disabled = false; 
 
@@ -1046,7 +1086,19 @@ const getRandomInt = (max) => {
 }
 
 const puzzle_input_1_10 = () => {
-    last_gen = getRandomInt(10) + 1;
+    if(last_gen === -1) {
+        last_gen = getRandomInt(10) + 1;
+        console.log(`last_gen: ${last_gen}`);
+        return last_gen;
+    }
+    
+    console.log(`last_gen_2: ${last_gen_2}`);
+    last_gen_2 = getRandomInt(10) + 1;
+    return last_gen_2;
+}
+
+const puzzle_input_5 = () => {
+    last_gen = 5;
     return last_gen;
 }
 
@@ -1060,8 +1112,17 @@ const puzzle_1_verify = () => {
     return output_cells[0] === 2 * last_gen;
 }
 
-// Puzzle #2 -> Print multiples of three
+// Puzzle #2 -> Print out N,N-1,N-2,...,0
 const puzzle_2_verify = () => {
+    for(var i = 0; i < 5; i++) {
+        if(output_cells[i] !== last_gen-i) return false;
+    }
+
+    return true;
+}
+
+// Puzzle #3 -> Print multiples of three
+const puzzle_3_verify = () => {
     for(var i = 0; i < 5; i++) {
         // console.log(3 * (i +1));
         if(output_cells[i] !== 3 * (i+1)) return false;
@@ -1070,9 +1131,20 @@ const puzzle_2_verify = () => {
     return true;
 }
 
+// Puzzle #4 -> Add two inputs
+const puzzle_4_verify = () => {
+    console.log(`${output_cells[0]} == ${last_gen} + ${last_gen_2}`);
+    return output_cells[0] == last_gen + last_gen_2;
+}
+
+// Puzzle #5 -> Endless
+
 puzzles.push({ text: "Output 3", verify_function: puzzle_0_verify, code_size: 9, input_func: puzzle_no_input });
 puzzles.push({ text: "Output double the input (,)", verify_function: puzzle_1_verify, code_size: 14, input_func: puzzle_input_1_10 });
-puzzles.push({ text: "Output multiples of 3.\n3, 6, 9, 12, 15", verify_function: puzzle_2_verify, code_size: 14, input_func: puzzle_no_input });
+puzzles.push({ text: "Output from input (,) to 0\n(f.e. 2, 1, 0)", verify_function: puzzle_2_verify, code_size: 8, input_func: puzzle_input_5 });
+puzzles.push({ text: "Output 5 multiples of 3.\n3,6,9,12 and  15", verify_function: puzzle_3_verify, code_size: 16, input_func: puzzle_no_input });
+puzzles.push({ text: "Output result of x+y\nboth inputs(,)", verify_function: puzzle_4_verify, code_size: 12, input_func: puzzle_input_1_10 });
+puzzles.push({ text: "Endless Mode\nYou can just\nmess around\nhere", verify_function: () => {return false;}, code_size: 50, input_func: puzzle_input_1_10 });
 
 const puzzle_success = () => {
     prompt_multiline("  Well done!\n", color`4`, LEVEL_SELECT);
@@ -1284,13 +1356,48 @@ const loop_close_op_tut = () => {
 }
 
 const output_op_tut = () => {
+    clearTile(5, 1);  
+    clearText();
+    addSprite(5, 1, output);
 
+    addText("Output", {x: 2, y: 3, color: color`0`});
+    addText("Outputs current", {x: 2, y: 7, color: color`0`});
+    addText("data cell", {x: 2, y: 8, color: color`0`});
+
+    addText("Press anything", {x: 2, y: 11, color: color`0`});
+    addText("to continue",  {x: 2, y: 12, color: color`0`});
 }
 
+const input_op_tut = () => {
+    clearTile(5, 1);  
+    clearText();
+    addSprite(5, 1, input);
+
+    addText("Input", {x: 2, y: 3, color: color`0`});
+    addText("Provides data", {x: 2, y: 7, color: color`0`});
+    addText("to current cell", {x: 2, y: 8, color: color`0`});
+    addText("(based on level)", {x: 2, y: 9, color: color`0`});
+
+    addText("Press anything", {x: 2, y: 11, color: color`0`});
+    addText("to continue",  {x: 2, y: 12, color: color`0`});
+}
+
+const end_op_tut = () => {
+    clearTile(5, 1);  
+    clearText();
+    addSprite(5, 1, end);
+
+    addText("End", {x: 2, y: 3, color: color`0`});
+    addText("Shuts down the", {x: 2, y: 7, color: color`0`});
+    addText("program.", {x: 2, y: 8, color: color`0`});
+
+    addText("Press anything", {x: 2, y: 11, color: color`0`});
+    addText("to continue",  {x: 2, y: 12, color: color`0`});
+}
 
 // let instruction_set = ["+", "-", "<", ">", "[", "]", ".", ",", "N"];
 
-const tutorial_list = [add_op_tut, minus_op_tut, shift_right_op_tut, shift_left_op_tut, loop_open_op_tut, loop_close_op_tut];
+const tutorial_list = [add_op_tut, minus_op_tut, shift_right_op_tut, shift_left_op_tut, loop_open_op_tut, loop_close_op_tut, output_op_tut, input_op_tut, end_op_tut];
 let curr_tutorial_idx = 0;
 let tut_listen_to_input = false;
 
@@ -1304,7 +1411,7 @@ const run_tutorial = () => {
     }, 1000);
 };
 
-onInput("j", () => {
+onInput("w", () => {
     if(game_state === MAIN_MENU && menu_tutorial_prompt) {
         menu_tutorial_prompt = false;
         run_tutorial();  
@@ -1319,7 +1426,7 @@ onInput("j", () => {
     }
 });
 
-onInput("l", () => {
+onInput("s", () => {
     if(game_state === MAIN_MENU && menu_tutorial_prompt) {
         menu_tutorial_prompt = false;
         switch_game_state(LEVEL_SELECT);
@@ -1357,6 +1464,28 @@ onInput("i", () => {
     }
 });
 
+onInput("j", () => {
+    if(game_state == IN_INTERPRETER) {
+        if(input_disabled) return;
+
+        prompt_multiline("Task:\n" + puzzles[level_selected].text, color`0`, IN_INTERPRETER);
+    }
+});
+
+onInput("l", () => {
+    if(game_state === IN_INTERPRETER) {
+        if(input_disabled) return;
+        switch_game_state(LEVEL_SELECT);
+    } else if(game_state === LEVEL_SELECT) {
+        if(playback !== undefined) {
+            playback.end();
+            playback = undefined;
+        } else {
+            playback = playTune(main_theme, Infinity);
+        }
+    }
+});
+
 onInput("k", () => {
     if(game_state == IN_INTERPRETER) {
         if(!input_disabled || should_stop) return;
@@ -1378,8 +1507,12 @@ const switch_game_state = (to) => {
     setMap(levels[to]);
     if(to === IN_INTERPRETER) {
         reset_interpreter_data();
+        addText("I -> run", {x:0, y: 14, color: color`4`});
+        addText("K -> stop", {x:11, y: 14, color: color`3`});
     } else if(to === LEVEL_SELECT) {
         addText("Level Select", {x:4, y: 2, color: color`0`});
+        addText(" K -> Play", {x:5, y: 12, color: color`4`});
+        addText("L -> Toggle Music", {x:2, y: 13, color: color`5`});
         render_level_select();
     }
 
@@ -1396,8 +1529,8 @@ afterInput(() => {
         clearText();
 
         addText("Play tutorial?", {x: 3, y:7, color: color`0`});
-        addText("J -> Yes", {x: 3, y: 9, color: color`4`});
-        addText("L -> No", {x: 3, y: 10, color: color`3`});
+        addText("W -> Yes", {x: 3, y: 9, color: color`4`});
+        addText("S -> No", {x: 3, y: 10, color: color`3`});
 
         menu_tutorial_prompt = true;
     } else if(game_state === IN_PROMPT) {
@@ -1419,7 +1552,7 @@ afterInput(() => {
 });
 
 addText("Brain Boom", {x: 5, y: 1, color: color`0`});
-addText("Made by Kapi", {x: 4, y: 2, color: color`0`});
+addText("Made by Kapi", {x: 4, y: 3, color: color`0`});
 
-addText("Press anything", {x: 3, y: 7, color: color`0`});
-addText("to start!", {x: 3, y: 8, color: color`0`});
+addText("Press anything", {x: 3, y: 7, color: color`4`});
+addText("to start!", {x: 3, y: 8, color: color`4`});
