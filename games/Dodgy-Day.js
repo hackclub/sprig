@@ -8,16 +8,16 @@ https://sprig.hackclub.com/gallery/getting_started
 @addedOn: 2024-06-09
 */
 
-const player = "p"
-const vBomb = "b"
-const hBomb = "h"
-const heart = "e"
+const player = 'p'
+const vBomb = 'b'
+const hBomb = 'h'
+const heart = 'e'
 const tBomb = 't'
 const rBomb = 'r'
 const dBomb = 'd'
 const difuse1 = 'f'
 const difuse2 = 'g'
-const difuse3 = 'h'
+const difuse3 = 'o'
 const difuse4 = 'j'
 const difuse5 = 'k'
 const difuse6 = 'l'
@@ -246,7 +246,7 @@ LLLLLLLLLLLLLLLL`],
 ................`]
 )
 
-setSolids([])
+setSolids([player, heart])
 
 let level = 0
 
@@ -264,7 +264,7 @@ eee..........h.
 ..d............
 h..............
 ...............
-...............
+.........f.....
 ......b......p.
 ...............`
 ]
@@ -325,28 +325,28 @@ function PlayerOver() {
 
 // New Spawn Logic
 function SpawnBombNew(type) {
-  if (type === vBomb) {
+  if (type == vBomb) {
     let x = playerObj.x + getRandomInt(2) - 1 //getRndInt(-1,1);
     if (x < 0)
       x = 0;
     if (x > width() - 1)
       x = width() - 1;
     addSprite(x, 0, tBomb);
-  } else if (type === hBomb) {
+  } else if (type == hBomb) {
     let y = playerObj.y + getRandomInt(2) - 1 //getRndInt(-1,1);
     if (y < 0)
       y = 0;
     if (y > height() - 1)
       y = height() - 1;
     addSprite(0, y, tBomb);
-  } else if (type === dBomb) {
+  } else if (type == dBomb) {
     let x = playerObj.x + getRandomInt(2) - 1 //getRndInt(-1,1);
     if (x < 0)
       x = 0;
     if (x > width() - 1)
       x = width() - 1;
     addSprite(x, height() - 1, tBomb);
-  } else if (type === rBomb) {
+  } else if (type == rBomb) {
     let y = playerObj.y + getRandomInt(2) - 1 //getRndInt(-1,1);
     if (y < 0)
       y = 0;
@@ -354,6 +354,37 @@ function SpawnBombNew(type) {
       y = height() - 1;
     addSprite(width() - 1, y, tBomb);
   }
+}
+
+// difuse logic
+function DifuseLogic() {
+  var d1 = getAll(difuse1);
+  var d2 = getAll(difuse2);
+  var d3 = getAll(difuse3);
+  var d4 = getAll(difuse4);
+  var d5 = getAll(difuse5);
+  var d6 = getAll(difuse6);
+
+  // difuse progression
+  d1.forEach(d1s => {
+    d1s.type = difuse2;
+  });
+  d2.forEach(d2s => {
+    d2s.type = difuse3;
+  });
+  d3.forEach(d3s => {
+    d3s.type = difuse4;
+  });
+  d4.forEach(d4s => {
+    d4s.type = difuse5;
+  });
+  d5.forEach(d5s => {
+    d5s.type = difuse6;
+  });
+  d6.forEach(d6s => {
+    health = 0;
+  });
+
 }
 
 // Bomb Logic New
@@ -441,6 +472,10 @@ var hit = false;
 const playerObj = getFirst(player);
 
 function GameLoop() {
+
+  if (health <= 0)
+    PlayerOver();
+  
   var playerTile = getTile(playerObj.x, playerObj.y);
   // loop through the sprites at the tile
   if (playerTile.length < 2) {
@@ -470,6 +505,8 @@ function UpdateTime() {
 }
 
 // Run the logic loops periodically
+
+const difuseInterval = setInterval(DifuseLogic, 500);
 
 const gameInterval = setInterval(GameLoop, 100);
 
