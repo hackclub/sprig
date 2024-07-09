@@ -776,11 +776,13 @@ let get_char_from_ascii = (ascii_code) => {
 
 const program_step = (instr) => {
     // console.log(`Program step! (${curr_instr}) (${instr})`);
-    if(instr === "N" || offset === max_offset) {
+    if(instr === "N" || offset === max_offset+1) {
         // if(!(curr_instr+1 >= code.length)) advance_box();
         stop_exec();
         return;
     }
+
+    // console.log("bruh");
 
     // if(!(curr_instr+1 >= code.length)) advance_box();
   
@@ -864,12 +866,12 @@ const run_instruction = (instruction) => {
             if(data_pointer + 1 !== data_cells_size) data_pointer++;
             break;
         case ".":
-            console.log("Inserting to output!");
+            // console.log("Inserting to output!");
             output_cells[output_pointer] = data_cells[data_pointer];
             if(output_pointer+1 !== output_size) output_pointer++;
             break;
         case ",":
-            // Not implemented
+            data_cells[data_pointer] = puzzles[level_selected].input_func();
             break;
         default:
             console.log(`Unrecognized instruction! ${instruction}`);
@@ -937,7 +939,10 @@ const get_number_sprites = (num) => {
     let second = digs[0];
 
     if(digs.length >= 2) {
-        first = get_char_from_ascii(aCharCode + parseInt(digs[1]));
+        // console.log(digs);
+        first = get_char_from_ascii(aCharCode + parseInt(digs[0]));
+        second = digs[1];
+        // console.log(first);
     }
 
     return [first, second];
@@ -988,7 +993,9 @@ const render_level_select = () => {
 // Prompts
 // -------------------
 let prompted_game_state = -1;
-const prompt_multiline = (text, clr, to) => {
+let prompt_callback = () => {};
+const prompt_multiline = (text, clr, to, callback = () => {}) => {
+    prompt_callback = callback;
     switch_game_state(IN_PROMPT);
     prompted_game_state = -1;
 
@@ -1024,27 +1031,48 @@ const prompt_multiline = (text, clr, to) => {
 // -------------------
 // Puzzles
 // -------------------
-let puzzles = []; // Contains {text, verify_function}
+let puzzles = []; // Contains {text, verify_function, code_size }
 let curr_puzzle = -1;
+let last_gen = -1;
+
+let input_op_disabled = false; 
+
+const puzzle_no_input = () => {
+    return -1;
+}
+
+const getRandomInt = (max) => {
+    return Math.floor(Math.random() * max);
+}
+
+const puzzle_input_1_10 = () => {
+    last_gen = getRandomInt(10) + 1;
+    return last_gen;
+}
 
 // Puzzle #0 -> Output 3
 const puzzle_0_verify = () => {
-    if(output_cells[0] === 3) return true;
-
-    return false;
+    return output_cells[0] === 3;
 }
 
-// Puzzle #0 -> Print 5, 4, 3, 2, 1, 0
+// Puzzle #1 -> Output double the input
 const puzzle_1_verify = () => {
-    for(var i = 0; i < 6; i++) {
-        if(output_cells[i] !== 5-i) return false;
+    return output_cells[0] === 2 * last_gen;
+}
+
+// Puzzle #2 -> Print multiples of three
+const puzzle_2_verify = () => {
+    for(var i = 0; i < 5; i++) {
+        // console.log(3 * (i +1));
+        if(output_cells[i] !== 3 * (i+1)) return false;
     }
 
     return true;
 }
 
-puzzles.push({ text: "Output 3", verify_function: puzzle_0_verify });
-puzzles.push({ text: "Output 5,4,3,2,1,0 ", verify_function: puzzle_1_verify });
+puzzles.push({ text: "Output 3", verify_function: puzzle_0_verify, code_size: 9, input_func: puzzle_no_input });
+puzzles.push({ text: "Output double the input (,)", verify_function: puzzle_1_verify, code_size: 14, input_func: puzzle_input_1_10 });
+puzzles.push({ text: "Output multiples of 3.\n3, 6, 9, 12, 15", verify_function: puzzle_2_verify, code_size: 14, input_func: puzzle_no_input });
 
 const puzzle_success = () => {
     prompt_multiline("  Well done!\n", color`4`, LEVEL_SELECT);
@@ -1060,6 +1088,7 @@ const MAIN_MENU = 0;
 const LEVEL_SELECT = 1;
 const IN_INTERPRETER = 2;
 const IN_PROMPT = 3;
+const TUTORIAL = 4;
 
 let input_disabled = false;
 
@@ -1087,7 +1116,14 @@ p.........
 ..........
 ..........`,
   map`
-.`
+.`,
+  map`
+.......
+.....+.
+.......
+.......
+.......
+.......`
 ]
 
 let selected = 0;
@@ -1099,10 +1135,17 @@ let program_size = (max_selected * 2);
 let offset = 0;
 let max_offset = program_size - max_selected;
 
-// Fill program out with blanks
-for(var i = 0; i < program_size+1; i++) {
-    program.push(-1);
+const reset_program = () => {
+    program = [];
+    max_offset = program_size - max_selected;
+
+    // Fill program out with blanks
+    for(var i = 0; i < program_size+1; i++) {
+        program.push(-1);
+    }
 }
+
+reset_program();
 
 setMap(levels[level]);
 
@@ -1158,15 +1201,118 @@ onInput("a", () => {
     }
 });
 
+const add_op_tut = () => {
+    clearTile(5, 1);
+    clearText();
+    addSprite(5, 1, add);
+
+    addText("Add", {x: 2, y: 3, color: color`0`});
+    addText("Adds 1 to the", {x: 2, y: 7, color: color`0`});
+    addText("current data cell", {x: 2, y: 8, color: color`0`});
+
+    addText("Press anything", {x: 2, y: 11, color: color`0`});
+    addText("to continue",  {x: 2, y: 12, color: color`0`});
+}
+
+const minus_op_tut = () => {
+    clearTile(5, 1);
+    clearText();
+    addSprite(5, 1, sub);
+
+    addText("Sub", {x: 2, y: 3, color: color`0`});
+    addText("Subtracts 1 from", {x: 2, y: 7, color: color`0`});
+    addText("current data cell", {x: 2, y: 8, color: color`0`});
+
+    addText("Press anything", {x: 2, y: 11, color: color`0`});
+    addText("to continue",  {x: 2, y: 12, color: color`0`});
+}
+
+const shift_right_op_tut = () => {
+    clearTile(5, 1);  
+    clearText();
+    addSprite(5, 1, shift_right);
+
+    addText("Shift Right", {x: 2, y: 3, color: color`0`});
+    addText("Shifts the", {x: 2, y: 7, color: color`0`});
+    addText("pointer to data", {x: 2, y: 8, color: color`0`});
+    addText("by 1", {x: 2, y: 9, color: color`0`});
+
+    addText("Press anything", {x: 2, y: 11, color: color`0`});
+    addText("to continue",  {x: 2, y: 12, color: color`0`});
+}
+
+const shift_left_op_tut = () => {
+    clearTile(5, 1);  
+    clearText();
+    addSprite(5, 1, shift_left);
+
+    addText("Shift Left", {x: 2, y: 3, color: color`0`});
+    addText("Shifts the", {x: 2, y: 7, color: color`0`});
+    addText("pointer to data", {x: 2, y: 8, color: color`0`});
+    addText("by -1", {x: 2, y: 9, color: color`0`});
+
+    addText("Press anything", {x: 2, y: 11, color: color`0`});
+    addText("to continue",  {x: 2, y: 12, color: color`0`});
+}
+
+const loop_open_op_tut = () => {
+    clearTile(5, 1);  
+    clearText();
+    addSprite(5, 1, open_loop);
+
+    addText("Open Loop", {x: 2, y: 3, color: color`0`});
+    addText("Opens a loop.", {x: 2, y: 7, color: color`0`});
+    addText("Skips to finish", {x: 2, y: 8, color: color`0`});
+    addText("if data cell == 0", {x: 2, y: 9, color: color`0`});
+
+    addText("Press anything", {x: 2, y: 11, color: color`0`});
+    addText("to continue",  {x: 2, y: 12, color: color`0`});
+}
+
+const loop_close_op_tut = () => {
+    clearTile(5, 1);  
+    clearText();
+    addSprite(5, 1, open_loop);
+
+    addText("Close Loop", {x: 2, y: 3, color: color`0`});
+    addText("Closes a loop.", {x: 2, y: 7, color: color`0`});
+    addText("Skips to start", {x: 2, y: 8, color: color`0`});
+    addText("if data cell != 0", {x: 2, y: 9, color: color`0`});
+
+    addText("Press anything", {x: 2, y: 11, color: color`0`});
+    addText("to continue",  {x: 2, y: 12, color: color`0`});
+}
+
+const output_op_tut = () => {
+
+}
+
+
+// let instruction_set = ["+", "-", "<", ">", "[", "]", ".", ",", "N"];
+
+const tutorial_list = [add_op_tut, minus_op_tut, shift_right_op_tut, shift_left_op_tut, loop_open_op_tut, loop_close_op_tut];
+let curr_tutorial_idx = 0;
+let tut_listen_to_input = false;
+
+const run_tutorial = () => {
+    switch_game_state(TUTORIAL);
+
+    tutorial_list[curr_tutorial_idx]();
+
+    setInterval(() => {
+        tut_listen_to_input = true;
+    }, 1000);
+};
+
 onInput("j", () => {
     if(game_state === MAIN_MENU && menu_tutorial_prompt) {
         menu_tutorial_prompt = false;
-        // prompt_multiline("Task:\nWrite from\n0 to 5 to the output cells", color`0`, IN_INTERPRETER);
-        
+        run_tutorial();  
     } else if(game_state == IN_INTERPRETER) {
         if(input_disabled) return;
       
         if(program[offset + selected] === 8) program[offset + selected] = -1;
+        else if(input_op_disabled && program[offset+selected] == 6) program[offset + selected] = 8;
         else program[offset + selected]++;
     
         render_box(sel_box);
@@ -1181,6 +1327,7 @@ onInput("l", () => {
         if(input_disabled) return;
       
         if(program[offset + selected] === -1) program[offset + selected] = 8;
+        else if(input_op_disabled && program[offset+selected] == 8) program[offset + selected] = 6;
         else program[offset + selected]--;
     
         render_box(sel_box);
@@ -1218,7 +1365,10 @@ onInput("k", () => {
     } else if(game_state === LEVEL_SELECT) {
         console.log(`Selected level: ${level_selected}!`);
 
-        curr_puzzle = level_selected;
+        curr_puzzle = level_selected; 
+        program_size = puzzles[level_selected].code_size-1;
+        input_op_disabled = puzzles[level_selected].input_func() === -1;
+        reset_program(); 
         prompt_multiline("Task:\n" + puzzles[level_selected].text, color`0`, IN_INTERPRETER);
     }
 });
@@ -1251,7 +1401,20 @@ afterInput(() => {
 
         menu_tutorial_prompt = true;
     } else if(game_state === IN_PROMPT) {
-        if(prompted_game_state !== -1) switch_game_state(prompted_game_state);
+        if(prompted_game_state !== -1) {
+            switch_game_state(prompted_game_state);
+            prompt_callback();
+        }
+    } else if(game_state === TUTORIAL && tut_listen_to_input) {
+        curr_tutorial_idx++;
+        if(curr_tutorial_idx !== tutorial_list.length) {
+            tutorial_list[curr_tutorial_idx]();
+            setInterval(() => {
+                tut_listen_to_input = true;
+            }, 1000);
+        } else {
+            switch_game_state(LEVEL_SELECT);
+        }
     }
 });
 
