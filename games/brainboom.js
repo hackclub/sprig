@@ -656,7 +656,7 @@ setLegend(
 .............0..
 ........000000..
 ................
-................` ]
+................` ],
 )
 
 
@@ -748,20 +748,6 @@ const program_loop = () => {
     }, 1000);
 }
 
-const render_output_boxes = () => {
-   for(var i = 0; i < output_size; i++) {
-        render_num_box(output_cells[i], box, 3 + i, 1);
-    }
-
-    // this is so ugly but idc
-    // if(with_intepr && output_pointer !== 0) render_num_box(output_cells[output_pointer-1], interpret_box, 3 + output_pointer-1, 1);
-}
-
-const render_interpret_boxes = () => {
-    render_num_box(output_cells[output_pointer], interpret_box, 3 + output_pointer, 1);
-    render_num_box(data_cells[data_pointer], interpret_box, 3 + data_pointer, 3);
-}
-
 const advance_box = () => {
     if(selected === max_selected) offset++;
     else selected++;
@@ -781,41 +767,6 @@ let aCharCode = "A".charCodeAt(0);
 let get_char_from_ascii = (ascii_code) => {
     return String.fromCharCode(ascii_code);
 }
-
-const get_number_sprites = (num) => {  
-    let digs = [];
-    let num_str = num.toString();
-    for(var i = 0; i < num_str.length; i++) {
-        digs.push(num_str[i]);
-    }
-  
-    if(digs.length == 0) return [zero, zero_2];
-  
-    let first = zero;
-    let second = digs[0];
-
-    if(digs.length >= 2) {
-        first = get_char_from_ascii(aCharCode + parseInt(digs[1]));
-    }
-
-    return [first, second];
-};
-
-const render_num_box = (num, box_sprite, x, y) => {
-    clearTile(x, y);
-    addSprite(x, y, box_sprite);
-
-    const nums = get_number_sprites(num);
-    // console.log(nums);
-    addSprite(x, y, nums[0]);
-    addSprite(x, y, nums[1]);
-};
-
-const render_data_boxes = () => {
-    for(var i = 0; i < data_cells_size; i++) {
-        render_num_box(data_cells[i], box, 3 + i, 3);
-    }
-};
 
 const program_step = (instr) => {
     // console.log(`Program step! (${curr_instr}) (${instr})`);
@@ -902,38 +853,8 @@ const run_instruction = (instruction) => {
 let instruction_set = ["+", "-", "<", ">", "[", "]", ".", ",", "N"];
 
 // -------------------
-// Game implementation
+// Render Functions
 // -------------------
-let level = 0
-const levels = [
-  map`
-p.........
-...bbbbbb.
-..........
-...bbbbbb.
-..........
-.sbbbbbbbr
-..........
-..........`
-]
-
-let input_disabled = false;
-
-let selected = 0;
-const max_selected = 7;
-
-let program = [];
-let program_size = (max_selected * 2);
-
-let offset = 0;
-let max_offset = program_size - max_selected;
-
-// Fill program out with blanks
-for(var i = 0; i < program_size+1; i++) {
-  program.push(-1);
-}
-
-setMap(levels[level])
 
 const get_op_sprite = () => {
   const id = program[offset + selected];
@@ -976,93 +897,268 @@ const render_all_boxes = () => {
     selected = 0;
 };
 
-onInput("d", () => {
-    if(input_disabled) return;
-  
-    if(selected === max_selected) {
-        if(offset === program_size - max_selected) return;
-        offset++;
-        render_all_boxes();
-        selected = max_selected;
-        render_box(sel_box);
-        render_arrows();
-      
-        return;
+const get_number_sprites = (num) => {  
+    let digs = [];
+    let num_str = num.toString();
+    for(var i = 0; i < num_str.length; i++) {
+        digs.push(num_str[i]);
     }
   
-    render_box(box);
-    selected++;
-    render_box(sel_box);
-    render_arrows();
+    if(digs.length == 0) return [zero, zero_2];
+  
+    let first = zero;
+    let second = digs[0];
+
+    if(digs.length >= 2) {
+        first = get_char_from_ascii(aCharCode + parseInt(digs[1]));
+    }
+
+    return [first, second];
+};
+
+const render_num_box = (num, box_sprite, x, y) => {
+    clearTile(x, y);
+    addSprite(x, y, box_sprite);
+
+    const nums = get_number_sprites(num);
+    // console.log(nums);
+    addSprite(x, y, nums[0]);
+    addSprite(x, y, nums[1]);
+};
+
+const render_data_boxes = () => {
+    for(var i = 0; i < data_cells_size; i++) {
+        render_num_box(data_cells[i], box, 3 + i, 3);
+    }
+};
+
+const render_output_boxes = () => {
+   for(var i = 0; i < output_size; i++) {
+        render_num_box(output_cells[i], box, 3 + i, 1);
+    }
+}
+
+const render_interpret_boxes = () => {
+    render_num_box(output_cells[output_pointer], interpret_box, 3 + output_pointer, 1);
+    render_num_box(data_cells[data_pointer], interpret_box, 3 + data_pointer, 3);
+}
+
+// -------------------
+// Game implementation
+// -------------------
+
+// Game states
+const MAIN_MENU = 0;
+const LEVEL_SELECT = 1;
+const IN_INTERPRETER = 2;
+const IN_PROMPT = 3;
+
+let input_disabled = false;
+
+let game_state = MAIN_MENU;
+
+let level = game_state
+const levels = [
+  map`
+...
+...
+...`,
+  map`
+.`,
+  map`
+p.........
+...bbbbbb.
+..........
+...bbbbbb.
+..........
+.sbbbbbbbr
+..........
+..........`,
+  map`
+.`
+]
+
+let selected = 0;
+const max_selected = 7;
+
+let program = [];
+let program_size = (max_selected * 2);
+
+let offset = 0;
+let max_offset = program_size - max_selected;
+
+// Fill program out with blanks
+for(var i = 0; i < program_size+1; i++) {
+    program.push(-1);
+}
+
+setMap(levels[level]);
+
+onInput("d", () => {
+    if(game_state == IN_INTERPRETER) {
+        if(input_disabled) return;
+      
+        if(selected === max_selected) {
+            if(offset === program_size - max_selected) return;
+            offset++;
+            render_all_boxes();
+            selected = max_selected;
+            render_box(sel_box);
+            render_arrows();
+          
+            return;
+        }
+      
+        render_box(box);
+        selected++;
+        render_box(sel_box);
+        render_arrows();
+    }
 });
 
 onInput("a", () => {
-    if(input_disabled) return;
-    
-    if(selected === 0) {
-        if(offset == 0) return;
-        offset--;
-        render_all_boxes();
-        selected = 0;
+    if(game_state == IN_INTERPRETER) {
+        if(input_disabled) return;
+        
+        if(selected === 0) {
+            if(offset == 0) return;
+            offset--;
+            render_all_boxes();
+            selected = 0;
+            render_box(sel_box);
+            render_arrows();
+          
+            return;
+        }
+      
+        render_box(box);
+        selected--;
         render_box(sel_box);
         render_arrows();
-      
-        return;
     }
-  
-    render_box(box);
-    selected--;
-    render_box(sel_box);
-    render_arrows();
 });
 
 onInput("j", () => {
-    if(input_disabled) return;
-  
-    if(program[offset + selected] === 8) program[offset + selected] = -1;
-    else program[offset + selected]++;
-
-    render_box(sel_box);
+    if(game_state === MAIN_MENU && menu_tutorial_prompt) {
+        menu_tutorial_prompt = false;
+        prompt_multiline("Task:\nWrite from\n0 to 5 to the output cells", color`0`, IN_INTERPRETER);
+    } else if(game_state == IN_INTERPRETER) {
+        if(input_disabled) return;
+      
+        if(program[offset + selected] === 8) program[offset + selected] = -1;
+        else program[offset + selected]++;
+    
+        render_box(sel_box);
+    }
 });
 
 onInput("l", () => {
-    if(input_disabled) return;
-  
-    if(program[offset + selected] === -1) program[offset + selected] = 8;
-    else program[offset + selected]--;
-
-    render_box(sel_box);
+    if(game_state === MAIN_MENU && menu_tutorial_prompt) {
+        menu_tutorial_prompt = false;
+        // switch_game_state(IN_INTERPRETER);
+    } else if(game_state == IN_INTERPRETER) {
+        if(input_disabled) return;
+      
+        if(program[offset + selected] === -1) program[offset + selected] = 8;
+        else program[offset + selected]--;
+    
+        render_box(sel_box);
+    }
 });
 
 onInput("i", () => {
-    if(input_disabled) return;
-    input_disabled = true;
-
-    offset = 0;
-    selected = 0;
-    render_all_boxes();
-    render_arrows();
-
-    render_box(interpret_box);
-  
-    // Create a digestible array for the interpreter
-    code = [];
-    for(var i = 0; i < program.length; i++) {
-        if(program[i] == -1) continue;
-        code.push(instruction_set[program[i]]);
+    if(game_state == IN_INTERPRETER) {
+        if(input_disabled) return;
+        input_disabled = true;
+    
+        offset = 0;
+        selected = 0;
+        render_all_boxes();
+        render_arrows();
+    
+        render_box(interpret_box);
+      
+        // Create a digestible array for the interpreter
+        code = [];
+        for(var i = 0; i < program.length; i++) {
+            if(program[i] == -1) continue;
+            code.push(instruction_set[program[i]]);
+        }
+    
+        run_program();
     }
-
-    run_program();
 });
 
 onInput("k", () => {
-    if(!input_disabled || should_stop) return;
+    if(game_state == IN_INTERPRETER) {
+        if(!input_disabled || should_stop) return;
 
-    should_stop = true;
+        should_stop = true;
+    }
 });
+
+const switch_game_state = (to) => {
+    clearText();
+    setMap(levels[to]);
+    if(to === IN_INTERPRETER) {
+        reset_interpreter_data();
+    }
+
+    game_state = to;
+}
+
+let menu_tutorial_prompt = false;
+
+let prompted_game_state = -1;
+const prompt_multiline = (text, color, to) => {
+    switch_game_state(IN_PROMPT);
+    prompted_game_state = -1;
+
+    // Set one second timeout on prompt exit
+    setTimeout(() => {
+        prompted_game_state = to;  
+    }, 1000);
+    
+    let lines = [];
+
+    let temp = "";
+    let curr = 0;
+    for(var i = 0; i < text.length; i++) {
+        temp += text[i];
+      
+        if(text[i] === '\n' || curr === 13 || i+1 === text.length) {
+            lines.push(temp);
+            temp = "";
+            curr = 0;
+        } else {
+            curr++;
+        }
+    }
+    
+    for(var i = 0; i < lines.length; i++) {
+        addText(lines[i], {x: 3, y: 3+i, color });
+    }
+}
 
 afterInput(() => {
+    // console.log(game_state);
   
+    if(game_state === MAIN_MENU) {
+        if(menu_tutorial_prompt) return;
+        clearText();
+
+        addText("Play tutorial?", {x: 3, y:7, color: color`0`});
+        addText("J -> Yes", {x: 3, y: 9, color: color`4`});
+        addText("L -> No", {x: 3, y: 10, color: color`3`});
+
+        menu_tutorial_prompt = true;
+    } else if(game_state === IN_PROMPT) {
+        if(prompted_game_state !== -1) switch_game_state(prompted_game_state);
+    }
 });
 
-reset_interpreter_data();
+addText("Brain Boom", {x: 5, y: 1, color: color`0`});
+addText("Made by Kapi", {x: 4, y: 2, color: color`0`});
+
+addText("Press anything", {x: 3, y: 7, color: color`0`});
+addText("to start!", {x: 3, y: 8, color: color`0`});
