@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Tank War
 @author: Shubh Mehra
-@tags: [Tank war, Tanks]
-@addedOn: 2024-07-05
+@tags: ['Tank war', 'Tanks']
+@addedOn: 2024-07-08
 */
 
 const player = "p";
