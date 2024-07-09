@@ -1,8 +1,19 @@
 /*
   @title:  BrainBoom
   @author: Kapilarny
-  @tags: []
-  @addedOn: 2024-00-00
+  @tags: ['advanced', 'brainf***', 'puzzle']
+  @addedOn: 2024-07-09
+*/
+
+/*
+  Controlz:
+  a/d -> move around menus/code
+  w/s -> change operand
+  k -> select level/stop simulation
+  i -> start simulation
+
+  j -> show level task
+  l -> go back to level selection
 */
 
 // -------------------
