@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: BlockMaze
 @author: Arjun
-@tags: [maze, puzzle, color]
+@tags: ['maze', 'puzzle', 'color']
 @addedOn: 2024-07-08
 */
 
