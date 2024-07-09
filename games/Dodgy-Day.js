@@ -365,6 +365,22 @@ function DifuseLogic() {
   var d5 = getAll(difuse5);
   var d6 = getAll(difuse6);
 
+  let cnt = d1.length + d2.length + d3.length + d4.length + d5.length + d6.length;
+  // spawn if none
+  if (cnt == 0) {
+    let x = getRndInt(playerObj.x-5, playerObj.x+5);
+    let y = getRndInt(playerObj.y-5, playerObj.y+5);
+    if (x < 0)
+      x = 0;
+    if (x > width()-1)
+      x = width()-1;
+    if (y < 1)
+      y = 1;
+    if (y > height()-1)
+      y = height()-1;
+    addSprite(x, y, difuse1);
+  }
+  
   // difuse progression
   d1.forEach(d1s => {
     d1s.type = difuse2;
@@ -483,19 +499,25 @@ function GameLoop() {
   }
   if (!hit) {
     playerTile.forEach(sprite => {
-      if (sprite.type === vBomb || sprite.type === hBomb) {
+      if (sprite.type === vBomb || sprite.type === hBomb || sprite.type === dBomb || sprite.type === rBomb) {
         hit = true;
         health--;
-        if (health == 2) {
-          getAll(heart)[0].remove();
-        } else if (health == 1) {
-          getAll(heart)[0].remove();
-        } else if (health <= 0) {
-          getAll(heart)[0].remove();
-          PlayerOver();
-        }
+        UpdateHearts();
+      } else if (sprite.type === difuse1 || sprite.type === difuse2 || sprite.type === difuse3 || sprite.type === difuse4 || sprite.type === difuse5 || sprite.type === difuse6) {
+        sprite.remove();
       }
     });
+  }
+}
+
+function UpdateHearts() {
+  if (health == 2) {
+    getAll(heart)[0].remove();
+  } else if (health == 1) {
+    getAll(heart)[0].remove();
+  } else if (health <= 0) {
+    getAll(heart)[0].remove();
+    PlayerOver();
   }
 }
 
@@ -506,9 +528,9 @@ function UpdateTime() {
 
 // Run the logic loops periodically
 
-const difuseInterval = setInterval(DifuseLogic, 500);
+const difuseInterval = setInterval(DifuseLogic, 1000);
 
-const gameInterval = setInterval(GameLoop, 100);
+const gameInterval = setInterval(GameLoop, 50);
 
 var bombInterval = setInterval(BombLogicNew, 800);
 
