@@ -2,7 +2,7 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Simple Maze
+@title: BlockMaze
 @author: Arjun
 @tags: [maze, puzzle, color]
 @addedOn: 2024-07-08
