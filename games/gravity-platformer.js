@@ -1,7 +1,4 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Sprig Platformer Game
 @author: NotRewd
 @tags: [platformer]
@@ -15,6 +12,14 @@ const invertedPlayer = "d";
 const platform = "w";
 const gravityInverter = "i";
 const goal = "g";
+
+const blueCoin = "b";
+const redCoin = "r";
+const yellowCoin = "y";
+
+const blueWall = "a";
+const redWall = "c";
+const yellowWall = "e";
 
 const jumpForce = 1;
 let gravity = 1;
@@ -71,6 +76,108 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000` ],
+  [ blueCoin, bitmap`
+................
+................
+................
+......5555......
+.....555555.....
+....55777755....
+...5577555555...
+...5575555555...
+...5575555555...
+...5575555555...
+....55555555....
+.....555555.....
+......5555......
+................
+................
+................` ],
+  [ redCoin, bitmap`
+................
+................
+................
+......3333......
+.....333333.....
+....33CCCC33....
+...33CC333333...
+...33C3333333...
+...33C3333333...
+...33C3333333...
+....33333333....
+.....333333.....
+......3333......
+................
+................
+................` ],
+  [ yellowCoin, bitmap`
+................
+................
+................
+......6666......
+.....666666.....
+....66FFFF66....
+...66FF666666...
+...66F6666666...
+...66F6666666...
+...66F6666666...
+....66666666....
+.....666666.....
+......6666......
+................
+................
+................` ],
+  [ blueWall, bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777` ],
+  [ redWall, bitmap`
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333` ],
+  [ yellowWall, bitmap`
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666` ],
   [ gravityInverter, bitmap`
 ................
 ................
@@ -107,12 +214,27 @@ setLegend(
 ................`]
 );
 
-setSolids([platform]);
+setSolids([player, invertedPlayer, platform, blueWall, redWall, yellowWall]);
+
+const coins = [
+  blueCoin,
+  redCoin,
+  yellowCoin
+];
+
+const coinWalls = [
+  blueWall,
+  redWall,
+  yellowWall
+];
 
 let currentPlayer;
 let currentGoal;
 
-let level = -1;
+let level = 0;
+
+let coinInstances = [];
+let coinWallInstances = [];
 
 const levels = [
   map`
@@ -167,6 +289,74 @@ wwwwwwwwwwwwwwwwwwww`,
 p...................
 wwwwwwwwwwwwwwwwwwww`,
   map`
+....................
+....................
+....................
+......wwwwwwwwww....
+............w.......
+............w.......
+............w....www
+g...........w.......
+wwwwww......w.......
+............wwww....
+............w.......
+............w.......
+............w....www
+....................
+p...................
+wwwwwwwwwwwwwwwwwwww`,
+  map`
+....................
+....................
+....................
+....................
+....................
+....................
+....................
+...................g
+.............wwwwwww
+.............w......
+.............w......
+.............w......
+.............w......
+.............w......
+p............w......
+wwwwwwwwwwwwwwwwwwww`,
+  map`
+....................
+....................
+....................
+....................
+....................
+....................
+....................
+................r...
+.............wwwwwww
+.............w......
+.............w......
+.............w......
+.............c......
+.............c......
+p............c.....g
+wwwwwwwwwwwwwwwwwwww`,
+  map`
+....................
+....................
+....................
+..wwww..wwwwwwwww...
+.....w....w.....a...
+.....w....w.....a...
+.....w....w.....a...
+ww...w....w.....wwww
+.....w....w.........
+.....w....w.........
+.....w....w........r
+..wwww....wwwwwwwwww
+.....a....c.........
+.....a....c.........
+p....a..b.c........g
+wwwwwwwwwwwwwwwwwwww`,
+  map`
 wwwwwwwwwwwwwwwwwwww
 g...................
 ....................
@@ -189,24 +379,61 @@ const resetGravity = () => gravity = 1;
 
 const invertGravity = () => {
   gravity *= -1;
+
+  const { x, y } = currentPlayer;
+  const sprite = gravity > 0 ? player : invertedPlayer;
+  
+  currentPlayer.remove();
+  
+  addSprite(x, y, sprite);
+
+  currentPlayer = getFirst(sprite);
+  currentPlayer.velocityY = 0;
 };
 
-const toggleNextMap = () => {
-  level++;
+const loadCoinWalls = () => {
+  coinInstances = [];
+  coinWallInstances = [];
   
-  if (level > levels.length - 1) return;
+  for (let i = 0; i < coins.length; i++) {
+    const coin = coins[i];
+    const coinWall = coinWalls[i];
 
-  setMap(levels[level]);
+    if (coin === undefined || coinWall === undefined) continue;
+
+    const coinInstance = getFirst(coin);
+    const walls = getAll(coinWall);
+
+    if (coinInstance === undefined || walls === undefined) continue;
+
+    coinInstances.push(coinInstance);
+    coinWallInstances.push(walls);
+  }
+};
+
+const changeMap = (index) => {
+  if (index > levels.length - 1) return;
+
+  setMap(levels[index]);
 
   currentPlayer = getFirst(player);
   currentPlayer.velocityY = 0;
+
+  loadCoinWalls();
   
   currentGoal = getFirst(goal);
 
   resetGravity();
 };
 
-toggleNextMap();
+const resetMap = () => changeMap(level);
+
+const toggleNextMap = () => {
+  level++;
+  changeMap(level);
+};
+
+changeMap(level);
 
 const wait = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
@@ -251,10 +478,28 @@ const handleGravityInverters = () => {
   }
 };
 
+const handleCoinWalls = () => {
+  for (let i = 0; i < coinInstances.length; i++) {
+    const coinInstance = coinInstances[i];
+    const walls = coinWallInstances[i];
+
+    if (coinInstance === undefined || walls === undefined) continue;
+    if (currentPlayer.x !== coinInstance.x || currentPlayer.y !== coinInstance.y) continue;
+
+    coinInstance.remove();
+
+    for (let i = 0; i < walls.length; i++) {
+      const wall = walls[i];
+      wall.remove();
+    }
+  }
+};
+
 const update = () => {
   handleVerticalVelocity();
   handleGravity();
   handleGravityInverters();
+  handleCoinWalls();
   handleGoalChecking();
 };
 
@@ -270,6 +515,10 @@ onInput("a", () => {
 
 onInput("d", () => {
   currentPlayer.x += 1;
+});
+
+onInput("j", () => {
+  changeMap(level);
 });
 
 // handle update
