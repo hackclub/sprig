@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Hallowed Knight
 @author: phthallo
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-07-09
 */
 
 /* Definitely not inspired by Hollow Knight.
