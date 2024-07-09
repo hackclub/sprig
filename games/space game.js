@@ -8,9 +8,9 @@ https://sprig.hackclub.com/gallery/getting_started
 @addedOn: 2024-00-00
 */
 
-const player = "p"
-const enemy = "e"
-const bullet = "b"
+const player = "p";
+const enemy = "e";
+const bullet = "b";
 
 setLegend(
   [player, bitmap`
@@ -64,46 +64,76 @@ setLegend(
 .....FC6CF......
 ................
 ................`],
-)
+);
 
-setSolids([player, enemy])
+setSolids([player, enemy]);
 
-let level = 0
+let level = 0;
 const levels = [
   map`
-...e...
 .......
 .......
-...b...
+.......
+.......
+.......
 ...p...`
-]
+];
 
-setMap(levels[level])
+setMap(levels[level]);
 
 setPushables({
   [player]: [],
-  [enemy]: []
-})
+  [enemy]: [],
+  [bullet]: [enemy]
+});
 
 onInput("w", () => {
-  getFirst(player).y -= 1
-})
+  getFirst(player).y -= 1;
+});
 
 onInput("a", () => {
-  getFirst(player).x -= 1
-})
+  getFirst(player).x -= 1;
+});
 
 onInput("s", () => {
-  getFirst(player).y += 1
-})
+  getFirst(player).y += 1;
+});
 
 onInput("d", () => {
-  getFirst(player).x += 1
-})
+  getFirst(player).x += 1;
+});
 
+function spawnBullet() {
+  let x = getFirst(player).x;
+  let y = 4;
+  addSprite(x, y, bullet);
+}
 
+function moveBullets() {
+  let bullets = getAll(bullet);
+  for (let i = 0; i < bullets.length; i++) {
+    bullets[i].y -= 1;
+    console.log(bullets[i].y)
+  }
+}
+function RemoveBullet() {
+  let bullets = getAll(bullet);
+  for (let i = 0; i < bullets.length; i++){
+    if (bullets[i].y == 0) {
+      bullets[i].remove();
+      }
+  }
+}
 
+var bulletShoot = setInterval(() => {
+  spawnBullet();
+}, 150);
 
-afterInput(() => {
+var gameLoop = setInterval(() => {
+  moveBullets();
+  RemoveBullet()
+}, 200);
 
-})
+// afterInput(() => {
+
+// })
