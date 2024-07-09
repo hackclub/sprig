@@ -21,6 +21,9 @@ const blueWall = "a";
 const redWall = "c";
 const yellowWall = "e";
 
+const whiteSquare = "f";
+const graySquare = "g";
+
 const jumpForce = 1;
 let gravity = 1;
 
@@ -211,7 +214,41 @@ setLegend(
 ...4444444444...
 .....444444.....
 ................
-................`]
+................`],
+  [ whiteSquare, bitmap`
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222` ],
+  [ graySquare, bitmap`
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL` ]
 );
 
 setSolids([player, invertedPlayer, platform, blueWall, redWall, yellowWall]);
@@ -231,7 +268,7 @@ const coinWalls = [
 let currentPlayer;
 let currentGoal;
 
-let level = 0;
+let level = 13;
 
 let coinInstances = [];
 let coinWallInstances = [];
@@ -292,13 +329,13 @@ wwwwwwwwwwwwwwwwwwww`,
 ....................
 ....................
 ....................
-......wwwwwwwwww....
+......wwwwwwwwwww...
 ............w.......
 ............w.......
 ............w....www
 g...........w.......
 wwwwww......w.......
-............wwww....
+............wwwww...
 ............w.......
 ............w.......
 ............w....www
@@ -373,6 +410,124 @@ g...................
 ....................
 p..................i
 wwwwwwwwwwwwwwwwwwww`,
+  map`
+wwwwwwwwwwwwwwwwwwww
+g...w...............
+....w...............
+....w.......www.....
+....w...............
+....w...............
+....w....www........
+....w...............
+....w...............
+....wwwww...........
+....................
+....................
+....................
+....................
+p..................i
+wwwwwwwwwwwwwwwwwwww`,
+  map`
+.wwwwwwwwwwwwwwwwwww
+.wi................w
+.w.wwwwwwwwwwwwwww.w
+.w.wi............w.w
+.w.w.wwwwwwwwwww.w.w
+.w.w.wi........w.w.w
+.w.w.w.wwwwwww.w.w.w
+.w.w.w.w.....w.w.w.w
+.w.w.w......gw.w.w.w
+.w.w.wwwwwwwww.w.w.w
+.w.w..........iw.w.w
+.w.wwwwwwwwwwwww.w.w
+.w..............iw.w
+.wwwwwwwwwwwwwwwww.w
+p.................iw
+wwwwwwwwwwwwwwwwwwww`,
+  map`
+wwwwwwwwwwwwwwwwwwww
+g.w.w.w.w.w.w.w.w...
+..w.w.w.w.w.w.w.....
+..w.w.w.w.w.w.......
+..w.w.w.w.w.........
+..w.w.w.w...........
+..w.w.w.............
+..w.w...........w...
+..w...........w.w...
+............w.w.w...
+..........w.w.w.w...
+........w.w.w.w.w...
+......w.w.w.w.w.w...
+....w.w.w.w.w.w.w...
+p.w.w.w.w.w.w.w.w..i
+wwwwwwwwwwwwwwwwwwww`,
+  map`
+wwwwwwwwwwwwwwwwwwww
+g.....w.......w.....
+......wr......w.....
+......wwww....www...
+......w.......w.....
+......w.......w.....
+......w.......w..ww.
+......w....wwww.....
+......w.......w.....
+......w.......www...
+......w.......w.....
+......wwwwww..w.....
+....................
+..................cc
+p.................ci
+wwwwwwwwwwwwwwwwwwww`,
+  map`
+wwwwwwwwwwwwwwwwwwww
+i..w...w.........c..
+.w.w.w.w.w.......c..
+.w.w.w.w.w.......w..
+.w.w.w.w.w.......w.w
+.w.w.w.w.w.......w..
+bw...w...w.......ww.
+wwwwwweeewwww....w..
+r.a..w...w.......w.w
+w.a..w.g.w.......w..
+..a..wwwww.......ww.
+.ww..............w..
+..w..............w.w
+w.w..............e..
+i.wp............ie.y
+wwwwwwwwwwwwwwwwwwww`,
+  map`
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wwwwwwwwffwwffwwwwffwwwwffwwffwwwwwwwwww
+wwwwwwwwffwwffwwffwwffwwffwwffwwwwwwwwww
+wwwwwwwwffwwffwwffwwffwwffwwffwwwwwwwwww
+wwwwwwwwwwffwwwwffwwffwwffwwffwwwwwwwwww
+wwwwwwwwwwffwwwwffwwffwwffwwffwwwwwwwwww
+wwwwwwwwwwffwwwwffwwffwwffwwffwwwwwwwwww
+wwwwwwwwwwffwwwwffwwffwwffwwffwwwwwwwwww
+wwwwwwwwwwffwwwwwwffwwwwwwffwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wwwwwwwwffwwwwwwffwwffffffwwfffwwffwwwww
+wwwwwwwwffwwwwwwffwwwwffwwwwffffwffwwwww
+wwwwwwwwffwwwwwwffwwwwffwwwwffwfwffwwwww
+wwwwwwwwffwwwwwwffwwwwffwwwwffwwfffwwwww
+wwwwwwwwffwwffwwffwwwwffwwwwffwwfffwwwww
+wwwwwwwwffwwffwwffwwwwffwwwwffwwwffwwwww
+wwwwwwwwffwwffwwffwwwwffwwwwffwwwffwwwww
+wwwwwwwwwwffwwffwwwwffffffwwffwwwffwwwww
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww`,
 ];
 
 const resetGravity = () => gravity = 1;
@@ -417,6 +572,9 @@ const changeMap = (index) => {
   setMap(levels[index]);
 
   currentPlayer = getFirst(player);
+
+  if (currentPlayer === undefined) return;
+  
   currentPlayer.velocityY = 0;
 
   loadCoinWalls();
@@ -437,8 +595,8 @@ changeMap(level);
 
 const wait = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
-const onFloor = () => getTile(currentPlayer.x, currentPlayer.y + 1).some(tile => tile.type == platform);
-const belowCeiling = () => getTile(currentPlayer.x, currentPlayer.y - 1).some(tile => tile.type == platform);
+const onFloor = () => getTile(currentPlayer.x, currentPlayer.y + 1).some(tile => tile.type == platform || coinWalls.includes(tile.type));
+const belowCeiling = () => getTile(currentPlayer.x, currentPlayer.y - 1).some(tile => tile.type == platform || coinWalls.includes(tile.type));
 
 const handleGravity = () => {
   if (currentPlayer.velocityY < 0) return;
@@ -504,16 +662,22 @@ const update = () => {
 };
 
 onInput("w", () => {
+  if (currentPlayer === undefined) return;
   if (gravity > 0 && !onFloor()) return;
   if (gravity < 0 && !belowCeiling()) return;
+  
   currentPlayer.velocityY -= 5;
 });
 
 onInput("a", () => {
+  if (currentPlayer === undefined) return;
+  
   currentPlayer.x -= 1;
 });
 
 onInput("d", () => {
+  if (currentPlayer === undefined) return;
+  
   currentPlayer.x += 1;
 });
 
