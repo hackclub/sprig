@@ -3,9 +3,8 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Checker Invasion
-
 @author: Stefan Lighezan
-@tags: [endless]
+@tags: ['endless']
 @addedOn: 2024-00-00
 */
 
