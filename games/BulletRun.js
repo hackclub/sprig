@@ -1,11 +1,10 @@
 /*
-@title: AvoidTheBullets
-@tags: N/A
-@addedOn: Not Decided yet
+@title: BulletRun
+@addedOn: 7/10/2024
 @author: Vivaan Shahani
 */
 
-// define the sprites in our game
+// Define the sprites in our game
 const player = "p";
 const bullet = "b";
 const goal = "g";
@@ -13,7 +12,7 @@ const wall = "w";
 let bulletSpeed = 250;
 let bulletInterval;
 
-// assign bitmap art to each sprite
+// Assign bitmap art to each sprite
 setLegend(
   [ player, bitmap`
 ................
@@ -85,22 +84,22 @@ setLegend(
 0000000000000000`]
 );
 
-// create game levels
-let level = 0; // this tracks the level we are on
+// Create game levels
+let level = 0; // This tracks the level we are on
 const levels = [
   map`
-pb..
-..g.
-....`,
+p.b.
+.w..
+...g`,
   map`
-p..
-.b.
-..g`,
+p..b.
+..w..
+.b..g`,
   map`
 p.wg
 .b..
 ..w.
-..w.`,
+..wb`,
   map`
 pb.w
 ...w
@@ -127,7 +126,7 @@ w.............
 ..............
 bb.b.b.b.b.b..`,
   map`
-.w.b.w.
+.wbb.w.
 .b...bb
 w..w..w
 .......
@@ -135,7 +134,7 @@ pw...wg
 ...b...
 w..w..w
 .b...b.
-.w.b.wb`,
+.w.bbwb`,
   map`
 pb
 w.
@@ -154,9 +153,9 @@ g.`,
 .....w.w...wwwwww....b..
 ..bbbwwwwww...b.....b...
 wwwwwww..bw..b.....b....
-w.w.bw..b...b.....b.....
+w.w.bw..b...b.....b.w...
 pb.b...b...b..w..b..w..g`,
-  // last challenge level
+  // Last challenge level
   map`
 p..w...........................
 .www...b........b.w..b.b.......
@@ -192,19 +191,14 @@ w.b....b...bbwb........w...b...
 .w.......ww...wbw...bb..ww..wwg`,
 ];
 
-// set the map displayed to the current level
+// Set the map displayed to the current level
 setMap(levels[level]);
 
-setSolids([ player, wall ]); // other sprites cannot go inside of these sprites
+setSolids([ player, wall ]); // Players and walls are the only things that can't run into each other
 
-// allow certain sprites to push certain other sprites
-setPushables({
-  [player]: []
-});
-
-// inputs for player movement control
+// Inputs for player movement control
 onInput("s", () => {
-  getFirst(player).y += 1; // positive y is downwards
+  getFirst(player).y += 1; // Positive y is downwards
 });
 
 onInput("d", () => {
@@ -248,11 +242,11 @@ function updateLevelCounter() {
   clearText();
   addText(`Level ${level + 1} / ${levels.length}`, { y: 1, color: color`3` });
   if (level === 7) {
-      bulletSpeed = 75;
-      startBulletInterval(); // Update the bullet interval speed for level 7
-    } else if (level === 8) {
-      bulletSpeed = 250;
-      startBulletInterval();
+    bulletSpeed = 75;
+    startBulletInterval(); // Update the bullet interval speed for level 7
+  } else if (level === 8) {
+    bulletSpeed = 250;
+    startBulletInterval();
   }
 }
 
@@ -274,7 +268,7 @@ function startBulletInterval() {
   }, bulletSpeed);
 }
 
-// input to reset level
+// Input to reset level
 onInput("j", () => {
   setMap(levels[level]);
   initializeBulletDirections();
@@ -283,7 +277,7 @@ onInput("j", () => {
   startBulletInterval();
 });
 
-// these get run after every input
+// After every Input
 afterInput(() => {
   const numberCovered = tilesWith(goal, player).length;
 
@@ -296,6 +290,7 @@ afterInput(() => {
       updateLevelCounter();
     } else {
       addText("You win!", { y: 4, color: color`3` });
+      clearInterval(bulletInterval); // Clear the interval when the game ends
     }
   }
 
