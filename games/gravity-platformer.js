@@ -5,8 +5,10 @@
 @addedOn: 2024-00-00
 */
 
+// How frequently should the update function be called?
 const updateDelay = 50;
 
+// Initializing sprites
 const player = "p";
 const invertedPlayer = "d";
 const platform = "w";
@@ -21,14 +23,15 @@ const blueWall = "a";
 const redWall = "c";
 const yellowWall = "e";
 
-const whiteSquare = "f";
-const graySquare = "g";
+// How high should the player jump?
+const jumpForce = 5;
 
-const jumpForce = 1;
+// How strong should be the gravity? Best when left to one or negative one
 let gravity = 1;
 
+// Assigning bitmaps to sprites
 setLegend(
-  [ player, bitmap`
+  [player, bitmap`
 5555555555555555
 5555555555555555
 5555555555555555
@@ -45,7 +48,7 @@ setLegend(
 5555555555555555
 5555555555555555
 5555555555555555` ],
-  [ invertedPlayer, bitmap`
+  [invertedPlayer, bitmap`
 5555555555555555
 5555555555555555
 5555555555555555
@@ -62,7 +65,7 @@ setLegend(
 5555555555555555
 5555555555555555
 5555555555555555` ],
-  [ platform, bitmap`
+  [platform, bitmap`
 0000000000000000
 0000000000000000
 0000000000000000
@@ -79,7 +82,7 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000` ],
-  [ blueCoin, bitmap`
+  [blueCoin, bitmap`
 ................
 ................
 ................
@@ -96,7 +99,7 @@ setLegend(
 ................
 ................
 ................` ],
-  [ redCoin, bitmap`
+  [redCoin, bitmap`
 ................
 ................
 ................
@@ -113,7 +116,7 @@ setLegend(
 ................
 ................
 ................` ],
-  [ yellowCoin, bitmap`
+  [yellowCoin, bitmap`
 ................
 ................
 ................
@@ -130,7 +133,7 @@ setLegend(
 ................
 ................
 ................` ],
-  [ blueWall, bitmap`
+  [blueWall, bitmap`
 7777777777777777
 7777777777777777
 7777777777777777
@@ -147,7 +150,7 @@ setLegend(
 7777777777777777
 7777777777777777
 7777777777777777` ],
-  [ redWall, bitmap`
+  [redWall, bitmap`
 3333333333333333
 3333333333333333
 3333333333333333
@@ -164,7 +167,7 @@ setLegend(
 3333333333333333
 3333333333333333
 3333333333333333` ],
-  [ yellowWall, bitmap`
+  [yellowWall, bitmap`
 6666666666666666
 6666666666666666
 6666666666666666
@@ -181,7 +184,7 @@ setLegend(
 6666666666666666
 6666666666666666
 6666666666666666` ],
-  [ gravityInverter, bitmap`
+  [gravityInverter, bitmap`
 ................
 ................
 .....HHHHHH.....
@@ -198,7 +201,7 @@ setLegend(
 .....HHHHHH.....
 ................
 ................`],
-  [ goal, bitmap`
+  [goal, bitmap`
 ................
 ................
 .....444444.....
@@ -214,66 +217,56 @@ setLegend(
 ...4444444444...
 .....444444.....
 ................
-................`],
-  [ whiteSquare, bitmap`
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222` ],
-  [ graySquare, bitmap`
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL` ]
+................`]
 );
 
+// Setting the solids
 setSolids([player, invertedPlayer, platform, blueWall, redWall, yellowWall]);
 
+// Defining which sprites are coins
 const coins = [
   blueCoin,
   redCoin,
   yellowCoin
 ];
 
+// Defining which sprites are coin walls, their indexes need to correspond with the indexes of coins
 const coinWalls = [
   blueWall,
   redWall,
   yellowWall
 ];
 
+// What is our current player and goal in this level?
 let currentPlayer;
 let currentGoal;
 
-let level = 13;
+// The current level that we are on
+let level = 0;
 
+// Current coin and coin wall instances found in the level
 let coinInstances = [];
 let coinWallInstances = [];
 
+// List of all levels
 const levels = [
+  map`
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww`,
   map`
 ....................
 ....................
@@ -496,61 +489,68 @@ w.w..............e..
 i.wp............ie.y
 wwwwwwwwwwwwwwwwwwww`,
   map`
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwwwwwwffwwffwwwwffwwwwffwwffwwwwwwwwww
-wwwwwwwwffwwffwwffwwffwwffwwffwwwwwwwwww
-wwwwwwwwffwwffwwffwwffwwffwwffwwwwwwwwww
-wwwwwwwwwwffwwwwffwwffwwffwwffwwwwwwwwww
-wwwwwwwwwwffwwwwffwwffwwffwwffwwwwwwwwww
-wwwwwwwwwwffwwwwffwwffwwffwwffwwwwwwwwww
-wwwwwwwwwwffwwwwffwwffwwffwwffwwwwwwwwww
-wwwwwwwwwwffwwwwwwffwwwwwwffwwwwwwwwwwww
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwwwwwwffwwwwwwffwwffffffwwfffwwffwwwww
-wwwwwwwwffwwwwwwffwwwwffwwwwffffwffwwwww
-wwwwwwwwffwwwwwwffwwwwffwwwwffwfwffwwwww
-wwwwwwwwffwwwwwwffwwwwffwwwwffwwfffwwwww
-wwwwwwwwffwwffwwffwwwwffwwwwffwwfffwwwww
-wwwwwwwwffwwffwwffwwwwffwwwwffwwwffwwwww
-wwwwwwwwffwwffwwffwwwwffwwwwffwwwffwwwww
-wwwwwwwwwwffwwffwwwwffffffwwffwwwffwwwww
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww`,
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww`,
 ];
 
+// A shorthand for resetting the gravity
 const resetGravity = () => gravity = 1;
 
-const invertGravity = () => {
+const invertGravity = () =>
+{
   gravity *= -1;
 
+  // Get our current position and determine which sprite should be used
   const { x, y } = currentPlayer;
   const sprite = gravity > 0 ? player : invertedPlayer;
-  
+
+  // Remove the current player sprite
   currentPlayer.remove();
-  
+
+  // Add a new sprite on our saved location
   addSprite(x, y, sprite);
 
+  // Assign the newly created player sprite
   currentPlayer = getFirst(sprite);
   currentPlayer.velocityY = 0;
 };
 
-const loadCoinWalls = () => {
+// When loading a new level, the level needs to locate and load the player along with other features
+const loadPlayer = () =>
+{
+  currentPlayer = getFirst(player);
+
+  if (currentPlayer === undefined) return;
+
+  currentPlayer.velocityY = 0;
+  loadCoinWalls();
+  currentGoal = getFirst(goal);
+
+  resetGravity();
+};
+
+// Loading all coin walls that can be found in the current level
+const loadCoinWalls = () =>
+{
   coinInstances = [];
   coinWallInstances = [];
-  
-  for (let i = 0; i < coins.length; i++) {
+
+  for (let i = 0; i < coins.length; i++)
+  {
     const coin = coins[i];
     const coinWall = coinWalls[i];
 
@@ -566,69 +566,191 @@ const loadCoinWalls = () => {
   }
 };
 
-const changeMap = (index) => {
+// Texts that are displayed in the game
+const loadStartScreenText = () =>
+{
+  addText("Gravity Platformer", {
+    x: 1,
+    y: 3,
+    color: color`2`
+  });
+
+  addText("Press any valid", {
+    x: 2,
+    y: 10,
+    color: color`2`
+  });
+
+  addText("key to play!", {
+    x: 4,
+    y: 11,
+    color: color`2`
+  });
+}
+
+const loadEndScreenText = () =>
+{
+  addText("You Win!", {
+    x: 7,
+    y: 3,
+    color: color`2`
+  });
+
+  addText("Press J to play", {
+    x: 3,
+    y: 10,
+    color: color`2`
+  });
+
+  addText("again!", {
+    x: 8,
+    y: 11,
+    color: color`2`
+  });
+};
+
+const loadTutorialText1 = () =>
+{
+  addText("Reach the green\ngoal to continue\n\nMove using A\nand D keys", {
+    x: 2,
+    y: 2,
+    color: color`1`
+  });
+};
+
+const loadTutorialText2 = () =>
+{
+  addText("Press W to jump", {
+    x: 2,
+    y: 2,
+    color: color`1`
+  });
+};
+
+const loadTutorialText3 = () =>
+{
+  addText("Long press W to\njump higher", {
+    x: 2,
+    y: 2,
+    color: color`1`
+  });
+};
+
+const loadTutorialText4 = () =>
+{
+  addText("A key will\nunlock a door\nwith the\nappropriate color", {
+    x: 2,
+    y: 2,
+    color: color`1`
+  });
+};
+
+const loadTutorialText5 = () =>
+{
+  addText("A gravity inverter\nwill invert the\ngravity", {
+    x: 1,
+    y: 6,
+    color: color`1`
+  });
+};
+
+// Determine which text should be displayed where
+const loadLevelText = () =>
+{
+  if (level === 1) loadTutorialText1();
+  else if (level === 2) loadTutorialText2();
+  else if (level === 5) loadTutorialText3();
+  else if (level === 6) loadTutorialText4();
+  else if (level === 8) loadTutorialText5();
+};
+
+const changeMap = (index) =>
+{
   if (index > levels.length - 1) return;
 
   setMap(levels[index]);
 
-  currentPlayer = getFirst(player);
+  // Clear all the texts if there are any
+  clearText();
 
-  if (currentPlayer === undefined) return;
-  
-  currentPlayer.velocityY = 0;
+  // If we are in the first level, it is probably the start screen, so display the start screen text
+  if (index === 0) loadStartScreenText();
 
-  loadCoinWalls();
-  
-  currentGoal = getFirst(goal);
+  // Same idea with the end level
+  else if (index === levels.length - 1) loadEndScreenText();
 
-  resetGravity();
+  // Otherwise we just want to load the player and potentially any text that belongs to a level
+  else
+  {
+    loadLevelText();
+    loadPlayer();
+  }
 };
 
-const resetMap = () => changeMap(level);
-
-const toggleNextMap = () => {
+// A shorthand for loading the next map
+const toggleNextMap = () =>
+{
   level++;
   changeMap(level);
 };
 
+// When the game first begins, we need to set the map for the first time
 changeMap(level);
 
+// A function that is used in the update method to wait so that the computer can process the call
 const wait = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
+// Are we on the floor? 
 const onFloor = () => getTile(currentPlayer.x, currentPlayer.y + 1).some(tile => tile.type == platform || coinWalls.includes(tile.type));
+
+// Are we on the ceiling?
 const belowCeiling = () => getTile(currentPlayer.x, currentPlayer.y - 1).some(tile => tile.type == platform || coinWalls.includes(tile.type));
 
-const handleGravity = () => {
+// Handle our gravity
+const handleGravity = () =>
+{
   if (currentPlayer.velocityY < 0) return;
   currentPlayer.velocityY += 1;
 };
 
-const handleVerticalVelocity = () => {
+const handleVerticalVelocity = () =>
+{
+  // Get the current velocity
   const velocity = currentPlayer.velocityY;
 
+  // Add or subtract from the velocity until the velocity is back at zero
   if (velocity !== 0) currentPlayer.velocityY += velocity > 0 ? -1 : 1;
-  
-  if (velocity > 0) {
+
+  if (velocity > 0)
+  {
+    // Depends on whether the gravity is inverted or not
     if (gravity > 0 && onFloor()) return;
     if (gravity < 0 && belowCeiling()) return;
     currentPlayer.y += gravity;
   }
-  else if (velocity < 0) {
+  else if (velocity < 0)
+  {
     if (gravity > 0 && belowCeiling()) return;
     if (gravity < 0 && onFloor()) return;
     currentPlayer.y -= gravity;
   }
 };
 
-const handleGoalChecking = () => {
+// Check for goal collision
+const handleGoalChecking = () =>
+{
   if (currentPlayer.x !== currentGoal.x || currentPlayer.y !== currentGoal.y) return;
   toggleNextMap();
 };
 
-const handleGravityInverters = () => {
+// Check for gravity inverter collision
+const handleGravityInverters = () =>
+{
   const gravityInverters = getAll(gravityInverter);
 
-  for (let i = 0; i < gravityInverters.length; i++) {
+  // Check for each one gravity inverter that there currently is in the level
+  for (let i = 0; i < gravityInverters.length; i++)
+  {
     const gravityInverter = gravityInverters[i];
     if (currentPlayer.x !== gravityInverter.x || currentPlayer.y !== gravityInverter.y) continue;
     gravityInverter.remove();
@@ -636,8 +758,11 @@ const handleGravityInverters = () => {
   }
 };
 
-const handleCoinWalls = () => {
-  for (let i = 0; i < coinInstances.length; i++) {
+// Check for coin collision
+const handleCoinWalls = () =>
+{
+  for (let i = 0; i < coinInstances.length; i++)
+  {
     const coinInstance = coinInstances[i];
     const walls = coinWallInstances[i];
 
@@ -646,14 +771,20 @@ const handleCoinWalls = () => {
 
     coinInstance.remove();
 
-    for (let i = 0; i < walls.length; i++) {
+    // Remove all the walls associated with the coin
+    for (let i = 0; i < walls.length; i++)
+    {
       const wall = walls[i];
       wall.remove();
     }
   }
 };
 
-const update = () => {
+// An update function that runs continuously
+const update = () =>
+{
+  if (currentPlayer === undefined) return;
+
   handleVerticalVelocity();
   handleGravity();
   handleGravityInverters();
@@ -661,34 +792,55 @@ const update = () => {
   handleGoalChecking();
 };
 
-onInput("w", () => {
+// For player jumping
+const playerJump = () =>
+{
   if (currentPlayer === undefined) return;
   if (gravity > 0 && !onFloor()) return;
   if (gravity < 0 && !belowCeiling()) return;
-  
-  currentPlayer.velocityY -= 5;
-});
 
-onInput("a", () => {
+  currentPlayer.velocityY -= jumpForce;
+};
+
+// For moving left
+const moveLeft = () =>
+{
   if (currentPlayer === undefined) return;
-  
   currentPlayer.x -= 1;
-});
+};
 
-onInput("d", () => {
+// For moving right
+const moveRight = () =>
+{
   if (currentPlayer === undefined) return;
-  
   currentPlayer.x += 1;
-});
+};
 
-onInput("j", () => {
+const resetLevel = () =>
+{
+  // If we are on the end screen, we want to reset the level to 0, otherwise just reset the current level
+  level = level === levels.length - 1 ? 0 : level;
+
   changeMap(level);
+};
+
+// Assign functions to inputs
+onInput("w", () => playerJump());
+onInput("a", () => moveLeft());
+onInput("d", () => moveRight());
+onInput("j", () => resetLevel());
+
+// If we are on the start screen, then pressing any input will result in toggling the next map hence, starting the game
+afterInput(() =>
+{
+  if (level === 0) toggleNextMap();
 });
 
-// handle update
-
-const handleUpdate = async () => {
-  while (true) {
+// Handle the update and its delay, needs to be an asynchronous function
+const handleUpdate = async () =>
+{
+  while (true)
+  {
     update();
     await wait(updateDelay);
   };
