@@ -1,50 +1,30 @@
-import { useEffect, useRef, useState } from "preact/hooks";
-import { Game } from "../../lib/game-saving/account";
-import InlineInput from "../design-system/inline-input";
+import { useState } from "preact/hooks";
 import styles from "./project-name-creator.module.css";
 import Button from "../design-system/button";
 
-interface ModalCreator{
-	game:Game;
-}
 
-export default function ProjectNameCreator({game}:ModalCreator) {
-	const [stateName, setStateName] = useState(game.name);
-	
+export default function ProjectNameCreator() {
+	const [stateName, setStateName] = useState("");
+	const [loading, setLoading] = useState(false);
 
 	return <div class={styles.container}>
-		<div class={styles.inner}>
-			<h1 class={styles.header}>Name your game</h1>
-			<div class={styles.input}>
-				<InlineInput autofocus={true} value={stateName} placeholder="Untitled" onChange={setStateName}/>
-			</div>
-
-			{/* <button style={styles.button} onClick={()=>{}}>
-				Done
-			</button> */}
-			<div class={styles.buttonContainer}>
-				<Button accent class={styles.done} onClick={()=>{
-					fetch("/api/games/rename", {method:"POST", body:JSON.stringify({
-						gameId: game.id,
-						newName:stateName
-					})}).then(res=>res.json()).then(data=>{
-
-						window.location.reload();
-					})
-				}}><span>Done</span></Button>
-				<Button class={styles.cancel}
-				onClick={()=>{
-					fetch("/api/games/rename", {method:"POST", body:JSON.stringify({
-						gameId: game.id,
-						newName:game.name
-					})}).then(res=>res.json()).then(data=>{
-
-						window.location.reload();
-					})
-				}}
-				>Cancel</Button>
+		<div></div>
+		<div class={styles.containerInner}>
+		
+			<div class={styles.inner}>
+				<h1 class={styles.header}>Create Game</h1>
+				<p>Please input a game name</p>
+				<input type={"text"} class={styles.input} autofocus={true} value={stateName} placeholder="Untitled" onInput={(e)=>{setStateName(e.target?.value )}}/>
+				<div class={styles.buttonContainer}>
+					<Button type="submit" disabled={loading || stateName.length===0} accent class={styles.done} onClick={()=>{
+						setLoading(true)
+						fetch(`/~/newGame`, {method:"POST", body:JSON.stringify({
+							name:stateName
+						})}).then(res=>{window.location.href = res.url; })
+					}}><span>{!loading ? "Create" : "Creating..."}</span></Button>
+				</div>
 			</div>
 		</div>
-
+		
 	</div>;
 }

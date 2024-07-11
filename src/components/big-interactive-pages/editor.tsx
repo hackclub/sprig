@@ -33,7 +33,7 @@ import {versionState} from "../../lib/upload";
 import VersionWarningModal from "../popups-etc/version-warning";
 import RoomPasswordPopup from "../popups-etc/room-password";
 import KeyBindingsModal from '../popups-etc/KeyBindingsModal'
-import ProjectNameCreator from "../popups-etc/project-name-creation";
+
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
@@ -224,7 +224,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	const screenControls = useRef<HTMLDivElement>(null);
 
 	const [sessionId] = useState(nanoid());
-	const [showNameModifyModal, setShowNameModifyModal] = useState(false);
+
 
 	useEffect(() => {
 		if(roomState){
@@ -527,9 +527,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 		return (
 			<div class={styles.page}>
 				<Navbar persistenceState={persistenceState} roomState={roomState}/>
-				{showNameModifyModal && <>
-					<ProjectNameCreator setModalClose={setShowNameModifyModal} game={(persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null}/>
-				</>}
+				
 				<div class={styles.pageMain}>
 					<div className={styles.codeContainer}>
 						<CodeMirror
