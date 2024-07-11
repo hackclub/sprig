@@ -5,7 +5,8 @@ import styles from './inline-input.module.css'
 interface InlineInputProps {
 	value: string
 	onChange: (value: string) => void
-	placeholder: string
+	placeholder: string;
+	autofocus?: boolean;
 }
 
 export default function InlineInput(props: InlineInputProps) {
@@ -25,6 +26,7 @@ export default function InlineInput(props: InlineInputProps) {
 			<input
 				class={styles.input}
 				value={props.value}
+				autofocus={props.autofocus}
 				onInput={event => props.onChange(event.currentTarget.value)}
 				style={{ width: width.value + 30 }}
 				placeholder={props.placeholder}
