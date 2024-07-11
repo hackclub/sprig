@@ -1,3 +1,9 @@
+/*
+@title: Mirror_Mirror
+@tags: []
+@addedOn: 2024-07-11
+@author: ethanJPope
+*/
 
 const monkeyRight = "m"
 const monkeyLeft = "l"
