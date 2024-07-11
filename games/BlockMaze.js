@@ -233,7 +233,7 @@ function isType(x, y, type) {
 }
 
 function canGo(x, y) {
-  if (isType(x, y, wall) || x > 8 || y > 7 || y < 0 || x < 0) {
+  if (isType(x, y, wall) || isType(x, y, paint) || x > 8 || y > 7 || y < 0 || x < 0) {
     return false;
   } else {
     return true;
