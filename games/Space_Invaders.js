@@ -1,8 +1,8 @@
 /*
 @title: OG Space Invaders
 @author: Atharva Malik
-@tags: ['space', 'invaders', 'space invaders', 'invader']
-@addedOn: 2024-00-00
+@tags: []
+@addedOn: 2024-07-11
 
 Controls:
 [W]: Shoot
