@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Find the Yellow Square
-@author: LeTiburon
+@author: Charlie Mills
 @tags: []
 @addedOn: 2024-07-11
 */
