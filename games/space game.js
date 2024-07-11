@@ -125,6 +125,9 @@ function RemoveBullet() {
   }
 }
 
+function spawnEnemy() {
+}
+
 var bulletShoot = setInterval(() => {
   spawnBullet();
 }, 150);
@@ -132,6 +135,7 @@ var bulletShoot = setInterval(() => {
 var gameLoop = setInterval(() => {
   moveBullets();
   RemoveBullet()
+  spwawnEnemy()
 }, 200);
 
 // afterInput(() => {
