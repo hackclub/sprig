@@ -26,7 +26,7 @@ export default function InlineInput(props: InlineInputProps) {
 			<input
 				class={styles.input}
 				value={props.value}
-				autofocus={props.autofocus}
+				autofocus={props.autofocus || false}
 				onInput={event => props.onChange(event.currentTarget.value)}
 				style={{ width: width.value + 30 }}
 				placeholder={props.placeholder}

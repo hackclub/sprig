@@ -14,13 +14,11 @@ export default function ProjectNameCreator() {
 			<div class={styles.inner}>
 				<h1 class={styles.header}>Create Game</h1>
 				<p>Please input a game name</p>
-				<input type={"text"} class={styles.input} autofocus={true} value={stateName} placeholder="Untitled" onInput={(e)=>{setStateName(e.target?.value )}}/>
+				<input type={"text"} class={styles.input} autofocus={true} value={stateName} placeholder="Untitled" onInput={(e)=>{setStateName((e.target as HTMLTextAreaElement)?.value )}}/>
 				<div class={styles.buttonContainer}>
 					<Button type="submit" disabled={loading || stateName.length===0} accent class={styles.done} onClick={()=>{
 						setLoading(true)
-						fetch(`/~/newGame`, {method:"POST", body:JSON.stringify({
-							name:stateName
-						})}).then(res=>{window.location.href = res.url; })
+						window.location.href= `/~/new?name=${stateName}`;
 					}}><span>{!loading ? "Create" : "Creating..."}</span></Button>
 				</div>
 			</div>

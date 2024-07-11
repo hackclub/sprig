@@ -234,12 +234,6 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 		}
 	}, [])
 
-	useEffect(()=>{
-		const game = (persistenceState.value.kind === 'PERSISTED' && persistenceState.value.game !== 'LOADING') ? persistenceState.value.game : null;
-
-		setShowNameModifyModal(game?.createdAt._seconds===game?.modifiedAt._seconds);			
-		
-	},[])
 
 	useEffect(() => {
 		const channel = new BroadcastChannel('session_channel');
