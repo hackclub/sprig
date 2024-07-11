@@ -22,12 +22,25 @@ const regexExpr = {
 };
 
 /**
+ * An array containing all of the valid strings
+ */
+
+const allowedTags = ["beginner", "puzzle", "strategy", "advanced", "endless", "tutorial", "multiplayer", "action", "sandbox", "adventure", "memory", "timed", "music", "role-playing", "turn-based", "real-time", "exploration", "survival", "simulation", "utility", "sports", "retro", "platformer"];
+
+
+/**
  * Checks if the metadata is valid
  *
  * TODO!
  */
-const isMetadataValid = (_: any): boolean => {
-	return true;
+const isMetadataValid = (metadata: any): boolean => {
+	
+	for (let tag of metadata.tags) {
+        if (!allowedTags.includes(tag)) {
+            return false;
+        }
+    }
+    return true;
 };
 
 /**
@@ -52,7 +65,6 @@ const setup = () => {
 	// More info: https://docs.astro.build/en/reference/integrations-reference/#astroconfigdone
 	integration.hooks["astro:config:done"] = () => {
 		const metadata: any = [];
-
 		// Loop for each game
 		walk().forEach((gameFile) => {
 			process.stdout.write(`[${gameFile}] Looking for metadata...`);
@@ -75,6 +87,9 @@ const setup = () => {
 					tags: JSON.parse(tags[1].replaceAll("'", '"')), // Replace all ' with " in order for compatibility issues
 					addedOn: addedOn[1],
 				};
+
+			
+			
 
 				// generate game image json data
 				generateImageJson(metaEntry.filename);
