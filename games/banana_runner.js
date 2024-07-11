@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Banana runner 
 @author: Aaron Lei
-@tags: [bananan]
-@addedOn: 2024-00-00
+@tags: []
+@addedOn: 2024-07-11
 */
 const player = "p"
 const knife = "k"
