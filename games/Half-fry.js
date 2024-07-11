@@ -1,8 +1,16 @@
+/*
+@title: Half-fry
+@author: Abhay Gupta
+@tags: []
+@addedOn: 2024-07-11
+
+WASD for movement
+J to restart the game
+You are Half-fry, who wants to become a full fry...Collect volts and enter the "pan"!
+beware of the traps and enjoy the game :)
+*/
+
 // this game was made by Abhay Gupta
-// WASD for movement
-//J to restart the game
-//You are Half-fry, who wants to become a full fry...Collect volts and enter the "pan"!
-//beware of the traps and enjoy the game :)
 
 const player = "f";
 const wall = "w";
