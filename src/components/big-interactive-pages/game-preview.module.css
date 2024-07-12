@@ -1,0 +1,240 @@
+.page {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.pageMain {
+	/* padding: 20px; */
+	display: flex;
+	flex-direction: row;
+
+	flex: 1;
+	/* overflow: hidden; */
+}
+
+.codeContainer {
+	flex: 1;
+	background: #ffffff;
+	position: relative;
+	/* overflow: hidden; */
+	display: flex;
+	flex-direction: column;
+	border-bottom: 2px solid var(--accent);
+}
+
+.codeContainer .code {
+	flex: 1;
+	/* overflow: hidden; */
+	border: 2px solid var(--accent);
+	border-bottom: none;
+}
+
+.playButton {
+	width: 100%;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	flex-grow: 0;
+}
+
+.stopButton {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	font-weight: bold;
+	background: red;
+}
+
+.hiddenButton {
+	z-index: -1;
+}
+
+.codeContainer .errors {
+	font-family: var(--font-code);
+	font-size: 0.9em;
+	position: relative;
+	width: 100%;
+	max-height: 160px;
+	overflow-y: auto;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	padding: 8px;
+	padding-right: 14px; /* space for close button. would flexbox be better? maybe! */
+	background: #ffffff;
+	border: 2px solid var(--accent);
+	border-top: 3px solid var(--error);
+	border-bottom: none;
+	color: var(--error);
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.codeContainer .errorClose {
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	color: var(--error);
+	background: none;
+	border: none;
+	cursor: var(--cursor-interactive);
+	font-size: 1.2rem;
+	padding: 0;
+	display: block;
+}
+
+.resizeBar {
+	height: 100%;
+	width: 6px;
+	cursor: col-resize;
+	background: transparent;
+}
+
+.resizeBar:hover,
+.resizeBar.resizing {
+	background: var(--accent-light);
+}
+
+.horizontalResizeBar {
+	position: absolute;
+	top: 30px;
+	z-index: 2;
+	width: 100%;
+	top: 30px;
+	z-index: 2;
+	height: 1px;
+	cursor: row-resize;
+	background: transparent;
+}
+
+.horizontalResizeBar:hover,
+.horizontalResizeBar.resizing {
+	background: var(--accent-light);
+	height: 6px;
+}
+
+.canvasWrapper {
+	/* overflow: hidden; */
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.screen {
+	border: 2px solid var(--accent);
+	display: block;
+	background: #000000;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 1000 / 800;
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+	outline: none;
+}
+
+.screen:focus {
+	outline: 4px solid #2194ff6c;
+}
+
+.screenControls {
+	font-size: 0.9em;
+
+	width: 30%;
+	max-width: 500px;
+
+	display: flex;
+	flex-direction: column;
+
+	/* border: 2px solid var(--accent); */
+
+	/* padding: 1rem; */
+}
+
+.metaData {
+	background: var(--bg-surface);
+	border: 2px solid var(--accent);
+	padding: 1rem;
+	margin-top: 1rem;
+	flex-grow: 1;
+}
+
+.mute,
+.screenControls .stop {
+	cursor: var(--cursor-interactive);
+	user-select: none;
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+	border: none;
+	background: none;
+	padding: 0;
+	display: flex;
+
+	justify-content: center;
+	align-items: center;
+	gap: 6px;
+}
+
+.mute {
+	/* flex-direction: column; */
+	border-bottom: 0;
+	margin-left: 10px;
+	border: 2px solid var(--accent);
+	border-bottom: 0;
+	/* position: absolute; */
+	color: white;
+	background-color: var(--accent);
+
+	padding-left: 10px;
+	padding-right: 10px;
+
+	padding-top: 5px;
+	padding-bottom: 5px;
+
+	/* top: calc(100% + 5px); */
+	right: 0;
+}
+
+.stop {
+	background: var(--error) !important;
+	color: white !important;
+}
+
+.screenControls .mute :global(svg),
+.screenControls .stop :global(svg) {
+	--size: 24px;
+	display: block;
+	width: var(--size);
+	height: var(--size);
+}
+
+.screenControls .screenSize {
+	color: var(--accent-light);
+	user-select: none;
+	/* overflow: hidden; */
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.screenSize {
+	height: 0;
+	overflow: hidden;
+}
+
+.outputArea {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	max-width: 100%;
+	/* overflow: hidden; */
+}
+
+.helpContainer {
+	position: relative;
+	height: auto;
+	max-width: 100%;
+	width: 100%;
+}

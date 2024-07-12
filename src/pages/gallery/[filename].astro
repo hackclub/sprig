@@ -12,6 +12,7 @@ import fs from 'fs'
 import path from 'path'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
+import GamePreview from '../../components/big-interactive-pages/game-preview'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename);
@@ -69,7 +70,7 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 				authorName={authorName || ''}
 			/>
 		) : (
-			<Editor
+			<GamePreview
 				client:load
 				persistenceState={persistenceState}
 				cookies={{
