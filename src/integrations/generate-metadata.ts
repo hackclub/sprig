@@ -34,13 +34,12 @@ const allowedTags = ["beginner", "puzzle", "strategy", "advanced", "endless", "t
  * TODO!
  */
 const isMetadataValid = (metadata: any): boolean => {
-	
 	for (let tag of metadata.tags) {
-        if (!allowedTags.includes(tag)) {
-            return false;
-        }
-    }
-    return true;
+		if (!allowedTags.includes(tag)) {
+			return false;
+		}
+	}
+	return true;
 };
 
 /**
@@ -65,7 +64,6 @@ const setup = () => {
 	// More info: https://docs.astro.build/en/reference/integrations-reference/#astroconfigdone
 	integration.hooks["astro:config:done"] = () => {
 		const metadata: any = [];
-		// Loop for each game
 		walk().forEach((gameFile) => {
 			process.stdout.write(`[${gameFile}] Looking for metadata...`);
 
@@ -88,8 +86,10 @@ const setup = () => {
 					addedOn: addedOn[1],
 				};
 
-			
-			
+				if (!isMetadataValid(metaEntry)) {
+					throw Error("Metadata is not valid in " + metaEntry.filename);
+				}
+
 
 				// generate game image json data
 				generateImageJson(metaEntry.filename);
@@ -98,17 +98,13 @@ const setup = () => {
 				console.log(" OK!");
 			} else {
 				console.log(" ERR!");
-				throw Error("A game metadata field is undefined!");
+				throw Error(`A game metadata field is undefined! ${gameFile}`);
 			}
 		});
 
 		process.stdout.write("[METADATA] Writing metadata file...");
-		if (isMetadataValid(metadata)) {
-			fs.writeFileSync("./games/metadata.json", JSON.stringify(metadata));
-			console.log(" OK!");
-		} else {
-			console.log(" ERR!");
-		}
+		fs.writeFileSync("./games/metadata.json", JSON.stringify(metadata));
+		console.log(" OK!");
 	};
 
 	// Return the astro integration
