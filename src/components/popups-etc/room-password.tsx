@@ -12,22 +12,27 @@ export interface RoomPasswordPopupProps {
 export default function RoomPasswordPopup(props: RoomPasswordPopupProps) {
 	let password = useSignal("");
 	function checkPassword() {
-		if(props.persistenceState.value.kind !== "COLLAB") return
+		if (props.persistenceState.value.kind !== "COLLAB") return;
+		
 		fetch("/api/rooms/check-password", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ roomId: props.persistenceState.value.game, password: password.value }),
 		}).then((res) => {
 			if (res.status === 200) {
-					res.json().then((game) => {
-						if(props.persistenceState.value.kind !== "COLLAB") return
-						props.persistenceState.value = {
-							...props.persistenceState.value,
-							game: game as Game,
-						}
-					}
-				)
+				res.json().then((game) => {
+					if (props.persistenceState.value.kind !== "COLLAB") return;
+					props.persistenceState.value = {
+						...props.persistenceState.value,
+						game: game as Game,
+					};
+				});
+			} else {
+				alert("Incorrect password. Please try again.");
 			}
+		}).catch((error) => {
+			console.error('Error:', error);
+			alert("An error occurred. Please try again later.");
 		});
 	}
 	return (
