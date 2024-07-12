@@ -2,7 +2,7 @@
 /* 
 @title: Solstice_game
 @author: Stephanie Zhou
-@tags: []
+@tags: [#maze]
 @addedOn: 2023-08-08
 */
 
@@ -11,6 +11,7 @@
     const background = "b"
     const goal = "g"
     const box = "x"
+    const enemy = "e"
     let treasures = 0;
 
 setLegend(
@@ -98,7 +99,24 @@ HHHHHHHHHHHHHHHH`],
 ...DDD66DDFFDD..
 ...DDDD66DFFDD..
 .....DDDDDDDD...
-.....FFFFFFF....`]
+.....FFFFFFF....`],
+  [enemy, bitmap`
+................
+................
+....400000044...
+....44644F44....
+....00644F000...
+.....000400.....
+......32423.....
+......33433.....
+..0000460F40000.
+.....4404044....
+.....44644F44...
+....446644F44...
+....446644FF4...
+.....DDDDDDD....
+......0..0......
+................`]
   
 )
 setBackground(background)
@@ -107,6 +125,7 @@ setSolids([player, obstacle,box])
 
 let level = 0
 const levels = [
+  
 	map`
 .o......
 .....o.o
@@ -140,7 +159,27 @@ oooooo`,
 oo...oo
 px..xgo
 oo.....
-oooooo.`
+oooooo.`,
+  map`
+oooooooooo
+....oo...o
+.....x..g.
+p....x....
+.....x.o..
+.....x.o..
+.....x.o..
+oooooooooo`,
+  map`
+.......o....o
+.......o.oogo
+.......ooo.x.
+ooo....o..o..
+..po...x..o..
+..oo...o.x...
+.....o.oo.x..
+.......o.....
+.o.o...oooooo`
+  
   
 ]
 
@@ -201,7 +240,73 @@ onInput("j", () => {
 
 // these get run after every input
 afterInput(() => {
+function checkForPlayer(x,y) { 
+  let result = false
+  getTile(x,y).map((tile) => {
+    if (tile.type == player)
+      result = true
+  })
+  return result 
+}
 
+let up = false
+
+setInterval(() => {
+    if (level == 5) {
+        if (up) { 
+            if (!(checkForPlayer(2,3) || checkForPlayer(3,3))) { 
+                clearTile(2,3)
+                clearTile(3,2)
+                addSprite(2,6, enemy)
+                addSprite(3,3,enemy)
+                up = false 
+            }
+        } else {
+            if (!(checkForPlayer(2,0) || checkForPlayer(3,2))) {
+                clearTile(2,6)
+                clearTile(3,3)
+                addSprite(2,3,enemy)
+                addSprite(3,2,enemy)
+                up = true
+            }
+        }
+    } else if (level == 6) {
+        if (up) { 
+            if (!(checkForPlayer(1,1) || checkForPlayer(3,3) || checkForPlayer(5,4) || checkForPlayer(1,7))) { 
+                clearTile(1,2)
+                clearTile(3,2)
+                clearTile(5,5)
+                clearTile(1,7)
+                addSprite(1,1, enemy)
+                addSprite(3,3,enemy)
+                addSprite(5,4, enemy)
+                addSprite(3,7,enemy)
+                up = false 
+            }
+        } else {
+            if (!(checkForPlayer(1,2) || checkForPlayer(3,2) || checkForPlayer(5,5) || checkForPlayer(3,7))) {
+                clearTile(1,1)
+                clearTile(3,3)
+                clearTile(5,4)
+                clearTile(3,7)
+                addSprite(1,2,enemy)
+                addSprite(3,2,enemy)
+                addSprite(5,5,enemy)
+                addSprite(1,7,enemy)
+                up = true
+            }
+        }
+    }
+}, 500)
+
+
+
+  const enemyTouch = tilesWith(player, enemy); 
+    
+    if (enemyTouch.length > 0) {
+        setMap(levels[level]);
+        treasures = treasures - 1;
+    }
 
   if(level === 0) {
     addText("find treasure!", { y: 4, color: color`3` })
