@@ -249,10 +249,12 @@ export const getGame = async (id: string | undefined): Promise<Game | null> => {
 }
 
 export const makeGame = async (ownerId: string, unprotected: boolean, name?: string, code?: string, tutorialName?: string, tutorialIndex?: number): Promise<Game> => {
+	
+	const createdDate = Timestamp.now()
 	const data = {
 		ownerId,
-		createdAt: Timestamp.now(),
-		modifiedAt: Timestamp.now(),
+		createdAt: createdDate,
+		modifiedAt: createdDate,
 		unprotected,
 		name: name ?? generateGameName(),
 		code: code ?? '',
