@@ -2,10 +2,10 @@
 [!]TUTORIAL[!] move with W and S. Don't hit the enemies and try to
 hit the friends.
 
-@title: Influenced
+@title: Find a Friend
 @author: Doodle Studio
 @tags: []
-@addedOn: 2024-07-08
+@addedOn: 2024-00-00
 */
 
 const player = "p"
@@ -305,10 +305,12 @@ setPushables({
 
 
 //this is very basic movement. The game checks everytime the player moves if
-//the enemy is touching.
+//the enemy is colliding with it.
 onInput("s", () => {
-  getFirst(player).y += 1
-  playTune(steps, 1)
+  if (isGameOver === 0) {
+    getFirst(player).y += 1
+    playTune(steps, 1)
+  }
 
 allFriends.forEach((friendSprite) => {
   if (friendSprite.x === getFirst(player).x && friendSprite.y === getFirst(player).y) {
@@ -321,23 +323,21 @@ allFriends.forEach((friendSprite) => {
   }
   });
   
-  getAll(enemy).forEach((enemySprite) => {
-  if (enemySprite.x === getFirst(player).x && enemySprite.y === getFirst(player).y) {
-    
-    getFirst(player).remove(); 
-    isGameOver = 1
-    
-    addText("Game Over", 
-            { 
-              x: 5, 
-              y: 6, 
-              color: color`3` 
-            }); 
-    clearInterval(intervalId); 
+  // Check player and enemy collision
+getAll(enemy).forEach((enemySprite) => {
+    if (getFirst(player) && getFirst(player).x === enemySprite.x && getFirst(player).y === enemySprite.y) {
+        getFirst(player).remove(); // Remove player sprite
+        enemySprite.remove(); // Remove enemy sprite
+        isGameOver = 1; // Update game over state
 
-    
-  }
-  });
+        addText("Game Over", { 
+            x: 5, 
+            y: 6, 
+            color: color`3` 
+        }); 
+        clearInterval(intervalId); // Stop game loop
+    }
+});
 })
 
 onInput("j", () => {
@@ -363,8 +363,10 @@ onInput("j", () => {
 
 
 onInput("w", () => {
-  getFirst(player).y += -1
+  if (isGameOver === 0) {
+    getFirst(player).y += -1
   playTune(steps, 1)
+  }
   allFriends.forEach((friendSprite) => {
   if (friendSprite.x === getFirst(player).x && friendSprite.y === getFirst(player).y) {
     getAll(enemy).forEach((enemySprite) => {
@@ -375,23 +377,21 @@ onInput("w", () => {
     })
   }
   });
-  getAll(enemy).forEach((enemySprite) => {
-  if (enemySprite.x === getFirst(player).x && enemySprite.y === getFirst(player).y) {
-    
-    getFirst(player).remove(); 
-    isGameOver = 1
-    
-    addText("Game Over", 
-            { 
-              x: 5, 
-              y: 6, 
-              color: color`3` 
-            }); 
-    clearInterval(intervalId); 
+  // Check player and enemy collision
+getAll(enemy).forEach((enemySprite) => {
+    if (getFirst(player) && getFirst(player).x === enemySprite.x && getFirst(player).y === enemySprite.y) {
+        getFirst(player).remove(); // Remove player sprite
+        enemySprite.remove(); // Remove enemy sprite
+        isGameOver = 1; // Update game over state
 
-    
-  }
-  });
+        addText("Game Over", { 
+            x: 5, 
+            y: 6, 
+            color: color`3` 
+        }); 
+        clearInterval(intervalId); // Stop game loop
+    }
+});
 })
 
 //this is the main game loop. It repetes everything in here every 0.7 seconds
@@ -464,36 +464,42 @@ if (getAll(friend).length === 1) {
 }, speed);
 
 //this handles the enemy movement and collision.
-let movement = setInterval(() => {
+if(isGameOver === 1) {
+    clearInterval(movement);
+  }
+  else {
+    let movement = setInterval(() => {
 
   //this make the enemy move left
+  if (isGameOver === 0) {
   getAll(enemy).forEach((enemySprite) => {
     enemySprite.x -= 1
   })
-
-  if(isGameOver === 1) {
-    clearInterval(movement);
   }
+
+  
 
   //this is the collision detection between the player and the enemy
+if (isGameOver === 0) {
+  // Check player and enemy collision
 getAll(enemy).forEach((enemySprite) => {
-  if (enemySprite.x === getFirst(player).x && enemySprite.y === getFirst(player).y) {
-    
-    getFirst(player).remove(); 
-    isGameOver = 1
-    
-    addText("Game Over", 
-            { 
-              x: 5, 
-              y: 6, 
-              color: color`3` 
-            }); 
-    clearInterval(intervalId); 
-  }
-  });
+    if (getFirst(player) && getFirst(player).x === enemySprite.x && getFirst(player).y === enemySprite.y) {
+        getFirst(player).remove(); // Remove player sprite
+        enemySprite.remove(); // Remove enemy sprite
+        isGameOver = 1; // Update game over state
+
+        addText("Game Over", { 
+            x: 5, 
+            y: 6, 
+            color: color`3` 
+        }); 
+        clearInterval(intervalId); // Stop game loop
+    }
+});
+}
   
 }, speed);
-
+  }
 
 
 
