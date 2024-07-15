@@ -1,8 +1,8 @@
 /*
 @title: Gravity Platformer
 @author: NotRewd
-@tags: [platformer]
-@addedOn: 2024-00-00
+@tags: ['platformer']
+@addedOn: 2024-07-15
 */
 
 // How frequently should the update function be called?
