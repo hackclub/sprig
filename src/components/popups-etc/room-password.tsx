@@ -1,10 +1,9 @@
-import { Signal, useSignal, useSignalEffect } from '@preact/signals'
+import { Signal, useSignal } from '@preact/signals'
 import Button from '../design-system/button'
 import Input from '../design-system/input'
 import styles from './share-room.module.css'
 import { PersistenceState } from '../../lib/state'
 import { Game } from '../../lib/game-saving/account'
-import { useEffect } from 'preact/hooks'
 
 export interface RoomPasswordPopupProps {
 	persistenceState: Signal<PersistenceState>
