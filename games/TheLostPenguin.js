@@ -1,8 +1,8 @@
 /*
-@title: The maze 
+@title: The Lost Penguin
 @author: Luca
-@tags: [puzzle,maze]
-@addedOn: 2024-00-00
+@tags: ['puzzle', 'maze']
+@addedOn: 2024-07-15
 */
 
 /*
