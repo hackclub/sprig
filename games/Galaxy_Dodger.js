@@ -2,6 +2,7 @@
 @title: Galaxy Dodger
 @tags: ['space', 'asteroids', 'build']
 @author: Caleb B
+@addedOn: 2024-07-15
 */
 
 // define the sprites in our game
