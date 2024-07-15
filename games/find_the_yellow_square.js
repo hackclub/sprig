@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: 
-@author: 
+@title: Find the Yellow Square
+@author: LeTiburon-3-3-3-3-3-3-3-3-3-3-3
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-07-15
 */
 
 const player = "p"
