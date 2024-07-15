@@ -1,8 +1,8 @@
 /*
-@title: 
-@author: 
-@tags: []
-@addedOn: 2024-00-00
+@title: Top Down Shooter
+@author: Orkpeko
+@tags: ["real-time", "strategy", "action"]
+@addedOn: 2024-07-15
 */
 
 const player = "p"
