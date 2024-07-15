@@ -29,6 +29,7 @@ const jumpForce = 5;
 // How strong should be the gravity? Best when left to one or negative one
 let gravity = 1;
 
+// What are the maximum jumps that the player can achieve in one go?
 let maxJumps = 2;
 let currentJumps = 0;
 
@@ -758,6 +759,7 @@ const handleCoinWalls = () => {
   }
 };
 
+// Reset the jumps when the player is on the ground
 const handleJumpsReset = () => {
   if (gravity > 0 && !onFloor()) return;
   if (gravity < 0 && !belowCeiling()) return;
