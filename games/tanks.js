@@ -18,7 +18,6 @@ const player = "a";
 const player2 = "b";
 const wall = "w";
 const projectile = "p";
-const chooser = "c";
 
 // direction of the tanks
 var direction1 = ">";
@@ -59,25 +58,6 @@ const projectileBitmap = bitmap`
 ................
 ................`;
 
-// for the color chooser
-const chooserBitmap = bitmap`
-4444444444444444
-4444444444444444
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................
-................`;
-
 var musicPlaying = null;
 
 // scores
@@ -87,22 +67,16 @@ var score2 = 0;
 // time of last win
 var lastWin = 0;
 
-setLegend(
-  [player, playerBitmap()],
-  [player2, player2Bitmap()],
-  [wall, wallBitmap],
-  [projectile, projectileBitmap],
-  [chooser, chooserBitmap]
-);
-
+registerSprites();
 setSolids([player, player2, wall, projectile]);
 
-// manages levels
+const Maps = {
+  End: 0,
+  ColorPicker: 1,
+  FirstLevel: 2
+};
 
-
-const firstLevel = 2;
-
-let level = firstLevel;
+let level = Maps.FirstLevel;
 const levels = [
   map`
 wwwww
@@ -111,12 +85,15 @@ wwwww
 wwwww
 wwwww`,
   map`
-.........
-.aaaaaaa.
-.c.......
-.bbbbbbb.
-.c.......
-.........`,
+...........
+...........
+...........
+..abcdefg..
+.....x.....
+..abcdefg..
+.....y.....
+...........
+...........`,
   player + `.........
 ..........
 ..w..ww...
@@ -129,11 +106,195 @@ wwwww`,
 
 setMap(levels[level])
 
+function registerSprites() {
+  setLegend(
+    [player, playerBitmap()],
+    [player2, player2Bitmap()],
+    [wall, wallBitmap],
+    [projectile, projectileBitmap]
+  );
+}
+
+function registerColorSprites() {
+  const chooser1 = "x";
+  const chooser2 = "y";
+  
+  setLegend(
+    ["a", bitmap`
+................
+................
+................
+...0000000......
+..033333330...00
+.030033033000000
+.03333333330..00
+.0000000000.....
+03394949400.....
+000000000000....
+003FC30FC30F0...
+.0F3F0F3F0F3F0..
+..0F03CF03CF0...
+...000000000....
+................
+................`],
+    ["b", bitmap`
+................
+................
+................
+...0000000......
+..099999990...00
+.090099099000000
+.09999999990..00
+.0000000000.....
+09934343400.....
+000000000000....
+009FC90FC90F0...
+.0F9F0F9F0F9F0..
+..0F09CF09CF0...
+...000000000....
+................
+................`],
+    ["c", bitmap`
+................
+................
+................
+...0000000......
+..066666660...00
+.060066066000000
+.06666666660..00
+.0000000000.....
+06634343400.....
+000000000000....
+006FC60FC60F0...
+.0F6F0F6F0F6F0..
+..0F06CF06CF0...
+...000000000....
+................
+................`],
+    ["d", bitmap`
+................
+................
+................
+...0000000......
+..0DDDDDDD0...00
+.0D00DD0DD000000
+.0DDDDDDDDD0..00
+.0000000000.....
+0DD34343400.....
+000000000000....
+00DFCD0FCD0F0...
+.0FDF0FDF0FDF0..
+..0F0DCF0DCF0...
+...000000000....
+................
+................`],
+    ["e", bitmap`
+................
+................
+................
+...0000000......
+..077777770...00
+.070077077000000
+.07777777770..00
+.0000000000.....
+07734343400.....
+000000000000....
+007FC70FC70F0...
+.0F7F0F7F0F7F0..
+..0F07CF07CF0...
+...000000000....
+................
+................`],
+    ["f", bitmap`
+................
+................
+................
+...0000000......
+..0HHHHHHH0...00
+.0H00HH0HH000000
+.0HHHHHHHHH0..00
+.0000000000.....
+0HH34343400.....
+000000000000....
+00HFCH0FCH0F0...
+.0FHF0FHF0FHF0..
+..0F0HCF0HCF0...
+...000000000....
+................
+................`],
+    ["g", bitmap`
+................
+................
+................
+...0000000......
+..088888880...00
+.080088088000000
+.08888888880..00
+.0000000000.....
+08834343400.....
+000000000000....
+008FC80FC80F0...
+.0F8F0F8F0F8F0..
+..0F08CF08CF0...
+...000000000....
+................
+................`],
+    [chooser1, bitmap`
+4444444444444444
+4444444444444444
+4444444444444444
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................`],
+    [chooser2, bitmap`
+4444444444444444
+4444444444444444
+4444444444444444
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................`]
+
+  );
+
+  // TODO: add a sound when color picked
+}
+
+function loadColorPicker() {
+  level = 1;
+
+  registerColorSprites();
+
+  setMap(levels[level]);
+  addText("L/R MOVE,UP SELECT", { y: 1 });
+}
+
+loadColorPicker();
+
 // holds all the flying bullets
 var projEntities = [];
 
 function addProjectile(x, y, direction) {
-  if (level >= firstLevel) {
+  if (level >= Maps.Maps.FirstLevel) {
     setLegend([projectile, projectileBitmap]);
 
     if (x >= 0 && x < width() && y >= 0 && y < height() && getTile(x, y).length <= 0) {
@@ -252,11 +413,11 @@ function player2Bitmap() {
 .090099099000000
 .09999999990..00
 .0000000000.....
-0DD34343400.....
+09934343400.....
 000000000000....
-00DFCD0FCD0F0...
-.0FDF0FDF0FDF0..
-..0F0DCF0DCF0...
+009FC90FC90F0...
+.0F9F0F9F0F9F0..
+..0F09CF09CF0...
 ...000000000....
 ................
 ................`;
@@ -300,7 +461,7 @@ function player2Bitmap() {
 }
 
 function checkWinLose(x, y) {
-  if (level >= firstLevel) {
+  if (level >= Maps.FirstLevel) {
     const loseMusic = tune`
 283.0188679245283: B4~283.0188679245283,
 283.0188679245283: C5~283.0188679245283,
@@ -331,12 +492,7 @@ function checkWinLose(x, y) {
 283.0188679245283: A4~283.0188679245283 + E4^283.0188679245283,
 283.0188679245283: G4~283.0188679245283 + D4^283.0188679245283,
 1132.0754716981132`;
-    setLegend(
-      [player, playerBitmap()],
-      [player2, player2Bitmap()],
-      [wall, wallBitmap],
-      [projectile, projectileBitmap]
-    );
+    registerSprites();
 
     if (getFirst(player).x == x && getFirst(player).y == y) {
       level = 0;
@@ -370,7 +526,7 @@ function checkWinLose(x, y) {
 /* change direction */
 
 onInput("w", () => {
-  if (level >= firstLevel) {
+  if (level >= Maps.FirstLevel) {
     direction1 = "^";
     setLegend(
       [player, bitmap`
@@ -397,7 +553,7 @@ onInput("w", () => {
 })
 
 onInput("s", () => {
-  if (level >= firstLevel) {
+  if (level >= Maps.FirstLevel) {
     direction1 = ".";
     setLegend(
       [player, bitmap`
@@ -425,7 +581,7 @@ onInput("s", () => {
 })
 
 onInput('a', () => {
-  if (level >= firstLevel) {
+  if (level >= Maps.FirstLevel) {
     direction1 = "<";
     setLegend(
       [player, bitmap`
@@ -449,11 +605,18 @@ onInput('a', () => {
     try {
       addProjectile(getFirst(player).x - 1, getFirst(player).y, "<");
     } catch (e) {}
+  } else if (level == Maps.ColorPicker) {
+    const chooser1 = "x";
+    registerColorSprites();
+
+    if (getFirst(chooser1).x > 1) {
+      getFirst(chooser1).x -= 1;
+    }
   }
 })
 
 onInput('d', () => {
-  if (level >= firstLevel) {
+  if (level >= Maps.FirstLevel) {
     direction1 = ">";
     setLegend(
       [player, bitmap`
@@ -477,11 +640,18 @@ onInput('d', () => {
     try {
       addProjectile(getFirst(player).x + 1, getFirst(player).y, ">");
     } catch (e) {}
+  } else if (level == Maps.ColorPicker) {
+    const chooser1 = "x";
+    registerColorSprites();
+
+    if (getFirst(chooser1).x < 7) {
+      getFirst(chooser1).x += 1;
+    }
   }
 })
 
 onInput("i", () => {
-  if (level >= firstLevel) {
+  if (level >= Maps.FirstLevel) {
     direction2 = "^";
     setLegend(
       [player2, bitmap`
@@ -509,7 +679,7 @@ onInput("i", () => {
 })
 
 onInput('k', () => {
-  if (level >= firstLevel) {
+  if (level >= Maps.FirstLevel) {
     direction2 = ".";
     setLegend(
       [player2, bitmap`
@@ -537,7 +707,7 @@ onInput('k', () => {
 })
 
 onInput('j', () => {
-  if (level >= firstLevel) {
+  if (level >= Maps.FirstLevel) {
     direction2 = "<";
     setLegend(
       [player2, bitmap`
@@ -561,11 +731,18 @@ onInput('j', () => {
     try {
       addProjectile(getFirst(player2).x - 1, getFirst(player2).y, "<");
     } catch (e) {}
+  } else if (level == Maps.ColorPicker) {
+    const chooser2 = "y";
+    registerColorSprites();
+
+    if (getFirst(chooser2).x > 1) {
+      getFirst(chooser2).x -= 1;
+    }
   }
-})
+});
 
 onInput("l", () => {
-  if (level >= firstLevel) {
+  if (level >= Maps.FirstLevel) {
     direction2 = ">";
     setLegend(
       [player2, bitmap`
@@ -589,23 +766,25 @@ onInput("l", () => {
     try {
       addProjectile(getFirst(player2).x + 1, getFirst(player2).y, ">");
     } catch (e) {}
+  } else if (level == Maps.ColorPicker) {
+    const chooser2 = "y";
+    registerColorSprites();
+
+    if (getFirst(chooser2).x < 7) {
+      getFirst(chooser2).x += 1;
+    }
   }
 })
 
 // restart the game if the level is different
 
 afterInput(() => {
-  if (new Date().getTime() - lastWin >= 250 && level < firstLevel) {
+  if (new Date().getTime() - lastWin >= 250 && level == Maps.End) {
     clearText();
     direction1 = ">";
     direction2 = "<";
-      setLegend(
-      [player, playerBitmap()],
-      [player2, player2Bitmap()],
-      [wall, wallBitmap],
-      [projectile, projectileBitmap]
-    );
-    level = firstLevel;
+    registerSprites();
+    level = Maps.FirstLevel;
     setMap(levels[level]);
     addText(score1 + ":" + score2, { color: color`4` });
   }
@@ -613,14 +792,9 @@ afterInput(() => {
 
 // actually move the sprite in a forever loop
 function run() {
-  if (level >= firstLevel) {
+  if (level >= Maps.FirstLevel) {
     // projectiles go first
-    setLegend(
-      [player, playerBitmap()],
-      [player2, player2Bitmap()],
-      [wall, wallBitmap],
-      [projectile, projectileBitmap]
-    );
+    registerSprites();
     for (var i = 0; i < projEntities.length;) {
       clearTile(projEntities[i][0], projEntities[i][1]);
       switch (projEntities[i][2]) {
