@@ -18,6 +18,7 @@ const player = "a";
 const player2 = "b";
 const wall = "w";
 const projectile = "p";
+const chooser = "c";
 
 // direction of the tanks
 var direction1 = ">";
@@ -58,46 +59,81 @@ const projectileBitmap = bitmap`
 ................
 ................`;
 
+// for the color chooser
+const chooserBitmap = bitmap`
+4444444444444444
+4444444444444444
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................`;
+
 var musicPlaying = null;
+
+// scores
+var score1 = 0;
+var score2 = 0;
+
+// time of last win
+var lastWin = 0;
 
 setLegend(
   [player, playerBitmap()],
   [player2, player2Bitmap()],
   [wall, wallBitmap],
-  [projectile, projectileBitmap]
+  [projectile, projectileBitmap],
+  [chooser, chooserBitmap]
 );
 
 setSolids([player, player2, wall, projectile]);
 
-// level 0 is the game, level 1 is end screen
-let level = 0
+// manages levels
+
+
+const firstLevel = 2;
+
+let level = firstLevel;
 const levels = [
   map`
-a.........
+wwwww
+wwwww
+wwwww
+wwwww
+wwwww`,
+  map`
+.........
+.aaaaaaa.
+.c.......
+.bbbbbbb.
+.c.......
+.........`,
+  player + `.........
 ..........
 ..w..ww...
 ..w.......
 ..w.......
-.....b....
+.....` + player2 + `....
 ...www....
-..........`,
-  map`
-wwwww
-wwwww
-wwwww
-wwwww
-wwwww`
-]
+..........`
+];
 
 setMap(levels[level])
-
-
 
 // holds all the flying bullets
 var projEntities = [];
 
 function addProjectile(x, y, direction) {
-  if (level != 1) {
+  if (level >= firstLevel) {
     setLegend([projectile, projectileBitmap]);
 
     if (x >= 0 && x < width() && y >= 0 && y < height() && getTile(x, y).length <= 0) {
@@ -166,7 +202,7 @@ function playerBitmap() {
 ................
 ................`;
     case '.':
-      return `
+      return bitmap`
 ................
 ................
 ...00DDDDDD00...
@@ -264,7 +300,7 @@ function player2Bitmap() {
 }
 
 function checkWinLose(x, y) {
-  if (level != 1) {
+  if (level >= firstLevel) {
     const loseMusic = tune`
 283.0188679245283: B4~283.0188679245283,
 283.0188679245283: C5~283.0188679245283,
@@ -301,33 +337,40 @@ function checkWinLose(x, y) {
       [wall, wallBitmap],
       [projectile, projectileBitmap]
     );
-    try {
-      if (getFirst(player).x == x && getFirst(player).y == y) {
-        level = 1;
-        try {
-          musicPlaying.end();
-        } catch (e) {}
-        musicPlaying = playTune(loseMusic);
 
-        setMap(levels[level]);
-        addText("ORANGE WIN", { x: 0, y: 0, color: color`9` });
-        addText("ANY KEY TO CONT", { x: 0, y: 2, color: color`2` });
-      } else if (getFirst(player2).x == x && getFirst(player2).y == y) {
-        level = 1;
-        playTune(loseMusic);
+    if (getFirst(player).x == x && getFirst(player).y == y) {
+      level = 0;
+      try {
+        musicPlaying.end();
+      } catch (e) {}
+      musicPlaying = playTune(loseMusic);
 
-        setMap(levels[level]);
-        addText("GREEN WIN", { x: 0, y: 0, color: color`4` });
-        addText("ANY KEY TO CONT", { x: 0, y: 2, color: color`2` });
-      }
-    } catch (e) {}
+      setMap(levels[level]);
+      clearText();
+      addText("ORANGE WIN", { x: 0, y: 0, color: color`9` });
+      addText("ANY KEY TO CONT", { x: 0, y: 2, color: color`2` });
+
+      score2++;
+      lastWin = new Date().getTime();
+    } else if (getFirst(player2).x == x && getFirst(player2).y == y) {
+      level = 0;
+      playTune(loseMusic);
+
+      setMap(levels[level]);
+      clearText();
+      addText("GREEN WIN", { x: 0, y: 0, color: color`4` });
+      addText("ANY KEY TO CONT", { x: 0, y: 2, color: color`2` });
+
+      score1++;
+      lastWin = new Date().getTime();
+    }
   }
 }
 
 /* change direction */
 
 onInput("w", () => {
-  if (level != 1) {
+  if (level >= firstLevel) {
     direction1 = "^";
     setLegend(
       [player, bitmap`
@@ -354,7 +397,7 @@ onInput("w", () => {
 })
 
 onInput("s", () => {
-  if (level != 1) {
+  if (level >= firstLevel) {
     direction1 = ".";
     setLegend(
       [player, bitmap`
@@ -382,7 +425,7 @@ onInput("s", () => {
 })
 
 onInput('a', () => {
-  if (level != 1) {
+  if (level >= firstLevel) {
     direction1 = "<";
     setLegend(
       [player, bitmap`
@@ -410,7 +453,7 @@ onInput('a', () => {
 })
 
 onInput('d', () => {
-  if (level != 1) {
+  if (level >= firstLevel) {
     direction1 = ">";
     setLegend(
       [player, bitmap`
@@ -438,7 +481,7 @@ onInput('d', () => {
 })
 
 onInput("i", () => {
-  if (level != 1) {
+  if (level >= firstLevel) {
     direction2 = "^";
     setLegend(
       [player2, bitmap`
@@ -466,7 +509,7 @@ onInput("i", () => {
 })
 
 onInput('k', () => {
-  if (level != 1) {
+  if (level >= firstLevel) {
     direction2 = ".";
     setLegend(
       [player2, bitmap`
@@ -494,7 +537,7 @@ onInput('k', () => {
 })
 
 onInput('j', () => {
-  if (level != 1) {
+  if (level >= firstLevel) {
     direction2 = "<";
     setLegend(
       [player2, bitmap`
@@ -522,7 +565,7 @@ onInput('j', () => {
 })
 
 onInput("l", () => {
-  if (level != 1) {
+  if (level >= firstLevel) {
     direction2 = ">";
     setLegend(
       [player2, bitmap`
@@ -550,25 +593,27 @@ onInput("l", () => {
 })
 
 // restart the game if the level is different
+
 afterInput(() => {
-  if (level == 1) {
+  if (new Date().getTime() - lastWin >= 250 && level < firstLevel) {
     clearText();
     direction1 = ">";
     direction2 = "<";
-    setLegend(
+      setLegend(
       [player, playerBitmap()],
       [player2, player2Bitmap()],
       [wall, wallBitmap],
       [projectile, projectileBitmap]
     );
-    level = 0;
+    level = firstLevel;
     setMap(levels[level]);
+    addText(score1 + ":" + score2, { color: color`4` });
   }
 });
 
 // actually move the sprite in a forever loop
 function run() {
-  if (level == 0) {
+  if (level >= firstLevel) {
     // projectiles go first
     setLegend(
       [player, playerBitmap()],
