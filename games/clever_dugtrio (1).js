@@ -1,16 +1,16 @@
 /*
 @title: Among Us Survival
 @tags: ['among us', 'survive']
-@addedOn: 2024-06-12
-@author: Anvay Ajmera
+@addedOn: 2024-06-16
 */
 
-
-
-const BG = "b"; 
+const BG = "b";
 const PLAYER = "p";
 const ROCK = "r";
 let deadStatus = false;
+let score = 0;
+let difficulty = 1;
+let gameStarted = false;
 
 setLegend(
   [ROCK, bitmap`
@@ -95,7 +95,9 @@ onInput("i", () => {
   if (deadStatus) {
     clearText();
     setMap(gameLevels[currentLevel]);
+    score = 0;
     deadStatus = false;
+    startGame();
   }
 });
 
@@ -133,16 +135,60 @@ function checkCollision() {
   return false;
 }
 
-var gameLoop = setInterval(() => {
-  if (!deadStatus) {
-    despawnRocks();
-    moveRocks();
-    spawnRock();
-  }
+function displayHomeScreen() {
+  clearText();
+  addText("Difficulty:", { x: 2, y: 4, color: color`2` });
+  addText("i. Easy", { x: 2, y: 6, color: color`2` });
+  addText("j. Medium", { x: 2, y: 8, color: color`2` });
+  addText("k. Hard", { x: 2, y: 10, color: color`2` });
+}
 
-  if (checkCollision()) {
-    deadStatus = true;
-    addText("GAME OVER", { x: 6, y: 7, color: color`6` });
-    addText("i to Restart", { x: 4, y: 10, color: color`6` });
+onInput("i", () => {
+  if (!gameStarted) {
+    difficulty = 2;
+    gameStarted = true;
+    startGame();
   }
-}, 1000);
+});
+
+onInput("j", () => {
+  if (!gameStarted) {
+    difficulty = 3;
+    gameStarted = true;
+    startGame();
+  }
+});
+
+onInput("k", () => {
+  if (!gameStarted) {
+    difficulty = 4;
+    gameStarted = true;
+    startGame();
+  }
+});
+
+function startGame() {
+  clearText();
+  setMap(gameLevels[currentLevel]);
+  gameLoop = setInterval(() => {
+    if (!deadStatus) {
+      score++;
+      clearText();
+      addText(`Score: ${score}`, { x: 1, y: 1, color: color`3` });
+      despawnRocks();
+      moveRocks();
+      spawnRock();
+    }
+    
+    if (checkCollision()) {
+      deadStatus = true;
+      addText("GAME OVER", { x: 6, y: 4, color: color`6` });
+      addText("Score: " + score, { x: 6, y: 7, color: color`6` });
+      addText("i to Restart", { x: 4, y: 10, color: color`6` });
+      clearInterval(gameLoop);
+      gameStarted = false;
+    }
+  }, 1000 / difficulty);
+}
+
+displayHomeScreen();
