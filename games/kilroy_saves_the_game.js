@@ -1,8 +1,8 @@
 /**
-@title Kilroy Saves the Game!
-@author Jacob Fisher 
-@tags ['kilroy', 'frc']
-@addedOn 2024-07-08
+@title: Kilroy Saves the Game!
+@author: Jacob Fisher 
+@tags: ['kilroy', 'frc']
+@addedOn: 2024-07-08
 */
 const quick = false
 const speed = quick ? 0.25 : 1.0
