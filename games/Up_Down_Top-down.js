@@ -2,7 +2,7 @@
 @title: Up, Down, Top-down
 @author: Somebud0180
 @tags: ['platformer', 'maze']
-@addedOn: 2024-00-00
+@addedOn: 2024-07-15
 */
 
 // A game with blocks, gravity blocks, flags, and stuff
