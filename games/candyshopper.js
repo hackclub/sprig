@@ -2,7 +2,7 @@
 @title: candyshopper
 @author: ayaangrover
 @tags: ["puzzle"]
-@addedOn: 2024-07-16
+@addedOn: 2024-07-15
 */
 
 const player = "p"
@@ -267,7 +267,72 @@ wwww.w.w...ww.w.w.w
 .....w.w...ww.www.w
 wwwwww.www.w..w...w
 w......w.w.wwww.www
-wwwwww...w....w.jg.`
+wwwwww...w....w.jg.`,
+  map`
+bbbb...bbbb
+.....c...bb
+.bbbbgbb..b
+p.cgbbbgc.b
+bbbbbgbb..b
+bbbbbcb...b
+bbbbb...bbb`,
+  map`
+gww..w......w
+jw.cpw.wwwwaw
+.w.w.w.w...ag
+.b.w.w.w.b.ag
+...w.w.w.bwag
+...w.w.w.bwgw
+...w.w.w.bwww
+g....w...bwww
+...w...wbbwww`,
+  map`
+wgwwwbpbwwwgw
+bc...b.b...cb
+b...........b
+ww.wwwwwwwwww
+...w...www.jg
+.www.w.w...ww
+.w...w.w.w.ww
+...www...w.jg`,
+  map`
+.....
+pj...
+www..
+g....`,
+  map`
+wwwwwwgb....
+w...........
+w.j....ww...
+w......www..
+w......bgww.
+w......jjgww
+ww.wwwb..www`,
+  map`
+...........
+pb.........
+........wg.
+.c......wwg
+..........w
+........w.w
+........w.w
+bbbbjbbbw.w
+ww........w`,
+  map`
+bww..cg
+.p.....
+.j.w...
+.b..g..`,
+  map`
+wwwww..www
+wwpc....jg
+gwwww...jg
+jgwww...jg
+.cgww...jg
+..ag....jg
+........jg
+wwwwwww.jg`
+
 ]
 
 const currentLevel = levels[level];
@@ -337,7 +402,7 @@ afterInput(() => {
       setMap(currentLevel);
       playTune(levelTune);
     } else {
-      addText("game over");
+      addText("you win!");
       playTune(winTune);
     }
   }
