@@ -10,8 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [18.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -20,7 +19,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
-      #- run: npm run build --if-present
+
       - name: Execute Unit tests
         run: |
           yarn install --frozen-lockfile
