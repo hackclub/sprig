@@ -9,7 +9,7 @@ Shoot your projectile at the other tank before they get you!
 In the color picker:
 AD to move player one cursor.
 JL to move player two cursor.
-W and I to set READY state for colors.
+W and I to set READY state for players.
 
 In the actual game:
 WASD for player one to move,
@@ -521,6 +521,17 @@ const colorTanks = [{
   },
 ];
 
+/* since the sprites for colored tanks are 0,1,2... respectively */
+const colorCode = [
+  color`3`, color`9`, color`6`,
+  color`D`, color`7`, color`H`,
+  color`8`
+];
+
+const colorString = [
+  "RED", "ORANGE", "YELLOW", "GREEN", "BLUE", "PURPLE", "PINK"
+];
+
 const wallBitmap = bitmap`
 10LLLLLLLLLLLL01
 010LLLLLLLLLL010
@@ -566,6 +577,10 @@ var score2 = 0;
 var player1Type = 3;
 var player2Type = 3;
 
+// color ready
+var player1Ready = false;
+var player2Ready = false;
+
 // time of last win
 var lastWin = 0;
 
@@ -610,18 +625,18 @@ const Music = {
 283.0188679245283: G4~283.0188679245283 + D4^283.0188679245283,
 1132.0754716981132`,
   ColorPickCheck: tune`
-123.45679012345678,
-123.45679012345678: B5-123.45679012345678,
-123.45679012345678: B5-123.45679012345678,
-3580.2469135802467`,
+230.76923076923077,
+230.76923076923077: B5-230.76923076923077,
+230.76923076923077: B5-230.76923076923077,
+6692.307692307692`,
   ColorPickFail: tune`
-319.1489361702128: E4/319.1489361702128,
-319.1489361702128: D4/319.1489361702128,
-319.1489361702128: C4/319.1489361702128,
-9255.31914893617`,
+153.0612244897959: E4/153.0612244897959,
+153.0612244897959: D4/153.0612244897959,
+153.0612244897959: C4/153.0612244897959,
+4438.775510204081`,
 };
 
-let level = Maps.FirstLevel;
+let level = Maps.ColorPicker;
 const levels = [
   map`
 wwwww
@@ -649,7 +664,7 @@ wwwww`,
 ..........`
 ];
 
-setMap(levels[level])
+loadColorPicker();
 
 function registerSprites() {
   setLegend(
@@ -706,10 +721,7 @@ function registerColorSprites() {
 ................
 ................
 ................`]
-
   );
-
-  // TODO: add a sound when color picked
 }
 
 function loadLevel() {
@@ -723,14 +735,10 @@ function loadLevel() {
 
 function loadColorPicker() {
   level = 1;
-
   registerColorSprites();
-
   setMap(levels[level]);
   addText("L/R MOVE,UP SELECT", { y: 1 });
 }
-
-loadColorPicker();
 
 // holds all the flying bullets
 var projEntities = [];
@@ -757,10 +765,10 @@ function player2Bitmap() {
 }
 
 function oneMusic(tune) {
-  try {
+  if (musicPlaying) {
     musicPlaying.end();
-  } catch (e) {}
-  musicPlaying = playTune(Music.End);
+  }
+  musicPlaying = playTune(tune);
 }
 
 function checkWinLose(x, y) {
@@ -773,7 +781,7 @@ function checkWinLose(x, y) {
 
       setMap(levels[level]);
       clearText();
-      addText("ORANGE WIN", { x: 0, y: 0, color: color`9` });
+      addText(colorString[player2Type] + " WIN", { x: 0, y: 0, color: colorCode[player2Type] });
       addText("ANY KEY TO CONT", { x: 0, y: 2, color: color`2` });
 
       score2++;
@@ -784,7 +792,7 @@ function checkWinLose(x, y) {
 
       setMap(levels[level]);
       clearText();
-      addText("GREEN WIN", { x: 0, y: 0, color: color`4` });
+      addText(colorString[player1Type] + " WIN", { x: 0, y: 0, color: colorCode[player1Type] });
       addText("ANY KEY TO CONT", { x: 0, y: 2, color: color`2` });
 
       score1++;
@@ -799,15 +807,25 @@ onInput("w", () => {
   if (level >= Maps.FirstLevel) {
     direction1 = "^";
     registerSprites();
-    try {
-      addProjectile(getFirst(player).x, getFirst(player).y - 1, "^");
-    } catch (e) {}
+
+    addProjectile(getFirst(player).x, getFirst(player).y - 1, "^");
+
   } else if (level == Maps.ColorPicker) {
     const chooser1 = "x";
-    registerColorSprites();
+    const chooser2 = "y";
+    player1Ready = true;
 
     player1Type = getFirst(chooser1).x - 2;
-    loadLevel();
+    player2Type = getFirst(chooser2).x - 2;
+
+    if (player1Type == player2Type) {
+      oneMusic(Music.ColorPickFail);
+    } else if (player2Ready) {
+      oneMusic(Music.ColorPickCheck);
+      loadLevel();
+    } else {
+      oneMusic(Music.ColorPickCheck);
+    }
   }
 })
 
@@ -816,9 +834,7 @@ onInput("s", () => {
     direction1 = ".";
     registerSprites();
 
-    try {
-      addProjectile(getFirst(player).x, getFirst(player).y + 1, ".");
-    } catch (e) {}
+    addProjectile(getFirst(player).x, getFirst(player).y + 1, ".");
   }
 })
 
@@ -827,9 +843,9 @@ onInput('a', () => {
     direction1 = "<";
     registerSprites();
 
-    try {
-      addProjectile(getFirst(player).x - 1, getFirst(player).y, "<");
-    } catch (e) {}
+
+    addProjectile(getFirst(player).x - 1, getFirst(player).y, "<");
+
   } else if (level == Maps.ColorPicker) {
     const chooser1 = "x";
     registerColorSprites();
@@ -845,9 +861,9 @@ onInput('d', () => {
     direction1 = ">";
     registerSprites();
 
-    try {
-      addProjectile(getFirst(player).x + 1, getFirst(player).y, ">");
-    } catch (e) {}
+
+    addProjectile(getFirst(player).x + 1, getFirst(player).y, ">");
+
   } else if (level == Maps.ColorPicker) {
     const chooser1 = "x";
     registerColorSprites();
@@ -863,15 +879,23 @@ onInput("i", () => {
     direction2 = "^";
     registerSprites();
 
-    try {
-      addProjectile(getFirst(player2).x, getFirst(player2).y - 1, "^");
-    } catch (e) {}
+    addProjectile(getFirst(player2).x, getFirst(player2).y - 1, "^");
   } else if (level == Maps.ColorPicker) {
+    const chooser1 = "x";
     const chooser2 = "y";
-    registerColorSprites();
+    player2Ready = true;
 
+    player1Type = getFirst(chooser1).x - 2;
     player2Type = getFirst(chooser2).x - 2;
-    loadLevel();
+
+    if (player1Type == player2Type) {
+      oneMusic(Music.ColorPickFail);
+    } else if (player1Ready) {
+      oneMusic(Music.ColorPickCheck);
+      loadLevel();
+    } else {
+      oneMusic(Music.ColorPickCheck);
+    }
   }
 })
 
@@ -880,9 +904,7 @@ onInput('k', () => {
     direction2 = ".";
     registerSprites();
 
-    try {
-      addProjectile(getFirst(player2).x, getFirst(player2).y + 1, ".");
-    } catch (e) {}
+    addProjectile(getFirst(player2).x, getFirst(player2).y + 1, ".");
   }
 })
 
@@ -891,9 +913,7 @@ onInput('j', () => {
     direction2 = "<";
     registerSprites();
 
-    try {
-      addProjectile(getFirst(player2).x - 1, getFirst(player2).y, "<");
-    } catch (e) {}
+    addProjectile(getFirst(player2).x - 1, getFirst(player2).y, "<");
   } else if (level == Maps.ColorPicker) {
     const chooser2 = "y";
     registerColorSprites();
@@ -909,9 +929,7 @@ onInput("l", () => {
     direction2 = ">";
     registerSprites();
 
-    try {
-      addProjectile(getFirst(player2).x + 1, getFirst(player2).y, ">");
-    } catch (e) {}
+    addProjectile(getFirst(player2).x + 1, getFirst(player2).y, ">");
   } else if (level == Maps.ColorPicker) {
     const chooser2 = "y";
     registerColorSprites();
@@ -923,7 +941,6 @@ onInput("l", () => {
 })
 
 // restart the game if the level is different
-
 afterInput(() => {
   if (new Date().getTime() - lastWin >= 250 && level == Maps.End) {
     loadLevel();
@@ -972,7 +989,7 @@ function run() {
     }
 
     // process tank movement
-    try {
+    if (level >= Maps.FirstLevel) {
       switch (direction1) {
         case "^":
           getFirst(player).y -= 1;
@@ -1005,7 +1022,7 @@ function run() {
         default:
           break;
       }
-    } catch (e) {}
+    }
   }
 }
 
