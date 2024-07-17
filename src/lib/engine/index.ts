@@ -75,7 +75,7 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 		fn(...Object.values(api))
 		return { error: null, cleanup }
 	} catch (error: any) {
-		// if there's an error code, it's most likely a babel error of some kind 
+		// if there's an error code, it's most likely a babel error of some kind
 		// other errors do not have an error code attached
 		if (!error.code) {
 			const normalizedError = normalizeGameError({ kind: "runtime", error });
@@ -83,8 +83,10 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 		} 
 
 		// At least for SyntaxErrors, the type of error shows as "unknown" instead of "SyntaxError" - this replaces that
-		if (error.message.split(":")[0] == 'unknown') {
-			error.message = error.message.replace('unknown', error.name)
+		if (error.message) {
+			if (error.message.split(":")[0] == 'unknown') {
+				error.message = error.message.replace('unknown', error.name)
+			}
 		}
 
 		return {

@@ -146,7 +146,7 @@ export const normalizeGameError = (gameError: GameError): NormalizedError => {
  * Finds the line and column of innermost error from a stack.
  * This is modified code from V1.
  */
-function findErrorLineCol(stack: string | undefined): [number | null, number | null] {
+function findErrorLineCol(stack: string | undefined, lineOffset: number): [number | null, number | null] {
 	if (!stack) return [null, null]
 
 	let line = null
@@ -157,7 +157,7 @@ function findErrorLineCol(stack: string | undefined): [number | null, number | n
 
 	if (location) {
 		let lineCol = location[1]!.split(":").map(Number)
-		line = lineCol[0]! - 2
+		line = lineCol[0]! - lineOffset
 		col = lineCol[1]!
 	}
 
