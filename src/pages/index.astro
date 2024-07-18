@@ -5,9 +5,6 @@ import StandardHead from '../components/standard-head.astro'
 import '../global.css'
 import '../legacy/homepage.scss'
 import { firestore, getSession } from '../lib/game-saving/account'
-import { getConsolesRemaining } from '../lib/remaining-consoles'
-
-const remainingConsoles = await getConsolesRemaining()
 
 const stories = [
 	{ id: 'sprig-front', width: 800, height: 602 },
