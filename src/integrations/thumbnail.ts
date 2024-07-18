@@ -1,10 +1,10 @@
-import type { APIRoute } from 'astro'
 import { baseEngine, palette } from 'sprig/base'
-import { RawThumbnail, Thumbnail } from '../../lib/thumbnail'
+import { RawThumbnail, Thumbnail } from '../lib/thumbnail'
 import fs from 'fs'
 import path from 'path'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
+import metrics from '../../metrics'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename);
@@ -102,8 +102,7 @@ const drawGameImage = (src: string): RawThumbnail => {
 	}
 }
 
-export const get: APIRoute = async ({ url }) => {
-	const name = url.searchParams.get('key') || ''
+export const generateImageJson = async (name: string) => {
 	let gameContentString = loadGameContentFromDisk(name)
 	let gameImageBase64 = loadImageBase64FromDisk(name)
 	
@@ -126,7 +125,7 @@ export const get: APIRoute = async ({ url }) => {
 		}	
 	} catch (error) {
 		// If everything breaks, use a default image
-		console.error(error)
+		// console.error(error)
 		const image = await fetch('https://cloud-i203j2e6a-hack-club-bot.vercel.app/1confused_dinosaur.png')
 		thumbnail = {
 			kind: 'png',
@@ -134,20 +133,18 @@ export const get: APIRoute = async ({ url }) => {
 		}
 	}
 
-	return new Response(JSON.stringify(thumbnail), {
-		status: 200,
-		headers: {
-			'Access-Control-Allow-Credentials': 'true',
-			'Access-Control-Allow-Origin': '*',
-			'Access-Control-Allow-Methods': 'GET,OPTIONS',
-			'Access-Control-Allow-Headers': '*',
-			'Cache-Control': 'max-age=86400'
+	// write/overwrite image json to public folder
+	let imgFilePath = path.resolve(__dirname, `../../public/${name}.json`);
+	fs.writeFile(imgFilePath, JSON.stringify(thumbnail), (err) => {
+		if (err) {
+			metrics.increment("http.errors.thumbnail_json");
 		}
-	})
+	});
 }
+
 function loadImageBase64FromDisk(name: string) {
 	try {
-		let imgPath = path.resolve(__dirname, `../../../games/img/${name}.png`)
+		let imgPath = path.resolve(__dirname, `../../games/img/${name}.png`)
 		if (!fs.existsSync(imgPath)) return null
 		return fs.readFileSync(imgPath).toString("base64")
 	} catch {
@@ -156,8 +153,7 @@ function loadImageBase64FromDisk(name: string) {
 }
 
 function loadGameContentFromDisk(name: string) {	
-	let gameContentPath = path.resolve(__dirname, `../../../games/${name}.js`)
+	let gameContentPath = path.resolve(__dirname, `../../games/${name}.js`)
 	if (!fs.existsSync(gameContentPath)) return null
 	return fs.readFileSync(gameContentPath).toString()
 }
-

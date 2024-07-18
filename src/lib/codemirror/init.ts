@@ -24,7 +24,7 @@ export function diagnosticsFromErrorLog(view: EditorView, errorLog: NormalizedEr
 		});
 }
 
-export const initialExtensions = (onUpdate: any, onRunShortcut: any) => ([
+export const initialExtensions = (onUpdate: any, onRunShortcut: any, yCollab?: any) => ([
 	lintGutter(),
 	lineNumbers(),
 	highlightActiveLineGutter(),
@@ -105,14 +105,15 @@ export const initialExtensions = (onUpdate: any, onRunShortcut: any) => ([
 	javascript(),
 	EditorView.updateListener.of(onUpdate),
 	widgets,
+	yCollab ? yCollab : []
 ]
 )
 
-export function createEditorState(initialCode: string, onUpdate = () => { }, onRunShortcut = () => { }): EditorState {
+export function createEditorState(initialCode: string, onUpdate = () => { }, onRunShortcut = () => { }, yCollab?: any): EditorState {
 	return EditorState.create({
 		doc: initialCode,
 		extensions: [
-			initialExtensions(onUpdate, onRunShortcut)
+			initialExtensions(onUpdate, onRunShortcut, yCollab)
 		]
 	})
 }
