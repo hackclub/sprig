@@ -161,7 +161,7 @@ CCCCCCCCCCCCCCCC` ] ,
 
 setSolids([ player, floor, box, redbox ])
 
-let level = 0
+let level = 11
 const levels = [
   map`
 fffff
@@ -218,7 +218,7 @@ f..bgb..f
 f.fgpgfff
 f..bgb..f
 f...f...f
-fffffffff`,
+fffffffff`, 
   map`
 fffffff
 f..g..f
@@ -241,13 +241,58 @@ fff.r....b.fff
 fffg......cfff
 ffffffffffffff`,
   map`
+ffffffffffffff
+f...f........f
+f...f......b.f
+f.p.cg..b....f
+f...f........f
+f...f........f
+ffgfffffff.fff
+ff...r.....fff
+ff.........fff
+ffffffffffffff`,
+  map`
+fffffffffffffffff
+fffff.fffffffffff
+fffff..........ff
+fffff.f........ff
+fffff.f......f.ff
+fffff.f.....br.ff
+f...f.ffffff.f.ff
+f.p.f..fffff...ff
+f...g..ffffffffff
+f...fffffffffffff
+f...............f
+f.............c.f
+f...............f
+fffffffffffffffff`,
+  map`
+fffffffffffffffff
+f...............f
+f.fffffffffff.b.f
+f.ff........f...f
+f.ff.fffff.b.f..f
+f.ff.f.fff...fr.f
+f.ff.f....f.f...f
+f.ff.f.f..f.f...f
+f.ff.f.f.ffgf...f
+f.ff.f.f.ffff...f
+f.ff.f.f.fff....f
+f...p.cf.......gf
+ffff.fff.ffffffff
+ffff.ffff......gf
+ffff.fffffb.fffff
+ffff........fffff
+ffffffffff.ffffff
+fffffffffffffffff`,
+  map`
 fffffff
 fffffff
 fffffff
 fffpfff
 fffffff
 fffffff
-fffffff`
+fffffff`,
 ]
 setMap(levels[level])
 
@@ -266,7 +311,7 @@ if (level === 7) {
     y: 1})
 }
 
-if (level === 8) {
+if (level === 11) {
   addText("You have won!", {
     x: 2,
     y: 1})
@@ -309,20 +354,26 @@ afterInput(() => {
   const redfinish = tilesWith(redgoal, redbox).length
   const playerblue = tilesWith(blueportal, player).length
   const playerorange = tilesWith(orangeportal, player).length
+  const existingOrangePortal = getFirst(orangeportal);
+  const existingBluePortal = getFirst(blueportal);
   if (level >= 7) {
   canportal = true
   }
-  if (pathsfinished === numgoal && redfinish === redgoals && level < 8) {
+  if (pathsfinished === numgoal && redfinish === redgoals && level < 11 ) {
     clearText()
     level = level + 1
     setMap(levels[level])
   }
-  if (playerblue === 1) {
+  if (playerblue === 1 && existingOrangePortal) {
+    setSolids([ floor, box, redbox ])
     getFirst(player).x = getFirst(orangeportal).x
     getFirst(player).y = getFirst(orangeportal).y
+    setSolids([ player, floor, box, redbox ])
   }
-  if (playerorange === 1) {
+  if (playerorange === 1 && existingBluePortal ) {
+    setSolids([ floor, box, redbox ])
     getFirst(player).x = getFirst(blueportal).x
     getFirst(player).y = getFirst(blueportal).y
+    setSolids([ player, floor, box, redbox ])
   }
 })
