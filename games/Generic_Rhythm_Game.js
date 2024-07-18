@@ -1,6 +1,6 @@
 /*
 
-@title: Generic Rythm Game
+@title: Generic RHythm Game
 @author: ThePangel
 @tags: [music, rythm]
 @addedOn: 2024-07-18
