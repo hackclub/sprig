@@ -75,7 +75,8 @@ const normalizeStack = (stack: string): StackItem[] | null => {
 }
 
 export const normalizeGameError = (gameError: GameError): NormalizedError => {
-	const lineOffset = 3
+	const lineOffset = 2
+	let addedLineCol = false
 
 	if (gameError.kind === 'parse') {
 		const { description, lineNumber, column } = gameError.error
@@ -113,11 +114,20 @@ export const normalizeGameError = (gameError: GameError): NormalizedError => {
 
 			if (fileName && item.lineNumber && item.column) {
 				descriptionLines.unshift(`    at ${item.callSite} (${fileName}:${item.lineNumber}:${item.column})`)
+				addedLineCol = true
 			} else if (fileName) {
 				descriptionLines.unshift(`    at ${item.callSite} (${fileName})`)
 			} else {
 				descriptionLines.unshift(`    at ${item.callSite}`)
 			}
+		}
+
+		// adds line number to infinite recursion
+		if (!addedLineCol && line && col && stack[0]) {
+			descriptionLines.unshift(`    at ${stack[0]!.callSite} (index.ts:${line}:${col})`)
+		} else if (!addedLineCol && line && col) {
+			// might not always be eval in some edge cases - change if this is the case
+			descriptionLines.unshift(`    at eval (index.ts:${line}:${col})`)
 		}
 
 		descriptionLines.unshift(`${gameError.error.name}: ${gameError.error.message}`)
@@ -136,7 +146,7 @@ export const normalizeGameError = (gameError: GameError): NormalizedError => {
  * Finds the line and column of innermost error from a stack.
  * This is modified code from V1.
  */
-function findErrorLineCol(stack: string | undefined): [number | null, number | null] {
+function findErrorLineCol(stack: string | undefined, lineOffset: number): [number | null, number | null] {
 	if (!stack) return [null, null]
 
 	let line = null
@@ -147,7 +157,7 @@ function findErrorLineCol(stack: string | undefined): [number | null, number | n
 
 	if (location) {
 		let lineCol = location[1]!.split(":").map(Number)
-		line = lineCol[0]! - 2 - 1
+		line = lineCol[0]! - lineOffset
 		col = lineCol[1]!
 	}
 
