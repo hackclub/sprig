@@ -161,7 +161,7 @@ CCCCCCCCCCCCCCCC` ] ,
 
 setSolids([ player, floor, box, redbox ])
 
-let level = 11
+let level = 0
 const levels = [
   map`
 fffff
