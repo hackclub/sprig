@@ -158,3 +158,4 @@ Please refer to [this document](./RESPONSIBILITIES.md) for a list of current tea
 ## License
 
 The Hack Club Sprig is open source and licensed under the [MIT License](./LICENSE). Fork, remix, and make it your own! Pull requests and other contributions greatly appreciated.
+ 
