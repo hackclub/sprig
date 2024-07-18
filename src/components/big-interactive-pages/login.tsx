@@ -22,7 +22,7 @@ export default function Login({ session, email, to }: LoginProps) {
 
 	return (
 		<div class={styles.page}>
-			<MainNavbar transparent session={session} />
+			<MainNavbar session={session} />
 
 			<div class={styles.pageMain}>
 				<form onSubmit={(event) => {
