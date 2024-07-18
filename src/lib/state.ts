@@ -59,7 +59,6 @@ export interface OpenEditor {
 	kind: EditorKind
 	editRange: FromTo
 	text: string
-	foldRangeIndex?: number
 }
 
 // Persistence

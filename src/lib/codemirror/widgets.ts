@@ -5,7 +5,7 @@ import { palette } from 'sprig/base'
 import { FromTo, getTag, makeWidget } from './util'
 import OpenButton from '../../components/codemirror-widgets/open-button'
 import Swatch from '../../components/codemirror-widgets/swatch'
-import { editorKinds, editors } from '../state'
+import { editorKinds, editors, _foldRanges, _widgets } from '../state'
 
 const OpenButtonWidget = makeWidget(OpenButton)
 const SwatchWidget = makeWidget(Swatch)
@@ -14,18 +14,15 @@ const SwatchWidget = makeWidget(Swatch)
 function makeValue(state: EditorState) {
 	const widgets: Range<Decoration>[] = []
 	const foldRanges: FromTo[] = []
-	
+
 	const syntax = syntaxTree(state)
 	syntax.iterate({
 		enter(node) {
 			for (const kind of editorKinds) {
 				const tag = getTag(editors[kind].label, node, syntax, state.doc)
 				if (!tag) continue
-				if (tag.nameFrom === tag.nameTo) continue
 
-				widgets.push(Decoration.replace({
-					widget: new OpenButtonWidget({ kind, text: tag.text })
-				}).range(tag.nameFrom, tag.nameTo))
+				if (tag.nameFrom === tag.nameTo) continue
 
 				if (kind === 'palette') {
 					const color = palette.find(([ key ]) => key === tag.text)
@@ -35,12 +32,18 @@ function makeValue(state: EditorState) {
 				} else if (tag.textFrom !== tag.textTo) {
 					foldRanges.push({ from: tag.textFrom, to: tag.textTo })
 				}
-				
+
+				widgets.push(Decoration.replace({
+					widget: new OpenButtonWidget({ kind, text: tag.text, range: { from: tag.textFrom, to: tag.textTo } })
+				}).range(tag.nameFrom, tag.nameTo))
+
 				break
 			}
 		}
 	})
 
+	_foldRanges.value = foldRanges;
+	_widgets.value = widgets;
 	return {
 		decorations: Decoration.set(widgets),
 		foldRanges
@@ -52,7 +55,7 @@ export default StateField.define({
 	update: (_, transaction) => makeValue(transaction.state),
 	provide: (field) => [
 		EditorView.decorations.from(field, value => value.decorations),
-		foldService.from(field, value => (_, lineStart, lineEnd) => (
+		foldService.from(field, value => (_, lineStart, lineEnd) => ( 
 			value.foldRanges.find(range => range.from >= lineStart && range.from <= lineEnd) ?? null
 		))
 	]
