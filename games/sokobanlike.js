@@ -312,7 +312,7 @@ afterInput(() => {
   if (level >= 7) {
   canportal = true
   }
-  if (pathsfinished === numgoal && redfinish === redgoals) {
+  if (pathsfinished === numgoal && redfinish === redgoals && level < 8) {
     clearText()
     level = level + 1
     setMap(levels[level])
