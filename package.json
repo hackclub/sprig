@@ -9,7 +9,8 @@
 		"start": "astro dev",
 		"build": "astro build",
 		"test": "deno run --allow-read ./tests/sprigfuzzy.js",
-		"test:unit": "vitest"
+		"test:unit": "vitest",
+		"docs:gen": "jsdoc -c ./docs/jsdoc/config.json ./games/advanced_engine.js"
 	},
 	"dependencies": {
 		"@astrojs/preact": "^2.0.1",
@@ -64,6 +65,7 @@
 		"@types/three": "^0.149.0",
 		"@types/throttle-debounce": "^5.0.0",
 		"@types/w3c-web-serial": "^1.0.3",
+		"jsdoc": "^4.0.3",
 		"vitest-canvas-mock": "^0.3.3"
 	}
 }

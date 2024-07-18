@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+
+:root {
+    --sprig-background-color: #FAFFD7;
+    --sprig-accent: #098969;
+    --sprig-hint: #4D4E53;
+    --sprig-white: #F8F9FA;
+}
+
+nav ul a, nav ul a:visited, nav ul a:active,
+.params .name, .props .name, .name code,
+tt, code, kbd, samp,
+.name, .signature {
+    font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', monospace;
+}
+
+body, nav ul, h1 {
+    font-family: 'Inter', sans-serif;
+}
+
+html
+{
+    background-color: var(--sprig-background-color);
+}
+
+body
+{
+    color: var(--sprig-hint);
+    background-color: var(--sprig-background-color);
+}
+
+a, a:visited, a:active {
+    color: var(--sprig-accent)
+}
+
+section
+{
+    background-color: var(--sprig-background-color);
+    border-bottom: 1px solid var(--sprig-accent);
+}
+
+.signature-attributes {
+    color: var(--sprig-hint);
+}
+
+nav
+{
+    border-left: 1px solid var(--sprig-accent);
+}
+
+nav ul a, nav ul a:visited, nav ul a:active {
+    color: var(--sprig-hint);
+}
+
+h4
+{
+    color: var(--sprig-hint);
+}
+
+td, th
+{
+    border: 1px solid var(--sprig-accent);
+}
+
+thead tr
+{
+    background-color: var(--sprig-accent);
+}
+
+th { border-right: 1px solid var(--sprig-accent); }
+tr > th:last-child { border-right: 1px solid var(--sprig-accent); }
+
+.ancestors, .attribs { color: var(--sprig-hint); }
+.ancestors a, .attribs a
+{
+    color: var(--sprig-hint) !important;
+}
+
+.important
+{
+    color: #950B02;
+}
+
+.type-signature {
+    color: var(--sprig-hint);
+}
+
+.details { margin-top: 14px; border-left: 2px solid var(--sprig-accent); }
+.source
+{
+    border: 1px solid var(--sprig-accent);
+}
+
+.source code
+{
+    background-color: var(--sprig-background-color);
+    color: var(--sprig-hint);
+}
+
+.prettyprint.linenums li
+{
+  border-left: 3px var(--sprig-accent) solid;
+}
+
+.prettyprint.linenums li.selected,
+.prettyprint.linenums li.selected *
+{
+  background-color: lightyellow;
+}
+
+.params .name, .props .name, .name code {
+    color: var(--sprig-hint);
+}
+
+.disabled {
+    color: #454545;
+}
+
+thead {
+    color: var(--sprig-white)
+}
