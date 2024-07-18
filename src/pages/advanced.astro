@@ -18,7 +18,7 @@ const session = await getSession(Astro.cookies)
     </head>
 
     <div class="navbar">
-        <Navbar transparent goldLogo session={session} />
+        <Navbar session={session} />
     </div>
 
     <script src="/coverflow.js" defer />
@@ -38,16 +38,16 @@ const session = await getSession(Astro.cookies)
             </div>
 
             <div class='text white'>
-                <h1 class="text-intro">A <span class="gold">Reimagined</span> Sprig Engine</h1>
+                <h1 class="text-intro">A <span class="highlight">Reimagined</span> Sprig Engine</h1>
                 <p>Create and Publish your own Sprig Game <br> powered by the new engine</p>
             </div>
 
             <div class="container">
-                <button class="btn active">
-                    Create Advanced Game »
-                </button>
+                <a class="btn active">
+                    Create Game »
+                </a>
 
-                <a class="btn" href="/gallery">
+                <a class="btn active" href="/gallery">
                     Explore Games »
                 </a>
             </div>
@@ -94,26 +94,23 @@ const session = await getSession(Astro.cookies)
         </div>
 
         <div class="container-border container-criteria" style="padding-bottom: 2rem;">
-            <h1 class="text text-header white">Criteria</h1>
+            <h1 class="text text-header white">ⓘ TLDR - Criteria</h1>
             
-            <div class="container ">
-                <div style="margin-right: 2rem">
-                    <p class="text white" style="text-align: start;">In detail, in order to get the grant your game must follow the following criteria:</p>
+            <div class="container">
+                <div style="margin-left: 2rem; width: 50rem">
+                    <p class="text white" style="text-align:start;">For a game to meet the criteria for a grant, it must be <span class="highlight">high quality, unique and fun</span> while being developed for at least <span class="highlight">20</span> hours.</p>
+
+                    <p class="text white" style="text-align: start;">Your game must possess these magical ingredients to claim the prize:</p>
                     <ul class="text white" style="text-align: start;">
-                        <li>Usable <b class="gold">Main/Settings</b> Menu</li>
-                        <li>At least <b class="gold">5 unique</b> game mechanics</li>
-                        <li>At least <b class="gold">20 hand-drawn sprites</b>, some of which are <b class="gold">animated</b></li>
-                        <li>At least <b class="gold">10</b> minutes of gameplay</li>
-                        <li>Runnable on a <b class="gold">Sprig</b> game device</li>
+                        <li>Usable <b class="highlight">Main/Settings</b> Menu</li>
+                        <li>At least <b class="highlight">5 unique</b> game mechanics</li>
+                        <li>At least <b class="highlight">20 hand-drawn sprites</b>, some of which are <b class="highlight">animated</b></li>
+                        <li>At least <b class="highlight">10</b> minutes of gameplay</li>
+                        <li>Runnable on a <b class="highlight">Sprig</b> game device</li>
                     </ul>
                 </div>
                 <img src="advanced-image1.png" class="criteria-image base" />    
             </div>
-        </div>
-
-        <div class="container-border">
-            <h1 class="text white text-header" title="Too Long Didn't Read">ⓘ TLDR</h1>
-            <p class="text white">For a game to meet the criteria for a grant, it must be <span class="gold">high quality, unique and fun</span> while being developed for at least <span class="gold">20</span> hours</p>
         </div>
     </body>
 </html>
@@ -204,8 +201,8 @@ const session = await getSession(Astro.cookies)
         font-size: large;
     }
 
-    .gold {
-        color: #F8CF00;
+    .highlight {
+        color: #098969;
     }
 
     .white {
@@ -214,7 +211,8 @@ const session = await getSession(Astro.cookies)
 
     .feature {
         border: #098969 .1rem solid;
-        border-radius: .75rem;
+        background-color: #FFFFFF;
+        border-radius: .3rem;
         padding: 0rem 2rem 0rem 2rem;
         margin: 0rem 1rem 0rem 1rem;
 
@@ -225,6 +223,8 @@ const session = await getSession(Astro.cookies)
         transition-duration: 0.3s;
         &:hover {
             transform: scale(1.1);
+            background-color: #098969;
+            color: #FFFFFF;
         }
     }
 
@@ -275,6 +275,16 @@ const session = await getSession(Astro.cookies)
         }
     }
 
+
+    .tldr-header {
+        font-size: xx-large
+    }
+    
+    .tldr {
+        text-align: start;
+        margin-left: 2rem;
+    }
+
     .text-header {
         font-size: xx-large;
 
@@ -286,10 +296,6 @@ const session = await getSession(Astro.cookies)
 
     .text-intro {
         font-size: xxx-large
-    }
-
-    .navbar {
-        background-color: #098969;
     }
 
     .coverflow-left {
