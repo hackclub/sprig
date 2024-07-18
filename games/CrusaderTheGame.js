@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Crusader
 @author: Skyfall
 @tags: ["platformer"]
-@addedOn: 2024-00-00
+@addedOn: 2024-07-18
 */
 
 const player = "p"
