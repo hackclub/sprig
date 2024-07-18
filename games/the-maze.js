@@ -1,3 +1,11 @@
+/*
+@title: The Maze
+@author: TRXAlpha
+@tags: ['maze']
+@addedOn: 2024-07-18
+*/
+
+
 // Define sprites and bitmaps from the second snippet
 const player = "p";
 const box = "b";
