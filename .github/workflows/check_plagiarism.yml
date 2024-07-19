@@ -9,7 +9,7 @@ jobs:
   split-and-list-files:
     runs-on: ubuntu-latest
     outputs:
-      batches: ${{ steps.set-output.outputs.batches }}
+      batches: ${{ steps.list-batches.outputs.batches }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -39,7 +39,7 @@ jobs:
           python .github/scripts/split_into_batches.py games/ batches/ 10
 
       - name: List files in batches
-        id: set-output
+        id: list-batches
         run: |
           echo "Listing files in batches"
           batches=""
@@ -49,8 +49,8 @@ jobs:
             batches="${batches}${dir},"
           done
           batches=${batches%,}  # Remove the trailing comma
-          echo "batches=${batches}"
-          echo "::set-output name=batches::${batches}"
+          echo "batches=${batches}" >> $GITHUB_ENV
+          echo "::set-output name=batches::${batches}"  # For backward compatibility
 
   plagiarism-check:
     needs: split-and-list-files
