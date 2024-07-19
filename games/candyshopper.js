@@ -353,3 +353,105 @@ jgwww...jg
 ........jg
 wwwwwww.jg`
 ]
+
+const currentLevel = levels[level];
+setMap(currentLevel);
+
+setSolids([player, juice, chocolate, candycane, wall]);
+
+setPushables({
+  [player]: [juice, chocolate, candycane],
+  [juice]: [juice],
+  [chocolate]: [chocolate],
+  [candycane]: [candycane]
+})
+
+onInput("w", () => {
+  const playerSprite = getFirst(player);
+  if (playerSprite.y > 0) {
+    playerSprite.y -= 1;
+    playTune(stepForwardTune);
+  }
+});
+
+onInput("s", () => {
+  const playerSprite = getFirst(player);
+  if (playerSprite.y < height() - 1) {
+    playerSprite.y += 1;
+    playTune(stepForwardTune);
+  }
+});
+
+onInput("a", () => {
+  const playerSprite = getFirst(player);
+  if (playerSprite.x > 0) {
+    playerSprite.x -= 1;
+    playTune(stepForwardTune);
+  }
+});
+
+onInput("d", () => {
+  const playerSprite = getFirst(player);
+  if (playerSprite.x < width() - 1) {
+    playerSprite.x += 1;
+    playTune(stepForwardTune);
+  }
+});
+
+onInput("j", () => {
+  const currentLevel = levels[level];
+
+  if (currentLevel !== undefined) {
+    clearText("");
+    setMap(currentLevel);
+    playTune(resetTune);
+  }
+});
+
+afterInput(() => {
+  const playerSprite = getFirst(player);
+  const badJuiceTiles = tilesWith(badjuice);
+
+  if (tilesWith(player, money).length > 0) {
+    if (currentLevel !== undefined) {
+      lives++; // Increase lives count
+      let xCoord=playerSprite.x;
+      let yCoord=playerSprite.y;
+      console.log(currentLevel);
+      setMap(currentLevel);
+      clearTile(xCoord, yCoord);
+    }
+  }
+
+  const fails = tilesWith(player, badjuice).length;
+  if (fails >= 1) {
+    playTune(resetTune); // Play reset tune
+    lives--; 
+  }
+
+  if (lives <= 0) {
+    level = 0; // Reset level
+    setMap(levels[level]); // Load the initial map
+    lives = 1;
+  }
+
+  const baskets = tilesWith(goal).length;
+
+  const successes = tilesWith(goal, juice).length + tilesWith(goal, chocolate).length + tilesWith(goal, candycane).length;
+  if (successes === baskets) {
+    level = level + 1;
+
+    const currentLevel = levels[level];
+
+    if (currentLevel !== undefined) {
+      setMap(currentLevel);
+      playTune(levelTune);
+    } else {
+      addText("you win!");
+      playTune(winTune);
+    }
+  }
+
+  // Display Lives Counter
+  addText(`Lives: ${lives}`, { x: 11, y: 1, color: color`1` }); // Display lives count on the screen
+});
