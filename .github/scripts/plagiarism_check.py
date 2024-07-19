@@ -19,6 +19,8 @@ def run_compare50(single_file, directory, output_dir, saved_dir_base):
         total_files = len(all_js_files)
         current_file_number = 0
 
+        log(f"Total files to compare: {total_files}")
+
         for file in all_js_files:
             current_file_number += 1
             if os.path.abspath(file) == os.path.abspath(single_file):
