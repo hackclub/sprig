@@ -2004,20 +2004,20 @@ class TouchBehavior extends TickCadenceBehavior {
   }
 }
 
-class PushableBehavior extends TickCadenceBehavior {
+class PushableBehavior extends Behavior {
   /**
    * A behavior that enables the associated GameObject to be pushed
    * 
    * @param {function} canBePushedBy - A callback to determine if the GameObject can be pushed
    */
   constructor(canBePushedBy = (object) => true) {
-    super(TICKRATE_PUSH)
+    super()
 
     this.canBePushedBy = canBePushedBy
   }
 
   /** @private */
-  onCadence() {}
+  tick() {}
 }
 
 class PusherBehavior extends Behavior {
@@ -2025,8 +2025,32 @@ class PusherBehavior extends Behavior {
    * A behavior that enables the associated GameObject to push other GameObjects
    */
   constructor() {
-    super(TICKRATE_PUSH)
+    super()
+
     this.lastPosition = null
+  }
+
+  /** @private */
+  raycast(engine, currentPosition, deltaPosition, object) {
+    let raycast
+    if (deltaPosition.x !== 0)
+      raycast = engine.raycastX(engine, currentPosition.x, currentPosition.y, deltaPosition.x, object)
+    if (deltaPosition.y !== 0)
+      raycast = engine.raycastY(engine, currentPosition.x, currentPosition.y, deltaPosition.y, object)
+
+    return raycast
+  }
+
+  /** @private */
+  hasFreeSpace(raycast) {
+    return raycast.pushables.length > 0 && raycast.pushables.length <= raycast.freeSpaces
+  }
+
+  /** @private */
+  push(raycast, deltaPosition) {
+    raycast.pushables.reverse().forEach(pushable => {
+      pushable.move(deltaPosition.x, deltaPosition.y)
+    })
   }
 
   /** @private */
@@ -2039,16 +2063,9 @@ class PusherBehavior extends Behavior {
 
     const deltaPosition = {x: currentPosition.x - this.lastPosition.x, y: currentPosition.y - this.lastPosition.y}
 
-    let raycast
-    if (deltaPosition.x !== 0)
-      raycast = engine.raycastX(engine, currentPosition.x, currentPosition.y, deltaPosition.x, parent.type)
-    if (deltaPosition.y !== 0)
-      raycast = engine.raycastY(engine, currentPosition.x, currentPosition.y, deltaPosition.y, parent.type)
-
-    if (raycast && raycast.pushables.length > 0 && raycast.pushables.length <= raycast.freeSpaces) {
-      raycast.pushables.reverse().forEach(pushable => {
-        pushable.move(deltaPosition.x, deltaPosition.y)
-      })
+    const raycast = this.raycast(engine, currentPosition, deltaPosition, parent)
+    if (raycast && this.hasFreeSpace(raycast)) {
+      this.push(raycast, deltaPosition)
     }
 
     this.lastPosition = currentPosition
