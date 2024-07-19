@@ -37,8 +37,8 @@ const session = await getSession(Astro.cookies)
                 </div>
             </div>
 
-            <div class='text white'>
-                <h1 class="text-intro">A <span class="highlight">Reimagined</span> Sprig Engine</h1>
+            <div class='text black'>
+                <h1 class="text-intro">A <span class="highlight-title">Reimagined</span> Sprig Engine</h1>
                 <p>Create and Publish your own Sprig Game <br> powered by the new engine</p>
             </div>
 
@@ -55,7 +55,7 @@ const session = await getSession(Astro.cookies)
 
         <br><br>
 
-        <div class="container-border" style="padding-bottom: 2rem;">
+        <div class="container-border" style="padding-bottom: 2rem; background-color: #2F2F2F;">
             <h1 class="text white text-header">New and Improved Features</h1>
 
             <div class="text white container">
@@ -93,7 +93,7 @@ const session = await getSession(Astro.cookies)
             </div>
         </div>
 
-        <div class="container-border container-criteria" style="padding-bottom: 2rem;">
+        <div class="container-border container-criteria" style="padding-bottom: 2rem; background-color: #098969">
             <h1 class="text text-header white">ⓘ TLDR - Criteria</h1>
             
             <div class="container">
@@ -162,8 +162,8 @@ const session = await getSession(Astro.cookies)
     }
 
     h3 {
-        text-decoration: underline;
         font-weight: bold;
+        font-size: 1.75rem;
     }
 
     .btn {
@@ -181,10 +181,8 @@ const session = await getSession(Astro.cookies)
     }
 
     .container-border {
-        border: #098969 .2rem solid;        
-        margin: 0rem 8rem 4rem 8rem;
-        border-radius: .3rem;
-        background-color: #FAFFD7;
+        padding-top: 1rem;
+        
     }
 
     .criterion:hover {
@@ -202,29 +200,38 @@ const session = await getSession(Astro.cookies)
     }
 
     .highlight {
+        color: #F8CF00;
+    }
+
+    .highlight-title {
         color: #098969;
     }
 
     .white {
+        color: white;
+    }
+
+    .black {
         color: black;
     }
 
     .feature {
-        border: #098969 .1rem solid;
+        border: #098969 .2rem solid;
         background-color: #FFFFFF;
+        color: black;
+
         border-radius: .3rem;
         padding: 0rem 2rem 0rem 2rem;
         margin: 0rem 1rem 0rem 1rem;
-
         width: 22rem;
-        height: 14rem;
+        height: 16rem;
 
 
         transition-duration: 0.3s;
         &:hover {
             transform: scale(1.1);
-            background-color: #098969;
-            color: #FFFFFF;
+            background-color: #e3e3e3;
+            color: black;
         }
     }
 
@@ -239,7 +246,7 @@ const session = await getSession(Astro.cookies)
         border: none;
         transition-duration: 0.3s;
 
-        color: #80C3A1;
+        color: white;
         &:hover {
             color: #098969;
         }
@@ -274,7 +281,6 @@ const session = await getSession(Astro.cookies)
             transform: scale(1.1);
         }
     }
-
 
     .tldr-header {
         font-size: xx-large
