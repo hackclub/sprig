@@ -352,6 +352,22 @@ jgwww...jg
 ..ag....jg
 ........jg
 wwwwwww.jg`,
+  
+  map`
+pmmm....................
+bwwwwwwwwwwwwwwwwwwwwww.
+........................
+.wwwwwwwwwwwwwwwwwwwwwwb
+........................
+bwwwwwwwwwwwwwwwwwwwwww.
+........................
+.wwwwwwwwwwwwwwwwwwwwwwb
+........................
+bwwwwwwwwwwwwwwwwwwwwww.
+........................
+.wwwwwwwwwwwwwwwwwwwwwwb
+......................jg
+wwwwwwwwwwwwwwwwwwwwwwww`
 ]
 
 const currentLevel = levels[level];
@@ -420,7 +436,6 @@ afterInput(() => {
       playTune(addLifeTune);
       let xCoord=playerSprite.x;
       let yCoord=playerSprite.y;
-      console.log(currentLevel);
       setMap(currentLevel);
       clearTile(xCoord, yCoord);
     }
