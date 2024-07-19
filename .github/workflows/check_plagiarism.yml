@@ -72,10 +72,16 @@ jobs:
       - name: Install Compare50 && beautifulsoup4
         run: pip install compare50 beautifulsoup4
 
+      - name: Debug Batch
+        run: | 
+          echo "Batch: ${{ matrix.batch }}"
       - name: Run Plagiarism Detection Script
         run: |
           if [ "${{ env.FILES }}" != '' ]; then
+            echo "Running plagiarism check for batch: ${{ matrix.batch }}"
             python .github/scripts/plagiarism_check.py "${{ env.FILES }}" ${{ matrix.batch }} output_dir saved_dir
+          else
+            echo "No files to process"
           fi
 
   extract-and-upload:
