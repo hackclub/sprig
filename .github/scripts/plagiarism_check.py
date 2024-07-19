@@ -37,16 +37,15 @@ def run_compare50(directory, output_dir, saved_dir_base):
 
                 command = [
                     "compare50",
-                    f'"{file}"',
-                    f'"{compare_file}"',
-                    "--output", f'"{output_dir}"',
+                    file,
+                    compare_file,
+                    "--output", output_dir,
                     "--max-file-size", str(1024 * 1024 * 100),
                     "--passes", "text"
                 ]
 
-                command_str = ' '.join(command)
-                log(f"Running command: {command_str}")
-                subprocess.run(command_str, shell=True, check=True)
+                log(f"Running command: {' '.join(command)}")
+                subprocess.run(command, check=True)
                 log("Compare50 command executed successfully.")
 
                 match_file = os.path.join(output_dir, "match_1.html")
@@ -65,7 +64,7 @@ def run_compare50(directory, output_dir, saved_dir_base):
         log(f"An error occurred: {e}")
 
 def main():
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 5:
         log("Incorrect number of arguments provided.")
         print("Usage: python plagiarism_check.py <games_directory> <batch_directory> <output_dir> <saved_dir_base>")
         sys.exit(1)
