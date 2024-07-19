@@ -293,9 +293,9 @@ bbbb...bbbb
 bbbb.c...bb
 mbbbbgbb..b
 pbcgbbbgc.b
-mbbbbgbb..b
+bbbbbgbb..b
 bbbbbcb...b
-bbbbbm..bbb`,
+bbbbb...bbb`,
   map`
 gww..w......w
 jw.cpw.wwwwaw
@@ -303,8 +303,8 @@ jw.cpw.wwwwaw
 .b.w.w.w.b.ag
 ...w.w.w.bwag
 ...w.w.w.bwgw
-...w.w.w.bwww
-g....w...bwww
+...w...w.bwww
+g........bwww
 ...w...wbbwww`,
   map`
 wgwwwbpbwwwgw
@@ -403,6 +403,7 @@ onInput("j", () => {
 
   if (currentLevel !== undefined) {
     clearText("");
+    const currentLevel = levels[level];
     setMap(currentLevel);
     playTune(resetTune);
   }
@@ -411,8 +412,9 @@ onInput("j", () => {
 afterInput(() => {
   const playerSprite = getFirst(player);
   const badJuiceTiles = tilesWith(badjuice);
-
+  const currentLevel = levels[level];
   if (tilesWith(player, money).length > 0) {
+    const currentLevel = levels[level];
     if (currentLevel !== undefined) {
       lives++; // Increase lives count
       let xCoord=playerSprite.x;
