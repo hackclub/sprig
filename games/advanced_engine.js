@@ -909,15 +909,15 @@ const spikeAnimations = [spike, spike_anim1]
 const bombAnimations = [bomb, bomb_anim1, bomb_anim2, bomb_anim3]
 
 const levels = [
-//   map`
-// wwwwwwwwww
-// w........w
-// w.R......w
-// w........w
-// w...RR...w
-// w........w
-// wp.......w
-// wwwwwwwwww`,
+  map`
+wwwwwwwwww
+w........w
+w........w
+w...AAA..w
+w........w
+w........w
+wp.......w
+wwwwwwwwww`,
   map`
 wwwwwwwwww
 wLwTwwU..w
@@ -1594,12 +1594,14 @@ class GameObject {
    * @param {integer} x - The initial x coordinate for your GameObject
    * @param {integer} y - The initial y coordinate for your GameObject
    * @param {string} type - The initial (Sprig/Spade) tile type for your GameObject.
+   * @param {boolean} canOverlap - If the GameObject can overlap with other GameObjects
    */
-  constructor(gameEngine, x, y, type) {
+  constructor(gameEngine, x, y, type, canOverlap = false) {
     this.x = x
     this.y = y
     this.type = type
     this.displayType = type
+    this.canOverlap = canOverlap
     this.gameEngine = gameEngine
     this.behaviors = []
     this.lastMoveTick = gameEngine.getTick()
@@ -1642,17 +1644,18 @@ class GameObject {
       this.gameEngine.log("oob: " + x + ", " + y);
       return false
     }
+
     let isProtagonist = this === this.gameEngine.getProtagonist()
-    let hasLiving = false
+
+    let canOverlap = true
     let managedObjects = this.gameEngine.getManagedObjectsAt(x, y)
-    let i
-    for (i = 0; i < managedObjects.length; i++) {
+    for (let i = 0; i < managedObjects.length; i++) {
       let go = managedObjects[i]
-      if (go.getBehavior(LivingBehavior) != null)
-        hasLiving = true;
+      if (this.cannotOverlapWith(go))
+        canOverlap = false
     }
 
-    return this.gameEngine.isNavigable(x, y) && (isProtagonist || !hasLiving)
+    return this.gameEngine.isNavigable(x, y) && (isProtagonist || canOverlap)
   }
 
   /**
@@ -1660,8 +1663,7 @@ class GameObject {
    * @param {GameObject} otherObject - Another GameObject to perform the overlap check against
    */
   cannotOverlapWith(otherObject) {
-    // todo - make overlapping dynamic/settable
-    return otherObject.type == wall
+    return !otherObject.canOverlap
   }
 
   /**
@@ -1673,8 +1675,7 @@ class GameObject {
     if (!this.canMoveTo(this.x + dx, this.y + dy))
       return false
 
-    this.gameEngine.log("moved")
-    console.log(`${this.type}: (${dx},${dy})`)
+    this.gameEngine.log(`Moved: ${this.type}: (${dx},${dy})`)
 
     this.removeTile()
     this.x += dx;
@@ -1789,6 +1790,14 @@ class GameObject {
     }
 
     return false;
+  }
+
+  /**
+   * Enables/Disables overlaping
+   * @param {boolean} canOverlap - If the GameObject can overlap
+   */
+  setCanOverlap(canOverlap) {
+    this.canOverlap = canOverlap
   }
 }
 
@@ -2169,11 +2178,13 @@ class AttackBehavior extends TickCadenceBehavior {
    * A behavior that allows the associated GameObject to attack other GameObjects
    * 
    * @param {string} killMsg - The message to show when a GameObject is attacked and killed
+   * @param {boolean} canDamageSameType - If the GameObject can damage other GameObjects of the same time
    * @param {integer} range -  The range of the attack
    */
-  constructor(killMsg, range = 1) {
+  constructor(killMsg, canDamageSameType = false, range = 1) {
     super(TICKRATE_ATTACK)
     this.killMsg = killMsg
+    this.canDamageSameType = canDamageSameType
     this.range = range
   }
 
@@ -2184,9 +2195,9 @@ class AttackBehavior extends TickCadenceBehavior {
 
     engine.spatialSelect(parentGo.x, parentGo.y, this.range).forEach(target => {
       if (engine.getTick() - target.getLastMoveTick() < 3) return;
+      if (!this.canDamageSameType && parentGo.type == target.type) return;
       
       const livingTarget = target.getBehavior(LivingBehavior)
-      
       if (livingTarget) {
         livingTarget.addHp(-1, this.killMsg)
       }
@@ -2303,7 +2314,7 @@ function addRockAt(engine, x, y) {
 
 // Adds a pusher arrow.  It automatically pushes the player in a certain direction (up, down, left, right)
 function addArrowAt(engine, x, y, arrowType, animations, logic) {
-  new GameObject(engine, x, y, arrowType)
+  new GameObject(engine, x, y, arrowType, true)
     .addBehavior(new AnimatedBehavior(animations, TICKRATE_DEFAULT, 0))
     .addBehavior(new TouchBehavior(logic))
 }
