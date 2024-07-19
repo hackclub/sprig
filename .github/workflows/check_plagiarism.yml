@@ -58,6 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        file: ${{ fromJson(needs.split-and-list-files.outputs.batches) }}
         batch: ${{ fromJson(needs.split-and-list-files.outputs.batches) }}
     steps:
       - name: Checkout code
@@ -73,14 +74,15 @@ jobs:
       - name: Install Compare50 && beautifulsoup4
         run: pip install compare50 beautifulsoup4
 
-      - name: Debug Batch
+      - name: Debug Batch and File
         run: |
+          echo "Processing file: ${{ matrix.file }}"
           echo "Processing batch: ${{ matrix.batch }}"
 
       - name: Run Plagiarism Detection Script
         run: |
-          echo "Running plagiarism check for batch: ${{ matrix.batch }}"
-          python .github/scripts/plagiarism_check.py "${{ matrix.batch }}" "output_dir" "saved_dir"
+          echo "Running plagiarism check for file: ${{ matrix.file }} in batch: ${{ matrix.batch }}"
+          python .github/scripts/plagiarism_check.py "${{ matrix.file }}" "${{ matrix.batch }}" "output_dir" "saved_dir"
 
   extract-and-upload:
     needs: plagiarism-check
