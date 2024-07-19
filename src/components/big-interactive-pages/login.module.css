@@ -16,15 +16,17 @@
 form {
 	width: 100%;
 	max-width: 500px;
-	padding: 30px;
 	background: var(--bg-surface);
-	border: 3px solid var(--accent);
+	border: 5px solid var(--accent);
+	padding:2rem;
+	padding-top: 2rem;
+	box-shadow: 10px 10px 0px -3px var(--accent);
 }
 
 h1 {
-	font-size: 1.6rem;
 	margin: 0;
 	margin-bottom: 12px;
+	font-weight: 900;
 }
 
 p {
