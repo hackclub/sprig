@@ -33,7 +33,7 @@ jobs:
           echo "FILES=$js_files" >> $GITHUB_ENV
 
       - name: Split files into batches
-        run: python .github/scripts/split_into_batches.py games/ batches/
+        run: python .github/scripts/split_into_batches.py games/ batches/ 10
 
       - name: List files in batches
         run: |
