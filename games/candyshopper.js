@@ -5,17 +5,20 @@
 @addedOn: 2024-07-15
 */
 
+let lives = 3;
+
 const player = "p"
 const juice = "j"
 const chocolate = "c"
 const candycane = "a"
+const money = "m"
 const goal = "g";
 const wall = "w";
 const badjuice = "b";
 const stepForwardTune = tune`
 127.29844413012731,
 42.432814710042436: C4^42.432814710042436,
-1188.1188118811883`; 
+1188.1188118811883`;
 const resetTune = tune`
 161.29032258064515,
 161.29032258064515: E5/161.29032258064515,
@@ -25,7 +28,7 @@ const resetTune = tune`
 161.29032258064515: A4/161.29032258064515,
 161.29032258064515: A4/161.29032258064515,
 161.29032258064515: A4/161.29032258064515,
-3870.967741935484`; 
+3870.967741935484`;
 const winTune = tune`
 100.67114093959732: C4/100.67114093959732,
 100.67114093959732: F4/100.67114093959732,
@@ -48,7 +51,7 @@ const winTune = tune`
 100.67114093959732: F5/100.67114093959732,
 100.67114093959732: E5/100.67114093959732,
 100.67114093959732: D5/100.67114093959732,
-1107.3825503355706`; 
+1107.3825503355706`;
 const levelTune = tune`
 53.475935828877006: A4-53.475935828877006,
 53.475935828877006: G4-53.475935828877006,
@@ -61,7 +64,7 @@ const levelTune = tune`
 53.475935828877006: G5-53.475935828877006,
 53.475935828877006: A5-53.475935828877006,
 53.475935828877006: B5-53.475935828877006,
-1122.9946524064171`; 
+1122.9946524064171`;
 
 
 setLegend(
@@ -99,6 +102,23 @@ setLegend(
 ................
 ................
 ................`],
+  [money, bitmap`
+.......4........
+......4444......
+.....4.4..4.....
+....4..4...4....
+....4..4........
+....4..4........
+.....4.4........
+......4444......
+.......4..4.....
+.......4...4....
+.......4...4....
+....4..4...4....
+.....4.4..4.....
+......4444......
+.......4........
+.......4........`],
   [juice, bitmap`
 ................
 ....1111........
@@ -208,13 +228,13 @@ let level = 0
 const levels = [
   map`
 p...
-...j
-b..g`,
+.m.j
+.b.g`,
   map`
-pb.jg
-.....
-j.c..
-.a...
+pmbjg
+ww...
+..c..
+ja...
 g.g.g`,
   map`
 p..
@@ -235,7 +255,7 @@ bpb
 acj
 ggg`,
   map`
-wp..bw
+wp.mbw
 wj.aww
 gj.cgw
 wgwgww
@@ -245,37 +265,37 @@ wwwwww`,
 .a............bww
 ..a............gw
 ...a..........gww
-....a.........pgw
-.....a........gww
-......ab.......gw
-.......a......bww
-...............gw`,
+....a..........gw
+wwwwwa........gww
+bb....a........gw
+mww....a......bww
+pww............gw`,
   map`
 p..wwwwwwwwwwwwwwww
-ww.wwww.w..ww...www
-....w...w.www.w.www
-.ww...w.w.www.w...w
+ww.wwww.wmww....www
+....w...w.w...w.www
+.ww...w.w...w.w.w.w
 .www.ww.wwwww.w.w.w
-.w.w..w...w...w.w.w
-...w.ww.w.w.w.w.w.w
+.w.w..w...w...w...w
+...w.ww.w.w.w.www.w
 .w.w.w..w...w.w.w.w
 .w.w.w.wwwwww.w.w.w
-wwww.w.w...ww.w.w.w
+wwww.w.w...ww.w...w
 .....w...w.w..w.w.w
-.wwwww.w.w.ww.w.www
-.www.w.w.wwww.w...w
+.wwwww.w.wmww.w.www
+.wwwmw.w.wwww.w...w
 .....w.w...ww.www.w
 wwwwww.www.w..w...w
 w......w.w.wwww.www
-wwwwww...w....w.jg.`,
+wwwwww...w....w.jgw`,
   map`
 bbbb...bbbb
-.....c...bb
-.bbbbgbb..b
-p.cgbbbgc.b
-bbbbbgbb..b
+bbbb.c...bb
+mbbbbgbb..b
+pbcgbbbgc.b
+mbbbbgbb..b
 bbbbbcb...b
-bbbbb...bbb`,
+bbbbbm..bbb`,
   map`
 gww..w......w
 jw.cpw.wwwwaw
@@ -291,8 +311,8 @@ wgwwwbpbwwwgw
 bc...b.b...cb
 b...........b
 ww.wwwwwwwwww
-...w...www.jg
-.www.w.w...ww
+...w...w...jg
+.www.w.w.w.ww
 .w...w.w.w.ww
 ...www...w.jg`,
   map`
@@ -301,7 +321,7 @@ pj...
 www..
 g....`,
   map`
-wwwwwwgb....
+wwwwwwgbp...
 w...........
 w.j....ww...
 w......www..
@@ -320,90 +340,16 @@ bbbbjbbbw.w
 ww........w`,
   map`
 bww..cg
-.p.....
+bpm....
 .j.w...
 .b..g..`,
   map`
-wwwww..www
-wwpc....jg
-gwwww...jg
+wwwww...ww
+wwpc..w.jg
+gwww....jg
 jgwww...jg
 .cgww...jg
 ..ag....jg
 ........jg
 wwwwwww.jg`
-
 ]
-
-const currentLevel = levels[level];
-setMap(currentLevel);
-
-setSolids([player, juice, chocolate, candycane, wall]);
-
-setPushables({
-  [player]: [juice, chocolate, candycane],
-  [juice]: [juice],
-  [chocolate]: [chocolate],
-  [candycane]: [candycane]
-})
-
-onInput("w", () => {
-  getFirst(player).y -= 1;
-  playTune(stepForwardTune); 
-});
-
-onInput("s", () => {
-  getFirst(player).y += 1;
-  playTune(stepForwardTune); 
-});
-
-onInput("a", () => {
-  getFirst(player).x -= 1;
-  playTune(stepForwardTune); 
-});
-
-onInput("d", () => {
-  getFirst(player).x += 1;
-  playTune(stepForwardTune); 
-});
-
-onInput("j", () => {
-  const currentLevel = levels[level];
-
-  if (currentLevel !== undefined) {
-    clearText("");
-    setMap(currentLevel);
-    playTune(resetTune); 
-  }
-});
-
-afterInput(() => {
-  const playerSprite = getFirst(player);
-  const badJuiceTiles = tilesWith(badjuice);
-
-  // Check if player is touching badjuice
-  const fails = tilesWith(player, badjuice).length + tilesWith(juice, badjuice).length + tilesWith(chocolate, badjuice).length + tilesWith(candycane, badjuice).length ;
-  if (fails>=1) {
-    playTune(resetTune);
-    level = 0;
-    setMap(levels[level]);
-  }
-
-  const baskets = tilesWith(goal).length;
-
-  // Check if the player has completed the level
-  const successes = tilesWith(goal, juice).length + tilesWith(goal, chocolate).length + tilesWith(goal, candycane).length;
-  if (successes === baskets) {
-    level = level + 1;
-
-    const currentLevel = levels[level];
-
-    if (currentLevel !== undefined) {
-      setMap(currentLevel);
-      playTune(levelTune);
-    } else {
-      addText("you win!");
-      playTune(winTune);
-    }
-  }
-});
