@@ -42,15 +42,16 @@ jobs:
         id: list-batches
         run: |
           echo "Listing files in batches"
-          batches=""
+          batches="[]"
           for dir in batches/*; do
-            echo "Files in $dir:"
-            ls $dir
-            batches="${batches}${dir},"
+            if [ -d "$dir" ]; then
+              echo "Files in $dir:"
+              ls "$dir"
+              batches=$(jq -c --arg dir "$dir" '. + [$dir]' <<< "$batches")
+            fi
           done
-          batches=${batches%,}  # Remove the trailing comma
-          echo "batches=${batches}" >> $GITHUB_ENV
-          echo "::set-output name=batches::${batches}"  # For backward compatibility
+          echo "batches=$batches" >> $GITHUB_ENV
+          echo "::set-output name=batches::$batches"  # For backward compatibility
 
   plagiarism-check:
     needs: split-and-list-files
