@@ -11,10 +11,13 @@ interface MobilePlayerProps {
 
 export default function MobilePlayer(props: MobilePlayerProps) {
 	const screen = useRef<HTMLCanvasElement>(null)
-
+	const cleanup = useRef<(() => void) | null>(null);
+	
 	const run = () => {
+		if (cleanup.current) cleanup.current();
 		const res = runGame(props.code, screen.current!, (_) => { })
 		if (res.error) console.error(res.error.raw)
+		cleanup.current = res.cleanup;
 		return res.cleanup
 	}
 
