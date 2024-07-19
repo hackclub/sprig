@@ -27,9 +27,6 @@ const TICKRATE_FOLLOW = 20
 /** Evaluate attack behaviors every 15 ticks */
 const TICKRATE_ATTACK = 15
 
-/** Evaluate push behaviors every 15 ticks */
-const TICKRATE_PUSH = 5
-
 const player = "p";
 const enemy = "e";
 const wall = "w";
@@ -913,7 +910,7 @@ const levels = [
 wwwwwwwwww
 w........w
 w........w
-w...AAA..w
+w...RRR..w
 w........w
 w........w
 wp.......w
@@ -2023,7 +2020,7 @@ class PushableBehavior extends TickCadenceBehavior {
   onCadence() {}
 }
 
-class PusherBehavior extends TickCadenceBehavior {
+class PusherBehavior extends Behavior {
   /**
    * A behavior that enables the associated GameObject to push other GameObjects
    */
@@ -2033,7 +2030,7 @@ class PusherBehavior extends TickCadenceBehavior {
   }
 
   /** @private */
-  onCadence() {
+  tick() {
     const parent = this.getParent()
     const engine = parent.getGameEngine()
 
