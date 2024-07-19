@@ -1243,17 +1243,17 @@ class GameEngine {
    * 
    * @param {integer} x - The x coordinate
    * @param {integer} y - The y coordinate
-   * @param {string} type - The GameObject type to check if it can be pushed by
+   * @param {GameObject} objectCheck - The GameObject to check if it can be pushed by
    * @returns {GameObject[]} - The GameObjects in the tile that can be pushed
    */
-  isPushable(x, y, type) {
+  isPushable(x, y, objectCheck) {
     let objects = this.getManagedObjectsAt(x, y)
     let result = []
 
     objects.forEach((object) => {
       let behavior = object.getBehavior(PushableBehavior)
       if (!behavior) return;
-      if (!behavior.canBePushedByObject(type)) return;
+      if (!behavior.canBePushedBy(objectCheck)) return;
 
       result.push(object)
     })
@@ -2011,31 +2011,12 @@ class PushableBehavior extends TickCadenceBehavior {
   /**
    * A behavior that enables the associated GameObject to be pushed
    * 
-   * @param {string[]} canBePushedBy - The gameobject array to define what GameObjects can push this GameObject
+   * @param {function} canBePushedBy - A callback to determine if the GameObject can be pushed
    */
-  constructor(canBePushedBy = []) {
+  constructor(canBePushedBy = (object) => true) {
     super(TICKRATE_PUSH)
 
     this.canBePushedBy = canBePushedBy
-  }
-
-  /**
-   * Adds a GameObject to the can be pushed by
-   * 
-   * @param {string} object - The GameObject to add
-   */
-  addGameObjectToPushedBy(object) {
-    this.canBePushedBy.push(object)
-  }
-
-  /**
-   * Checks if an object can be pushed
-   * 
-   * @param {string} object - The GameObject to check
-   * @returns {boolean}
-   */
-  canBePushedByObject(object) {
-    return this.canBePushedBy.indexOf(object) !== -1;
   }
 
   /** @private */
@@ -2312,7 +2293,7 @@ function addWallAt(engine, x, y) {
 // Adds a movable rocl
 function addRockAt(engine, x, y) {
   new GameObject(engine, x, y, rock)
-    .addBehavior(new PushableBehavior([player]))
+    .addBehavior(new PushableBehavior())
     .addBehavior(new LivingBehavior(1, 1, (obj) => obj.destroy()))
 }
 
