@@ -80,7 +80,7 @@ jobs:
       - name: Run Plagiarism Detection Script
         run: |
           echo "Running plagiarism check for batch: ${{ matrix.batch }}"
-          python .github/scripts/plagiarism_check.py "games/" "${{ matrix.batch }}" "output_dir" "saved_dir"
+          python .github/scripts/plagiarism_check.py "${{ matrix.batch }}" "output_dir" "saved_dir"
 
   extract-and-upload:
     needs: plagiarism-check

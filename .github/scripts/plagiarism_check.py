@@ -37,15 +37,16 @@ def run_compare50(directory, output_dir, saved_dir_base):
 
                 command = [
                     "compare50",
-                    file,
-                    compare_file,
-                    "--output", output_dir,
+                    f'"{file}"',
+                    f'"{compare_file}"',
+                    "--output", f'"{output_dir}"',
                     "--max-file-size", str(1024 * 1024 * 100),
                     "--passes", "text"
                 ]
 
-                log(f"Running command: {' '.join(command)}")
-                subprocess.run(command, check=True)
+                command_str = ' '.join(command)
+                log(f"Running command: {command_str}")
+                subprocess.run(command_str, shell=True, check=True)
                 log("Compare50 command executed successfully.")
 
                 match_file = os.path.join(output_dir, "match_1.html")
@@ -64,18 +65,16 @@ def run_compare50(directory, output_dir, saved_dir_base):
         log(f"An error occurred: {e}")
 
 def main():
-    if len(sys.argv) != 5:
+    if len(sys.argv) != 4:
         log("Incorrect number of arguments provided.")
-        print("Usage: python plagiarism_check.py <games_directory> <batch_directory> <output_dir> <saved_dir_base>")
+        print("Usage: python plagiarism_check.py <batch_directory> <output_dir> <saved_dir_base>")
         sys.exit(1)
 
-    games_directory = sys.argv[1]
-    batch_directory = sys.argv[2]
-    output_dir = sys.argv[3]
-    saved_dir_base = sys.argv[4]
+    batch_directory = sys.argv[1]
+    output_dir = sys.argv[2]
+    saved_dir_base = sys.argv[3]
 
     log(f"Starting plagiarism check with the following arguments:")
-    log(f"Games directory: {games_directory}")
     log(f"Batch directory: {batch_directory}")
     log(f"Output directory: {output_dir}")
     log(f"Saved directory base: {saved_dir_base}")
