@@ -32,6 +32,16 @@ jobs:
           js_files=$(git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep 'games/.*\.js$' | xargs)
           echo "FILES=$js_files" >> $GITHUB_ENV
 
+      - name: Split files into batches
+        run: python .github/scripts/split_into_batches.py games/ batches/
+
+      - name: List files in batches
+        run: |
+          for dir in batches/*; do
+            echo "Files in $dir:"
+            ls $dir
+          done
+
       - name: Run Plagiarism Detection Script
         if: env.FILES != ''
         run: python .github/scripts/plagiarism_check.py "${{ env.FILES }}" games output_dir saved_dir
