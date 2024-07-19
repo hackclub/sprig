@@ -1603,6 +1603,7 @@ class GameObject {
     this.displayType = type
     this.canOverlap = canOverlap
     this.gameEngine = gameEngine
+    this.destroyed = false
     this.behaviors = []
     this.lastMoveTick = gameEngine.getTick()
     gameEngine.addTile(x, y, this.displayType)
@@ -1618,6 +1619,8 @@ class GameObject {
   tick() {
     let i
     for (i in this.behaviors) {
+      if (this.destroyed) break;
+      
       let behavior = this.behaviors[i]
       behavior.tick();
     }
@@ -1719,6 +1722,7 @@ class GameObject {
    * Destroys the GameObject and clears its tile
    */
   destroy() {
+    this.destroyed = true
     this.gameEngine.scheduleAtEndOfTick(() => {
       this.removeTile()
       this.gameEngine.removeGameObject(this)
