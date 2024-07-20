@@ -293,7 +293,7 @@ bbbb...bbbb
 bbbb.c...bb
 mbbbbgbb..b
 pbcgbbbgc.b
-bbbbbgbb..b
+mbbbbgbb..b
 bbbbbcb...b
 bbbbb...bbb`,
   map`
@@ -509,7 +509,7 @@ afterInput(() => {
   if (lives <= 0) {
     level = 0; // Reset level
     setMap(levels[level]); // Load the initial map
-    lives = 1;
+    lives = 3;
   }
 
   const baskets = tilesWith(goal).length;
