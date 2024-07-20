@@ -367,7 +367,24 @@ bwwwwwwwwwwwwwwwwwwwwww.
 ........................
 .wwwwwwwwwwwwwwwwwwwwwwb
 ......................jg
-wwwwwwwwwwwwwwwwwwwwwwww`
+wwwwwwwwwwwwwwwwwwwwwwww`,
+    map`
+bbb..
+bpj..
+bbb..
+g....`,
+  map`
+ggggwwwgggg
+aaaawwwaaaa
+....www....
+....bmb....
+wwwwwpwwwww`,
+    map`
+ggwwwgggggg
+jjg.ccccccg
+pjg......cg
+jjg.ccccccg
+ggwwwgggggg`
 ]
 
 const currentLevel = levels[level];
