@@ -2,7 +2,7 @@
 @title: candyshopper
 @author: ayaangrover
 @tags: ["puzzle"]
-@addedOn: 2024-07-15
+@addedOn: 2024-07-19
 */
 
 let lives = 3;
@@ -352,7 +352,6 @@ jgwww...jg
 ..ag....jg
 ........jg
 wwwwwww.jg`,
-  
   map`
 pmmm....................
 bwwwwwwwwwwwwwwwwwwwwww.
@@ -368,7 +367,7 @@ bwwwwwwwwwwwwwwwwwwwwww.
 .wwwwwwwwwwwwwwwwwwwwwwb
 ......................jg
 wwwwwwwwwwwwwwwwwwwwwwww`,
-    map`
+  map`
 bbb..
 bpj..
 bbb..
@@ -379,12 +378,55 @@ aaaawwwaaaa
 ....www....
 ....bmb....
 wwwwwpwwwww`,
-    map`
+  map`
 ggwwwgggggg
 jjg.ccccccg
 pjg......cg
 jjg.ccccccg
-ggwwwgggggg`
+ggwwwgggggg`,
+  map`
+gbp...b
+jwwww.w
+......w
+wwwwwwb`,
+  map`
+gbp.www
+jwb...w
+...ww.w
+ww....w`,
+  map`
+pw...w...w...
+.w.w.w.w.w.w.
+...w...w...w.
+bwwwwwwwwwww.
+...w...w...w.
+jw.w.w.w.w.w.
+gw...w...w...`,
+  map`
+..bbp
+.wbbb
+jwbbb
+gwwww`,
+  map`
+w..w
+pjjg
+bwgw`,
+  map`
+w.b
+pj.
+b.g`,
+  map`
+g.......
+gwwww...
+..apw...
+.awww.a.
+.......g`,
+  map`
+ggw.agw
+jjw.www
+......w
+wwbwccw
+mp.wggw`
 ]
 
 const currentLevel = levels[level];
@@ -451,8 +493,8 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       lives++; // Increase lives count
       playTune(addLifeTune);
-      let xCoord=playerSprite.x;
-      let yCoord=playerSprite.y;
+      let xCoord = playerSprite.x;
+      let yCoord = playerSprite.y;
       setMap(currentLevel);
       clearTile(xCoord, yCoord);
     }
@@ -461,7 +503,7 @@ afterInput(() => {
   const fails = tilesWith(player, badjuice).length;
   if (fails >= 1) {
     playTune(resetTune); // Play reset tune
-    lives--; 
+    lives--;
   }
 
   if (lives <= 0) {
