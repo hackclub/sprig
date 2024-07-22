@@ -1415,13 +1415,6 @@ afterInput(() => {
           addSprite(lastPlayerX, lastPlayerY, boy);
         else
           addSprite(lastPlayerX, lastPlayerY, girl);
-  
-        // Make the collected tickets disappear
-        if (collectedPosX) {
-          for (let i = 0; i < collectedPosX.length; i++) {
-            clearTile(collectedPosX, collectedPosY);
-          }
-        }
         
         playerX = lastPlayerX;
         playerY = lastPlayerY;
