@@ -556,7 +556,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									<a href="/~">Your games</a>
 								</li>
 								<li>
-									<a href="/~/new">New game</a>
+									<a href="/~/new-game">New game</a>
 								</li>
 							</>
 						) : (
