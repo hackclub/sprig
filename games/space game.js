@@ -126,16 +126,57 @@ function RemoveBullet() {
 }
 
 function spawnEnemy() {
+  let y = 0
+  let x = Math.floor(Math.random() * 7);
+  let spawn = Math.floor(Math.random() * 3);
+  if (spawn == 1) {
+    addSprite(x, y, enemy);
+  }
+}
+
+function moveEnemy() {
+  let enemies = getAll(enemy)
+  for (let i = 0; i < enemies.length; i++) {
+    enemies[i].y += 1
+  }
+}
+
+function removeEnemy() {
+  let enemies = getAll(enemy);
+  for (let i = 0; i < enemies.length; i++) {
+    if (enemies[i].y == 5) {
+      enemies[i].remove();
+    }
+  }
+}
+
+function destroyEnemy() {
+  let enemies = getAll(enemy);
+  let bullets = getAll(bullet)
+  for (let i = 0; i < bullets.length; i++) {
+    for (let z = 0; z < enemies.length; z++) {
+      if (bullets[i].y == enemies[z].y && bullets[i].x == covids[z].x) {
+        clearTile(bullets[i].x, bullets[i].y)
+      }
+    }
+  }
 }
 
 var bulletShoot = setInterval(() => {
   spawnBullet();
 }, 150);
 
+var enemySpawnLoop = setInterval(() => {
+  removeEnemy();
+    moveEnemy();
+  
+}, 700);
+
 var gameLoop = setInterval(() => {
   moveBullets();
   RemoveBullet()
-  spwawnEnemy()
+  spawnEnemy()
+  
 }, 200);
 
 // afterInput(() => {
