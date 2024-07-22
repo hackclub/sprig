@@ -1,7 +1,7 @@
 /*
 @title: OG Space Invaders
 @author: Atharva Malik
-@tags: []
+@tags: ['space', 'invaders', 'space invaders', 'invader']
 @addedOn: 2024-07-11
 
 Controls:
@@ -218,6 +218,7 @@ function isGameOver(){
     setLevel(0, "You lost!", 'Press J to restart');
     gameOver = false;
     gameHasStarted = false;
+    lost = false;
   }
   if (numOfEnemies<=0){
     numOfEnemies = 35;
