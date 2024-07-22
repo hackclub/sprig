@@ -34,6 +34,7 @@ import VersionWarningModal from "../popups-etc/version-warning";
 import RoomPasswordPopup from "../popups-etc/room-password";
 import KeyBindingsModal from '../popups-etc/KeyBindingsModal'
 
+
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
 	roomState?: Signal<RoomState>;
@@ -224,6 +225,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 
 	const [sessionId] = useState(nanoid());
 
+
 	useEffect(() => {
 		if(roomState){
 			isNewSaveStrat.value = true;
@@ -231,6 +233,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 			isNewSaveStrat.value = false;
 		}
 	}, [])
+
 
 	useEffect(() => {
 		const channel = new BroadcastChannel('session_channel');
@@ -518,7 +521,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 		return (
 			<div class={styles.page}>
 				<Navbar persistenceState={persistenceState} roomState={roomState}/>
-
+				
 				<div class={styles.pageMain}>
 					<div className={styles.codeContainer}>
 						<CodeMirror
