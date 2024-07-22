@@ -1445,15 +1445,15 @@ class GameEngine {
   search(engine, startPosition, deltaPosition, stopAtWall, pushedBy) {
     if (deltaPosition.x == 0 && deltaPosition.y == 0) return;
 
+    let freeSpaces = 0
     let deltaPositionAbsolute = Vec2Utils.absolute(deltaPosition)
-    let freeSpaces = -Vec2Utils.sum(deltaPositionAbsolute)
-
     let hitWall = false, hitPushable = undefined, pushables = [];
 
-    let position = {x: startPosition.x, y: startPosition.y};
+    let position = startPosition;
     while ((stopAtWall && !hitWall) && this.withinBounds(position.x, position.y)) {
       if (engine.isWall(position.x, position.y)) {
-        hitWall = true; break;
+        hitWall = true;
+        break;
       }
 
       freeSpaces += deltaPositionAbsolute.x + deltaPositionAbsolute.y
@@ -1485,7 +1485,7 @@ class GameEngine {
     return {
       hitWall: hitWall,
       wall: hitWall ? position : {x: -1, y: -1},
-      freeSpaces: freeSpaces,
+      freeSpaces: freeSpaces - Vec2Utils.sum(deltaPositionAbsolute),
       pushables: pushables.flat()
     }
   }
@@ -1507,6 +1507,89 @@ function getRandomRange(min, max) {
   const minCeiled = Math.ceil(min);
   const maxFloored = Math.floor(max);
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
+}
+
+/**
+ * Represents and implements a Vec2D
+ */
+class Vec2D {
+  /**
+   * Creates a Vector2D
+   * @param {integer} x - The x coord
+   * @param {integer} y - The y coord
+   */
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  /**
+   * Adds two vectors and saves the result
+   * @param {Vec2D} rhs - The vector to add
+   */
+  add(rhs) {
+    this.x += rhs.x
+    this.y += rhs.y
+  }
+
+  /**
+   * Subtracts two vectors and saves the result
+   * @param {Vec2D} rhs - The vector to subtract
+   */
+  subtract(rhs) {
+    this.x -= rhs.x
+    this.y -= rhs.y
+  }
+
+  /**
+   * Multiplies two vectors and saves the result
+   * @param {Vec2D} rhs - The vector to multiply
+   */
+  multiply(rhs) {
+    this.x *= rhs.x
+    this.y *= rhs.y
+  }
+
+  /**
+   * Divides two vectors and saves the result
+   * @param {Vec2D} rhs - The vector to divide
+   */
+  divide(rhs) {
+    this.x /= rhs.x
+    this.y /= rhs.y
+  }
+
+  /**
+   * Gets the distance between two Vector2D points
+   * @param {Vec2D} rhs - The second point
+   */
+  distanceBetween(rhs) {
+    return Math.sqrt((rhs.y - this.y) ** 2 + (rhs.x - this.x) ** 2)
+  }
+
+  /**
+   * Makes the Vector2D contain absolute values
+   */
+  absolute() {
+    this.x = Math.abs(this.x)
+    this.y = Math.abs(this.y)
+  }
+
+  /**
+   * Sums the x and y coord
+   * @returns {integer}
+   */
+  sum() {
+    return this.x + this.y
+  }
+
+  /**
+   * Clones a new Vec2D from the current Vec2D
+   * @returns {Vec2D}
+   */
+  clone() {
+    return new Vec2D(this.x, this.y)
+  }
 }
 
 /** A class containg utils for a Vec2 */
@@ -2006,7 +2089,14 @@ class PusherBehavior extends Behavior {
     this.lastPosition = null
   }
 
-  /** @private */
+  /**
+   * @private
+   * @param {GameEngine} engine 
+   * @param {Vec2} currentPosition 
+   * @param {Vec2} deltaPosition 
+   * @param {GameObject} object 
+   * @returns {GameEngine~SearchResult}
+   */
   raycast(engine, currentPosition, deltaPosition, object) {
     return engine.search(engine, currentPosition, deltaPosition, true, object)
   }
