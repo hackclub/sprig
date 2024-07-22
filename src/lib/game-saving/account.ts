@@ -6,6 +6,7 @@ import { customAlphabet } from 'nanoid/async'
 import { lazy } from '../utils/lazy'
 import { generateGameName } from '../words'
 import metrics from '../../../metrics'
+import { RoomParticipant } from '../state'
 
 const numberid = customAlphabet('0123456789')
 
@@ -53,6 +54,9 @@ export interface Game {
 	code: string
 	tutorialName?: string
 	tutorialIndex?: number
+	roomParticipants?: RoomParticipant[]
+	isRoomOpen?: boolean
+	password?: string
 }
 
 export interface LoginCode {
@@ -245,10 +249,12 @@ export const getGame = async (id: string | undefined): Promise<Game | null> => {
 }
 
 export const makeGame = async (ownerId: string, unprotected: boolean, name?: string, code?: string, tutorialName?: string, tutorialIndex?: number): Promise<Game> => {
+	
+	const createdDate = Timestamp.now()
 	const data = {
 		ownerId,
-		createdAt: Timestamp.now(),
-		modifiedAt: Timestamp.now(),
+		createdAt: createdDate,
+		modifiedAt: createdDate,
 		unprotected,
 		name: name ?? generateGameName(),
 		code: code ?? '',

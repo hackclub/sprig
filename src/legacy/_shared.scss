@@ -205,6 +205,12 @@ a {
 	.logo { display: none; }
 }
 
+@media (max-width: 450px) {
+	.btn.active.top {
+		margin-bottom: 10px;
+	}
+}
+
 @media (max-width: $breakpoint-2) {
 	.btn {
 	font-size: 1.6rem;
