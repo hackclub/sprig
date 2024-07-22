@@ -2,11 +2,9 @@
 import '../global.css'
 import '../legacy/get.scss'
 import { getSession } from '../lib/game-saving/account'
-import { getConsolesRemaining } from '../lib/remaining-consoles'
 import Navbar from '../components/navbar-main'
 import StandardHead from '../components/standard-head.astro'
 
-const remainingConsoles = await getConsolesRemaining()
 const session = await getSession(Astro.cookies)
 ---
 
@@ -27,10 +25,6 @@ const session = await getSession(Astro.cookies)
 						If you're looking to submit your game to get a Sprig, make sure to read over the <a
 							href="https://github.com/hackclub/sprig/blob/main/docs/GET_A_SPRIG.md" target="_blank">rules here</a
 						>.
-					</p>
-
-					<p>
-						<strong>{remainingConsoles}</strong> teenagers have already claimed their sprig!
 					</p>
 				</div>
 			</div>
