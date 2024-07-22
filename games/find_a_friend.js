@@ -5,7 +5,7 @@ hit the friends.
 @title: Find a Friend
 @author: Doodle Studio
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-07-22
 */
 
 const player = "p"
