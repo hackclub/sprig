@@ -22,11 +22,8 @@
 	align-items: center;
 }
 
-
-
-
 .inner{
-	background: var(--bg-base);
+	background: var(--bg-surface);
 	border: 5px solid var(--accent);
 	padding:2rem;
 	padding-top: 1rem;
@@ -38,7 +35,7 @@
 
 .input{
 	background: white;
-	border: 2px solid var(--accent);
+	border: 2px solid var(--fg-muted);
 	padding:10px 10px;
 	width: 100%;
 	overflow: hidden;
