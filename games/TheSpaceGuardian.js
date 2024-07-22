@@ -2,7 +2,7 @@
 @title: TheSpaceGuardian
 @author: Adrian DeGendt 
 @tags: []
-@addedOn: 2024-07-9
+@addedOn: 2024-07-22
 
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
