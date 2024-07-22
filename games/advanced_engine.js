@@ -1425,77 +1425,43 @@ class GameEngine {
   }
 
   /**
-   * Clamps the direction to (-1, +1) on both axis
-   * @param {GameEngine~Position} direction - The direction to be clamped
-   * @returns {GameEngine~Position}
-   */
-  clampDirection(direction) {
-    let x = direction.x > 0 ? 1 : -1
-    if (direction.x == 0)
-      x = 0;
-
-    let y = direction.y > 0 ? 1 : -1
-    if (direction.y == 0)
-      y = 0
-
-    return {x: x, y: y}
-  }
-
-  /**
-   * @typedef {Object} GameEngine~Position
-   * @property {integer} x - The wall X
-   * @property {integer} y - The wall Y
+   * @typedef {Object} GameEngine~SearchResult
+   * @param {boolean} hitWall - If the search has hit a wall
+   * @param {Vec2} wall - The wall that the search has hit, defaults to (-1, -1)
+   * @param {integer} freeSpaces - How many free spaces are there
+   * @param {GameObject[]} pushables - How many pushables are in direct contact with the start position
    */
 
   /**
-   * @typedef {Object} GameEngine~RaycastResult
-   * @property {GameEngine~Position} wall - The wall
-   * @property {integer} freeSpaces - The amount of the free spaces
-   */
-
-  /**
-   * @typedef {Object} GameEngine~RaycastResultCombined
-   * @property {GameEngine~RaycastResult} x
-   * @property {GameEngine~RaycastResult}
-   */
-
-  /**
-   * Sends a raycast to both x, Y axis
-   * @param {GameEngine} engine - The current game engine instance
-   * @param {integer} startX - The raycast x coordinate
-   * @param {integer} startY - The raycast y coordinate
-   * @param {GameEngine~Position } direction - The raycast direction
+   * Starts a search at the objects startPosition
    * 
-   * @returns {GameEngine~RaycastResultCombined}
+   * @param {GameEngine} engine - The GameEngine to use
+   * @param {Vec2} startPosition - The Search Start Position
+   * @param {Vec2} deltaPosition - The delta to follow
+   * @param {boolean} stopAtWall - If the search should stop at a wall
+   * @param {GameEngine} pushedBy - The object to check if it can be pushed by
+   * @returns {GameEngine~SearchResult | undefined}
    */
-  raycast(engine, startX, startY, direction) {
-    const clampedDirection = this.clampDirection(direction)
-    return {x: this.raycastX(engine, startX, startY, clampedDirection.x), y: this.raycastY(engine, startX, startY, clampedDirection.y)}
-  }
+  search(engine, startPosition, deltaPosition, stopAtWall, pushedBy) {
+    if (deltaPosition.x == 0 && deltaPosition.y == 0) return;
 
-  /**
-   * Starts a raycast on the X axis
-   * 
-   * @param {GameEngine} engine - The current game engine instance
-   * @param {integer} startX - The raycast start X
-   * @param {integer} startY - The raycast start Y
-   * @param {integer} direction - The raycast direction (positive or negative)
-   * @param {string} pushedBy - The object to try if it can push others
-   * @returns {GameEngine~RaycastResult} - Raycast Resuslt
-   */
-  raycastX(engine, startX, startY, direction, pushedBy = undefined) {
-    let hitWall, hitPushable = undefined, pushables = [], freeSpaces = 0;
-    let offset = direction > 0 ? 1 : -1;
+    let deltaPositionAbsolute = Vec2Utils.absolute(deltaPosition)
+    let freeSpaces = -Vec2Utils.sum(deltaPositionAbsolute)
 
-    let x = startX
-    while (!hitWall && x < engine.getWidth() && x >= 0) {
-      if (engine.isWall(x, startY))
-        hitWall = {x: x, y: startY}
-      freeSpaces++
-      x += offset
+    let hitWall = false, hitPushable = undefined, pushables = [];
+
+    let position = {x: startPosition.x, y: startPosition.y};
+    while ((stopAtWall && !hitWall) && this.withinBounds(position.x, position.y)) {
+      if (engine.isWall(position.x, position.y)) {
+        hitWall = true; break;
+      }
+
+      freeSpaces += deltaPositionAbsolute.x + deltaPositionAbsolute.y
+      position = Vec2Utils.add(position, deltaPosition)
 
       if (!pushedBy) continue;
-      let isPushable = engine.isPushable(x - offset, startY, pushedBy)
+      let isPushable = engine
+        .isPushable(position.x - deltaPosition.x, position.y - deltaPosition.y, pushedBy)
       const hasPushable = isPushable.length > 0
 
       if (hitPushable == true) {
@@ -1516,52 +1482,12 @@ class GameEngine {
       }
     }
 
-    return {wall: hitWall, freeSpaces: freeSpaces - 2, pushables: pushables.flat()}
-  }
-
-  /**
-   * Starts a raycast on the Y axis
-   * 
-   * @param {GameEngine} engine - The current game engine instance
-   * @param {integer} startX - The raycast start X
-   * @param {integer} startY - The raycast start Y
-   * @param {integer} direction - The raycast direction (positive or negative)
-   * @returns {GameEngine~RaycastResult} - Raycast Resuslt
-   */
-  raycastY(engine, startX, startY, direction, pushedBy = undefined) {
-    let hitWall, hitPushable = undefined, pushables = [], freeSpaces = 0;
-    let offset = direction > 0 ? 1 : -1;
-
-    let y = startY
-    while (!hitWall && y < engine.getHeight() && y >= 0) {
-      if (engine.isWall(startX, y))
-        hitWall = {x: startX, y: y}
-      freeSpaces++
-      y += offset
-
-      if (!pushedBy) continue;
-      let isPushable = engine.isPushable(startX, y - offset, pushedBy)
-      const hasPushable = isPushable.length > 0
-
-      if (hitPushable == true) {
-        if (!hasPushable) {
-          hitPushable = false
-        } else {
-          pushables.push(isPushable)
-        }
-      }
-
-      if (hitPushable == undefined) {
-        if (hasPushable) {
-          hitPushable = true
-          pushables.push(isPushable)
-        } else {
-          hitPushable = false
-        }
-      }
+    return {
+      hitWall: hitWall,
+      wall: hitWall ? position : {x: -1, y: -1},
+      freeSpaces: freeSpaces,
+      pushables: pushables.flat()
     }
-
-    return {wall: hitWall, freeSpaces: freeSpaces - 2, pushables: pushables.flat()}
   }
 }
 
@@ -1581,6 +1507,56 @@ function getRandomRange(min, max) {
   const minCeiled = Math.ceil(min);
   const maxFloored = Math.floor(max);
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
+}
+
+/** A class containg utils for a Vec2 */
+class Vec2Utils {
+  /**
+ * @typedef {Object} Vec2
+ * @property {number} x - The x coordinate
+ * @property {number} y - The y coordinate
+ */
+
+  /**
+   * Adds two Vec2 together
+   * 
+   * @param {Vec2} a 
+   * @param {Vec2} b 
+   * @returns {Vec2}
+   */
+  static add(a, b) {
+    return {x: a.x + b.x, y: a.y + b.y}
+  }
+
+  /**
+   * Multiplies two Vec2 together
+   * @param {Vec2} a 
+   * @param {Vec2} b 
+   * @returns {Vec2}
+   */
+  static multiply(a, b) {
+    return {x: a.x * b.x, y: a.y * b.y}
+  }
+
+  /**
+   * Makes the Vec2 contain absolute values
+   * 
+   * @param {Vec2} a 
+   * @returns {Vec2}
+   */
+  static absolute(a) {
+    return {x: Math.abs(a.x), y: Math.abs(a.y)}
+  }
+
+  /**
+   * Sums the Vec2 values
+   * 
+   * @param {Vec2} a 
+   * @returns {Vec2}
+   */
+  static sum(a) {
+    return a.x + a.y
+  }
 }
 
 /** Represents a single game object that will be managed by the GameEngine */
@@ -2032,13 +2008,7 @@ class PusherBehavior extends Behavior {
 
   /** @private */
   raycast(engine, currentPosition, deltaPosition, object) {
-    let raycast
-    if (deltaPosition.x !== 0)
-      raycast = engine.raycastX(engine, currentPosition.x, currentPosition.y, deltaPosition.x, object)
-    if (deltaPosition.y !== 0)
-      raycast = engine.raycastY(engine, currentPosition.x, currentPosition.y, deltaPosition.y, object)
-
-    return raycast
+    return engine.search(engine, currentPosition, deltaPosition, true, object)
   }
 
   /** @private */
