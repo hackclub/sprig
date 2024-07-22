@@ -2,8 +2,8 @@
 /* 
 @title: Solstice_game
 @author: Stephanie Zhou
-@tags: [#maze]
-@addedOn: 2023-08-08
+@tags: ['maze']
+@addedOn: 2024-07-022
 */
 
     const player = "p"
