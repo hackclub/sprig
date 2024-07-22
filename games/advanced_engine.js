@@ -1427,7 +1427,7 @@ class GameEngine {
   /**
    * @typedef {Object} GameEngine~SearchResult
    * @param {boolean} hitWall - If the search has hit a wall
-   * @param {Vec2} wall - The wall that the search has hit, defaults to (-1, -1)
+   * @param {Vec2D} wall - The wall that the search has hit, defaults to (-1, -1)
    * @param {integer} freeSpaces - How many free spaces are there
    * @param {GameObject[]} pushables - How many pushables are in direct contact with the start position
    */
@@ -1436,8 +1436,8 @@ class GameEngine {
    * Starts a search at the objects startPosition
    * 
    * @param {GameEngine} engine - The GameEngine to use
-   * @param {Vec2} startPosition - The Search Start Position
-   * @param {Vec2} deltaPosition - The delta to follow
+   * @param {Vec2D} startPosition - The Search Start Position
+   * @param {Vec2D} deltaPosition - The delta to follow
    * @param {boolean} stopAtWall - If the search should stop at a wall
    * @param {GameEngine} pushedBy - The object to check if it can be pushed by
    * @returns {GameEngine~SearchResult | undefined}
@@ -1446,7 +1446,7 @@ class GameEngine {
     if (deltaPosition.x == 0 && deltaPosition.y == 0) return;
 
     let freeSpaces = 0
-    let deltaPositionAbsolute = Vec2Utils.absolute(deltaPosition)
+    let deltaPositionAbsolute = deltaPosition.clone().absolute()
     let hitWall = false, hitPushable = undefined, pushables = [];
 
     let position = startPosition;
@@ -1456,8 +1456,8 @@ class GameEngine {
         break;
       }
 
-      freeSpaces += deltaPositionAbsolute.x + deltaPositionAbsolute.y
-      position = Vec2Utils.add(position, deltaPosition)
+      freeSpaces += deltaPositionAbsolute.sum()
+      position.add(deltaPosition)
 
       if (!pushedBy) continue;
       let isPushable = engine
@@ -1484,8 +1484,8 @@ class GameEngine {
 
     return {
       hitWall: hitWall,
-      wall: hitWall ? position : {x: -1, y: -1},
-      freeSpaces: freeSpaces - Vec2Utils.sum(deltaPositionAbsolute),
+      wall: hitWall ? position : new Vec2D(-1, -1),
+      freeSpaces: freeSpaces - deltaPositionAbsolute.sum(),
       pushables: pushables.flat()
     }
   }
@@ -1524,39 +1524,59 @@ class Vec2D {
   }
 
   /**
+   * Creates a new Vec2D from an object
+   * @param {Object} obj - The object to convert from
+   */
+  static from(obj) {
+    return new Vec2D(obj.x, obj.y)
+  }
+
+  /**
    * Adds two vectors and saves the result
    * @param {Vec2D} rhs - The vector to add
+   * @returns {Vec2D}
    */
   add(rhs) {
     this.x += rhs.x
     this.y += rhs.y
+
+    return this
   }
 
   /**
    * Subtracts two vectors and saves the result
    * @param {Vec2D} rhs - The vector to subtract
+   * @returns {Vec2D}
    */
   subtract(rhs) {
     this.x -= rhs.x
     this.y -= rhs.y
+
+    return this
   }
 
   /**
    * Multiplies two vectors and saves the result
    * @param {Vec2D} rhs - The vector to multiply
+   * @returns {Vec2D}
    */
   multiply(rhs) {
     this.x *= rhs.x
     this.y *= rhs.y
+
+    return this
   }
 
   /**
    * Divides two vectors and saves the result
    * @param {Vec2D} rhs - The vector to divide
+   * @returns {Vec2D}
    */
   divide(rhs) {
     this.x /= rhs.x
     this.y /= rhs.y
+
+    return this
   }
 
   /**
@@ -1569,10 +1589,13 @@ class Vec2D {
 
   /**
    * Makes the Vector2D contain absolute values
+   * @returns {Vec2D}
    */
   absolute() {
     this.x = Math.abs(this.x)
     this.y = Math.abs(this.y)
+
+    return this
   }
 
   /**
@@ -1589,56 +1612,6 @@ class Vec2D {
    */
   clone() {
     return new Vec2D(this.x, this.y)
-  }
-}
-
-/** A class containg utils for a Vec2 */
-class Vec2Utils {
-  /**
- * @typedef {Object} Vec2
- * @property {number} x - The x coordinate
- * @property {number} y - The y coordinate
- */
-
-  /**
-   * Adds two Vec2 together
-   * 
-   * @param {Vec2} a 
-   * @param {Vec2} b 
-   * @returns {Vec2}
-   */
-  static add(a, b) {
-    return {x: a.x + b.x, y: a.y + b.y}
-  }
-
-  /**
-   * Multiplies two Vec2 together
-   * @param {Vec2} a 
-   * @param {Vec2} b 
-   * @returns {Vec2}
-   */
-  static multiply(a, b) {
-    return {x: a.x * b.x, y: a.y * b.y}
-  }
-
-  /**
-   * Makes the Vec2 contain absolute values
-   * 
-   * @param {Vec2} a 
-   * @returns {Vec2}
-   */
-  static absolute(a) {
-    return {x: Math.abs(a.x), y: Math.abs(a.y)}
-  }
-
-  /**
-   * Sums the Vec2 values
-   * 
-   * @param {Vec2} a 
-   * @returns {Vec2}
-   */
-  static sum(a) {
-    return a.x + a.y
   }
 }
 
@@ -2098,7 +2071,7 @@ class PusherBehavior extends Behavior {
    * @returns {GameEngine~SearchResult}
    */
   raycast(engine, currentPosition, deltaPosition, object) {
-    return engine.search(engine, currentPosition, deltaPosition, true, object)
+    return engine.search(engine, Vec2D.from(currentPosition), Vec2D.from(deltaPosition), true, object)
   }
 
   /** @private */
