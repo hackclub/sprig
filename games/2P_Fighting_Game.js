@@ -2,7 +2,7 @@
 @title: Fighing Engine
 @author: James Lian
 @tags: ['fighting', 'multiplayer', '2player']
-@addedOn: 2024-07-08
+@addedOn: 2024-07-22
 
 A simple 2-player fighting game engine, a little like rock'em sock'em robots and Street Fighter.
 Dodge your oponents by moving left and right! Punch them to knock them out!
