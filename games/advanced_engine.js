@@ -1175,7 +1175,7 @@ class GameEngine {
     for (x = 0; x < width(); x++) {
       this.managedObjectIndex.push([]);
       for (y = 0; y < height(); y++) {
-        this.managedObjectIndex[x].push(this.getManagedObjectsAt(x, y))
+        this.managedObjectIndex[x].push(this.getManagedObjectsAt(new Vec2D(x, y)))
       }
     }
   }
@@ -1209,25 +1209,23 @@ class GameEngine {
 
   /**
    * Checks to see if a coordinate is navigable
-   * @param {integer} x - The x coordinate
-   * @param {integer} y - The y coordinate
+   * @param {Vec2D} position - The coordinate
    */
-  isNavigable(x, y) {
-    if (this.isWall(x, y)) return false
+  isNavigable(position) {
+    if (this.isWall(position)) return false
 
     // NOTE - could do custom nav logic by inspecting these
-    let managedObjects = this.getManagedObjectsAt(x, y)
+    let managedObjects = this.getManagedObjectsAt(position)
 
     return true
   }
 
   /**
    * Checks to see if a coordinate is a wall
-   * @param {integer} x - The x coordinate
-   * @param {integer} y - The y coordinate
+   * @param {Vec2D} position - The coorddinate
    */
-  isWall(x, y) {
-    let tiles = getTile(x, y)
+  isWall(position) {
+    let tiles = getTile(position.x, position.y)
     let i
     for (i = 0; i < tiles.length; i++) {
       if (tiles[i].type === wall) return true
@@ -1238,13 +1236,12 @@ class GameEngine {
   /**
    * Checks if the GameObjects in a tile can be pushed
    * 
-   * @param {integer} x - The x coordinate
-   * @param {integer} y - The y coordinate
+   * @param {Vec2D} position - The coordinate
    * @param {GameObject} objectCheck - The GameObject to check if it can be pushed by
    * @returns {GameObject[]} - The GameObjects in the tile that can be pushed
    */
-  isPushable(x, y, objectCheck) {
-    let objects = this.getManagedObjectsAt(x, y)
+  isPushable(position, objectCheck) {
+    let objects = this.getManagedObjectsAt(position)
     let result = []
 
     objects.forEach((object) => {
@@ -1276,15 +1273,14 @@ class GameEngine {
 
   /**
    * Retrieves all GameObject's at a current coordinate
-   * @param {integer} x - The x coordinate
-   * @param {integer} y - The y coordinate
+   * @param {Vec2D} position - The coordinate
    */
-  getManagedObjectsAt(x, y) {
+  getManagedObjectsAt(position) {
     let ret = []
     let i
     for (i = 0; i < this.managedObjects.length; i++) {
       let obj = this.managedObjects[i]
-      if (obj.position.x == x && obj.position.y == y)
+      if (obj.position.is(position))
         ret.push(obj)
     }
     return ret
@@ -1331,16 +1327,15 @@ class GameEngine {
 
   /**
    * Retrieve all GameObject's within a given radius, centered on a coordinate
-   * @param {integer} x - The x coordinate
-   * @param {integer} y - The y coordinate
+   * @param {Vec2D} position - The coordinates
    * @param {float} radius - The radius of your selection
    */
-  spatialSelect(x, y, radius) {
+  spatialSelect(position, radius) {
     let objects = []
     let i;
     for (i = 0; i < this.managedObjects.length; i++) {
       let go = this.managedObjects[i]
-      if (this.distanceBetween(x, y, go.position.x, go.position.y) <= radius)
+      if (position.distanceBetween(go.position) <= radius)
         objects.push(go)
     }
     return objects
@@ -1394,16 +1389,15 @@ class GameEngine {
 
   /**
    * Checks whether a given coordinate is within the boundaries of the currently loaded map.
-   * @param {integer} x - The x coordinate
-   * @param {integer} y - The y coordinate
+   * @param {Vec2D} position - The coordinates
    */
-  withinBounds(x, y) {
-    return x >= 0 && y >= 0 && y < this.getHeight() && x < this.getWidth()
+  withinBounds(position) {
+    return position.x >= 0 && position.y >= 0 && position.y < this.getHeight() && position.x < this.getWidth()
   }
 
   /** @private */
-  addTile(x, y, type) {
-    addSprite(x, y, type)
+  addTile(position, type) {
+    addSprite(position.x, position.y, type)
   }
 
   /**
@@ -1413,9 +1407,9 @@ class GameEngine {
    * @param {float} x2 - The x coordinate of the second object
    * @param {float} y2 - The y coordinate of the second object
    */
-  distanceBetween(x1, y1, x2, y2) {
-    return Math.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2)
-  }
+  // distanceBetween(x1, y1, x2, y2) {
+  //   return Math.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2)
+  // }
 
   /** Retrieves (and subsequently clears) the last input registered with the GameEngine */
   popLastInput() {
@@ -1450,8 +1444,8 @@ class GameEngine {
     let hitWall = false, hitPushable = undefined, pushables = [];
 
     let position = startPosition;
-    while ((stopAtWall && !hitWall) && this.withinBounds(position.x, position.y)) {
-      if (engine.isWall(position.x, position.y)) {
+    while ((stopAtWall && !hitWall) && this.withinBounds(position)) {
+      if (engine.isWall(position)) {
         hitWall = true;
         break;
       }
@@ -1613,6 +1607,15 @@ class Vec2D {
   clone() {
     return new Vec2D(this.x, this.y)
   }
+
+  /**
+   * Checks if a Vec2D is equal with the current
+   * @param {Vec2D} rhs - The vector to checkl
+   * @returns {boolean}
+   */
+  is(rhs) {
+    return this.x == rhs.x && this.y == rhs.y
+  }
 }
 
 /** Represents a single game object that will be managed by the GameEngine */
@@ -1633,7 +1636,7 @@ class GameObject {
     this.destroyed = false
     this.behaviors = []
     this.lastMoveTick = gameEngine.getTick()
-    gameEngine.addTile(position.x, position.y, this.displayType)
+    gameEngine.addTile(position, this.displayType)
     gameEngine.addGameObject(this)
   }
 
@@ -1661,7 +1664,7 @@ class GameObject {
   replaceTile(newType) {
     this.removeTile()
     this.displayType = newType
-    this.gameEngine.addTile(this.position.x, this.position.y, newType)
+    this.gameEngine.addTile(this.position, newType)
   }
 
   /**
@@ -1669,8 +1672,7 @@ class GameObject {
    * @param {Vec2D} position - The coordinate
    */
   canMoveTo(position) {
-    console.log(`CAN_MOVE: ${JSON.stringify(position)}`)
-    if (!this.gameEngine.withinBounds(position.x, position.y)) {
+    if (!this.gameEngine.withinBounds(position)) {
       this.gameEngine.log("oob: " + position.x + ", " + position.y);
       return false
     }
@@ -1678,14 +1680,14 @@ class GameObject {
     let isProtagonist = this === this.gameEngine.getProtagonist()
 
     let canOverlap = true
-    let managedObjects = this.gameEngine.getManagedObjectsAt(position.x, position.y)
+    let managedObjects = this.gameEngine.getManagedObjectsAt(position)
     for (let i = 0; i < managedObjects.length; i++) {
       let go = managedObjects[i]
       if (this.cannotOverlapWith(go))
         canOverlap = false
     }
 
-    return this.gameEngine.isNavigable(position.x, position.y) && (isProtagonist || canOverlap)
+    return this.gameEngine.isNavigable(position) && (isProtagonist || canOverlap)
   }
 
   /**
@@ -1709,7 +1711,7 @@ class GameObject {
     this.removeTile()
     this.position.add(deltaPosition)
     this.removeTile()
-    this.gameEngine.addTile(this.position.x, this.position.y, this.displayType);
+    this.gameEngine.addTile(this.position, this.displayType);
     this.gameEngine.recreateNavigationMap()
     this.lastMoveTick = this.gameEngine.getTick()
     return true
@@ -1724,12 +1726,11 @@ class GameObject {
       return
 
     this.gameEngine.log("tp - " + position.x + "," + position.y)
-    console.log(position)
 
     this.removeTile()
     this.position = position
     this.removeTile()
-    this.gameEngine.addTile(this.position.x, this.position.y, this.displayType);
+    this.gameEngine.addTile(this.position, this.displayType);
     this.gameEngine.recreateNavigationMap()
     this.lastMoveTick = this.gameEngine.getTick()
   }
@@ -2131,20 +2132,19 @@ class FollowBehavior extends TickCadenceBehavior {
       this.target = engine.getProtagonist()
     }
 
-    this.moveTowards(parentGo.position.x, parentGo.position.y, this.target.position.x, this.target.position.y)
+    this.moveTowards(parentGo.position, this.target.position)
   }
 
   /** @private */
-  moveTowards(startX, startY, desiredX, desiredY) {
+  moveTowards(start, desired) {
     let parentGo = this.getParent()
     let engine = parentGo.getGameEngine()
 
-    if (engine.distanceBetween(startX, startY, desiredX, desiredY) <= 1)
+    if (start.distanceBetween(desired) <= 1)
       return
 
     let navMap = engine.getFreshNavigationMap(parentGo)
-    console.log(navMap)
-    let coord = this.bfs(navMap, { x: startX, y: startY }, { x: desiredX, y: desiredY })
+    let coord = this.bfs(navMap, start, desired)
     if (coord == false) {
       console.log("no move")
     } else {
@@ -2225,7 +2225,7 @@ class AttackBehavior extends TickCadenceBehavior {
     let parentGo = this.getParent()
     let engine = parentGo.getGameEngine()
 
-    engine.spatialSelect(parentGo.position.x, parentGo.position.y, this.range).forEach(target => {
+    engine.spatialSelect(parentGo.position, this.range).forEach(target => {
       if (engine.getTick() - target.getLastMoveTick() < 3) return;
       if (!this.canDamageSameType && parentGo.type == target.type) return;
       
@@ -2426,7 +2426,7 @@ function addBombAt(engine, x, y) {
 
 // Adds a flame, if it touches the player it hurts you
 function addFlameAt(engine, x, y) {
-  if (gameEngine.isWall(x, y) || !gameEngine.withinBounds(x, y)) return;
+  if (gameEngine.isWall(new Vec2D(x, y)) || !gameEngine.withinBounds(new Vec2D(x, y))) return;
 
   new GameObject(engine, new Vec2D(x, y), flame)
     .addBehavior(new AttackBehavior("burned"))
