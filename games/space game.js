@@ -50,23 +50,23 @@ setLegend(
   [bullet, bitmap`
 ................
 ................
-......111.......
-......F6F.......
-......F6F.......
-.....FF6FF......
-.....FC6CF......
-.....FC6CF......
-.....FC6CF......
-.....FC6CF......
-.....FC6CF......
-.....FC6CF......
-.....FC6CF......
-.....FC6CF......
+................
+................
+.......5........
+......555.......
+.....55655......
+.....56665......
+.....56665......
+.....56665......
+.....56665......
+.....56665......
+.....55555......
+................
 ................
 ................`],
 );
 
-setSolids([player, enemy]);
+setSolids([]);
 
 let level = 0;
 const levels = [
@@ -79,6 +79,9 @@ const levels = [
 ...p...`
 ];
 
+var score = 0
+var gameOver = false
+
 setMap(levels[level]);
 
 setPushables({
@@ -87,25 +90,23 @@ setPushables({
   [bullet]: [enemy]
 });
 
-onInput("w", () => {
-  getFirst(player).y -= 1;
-});
 
 onInput("a", () => {
-  getFirst(player).x -= 1;
+  if (!gameOver) {
+    getFirst(player).x -= 1;
+  }
 });
 
-onInput("s", () => {
-  getFirst(player).y += 1;
-});
 
 onInput("d", () => {
-  getFirst(player).x += 1;
+  if (!gameOver) {
+    getFirst(player).x += 1;
+  }
 });
 
 function spawnBullet() {
   let x = getFirst(player).x;
-  let y = 4;
+  let y = 5;
   addSprite(x, y, bullet);
 }
 
@@ -116,12 +117,13 @@ function moveBullets() {
     console.log(bullets[i].y)
   }
 }
+
 function RemoveBullet() {
   let bullets = getAll(bullet);
-  for (let i = 0; i < bullets.length; i++){
+  for (let i = 0; i < bullets.length; i++) {
     if (bullets[i].y == 0) {
       bullets[i].remove();
-      }
+    }
   }
 }
 
@@ -145,38 +147,71 @@ function removeEnemy() {
   let enemies = getAll(enemy);
   for (let i = 0; i < enemies.length; i++) {
     if (enemies[i].y == 5) {
-      enemies[i].remove();
+      // clearInterval(bulletShoot);
+      clearInterval(enemySpawnLoop);
+      clearInterval(gameLoop);
+      gameOver = true
+      addText("Game Over", { x: 5, y: 5, color: color`3` });
+      break;
     }
   }
 }
 
 function destroyEnemy() {
   let enemies = getAll(enemy);
-  let bullets = getAll(bullet)
+  let bullets = getAll(bullet);
   for (let i = 0; i < bullets.length; i++) {
     for (let z = 0; z < enemies.length; z++) {
-      if (bullets[i].y == enemies[z].y && bullets[i].x == covids[z].x) {
-        clearTile(bullets[i].x, bullets[i].y)
+      if (bullets[i].x == enemies[z].x && bullets[i].y == enemies[z].y) {
+        bullets[i].remove();
+        enemies[z].remove();
+        score += 1
+        break;
       }
     }
   }
 }
 
-var bulletShoot = setInterval(() => {
-  spawnBullet();
-}, 150);
+function checkPlayerCollision() {
+  let playerSprite = getFirst(player);
+  let enemies = getAll(enemy);
+  for (let i = 0; i < enemies.length; i++) {
+    if (playerSprite.x == enemies[i].x && playerSprite.y == enemies[i].y) {
+      gameOver = true
+      break;
+    }
+  }
+}
+
+// var bulletShoot = setInterval(() => {
+//   spawnBullet();
+//   // 150
+// }, 500);
 
 var enemySpawnLoop = setInterval(() => {
   removeEnemy();
-    moveEnemy();
-  
+  moveEnemy();
+
 }, 700);
 
 var gameLoop = setInterval(() => {
+  spawnBullet();
   moveBullets();
   RemoveBullet()
   spawnEnemy()
-  
+  destroyEnemy()
+  checkPlayerCollision();
+  addText("Score: " + score, {
+    x: 1,
+    y: 1,
+    color: color`0`
+  })
+  if (gameOver) {
+    // clearInterval(bulletShoot);
+    clearInterval(enemySpawnLoop);
+    clearInterval(gameLoop);
+    addText("Game Over", { x: 5, y: 5, color: color`3` });
+  }
 }, 200);
 
 // afterInput(() => {
