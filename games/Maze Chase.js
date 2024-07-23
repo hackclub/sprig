@@ -1,6 +1,5 @@
 /*
 Capture the flag before the other player does!
-
 @title: Maze Chase
 @author: Armaanpreet Singh
 @tags: ['two-player', 'maze', 'capture']
@@ -12,6 +11,7 @@ const player2 = "b";
 const wall = "w";
 const flag = "f";
 const gameover = "g";
+const teleporter = "t";
 
 const player1Bitmap = bitmap`
 ................
@@ -103,14 +103,31 @@ const gameoverBitmap = bitmap`
 2222222222222222
 2222222222222222`;
 
-
+const teleporterBitmap = bitmap`
+................
+................
+......7..7......
+......7777......
+......7227......
+....77277277....
+....72HHHH27....
+....72HHHH27....
+....72HHHH27....
+....77277277....
+......7227......
+......7777......
+......7..7......
+................
+................
+................`;
 
 setLegend(
   [player1, player1Bitmap],
   [player2, player2Bitmap],
   [wall, wallBitmap],
   [flag, flagBitmap],
-  [gameover, gameoverBitmap]
+  [gameover, gameoverBitmap],
+  [teleporter, teleporterBitmap]
 );
 
 setSolids([player1, player2, wall]);
@@ -122,7 +139,7 @@ const levels = [
 a.....w..b
 ..ww....ww
 w.w..ww.w.
-..w.w...w.
+..w.wt..w.
 .ww.w.www.
 ......w...
 .w.wwww...
@@ -134,7 +151,7 @@ wwwwww.www
 ....a.w..w
 .ww...w..w
 w....bw.ww
-..wwwwwfww
+..wwwt.fww
 ..w.....ww`,
   map`
 a.wwwwwwww
@@ -147,7 +164,7 @@ w...f....w
 wwwwwwww.b`,
   map`
 wwwwwwwwwwwwww
-a............w
+a.........t..w
 .www.w.www...w
 .............w
 wwww.wfw.ww.ww
@@ -159,6 +176,24 @@ g`
 ];
 
 setMap(levels[level]);
+
+// Timer variables
+let timer = 30;
+let interval;
+
+function startTimer() {
+  interval = setInterval(() => {
+    timer--;
+    clearText();
+    addText(`Time: ${timer}`, { x: 10, y: 0, color: color`0` });
+    if (timer <= 0) {
+      clearInterval(interval);
+      setMap(levels[4]);
+      addText("TIME'S UP! DRAW", { x: 0, y: 0, color: color`5` });
+      addText("ANY KEY TO CONTINUE", { x: 0, y: 2, color: color`5` });
+    }
+  }, 1000);
+}
 
 function checkWin() {
   const winMusic = tune`
@@ -194,14 +229,14 @@ function checkWin() {
 
   try {
     if (getFirst(player1).x == getFirst(flag).x && getFirst(player1).y == getFirst(flag).y) {
+      clearInterval(interval);
       playTune(winMusic);
-
       setMap(levels[4]); // Show the end screen
       addText("PLAYER 1 WINS", { x: 0, y: 0, color: color`7` });
       addText("ANY KEY TO CONTINUE", { x: 0, y: 2, color: color`7` });
     } else if (getFirst(player2).x == getFirst(flag).x && getFirst(player2).y == getFirst(flag).y) {
+      clearInterval(interval);
       playTune(winMusic);
-
       setMap(levels[4]); // Show the end screen
       addText("PLAYER 2 WINS", { x: 0, y: 0, color: color`3` });
       addText("ANY KEY TO CONTINUE", { x: 0, y: 2, color: color`3` });
@@ -209,10 +244,26 @@ function checkWin() {
   } catch (e) {}
 }
 
+function teleport(player) {
+  const teleporters = getAll(teleporter);
+  const currentPosition = getTile(player.x, player.y);
+  const currentTeleporter = currentPosition.find(tile => tile.type === teleporter);
+  if (currentTeleporter) {
+    const otherTeleporter = teleporters.find(t => t.x !== currentTeleporter.x || t.y !== currentTeleporter.y);
+    if (otherTeleporter) {
+      player.x = otherTeleporter.x;
+      player.y = otherTeleporter.y;
+    }
+  }
+}
+
 // Player 1 controls
 onInput("w", () => {
   if (level < 4) {
     getFirst(player1).y -= 1;
+    if (getTile(getFirst(player1).x, getFirst(player1).y).some(tile => tile.type === teleporter)) {
+      teleport(getFirst(player1));
+    }
     checkWin();
   }
 });
@@ -220,6 +271,9 @@ onInput("w", () => {
 onInput("s", () => {
   if (level < 4) {
     getFirst(player1).y += 1;
+    if (getTile(getFirst(player1).x, getFirst(player1).y).some(tile => tile.type === teleporter)) {
+      teleport(getFirst(player1));
+    }
     checkWin();
   }
 });
@@ -227,6 +281,9 @@ onInput("s", () => {
 onInput("a", () => {
   if (level < 4) {
     getFirst(player1).x -= 1;
+    if (getTile(getFirst(player1).x, getFirst(player1).y).some(tile => tile.type === teleporter)) {
+      teleport(getFirst(player1));
+    }
     checkWin();
   }
 });
@@ -234,6 +291,9 @@ onInput("a", () => {
 onInput("d", () => {
   if (level < 4) {
     getFirst(player1).x += 1;
+    if (getTile(getFirst(player1).x, getFirst(player1).y).some(tile => tile.type === teleporter)) {
+      teleport(getFirst(player1));
+    }
     checkWin();
   }
 });
@@ -242,6 +302,9 @@ onInput("d", () => {
 onInput("i", () => {
   if (level < 4) {
     getFirst(player2).y -= 1;
+    if (getTile(getFirst(player2).x, getFirst(player2).y).some(tile => tile.type === teleporter)) {
+      teleport(getFirst(player2));
+    }
     checkWin();
   }
 });
@@ -249,6 +312,9 @@ onInput("i", () => {
 onInput("k", () => {
   if (level < 4) {
     getFirst(player2).y += 1;
+    if (getTile(getFirst(player2).x, getFirst(player2).y).some(tile => tile.type === teleporter)) {
+      teleport(getFirst(player2));
+    }
     checkWin();
   }
 });
@@ -256,6 +322,9 @@ onInput("k", () => {
 onInput("j", () => {
   if (level < 4) {
     getFirst(player2).x -= 1;
+    if (getTile(getFirst(player2).x, getFirst(player2).y).some(tile => tile.type === teleporter)) {
+      teleport(getFirst(player2));
+    }
     checkWin();
   }
 });
@@ -263,6 +332,9 @@ onInput("j", () => {
 onInput("l", () => {
   if (level < 4) {
     getFirst(player2).x += 1;
+    if (getTile(getFirst(player2).x, getFirst(player2).y).some(tile => tile.type === teleporter)) {
+      teleport(getFirst(player2));
+    }
     checkWin();
   }
 });
@@ -273,5 +345,9 @@ afterInput(() => {
     clearText();
     level = (level + 1) % 4; // Move to the next level
     setMap(levels[level]);
+    timer = 30;
+    startTimer();
   }
 });
+
+startTimer();
