@@ -1188,7 +1188,7 @@ class GameEngine {
     for (x = 0; x < width(); x++) {
       this.navMap.push([]);
       for (y = 0; y < height(); y++) {
-        this.navMap[x].push(this.isNavigable(x, y) ? NAVIGABLE : WALL)
+        this.navMap[x].push(this.isNavigable(new Vec2D(x, y)) ? NAVIGABLE : WALL)
       }
     }
   }
