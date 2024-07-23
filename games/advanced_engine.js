@@ -1204,7 +1204,8 @@ class GameEngine {
       }
       output += "\n"
     }
-    console.log(output)
+
+    this.log(output)
   }
 
   /**
@@ -1384,7 +1385,7 @@ class GameEngine {
     if (this.inputHandler != null)
       this.inputHandler(this)
     else
-      console.log("warning: no input handler")
+      this.log("warning: no input handler")
   }
 
   /**
@@ -2146,7 +2147,7 @@ class FollowBehavior extends TickCadenceBehavior {
     let navMap = engine.getFreshNavigationMap(parentGo)
     let coord = this.bfs(navMap, start, desired)
     if (coord == false) {
-      console.log("no move")
+      engine.log(`${parentGo.type} - no move`)
     } else {
       parentGo.move(new Vec2D(coord.x - parentGo.position.x, coord.y - parentGo.position.y))
     }
