@@ -1,6 +1,6 @@
 /*
 @title: Sprigenstein3D
-@author: Ben Nack(TheBlueOomaLoompa)
+@author: TheBlueOomaLoompa
 @tags: ['maze']
 @addedOn: 2024-07-22
 */
