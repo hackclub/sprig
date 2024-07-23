@@ -906,15 +906,15 @@ const spikeAnimations = [spike, spike_anim1]
 const bombAnimations = [bomb, bomb_anim1, bomb_anim2, bomb_anim3]
 
 const levels = [
-  map`
-wwwwwwwwww
-w........w
-w........w
-w...RRR..w
-w........w
-w........w
-wp.......w
-wwwwwwwwww`,
+//   map`
+// wwwwwwwwww
+// w........w
+// w........w
+// w...RRR..w
+// w........w
+// w........w
+// wp.......w
+// wwwwwwwwww`,
   map`
 wwwwwwwwww
 wLwTwwU..w
@@ -1267,7 +1267,7 @@ class GameEngine {
     let y
     for (x = 0; x < width(); x++) {
       for (y = 0; y < height(); y++) {
-        if ((agent.x == x && agent.y == y) || this.navMap[x][y] == VISITED)
+        if ((agent.position.x == x && agent.position.y == y) || this.navMap[x][y] == VISITED)
           this.navMap[x][y] = NAVIGABLE
       }
     }
@@ -1284,7 +1284,7 @@ class GameEngine {
     let i
     for (i = 0; i < this.managedObjects.length; i++) {
       let obj = this.managedObjects[i]
-      if (obj.x == x && obj.y == y)
+      if (obj.position.x == x && obj.position.y == y)
         ret.push(obj)
     }
     return ret
@@ -1340,7 +1340,7 @@ class GameEngine {
     let i;
     for (i = 0; i < this.managedObjects.length; i++) {
       let go = this.managedObjects[i]
-      if (this.distanceBetween(x, y, go.x, go.y) <= radius)
+      if (this.distanceBetween(x, y, go.position.x, go.position.y) <= radius)
         objects.push(go)
     }
     return objects
@@ -1620,14 +1620,12 @@ class GameObject {
   /**
    * Create a new GameObject.  This generally represents an entity that can be seen on screen and has a location on the currently loaded map.
    * @param {GameEngine} gameEngine - The context GameEngine for your new game entity.
-   * @param {integer} x - The initial x coordinate for your GameObject
-   * @param {integer} y - The initial y coordinate for your GameObject
+   * @param {Vec2D} position - The initial coordinate for your GameObject
    * @param {string} type - The initial (Sprig/Spade) tile type for your GameObject.
    * @param {boolean} canOverlap - If the GameObject can overlap with other GameObjects
    */
-  constructor(gameEngine, x, y, type, canOverlap = false) {
-    this.x = x
-    this.y = y
+  constructor(gameEngine, position, type, canOverlap = false) {
+    this.position = position
     this.type = type
     this.displayType = type
     this.canOverlap = canOverlap
@@ -1635,7 +1633,7 @@ class GameObject {
     this.destroyed = false
     this.behaviors = []
     this.lastMoveTick = gameEngine.getTick()
-    gameEngine.addTile(x, y, this.displayType)
+    gameEngine.addTile(position.x, position.y, this.displayType)
     gameEngine.addGameObject(this)
   }
 
@@ -1663,31 +1661,31 @@ class GameObject {
   replaceTile(newType) {
     this.removeTile()
     this.displayType = newType
-    this.gameEngine.addTile(this.x, this.y, newType)
+    this.gameEngine.addTile(this.position.x, this.position.y, newType)
   }
 
   /**
    * Determine3s whether or not this GameObject can move to an input coordinate
-   * @param {integer} x - The x coordinate
-   * @param {integer} y - The y coordinate
+   * @param {Vec2D} position - The coordinate
    */
-  canMoveTo(x, y) {
-    if (!this.gameEngine.withinBounds(x, y)) {
-      this.gameEngine.log("oob: " + x + ", " + y);
+  canMoveTo(position) {
+    console.log(`CAN_MOVE: ${JSON.stringify(position)}`)
+    if (!this.gameEngine.withinBounds(position.x, position.y)) {
+      this.gameEngine.log("oob: " + position.x + ", " + position.y);
       return false
     }
 
     let isProtagonist = this === this.gameEngine.getProtagonist()
 
     let canOverlap = true
-    let managedObjects = this.gameEngine.getManagedObjectsAt(x, y)
+    let managedObjects = this.gameEngine.getManagedObjectsAt(position.x, position.y)
     for (let i = 0; i < managedObjects.length; i++) {
       let go = managedObjects[i]
       if (this.cannotOverlapWith(go))
         canOverlap = false
     }
 
-    return this.gameEngine.isNavigable(x, y) && (isProtagonist || canOverlap)
+    return this.gameEngine.isNavigable(position.x, position.y) && (isProtagonist || canOverlap)
   }
 
   /**
@@ -1700,20 +1698,18 @@ class GameObject {
 
   /**
    * Move the GameObject in a relative manner (using delta coordinates from current position)
-   * @param {integer} dx - A relative offset on the x coordinate to apply (-1 is left, 1 is right)
-   * @param {integer} dy - A relative offset on the y coordinate to apply (-1 is up, 1 is down)
+   * @param {Vec2D} deltaPosition - A relative offset on the x, y coordinate to apply
    */
-  move(dx, dy) {
-    if (!this.canMoveTo(this.x + dx, this.y + dy))
+  move(deltaPosition) {
+    if (!this.canMoveTo(this.position.clone().add(deltaPosition)))
       return false
 
-    this.gameEngine.log(`Moved: ${this.type}: (${dx},${dy})`)
+    this.gameEngine.log(`Moved: ${this.type}: (${deltaPosition.x},${deltaPosition.y})`)
 
     this.removeTile()
-    this.x += dx;
-    this.y += dy;
+    this.position.add(deltaPosition)
     this.removeTile()
-    this.gameEngine.addTile(this.x, this.y, this.displayType);
+    this.gameEngine.addTile(this.position.x, this.position.y, this.displayType);
     this.gameEngine.recreateNavigationMap()
     this.lastMoveTick = this.gameEngine.getTick()
     return true
@@ -1721,20 +1717,19 @@ class GameObject {
 
   /**
    * Instantaneously move the GameObject to a specific x/y coordinate.
-   * @param {integer} x - The x coordinate
-   * @param {integer} y - The y coordinate
+   * @param {Vec2D} position - The Vec2D coordinate
    */
-  teleport(x, y) {
-    if (!this.canMoveTo(x, y))
+  teleport(position) {
+    if (!this.canMoveTo(position))
       return
 
-    this.gameEngine.log("tp - " + x + "," + y)
+    this.gameEngine.log("tp - " + position.x + "," + position.y)
+    console.log(position)
 
     this.removeTile()
-    this.x = x;
-    this.y = y;
+    this.position = position
     this.removeTile()
-    this.gameEngine.addTile(this.x, this.y, this.displayType);
+    this.gameEngine.addTile(this.position.x, this.position.y, this.displayType);
     this.gameEngine.recreateNavigationMap()
     this.lastMoveTick = this.gameEngine.getTick()
   }
@@ -1744,7 +1739,7 @@ class GameObject {
    * @param {GameObject} otherObj - The other GameObject whose distance from this GameObject you'd like to measure
    */
   distanceTo(otherObj) {
-    return this.gameEngine.distanceBetween(this.x, this.y, otherObj.x, otherObj.y)
+    return this.position.distanceBetween(otherObj.position)
   }
 
   /**
@@ -1760,7 +1755,7 @@ class GameObject {
 
   /** Clears the Spade tile that this GameObject is located on. */
   removeTile() {
-    clearTile(this.x, this.y)
+    clearTile(this.position.x, this.position.y)
   }
 
   /** Retrieves the associated GameEngine with this GameObject */
@@ -1770,7 +1765,7 @@ class GameObject {
 
   /** Retrieves the current coordinate of the GameObject.  Note that this is returns a copy of the value */
   getPosition() {
-    return { x: this.x, y: this.y }
+    return this.position.clone()
   }
 
   /**
@@ -2065,13 +2060,13 @@ class PusherBehavior extends Behavior {
   /**
    * @private
    * @param {GameEngine} engine 
-   * @param {Vec2} currentPosition 
-   * @param {Vec2} deltaPosition 
+   * @param {Vec2D} currentPosition 
+   * @param {Vec2D} deltaPosition 
    * @param {GameObject} object 
    * @returns {GameEngine~SearchResult}
    */
   raycast(engine, currentPosition, deltaPosition, object) {
-    return engine.search(engine, Vec2D.from(currentPosition), Vec2D.from(deltaPosition), true, object)
+    return engine.search(engine, currentPosition, deltaPosition, true, object)
   }
 
   /** @private */
@@ -2082,7 +2077,7 @@ class PusherBehavior extends Behavior {
   /** @private */
   push(raycast, deltaPosition) {
     raycast.pushables.reverse().forEach(pushable => {
-      pushable.move(deltaPosition.x, deltaPosition.y)
+      pushable.move(deltaPosition)
     })
   }
 
@@ -2091,17 +2086,21 @@ class PusherBehavior extends Behavior {
     const parent = this.getParent()
     const engine = parent.getGameEngine()
 
-    const currentPosition = parent.getPosition()
-    if (!this.lastPosition) return this.lastPosition = currentPosition;
+    let currentPosition = parent.getPosition()
+    
+    if (this.lastPosition == null) {
+      this.lastPosition = currentPosition.clone();
+      return;
+    }
 
-    const deltaPosition = {x: currentPosition.x - this.lastPosition.x, y: currentPosition.y - this.lastPosition.y}
-
-    const raycast = this.raycast(engine, currentPosition, deltaPosition, parent)
+    // let deltaPosition = new Vec2D(this.lastPosition.x - currentPosition.x, this.lastPosition.y - currentPosition.y)
+    let deltaPosition = currentPosition.clone().subtract(this.lastPosition)
+    const raycast = this.raycast(engine, currentPosition.clone(), deltaPosition.clone(), parent)
     if (raycast && this.hasFreeSpace(raycast)) {
       this.push(raycast, deltaPosition)
     }
 
-    this.lastPosition = currentPosition
+    this.lastPosition = currentPosition.clone()
   }
 }
 
@@ -2132,7 +2131,7 @@ class FollowBehavior extends TickCadenceBehavior {
       this.target = engine.getProtagonist()
     }
 
-    this.moveTowards(parentGo.x, parentGo.y, this.target.x, this.target.y)
+    this.moveTowards(parentGo.position.x, parentGo.position.y, this.target.position.x, this.target.position.y)
   }
 
   /** @private */
@@ -2144,11 +2143,12 @@ class FollowBehavior extends TickCadenceBehavior {
       return
 
     let navMap = engine.getFreshNavigationMap(parentGo)
+    console.log(navMap)
     let coord = this.bfs(navMap, { x: startX, y: startY }, { x: desiredX, y: desiredY })
     if (coord == false) {
       console.log("no move")
     } else {
-      parentGo.move(coord.x - parentGo.x, coord.y - parentGo.y)
+      parentGo.move(new Vec2D(coord.x - parentGo.position.x, coord.y - parentGo.position.y))
     }
   }
 
@@ -2225,7 +2225,7 @@ class AttackBehavior extends TickCadenceBehavior {
     let parentGo = this.getParent()
     let engine = parentGo.getGameEngine()
 
-    engine.spatialSelect(parentGo.x, parentGo.y, this.range).forEach(target => {
+    engine.spatialSelect(parentGo.position.x, parentGo.position.y, this.range).forEach(target => {
       if (engine.getTick() - target.getLastMoveTick() < 3) return;
       if (!this.canDamageSameType && parentGo.type == target.type) return;
       
@@ -2300,16 +2300,16 @@ let inputHandler = function(engine) {
   let desiredAnimations = null;
   switch (engine.popLastInput()) {
     case "w":
-      player.move(0, -1);
+      player.move(new Vec2D(0, -1));
       break;
     case "a":
-      player.move(-1, 0);
+      player.move(new Vec2D(-1, 0));
       break;
     case "d":
-      player.move(1, 0);
+      player.move(new Vec2D(1, 0));
       break;
     case "s":
-      player.move(0, 1);
+      player.move(new Vec2D(0, 1));
       break;
     case null:
       break;
@@ -2326,7 +2326,7 @@ function onDeath(_, engine, killMsg) {
 // Adds a player object, taking special case to inform the engine that this is the protagonist (main player controller)
 function addPlayerAt(engine, x, y) {
   engine.setProtagonist(
-    new GameObject(engine, x, y, player)
+    new GameObject(engine, new Vec2D(x, y), player)
     .addBehavior(new PlayerAnimationBehavior())
     .addBehavior(new LivingBehavior(1, 1, onDeath))
     .addBehavior(new PusherBehavior()))
@@ -2334,26 +2334,26 @@ function addPlayerAt(engine, x, y) {
 
 // Adds a boring old wall
 function addWallAt(engine, x, y) {
-  new GameObject(engine, x, y, wall);
+  new GameObject(engine, new Vec2D(x, y), wall);
 }
 
 // Adds a movable rocl
 function addRockAt(engine, x, y) {
-  new GameObject(engine, x, y, rock)
+  new GameObject(engine, new Vec2D(x, y), rock)
     .addBehavior(new PushableBehavior())
     .addBehavior(new LivingBehavior(1, 1, (obj) => obj.destroy()))
 }
 
 // Adds a pusher arrow.  It automatically pushes the player in a certain direction (up, down, left, right)
 function addArrowAt(engine, x, y, arrowType, animations, logic) {
-  new GameObject(engine, x, y, arrowType, true)
+  new GameObject(engine, new Vec2D(x, y), arrowType, true)
     .addBehavior(new AnimatedBehavior(animations, TICKRATE_DEFAULT, 0))
     .addBehavior(new TouchBehavior(logic))
 }
 
 // Adds an enemy that follows you and tries to eat you
 function addEnemyAt(engine, x, y) {
-  new GameObject(engine, x, y, boss1)
+  new GameObject(engine, new Vec2D(x, y), boss1)
     .addBehavior(new AnimatedBehavior(boss1Animations))
     .addBehavior(new FollowBehavior())
     .addBehavior(new LivingBehavior(5, 5, (enemy) => enemy.destroy()))
@@ -2362,14 +2362,14 @@ function addEnemyAt(engine, x, y) {
 
 // Adds a spike trap.  When it touches you, it hurts!
 function addSpikeAt(engine, x, y) {
-  new GameObject(engine, x, y, spike)
+  new GameObject(engine, new Vec2D(x, y), spike)
     .addBehavior(new AnimatedBehavior(spikeAnimations, TICKRATE_DEFAULT, 0))
     .addBehavior(new AttackBehavior("slashinated"))
 }
 
 // Adds stairs that lead to the next level
 function addDownStairsAt(engine, x, y) {
-  new GameObject(engine, x, y, stairsDown)
+  new GameObject(engine, new Vec2D(x, y), stairsDown)
     .addBehavior(new AnimatedBehavior(stairDownAnimations))
     .addBehavior(new TouchBehavior(warpDownLogic))
 }
@@ -2383,7 +2383,7 @@ function teleportLogic(go) {
     case teleport1_from:
       let to = gameEngine.getFirst(teleport1_to)
       if (to != null) {
-        protagonist.teleport(to.x, to.y)
+        protagonist.teleport(to.position)
         if (gameEngine.getLevel() == 0) {
           addText("whoa!", { x: 14, y: 3, color: color`0` })
         }
@@ -2402,25 +2402,25 @@ function addTeleporterAt(engine, x, y, destinationTileType) {
   // First, create the teleporter destination
   let destinationTile = getFirst(teleport1_to)
   if (destinationTile != null) {
-    new GameObject(engine, destinationTile.x, destinationTile.y, teleport1_to)
+    new GameObject(engine, new Vec2D(destinationTile.x, destinationTile.y), teleport1_to)
       .addBehavior(new AnimatedBehavior(teleport1_to_animations))
   }
 
   // The teleporter, with its special teleportation logic that activates on touch (immediately adjacent)
-  new GameObject(engine, x, y, teleport1_from)
+  new GameObject(engine, new Vec2D(x, y), teleport1_from)
     .addBehavior(new AnimatedBehavior(teleport1_from_animations))
     .addBehavior(new TouchBehavior(teleportLogic))
 }
 
 // Adds a Bomb
 function addBombAt(engine, x, y) {
-  new GameObject(engine, x, y, bomb)
+  new GameObject(engine, new Vec2D(x, y), bomb)
     .addBehavior(new AnimatedBehavior(bombAnimations, TICKRATE_DEFAULT, getRandomRange(0, 1024), (self) => {
       self.getParent().destroy()
-      addFlameAt(gameEngine, self.getParent().x, self.getParent().y + 1)
-      addFlameAt(gameEngine, self.getParent().x, self.getParent().y - 1)
-      addFlameAt(gameEngine, self.getParent().x + 1, self.getParent().y)
-      addFlameAt(gameEngine, self.getParent().x - 1, self.getParent().y)
+      addFlameAt(gameEngine, self.getParent().position.x, self.getParent().position.y + 1)
+      addFlameAt(gameEngine, self.getParent().position.x, self.getParent().position.y - 1)
+      addFlameAt(gameEngine, self.getParent().position.x + 1, self.getParent().position.y)
+      addFlameAt(gameEngine, self.getParent().position.x - 1, self.getParent().position.y)
     }))
 }
 
@@ -2428,7 +2428,7 @@ function addBombAt(engine, x, y) {
 function addFlameAt(engine, x, y) {
   if (gameEngine.isWall(x, y) || !gameEngine.withinBounds(x, y)) return;
 
-  new GameObject(engine, x, y, flame)
+  new GameObject(engine, new Vec2D(x, y), flame)
     .addBehavior(new AttackBehavior("burned"))
     .addBehavior(new LifetimeBehavior(10))
 }
@@ -2442,19 +2442,19 @@ function warpDownLogic(go) {
 }
 
 function warpLeftArrowLogic(go) {
-  go.getGameEngine().getProtagonist().move(-1, 0)
+  go.getGameEngine().getProtagonist().move(new Vec2D(-1, 0))
 }
 
 function warpRightArrowLogic(go) {
-  go.getGameEngine().getProtagonist().move(1, 0)
+  go.getGameEngine().getProtagonist().move(new Vec2D(1, 0))
 }
 
 function warpUpArrowLogic(go) {
-  go.getGameEngine().getProtagonist().move(0, -1)
+  go.getGameEngine().getProtagonist().move(new Vec2D(0, -1))
 }
 
 function warpDownArrowLogic(go) {
-  go.getGameEngine().getProtagonist().move(0, 1)
+  go.getGameEngine().getProtagonist().move(new Vec2D(0, 1))
 }
 
 // This is where you should create your game object controllers
@@ -2526,7 +2526,7 @@ function onInit(engine, level) {
 
   onInput('k', () => { 
     const player = gameEngine.getProtagonist()
-    addBombAt(gameEngine, player.x, player.y)
+    addBombAt(gameEngine, player.position.x, player.position.y)
   })
 }
 
