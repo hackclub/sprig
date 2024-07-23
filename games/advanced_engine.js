@@ -1505,6 +1505,41 @@ function getRandomRange(min, max) {
 }
 
 /**
+ * Manages Persistance in the sprig engine
+ */
+class Preferences {
+  constructor () {}
+
+  /**
+   * Writes a value to the persistant storage
+   * 
+   * @todo Spade / Web Implementation
+   * @param {string} key - The key to save the value to
+   * @param {string | number} value - The value to save
+   * @returns {boolean} - Returns strue if the operation succeded
+   */
+  write(key, value) {
+    if (!(typeof value == "string" || typeof value == "number"))
+      return
+
+    // TODO: SAVE VALUE TO KEY PAIR
+    // REMINDER: KEY SHOULD BE HASHED - MD5/CRC32 ARE POTENTIAL OPTIONS
+  }
+
+  /**
+   * Reads a value from the persistant storage
+   * 
+   * @todo Spade / Web Implementation
+   * @param {string} key - The key to lookup
+   * @returns {undefined | number | string}
+   */
+  read(key) {
+    // TODO: READ VALUE FROM KEY
+    // REMINDER: KEY SHOULD BE HASHED BEFORE LOOKUP - MD5/CRC32 ARE POTENTIAL OPTIONS
+  }
+}
+
+/**
  * Represents and implements a Vec2D
  */
 class Vec2D {
