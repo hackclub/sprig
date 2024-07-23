@@ -3,7 +3,7 @@ import { useEffect } from 'preact/hooks'
 import { IoClose } from 'react-icons/io5'
 import tinykeys from 'tinykeys'
 import { usePopupCloseClick } from '../../lib/utils/popup-close-click'
-import { codeMirror, editors, openEditor, codeMirrorEditorText, _foldRanges, _widgets } from '../../lib/state'
+import { codeMirror, editors, openEditor, codeMirrorEditorText, _foldRanges, _widgets, OpenEditor } from '../../lib/state'
 import styles from './editor-modal.module.css'
 import levenshtein from 'js-levenshtein'
 import { runGameHeadless } from '../../lib/engine'
@@ -82,7 +82,7 @@ export default function EditorModal() {
 			if (openEditor.value?.kind === 'map') runGameHeadless(code ?? '');
 
 			openEditor.value = {
-				...openEditor.value,
+				...openEditor.value as OpenEditor,
 				editRange: {
 					from: editRange!.from,
 					to: editRange!.to
