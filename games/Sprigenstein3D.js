@@ -53,14 +53,6 @@ function clear() {
 }
 clear();
 
-
-
-bitmap`
-0L12............
-3C75............
-6F4D............
-8H9.............`
-
 function updateLegend() {
   let strings = [];
 
@@ -255,8 +247,44 @@ function resetLevel() {
   }
 }
 resetLevel();
-  
+
 // RENDER
+//// Bitmaps
+const wallTexture = bitmap`
+2222222222222222
+3332333233323332
+3332333233323332
+2222222222222222
+3233323332333233
+3233323332333233
+2222222222222222
+3332333233323332
+3332333233323332
+2222222222222222
+3233323332333233
+3233323332333233
+2222222222222222
+3332333233323332
+3332333233323332
+2222222222222222`;
+const endTexture = bitmap`
+................
+...6666666666...
+...FFFF33FFFF...
+...6F6F33F6F6...
+...FFFF33FFFF...
+...6666666666...
+...6666666666...
+...6666666666...
+....66666666....
+....66666666....
+......6666......
+.......66.......
+.......66.......
+......FFFF......
+.....666666.....
+................`;
+
 function render() {
   clear();
   addText(`Level ${level + 1}`, { x: 0, y: 0, color: COLORS[3] });
@@ -266,16 +294,17 @@ function render() {
   while(angleOffset < FOV && x < 160) {
     const ra = player.a + angleOffset - FOV/2;
     const hit = raycast({ ...player, a: ra });
-    const distance = dist(player, hit);
+    const distance = dist(player, hit) * Math.cos(angleOffset - FOV/2);
     const height = Math.min(Math.max((11-distance)/12, 0), 1);
     const pxHeight = Math.round(Math.min(Math.max(height*MAX_HEIGHT, 0), 128));
-    
+    const percent = ((hit.x+hit.y)/2)%1 * Math.cos(angleOffset - FOV/2);
+
     switch(hit.char) {
       case WALL:
-        drawLine(x, 2, pxHeight, COLORS[4]);
+        drawLine(x, 2, pxHeight, percent, wallTexture);
         break;
       case END:
-        drawLine(x, 2, pxHeight, COLORS[6]);
+        drawLine(x, 2, pxHeight, percent, endTexture);
         break;
       default:
         break;
@@ -290,9 +319,13 @@ function dist(p1, p2) {
   return Math.sqrt((p2.x - p1.x)**2+(p2.y-p1.y)**2);
 }
 
-function drawLine(x, width, height, color) {
+function drawLine(x, width, height, percent, texture) {
+  const min = Math.round(Math.max(64-height/2, 0));
+  const textureRows = texture.split('\n');
+  
   for(let ix = x; ix < width + x; ix++) {
-    for(let y = Math.round(Math.max(64-height/2, 0)); y < Math.round(Math.min(64+height/2, 128)); y++) {
+    for(let y = min; y < Math.round(Math.min(64+height/2, 128)); y++) {
+      const color = textureRows[Math.floor((y-min)/height*16)+1].charAt(Math.floor(percent*16));
       setPixel(ix, y, color);
     }
   }
