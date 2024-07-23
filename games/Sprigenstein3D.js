@@ -1,6 +1,6 @@
 /*
 @title: Sprigenstein3D
-@author: TheBlueOomaLoompa
+@author: Ben Nack(TheBlueOomaLoompa)
 @tags: ['maze']
 @addedOn: 2024-07-22
 */
@@ -11,9 +11,9 @@
 * Controls:
 *   W, S: Walk forward and backward
 *   A, D: Turn left and right
+*   J: Use key to open door
 * TODO if I have time:
 * - Add more levels
-* - Add keys and doors
 */
 
 /*
@@ -23,12 +23,205 @@
 const TILE_WIDTH=10
 const TILE_HEIGHT=8
 const TILE_SIZE=16
+
 const PLAYER_SPEED = .5;
 const LOOK_INC = 15 / 180 * Math.PI;
-const RAYCAST_RES = 0.01;
-const FOV = 80 / 180 * Math.PI;
-const FOV_RES = 1 / 180 * Math.PI;
+
+const RAYCAST_RES = 0.001;
+const FOV_NUM = 60;
+
+const FOV = FOV_NUM / 180 * Math.PI;
+const FOV_RES = FOV_NUM / 160 / 180 * Math.PI;
 const MAX_HEIGHT = 128;
+
+// ASSETS
+//// Sounds
+const doorSound = tune`
+77.51937984496124: C4/77.51937984496124,
+77.51937984496124: C4/77.51937984496124,
+77.51937984496124: C4/77.51937984496124,
+77.51937984496124: C4/77.51937984496124,
+2170.5426356589146`;
+const keySound = tune`
+70.4225352112676: C4^70.4225352112676 + E4~70.4225352112676 + G4/70.4225352112676,
+70.4225352112676: C5^70.4225352112676 + E5~70.4225352112676 + G5/70.4225352112676,
+70.4225352112676: B5^70.4225352112676,
+2042.2535211267605`;
+const newLevelTune = tune`
+103.80622837370242: D4~103.80622837370242 + G5^103.80622837370242 + A4/103.80622837370242,
+103.80622837370242: D4~103.80622837370242 + F5^103.80622837370242 + B4/103.80622837370242,
+103.80622837370242: D4~103.80622837370242 + E5^103.80622837370242 + A4/103.80622837370242,
+103.80622837370242: D5^103.80622837370242 + D4~103.80622837370242 + G4/103.80622837370242,
+103.80622837370242: F4-103.80622837370242,
+103.80622837370242: F5-103.80622837370242,
+2698.961937716263`;
+const winTune = tune`
+256.4102564102564: A5^256.4102564102564 + F5-256.4102564102564 + E4~256.4102564102564,
+256.4102564102564,
+256.4102564102564: A5^256.4102564102564 + F5-256.4102564102564 + B4/256.4102564102564 + D4~256.4102564102564,
+256.4102564102564: A4/256.4102564102564,
+256.4102564102564: G5^256.4102564102564 + E5-256.4102564102564 + E4~256.4102564102564,
+256.4102564102564: A4/256.4102564102564,
+256.4102564102564: G5^256.4102564102564 + E5-256.4102564102564,
+256.4102564102564: G4/256.4102564102564,
+256.4102564102564: E5^256.4102564102564 + C5-256.4102564102564 + F4/256.4102564102564 + E4~256.4102564102564,
+256.4102564102564: G4/256.4102564102564,
+256.4102564102564: G5^256.4102564102564 + E5-256.4102564102564 + D4~256.4102564102564,
+256.4102564102564: F5^256.4102564102564 + D5-256.4102564102564 + B4/256.4102564102564,
+256.4102564102564: G5^256.4102564102564 + E5-256.4102564102564 + E4~256.4102564102564,
+256.4102564102564: A5^256.4102564102564 + F5-256.4102564102564 + B4/256.4102564102564,
+256.4102564102564: B5^256.4102564102564 + G5-256.4102564102564 + B4/256.4102564102564 + D4~256.4102564102564,
+256.4102564102564: D4~256.4102564102564,
+256.4102564102564: B5^256.4102564102564 + G5-256.4102564102564 + G4/256.4102564102564,
+256.4102564102564: C4~256.4102564102564,
+256.4102564102564: D5^256.4102564102564 + B4-256.4102564102564 + C4/256.4102564102564 + F5~256.4102564102564,
+256.4102564102564,
+256.4102564102564: C5^256.4102564102564 + A4-256.4102564102564 + C4/256.4102564102564 + E5~256.4102564102564,
+256.4102564102564: C4/256.4102564102564,
+256.4102564102564: C5^256.4102564102564 + A4-256.4102564102564 + C4/256.4102564102564 + E5~256.4102564102564,
+2307.6923076923076`;
+
+//// Bitmaps
+const wallTexture = bitmap`
+2222222222222222
+3332333233323332
+3332333233323332
+2222222222222222
+3233323332333233
+3233323332333233
+2222222222222222
+3332333233323332
+3332333233323332
+2222222222222222
+3233323332333233
+3233323332333233
+2222222222222222
+3332333233323332
+3332333233323332
+2222222222222222`;
+const endTexture = bitmap`
+................
+...6666666666...
+...FFFF33FFFF...
+...6F6F33F6F6...
+...FFFF33FFFF...
+...6666666666...
+...6666666666...
+...6666666666...
+....66666666....
+....66666666....
+......6666......
+.......66.......
+.......66.......
+......FFFF......
+.....666666.....
+................`;
+const keyTexture = bitmap`
+................
+................
+................
+................
+................
+................
+....66..........
+...6..6666666...
+...6..6...6.6...
+....66..........
+................
+................
+................
+................
+................
+................`;
+const doorTexture = bitmap`
+2222222222222222
+3332355555523332
+3332577777753332
+2225777777775222
+3235777777775233
+3257777777777533
+2257777777777522
+3357777777777532
+3357777777777532
+2257777777677522
+3257777776067533
+3257777777677533
+2257777777777522
+3357777777777532
+3357777777777532
+2257777777777522`;
+
+//// Levels
+
+////// Level Components
+const START = 's';
+const END = 'e';
+const WALL = 'w';
+const KEY = 'k';
+const DOOR = 'd';
+const EMPTY = '_';
+
+/* Empty level
+`
+  wwwwwwwwww
+  w________w
+  w________w
+  w________w
+  w________w
+  w________w
+  w________w
+  w________w
+  w________w
+  wwwwwwwwww`,
+*/
+
+let levels = [
+  `
+  wwwwwwwwww
+  w________w
+  w_s______w
+  w________w
+  w___ww___w
+  w___ww___w
+  w________w
+  w________w
+  w_______ew
+  wwwwwwwwww`,
+  `
+  wwwwwwwwww
+  ws_______w
+  w__wwwww_w
+  w______www
+  w___w__w_w
+  w___w____w
+  w_w___ww_w
+  w_wwww___w
+  w___w___ew
+  wwwwwwwwww`,
+  `
+  wwwwwwwwww
+  ws_______w
+  wwwwwww__w
+  w________w
+  w_w_w_wwww
+  w_w_w_weww
+  w_w_w_w__w
+  w_w_w_ww_w
+  w__w_____w
+  wwwwwwwwww`,
+  `
+  wwwwwwwwwww
+  w_w__k___kw
+  w_w_wwwww_w
+  w___ws__w_w
+  ww_ww___wdw
+  w___w_____w
+  w_www_wdwww
+  w___w_w___w
+  w_w_w_w___w
+  w_w___w__ew
+  wwwwwwwwwww`,
+];
 
 /*
  * PIXEL ENGINE
@@ -49,7 +242,7 @@ const COLORS = ['0', 'L', '1', '2', '3','C','7','5','6','F','4','D','8','H','9']
 let pixels = '';
 function clear() {
   pixels = '';
-  for(let i = 0; i < 160*128; i++) { pixels += COLORS[0]; }
+  for(let i = 0; i < 160*128; i++) { pixels += i > 160*64 ? COLORS[1] : COLORS[6] }
 }
 clear();
 
@@ -183,107 +376,36 @@ function setPixel(x, y, color) {
  * GAME
 */
 
-// LEVEL
+let rows = [];
 
-const START = 's';
-const END = 'e';
-const WALL = 'w';
-const EMPTY = '_';
-
-let levels = [
-  `
-  wwwwwwwwww
-  w________w
-  w_s______w
-  w________w
-  w___ww___w
-  w___ww___w
-  w________w
-  w________w
-  w______eew
-  wwwwwwwwww`,
-  `
-  wwwwwwwwww
-  ws_______w
-  w__wwwww_w
-  w______www
-  w___w__w_w
-  w___w____w
-  w_w___ww_w
-  w_wwww___w
-  w___w__eew
-  wwwwwwwwww`,
-  `
-  wwwwwwwwww
-  ws_______w
-  wwwwwww__w
-  w________w
-  w_w_w_wwww
-  w_w_w_weww
-  w_w_w_w__w
-  w_w_w_ww_w
-  w__w_____w
-  wwwwwwwwww`,
-];
-
-for(let i = 0; i < levels.length; i++) {
-  levels[i] = levels[i].replaceAll(' ', '');
+function removeThing(thing) {
+  const { x, y } = { x: Math.floor(thing.x), y: Math.floor(thing.y) };
+  rows[y] = rows[y].slice(0, x) + '_' + rows[y].slice(x + 1);
 }
 
 // STATE
-let player = { x: 0, y: 0, a: 0 };
+let player = { x: 0, y: 0, a: 0, k: 0 };
 let level = 0;
 
 //// SETUP
 
-let rows = levels[level].split('\n');
+// Remove whitespaces
+for(let i = 0; i < levels.length; i++) {
+  levels[i] = levels[i].replaceAll(' ', '');
+}
+rows = levels[level].split('\n');
 function resetLevel() {
   rows = levels[level].split('\n');
   for(let y = 0; y < rows.length; y++) {
     for(let x = 0; x < rows[y].length; x++) {
       const char = rows[y].charAt(x);
-      if(char == START) player = { x: x + .5, y: y + .5, a: 0 };
+      if(char == START) player = { x: x + .5, y: y + .5, a: 0, k: 0 };
     }
   }
 }
 resetLevel();
 
 // RENDER
-//// Bitmaps
-const wallTexture = bitmap`
-2222222222222222
-3332333233323332
-3332333233323332
-2222222222222222
-3233323332333233
-3233323332333233
-2222222222222222
-3332333233323332
-3332333233323332
-2222222222222222
-3233323332333233
-3233323332333233
-2222222222222222
-3332333233323332
-3332333233323332
-2222222222222222`;
-const endTexture = bitmap`
-................
-...6666666666...
-...FFFF33FFFF...
-...6F6F33F6F6...
-...FFFF33FFFF...
-...6666666666...
-...6666666666...
-...6666666666...
-....66666666....
-....66666666....
-......6666......
-.......66.......
-.......66.......
-......FFFF......
-.....666666.....
-................`;
 
 function render() {
   clear();
@@ -295,21 +417,27 @@ function render() {
     const ra = player.a + angleOffset - FOV/2;
     const hit = raycast({ ...player, a: ra });
     const distance = dist(player, hit) * Math.cos(angleOffset - FOV/2);
-    const height = Math.min(Math.max((11-distance)/12, 0), 1);
+    const height = Math.min(Math.max((11-distance)/13, 0), 1);
     const pxHeight = Math.round(Math.min(Math.max(height*MAX_HEIGHT, 0), 128));
-    const percent = ((hit.x+hit.y)/2)%1 * Math.cos(angleOffset - FOV/2);
+    const percent = ((hit.x+hit.y))%1;
 
     switch(hit.char) {
       case WALL:
-        drawLine(x, 2, pxHeight, percent, wallTexture);
+        drawLine(x, 1, pxHeight, percent, wallTexture);
         break;
       case END:
-        drawLine(x, 2, pxHeight, percent, endTexture);
+        drawLine(x, 1, pxHeight, percent, endTexture);
+        break;
+      case KEY:
+        drawLine(x, 1, pxHeight, percent, keyTexture);
+        break;
+      case DOOR:
+        drawLine(x, 1, pxHeight, percent, doorTexture);
         break;
       default:
         break;
     }
-    x+= 2;
+    x+= 1;
 
     angleOffset += FOV_RES;
   }
@@ -345,16 +473,25 @@ function raycast(start, filter = [START]) {
   }
 }
 
+const moveFilter = [START, END, KEY];
+
 // INPUT
 onInput("w", () => {
-  const distance = dist(player, raycast(player, [START, END]));
+  const hit = raycast(player);
+  if(KEY == hit.char && dist(player, hit) < 1.5) {
+    playTune(keySound);
+    removeThing(hit);
+    player.k++;
+  }
+  
+  const distance = dist(player, raycast(player, moveFilter));
   if(distance <= PLAYER_SPEED) return;
   player.x += Math.cos(player.a) * Math.min(PLAYER_SPEED, distance);
   player.y += Math.sin(player.a) * Math.min(PLAYER_SPEED, distance);
 });
 
 onInput("s", () => {
-  const distance = dist(player, raycast(player, [START, END]));
+  const distance = dist(player, raycast({...player, a: -player.a}, moveFilter));
   if(distance <= PLAYER_SPEED*2) return;
   player.x -= Math.cos(player.a) * Math.min(PLAYER_SPEED, distance);
   player.y -= Math.sin(player.a) * Math.min(PLAYER_SPEED, distance);
@@ -368,39 +505,14 @@ onInput("d", () => {
   player.a += LOOK_INC;
 });
 
-const newLevelTune = tune`
-103.80622837370242: D4~103.80622837370242 + G5^103.80622837370242 + A4/103.80622837370242,
-103.80622837370242: D4~103.80622837370242 + F5^103.80622837370242 + B4/103.80622837370242,
-103.80622837370242: D4~103.80622837370242 + E5^103.80622837370242 + A4/103.80622837370242,
-103.80622837370242: D5^103.80622837370242 + D4~103.80622837370242 + G4/103.80622837370242,
-103.80622837370242: F4-103.80622837370242,
-103.80622837370242: F5-103.80622837370242,
-2698.961937716263`;
-const winTune = tune`
-256.4102564102564: A5^256.4102564102564 + F5-256.4102564102564 + E4~256.4102564102564,
-256.4102564102564,
-256.4102564102564: A5^256.4102564102564 + F5-256.4102564102564 + B4/256.4102564102564 + D4~256.4102564102564,
-256.4102564102564: A4/256.4102564102564,
-256.4102564102564: G5^256.4102564102564 + E5-256.4102564102564 + E4~256.4102564102564,
-256.4102564102564: A4/256.4102564102564,
-256.4102564102564: G5^256.4102564102564 + E5-256.4102564102564,
-256.4102564102564: G4/256.4102564102564,
-256.4102564102564: E5^256.4102564102564 + C5-256.4102564102564 + F4/256.4102564102564 + E4~256.4102564102564,
-256.4102564102564: G4/256.4102564102564,
-256.4102564102564: G5^256.4102564102564 + E5-256.4102564102564 + D4~256.4102564102564,
-256.4102564102564: F5^256.4102564102564 + D5-256.4102564102564 + B4/256.4102564102564,
-256.4102564102564: G5^256.4102564102564 + E5-256.4102564102564 + E4~256.4102564102564,
-256.4102564102564: A5^256.4102564102564 + F5-256.4102564102564 + B4/256.4102564102564,
-256.4102564102564: B5^256.4102564102564 + G5-256.4102564102564 + B4/256.4102564102564 + D4~256.4102564102564,
-256.4102564102564: D4~256.4102564102564,
-256.4102564102564: B5^256.4102564102564 + G5-256.4102564102564 + G4/256.4102564102564,
-256.4102564102564: C4~256.4102564102564,
-256.4102564102564: D5^256.4102564102564 + B4-256.4102564102564 + C4/256.4102564102564 + F5~256.4102564102564,
-256.4102564102564,
-256.4102564102564: C5^256.4102564102564 + A4-256.4102564102564 + C4/256.4102564102564 + E5~256.4102564102564,
-256.4102564102564: C4/256.4102564102564,
-256.4102564102564: C5^256.4102564102564 + A4-256.4102564102564 + C4/256.4102564102564 + E5~256.4102564102564,
-2307.6923076923076`;
+onInput("j", () => {
+  const hit = raycast(player);
+  if(hit.char == DOOR && dist(player, hit) < 2 && player.k > 0) {
+    player.k--;
+    removeThing(hit);
+    playTune(doorSound);
+  }
+});
 
 // these get run after every input
 afterInput(() => {
@@ -410,7 +522,7 @@ afterInput(() => {
   if(hit.char == END && distance < PLAYER_SPEED*2) {
     level += 1;
     if(level >= levels.length) {
-      addText("You win!", { x: 0, y: 0, color: COLORS[3] });
+      addText("You escaped!", { x: 0, y: 0, color: COLORS[3] });
       playTune(winTune);
     }else {
       playTune(newLevelTune);
@@ -420,7 +532,6 @@ afterInput(() => {
   if(level < levels.length) {
     render();
     updateLegend();
-    //console.log(player);
   }
 });
 
