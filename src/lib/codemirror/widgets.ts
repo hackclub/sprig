@@ -24,6 +24,10 @@ function makeValue(state: EditorState) {
 
 				if (tag.nameFrom === tag.nameTo) continue
 
+				widgets.push(Decoration.replace({
+					widget: new OpenButtonWidget({ kind, text: tag.text, range: { from: tag.textFrom, to: tag.textTo } })
+				}).range(tag.nameFrom, tag.nameTo))
+
 				if (kind === 'palette') {
 					const color = palette.find(([ key ]) => key === tag.text)
 					if (color) {
@@ -32,10 +36,6 @@ function makeValue(state: EditorState) {
 				} else if (tag.textFrom !== tag.textTo) {
 					foldRanges.push({ from: tag.textFrom, to: tag.textTo })
 				}
-
-				widgets.push(Decoration.replace({
-					widget: new OpenButtonWidget({ kind, text: tag.text, range: { from: tag.textFrom, to: tag.textTo } })
-				}).range(tag.nameFrom, tag.nameTo))
 
 				break
 			}
@@ -52,7 +52,12 @@ function makeValue(state: EditorState) {
 
 export default StateField.define({
 	create: (state) => makeValue(state),
-	update: (_, transaction) => makeValue(transaction.state),
+	update: (_, transaction) => {
+		// console.log("transaction state", transaction.state);
+		// const decorations = makeValue(transaction.state)
+		// console.log("decorations", decorations);
+		return makeValue(transaction.state)
+	},
 	provide: (field) => [
 		EditorView.decorations.from(field, value => value.decorations),
 		foldService.from(field, value => (_, lineStart, lineEnd) => ( 
