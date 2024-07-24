@@ -31,27 +31,7 @@
 
 // More firmware stuiff
 #include "ST7735_TFT.h"
-#include "upload.h"
 
-// Other imports
-#include "shared/sprig_engine/base_engine.c"
-#include "shared/sprig_engine/module_native.c"
-
-// Externs for shared/ui/errorbuf.h
-char errorbuf[512] = "";
-Color errorbuf_color; // Initialized in main()
-static void fatal_error() {
-  // On fatal error, start an infinite loop rendering the errorbuf.
-  errorbuf_color = color16(255, 0, 0); // Make sure it's red
-  while (1) {
-    text_clear();
-    render_errorbuf();
-    st7735_fill_start();
-    render(st7735_fill_send);
-    st7735_fill_finish();
-  }
-}
-#include "shared/ui/errorbuf.h"
 
 #define ARR_LEN(arr) (sizeof(arr) / sizeof(arr[0]))
 
@@ -220,36 +200,31 @@ int main() {
   // Overclock the RP2040!
   set_sys_clock_khz(270000, true);
 
-  errorbuf_color = color16(0, 255, 255); // cyan
-
   power_lights();   // Turn on the power lights
   stdio_init_all(); // Init serial port
-  st7735_init();    // Init display
   rng_init();       // Init RNG
 
-  while(!save_read()) {
-    // No game stored in memory
-    strcpy(errorbuf, "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "    PLEASE UPLOAD   \n"
-                     "       A GAME       \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     " sprig.hackclub.com \n");
-    render_errorbuf();
-    st7735_fill_start();
-    render(st7735_fill_send);
-    st7735_fill_finish();
+  // Initialize the display (call this once at the start)
+  st7735_init();
 
+  // Set up for drawing (set column and row addresses)
+  st7735_fill_start();
+
+  // Example: Draw a pattern of colors
+  uint16_t pixels[] = {
+      ST7735_RED, ST7735_GREEN, ST7735_BLUE, ST7735_YELLOW, ST7735_CYAN,
+      ST7735_MAGENTA, ST7735_WHITE, ST7735_BLACK
+  };
+
+  for (int i = 0; i < sizeof(pixels) / sizeof(pixels[0]); ++i) {
+      for (int j = 0; j < 500; ++j) { // Draw 50 pixels of each color
+          st7735_fill_send(pixels[i]);
+		  // spi_write_blocking(SPI_TFT_PORT, (uint8_t *)&pixel, sizeof(uint16_t));
+      }
   }
+
+  // Finish drawing
+  st7735_fill_finish();
 
   // Start a core to listen for keypresses.
   multicore_launch_core1(core1_entry);
@@ -265,80 +240,12 @@ int main() {
   sleep_ms(50);
   while (multicore_fifo_rvalid()) multicore_fifo_pop_blocking();
 
-  /**
-   * Wait for a keypress to start the game.
-   *
-   * This is important so games with e.g. infinite loops don't
-   * brick the device as soon as they start up.
-   */
-  while(!multicore_fifo_rvalid()) {
-    strcpy(errorbuf, "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "  PRESS ANY BUTTON  \n"
-                     "       TO RUN       \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     " sprig.hackclub.com \n");
-    render_errorbuf();
-    st7735_fill_start();
-    render(st7735_fill_send);
-    st7735_fill_finish();
-
-    load_new_scripts();
-  }
-
-  // Wow, we can actually run a game now!
-
-  // Clear the errorbuf and make it red
-  memset(errorbuf, 0, sizeof(errorbuf));
-  errorbuf_color = color16(255, 0, 0);
-  text_clear();
-
-  // Drain any remaining keypresses
-  while (multicore_fifo_rvalid()) multicore_fifo_pop_blocking();
-
-
-  // Current time for timer handling (see frame_cb in shared/sprig_engine/engine.js)
-  absolute_time_t last = get_absolute_time();
-  dbg("okay launching game loop");
-
   // Event loop!
   while (1) {
     // Handle any new button presses
     while (multicore_fifo_rvalid()) {
-      spade_call_press(multicore_fifo_pop_blocking());
+      puts(multicore_fifo_pop_blocking());
     }
 
-
-    // setTimeout/setInterval impl
-    absolute_time_t now = get_absolute_time();
-    int elapsed = us_to_ms(absolute_time_diff_us(last, now));
-    last = now;
-    spade_call_frame(elapsed);
-
-    // Render
-    render_errorbuf();
-    st7735_fill_start();
-    render(st7735_fill_send);
-    st7735_fill_finish();
   }
-
-  /**
-   * Watchdog is a mechanism designed to catch infinite loops. It will
-   * automatically reboot the device if another function, watchdog_update()
-   * is not called rapidly enough.
-   * 
-   * Enabling watchdog with a timeout of 0 will cause the Pico to reboot
-   * right away.
-   */
-  watchdog_enable(0, false);
-  while (1) {}
 }

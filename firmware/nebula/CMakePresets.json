@@ -7,7 +7,7 @@
       "generator": "Unix Makefiles",
       "binaryDir": "${sourceDir}/pc_build/",
       "cacheVariables": {
-        "SPADE_TARGET": "pc"
+        "NEBULA_TARGET": "pc"
       }
     },
     {
@@ -16,7 +16,7 @@
       "generator": "Unix Makefiles",
       "binaryDir": "${sourceDir}/rpi_build/",
       "cacheVariables": {
-        "SPADE_TARGET": "rpi"
+        "NEBULA_TARGET": "rpi"
       },
       "environment": {
         "PICO_SDK_PATH": "~/raspberrypi/pico-sdk",

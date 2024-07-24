@@ -1,9 +1,7 @@
 #include <stdint.h>
-#include "jerryscript.h"
 
 #include "shared/ui/errorbuf.h"
 #include "shared/ui/font.h"
-#include "shared/js_runtime/jerry_mem.h"
 #include "base_engine.h"
 
 static State *state = NULL;
