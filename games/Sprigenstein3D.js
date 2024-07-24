@@ -1,13 +1,12 @@
 /*
 @title: Sprigenstein3D
-@author: Ben Nack(TheBlueOomaLoompa)
+@author: TheBlueOomaLoompa
 @tags: ['maze']
 @addedOn: 2024-07-22
 */
 /*
 * Escape the 3D maze.
-* Walls are red and blue is the exit door.
-* WARNING: If you try to walk into walls you may or may not get stuck, no promises.
+* Run into the trophy to complete each level.
 * Controls:
 *   W, S: Walk forward and backward
 *   A, D: Turn left and right
@@ -26,6 +25,7 @@ const TILE_SIZE=16
 
 const PLAYER_SPEED = .5;
 const LOOK_INC = 15 / 180 * Math.PI;
+const COLLISION_MARGIN = .01;
 
 const RAYCAST_RES = 0.001;
 const FOV_NUM = 60;
@@ -482,17 +482,17 @@ onInput("w", () => {
     playTune(keySound);
     removeThing(hit);
     player.k++;
-  }
+  }  
   
   const distance = dist(player, raycast(player, moveFilter));
-  if(distance <= PLAYER_SPEED) return;
+  if(distance <= PLAYER_SPEED+COLLISION_MARGIN) return;
   player.x += Math.cos(player.a) * Math.min(PLAYER_SPEED, distance);
   player.y += Math.sin(player.a) * Math.min(PLAYER_SPEED, distance);
 });
 
 onInput("s", () => {
-  const distance = dist(player, raycast({...player, a: -player.a}, moveFilter));
-  if(distance <= PLAYER_SPEED*2) return;
+  const distance = dist(player, raycast({...player, a: player.a+Math.PI}, moveFilter));
+  if(distance <= PLAYER_SPEED+COLLISION_MARGIN) return;
   player.x -= Math.cos(player.a) * Math.min(PLAYER_SPEED, distance);
   player.y -= Math.sin(player.a) * Math.min(PLAYER_SPEED, distance);
 });
