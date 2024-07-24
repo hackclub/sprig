@@ -283,7 +283,7 @@ const Astar = (
     N, 
     M
 ) => {
-  console.log('Astar called with', startRow, startCol, endRow, endCol, N,  M);
+  // console.log('Astar called with', startRow, startCol, endRow, endCol, N,  M);
   const getNeighbors = function (row, col, N, M) {
     const rowv = [-1, 0, 1, 0];
     const colv = [0, 1, 0, -1];
@@ -292,15 +292,15 @@ const Astar = (
         let rr = row + rowv[i], cc = col + colv[i];
         if (rr < 0 || cc < 0 || rr >= N || cc >= M) continue;
         let bad = false;
-        console.log(rr, cc, getTile(cc, rr));
+        // console.log(rr, cc, getTile(cc, rr));
         for (let sprite of getTile(cc, rr)) {
-          console.log(rr, cc, sprite);
+          // console.log(rr, cc, sprite);
           if (sprite._type === water || sprite._type === trap) {
             bad = true;
             break;
           }
         }
-        console.log('bad', bad);
+        // console.log('bad', bad);
         if (bad) continue;
         neighbors.push([rr, cc]);
     }
@@ -321,7 +321,7 @@ const Astar = (
         return a_dist < b_dist;
     });
     q.push([0, [startRow, startCol]]);
-    console.log('N, M', N, M, typeof(N), typeof(M));
+    // console.log('N, M', N, M, typeof(N), typeof(M));
     let vis = new Array(N * M + 1);
     let par = new Array(N * M + 1);
     const INF = 1e9;
@@ -580,16 +580,19 @@ for (let i = 0; i < curGrid.length; ++i) {
 
 onInput("s", () => {
   if (settingUp) return;
+  if (!getFirst(player)) return;
   getFirst(player).y += 1
 })
 
 onInput("w", () => {
   if (settingUp) return;
+  if (!getFirst(player)) return;
   getFirst(player).y -= 1
 })
 
 onInput("d", () => {
   if (settingUp) return;
+  if (!getFirst(player)) return;
   getFirst(player).x += 1
   updateLegend([player, reversedPBitMap]);
   setLegend(...legend);
@@ -597,6 +600,7 @@ onInput("d", () => {
 
 onInput("a", () => {
   if (settingUp) return;
+  if (!getFirst(player)) return;
   getFirst(player).x -= 1
   updateLegend([player, pbitMap.join("\n")])
   setLegend(...legend)
@@ -607,6 +611,7 @@ const convNumberToPos = (number, N) => {
 };
 onInput("i", () => {
   if (settingUp) return;
+  if (!getFirst(player)) return;
   const N = levels[level].split("\n").length;
   // console.log('N - 1', N - 1);
   let [parentArray, visList] = Astar(getFirst(player).y, getFirst(player).x, N - 1, N - 1, N, N);
@@ -629,6 +634,7 @@ onInput("i", () => {
 
 onInput("j", () => {
   if (settingUp) return;
+  if (!getFirst(player)) return;
   setMap(levels[level]);
 });
 
@@ -666,7 +672,7 @@ afterInput(() => {
     playTune(foundBerry);
     // level += 1
     // console.log(levels[level], '\n')
-    console.log(legend)
+    // console.log(legend)
     // setLegend(...legend)
     // console.log(levels[level + 1])
     setMap(levels[++level])
