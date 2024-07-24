@@ -178,32 +178,73 @@ if (level % 2) {
 
 // player 1 controls
 onInput("w", () => {
-  getFirst(player1).y -= 1
-})
-onInput("a", () => {
-  getFirst(player1).x -= 1
-})
-onInput("s", () => {
-  getFirst(player1).y += 1
-})
-onInput("d", () => {
-  getFirst(player1).x += 1
+  try {
+    getFirst(player1).y -= 1
+  } catch (error) {
+    respawnPlayer(player1)
+  }
 })
 
+onInput("a", () => {
+  try {
+    getFirst(player1).x -= 1
+  } catch (error) {
+    respawnPlayer(player1)
+  }
+})
+
+onInput("s", () => {
+  try {
+    getFirst(player1).y += 1
+  } catch (error) {
+    respawnPlayer(player1)
+  }
+})
+
+onInput("d", () => {
+  try {
+    getFirst(player1).x += 1
+  } catch (error) {
+    respawnPlayer(player1)
+  }
+})
 
 // player 2 controls
 onInput("i", () => {
-  getFirst(player2).y -= 1
+  try {
+    getFirst(player2).y -= 1
+  } catch (error) {
+    respawnPlayer(player2)
+  }
 })
+
 onInput("j", () => {
-  getFirst(player2).x -= 1
+  try {
+    getFirst(player2).x -= 1
+  } catch (error) {
+    respawnPlayer(player2)
+  }
 })
+
 onInput("k", () => {
-  getFirst(player2).y += 1
+  try {
+    getFirst(player2).y += 1
+  } catch (error) {
+    respawnPlayer(player2)
+  }
 })
+
 onInput("l", () => {
-  getFirst(player2).x += 1
+  try {
+    getFirst(player2).x += 1
+  } catch (error) {
+    respawnPlayer(player2)
+  }
 })
+
+function respawnPlayer(player) {
+  addSprite(0, 0, player)
+}
 
 const removeAndRespawnMovingBoxes = () => {
   if (Math.random() < 0.4) {
@@ -212,7 +253,7 @@ const removeAndRespawnMovingBoxes = () => {
     tiles.forEach(sprite => {
       const x = sprite.x
       const y = sprite.y
-  
+
       // Randomly determine if the sprite should disappear and reappear
       if (Math.random() < 0.5) {
         // Check if the spawning position is occupied by a player
@@ -222,18 +263,25 @@ const removeAndRespawnMovingBoxes = () => {
           // Remove the movingBox sprite
           clearTile(x, y)
           addSprite(x, y, planks)
-    
+
           // Generate a random delay between 500ms and 2000ms for the sprite to reappear
           const randomDelay = Math.floor(Math.random() * 1500) + 500
-    
+
           // Add the movingBox sprite back to the same tile after a random delay
           setTimeout(() => {
             clearTile(x, y)
             addSprite(x, y, movingBox)
-          }, randomDelay); 
+          }, randomDelay);
         } else {
-          getFirst(player1).x += 1
-          getFirst(player2).x += 1
+          const player1Sprite = getFirst(player1);
+          const player2Sprite = getFirst(player2);
+          
+          if (player1Sprite) {
+            player1Sprite.x += 1;
+          }
+          if (player2Sprite) {
+            player2Sprite.x += 1;
+          }
         }
       }
     })
@@ -262,11 +310,11 @@ afterInput(() => {
       clearText()
 
       if (level % 2) {
-        setSolids([player1, box])
+        setSolids([player1, box, movingBox])
         currentColour = color`3`
         addText('Red is IT!', options = { x: 5, y: 1, color: currentColour })
       } else {
-        setSolids([player2, box])
+        setSolids([player2, box, movingBox])
         currentColour = color`5`
         addText('Blue is IT!', options = { x: 5, y: 1, color: currentColour })
       }
