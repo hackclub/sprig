@@ -32,6 +32,8 @@
 // More firmware stuiff
 #include "ST7735_TFT.h"
 
+// test
+#include "shared/hi.h"
 
 #define ARR_LEN(arr) (sizeof(arr) / sizeof(arr[0]))
 
@@ -198,7 +200,7 @@ int main() {
     timer_hw->dbgpause = 0;
 
   // Overclock the RP2040!
-  set_sys_clock_khz(270000, true);
+  //set_sys_clock_khz(270000, true);
 
   power_lights();   // Turn on the power lights
   stdio_init_all(); // Init serial port
@@ -216,12 +218,19 @@ int main() {
       ST7735_MAGENTA, ST7735_WHITE, ST7735_BLACK
   };
 
+  /*
   for (int i = 0; i < sizeof(pixels) / sizeof(pixels[0]); ++i) {
-      for (int j = 0; j < 500; ++j) { // Draw 50 pixels of each color
+      for (int j = 0; j < 1024; ++j) { // Draw 50 pixels of each color
           st7735_fill_send(pixels[i]);
 		  // spi_write_blocking(SPI_TFT_PORT, (uint8_t *)&pixel, sizeof(uint16_t));
       }
+	  
   }
+  */
+
+  for (int i = 0; i < hi_png_len; i++) {
+	  st7735_fill_send(hi_png[i]);
+  } 
 
   // Finish drawing
   st7735_fill_finish();
@@ -244,7 +253,7 @@ int main() {
   while (1) {
     // Handle any new button presses
     while (multicore_fifo_rvalid()) {
-      puts(multicore_fifo_pop_blocking());
+      printf("%d\n", multicore_fifo_pop_blocking());
     }
 
   }
