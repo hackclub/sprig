@@ -52,15 +52,10 @@ function makeValue(state: EditorState) {
 
 export default StateField.define({
 	create: (state) => makeValue(state),
-	update: (_, transaction) => {
-		// console.log("transaction state", transaction.state);
-		// const decorations = makeValue(transaction.state)
-		// console.log("decorations", decorations);
-		return makeValue(transaction.state)
-	},
+	update: (_, transaction) => makeValue(transaction.state),
 	provide: (field) => [
 		EditorView.decorations.from(field, value => value.decorations),
-		foldService.from(field, value => (_, lineStart, lineEnd) => ( 
+		foldService.from(field, value => (_, lineStart, lineEnd) => (
 			value.foldRanges.find(range => range.from >= lineStart && range.from <= lineEnd) ?? null
 		))
 	]
