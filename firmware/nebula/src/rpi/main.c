@@ -32,8 +32,8 @@
 // More firmware stuiff
 #include "ST7735_TFT.h"
 
-// test
-#include "shared/hi.h"
+#include "display.c"
+
 
 #define ARR_LEN(arr) (sizeof(arr) / sizeof(arr[0]))
 
@@ -224,13 +224,35 @@ int main() {
           st7735_fill_send(pixels[i]);
 		  // spi_write_blocking(SPI_TFT_PORT, (uint8_t *)&pixel, sizeof(uint16_t));
       }
-	  
+  }
+
+  for (int i = 0; i < 300; i++) {
+	  spi_write_blocking(SPI_TFT_PORT, (uint8_t *)pixels, sizeof(uint16_t) * 8);
   }
   */
 
-  for (int i = 0; i < hi_png_len; i++) {
-	  st7735_fill_send(hi_png[i]);
-  } 
+  // because the display prints columns first we need to manually print rows
+  for (int j = 0; j < 160; j++) {
+	  for (int i = 0; i < 128; i++) {
+		  char type = displae[i * 160 + j];
+
+		  if (type == '0') {
+			  st7735_fill_send(ST7735_WHITE);
+		  } else {
+			  st7735_fill_send(ST7735_BLACK);
+		  }
+	  } 
+  }
+
+  /*
+  for (int i = 0; displae[i]; i++) {
+	  if (displae[i] == '0') {
+		  st7735_fill_send(ST7735_WHITE);
+	  } else {
+		  st7735_fill_send(ST7735_BLACK);
+	  }
+  }
+  */
 
   // Finish drawing
   st7735_fill_finish();
