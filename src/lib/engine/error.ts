@@ -92,7 +92,7 @@ export const normalizeGameError = (gameError: GameError): NormalizedError => {
 
 		const stack = (gameError.error.stack ? normalizeStack(gameError.error.stack) : null) ?? []
 
-		let [line, col] = findErrorLineCol(gameError.error.stack)
+		let [line, col] = findErrorLineCol(gameError.error.stack, lineOffset)
 
 		stack.reverse()
 
