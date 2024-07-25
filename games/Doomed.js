@@ -151,9 +151,7 @@ setLegend(
 ................
 ................
 ................
-................
 .......666......
-................
 ................
 ................
 ................`],
@@ -311,6 +309,8 @@ const moveCooldown = 300; // 0.3 seconds
 const bulletSpeed = 100; // 0.1 seconds
 let lastFireTime = 0;
 const fireCooldown = 100; // 0.1 seconds
+let demonSpawnRate = 3000; // 3 seconds
+let demonMoveSpeed = 800; // 0.8 seconds
 
 addText(`Demons killed:${demonsKilled}`, { 
   x: 1,
@@ -451,10 +451,14 @@ function spawnDemon() {
 }
 
 function gameOver() {
+  // Prevent keypresses
   isGameOver = true;
+  
+  // Stop intervals
   clearInterval(demonSpawnInterval);
   clearInterval(demonMoveInterval);
   clearInterval(increaseInterval);
+  clearInterval(speedDecreaseInterval);
   setTimeout(() => {
     clearText();
     const allSprites = getAll();
@@ -502,11 +506,13 @@ function gameOver() {
 }
 
 function restartGame() {
+  // Give back control and reset values
   isGameOver = false;
   clearText();
   demonsKilled = 0;
-  playerLives = 5; // Reset lives
-  demonSpawnRate = 3000; // Reset spawn rate
+  playerLives = 5;
+  demonSpawnRate = 3000;
+  demonMoveSpeed = 800;
   setMap(levels[level]);
   setPushables({
     [playerUp]: [],
@@ -529,15 +535,21 @@ function restartGame() {
 
   // Restart intervals
   demonSpawnInterval = setInterval(spawnDemon, demonSpawnRate);
-  demonMoveInterval = setInterval(moveDemons, 800); // Move demons every 0.8 seconds
-  increaseInterval = setInterval(increaseDemonSpawnRate, 15000); // Increase spawn rate every 15 seconds
+  demonMoveInterval = setInterval(moveDemons, demonMoveSpeed);
+  increaseInterval = setInterval(increaseDemonSpawnRate, 15000);
+  speedDecreaseInterval = setInterval(decreaseDemonMoveSpeed, 5000);
 }
 
-let demonSpawnRate = 3000; // Start with 3 seconds
 function increaseDemonSpawnRate() {
   demonSpawnRate /= 2; // Double the spawn rate >:)
   clearInterval(demonSpawnInterval);
   demonSpawnInterval = setInterval(spawnDemon, demonSpawnRate);
+}
+
+function decreaseDemonMoveSpeed() {
+  demonMoveSpeed = Math.max(25, demonMoveSpeed - 25); // Decrease move speed by 25 milliseconds, minimum 25 milliseconds
+  clearInterval(demonMoveInterval);
+  demonMoveInterval = setInterval(moveDemons, demonMoveSpeed);
 }
 
 function moveDemons() {
@@ -603,9 +615,10 @@ function moveDemons() {
   });
 }
 
-let demonSpawnInterval = setInterval(spawnDemon, demonSpawnRate);
-let demonMoveInterval = setInterval(moveDemons, 800); // Move demons every 0.8 seconds
+let demonSpawnInterval = setInterval(spawnDemon, demonSpawnRate); // Spawn demons at initial rate
+let demonMoveInterval = setInterval(moveDemons, demonMoveSpeed); // Move demons at the initial speed
 let increaseInterval = setInterval(increaseDemonSpawnRate, 15000); // Increase spawn rate every 15 seconds
+let speedDecreaseInterval = setInterval(decreaseDemonMoveSpeed, 5000); // Decrease demon move speed every 5 seconds
 
 onInput("w", () => movePlayer(0, -1));
 onInput("a", () => movePlayer(-1, 0));
