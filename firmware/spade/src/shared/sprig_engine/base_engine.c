@@ -434,6 +434,12 @@ static void sprite_plop_into_map(Sprite *sprite) {
 }
 
 static Sprite *map_add(int x, int y, char kind) {
+  // jerry_heap_stats_t stats = {0};
+  // jerry_get_memory_stats(&stats);
+  // char msg[255];
+  // sprintf(msg, "SZ: %lu, ALLOC: %lu", stats.size, stats.allocated_bytes);
+  // yell(&msg);
+
   if (x < 0 || x >= state->width ) return 0;
   if (y < 0 || y >= state->height) return 0;
 
@@ -448,8 +454,6 @@ static Sprite *map_add(int x, int y, char kind) {
 }
 
 static void map_set(char *str) {
-  dbg("wormed ya way down into base_engine.c");
-
   // figure out how big of an allocation we need to make,  if any
   int tx = 0, ty = 0;
   char *str_dup = str;
@@ -464,8 +468,6 @@ static void map_set(char *str) {
   int old_map_size = state->width * state->height * sizeof(Sprite *);
   state->width = tx;
   state->height = ty+1;
-  dbg("parsed, found dims");
-
   if (!state->width || !state->height) return;
 
   // free stuff so we can create new ones
@@ -473,11 +475,9 @@ static void map_set(char *str) {
     jerry_heap_free(state->map, old_map_size);
   for (int i = 0; i < state->sprite_pool_size; i++)
     sprite_free(state->sprite_pool + i);
-  dbg("freed some sprites, maybe a map");
 
   state->map = jerry_calloc(state->width * state->height, sizeof(Sprite*));
   if (state->map == NULL) {
-    yell("AAAAAAAAA (map too big)");
     snprintf(errorbuf, sizeof(errorbuf), "map too big to fit in memory (%dx%d)", state->width, state->height);
     fatal_error();
   }
@@ -505,8 +505,6 @@ static void map_set(char *str) {
       } break;
     }
   } while (*str++);
-
-  dbg("alrighty, lemme resize a legend");
 
   render_resize_legend();
 }
@@ -708,7 +706,6 @@ static void legend_doodle_set(char kind, char *str) {
 
   state->render->legend_doodled[(int)kind] = 1;
   Doodle *d = state->render->legend + index;
-  dbgf("bouta write to %lu + %d\n", state->render->legend, index);
 
   int px = 0, py = 0;
   do {
