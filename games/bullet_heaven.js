@@ -1,7 +1,4 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Bullet Heaven
 @author: OtterDev 
 @tags: [shooter]
@@ -33,6 +30,7 @@ const deadNoise = tune`
 500: C4/500,
 14500`
 let jerkCanShoot = true;
+let canShoot = true;
 
 function delay(time) {
   return new Promise(resolve => setTimeout(resolve, time));
@@ -183,25 +181,30 @@ onInput("a", () => {
   }
 });
 onInput("l", () => {
-  if (stillAlive) {
+  if (stillAlive && canShoot) {
     addSprite(getFirst(player).x, getFirst(player).y, bullet)
+    canShoot = false
   }
 });
 onInput("i", () => {
-  if (stillAlive) {
+  if (stillAlive && canShoot) {
     addSprite(getFirst(player).x, getFirst(player).y, bullet)
+    canShoot = false
   }
 });
 onInput("j", () => {
-  if (stillAlive) {
+  if (stillAlive && canShoot) {
     addSprite(getFirst(player).x, getFirst(player).y, bullet)
+    canShoot = false
   }
 });
 onInput("k", () => {
-  if (stillAlive) {
+  if (stillAlive && canShoot) {
     addSprite(getFirst(player).x, getFirst(player).y, bullet)
+    canShoot = false
   }
 });
+
 function moveBullets() {
   let bullets = getAll(bullet);
   let jerkBullets = getAll(jerkBullet);
@@ -288,3 +291,6 @@ let jerkTimer = setInterval(() => {
 let bulletTimer = setInterval(() => {
   jerkCanShoot = true
 }, 2000)
+let playerTimer = setInterval(() => {
+  canShoot = true
+}, 200)
