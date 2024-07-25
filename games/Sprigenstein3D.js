@@ -521,7 +521,7 @@ afterInput(() => {
   const distance = dist(player, hit);
   if(hit.char == END && distance < PLAYER_SPEED*2) {
     level += 1;
-    if(level >= levels.length) {
+    if(level == levels.length) {
       addText("You escaped!", { x: 0, y: 0, color: COLORS[3] });
       playTune(winTune);
     }else {
