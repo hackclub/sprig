@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: jailbreak :)
 @author: navya 
-@tags: [2_player]
+@tags: ["2_player"]
 @addedOn: 2024-06-26
 */
 
