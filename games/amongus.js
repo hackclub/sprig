@@ -1,7 +1,8 @@
 /*
 @title: Among Us Survival
 @tags: ['among us', 'survive']
-@addedOn: 2024-06-16
+@author: anvayajmera
+@addedOn: 2024-07-26
 */
 
 const BG = "b";
