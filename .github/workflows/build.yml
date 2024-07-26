@@ -57,36 +57,9 @@ jobs:
         run: |
           cd ~/
           git clone https://github.com/hackclub/sprig.git
-          cd ~/sprig/firmware/
-          mv spade ~/
-      
-      - name: 'Clone JerryScript'
-        run: |
-          cd ~/jerryscript_build
-          git clone https://github.com/jerryscript-project/jerryscript.git
-          cd jerryscript
-          git checkout 8ba0d1b6ee5a065a42f3b306771ad8e3c0d819bc
-          cd ~/spade
-          ./src/pc/jerry/refresh.sh
-      
-      - name: 'Clone pico-sdk'
-        run: |
-          cd ~/raspberrypi
-          git clone -b 1.3.1 https://github.com/raspberrypi/pico-sdk.git
-          git clone https://github.com/raspberrypi/pico-extras.git
-          cd pico-sdk
-          git submodule update --init
-          cd ../pico-extras
-          git submodule update --init
-      
-      - name: 'Build Spade'
-        run: |
-          cd ~/spade
-          mkdir ./src/shared/sprig_engine/build
-          ./tools/cstringify.py ./src/shared/sprig_engine/engine.js > ./src/shared/sprig_engine/build/engine.min.js.cstring
-          cmake --preset=rpi
-          cd rpi_build
-          make
+          
+      - name: 'Build Script'
+        run: cd ~/sprig/firmware/spade && ../../scripts/gardenshed/build.sh
       
       - name: 'Upload artifact'
         uses: 'actions/upload-artifact@v3'
