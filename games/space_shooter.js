@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Space Shooter
 @author: valeriuv
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-07-26
 */
 
 const player = "p";
