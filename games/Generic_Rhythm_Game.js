@@ -2,7 +2,7 @@
 
 @title: Generic Rhythm Game
 @author: ThePangel
-@tags: [music, rythm]
+@tags: ["music", "rythm"]
 @addedOn: 2024-07-18
 */
 
