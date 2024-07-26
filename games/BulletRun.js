@@ -1,16 +1,19 @@
-/*
-@title: BulletRun
-@addedOn: 7/10/2024
-@author: Vivaan Shahani
-*/
-
 // Define the sprites in our game
 const player = "p";
 const bullet = "b";
 const goal = "g";
 const wall = "w";
+const powerUp = "u";
+const obstacle = "o";
+
 let bulletSpeed = 250;
 let bulletInterval;
+let timer = 0;
+let isInvincible = true;
+let speedBoost = false;
+let speedBoostTimer;
+let inRandomMode = false;
+let gameOver = false;
 
 // Assign bitmap art to each sprite
 setLegend(
@@ -81,7 +84,41 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000`]
+0000000000000000`],
+  [powerUp, bitmap`
+................
+................
+......6.........
+.....666........
+....66666.......
+....66666.......
+...6666666......
+...6666666......
+..666666666.....
+..666666666.....
+.66666666666....
+.66666666666....
+666666666666....
+666666666666....
+6666666666666...
+6666666666666...`],
+  [obstacle, bitmap`
+................
+................
+......8.........
+.....888........
+....88888.......
+....88888.......
+...8888888......
+...8888888......
+..888888888.....
+..888888888.....
+.88888888888....
+.88888888888....
+888888888888....
+888888888888....
+8888888888888...
+8888888888888...`]
 );
 
 // Create game levels
@@ -120,6 +157,7 @@ b.b.b.b.b.b.b.
 w.............
 p............g
 w.............
+..............
 ..............
 ..............
 ..............
@@ -181,33 +219,30 @@ w.b....b...bbwb........w...b...
 ......ww.........b.............
 ....w....w.wb......w...........
 ...b..........ww..w...b......b.
-.w........w.............w.w..b.
-....w.b..b.ww....w....wwwwb....
-........w..bb.....w.w......w...
-..w........w.b.....w....w....w.
-........w...b.......w....w...ww
-.......w.....b...w.............
-...w...b........w..w...ww......
 .w.......ww...wbw...bb..ww..wwg`
 ];
 
 // Set the map displayed to the current level
 setMap(levels[level]);
 
-setSolids([player, wall]); // Players and walls are the only things that can't run into each other
+setSolids([player, wall, obstacle]); // Players, walls, and obstacles are the only things that can't run into each other
 
 // Inputs for player movement control
 onInput("s", () => {
+  if (gameOver) return;
   getFirst(player).y += 1; // Positive y is downwards
 });
 
 onInput("d", () => {
+  if (gameOver) return;
   getFirst(player).x += 1;
 });
 onInput("w", () => {
+  if (gameOver) return;
   getFirst(player).y -= 1;
 });
 onInput("a", () => {
+  if (gameOver) return;
   getFirst(player).x -= 1;
 });
 
@@ -240,22 +275,23 @@ function moveBullets() {
 
 function updateLevelCounter() {
   clearText();
-  addText(`Level ${level + 1} / ${levels.length}`, { y: 1, color: color`3` });
-  if (level === 7) {
-    bulletSpeed = 75;
-    startBulletInterval(); // Update the bullet interval speed for level 7
-  } else if (level === 8) {
-    bulletSpeed = 250;
-    startBulletInterval();
+  if (!inRandomMode) {
+    addText(`Level ${level + 1} / ${levels.length}`, { y: 1, color: color`3` });
   }
+  addText(`Time: ${timer} s`, { y: 2, color: color`3` });
 }
 
 function checkForDeath() {
   const playerBullets = tilesWith(player, bullet).length;
-  if (playerBullets > 0) {
-    clearText(); // Clear previous text
+  if (playerBullets > 0 && !isInvincible) {
+    clearText();
+    addText(`Level ${level + 1} / ${levels.length}`, { y: 1, color: color`3` });
     addText("Game Over!", { y: 4, color: color`3` });
-    setMap(levels[level]);
+    if (inRandomMode) {
+      setMap(generateRandomLevel());
+    } else {
+      setMap(levels[level]);
+    }
     initializeBulletDirections();
     updateLevelCounter();
   }
@@ -269,8 +305,38 @@ function startBulletInterval() {
   }, bulletSpeed);
 }
 
+// Power-Up Logic
+function applyPowerUp() {
+  const playerPowerUps = tilesWith(player, powerUp).length;
+  if (playerPowerUps > 0) {
+    const powerUpTile = getFirst(powerUp);
+    clearTile(powerUpTile.x, powerUpTile.y);
+    isInvincible = true;
+    setTimeout(() => {
+      isInvincible = false;
+    }, 5000);
+  }
+}
+
+function checkForObstacle() {
+  const playerObstacles = tilesWith(player, obstacle).length;
+  if (playerObstacles > 0) {
+    const obstacleTile = getFirst(obstacle);
+    clearTile(obstacleTile.x, obstacleTile.y);
+  }
+}
+
+function startSpeedBoost() {
+  speedBoost = true;
+  clearTimeout(speedBoostTimer);
+  speedBoostTimer = setTimeout(() => {
+    speedBoost = false;
+  }, 5000);
+}
+
 // Input to reset level
 onInput("j", () => {
+  if (gameOver) return;
   setMap(levels[level]);
   initializeBulletDirections();
   updateLevelCounter();
@@ -278,23 +344,141 @@ onInput("j", () => {
   startBulletInterval();
 });
 
-// After every Input
-afterInput(() => {
-  const numberCovered = tilesWith(goal, player).length;
+// Add timer for time trials
+const timerInterval = setInterval(() => {
+  if (!gameOver) {
+    timer += 1;
+    updateLevelCounter();
+  }
+}, 1000);
 
-  if (numberCovered === 1) {
-    level += 1; // Increment the level after changing the speed
+// Calculate ranking
+function getRanking(time) {
+  if (time <= 40) return "Top 1% - You are god!";
+  if (time <= 45) return "Top 2% - try again";
+  if (time <= 50) return "Top 3% - try again";
+  if (time <= 55) return "Top 5% - try again";
+  if (time <= 60) return "Top 10% - try again";
+  if (time <= 65) return "Top 15% - try again";
+  if (time <= 70) return "Top 20% - try again";
+  if (time <= 80) return "Top 25% - try again";
+  if (time <= 90) return "Top 50% - try again";
+  if (time <= 106) return "Top 75% - try again";
+  if (time <= 110) return "Top 80% - try again";
+  if (time <= 160) return "Top 85% - try again";
+  if (time <= 185) return "Top 90% - try again";
+  if (time <= 210) return "Top 99% - try again";
+  return "Top 100% - You suck!";
+}
 
-    if (level < levels.length) {
-      setMap(levels[level]);
-      initializeBulletDirections();
-      updateLevelCounter();
-    } else {
-      addText("You win!", { y: 4, color: color`3` });
-      clearInterval(bulletInterval); // Clear the interval when the game ends
+// Generate random levels
+function generateRandomLevel() {
+  const width = Math.floor(Math.random() * 10) + 10;
+  const height = Math.floor(Math.random() * 10) + 10;
+  
+  let mapStr = Array(height).fill('.'.repeat(width)).map(row => row.split(''));
+
+  // Place player and goal
+  mapStr[0][0] = 'p';
+  mapStr[height - 1][width - 1] = 'g';
+
+  // Place walls and bullets ensuring not to block the player or the goal
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      if ((x === 0 && y === 0) || (x === width - 1 && y === height - 1)) continue;
+      const randNum = Math.random();
+      if (randNum < 0.1) {
+        mapStr[y][x] = 'b';
+      } else if (randNum < 0.2) {
+        mapStr[y][x] = 'w';
+      }
     }
   }
 
+  return map`${mapStr.map(row => row.join('')).join('\n')}`;
+}
+
+let retryListenerRegistered = false;
+let randomLevelListenerRegistered = false;
+
+function showEndScreen() {
+  gameOver = true;
+  clearInterval(bulletInterval);
+  clearText(); // Clear all existing text before adding new text
+  addText(`You win! Time: ${timer} s`, { y: 4, color: color`3` });
+  const ranking = getRanking(timer);
+  addText(ranking, { y: 6, color: color`3` });
+  addText("Press 'i' to retry", { y: 8, color: color`3` });
+  addText("Press 'k' for random", { y: 10, color: color`3` });
+    addText("ai generated levels", { y: 12, color: color`3` });
+
+
+  if (!retryListenerRegistered) {
+    onInput("i", () => {
+      if (!gameOver) return;
+      level = 0;
+      timer = 0;
+      bulletSpeed = 250;
+      inRandomMode = false;
+      gameOver = false;
+      setMap(levels[level]);
+      initializeBulletDirections();
+      updateLevelCounter();
+      startBulletInterval();
+    });
+    retryListenerRegistered = true;
+  }
+
+  if (!randomLevelListenerRegistered) {
+    onInput("k", () => {
+      if (!gameOver) return;
+      timer = 0;
+      bulletSpeed = 250;
+      inRandomMode = true;
+      gameOver = false;
+      setMap(generateRandomLevel());
+      initializeBulletDirections();
+      startBulletInterval();
+    });
+    randomLevelListenerRegistered = true;
+  }
+}
+
+// After every Input
+afterInput(() => {
+  if (gameOver) return;
+  const numberCovered = tilesWith(goal, player).length;
+
+  if (numberCovered === 1) {
+    if (inRandomMode) {
+      setMap(generateRandomLevel());
+    } else {
+      level += 1; // Increment the level after changing the speed
+
+      if (level < levels.length+1) {
+        if (level === 7) {
+          bulletSpeed = 75;
+        } else if (level === 8) {
+          bulletSpeed = 250;
+        } else if (level === 10) { // Ensure level 10 condition to show end screen
+          gameOver = true;
+          showEndScreen();
+          return;
+        }
+        setMap(levels[level]);
+      } else {
+        clearInterval(bulletInterval); // Clear the interval when the game ends
+        clearInterval(timerInterval); // Stop the timer
+        showEndScreen();
+      }
+    }
+    initializeBulletDirections();
+    updateLevelCounter();
+    startBulletInterval(); // Start bullet movement with the new speed
+  }
+
+  applyPowerUp();
+  checkForObstacle();
   checkForDeath();
 });
 
