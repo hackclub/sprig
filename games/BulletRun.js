@@ -9,7 +9,7 @@ const obstacle = "o";
 let bulletSpeed = 250;
 let bulletInterval;
 let timer = 0;
-let isInvincible = true;
+let isInvincible = false;
 let speedBoost = false;
 let speedBoostTimer;
 let inRandomMode = false;
