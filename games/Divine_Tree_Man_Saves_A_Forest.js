@@ -12,7 +12,7 @@ Mechanics:
 There are 7 levels with the 7th one being an end screen.
 The mechanics are difficult to use, but once you get the hang of it you could finish the game super quickly.
 
-@title: the game
+@title: Divine Tree Man Saves A Forest
 @author: Rohan Pani (13)
 @tags: ["sprig"]
 @addedOn: 2024-07-26
