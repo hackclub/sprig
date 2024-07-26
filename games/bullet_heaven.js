@@ -14,7 +14,6 @@ const jerkBullet = "u";
 let jerkHealth = 30;
 let jerkMovingLeft = false;
 let stillAlive = true;
-let jerkDead = false;
 const bulletNoise = tune`
 500: C4-500,
 15500`
@@ -249,16 +248,16 @@ let timer = setInterval(() => {
         bullet.remove();
       }
     });
-    if (bullet.x === getFirst(jerk).x && bullet.y === getFirst(jerk).y && !jerkDead && stillAlive) {
+    if (bullet.x === getFirst(jerk).x && bullet.y === getFirst(jerk).y && stillAlive) {
       if (jerkHealth <= 1) {
-        jerkDead = true
+        stillAlive = false;
         clearInterval(jerkTimer)
         getFirst(jerk).remove();
         playTune(winNoise);
         addText(`you won!`, {
           x: 5,
           y: 5,
-          color: color`6`
+          color: color`F`
         })
         clearInterval(timer)
         return;
@@ -271,7 +270,7 @@ let timer = setInterval(() => {
   });
 }, 100);
 let jerkTimer = setInterval(() => {
-  if (jerkDead || !stillAlive) {
+  if (!stillAlive) {
     return;
   }
   if (getFirst(jerk).x === 0) {
