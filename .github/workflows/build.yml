@@ -65,5 +65,5 @@ jobs:
         uses: 'actions/upload-artifact@v3'
         with:
           name: 'spade.uf2'
-          path: '~/spade/rpi_build/src/spade.uf2'
+          path: '~/sprig/firmware/spade.uf2'
           if-no-files-found: error
