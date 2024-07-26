@@ -15,7 +15,7 @@ The mechanics are difficult to use, but once you get the hang of it you could fi
 @title: the game
 @author: Rohan Pani (13)
 @tags: ["sprig"]
-@addedOn: 2024-00-00
+@addedOn: 2024-07-26
 Finished on July 13, 2024.
 */
 
