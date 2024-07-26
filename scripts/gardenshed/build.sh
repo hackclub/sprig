@@ -40,7 +40,7 @@ fi
 
 case $1 in
     "--log") docker build ./docker | tee dockerBuildLog.txt
-             docker run -it --security-opt label:disable --rm --volume `pwd`:/root/spade $(docker images | awk '{print $3}' | awk 'NR==2') | tee -a dockerBuildLog.txt ;;
+             docker run -t --security-opt label:disable --rm --volume `pwd`:/root/spade $(docker images | awk '{print $3}' | awk 'NR==2') | tee -a dockerBuildLog.txt ;;
     *) docker build ./docker
-       docker run -it --security-opt label:disable --rm --volume `pwd`:/root/spade $(docker images | awk '{print $3}' | awk 'NR==2') ;;
+       docker run -t --security-opt label:disable --rm --volume `pwd`:/root/spade $(docker images | awk '{print $3}' | awk 'NR==2') ;;
 esac
