@@ -5,7 +5,7 @@ Part 1
 @title: Stickman
 @author: Benjamin Faershtein
 @tags: ['stickman']
-@addedOn: 2024-00-00
+@addedOn: 2024-07-26
 */
 
 const player = "p"
