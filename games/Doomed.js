@@ -918,6 +918,11 @@ function fireBullet(bulletType, dx, dy) {
 }
 
 function fireFireball(fireballType, dx, dy, startX, startY) {
+  // Reduce floating fireballs
+  const currentTime = Date.now();
+  if (isGameOver || currentTime - lastFireTime < fireCooldown) return;
+  lastFireTime = currentTime;
+  
   // Fireball sound effect
   const fire = tune`
 42.857142857142854: C4-42.857142857142854,
@@ -1343,7 +1348,7 @@ function moveBoss() {
   const currentTime = Date.now();
 
   // Check if boss is on the same x or y axis as the player and fire fireballs
-  if (currentTime - lastBossFireTime >= 1000) { // 1 second cooldown
+  if (currentTime - lastBossFireTime >= 700) { // 0.7 second cooldown
     if (boss.x === player.x || boss.y === player.y) {
       if (boss.x === player.x && boss.y > player.y) {
         if (boss.type !== bossUp) {
