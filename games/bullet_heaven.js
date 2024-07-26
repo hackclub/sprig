@@ -11,7 +11,7 @@ const bullet = "b";
 const wall = "w"
 const playerWall = "i"
 const jerkBullet = "u";
-let jerkHealth = 30;
+let jerkHealth = 40;
 let jerkMovingLeft = false;
 let stillAlive = true;
 const bulletNoise = tune`
@@ -292,4 +292,4 @@ let bulletTimer = setInterval(() => {
 }, 2000)
 let playerTimer = setInterval(() => {
   canShoot = true
-}, 200)
+}, 300)
