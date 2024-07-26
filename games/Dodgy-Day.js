@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Dodgy Day
 @author: Neelesh Chevuri
 @tags: []
-@addedOn: 2024-06-09
+@addedOn: 2024-07-26
 */
 
 const player = 'p'
