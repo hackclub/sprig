@@ -16,7 +16,6 @@ interface HelpProps {
 	defaultHelpAreaHeight: number;
 	helpAreaSize: Signal<number>;
 	showingTutorialWarning?: Signal<boolean>;
-	sessionId: string
 }
 const helpHtml = compiledContent();
 
@@ -45,7 +44,7 @@ export default function Help(props: HelpProps) {
 				tutorialIndex,
 			};
 			if(isNewSaveStrat.value)
-				startSavingGame(props.persistenceState)
+				startSavingGame(props.persistenceState, undefined)
 			else
 				saveGame(
 					props.persistenceState,
