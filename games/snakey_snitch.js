@@ -1,3 +1,9 @@
+/*
+@title: Snakey Snitch
+@tags: []
+@addedOn: 2024-07-29
+@author: Mrshushiknight
+*/
 
 const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d");
