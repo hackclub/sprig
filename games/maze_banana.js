@@ -1,8 +1,8 @@
 /*
 @title: Maze Banana
 @author: Rushi Chopra
-@tags: [maze, bananas]
-@addedOn: 2024-07-27
+@tags: []
+@addedOn: 2024-07-29
 */
 const player = "p";
 const wall = "w";
