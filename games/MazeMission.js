@@ -1,22 +1,22 @@
 /*
 @title: MazeMission
-@author: Caitlin925
-@tags: []
-@addedOn: 2024-07-11
-
+@author: CaitlinOchuwa
+@tags: ['maze', 'levels']
+@addedOn: 2024-07-029
 
 HOW TO PLAY
 'WASD' to control your player
 'I' to reset the game
 
-The goal is to get to the door to escape the mazes. However, in order to maximize your score for
-the run, you must collect all of the coins. Collect coins and navigate through the mazes to become
-the ultimate maze master!
+The goal is to get to the door to escape the mazes. However, in order to maximize your score
+and successfully complete the run, you must collect all of the coins. But, the red coins
+are known as AntiCoins and actually hurt your score. Collect coins, avoid the AntiCoins, and navigate
+through the mazes to become the ultimate maze master!
 */
 
 //CONSTANTS
 const player = "p"
-const playerHit = "h"
+const antiCoin = "o"
 const spike = "s"
 const spikeRight = "r"
 const spikeLeft = "l"
@@ -26,6 +26,9 @@ const door = "d"
 const background = "b"
 const collectedCoin = tune `
 461.53846153846155: B5~461.53846153846155,
+14307.692307692309`
+const collectedAntiCoin = tune `
+461.53846153846155: C4^461.53846153846155,
 14307.692307692309`
 
 
@@ -47,23 +50,6 @@ setLegend(
 .....00..00.....
 ................
 ................` ],
-  [playerHit, bitmap`
-................
-................
-................
-................
-................
-.....33999......
-.....309099.....
-.....999999.....
-.....990099.....
-.....909909.....
-......9999......
-......0..0......
-.....00..00.....
-................
-................
-................`],
   [ spike, bitmap `
 .......00.......
 ......0000......
@@ -182,7 +168,23 @@ setLegend(
 ....00000000....
 .....000000.....
 ......0000......
-.......00.......`]  
+.......00.......`], [antiCoin, bitmap`
+................
+................
+................
+................
+.....33333......
+....3333333.....
+....3300033.....
+....3303333.....
+....3300033.....
+....3333333.....
+.....33333......
+................
+................
+................
+................
+................`]
 )
 
 setBackground(background)
@@ -192,11 +194,12 @@ var score = 0
 var isSecretChallenge = false
 
 
+
 //SCORE AND LIVES LABELS
 addText(`Score: ${score}`,{x: 0, y: 0, color: color`4`})
 addText(`   WASD to move\n   'i' to reset\n Collect coins and\n navigate through\n the mazes to win!`, {x: 1, y:5, color: color`D`}) 
 
-setSolids([player, playerHit, spike, spikeRight, spikeLeft, spikeDown])
+setSolids([player, spike, spikeRight, spikeLeft, spikeDown])
 
 let levelNumber = 0
 const levels = [ map `
@@ -213,45 +216,44 @@ p..c`, map `
 .l.r.
 pl.c.`, map `
 aaaaaaa
-rcr..cl
+rcro.cl
 r.r.l.l
 r..cl.l
 rss...l
 r...s..
-p...csd`, map `
+p.o.csd`, map `
 ca.c.aaa
 ..da.c.c
-rc.c...a
+rcoco..a
 r....rc.
-c.lc.r.c
+c.lc.roc
 ..l..c..
-c.lc.sss
+colcosss
 pc..c..c`, map `
 ..d.aa
 sss...
-c..cr.
+c.ocr.
 .aa.r.
-p....c`, map `
-........c....l
+p...oc`, map `
+..o.....c....l
 .aaa..aa...r.l
-.clc.......r.l
+.clc...o...r.l
 ..l..sssssss.l
-..l........r.l
-........c..r.l
+..l.o......r.l
+........co.r.l
 .aaa.l.aaa.rcl
-.aalcl..l..rss
+.aalcl.olo.rss
 ...l.l.cl.....
-p..c.......s.d`, map`
+po.c..o....s.d`, map`
 daaaa
-.....
-aaaac
-p....`
+....o
+aaa.c
+p...o`
 ]
 setMap(levels[levelNumber])
 
 setPushables({
-  [ player ]: [],
-  [ playerHit ]: []
+  [ player ]: []
 })
 
 //USER INPUT
@@ -273,10 +275,11 @@ onInput("i", () => {
 onInput("j", () => {
   resetGame()
   isSecretChallenge = true
-  addText(`Collect the LEAST\namount of coins\n     possible`, {x: 1, y: 10, color: color`9`})
+  addText(`Collect the LEAST\namount of coins\n   possible to win`, {x: 1, y: 10, color: color`9`})
 })
 
 afterInput(() => {
+  let antiCoins = getAll(antiCoin)
   let coins = getAll(coin)
   let character = getFirst(player)
   let thisTile = getTile(getFirst(player).x, getFirst(player).y);
@@ -292,7 +295,7 @@ afterInput(() => {
           addText(`Try again. Collect\n      All Coins`, {x: 1, y: 5, color: color `3`})
           addText(`Press 'i' to reset\n     the game`, {x: 1, y: 13, color: color `3`})
         }
-        else if(score == 7 && isSecretChallenge == true){
+        else if(score == 9 && isSecretChallenge == true){
           addText(`Congrats! You are\n   the ultimate\n    maze master!`, {x: 1, y: 5, color: color `9`})
           addText(`Press 'i' to reset\n     the game`, {x: 1, y: 13, color: color `9`})
         }
@@ -317,7 +320,24 @@ afterInput(() => {
     
     }
   }
+  for(let i = 0; i < antiCoins.length; i++){
+    if(character.x === antiCoins[i].x && character.y === antiCoins[i].y){
+      antiCoins[i].remove()
+      playTune(collectedAntiCoin)
+      score -= 2;
+      clearText()
+      addText(`Score: ${score}`,{x: 0, y: 0, color: color`3`})
+    
+    }
+  }
+
+  if(score < 0){
+    addText(`Try again. Collect\n  All GOLD Coins`, {x: 1, y: 5, color: color `3`})
+    addText(`Press 'i' to reset\n     the game`, {x: 1, y: 11, color: color `3`})
+  }
 })
+
+
 
 //RESETS THE GAME
 function resetGame(){
@@ -329,3 +349,4 @@ function resetGame(){
   levelNumber = 0
   setMap(levels[levelNumber])
 }
+
