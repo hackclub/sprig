@@ -263,10 +263,10 @@ dggggggg`;
 
 setMap(runmap);
 
-let const_time = 500;
+let const_time = 250;
 let time = const_time;
-let const_jump_time = 800;
-let jump_time = 800;
+let const_jump_time = 500;
+let jump_time = 500;
 let min_time = 200;
 let jump = 0;
 let top_map = "........";
@@ -280,7 +280,7 @@ let playing = 0;
 let score = 0;
 let waiting = false;
 let speed_increment = 2;
-let obstacle_distance = 5;
+let obstacle_distance = 10;
 let currentScheme = 0;
 
 function switchColors() {
@@ -385,8 +385,8 @@ function tick() {
         }
     }
     score++;
-    if (score % 100 === 0) playTune(scoreSound);
-    if (score % 10 === 0) switchColors();
+    if (score % 150 === 0) playTune(scoreSound);
+    if (score % 25 === 0) switchColors();
     
     addText("    Score: " + score.toString(), {
         x: 2,
