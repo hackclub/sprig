@@ -5,8 +5,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Escape Arcade Prision!
 @author: Felix Gao
-@tags: ["Puzzle", "Prison"]
-@addedOn: 2024-00-00
+@tags: ['puzzle', 'prison']
+@addedOn: 2024-07-29
 */
 
 // People lol
