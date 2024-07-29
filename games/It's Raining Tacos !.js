@@ -1,7 +1,8 @@
 /*
-@title: It's Raining Tacos !
-@tags: []
+@title: It's Raining Tacos
 @author: omarko
+@tags: ["Dodge","Survival"]
+@addedOn: 2024-07-29
 */
 
 // Define sprites
