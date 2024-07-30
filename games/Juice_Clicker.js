@@ -1,3 +1,10 @@
+/*
+@title: Juice Clicker
+@tags: []
+@addedOn: 2024-07-29
+@author: ikejlemieux
+*/
+
 const player = "p";
 const background = "b"
 
