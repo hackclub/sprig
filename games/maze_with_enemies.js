@@ -1,3 +1,9 @@
+/*
+@title: Maze With Enemies
+@author: leonprincen
+@tags: []
+@addedOn: 2024-07-29
+*/
 const player = "p";
 const enemy = "e";
 const enemy2 = "r";
