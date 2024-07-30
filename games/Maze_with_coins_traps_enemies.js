@@ -1,7 +1,7 @@
 /*
 @title: Maze with coins, traps, enemies
 @author: 123xxgamer 
-@tags: [maze]
+@tags: ["maze"]
 @addedOn: 2024-07-26
 */
 
