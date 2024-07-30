@@ -1,8 +1,8 @@
 /*
 @title: Bullet Heaven
 @author: OtterDev 
-@tags: ["shooter"]
-@addedOn: 2024-07-26
+@tags: [shooter]
+@addedOn: 2024-00-00
 */
 
 const player = "p";
@@ -11,7 +11,7 @@ const bullet = "b";
 const wall = "w"
 const playerWall = "i"
 const jerkBullet = "u";
-let jerkHealth = 40;
+let jerkHealth = 30;
 let jerkMovingLeft = false;
 let stillAlive = true;
 const bulletNoise = tune`
@@ -156,24 +156,27 @@ setMap(level)
 setPushables({
   [player]: []
 })
-
-onInput("s", () => {
+getFirst(player).y += 1;
+/* i think it'd make more sense to just scrap moving up and down as its basically useless
+and opens up the opportunity for bugs
+ onInput("s", () => {
   if (stillAlive) {
     getFirst(player).y += 1;
   }
 });
-
+*/
 onInput("d", () => {
   if (stillAlive) {
     getFirst(player).x += 1;
   }
 });
-
+/*
 onInput("w", () => {
   if (stillAlive) {
     getFirst(player).y -= 1;
   }
 });
+*/
 onInput("a", () => {
   if (stillAlive) {
     getFirst(player).x -= 1;
@@ -250,7 +253,8 @@ let timer = setInterval(() => {
     });
     if (bullet.x === getFirst(jerk).x && bullet.y === getFirst(jerk).y && stillAlive) {
       if (jerkHealth <= 1) {
-        stillAlive = false;
+        // set stillalive to false so it has the same effect as if you died
+        stillAlive = false
         clearInterval(jerkTimer)
         getFirst(jerk).remove();
         playTune(winNoise);
@@ -292,4 +296,4 @@ let bulletTimer = setInterval(() => {
 }, 2000)
 let playerTimer = setInterval(() => {
   canShoot = true
-}, 300)
+}, 200)
