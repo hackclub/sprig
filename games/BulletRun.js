@@ -1,3 +1,10 @@
+/* 
+@title: Bullet Run
+@author: GeoWizard4645
+@tags: []
+@addedOn: 2024-07-29
+*/
+
 // Define the sprites in our game
 const player = "p";
 const bullet = "b";
