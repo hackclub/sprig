@@ -3,8 +3,7 @@
 @import './_shared.scss';
 
 body {
-	background: #2f2f2f;
-	color: #ffffff;
+	color: black;
 }
 
 nav {
@@ -15,7 +14,7 @@ nav {
 }
 
 .wrapper {
-	font-family: $pixel-text-font;
+	font-family: var(--font-text);
 
 	p, ul, ol {
 		font-size: 1.4rem;
@@ -60,27 +59,38 @@ nav {
 	li {
 		line-height: 1.5em;
 	}
+
+	h1 {
+		margin-top:0;
+	}
 	
 	.inner {
-		width: 75%;
+		width: 90%;
 		margin: 0 auto;
 		padding-bottom: 5vh;
 	}
 	
 	.heading-outer {
 		padding: 10vh 0;
+		padding-top: 120px;
+		width: 100%;
 		margin: 0;
-		margin-bottom: 5vh;
-		color: white;
-		text-shadow: 0 0 10px black;
-		background: url('/background-new.png'), $base-background;
-		background-size: cover;
-		background-attachment: fixed;
-		background-position: bottom 200px center;
+		color: black;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+
+	.sprig-image {
+		width: 100%;
+		margin: 0 0 0 auto;
+		padding: 0;
+		object-fit: contain;
 	}
 	
 	a:not(:has(.btn)) {
-		color: #66ebb6;
+		color: #30d794;
+		
 
 		&:hover {
 			text-decoration: underline;
@@ -88,15 +98,18 @@ nav {
 	}
 
 	.heading-inner {
-		width: 75%;
-		margin: auto;
+		margin: 0;
+		width: 100%;
 	}
 	
 	.step {
 		display: grid;
 		grid-template-columns: 1fr;
-		padding-bottom: 7vh;
+		margin-bottom: 7vh;
 		line-height: 1.5;
+		border: 4px solid var(--accent);
+		background: var(--bg-surface);
+		padding: 25px;
 	}
 	
 	.bottom-cta {
@@ -110,17 +123,45 @@ nav {
 			font-size: 42px;
 		}
 	
-		.step {
-			grid-template-columns: 0.8fr 1.2fr;
-		}
-	
 		img {
 			width: 80%;
+		}
+
+		.sprig-image {
+			height: auto;
+			max-width: 40%;
+		}
+
+		.heading-outer {
+			justify-content: space-between;
+			align-items: stretch;
+			flex-direction: row;
+		}
+
+		.step {
+			padding: 40px;
+		}
+
+		.inner {
+			width: 75%;
+		}
+
+		.heading-inner {
+			width: 50%;
 		}
 	
 		@media (min-width: $breakpoint-2) {
 			h1 {
 				font-size: 54px;
+			}
+
+			.sprig-image {
+				height: 300px;
+				padding-left: 30px;
+			}
+
+			.step {
+				grid-template-columns: 0.8fr 1.2fr;
 			}
 		}
 	}
