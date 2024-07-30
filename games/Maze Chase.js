@@ -5,7 +5,6 @@ Capture the flag before the other player does!
 @tags: ['two-player', 'maze', 'capture']
 @addedOn: 2024-07-09
 */
-
 const player1 = "a";
 const player2 = "b";
 const wall = "w";
@@ -245,16 +244,10 @@ function checkWin() {
 }
 
 function teleport(player) {
-  const teleporters = getAll(teleporter);
-  const currentPosition = getTile(player.x, player.y);
-  const currentTeleporter = currentPosition.find(tile => tile.type === teleporter);
-  if (currentTeleporter) {
-    const otherTeleporter = teleporters.find(t => t.x !== currentTeleporter.x || t.y !== currentTeleporter.y);
-    if (otherTeleporter) {
-      player.x = otherTeleporter.x;
-      player.y = otherTeleporter.y;
-    }
-  }
+  const newX = Math.floor(Math.random() * 10);
+  const newY = Math.floor(Math.random() * 10);
+  player.x = newX;
+  player.y = newY;
 }
 
 // Player 1 controls
