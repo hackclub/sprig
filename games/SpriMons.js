@@ -1,8 +1,8 @@
 /*
 @title: SpriMons
 @author: Bartosz Budnik 
-@tags: [Arcade, Hack-Club, RPG, Training, Turn-Based]
-@addedOn: 2024-07-20
+@tags: ['rpg', 'arcade']
+@addedOn: 2024-07-30
 */
 
 /* 
