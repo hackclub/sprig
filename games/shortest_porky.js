@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: monitor's game
-@author: 
+@author: mjh316
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-07-29
 */
 
 const littlerootTheme = tune`
