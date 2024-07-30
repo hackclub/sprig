@@ -1,8 +1,8 @@
 /*
-@title: the two bananas game
+@title: The Two Bananas Game
 @author: sridhar
-@tags: ['#bananasarecool']
-@addedOn: 2024-00-00
+@tags: []
+@addedOn: 2024-07-29
 */
 
 // all sprites
