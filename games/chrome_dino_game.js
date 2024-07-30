@@ -11,6 +11,7 @@ const c1 = "c";
 const c2 = "e";
 const g = "g";
 const b = "b";
+const p = "p"; // Power-up
 
 const d1 = "h";
 const r1 = "i";
@@ -18,6 +19,7 @@ const c11 = "j";
 const c21 = "k";
 const g1 = "l";
 const b1 = "m";
+const p1 = "n"; // Power-up inverted
 
 // Original color scheme (black on white)
 const bitmapsOriginal = [
@@ -123,7 +125,24 @@ const bitmapsOriginal = [
 2222222222222222
 2222222222222222
 2222222222222222
-2222222222222222`]
+2222222222222222`],
+  [p, bitmap`
+................
+......666.......
+.....6...6......
+....6.6.6.6.....
+....6.....6.....
+....6.....6.....
+.....6...6......
+......666.......
+................
+................
+................
+................
+................
+................
+................
+................`]
 ];
 
 // Inverted color scheme (white on black)
@@ -232,6 +251,23 @@ const bitmapsInverted = [
 0000000000000000
 0000000000000000
 0000000000000000`],
+  [p1, bitmap`
+................
+......666.......
+.....6...6......
+....6.6.6.6.....
+....6.....6.....
+....6.....6.....
+.....6...6......
+......666.......
+................
+................
+................
+................
+................
+................
+................
+................`]
   
 ];
 
@@ -241,7 +277,8 @@ setLegend(
   [c1, bitmapsOriginal[2][1]],
   [c2, bitmapsOriginal[3][1]],
   [g, bitmapsOriginal[4][1]],
-  [b, bitmapsOriginal[5][1]]
+  [b, bitmapsOriginal[5][1]],
+  [p, bitmapsOriginal[6][1]]
 );
 
 const jumpSound = tune`
@@ -256,6 +293,9 @@ const scoreSound = tune`
 100: a4^500, a4^500, a4^500, a4^500, 
 100: b4^500, b4^500, b4^500, b4^500`;
 
+const powerUpSound = tune`
+300: c5^500, d5^500, e5^500, f5^500`;
+
 let runmap = map`
 ........
 ........
@@ -265,8 +305,8 @@ setMap(runmap);
 
 let const_time = 250;
 let time = const_time;
-let const_jump_time = 500;
-let jump_time = 500;
+let const_jump_time = 425;
+let jump_time = 425;
 let min_time = 200;
 let jump = 0;
 let top_map = "........";
@@ -278,10 +318,14 @@ let tick_timer;
 let jump_timer;
 let playing = 0;
 let score = 0;
+let num = 0;
 let waiting = false;
 let speed_increment = 2;
 let obstacle_distance = 10;
 let currentScheme = 0;
+let invincible = false;
+let invincible_timer;
+let invincible_duration = 5000;
 
 function switchColors() {
     console.log("Switching colors");
@@ -292,7 +336,8 @@ function switchColors() {
             [c1, bitmapsInverted[2][1]],
             [c2, bitmapsInverted[3][1]],
             [g, bitmapsInverted[4][1]],
-            [b, bitmapsInverted[5][1]]
+            [b, bitmapsInverted[5][1]],
+            [p, bitmapsInverted[6][1]]
           
         );
         currentScheme = 1;
@@ -303,7 +348,8 @@ function switchColors() {
             [c1, bitmapsOriginal[2][1]],
             [c2, bitmapsOriginal[3][1]],
             [g, bitmapsOriginal[4][1]],
-            [b, bitmapsOriginal[5][1]]
+            [b, bitmapsOriginal[5][1]],
+            [p, bitmapsOriginal[6][1]]
 
         );
         currentScheme = 0;
@@ -315,7 +361,7 @@ function do_jump() {
     else {
         let dSprite = getFirst(d);
         if (dSprite === undefined) return;
-        if (top_map[0] === r) game_over();
+        if (top_map[0] === r && !invincible) game_over();
         if (dSprite.y === 1) {
             dSprite.y -= 1;
             jump = 1;
@@ -334,19 +380,19 @@ function end_jump() {
     }
 }
 
-onInput("w", () => {
-    if (playing === 0 && !waiting) {
-        playing = 1;
-        top_map = "........";
-        bot_map = "gggggggg";
-        runmap = `${top_map} \n ${bot_map}`;
-        setMap(runmap);
-        addSprite(0, 1, d);
-        jump = 0;
-        tick();
-        clearText();
-    } else if (!waiting) do_jump();
-});
+function generateMapWithPowerUps() {
+    let mapTop = top_map;
+    let mapBottom = bot_map;
+  
+    for (let i = 0; i < mapBottom.length; i++) {
+        if ((mapBottom[i] === c1 || mapBottom[i] === c2) && (score % 1 === 0 && score !== 0)) mapTop = mapTop.slice(0, i) + p + mapTop.slice(i + 1);  
+    }
+
+    return {
+        top: mapTop,
+        bottom: mapBottom
+    };
+}
 
 function tick() {
     top_next = ".";
@@ -367,16 +413,23 @@ function tick() {
     }
     top_map = top_map.slice(1) + top_next;
     bot_map = bot_map.slice(1) + next;
+    
+    let staticMap = generateMapWithPowerUps();
+    top_map = staticMap.top;
+    bot_map = staticMap.bottom;
+    
     runmap = `${top_map} \n ${bot_map}`;
-    console.log(`Setting map to: \n${runmap}`);
     setMap(runmap);
+
     if (jump === 0) {
-        if (bot_map[0] !== g) return game_over();
-        addSprite(0, 1, d);
+        if (bot_map[0] === p) collectPowerUp();
+        else if (bot_map[0] !== g && !invincible) return game_over();
+        addSprite(0, 1, d); 
     } else {
-        if (top_map[0] === r) return game_over();
-        addSprite(0, 0, d);
+        if (top_map[0] === r && !invincible) return game_over();
+        addSprite(0, 0, d); 
     }
+
     if (time > min_time) {
         speed_increment++;
         if (speed_increment > obstacle_distance) {
@@ -396,11 +449,21 @@ function tick() {
     tick_timer = setTimeout(tick, time);
 }
 
+function collectPowerUp() {
+    playTune(powerUpSound);
+    invincible = true;
+    clearTimeout(invincible_timer);
+    invincible_timer = setTimeout(endInvincibility, invincible_duration);
+}
+
+function endInvincibility() {
+    invincible = false;
+}
+
 function game_over() {
     playing = 0;
-    clearTile(0, 0);
-    clearTile(0, 1);
     clearTimeout(tick_timer);
+    clearTimeout(invincible_timer);
     addText("Press W to restart", {
         x: 1,
         y: 4,
@@ -414,9 +477,27 @@ function game_over() {
     score = 0;
     playTune(gameOverSound);
 }
+
+onInput("w", () => {
+    if (playing === 0 && !waiting) {
+        playing = 1;
+        top_map = "........";
+        bot_map = "gggggggg";
+        runmap = `${top_map} \n ${bot_map}`;
+        setMap(runmap);
+        addSprite(0, 1, d);
+        jump = 0;
+        invincible = false;
+        clearTimeout(invincible_timer);
+        tick();
+        clearText();
+    } else if (!waiting) do_jump();
+});
+
 addText("Press W to start", {
     x: 2,
     y: 2,
     color: color`2`
 });
+
 setBackground("b");
