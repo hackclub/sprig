@@ -2,7 +2,10 @@ import { createEditorState, initialExtensions, diagnosticsFromErrorLog } from '.
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { Extension, StateEffect } from '@codemirror/state'
 import styles from './codemirror.module.css'
+
 import { oneDark } from '@codemirror/theme-one-dark'
+import { vscodeDark, vscodeLight } from '@uiw/codemirror-theme-vscode';
+
 import { EditorView } from '@codemirror/view'
 import { theme, errorLog, PersistenceState, isNewSaveStrat, RoomState, RoomParticipant, ConnectionStatus } from '../lib/state'
 import { Diagnostic, setDiagnosticsEffect } from '@codemirror/lint'
@@ -71,6 +74,10 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		if (theme.value === "dark") {
 			editorRef?.dispatch({
 				effects: StateEffect.appendConfig.of(oneDark)
+			});
+		} else if (theme.value === "vscode") {
+			editorRef?.dispatch({
+				effects: StateEffect.appendConfig.of(vscodeDark)
 			});
 		} else editorRef?.dispatch({
 			effects: StateEffect.reconfigure.of(restoreInitialConfig())
