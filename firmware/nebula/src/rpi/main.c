@@ -212,47 +212,17 @@ int main() {
   // Set up for drawing (set column and row addresses)
   st7735_fill_start();
 
-  // Example: Draw a pattern of colors
-  uint16_t pixels[] = {
-      ST7735_RED, ST7735_GREEN, ST7735_BLUE, ST7735_YELLOW, ST7735_CYAN,
-      ST7735_MAGENTA, ST7735_WHITE, ST7735_BLACK
-  };
+  display_clear();
 
-  /*
-  for (int i = 0; i < sizeof(pixels) / sizeof(pixels[0]); ++i) {
-      for (int j = 0; j < 1024; ++j) { // Draw 50 pixels of each color
-          st7735_fill_send(pixels[i]);
-		  // spi_write_blocking(SPI_TFT_PORT, (uint8_t *)&pixel, sizeof(uint16_t));
-      }
-  }
+  text_overlay[0] = 'N';
+  text_overlay[1] = 'E';
+  text_overlay[2] = 'B';
+  text_overlay[3] = 'U';
+  text_overlay[4] = 'L';
+  text_overlay[5] = 'A';
 
-  for (int i = 0; i < 300; i++) {
-	  spi_write_blocking(SPI_TFT_PORT, (uint8_t *)pixels, sizeof(uint16_t) * 8);
-  }
-  */
-
-  // because the display prints columns first we need to manually print rows
-  for (int j = 0; j < 160; j++) {
-	  for (int i = 0; i < 128; i++) {
-		  char type = displae[i * 160 + j];
-
-		  if (type == '0') {
-			  st7735_fill_send(ST7735_WHITE);
-		  } else {
-			  st7735_fill_send(ST7735_BLACK);
-		  }
-	  } 
-  }
-
-  /*
-  for (int i = 0; displae[i]; i++) {
-	  if (displae[i] == '0') {
-		  st7735_fill_send(ST7735_WHITE);
-	  } else {
-		  st7735_fill_send(ST7735_BLACK);
-	  }
-  }
-  */
+  render_text_overlay();
+  render();
 
   // Finish drawing
   st7735_fill_finish();
