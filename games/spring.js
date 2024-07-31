@@ -10,6 +10,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 const player = "p"
 
+const wall = "w"
+
 const arrow_0 = "0"
 const arrow_45 = "1"
 const arrow_90 = "2"
@@ -22,23 +24,6 @@ const arrow_315 = "7"
 const arrowIncrement = 45
 
 setLegend(
-  [ player, bitmap`
-................
-................
-.......000......
-.......0.0......
-......0..0......
-......0...0.0...
-....0003.30.0...
-....0.0...000...
-....0.05550.....
-......0...0.....
-.....0....0.....
-.....0...0......
-......000.......
-......0.0.......
-.....00.00......
-................` ],
   [ arrow_0, bitmap`
 ................
 ................
@@ -174,20 +159,68 @@ setLegend(
 ................
 ................
 ................
-................` ]
+................` ],
+  [ player, bitmap`
+................
+................
+.......000......
+.......0.0......
+......0..0......
+......0...0.0...
+....0003.30.0...
+....0.0...000...
+....0.05550.....
+......0...0.....
+.....0....0.....
+.....0...0......
+......000.......
+......0.0.......
+.....00.00......
+................` ],
+  [ wall, bitmap`
+0000000000000000
+0000000000000000
+0099999999999900
+0099999999999900
+0099999999999900
+0099999999999900
+0099999999999900
+0099999999999900
+0099999999999900
+0099999999999900
+0099999999999900
+0099999999999900
+0099999999999900
+0099999999999900
+0000000000000000
+0000000000000000` ]
 )
 
-// setSolids([ arrow_0, arrow_45 ])
+setSolids([ player, wall ])
 
 let level = 0
 const levels = [
   map`
-......
-......
-......
-......
-......
-..p...`
+....................
+....................
+....................
+....................
+....................
+....................
+....................
+....................
+....................
+....................
+....................
+....................
+....................
+....................
+....................
+....................
+....................
+..p.................
+w.w.w.w.w.w.w.w.w.w.
+wwwwwwwwwwwwwwwwwwww`
 ]
 
 setMap(levels[level])
@@ -263,13 +296,20 @@ onInput("k", () => {
     fullX = playerSprite.x
     fullY = playerSprite.y
     
-    setInterval(() => {
+    const interval = setInterval(() => {
       // playerSprite.x += xVel
       // playerSprite.y += yVel
       fullX += xVel
       fullY += yVel
+      
       playerSprite.x = Math.round(fullX)
       playerSprite.y = Math.round(fullY)
+      
+      yVel += gravity
+
+      // if (true) {
+      //   clearInterval(interval);
+      // }
     }, 60)
     
     const arrowSprite = getFirst(arrowType)
@@ -284,6 +324,13 @@ afterInput(() => {
 
 function setArrowPosition() {
   if (arrowType !== null) {
+    console.log("hello")
+    console.log(getFirst(player)) // undefined
+    console.log(getAll(wall)) // []
+    console.log(getTile(0, 0))
+    console.log(getFirst("0"))
+    console.log(getAll("0"))
+    
     const playerSprite = getFirst(player)
     const arrowSprite = getFirst(arrowType)
 
@@ -308,3 +355,74 @@ function getArrowDeg() {
   if (arrowType === null) return null
   return Number(arrowType) * arrowIncrement
 }
+
+function getParsedMap() {
+  const map = [];
+
+  for (let y = 0; y < height(); y++) {
+    const row = []
+    map.push(row)
+    
+    for (let x = 0; x < width(); x++) {      
+      const tile = getTile(x, y).map(tile => tile.type)
+      row.push(tile)
+    }
+  }
+  
+  return map;
+}
+
+function setMapFromParsed(parsedMap) {
+  setMap(
+    parsedMap.map(row =>
+      row.map(tile => tile.length === 0 ? "." : tile[0]).join("")
+    ).join("\n")
+  )
+
+  console.log(
+    parsedMap.map(row =>
+      row.map(tile => tile.length === 0 ? "." : tile[0]).join("")
+    ).join("\n")
+  )
+
+  console.log(map)
+  
+  for (let y = 0; y < height(); y++) {
+  // for (let y = 0; y < map.length; y++) {
+    const row = parsedMap[y]
+
+    console.log("row")
+    
+    for (let x = 0; x < width(); x++) {
+    // for (let x = 0; x < row.length; x++) {
+      const tile = row[x]
+      // console.log(tile)
+      for (let i = 1; i < tile.length; i++) {
+        const sprite = tile[i]
+        console.log(tile)
+        addSprite(x, y, tile)
+      }
+    }
+  }
+  
+  // for (let y = 0; y < height(); y++) {
+  // // for (let y = 0; y < map.length; y++) {
+  //   const row = parsedMap[y]
+
+  //   console.log("row")
+    
+  //   for (let x = 0; x < width(); x++) {
+  //   // for (let x = 0; x < row.length; x++) {
+  //     const tile = row[x]
+  //     // console.log(tile)
+  //     for (const sprite of tile) {
+  //       console.log(tile)
+  //       addSprite(x, y, tile)
+  //     }
+  //   }
+  // }
+}
+
+console.log(getParsedMap())
+
+setMapFromParsed(getParsedMap())
