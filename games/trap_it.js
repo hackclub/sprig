@@ -1,3 +1,9 @@
+/*
+@title: trap_it
+@author: PRairigh
+@tags: ["strategy"]
+@addedOn: 2024-07-31
+*/
 
 // Create a tune:
 const melody = tune`
@@ -38,9 +44,8 @@ const melody = tune`
 playTune(melody)
 const playback = playTune(melody, Infinity)
 
-
-
-
+let monster_health = new Array(1)
+monster_health[0]=60
 
 const player = "p"
 const wall = "j"
@@ -108,7 +113,7 @@ LLLLLLLLLLLLLLLL` ],
 
 setSolids([wall,player,enemy])
 
-let level = 0
+let level = 1
 const levels = [
   map`
 j.................................
@@ -126,14 +131,47 @@ p.................................
 ..................................
 ..................................
 ..................................
-..................................`
+..................................`,
 ]
 
-setMap(levels[level])
+setMap(levels[0])
 
 setPushables({
   [ player ]: []
 })
+
+// Function to generate random x and y within a specified range
+function generateRandomCoordinates(minX, maxX, minY, maxY) {
+  const randomX = Math.floor(Math.random() * (maxX - minX + 1) + minX);
+  const randomY = Math.floor(Math.random() * (maxY - minY + 1) + minY);
+  return { x: randomX, y: randomY };
+}
+
+// Usage example
+function makeLevel() {
+  //Remove all old robots
+  getAll(enemy).forEach((enemySprite) => {
+    enemySprite.remove();
+         });
+  getAll(wall).forEach((wallSprite) => {
+    wallSprite.remove();
+         });
+
+  monster_health[idx] = new Array(length)
+
+  // Add new robots
+  const minX = 0; // Minimum x value
+  const maxX = 33; // Maximum x value
+  const minY = 0; // Minimum y value
+  const maxY = 13; // Maximum y value
+  for (i=0; i <level; i+= 1) {
+    const randomCoordinates = generateRandomCoordinates(minX, maxX, minY, maxY);
+    addSprite(randomCoordinates.x, randomCoordinates.y, enemy);
+    monster_health[i] = 60
+  }
+  const randomCoordinates = generateRandomCoordinates(minX, maxX, minY, maxY);
+  addSprite(randomCoordinates.x, randomCoordinates.y, wall);
+}
 
 onInput("s", () => {
   getFirst(player).y += 2
@@ -190,50 +228,56 @@ onInput("k", () => {
   clearText()
 })
 
-let monster_health = 60
-
+let random_move_2 = 0
 function moveMonsters() {
   let monster_expected_x = 0
   let monster_expected_y = 0
   firstPlayer = getFirst(player)
   monsterList = getAll(enemy)
+  random_move_2 += 1
+  dead_monsters = 0
   for (idx=0; idx < monsterList.length; idx += 1) {
 
-    addText(monsterList[idx].x.toString()+", " + monsterList[idx].y.toString(), {
-            x:0, y:1
-    })
     monster_expected_x = monsterList[idx].x
     monster_expected_y = monsterList[idx].y
 
-    
     deltaX = firstPlayer.x - monsterList[idx].x
-    monsterList[idx].x += Math.sign(deltaX)
-
     deltaY = firstPlayer.y - monsterList[idx].y
-    monsterList[idx].y += Math.sign(deltaY)
-    addText(monsterList[idx].x.toString()+", " + monsterList[idx].y.toString(), {
-            x:0, y:2
-    })
-
-    if (monster_expected_x == monsterList[idx].x && monster_expected_y == monsterList[idx].y) {
-      monster_health -= 1;
-    } else {
-      monster_health = Math.min(monster_health+1, 60)
+    if (random_move_2 == 3) {
+      deltaX = Math.ceil(Math.random() * 10 -5);
+      deltaY = Math.ceil(Math.random() * 10 -5);
+      random_move_2 = 0
     }
-    if (monster_health < 1) { 
-      addText( "YOU WIN", {
-        x:10,
-        y:4,        
-                 })
+    monsterList[idx].x += Math.sign(deltaX)
+    monsterList[idx].y += Math.sign(deltaY)
+   
+    if (monster_expected_x == monsterList[idx].x && monster_expected_y == monsterList[idx].y) {
+      monster_health[idx] = Math.max(0, monster_health[idx]-1);
     } else {
-      addText( monster_health.toString(), {
+      monster_health[idx] = Math.min(monster_health[idx]+1, 60)
+    }
+    if (monster_health[idx] < 1) {
+      dead_monsters += 1
+    }
+  }
+  if (dead_monsters == monsterList.length) { 
+    addText( "YOU WIN this level", {
+        x:1,
+        y:4,        
+    })
+    level += 1;
+    makeLevel();
+  } else {
+  }
+
+  addText( monster_health.join(", "), {
         x:0,
         y:0,        
-                 })
-    }
-
-  }
+  })
 }
+
+
+    
 
 onInput("j", () => {
   moveMonsters()
@@ -244,7 +288,3 @@ onInput("j", () => {
   }
   clearText()
 })
-
-
-
-  
