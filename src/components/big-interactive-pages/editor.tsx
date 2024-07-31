@@ -572,16 +572,6 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 								))}
 							</div>
 						)}
-						<Button
-							accent
-							icon={IoPlayCircleOutline}
-							bigIcon
-							iconSide="right"
-							class={styles.playButton}
-							onClick={onRun}
-						>
-							Run
-						</Button>
 					</div>
 
 					<div

@@ -166,6 +166,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 	const deleteState = useSignal<"idle" | "confirm" | "deleting">("idle");
 	const resetState = useSignal<"idle" | "confirm">("idle");
+	const showDropdown = useSignal(false);
+
 	useSignalEffect(() => {
 		const _showNavPopup = showNavPopup.value;
 		const _deleteState = deleteState.value;
@@ -191,6 +193,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		styles.themePicker!,
 		() => (showThemePicker.value = false),
 		showThemePicker.value
+	);
+	
+	usePopupCloseClick(
+		styles.dropdown!,
+	    () => (showDropdown.value = false),
+		showDropdown.value
 	);
 
 	let saveState;
@@ -360,23 +368,34 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				</li>
 
 				<li>
-					<Button
-						accent
-						icon={
-							{
-								IDLE: IoPlay,
-								LOADING: VscLoading,
-								ERROR: IoWarning,
-							}[uploadState.value]
-						}
-						spinnyIcon={uploadState.value === "LOADING"}
-						loading={uploadState.value === "LOADING"}
-						onClick={() =>
-							upload(codeMirror.value?.state.doc.toString() ?? "")
-						}
-					>
-						Run on Device
-					</Button>
+					<div class={styles.dropdownContainer}>
+						<Button accent onClick={() => (showDropdown.value = !showDropdown.value)}>
+						Run <IoChevronDown />
+						</Button>
+						{showDropdown.value && (
+							<div class={styles.playPopup}>
+								<Button
+									accent
+									icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
+									spinnyIcon={uploadState.value === "LOADING"}
+									loading={uploadState.value === "LOADING"}
+									onClick={() => upload(codeMirror.value?.state.doc.toString() ?? "")}
+								>
+									Run
+								</Button>
+								<div class={styles.divider}></div>
+								<Button
+									accent
+									icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
+									spinnyIcon={uploadState.value === "LOADING"}
+									loading={uploadState.value === "LOADING"}
+									onClick={() => upload(codeMirror.value?.state.doc.toString() ?? "")}
+								>
+									Run on Device
+								</Button>
+							</div>
+						)}
+					</div>
 				</li>
 
 				<li>{actionButton}</li>
