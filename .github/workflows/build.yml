@@ -17,7 +17,7 @@ jobs:
       - name: 'Clone Spade repo'
         run: |
           cd ~/
-          git clone -b fix/spade-action-user-docker https://github.com/GalaxyGamingBoy/hc-sprig.git sprig/
+          git clone https://github.com/hackclub/sprig.git sprig/
           
       - name: 'Build Script'
         run: cd ~/sprig/firmware/spade && ../../scripts/gardenshed/build.sh
