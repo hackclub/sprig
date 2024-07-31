@@ -124,7 +124,7 @@ type Theme = {
 	accentDark: string,
 	fgMutedOnAccent: string,
 	background: string,
-	color: string
+	color: string,
 	copyContainerText: string
 };
 
@@ -135,13 +135,13 @@ const baseTheme: Theme = {
 	fgMutedOnAccent: "#8fcabb",
 	background: "#2f2f2f",
 	color: "black",
-	copyContainerText: "white",
+	copyContainerText: "white"
 };
 
 export const themes: Partial<Record<ThemeType, Theme>> = {
 	"dark": {
 		...baseTheme,
-		background: "#2f2f2f",
+		background: "#2f2f2f"
 	},
 	"light": {
 		...baseTheme,
@@ -154,7 +154,7 @@ export const themes: Partial<Record<ThemeType, Theme>> = {
 		accent: "#FFAE06",
 		accentDark: "#ff9d00",
 		fgMutedOnAccent: "#6d83ff",
-		background: "#3E29ED",
+		background: "#3E29ED"
 	},
 	"vscode": {
 		...baseTheme,
@@ -163,7 +163,7 @@ export const themes: Partial<Record<ThemeType, Theme>> = {
 		fgMutedOnAccent: "#b6b6b6",
 		background: "#1f1f1f",
 		color: "#545454",
-		copyContainerText: "#ffffff",
+		copyContainerText: "#ffffff"
 	}
 };
 

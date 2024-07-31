@@ -2,10 +2,8 @@ import { createEditorState, initialExtensions, diagnosticsFromErrorLog } from '.
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { Extension, StateEffect } from '@codemirror/state'
 import styles from './codemirror.module.css'
-
 import { oneDark } from '@codemirror/theme-one-dark'
-import { vscodeDark, vscodeLight } from '@uiw/codemirror-theme-vscode';
-
+import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { EditorView } from '@codemirror/view'
 import { theme, errorLog, PersistenceState, isNewSaveStrat, RoomState, RoomParticipant, ConnectionStatus } from '../lib/state'
 import { Diagnostic, setDiagnosticsEffect } from '@codemirror/lint'
@@ -72,8 +70,23 @@ export default function CodeMirror(props: CodeMirrorProps) {
 
 	const setEditorTheme = () => {
 		if (theme.value === "dark") {
-			editorRef?.dispatch({
-				effects: StateEffect.appendConfig.of(oneDark)
+			// ==============================
+			// Here we need it to first set to the defaults
+			// because switching from the vscode them to the dark theme does not change the
+			// text spacing.
+
+			// My hunch is that the oneDark theme does not contain settings for the text spacing
+			// so resetting to the default will fix the spacing.
+
+			// - Andrew
+			// ==============================
+			
+			editorRef?.dispatch({ 
+				effects: StateEffect.reconfigure.of(restoreInitialConfig()) // <-- Resetting the theme here.
+			});
+
+			editorRef?.dispatch({ 
+				effects: StateEffect.appendConfig.of(oneDark) // <-- Then set it to the oneDark theme.
 			});
 		} else if (theme.value === "vscode") {
 			editorRef?.dispatch({
