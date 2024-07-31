@@ -36,7 +36,7 @@ import { VscLoading } from "react-icons/vsc";
 import { defaultExampleCode } from "../lib/examples";
 import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
-import { foldAllTemplateLiterals } from "./big-interactive-pages/editor";
+import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
@@ -379,7 +379,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
 									spinnyIcon={uploadState.value === "LOADING"}
 									loading={uploadState.value === "LOADING"}
-									onClick={() => upload(codeMirror.value?.state.doc.toString() ?? "")}
+									onClick={() => onRun()}
 								>
 									Run
 								</Button>
