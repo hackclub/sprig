@@ -214,12 +214,12 @@ const levels = [
 ...w...w...w...w...w
 ....................
 .w...w...w...w...w..
-....................
+.............w......
 ....................
 w..................w
 w..................w
-..p.................
-w.w.w.w.w.w.w.w.w.w.
+....................
+w.wpw.w.w.w.w.w.w.w.
 wwwwwwwwwwwwwwwwwwww`
 ]
 
@@ -286,59 +286,88 @@ onInput("l", () => {
 
 onInput("k", () => {
   if (arrowType !== null) {
+    const deg = getArrowDeg()
+    const rad = deg * (Math.PI / 180)
+
     const arrowSprite = getFirst(arrowType)
     arrowSprite.remove()
     arrowType = null
-    
-    const playerSprite = getFirst(player)
-    
-    const deg = getArrowDeg()
-    const rad = deg * (Math.PI / 180)
 
     const startVel = 1
     xVel = startVel * Math.cos(rad)
     yVel = -startVel * Math.sin(rad)
 
     setMapFromParsed(fullMap)
+
+    // const touchingWalls = getTouching()
+    // console.log(touchingWalls)
+    
+    const playerSprite = getFirst(player)
     fullX = playerSprite.x
     fullY = playerSprite.y
+    
     centerMap()
+
+    // console.log(fullX)
+    // console.log(fullY)
+    // console.log(deg)
+    // console.log(xVel)
+    // console.log(yVel)
     
     const interval = setInterval(() => {
       setMapFromParsed(fullMap)
+      
+      const p = getFirst(player)
+      
+      // playerSprite.x += xVel
+      // playerSprite.y += yVel
+      fullX += xVel
+      fullY += yVel
 
-      setTimeout(() => {
-        const playerSprite = getFirst(player)
-        
-        // playerSprite.x += xVel
-        // playerSprite.y += yVel
-        fullX += xVel
-        fullY += yVel
-  
-        const oldX = playerSprite.x
-        const oldY = playerSprite.y
-        
-        playerSprite.x = Math.round(fullX)
-        playerSprite.y = Math.round(fullY)
-        
-        yVel += gravity
-  
-        if (
-          // (xVel && oldX === playerSprite.x) ||
-          // (yVel && oldY === playerSprite.y)
-          Math.round(fullX) !== playerSprite.x ||
-          Math.round(fullY) !== playerSprite.y
-        ) {
-          clearInterval(interval);
-        }
+      const oldX = p.x
+      const oldY = p.y
+      
+      p.x = Math.round(fullX)
+      p.y = Math.round(fullY)
+      
+      yVel += gravity
 
-        setTimeout(() => {
-          fullMap = getParsedMap()
-          centerMap()
-        }, 1000)
-      }, 1000)
-    }, 3000)
-    // timeouts are temporary - simply here for debugging purposes (so that each step can be seen separately)
+      // if (
+      //   // (xVel && oldX === playerSprite.x) ||
+      //   // (yVel && oldY === playerSprite.y)
+      //   Math.round(fullX) !== playerSprite.x ||
+      //   Math.round(fullY) !== playerSprite.y
+      // ) {
+      //   console.log("clear");
+      //   clearInterval(interval);
+      // }
+
+      // if (isEffectivelyZero()) {
+      //   console.log("clear")
+      //   clearInterval(interval)
+      // }
+
+      const walls = getAll(wall)
+      // TODO: check which side player is touching wall, compared against vel
+      // if (walls.some(w => playerTouchingWall(playerSprite, w))) {
+      if (
+        walls.some(w => (
+          (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
+          (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
+          (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
+          (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
+        ))
+      ) {
+        console.log("clear")
+        clearInterval(interval)
+      }
+
+      // TODO: prevent arrow from showing up when interval still exists
+    
+      fullMap = getParsedMap()
+      
+      centerMap()
+    }, 60)
   }
 })
 
@@ -348,12 +377,12 @@ afterInput(() => {
 
 function setArrowPosition() {
   if (arrowType !== null) {
-    console.log("hello")
-    console.log(getFirst(player)) // undefined
-    console.log(getAll(wall)) // []
-    console.log(getTile(0, 0))
-    console.log(getFirst("0"))
-    console.log(getAll("0"))
+    // console.log("hello")
+    // console.log(getFirst(player)) // undefined
+    // console.log(getAll(wall)) // []
+    // console.log(getTile(0, 0))
+    // console.log(getFirst("0"))
+    // console.log(getAll("0"))
     
     const playerSprite = getFirst(player)
     const arrowSprite = getFirst(arrowType)
@@ -432,11 +461,11 @@ function setMapFromParsed(parsedMap) {
   }
 }
 
-function zoomMap(parsedMap, rawX, rawY) {
+function zoomMap(parsedMap, rawX, rawY, rawZoomWidth, rawZoomHeight) {
   // const rawX = 200
   // const rawY = 20
-  const rawZoomWidth = 15
-  const rawZoomHeight = 15
+  // const rawZoomWidth = 10
+  // const rawZoomHeight = 10
 
   const mapWidth = parsedMap[0].length
   const mapHeight = parsedMap.length
@@ -478,10 +507,44 @@ function centerMap() {
   const playerSprite = getFirst(player)
 
   // console.log({x:playerSprite.x,y:playerSprite.y})
+
+  const mapWidth = 10
+  const mapHeight = 10
   
   const parsedMap = getParsedMap()
-  const zoomedMap = zoomMap(parsedMap, playerSprite.x-2, playerSprite.y-2)
+  const zoomedMap = zoomMap(
+    parsedMap,
+    playerSprite.x-Math.round(mapWidth/2)+1,
+    playerSprite.y-Math.round(mapHeight/2),
+    mapWidth,
+    mapHeight
+  )
   setMapFromParsed(zoomedMap)
+}
+
+// function getTouching() {
+//   const playerSprite = getFirst(player)
+//   const walls = getAll(wall)
+//   // console.log({ playerSpriteX: playerSprite.x, playerSpriteY: playerSprite.y })
+//   // console.log({ wallX: walls[0].x, wallY: walls[0].y })
+//   // const touching = walls.filter(w => (
+//   //   (w.y === playerSprite.y && Math.abs(w.x - playerSprite.x) <= 1) ||
+//   //   (w.x === playerSprite.x && Math.abs(w.y - playerSprite.y) <= 1)
+//   // ));
+//   const touching = walls.filter(w => playerTouchingWall(playerSprite, w))
+//   return touching
+// }
+
+// function playerTouchingWall(p, w) {
+//   return (
+//     (w.y === p.y && Math.abs(w.x - p.x) <= 1) ||
+//     (w.x === p.x && Math.abs(w.y - p.y) <= 1)
+//   )
+// }
+
+function isEffectivelyZero(num) {
+  const epsilon = 1e-10
+  return Math.abs(num) < epsilon
 }
 
 // console.log(getParsedMap())
