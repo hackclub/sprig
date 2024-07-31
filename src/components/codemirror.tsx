@@ -72,11 +72,12 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		if (theme.value === "dark") {
 			// ==============================
 			// Here we need it to first set to the defaults
-			// because switching from the vscode them to the dark theme does not change the
-			// text spacing.
+			// because switching from the vscode them to the
+			// dark theme does not change the text spacing.
 
-			// My hunch is that the oneDark theme does not contain settings for the text spacing
-			// so resetting to the default will fix the spacing.
+			// My hunch is that the oneDark theme does not
+			// contain settings for the text spacing so
+			// resetting to the default will fix the spacing.
 
 			// - Andrew
 			// ==============================
