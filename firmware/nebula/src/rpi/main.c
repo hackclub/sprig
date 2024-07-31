@@ -214,7 +214,24 @@ int main() {
 
   display_clear();
 
-  strncpy(text_overlay, "NEBULANEBULANEBULANEBULANEBULANEBULANEBULANEBULANEBULANEBULANEBULANEBULA", 72);
+  strncpy(text_overlay, 
+		  "Nebula is.the.best.at.life"
+		  "Nebula.is.the.best.at.life"
+		  "Nebula.is.the.best.at.life"
+		  "Nebula.is.the.best.at.life"
+		  "Nebula.is.the.best.at.life"
+		  "Nebula.is.the.best.at.life"
+		  "Nebula.is.the.best.at.life"
+		  "Nebula.is.the.best.at.life"
+		  "Nebula.is.the.best.at.life"
+		  "Nebula.is.the.best.at.lif3"
+		  "Nebula.is.the.best.at.life"
+		  "Nebula.is.the.best.at.life"
+		  "Nebula.is.the.best.at.lif3"
+		  "Nebula.is.the.best.at.life"
+		  "Nebula.is.the.best.at.life"
+		  "Nebula.is.the.best.at.lif3"
+		  , 416);
 
   render_text_overlay();
   render();
