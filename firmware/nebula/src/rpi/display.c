@@ -6,14 +6,9 @@
 #define HEIGHT 128
 #define WIDTH  160
 
-// convert x,y values as we want on the screen to the buffer index
-#define DISPLAY_I(x, y) ((x) * WIDTH + (y))
-
-// text overlay character to display pixel start
-#define TEXT_OVERLAY_I(x) (1 + (x) * 6)
 
 // text overlay buffer
-#define TEXT_OVERLAY_BUF 200
+#define TEXT_OVERLAY_BUF (10*26)
 #define ST_TEXT_OVERLAY 0x21
 
 /* 
@@ -23,7 +18,7 @@
 uint16_t display[HEIGHT * WIDTH];
 
 // supports 10x20 text overlay
-uint8_t text_overlay[TEXT_OVERLAY_BUF];
+uint8_t text_overlay[TEXT_OVERLAY_BUF] = { '0' };
 
 /*
  * bitmap array
@@ -693,12 +688,21 @@ render(void)
 void 
 render_text_overlay(void) 
 {
-	for (uint8_t i = 0; i < 7; i++) {
-		
-		for (uint8_t j = 0; j < 8; j++) {
-			display[j + HEIGHT * i] = (bitmaps[text_overlay[0] - 0x21][j + 8 * i] == '0') ? ST7735_WHITE : ST7735_BLACK;
+	// character in overlay
+	for (uint8_t i = 0; i < 100; i++) {
+		// pixel in bitmap
+		for (uint8_t j = 0; j < 6; j++) {
+			for (uint8_t k = 0; k < 7; k++) {
+				// hopefully the compiler optimizes this
+				display[
+					(k + HEIGHT * j) +			// pixel in bitmap
+					((i % 26) * HEIGHT * 6) +	// char row in text overlay
+					((i / 26) * 8) +			// char col in text overlay
+					HEIGHT * 2 + 1				// start offset
+				] = (bitmaps[text_overlay[i] - 0x21][k + j * 7] == '0') ? ST7735_WHITE : ST7735_BLACK;
+			}
 		}
-	}
+	} 
 }
 
 

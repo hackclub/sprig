@@ -214,12 +214,7 @@ int main() {
 
   display_clear();
 
-  text_overlay[0] = 'N';
-  text_overlay[1] = 'E';
-  text_overlay[2] = 'B';
-  text_overlay[3] = 'U';
-  text_overlay[4] = 'L';
-  text_overlay[5] = 'A';
+  strncpy(text_overlay, "NEBULANEBULANEBULANEBULANEBULANEBULANEBULANEBULANEBULANEBULANEBULANEBULA", 72);
 
   render_text_overlay();
   render();
