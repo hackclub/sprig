@@ -206,18 +206,18 @@ const levels = [
 ....................
 ....................
 ....................
+.ww.ww.ww.ww.ww.ww.w
 ....................
 ....................
 ....................
 ....................
+...w...w...w...w...w
+....................
+.w...w...w...w...w..
 ....................
 ....................
-....................
-....................
-....................
-....................
-....................
-....................
+w..................w
+w..................w
 ..p.................
 w.w.w.w.w.w.w.w.w.w.
 wwwwwwwwwwwwwwwwwwww`
@@ -236,6 +236,8 @@ let yVel = 0
 let gravity = 0.1
 
 let arrowType = null
+
+let fullMap = null
 
 onInput("s", () => {
   // getFirst(player).y += 1
@@ -284,6 +286,10 @@ onInput("l", () => {
 
 onInput("k", () => {
   if (arrowType !== null) {
+    const arrowSprite = getFirst(arrowType)
+    arrowSprite.remove()
+    arrowType = null
+    
     const playerSprite = getFirst(player)
     
     const deg = getArrowDeg()
@@ -293,28 +299,46 @@ onInput("k", () => {
     xVel = startVel * Math.cos(rad)
     yVel = -startVel * Math.sin(rad)
 
+    setMapFromParsed(fullMap)
     fullX = playerSprite.x
     fullY = playerSprite.y
+    centerMap()
     
     const interval = setInterval(() => {
-      // playerSprite.x += xVel
-      // playerSprite.y += yVel
-      fullX += xVel
-      fullY += yVel
-      
-      playerSprite.x = Math.round(fullX)
-      playerSprite.y = Math.round(fullY)
-      
-      yVel += gravity
+      setMapFromParsed(fullMap)
 
-      // if (true) {
-      //   clearInterval(interval);
-      // }
-    }, 60)
-    
-    const arrowSprite = getFirst(arrowType)
-    arrowSprite.remove()
-    arrowType = null
+      setTimeout(() => {
+        const playerSprite = getFirst(player)
+        
+        // playerSprite.x += xVel
+        // playerSprite.y += yVel
+        fullX += xVel
+        fullY += yVel
+  
+        const oldX = playerSprite.x
+        const oldY = playerSprite.y
+        
+        playerSprite.x = Math.round(fullX)
+        playerSprite.y = Math.round(fullY)
+        
+        yVel += gravity
+  
+        if (
+          // (xVel && oldX === playerSprite.x) ||
+          // (yVel && oldY === playerSprite.y)
+          Math.round(fullX) !== playerSprite.x ||
+          Math.round(fullY) !== playerSprite.y
+        ) {
+          clearInterval(interval);
+        }
+
+        setTimeout(() => {
+          fullMap = getParsedMap()
+          centerMap()
+        }, 1000)
+      }, 1000)
+    }, 3000)
+    // timeouts are temporary - simply here for debugging purposes (so that each step can be seen separately)
   }
 })
 
@@ -357,6 +381,8 @@ function getArrowDeg() {
 }
 
 function getParsedMap() {
+  // console.log(height())
+  
   const map = [];
 
   for (let y = 0; y < height(); y++) {
@@ -372,57 +398,98 @@ function getParsedMap() {
   return map;
 }
 
-function setMapFromParsed(parsedMap) {
+function setMapFromParsed(parsedMap) {  
   setMap(
     parsedMap.map(row =>
       row.map(tile => tile.length === 0 ? "." : tile[0]).join("")
     ).join("\n")
   )
 
-  console.log(
-    parsedMap.map(row =>
-      row.map(tile => tile.length === 0 ? "." : tile[0]).join("")
-    ).join("\n")
-  )
+  // console.log(
+  //   parsedMap.map(row =>
+  //     row.map(tile => tile.length === 0 ? "." : tile[0]).join("")
+  //   ).join("\n")
+  // )
 
-  console.log(map)
+  // console.log(map)
   
   for (let y = 0; y < height(); y++) {
   // for (let y = 0; y < map.length; y++) {
     const row = parsedMap[y]
 
-    console.log("row")
+    // console.log("row")
     
     for (let x = 0; x < width(); x++) {
     // for (let x = 0; x < row.length; x++) {
       const tile = row[x]
-      // console.log(tile)
+      
       for (let i = 1; i < tile.length; i++) {
         const sprite = tile[i]
-        console.log(tile)
+        // console.log(tile)
         addSprite(x, y, tile)
       }
     }
   }
-  
-  // for (let y = 0; y < height(); y++) {
-  // // for (let y = 0; y < map.length; y++) {
-  //   const row = parsedMap[y]
-
-  //   console.log("row")
-    
-  //   for (let x = 0; x < width(); x++) {
-  //   // for (let x = 0; x < row.length; x++) {
-  //     const tile = row[x]
-  //     // console.log(tile)
-  //     for (const sprite of tile) {
-  //       console.log(tile)
-  //       addSprite(x, y, tile)
-  //     }
-  //   }
-  // }
 }
 
-console.log(getParsedMap())
+function zoomMap(parsedMap, rawX, rawY) {
+  // const rawX = 200
+  // const rawY = 20
+  const rawZoomWidth = 15
+  const rawZoomHeight = 15
 
-setMapFromParsed(getParsedMap())
+  const mapWidth = parsedMap[0].length
+  const mapHeight = parsedMap.length
+
+  // const zoomWidth = rawZoomWidth
+  // const zoomHeight = rawZoomHeight
+  
+  const zoomWidth = Math.min(rawZoomWidth, mapWidth)
+  const zoomHeight = Math.min(rawZoomHeight, mapHeight)
+  const x = Math.max(Math.min(rawX, mapWidth-zoomWidth), 0)
+  const y = Math.max(Math.min(rawY, mapHeight-zoomHeight), 0)
+
+  // const x = rawX
+  // const y = rawY
+  
+  const zoomedMap = []
+
+  for (let iterY = 0; iterY < zoomHeight; iterY++) {
+    const row = []
+    zoomedMap.push(row)
+
+    for (let iterX = 0; iterX < zoomWidth; iterX++) {
+      const tile = []
+      row.push(tile)
+
+      // console.log("row");
+      
+      for (let i = 0; i < parsedMap[iterY+y][iterX+x].length; i++) {
+        // console.log(parsedMap[iterY+y][iterX+x][i])
+        tile.push(parsedMap[iterY+y][iterX+x][i])
+      }
+    }
+  }
+
+  return zoomedMap
+}
+
+function centerMap() {
+  const playerSprite = getFirst(player)
+
+  // console.log({x:playerSprite.x,y:playerSprite.y})
+  
+  const parsedMap = getParsedMap()
+  const zoomedMap = zoomMap(parsedMap, playerSprite.x-2, playerSprite.y-2)
+  setMapFromParsed(zoomedMap)
+}
+
+// console.log(getParsedMap())
+
+// setMapFromParsed(zoomMap(getParsedMap()))
+
+fullMap = getParsedMap()
+centerMap()
+
+// console.log(`width: ${width()}`)
+// setMapFromParsed(zoomMap(getParsedMap(), 1, 0))
