@@ -14,7 +14,7 @@ That's all!
 
 ## Have no fear, UF2 is here!
 
-Click on [this link](https://sprig.hackclub.com/spade.uf2) to download Spade, the operating system for the Sprig console.
+Click on [this link](https://sprig.hackclub.com/pico-os.uf2) to download Spade, the operating system for the Sprig console.
 
 ## BOOTSEL
 
