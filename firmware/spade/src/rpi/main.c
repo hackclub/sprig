@@ -221,7 +221,7 @@ static int load_new_scripts(void) {
             printf("SPADE:%sEND", SPADE_VERSION);
             return 0;
         case 2: // legacy (1,2,3,4)
-            puts("legacy detected");
+            puts("LEG_UPL_DET"); // don't confuse people with system messages that seem like they're meant for humans
             return 0;
         default:
             return 0;

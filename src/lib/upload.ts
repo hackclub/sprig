@@ -128,13 +128,20 @@ export const getIsLegacySerial = async (
 	await writer.ready
 	await writer.write(new Uint8Array([ 0, 1, 2, 3, 4 ]).buffer)
 
+	// 128-char buffer
+	let serialBuffer = " ".repeat(128)
+
 	while (true) {
 		const { value, done } = await reader.read()
+		
 		if (done) return null
 		logSerialOutput(value)
 
-		if (value.indexOf('found startup seq!') >= 0) return true
-		if (value.indexOf('legacy detected') >= 0) return false
+		serialBuffer  = serialBuffer.concat(value)
+		serialBuffer = serialBuffer.slice(serialBuffer.length - 128, serialBuffer.length)
+
+		if (serialBuffer.indexOf('found startup seq!') >= 0) return true
+		if (serialBuffer.indexOf('LEG_UPL_DET') >= 0) return false
 	}
 }
 
@@ -167,7 +174,7 @@ export const upload = async (code: string): Promise<void> => {
 			versionState.value = "LEGACY"
 			return
 		} else {
-			console.log("[UPLOAD] Not legacy!")
+			console.log("[UPLOAD] Spade version is not legacy.")
 		}
 
 		const versionNum = await getVersionNumber(writer, reader)
@@ -176,7 +183,7 @@ export const upload = async (code: string): Promise<void> => {
 		if (versionNum != latestVersion) {
 			versionState.value = "OLD"
 		} else {
-			console.log("[UPLOAD] Version up to date!")
+			console.log("[UPLOAD] Spade version up to date!")
 		}
 
 		await uploadToSerial(code, writer, reader)

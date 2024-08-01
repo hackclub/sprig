@@ -12,7 +12,7 @@ uint16_t SPRIG_MAGIC[FLASH_PAGE_SIZE/2] = { 1337, 42, 69, 420, 420, 1337 };
 
 static const char *save_read(void) {
   if (memcmp(&SPRIG_MAGIC, flash_target_contents, sizeof(SPRIG_MAGIC)) != 0) {
-    puts("no magic :(");
+    puts("No game loaded!");
     return NULL;
   }
 
@@ -40,7 +40,7 @@ static void upl_flush_buf(void) {
                       256);
   restore_interrupts(interrupts);
   memset(upl_state.buf, 0, sizeof(upl_state.buf));
-  printf("wrote page (%d/%d)\n",
+  printf("Wrote page (%d/%d)\n",
          upl_state.page,
          (upl_state.len/(FLASH_PAGE_SIZE + 1)));
 }
@@ -57,7 +57,7 @@ static int upl_stdin_read(void) {
       case UplProg_Header: {
         ((char *)(&upl_state.len))[upl_state.len_i++] = c;
         if (upl_state.len_i >= sizeof(uint32_t)) {
-          printf("ok reading %d chars\n", upl_state.len);
+          printf("Ok reading %d chars\n", upl_state.len);
           upl_state.prog = UplProg_Body;
           upl_state.len_i = 0;
           upl_state.page = 1; // skip first, that's for magic
@@ -75,22 +75,23 @@ static int upl_stdin_read(void) {
           flash_range_erase(FLASH_TARGET_OFFSET, sector_len);
           restore_interrupts(interrupts);
 
+          puts("Cleared flash region for game + engine script.");
+
           for (int i = 0; i < sizeof(engine_script) - 1; i++) {
             upl_state.buf[upl_state.len_i++ % FLASH_PAGE_SIZE] = engine_script[i];
             if (upl_state.len_i % FLASH_PAGE_SIZE == 0) {
-              puts("flushin buf (wit da code!)");
+              puts("Flushing engine script buffer to flash.");
               upl_flush_buf();
             }
           }
 
-          puts("cleared flash");
         }
       } break;
       case UplProg_Body: {
         // printf("upl char (%d/%d)\n", upl_state.len_i, upl_state.len);
         upl_state.buf[upl_state.len_i++ % FLASH_PAGE_SIZE] = c;
         if (upl_state.len_i % FLASH_PAGE_SIZE == 0) {
-          puts("flushin buf");
+          puts("Flushing upload buffer to flash.");
           upl_flush_buf();
         }
 
@@ -112,5 +113,4 @@ static int upl_stdin_read(void) {
       } break;
     }
   }
-  puts("end of upl_stdin_read");
 }
