@@ -75,7 +75,7 @@ nav {
 	}
 	
 	.heading-outer {
-		padding: 150px 0 50px 0;
+		padding: 150px 0 50px;
 		width: 100%;
 		margin: 0;
 		color: black;
@@ -95,7 +95,6 @@ nav {
 	a:not(:has(.btn)) {
 		color: #30d794;
 		
-
 		&:hover {
 			text-decoration: underline;
 		}
@@ -140,6 +139,8 @@ nav {
 			justify-content: space-between;
 			align-items: stretch;
 			flex-direction: row;
+			padding-left: 13px;
+			padding-right: 13px;
 		}
 
 		.step {
