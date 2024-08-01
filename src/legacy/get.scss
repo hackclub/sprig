@@ -19,6 +19,10 @@ nav {
 	p, ul, ol {
 		font-size: 1.4rem;
 	}
+
+	.subtitle {
+		font-size: 1.3rem;
+	}
 	
 	code {
 		display: block;
@@ -39,19 +43,19 @@ nav {
 	
 	p,
 	ul {
-		font-size: 1.3rem;
+		font-size: 1rem;
 		font-weight: 300;
 	}
 	
 	.step-number {
-		font-size: 1.2rem;
+		font-size: 1rem;
 		margin: 0;
-		color: #c6c6c6;
+		color: #7a7a7a;
 	}
 	
 	h2 {
 		font-weight: normal;
-		font-size: 2rem;
+		font-size: 1.5rem;
 		margin: 4px 0 20px 0;
 		color: #399F6E;
 	}
@@ -86,6 +90,7 @@ nav {
 		margin: 0 0 0 auto;
 		padding: 0;
 		object-fit: contain;
+		image-rendering: pixelated;
 	}
 	
 	a:not(:has(.btn)) {
@@ -149,6 +154,10 @@ nav {
 		.heading-inner {
 			width: 50%;
 		}
+
+		.step {
+			grid-template-columns: 0.8fr 1.2fr;
+		}
 	
 		@media (min-width: $breakpoint-2) {
 			h1 {
@@ -158,10 +167,6 @@ nav {
 			.sprig-image {
 				height: 300px;
 				padding-left: 30px;
-			}
-
-			.step {
-				grid-template-columns: 0.8fr 1.2fr;
 			}
 		}
 	}
