@@ -3053,5 +3053,7 @@ afterInput(() => {
     inverterGemGotten = false;
     mazeGemGotten = false;
     enteredFinalRoomForTheFirstTime = false;
+    texts = [];
+    refreshText();
   }
 });
