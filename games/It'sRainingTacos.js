@@ -1,7 +1,7 @@
 /*
 @title: It's Raining Tacos
 @author: omarko
-@tags: ["Dodge","Survival"]
+@tags: ["Dodge","Survival","Shooter"]
 @addedOn: 2024-07-29
 */
 
@@ -11,6 +11,7 @@ const obstacle1 = "o";
 const obstacle2 = "x";
 const obstacle3 = "y";
 const background = "g";
+const bullet = "b";
 
 // Set legend for sprites
 setLegend(
@@ -98,7 +99,24 @@ setLegend(
 ....6666....6666
 ....6666....6666
 ....6666....6666
-....6666....6666`]
+....6666....6666`],
+  [bullet, bitmap`
+................
+................
+................
+................
+................
+......999.......
+.....99699......
+.....96969......
+.....96969......
+......969.......
+......969.......
+.......9........
+.......9........
+................
+................
+................`]
 );
 
 // Set solids
@@ -132,7 +150,7 @@ let score = 0;
 let difficulty = 2000; // Initial obstacle spawn rate (milliseconds)
 
 // Variables to manage obstacle removal timing
-const removalDelay = 500; // milliseconds
+const removalDelay = 50; // milliseconds
 let removalTimers = {};
 
 // Function to start the game
@@ -154,11 +172,13 @@ function startGame() {
 
       if (checkHit()) {
         clearInterval(gameLoop);
+        clearInterval(spawnInterval);
+        clearInterval(scoreInterval);
         gameRunning = false;
         gameOverScreen();
       }
     }
-  }, 500); // Increased speed by changing interval to 500 ms
+  }, 500);
 
   // Spawn obstacles periodically and increase difficulty over time
   spawnInterval = setInterval(() => {
@@ -201,6 +221,15 @@ function movePlayerRight() {
   }
 }
 
+function shoot() {
+  if (gameRunning) {
+    let p = getFirst(player);
+    if (p) {
+      addSprite(p.x, p.y - 2, bullet); // Spawn bullet just above the player
+    }
+  }
+}
+
 // Display start message
 function displayStartMessage() {
   clearText();
@@ -209,7 +238,7 @@ function displayStartMessage() {
     y: 6,
     color: color`3`
   });
-  addText("to start !", {
+  addText("to start!", {
     x: 5,
     y: 9,
     color: color`3`
@@ -225,6 +254,7 @@ onInput("w", () => handleInput());
 onInput("s", () => handleInput());
 onInput("i", () => handleInput());
 onInput("k", () => handleInput());
+onInput("j", () => { handleInput(); shoot(); });
 
 // Array of obstacle types
 const obstacles = [obstacle1, obstacle2, obstacle3];
@@ -271,66 +301,131 @@ function despawnObstacles() {
   for (let i = 0; i < allObstacles.length; i++) {
     if (allObstacles[i]) {
       if (allObstacles[i].y >= 7) { // Check if obstacle has reached the bottom
-        // Set a timer to remove the obstacle after a delay
-        if (!removalTimers[allObstacles[i].id]) {
-          removalTimers[allObstacles[i].id] = setTimeout(() => {
-            allObstacles[i].remove();
-            delete removalTimers[allObstacles[i].id]; // Clean up timer reference
-          }, removalDelay);
+        if (allObstacles[i].type === obstacle1) {
+          allObstacles[i].remove(); // Remove obstacle1 when it reaches the bottom
+        } else {
+          // For obstacles other than obstacle1, set a timer to remove them after a delay
+          if (!removalTimers[allObstacles[i].id]) {
+            removalTimers[allObstacles[i].id] = setTimeout(() => {
+              allObstacles[i].remove();
+              delete removalTimers[allObstacles[i].id]; // Clean up timer reference
+            }, removalDelay);
+          }
+        }
+
+        // Check for game over condition for specific obstacles
+        if (allObstacles[i].type === obstacle2 || allObstacles[i].type === obstacle3) {
+          gameRunning = false;
+          clearInterval(gameLoop);
+          clearInterval(spawnInterval);
+          clearInterval(scoreInterval);
+          gameOverScreen();
         }
       }
     }
   }
 }
 
-// See if the player was hit
+// Function to check if player hits obstacles
 function checkHit() {
   let p = getFirst(player);
-  let allObstacles = getAll(obstacle1).concat(getAll(obstacle2)).concat(getAll(obstacle3));
+  if (!p) return false;
 
-  if (p) {
-    for (let i = 0; i < allObstacles.length; i++) {
-      if (allObstacles[i] && allObstacles[i].x == p.x && allObstacles[i].y == p.y) {
-        return true;
+  let allObstacles = getAll(obstacle1).concat(getAll(obstacle2)).concat(getAll(obstacle3));
+  for (let i = 0; i < allObstacles.length; i++) {
+    if (allObstacles[i].x === p.x && allObstacles[i].y === p.y) {
+      return true; // Hit detected
+    }
+  }
+
+  return false; // No hit detected
+}
+
+// Function to check if bullets hit obstacles
+function checkBulletHit() {
+  let allBullets = getAll(bullet);
+  let allObstacle1 = getAll(obstacle1);
+  let allObstacle2 = getAll(obstacle2);
+  let allObstacle3 = getAll(obstacle3);
+
+  allBullets.forEach(bullet => {
+    allObstacle1.forEach(obstacle => {
+      if (bullet.x === obstacle.x && bullet.y === obstacle.y) {
+        bullet.remove();
+        obstacle.remove();
+        gameRunning = false;
+        clearInterval(gameLoop);
+        clearInterval(spawnInterval);
+        clearInterval(scoreInterval);
+        gameOverScreen();
+      }
+    });
+
+    allObstacle2.forEach(obstacle => {
+      if (bullet.x === obstacle.x && bullet.y === obstacle.y) {
+        bullet.remove();
+        obstacle.remove();
+      }
+    });
+
+    allObstacle3.forEach(obstacle => {
+      if (bullet.x === obstacle.x && bullet.y === obstacle.y) {
+        bullet.remove();
+        obstacle.remove();
+      }
+    });
+  });
+}
+
+// Function to move bullets upwards
+function moveBullets() {
+  let allBullets = getAll(bullet);
+
+  for (let i = 0; i < allBullets.length; i++) {
+    let b = allBullets[i];
+    if (b) {
+      b.y -= 1;
+      // Remove bullet if it reaches the top
+      if (b.y <= 0) {
+        b.remove();
       }
     }
   }
 
-  return false;
+  checkBulletHit();
 }
 
-// Update score display
+// Function to update the score
 function updateScore() {
   clearText();
-  addText(`Score: ${score}`, {
-    x: 6,
-    y: 0,
+  addText("Score: " + score, {
+    x: 1,
+    y: 1,
     color: color`3`
   });
 }
 
-// Game over screen
+// Function to display the game over screen
 function gameOverScreen() {
   clearText();
-  addText("Game Over !", {
-    x: 5, // Centered horizontally for an 8x8 screen
-    y: 8, // Centered vertically for an 8x8 screen
+  addText("Game Over", {
+    x: 5,
+    y: 6,
     color: color`3`
   });
+  addText("Score: " + score, {
+    x: 5,
+    y: 9,
+    color: color`3`
+  });
+
+  displayStartMessage();
 }
 
-// Create a simplified tune of "It's Raining Tacos"
-const tacoTune = tune`
-<t120
-e4 e e e f g g
-f e d d d e f
-e4 e e e f g g
-f e d d d e f
-e e e e f g g
-f e d d d e f
-e e e e f g g
-f e d d d e f
-`;
-
-// Play the tune
-playTune(tacoTune);
+// Move bullets and check for collisions every 100ms
+setInterval(() => {
+  if (gameRunning) {
+    moveBullets();
+    checkBulletHit();
+  }
+}, 100);
