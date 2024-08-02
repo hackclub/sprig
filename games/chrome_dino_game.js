@@ -11,7 +11,7 @@ const c1 = "c";
 const c2 = "e";
 const g = "g";
 const b = "b";
-const p = "p"; // Power-up
+const p = "p";
 
 const d1 = "h";
 const r1 = "i";
@@ -19,9 +19,8 @@ const c11 = "j";
 const c21 = "k";
 const g1 = "l";
 const b1 = "m";
-const p1 = "n"; // Power-up inverted
+const p1 = "n";
 
-// Original color scheme (black on white)
 const bitmapsOriginal = [
   [d, bitmap`
 ................
@@ -145,7 +144,6 @@ const bitmapsOriginal = [
 ................`]
 ];
 
-// Inverted color scheme (white on black)
 const bitmapsInverted = [
   [d1, bitmap`
 ................
@@ -385,7 +383,7 @@ function generateMapWithPowerUps() {
     let mapBottom = bot_map;
   
     for (let i = 0; i < mapBottom.length; i++) {
-        if ((mapBottom[i] === c1 || mapBottom[i] === c2) && (score % 1 === 0 && score !== 0)) mapTop = mapTop.slice(0, i) + p + mapTop.slice(i + 1);  
+        if ((mapBottom[i] === c1 || mapBottom[i] === c2) && (i % 5 == 0)) mapTop = mapTop.slice(0, i) + p + mapTop.slice(i + 1);  
     }
 
     return {
@@ -398,7 +396,7 @@ function tick() {
     top_next = ".";
     switch (last) {
         case g:
-            let options = [g, g, g, g, g, g, c1, c2, r];
+            let options = [g, g, g, g, g, g, g, c1, c2, r];
             next = options[Math.floor(Math.random() * options.length)];
             last = next;
             if (next === r) {
@@ -414,19 +412,22 @@ function tick() {
     top_map = top_map.slice(1) + top_next;
     bot_map = bot_map.slice(1) + next;
     
-    let staticMap = generateMapWithPowerUps();
-    top_map = staticMap.top;
-    bot_map = staticMap.bottom;
-    
+    let powerUpChance = Math.random();
+    if (powerUpChance < 0.01) {
+        let powerUpIndex = Math.floor(Math.random() * top_map.length);
+        top_map = top_map.slice(0, powerUpIndex) + p + top_map.slice(powerUpIndex + 1);
+    }
+
     runmap = `${top_map} \n ${bot_map}`;
     setMap(runmap);
 
     if (jump === 0) {
-        if (bot_map[0] === p) collectPowerUp();
-        else if (bot_map[0] !== g && !invincible) return game_over();
+        if (top_map[0] === p) collectPowerUp();
+        if (bot_map[0] !== g && bot_map[0] !== p && !invincible) return game_over();
         addSprite(0, 1, d); 
     } else {
         if (top_map[0] === r && !invincible) return game_over();
+        if (top_map[0] === p) collectPowerUp();
         addSprite(0, 0, d); 
     }
 
@@ -441,10 +442,11 @@ function tick() {
     if (score % 150 === 0) playTune(scoreSound);
     if (score % 25 === 0) switchColors();
     
+    let scoreColor = invincible ? color`6` : color`2`;
     addText("    Score: " + score.toString(), {
         x: 2,
         y: 4,
-        color: color`2`
+        color: scoreColor
     });
     tick_timer = setTimeout(tick, time);
 }
