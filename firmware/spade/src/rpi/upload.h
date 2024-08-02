@@ -35,14 +35,17 @@ static struct {
 
 static void upl_flush_buf(void) {
   uint32_t interrupts = save_and_disable_interrupts();
-  flash_range_program(FLASH_TARGET_OFFSET + (upl_state.page++) * 256,
+  uint32_t location = (upl_state.page++) * 256;
+
+  flash_range_program(FLASH_TARGET_OFFSET + location,
                       (void *)upl_state.buf,
                       256);
   restore_interrupts(interrupts);
   memset(upl_state.buf, 0, sizeof(upl_state.buf));
-  printf("Wrote page (%d/%d)\n",
+  printf("Wrote page %d/%lu (location 0x%s)\n",
          upl_state.page,
-         (upl_state.len/(FLASH_PAGE_SIZE + 1)));
+         (upl_state.len/(FLASH_PAGE_SIZE + 1)),
+         flash_target_contents + location);
 }
 
 static int upl_stdin_read(void) {

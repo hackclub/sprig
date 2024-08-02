@@ -265,7 +265,9 @@ int main() {
   jerry_init(JERRY_INIT_MEM_STATS);
   init(sprite_free_jerry_object); // TODO: document
 
-  while(!save_read()) {
+  const char* game_stored = save_read();
+
+  while (!game_stored) {
     // No game stored in memory
     strcpy(errorbuf, "                    \n"
                      "                    \n"
@@ -287,7 +289,9 @@ int main() {
     render(st7735_fill_send);
     st7735_fill_finish();
 
-    load_new_scripts();
+    if (load_new_scripts()) {
+        game_stored = save_read();
+    }
   }
 
   // Start a core to listen for keypresses.
