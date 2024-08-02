@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Ninja Run
 @author: Acidicts
-@tags: [@ninja]
+@tags: ["ninja"]
 @addedOn: 2024-00-00
 */
 
