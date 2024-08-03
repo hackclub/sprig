@@ -258,16 +258,55 @@ onInput("i", () => {
 
 onInput("j", () => {
   if (arrowType !== null) {
-    const arrowTypeNum = Number(arrowType)
-    
-    const lastArrow = 360 / arrowIncrement - 1
-    const newType = (arrowTypeNum === lastArrow) ? 0 : (arrowTypeNum + 1)
-    
-    const arrowSprite = getFirst(arrowType)
-    arrowSprite.type = newType.toString()
-    arrowType = newType.toString()
+    let nextArrow = true
 
-    setArrowPosition()
+    // TODO: rather than "looping" the arrow around, simply prevent it from being moved past the bounds
+    // TODO: same logic (almost) would be added to the "l" input listener. it's not there currently for testing purposes.
+    while (nextArrow) {
+      const arrowTypeNum = Number(arrowType)
+      
+      const lastArrow = 360 / arrowIncrement - 1
+      const newType = (arrowTypeNum === lastArrow) ? 0 : (arrowTypeNum + 1)
+      
+      const arrowSprite = getFirst(arrowType)
+      arrowSprite.type = newType.toString()
+      arrowType = newType.toString()
+  
+      setArrowPosition()
+
+      nextArrow = checkArrowIsInvalid()
+    }
+    
+    // console.log(getArrowDeg())
+
+    // const p = getFirst(player)
+    // const walls = getAll(wall)
+    // const arrowDeg = getArrowDeg()
+    // const touching = walls.filter(w => (
+    //   (w.y === p.y && Math.abs(w.x - p.x) <= 1) ||
+    //   (w.x === p.x && Math.abs(w.y - p.y) <= 1)
+    // ))
+    // .map(w => ({ angle: Math.atan2(p.y-w.y, p.x-w.x)*(180/Math.PI) })).map(w => ({ angle: w.angle < 0 ? w.angle + 360 : w.angle })).map(w => ({ angle: w.angle, distance: Math.abs(getArrowDeg()-w.angle) % 360 }))
+    // const someIsInvalid = walls.some(w => {
+    //   const isTouching = (
+    //     (w.y === p.y && Math.abs(w.x - p.x) <= 1) ||
+    //     (w.x === p.x && Math.abs(w.y - p.y) <= 1)
+    //   )
+      
+    //   if (!isTouching) return false
+      
+    //   let angle = Math.atan2(p.y-w.y, p.x-w.x)*(180/Math.PI)
+    //   angle = angle < 0 ? angle + 360 : angle
+
+    //   const distance = Math.abs(arrowDeg-angle) % 360
+    //   if (distance <= 45) return true
+    // })
+    // if (someIsInvalid) console.log("nope!")
+    // console.log(touching)
+    // if (touching.some(t => t.distance <= 45)) {
+    //   console.log("nope!")
+    // }
+    // console.log(touching)
   }
 })
 
@@ -414,6 +453,13 @@ function getArrowDeg() {
   return Number(arrowType) * arrowIncrement
 }
 
+// function getArrowDeg(thisArrowType) {
+//   if (typeof thisArrowType === "string" || typeof thisArrowType === "number")
+//     return Number(arrowType) * arrowIncrement
+//   else if (arrowType === null) return null
+//   else return Number(arrowType) * arrowIncrement
+// }
+
 function getParsedMap() {
   // console.log(height())
   
@@ -546,6 +592,34 @@ function centerMap() {
 //     (w.x === p.x && Math.abs(w.y - p.y) <= 1)
 //   )
 // }
+
+function checkArrowIsInvalid() {
+  const p = getFirst(player)
+  const walls = getAll(wall)
+  const arrowDeg = getArrowDeg()
+
+  console.log("\n\n\nNEW CHECK")
+  
+  const someIsInvalid = walls.filter(w => {
+    const isTouching = (
+      (w.y === p.y && Math.abs(w.x - p.x) <= 1) ||
+      (w.x === p.x && Math.abs(w.y - p.y) <= 1)
+    )
+
+    if (!isTouching) return false
+
+    console.log(isTouching)
+    
+    let _angle = Math.atan2(p.y-w.y, w.x-p.x)*(180/Math.PI)
+    angle = _angle < 0 ? _angle + 360 : _angle
+
+    const distance = Math.abs(arrowDeg-angle) % 360
+    console.log({ angle, _angle, distance, px: p.x, py: p.y, wx: w.x, wy: w.y, dx: p.x-w.x, dy: p.y-w.y })
+    if (distance <= 45) return true
+  }).length >= 1
+  
+  return someIsInvalid
+}
 
 function isEffectivelyZero(num) {
   const epsilon = 1e-10
