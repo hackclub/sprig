@@ -86,12 +86,28 @@ const levels = [
 setBackground(background)
 setMap(levels[level])
 
-setPushables({
-  [ player ]: []
-})
+const controls = {
+  "1": {
+    "s": p => p.y += 1,
+    "w": p => p.y -= 1,
+    "d": p => p.x += 1,
+    "a": p => p.x -= 1,
+  },
+  "2": {
+    "k": p => p.y += 1,
+    "i": p => p.y -= 1,
+    "l": p => p.x += 1,
+    "j": p => p.x -= 1,
+  }
+}
 
-onInput("s", () => {
-  getFirst(player).y += 1
+Object.keys(controls).forEach(player => {
+  Object.keys(controls[player]).forEach(key => {
+    onInput(key, () => {
+      const p = getFirst(player);
+      controls[player][key](p)
+    })
+  })
 })
 
 afterInput(() => {
