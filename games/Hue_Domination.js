@@ -301,9 +301,14 @@ setSolids([...spritesRed, ...spritesBlue]);
 
       // color the canvas at that spot
       let currentColor = canvas[player.x][player.y]
-      console.log(player.x, player.y, currentColor, canvas)
       if (currentColor == "") {
         addSprite(player.x, player.y, paintColor)
+      } else if (currentColor != paintColor) {
+        for (let sprite of getTile(player.x, player.y)) {
+          if (sprite.type == currentColor) {
+            sprite.type = paintColor
+          }
+        }
       }
       canvas[player.x][player.y] = paintColor
     })
