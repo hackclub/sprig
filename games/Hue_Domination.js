@@ -16,8 +16,14 @@ const playerBlueUp = "5"
 const playerBlueDown = "6"
 const playerBlueLeft = "7"
 const playerBlueRight = "8"
-const paintBlue = "b"
 const paintRed = "r"
+const paintRedSpecial1 = "R"
+const paintRedSpecial2 = "t"
+const paintRedSpecial3 = "T"
+const paintBlue = "b"
+const paintBlueSpecial1 = "B"
+const paintBlueSpecial2 = "n"
+const paintBlueSpecial3 = "N"
 const background = "g"
 
 setLegend(
@@ -191,6 +197,57 @@ setLegend(
 3333333333333333
 3333333333333333
 3333333333333333` ],
+  [paintRedSpecial1, bitmap`
+3333333333333333
+3399933333333333
+3999933333333333
+3999333333333333
+3393333333333333
+3333333333333333
+3333333333333333
+3333333333333993
+3333333333339993
+3333333333999993
+3333333999999993
+3333339999999993
+3333333999999933
+3333333399999333
+3333333333333333
+3333333333333333` ],
+  [paintRedSpecial2, bitmap`
+3333333333333333
+3333333333333333
+3333333399999333
+3333333399999933
+3333333999999933
+3333399999999933
+3333339999993333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333993333
+3333333333999333
+3993333333399333
+3933333333333333
+3333333333333333
+3333333333333333` ],
+  [paintRedSpecial3, bitmap`
+3333333333333333
+3333333333333333
+3339999333333333
+3339999993333333
+3399999999333333
+3999933333333333
+3999333399993333
+3999333999999333
+3993333999999933
+3333333333999933
+3333333333399933
+3333333333999933
+3333333333999333
+3333333339999333
+3333333399333333
+3333333333333333` ],
   [paintBlue, bitmap`
 5555555555555555
 5555555555555555
@@ -207,6 +264,57 @@ setLegend(
 5555555555555555
 5555555555555555
 5555555555555555
+5555555555555555` ],
+  [paintBlueSpecial1, bitmap`
+5555555555555555
+5555555555555555
+5555577757777555
+5557777777775555
+5557777777775555
+5557777777555555
+5557757775555555
+5557555555555577
+5555555555555777
+5555555555555775
+5555555555555555
+5555555577555555
+5555777777755555
+5557777777555555
+5555555555555555
+5555555555555555` ],
+  [paintBlueSpecial2, bitmap`
+5555555555555555
+5557557555555555
+5557777775555555
+5777777777555555
+5577777777555555
+5577777777555555
+5557777555555555
+5555575555555555
+5555555555555775
+5555555555555775
+5555555555555555
+5577555555555555
+5577555555555555
+5575555555555555
+5555555555555555
+5555555555555555` ],
+  [paintBlueSpecial3, bitmap`
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555775755555
+5555555777777755
+5555555577777775
+5555555557777775
+5555555777777775
+5555555577777555
+5555555577755555
+5577555555555555
+5777555555555555
+5777555555555555
+5575555555555555
 5555555555555555` ],
 )
 
@@ -282,8 +390,8 @@ const controlsBlue = {
 
 setSolids([...spritesRed, ...spritesBlue]);
 
-[[spritesBlue, controlsBlue, "b"], [spritesRed, controlsRed, "r"]].forEach(data => {
-  const [sprites, controls, paintColor] = data;
+[[spritesBlue, controlsBlue, "b", ["B","n","N"]], [spritesRed, controlsRed, "r", ["R", "t", "T"]]].forEach(data => {
+  const [sprites, controls, paintColor, specialPaint] = data;
 
   Object.keys(controls).forEach(key => {
     onInput(key, () => {
@@ -303,10 +411,18 @@ setSolids([...spritesRed, ...spritesBlue]);
       let currentColor = canvas[player.x][player.y]
       if (currentColor == "") {
         addSprite(player.x, player.y, paintColor)
-      } else if (currentColor != paintColor) {
+      } else {
         for (let sprite of getTile(player.x, player.y)) {
           if (sprite.type == currentColor) {
-            sprite.type = paintColor
+            
+            // random chance to pick a special paint sprite
+            if (Math.random() < 0.5) {
+              paintSprite = specialPaint[Math.floor(Math.random() * specialPaint.length)]
+            } else {
+              paintSprite = paintColor
+            }
+            
+            sprite.type = paintSprite
           }
         }
       }
