@@ -21,7 +21,7 @@ const paintRed = "r"
 const background = "g"
 
 setLegend(
-  [ playerRedUp, bitmap`
+  [playerRedUp, bitmap`
 ................
 ..000000000000..
 ..066663666360..
@@ -38,7 +38,7 @@ setLegend(
 ......0330......
 ......0330......
 ......0000......` ],
-  [ playerRedDown, bitmap`
+  [playerRedDown, bitmap`
 ......0000......
 ......0660......
 ......0630......
@@ -55,7 +55,7 @@ setLegend(
 ..033333333330..
 ..000000000000..
 ................` ],
-  [ playerRedLeft, bitmap`
+  [playerRedLeft, bitmap`
 ................
 ................
 .000000.........
@@ -72,7 +72,7 @@ setLegend(
 .000000.0.......
 ....0...0.......
 ....00000.......` ],
-  [ playerRedRight, bitmap`
+  [playerRedRight, bitmap`
 .......00000....
 .......0...0....
 .......0.000000.
@@ -89,7 +89,7 @@ setLegend(
 .........000000.
 ................
 ................` ],
-  [ playerBlueUp, bitmap`
+  [playerBlueUp, bitmap`
 ................
 ..000000000000..
 ..077775777570..
@@ -106,7 +106,7 @@ setLegend(
 ......0550......
 ......0550......
 ......0000......` ],
-  [ playerBlueDown, bitmap`
+  [playerBlueDown, bitmap`
 ......0000......
 ......0770......
 ......0750......
@@ -123,7 +123,7 @@ setLegend(
 ..055555555550..
 ..000000000000..
 ................` ],
-  [ playerBlueLeft, bitmap`
+  [playerBlueLeft, bitmap`
 ................
 ................
 .000000.........
@@ -140,7 +140,7 @@ setLegend(
 .000000.0.......
 ....0...0.......
 ....00000.......` ],
-  [ playerBlueRight, bitmap`
+  [playerBlueRight, bitmap`
 .......00000....
 .......0...0....
 .......0.000000.
@@ -157,7 +157,7 @@ setLegend(
 .........000000.
 ................
 ................` ],
-  [ background, bitmap`
+  [background, bitmap`
 2121212122222222
 1212121222222222
 2121212122222222
@@ -174,6 +174,40 @@ setLegend(
 2222222221212121
 2222222212121212
 2222222221212121` ],
+  [paintRed, bitmap`
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333` ],
+  [paintBlue, bitmap`
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555` ],
 )
 
 
@@ -193,7 +227,20 @@ const levels = [
 setBackground(background)
 setMap(levels[level])
 
-const spritesRed = ["1","2","3","4"]
+// Create an array the size of the game board, to keep track of paint
+let canvas = []
+for (let i = 0; i < 10; i++) {
+  canvas.push(Array(8).fill(""))
+}
+
+// the canvas should start off painted where the players spawn
+canvas[9][0] = "b"
+canvas[0][7] = "r"
+addSprite(9, 0, "b")
+addSprite(0, 7, "r")
+
+
+const spritesRed = ["1", "2", "3", "4"]
 const controlsRed = {
   "w": {
     func: p => p.y -= 1,
@@ -205,7 +252,7 @@ const controlsRed = {
   },
   "a": {
     func: p => p.x -= 1,
-    type: "3",
+    type: "2",
   },
   "d": {
     func: p => p.x += 1,
@@ -213,7 +260,7 @@ const controlsRed = {
   },
 }
 
-const spritesBlue = ["5","6","7","8"]
+const spritesBlue = ["5", "6", "7", "8"]
 const controlsBlue = {
   "i": {
     func: p => p.y -= 1,
@@ -233,24 +280,33 @@ const controlsBlue = {
   },
 }
 
-setSolids([ ...spritesRed, ...spritesBlue ]);
+setSolids([...spritesRed, ...spritesBlue]);
 
-[[spritesBlue, controlsBlue], [spritesRed,controlsRed]].forEach(data => {
-  const [sprites, controls] = data;
-  
+[[spritesBlue, controlsBlue, "b"], [spritesRed, controlsRed, "r"]].forEach(data => {
+  const [sprites, controls, paintColor] = data;
+
   Object.keys(controls).forEach(key => {
     onInput(key, () => {
-		let player;
-		// find the player, regardless of what directional sprite is in use right now
-		for (const sprite of sprites) {
-      console.log(sprite)
-			player = getFirst(sprite);
-			if (player) break;
-		}
+      let player;
+      // find the player, regardless of what directional sprite is in use right now
+      for (const sprite of sprites) {
+        console.log(sprite)
+        player = getFirst(sprite);
+        if (player) break;
+      }
 
-		controls[key].func(player);
-		player.type = controls[key].type;
-	})
+      // move the player
+      controls[key].func(player);
+      player.type = controls[key].type;
+
+      // color the canvas at that spot
+      let currentColor = canvas[player.x][player.y]
+      console.log(player.x, player.y, currentColor, canvas)
+      if (currentColor == "") {
+        addSprite(player.x, player.y, paintColor)
+      }
+      canvas[player.x][player.y] = paintColor
+    })
   })
 })
 
