@@ -37,7 +37,7 @@ setLegend(
 ......0630......
 ......0330......
 ......0330......
-......0000......`],
+......0000......` ],
   [ playerRedDown, bitmap`
 ......0000......
 ......0660......
@@ -71,7 +71,7 @@ setLegend(
 .033330.0.......
 .000000.0.......
 ....0...0.......
-....00000.......`],
+....00000.......` ],
   [ playerRedRight, bitmap`
 .......00000....
 .......0...0....
@@ -88,7 +88,7 @@ setLegend(
 .........033330.
 .........000000.
 ................
-................`],
+................` ],
   [ playerBlueUp, bitmap`
 ................
 ..000000000000..
@@ -105,7 +105,7 @@ setLegend(
 ......0750......
 ......0550......
 ......0550......
-......0000......`]
+......0000......` ],
   [ playerBlueDown, bitmap`
 ......0000......
 ......0770......
@@ -139,7 +139,7 @@ setLegend(
 .055550.0.......
 .000000.0.......
 ....0...0.......
-....00000.......`]
+....00000.......` ],
   [ playerBlueRight, bitmap`
 .......00000....
 .......0...0....
@@ -156,7 +156,7 @@ setLegend(
 .........055550.
 .........000000.
 ................
-................`]
+................` ],
   [ background, bitmap`
 2121212122222222
 1212121222222222
@@ -173,10 +173,9 @@ setLegend(
 2222222212121212
 2222222221212121
 2222222212121212
-2222222221212121` ]
+2222222221212121` ],
 )
 
-setSolids([ playerRedDown, playerBlue ])
 
 let level = 0
 const levels = [
@@ -194,46 +193,65 @@ const levels = [
 setBackground(background)
 setMap(levels[level])
 
-const spritesRed = [1,2,3,4]
+const spritesRed = ["1","2","3","4"]
 const controlsRed = {
   "w": {
     func: p => p.y -= 1,
-    sprite: 1,
-  },
-  "a": {
-    func: p => p.x -= 1,
-    sprite: 2,
+    type: "1",
   },
   "s": {
     func: p => p.y += 1,
-    sprite: 3,
+    type: "2",
+  },
+  "a": {
+    func: p => p.x -= 1,
+    type: "3",
   },
   "d": {
     func: p => p.x += 1,
-    sprite: 4,
+    type: "4",
   },
 }
 
-const spritesBlue = [5,6,7,8]
+const spritesBlue = ["5","6","7","8"]
 const controlsBlue = {
-  "w": {
+  "i": {
     func: p => p.y -= 1,
-    sprite: 5,
+    type: "5",
   },
-  "a": {
-    func: p => p.x -= 1,
-    sprite: 6,
-  },
-  "s": {
+  "k": {
     func: p => p.y += 1,
-    sprite: 7,
+    type: "6",
   },
-  "d": {
+  "j": {
+    func: p => p.x -= 1,
+    type: "7",
+  },
+  "l": {
     func: p => p.x += 1,
-    sprite: 8,
+    type: "8",
   },
 }
 
-afterInput(() => {
+setSolids([ ...spritesRed, ...spritesBlue ]);
+
+[[spritesBlue, controlsBlue], [spritesRed,controlsRed]].forEach(data => {
+  const [sprites, controls] = data;
   
+  Object.keys(controls).forEach(key => {
+    onInput(key, () => {
+		let player;
+		// find the player, regardless of what directional sprite is in use right now
+		for (const sprite of sprites) {
+      console.log(sprite)
+			player = getFirst(sprite);
+			if (player) break;
+		}
+
+		controls[key].func(player);
+		player.type = controls[key].type;
+	})
+  })
 })
+
+
