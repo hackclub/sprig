@@ -252,7 +252,7 @@ const controlsRed = {
   },
   "a": {
     func: p => p.x -= 1,
-    type: "2",
+    type: "3",
   },
   "d": {
     func: p => p.x += 1,
