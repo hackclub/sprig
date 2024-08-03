@@ -235,6 +235,8 @@ let xVel = 0
 let yVel = 0
 let gravity = 0.1
 
+let inAir = false
+
 let arrowType = null
 
 let fullMap = null
@@ -247,7 +249,7 @@ onInput("s", () => {
 })
 
 onInput("i", () => {
-  if (arrowType === null) {
+  if (arrowType === null && !inAir) {
     addSprite(0, 0, arrow_0)
     arrowType = arrow_0
     setArrowPosition()
@@ -286,6 +288,8 @@ onInput("l", () => {
 
 onInput("k", () => {
   if (arrowType !== null) {
+    inAir = true
+    
     const deg = getArrowDeg()
     const rad = deg * (Math.PI / 180)
 
@@ -360,6 +364,7 @@ onInput("k", () => {
       ) {
         console.log("clear")
         clearInterval(interval)
+        inAir = false
       }
 
       // TODO: prevent arrow from showing up when interval still exists
