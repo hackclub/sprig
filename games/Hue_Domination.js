@@ -8,14 +8,14 @@ https://sprig.hackclub.com/gallery/getting_started
 @addedOn: 2024-00-00
 */
 
-const player1 = "1"
-const player2 = "2"
+const playerRed = "R"
+const playerBlue = "B"
 const paintBlue = "b"
 const paintRed = "r"
 const background = "g"
 
 setLegend(
-  [ player1, bitmap`
+  [ playerRed, bitmap`
 ......0000......
 ......0660......
 ......0630......
@@ -32,7 +32,7 @@ setLegend(
 ..033333333330..
 ..000000000000..
 ................` ],
-  [ player2, bitmap`
+  [ playerBlue, bitmap`
 ......0000......
 ......0770......
 ......0750......
@@ -68,7 +68,7 @@ setLegend(
 2222222221212121` ]
 )
 
-setSolids([ player1, player2 ])
+setSolids([ playerRed, playerBlue ])
 
 let level = 0
 const levels = [
@@ -87,13 +87,13 @@ setBackground(background)
 setMap(levels[level])
 
 const controls = {
-  "1": {
+  "R": {
     "s": p => p.y += 1,
     "w": p => p.y -= 1,
     "d": p => p.x += 1,
     "a": p => p.x -= 1,
   },
-  "2": {
+  "B": {
     "k": p => p.y += 1,
     "i": p => p.y -= 1,
     "l": p => p.x += 1,
