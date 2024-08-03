@@ -319,9 +319,14 @@ setLegend(
 )
 
 
-let level = 0
-const levels = [
-  map`
+
+
+
+let canvas;
+
+function startGame() {
+  setBackground(background)
+  setMap(map`
 .........6
 ..........
 ..........
@@ -329,24 +334,21 @@ const levels = [
 ..........
 ..........
 ..........
-1.........`
-]
+1.........`)
+  
+  // Create an array the size of the game board, to keep track of paint
+  canvas = []
+  for (let i = 0; i < 10; i++) {
+	canvas.push(Array(8).fill(""))
+  }
 
-setBackground(background)
-setMap(levels[level])
 
-// Create an array the size of the game board, to keep track of paint
-let canvas = []
-for (let i = 0; i < 10; i++) {
-  canvas.push(Array(8).fill(""))
+  // the canvas should start off painted where the players spawn
+  canvas[9][0] = "b"
+  canvas[0][7] = "r"
+  addSprite(9, 0, "b")
+  addSprite(0, 7, "r")
 }
-
-// the canvas should start off painted where the players spawn
-canvas[9][0] = "b"
-canvas[0][7] = "r"
-addSprite(9, 0, "b")
-addSprite(0, 7, "r")
-
 
 const spritesRed = ["1", "2", "3", "4"]
 const controlsRed = {
@@ -416,7 +418,7 @@ setSolids([...spritesRed, ...spritesBlue]);
           if (sprite.type == currentColor) {
             
             // random chance to pick a special paint sprite
-            if (Math.random() < 0.5) {
+            if (Math.random() < 0.35) {
               paintSprite = specialPaint[Math.floor(Math.random() * specialPaint.length)]
             } else {
               paintSprite = paintColor
