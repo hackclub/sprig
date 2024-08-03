@@ -68,7 +68,7 @@ setLegend(
 2222222221212121` ]
 )
 
-setSolids([])
+setSolids([ player1, player2 ])
 
 let level = 0
 const levels = [
