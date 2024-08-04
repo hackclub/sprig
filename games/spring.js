@@ -14,15 +14,40 @@ const wall = "w"
 const wall_no_stick = "n"
 
 const arrow_0 = "0"
-const arrow_45 = "1"
-const arrow_90 = "2"
-const arrow_135 = "3"
-const arrow_180 = "4"
-const arrow_225 = "5"
-const arrow_270 = "6"
-const arrow_315 = "7"
+const arrow_22 = "1"
+const arrow_45 = "2"
+const arrow_67 = "3"
+const arrow_90 = "4"
+const arrow_112 = "5"
+const arrow_135 = "6"
+const arrow_157 = "7"
+const arrow_180 = "8"
+const arrow_202 = "9"
+const arrow_225 = "!"
+const arrow_247 = "@"
+const arrow_270 = "#"
+const arrow_292 = "$"
+const arrow_315 = "%"
 
-const arrowIncrement = 45
+const arrowCounters = [
+  arrow_0,
+  arrow_22,
+  arrow_45,
+  arrow_67,
+  arrow_90,
+  arrow_112,
+  arrow_135,
+  arrow_157,
+  arrow_180,
+  arrow_202,
+  arrow_225,
+  arrow_247,
+  arrow_270,
+  arrow_292,
+  arrow_315
+]
+
+const arrowIncrement = 22.5
 const lastArrow = 360 / arrowIncrement - 1
 
 setLegend(
@@ -43,6 +68,23 @@ setLegend(
 ................
 ................
 ................` ],
+  [ arrow_22, bitmap`
+.......000000...
+........00000000
+............0000
+..........00000.
+.......00000..0.
+....000000...00.
+..00000.....00..
+.000.......000..
+............0...
+................
+................
+................
+................
+................
+................
+................` ],
   [ arrow_45, bitmap`
 ................
 ................
@@ -60,6 +102,23 @@ setLegend(
 .000............
 000.............
 00..............` ],
+  [ arrow_67, bitmap`
+.............00.
+..........00000.
+........000.000.
+.......000..0000
+........0..00.00
+...........00.00
+..........00..00
+..........00..00
+..........00...0
+.........00.....
+.........00.....
+.........00.....
+........00......
+........00......
+.........0......
+................` ],
   [ arrow_90, bitmap`
 .......00.......
 ......0000......
@@ -145,23 +204,23 @@ setLegend(
 .....000000.....
 ......0000......
 .......00.......` ],
-  [ arrow_315, bitmap`
-00..............
-000.............
-.000............
-..000...........
-...000..........
-....000...00....
-.....000..00....
-......000.00....
-.......00000....
-........0000....
-.....0000000....
-.....0000000....
-................
-................
-................
-................` ],
+//   [ arrow_315, bitmap`
+// 00..............
+// 000.............
+// .000............
+// ..000...........
+// ...000..........
+// ....000...00....
+// .....000..00....
+// ......000.00....
+// .......00000....
+// ........0000....
+// .....0000000....
+// .....0000000....
+// ................
+// ................
+// ................
+// ................` ],
   [ player, bitmap`
 ................
 ................
@@ -235,11 +294,17 @@ n..................n
 nw...w...w...w...w.n
 n............w.....n
 n..................n
-n..................n
+n........n.........n
 n..................n
 n..................n
 n.wp..w.w.w.w.w.w.wn
-nwwwwwwwwwwwwwwwwwwn`
+n.wwwwwwwwwwwwwwwwwn
+n.n...n............n
+n.n...n............n
+n.n.........ww..wwwn
+n.......n..........n
+n.......n..........n
+wwwwwwwwwwwwwwwwwwww`
 ]
 
 setMap(levels[level])
@@ -269,12 +334,12 @@ onInput("s", () => {
 
 onInput("i", () => {
   if (arrowType === null && !inAir) {
-    let newArrowType = Number(arrow_0)
+    let newArrowType = arrowCounters.indexOf(arrow_0)
     while (checkArrowIsInvalid(newArrowType)) {
       newArrowType += 1
       if (newArrowType === lastArrow) throw new Error("No possible moves")
     }
-    newArrowType = newArrowType.toString()
+    newArrowType = arrowCounters[newArrowType]
     
     addSprite(0, 0, newArrowType)
     arrowType = newArrowType
@@ -287,15 +352,15 @@ onInput("j", () => {
   if (arrowType !== null) {
     const arrowTypeNum = Number(arrowType)
     
-    const newType = (arrowTypeNum === lastArrow) ? 0 : (arrowTypeNum + 1)
+    const newType = arrowCounters[(arrowTypeNum === lastArrow) ? 0 : (arrowTypeNum + 1)]
     
     const isInvalid = checkArrowIsInvalid(newType)
 
     if (isInvalid) return
     
     const arrowSprite = getFirst(arrowType)
-    arrowSprite.type = newType.toString()
-    arrowType = newType.toString()
+    arrowSprite.type = newType
+    arrowType = newType
 
     setArrowPosition()
   }
@@ -305,15 +370,15 @@ onInput("l", () => {
   if (arrowType !== null) {
     const arrowTypeNum = Number(arrowType)
     
-    const newType = (arrowTypeNum === 0) ? lastArrow : (arrowTypeNum - 1)
+    const newType = arrowCounters[(arrowTypeNum === 0) ? lastArrow : (arrowTypeNum - 1)]
     
     const isInvalid = checkArrowIsInvalid(newType)
 
     if (isInvalid) return
     
     const arrowSprite = getFirst(arrowType)
-    arrowSprite.type = newType.toString()
-    arrowType = newType.toString()
+    arrowSprite.type = newType
+    arrowType = newType
 
     setArrowPosition()
   }
@@ -330,6 +395,7 @@ onInput("k", () => {
     arrowSprite.remove()
     arrowType = null
 
+    // note that startVel should never be larger than 1
     const startVel = 1
     xVel = startVel * Math.cos(rad)
     yVel = -startVel * Math.sin(rad)
@@ -346,18 +412,40 @@ onInput("k", () => {
       setMapFromParsed(fullMap)
       
       const p = getFirst(player)
+
+      const wallsNoStick = getAll(wall_no_stick)
+      if (
+        wallsNoStick.some(w => (
+          (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
+          (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
+        ))
+      ) {
+        console.log("reset x")
+        xVel = 0
+      }
+      if (
+        wallsNoStick.some(w => (
+          (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
+          (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel))
+        ))
+      ) {
+        console.log("reset y")
+        yVel = 0
+      }
       
       fullX += xVel
       fullY += yVel
 
-      const oldX = p.x
-      const oldY = p.y
+      // const oldX = p.x
+      // const oldY = p.y
       
       p.x = Math.round(fullX)
       p.y = Math.round(fullY)
       
-      yVel += gravity
+      // yVel += gravity
 
+      yVel = Math.min(yVel+gravity, 1)
+      
       const walls = getAll(wall)
       if (
         walls.some(w => (
@@ -553,7 +641,7 @@ function centerMap() {
 
 function checkArrowIsInvalid(thisArrowType) {
   const p = getFirst(player)
-  const walls = getAll(wall)
+  const walls = [...getAll(wall), ...getAll(wall_no_stick)]
   const arrowDeg = getArrowDeg(thisArrowType)
   
   const someIsInvalid = walls.some(w => {
