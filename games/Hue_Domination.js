@@ -28,11 +28,10 @@ function doubleBitmap(bitmap) {
 
 // the title screen image needs to be split into 16x16 chunks
 function splitBitmap(bitmap) {
-    const rows = bitmap.split('\n').slice(1);
+    const rows = bitmap.trim().split('\n')
     const chunks = [];
     const chunkRows = rows.length / 16;
     const chunkCols = rows[0].length / 16;
-    console.log(chunkRows, chunkCols)
   
     for (let i = 0; i < chunkRows; i++) {
         for (let j = 0; j < chunkCols; j++) {
@@ -42,7 +41,7 @@ function splitBitmap(bitmap) {
                 const startCol = j * 16;
                 const endCol = startCol + 16;
                 
-                chunk.push(row.slice(startCol, endCol));
+                chunk.push(rows[rowIndex].slice(startCol, endCol));
             }
             chunks.push(chunk.join('\n'));
         }
@@ -101,14 +100,11 @@ const titleImage = bitmap`
 ................................................................
 ................................................................
 ................................................................`
-console.log(titleImage)
-console.log(doubleBitmap(titleImage))
 const titleChunks = splitBitmap(doubleBitmap(titleImage))
 const titleChars = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz".split("")
-const titleLegend = titleChunks.map((chunk, index) => [titleChars[index], chunk]);
-console.log(titleLegend)
+let titleLegend = titleChunks.map((chunk, index) => [titleChars[index], chunk]);
 
-setLegend(titleLegend)
+setLegend(...titleLegend)
 setMap(map`
 ..........
 .AaBbCcDd.
@@ -119,6 +115,26 @@ setMap(map`
 .UuVvWwXx.
 ..........`)
 
+
+const textColors = [color`3`, color`7`]
+let currentTextColor = 1;
+addText("Press any button", {x: 2, y: 13, color: textColors[0]})
+const blinkingTextInterval = setInterval(() => {
+  currentTextColor = 1 - currentTextColor;
+  
+  clearText();
+  addText("Press any button", {x: 2, y: 13, color: textColors[currentTextColor]})
+}, 1000)
+
+
+let gameStarted = false;
+"wasdijkl".split("").forEach(key => {
+  onInput(key, () => {
+    if (!gameStarted) startGame()
+  })
+})
+
+
 const playerRedUp = "1"
 const playerRedDown = "2"
 const playerRedLeft = "3"
@@ -127,20 +143,24 @@ const playerBlueUp = "5"
 const playerBlueDown = "6"
 const playerBlueLeft = "7"
 const playerBlueRight = "8"
-const paintRed = "r"
-const paintRedSpecial1 = "R"
-const paintRedSpecial2 = "t"
-const paintRedSpecial3 = "T"
-const paintBlue = "b"
-const paintBlueSpecial1 = "B"
-const paintBlueSpecial2 = "n"
-const paintBlueSpecial3 = "N"
-const background = "g"
+const paintRed = "Y"
+const paintRedSpecial1 = "z"
+const paintRedSpecial2 = "9"
+const paintRedSpecial3 = "0"
+const paintBlue = "y"
+const paintBlueSpecial1 = "`"
+const paintBlueSpecial2 = "~"
+const paintBlueSpecial3 = "-"
+const background = "Z"
 
 
 let canvas;
 
 function startGame() {
+  clearInterval(blinkingTextInterval)
+  clearText()
+  setTimeout(() => gameStarted = true, 10)
+
   setLegend(
   [playerRedUp, bitmap`
 ................
@@ -435,7 +455,7 @@ function startGame() {
 )
   
   
-  setBackground(background)
+  // setBackground(background)
   setMap(map`
 .........6
 ..........
@@ -454,10 +474,10 @@ function startGame() {
 
 
   // the canvas should start off painted where the players spawn
-  canvas[9][0] = "b"
-  canvas[0][7] = "r"
-  addSprite(9, 0, "b")
-  addSprite(0, 7, "r")
+  canvas[9][0] = paintBlue
+  canvas[0][7] = paintRed
+  addSprite(9, 0, paintBlue)
+  addSprite(0, 7, paintRed)
 }
 
 const spritesRed = ["1", "2", "3", "4"]
@@ -502,11 +522,16 @@ const controlsBlue = {
 
 setSolids([...spritesRed, ...spritesBlue]);
 
-[[spritesBlue, controlsBlue, "b", ["B","n","N"]], [spritesRed, controlsRed, "r", ["R", "t", "T"]]].forEach(data => {
+[
+  [spritesBlue, controlsBlue, paintBlue, [paintBlueSpecial1,paintBlueSpecial2,paintBlueSpecial3]],
+  [spritesRed, controlsRed, paintRed, [paintRedSpecial1,paintRedSpecial2,paintRedSpecial3]]
+].forEach(data => {
   const [sprites, controls, paintColor, specialPaint] = data;
 
   Object.keys(controls).forEach(key => {
     onInput(key, () => {
+      if (!gameStarted) return
+      
       let player;
       // find the player, regardless of what directional sprite is in use right now
       for (const sprite of sprites) {
@@ -542,5 +567,6 @@ setSolids([...spritesRed, ...spritesBlue]);
     })
   })
 })
+
 
 
