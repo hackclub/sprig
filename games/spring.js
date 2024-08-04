@@ -10,6 +10,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 const player = "p"
 
+const background = "b"
+
 const wall = "w"
 const wall_no_stick = "n"
 
@@ -28,6 +30,7 @@ const arrow_247 = "@"
 const arrow_270 = "#"
 const arrow_292 = "$"
 const arrow_315 = "%"
+const arrow_337 = "^"
 
 const arrowCounters = [
   arrow_0,
@@ -44,7 +47,8 @@ const arrowCounters = [
   arrow_247,
   arrow_270,
   arrow_292,
-  arrow_315
+  arrow_315,
+  arrow_337
 ]
 
 const arrowIncrement = 22.5
@@ -136,6 +140,23 @@ setLegend(
 .......00.......
 .......00.......
 ................` ],
+  [ arrow_112, bitmap`
+.00.............
+.00000..........
+.000.000........
+0000..000.......
+00.00..0........
+00.00...........
+00..00..........
+00..00..........
+0...00..........
+.....00.........
+.....00.........
+.....00.........
+......00........
+......00........
+......0.........
+................` ],
   [ arrow_135, bitmap`
 ................
 ................
@@ -153,6 +174,23 @@ setLegend(
 ............000.
 .............000
 ..............00` ],
+  [ arrow_157, bitmap`
+...000000.......
+00000000........
+0000............
+.00000..........
+.0..00000.......
+.00...000000....
+..00.....00000..
+..000.......000.
+...0............
+................
+................
+................
+................
+................
+................
+................` ],
   [ arrow_180, bitmap`
 ................
 ................
@@ -170,6 +208,23 @@ setLegend(
 ................
 ................
 ................` ],
+  [ arrow_202, bitmap`
+................
+................
+................
+................
+................
+................
+................
+...0............
+..000.......000.
+..00.....00000..
+.00...000000....
+.0..00000.......
+.00000..........
+0000............
+00000000........
+...000000.......` ],
   [ arrow_225, bitmap`
 ..............00
 .............000
@@ -187,6 +242,23 @@ setLegend(
 ................
 ................
 ................` ],
+  [ arrow_247, bitmap`
+................
+......0.........
+......00........
+......00........
+.....00.........
+.....00.........
+.....00.........
+0...00..........
+00..00..........
+00..00..........
+00.00...........
+00.00..0........
+0000..000.......
+.000.000........
+.00000..........
+.00.............` ],
   [ arrow_270, bitmap`
 ................
 .......00.......
@@ -204,40 +276,91 @@ setLegend(
 .....000000.....
 ......0000......
 .......00.......` ],
-//   [ arrow_315, bitmap`
-// 00..............
-// 000.............
-// .000............
-// ..000...........
-// ...000..........
-// ....000...00....
-// .....000..00....
-// ......000.00....
-// .......00000....
-// ........0000....
-// .....0000000....
-// .....0000000....
-// ................
-// ................
-// ................
-// ................` ],
-  [ player, bitmap`
+  [ arrow_292, bitmap`
+................
+.........0......
+........00......
+........00......
+.........00.....
+.........00.....
+.........00.....
+..........00...0
+..........00..00
+..........00..00
+...........00.00
+........0..00.00
+.......000..0000
+........000.000.
+..........00000.
+.............00.` ],
+  [ arrow_315, bitmap`
+00..............
+000.............
+.000............
+..000...........
+...000..........
+....000...00....
+.....000..00....
+......000.00....
+.......00000....
+........0000....
+.....0000000....
+.....0000000....
 ................
 ................
-.......000......
-.......0.0......
-......0..0......
-......0...0.0...
-....0003.30.0...
-....0.0...000...
-....0.05550.....
-......0...0.....
-.....0....0.....
-.....0...0......
-......000.......
-......0.0.......
-.....00.00......
+................
 ................` ],
+  [ arrow_337, bitmap`
+................
+................
+................
+................
+................
+................
+................
+............0...
+.000.......000..
+..00000.....00..
+....000000...00.
+.......00000..0.
+..........00000.
+............0000
+........00000000
+.......000000...` ],
+  [ player, bitmap`
+...0000000000...
+..000000000000..
+.00033333333000.
+0003333333333000
+0033333333333300
+0033300330033300
+0033300330033300
+0033300330033300
+0033333333333300
+0033333333333300
+0033333333333300
+0033333333333300
+0033333333333000
+.00033333333000.
+..000000000000..
+...0000000000...` ],
+  [ background, bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777` ],
   [ wall, bitmap`
 0000000000000000
 0000000000000000
@@ -274,6 +397,66 @@ setLegend(
 .00000000000000.` ]
 )
 
+const melody = tune`
+150: D4-150,
+150: D4-150,
+150: F4-150,
+150: F4-150,
+150: E4-150,
+150: E4-150,
+300,
+150: D4-150,
+150: D4-150,
+150: F4-150,
+150: F4-150,
+150: E4-150,
+150: E4-150,
+300,
+150: D4-150 + F4-150,
+150: D4-150 + F4-150,
+150: F4-150 + A4-150,
+150: F4-150 + A4-150,
+150: E4-150 + G4-150,
+150: E4-150 + G4-150,
+300,
+150: D4-150 + F4-150,
+150: D4-150 + F4-150,
+150: F4-150 + A4-150,
+150: F4-150 + A4-150,
+150: E4-150 + G4-150,
+150: E4-150 + G4-150,
+300`
+
+const melody2 = tune`
+150: D4-150 + F4-150,
+150: D4-150 + F4-150,
+150: F4-150 + A4-150,
+150: F4-150 + A4-150,
+150: E4-150 + G4-150,
+150: E4-150 + G4-150,
+300,
+150: D4-150 + F4-150,
+150: D4-150 + F4-150,
+150: F4-150 + A4-150,
+150: F4-150 + A4-150,
+150: E4-150 + G4-150,
+150: E4-150 + G4-150,
+300,
+150: F4-150 + A4-150,
+150: F4-150 + A4-150,
+150: A4-150 + C5-150,
+150: A4-150 + C5-150,
+150: B4-150 + G4-150,
+150: B4-150 + G4-150,
+300,
+150: F4-150 + A4-150,
+150: F4-150 + A4-150,
+150: A4-150 + C5-150,
+150: A4-150 + C5-150,
+150: B4-150 + G4-150,
+150: B4-150 + G4-150,
+300`
+
 setSolids([ player, wall, wall_no_stick ])
 
 let level = 0
@@ -297,15 +480,17 @@ n..................n
 n........n.........n
 n..................n
 n..................n
-n.wp..w.w.w.w.w.w.wn
+n.w...w.w.w.w.w.w.wn
 n.wwwwwwwwwwwwwwwwwn
 n.n...n............n
 n.n...n............n
 n.n.........ww..wwwn
 n.......n..........n
-n.......n..........n
+np......n..........n
 wwwwwwwwwwwwwwwwwwww`
 ]
+
+setBackground(background)
 
 setMap(levels[level])
 
@@ -335,7 +520,7 @@ onInput("s", () => {
 onInput("i", () => {
   if (arrowType === null && !inAir) {
     let newArrowType = arrowCounters.indexOf(arrow_0)
-    while (checkArrowIsInvalid(newArrowType)) {
+    while (checkArrowIsInvalid(arrowCounters[newArrowType])) {
       newArrowType += 1
       if (newArrowType === lastArrow) throw new Error("No possible moves")
     }
@@ -350,7 +535,7 @@ onInput("i", () => {
 // TODO: simplify code in "j" and "l" listeners to avoid duplicating
 onInput("j", () => {
   if (arrowType !== null) {
-    const arrowTypeNum = Number(arrowType)
+    const arrowTypeNum = arrowCounters.indexOf(arrowType)
     
     const newType = arrowCounters[(arrowTypeNum === lastArrow) ? 0 : (arrowTypeNum + 1)]
     
@@ -368,7 +553,7 @@ onInput("j", () => {
 
 onInput("l", () => {
   if (arrowType !== null) {
-    const arrowTypeNum = Number(arrowType)
+    const arrowTypeNum = arrowCounters.indexOf(arrowType)
     
     const newType = arrowCounters[(arrowTypeNum === 0) ? lastArrow : (arrowTypeNum - 1)]
     
@@ -412,26 +597,6 @@ onInput("k", () => {
       setMapFromParsed(fullMap)
       
       const p = getFirst(player)
-
-      const wallsNoStick = getAll(wall_no_stick)
-      if (
-        wallsNoStick.some(w => (
-          (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
-          (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
-        ))
-      ) {
-        console.log("reset x")
-        xVel = 0
-      }
-      if (
-        wallsNoStick.some(w => (
-          (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
-          (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel))
-        ))
-      ) {
-        console.log("reset y")
-        yVel = 0
-      }
       
       fullX += xVel
       fullY += yVel
@@ -459,7 +624,31 @@ onInput("k", () => {
         console.log("clear")
         clearInterval(interval)
         inAir = false
+      } else {
+        const wallsNoStick = getAll(wall_no_stick)
+        if (
+          wallsNoStick.some(w => (
+            (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
+            (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
+          ))
+        ) {
+          console.log("reset x")
+          xVel = 0
+          fullX = p.x
+        }
+        if (
+          wallsNoStick.some(w => (
+            (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
+            (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel))
+          ))
+        ) {
+          console.log("reset y")
+          yVel = 0
+          fullY = p.y
+        }
       }
+
+      console.log(p.y)
     
       fullMap = getParsedMap()
       
@@ -655,8 +844,10 @@ function checkArrowIsInvalid(thisArrowType) {
     let angle = Math.atan2(p.y-w.y, w.x-p.x)*(180/Math.PI)
     angle = angle < 0 ? angle + 360 : angle
 
-    const distance = Math.abs(arrowDeg-angle) % 360
-    if (distance <= 45) return true
+    let distance = Math.abs(arrowDeg-angle) % 360
+    distance = distance > 180 ? (180 - (distance % 180)) : distance
+    console.log(distance)
+    if (distance < 90) return true
   })
   
   return someIsInvalid
@@ -664,9 +855,9 @@ function checkArrowIsInvalid(thisArrowType) {
 
 function getArrowDeg(thisArrowType) {
   if (typeof thisArrowType === "string" || typeof thisArrowType === "number")
-    return Number(thisArrowType) * arrowIncrement
+    return arrowCounters.indexOf(thisArrowType) * arrowIncrement
   else if (arrowType === null) return null
-  else return Number(arrowType) * arrowIncrement
+  else return arrowCounters.indexOf(arrowType) * arrowIncrement
 }
 
 function isEffectivelyZero(num) {
