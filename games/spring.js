@@ -457,6 +457,27 @@ const melody2 = tune`
 150: B4-150 + G4-150,
 300`
 
+const melody3 = tune`
+150: F4-150 + A4-150,
+150: F4-150 + A4-150,
+150: A4-150 + C5-150,
+150: A4-150 + C5-150,
+150: B4-150 + G4-150,
+150: B4-150 + G4-150,
+300,
+150: D4-150,
+450,
+150: D4-150,
+450,
+150: D4-150 + A4-150,
+450,
+150: D4-150 + A4-150,
+450,
+150: D4-150 + C5-150,
+450,
+150: D4-150 + C5-150,
+450`
+
 setSolids([ player, wall, wall_no_stick ])
 
 let level = 0
@@ -510,11 +531,97 @@ let arrowType = null
 
 let fullMap = null
 
+let zoom = {
+  zooming: false,
+  isZoomedOut: false,
+  x: null,
+  y: null
+}
+
+onInput("w", async () => {
+  // console.log({x:playerSprite.x,y:playerSprite.y})
+
+  if (zoom.isZoomedOut) {
+    zoom.y = Math.max(zoom.y-1, 0)
+    setMapFromParsed(fullMap)
+    const parsedMap = getParsedMap()
+    const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
+    setMapFromParsed(zoomedMap)
+  } else if (!zoom.zooming) {
+    // setMapFromParsed(fullMap)
+    // const playerSprite = getFirst(player)
+    
+    // zoom.zooming = true
+    // zoom.x = playerSprite.x-Math.round(midWidth/2)+1
+    // zoom.y = playerSprite.y-Math.round(midHeight/2)
+
+    zoom.zooming = true
+
+    const newWidth = 20
+    const newHeight = 16
+    
+    const ogWidth = width()
+    const ogHeight = height()
+    
+    const widthDiff = newWidth-ogWidth
+    const heightDiff = newHeight-ogHeight
+    
+    const iterationCount = Math.ceil(Math.max(widthDiff, heightDiff)/2)
+  
+    // console.log(`iter: ${iterationCount}`)
+    
+    for (let i = 0; i < iterationCount; i++) {
+      // if (i >= 1) setMapFromParsed(fullMap)
+
+      setMapFromParsed(fullMap)
+      const playerSprite = getFirst(player)
+      
+      zoom.width = ogWidth+Math.round(widthDiff / iterationCount * (i+1))
+      zoom.height = ogHeight+Math.round(heightDiff / iterationCount * (i+1))
+      
+      zoom.x = playerSprite.x-Math.round(zoom.width/2)+1
+      zoom.y = playerSprite.y-Math.round(zoom.height/2)
+      
+      // const midWidth = ogWidth+Math.round(widthDiff / iterationCount * (i+1))
+      // const midHeight = ogHeight+Math.round(heightDiff / iterationCount * (i+1))
+  
+      // console.log(midWidth)
+      // console.log(midHeight)
+      
+      const parsedMap = getParsedMap()
+      // const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, midWidth, midHeight)
+      const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
+      setMapFromParsed(zoomedMap)
+  
+      await wait(10)
+    }
+
+    setMapFromParsed(fullMap)
+    zoom.y = Math.max(Math.min(zoom.y, height()-zoom.height), 0)
+    const parsedMap = getParsedMap()
+    const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
+    setMapFromParsed(zoomedMap)
+    zoom.isZoomedOut = true
+  }
+
+  function wait(ms) {
+    return new Promise((resolve, _reject) => setTimeout(resolve, ms))
+  }
+})
+
+onInput("a", () => {
+  
+})
+
 onInput("s", () => {
   // getFirst(player).y += 1
   // const arrowSprite = addSprite(2, 2, arrow_0)
   // const arrowSprite45 = addSprite(3, 2, arrow_45)
   // arrowSprite.rotate = 20
+})
+
+onInput("d", () => {
+  
 })
 
 onInput("i", () => {
@@ -657,9 +764,9 @@ onInput("k", () => {
   }
 })
 
-afterInput(() => {
+// afterInput(() => {
   
-})
+// })
 
 function setArrowPosition() {
   if (arrowType !== null) {
@@ -795,7 +902,7 @@ function centerMap() {
   // console.log({x:playerSprite.x,y:playerSprite.y})
 
   const mapWidth = 10
-  const mapHeight = 10
+  const mapHeight = 8
   
   const parsedMap = getParsedMap()
   const zoomedMap = zoomMap(
