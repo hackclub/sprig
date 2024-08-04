@@ -8,6 +8,24 @@ https://sprig.hackclub.com/gallery/getting_started
 @addedOn: 2024-00-00
 */
 
+// scales up a bitmap by 2x
+function doubleBitmap(bitmap) {
+    const rows = bitmap.split('\n');
+    const scaledRows = [];
+
+    for (const row of rows) {
+        // horizontal
+        const scaledRow = row.split('').map(char => char.repeat(2)).join('');
+
+
+        // vertical
+        scaledRows.push(scaledRow);
+        scaledRows.push(scaledRow);
+    }
+
+    return scaledRows.join('\n');
+}
+
 // the title screen image needs to be split into 16x16 chunks
 function splitBitmap(bitmap) {
     const rows = bitmap.split('\n').slice(1);
@@ -23,7 +41,8 @@ function splitBitmap(bitmap) {
                 const rowIndex = i * 16 + r;
                 const startCol = j * 16;
                 const endCol = startCol + 16;
-                chunk.push(rows[rowIndex].slice(startCol, endCol));
+                
+                chunk.push(row.slice(startCol, endCol));
             }
             chunks.push(chunk.join('\n'));
         }
@@ -82,8 +101,23 @@ const titleImage = bitmap`
 ................................................................
 ................................................................
 ................................................................`
-const titleChunks = splitBitmap(titleImage)
+console.log(titleImage)
+console.log(doubleBitmap(titleImage))
+const titleChunks = splitBitmap(doubleBitmap(titleImage))
+const titleChars = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz".split("")
+const titleLegend = titleChunks.map((chunk, index) => [titleChars[index], chunk]);
+console.log(titleLegend)
 
+setLegend(titleLegend)
+setMap(map`
+..........
+.AaBbCcDd.
+.EeFfGgHh.
+.IiJjKkLl.
+.MmNnOoPp.
+.QqRrSsTt.
+.UuVvWwXx.
+..........`)
 
 const playerRedUp = "1"
 const playerRedDown = "2"
@@ -103,7 +137,11 @@ const paintBlueSpecial2 = "n"
 const paintBlueSpecial3 = "N"
 const background = "g"
 
-setLegend(
+
+let canvas;
+
+function startGame() {
+  setLegend(
   [playerRedUp, bitmap`
 ................
 ..000000000000..
@@ -393,23 +431,10 @@ setLegend(
 5777555555555555
 5575555555555555
 5555555555555555` ],
-  [title, ],
+  ...titleLegend
 )
-
-setMap(map`..........
-..........
-..........
-....X.....
-..........
-..........
-..........
-..........`)
-
-
-
-let canvas;
-
-function startGame() {
+  
+  
   setBackground(background)
   setMap(map`
 .........6
