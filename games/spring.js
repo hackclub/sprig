@@ -585,6 +585,7 @@ nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn`
 
 setBackground(background)
 
+// TODO: consider moving this to function (along w/ last 2 lines)
 setMap(levels[level])
 
 setPushables({
@@ -611,205 +612,223 @@ let zoom = {
   y: null
 }
 
-onInput("w", async () => {
-  if (gameOver || inAir) return
-  panBy(0, -1)
-})
+onInput("w", () => handleWasdInput("w"))
+onInput("a", () => handleWasdInput("a"))
+onInput("s", () => handleWasdInput("s"))
+onInput("d", () => handleWasdInput("d"))
 
-onInput("a", () => {
-  if (gameOver || inAir) return
-  panBy(-1, 0)
-})
-
-onInput("s", () => {
-  if (gameOver || inAir) return
-  panBy(0, 1)
-})
-
-onInput("d", () => {
-  if (gameOver || inAir) return
-  panBy(1, 0)
-})
-
-onInput("i", () => {
-  // TODO: consider combining this early return with the 3rd (same for jkl)
-  // TODO: reset game when pressing any key. this should be a separate function
-  if (gameOver) return
-  
-  if (zoom.isZoomedOut) {
-    resetPan()
-    return
-  }
-  
-  if (
-    zoom.zooming ||
-    arrowType !== null ||
-    inAir
-  ) return
-
-  let newArrowType = arrowCounters.indexOf(arrow_0)
-  while (checkArrowIsInvalid(arrowCounters[newArrowType])) {
-    newArrowType += 1
-    if (newArrowType === lastArrow) throw new Error("No possible moves")
-  }
-  newArrowType = arrowCounters[newArrowType]
-  
-  addSprite(0, 0, newArrowType)
-  arrowType = newArrowType
-  setArrowPosition()
-})
-
-// TODO: simplify code in "j" and "l" listeners to avoid duplicating
-onInput("j", () => {
-  if (gameOver) return
-  
-  if (zoom.isZoomedOut) {
-    resetPan()
-    return
-  }
-  
-  if (arrowType === null) return
-
-  rotateArrow(1)
-})
-
-onInput("l", () => {
-  if (gameOver) return
-  
-  if (zoom.isZoomedOut) {
-    resetPan()
-    return
-  }
-  
-  if (arrowType === null) return
-
-  rotateArrow(-1)
-})
-
-onInput("k", () => {
-  if (gameOver) return
-  
-  if (zoom.isZoomedOut) {
-    resetPan()
-    return
-  }
-  
-  if (arrowType === null) return
-  
-  inAir = true
-  
-  const deg = getArrowDeg()
-  const rad = deg * (Math.PI / 180)
-
-  const arrowSprite = getFirst(arrowType)
-  arrowSprite.remove()
-  arrowType = null
-
-  // note that startVel should never be larger than 1
-  const startVel = 1
-  xVel = startVel * Math.cos(rad)
-  yVel = -startVel * Math.sin(rad)
-
-  setMapFromParsed(fullMap)
-  
-  const playerSprite = getFirst(player)
-  fullX = playerSprite.x
-  fullY = playerSprite.y
-  
-  centerMap()
-  
-  const interval = setInterval(() => {
-    const times = []
-    
-    setMapFromParsed(fullMap)
-    
-    const p = getFirst(player)
-    
-    fullX += xVel
-    fullY += yVel
-    
-    p.x = Math.round(fullX)
-    p.y = Math.round(fullY)
-
-    yVel = Math.min(yVel+gravity, 1)
-
-    const overlap = [...getAll(wall), ...getAll(wall_no_stick)].find(w => w.x === p.x && w.y === p.y)
-    if (overlap) {
-      if (yVel > xVel) {
-        p.x -= xVel / Math.abs(xVel)
-        fullX = p.x
-      } else {
-        p.y -= yVel / Math.abs(yVel)
-        fullY = p.y
-      }
-    }
-
-    const lavaOverlap = getAll(lava).find(l => l.x === p.x && l.y === p.y)
-    if (lavaOverlap) {
-      clearInterval(interval)
-      inAir = false
-      gameOver = true
-      addText("Game Over", {
-        y: 6,
-        color: color`2`
-      })
-      // addText("You hit the lava!", {
-      //   y: 8,
-      //   color: color`2`
-      // })
-      addText("Press any button", {
-        y: 8,
-        color: color`2`
-      })
-      addText("to play again!", {
-        y: 9,
-        color: color`2`
-      })
-    } else {
-      const walls = getAll(wall)
-      if (
-        walls.some(w => (
-          (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
-          (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
-          (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
-          (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
-        ))
-      ) {
-        // TODO: consider playing sound effect here
-        // console.log("clear")
-        clearInterval(interval)
-        inAir = false
-      } else {
-        const wallsNoStick = getAll(wall_no_stick)
-        if (
-          wallsNoStick.some(w => (
-            (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
-            (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
-          ))
-        ) {
-          xVel = 0
-          fullX = p.x
-        }
-        if (
-          wallsNoStick.some(w => (
-            (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
-            (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel))
-          ))
-        ) {
-          yVel = 0
-          fullY = p.y
-        }
-      }
-    }
-
-    fullMap = getParsedMap()
-    centerMap()
-  }, 60)
-})
+onInput("i", () => handleIjklInput("i"))
+onInput("j", () => handleIjklInput("j"))
+onInput("l", () => handleIjklInput("l"))
+onInput("k", () => handleIjklInput("k"))
 
 // afterInput(() => {
   
 // })
+
+function handleWasdInput(key) {
+  const earlyReturn = handleGlobalInput()
+  if (earlyReturn) return
+
+  // TODO: check if this should be moved to handleGlobalInput()
+  // if (gameOver || inAir) return
+  
+  switch (key) {
+    case "w":
+      panBy(0, -1)
+      break
+    case "a":
+      panBy(-1, 0)
+      break
+    case "s":
+      panBy(0, 1)
+      break
+    case "d":
+      panBy(1, 0)
+      break
+    default:
+      throw new Error(`Unexpected key ${key}`)
+  }
+}
+
+function handleIjklInput(key) {
+  const earlyReturn = handleGlobalInput()
+  if (earlyReturn) return
+
+  // TODO: check if this should be moved to handleGlobalInput()
+  // if (gameOver) return
+  
+  if (zoom.isZoomedOut) {
+    resetPan()
+    return
+  }
+
+  switch (key) {
+    case "i":
+      // TODO: consider combining this early return with the 3rd (same for jkl)
+      // TODO: reset game when pressing any key. this should be a separate function
+      
+      if (
+        zoom.zooming ||
+        arrowType !== null ||
+        inAir
+      ) return
+    
+      let newArrowType = arrowCounters.indexOf(arrow_0)
+      while (checkArrowIsInvalid(arrowCounters[newArrowType])) {
+        newArrowType += 1
+        if (newArrowType === lastArrow) throw new Error("No possible moves")
+      }
+      newArrowType = arrowCounters[newArrowType]
+      
+      addSprite(0, 0, newArrowType)
+      arrowType = newArrowType
+      setArrowPosition()
+      
+      break
+    case "j":
+      if (arrowType === null) return
+      rotateArrow(1)
+      break
+    case "l":
+      if (arrowType === null) return
+      rotateArrow(-1)
+      break
+    case "k":
+      if (arrowType === null) return
+      
+      inAir = true
+      
+      const deg = getArrowDeg()
+      const rad = deg * (Math.PI / 180)
+    
+      const arrowSprite = getFirst(arrowType)
+      arrowSprite.remove()
+      arrowType = null
+    
+      // note that startVel should never be larger than 1
+      const startVel = 1
+      xVel = startVel * Math.cos(rad)
+      yVel = -startVel * Math.sin(rad)
+    
+      setMapFromParsed(fullMap)
+      
+      const playerSprite = getFirst(player)
+      fullX = playerSprite.x
+      fullY = playerSprite.y
+      
+      centerMap()
+      
+      const interval = setInterval(() => {
+        const times = []
+        
+        setMapFromParsed(fullMap)
+        
+        const p = getFirst(player)
+        
+        fullX += xVel
+        fullY += yVel
+        
+        p.x = Math.round(fullX)
+        p.y = Math.round(fullY)
+    
+        yVel = Math.min(yVel+gravity, 1)
+    
+        const overlap = [...getAll(wall), ...getAll(wall_no_stick)].find(w => w.x === p.x && w.y === p.y)
+        if (overlap) {
+          if (yVel > xVel) {
+            p.x -= xVel / Math.abs(xVel)
+            fullX = p.x
+          } else {
+            p.y -= yVel / Math.abs(yVel)
+            fullY = p.y
+          }
+        }
+    
+        const lavaOverlap = getAll(lava).find(l => l.x === p.x && l.y === p.y)
+        if (lavaOverlap) {
+          clearInterval(interval)
+          inAir = false
+          gameOver = true
+          addText("Game Over", {
+            y: 6,
+            color: color`2`
+          })
+          // addText("You hit the lava!", {
+          //   y: 8,
+          //   color: color`2`
+          // })
+          addText("Press any button", {
+            y: 8,
+            color: color`2`
+          })
+          addText("to play again!", {
+            y: 9,
+            color: color`2`
+          })
+        } else {
+          const walls = getAll(wall)
+          if (
+            walls.some(w => (
+              (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
+              (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
+              (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
+              (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
+            ))
+          ) {
+            // TODO: consider playing sound effect here
+            // console.log("clear")
+            clearInterval(interval)
+            inAir = false
+          } else {
+            const wallsNoStick = getAll(wall_no_stick)
+            if (
+              wallsNoStick.some(w => (
+                (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
+                (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
+              ))
+            ) {
+              xVel = 0
+              fullX = p.x
+            }
+            if (
+              wallsNoStick.some(w => (
+                (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
+                (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel))
+              ))
+            ) {
+              yVel = 0
+              fullY = p.y
+            }
+          }
+        }
+    
+        fullMap = getParsedMap()
+        centerMap()
+      }, 60)
+      
+      break
+    default:
+      throw new Error(`Unexpected key ${key}`)
+  }
+}
+
+function handleGlobalInput() {
+  if (inAir) return
+  if (gameOver) {
+    gameOver = false
+    clearText()
+
+    // TODO: consider moving to function (e.g. setLevel())
+    // TODO: this should also reset other variables (e.g. inAir)
+    setMap(levels[level])
+    fullMap = getParsedMap()
+    centerMap()
+    
+    return true
+  }
+  return false
+}
 
 function rotateArrow(rotateCount) {
   const arrowTypeNum = arrowCounters.indexOf(arrowType)
@@ -1067,7 +1086,7 @@ async function panBy(panByX, panByY) {
 
 async function resetPan() {
   // empty arguments results in reset
-  panBy()
+  await panBy()
 }
 
 function wait(ms) {
