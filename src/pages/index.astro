@@ -52,35 +52,16 @@ if (session && session.session.full) {
 				<h1>Every player is a creator.</h1>
 				<p>Explore 430+ games built by other teenagers, <br />or make your own and we'll send you a console!</p>
 				<div>
-				{
-					session && session.session.full ? (
-						gameCount === 0 ? (
-							<a href='/~/new-game'>
-								<button class='btn active'>
-									Make a game &raquo;
-								</button>
-							</a>
-						) : (
-							<a href='/~'>
-								<button class='btn active'>
-									Your games &raquo;
-								</button>
-							</a>
-						)
-					) : (
-						<a href='/editor'>
-							<button class='btn active'>
-								{session ? 'Open editor' : 'Make a game'}{' '}
-								&raquo;
-							</button>
-						</a>
-					)
-				}
-				<!-- <a href='/~/new'>
-					<button class='btn active'>
-						Play a game &raquo;
-					</button>
-				</a> -->
+					<a href='/~/new-game'>
+						<button class='btn active top'>
+							Make a game &raquo;
+						</button>
+					</a>
+					<a href='/gallery'>
+						<button class='btn active'>
+							Play a game &raquo;
+						</button>
+					</a>
 				</div>
 			</div>
 		</section>
