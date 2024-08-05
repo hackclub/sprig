@@ -436,10 +436,30 @@ setLegend(
 ..000000000000..` ]
 )
 
-const sprites = {
-  solid: [ wall, wall_no_stick, ice ],
-  sticky: [ wall ],
-  danger: [ lava ]
+const spriteTypes = {
+  solid: {
+    sound: null,
+    types: [ wall, wall_no_stick, ice ]
+  },
+  sticky: {
+    sound: tune`
+120: C4/120,
+3720`,
+    types: [ wall ]
+  },
+  slippery: {
+    sound: tune`
+60: B5^60,
+1860`,
+    types: [ wall_no_stick, ice ]
+  },
+  danger: {
+    sound: tune`
+150: G4/150,
+150: C4/150 + E4/150,
+4500`,
+    types: [ lava ]
+  }
 }
 
 const melody = tune`
@@ -471,6 +491,8 @@ const melody = tune`
 150: E4-150 + G4-150,
 150: E4-150 + G4-150,
 300`
+
+console.log(JSON.stringify(melody))
 
 const melody2 = tune`
 150: D4-150 + F4-150,
@@ -522,6 +544,30 @@ const melody3 = tune`
 450,
 150: D4-150 + C5-150,
 450`
+
+const repeatMelody = tune`
+150: D4-150,
+150: D4-150,
+150: F4-150,
+150: F4-150,
+150: E4-150,
+150: E4-150,
+3900`
+
+setInterval(() => {
+  playTune(repeatMelody)
+}, 5000)
+
+// const stickSound = tune`
+// 120: C4/120,
+// 3720`
+// const slideSound = tune`
+// 59.642147117296226: B5^59.642147117296226,
+// 1848.906560636183`
+// const gameOverSound = tune`
+// 150: G4/150,
+// 150: C4/150 + E4/150,
+// 4500`
 
 // setSolids([ player, wall, wall_no_stick ])
 
@@ -592,8 +638,8 @@ nw....w........n.................................n
 nw....w........n.................................n
 nw....w........n.................................n
 nwp...w........n.................................n
-nww...w........n.......wwwww.....................n
-nllllln........nllllllln.........................n
+nww...w........n.........nw......................n
+nllllln........nlllllllllnww.....................n
 nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn`
 ]
 
@@ -610,6 +656,8 @@ let fullX;
 let fullY;
 let xVel;
 let yVel;
+let lastSoundPlayedX;
+let lastSoundPlayedY;
 let inAir;
 let gameOver;
 let arrowType;
@@ -734,7 +782,7 @@ function handleIjklInput(key) {
     
         yVel = Math.min(yVel+gravity, 1)
     
-        const overlap = [...getAll(wall), ...getAll(wall_no_stick)].find(w => w.x === p.x && w.y === p.y)
+        const overlap = getAllOfType("solid").find(w => w.x === p.x && w.y === p.y)
         if (overlap) {
           if (yVel > xVel) {
             p.x -= xVel / Math.abs(xVel)
@@ -745,8 +793,8 @@ function handleIjklInput(key) {
           }
         }
     
-        const lavaOverlap = getAll(lava).find(l => l.x === p.x && l.y === p.y)
-        if (lavaOverlap) {
+        const dangerOverlap = getAllOfType("danger").find(l => l.x === p.x && l.y === p.y)
+        if (dangerOverlap) {
           clearInterval(interval)
           inAir = false
           gameOver = true
@@ -766,10 +814,11 @@ function handleIjklInput(key) {
             y: 9,
             color: color`2`
           })
+          playSoundOfType("danger")
         } else {
-          const walls = getAll(wall)
+          const stickyWalls = getAllOfType("sticky")
           if (
-            walls.some(w => (
+            stickyWalls.some(w => (
               (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
               (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
               (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
@@ -778,27 +827,31 @@ function handleIjklInput(key) {
           ) {
             // TODO: consider playing sound effect here
             // console.log("clear")
+            // playTune(stickSound)
             clearInterval(interval)
             inAir = false
+            playSoundOfType("sticky")
           } else {
-            const wallsNoStick = getAll(wall_no_stick)
+            const wallsSlippery = getAllOfType("slippery")
             if (
-              wallsNoStick.some(w => (
+              wallsSlippery.some(w => (
                 (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
                 (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
               ))
             ) {
               xVel = 0
               fullX = p.x
+              playSoundOfType("slippery")
             }
             if (
-              wallsNoStick.some(w => (
+              wallsSlippery.some(w => (
                 (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
                 (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel))
               ))
             ) {
               yVel = 0
               fullY = p.y
+              playSoundOfType("slippery")
             }
           }
         }
@@ -1048,8 +1101,6 @@ async function panBy(panByX, panByY) {
     const xDiff = newX-ogX
     const yDiff = newY-ogY
     
-    console.log({ half: reset ? zoom.width : ogWidth, ogX, ogY, xDiff, yDiff })
-    
     const iterationCount = Math.ceil(Math.max(Math.abs(widthDiff), Math.abs(heightDiff))/2)
     
     for (let i = 0; i < iterationCount; i++) {
@@ -1087,7 +1138,7 @@ function wait(ms) {
 
 function checkArrowIsInvalid(thisArrowType) {
   const p = getFirst(player)
-  const walls = [...getAll(wall), ...getAll(wall_no_stick)]
+  const walls = getAllOfType("solid")
   const arrowDeg = getArrowDeg(thisArrowType)
   
   const someIsInvalid = walls.some(w => {
@@ -1125,6 +1176,27 @@ function getArrowDeg(thisArrowType) {
   else return arrowCounters.indexOf(arrowType) * arrowIncrement
 }
 
+function getAllOfType(type) {
+  if (!(type in spriteTypes)) throw new Error(`Type ${type} not found`)
+  return spriteTypes[type].types.map(t => getAll(t)).flat()
+}
+
+function playSoundOfType(type) {
+  if (!(type in spriteTypes)) throw new Error(`Type ${type} not found`)
+  if (!spriteTypes[type].sound) return
+  
+  const playerSprite = getFirst(player)
+  if (
+    playerSprite.x === lastSoundPlayedX &&
+    playerSprite.y === lastSoundPlayedY
+  ) return
+
+  lastSoundPlayedX = playerSprite.x
+  lastSoundPlayedY = playerSprite.y
+  
+  setTimeout(() => playTune(spriteTypes[type].sound), 60)
+}
+
 function isEffectivelyZero(num) {
   const epsilon = 1e-10
   return Math.abs(num) < epsilon
@@ -1135,6 +1207,9 @@ function startLevel(newLevel) {
   fullY = null
   xVel = 0
   yVel = 0
+
+  lastSoundPlayedX = null
+  lastSoundPlayedY = null
   
   inAir = false
   gameOver = false
