@@ -14,6 +14,7 @@ const background = "b"
 
 const wall = "w"
 const wall_no_stick = "n"
+const lava = "l"
 
 const arrow_0 = "0"
 const arrow_22 = "1"
@@ -53,6 +54,9 @@ const arrowCounters = [
 
 const arrowIncrement = 22.5
 const lastArrow = 360 / arrowIncrement - 1
+
+const defaultMapWidth = 10
+const defaultMapHeight = 8
 
 setLegend(
   [ arrow_0, bitmap`
@@ -362,22 +366,22 @@ setLegend(
 7777777777777777
 7777777777777777` ],
   [ wall, bitmap`
-0000000000000000
-0000000000000000
-0099999999999900
-0099999999999900
-0099999999999900
-0099999999999900
-0099999999999900
-0099999999999900
-0099999999999900
-0099999999999900
-0099999999999900
-0099999999999900
-0099999999999900
-0099999999999900
-0000000000000000
-0000000000000000` ],
+..000000000000..
+.00000000000000.
+000DDFFFFFFFF000
+00DDDFFFFFFFFF00
+00DDDDDDDDDFFF00
+00DDDDDDDDDDFF00
+00DDDDDDDDDDFF00
+00DDDDDDDDDDFF00
+00DDDDDDDDDDFF00
+00DDDDDDDDDDFF00
+00FFDDDDDDDDFF00
+00FFFDDDDDDDDD00
+00FFFFFFDDDDDD00
+000FFFFFDDDDD000
+.00000000000000.
+..000000000000..` ],
   [ wall_no_stick, bitmap`
 .00000000000000.
 0000000000000000
@@ -394,7 +398,24 @@ setLegend(
 00LL1LLL11LLLL00
 00L1LLL11LLLLL00
 0000000000000000
-.00000000000000.` ]
+.00000000000000.` ],
+  [ lava, bitmap`
+................
+................
+.666.....666....
+6666666666666666
+6999666669996666
+9999999999999999
+9996999999999999
+9999999969999999
+9999999999999999
+9999999999996999
+9999999999999999
+9999996999999999
+9999999999999996
+9996999999999999
+9999999999699999
+9999999999999999` ]
 )
 
 const melody = tune`
@@ -558,7 +579,7 @@ nw....w....................................................n
 nw....w....................................................n
 nwp...w....................................................n
 nww...w....................................................n
-n..........................................................n
+nllllln....................................................n
 nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn`
 ]
 
@@ -590,240 +611,185 @@ let zoom = {
 }
 
 onInput("w", async () => {
-  // console.log({x:playerSprite.x,y:playerSprite.y})
-
+  if (inAir) return
   panBy(0, -1)
-  
-  // if (zoom.isZoomedOut) {
-  //   zoom.y = Math.max(zoom.y-1, 0)
-  //   setMapFromParsed(fullMap)
-  //   const parsedMap = getParsedMap()
-  //   const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
-  //   setMapFromParsed(zoomedMap)
-  // } else if (!zoom.zooming) {
-  //   // setMapFromParsed(fullMap)
-  //   // const playerSprite = getFirst(player)
-    
-  //   // zoom.zooming = true
-  //   // zoom.x = playerSprite.x-Math.round(midWidth/2)+1
-  //   // zoom.y = playerSprite.y-Math.round(midHeight/2)
-
-  //   zoom.zooming = true
-
-  //   const newWidth = 20
-  //   const newHeight = 16
-    
-  //   const ogWidth = width()
-  //   const ogHeight = height()
-    
-  //   const widthDiff = newWidth-ogWidth
-  //   const heightDiff = newHeight-ogHeight
-    
-  //   const iterationCount = Math.ceil(Math.max(widthDiff, heightDiff)/2)
-  
-  //   // console.log(`iter: ${iterationCount}`)
-    
-  //   for (let i = 0; i < iterationCount; i++) {
-  //     // if (i >= 1) setMapFromParsed(fullMap)
-
-  //     setMapFromParsed(fullMap)
-  //     const playerSprite = getFirst(player)
-      
-  //     zoom.width = ogWidth+Math.round(widthDiff / iterationCount * (i+1))
-  //     zoom.height = ogHeight+Math.round(heightDiff / iterationCount * (i+1))
-      
-  //     zoom.x = playerSprite.x-Math.round(zoom.width/2)+1
-  //     zoom.y = playerSprite.y-Math.round(zoom.height/2)
-      
-  //     // const midWidth = ogWidth+Math.round(widthDiff / iterationCount * (i+1))
-  //     // const midHeight = ogHeight+Math.round(heightDiff / iterationCount * (i+1))
-  
-  //     // console.log(midWidth)
-  //     // console.log(midHeight)
-      
-  //     const parsedMap = getParsedMap()
-  //     // const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, midWidth, midHeight)
-  //     const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
-  //     setMapFromParsed(zoomedMap)
-  
-  //     await wait(10)
-  //   }
-
-  //   setMapFromParsed(fullMap)
-  //   zoom.y = Math.max(Math.min(zoom.y, height()-zoom.height), 0)
-  //   const parsedMap = getParsedMap()
-  //   const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
-  //   setMapFromParsed(zoomedMap)
-  //   zoom.isZoomedOut = true
-  // }
-
-  // function wait(ms) {
-  //   return new Promise((resolve, _reject) => setTimeout(resolve, ms))
-  // }
 })
 
 onInput("a", () => {
+  if (inAir) return
   panBy(-1, 0)
 })
 
 onInput("s", () => {
+  if (inAir) return
   panBy(0, 1)
-  // getFirst(player).y += 1
-  // const arrowSprite = addSprite(2, 2, arrow_0)
-  // const arrowSprite45 = addSprite(3, 2, arrow_45)
-  // arrowSprite.rotate = 20
 })
 
 onInput("d", () => {
+  if (inAir) return
   panBy(1, 0)
 })
 
 onInput("i", () => {
-  if (arrowType === null && !inAir) {
-    let newArrowType = arrowCounters.indexOf(arrow_0)
-    while (checkArrowIsInvalid(arrowCounters[newArrowType])) {
-      newArrowType += 1
-      if (newArrowType === lastArrow) throw new Error("No possible moves")
-    }
-    newArrowType = arrowCounters[newArrowType]
-    
-    addSprite(0, 0, newArrowType)
-    arrowType = newArrowType
-    setArrowPosition()
+  if (zoom.isZoomedOut) {
+    resetPan()
+    return
   }
+  
+  if (
+    zoom.zooming ||
+    arrowType !== null ||
+    inAir
+  ) return
+
+  let newArrowType = arrowCounters.indexOf(arrow_0)
+  while (checkArrowIsInvalid(arrowCounters[newArrowType])) {
+    newArrowType += 1
+    if (newArrowType === lastArrow) throw new Error("No possible moves")
+  }
+  newArrowType = arrowCounters[newArrowType]
+  
+  addSprite(0, 0, newArrowType)
+  arrowType = newArrowType
+  setArrowPosition()
 })
 
 // TODO: simplify code in "j" and "l" listeners to avoid duplicating
 onInput("j", () => {
-  if (arrowType !== null) {
-    const arrowTypeNum = arrowCounters.indexOf(arrowType)
-    
-    const newType = arrowCounters[(arrowTypeNum === lastArrow) ? 0 : (arrowTypeNum + 1)]
-    
-    const isInvalid = checkArrowIsInvalid(newType)
-
-    if (isInvalid) return
-    
-    const arrowSprite = getFirst(arrowType)
-    arrowSprite.type = newType
-    arrowType = newType
-
-    setArrowPosition()
+  if (zoom.isZoomedOut) {
+    resetPan()
+    return
   }
+  
+  if (arrowType === null) return
+  
+  const arrowTypeNum = arrowCounters.indexOf(arrowType)
+  
+  const newType = arrowCounters[(arrowTypeNum === lastArrow) ? 0 : (arrowTypeNum + 1)]
+  
+  const isInvalid = checkArrowIsInvalid(newType)
+
+  if (isInvalid) return
+  
+  const arrowSprite = getFirst(arrowType)
+  arrowSprite.type = newType
+  arrowType = newType
+
+  setArrowPosition()
 })
 
 onInput("l", () => {
-  if (arrowType !== null) {
-    const arrowTypeNum = arrowCounters.indexOf(arrowType)
-    
-    const newType = arrowCounters[(arrowTypeNum === 0) ? lastArrow : (arrowTypeNum - 1)]
-    
-    const isInvalid = checkArrowIsInvalid(newType)
-
-    if (isInvalid) return
-    
-    const arrowSprite = getFirst(arrowType)
-    arrowSprite.type = newType
-    arrowType = newType
-
-    setArrowPosition()
+  if (zoom.isZoomedOut) {
+    resetPan()
+    return
   }
+  
+  if (arrowType === null) return
+  
+  const arrowTypeNum = arrowCounters.indexOf(arrowType)
+  
+  const newType = arrowCounters[(arrowTypeNum === 0) ? lastArrow : (arrowTypeNum - 1)]
+  
+  const isInvalid = checkArrowIsInvalid(newType)
+
+  if (isInvalid) return
+  
+  const arrowSprite = getFirst(arrowType)
+  arrowSprite.type = newType
+  arrowType = newType
+
+  setArrowPosition()
 })
 
 onInput("k", () => {
-  if (arrowType !== null) {
-    inAir = true
+  if (zoom.isZoomedOut) {
+    resetPan()
+    return
+  }
+  
+  if (arrowType === null) return
+  
+  inAir = true
+  
+  const deg = getArrowDeg()
+  const rad = deg * (Math.PI / 180)
+
+  const arrowSprite = getFirst(arrowType)
+  arrowSprite.remove()
+  arrowType = null
+
+  // note that startVel should never be larger than 1
+  const startVel = 1
+  xVel = startVel * Math.cos(rad)
+  yVel = -startVel * Math.sin(rad)
+
+  setMapFromParsed(fullMap)
+  
+  const playerSprite = getFirst(player)
+  fullX = playerSprite.x
+  fullY = playerSprite.y
+  
+  centerMap()
+  
+  const interval = setInterval(async () => {
+    const times = []
     
-    const deg = getArrowDeg()
-    const rad = deg * (Math.PI / 180)
-
-    const arrowSprite = getFirst(arrowType)
-    arrowSprite.remove()
-    arrowType = null
-
-    // note that startVel should never be larger than 1
-    const startVel = 1
-    xVel = startVel * Math.cos(rad)
-    yVel = -startVel * Math.sin(rad)
-
+    let midStamp;
+    
+    midStamp = Date.now()
     setMapFromParsed(fullMap)
+    times.push({ time: Date.now()-midStamp, line: 764 })
     
-    const playerSprite = getFirst(player)
-    fullX = playerSprite.x
-    fullY = playerSprite.y
+    const p = getFirst(player)
     
-    centerMap()
+    fullX += xVel
+    fullY += yVel
     
-    const interval = setInterval(async () => {
-      const startD = Date.now()
-      
-      const times = []
-      
-      let midStamp;
-      
-      midStamp = Date.now()
-      setMapFromParsed(fullMap)
-      times.push({ time: Date.now()-midStamp, line: 764 })
-      
-      const p = getFirst(player)
-      
-      fullX += xVel
-      fullY += yVel
+    p.x = Math.round(fullX)
+    p.y = Math.round(fullY)
 
-      // const oldX = p.x
-      // const oldY = p.y
-      
-      p.x = Math.round(fullX)
-      p.y = Math.round(fullY)
-      
-      // yVel += gravity
+    yVel = Math.min(yVel+gravity, 1)
 
-      yVel = Math.min(yVel+gravity, 1)
-
-      midStamp = Date.now()
-      const walls = getAll(wall)
+    midStamp = Date.now()
+    const walls = getAll(wall)
+    if (
+      walls.some(w => (
+        (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
+        (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
+        (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
+        (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
+      ))
+    ) {
+      // TODO: consider playing sound effect here
+      // console.log("clear")
+      clearInterval(interval)
+      inAir = false
+    } else {
+      const wallsNoStick = getAll(wall_no_stick)
       if (
-        walls.some(w => (
-          (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
+        wallsNoStick.some(w => (
           (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
-          (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
           (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
         ))
       ) {
-        // TODO: consider playing sound effect here
-        // console.log("clear")
-        clearInterval(interval)
-        inAir = false
-      } else {
-        const wallsNoStick = getAll(wall_no_stick)
-        if (
-          wallsNoStick.some(w => (
-            (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
-            (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
-          ))
-        ) {
-          xVel = 0
-          fullX = p.x
-        }
-        if (
-          wallsNoStick.some(w => (
-            (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
-            (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel))
-          ))
-        ) {
-          yVel = 0
-          fullY = p.y
-        }
+        xVel = 0
+        fullX = p.x
       }
-      times.push({ time: Date.now()-midStamp, line: 818 })
+      if (
+        wallsNoStick.some(w => (
+          (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
+          (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel))
+        ))
+      ) {
+        yVel = 0
+        fullY = p.y
+      }
+    }
+    times.push({ time: Date.now()-midStamp, line: 818 })
 
-      fullMap = getParsedMap()
-      centerMap()
-      
-      console.log(`took ${Date.now()-startD}ms`)
-    }, 60)
-    // }, 2000)
-  }
+    fullMap = getParsedMap()
+    centerMap()
+  }, 60)
 })
 
 // afterInput(() => {
@@ -832,13 +798,6 @@ onInput("k", () => {
 
 function setArrowPosition() {
   if (arrowType !== null) {
-    // console.log("hello")
-    // console.log(getFirst(player)) // undefined
-    // console.log(getAll(wall)) // []
-    // console.log(getTile(0, 0))
-    // console.log(getFirst("0"))
-    // console.log(getAll("0"))
-    
     const playerSprite = getFirst(player)
     const arrowSprite = getFirst(arrowType)
 
@@ -847,15 +806,9 @@ function setArrowPosition() {
     const distance = 1
     const x = distance * Math.cos(rad)
     const y = distance * Math.sin(rad)
-    // console.log(`deg: ${deg}`)
-    // console.log(`x: ${x}`)
-    // console.log(`y: ${y}`)
     
     arrowSprite.x = Math.round(playerSprite.x + x)
     arrowSprite.y = Math.round(playerSprite.y - y)
-    
-    // arrowSprite.x = playerSprite.x + 1
-    // arrowSprite.y = playerSprite.y - 1
   }
 }
 
@@ -966,8 +919,8 @@ function centerMap() {
 
   // console.log({x:playerSprite.x,y:playerSprite.y})
 
-  const mapWidth = 10
-  const mapHeight = 8
+  const mapWidth = defaultMapWidth
+  const mapHeight = defaultMapHeight
   
   const parsedMap = getParsedMap()
   const zoomedMap = zoomMap(
@@ -1001,8 +954,9 @@ function centerMap() {
 // }
 
 async function panBy(panByX, panByY) {
-  // TODO: remove arrow when panning
-  // TODO: prevent arrow from opening while panning (instead, it should reset - i.e. exit the panning)
+  const arrowSprite = getFirst(arrowType)
+  if (arrowSprite) arrowSprite.remove()
+  arrowType = null
   
   // TODO: move fullWidth and fullHeight to different function or var
   const ogParsedMap = getParsedMap()
@@ -1010,77 +964,68 @@ async function panBy(panByX, panByY) {
   const fullWidth = width()
   const fullHeight = height()
   setMapFromParsed(ogParsedMap)
-  // const parsedMap = getParsedMap()
-  // const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
-  // setMapFromParsed(zoomedMap)
+
+  const reset = typeof panByX !== "number" && typeof panByY !== "number"
   
-  if (zoom.isZoomedOut) {
+  if (zoom.isZoomedOut && !reset) {
     zoom.x = Math.max(Math.min(zoom.x+panByX, fullWidth-zoom.width), 0)
     zoom.y = Math.max(Math.min(zoom.y+panByY, fullHeight-zoom.height), 0)
-    // console.log(zoom)
+    
     setMapFromParsed(fullMap)
     const parsedMap = getParsedMap()
     const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
     setMapFromParsed(zoomedMap)
-  } else if (!zoom.zooming) {
-    // setMapFromParsed(fullMap)
-    // const playerSprite = getFirst(player)
-    
-    // zoom.zooming = true
-    // zoom.x = playerSprite.x-Math.round(midWidth/2)+1
-    // zoom.y = playerSprite.y-Math.round(midHeight/2)
-
+  } else if (!zoom.zooming || reset) {
     zoom.zooming = true
 
-    const newWidth = Math.min(20, fullWidth)
-    const newHeight = Math.min(16, fullHeight)
-    
+    const newWidth = Math.min(reset ? defaultMapWidth : 20, fullWidth)
+    const newHeight = Math.min(reset ? defaultMapHeight : 16, fullHeight)
     const ogWidth = width()
     const ogHeight = height()
+
+    setMapFromParsed(fullMap)
+    const playerSprite = getFirst(player)
+    const newX = playerSprite.x-Math.round(newWidth/2)+1
+    const newY = playerSprite.y-Math.round(newHeight/2)
+    const ogX = reset ? zoom.x : playerSprite.x-Math.round(newWidth/2)+1
+    const ogY = reset ? zoom.y : playerSprite.y-Math.round(newHeight/2)+1
     
     const widthDiff = newWidth-ogWidth
     const heightDiff = newHeight-ogHeight
+    const xDiff = newX-ogX
+    const yDiff = newY-ogY
     
-    const iterationCount = Math.ceil(Math.max(widthDiff, heightDiff)/2)
-  
-    // console.log(`iter: ${iterationCount}`)
+    console.log({ half: reset ? zoom.width : ogWidth, ogX, ogY, xDiff, yDiff })
+    
+    const iterationCount = Math.ceil(Math.max(Math.abs(widthDiff), Math.abs(heightDiff))/2)
     
     for (let i = 0; i < iterationCount; i++) {
-      // if (i >= 1) setMapFromParsed(fullMap)
-
-      setMapFromParsed(fullMap)
+      if (i >= 1) setMapFromParsed(fullMap)
       const playerSprite = getFirst(player)
       
       zoom.width = ogWidth+Math.round(widthDiff / iterationCount * (i+1))
       zoom.height = ogHeight+Math.round(heightDiff / iterationCount * (i+1))
-      
-      zoom.x = playerSprite.x-Math.round(zoom.width/2)+1
-      zoom.y = playerSprite.y-Math.round(zoom.height/2)
-      
-      // const midWidth = ogWidth+Math.round(widthDiff / iterationCount * (i+1))
-      // const midHeight = ogHeight+Math.round(heightDiff / iterationCount * (i+1))
-  
-      // console.log(midWidth)
-      // console.log(midHeight)
 
-      // console.log({ parsedMap, "zoom.x": zoom.x, "zoom.y": zoom.y, "zoom.width": zoom.width, "zoom.height": zoom.height })
+      zoom.x = ogX + Math.round(xDiff / iterationCount * (i+1))
+      zoom.y = ogY + Math.round(yDiff / iterationCount * (i+1))
+      
       const parsedMap = getParsedMap()
-      // const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, midWidth, midHeight)
       const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
       setMapFromParsed(zoomedMap)
   
       await wait(10)
     }
-
-    // setMapFromParsed(fullMap)
-    // zoom.y = Math.max(Math.min(zoom.y, fullHeight-zoom.height), 0)
-    // const parsedMap = getParsedMap()
-    // const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
-    // setMapFromParsed(zoomedMap)
+    
     zoom.x = Math.max(Math.min(zoom.x+panByX, fullWidth-zoom.width), 0)
     zoom.y = Math.max(Math.min(zoom.y+panByY, fullHeight-zoom.height), 0)
-    zoom.isZoomedOut = true
+    zoom.isZoomedOut = !reset
+    zoom.zooming = false
   }
+}
+
+async function resetPan() {
+  // empty arguments results in reset
+  panBy()
 }
 
 function wait(ms) {
