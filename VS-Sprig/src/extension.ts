@@ -169,7 +169,7 @@ function getWebviewContent(gameCode: string) {
             map, bitmap, color, tune, setMap, addText, clearText, addSprite,
             getGrid, getTile, tilesWith, clearTile, setSolids, setPushables,
             setBackground, getFirst, getAll, width, height,setLegend, onInput,
-            afterInput, playTune, setTimeout, setInterval, clearTimeout, clearInterval
+            afterInput, playTune
           } = api
           // game starts here
           ${gameCode}
