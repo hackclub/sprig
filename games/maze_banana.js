@@ -1,6 +1,8 @@
 /*
 @title: Maze Banana 2-Player
+@tags: []
 @author: Rushil Chopra
+@addedOn: 2024-08-05
 */
 const player1 = "p"; // First player
 const player2 = "P"; // Second player
