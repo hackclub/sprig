@@ -755,6 +755,8 @@ onInput("k", () => {
     centerMap()
     
     const interval = setInterval(async () => {
+      const startD = Date.now()
+      
       const times = []
       
       let midStamp;
@@ -789,7 +791,7 @@ onInput("k", () => {
         ))
       ) {
         // TODO: consider playing sound effect here
-        console.log("clear")
+        // console.log("clear")
         clearInterval(interval)
         inAir = false
       } else {
@@ -800,7 +802,6 @@ onInput("k", () => {
             (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
           ))
         ) {
-          console.log("reset x")
           xVel = 0
           fullX = p.x
         }
@@ -810,28 +811,16 @@ onInput("k", () => {
             (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel))
           ))
         ) {
-          console.log("reset y")
           yVel = 0
           fullY = p.y
         }
       }
       times.push({ time: Date.now()-midStamp, line: 818 })
 
-      console.log(p.y)
-
-      // await wait(1000)
-      
-      midStamp = Date.now()
       fullMap = getParsedMap()
-      console.log(fullMap)
-      times.push({ time: Date.now()-midStamp, line: 826 })
-      midStamp = Date.now()      
       centerMap()
-      times.push({ time: Date.now()-midStamp, line: 830 })
-
-      console.log(times)
-
-      // console.log(`took ${Date.now()-startD}ms`)
+      
+      console.log(`took ${Date.now()-startD}ms`)
     }, 60)
     // }, 2000)
   }
@@ -876,21 +865,24 @@ function setArrowPosition() {
 // }
 
 function getParsedMap() {
-  // console.log(height())
+  const grid = getGrid()
   
-  const map = [];
+  const map = []
 
-  for (let y = 0; y < height(); y++) {
+  const currWidth = width()
+  const currHeight = height()
+  
+  for (let y = 0; y < currHeight; y++) {
     const row = []
     map.push(row)
     
-    for (let x = 0; x < width(); x++) {      
-      const tile = getTile(x, y).map(tile => tile.type)
+    for (let x = 0; x < currWidth; x++) {      
+      const tile = grid[currWidth*y+x].map(tile => tile.type)
       row.push(tile)
     }
   }
   
-  return map;
+  return map
 }
 
 function setMapFromParsed(parsedMap) {  
@@ -1025,7 +1017,7 @@ async function panBy(panByX, panByY) {
   if (zoom.isZoomedOut) {
     zoom.x = Math.max(Math.min(zoom.x+panByX, fullWidth-zoom.width), 0)
     zoom.y = Math.max(Math.min(zoom.y+panByY, fullHeight-zoom.height), 0)
-    console.log(zoom)
+    // console.log(zoom)
     setMapFromParsed(fullMap)
     const parsedMap = getParsedMap()
     const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
@@ -1113,7 +1105,7 @@ function checkArrowIsInvalid(thisArrowType) {
 
     let distance = Math.abs(arrowDeg-angle) % 360
     distance = distance > 180 ? (180 - (distance % 180)) : distance
-    console.log(distance)
+    // console.log(distance)
     if (distance < 90) return true
   })
   
