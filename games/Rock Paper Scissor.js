@@ -1,3 +1,10 @@
+/*
+@title: Rock Paper Scissor
+@author: akshatjaiin
+@tags: []
+@addedOn: 2024-08-05
+*/
+
 // Rock Paper Scissors For sprig
 
 let currentChoice; // make a guess by computer
