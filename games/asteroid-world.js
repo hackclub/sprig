@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: FLY
-@author: 
-@tags: []
-@addedOn: 2024-00-00
+@title: Astroid World
+@author: Shaurya
+@tags: [space]
+@addedOn: 2024-08-06
 */
 
 const moveTune = tune`
@@ -37,11 +34,12 @@ const bullet = "l" // Define a new sprite type for the bullet
 const ast1 = "1"
 const ast2 = "2"
 let astkilled = 0
+let gameOver = false
 
 let startGame = false;
 
 setLegend(
-  [ player, bitmap`
+  [player, bitmap`
 ................
 ................
 .......33.......
@@ -57,7 +55,7 @@ setLegend(
 2..............2
 2222222222222222
 ................
-................` ],
+................`],
   [bg, bitmap`
 0000000000000000
 0200000000000000
@@ -132,22 +130,22 @@ setSolids([bullet])
 
 function shootUpdate() {
   if (getAll(bullet).length > 0) {
-    for (let proj of getAll(bullet)){
+    for (let proj of getAll(bullet)) {
       proj.y -= 1;
       if (getTile(proj.x, proj.y).length > 1) {
         let a = getTile(proj.x, proj.y)[0]['_type']
         let b = getTile(proj.x, proj.y)[1]['_type']
-        for (let letter of ["1", "2"]){
+        for (let letter of ["1", "2"]) {
           if (a == letter || b == letter)
             astkilled++;
         }
-        for (let stuff of getTile(proj.x, proj.y)){
+        for (let stuff of getTile(proj.x, proj.y)) {
           stuff.remove();
         }
         proj.remove();
         return;
       }
-      if (proj.y == 0){proj.remove();}
+      if (proj.y == 0) { proj.remove(); }
     }
   }
 }
@@ -157,60 +155,70 @@ function randint(min, max) {
 }
 
 function spawn() {
-  const randomInt = randint(1,2)
-  const eX = randint(0, 8)
-  const eY = 0
-  if (randomInt == 1) {
-    addSprite(eX, eY, ast1)
-  } else {
-    addSprite(eX, eY, ast2)
+  if (!gameOver) {
+    const randomInt = randint(1, 2)
+    const eX = randint(0, 8)
+    const eY = 0
+    if (randomInt == 1) {
+      addSprite(eX, eY, ast1)
+    } else {
+      addSprite(eX, eY, ast2)
+    }
   }
 }
 
 function updateAst() {
-  const playerSprite = getFirst(player)
+  if (!gameOver) {
+    const playerSprite = getFirst(player)
     if (getAll(ast1).length > 0 || getAll(ast2).length > 0) {
-    for (let proj of getAll(ast1)){
-      proj.y += 1;
-      if (proj.y == 7){proj.remove();}
-      if (proj.x == playerSprite.x && proj.y == playerSprite.y) {
-        playTune(gameOverTune)
-        addText(`Asteroid(s) Killed: ${astkilled}`, {
-          y:2,
+      for (let proj of getAll(ast1)) {
+        proj.y += 1;
+        if (proj.y == 7) { proj.remove(); }
+        if (proj.x == playerSprite.x && proj.y == playerSprite.y) {
+          gameOver = true
+          playTune(gameOverTune)
+          addText("Asteroid Killed:", {
+            y: 2,
             color: color`6`
-        })
-        addText('Game Over!!', {
-          y: 4,
-          color: color`3`
-        })
-      addText('j to restart', {
-          y: 6,
-          color: color`4`
-        })
+          })
+          addText(`${astkilled}`, {
+            y: 4,
+            color: color`6`
+          })
+          addText('Game Over!!', {
+            y: 6,
+            color: color`3`
+          })
+          addText('j to restart', {
+            y: 8,
+            color: color`4`
+          })
+        }
       }
-    }
 
-    for (let proj of getAll(ast2)){
-      proj.y += 1;
-      if (proj.y == 7){proj.remove();}
-      if (proj.x == playerSprite.x && proj.y == playerSprite.y) {
-        playTune(gameOverTune)
-         addText("Asteroid(s) Killed:", {
-            y:2,
+      for (let proj of getAll(ast2)) {
+        proj.y += 1;
+        if (proj.y == 7) { proj.remove(); }
+        if (proj.x == playerSprite.x && proj.y == playerSprite.y) {
+          gameOver = true
+          playTune(gameOverTune)
+          addText("Asteroid Killed:", {
+            y: 2,
             color: color`6`
-        })
-        addText(`${astkilled}`, {
-            y:4,
+          })
+          addText(`${astkilled}`, {
+            y: 4,
             color: color`6`
-        })
-        addText('Game Over!!', {
-          y: 6,
-          color: color`3`
-        })
-      addText('j to restart', {
-          y: 8,
-          color: color`4`
-        })
+          })
+          addText('Game Over!!', {
+            y: 6,
+            color: color`3`
+          })
+          addText('j to restart', {
+            y: 8,
+            color: color`4`
+          })
+        }
       }
     }
   }
@@ -233,7 +241,7 @@ setMap(levels[level])
 setBackground(bg)
 
 setPushables({
-  [ player ]: []
+  [player]: []
 })
 
 addText("shoot or avoid the", {
@@ -242,7 +250,7 @@ addText("shoot or avoid the", {
 })
 
 addText("asteroids", {
-  y:3,
+  y: 3,
   color: color`2`
 })
 
@@ -261,30 +269,23 @@ addText("j to start!", {
   color: color`4`
 })
 
-let shootUpdateInt = setInterval(shootUpdate, 100);
-let spawnAst = setInterval(spawn, randint(2000, 3500))
-let spawnAst2 = setInterval(spawn, randint(2000, 3500))
-let spawnAst3 = setInterval(spawn, randint(2000, 3500))
-let spawnAst4 = setInterval(spawn, randint(2000, 3500))
-let updateAstInt = setInterval(updateAst, randint(300, 500))
-
 onInput("a", () => {
-  if (startGame) {
-  getFirst(player).x -= 1
-  playTune(moveTune)
+  if (startGame && !gameOver) {
+    getFirst(player).x -= 1
+    playTune(moveTune)
   }
 })
 
 
 onInput("d", () => {
-  if (startGame) {
-  getFirst(player).x += 1
-  playTune(moveTune)
+  if (startGame && !gameOver) {
+    getFirst(player).x += 1
+    playTune(moveTune)
   }
 })
 
 onInput("w", () => {
-  if (startGame) {
+  if (startGame && !gameOver) {
     const playerSprite = getFirst(player)
     addSprite(playerSprite.x, playerSprite.y, bullet)
     playTune(shootTune)
@@ -294,10 +295,17 @@ onInput("w", () => {
 onInput("j", () => {
   clearText()
   startGame = true;
+  gameOver = false;
   setMap(levels[level])
   playTune(startTune)
+  if (!gameOver) {
+    setInterval(shootUpdate, 100);
+    setInterval(spawn, randint(2000, 3500))
+    setInterval(spawn, randint(2000, 3500))
+    setInterval(updateAst, randint(300, 500))
+  }
 })
 
 afterInput(() => {
-  
+
 })
