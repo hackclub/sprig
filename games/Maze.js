@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Maze
 @author: Darshan Choudhary
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-04
 */
 
 const player = "p"
