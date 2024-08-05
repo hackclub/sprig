@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Checker Invasion
 @author: Stefan Lighezan
 @tags: ['endless']
-@addedOn: 2024-00-00
+@addedOn: 2024-07-24
 */
 
 const redChecker = "r"
