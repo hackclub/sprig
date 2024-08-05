@@ -3,7 +3,7 @@ Capture the flag before the other player does!
 @title: Maze Chase
 @author: Armaanpreet Singh
 @tags: ['two-player', 'maze', 'capture']
-@addedOn: 2024-07-09
+@addedOn: 2024-08-05
 */
 const player1 = "a";
 const player2 = "b";
