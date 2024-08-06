@@ -1,8 +1,8 @@
-// Am I supposed to add this? I just added random stuff
 /*
 @title: Ghoul Thrasher
 @author: Kushagra
 @tags: ['dungeon', 'rougelike', 'shooter']
+@addedOn: 2024-08-06
 */
 
 function getRandomInt(min, max) {
