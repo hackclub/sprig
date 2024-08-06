@@ -1,8 +1,8 @@
 /*
 @title: Unfinished Game
 @author: Vi Du Tran
-@tags: ['test']
-@addedOn: 2024-00-00
+@tags: []
+@addedOn: 2024-08-06
 
 This game is totally unfinished. There is nothing to see here.
 WASD to move. L to advance text. J to reset level.
