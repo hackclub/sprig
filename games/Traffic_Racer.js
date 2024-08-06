@@ -2,7 +2,7 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Traffic_Racer_2D
+@title: Traffic Racer 2D
 @author: advaitconty
 @tags: []
 @addedOn: 2024-08-05
@@ -147,12 +147,13 @@ setMap(levels[level])
 setPushables({
   [player]: []
 })
+
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function updateSpeed(speed) {
- clearInterval(speedIntervalId)
+  clearInterval(speedIntervalId)
   speedIntervalId = setInterval(changeSpeed, speed)
 }
 
@@ -163,8 +164,8 @@ function changeSpeed() {
 
 function spawnCar() {
   if (playing == true) {
-  var coordinateX = getRandomInt(3, 4)
-  addSprite(getRandomInt(3, 4), getRandomInt(1, 3), obstacle);
+    var coordinateX = getRandomInt(3, 4)
+    addSprite(getRandomInt(4, 5), getRandomInt(1, 3), obstacle);
   } else {
     const allObstacles = getAll(obstacle)
     allObstacles.forEach(obstacle => {
@@ -179,12 +180,13 @@ function detectCollision() {
 
   allObstacles.forEach(obstacle => {
     if (playerSprite.x === obstacle.x && playerSprite.y === obstacle.y) {
+      clearText()
       addSprite(playerSprite.x, playerSprite.y, explosion)
       endGame = true
       playing = false
-      addText("Game Over!", {x: 5, y: 3, color: color`2`})
-      addText(`You went\n${((distanceTravelled - offRoaded) / 1000).toString()} km`, {x: 6, y: 5, color: color`2`})
-      addText("Press i\nto restart", {x: 5, y: 9, color:color`2`})
+      addText("Game Over!", { x: 5, y: 3, color: color`2` })
+      addText(`You went\n${((distanceTravelled - offRoaded) / 1000).toString()} km`, { x: 6, y: 5, color: color`2` })
+      addText("Press i\nto restart", { x: 5, y: 9, color: color`2` })
     }
   });
 }
@@ -192,8 +194,8 @@ function detectCollision() {
 function startGame() {
   if (playing == true) {
     // Get all obstacle sprites
-  const allObstacles = getAll(obstacle)  
-  allObstacles.forEach(obstacle => {
+    const allObstacles = getAll(obstacle)
+    allObstacles.forEach(obstacle => {
       if ((obstacle.x - 1) === -1) {
         obstacle.remove();
       } else {
@@ -201,11 +203,16 @@ function startGame() {
       }
     })
     distanceTravelled += 1
+    addText(distanceTravelled / 1000 + " km", { x: 3, y: 2, color: color`2` })
 
     const playerSprite = getFirst(player)
 
     if (playerSprite.y === 0 || playerSprite.y === 4) {
-      offRoaded += 1
+      distanceTravelled -= 2
+    }
+
+    if ((distanceTravelled % 0.05) === 0) {
+      clearInterval(gameIntervalId)
     }
   }
 }
@@ -215,21 +222,24 @@ addText("Traffic\n\nRacer2D", { x: 6, y: 4, color: color`2`, font: "Arial" })
 addText("Press I\n\nto start", { x: 6, y: 8, color: color`2`, font: "Arial" })
 
 onInput("i", () => {
-  playing = true
-  if (spriteAdded == false) {
-  addSprite(1, 2, player)
-    spriteAdded = true
+  if (playing == false) {
+    distanceTravelled = 0
+    playing = true
+    if (spriteAdded == false) {
+      addSprite(1, 2, player)
+      spriteAdded = true
+    }
+    clearText()
+    gameIntervalId = setInterval(startGame, getRandomInt(800, 1200))
+    spawnIntervalId = setInterval(spawnCar, getRandomInt(1000, 1500))
+    setInterval(detectCollision, 1000)
+
+    const allExplosions = getAll(explosion);
+
+    allExplosions.forEach(explosionSprite => {
+      explosionSprite.remove();
+    });
   }
-  clearText()
-  gameIntervalId = setInterval(startGame, getRandomInt(800, 1200))
-  spawnIntervalId = setInterval(spawnCar, getRandomInt(1000, 1500))
-  setInterval(detectCollision, 1000)
-
-  const allExplosions = getAll(explosion);
-
-  allExplosions.forEach(explosionSprite => {
-    explosionSprite.remove();
-  });
 })
 
 onInput("w", () => {
@@ -268,6 +278,6 @@ onInput("d", () => {
 
 afterInput(() => {
   if (playing == true) {
-    
+
   }
 })
