@@ -14,6 +14,7 @@ const background = "b"
 
 const wall = "w"
 const wall_no_stick = "n"
+const lava_top = "t"
 const lava = "l"
 const ice = "i"
 
@@ -400,7 +401,7 @@ setLegend(
 00L1LLL11LLLLL00
 0000000000000000
 .00000000000000.` ],
-  [ lava, bitmap`
+  [ lava_top, bitmap`
 ................
 ................
 .666.....666....
@@ -416,6 +417,23 @@ setLegend(
 9999999999999996
 9996999999999999
 9999999999699999
+9999999999999999` ],
+  [ lava, bitmap`
+9999999999999999
+9999999999999999
+9999999996999999
+9999999999999999
+9999699999999999
+9999999999999969
+9999999999999999
+9969999996999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999969999999999
+9999999999999999
+9699999999996999
+9999999999999999
 9999999999999999` ],
   [ ice, bitmap`
 ..000000000000..
@@ -458,7 +476,7 @@ const spriteTypes = {
 150: G4/150,
 150: C4/150 + E4/150,
 4500`,
-    types: [ lava ]
+    types: [ lava_top, lava ]
   }
 }
 
@@ -599,46 +617,46 @@ n.......n..........n
 np......n..........n
 wwwwwwwwwwwwwwwwwwww`,
   map`
-nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n.................nlllllnw....wnllllln...........n
-n.................nlllllnw....wnllllln...........n
-n.................nnnnnnnw....wnnnnnnn...........n
-n........................w....w..................n
-n........................w....w..................n
-n........................w....w..................n
-n........................w....w..................n
-n........................w....w..................n
-n........................w....w..................n
-n........................w....w..................n
-n........................w....w..................n
-nw....wiiiiiiiii..............w..................n
-nw....w........n..............w..................n
-nw....w........n..............w..................n
-nw....w........n..............w..................n
-nw....w........n..............w..................n
-nwp...w........n..............w..................n
-nww...w........n.........nwwwww..................n
-nllllln........nllllllllln.......................n
-nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn`
+nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n........................................n
+n.................ntttttnw....wntttttttttn
+n.................nlllllnw....wnllllllllln
+n.................nnnnnnnw....wnnnnnnnnnnn
+n........................w....w..........n
+n........................w....w..........n
+n........................w....w..........n
+n........................w....w..........n
+n........................w....w..........n
+n........................w....w..........n
+n........................w....w..........n
+n........................w....w..........n
+nw....wiiiiiiiii..............w..........n
+nw....w........n..............w..........n
+nw....w........n..............w..........n
+nw....w........n..............w..........n
+nw....w........n..............w..........n
+nwp...w........n..............w..........n
+nww...w........n.........nwwwww..........n
+ntttttn........ntttttttttn...............n
+nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn`
 ]
 
 setBackground(background)
@@ -705,6 +723,8 @@ function handleIjklInput(key) {
 
   // TODO: check if this should be moved to handleGlobalInput()
   // if (gameOver) return
+
+  // TODO: prevent zooming while in air
   
   if (zoom.isZoomedOut) {
     resetPan()
@@ -774,50 +794,14 @@ function handleIjklInput(key) {
         
         fullX += xVel
         fullY += yVel
-
-        const roundedNewX = Math.round(fullX)
-        const roundedNewY = Math.round(fullY)
-        const stickyWalls = getAll(wall)
-        clearText()
-        addText( `touching: ${         stickyWalls.some(w =>
-            (
-              (w.y === p.y && Math.abs(w.x - p.x) === 1) ||
-              (w.x === p.x && Math.abs(w.y - p.y) === 1)
-            )
-          )}`,{y:1})
-        addText( `equals: ${         stickyWalls.some(w =>
-            (
-              (w.y === p.y && Math.abs(w.x - p.x) === 1) ||
-              (w.x === p.x && Math.abs(w.y - p.y) === 1)
-            ) && w.x === roundedNewX && w.y === roundedNewY
-          )}`,{y:3})
-        if (
-          // stickyWalls.some(w => (
-          //   (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
-          //   (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
-          //   (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
-          //   (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
-          // ))
-          stickyWalls.some(w =>
-            (
-              (w.y === p.y && Math.abs(w.x - p.x) === 1) ||
-              (w.x === p.x && Math.abs(w.y - p.y) === 1)
-            ) && w.x === roundedNewX && w.y === roundedNewY
-          )
-        ) {
-          console.log("collision!!")
-          clearInterval(interval)
-          inAir = false
-          playSoundOfType("sticky")
-        } else {
-          p.x = roundedNewX
-          p.y = roundedNewY
-        }
+        
+        p.x = Math.round(fullX)
+        p.y = Math.round(fullY)
     
         yVel = Math.min(yVel+gravity, 1)
     
         const overlap = getAllOfType("solid").find(w => w.x === p.x && w.y === p.y)
-        if (false && overlap) {
+        if (overlap) {
           if (yVel > xVel) {
             p.x -= xVel / Math.abs(xVel)
             fullX = p.x
@@ -825,11 +809,6 @@ function handleIjklInput(key) {
             p.y -= yVel / Math.abs(yVel)
             fullY = p.y
           }
-          // if (overlap.type === wall) {
-          //   clearInterval(interval)
-          //   inAir = false
-          //   playSoundOfType("sticky")
-          // }
         }
     
         const dangerOverlap = getAllOfType("danger").find(l => l.x === p.x && l.y === p.y)
@@ -854,20 +833,14 @@ function handleIjklInput(key) {
             color: color`2`
           })
           playSoundOfType("danger")
-        } else if (false) {
+        } else {
           const stickyWalls = getAllOfType("sticky")
           if (
-            // stickyWalls.some(w => (
-            //   (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
-            //   (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
-            //   (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
-            //   (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
-            // ))
             stickyWalls.some(w => (
-              (w.x === p.x && w.y === p.y - 1 && Math.round(p.y+Math.min(yVel+gravity, 1)) === w.y && !isEffectivelyZero(yVel)) ||
-              (w.y === p.y && w.x === p.x + 1 && Math.round(p.x+xVel) === w.x && !isEffectivelyZero(xVel)) ||
-              (w.x === p.x && w.y === p.y + 1 && Math.round(p.y+Math.min(yVel+gravity, 1)) === w.y && !isEffectivelyZero(yVel)) ||
-              (w.y === p.y && w.x === p.x - 1 && Math.round(p.x+xVel) === w.x && !isEffectivelyZero(xVel))
+              (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
+              (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
+              (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
+              (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
             ))
           ) {
             // TODO: consider playing sound effect here
@@ -903,7 +876,7 @@ function handleIjklInput(key) {
     
         fullMap = getParsedMap()
         centerMap()
-      }, 1000)
+      }, 60)
       
       break
     default:
