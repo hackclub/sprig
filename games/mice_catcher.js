@@ -1,4 +1,9 @@
 /*
+@title: Mice Catcher
+@author: Slippy
+@tags: []
+@addedOn: 2024-08-06
+
 You, the player must catch the maximum number of mice under one minute
 */
 
