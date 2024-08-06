@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Guessing game
-@author: 
+@author:Hud.co 
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-7-28
 */
 
 slides = new Array(
