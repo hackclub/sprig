@@ -19,7 +19,7 @@ const bomb = "b"
 
 
 setLegend(
-  [ left_wall, bitmap`
+  [left_wall, bitmap`
 ...............0
 ...............0
 ...............0
@@ -35,8 +35,8 @@ setLegend(
 ...............0
 ...............0
 ...............0
-...............0` ],
-  [ right_wall, bitmap`
+...............0`],
+  [right_wall, bitmap`
 0...............
 0...............
 0...............
@@ -52,8 +52,8 @@ setLegend(
 0...............
 0...............
 0...............
-0...............` ],
-  [ mid_wall, bitmap`
+0...............`],
+  [mid_wall, bitmap`
 0..............0
 0..............0
 0..............0
@@ -69,8 +69,8 @@ setLegend(
 0..............0
 0..............0
 0..............0
-0..............0` ],
-  [ left, bitmap`
+0..............0`],
+  [left, bitmap`
 ...............0
 ...............0
 ...............0
@@ -86,8 +86,8 @@ setLegend(
 ...............0
 ...............0
 ...............0
-...............0` ],
-  [ mid, bitmap`
+...............0`],
+  [mid, bitmap`
 0..............0
 0..............0
 0......LL......0
@@ -103,8 +103,8 @@ setLegend(
 0....L....L....0
 0...L......L...0
 0...L......L...0
-0..............0` ],
-  [ right, bitmap`
+0..............0`],
+  [right, bitmap`
 0...............
 0...............
 0...............
@@ -121,7 +121,7 @@ setLegend(
 0...............
 0...............
 0...............`],
-  [ bomb, bitmap`
+  [bomb, bitmap`
 ................
 ................
 ................
@@ -147,21 +147,21 @@ lmr
 lmr
 lmr
 Lmr`,
-                map`
+  map`
 lmr
 lmr
 lmr
 lmr
 lMr`,
-                map`
+  map`
 lmr
 lmr
 lmr
 lmr
 lmR`,
-                map`
+  map`
 .`
-               ]
+]
 
 function getRandInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -205,16 +205,16 @@ const melody = tune`
 214.28571428571428: G5~214.28571428571428,
 214.28571428571428: F5~214.28571428571428,
 214.28571428571428: F5~214.28571428571428,
-214.28571428571428: G5~214.28571428571428` 
+214.28571428571428: G5~214.28571428571428`
 
 const bomb1 = 0
 const bomb2 = 0
 const bomb3 = 0
 
 const bombs = [
-  {id:0, active:false, y:0},
-  {id:1, active:false, y:0},
-  {id:2, active:false, y:0},
+  { id: 0, active: false, y: 0 },
+  { id: 1, active: false, y: 0 },
+  { id: 2, active: false, y: 0 },
 ]
 
 const playback = playTune(melody, Infinity)
@@ -250,18 +250,18 @@ afterInput(() => {
     if (rand === 2) {
       bombs[2].active = true
     }
-    for (let i=0; i<bombs.length; i++) {
+    for (let i = 0; i < bombs.length; i++) {
       if (bombs[i].y >= 4) {
         bombs[i].y = 0
         bombs[i].active = false
         score += 1
       }
-      if (bombs[i].active && alive){
+      if (bombs[i].active && alive) {
         addSprite(i, bombs[i].y, bomb)
         bombs[i].y += 1
-        
+
         if (i === level) {
-          if (bombs[i].y === 4){
+          if (bombs[i].y === 4) {
             playback.end()
             alive = false
             setMap(levels[3])
@@ -269,21 +269,21 @@ afterInput(() => {
         }
       }
     }
-    addText("Score ", { 
+    addText("Score ", {
       x: 0,
       y: 1,
       color: color`3`
     })
-  
+
     addText(String(score), {
       x: 0,
       y: 3,
       color: color`3`
     })
   }
-  else {
+  if (!alive) {
     clearText()
-    addText("Game Over", {x:5, y:5, color:color`3`})
-    addText("Score: " + String(score), {x:6, y:7, color:color`7`})
+    addText("Game Over", { x: 5, y: 5, color: color`3` })
+    addText("Score: " + String(score), { x: 6, y: 7, color: color`7` })
   }
 })
