@@ -492,8 +492,6 @@ const melody = tune`
 150: E4-150 + G4-150,
 300`
 
-console.log(JSON.stringify(melody))
-
 const melody2 = tune`
 150: D4-150 + F4-150,
 150: D4-150 + F4-150,
@@ -554,9 +552,9 @@ const repeatMelody = tune`
 150: E4-150,
 3900`
 
-setInterval(() => {
-  playTune(repeatMelody)
-}, 5000)
+// setInterval(() => {
+//   playTune(repeatMelody)
+// }, 5000)
 
 // const stickSound = tune`
 // 120: C4/120,
@@ -621,25 +619,25 @@ n................................................n
 n................................................n
 n................................................n
 n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-n................................................n
-nw....wiiiiiiiii.................................n
-nw....w........n.................................n
-nw....w........n.................................n
-nw....w........n.................................n
-nw....w........n.................................n
-nwp...w........n.................................n
-nww...w........n.........nw......................n
-nllllln........nlllllllllnww.....................n
+n.................nlllllnw....wnllllln...........n
+n.................nlllllnw....wnllllln...........n
+n.................nnnnnnnw....wnnnnnnn...........n
+n........................w....w..................n
+n........................w....w..................n
+n........................w....w..................n
+n........................w....w..................n
+n........................w....w..................n
+n........................w....w..................n
+n........................w....w..................n
+n........................w....w..................n
+nw....wiiiiiiiii..............w..................n
+nw....w........n..............w..................n
+nw....w........n..............w..................n
+nw....w........n..............w..................n
+nw....w........n..............w..................n
+nwp...w........n..............w..................n
+nww...w........n.........nwwwww..................n
+nllllln........nllllllllln.......................n
 nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn`
 ]
 
@@ -776,14 +774,50 @@ function handleIjklInput(key) {
         
         fullX += xVel
         fullY += yVel
-        
-        p.x = Math.round(fullX)
-        p.y = Math.round(fullY)
+
+        const roundedNewX = Math.round(fullX)
+        const roundedNewY = Math.round(fullY)
+        const stickyWalls = getAll(wall)
+        clearText()
+        addText( `touching: ${         stickyWalls.some(w =>
+            (
+              (w.y === p.y && Math.abs(w.x - p.x) === 1) ||
+              (w.x === p.x && Math.abs(w.y - p.y) === 1)
+            )
+          )}`,{y:1})
+        addText( `equals: ${         stickyWalls.some(w =>
+            (
+              (w.y === p.y && Math.abs(w.x - p.x) === 1) ||
+              (w.x === p.x && Math.abs(w.y - p.y) === 1)
+            ) && w.x === roundedNewX && w.y === roundedNewY
+          )}`,{y:3})
+        if (
+          // stickyWalls.some(w => (
+          //   (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
+          //   (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
+          //   (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
+          //   (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
+          // ))
+          stickyWalls.some(w =>
+            (
+              (w.y === p.y && Math.abs(w.x - p.x) === 1) ||
+              (w.x === p.x && Math.abs(w.y - p.y) === 1)
+            ) && w.x === roundedNewX && w.y === roundedNewY
+          )
+        ) {
+          console.log("collision!!")
+          clearInterval(interval)
+          inAir = false
+          playSoundOfType("sticky")
+        } else {
+          p.x = roundedNewX
+          p.y = roundedNewY
+        }
     
         yVel = Math.min(yVel+gravity, 1)
     
         const overlap = getAllOfType("solid").find(w => w.x === p.x && w.y === p.y)
-        if (overlap) {
+        if (false && overlap) {
           if (yVel > xVel) {
             p.x -= xVel / Math.abs(xVel)
             fullX = p.x
@@ -791,6 +825,11 @@ function handleIjklInput(key) {
             p.y -= yVel / Math.abs(yVel)
             fullY = p.y
           }
+          // if (overlap.type === wall) {
+          //   clearInterval(interval)
+          //   inAir = false
+          //   playSoundOfType("sticky")
+          // }
         }
     
         const dangerOverlap = getAllOfType("danger").find(l => l.x === p.x && l.y === p.y)
@@ -815,14 +854,20 @@ function handleIjklInput(key) {
             color: color`2`
           })
           playSoundOfType("danger")
-        } else {
+        } else if (false) {
           const stickyWalls = getAllOfType("sticky")
           if (
+            // stickyWalls.some(w => (
+            //   (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
+            //   (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
+            //   (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
+            //   (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
+            // ))
             stickyWalls.some(w => (
-              (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
-              (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
-              (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
-              (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
+              (w.x === p.x && w.y === p.y - 1 && Math.round(p.y+Math.min(yVel+gravity, 1)) === w.y && !isEffectivelyZero(yVel)) ||
+              (w.y === p.y && w.x === p.x + 1 && Math.round(p.x+xVel) === w.x && !isEffectivelyZero(xVel)) ||
+              (w.x === p.x && w.y === p.y + 1 && Math.round(p.y+Math.min(yVel+gravity, 1)) === w.y && !isEffectivelyZero(yVel)) ||
+              (w.y === p.y && w.x === p.x - 1 && Math.round(p.x+xVel) === w.x && !isEffectivelyZero(xVel))
             ))
           ) {
             // TODO: consider playing sound effect here
@@ -858,7 +903,7 @@ function handleIjklInput(key) {
     
         fullMap = getParsedMap()
         centerMap()
-      }, 60)
+      }, 1000)
       
       break
     default:
@@ -1105,7 +1150,6 @@ async function panBy(panByX, panByY) {
     
     for (let i = 0; i < iterationCount; i++) {
       if (i >= 1) setMapFromParsed(fullMap)
-      const playerSprite = getFirst(player)
       
       zoom.width = ogWidth+Math.round(widthDiff / iterationCount * (i+1))
       zoom.height = ogHeight+Math.round(heightDiff / iterationCount * (i+1))
