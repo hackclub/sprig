@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Multiplayer maze
 @author: odczik
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-05
 */
 
 let mazeSize = 10 // must be even, min: 10
