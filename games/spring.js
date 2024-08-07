@@ -18,6 +18,8 @@ const lava_top = "t"
 const lava = "l"
 const ice = "i"
 const ladder = "c"
+const one_way_up = "u"
+const goal = "g"
 
 const arrow_0 = "0"
 const arrow_22 = "1"
@@ -469,10 +471,46 @@ CC............CC
 CC............CC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
-CC............CC` ]
+CC............CC` ],
+  [ one_way_up, bitmap`
+.00000000000000.
+0000000000000000
+00DDDDDDDDFFFF00
+00DDDDDDDDDDDF00
+00FFDDDDDDDDDD00
+0000000000000000
+.00000000000000.
+................
+................
+................
+................
+................
+................
+................
+................
+................` ],
+  [ goal, bitmap`
+................
+.........000....
+........00600...
+.......0066600..
+......00666660..
+.....0066666600.
+....00666666660.
+...006666666660.
+..0066666669990.
+.00666669999990.
+.06669999999990.
+.09999999990000.
+.09999990000....
+.09990000.......
+.00000..........
+................` ]
 )
 
-const spriteTypes = {
+// TODO: prevent player getting stuck when landing straight down on ice
+
+const spriteCategories = {
   solid: {
     sound: null,
     types: [ wall, wall_no_stick, ice ]
@@ -495,6 +533,12 @@ const spriteTypes = {
 150: C4/150 + E4/150,
 4500`,
     types: [ lava_top, lava ]
+  },
+  directional_up: {
+    sound: tune`
+120: D4/120,
+3720`,
+    types: [ one_way_up ]
   }
 }
 
@@ -635,46 +679,37 @@ n.......n..........n
 np......n..........n
 wwwwwwwwwwwwwwwwwwww`,
   map`
-nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n........................................n
-n.................ntttttnw....wntttttttttn
-n.................nlllllnw....wnllllllllln
-n.................nnnnnnnw....wnnnnnnnnnnn
-n........................w....w..........n
-n........................w....w..........n
-n........................w....w..........n
-n........................w....w..........n
-n........................w....w..........n
-n........................w....w..........n
-n..cc....................w....w..........n
-n..cc....................w....w..........n
-nw.cc.wiiiiiiiii..............w..........n
-nw.cc.w........n..............w..........n
-nw.cc.w........n..............w..........n
-nw.cc.w........n..............w..........n
-nw....w........n..............w..........n
-nwp...w........n..............w..........n
-nww...w........n.........nwwwww..........n
-ntttttn........ntttttttttn...............n
-nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn`
+nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+n.......................................................n
+n.......................................................n
+n.......................................................n
+n.......................................................n
+n.......................................................n
+n.......................................................n
+n.......................................................n
+n.......................................................n
+n.......................................................n
+n..g....................................................n
+n..ww............................ntttttnw....wntttttttttn
+n.......ww.......................nlllllnw....wnllllllllln
+n............ww...ww...ww...ww...nnnnnnnw....wnnnnnnnnnnn
+n.......................................w....w..........n
+n.......................................w....w..........n
+n.......................................w....w..........n
+n.......................................w....w..........n
+n.......................................w....w..........n
+n.......................................w....w..........n
+nwww...www..............................w....w..........n
+n.......................................w....w..........n
+n............wwww....wiiiiiiiii..............w..........n
+n...ii....ii....w....w........n..............w..........n
+n...............w....w........n..............w..........n
+n...............w....w........n..............w..........n
+n...............w....w........n..............w..........n
+n...............wp...w........n..............w..........n
+n...............ww...w........n.........nwwwww..........n
+nttttttttttttttttttttn........ntttttttttn...............n
+nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn`
 ]
 
 setBackground(background)
@@ -690,8 +725,9 @@ let fullX;
 let fullY;
 let xVel;
 let yVel;
-let lastSoundPlayedX;
-let lastSoundPlayedY;
+let playedOnTile;
+// let lastSoundPlayedX;
+// let lastSoundPlayedY;
 let inAir;
 let gameOver;
 let arrowType;
@@ -807,6 +843,9 @@ function handleIjklInput(key) {
         setMapFromParsed(fullMap)
         
         const p = getFirst(player)
+
+        const oldX = p.x
+        const oldY = p.y
         
         fullX += xVel
         fullY += yVel
@@ -850,7 +889,9 @@ function handleIjklInput(key) {
           })
           playSoundOfType("danger")
         } else {
+          // const stickyWalls = [...getAllOfType("sticky"), ...getAllOfType("directional_up")]
           const stickyWalls = getAllOfType("sticky")
+          const directionalUp = getAllOfType("directional_up")
           if (
             stickyWalls.some(w => (
               (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
@@ -865,6 +906,14 @@ function handleIjklInput(key) {
             clearInterval(interval)
             inAir = false
             playSoundOfType("sticky")
+          } else if (
+            directionalUp.some(w => (
+              w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)
+            ))  
+          ) {
+            clearInterval(interval)
+            inAir = false
+            playSoundOfType("directional_up")
           } else {
             const wallsSlippery = getAllOfType("slippery")
             if (
@@ -889,6 +938,8 @@ function handleIjklInput(key) {
             }
           }
         }
+
+        if (oldX !== p.x || oldY !== p.y) playedOnTile = false
     
         fullMap = getParsedMap()
         centerMap()
@@ -1209,25 +1260,43 @@ function getArrowDeg(thisArrowType) {
   else return arrowCounters.indexOf(arrowType) * arrowIncrement
 }
 
-function getAllOfType(type) {
-  if (!(type in spriteTypes)) throw new Error(`Type ${type} not found`)
-  return spriteTypes[type].types.map(t => getAll(t)).flat()
+function getAllOfType(category) {
+  if (!(category in spriteCategories)) throw new Error(`Type ${category} not found`)
+  return spriteCategories[category].types.map(t => getAll(t)).flat()
 }
 
-function playSoundOfType(type) {
-  if (!(type in spriteTypes)) throw new Error(`Type ${type} not found`)
-  if (!spriteTypes[type].sound) return
-  
-  const playerSprite = getFirst(player)
-  if (
-    playerSprite.x === lastSoundPlayedX &&
-    playerSprite.y === lastSoundPlayedY
-  ) return
+function typeIsInCategory(type, category) {
+  if (!(category in spriteCategories)) throw new Error(`Category ${category} not found`)
+  return spriteCategories[category].types.includes(type)
+}
 
-  lastSoundPlayedX = playerSprite.x
-  lastSoundPlayedY = playerSprite.y
+function playSoundOfType(category) {
+  console.log(`attempt playing ${category}`)
   
-  setTimeout(() => playTune(spriteTypes[type].sound), 60)
+  if (!(category in spriteCategories)) throw new Error(`Type ${type} not found`)
+  if (!spriteCategories[category].sound) return
+  
+  console.log(`reached a ${category}`)
+  
+  // const playerSprite = getFirst(player)
+  // if (
+  //   playerSprite.x === lastSoundPlayedX &&
+  //   playerSprite.y === lastSoundPlayedY
+  // ) return
+
+  if (playedOnTile) return
+
+  playedOnTile = true
+  
+  console.log(`reached b ${category}`)
+
+  // lastSoundPlayedX = playerSprite.x
+  // lastSoundPlayedY = playerSprite.y
+  
+  setTimeout(() => {
+    playTune(spriteCategories[category].sound)
+    console.log("should play")
+  }, 60)
 }
 
 function isEffectivelyZero(num) {
@@ -1241,8 +1310,10 @@ function startLevel(newLevel) {
   xVel = 0
   yVel = 0
 
-  lastSoundPlayedX = null
-  lastSoundPlayedY = null
+  playedOnTile = false
+  
+  // lastSoundPlayedX = null
+  // lastSoundPlayedY = null
   
   inAir = false
   gameOver = false
