@@ -20,6 +20,8 @@ const ice = "i"
 const ladder = "c"
 const one_way_up = "u"
 const goal = "g"
+const locked = "L"
+const unlocked = "U"
 
 const arrow_0 = "0"
 const arrow_22 = "1"
@@ -490,39 +492,76 @@ CC............CC` ],
 ................
 ................` ],
   [ goal, bitmap`
-................
-.........000....
-........00600...
-.......0066600..
-......00666660..
-.....0066666600.
-....00666666660.
-...006666666660.
-..0066666669990.
-.00666669999990.
-.06669999999990.
-.09999999990000.
-.09999990000....
-.09990000.......
-.00000..........
-................` ]
+00.LL......LL.00
+0.LL......LL...0
+.LL......LL.....
+LL......LL......
+L......LL......L
+......LL......LL
+.....LL......LL.
+....LL......LL..
+...LL......LL...
+..LL......LL....
+.LL......LL.....
+LL......LL......
+L......LL......L
+......LL......LL
+0....LL......LL0
+00..LL......LL00` ],
+  [ locked, bitmap`
+1.1LL.1.1.1LL.1.
+.1LL.1.1.1LL.1.1
+1LL.1.1.1LL.1.1.
+LL.1.1.1LL.1.1.1
+L.1.1.1LL.1.1.1L
+.1.1.1LL.1.1.1LL
+1.1.1LL.1.1.1LL.
+.1.1LL.1.1.1LL.1
+1.1LL.1.1.1LL.1.
+.1LL.1.1.1LL.1.1
+1LL.1.1.1LL.1.1.
+LL.1.1.1LL.1.1.1
+L.1.1.1LL.1.1.1L
+.1.1.1LL.1.1.1LL
+1.1.1LL.1.1.1LL.
+.1.1LL.1.1.1LL.1` ],
+  [ unlocked, bitmap`
+1.1.1.1.1.1.1.1.
+.1.1.1.1.1.1.1.1
+1.1.1.1.1.1.1.1.
+.1.1.1.1.1.1.1.1
+1.1.1.1.1.1.1.1.
+.1.1.1.1.1.1.1.1
+1.1.1.1.1.1.1.1.
+.1.1.1.1.1.1.1.1
+1.1.1.1.1.1.1.1.
+.1.1.1.1.1.1.1.1
+1.1.1.1.1.1.1.1.
+.1.1.1.1.1.1.1.1
+1.1.1.1.1.1.1.1.
+.1.1.1.1.1.1.1.1
+1.1.1.1.1.1.1.1.
+.1.1.1.1.1.1.1.1` ]
 )
 
 const spriteCategories = {
   solid: {
     sound: null,
+    forceSound: false,
     types: [ wall, wall_no_stick, ice ]
   },
   sticky: {
     sound: tune`
 120: C4/120,
 3720`,
+    forceSound: false,
     types: [ wall ]
   },
   slippery: {
     sound: tune`
 60: B5^60,
 1860`,
+    forceSound: false,
     types: [ wall_no_stick, ice ]
   },
   danger: {
@@ -530,6 +569,7 @@ const spriteCategories = {
 150: G4/150,
 150: C4/150 + E4/150,
 4500`,
+    forceSound: true,
     types: [ lava_top, lava ]
   },
   goal: {
@@ -542,12 +582,14 @@ const spriteCategories = {
 150: A5/150 + F5/150,
 150: B5/150 + G5/150,
 3750`,
+    forceSound: true,
     types: [ goal ]
   },
   directional_up: {
     sound: tune`
 120: D4/120,
 3720`,
+    forceSound: false,
     types: [ one_way_up ]
   }
 }
@@ -683,11 +725,56 @@ wwwwwwwwww`,
 nnnnnnnnnnnnnnnnnnnn
 n..................n
 n..................n
-n...............g..n
-n.......ww.........n
 n..................n
-np.................n
-nwwwnttttttttnwwwwwn`,
+n..................n
+nww.ww.ww.ww.ww.ww.n
+n..................n
+n..................n
+n..................n
+n..................n
+n..w...w...w...w...n
+n..................n
+n....w...w...w...w.n
+n............w.....n
+n..................n
+n..................n
+n..................n
+n..................n
+n..................n
+n..................n
+n..................n
+nuuuuun............n
+n.....L............n
+n.....L............n
+n.p...L............n
+nwwwwwwwwwwwwwwwwwwn`,
+  map`
+nnnnnnnnnnnnnnnnnnnn
+n..................n
+n..................n
+n..................n
+n..................n
+nww.ww.ww.ww.ww.ww.n
+n..................n
+n..................n
+n..................n
+n......g...........n
+n..w...w...w...w...n
+n..................n
+n....w...w...w...w.n
+n............w.....n
+n..................n
+n.uuuuuuuuuuuuuuuu.n
+n..................n
+n..................n
+n.w...w.w.w.w.w.w..n
+n.wwwwwwwwwwwwwwww.n
+n.n...n............n
+n.n...n............n
+n.n.........ww..wwwn
+n.......n..........n
+n.p.....n..........n
+nwwwwwwwwwwwwwwwwwwn`,
   map`
 nnnnnnnnnnnnnnnnnnnn
 n..................n
@@ -771,6 +858,7 @@ let won;
 let arrowType;
 let fullMap;
 let zoom;
+let cachedZoomBox;
 
 onInput("w", () => handleWasdInput("w"))
 onInput("a", () => handleWasdInput("a"))
@@ -880,112 +968,131 @@ function handleIjklInput(key) {
         
         fullX += xVel
         fullY += yVel
+
+        const roundedFullX = Math.round(fullX)
+        const roundedFullY = Math.round(fullY)
         
-        p.x = Math.round(fullX)
-        p.y = Math.round(fullY)
-    
-        yVel = Math.min(yVel+gravity, 1)
-    
-        // const overlap = getAllOfCategory("solid").find(w => w.x === p.x && w.y === p.y)
-        if (playerOverlapsWithCategory("solid")) {
-          if (yVel > xVel) {
-            p.x -= xVel / Math.abs(xVel)
-            fullX = p.x
-          } else {
-            p.y -= yVel / Math.abs(yVel)
-            fullY = p.y
-          }
-        }
-    
-        // const dangerOverlap = getAllOfCategory("danger").find(l => l.x === p.x && l.y === p.y)
-        if (playerOverlapsWithCategory("danger")) {
+        if (
+          roundedFullX < 0 || roundedFullX >= width() ||
+          roundedFullY < 0 || roundedFullY >= height()
+        ) {
+          p.remove()
           stopMove()
           gameOver = true
-          addText(
-            "Game Over",
-            { y: 6, color: color`2` }
-          )
-          addText(
-            "Press any button",
-            { y: 8, color: color`2` }
-          )
-          addText(
-            "to play again!",
-            { y: 9, color: color`2` }
-          )
           soundToPlay = "danger"
-        } else if (playerOverlapsWithCategory("goal")) {
-          stopMove()
-          gameOver = true
-          won = true
-          addText(
-            "Level Complete!",
-            { y: 6, color: color`2` }
-          )
-          addText(
-            "Press any button",
-            { y: 8, color: color`2` }
-          )
-          addText(
-            "to continue to",
-            { y: 9, color: color`2` }
-          )
-          addText(
-            "the next level!",
-            { y: 10, color: color`2` }
-          )
-          soundToPlay = "goal"
         } else {
-          const stickyWalls = getAllOfCategory("sticky")
-          const directionalUp = getAllOfCategory("directional_up")
-          if (
-            stickyWalls.some(w => (
-              (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
-              (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
-              (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
-              (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
-            ))
-          ) {
+          p.x = roundedFullX
+          p.y = roundedFullY
+      
+          yVel = Math.min(yVel+gravity, 1)
+      
+          // const overlap = getAllOfCategory("solid").find(w => w.x === p.x && w.y === p.y)
+          if (playerOverlapsWithCategory("solid")) {
+            if (yVel > xVel) {
+              p.x -= xVel / Math.abs(xVel)
+              fullX = p.x
+            } else {
+              p.y -= yVel / Math.abs(yVel)
+              fullY = p.y
+            }
+          }
+      
+          // const dangerOverlap = getAllOfCategory("danger").find(l => l.x === p.x && l.y === p.y)
+          if (playerOverlapsWithCategory("danger")) {
             stopMove()
-            soundToPlay = "sticky"
-          } else if (
-            directionalUp.some(w => (
-              w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)
-            ))
-          ) {
+            gameOver = true
+            soundToPlay = "danger"
+          } else if (playerOverlapsWithCategory("goal")) {
             stopMove()
-            soundToPlay = "directional_up"
+            gameOver = true
+            won = true
+            soundToPlay = "goal"
           } else {
-            const wallsSlippery = getAllOfCategory("slippery")
+            const stickyWalls = getAllOfCategory("sticky")
+            const directionalUp = getAllOfCategory("directional_up")
             if (
-              wallsSlippery.some(w => (
+              stickyWalls.some(w => (
+                (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
                 (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
+                (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
                 (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
               ))
             ) {
-              xVel = 0
-              fullX = p.x
-              soundToPlay = "slippery"
-            }
-            if (
-              wallsSlippery.some(w => (
-                (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
-                (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel))
+              stopMove()
+              soundToPlay = "sticky"
+            } else if (
+              directionalUp.some(w => (
+                w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)
               ))
             ) {
-              yVel = 0
-              fullY = p.y
-              soundToPlay = "slippery"
-              if (yVel > 0 && isEffectivelyZero(xVel)) stopMove()
+              stopMove()
+              soundToPlay = "directional_up"
+            } else {
+              const wallsSlippery = getAllOfCategory("slippery")
+              if (
+                wallsSlippery.some(w => (
+                  (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
+                  (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
+                ))
+              ) {
+                xVel = 0
+                fullX = p.x
+                soundToPlay = "slippery"
+              }
+              if (
+                wallsSlippery.some(w => (
+                  (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
+                  (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel))
+                ))
+              ) {
+                yVel = 0
+                fullY = p.y
+                soundToPlay = "slippery"
+                if (yVel > 0 && isEffectivelyZero(xVel)) stopMove()
+              }
             }
           }
+  
+          if (oldX !== p.x || oldY !== p.y) playedOnTile = false
         }
-
-        if (oldX !== p.x || oldY !== p.y) playedOnTile = false
-    
+          
         fullMap = getParsedMap()
         centerMap()
 
+        if (gameOver) {
+          if (won) {
+            addText(
+              "Level Complete!",
+              { y: 6, color: color`2` }
+            )
+            addText(
+              "Press any button",
+              { y: 8, color: color`2` }
+            )
+            addText(
+              "to continue to",
+              { y: 9, color: color`2` }
+            )
+            addText(
+              "the next level!",
+              { y: 10, color: color`2` }
+            )
+          } else {
+            addText(
+              "Game Over",
+              { y: 6, color: color`2` }
+            )
+            addText(
+              "Press any button",
+              { y: 8, color: color`2` }
+            )
+            addText(
+              "to play again!",
+              { y: 9, color: color`2` }
+            )
+          }
+        }
+        
         if (soundToPlay) playSoundOfType(soundToPlay)
       }, 60)
 
@@ -1195,24 +1302,31 @@ function centerMap() {
 function getCenterZoomBox(options = {}) {
   const playerSprite = getFirst(player)
   
-  const mapWidth = options.width ?? defaultMapWidth
-  const mapHeight = options.height ?? defaultMapHeight
-  // const x = playerSprite.x-Math.round(mapWidth/2)+1
-  // const y = playerSprite.y-Math.round(mapHeight/2)
-  const x = playerSprite.x-Math.round(mapWidth/2)+1
-  const y = playerSprite.y-Math.round(mapHeight/2)
-  // const x = Math.max(Math.min(playerSprite.x-Math.round(mapWidth/2)+1, width()-mapWidth), 0)
-  // const y = Math.max(Math.min(playerSprite.y-Math.round(mapHeight/2), height()-mapHeight), 0)
-  const constrainedX = Math.max(Math.min(x, width()-mapWidth), 0)
-  const constrainedY = Math.max(Math.min(y, height()-mapHeight), 0)
+  if (playerSprite) {
+    const mapWidth = options.width ?? defaultMapWidth
+    const mapHeight = options.height ?? defaultMapHeight
+    
+    const x = playerSprite.x-Math.round(mapWidth/2)+1
+    const y = playerSprite.y-Math.round(mapHeight/2)
+    
+    const constrainedX = Math.max(Math.min(x, width()-mapWidth), 0)
+    const constrainedY = Math.max(Math.min(y, height()-mapHeight), 0)
   
-  const zoomBox = {
-    x: constrainedX,
-    y: constrainedY,
-    width: mapWidth,
-    height: mapHeight
-  }
-  return zoomBox
+    const zoomBox = {
+      x: constrainedX,
+      y: constrainedY,
+      width: mapWidth,
+      height: mapHeight
+    }
+
+    if (mapWidth === defaultMapWidth && mapHeight === defaultMapHeight)
+      cachedZoomBox = zoomBox
+    
+    return zoomBox
+  } else if (cachedZoomBox)
+    return cachedZoomBox
+  else
+    throw new Error("Could not provide zoom box")
 }
 
 // function getTouching() {
@@ -1262,8 +1376,6 @@ async function panBy(panByX, panByY) {
 
     const ogWidth = width()
     const ogHeight = height()
-
-    // TODO: simplify the calculation for some of these values. they should rely on a function etc.
     
     setMapFromParsed(fullMap)
 
@@ -1279,9 +1391,6 @@ async function panBy(panByX, panByY) {
 
     const { x: newZoomX, y: newZoomY } = getCenterZoomBox({ width: newWidth, height: newHeight })
     
-    // const playerSprite = getFirst(player)
-    // const newX = playerSprite.x-Math.round(newWidth/2)+1
-    // const newY = playerSprite.y-Math.round(newHeight/2)
     const ogZoomX = reset ? zoom.x : centerZoomX
     const ogZoomY = reset ? zoom.y : centerZoomY
     
@@ -1290,37 +1399,31 @@ async function panBy(panByX, panByY) {
     const zoomDiffX = newZoomX-ogZoomX
     const zoomDiffY = newZoomY-ogZoomY
     
-    // TODO: fix zoom values
-    
     const iterationCount = Math.ceil(Math.max(Math.abs(zoomDiffWidth), Math.abs(zoomDiffHeight))/2)
     
-    // console.log("test a")
-    
-    for (let i = 0; i < iterationCount; i++) {
-      if (i >= 1) setMapFromParsed(fullMap)
-      
-      zoom.width = ogWidth+Math.round(zoomDiffWidth / iterationCount * (i+1))
-      zoom.height = ogHeight+Math.round(zoomDiffHeight / iterationCount * (i+1))
-
-      zoom.x = ogZoomX + Math.round(zoomDiffX / iterationCount * (i+1))
-      zoom.y = ogZoomY + Math.round(zoomDiffY / iterationCount * (i+1))
-      
-      const parsedMap = getParsedMap()
-      const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
-      setMapFromParsed(zoomedMap)
-
-      // FIXME: switch this back to 10ms (200ms is temporary for testing)
-      if (i < iterationCount-1) await wait(200)
+    if (iterationCount >= 1) {
+      for (let i = 0; i < iterationCount; i++) {
+        if (i >= 1) setMapFromParsed(fullMap)
+        
+        zoom.width = ogWidth+Math.round(zoomDiffWidth / iterationCount * (i+1))
+        zoom.height = ogHeight+Math.round(zoomDiffHeight / iterationCount * (i+1))
+  
+        zoom.x = ogZoomX + Math.round(zoomDiffX / iterationCount * (i+1))
+        zoom.y = ogZoomY + Math.round(zoomDiffY / iterationCount * (i+1))
+        
+        const parsedMap = getParsedMap()
+        const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
+        setMapFromParsed(zoomedMap)
+  
+        if (i < iterationCount-1) await wait(10)
+      }
+    } else {
+      zoom.width = newWidth
+      zoom.height = newHeight
+      zoom.x = newZoomX
+      zoom.y = newZoomY
     }
-    // console.log("test b")
-
-    zoom.width = newWidth
-    zoom.height = newHeight
-    // TODO: check why this was calculated instead of using newX and newY
-    // zoom.x = Math.max(Math.min(zoom.x+panByX, fullWidth-zoom.width), 0)
-    // zoom.y = Math.max(Math.min(zoom.y+panByY, fullHeight-zoom.height), 0)
-    zoom.x = newZoomX
-    zoom.y = newZoomY
+      
     zoom.isZoomedOut = !reset
     zoom.zooming = false
   }
@@ -1375,51 +1478,34 @@ function getArrowDeg(thisArrowType) {
   else return arrowCounters.indexOf(arrowType) * arrowIncrement
 }
 
-function getAllOfCategory(category) {
-  if (!(category in spriteCategories)) throw new Error(`Category ${category} not found`)
-  return spriteCategories[category].types.map(t => getAll(t)).flat()
+function getAllOfCategory(categoryId) {
+  if (!(categoryId in spriteCategories)) throw new Error(`Category ${category} not found`)
+  const category = spriteCategories[categoryId]
+  return category.types.map(t => getAll(t)).flat()
 }
 
-function typeIsInCategory(type, category) {
-  if (!(category in spriteCategories)) throw new Error(`Category ${category} not found`)
-  return spriteCategories[category].types.includes(type)
+function typeIsInCategory(type, categoryId) {
+  if (!(categoryId in spriteCategories)) throw new Error(`Category ${category} not found`)
+  const category = spriteCategories[categoryId]
+  return category.types.includes(type)
 }
 
-function playerOverlapsWithCategory(category) {
-  if (!(category in spriteCategories)) throw new Error(`Category ${category} not found`)
+function playerOverlapsWithCategory(categoryId) {
   const playerSprite = getFirst(player)
   if (!playerSprite) return false
-  // console.log({ x: playerSprite.x, y: playerSprite.y })
-  return getAllOfCategory(category).find(w => w.x === playerSprite.x && w.y === playerSprite.y) ?? false
+  return getAllOfCategory(categoryId).find(w => w.x === playerSprite.x && w.y === playerSprite.y) ?? false
 }
 
-function playSoundOfType(category) {
-  console.log(`attempt playing ${category}`)
+function playSoundOfType(categoryId) {
+  if (!(categoryId in spriteCategories)) throw new Error(`Type ${type} not found`)
+  const category = spriteCategories[categoryId]
   
-  if (!(category in spriteCategories)) throw new Error(`Type ${type} not found`)
-  if (!spriteCategories[category].sound) return
-  
-  console.log(`reached a ${category}`)
-  
-  // const playerSprite = getFirst(player)
-  // if (
-  //   playerSprite.x === lastSoundPlayedX &&
-  //   playerSprite.y === lastSoundPlayedY
-  // ) return
-
-  if (playedOnTile) return
+  if (!category.sound) return
+  if (playedOnTile && !category.forceSound) return
 
   playedOnTile = true
   
-  console.log(`reached b ${category}`)
-
-  // lastSoundPlayedX = playerSprite.x
-  // lastSoundPlayedY = playerSprite.y
-  
-  setTimeout(() => {
-    playTune(spriteCategories[category].sound)
-    console.log("should play")
-  }, 60)
+  setTimeout(() => playTune(category.sound), 60)
 }
 
 function isEffectivelyZero(num) {
@@ -1452,6 +1538,8 @@ function startLevel(newLevel) {
     x: null,
     y: null
   }
+  
+  cachedZoomBox = null
 
   clearText()
   
