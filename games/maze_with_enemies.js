@@ -1,9 +1,3 @@
-/*
-@title: Maze With Enemies
-@author: leonprincen
-@tags: []
-@addedOn: 2024-07-29
-*/
 const player = "p";
 const enemy = "e";
 const enemy2 = "r";
@@ -192,19 +186,19 @@ ww.w.wwwwww.
 const currentLevel = levels[level];
 setMap(currentLevel);
 
-onInput("w", () => {
+onInput("i", () => {
     if (!gameIsOver) getFirst(player).y -= 1;
 });
 
-onInput("s", () => {
+onInput("k", () => {
     if (!gameIsOver) getFirst(player).y += 1;
 });
 
-onInput("a", () => {
+onInput("j", () => {
     if (!gameIsOver) getFirst(player).x -= 1;
 });
 
-onInput("d", () => {
+onInput("l", () => {
     if (!gameIsOver) getFirst(player).x += 1;
 });
 
