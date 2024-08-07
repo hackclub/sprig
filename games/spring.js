@@ -534,6 +534,18 @@ const spriteCategories = {
 4500`,
     types: [ lava_top, lava ]
   },
+  goal: {
+    sound: tune`
+150: F5/150 + A5/150,
+150: A5/150 + F5/150,
+150: G5/150 + B5/150,
+150: G5/150 + B5/150,
+150,
+150: A5/150 + F5/150,
+150: B5/150 + G5/150,
+3750`,
+    types: [ goal ]
+  },
   directional_up: {
     sound: tune`
 120: D4/120,
@@ -652,6 +664,24 @@ const spriteCategories = {
 let level;
 const levels = [
   map`
+wwwwwwwwww
+w........w
+w........w
+w........w
+w........w
+w........w
+w.p....g.w
+wwwwwwwwww`,
+  map`
+wwwwwwwwww
+w.....w.gw
+w.....w..w
+w.....w..w
+w..w.....w
+w..w.....w
+wp.w.....w
+wwwwwwwwww`,
+  map`
 nnnnnnnnnnnnnnnnnnnn
 n..................n
 n..................n
@@ -661,18 +691,18 @@ nww.ww.ww.ww.ww.ww.n
 n..................n
 n..................n
 n..................n
-n..................n
+n......g...........n
 n..w...w...w...w...n
 n..................n
 nw...w...w...w...w.n
 n............w.....n
 n..................n
-n........n.........n
+nuuuuuuuuuuuuuuuuuun
 n..................n
 n..................n
-n.w...w.w.w.w.w.w.wn
+nuw...w.w.w.w.w.w.wn
 n.wwwwwwwwwwwwwwwwwn
-n.n...n............n
+nun...n............n
 n.n...n............n
 n.n.........ww..wwwn
 n.......n..........n
@@ -730,6 +760,7 @@ let playedOnTile;
 // let lastSoundPlayedY;
 let inAir;
 let gameOver;
+let won;
 let arrowType;
 let fullMap;
 let zoom;
@@ -744,7 +775,7 @@ onInput("j", () => handleIjklInput("j"))
 onInput("l", () => handleIjklInput("l"))
 onInput("k", () => handleIjklInput("k"))
 
-startLevel(1)
+startLevel(3)
 
 function handleWasdInput(key) {
   const earlyReturn = handleGlobalInput()
@@ -840,6 +871,8 @@ function handleIjklInput(key) {
       centerMap()
       
       const interval = setInterval(() => {
+        let soundToPlay;
+        
         setMapFromParsed(fullMap)
         
         const p = getFirst(player)
@@ -855,8 +888,8 @@ function handleIjklInput(key) {
     
         yVel = Math.min(yVel+gravity, 1)
     
-        const overlap = getAllOfType("solid").find(w => w.x === p.x && w.y === p.y)
-        if (overlap) {
+        // const overlap = getAllOfCategory("solid").find(w => w.x === p.x && w.y === p.y)
+        if (playerOverlapsWithCategory("solid")) {
           if (yVel > xVel) {
             p.x -= xVel / Math.abs(xVel)
             fullX = p.x
@@ -866,10 +899,9 @@ function handleIjklInput(key) {
           }
         }
     
-        const dangerOverlap = getAllOfType("danger").find(l => l.x === p.x && l.y === p.y)
-        if (dangerOverlap) {
-          clearInterval(interval)
-          inAir = false
+        // const dangerOverlap = getAllOfCategory("danger").find(l => l.x === p.x && l.y === p.y)
+        if (playerOverlapsWithCategory("danger")) {
+          stopMove()
           gameOver = true
           addText("Game Over", {
             y: 6,
@@ -887,11 +919,32 @@ function handleIjklInput(key) {
             y: 9,
             color: color`2`
           })
-          playSoundOfType("danger")
+          soundToPlay = "danger"
+        } else if (playerOverlapsWithCategory("goal")) {
+          stopMove()
+          gameOver = true
+          won = true
+          addText("Level Complete!", {
+            y: 6,
+            color: color`2`
+          })
+          addText("Press any button", {
+            y: 8,
+            color: color`2`
+          })
+          addText("to continue to", {
+            y: 9,
+            color: color`2`
+          })
+          addText("the next level!", {
+            y: 10,
+            color: color`2`
+          })
+          soundToPlay = "goal"
         } else {
           // const stickyWalls = [...getAllOfType("sticky"), ...getAllOfType("directional_up")]
-          const stickyWalls = getAllOfType("sticky")
-          const directionalUp = getAllOfType("directional_up")
+          const stickyWalls = getAllOfCategory("sticky")
+          const directionalUp = getAllOfCategory("directional_up")
           if (
             stickyWalls.some(w => (
               (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel)) ||
@@ -903,19 +956,17 @@ function handleIjklInput(key) {
             // TODO: consider playing sound effect here
             // console.log("clear")
             // playTune(stickSound)
-            clearInterval(interval)
-            inAir = false
-            playSoundOfType("sticky")
+            stopMove()
+            soundToPlay = "sticky"
           } else if (
             directionalUp.some(w => (
               w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)
-            ))  
+            ))
           ) {
-            clearInterval(interval)
-            inAir = false
-            playSoundOfType("directional_up")
+            stopMove()
+            soundToPlay = "directional_up"
           } else {
-            const wallsSlippery = getAllOfType("slippery")
+            const wallsSlippery = getAllOfCategory("slippery")
             if (
               wallsSlippery.some(w => (
                 (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
@@ -924,7 +975,7 @@ function handleIjklInput(key) {
             ) {
               xVel = 0
               fullX = p.x
-              playSoundOfType("slippery")
+              soundToPlay = "slippery"
             }
             if (
               wallsSlippery.some(w => (
@@ -934,7 +985,8 @@ function handleIjklInput(key) {
             ) {
               yVel = 0
               fullY = p.y
-              playSoundOfType("slippery")
+              soundToPlay = "slippery"
+              if (isEffectivelyZero(xVel)) stopMove()
             }
           }
         }
@@ -943,7 +995,14 @@ function handleIjklInput(key) {
     
         fullMap = getParsedMap()
         centerMap()
+
+        if (soundToPlay) playSoundOfType(soundToPlay)
       }, 60)
+
+      function stopMove() {
+        clearInterval(interval)
+        inAir = false
+      }
       
       break
     default:
@@ -954,6 +1013,7 @@ function handleIjklInput(key) {
 function handleGlobalInput() {
   if (inAir) return
   if (gameOver) {
+    if (won) level++
     startLevel(level)
     return true
   }
@@ -1174,19 +1234,25 @@ async function panBy(panByX, panByY) {
     const ogWidth = width()
     const ogHeight = height()
 
+    // TODO: simplify the calculation for some of these values. they should rely on a function etc.
+    
     setMapFromParsed(fullMap)
     const playerSprite = getFirst(player)
     const newX = playerSprite.x-Math.round(newWidth/2)+1
     const newY = playerSprite.y-Math.round(newHeight/2)
-    const ogX = reset ? zoom.x : playerSprite.x-Math.round(newWidth/2)+1
-    const ogY = reset ? zoom.y : playerSprite.y-Math.round(newHeight/2)+1
+    const ogX = reset ? zoom.x : playerSprite.x-Math.round(ogWidth/2)+1
+    const ogY = reset ? zoom.y : playerSprite.y-Math.round(ogHeight/2)+1
     
     const widthDiff = newWidth-ogWidth
     const heightDiff = newHeight-ogHeight
     const xDiff = newX-ogX
     const yDiff = newY-ogY
     
+    // TODO: fix zoom values
+    
     const iterationCount = Math.ceil(Math.max(Math.abs(widthDiff), Math.abs(heightDiff))/2)
+    
+    // console.log("test a")
     
     for (let i = 0; i < iterationCount; i++) {
       if (i >= 1) setMapFromParsed(fullMap)
@@ -1200,12 +1266,19 @@ async function panBy(panByX, panByY) {
       const parsedMap = getParsedMap()
       const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
       setMapFromParsed(zoomedMap)
-  
-      await wait(10)
+
+      // FIXME: switch this back to 10ms (200ms is temporary for testing)
+      await wait(200)
     }
-    
-    zoom.x = Math.max(Math.min(zoom.x+panByX, fullWidth-zoom.width), 0)
-    zoom.y = Math.max(Math.min(zoom.y+panByY, fullHeight-zoom.height), 0)
+    // console.log("test b")
+
+    zoom.width = newWidth
+    zoom.height = newHeight
+    // TODO: check why this was calculated instead of using newX and newY
+    // zoom.x = Math.max(Math.min(zoom.x+panByX, fullWidth-zoom.width), 0)
+    // zoom.y = Math.max(Math.min(zoom.y+panByY, fullHeight-zoom.height), 0)
+    zoom.x = newX
+    zoom.y = newY
     zoom.isZoomedOut = !reset
     zoom.zooming = false
   }
@@ -1222,7 +1295,7 @@ function wait(ms) {
 
 function checkArrowIsInvalid(thisArrowType) {
   const p = getFirst(player)
-  const walls = getAllOfType("solid")
+  const walls = getAllOfCategory("solid")
   const arrowDeg = getArrowDeg(thisArrowType)
   
   const someIsInvalid = walls.some(w => {
@@ -1260,14 +1333,22 @@ function getArrowDeg(thisArrowType) {
   else return arrowCounters.indexOf(arrowType) * arrowIncrement
 }
 
-function getAllOfType(category) {
-  if (!(category in spriteCategories)) throw new Error(`Type ${category} not found`)
+function getAllOfCategory(category) {
+  if (!(category in spriteCategories)) throw new Error(`Category ${category} not found`)
   return spriteCategories[category].types.map(t => getAll(t)).flat()
 }
 
 function typeIsInCategory(type, category) {
   if (!(category in spriteCategories)) throw new Error(`Category ${category} not found`)
   return spriteCategories[category].types.includes(type)
+}
+
+function playerOverlapsWithCategory(category) {
+  if (!(category in spriteCategories)) throw new Error(`Category ${category} not found`)
+  const playerSprite = getFirst(player)
+  if (!playerSprite) return false
+  // console.log({ x: playerSprite.x, y: playerSprite.y })
+  return getAllOfCategory(category).find(w => w.x === playerSprite.x && w.y === playerSprite.y) ?? false
 }
 
 function playSoundOfType(category) {
@@ -1317,6 +1398,7 @@ function startLevel(newLevel) {
   
   inAir = false
   gameOver = false
+  won = false
   
   arrowType = null
   
