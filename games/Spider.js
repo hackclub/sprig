@@ -257,7 +257,7 @@ const pitWeb = tilesWith(web, pit).length;
     addSprite(spiderSprite.x + 1, spiderSprite.y, pit)
   }})
 afterInput(() => {
-  goal = ((level)+2)
+  goal = ((level)+3)
   if (level === 7) {
     goal = 1000
   }
