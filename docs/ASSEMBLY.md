@@ -26,7 +26,7 @@ Below are instructions for assembling your Sprig console.
 ## Instructions
 
 1. Slide the LCD screen into the socket on the top of the board.
-   
+
 ![Photo of a PCB with LCD attached](https://cloud-6po09tv9d-hack-club-bot.vercel.app/2lcd-no-spacers.jpg)
 
 > [!CAUTION]
