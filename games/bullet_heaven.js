@@ -2,7 +2,7 @@
 @title: Bullet Heaven
 @author: OtterDev 
 @tags: ["shooter"]
-@addedOn: 2024-00-00
+@addedOn: 2024-07-30
 */
 
 const player = "p";
