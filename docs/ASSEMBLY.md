@@ -15,46 +15,62 @@ Below are instructions for assembling your Sprig console.
 | 1        | Raspberry Pi Pico                                                         |
 | 4        | clear backings (2 with D-pad cutouts, 2 solid)                            |
 | 1        | bag of 10 tactile button switches                                         |
-| 1        | bag of hardware for screen (2 spacers, 2 M2\*14mm screws, 2 hex nuts)\*    |
-| 1        | bag of hardware for backings (8 M2\*10mm screws, 8 hex nuts, allen key)\* |
+| 1        | bag of hardware for screen (2 spacers, 2 M2\*14mm bolts, 2 hex nuts)\*    |
+| 1        | bag of hardware for backings (8 M2\*10mm bolts, 8 hex nuts, allen key)\* |
 | 1        | adapter or micro-USB cable                                                |
 | 1        | bag of 2 AAA batteries                                                    |
 
-\* May include extra hardware.
+> [!NOTE]
+> Extra hardware may be included - it's all packed by hand. If you're missing a part, [DM `@graham` on the Hack Club Slack](https://hackclub.slack.com/team/U04QH1TTMBP) or email graham<img src="https://upload.wikimedia.org/wikipedia/commons/8/88/At_sign.svg" height=15px alt="@"></img>hackclub.com. 
 
 ## Instructions
 
-1. Connect the LCD screen to the pins on the top of the board.
-
+1. Slide the LCD screen into the socket on the top of the board.
+   
 ![Photo of a PCB with LCD attached](https://cloud-6po09tv9d-hack-club-bot.vercel.app/2lcd-no-spacers.jpg)
 
-2. Add spacers, put the longer screws through the holes, and screw the nuts on the back side.
+> [!CAUTION]
+> Make sure that there are no pins floating out on either end! Misalignments can cause bad things to happen. 
+
+2. Slide one of the two plastic spacers (long tubes) under one of the two holes in the display. Slide one of the longer bolts through the screen, spacer, and circuit board and screw one of the nuts onto the other end. Use the allen key to tighten it. Repeat for the display's other hole.
 
 ![Photo of an LCD assembled with screws and spacers](https://cloud-6po09tv9d-hack-club-bot.vercel.app/1screws-through-spacers.jpg)
 
-3. Put 4 buttons in corresponding holes on each side of the board. You'll have 2 extra buttons.
+3. Put the buttons in the corresponding holes on the front of the board - 4 on each side. You'll have 2 extra buttons.
 
 ![Photo of a single button on a PCB](https://cloud-6po09tv9d-hack-club-bot.vercel.app/0singlebutton.jpg)
 
 ![Photo of a PCB with an LCD and 8 buttons](https://cloud-obltnnp51-hack-club-bot.vercel.app/5all-buttons.jpg)
 
-4. Turn the board over, and put the clear backings on. The first piece should have a D-pad cutout; the solid piece should be on top. The screw holes and D-pad cutout may need to be cleared out. Make sure to peel off the protective film on the front and back of each piece.
+> [!NOTE]
+> Don't worry about soldering the buttons in. The bends in the buttons' leads help them stay in the PCB!
 
+4. Grab the clear backing plates. You should have four of them - two with a plus-shaped cutout, and two without.
+> [!NOTE]
+> If any of the plates have what look like circular scores where holes should be, use a bolt to push the piece through.
+
+Peel the plastic film off both sides of each piece.
 ![Photo of a protective plastic film being peeled off of an acrylic piece](https://cloud-6po09tv9d-hack-club-bot.vercel.app/3peel-plastic.jpg)
 
+Now flip over your Sprig and stack two plates on one side of the board - first one with the plus-shaped cutout for the D-pad, then one of the solid ones. 
 ![Photo of a piece of plastic with a D-pad cutout on a PCB](https://cloud-obltnnp51-hack-club-bot.vercel.app/4backing1.jpg)
-
 ![Photo of two plastic pieces stacked atop a PCB](https://cloud-obltnnp51-hack-club-bot.vercel.app/3backing2.jpg)
 
-5. Put the shorter screws in holes and add nuts on the top side of the board. Tighten using the allen key provided. Repeat for the clear backings on the other side.
+> [!TIP]
+> If it's hard to get the plates to stay lined up, you can put one bolt through the plates first, then put the bolt in the corresponding hole in the PCB.
 
-![Four screws securing 2 pieces of plastic to a PCB](https://cloud-obltnnp51-hack-club-bot.vercel.app/2backing-withscrews.jpg)
+5. Put the shorter bolts in the plates' holes and add nuts on the top side of the board. Tighten using the allen key provided. Repeat steps 4 and 5 for the plates on the other side.
 
-6. Put in the Raspberry Pi Pico, with the USB port facing the outside edge of the board.
+![Four bolts securing 2 pieces of plastic to a PCB](https://cloud-obltnnp51-hack-club-bot.vercel.app/2backing-withscrews.jpg)
+
+6. Put the Raspberry Pi Pico into the socket on the back. The USB port should face the top of the board (where the black speaker is). It might need a bit of force, but the black plastic on the Pico will be flat against the socket when it's all the way in.
 
 ![Photo of a PCB](https://cloud-obltnnp51-hack-club-bot.vercel.app/0pico.jpg)
 
-7. Put in 2 AAA batteries.
+> [!CAUTION]
+> Make sure that the ends of the Pico's rows of pins align with the ends of the sockets! Misalignments can cause bad things to happen. 
+
+7. Put in the 2 AAA batteries. The negative (-) side of each battery goes against the spring at one end of the slot.
 
 ![Photo of an assembled handheld game console](https://cloud-93zuth77c-hack-club-bot.vercel.app/0img_1613.jpg)
 
