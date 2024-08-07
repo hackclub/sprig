@@ -19,8 +19,10 @@ const lava = "l"
 const ice = "i"
 const ladder = "c"
 const one_way_up = "u"
+const key = "k"
 const goal = "g"
 const locked = "L"
+const locked_graphic = "G"
 const unlocked = "U"
 
 const arrow_0 = "0"
@@ -492,63 +494,165 @@ CC............CC` ],
 ................
 ................` ],
   [ goal, bitmap`
-00.LL......LL.00
-0.LL......LL...0
-.LL......LL.....
-LL......LL......
-L......LL......L
-......LL......LL
-.....LL......LL.
-....LL......LL..
-...LL......LL...
-..LL......LL....
-.LL......LL.....
-LL......LL......
-L......LL......L
-......LL......LL
-0....LL......LL0
-00..LL......LL00` ],
+................
+.........000....
+........00600...
+.......0066600..
+......00666660..
+.....0066666600.
+....00666666660.
+...006666666660.
+..0066666669990.
+.00666669999990.
+.06669999999990.
+.09999999990000.
+.09999990000....
+.09990000.......
+.00000..........
+................` ],
+//   [ key, bitmap`
+// ..........00....
+// .........0660...
+// ........066060..
+// .......0660.060.
+// .......060...060
+// ........060.0660
+// .....00..060660.
+// ....0660..0660..
+// ...066660..00...
+// ..06606660......
+// .0660.06660.....
+// .06660.0660.....
+// ..06660660......
+// ...066660.......
+// ....0660........
+// .....00.........` ],
+  [ key, bitmap`
+................
+..........00....
+.........0660...
+........066660..
+.......06600660.
+.......0660.0690
+........06600690
+.......06066690.
+......06690990..
+...0.06690.00...
+..0606690.......
+.0606690........
+..06690.........
+...090..........
+....0...........
+................` ],
+//   [ locked, bitmap`
+// 1.1LL.1.1.1LL.1.
+// .1LL.1.1.1LL.1.1
+// 1LL.1.1.1LL.1.1.
+// LL.1.1.1LL.1.1.1
+// L.1.1.1LL.1.1.1L
+// .1.1.1LL.1.1.1LL
+// 1.1.1LL.1.1.1LL.
+// .1.1LL.1.1.1LL.1
+// 1.1LL.1.1.1LL.1.
+// .1LL.1.1.1LL.1.1
+// 1LL.1.1.1LL.1.1.
+// LL.1.1.1LL.1.1.1
+// L.1.1.1LL.1.1.1L
+// .1.1.1LL.1.1.1LL
+// 1.1.1LL.1.1.1LL.
+// .1.1LL.1.1.1LL.1` ],
   [ locked, bitmap`
-1.1LL.1.1.1LL.1.
-.1LL.1.1.1LL.1.1
-1LL.1.1.1LL.1.1.
-LL.1.1.1LL.1.1.1
-L.1.1.1LL.1.1.1L
-.1.1.1LL.1.1.1LL
-1.1.1LL.1.1.1LL.
-.1.1LL.1.1.1LL.1
-1.1LL.1.1.1LL.1.
-.1LL.1.1.1LL.1.1
-1LL.1.1.1LL.1.1.
-LL.1.1.1LL.1.1.1
-L.1.1.1LL.1.1.1L
-.1.1.1LL.1.1.1LL
-1.1.1LL.1.1.1LL.
-.1.1LL.1.1.1LL.1` ],
+.00000000000000.
+01LL.1.1.1LL.1.0
+0LL.1.1.1LL.1.10
+0L.1.1.1LL.1.1.0
+0.1.1.1LL.1.1.10
+01.1.1LL.1.1.1L0
+0.1.1LL.1.1.1LL0
+01.1LL.1.1.1LL.0
+0.1LL.1.1.1LL.10
+01LL.1.1.1LL.1.0
+0LL.1.1.1LL.1.10
+0L.1.1.1LL.1.1.0
+0.1.1.1LL.1.1.10
+01.1.1LL.1.1.1L0
+0.1.1LL.1.1.1LL0
+.00000000000000.` ],
+//   [ locked_graphic, bitmap`
+// 1.1LL.1.1.1LL.1.
+// .1LL.1.1.1LL.1.1
+// 1LL.1.100LL.1.1.
+// LL.1.10000.1.1.1
+// L.1.1000000.1.1L
+// .1.1.00L.001.1LL
+// 1.1.100.100.1LL.
+// .1.100000000LL.1
+// 1.1L00000000L.1.
+// .1LL00000000.1.1
+// 1LL.000..0001.1.
+// LL.100000000.1.1
+// L.1.000000001.1L
+// .1.100000000.1LL
+// 1.1.1LL.1.1.1LL.
+// .1.1LL.1.1.1LL.1` ],
+  [ locked_graphic, bitmap`
+.00000000000000.
+01LL.1.1.1LL.1.0
+0LL.1.100LL.1.10
+0L.1.10000.1.1.0
+0.1.1000000.1.10
+01.1.00L.001.1L0
+0.1.100.100.1LL0
+01.100000000LL.0
+0.1L00000000L.10
+01LL00000000.1.0
+0LL.000..0001.10
+0L.100000000.1.0
+0.1.000000001.10
+01.100000000.1L0
+0.1.1LL.1.1.1LL0
+.00000000000000.` ],
+//   [ unlocked, bitmap`
+// 1.1.1.1.1.1.1.1.
+// .1.1.1.1.1.1.1.1
+// 1.1.1.1.1.1.1.1.
+// .1.1.1.1.1.1.1.1
+// 1.1.1.1.1.1.1.1.
+// .1.1.1.1.1.1.1.1
+// 1.1.1.1.1.1.1.1.
+// .1.1.1.1.1.1.1.1
+// 1.1.1.1.1.1.1.1.
+// .1.1.1.1.1.1.1.1
+// 1.1.1.1.1.1.1.1.
+// .1.1.1.1.1.1.1.1
+// 1.1.1.1.1.1.1.1.
+// .1.1.1.1.1.1.1.1
+// 1.1.1.1.1.1.1.1.
+// .1.1.1.1.1.1.1.1` ]
   [ unlocked, bitmap`
-1.1.1.1.1.1.1.1.
-.1.1.1.1.1.1.1.1
-1.1.1.1.1.1.1.1.
-.1.1.1.1.1.1.1.1
-1.1.1.1.1.1.1.1.
-.1.1.1.1.1.1.1.1
-1.1.1.1.1.1.1.1.
-.1.1.1.1.1.1.1.1
-1.1.1.1.1.1.1.1.
-.1.1.1.1.1.1.1.1
-1.1.1.1.1.1.1.1.
-.1.1.1.1.1.1.1.1
-1.1.1.1.1.1.1.1.
-.1.1.1.1.1.1.1.1
-1.1.1.1.1.1.1.1.
-.1.1.1.1.1.1.1.1` ]
+.LLLLLLLLLLLLLL.
+L1.1.1.1.1.1.1.L
+L.1.1.1.1.1.1.1L
+L1.1.1.1.1.1.1.L
+L.1.1.1.1.1.1.1L
+L1.1.1.1.1.1.1.L
+L.1.1.1.1.1.1.1L
+L1.1.1.1.1.1.1.L
+L.1.1.1.1.1.1.1L
+L1.1.1.1.1.1.1.L
+L.1.1.1.1.1.1.1L
+L1.1.1.1.1.1.1.L
+L.1.1.1.1.1.1.1L
+L1.1.1.1.1.1.1.L
+L.1.1.1.1.1.1.1L
+.LLLLLLLLLLLLLL.` ]
 )
 
 const spriteCategories = {
   solid: {
     sound: null,
     forceSound: false,
-    types: [ wall, wall_no_stick, ice ]
+    types: [ wall, wall_no_stick, ice, locked, locked_graphic ]
   },
   sticky: {
     sound: tune`
@@ -562,7 +666,7 @@ const spriteCategories = {
 60: B5^60,
 1860`,
     forceSound: false,
-    types: [ wall_no_stick, ice ]
+    types: [ wall_no_stick, ice, locked, locked_graphic ]
   },
   danger: {
     sound: tune`
@@ -591,115 +695,22 @@ const spriteCategories = {
 3720`,
     forceSound: false,
     types: [ one_way_up ]
+  },
+  key: {
+    sound: tune`
+200: B5~200,
+6200`,
+    forceSound: false,
+    types: [ key ]
+  },
+  locked: {
+    sound: tune`
+107.14285714285714: C4-107.14285714285714,
+3321.428571428571`,
+    forceSound: false,
+    types: [ locked, locked_graphic ]
   }
 }
-
-// const melody = tune`
-// 150: D4-150,
-// 150: D4-150,
-// 150: F4-150,
-// 150: F4-150,
-// 150: E4-150,
-// 150: E4-150,
-// 300,
-// 150: D4-150,
-// 150: D4-150,
-// 150: F4-150,
-// 150: F4-150,
-// 150: E4-150,
-// 150: E4-150,
-// 300,
-// 150: D4-150 + F4-150,
-// 150: D4-150 + F4-150,
-// 150: F4-150 + A4-150,
-// 150: F4-150 + A4-150,
-// 150: E4-150 + G4-150,
-// 150: E4-150 + G4-150,
-// 300,
-// 150: D4-150 + F4-150,
-// 150: D4-150 + F4-150,
-// 150: F4-150 + A4-150,
-// 150: F4-150 + A4-150,
-// 150: E4-150 + G4-150,
-// 150: E4-150 + G4-150,
-// 300`
-
-// const melody2 = tune`
-// 150: D4-150 + F4-150,
-// 150: D4-150 + F4-150,
-// 150: F4-150 + A4-150,
-// 150: F4-150 + A4-150,
-// 150: E4-150 + G4-150,
-// 150: E4-150 + G4-150,
-// 300,
-// 150: D4-150 + F4-150,
-// 150: D4-150 + F4-150,
-// 150: F4-150 + A4-150,
-// 150: F4-150 + A4-150,
-// 150: E4-150 + G4-150,
-// 150: E4-150 + G4-150,
-// 300,
-// 150: F4-150 + A4-150,
-// 150: F4-150 + A4-150,
-// 150: A4-150 + C5-150,
-// 150: A4-150 + C5-150,
-// 150: B4-150 + G4-150,
-// 150: B4-150 + G4-150,
-// 300,
-// 150: F4-150 + A4-150,
-// 150: F4-150 + A4-150,
-// 150: A4-150 + C5-150,
-// 150: A4-150 + C5-150,
-// 150: B4-150 + G4-150,
-// 150: B4-150 + G4-150,
-// 300`
-
-// const melody3 = tune`
-// 150: F4-150 + A4-150,
-// 150: F4-150 + A4-150,
-// 150: A4-150 + C5-150,
-// 150: A4-150 + C5-150,
-// 150: B4-150 + G4-150,
-// 150: B4-150 + G4-150,
-// 300,
-// 150: D4-150,
-// 450,
-// 150: D4-150,
-// 450,
-// 150: D4-150 + A4-150,
-// 450,
-// 150: D4-150 + A4-150,
-// 450,
-// 150: D4-150 + C5-150,
-// 450,
-// 150: D4-150 + C5-150,
-// 450`
-
-// const repeatMelody = tune`
-// 150: D4-150,
-// 150: D4-150,
-// 150: F4-150,
-// 150: F4-150,
-// 150: E4-150,
-// 150: E4-150,
-// 3900`
-
-// setInterval(() => {
-//   playTune(repeatMelody)
-// }, 5000)
-
-// const stickSound = tune`
-// 120: C4/120,
-// 3720`
-// const slideSound = tune`
-// 59.642147117296226: B5^59.642147117296226,
-// 1848.906560636183`
-// const gameOverSound = tune`
-// 150: G4/150,
-// 150: C4/150 + E4/150,
-// 4500`
-
-// setSolids([ player, wall, wall_no_stick ])
 
 let level;
 const levels = [
@@ -722,32 +733,32 @@ w..w.....w
 wp.w.....w
 wwwwwwwwww`,
   map`
-nnnnnnnnnnnnnnnnnnnn
-n..................n
-n..................n
-n..................n
-n..................n
-nww.ww.ww.ww.ww.ww.n
-n..................n
-n..................n
-n..................n
-n..................n
-n..w...w...w...w...n
-n..................n
-n....w...w...w...w.n
-n............w.....n
-n..................n
-n..................n
-n..................n
-n..................n
-n..................n
-n..................n
-n..................n
-nuuuuun............n
-n.....L............n
-n.....L............n
-n.p...L............n
-nwwwwwwwwwwwwwwwwwwn`,
+nwnwnwnwnwnwnwnwnwnwn
+w...................w
+n...................n
+w...................w
+n...................n
+w...................w
+n...................n
+w...................w
+n...................n
+w...................w
+n...................n
+w...................w
+n.....wwwwwwwwww....n
+w...................w
+n..................kn
+w.................www
+n...................n
+w...................w
+n.....nttttttttn....n
+w.....nlllllllln....w
+n.....nlllllllln....n
+wuuuuunnnnnnnnnn....w
+n.....L........n....n
+w.....G........n....w
+n.p...L....g...n....n
+wwwwwwwwwwwwwwwwwwwww`,
   map`
 nnnnnnnnnnnnnnnnnnnn
 n..................n
@@ -986,7 +997,6 @@ function handleIjklInput(key) {
       
           yVel = Math.min(yVel+gravity, 1)
       
-          // const overlap = getAllOfCategory("solid").find(w => w.x === p.x && w.y === p.y)
           if (playerOverlapsWithCategory("solid")) {
             if (yVel > xVel) {
               p.x -= xVel / Math.abs(xVel)
@@ -996,8 +1006,14 @@ function handleIjklInput(key) {
               fullY = p.y
             }
           }
-      
-          // const dangerOverlap = getAllOfCategory("danger").find(l => l.x === p.x && l.y === p.y)
+          
+          const keyOverlap = playerOverlapsWithCategory("key")
+          if (keyOverlap) {
+            keyOverlap.remove()
+            getAllOfCategory("locked").map(l => l.type = unlocked)
+            soundToPlay = "key"
+          }
+          
           if (playerOverlapsWithCategory("danger")) {
             stopMove()
             gameOver = true
@@ -1029,25 +1045,25 @@ function handleIjklInput(key) {
               soundToPlay = "directional_up"
             } else {
               const wallsSlippery = getAllOfCategory("slippery")
-              if (
-                wallsSlippery.some(w => (
-                  (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
-                  (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
-                ))
-              ) {
+              
+              const touchingSlipperyX = wallsSlippery.find(w => (
+                (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
+                (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
+              ))
+              if (touchingSlipperyX) {
                 xVel = 0
                 fullX = p.x
-                soundToPlay = "slippery"
+                soundToPlay = typeIsInCategory(touchingSlipperyX.type, "locked") ? "locked" : "slippery"
               }
-              if (
-                wallsSlippery.some(w => (
-                  (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
-                  (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel))
-                ))
-              ) {
+              
+              const touchingSlipperyY = wallsSlippery.find(w => (
+                (w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)) ||
+                (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel))
+              ))
+              if (touchingSlipperyY) {
                 yVel = 0
                 fullY = p.y
-                soundToPlay = "slippery"
+                soundToPlay = typeIsInCategory(touchingSlipperyY.type, "locked") ? "locked" : "slippery"
                 if (yVel > 0 && isEffectivelyZero(xVel)) stopMove()
               }
             }
