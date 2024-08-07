@@ -508,8 +508,6 @@ CC............CC` ],
 ................` ]
 )
 
-// TODO: prevent player getting stuck when landing straight down on ice
-
 const spriteCategories = {
   solid: {
     sound: null,
@@ -536,10 +534,10 @@ const spriteCategories = {
   },
   goal: {
     sound: tune`
-150: F5/150 + A5/150,
 150: A5/150 + F5/150,
-150: G5/150 + B5/150,
-150: G5/150 + B5/150,
+150: A5/150 + F5/150,
+150: B5/150 + G5/150,
+150: B5/150 + G5/150,
 150,
 150: A5/150 + F5/150,
 150: B5/150 + G5/150,
@@ -685,6 +683,15 @@ wwwwwwwwww`,
 nnnnnnnnnnnnnnnnnnnn
 n..................n
 n..................n
+n...............g..n
+n.......ww.........n
+n..................n
+np.................n
+nwwwnttttttttnwwwwwn`,
+  map`
+nnnnnnnnnnnnnnnnnnnn
+n..................n
+n..................n
 n..................n
 n..................n
 nww.ww.ww.ww.ww.ww.n
@@ -775,14 +782,11 @@ onInput("j", () => handleIjklInput("j"))
 onInput("l", () => handleIjklInput("l"))
 onInput("k", () => handleIjklInput("k"))
 
-startLevel(3)
+startLevel(2)
 
 function handleWasdInput(key) {
   const earlyReturn = handleGlobalInput()
   if (earlyReturn) return
-
-  // TODO: check if this should be moved to handleGlobalInput()
-  // if (gameOver || inAir) return
   
   switch (key) {
     case "w":
@@ -805,9 +809,6 @@ function handleWasdInput(key) {
 function handleIjklInput(key) {
   const earlyReturn = handleGlobalInput()
   if (earlyReturn) return
-
-  // TODO: check if this should be moved to handleGlobalInput()
-  // if (gameOver) return
   
   if (zoom.isZoomedOut) {
     resetPan()
@@ -815,10 +816,7 @@ function handleIjklInput(key) {
   }
 
   switch (key) {
-    case "i":
-      // TODO: consider combining this early return with the 3rd (same for jkl)
-      // TODO: reset game when pressing any key. this should be a separate function
-      
+    case "i":      
       if (
         zoom.zooming ||
         arrowType !== null ||
@@ -903,46 +901,41 @@ function handleIjklInput(key) {
         if (playerOverlapsWithCategory("danger")) {
           stopMove()
           gameOver = true
-          addText("Game Over", {
-            y: 6,
-            color: color`2`
-          })
-          // addText("You hit the lava!", {
-          //   y: 8,
-          //   color: color`2`
-          // })
-          addText("Press any button", {
-            y: 8,
-            color: color`2`
-          })
-          addText("to play again!", {
-            y: 9,
-            color: color`2`
-          })
+          addText(
+            "Game Over",
+            { y: 6, color: color`2` }
+          )
+          addText(
+            "Press any button",
+            { y: 8, color: color`2` }
+          )
+          addText(
+            "to play again!",
+            { y: 9, color: color`2` }
+          )
           soundToPlay = "danger"
         } else if (playerOverlapsWithCategory("goal")) {
           stopMove()
           gameOver = true
           won = true
-          addText("Level Complete!", {
-            y: 6,
-            color: color`2`
-          })
-          addText("Press any button", {
-            y: 8,
-            color: color`2`
-          })
-          addText("to continue to", {
-            y: 9,
-            color: color`2`
-          })
-          addText("the next level!", {
-            y: 10,
-            color: color`2`
-          })
+          addText(
+            "Level Complete!",
+            { y: 6, color: color`2` }
+          )
+          addText(
+            "Press any button",
+            { y: 8, color: color`2` }
+          )
+          addText(
+            "to continue to",
+            { y: 9, color: color`2` }
+          )
+          addText(
+            "the next level!",
+            { y: 10, color: color`2` }
+          )
           soundToPlay = "goal"
         } else {
-          // const stickyWalls = [...getAllOfType("sticky"), ...getAllOfType("directional_up")]
           const stickyWalls = getAllOfCategory("sticky")
           const directionalUp = getAllOfCategory("directional_up")
           if (
@@ -953,9 +946,6 @@ function handleIjklInput(key) {
               (w.y === p.y && w.x === p.x - 1 && xVel < 0 && !isEffectivelyZero(xVel))
             ))
           ) {
-            // TODO: consider playing sound effect here
-            // console.log("clear")
-            // playTune(stickSound)
             stopMove()
             soundToPlay = "sticky"
           } else if (
@@ -986,7 +976,7 @@ function handleIjklInput(key) {
               yVel = 0
               fullY = p.y
               soundToPlay = "slippery"
-              if (isEffectivelyZero(xVel)) stopMove()
+              if (yVel > 0 && isEffectivelyZero(xVel)) stopMove()
             }
           }
         }
@@ -1026,12 +1016,13 @@ function rotateArrow(rotateCount) {
   const arrowCount = lastArrow + 1
 
   // TODO: improve this logic (or at least use a ternary operator)
-  let newTypeNum = arrowTypeNum + rotateCount
-  if (newTypeNum > lastArrow) newTypeNum = newTypeNum % arrowCount
-  else if (newTypeNum < 0) {
-    newTypeNum = arrowCount + (newTypeNum % arrowCount)
-    if (newTypeNum === arrowCount) newTypeNum = 0
-  }
+  // let newTypeNum = arrowTypeNum + rotateCount
+  // if (newTypeNum > lastArrow) newTypeNum = newTypeNum % arrowCount
+  // else if (newTypeNum < 0) {
+  //   newTypeNum = arrowCount + (newTypeNum % arrowCount)
+  //   if (newTypeNum === arrowCount) newTypeNum = 0
+  // }
+  const newTypeNum = ((arrowTypeNum + rotateCount) % arrowCount + arrowCount) % arrowCount
   // console.log(newTypeNum)
 
   const newType = arrowCounters[newTypeNum]
@@ -1166,22 +1157,62 @@ function zoomMap(parsedMap, rawX, rawY, rawZoomWidth, rawZoomHeight) {
 }
 
 function centerMap() {
-  const playerSprite = getFirst(player)
+  // const playerSprite = getFirst(player)
 
   // console.log({x:playerSprite.x,y:playerSprite.y})
 
-  const mapWidth = defaultMapWidth
-  const mapHeight = defaultMapHeight
+  // const mapWidth = defaultMapWidth
+  // const mapHeight = defaultMapHeight
+  
+  // const parsedMap = getParsedMap()
+  // const zoomedMap = zoomMap(
+  //   parsedMap,
+  //   playerSprite.x-Math.round(mapWidth/2)+1,
+  //   playerSprite.y-Math.round(mapHeight/2),
+  //   mapWidth,
+  //   mapHeight
+  // )
+  // setMapFromParsed(zoomedMap)
+
+  const {
+    x: zoomX,
+    y: zoomY,
+    width: zoomWidth,
+    height: zoomHeight
+  } = getCenterZoomBox()
   
   const parsedMap = getParsedMap()
   const zoomedMap = zoomMap(
     parsedMap,
-    playerSprite.x-Math.round(mapWidth/2)+1,
-    playerSprite.y-Math.round(mapHeight/2),
-    mapWidth,
-    mapHeight
+    zoomX,
+    zoomY,
+    zoomWidth,
+    zoomHeight
   )
   setMapFromParsed(zoomedMap)
+}
+
+function getCenterZoomBox(options = {}) {
+  const playerSprite = getFirst(player)
+  
+  const mapWidth = options.width ?? defaultMapWidth
+  const mapHeight = options.height ?? defaultMapHeight
+  // const x = playerSprite.x-Math.round(mapWidth/2)+1
+  // const y = playerSprite.y-Math.round(mapHeight/2)
+  const x = playerSprite.x-Math.round(mapWidth/2)+1
+  const y = playerSprite.y-Math.round(mapHeight/2)
+  // const x = Math.max(Math.min(playerSprite.x-Math.round(mapWidth/2)+1, width()-mapWidth), 0)
+  // const y = Math.max(Math.min(playerSprite.y-Math.round(mapHeight/2), height()-mapHeight), 0)
+  const constrainedX = Math.max(Math.min(x, width()-mapWidth), 0)
+  const constrainedY = Math.max(Math.min(y, height()-mapHeight), 0)
+  
+  const zoomBox = {
+    x: constrainedX,
+    y: constrainedY,
+    width: mapWidth,
+    height: mapHeight
+  }
+  return zoomBox
 }
 
 // function getTouching() {
@@ -1229,46 +1260,57 @@ async function panBy(panByX, panByY) {
   } else if ((!zoom.zooming || reset) && !inAir) {
     zoom.zooming = true
 
-    const newWidth = Math.min(reset ? defaultMapWidth : 20, fullWidth)
-    const newHeight = Math.min(reset ? defaultMapHeight : 16, fullHeight)
     const ogWidth = width()
     const ogHeight = height()
 
     // TODO: simplify the calculation for some of these values. they should rely on a function etc.
     
     setMapFromParsed(fullMap)
-    const playerSprite = getFirst(player)
-    const newX = playerSprite.x-Math.round(newWidth/2)+1
-    const newY = playerSprite.y-Math.round(newHeight/2)
-    const ogX = reset ? zoom.x : playerSprite.x-Math.round(ogWidth/2)+1
-    const ogY = reset ? zoom.y : playerSprite.y-Math.round(ogHeight/2)+1
+
+    const {
+      x: centerZoomX,
+      y: centerZoomY,
+      width: centerZoomWidth,
+      height: centerZoomHeight
+    } = getCenterZoomBox()
     
-    const widthDiff = newWidth-ogWidth
-    const heightDiff = newHeight-ogHeight
-    const xDiff = newX-ogX
-    const yDiff = newY-ogY
+    const newWidth = Math.min(reset ? centerZoomWidth : 20, fullWidth)
+    const newHeight = Math.min(reset ? centerZoomHeight : 16, fullHeight)
+
+    const { x: newZoomX, y: newZoomY } = getCenterZoomBox({ width: newWidth, height: newHeight })
+    
+    // const playerSprite = getFirst(player)
+    // const newX = playerSprite.x-Math.round(newWidth/2)+1
+    // const newY = playerSprite.y-Math.round(newHeight/2)
+    const ogZoomX = reset ? zoom.x : centerZoomX
+    const ogZoomY = reset ? zoom.y : centerZoomY
+    
+    const zoomDiffWidth = newWidth-ogWidth
+    const zoomDiffHeight = newHeight-ogHeight
+    const zoomDiffX = newZoomX-ogZoomX
+    const zoomDiffY = newZoomY-ogZoomY
     
     // TODO: fix zoom values
     
-    const iterationCount = Math.ceil(Math.max(Math.abs(widthDiff), Math.abs(heightDiff))/2)
+    const iterationCount = Math.ceil(Math.max(Math.abs(zoomDiffWidth), Math.abs(zoomDiffHeight))/2)
     
     // console.log("test a")
     
     for (let i = 0; i < iterationCount; i++) {
       if (i >= 1) setMapFromParsed(fullMap)
       
-      zoom.width = ogWidth+Math.round(widthDiff / iterationCount * (i+1))
-      zoom.height = ogHeight+Math.round(heightDiff / iterationCount * (i+1))
+      zoom.width = ogWidth+Math.round(zoomDiffWidth / iterationCount * (i+1))
+      zoom.height = ogHeight+Math.round(zoomDiffHeight / iterationCount * (i+1))
 
-      zoom.x = ogX + Math.round(xDiff / iterationCount * (i+1))
-      zoom.y = ogY + Math.round(yDiff / iterationCount * (i+1))
+      zoom.x = ogZoomX + Math.round(zoomDiffX / iterationCount * (i+1))
+      zoom.y = ogZoomY + Math.round(zoomDiffY / iterationCount * (i+1))
       
       const parsedMap = getParsedMap()
       const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
       setMapFromParsed(zoomedMap)
 
       // FIXME: switch this back to 10ms (200ms is temporary for testing)
-      await wait(200)
+      if (i < iterationCount-1) await wait(200)
     }
     // console.log("test b")
 
@@ -1277,8 +1319,8 @@ async function panBy(panByX, panByY) {
     // TODO: check why this was calculated instead of using newX and newY
     // zoom.x = Math.max(Math.min(zoom.x+panByX, fullWidth-zoom.width), 0)
     // zoom.y = Math.max(Math.min(zoom.y+panByY, fullHeight-zoom.height), 0)
-    zoom.x = newX
-    zoom.y = newY
+    zoom.x = newZoomX
+    zoom.y = newZoomY
     zoom.isZoomedOut = !reset
     zoom.zooming = false
   }
