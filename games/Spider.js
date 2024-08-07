@@ -125,7 +125,7 @@ setBackground(back)
 
 setSolids([ spider, pit ])
 
-let level = 5
+let level = 0
 const levels = [
   map`
 .....
