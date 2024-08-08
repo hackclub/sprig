@@ -180,7 +180,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 	// usePopupCloseClick closes a popup when you click outside of its area
 	usePopupCloseClick(
-		styles.navPopup!,
+		styles.dropdown!,
 		() => (showNavPopup.value = false),
 		showNavPopup.value
 	);
