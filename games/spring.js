@@ -735,7 +735,7 @@ const spriteCategories = {
 150: C4/150 + E4/150,
 4500`,
     forceSound: true,
-    types: [ lava_top, lava ]
+    types: [ lava_top, lava, spike_up ]
   },
   goal: {
     sound: tune`
@@ -855,46 +855,76 @@ n.........................................n
 n................MMMMMMMMm.sss............n
 n..........................www............n
 n...........................gw............n
-.................mMMMMMMMM.................
-...........................................
-...........................................
-...........................................
-...........................................
-...........................................
-...........................................
-...........................................`,
-  map`
-nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
-n.......................................................n
-n.......................................................n
-n.......................................................n
-n.......................................................n
-n.......................................................n
-n.......................................................n
-n.......................................................n
-n.......................................................n
-n.......................................................n
-n..g....................................................n
-n..ww............................ntttttnw....wntttttttttn
-n.......ww.......................nlllllnw....wnllllllllln
-n............ww...ww...ww...ww...nnnnnnnw....wnnnnnnnnnnn
-n.......................................w....w..........n
-n.......................................w....w..........n
-n.......................................w....w..........n
-n.......................................w....w..........n
-n.......................................w....w..........n
-n.......................................w....w..........n
-nwww...www..............................w....w..........n
-n.......................................w....w..........n
-n............wwww....wiiiiiiiii..............w..........n
-n...ii....ii....w....w........n..............w..........n
-n...............w....w........n..............w..........n
-n...............w....w........n..............w..........n
-n...............w....w........n..............w..........n
-n...............wp...w........n..............w..........n
-n...............ww...w........n.........nwwwww..........n
-nttttttttttttttttttttn........ntttttttttn...............n
-nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn`,
+n................mMMMMMMMM................n
+n.........................................n
+n.........................................n
+n.........................................n
+n.........................................n
+n.........................................n
+n.........................................n
+n.........................................n`,
+map`
+nnnnnnnwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwnnnnnnnnnnnnnnnnnnnn
+n.......................................w...................n
+n.......................................w...................n
+n.......................................w...................n
+n.......................................w...................n
+n..........................sssss........w...................n
+n......wwwwwwwwwwiiiiiiiiiiwwwwwwwwwwwwww...................n
+n.......................................w...................n
+nuuu....................................w...................n
+n.......................................w...................n
+n.......................................w...................n
+n.......................................w...................n
+nuuu...wwwwwwwwwwiiiiiiiiii.............w...................n
+n.......................................w...................n
+n.......................................w...................n
+n.......................................w...................n
+nuuu....................................w...................n
+n.......................................w...................n
+n......wwwwwwwwwwiiiiiiiiiiwwwwwwwwwwwwww...................n
+n.......................................w...................n
+nuuu....................................w...................n
+n.......................................w...................n
+n.......................................w...................n
+n.......................................w...................n
+nuuu...wwwwwwwwwwiiiiiiiiiiwwwwwwwwwwwwww...................n
+n.......................................w...................n
+n...................................LLL.w...................n
+n...................................GgL.w...................n
+nuuu................................LLL.w...................n
+n.......................................w...................n
+n......wwwwwwwwwwiiiiiiiiiiwwwwwwwwwwwwww...................n
+n.......................................w...................n
+nuuu....................................w...................n
+n.......................................w...................n
+n.......................................w...................n
+n.......................................w...................n
+nuuu...wwwwwwwwwwiiiiiiiiiiwwwwwwwwwwwwww...................n
+n...........................................................n
+n...........................................................n
+n...........................................................n
+nuuu........................................................n
+n................................................k..........n
+n......wwwwwwwwwwiiiiiiiiiiiiiiiiiiiiiiiiMMMMmMMMM..........n
+n.......................................w...................n
+nuuu....................................w...................n
+n.......................................w...................n
+n.......................................w...................n
+n.......................................w...................n
+nuuu...wwwwwwwwwwiiiiiiiiiiwwwww........w...................n
+n..........................L............w...................n
+n..........................L............w...................n
+n..........................G............w...................n
+nuuu.......................L............w...................n
+n..........................L....ssssssssw...................n
+n......wwwwwwwwwwiiiiiiiiiiwwwwwwwwwwwwww...................n
+n.......................................w...................n
+nuuu....................................w...................n
+n.......................................w...................n
+n.......................................w...................n
+n.p.....................................w...................n
+nwww...wwwwwwwwwwiiiiiiiiii......wwwwwwww...................n`,
   map`
 nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
 n.......................................................n
@@ -964,7 +994,7 @@ onInput("j", () => handleIjklInput("j"))
 onInput("l", () => handleIjklInput("l"))
 onInput("k", () => handleIjklInput("k"))
 
-startLevel(4)
+startLevel(5)
 
 function handleWasdInput(key) {
   const earlyReturn = handleGlobalInput()
@@ -1230,27 +1260,34 @@ function rotateArrow(rotateCount) {
   
   const arrowCount = lastArrow + 1
 
-  // TODO: improve this logic (or at least use a ternary operator)
-  // let newTypeNum = arrowTypeNum + rotateCount
-  // if (newTypeNum > lastArrow) newTypeNum = newTypeNum % arrowCount
-  // else if (newTypeNum < 0) {
-  //   newTypeNum = arrowCount + (newTypeNum % arrowCount)
-  //   if (newTypeNum === arrowCount) newTypeNum = 0
-  // }
-  const newTypeNum = ((arrowTypeNum + rotateCount) % arrowCount + arrowCount) % arrowCount
-  // console.log(newTypeNum)
+  let rawNewTypeNum = arrowTypeNum + rotateCount
+  let newTypeNum = constrainArrowTypeNum(rawNewTypeNum)
+  let newType = arrowCounters[newTypeNum]
 
-  const newType = arrowCounters[newTypeNum]
-  
-  const isInvalid = checkArrowIsInvalid(newType)
+  const startedAt = newType
+  while (checkArrowIsInvalid(newType)) {
+    rawNewTypeNum += rotateCount
+    newTypeNum = constrainArrowTypeNum(rawNewTypeNum)
+    newType = arrowCounters[newTypeNum]
+    if (newType === startedAt) {
+      newType = null
+      break
+    }
+  }
 
-  if (isInvalid) return
+  if (!newType) return
   
   const arrowSprite = getFirst(arrowType)
   arrowSprite.type = newType
   arrowType = newType
 
   setArrowPosition()
+}
+
+function constrainArrowTypeNum(rawArrowTypeNum) {
+  const arrowCount = lastArrow + 1
+  const constrainedTypeNum = ((rawArrowTypeNum) % arrowCount + arrowCount) % arrowCount
+  return constrainedTypeNum
 }
 
 function setArrowPosition() {
@@ -1712,6 +1749,7 @@ function startLevel(newLevel) {
           (movingSprite.x === playerSprite.x && Math.abs(movingSprite.y - playerSprite.y) <= 1)
         )
       )
+        // TODO: make this still trigger collision code (particularly for key)
         playerSprite.x += movementInfo.direction
       
       movingSprite.x += movementInfo.direction
