@@ -1598,9 +1598,19 @@ for (const frame of titleFrames) {
   titleData.push([titleLegend, titleMap])
 }
 
+setLegend(...titleData.map(v => v[0]).flat(1))
 
-setLegend(...titleData[0][0])
-setMap("\n" + titleData[0][1])
+let currentTitleFrame = 0
+const titleAnimationInterval = setInterval(() => {
+  setMap("\n" + titleData[currentTitleFrame][1])
+  console.log(titleData[currentTitleFrame][1])
+  // console.log("done")
+
+  currentTitleFrame = (currentTitleFrame + 1) % titleData.length
+
+  clearInterval(titleAnimationInterval)
+}, 1000)
+
 
 
 const textColors = [color`3`, color`7`]
