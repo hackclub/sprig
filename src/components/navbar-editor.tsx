@@ -18,6 +18,8 @@ import { persist } from "../lib/game-saving/auth-helper";
 import InlineInput from "./design-system/inline-input";
 import { throttle } from "throttle-debounce";
 import SharePopup from "./popups-etc/share-popup";
+import ShareRoomPopup from "./popups-etc/share-room";
+
 import {
 	IoChevronDown,
 	IoLogoGithub,
@@ -143,6 +145,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const showNavPopup = useSignal(false);
 	const showStuckPopup = useSignal(false);
 	const showThemePicker = useSignal(false);
+	const shareRoomPopup = useSignal(false);
+
 
 	// we will accept the current user's
 	// - name,
@@ -397,6 +401,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				/>
 			)}
 
+			{shareRoomPopup.value && props.roomState && (
+				<ShareRoomPopup
+					persistenceState={props.persistenceState}
+					roomState={props.roomState}
+					onClose={() => shareRoomPopup.value = false}
+				/>
+			)}	
+
 			{showThemePicker.value && (
 				<ul class={styles.themePicker}>
 					{Object.keys(themes).map((themeKey) => {
@@ -544,7 +556,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									<a href="/~">Your games</a>
 								</li>
 								<li>
-									<a href="/~/new">New game</a>
+									<a href="/~/new-game">New game</a>
 								</li>
 							</>
 						) : (
@@ -579,6 +591,21 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								</li>
 							</>
 						)}
+
+						{(props.persistenceState.value.session?.session.full && isNewSaveStrat.value) ?(
+							<>
+								<li>
+								<a
+								href="javascript:void"
+								role="button"
+						
+								onClick={() => (shareRoomPopup.value = true)}
+							>
+								{!(props.persistenceState.value.kind == "PERSISTED" && props.persistenceState.value.game !== "LOADING" && props.persistenceState.value.game.isRoomOpen) ? "Create a room" : "Share room"}
+							</a>
+								</li>
+							</>
+						) : null}	
 						<li>
 							<a href="/gallery">Gallery</a>
 						</li>

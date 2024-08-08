@@ -62,7 +62,7 @@ export default function Help(props: HelpProps) {
 				tutorialIndex,
 			};
 			if(isNewSaveStrat.value)
-				startSavingGame(props.persistenceState)
+				startSavingGame(props.persistenceState, undefined)
 			else
 				saveGame(
 					props.persistenceState,
