@@ -1,5 +1,5 @@
 /*
-@title: Coin Collector
+@title: Coin Hunter
 @author: Daniyal Shaikh
 @tags: 
 @addedOn: 08/08/2024
