@@ -35,7 +35,7 @@ import RoomPasswordPopup from "../popups-etc/room-password";
 import KeyBindingsModal from '../popups-etc/KeyBindingsModal'
 
 let screenRef: HTMLCanvasElement | null = null;
-let cleanupRef: (() => void) | null = null;
+let cleanupRef: (() => void) | undefined = undefined;
 let screenShakeSignal: Signal<number> | null = null;
 
 export const onRun = async () => {
@@ -60,8 +60,8 @@ export const onRun = async () => {
 		}
 	}, 200);
 
-	cleanupRef = res.cleanup;
-	if (res.error) {
+	cleanupRef = res?.cleanup;
+	if (res && res.error) {
 		console.error(res.error.raw);
 		errorLog.value = [...errorLog.value, res.error];
 	}
@@ -440,7 +440,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	useEffect(() => () => cleanup.current?.(), []);
 	// We like running games!
 	const screen = useRef<HTMLCanvasElement>(null);
-	const cleanup = useRef<(() => void) | null>(null);
+	const cleanup = useRef<(() => void) | undefined>();
 	const screenShake = useSignal(0);
 
 	const onStop = async () => {
