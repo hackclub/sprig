@@ -26,6 +26,7 @@ const locked_graphic = "G"
 const unlocked = "U"
 const moving_platform = "m"
 const movement_guide = "M"
+const spike_up = "s"
 
 const arrow_0 = "0"
 const arrow_22 = "1"
@@ -681,7 +682,24 @@ LLLFFFFFDDDDDLLL
 ................
 ................
 ................
-................` ]
+................` ],
+  [ spike_up, bitmap`
+................
+.......00.......
+.......00.......
+......0110......
+......0110......
+......0110......
+.....011110.....
+.....011110.....
+.....011110.....
+....01111110....
+....01111110....
+....01111110....
+...0111111110...
+...0111111110...
+...0111111110...
+...0000000000...` ]
 )
 
 const spriteCategories = {
@@ -820,7 +838,7 @@ n.........................................n
 n.........................................n
 n.........................................n
 n.........................................n
-n.........................................n
+n...........p.............................n
 n..........www...............www..........n
 n.........................................n
 n....................k....................n
@@ -828,42 +846,55 @@ n.........................................n
 n.........................................n
 n................LLLLGLLLL................n
 n.........................................n
+n................MMMMMMMMm................n
 n.........................................n
 n.........................................n
-n....................p....................n
-n.........................................n
-n................MMMMmMMMM................n
+n................mMMMMMMMM................n
 n.........................................n
 n.........................................n
-n.........................................n
-n.........................................n`,
+n................MMMMMMMMm.sss............n
+n..........................www............n
+n...........................gw............n
+.................mMMMMMMMM.................
+...........................................
+...........................................
+...........................................
+...........................................
+...........................................
+...........................................
+...........................................`,
   map`
-nnnnnnnnnnnnnnnnnnnn
-n..................n
-n..................n
-n..................n
-n..................n
-nww.ww.ww.ww.ww.ww.n
-n..................n
-n..................n
-n..................n
-n......g...........n
-n..w...w...w...w...n
-n..................n
-nw...w...w...w...w.n
-n............w.....n
-n..................n
-nuuuuuuuuuuuuuuuuuun
-n..................n
-n..................n
-nuw...w.w.w.w.w.w.wn
-n.wwwwwwwwwwwwwwwwwn
-nun...n............n
-n.n...n............n
-n.n.........ww..wwwn
-n.......n..........n
-np......n..........n
-wwwwwwwwwwwwwwwwwwww`,
+nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+n.......................................................n
+n.......................................................n
+n.......................................................n
+n.......................................................n
+n.......................................................n
+n.......................................................n
+n.......................................................n
+n.......................................................n
+n.......................................................n
+n..g....................................................n
+n..ww............................ntttttnw....wntttttttttn
+n.......ww.......................nlllllnw....wnllllllllln
+n............ww...ww...ww...ww...nnnnnnnw....wnnnnnnnnnnn
+n.......................................w....w..........n
+n.......................................w....w..........n
+n.......................................w....w..........n
+n.......................................w....w..........n
+n.......................................w....w..........n
+n.......................................w....w..........n
+nwww...www..............................w....w..........n
+n.......................................w....w..........n
+n............wwww....wiiiiiiiii..............w..........n
+n...ii....ii....w....w........n..............w..........n
+n...............w....w........n..............w..........n
+n...............w....w........n..............w..........n
+n...............w....w........n..............w..........n
+n...............wp...w........n..............w..........n
+n...............ww...w........n.........nwwwww..........n
+nttttttttttttttttttttn........ntttttttttn...............n
+nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn`,
   map`
 nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
 n.......................................................n
@@ -933,7 +964,7 @@ onInput("j", () => handleIjklInput("j"))
 onInput("l", () => handleIjklInput("l"))
 onInput("k", () => handleIjklInput("k"))
 
-startLevel(3)
+startLevel(4)
 
 function handleWasdInput(key) {
   const earlyReturn = handleGlobalInput()
@@ -1634,20 +1665,83 @@ function startLevel(newLevel) {
   setMap(levels[level])
   
   fullMap = getParsedMap()
-  centerMap()
-
+  
   // TODO: filter these
   const movingSprites = fullMap
-    .map(
-      (row, i) => row.map((tile, j) =>
-        tile.map(sprite => ({ type: sprite, row: i, col: j })
-      ))
+    .map((row, y) =>
+      row
+        .map((tile, x) =>
+          tile
+            .filter(sprite => sprite === moving_platform)
+            .map(sprite => ({
+              type: sprite,
+              x,
+              y,
+              direction: getTile(x + 1, y).some(s => s.type === movement_guide) ? 1 : -1
+            }))
+        )
+        .flat()
     )
+    .flat()
+  
+  centerMap()
 
-  console.log(movingSprites)
+  console.log(JSON.stringify(movingSprites, null, 2))
     // filter(m => m.some(tile => tile.includes(moving_platform)))
   
   updateTilesInterval = setInterval(() => {
+    setMapFromParsed(fullMap)
+    
+    const movingPlatforms = getAll(moving_platform)
+    // for (const movingPlatform of movingPlatforms) {
+      // const movementInfo = movingSprites.find(s => s.x === movingPlatform.x && s.y === movingPlatform.y)
+      // if (!movementInfo) continue
+
+    const playerSprite = getFirst(player)
+    
+    for (const movementInfo of movingSprites) {
+      const movingSprite = getTile(movementInfo.x, movementInfo.y).find(s => s.type === moving_platform)
+
+      const swapGuide = getTile(movingSprite.x + movementInfo.direction, movingSprite.y).find(s => s.type === movement_guide)
+      if (swapGuide) swapGuide.x -= movementInfo.direction
+
+      if (
+        !inAir &&
+        (
+          (movingSprite.y === playerSprite.y && Math.abs(movingSprite.x - playerSprite.x) <= 1) ||
+          (movingSprite.x === playerSprite.x && Math.abs(movingSprite.y - playerSprite.y) <= 1)
+        )
+      )
+        playerSprite.x += movementInfo.direction
+      
+      movingSprite.x += movementInfo.direction
+      movementInfo.x = movingSprite.x
+      movementInfo.y = movingSprite.y
+
+      const nextGuide = getTile(movingSprite.x + movementInfo.direction, movingSprite.y)
+        .find(s => s.type === movement_guide)
+      if (!nextGuide) movementInfo.direction = -movementInfo.direction
+    }
+
+    fullMap = getParsedMap()
+    
+    // for (const movingSprite of movingSprites) {
+    //   fullMap[movingSprite.row][movingSprite.col].x += movingSprite.direction
+    //   console.log("increased!!")
+    // }
+
+    if (zoom.isZoomedOut || zoom.zooming) {
+      const parsedMap = getParsedMap()
+      const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
+      setMapFromParsed(zoomedMap)
+    } else
+      centerMap()
+
+    if (arrowType) {
+      addSprite(0, 0, arrowType)
+      setArrowPosition()
+    }
+    
     // setMapFromParsed(fullMap)
 
     // const currentMap = getParsedMap()
