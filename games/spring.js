@@ -24,6 +24,8 @@ const goal = "g"
 const locked = "L"
 const locked_graphic = "G"
 const unlocked = "U"
+const moving_platform = "m"
+const movement_guide = "M"
 
 const arrow_0 = "0"
 const arrow_22 = "1"
@@ -645,28 +647,69 @@ L1.1.1.1.1.1.1.L
 L.1.1.1.1.1.1.1L
 L1.1.1.1.1.1.1.L
 L.1.1.1.1.1.1.1L
-.LLLLLLLLLLLLLL.` ]
+.LLLLLLLLLLLLLL.` ],
+  [ moving_platform, bitmap`
+..LLLLLLLLLLLL..
+.LLLLLLLLLLLLLL.
+LLLDDFFFFFFFFLLL
+LLDDDFFFFFFFFFLL
+LLDDDDDDDDDFFFLL
+LLDDDDDDDDDDFFLL
+LLDDDDDDDDDDFFLL
+LLDDDDDDDDDDFFLL
+LLDDDDDDDDDDFFLL
+LLDDDDDDDDDDFFLL
+LLFFDDDDDDDDFFLL
+LLFFFDDDDDDDDDLL
+LLFFFFFFDDDDDDLL
+LLLFFFFFDDDDDLLL
+.LLLLLLLLLLLLLL.
+..LLLLLLLLLLLL..` ],
+  [ movement_guide, bitmap`
+................
+................
+................
+................
+................
+................
+................
+2222222222222222
+1111111111111111
+................
+................
+................
+................
+................
+................
+................` ]
 )
 
 const spriteCategories = {
   solid: {
     sound: null,
     forceSound: false,
-    types: [ wall, wall_no_stick, ice, locked, locked_graphic ]
+    types: [ wall, wall_no_stick, ice, locked, locked_graphic, moving_platform ]
   },
   sticky: {
     sound: tune`
 120: C4/120,
 3720`,
     forceSound: false,
-    types: [ wall ]
+    types: [ wall, moving_platform ]
+  },
+  sticky_top: {
+    sound: tune`
+107.14285714285714: C4-107.14285714285714,
+3321.428571428571`,
+    forceSound: false,
+    types: [ locked, locked_graphic ]
   },
   slippery: {
     sound: tune`
 60: B5^60,
 1860`,
     forceSound: false,
-    types: [ wall_no_stick, ice, locked, locked_graphic ]
+    types: [ wall_no_stick, ice ]
   },
   danger: {
     sound: tune`
@@ -704,9 +747,7 @@ const spriteCategories = {
     types: [ key ]
   },
   locked: {
-    sound: tune`
-107.14285714285714: C4-107.14285714285714,
-3321.428571428571`,
+    sound: null,
     forceSound: false,
     types: [ locked, locked_graphic ]
   }
@@ -732,6 +773,15 @@ w..w.....w
 w..w.....w
 wp.w.....w
 wwwwwwwwww`,
+  map`
+nnnnnnnnnnnnnnnnnnnn
+n..................n
+n..................n
+n...............g..n
+n.......ww.........n
+n..................n
+np.................n
+nwwwnttttttttnwwwwwn`,
   map`
 nwnwnwnwnwnwnwnwnwnwn
 w...................w
@@ -760,32 +810,33 @@ w.....G........n....w
 n.p...L....g...n....n
 wwwwwwwwwwwwwwwwwwwww`,
   map`
-nnnnnnnnnnnnnnnnnnnn
-n..................n
-n..................n
-n..................n
-n..................n
-nww.ww.ww.ww.ww.ww.n
-n..................n
-n..................n
-n..................n
-n......g...........n
-n..w...w...w...w...n
-n..................n
-n....w...w...w...w.n
-n............w.....n
-n..................n
-n.uuuuuuuuuuuuuuuu.n
-n..................n
-n..................n
-n.w...w.w.w.w.w.w..n
-n.wwwwwwwwwwwwwwww.n
-n.n...n............n
-n.n...n............n
-n.n.........ww..wwwn
-n.......n..........n
-n.p.....n..........n
-nwwwwwwwwwwwwwwwwwwn`,
+nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+n.........................................n
+n.........................................n
+n.........................................n
+n.........................................n
+n.........................................n
+n.........................................n
+n.........................................n
+n.........................................n
+n.........................................n
+n.........................................n
+n..........www...............www..........n
+n.........................................n
+n....................k....................n
+n.........................................n
+n.........................................n
+n................LLLLGLLLL................n
+n.........................................n
+n.........................................n
+n.........................................n
+n....................p....................n
+n.........................................n
+n................MMMMmMMMM................n
+n.........................................n
+n.........................................n
+n.........................................n
+n.........................................n`,
   map`
 nnnnnnnnnnnnnnnnnnnn
 n..................n
@@ -870,6 +921,7 @@ let arrowType;
 let fullMap;
 let zoom;
 let cachedZoomBox;
+let updateTilesInterval;
 
 onInput("w", () => handleWasdInput("w"))
 onInput("a", () => handleWasdInput("a"))
@@ -881,7 +933,7 @@ onInput("j", () => handleIjklInput("j"))
 onInput("l", () => handleIjklInput("l"))
 onInput("k", () => handleIjklInput("k"))
 
-startLevel(2)
+startLevel(3)
 
 function handleWasdInput(key) {
   const earlyReturn = handleGlobalInput()
@@ -968,7 +1020,7 @@ function handleIjklInput(key) {
       centerMap()
       
       const interval = setInterval(() => {
-        let soundToPlay;
+        let soundsToPlay = []
         
         setMapFromParsed(fullMap)
         
@@ -990,7 +1042,7 @@ function handleIjklInput(key) {
           p.remove()
           stopMove()
           gameOver = true
-          soundToPlay = "danger"
+          soundsToPlay.push("danger")
         } else {
           p.x = roundedFullX
           p.y = roundedFullY
@@ -1011,20 +1063,21 @@ function handleIjklInput(key) {
           if (keyOverlap) {
             keyOverlap.remove()
             getAllOfCategory("locked").map(l => l.type = unlocked)
-            soundToPlay = "key"
+            soundsToPlay.push("key")
           }
           
           if (playerOverlapsWithCategory("danger")) {
             stopMove()
             gameOver = true
-            soundToPlay = "danger"
+            soundsToPlay.push("danger")
           } else if (playerOverlapsWithCategory("goal")) {
             stopMove()
             gameOver = true
             won = true
-            soundToPlay = "goal"
+            soundsToPlay.push("goal")
           } else {
             const stickyWalls = getAllOfCategory("sticky")
+            const stickyTopWalls = getAllOfCategory("sticky_top")
             const directionalUp = getAllOfCategory("directional_up")
             if (
               stickyWalls.some(w => (
@@ -1035,16 +1088,23 @@ function handleIjklInput(key) {
               ))
             ) {
               stopMove()
-              soundToPlay = "sticky"
+              soundsToPlay.push("sticky")
+            } else if (
+              stickyTopWalls.some(w => (
+                w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)
+              ))
+            ) {
+              stopMove()
+              soundsToPlay.push("sticky_top")
             } else if (
               directionalUp.some(w => (
                 w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)
               ))
             ) {
               stopMove()
-              soundToPlay = "directional_up"
+              soundsToPlay.push("directional_up")
             } else {
-              const wallsSlippery = getAllOfCategory("slippery")
+              const wallsSlippery = [...getAllOfCategory("slippery"), ...getAllOfCategory("sticky_top")]
               
               const touchingSlipperyX = wallsSlippery.find(w => (
                 (w.y === p.y && w.x === p.x + 1 && xVel > 0 && !isEffectivelyZero(xVel)) ||
@@ -1053,7 +1113,7 @@ function handleIjklInput(key) {
               if (touchingSlipperyX) {
                 xVel = 0
                 fullX = p.x
-                soundToPlay = typeIsInCategory(touchingSlipperyX.type, "locked") ? "locked" : "slippery"
+                soundsToPlay.push(typeIsInCategory(touchingSlipperyX.type, "sticky_top") ? "sticky_top" : "slippery")
               }
               
               const touchingSlipperyY = wallsSlippery.find(w => (
@@ -1061,10 +1121,10 @@ function handleIjklInput(key) {
                 (w.x === p.x && w.y === p.y - 1 && yVel < 0 && !isEffectivelyZero(yVel))
               ))
               if (touchingSlipperyY) {
+                if (yVel > 0 && isEffectivelyZero(xVel)) stopMove()
                 yVel = 0
                 fullY = p.y
-                soundToPlay = typeIsInCategory(touchingSlipperyY.type, "locked") ? "locked" : "slippery"
-                if (yVel > 0 && isEffectivelyZero(xVel)) stopMove()
+                soundsToPlay.push(typeIsInCategory(touchingSlipperyY.type, "locked") ? "locked" : "slippery")
               }
             }
           }
@@ -1076,6 +1136,7 @@ function handleIjklInput(key) {
         centerMap()
 
         if (gameOver) {
+          if (updateTilesInterval) clearInterval(updateTilesInterval)
           if (won) {
             addText(
               "Level Complete!",
@@ -1109,7 +1170,7 @@ function handleIjklInput(key) {
           }
         }
         
-        if (soundToPlay) playSoundOfType(soundToPlay)
+        if (soundsToPlay.length >= 1) playSoundsOfTypes(soundsToPlay)
       }, 60)
 
       function stopMove() {
@@ -1401,6 +1462,10 @@ async function panBy(panByX, panByY) {
       width: centerZoomWidth,
       height: centerZoomHeight
     } = getCenterZoomBox()
+
+    // actually, this should be avoided since it causes bars in opposing direction
+    // const zoomedOutWidth = fullWidth-20 <= 1 ? fullWidth : 20
+    // const zoomedOutHeight = fullHeight-16 <= 1 ? fullHeight : 16
     
     const newWidth = Math.min(reset ? centerZoomWidth : 20, fullWidth)
     const newHeight = Math.min(reset ? centerZoomHeight : 16, fullHeight)
@@ -1512,16 +1577,22 @@ function playerOverlapsWithCategory(categoryId) {
   return getAllOfCategory(categoryId).find(w => w.x === playerSprite.x && w.y === playerSprite.y) ?? false
 }
 
-function playSoundOfType(categoryId) {
-  if (!(categoryId in spriteCategories)) throw new Error(`Type ${type} not found`)
-  const category = spriteCategories[categoryId]
-  
-  if (!category.sound) return
-  if (playedOnTile && !category.forceSound) return
+function playSoundsOfTypes(categoryIds) {
+  for (const categoryId of categoryIds)
+    if (!(categoryId in spriteCategories)) throw new Error(`Category ${categoryId} not found`)
 
-  playedOnTile = true
+  for (const categoryId of categoryIds) {
+    const category = spriteCategories[categoryId]
+    
+    if (
+      !category.sound ||
+      (playedOnTile && !category.forceSound)
+    ) continue
   
-  setTimeout(() => playTune(category.sound), 60)
+    setTimeout(() => playTune(category.sound), 60)
+  }
+  
+  playedOnTile = true
 }
 
 function isEffectivelyZero(num) {
@@ -1564,4 +1635,30 @@ function startLevel(newLevel) {
   
   fullMap = getParsedMap()
   centerMap()
+
+  // TODO: filter these
+  const movingSprites = fullMap
+    .map(
+      (row, i) => row.map((tile, j) =>
+        tile.map(sprite => ({ type: sprite, row: i, col: j })
+      ))
+    )
+
+  console.log(movingSprites)
+    // filter(m => m.some(tile => tile.includes(moving_platform)))
+  
+  updateTilesInterval = setInterval(() => {
+    // setMapFromParsed(fullMap)
+
+    // const currentMap = getParsedMap()
+    // console.log(currentMap)
+
+    // const movingRows = currentMap.filter(m => m.some(tile => tile.includes(moving_platform)))
+    // console.log(movingRows)
+    
+    // fullMap = currentMap
+    // setMapFromParsed(fullMap)
+    
+    // centerMap()
+  }, 1000)
 }
