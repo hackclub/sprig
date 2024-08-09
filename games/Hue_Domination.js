@@ -1609,8 +1609,6 @@ const titleAnimationInterval = setInterval(() => {
   setMap("\n" + titleData[currentTitleFrame][1])
   
   currentTitleFrame = (currentTitleFrame + 1) % titleData.length
-
-  // clearInterval(titleAnimationInterval)
 }, 300)
 
 
@@ -1644,6 +1642,7 @@ const background = "Z"
 let canvas;
 
 function startGame() {
+  clearInterval(titleAnimationInterval)
   setTimeout(() => gameStarted = true, 10)
 
   setLegend(
@@ -1936,7 +1935,6 @@ function startGame() {
 5777555555555555
 5575555555555555
 5555555555555555` ],
-  ...titleLegend
 )
   
   
