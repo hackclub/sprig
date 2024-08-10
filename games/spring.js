@@ -705,28 +705,28 @@ LLLFFFFFDDDDDLLL
 const spriteCategories = {
   solid: {
     sound: null,
-    forceSound: false,
+    // forceSound: false,
     types: [ wall, wall_no_stick, ice, locked, locked_graphic, moving_platform ]
   },
   sticky: {
     sound: tune`
 120: C4/120,
 3720`,
-    forceSound: false,
+    // forceSound: false,
     types: [ wall, moving_platform ]
   },
   sticky_top: {
     sound: tune`
 107.14285714285714: C4-107.14285714285714,
 3321.428571428571`,
-    forceSound: false,
+    // forceSound: false,
     types: [ locked, locked_graphic ]
   },
   slippery: {
     sound: tune`
 60: B5^60,
 1860`,
-    forceSound: false,
+    // forceSound: false,
     types: [ wall_no_stick, ice ]
   },
   danger: {
@@ -734,7 +734,7 @@ const spriteCategories = {
 150: G4/150,
 150: C4/150 + E4/150,
 4500`,
-    forceSound: true,
+    // forceSound: true,
     types: [ lava_top, lava, spike_up ]
   },
   goal: {
@@ -747,26 +747,26 @@ const spriteCategories = {
 150: A5/150 + F5/150,
 150: B5/150 + G5/150,
 3750`,
-    forceSound: true,
+    // forceSound: true,
     types: [ goal ]
   },
   directional_up: {
     sound: tune`
 120: D4/120,
 3720`,
-    forceSound: false,
+    // forceSound: false,
     types: [ one_way_up ]
   },
   key: {
     sound: tune`
 200: B5~200,
 6200`,
-    forceSound: false,
+    // forceSound: false,
     types: [ key ]
   },
   locked: {
     sound: null,
-    forceSound: false,
+    // forceSound: false,
     types: [ locked, locked_graphic ]
   }
 }
@@ -1081,7 +1081,7 @@ function handleIjklInput(key) {
       centerMap()
       
       const interval = setInterval(() => {
-        let soundsToPlay = []
+        let soundToPlay;
         
         setMapFromParsed(fullMap)
         
@@ -1096,20 +1096,22 @@ function handleIjklInput(key) {
         const roundedFullX = Math.round(fullX)
         const roundedFullY = Math.round(fullY)
         
-        if (
+        if ( // handle player going out of bounds (e.g. falling out of map)
           roundedFullX < 0 || roundedFullX >= width() ||
           roundedFullY < 0 || roundedFullY >= height()
         ) {
           p.remove()
+          // gameOver = true
+          // soundToPlay = "danger"
+          endGame({ won: false })
           stopMove()
-          gameOver = true
-          soundsToPlay.push("danger")
         } else {
           p.x = roundedFullX
           p.y = roundedFullY
       
           yVel = Math.min(yVel+gravity, 1)
-      
+
+          // handle diagonal collisions
           if (playerOverlapsWithCategory("solid")) {
             if (yVel > xVel) {
               p.x -= xVel / Math.abs(xVel)
@@ -1119,24 +1121,31 @@ function handleIjklInput(key) {
               fullY = p.y
             }
           }
+
+          // // handle player overlapping with key (collect it)
+          // const keyOverlap = playerOverlapsWithCategory("key")
+          // if (keyOverlap) {
+          //   keyOverlap.remove()
+          //   getAllOfCategory("locked").map(l => l.type = unlocked)
+          //   soundsToPlay.push("key")
+          // }
           
-          const keyOverlap = playerOverlapsWithCategory("key")
-          if (keyOverlap) {
-            keyOverlap.remove()
-            getAllOfCategory("locked").map(l => l.type = unlocked)
-            soundsToPlay.push("key")
-          }
-          
-          if (playerOverlapsWithCategory("danger")) {
-            stopMove()
-            gameOver = true
-            soundsToPlay.push("danger")
-          } else if (playerOverlapsWithCategory("goal")) {
-            stopMove()
-            gameOver = true
-            won = true
-            soundsToPlay.push("goal")
-          } else {
+          // if (playerOverlapsWithCategory("danger")) { // handle game over from danger sprite (e.g. lava)
+          //   stopMove()
+          //   gameOver = true
+          //   soundsToPlay.push("danger")
+          // } else if (playerOverlapsWithCategory("goal")) { // handle game being won (player overlapping with goal sprite)
+          //   stopMove()
+          //   gameOver = true
+          //   won = true
+          //   soundsToPlay.push("goal")
+          // } else {
+
+          checkNonSolidOverlap()
+
+          if (gameOver) stopMove()
+          else {
+            // check regular collisions
             const stickyWalls = getAllOfCategory("sticky")
             const stickyTopWalls = getAllOfCategory("sticky_top")
             const directionalUp = getAllOfCategory("directional_up")
@@ -1149,21 +1158,21 @@ function handleIjklInput(key) {
               ))
             ) {
               stopMove()
-              soundsToPlay.push("sticky")
+              soundToPlay = "sticky"
             } else if (
               stickyTopWalls.some(w => (
                 w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)
               ))
             ) {
               stopMove()
-              soundsToPlay.push("sticky_top")
+              soundToPlay = "sticky_top"
             } else if (
               directionalUp.some(w => (
                 w.x === p.x && w.y === p.y + 1 && yVel > 0 && !isEffectivelyZero(yVel)
               ))
             ) {
               stopMove()
-              soundsToPlay.push("directional_up")
+              soundToPlay = "directional_up"
             } else {
               const wallsSlippery = [...getAllOfCategory("slippery"), ...getAllOfCategory("sticky_top")]
               
@@ -1174,7 +1183,7 @@ function handleIjklInput(key) {
               if (touchingSlipperyX) {
                 xVel = 0
                 fullX = p.x
-                soundsToPlay.push(typeIsInCategory(touchingSlipperyX.type, "sticky_top") ? "sticky_top" : "slippery")
+                soundToPlay = typeIsInCategory(touchingSlipperyX.type, "sticky_top") ? "sticky_top" : "slippery"
               }
               
               const touchingSlipperyY = wallsSlippery.find(w => (
@@ -1185,7 +1194,7 @@ function handleIjklInput(key) {
                 if (yVel > 0 && isEffectivelyZero(xVel)) stopMove()
                 yVel = 0
                 fullY = p.y
-                soundsToPlay.push(typeIsInCategory(touchingSlipperyY.type, "locked") ? "locked" : "slippery")
+                soundToPlay = typeIsInCategory(touchingSlipperyY.type, "locked") ? "locked" : "slippery"
               }
             }
           }
@@ -1196,42 +1205,42 @@ function handleIjklInput(key) {
         fullMap = getParsedMap()
         centerMap()
 
-        if (gameOver) {
-          if (updateTilesInterval) clearInterval(updateTilesInterval)
-          if (won) {
-            addText(
-              "Level Complete!",
-              { y: 6, color: color`2` }
-            )
-            addText(
-              "Press any button",
-              { y: 8, color: color`2` }
-            )
-            addText(
-              "to continue to",
-              { y: 9, color: color`2` }
-            )
-            addText(
-              "the next level!",
-              { y: 10, color: color`2` }
-            )
-          } else {
-            addText(
-              "Game Over",
-              { y: 6, color: color`2` }
-            )
-            addText(
-              "Press any button",
-              { y: 8, color: color`2` }
-            )
-            addText(
-              "to play again!",
-              { y: 9, color: color`2` }
-            )
-          }
-        }
+        // if (gameOver) {
+        //   if (updateTilesInterval) clearInterval(updateTilesInterval)
+        //   if (won) {
+        //     addText(
+        //       "Level Complete!",
+        //       { y: 6, color: color`2` }
+        //     )
+        //     addText(
+        //       "Press any button",
+        //       { y: 8, color: color`2` }
+        //     )
+        //     addText(
+        //       "to continue to",
+        //       { y: 9, color: color`2` }
+        //     )
+        //     addText(
+        //       "the next level!",
+        //       { y: 10, color: color`2` }
+        //     )
+        //   } else {
+        //     addText(
+        //       "Game Over",
+        //       { y: 6, color: color`2` }
+        //     )
+        //     addText(
+        //       "Press any button",
+        //       { y: 8, color: color`2` }
+        //     )
+        //     addText(
+        //       "to play again!",
+        //       { y: 9, color: color`2` }
+        //     )
+        //   }
+        // }
         
-        if (soundsToPlay.length >= 1) playSoundsOfTypes(soundsToPlay)
+        if (soundToPlay) playSoundOfType(soundToPlay)
       }, 60)
 
       function stopMove() {
@@ -1242,6 +1251,88 @@ function handleIjklInput(key) {
       break
     default:
       throw new Error(`Unexpected key ${key}`)
+  }
+}
+
+function checkNonSolidOverlap() {
+  let soundToPlay;
+  
+  // handle player overlapping with key (collect it)
+  const keyOverlap = playerOverlapsWithCategory("key")
+  if (keyOverlap) {
+    keyOverlap.remove()
+    getAllOfCategory("locked").map(l => l.type = unlocked)
+    // TODO: might not need a whole soundToPlay variable
+    soundToPlay = "key"
+  }
+  
+  if (playerOverlapsWithCategory("danger")) { // handle game over from danger sprite (e.g. lava)
+    // stopMove()
+    
+    // gameOver = true
+    // soundToPlay = "danger"
+
+    endGame({ won: false })
+  } else if (playerOverlapsWithCategory("goal")) { // handle game being won (player overlapping with goal sprite)
+    // stopMove()
+    
+    // gameOver = true
+    // won = true
+    // soundToPlay = "goal"
+
+    endGame({ won: true })
+  }
+
+  if (soundToPlay) playSoundOfType(soundToPlay, true)
+}
+
+function endGame(options = {}) {
+  gameOver = true
+  won = options.won ?? false
+
+  console.log("running")
+  if (updateTilesInterval) {
+    console.log("clear interval")
+    clearInterval(updateTilesInterval)
+  }
+  
+  if (won) {
+    playSoundOfType("goal", true)
+    
+    addText(
+      "Level Complete!",
+      { y: 6, color: color`2` }
+    )
+    addText(
+      "Press any button",
+      { y: 8, color: color`2` }
+    )
+    addText(
+      "to continue to",
+      { y: 9, color: color`2` }
+    )
+    addText(
+      "the next level!",
+      { y: 10, color: color`2` }
+    )
+    // soundToPlay = "goal"
+  } else {
+    playSoundOfType("danger", true)
+
+    console.log("add game over text")
+    
+    addText(
+      "Game Over",
+      { y: 6, color: color`2` }
+    )
+    addText(
+      "Press any button",
+      { y: 8, color: color`2` }
+    )
+    addText(
+      "to play again!",
+      { y: 9, color: color`2` }
+    )
   }
 }
 
@@ -1291,19 +1382,22 @@ function constrainArrowTypeNum(rawArrowTypeNum) {
 }
 
 function setArrowPosition() {
-  if (arrowType !== null) {
-    const playerSprite = getFirst(player)
-    const arrowSprite = getFirst(arrowType)
+  if (arrowType === null) return
+  
+  const playerSprite = getFirst(player)
 
-    const deg = getArrowDeg()
-    const rad = deg * (Math.PI / 180)
-    const distance = 1
-    const x = distance * Math.cos(rad)
-    const y = distance * Math.sin(rad)
-    
-    arrowSprite.x = Math.round(playerSprite.x + x)
-    arrowSprite.y = Math.round(playerSprite.y - y)
-  }
+  if (!playerSprite) return
+  
+  const arrowSprite = getFirst(arrowType)
+
+  const deg = getArrowDeg()
+  const rad = deg * (Math.PI / 180)
+  const distance = 1
+  const x = distance * Math.cos(rad)
+  const y = distance * Math.sin(rad)
+  
+  arrowSprite.x = Math.round(playerSprite.x + x)
+  arrowSprite.y = Math.round(playerSprite.y - y)
 }
 
 // function getArrowDeg() {
@@ -1645,20 +1739,17 @@ function playerOverlapsWithCategory(categoryId) {
   return getAllOfCategory(categoryId).find(w => w.x === playerSprite.x && w.y === playerSprite.y) ?? false
 }
 
-function playSoundsOfTypes(categoryIds) {
-  for (const categoryId of categoryIds)
-    if (!(categoryId in spriteCategories)) throw new Error(`Category ${categoryId} not found`)
-
-  for (const categoryId of categoryIds) {
-    const category = spriteCategories[categoryId]
-    
-    if (
-      !category.sound ||
-      (playedOnTile && !category.forceSound)
-    ) continue
+function playSoundOfType(categoryId, forceSound) {
+  if (!(categoryId in spriteCategories)) throw new Error(`Category ${categoryId} not found`)
   
-    setTimeout(() => playTune(category.sound), 60)
-  }
+  const category = spriteCategories[categoryId]
+  
+  if (
+    !category.sound ||
+    (playedOnTile && !forceSound)
+  ) return
+
+  setTimeout(() => playTune(category.sound), 60)
   
   playedOnTile = true
 }
@@ -1742,19 +1833,30 @@ function startLevel(newLevel) {
       const swapGuide = getTile(movingSprite.x + movementInfo.direction, movingSprite.y).find(s => s.type === movement_guide)
       if (swapGuide) swapGuide.x -= movementInfo.direction
 
-      if (
+      const doMovePlayer = (
         !inAir &&
         (
           (movingSprite.y === playerSprite.y && Math.abs(movingSprite.x - playerSprite.x) <= 1) ||
           (movingSprite.x === playerSprite.x && Math.abs(movingSprite.y - playerSprite.y) <= 1)
         )
       )
-        // TODO: make this still trigger collision code (particularly for key)
-        playerSprite.x += movementInfo.direction
       
       movingSprite.x += movementInfo.direction
       movementInfo.x = movingSprite.x
       movementInfo.y = movingSprite.y
+      
+      if (doMovePlayer) {
+        // TODO: make this still trigger collision code (particularly for key)
+        playerSprite.x += movementInfo.direction
+        checkNonSolidOverlap()
+        // if (getSprite(playerSprite.x, playerSprite.y))
+        if (playerOverlapsWithCategory("solid")) {
+          // gameOver = true
+          playerSprite.remove()
+          endGame({ won: false })
+          // playSoundOfType("danger")
+        }
+      }
 
       const nextGuide = getTile(movingSprite.x + movementInfo.direction, movingSprite.y)
         .find(s => s.type === movement_guide)
@@ -1776,6 +1878,7 @@ function startLevel(newLevel) {
       centerMap()
 
     if (arrowType) {
+      // TODO: attempt to maintain previous arrow position
       addSprite(0, 0, arrowType)
       setArrowPosition()
     }
