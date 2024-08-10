@@ -1,7 +1,11 @@
 import type { APIRoute } from 'astro'
-import { getSession, getUserByEmail, makeOrUpdateSession, findDocument } from '../../../lib/game-saving/account'
+import { getSession, getUserByEmail, makeOrUpdateSession, findDocument, updateDocument } from '../../../lib/game-saving/account'
 import { isValidEmail } from '../../../lib/game-saving/email'
 import {DevEmail} from "../../../lib/game-saving/auth-helper";
+import { Timestamp } from 'firebase-admin/firestore';
+
+const MAX_ATTEMPTS = 3;
+const LOCKOUT_DURATION_MS = 15 * 60 * 1000;
 
 export const post: APIRoute = async ({ request, cookies }) => {
 	const session = await getSession(cookies)
@@ -25,7 +29,19 @@ export const post: APIRoute = async ({ request, cookies }) => {
 
 	const user = await getUserByEmail(email!) ?? session?.user
 	if (!user) return new Response('Invalid email or session', { status: 401 })
-	
+ 
+	const now = Timestamp.now();
+
+	if (user.lockoutUntil && user.lockoutUntil.toMillis() > now.toMillis()) {
+		const lockoutMinutes = Math.ceil(
+			(user.lockoutUntil.toMillis() - now.toMillis()) / 60000
+		);
+		return new Response(
+			`Account locked. Try again in ${lockoutMinutes} minute(s).`,
+			{ status: 429 }
+		);
+	}
+
 	if (email === DevEmail && code == import.meta.env.DEV_CODE) {
 		await makeOrUpdateSession(cookies, user.id, 'code')
 		return new Response(JSON.stringify({ user }), { status: 200 })
@@ -36,7 +52,35 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		['userId', '==', user.id]
 	], 1);
 
-	if (_codes.empty) return new Response('Invalid login code', { status: 401 })
+    if (_codes.empty) {
+		const failedAttempts = (user.failedLoginAttempts ?? 0) + 1;
+
+		if (failedAttempts >= MAX_ATTEMPTS) {
+			const lockoutUntil = Timestamp.fromMillis(
+				now.toMillis() + LOCKOUT_DURATION_MS
+			);
+			await updateDocument("users", user.id, {
+				failedAttempts: failedAttempts,
+				lockoutUntil: lockoutUntil,
+			});
+			return new Response(
+				`Too many attempts. Account locked for ${
+					LOCKOUT_DURATION_MS / 60000
+				} minutes.`,
+				{ status: 429 }
+			);
+		} else {
+			await updateDocument("users", user.id, {
+				failedAttempts: failedAttempts,
+			});
+			return new Response("Invalid login code", { status: 401 });
+		}
+	}
+
+	await updateDocument("users", user.id, {
+		failedAttempts: 0,
+		lockoutUntil: null,
+	});
 
 	await makeOrUpdateSession(cookies, user.id, 'code')
 	
