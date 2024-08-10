@@ -513,23 +513,6 @@ CC............CC` ],
 .09990000.......
 .00000..........
 ................` ],
-//   [ key, bitmap`
-// ..........00....
-// .........0660...
-// ........066060..
-// .......0660.060.
-// .......060...060
-// ........060.0660
-// .....00..060660.
-// ....0660..0660..
-// ...066660..00...
-// ..06606660......
-// .0660.06660.....
-// .06660.0660.....
-// ..06660660......
-// ...066660.......
-// ....0660........
-// .....00.........` ],
   [ key, bitmap`
 ................
 ..........00....
@@ -547,23 +530,6 @@ CC............CC` ],
 ...090..........
 ....0...........
 ................` ],
-//   [ locked, bitmap`
-// 1.1LL.1.1.1LL.1.
-// .1LL.1.1.1LL.1.1
-// 1LL.1.1.1LL.1.1.
-// LL.1.1.1LL.1.1.1
-// L.1.1.1LL.1.1.1L
-// .1.1.1LL.1.1.1LL
-// 1.1.1LL.1.1.1LL.
-// .1.1LL.1.1.1LL.1
-// 1.1LL.1.1.1LL.1.
-// .1LL.1.1.1LL.1.1
-// 1LL.1.1.1LL.1.1.
-// LL.1.1.1LL.1.1.1
-// L.1.1.1LL.1.1.1L
-// .1.1.1LL.1.1.1LL
-// 1.1.1LL.1.1.1LL.
-// .1.1LL.1.1.1LL.1` ],
   [ locked, bitmap`
 .00000000000000.
 01LL.1.1.1LL.1.0
@@ -581,23 +547,6 @@ CC............CC` ],
 01.1.1LL.1.1.1L0
 0.1.1LL.1.1.1LL0
 .00000000000000.` ],
-//   [ locked_graphic, bitmap`
-// 1.1LL.1.1.1LL.1.
-// .1LL.1.1.1LL.1.1
-// 1LL.1.100LL.1.1.
-// LL.1.10000.1.1.1
-// L.1.1000000.1.1L
-// .1.1.00L.001.1LL
-// 1.1.100.100.1LL.
-// .1.100000000LL.1
-// 1.1L00000000L.1.
-// .1LL00000000.1.1
-// 1LL.000..0001.1.
-// LL.100000000.1.1
-// L.1.000000001.1L
-// .1.100000000.1LL
-// 1.1.1LL.1.1.1LL.
-// .1.1LL.1.1.1LL.1` ],
   [ locked_graphic, bitmap`
 .00000000000000.
 01LL.1.1.1LL.1.0
@@ -615,23 +564,6 @@ CC............CC` ],
 01.100000000.1L0
 0.1.1LL.1.1.1LL0
 .00000000000000.` ],
-//   [ unlocked, bitmap`
-// 1.1.1.1.1.1.1.1.
-// .1.1.1.1.1.1.1.1
-// 1.1.1.1.1.1.1.1.
-// .1.1.1.1.1.1.1.1
-// 1.1.1.1.1.1.1.1.
-// .1.1.1.1.1.1.1.1
-// 1.1.1.1.1.1.1.1.
-// .1.1.1.1.1.1.1.1
-// 1.1.1.1.1.1.1.1.
-// .1.1.1.1.1.1.1.1
-// 1.1.1.1.1.1.1.1.
-// .1.1.1.1.1.1.1.1
-// 1.1.1.1.1.1.1.1.
-// .1.1.1.1.1.1.1.1
-// 1.1.1.1.1.1.1.1.
-// .1.1.1.1.1.1.1.1` ]
   [ unlocked, bitmap`
 .LLLLLLLLLLLLLL.
 L1.1.1.1.1.1.1.L
@@ -705,28 +637,24 @@ LLLFFFFFDDDDDLLL
 const spriteCategories = {
   solid: {
     sound: null,
-    // forceSound: false,
     types: [ wall, wall_no_stick, ice, locked, locked_graphic, moving_platform ]
   },
   sticky: {
     sound: tune`
 120: C4/120,
 3720`,
-    // forceSound: false,
     types: [ wall, moving_platform ]
   },
   sticky_top: {
     sound: tune`
 107.14285714285714: C4-107.14285714285714,
 3321.428571428571`,
-    // forceSound: false,
     types: [ locked, locked_graphic ]
   },
   slippery: {
     sound: tune`
 60: B5^60,
 1860`,
-    // forceSound: false,
     types: [ wall_no_stick, ice ]
   },
   danger: {
@@ -734,7 +662,6 @@ const spriteCategories = {
 150: G4/150,
 150: C4/150 + E4/150,
 4500`,
-    // forceSound: true,
     types: [ lava_top, lava, spike_up ]
   },
   goal: {
@@ -747,26 +674,22 @@ const spriteCategories = {
 150: A5/150 + F5/150,
 150: B5/150 + G5/150,
 3750`,
-    // forceSound: true,
     types: [ goal ]
   },
   directional_up: {
     sound: tune`
 120: D4/120,
 3720`,
-    // forceSound: false,
     types: [ one_way_up ]
   },
   key: {
     sound: tune`
 200: B5~200,
 6200`,
-    // forceSound: false,
     types: [ key ]
   },
   locked: {
     sound: null,
-    // forceSound: false,
     types: [ locked, locked_graphic ]
   }
 }
@@ -863,7 +786,7 @@ n.........................................n
 n.........................................n
 n.........................................n
 n.........................................n`,
-map`
+  map`
 nnnnnnnwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwnnnnnnnnnnnnnnnnnnnn
 n.......................................w...................n
 n.......................................w...................n
@@ -973,11 +896,10 @@ let fullY;
 let xVel;
 let yVel;
 let playedOnTile;
-// let lastSoundPlayedX;
-// let lastSoundPlayedY;
 let inAir;
 let gameOver;
 let won;
+let lastArrowType;
 let arrowType;
 let fullMap;
 let zoom;
@@ -1035,15 +957,40 @@ function handleIjklInput(key) {
         inAir
       ) return
     
-      let newArrowType = arrowCounters.indexOf(arrow_0)
-      while (checkArrowIsInvalid(arrowCounters[newArrowType])) {
-        newArrowType += 1
-        if (newArrowType === lastArrow) throw new Error("No possible moves")
+      // let newArrowType = arrowCounters.indexOf(arrow_0)
+      // while (checkArrowIsInvalid(arrowCounters[newArrowType])) {
+      //   newArrowType += 1
+      //   if (newArrowType === lastArrow) throw new Error("No possible moves")
+      // }
+      // newArrowType = arrowCounters[newArrowType]
+
+      // const startingArrowType = arrowCounters.indexOf(lastArrowType ?? arrow_0)
+      // let newArrowType = startingArrowType
+      // while (checkArrowIsInvalid(arrowCounters[newArrowType])) {
+      //   newArrowType = ((newArrowType + 1) % lastArrow + lastArrow) % lastArrow
+      //   if (newArrowType === startingArrowType) throw new Error("No possible moves")
+      // }
+      // newArrowType = arrowCounters[newArrowType]
+
+      const validArrows = []
+      for (let i = 0; i < lastArrow; i++) {
+        if (!checkArrowIsInvalid(arrowCounters[i]))
+          validArrows.push(i)
       }
-      newArrowType = arrowCounters[newArrowType]
+      if (validArrows.length === 0) throw new Error("No possible moves")
+      console.log(validArrows)
+      const goalArrowType = arrowCounters.indexOf(lastArrowType ?? arrow_0)
+      const closestArrowType = validArrows.reduce(
+        (prev, curr) => Math.abs(curr - goalArrowType) < Math.abs(prev - goalArrowType) ? curr : prev
+      )
+      console.log(goalArrowType)
+      console.log(closestArrowType)
+      
+      const newArrowType = arrowCounters[closestArrowType]
       
       addSprite(0, 0, newArrowType)
       arrowType = newArrowType
+      lastArrowType = arrowType
       setArrowPosition()
       
       break
@@ -1101,8 +1048,6 @@ function handleIjklInput(key) {
           roundedFullY < 0 || roundedFullY >= height()
         ) {
           p.remove()
-          // gameOver = true
-          // soundToPlay = "danger"
           endGame({ won: false })
           stopMove()
         } else {
@@ -1122,30 +1067,11 @@ function handleIjklInput(key) {
             }
           }
 
-          // // handle player overlapping with key (collect it)
-          // const keyOverlap = playerOverlapsWithCategory("key")
-          // if (keyOverlap) {
-          //   keyOverlap.remove()
-          //   getAllOfCategory("locked").map(l => l.type = unlocked)
-          //   soundsToPlay.push("key")
-          // }
-          
-          // if (playerOverlapsWithCategory("danger")) { // handle game over from danger sprite (e.g. lava)
-          //   stopMove()
-          //   gameOver = true
-          //   soundsToPlay.push("danger")
-          // } else if (playerOverlapsWithCategory("goal")) { // handle game being won (player overlapping with goal sprite)
-          //   stopMove()
-          //   gameOver = true
-          //   won = true
-          //   soundsToPlay.push("goal")
-          // } else {
-
           checkNonSolidOverlap()
 
           if (gameOver) stopMove()
           else {
-            // check regular collisions
+            // check normal solid collisions
             const stickyWalls = getAllOfCategory("sticky")
             const stickyTopWalls = getAllOfCategory("sticky_top")
             const directionalUp = getAllOfCategory("directional_up")
@@ -1204,41 +1130,6 @@ function handleIjklInput(key) {
           
         fullMap = getParsedMap()
         centerMap()
-
-        // if (gameOver) {
-        //   if (updateTilesInterval) clearInterval(updateTilesInterval)
-        //   if (won) {
-        //     addText(
-        //       "Level Complete!",
-        //       { y: 6, color: color`2` }
-        //     )
-        //     addText(
-        //       "Press any button",
-        //       { y: 8, color: color`2` }
-        //     )
-        //     addText(
-        //       "to continue to",
-        //       { y: 9, color: color`2` }
-        //     )
-        //     addText(
-        //       "the next level!",
-        //       { y: 10, color: color`2` }
-        //     )
-        //   } else {
-        //     addText(
-        //       "Game Over",
-        //       { y: 6, color: color`2` }
-        //     )
-        //     addText(
-        //       "Press any button",
-        //       { y: 8, color: color`2` }
-        //     )
-        //     addText(
-        //       "to play again!",
-        //       { y: 9, color: color`2` }
-        //     )
-        //   }
-        // }
         
         if (soundToPlay) playSoundOfType(soundToPlay)
       }, 60)
@@ -1255,35 +1146,18 @@ function handleIjklInput(key) {
 }
 
 function checkNonSolidOverlap() {
-  let soundToPlay;
-  
   // handle player overlapping with key (collect it)
   const keyOverlap = playerOverlapsWithCategory("key")
   if (keyOverlap) {
     keyOverlap.remove()
     getAllOfCategory("locked").map(l => l.type = unlocked)
-    // TODO: might not need a whole soundToPlay variable
-    soundToPlay = "key"
+    playSoundOfType("key", true)
   }
   
-  if (playerOverlapsWithCategory("danger")) { // handle game over from danger sprite (e.g. lava)
-    // stopMove()
-    
-    // gameOver = true
-    // soundToPlay = "danger"
-
+  if (playerOverlapsWithCategory("danger")) // handle game over from danger sprite (e.g. lava)
     endGame({ won: false })
-  } else if (playerOverlapsWithCategory("goal")) { // handle game being won (player overlapping with goal sprite)
-    // stopMove()
-    
-    // gameOver = true
-    // won = true
-    // soundToPlay = "goal"
-
+  else if (playerOverlapsWithCategory("goal")) // handle game being won (player overlapping with goal sprite)
     endGame({ won: true })
-  }
-
-  if (soundToPlay) playSoundOfType(soundToPlay, true)
 }
 
 function endGame(options = {}) {
@@ -1315,7 +1189,6 @@ function endGame(options = {}) {
       "the next level!",
       { y: 10, color: color`2` }
     )
-    // soundToPlay = "goal"
   } else {
     playSoundOfType("danger", true)
 
@@ -1371,6 +1244,7 @@ function rotateArrow(rotateCount) {
   const arrowSprite = getFirst(arrowType)
   arrowSprite.type = newType
   arrowType = newType
+  lastArrowType = arrowType
 
   setArrowPosition()
 }
@@ -1400,11 +1274,6 @@ function setArrowPosition() {
   arrowSprite.y = Math.round(playerSprite.y - y)
 }
 
-// function getArrowDeg() {
-//   if (arrowType === null) return null
-//   return Number(arrowType) * arrowIncrement
-// }
-
 function getParsedMap() {
   const grid = getGrid()
   
@@ -1432,28 +1301,15 @@ function setMapFromParsed(parsedMap) {
       row.map(tile => tile.length === 0 ? "." : tile[0]).join("")
     ).join("\n")
   )
-
-  // console.log(
-  //   parsedMap.map(row =>
-  //     row.map(tile => tile.length === 0 ? "." : tile[0]).join("")
-  //   ).join("\n")
-  // )
-
-  // console.log(map)
   
   for (let y = 0; y < height(); y++) {
-  // for (let y = 0; y < map.length; y++) {
     const row = parsedMap[y]
-
-    // console.log("row")
     
     for (let x = 0; x < width(); x++) {
-    // for (let x = 0; x < row.length; x++) {
       const tile = row[x]
       
       for (let i = 1; i < tile.length; i++) {
         const sprite = tile[i]
-        // console.log(tile)
         addSprite(x, y, sprite)
       }
     }
@@ -1461,24 +1317,13 @@ function setMapFromParsed(parsedMap) {
 }
 
 function zoomMap(parsedMap, rawX, rawY, rawZoomWidth, rawZoomHeight) {
-  // const rawX = 200
-  // const rawY = 20
-  // const rawZoomWidth = 10
-  // const rawZoomHeight = 10
-
   const mapWidth = parsedMap[0].length
   const mapHeight = parsedMap.length
-
-  // const zoomWidth = rawZoomWidth
-  // const zoomHeight = rawZoomHeight
   
   const zoomWidth = Math.min(rawZoomWidth, mapWidth)
   const zoomHeight = Math.min(rawZoomHeight, mapHeight)
   const x = Math.max(Math.min(rawX, mapWidth-zoomWidth), 0)
   const y = Math.max(Math.min(rawY, mapHeight-zoomHeight), 0)
-
-  // const x = rawX
-  // const y = rawY
   
   const zoomedMap = []
 
@@ -1489,13 +1334,9 @@ function zoomMap(parsedMap, rawX, rawY, rawZoomWidth, rawZoomHeight) {
     for (let iterX = 0; iterX < zoomWidth; iterX++) {
       const tile = []
       row.push(tile)
-
-      // console.log("row");
       
-      for (let i = 0; i < parsedMap[iterY+y][iterX+x].length; i++) {
-        // console.log(parsedMap[iterY+y][iterX+x][i])
+      for (let i = 0; i < parsedMap[iterY+y][iterX+x].length; i++)
         tile.push(parsedMap[iterY+y][iterX+x][i])
-      }
     }
   }
 
@@ -1503,23 +1344,6 @@ function zoomMap(parsedMap, rawX, rawY, rawZoomWidth, rawZoomHeight) {
 }
 
 function centerMap() {
-  // const playerSprite = getFirst(player)
-
-  // console.log({x:playerSprite.x,y:playerSprite.y})
-
-  // const mapWidth = defaultMapWidth
-  // const mapHeight = defaultMapHeight
-  
-  // const parsedMap = getParsedMap()
-  // const zoomedMap = zoomMap(
-  //   parsedMap,
-  //   playerSprite.x-Math.round(mapWidth/2)+1,
-  //   playerSprite.y-Math.round(mapHeight/2),
-  //   mapWidth,
-  //   mapHeight
-  // )
-  // setMapFromParsed(zoomedMap)
-
   const {
     x: zoomX,
     y: zoomY,
@@ -1568,26 +1392,6 @@ function getCenterZoomBox(options = {}) {
     throw new Error("Could not provide zoom box")
 }
 
-// function getTouching() {
-//   const playerSprite = getFirst(player)
-//   const walls = getAll(wall)
-//   // console.log({ playerSpriteX: playerSprite.x, playerSpriteY: playerSprite.y })
-//   // console.log({ wallX: walls[0].x, wallY: walls[0].y })
-//   // const touching = walls.filter(w => (
-//   //   (w.y === playerSprite.y && Math.abs(w.x - playerSprite.x) <= 1) ||
-//   //   (w.x === playerSprite.x && Math.abs(w.y - playerSprite.y) <= 1)
-//   // ));
-//   const touching = walls.filter(w => playerTouchingWall(playerSprite, w))
-//   return touching
-// }
-
-// function playerTouchingWall(p, w) {
-//   return (
-//     (w.y === p.y && Math.abs(w.x - p.x) <= 1) ||
-//     (w.x === p.x && Math.abs(w.y - p.y) <= 1)
-//   )
-// }
-
 async function panBy(panByX, panByY) {
   const arrowSprite = getFirst(arrowType)
   if (arrowSprite) arrowSprite.remove()
@@ -1624,10 +1428,6 @@ async function panBy(panByX, panByY) {
       width: centerZoomWidth,
       height: centerZoomHeight
     } = getCenterZoomBox()
-
-    // actually, this should be avoided since it causes bars in opposing direction
-    // const zoomedOutWidth = fullWidth-20 <= 1 ? fullWidth : 20
-    // const zoomedOutHeight = fullHeight-16 <= 1 ? fullHeight : 16
     
     const newWidth = Math.min(reset ? centerZoomWidth : 20, fullWidth)
     const newHeight = Math.min(reset ? centerZoomHeight : 16, fullHeight)
@@ -1767,13 +1567,11 @@ function startLevel(newLevel) {
 
   playedOnTile = false
   
-  // lastSoundPlayedX = null
-  // lastSoundPlayedY = null
-  
   inAir = false
   gameOver = false
   won = false
-  
+
+  lastArrowType = null
   arrowType = null
   
   fullMap = null
@@ -1794,7 +1592,6 @@ function startLevel(newLevel) {
   
   fullMap = getParsedMap()
   
-  // TODO: filter these
   const movingSprites = fullMap
     .map((row, y) =>
       row
@@ -1813,17 +1610,11 @@ function startLevel(newLevel) {
     .flat()
   
   centerMap()
-
-  console.log(JSON.stringify(movingSprites, null, 2))
-    // filter(m => m.some(tile => tile.includes(moving_platform)))
   
   updateTilesInterval = setInterval(() => {
     setMapFromParsed(fullMap)
     
     const movingPlatforms = getAll(moving_platform)
-    // for (const movingPlatform of movingPlatforms) {
-      // const movementInfo = movingSprites.find(s => s.x === movingPlatform.x && s.y === movingPlatform.y)
-      // if (!movementInfo) continue
 
     const playerSprite = getFirst(player)
     
@@ -1846,15 +1637,11 @@ function startLevel(newLevel) {
       movementInfo.y = movingSprite.y
       
       if (doMovePlayer) {
-        // TODO: make this still trigger collision code (particularly for key)
         playerSprite.x += movementInfo.direction
         checkNonSolidOverlap()
-        // if (getSprite(playerSprite.x, playerSprite.y))
         if (playerOverlapsWithCategory("solid")) {
-          // gameOver = true
           playerSprite.remove()
           endGame({ won: false })
-          // playSoundOfType("danger")
         }
       }
 
@@ -1864,11 +1651,6 @@ function startLevel(newLevel) {
     }
 
     fullMap = getParsedMap()
-    
-    // for (const movingSprite of movingSprites) {
-    //   fullMap[movingSprite.row][movingSprite.col].x += movingSprite.direction
-    //   console.log("increased!!")
-    // }
 
     if (zoom.isZoomedOut || zoom.zooming) {
       const parsedMap = getParsedMap()
@@ -1882,18 +1664,5 @@ function startLevel(newLevel) {
       addSprite(0, 0, arrowType)
       setArrowPosition()
     }
-    
-    // setMapFromParsed(fullMap)
-
-    // const currentMap = getParsedMap()
-    // console.log(currentMap)
-
-    // const movingRows = currentMap.filter(m => m.some(tile => tile.includes(moving_platform)))
-    // console.log(movingRows)
-    
-    // fullMap = currentMap
-    // setMapFromParsed(fullMap)
-    
-    // centerMap()
   }, 1000)
 }
