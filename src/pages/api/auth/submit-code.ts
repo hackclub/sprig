@@ -4,9 +4,6 @@ import { isValidEmail } from '../../../lib/game-saving/email'
 import {DevEmail} from "../../../lib/game-saving/auth-helper";
 import { Timestamp } from 'firebase-admin/firestore';
 
-const MAX_ATTEMPTS = 3;
-const LOCKOUT_DURATION_MS = 15 * 60 * 1000;
-
 export const post: APIRoute = async ({ request, cookies }) => {
 	const session = await getSession(cookies)
 
@@ -32,9 +29,12 @@ export const post: APIRoute = async ({ request, cookies }) => {
  
 	const now = Timestamp.now();
 
-	if (user.lockoutUntil && user.lockoutUntil.toMillis() > now.toMillis()) {
+	const failedLoginAttempts = user.failedLoginAttempts ?? 0;
+	const lockoutUntil = user.lockoutUntil ?? null;
+
+	if (lockoutUntil && lockoutUntil.toMillis() > now.toMillis()) {
 		const lockoutMinutes = Math.ceil(
-			(user.lockoutUntil.toMillis() - now.toMillis()) / 60000
+			(lockoutUntil.toMillis() - now.toMillis()) / 60000
 		);
 		return new Response(
 			`Account locked. Try again in ${lockoutMinutes} minute(s).`,
@@ -53,36 +53,36 @@ export const post: APIRoute = async ({ request, cookies }) => {
 	], 1);
 
     if (_codes.empty) {
-		const failedAttempts = (user.failedLoginAttempts ?? 0) + 1;
+		const newFailedAttempts = failedLoginAttempts + 1;
 
-		if (failedAttempts >= MAX_ATTEMPTS) {
+		if (newFailedAttempts >= import.meta.env.MAX_ATTEMPTS) {
 			const lockoutUntil = Timestamp.fromMillis(
-				now.toMillis() + LOCKOUT_DURATION_MS
+				now.toMillis() + import.meta.env.LOCKOUT_DURATION_MS
 			);
 			await updateDocument("users", user.id, {
-				failedAttempts: failedAttempts,
+				failedLoginAttempts: newFailedAttempts,
 				lockoutUntil: lockoutUntil,
 			});
 			return new Response(
 				`Too many attempts. Account locked for ${
-					LOCKOUT_DURATION_MS / 60000
+					import.meta.env.LOCKOUT_DURATION_MS / 60000
 				} minutes.`,
 				{ status: 429 }
 			);
 		} else {
 			await updateDocument("users", user.id, {
-				failedAttempts: failedAttempts,
+				failedLoginAttempts: newFailedAttempts,
 			});
 			return new Response("Invalid login code", { status: 401 });
 		}
 	}
 
 	await updateDocument("users", user.id, {
-		failedAttempts: 0,
+		failedLoginAttempts: 0,
 		lockoutUntil: null,
 	});
 
-	await makeOrUpdateSession(cookies, user.id, 'code')
+	await makeOrUpdateSession(cookies, user.id, "code");
 	
 	const snap = await findDocument('loginCodes', ['userId', '==', user.id]);
 	// const snap = await firestore.collection('loginCodes').where('userId', '==', user.id).get()
