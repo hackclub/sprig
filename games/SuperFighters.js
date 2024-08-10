@@ -14,6 +14,19 @@ const shootDelay = 1000;
 const soundDelay = 100;
 const jumpDuration = 280;
 
+// Game data
+let level = 0;
+let jumping = false;
+let changingLevels = false;
+let lives = startingLives;
+
+// Internal variables
+let lastParticleSound = Date.now();
+let lastLeftMovement = Date.now();
+let lastRightMovement = Date.now();
+let lastShot = Date.now();
+
+// Sprite data
 const rightFacingPlayer = "p";
 const leftFacingPlayer = "l";
 const rightPunchingPlayer = "r";
@@ -395,17 +408,6 @@ H....000000...H.`,
 setBackground(sky);
 
 setSolids([rightFacingPlayer, leftFacingPlayer, box, bedrock]);
-// Game data
-let level = 0;
-let jumping = false;
-let changingLevels = false;
-
-// Internal variables
-let lastParticleSound = Date.now();
-let lastLeftMovement = Date.now();
-let lastRightMovement = Date.now();
-let lastShot = Date.now();
-let lives = startingLives;
 
 const levels = [
   map`
@@ -551,9 +553,9 @@ function isPlayer(type) {
 }
 
 /**
- * Calculate the distance to the ground (delta Y)
+ * Calculate the distance to the ground
  * @param {*} player entity
- * @returns delta Y
+ * @returns distance to the ground
  */
 function distanceToGround(player) {
   let playerY = player.y;
@@ -592,9 +594,9 @@ function isOnGround(player) {
 function attackEntity(player, entityX, entityY) {
   // Check sprite next to the player
   getTile(entityX, entityY).forEach((tile) => {
-    // Confirm they are not destroying a player
+    // Confirm they are not destroying themselves!
     if (isPlayer(tile.type)) return;
-    //If it bedrock, we cannot break it!
+    //If it bedrock, we cannot break it (easily)
     if (tile.type == bedrock) {
       spawnParticle(entityX, entityY, 0);
       addSprite(entityX, entityY, bedrock);
@@ -651,10 +653,6 @@ function shootBullet(shooter, originX, originY) {
     }
   }
 }
-
-// particleX: particle position x
-// particleY: particle position y
-// type: sound type
 
 /**
  *
@@ -808,19 +806,44 @@ onInput("d", () => {
 
 // Gravity handler
 setInterval(() => {
-  if (!jumping) {
-    // Gravity for all living entities!
+  // Gravity for all living entities!
+  getAll().forEach((entity) => {
+    if (isEntity(entity.type)) {
+      // Don't apply gravity to the player as they are jumping
+      if (isPlayer(entity.type) && jumping) return;
+      let onGround = isOnGround(entity);
+      if (!onGround) {
+        // Move downward
+        entity.y += 1;
+      }
+    }
+  });
+}, 30);
+
+function gameReset() {
+  // Handle player death
+  if (lives <= 0 && !changingLevels) {
+    // Reset level
+    level = 0;
+    clearText();
+
+    // Destroy all entities (except the player)
     getAll().forEach((entity) => {
-      if (isEntity(entity.type)) {
-        let onGround = isOnGround(entity);
-        if (!onGround) {
-          // Move downward
-          entity.y += 1;
-        }
+      if (!isPlayer(entity.type)) {
+        entity.remove();
       }
     });
+    // Load the world
+    setMap(levels[level]);
+
+    //Reset lives & jumping state
+    lives = startingLives;
+    jumping = false;
+
+    //Add game title text
+    addText(gameTitle, gameTitleColor);
   }
-}, 30);
+}
 
 // Moving entity handler
 setInterval(() => {
@@ -847,6 +870,7 @@ setInterval(() => {
 
   // Process moving bullets
   getAll().forEach((entity) => {
+    if (!getFirst(player)) return;
     //Is the entity a bullet?
     if (entity.type == bullet) {
       // Calculate difference to player
@@ -864,13 +888,14 @@ setInterval(() => {
           spawnParticle(entity.x, entity.y, isPlayer(obstacle.type) ? 1 : 0);
           if (isPlayer(obstacle.type)) {
             lives--;
+            if (lives == 0) {
+              gameReset();
+            }
           }
           return;
         }
       });
       if (removedEntity) return;
-      // Process delta movement to player (bullet movement behavior)
-      let yDiff = getFirst(player).y - entity.y;
       // Move the bullet toward the player
       entity.x += xDiff > 0 ? 1 : -1;
 
@@ -904,7 +929,8 @@ setInterval(() => {
       if (
         entity.type != bullet &&
         entity.type != fireParticle &&
-        entity.type != heart
+        entity.type != heart &&
+        !isPlayer(entity)
       ) {
         // If the entity has not reached the left side, keep pushing them
         if (entity.x != 0) {
@@ -959,28 +985,6 @@ setInterval(() => {
     }
   }
   if (changingLevels) return;
-
-  // Handle player death
-  if (lives <= 0 && !changingLevels) {
-    // Reset level
-    level = 0;
-    clearText();
-
-    // Destroy all entities (except the player)
-    getAll().forEach((entity) => {
-      if (!isPlayer(entity.type)) {
-        entity.remove();
-      }
-    });
-    // Load the world
-    setMap(levels[level]);
-
-    //Reset lives
-    lives = startingLives;
-
-    //Add game title text
-    addText(gameTitle, gameTitleColor);
-  }
 
   // Render lives on the screen
   let text = "Lives: " + lives;
