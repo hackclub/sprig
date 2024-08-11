@@ -27,6 +27,8 @@ const unlocked = "U"
 const moving_platform = "m"
 const movement_guide = "M"
 const spike_up = "s"
+const spike_down = "d"
+const spike_left = "q"
 
 const arrow_0 = "0"
 const arrow_22 = "1"
@@ -496,40 +498,6 @@ CC............CC` ],
 ................
 ................
 ................` ],
-//   [ goal, bitmap`
-// ................
-// .........000....
-// ........00600...
-// .......0066600..
-// ......00666660..
-// .....0066666600.
-// ....00666666660.
-// ...006666666660.
-// ..0066666669990.
-// .00666669999990.
-// .06669999999990.
-// .09999999990000.
-// .09999990000....
-// .09990000.......
-// .00000..........
-// ................` ],
-//   [ goal, bitmap`
-// ......0000......
-// ....00....00....
-// ..00........00..
-// ..0..........0..
-// .0............0.
-// .0............0.
-// 0..............0
-// 0..............0
-// 0..............0
-// 0..............0
-// .0............0.
-// .0............0.
-// ..0..........0..
-// ..00........00..
-// ....00....00....
-// ......0000......` ],
   [ goal, bitmap`
 ................
 ................
@@ -547,23 +515,6 @@ CC............CC` ],
 ......0000......
 ................
 ................` ],
-//   [ goal, bitmap`
-// ....00000000....
-// ...0000000000...
-// ..000000000000..
-// .00000000000000.
-// 0000000000000000
-// 0000000000000000
-// 0000000000000000
-// 0000000000000000
-// 0000000000000000
-// 0000000000000000
-// 0000000000000000
-// 0000000000000000
-// .00000000000000.
-// ..000000000000..
-// ...0000000000...
-// ....00000000....` ],
   [ key, bitmap`
 ................
 ..........00....
@@ -682,7 +633,41 @@ LLLFFFFFDDDDDLLL
 ...0111111110...
 ...0111111110...
 ...0111111110...
-...0000000000...` ]
+...0000000000...` ],
+  [ spike_down, bitmap`
+...0000000000...
+...0111111110...
+...0111111110...
+...0111111110...
+....01111110....
+....01111110....
+....01111110....
+.....011110.....
+.....011110.....
+.....011110.....
+......0110......
+......0110......
+......0110......
+.......00.......
+.......00.......
+................` ],
+  [ spike_left, bitmap`
+................
+................
+................
+............0000
+.........0001110
+......0001111110
+...0001111111110
+.001111111111110
+.001111111111110
+...0001111111110
+......0001111110
+.........0001110
+............0000
+................
+................
+................` ]
 )
 
 const spriteCategories = {
@@ -713,7 +698,7 @@ const spriteCategories = {
 150: G4/150,
 150: C4/150 + E4/150,
 4500`,
-    types: [ lava_top, lava, spike_up ]
+    types: [ lava_top, lava, spike_up, spike_down, spike_left ]
   },
   goal: {
     sound: tune`
@@ -745,7 +730,7 @@ const spriteCategories = {
   }
 }
 
-let level;
+let level
 const levels = [
   map`
 wwwwwwwwww
@@ -774,6 +759,15 @@ n.......ww.........n
 n..................n
 np.................n
 nwwww........wwwwwwn`,
+  map`
+wwwwwwwwwwnnnnnwwwwwnnnnnwwwwwwwwwwwwwwww
+w.........nnnnn.....nnnnn.............qnw
+w.........ddddd.....ddddd.............qnw
+w................................ss...qnw
+w................................nn....nw
+w....sssss.....sssss.....sssss...nn....nw
+w.p..nnnnn.....nnnnn.....nnnnn...nng...nw
+wwwwwnnnnnwwwwwnnnnnwwwwwnnnnnwwwwwwwwwww`,
   map`
 nwnwnwnwnwnwnwnwnwnwn
 w...................w
@@ -990,29 +984,29 @@ let gravity = 0.1
 
 let showedLeftHint = false
 
-let lastResetClick;
-let resetClickCount;
+let lastResetClick
+let resetClickCount
 
 let finishedAll = false
 
-let totalTime = 0;
+let totalTime = 0
 
 // these are all set within startLevel()
-let fullX;
-let fullY;
-let xVel;
-let yVel;
-let playedOnTile;
-let inAir;
-let gameOver;
-let won;
-let lastArrowType;
-let arrowType;
-let fullMap;
-let zoom;
-let cachedZoomBox;
-let updateTilesInterval;
-let startTime;
+let fullX
+let fullY
+let xVel
+let yVel
+let playedOnTile
+let inAir
+let gameOver
+let won
+let lastArrowType
+let arrowType
+let fullMap
+let zoom
+let cachedZoomBox
+let updateTilesInterval
+let startTime
 
 onInput("w", () => handleWasdInput("w"))
 onInput("a", () => handleWasdInput("a"))
@@ -1024,13 +1018,13 @@ onInput("j", () => handleIjklInput("j"))
 onInput("l", () => handleIjklInput("l"))
 onInput("k", () => handleIjklInput("k"))
 
-startLevel(0)
+startLevel(3)
 
 function handleWasdInput(key) {
   const earlyReturn = handleGlobalInput()
   if (earlyReturn) return
 
-  if (level === 3) clearText()
+  if (level === 4) clearText()
   
   switch (key) {
     case "w":
@@ -1122,7 +1116,7 @@ function handleIjklInput(key) {
       centerMap()
       
       const interval = setInterval(() => {
-        let soundToPlay;
+        let soundToPlay
         
         setMapFromParsed(fullMap)
         
@@ -1330,8 +1324,6 @@ function handleGlobalInput() {
 
 function rotateArrow(rotateCount) {
   const arrowTypeNum = arrowCounters.indexOf(arrowType)
-  
-  // const arrowCount = lastArrow + 1
 
   let rawNewTypeNum = arrowTypeNum + rotateCount
   let newTypeNum = constrainArrowTypeNum(rawNewTypeNum)
@@ -1506,7 +1498,6 @@ async function panBy(panByX, panByY) {
   if (arrowSprite) arrowSprite.remove()
   arrowType = null
   
-  // TODO: move fullWidth and fullHeight to different function or var
   const ogParsedMap = getParsedMap()
   setMapFromParsed(fullMap)
   const fullWidth = width()
@@ -1552,8 +1543,6 @@ async function panBy(panByX, panByY) {
       else if (newHeight < 16)
         newWidth = Math.round(newHeight * 1.25)
     }
-    
-    console.table({ newWidth, fullWidth, newHeight, fullHeight })
 
     const { x: newZoomX, y: newZoomY } = getCenterZoomBox({ width: newWidth, height: newHeight })
     
@@ -1590,7 +1579,6 @@ async function panBy(panByX, panByY) {
       zoom.x = newZoomX
       zoom.y = newZoomY
 
-      // TODO: consider making this a function
       const parsedMap = getParsedMap()
       const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
       setMapFromParsed(zoomedMap)
@@ -1688,7 +1676,9 @@ function isEffectivelyZero(num) {
   return Math.abs(num) < epsilon
 }
 
-function startLevel(newLevel) {  
+function startLevel(newLevel) {
+  if (!(newLevel in levels)) throw new Error(`Level ${newLevel} does not exist`)
+  
   fullX = null
   fullY = null
   xVel = 0
@@ -1718,6 +1708,8 @@ function startLevel(newLevel) {
   
   level = newLevel
   setMap(levels[level])
+
+  if (!getFirst(player)) throw new Error("Player is not in level. A player sprite must exist")
   
   fullMap = getParsedMap()
   
@@ -1822,13 +1814,13 @@ function startLevel(newLevel) {
       ]
     ]
     
-    let textIndex;
+    let textIndex
     
     nextText()
     
     const firstLevelInterval = setInterval(() => {
       if (level !== 0 || gameOver) {
-        clearInterval(newLevel)
+        clearInterval(firstLevelInterval)
         return
       }
       nextText()
@@ -1844,7 +1836,7 @@ function startLevel(newLevel) {
       const texts = textsList[textIndex]
       addTexts(texts)
     }
-  } else if (!finishedAll && newLevel === 3 && !showedLeftHint) {
+  } else if (!finishedAll && newLevel === 4 && !showedLeftHint) {
     showedLeftHint = true
 
     addTexts([
