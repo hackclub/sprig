@@ -1644,7 +1644,7 @@ const resolution = 2; // number of pixels in a tile
 
 // get a unique character for a given x and y, for the legend
 function getTileLegend(tileX, tileY) {
-  return String.fromCharCode(currentLegendChar + (tileX * tileY))
+  return String.fromCharCode(currentLegendChar + tileX + (10 * resolution * tileY))
 }
 
 // generate a static map of unique characters for the canvas to render to 
@@ -1655,6 +1655,7 @@ for (let y = 0; y < 8 * resolution; y++) {
     canvasMap += getTileLegend(x, y);
   }
 }
+console.log(canvasMap)
 
 // using the canvas, generate a bitmap for an x and y on the sprig map
 function genTileBitmap(tileX, tileY) {
