@@ -1024,7 +1024,7 @@ onInput("j", () => handleIjklInput("j"))
 onInput("l", () => handleIjklInput("l"))
 onInput("k", () => handleIjklInput("k"))
 
-startLevel(7)
+startLevel(0)
 
 function handleWasdInput(key) {
   const earlyReturn = handleGlobalInput()
@@ -1066,21 +1066,6 @@ function handleIjklInput(key) {
         arrowType !== null ||
         inAir
       ) return
-    
-      // let newArrowType = arrowCounters.indexOf(arrow_0)
-      // while (checkArrowIsInvalid(arrowCounters[newArrowType])) {
-      //   newArrowType += 1
-      //   if (newArrowType === lastArrow) throw new Error("No possible moves")
-      // }
-      // newArrowType = arrowCounters[newArrowType]
-
-      // const startingArrowType = arrowCounters.indexOf(lastArrowType ?? arrow_0)
-      // let newArrowType = startingArrowType
-      // while (checkArrowIsInvalid(arrowCounters[newArrowType])) {
-      //   newArrowType = ((newArrowType + 1) % lastArrow + lastArrow) % lastArrow
-      //   if (newArrowType === startingArrowType) throw new Error("No possible moves")
-      // }
-      // newArrowType = arrowCounters[newArrowType]
 
       const validArrows = []
       for (let i = 0; i < lastArrow; i++) {
@@ -1088,13 +1073,12 @@ function handleIjklInput(key) {
           validArrows.push(i)
       }
       if (validArrows.length === 0) throw new Error("No possible moves")
-      console.log(validArrows)
+      
       const goalArrowType = arrowCounters.indexOf(lastArrowType ?? arrow_0)
+      
       const closestArrowType = validArrows.reduce(
         (prev, curr) => Math.abs(curr - goalArrowType) < Math.abs(prev - goalArrowType) ? curr : prev
       )
-      console.log(goalArrowType)
-      console.log(closestArrowType)
       
       const newArrowType = arrowCounters[closestArrowType]
       
@@ -1271,65 +1255,14 @@ function checkNonSolidOverlap() {
 }
 
 function endGame(options = {}) {
-  // const duration = Date.now() - startTime
-  // const labels = [
-  //   { label: "h", count: 1000 * 60 * 60 },
-  //   { label: "m", count: 1000 * 60 },
-  //   { label: "s", count: 1000 }
-  // ]
-  // const remaining = duration
-  // const outputUnits = []
-  // for (const label of labels) {
-  //   const count = remaining % label.count
-  //   if (outputUnits.length >= 1 || count > 0) {
-  //     outputUnits.push(`${count}${label.label}`)
-  //   }
-  // }
-  // const formattedTime = outputUnits
-
-  // console.log(outputUnits)
-
-  // console.log(Date.now())
-  // console.log(`started at: ${startTime}`)
-  
   const duration = Date.now() - startTime
   totalTime += duration
   
-  // const labels = [
-  //   { label: "h", count: 1000 * 60 * 60 },
-  //   { label: "m", count: 1000 * 60 },
-  //   { label: "s", count: 1000 }
-  // ]
-  // let remaining = duration
-  // const outputUnits = []
-  // // console.log(remaining)
-  // for (const label of labels) {
-  //   const isLast = labels.indexOf(label) === labels.length-1
-    
-  //   const count = remaining / label.count
-  //   const roundedCount = (
-  //     isLast ?
-  //     Math.floor(count * 10) / 10 :
-  //     Math.floor(count)
-  //   )
-    
-  //   if (outputUnits.length >= 1 || roundedCount > 0 || isLast)
-  //     outputUnits.push(`${roundedCount}${label.label}`)
-    
-  //   remaining = remaining % label.count
-  // }
-  // const formattedTime = outputUnits.join(" ")
-
-  // console.log(outputUnits)
-  
   gameOver = true
   won = options.won ?? false
-
-  console.log("running")
-  if (updateTilesInterval) {
-    console.log("clear interval")
+  
+  if (updateTilesInterval)
     clearInterval(updateTilesInterval)
-  }
 
   clearText()
   
@@ -1337,87 +1270,34 @@ function endGame(options = {}) {
     playSoundOfType("goal", true)
 
     if (level === levels.length-1) {
-    // if (level === 0) {
-      addText(
-        "ALL LEVELS!",
-        { y: 3, color: color`6` }
-      )
-      addText(
-        "COMPLETE!",
-        { y: 4, color: color`6` }
-      )
-      
-      addText(
-        "Congratulations!",
-        { y: 6, color: color`2` }
-      )
-      
-      addText(
-        `Time: ${formatTime(duration)}`,
-        { y: 8, color: color`2` }
-      )
-      addText(
-        `Total: ${formatTime(totalTime)}`,
-        { y: 9, color: color`6` }
-      )
-
-      addText(
-        "Triple press any",
-        { y: 11, color: color`2` }
-      )
-      addText(
-        "button to restart",
-        { y: 12, color: color`2` }
-      )
-      addText(
-        "to the first level.",
-        { y: 13, color: color`2` }
-      )
+      addTexts([
+        { text: "ALL LEVELS!", y: 3, color: color`6` },
+        { text: "COMPLETE!", y: 4, color: color`6` },
+        { text: "Congratulations!", y: 6 },
+        { text: `Time: ${formatTime(duration)}`, y: 8 },
+        { text: `Total: ${formatTime(totalTime)}`, y: 9, color: color`6` },
+        { text: "Triple press any", y: 11 },
+        { text: "button to restart", y: 12 },
+        { text: "to the first level.", y: 13 }
+      ])
     } else {
-      addText(
-        "Level Complete!",
-        { y: 5, color: color`2` }
-      )
-      
-      addText(
-        `Time: ${formatTime(duration)}`,
-        { y: 7, color: color`2` }
-      )
-      
-      addText(
-        "Press any button",
-        { y: 9, color: color`2` }
-      )
-      addText(
-        "to continue to",
-        { y: 10, color: color`2` }
-      )
-      addText(
-        "the next level!",
-        { y: 11, color: color`2` }
-      )
+      addTexts([
+        { text: "Level Complete!", y: 5 },
+        { text: `Time: ${formatTime(duration)}`, y: 7 },
+        { text: "Press any button", y: 9 },
+        { text: "to continue to", y: 10 },
+        { text: "the next level!", y: 11 }
+      ])
     }
   } else {
     playSoundOfType("danger", true)
 
-    console.log("add game over text")
-    
-    addText(
-      "Game Over",
-      { y: 5, color: color`2` }
-    )
-    addText(
-      "Press any button",
-      { y: 7, color: color`2` }
-    )
-    addText(
-      "to play again!",
-      { y: 8, color: color`2` }
-    )
-    addText(
-      `Time: ${formatTime(duration)}`,
-      { y: 10, color: color`2` }
-    )
+    addTexts([
+      { text: "Game Over", y: 5 },
+      { text: "Press any button", y: 7 },
+      { text: "to play again!", y: 8 },
+      { text: `Time: ${formatTime(duration)}`, y: 10 }
+    ])
   }
 }
 
@@ -1636,7 +1516,6 @@ async function panBy(panByX, panByY) {
   const reset = typeof panByX !== "number" && typeof panByY !== "number"
   
   if (zoom.isZoomedOut && !reset) {
-    console.log("yup!")
     zoom.x = Math.max(Math.min(zoom.x+panByX, fullWidth-zoom.width), 0)
     zoom.y = Math.max(Math.min(zoom.y+panByY, fullHeight-zoom.height), 0)
     
@@ -1686,16 +1565,11 @@ async function panBy(panByX, panByY) {
     const zoomDiffX = newZoomX-ogZoomX
     const zoomDiffY = newZoomY-ogZoomY
     
-    let iterationCount = Math.ceil(Math.max(Math.abs(zoomDiffWidth), Math.abs(zoomDiffHeight))/2)
-
-    console.log(iterationCount)
-    
+    let iterationCount = Math.ceil(Math.max(Math.abs(zoomDiffWidth), Math.abs(zoomDiffHeight))/2)    
     if (reset) iterationCount = Math.max(iterationCount, 3)
     
     if (iterationCount >= 1) {
-      console.log("a")
       for (let i = 0; i < iterationCount; i++) {
-        console.log("b")
         if (i >= 1) setMapFromParsed(fullMap)
         
         zoom.width = ogWidth+Math.round(zoomDiffWidth / iterationCount * (i+1))
@@ -1720,8 +1594,6 @@ async function panBy(panByX, panByY) {
       const parsedMap = getParsedMap()
       const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
       setMapFromParsed(zoomedMap)
-      
-      console.log("c")
     }
       
     zoom.isZoomedOut = !reset
@@ -1970,48 +1842,38 @@ function startLevel(newLevel) {
       clearText()
 
       const texts = textsList[textIndex]
-
-      console.log(texts)
-
-      for (const text of texts) {
-        addText(
-          text.text,
-          { x: text.x, y: text.y, color: text.color ?? color`2` }
-        )
-      }
-      
-      // addText(
-      //   "SPRING!",
-      //   { y: 3, color: color`2` }
-      // )
-      // addText("Learn the controls", { y: 5, color: color`2` })
-      // addText("by experimenting!", { y: 6, color: color`2` })
-      // addText("Start with the buttons on the right. The left buttons will prove useful later!", { y: 7, color: color`2` })
+      addTexts(texts)
     }
   } else if (!finishedAll && newLevel === 3 && !showedLeftHint) {
     showedLeftHint = true
-    
-    addText(
-      "Pssst...",
-      { y: 2, color: color`2` }
-    )
-    addText(
-      "Now would be a",
-      { y: 3, color: color`2` }
-    )
-    addText(
-      "good time to",
-      { y: 4, color: color`2` }
-    )
-    addText(
-      "experiment with",
-      { y: 5, color: color`2` }
-    )
-    addText(
-      "the LEFT buttons!",
-      { y: 6, color: color`2` }
-    )
+
+    addTexts([
+      { text: "Pssst...", y: 2 },
+      { text: "Now would be a", y: 3 },
+      { text: "good time to", y: 4 },
+      { text: "experiment with", y: 5 },
+      { text: "the LEFT buttons!", y: 6 }
+    ])
   }
+}
+
+function addTexts(texts = []) {
+  for (const textOptions of texts) {
+    addTextCustom(textOptions)
+  }
+}
+
+function addTextCustom(options = {}) {
+  const {
+    text,
+    x,
+    y = 0,
+    color: textColor = color`2`
+  } = options
+
+  if (!text) throw new Error("Text is required")
+  
+  addText(text, { x, y, color: textColor })
 }
 
 function formatTime(ms) {
