@@ -1657,7 +1657,7 @@ for (let y = 0; y < 8 * resolution; y++) {
 }
 
 // using the canvas, generate a bitmap for an x and y on the sprig map
-function getTile(tileX, tileY) {
+function genTileBitmap(tileX, tileY) {
   // loop through every pixel in the tile
   const tileBitmap = "";
   for (let y = tileY; y < tileY + resolution; y++) {
