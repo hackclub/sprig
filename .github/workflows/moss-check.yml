@@ -1,0 +1,37 @@
+name: Plagiarism Check with MOSS
+
+on:
+  pull_request:
+    paths:
+      - "games/**/*.js"
+
+jobs:
+  moss-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Perl
+        run: sudo apt-get install perl
+
+      - name: Get list of changed files
+        id: changed-files
+        run: |
+          echo "Pull Request Base SHA: ${{ github.event.pull_request.base.sha }}"
+          echo "Pull Request Head SHA: ${{ github.event.pull_request.head.sha }}"
+          js_files=$(git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep 'games/.*\.js$' | xargs)
+          echo "FILES=$js_files" >> $GITHUB_ENV
+
+      - name: Make MOSS Script Executable
+        run: chmod +x .github/scripts/moss
+
+      - name: Run MOSS
+        if: env.FILES != ''
+        run: .github/scripts/moss -l javascript ${{ env.FILES }} games/*.js
+
+      - name: Display MOSS URL
+        if: env.FILES != ''
+        run: |
+          echo "MOSS run completed. Check the plagiarism report at the URL provided above."
