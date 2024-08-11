@@ -31,7 +31,10 @@ jobs:
 
       - name: Run MOSS
         if: env.FILES != ''
-        run: .github/scripts/moss -l javascript ${{ env.FILES }} games/*.js
+        run: |
+          for file in ${{ env.FILES }}; do
+            .github/scripts/moss -l javascript "$file" games/*.js
+          done
 
       - name: Display MOSS URL
         if: env.FILES != ''
