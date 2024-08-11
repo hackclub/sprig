@@ -496,23 +496,74 @@ CC............CC` ],
 ................
 ................
 ................` ],
+//   [ goal, bitmap`
+// ................
+// .........000....
+// ........00600...
+// .......0066600..
+// ......00666660..
+// .....0066666600.
+// ....00666666660.
+// ...006666666660.
+// ..0066666669990.
+// .00666669999990.
+// .06669999999990.
+// .09999999990000.
+// .09999990000....
+// .09990000.......
+// .00000..........
+// ................` ],
+//   [ goal, bitmap`
+// ......0000......
+// ....00....00....
+// ..00........00..
+// ..0..........0..
+// .0............0.
+// .0............0.
+// 0..............0
+// 0..............0
+// 0..............0
+// 0..............0
+// .0............0.
+// .0............0.
+// ..0..........0..
+// ..00........00..
+// ....00....00....
+// ......0000......` ],
   [ goal, bitmap`
 ................
-.........000....
-........00600...
-.......0066600..
-......00666660..
-.....0066666600.
-....00666666660.
-...006666666660.
-..0066666669990.
-.00666669999990.
-.06669999999990.
-.09999999990000.
-.09999990000....
-.09990000.......
-.00000..........
+................
+......0000......
+....00666600....
+...0666666660...
+...0666996660...
+..066699996660..
+..066999999660..
+..066999999660..
+..066699996660..
+...0666996660...
+...0666666660...
+....00666600....
+......0000......
+................
 ................` ],
+//   [ goal, bitmap`
+// ....00000000....
+// ...0000000000...
+// ..000000000000..
+// .00000000000000.
+// 0000000000000000
+// 0000000000000000
+// 0000000000000000
+// 0000000000000000
+// 0000000000000000
+// 0000000000000000
+// 0000000000000000
+// 0000000000000000
+// .00000000000000.
+// ..000000000000..
+// ...0000000000...
+// ....00000000....` ],
   [ key, bitmap`
 ................
 ..........00....
@@ -722,7 +773,7 @@ n...............g..n
 n.......ww.........n
 n..................n
 np.................n
-nwwwnttttttttnwwwwwn`,
+nwwww........wwwwwwn`,
   map`
 nwnwnwnwnwnwnwnwnwnwn
 w...................w
@@ -1274,27 +1325,58 @@ function endGame(options = {}) {
   
   if (won) {
     playSoundOfType("goal", true)
-    
-    addText(
-      "Level Complete!",
-      { y: 5, color: color`2` }
-    )
-    addText(
-      "Press any button",
-      { y: 7, color: color`2` }
-    )
-    addText(
-      "to continue to",
-      { y: 8, color: color`2` }
-    )
-    addText(
-      "the next level!",
-      { y: 9, color: color`2` }
-    )
-    addText(
-      `Time: ${formattedTime}`,
-      { y: 11, color: color`2` }
-    )
+
+    if (level === levels.length-1) {
+      addText(
+        "ALL LEVELS!",
+        { y: 4, color: color`6` }
+      )
+      addText(
+        "COMPLETE!",
+        { y: 5, color: color`6` }
+      )
+      addText(
+        "Congratulations!",
+        { y: 7, color: color`2` }
+      )
+      addText(
+        "Press any button",
+        { y: 9, color: color`2` }
+      )
+      addText(
+        "to restart to",
+        { y: 10, color: color`2` }
+      )
+      addText(
+        "the first level.",
+        { y: 11, color: color`2` }
+      )
+      addText(
+        `Time: ${formattedTime}`,
+        { y: 13, color: color`2` }
+      )
+    } else {
+      addText(
+        "Level Complete!",
+        { y: 5, color: color`2` }
+      )
+      addText(
+        "Press any button",
+        { y: 7, color: color`2` }
+      )
+      addText(
+        "to continue to",
+        { y: 8, color: color`2` }
+      )
+      addText(
+        "the next level!",
+        { y: 9, color: color`2` }
+      )
+      addText(
+        `Time: ${formattedTime}`,
+        { y: 11, color: color`2` }
+      )
+    }
   } else {
     playSoundOfType("danger", true)
 
@@ -1314,7 +1396,7 @@ function endGame(options = {}) {
     )
     addText(
       `Time: ${formattedTime}`,
-      { y: 9, color: color`2` }
+      { y: 10, color: color`2` }
     )
   }
 }
@@ -1332,7 +1414,7 @@ function handleGlobalInput() {
 function rotateArrow(rotateCount) {
   const arrowTypeNum = arrowCounters.indexOf(arrowType)
   
-  const arrowCount = lastArrow + 1
+  // const arrowCount = lastArrow + 1
 
   let rawNewTypeNum = arrowTypeNum + rotateCount
   let newTypeNum = constrainArrowTypeNum(rawNewTypeNum)
@@ -1517,6 +1599,7 @@ async function panBy(panByX, panByY) {
   const reset = typeof panByX !== "number" && typeof panByY !== "number"
   
   if (zoom.isZoomedOut && !reset) {
+    console.log("yup!")
     zoom.x = Math.max(Math.min(zoom.x+panByX, fullWidth-zoom.width), 0)
     zoom.y = Math.max(Math.min(zoom.y+panByY, fullHeight-zoom.height), 0)
     
@@ -1525,8 +1608,6 @@ async function panBy(panByX, panByY) {
     const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
     setMapFromParsed(zoomedMap)
   } else if ((!zoom.zooming || reset) && !inAir) {
-    zoom.zooming = true
-
     const ogWidth = width()
     const ogHeight = height()
     
@@ -1539,8 +1620,24 @@ async function panBy(panByX, panByY) {
       height: centerZoomHeight
     } = getCenterZoomBox()
     
-    const newWidth = Math.min(reset ? centerZoomWidth : 20, fullWidth)
-    const newHeight = Math.min(reset ? centerZoomHeight : 16, fullHeight)
+    if (!reset && centerZoomWidth === fullWidth && centerZoomHeight === fullHeight) {
+      centerMap()
+      return
+    }
+    
+    zoom.zooming = true
+    
+    let newWidth = Math.min(reset ? centerZoomWidth : 20, fullWidth)
+    let newHeight = Math.min(reset ? centerZoomHeight : 16, fullHeight)
+
+    if (!reset) {
+      if (newWidth < 20)
+        newHeight = Math.round(newWidth * 0.8)
+      else if (newHeight < 16)
+        newWidth = Math.round(newHeight * 1.25)
+    }
+    
+    console.table({ newWidth, fullWidth, newHeight, fullHeight })
 
     const { x: newZoomX, y: newZoomY } = getCenterZoomBox({ width: newWidth, height: newHeight })
     
@@ -1552,10 +1649,16 @@ async function panBy(panByX, panByY) {
     const zoomDiffX = newZoomX-ogZoomX
     const zoomDiffY = newZoomY-ogZoomY
     
-    const iterationCount = Math.ceil(Math.max(Math.abs(zoomDiffWidth), Math.abs(zoomDiffHeight))/2)
+    let iterationCount = Math.ceil(Math.max(Math.abs(zoomDiffWidth), Math.abs(zoomDiffHeight))/2)
+
+    console.log(iterationCount)
+    
+    if (reset) iterationCount = Math.max(iterationCount, 3)
     
     if (iterationCount >= 1) {
+      console.log("a")
       for (let i = 0; i < iterationCount; i++) {
+        console.log("b")
         if (i >= 1) setMapFromParsed(fullMap)
         
         zoom.width = ogWidth+Math.round(zoomDiffWidth / iterationCount * (i+1))
@@ -1575,6 +1678,13 @@ async function panBy(panByX, panByY) {
       zoom.height = newHeight
       zoom.x = newZoomX
       zoom.y = newZoomY
+
+      // TODO: consider making this a function
+      const parsedMap = getParsedMap()
+      const zoomedMap = zoomMap(parsedMap, zoom.x, zoom.y, zoom.width, zoom.height)
+      setMapFromParsed(zoomedMap)
+      
+      console.log("c")
     }
       
     zoom.isZoomedOut = !reset
@@ -1780,7 +1890,7 @@ function startLevel(newLevel) {
   if (newLevel === 0) {
     const textsList = [
       [
-        { text: "SPRING!", y: 3 },
+        { text: "SPRING!", y: 3, color: color`5` },
         { text: "Learn the controls", y: 5 },
         { text: "by experimenting!", y: 6 }
       ],
@@ -1826,7 +1936,7 @@ function startLevel(newLevel) {
       for (const text of texts) {
         addText(
           text.text,
-          { x: text.x, y: text.y, color: color`2` }
+          { x: text.x, y: text.y, color: text.color ?? color`2` }
         )
       }
       
