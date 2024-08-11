@@ -1492,7 +1492,7 @@ You finished the
   game without
 using assists :O`;
 
-// Configurables
+// Configurable Variables
 let defaultSolids = [
   player,
   wall,
@@ -1508,46 +1508,45 @@ let mapLevels = [2, 4, 7, 8, 10, 11, 13, 15, 16, 19, 21, 22]; // List of levels 
 let lightRange = 3; // The default distance a light can reach, for displaySpritesInRange()
 let playerRange = 3; // The default distance the player can see, for displaySpritesInRange()
 let flashBrightness = 10; // How far the player can see when using mapFlash()
-let toastDelay = 3000; // How long a toast lasts (Used when a key is found or door is unlocked)
-let shortToastDelay = 1500; // How long a short toast lasts (Used when the player cant unlock a door or finds an empty box)
+let toastDelay = 3000; // How long a toast lasts
+let shortToastDelay = 1500; // How long a short toast lasts
 let textHeightOffset = 4; // How high toast texts should appear
 let mapHeightOffset = 1; // How high map name toast texts should appear
 let isMusicMuted = false; // The default option wether to play main menu music or not
+let spawnX = 1; // Default X value used to spawn player on start, tells where to spawn player in spawn()
+let spawnY = 1; // Default Y value used to spawn player on start, tells where to spawn player in spawn()
 
-// Music
+// Music Variables
 let stemOne; // Used to set playback of stem one
 let stemTwo; // Used to set playback of stem two
 let stemThree; // Used to set playback of stem three
 let stemFour; // Used to set playback of stem four
 let musicTimeouts = [0, 1, 2, 3, 4, 5, 6]; // Used to set the timeout of each phase
 
-// Background Game States
-let widthX; // Stores actual map width (Stored on spawn)
-let gameState; // Stores the current game state (menu, game, pause, end) used for certain functions, such as updateGameIntervals()
-let menuMode = 1; // Stores the current screen (1: Main Menu, 2: Guide) used for certain functions, such as updateGameIntervals()
+// Background Game Variables
+let gameState; // Stores the current game state (menu, game, pause, end) used for certain functions
 let pointerOption = 0; // Stores which option is currently selected
 let currentPointer; // Stores which texture the pointer is using
 let currentMuteIcon = unmutedSprite; // Stores which texture the mute icon is using
 let backButtonState = "2"; // Stores the state of the back button in the guide (1: Inactive, 2: Active)
 let pingError; // Notifies errorPing() if an error occured (reduces error spam)
 let allSprites; // Stores all blocks inside a level
-let solidSprites = defaultSolids; //  Stores which blocks are currently solid
 let currentPlayerCoord; // Stores player's last position. Used in stepPing()
 let keyFound; // Stores if a key was found. Used to feature key while gameState paused, for setSprites()
 let textHeight; // Stores which height toast texts appear
 let flashingMap; // Stores if the player pressed the map flash button, used to adjust player texture
-let usedAssist; // Stores if the player ever used the assists (flash map and key magic)
 let mapIndex = 0; // Stores the current map number
 let lastDisplayed; // Stores the last displayed map name
+let usedAssist; // Stores if the player ever used the assists (flash map and key magic)
 let toastTimeout; // Stores the timeout used for toast text clear
 
-// In-Game States
-let spawnX = 1; // Default X value used to spawn player on start, used to tell where player to spawn in checkBorder()
-let spawnY = 1; // Default Y value used to spawn player on start, used to tell where player to spawn in checkBorder()
+// In-Game Variables
+let widthX; // Stores actual map width (Stored on spawn)
 let level = 1; // 0 for Guide; 1 for Main Menu
 let lastLevel = 1; // Tracks level before mainMenu to allow accessing the main menu whilst in game
 let currentKey; // Used to track which key the player is holding
 let currentPlayer = playerSprite; // Used to track which player sprite to show (based on key)
+let solidSprites = defaultSolids; //  Stores which blocks are currently solid
 
 // Loops
 let pointerChangeInterval; // Loop used to change the pointer icon in the main menu
@@ -2015,15 +2014,9 @@ function grabBox() {
     getTile(playerCoord.x + 1, playerCoord.y)[0], // Tile to the right of player
     getTile(playerCoord.x - 1, playerCoord.y)[0], // Tile to the left of playerd
   ];
-  let boxOneFound = surroundingTiles.some(
-    (tile) => tile && tile.type == boxKeyOne,
-  );
-  let boxTwoFound = surroundingTiles.some(
-    (tile) => tile && tile.type == boxKeyTwo,
-  );
-  let boxThreeFound = surroundingTiles.some(
-    (tile) => tile && tile.type == boxKeyThree,
-  );
+  let boxOneFound = surroundingTiles.some((tile) => tile && tile.type == boxKeyOne);
+  let boxTwoFound = surroundingTiles.some((tile) => tile && tile.type == boxKeyTwo);
+  let boxThreeFound = surroundingTiles.some((tile) => tile && tile.type == boxKeyThree);
   let boxFound = surroundingTiles.some((tile) => tile && tile.type == box);
 
   if (boxOneFound) {
@@ -2318,16 +2311,10 @@ function displaySpritesInRange() {
     let spriteY = allSprite.y;
 
     // Calculate the distance between the block and the player
-    const distancePlayer =
-      Math.abs(spriteX - playerX) + Math.abs(spriteY - playerY);
+    const distancePlayer = Math.abs(spriteX - playerX) + Math.abs(spriteY - playerY);
 
-    // Check if the block is within the specified range around the player
-    if (distancePlayer <= playerRange) {
-      if (!getTile(spriteX, spriteY)) {
-        // If block is within range, add it to the game
-        addSprite(spriteX, spriteY, allSprite.type);
-      }
-    } else {
+    // Check if the block is outside the specified range around the player
+    if (distancePlayer >= playerRange) {
       if (getTile(spriteX, spriteY)) {
         // If block exceeds the range, remove it from the game
         clearTile(spriteX, spriteY);
@@ -2345,8 +2332,7 @@ function displaySpritesInRange() {
         let lanternY = lanternCoord.y;
 
         // Calculate the distance between the block and the lantern
-        const distanceLantern =
-          Math.abs(spriteX - lanternX) + Math.abs(spriteY - lanternY);
+        const distanceLantern = Math.abs(spriteX - lanternX) + Math.abs(spriteY - lanternY);
 
         // Check if the block is within the specified range around the hanging lantern
         if (distanceLantern <= lightRange) {
