@@ -6,109 +6,41 @@ on:
       - "games/**/*.js"
 
 jobs:
-  split-and-list-files:
+  plagiarism-check:
     runs-on: ubuntu-latest
-    outputs:
-      batches: ${{ steps.list-batches.outputs.batches }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
+      - name: Set up Perl
+        run: sudo apt-get install perl
 
-      - name: Install Compare50 && beautifulsoup4
-        run: pip install compare50 beautifulsoup4
+      - name: Install MOSS dependencies
+        run: |
+          wget http://theory.stanford.edu/~aiken/moss/moss.pl -O moss.pl
+          chmod +x moss.pl
 
       - name: Get list of changed files
         id: changed-files
         run: |
           echo "Pull Request Base SHA: ${{ github.event.pull_request.base.sha }}"
           echo "Pull Request Head SHA: ${{ github.event.pull_request.head.sha }}"
+          git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep 'games/.*\.js$' | xargs
           js_files=$(git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep 'games/.*\.js$' | xargs)
-          echo "FILES=$js_files"
           echo "FILES=$js_files" >> $GITHUB_ENV
 
-      - name: Split files into 10 batches
-        run: |
-          echo "Running split_into_batches.py"
-          python .github/scripts/split_into_batches.py games/ batches/ 10
-
-      - name: List files in batches
-        id: list-batches
-        run: |
-          echo "Listing files in batches"
-          batches="[]"
-          for dir in batches/*; do
-            if [ -d "$dir" ]; then
-              echo "Files in $dir:"
-              ls "$dir"
-              batches=$(jq -c --arg dir "$dir" '. + [$dir]' <<< "$batches")
-            fi
-          done
-          echo "batches=$batches" >> $GITHUB_ENV
-          echo "::set-output name=batches::$batches"  # For backward compatibility
-
-  plagiarism-check:
-    needs: split-and-list-files
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        file: ${{ fromJson(needs.split-and-list-files.outputs.batches) }}
-        batch: ${{ fromJson(needs.split-and-list-files.outputs.batches) }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install Compare50 && beautifulsoup4
-        run: pip install compare50 beautifulsoup4
-
-      - name: Debug Batch and File
-        run: |
-          echo "Processing file: ${{ matrix.file }}"
-          echo "Processing batch: ${{ matrix.batch }}"
-
       - name: Run Plagiarism Detection Script
-        run: |
-          echo "Running plagiarism check for file: ${{ matrix.file }} in batch: ${{ matrix.batch }}"
-          python .github/scripts/plagiarism_check.py "${{ matrix.file }}" "${{ matrix.batch }}" "output_dir" "saved_dir"
+        if: env.FILES != ''
+        run: python .github/scripts/plagiarism_check.py "${{ env.FILES }}" games output_dir saved_dir
 
-  extract-and-upload:
-    needs: plagiarism-check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Extract and Display Similarity Percentages
-        run: |
-          echo "Extracting similarity percentages"
-          python .github/scripts/extract_percentages.py saved_dir/
-        id: extract-percentages
-
-      - name: Upload Compare50 Results as Artifacts
+      - name: Upload MOSS Results as Artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: compare50-results
+          name: moss-results
           path: saved_dir/
 
       - name: Save PR number to file

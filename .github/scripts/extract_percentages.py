@@ -1,38 +1,37 @@
-from bs4 import BeautifulSoup
 import os
 import sys
 import time
+from bs4 import BeautifulSoup
 
 def log(message):
     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
     print(f"[{timestamp}] {message}")
 
-def extract_similarity_percentage(html_file):
+def process_moss_results(html_file, threshold=50):
+    log("Processing MOSS results for plagiarism...")
+    
+    high_plagiarism_detected = False
+    high_plagiarism_files = []
+
     try:
         with open(html_file, 'r', encoding='utf-8') as file:
             soup = BeautifulSoup(file, 'html.parser')
-            file_name_tag = soup.select_one("#textright > div > h4")
-            if file_name_tag:
-                percentage_text = file_name_tag.find("span", class_="text-secondary small").text.strip("()%")
-                return int(percentage_text)
-            else:
-                return None
-    except Exception as e:
-        log(f"Error processing file {html_file}: {e}")
-        return None
+            links = soup.find_all('a')
 
-def process_html_files(directory, threshold=50):
-    log("Processing HTML files for plagiarism results...")
-    high_plagiarism_detected = False
-    high_plagiarism_files = []
-    for filename in os.listdir(directory):
-        if filename.endswith(".html"):
-            file_path = os.path.join(directory, filename)
-            percentage = extract_similarity_percentage(file_path)
-            if percentage is not None and percentage >= threshold:
-                log(f"High plagiarism detected - {filename.replace('.html', '.js')}: {percentage}%")
-                high_plagiarism_files.append(filename.replace('.html', '.js') + ": " + str(percentage) + "%")
-                high_plagiarism_detected = True
+            for link in links:
+                text = link.text
+                if 'matches' in text:
+                    parts = text.split()
+                    percentage = int(parts[-1].strip('%'))
+                    
+                    if percentage >= threshold:
+                        high_plagiarism_detected = True
+                        high_plagiarism_files.append(f"{text}")
+
+    except Exception as e:
+        log(f"Error processing MOSS results: {e}")
+        return False, []
+
     return high_plagiarism_detected, high_plagiarism_files
 
 def write_to_markdown(file_path, lines):
@@ -48,7 +47,13 @@ def main():
         sys.exit(1)
 
     saved_dir_path = sys.argv[1]
-    high_plagiarism_detected, high_plagiarism_files = process_html_files(saved_dir_path)
+    html_file = os.path.join(saved_dir_path, 'moss_result.html')
+    
+    if not os.path.exists(html_file):
+        log(f"HTML file {html_file} not found.")
+        sys.exit(1)
+
+    high_plagiarism_detected, high_plagiarism_files = process_moss_results(html_file)
 
     markdown_lines = ["# Plagiarism Report"]
     if high_plagiarism_detected:
@@ -60,5 +65,6 @@ def main():
     else:
         log("No high plagiarism percentages detected.")
     log("Plagiarism report generation completed.")
+
 if __name__ == "__main__":
     main()
