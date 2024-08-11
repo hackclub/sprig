@@ -990,7 +990,14 @@ let gravity = 0.1
 
 let showedLeftHint = false
 
-// these are all set within startGame()
+let lastResetClick;
+let resetClickCount;
+
+let finishedAll = false
+
+let totalTime = 0;
+
+// these are all set within startLevel()
 let fullX;
 let fullY;
 let xVel;
@@ -1017,7 +1024,7 @@ onInput("j", () => handleIjklInput("j"))
 onInput("l", () => handleIjklInput("l"))
 onInput("k", () => handleIjklInput("k"))
 
-startLevel(0)
+startLevel(7)
 
 function handleWasdInput(key) {
   const earlyReturn = handleGlobalInput()
@@ -1284,33 +1291,36 @@ function endGame(options = {}) {
 
   // console.log(Date.now())
   // console.log(`started at: ${startTime}`)
+  
   const duration = Date.now() - startTime
-  const labels = [
-    { label: "h", count: 1000 * 60 * 60 },
-    { label: "m", count: 1000 * 60 },
-    { label: "s", count: 1000 }
-  ]
-  let remaining = duration
-  const outputUnits = []
-  // console.log(remaining)
-  for (const label of labels) {
-    const isLast = labels.indexOf(label) === labels.length-1
+  totalTime += duration
+  
+  // const labels = [
+  //   { label: "h", count: 1000 * 60 * 60 },
+  //   { label: "m", count: 1000 * 60 },
+  //   { label: "s", count: 1000 }
+  // ]
+  // let remaining = duration
+  // const outputUnits = []
+  // // console.log(remaining)
+  // for (const label of labels) {
+  //   const isLast = labels.indexOf(label) === labels.length-1
     
-    const count = remaining / label.count
-    const roundedCount = (
-      isLast ?
-      Math.floor(count * 10) / 10 :
-      Math.floor(count)
-    )
+  //   const count = remaining / label.count
+  //   const roundedCount = (
+  //     isLast ?
+  //     Math.floor(count * 10) / 10 :
+  //     Math.floor(count)
+  //   )
     
-    if (outputUnits.length >= 1 || roundedCount > 0 || isLast)
-      outputUnits.push(`${roundedCount}${label.label}`)
+  //   if (outputUnits.length >= 1 || roundedCount > 0 || isLast)
+  //     outputUnits.push(`${roundedCount}${label.label}`)
     
-    remaining = remaining % label.count
-  }
-  const formattedTime = outputUnits.join(" ")
+  //   remaining = remaining % label.count
+  // }
+  // const formattedTime = outputUnits.join(" ")
 
-  console.log(outputUnits)
+  // console.log(outputUnits)
   
   gameOver = true
   won = options.won ?? false
@@ -1327,32 +1337,40 @@ function endGame(options = {}) {
     playSoundOfType("goal", true)
 
     if (level === levels.length-1) {
+    // if (level === 0) {
       addText(
         "ALL LEVELS!",
-        { y: 4, color: color`6` }
+        { y: 3, color: color`6` }
       )
       addText(
         "COMPLETE!",
-        { y: 5, color: color`6` }
+        { y: 4, color: color`6` }
       )
+      
       addText(
         "Congratulations!",
-        { y: 7, color: color`2` }
+        { y: 6, color: color`2` }
+      )
+      
+      addText(
+        `Time: ${formatTime(duration)}`,
+        { y: 8, color: color`2` }
       )
       addText(
-        "Press any button",
-        { y: 9, color: color`2` }
+        `Total: ${formatTime(totalTime)}`,
+        { y: 9, color: color`6` }
       )
+
       addText(
-        "to restart to",
-        { y: 10, color: color`2` }
-      )
-      addText(
-        "the first level.",
+        "Triple press any",
         { y: 11, color: color`2` }
       )
       addText(
-        `Time: ${formattedTime}`,
+        "button to restart",
+        { y: 12, color: color`2` }
+      )
+      addText(
+        "to the first level.",
         { y: 13, color: color`2` }
       )
     } else {
@@ -1360,20 +1378,22 @@ function endGame(options = {}) {
         "Level Complete!",
         { y: 5, color: color`2` }
       )
+      
       addText(
-        "Press any button",
+        `Time: ${formatTime(duration)}`,
         { y: 7, color: color`2` }
       )
+      
       addText(
-        "to continue to",
-        { y: 8, color: color`2` }
-      )
-      addText(
-        "the next level!",
+        "Press any button",
         { y: 9, color: color`2` }
       )
       addText(
-        `Time: ${formattedTime}`,
+        "to continue to",
+        { y: 10, color: color`2` }
+      )
+      addText(
+        "the next level!",
         { y: 11, color: color`2` }
       )
     }
@@ -1395,7 +1415,7 @@ function endGame(options = {}) {
       { y: 8, color: color`2` }
     )
     addText(
-      `Time: ${formattedTime}`,
+      `Time: ${formatTime(duration)}`,
       { y: 10, color: color`2` }
     )
   }
@@ -1404,7 +1424,24 @@ function endGame(options = {}) {
 function handleGlobalInput() {
   if (inAir) return
   if (gameOver) {
-    if (won) level++
+    if (won) {
+      if (level === levels.length-1) {
+        finishedAll = true
+        
+        const currDate = Date.now()
+        
+        if (
+          !lastResetClick ||
+          currDate-lastResetClick >= 1000
+        ) resetClickCount = 0
+        
+        lastResetClick = currDate
+        resetClickCount++
+
+        if (resetClickCount === 3) level = 0
+        else return true
+      } else level++
+    }
     startLevel(level)
     return true
   }
@@ -1886,8 +1923,11 @@ function startLevel(newLevel) {
   }, 1000)
 
   startTime = Date.now()
+  if (newLevel === 0) totalTime = 0
 
-  if (newLevel === 0) {
+  if (!finishedAll && newLevel === 0) {
+    totalTime = 0
+    
     const textsList = [
       [
         { text: "SPRING!", y: 3, color: color`5` },
@@ -1948,7 +1988,7 @@ function startLevel(newLevel) {
       // addText("by experimenting!", { y: 6, color: color`2` })
       // addText("Start with the buttons on the right. The left buttons will prove useful later!", { y: 7, color: color`2` })
     }
-  } else if (newLevel === 3 && !showedLeftHint) {
+  } else if (!finishedAll && newLevel === 3 && !showedLeftHint) {
     showedLeftHint = true
     
     addText(
@@ -1972,4 +2012,35 @@ function startLevel(newLevel) {
       { y: 6, color: color`2` }
     )
   }
+}
+
+function formatTime(ms) {
+  const labels = [
+    { label: "h", count: 1000 * 60 * 60 },
+    { label: "m", count: 1000 * 60 },
+    { label: "s", count: 1000 }
+  ]
+  
+  let remaining = ms
+  
+  const outputUnits = []
+  for (const label of labels) {
+    const isLast = labels.indexOf(label) === labels.length-1
+    
+    const count = remaining / label.count
+    const roundedCount = (
+      isLast ?
+      Math.floor(count * 10) / 10 :
+      Math.floor(count)
+    )
+    
+    if (outputUnits.length >= 1 || roundedCount > 0 || isLast)
+      outputUnits.push(`${roundedCount}${label.label}`)
+    
+    remaining = remaining % label.count
+  }
+  
+  const formattedTime = outputUnits.join(" ")
+  
+  return formattedTime
 }
