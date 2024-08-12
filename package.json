@@ -8,7 +8,8 @@
 		"dev": "astro dev",
 		"start": "astro dev",
 		"build": "astro build",
-		"test": "deno run --allow-read ./tests/sprigfuzzy.js"
+		"test": "deno run --allow-read ./tests/sprigfuzzy.js",
+		"test:unit": "vitest"
 	},
 	"dependencies": {
 		"@astrojs/preact": "^2.0.1",
@@ -45,6 +46,7 @@
 		"three": "^0.149.0",
 		"throttle-debounce": "^5.0.0",
 		"tinykeys": "^1.4.0",
+		"vitest": "^2.0.3",
 		"y-codemirror.next": "^0.3.4",
 		"y-webrtc": "^10.3.0",
 		"yjs": "^13.6.16"
@@ -61,6 +63,7 @@
 		"@types/node-statsd": "^0.1.6",
 		"@types/three": "^0.149.0",
 		"@types/throttle-debounce": "^5.0.0",
-		"@types/w3c-web-serial": "^1.0.3"
+		"@types/w3c-web-serial": "^1.0.3",
+		"vitest-canvas-mock": "^0.3.3"
 	}
 }

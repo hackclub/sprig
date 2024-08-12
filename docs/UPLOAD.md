@@ -14,12 +14,7 @@ That's all!
 
 ## Have no fear, UF2 is here!
 
-![hmm...](./assets/wheres_waldo_uf2.png)
-
-Your journey starts with a scavenger hunt.
-See if you can find the "pico-os.uf2" file in [the sprig repo](https://github.com/hackclub/sprig)!
-You might recognize it as the place where you uploaded your game to the gallery :P
-Go ahead and download that file.
+Click on [this link](https://sprig.hackclub.com/pico-os.uf2) to download Spade, the operating system for the Sprig console.
 
 ## BOOTSEL
 

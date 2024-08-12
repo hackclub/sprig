@@ -6,15 +6,39 @@ import { textToTune } from 'sprig/base'
 import { webEngine } from 'sprig/web'
 import * as Babel from "@babel/standalone"
 import TransformDetectInfiniteLoop, { BuildDuplicateFunctionDetector } from '../custom-babel-transforms'
+import {logInfo} from "../../components/popups-etc/help";
 
 interface RunResult {
 	error: NormalizedError | null
 	cleanup: () => void
 }
 
-export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (error: NormalizedError) => void): RunResult {
-	const game = webEngine(canvas)
+function getErrorObject(): Error {
+    try {
+        throw new Error("");
+    } catch (err) {
+        return err as Error;
+    }
+}
 
+function parseErrorStack(err?: Error): [number | null, number | null] {
+    const stack = err?.stack;
+    const chromePattern = /<anonymous>:(\d+):(\d+)/;
+    const firefoxPattern = /Function:(\d+):(\d+)/;
+
+    let match = chromePattern.exec(stack ?? '') || firefoxPattern.exec(stack ?? '');
+    if (match && match.length >= 3) {
+        const line = parseInt(match[1]!, 10);
+        const column = parseInt(match[2]!, 10);
+        if (!isNaN(line) && !isNaN(column)) {
+            return [line - 2, column];
+        }
+    }
+    return [null, null];
+}
+
+export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (error: NormalizedError) => void): RunResult | undefined {
+	const game = webEngine(canvas)
 	const tunes: PlayTuneRes[] = []
 	const timeouts: number[] = []
 	const intervals: number[] = []
@@ -61,37 +85,46 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 			const playTuneRes = playTune(tune, n)
 			tunes.push(playTuneRes)
 			return playTuneRes
-		}
-	}
-
-	const engineAPIKeys = Object.keys(api);
-	try {
-		const transformResult = Babel.transform(code, {
-			plugins: [TransformDetectInfiniteLoop, BuildDuplicateFunctionDetector(engineAPIKeys)],
-			retainLines: true
-		})
-
-		const fn = new Function(...engineAPIKeys, transformResult.code!)
-		fn(...Object.values(api))
-		return { error: null, cleanup }
-	} catch (error: any) {
-		// if there's an error code, it's most likely a babel error of some kind 
-		// other errors do not have an error code attached
-		if (!error.code) {
-			const normalizedError = normalizeGameError({ kind: "runtime", error });
-			normalizedError!.line! += 1;
-			return { error: normalizedError, cleanup };
-		} 
-		return {
-			error: {
-				raw: error,
-				description: error.message,
-				line: error.loc.line,
-				column: error.loc.column
+		},
+		console: {
+			...console,
+			log: (...args: any[]) => {
+				console.log(...args)
+				const err = getErrorObject();
+				const nums = parseErrorStack(err);
+				logInfo.value = [...logInfo.value, {
+					args: args,
+					nums: nums as number[],
+					isErr: false
+				}]
 			},
-			cleanup
+			error: (...args: any[]) => {
+				console.error(...args)
+				const err = getErrorObject();
+				const nums = parseErrorStack(err);
+				logInfo.value = [...logInfo.value, {
+					args: args,
+					nums: nums as number[],
+					isErr: true
+				}]
+			}
 		}
 	}
+
+    const engineAPIKeys = Object.keys(api);
+    try {
+        const transformResult = Babel.transform(code, {
+            plugins: [TransformDetectInfiniteLoop, BuildDuplicateFunctionDetector(engineAPIKeys)],
+            retainLines: true
+        });
+        logInfo.value = [];
+        const fn = new Function(...engineAPIKeys, transformResult.code!);
+        fn(...Object.values(api));
+        return { error: null, cleanup };
+    } catch (error: any) {
+        onPageError(normalizeGameError({ kind: "runtime", error }));
+        return { error: normalizeGameError({ kind: "runtime", error }), cleanup };
+    }
 }
 
 export function runGameHeadless(code: string): void {
@@ -118,7 +151,9 @@ export function runGameHeadless(code: string): void {
 	try {
 		const fn = new Function(...Object.keys(api), code)
 		fn(...Object.values(api))
-	} catch {}
+	} catch (error: any) {
+		normalizeGameError({ kind: 'runtime', error })
+	}
 
 	game.cleanup()
 }
