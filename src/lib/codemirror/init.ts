@@ -41,7 +41,7 @@ import { effect, signal } from "@preact/signals";
 import { h, render } from "preact";
 import SearchBox from "../../components/search-box";
 import type { NormalizedError } from "../state";
-import { jsDocCompletions } from "./autocomplete";
+import { sprigFunctionCompletion } from "./autocomplete";
 import widgets from "./widgets";
 
 export function diagnosticsFromErrorLog(
@@ -170,7 +170,7 @@ export const initialExtensions = (
 	indentUnit.of("  "),
 	javascript(),
 	autocompletion(),
-	jsDocCompletions,
+	sprigFunctionCompletion,
 	EditorView.updateListener.of(onUpdate),
 	widgets,
 	yCollab ? yCollab : [],
