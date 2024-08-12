@@ -1,30 +1,71 @@
-import { EditorState } from '@codemirror/state'
-import { getSearchQuery, highlightSelectionMatches, search, searchKeymap, setSearchQuery } from '@codemirror/search'
-import widgets from './widgets'
-import { effect, signal } from '@preact/signals'
-import { h, render } from 'preact'
-import { bracketMatching, defaultHighlightStyle, foldGutter, foldKeymap, indentOnInput, indentUnit, syntaxHighlighting } from '@codemirror/language'
-import { history, defaultKeymap, historyKeymap, indentWithTab, insertNewlineAndIndent } from '@codemirror/commands'
-import { javascript } from '@codemirror/lang-javascript'
-import SearchBox from '../../components/search-box'
-import { EditorView, keymap, lineNumbers, highlightActiveLineGutter, highlightSpecialChars, drawSelection, dropCursor, rectangularSelection, crosshairCursor, highlightActiveLine } from '@codemirror/view'
+import { autocompletion } from "@codemirror/autocomplete";
+import {
+	defaultKeymap,
+	history,
+	historyKeymap,
+	indentWithTab,
+	insertNewlineAndIndent,
+} from "@codemirror/commands";
+import { javascript } from "@codemirror/lang-javascript";
+import {
+	bracketMatching,
+	defaultHighlightStyle,
+	foldGutter,
+	foldKeymap,
+	indentOnInput,
+	indentUnit,
+	syntaxHighlighting,
+} from "@codemirror/language";
 import { lintGutter } from "@codemirror/lint";
-import type { NormalizedError } from '../state'
+import {
+	getSearchQuery,
+	highlightSelectionMatches,
+	search,
+	searchKeymap,
+	setSearchQuery,
+} from "@codemirror/search";
+import { EditorState } from "@codemirror/state";
+import {
+	crosshairCursor,
+	drawSelection,
+	dropCursor,
+	EditorView,
+	highlightActiveLine,
+	highlightActiveLineGutter,
+	highlightSpecialChars,
+	keymap,
+	lineNumbers,
+	rectangularSelection,
+} from "@codemirror/view";
+import { effect, signal } from "@preact/signals";
+import { h, render } from "preact";
+import SearchBox from "../../components/search-box";
+import type { NormalizedError } from "../state";
+import { jsDocCompletions } from "./autocomplete";
+import widgets from "./widgets";
 
-export function diagnosticsFromErrorLog(view: EditorView, errorLog: NormalizedError[]) {
-	return errorLog.filter(error => error.line)
-		.map(error => {
+export function diagnosticsFromErrorLog(
+	view: EditorView,
+	errorLog: NormalizedError[]
+) {
+	return errorLog
+		.filter((error) => error.line)
+		.map((error) => {
 			const targetLine = view.state.doc.line(error.line!);
 			return {
 				from: targetLine.from,
 				to: targetLine.to,
 				severity: "error",
-				message: error.description
+				message: error.description,
 			};
 		});
 }
 
-export const initialExtensions = (onUpdate: any, onRunShortcut: any, yCollab?: any) => ([
+export const initialExtensions = (
+	onUpdate: any,
+	onRunShortcut: any,
+	yCollab?: any
+) => [
 	lintGutter(),
 	lineNumbers(),
 	highlightActiveLineGutter(),
@@ -44,76 +85,105 @@ export const initialExtensions = (onUpdate: any, onRunShortcut: any, yCollab?: a
 	search({
 		top: true,
 		createPanel(view) {
-			const dom = document.createElement('div')
-			const query = signal(getSearchQuery(view.state))
-			const cursor = signal({ index: 0, count: 0 })
+			const dom = document.createElement("div");
+			const query = signal(getSearchQuery(view.state));
+			const cursor = signal({ index: 0, count: 0 });
 
-			let _firstUpdate = true
+			let _firstUpdate = true;
 			effect(() => {
-				const update = view.state.update({ effects: setSearchQuery.of(query.value) })
+				const update = view.state.update({
+					effects: setSearchQuery.of(query.value),
+				});
 				if (_firstUpdate) {
-					_firstUpdate = false
-					return
+					_firstUpdate = false;
+					return;
 				}
-				view.dispatch(update)
-			})
+				view.dispatch(update);
+			});
 
-			render(h(SearchBox, {
-				query,
-				cursor,
-				runCommand(command) { command(view) }
-			}), dom)
+			render(
+				h(SearchBox, {
+					query,
+					cursor,
+					runCommand(command) {
+						command(view);
+					},
+				}),
+				dom
+			);
 
 			return {
 				dom,
 				update(update) {
-					query.value = getSearchQuery(update.state)
+					query.value = getSearchQuery(update.state);
 
-					let [index, count] = [0, 0]
+					let [index, count] = [0, 0];
 					if (query.value.valid) {
-						const iter = query.value.getCursor(update.state)
-						for (let item = iter.next(); !item.done; item = iter.next()) {
-							count++
-							if (item.value.from <= update.state.selection.main.from && item.value.to >= update.state.selection.main.to)
-								index = count
+						const iter = query.value.getCursor(update.state);
+						for (
+							let item = iter.next();
+							!item.done;
+							item = iter.next()
+						) {
+							count++;
+							if (
+								item.value.from <=
+									update.state.selection.main.from &&
+								item.value.to >= update.state.selection.main.to
+							)
+								index = count;
 						}
 					}
-					cursor.value = { index, count }
+					cursor.value = { index, count };
 				},
-				unmount() { render(null, dom) }
-			}
-		}
+				unmount() {
+					render(null, dom);
+				},
+			};
+		},
 	}),
 	keymap.of([
-		...defaultKeymap.filter(({ key }) => !['Enter', 'Mod-Enter'].includes(key!)),
+		...defaultKeymap.filter(
+			({ key }) => !["Enter", "Mod-Enter"].includes(key!)
+		),
 		...searchKeymap,
 		...historyKeymap,
 		...foldKeymap,
 		indentWithTab, // TODO: We should put a note about Esc+Tab for accessibility somewhere.
 		{
-			key: 'Mod-Enter',
+			key: "Mod-Enter",
 			preventDefault: true,
-			run: () => { onRunShortcut(); return true }
+			run: () => {
+				onRunShortcut();
+				return true;
+			},
 		},
 		{
-			key: 'Enter',
+			key: "Enter",
 			run: insertNewlineAndIndent,
-			shift: () => { onRunShortcut(); return true }
-		}
+			shift: () => {
+				onRunShortcut();
+				return true;
+			},
+		},
 	]),
-	indentUnit.of('  '),
+	indentUnit.of("  "),
 	javascript(),
+	autocompletion(),
+	jsDocCompletions,
 	EditorView.updateListener.of(onUpdate),
 	widgets,
-	yCollab ? yCollab : []
-]
-)
+	yCollab ? yCollab : [],
+];
 
-export function createEditorState(initialCode: string, onUpdate = () => { }, onRunShortcut = () => { }, yCollab?: any): EditorState {
+export function createEditorState(
+	initialCode: string,
+	onUpdate = () => {},
+	onRunShortcut = () => {},
+	yCollab?: any
+): EditorState {
 	return EditorState.create({
 		doc: initialCode,
-		extensions: [
-			initialExtensions(onUpdate, onRunShortcut, yCollab)
-		]
-	})
+		extensions: [initialExtensions(onUpdate, onRunShortcut, yCollab)],
+	});
 }
