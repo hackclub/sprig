@@ -77,7 +77,7 @@ sudo usermod -aG dialout orpheus
 
 ### Flatpaks - I play with sandboxes!
 
-Is your browser installed as a Flatpak? This means that you need to do more setup becauase it's running in a sandbox so it likely won't have access to serial ports. To fix this, run the following override command replacing the flatpak name as appropriate:
+Is your browser installed as a Flatpak? This means that you need to do more setup because it's running in a sandbox so it likely won't have access to serial ports. To fix this, run the following override command replacing the flatpak name as appropriate:
 
 ```sh
 flatpak override --device=all org.chromium.Chromium
