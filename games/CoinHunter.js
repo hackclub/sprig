@@ -1,7 +1,7 @@
 /*
 @title: Coin Hunter
 @author: Daniyal Shaikh
-@tags: 
+@tags: []
 @addedOn: 08/08/2024
 */
 
