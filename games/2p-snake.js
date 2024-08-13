@@ -4,6 +4,7 @@
 @tags: [multiplayer, snake, 2p, co-op]
 @addedOn: 2024-08-13
 @madeWith: SprigKit
+@repo: youknowedo/2p-snake
 */
 
 // src/music.ts
