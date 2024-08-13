@@ -1,8 +1,8 @@
 /*
 @title: Sprig Invaders
-@author: 
+@author: Bunnzulu
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-13
 */
 
 const player = "p"
