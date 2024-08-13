@@ -1,25 +1,27 @@
 import { Signal, useSignal, useSignalEffect } from "@preact/signals";
+import { throttle } from "throttle-debounce";
+import { persist } from "../lib/game-saving/auth-helper";
+import type { RoomState, ThemeType } from "../lib/state";
 import {
 	codeMirror,
-	PersistenceState,
-	errorLog,
 	editSessionLength,
-	themes,
-	theme,
-	switchTheme,
+	errorLog,
 	isNewSaveStrat,
+	PersistenceState,
+	switchTheme,
+	theme,
+	themes,
 } from "../lib/state";
-import type { RoomState, ThemeType } from "../lib/state";
 import Button from "./design-system/button";
-import Textarea from "./design-system/textarea";
-import SavePrompt from "./popups-etc/save-prompt";
-import styles from "./navbar.module.css";
-import { persist } from "../lib/game-saving/auth-helper";
 import InlineInput from "./design-system/inline-input";
-import { throttle } from "throttle-debounce";
+import Textarea from "./design-system/textarea";
+import styles from "./navbar.module.css";
+import SavePrompt from "./popups-etc/save-prompt";
 import SharePopup from "./popups-etc/share-popup";
 import ShareRoomPopup from "./popups-etc/share-room";
 
+import beautifier from "js-beautify";
+import { FaBrush } from "react-icons/fa";
 import {
 	IoChevronDown,
 	IoLogoGithub,
@@ -29,15 +31,13 @@ import {
 	IoShuffle,
 	IoWarning,
 } from "react-icons/io5";
-import { FaBrush } from "react-icons/fa";
-import { usePopupCloseClick } from "../lib/utils/popup-close-click";
-import { upload, uploadState } from "../lib/upload";
 import { VscLoading } from "react-icons/vsc";
-import { defaultExampleCode } from "../lib/examples";
-import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
-import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
-import { showKeyBinding } from '../lib/state';
+import { defaultExampleCode } from "../lib/examples";
+import { showKeyBinding } from "../lib/state";
+import { upload, uploadState } from "../lib/upload";
+import { usePopupCloseClick } from "../lib/utils/popup-close-click";
+import { foldAllTemplateLiterals, onRun } from "./big-interactive-pages/editor";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -82,8 +82,8 @@ const canDelete = (persistenceState: Signal<PersistenceState>) => {
 };
 
 interface EditorNavbarProps {
-	persistenceState: Signal<PersistenceState>
-	roomState: Signal<RoomState> | undefined
+	persistenceState: Signal<PersistenceState>;
+	roomState: Signal<RoomState> | undefined;
 }
 
 type StuckCategory =
@@ -147,7 +147,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const showThemePicker = useSignal(false);
 	const shareRoomPopup = useSignal(false);
 
-
 	// we will accept the current user's
 	// - name,
 	// - the category of issue they
@@ -166,7 +165,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 	const deleteState = useSignal<"idle" | "confirm" | "deleting">("idle");
 	const resetState = useSignal<"idle" | "confirm">("idle");
+
 	const showDropdown = useSignal(false);
+	const runMode = useSignal<"run" | "device">("run");
 
 	useSignalEffect(() => {
 		const _showNavPopup = showNavPopup.value;
@@ -194,10 +195,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		() => (showThemePicker.value = false),
 		showThemePicker.value
 	);
-	
+
 	usePopupCloseClick(
 		styles.dropdown!,
-	    () => (showDropdown.value = false),
+		() => (showDropdown.value = false),
 		showDropdown.value
 	);
 
@@ -235,13 +236,17 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	} else if (props.persistenceState.value.kind === "PERSISTED") {
 		saveState = {
 			SAVED: `Saved to ${
-				!isNewSaveStrat.value ? 
-					props.persistenceState.value.session?.user.email ?? "???"
-				:
-					props.roomState?.value.participants.filter((participant) => {
-						if(participant.isHost) return true
-						return false
-					})[0]?.userEmail === props.persistenceState.value.session?.user.email ? props.persistenceState.value.session?.user.email : "???"
+				!isNewSaveStrat.value
+					? props.persistenceState.value.session?.user.email ?? "???"
+					: props.roomState?.value.participants.filter(
+							(participant) => {
+								if (participant.isHost) return true;
+								return false;
+							}
+					  )[0]?.userEmail ===
+					  props.persistenceState.value.session?.user.email
+					? props.persistenceState.value.session?.user.email
+					: "???"
 			}`,
 			SAVING: "Saving...",
 			ERROR: "Error saving to cloud",
@@ -303,14 +308,20 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 										)
 									}
 								/>
-								<span class={styles.attribution}> by {
-										(!isNewSaveStrat.value || props.roomState?.value.participants.filter((participant) => {
-												if(participant.isHost) return true
-												return false
-											})[0]?.userEmail === props.persistenceState.value.session?.user.email)
-											? "you"
-											: "???"
-									}
+								<span class={styles.attribution}>
+									{" "}
+									by{" "}
+									{!isNewSaveStrat.value ||
+									props.roomState?.value.participants.filter(
+										(participant) => {
+											if (participant.isHost) return true;
+											return false;
+										}
+									)[0]?.userEmail ===
+										props.persistenceState.value.session
+											?.user.email
+										? "you"
+										: "???"}
 								</span>
 							</>
 						) : props.persistenceState.value.kind === "SHARED" ? (
@@ -369,27 +380,62 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 				<li>
 					<div class={styles.dropdownContainer}>
-						<Button accent onClick={() => (showDropdown.value = !showDropdown.value)}>
-						Run <IoChevronDown />
+						<Button
+							accent
+							onClick={(e) => {
+								if (e.target !== e.currentTarget) return;
+
+								runMode.value == "run"
+									? onRun()
+									: upload(
+											codeMirror.value?.state.doc.toString() ??
+												""
+									  );
+							}}
+						>
+							{runMode.value == "run" ? "Run" : "Run on Device"}
+							<span
+								onClick={() =>
+									(showDropdown.value = !showDropdown.value)
+								}
+							>
+								<IoChevronDown />
+							</span>
 						</Button>
 						{showDropdown.value && (
 							<div class={styles.playPopup}>
 								<Button
 									accent
-									icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
+									icon={
+										uploadState.value === "LOADING"
+											? VscLoading
+											: IoPlay
+									}
 									spinnyIcon={uploadState.value === "LOADING"}
 									loading={uploadState.value === "LOADING"}
-									onClick={() => onRun()}
+									onClick={() => (
+										onRun(), (runMode.value = "run")
+									)}
 								>
 									Run
 								</Button>
 								<div class={styles.divider}></div>
 								<Button
 									accent
-									icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
+									icon={
+										uploadState.value === "LOADING"
+											? VscLoading
+											: IoPlay
+									}
 									spinnyIcon={uploadState.value === "LOADING"}
 									loading={uploadState.value === "LOADING"}
-									onClick={() => upload(codeMirror.value?.state.doc.toString() ?? "")}
+									onClick={() => (
+										upload(
+											codeMirror.value?.state.doc.toString() ??
+												""
+										),
+										(runMode.value = "device")
+									)}
 								>
 									Run on Device
 								</Button>
@@ -424,9 +470,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				<ShareRoomPopup
 					persistenceState={props.persistenceState}
 					roomState={props.roomState}
-					onClose={() => shareRoomPopup.value = false}
+					onClose={() => (shareRoomPopup.value = false)}
 				/>
-			)}	
+			)}
 
 			{showThemePicker.value && (
 				<ul class={styles.themePicker}>
@@ -611,20 +657,31 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							</>
 						)}
 
-						{(props.persistenceState.value.session?.session.full && isNewSaveStrat.value) ?(
+						{props.persistenceState.value.session?.session.full &&
+						isNewSaveStrat.value ? (
 							<>
 								<li>
-								<a
-								href="javascript:void"
-								role="button"
-						
-								onClick={() => (shareRoomPopup.value = true)}
-							>
-								{!(props.persistenceState.value.kind == "PERSISTED" && props.persistenceState.value.game !== "LOADING" && props.persistenceState.value.game.isRoomOpen) ? "Create a room" : "Share room"}
-							</a>
+									<a
+										href="javascript:void"
+										role="button"
+										onClick={() =>
+											(shareRoomPopup.value = true)
+										}
+									>
+										{!(
+											props.persistenceState.value.kind ==
+												"PERSISTED" &&
+											props.persistenceState.value
+												.game !== "LOADING" &&
+											props.persistenceState.value.game
+												.isRoomOpen
+										)
+											? "Create a room"
+											: "Share room"}
+									</a>
 								</li>
 							</>
-						) : null}	
+						) : null}
 						<li>
 							<a href="/gallery">Gallery</a>
 						</li>
@@ -657,11 +714,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							</a>
 						</li>
 						<li>
-							<a href={"javascript:void"}
-							role="button"
-							onClick={
-								foldAllTemplateLiterals
-							}> 
+							<a
+								href={"javascript:void"}
+								role="button"
+								onClick={foldAllTemplateLiterals}
+							>
 								Collapse all bitmaps
 							</a>
 						</li>
