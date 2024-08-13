@@ -8,6 +8,13 @@ https://sprig.hackclub.com/gallery/getting_started
 @addedOn: 2024-00-00
 */
 
+
+// settings
+const fps = 10;
+const resolution = 2; // number of pixels in a tile (16 real pixels)
+
+
+
 let currentLegendChar = 32; // start at the first real character (space)
 function getLegendChar() {
   const char = String.fromCharCode(currentLegendChar++)
@@ -1639,7 +1646,6 @@ const background = "Z"
 
 
 let canvas;
-const resolution = 2; // number of pixels in a tile
 
 // get a unique character for a given x and y, for the legend
 function getTileLegend(tileX, tileY) {
@@ -1714,7 +1720,16 @@ function startGame() {
     canvas.push(row)
   }
 
-  renderCanvas();
+
+  const renderLoop = setInterval(() => {
+    renderCanvas();
+    canvas[
+      Math.floor(Math.random() * 10 * resolution)
+    ][
+      Math.floor(Math.random() * 8 * resolution)
+    ] = color`3`
+  }, 1000 / fps);
+  
   
 /*  setLegend(
   [playerRedUp, bitmap`
