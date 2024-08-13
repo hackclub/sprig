@@ -474,7 +474,7 @@ var updatePlayer = (player) => {
 var game = {
 	started: false,
 	points: 0,
-	speed: 200,
+	speed: 350,
 };
 var level = map`
 qqqqqqqqqqqqqqqqqqqq
@@ -522,7 +522,7 @@ var setupGame = () => {
 		color: color`2`,
 	});
 	game.points = 0;
-	game.speed = 200;
+	game.speed = 300;
 };
 var startGame = () => {
 	game.started = true;
@@ -537,9 +537,9 @@ var startGame = () => {
 	});
 	setMap(level);
 	setupGame();
-	game.tick = setInterval(onUpdate, game.speed++);
+	update();
 };
-var onUpdate = () => {
+var update = () => {
 	clearText();
 	addText(`2P SNAKE       ${("00" + game.points).slice(-3)}`, {
 		x: 1,
@@ -548,6 +548,8 @@ var onUpdate = () => {
 	});
 	if (updatePlayer(players[0]) == -1) return gameOver2(p1);
 	if (updatePlayer(players[1]) == -1) return gameOver2(p2);
+	game.tick = setTimeout(update, game.speed--);
+	if (game.speed < 125) game.speed = 125;
 };
 var gameOver2 = (winner) => {
 	playGameOverSound();
