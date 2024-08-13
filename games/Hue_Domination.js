@@ -1748,10 +1748,25 @@ function renderCanvas() {
 			legend.push([canvasLegendChars[i++], genTileBitmap(x, y)]);
 		}
 	}
-	// console.log(legend.map(v=>v[0]).join(""))
-	// console.log(canvasMap.replace(/\n/g,""))
+
 	setLegend(...legend);
-	setMap(canvasMap);
+	setMap(canvasMap); // even though the map hasn't changed, calling setMap again triggers an update
+}
+
+// offset a bitmap by a pixel amount, by creating 4 bitmaps and shifting the original bitmap across them
+function offsetBitmap(bitmap, x, y) {
+	// add padding on the top
+	bitmap = "................\n".repeat(y) + bitmap.trim();
+	// add padding on the bottom to make it 32 tall
+	bitmap = bitmap + "\n................".repeat(16 - y);
+	// add padding on the left and the right
+	const rows = bitmap.split("\n");
+	const paddingLeft = ".".repeat(x);
+	const paddingRight = ".".repeat(16 - x);
+	bitmap = rows.map((row) => paddingLeft + row + paddingRight).join("\n");
+
+	// return bitmap;
+	return splitBitmap(bitmap);
 }
 
 startGame();
@@ -1884,13 +1899,33 @@ async function startGame() {
 		]
 	);
 
+	const testBitmap = bitmap`
+7777777777777777
+7333333333333337
+7333333333333337
+7333333333333337
+7333433333343337
+7333433333343337
+7333433333343337
+7333333333333337
+7333333333333337
+7333333333333337
+7333433333343337
+7333343333433337
+7333334444333337
+7333333333333337
+7333333333333337
+7777777777777777`;
+	console.log(testBitmap);
+	console.log(offsetBitmap(testBitmap, 1, 1));
+
 	await spiralAnimation(spiralAnimationChar, 10);
 
 	// fade animation
 	setMap("\n..........".repeat(8));
 	for (let i = 1; i <= 5; i++) {
 		setBackground(String(i));
-		await new Promise((res) => setTimeout(res, 100));
+		i < 5 && (await new Promise((res) => setTimeout(res, 50)));
 	}
 
 	// Create an array to keep track of paint
@@ -1912,7 +1947,7 @@ async function startGame() {
 	}, 1000 / fps);
 
 	/*  setLegend(
-	[playerRedUp, bitmap`
+  [playerRedUp, bitmap`
 ................
 ..000000000000..
 ..099993999390..
@@ -1929,7 +1964,7 @@ async function startGame() {
 ......0330......
 ......0330.....C
 ......0000......` ],
-	[playerRedDown, bitmap`
+  [playerRedDown, bitmap`
 ......0000......
 ......0990......
 ......0930......-
@@ -1946,7 +1981,7 @@ async function startGame() {
 ..033333333330..
 ..000000000000..
 ................` ],
-	[playerRedLeft, bitmap`
+  [playerRedLeft, bitmap`
 ................
 ................
 .000000.........
@@ -1963,7 +1998,7 @@ async function startGame() {
 .000000.0.......
 ....0...0.......
 ....00000.......` ],
-	[playerRedRight, bitmap`
+  [playerRedRight, bitmap`
 ......2222222...
 ......2000002...
 ......2022202222
@@ -1980,7 +2015,7 @@ async function startGame() {
 ........20333302
 ........20000002
 ........22222222` ],
-	[playerBlueUp, bitmap`
+  [playerBlueUp, bitmap`
 ................
 ..000000000000..
 ..0HHHH7HHH7H0..
@@ -1997,7 +2032,7 @@ async function startGame() {
 ......0770......
 ......0770......
 ......0000......` ],
-	[playerBlueDown, bitmap`
+  [playerBlueDown, bitmap`
 ......0000......
 ......0HH0......
 ......0H70......
@@ -2014,7 +2049,7 @@ async function startGame() {
 ..077777777770..
 ..000000000000..
 ................` ],
-	[playerBlueLeft, bitmap`
+  [playerBlueLeft, bitmap`
 ................
 ................
 .000000.........
@@ -2031,7 +2066,7 @@ async function startGame() {
 .000000.0.......
 ....0...0.......
 ....00000.......` ],
-	[playerBlueRight, bitmap`
+  [playerBlueRight, bitmap`
 .......00000....
 .......0...0....
 .......0.000000.
@@ -2048,7 +2083,7 @@ async function startGame() {
 .........000000.
 ................
 ................` ],
-	[background, bitmap`
+  [background, bitmap`
 2121212122222222
 1212121222222222
 2121212122222222
@@ -2065,7 +2100,7 @@ async function startGame() {
 2222222221212121
 2222222212121212
 2222222221212121` ],
-	[paintRed, bitmap`
+  [paintRed, bitmap`
 3333333333333333
 3333333333333333
 3333333333333333
@@ -2082,7 +2117,7 @@ async function startGame() {
 3333333333333333
 3333333333333333
 3333333333333333` ],
-	[paintRedSpecial1, bitmap`
+  [paintRedSpecial1, bitmap`
 3333333333333333
 3399933333333333
 3999933333333333
@@ -2099,7 +2134,7 @@ async function startGame() {
 3333333399999333
 3333333333333333
 3333333333333333` ],
-	[paintRedSpecial2, bitmap`
+  [paintRedSpecial2, bitmap`
 3333333333333333
 3333333333333333
 3333333399999333
@@ -2116,7 +2151,7 @@ async function startGame() {
 3933333333333333
 3333333333333333
 3333333333333333` ],
-	[paintRedSpecial3, bitmap`
+  [paintRedSpecial3, bitmap`
 3333333333333333
 3333333333333333
 3339999333333333
@@ -2133,7 +2168,7 @@ async function startGame() {
 3333333339999333
 3333333399333333
 3333333333333333` ],
-	[paintBlue, bitmap`
+  [paintBlue, bitmap`
 7777777777777777
 7777777777777777
 7777777777777777
@@ -2150,7 +2185,7 @@ async function startGame() {
 7777777777777777
 7777777777777777
 7777777777777777` ],
-	[paintBlueSpecial1, bitmap`
+  [paintBlueSpecial1, bitmap`
 7777777777777777
 7777777777777777
 77777HHH7HHHH777
@@ -2167,7 +2202,7 @@ async function startGame() {
 777HHHHHHH777777
 7777777777777777
 7777777777777777` ],
-	[paintBlueSpecial2, bitmap`
+  [paintBlueSpecial2, bitmap`
 7777777777777777
 777H77H777777777
 777HHHHHH7777777
@@ -2184,7 +2219,7 @@ async function startGame() {
 77H7777777777777
 7777777777777777
 7777777777777777` ],
-	[paintBlueSpecial3, bitmap`
+  [paintBlueSpecial3, bitmap`
 7777777777777777
 7777777777777777
 7777777777777777
@@ -2204,8 +2239,8 @@ async function startGame() {
 )
   
   
-	setBackground(background)
-	setMap(map`
+  setBackground(background)
+  setMap(map`
 .........6
 ..........
 ..........
