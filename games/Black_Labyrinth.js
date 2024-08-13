@@ -2,7 +2,7 @@
 @title: Black Labyrinth
 @author: Somebud0180
 @tags: ['maze']
-@addedOn: 2024-00-00
+@addedOn: 2024-08-13
 */
 
 // A game all about mazes, mazes with lights, and mazes with boxes, even both at the same time
