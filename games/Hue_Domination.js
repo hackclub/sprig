@@ -1662,13 +1662,22 @@ for (let y = 0; y < 8; y++) {
 function genTileBitmap(tileX, tileY) {
   // loop through every pixel in the tile
   let tileBitmap = "";
-  for (let y = tileY; y < tileY + resolution; y++) {
+
+  // scale the sprig x and y to the canvas x and y
+  const canvasX = tileX * resolution;
+  const canvasY = tileY * resolution;
+
+
+  for (let y = canvasY; y < canvasY + resolution; y++) {
+    // this `i` loop scales up the pixels in the y direction
+    for (let i = 0; i < 16 / resolution; i++) {
     tileBitmap += "\n";
-    for (let x = tileY; x < tileX + resolution; x++) {
-      tileBitmap += canvas[x][y].repeat(16 / resolution)
+      for (let x = canvasX; x < canvasX + resolution; x++) {
+        // this repeat scales the pixels in the x direction
+        tileBitmap += canvas[x][y].repeat(16 / resolution)
+      }
     }
   }
-
   return tileBitmap;
 }
 
@@ -1696,8 +1705,13 @@ function startGame() {
 
   // Create an array to keep track of paint
   canvas = []
-  for (let i = 0; i < 10 * resolution; i++) {
-	canvas.push(Array(8 * resolution).fill(color`4`))
+  for (let x = 0; x < 10 * resolution; x++) {
+    const row = [];
+    for (let y = 0; y < 8 * resolution; y++) {
+      // checkerboard pattern
+      row.push((x+y)%2==0?color`4`:color`D`)
+    }
+    canvas.push(row)
   }
 
   renderCanvas();
