@@ -1,38 +1,35 @@
-import styles from "./editor.module.css";
-import CodeMirror from "../codemirror";
-import Navbar from "../navbar-editor";
-import {
-	IoClose,
-	IoPlayCircleOutline,
-	IoStopCircleOutline,
-	IoVolumeHighOutline,
-	IoVolumeMuteOutline,
-} from "react-icons/io5";
 import {
 	Signal,
 	useComputed,
 	useSignal,
 	useSignalEffect,
 } from "@preact/signals";
-import { useEffect, useRef, useState} from "preact/hooks";
-import { codeMirror, errorLog, isNewSaveStrat, muted, PersistenceState, RoomState } from "../../lib/state";
-import EditorModal from "../popups-etc/editor-modal";
-import { runGame } from "../../lib/engine";
-import DraftWarningModal from "../popups-etc/draft-warning";
-import Button from "../design-system/button";
-import { debounce } from "throttle-debounce";
-import Help from "../popups-etc/help";
-import { collapseRanges } from "../../lib/codemirror/util";
-import { defaultExampleCode } from "../../lib/examples";
-import MigrateToast from "../popups-etc/migrate-toast";
 import { nanoid } from "nanoid";
-import TutorialWarningModal from "../popups-etc/tutorial-warning";
-import { editSessionLength, switchTheme, ThemeType, continueSaving, LAST_SAVED_SESSION_ID, showSaveConflictModal } from '../../lib/state'
-import SessionConflictWarningModal from '../popups-etc/session-conflict-warning-modal'
-import {versionState} from "../../lib/upload";
-import VersionWarningModal from "../popups-etc/version-warning";
+import { useEffect, useRef, useState } from "preact/hooks";
+import {
+	IoClose,
+	IoStopCircleOutline,
+	IoVolumeHighOutline,
+	IoVolumeMuteOutline,
+} from "react-icons/io5";
+import { debounce } from "throttle-debounce";
+import { collapseRanges } from "../../lib/codemirror/util";
+import { runGame } from "../../lib/engine";
+import { defaultExampleCode } from "../../lib/examples";
+import { codeMirror, continueSaving, editSessionLength, errorLog, isNewSaveStrat, LAST_SAVED_SESSION_ID, muted, PersistenceState, RoomState, showSaveConflictModal, switchTheme, ThemeType } from "../../lib/state";
+import { versionState } from "../../lib/upload";
+import CodeMirror from "../codemirror";
+import Navbar from "../navbar-editor";
+import DraftWarningModal from "../popups-etc/draft-warning";
+import EditorModal from "../popups-etc/editor-modal";
+import Help from "../popups-etc/help";
+import KeyBindingsModal from '../popups-etc/KeyBindingsModal';
+import MigrateToast from "../popups-etc/migrate-toast";
 import RoomPasswordPopup from "../popups-etc/room-password";
-import KeyBindingsModal from '../popups-etc/KeyBindingsModal'
+import SessionConflictWarningModal from '../popups-etc/session-conflict-warning-modal';
+import TutorialWarningModal from "../popups-etc/tutorial-warning";
+import VersionWarningModal from "../popups-etc/version-warning";
+import styles from "./editor.module.css";
 
 let screenRef: HTMLCanvasElement | null = null;
 let cleanupRef: (() => void) | undefined = undefined;
