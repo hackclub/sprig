@@ -8,48 +8,94 @@ https://sprig.hackclub.com/gallery/getting_started
 @addedOn: 2024-00-00
 */
 
-
 // settings
 const fps = 10;
-const resolution = 2; // number of pixels in a tile (16 real pixels)
+const resolution = 4; // number of pixels in a tile (16 real pixels)
 
+async function spiralAnimation(spriteChar, delay) {
+	let top = 0,
+		bottom = 7,
+		left = 0,
+		right = 9,
+		direction = 0;
 
+	while (top <= bottom && left <= right) {
+		switch (direction) {
+			case 0: // right
+				for (let i = left; i <= right; i++) {
+					clearTile(i, top);
+					addSprite(i, top, spriteChar);
+					await new Promise((res) => setTimeout(res, delay));
+				}
+				top++;
+				break;
+			case 1: // down
+				for (let i = top; i <= bottom; i++) {
+					clearTile(right, i);
+					addSprite(right, i, spriteChar);
+					await new Promise((res) => setTimeout(res, delay));
+				}
+				right--;
+				break;
+			case 2: // left
+				for (let i = right; i >= left; i--) {
+					clearTile(i, bottom);
+					addSprite(i, bottom, spriteChar);
+					await new Promise((res) => setTimeout(res, delay));
+				}
+				bottom--;
+				break;
+			case 3: // up
+				for (let i = bottom; i >= top; i--) {
+					clearTile(left, i);
+					addSprite(left, i, spriteChar);
+					await new Promise((res) => setTimeout(res, delay));
+				}
+				left++;
+				break;
+		}
+		direction = (direction + 1) % 4;
+		// wait <delay> seconds
+	}
+}
 
 let currentLegendChar = 32; // start at the first real character (space)
 function getLegendChar() {
-  const char = String.fromCharCode(currentLegendChar++)
-  if (char == "." || char == "\n" || char == " ") { // skip reserved characters
-    return String.fromCharCode(currentLegendChar++)
-  }
-  return char;
+	const char = String.fromCharCode(currentLegendChar++);
+	if (char == "." || char == "\n" || char == " ") {
+		// skip reserved characters
+		return String.fromCharCode(currentLegendChar++);
+	}
+	return char;
 }
 
 // the title screen image needs to be split into 16x16 chunks
 function splitBitmap(bitmap) {
-    const rows = bitmap.trim().split('\n')
-    const chunks = [];
-    const chunkRows = rows.length / 16;
-    const chunkCols = rows[0].length / 16;
+	const rows = bitmap.trim().split("\n");
+	const chunks = [];
+	const chunkRows = rows.length / 16;
+	const chunkCols = rows[0].length / 16;
 
-    for (let i = 0; i < chunkRows; i++) {
-        for (let j = 0; j < chunkCols; j++) {
-            let chunk = [];
-            for (let r = 0; r < 16; r++) {
-                const rowIndex = i * 16 + r;
-                const startCol = j * 16;
-                const endCol = startCol + 16;
-                
-                chunk.push(rows[rowIndex].slice(startCol, endCol));
-            }
-            chunks.push(chunk.join('\n'));
-        }
-    }
+	for (let i = 0; i < chunkRows; i++) {
+		for (let j = 0; j < chunkCols; j++) {
+			let chunk = [];
+			for (let r = 0; r < 16; r++) {
+				const rowIndex = i * 16 + r;
+				const startCol = j * 16;
+				const endCol = startCol + 16;
 
-    return chunks;
+				chunk.push(rows[rowIndex].slice(startCol, endCol));
+			}
+			chunks.push(chunk.join("\n"));
+		}
+	}
+
+	return chunks;
 }
 
 // dimensions need to be a multiple of 16
-const titleFrames = bitmap`3333333333333333333333333333333333333333333333333333333333333333333333333333377777777777777777777777777777777777777777777777777777777777777777777777777777777777
+const titleFrames =
+	bitmap`3333333333333333333333333333333333333333333333333333333333333333333333333333377777777777777777777777777777777777777777777777777777777777777777777777777777777777
 3333333333333333333333333333333333333333333333333333333333333333333333333333337777777777777777777777777777777777777777777777777777777777777777777777777777777777
 3333333333333333333333333333333333333333333333333333333333333333333333333333337777777777777777777777777777777777777777777777777777777777777777777777777777777777
 3333333333333333333333333333333333333233333333333323333333332333333333333333322777777777777727777777777777777772777777777777777777777777777777777777777777777777
@@ -1595,144 +1641,278 @@ const titleFrames = bitmap`33333333333333333333333333333333333333333333333333333
 1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111100011111111111111111111111111111111111111111111111111111111111111
 1121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121
 1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
-2111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111`.split("\n\n")
-const titleData = []
-for (const frame of titleFrames) {  
-  const titleChunks = splitBitmap(frame)
-  const titleLegend = titleChunks.map((chunk, index) => [getLegendChar(), chunk]);
-  // create the map by joining every char for the title into one string, then inserting newlines
-  const titleMap = titleLegend.map(v => v[0]).join("").replace(/(.{10})/g, "$1\n").slice(0,-1);
-  titleData.push([titleLegend, titleMap])
+2111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111`.split(
+		"\n\n"
+	);
+const titleData = [];
+for (const frame of titleFrames) {
+	const titleChunks = splitBitmap(frame);
+	const titleLegend = titleChunks.map((chunk, index) => [
+		getLegendChar(),
+		chunk,
+	]);
+	// create the map by joining every char for the title into one string, then inserting newlines
+	const titleMap = titleLegend
+		.map((v) => v[0])
+		.join("")
+		.replace(/(.{10})/g, "$1\n")
+		.slice(0, -1);
+	titleData.push([titleLegend, titleMap]);
 }
 
+setLegend(...titleData.map((v) => v[0]).flat(1));
 
-setLegend(...titleData.map(v => v[0]).flat(1))
+setMap(titleData[3][1]);
 
-setMap(titleData[3][1])
-
-let currentTitleFrame = 0
+let currentTitleFrame = 0;
 const titleAnimationInterval = setInterval(() => {
-  setMap("\n" + titleData[currentTitleFrame][1])
-  
-  currentTitleFrame = (currentTitleFrame + 1) % titleData.length
-}, 300)
+	setMap("\n" + titleData[currentTitleFrame][1]);
 
+	currentTitleFrame = (currentTitleFrame + 1) % titleData.length;
+}, 300);
 
 let gameStarted = false;
-"wasdijkl".split("").forEach(key => {
-  onInput(key, () => {
-    if (!gameStarted) startGame()
-  })
-})
+"wasdijkl".split("").forEach((key) => {
+	onInput(key, () => {
+		if (!gameStarted) startGame();
+	});
+});
 
-
-const playerRedUp = "1"
-const playerRedDown = "2"
-const playerRedLeft = "3"
-const playerRedRight = "4"
-const playerBlueUp = "5"
-const playerBlueDown = "6"
-const playerBlueLeft = "7"
-const playerBlueRight = "8"
-const paintRed = "Y"
-const paintRedSpecial1 = "z"
-const paintRedSpecial2 = "9"
-const paintRedSpecial3 = "0"
-const paintBlue = "y"
-const paintBlueSpecial1 = "`"
-const paintBlueSpecial2 = "~"
-const paintBlueSpecial3 = "-"
-const background = "Z"
-
+const playerRedUp = "1";
+const playerRedDown = "2";
+const playerRedLeft = "3";
+const playerRedRight = "4";
+const playerBlueUp = "5";
+const playerBlueDown = "6";
+const playerBlueLeft = "7";
+const playerBlueRight = "8";
+const paintRed = "Y";
+const paintRedSpecial1 = "z";
+const paintRedSpecial2 = "9";
+const paintRedSpecial3 = "0";
+const paintBlue = "y";
+const paintBlueSpecial1 = "`";
+const paintBlueSpecial2 = "~";
+const paintBlueSpecial3 = "-";
+const background = "Z";
 
 let canvas;
 
 // get a unique character for a given x and y, for the legend
 function getTileLegend(tileX, tileY) {
-  return String.fromCharCode(currentLegendChar + tileX + (10 * resolution * tileY))
+	return String.fromCharCode(
+		currentLegendChar++ + tileX + 10 * resolution * tileY
+	);
 }
 
-// generate a static map of unique characters for the canvas to render to 
+// generate a static map of unique characters for the canvas to render to
 let canvasMap = "";
 const canvasLegendChars = [];
 for (let y = 0; y < 8; y++) {
-  canvasMap += "\n";
-  for (let x = 0; x < 10; x++) {
-    const char =  getTileLegend(x, y);
-    canvasMap += char;
-    canvasLegendChars.push(char)
-  }
+	canvasMap += "\n";
+	for (let x = 0; x < 10; x++) {
+		const char = getTileLegend(x, y);
+		canvasMap += char;
+		canvasLegendChars.push(char);
+	}
 }
 
 // using the canvas, generate a bitmap for an x and y on the sprig map
 function genTileBitmap(tileX, tileY) {
-  // loop through every pixel in the tile
-  let tileBitmap = "";
+	// loop through every pixel in the tile
+	let tileBitmap = "";
 
-  // scale the sprig x and y to the canvas x and y
-  const canvasX = tileX * resolution;
-  const canvasY = tileY * resolution;
+	// scale the sprig x and y to the canvas x and y
+	const canvasX = tileX * resolution;
+	const canvasY = tileY * resolution;
 
-
-  for (let y = canvasY; y < canvasY + resolution; y++) {
-    // this `i` loop scales up the pixels in the y direction
-    for (let i = 0; i < 16 / resolution; i++) {
-    tileBitmap += "\n";
-      for (let x = canvasX; x < canvasX + resolution; x++) {
-        // this repeat scales the pixels in the x direction
-        tileBitmap += canvas[x][y].repeat(16 / resolution)
-      }
-    }
-  }
-  return tileBitmap;
+	for (let y = canvasY; y < canvasY + resolution; y++) {
+		// this `i` loop scales up the pixels in the y direction
+		for (let i = 0; i < 16 / resolution; i++) {
+			tileBitmap += "\n";
+			for (let x = canvasX; x < canvasX + resolution; x++) {
+				// this repeat scales the pixels in the x direction
+				tileBitmap += canvas[x][y].repeat(16 / resolution);
+			}
+		}
+	}
+	return tileBitmap;
 }
-
 
 function renderCanvas() {
-  // loop through every 'tile' in the map
-  const legend = [];
-  let i = 0;
-  for (let x = 0; x < 10; x++) {
-    for (let y = 0; y < 8; y++) {
-      legend.push([canvasLegendChars[i++], genTileBitmap(x,y)]);
-    }
-  }
-  // console.log(legend.map(v=>v[0]).join(""))
-  // console.log(canvasMap.replace(/\n/g,""))
-  setLegend(...legend);
-  setMap(canvasMap);
+	// loop through every 'tile' in the map
+	const legend = [];
+	let i = 0;
+	for (let x = 0; x < 10; x++) {
+		for (let y = 0; y < 8; y++) {
+			legend.push([canvasLegendChars[i++], genTileBitmap(x, y)]);
+		}
+	}
+	// console.log(legend.map(v=>v[0]).join(""))
+	// console.log(canvasMap.replace(/\n/g,""))
+	setLegend(...legend);
+	setMap(canvasMap);
 }
 
-startGame()
+startGame();
 
-function startGame() {
-  clearInterval(titleAnimationInterval)
-  setTimeout(() => gameStarted = true, 10)
+async function startGame() {
+	clearInterval(titleAnimationInterval);
+	setTimeout(() => (gameStarted = true), 10);
 
-  // Create an array to keep track of paint
-  canvas = []
-  for (let x = 0; x < 10 * resolution; x++) {
-    const row = [];
-    for (let y = 0; y < 8 * resolution; y++) {
-      // checkerboard pattern
-      row.push((x+y)%2==0?color`4`:color`D`)
-    }
-    canvas.push(row)
-  }
+	const spiralAnimationChar = "S";
+	setLegend(
+		[
+			spiralAnimationChar,
+			bitmap`
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333`,
+		],
+		[
+			"1",
+			bitmap`
+333.333.333.333.
+3333333333333333
+3.333.333.333.33
+3333333333333333
+333.333.333.333.
+3333333333333333
+3.333.333.333.33
+3333333333333333
+333.333.333.333.
+3333333333333333
+3.333.333.333.33
+3333333333333333
+333.333.333.333.
+3333333333333333
+3.333.333.333.33
+3333333333333333`,
+		],
+		[
+			"2",
+			bitmap`
+333.333.333.333.
+.3.3.3.3.3.3.3.3
+3.333.333.333.33
+.3.3.3.3.3.3.3.3
+333.333.333.333.
+.3.3.3.3.3.3.3.3
+3.333.333.333.33
+.3.3.3.3.3.3.3.3
+333.333.333.333.
+.3.3.3.3.3.3.3.3
+3.333.333.333.33
+.3.3.3.3.3.3.3.3
+333.333.333.333.
+.3.3.3.3.3.3.3.3
+3.333.333.333.33
+.3.3.3.3.3.3.3.3`,
+		],
+		[
+			"3",
+			bitmap`
+3.3.3.3.3.3.3.3.
+.3.3.3.3.3.3.3.3
+3.3.3.3.3.3.3.3.
+.3.3.3.3.3.3.3.3
+3.3.3.3.3.3.3.3.
+.3.3.3.3.3.3.3.3
+3.3.3.3.3.3.3.3.
+.3.3.3.3.3.3.3.3
+3.3.3.3.3.3.3.3.
+.3.3.3.3.3.3.3.3
+3.3.3.3.3.3.3.3.
+.3.3.3.3.3.3.3.3
+3.3.3.3.3.3.3.3.
+.3.3.3.3.3.3.3.3
+3.3.3.3.3.3.3.3.
+.3.3.3.3.3.3.3.3`,
+		],
+		[
+			"4",
+			bitmap`
+3...3...3...3...
+.3.3.3.3.3.3.3.3
+..3...3...3...3.
+.3.3.3.3.3.3.3.3
+3...3...3...3...
+.3.3.3.3.3.3.3.3
+..3...3...3...3.
+.3.3.3.3.3.3.3.3
+3...3...3...3...
+.3.3.3.3.3.3.3.3
+..3...3...3...3.
+.3.3.3.3.3.3.3.3
+3...3...3...3...
+.3.3.3.3.3.3.3.3
+..3...3...3...3.
+.3.3.3.3.3.3.3.3`,
+		],
+		[
+			"5",
+			bitmap`
+3...3...3...3...
+................
+..3...3...3...3.
+................
+3...3...3...3...
+................
+..3...3...3...3.
+................
+3...3...3...3...
+................
+..3...3...3...3.
+................
+3...3...3...3...
+................
+..3...3...3...3.
+................`,
+		]
+	);
 
+	await spiralAnimation(spiralAnimationChar, 10);
 
-  const renderLoop = setInterval(() => {
-    renderCanvas();
-    canvas[
-      Math.floor(Math.random() * 10 * resolution)
-    ][
-      Math.floor(Math.random() * 8 * resolution)
-    ] = color`3`
-  }, 1000 / fps);
-  
-  
-/*  setLegend(
-  [playerRedUp, bitmap`
+	// fade animation
+	setMap("\n..........".repeat(8));
+	for (let i = 1; i <= 5; i++) {
+		setBackground(String(i));
+		await new Promise((res) => setTimeout(res, 100));
+	}
+
+	// Create an array to keep track of paint
+	canvas = [];
+	for (let x = 0; x < 10 * resolution; x++) {
+		const row = [];
+		for (let y = 0; y < 8 * resolution; y++) {
+			// checkerboard pattern
+			row.push((x + y) % 2 == 0 ? color`4` : color`D`);
+		}
+		canvas.push(row);
+	}
+
+	const renderLoop = setInterval(() => {
+		renderCanvas();
+		canvas[Math.floor(Math.random() * 10 * resolution)][
+			Math.floor(Math.random() * 8 * resolution)
+		] = color`3`;
+	}, 1000 / fps);
+
+	/*  setLegend(
+	[playerRedUp, bitmap`
 ................
 ..000000000000..
 ..099993999390..
@@ -1749,10 +1929,10 @@ function startGame() {
 ......0330......
 ......0330.....C
 ......0000......` ],
-  [playerRedDown, bitmap`
+	[playerRedDown, bitmap`
 ......0000......
 ......0990......
-......0930......
+......0930......-
 ......0330......
 ......0330......
 ......0000......
@@ -1766,7 +1946,7 @@ function startGame() {
 ..033333333330..
 ..000000000000..
 ................` ],
-  [playerRedLeft, bitmap`
+	[playerRedLeft, bitmap`
 ................
 ................
 .000000.........
@@ -1783,7 +1963,7 @@ function startGame() {
 .000000.0.......
 ....0...0.......
 ....00000.......` ],
-  [playerRedRight, bitmap`
+	[playerRedRight, bitmap`
 ......2222222...
 ......2000002...
 ......2022202222
@@ -1800,7 +1980,7 @@ function startGame() {
 ........20333302
 ........20000002
 ........22222222` ],
-  [playerBlueUp, bitmap`
+	[playerBlueUp, bitmap`
 ................
 ..000000000000..
 ..0HHHH7HHH7H0..
@@ -1817,7 +1997,7 @@ function startGame() {
 ......0770......
 ......0770......
 ......0000......` ],
-  [playerBlueDown, bitmap`
+	[playerBlueDown, bitmap`
 ......0000......
 ......0HH0......
 ......0H70......
@@ -1834,7 +2014,7 @@ function startGame() {
 ..077777777770..
 ..000000000000..
 ................` ],
-  [playerBlueLeft, bitmap`
+	[playerBlueLeft, bitmap`
 ................
 ................
 .000000.........
@@ -1851,7 +2031,7 @@ function startGame() {
 .000000.0.......
 ....0...0.......
 ....00000.......` ],
-  [playerBlueRight, bitmap`
+	[playerBlueRight, bitmap`
 .......00000....
 .......0...0....
 .......0.000000.
@@ -1868,7 +2048,7 @@ function startGame() {
 .........000000.
 ................
 ................` ],
-  [background, bitmap`
+	[background, bitmap`
 2121212122222222
 1212121222222222
 2121212122222222
@@ -1885,7 +2065,7 @@ function startGame() {
 2222222221212121
 2222222212121212
 2222222221212121` ],
-  [paintRed, bitmap`
+	[paintRed, bitmap`
 3333333333333333
 3333333333333333
 3333333333333333
@@ -1902,7 +2082,7 @@ function startGame() {
 3333333333333333
 3333333333333333
 3333333333333333` ],
-  [paintRedSpecial1, bitmap`
+	[paintRedSpecial1, bitmap`
 3333333333333333
 3399933333333333
 3999933333333333
@@ -1919,7 +2099,7 @@ function startGame() {
 3333333399999333
 3333333333333333
 3333333333333333` ],
-  [paintRedSpecial2, bitmap`
+	[paintRedSpecial2, bitmap`
 3333333333333333
 3333333333333333
 3333333399999333
@@ -1936,7 +2116,7 @@ function startGame() {
 3933333333333333
 3333333333333333
 3333333333333333` ],
-  [paintRedSpecial3, bitmap`
+	[paintRedSpecial3, bitmap`
 3333333333333333
 3333333333333333
 3339999333333333
@@ -1953,7 +2133,7 @@ function startGame() {
 3333333339999333
 3333333399333333
 3333333333333333` ],
-  [paintBlue, bitmap`
+	[paintBlue, bitmap`
 7777777777777777
 7777777777777777
 7777777777777777
@@ -1970,7 +2150,7 @@ function startGame() {
 7777777777777777
 7777777777777777
 7777777777777777` ],
-  [paintBlueSpecial1, bitmap`
+	[paintBlueSpecial1, bitmap`
 7777777777777777
 7777777777777777
 77777HHH7HHHH777
@@ -1987,7 +2167,7 @@ function startGame() {
 777HHHHHHH777777
 7777777777777777
 7777777777777777` ],
-  [paintBlueSpecial2, bitmap`
+	[paintBlueSpecial2, bitmap`
 7777777777777777
 777H77H777777777
 777HHHHHH7777777
@@ -2004,7 +2184,7 @@ function startGame() {
 77H7777777777777
 7777777777777777
 7777777777777777` ],
-  [paintBlueSpecial3, bitmap`
+	[paintBlueSpecial3, bitmap`
 7777777777777777
 7777777777777777
 7777777777777777
@@ -2024,8 +2204,8 @@ function startGame() {
 )
   
   
-  setBackground(background)
-  setMap(map`
+	setBackground(background)
+	setMap(map`
 .........6
 ..........
 ..........
@@ -2035,95 +2215,105 @@ function startGame() {
 ..........
 1.........`)
 */
-
 }
 
-const spritesRed = ["1", "2", "3", "4"]
+const spritesRed = ["1", "2", "3", "4"];
 const controlsRed = {
-  "w": {
-    func: p => p.y -= 1,
-    type: "1",
-  },
-  "s": {
-    func: p => p.y += 1,
-    type: "2",
-  },
-  "a": {
-    func: p => p.x -= 1,
-    type: "3",
-  },
-  "d": {
-    func: p => p.x += 1,
-    type: "4",
-  },
-}
+	w: {
+		func: (p) => (p.y -= 1),
+		type: "1",
+	},
+	s: {
+		func: (p) => (p.y += 1),
+		type: "2",
+	},
+	a: {
+		func: (p) => (p.x -= 1),
+		type: "3",
+	},
+	d: {
+		func: (p) => (p.x += 1),
+		type: "4",
+	},
+};
 
-const spritesBlue = ["5", "6", "7", "8"]
+const spritesBlue = ["5", "6", "7", "8"];
 const controlsBlue = {
-  "i": {
-    func: p => p.y -= 1,
-    type: "5",
-  },
-  "k": {
-    func: p => p.y += 1,
-    type: "6",
-  },
-  "j": {
-    func: p => p.x -= 1,
-    type: "7",
-  },
-  "l": {
-    func: p => p.x += 1,
-    type: "8",
-  },
-}
+	i: {
+		func: (p) => (p.y -= 1),
+		type: "5",
+	},
+	k: {
+		func: (p) => (p.y += 1),
+		type: "6",
+	},
+	j: {
+		func: (p) => (p.x -= 1),
+		type: "7",
+	},
+	l: {
+		func: (p) => (p.x += 1),
+		type: "8",
+	},
+};
 
 setSolids([...spritesRed, ...spritesBlue]);
 
 [
-  [spritesBlue, controlsBlue, paintBlue, [paintBlueSpecial1,paintBlueSpecial2,paintBlueSpecial3]],
-  [spritesRed, controlsRed, paintRed, [paintRedSpecial1,paintRedSpecial2,paintRedSpecial3]]
-].forEach(data => {
-  const [sprites, controls, paintColor, specialPaint] = data;
+	[
+		spritesBlue,
+		controlsBlue,
+		paintBlue,
+		[paintBlueSpecial1, paintBlueSpecial2, paintBlueSpecial3],
+	],
+	[
+		spritesRed,
+		controlsRed,
+		paintRed,
+		[paintRedSpecial1, paintRedSpecial2, paintRedSpecial3],
+	],
+].forEach((data) => {
+	const [sprites, controls, paintColor, specialPaint] = data;
 
-  Object.keys(controls).forEach(key => {
-    onInput(key, () => {
-      if (!gameStarted) return
-      
-      let player;
-      // find the player, regardless of what directional sprite is in use right now
-      for (const sprite of sprites) {
-        player = getFirst(sprite);
-        if (player) break;
-      }
+	Object.keys(controls).forEach((key) => {
+		onInput(key, () => {
+			if (!gameStarted) return;
 
-      // move the player
-      controls[key].func(player);
-      player.type = controls[key].type;
+			let player;
+			// find the player, regardless of what directional sprite is in use right now
+			for (const sprite of sprites) {
+				player = getFirst(sprite);
+				if (player) break;
+			}
 
-      // color the canvas at that spot
-      let currentColor = canvas[player.x][player.y]
-      if (currentColor == "") {
-        addSprite(player.x, player.y, paintColor)
-      } else {
-        for (let sprite of getTile(player.x, player.y)) {
-          if (sprite.type == currentColor) {
-            
-            // random chance to pick a special paint sprite
-            if (Math.random() < 0.35) {
-              paintSprite = specialPaint[Math.floor(Math.random() * specialPaint.length)]
-            } else {
-              paintSprite = paintColor
-            }
-            
-            sprite.type = paintSprite
-          }
-        }
-      }
-      canvas[player.x][player.y] = paintColor
-    })
-  })
-})
+			// move the player
+			controls[key].func(player);
+			player.type = controls[key].type;
 
+			// color the canvas at that spot
+			let currentColor = canvas[player.x][player.y];
+			if (currentColor == "") {
+				addSprite(player.x, player.y, paintColor);
+			} else {
+				for (let sprite of getTile(player.x, player.y)) {
+					if (sprite.type == currentColor) {
+						// random chance to pick a special paint sprite
+						if (Math.random() < 0.35) {
+							paintSprite =
+								specialPaint[
+									Math.floor(
+										Math.random() * specialPaint.length
+									)
+								];
+						} else {
+							paintSprite = paintColor;
+						}
 
-
+						sprite.type = paintSprite;
+					}
+				}
+			}
+			canvas[player.x][player.y] = paintColor;
+		});
+	});
+});
