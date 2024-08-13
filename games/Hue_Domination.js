@@ -1649,10 +1649,13 @@ function getTileLegend(tileX, tileY) {
 
 // generate a static map of unique characters for the canvas to render to 
 let canvasMap = "";
+const canvasLegendChars = [];
 for (let y = 0; y < 8 * resolution; y++) {
   canvasMap += "\n";
   for (let x = 0; x < 10 * resolution; x++) {
-    canvasMap += getTileLegend(x, y);
+    const char =  getTileLegend(x, y);
+    canvasMap += char;
+    canvasLegendChars.push(char)
   }
 }
 console.log(canvasMap)
@@ -1660,7 +1663,7 @@ console.log(canvasMap)
 // using the canvas, generate a bitmap for an x and y on the sprig map
 function genTileBitmap(tileX, tileY) {
   // loop through every pixel in the tile
-  const tileBitmap = "";
+  let tileBitmap = "";
   for (let y = tileY; y < tileY + resolution; y++) {
     tileBitmap += "\n";
     for (let x = tileY; x < tileX + resolution; x++) {
@@ -1668,22 +1671,36 @@ function genTileBitmap(tileX, tileY) {
     }
   }
 
-  return tileBitmap
+  return tileBitmap;
 }
 
 function renderCanvas() {
   // loop through every 'tile' in the map
+  const legend = [];
+  let i = 0;
   for (let x = 0; x < canvas.length; x += resolution) {
     for (let y = 0; y < canvas[x].length; y += resolution) {
-      
+      legend.push([canvasLegendChars[i++], genTileBitmap(x,y)]);
     }
   }
+  console.log(legend.map(v=>v[0]).join(""))
+  console.log(canvasMap.replace(/\n/g,""))
+  setLegend(...legend);
+  setMap(canvasMap);
 }
 
 function startGame() {
   clearInterval(titleAnimationInterval)
   setTimeout(() => gameStarted = true, 10)
 
+  // Create an array to keep track of paint
+  canvas = []
+  for (let i = 0; i < 10 * resolution; i++) {
+	canvas.push(Array(8 * resolution).fill(color`4`))
+  }
+
+  renderCanvas();
+  
 /*  setLegend(
   [playerRedUp, bitmap`
 ................
@@ -1988,13 +2005,6 @@ function startGame() {
 ..........
 1.........`)
 */
-  
-  
-  // Create an array to keep track of paint
-  canvas = []
-  for (let i = 0; i < 10 * resolution; i++) {
-	canvas.push(Array(8 * resolution).fill("."))
-  }
 
 }
 
