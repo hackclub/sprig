@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Tetris?
 @author: Gautham Nair
-@tags: [Classis, Tetris, Infinite]
+@tags: ["Classis", "Tetris", "Infinite"]
 @addedOn: 2024-08-05
 */
 const White = "W";
