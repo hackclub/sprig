@@ -1,3 +1,10 @@
+/*
+@title: Cobble Maze
+@author: yashsethu
+@tags: []
+@addedOn: 2024-08-13
+*/
+
 const down = "d"
 const up = "n"
 const right_1 = "r"
