@@ -1591,7 +1591,6 @@ const titleFrames = bitmap`33333333333333333333333333333333333333333333333333333
 2111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111211121112111`.split("\n\n")
 const titleData = []
 for (const frame of titleFrames) {  
-  console.log(titleFrames)
   const titleChunks = splitBitmap(frame)
   const titleLegend = titleChunks.map((chunk, index) => [getLegendChar(), chunk]);
   // create the map by joining every char for the title into one string, then inserting newlines
@@ -1650,15 +1649,14 @@ function getTileLegend(tileX, tileY) {
 // generate a static map of unique characters for the canvas to render to 
 let canvasMap = "";
 const canvasLegendChars = [];
-for (let y = 0; y < 8 * resolution; y++) {
+for (let y = 0; y < 8; y++) {
   canvasMap += "\n";
-  for (let x = 0; x < 10 * resolution; x++) {
+  for (let x = 0; x < 10; x++) {
     const char =  getTileLegend(x, y);
     canvasMap += char;
     canvasLegendChars.push(char)
   }
 }
-console.log(canvasMap)
 
 // using the canvas, generate a bitmap for an x and y on the sprig map
 function genTileBitmap(tileX, tileY) {
@@ -1674,20 +1672,23 @@ function genTileBitmap(tileX, tileY) {
   return tileBitmap;
 }
 
+
 function renderCanvas() {
   // loop through every 'tile' in the map
   const legend = [];
   let i = 0;
-  for (let x = 0; x < canvas.length; x += resolution) {
-    for (let y = 0; y < canvas[x].length; y += resolution) {
+  for (let x = 0; x < 10; x++) {
+    for (let y = 0; y < 8; y++) {
       legend.push([canvasLegendChars[i++], genTileBitmap(x,y)]);
     }
   }
-  console.log(legend.map(v=>v[0]).join(""))
-  console.log(canvasMap.replace(/\n/g,""))
+  // console.log(legend.map(v=>v[0]).join(""))
+  // console.log(canvasMap.replace(/\n/g,""))
   setLegend(...legend);
   setMap(canvasMap);
 }
+
+startGame()
 
 function startGame() {
   clearInterval(titleAnimationInterval)
@@ -2063,7 +2064,6 @@ setSolids([...spritesRed, ...spritesBlue]);
       let player;
       // find the player, regardless of what directional sprite is in use right now
       for (const sprite of sprites) {
-        console.log(sprite)
         player = getFirst(sprite);
         if (player) break;
       }
