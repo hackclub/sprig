@@ -2,7 +2,7 @@
 @title: Coin Hunter
 @author: Daniyal Shaikh
 @tags: []
-@addedOn: 08/08/2024
+@addedOn: 08-08-2024
 */
 
 const player = "p";
