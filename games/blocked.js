@@ -1,8 +1,8 @@
 /*
 @title: aMaze
 @author: Sumedh Natu
-@tags: [puzzle, tiles, sokoban, boxes]
-@addedOn: 2024-00-00
+@tags: ["puzzle", "tiles", "sokoban", "boxes"]
+@addedOn: 2024-08-13
 */
 
 let playerSprite = bitmap`
