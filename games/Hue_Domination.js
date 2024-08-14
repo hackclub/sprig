@@ -1717,6 +1717,20 @@ for (let y = 0; y < 8; y++) {
 	}
 }
 
+// reserve 4 chars for each player
+const redLegend = [
+	getLegendChar(),
+	getLegendChar(),
+	getLegendChar(),
+	getLegendChar(),
+];
+const blueLegend = [
+	getLegendChar(),
+	getLegendChar(),
+	getLegendChar(),
+	getLegendChar(),
+];
+
 // using the canvas, generate a bitmap for an x and y on the sprig map
 function genTileBitmap(tileX, tileY) {
 	// loop through every pixel in the tile
@@ -1750,7 +1764,13 @@ function renderCanvas() {
 	}
 
 	setLegend(...legend);
-	setMap(canvasMap); // even though the map hasn't changed, calling setMap again triggers an update
+}
+
+function renderPlayer(playerData) {
+	const tileX = Math.floor(playerData.x / resolution);
+	const offsetX = playerData.x % resolution;
+	const tileY = Math.floor(playerData.y / resolution);
+	const offsetY = playerData.y % resolution;
 }
 
 // offset a bitmap by a pixel amount, by creating 4 bitmaps and shifting the original bitmap across them
@@ -1769,11 +1789,39 @@ function offsetBitmap(bitmap, x, y) {
 	return splitBitmap(bitmap);
 }
 
+// sprite data
+const spriteData = {
+	redUp: bitmap`
+................
+.22222222222222.
+.20000000000002.
+220229299999902.
+200233333333302.
+200333333333302.
+200000000000002.
+202222222222222.
+2000000002......
+22222222022.....
+......20002.....
+......20C02.....
+......20C02.....
+......20002.....
+......22222.....
+................`,
+};
+
+// player position data
+let red = {
+	x: 5,
+	y: 5,
+};
+
 startGame();
 
 async function startGame() {
 	clearInterval(titleAnimationInterval);
 	setTimeout(() => (gameStarted = true), 10);
+	console.log(spriteData);
 
 	const spiralAnimationChar = "S";
 	setLegend(
@@ -1899,26 +1947,6 @@ async function startGame() {
 		]
 	);
 
-	const testBitmap = bitmap`
-7777777777777777
-7333333333333337
-7333333333333337
-7333333333333337
-7333433333343337
-7333433333343337
-7333433333343337
-7333333333333337
-7333333333333337
-7333333333333337
-7333433333343337
-7333343333433337
-7333334444333337
-7333333333333337
-7333333333333337
-7777777777777777`;
-	console.log(testBitmap);
-	console.log(offsetBitmap(testBitmap, 1, 1));
-
 	await spiralAnimation(spiralAnimationChar, 10);
 
 	// fade animation
@@ -1939,8 +1967,11 @@ async function startGame() {
 		canvas.push(row);
 	}
 
+	renderCanvas();
+	setMap(canvasMap);
 	const renderLoop = setInterval(() => {
 		renderCanvas();
+		renderPlayer(red);
 		canvas[Math.floor(Math.random() * 10 * resolution)][
 			Math.floor(Math.random() * 8 * resolution)
 		] = color`3`;
