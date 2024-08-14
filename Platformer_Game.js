@@ -308,6 +308,8 @@ afterInput(() => {
     getTile(p.x, p.y).forEach(t => {
       if (t.type === coin) t.remove();
     });
+    // Visual feedback for collecting coins
+    addText(`Score: ${score}`, { x: 1, y: 1, color: color`3` });
   }
 });
 
@@ -335,3 +337,96 @@ setInterval(() => {
     if (mp.x >= 15) mp.x = 0; // Loop moving platform movement
   });
 }, 1000);
+
+// Additional Power-Ups
+afterInput(() => {
+  const p = getFirst(player);
+  if (p && getTile(p.x, p.y).some(t => t.type === powerUp)) {
+    // Example: Invincibility
+    p.invincible = true;
+    setTimeout(() => {
+      p.invincible = false;
+    }, 5000); // Invincibility lasts for 5 seconds
+  }
+});
+
+// Enhanced Enemy Behavior
+setInterval(() => {
+  getAll(enemy).forEach(e => {
+    e.x += (Math.random() > 0.5 ? 1 : -1); // Random horizontal movement
+    e.y += (Math.random() > 0.5 ? 1 : -1); // Random vertical movement
+    if (e.x < 0) e.x = 0;
+    if (e.x >= 15) e.x = 14;
+    if (e.y < 0) e.y = 0;
+    if (e.y >= 15) e.y = 14;
+  });
+}, 500);
+
+// Interactive Elements
+afterInput(() => {
+  const p = getFirst(player);
+  if (p && getTile(p.x, p.y).some(t => t.type === platform)) {
+    // Example: Breakable blocks
+    getTile(p.x, p.y).forEach(t => {
+      if (t.type === platform) t.remove();
+    });
+  }
+});
+
+// Visual and Audio Feedback
+function playSound(sound) {
+  // Placeholder function for playing sound effects
+  console.log(`Playing sound: ${sound}`);
+}
+
+afterInput(() => {
+  const p = getFirst(player);
+  if (p && getTile(p.x, p.y).some(t => t.type === coin)) {
+    playSound('coin');
+    addText(`Score: ${score}`, { x: 1, y: 1, color: color`3` });
+  }
+  if (p && getTile(p.x, p.y).some(t => t.type === powerUp)) {
+    playSound('powerUp');
+  }
+  if (p && getTile(p.x, p.y).some(t => t.type === spike)) {
+    playSound('spike');
+  }
+});
+
+// Difficulty Levels
+const difficultyLevels = [
+  { gravity: 1, enemySpeed: 500 },
+  { gravity: 2, enemySpeed: 400 },
+  { gravity: 3, enemySpeed: 300 }
+];
+
+let currentDifficulty = 0;
+
+setInterval(() => {
+  const p = getFirst(player);
+  if (p) {
+    p.y += difficultyLevels[currentDifficulty].gravity; // Apply gravity based on difficulty
+  }
+}, 100);
+
+setInterval(() => {
+  getAll(enemy).forEach(e => {
+    e.x += (Math.random() > 0.5 ? 1 : -1);
+    e.y += (Math.random() > 0.5 ? 1 : -1);
+    if (e.x < 0) e.x = 0;
+    if (e.x >= 15) e.x = 14;
+    if (e.y < 0) e.y = 0;
+    if (e.y >= 15) e.y = 14;
+  });
+}, difficultyLevels[currentDifficulty].enemySpeed);
+
+// Increase difficulty as levels progress
+afterInput(() => {
+  const p = getFirst(player);
+  if (p && getTile(p.x, p.y).some(t => t.type === goal)) {
+    level += 1;
+    currentDifficulty = Math.min(currentDifficulty + 1, difficultyLevels.length - 1);
+    const currentLevel = levels[level];
+    if (currentLevel !== undefined) setMap(currentLevel);
+  }
+});
