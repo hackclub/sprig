@@ -171,9 +171,9 @@ const levels = [
   map`
 p..c...............
 ..y..xp............
-..y..xyp........s..
+..y..xyp.....u..s..
 ..y..xyyp......ss.g
-..y..xyp......sss..
+..y..xyp...e..sss..
 ..y..xyp.....ssss..
 ..y..xyyp...sssss..
 ..y..xyyp..ssssss..
@@ -430,3 +430,30 @@ afterInput(() => {
     if (currentLevel !== undefined) setMap(currentLevel);
   }
 });
+
+// Background Music
+function playBackgroundMusic() {
+  // Placeholder function for playing background music
+  console.log('Playing background music');
+}
+
+playBackgroundMusic();
+
+// Game Over Screen
+function gameOver() {
+  addText('Game Over', { x: 5, y: 7, color: color`2` });
+  setTimeout(() => {
+    level = 0;
+    currentDifficulty = 0;
+    setMap(levels[level]);
+  }, 3000); // Restart game after 3 seconds
+}
+
+// Check for Game Over Condition
+afterInput(() => {
+  const p = getFirst(player);
+  if (p && getTile(p.x, p.y).some(t => t.type === spike) && !p.invincible) {
+    gameOver();
+  }
+});
+
