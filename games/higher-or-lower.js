@@ -55,9 +55,9 @@ const winsound = tune`
 
 addText("Higher or Lower", {x: 3, y:1});
 var gamestarted = 0
-number = 0
-number2 = 0
-score = 0
+var number = 0
+var number2 = 0
+var score = 0
 if (gamestarted == 0) {
   addText("Press A", {x: 6, y:8});
 }
