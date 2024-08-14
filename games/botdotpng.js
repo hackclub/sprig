@@ -10,7 +10,7 @@ BOTDOTPNG:
 @title: botdotpng
 @author: mavdotjs
 @tags: ['puzzle', 'bot', 'singleplayer']
-@addedOn: 2024-08-19
+@addedOn: 2024-08-14
 */
 
 const bg = 'B'
