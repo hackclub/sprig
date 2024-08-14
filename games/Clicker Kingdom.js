@@ -274,10 +274,10 @@ t.v.s`, //main
 .......
 .......
 .......
-...p...`, //startscreen
+.......`, //startscreen
   map`
-.........hp
-..........h
+...........
+...........
 ...........
 ...........
 ...........
@@ -316,24 +316,32 @@ setPushables({
 })
 
 onInput("w", () => {
-  getFirst(player).y -= 1
-  playTune(move)
+  if (level === 0){
+    getFirst(player).y -= 1
+    playTune(move)
+  }
 })
 
 onInput("a", () => {
-  getFirst(player).x -= 1
-  playTune(move)
+  if (level === 0){
+    getFirst(player).x -= 1
+    playTune(move)
+  }
 })
 
 
 onInput("s", () => {
-  getFirst(player).y += 1
-  playTune(move)
+  if (level === 0){
+    getFirst(player).y += 1
+    playTune(move)
+  }
 })
 
 onInput("d", () => {
-  getFirst(player).x += 1
-  playTune(move)
+  if (level === 0){
+    getFirst(player).x += 1
+    playTune(move)
+  }
 })
 
 
