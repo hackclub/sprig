@@ -1,3 +1,10 @@
+/*
+@title: PlasticPickup
+@author: pizzalover125
+@tags: []
+@addedOn: 2024-08-15
+*/
+
 const player = "p"
 const sky = "b"
 const obstacle = "o"
@@ -223,3 +230,4 @@ var gameLoop = setInterval(() => {
   spawnObstacle();
   spawnBottle();
 }, 500);
+
