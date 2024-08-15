@@ -2,7 +2,7 @@
 @title: PuppyCafe
 @author: Lenochodik
 @tags: ['classic', 'tapper', 'endless']
-@addedOn: 2024-00-00
+@addedOn: 2024-08-15
 */
 
 // = Helper functions ==============================
@@ -716,3 +716,4 @@ function createLevelUpInterval() {
   }, levelUpIntervalDuration)
 }
 // =================================================
+
