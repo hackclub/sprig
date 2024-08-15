@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Ball & Bow Tie
 @author: Mihir Kaushal
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-15
 */
 
 // define the sprites in our game
@@ -309,3 +309,4 @@ const touchingSpikeUp = spikeTile.some(sprite => sprite.type === spike_up);
 } 
 
 });
+
