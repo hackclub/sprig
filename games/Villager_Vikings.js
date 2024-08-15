@@ -6,7 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Villager Vikings
 @author: D.M.R
 @tags: ['attack']
-@addedOn: 2024-00-00
+@addedOn: 2024-08-15
 🎮 CONTROLS:
   Begining controls:
 	S-To watch the story
@@ -1460,3 +1460,4 @@ onInput("s",() => {
     }
 })
 //TO/DO: update all the sprites every moment
+
