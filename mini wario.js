@@ -3,7 +3,7 @@
 @title: mini wario
 @author: Shaibal Haque
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-15
 */
 
 /* setting constants will assign sprites to these later  */
@@ -176,3 +176,4 @@ afterInput(() => {
     addText("Game won", { x: 2, y: 7, color: '9' })
   }
 })
+
