@@ -1,8 +1,8 @@
 /*
 @title: 2048 - Better graphics and music
-@tags: ['classic']['updated']['retro']
+@tags: ['classic', 'updated', 'retro']
 @addedOn: 2024-08-12
-@author: original: linkai101 updates:Shahm
+@author: linkai101; updates: Shahm
 */
 
 const empty = "-"
@@ -1362,3 +1362,4 @@ tune`
 ];
 
 tracks.forEach((e) => playTune(e));
+
