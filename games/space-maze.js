@@ -2,8 +2,8 @@
 /* 
 @title: space_maze
 @author: klumey
-@tags: [space, maze, puzzle]
-@addedOn: 2024-07-28
+@tags: ['space', 'maze', 'puzzle']
+@addedOn: 2024-08-15
 
 ----------------------CONTROLS--------------
 
@@ -800,3 +800,4 @@ stepOnPortal();
       }
     }
 })
+
