@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Spring
-@author: 
+@author: TechPandaPro 
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-15
 */
 
 const player = "p"
@@ -1898,3 +1898,4 @@ function formatTime(ms) {
   
   return formattedTime
 }
+
