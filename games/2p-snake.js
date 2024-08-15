@@ -1,10 +1,8 @@
 /*
 @title: 2p-snake
 @author: Sigfredo feat. whatware
-@tags: [multiplayer, snake, 2p, co-op]
+@tags: ['multiplayer', 'snake', '2p', 'co-op']
 @addedOn: 2024-08-13
-@madeWith: SprigKit
-@repo: youknowedo/2p-snake
 */
 
 // src/music.ts
@@ -623,3 +621,4 @@ addText("'L' TO START", {
 	y: 13,
 	color: color`2`,
 });
+
