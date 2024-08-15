@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Simon Sees
 @author: Armand
-@tags: [infinite, simple ]
-@addedOn: 2024-07-30
+@tags: ['infinite', 'simple']
+@addedOn: 2024-08-15
 */
 
 
@@ -686,3 +686,4 @@ onInput("j", () => handleColorInput(3, 'j'));
 afterInput(() => {
   // Any other code that should run after input
 });
+
