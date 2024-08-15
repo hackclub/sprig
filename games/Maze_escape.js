@@ -1,3 +1,10 @@
+/*
+@title: Maze_escape
+@author: NikosDev
+@tags: []
+@addedOn: 2024-08-15
+*/
+
 const player = "p";
 const wall = "w";
 const coin = "c";
@@ -346,3 +353,4 @@ setInterval(() => {
     else if (direction === 3 && e.x < width() - 1) e.x += 1;
   });
 }, 1000);
+
