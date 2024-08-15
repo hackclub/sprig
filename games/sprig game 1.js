@@ -1,3 +1,10 @@
+/*
+@title: Sprig Maze Game
+@author: dasadishree
+@tags: []
+@addedOn: 2024-08-15
+*/
+
 const player = "p"
 const box = "b"
 const goal = "g"
@@ -201,4 +208,5 @@ onInput("j", () => {
     const currentLevel = levels[level];
     if (currentLevel !== undefined) setMap(currentLevel);
 });
+
 
