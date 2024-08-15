@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Fighter
-@author: 
+@title: Zombie Run
+@author: Arush
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-15
 */
 
 const player = "p"
@@ -196,3 +196,4 @@ setInterval(() => {
     addText("Level: " + (currentLevel +1 ), { x: 1, y: 1, color: color`3` });
   }
 },2);
+
