@@ -1,3 +1,10 @@
+/*
+@title: Rico Rodriguez
+@author: Amspy
+@tags: []
+@addedOn: 2024-08-15
+*/
+
 const player = "p";
 const bullet = "b";
 const background = "g";
@@ -190,3 +197,4 @@ afterInput(() => {
 setInterval(createBullet, 1000);
 
 showStartScreen();
+
