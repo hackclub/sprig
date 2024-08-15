@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Higher Lower v2
-@author: 
+@author: Kipp-ie 
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-15
 */
 
 
@@ -121,3 +121,4 @@ onInput("s", () => {
     }
   }
 })
+
