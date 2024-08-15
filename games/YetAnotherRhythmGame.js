@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: fruit catch
 @author: Sreekar617
-@tags: [beginner]
-@addedOn: 2024-00-00
+@tags: ['beginner']
+@addedOn: 2024-08-15
 */
 
 function sleep(ms) {
@@ -302,3 +302,4 @@ async function start() {
 }
 
 start()
+
