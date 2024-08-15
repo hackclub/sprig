@@ -1,8 +1,8 @@
 /*
 @title: HELP ME I CANT CODE
 @author: PotatoMoth
-@tags: [maze, adventure]
-@addedOn: 2024-00-00
+@tags: ['maze', 'adventure']
+@addedOn: 2024-08-15
 */
 
 const player = "p"
@@ -615,3 +615,4 @@ setInterval(() => {
     checkCollisions()
   },
   200)
+
