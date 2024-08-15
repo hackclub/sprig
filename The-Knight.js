@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: The Knight
-@author: 
+@author: CragglesG 
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-15
 */
 
 const player = "p"
@@ -678,3 +678,4 @@ afterInput(() => {
 95.84664536741214: C4/95.84664536741214 + D4~95.84664536741214 + E4^95.84664536741214 + F4-95.84664536741214,
 2779.552715654952`)
 })
+
