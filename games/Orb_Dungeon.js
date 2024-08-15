@@ -2,7 +2,7 @@
 @title: Orb Dungeon
 @author: Dimitris Toulis
 @tags: ['dungeon']
-@addedOn: 2024-07-31
+@addedOn: 2024-08-15
 */
 /*
 ## Controls
@@ -1164,3 +1164,4 @@ function restartGame() {
   setLegend([player, playerBitmap], ...sprites)
   redrawMap()
 }
+
