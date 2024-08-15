@@ -27,7 +27,6 @@ import {
 	IoSaveOutline,
 	IoShareOutline,
 	IoShuffle,
-	IoWarning,
 } from "react-icons/io5";
 import { FaBrush } from "react-icons/fa";
 import { usePopupCloseClick } from "../lib/utils/popup-close-click";
