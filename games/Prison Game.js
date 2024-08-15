@@ -1,8 +1,8 @@
 /*
 @title: Prison Game
 @author: Fallhicory 
-@tags: [maze, game,levels, singleplayer, prison]
-@addedOn: 2024-00-00
+@tags: ['maze', 'game','levels', 'singleplayer', 'prison']
+@addedOn: 2024-08-15
 */
 
 const police = "p"
@@ -303,3 +303,4 @@ afterInput(() => {
     });
   }
 });
+
