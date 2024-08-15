@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: S2K
-@author: 
+@author: Spectrepro 
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-15
 */
 
 /*
@@ -171,3 +171,4 @@ function update() {
 
 // Run the update function repeatedly
 setInterval(update, 100);
+
