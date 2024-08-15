@@ -1,3 +1,10 @@
+/*
+@title: Maze-game v1
+@author: Owais43
+@tags: ["maze"]
+@addedOn: 2024-08-15
+*/
+
 const player = "p";
 const wall = "w";
 const goal = "g";
@@ -119,3 +126,4 @@ afterInput(() => {
     addText("You Win!", { x: 6, y: 4, color: color`3` });
   }
 });
+
