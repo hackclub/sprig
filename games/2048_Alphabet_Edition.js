@@ -22,7 +22,6 @@ Press j to end music.
 Press i for instructions and credits.
 */
 const blank = "-"
-const a = "a";
 const b = "b";
 const c = "c";
 const d = "d";
