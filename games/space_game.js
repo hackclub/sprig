@@ -15,6 +15,7 @@ Buttons:
 
 @title: Space Game
 @author: Abhimanyu Chaudhary
+@tags: []
 @addedOn: 2024-08-13
 */
 
@@ -367,3 +368,4 @@ function updateTimer(timer) {
     return timer;
   }
 }
+
