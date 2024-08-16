@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: WrongLane
 @author: KaspianDev
-@tags: ['dodge', 'endless', `singleplayer`]
-@addedOn: 2024-08-09
+@tags: ['dodge', 'endless', 'singleplayer']
+@addedOn: 2024-08-15
 */
 
 /* Controls:
@@ -549,3 +549,4 @@ onInput("l", () => {
     refreshMenu()
   }
 })
+
