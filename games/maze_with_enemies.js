@@ -1,3 +1,10 @@
+/*
+@title: Maze with enemies
+@author: leonprincen
+@tags: []
+@addedOn: 2024-08-16
+*/
+
 const player = "p";
 const enemy = "e";
 const enemy2 = "r";
@@ -319,3 +326,4 @@ function gameOver() {
   clearInterval(gameInterval);
   gameIsOver = true;
 }
+
