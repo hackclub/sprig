@@ -1,8 +1,8 @@
 /*
 @title: SuperFighters
 @author: retrooper
-@tags: ['shooter', 'platformer', 'fighting', `singleplayer`]
-@addedOn: 2024-08-09
+@tags: ['shooter', 'platformer', 'fighting', 'singleplayer']
+@addedOn: 2024-08-15
 */
 
 // Constants
@@ -992,3 +992,4 @@ setInterval(() => {
     addText(text, { x: width() - 3, y: 5, color: `5` });
   }
 }, 40);
+
