@@ -2,6 +2,7 @@
 @title: The Maze-trix
 @author: Shayan
 @tags: []
+@addedOn: 2024-08-16
 */
 
 const player = "p";
@@ -231,3 +232,4 @@ afterInput(() => {
     addText("Door Unlocked!", { x: 6, y: 5, color: color`7` })
   }
 });
+
