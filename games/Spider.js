@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Spider
-@author: 
+@author: AlexGaloy
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-15
 */
 
 const spider = "p"
@@ -415,3 +415,4 @@ afterInput(() => {
   lastX = "" + getFirst(spider).x
   lastY = "" + getFirst(spider).y
 })
+
