@@ -1,4 +1,10 @@
 /*
+@title: Galaga
+@author: wormmeatapple
+@tags: []
+@addedOn: 2024-08-15
+
+
 Written by wormmeatapple
 Inspired by arcade game Galaga
 Ai was used for syntax, errors in code, and clarification, but no ai written code was used
@@ -426,3 +432,4 @@ function resetEnemies() {
   }
 }
                    
+
