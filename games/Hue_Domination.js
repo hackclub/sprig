@@ -1717,20 +1717,6 @@ for (let y = 0; y < 8; y++) {
 	}
 }
 
-// reserve 4 chars for each player
-const redLegend = [
-	getLegendChar(),
-	getLegendChar(),
-	getLegendChar(),
-	getLegendChar(),
-];
-const blueLegend = [
-	getLegendChar(),
-	getLegendChar(),
-	getLegendChar(),
-	getLegendChar(),
-];
-
 // using the canvas, generate a bitmap for an x and y on the sprig map
 function genTileBitmap(tileX, tileY) {
 	// loop through every pixel in the tile
@@ -1766,11 +1752,14 @@ function renderCanvas() {
 	setLegend(...legend);
 }
 
-function renderPlayer(playerData) {
-	const tileX = Math.floor(playerData.x / resolution);
-	const offsetX = playerData.x % resolution;
-	const tileY = Math.floor(playerData.y / resolution);
-	const offsetY = playerData.y % resolution;
+function renderPlayer(player) {
+	const tileX = Math.floor(player.x / resolution);
+	const offsetX = player.x % resolution;
+	const tileY = Math.floor(player.y / resolution);
+	const offsetY = player.y % resolution;
+
+	const bitmaps = offsetBitmap(player[player.direction], offsetX, offsetY);
+	setLegend(...player.legendChars.map( (char, i) => [char, bitmaps[i]] ))
 }
 
 // offset a bitmap by a pixel amount, by creating 4 bitmaps and shifting the original bitmap across them
@@ -1789,31 +1778,29 @@ function offsetBitmap(bitmap, x, y) {
 	return splitBitmap(bitmap);
 }
 
-// sprite data
-const spriteData = {
-	redUp: bitmap`
-................
-.22222222222222.
-.20000000000002.
-220229299999902.
-200233333333302.
-200333333333302.
-200000000000002.
-202222222222222.
-2000000002......
-22222222022.....
-......20002.....
-......20C02.....
-......20C02.....
-......20002.....
-......22222.....
-................`,
-};
-
-// player position data
+// player position & sprite data
 let red = {
 	x: 5,
 	y: 5,
+	direction: "up",
+	legendChars: [getLegendChar(), getLegendChar(), getLegendChar(), getLegendChar()],
+	up: bitmap`
+	................
+	.22222222222222.
+	.20000000000002.
+	220229299999902.
+	200233333333302.
+	200333333333302.
+	200000000000002.
+	202222222222222.
+	2000000002......
+	22222222022.....
+	......20002.....
+	......20C02.....
+	......20C02.....
+	......20002.....
+	......22222.....
+	................`,
 };
 
 startGame();
@@ -1821,7 +1808,6 @@ startGame();
 async function startGame() {
 	clearInterval(titleAnimationInterval);
 	setTimeout(() => (gameStarted = true), 10);
-	console.log(spriteData);
 
 	const spiralAnimationChar = "S";
 	setLegend(
