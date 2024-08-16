@@ -1,5 +1,4 @@
 /*
-
 Sprig Space Game:
 
 Press a and d to move the spaceship left and right to avoid the missiles!
