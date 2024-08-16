@@ -54,7 +54,7 @@ const directions = [up, right, down, left]
 const sequence = []
 let playingSequence = false;
 
-sequence_loc = 0
+let sequence_loc = 0
 
 sequence.push(directions[Math.floor(Math.random() * 4)][Math.floor(Math.random() * 4)]); // add one random thingy 
 play_sequence()
@@ -536,18 +536,18 @@ LLLLLLLLLLLLLLLL
 ................` ],
 )
 
-display = map`
+let display = map`
 ...
 .${sequence[sequence_loc]}.
 o.p`
 
-input_direction = null
+let input_direction = null
 
-input_colour = null
+let input_colour = null
 
-input_sequence_loc = 0
+let input_sequence_loc = 0
 
-score = 0
+let score = 0
 
 if (typeof high_score === 'undefined') {
   high_score = 0
