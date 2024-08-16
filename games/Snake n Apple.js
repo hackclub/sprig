@@ -1,8 +1,8 @@
 /*
 @title: Traditional Snake
-@tags: ['classic']
-@addedOn: 2024-07-05
 @author: dmcegan
+@tags: ['classic']
+@addedOn: 2024-08-15
 */
 const snakeBody = "s";
 const apple = "a";
@@ -194,3 +194,4 @@ onInput("d", () => {
 });
 
 setInterval(moveSnake, 120);
+
