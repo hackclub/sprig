@@ -5,7 +5,7 @@
 use A S W D for movement & I to reset game
 @author: Saurav Alva & Gaurav Alva 
 @tags: []
-@addedOn: 2024-08-09
+@addedOn: 2024-08-15
 */
 
 
@@ -264,3 +264,4 @@ function displayStatus() {
 }
 
 displayStatus();  // Initial status display
+
