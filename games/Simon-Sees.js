@@ -52,6 +52,7 @@ const directions = [up, right, down, left]
 
 
 const sequence = []
+let playingSequence = false;
 
 sequence_loc = 0
 
@@ -566,7 +567,6 @@ function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-let playingSequence = false;
 
 async function play_sequence() {
   playingSequence = true;
