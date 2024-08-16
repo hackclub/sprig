@@ -556,7 +556,6 @@ if (typeof high_score === 'undefined') {
 }
 
 
-
 addText(`Score: ${score}`, { x: 3, y: 1, color: color`0` }); // Display current score
 addText(`High Score: ${high_score}`, { x: 3, y: 2, color: color`0` }); // Display high score
 
