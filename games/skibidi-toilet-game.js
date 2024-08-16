@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: skibidi-toilet-game
-@author: me
-@tags: [skibidi, skibidi-toilet]
-@addedOn: 2024-00-00
+@author: spedward
+@tags: ['skibidi', 'skibidi-toilet']
+@addedOn: 2024-08-15
 
 */
 
@@ -494,3 +494,4 @@ onInput("s", () => {
 afterInput(() => {
   addText('score: ' + score, options = { x: 6, y: 5, color: color`9` })
 })
+
