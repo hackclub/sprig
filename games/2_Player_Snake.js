@@ -252,6 +252,17 @@ j.......h..jjjj.h.
 setMap(level);
 setBackground(background);
 
+// Some short tunes
+const appleTune = tune`
+500: B4/500 + D4-500,
+15500`
+const endTune = tune`
+500: B4/500,
+500: G5/500,
+500: B4/500,
+500: G5/500 + F5/500,
+14000`
+
 // Track directions (NSEW as 0123) for both snakes
 let aDir = "S";
 let bDir = "N";
@@ -363,20 +374,24 @@ function updateSnake(nextPos) {
   // Decide whether to add a new snake body
   if (appleA.x === nextPos[0].x && appleA.y === nextPos[0].y) {
     addSnake1 = true;
+    playTune(appleTune)
     appleA.remove();
   }
   if (appleB.x === nextPos[1].x && appleB.y === nextPos[1].y) {
     addSnake2 = true;
+    playTune(appleTune)
     appleB.remove();
   }
 
   // Decide whether to delete a snake body
   if (appleA.x === nextPos[1].x && appleA.y === nextPos[1].y) {
     delSnake2 = true;
+    playTune(appleTune)
     appleA.remove();
   }
   if (appleB.x === nextPos[0].x && appleB.y === nextPos[0].y) {
     delSnake1 = true;
+    playTune(appleTune)
     appleB.remove();
   }
 
@@ -535,6 +550,7 @@ function handleLoss(timeLoss = true) {
     y: Math.floor(height() / 2),
     color: color`0`,
   });
+  playTune(endTune)
 }
 
 // Update game time
