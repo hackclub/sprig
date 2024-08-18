@@ -508,7 +508,7 @@ score = 0;
     y: 2,
     color: color`3` });
      r = Math.floor(Math.random() * 23);
-const playback = playTune(fireBeats, Infinity) })
+})
 onInput("s", () => {
   getFirst(monkey).y += 1
 })
