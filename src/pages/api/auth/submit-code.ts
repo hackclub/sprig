@@ -55,9 +55,9 @@ export const post: APIRoute = async ({ request, cookies }) => {
     if (_codes.empty) {
 		const newFailedAttempts = failedLoginAttempts + 1;
 
-		if (newFailedAttempts >= import.meta.env.MAX_ATTEMPTS) {
+		if (newFailedAttempts >= +import.meta.env.MAX_ATTEMPTS) {
 			const lockoutUntil = Timestamp.fromMillis(
-				now.toMillis() + import.meta.env.LOCKOUT_DURATION_MS
+				now.toMillis() + parseInt(import.meta.env.LOCKOUT_DURATION_MS)
 			);
 			await updateDocument("users", user.id, {
 				failedLoginAttempts: newFailedAttempts,
