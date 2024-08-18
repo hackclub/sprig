@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Monkey quest 3: lightless knights
-@author: 
+@author: Eamonn
 @tags: []
 @addedOn: 2024-00-00
 */
