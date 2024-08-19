@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: 2048
-@author: 
+@author: VeressIris
 @tags: []
-@addedOn: 2024-08-13
+@addedOn: 2024-08-19
 */
 
 const two = "1"
