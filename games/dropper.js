@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: dropper
 @author: hinoob
-@tags: ['falling', 'gravity', 'descent', 'singleplayer']
+@tags: ['falling', 'gravity', 'descent', 'singleplayer', 'obstacle']
 @addedOn: 2024-00-00
 */
 
