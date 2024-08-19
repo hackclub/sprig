@@ -42,7 +42,7 @@ static void upl_flush_buf(void) {
                       256);
   restore_interrupts(interrupts);
   memset(upl_state.buf, 0, sizeof(upl_state.buf));
-  printf("Wrote page %d/%lu (location 0x%s)\n",
+  printf("Wrote page %d/%lu (location 0x%x)\n",
          upl_state.page,
          (upl_state.len/(FLASH_PAGE_SIZE + 1)),
          flash_target_contents + location);

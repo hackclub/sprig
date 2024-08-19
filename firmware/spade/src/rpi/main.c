@@ -294,6 +294,11 @@ int main() {
     }
   }
 
+  // Hacky, but we're resetting here since button polling
+  // is launched in upl_stdin_read. Will be fixed with new
+  // multi-game support code.
+  multicore_reset_core1();
+
   // Start a core to listen for keypresses.
   multicore_launch_core1(core1_entry);
 
