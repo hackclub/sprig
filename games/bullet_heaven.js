@@ -168,6 +168,8 @@ and opens up the opportunity for bugs
 onInput("d", () => {
   if (stillAlive) {
     getFirst(player).x += 1;
+  } else {
+    reboot()
   }
 });
 /*
@@ -180,30 +182,48 @@ onInput("w", () => {
 onInput("a", () => {
   if (stillAlive) {
     getFirst(player).x -= 1;
+  } else {
+    reboot()
   }
 });
 onInput("l", () => {
   if (stillAlive && canShoot) {
     addSprite(getFirst(player).x, getFirst(player).y, bullet)
     canShoot = false
+  } else {
+    if (!stillAlive) {
+      reboot()
+    }
   }
 });
 onInput("i", () => {
   if (stillAlive && canShoot) {
     addSprite(getFirst(player).x, getFirst(player).y, bullet)
     canShoot = false
+  } else {
+    if (!stillAlive) {
+      reboot()
+    }
   }
 });
 onInput("j", () => {
   if (stillAlive && canShoot) {
     addSprite(getFirst(player).x, getFirst(player).y, bullet)
     canShoot = false
+  } else {
+    if (!stillAlive) {
+      reboot()
+    }
   }
 });
 onInput("k", () => {
   if (stillAlive && canShoot) {
     addSprite(getFirst(player).x, getFirst(player).y, bullet)
     canShoot = false
+  } else {
+    if (!stillAlive) {
+      reboot()
+    }
   }
 });
 
@@ -217,7 +237,8 @@ function moveBullets() {
     jerkBullets[i].y += 1;
   }
 }
-let timer = setInterval(() => {
+
+function gameLoop() {
   moveBullets()
   const bullets = getAll(bullet);
   const jerkBullets = getAll(jerkBullet);
@@ -235,6 +256,11 @@ let timer = setInterval(() => {
       addText(`you died!`, {
         x: 5,
         y: 5,
+        color: color`9`
+      })
+      addText(`try again?`, {
+        x: 5,
+        y: 8,
         color: color`9`
       })
       clearInterval(timer)
@@ -255,12 +281,16 @@ let timer = setInterval(() => {
       if (jerkHealth <= 1) {
         // set stillalive to false so it has the same effect as if you died
         stillAlive = false
-        clearInterval(jerkTimer)
         getFirst(jerk).remove();
         playTune(winNoise);
         addText(`you won!`, {
           x: 5,
           y: 5,
+          color: color`F`
+        })
+        addText(`play again?`, {
+          x: 5,
+          y: 8,
           color: color`F`
         })
         clearInterval(timer)
@@ -272,7 +302,8 @@ let timer = setInterval(() => {
     }
 
   });
-}, 100);
+}
+let timer = setInterval(gameLoop, 100)
 let jerkTimer = setInterval(() => {
   if (!stillAlive) {
     return;
@@ -297,3 +328,15 @@ let bulletTimer = setInterval(() => {
 let playerTimer = setInterval(() => {
   canShoot = true
 }, 200)
+
+function reboot() {
+  clearText()
+  stillAlive = true
+  jerkHealth = 40
+  jerkMovingLeft = false
+  jerkCanShoot = true
+  canShoot = true
+  setMap(level)
+  getFirst(player).y += 1;
+  timer = setInterval(gameLoop, 100)
+}
