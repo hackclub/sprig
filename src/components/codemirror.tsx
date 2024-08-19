@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { Extension, StateEffect } from '@codemirror/state'
 import styles from './codemirror.module.css'
 import { oneDark } from '@codemirror/theme-one-dark'
+import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { EditorView } from '@codemirror/view'
 import { theme, errorLog, PersistenceState, isNewSaveStrat, RoomState, RoomParticipant, ConnectionStatus } from '../lib/state'
 import { Diagnostic, setDiagnosticsEffect } from '@codemirror/lint'
@@ -68,9 +69,29 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	}, () => onRunShortcutRef.current?.(), yCollabSignal.value as Extension);
 
 	const setEditorTheme = () => {
+		// ==============================
+		// Here we need it to first set to the defaults
+		// because switching between the themes does
+		// not work quite right without reseting everything.
+
+		// My hunch is that the oneDark theme does not
+		// contain settings for the text spacing so
+		// resetting to the default will fix the spacing.
+
+		// - Andrew
+		// ==============================
+		
+		editorRef?.dispatch({ 
+			effects: StateEffect.reconfigure.of(restoreInitialConfig()) // <-- Resetting the theme here.
+		});
+
 		if (theme.value === "dark") {
-			editorRef?.dispatch({
+			editorRef?.dispatch({ 
 				effects: StateEffect.appendConfig.of(oneDark)
+			});
+		} else if (theme.value === "vscode") {
+			editorRef?.dispatch({
+				effects: StateEffect.appendConfig.of(vscodeDark)
 			});
 		} else editorRef?.dispatch({
 			effects: StateEffect.reconfigure.of(restoreInitialConfig())

@@ -116,7 +116,7 @@ export const showSaveConflictModal = signal<boolean>(false);
 export const continueSaving = signal<boolean>(true);
 export const LAST_SAVED_SESSION_ID = 'lastSavedSessionId';
 
-export type ThemeType = "dark" | "light" | "busker";
+export type ThemeType = "dark" | "light" | "busker" | "vscode";
 export const theme = signal<ThemeType>("dark");
 type Theme = {
 	navbarIcon: string,
@@ -124,8 +124,12 @@ type Theme = {
 	accentDark: string,
 	fgMutedOnAccent: string,
 	background: string,
-	color: string
-	copyContainerText: string
+	color: string,
+	copyContainerText: string,
+	bgSurface: string,
+	helpAreaContentH1: string,
+	helpAreaContentH3: string,
+	helpAreaContentText: string
 };
 
 const baseTheme: Theme = {
@@ -136,12 +140,20 @@ const baseTheme: Theme = {
 	background: "#2f2f2f",
 	color: "black",
 	copyContainerText: "white",
+	bgSurface: "#f8f9fa",
+	helpAreaContentH1: "#868e96",
+	helpAreaContentH3: "#000000",
+	helpAreaContentText: "#495057"
 };
 
 export const themes: Partial<Record<ThemeType, Theme>> = {
 	"dark": {
 		...baseTheme,
 		background: "#2f2f2f",
+		bgSurface: "#282c34",
+		helpAreaContentH1: "#136853",
+		helpAreaContentH3: "white",
+		helpAreaContentText: "white"
 	},
 	"light": {
 		...baseTheme,
@@ -152,9 +164,22 @@ export const themes: Partial<Record<ThemeType, Theme>> = {
 		...baseTheme,
 		navbarIcon: "/PENNY_HEAD.png",
 		accent: "#FFAE06",
-	 	accentDark: "#ff9d00",
+		accentDark: "#ff9d00",
 		fgMutedOnAccent: "#6d83ff",
-		background: "#3E29ED",
+		background: "#3E29ED"
+	},
+	"vscode": {
+		...baseTheme,
+		accent: "#0078d4",
+		accentDark: "#0062ac",
+		fgMutedOnAccent: "#b6b6b6",
+		background: "#1f1f1f",
+		color: "#545454",
+		copyContainerText: "#ffffff",
+		bgSurface: "#1e1e1e",
+		helpAreaContentH1: "#0078d4",
+		helpAreaContentH3: "white",
+		helpAreaContentText: "white"
 	}
 };
 
@@ -172,6 +197,12 @@ export const switchTheme = (themeType: ThemeType) => {
 	document.documentElement.style.setProperty(`--accent`, themeValue?.accent?? '');
 	document.documentElement.style.setProperty(`--accent-dark`, themeValue?.accentDark?? '');
 	document.documentElement.style.setProperty(`--fg-muted-on-accent`, themeValue?.fgMutedOnAccent?? '');
+
+	document.documentElement.style.setProperty(`--bg-surface`, themeValue?.bgSurface?? '');
+	document.documentElement.style.setProperty(`--help-area-content-h3`, themeValue?.helpAreaContentH3?? '');
+	document.documentElement.style.setProperty(`--help-area-content-h1`, themeValue?.helpAreaContentH1?? '');
+	document.documentElement.style.setProperty(`--help-area-content-text`, themeValue?.helpAreaContentText?? '');
+
 	documentStyle.color = themeValue?.color ?? '';
 	
 	// change the color of the text in elements having .copy-container style

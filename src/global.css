@@ -30,6 +30,10 @@ body {
 	--bg-btn-inactive: #434343;
 	--bg-btn-inactive-dark: #2e2e2e;
 
+	--help-area-content-h1: #868e96;
+	--help-area-content-h3: #000000;
+	--help-area-content-text: #495057;
+
 	--fg-muted: #9d9d9d;
 	--fg-muted-on-accent: #8fcabb;
 	--error: #e03131;
