@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Guardian
-@author: 
+@author: srijan-raghavula
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-18
 */
 
 const player = "p";
