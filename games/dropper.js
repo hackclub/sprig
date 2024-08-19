@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: dropper
 @author: hinoob
-@tags: []
+@tags: ['falling', 'gravity', 'descent']
 @addedOn: 2024-00-00
 */
 
