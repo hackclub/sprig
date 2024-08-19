@@ -2,7 +2,7 @@
 @title: Circuit Breaker
 @author: Stefan D
 @tags: ["maze", "wire"]
-@addedOn: 2024-18-08
+@addedOn: 2024-08-18
 */
 
 const player = "p";
