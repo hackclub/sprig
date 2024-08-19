@@ -1,7 +1,7 @@
 /*
 @title: Astroids
 @author: Alex
-@tags: [Bullet Hell]
+@tags: ["Bullet Hell"]
 @addedOn: 2024-08-17
 */
 let timeCounter = 0;
