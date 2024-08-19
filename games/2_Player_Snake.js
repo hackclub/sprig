@@ -562,8 +562,11 @@ function updateTime() {
   }
 }
 
+let interval
 function beginGame() {
-  let interval = setInterval(() => {
+  console.log(tickTime*1000)
+  if (interval) clearInterval(interval);
+  interval = setInterval(() => {
     const nextPos = getNextPos();
     if (!gameLost) {
       updateSnake(nextPos);
