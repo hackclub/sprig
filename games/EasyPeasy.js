@@ -2,6 +2,12 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
+Description:
+A game about making and selling lemonade! Your current goal is 100 Money, once you reach this goal hit "A".
+You start off with 2 money; buy lemons to squeeze with "I"; squeeze the lemons with "J"; Put the juice into a cup with "L"; Sell the cups with J.
+"W", "S", and "D" are used for purchasing upgrades.
+
+
 @title: Easy Peasy
 @author: ChasedDraco
 @tags: ["lemons","clicker"]
