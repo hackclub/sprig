@@ -1,5 +1,10 @@
 
 /* 
+@title: HideAndSeekMazeGame
+@author: Liana24601
+@tags: []
+@addedOn: 2024-08-20
+
 yippee
 */
 
