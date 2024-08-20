@@ -2,7 +2,7 @@ import styles from './bitmap-editor.module.css'
 import type { EditorProps } from '../../lib/state'
 import type { IconType } from 'react-icons'
 import { signal, useSignal, useSignalEffect } from '@preact/signals'
-import { palette, type PaletteItem, rgbaToHex, transparent } from 'sprig/base'
+import { palette, type PaletteItem, rgbaToHex, transparent  } from '../../../engine/src/base'
 import { transparentBgUrl } from '../../lib/utils/transparent-bg'
 import { drawingTools, makeTempGrid, mirrorGrid, TempGrid, transformTools, Vector } from './bitmap-editor-tools'
 import { useEffect, useRef } from 'preact/hooks'
@@ -45,7 +45,7 @@ interface ToolButtonProps {
 
 function ToolButton(props: ToolButtonProps) {
 	const ref = useRef<HTMLButtonElement>(null)
-	
+
 	useEffect(() => {
 		return props.shortcut ? tinykeys(window, {
 			[props.shortcut]: (event: KeyboardEvent) => {
@@ -139,7 +139,7 @@ export default function BitmapEditor(props: EditorProps) {
 			editState.value = null
 		}
 
-		const keydown = (event: KeyboardEvent) => { liveMirror.value = event.altKey }
+    const keydown = (event: KeyboardEvent) => { liveMirror.value = event.altKey }
 		const keyup = (event: KeyboardEvent) => { liveMirror.value = event.altKey }
 
 		window.addEventListener('mouseup', mouseup)
@@ -227,7 +227,7 @@ export default function BitmapEditor(props: EditorProps) {
 							{row.map((item, x) => {
 								const mirroredTempGrid = editState.value && (liveMirror.value ? mirrorGrid(editState.value.tempGrid) : editState.value.tempGrid)
 								if (mirroredTempGrid?.[y]![x]) item = mirroredTempGrid[y]![x]!
-								
+
 								return (
 									<div
 										key={`${x},${y}`}
