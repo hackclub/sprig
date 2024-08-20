@@ -1,7 +1,7 @@
 /*
 @title: Monster Mauler
 @author: DUMBHOG
-@tags: [shooter, fps]
+@tags: ["shooter", "fps"]
 @addedOn: 2024-08-20
 With help from CragglesG
 
