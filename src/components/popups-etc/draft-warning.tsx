@@ -76,7 +76,7 @@ export default function DraftWarningModal(props: DraftWarningModalProps) {
 							</Button>
 						</div>
 						{auth.state.value === 'CODE_INCORRECT' && <p class={styles.error}>Incorrect login code.</p>}
-						{auth.state.value === 'ACCOUNT_LOCKED' && <p class={styles.error}>Account locked due to too many failed attempts. Please try again later.</p>}
+						{auth.state.value === 'ACCOUNT_LOCKED' && <p class={styles.error}>Account locked due to too many failed attempts. Please try again in {+import.meta.env.PUBLIC_LOCKOUT_DURATION_MS / 60000} minutes.</p>}
 					</form>
 
 					<p class={styles.muted}>
