@@ -40,7 +40,7 @@ export default function DraftWarningModal(props: DraftWarningModalProps) {
 					}} class={styles.stack}>
 						<div class={styles.inputRow}>
 							<Input onChange={() => undefined} value={auth.email.value} type='email' autoComplete='email' placeholder='fiona@hackclub.com' bind={auth.email} />
-							<Button accent type='submit' disabled={!auth.emailValid.value} loading={auth.isLoading.value}>
+							<Button accent type='submit' disabled={!auth.codeValid.value || auth.state.value === 'ACCOUNT_LOCKED'} loading={auth.isLoading.value}>
 								Start coding
 							</Button>
 						</div>
@@ -76,6 +76,7 @@ export default function DraftWarningModal(props: DraftWarningModalProps) {
 							</Button>
 						</div>
 						{auth.state.value === 'CODE_INCORRECT' && <p class={styles.error}>Incorrect login code.</p>}
+						{auth.state.value === 'ACCOUNT_LOCKED' && <p class={styles.error}>Account locked due to too many failed attempts. Please try again in {+import.meta.env.PUBLIC_LOCKOUT_DURATION_MS / 60000} minutes.</p>}
 					</form>
 
 					<p class={styles.muted}>
