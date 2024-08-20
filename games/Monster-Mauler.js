@@ -2,7 +2,7 @@
 @title: Monster Mauler
 @author: DUMBHOG
 @tags: [shooter, fps]
-@addedOn: 2024-00-00s
+@addedOn: 2024-08-20
 With help from CragglesG
 
 How to play: Shoot as many enemies as you can before the time runs out! and make sure to not get too close to them!
