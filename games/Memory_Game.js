@@ -2,7 +2,7 @@
 @title: Memory game
 @author: TitanStar73
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-18
 */
 /*
 A shown in the instructions:
