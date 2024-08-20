@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Monkey quest 3: lightless knights
 @author: Eamonn
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-20
 */
 
 let r = 0;
