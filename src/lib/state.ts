@@ -103,7 +103,7 @@ export type RoomState = {
 	connectionStatus: ConnectionStatus
 	roomId: string
 	participants: RoomParticipant[]
-}	
+}
 
 export const codeMirror = signal<EditorView | null>(null)
 export const muted = signal<boolean>(false)
@@ -173,7 +173,7 @@ export const switchTheme = (themeType: ThemeType) => {
 	document.documentElement.style.setProperty(`--accent-dark`, themeValue?.accentDark?? '');
 	document.documentElement.style.setProperty(`--fg-muted-on-accent`, themeValue?.fgMutedOnAccent?? '');
 	documentStyle.color = themeValue?.color ?? '';
-	
+
 	// change the color of the text in elements having .copy-container style
 	// These includes pages such as 'Gallery' and 'Your Games'
 	const copyContainer = document.querySelector(".copy-container") as HTMLDivElement;
@@ -182,3 +182,5 @@ export const switchTheme = (themeType: ThemeType) => {
 	}
 }
 export const isNewSaveStrat = signal<boolean>(false)
+export const screenRef = signal<HTMLCanvasElement | null>(null);
+export const cleanupRef = signal<(() => void) | undefined>(undefined);

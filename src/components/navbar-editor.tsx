@@ -8,6 +8,7 @@ import {
 	theme,
 	switchTheme,
 	isNewSaveStrat,
+	screenRef,
 } from "../lib/state";
 import type { RoomState, ThemeType } from "../lib/state";
 import Button from "./design-system/button";
