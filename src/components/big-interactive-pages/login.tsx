@@ -57,8 +57,9 @@ export default function Login({ session, email, to }: LoginProps) {
 						</p>
 						<Input onChange={() => undefined} value={auth.code.value} id='code' type='text' maxLength={auth.email.value == DevEmail ? 70 : 6} placeholder='123456'  bind={auth.code} />
 						{auth.state.value === 'CODE_INCORRECT' && <p class={styles.error}>Incorrect login code.</p>}
+						{auth.state.value === 'ACCOUNT_LOCKED' && <p class={styles.error}>Account locked due to too many failed attempts. Please try again in {+import.meta.env.PUBLIC_LOCKOUT_DURATION_MS / 60000} minutes.</p>}
 
-						<Button class={styles.submit} accent type='submit' disabled={!auth.codeValid.value} loading={auth.isLoading.value}>
+                        <Button class={styles.submit} accent type='submit' disabled={!auth.codeValid.value || auth.state.value === 'ACCOUNT_LOCKED'} loading={auth.isLoading.value}>
 							Finish logging in
 						</Button>
 					</>)}
