@@ -56,7 +56,7 @@ export const onRun = async () => {
 		}
 	}, 200);
 
-	cleanupRef = res?.cleanup;
+	cleanupRef.value = res?.cleanup;
 	if (res && res.error) {
 		console.error(res.error.raw);
 		errorLog.value = [...errorLog.value, res.error];
@@ -474,9 +474,9 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	useEffect(() => {
 		if(!isNewSaveStrat.value){
 			const handler = (event: KeyboardEvent) => {
-				if (event.key === "s" && (event.metaKey || event.ctrlKey)) { 
+				if (event.key === "s" && (event.metaKey || event.ctrlKey)) {
 					event.preventDefault();
-					if (!continueSaving.value) { 
+					if (!continueSaving.value) {
 						continueSaving.value = true;
 						saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
 					}
@@ -529,7 +529,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 		return (
 			<div class={styles.page}>
 				<Navbar persistenceState={persistenceState} roomState={roomState}/>
-				
+
 				<div class={styles.pageMain}>
 					<div className={styles.codeContainer}>
 						<CodeMirror
@@ -648,7 +648,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 								</button>
 								<button
 									className={styles.stop}
-									onClick={() => onStop()}
+									onClick={onStop}
 								>
 									<IoStopCircleOutline />
 									<span>Stop</span>
