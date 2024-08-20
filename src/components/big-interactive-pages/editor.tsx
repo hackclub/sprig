@@ -9,7 +9,6 @@ import {
 } from "react-icons/io5";
 import {
 	Signal,
-	signal,
 	useComputed,
 	useSignal,
 	useSignalEffect,
