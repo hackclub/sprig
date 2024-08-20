@@ -35,6 +35,8 @@ export interface User {
 	createdAt: Timestamp
 	email: string
 	username: string | null
+	failedLoginAttempts?: number
+	lockoutUntil?: Timestamp
 }
 
 export interface Session {
