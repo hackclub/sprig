@@ -57,7 +57,7 @@ Chances are, you need to do some additional setup to flash your game on Linux. B
 
 ### Join the group!
 
-For most Linux distributions, you need to add your user to the `dialout` group. If this group exists, or it doesn't work, add your user to the `uucp` group instead.
+For most Linux distributions, you need to add your user to the `dialout` group. If this doesn't exists, or it doesn't work, add your user to the `uucp` group instead.
 
 If you're on Arch, or an Arch-based distro, you will likely need to use `uucp` as the `dialout` group doesn't exist.
 
