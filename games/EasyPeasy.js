@@ -267,14 +267,19 @@ function juicing() {
 }
 
 function autoJuicing() {
-  if(level === 0){
+  if(level === 0 && -1<lemons-autoJuicer-2){
   juice += autoJuicer-2
   lemons -= autoJuicer-2
   updateScore()
   juicable = true
   }
+  else if(0>lemons-autoJuicer-2){
+  juice += lemons
+  lemons -= lemons
+  updateScore()
+  juicable = true
+  }
 }
-
 function juicingLoop() {
   if(autoJuicer > 2){
         if(juicable===true){
