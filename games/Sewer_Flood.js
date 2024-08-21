@@ -1,6 +1,8 @@
 /*
 @title: Sewer_Flood
 @author: Eduardo
+@tags: [infinite]
+@addedOn: 2024-00-00
 */
 
 const jumpHeight = 5
@@ -382,7 +384,7 @@ function menu() {
   level = 0
   setMap(levels[level])
   clearText()
-  addText("Flood Escape", { x:4, y:2, color:color`5` })
+  addText("Sewer Flood", { x:4, y:2, color:color`5` })
   addText("A to play", { x:5, y:7, color:color`7` })
 }
 
