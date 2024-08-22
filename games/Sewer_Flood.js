@@ -1,8 +1,8 @@
 /*
 @title: Sewer_Flood
 @author: Eduardo
-@tags: [infinite]
-@addedOn: 2024-00-00
+@tags: ["infinite"]
+@addedOn: 2024-08-22
 */
 
 const jumpHeight = 5
