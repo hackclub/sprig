@@ -193,11 +193,7 @@ if (inMainMenu) {
     color: color`5`
   })
 
-  addText("Sorry for the\n potential,\nand likely\n bugs", {
-    x: 4,
-    y: 10,
-    color: color`5`
-  })
+
 }
 
 function killCountdown() {
