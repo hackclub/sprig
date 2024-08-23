@@ -23,6 +23,8 @@ const quickTone = tune`
 37.5: B5-10,
 1162.5`;
 
+let score = 0
+
 
 const up_yellow = "1"
 const up_red = "2"
@@ -73,8 +75,6 @@ const down_display = "9"
 const left_display = "0"
 
 const game_over = "g"
-
-let score = 0
 
 setLegend(
   [ up_yellow, bitmap`
