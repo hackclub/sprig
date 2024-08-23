@@ -8,6 +8,7 @@ import {
 	theme,
 	switchTheme,
 	isNewSaveStrat,
+	screenRef,
 } from "../lib/state";
 import type { RoomState, ThemeType } from "../lib/state";
 import Button from "./design-system/button";
@@ -18,6 +19,8 @@ import { persist } from "../lib/game-saving/auth-helper";
 import InlineInput from "./design-system/inline-input";
 import { throttle } from "throttle-debounce";
 import SharePopup from "./popups-etc/share-popup";
+import ShareRoomPopup from "./popups-etc/share-room";
+
 import {
 	IoChevronDown,
 	IoLogoGithub,
@@ -25,7 +28,6 @@ import {
 	IoSaveOutline,
 	IoShareOutline,
 	IoShuffle,
-	IoWarning,
 } from "react-icons/io5";
 import { FaBrush } from "react-icons/fa";
 import { usePopupCloseClick } from "../lib/utils/popup-close-click";
@@ -34,7 +36,8 @@ import { VscLoading } from "react-icons/vsc";
 import { defaultExampleCode } from "../lib/examples";
 import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
-import { foldAllTemplateLiterals } from "./big-interactive-pages/editor";
+import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
+import { showKeyBinding } from '../lib/state';
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -80,7 +83,7 @@ const canDelete = (persistenceState: Signal<PersistenceState>) => {
 
 interface EditorNavbarProps {
 	persistenceState: Signal<PersistenceState>
-	roomState?: Signal<RoomState>
+	roomState: Signal<RoomState> | undefined
 }
 
 type StuckCategory =
@@ -142,6 +145,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const showNavPopup = useSignal(false);
 	const showStuckPopup = useSignal(false);
 	const showThemePicker = useSignal(false);
+	const shareRoomPopup = useSignal(false);
+
 
 	// we will accept the current user's
 	// - name,
@@ -161,6 +166,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 	const deleteState = useSignal<"idle" | "confirm" | "deleting">("idle");
 	const resetState = useSignal<"idle" | "confirm">("idle");
+	const showDropdown = useSignal(false);
+
 	useSignalEffect(() => {
 		const _showNavPopup = showNavPopup.value;
 		const _deleteState = deleteState.value;
@@ -171,9 +178,15 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			resetState.value = "idle";
 	});
 
+	// We're listening to changes in screenRef because the game will only run if the screenRef is defined
+	// So we want to re-render the editor navbar when the screenRef changes so the game can actually run when it's defined
+  useSignalEffect(() => {
+    screenRef.value;
+  });
+
 	// usePopupCloseClick closes a popup when you click outside of its area
 	usePopupCloseClick(
-		styles.navPopup!,
+		styles.dropdown!,
 		() => (showNavPopup.value = false),
 		showNavPopup.value
 	);
@@ -186,6 +199,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		styles.themePicker!,
 		() => (showThemePicker.value = false),
 		showThemePicker.value
+	);
+
+	usePopupCloseClick(
+		styles.dropdown!,
+	    () => (showDropdown.value = false),
+		showDropdown.value
 	);
 
 	let saveState;
@@ -222,11 +241,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	} else if (props.persistenceState.value.kind === "PERSISTED") {
 		saveState = {
 			SAVED: `Saved to ${
-				!isNewSaveStrat.value ? 
+				!isNewSaveStrat.value ?
 					props.persistenceState.value.session?.user.email ?? "???"
 				:
 					props.roomState?.value.participants.filter((participant) => {
 						if(participant.isHost) return true
+						return false
 					})[0]?.userEmail === props.persistenceState.value.session?.user.email ? props.persistenceState.value.session?.user.email : "???"
 			}`,
 			SAVING: "Saving...",
@@ -292,6 +312,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								<span class={styles.attribution}> by {
 										(!isNewSaveStrat.value || props.roomState?.value.participants.filter((participant) => {
 												if(participant.isHost) return true
+												return false
 											})[0]?.userEmail === props.persistenceState.value.session?.user.email)
 											? "you"
 											: "???"
@@ -353,23 +374,34 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				</li>
 
 				<li>
-					<Button
-						accent
-						icon={
-							{
-								IDLE: IoPlay,
-								LOADING: VscLoading,
-								ERROR: IoWarning,
-							}[uploadState.value]
-						}
-						spinnyIcon={uploadState.value === "LOADING"}
-						loading={uploadState.value === "LOADING"}
-						onClick={() =>
-							upload(codeMirror.value?.state.doc.toString() ?? "")
-						}
-					>
-						Run on Device
-					</Button>
+					<div class={styles.dropdownContainer}>
+						<Button accent onClick={() => (showDropdown.value = !showDropdown.value)}>
+						Run <IoChevronDown />
+						</Button>
+						{showDropdown.value && (
+							<div class={styles.playPopup}>
+								<Button
+									accent
+									icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
+									spinnyIcon={uploadState.value === "LOADING"}
+									loading={uploadState.value === "LOADING"}
+                  onClick={() => onRun()}
+								>
+									Run
+								</Button>
+								<div class={styles.divider}></div>
+								<Button
+									accent
+									icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
+									spinnyIcon={uploadState.value === "LOADING"}
+									loading={uploadState.value === "LOADING"}
+									onClick={() => upload(codeMirror.value?.state.doc.toString() ?? "")}
+								>
+									Run on Device
+								</Button>
+							</div>
+						)}
+					</div>
 				</li>
 
 				<li>{actionButton}</li>
@@ -391,6 +423,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				<SharePopup
 					persistenceState={props.persistenceState}
 					onClose={() => (showSharePopup.value = false)}
+				/>
+			)}
+
+			{shareRoomPopup.value && props.roomState && (
+				<ShareRoomPopup
+					persistenceState={props.persistenceState}
+					roomState={props.roomState}
+					onClose={() => shareRoomPopup.value = false}
 				/>
 			)}
 
@@ -541,7 +581,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									<a href="/~">Your games</a>
 								</li>
 								<li>
-									<a href="/~/new">New game</a>
+									<a href="/~/new-game">New game</a>
 								</li>
 							</>
 						) : (
@@ -576,6 +616,21 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								</li>
 							</>
 						)}
+
+						{(props.persistenceState.value.session?.session.full && isNewSaveStrat.value) ?(
+							<>
+								<li>
+								<a
+								href="javascript:void"
+								role="button"
+
+								onClick={() => (shareRoomPopup.value = true)}
+							>
+								{!(props.persistenceState.value.kind == "PERSISTED" && props.persistenceState.value.game !== "LOADING" && props.persistenceState.value.game.isRoomOpen) ? "Create a room" : "Share room"}
+							</a>
+								</li>
+							</>
+						) : null}
 						<li>
 							<a href="/gallery">Gallery</a>
 						</li>
@@ -596,11 +651,23 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							</a>
 						</li>
 						<li>
+							<a
+								href="javascript:void(0);"
+								role="button"
+								onClick={() => {
+									showKeyBinding.value = true;
+									showNavPopup.value = false;
+								}}
+							>
+								Rebinding key
+							</a>
+						</li>
+						<li>
 							<a href={"javascript:void"}
 							role="button"
 							onClick={
 								foldAllTemplateLiterals
-							}> 
+							}>
 								Collapse all bitmaps
 							</a>
 						</li>

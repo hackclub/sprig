@@ -78,12 +78,16 @@ export type PersistenceState = ({
 	tutorial?: string[] | undefined
 	tutorialName?: string | undefined
 	tutorialIndex?: number | undefined
+} | {
+	kind: 'COLLAB'
+	game: string | 'LOADING' | Game // String means the game is restricted and only the roomId needs to be shown to the user
+	password: string | undefined
 }) & {
 	session: SessionInfo | null
 	stale: boolean
 }
 
-export enum RoomStatus {
+export enum ConnectionStatus {
 	CONNECTED,
 	CONNECTING,
 	DISCONNECTED
@@ -92,14 +96,14 @@ export enum RoomStatus {
 export type RoomParticipant = {
 	userEmail: string
 	isHost: boolean
+	isBanned?: boolean
 }
 
 export type RoomState = {
-	status: RoomStatus
+	connectionStatus: ConnectionStatus
 	roomId: string
-	password: string
 	participants: RoomParticipant[]
-}	
+}
 
 export const codeMirror = signal<EditorView | null>(null)
 export const muted = signal<boolean>(false)
@@ -107,6 +111,7 @@ export const errorLog = signal<NormalizedError[]>([])
 export const openEditor = signal<OpenEditor | null>(null)
 export const bitmaps = signal<[string, string][]>([])
 export const editSessionLength = signal<Date>(new Date());
+export const showKeyBinding = signal(false);
 export const showSaveConflictModal = signal<boolean>(false);
 export const continueSaving = signal<boolean>(true);
 export const LAST_SAVED_SESSION_ID = 'lastSavedSessionId';
@@ -163,10 +168,10 @@ export const switchTheme = (themeType: ThemeType) => {
 	// set the document values
 	const documentStyle = document.body.style;
 
-	documentStyle.background = themeValue?.background ?? '';
-	document.documentElement.style.setProperty(`--accent`, themeValue?.accent ?? '');
-	document.documentElement.style.setProperty(`--accent-dark`, themeValue?.accentDark ?? '');
-	document.documentElement.style.setProperty(`--fg-muted-on-accent`, themeValue?.fgMutedOnAccent ?? '');
+	documentStyle.background = themeValue?.background?? '';
+	document.documentElement.style.setProperty(`--accent`, themeValue?.accent?? '');
+	document.documentElement.style.setProperty(`--accent-dark`, themeValue?.accentDark?? '');
+	document.documentElement.style.setProperty(`--fg-muted-on-accent`, themeValue?.fgMutedOnAccent?? '');
 	documentStyle.color = themeValue?.color ?? '';
 
 	// change the color of the text in elements having .copy-container style
@@ -176,4 +181,6 @@ export const switchTheme = (themeType: ThemeType) => {
 		copyContainer.style.color = themeValue?.copyContainerText ?? '';
 	}
 }
-export const isNewSaveStrat = signal<boolean>(true)
+export const isNewSaveStrat = signal<boolean>(false)
+export const screenRef = signal<HTMLCanvasElement | null>(null);
+export const cleanupRef = signal<(() => void) | undefined>(undefined);
