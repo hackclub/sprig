@@ -25,6 +25,7 @@ const quickTone = tune`
 
 let score = 0
 
+let high_score = 0
 
 const up_yellow = "1"
 const up_red = "2"
