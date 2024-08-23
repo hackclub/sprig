@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Archery
-@author: 
+@author: Raghav Sinha
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-23
 */
 
 const player = "p"
@@ -344,3 +344,4 @@ if (level === 1){
 afterInput(() => {
 
 })
+
