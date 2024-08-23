@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: oneway
 @author: SpeedyGo55
-@tags: [labyrinth, topdown]
-@addedOn: 2024-00-00
+@tags: ["labyrinth", "topdown"]
+@addedOn: 2024-08-23
 */
 
 const step_sound = tune`
@@ -359,3 +359,4 @@ afterInput(() => {
     setMap(levels[level])
   }
 })
+
