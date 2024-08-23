@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: RPS
-@author: 
+@author: Shahm Najeeb 
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-23
 */
 
 const player = "p";
@@ -124,3 +124,4 @@ afterInput(() => {
   const result = determineWinner(playerMove, opponentMove);
   addText(result, { x: 0, y: 0 });
 })
+
