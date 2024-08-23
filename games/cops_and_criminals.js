@@ -282,15 +282,21 @@ const levelMap = {
   1: "high security",
   2: "ultramax security",
 }
-let pathFindingMode = false; // AI will take over the world
 let score = 0, topScore = score;
 const GameState = {
   MAIN_MENU: "MainMenu",
   RUNNING: "Running",
   FINISHED: "Finished",
-  SCREEN: "In a screen"
+  SCREEN: "In a screen",
+  // TODO: Add shop
+  SHOP: "In the shop",
+};
+const GameMode = {
+  SINGLEPLAYER: "Singleplayer",
+  MULTIPLAYER: "Multiplayer",
 };
 let gameState = GameState.MAIN_MENU;
+let gameMode = GameMode.SINGLEPLAYER;
 const mainMenuMap = map`
 JJJJJJJJJ
 JJJJJJJJJ
@@ -333,42 +339,60 @@ C.C...C.C
 C.E..DD.C
 C....A..C
 EDDDDDDDF`,
-]
+  map`
+GDDDDDDDDIH
+C..A..C...C
+C.GDDDC.GDC
+C.........C
+C.C.......C
+CGDF..DDDDC
+CF........C
+C...DH..G.C
+C.G..C..C.C
+CBC..C..C.C
+EDDDDDDDDDF`,
+];
+
+let moveCounter = 0;
+const moveFrequency = 2; // The cop moves every 3rd frame
 
 openStartMenu();
 
 let playerEntity, copEntity;
 
 onInput("w", () => {
-  if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN].includes(gameState)) return;
+  if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN, GameState.SHOP].includes(gameState)) return;
   playerEntity = getFirst(playerSprite.bitmapKey);
   if (!playerEntity) return;
   // Check if the copSprite is in the new coordinates
   if (isAboutToCollide(playerEntity.x, playerEntity.y - 1, copSprite.bitmapKey)) loseCondition();
   playerEntity.y -= 1;
+  playerMove("w");
 });
 onInput("a", () => {
-  if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN].includes(gameState)) return;
+  if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN, GameState.SHOP].includes(gameState)) return;
   playerEntity = getFirst(playerSprite.bitmapKey);
   if (!playerEntity) return;
   if (isAboutToCollide(playerEntity.x - 1, playerEntity.y, copSprite.bitmapKey)) loseCondition();
   playerEntity.x -= 1;
+  playerMove("a");
 });
 
 onInput("s", () => {
-  if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN].includes(gameState)) return;
+  if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN, GameState.SHOP].includes(gameState)) return;
   playerEntity = getFirst(playerSprite.bitmapKey);
   if (!playerEntity) return;
   if (isAboutToCollide(playerEntity.x, playerEntity.y + 1, copSprite.bitmapKey)) loseCondition();
   getFirst(playerSprite.bitmapKey).y += 1;
+  playerMove("s");
 });
 onInput("d", () => {
-  console.log(gameState);
-  if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN].includes(gameState)) return;
+  if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN, GameState.SHOP].includes(gameState)) return;
   playerEntity = getFirst(playerSprite.bitmapKey);
   if (!playerEntity) return;
   if (isAboutToCollide(playerEntity.x + 1, playerEntity.y, copSprite.bitmapKey)) loseCondition();
   getFirst(playerSprite.bitmapKey).x += 1;
+  playerMove("d");
 });
 onInput("i", () => {
   if (gameState == GameState.MAIN_MENU) {
@@ -378,49 +402,65 @@ onInput("i", () => {
     setMap(levels[level]);
     clearText();
   } else {
-    if (pathFindingMode) return;
-    if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN].includes(gameState)) return;
+    if (gameMode != GameMode.MULTIPLAYER) return;
+    if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN, GameState.SHOP].includes(gameState)) return;
     copEntity = getFirst(copSprite.bitmapKey);
     if (!copEntity) return;
     if (isAboutToCollide(copEntity.x, copEntity.y - 1, playerSprite.bitmapKey)) loseCondition();
     copEntity.y -= 1;
+    copMove("i");
   }
 });
 onInput("j", () => {
-  if (pathFindingMode) return;
-  if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN].includes(gameState)) return;
-  copEntity = getFirst(copSprite.bitmapKey);
-  if (!copEntity) return;
-  if (isAboutToCollide(copEntity.x - 1, copEntity.y, playerSprite.bitmapKey)) loseCondition();
-  copEntity.x -= 1;
+  if (gameState == GameState.MAIN_MENU) {
+    gameMode = gameMode == GameMode.MULTIPLAYER ? GameMode.SINGLEPLAYER : GameMode.MULTIPLAYER;
+    openStartMenu();
+  } else {
+    if (gameMode != GameMode.MULTIPLAYER) return;
+    if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN, GameState.SHOP].includes(gameState)) return;
+    copEntity = getFirst(copSprite.bitmapKey);
+    if (!copEntity) return;
+    if (isAboutToCollide(copEntity.x - 1, copEntity.y, playerSprite.bitmapKey)) loseCondition();
+    copEntity.x -= 1;
+    copMove("j");
+  }
 });
 onInput("k", () => {
-  if (pathFindingMode) return;
-  if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN].includes(gameState)) return;
+  if (gameMode != GameMode.MULTIPLAYER) return;
+  if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN, GameState.SHOP].includes(gameState)) return;
   copEntity = getFirst(copSprite.bitmapKey);
   if (!copEntity) return;
   if (isAboutToCollide(copEntity.x, copEntity.y + 1, playerSprite.bitmapKey)) loseCondition();
   copEntity.y += 1;
+  copMove("k");
 });
 onInput("l", () => {
-  if (pathFindingMode) return;
-  if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN].includes(gameState)) return;
+  if (gameMode != GameMode.MULTIPLAYER) return;
+  if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN, GameState.SHOP].includes(gameState)) return;
   copEntity = getFirst(copSprite.bitmapKey);
   if (!copEntity) return;
   if (isAboutToCollide(copEntity.x + 1, copEntity.y, playerSprite.bitmapKey)) loseCondition();
   copEntity.x += 1;
+  copMove("l");
 });
 
 afterInput(() => {
-  if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN].includes(gameState)) return;
+  if ([GameState.MAIN_MENU, GameState.FINISHED, GameState.SCREEN, GameState.SHOP].includes(gameState)) return;
   playerEntity = getFirst(playerSprite.bitmapKey);
   copEntity = getFirst(copSprite.bitmapKey);
   if (!copEntity || !playerEntity) return;
 
-  // Pathfinding for each cop
-  // Disabled for now
 
-  playTune(stepSound);
+  // Pathfinding for the cop
+  if (gameMode == GameMode.SINGLEPLAYER) {
+    if (moveCounter % moveFrequency === 0) {
+      const direction = bfsPathfinding(copEntity.x, copEntity.y, playerEntity.x, playerEntity.y);
+      if (direction) {
+        moveCop(direction);
+      }
+    }
+    moveCounter++;
+  }
 
   // Lose condition
   if (isAboutToCollide(playerEntity.x, playerEntity.y, copSprite.bitmapKey)) {
@@ -478,6 +518,11 @@ function openStartMenu() {
     y: 14,
     color: color`0`,
   });
+  addText(`${gameMode == GameMode.MULTIPLAYER ? "MP" : "SP"}`, {
+    x: 9,
+    y: 8,
+    color: color`0`,
+  });
 }
 function openWinMenu(hasNextLevel) {
   gameState = GameState.SCREEN;
@@ -531,4 +576,94 @@ function openWinMenu(hasNextLevel) {
 function isAboutToCollide(x, y, sprite2) {
   const entity2 = getFirst(sprite2);
   return x == entity2.x && y == entity2.y;
+}
+
+// Hacky functions for global movement \\
+function playerMove(key) {
+    const keyMap = {
+      "W": "UP",
+      "A": "LEFT",
+      "S": "DOWN",
+      "D": "RIGHT",
+    }
+    playTune(stepSound);
+}
+
+function copMove(key) {
+  const keyMap = {
+    "I": "UP",
+    "J": "LEFT",
+    "K": "DOWN",
+    "L": "RIGHT",
+  }
+  playTune(stepSound);
+}
+
+function bfsPathfinding(startX, startY, goalX, goalY) {
+  const queue = [{ x: startX, y: startY, path: [] }];
+  const visited = new Set([`${startX},${startY}`]);
+
+  const directions = [
+    { x: 0, y: -1, command: 'w' }, // up
+    { x: -1, y: 0, command: 'a' }, // left
+    { x: 0, y: 1, command: 's' },  // down
+    { x: 1, y: 0, command: 'd' },  // right
+    { x: -1, y: -1, command: 'q' }, // up-left (diagonal)
+    { x: 1, y: -1, command: 'e' }, // up-right (diagonal)
+    { x: -1, y: 1, command: 'z' }, // down-left (diagonal)
+    { x: 1, y: 1, command: 'c' }   // down-right (diagonal)
+  ];
+
+  while (queue.length > 0) {
+    const { x, y, path } = queue.shift();
+
+    for (const direction of directions) {
+      const newX = x + direction.x;
+      const newY = y + direction.y;
+
+      if (newX === goalX && newY === goalY) {
+        return direction.command;
+      }
+
+      if (!visited.has(`${newX},${newY}`) && !solids.includes(getTile(newX, newY)[0])) {
+        visited.add(`${newX},${newY}`);
+        queue.push({ x: newX, y: newY, path: [...path, { x: newX, y: newY }] });
+      }
+    }
+  }
+
+  return null;
+}
+
+function moveCop(direction) {
+  switch (direction) {
+    case 'w':
+      copEntity.y -= 1;
+      break;
+    case 'a':
+      copEntity.x -= 1;
+      break;
+    case 's':
+      copEntity.y += 1;
+      break;
+    case 'd':
+      copEntity.x += 1;
+      break;
+    case 'q': // Diagonal up-left
+      copEntity.x -= 1;
+      copEntity.y -= 1;
+      break;
+    case 'e': // Diagonal up-right
+      copEntity.x += 1;
+      copEntity.y -= 1;
+      break;
+    case 'z': // Diagonal down-left
+      copEntity.x -= 1;
+      copEntity.y += 1;
+      break;
+    case 'c': // Diagonal down-right
+      copEntity.x += 1;
+      copEntity.y += 1;
+      break;
+  }
 }
