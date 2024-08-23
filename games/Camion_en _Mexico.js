@@ -1,8 +1,8 @@
 /*
 @title: Camión en México
 @author: Cesar Garnica
-@tags: [levels, maze]
-@addedOn:09/08/2024
+@tags: ["levels", "maze"]
+@addedOn: 2024-08-23
 */
 /*The goal is to reach the end with a minimum amount of money. To advance to the next level, 
 you must reach it with the blue-capped stickman with at least 3 points. There are 
@@ -553,4 +553,5 @@ afterInput(() => {
         setMap(levels[level])
     }
 })
+
 
