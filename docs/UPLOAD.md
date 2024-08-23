@@ -44,6 +44,42 @@ cp -X ~/Downloads/pico-os.uf2 /Volumes/RPI-RP2
 
 Open up your game in the editor, click the "Run on Device" button in the top right, and select the Sprig from the menu (again, like a USB device.)
 
-*Note: Make sure you're using a Chromium-based browser such as Edge or Chrome. On Linux you will also need to add your user to the `dialout` group*
-
 That's it! You're done :)
+
+> [!NOTE]
+> Make sure you're using a Chromium-based browser such as Edge or Chrome.
+> If you're using Linux, check the Linux section below because you probably need more setup!
+
+
+## But I use Linux!
+
+Chances are, you need to do some additional setup to flash your game on Linux. But don't fear - it's straightforward!
+
+### Join the group!
+
+For most Linux distributions, you need to add your user to the `dialout` group. If this group doesn't exist, or it doesn't work, add your user to the `uucp` group instead.
+
+If you're on Arch, or an Arch-based distro, you will likely need to use `uucp` as the `dialout` group doesn't exist.
+
+To add a user to a group, run the following command replacing the groupname and user as appropriate:
+```sh
+sudo usermod -aG dialout orpheus
+```
+> [!NOTE]
+> You will likely be prompted for your password. Don't worry if you can't see it - that's normal! Just type it out as normal and press enter
+
+**Make sure to reboot your system after making this change** and you should be good to get flashing!
+
+### Flatpaks - I play with sandboxes!
+
+Is your browser installed as a Flatpak? This means that you need to do more setup because it's running in a sandbox so it likely won't have access to serial ports. To fix this, run the following override command replacing the flatpak name as appropriate:
+
+```sh
+flatpak override --device=all org.chromium.Chromium
+```
+> [!NOTE]
+> Depending on your setup, you may need to run this command with sudo.
+
+Now you should be good to flash your game to your Sprig! Oh, but make sure to restart your browser after making that change :)
+
+Happy sprigging! :D
