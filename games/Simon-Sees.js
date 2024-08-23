@@ -74,6 +74,8 @@ const left_display = "0"
 
 const game_over = "g"
 
+let score = 0
+
 setLegend(
   [ up_yellow, bitmap`
 .......66.......
@@ -546,8 +548,6 @@ let input_direction = null
 let input_colour = null
 
 let input_sequence_loc = 0
-
-let score = 0
 
 if (typeof high_score === 'undefined') {
   high_score = 0
