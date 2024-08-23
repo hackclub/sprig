@@ -1,7 +1,7 @@
 /*
 @title: thefake chrome dino
-@tags: ['endless''color dino']
-@addedOn: idk 
+@tags: ['endless', 'color dino']
+@addedOn: 2024-08-23
 @author: crabby605
 */
 
@@ -248,3 +248,4 @@ setInterval(() => {
     setMap(layers.join("\n"));
   }
 }, 80); // Adjusted interval for slower speed
+
