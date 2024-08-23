@@ -1,7 +1,7 @@
 import { EditorView, Decoration } from '@codemirror/view'
 import { type EditorState, StateField, type Range } from '@codemirror/state'
 import { syntaxTree, foldService } from '@codemirror/language'
-import { palette } from 'sprig/base'
+import { palette } from '../../../engine/src/base'
 import { FromTo, getTag, makeWidget } from './util'
 import OpenButton from '../../components/codemirror-widgets/open-button'
 import Swatch from '../../components/codemirror-widgets/swatch'
@@ -14,7 +14,7 @@ const SwatchWidget = makeWidget(Swatch)
 function makeValue(state: EditorState) {
 	const widgets: Range<Decoration>[] = []
 	const foldRanges: FromTo[] = []
-	
+
 	const syntax = syntaxTree(state)
 	syntax.iterate({
 		enter(node) {
@@ -35,7 +35,7 @@ function makeValue(state: EditorState) {
 				} else if (tag.textFrom !== tag.textTo) {
 					foldRanges.push({ from: tag.textFrom, to: tag.textTo })
 				}
-				
+
 				break
 			}
 		}

@@ -39,12 +39,18 @@ export const uploadToSerial = async (message: string,
 	const receivedEOT = new Promise<void>(resolve => {
 		(async () => {
 			try {
+				// 128-char buffer
+				let serialBuffer = " ".repeat(128)
+				
 				while (true) {
 					const { value, done } = await reader.read()
 					if (done) break
 					logSerialOutput(value)
 
-					if (value.indexOf('ALL_GOOD') >= 0) resolve()
+					serialBuffer  = serialBuffer.concat(value)
+					serialBuffer = serialBuffer.slice(serialBuffer.length - 128, serialBuffer.length)
+
+					if (serialBuffer.indexOf('ALL_GOOD') >= 0) resolve()
 				}
 			} catch (error) {
 				console.error(error)
@@ -122,13 +128,20 @@ export const getIsLegacySerial = async (
 	await writer.ready
 	await writer.write(new Uint8Array([ 0, 1, 2, 3, 4 ]).buffer)
 
+	// 128-char buffer
+	let serialBuffer = " ".repeat(128)
+
 	while (true) {
 		const { value, done } = await reader.read()
+		
 		if (done) return null
 		logSerialOutput(value)
 
-		if (value.indexOf('found startup seq!') >= 0) return true
-		if (value.indexOf('legacy detected') >= 0) return false
+		serialBuffer  = serialBuffer.concat(value)
+		serialBuffer = serialBuffer.slice(serialBuffer.length - 128, serialBuffer.length)
+
+		if (serialBuffer.indexOf('found startup seq!') >= 0) return true
+		if (serialBuffer.indexOf('legacy detected') >= 0) return false
 	}
 }
 

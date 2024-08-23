@@ -22,7 +22,7 @@ const ChatComponent = ({ persistenceState }: ChatProps) => {
 				? persistenceState?.value.game !== "LOADING"
 					? persistenceState?.value.game.name
 					: ""
-				: persistenceState?.value.name || "";
+				: "";
 
 	const systemPrompt = () => `Here is the current code:
 \`\`\`
