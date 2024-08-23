@@ -1,3 +1,10 @@
+/*
+@title: Humpty Dumpty
+@author: Arnav R
+@tags: []
+@addedOn: 2024-08-23
+*/
+
 const player = "p";
 const wallTop = "t";
 const wallBottom = "w";
@@ -219,3 +226,4 @@ function jump() {
     getFirst(player).y = 8;
   }, 400);
 }
+
