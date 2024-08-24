@@ -1678,24 +1678,6 @@ let gameStarted = false;
 	});
 });
 
-const playerRedUp = "1";
-const playerRedDown = "2";
-const playerRedLeft = "3";
-const playerRedRight = "4";
-const playerBlueUp = "5";
-const playerBlueDown = "6";
-const playerBlueLeft = "7";
-const playerBlueRight = "8";
-const paintRed = "Y";
-const paintRedSpecial1 = "z";
-const paintRedSpecial2 = "9";
-const paintRedSpecial3 = "0";
-const paintBlue = "y";
-const paintBlueSpecial1 = "`";
-const paintBlueSpecial2 = "~";
-const paintBlueSpecial3 = "-";
-const background = "Z";
-
 let canvas;
 
 // stores static copies of all the tile legends for any x and y (see below)
@@ -1765,9 +1747,9 @@ function renderCanvas() {
 	setLegend(...legend);
 }
 
-function renderPlayer(player) {
-	const offsetX = player.x % resolution;
-	const offsetY = player.y % resolution;
+function renderPlayer(player) {  
+	const offsetX = (player.x % resolution) * (16/resolution);
+	const offsetY = (player.y % resolution) * (16/resolution);
 
 	const bitmaps = offsetBitmap(player[player.direction], offsetX, offsetY);
 	setLegend(...player.legendChars.map((char, i) => [char, bitmaps[i]]));
@@ -1803,10 +1785,11 @@ function offsetBitmap(bitmap, x, y) {
 }
 
 // player position & sprite data
-let red = {
-	x: 5,
-	y: 5,
+const red = {
+	x: Math.floor(0.5 * resolution),
+	y: Math.ceil(6.5 * resolution),
 	direction: "up",
+    recentInput: 0, // positive or negative depending on input direction
 	legendChars: [
 		getLegendChar(),
 		getLegendChar(),
@@ -1832,7 +1815,41 @@ let red = {
 ................`,
 };
 
+const blue = {
+	x: Math.ceil(8.5 * resolution),
+	y: Math.floor(0.5 * resolution),
+	direction: "down",
+    recentInput: 0,
+	legendChars: [
+		getLegendChar(),
+		getLegendChar(),
+		getLegendChar(),
+		getLegendChar(),
+	],
+	down: bitmap`
+................
+.....22222......
+.....20002......
+.....20C02......
+.....20C02......
+.....20002......
+.....22022222222
+......2000000002
+.222222222222202
+.200000000000002
+.202272777777002
+.20277777777H002
+.20HHHHHHHHHH022
+.20000000000002.
+.22222222222222.
+................`,
+};
+
 startGame();
+
+// arrays for red and blue sprites, these get set once the game starts
+const redSprites = [];
+const blueSprites = [];
 
 async function startGame() {
 	clearInterval(titleAnimationInterval);
@@ -1986,23 +2003,95 @@ async function startGame() {
 	setMap(canvasMap);
 
 	// to get the player sprite into the right stacking position, clear the tile then add it
-	const positionData = getPlayerPositionData(red);
-	for (let pos of positionData) {
-		renderPlayer(red);
-		const [x, y] = pos[0];
-		clearTile(x, y);
-		addSprite(x, y, pos[1]);
+	for (const pl of [red, blue]) {
+        const positionData = getPlayerPositionData(pl);
+    	for (let pos of positionData) {
+    		renderPlayer(pl);
+    		const [x, y] = pos[0];
+    		clearTile(x, y);
+    		addSprite(x, y, pos[1]);
+    
+    		// render the map again and cover back up the hole that was created to slot in the player sprites
+    		renderCanvas();
+    		addSprite(x, y, tileLegends[x][y]);
+    	}
+    }
 
-		// render the map again and cover back up the hole that was created to slot in the player sprites
-		renderCanvas();
-		addSprite(x, y, tileLegends[x][y]);
-	}
+    for (let i = 0; i < 4; i++) {
+      redSprites.push(getFirst(red.legendChars[i]))
+      blueSprites.push(getFirst(blue.legendChars[i]))
+    }
 
 	const renderLoop = setInterval(() => {
+        doMovementUpdates();
 		renderPlayer(red);
+		renderPlayer(blue);
 		renderCanvas();
-		canvas[Math.floor(Math.random() * 10 * resolution)][
-			Math.floor(Math.random() * 8 * resolution)
-		] = color`3`;
+		// canvas[Math.floor(Math.random() * 10 * resolution)][
+		// 	Math.floor(Math.random() * 8 * resolution)
+		// ] = color`3`;
 	}, 1000 / fps);
 }
+
+function doMovementUpdates() {
+  if (red.x % resolution == 0 && red.recentInput) {
+    console.log(1)
+    for (const sprite of redSprites) {
+      sprite.x += red.recentInput;
+    }
+    red.recentInput = 0;
+  } else if (red.y % resolution == 0 && red.recentInput) {
+    for (const sprite of redSprites) {
+      sprite.y += red.recentInput;
+    }
+    red.recentInput = 0;
+  }
+
+  if (blue.x % resolution == 0 && blue.recentInput) {
+    for (const sprite of blueSprites) {
+      sprite.x += blue.recentInput;
+    }
+    blue.recentInput = 0;
+  } else if (blue.y % resolution == 0 && blue.recentInput) {
+    for (const sprite of blueSprites) {
+      sprite.y += blue.recentInput;
+    }
+    blue.recentInput = 0;
+  }
+}
+
+onInput("w", () => {
+  red.y -= 1;
+  red.recentInput = -1;
+})
+onInput("s", () => {
+  red.y += 1;
+  red.recentInput = 1;
+})
+onInput("a", () => {
+  red.x -= 1;
+  red.recentInput = -1;
+})
+onInput("d", () => {
+  red.x += 1;
+  red.recentInput = 1;
+})
+
+onInput("i", () => {
+  blue.y -= 1;
+  blue.recentInput = -1;
+})
+onInput("k", () => {
+  blue.y += 1;
+  blue.recentInput = 1;
+})
+onInput("j", () => {
+  blue.x -= 1;
+  blue.recentInput = -1;
+})
+onInput("l", () => {
+  blue.x += 1;
+  blue.recentInput = 1;
+})
+
+
