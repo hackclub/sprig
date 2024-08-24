@@ -19,6 +19,8 @@ let level = 0;
 let jumping = false;
 let changingLevels = false;
 let lives = startingLives;
+let gravityDown = true;
+let hasMagnet = false;
 
 // Internal variables
 let lastParticleSound = Date.now();
@@ -31,6 +33,8 @@ const rightFacingPlayer = "p";
 const leftFacingPlayer = "l";
 const rightPunchingPlayer = "r";
 const leftPunchingPlayer = "n";
+const rightFacingMagnetPlayer = "H";
+const leftFacingMagnetPlayer = "O";
 
 const npcFacingRight = "P";
 const npcFacingLeft = "L";
@@ -45,6 +49,7 @@ const bullet_left = "m";
 const bullet_right = "M";
 const heart = "h";
 const sky = "s";
+const magnet = "0";
 
 let player = rightFacingPlayer;
 
@@ -143,6 +148,46 @@ setLegend(
 ...00...000.....
 ...00....00.....
 ..000...000.....`,
+  ],
+  [
+    rightFacingMagnetPlayer,
+    bitmap`
+...000000.......
+..00C0CC00......
+..00020020....00
+..0C00C00....030
+0000CCCC000.0331
+0000000000003331
+0000222220003330
+0000020020CC7330
+000CC00020CC7730
+000CC00000007771
+.0000000000.0771
+....00000....000
+....000000......
+...000...00.....
+...00....00.....
+...000...000....`,
+  ],
+  [
+    leftFacingMagnetPlayer,
+    bitmap`
+.......000000...
+......00CC0C00..
+00....02002000..
+030....00C00C0..
+1330.000CCCC0000
+1333000000000000
+0333000222220000
+0337CC0200200000
+0377CC02000CC000
+17770000000CC000
+1770.0000000000.
+000....00000....
+......000000....
+.....000..00....
+.....00....00...
+....000...000...`,
   ],
   [
     rightPunchingPlayer,
@@ -423,6 +468,26 @@ H....000000...H.`,
 2222222222222222
 2222222222222222
 2222222222222222`,
+  ],
+  [
+    magnet,
+    bitmap`
+................
+................
+................
+................
+000000....00000.
+0LLL00...0LLLL0.
+0L0000...00000L0
+003330...0777700
+023320...0722270
+022320...0727770
+0232200.00772770
+0233230.07777270
+0333333077722270
+0333333377777770
+.03333337777770.
+..000000000000..`,
   ]
 );
 
@@ -433,6 +498,8 @@ setSolids([
   leftFacingPlayer,
   leftPunchingPlayer,
   rightPunchingPlayer,
+  rightFacingMagnetPlayer,
+  leftFacingMagnetPlayer,
   npcEvilLeft,
   npcEvilRight,
   npcFacingLeft,
@@ -454,10 +521,10 @@ p......LP......
 ...............
 ...............
 ...............
-...............
-.............cB
-.............cB
-p......LP..b.cB`,
+...b.b.b.b.bBBB
+.cB.........BBB
+.cB.........BBB
+pcBP....L...BBB`,
   map`
 ...............
 ...............
@@ -466,25 +533,25 @@ p......LP..b.cB`,
 .......b...bbBB
 p.bbbbbbb...LBB`,
   map`
-...............
-...............
-...............
-...............
-...............
-.............P.
-.............b.
-............bB.
-p......LL..b.B.`,
+..............
+..............
+..............
+.........b.b..
+....Bb.b.....b
+...cB........b
+..BB........cB
+.cBBBB.B.B.B.B
+pB.....LL.c..B`,
   map`
-...............
-...............
-...............
-...............
-...............
-.............P.
-.............b.
-p...........bB.
-bbbbbbbbbbbbbbb`,
+BBBBBBBBBBBBB
+.............
+.......BBBBBB
+.......BBBBBB
+.......BBBBBB
+.......BBBBBB
+.......BBBBBB
+p.0....BBBBBB
+BBBBBBBBBBBBB`,
   map`
 p..............
 bbbbbbbbbbbb.bb
@@ -496,13 +563,21 @@ bbbbbbbbbbbb...
 bbbbbbbbbbbbbbb
 BBBBBBBBBBBBBBB`,
   map`
-bbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbb
-bbbbbbbbbbb....
-p...........bbb
-bbbbbbbbbbbbbbb
+.........bbbbbb
+...............
+........bbbbbbb
+...............
+.......bbbbbbbb
+...............
+......bbbbbbbbb
+...............
+.....bbbbbbbbbb
+...............
+....bbbbbbbbbbb
+...............
+...bbbbbbbbbbbb
+p..............
+...............
 BBBBBBBBBBBBBBB`,
   map`
 bbbbbbbbbbbbbbb
@@ -515,14 +590,14 @@ bbBBBBbbbbbbbbb
 bbbbbbbbbbbbbbb
 BBBBBBBBBBBBBBB`,
   map`
-p..............
-bbbbbbbbbbbb.bb
-bbbbbbbbbbbb.bb
-bbbbbbbbbbbb.bb
-bbbbbbbbbbbb.bb
-bbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbb
+BBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBB
+p..0.BB....BB..
+BBBB.BB.BB.BB.B
+BBBB.BB.BB.BB.B
+BBBB.BB.BB.BB.B
+BBBB....BB....B
+BBBBBBBBBBBBBBB
 BBBBBBBBBBBBBBB`,
   map`
 ...............
@@ -580,7 +655,9 @@ function isPlayer(type) {
     type == leftFacingPlayer ||
     type == rightFacingPlayer ||
     type == leftPunchingPlayer ||
-    type == rightPunchingPlayer
+    type == rightPunchingPlayer ||
+    type == rightFacingMagnetPlayer ||
+    type == leftFacingMagnetPlayer
   );
 }
 
@@ -767,7 +844,11 @@ onInput("l", () => {
       getFirst(player).type == rightPunchingPlayer
     ) {
       getFirst(player).type = rightFacingPlayer;
-      player = rightFacingPlayer;
+      if (hasMagnet) {
+        player = rightFacingMagnetPlayer;
+      } else {
+        player = rightFacingPlayer;
+      }
     }
     clearInterval(intervalId);
   }, 200);
@@ -791,8 +872,13 @@ onInput("j", () => {
       getFirst(player) &&
       getFirst(player).type == leftPunchingPlayer
     ) {
-      getFirst(player).type = leftFacingPlayer;
-      player = leftFacingPlayer;
+      if (hasMagnet) {
+        getFirst(player).type = leftFacingMagnetPlayer;
+        player = leftFacingMagnetPlayer;
+      } else {
+        getFirst(player).type = leftFacingPlayer;
+        player = leftFacingPlayer;
+      }
     }
     clearInterval(intervalId);
   }, 200);
@@ -824,6 +910,29 @@ onInput("w", () => {
   }
 });
 
+// Gravity switch functionality
+onInput("i", () => {
+  if (!player || !getFirst(player)) return;
+
+  // Is the player on ground (and not jumping)
+  let onGround = isOnGround(getFirst(player));
+  if (!jumping && onGround && hasMagnet) {
+    gravityDown = false;
+
+    //jumping = true;
+    getFirst(player).y -= 1;
+  }
+});
+
+onInput("k", () => {
+  if (!player || !getFirst(player)) return;
+
+  // Is the player on ground (and not jumping)
+  let onGround = isOnGround(getFirst(player));
+  gravityDown = true;
+  jumping = false;
+});
+
 // Handle left directional movement
 onInput("a", () => {
   if (!player || !getFirst(player)) return;
@@ -833,8 +942,13 @@ onInput("a", () => {
     lastLeftMovement = currentTime;
 
     if (player && getFirst(player).type != "l") {
-      getFirst(player).type = leftFacingPlayer;
-      player = leftFacingPlayer;
+      if (hasMagnet) {
+        getFirst(player).type = leftFacingMagnetPlayer;
+        player = leftFacingMagnetPlayer;
+      } else {
+        getFirst(player).type = leftFacingPlayer;
+        player = leftFacingPlayer;
+      }
     }
     // Move to the left direction
     getFirst(player).x -= 1;
@@ -848,8 +962,13 @@ onInput("d", () => {
   if (currentTime - lastRightMovement >= movementDelay) {
     lastRightMovement = currentTime;
     if (player && getFirst(player).type != rightFacingPlayer) {
-      getFirst(player).type = rightFacingPlayer;
-      player = rightFacingPlayer;
+      if (hasMagnet) {
+        getFirst(player).type = rightFacingMagnetPlayer;
+        player = rightFacingMagnetPlayer;
+      } else {
+        getFirst(player).type = rightFacingPlayer;
+        player = rightFacingPlayer;
+      }
     }
     // Move to the right direction
     getFirst(player).x += 1;
@@ -860,13 +979,23 @@ onInput("d", () => {
 setInterval(() => {
   // Gravity for all living entities!
   getAll().forEach((entity) => {
-    if (isEntity(entity.type)) {
+    if (
+      isEntity(entity.type) ||
+      //Gravity for blocks,
+      //this exemption for level index 6
+      level == 6
+    ) {
       // Don't apply gravity to the player as they are jumping
       if (isPlayer(entity.type) && jumping) return;
       let onGround = isOnGround(entity);
       if (!onGround) {
-        // Move downward
-        entity.y += 1;
+        // Move downward (if gravityDown is true)
+        let deltaY = gravityDown ? 1 : -1;
+        if (entity.y + deltaY > height() - 1) {
+          entity.y = height() - 1;
+        } else {
+          entity.y += deltaY;
+        }
       }
     }
   });
@@ -903,10 +1032,27 @@ setInterval(() => {
   if (!player || !getFirst(player)) return;
   // Process entity proximity detection (NPC player tracing logic)
   getAll().forEach((entity) => {
-    // Loop over all NPCs
-    if (!isNPC(entity.type)) return;
     // Calculate distance to the player
     let dist = distance(getFirst(player), entity.x, entity.y);
+    //Magnet item pickup detection
+    if (dist == 0.0 && entity.type == magnet) {
+      playTune(happySound);
+      clearText();
+      hasMagnet = true;
+      if (getFirst(player).type == rightFacingPlayer) {
+        getFirst(player).type = rightFacingMagnetPlayer;
+        player = rightFacingMagnetPlayer;
+      } else if (entity.type == leftFacingPlayer) {
+        getFirst(player).type = leftFacingMagnetPlayer;
+        player = leftFacingMagnetPlayer;
+      }
+      entity.remove();
+
+      return;
+    }
+
+    // Loop over all NPCs
+    if (!isNPC(entity.type)) return;
     // Once the player comes in close proximity, make them look at the player
     if (dist < 10) {
       let xDiff = getFirst(player).x - entity.x;
@@ -1035,15 +1181,29 @@ setInterval(() => {
       case 2:
         addText("It gets harder...", { y: 4, color: `3` });
         break;
-      case 5:
-        addText("Go down", { y: 2, color: `3` });
+      case 4:
+        if (!hasMagnet) {
+          addText("Pick up", { y: 10, color: `4` });
+          addText("the magnet!", { y: 11, color: `4` });
+        }
         break;
-      case 6:
-        addText("What is next?...", { y: 2, color: `5` });
+      case 5:
+        hasMagnet = false;
+        gravityDown = true;
+        addText("Go down...", { y: 2, color: `3` });
+        break;
+      case 8:
+        if (!hasMagnet) {
+          addText("Collect", { x: 0, y: 6, color: `4` });
+          addText("the", { x: 0, y: 7, color: `4` });
+          addText("magnet", { x: 0, y: 8, color: `4` });
+        }
         break;
     }
 
     if (level == levels.length - 1) {
+      hasMagnet = false;
+      gravityDown = true;
       addText("You win!", { y: 3, color: `4` });
     }
 
