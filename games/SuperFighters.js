@@ -41,7 +41,8 @@ const box = "b";
 const bedrock = "B";
 const ladder = "c";
 const fireParticle = "f";
-const bullet = "m";
+const bullet_left = "m";
+const bullet_right = "M";
 const heart = "h";
 const sky = "s";
 
@@ -344,7 +345,7 @@ LLLLL000LLLLLLLL
 ......6.........`,
   ],
   [
-    bullet,
+    bullet_left,
     bitmap`
 ................
 ................
@@ -355,6 +356,26 @@ LLLLL000LLLLLLLL
 ................
 ......96F6......
 ......F666......
+................
+................
+................
+................
+................
+................
+................`,
+  ],
+  [
+    bullet_right,
+    bitmap`
+................
+................
+................
+................
+................
+................
+................
+......6F69......
+......666F......
 ................
 ................
 ................
@@ -407,7 +428,18 @@ H....000000...H.`,
 
 setBackground(sky);
 
-setSolids([rightFacingPlayer, leftFacingPlayer, box, bedrock]);
+setSolids([
+  rightFacingPlayer,
+  leftFacingPlayer,
+  leftPunchingPlayer,
+  rightPunchingPlayer,
+  npcEvilLeft,
+  npcEvilRight,
+  npcFacingLeft,
+  npcFacingRight,
+  box,
+  bedrock,
+]);
 
 const levels = [
   map`
@@ -432,7 +464,7 @@ p......LP..b.cB`,
 ..............B
 .........b...BB
 .......b...bbBB
-p.bbbbbbb....BB`,
+p.bbbbbbb...LBB`,
   map`
 ...............
 ...............
@@ -627,6 +659,15 @@ function distance(player, entityX, entityY) {
 }
 
 /**
+ * Is the entity type a kind of bullet.
+ * @param {*} entity type
+ * @returns
+ */
+function isBullet(type) {
+  return type == bullet_right || type == bullet_left;
+}
+
+/**
  * Ellicit an attack from an NPC.
  * Shoot a bullet.
  * @param {*} shooter attacker
@@ -643,13 +684,13 @@ function shootBullet(shooter, originX, originY) {
       shooter.type == leftFacingPlayer ||
       shooter.type == npcEvilLeft
     ) {
-      addSprite(originX, originY, bullet);
+      addSprite(originX, originY, bullet_left);
     } else if (
       shooter.type == npcFacingRight ||
       shooter.type == rightFacingPlayer ||
       shooter.type == npcEvilRight
     ) {
-      addSprite(originX, originY, bullet);
+      addSprite(originX, originY, bullet_right);
     }
   }
 }
@@ -666,6 +707,18 @@ function spawnParticle(particleX, particleY, type) {
   if (currentTime - lastParticleSound > soundDelay) {
     lastParticleSound = currentTime;
 
+    if (particleX > width() - 1) {
+      particleX = width() - 1;
+    }
+    if (particleX < 0) {
+      particleX = 0;
+    }
+    if (particleY > height() - 1) {
+      particleY = height() - 1;
+    }
+    if (particleY < 0) {
+      particleY = 0;
+    }
     // Spawn the corresponding particle
     if (type == 0) {
       playTune(explosionSound);
@@ -791,7 +844,6 @@ onInput("a", () => {
 // Handle right directional movement
 onInput("d", () => {
   if (!player || !getFirst(player)) return;
-
   let currentTime = Date.now();
   if (currentTime - lastRightMovement >= movementDelay) {
     lastRightMovement = currentTime;
@@ -846,9 +898,9 @@ function gameReset() {
 }
 
 // Moving entity handler
+let i = 0;
 setInterval(() => {
   if (!player || !getFirst(player)) return;
-
   // Process entity proximity detection (NPC player tracing logic)
   getAll().forEach((entity) => {
     // Loop over all NPCs
@@ -856,7 +908,13 @@ setInterval(() => {
     // Calculate distance to the player
     let dist = distance(getFirst(player), entity.x, entity.y);
     // Once the player comes in close proximity, make them look at the player
-    if (dist < 7) {
+    if (dist < 10) {
+      let xDiff = getFirst(player).x - entity.x;
+      //Prevent npc from walking into the same space as player, making it not dangerous.
+      if (i % 2 == 0 && Math.abs(xDiff) > 1) {
+        let newPosX = entity.x + (xDiff > 0 ? 1 : -1);
+        entity.x = newPosX;
+      }
       // Evaluate direction of player using delta x (as it is a 2D game)
       let right = getFirst(player).x - entity.x > 0;
       if (right) {
@@ -864,7 +922,10 @@ setInterval(() => {
       } else {
         entity.type = npcEvilLeft;
       }
-      shootBullet(entity, entity.x, entity.y);
+
+      if (dist < 7) {
+        shootBullet(entity, entity.x, entity.y);
+      }
     }
   });
 
@@ -872,15 +933,15 @@ setInterval(() => {
   getAll().forEach((entity) => {
     if (!getFirst(player)) return;
     //Is the entity a bullet?
-    if (entity.type == bullet) {
+    if (isBullet(entity.type)) {
       // Calculate difference to player
-      let xDiff = getFirst(player).x - entity.x;
+      let xDiff = entity.type == bullet_right ? 1 : -1;
       let removedEntity = false;
       //Find all entities in game
       getTile(entity.x, entity.y).forEach((obstacle) => {
         // If the bullet did not hit an NPC (since they are the shooters)
         // Also check if the obstacle is not the same bullet.
-        if (obstacle.type != bullet && !isNPC(obstacle.type)) {
+        if (!isBullet(obstacle.type) && !isNPC(obstacle.type)) {
           entity.remove();
           removedEntity = true;
           // Spawn the heart particle if it was a player,
@@ -901,19 +962,26 @@ setInterval(() => {
 
       // Destroy bullets meeting the edge
       if (entity.x == width() - 1 || entity.x == 0) {
+        entity.remove();
         var interval = setInterval(() => {
-          spawnParticle(entity.x, entity.y, 0);
-          entity.remove();
+          //Is within bounds?
+          if (entity.x <= width() - 1 && entity.x >= 0) {
+            spawnParticle(entity.x, entity.y, 0);
+          }
           clearInterval(interval);
         }, 200);
       }
     }
   });
+  i++;
 }, 300);
 
 // Level changing handler, Player death handler, Lives rendering handler
 setInterval(() => {
-  if (!player || !getFirst(player)) return;
+  if (!player || !getFirst(player)) {
+    player = rightFacingPlayer;
+    return;
+  }
 
   // Changing levels functionality (if they reach the edge)
   if (getFirst(player).x == width() - 1) {
@@ -927,7 +995,7 @@ setInterval(() => {
     // Shift all entities to the left
     getAll().forEach((entity) => {
       if (
-        entity.type != bullet &&
+        !isBullet(entity.type) &&
         entity.type != fireParticle &&
         entity.type != heart &&
         !isPlayer(entity)
@@ -992,4 +1060,3 @@ setInterval(() => {
     addText(text, { x: width() - 3, y: 5, color: `5` });
   }
 }, 40);
-
