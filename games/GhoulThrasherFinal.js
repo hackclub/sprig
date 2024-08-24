@@ -388,7 +388,7 @@ let buttonCoords = {
 }
 
 let nuclearBarrelCurrent = 0;
-let nuclearBarrelMax = 25;
+let nuclearBarrelMax = 15;
 
 setLegend(
   [skull, bitmap`
@@ -2811,14 +2811,14 @@ setInterval(() => {
     attackCounter++;
     if (houseHealth === phaseTwoChange) {
       bossPhase = 2;
-      nuclearBarrelMax = 35
+      nuclearBarrelMax = 25
     }
     if (houseHealth === phaseThreeChange) {
       bossPhase = 3;
-      nuclearBarrelMax = 45
+      nuclearBarrelMax = 35
     }
     if (houseHealth === phaseFourChange) {
-      nuclearBarrelMax = 55
+      nuclearBarrelMax = 45
     }
     if (attackCounter >= attackCounterMax / bossPhase) {
       attackCounter = 0;
