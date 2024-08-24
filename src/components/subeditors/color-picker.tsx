@@ -1,5 +1,5 @@
 import styles from './color-picker.module.css'
-import { palette, rgbaToHex } from 'sprig/base'
+import { palette, rgbaToHex } from '../../../engine/src/base'
 import { transparentBgUrl } from '../../lib/utils/transparent-bg'
 import type { EditorProps } from '../../lib/state'
 
