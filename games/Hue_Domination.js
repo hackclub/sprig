@@ -1698,11 +1698,24 @@ const background = "Z";
 
 let canvas;
 
+// stores static copies of all the tile legends for any x and y (see below)
+const tileLegends = [];
+for (let x = 0; x < 10; x++) {
+	const row = [];
+	for (let y = 0; y < 8; y++) {
+		row.push(""); // start as empty, initialize in getTileLegend
+	}
+	tileLegends.push(row);
+}
+
 // get a unique character for a given x and y, for the legend
 function getTileLegend(tileX, tileY) {
-	return String.fromCharCode(
+	const ch = String.fromCharCode(
 		currentLegendChar++ + tileX + 10 * resolution * tileY
 	);
+
+	tileLegends[tileX][tileY] = ch;
+	return ch;
 }
 
 // generate a static map of unique characters for the canvas to render to
@@ -1753,13 +1766,24 @@ function renderCanvas() {
 }
 
 function renderPlayer(player) {
-	const tileX = Math.floor(player.x / resolution);
 	const offsetX = player.x % resolution;
-	const tileY = Math.floor(player.y / resolution);
 	const offsetY = player.y % resolution;
 
 	const bitmaps = offsetBitmap(player[player.direction], offsetX, offsetY);
-	setLegend(...player.legendChars.map( (char, i) => [char, bitmaps[i]] ))
+	setLegend(...player.legendChars.map((char, i) => [char, bitmaps[i]]));
+}
+
+function getPlayerPositionData(player) {
+	const tileX = Math.floor(player.x / resolution);
+	const tileY = Math.floor(player.y / resolution);
+
+	// spaghetti code, returns each tile the player is occupying combined with the legend char for that bitmap
+	return [
+		[tileX, tileY],
+		[tileX + 1, tileY],
+		[tileX, tileY + 1],
+		[tileX + 1, tileY + 1],
+	].map((pos, i) => [pos, player.legendChars[i]]);
 }
 
 // offset a bitmap by a pixel amount, by creating 4 bitmaps and shifting the original bitmap across them
@@ -1783,7 +1807,12 @@ let red = {
 	x: 5,
 	y: 5,
 	direction: "up",
-	legendChars: [getLegendChar(), getLegendChar(), getLegendChar(), getLegendChar()],
+	legendChars: [
+		getLegendChar(),
+		getLegendChar(),
+		getLegendChar(),
+		getLegendChar(),
+	],
 	up: bitmap`
 ................
 .22222222222222.
@@ -1955,417 +1984,25 @@ async function startGame() {
 
 	renderCanvas();
 	setMap(canvasMap);
-	const renderLoop = setInterval(() => {
-		renderCanvas();
+
+	// to get the player sprite into the right stacking position, clear the tile then add it
+	const positionData = getPlayerPositionData(red);
+	for (let pos of positionData) {
 		renderPlayer(red);
+		const [x, y] = pos[0];
+		clearTile(x, y);
+		addSprite(x, y, pos[1]);
+
+		// render the map again and cover back up the hole that was created to slot in the player sprites
+		renderCanvas();
+		addSprite(x, y, tileLegends[x][y]);
+	}
+
+	const renderLoop = setInterval(() => {
+		renderPlayer(red);
+		renderCanvas();
 		canvas[Math.floor(Math.random() * 10 * resolution)][
 			Math.floor(Math.random() * 8 * resolution)
 		] = color`3`;
 	}, 1000 / fps);
-
-	/*  setLegend(
-  [playerRedUp, bitmap`
-................
-..000000000000..
-..099993999390..
-..093333333330..
-..09333333333000
-..033333333330.0
-..000000000000.0
-...............0
-.......000000000
-.......0........
-......0000......
-......0990......
-......0930......
-......0330......
-......0330.....C
-......0000......` ],
-  [playerRedDown, bitmap`
-......0000......
-......0990......
-......0930......-
-......0330......
-......0330......
-......0000......
-.......0........
-.......000000000
-...............0
-..000000000000.0
-..099993999390.0
-..09333333333000
-..093333333330..
-..033333333330..
-..000000000000..
-................` ],
-  [playerRedLeft, bitmap`
-................
-................
-.000000.........
-.099930.........
-.093330.........
-.093330.........
-.093330...000000
-.033330.00099930
-.093330.0.093330
-.093330.0.000000
-.033330.0.......
-.033330.0.......
-.033330.0.......
-.000000.0.......
-....0...0.......
-....00000.......` ],
-  [playerRedRight, bitmap`
-......2222222...
-......2000002...
-......2022202222
-......2020000002
-......2020999302
-......2020933302
-2222222020933302
-2000002020933302
-2099302020333302
-2033300020933302
-2000002220933302
-2222222.20333302
-........20333302
-........20333302
-........20000002
-........22222222` ],
-  [playerBlueUp, bitmap`
-................
-..000000000000..
-..0HHHH7HHH7H0..
-..0H7777777770..
-..0H777777777000
-..077777777770.0
-..000000000000.0
-...............0
-.......000000000
-.......0........
-......0000......
-......0HH0......
-......0H70......
-......0770......
-......0770......
-......0000......` ],
-  [playerBlueDown, bitmap`
-......0000......
-......0HH0......
-......0H70......
-......0770......
-......0770......
-......0000......
-.......0........
-.......000000000
-...............0
-..000000000000.0
-..0HHHH7HHH7H0.0
-..0H777777777000
-..0H7777777770..
-..077777777770..
-..000000000000..
-................` ],
-  [playerBlueLeft, bitmap`
-................
-................
-.000000.........
-.0HHH70.........
-.0H7770.........
-.0H7770.........
-.0H7770...000000
-.077770.000HHH70
-.0H7770.0.0H7770
-.0H7770.0.000000
-.077770.0.......
-.077770.0.......
-.077770.0.......
-.000000.0.......
-....0...0.......
-....00000.......` ],
-  [playerBlueRight, bitmap`
-.......00000....
-.......0...0....
-.......0.000000.
-.......0.0HHH70.
-.......0.0H7770.
-.......0.0H7770.
-000000.0.0H7770.
-0HHH70.0.077770.
-0H777000.0H7770.
-000000...0H7770.
-.........077770.
-.........077770.
-.........077770.
-.........000000.
-................
-................` ],
-  [background, bitmap`
-2121212122222222
-1212121222222222
-2121212122222222
-1212121222222222
-2121212122222222
-1212121222222222
-2121212122222222
-1212121222222222
-2222222212121212
-2222222221212121
-2222222212121212
-2222222221212121
-2222222212121212
-2222222221212121
-2222222212121212
-2222222221212121` ],
-  [paintRed, bitmap`
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333` ],
-  [paintRedSpecial1, bitmap`
-3333333333333333
-3399933333333333
-3999933333333333
-3999333333333333
-3393333333333333
-3333333333333333
-3333333333333333
-3333333333333993
-3333333333339993
-3333333333999993
-3333333999999993
-3333339999999993
-3333333999999933
-3333333399999333
-3333333333333333
-3333333333333333` ],
-  [paintRedSpecial2, bitmap`
-3333333333333333
-3333333333333333
-3333333399999333
-3333333399999933
-3333333999999933
-3333399999999933
-3333339999993333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333993333
-3333333333999333
-3993333333399333
-3933333333333333
-3333333333333333
-3333333333333333` ],
-  [paintRedSpecial3, bitmap`
-3333333333333333
-3333333333333333
-3339999333333333
-3339999993333333
-3399999999333333
-3999933333333333
-3999333399993333
-3999333999999333
-3993333999999933
-3333333333999933
-3333333333399933
-3333333333999933
-3333333333999333
-3333333339999333
-3333333399333333
-3333333333333333` ],
-  [paintBlue, bitmap`
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777` ],
-  [paintBlueSpecial1, bitmap`
-7777777777777777
-7777777777777777
-77777HHH7HHHH777
-777HHHHHHHHH7777
-777HHHHHHHHH7777
-777HHHHHHH777777
-777HH7HHH7777777
-777H7777777777HH
-7777777777777HHH
-7777777777777HH7
-7777777777777777
-77777777HH777777
-7777HHHHHHH77777
-777HHHHHHH777777
-7777777777777777
-7777777777777777` ],
-  [paintBlueSpecial2, bitmap`
-7777777777777777
-777H77H777777777
-777HHHHHH7777777
-7HHHHHHHHH777777
-77HHHHHHHH777777
-77HHHHHHHH777777
-777HHHH777777777
-77777H7777777777
-7777777777777HH7
-7777777777777HH7
-7777777777777777
-77HH777777777777
-77HH777777777777
-77H7777777777777
-7777777777777777
-7777777777777777` ],
-  [paintBlueSpecial3, bitmap`
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777HH7H77777
-7777777HHHHHHH77
-77777777HHHHHHH7
-777777777HHHHHH7
-7777777HHHHHHHH7
-77777777HHHHH777
-77777777HHH77777
-77HH777777777777
-7HHH777777777777
-7HHH777777777777
-77H7777777777777
-7777777777777777` ],
-)
-  
-  
-  setBackground(background)
-  setMap(map`
-.........6
-..........
-..........
-..........
-..........
-..........
-..........
-1.........`)
-*/
 }
-
-const spritesRed = ["1", "2", "3", "4"];
-const controlsRed = {
-	w: {
-		func: (p) => (p.y -= 1),
-		type: "1",
-	},
-	s: {
-		func: (p) => (p.y += 1),
-		type: "2",
-	},
-	a: {
-		func: (p) => (p.x -= 1),
-		type: "3",
-	},
-	d: {
-		func: (p) => (p.x += 1),
-		type: "4",
-	},
-};
-
-const spritesBlue = ["5", "6", "7", "8"];
-const controlsBlue = {
-	i: {
-		func: (p) => (p.y -= 1),
-		type: "5",
-	},
-	k: {
-		func: (p) => (p.y += 1),
-		type: "6",
-	},
-	j: {
-		func: (p) => (p.x -= 1),
-		type: "7",
-	},
-	l: {
-		func: (p) => (p.x += 1),
-		type: "8",
-	},
-};
-
-setSolids([...spritesRed, ...spritesBlue]);
-
-[
-	[
-		spritesBlue,
-		controlsBlue,
-		paintBlue,
-		[paintBlueSpecial1, paintBlueSpecial2, paintBlueSpecial3],
-	],
-	[
-		spritesRed,
-		controlsRed,
-		paintRed,
-		[paintRedSpecial1, paintRedSpecial2, paintRedSpecial3],
-	],
-].forEach((data) => {
-	const [sprites, controls, paintColor, specialPaint] = data;
-
-	Object.keys(controls).forEach((key) => {
-		onInput(key, () => {
-			if (!gameStarted) return;
-
-			let player;
-			// find the player, regardless of what directional sprite is in use right now
-			for (const sprite of sprites) {
-				player = getFirst(sprite);
-				if (player) break;
-			}
-
-			// move the player
-			controls[key].func(player);
-			player.type = controls[key].type;
-
-			// color the canvas at that spot
-			let currentColor = canvas[player.x][player.y];
-			if (currentColor == "") {
-				addSprite(player.x, player.y, paintColor);
-			} else {
-				for (let sprite of getTile(player.x, player.y)) {
-					if (sprite.type == currentColor) {
-						// random chance to pick a special paint sprite
-						if (Math.random() < 0.35) {
-							paintSprite =
-								specialPaint[
-									Math.floor(
-										Math.random() * specialPaint.length
-									)
-								];
-						} else {
-							paintSprite = paintColor;
-						}
-
-						sprite.type = paintSprite;
-					}
-				}
-			}
-			canvas[player.x][player.y] = paintColor;
-		});
-	});
-});
