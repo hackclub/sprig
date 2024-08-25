@@ -252,14 +252,14 @@ setInterval(function () {
     if (gameEnded) return;
     const time_power_have = time_start_power !== 0 ? ((performance.now() - time_start_power) / 1000) % 60 : null;
 
-    if (time_power_have && time_power_have >= 5) {
+    if (time_power_have && time_power_have >= 10) {
         // Remove the power
         const all_players_low_time = getAll(playerLowTime);
         if (all_players_low_time) {
             all_players_low_time.forEach(p => p.remove());
         }
         time_start_power = 0;
-    } else if (time_power_have && time_power_have >= 3) {
+    } else if (time_power_have && time_power_have >= 7) {
         // Change Player Style
         const all_players = getAll(player);
         if (all_players.length > 2) {
