@@ -64,7 +64,9 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 				break;
 			}
 			case SortOrder.TUTORIALS_AND_CHRONOLOGICAL: {
-				games = games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn));
+				games = games.sort((a, b) => 
+					isNaN(Date.parse(b.addedOn)) ? -1 : isNaN(Date.parse(a.addedOn)) ? 1 : Date.parse(b.addedOn) - Date.parse(a.addedOn)
+				);
 
 				// put tutorials first
 				games.sort((a, _) => a.tags.includes("tutorial") ? -1 : 1);
