@@ -1,5 +1,6 @@
 ---
 import ProjectNameCreator from "../../components/popups-etc/project-name-creation";
+import ProjectCreatorNotLoggedIn from "../../components/popups-etc/project-creation-not-logged-in";
 import '../../global.css';
 import Navbar from "../../components/navbar-main";
 import { getSession } from "../../lib/game-saving/account";
@@ -12,6 +13,6 @@ const session = await getSession(Astro.cookies)
 	<Navbar session={session} />
 	
 	<body>
-		<ProjectNameCreator client:load/>
+		{session ? <ProjectNameCreator client:load/> : <ProjectCreatorNotLoggedIn client:load/>}
 	</body>	
 </html>

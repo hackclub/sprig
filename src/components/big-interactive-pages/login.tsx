@@ -1,7 +1,9 @@
 import { useSignalEffect } from '@preact/signals'
 import { IoPaperPlaneOutline } from 'react-icons/io5'
 import { SessionInfo } from '../../lib/game-saving/account'
-import {DevEmail, useAuthHelper} from '../../lib/game-saving/auth-helper'
+import { DevEmail, useAuthHelper } from '../../lib/game-saving/auth-helper'
+import { makeGame } from '../../lib/game-saving/account'
+import { defaultExampleCode } from "../../lib/examples";
 import Button from '../design-system/button'
 import Input from '../design-system/input'
 import LinkButton from '../design-system/link-button'
@@ -17,7 +19,17 @@ interface LoginProps {
 export default function Login({ session, email, to }: LoginProps) {
 	const auth = useAuthHelper('EMAIL_ENTRY', email)
 	useSignalEffect(() => {
-		if (auth.stage.value === 'LOGGED_IN') window.location.replace(to)
+		if (auth.stage.value === 'LOGGED_IN') {
+			console.log(auth.emailValid.value)
+			console.log(auth)
+			console.log("sdhflashdfjsadflksd this is a log")
+			const savedGame = localStorage.getItem("sprigMemory")
+			if (savedGame && session) {
+				makeGame(session.user.id, false, "look its a name", savedGame)
+				localStorage.setItem("sprigMemory", defaultExampleCode)
+			}
+			window.location.replace(to)
+		}
 	})
 
 	return (
@@ -40,7 +52,7 @@ export default function Login({ session, email, to }: LoginProps) {
 						<Input onChange={() => undefined} value={auth.email.value} type='email' id='email' autoComplete='email' placeholder='fiona@hackclub.com' bind={auth.email} />
 						{auth.state.value === 'EMAIL_INCORRECT' && <p class={styles.error}>Failed sending login code. Did you enter the right email?</p>}
 
-						<Button class={styles.submit} icon={IoPaperPlaneOutline} iconSide='right' accent type='submit' disabled={!auth.emailValid.value} loading={auth.isLoading.value}>
+						<Button class={styles.submit} icon={IoPaperPlaneOutline} iconSide='right' accent type='submit' disabled={/* !auth.emailValid.value */ false} loading={auth.isLoading.value}>
 							Send code
 						</Button>
 					</>) : (<>
