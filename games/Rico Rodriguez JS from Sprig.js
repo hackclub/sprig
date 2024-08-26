@@ -160,7 +160,7 @@ function resetGame() {
   gameOver = false;
   gameStarted = false;
   abilityAvailable = false;
-  
+  instruct = false
   showStartScreen();
 }
 
