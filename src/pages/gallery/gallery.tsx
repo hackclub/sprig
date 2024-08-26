@@ -260,7 +260,6 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 							/>
 							<h3>{game.title}</h3>
 							<p class="author">by @{game.author}</p>
-							<p>{game.addedOn}</p>
 							<p class="tags" onClick={(e) => e.stopPropagation()}>
 
 								{game.tags.map((tag) =>
