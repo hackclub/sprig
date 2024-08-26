@@ -47,6 +47,8 @@ export default function EditorModal() {
 	useEffect(() => {
 		// just do this to sync the editor text with the code mirror text
 
+		if (!openEditor.value) return;
+
 		const code = codeMirror.value?.state.doc.toString() ?? '';
 		const levenshtainDistances = _foldRanges.value.map((foldRange, foldRangeIndex) => {
 			const widgetKind = _widgets.value[foldRangeIndex]?.value.spec.widget.props.kind;
