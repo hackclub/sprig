@@ -5,7 +5,7 @@ import { palette } from '../../../engine/src/base'
 import { FromTo, getTag, makeWidget } from './util'
 import OpenButton from '../../components/codemirror-widgets/open-button'
 import Swatch from '../../components/codemirror-widgets/swatch'
-import { editorKinds, editors } from '../state'
+import { editorKinds, editors, _foldRanges, _widgets } from '../state'
 
 const OpenButtonWidget = makeWidget(OpenButton)
 const SwatchWidget = makeWidget(Swatch)
@@ -21,10 +21,11 @@ function makeValue(state: EditorState) {
 			for (const kind of editorKinds) {
 				const tag = getTag(editors[kind].label, node, syntax, state.doc)
 				if (!tag) continue
+
 				if (tag.nameFrom === tag.nameTo) continue
 
 				widgets.push(Decoration.replace({
-					widget: new OpenButtonWidget({ kind, text: tag.text })
+					widget: new OpenButtonWidget({ kind, text: tag.text, range: { from: tag.textFrom, to: tag.textTo } })
 				}).range(tag.nameFrom, tag.nameTo))
 
 				if (kind === 'palette') {
@@ -41,6 +42,8 @@ function makeValue(state: EditorState) {
 		}
 	})
 
+	_foldRanges.value = foldRanges;
+	_widgets.value = widgets;
 	return {
 		decorations: Decoration.set(widgets),
 		foldRanges
