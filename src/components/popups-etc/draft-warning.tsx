@@ -40,7 +40,7 @@ export default function DraftWarningModal(props: DraftWarningModalProps) {
 					}} class={styles.stack}>
 						<div class={styles.inputRow}>
 							<Input onChange={() => undefined} value={auth.email.value} type='email' autoComplete='email' placeholder='fiona@hackclub.com' bind={auth.email} />
-							<Button accent type='submit' disabled={!auth.codeValid.value || auth.state.value === 'ACCOUNT_LOCKED'} loading={auth.isLoading.value}>
+							<Button accent type='submit' disabled={!auth.emailValid.value} loading={auth.isLoading.value}>
 								Start coding
 							</Button>
 						</div>
@@ -71,7 +71,7 @@ export default function DraftWarningModal(props: DraftWarningModalProps) {
 
 						<div class={`${styles.inputRow} ${styles.limited}`}>
 							<Input onChange={() => undefined} value={auth.code.value} maxLength={6} class={styles.center} type='text' bind={auth.code} placeholder='123456' />
-							<Button accent type='submit' disabled={!auth.codeValid.value} loading={auth.isLoading.value}>
+							<Button accent type='submit' disabled={!auth.codeValid.value || auth.state.value === 'ACCOUNT_LOCKED'} loading={auth.isLoading.value}>
 								Log in
 							</Button>
 						</div>
