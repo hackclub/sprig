@@ -342,8 +342,6 @@ void consolidate_flash_games() {
             uint32_t interrupts = save_and_disable_interrupts();
 
             flash_range_erase(FLASH_TARGET_OFFSET(write + i), SLOT_SIZE);
-            volatile int flash_offset = FLASH_TARGET_OFFSET(write + i);
-            volatile int flash_data = (int) FLASH_TARGET_CONTENTS(read + i);
 
             flash_range_program(FLASH_TARGET_OFFSET(write + i), slot_buffer,
                                 SLOT_SIZE);
