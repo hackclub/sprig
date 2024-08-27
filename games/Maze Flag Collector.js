@@ -75,6 +75,7 @@ setLegend(
 setSolids([player, wall])
 
 let level = 0
+// map levels feel free to add more whoever is playing this
 const levels = [
   map`
 wwwwwwwwww
@@ -124,6 +125,7 @@ function loadLevel(levelIndex) {
 
 loadLevel(level)
 
+//movement
 setPushables({
   [player]: []
 })
@@ -148,7 +150,6 @@ afterInput(() => {
   const playerSprite = getFirst(player)
   const flagSprite = getFirst(flag)
 
-  // Ensure the sprites exist before accessing their properties
   if (playerSprite && flagSprite) {
     // Check if player has collected the flag
     if (playerSprite.x === flagSprite.x && playerSprite.y === flagSprite.y) {
@@ -158,7 +159,7 @@ afterInput(() => {
       level += 1
       if (level >= levels.length) {
         console.log("You have completed all levels!")
-        level = 0 // Reset to the first level if needed
+        level = 0 // Reset to the first level to play again
       }
       loadLevel(level)
     }
