@@ -17,7 +17,8 @@ type Filter = {
 	query: string,
 	tags: string[],
 	sort: SortOrder
-};
+}
+
 export default function Gallery({ games, tags }: { games: GameMetadata[], tags: string[] }) {
 	const [gamesState, setGamesState] = useState<GalleryGameMetadata[]>([]);
 	const [filter, setFilter] = useState<Filter>({ query: "", sort: SortOrder.TUTORIALS_AND_CHRONOLOGICAL, tags: [] })
@@ -63,7 +64,9 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 				break;
 			}
 			case SortOrder.TUTORIALS_AND_CHRONOLOGICAL: {
-				games = games.sort((a, b) => Date.parse(b.addedOn) - Date.parse(a.addedOn));
+				games = games.sort((a, b) => 
+					isNaN(Date.parse(b.addedOn)) ? -1 : isNaN(Date.parse(a.addedOn)) ? 1 : Date.parse(b.addedOn) - Date.parse(a.addedOn)
+				);
 
 				// put tutorials first
 				games.sort((a, _) => a.tags.includes("tutorial") ? -1 : 1);
@@ -111,7 +114,8 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 			) as HTMLImageElement;
 			if (["loading", "true"].includes(img.dataset.loaded!)) return;
 			img.dataset.loaded = "loading";
-			img.src = await loadThumbnailUrl(gameCard.filename);
+			const thumbnail = await loadThumbnailUrl(gameCard.filename);
+			img.src = thumbnail;
 			img.dataset.loaded = "true";
 		};
 

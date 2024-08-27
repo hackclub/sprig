@@ -6,3 +6,8 @@ yarn-error.log
 .env
 dist/
 games/metadata.json
+public/*.json
+firmware/spade/src/rpi/jerry/lib/*.a
+firmware/spade/src/rpi/jerry/lib/libjerry-core.a
+firmware/spade/src/rpi/jerry/lib/libjerry-ext.a
+firmware/spade/src/rpi/jerry/lib/libjerry-port-default.a

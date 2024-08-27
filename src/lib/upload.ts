@@ -50,37 +50,43 @@ export const uploadToSerial = async (name: string, message: string,
 	const receivedEOT = new Promise<void>(resolve => {
 		(async () => {
 			try {
+				// 128-char buffer
+				let serialBuffer = " ".repeat(128)
+
 				while (true) {
 					const { value, done } = await reader.read()
 					if (done) break
 					logSerialOutput(value)
 
-					if (value.indexOf('ALL_GOOD') >= 0) {
-						eotMessage.value = {status: "ALL_GOOD"}
-						resolve()
-					} // TODO: use a buffer to avoid errors
-					else if (value.indexOf('OO_FLASH') >= 0) {
-						// OO_FLASH/{slots needed}/{slots available}/
-						let value_split = value?.split("/")
-						value_split = value_split.splice(value_split.indexOf("OO_FLASH")+1)
-						
-						const slots_needed = parseInt(value_split[0]!)
-						const slots_available = parseInt(value_split[1]!)
-						
-						eotMessage.value = {
-							status: "OO_FLASH",
-							slots_needed,
-							slots_available
-						}
-						uploadState.value = "ERROR"
-						
-						resolve()
-					}
-					else if (value.indexOf('OO_METADATA') >= 0) {
-						eotMessage.value = { status: "OO_METADATA" }
-						uploadState.value = "ERROR"
-						resolve()
-					}
+					serialBuffer  = serialBuffer.concat(value)
+					serialBuffer = serialBuffer.slice(serialBuffer.length - 128, serialBuffer.length)
+
+                    if (serialBuffer.indexOf('ALL_GOOD') >= 0) {
+                        eotMessage.value = {status: "ALL_GOOD"}
+                        resolve()
+                    } // TODO: use a buffer to avoid errors
+                    else if (serialBuffer.indexOf('OO_FLASH') >= 0) {
+                        // OO_FLASH/{slots needed}/{slots available}/
+                        let value_split = serialBuffer?.split("/")
+                        value_split = value_split.splice(serialBuffer.indexOf("OO_FLASH")+1)
+
+                        const slots_needed = parseInt(value_split[0]!)
+                        const slots_available = parseInt(value_split[1]!)
+
+                        eotMessage.value = {
+                            status: "OO_FLASH",
+                            slots_needed,
+                            slots_available
+                        }
+                        uploadState.value = "ERROR"
+
+                        resolve()
+                    }
+                    else if (serialBuffer.indexOf('OO_METADATA') >= 0) {
+                        eotMessage.value = { status: "OO_METADATA" }
+                        uploadState.value = "ERROR"
+                        resolve()
+                    }
 				}
 			} catch (error) {
 				console.error(error)
@@ -104,7 +110,7 @@ export const uploadToSerial = async (name: string, message: string,
 	const nameString = new Uint8Array(100)
 	new TextEncoder().encodeInto(name + "\0".repeat(100 - name.length), nameString)
 	await writer.write(nameString)
-	
+
 	console.log('[UPLOAD > SERIAL] Checkpoint 2 - writing length')
 	await writer.write(new Uint32Array([ buf.length ]).buffer)
 
@@ -166,13 +172,20 @@ export const getIsLegacySerial = async (
 	await writer.ready
 	await writer.write(new Uint8Array([ 0, 1, 2, 3, 4 ]).buffer)
 
+	// 128-char buffer
+	let serialBuffer = " ".repeat(128)
+
 	while (true) {
 		const { value, done } = await reader.read()
+
 		if (done) return null
 		logSerialOutput(value)
 
-		if (value.indexOf('found startup seq!') >= 0) return true
-		if (value.indexOf('legacy detected') >= 0) return false
+		serialBuffer  = serialBuffer.concat(value)
+		serialBuffer = serialBuffer.slice(serialBuffer.length - 128, serialBuffer.length)
+
+		if (serialBuffer.indexOf('found startup seq!') >= 0) return true
+		if (serialBuffer.indexOf('legacy detected') >= 0) return false
 	}
 }
 
