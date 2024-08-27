@@ -1,11 +1,12 @@
 cd ~/jerryscript_build
 rm -rf example-*
 
-# CMAKE_ASM_COMPILER=arm-none-eabi-gcc
-# CMAKE_C_COMPILER=arm-none-eabi-gcc
-# CMAKE_CXX_COMPILER=arm-none-eabi-g++
-# CMAKE_LINKER=arm-none-eabi-ld
-# CMAKE_OBJCOPY=arm-none-eabi-objcopy
+export CC=arm-none-eabi-gcc
+export CMAKE_ASM_COMPILER=arm-none-eabi-gcc
+export CMAKE_C_COMPILER=arm-none-eabi-gcc
+export CMAKE_CXX_COMPILER=arm-none-eabi-g++
+export CMAKE_LINKER=arm-none-eabi-ld
+export CMAKE_OBJCOPY=arm-none-eabi-objcopy
 
   # --debug \
 python3 jerryscript/tools/build.py \

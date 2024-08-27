@@ -350,7 +350,13 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						spinnyIcon={uploadState.value === "LOADING"}
 						loading={uploadState.value === "LOADING"}
 						onClick={() =>
-							upload(codeMirror.value?.state.doc.toString() ?? "")
+							upload(codeMirror.value?.state.doc.toString() ?? "",
+								props.persistenceState.value.kind == "PERSISTED" 
+								&& props.persistenceState.value.game != "LOADING" 
+									? props.persistenceState.value.game.name
+									: props.persistenceState.value.kind == "SHARED" ? props.persistenceState.value.name
+									: "Untitled Game"
+							)
 						}
 					>
 						Run on Device

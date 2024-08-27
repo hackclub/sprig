@@ -72,6 +72,7 @@ typedef struct {
   uint8_t last_state;
   uint8_t ring_i;
 } ButtonState;
+// W, S, A, D, I, K, J, L
 uint button_pins[] = {  5,  7,  6,  8, 12, 14, 13, 15 };
 static ButtonState button_states[ARR_LEN(button_pins)] = {0};
 
@@ -248,6 +249,25 @@ static int load_new_scripts(void) {
   }
 #endif
 
+typedef enum {
+  NEW_SLOT,
+  RUN_GAME,
+  DELETE_CONFIRM
+  } Welcome_Screen;
+
+  int count_digits(uint32_t number) {
+      if (number < 10) return 1;
+      if (number < 100) return 2;
+      if (number < 1000) return 3;
+      if (number < 10000) return 4;
+      if (number < 100000) return 5;
+      if (number < 1000000) return 6;
+      if (number < 10000000) return 7;
+      if (number < 100000000) return 8;
+      if (number < 1000000000) return 9;
+      return 10;
+  }
+
 int main() {
     timer_hw->dbgpause = 0;
 
@@ -265,74 +285,173 @@ int main() {
   jerry_init(JERRY_INIT_MEM_STATS);
   init(sprite_free_jerry_object); // TODO: document
 
-  while(!save_read()) {
-    // No game stored in memory
-    strcpy(errorbuf, "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "    PLEASE UPLOAD   \n"
-                     "       A GAME       \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     " sprig.hackclub.com \n");
-    render_errorbuf();
-    st7735_fill_start();
-    render(st7735_fill_send);
-    st7735_fill_finish();
+    // Start a core to listen for keypresses.
+    multicore_reset_core1();
 
-    load_new_scripts();
-  }
+    update_save_version(); // init here to avoid irqs on other core
 
-  // Start a core to listen for keypresses.
-  multicore_launch_core1(core1_entry);
+    multicore_launch_core1(core1_entry);
 
-  /**
-   * We get a bunch of fake keypresses at startup, so we need to
-   * drain them from the FIFO queue.
-   *
-   * What really needs to be done here is to have button_init
-   * record when it starts so that we can ignore keypresses after
-   * that timestamp.
-   */
-  sleep_ms(50);
-  while (multicore_fifo_rvalid()) multicore_fifo_pop_blocking();
+    /**
+       * We get a bunch of fake keypresses at startup, so we need to
+       * drain them from the FIFO queue.
+       *
+       * What really needs to be done here is to have button_init
+       * record when it starts so that we can ignore keypresses after
+       * that timestamp.
+       */
+    sleep_ms(50);
+    while (multicore_fifo_rvalid()) multicore_fifo_pop_blocking();
 
-  /**
-   * Wait for a keypress to start the game.
-   *
-   * This is important so games with e.g. infinite loops don't
-   * brick the device as soon as they start up.
-   */
-  while(!multicore_fifo_rvalid()) {
-    strcpy(errorbuf, "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "  PRESS ANY BUTTON  \n"
-                     "       TO RUN       \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     " sprig.hackclub.com \n");
-    render_errorbuf();
-    st7735_fill_start();
-    render(st7735_fill_send);
-    st7735_fill_finish();
+    int games_i = 0;
 
-    load_new_scripts();
-  }
+    int games_len = 8;
+    Game* games = malloc(games_len * sizeof(Game));
+
+    Welcome_Screen welcome_state = NEW_SLOT;
+
+    for (;;) {
+
+        if (games_i >= games_len && games_i != 0) {
+            games_i = games_len - 1;
+        }
+
+        if (welcome_state == DELETE_CONFIRM) {
+            // no-op
+        } else if (games_len == 0) {
+            welcome_state = NEW_SLOT;
+        } else {
+            welcome_state = RUN_GAME;
+            set_game(games[games_i]);
+        }
+
+        /**
+        * Wait for a keypress to start the game.
+        * This is important so games with e.g. infinite loops don't
+        * brick the device as soon as they start up.
+        */
+
+        if (multicore_fifo_rvalid()) {
+            uint32_t c = multicore_fifo_pop_blocking();
+
+            if (welcome_state == DELETE_CONFIRM) {
+                if (c == 7) { // S
+                    welcome_state = RUN_GAME;
+                } else if (c == 5) { // W
+                    delete_game(games[games_i]);
+                    welcome_state = RUN_GAME;
+                    continue;
+                }
+            } else if (c == 6) { // A
+                if (games_i > 0) games_i--;
+            } else if (c == 8) { // D
+                if (games_i < games_len - 1) games_i++;
+            } else if (c == 7 && welcome_state == RUN_GAME) { // S
+                welcome_state = DELETE_CONFIRM;
+            } else if (welcome_state == RUN_GAME && c == 5) { // other button
+                break;
+            }
+        }
+
+        games_len = get_games(&games, games_len);
+
+        switch (welcome_state) {
+            case NEW_SLOT:
+                strcpy(errorbuf, "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  " Please upload      \n"
+                                  " a game.            \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  "                    \n"
+                                  " sprig.hackclub.com \n"
+                        );
+                break;
+            case RUN_GAME: {
+                char game_padding[] = "                    ";
+                char size_padding[] = "                    ";
+
+                game_padding[
+                        20
+                        - count_digits(games_i+1)
+                        - count_digits(games_len)
+                        - 8 // 7 at first + 1 slash
+                        ] = '\0';
+
+                size_padding[
+                        20
+                        - count_digits(GAME_SLOTS(games[games_i].size_b))
+                        - count_digits(MAX_SLOTS)
+                        - 8 // 7 at first + 1 slash
+                        ] = '\0';
+
+                // 6lines
+                char game_split_lines[] = {
+                        "                    \n"
+                        "                    \n"
+                        "                    \n"
+                        "                    \n"
+                        "                    \n"
+                        "                    \n"
+                };
+
+                for (int i = 0; i*17 < strlen(games[games_i].name); i++) { // 20 - 3 buffer = 17
+                    memcpy(&game_split_lines[i*21 + 1], &games[games_i].name[i*17],
+                           strlen(games[games_i].name) - i*17 < 17 ? strlen(games[games_i].name) - i*17 : 17);
+                }
+
+
+                sprintf(errorbuf,
+                        "                    \n"
+                        "                    \n"
+                        "%s"
+                        "                    \n"
+                        " Game: %d/%d%s\n"
+                        " Size: %lu/%d%s\n"
+                        "                    \n"
+                        " W: PLAY            \n"
+                        " S: DELETE          \n"
+                        " <-  A , D  ->      \n",
+                        game_split_lines,
+                        games_i + 1, games_len, game_padding,
+                        GAME_SLOTS(games[games_i].size_b), MAX_SLOTS, size_padding);
+                break;
+            }
+            case DELETE_CONFIRM: {
+                strcpy(errorbuf, "                    \n"
+                                 "                    \n"
+                                 "                    \n"
+                                 "                    \n"
+                                 "                    \n"
+                                 " Do you really      \n"
+                                 " want to delete     \n"
+                                 " this game?         \n"
+                                 "                    \n"
+                                 "                    \n"
+                                 " W: confirm         \n"
+                                 " S: exit            \n"
+                                 "                    \n"
+                                 "                    \n"
+                                 " sprig.hackclub.com \n"
+                );
+                break;
+            }
+        }
+
+        render_errorbuf();
+        st7735_fill_start();
+        render(st7735_fill_send);
+        st7735_fill_finish();
+
+        load_new_scripts();
+    }
 
   // Wow, we can actually run a game now!
 

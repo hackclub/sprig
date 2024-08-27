@@ -28,8 +28,9 @@ import MigrateToast from "../popups-etc/migrate-toast";
 import { nanoid } from "nanoid";
 import TutorialWarningModal from "../popups-etc/tutorial-warning";
 import { editSessionLength, switchTheme, ThemeType } from "../../lib/state";
-import {versionState} from "../../lib/upload";
+import {eotMessage, versionState} from "../../lib/upload";
 import VersionWarningModal from "../popups-etc/version-warning";
+import OutOfSpaceModal from "../popups-etc/out-of-space";
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
@@ -598,6 +599,10 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 
 			{versionState.value != "OK" && (
 				<VersionWarningModal versionState={versionState} />
+			)}
+
+			{eotMessage.value && eotMessage.value.status != "ALL_GOOD" && (
+				<OutOfSpaceModal eotMessage={eotMessage} />
 			)}
 
 			{showingTutorialWarning.value && (
