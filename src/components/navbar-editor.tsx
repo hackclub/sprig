@@ -238,7 +238,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				Remix to save edits
 			</Button>
 		);
-	} else if (props.persistenceState.value.kind === "PERSISTED") {
+	} else if (props.persistenceState.value.kind === "PERSISTED" || (isNewSaveStrat.value && props.persistenceState.value.kind === "COLLAB")) {
 		saveState = {
 			SAVED: `Saved to ${
 				!isNewSaveStrat.value ?
@@ -247,11 +247,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					props.roomState?.value.participants.filter((participant) => {
 						if(participant.isHost) return true
 						return false
-					})[0]?.userEmail === props.persistenceState.value.session?.user.email ? props.persistenceState.value.session?.user.email : "???"
+					})[0]?.userEmail === props.persistenceState.value.session?.user.email ? props.persistenceState.value.session?.user.email : "the host"
 			}`,
 			SAVING: "Saving...",
 			ERROR: "Error saving to cloud",
 		}[props.persistenceState.value.cloudSaveState];
+		console.log(saveState)
 		if (props.persistenceState.value.cloudSaveState === "ERROR")
 			errorBlink = true;
 
@@ -309,15 +310,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 										)
 									}
 								/>
-								<span class={styles.attribution}> by {
-										(!isNewSaveStrat.value || props.roomState?.value.participants.filter((participant) => {
-												if(participant.isHost) return true
-												return false
-											})[0]?.userEmail === props.persistenceState.value.session?.user.email)
-											? "you"
-											: "???"
-									}
-								</span>
+								<span class={styles.attribution}>by you</span>
 							</>
 						) : props.persistenceState.value.kind === "SHARED" ? (
 							<>
@@ -327,6 +320,16 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 										? ` by ${props.persistenceState.value.authorName}`
 										: " (shared with you)"}
 								</span>
+							</>
+						) : props.persistenceState.value.kind === "COLLAB" && typeof props.persistenceState.value.game !== "string"? (
+							<>
+								<InlineInput 
+									placeholder="Untitled"
+									// @ts-ignore idk why i need to .game.game but if i just .game.name it's undefined
+									value={props.persistenceState.value.game.game.name}
+									onChange={() => {}}
+									disabled={true}
+								/>
 							</>
 						) : (
 							"Unsaved Game"

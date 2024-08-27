@@ -82,6 +82,7 @@ export type PersistenceState = ({
 	kind: 'COLLAB'
 	game: string | 'LOADING' | Game // String means the game is restricted and only the roomId needs to be shown to the user
 	password: string | undefined
+	cloudSaveState: 'SAVED' | 'SAVING' | 'ERROR'
 }) & {
 	session: SessionInfo | null
 	stale: boolean

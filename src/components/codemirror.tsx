@@ -86,12 +86,12 @@ export default function CodeMirror(props: CodeMirrorProps) {
 					if(props.persistenceState === undefined) throw new Error("Persistence state is undefined");
 					if(state.saved == "saved"){
 						let persistenceState = props.persistenceState.peek();
-						if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING"){
+						if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING" || persistenceState.kind === "COLLAB"){
 							props.persistenceState.value = {...persistenceState, cloudSaveState: "SAVED"};
 						}
 					} else if(state.saved == "error"){
 						let persistenceState = props.persistenceState.peek();
-						if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING"){
+						if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING"|| persistenceState.kind === "COLLAB"){
 							props.persistenceState.value = {...persistenceState, cloudSaveState: "ERROR"};
 						}
 					}
