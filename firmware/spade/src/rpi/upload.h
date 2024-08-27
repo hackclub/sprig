@@ -75,18 +75,8 @@ static const char *save_read() {
   return save;
 }
 
-// save versions != spade versions
-// increment in the value returned means different scheme for saving games
-static int get_save_version(const char* version) {
-    if (memory_is_ones(version, METADATA_ENTRY_SIZE)) return 1;
-    if (strcmp(version, "1.1.0") == 0) return 2;
-
-    // something weird happened!?
-    return -1;
-}
-
 // must be run with core 1 disabled - conflict risk
-static void flash_write_save_version(const char* version) {
+static void flash_write_version(const char* version) {
     void *metadata_first_sector = malloc(FLASH_SECTOR_SIZE);
     memcpy(metadata_first_sector, METADATA_START, FLASH_SECTOR_SIZE);
     strcpy(metadata_first_sector, version);
@@ -97,6 +87,16 @@ static void flash_write_save_version(const char* version) {
     restore_interrupts(interrupts);
 
     free(metadata_first_sector);
+}
+
+// save versions != spade versions
+// increment in the value returned means different scheme for saving games
+static int get_save_version(const char* version) {
+    if (memory_is_ones(version, METADATA_ENTRY_SIZE)) return 1;
+    if (strcmp(version, "2.0.0") == 0) return 2;
+
+    // something weird happened!?
+    return -1;
 }
 
 // must be run with core 1 disabled - conflict risk
@@ -129,10 +129,9 @@ static int update_save_version() {
                 free(metadata_first_sector);
             }
 
-            flash_write_save_version("1.1.0");
+            flash_write_version("2.0.0");
             return update_save_version();
         }
-        case 2:
         default:
             return 1;
     }
