@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Maze Flag Collector Game
 @author: Ravin
-@tags: [maze, game]
-@addedOn: 2024-00-00
+@tags: ["maze", "game"]
+@addedOn: 2024-08-28
 */
 
 const player = "p"
@@ -167,3 +167,4 @@ afterInput(() => {
     console.log("Player or flag sprite not found!")
   }
 })
+
