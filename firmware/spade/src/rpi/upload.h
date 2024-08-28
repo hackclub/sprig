@@ -34,13 +34,6 @@ int slot = 0;
 #define METADATA_CONTENTS(index) ((const Game *) (XIP_BASE + FLASH_TARGET_START - METADATA_SIZE + METADATA_ENTRY_SIZE + (index) * METADATA_ENTRY_SIZE))
 #define METADATA_OFFSET ((uint32_t) (FLASH_TARGET_START - METADATA_SIZE + METADATA_ENTRY_SIZE))
 
-// i think what happened here is only FLASH_TARGET_START was cast to a Game*.
-// METADATA_SIZE was a signed int. this coerced METADATA_OFFSET into a signed int,
-// which was then passed into a function that accepted a uint32_t.
-// this messed up the pointer and caused it to overwrite application code in the flash (XIP)
-// #define METADATA_OFFSET ((const Game*) FLASH_TARGET_START - METADATA_SIZE + METADATA_ENTRY_SIZE)
-
-
 #define METADATA_START METADATA_CONTENTS(-1)
 
 #define FLASH_VERSION ((const char *) (XIP_BASE + FLASH_TARGET_START - METADATA_SIZE))
@@ -436,8 +429,8 @@ static int upl_stdin_read(void) {
 
                       // not enough slots
                       if (get_available_flash_slots(exclude) < GAME_SLOTS(upl_state.len)) {
-                          // /OO_FLASH/{slots needed}/{slots available}/
-                          printf("/OO_FLASH/%lu/%d/", GAME_SLOTS(upl_state.len),
+                          // OO_FLASH/{slots needed}/{slots available}/
+                          printf("OO_FLASH/%lu/%d/", GAME_SLOTS(upl_state.len),
                                  get_available_flash_slots(exclude));
                           multicore_launch_core1(core1_entry);
                           return 0; // ERROR!
