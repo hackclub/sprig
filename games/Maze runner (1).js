@@ -2,7 +2,7 @@
 @title: maze runner
 @author: surojit
 @tags: []
-@addedOn: 24 august 24
+@addedOn: 2024-08-28
 */
 
 const down = "d"
@@ -455,3 +455,4 @@ afterInput(() => {
     }
   }
 })
+
