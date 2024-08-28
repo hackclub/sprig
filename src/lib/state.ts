@@ -1,4 +1,5 @@
-import type { EditorView } from '@codemirror/view'
+import type { EditorView, Decoration } from '@codemirror/view'
+import type { Range } from '@codemirror/state'
 import { Signal, signal } from '@preact/signals'
 import { IoColorPalette, IoImage, IoMap, IoMusicalNotes } from 'react-icons/io5'
 import type { FromTo } from './codemirror/util'
@@ -106,6 +107,7 @@ export type RoomState = {
 }
 
 export const codeMirror = signal<EditorView | null>(null)
+export const codeMirrorEditorText = signal<string>('');
 export const muted = signal<boolean>(false)
 export const errorLog = signal<NormalizedError[]>([])
 export const openEditor = signal<OpenEditor | null>(null)
@@ -114,6 +116,8 @@ export const editSessionLength = signal<Date>(new Date());
 export const showKeyBinding = signal(false);
 export const showSaveConflictModal = signal<boolean>(false);
 export const continueSaving = signal<boolean>(true);
+export const _foldRanges = signal<FromTo[]>([]);
+export const _widgets = signal<Range<Decoration>[]>([]);
 export const LAST_SAVED_SESSION_ID = 'lastSavedSessionId';
 
 export type ThemeType = "dark" | "light" | "busker";

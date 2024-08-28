@@ -17,3 +17,4 @@ game.min.js
 dockerBuildLog.txt
 spade.uf2
 spade.elf
+src/shared/version.h
