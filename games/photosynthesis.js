@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Photosynthesis
 @author: Vanessa Tan
-@tags: [beginner]
+@tags: ["beginner"]
 @addedOn: 2024-08-26
 */
 
@@ -392,3 +392,4 @@ var gameLoop = setInterval(() => {
   
 
 }, 1000-level*100);
+
