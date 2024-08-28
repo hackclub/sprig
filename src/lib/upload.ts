@@ -66,10 +66,9 @@ export const uploadToSerial = async (name: string, message: string,
                         resolve()
                     } // TODO: use a buffer to avoid errors
                     else if (serialBuffer.indexOf('OO_FLASH') >= 0) {
-                        // OO_FLASH/{slots needed}/{slots available}/
+                        // /OO_FLASH/{slots needed}/{slots available}/
                         let value_split = serialBuffer?.split("/")
-                        value_split = value_split.splice(serialBuffer.indexOf("OO_FLASH")+1)
-
+                        value_split = value_split.splice(value_split.indexOf("OO_FLASH")+1)
                         const slots_needed = parseInt(value_split[0]!)
                         const slots_available = parseInt(value_split[1]!)
 
