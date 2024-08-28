@@ -20,7 +20,7 @@ export default function OutOfSpaceModal({ eotMessage }: {eotMessage: Signal<EOTM
 						}
 						{eotMessage.value?.status == "OO_METADATA"
 							&& <>
-							<h2>Your console is out of storage space!</h2>
+							<h2>You've hit the limit for the number of games stored on your console! </h2>
 								<p>Please delete any one game, then retry.</p>
 						</>}
 						<Button onClick={() => {
