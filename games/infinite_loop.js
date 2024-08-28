@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: The Infinite Loop
 @author: Matthew Soh
-@tags: [arcade-jam]
-@addedOn: 2024-00-00
+@tags: ["arcade-jam"]
+@addedOn: 2024-08-28
 */
 
 const soundtrack = tune`
@@ -428,3 +428,4 @@ const timer = setInterval(() => {
     addText("Time: " + (time / 10).toFixed(1), { y: 15, color: color`L` });
   }
 }, 100);
+
