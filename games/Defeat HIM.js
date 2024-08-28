@@ -1,20 +1,9 @@
 /*
 
-Name of game: my first SPRIG game
-Name: Ethan R 
-Date:7/29/2024
-this is my first game
-
----
-This game was created using the following game as an example:
-(Thank you for making this, it allowed us to create our own game)
-----
-@title: getting_started
-@tags: ['beginner', 'tutorial']
-@addedOn: 2022-07-26
-@author: leo, edits: samliu, belle, kara
-----
-
+@title: Defeat HIM
+@author: Ethan R 
+@addedOn: 2024-08-28
+@tags: []
 
 */
 
