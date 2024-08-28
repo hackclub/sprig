@@ -1,3 +1,10 @@
+/*
+@title: Falling coin
+@author: Praveenkushinpi
+@tags: []
+@addedOn: 2024-08-28
+*/
+
 const player = "p";
 const fallingObject = "o";
 const ground = "g";
