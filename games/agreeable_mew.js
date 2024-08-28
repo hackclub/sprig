@@ -1,3 +1,10 @@
+/*
+@title: Obstacle Mega Warfare
+@author: LimesKey
+@addedOn: 2024-08-28
+@tags: []
+*/
+
 const player = "p";
 const obstacle = "o";
 const boom = "b";
