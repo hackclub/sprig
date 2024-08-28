@@ -189,17 +189,8 @@ static void strlcat_fixed_error(char *dest, jerry_value_t loc, size_t size) {
     }
   }
 
-  int engine_lines = 1;
-  for (int i = 0; i < sizeof(engine_script); i++) {
-    if (engine_script[i] == '\n') engine_lines++;
-  }
-
-  if (line <= engine_lines) {
-    strlcat(dest, "engine:", size);
-  } else {
-    strlcat(dest, "game:", size);
-    line = line - engine_lines + 1;
-  }
+  strlcat(dest, "game:", size);
+  
   char line_str[7] = "";
   sprintf(line_str, "%d", line);
   strlcat(dest, line_str, size);
