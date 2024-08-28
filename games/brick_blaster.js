@@ -2,7 +2,7 @@
 @title: Brick Blaster
 @author: MohammedMMc
 @tags: ["brick", "blaster", "brick-blaster"]
-@addedOn: 2024-25-8
+@addedOn: 2024-08-28
 */
 
 const playerLowTime = "l";
@@ -427,4 +427,5 @@ const gameLoop = setInterval(function () {
     }
 
 }, 200);
+
 
