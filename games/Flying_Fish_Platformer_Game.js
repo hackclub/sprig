@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Reese Game
-@author: 
+@title: Flying Fish
+@author: Reese Ochitwa
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-28
 */
 
 const player = "p"
@@ -302,3 +302,4 @@ onInput("a", () => {
 afterInput(() => {
 
 })
+
