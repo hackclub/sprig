@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: 13
-@author: 
+@title: 9 Tiles
+@author: Arrow07
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-28
 */
 const melody = tune`
 428.57142857142856: B5-428.57142857142856 + A5^428.57142857142856,
@@ -388,3 +388,4 @@ onInput("w", () => {
 })
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+
