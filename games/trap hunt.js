@@ -1,4 +1,9 @@
-
+/*
+@title: trap runner
+@author: surojit roy
+@tags: []
+@addedOn: 2024-08-28 
+*/
 
 const down = "d"
 const up = "n"
@@ -520,3 +525,4 @@ afterInput(() => {
     }
   }
 })
+
