@@ -1,5 +1,5 @@
 import {useRef} from "preact/hooks";
-import {effect, signal, Signal, useSignal, useSignalEffect} from "@preact/signals";
+import {signal, Signal, useSignal, useSignalEffect} from "@preact/signals";
 import {IoCaretBack, IoCaretForward} from "react-icons/io5";
 import styles from "./help.module.css";
 import {compiledContent} from "../../../docs/docs.md";
