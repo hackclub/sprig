@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: 
-@author: 
+@title: Least_Tiles
+@author: cluac
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-08-28
 */
 
 const player = "p"
@@ -276,3 +276,4 @@ afterInput(() => {
   }
 
 })
+
