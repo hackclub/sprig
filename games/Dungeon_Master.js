@@ -1,3 +1,10 @@
+/*
+@title: Dungeon_Master
+@author: BrandenLordNov
+@addedOn: 2024-08-28
+@tags: []
+*/
+
 const black = "-"
 const health = "h"
 const heart = "H"
@@ -825,3 +832,4 @@ var gameLoop = setInterval(() => {
   playerHearts()
   }
   }, 300);
+
