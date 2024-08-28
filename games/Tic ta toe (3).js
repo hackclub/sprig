@@ -4,7 +4,8 @@ This code was made on 24 August
 
 @title: TicTacToe game
 @author: surojit 
-@tags: 
+@tags: []
+@addedOn: 2024-08-28 
 */
 
 const PLAYER = "p";
@@ -199,3 +200,4 @@ onInput("j", () => {
     isPlayerTurn = !isPlayerTurn;
   }
 });
+
