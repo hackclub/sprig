@@ -464,7 +464,7 @@ int main() {
   while (multicore_fifo_rvalid()) multicore_fifo_pop_blocking();
 
   // Run the code!
-  js_run(save_read(), strlen(save_read()));
+  js_run(save_read(), !games[games_i].is_legacy);
 
   #ifdef SPADE_AUDIO
     // Initialize audio

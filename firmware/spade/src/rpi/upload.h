@@ -1,4 +1,3 @@
-#include "shared/sprig_engine/script.h"
 #include "hardware/flash.h"
 #include <stdlib.h>
 static void core1_entry(void);
@@ -14,6 +13,7 @@ typedef struct {
     Game_Location location;
     uint8_t slot;
     uint32_t size_b;
+    uint8_t is_legacy; // ewwwwww
 } Game;
 
 Game current_game = (Game) {};
@@ -26,7 +26,7 @@ int slot = 0;
 #define FLASH_TARGET_START (800*1024)
 #define FLASH_TARGET_OFFSET(slot_i) (FLASH_TARGET_START + (slot_i) * SLOT_SIZE)
 
-#define GAME_SLOTS(bytes) (((bytes) + (sizeof(engine_script) - 1) + FLASH_PAGE_SIZE) / SLOT_SIZE + 1)
+#define GAME_SLOTS(bytes) (((bytes) + FLASH_PAGE_SIZE) / SLOT_SIZE + 1)
 
 #define METADATA_MAX_ENTRIES 32
 #define METADATA_ENTRY_SIZE (256) // you can program up to one page at a time. (256 bytes).
@@ -111,9 +111,10 @@ static int update_save_version() {
                 // add flash metadata for first game
                 Game game = {
                         .slot = 0,
-                        .size_b = strlen(FLASH_TARGET_CONTENTS(0) + FLASH_PAGE_SIZE + (sizeof(engine_script) - 1)),
+                        .size_b = strlen(FLASH_TARGET_CONTENTS(0) + FLASH_PAGE_SIZE),
                         .name = "Legacy Game",
-                        .location = Location_FLASH
+                        .location = Location_FLASH,
+                        .is_legacy = 1
                 };
 
                 void *metadata_first_sector = malloc(FLASH_SECTOR_SIZE);
@@ -422,6 +423,7 @@ static int upl_stdin_read(void) {
                       strcpy(game.name, upl_state.name);
                       game.size_b = upl_state.len;
                       game.location = Location_FLASH;
+                      game.is_legacy = 0;
 
                       int metadata_i;
                       int search_result = get_game_index_by_name(game.name);
@@ -469,24 +471,15 @@ static int upl_stdin_read(void) {
                       free(new_metadata);
                   }
 
-                  uint32_t char_len = upl_state.len +
-                                 sizeof(engine_script); // sizeof script includes the null term, we still need to remove from script
-                  upl_state.len = char_len;
                   // one to round up, one for magic
-                  uint32_t page_len = (char_len / FLASH_PAGE_SIZE + 2) * FLASH_PAGE_SIZE;
+                  uint32_t page_len = (upl_state.len / FLASH_PAGE_SIZE + 2) * FLASH_PAGE_SIZE;
                   uint32_t sector_len = (page_len / FLASH_SECTOR_SIZE + 1) * FLASH_SECTOR_SIZE;
 
                   uint32_t interrupts = save_and_disable_interrupts();
                   flash_range_erase(FLASH_TARGET_OFFSET(slot), sector_len);
                   restore_interrupts(interrupts);
 
-                  for (int i = 0; i < sizeof(engine_script) - 1; i++) {
-                      upl_state.buf[upl_state.len_i++ % FLASH_PAGE_SIZE] = engine_script[i];
-                      if (upl_state.len_i % FLASH_PAGE_SIZE == 0) {
-                          puts("flushin buf (wit da code!)");
-                          upl_flush_buf();
-                      }
-                  }
+
 
                   puts("cleared flash");
               }
