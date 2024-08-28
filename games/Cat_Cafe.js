@@ -1,7 +1,9 @@
 /*
 @title: Cat Cafe
 @author: Nunu(greatplansahead)
-@tags: [portal, maze, cute, cafe, bubble tea]
+@tags: ["portal", "maze", "cute", "cafe", "bubble tea"]
+@addedOn: 2024-08-28
+
 arcade project.
 Controls: 
 player 1
@@ -1018,3 +1020,4 @@ afterInput(() => {
 
 
 })
+
