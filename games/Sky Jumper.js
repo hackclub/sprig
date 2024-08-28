@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Platformer Adventure
 @author: Roshni Kumari
-@tags: [platformer, adventure]
-@addedOn: 2024-08-24
+@tags: ["platformer", "adventure"]
+@addedOn: 2024-08-28
 */
 
 const player = "p";
@@ -151,3 +151,4 @@ afterInput(() => {
     }
   }
 });
+
