@@ -393,11 +393,31 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									  );
 							}}
 						>
-							{runMode.value == "run" ? "Run" : "Run on Device"}
 							<span
-								onClick={() =>
-									(showDropdown.value = !showDropdown.value)
-								}
+								style={{
+									marginRight: "-0.25rem",
+									marginLeft: "-0.25rem",
+								}}
+							>
+								{runMode.value == "run"
+									? "Run"
+									: "Run on Device"}
+							</span>
+						</Button>
+						<Button
+							accent
+							onClick={() =>
+								(showDropdown.value = !showDropdown.value)
+							}
+						>
+							<span
+								style={{
+									height: "17.281px",
+									marginLeft: "-0.5rem",
+									marginRight: "-0.5rem",
+									display: "flex",
+									alignItems: "center",
+								}}
 							>
 								<IoChevronDown />
 							</span>
