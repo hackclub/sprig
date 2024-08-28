@@ -76,6 +76,18 @@ typedef struct {
 uint button_pins[] = {  5,  7,  6,  8, 12, 14, 13, 15 };
 static ButtonState button_states[ARR_LEN(button_pins)] = {0};
 
+typedef enum {
+    Button_W,
+    Button_S,
+    Button_A,
+    Button_D,
+    Button_I,
+    Button_K,
+    Button_J,
+    Button_L,
+    Button_None
+} Button;
+
 static bool button_history_read(ButtonState *bs, int i) {
   // We want to store bools compactly so we have to do some bit twiddling.
   int q = 1 << (i % 8);
@@ -268,6 +280,29 @@ typedef enum {
       return 10;
   }
 
+  static Button get_button_press() {
+      if (!multicore_fifo_rvalid()) return Button_None;
+
+      switch (multicore_fifo_pop_blocking()) {
+          case 5:
+              return Button_W;
+          case 7:
+              return Button_S;
+          case 6:
+              return Button_A;
+          case 8:
+              return Button_D;
+          case 12:
+              return Button_I;
+          case 14:
+              return Button_K;
+          case 13:
+              return Button_J;
+          case 15:
+              return Button_L;
+      }
+  }
+
 int main() {
     timer_hw->dbgpause = 0;
 
@@ -305,8 +340,8 @@ int main() {
 
     int games_i = 0;
 
-    int games_len = 8;
-    Game* games = malloc(games_len * sizeof(Game));
+    int games_len = 0;
+    Game* games = malloc(METADATA_MAX_ENTRIES * sizeof(Game));
 
     Welcome_Screen welcome_state = NEW_SLOT;
 
@@ -325,35 +360,28 @@ int main() {
             set_game(games[games_i]);
         }
 
-        /**
-        * Wait for a keypress to start the game.
-        * This is important so games with e.g. infinite loops don't
-        * brick the device as soon as they start up.
-        */
-
-        if (multicore_fifo_rvalid()) {
-            uint32_t c = multicore_fifo_pop_blocking();
-
+        Button button_pressed = get_button_press();
+        if (get_button_press() != Button_None) {
             if (welcome_state == DELETE_CONFIRM) {
-                if (c == 7) { // S
+                if (button_pressed == Button_S) {
                     welcome_state = RUN_GAME;
-                } else if (c == 5) { // W
+                } else if (button_pressed == Button_W) {
                     delete_game(games[games_i]);
                     welcome_state = RUN_GAME;
                     continue;
                 }
-            } else if (c == 6) { // A
+            } else if (button_pressed == Button_A) {
                 if (games_i > 0) games_i--;
-            } else if (c == 8) { // D
+            } else if (button_pressed == Button_D) {
                 if (games_i < games_len - 1) games_i++;
-            } else if (c == 7 && welcome_state == RUN_GAME) { // S
+            } else if (button_pressed == Button_S && welcome_state == RUN_GAME) {
                 welcome_state = DELETE_CONFIRM;
-            } else if (welcome_state == RUN_GAME && c == 5) { // other button
+            } else if (welcome_state == RUN_GAME && button_pressed == Button_W) {
                 break;
             }
         }
 
-        games_len = get_games(&games, games_len);
+        games_len = get_games(&games);
 
         switch (welcome_state) {
             case NEW_SLOT:
@@ -375,24 +403,28 @@ int main() {
                         );
                 break;
             case RUN_GAME: {
+                // screen is 20 characters wide
+                int screen_width_chars = 20;
+
+                // padding to be written after game num & size
                 char game_padding[] = "                    ";
                 char size_padding[] = "                    ";
 
                 game_padding[
-                        20
+                        screen_width_chars
                         - count_digits(games_i+1)
                         - count_digits(games_len)
-                        - 8 // 7 at first + 1 slash
+                        - 8 // 7 chars used for " Game: " + account for slash
                         ] = '\0';
 
                 size_padding[
-                        20
+                        screen_width_chars
                         - count_digits(GAME_SLOTS(games[games_i].size_b))
                         - count_digits(MAX_SLOTS)
-                        - 8 // 7 at first + 1 slash
+                        - 8 // 7 chars used for " Size: " + account for slash
                         ] = '\0';
 
-                // 6lines
+                // 6lines, for game name
                 char game_split_lines[] = {
                         "                    \n"
                         "                    \n"
@@ -402,9 +434,24 @@ int main() {
                         "                    \n"
                 };
 
-                for (int i = 0; i*17 < strlen(games[games_i].name); i++) { // 20 - 3 buffer = 17
-                    memcpy(&game_split_lines[i*21 + 1], &games[games_i].name[i*17],
-                           strlen(games[games_i].name) - i*17 < 17 ? strlen(games[games_i].name) - i*17 : 17);
+                // buffer of 3 chars at beginning, subtract from total width
+                int chars_per_line = screen_width_chars - 3;
+                unsigned int lines_used = strlen(games[games_i].name) / chars_per_line + 1;
+                for (int i = 0; i < lines_used; i++) {
+                    // write to game_split_lines, segmented per line,
+                    // +1 for the newline, +1 to get next open char
+                    char* write_dest = &game_split_lines[i*(screen_width_chars+1) + 1];
+
+                    // read from the game name, segmented by chars_per_line
+                    char* game_line = &games[games_i].name[i*chars_per_line];
+
+                    // write length is chars_per_line except if the last segment of game name is less than that
+                    unsigned int write_length = chars_per_line;
+                    if (strlen(games[games_i].name) - i*write_length < write_length) {
+                        write_length = strlen(games[games_i].name) - i*chars_per_line;
+                    }
+
+                    memcpy(write_dest, game_line, write_length);
                 }
 
 

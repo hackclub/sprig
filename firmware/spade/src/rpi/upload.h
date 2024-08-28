@@ -13,7 +13,7 @@ typedef struct {
     Game_Location location;
     uint8_t slot;
     uint32_t size_b;
-    uint8_t is_legacy; // ewwwwww
+    uint8_t is_legacy; // legacy games moved over from firmware 1.0.0; includes engine script
 } Game;
 
 Game current_game = (Game) {};
@@ -21,26 +21,27 @@ int slot = 0;
 
 // rationale: half engine, half games?
 // NOTE: this has to be a multiple of 4096 (FLASH_SECTOR_SIZE)
-#define SLOT_SIZE FLASH_SECTOR_SIZE
-#define MAX_SLOTS 150
 #define FLASH_TARGET_START (800*1024)
+
+#define MAX_SLOTS 150
+#define SLOT_SIZE FLASH_SECTOR_SIZE
 #define FLASH_TARGET_OFFSET(slot_i) (FLASH_TARGET_START + (slot_i) * SLOT_SIZE)
+#define FLASH_TARGET_CONTENTS(slot_i) ((const uint8_t *) (XIP_BASE + FLASH_TARGET_OFFSET(slot_i)))
 
 #define GAME_SLOTS(bytes) (((bytes) + FLASH_PAGE_SIZE) / SLOT_SIZE + 1)
 
 #define METADATA_MAX_ENTRIES 32
-#define METADATA_ENTRY_SIZE (256) // you can program up to one page at a time. (256 bytes).
-#define METADATA_SIZE ((METADATA_MAX_ENTRIES+1) * METADATA_ENTRY_SIZE) // first entry is for version
-#define METADATA_CONTENTS(index) ((const Game *) (XIP_BASE + FLASH_TARGET_START - METADATA_SIZE + METADATA_ENTRY_SIZE + (index) * METADATA_ENTRY_SIZE))
+#define METADATA_ENTRY_SIZE FLASH_PAGE_SIZE // you can program up to one page at a time. (256 bytes).
 #define METADATA_OFFSET ((uint32_t) (FLASH_TARGET_START - METADATA_SIZE + METADATA_ENTRY_SIZE))
+#define METADATA_CONTENTS(index) ((const Game *) (XIP_BASE + FLASH_TARGET_START - METADATA_SIZE + METADATA_ENTRY_SIZE + (index) * METADATA_ENTRY_SIZE))
 
+// we store the version one metadata slot before the first
+#define METADATA_SIZE ((METADATA_MAX_ENTRIES+1) * METADATA_ENTRY_SIZE)
 #define METADATA_START METADATA_CONTENTS(-1)
+#define FLASH_VERSION ((const char *) METADATA_START)
 
-#define FLASH_VERSION ((const char *) (XIP_BASE + FLASH_TARGET_START - METADATA_SIZE))
+#define PTR_METADATA_CONTENTS(metadata_ptr, i) (((Game*) (metadata_ptr + METADATA_ENTRY_SIZE*i)))
 
-#define FLASH_TARGET_CONTENTS(slot_i) ((const uint8_t *) (XIP_BASE + FLASH_TARGET_OFFSET(slot_i)))
-
-#define ZEROS(bytes) ((char[bytes]){})
 
 static const int memory_is_ones(const void *memory, size_t count) {
     // this is taken from gcc libiberty
@@ -132,19 +133,14 @@ static int update_save_version() {
 
 }
 
-// returns len of games. games should be pointer to array of games (Game**)
-static int get_games(Game** games, int games_len) {
+// returns len of games. games should be pointer to array of games (Game**) w/ size METADATA_MAX_ENTRIES
+static int get_games(Game** games) {
     int games_i = -1;
 
     for (int i = 0; i < METADATA_MAX_ENTRIES; i++) {
 
         volatile int is_ones = memory_is_ones(METADATA_CONTENTS(i), METADATA_ENTRY_SIZE);
         if (is_ones) continue;
-
-        if (games_len <= ++games_i) {
-            games_len *= 2;
-            *games = realloc(*games, games_len * sizeof(Game));
-        }
 
         (*games)[games_i] = *METADATA_CONTENTS(i);
     }
@@ -255,8 +251,6 @@ static void delete_game(Game aGame) {
         }
     }
 }
-
-#define PTR_METADATA_CONTENTS(metadata_ptr, i) (((Game*) (metadata_ptr + METADATA_ENTRY_SIZE*i)))
 
 // for some reason this hangs when just reading from flash
 // fixed by changing to read from heap but don't know root cause
