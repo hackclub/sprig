@@ -10,17 +10,17 @@ export default function OutOfSpaceModal({ eotMessage }: {eotMessage: Signal<EOTM
 					<div class={styles.stack}>
 						{eotMessage.value?.status == "OO_FLASH"
 							&& <>
-								<h2>Your console is out of game slots!</h2>
+								<h2>Your console is out of storage space!</h2>
 								<p>There
-								are {eotMessage.value.slots_available} slots available,
-								but {eotMessage.value.slots_needed} slots are needed for this game.
-								<br/>Please delete {eotMessage.value.slots_needed - eotMessage.value.slots_available} slots worth of games, then retry.
+								are {eotMessage.value.slots_available} blocks available,
+								but {eotMessage.value.slots_needed} blocks are needed for this game.
+								<br/>Please delete {eotMessage.value.slots_needed - eotMessage.value.slots_available} blocks worth of games, then retry.
 							</p>
 							</>
 						}
 						{eotMessage.value?.status == "OO_METADATA"
 							&& <>
-							<h2>Your console is out of metadata slots!</h2>
+							<h2>Your console has hit its maximum number of stored games!</h2>
 								<p>Please delete any one game, then retry.</p>
 						</>}
 						<Button onClick={() => {
