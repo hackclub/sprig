@@ -186,7 +186,7 @@ CC999999999999CC
 9C9C9999999C99C9
 9CCCCCCCCCCCCCCC
 CC99999C9999999C`],
-	[ player, bitmap`
+	/*[ player, bitmap`
 ..........CCCC..
 ........CCCCC...
 .......CCCCC....
@@ -200,6 +200,23 @@ CC99999C9999999C`],
 ..CC.0222222CC..
 ...C.02222220C..
 ...C..CC6CCCCCC.
+.......00000CCCC
+.......0...0.CCC
+.....000...000..` ],*/
+    [ player, bitmap`
+.........CCCC...
+........CCCC....
+.......CCCC.....
+......CCCCC.....
+.C...CCCCCCC....
+.C..CCCCCCCCCC..
+.CC...000000....
+..C..02222200...
+..C..02020220...
+..CC.0222222CC..
+...C.0222222CC..
+...C..0000CCCCC.
+.......C6CCCCCCC
 .......00000CCCC
 .......0...0.CCC
 .....000...000..` ],
@@ -370,7 +387,7 @@ dwwwwww
 .l.ls.d
 www.wwd
 .kll...
-2.lk..w`,//Level 5 
+2.bk..w`,//Level 5 
   map`
 hhhwww
 .s.www
@@ -395,19 +412,18 @@ ww.wwwwdw
 .k.wzs..0
 .z.wsz...`,//Level 8
   map`
-hhhw.sww....wwk...
-wwwww.ww..z.ww....
-p...w.w.........z.
-www.w.w...........
-www.w.w.wwwwdwwww.
-z.......ws....www.
-.ww.w.w.w.wwwww...
-.wz.w.w.w..z.wws..
-.w.sw.w.wwww..w...
-.wwww.w.ww0w..w.z.
-k........w.w..wwdw
-wwww.w...w.dz.....
-.kz..w..zw.wwwwwww`,//Level 9
+hhhksww.H..wwk..
+wwwwzww..z.ww...
+p..w.wwz...ww..z
+ww.w.w..........
+ww.w.w.wwwwdwwww
+z......ws...wwww
+.wdwww.w.wwwwwHz
+.wzsHw.w..z.wws.
+.wwwww.wwww..w..
+k...ww.ww0w..w.z
+www....wwzw..wwd
+kz..w.zww.dz....`,//Level 9
   map`
 hhh.sbdwwwww
 0wwww....www
@@ -479,7 +495,7 @@ zd.d...wkwkk
 zwzwzw.wkwkk
 zwzwzw.wdwww
 swkwkw.d.kk0`,//Level 15
-  map`
+ /* map`
 hhhw...wpw...w.
 wwww...w.w...w.
 ...w...w.w...w.
@@ -491,7 +507,7 @@ w.wwwwww.ww.ww.
 .......w.wwwww.
 ...............
 ...............
-...............`,//Level 16
+...............`,//Level 16*/
 ];
 
 setMap(levels[level])
@@ -606,7 +622,7 @@ function checkColision(changeX, changeY){
     //if lbox is in door
       for (let j = 0; j < lboxes.length; j++) {
         if((doors[i].x == lboxes[j].x) && (doors[i].y == lboxes[j].y)){
-          addText("daf",{x: 0, y: 0, color: color`6`})
+          //addText("daf",{x: 0, y: 0, color: color`6`})
           //check if lbox will be in box
           for (let k = 0; k < boxes.length; k++) {
             if((lboxes[j].x-changeX == boxes[k].x) && (lboxes[j].y-changeY == boxes[k].y)){
