@@ -361,7 +361,7 @@ int main() {
         }
 
         Button button_pressed = get_button_press();
-        if (get_button_press() != Button_None) {
+        if (button_pressed != Button_None) {
             if (welcome_state == DELETE_CONFIRM) {
                 if (button_pressed == Button_S) {
                     welcome_state = RUN_GAME;
