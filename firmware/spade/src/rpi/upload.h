@@ -135,17 +135,17 @@ static int update_save_version() {
 
 // returns len of games. games should be pointer to array of games (Game**) w/ size METADATA_MAX_ENTRIES
 static int get_games(Game** games) {
-    int games_i = -1;
+    int games_i = 0;
 
     for (int i = 0; i < METADATA_MAX_ENTRIES; i++) {
 
         volatile int is_ones = memory_is_ones(METADATA_CONTENTS(i), METADATA_ENTRY_SIZE);
         if (is_ones) continue;
 
-        (*games)[games_i] = *METADATA_CONTENTS(i);
+        (*games)[games_i++] = *METADATA_CONTENTS(i);
     }
 
-    return games_i + 1;
+    return games_i;
 }
 
 static int get_available_flash_slots(int exclude) {
