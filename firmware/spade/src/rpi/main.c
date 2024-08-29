@@ -41,6 +41,10 @@
 #include "shared/js_runtime/jerryxx.c"
 #include "shared/js_runtime/js.h"
 
+// screen is 20 characters wide
+#define SCREEN_WIDTH_CHARS 20
+#define SCREEN_HEIGHT_LINES 10
+
 // Externs for shared/ui/errorbuf.h
 char errorbuf[512] = "";
 Color errorbuf_color; // Initialized in main()
@@ -263,8 +267,9 @@ static int load_new_scripts(void) {
 
 typedef enum {
   NEW_SLOT,
-  RUN_GAME,
-  DELETE_CONFIRM
+  GAME_MENU,
+  DELETE_CONFIRM,
+  RUN_GAME
   } Welcome_Screen;
 
   int count_digits(uint32_t number) {
@@ -303,6 +308,161 @@ typedef enum {
       }
   }
 
+typedef struct {
+    Welcome_Screen screen;
+    int games_len;
+    int games_i;
+    Game* games;
+} Welcome_State;
+
+  const char delete_confirm_screen[] = "                    \n"
+                                      "                    \n"
+                                      "                    \n"
+                                      "                    \n"
+                                      "                    \n"
+                                      " Do you really      \n"
+                                      " want to delete     \n"
+                                      " this game?         \n"
+                                      "                    \n"
+                                      "                    \n"
+                                      " W: confirm         \n"
+                                      " S: exit            \n"
+                                      "                    \n"
+                                      "                    \n"
+                                      " sprig.hackclub.com \n";
+
+  const char upload_game_screen[] = "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    " Please upload      \n"
+                                    " a game.            \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    " sprig.hackclub.com \n";
+
+void render_game_menu_screen(char *buffer, Welcome_State welcome_state) {
+    // padding to be written after game num & size
+    char game_padding[] = "                    ";
+    char size_padding[] = "                    ";
+
+    game_padding[
+            SCREEN_WIDTH_CHARS
+            - count_digits(welcome_state.games_i + 1)
+            - count_digits(welcome_state.games_len)
+            - 8 // 7 chars used for " Game: " + account for slash
+    ] = '\0';
+
+    size_padding[
+            SCREEN_WIDTH_CHARS
+            - count_digits(GAME_SLOTS(welcome_state.games[welcome_state.games_i].size_b))
+            - count_digits(MAX_SLOTS)
+            - 8 // 7 chars used for " Size: " + account for slash
+    ] = '\0';
+
+    // 6lines, for game name
+    char game_split_lines[] = {
+            "                    \n"
+            "                    \n"
+            "                    \n"
+            "                    \n"
+            "                    \n"
+            "                    \n"
+    };
+
+    // buffer of 3 chars at beginning, subtract from total width
+    int chars_per_line = SCREEN_WIDTH_CHARS - 3;
+    unsigned int lines_used = strlen(welcome_state.games[welcome_state.games_i].name) / chars_per_line + 1;
+    for (int i = 0; i < lines_used; i++) {
+        // write to game_split_lines, segmented per line,
+        // +1 for the newline, +1 to get next open char
+        char *write_dest = &game_split_lines[i * (SCREEN_WIDTH_CHARS + 1) + 1];
+
+        // read from the game name, segmented by chars_per_line
+        char *game_line = &welcome_state.games[welcome_state.games_i].name[i * chars_per_line];
+
+        // write length is chars_per_line except if the last segment of game name is less than that
+        unsigned int write_length = chars_per_line;
+        if (strlen(welcome_state.games[welcome_state.games_i].name) - i * write_length < write_length) {
+            write_length = strlen(welcome_state.games[welcome_state.games_i].name) - i * chars_per_line;
+        }
+
+        memcpy(write_dest, game_line, write_length);
+    }
+
+
+    sprintf(buffer,
+            "                    \n"
+            "                    \n"
+            "%s"
+            "                    \n"
+            " Game: %d/%d%s\n"
+            " Size: %lu/%d%s\n"
+            "                    \n"
+            " W: PLAY            \n"
+            " S: DELETE          \n"
+            " <-  A , D  ->      \n",
+            game_split_lines,
+            welcome_state.games_i + 1, welcome_state.games_len, game_padding,
+            GAME_SLOTS(welcome_state.games[welcome_state.games_i].size_b), MAX_SLOTS, size_padding);
+}
+
+void update_welcome_state(Welcome_State* welcome_state) {
+    welcome_state->games_len = get_games(&welcome_state->games);
+
+    if (welcome_state->games_i >= welcome_state->games_len && welcome_state->games_i != 0) {
+        welcome_state->games_i = welcome_state->games_len - 1;
+    }
+
+    if (welcome_state->screen == DELETE_CONFIRM) {
+        // no-op
+    } else if (welcome_state->games_len == 0) {
+        welcome_state->screen = NEW_SLOT;
+    } else {
+        welcome_state->screen = GAME_MENU;
+        set_game(welcome_state->games[welcome_state->games_i]);
+    }
+
+    Button button_pressed = get_button_press();
+
+    if (welcome_state->screen == GAME_MENU)
+        switch (button_pressed) {
+            case Button_A:
+                if (welcome_state->games_i > 0) welcome_state->games_i--;
+                break;
+            case Button_D:
+                if (welcome_state->games_i < welcome_state->games_len - 1) welcome_state->games_i++;
+                break;
+            case Button_S:
+                welcome_state->screen = DELETE_CONFIRM;
+                break;
+            case Button_W:
+                welcome_state->screen = RUN_GAME;
+                break;
+            default:
+                break;
+        }
+    else if (welcome_state->screen == DELETE_CONFIRM)
+        switch (button_pressed) {
+            case Button_S:
+                welcome_state->screen = GAME_MENU;
+                break;
+            case Button_W:
+                delete_game(welcome_state->games[welcome_state->games_i]);
+                welcome_state->screen = GAME_MENU;
+                update_welcome_state(welcome_state);
+                break;
+            default:
+                break;
+        }
+}
+
 int main() {
     timer_hw->dbgpause = 0;
 
@@ -338,159 +498,24 @@ int main() {
     sleep_ms(50);
     while (multicore_fifo_rvalid()) multicore_fifo_pop_blocking();
 
-    int games_i = 0;
-
-    int games_len = 0;
-    Game* games = malloc(METADATA_MAX_ENTRIES * sizeof(Game));
-
-    Welcome_Screen welcome_state = NEW_SLOT;
+    Welcome_State welcome_state = {
+            .screen = NEW_SLOT,
+            .games = malloc(METADATA_MAX_ENTRIES * sizeof(Game)), // leaks but it's fine since lifetime=program
+            .games_len = 0,
+            .games_i = 0
+    };
 
     for (;;) {
+        update_welcome_state(&welcome_state);
 
-        if (games_i >= games_len && games_i != 0) {
-            games_i = games_len - 1;
-        }
-
-        if (welcome_state == DELETE_CONFIRM) {
-            // no-op
-        } else if (games_len == 0) {
-            welcome_state = NEW_SLOT;
-        } else {
-            welcome_state = RUN_GAME;
-            set_game(games[games_i]);
-        }
-
-        Button button_pressed = get_button_press();
-        if (button_pressed != Button_None) {
-            if (welcome_state == DELETE_CONFIRM) {
-                if (button_pressed == Button_S) {
-                    welcome_state = RUN_GAME;
-                } else if (button_pressed == Button_W) {
-                    delete_game(games[games_i]);
-                    welcome_state = RUN_GAME;
-                    continue;
-                }
-            } else if (button_pressed == Button_A) {
-                if (games_i > 0) games_i--;
-            } else if (button_pressed == Button_D) {
-                if (games_i < games_len - 1) games_i++;
-            } else if (button_pressed == Button_S && welcome_state == RUN_GAME) {
-                welcome_state = DELETE_CONFIRM;
-            } else if (welcome_state == RUN_GAME && button_pressed == Button_W) {
-                break;
-            }
-        }
-
-        games_len = get_games(&games);
-
-        switch (welcome_state) {
-            case NEW_SLOT:
-                strcpy(errorbuf, "                    \n"
-                                  "                    \n"
-                                  "                    \n"
-                                  "                    \n"
-                                  "                    \n"
-                                  "                    \n"
-                                  " Please upload      \n"
-                                  " a game.            \n"
-                                  "                    \n"
-                                  "                    \n"
-                                  "                    \n"
-                                  "                    \n"
-                                  "                    \n"
-                                  "                    \n"
-                                  " sprig.hackclub.com \n"
-                        );
-                break;
-            case RUN_GAME: {
-                // screen is 20 characters wide
-                int screen_width_chars = 20;
-
-                // padding to be written after game num & size
-                char game_padding[] = "                    ";
-                char size_padding[] = "                    ";
-
-                game_padding[
-                        screen_width_chars
-                        - count_digits(games_i+1)
-                        - count_digits(games_len)
-                        - 8 // 7 chars used for " Game: " + account for slash
-                        ] = '\0';
-
-                size_padding[
-                        screen_width_chars
-                        - count_digits(GAME_SLOTS(games[games_i].size_b))
-                        - count_digits(MAX_SLOTS)
-                        - 8 // 7 chars used for " Size: " + account for slash
-                        ] = '\0';
-
-                // 6lines, for game name
-                char game_split_lines[] = {
-                        "                    \n"
-                        "                    \n"
-                        "                    \n"
-                        "                    \n"
-                        "                    \n"
-                        "                    \n"
-                };
-
-                // buffer of 3 chars at beginning, subtract from total width
-                int chars_per_line = screen_width_chars - 3;
-                unsigned int lines_used = strlen(games[games_i].name) / chars_per_line + 1;
-                for (int i = 0; i < lines_used; i++) {
-                    // write to game_split_lines, segmented per line,
-                    // +1 for the newline, +1 to get next open char
-                    char* write_dest = &game_split_lines[i*(screen_width_chars+1) + 1];
-
-                    // read from the game name, segmented by chars_per_line
-                    char* game_line = &games[games_i].name[i*chars_per_line];
-
-                    // write length is chars_per_line except if the last segment of game name is less than that
-                    unsigned int write_length = chars_per_line;
-                    if (strlen(games[games_i].name) - i*write_length < write_length) {
-                        write_length = strlen(games[games_i].name) - i*chars_per_line;
-                    }
-
-                    memcpy(write_dest, game_line, write_length);
-                }
-
-
-                sprintf(errorbuf,
-                        "                    \n"
-                        "                    \n"
-                        "%s"
-                        "                    \n"
-                        " Game: %d/%d%s\n"
-                        " Size: %lu/%d%s\n"
-                        "                    \n"
-                        " W: PLAY            \n"
-                        " S: DELETE          \n"
-                        " <-  A , D  ->      \n",
-                        game_split_lines,
-                        games_i + 1, games_len, game_padding,
-                        GAME_SLOTS(games[games_i].size_b), MAX_SLOTS, size_padding);
-                break;
-            }
-            case DELETE_CONFIRM: {
-                strcpy(errorbuf, "                    \n"
-                                 "                    \n"
-                                 "                    \n"
-                                 "                    \n"
-                                 "                    \n"
-                                 " Do you really      \n"
-                                 " want to delete     \n"
-                                 " this game?         \n"
-                                 "                    \n"
-                                 "                    \n"
-                                 " W: confirm         \n"
-                                 " S: exit            \n"
-                                 "                    \n"
-                                 "                    \n"
-                                 " sprig.hackclub.com \n"
-                );
-                break;
-            }
-        }
+        if (welcome_state.screen == RUN_GAME)
+            break;
+        else if (welcome_state.screen == NEW_SLOT)
+            strcpy(errorbuf, upload_game_screen);
+        else if (welcome_state.screen == GAME_MENU)
+            render_game_menu_screen(errorbuf, welcome_state);
+        else if (welcome_state.screen == DELETE_CONFIRM)
+            strcpy(errorbuf, delete_confirm_screen);
 
         render_errorbuf();
         st7735_fill_start();
@@ -511,7 +536,7 @@ int main() {
   while (multicore_fifo_rvalid()) multicore_fifo_pop_blocking();
 
   // Run the code!
-  js_run(save_read(), !games[games_i].is_legacy);
+  js_run(save_read(), !welcome_state.games[welcome_state.games_i].is_legacy);
 
   #ifdef SPADE_AUDIO
     // Initialize audio
