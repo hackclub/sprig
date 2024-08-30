@@ -8,9 +8,10 @@ https://sprig.hackclub.com/gallery/getting_started
 @addedOn: 2024-08-28
 */
 
-const player = "p"
-const flag = "f"
-const wall = "w"
+const player = "p";
+const flag = "f";
+const wall = "w";
+const coin = "c";
 
 let playersprite = bitmap`
 ................
@@ -28,7 +29,7 @@ let playersprite = bitmap`
 ......000.......
 ......0.0.......
 .....00.00......
-................`
+................`;
 
 let flagsprite = bitmap`
 ...0000.........
@@ -46,7 +47,7 @@ let flagsprite = bitmap`
 ..044440........
 0000000000......
 0444444440......
-0000000000......`
+0000000000......`;
 
 let wallsprite = bitmap`
 1111111111111111
@@ -64,18 +65,38 @@ let wallsprite = bitmap`
 1111111111111111
 1111111111111111
 1111111111111111
-1111111111111111`
+1111111111111111`;
+
+let coinsprite = bitmap`
+................
+....66666666....
+...6666666666...
+..666666666666..
+.66666666666666.
+.66666666666666.
+.66666666666666.
+.66666666666666.
+.66666666666666.
+.66666666666666.
+.66666666666666.
+.66666666666666.
+..666666666666..
+...6666666666...
+....66666666....
+................`;
 
 setLegend(
   [player, playersprite],
   [flag, flagsprite],
-  [wall, wallsprite]
-)
+  [wall, wallsprite],
+  [coin, coinsprite],
+);
 
-setSolids([player, wall])
+setSolids([player, wall]);
 
-let level = 0
-// map levels feel free to add more whoever is playing this
+let level = 0;
+
+// Map levels with coins
 const levels = [
   map`
 wwwwwwwwww
@@ -83,88 +104,102 @@ wp.....f.w
 ww.wwww.ww
 w....w...w
 w..wwwww.w
-w.w.....ww
+w.....c.ww
 ww.wwwwww.
-w........w
+w...c....w
 wwwwwwwwww`,
   map`
 wwwwwwwwww
-w.......fw
+w.c....cfw
 w.wwwwww.w
 w.w....pw.
 w.w.w.w.w.
+w.w.wcw.w.
 w.w.w.w.w.
-w.w.w.w.w.
-w.......w.
+wc......w.
 wwwwwwwwww`,
   map`
 wwwwwwwwww
 w........f
 w.wwwwww.w
-w.w......w
+w.w.....cw
 w.w.wwww.w
 w.w....pww
-w.wwwwwwww
-w........w
+w.cwwwwwww
+w.....c..w
 wwwwwwwwww`,
   map`
 ..........
 wwwwwwwww.
-w.......w.
+wc....c.w.
 w.wwwww.w.
-w.w..pw.w.
+w.w..pwcw.
 w.w.www.w.
-w.w.....w.
+wcw..c..w.
 w.wwwwwww.
 wf........`
-]
+];
 
 function loadLevel(levelIndex) {
-  setMap(levels[levelIndex])
+  setMap(levels[levelIndex]);
 }
 
-loadLevel(level)
+loadLevel(level);
 
-//movement
+// Movement
 setPushables({
   [player]: []
-})
+});
 
 onInput("w", () => {
-  getFirst(player).y -= 1
-})
+  getFirst(player).y -= 1;
+});
 
 onInput("a", () => {
-  getFirst(player).x -= 1
-})
+  getFirst(player).x -= 1;
+});
 
 onInput("s", () => {
-  getFirst(player).y += 1
-})
+  getFirst(player).y += 1;
+});
 
 onInput("d", () => {
-  getFirst(player).x += 1
-})
+  getFirst(player).x += 1;
+});
 
 afterInput(() => {
-  const playerSprite = getFirst(player)
-  const flagSprite = getFirst(flag)
+  const playerSprite = getFirst(player);
+  const flagSprite = getFirst(flag);
+  const coins = getAll(coin);
 
-  if (playerSprite && flagSprite) {
-    // Check if player has collected the flag
-    if (playerSprite.x === flagSprite.x && playerSprite.y === flagSprite.y) {
-      console.log("You collected the flag! You win!")
+  // Collect coins
+  coins.forEach((coinSprite) => {
+    if (playerSprite.x === coinSprite.x && playerSprite.y === coinSprite.y) {
+      clearTile(coinSprite.x, coinSprite.y); // Clear the coin from the tile
+      addSprite(playerSprite.x, playerSprite.y, player); // Re-add the player sprite to the tile
+    }
+  });
+
+  // Check if player has collected all coins
+  const allCoinsCollected = coins.length === 0;
+
+  // Check if player has reached the flag
+  if (playerSprite && flagSprite && playerSprite.x === flagSprite.x && playerSprite.y === flagSprite.y) {
+    if (allCoinsCollected) {
+      console.log("You collected all coins and the flag! You win!");
 
       // Move to the next level
-      level += 1
+      level += 1;
       if (level >= levels.length) {
-        console.log("You have completed all levels!")
-        level = 0 // Reset to the first level to play again
+        console.log("You have completed all levels!");
+        level = 0; // Reset to the first level to play again
       }
-      loadLevel(level)
+      loadLevel(level);
+    } else {
+      console.log("You should collect all the coins before reaching the flag. Try again!");
     }
   } else {
-    console.log("Player or flag sprite not found!")
+    console.log("Player, flag, or coins not found!");
   }
-})
+});
 
