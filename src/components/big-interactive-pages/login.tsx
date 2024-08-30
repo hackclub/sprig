@@ -2,7 +2,6 @@ import { useSignalEffect } from '@preact/signals'
 import { IoPaperPlaneOutline } from 'react-icons/io5'
 import { SessionInfo } from '../../lib/game-saving/account'
 import { DevEmail, useAuthHelper } from '../../lib/game-saving/auth-helper'
-import { makeGame } from '../../lib/game-saving/account'
 import { defaultExampleCode } from "../../lib/examples";
 import Button from '../design-system/button'
 import Input from '../design-system/input'
@@ -18,18 +17,29 @@ interface LoginProps {
 
 export default function Login({ session, email, to }: LoginProps) {
 	const auth = useAuthHelper('EMAIL_ENTRY', email)
+
 	useSignalEffect(() => {
-		if (auth.stage.value === 'LOGGED_IN') {
-			console.log(auth.emailValid.value)
-			console.log(auth)
-			console.log("sdhflashdfjsadflksd this is a log")
-			const savedGame = localStorage.getItem("sprigMemory")
-			if (savedGame && session) {
-				makeGame(session.user.id, false, "look its a name", savedGame)
-				localStorage.setItem("sprigMemory", defaultExampleCode)
+		const handleLogin = async () => {
+			if (auth.stage.value === 'LOGGED_IN') {
+				const savedGame = localStorage.getItem("sprigMemory")
+				if (savedGame && savedGame !== defaultExampleCode) {
+					try {
+						const res = await fetch('/api/games/new', {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({
+								code: savedGame
+							})
+						})
+						localStorage.setItem("sprigMemory", defaultExampleCode)
+					} catch (error) {
+						console.error('Failed to save game:', error)
+					}
+				}
+				window.location.replace(to)
 			}
-			window.location.replace(to)
 		}
+		handleLogin()
 	})
 
 	return (
