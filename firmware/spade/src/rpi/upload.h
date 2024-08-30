@@ -423,8 +423,8 @@ static int upl_stdin_read(void) {
 
                       // not enough slots
                       if (get_available_flash_slots(exclude) < GAME_SLOTS(upl_state.len)) {
-                          // OO_FLASH/{slots needed}/{slots available}/
-                          printf("OO_FLASH/%lu/%d/", GAME_SLOTS(upl_state.len),
+                          // /OO_FLASH/{slots needed}/{slots available}/
+                          printf("/OO_FLASH/%lu/%d/", GAME_SLOTS(upl_state.len),
                                  get_available_flash_slots(exclude));
                           multicore_launch_core1(core1_entry);
                           return 0; // ERROR!
