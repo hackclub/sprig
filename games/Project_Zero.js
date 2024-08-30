@@ -1,8 +1,8 @@
 /*
 @title: Project Zero
-@author: 
-@tags: []
-@addedOn: 2024-00-00
+@author: Creeperlulu
+@tags: [arcade, puzzle, advanced]
+@addedOn: 2024-08-30
 */
 
 // ----------INIT----------
@@ -1865,11 +1865,11 @@ afterInput(() => {
       clearText();
     } else {
       clearText();
-      setMap(ui[0]);
-      scene(empty, currentPlayer, currentZero, emptymusic);
-      addText("It's not over yet.", { x: 1, y: 7, color: color`0` })
-      addText("This game is still", { x: 1, y: 8, color: color`0` })
-      addText("in development.", { x: 3, y: 9, color: color`0` })
+        setMap(ui[0]);
+        scene(empty, currentPlayer, currentZero, emptymusic);
+        addText("It's not over yet.", { x: 1, y: 7, color: color`0` })
+        addText("This game is still", { x: 1, y: 8, color: color`0` })
+        addText("in development.", { x: 3, y: 9, color: color`0` })
     }
   }
 
@@ -1890,7 +1890,7 @@ afterInput(() => {
 
         clearText();
       } else {
-        clearText();
+      clearText();
         setMap(ui[0]);
         scene(empty, currentPlayer, currentZero, emptymusic);
         addText("It's not over yet.", { x: 1, y: 7, color: color`0` })
