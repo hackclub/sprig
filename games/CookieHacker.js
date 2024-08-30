@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: 
-@author: 
-@tags: []
-@addedOn: 2024-00-00
+@title: Cookie Hacker
+@author: felixexists 
+@tags: [money, capitalism, tycoon]
+@addedOn: 2024-08-30
 */
 const melody = tune`
 188.67924528301887,
@@ -49,6 +46,8 @@ let stall = 't'
 let social_media = 'x'
 let factory = 'f'
 let victory = 'v'
+let bg = 'b'
+let atom = 'a'
 let passives = []
 
 setLegend(
@@ -139,17 +138,17 @@ setLegend(
 .00000000000000.`], 
   [social_media, bitmap`
 0000000000000000
-0.4.4......3.3.0
-0..............0
-0.4.4......333.0
-0.444......3.3.0
-0.....00000....0
-0...00077770...0
-0..077777770...0
-0.07777777770..0
-0.077777777770.0
-0..00000000000.0
-0..............0
+0242422222232320
+0222222222222220
+0242422222233320
+0244422222232320
+0222220000022220
+0222000777702220
+0220777777702220
+0207777777770220
+0207777777777020
+0220000000000020
+0222222222222220
 0000000000000000
 ...0.......0....
 ...0.......0....
@@ -187,11 +186,45 @@ setLegend(
 4444444444444444
 4444444444444444
 4444444444444444
-4444444444444444`]
+4444444444444444`],
+  [bg, bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777`],
+  [atom, bitmap`
+....66666666....
+...6666666666...
+..660666666066..
+.66000666600066.
+6600006006000066
+6000060000600006
+6000060000600006
+6666666006666666
+6666666666666666
+6666666666666666
+6666666006666666
+6666660000666666
+.66660000006666.
+..660000000066..
+...6600000066...
+....66666666....`]
 )
 
 setSolids([])
-let money = 0
+let money = 10000
 let cookies = 0
 let level = 0
 let is_in_main_game = 0
@@ -215,6 +248,8 @@ addText("Press S to start", {
 onInput('s', () => {
   if (is_in_main_game == 0) {
   setMap(levels[0])
+  setBackground(bg)
+
   clearText()
   applyPassives()
   is_in_main_game = 1}
@@ -303,11 +338,27 @@ function addPurchasables() {
       x: 15,
       y: 10, }
     )
+    
+    if (money >= 10000) {
+      addSprite(1,3, atom)
+      addText("J", {
+       x: 6,
+      y: 11,
+      })
+    }
+    else {
+      clearTile(1,3)
+    }
+    }
+    else {
+      clearTile(3,3)
+      clearTile(1,3)
     }
   }
   else {
     clearTile(3,1)
     clearTile(3,3)
+    clearTile(1,3)
   }  
 }
 
@@ -322,6 +373,13 @@ onInput('k', () => {
   if (money >= 500) {
   money -= 500
   passives.push(25)
+  set_displays(money, cookies)
+  }
+})
+onInput('j', () => {
+  if (money >= 10000) {
+  money -= 10000
+  passives.push(500)
   set_displays(money, cookies)
   }
 })
