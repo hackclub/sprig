@@ -47,6 +47,10 @@ let cookie_big = 'c'
 let cookie_small = 's'
 let stall = 't'
 let social_media = 'x'
+let factory = 'f'
+let victory = 'v'
+let passives = []
+
 setLegend(
   [ui, bitmap`
 ................
@@ -150,6 +154,40 @@ setLegend(
 ...0.......0....
 ...0.......0....
 ...0.......0....`],
+  [factory, bitmap`
+...2.......2.22.
+.2222.....22.2..
+2222......2222..
+..11.......11...
+..11.......11...
+..11.......11...
+..11.......11...
+.LLLLLLLLLLLLLL.
+.L77L77LL77L77L.
+.L77L77LL77L77L.
+.LLLLLLLLLLLLLL.
+.LLLLLLLLLLLLLL.
+.LLLLLLLLLLLLLL.
+.LLLLLLLLLLLLLL.
+.LLLLLLLLLLLLLL.
+.LLLLLLLLLLLLLL.`],
+  [victory, bitmap`
+4L7L4LLLLL4L77L4
+4L7L4L777L4L77L4
+4LLL4L777L4L77L4
+44L44L777L4L77L4
+44L44LLLLL4LLLL4
+4444444444444444
+4L4L4L4LLL4LLL4L
+4L4L4L44L44L4L4L
+4L4L4L44L44L4L4L
+4L4L4L44L44L4L44
+4LLLLL4LLL4L4L4L
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444`]
 )
 
 setSolids([])
@@ -164,7 +202,8 @@ u...
 t...
 ....
 c...`, map`
-l`
+l`, map`
+v`
 ]
 setMap(levels[1])
 addText("Press S to start", {
@@ -177,6 +216,7 @@ onInput('s', () => {
   if (is_in_main_game == 0) {
   setMap(levels[0])
   clearText()
+  applyPassives()
   is_in_main_game = 1}
   else {
     if (is_in_waiting_state == 0){
@@ -221,6 +261,14 @@ function set_displays(money, cookies) {
   x: 3,
   y: 9,
   color: color`D`})
+  addText((sumPassives().toString()).concat("/sec"), {
+    x:6,
+    y:6,
+    color: color`5`
+  }
+         )
+  
+  addPurchasables()
 }
 
 function sell_cookies() {
@@ -231,18 +279,70 @@ function sell_cookies() {
 }
 
 afterInput(() => {
-  if (money > 100) {
+  if (is_in_main_game == 1) {
+    
+  addPurchasables()
+  if (money > 1000000000) {
+    setMap(levels[2])
+    clearText()
+    
+  }}
+})
+function addPurchasables() {
+  if (money >= 100) {
     addSprite(3, 1, social_media)
     addText(
       "I ^", {
       x: 15,
       y: 9, }
     )
+    if (money >= 500) {
+      addSprite(3, 3, factory)
+      addText(
+      "K ", {
+      x: 15,
+      y: 10, }
+    )
+    }
   }
-    
-})
+  else {
+    clearTile(3,1)
+    clearTile(3,3)
+  }  
+}
 
-onInput('i' () => {
+onInput('i', () => {
+  if (money >= 100) {
   money -= 100
-  
+  passives.push(3)
+  set_displays(money, cookies)
+  }
 })
+onInput('k', () => {
+  if (money >= 500) {
+  money -= 500
+  passives.push(25)
+  set_displays(money, cookies)
+  }
+})
+function sumPassives() {
+  let n = 0
+  for (let p of passives) {
+      n += p
+  }
+  return n
+  
+}
+
+function applyPassives()
+{
+    cookies += sumPassives()
+    set_displays(money, cookies)
+
+    setTimeout(function()
+    {
+        applyPassives();
+
+    }, 1000);
+}
+
