@@ -62,7 +62,7 @@ export default function Login({ session, email, to }: LoginProps) {
 						<Input onChange={() => undefined} value={auth.email.value} type='email' id='email' autoComplete='email' placeholder='fiona@hackclub.com' bind={auth.email} />
 						{auth.state.value === 'EMAIL_INCORRECT' && <p class={styles.error}>Failed sending login code. Did you enter the right email?</p>}
 
-						<Button class={styles.submit} icon={IoPaperPlaneOutline} iconSide='right' accent type='submit' disabled={/* !auth.emailValid.value */ false} loading={auth.isLoading.value}>
+						<Button class={styles.submit} icon={IoPaperPlaneOutline} iconSide='right' accent type='submit' disabled={!auth.emailValid.value} loading={auth.isLoading.value}>
 							Send code
 						</Button>
 					</>) : (<>
