@@ -240,15 +240,16 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			</Button>
 		);
 	} else if (props.persistenceState.value.kind === PersistenceStateKind.PERSISTED || (isNewSaveStrat.value && props.persistenceState.value.kind === PersistenceStateKind.COLLAB)) {
+		const userEmail = props.persistenceState.value.session?.user.email
 		saveState = {
 			SAVED: `Saved to ${
 				!isNewSaveStrat.value ?
-					props.persistenceState.value.session?.user.email ?? "???"
+					userEmail ?? "???"
 				:
 					props.roomState?.value.participants.filter((participant) => {
 						if(participant.isHost) return true
 						return false
-					})[0]?.userEmail === props.persistenceState.value.session?.user.email ? props.persistenceState.value.session?.user.email : "the host"
+					})[0]?.userEmail === userEmail ? userEmail : "the host"
 			}`,
 			SAVING: "Saving...",
 			ERROR: "Error saving to cloud",
