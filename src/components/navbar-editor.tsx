@@ -254,7 +254,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			SAVING: "Saving...",
 			ERROR: "Error saving to cloud",
 		}[props.persistenceState.value.cloudSaveState];
-		console.log(saveState)
 		if (props.persistenceState.value.cloudSaveState === "ERROR")
 			errorBlink = true;
 
