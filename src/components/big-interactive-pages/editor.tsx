@@ -27,8 +27,9 @@ import { nanoid } from "nanoid";
 import TutorialWarningModal from "../popups-etc/tutorial-warning";
 import { editSessionLength, switchTheme, ThemeType, continueSaving, LAST_SAVED_SESSION_ID, showSaveConflictModal } from '../../lib/state'
 import SessionConflictWarningModal from '../popups-etc/session-conflict-warning-modal'
-import {versionState} from "../../lib/upload";
+import {eotMessage, versionState} from "../../lib/upload";
 import VersionWarningModal from "../popups-etc/version-warning";
+import OutOfSpaceModal from "../popups-etc/out-of-space";
 import RoomPasswordPopup from "../popups-etc/room-password";
 import KeyBindingsModal from '../popups-etc/KeyBindingsModal'
 
@@ -736,6 +737,10 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 				{versionState.value != "OK" && (
 					<VersionWarningModal versionState={versionState} />
 				)}
+
+                {eotMessage.value && eotMessage.value.status != "ALL_GOOD" && (
+                    <OutOfSpaceModal eotMessage={eotMessage} />
+                )}
 
 				{showingTutorialWarning.value && (
 					<TutorialWarningModal

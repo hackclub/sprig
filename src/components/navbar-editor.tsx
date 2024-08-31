@@ -28,6 +28,7 @@ import {
 	IoSaveOutline,
 	IoShareOutline,
 	IoShuffle,
+    IoWarning,
 } from "react-icons/io5";
 import { FaBrush } from "react-icons/fa";
 import { usePopupCloseClick } from "../lib/utils/popup-close-click";
@@ -380,22 +381,28 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						</Button>
 						{showDropdown.value && (
 							<div class={styles.playPopup}>
-								<Button
-									accent
-									icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
-									spinnyIcon={uploadState.value === "LOADING"}
-									loading={uploadState.value === "LOADING"}
-                  onClick={() => onRun()}
-								>
+								<Button accent icon={IoPlay} onClick={() => onRun()}>
 									Run
 								</Button>
 								<div class={styles.divider}></div>
 								<Button
 									accent
-									icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
+									icon={
+                                    {
+                                        IDLE: IoPlay,
+                                        LOADING: VscLoading,
+                                        ERROR: IoWarning,
+                                    }[uploadState.value]
+                                }
 									spinnyIcon={uploadState.value === "LOADING"}
 									loading={uploadState.value === "LOADING"}
-									onClick={() => upload(codeMirror.value?.state.doc.toString() ?? "")}
+									onClick={() => upload(codeMirror.value?.state.doc.toString() ?? "",
+                                        props.persistenceState.value.kind == "PERSISTED"
+                                        && props.persistenceState.value.game != "LOADING"
+                                            ? props.persistenceState.value.game.name
+                                            : props.persistenceState.value.kind == "SHARED" ? props.persistenceState.value.name
+                                                : "Untitled Game"
+                                    )}
 								>
 									Run on Device
 								</Button>
@@ -621,7 +628,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							<>
 								<li>
 								<a
-								href="javascript:void"
+								href="javascript:void(0)"
 								role="button"
 
 								onClick={() => (shareRoomPopup.value = true)}
@@ -676,7 +683,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					<ul>
 						<li>
 							<a
-								href="javascript:void"
+								href="javascript:void(0)"
 								role="button"
 								onClick={() => {
 									const a = document.createElement("a");
@@ -710,7 +717,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						{canDelete(props.persistenceState) ? (
 							<li>
 								<a
-									href="javascript:void"
+									href="javascript:void(0)"
 									role="button"
 									onClick={async () => {
 										if (deleteState.value === "idle") {
