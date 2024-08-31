@@ -1,9 +1,9 @@
 import { playTune } from './tune'
 import { normalizeGameError } from './error'
 import { bitmaps, NormalizedError } from '../state'
-import type { PlayTuneRes } from 'sprig'
-import { textToTune } from 'sprig/base'
-import { webEngine } from 'sprig/web'
+import type { PlayTuneRes } from '../../../engine/src/api'
+import { textToTune } from '../../../engine/src/base'
+import { webEngine } from '../../../engine/src/web'
 import * as Babel from "@babel/standalone"
 import TransformDetectInfiniteLoop, { BuildDuplicateFunctionDetector } from '../custom-babel-transforms'
 import {logInfo} from "../../components/popups-etc/help";
@@ -136,11 +136,11 @@ export function runGameHeadless(code: string): void {
 		setInterval: () => {},
 		setLegend: (..._bitmaps: [string, string][]) => {
 			// this is bad; but for some reason i could not do _bitmaps === [undefined]
-			if(JSON.stringify(_bitmaps) === "[null]") { 
+			if(JSON.stringify(_bitmaps) === "[null]") {
 				// @ts-ignore
 				bitmaps.value = [[]];
 				throw new Error('The sprites passed into setLegend each need to be in square brackets, like setLegend([player, bitmap`...`]).');
-			} else 
+			} else
 				bitmaps.value = _bitmaps
 			return game.api.setLegend(..._bitmaps)
 		},

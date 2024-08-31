@@ -1,4 +1,4 @@
-import { baseEngine, palette } from 'sprig/base'
+import { baseEngine, palette } from '../../engine/src/base'
 import { RawThumbnail, Thumbnail } from '../lib/thumbnail'
 import fs from 'fs'
 import path from 'path'
@@ -21,7 +21,7 @@ const evalGameScript = (script: string) => {
 		setLegend: (...bitmaps: [string, string][]) => { legend = bitmaps },
 		setBackground: (bg: string) => { background = bg },
 		setMap: (string: string) => { map = string },
-		onInput: () => {}, 
+		onInput: () => {},
 		afterInput: () => {},
 		playTune: () => {},
 		setTimeout: () => {},
@@ -74,8 +74,8 @@ const blitSprite = (data: Uint8Array, width: number, bitmap: number[], tx: numbe
 
 const drawGameImage = (src: string): RawThumbnail => {
 	const { legend, map, background } = evalGameScript(src)
-	if (!map) { 
-		throw new Error('No map found') 
+	if (!map) {
+		throw new Error('No map found')
 	}
 
 	const mapWidth = map.trim().split('\n')[0]!.trim().length
@@ -105,10 +105,10 @@ const drawGameImage = (src: string): RawThumbnail => {
 export const generateImageJson = async (name: string) => {
 	let gameContentString = loadGameContentFromDisk(name)
 	let gameImageBase64 = loadImageBase64FromDisk(name)
-	
+
 	let thumbnail: Thumbnail
 	try {
-		if (gameImageBase64 != null) 
+		if (gameImageBase64 != null)
 		{
 			// Try fetching a custom image (PNG only)
 			thumbnail = {
@@ -119,10 +119,10 @@ export const generateImageJson = async (name: string) => {
 			if (gameContentString == null) {
 				throw new Error('No image found, no game content found - weird')
 			} else {
-				// Fetch the script and try to run the game			
+				// Fetch the script and try to run the game
 				thumbnail = drawGameImage(gameContentString as string)
 			}
-		}	
+		}
 	} catch (error) {
 		// If everything breaks, use a default image
 		// console.error(error)
@@ -152,7 +152,7 @@ function loadImageBase64FromDisk(name: string) {
 	}
 }
 
-function loadGameContentFromDisk(name: string) {	
+function loadGameContentFromDisk(name: string) {
 	let gameContentPath = path.resolve(__dirname, `../../games/${name}.js`)
 	if (!fs.existsSync(gameContentPath)) return null
 	return fs.readFileSync(gameContentPath).toString()
