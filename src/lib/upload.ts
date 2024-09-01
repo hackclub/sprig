@@ -7,9 +7,20 @@ export type UploadState = 'IDLE' | 'LOADING' | 'ERROR'
 // OLD = you can upload games, but your firmware is out-of-date
 export type VersionState = 'OK' | 'LEGACY' | 'OLD'
 
+export type EOTMessage = {
+	status: 'ALL_GOOD'
+} | {
+	status: 'OO_METADATA'
+} | {
+	status: 'OO_FLASH',
+		slots_needed: number,
+	slots_available: number
+}
+
 export const uploadState = signal<UploadState>('IDLE')
 export const versionState = signal<VersionState>('OK')
 export const showUploadWarningModal = signal(false);
+export const eotMessage = signal<EOTMessage | null>(null)
 
 const getPort = async (): Promise<SerialPort> => {
 	if (!navigator.serial) {
@@ -32,7 +43,7 @@ const getPort = async (): Promise<SerialPort> => {
 export const logSerialOutput = (value: string) => (value.trim().length > 0) && console.log(`%c< ${value.trim()}`, 'color: #999')
 
 
-export const uploadToSerial = async (message: string,
+export const uploadToSerial = async (name: string, message: string,
 																		 writer: WritableStreamDefaultWriter<ArrayBuffer>,
 																		 reader: ReadableStreamDefaultReader<string>) => {
 
@@ -41,7 +52,7 @@ export const uploadToSerial = async (message: string,
 			try {
 				// 128-char buffer
 				let serialBuffer = " ".repeat(128)
-				
+
 				while (true) {
 					const { value, done } = await reader.read()
 					if (done) break
@@ -50,7 +61,31 @@ export const uploadToSerial = async (message: string,
 					serialBuffer  = serialBuffer.concat(value)
 					serialBuffer = serialBuffer.slice(serialBuffer.length - 128, serialBuffer.length)
 
-					if (serialBuffer.indexOf('ALL_GOOD') >= 0) resolve()
+                    if (serialBuffer.indexOf('ALL_GOOD') >= 0) {
+                        eotMessage.value = {status: "ALL_GOOD"}
+                        resolve()
+                    } // TODO: use a buffer to avoid errors
+                    else if (serialBuffer.indexOf('OO_FLASH') >= 0) {
+                        // /OO_FLASH/{slots needed}/{slots available}/
+                        let value_split = serialBuffer?.split("/")
+                        value_split = value_split.splice(value_split.indexOf("OO_FLASH")+1)
+                        const slots_needed = parseInt(value_split[0]!)
+                        const slots_available = parseInt(value_split[1]!)
+
+                        eotMessage.value = {
+                            status: "OO_FLASH",
+                            slots_needed,
+                            slots_available
+                        }
+                        uploadState.value = "ERROR"
+
+                        resolve()
+                    }
+                    else if (serialBuffer.indexOf('OO_METADATA') >= 0) {
+                        eotMessage.value = { status: "OO_METADATA" }
+                        uploadState.value = "ERROR"
+                        resolve()
+                    }
 				}
 			} catch (error) {
 				console.error(error)
@@ -67,6 +102,14 @@ export const uploadToSerial = async (message: string,
 
 	console.log('[UPLOAD > SERIAL] Checkpoint 2')
 	await writer.ready
+
+	console.log('[UPLOAD > SERIAL] Checkpoint 2 - writing name')
+	// send name + padding to total 128b
+	// TODO: game titles shouldn't be able to have special characters
+	const nameString = new Uint8Array(100)
+	new TextEncoder().encodeInto(name + "\0".repeat(100 - name.length), nameString)
+	await writer.write(nameString)
+
 	console.log('[UPLOAD > SERIAL] Checkpoint 2 - writing length')
 	await writer.write(new Uint32Array([ buf.length ]).buffer)
 
@@ -133,7 +176,7 @@ export const getIsLegacySerial = async (
 
 	while (true) {
 		const { value, done } = await reader.read()
-		
+
 		if (done) return null
 		logSerialOutput(value)
 
@@ -145,7 +188,7 @@ export const getIsLegacySerial = async (
 	}
 }
 
-export const upload = async (code: string): Promise<void> => {
+export const upload = async (code: string, name: string): Promise<void> => {
 	if (uploadState.value === 'LOADING') return
 	uploadState.value = 'LOADING'
 
@@ -174,7 +217,7 @@ export const upload = async (code: string): Promise<void> => {
 			versionState.value = "LEGACY"
 			return
 		} else {
-			console.log("[UPLOAD] Not legacy!")
+			console.log("[UPLOAD] Spade version is not legacy.")
 		}
 
 		const versionNum = await getVersionNumber(writer, reader)
@@ -186,7 +229,7 @@ export const upload = async (code: string): Promise<void> => {
 			console.log("[UPLOAD] Version up to date!")
 		}
 
-		await uploadToSerial(code, writer, reader)
+		await uploadToSerial(name, code, writer, reader)
 
 		console.log('[UPLOAD] Waiting on stream close and writer lock release...')
 		//reader.releaseLock()
