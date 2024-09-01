@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: Hue Domination
+@title: Hue Havoc
 @author: Gus Ruben
-@tags: [2-Player, Multiplayer, PVP]
-@addedOn: 2024-00-00
+@tags: ["2-player", "multiplayer", "pvp"]
+@addedOn: 2024-09-01
 */
 
 // settings
