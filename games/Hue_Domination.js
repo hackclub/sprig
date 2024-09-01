@@ -1744,12 +1744,53 @@ function renderCanvas() {
 		}
 	}
 
-	setLegend(...legend);
+	setLegend(...legend,["7",
+			bitmap`
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333`,
+		], ["8",
+			bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777`]
+		);
 }
 
 function renderPlayer(player) {
-	const offsetX = (player.x % resolution) * (16 / resolution);
-	const offsetY = (player.y % resolution) * (16 / resolution);
+	// const offsetX = (player.x % resolution) * (16/resolution);
+	// const offsetY = (player.y % resolution) * (16/resolution);
+	const offsetX = 0;
+	const offsetY = 0;
+	// console.log(player.y, offsetY)
+
+	// player.direction == "up" && console.log(player.y, (player.y % (16/resolution)))
 
 	const bitmaps = offsetBitmap(player[player.direction], offsetX, offsetY);
 	setLegend(...player.legendChars.map((char, i) => [char, bitmaps[i]]));
@@ -1786,10 +1827,11 @@ function offsetBitmap(bitmap, x, y) {
 
 // player position & sprite data
 const red = {
-	x: Math.floor(0.5 * resolution),
-	y: Math.ceil(6.5 * resolution),
+	x: 4,
+	y: 24,
 	direction: "up",
-	recentInput: 0, // positive or negative depending on input direction
+	recentInputX: 0, // positive or negative depending on input direction
+	recentInputY: 0,
 	legendChars: [
 		getLegendChar(),
 		getLegendChar(),
@@ -1813,19 +1855,88 @@ const red = {
 ......20002.....
 ......22222.....
 ................`,
+	down: bitmap`
+................
+.....22222......
+.....20002......
+.....20C02......
+.....20C02......
+.....20002......
+.....22022222222
+......2000000002
+.222222222222202
+.200000000000002
+.202292999999002
+.202333333333002
+.203333333333022
+.20000000000002.
+.22222222222222.
+................`,
+    right: bitmap`
+......2222222...
+......200000222.
+......202000002.
+......202022302.
+......202023302.
+......202093302.
+.22222202023302.
+.20000202093302.
+.20CC0002093302.
+.20000222093302.
+.222222.2093302.
+........2093302.
+........2093302.
+........2000002.
+........2222222.
+................`,
+    left: bitmap`
+................
+.2222222........
+.2000002........
+.2022302........
+.2023302........
+.2093302.222222.
+.20233022200002.
+.2093302000CC02.
+.20933020200002.
+.20933020222222.
+.209330202......
+.209330202......
+.209330202......
+.200000202......
+.222000002......
+...2222222......`,
 };
 
 const blue = {
-	x: Math.ceil(8.5 * resolution),
-	y: Math.floor(0.5 * resolution),
+	x: 32,
+	y: 4,
 	direction: "down",
-	recentInput: 0,
+	recentInputX: 0,
+	recentInputY: 0,
 	legendChars: [
 		getLegendChar(),
 		getLegendChar(),
 		getLegendChar(),
 		getLegendChar(),
 	],
+  	up: bitmap`
+................
+.22222222222222.
+.20000000000002.
+220227277777702.
+200277777777702.
+200HHHHHHHHHH02.
+200000000000002.
+202222222222222.
+2000000002......
+22222222022.....
+......20002.....
+......20C02.....
+......20C02.....
+......20002.....
+......22222.....
+................`,
 	down: bitmap`
 ................
 .....22222......
@@ -1838,14 +1949,46 @@ const blue = {
 .222222222222202
 .200000000000002
 .202272777777002
-.20277777777H002
+.202777777777002
 .20HHHHHHHHHH022
 .20000000000002.
 .22222222222222.
 ................`,
+    right: bitmap`
+......2222222...
+......200000222.
+......202000002.
+......202022H02.
+......202027H02.
+......202077H02.
+.22222202027H02.
+.20000202077H02.
+.20CC0002077H02.
+.20000222077H02.
+.222222.2077H02.
+........2077H02.
+........2077H02.
+........2000002.
+........2222222.
+................`,
+    left: bitmap`
+................
+.2222222........
+.2000002........
+.2022H02........
+.2027H02........
+.2077H02.222222.
+.2027H022200002.
+.2077H02000CC02.
+.2077H020200002.
+.2077H020222222.
+.2077H0202......
+.2077H0202......
+.2077H0202......
+.200000202......
+.222000002......
+...2222222......`,
 };
-
-startGame();
 
 // arrays for red and blue sprites, these get set once the game starts
 const redSprites = [];
@@ -1976,6 +2119,66 @@ async function startGame() {
 ................
 ..3...3...3...3.
 ................`,
+		],
+		[
+			"0",
+			bitmap`
+1.1.1.1.........
+.1.1.1.1........
+1.1.1.1.........
+.1.1.1.1........
+1.1.1.1.........
+.1.1.1.1........
+1.1.1.1.........
+.1.1.1.1........
+........1.1.1.1.
+.........1.1.1.1
+........1.1.1.1.
+.........1.1.1.1
+........1.1.1.1.
+.........1.1.1.1
+........1.1.1.1.
+.........1.1.1.1`,
+		],
+		[
+			"7",
+			bitmap`
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333`,
+		],
+		[
+			"8",
+			bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777`,
 		]
 	);
 
@@ -1987,6 +2190,7 @@ async function startGame() {
 		setBackground(String(i));
 		i < 5 && (await new Promise((res) => setTimeout(res, 50)));
 	}
+	setBackground("0");
 
 	// Create an array to keep track of paint
 	canvas = [];
@@ -1994,7 +2198,8 @@ async function startGame() {
 		const row = [];
 		for (let y = 0; y < 8 * resolution; y++) {
 			// checkerboard pattern
-			row.push((x + y) % 2 == 0 ? color`4` : color`D`);
+			// row.push((x + y) % 2 == 0 ? color`4` : color`D`);
+			row.push(".");
 		}
 		canvas.push(row);
 	}
@@ -2022,6 +2227,7 @@ async function startGame() {
 		blueSprites.push(getFirst(blue.legendChars[i]));
 	}
 
+
 	const renderLoop = setInterval(() => {
 		doMovementUpdates();
 		renderPlayer(red);
@@ -2031,65 +2237,139 @@ async function startGame() {
 		// 	Math.floor(Math.random() * 8 * resolution)
 		// ] = color`3`;
 	}, 1000 / fps);
+
+    let time = 20;
+    addText(time.toString(), {x: 9, y: 1});
+    const timerLoop = setInterval(() => {
+      time--;
+      clearText();
+      addText(time.toString(), {x: 9, y: 1});
+
+      if (time == 0) {
+        clearInterval(renderLoop);
+        const redScore = getAll("7").length;
+        const blueScore = getAll("8").length;
+        clearText();
+        setMap(map`
+..........
+..........
+..........
+..........
+..........
+..........
+..........
+..........`);
+
+        if (redScore > blueScore) {
+          addText("Red wins!", {x: 6, y: 7, color: color`3`})
+        } else if (blueScore > redScore) {
+          addText("Blue wins!", {x: 5, y: 7, color: color`7`})
+        } else {
+          addText("Tie!", {x: 8, y: 7, color: color`L`})
+        }
+        
+        clearInterval(timerLoop);
+      }
+    }, 1000)
+}
+
+function paint(player, color) {
+	const sprite = getFirst(player.legendChars[0]);
+    const tileSprites = getTile(sprite.x,sprite.y);
+    let found = false;
+    for (const sp of tileSprites) {
+      if (sp.type == "7" || sp.type == "8") {
+        sp.type = color;
+        found = true;
+      }
+    }
+	if (!found) addSprite(sprite.x, sprite.y, color);
 }
 
 function doMovementUpdates() {
-	if (red.x % resolution == 0 && red.recentInput) {
-		console.log(1);
+	if (red.x % resolution == 0 && red.recentInputX) {
 		for (const sprite of redSprites) {
-			sprite.x += red.recentInput;
+			sprite.x += red.recentInputX;
 		}
-		red.recentInput = 0;
-	} else if (red.y % resolution == 0 && red.recentInput) {
+		red.recentInputX = 0;
+    	paint(red, "7");
+	} else if (red.y % resolution == 0 && red.recentInputY) {
 		for (const sprite of redSprites) {
-			sprite.y += red.recentInput;
+			sprite.y += red.recentInputY;
 		}
-		red.recentInput = 0;
+		red.recentInputY = 0;
+    	paint(red, "7");
 	}
 
-	if (blue.x % resolution == 0 && blue.recentInput) {
+	if (blue.x % resolution == 0 && blue.recentInputX) {
 		for (const sprite of blueSprites) {
-			sprite.x += blue.recentInput;
+			sprite.x += blue.recentInputX;
 		}
-		blue.recentInput = 0;
-	} else if (blue.y % resolution == 0 && blue.recentInput) {
+		blue.recentInputX = 0;
+    	paint(blue, "8");
+	} else if (blue.y % resolution == 0 && blue.recentInputY) {
 		for (const sprite of blueSprites) {
-			sprite.y += blue.recentInput;
+			sprite.y += blue.recentInputY;
 		}
-		blue.recentInput = 0;
+		blue.recentInputY = 0;
+    	paint(blue, "8");
 	}
 }
 
 onInput("w", () => {
-	red.y -= 1;
-	red.recentInput = -1;
+	if (red.y <= 0 || !gameStarted) return;
+	// red.y -= 1;
+    red.direction = "up";
+	red.y -= resolution;
+	red.recentInputY = -1;
 });
 onInput("s", () => {
-	red.y += 1;
-	red.recentInput = 1;
+	if (red.y >= 28 || !gameStarted) return;
+	// red.y += 1;
+    red.direction = "down";
+	red.y += resolution;
+	red.recentInputY = 1;
 });
 onInput("a", () => {
-	red.x -= 1;
-	red.recentInput = -1;
+	if (red.x <= 0 || !gameStarted) return;
+	// red.x -= 1;
+    red.direction = "left";
+	red.x -= resolution;
+	red.recentInputX = -1;
 });
 onInput("d", () => {
-	red.x += 1;
-	red.recentInput = 1;
+	if (red.x >= 72 || !gameStarted) return;
+	// red.x += 1;
+    red.direction = "right";
+	red.x += resolution;
+	red.recentInputX = 1;
 });
 
 onInput("i", () => {
-	blue.y -= 1;
-	blue.recentInput = -1;
+	if (blue.y <= 0 || !gameStarted) return;
+	// blue.y -= 1;
+    blue.direction = "up";
+	blue.y -= resolution;
+	blue.recentInputY = -1;
 });
 onInput("k", () => {
-	blue.y += 1;
-	blue.recentInput = 1;
+	if (blue.y >= 28 || !gameStarted) return;
+	// blue.y += 1;
+    blue.direction = "down";
+	blue.y += resolution;
+	blue.recentInputY = 1;
 });
 onInput("j", () => {
-	blue.x -= 1;
-	blue.recentInput = -1;
+	if (blue.x <= 0 || !gameStarted) return;
+	// blue.x -= 1;
+    blue.direction = "left";
+	blue.x -= resolution;
+	blue.recentInputX = -1;
 });
 onInput("l", () => {
-	blue.x += 1;
-	blue.recentInput = 1;
+	if (blue.x >= 72 || !gameStarted) return;
+	// blue.x += 1;
+    blue.direction = "right";
+	blue.x += resolution;
+	blue.recentInputX = 1;
 });
