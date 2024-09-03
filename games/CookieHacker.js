@@ -224,7 +224,7 @@ setLegend(
 )
 
 setSolids([])
-let money = 0
+let money = 990000000
 let cookies = 0
 let level = 0
 let is_in_main_game = 0
@@ -281,6 +281,7 @@ onInput('w', () => {
 })
 
 function set_displays(money, cookies) {
+  if (is_in_main_game == 1) {
   clearText()
   addText(money.toString(), {
     x: 6,
@@ -309,7 +310,7 @@ function set_displays(money, cookies) {
   })
 
   addPurchasables()
-}
+}}
 
 function sell_cookies() {
   money += Math.pow(cookies, 1.25)
@@ -325,12 +326,13 @@ afterInput(() => {
     if (money > 1000000000) {
       setMap(levels[2])
       clearText()
-
+      is_in_main_game = 0
     }
   }
 })
 
 function addPurchasables() {
+  if (is_in_main_game == 1) {
   if (money >= 100) {
     addSprite(3, 1, social_media)
     addText(
@@ -367,7 +369,7 @@ function addPurchasables() {
     clearTile(1, 3)
   }
 }
-
+}
 onInput('i', () => {
   if (money >= 100) {
     money -= 100
