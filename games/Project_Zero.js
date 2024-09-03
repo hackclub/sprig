@@ -1,8 +1,8 @@
 /*
 @title: Project Zero
 @author: Creeperlulu
-@tags: [arcade, puzzle, advanced]
-@addedOn: 2024-08-30
+@tags: ["arcade", "puzzle", "advanced"]
+@addedOn: 2024-09-03
 */
 
 // ----------INIT----------
@@ -1908,3 +1908,4 @@ afterInput(() => {
     }
   }
 })
+
