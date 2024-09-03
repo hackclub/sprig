@@ -1,6 +1,8 @@
 /* 
 @title: Word Sculptor
 @author: S1K
+@tags: []
+@addedOn: 2024-09-03
 */
 
 const defaultWords = ["CAT", "DOG", "FOX", "OWL", "LION", "CODE", "HACKCLUB", "BYTE", "GIT", "BOTS", "PYTHON", "SCRIPT", "DATA", "SPRIG"];
@@ -227,3 +229,4 @@ loadCustomWords();
 // Initialize and start the game
 initGame();
 update();
+
