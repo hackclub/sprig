@@ -248,7 +248,7 @@ SECTIONS
 
     /* stack limit is poorly named, but historically is maximum heap ptr */
 
-    /* ORIGINAL STACK SIZE
+    /* ORIGINAL STACK MEMORY MAP
      * __StackLimit = ORIGIN(RAM) + LENGTH(RAM);
      * __StackOneTop = ORIGIN(SCRATCH_X) + LENGTH(SCRATCH_X);
      * __StackTop = ORIGIN(SCRATCH_Y) + LENGTH(SCRATCH_Y);
