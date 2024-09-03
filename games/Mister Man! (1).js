@@ -1,3 +1,10 @@
+/*
+@title: Mr.Man!
+@author: Deoteet Ojasavee
+@addedOn: 2024-09-03
+@tags: []
+*/
+
 //controls are I, J, K, L, and W for reset
 
 //define the sprites in our game
@@ -369,3 +376,4 @@ afterInput(() => {
     }
   }
 });
+
