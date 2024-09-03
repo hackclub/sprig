@@ -1,5 +1,5 @@
 import { IoArrowForward, IoBrush, IoColorFill, IoColorWand, IoEllipse, IoEyedrop, IoMove, IoReload, IoSquare, IoSwapHorizontal, IoSwapVertical, IoSync } from 'react-icons/io5'
-import { type PaletteItem, transparent } from 'sprig/base'
+import { type PaletteItem, transparent } from '../../../engine/src/base'
 
 export type TempGrid = (PaletteItem | null)[][]
 export type Vector = { x: number, y: number }
@@ -145,7 +145,7 @@ export const drawingTools = [
 			const dest = ctx.shiftKey
 				? snapDestToSquare(ctx.startPos, ctx.currentPos)
 				: ctx.currentPos
-			
+
 			const min = { x: Math.min(src.x, dest.x) - 1, y: Math.min(src.y, dest.y) - 1 }
 			const max = { x: Math.max(src.x, dest.x) + 1, y: Math.max(src.y, dest.y) + 1 }
 			const [ cx, cy ] = [ (min.x + max.x) / 2, (min.y + max.y) / 2 ]

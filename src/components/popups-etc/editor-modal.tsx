@@ -3,14 +3,15 @@ import { useEffect } from 'preact/hooks'
 import { IoClose } from 'react-icons/io5'
 import tinykeys from 'tinykeys'
 import { usePopupCloseClick } from '../../lib/utils/popup-close-click'
-import { codeMirror, editors, openEditor } from '../../lib/state'
+import { codeMirror, editors, openEditor, codeMirrorEditorText, _foldRanges, _widgets, OpenEditor } from '../../lib/state'
 import styles from './editor-modal.module.css'
+import levenshtein from 'js-levenshtein'
+import { runGameHeadless } from '../../lib/engine'
 
 export default function EditorModal() {
 	const Content = openEditor.value ? editors[openEditor.value.kind].modalContent : () => null
 	const text = useSignal(openEditor.value?.text ?? '')
 
-	// Sync code changes with editor text
 	useSignalEffect(() => {
 		if (openEditor.value) text.value = openEditor.value.text
 	})
@@ -29,7 +30,7 @@ export default function EditorModal() {
 				insert: _text
 			}
 		})
-		
+
 		openEditor.value = {
 			..._openEditor,
 			text: _text,
@@ -39,6 +40,61 @@ export default function EditorModal() {
 			}
 		}
 	})
+
+	// the challenge now is making the editor keep track of what map editor it's currently focused on and streaming the changes in the map editor
+	// it's tricky because maps can grow and shrink
+
+	useEffect(() => {
+		// just do this to sync the editor text with the code mirror text
+
+		if (!openEditor.value) return;
+
+		const code = codeMirror.value?.state.doc.toString() ?? '';
+		const levenshtainDistances = _foldRanges.value.map((foldRange, foldRangeIndex) => {
+			const widgetKind = _widgets.value[foldRangeIndex]?.value.spec.widget.props.kind;
+
+			// if the widget kind is not the same as the open editor kind, don't do anything
+			if (widgetKind !== openEditor.value?.kind) return -1;
+
+			const theCode = code.slice(foldRange?.from, foldRange?.to);
+
+			const distance = levenshtein(text.value, theCode)
+			return distance;
+		});
+
+
+
+		// if (levenshtainDistances.length === 0) alert(`You are currently editing a deleted ${openEditor.value?.kind}`);
+		if (levenshtainDistances.length === 0) return;
+
+		// compute the index of the min distance
+		let indexOfMinDistance = 0;
+		levenshtainDistances.forEach((distance, didx) => {
+			if (levenshtainDistances[indexOfMinDistance]! < 0) indexOfMinDistance = didx;
+			const min = levenshtainDistances[indexOfMinDistance]!;
+			if (distance >= 0 && distance <= min) indexOfMinDistance = didx;
+		});
+
+		// update the open editor if the index is not -1
+		if (indexOfMinDistance !== -1) {
+			const editRange = _foldRanges.value[indexOfMinDistance]
+			const openEditorCode = code.slice(editRange?.from, editRange?.to)
+
+			// the map editor needs to get the bitmaps after running the code
+			if (openEditor.value?.kind === 'map') runGameHeadless(code ?? '');
+
+			openEditor.value = {
+				...openEditor.value as OpenEditor,
+				editRange: {
+					from: editRange!.from,
+					to: editRange!.to
+				},
+				text: openEditorCode
+			}
+		}
+
+	}, [codeMirrorEditorText.value]);
+
 
 	usePopupCloseClick(styles.content!, () => openEditor.value = null, !!openEditor.value)
 	useEffect(() => tinykeys(window, {

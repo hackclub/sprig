@@ -263,9 +263,24 @@
 	min-width: 160px;
 }
 
-.navPopup .divider {
-	height: 2px;
-	background: var(--accent);
+.playPopup {
+	background: var(--accent-dark);
+	color: #ffffff;
+	z-index: 9;
+	position: absolute;
+	top: 48px;
+	right: 140px;
+	box-shadow: 0 4px 8px 0 #0000005e;
+	min-width: 160px;
+	border-radius: 4px;
+	display: flex;
+	flex-direction: column;
+}
+
+.playPopup .navPopup .divider {
+	width: 100%;
+	height: 1px;
+	background: rgba(255, 255, 255, 0.2);
 	margin: 8px 0;
 }
 

@@ -57,7 +57,7 @@ export default function MainNavbar(props: MainNavbarProps) {
 							</a>
 						</li>
 						<li>
-							<a href="/~/new">
+							<a href="/~/new-game">
 								<Button icon={IoAdd}>New Game</Button>
 							</a>
 						</li>
