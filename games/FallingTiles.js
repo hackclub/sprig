@@ -1,7 +1,8 @@
 /*
 @title: FallingTiles
 @author: Rishabh R
-@addedOn: 2024-08-29
+@addedOn: 2024-09-03
+@tags: []
 */
 const tile = "t";
 const background = "b";
@@ -283,3 +284,4 @@ onInput("w", () => {
 });
 
 startScreen();
+
