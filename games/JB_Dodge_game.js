@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: JB_Dodgy_Meteor_Game
-@author: 
-@tags: [dodge]
-@addedOn: 2024-00-00
+@author: JbBurnsWasHere
+@tags: ["dodge"]
+@addedOn: 2024-09-03
 */
 
 const player = "p";
@@ -146,3 +146,4 @@ function checkHit() {
   }
   return false;
 }
+
