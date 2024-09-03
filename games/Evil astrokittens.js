@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Evil space kittens
 @author: Dragos Gabriel Matu
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-09-03
 */
 
 //PLAYER
@@ -1067,3 +1067,4 @@ onInput("s", () => {
 
 afterInput(() => {
 })
+
