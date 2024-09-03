@@ -10,6 +10,7 @@ target_compile_definitions(spade PRIVATE
   # PICO_DEFAULT_UART=0
   # PICO_DEFAULT_UART_TX_PIN=28
   # PICO_DEFAULT_UART_RX_PIN=29
+  JERRY_SYSTEM_ALLOCATOR=1
 )
 
 target_link_libraries(spade PRIVATE
@@ -22,9 +23,10 @@ target_link_libraries(spade PRIVATE
   hardware_adc
 )
 
+pico_set_linker_script(spade "${CMAKE_CURRENT_SOURCE_DIR}/${SPADE_TARGET}/memmap.ld")
+
 pico_enable_stdio_usb(spade 1)
 pico_enable_stdio_uart(spade 0)
 
 # create map/bin/hex file etc.
 pico_add_extra_outputs(spade)
-
