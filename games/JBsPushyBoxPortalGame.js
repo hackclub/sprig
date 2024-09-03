@@ -3,8 +3,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: JB's Pushy Blocky Portal Game
 @author: Justin Burns II :)
-@tags: [Push, 8-bit, JB Burns, #JB Burns]
-@addedOn: 2024-00-00
+@tags: []
+@addedOn: 2024-09-03
 */
 setSolids([])
 const player = "p"
