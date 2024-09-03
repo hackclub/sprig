@@ -1,3 +1,10 @@
+/*
+@title: Treasure Maze
+@author: AiyuuHacks
+@addedOn: 2024-09-03
+@tags: []
+*/
+
 const player = "p"
 const obstacle1 = "1"
 const obstacle2 = "2"
@@ -451,6 +458,7 @@ var gameLoop = setInterval(() => {
 
   
 }, 150)
+
 
 
 
