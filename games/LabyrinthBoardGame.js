@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: LabyrinthBoardGame
 @author: rivques
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-09-03
 */
 
 // a port of the Labyrinth board game to Sprig.
@@ -1050,3 +1050,4 @@ onInput("a", () => {
 afterInput(() => {
     
 })
+
