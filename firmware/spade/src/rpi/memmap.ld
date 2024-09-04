@@ -1,3 +1,4 @@
+/* Note: This memmap.ld is a modified copy of the default RP2040 linker script that is used */
 /* Based on GCC ARM embedded samples.
    Defines the following symbols for use by code:
     __exidx_start
@@ -21,12 +22,13 @@
     __stack (== StackTop)
 */
 
+/* MODIFIED */
 MEMORY
 {
     FLASH(rx) : ORIGIN = 0x10000000, LENGTH = 2048k
     RAM(rwx) : ORIGIN =  0x20000000, LENGTH = 256k
-    SCRATCH_X(rwx) : ORIGIN = 0x20040000, LENGTH = 6k
-    SCRATCH_Y(rwx) : ORIGIN = 0x20041800, LENGTH = 2k
+    SCRATCH_X(rwx) : ORIGIN = 0x20040000, LENGTH = 6k /* 0x20041800 - 0x20040000 = 0x1800 = 6KB Length
+    SCRATCH_Y(rwx) : ORIGIN = 0x20041800, LENGTH = 2k /* 0x20042000 - 0x20041800 = 0x0800 = 2KB Length
 }
 
 ENTRY(_entry_point)
@@ -222,7 +224,7 @@ SECTIONS
      * stack is not used then all of SCRATCH_X is free.
      */
 
-    /*
+    /* ORIGINAL
      * .stack1_dummy (NOLOAD):
      * {
      *    *(.stack1*)
@@ -233,6 +235,7 @@ SECTIONS
      * } > SCRATCH_Y
      */
 
+	/* MODIFIED: SWAP STACK SCRATCHES (SCRATCH_X <> SCRATCH_Y) */
     .stack1_dummy (NOLOAD):
     {
         *(.stack1*)
@@ -256,6 +259,7 @@ SECTIONS
      * __StackBottom = __StackTop - SIZEOF(.stack_dummy);
      */
 
+	/* MODIFIED: SWAP STACK SCRATCHES (SCRATCH_X <> SCRATCH_Y) */
     __StackLimit = ORIGIN(RAM) + LENGTH(RAM);
     __StackOneTop = ORIGIN(SCRATCH_Y) + LENGTH(SCRATCH_Y);
     __StackTop = ORIGIN(SCRATCH_X) + LENGTH(SCRATCH_X);
