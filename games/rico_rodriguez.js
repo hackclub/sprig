@@ -1,3 +1,9 @@
+/*
+@title: Rico Rodriguez
+@author: DefinitelyInconspicuous
+@tags: []
+@addedOn: 2024-09-04
+*/
 const player = "p";
 const bullet = "b";
 const background = "g";
