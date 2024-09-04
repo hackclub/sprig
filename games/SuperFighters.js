@@ -61,15 +61,15 @@ const sky_dark = "7";
 const sky_black = "8";
 
 let player = rightFacingPlayer;
- 
+
 let happySound = tune`
 193.5483870967742: B5~193.5483870967742,
 6000`;
- 
+
 let explosionSound = tune`
 500: A5^500,
 15500`;
- 
+
 let victoryMusic = tune`
 333.3333333333333: G5~333.3333333333333,
 333.3333333333333: B5~333.3333333333333,
@@ -95,7 +95,7 @@ let victoryMusic = tune`
 333.3333333333333: F5~333.3333333333333,
 333.3333333333333: D5~333.3333333333333,
 1333.3333333333333`;
- 
+
 let gameMusic = tune`
 258.62068965517244: G4~258.62068965517244,
 258.62068965517244: B4~258.62068965517244,
@@ -114,9 +114,9 @@ let gameMusic = tune`
 258.62068965517244: G5^258.62068965517244,
 258.62068965517244: D5~258.62068965517244,
 1034.4827586206898`;
- 
+
 const playback = playTune(gameMusic, Infinity);
- 
+
 setLegend(
   [
     rightFacingPlayer,
@@ -198,7 +198,7 @@ setLegend(
 .....00....00...
 ....000...000...`,
   ],
-   [
+  [
     rightFacingGunPlayer,
     bitmap`
 ...000000.......
@@ -518,7 +518,7 @@ H....000000...H.`,
 2222222222222222
 2222222222222222`,
   ],
-   [
+  [
     sky_dark,
     bitmap`
 LLLLLLLLLLLLLLLL
@@ -538,7 +538,7 @@ LLLLLLLLLLLLLLLL
 LLLLLLLLLLLLLLLL
 LLLLLLLLLLLLLLLL`,
   ],
-   [
+  [
     sky_black,
     bitmap`
 0000000000000000
@@ -579,8 +579,8 @@ LLLLLLLLLLLLLLLL`,
 ..000000000000..`,
   ],
   [
-  gun,
-  bitmap`
+    gun,
+    bitmap`
 ..6.......6.....
 ..6.......6.....
 ................
@@ -637,11 +637,11 @@ LLLLLLLLLLLLLLLL`,
 ................
 ................
 ................`,
-  ],
+  ]
 );
- 
+
 setBackground(sky_light);
- 
+
 setSolids([
   rightFacingPlayer,
   leftFacingPlayer,
@@ -658,7 +658,7 @@ setSolids([
   box,
   bedrock,
 ]);
- 
+
 const levels = [
   map`
 ...............
@@ -667,15 +667,11 @@ p......LP......
 ..b..........cb
 ..b..........cb`,
   map`
-...............
-...............
-...............
-...............
-...............
-...b.b.b.b.bBBB
-.cB.........BBB
-.cB.........BBB
-pcBP....L...BBB`,
+.............
+.............
+.............
+.cB..........
+pcB........P.`,
   map`
 ...............
 ...............
@@ -685,71 +681,56 @@ pcBP....L...BBB`,
 p.bbbbbbb...LBB`,
   map`
 ..............
+..1...........
 ..............
 ..............
-.........b.b..
-....Bb.b.....b
-...cB........b
-..BB........cB
-.cBBBB.B.B.B.B
-pB.....LL.c..B`,
+..............
+p...........L.`,
   map`
-BBBBBBBBBBBBB
-.............
-.......BBBBBB
-.......BBBBBB
-.......BBBBBB
-.......BBBBBB
-.......BBBBBB
-p.0....BBBBBB
-BBBBBBBBBBBBB`,
+BBBBBBBBB
+.........
+......BBB
+......B..
+......B..
+......B..
+......B..
+p.0...B..
+BBBBBBB..`,
   map`
 p..............
-bbbbbbbbbbbb.bb
-bbbbbbbbbbbb.bb
-bbbbbbbbbbbb.bb
-bbbbbbbbbbbb.bb
-bbbbbbbbbbbb.bb
-bbbbbbbbbbbb...
 bbbbbbbbbbbbbbb
-BBBBBBBBBBBBBBB`,
+...............
+...............
+...............`,
   map`
-.........bbbbbb
-...............
-........bbbbbbb
-...............
-.......bbbbbbbb
-...............
-......bbbbbbbbb
-...............
-.....bbbbbbbbbb
-...............
-....bbbbbbbbbbb
-...............
-...bbbbbbbbbbbb
-p..............
-...............
-BBBBBBBBBBBBBBB`,
+......
+......
+......
+......
+......
+.....b
+......
+....b.
+......
+...b..
+p....B
+....BB
+BBBBBB`,
   map`
-bbbbbbbbbbbbbbb
-bbbbbbbbbbbb.bb
-p...BP.........
-BBB.Bbbb..bb.bb
-bbB.b....Bbb.bb
-bbB...BBBBbbbbb
-bbBBBBbbbbbbbbb
-bbbbbbbbbbbbbbb
-BBBBBBBBBBBBBBB`,
+....B......
+p...BP.....
+BBB.Bbb....
+..B.1......
+..B........
+..BBBBBBBBB`,
   map`
-BBBBBBBBBBBBBBB
-BBBBBBBBBBBBBBB
-p..0.BB....BB..
-BBBB.BB.BB.BB.B
-BBBB.BB.BB.BB.B
-BBBB.BB.BB.BB.B
-BBBB....BB....B
-BBBBBBBBBBBBBBB
-BBBBBBBBBBBBBBB`,
+bbbbbbbbbb
+.....bb...
+p.0..bb...
+bbbb....bb
+...b....bb
+...b....bb
+...bbbbbbb`,
   map`
 BBBBBBBBBBBBBB
 BBBBBBBBBBBBBB
@@ -768,8 +749,8 @@ BBBBBBBBBBBBBB`,
 ...............
 ...............
 ...............
-...............
-p..............`,
+p..............
+bbbbbbbbbbbbbbb`,
 ];
 
 setMap(levels[level]);
@@ -777,7 +758,6 @@ setMap(levels[level]);
 setPushables({
   [rightFacingPlayer]: [],
   [leftFacingPlayer]: [],
-  [box]: [],
 });
 
 // Add game title text as the player loads into the game.
@@ -818,7 +798,7 @@ function isPlayer(type) {
     type == leftPunchingPlayer ||
     type == rightPunchingPlayer ||
     type == rightFacingMagnetPlayer ||
-    type == leftFacingMagnetPlayer || 
+    type == leftFacingMagnetPlayer ||
     type == leftFacingGunPlayer ||
     type == rightFacingGunPlayer
   );
@@ -904,8 +884,12 @@ function distance(player, entityX, entityY) {
  * @returns
  */
 function isBullet(type) {
-  return type == bullet_right || type == bullet_left
-    || type == player_bullet_right || type == player_bullet_left;
+  return (
+    type == bullet_right ||
+    type == bullet_left ||
+    type == player_bullet_right ||
+    type == player_bullet_left
+  );
 }
 
 /**
@@ -936,7 +920,6 @@ function shootBullet(shooter, originX, originY) {
   }
 }
 
-
 /**
  * Ellicit a bullet attack from a player.
  * Shoot a bullet.
@@ -949,13 +932,9 @@ function playerShootBullet(shooter, originX, originY) {
   if (currentTime - lastPlayerShot > shootDelay) {
     lastPlayerShot = currentTime;
     //TODO Possibly add shooting functionality for players
-    if (
-      shooter.type == leftFacingGunPlayer
-    ) {
+    if (shooter.type == leftFacingGunPlayer) {
       addSprite(originX, originY, player_bullet_left);
-    } else if (
-      shooter.type == rightFacingGunPlayer
-    ) {
+    } else if (shooter.type == rightFacingGunPlayer) {
       addSprite(originX, originY, player_bullet_right);
     }
   }
@@ -1025,9 +1004,8 @@ onInput("l", () => {
     getFirst(player).type = rightPunchingPlayer;
     player = rightPunchingPlayer;
     attackEntity(player, particleX, particleY);
-  }
-  else if (getFirst(player).type == rightFacingGunPlayer && hasGun) {
-     playerShootBullet(getFirst(player), particleX, particleY);
+  } else if (getFirst(player).type == rightFacingGunPlayer && hasGun) {
+    playerShootBullet(getFirst(player), particleX, particleY);
   }
   var intervalId = setInterval(() => {
     if (
@@ -1057,9 +1035,8 @@ onInput("j", () => {
     getFirst(player).type = leftPunchingPlayer;
     player = leftPunchingPlayer;
     attackEntity(player, particleX, particleY);
-  }
-  else if (getFirst(player).type == leftFacingGunPlayer && hasGun) {
-     playerShootBullet(getFirst(player), particleX, particleY);
+  } else if (getFirst(player).type == leftFacingGunPlayer && hasGun) {
+    playerShootBullet(getFirst(player), particleX, particleY);
   }
   var intervalId = setInterval(() => {
     if (
@@ -1140,12 +1117,10 @@ onInput("a", () => {
       if (hasMagnet) {
         getFirst(player).type = leftFacingMagnetPlayer;
         player = leftFacingMagnetPlayer;
-      } 
-       else if (hasGun) {
+      } else if (hasGun) {
         getFirst(player).type = leftFacingGunPlayer;
         player = leftFacingGunPlayer;
-      }
-      else {
+      } else {
         getFirst(player).type = leftFacingPlayer;
         player = leftFacingPlayer;
       }
@@ -1165,12 +1140,10 @@ onInput("d", () => {
       if (hasMagnet) {
         getFirst(player).type = rightFacingMagnetPlayer;
         player = rightFacingMagnetPlayer;
-      }
-      else if (hasGun) {
+      } else if (hasGun) {
         getFirst(player).type = rightFacingGunPlayer;
         player = rightFacingGunPlayer;
-      }
-      else {
+      } else {
         getFirst(player).type = rightFacingPlayer;
         player = rightFacingPlayer;
       }
@@ -1240,30 +1213,28 @@ setInterval(() => {
     // Calculate distance to the player
     let dist = distance(getFirst(player), entity.x, entity.y);
     //Magnet item pickup detection
-     if (dist == 0.0 && (entity.type == magnet || entity.type == gun)) {
+    if (dist == 0.0 && (entity.type == magnet || entity.type == gun)) {
       playTune(happySound);
       clearText();
-       if (entity.type == magnet) {
-      hasMagnet = true;
-      if (getFirst(player).type == rightFacingPlayer) {
-        getFirst(player).type = rightFacingMagnetPlayer;
-        player = rightFacingMagnetPlayer;
-      } else if (entity.type == leftFacingPlayer) {
-        getFirst(player).type = leftFacingMagnetPlayer;
-        player = leftFacingMagnetPlayer;
-      }
-       }
-       else if (entity.type == gun) {
-           hasGun = true;
+      if (entity.type == magnet) {
+        hasMagnet = true;
+        if (getFirst(player).type == rightFacingPlayer) {
+          getFirst(player).type = rightFacingMagnetPlayer;
+          player = rightFacingMagnetPlayer;
+        } else if (entity.type == leftFacingPlayer) {
+          getFirst(player).type = leftFacingMagnetPlayer;
+          player = leftFacingMagnetPlayer;
+        }
+      } else if (entity.type == gun) {
+        hasGun = true;
         if (getFirst(player).type == rightFacingPlayer) {
           getFirst(player).type = rightFacingGunPlayer;
-        player = rightFacingGunPlayer;
-        }
-        else if (entity.type == leftFacingPlayer) {
+          player = rightFacingGunPlayer;
+        } else if (entity.type == leftFacingPlayer) {
           getFirst(player).type = leftFacingGunPlayer;
           player = leftFacingGunPlayer;
         }
-       }
+      }
       entity.remove();
       return;
     }
@@ -1297,7 +1268,10 @@ setInterval(() => {
     //Is the entity a bullet?
     if (isBullet(entity.type)) {
       // Based on the bullet sprite type, check if it's a right-sided bullet or left.
-      let xDiff = (entity.type == bullet_right || entity.type == player_bullet_right) ? 1 : -1;
+      let xDiff =
+        entity.type == bullet_right || entity.type == player_bullet_right
+          ? 1
+          : -1;
       let removedEntity = false;
       //Find all entities in game
       getTile(entity.x, entity.y).forEach((obstacle) => {
@@ -1306,31 +1280,36 @@ setInterval(() => {
           //Check if the bullet originates from a player.
           //If so, then we expect it to hit an NPC.
           //If not, then we expect it to hit a non-NPC. (including players)
-          if ((entity.type == player_bullet_right || entity.type == player_bullet_left) &&
-              isNPC(obstacle.type) || (entity.type == bullet_right || entity.type == bullet_left) && !isNPC(obstacle.type)) {
-          entity.remove();
-          removedEntity = true;
-          // Spawn the heart particle if it was a player,
-          // Spawn the explosion particle otherwise
-          spawnParticle(entity.x, entity.y, isPlayer(obstacle.type) ? 1 : 0);
-          //If the bullet hit a player (meaning it originates from an NPC), subtract lives
-          if (isPlayer(obstacle.type)) {
-            lives--;
-            if (lives == 0) {
-              gameReset();
+          if (
+            ((entity.type == player_bullet_right ||
+              entity.type == player_bullet_left) &&
+              isNPC(obstacle.type)) ||
+            ((entity.type == bullet_right || entity.type == bullet_left) &&
+              !isNPC(obstacle.type))
+          ) {
+            entity.remove();
+            removedEntity = true;
+            // Spawn the heart particle if it was a player,
+            // Spawn the explosion particle otherwise
+            spawnParticle(entity.x, entity.y, isPlayer(obstacle.type) ? 1 : 0);
+            //If the bullet hit a player (meaning it originates from an NPC), subtract lives
+            if (isPlayer(obstacle.type)) {
+              lives--;
+              if (lives == 0) {
+                gameReset();
+              }
             }
-          }
             //If the bullet hit an NPC, it originates from a player.
-          else if (isNPC(obstacle.type)) {
-            obstacle.remove();
-          }
-          return;
+            else if (isNPC(obstacle.type)) {
+              obstacle.remove();
+            }
+            return;
           }
         }
       });
       if (removedEntity) return;
       // Move the bullet in the direction contingent on the sprite (acts as metadata)
-        entity.x += xDiff;
+      entity.x += xDiff;
       // Destroy bullets meeting the edge
       if (entity.x == width() - 1 || entity.x == 0) {
         entity.remove();
@@ -1411,6 +1390,7 @@ setInterval(() => {
       case 3:
         break;
       case 4:
+        hasGun = false;
         setBackground(sky_dark);
         if (!hasMagnet) {
           addText("Pick up", { y: 10, color: `4` });
@@ -1421,12 +1401,17 @@ setInterval(() => {
         setBackground(sky_black);
         hasMagnet = false;
         gravityDown = true;
-        addText("Go down...", { y: 2, color: `3` });
+        addText("Go right...", { y: 2, color: `3` });
         break;
       case 6:
-          setBackground(sky_light);
+        setBackground(sky_light);
+        break;
+      case 7:
+        setBackground(sky_dark);
         break;
       case 8:
+        hasGun = false;
+        setBackground(sky_black);
         if (!hasMagnet) {
           addText("Collect", { x: 1, y: 6, color: `4` });
           addText("the", { x: 1, y: 7, color: `4` });
@@ -1434,6 +1419,7 @@ setInterval(() => {
         }
         break;
       case 9:
+        setBackground(sky_light);
         hasMagnet = false;
         gravityDown = true;
         if (!hasGun) {
@@ -1446,6 +1432,7 @@ setInterval(() => {
 
     if (level == levels.length - 1) {
       hasGun = false;
+      setBackground(sky_black);
       addText("You win!", { y: 3, color: `4` });
     }
 
