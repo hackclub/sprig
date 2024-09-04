@@ -165,13 +165,6 @@ static void power_lights()
   pwm_set_enabled(slice_num_0, true);
   pwm_set_gpio_level(pin_num_0, 65535 / 8);
 
-  // light on raspberry pi pico
-  const int led_pin_num = 25;
-  gpio_set_function(led_pin_num, GPIO_FUNC_PWM);
-  uint led_slice_num = pwm_gpio_to_slice_num(led_pin_num);
-  pwm_set_enabled(led_slice_num, true);
-  pwm_set_gpio_level(led_pin_num, 65535 / 8);
-
   // right blue light
   // const pin_num_1 = 4;
   // gpio_set_function(pin_num_1, GPIO_FUNC_PWM);
