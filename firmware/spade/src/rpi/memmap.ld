@@ -1,4 +1,5 @@
 /* Note: This memmap.ld is a modified copy of the default RP2040 linker script that is used */
+/* https://github.com/raspberrypi/pico-sdk/blob/master/src/rp2_common/pico_crt0/rp2040/memmap_default.ld */
 /* Based on GCC ARM embedded samples.
    Defines the following symbols for use by code:
     __exidx_start
