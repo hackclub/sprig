@@ -1,0 +1,176 @@
+---
+import "../../global.css";
+import "./blog.css"
+
+import {getSession} from "../../lib/game-saving/account";
+
+import StandardHead from "../../components/standard-head.astro";
+import Navbar from "../../components/navbar-main";
+import {AstroGlobal, MarkdownContent} from "astro";
+import {LoopsClient} from "loops";
+import {Octokit} from "octokit";
+
+const session = await getSession(Astro.cookies);
+
+export const octokit = new Octokit({
+	// auth: import.meta.env.GITHUB_KEY
+})
+
+export const handleMailingListSubmission = async (Astro: AstroGlobal) => {
+	if (Astro.request.method !== "POST") return false
+	try {
+		const email: string = await Astro.request.formData().then(data => data.get("email")) as string
+
+		const loops = new LoopsClient(import.meta.env.LOOPS_API_KEY)
+
+		const foundContacts = await loops.findContact(email)
+
+		if (foundContacts.length == 0) {
+			await loops.createContact(email, {
+				source: 'Sprig blog',
+				userGroup: "Hack Clubber"
+			})
+		}
+
+		await loops.updateContact(email, {
+			sprigBlogSignedUpAt: new Date().getTime()
+		})
+
+		return true
+	} catch (e) {
+		console.error(e)
+		return false
+	}
+	
+}
+
+const formSubmitted = await handleMailingListSubmission(Astro)
+
+const posts = await Astro.glob('../../../blog/*.md')
+	.then(entries => entries.sort(
+		(a, b) => 
+			new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
+	).filter(record => new Date(record.frontmatter.date) < new Date()));
+
+export const getPostMetadata = async (post: MarkdownContent) => {
+	const slug = post.file.split("/").pop().split(".md")[0]
+
+	let img;
+	try {
+		img = await import(`../../../blog/images/${slug}.png`).then(file => file.default)
+		console.log(img)
+	} catch {
+		img = "https://cloud-i203j2e6a-hack-club-bot.vercel.app/1confused_dinosaur.png"
+		console.log(img)
+	}
+	
+	console.log(img)
+
+	let date = new Date(post.frontmatter.date).toLocaleDateString(
+		undefined, {
+			timeZone: "UTC",
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+		}
+	)
+	
+	return {
+		img, slug, date
+	}
+}
+
+export const getNameFromUsername = async (username: string) => {
+	const { name } = await octokit.request('GET /users/{username}', {
+		username,
+		headers: {
+			'X-GitHub-Api-Version': '2022-11-28'
+		}
+	}).then((resp: any) => resp.data)
+	
+	return name
+}
+
+---
+
+<html lang='en'>
+<head>
+	<StandardHead title={'Sprig Engineering Blog'} />
+	<script>
+		import {theme, switchTheme} from "../../lib/state";
+		import type {ThemeType} from "../../lib/state";
+		const currentTheme = localStorage.getItem("theme") ?? localStorage.getItem("isDark") ?? "light"
+		theme.value = currentTheme as ThemeType;
+
+		switchTheme(theme.value);
+		window.switchTheme = switchTheme;
+	</script>
+</head>
+<body>
+<Navbar session={session } />
+<main class="copy-container">
+	<h1>Sprig Engineering Blog</h1>
+	<p>Sprig is a game engine and game console built by a team of high school students and Hack Club staff-
+		it's in active development, as we work to make the experience better for teenagers.
+		This blog is where we'll post about the interesting technical challenges we encounter and how we solve them.</p>
+		<p>If you're a teenager, join us in the #hq-engineering channel of the <a href="https://hackclub.com/slack">Hack Club Slack</a> to get involved and learn more.
+	</p>
+	<p>You can also sign up to hear when a new blog post comes out! We won't spam you.</p>
+	<form method="post" class="mailing-list">
+		{!formSubmitted && (
+			<label>Email:</label>
+			<input type="email" id="email">
+			<button>Sign up!</button>
+		)}
+		{formSubmitted && <p class="confirm">> You've been signed up for the mailing list!</p>}
+	</form>
+	<div>
+			{posts && (async () => {
+				let post = posts[0]!
+				
+				let {img, slug, date} = await getPostMetadata(post)
+
+				return <div class="entry box frontpage">
+					<img src={img} alt={"Cover image"} width={300} height={300}></img>
+					<div class="preview">
+					<h1><a href={`/blog/${slug}`}>{post.frontmatter.title}</a></h1>
+					<h3>{date}</h3>
+
+					<div class="authors">
+						<div class="pfp-container">
+							{post.frontmatter.authors.map(author => {
+								return <img src={`https://github.com/${author}.png`}
+											  alt={`Profile picture for ${author}`}
+											  width={100} height={100}></img>
+							})}
+						</div>
+						<h2>By: {Promise.all(post.frontmatter.authors.map(getNameFromUsername)).then(list => list.join(", "))}</h2>
+					</div>
+					</div>
+				</div>
+			})()}
+			{posts && posts.slice(1).map(async post => {
+				const {slug, img, date} = await getPostMetadata(post)
+				return <div class="entry box">
+					<img src={img} alt={"Cover image"} width={300} height={300} />
+					<div class="preview">
+						<h1><a href={`/blog/${slug}`}>{post.frontmatter.title}</a></h1>
+						<h3>{date}</h3>
+
+						<div class="authors">
+							<div class="pfp-container">
+								{post.frontmatter.authors.map(author => {
+									return <img src={`https://github.com/${author}.png`}
+												  alt={`Profile picture for ${author}`}
+												  width={100} height={100}></img>
+								})}
+							</div>
+							<h2>By: {Promise.all(post.frontmatter.authors.map(getNameFromUsername)).then(list => list.join(", "))}</h2>
+						</div>
+					</div>
+				</div>
+			})}
+	</div>
+</main>
+</body>
+</html>

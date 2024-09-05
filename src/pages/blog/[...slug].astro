@@ -1,0 +1,73 @@
+---
+import {getSession} from "../../lib/game-saving/account";
+import "./blog.css"
+import "../../global.css"
+
+import StandardHead from "../../components/standard-head.astro";
+import Navbar from "../../components/navbar-main";
+import type {MarkdownContent} from "astro";
+import {getPostMetadata, handleMailingListSubmission, getNameFromUsername} from "./index.astro"
+
+const session = await getSession(Astro.cookies)
+
+const {slug} = Astro.params
+
+const post: MarkdownContent = await import(`../../../blog/${slug}.md`)
+
+const {img, date} = await getPostMetadata(post);
+
+const formSubmitted = await handleMailingListSubmission(Astro)
+---
+
+<html lang='en'>
+<head>
+	<StandardHead title={`${post.frontmatter.title} - Sprig`} />
+	<script>
+		import {theme, switchTheme} from "../../lib/state";
+		import type {ThemeType} from "../../lib/state";
+		const currentTheme = localStorage.getItem("theme") ?? localStorage.getItem("isDark") ?? "light"
+		theme.value = currentTheme as ThemeType;
+
+		switchTheme(theme.value);
+	</script>
+</head>
+<body>
+<Navbar session={session } />
+<main class="copy-container">
+	<a href="/blog">⇐ Back to all posts</a>
+	<div class="title box">
+		<img src={img} alt={"Cover Image"} width={500} height={500}></img>
+		<h1>{post.frontmatter.title}</h1>
+		<h3>{date}</h3>
+		<div class="authors">
+			<div class="pfp-container">
+				{post.frontmatter.authors.map(author => {
+					return <img src={`https://github.com/${author}.png`}
+								  alt={`Profile picture for ${author}`}
+								  width={100} height={100}></img>
+				})}
+			</div>
+			<h2>By: {post.frontmatter.authors.map(getNameFromUsername).map((author, i, arr) => 
+				<><a href={`https://github.com/${post.frontmatter.authors[i]}`}>{author}</a>{i != arr.length-1 ? ", " : ""}</>)}
+			</h2>
+		</div>
+	</div>
+	<div class="post box">
+		<post.Content></post.Content>
+	</div>
+	<div class="post box">
+		<p>If you're a teenager, join us in the #hq-engineering channel of the <a href="https://hackclub.com/slack">Hack Club Slack</a> to get involved.
+		</p>
+		<p>You can also sign up to get updates. We won't spam you.</p>
+		<form method="post" class="mailing-list">
+			{!formSubmitted && (
+				<label>Email:</label>
+				<input type="email" id="email">
+				<button>Sign up!</button>
+			)}
+			{formSubmitted && <p class="confirm">> You've been signed up for the mailing list!</p>}
+		</form>
+	</div>
+</main>
+</body>
+</html>

@@ -39,8 +39,12 @@ export default function MainNavbar(props: MainNavbarProps) {
 					<a href="/gallery">Gallery</a>
 				</li>
 				<li>
+					<a href="/blog">Blog</a>
+				</li>
+				<li>
 					<a href="/get">Get a Sprig</a>
 				</li>
+
 			</ul>
 			{/* <div class={styles.desktop}>
 				<AnnouncementBanner />

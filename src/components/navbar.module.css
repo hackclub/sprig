@@ -327,6 +327,10 @@
 	.desktop {
 		display: none;
 	}
+	
+	.container > .rightActions {
+		display: none;
+	}
 }
 
 @media (max-width: 420px) {
