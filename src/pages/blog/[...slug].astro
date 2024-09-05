@@ -6,7 +6,7 @@ import "../../global.css"
 import StandardHead from "../../components/standard-head.astro";
 import Navbar from "../../components/navbar-main";
 import type {MarkdownContent} from "astro";
-import {getPostMetadata, handleMailingListSubmission, getNameFromUsername} from "./index.astro"
+import {handleMailingListSubmission, getPostMetadata, getNameFromUsername} from "./lib";
 
 const session = await getSession(Astro.cookies)
 
