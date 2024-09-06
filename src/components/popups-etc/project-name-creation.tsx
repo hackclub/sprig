@@ -12,7 +12,7 @@ export default function ProjectNameCreator() {
             <div class={styles.containerInner}>
 				<div class={styles.inner}>
 					<h1 class={styles.header}>Create Game</h1>
-					<p>Please input a game name</p>
+					<p class={styles.subtitle}>Game name:</p>
 					<input type={"text"} class={styles.input} autofocus={true} value={stateName} placeholder="Untitled" onInput={(e)=>{setStateName((e.target as HTMLTextAreaElement)?.value )}}/>
 					<div class={styles.buttonContainer}>
 						<Button type="submit" disabled={loading || stateName.length===0} accent class={styles.done} onClick={()=>{

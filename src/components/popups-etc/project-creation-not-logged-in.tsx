@@ -1,8 +1,22 @@
+import { useEffect } from 'preact/hooks';
 import styles from "./project-name-creator.module.css";
 import Button from "../design-system/button";
+import LinkButton from '../design-system/link-button';
 import { defaultExampleCode } from "../../lib/examples";
+import { SessionInfo } from '../../lib/game-saving/account';
 
-export default function ProjectNameCreator() {
+interface ProjectNameCreatorProps {
+	session: SessionInfo | null;
+}
+
+export default function ProjectNameCreator({ session }: ProjectNameCreatorProps) {
+
+    useEffect(() => {
+        const savedGame = localStorage.getItem("sprigMemory");
+        if (!session && (!savedGame || savedGame === defaultExampleCode)) {
+            window.location.href = "/editor";
+        }
+    }, [session]);
 
     return (
         <div class={styles.container}>
@@ -10,13 +24,7 @@ export default function ProjectNameCreator() {
             <div class={styles.containerInner}>
                 <div class={styles.inner}>
                     <h1 class={styles.header}>Create Game</h1>
-                    <p>If you create a new game, the game you were working on will be lost because you are not logged in.</p>
-                    <div class={styles.buttonContainer}>
-                        <Button type="submit" accent class={styles.done} onClick={()=>{
-                            localStorage.setItem("sprigMemory", defaultExampleCode);
-                            window.location.href= `/editor`;
-                        }}><span>Create a New Game</span></Button>
-                    </div>
+                    <p>You already have a game stored, but it hasn't been saved to an account. You can either log in to save it and create a new game, or open your existing game.</p>
                     <div class={styles.buttonContainer}>
                         <Button type="submit" accent class={styles.done} onClick={()=>{
                             window.location.href= `/login?to=/~/new-game`;
@@ -24,6 +32,14 @@ export default function ProjectNameCreator() {
                         <Button type="submit" accent class={styles.done} onClick={()=>{
                             window.location.href= `/editor`;
                         }}><span>Open Your Game</span></Button>
+                    </div>
+                    <div class={[styles.buttonContainer, styles.muted].join(' ')}>
+                        <LinkButton
+                            onClick={() => {
+                                localStorage.setItem("sprigMemory", defaultExampleCode);
+                                window.location.href= `/editor`;
+                            }}
+                        >or, delete your old game and start from scratch</LinkButton>
                     </div>
                 </div>
             </div>
