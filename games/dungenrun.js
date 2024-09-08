@@ -113,31 +113,31 @@ setSolids([player, wall]);
 let levels = [
   map`
 .......wwwwwwwwwwe
-.......w...wwk....
+.......w...ww.....
 wwwwwwwwww..w.wwww
 .w.......w.ww.w.w.
 .wwww.w.ww.w..w.w.
-.w..www......k..w.
-.wk....wwww.w...w.
+.w..www.........w.
+.w.....wwww.w...w.
 ww.ww...k...w...w.
 ....w.w..w.ww.wwww
 www.w.w.www...w...
 .pw.w.w....w....w.
-w.k..wwwwww.w..ww.
+w....wwwwww.w..ww.
 w.ww.w...w..ww.w.w
 www.wwww.wwww.ww.w`, // Level 1
   map`
 ......wwwwwwwwwwww
 ......w.w........w
-wwwwwwwk.ww.w.w..w
+wwwwwww..ww.w.w..w
 ww..w..w..w..w..ww
-w.w.w.wwwew.wwwk.w
+w.w.w.wwwew.www..w
 w.w.w...www...ww.w
 w.w.w.w.ww..w..w.w
 w.w.w.w.k..w..ww.w
 w.w...w..www...w.w
-w.wkw.w.w....w.w.w
-w.ww..w.w.wwww.wkw
+w.w.w.w.w....w.w.w
+w.ww..w.w.wwww.w.w
 w..w.ww.w....w.w.e
 wpw...w.ww.ww..www
 w...w.wwwww.wwwwww`, // Level 2
@@ -147,30 +147,30 @@ w...w.wwwww.wwwwww`, // Level 2
 wwwwwwww..w......w
 pwww.....w.w.www.w
 ...w.w.ww...k..w.w
-w.kww....w..www..w
+w..ww....w..www..w
 w.ww..ww.ww.w....w
-w.....kw.w..w.ww.w
-w.wwwww..w.kw.w..w
+w......w.w..w.ww.w
+w.wwwww..w..w.w..w
 w.w.....ww.w..ww.w
 w.w.wwww..w..w...w
-w..wwk...w..wk...w
+w..ww....w..w....w
 w.wwwwwwwwewwwwwww
 www.w.w.wwwww.w.ww`, // Level 3
   map`
 .......wwwwwwwwwww
 .......we.........
 wwwwwwwwwwww..w...
-w.kw.w......w.www.
+w..w.w......w.www.
 wwww.w.wwwww..w...
-w......w..k.ww..w.
+w......w....ww..w.
 wwwwwwew.ww..w.ww.
 w....www...w.w....
 wwww.w.www.w..www.
-ww..kw.....ww..k..
+ww...w.....ww..k..
 ww.wwww.w.ww.w.www
 ww......w....w.w..
 p.wwwwwww.wwww.w..
-w.........k.......`, // Level 4
+w.................`, // Level 4
   map`
 .......wwwwwwwwwww
 .......w........ww
@@ -178,12 +178,12 @@ wwwwwwww.wwww..w.w
 .w..w........w..ww
 ..w....www.ww.w..w
 wwwww.ww.ww.www.ww
-w.........w.wkw.kw
-wkwwww..w...w.w.ww
+w.........w.w.w..w
+w.wwww..w...w.w.ww
 w....w.wwww...w.ww
-wwkw.w....w..w..ww
+wwww.w....w..w..ww
 w..w.wwwkw.ww..w.w
-wp.wkw..w.w...ww.w
+wp.w.w..w.w...ww.w
 .......w..w.w....e
 wwwww.wwwwwwww.www`, // Level 5 - Boss Level
   map`
@@ -194,11 +194,11 @@ w....w...w.w.w.w.w
 .pw.w.wwww.w...w.w
 www.w.w....www.w.w
 ....w.w.ww..w..w.w
-w.www.wk.w..wk.w.w
+w.www.w..w..w..w.w
 w....w..w.w.w..w.w
 w.w.ww.wwww.ww.w.w
-w.w....ww......wkw
-wkww.w..w.wwww.w.w
+w.w....ww......w.w
+w.ww.w..w.wwww.w.w
 ww.w.wwww....kww.w
 wwwwww.www.www.wew`, // Level 6 - Boss Level
   map`
@@ -207,14 +207,15 @@ wwwwww.www.www.wew`, // Level 6 - Boss Level
 wwwwwwww.wwww..w.w
 .w..w........w..ww
 ..w....www.ww.w..w
-wwwww.ww.ww.www.ww
+wwwww.ww.w..www.ww
 w.........w.wkw..w
-wkwwww..w...w.w.ww
+w.wwww..w...w.w.ww
 w....w.wwww...w.ww
-wwkw.w....w..w..ww
-w..w.wwwkw.ww..w.w
-wp.wk...w.....w..w
-wwwwwwwwwwewwwwwww`, // Level 7 - Boss Level
+ww.w.w....w..w..ww
+w..w.www.w.ww..w.w
+wp.w....w.....w..w
+w.w..w.w.wew.w.www
+wwwwwww.w.wwwwwwww`, // Level 7 - Boss Level
 ];
 
 setBackground(background);
