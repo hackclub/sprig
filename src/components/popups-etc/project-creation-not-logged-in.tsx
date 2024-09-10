@@ -1,22 +1,9 @@
-import { useEffect } from 'preact/hooks';
 import styles from "./project-name-creator.module.css";
 import Button from "../design-system/button";
 import LinkButton from '../design-system/link-button';
 import { defaultExampleCode } from "../../lib/examples";
-import { SessionInfo } from '../../lib/game-saving/account';
 
-interface ProjectNameCreatorProps {
-	session: SessionInfo | null;
-}
-
-export default function ProjectNameCreator({ session }: ProjectNameCreatorProps) {
-
-    useEffect(() => {
-        const savedGame = localStorage.getItem("sprigMemory");
-        if (!session && (!savedGame || savedGame === defaultExampleCode)) {
-            window.location.href = "/editor";
-        }
-    }, [session]);
+export default function ProjectNameCreatorNotLoggedIn() {
 
     return (
         <div class={styles.container}>
