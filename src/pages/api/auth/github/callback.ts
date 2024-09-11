@@ -41,9 +41,6 @@ export const get: APIRoute = async ({ request, cookies }) => {
 			throw new Error("Failed to retrieve GitHub user");
 		}
 
-		console.log('Cookies: ', cookies);
-		console.log('sprigSession Cookie: ', cookies.get('sprigSession'));
-
 		const sessionInfo = await getSession(cookies);
 		if (!sessionInfo) {
 			console.error("No active session found");

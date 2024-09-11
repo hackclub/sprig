@@ -334,5 +334,5 @@ export const getSnapshotData = async (id: string): Promise<SnapshotData | null> 
 }
 
 export const updateUserGitHubToken = async (userId: string, githubAccessToken: string, githubId: string, githubUsername: string): Promise<void> => {
-    await setDocument('users', userId, { githubAccessToken, githubId, githubUsername });
+    await updateDocument('users', userId, { githubAccessToken, githubId, githubUsername });
 }

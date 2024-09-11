@@ -215,8 +215,29 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const isPublishing = useSignal(false);
     const publishSuccess = useSignal(false);
     const publishError = useSignal(false);
-	const prUrl = useSignal<string | null>(null);
+	const githubPRUrl = useSignal<string | null>(null);
+
 	let hasError = false;
+	const githubUsername = useSignal<string | null>(null);
+
+	useSignalEffect(() => {
+		const session = props.persistenceState.value.session;
+		if (session && session.user && session.user.githubUsername) {
+			githubUsername.value = session.user.githubUsername;
+		} else {
+			githubUsername.value = "user";
+		}
+	});
+
+	useSignalEffect(() => {
+		const persistenceState = props.persistenceState.value;
+
+		if (persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING" && persistenceState.game.githubPR) {
+			githubPRUrl.value = persistenceState.game.githubPR;
+		} else {
+			githubPRUrl.value = null;
+		}
+	});
 
 	// we will accept the current user's
 	// - name,
@@ -480,7 +501,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				gameID ?? ''
 			);
 
-			prUrl.value = pr.html_url;
+			githubPRUrl.value = pr.html_url;
 
 			publishSuccess.value = true;
 		} catch (error) {
@@ -691,7 +712,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									<div className={styles.popupHeader}>
 										<h2>Connected to GitHub</h2>
 										<p className={styles.successMessage}>
-											Awesome! You're now connected to GitHub as {props.persistenceState.value.session?.user?.githubUsername || "user"}.
+											Awesome! You're now connected to GitHub as {props.persistenceState.value.session?.user?.githubUsername || githubUsername.value}.
 										</p>
 									</div>
 
@@ -702,7 +723,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 												props.persistenceState.value.game !== "LOADING" ? (
 												<input
 													id="gameTitle"
-													value={props.persistenceState.value.game.name ?? ""}
+													value={props.persistenceState.value.game.name ?? githubUsername.value}
 													type="text"
 													placeholder="Enter your game title"
 													disabled
@@ -818,14 +839,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									<p className={styles.successMessage}>
 										Your game has been successfully published to GitHub.
 									</p>
-									<Button onClick={() => { prUrl.value && window.open(prUrl.value, "_blank") }}>
+									<Button onClick={() => { githubPRUrl.value && window.open(githubPRUrl.value, "_blank") }}>
 										View on GitHub
 									</Button>
-									<div style={{ marginTop: '10px' }}>
-										<Button onClick={() => { publishSuccess.value = false; publishDropdown.value = false; publishError.value = false; readyPublish.value = false; }}>
-											Publish Another Game
-										</Button>
-									</div>
 								</div>
 							)}
 
