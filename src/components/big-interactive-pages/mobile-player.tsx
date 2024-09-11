@@ -16,9 +16,9 @@ export default function MobilePlayer(props: MobilePlayerProps) {
 	const run = () => {
 		if (cleanup.current) cleanup.current();
 		const res = runGame(props.code, screen.current!, (_) => { })
-		if (res.error) console.error(res.error.raw)
-		cleanup.current = res.cleanup;
-		return res.cleanup
+		if (res?.error) console.error(res.error.raw)
+		cleanup.current = res!.cleanup;
+		return res?.cleanup
 	}
 
 	useEffect(() => {

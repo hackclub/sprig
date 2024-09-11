@@ -8,6 +8,7 @@ import {
 	theme,
 	switchTheme,
 	isNewSaveStrat,
+	screenRef,
 } from "../lib/state";
 import type { RoomState, ThemeType } from "../lib/state";
 import Button from "./design-system/button";
@@ -270,6 +271,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			resetState.value = "idle";
 	});
 
+	// We're listening to changes in screenRef because the game will only run if the screenRef is defined
+	// So we want to re-render the editor navbar when the screenRef changes so the game can actually run when it's defined
+  useSignalEffect(() => {
+    screenRef.value;
+  });
+
 	// usePopupCloseClick closes a popup when you click outside of its area
 	usePopupCloseClick(
 		styles.dropdown!,
@@ -286,7 +293,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		() => (showThemePicker.value = false),
 		showThemePicker.value
 	);
-	
+
 	usePopupCloseClick(
 		styles.dropdown!,
 	    () => (showDropdown.value = false),
@@ -546,7 +553,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	} else if (props.persistenceState.value.kind === "PERSISTED") {
 		saveState = {
 			SAVED: `Saved to ${
-				!isNewSaveStrat.value ? 
+				!isNewSaveStrat.value ?
 					props.persistenceState.value.session?.user.email ?? "???"
 				:
 					props.roomState?.value.participants.filter((participant) => {
@@ -913,7 +920,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					roomState={props.roomState}
 					onClose={() => shareRoomPopup.value = false}
 				/>
-			)}	
+			)}
 
 			{showThemePicker.value && (
 				<ul class={styles.themePicker}>
@@ -1102,16 +1109,16 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							<>
 								<li>
 								<a
-								href="javascript:void"
+								href="javascript:void(0)"
 								role="button"
-						
+
 								onClick={() => (shareRoomPopup.value = true)}
 							>
 								{!(props.persistenceState.value.kind == "PERSISTED" && props.persistenceState.value.game !== "LOADING" && props.persistenceState.value.game.isRoomOpen) ? "Create a room" : "Share room"}
 							</a>
 								</li>
 							</>
-						) : null}	
+						) : null}
 						<li>
 							<a href="/gallery">Gallery</a>
 						</li>
@@ -1148,7 +1155,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							role="button"
 							onClick={
 								foldAllTemplateLiterals
-							}> 
+							}>
 								Collapse all bitmaps
 							</a>
 						</li>
@@ -1157,7 +1164,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					<ul>
 						<li>
 							<a
-								href="javascript:void"
+								href="javascript:void(0)"
 								role="button"
 								onClick={() => {
 									const a = document.createElement("a");
@@ -1191,7 +1198,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						{canDelete(props.persistenceState) ? (
 							<li>
 								<a
-									href="javascript:void"
+									href="javascript:void(0)"
 									role="button"
 									onClick={async () => {
 										if (deleteState.value === "idle") {

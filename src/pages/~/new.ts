@@ -1,7 +1,6 @@
 import type { APIRoute } from 'astro'
 import { getSession, makeGame } from '../../lib/game-saving/account'
 import { defaultExampleCode } from '../../lib/examples'
-import { generateGameName } from '../../lib/words'
 
 
 const createDefaultWithTitle = (title:string) =>{

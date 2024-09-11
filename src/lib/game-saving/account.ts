@@ -38,6 +38,8 @@ export interface User {
 	githubAccessToken?: string
 	githubId?: string
 	githubUsername?: string
+	failedLoginAttempts?: number
+	lockoutUntil?: Timestamp
 }
 
 export interface Session {
