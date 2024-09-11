@@ -27,7 +27,6 @@ import {
 	IoSaveOutline,
 	IoShareOutline,
 	IoShuffle,
-	IoWarning,
 } from "react-icons/io5";
 import { FaBrush } from "react-icons/fa";
 import { usePopupCloseClick } from "../lib/utils/popup-close-click";
@@ -38,6 +37,7 @@ import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
+import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage } from "../lib/game-saving/github";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -102,6 +102,69 @@ type StuckData = {
 	description: string;
 };
 
+const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any) => {
+	try {
+		const githubSession = document.cookie
+			.split('; ')
+			.find(row => row.startsWith('githubSession='))
+			?.split('=')[1];
+
+		if (isPublish) {
+			publishDropdown.value = true;
+			publishSuccess.value = true;
+			return
+		}
+
+		if (githubSession) {
+			publishDropdown.value = true;
+			readyPublish.value = true;
+			return;
+		}
+		const clientId = import.meta.env.PUBLIC_GITHUB_CLIENT_ID;
+		const redirectUri = import.meta.env.PUBLIC_GITHUB_REDIRECT_URI;
+		const scope = 'repo';
+
+		const state = encodeURIComponent(JSON.stringify({ userId }));
+
+		const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}`;
+
+		const width = 600, height = 700;
+		const left = (screen.width - width) / 2;
+		const top = (screen.height - height) / 2;
+
+		const authWindow = window.open(
+			githubAuthUrl,
+			'GitHub Authorization',
+			`width=${width},height=${height},top=${top},left=${left}`
+		);
+
+		authWindow?.focus();
+
+		window.addEventListener('message', (event) => {
+
+			if (event.origin !== window.location.origin) {
+				return;
+			}
+
+			const { status, message, accessToken } = event.data;
+
+			if (status === 'success') {
+				const expires = new Date(Date.now() + 7 * 864e5).toUTCString();
+				document.cookie = `githubSession=${encodeURIComponent(accessToken)}; expires=${expires}; path=/`;
+				publishDropdown.value = true;
+				readyPublish.value = true;
+			}
+			else if (status === 'error') {
+				console.error('Error during GitHub authorization:', message);
+				alert('An error occurred: ' + message);
+			}
+		});
+	} catch (error) {
+		console.error('Error during GitHub authorization:', error);
+		alert('An error occurred: ' + (error as Error).message);
+	}
+};
+
 const prettifyCode = () => {
 	// Check if the codeMirror is ready
 	if (!codeMirror.value) return;
@@ -146,7 +209,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const showStuckPopup = useSignal(false);
 	const showThemePicker = useSignal(false);
 	const shareRoomPopup = useSignal(false);
+	const thumbnailPreview = useSignal<string | null>(null);
 
+	const readyPublish = useSignal(false);
+	const isPublishing = useSignal(false);
+    const publishSuccess = useSignal(false);
+    const publishError = useSignal(false);
+	const prUrl = useSignal<string | null>(null);
+	let hasError = false;
 
 	// we will accept the current user's
 	// - name,
@@ -167,6 +237,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const deleteState = useSignal<"idle" | "confirm" | "deleting">("idle");
 	const resetState = useSignal<"idle" | "confirm">("idle");
 	const showDropdown = useSignal(false);
+	const publishDropdown = useSignal(false);
 
 	useSignalEffect(() => {
 		const _showNavPopup = showNavPopup.value;
@@ -200,6 +271,225 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	    () => (showDropdown.value = false),
 		showDropdown.value
 	);
+
+	usePopupCloseClick(
+		styles.publishPopup!,
+		() => (publishDropdown.value = false),
+		publishDropdown.value
+	);
+
+	const handleFileDrop = (e: DragEvent) => {
+		e.preventDefault();
+		const file = e.dataTransfer?.files[0];
+		if (file) {
+			handleFileUpload(file);
+		} else {
+			displayError("thumbnail", "Please upload a valid image file.");
+		}
+	};
+
+	const handleFileChange = (e: Event) => {
+		const file = (e.target as HTMLInputElement).files?.[0];
+		if (file) {
+			handleFileUpload(file);
+		} else {
+			displayError("thumbnail", "Please upload a valid image file.");
+		}
+	};
+
+	const handleFileUpload = (file: File) => {
+		if (file && file.type.startsWith("image/")) {
+			const reader = new FileReader();
+			reader.onload = (event) => {
+				thumbnailPreview.value = event.target?.result as string;
+				clearError("thumbnail");
+			};
+			reader.readAsDataURL(file);
+		} else {
+			displayError("thumbnail", "Please upload a valid image file.");
+		}
+	};
+
+	const displayError = (fieldId: string, message: string) => {
+		const errorElement = document.getElementById(`error-${fieldId}`);
+		if (errorElement) {
+			errorElement.textContent = message;
+			errorElement.style.display = 'block';
+			errorElement.style.color = 'red';
+		}
+	};
+
+	const handleError = (field: string, condition: any, message: string) => {
+		if (condition) {
+			displayError(field, message);
+			hasError = true;
+		}
+	};
+
+	const clearError = (fieldId: string) => {
+		const errorElement = document.getElementById(`error-${fieldId}`);
+		if (errorElement) {
+			errorElement.style.display = 'none';
+			errorElement.textContent = '';
+		}
+	};
+
+	async function validateGameName(gameName: string): Promise<{ valid: boolean; message: string }> {
+
+		let existingGames: any[] = [];
+		try {
+			const response = await fetch(import.meta.env.PUBLIC_GALLERY_API);
+			if (response.ok) {
+				existingGames = await response.json();
+			} else {
+				throw new Error('Failed to fetch gallery games');
+			}
+		} catch (error) {
+			console.error('Error fetching gallery games:', error);
+			return { valid: false, message: "Failed to fetch gallery games. Please try again later." };
+		}
+
+		const validNamePattern = /^[a-zA-Z0-9_-]+$/;
+		if (!validNamePattern.test(gameName)) {
+			return { valid: false, message: "The game name can only contain alphanumeric characters, dashes, or underscores." };
+		}
+
+		const lowerCaseGameName = gameName.toLowerCase();
+		const isUnique = !existingGames.some(game => game.lowerCaseTitle === lowerCaseGameName);
+		if (!isUnique) {
+			return { valid: false, message: "The game name already exists in the gallery. Please choose a different name." };
+		}
+
+		return { valid: true, message: "The game name is valid and unique." };
+	}
+
+	const publishToGithub = async (accessToken: string | null | undefined, yourGithubUsername: string | undefined, gameID: string | undefined) => {
+		try {
+
+			const gameTitleElement = document.getElementById('gameTitle') as HTMLInputElement | null;
+			const authorNameElement = document.getElementById('authorName') as HTMLInputElement | null;
+			const gameDescriptionElement = document.getElementById('gameDescription') as HTMLTextAreaElement | null;
+			const gameControlsDescriptionElement = document.getElementById('gameControlsDescription') as HTMLTextAreaElement | null;
+
+			if (!gameTitleElement || !authorNameElement || !gameDescriptionElement || !gameControlsDescriptionElement) {
+				console.error("Required elements are missing.");
+				return;
+			}
+
+			const gameTitle = gameTitleElement.value.trim();
+			const authorName = authorNameElement.value;
+			const gameDescription = gameDescriptionElement.value;
+			const gameCode = codeMirror.value?.state.doc.toString() ?? "";
+			const image = thumbnailPreview.value;
+			const gameControlsDescription = gameControlsDescriptionElement.value;
+
+			clearError("gameDescription");
+			clearError("thumbnail");
+			clearError("gameControlsDescription");
+			clearError("gameTitle");
+
+			hasError = false;
+
+			const { valid, message: gameNameMessage } = await validateGameName(gameTitle);
+			handleError("gameTitle", !valid, gameNameMessage);
+			handleError("gameDescription", !gameDescription, "Please provide a game description.");
+			handleError("thumbnail", !image, "Please upload a thumbnail image.");
+			handleError("gameControlsDescription", !gameControlsDescription, "Please provide game controls description.");
+
+			if (hasError) {
+				return;
+			}
+
+			if (!accessToken) {
+				throw new Error("GitHub access token not found.");
+			}
+
+			let isValidToken = await validateGitHubToken(accessToken);
+			if (!isValidToken) {
+				console.warn("Token invalid or expired. Attempting re-authentication...");
+				if (
+					(props.persistenceState.value.kind === 'PERSISTED' ||
+						props.persistenceState.value.kind === 'COLLAB') &&
+					props.persistenceState.value.game !== 'LOADING'
+				) {
+					if (typeof props.persistenceState.value.game !== 'string') {
+						await openGitHubAuthPopup(
+							props.persistenceState.value.session?.user?.id ?? null,
+							publishDropdown,
+							readyPublish,
+							props.persistenceState.value.game.isPublished,
+							publishSuccess
+						);
+					}
+				}
+				accessToken = sessionStorage.getItem("githubAccessToken");
+				if (!accessToken || !(await validateGitHubToken(accessToken))) {
+					throw new Error("Failed to re-authenticate with GitHub.");
+				}
+			}
+
+			isPublishing.value = true;
+			readyPublish.value = false;
+			publishError.value = false;
+			publishSuccess.value = false;
+
+			let forkedRepo;
+			try {
+				forkedRepo = await forkRepository(accessToken, "hackclub", "sprig");
+			} catch {
+				console.warn("Fork might already exist. Fetching existing fork...");
+				forkedRepo = await fetchForkedRepository(accessToken, "hackclub", "sprig", yourGithubUsername || "");
+			}
+
+			const latestCommitSha = await fetchLatestCommitSha(accessToken, forkedRepo.owner.login, forkedRepo.name, forkedRepo.default_branch);
+			if (!latestCommitSha) {
+				throw new Error("Failed to fetch the latest commit SHA.");
+			}
+
+			const newBranchName = `Automated-PR-${Date.now()}`;
+
+			await createBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, latestCommitSha);
+
+			const imageBase64 = thumbnailPreview.value || null;
+			const imageBlobSha = imageBase64 ? await createBlobForImage(accessToken, forkedRepo.owner.login, forkedRepo.name, imageBase64.split(',')[1]) : null;
+
+			const treeSha = await createTreeAndCommit(
+				accessToken,
+				forkedRepo.owner.login,
+				forkedRepo.name,
+				latestCommitSha,
+				[
+					{ path: `games/${gameTitle}.js`, content: gameCode },
+					...(imageBlobSha ? [{ path: `games/img/${gameTitle}.png`, sha: imageBlobSha }] : [])
+				]
+			);
+
+			const newCommit = await createCommit(accessToken, forkedRepo.owner.login, forkedRepo.name, `Automated Commit - ${gameTitle}`, treeSha, latestCommitSha);
+
+			await updateBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, newCommit.sha);
+
+			const pr = await createPullRequest(
+				accessToken,
+				"hackclub",
+				"sprig",
+				`[Automated] ${gameTitle}`,
+				newBranchName,
+				"main",
+				`### Author name\nAuthor: ${authorName}\n\n### About your game\n\n**What is your game about?**\n${gameDescription}\n\n**How do you play your game?**\n${gameControlsDescription}`,
+				forkedRepo.owner.login,
+				gameID ?? ''
+			);
+
+			prUrl.value = pr.html_url;
+
+			publishSuccess.value = true;
+		} catch (error) {
+			console.error("Publishing failed:", error);
+			publishError.value = true;
+		} finally {
+			isPublishing.value = false;
+		}
+	};
 
 	let saveState;
 	let actionButton;
@@ -366,24 +656,205 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						Report a bug
 					</Button>
 				</li>
+				<li>
+					{props.persistenceState.value.kind === "PERSISTED" && (
+						<Button
+							onClick={async () => {
+								if (
+									(props.persistenceState.value.kind === 'PERSISTED' ||
+										props.persistenceState.value.kind === 'COLLAB') &&
+									props.persistenceState.value.game !== 'LOADING'
+								) {
+									if (typeof props.persistenceState.value.game !== 'string') {
+										await openGitHubAuthPopup(
+											props.persistenceState.value.session?.user?.id ?? null,
+											publishDropdown,
+											readyPublish,
+											props.persistenceState.value.game.isPublished,
+											publishSuccess
+										);
+									}
+								} else {
+									console.warn('Game is not ready or is a restricted game');
+								}
+							}}
+							disabled={!isLoggedIn}
+						>
+							Publish To GitHub
+						</Button>
+					)}
+
+					{publishDropdown.value && (
+						<div className={styles.publishPopup}>
+							{readyPublish.value && (
+								<>
+									<div className={styles.popupHeader}>
+										<h2>Connected to GitHub</h2>
+										<p className={styles.successMessage}>
+											Awesome! You're now connected to GitHub as {props.persistenceState.value.session?.user?.githubUsername || "user"}.
+										</p>
+									</div>
+
+									<div className={styles.inputGroup}>
+										<div className={styles.inputField}>
+											<label htmlFor="gameTitle">Game Title</label>
+											{props.persistenceState.value.kind === "PERSISTED" &&
+												props.persistenceState.value.game !== "LOADING" ? (
+												<input
+													id="gameTitle"
+													value={props.persistenceState.value.game.name ?? ""}
+													type="text"
+													placeholder="Enter your game title"
+													disabled
+												/>
+											) : (
+												<span>Fetching Name...</span>
+											)}
+											<div id="error-gameTitle" class="error-message" style="display: none;"></div>
+										</div>
+
+										<div className={styles.inputField}>
+											<label htmlFor="authorName">Author Name</label>
+											<input
+												id="authorName"
+												value={props.persistenceState.value.session?.user?.githubUsername ?? ""}
+												type="text"
+												placeholder="Enter author name"
+												disabled
+											/>
+										</div>
+
+										<div className={styles.inputField}>
+											<label htmlFor="gameDescription">About Your Game</label>
+											<textarea
+												id="gameDescription"
+												v-model="gameDescription"
+												placeholder="Describe the key objectives, gameplay mechanics, and what makes your game unique."
+												rows={4}
+											/>
+											<div id="error-gameDescription" class="error-message" style="display: none;"></div>
+										</div>
+
+										<div className={styles.inputField}>
+											<label htmlFor="gameControlsDescription">How to Play Your Game</label>
+											<textarea
+												id="gameControlsDescription"
+												v-model="gameControlsDescription"
+												placeholder="Describe how to play your game here (e.g., controls)..."
+												rows={4}
+											/>
+											<div id="error-gameControlsDescription" class="error-message" style="display: none;"></div>
+										</div>
+
+										<div className={styles.inputField}>
+											<label htmlFor="thumbnailUpload">Game Thumbnail</label>
+											<div
+												id="thumbnailUpload"
+												className={styles.dragDropArea}
+												onDragOver={(e) => e.preventDefault()}
+												onDrop={handleFileDrop}
+												onClick={() => document.getElementById("fileInput")?.click()}
+											>
+												<p>Drag and drop your thumbnail image here, or click to upload</p>
+												<input
+													id="fileInput"
+													type="file"
+													accept="image/*"
+													className={styles.fileInput}
+													onChange={handleFileChange}
+												/>
+											</div>
+											{thumbnailPreview.value && (
+												<img
+													src={thumbnailPreview.value}
+													alt="Thumbnail Preview"
+													className={styles.thumbnailPreview}
+												/>
+											)}
+											<div id="error-thumbnail" class="error-message" style="display: none;"></div>
+										</div>
+									</div>
+									<div className={styles.buttonGroup}>
+										<Button
+											accent
+											icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
+											spinnyIcon={uploadState.value === "LOADING"}
+											loading={uploadState.value === "LOADING"}
+											onClick={async () => {
+												try {
+													const game = props.persistenceState.value.kind === 'PERSISTED' && typeof props.persistenceState.value.game === 'object'
+														? props.persistenceState.value.game
+														: null;
+
+													const gameId = game?.id || null;
+													await publishToGithub(
+														props.persistenceState.value.session?.user?.githubAccessToken,
+														props.persistenceState.value.session?.user?.githubUsername,
+														gameId ?? ''
+													);
+												} catch (error) {
+													console.error("Publishing failed:", error);
+												}
+											}}
+										>
+											Publish The Game
+										</Button>
+									</div>
+								</>
+							)}
+
+							{isPublishing.value && (
+								<div className={styles.popupHeader}>
+									<h2>Publishing...</h2>
+									<p className={styles.successMessage}>
+										Your game is being published to GitHub. Please wait...
+									</p>
+								</div>
+							)}
+
+							{publishSuccess.value && (
+								<div className={styles.popupHeader}>
+									<h2>Success!</h2>
+									<p className={styles.successMessage}>
+										Your game has been successfully published to GitHub.
+									</p>
+									<Button onClick={() => { prUrl.value && window.open(prUrl.value, "_blank") }}>
+										View on GitHub
+									</Button>
+									<div style={{ marginTop: '10px' }}>
+										<Button onClick={() => { publishSuccess.value = false; publishDropdown.value = false; publishError.value = false; readyPublish.value = false; }}>
+											Publish Another Game
+										</Button>
+									</div>
+								</div>
+							)}
+
+							{publishError.value && (
+								<div className={styles.popupHeader}>
+									<h2>Error</h2>
+									<p className={styles.successMessage}>
+										Something went wrong while publishing your game. Please try again.
+									</p>
+									<Button onClick={() => { publishError.value = false; publishDropdown.value = true; readyPublish.value = true; publishSuccess.value = false; }}>
+										Try Again
+									</Button>
+								</div>
+							)}
+						</div>
+					)}
+				</li>
 
 				<li>
-					<div class={styles.dropdownContainer}>
-						<Button accent onClick={() => (showDropdown.value = !showDropdown.value)}>
-						Run <IoChevronDown />
-						</Button>
+					<div class={styles.runButtonContainer}>
+						<button className={styles.runButton} onClick={() => onRun()}>
+							Run
+						</button>
+						<button className={styles.dropdownButton} onClick={() => (showDropdown.value = !showDropdown.value)}>
+							<IoChevronDown />
+						</button>
+
 						{showDropdown.value && (
 							<div class={styles.playPopup}>
-								<Button
-									accent
-									icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
-									spinnyIcon={uploadState.value === "LOADING"}
-									loading={uploadState.value === "LOADING"}
-									onClick={() => onRun()}
-								>
-									Run
-								</Button>
-								<div class={styles.divider}></div>
 								<Button
 									accent
 									icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
