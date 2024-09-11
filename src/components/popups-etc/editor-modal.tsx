@@ -22,8 +22,21 @@ export default function EditorModal() {
 		if (openEditor.value) text.value = openEditor.value.text
 	})
 
+	/**
+	 * @Josias
+	 * The two useEffect's below can be naughty but they help ensure two things
+	 * 1. If an update comes from the underlying codemirror document, the first effect doesn't run as we're already updating the editor modal from there
+	 * 2. If an update was originally made from the currently open editor modal, the changes to the codemirror document will
+	 * not trigger an update to the open editor modal
+	 * 
+	 * Both of these help us avoid Out-of-order errors or Cycles
+	 */
+
 	// Sync editor text changes with code
-	useEffect(() => {
+	useEffect(() => { // useEffect #1
+		// if update comes from codemirror doc (probably from a collab session)
+		// this ensures that updates are not triggered from this effect which may cause an 
+		// Out-of-order / Cycles
 		if (updateCulprit === UpdateCulprit.CodeMirror) {
 			setUpdateCulprit(UpdateCulprit.RESET);
 			return;
@@ -54,6 +67,9 @@ export default function EditorModal() {
 
 
 	useEffect(() => {
+		// if update comes from codemirror doc (probably from a collab session)
+		// this ensures that updates are not triggered from this effect which may cause an 
+		// Out-of-order / Cycles
 		if (updateCulprit === UpdateCulprit.OpenEditor) {
 			setUpdateCulprit(UpdateCulprit.RESET);
 			return;
