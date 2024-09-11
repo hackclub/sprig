@@ -87,7 +87,7 @@ export default function EditorModal() {
 		if (!openEditor.value) return;
 
 		const code = codeMirror.value?.state.doc.toString() ?? '';
-		const levenshtainDistances = _foldRanges.value.map((foldRange, foldRangeIndex) => {
+		const levenshteinDistances = _foldRanges.value.map((foldRange, foldRangeIndex) => {
 			const widgetKind = _widgets.value[foldRangeIndex]?.value.spec.widget.props.kind;
 
 			// if the widget kind is not the same as the open editor kind, don't do anything
@@ -100,13 +100,13 @@ export default function EditorModal() {
 		});
 
 		// if (levenshtainDistances.length === 0) alert(`You are currently editing a deleted ${openEditor.value?.kind}`);
-		if (levenshtainDistances.length === 0) return;
+		if (levenshteinDistances.length === 0) return;
 
 		// compute the index of the min distance
 		let indexOfMinDistance = 0;
-		levenshtainDistances.forEach((distance, didx) => {
-			if (levenshtainDistances[indexOfMinDistance]! < 0) indexOfMinDistance = didx;
-			const min = levenshtainDistances[indexOfMinDistance]!;
+		levenshteinDistances.forEach((distance, didx) => {
+			if (levenshteinDistances[indexOfMinDistance]! < 0) indexOfMinDistance = didx;
+			const min = levenshteinDistances[indexOfMinDistance]!;
 			if (distance >= 0 && distance <= min) indexOfMinDistance = didx;
 		});
 
