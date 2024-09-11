@@ -140,6 +140,11 @@ const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, 
 			`width=${width},height=${height},top=${top},left=${left}`
 		);
 
+		if (!authWindow || authWindow.closed || typeof authWindow.closed === 'undefined') {
+            alert('Popup blocked. Please allow popups for this site.');
+            return;
+        }
+
 		authWindow?.focus();
 
 		window.addEventListener('message', (event) => {
@@ -152,7 +157,7 @@ const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, 
 
 			if (status === 'success') {
 				const expires = new Date(Date.now() + 7 * 864e5).toUTCString();
-				document.cookie = `githubSession=${encodeURIComponent(accessToken)}; expires=${expires}; path=/`;
+                document.cookie = `githubSession=${encodeURIComponent(accessToken)}; expires=${expires}; path=/; SameSite=None; Secure`;
 				publishDropdown.value = true;
 				readyPublish.value = true;
 			}
