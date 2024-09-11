@@ -28,6 +28,7 @@ import {
 	IoSaveOutline,
 	IoShareOutline,
 	IoShuffle,
+	IoWarning,
 } from "react-icons/io5";
 import { FaBrush } from "react-icons/fa";
 import { usePopupCloseClick } from "../lib/utils/popup-close-click";
@@ -880,10 +881,22 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							<div class={styles.playPopup}>
 								<Button
 									accent
-									icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
+									icon={
+										{
+											IDLE: IoPlay,
+											LOADING: VscLoading,
+											ERROR: IoWarning,
+										}[uploadState.value]
+									}
 									spinnyIcon={uploadState.value === "LOADING"}
 									loading={uploadState.value === "LOADING"}
-									onClick={() => upload(codeMirror.value?.state.doc.toString() ?? "")}
+									onClick={() => upload(codeMirror.value?.state.doc.toString() ?? "",
+										props.persistenceState.value.kind == "PERSISTED"
+											&& props.persistenceState.value.game != "LOADING"
+											? props.persistenceState.value.game.name
+											: props.persistenceState.value.kind == "SHARED" ? props.persistenceState.value.name
+												: "Untitled Game"
+									)}
 								>
 									Run on Device
 								</Button>
