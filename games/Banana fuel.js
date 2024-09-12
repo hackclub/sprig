@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Banana fuel
 @author: Neon
-@tags: []
+@tags: ['banana', 'simple']
 @addedOn: 2024-09-12
 */
 
