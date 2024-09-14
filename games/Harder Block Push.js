@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Harder Block Push
 @author: Game
-@tags: []
+@tags: ["sokoban-style", "hard", "advanced"]
 @addedOn: 2024-9-14
 */
 
