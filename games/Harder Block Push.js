@@ -76,7 +76,7 @@ setLegend(
 
 setSolids([blocks, player])
 
-let level = 2
+let level = 0
 const levels = [
   map`
 ...........
