@@ -60,6 +60,7 @@ jobs:
 
       - name: Inject MOSS User ID into moss.pl
         run: |
+          echo "MOSS_USERID=${{ secrets.MOSS_USERID }}"
           sed -i "s/\$userid=;/\$userid=${{ secrets.MOSS_USERID }};/" .github/scripts/moss.pl
           cat .github/scripts/moss.pl | grep userid
 
