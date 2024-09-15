@@ -1231,7 +1231,7 @@ onInput("a", () => {
   if (!player || !getFirst(player)) return;
 
   if (inMenu) {
-    menuEntities = new Array();
+    let menuEntities = new Array();
     let pushEntities = true;
     getAll().forEach((entity) => {
       menuEntities.push(entity);
@@ -1279,7 +1279,7 @@ onInput("d", () => {
   if (!player || !getFirst(player)) return;
 
   if (inMenu) {
-    menuEntities = new Array();
+    let menuEntities = new Array();
     let pushEntities = true;
     getAll().forEach((entity) => {
       menuEntities.push(entity);
