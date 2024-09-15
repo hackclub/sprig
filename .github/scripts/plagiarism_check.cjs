@@ -152,7 +152,7 @@ async function processReports(resultFolder, suspectFile) {
 		const reportFiles = ['report_split1.html', 'report_split2.html'].map(file => path.join(resultFolder, file));
 		let highestPercentage = 0;
 		let highestPercentageFile = '';
-		const markdownLines = ["# Plagiarism Report"];
+		const markdownLines = ["# Plagiarism Report", "## Game overlap report:"];
 
 		for (const reportFile of reportFiles) {
 			if (fs.existsSync(reportFile)) {
@@ -174,7 +174,7 @@ async function processReports(resultFolder, suspectFile) {
 						const file2Percentage = calculatePlagiarismPercentage(matchedLines, file2Lines);
 
 						log(`Plagiarism: ${file2Percentage}% of ${cleanFilePath}`);
-						markdownLines.push(`- **${cleanFilePath}**: ${file2Percentage}% plagiarism`);
+						markdownLines.push(`${cleanFilePath}: ${file2Percentage}%`);
 
 						if (file2Percentage > highestPercentage) {
 							highestPercentage = file2Percentage;
@@ -189,7 +189,12 @@ async function processReports(resultFolder, suspectFile) {
 			}
 		}
 
-		markdownLines.push(`\n## The highest plagiarism is ${highestPercentage}% from ${highestPercentageFile}\n`);
+		if (highestPercentageFile) {
+			markdownLines.push(`\nThe highest plagiarism is ${highestPercentage}% from ${highestPercentageFile}`);
+		} else {
+			markdownLines.push("\nNo significant overlap found.");
+		}
+
 		await writeToMarkdown(path.join(resultFolder, 'plagiarism-report.md'), markdownLines);
 	} catch (error) {
 		log(`Failed to process reports: ${error.message}`);
