@@ -20,8 +20,42 @@ jobs:
         with:
           node-version: '18.20.4'
 
-      - name: Install Cheerio and Axios
-        run: npm install cheerio axios --legacy-peer-deps
+      - name: Delete existing package.json
+        run: |
+          if [ -f "package.json" ]; then
+            rm package.json
+          fi
+
+      - name: Create new package.json for plagiarism checker
+        run: |
+          cat > package.json <<EOL
+          {
+            "name": "plagiarism-checker",
+            "version": "1.0.0",
+            "description": "A script to check for plagiarism using MOSS.",
+            "main": ".github/scripts/plagiarism_check.cjs",
+            "dependencies": {
+              "axios": "^1.0.0",
+              "cheerio": "^1.0.0"
+            },
+            "scripts": {
+              "start": "node .github/scripts/plagiarism_check.cjs"
+            }
+          }
+          EOL
+
+      - name: Cache Node Modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      - name: Install Dependencies for Plagiarism Checker
+        run: npm install --legacy-peer-deps
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
 
       - name: Print Base and Head SHA
         run: |
@@ -41,7 +75,7 @@ jobs:
       - name: Run Plagiarism Detection Script
         id: plagiarism-check
         if: ${{ env.FILES != '' }}
-        run: node .github/scripts/plagiarism_check.cjs "${{ env.FILES }}"
+        run: npm start "${{ env.FILES }}"
 
       - name: Upload MOSS Results as Artifacts
         if: success() && ${{ env.FILES != '' }}
