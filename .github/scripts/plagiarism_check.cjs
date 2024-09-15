@@ -173,12 +173,14 @@ async function processReports(resultFolder, suspectFile) {
 						const file2Lines = countFileLines(file2FullPath);
 						const file2Percentage = calculatePlagiarismPercentage(matchedLines, file2Lines);
 
-						log(`Plagiarism: ${file2Percentage}% of ${cleanFilePath}`);
-						markdownLines.push(`${cleanFilePath}: ${file2Percentage}%`);
+						if (file2Percentage >= 40) {
+							log(`Plagiarism: ${file2Percentage}% of ${cleanFilePath}`);
+							markdownLines.push(`${cleanFilePath}: ${file2Percentage}%`);
 
-						if (file2Percentage > highestPercentage) {
-							highestPercentage = file2Percentage;
-							highestPercentageFile = cleanFilePath;
+							if (file2Percentage > highestPercentage) {
+								highestPercentage = file2Percentage;
+								highestPercentageFile = cleanFilePath;
+							}
 						}
 					} else {
 						log(`Warning: File ${file2FullPath} does not exist.`);
