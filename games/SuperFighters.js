@@ -68,9 +68,7 @@ let LEFT_FACING_PLACEHOLDER = leftFacingPlayer_A;
 
 let player = null;
 
-let happySound = tune`
-500: D5^500 + A5~500,
-15500`;
+let happySound = tune`3`;
 
 let explosionSound = tune`
 500: D5^500,
@@ -110,6 +108,8 @@ let victoryMusic = tune`
 140.8450704225352: C5~140.8450704225352 + C4/140.8450704225352 + G4/140.8450704225352 + E4/140.8450704225352 + E5/140.8450704225352,
 140.8450704225352`;
 
+let loadingMusic = victoryMusic;
+
 let gameMusic = tune`
 140.8450704225352: D5~140.8450704225352 + D4/140.8450704225352 + F4/140.8450704225352 + A4^140.8450704225352,
 140.8450704225352,
@@ -144,7 +144,7 @@ let gameMusic = tune`
 140.8450704225352: G5~140.8450704225352,
 140.8450704225352: G4~140.8450704225352`;
 
-let playback = playTune(victoryMusic, Infinity);
+let playback = playTune(loadingMusic, Infinity);
 
 setLegend(
   [
@@ -715,7 +715,7 @@ setSolids([
   rightFacingPlayer_A,
   leftFacingPlayer_A,
   rightFacingPlayer_B,
-  rightFacingPlayer_B,
+  leftFacingPlayer_B,
   leftPunchingPlayer,
   rightPunchingPlayer,
   rightFacingMagnetPlayer,
@@ -842,11 +842,15 @@ setPushables({
 // Add game title text as the player loads into the game.
 addText(gameTitle, gameTitleColor);
 
+addText("Select a character", { y: 4, color: color`2` });
+
 //Add menu icons
-addText("<-  ->", { y: 9, color: color`3` });
+addText("<__>", { y: 9, color: color`3` });
 
 //Add menu text
-addText("Press S to start!", { y: 11, color: color`6` });
+addText("Press", { x: 2, y: 11, color: color`0` });
+addText(" S ", { x: 8, y: 11, color: color`3` });
+addText("to start!", { x: 11, y: 11, color: color`0` });
 
 function copy(source, deep) {
   var o, prop, type;
@@ -1388,7 +1392,7 @@ function gameReset() {
   // Handle player death
   if (lives <= 0 && !changingLevels) {
     // Reset level
-    level = 0;
+    level = 1;
     clearText();
 
     // Destroy all entities (except the player)
@@ -1590,7 +1594,7 @@ setInterval(() => {
 
     switch (level) {
       case 2:
-        setBackground(sky_black);
+        setBackground(sky_light);
         addText("Not bad...", { y: 3, color: `4` });
         addText("Can you beat this?", { y: 4, color: `3` });
         break;
@@ -1649,7 +1653,7 @@ setInterval(() => {
 
     if (isFinalLevel) {
       playback.end();
-      playTune(victoryMusic, Infinity);
+      playTune(victoryMusic, 3);
     }
   }
   if (changingLevels) return;
@@ -1657,6 +1661,6 @@ setInterval(() => {
   // Render lives on the screen
   let text = "Lives: " + lives;
   if (level < levels.length - 1 && level > 0) {
-    addText(text, { x: width() - 3, y: 5, color: `5` });
+    addText(text, { x: width() - 4, y: 5, color: `5` });
   }
 }, 40);
