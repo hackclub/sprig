@@ -81,3 +81,14 @@ jobs:
         with:
           name: plagiarism-report
           path: .github/moss_results/plagiarism-report.md
+
+      - name: Save PR number to file
+        if: always()
+        run: echo ${{ github.event.pull_request.number }} > pr_number.txt
+
+      - name: Upload PR Number as Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-number
+          path: pr_number.txt
