@@ -50,7 +50,7 @@ function submitToMoss(suspectFile, folder) {
 	return new Promise((resolve, reject) => {
 		log(`Submitting files to MOSS for ${folder}...`);
 
-		const mossCommand = `perl moss.pl -l javascript ${suspectFile} ${folder}/*.js`;
+		const mossCommand = `perl .github/scripts/moss.pl -l javascript ${suspectFile} ${folder}/*.js`;
 
 		exec(mossCommand, (error, stdout, stderr) => {
 			if (error) {
