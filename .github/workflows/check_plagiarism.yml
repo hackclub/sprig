@@ -61,6 +61,7 @@ jobs:
       - name: Inject MOSS User ID into moss.pl
         run: |
           sed -i "s/\$userid=;/\$userid=${{ secrets.MOSS_USERID }};/" .github/scripts/moss.pl
+          cat .github/scripts/moss.pl | grep userid
 
       - name: Run Plagiarism Detection Script
         id: plagiarism-check
