@@ -849,8 +849,8 @@ addText("<__>", { y: 9, color: color`3` });
 
 //Add menu text
 addText("Press", { x: 2, y: 11, color: color`0` });
-addText(" S ", { x: 8, y: 11, color: color`3` });
-addText("to start!", { x: 11, y: 11, color: color`0` });
+addText(" S ", { x: 7, y: 11, color: color`3` });
+addText("to start!", { x: 10, y: 11, color: color`0` });
 
 function copy(source, deep) {
   var o, prop, type;
