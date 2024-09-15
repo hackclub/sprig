@@ -47,6 +47,13 @@ jobs:
       - name: Install Dependencies for Plagiarism Checker
         run: npm install
 
+      - name: Get list of changed files
+        id: changed-files
+        run: |
+          js_files=$(git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep '^games/.*\.js$' | xargs)
+          echo "FILES=$js_files" >> $GITHUB_ENV
+        shell: bash
+
       - name: Print Base and Head SHA
         run: |
           echo "Pull Request Base SHA: ${{ github.event.pull_request.base.sha }}"
@@ -55,7 +62,6 @@ jobs:
       - name: Inject MOSS User ID into moss.pl
         run: |
           sed -i "s/\$userid=;/\$userid=547529030;/" .github/scripts/moss.pl
-          cat .github/scripts/moss.pl | grep userid
 
       - name: Run Plagiarism Detection Script
         id: plagiarism-check
