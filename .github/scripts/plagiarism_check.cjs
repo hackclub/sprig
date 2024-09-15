@@ -159,7 +159,7 @@ async function processReports(resultFolder, suspectFile) {
 				const reportMatches = extractMossReportData(reportFile, suspectFile);
 				for (const match of reportMatches) {
 					const matchedLines = parseInt(match.linesMatched);
-					const file2Path = match.file2.match(/\S+\.js/)[0];
+					const file2Path = path.basename(match.file2);
 					const file2FullPath = path.join(__dirname, '../../games', file2Path);
 
 					const file2Lines = countFileLines(file2FullPath);
