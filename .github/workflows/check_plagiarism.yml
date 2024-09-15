@@ -15,56 +15,44 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          python-version: '3.10'
+          node-version: '18.20.4'
 
-      - name: Install Compare50 && beautifulsoup4
-        run: pip install compare50 beautifulsoup4
+      - name: Install Cheerio and Axios
+        run: npm install cheerio axios --legacy-peer-deps
+
+      - name: Print Base and Head SHA
+        run: |
+          echo "Pull Request Base SHA: ${{ github.event.pull_request.base.sha }}"
+          echo "Pull Request Head SHA: ${{ github.event.pull_request.head.sha }}"
 
       - name: Get list of changed files
         id: changed-files
         run: |
-          echo "Pull Request Base SHA: ${{ github.event.pull_request.base.sha }}"
-          echo "Pull Request Head SHA: ${{ github.event.pull_request.head.sha }}"
-          git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep 'games/.*\.js$' | xargs
-          js_files=$(git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep 'games/.*\.js$' | xargs)
+          js_files=$(git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep '^games/.*\.js$' | xargs)
           echo "FILES=$js_files" >> $GITHUB_ENV
 
+      - name: Inject MOSS User ID into moss.pl
+        run: |
+          sed -i "s/\$userid=;/\$userid=${{ secrets.MOSS_USERID }};/" .github/scripts/moss.pl
+
       - name: Run Plagiarism Detection Script
-        if: env.FILES != ''
-        run: python .github/scripts/plagiarism_check.py "${{ env.FILES }}" games output_dir saved_dir
+        id: plagiarism-check
+        if: ${{ env.FILES != '' }}
+        run: node .github/scripts/plagiarism_check.cjs "${{ env.FILES }}"
 
-      - name: Extract and Display Similarity Percentages
-        run: python .github/scripts/extract_percentages.py saved_dir/
-        id: extract-percentages
-
-      - name: Upload Compare50 Results as Artifacts
-        if: always()
+      - name: Upload MOSS Results as Artifacts
+        if: success() && ${{ env.FILES != '' }}
         uses: actions/upload-artifact@v4
         with:
-          name: compare50-results
-          path: saved_dir/
-
-      - name: Save PR number to file
-        if: always()
-        run: echo ${{ github.event.pull_request.number }} > pr_number.txt
-
-      - name: Upload PR Number as Artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: pr-number
-          path: pr_number.txt
+          name: moss-results
+          path: .github/moss_results/
 
       - name: Upload Plagiarism Report as Artifact
-        if: always()
+        if: success() && ${{ env.FILES != '' }} && steps.plagiarism-check.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: plagiarism-report
-          path: plagiarism-report.md
-
-      - name: Check for High Plagiarism Percentages
-        if: always() && steps.extract-percentages.outcome == 'failure'
-        run: echo "Plagiarism percentage over threshold detected."
+          path: .github/moss_results/plagiarism-report.md
