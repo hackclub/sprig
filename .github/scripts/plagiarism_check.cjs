@@ -192,7 +192,8 @@ async function processReports(resultFolder, suspectFile) {
 		}
 
 		if (highestPercentageFile) {
-			markdownLines.push(`\nThe highest plagiarism is ${highestPercentage}% from ${highestPercentageFile}`);
+			markdownLines.length = 2;
+			markdownLines.push(`${highestPercentageFile}: ${highestPercentage}%`);
 		} else {
 			markdownLines.push("\nNo significant overlap found.");
 		}
