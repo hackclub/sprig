@@ -52,16 +52,9 @@ jobs:
           echo "Pull Request Base SHA: ${{ github.event.pull_request.base.sha }}"
           echo "Pull Request Head SHA: ${{ github.event.pull_request.head.sha }}"
 
-      - name: Get list of changed files
-        id: changed-files
-        run: |
-          js_files=$(git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep '^games/.*\.js$' | xargs)
-          echo "FILES=$js_files" >> $GITHUB_ENV
-
       - name: Inject MOSS User ID into moss.pl
         run: |
-          echo "MOSS_USERID=${{ secrets.MOSS_USERID }}"
-          sed -i "s/\$userid=;/\$userid=${{ secrets.MOSS_USERID }};/" .github/scripts/moss.pl
+          sed -i "s/\$userid=;/\$userid=547529030;/" .github/scripts/moss.pl
           cat .github/scripts/moss.pl | grep userid
 
       - name: Run Plagiarism Detection Script
