@@ -160,7 +160,7 @@ async function processReports(resultFolder, suspectFile) {
 				for (const match of reportMatches) {
 					const matchedLines = parseInt(match.linesMatched);
 					const file2Path = match.file2.match(/\S+\.js/)[0];
-					const cleanFilePath = file2Path.replace(/\s*\(.*\)/, '');
+					const cleanFilePath = path.basename(file2Path);
 					const file2FullPath = path.join(__dirname, '../../games', cleanFilePath);
 
 					const file2Lines = countFileLines(file2FullPath);
