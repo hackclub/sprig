@@ -157,21 +157,31 @@ async function processReports(resultFolder, suspectFile) {
 		for (const reportFile of reportFiles) {
 			if (fs.existsSync(reportFile)) {
 				const reportMatches = extractMossReportData(reportFile, suspectFile);
+
 				for (const match of reportMatches) {
 					const matchedLines = parseInt(match.linesMatched);
 					const file2Path = match.file2.match(/\S+\.js/)[0];
 					const cleanFilePath = path.basename(file2Path);
+
+					if (cleanFilePath === path.basename(suspectFile)) {
+						continue;
+					}
+
 					const file2FullPath = path.join(__dirname, '../../games', cleanFilePath);
 
-					const file2Lines = countFileLines(file2FullPath);
-					const file2Percentage = calculatePlagiarismPercentage(matchedLines, file2Lines);
+					if (fs.existsSync(file2FullPath)) {
+						const file2Lines = countFileLines(file2FullPath);
+						const file2Percentage = calculatePlagiarismPercentage(matchedLines, file2Lines);
 
-					log(`Plagiarism: ${file2Percentage}% of ${file2Path}`);
-					markdownLines.push(`- **${file2Path}**: ${file2Percentage}% plagiarism`);
+						log(`Plagiarism: ${file2Percentage}% of ${cleanFilePath}`);
+						markdownLines.push(`- **${cleanFilePath}**: ${file2Percentage}% plagiarism`);
 
-					if (file2Percentage > highestPercentage) {
-						highestPercentage = file2Percentage;
-						highestPercentageFile = file2Path;
+						if (file2Percentage > highestPercentage) {
+							highestPercentage = file2Percentage;
+							highestPercentageFile = cleanFilePath;
+						}
+					} else {
+						log(`Warning: File ${file2FullPath} does not exist.`);
 					}
 				}
 			} else {
