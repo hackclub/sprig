@@ -1,3 +1,10 @@
+/*
+@title: Asteroid Beatdown
+@author: aidanq06
+@tags: []
+@addedOn: 2024-09-15
+*/
+
 const spaceship = "s";
 const asteroid = "a";
 const bullet = "b";
