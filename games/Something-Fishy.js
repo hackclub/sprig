@@ -1,8 +1,8 @@
 /*
 @title: Something Fishy
 @author: Suryaansh Chawla
-@tags: [fishing, fish]
-@addedOn: 2024-08-25
+@tags: ['fishing']
+@addedOn: 2024-09-16
 */
 
 const one = "1";
