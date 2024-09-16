@@ -47,7 +47,7 @@ export default function RoomPasswordPopup(props: RoomPasswordPopupProps) {
 					}>
 						<div class={styles.inputRow}>
 							<Input onChange={() => undefined} value={password.value} bind={password} placeholder='Enter the room password here' />
-							<Button accent type='submit' disabled={password.value.length == 0}>
+							<Button accent type='submit'>
 								Enter room
 							</Button>
 						</div>
