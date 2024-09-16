@@ -1,3 +1,10 @@
+/*
+@title: classic pong
+@author: AVSC2-ops
+@tags: []
+@addedOn: 2024-09-16
+*/
+
 var DIRECTION = {
   IDLE: 0,
   UP: 1,
