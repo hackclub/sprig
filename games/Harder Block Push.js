@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Harder Block Push
 @author: Game
-@tags: []
+@tags: [["sokoban-style", "hard", "advanced"]
 @addedOn: 2024-9-14
 */
 
@@ -94,7 +94,7 @@ setLegend(
 
 setSolids([blocks, player, wall])
 
-let level = 2
+let level = 0
 const levels = [
   map`
 ........w..
@@ -170,7 +170,7 @@ onInput("d", () => {
 })
 
 onInput("j", () => {
-  const currentLevel = levels[level]
+  const currentLevel = levels[level];
   if (currentLevel !== undefined) {
     clearText("");
     setMap(currentLevel);
