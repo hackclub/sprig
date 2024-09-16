@@ -1,5 +1,5 @@
 /*
-@title: classic pong
+@title: Classic Pong
 @author: AVSC2-ops
 @tags: []
 @addedOn: 2024-09-16
