@@ -38,8 +38,8 @@ of this framework, the code is very unclean and may cause eye cancer :(
 
 @title: colorconnect
 @author: Newton
-@tags: [colorconnect]
-@addedOn: 2024-00-00
+@tags: []
+@addedOn: 2024-09-16
 */
 
 const circle_bitmap = bitmap`
