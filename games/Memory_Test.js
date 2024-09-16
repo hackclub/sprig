@@ -1,7 +1,6 @@
 /*
 @title: Memory_Test
 @tags: ['memory']
-@img: ""
 @addedOn: 2023-03-03
 @author: Albert_M
 A simple memory test. 

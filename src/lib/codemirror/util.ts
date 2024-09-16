@@ -11,12 +11,12 @@ export function getTag(name: string, node: SyntaxNodeRef, syntax: Tree, doc: Tex
 	if (identifier?.name !== 'VariableName') return
 	const identifierName = doc.sliceString(identifier.from, identifier.to)
 	if (identifierName !== name) return
-  
+
 	const templateString = identifier.nextSibling
 	if (templateString?.name !== 'TemplateString') return
 	const templateStringText = doc.sliceString(templateString.from, templateString.to)
 	if (!templateStringText.endsWith('`') || !templateStringText.startsWith('`') || templateStringText.length < 2) return
-  
+
 	return {
 		text: templateStringText.slice(1, -1),
 		nameFrom: identifier.from,
@@ -26,7 +26,7 @@ export function getTag(name: string, node: SyntaxNodeRef, syntax: Tree, doc: Tex
 	}
 }
 
- 
+
 export interface FromTo {
 	from: number
 	to: number
@@ -61,7 +61,7 @@ export const makeWidget = <T extends {}>(Component: ComponentType<T>) => class e
 
 export const collapseRanges = (view: EditorView, ranges: [number, number][]) => {
 	const effects = []
-  
+
 	for (const [ start, end ] of ranges) {
 		for (let pos = start; pos < end;) {
 			const line = view.lineBlockAt(pos)
@@ -70,7 +70,17 @@ export const collapseRanges = (view: EditorView, ranges: [number, number][]) => 
 			pos = (range ? view.lineBlockAt(range.to) : line).to + 1
 		}
 	}
-  
+
 	if (effects.length) view.dispatch({ effects })
 	return !!effects.length
+}
+
+export async function sha256Hash(message: string) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(message);
+
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
 }

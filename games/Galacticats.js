@@ -1,7 +1,6 @@
 /*
 @title: Galacticats
 @tags: ['catch']
-@img: ""
 @addedOn: 2022-11-23
 @author: adadyer
 

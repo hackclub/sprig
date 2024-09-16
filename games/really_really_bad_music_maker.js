@@ -3,7 +3,6 @@
 @title: really_really_bad_music_maker
 @author: Shav (secondary-smiles)
 @tags: ['music']
-@img: ""
 @addedOn: 2023-06-23
 */
 

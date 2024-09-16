@@ -1,7 +1,6 @@
 /*
 @title: Falling Blocks
 @tags: ['hackable']
-@img: ""
 @addedOn: 2022-09-17
 @author: Thanosan Prathifkumar
 

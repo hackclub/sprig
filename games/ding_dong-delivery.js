@@ -1,6 +1,5 @@
 //@title: ding_dong-delivery
 @tags: []
-@img: ""
 @addedOn: 2023-09-09
 //@author: cott3-github * efe - slack 
 //controls:
@@ -311,7 +310,7 @@ afterInput(() => {
         playTune(bell)
       //pause script for 1 sec
       setTimeout(() => {
-        console.log("This will have the 1 second delay.");
+        // console.log("This will have the 1 second delay.");
         // increase the current level number
         level += 1;
       
@@ -324,7 +323,7 @@ afterInput(() => {
           playTune(win)
         }
       }, 1000);
-      console.log("This will not have the delay.")
+      // console.log("This will not have the delay.")
     }
     getAll(pothole).forEach((obj) => {
       if(getFirst(box).x == obj.x && getFirst(box).y == obj.y){

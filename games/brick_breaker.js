@@ -1,7 +1,6 @@
 /*
 @title: brick_breaker
 @tags: ['strategy']
-@img: ""
 @addedOn: 2023-01-14
 @author: shaunba
 

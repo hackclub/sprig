@@ -1,7 +1,6 @@
 /*
 @title: A_Really_One_Sided_Duel
 @tags: ['endless']
-@img: ""
 @addedOn: 2022-12-28
 @author: Saatwik Das
 */

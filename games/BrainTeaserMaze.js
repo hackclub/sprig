@@ -1,7 +1,6 @@
 /*
 @title: BrainTeaserMaze
 @tags: ['sokoban-style']
-@img: BrainTeaserMaze
 @addedOn: 2022-12-19
 @author: Arhan
 

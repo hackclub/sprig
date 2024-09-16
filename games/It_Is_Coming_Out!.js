@@ -1,7 +1,6 @@
 /*
 @title: It_Is_Coming_Out!
 @tags: []
-@img: It_Is_Coming_Out!
 @addedOn: 2023-03-15
 @author: Onovez
 */

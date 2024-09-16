@@ -1,7 +1,6 @@
 /*
 @title: multiplayer_soccer
 @tags: ['multiplayer']
-@img: ""
 @addedOn: 2022-08-12
 @author: shannon yeow
 */

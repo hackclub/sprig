@@ -1,7 +1,6 @@
 /*
 @title: Jet_Box
 @tags: ['puzzle-score']
-@img: Jet_Box
 @addedOn: 2022-12-03
 @author: Hugh Wilks
 

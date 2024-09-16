@@ -1,7 +1,6 @@
 /*
 @title: Ninja In A Bear Trap Factory
 @tags: ['strategy']
-@img: Ninja_In_A_Bear_Trap_Factory
 @addedOn: 2022-12-04
 @author: Matt The Banana
 */

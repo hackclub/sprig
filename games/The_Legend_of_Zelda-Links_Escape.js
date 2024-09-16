@@ -3,7 +3,6 @@
 @title: The_Legend_of_Zelda-Links_Escape
 @author: ItzHex
 @tags: ['advanced']
-@img: ""
 @addedOn: 2023-08-28
 */
 

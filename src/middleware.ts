@@ -10,7 +10,7 @@ export async function onRequest({ request }: any, next: () => any) {
   const response = await next();
   const time = performance.now() - start;
 
-  const metricKey = `${response.status}.${metricName}`;
+  const metricKey = `http.${response.status}.${metricName}`;
   console.log(metricKey);
   metrics.increment(metricKey, 1);
   metrics.timing(metricName, time);

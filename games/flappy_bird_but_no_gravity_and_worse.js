@@ -1,7 +1,6 @@
 /*
 @title: flappy_bird_but_no_gravity_and_worse
 @tags: ['WIP', 'endless']
-@img: ""
 @addedOn: 2022-09-16
 @author: sam liu
 */
@@ -134,7 +133,7 @@ function gameLoop() {
 
 function lost() {
   isGameOver = true;
-  console.log("You lost");
+  // console.log("You lost");
   setMap(map`
 ........
 ........

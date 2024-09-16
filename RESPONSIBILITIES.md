@@ -14,7 +14,7 @@ The goal of this document is to make ownership of responsibilities / decision-ma
 
 
 ## Product Management
-**Owner**: Leo\
+**Owner**: Graham\
 **Responsibilities**:
 * approves/denies of all end-user-facing Sprig and Spade features
 * works with contributors to refine their product idea(s) into concrete form before they start coding
@@ -34,23 +34,14 @@ The goal of this document is to make ownership of responsibilities / decision-ma
 * has final say on all things within the engineering domain
 
 ## Operations
-**Owner**: Shawn\
+**Owner**: Graham\
 **Responsibilities**:
 * is responsible for mailing new Sprig shipments to Hack Clubbers
 * maintaining a stock of devices and components to be sent
 * supports the process of obtaining replacement parts for Hack Clubbers
 
-## Communications and Marketing
-**Owner**: Kara\
-**Responsibilities**:
-* evangelizes to the public on behalf of the team
-* ensures team aligns with the public messaging being made
-* distills complex information from other team members into digestible material
-* conveys community feedback to the rest of the team via stories & submitting github issues
-* publicizes roles that need filling by the community
-
 ## App Review
-**Owner**: Lucas\
+**Owner**: Lucas & Graham\
 **Responsibilities**:
 * responsible for welcoming newcomers (Sprig app authors) to the Sprig project warmly when they send their initial pull requests
 * ensuring that games are submitted in the proper format and according to defined policies

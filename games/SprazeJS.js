@@ -1,7 +1,6 @@
 /*
 @title: Spraze
 @tags: ['logic']
-@img: ""
 @addedOn: 2022-08-29
 @author: Peipr (@peiprjs)
 */

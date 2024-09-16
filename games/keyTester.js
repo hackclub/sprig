@@ -2,7 +2,6 @@
 /*
 @title: keyTester
 @tags: ['tool']
-@img: ""
 @addedOn: 2023-01-12
 @author: devramsean0
 */

@@ -1,7 +1,6 @@
 /*
 @title: The_Sky_Is_Falling_For_Real_This_Time
 @tags: ['endless']
-@img: ""
 @addedOn: 2023-02-11
 @author: Sawgur
 */

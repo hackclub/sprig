@@ -3,7 +3,6 @@
 @title: Meteor_Dodge
 @author: Kritav
 @tags: ['endless']
-@img: ""
 @addedOn: 2023-04-27
 */
 

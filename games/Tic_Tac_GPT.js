@@ -1,7 +1,6 @@
 /*
 @title: TicTacGPT
 @tags: ['classic']
-@img: ""
 @addedOn: 2023-09-08
 @author: 2008wbbv
 

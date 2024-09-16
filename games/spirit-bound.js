@@ -3,7 +3,6 @@
 @title: spirit-bound
 @author: Tom-on
 @tags: ['dungeon']
-@img: ""
 @addedOn: 2023-08-31
 */
 

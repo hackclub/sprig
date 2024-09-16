@@ -3,7 +3,6 @@
 @title: Maths_Speedrun
 @author: Anshuman M.
 @tags: ['logic']
-@img: ""
 @addedOn: 2023-05-17
 */
 

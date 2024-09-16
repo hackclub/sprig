@@ -1,7 +1,6 @@
 /*
 @title: tetris
 @tags: ['classic']
-@img: ""
 @addedOn: 2022-09-12
 @author: neesh
 */

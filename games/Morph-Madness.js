@@ -2,7 +2,6 @@
 @title: Morph-Madness
 @author: SimonDMC
 @tags: ["puzzle", "logic"]
-@img: ""
 @addedOn: 2024-02-21
 */
 

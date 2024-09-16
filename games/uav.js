@@ -2,7 +2,6 @@
 @title: uav
 @author: malted
 @tags: []
-@img: ""
 @addedOn: 2024-03-04
 */
 const player = "p"
@@ -154,7 +153,7 @@ const spawnLoop = setTimeout(fireUav, freq)
 
 let updateCount = 0
 const updateLoop = setInterval(() => {
-  console.log("update loop", paused);
+  // console.log("update loop", paused);
   const t = tilesWith(uav)
   getAll(uav).forEach(u => {
     u.y++

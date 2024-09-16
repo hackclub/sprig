@@ -1,7 +1,6 @@
 /*
 @title: Snake
 @tags: ['endless']
-@img: ""
 @addedOn: 2022-11-10
 @author: Boyne
 */
@@ -291,7 +290,7 @@ function move() {
   }
   
   if (tilesWith(player, food).length != 0 || tilesWith(body, food).length != 0) {
-    console.log(tilesWith(player).length);
+    // console.log(tilesWith(player).length);
     placeFood();
     score += 1;
     clearTile(getFirst(food).x, getFirst(food).y);

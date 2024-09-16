@@ -3,7 +3,6 @@
 @title: fire_boom
 @author: Samarpan
 @tags: ['dodge']
-@img: ""
 @addedOn: 2023-09-25
 */
 
@@ -249,7 +248,7 @@ function startTimer() {
 
 
 var gameLoop = setInterval(() => {
-  console.log("Game loop is running");
+  // console.log("Game loop is running");
   // Step 4 - Add all game functions
 despawnfire();
   movefire();

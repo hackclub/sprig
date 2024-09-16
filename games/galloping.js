@@ -1,7 +1,6 @@
 /*
 @title: galloping!
 @tags: ['dodge']
-@img: ""
 @addedOn: 2023-05-23
 @author: Daniel Cui
 
@@ -544,7 +543,7 @@ let gameloop = setInterval(() => {
 }, 0);
 
 function setLevel(newLevel) {
-  console.log(newLevel);
+  // console.log(newLevel);
   isRunning = false;
   level = newLevel;
   clearText();

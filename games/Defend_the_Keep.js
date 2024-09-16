@@ -3,7 +3,6 @@
 @title: Defend_the_Keep
 @author: alphaom33
 @tags: ['dodge']
-@img: ""
 @addedOn: 2023-06-04
 */
 

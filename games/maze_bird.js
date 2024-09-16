@@ -1,7 +1,6 @@
 /*
 @title: maze bird
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2023-01-01
 @author: rkohm
 */

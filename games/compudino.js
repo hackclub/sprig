@@ -3,7 +3,6 @@
 @title: compudino
 @author: rcyaon
 @tags: ['']
-@img: ""
 @addedOn: 2023-12-08
 */
 

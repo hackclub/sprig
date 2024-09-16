@@ -1,7 +1,6 @@
 /*
 @title: MusicalTiles
 @tags: []
-@img: ""
 @addedOn: 2023-03-14
 @author: Shreeya Rani
 

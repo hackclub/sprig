@@ -3,7 +3,6 @@
 @title: Battleship
 @author: Johna-123
 @tags: ['advanced']
-@img: ""
 @addedOn: 2023-08-25
 */
 

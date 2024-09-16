@@ -78,5 +78,62 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 				}}
 			/>
 		)}
+
+    <script is:inline>
+        // There is no clear guidance there when it comes to handling device and browser-specific differentiations on mobile browsers,as such we need to do a custom implementation of vh
+        const calculateCSS = () => {
+            document.documentElement.style.setProperty(
+                "--vh",
+                `${window.innerHeight * 0.01}px`
+            );
+            document.documentElement.style.setProperty(
+                "--vw",
+                `${window.innerWidth * 0.01}px`
+            );
+        };
+
+        // Vendor Agnostic Fullscreen Functions
+        const requestFullscreen = (element) => {
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen();
+            }
+        };
+
+        const exitFullscreen = () => {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            }
+        };
+
+        const fullscreenElement = () => {
+            return (
+                document.fullscreenElement ||
+                document.mozFullScreenElemen ||
+                document.webkitFullscreenElement
+            );
+        };
+
+        const toggleFullscreen = async () => {
+            if (fullscreenElement()) {
+                exitFullscreen();
+            } else {
+                requestFullscreen(document.documentElement);
+            }
+        };
+
+        calculateCSS();
+        window.addEventListener("resize", calculateCSS);
+        document
+            .getElementById("toggle-fullscreen")
+            ?.addEventListener("click", toggleFullscreen);
+    </script>
 	</body>
 </html>

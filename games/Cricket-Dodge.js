@@ -1,7 +1,6 @@
 /*
 @title: Cricket Dodge
 @tags: ['endless']
-@img: ""
 @addedOn: 2023-01-17
 @author: Harsh Singh
 Use A and D to move. 

@@ -1,7 +1,6 @@
 /*
 @title: girl scouts x hack club
 @tags: ['event']
-@img: ""
 @addedOn: 2023-03-13
 @author: keira 
 --horizon sprig workshop led by aileen & keira!--

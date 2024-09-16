@@ -1,7 +1,6 @@
 /*
 @title: 2 player tic-tac-toe
 @tags: ['classic', 'multiplayer']
-@img: ""
 @addedOn: 2022-09-06
 @author: reesericci
 
@@ -129,7 +128,7 @@ function checkForWinner(tiles) {
 }
 
 function winner(type) {
-  console.log(`${type} wins!`);
+  // console.log(`${type} wins!`);
   finished = true;
   setMap(map`
 ..........
@@ -284,6 +283,6 @@ onInput("d", () => {
 })
 
 afterInput(() => {
-  console.log(currentTurn)
+  // console.log(currentTurn)
   checkForWinner(allTiles);
 });

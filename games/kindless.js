@@ -1,7 +1,6 @@
 /*
 @title: kindless
 @tags: ['advanced']
-@img: ""
 @addedOn: 2022-07-26
 @author: Ishan (@quackduck)
 
@@ -444,7 +443,7 @@ setInterval(() => {
     pos = getFirst(player).y;
     velocity = 0;
   }
-  console.log(pos)
+  // console.log(pos)
   if (Math.round(pos) === 13 && velocity > 0) { // ground, going down
     velocity = 0;
   }
@@ -466,7 +465,7 @@ setInterval(() => {
 // let score = 90
 setInterval(() => {
   let velocityMsg = round(-velocity*10) + " " + round(hvelocity*10);
-  console.log(-velocity, velocityMsg);
+  // console.log(-velocity, velocityMsg);
   // textWrite(9, 1, score + "");
   clearText();
   addText(velocityMsg, {y: 0, color:color`2`})

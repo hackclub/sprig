@@ -3,7 +3,6 @@
 @title: calculator_puzzle
 @author: aboutdavid
 @tags: ['thematic-puzzle']
-@img: ""
 @addedOn: 2023-04-25
 */
 

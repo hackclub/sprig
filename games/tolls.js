@@ -1,7 +1,6 @@
 /*
 @title: tolls
 @tags: ['WIP']
-@img: ""
 @addedOn: 2022-07-19
 @author: leo
 

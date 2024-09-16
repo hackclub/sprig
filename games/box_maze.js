@@ -1,7 +1,6 @@
 /*
 @title: Box_Maze
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2022-10-19
 @author: Boden
 */

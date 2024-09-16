@@ -1,7 +1,6 @@
 /*
 @title: Pac-Man But With Stars
 @tags: ['classic', 'strategy']
-@img: ""
 @addedOn: 2022-12-01
 @author: Austin
 

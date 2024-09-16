@@ -12,7 +12,7 @@ interface SavePromptProps {
 	persistenceState: Signal<PersistenceState>
 	onClose: () => void
 }
-	
+
 export default function SavePrompt(props: SavePromptProps) {
 	const email = useSignal(props.persistenceState.value.session?.user.email ?? '')
 	const emailValid = useComputed(() => isValidEmail(email.value))
@@ -38,7 +38,7 @@ export default function SavePrompt(props: SavePromptProps) {
 				}}>
 					<p>Enter your email to save your work, we'll send you a link for later:</p>
 					<div class={popupStyles.inputRow}>
-						<Input type='email' autoComplete='email' placeholder='fiona@hackclub.com' bind={email} />
+						<Input onChange={() => undefined} value={email.value} type='email' autoComplete='email' placeholder='fiona@hackclub.com' bind={email} />
 						<Button accent type='submit' disabled={!emailValid.value}>
 							Save
 						</Button>
@@ -54,7 +54,7 @@ export default function SavePrompt(props: SavePromptProps) {
 			<Button accent onClick={() => props.onClose()}>Done</Button>
 		</>)
 	}
-	
+
 	return (
 		<div class={popupStyles.popup}>
 			{content}

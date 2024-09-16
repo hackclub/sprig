@@ -1,7 +1,6 @@
 /*
 @title: Eat the cake
 @tags: ['beginner', 'hackable']
-@img: ""
 @addedOn: 2022-10-13
 @author: _klyap_
 */

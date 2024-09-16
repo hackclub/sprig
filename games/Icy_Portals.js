@@ -1,7 +1,6 @@
 /*
 @title: Icy Portals
 @tags: ['energy-control']
-@img: ""
 @addedOn: 2022-12-02
 @author: Jonathan La
 */

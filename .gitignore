@@ -5,3 +5,5 @@ node_modules/
 yarn-error.log
 .env
 dist/
+games/metadata.json
+public/*.json

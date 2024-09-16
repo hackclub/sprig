@@ -1,7 +1,6 @@
 /*
 @title: Tron
 @tags: ['multiplayer']
-@img: ""
 @addedOn: 2022-10-30
 @author: Robert Carmen
 
@@ -362,13 +361,13 @@ const gameLoop1 = setInterval(() => {
     addSprite(getFirst(p1u).x, getFirst(p1u).y, stream1);
     getFirst(p1u).y -= 1;
   } catch (e) {
-    console.log("nope");
+    // console.log("nope");
   }
   try {
     addSprite(getFirst(p2u).x, getFirst(p2u).y, stream2);
     getFirst(p2u).y -= 1;
   } catch (e) {
-    console.log("nope");
+    // console.log("nope");
   }
 }, updateRate);
 
@@ -377,13 +376,13 @@ const gameLoop2 = setInterval(() => {
     addSprite(getFirst(p1d).x, getFirst(p1d).y, stream1);
     getFirst(p1d).y += 1;
   } catch (e) {
-    console.log("nope");
+    // console.log("nope");
   }
   try {
     addSprite(getFirst(p2d).x, getFirst(p2d).y, stream2);
     getFirst(p2d).y += 1;
   } catch (e) {
-    console.log("nope");
+    // console.log("nope");
   }
 }, updateRate);
 
@@ -392,13 +391,13 @@ const gameLoop3 = setInterval(() => {
     addSprite(getFirst(p1r).x, getFirst(p1r).y, stream1);
     getFirst(p1r).x += 1;
   } catch (e) {
-    console.log("nope");
+    // console.log("nope");
   }
   try {
     addSprite(getFirst(p2r).x, getFirst(p2r).y, stream2);
     getFirst(p2r).x += 1;
   } catch (e) {
-    console.log("nope");
+    // console.log("nope");
   }
 }, updateRate);
 
@@ -407,13 +406,13 @@ const gameLoop4 = setInterval(() => {
     addSprite(getFirst(p1l).x, getFirst(p1l).y, stream1);
     getFirst(p1l).x -= 1;
   } catch (e) {
-    console.log("nope");
+    // console.log("nope");
   }
   try {
     addSprite(getFirst(p2l).x, getFirst(p2l).y, stream2);
     getFirst(p2l).x -= 1;
   } catch (e) {
-    console.log("nope");
+    // console.log("nope");
   }
 }, updateRate);
 

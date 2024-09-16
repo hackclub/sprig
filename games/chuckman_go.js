@@ -1,7 +1,6 @@
 /*
 @title: chuckman_go
 @tags: ['strategy']
-@img: ""
 @addedOn: 2022-11-17
 @author: faisalsayed10
 */

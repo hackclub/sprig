@@ -1,7 +1,6 @@
 /*
 @title: CATCH ME!
 @tags: ['catch']
-@img: CATCH-ME
 @addedOn: 2023-01-07
 @author: Nidheesh
 */

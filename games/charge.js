@@ -1,7 +1,6 @@
 /*
 @title: charge
 @tags: ['choice']
-@img: charge
 @addedOn: 2022-12-23
 @author: ZeroQLi
 */

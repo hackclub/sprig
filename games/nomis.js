@@ -1,7 +1,6 @@
 /*
 @title: Nomis
 @tags: ['classic', 'hackable']
-@img: ""
 @addedOn: 2022-08-29
 @author: Cheru Berhanu
 */

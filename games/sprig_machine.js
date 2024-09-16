@@ -1,7 +1,6 @@
 /*
 @title: Sprig Machine
 @tags: ['sandbox']
-@img: ""
 @addedOn: 2022-10-21
 @author: Leonard (Omay)
 

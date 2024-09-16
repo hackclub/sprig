@@ -3,7 +3,6 @@
 @title: MyForestMaze
 @author: MI2
 @tags: ['explore']
-@img: ""
 @addedOn: 2023-06-15
 */
 

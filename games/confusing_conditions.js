@@ -1,7 +1,6 @@
 /*
 @title: confusing_conditions
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2022-09-08
 @author: Sooraj
 */

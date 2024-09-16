@@ -1,7 +1,6 @@
 /*
 @title: penguin_slide
 @tags: ['strategy']
-@img: ""
 @addedOn: 2022-09-08
 @author: veehz
 */

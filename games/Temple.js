@@ -1,7 +1,6 @@
 /*
 @title: Temple
 @tags: ['puzzle-npc']
-@img: Temple
 @addedOn: 2022-12-07
 @author: Wynston
 */

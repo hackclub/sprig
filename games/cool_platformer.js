@@ -1,7 +1,6 @@
 /*
 @title: cool_platformer
 @tags: ['strategy']
-@img: ""
 @addedOn: 2022-11-12
 @author: Aiden/Roizor
 */

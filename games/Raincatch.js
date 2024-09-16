@@ -2,7 +2,6 @@
 @title: Raincatch
 @author: A Malladi
 @tags: ['catch']
-@img: ""
 @addedOn: 2023-12-31
 */
 

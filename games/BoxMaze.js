@@ -3,7 +3,6 @@
 @title: BoxMaze
 @author: Kalo
 @tags: ['logic']
-@img: ""
 @addedOn: 2023-11-13
 */
 

@@ -49,7 +49,6 @@
 	z-index: -1;
 }
 
-
 .codeContainer .errors {
 	font-family: var(--font-code);
 	font-size: 0.9em;
@@ -96,8 +95,31 @@
 	background: var(--accent-light);
 }
 
+.horizontalResizeBar {
+	position: absolute;
+	top: 30px;
+	z-index: 2;
+	width: 100%;
+	top: 30px;
+	z-index: 2;
+	height: 1px;
+	cursor: row-resize;
+	background: transparent;
+}
+
+.horizontalResizeBar:hover,
+.horizontalResizeBar.resizing {
+	background: var(--accent-light);
+	height: 6px;
+}
+
 .canvasWrapper {
-	max-height: 100%;
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .screen {
@@ -106,7 +128,7 @@
 	background: #000000;
 	width: 100%;
 	height: auto;
-	max-height: 80%;
+	aspect-ratio: 1000 / 800;
 	image-rendering: crisp-edges;
 	image-rendering: pixelated;
 	outline: none;
@@ -127,7 +149,8 @@
 	padding: 8px 0;
 }
 
-.screenControls .mute, .screenControls .stop {
+.screenControls .mute,
+.screenControls .stop {
 	cursor: var(--cursor-interactive);
 	user-select: none;
 	color: inherit;
@@ -142,7 +165,8 @@
 	gap: 6px;
 }
 
-.screenControls .mute :global(svg), .screenControls .stop :global(svg) {
+.screenControls .mute :global(svg),
+.screenControls .stop :global(svg) {
 	--size: 24px;
 	display: block;
 	width: var(--size);
@@ -167,5 +191,8 @@
 }
 
 .helpContainer {
+	position: relative;
+	height: auto;
 	max-width: 100%;
+	width: 100%;
 }

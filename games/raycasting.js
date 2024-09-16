@@ -1,7 +1,6 @@
 /*
 @title: Raycasting Demo
 @tags: ['advanced']
-@img: ""
 @addedOn: 2022-07-22
 @author: Henry Bass
 

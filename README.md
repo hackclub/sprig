@@ -68,7 +68,7 @@ Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) 
 
 - `#sprig-platform`: For discussion of development of the Sprig platform as a whole. 
 - `#sprig-gaming-controller`: Building a case for the Sprig console to make it a portable gaming controller.
-- `#sprig-emulator`: Development of emulator.
+- `#sprig-emulator`: Development of a Gameboy emulator for Sprig.
 - `#sprig-multiplayer`: Development of multiplayer support.
 - `#sprig-lora`: Development of Sprig-Lora communicator.
 - `#sdsprig`: Development of Sprig loading from an SD Card.
@@ -118,7 +118,7 @@ cd sprig
 yarn install
 ```
 
-Next, you'll want to give Sprig access to the Firebase credentials you created. Make a `.env` file in the root of the project and enter `FIREBASE_CREDENTIAL=` followed by the base64 string you generated.
+Next, you'll want to give Sprig access to the Firebase credentials, as well as some extra credentials that you can request from the @creds team on Slack. Complete the `.env.example` file with those credentials and rename it to `.env`.
 
 To start the dev server, run `yarn dev` and visit <http://localhost:3000> in your web browser! Please create a GitHub issue if you cannot get something to work properly.
 

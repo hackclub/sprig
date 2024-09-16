@@ -1,7 +1,6 @@
 /*
 @title: connect the dots
 @tags: ['strategy']
-@img: ""
 @addedOn: 2023-02-26
 @author: Alex Howden
 Recreation of Flow Free

@@ -11,5 +11,5 @@
 		},
 		"importsNotUsedAsValues": "remove"
 	},
-	"exclude": [ "node_modules" ]
+	"exclude": [ "node_modules", "sprig-hax", "hardware", "firmware" ]
 }

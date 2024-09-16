@@ -127,7 +127,7 @@ You’re now a Sprig game developer! You have a few options for how to continue 
 
 If you feel confident with the Sprig editor and ready to create your own games from scratch,
 - Take a look at the [Sprig Gallery](/gallery) and collect ideas from games you look through
-- [Click here](/~/new) to create a new Sprig game
+- [Click here](/~/new-game) to create a new Sprig game
 - Once you're done, [submit](/get) your game to the gallery and get a free Sprig console
 
 If you're enjoying hacking on this game, here are some ideas for how to expand on it:

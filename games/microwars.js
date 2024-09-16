@@ -1,7 +1,6 @@
 /*
 @title: microwars
 @tags: ['multiplayer']
-@img: ""
 @addedOn: 2023-02-19
 @author: Bedo
 */

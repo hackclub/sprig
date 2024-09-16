@@ -3,7 +3,6 @@
 @title: Hard-Hat_Helper
 @author: Nathan Jereb
 @tags: ['']
-@img: ""
 @addedOn: 2023-12-21
 */
 

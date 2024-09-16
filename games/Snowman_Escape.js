@@ -2,7 +2,6 @@
 @title: Snowman_Escape
 @author: Michael Q
 @tags: ['puzzle']
-@img: ""
 @addedOn: 2024-01-18
 
 Instructions:

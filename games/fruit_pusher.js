@@ -3,7 +3,6 @@
 @title: fruit_pusher
 @author: kirby-b
 @tags: ["puzzle"]
-@img: ""
 @addedOn: 2024-01-15
 */
 

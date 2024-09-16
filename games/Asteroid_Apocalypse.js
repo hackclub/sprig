@@ -1,7 +1,6 @@
 /*
 @title: asteroid apocalypse
 @tags: ['endless']
-@img: ""
 @addedOn: 2022-12-31
 @author: zcsop1206
 Move the lazer with "a" and "d" for left and right, "w" and "s" for up and down

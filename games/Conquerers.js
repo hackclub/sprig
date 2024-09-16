@@ -1,7 +1,6 @@
 /*
 @title: Conquerers
 @tags: ['multiplayer']
-@img: ""
 @addedOn: 2022-11-15
 @author: Leonard (Omay)
 

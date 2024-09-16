@@ -2,7 +2,6 @@
 @title: sprigish
 @author: dom
 @tags: ["puzzle"]
-@img: ""
 @addedOn: 2024-01-16
 
 A Sprig recreaction(ish) of Dadish.

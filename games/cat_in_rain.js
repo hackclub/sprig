@@ -3,7 +3,6 @@
 @title: cat_in_rain
 @author: alxndriab
 @tags: ['dodge']
-@img: ""
 @addedOn: 2023-11-17
 */
 

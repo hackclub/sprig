@@ -1,7 +1,6 @@
 /*
 @title: Piano
 @tags: ['simulation']
-@img: ""
 @addedOn: 2022-09-14
 @author: Scott
 

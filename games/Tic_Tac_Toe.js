@@ -1,7 +1,6 @@
 /*
 @title: TicTacToe
 @tags: ['classic']
-@img: ""
 @addedOn: 2023-02-02
 @author: Northernside
 

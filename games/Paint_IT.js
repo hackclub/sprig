@@ -1,7 +1,6 @@
 /*
 @title: Paint_IT
 @tags: ['sandbox']
-@img: ""
 @addedOn: 2022-09-14
 @author: N Rizwan
 */

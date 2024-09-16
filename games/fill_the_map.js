@@ -3,7 +3,6 @@
 @title: fill_the_map
 @author: Ansh Kumar
 @tags: ['strategy']
-@img: ""
 @addedOn: 2023-03-14
 */
 

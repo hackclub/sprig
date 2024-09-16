@@ -1,7 +1,6 @@
 /*
 @title: Get_the_birdie!
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2022-12-23
 @author: Sophie
 */

@@ -1,7 +1,6 @@
 /*
 @title: Amongus flight
 @tags: ['endless']
-@img: ""
 @addedOn: 2023-01-04
 @author: Yashas
 */
@@ -135,7 +134,7 @@ getAll(blocker).forEach((w) => {
 
 function lost() {
   death = true;
-  console.log("You lost");
+  // console.log("You lost");
   setMap(map`
 ........
 ........

@@ -3,7 +3,6 @@
 @title: Musi
 @author: levi - blockish
 @tags: ['memory']
-@img: ""
 @addedOn: 2023-10-25
 */
 

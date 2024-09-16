@@ -1,7 +1,6 @@
 /*
 @title: 15 puzzle
 @tags: ['advanced']
-@img: ""
 @addedOn: 2022-07-18
 @author: maggie
 
@@ -339,7 +338,7 @@ if (!solvable) {
 
 
 puzzle.push(16);
-console.log(puzzle)
+// console.log(puzzle)
 
 let puzzleIdx = 0;
 let mapStr = ""
@@ -350,7 +349,7 @@ for (let i = 0; i < 4; i++) {
   }
   mapStr += "\n";
 }
-console.log(mapStr);
+// console.log(mapStr);
 
 setMap(map`${mapStr}`);
 
@@ -401,8 +400,8 @@ afterInput(async () => {
       for (let x = 0; x < 4; x++) {
       const t = getTile(x, y);
       if (t.length && t[0].type != tiles[tileIdx]) {
-        console.log("got type", t[0].type)
-        console.log('expected', tiles[tileIdx])
+        // console.log("got type", t[0].type)
+        // console.log('expected', tiles[tileIdx])
         return
       }
       tileIdx++;

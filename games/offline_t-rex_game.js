@@ -1,7 +1,6 @@
 /*
 @title: offline_t-rex_game
 @tags: ['endless']
-@img: ""
 @addedOn: 2022-12-31
 @author: zoya hussain */
 
@@ -180,7 +179,7 @@ function gameLoop() {
 
 function lost() {
   gameOver = true;
-  console.log("You lost");
+  // console.log("You lost");
   setMap(map`
 ssssss
 ssssss

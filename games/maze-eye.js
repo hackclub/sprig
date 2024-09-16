@@ -1,6 +1,5 @@
 /*
 @tags: ['dodge']
-@img: ""
 @addedOn: 2023-12-23
 @title: maze-eye 
 @author: acon

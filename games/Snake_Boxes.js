@@ -7,7 +7,6 @@ Goal: push the box adjacent to the goal to score points, push the goal if necess
 @title: Snake_Boxes
 @author: Aryavrat Mishra
 @tags: ['classic']
-@img: ""
 @addedOn: 2024-01-30
 */
 
@@ -392,7 +391,7 @@ onInput("s", () => {
     keyPressed = "s";
   }
 });
-console.log(keyPressed);
+// console.log(keyPressed);
 
 const resetGame = () => {
   keyPressed = "";
@@ -417,7 +416,7 @@ const resetGame = () => {
       addSprite(tail.xPos, tail.yPos, green1);
     }
   }catch(error){
-    console.log(error)
+    // console.log(error)
   }
   clearText() // Clearing all Text in playing Area
   score = 0; // Resetting Score

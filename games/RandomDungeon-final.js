@@ -1,7 +1,6 @@
 /*
 @title: RandomDungeon
 @tags: ['dungeon']
-@img: ""
 @addedOn: 2023-02-20
 @author: JonathanLevi
 
@@ -19,7 +18,7 @@ function random(min, max) {
 }
 
 
-console.log("running")
+// console.log("running")
 
 class Weapon {
   constructor(name, range, damage) {
@@ -614,7 +613,7 @@ class Enemy {
             dungeon[y][x] = this.id
             this.x = x
             this.y = y
-            console.log(this.x, this.y)
+            // console.log(this.x, this.y)
             return
           }
         }
@@ -643,7 +642,7 @@ class Enemy {
     // attempt to move towards player
     var x = this.x.valueOf()
     var y = this.y.valueOf()
-    console.log("moving", x, y)
+    // console.log("moving", x, y)
     if (this.y > playery) {
       y--
     } else if (this.y < playery) {
@@ -751,9 +750,9 @@ function playerAttack() {
     }
   }
   if (hit){
-    console.log("hit enemy")
+    // console.log("hit enemy")
   } else {
-    console.log("could not target enemy")
+    // console.log("could not target enemy")
   }
 }
 

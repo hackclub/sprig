@@ -1,7 +1,6 @@
 /*
 @title: Stop
 @tags: ['puzzle-npc']
-@img: Stop
 @addedOn: 2022-12-07
 @author: wyn-cmd
 */

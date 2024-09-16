@@ -2,7 +2,6 @@
 @title: Save-The-Flower
 @author: Mahir Ishum
 @tags: ['strategy']
-@img: ""
 @addedOn: 2024-02-17
 
 About the game:

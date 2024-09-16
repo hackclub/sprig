@@ -1,7 +1,6 @@
 /*
 @title: Flying Game
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2022-10-08
 @author: Zainab Khorakiwala
 */

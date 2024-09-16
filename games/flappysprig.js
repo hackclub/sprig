@@ -3,7 +3,6 @@
 @title: flappysprig
 @author: Spectral
 @tags: ['classic']
-@img: ""
 @addedOn: 2023-09-10
 */
 
@@ -354,7 +353,7 @@ function resetintervals() {
     point += 1
   }
   // Show Points at the right of the screen
-  console.log(point)
+  // console.log(point)
   let pointstring = point.toString()
   clearText()
   addText(pointstring, { 
@@ -362,7 +361,7 @@ function resetintervals() {
   y: 1,
   color: color`0`
   })
-  console.log(playerx,playery)
+  // console.log(playerx,playery)
   if (getTile(playerx, playery)[1]) {
     // Make the game over screen appears
     clearText()

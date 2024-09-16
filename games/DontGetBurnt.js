@@ -1,7 +1,6 @@
 /*
 @title: Don't Get Burnt!
 @tags: ['']
-@img: ""
 @addedOn: 2023-05-28
 @author: Alexandra Miller, Mariia Tymoshenko, Elaine Liu, Shenelle Jayakody, Ariane Clarke
 

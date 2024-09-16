@@ -3,7 +3,6 @@
 @title: galactic
 @author: polypixeldev
 @tags: ['strategy']
-@img: ""
 @addedOn: 2023-11-12
 */
 

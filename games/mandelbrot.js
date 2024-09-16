@@ -1,7 +1,6 @@
 /*
 @title: Mandelbrot
 @tags: ['sandbox', 'simulation', 'hackable']
-@img: ""
 @addedOn: 2022-09-14
 @author: Henry
 Instructions:

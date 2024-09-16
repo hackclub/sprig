@@ -2,7 +2,6 @@
 
 @title: infinite_cat
 @tags: ['strategy']
-@img: ""
 @addedOn: 2022-11-07
 @author: Deven Jadhav
 

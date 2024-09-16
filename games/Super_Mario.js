@@ -5,7 +5,6 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Super_Mario
 @author: Cosmin
 @tags: ['classic']
-@img: ""
 @addedOn: 2024-03-01
 */
 

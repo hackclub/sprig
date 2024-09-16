@@ -1,7 +1,6 @@
 /*
 @title: virus_plowing
 @tags: ['endless']
-@img: ""
 @addedOn: 2022-11-11
 @author: Danush Ramanan
 */

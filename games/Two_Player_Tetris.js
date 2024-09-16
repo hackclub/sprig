@@ -3,7 +3,6 @@
 @title: Two_Player_Tetris
 @author: Spectral
 @tags: ['classic', 'multiplayer']
-@img: ""
 @addedOn: 2023-09-11
 */
 

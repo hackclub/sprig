@@ -1,7 +1,6 @@
 /*
 @title: English Checkers
 @tags: ['classic']
-@img: ""
 @addedOn: 2023-01-04
 @author: Oakchris1955
 

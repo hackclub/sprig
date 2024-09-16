@@ -3,7 +3,6 @@
 @title: Morse_trainer
 @author: Yuuta
 @tags: ['']
-@img: ""
 @addedOn: 2023-12-21
 */
 

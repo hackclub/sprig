@@ -1,7 +1,6 @@
 /*
 @title: sPaint!
 @tags: ['sandbox']
-@img: ""
 @addedOn: 2023-02-02
 @author: yzde
 

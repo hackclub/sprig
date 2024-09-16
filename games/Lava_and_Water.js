@@ -1,7 +1,6 @@
 /*
 @title: Lava and Water  
 @tags: ['puzzle-2players', 'classic']
-@img: ""
 @addedOn: 2022-10-15
 @author: Akeell 
 */

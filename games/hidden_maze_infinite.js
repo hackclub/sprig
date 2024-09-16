@@ -3,7 +3,6 @@
 @title: hidden_maze_infinite
 @author: Rylan Berry
 @tags: ['endless']
-@img: ""
 @addedOn: 2023-05-12
 */
 

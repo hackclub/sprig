@@ -3,7 +3,6 @@
 @title: run
 @author: Nguyễn Gia Bách
 @tags: ['logic']
-@img: ""
 @addedOn: 2023-07-20
 */
 

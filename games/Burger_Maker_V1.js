@@ -1,7 +1,6 @@
 /*
 @title: Burger_Maker
 @tags: ['thematic-puzzle']
-@img: ""
 @addedOn: 2022-12-28
 @author: Captain_AJ
 */

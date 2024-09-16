@@ -1,7 +1,6 @@
 /*
 @title: Puzzle_Game
 @tags: ['timer-puzzle']
-@img: ""
 @addedOn: 2022-10-20
 @author: Amelia
 */

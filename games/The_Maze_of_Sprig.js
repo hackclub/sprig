@@ -1,7 +1,6 @@
 /*
 @title: The Maze of Sprig
 @tags: ['sokoban-style']
-@img: ""
 @addedOn: 2023-02-14
 @author: SahilD
 */

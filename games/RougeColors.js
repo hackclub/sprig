@@ -3,7 +3,6 @@
 @title: RougeColors
 @author: KingstimusPrime
 @tags: ['strategy']
-@img: ""
 @addedOn: 2023-04-19
 */
 

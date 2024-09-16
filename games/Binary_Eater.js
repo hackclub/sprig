@@ -1,7 +1,6 @@
 /*
 @title:  Binary Eater
 @tags: ['logic']
-@img: ""
 @addedOn: 2023-03-10
 @author: Kumaraswamy
 
@@ -275,7 +274,7 @@ function generateBinaryMap() {
 
 
 let binaryMap = generateBinaryMap();
-console.log(binaryMap);
+// console.log(binaryMap);
 
 onInput("w", () => { code(0);  });
 onInput("a", () => { code(1);  });
@@ -302,7 +301,7 @@ function restart_game() {
 
 // l is also used to reset
 onInput("l", () => {
-    console.log("yep");
+    // console.log("yep");
     if (!game_running) {
         restart_game();
         return;
@@ -336,7 +335,7 @@ function code(digit) {
 
         return;
     }
-    console.log("Binary value: " + ch);
+    // console.log("Binary value: " + ch);
 
     letters += ch;
     bin = "";

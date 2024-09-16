@@ -1,7 +1,6 @@
 /*
 @title: Treasure_Hunt
 @tags: ['strategy']
-@img: ""
 @addedOn: 2022-09-28
 @author: Manikandan_M
 */

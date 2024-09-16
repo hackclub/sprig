@@ -1,7 +1,6 @@
 /*
 @title: PushBattle
 @tags: ['multiplayer']
-@img: ""
 @addedOn: 2022-11-05
 @author: MatrixMongoose
 */

@@ -1,7 +1,6 @@
 /*
 @title: CrimbLetips
 @tags: []
-@img: ""
 @addedOn: 2022-12-19
 @author: ShawnM
 */

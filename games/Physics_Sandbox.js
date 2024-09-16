@@ -1,7 +1,6 @@
 /*
 @title: Physics Sandbox
 @tags: ['simulation']
-@img: ""
 @addedOn: 2023-03-27
 @author: Henry Bass
 
@@ -576,9 +575,9 @@ setInterval(() => {
     setMap(screen);
     settingsManager.render();
     t++;
-    console.log(entities);
+    // console.log(entities);
     inputSpeed = settingsManager.getValue("Pointer Speed");
-    console.log(settingsManager.getValue("Pointer Speed"));
+    // console.log(settingsManager.getValue("Pointer Speed"));
     let setGrav = settingsManager.getValue("Gravity");
   
     if (typeof setGrav == "string") {

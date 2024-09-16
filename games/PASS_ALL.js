@@ -1,7 +1,6 @@
 /*
 @title: PASS_ALL
 @tags: ['strategy']
-@img: ""
 @addedOn: 2022-10-03
 @author: Shivang0
 Instructions:

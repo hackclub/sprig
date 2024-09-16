@@ -10,6 +10,7 @@ import SearchBox from '../../components/search-box'
 import { EditorView, keymap, lineNumbers, highlightActiveLineGutter, highlightSpecialChars, drawSelection, dropCursor, rectangularSelection, crosshairCursor, highlightActiveLine } from '@codemirror/view'
 import { lintGutter } from "@codemirror/lint";
 import type { NormalizedError } from '../state'
+import { codeMirrorEditorText } from '../state'
 
 export function diagnosticsFromErrorLog(view: EditorView, errorLog: NormalizedError[]) {
 	return errorLog.filter(error => error.line)
@@ -24,7 +25,11 @@ export function diagnosticsFromErrorLog(view: EditorView, errorLog: NormalizedEr
 		});
 }
 
-export const initialExtensions = (onUpdate: any, onRunShortcut: any) => ([
+export const initialExtensions = (onUpdate: any, onRunShortcut: any, yCollab?: any) => ([
+	EditorView.updateListener.of(update => {
+		const newEditorText = update.state.doc.toString();
+		codeMirrorEditorText.value = newEditorText;
+	}),
 	lintGutter(),
 	lineNumbers(),
 	highlightActiveLineGutter(),
@@ -105,14 +110,15 @@ export const initialExtensions = (onUpdate: any, onRunShortcut: any) => ([
 	javascript(),
 	EditorView.updateListener.of(onUpdate),
 	widgets,
+	yCollab ? yCollab : []
 ]
 )
 
-export function createEditorState(initialCode: string, onUpdate = () => { }, onRunShortcut = () => { }): EditorState {
+export function createEditorState(initialCode: string, onUpdate = () => { }, onRunShortcut = () => { }, yCollab?: any): EditorState {
 	return EditorState.create({
 		doc: initialCode,
 		extensions: [
-			initialExtensions(onUpdate, onRunShortcut)
+			initialExtensions(onUpdate, onRunShortcut, yCollab)
 		]
 	})
 }

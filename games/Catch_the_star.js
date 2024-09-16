@@ -2,7 +2,6 @@
 @title: Catch the star
 @author: Saumya
 @tags: []
-@img: ""
 @addedOn: 2023-12-20
 */
 

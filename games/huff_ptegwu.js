@@ -2,7 +2,6 @@
 @title: huff_ptegwu
 @author: PenJonathan
 @tags: ['multiplayer']
-@img: ""
 @addedOn: 2023-12-29
 */
 

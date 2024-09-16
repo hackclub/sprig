@@ -3,7 +3,6 @@
 @title: Pet_the_Cat
 @author: Nathan Jereb
 @tags: []
-@img: ""
 @addedOn: 2023-05-08
 */
 

@@ -1,7 +1,6 @@
 /*
 @title: Invisible Maze
 @tags: ['logic']
-@img: Invisible_Maze
 @addedOn: 2022-12-07
 @author: Ryan Qin
 */

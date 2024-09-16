@@ -1,7 +1,6 @@
 /*
 @title: cubefield
 @tags: ['endless']
-@img: ""
 @addedOn: 2023-01-10
 @author: jai
 */
@@ -255,12 +254,12 @@ function tick() {
     return;
   }
 
-  console.log(getAll());
+  // console.log(getAll());
   
   for (let currentEnemy of getAll()) {
     if (isNaN(currentEnemy._type)) continue;
     
-    console.log(currentEnemy);
+    // console.log(currentEnemy);
     
     if ((currentEnemy.y + 1) === height()) {
       clearTile(currentEnemy.x, currentEnemy.y);

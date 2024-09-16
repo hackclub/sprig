@@ -12,9 +12,12 @@ export type AuthState =
 	| 'CODE_SENT'
 	| 'CODE_CHECKING'
 	| 'CODE_INCORRECT'
+	| 'ACCOUNT_LOCKED'
 	| 'LOGGED_IN'
 
 export type AuthStage = 'IDLE' | 'EMAIL' | 'CODE' | 'LOGGED_IN'
+
+export const DevEmail = "development@hackclub.com"
 	
 export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: string = '') => {
 	const state = useSignal(initialState)
@@ -31,7 +34,7 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: st
 	const emailValid = useComputed(() => isValidEmail(email.value))
 
 	const code = useSignal('')
-	const codeValid = useComputed(() => code.value.length === 6)
+	const codeValid = useComputed(() => code.value.length === 6 || email.value === DevEmail)
 	useSignalEffect(() => { code.value = code.value.replace(/[^0-9]/g, '') })
 
 	const startEmailEntry = () => { state.value = 'EMAIL_ENTRY' }
@@ -64,6 +67,9 @@ export const useAuthHelper = (initialState: AuthState = 'IDLE', initialEmail: st
 		})
 		if (res.ok) {
 			state.value = 'LOGGED_IN'
+		} else if (res.status === 429) {
+			state.value = 'ACCOUNT_LOCKED'
+			console.error('Account locked due to too many failed attempts.')
 		} else {
 			state.value = 'CODE_INCORRECT'
 			console.error(await res.text())

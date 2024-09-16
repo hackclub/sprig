@@ -3,7 +3,6 @@
 @title: TwinPrimeRockets
 @author: Pradevel
 @tags: ['thematic-puzzle']
-@img: ""
 @addedOn: 2023-03-21
 */
 

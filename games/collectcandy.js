@@ -3,7 +3,6 @@
 @title: collectcandy
 @author: James C
 @tags: ['catch']
-@img: ""
 @addedOn: 2023-11-04
 */
 

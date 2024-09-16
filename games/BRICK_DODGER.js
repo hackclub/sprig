@@ -1,7 +1,6 @@
 /*
 @title: BRICK DODGER
 @tags: ['endless']
-@img: ""
 @addedOn: 2022-11-06
 @author: Logan Fick
 Instructions:

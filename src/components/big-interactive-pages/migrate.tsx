@@ -167,7 +167,7 @@ export default function Migrate({ session, intitialEmail }: MigrateProps) {
 						.map((game) => ({ id: gameIds[game.name], legacy: game }))
 
 					localStorage.setItem('seenMigration', 'true')
-					
+
 					if (session?.session.full) {
 						window.location.replace('/~')
 					} else {
@@ -177,7 +177,7 @@ export default function Migrate({ session, intitialEmail }: MigrateProps) {
 					{session?.session.full ? null : (
 						<div class={styles.emailEntry}>
 							<label for='email'>Enter your email:</label>
-							<Input type='email' autoComplete='email' id='email' placeholder={'fiona@hackclub.com'} bind={email} />
+							<Input onChange={() => undefined} value={email.value} type='email' autoComplete='email' id='email' placeholder={'fiona@hackclub.com'} bind={email} />
 						</div>
 					)}
 

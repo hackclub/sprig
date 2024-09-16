@@ -3,7 +3,6 @@
 @title: chain_remove
 @author: imcute
 @tags: ['endless']
-@img: ""
 @addedOn: 2023-07-22
 */
 
