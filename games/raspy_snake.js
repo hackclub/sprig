@@ -1,8 +1,8 @@
 /*
 @title: SnakeGame
 @author: Elijah Grandell
-@tags: [snake, game]
-@addedOn: 2024-07-11
+@tags: []
+@addedOn: 2024-09-16
 */
 
 const player = "p";
