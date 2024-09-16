@@ -638,7 +638,7 @@ afterInput(() => {
 
   const covered = tilesWith(green, player).length
 
-  if(targetnum == covered)
+  if(targetnum == covered && targetnum != 0)
   {
     setMap(levels[0])
   }
