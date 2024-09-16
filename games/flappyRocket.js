@@ -1,5 +1,8 @@
 /*
-@title: Full Screen Flappy Bird
+@title: Flappy Rocket
+@author: quantumDSflux
+@tags: []
+@addedOn: 2024-09-16
 */
 
 const player = "p";
