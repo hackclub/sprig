@@ -2,6 +2,7 @@
 @title: Least_Tiles_2.0
 @author: NumberBasher
 @addedOn: 2024-09-16
+@tags: []
 */
 
   addText('00', {
