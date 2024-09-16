@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: MazeGame(Reach green box)
+@title: MazeGame (Reach green box)
 @author: Sai Avula
 @tags: []
-@addedOn: 2024-08-06
+@addedOn: 2024-09-16
 */
 
 const player = "p"
