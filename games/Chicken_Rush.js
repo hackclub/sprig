@@ -1,3 +1,10 @@
+/*
+@title: Chicken Rush
+@author: RobertoEchCCHS
+@tags: []
+@addedOn: 2024-09-16
+*/
+
 // Define sprite characters
 const player = "p"
 const coin = "c"
