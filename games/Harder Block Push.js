@@ -4,13 +4,14 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Harder Block Push
 @author: Game
-@tags: ["sokoban-style", "hard", "advanced"]
+@tags: []
 @addedOn: 2024-9-14
 */
 
 const player = "p"
 const blocks = "b"
 const goal = "g"
+const wall = "w"
 const goalsfx = tune`
 121.95121951219512: G4-121.95121951219512 + B5~121.95121951219512,
 121.95121951219512: E5-121.95121951219512 + G5^121.95121951219512 + B5~121.95121951219512,
@@ -71,47 +72,64 @@ setLegend(
 .44444444444444.
 ..444444444444..
 ...4444444444...
+................`],
+  [wall, bitmap`
+................
+...0000000000...
+..000000000000..
+.00000000000000.
+.00000000000000.
+.00000000000000.
+.00000000000000.
+.00000000000000.
+.00000000000000.
+.00000000000000.
+.00000000000000.
+.00000000000000.
+.00000000000000.
+..000000000000..
+...0000000000...
 ................`]
 )
 
-setSolids([blocks, player])
+setSolids([blocks, player, wall])
 
-let level = 0
+let level = 2
 const levels = [
   map`
-...........
-..b....b...
+........w..
+..b...wbw..
 .bbb...b...
 ..b........
 .....b...b.
-.b...p..b..
-....b...b..
-........gb.
-.b.....b...
+.b...pw.b.w
+....bww.b..
+......w.gb.
+.bw....bw..
 ..b...b....
 ...........`,
   map`
-..........p
+....w.....p
 .b.b.b.b.b.
-...........
+w.........w
 .b.b...b.b.
-.....b.....
+...w.b.w...
 .b..bgb..b.
-.....b.....
+w..w.b.w..w
 .b.b...b.b.
 ...........
 .b.b.b.b.b.
-...........`,
+..w...w...w`,
   map`
-...........
+.....w.....
 ....bbb....
 .....b.....
 .....g.....
-.....b.....
-.b.bbpbb.b.
-.....b.....
+....wbw....
+.bwbbpbbwb.
+....wbw....
 ...b.b.b...
-..b.....b..
+..b..w..b..
 .b...b...b.
 ...........`,
 ]
@@ -152,9 +170,7 @@ onInput("d", () => {
 })
 
 onInput("j", () => {
-  const currentLevel = levels[level]; // get the original map of the level
-
-  // make sure the level exists before we load it
+  const currentLevel = levels[level]
   if (currentLevel !== undefined) {
     clearText("");
     setMap(currentLevel);
@@ -170,19 +186,14 @@ afterInput(() => {
     playTune(goalsfx)
   }
   if (getAll(blocks).length <= 0) {
-
-    // increase the current level number
     level = level + 1;
 
     const currentLevel = levels[level];
 
-    // make sure the level exists and if so set the map
-    // otherwise, we have finished the last level, there is no level
-    // after the last level
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("You somehow win!", { y: 4, color: color`3` });
+      addText("You somehow win!", { y: 4, color: color`7` });
     }
   }
 })
