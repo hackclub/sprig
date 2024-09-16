@@ -23,8 +23,7 @@ async function splitFilesAsync(gamesFolder, splitFolders) {
 	try {
 		log(`Splitting files into ${splitFolders.length} groups...`);
 
-		const jsFiles = await fsPromises.readdir(gamesFolder);
-		const jsFilesFiltered = jsFiles.filter(file => file.endsWith('.js'));
+		const jsFilesFiltered = (await fsPromises.readdir(gamesFolder)).filter(file => file.endsWith('.js'));
 		const filesPerGroup = Math.ceil(jsFilesFiltered.length / splitFolders.length);
 
 		await Promise.all(splitFolders.map(folder => fsPromises.mkdir(folder, { recursive: true })));

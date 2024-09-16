@@ -10,24 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up Node.js
+      - name: Set up Node.js Environment
         uses: actions/setup-node@v4
         with:
           node-version: '18.20.4'
 
-      - name: Delete existing package.json
+      - name: Rebuild package.json for Plagiarism Checker
         run: |
           if [ -f "package.json" ]; then
             rm package.json
           fi
-
-      - name: Create new package.json for plagiarism checker
-        run: |
           cat > package.json <<EOL
           {
             "name": "plagiarism-checker",
@@ -44,49 +41,48 @@ jobs:
           }
           EOL
 
-      - name: Install Dependencies for Plagiarism Checker
+      - name: Install NPM Dependencies
         run: npm install
 
-      - name: Get list of changed files
+      - name: Identify Changed JavaScript Files
         id: changed-files
         run: |
           js_files=$(git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep '^games/.*\.js$' | xargs)
           echo "FILES=$js_files" >> $GITHUB_ENV
         shell: bash
 
-      - name: Print Base and Head SHA
+      - name: Show Git Base and Head SHAs
         run: |
-          echo "Pull Request Base SHA: ${{ github.event.pull_request.base.sha }}"
-          echo "Pull Request Head SHA: ${{ github.event.pull_request.head.sha }}"
+          echo "Base SHA: ${{ github.event.pull_request.base.sha }}"
+          echo "Head SHA: ${{ github.event.pull_request.head.sha }}"
 
-      - name: Inject MOSS User ID into moss.pl
-        run: |
-          sed -i "s/\$userid=;/\$userid=547529030;/" .github/scripts/moss.pl
+      - name: Set Up MOSS Script
+        run: sed -i "s/\$userid=;/\$userid=547529030;/" .github/scripts/moss.pl
 
-      - name: Run Plagiarism Detection Script
+      - name: Run Plagiarism Detection
         id: plagiarism-check
         if: ${{ env.FILES != '' }}
         run: npm start "${{ env.FILES }}"
 
-      - name: Upload MOSS Results as Artifacts
+      - name: Upload MOSS Results
         if: success() && ${{ env.FILES != '' }}
         uses: actions/upload-artifact@v4
         with:
           name: moss-results
           path: .github/moss_results/
 
-      - name: Upload Plagiarism Report as Artifact
+      - name: Upload Detailed Plagiarism Report
         if: success() && ${{ env.FILES != '' }} && steps.plagiarism-check.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: plagiarism-report
           path: .github/moss_results/plagiarism-report.md
 
-      - name: Save PR number to file
+      - name: Save Pull Request Number
         if: always()
         run: echo ${{ github.event.pull_request.number }} > pr_number.txt
 
-      - name: Upload PR Number as Artifact
+      - name: Upload PR Number Artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
