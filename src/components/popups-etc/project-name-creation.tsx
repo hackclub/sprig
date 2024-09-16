@@ -11,7 +11,7 @@ export default function ProjectNameCreator() {
 		<div></div>
 		<div class={styles.containerInner}>
 		
-			<div class={styles.inner}>
+			<form class={styles.inner}>
 				<h1 class={styles.header}>Create Game</h1>
 				<p>Please input a game name</p>
 				<input type={"text"} class={styles.input} autofocus={true} value={stateName} placeholder="Untitled" onInput={(e)=>{setStateName((e.target as HTMLTextAreaElement)?.value )}}/>
@@ -21,7 +21,7 @@ export default function ProjectNameCreator() {
 						window.location.href= `/~/new?name=${stateName}`;
 					}}><span>{!loading ? "Create" : "Creating..."}</span></Button>
 				</div>
-			</div>
+			</form>
 		</div>
 		
 	</div>;
