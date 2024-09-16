@@ -2,8 +2,8 @@
 
 @title: Hope 
 @author: Tyler P Evans
-@tags: [text-based, story]
-@addedOn: 2024-00-00
+@tags: ["text-based", "story"]
+@addedOn: 2024-09-15
 
 almost all life died when the tmepature shot skyward.
 some survived, some where left somewhere in between.
