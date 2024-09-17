@@ -3,7 +3,6 @@ import CodeMirror from "../codemirror";
 import Navbar from "../navbar-editor";
 import {
 	IoClose,
-	IoPlayCircleOutline,
 	IoStopCircleOutline,
 	IoVolumeHighOutline,
 	IoVolumeMuteOutline,
@@ -15,11 +14,10 @@ import {
 	useSignalEffect,
 } from "@preact/signals";
 import { useEffect, useRef, useState} from "preact/hooks";
-import { codeMirror, errorLog, isNewSaveStrat, muted, PersistenceState, RoomState } from "../../lib/state";
+import { codeMirror, errorLog, isNewSaveStrat, muted, PersistenceState, RoomState,  screenRef, cleanupRef } from "../../lib/state";
 import EditorModal from "../popups-etc/editor-modal";
 import { runGame } from "../../lib/engine";
 import DraftWarningModal from "../popups-etc/draft-warning";
-import Button from "../design-system/button";
 import { debounce } from "throttle-debounce";
 import Help from "../popups-etc/help";
 import { collapseRanges } from "../../lib/codemirror/util";
@@ -29,28 +27,26 @@ import { nanoid } from "nanoid";
 import TutorialWarningModal from "../popups-etc/tutorial-warning";
 import { editSessionLength, switchTheme, ThemeType, continueSaving, LAST_SAVED_SESSION_ID, showSaveConflictModal } from '../../lib/state'
 import SessionConflictWarningModal from '../popups-etc/session-conflict-warning-modal'
-import {versionState} from "../../lib/upload";
+import {eotMessage, versionState} from "../../lib/upload";
 import VersionWarningModal from "../popups-etc/version-warning";
+import OutOfSpaceModal from "../popups-etc/out-of-space";
 import RoomPasswordPopup from "../popups-etc/room-password";
 import KeyBindingsModal from '../popups-etc/KeyBindingsModal'
 
-let screenRef: HTMLCanvasElement | null = null;
-let cleanupRef: (() => void) | undefined = undefined;
 let screenShakeSignal: Signal<number> | null = null;
 
 export const onRun = async () => {
 	foldAllTemplateLiterals();
-	if (!screenRef) return;
+	if (!screenRef.value) return;
 
-	if (cleanupRef) cleanupRef();
+	if (cleanupRef.value) cleanupRef.value();
 	errorLog.value = [];
-
 	const code = codeMirror.value?.state.doc.toString() ?? "";
-	const res = runGame(code, screenRef, (error) => {
+	const res = runGame(code, screenRef.value, (error) => {
 		errorLog.value = [...errorLog.value, error];
 	});
 
-	screenRef.focus();
+	screenRef.value.focus();
 	if (screenShakeSignal) {
 		screenShakeSignal.value++;
 	}
@@ -60,7 +56,7 @@ export const onRun = async () => {
 		}
 	}, 200);
 
-	cleanupRef = res?.cleanup;
+	cleanupRef.value = res?.cleanup;
 	if (res && res.error) {
 		console.error(res.error.raw);
 		errorLog.value = [...errorLog.value, res.error];
@@ -433,23 +429,19 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	}, []);
 
 	useEffect(() => {
-		screenRef = screen.current;
-		cleanupRef = cleanup.current;
+		screenRef.value = screen.current;
+
 		screenShakeSignal = screenShake;
 	});
-	useEffect(() => () => cleanup.current?.(), []);
+	useEffect(() => () => cleanupRef.value?.(), []);
 	// We like running games!
 	const screen = useRef<HTMLCanvasElement>(null);
-	const cleanup = useRef<(() => void) | undefined>();
 	const screenShake = useSignal(0);
 
 	const onStop = async () => {
 		if (!screen.current) return;
-
-		if (cleanup.current) cleanup.current();
+		if (cleanupRef.value) cleanupRef.value?.();
 	};
-
-	useEffect(() => () => cleanup.current?.(), []);
 
 	// Warn before leave
 	useSignalEffect(() => {
@@ -482,9 +474,9 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	useEffect(() => {
 		if(!isNewSaveStrat.value){
 			const handler = (event: KeyboardEvent) => {
-				if (event.key === "s" && (event.metaKey || event.ctrlKey)) { 
+				if (event.key === "s" && (event.metaKey || event.ctrlKey)) {
 					event.preventDefault();
-					if (!continueSaving.value) { 
+					if (!continueSaving.value) {
 						continueSaving.value = true;
 						saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
 					}
@@ -537,7 +529,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 		return (
 			<div class={styles.page}>
 				<Navbar persistenceState={persistenceState} roomState={roomState}/>
-				
+
 				<div class={styles.pageMain}>
 					<div className={styles.codeContainer}>
 						<CodeMirror
@@ -656,7 +648,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 								</button>
 								<button
 									className={styles.stop}
-									onClick={() => onStop()}
+									onClick={onStop}
 								>
 									<IoStopCircleOutline />
 									<span>Stop</span>
@@ -745,6 +737,10 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 				{versionState.value != "OK" && (
 					<VersionWarningModal versionState={versionState} />
 				)}
+
+                {eotMessage.value && eotMessage.value.status != "ALL_GOOD" && (
+                    <OutOfSpaceModal eotMessage={eotMessage} />
+                )}
 
 				{showingTutorialWarning.value && (
 					<TutorialWarningModal
