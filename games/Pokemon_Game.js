@@ -1,3 +1,10 @@
+/*
+@title: Pokemon Game
+@author: ItzShubhamDev
+@tags: []
+@addedOn: 2024-09-17
+*/
+
 const bulbasaur = 'b';
 const charmander = 'c';
 const squirtle = 's';
