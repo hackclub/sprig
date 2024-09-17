@@ -1,5 +1,5 @@
 /*
-@title: maze
+@title: Problem Maze
 @author: Gramgra07
 @tags: ['maze']
 @addedOn: 2024-09-17
