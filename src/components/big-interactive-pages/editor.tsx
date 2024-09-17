@@ -32,6 +32,7 @@ import VersionWarningModal from "../popups-etc/version-warning";
 import OutOfSpaceModal from "../popups-etc/out-of-space";
 import RoomPasswordPopup from "../popups-etc/room-password";
 import KeyBindingsModal from '../popups-etc/KeyBindingsModal'
+import { PersistenceStateKind } from "../../lib/state";
 
 let screenShakeSignal: Signal<number> | null = null;
 
@@ -169,7 +170,7 @@ export const saveGame = debounce(
 			saveQueueSize--;
 			if (
 				saveQueueSize === 0 &&
-				persistenceState.value.kind === "PERSISTED"
+				persistenceState.value.kind === PersistenceStateKind.PERSISTED
 			) {
 				persistenceState.value = {
 					...persistenceState.value,
@@ -187,7 +188,7 @@ export async function startSavingGame(persistenceState: Signal<PersistenceState>
 	const attemptSaveGame = async () => {
 		try {
 			const game =
-				persistenceState.value.kind === "PERSISTED" &&
+				persistenceState.value.kind === PersistenceStateKind.PERSISTED &&
 				persistenceState.value.game !== "LOADING"
 					? persistenceState.value.game
 					: null;
@@ -217,7 +218,7 @@ export async function startSavingGame(persistenceState: Signal<PersistenceState>
 		await new Promise((resolve) => setTimeout(resolve, 2000));
 	}
 	console.log("SUCCESS SAVE")
-	if (persistenceState.value.kind === "PERSISTED")
+	if (persistenceState.value.kind === PersistenceStateKind.PERSISTED)
 		persistenceState.value = {
 			...persistenceState.value,
 			cloudSaveState: "SAVED",
@@ -225,7 +226,7 @@ export async function startSavingGame(persistenceState: Signal<PersistenceState>
 }
 
 const exitTutorial = (persistenceState: Signal<PersistenceState>, sessionId: string) => {
-	if (persistenceState.value.kind === "PERSISTED") {
+	if (persistenceState.value.kind === PersistenceStateKind.PERSISTED) {
 		delete persistenceState.value.tutorial;
 		if (typeof persistenceState.value.game !== "string") {
 			delete persistenceState.value.game.tutorialName;
@@ -241,7 +242,7 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>, sessionId: str
         	saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
 
 	} else {
-		if (persistenceState.value.kind == "SHARED")
+		if (persistenceState.value.kind == PersistenceStateKind.SHARED)
 			delete persistenceState.value.tutorial;
 	}
 };
@@ -446,10 +447,10 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	// Warn before leave
 	useSignalEffect(() => {
 		let needsWarning = false;
-		if (["SHARED", "IN_MEMORY"].includes(persistenceState.value.kind)) {
+		if ([PersistenceStateKind.SHARED, PersistenceStateKind.IN_MEMORY].includes(persistenceState.value.kind)) {
 			needsWarning = persistenceState.value.stale;
 		} else if (
-			persistenceState.value.kind === "PERSISTED" &&
+			persistenceState.value.kind === PersistenceStateKind.PERSISTED &&
 			persistenceState.value.stale &&
 			persistenceState.value.game !== "LOADING"
 		) {
@@ -491,16 +492,16 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	let initialCode = "";
 	let gameId = '';
 	if (
-		persistenceState.value.kind === "PERSISTED" &&
+		persistenceState.value.kind === PersistenceStateKind.PERSISTED &&
 		persistenceState.value.game !== "LOADING"
 	){
 		initialCode = persistenceState.value.game.code;
 		gameId = persistenceState.value.game?.id ?? '';
 
 	}
-	else if (persistenceState.value.kind === "SHARED")
+	else if (persistenceState.value.kind === PersistenceStateKind.SHARED)
 		initialCode = persistenceState.value.code;
-	else if (persistenceState.value.kind === "IN_MEMORY")
+	else if (persistenceState.value.kind === PersistenceStateKind.IN_MEMORY)
 		initialCode = localStorage.getItem("sprigMemory") ?? defaultExampleCode;
 	// Firefox has weird tab restoring logic. When you, for example, Ctrl-Shift-T, it opens
 	// a kinda broken cached version of the page. And for some reason this reverts the CM
@@ -521,7 +522,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 			}
 		});
 	}, [initialCode]);
-	if(isNewSaveStrat.value && persistenceState.value.kind === "COLLAB" && typeof persistenceState.value.game === 'string')
+	if(isNewSaveStrat.value && persistenceState.value.kind === PersistenceStateKind.COLLAB && typeof persistenceState.value.game === 'string')
 		return (
 			<RoomPasswordPopup persistenceState={persistenceState} />
 		)
@@ -547,7 +548,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 									...persistenceState.value,
 									stale: true,
 								};
-								if (persistenceState.value.kind === "PERSISTED") {
+								if (persistenceState.value.kind === PersistenceStateKind.PERSISTED) {
 									persistenceState.value = {
 										...persistenceState.value,
 										cloudSaveState: "SAVING",
@@ -556,7 +557,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 										saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
 								}
 
-								if (persistenceState.value.kind === "IN_MEMORY") {
+								if (persistenceState.value.kind === PersistenceStateKind.IN_MEMORY) {
 									localStorage.setItem(
 										"sprigMemory",
 										codeMirror.value!.state.doc.toString()
@@ -689,9 +690,9 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 								style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenContainer.current?.clientHeight! - screenControls.current?.clientHeight!) }}
 							>
 								{!(
-									(persistenceState.value.kind === "SHARED" ||
+									(persistenceState.value.kind === PersistenceStateKind.SHARED ||
 										persistenceState.value.kind ===
-											"PERSISTED") &&
+											PersistenceStateKind.PERSISTED) &&
 									persistenceState.value.tutorial
 								) && (
 									<Help
@@ -705,8 +706,8 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 									/>
 								)}
 
-								{(persistenceState.value.kind === "SHARED" ||
-									persistenceState.value.kind === "PERSISTED") &&
+								{(persistenceState.value.kind === PersistenceStateKind.SHARED ||
+									persistenceState.value.kind === PersistenceStateKind.PERSISTED) &&
 									persistenceState.value.tutorial && (
 										<Help
 											sessionId={sessionId}
@@ -729,7 +730,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 				</div>
 
 				<EditorModal />
-				{persistenceState.value.kind === "IN_MEMORY" &&
+				{persistenceState.value.kind === PersistenceStateKind.IN_MEMORY &&
 					persistenceState.value.showInitialWarning && (
 						<DraftWarningModal persistenceState={persistenceState} />
 					)}
