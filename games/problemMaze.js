@@ -1,8 +1,8 @@
 /*
 @title: maze
-@author:  Gramgra07
-@tags: [maze]
-@addedOn: 2024-00-00
+@author: Gramgra07
+@tags: ['maze']
+@addedOn: 2024-09-17
 */
 
 const player = "p"
