@@ -388,6 +388,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								<Button accent icon={IoPlay} onClick={() => onRun()}>
 									Run
 								</Button>
+								<Button accent icon={IoPlay} onClick={() => onRunFullscreen()}>
+									Run Fullscreen
+								</Button>
 								<div class={styles.divider}></div>
 								<Button
 									accent
