@@ -1,5 +1,7 @@
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// Handles the response from GitHub API requests.
+// Throws an error with a detailed message if the response is not OK (status code 2xx).
 async function handleResponse(response: Response): Promise<any> {
 	if (!response.ok) {
 		const errorData = await response.json().catch(() => ({}));
@@ -12,6 +14,8 @@ async function handleResponse(response: Response): Promise<any> {
 	return response.json().catch(() => ({}));
 }
 
+// Sends a GitHub API request and retries up to a specified number of times if it fails.
+// Includes an exponential backoff between retries (delay increases with each retry).
 async function fetchWithRetry(
 	url: string,
 	options: RequestInit,
@@ -25,13 +29,14 @@ async function fetchWithRetry(
 		if (attempt < retries - 1) {
 			console.warn(
 				`Retrying GitHub API request (${attempt + 1}/${retries})`
-			);
-			await delay(delayMs * (attempt + 1));
+			); // Log a warning for each retry attempt
+			await delay(delayMs * (attempt + 1)); // Exponential backoff before retrying
 		}
 	}
-	throw new Error("Max retries reached, request failed.");
+	throw new Error("Max retries reached, request failed."); // Throw error if all retries fail
 }
 
+// Generates authorization headers for GitHub API requests using the provided access token.
 function getAuthHeaders(accessToken: string): HeadersInit {
 	return {
 		Authorization: `Bearer ${accessToken}`,
@@ -39,17 +44,20 @@ function getAuthHeaders(accessToken: string): HeadersInit {
 	};
 }
 
+// Generates headers for JSON-based API requests, including authorization if an access token is provided.
 function getJsonHeaders(accessToken?: string): HeadersInit {
 	const headers: HeadersInit = {
 		"Content-Type": "application/json",
 		Accept: "application/json",
 	};
 	if (accessToken) {
-		headers.Authorization = `Bearer ${accessToken}`;
+		headers.Authorization = `Bearer ${accessToken}`; // Add authorization header if access token is provided
 	}
 	return headers;
 }
 
+// Fetches a GitHub OAuth access token using the provided authorization code.
+// Uses the GitHub OAuth flow to exchange a code for an access token.
 export async function fetchGitHubAccessToken(
 	code: string
 ): Promise<string | null> {
@@ -85,6 +93,7 @@ export async function fetchGitHubAccessToken(
 	}
 }
 
+// Fetches the authenticated GitHub user's details using the provided access token.
 export async function fetchGitHubUser(accessToken: string): Promise<any> {
 	const response = await fetchWithRetry("https://api.github.com/user", {
 		headers: getAuthHeaders(accessToken),
@@ -93,6 +102,7 @@ export async function fetchGitHubUser(accessToken: string): Promise<any> {
 	return handleResponse(response);
 }
 
+// Validates if the provided GitHub access token is valid by making a test request to GitHub API.
 export async function validateGitHubToken(
 	accessToken: string
 ): Promise<boolean> {
@@ -100,9 +110,10 @@ export async function validateGitHubToken(
 		headers: getAuthHeaders(accessToken),
 	});
 
-	return response.ok;
+	return response.ok; // Return true if the token is valid, otherwise false
 }
 
+// Revokes the provided GitHub access token by removing it from the user's authorized applications.
 export async function revokeGitHubToken(accessToken: string): Promise<void> {
 	const response = await fetchWithRetry(
 		`https://github.com/settings/connections/applications/${
@@ -115,17 +126,18 @@ export async function revokeGitHubToken(accessToken: string): Promise<void> {
 	);
 
 	if (!response.ok) {
-		await handleResponse(response);
+		await handleResponse(response); // Handle error if token revocation fails
 	}
 }
 
+// Forks a specified repository on GitHub using the provided access token.
 export async function forkRepository(
 	accessToken: string,
 	owner: string,
 	repo: string
 ): Promise<any> {
 	const response = await fetchWithRetry(
-		`https://api.github.com/repos/${owner}/${repo}/forks`,
+		`https://api.github.com/repos/${owner}/${repo}/forks`, // GitHub API endpoint to fork a repository
 		{
 			method: "POST",
 			headers: getAuthHeaders(accessToken),
@@ -135,6 +147,7 @@ export async function forkRepository(
 	return handleResponse(response);
 }
 
+// Creates a new branch in the specified GitHub repository based on a commit SHA.
 export async function createBranch(
 	accessToken: string,
 	owner: string,
@@ -143,7 +156,7 @@ export async function createBranch(
 	sha: string
 ): Promise<any> {
 	const response = await fetchWithRetry(
-		`https://api.github.com/repos/${owner}/${repo}/git/refs`,
+		`https://api.github.com/repos/${owner}/${repo}/git/refs`, // GitHub API endpoint to create a branch
 		{
 			method: "POST",
 			headers: getAuthHeaders(accessToken),
@@ -157,6 +170,7 @@ export async function createBranch(
 	return handleResponse(response);
 }
 
+// Creates a new commit in the GitHub repository.
 export async function createCommit(
 	accessToken: string,
 	owner: string,
@@ -166,7 +180,7 @@ export async function createCommit(
 	parentSha: string
 ): Promise<any> {
 	const response = await fetchWithRetry(
-		`https://api.github.com/repos/${owner}/${repo}/git/commits`,
+		`https://api.github.com/repos/${owner}/${repo}/git/commits`, // GitHub API endpoint to create a commit
 		{
 			method: "POST",
 			headers: getAuthHeaders(accessToken),
@@ -178,9 +192,10 @@ export async function createCommit(
 		}
 	);
 
-	return handleResponse(response);
+	return handleResponse(response); // Return the created commit
 }
 
+// Creates a pull request on a GitHub repository.
 export async function createPullRequest(
 	accessToken: string,
 	owner: string,
@@ -192,12 +207,13 @@ export async function createPullRequest(
 	forkOwner: string,
 	gameId: string
 ): Promise<any> {
-	await delay(5000);
+	await delay(5000); // Delay to ensure the forked repository is ready
 	const fullHead = `${forkOwner}:${head}`;
 
 	try {
+		// Create the pull request
 		const response = await fetchWithRetry(
-			`https://api.github.com/repos/${owner}/${repo}/pulls`,
+			`https://api.github.com/repos/${owner}/${repo}/pulls`, // GitHub API endpoint for creating pull requests
 			{
 				method: "POST",
 				headers: getAuthHeaders(accessToken),
@@ -211,10 +227,10 @@ export async function createPullRequest(
 		);
 
 		const pullRequest = await handleResponse(response);
-		const prUrl = pullRequest.html_url;
+		const prUrl = pullRequest.html_url; // URL of the created pull request
 
 		const updateGamePRResponse = await fetch(
-			`/api/games/github-update-game`,
+			`/api/games/github-update-game`, // Endpoint to update game metadata with the pull request
 			{
 				method: "POST",
 				headers: {
@@ -253,6 +269,7 @@ export async function createPullRequest(
 	}
 }
 
+// Fetches the latest commit SHA for the specified branch in a GitHub repository.
 export async function fetchLatestCommitSha(
 	accessToken: string,
 	owner: string,
@@ -263,36 +280,38 @@ export async function fetchLatestCommitSha(
 	const response = await fetchWithRetry(url, {
 		headers: getAuthHeaders(accessToken),
 	});
-	const data = await handleResponse(response);
+	const data = await handleResponse(response); // Return the commit SHA
 	return data.object.sha;
 }
 
+// Creates a blob (file) in a GitHub repository, encoding it as base64.
 export async function createBlob(
 	accessToken: string,
 	owner: string,
 	repo: string,
 	content: Blob
 ): Promise<string> {
-	const url = `https://api.github.com/repos/${owner}/${repo}/git/blobs`;
-	const reader = new FileReader();
+	const url = `https://api.github.com/repos/${owner}/${repo}/git/blobs`; // GitHub API endpoint to create a blob
+	const reader = new FileReader(); // Read the file content
 	const base64 = await new Promise<string>((resolve) => {
-		reader.onloadend = () => resolve(reader.result as string);
+		reader.onloadend = () => resolve(reader.result as string); // Convert file content to base64
 		reader.readAsDataURL(content);
 	});
 	const base64content = base64.split(",")[1];
 
 	const response = await fetchWithRetry(url, {
-		method: "POST",
+		method: "POST", // Use POST to create the blob
 		headers: getJsonHeaders(accessToken),
 		body: JSON.stringify({
 			content: base64content,
 			encoding: "base64",
 		}),
 	});
-	const data = await handleResponse(response);
+	const data = await handleResponse(response); // Return the blob SHA
 	return data.sha;
 }
 
+// Fetches the forked repository for the authenticated user.
 export async function fetchForkedRepository(
 	accessToken: string,
 	owner: string,
@@ -300,7 +319,7 @@ export async function fetchForkedRepository(
 	yourGithubUsername: string
 ): Promise<any> {
 	const response = await fetchWithRetry(
-		`https://api.github.com/repos/${owner}/${repo}/forks`,
+		`https://api.github.com/repos/${owner}/${repo}/forks`, // GitHub API endpoint to fetch forks
 		{
 			headers: getAuthHeaders(accessToken),
 		}
@@ -308,7 +327,7 @@ export async function fetchForkedRepository(
 
 	const forks = await handleResponse(response);
 	const forkedRepo = forks.find(
-		(fork: any) => fork.owner.login === yourGithubUsername
+		(fork: any) => fork.owner.login === yourGithubUsername // Find the fork created by the current user
 	);
 	if (!forkedRepo) {
 		throw new Error("Forked repository not found.");
@@ -317,6 +336,7 @@ export async function fetchForkedRepository(
 	return forkedRepo;
 }
 
+// Creates a Git tree and commits files in a GitHub repository.
 export async function createTreeAndCommit(
 	accessToken: string,
 	owner: string,
@@ -326,13 +346,13 @@ export async function createTreeAndCommit(
 ): Promise<string> {
 	const tree = files.map((file) => ({
 		path: file.path,
-		mode: "100644",
+		mode: "100644", // File permissions (100644 represents a non-executable file)
 		type: "blob",
 		...(file.sha ? { sha: file.sha } : { content: file.content }),
 	}));
 
 	const response = await fetchWithRetry(
-		`https://api.github.com/repos/${owner}/${repo}/git/trees`,
+		`https://api.github.com/repos/${owner}/${repo}/git/trees`, // GitHub API endpoint to create a tree
 		{
 			method: "POST",
 			headers: getJsonHeaders(accessToken),
@@ -343,10 +363,11 @@ export async function createTreeAndCommit(
 		}
 	);
 
-	const treeData = await handleResponse(response);
+	const treeData = await handleResponse(response); // Return the tree SHA
 	return treeData.sha;
 }
 
+// Updates an existing branch in a GitHub repository by pointing it to a new commit SHA.
 export async function updateBranch(
 	accessToken: string,
 	owner: string,
@@ -355,20 +376,21 @@ export async function updateBranch(
 	commitSha: string
 ): Promise<any> {
 	const response = await fetchWithRetry(
-		`https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branchName}`,
+		`https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branchName}`, // GitHub API endpoint to update a branch
 		{
 			method: "PATCH",
 			headers: getJsonHeaders(accessToken),
 			body: JSON.stringify({
-				sha: commitSha,
-				force: true,
+				sha: commitSha, // Update the branch to point to the new commit
+				force: true, // Force update in case of conflicts
 			}),
 		}
 	);
 
-	return handleResponse(response);
+	return handleResponse(response); // Return the updated branch reference
 }
 
+// Creates a blob (file) for an image in a GitHub repository, encoding it as base64.
 export async function createBlobForImage(
 	accessToken: string,
 	repoOwner: string,
@@ -376,7 +398,7 @@ export async function createBlobForImage(
 	base64ImageContent: any
 ): Promise<string> {
 	const response = await fetchWithRetry(
-		`https://api.github.com/repos/${repoOwner}/${repoName}/git/blobs`,
+		`https://api.github.com/repos/${repoOwner}/${repoName}/git/blobs`, // GitHub API endpoint to create a blob for an image
 		{
 			method: "POST",
 			headers: getJsonHeaders(accessToken),
@@ -387,6 +409,6 @@ export async function createBlobForImage(
 		}
 	);
 
-	const data = await handleResponse(response);
+	const data = await handleResponse(response); // Return the blob SHA
 	return data.sha;
 }
