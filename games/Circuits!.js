@@ -19,7 +19,7 @@ under the blue selection square
 
 @title: Circuits!
 @author: Kevin Butchard
-@tags: [circuits, sandbox, wire]
+@tags: ['circuits', 'sandbox', 'wire']
 @addedOn: 2024-09-16
 */
 
