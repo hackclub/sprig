@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: specs
-@author: 
+@author: chubbyducky
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-09-17
 
 To-do, for future iterations:
 [] create more levels and components
