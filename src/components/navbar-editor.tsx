@@ -20,6 +20,7 @@ import InlineInput from "./design-system/inline-input";
 import { throttle } from "throttle-debounce";
 import SharePopup from "./popups-etc/share-popup";
 import ShareRoomPopup from "./popups-etc/share-room";
+import { PersistenceStateKind } from "../lib/state";
 
 import {
 	IoChevronDown,
@@ -60,7 +61,7 @@ const onNameEdit = (
 	newName: string
 ) => {
 	if (
-		persistenceState.value.kind !== "PERSISTED" ||
+		persistenceState.value.kind !== PersistenceStateKind.PERSISTED ||
 		persistenceState.value.game === "LOADING"
 	)
 		return;
@@ -77,7 +78,7 @@ const onNameEdit = (
 const canDelete = (persistenceState: Signal<PersistenceState>) => {
 	return (
 		true &&
-		persistenceState.value.kind === "PERSISTED" &&
+		persistenceState.value.kind === PersistenceStateKind.PERSISTED &&
 		persistenceState.value.game !== "LOADING" &&
 		!persistenceState.value.game.unprotected
 	);
@@ -528,7 +529,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	let saveState;
 	let actionButton;
 	let errorBlink = false;
-	if (props.persistenceState.value.kind === "IN_MEMORY") {
+	if (props.persistenceState.value.kind === PersistenceStateKind.IN_MEMORY) {
 		saveState = "Your work is unsaved!";
 
 		actionButton = (
@@ -539,7 +540,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				Save your work
 			</Button>
 		);
-	} else if (props.persistenceState.value.kind === "SHARED") {
+	} else if (props.persistenceState.value.kind === PersistenceStateKind.SHARED) {
 		saveState = props.persistenceState.value.stale
 			? "Your changes are unsaved!"
 			: "No changes to save";
@@ -556,16 +557,17 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				Remix to save edits
 			</Button>
 		);
-	} else if (props.persistenceState.value.kind === "PERSISTED") {
+	} else if (props.persistenceState.value.kind === PersistenceStateKind.PERSISTED || (isNewSaveStrat.value && props.persistenceState.value.kind === PersistenceStateKind.COLLAB)) {
+		const userEmail = props.persistenceState.value.session?.user.email
 		saveState = {
 			SAVED: `Saved to ${
 				!isNewSaveStrat.value ?
-					props.persistenceState.value.session?.user.email ?? "???"
+					userEmail ?? "???"
 				:
 					props.roomState?.value.participants.filter((participant) => {
 						if(participant.isHost) return true
 						return false
-					})[0]?.userEmail === props.persistenceState.value.session?.user.email ? props.persistenceState.value.session?.user.email : "???"
+					})[0]?.userEmail === userEmail ? userEmail : "the host"
 			}`,
 			SAVING: "Saving...",
 			ERROR: "Error saving to cloud",
@@ -612,7 +614,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						</button>
 					</li>
 					<li class={styles.filename}>
-						{props.persistenceState.value.kind === "PERSISTED" &&
+						{props.persistenceState.value.kind === PersistenceStateKind.PERSISTED &&
 						props.persistenceState.value.game !== "LOADING" ? (
 							<>
 								<InlineInput
@@ -627,17 +629,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 										)
 									}
 								/>
-								<span class={styles.attribution}> by {
-										(!isNewSaveStrat.value || props.roomState?.value.participants.filter((participant) => {
-												if(participant.isHost) return true
-												return false
-											})[0]?.userEmail === props.persistenceState.value.session?.user.email)
-											? "you"
-											: "???"
-									}
-								</span>
+								<span class={styles.attribution}>by you</span>
 							</>
-						) : props.persistenceState.value.kind === "SHARED" ? (
+						) : props.persistenceState.value.kind === PersistenceStateKind.SHARED ? (
 							<>
 								{props.persistenceState.value.name}
 								<span class={styles.attribution}>
@@ -645,6 +639,16 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 										? ` by ${props.persistenceState.value.authorName}`
 										: " (shared with you)"}
 								</span>
+							</>
+						) : props.persistenceState.value.kind === PersistenceStateKind.COLLAB && typeof props.persistenceState.value.game !== "string"? (
+							<>
+								<InlineInput 
+									placeholder="Untitled"
+									// @ts-ignore idk why i need to .game.game but if i just .game.name it's undefined
+									value={props.persistenceState.value.game.game.name}
+									onChange={() => {}}
+									disabled={true}
+								/>
 							</>
 						) : (
 							"Unsaved Game"
@@ -1132,7 +1136,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 								onClick={() => (shareRoomPopup.value = true)}
 							>
-								{!(props.persistenceState.value.kind == "PERSISTED" && props.persistenceState.value.game !== "LOADING" && props.persistenceState.value.game.isRoomOpen) ? "Create a room" : "Share room"}
+								{!(props.persistenceState.value.kind == PersistenceStateKind.PERSISTED && props.persistenceState.value.game !== "LOADING" && props.persistenceState.value.game.isRoomOpen) ? "Create a room" : "Share room"}
 							</a>
 								</li>
 							</>
@@ -1188,13 +1192,13 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									const a = document.createElement("a");
 									const name =
 										props.persistenceState.value.kind ===
-											"PERSISTED" &&
+											PersistenceStateKind.PERSISTED &&
 										props.persistenceState.value.game !==
 											"LOADING"
 											? props.persistenceState.value.game
 													.name
 											: props.persistenceState.value
-													.kind === "SHARED"
+													.kind === PersistenceStateKind.SHARED
 											? props.persistenceState.value.name
 											: "sprig-game";
 									const code =
@@ -1238,7 +1242,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 															props
 																.persistenceState
 																.value.kind ===
-																"PERSISTED" &&
+																PersistenceStateKind.PERSISTED &&
 															props
 																.persistenceState
 																.value.game !==
