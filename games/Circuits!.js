@@ -16,7 +16,7 @@ under the blue selection square
 L to place a new item
 under the blue selection square
 
-
+ 
 @title: Circuits!
 @author: Kevin Butchard
 @tags: ['circuits', 'sandbox', 'wire']
