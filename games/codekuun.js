@@ -1,3 +1,10 @@
+/*
+@title: codekuun
+@tags: ['hackable', 'puzzle', 'logic']
+@addedOn: 2024-09-16
+@author: Jomar Milan
+*/
+
 const bitmaps = {
   controllableUp: {
     key: '~',
