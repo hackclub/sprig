@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Space jam
-@author: 
+@author: Praveenkushinpi 
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-09-17
 */
 const rocket = "r";
 const space = "s";
