@@ -12,6 +12,7 @@ import { WebrtcProvider } from 'y-webrtc'
 import * as Y from 'yjs'
 import { startSavingGame } from './big-interactive-pages/editor'
 import { yCollab } from 'y-codemirror.next'
+import { PersistenceStateKind } from '../lib/state'
 
 interface CodeMirrorProps {
 	class?: string | undefined
@@ -86,12 +87,12 @@ export default function CodeMirror(props: CodeMirrorProps) {
 					if(props.persistenceState === undefined) throw new Error("Persistence state is undefined");
 					if(state.saved == "saved"){
 						let persistenceState = props.persistenceState.peek();
-						if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING"){
+						if(persistenceState.kind === PersistenceStateKind.PERSISTED && persistenceState.game !== "LOADING" || persistenceState.kind === PersistenceStateKind.COLLAB){
 							props.persistenceState.value = {...persistenceState, cloudSaveState: "SAVED"};
 						}
 					} else if(state.saved == "error"){
 						let persistenceState = props.persistenceState.peek();
-						if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING"){
+						if(persistenceState.kind === PersistenceStateKind.PERSISTED && persistenceState.game !== "LOADING"|| persistenceState.kind === PersistenceStateKind.COLLAB){
 							props.persistenceState.value = {...persistenceState, cloudSaveState: "ERROR"};
 						}
 					}
@@ -134,14 +135,14 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				signaling: [
 					import.meta.env.PUBLIC_SIGNALING_SERVER_HOST as string,
 				],
-				// password: ((persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING" && persistenceState.game.password) ? persistenceState.game.password : "")
+				// password: ((persistenceState.kind === PersistenceStateKind.PERSISTED && persistenceState.game !== "LOADING" && persistenceState.game.password) ? persistenceState.game.password : "")
 			});
 			//get yjs document from provider
 			let ytext = yDoc.getText("codemirror");
 			const yUndoManager = new Y.UndoManager(ytext);
 
 			yProviderAwarenessSignal.value = provider.awareness
-			const isHost = ((persistenceState.kind == "PERSISTED" && persistenceState.game != "LOADING") && persistenceState.session?.user.id === persistenceState.game.ownerId)
+			const isHost = ((persistenceState.kind == PersistenceStateKind.PERSISTED && persistenceState.game != "LOADING") && persistenceState.session?.user.id === persistenceState.game.ownerId)
 			provider.awareness.setLocalStateField("user", {
 				name:
 					props.persistenceState.peek().session?.user.email ??
@@ -197,7 +198,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				if(props.roomState)
 					props.roomState.value.participants = participants;
 				let persistenceState = props.persistenceState.peek();
-				if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING"){
+				if(persistenceState.kind === PersistenceStateKind.PERSISTED && persistenceState.game !== "LOADING"){
 					if(persistenceState.game.ownerId === persistenceState.session?.user.id){
 						startSavingGame(props.persistenceState, props.roomState);
 					}
