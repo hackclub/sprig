@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Harder Block Push
 @author: Game
-@tags: [["sokoban-style", "hard", "advanced"]
-@addedOn: 2024-9-14
+@tags: ["sokoban-style", "hard", "advanced"]
+@addedOn: 2024-09-14
 */
 
 const player = "p"
@@ -197,3 +197,4 @@ afterInput(() => {
     }
   }
 })
+
