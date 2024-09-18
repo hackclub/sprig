@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: buildBurger
 @author: Kevin
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-09-18
 */
 const cursor = "c"
 const bunBottom = "b"
@@ -420,5 +420,6 @@ onInput("d", () => {
 afterInput(() => {
   
 })
+
 
 
