@@ -1,7 +1,7 @@
 /*
 @title: Slippy-Slidey
 @author: B0redChungus
-@tags: ['idk']
+@tags: []
 @addedOn: 2024-09-17
 Inspired by "the slippery ice puzzles" in snowdin from Undertale by Toby Fox.
 */
@@ -305,3 +305,4 @@ afterInput(() => {
   // Check if ice player is on ice, and slip and slide across it
   slip(0, 200)
 })
+
