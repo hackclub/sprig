@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: 
+@title: Turn based game 
 @author: Michael
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-09-18
 
 HOW TO PLAY:
 The goal of the game is to knock out the red square - There are no attacks yet though
@@ -361,3 +361,4 @@ function gameLoop() {
 
 // Run gameLoop once every second
 var gameInterval = setInterval(gameLoop, 250);
+
