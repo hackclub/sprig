@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: 10 levels Maze Game
 @author: YashV. Niranjan
-@tags: [maze game]
+@tags: ['maze game']
 @addedOn: 2024-09-15
 */
 
@@ -333,4 +333,5 @@ afterInput(() => {
     }
   }
 });
+
 
