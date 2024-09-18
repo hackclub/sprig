@@ -2,7 +2,7 @@
 @title: Tickets Please!
 @author: Vaporform (ysk)
 @tags: ['singleplayer','simulator']
-@addedOn: 2024-00-00
+@addedOn: 2024-09-18
 */
 
 //A game heavily inspired by Papers Please!
@@ -2296,3 +2296,4 @@ onInput("l", () => {
   }
 })
 /////////////
+
