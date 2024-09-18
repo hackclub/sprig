@@ -1,8 +1,8 @@
 /*
 @title: RickRoll
 @author: MMKF
-@tags: [RickRoll]
-@addedOn: 15-09-2024
+@tags: []
+@addedOn: 2024-09-18
 */
 
 const black = "a"
