@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Bombs
 @author: a-potted-plant
 @tags: ['beginner']
-@addedOn: 2024-09-06
+@addedOn: 2024-09-18
 */
 
 const player = "p"
@@ -453,3 +453,4 @@ afterInput(() => {
     }
   }
 })
+
