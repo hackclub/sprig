@@ -1,4 +1,11 @@
 /*
+@title: Banana fuel
+@author: Neon
+@tags: []
+@addedOn: 2024-09-12
+*/
+
+/*
 Banana fuel:
 controls: use `w,a,s,d,j`
 wasd to move
@@ -7,10 +14,6 @@ to progress to the next level get all bananas/jewels on level OR use a door.
 there is an easter egg on the big levels. 
 Easter egg: secret room with full non claimable bananas.
 (no point benefits )
-@title: Banana fuel
-@author: Neon
-@tags: [banana]
-@addedOn: 2024-09-12
 */
 // since console.debug, console.error dont work convert them to log
 console.error = (str) => console.log(`err: ${str}`);
