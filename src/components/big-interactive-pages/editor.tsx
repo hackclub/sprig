@@ -64,6 +64,37 @@ export const onRun = async () => {
 	}
 };
 
+export const onRunFullscreen = async () => {
+	foldAllTemplateLiterals();
+	if (!screenRef.value) return;
+
+	if (cleanupRef.value) cleanupRef.value();
+	errorLog.value = [];
+	const code = codeMirror.value?.state.doc.toString() ?? "";
+	const res = runGame(code, screenRef.value, (error) => {
+		errorLog.value = [...errorLog.value, error];
+	});
+
+	//Edit: Request fullscreen
+	screenRef.value.requestFullscreen();
+
+	screenRef.value.focus();
+	if (screenShakeSignal) {
+		screenShakeSignal.value++;
+	}
+	setTimeout(() => {
+		if (screenShakeSignal) {
+			screenShakeSignal.value--;
+		}
+	}, 200);
+
+	cleanupRef.value = res?.cleanup;
+	if (res && res.error) {
+		console.error(res.error.raw);
+		errorLog.value = [...errorLog.value, res.error];
+	}
+};
+
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
 	roomState?: Signal<RoomState>;

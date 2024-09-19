@@ -38,7 +38,7 @@ import { VscLoading } from "react-icons/vsc";
 import { defaultExampleCode } from "../lib/examples";
 import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
-import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
+import { foldAllTemplateLiterals, onRun, onRunFullscreen} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
@@ -387,6 +387,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							<div class={styles.playPopup}>
 								<Button accent icon={IoPlay} onClick={() => onRun()}>
 									Run
+								</Button>
+								<Button accent icon={IoPlay} onClick={() => onRunFullscreen()}>
+									Run Fullscreen
 								</Button>
 								<div class={styles.divider}></div>
 								<Button
