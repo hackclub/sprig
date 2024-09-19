@@ -13,17 +13,17 @@ Easter egg: secret room with full non claimable bananas.
 @addedOn: 2024-09-12
 */
 // since console.debug, console.error dont work convert them to log
-console.error = str => console.log(`err: ${str}`)
-console.debug = str => console.log(`debug: ${str}`)
-const player = "p"
-const player1 = "1"
-const player2 = "2"
-const player3 = "3"
-const fruit = "f"
-const jewel = "j"
+console.error = (str) => console.log(`err: ${str}`);
+console.debug = (str) => console.log(`debug: ${str}`);
+const player = "p";
+const player1 = "1";
+const player2 = "2";
+const player3 = "3";
+const fruit = "f";
+const jewel = "j";
 // to get the fruit from the block you must have x fruit & break the block
-const fruitblock = 'b'
-const door = "d"
+const fruitblock = "b";
+const door = "d";
 const requiredBananasToWinLevel = 5;
 
 let score = 0;
@@ -31,17 +31,19 @@ let score = 0;
 let playerStatus = 0;
 let isDone = false;
 let jewel_attached_to_player = false,
-  jewel_first_round = true
+  jewel_first_round = true;
 let left_stare = 0;
 let old = {
-  p: { x: null, y: null, level: 1 }
-}
+  p: { x: null, y: null, level: 1 },
+};
 // easter egg
 let easter_egg_banner = false;
 let easter_egg_loaded = false;
 let disable_easter_egg = false;
 setLegend(
-  [player, bitmap`
+  [
+    player,
+    bitmap`
 ................
 ................
 .......000......
@@ -57,8 +59,11 @@ setLegend(
 ......000.......
 ......0.0.......
 .....00.00......
-................`],
-  [player1, bitmap`
+................`,
+  ],
+  [
+    player1,
+    bitmap`
 ................
 ................
 .......000......
@@ -74,8 +79,11 @@ setLegend(
 ......000.......
 ......0.0.......
 .....00.00......
-................`],
-  [player2, bitmap`
+................`,
+  ],
+  [
+    player2,
+    bitmap`
 ................
 ................
 .......000......
@@ -91,8 +99,11 @@ setLegend(
 ......000.......
 ......0.0.......
 .....00.00......
-................`],
-  [player3, bitmap`
+................`,
+  ],
+  [
+    player3,
+    bitmap`
 ................
 ................
 .......000......
@@ -108,8 +119,11 @@ setLegend(
 ......000.......
 ......0.0.......
 .....00.00......
-................`],
-  [fruit, bitmap`
+................`,
+  ],
+  [
+    fruit,
+    bitmap`
 ................
 ................
 .......CCC......
@@ -125,8 +139,11 @@ setLegend(
 ......CCC.......
 ................
 ................
-................`],
-  [fruitblock, bitmap`
+................`,
+  ],
+  [
+    fruitblock,
+    bitmap`
 0000000000000000
 0..............0
 0......CCC.....0
@@ -142,8 +159,11 @@ setLegend(
 0.....CCC......0
 0..............0
 0..............0
-0000000000000000`],
-  [door, bitmap`
+0000000000000000`,
+  ],
+  [
+    door,
+    bitmap`
 0000000000000000
 0CCCCCCCCCCCCCC0
 0CCCCCCCCCCCCCC0
@@ -159,8 +179,11 @@ setLegend(
 0CCCCCCCCCCCCCC0
 0CCCCCCCCCCCCCC0
 0CCCCCCCCCCCCCC0
-0000000000000000`],
-  [jewel, bitmap`
+0000000000000000`,
+  ],
+  [
+    jewel,
+    bitmap`
 0000000000000000
 0.2.2.2.2.2.2.20
 02.2.2.2.2.2.2.0
@@ -176,13 +199,14 @@ setLegend(
 02.2.2.2.2.2.2.0
 0.2.2.2.2.2.2.20
 02.2.2.2.2.2.2.0
-0000000000000000`]
-)
-setSolids([player, player1, player2, player3, fruitblock])
+0000000000000000`,
+  ],
+);
+setSolids([player, player1, player2, player3, fruitblock]);
 
-let level = 1
+let level = 1;
 const levels = [
-  // you lose map 
+  // you lose map
   map`
 ...
 ...
@@ -198,17 +222,17 @@ f..`,
   map`
 ..p
 ...
-${Math.random() > .5 ? 'f' : '.'}.f`,
+${Math.random() > 0.5 ? "f" : "."}.f`,
   map`
 b.p
-${Math.random() > .3 ? 'f': 'j'}b.
+${Math.random() > 0.3 ? "f" : "j"}b.
 b.f`,
   map`
 p..bf
 f...b
 ...b.
 ..b.d
-.b..${Math.random() > .5 ? 'f' : '.'}`,
+.b..${Math.random() > 0.5 ? "f" : "."}`,
   // begin special easter egg levels - 3 levels
   // keep left side free of blocks
   map`
@@ -221,10 +245,10 @@ f...b
 p..bf
 b...b
 .b..d
-b.${Math.random() > .5 ? '.' : 'f'}..
+b.${Math.random() > 0.5 ? "." : "f"}..
 .b..f`,
   map`
-${Math.random() > .5 ? 'j' : 'f'}b.bd
+${Math.random() > 0.5 ? "j" : "f"}b.bd
 b...f
 .b..p
 .b...
@@ -233,36 +257,34 @@ b...f
   map`
 ...
 ...
-...` // you win map
-]
-setMap(levels[level])
+...`, // you win map
+];
+setMap(levels[level]);
 setPushables({
   [player]: [],
-})
+});
 
 function getPlayerInstance() {
   switch (playerStatus) {
     case 0:
-      return player
+      return player;
       break;
     case 1:
-      return player1
+      return player1;
       break;
     case 2:
-      return player2
+      return player2;
       break;
     case 3:
-      return player3
+      return player3;
       break;
     default:
       return player3; // if at the max then just show full charge
       break;
   }
-
 }
 
 function handleInputs() {
-
   onInput("w", () => {
     if (isDone) return;
     left_stare = 0;
@@ -276,7 +298,7 @@ function handleInputs() {
     //       clearUpBoxes()
     //   // levelUp()
     // } else {
-    //   // you lose 
+    //   // you lose
     //   isDone = true;
     //   setMap(levels[0])
     //         updateLevelText()
@@ -284,110 +306,112 @@ function handleInputs() {
     //       }
 
     //     }
-    getFirst(getPlayerInstance()).y -= 1
-  })
+    getFirst(getPlayerInstance()).y -= 1;
+  });
   onInput("d", () => {
     if (isDone) return;
     left_stare = 0;
     // if(easter_egg_loaded) {
     //   current_score_for_math++;
     // }
-    getFirst(getPlayerInstance()).x += 1
-  })
+    getFirst(getPlayerInstance()).x += 1;
+  });
   onInput("a", () => {
     if (isDone) return;
-    const pl = getFirst(getPlayerInstance())
+    const pl = getFirst(getPlayerInstance());
     // if(easter_egg_loaded) {
     //   current_score_for_math--;
     // }
     if (pl.x == 0) {
       left_stare++;
     }
-    getFirst(getPlayerInstance()).x -= 1
-  })
+    getFirst(getPlayerInstance()).x -= 1;
+  });
   onInput("s", () => {
     if (isDone) return;
     left_stare = 0;
-    getFirst(getPlayerInstance()).y += 1
-  })
-
+    getFirst(getPlayerInstance()).y += 1;
+  });
 }
-
 
 function playEatTune() {
   playTune(tune`
 500: B4/500,
-15500`)
+15500`);
 }
 
 function playLevelUpTune() {
-  playTune(tune`D`)
+  playTune(tune`D`);
 }
 
 function clearUpBoxes() {
-  getAll(fruitblock).forEach(e => {
-    clearTile(e.x, e.y)
-  })
+  getAll(fruitblock).forEach((e) => {
+    clearTile(e.x, e.y);
+  });
 }
 afterInput(() => {
   if (isDone) return;
-  if (old.p.level !== level) resetCords()
+  if (old.p.level !== level) resetCords();
 
-  const pl = getFirst(getPlayerInstance())
-  if (getAll(door).find(f => f.x == pl.x && f.y == pl.y)) {
+  const pl = getFirst(getPlayerInstance());
+  if (getAll(door).find((f) => f.x == pl.x && f.y == pl.y)) {
     if (easter_egg_loaded) {
       disable_easter_egg = true;
       easter_egg_loaded = false;
     }
-    levelUp()
+    levelUp();
     return;
   }
-  const hitFruit = getAll(fruit).find(f => f._x == pl.x && f._y == pl.y)
-  const hitsJewel = getAll(jewel).find(f => f._x == pl.x && f._y == pl.y)
+  const hitFruit = getAll(fruit).find((f) => f._x == pl.x && f._y == pl.y);
+  const hitsJewel = getAll(jewel).find((f) => f._x == pl.x && f._y == pl.y);
   if (playerStatus > 0) {
-    clearUpBoxes()
+    clearUpBoxes();
   }
   let jewel_just_added = false;
   if (jewel_attached_to_player) {
-    clearTile(pl.x, pl.y)
+    clearTile(pl.x, pl.y);
     if (old.p.x !== null && old.p.y !== null) {
       // console.log(`clearing ${old.p.x},${old.p.y} - ${old.p.level} = ${pl.x},${pl.y} - ${level}`)
-      clearTile(old.p.x, old.p.y)
+      clearTile(old.p.x, old.p.y);
     }
-    addSprite(pl.x, pl.y, jewel)
-    addSprite(pl.x, pl.y, getPlayerInstance())
+    addSprite(pl.x, pl.y, jewel);
+    addSprite(pl.x, pl.y, getPlayerInstance());
     jewel_just_added = true;
   }
   if (hitFruit || (hitsJewel && !jewel_attached_to_player)) {
     // console.log('#eat')
-    playEatTune()
-    clearTile(pl.x, pl.y)
+    playEatTune();
+    clearTile(pl.x, pl.y);
     if (hitFruit) {
       playerStatus++;
       score++;
-      clearUpBoxes()
+      clearUpBoxes();
     }
 
     if (hitsJewel && !jewel_attached_to_player && !jewel_just_added) {
-      addSprite(pl.x, pl.y, jewel)
+      addSprite(pl.x, pl.y, jewel);
       jewel_attached_to_player = true;
       jewel_first_round = true;
     }
-    addSprite(pl.x, pl.y, getPlayerInstance())
+    addSprite(pl.x, pl.y, getPlayerInstance());
   }
 
-  old.p.x = pl.x
-  old.p.y = pl.y
+  old.p.x = pl.x;
+  old.p.y = pl.y;
   if (level >= 6 && level <= 8 && !disable_easter_egg) {
     // if(disable_easter_egg) return;
-    // add easter egg thing if its not already displayed. 
+    // add easter egg thing if its not already displayed.
     if (!easter_egg_banner) {
-      addText('sprig', { x: 3, y: 1, color: disable_easter_egg ? color`D` : color`3` })
+      addText("sprig", {
+        x: 3,
+        y: 1,
+        color: disable_easter_egg ? color`D` : color`3`,
+      });
       easter_egg_banner = true;
     }
     // stop looking at the source to beat the easter egg tsk tsk
     if (pl.x == 0 && pl.y == 2 && left_stare >= 4) {
-      //start the game :D 
+      //start the game :D
       playerStatus = 0;
 
       setMap(map`
@@ -397,61 +421,66 @@ d....33
 .......
 .......
 3......
-33....p`)
+33....p`);
       // addEasterEggText()
       easter_egg_loaded = true;
 
       return;
     }
   }
-  if ((getAll(fruit).length == 0 && (jewel_attached_to_player ? true : getAll(jewel).length == 0)) || (getAll(door).length == 0 ? false : getAll(door).find(f => f._x == pl.x && f._y == pl.y))) {
+  if (
+    (getAll(fruit).length == 0 &&
+      (jewel_attached_to_player ? true : getAll(jewel).length == 0)) ||
+    (getAll(door).length == 0
+      ? false
+      : getAll(door).find((f) => f._x == pl.x && f._y == pl.y))
+  ) {
     if (!easter_egg_loaded) {
-      console.debug(1)
-      levelUp()
+      console.debug(1);
+      levelUp();
     }
   }
-
-})
+});
 
 function resetCords() {
-  old.p = { x: null, y: null, level: level }
+  old.p = { x: null, y: null, level: level };
 }
 
 function levelUp() {
-  console.debug(`#levelup`)
+  console.debug(`#levelup`);
   level++;
-  //clear old cords on new map since it will clear last spot u were standing on old map 
-  resetCords()
+  //clear old cords on new map since it will clear last spot u were standing on old map
+  resetCords();
   playerStatus = 0;
   easter_egg_banner = false;
-  clearText()
-  playLevelUpTune()
+  clearText();
+  playLevelUpTune();
   if (jewel_first_round && jewel_attached_to_player) {
     jewel_first_round = false;
   } else if (jewel_attached_to_player) {
     jewel_attached_to_player = false;
-    score *= 1.5
-    score = Math.round(score)
+    score *= 1.5;
+    score = Math.round(score);
   }
   if (levels[level]) {
     try {
-      setMap(levels[level])
+      setMap(levels[level]);
     } catch (e) {
       // broken level - u lose
       level = 0;
-      setMap(levels[level])
+      setMap(levels[level]);
     }
   }
-  updateLevelText()
+  updateLevelText();
 }
 
 function updateLevelText() {
   if (level == levels.length - 1) {
-    addText('You win ', { x: 7, y: 7, color: color`4` })
-    addText('Score - ' + score, { x: 6, y: 8, color: color`D` })
+    addText("You win ", { x: 7, y: 7, color: color`4` });
+    addText("Score - " + score, { x: 6, y: 8, color: color`D` });
     isDone = true;
   } else if (level == 0) {
-    addText('You LOSE ', { x: 7, y: 5, color: color`3` })
+    addText("You LOSE ", { x: 7, y: 5, color: color`3` });
   }
 }
-handleInputs()
+handleInputs();
