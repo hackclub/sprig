@@ -2,14 +2,13 @@
 @title: Least_Tiles_2.0
 @author: NumberBasher
 @addedOn: 2024-09-16
-@tags: []
 */
 
-  addText('00', {
-    x: 1,
-    y: 1,
-    color: color`2`
-  })
+addText('00', {
+  x: 1,
+  y: 1,
+  color: color`2`
+})
 
 let flag = true
 const player = "p"
@@ -153,6 +152,136 @@ weeeeewwwew
 wwewwwwwwww
 wweeeepwwww
 wwwwwwwwwww`,
+  map`
+w.w..ww.www...w.w.www..ww.w.w.w..w.w
+w.w.w...w.....w.w..w....w.w.w.w..w.w
+w.w..w..ww.........w....w.ww..w.....
+w.w...w.w..........w..w.w.w.w.w.....
+.ww.ww..www.......www..ww.w.w.www...
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+www.ww.....ww.w.w..w.w..ww..w.w.w...
+ew..w.w.....w.w.w.w.w.w.w.w.w.w.w...
+ew..w.w.....w.w.w.w.w.w.www.w.w.w...
+ew..w.w...w.w.w.w.w...w.w...........
+pw...ww....ww..ww.w...w.w...w.w.w...`,
+  map`
+pwewewwwwe
+weweeeweee
+ewwwwwwwww
+wwweeeweew
+weewwewwew
+ewwewewwew
+weeewewwee
+ewwweeewwe
+weweweeeew
+eweeeeewee`,
+  map`
+eee.ttttttt
+eww...w....
+eeeweeewewe
+wwewewewewe
+eeeweweweee
+........wwe
+ttttttwpeee`,
+  map`
+p.........
+..........
+..........
+..........
+....e.....
+.w........
+.ww.......
+w.........
+........w.
+..........`,
+  map`
+p..w....w.
+........e.
+.e..weeee.
+..ew...ee.
+w.ee..wee.
+...ee.....
+..w..e.w..
+..........
+ee...w....
+..eeee....`,
+  map`
+pe...wwwwww.ww...........
+.e...............w...w.w.
+..e...........w.ee.e.....
+..e.......wwee..w...w....
+..ww..w....weww..w..w....
+..w.e..w.w.....ww..ee....
+w....e.....ww.....ww..w..
+www...ew..www....e.......
+www...we....w.e....w.w...
+ww....w.e...we........ww.
+www..ww....ew...www......
+ww...ww..wwwww......w...w
+w..w..w..e..w.w.........w
+w......ewww.w..w.........
+ww....e..wwww.....w.....w
+w.w...w...w.e.w.....w...w
+w..ee......wee..w.w.e...w
+...e.....w...ew..ww.ww..w
+ww..ew..ww..w.eew....ee.w
+ww.....e..eew..eew.wwww.w
+.weew.ewee..ww.eeew...w.w
+..w.......eeeewwew..w.w.w
+..ewww.....ee.www.....w.w
+...ee...e.e.............w
+.....eee......ww....w.w..`,
+  map`
+pewwe
+eeeew
+eeewe
+ewwew
+wewwe`,
+  map`
+p........w
+...w.....w
+..e.w.....
+.ww.......
+...w......
+..........
+..w.......
+.w........
+..........
+..........`,
+  map`
+weeeeeeeeeeeeeee
+wewwweeeeeeewwwe
+wewwwwwwwwwwwwwe
+wewweweeweewewwe
+wwewweeeeeeewwee
+weeweeewwweeewee
+weeweeweeeweewee
+weeweewepeweewee
+weeweeweeeweewee
+weeweeewwweeewee
+weewweeeeeeewwew
+wewweweeeeewewwe
+wewwwwwwwwwwwwwe
+wewwweeeeeeewwwe
+weeeeweeeeeeeeee
+wwwwwwwwwwwwwwww`,
+  map`
+weeeeeeeeeeeeeee
+wewwwwwwwwwwwwwe
+weweeeeeeeeeewwe
+wewewweeeeeewewe
+weweeweeeeeweewe
+weweeeweeeweeewe
+weweeeewpweeeewe
+weweeeeeweeeeewe
+weweeeeweweeeewe
+weweeeweeeweeewe
+wewewweeeeewwewe
+wewewweeeeeewewe
+weweeeeeeeeeeewe
+wewwwwwwwwwwwwwe
+weeeeeeeeeeeeeee
+wwwwwwwwwwwwwwww`,
 ]
 
 setMap(levels[level])
@@ -161,14 +290,13 @@ setPushables({
   [player]: []
 })
 onInput("w", () => {
-  if(!flag)return;
-  if (lastpressed !== "w" && flag) { moves++ }
+  if (!flag) return;
 
   const player = getFirst("p")
   let futureY = player.y - 1
 
   // Continuously move the player to the right until a wall is encountered
-  while (!getTile(player.x, futureY).some(sprite => sprite.type === "w")) {
+  while (!getTile(player.x, futureY).some(sprite => sprite.type === "w") && (0 <= futureY && futureY < height())) {
     // Clear the current player position
     clearTile(player.x, player.y)
     addSprite(player.x, player.y, "t")
@@ -179,19 +307,19 @@ onInput("w", () => {
     addSprite(player.x, player.y, "p")
     // Update the future position for the next iteration
     futureY--
+    if (lastpressed !== "w" && flag) { moves++ }
+    lastpressed = "w"
   }
-  lastpressed = "w"
 
 })
 onInput("s", () => {
-  if(!flag)return;
-  if (lastpressed !== "s") { moves++ }
+  if (!flag) return;
 
   const player = getFirst("p")
   let futureY = player.y + 1
 
   // Continuously move the player to the right until a wall is encountered
-  while (!getTile(player.x, futureY).some(sprite => sprite.type === "w")) {
+  while (!getTile(player.x, futureY).some(sprite => sprite.type === "w") && (0 <= futureY && futureY < height())) {
     // Clear the current player position
     clearTile(player.x, player.y)
     addSprite(player.x, player.y, "t")
@@ -202,20 +330,20 @@ onInput("s", () => {
     addSprite(player.x, player.y, "p")
     // Update the future position for the next iteration
     futureY++
+    if (lastpressed !== "s") { moves++ }
+    lastpressed = "s"
   }
-  lastpressed = "s"
 
 
 })
 onInput("a", () => {
-  if(!flag)return;
-  if (lastpressed !== "a" && flag) { moves++ }
+  if (!flag) return;
 
   const player = getFirst("p")
   let futureX = player.x - 1
 
   // Continuously move the player to the right until a wall is encountered
-  while (!getTile(futureX, player.y).some(sprite => sprite.type === "w")) {
+  while (!getTile(futureX, player.y).some(sprite => sprite.type === "w") && (0 <= futureX && futureX < width())) {
     // Clear the current player position
     clearTile(player.x, player.y)
     addSprite(player.x, player.y, "t")
@@ -226,20 +354,20 @@ onInput("a", () => {
     addSprite(player.x, player.y, "p")
     // Update the future position for the next iteration
     futureX--
+    if (lastpressed !== "a" && flag) { moves++ }
+    lastpressed = "a"
   }
-  lastpressed = "a"
 
 
 })
 onInput("d", () => {
-  if(!flag)return;
-  if (lastpressed !== "d" && flag) { moves++ }
+  if (!flag) return;
 
   const player = getFirst("p")
   let futureX = player.x + 1
 
   // Continuously move the player to the right until a wall is encountered
-  while (!getTile(futureX, player.y).some(sprite => sprite.type === "w")) {
+  while (!getTile(futureX, player.y).some(sprite => sprite.type === "w") && (0 <= futureX && futureX < width())) {
     // Clear the current player position
     clearTile(player.x, player.y)
     addSprite(player.x, player.y, "t")
@@ -250,18 +378,118 @@ onInput("d", () => {
     addSprite(player.x, player.y, "p")
     // Update the future position for the next iteration
     futureX++
+    if (lastpressed !== "d" && flag) { moves++ }
+    lastpressed = "d"
   }
-  lastpressed = "d"
 
 })
 
+
+
+
+onInput("i", () => {
+  if (!flag) return;
+
+  const player = getFirst("p")
+  let futureY = player.y - 2
+
+  // Continuously move the player to the right until a wall is encountered
+  while (!getTile(player.x, futureY).some(sprite => sprite.type === "w") && (0 <= futureY && futureY < height())) {
+    // Clear the current player position
+    clearTile(player.x, player.y)
+    addSprite(player.x, player.y, "t")
+
+    // Move the player to the right
+    player.y = futureY
+    // Add the player back to the new position
+    addSprite(player.x, player.y, "p")
+    // Update the future position for the next iteration
+    futureY -= 2
+    if (lastpressed !== "i" && flag) { moves++ }
+    lastpressed = "i"
+  }
+
+})
+onInput("k", () => {
+  if (!flag) return;
+
+  const player = getFirst("p")
+  let futureY = player.y + 2
+
+  // Continuously move the player to the right until a wall is encountered
+  while (!getTile(player.x, futureY).some(sprite => sprite.type === "w") && (0 <= futureY && futureY < height())) {
+    // Clear the current player position
+    clearTile(player.x, player.y)
+    addSprite(player.x, player.y, "t")
+
+    // Move the player to the right
+    player.y = futureY
+    // Add the player back to the new position
+    addSprite(player.x, player.y, "p")
+    // Update the future position for the next iteration
+    futureY += 2
+    if (lastpressed !== "k") { moves++ }
+    lastpressed = "k"
+  }
+
+
+})
 onInput("j", () => {
-  setMap(levels[level])
+  if (!flag) return;
+
+  const player = getFirst("p")
+  let futureX = player.x - 2
+
+  // Continuously move the player to the right until a wall is encountered
+  while (!getTile(futureX, player.y).some(sprite => sprite.type === "w") && (0 <= futureX && futureX < width())) {
+    // Clear the current player position
+    clearTile(player.x, player.y)
+    addSprite(player.x, player.y, "t")
+
+    // Move the player to the right
+    player.x = futureX
+    // Add the player back to the new position
+    addSprite(player.x, player.y, "p")
+    // Update the future position for the next iteration
+    futureX -= 2
+    if (lastpressed !== "j" && flag) { moves++ }
+    lastpressed = "j"
+  }
+
+
 })
+onInput("l", () => {
+  if (!flag) return;
+
+  const player = getFirst("p")
+  let futureX = player.x + 2
+
+  // Continuously move the player to the right until a wall is encountered
+  while (!getTile(futureX, player.y).some(sprite => sprite.type === "w") && (0 <= futureX && futureX < width())) {
+    // Clear the current player position
+    clearTile(player.x, player.y)
+    addSprite(player.x, player.y, "t")
+
+    // Move the player to the right
+    player.x = futureX
+    // Add the player back to the new position
+    addSprite(player.x, player.y, "p")
+    // Update the future position for the next iteration
+    futureX += 2
+    if (lastpressed !== "l" && flag) { moves++ }
+    lastpressed = "l"
+  }
+
+})
+
+
+
+
+
 
 
 afterInput(() => {
-  addText((moves%1000).toString().padStart(2, '0'), {
+  addText((moves % 1000).toString().padStart(2, '0'), {
     x: 1,
     y: 1,
     color: color`2`
@@ -284,4 +512,3 @@ afterInput(() => {
   }
 
 })
-
