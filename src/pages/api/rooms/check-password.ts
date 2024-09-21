@@ -17,6 +17,7 @@ export const post: APIRoute = async ({ request }) => {
 
 	const game = await getGame(roomId)
 	if (!game) return new Response('Room does not exist', { status: 404 })
+	if(game.password === "" && password === "") return new Response(JSON.stringify({game}), { status: 200 })
 	if(game.password && bcrypt.compareSync(password, game.password)) 
 		return new Response(JSON.stringify({game}), { status: 200 })
 	return new Response('Incorrect password', { status: 401 })

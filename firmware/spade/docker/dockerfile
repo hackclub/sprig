@@ -1,6 +1,6 @@
 FROM alpine:3.19
 
-RUN apk add git python3 clang make cmake entr uglify-js gcc-arm-none-eabi g++-arm-none-eabi gdb-multiarch
+RUN apk add git python3 clang make cmake entr uglify-js gcc-arm-none-eabi g++-arm-none-eabi gdb-multiarch gcc
 
 COPY ./importBuildRepos.sh /opt/importBuildRepos.sh
 
