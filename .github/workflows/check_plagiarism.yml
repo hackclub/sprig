@@ -34,4 +34,4 @@ jobs:
 
       - name: Run Plagiarism Detection Script
         if: env.FILES != ''
-        run: python ./.github/scripts/plagiarism_check.py "${{ env.FILES }}" ./games 0.5
+        run: python ./.github/scripts/plagiarism_check.py ./games 0.5 "${{ env.FILES }}"
