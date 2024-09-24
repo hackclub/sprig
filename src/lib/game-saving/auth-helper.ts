@@ -1,7 +1,7 @@
 import { Signal, useComputed, useSignal, useSignalEffect } from '@preact/signals'
 import { Game, SessionInfo } from './account'
 import { isValidEmail } from './email'
-import { codeMirror, PersistenceState } from '../state'
+import { codeMirror, PersistenceState, PersistenceStateKind } from '../state'
 import { executeCaptcha } from '../recaptcha'
 
 export type AuthState =
@@ -112,7 +112,7 @@ export const persist = async (persistenceState: Signal<PersistenceState>, email?
 	const tutorial = persistenceState.value.kind === 'SHARED' ? persistenceState.value.tutorial : undefined
 	const tutorialIndex = persistenceState.value.kind === 'SHARED' ? persistenceState.value.tutorialIndex : undefined
 	persistenceState.value = {
-		kind: 'PERSISTED',
+		kind: PersistenceStateKind.PERSISTED,
 		cloudSaveState: 'SAVING',
 		game: 'LOADING',
 		stale: persistenceState.value.stale,
