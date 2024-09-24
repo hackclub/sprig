@@ -149,6 +149,8 @@ if __name__ == '__main__':
 	parser.add_argument('input_doc', type=str, help='a path to an input document')
 	args = parser.parse_args()
 
+	all_gallery_items = load_files_from_dir(args.doc_dir, ".js")
+
 	if args.input_doc not in all_gallery_items:
 		print("Sorry - the input document must be a reference into the gallery directory.")
 		exit(1)
