@@ -45,7 +45,8 @@ def filter_code(code):
 	code = re.sub('tune`.*?`', '', code, flags=re.MULTILINE | re.DOTALL)
 	code = re.sub('map`.*?`', '', code, flags=re.MULTILINE | re.DOTALL)
 	code = re.sub('^/\\*(.|[\r\n])*?\\*/', '', code, flags=re.DOTALL)
-
+	code = re.sub('^/\\*(.|[\r\n])*?\\*/', '', code, flags=re.DOTALL)
+	code = re.sub('(//)(.+?)(?=[\n\r]|\\*\\))', '', code, flags=re.MULTILINE | re.DOTALL)
 	return code
 
 
