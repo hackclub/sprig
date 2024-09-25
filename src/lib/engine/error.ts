@@ -130,7 +130,9 @@ export const normalizeGameError = (gameError: GameError): NormalizedError => {
 			descriptionLines.unshift(`    at eval (index.ts:${line}:${col})`)
 		}
 
-		descriptionLines.unshift(`${gameError.error.name}: ${gameError.error.message}`)
+		descriptionLines.unshift(`Error Name: ${gameError.error.name}`)
+        descriptionLines.unshift(`Error Message: ${gameError.error.message}`)
+
 		return {
 			description: descriptionLines.join('\n'),
 			raw: gameError.error,
