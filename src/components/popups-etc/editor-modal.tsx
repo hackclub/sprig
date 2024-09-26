@@ -22,24 +22,33 @@ export default function EditorModal() {
 		// This is probably bad practice
 		const _openEditor = openEditor.peek() // Gotta peek to avoid cycles
 		const _text = text.value // But we want to sub to this
-		if (!codeMirror.value || !_openEditor) return
 
-		codeMirror.value.dispatch({
-			changes: {
-				..._openEditor.editRange,
-				insert: _text
-			}
-		})
+		// Sync only if there's an active CodeMirror editor and an open editor
+		if (!codeMirror.value || !_openEditor) return;
 
-		openEditor.value = {
-			..._openEditor,
-			text: _text,
-			editRange: {
-				from: _openEditor.editRange.from,
-				to: _openEditor.editRange.from + _text.length
-			}
+		// Differentiate between map and palette updates
+		if (_openEditor.kind === 'palette' || _openEditor.kind === 'map') {
+			console.log('dispatching', _openEditor.editRange, _text);
+
+			codeMirror.value.dispatch({
+				changes: {
+					from: _openEditor.editRange.from,
+					to: _openEditor.editRange.to,
+					insert: _text
+				}
+			})
+
+			// Update openEditor with new text and correct range
+			openEditor.value = {
+				..._openEditor,
+				text: _text,
+				editRange: {
+					from: _openEditor.editRange.from,
+					to: _openEditor.editRange.from + _text.length
+				}
+			};
 		}
-	})
+	});
 
 	// the challenge now is making the editor keep track of what map editor it's currently focused on and streaming the changes in the map editor
 	// it's tricky because maps can grow and shrink
@@ -50,56 +59,53 @@ export default function EditorModal() {
 		if (!openEditor.value) return;
 
 		const code = codeMirror.value?.state.doc.toString() ?? '';
-		const levenshtainDistances = _foldRanges.value.map((foldRange, foldRangeIndex) => {
-			const widgetKind = _widgets.value[foldRangeIndex]?.value.spec.widget.props.kind;
+		const levenshtainDistances = _foldRanges.value.map((foldRange, index) => {
+			const widgetKind = _widgets.value[index]?.value.spec.widget.props.kind;
 
-			// if the widget kind is not the same as the open editor kind, don't do anything
-			if (widgetKind !== openEditor.value?.kind) return -1;
+			// Filter out unrelated widgets
+			if (!openEditor.value || widgetKind !== openEditor.value.kind) return -1;
 
-			const theCode = code.slice(foldRange?.from, foldRange?.to);
-
-			const distance = levenshtein(text.value, theCode)
-			return distance;
+			const foldCode = code.slice(foldRange.from, foldRange.to);
+			return levenshtein(text.value, foldCode);
 		});
 
+		// Find closest matching fold range
+		const validDistances = levenshtainDistances.filter(d => d >= 0);
+		if (validDistances.length === 0) return;
 
+		const indexOfMinDistance = validDistances.indexOf(Math.min(...validDistances));
+		const editRange = _foldRanges.value[indexOfMinDistance];
 
-		// if (levenshtainDistances.length === 0) alert(`You are currently editing a deleted ${openEditor.value?.kind}`);
-		if (levenshtainDistances.length === 0) return;
+		// Update the open editor range and content
+		if (editRange) {
+			const openEditorCode = code.slice(editRange.from, editRange.to);
 
-		// compute the index of the min distance
-		let indexOfMinDistance = 0;
-		levenshtainDistances.forEach((distance, didx) => {
-			if (levenshtainDistances[indexOfMinDistance]! < 0) indexOfMinDistance = didx;
-			const min = levenshtainDistances[indexOfMinDistance]!;
-			if (distance >= 0 && distance <= min) indexOfMinDistance = didx;
-		});
-
-		// update the open editor if the index is not -1
-		if (indexOfMinDistance !== -1) {
-			const editRange = _foldRanges.value[indexOfMinDistance]
-			const openEditorCode = code.slice(editRange?.from, editRange?.to)
-
-			// the map editor needs to get the bitmaps after running the code
-			if (openEditor.value?.kind === 'map') runGameHeadless(code ?? '');
+			// If it's a map editor, update bitmaps based on headless game logic
+			if (openEditor.value.kind === 'map') {
+				runGameHeadless(code);
+			}
 
 			openEditor.value = {
 				...openEditor.value as OpenEditor,
 				editRange: {
-					from: editRange!.from,
-					to: editRange!.to
+					from: editRange.from,
+					to: editRange.to
 				},
 				text: openEditorCode
 			}
 		}
-
 	}, [codeMirrorEditorText.value]);
 
-
+	// Handle closing modal on escape key press or outside click
 	usePopupCloseClick(styles.content!, () => openEditor.value = null, !!openEditor.value)
-	useEffect(() => tinykeys(window, {
-		'Escape': () => openEditor.value = null
-	}), [])
+	useEffect(() => {
+		const unsubscribe = tinykeys(window, {
+			'Escape': () => openEditor.value = null
+		});
+		return () => unsubscribe()
+	}, [])
+
+	// Render only when there's an open editor
 	if (!openEditor.value) return null
 
 	return (
