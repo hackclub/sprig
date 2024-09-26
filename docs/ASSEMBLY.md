@@ -8,20 +8,20 @@ Below are instructions for assembling your Sprig console.
 
 ![Parts of game console laid out on a wooden table](https://cloud-6po09tv9d-hack-club-bot.vercel.app/4everything.jpg)
 
-| Quantity | Item                                                                      |
-| -------- | ------------------------------------------------------------------------- |
-| 1        | Sprig PCB                                                                 |
-| 1        | LCD screen                                                                |
-| 1        | Raspberry Pi Pico                                                         |
-| 4        | clear backings (2 with D-pad cutouts, 2 solid)                            |
-| 1        | bag of 10 tactile button switches (only 8 will be used)                   |
-| 1        | bag of hardware for screen (2 spacers, 2 M2\*14mm bolts, 2 hex nuts)\*    |
-| 1        | bag of hardware for backings (8 M2\*10mm bolts, 8 hex nuts, allen key)\*  |
-| 1        | adapter or micro-USB cable                                                |
-| 1        | bag of 2 AAA batteries                                                    |
+| Quantity | Item                                                                      									|
+| -------- | ---------------------------------------------------------------------------------------------------------- |
+| 1        | Sprig PCB                                                                 									|
+| 1        | LCD screen                                                                									|
+| 1        | Raspberry Pi Pico                                                         									|
+| 4        | clear backings (2 with D-pad cutouts, 2 solid)                            									|
+| 1        | bag of 10 tactile button switches (only 8 will be used)                   									|
+| 1        | bag of hardware for screen (2 tube spacers or 1 3D-printed long spacer, 2 M2\*14mm bolts, 2 hex nuts)\*    |
+| 1        | bag of hardware for backings (8 M2\*10mm bolts, 8 hex nuts, allen key)\*  									|
+| 1        | adapter or micro-USB cable                                                									|
+| 1        | bag of 2 AAA batteries                                                    									|
 
 > [!NOTE]
-> Extra hardware may be included - it's all packed by hand. If you're missing a part, [DM `@graham` on the Hack Club Slack](https://hackclub.slack.com/team/U04QH1TTMBP) or email graham<img src="https://upload.wikimedia.org/wikipedia/commons/8/88/At_sign.svg" height=15px alt="@"></img>hackclub.com. 
+> Extra hardware may be included - it's all packed by hand. If you're missing a part, [ask in `#sprig` on the Hack Club Slack](https://hackclub.slack.com/archives/C02UN35M7LG).
 
 ## Instructions
 
@@ -32,7 +32,7 @@ Below are instructions for assembling your Sprig console.
 > [!CAUTION]
 > Make sure that there are no pins floating out on either end! Misalignments can cause bad things to happen. 
 
-2. Slide one of the two plastic spacers (long tubes) under one of the two holes in the display. Slide one of the longer bolts through the screen, spacer, and circuit board and screw one of the nuts onto the other end. Use the allen key to tighten it. Repeat for the display's other hole.
+2. If you have one long 3D-printed part with two holes in your kit, slide it under the end of the display. Slide one of the longer bolts through the screen, spacer, and circuit board and screw one of the nuts onto the other end. Use the allen key to tighten it. Repeat for the display's other hole. If you have two small plastic tubes, place one under each hole in the display and repeat this process for each.
 
 ![Photo of an LCD assembled with screws and spacers](https://cloud-6po09tv9d-hack-club-bot.vercel.app/1screws-through-spacers.jpg)
 
