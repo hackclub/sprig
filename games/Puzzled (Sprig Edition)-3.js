@@ -1,5 +1,6 @@
 /*
 @title: Puzzled (Sprig Edtion!)
+@author: cbbcsa
 @tags: ['maze', 'puzzle']
 @addedOn: 2024-09-21
 */
