@@ -2,7 +2,7 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Battle of the colors
+@title: Revenge of the kitty
 @author: Pugx23
 @tags: []
 @addedOn: 2024-09-27
