@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Battle of the colors
-@author: 
+@author: Pugx23
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-09-27
 */
 
 const player = "p"
