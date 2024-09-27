@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 javascript:void(0);
-@title: world_simulation
-@author: 
-@tags: [mutiplayer,laser,clock]
-@addedOn: 2024-00-00
+@title: lasers vs fog
+@author: e-rairigh
+@tags: ['mutiplayer','laser','clock']
+@addedOn: 2024-09-27
 */
 let win = false
 let shot = false
