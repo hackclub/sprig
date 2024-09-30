@@ -528,236 +528,240 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 			}
 		});
 	}, [initialCode]);
-	if(isNewSaveStrat.value && persistenceState.value.kind === PersistenceStateKind.COLLAB && typeof persistenceState.value.game === 'string')
-		return (
-			<RoomPasswordPopup persistenceState={persistenceState} />
-		)
-	else
-		return (
-			<div class={styles.page}>
-				<Navbar persistenceState={persistenceState} roomState={roomState}/>
 
-				<div class={styles.pageMain}>
-					<div className={styles.codeContainer}>
-						<CodeMirror
-							persistenceState={persistenceState}
-							roomState={roomState}
-							class={styles.code}
-							initialCode={initialCode}
-							onEditorView={(editor) => {
-								codeMirror.value = editor;
-								setTimeout(() => foldAllTemplateLiterals(), 100); // Fold after the document is parsed (gross)
-							}}
-							onRunShortcut={onRun}
-							onCodeChange={() => {
+	return (
+		isNewSaveStrat.value && persistenceState.value.kind === PersistenceStateKind.COLLAB && typeof persistenceState.value.game === 'string' 
+		? 
+			(<>
+				<RoomPasswordPopup persistenceState={persistenceState} />
+			</>) 
+		:
+			(
+		<div class={styles.page}>
+			<Navbar persistenceState={persistenceState} roomState={roomState}/>
+
+			<div class={styles.pageMain}>
+				<div className={styles.codeContainer}>
+					<CodeMirror
+						persistenceState={persistenceState}
+						roomState={roomState}
+						class={styles.code}
+						initialCode={initialCode}
+						onEditorView={(editor) => {
+							codeMirror.value = editor;
+							setTimeout(() => foldAllTemplateLiterals(), 100); // Fold after the document is parsed (gross)
+						}}
+						onRunShortcut={onRun}
+						onCodeChange={() => {
+							persistenceState.value = {
+								...persistenceState.value,
+								stale: true,
+							};
+							if (persistenceState.value.kind === PersistenceStateKind.PERSISTED || persistenceState.value.kind === PersistenceStateKind.COLLAB) {
 								persistenceState.value = {
 									...persistenceState.value,
-									stale: true,
+									cloudSaveState: "SAVING",
 								};
-								if (persistenceState.value.kind === PersistenceStateKind.PERSISTED) {
-									persistenceState.value = {
-										...persistenceState.value,
-										cloudSaveState: "SAVING",
-									};
-									if(!isNewSaveStrat.value)
-										saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
-								}
+								console.log("SAVING")
+								if(!isNewSaveStrat.value)
+									saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
+							}
 
-								if (persistenceState.value.kind === PersistenceStateKind.IN_MEMORY) {
-									localStorage.setItem(
-										"sprigMemory",
-										codeMirror.value!.state.doc.toString()
-									);
-								}
-							}}
-						/>
-						{errorLog.value.length > 0 && (
-							<div class={styles.errors}>
-								<button
-									class={styles.errorClose}
-									onClick={() => (errorLog.value = [])}
-								>
-									<IoClose />
-								</button>
-
-								{errorLog.value.map((error, i) => (
-									<div key={`${i}-${error.description}`}>
-										{error.description}
-									</div>
-								))}
-							</div>
-						)}
-					</div>
-
-					<div
-						class={`${styles.resizeBar} ${
-							resizeState.value ? styles.resizing : ""
-						}`}
-						onMouseDown={(event) => {
-							document.documentElement.style.cursor = "col-resize";
-							resizeState.value = {
-								startMousePos: event.clientX,
-								startValue: realOutputAreaSize.value,
-							};
-							window.addEventListener(
-								"mouseup",
-								() => {
-									resizeState.value = null;
-									document.documentElement.style.cursor = "";
-								},
-								{ once: true }
-							);
+							if (persistenceState.value.kind === PersistenceStateKind.IN_MEMORY) {
+								localStorage.setItem(
+									"sprigMemory",
+									codeMirror.value!.state.doc.toString()
+								);
+							}
 						}}
 					/>
+					{errorLog.value.length > 0 && (
+						<div class={styles.errors}>
+							<button
+								class={styles.errorClose}
+								onClick={() => (errorLog.value = [])}
+							>
+								<IoClose />
+							</button>
 
-					<div
-						class={styles.outputArea}
-						ref={outputArea}
-						style={{ width: realOutputAreaSize.value }}
-					>
-						<div ref={screenContainer} style={ outputArea.current ? {
-						height: canvasScreenSize.value.height,
-							maxHeight: canvasScreenSize.value.maxHeight,
-						} : {} }>
-							<div class={styles.canvasWrapper}>
-								<canvas
-									class={`${styles.screen} ${
-										screenShake.value > 0 ? "shake" : ""
-									}`}
-									style={ outputArea.current ? {
-									height: canvasScreenSize.value.height,
-									maxHeight:  canvasScreenSize.value.maxHeight,
-										width: (1.25 * canvasScreenSize.value.height),
-										maxWidth: "100%",
-									}: { } }
-									ref={screen}
-									tabIndex={0}
-									width="1000"
-									height="800"
-								/>
-							</div>
-							<div ref={screenControls} class={styles.screenControls}>
-								<button
-									className={styles.mute}
-									onClick={() => (muted.value = !muted.value)}
-								>
-									{muted.value ? (
-										<>
-											<IoVolumeMuteOutline />{" "}
-											<span>Unmute</span>
-										</>
-									) : (
-										<>
-											<IoVolumeHighOutline />{" "}
-											<span>Mute</span>
-										</>
-									)}
-								</button>
-								<button
-									className={styles.stop}
-									onClick={onStop}
-								>
-									<IoStopCircleOutline />
-									<span>Stop</span>
-								</button>
-								<div class={styles.screenSize}>
-									(Sprig screen is 1/8" / 160&times;128 px)
+							{errorLog.value.map((error, i) => (
+								<div key={`${i}-${error.description}`}>
+									{error.description}
 								</div>
+							))}
+						</div>
+					)}
+				</div>
+
+				<div
+					class={`${styles.resizeBar} ${
+						resizeState.value ? styles.resizing : ""
+					}`}
+					onMouseDown={(event) => {
+						document.documentElement.style.cursor = "col-resize";
+						resizeState.value = {
+							startMousePos: event.clientX,
+							startValue: realOutputAreaSize.value,
+						};
+						window.addEventListener(
+							"mouseup",
+							() => {
+								resizeState.value = null;
+								document.documentElement.style.cursor = "";
+							},
+							{ once: true }
+						);
+					}}
+				/>
+
+				<div
+					class={styles.outputArea}
+					ref={outputArea}
+					style={{ width: realOutputAreaSize.value }}
+				>
+					<div ref={screenContainer} style={ outputArea.current ? {
+					height: canvasScreenSize.value.height,
+						maxHeight: canvasScreenSize.value.maxHeight,
+					} : {} }>
+						<div class={styles.canvasWrapper}>
+							<canvas
+								class={`${styles.screen} ${
+									screenShake.value > 0 ? "shake" : ""
+								}`}
+								style={ outputArea.current ? {
+								height: canvasScreenSize.value.height,
+								maxHeight:  canvasScreenSize.value.maxHeight,
+									width: (1.25 * canvasScreenSize.value.height),
+									maxWidth: "100%",
+								}: { } }
+								ref={screen}
+								tabIndex={0}
+								width="1000"
+								height="800"
+							/>
+						</div>
+						<div ref={screenControls} class={styles.screenControls}>
+							<button
+								className={styles.mute}
+								onClick={() => (muted.value = !muted.value)}
+							>
+								{muted.value ? (
+									<>
+										<IoVolumeMuteOutline />{" "}
+										<span>Unmute</span>
+									</>
+								) : (
+									<>
+										<IoVolumeHighOutline />{" "}
+										<span>Mute</span>
+									</>
+								)}
+							</button>
+							<button
+								className={styles.stop}
+								onClick={onStop}
+							>
+								<IoStopCircleOutline />
+								<span>Stop</span>
+							</button>
+							<div class={styles.screenSize}>
+								(Sprig screen is 1/8" / 160&times;128 px)
 							</div>
 						</div>
-						<div class={styles.helpContainer}>
-							<div
-								class={`${styles.horizontalResizeBar} ${
-									horizontalResizeState.value
-										? styles.resizing
-										: ""
-								}`}
-								onMouseDown={(event) => {
-									document.documentElement.style.cursor =
-										"col-resize";
-									horizontalResizeState.value = {
-										startMousePos: event.clientY,
-										startValue: realHelpAreaSize.value,
-									};
-									window.addEventListener(
-										"mouseup",
-										() => {
-											horizontalResizeState.value = null;
-											document.documentElement.style.cursor =
-												"";
-										},
-										{ once: true }
-									);
-								}}
-							/>
-							<div
-								class={styles.helpContainer}
-								// style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenControls.current?.clientHeight! + screenContainer.current?.clientHeight!) }}
-								style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenContainer.current?.clientHeight! - screenControls.current?.clientHeight!) }}
-							>
-								{!(
-									(persistenceState.value.kind === PersistenceStateKind.SHARED ||
-										persistenceState.value.kind ===
-											PersistenceStateKind.PERSISTED) &&
-									persistenceState.value.tutorial
-								) && (
+					</div>
+					<div class={styles.helpContainer}>
+						<div
+							class={`${styles.horizontalResizeBar} ${
+								horizontalResizeState.value
+									? styles.resizing
+									: ""
+							}`}
+							onMouseDown={(event) => {
+								document.documentElement.style.cursor =
+									"col-resize";
+								horizontalResizeState.value = {
+									startMousePos: event.clientY,
+									startValue: realHelpAreaSize.value,
+								};
+								window.addEventListener(
+									"mouseup",
+									() => {
+										horizontalResizeState.value = null;
+										document.documentElement.style.cursor =
+											"";
+									},
+									{ once: true }
+								);
+							}}
+						/>
+						<div
+							class={styles.helpContainer}
+							// style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenControls.current?.clientHeight! + screenContainer.current?.clientHeight!) }}
+							style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenContainer.current?.clientHeight! - screenControls.current?.clientHeight!) }}
+						>
+							{!(
+								(persistenceState.value.kind === PersistenceStateKind.SHARED ||
+									persistenceState.value.kind ===
+										PersistenceStateKind.PERSISTED) &&
+								persistenceState.value.tutorial
+							) && (
+								<Help
+									sessionId={sessionId}
+									defaultHelpAreaHeight={
+										defaultHelpAreaHeight
+									}
+									helpAreaSize={helpAreaSize}
+									persistenceState={persistenceState}
+									initialVisible={!cookies.hideHelp}
+								/>
+							)}
+
+							{(persistenceState.value.kind === PersistenceStateKind.SHARED ||
+								persistenceState.value.kind === PersistenceStateKind.PERSISTED) &&
+								persistenceState.value.tutorial && (
 									<Help
 										sessionId={sessionId}
 										defaultHelpAreaHeight={
 											defaultHelpAreaHeight
 										}
 										helpAreaSize={helpAreaSize}
+										tutorialContent={
+											persistenceState.value.tutorial
+										}
 										persistenceState={persistenceState}
-										initialVisible={!cookies.hideHelp}
+										showingTutorialWarning={
+											showingTutorialWarning
+										}
 									/>
 								)}
-
-								{(persistenceState.value.kind === PersistenceStateKind.SHARED ||
-									persistenceState.value.kind === PersistenceStateKind.PERSISTED) &&
-									persistenceState.value.tutorial && (
-										<Help
-											sessionId={sessionId}
-											defaultHelpAreaHeight={
-												defaultHelpAreaHeight
-											}
-											helpAreaSize={helpAreaSize}
-											tutorialContent={
-												persistenceState.value.tutorial
-											}
-											persistenceState={persistenceState}
-											showingTutorialWarning={
-												showingTutorialWarning
-											}
-										/>
-									)}
-							</div>
 						</div>
 					</div>
 				</div>
-
-				<EditorModal />
-				{persistenceState.value.kind === PersistenceStateKind.IN_MEMORY &&
-					persistenceState.value.showInitialWarning && (
-						<DraftWarningModal persistenceState={persistenceState} />
-					)}
-
-				{versionState.value != "OK" && (
-					<VersionWarningModal versionState={versionState} />
-				)}
-
-                {eotMessage.value && eotMessage.value.status != "ALL_GOOD" && (
-                    <OutOfSpaceModal eotMessage={eotMessage} />
-                )}
-
-				{showingTutorialWarning.value && (
-					<TutorialWarningModal
-						exitTutorial={() => exitTutorial(persistenceState, sessionId)}
-						showingTutorialWarning={showingTutorialWarning}
-					/>
-				)}
-				<MigrateToast persistenceState={persistenceState} />
-				<SessionConflictWarningModal sessionId={sessionId} gameId={gameId} />
-				<KeyBindingsModal />
 			</div>
-		);
+
+			<EditorModal />
+			{persistenceState.value.kind === PersistenceStateKind.IN_MEMORY &&
+				persistenceState.value.showInitialWarning && (
+					<DraftWarningModal persistenceState={persistenceState} />
+				)}
+
+			{versionState.value != "OK" && (
+				<VersionWarningModal versionState={versionState} />
+			)}
+
+			{eotMessage.value && eotMessage.value.status != "ALL_GOOD" && (
+				<OutOfSpaceModal eotMessage={eotMessage} />
+			)}
+
+			{showingTutorialWarning.value && (
+				<TutorialWarningModal
+					exitTutorial={() => exitTutorial(persistenceState, sessionId)}
+					showingTutorialWarning={showingTutorialWarning}
+				/>
+			)}
+			<MigrateToast persistenceState={persistenceState} />
+			<SessionConflictWarningModal sessionId={sessionId} gameId={gameId} />
+			<KeyBindingsModal />
+		</div>
+	));
 }
