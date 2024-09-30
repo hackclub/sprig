@@ -505,6 +505,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 		initialCode = localStorage.getItem("sprigMemory") ?? defaultExampleCode;
 	else if (isNewSaveStrat.value && persistenceState.value.kind === PersistenceStateKind.COLLAB){
 		if(typeof persistenceState.value.game !== 'string')
+			// @ts-ignore
 			initialCode = persistenceState.value.game.game.code;
 	}
 	
