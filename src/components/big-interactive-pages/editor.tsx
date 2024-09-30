@@ -503,6 +503,12 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 		initialCode = persistenceState.value.code;
 	else if (persistenceState.value.kind === PersistenceStateKind.IN_MEMORY)
 		initialCode = localStorage.getItem("sprigMemory") ?? defaultExampleCode;
+	else if (isNewSaveStrat.value && persistenceState.value.kind === PersistenceStateKind.COLLAB){
+		if(typeof persistenceState.value.game !== 'string')
+			// @ts-ignore
+			initialCode = persistenceState.value.game.game.code;
+	}
+	
 	// Firefox has weird tab restoring logic. When you, for example, Ctrl-Shift-T, it opens
 	// a kinda broken cached version of the page. And for some reason this reverts the CM
 	// state. Seems like manipulating Preact state is unpredictable, but sessionStorage is
