@@ -7,16 +7,19 @@ import { codeMirror, editors, openEditor, codeMirrorEditorText, _foldRanges, _wi
 import styles from './editor-modal.module.css'
 import levenshtein from 'js-levenshtein'
 import { runGameHeadless } from '../../lib/engine'
+import { foldAllTemplateLiterals } from "../big-interactive-pages/editor"
 
-const enum UpdateCulprit {
+const enum LastUpdater {
 	RESET,
 	OpenEditor,
-	CodeMirror		
+	CodeMirror
 }
 export default function EditorModal() {
 	const Content = openEditor.value ? editors[openEditor.value.kind].modalContent : () => null
 	const text = useSignal(openEditor.value?.text ?? '');
-	const [updateCulprit, setUpdateCulprit] = useState<UpdateCulprit>(UpdateCulprit.RESET);
+	const [lastUpdater, setLastUpdater] = useState<LastUpdater>(LastUpdater.RESET);
+
+  const setUpdaterAndFold = (lastUpdater: LastUpdater) => { setLastUpdater(lastUpdater); foldAllTemplateLiterals(); }
 
 	useSignalEffect(() => {
 		if (openEditor.value) text.value = openEditor.value.text
@@ -28,17 +31,17 @@ export default function EditorModal() {
 	 * 1. If an update comes from the underlying codemirror document, the first effect doesn't run as we're already updating the editor modal from there
 	 * 2. If an update was originally made from the currently open editor modal, the changes to the codemirror document will
 	 * not trigger an update to the open editor modal
-	 * 
+	 *
 	 * Both of these help us avoid Out-of-order errors or Cycles
 	 */
 
 	// Sync editor text changes with code
 	useEffect(() => { // useEffect #1
 		// if update comes from codemirror doc (probably from a collab session)
-		// this ensures that updates are not triggered from this effect which may cause an 
+		// this ensures that updates are not triggered from this effect which may cause an
 		// Out-of-order / Cycles
-		if (updateCulprit === UpdateCulprit.CodeMirror) {
-			setUpdateCulprit(UpdateCulprit.RESET);
+		if (lastUpdater === LastUpdater.CodeMirror) {
+			setUpdaterAndFold(LastUpdater.RESET);
 			return;
 		}
 		// Signals are killing me but useEffect was broken and I need to ship this
@@ -62,21 +65,21 @@ export default function EditorModal() {
 				to: _openEditor.editRange.from + _text.length
 			}
 		}
-		setUpdateCulprit(UpdateCulprit.OpenEditor);
+		setUpdaterAndFold(LastUpdater.OpenEditor);
 	}, [text.value]);
 
 
 	useEffect(() => {
 		// if update comes from codemirror doc (probably from a collab session)
-		// this ensures that updates are not triggered from this effect which may cause an 
+		// this ensures that updates are not triggered from this effect which may cause an
 		// Out-of-order / Cycles
-		if (updateCulprit === UpdateCulprit.OpenEditor) {
-			setUpdateCulprit(UpdateCulprit.RESET);
+		if (lastUpdater === LastUpdater.OpenEditor) {
+			setUpdaterAndFold(LastUpdater.RESET);
 			return;
 		}
 		// just do this to sync the editor text with the code mirror text
 		computeAndUpdateModalEditor();
-		setUpdateCulprit(UpdateCulprit.CodeMirror);
+		setUpdaterAndFold(LastUpdater.CodeMirror);
 		// updateCulprit.value = UPDATE_CULPRIT.CodeMirror;
 	}, [codeMirrorEditorText.value]);
 
@@ -124,12 +127,12 @@ export default function EditorModal() {
 					...openEditor.value as OpenEditor,
 					editRange: {
 						from: editRange!.from,
-						to: editRange!.to 
+						to: editRange!.to
 					},
 					text: openEditorCode
 				}
-		
-		} 
+
+		}
 	}
 
 	usePopupCloseClick(styles.content!, () => openEditor.value = null, !!openEditor.value)
