@@ -1,8 +1,8 @@
 /*
 @title: Dogs vs Cats
+@author: Theodor
 @tags: ['endless']
 @addedOn: 2022-11-12
-@author: Theodor
 */
 const melody = tune `
 500: f4^500 + g5~500,

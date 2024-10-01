@@ -2,8 +2,8 @@
 @title: Tag Your Buddy
 @author: Aadarsh Jonnalagadda
 @tags: []
-@img: ""
 @addedOn: 2024-05-20
+@img: ""
 */
 
 const player1 = "p"

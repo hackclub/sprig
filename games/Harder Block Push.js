@@ -1,11 +1,11 @@
 /*
+@title: Harder Block Push
+@author: Game
+@tags: ['puzzle']
+@addedOn: 2024-09-14
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Harder Block Push
-@author: Game
-@tags: ["sokoban-style", "hard", "advanced"]
-@addedOn: 2024-09-14
 */
 
 const player = "p"

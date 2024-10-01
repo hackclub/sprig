@@ -1,8 +1,8 @@
 /*
 @title: Flurffy
-@tags: ['classic']
-@addedOn: 2022-09-13
 @author: Lucas
+@tags: ['retro']
+@addedOn: 2022-09-13
 */
 const flurffy = "f"
 const canoup = "m"

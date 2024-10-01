@@ -1,8 +1,8 @@
 /*
 @title: Sprig Machine
+@author: Leonard (Omay)
 @tags: ['sandbox']
 @addedOn: 2022-10-21
-@author: Leonard (Omay)
 
 WASD to move selection
 I: select

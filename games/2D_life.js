@@ -1,8 +1,8 @@
 /*
 @title: 2D Life
-@tags: ['simulation', 'hackable', 'classic', 'sandbox']
-@addedOn: 2022-09-25
 @author: Leonard (Omay)
+@tags: ['sandbox','simulation','retro']
+@addedOn: 2022-09-25
 
 Use "WASD" to move the selector.
 Use "I" to toggle the cell that the selector is at.

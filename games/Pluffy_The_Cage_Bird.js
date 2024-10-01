@@ -1,8 +1,8 @@
 /*
-@tags: ['timer-puzzle']
-@addedOn: 2023-12-24
 @title: Pluffy_The_Cage_Bird
 @author: Nihal_K
+@tags: ['puzzle','timed']
+@addedOn: 2023-12-24
 @inspired by 'Flurffy Game'
 */
 const pluffy = "p"

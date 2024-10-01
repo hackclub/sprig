@@ -1,11 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Blackjack
 @author: Josh Baron <xriiitox>
 @tags: ['endless']
 @addedOn: 2024-07-02
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 
 const spade = "s"

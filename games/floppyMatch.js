@@ -1,8 +1,8 @@
 /*
 @title: floppyMatch
-@tags: ['logic']
-@addedOn: 2022-10-05
 @author: GBan22
+@tags: ['puzzle']
+@addedOn: 2022-10-05
 Instructions:
 
 In floppyMatch, you control a pointer that can move from left to right. A floppy disk appears at the top of the screen, and you have to match it. 
