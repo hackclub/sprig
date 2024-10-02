@@ -1,5 +1,5 @@
 /*
-@title: Ghosbly
+@title: Ghosbly: Turn Based Combat
 @author: SlimeBind
 @tags: []
 @addedOn: 2024-06-24
