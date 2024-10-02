@@ -1,5 +1,5 @@
 /*
-@title: Coding Demo 3
+@title: Coding Demo 3: Custom Directional Solids
 @author: Leonard (Omay)
 @tags: []
 @addedOn: 2022-10-20
