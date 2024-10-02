@@ -1,5 +1,5 @@
 /*
-@title: SOUL STEALER
+@title: SOUL STEALER: The Vengful Spirit
 @author: Gavin Jent
 @tags: []
 @addedOn: 2024-05-20
