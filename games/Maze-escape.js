@@ -353,3 +353,4 @@ setInterval(() => {
     else if (direction === 3 && e.x < width() - 1) e.x += 1;
   });
 }, 1000);
+
