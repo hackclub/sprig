@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 javascript:void(0);
 @title: lasers vs fog
 @author: e-rairigh
-@tags: ['mutiplayer','laser','clock']
+@tags: ['mutiplayer']
 @addedOn: 2024-09-27
 */
 let win = false
