@@ -1,7 +1,7 @@
 /*
 @title: Tech Catchers V2
-@author: Shaheer 
-@tags: ['endless', 'tech','SSD', 'Shooter']
+@author: Shaheer
+@tags: ['endless','action']
 @addedOn: 2024-06-25
 
 Instructions:

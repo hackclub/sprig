@@ -1,8 +1,8 @@
 /*
 @title: red_light_green_light
+@author: annie
 @tags: ['strategy']
 @addedOn: 2022-11-16
-@author: annie
 wasd to move
 get a score of 3 during at level to progress to the next level
 move road blocks to get to the goal

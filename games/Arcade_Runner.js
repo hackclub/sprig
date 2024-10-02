@@ -1,11 +1,11 @@
 /*
+@title: Arcade runner
+@author: Artem4852
+@tags: ['endless']
+@addedOn: 2024-08-04
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Arcade runner
-@author: Artem4852
-@tags: ["endless"]
-@addedOn: 2024-08-04
 
 Controls:
 W - up

@@ -1,4 +1,8 @@
 /*
+@title: Divine Tree Man Saves A Forest
+@author: Rohan Pani (13)
+@tags: []
+@addedOn: 2024-07-26
 The story of this game is to save the forest from invaders like a deadly fungus, Forest fires, and the Zire that started them. 
 Remember to look carefully at each level before startinng them. Getting the pushable items stuck softlocks the game and you must restart from the beggining
 by pressing i.
@@ -12,10 +16,6 @@ Mechanics:
 There are 7 levels with the 7th one being an end screen.
 The mechanics are difficult to use, but once you get the hang of it you could finish the game super quickly.
 
-@title: Divine Tree Man Saves A Forest
-@author: Rohan Pani (13)
-@tags: ["sprig"]
-@addedOn: 2024-07-26
 Finished on July 13, 2024.
 */
 

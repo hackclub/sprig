@@ -1,8 +1,8 @@
 /*
 @title: Path Master
 @author: Mir Muhammad Abidul Haq (Ahnaf)
+@tags: ['puzzle']
 @addedOn: 2024-07-08
-@tags: ['sokoban']
 
 Instructions:
 

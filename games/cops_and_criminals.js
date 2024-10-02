@@ -1,11 +1,11 @@
 /*
+@title: Cops and criminals
+@author: Adrian T
+@tags: ['puzzle','multiplayer','adventure']
+@addedOn: 2024-08-15
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Cops and criminals
-@author: Adrian T
-@tags: ["maze", "multiplayer", "prison", "escape", "levels", "score"]
-@addedOn: 2024-08-15
 */
 
 const mappedSprites = [];

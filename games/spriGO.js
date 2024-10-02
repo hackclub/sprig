@@ -1,7 +1,7 @@
 /*
 @title: spriGO
 @author: InfinityCity18
-@tags: ['multiplayer', 'strategy', 'go', 'baduk']
+@tags: ['strategy','multiplayer']
 @addedOn: 2024-08-12
 */
 

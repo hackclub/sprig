@@ -1,8 +1,8 @@
 /*
 @title: snakey snake
-@tags: ['WIP', 'strategy']
-@addedOn: 2022-08-12
 @author: Alexander Chin
+@tags: ['strategy']
+@addedOn: 2022-08-12
 Instructions:
 Eat all of the apples, then go for orphy!
 rock eater power ups allow you to eat rocks - one rock per power up. 

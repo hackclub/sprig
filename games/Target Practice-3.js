@@ -1,11 +1,11 @@
 /*
+@title: Target Practice
+@author: Ankit Kantheti
+@tags: []
+@addedOn: 2024-09-03
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Target Practice
-@author: Ankit Kantheti 
-@tags: []
-@addedOn: 2024-09-03
 */
 //
 const player = "P";

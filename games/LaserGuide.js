@@ -1,12 +1,12 @@
 /*
+@title: LaserGuide
+@author: Extner
+@tags: ['puzzle','action']
+@addedOn: 2024-05-20
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: LaserGuide
-@author: Extner
-@tags: ['laser', 'puzzle']
 @img: ""
-@addedOn: 2024-05-20
 */
 
 const BACKGROUND = "0"

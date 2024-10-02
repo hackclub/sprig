@@ -1,7 +1,7 @@
 /*
 @title: Problem Maze
 @author: Gramgra07
-@tags: ['maze']
+@tags: ['puzzle']
 @addedOn: 2024-09-17
 */
 

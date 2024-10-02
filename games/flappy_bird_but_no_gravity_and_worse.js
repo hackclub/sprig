@@ -1,8 +1,8 @@
 /*
 @title: flappy_bird_but_no_gravity_and_worse
-@tags: ['WIP', 'endless']
-@addedOn: 2022-09-16
 @author: sam liu
+@tags: ['endless']
+@addedOn: 2022-09-16
 */
 
 const player = "p";

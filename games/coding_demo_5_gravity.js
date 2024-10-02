@@ -1,8 +1,8 @@
 /*
 @title: Coding Demo 5: Gravity
-@tags: ['demo', 'hackable', 'simulation', 'beginner']
-@addedOn: 2022-11-12
 @author: Leonard (Omay)
+@tags: ['simulation']
+@addedOn: 2022-11-12
 
 Comments labeled include on their own line mean copy the code from the include to end include
 

@@ -2,7 +2,7 @@
 /* 
 @title: flappysprig
 @author: Spectral
-@tags: ['classic']
+@tags: ['retro']
 @addedOn: 2023-09-10
 */
 

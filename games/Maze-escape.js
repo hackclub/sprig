@@ -1,7 +1,7 @@
 /*
 @title: Maze_escape
 @author: NikosDev
-@tags: [] 
+@tags: []
 @addedOn: 2024-08-15
 */
 

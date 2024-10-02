@@ -1,7 +1,7 @@
 /*
 @title: Wordescaper
 @author: Frank Z
-@tags: ['typing', 'word-game', 'hackable']
+@tags: ['utility']
 @addedOn: 2024-09-16
 */
 
