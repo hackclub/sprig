@@ -25,7 +25,7 @@ const regexExpr = {
  * An array containing all of the valid strings
  */
 
-const allowedTags = ["beginner", "puzzle", "strategy", "advanced", "endless", "tutorial", "multiplayer", "action", "sandbox", "adventure", "memory", "timed", "music", "role-playing", "turn-based", "real-time", "exploration", "survival", "simulation", "utility", "sports", "retro", "platformer"];
+const allowedTags = ["tutorial", "puzzle", "strategy", "endless", "multiplayer", "action", "sandbox", "adventure", "memory", "timed", "music", "role-playing", "turn-based", "real-time", "exploration", "survival", "simulation", "utility", "sports", "retro", "platformer", "humor", "3d"];
 
 
 /**
