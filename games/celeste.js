@@ -1,5 +1,5 @@
 /*
-@title: Celeste
+@title: Celeste: Sprig Edition
 @author: DillonB07
 @tags: ['platformer']
 @addedOn: 2024-06-14
