@@ -1,5 +1,5 @@
 /*
-@title: Coding Demo 5
+@title: Coding Demo 5: Gravity
 @author: Leonard (Omay)
 @tags: ['simulation']
 @addedOn: 2022-11-12
