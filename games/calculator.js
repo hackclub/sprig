@@ -1,8 +1,8 @@
 /*
 @title: calculator
-@tags: ['tool', 'simulation']
-@addedOn: 2023-03-03
 @author: Sameer Murthy
+@tags: ['utility','simulation']
+@addedOn: 2023-03-03
 
 Github: @SameeraMurthy
 

@@ -1,8 +1,8 @@
 /*
 @title: cool_platformer
+@author: Aiden/Roizor
 @tags: ['strategy']
 @addedOn: 2022-11-12
-@author: Aiden/Roizor
 */
 
 const player = "p";

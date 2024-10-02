@@ -1,8 +1,8 @@
 /*
 @title: RandomDungeon
-@tags: ['dungeon']
-@addedOn: 2023-02-20
 @author: JonathanLevi
+@tags: ['adventure']
+@addedOn: 2023-02-20
 
 WASD to Move
 

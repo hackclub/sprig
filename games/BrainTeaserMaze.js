@@ -1,8 +1,8 @@
 /*
 @title: BrainTeaserMaze
-@tags: ['sokoban-style']
-@addedOn: 2022-12-19
 @author: Arhan
+@tags: ['puzzle']
+@addedOn: 2022-12-19
 
 
   Controls:

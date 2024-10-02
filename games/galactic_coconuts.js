@@ -1,8 +1,8 @@
 /*
 @title: Galactic Coconuts
-@tags: ['dodge']
-@addedOn: 2023-10-30
 @author: kcoderhtml (@kieran on slack)
+@tags: ['action']
+@addedOn: 2023-10-30
 Keys: 
 - J to fire
 - A to move left

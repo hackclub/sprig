@@ -1,11 +1,11 @@
 /*
+@title: Formula 1
+@author: Mary
+@tags: ['multiplayer']
+@addedOn: 2024-04-12
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Formula 1
-@author: Mary
-@tags: ["multiplayer"]
-@addedOn: 2024-04-12
 */
 
 const ferrari = "f"

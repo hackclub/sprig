@@ -1,8 +1,8 @@
 import { effect } from '@preact/signals'
 import { lazy } from '../utils/lazy'
 import { muted } from '../state'
-import { type PlayTuneRes, type Tune } from 'sprig'
-import { playTuneHelper } from 'sprig/web'
+import type { PlayTuneRes, Tune } from '../../../engine/src/api'
+import { playTuneHelper } from '../../../engine/src/web'
 
 const audioCtx = lazy(() => new AudioContext())
 const volGain = lazy(() => {

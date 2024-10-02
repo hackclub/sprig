@@ -1,11 +1,11 @@
 /*
+@title: Jumping banana
+@author: Ernests
+@tags: ['endless','action']
+@addedOn: 2024-07-06
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Jumping banana
-@author: Ernests
-@tags: ['endless', 'dodge']
-@addedOn: 2024-07-06
 
 Movement:
   w - jump

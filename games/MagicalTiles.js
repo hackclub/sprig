@@ -1,8 +1,8 @@
 /*
 @title: MusicalTiles
+@author: Shreeya Rani
 @tags: []
 @addedOn: 2023-03-14
-@author: Shreeya Rani
 
 Creds:-
 Nomis by Cheru Berhanu (Inspired me for the project)

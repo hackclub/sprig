@@ -1,8 +1,8 @@
 /*
 @title: Treasure_Hunt
+@author: Manikandan_M
 @tags: ['strategy']
 @addedOn: 2022-09-28
-@author: Manikandan_M
 */
 
 const player = "p";

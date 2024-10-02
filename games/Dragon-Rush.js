@@ -2,7 +2,7 @@
 /* 
 @title: Dragon-Rush
 @author: Xhaiden, Aaron, and Brenden
-@tags: ['WIP']
+@tags: []
 @addedOn: 2023-07-18
 */
 

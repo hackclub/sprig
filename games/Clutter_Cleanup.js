@@ -1,11 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Clutter Cleanup
 @author: CmdrApollo
 @tags: []
 @addedOn: 2024-07-09
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 
 const player = 'p';

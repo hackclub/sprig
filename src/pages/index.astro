@@ -5,9 +5,6 @@ import StandardHead from '../components/standard-head.astro'
 import '../global.css'
 import '../legacy/homepage.scss'
 import { firestore, getSession } from '../lib/game-saving/account'
-import { getConsolesRemaining } from '../lib/remaining-consoles'
-
-const remainingConsoles = await getConsolesRemaining()
 
 const stories = [
 	{ id: 'sprig-front', width: 800, height: 602 },
@@ -55,35 +52,16 @@ if (session && session.session.full) {
 				<h1>Every player is a creator.</h1>
 				<p>Explore 430+ games built by other teenagers, <br />or make your own and we'll send you a console!</p>
 				<div>
-				{
-					session && session.session.full ? (
-						gameCount === 0 ? (
-							<a href='/~/new-game'>
-								<button class='btn active'>
-									Make a game &raquo;
-								</button>
-							</a>
-						) : (
-							<a href='/~'>
-								<button class='btn active'>
-									Your games &raquo;
-								</button>
-							</a>
-						)
-					) : (
-						<a href='/editor'>
-							<button class='btn active'>
-								{session ? 'Open editor' : 'Make a game'}{' '}
-								&raquo;
-							</button>
-						</a>
-					)
-				}
-				<!-- <a href='/~/new'>
-					<button class='btn active'>
-						Play a game &raquo;
-					</button>
-				</a> -->
+					<a href='/~/new-game'>
+						<button class='btn active top'>
+							Make a game &raquo;
+						</button>
+					</a>
+					<a href='/gallery'>
+						<button class='btn active'>
+							Play a game &raquo;
+						</button>
+					</a>
 				</div>
 			</div>
 		</section>
@@ -269,9 +247,6 @@ if (session && session.session.full) {
 					<article>
 						<h3>3</h3>
 						<p>Check your mailbox for a Sprig device :)</p>
-						<p class='remaining-consoles'>
-							<span>{remainingConsoles}</span> remaining
-						</p>
 					</article>
 				</div>
 			</div>
@@ -370,17 +345,17 @@ if (session && session.session.full) {
 			import * as THREE from 'three'
 			import { Scene, WebGLRenderer, sRGBEncoding, PerspectiveCamera, AmbientLight, DirectionalLight, HemisphereLight, Raycaster, Vector2, Object3D, Mesh, Texture, BufferGeometry, Material } from 'three'
 			import { OrbitControls } from '../lib/orbit-controls'
-			import { type InputKey, VALID_INPUTS } from 'sprig'
-			import { imageDataEngine } from 'sprig/image-data'
+			import { type InputKey, VALID_INPUTS } from '../../engine/src/api'
+			import { imageDataEngine } from '../../engine/src/image-data'
 			import { homepageExampleCode } from '../lib/examples'
-			
+
 			// @ts-ignore
 			import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment'
 			// @ts-ignore
 			import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 			// @ts-ignore
 			import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
-			
+
 			var canvas = document.createElement('canvas')
 			var gl = false
 			try {
@@ -396,7 +371,7 @@ if (session && session.session.full) {
 				el.id = "note"
 				var cont = document.getElementById("container")
 				cont.appendChild(el)
-			
+
 				// GPU meets the requirements, proceed with rendering
 
 				const game = imageDataEngine();

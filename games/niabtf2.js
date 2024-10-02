@@ -1,8 +1,8 @@
 /*
 @title: Ninja In A Bear Trap Factory 2
+@author: Matt The Banana
 @tags: ['strategy']
 @addedOn: 2022-12-06
-@author: Matt The Banana
 */
 
 

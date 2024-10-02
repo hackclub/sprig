@@ -1,15 +1,17 @@
 ---
 import ProjectNameCreator from "../../components/popups-etc/project-name-creation";
 import '../../global.css';
+import Navbar from "../../components/navbar-main";
+import { getSession } from "../../lib/game-saving/account";
+
+const session = await getSession(Astro.cookies)
 ---
 
 
 <html lang='en'>
+	<Navbar session={session} />
 	
-<body>
-	<ProjectNameCreator client:load/>
-</body>
-		
-
-		
+	<body>
+		<ProjectNameCreator client:load/>
+	</body>	
 </html>

@@ -2,8 +2,8 @@
 @title: Another Maze Runner
 @author: AyoubChafiq
 @tags: []
-@img: ""
 @addedOn: 2024-06-07
+@img: ""
 */
 function getRandomInt(max) {
   return Math.floor(Math.random() * max)

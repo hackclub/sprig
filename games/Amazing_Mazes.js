@@ -2,7 +2,7 @@
 /* 
 @title: Amazing_Mazes
 @author: Dexter Speed
-@tags: ['sokoban-style']
+@tags: ['puzzle']
 @addedOn: 2023-07-25
 */
 

@@ -1,8 +1,8 @@
 /*
 @title: burger build
-@tags: ['dodge']
-@addedOn: 2023-08-19
 @author: emily27yee
+@tags: ['action']
+@addedOn: 2023-08-19
 */
 
 const player = "p"
