@@ -1,7 +1,7 @@
 /*
 @title: Camión en México
 @author: Cesar Garnica
-@tags: ["levels", "maze"]
+@tags: ['puzzle']
 @addedOn: 2024-08-23
 */
 /*The goal is to reach the end with a minimum amount of money. To advance to the next level, 

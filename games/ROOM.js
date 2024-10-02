@@ -2,7 +2,7 @@
 /* 
 @title: ROOM
 @author: davnotdev
-@tags: ['advanced']
+@tags: []
 @addedOn: 2023-06-27
 */
 

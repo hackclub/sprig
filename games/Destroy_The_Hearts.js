@@ -2,7 +2,7 @@
 /* 
 @title: Destroy_The_Hearts
 @author: Deniz Melik Aktın
-@tags: ['sokoban-style']
+@tags: ['puzzle']
 @addedOn: 2023-10-09
 */
 

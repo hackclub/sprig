@@ -1,9 +1,9 @@
 {}
 /*
 @title: keyTester
-@tags: ['tool']
-@addedOn: 2023-01-12
 @author: devramsean0
+@tags: ['utility']
+@addedOn: 2023-01-12
 */
 // Music
 const beep = tune`

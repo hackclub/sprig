@@ -1,11 +1,11 @@
 /*
+@title: Miku's_Doors_Galore!
+@author: tqbed
+@tags: ['puzzle']
+@addedOn: 2024-06-22
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Miku's_Doors_Galore!
-@author: tqbed
-@tags: ['beginner', 'simple', 'puzzle', 'maze']
-@addedOn: 2024-06-22
 */
 
 const player = "p";

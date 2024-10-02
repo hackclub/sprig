@@ -1,8 +1,8 @@
 /*
 @title: tower_of_hanoi
-@tags: ['classic']
-@addedOn: 2022-10-02
 @author: nicholasz2510
+@tags: ['retro']
+@addedOn: 2022-10-02
 */
 
 

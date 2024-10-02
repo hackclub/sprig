@@ -2,7 +2,7 @@
 /* 
 @title: Hard-Hat_Helper
 @author: Nathan Jereb
-@tags: ['']
+@tags: []
 @addedOn: 2023-12-21
 */
 

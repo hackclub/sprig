@@ -1,8 +1,8 @@
 /*
 @title: laser tag
-@tags: ['hackable', 'strategy']
-@addedOn: 2022-07-14
 @author: leo
+@tags: ['strategy']
+@addedOn: 2022-07-14
 
 Instructions:
 

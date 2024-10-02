@@ -1,8 +1,8 @@
 /*
 @title: Tron
+@author: Robert Carmen
 @tags: ['multiplayer']
 @addedOn: 2022-10-30
-@author: Robert Carmen
 
 An adaptation of the classic game, Tron. Enjoy!
 v0.2

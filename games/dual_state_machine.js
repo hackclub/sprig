@@ -1,8 +1,8 @@
 /*
 @title: dual_state_machine
+@author: Leonard (Omay)
 @tags: ['strategy']
 @addedOn: 2022-11-11
-@author: Leonard (Omay)
 
 you only win when it turns green...
 

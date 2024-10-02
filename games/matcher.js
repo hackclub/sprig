@@ -1,8 +1,8 @@
 /*
 @title: matcher
-@tags: ['logic']
-@addedOn: 2022-08-12
 @author: Brian
+@tags: ['puzzle']
+@addedOn: 2022-08-12
 
 ijkl to move the selector
 wasd to move the selected block

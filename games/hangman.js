@@ -1,8 +1,8 @@
 /*
 @title: hangman
-@tags: ['classic']
-@addedOn: 2023-05-05
 @author: PapaAlpaca
+@tags: ['retro']
+@addedOn: 2023-05-05
 Special thanks to jedgrei for the alphabet design :)
 */
 /*

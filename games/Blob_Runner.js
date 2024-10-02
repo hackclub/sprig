@@ -1,8 +1,8 @@
 /*
 @title: Blob_Runner
+@author: Bright Li
 @tags: []
 @addedOn: 2023-01-09
-@author: Bright Li
 */
 
 const player = "p"

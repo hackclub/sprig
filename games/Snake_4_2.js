@@ -1,8 +1,8 @@
 /*
 @title: Snake_4_2
+@author: Stephen King
 @tags: ['endless']
 @addedOn: 2022-11-18
-@author: Stephen King
 */
 //random function
 function rng(min, max) {
