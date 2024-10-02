@@ -1,5 +1,5 @@
 /*
-@title: Monkey quest 3
+@title: Monkey quest 3: lightless knights
 @author: Eamonn
 @tags: []
 @addedOn: 2024-08-20
