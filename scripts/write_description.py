@@ -36,18 +36,6 @@ def get_description(game, client):
     if len(prompt) > max_length:
         prompt = prompt[:max_length]
 
-    print(f"""
-    Please write a short description (3 sentences, no line breaks) for this game. This is spoken to someone looking for information about the theme and type of game, not a player. Do not add information about the controls.
-
-    Below is the comment that the author wrote in the code:
-    {game["file_comment"]}
-
-    Below is the comment that the author wrote in their pull request:
-    {pr_comment}
-
-    If the comment doesn't have a description, please write a description based on the code.
-    Below is the code for the game:""")
-
     completion = client.chat.completions.create(
         model="gpt-4o",
         messages=[  
