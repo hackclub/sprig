@@ -1,8 +1,8 @@
 /*
 @title: skyrace
+@author: Shourya Pandey
 @tags: ['multiplayer']
 @addedOn: 2023-07-16
-@author: Shourya Pandey
 
 About game :- 
   this is a multiplayer game you have to avoid collision with the mountain,

@@ -1,8 +1,8 @@
 /*
 @title: Rock, Paper, Scissors!
-@tags: ['classic']
-@addedOn: 2022-09-13
 @author: ezefranca
+@tags: ['retro']
+@addedOn: 2022-09-13
 */
 const player = "p";
 

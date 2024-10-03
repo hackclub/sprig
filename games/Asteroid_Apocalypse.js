@@ -1,8 +1,8 @@
 /*
 @title: asteroid apocalypse
+@author: zcsop1206
 @tags: ['endless']
 @addedOn: 2022-12-31
-@author: zcsop1206
 Move the lazer with "a" and "d" for left and right, "w" and "s" for up and down
 Try to destroy the asteroid before it hits the bas
 The game ends if the asteroid hits the base. 

@@ -1,8 +1,8 @@
 /*
 @title: Friendship!!! <3
-@tags: ['beginner', 'strategy']
-@addedOn: 2022-07-27
 @author: ncase
+@tags: ['strategy']
+@addedOn: 2022-07-27
 
 Instructions:
 

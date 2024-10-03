@@ -1,8 +1,8 @@
 /*
 @title: English Checkers
-@tags: ['classic']
-@addedOn: 2023-01-04
 @author: Oakchris1955
+@tags: ['retro']
+@addedOn: 2023-01-04
 
 This is a port of the english variant of the popular game, checkers, also known as draughts
 The rules can be found here: https://en.wikipedia.org/wiki/English_draughts#Rules

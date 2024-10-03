@@ -1,8 +1,8 @@
 /*
 @title: hex_hubbub
-@tags: ['thematic-puzzle']
-@addedOn: 2023-01-28
 @author: ajs256
+@tags: ['puzzle']
+@addedOn: 2023-01-28
 */
 
 /*

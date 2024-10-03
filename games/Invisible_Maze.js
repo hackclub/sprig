@@ -1,8 +1,8 @@
 /*
 @title: Invisible Maze
-@tags: ['logic']
-@addedOn: 2022-12-07
 @author: Ryan Qin
+@tags: ['puzzle']
+@addedOn: 2022-12-07
 */
 
 const player = "p";

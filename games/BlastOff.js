@@ -1,10 +1,10 @@
 /*
-
 @title: BlastOff
 @author: Fahad
-@tags: ['endless', 'dodge']
-@img: ""
+@tags: ['endless','action']
 @addedOn: 2024-06-04
+
+@img: ""
 
 Movement:
   w - Up

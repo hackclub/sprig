@@ -1,6 +1,6 @@
 /*
 @title: SquidsInTheStarts
-@author: Lucas4680 
+@author: Lucas4680
 @tags: []
 @addedOn: 2024-02-11
 

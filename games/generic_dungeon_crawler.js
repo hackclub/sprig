@@ -1,8 +1,8 @@
 /*
 @title: generic_dungeon_crawler
-@tags: ['dungeon']
-@addedOn: 2022-10-24
 @author: Lingdong Huang
+@tags: ['adventure']
+@addedOn: 2022-10-24
 */
 
 let W = 10;

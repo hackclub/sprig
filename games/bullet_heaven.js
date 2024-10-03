@@ -1,7 +1,7 @@
 /*
 @title: Bullet Heaven
-@author: OtterDev 
-@tags: ["shooter"]
+@author: OtterDev
+@tags: ['action']
 @addedOn: 2024-07-30
 */
 

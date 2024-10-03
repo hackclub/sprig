@@ -1,7 +1,7 @@
 /*
 @title: Sprigenstein3D
 @author: TheBlueOomaLoompa
-@tags: ['maze']
+@tags: ['puzzle']
 @addedOn: 2024-07-22
 */
 /*

@@ -1,12 +1,12 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Party Games
 @author: iambodha
 @tags: ['multiplayer']
-@img: ""
 @addedOn: 2024-06-22
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
+@img: ""
 */
 
 const background = "b";

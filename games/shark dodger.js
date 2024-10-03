@@ -1,9 +1,9 @@
 /*
 @title: shark_dodger
 @author: angelgames
-@tags: ["dodge"]
-@img: ""
+@tags: ['action']
 @addedOn: 2024-05-23
+@img: ""
 */
 const player = "p"
 const harpoon = "h"
