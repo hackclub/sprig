@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: sprock_blast
+@title: Sprock Blast
 @author: cayleb247
-@tags: []
-@addedOn: 2024-00-00
+@tags: ['puzzle', 'retro']
+@addedOn: 2024-10-03
 */
 
 /*
