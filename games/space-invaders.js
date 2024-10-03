@@ -2,9 +2,9 @@
 
 /*
 @title: Space_Invaders
+@author: Carmel132
 @tags: ['strategy']
 @addedOn: 2023-04-19
-@author: Carmel132
 
 Controls:
 A/D - Left/Right

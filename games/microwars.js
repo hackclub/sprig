@@ -1,8 +1,8 @@
 /*
 @title: microwars
+@author: Bedo
 @tags: ['multiplayer']
 @addedOn: 2023-02-19
-@author: Bedo
 */
 
 const rasp = "r"

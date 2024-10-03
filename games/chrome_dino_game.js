@@ -1,7 +1,7 @@
 /*
 @title: Chrome Dinosaur Game
 @author: @blazecoding.xyz
-@tags: ['classic', 'endless']
+@tags: ['endless','retro']
 @addedOn: 2024-07-27
 */
 

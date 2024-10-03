@@ -1,9 +1,9 @@
 /*
-Slimer
 @title: Slimer
 @author: DevCmb
 @tags: []
 @addedOn: 2024-07-04
+Slimer
 */
 
 const player = "p"

@@ -6,30 +6,17 @@ import { runGameHeadless } from '../../lib/engine'
 interface OpenButtonProps {
 	kind: EditorKind
 	text: string
+	range: { from: number, to: number },
 }
 
 export default function OpenButton(props: OpenButtonProps) {
 	const { label, icon: Icon } = editors[props.kind]
-
 	return (
 		<button
 			class={styles.openButton}
-			onClick={async (event) => {
+			onClick={async () => {
 				if (!codeMirror.value) return
-				const doc = codeMirror.value.state.doc.toString();
-				let pos = codeMirror.value.posAtCoords({ x: event.pageX, y: event.pageY })!
-				let from = -1
 
-				while (true) {
-					if (doc[pos] === '`') {
-						if (from === -1) {
-							from = pos + 1
-						} else {
-							break;
-						}
-					}
-					pos++
-				}
 
 				if (editors[props.kind].needsBitmaps) {
 					// Run the game headless to update bitmaps
@@ -40,7 +27,7 @@ export default function OpenButton(props: OpenButtonProps) {
 				openEditor.value = {
 					kind: props.kind,
 					text: props.text,
-					editRange: { from, to: pos }
+					editRange: { from: props.range.from, to: props.range.to },
 				}
 			}}
 		>

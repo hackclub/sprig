@@ -1,8 +1,8 @@
 /*
 @title: speedy_snake
+@author: ItsAStarryKnight
 @tags: ['endless']
 @addedOn: 2022-11-11
-@author: ItsAStarryKnight
 */
 
 //Classic snake game with a twist!

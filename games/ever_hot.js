@@ -1,8 +1,8 @@
 /*
 @title: ever_hot
+@author: Leo H
 @tags: ['endless']
 @addedOn: 2022-11-11
-@author: Leo H
 */
 var points
 var isAlive = true

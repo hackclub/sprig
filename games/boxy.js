@@ -1,10 +1,10 @@
 /*
+@title: boxy
+@author: olii-dev
+@tags: ['retro']
+@addedOn: 2024-07-08
 Get the package (box) to mr poptato! (the green thing)
 Watch out! Yellow enemies try to take your parcels!
-@title: boxy
-@tags: ['classic', 'fun']
-@addedOn: 2024-07-08
-@author: olii-dev
 
 Instructions:
 

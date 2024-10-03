@@ -1,8 +1,8 @@
 /*
 @title: Coding Demo 4 - Screen Scrolling
-@tags: ['demo', 'hackable', 'beginner']
-@addedOn: 2022-11-7
 @author: Leonard (Omay)
+@tags: []
+@addedOn: 2022-11-7
 
 MapV2 is a version of a map I made that can store any map. It is helpful for copying the current state of the map.
 Between every "INCLUDE" and "END INCLUDE" is what you need to copy

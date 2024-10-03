@@ -2,7 +2,7 @@
 /* 
 @title: fire_boom
 @author: Samarpan
-@tags: ['dodge']
+@tags: ['action']
 @addedOn: 2023-09-25
 */
 

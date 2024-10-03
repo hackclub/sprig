@@ -1,4 +1,5 @@
-import type { EditorView } from '@codemirror/view'
+import type { EditorView, Decoration } from '@codemirror/view'
+import type { Range } from '@codemirror/state'
 import { Signal, signal } from '@preact/signals'
 import { IoColorPalette, IoImage, IoMap, IoMusicalNotes } from 'react-icons/io5'
 import type { FromTo } from './codemirror/util'
@@ -60,18 +61,25 @@ export interface OpenEditor {
 	text: string
 }
 
+export enum PersistenceStateKind {
+	IN_MEMORY = 'IN_MEMORY',
+	PERSISTED = 'PERSISTED',
+	SHARED = 'SHARED',
+	COLLAB = 'COLLAB'
+}
+
 // Persistence
 export type PersistenceState = ({
-	kind: 'IN_MEMORY'
+	kind: PersistenceStateKind.IN_MEMORY
 	showInitialWarning: boolean
 } | {
-	kind: 'PERSISTED'
+	kind: PersistenceStateKind.PERSISTED
 	cloudSaveState: 'SAVED' | 'SAVING' | 'ERROR'
 	game: 'LOADING' | Game,
 	tutorial?: string[] | undefined,
 	tutorialIndex?: number | undefined
 } | {
-	kind: 'SHARED'
+	kind: PersistenceStateKind.SHARED
 	name: string
 	authorName: string
 	code: string,
@@ -79,9 +87,10 @@ export type PersistenceState = ({
 	tutorialName?: string | undefined
 	tutorialIndex?: number | undefined
 } | {
-	kind: 'COLLAB'
+	kind: PersistenceStateKind.COLLAB
 	game: string | 'LOADING' | Game // String means the game is restricted and only the roomId needs to be shown to the user
 	password: string | undefined
+	cloudSaveState: 'SAVED' | 'SAVING' | 'ERROR'
 }) & {
 	session: SessionInfo | null
 	stale: boolean
@@ -103,9 +112,10 @@ export type RoomState = {
 	connectionStatus: ConnectionStatus
 	roomId: string
 	participants: RoomParticipant[]
-}	
+}
 
 export const codeMirror = signal<EditorView | null>(null)
+export const codeMirrorEditorText = signal<string>('');
 export const muted = signal<boolean>(false)
 export const errorLog = signal<NormalizedError[]>([])
 export const openEditor = signal<OpenEditor | null>(null)
@@ -114,6 +124,8 @@ export const editSessionLength = signal<Date>(new Date());
 export const showKeyBinding = signal(false);
 export const showSaveConflictModal = signal<boolean>(false);
 export const continueSaving = signal<boolean>(true);
+export const _foldRanges = signal<FromTo[]>([]);
+export const _widgets = signal<Range<Decoration>[]>([]);
 export const LAST_SAVED_SESSION_ID = 'lastSavedSessionId';
 
 export type ThemeType = "dark" | "light" | "busker";
@@ -173,7 +185,7 @@ export const switchTheme = (themeType: ThemeType) => {
 	document.documentElement.style.setProperty(`--accent-dark`, themeValue?.accentDark?? '');
 	document.documentElement.style.setProperty(`--fg-muted-on-accent`, themeValue?.fgMutedOnAccent?? '');
 	documentStyle.color = themeValue?.color ?? '';
-	
+
 	// change the color of the text in elements having .copy-container style
 	// These includes pages such as 'Gallery' and 'Your Games'
 	const copyContainer = document.querySelector(".copy-container") as HTMLDivElement;
@@ -182,3 +194,5 @@ export const switchTheme = (themeType: ThemeType) => {
 	}
 }
 export const isNewSaveStrat = signal<boolean>(false)
+export const screenRef = signal<HTMLCanvasElement | null>(null);
+export const cleanupRef = signal<(() => void) | undefined>(undefined);

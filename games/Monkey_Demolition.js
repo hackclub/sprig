@@ -1,8 +1,8 @@
 /*
 @title: Mirror_Mirror
+@author: ethanJPope
 @tags: []
 @addedOn: 2024-07-11
-@author: ethanJPope
 */
 
 const monkeyRight = "m"

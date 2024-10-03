@@ -35,6 +35,11 @@ export interface User {
 	createdAt: Timestamp
 	email: string
 	username: string | null
+	githubAccessToken?: string
+	githubId?: string
+	githubUsername?: string
+	failedLoginAttempts?: number
+	lockoutUntil?: Timestamp
 }
 
 export interface Session {
@@ -57,6 +62,8 @@ export interface Game {
 	roomParticipants?: RoomParticipant[]
 	isRoomOpen?: boolean
 	password?: string
+	isPublished?: boolean
+	githubPR?: string
 }
 
 export interface LoginCode {
@@ -326,4 +333,8 @@ export const getSnapshotData = async (id: string): Promise<SnapshotData | null> 
 		ownerName: user?.username ?? snapshot.ownerName,
 		code: snapshot.code
 	}
+}
+
+export const updateUserGitHubToken = async (userId: string, githubAccessToken: string, githubId: string, githubUsername: string): Promise<void> => {
+    await updateDocument('users', userId, { githubAccessToken, githubId, githubUsername });
 }

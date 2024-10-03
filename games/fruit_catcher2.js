@@ -1,9 +1,9 @@
 /*
 @title: Fruit Catcher Deluxe
-@tags: []
-@img: ""
-@addedOn: 2022-06-4
 @author: Prathyush Yeturi
+@tags: []
+@addedOn: 2022-06-4
+@img: ""
 */
 
 var isRunning = true;

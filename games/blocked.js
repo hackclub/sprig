@@ -1,7 +1,7 @@
 /*
 @title: aMaze
 @author: Sumedh Natu
-@tags: ["puzzle", "tiles", "sokoban", "boxes"]
+@tags: ['puzzle']
 @addedOn: 2024-08-13
 */
 

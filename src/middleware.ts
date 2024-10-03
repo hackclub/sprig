@@ -12,6 +12,9 @@ export async function onRequest({ request }: any, next: () => any) {
 
   const metricKey = `http.${response.status}.${metricName}`;
   console.log(metricKey);
-  metrics.increment(metricKey, 1);
-  metrics.timing(metricName, time);
+  
+  await Promise.all([
+	  new Promise(resolve => metrics.increment(metricKey, 1, resolve)),
+	  new Promise(resolve => metrics.timing(metricName, time, resolve))
+  ])
 }

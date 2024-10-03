@@ -1,11 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Hallowed Knight
 @author: phthallo
 @tags: []
 @addedOn: 2024-07-09
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 
 /* Definitely not inspired by Hollow Knight.

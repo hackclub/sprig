@@ -1,11 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: love-bug
 @author: b3arora
 @tags: []
 @addedOn: 2024-08-13
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 
 //too many bombs
