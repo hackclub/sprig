@@ -1,9 +1,8 @@
 /*
 @title: Sprig Shooter
 @author: Heliodex
-@tags: ["advanced", "space", "endless", "dodge", "singleplayer", "shooter"]
-@img: "Sprig Shooter"
-@addedOn: 2024-09-30
+@tags: ["endless", "action", "real-time", "retro"]
+@addedOn: 2024-10-03
 
 Space-themed shooter! Control your ship and shoot down enemies (purple asteroid/planet thingies) to blow them into pieces and earn score. Try to get your score as high as possible (duh) and avoid getting hit by enemies (duh too).
 The game is endless and difficulty increases as you progress. Good luck, cadet!
