@@ -1,11 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: 9 Tiles
 @author: Arrow07
 @tags: []
 @addedOn: 2024-08-28
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 const melody = tune`
 428.57142857142856: B5-428.57142857142856 + A5^428.57142857142856,

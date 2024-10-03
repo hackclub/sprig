@@ -2,13 +2,12 @@
 /* 
 @title: cat_in_rain
 @author: alxndriab
-@tags: ['dodge']
+@tags: ['action']
 @addedOn: 2023-11-17
 */
 
     /*
 @title cat_in_rain
-@author: alex b
 inspration from dodge_the_fireball by sam liu
 */
 

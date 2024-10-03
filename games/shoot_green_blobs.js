@@ -1,8 +1,8 @@
 /*
 @title: shoot_green_blobs
-@tags: ['classic']
-@addedOn: 2022-09-07
 @author: otterly-otter
+@tags: ['retro']
+@addedOn: 2022-09-07
 
 */
 

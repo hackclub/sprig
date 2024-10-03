@@ -1,11 +1,11 @@
 /*
+@title: Spridle
+@author: Duclings
+@tags: ['retro']
+@addedOn: 2024-06-23
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Spridle
-@author: Duclings
-@tags: ['classic']
-@addedOn: 2024-06-23
 */
 
 const underscore = "u"

@@ -1,8 +1,8 @@
 /*
 @title: rescue_leo
-@tags: ['thematic-puzzle']
-@addedOn: 2023-02-11
 @author: agentblack_6000
+@tags: ['puzzle']
+@addedOn: 2023-02-11
 
 
 A game to spread awarness about sea turtles, perhaps switch to reusable

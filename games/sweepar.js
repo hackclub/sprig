@@ -1,10 +1,10 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
 @title: Sweepar
 @author: eshangonemad
 @tags: []
 @addedOn: 2024-03-20
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
 */
 const cursor = "c"
 const bomb = "b"

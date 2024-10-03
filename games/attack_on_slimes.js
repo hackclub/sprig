@@ -1,8 +1,8 @@
 /*
 @title: attack_on_slimes
+@author: OwOSwordsman
 @tags: ['endless']
 @addedOn: 2022-12-26
-@author: OwOSwordsman
 */
 
 // gamestate

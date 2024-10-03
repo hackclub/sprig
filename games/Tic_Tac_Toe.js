@@ -1,8 +1,8 @@
 /*
 @title: TicTacToe
-@tags: ['classic']
-@addedOn: 2023-02-02
 @author: Northernside
+@tags: ['retro']
+@addedOn: 2023-02-02
 
 This isn't 100% made by me, as I heavily modified Atharv Gupta's code and fixed some bugs + improved the code.
 

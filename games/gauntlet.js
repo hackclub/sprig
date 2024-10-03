@@ -1,7 +1,7 @@
 /*
 @title: gauntlet
 @author: hex4
-@tags: ["arcade", "endless"]
+@tags: ['endless']
 @addedOn: 2024-09-16
 */
 

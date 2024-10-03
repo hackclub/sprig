@@ -87,12 +87,12 @@ export default function CodeMirror(props: CodeMirrorProps) {
 					if(props.persistenceState === undefined) throw new Error("Persistence state is undefined");
 					if(state.saved == "saved"){
 						let persistenceState = props.persistenceState.peek();
-						if(persistenceState.kind === PersistenceStateKind.PERSISTED && persistenceState.game !== "LOADING" || persistenceState.kind === PersistenceStateKind.COLLAB){
+						if((persistenceState.kind === PersistenceStateKind.PERSISTED || persistenceState.kind === PersistenceStateKind.COLLAB) && persistenceState.game !== "LOADING"){
 							props.persistenceState.value = {...persistenceState, cloudSaveState: "SAVED"};
 						}
 					} else if(state.saved == "error"){
 						let persistenceState = props.persistenceState.peek();
-						if(persistenceState.kind === PersistenceStateKind.PERSISTED && persistenceState.game !== "LOADING"|| persistenceState.kind === PersistenceStateKind.COLLAB){
+						if((persistenceState.kind === PersistenceStateKind.PERSISTED || persistenceState.kind === PersistenceStateKind.COLLAB) && persistenceState.game !== "LOADING"){
 							props.persistenceState.value = {...persistenceState, cloudSaveState: "ERROR"};
 						}
 					}

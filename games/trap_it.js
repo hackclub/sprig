@@ -1,7 +1,7 @@
 /*
 @title: trap_it
 @author: PRairigh
-@tags: ["strategy"]
+@tags: ['strategy']
 @addedOn: 2024-07-31
 */
 

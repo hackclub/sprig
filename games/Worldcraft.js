@@ -1,8 +1,8 @@
 /*
 @title: Worldcraft
-@tags: ['explore']
-@addedOn: 2022-12-09
 @author: adadyer
+@tags: ['adventure']
+@addedOn: 2022-12-09
 
 Instructions:
 Explore the world using the portals, gather supplies, and build structures.
