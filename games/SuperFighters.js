@@ -1,7 +1,7 @@
 /*
 @title: SuperFighters
 @author: retrooper
-@tags: ['shooter', 'platformer', 'fighting', 'singleplayer']
+@tags: ['action','platformer']
 @addedOn: 2024-08-15
 */
 

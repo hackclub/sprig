@@ -1,12 +1,12 @@
 /*
+@title: Rift Jump
+@author: sharonbasovich
+@tags: ['platformer']
+@addedOn: 2024-05-28
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Rift Jump
-@author: sharonbasovich
-@tags: ["platformer"]
 @img: ""
-@addedOn: 2024-05-28
 */
 
 const coin = "c"

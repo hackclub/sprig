@@ -1,8 +1,8 @@
 /*
 @title: cookie_clicker
+@author: kunevi
 @tags: ['endless']
 @addedOn: 2022-12-16
-@author: kunevi
   _    _  ______          __  _______ ____    _____  _           __     __
  | |  | |/ __ \ \        / / |__   __/ __ \  |  __ \| |        /\\ \   / /
  | |__| | |  | \ \  /\  / /     | | | |  | | | |__) | |       /  \\ \_/ / 

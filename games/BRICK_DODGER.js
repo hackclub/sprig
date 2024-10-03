@@ -1,8 +1,8 @@
 /*
 @title: BRICK DODGER
+@author: Logan Fick
 @tags: ['endless']
 @addedOn: 2022-11-06
-@author: Logan Fick
 Instructions:
   Move left or right using A/D keys,
   dodge the bricks coming down,

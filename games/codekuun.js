@@ -1,8 +1,8 @@
 /*
 @title: codekuun
-@tags: ['hackable', 'puzzle', 'logic']
-@addedOn: 2024-09-16
 @author: Jomar Milan
+@tags: ['puzzle']
+@addedOn: 2024-09-16
 */
 
 const bitmaps = {

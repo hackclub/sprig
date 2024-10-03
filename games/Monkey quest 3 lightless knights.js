@@ -1,11 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Monkey quest 3: lightless knights
 @author: Eamonn
 @tags: []
 @addedOn: 2024-08-20
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 
 let r = 0;

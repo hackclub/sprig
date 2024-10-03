@@ -1,8 +1,8 @@
 /*
 @title: BreadMaze
-@tags: ['sokoban-style']
-@addedOn: 2022-10-20
 @author: Aiden
+@tags: ['puzzle']
+@addedOn: 2022-10-20
 */
 
 const player = "p";

@@ -1,7 +1,7 @@
 /*
 @title: HELP ME I CANT CODE
 @author: PotatoMoth
-@tags: ["maze", "adventure"]
+@tags: ['puzzle','adventure']
 @addedOn: 2024-08-15
 */
 

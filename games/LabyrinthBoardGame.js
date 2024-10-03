@@ -1,11 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: LabyrinthBoardGame
 @author: rivques
 @tags: []
 @addedOn: 2024-09-03
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 
 // a port of the Labyrinth board game to Sprig.

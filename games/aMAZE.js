@@ -1,8 +1,8 @@
 /*
 @title: aMAZE
-@tags: ['sokoban-style']
-@addedOn: 2023-01-08
 @author: anabia
+@tags: ['puzzle']
+@addedOn: 2023-01-08
 */
 const player = "p";
 const wall = "w";

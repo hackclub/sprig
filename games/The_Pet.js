@@ -1,8 +1,8 @@
 /*
 @title: The_Pet
+@author: wyn-cmd
 @tags: ['simulation']
 @addedOn: 2022-12-07
-@author: wyn-cmd
 */
 
 
