@@ -1,11 +1,11 @@
 /*
+@title: skibidi-toilet-game
+@author: spedward
+@tags: ['humor']
+@addedOn: 2024-08-15
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: skibidi-toilet-game
-@author: spedward
-@tags: ['skibidi', 'skibidi-toilet']
-@addedOn: 2024-08-15
 
 */
 

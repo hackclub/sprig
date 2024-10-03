@@ -1,8 +1,8 @@
 /*
 @title: Protect The Surfer
+@author: thinkingjet
 @tags: []
 @addedOn: 2023-01-03
-@author: thinkingjet
 Thanks to @Colton for his inspiration with Hectic Hockey
 Instructions:
 Welcome to "Protect The Surfer"! In this exciting and challenging game, you'll take control of a surfer navigating through dangerous waters, trying to reach the safety of the shore without getting attacked by sharks.

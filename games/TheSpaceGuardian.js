@@ -1,6 +1,6 @@
 /*
 @title: TheSpaceGuardian
-@author: Adrian DeGendt 
+@author: Adrian DeGendt
 @tags: []
 @addedOn: 2024-07-22
 

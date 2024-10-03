@@ -1,7 +1,7 @@
 /*
 @title: Tickets Please!
 @author: Vaporform (ysk)
-@tags: ['singleplayer','simulator']
+@tags: ['simulation']
 @addedOn: 2024-09-18
 */
 

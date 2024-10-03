@@ -1,7 +1,7 @@
 /*
 @title: Generative Maze
 @author: Zeyu Yao
-@tags: ["endless", "infinite", "maze"]
+@tags: ['puzzle','endless']
 @addedOn: 2024-09-14
 */
 

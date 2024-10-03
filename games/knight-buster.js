@@ -1,7 +1,7 @@
 /*
 @title: Knight Buster
 @author: Isobel P
-@tags: ["multiplayer"]
+@tags: ['multiplayer']
 @addedOn: 2024-07-22
 */
 

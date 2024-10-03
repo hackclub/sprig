@@ -1,11 +1,11 @@
 /*
+@title: toto
+@author: marsisus
+@tags: []
+@addedOn: 2024-08-18
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: toto
-@author: marsisus 
-@tags: []
-@addedOn: 2024-08-18
 */
 
 const player = "p"

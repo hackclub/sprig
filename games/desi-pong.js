@@ -1,8 +1,8 @@
 /*
 @title: Desi-Pong
-@tags: ['classic']
-@addedOn: 2022-09-14
 @author: Arnob Das
+@tags: ['retro']
+@addedOn: 2022-09-14
 */
 
 const player1 = "1";

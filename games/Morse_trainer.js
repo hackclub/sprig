@@ -2,7 +2,7 @@
 /* 
 @title: Morse_trainer
 @author: Yuuta
-@tags: ['']
+@tags: []
 @addedOn: 2023-12-21
 */
 

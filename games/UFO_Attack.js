@@ -1,8 +1,8 @@
 /*
 @title: UFO Attack
+@author: Troy
 @tags: ['strategy']
 @addedOn: 2022-11-13
-@author: Troy
 */
 
 

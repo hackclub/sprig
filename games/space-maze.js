@@ -2,7 +2,7 @@
 /* 
 @title: space_maze
 @author: klumey
-@tags: ['space', 'maze', 'puzzle', 'alien']
+@tags: ['puzzle']
 @addedOn: 2024-08-31
 
 ----------------------CONTROLS--------------

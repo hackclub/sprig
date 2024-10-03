@@ -1,7 +1,7 @@
 /*
 @title: Cheese_Terminator
 @author: Colin
-@tags: ['sokoban-style']
+@tags: ['puzzle']
 @addedOn: 2024-06-22
 
 This is a port of Microsoft Cheese Terminator, a game that was given to you if you mailed in surveys for microsoft in poland.

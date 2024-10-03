@@ -1,12 +1,12 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: SOUL STEALER: The Vengful Spirit
 @author: Gavin Jent
 @tags: []
-@img: ""
 @addedOn: 2024-05-20
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
+@img: ""
 */
 
 const player = "p"

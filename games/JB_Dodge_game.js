@@ -1,11 +1,11 @@
 /*
+@title: JB_Dodgy_Meteor_Game
+@author: JbBurnsWasHere
+@tags: ['action']
+@addedOn: 2024-09-03
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: JB_Dodgy_Meteor_Game
-@author: JbBurnsWasHere
-@tags: ["dodge"]
-@addedOn: 2024-09-03
 */
 
 const player = "p";

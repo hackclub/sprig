@@ -1,8 +1,8 @@
 /*
 @title: The UFO farm
+@author: Harrison Ng
 @tags: ['endless']
 @addedOn: 2023-01-20
-@author: Harrison Ng
 */
 
 let tractor;

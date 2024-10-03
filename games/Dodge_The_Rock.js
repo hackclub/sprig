@@ -1,8 +1,8 @@
 /*
 @title: Dodge_The_Rock
+@author: dutamot
 @tags: []
 @addedOn: 2023-03-09
-@author: dutamot
 */
 
 const player = "p"

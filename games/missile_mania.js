@@ -1,9 +1,9 @@
 /*
-
 @title: Missile Mania
+@author: Nisarga (https://github.com/nisarga-developer)
 @tags: ['endless']
 @addedOn: 2023-01-01
-@author: Nisarga (https://github.com/nisarga-developer)
+
 
 Instructions:
 Hit "run" to execute the code and
