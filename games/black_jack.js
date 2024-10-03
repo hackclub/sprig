@@ -1,8 +1,8 @@
 /*
 @title: black_jack
-@tags: ['classic']
-@addedOn: 2022-12-21
 @author: xevaly
+@tags: ['retro']
+@addedOn: 2022-12-21
 
 Before the game starts, the player can adjust their bet size by pressing the "I" key to increase the bet size and the "K" key to decrease it.
 

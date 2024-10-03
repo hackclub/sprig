@@ -1,8 +1,8 @@
 /*
 @title: Pusher game
+@author: liam
 @tags: ['strategy']
 @addedOn: 2023-02-08
-@author: liam
 */
 
 const player = "p";

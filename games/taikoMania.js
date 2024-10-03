@@ -1,7 +1,7 @@
 /*
 @title: taikoMania
 @author: Isaac Wong
-@tags: ['']
+@tags: []
 @addedOn: 2023-12-29
 */
 

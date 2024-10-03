@@ -1,8 +1,8 @@
 /*
 @title: Infinite Maze
+@author: pertark
 @tags: ['endless']
 @addedOn: 2022-09-22
-@author: pertark
 */
 
 //INCLUDE

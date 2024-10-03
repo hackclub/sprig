@@ -2,7 +2,7 @@
 /* 
 @title: Tile_Slider
 @author: Susman
-@tags: ['']
+@tags: []
 @addedOn: 2023-11-30
 */
 

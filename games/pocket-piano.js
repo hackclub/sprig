@@ -1,8 +1,8 @@
 /*
 @title: Pocket Piano
+@author: Odysseus Kirikopoulos
 @tags: ['simulation']
 @addedOn: 2023-02-15
-@author: Odysseus Kirikopoulos
 */
 
 const tune_c = tune`

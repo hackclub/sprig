@@ -1,8 +1,8 @@
 /*
 @title: Zombie Defense
+@author: Edmund
 @tags: ['endless']
 @addedOn: 2022-09-19
-@author: Edmund
 
 Controls:
   W, S - Movement

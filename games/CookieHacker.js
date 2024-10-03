@@ -1,6 +1,6 @@
 /*
 @title: Cookie Hacker
-@author: felixexists 
+@author: felixexists
 @tags: []
 @addedOn: 2024-09-03
 */

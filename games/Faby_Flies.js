@@ -1,11 +1,11 @@
 /*
+@title: Faby Flies
+@author: Eny
+@tags: ['endless','retro']
+@addedOn: 2024-06-22
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Faby Flies
-@author: Eny 
-@tags: ['classic', 'endless']
-@addedOn: 2024-06-22
 */
 
 const player = "p"

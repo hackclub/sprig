@@ -1,8 +1,8 @@
 /*
 @title: Terminal-Dungeon
-@tags: ['puzzle-npc']
-@addedOn: 2022-12-20
 @author: adadyer
+@tags: ['puzzle']
+@addedOn: 2022-12-20
 
 WASD to move, IJKL to interact.
 

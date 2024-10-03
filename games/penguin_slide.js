@@ -1,8 +1,8 @@
 /*
 @title: penguin_slide
+@author: veehz
 @tags: ['strategy']
 @addedOn: 2022-09-08
-@author: veehz
 */
 
 const player = "p";

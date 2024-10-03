@@ -1,8 +1,8 @@
 /*
 @title: Snake
+@author: Boyne
 @tags: ['endless']
 @addedOn: 2022-11-10
-@author: Boyne
 */
 
 const logo1 = "1";

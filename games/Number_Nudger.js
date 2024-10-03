@@ -1,8 +1,8 @@
 /*
 @title: Number_Nudger
+@author: Boon
 @tags: ['strategy']
 @addedOn: 2023-01-02
-@author: Boon
 
 Instructions:
 Use the red player to move the blue number blocks into the green slots.

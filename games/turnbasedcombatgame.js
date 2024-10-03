@@ -1,11 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: Turn based game 
+@title: Turn based game
 @author: Michael
 @tags: []
 @addedOn: 2024-09-18
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 
 HOW TO PLAY:
 The goal of the game is to knock out the red square - There are no attacks yet though

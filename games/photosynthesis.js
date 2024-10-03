@@ -1,11 +1,11 @@
 /*
+@title: Photosynthesis
+@author: Vanessa Tan
+@tags: []
+@addedOn: 2024-08-26
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Photosynthesis
-@author: Vanessa Tan
-@tags: ["beginner"]
-@addedOn: 2024-08-26
 */
 
 const player = "p";

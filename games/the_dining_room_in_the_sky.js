@@ -1,8 +1,8 @@
 /*
-@title: the_dining_room_in_the_sky 
-@tags: ['puzzle-score']
-@addedOn: 2023-02-28
+@title: the_dining_room_in_the_sky
 @author: Dylan Tran
+@tags: ['puzzle']
+@addedOn: 2023-02-28
 */
 
         let Score = 0;

@@ -1,11 +1,11 @@
 /*
+@title: Stickman
+@author: Benjamin Faershtein
+@tags: []
+@addedOn: 2024-07-26
 STICKMAN
 Part 1
 
-@title: Stickman
-@author: Benjamin Faershtein
-@tags: ['stickman']
-@addedOn: 2024-07-26
 */
 
 const player = "p"

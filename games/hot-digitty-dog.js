@@ -1,8 +1,8 @@
 /*
 @title: hot-digitty-dog
+@author: Urjith Mishra
 @tags: ['endless']
 @addedOn: 2023-01-10
-@author: Urjith Mishra
 */
 
 // Sprites

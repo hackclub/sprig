@@ -1,8 +1,8 @@
 /*
 @title: Seven Ate Nine (789)
+@author: Arjun V
 @tags: ['multiplayer']
 @addedOn: 2022-09-12
-@author: Arjun V
 
 
 A fun, fast-paced, 2-player game.

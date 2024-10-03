@@ -1,8 +1,8 @@
 /*
 @title: dihydrogen_monoxide_free_fall
+@author: aksel s.
 @tags: ['endless']
 @addedOn: 2022-11-06
-@author: aksel s.
 */
 
 // FLAGS AND VARIABLES
