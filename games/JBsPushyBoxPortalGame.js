@@ -1,10 +1,10 @@
 /*
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: JB's Pushy Blocky Portal Game
 @author: Justin Burns II :)
 @tags: []
 @addedOn: 2024-09-03
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 setSolids([])
 const player = "p"

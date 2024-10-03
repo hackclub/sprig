@@ -2,7 +2,7 @@
 /* 
 @title: Women's roles during wartime
 @author: cupcakes
-@tags: ['thematic-puzzle']
+@tags: ['puzzle']
 @addedOn: 2023-06-04
 */
 

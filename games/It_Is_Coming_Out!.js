@@ -1,8 +1,8 @@
 /*
 @title: It_Is_Coming_Out!
+@author: Onovez
 @tags: []
 @addedOn: 2023-03-15
-@author: Onovez
 */
 // Game where you have to go through obstcle to go to toilet to poop
 // 'w','a','s','d': to move, 'j' to reset map, and 'k' to restart game

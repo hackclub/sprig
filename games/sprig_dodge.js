@@ -1,8 +1,8 @@
 /*
 @title: sprig_dodging
-@tags: ['beginner', 'tutorial']
-@addedOn: 2022-12-15
 @author: sam liu and lucas
+@tags: ['tutorial']
+@addedOn: 2022-12-15
 */
 
 // define the sprites in our game

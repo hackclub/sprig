@@ -1,11 +1,11 @@
 /*
+@title: Penny s Quest
+@author: OHIO-MAN
+@tags: []
+@addedOn: 2024-04-20
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Penny s Quest
-@author: OHIO-MAN
-@tags: ["penny"]
-@addedOn: 2024-04-20
 */
 /*
 Controls:

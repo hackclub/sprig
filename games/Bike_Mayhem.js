@@ -1,11 +1,11 @@
 /*
+@title: Bike Mayhem
+@author: Eddie B
+@tags: []
+@addedOn: 2024-08-18
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Bike Mayhem
-@author: Eddie B
-@tags: ["bike"]
-@addedOn: 2024-08-18
 */
 
 const player = "p"

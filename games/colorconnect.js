@@ -1,4 +1,8 @@
 /*
+@title: colorconnect
+@author: Newton
+@tags: []
+@addedOn: 2024-09-16
    ___      _                ___                            _   
   / __\___ | | ___  _ __    / __\___  _ __  _ __   ___  ___| |_ 
  / /  / _ \| |/ _ \| '__|  / /  / _ \| '_ \| '_ \ / _ \/ __| __|
@@ -36,10 +40,6 @@ of this framework, the code is very unclean and may cause eye cancer :(
 
 --------------------------------------------------------------------------------
 
-@title: colorconnect
-@author: Newton
-@tags: []
-@addedOn: 2024-09-16
 */
 
 const circle_bitmap = bitmap`

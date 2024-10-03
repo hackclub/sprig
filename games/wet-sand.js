@@ -1,8 +1,8 @@
 /*
 @title: wet-sand
+@author: mint
 @tags: ['simulation']
 @addedOn: 2023-02-20
-@author: mint
 */
 
 const sand = "s";

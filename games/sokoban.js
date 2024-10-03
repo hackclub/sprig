@@ -1,8 +1,8 @@
 /*
 @title: sokoban
-@tags: ['beginner', 'hackable', 'sokoban-style']
-@addedOn: 2022-07-18
 @author: leo
+@tags: ['puzzle']
+@addedOn: 2022-07-18
 
 Instructions:
 

@@ -1,8 +1,8 @@
 /*
 @title: Battle_City
+@author: DevIos
 @tags: []
 @addedOn: 2023-01-09
-@author: DevIos
 */
 const player = "p";
 const wall = "w";

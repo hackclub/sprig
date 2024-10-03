@@ -1,8 +1,8 @@
 /*
 @title: soko_quest
-@tags: ['logic']
-@addedOn: 2022-11-13
 @author: swarit choudhari
+@tags: ['puzzle']
+@addedOn: 2022-11-13
 
 Instructions:
 

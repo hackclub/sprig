@@ -2,7 +2,7 @@
 @title: trap runner
 @author: surojit roy
 @tags: []
-@addedOn: 2024-08-28 
+@addedOn: 2024-08-28
 */
 
 const down = "d"

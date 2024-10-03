@@ -1,8 +1,8 @@
 /*
 @title: TicTacGPT
-@tags: ['classic']
-@addedOn: 2023-09-08
 @author: 2008wbbv
+@tags: ['retro']
+@addedOn: 2023-09-08
 
 This isn't 100% made by me, as I heavily modified Northernside's code and added some bugs and a AI player.credits : https://sprig.hackclub.com/gallery/Tic_Tac_Toe
 

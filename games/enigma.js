@@ -1,7 +1,7 @@
 /*
 @title: Enigma
 @author: Ben Gertler
-@tags: ['simulation', 'sandbox']
+@tags: ['sandbox','simulation']
 @addedOn: 2024-08-28
 */
 

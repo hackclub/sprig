@@ -1,8 +1,8 @@
 /*
 @title: Amoeba
-@tags: ['logic']
-@addedOn: 2022-11-08
 @author: LUKÁCS Gergely
+@tags: ['puzzle']
+@addedOn: 2022-11-08
 
 HOW TO PLAY:
 Amoeba is a two-player strategy game, a version of Gomoku.

@@ -1,7 +1,7 @@
 /*
 @title: Pizzeria
 @author: dilbert335
-@tags: ['classic']
+@tags: ['retro']
 @addedOn: 2024-08-06
 */
 
