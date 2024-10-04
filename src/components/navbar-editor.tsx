@@ -258,7 +258,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	// keep track of the submit status for "I'm stuck" requests
 	const isSubmitting = useSignal<boolean>(false);
 
-	const isLoggedIn = props.persistenceState.value.session ? true : false;
+	const isLoggedIn = props.persistenceState.value.session?.session.full ?? false;
 
 	const showSavePrompt = useSignal(false);
 	const showSharePopup = useSignal(false);
