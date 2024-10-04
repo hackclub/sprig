@@ -400,7 +400,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 	const publishToGithub = async (accessToken: string | null | undefined, yourGithubUsername: string | undefined, gameID: string | undefined) => {
 		try {
-
 			const gameTitleElement = document.getElementById('gameTitle') as HTMLInputElement | null;
 			const authorNameElement = document.getElementById('authorName') as HTMLInputElement | null;
 			const gameDescriptionElement = document.getElementById('gameDescription') as HTMLTextAreaElement | null;
@@ -428,7 +427,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			const { valid, message: gameNameMessage } = await validateGameName(gameTitle);
 			handleError("gameTitle", !valid, gameNameMessage);
 			handleError("gameDescription", !gameDescription, "Please provide a game description.");
-			handleError("thumbnail", !image, "Please upload a thumbnail image.");
 			handleError("gameControlsDescription", !gameControlsDescription, "Please provide game controls description.");
 
 			if (hasError) {
@@ -507,7 +505,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				accessToken,
 				"hackclub",
 				"sprig",
-				`[Automated] ${gameTitle}`,
+				`[Sprig App] ${gameTitle}`,
 				newBranchName,
 				"main",
 				`### Author name\nAuthor: ${authorName}\n\n### About your game\n\n**What is your game about?**\n${gameDescription}\n\n**How do you play your game?**\n${gameControlsDescription}`,
@@ -785,7 +783,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 										</div>
 
 										<div className={styles.inputField}>
-											<label htmlFor="thumbnailUpload">Game Thumbnail</label>
+											<label htmlFor="thumbnailUpload">Game Thumbnail (Optional)</label>
 											<div
 												id="thumbnailUpload"
 												className={styles.dragDropArea}
@@ -809,7 +807,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 													className={styles.thumbnailPreview}
 												/>
 											)}
-											<div id="error-thumbnail" class="error-message" style="display: none;"></div>
 										</div>
 									</div>
 									<div className={styles.buttonGroup}>
