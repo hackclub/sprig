@@ -1,7 +1,7 @@
 /*
 @title: PuppyCafe
 @author: Lenochodik
-@tags: ['classic', 'tapper', 'endless']
+@tags: ['endless','retro']
 @addedOn: 2024-08-15
 */
 

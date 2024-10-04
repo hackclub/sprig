@@ -3,8 +3,8 @@
 @title: Mom,_have_you_seen_Coco?
 @author: Lillian Curi
 @tags: []
-@img: ""
 @addedOn: 2024-05-10
+@img: ""
 */
     const select = ")"
     const character = "1"

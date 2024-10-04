@@ -1,8 +1,8 @@
 /*
 @title: 3D Wireframe Renderer (v2)
+@author: Patcybermind
 @tags: ['simulation']
 @addedOn: 2024-06-11
-@author: Patcybermind
 */
 /* HOW TO USE :
   w = forward

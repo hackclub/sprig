@@ -1,8 +1,8 @@
 /*
 @title: bobs_bad_apple
-@tags: ['logic']
-@addedOn: 2023-03-01
 @author: L. Clark
+@tags: ['puzzle']
+@addedOn: 2023-03-01
 */
 
 // Bob is trapped in a maze.

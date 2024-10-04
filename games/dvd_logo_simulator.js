@@ -1,8 +1,8 @@
 /*
 @title: DVD logo Simulator
-@tags: ['simulation', 'demo', 'endless']
-@addedOn: 2022-12-18
 @author: the456gamer
+@tags: ['endless','simulation']
+@addedOn: 2022-12-18
 
 hit run, enjoy.
 J -> restart from random position

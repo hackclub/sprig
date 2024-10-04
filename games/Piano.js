@@ -1,8 +1,8 @@
 /*
 @title: Piano
+@author: Scott
 @tags: ['simulation']
 @addedOn: 2022-09-14
-@author: Scott
 
 Instructions:
 

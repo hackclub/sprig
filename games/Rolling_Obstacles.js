@@ -1,8 +1,8 @@
 /*
 @title: Rolling Obstacles
-@tags: ['puzzle-score']
-@addedOn: 2023-02-02
 @author: Ruhan Pandit
+@tags: ['puzzle']
+@addedOn: 2023-02-02
 */
 
 const player = "p";

@@ -224,8 +224,7 @@ static void js_init(char *file, int file_size) {
   strcpy(combined, engine_script);
   strcpy(combined + sizeof(engine_script) - 1, file);
 
-  const jerry_length_t combined_size = sizeof (engine_script) - 1 + file_size;
-  js_run(combined, combined_size);
+  js_run(combined, 0);
 }
 
 /**

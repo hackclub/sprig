@@ -1,8 +1,8 @@
 /*
 @title: QuadraPedal
-@tags: ['sokoban-style']
-@addedOn: 2022-11-04
 @author: Jamarkis
+@tags: ['puzzle']
+@addedOn: 2022-11-04
 
 Hit "run" to execute the code and
 start the game (you can also press shift+enter).

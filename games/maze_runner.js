@@ -1,8 +1,8 @@
 /*
 @title: maze runner
-@tags: ['timer-puzzle']
-@addedOn: 2022-09-26
 @author: wetf
+@tags: ['puzzle','timed']
+@addedOn: 2022-09-26
 */
 
 const player = "p";

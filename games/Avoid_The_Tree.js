@@ -1,8 +1,8 @@
 /*
 @title: Avoid_The_Tree
+@author: Samarth Verulkar
 @tags: ['endless']
 @addedOn: 2023-01-05
-@author: Samarth Verulkar
 
 References and inspirations:
 Coding Demo 5: Gravity by Leonard (Omay)

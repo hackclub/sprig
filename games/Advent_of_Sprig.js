@@ -1,8 +1,8 @@
 /*
 @title: Advent of Sprig
-@tags: ['event']
-@addedOn: 2022-12-01
 @author: Leonard (Omay)
+@tags: ['utility']
+@addedOn: 2022-12-01
 Every day, I will add a new game or level of a game.
 */
 

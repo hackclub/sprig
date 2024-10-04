@@ -1,12 +1,12 @@
 
 /*
+@title: Villager Vikings
+@author: D.M.R
+@tags: ['action']
+@addedOn: 2024-08-15
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Villager Vikings
-@author: D.M.R
-@tags: ['attack']
-@addedOn: 2024-08-15
 🎮 CONTROLS:
   Begining controls:
 	S-To watch the story

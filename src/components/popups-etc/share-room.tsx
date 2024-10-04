@@ -5,6 +5,7 @@ import Input from '../design-system/input'
 import LinkButton from '../design-system/link-button'
 import styles from './share-room.module.css'
 import { IoClose } from 'react-icons/io5'
+import { PersistenceStateKind } from '../../lib/state'
 
 export interface ShareRoomPopupProps {
 	roomState: Signal<RoomState>;
@@ -45,7 +46,7 @@ export default function ShareRoomPopup(props: ShareRoomPopupProps) {
 		roomOpen: boolean
 	) => {
 		if (
-			persistenceState.value.kind !== "PERSISTED" ||
+			persistenceState.value.kind !== PersistenceStateKind.PERSISTED ||
 			persistenceState.value.game === "LOADING"
 		)
 			return;
@@ -67,7 +68,7 @@ export default function ShareRoomPopup(props: ShareRoomPopupProps) {
 		}, 2000);
 	})
 
-if (!(props.persistenceState.value.kind == "PERSISTED" && props.persistenceState.value.game !== "LOADING" && props.persistenceState.value.game.isRoomOpen)) {
+if (!(props.persistenceState.value.kind == PersistenceStateKind.PERSISTED && props.persistenceState.value.game !== "LOADING" && props.persistenceState.value.game.isRoomOpen)) {
 	return (
 		<div class={styles.overlay}>
 			<div class={styles.modal}>

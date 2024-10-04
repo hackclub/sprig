@@ -1,8 +1,8 @@
 /*
 @title: CrimbLetips
+@author: ShawnM
 @tags: []
 @addedOn: 2022-12-19
-@author: ShawnM
 */
 
 const Black = "B";

@@ -1,8 +1,8 @@
 /*
 @title: Gravity is a Thing
-@tags: ['logic']
-@addedOn: 2022-09-30
 @author: Will_Rigney
+@tags: ['puzzle']
+@addedOn: 2022-09-30
 */
 
 //W to jump

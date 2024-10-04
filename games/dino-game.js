@@ -1,7 +1,7 @@
 /*
 @title: Save Orpheus - Chrome Dino Game Remake
 @author: @thetridentguy
-@tags: ['classic']
+@tags: ['retro']
 @addedOn: 2024-03-29
 */
 

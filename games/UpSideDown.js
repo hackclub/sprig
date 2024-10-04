@@ -1,11 +1,11 @@
 /*
+@title: UpSideDown
+@author: Sidak08
+@tags: ['endless','retro']
+@addedOn: 2024-06-26
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: UpSideDown
-@author: Sidak08
-@tags: ['endless', 'classic', 'fun']
-@addedOn: 2024-06-26
 */
 
 const player = "p";

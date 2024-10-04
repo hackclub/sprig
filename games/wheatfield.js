@@ -1,10 +1,10 @@
 /*
-
-@title: WheatField 
+@title: WheatField
 @author: FEEJEE
-@tags: ['farming','simulation']
-@img: ""
+@tags: ['simulation']
 @addedOn: 2024-03-00
+
+@img: ""
 
 
 .𖥔 ݁ ˖
