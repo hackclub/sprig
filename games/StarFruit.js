@@ -1,3 +1,10 @@
+/*
+@title: StarFruit
+@author: irstupid
+@tags: ['endless', 'retro']
+@addedOn: 2024-10-04
+*/
+
 let player = "p"
 const grass = "#"
 const cherry = "1"
