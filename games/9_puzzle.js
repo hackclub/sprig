@@ -1,9 +1,9 @@
 /*
-
 @title: 9_puzzle
-@tags: ['logic']
-@addedOn: 2022-07-14
 @author: brian
+@tags: ['puzzle']
+@addedOn: 2022-07-14
+
 
 Instructions:
 

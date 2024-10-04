@@ -1,13 +1,13 @@
 /*
+@title: Snake_Boxes
+@author: Aryavrat Mishra
+@tags: ['retro']
+@addedOn: 2024-01-30
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 Goal: push the box adjacent to the goal to score points, push the goal if necessary, press l if you lose
 
-@title: Snake_Boxes
-@author: Aryavrat Mishra
-@tags: ['classic']
-@addedOn: 2024-01-30
 */
 
 const body = "b"

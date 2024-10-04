@@ -2,7 +2,7 @@
 /* 
 @title: bomb_dodge
 @author: AstralTurtle
-@tags: ['logic']
+@tags: ['puzzle']
 @addedOn: 2023-12-10
 */
 

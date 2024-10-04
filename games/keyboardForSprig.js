@@ -1,7 +1,7 @@
 /*
 @title: keyboard for sprig
 @author: mrdarip
-@tags: ['tool']
+@tags: ['utility']
 @addedOn: 2024-08-15
 
 Select the line where the character you want to write is, 

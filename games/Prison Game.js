@@ -1,7 +1,7 @@
 /*
 @title: Prison Game
-@author: Fallhicory 
-@tags: ['maze', 'game','levels', 'singleplayer', 'prison']
+@author: Fallhicory
+@tags: ['puzzle']
 @addedOn: 2024-08-15
 */
 

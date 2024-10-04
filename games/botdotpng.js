@@ -1,4 +1,8 @@
 /*
+@title: botdotpng
+@author: mavdotjs
+@tags: ['puzzle']
+@addedOn: 2024-08-14
 BOTDOTPNG:
 
     K: read tutorial
@@ -7,10 +11,6 @@ BOTDOTPNG:
 	J: rotate
 	I: run robot
 
-@title: botdotpng
-@author: mavdotjs
-@tags: ['puzzle', 'bot', 'singleplayer']
-@addedOn: 2024-08-14
 */
 
 const bg = 'B'

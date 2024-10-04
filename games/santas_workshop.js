@@ -1,8 +1,8 @@
 /*
 @title: santas_workshop
-@tags: ['sokoban-style']
-@addedOn: 2023-03-10
 @author: ava_sadasivan
+@tags: ['puzzle']
+@addedOn: 2023-03-10
 */
 
 const elf = "p";

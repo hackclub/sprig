@@ -1,8 +1,8 @@
 /*
 @title: dino
+@author: Pfostierer
 @tags: ['endless']
 @addedOn: 2023-02-19
-@author: Pfostierer
 */
 
 const h = 10;

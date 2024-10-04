@@ -1,8 +1,8 @@
 /*
-@title: the journey of the box[a sokoban saga] 
-@tags: ['sokoban-style']
-@addedOn: 2023-04-15
+@title: the journey of the box[a sokoban saga]
 @author: Ethan Francis
+@tags: ['puzzle']
+@addedOn: 2023-04-15
 //INSTRUCTIONS
  Get all blue boxes into the holes 
  if there is buttons, boxes need to be on the buttons

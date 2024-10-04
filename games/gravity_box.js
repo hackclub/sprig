@@ -1,8 +1,8 @@
 /*
 @title: Gravity Box
+@author: Josias Aurel
 @tags: []
 @addedOn: 2023-10-18
-@author: Josias Aurel
 */
 
 const player = "p"

@@ -1,8 +1,8 @@
 /*
 @title: Tic-Tac-Toe
-@tags: ['classic']
-@addedOn: 2023-01-19
 @author: Atharv Gupta
+@tags: ['retro']
+@addedOn: 2023-01-19
 */
 
 

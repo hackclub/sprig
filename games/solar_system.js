@@ -1,8 +1,8 @@
 /*
 @title: solar_system
+@author: CD
 @tags: ['simulation']
 @addedOn: 2022-11-23
-@author: CD
 */
 
 /*

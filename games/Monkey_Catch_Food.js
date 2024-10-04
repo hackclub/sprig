@@ -1,7 +1,7 @@
 /*
 @title: Monkey_Catch_Food
 @author: Ahmet Dedeler
-@tags: ['catch']
+@tags: []
 @addedOn: 2023-12-30
 */
 
