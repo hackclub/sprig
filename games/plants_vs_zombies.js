@@ -1,8 +1,8 @@
 /*
-  @title: Plants vs. Zombies
+@title: Plants vs. Zombies
+@author: jianmin-chen
 @tags: []
 @addedOn: 2023-02-15
-  @author: jianmin-chen
 
   Instructions:
   Use A + D to choose which plant to put down.

@@ -7,8 +7,6 @@ import { signal } from '@preact/signals'
 import { RoomState, ConnectionStatus, type PersistenceState } from '../../../lib/state'
 import MobileUnsupported from '../../../components/popups-etc/mobile-unsupported'
 import { mobileUserAgent } from '../../../lib/utils/mobile'
-import RoomPasswordPopup from '../../../components/popups-etc/room-password'
-
 
 const session = await getSession(Astro.cookies)
 if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
@@ -107,6 +105,7 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 			persistenceState={persistenceState}
 			roomState={roomState}
 			cookies={{
+				helpAreaSize: Astro.cookies.get('helpAreaSize').number(),
 				outputAreaSize: Astro.cookies.get('outputAreaSize').number(),
 				hideHelp: Astro.cookies.get('hideHelp').boolean()
 			}}

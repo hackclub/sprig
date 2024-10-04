@@ -2,7 +2,7 @@
 /* 
 @title: TwinPrimeRockets
 @author: Pradevel
-@tags: ['thematic-puzzle']
+@tags: ['puzzle']
 @addedOn: 2023-03-21
 */
 

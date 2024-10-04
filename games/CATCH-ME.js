@@ -1,8 +1,8 @@
 /*
 @title: CATCH ME!
-@tags: ['catch']
-@addedOn: 2023-01-07
 @author: Nidheesh
+@tags: []
+@addedOn: 2023-01-07
 */
 
 const player = "p"

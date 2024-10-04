@@ -1,8 +1,8 @@
 /*
 @title: Galacticats
-@tags: ['catch']
-@addedOn: 2022-11-23
 @author: adadyer
+@tags: []
+@addedOn: 2022-11-23
 
 Get the Galacticat back to his ship. 
 

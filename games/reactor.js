@@ -1,8 +1,8 @@
 /*
 @title: reaction_timer
+@author: sampoder
 @tags: ['multiplayer']
 @addedOn: 2022-09-16
-@author: sampoder
 
 Instructions:
 

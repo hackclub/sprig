@@ -7,7 +7,7 @@ import {codeMirror, isNewSaveStrat, PersistenceState} from "../../lib/state";
 import Button from "../design-system/button";
 import {saveGame, startSavingGame} from "../big-interactive-pages/editor";
 import ChatComponent from "./chat-component";
-
+import { PersistenceStateKind } from "../../lib/state";
 interface HelpProps {
 	sessionId: string;
 	initialVisible?: boolean;
@@ -49,12 +49,12 @@ export default function Help(props: HelpProps) {
 	
 	const tutorialHtml =
 		props.tutorialContent &&
-		(props.persistenceState?.value.kind == "PERSISTED" ||
-			props.persistenceState?.value.kind == "SHARED") &&
+		(props.persistenceState?.value.kind == PersistenceStateKind.PERSISTED ||
+			props.persistenceState?.value.kind == PersistenceStateKind.SHARED) &&
 		props.tutorialContent[props.persistenceState?.value.tutorialIndex || 0];
 
 	const setTutorialIndex = (tutorialIndex: number) => {
-		if (props.persistenceState?.value.kind == "PERSISTED") {
+		if (props.persistenceState?.value.kind == PersistenceStateKind.PERSISTED) {
 			props.persistenceState.value = {
 				...props.persistenceState.value,
 				stale: true,
@@ -69,7 +69,7 @@ export default function Help(props: HelpProps) {
 					codeMirror.value!.state.doc.toString(),
 					props.sessionId
 				);
-		} else if (props.persistenceState?.value.kind == "SHARED") {
+		} else if (props.persistenceState?.value.kind == PersistenceStateKind.SHARED) {
 			props.persistenceState.value = {
 				...props.persistenceState.value,
 				tutorialIndex,
@@ -79,8 +79,8 @@ export default function Help(props: HelpProps) {
 
 	const nextPage = () => {
 		const tutorialIndex =
-			((props.persistenceState?.value.kind == "PERSISTED" ||
-				props.persistenceState?.value.kind == "SHARED") &&
+			((props.persistenceState?.value.kind == PersistenceStateKind.PERSISTED ||
+				props.persistenceState?.value.kind == PersistenceStateKind.SHARED) &&
 				props.persistenceState.value.tutorialIndex) ||
 			0;
 		setTutorialIndex(tutorialIndex + 1);
@@ -88,8 +88,8 @@ export default function Help(props: HelpProps) {
 
 	const previousPage = () => {
 		const tutorialIndex =
-			((props.persistenceState?.value.kind == "PERSISTED" ||
-				props.persistenceState?.value.kind == "SHARED") &&
+			((props.persistenceState?.value.kind == PersistenceStateKind.PERSISTED ||
+				props.persistenceState?.value.kind == PersistenceStateKind.SHARED) &&
 				props.persistenceState.value.tutorialIndex) ||
 			0;
 		setTutorialIndex(tutorialIndex - 1);
@@ -207,8 +207,8 @@ export default function Help(props: HelpProps) {
 					ref={tutorialContentRef}
 				/>
 
-				{(props.persistenceState?.value.kind == "PERSISTED" ||
-					props.persistenceState?.value.kind == "SHARED") && (
+				{(props.persistenceState?.value.kind == PersistenceStateKind.PERSISTED ||
+					props.persistenceState?.value.kind == PersistenceStateKind.SHARED) && (
 					<>
 						<br/>
 						<div class={styles.paginationContainer}>

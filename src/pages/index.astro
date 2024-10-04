@@ -345,17 +345,17 @@ if (session && session.session.full) {
 			import * as THREE from 'three'
 			import { Scene, WebGLRenderer, sRGBEncoding, PerspectiveCamera, AmbientLight, DirectionalLight, HemisphereLight, Raycaster, Vector2, Object3D, Mesh, Texture, BufferGeometry, Material } from 'three'
 			import { OrbitControls } from '../lib/orbit-controls'
-			import { type InputKey, VALID_INPUTS } from 'sprig'
-			import { imageDataEngine } from 'sprig/image-data'
+			import { type InputKey, VALID_INPUTS } from '../../engine/src/api'
+			import { imageDataEngine } from '../../engine/src/image-data'
 			import { homepageExampleCode } from '../lib/examples'
-			
+
 			// @ts-ignore
 			import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment'
 			// @ts-ignore
 			import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 			// @ts-ignore
 			import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
-			
+
 			var canvas = document.createElement('canvas')
 			var gl = false
 			try {
@@ -371,7 +371,7 @@ if (session && session.session.full) {
 				el.id = "note"
 				var cont = document.getElementById("container")
 				cont.appendChild(el)
-			
+
 				// GPU meets the requirements, proceed with rendering
 
 				const game = imageDataEngine();

@@ -1,8 +1,8 @@
 /*
 @title: Starjump
-@tags: ['sokoban-style']
-@addedOn: 2023-12-21
 @author: skifli
+@tags: ['puzzle']
+@addedOn: 2023-12-21
 
 Instructions:
 

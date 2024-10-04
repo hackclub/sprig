@@ -1,8 +1,8 @@
 /*
 @title: parachute panic(in sprig)
-@tags: ['logic']
-@addedOn: 2023-06-26
 @author: Riston Rodrigues
+@tags: ['puzzle']
+@addedOn: 2023-06-26
 tried to make a copy of an old java game parachute panic for sprig
 
 Play:-

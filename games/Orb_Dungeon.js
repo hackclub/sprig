@@ -1,7 +1,7 @@
 /*
 @title: Orb Dungeon
 @author: Dimitris Toulis
-@tags: ['dungeon']
+@tags: ['adventure']
 @addedOn: 2024-08-15
 */
 /*
@@ -1046,6 +1046,7 @@ afterInput(() => {
     return
   }
   redrawMap()
+  lastMove = {x:0,y:0}
 })
 onInput("k", () => {
   if (kcount == 1 || freezed) restartGame()

@@ -1,8 +1,8 @@
 /*
 @title: Boxxod
-@tags: ['logic']
-@addedOn: 2023-10-20
 @author: Kokonico
+@tags: ['puzzle']
+@addedOn: 2023-10-20
 
 a game about gravity and boxes.
 
