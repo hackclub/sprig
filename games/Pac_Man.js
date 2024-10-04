@@ -1,8 +1,8 @@
 /*
 @title: Pac Man
-@tags: ['classic']
-@addedOn: 2022-12-07
 @author: Nico Koundakjian
+@tags: ['retro']
+@addedOn: 2022-12-07
 
 
 The Pac is back

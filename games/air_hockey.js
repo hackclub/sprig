@@ -1,7 +1,7 @@
 /*
-@author: @Soumay Manderna
 @title: air_hockey
-@tags: ['classic']
+@author: @Soumay Manderna
+@tags: ['retro']
 @addedOn: 2023-04-01
 
 Controls--

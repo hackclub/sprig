@@ -1,11 +1,11 @@
 /*
+@title: Treasure_Quest
+@author: Albin Thapaliya
+@tags: ['puzzle','adventure']
+@addedOn: 2024-06-18
 // Treasure Quest
 // Navigate through obstacles and puzzles to reach the treasure and beaware of enemy!
 
-@title: Treasure_Quest
-@author: Albin Thapaliya
-@tags: ['adventure', 'puzzle']
-@addedOn: 2024-06-18
 */
 
 const player = "p";

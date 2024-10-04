@@ -1,8 +1,8 @@
 /*
 @title: Cross_The_Road
+@author: Haneesh Pediredla
 @tags: ['endless']
 @addedOn: 2022-12-27
-@author: Haneesh Pediredla
 
 Play:-
 WASD to move. Dodge the vehicles and reach the finish line.

@@ -1,8 +1,8 @@
 /*
 @title: scrolling_maze
+@author: Ben
 @tags: []
 @addedOn: 2023-01-15
-@author: Ben
 */
 /*
   Big maze. IDK. I don't really make mazes. 

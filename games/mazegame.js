@@ -2,7 +2,7 @@
 /* 
 @title: mazegame
 @author: Elian
-@tags: ['sokoban-style']
+@tags: ['puzzle']
 @addedOn: 2023-11-04
 */
 

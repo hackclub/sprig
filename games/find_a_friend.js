@@ -1,11 +1,11 @@
 /*
-[!]TUTORIAL[!] move with W and S. Don't hit the enemies and try to
-hit the friends.
-
 @title: Find a Friend
 @author: Doodle Studio
 @tags: []
 @addedOn: 2024-07-22
+[!]TUTORIAL[!] move with W and S. Don't hit the enemies and try to
+hit the friends.
+
 */
 
 const player = "p"

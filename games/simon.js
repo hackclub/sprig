@@ -1,8 +1,8 @@
 /*
 @title: simon
-@tags: ['classic']
-@addedOn: 2022-09-29
 @author: riley
+@tags: ['retro']
+@addedOn: 2022-09-29
 */
 
 /*

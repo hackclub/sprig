@@ -1,9 +1,9 @@
 /*
 @title: Roodkapje
 @author: Ebit22
-@tags: ['beginner', 'maze']
-@img: ""
+@tags: ['puzzle']
 @addedOn: 2024-05-30
+@img: ""
 
 move with WASD, go to the house and dogde the wolfs.
 */

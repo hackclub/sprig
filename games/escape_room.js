@@ -1,8 +1,8 @@
 /*
 @title: escape_room
-@tags: ['sokoban-style']
+@author: Sampanna and Dhruv
+@tags: ['puzzle']
 @addedOn: 2022-11-01
-@author: Sampanna and Dhruv 
 
 */
 const wall = "w";

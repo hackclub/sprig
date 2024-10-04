@@ -1,8 +1,8 @@
 /*
 @title: spriggy_morse
+@author: Srishti Pandey
 @tags: []
 @addedOn: 2023-01-29
-@author: Srishti Pandey
 */
 
 const dot = "d";

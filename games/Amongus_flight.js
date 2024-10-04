@@ -1,8 +1,8 @@
 /*
 @title: Amongus flight
+@author: Yashas
 @tags: ['endless']
 @addedOn: 2023-01-04
-@author: Yashas
 */
 
 const amongus = "p";

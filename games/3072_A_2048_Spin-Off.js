@@ -1,8 +1,8 @@
 /*
 @title: 3072: A 2048 Spin-Off
+@author: sahitid
 @tags: ['strategy']
 @addedOn: 2022-10-14
-@author: sahitid
 
 Why play 2048 when it's the same basic game you've been playing for years?
 Why don't you move on to a better version? A more intuitive version?

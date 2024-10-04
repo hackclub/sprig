@@ -1,8 +1,8 @@
 /*
 @title: spriggymon
-@tags: ['Sprig Lover Forever']
-@addedOn: 2022-11-15
 @author: spriglover69
+@tags: []
+@addedOn: 2022-11-15
 
 full source: https://github.com/spriglover69/spriggymon
 */

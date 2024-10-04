@@ -1,11 +1,11 @@
 /*
+@title: Treasure-Hunt-Adventure
+@author: Sophia E
+@tags: ['puzzle']
+@addedOn: 2024-04-05
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Treasure-Hunt-Adventure
-@author: Sophia E
-@tags: ["puzzle"]
-@addedOn: 2024-04-05
 */
 
 const player = "p";

@@ -1,8 +1,8 @@
   /*
 @title: under_fire
+@author: alex_dvc
 @tags: ['strategy']
 @addedOn: 2023-02-08
-@author: alex_dvc
 */
 
 const player = "p";

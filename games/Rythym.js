@@ -1,8 +1,8 @@
 /*
-@tags: ['']
+@title: Rythym
+@author: Shadman
+@tags: []
 @addedOn: 2023-12-25
-  @title: Rythym
-  @author: Shadman
 
   Use WASD to activate a pad right before an array lands on it!
   Letting one fall through loses you points, so does activating a pad and not having anything land on it (so no spamming all the keys)

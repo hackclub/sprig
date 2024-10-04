@@ -1,4 +1,8 @@
 /*
+@title: Escape the evil moving purple block
+@author: Owski
+@tags: []
+@addedOn: 2024-07-29
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 ***INFO***
@@ -6,10 +10,6 @@ in level one make sure to get to the yellow box to achieve,
 this is also true for level 2
 if the game is to hard adjust your health to 80000000
 
-@title: Escape the evil moving purple block
-@author: Owski
-@tags: []
-@addedOn: 2024-07-29
 */
 var gameRunning = true;
 const player = "p"

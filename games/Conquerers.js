@@ -1,8 +1,8 @@
 /*
 @title: Conquerers
+@author: Leonard (Omay)
 @tags: ['multiplayer']
 @addedOn: 2022-11-15
-@author: Leonard (Omay)
 
 WASD to move selector
 I to place a boat
