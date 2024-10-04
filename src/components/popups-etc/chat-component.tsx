@@ -9,6 +9,7 @@ import markdown from "@wcj/markdown-to-html";
 import { nanoid } from "nanoid";
 import { useState, useEffect } from "preact/hooks";
 import { sha256Hash } from "../../lib/codemirror/util";
+import { PersistenceStateKind } from "../../lib/state";
 
 interface ChatProps {
 	persistenceState: Signal<PersistenceState>;
@@ -16,9 +17,9 @@ interface ChatProps {
 
 const ChatComponent = ({ persistenceState }: ChatProps) => {
 	const game =
-		persistenceState?.value.kind === "IN_MEMORY"
+		persistenceState?.value.kind === PersistenceStateKind.IN_MEMORY
 			? ""
-			: persistenceState?.value.kind === "PERSISTED"
+			: persistenceState?.value.kind === PersistenceStateKind.PERSISTED
 				? persistenceState?.value.game !== "LOADING"
 					? persistenceState?.value.game.name
 					: ""

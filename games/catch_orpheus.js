@@ -1,8 +1,8 @@
 /*
 @title: catch_orpheus
-@tags: ['catch']
-@addedOn: 2022-10-08
 @author: sampoder
+@tags: []
+@addedOn: 2022-10-08
 
 Instructions
 

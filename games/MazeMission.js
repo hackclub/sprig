@@ -1,7 +1,8 @@
 /*
 @title: MazeMission
 @author: CaitlinOchuwa
-@tags: ['maze', 'levels']
+@tags: ['puzzle']
+@addedOn: 2024-08-06
 
 HOW TO PLAY
 'WASD' to control your player

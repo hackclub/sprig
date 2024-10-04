@@ -1,8 +1,8 @@
 /*
 @title: Recycling_Turtle
-@tags: ['puzzle-score']
-@addedOn: 2023-05-19
 @author: ari-tistic
+@tags: ['puzzle']
+@addedOn: 2023-05-19
 
 Keys: 
   - A to move left

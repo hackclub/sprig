@@ -1,8 +1,8 @@
 /*
 @title: whack_a_mole
+@author: Sameer Murthy
 @tags: ['endless']
 @addedOn: 2023-03-01
-@author: Sameer Murthy
 
 How to Play:
 - Whack the mole to start by pressing any key.

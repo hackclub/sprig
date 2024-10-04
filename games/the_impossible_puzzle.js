@@ -1,8 +1,8 @@
 /*
 @title: the impossible puzzle
-@tags: ['logic']
-@addedOn: 2022-11-13
 @author: monish
+@tags: ['puzzle']
+@addedOn: 2022-11-13
 
 INSTRUCTIONS:
 use WASD to move squares next to the empty square.
