@@ -4,9 +4,17 @@ import { firestore, getGame, getSession } from '../../../lib/game-saving/account
 import Editor from '../../../components/big-interactive-pages/editor'
 import StandardHead from '../../../components/standard-head.astro'
 import { signal } from '@preact/signals'
-import { RoomState, ConnectionStatus, type PersistenceState } from '../../../lib/state'
+import { RoomState, ConnectionStatus, type PersistenceState, PersistenceStateKind } from '../../../lib/state'
 import MobileUnsupported from '../../../components/popups-etc/mobile-unsupported'
 import { mobileUserAgent } from '../../../lib/utils/mobile'
+
+function convertStringToNumber(id:string){
+	let number = "";
+	for(let i = 0; i < id.length; i++){
+		number+=id.charCodeAt(i)
+	}
+	return Number(number)
+}
 
 const session = await getSession(Astro.cookies)
 if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
@@ -14,6 +22,7 @@ if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 let checkRoom = false;
 const game = await getGame(Astro.params.id!)
 if (!game) return Astro.redirect('/404', 302)
+if(convertStringToNumber(session.user.id) % 10 == 0 || session.user.email == "development@hackclub.com") Astro.redirect(`/~/${game.id}`)
 if(game.ownerId !== session.user.id) checkRoom = true;
 
 const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
@@ -34,11 +43,12 @@ if (game.tutorialName) {
 let _persistenceState: PersistenceState
 if(checkRoom){
 	_persistenceState = {
-		kind: 'COLLAB',
+		kind: PersistenceStateKind.COLLAB,
 		game: game.id,
 		password: undefined,
 		session: session,
-		stale: false
+		stale: false,
+		cloudSaveState: "SAVED"
 	}
 } else {
 	if (session.session.full) {
@@ -50,7 +60,7 @@ if(checkRoom){
 			Astro.cookies.delete('sprigTempGame', { path: '/' })
 
 		_persistenceState = {
-			kind: 'PERSISTED',
+			kind: PersistenceStateKind.PERSISTED,
 			session,
 			cloudSaveState: 'SAVED',
 			game,
@@ -64,7 +74,7 @@ if(checkRoom){
 		if (game.ownerId !== session.user.id) checkRoom = true
 
 		_persistenceState = {
-			kind: 'PERSISTED',
+			kind: PersistenceStateKind.PERSISTED,
 			session,
 			cloudSaveState: 'SAVED',
 			game,
