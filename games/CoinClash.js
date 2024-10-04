@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Coin Clash
-@author: 
-@tags: []
-@addedOn: 2024-00-00
+@author: PhyoTP
+@tags: ['multiplayer', 'turn-based', 'strategy']
+@addedOn: 2024-10-04
 */
 
 const playerOne = "1";
