@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: 2048
 @author: VeressIris
-@tags: []
+@tags: ['endless', 'puzzle']
 @addedOn: 2024-08-19
 */
 
