@@ -478,6 +478,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 			const imageBase64 = thumbnailPreview.value || null;
 			const imageBlobSha = imageBase64 ? await createBlobForImage(accessToken, forkedRepo.owner.login, forkedRepo.name, imageBase64.split(',')[1]) : null;
+			const sanitizedGameTitle = gameTitle.replace(/\s+/g, '-');
 
 			const treeSha = await createTreeAndCommit(
 				accessToken,
@@ -485,8 +486,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				forkedRepo.name,
 				latestCommitSha,
 				[
-					{ path: `games/${gameTitle}.js`, content: gameCode },
-					...(imageBlobSha ? [{ path: `games/img/${gameTitle}.png`, sha: imageBlobSha }] : [])
+					{ path: `games/${sanitizedGameTitle}.js`, content: gameCode },
+					...(imageBlobSha ? [{ path: `games/img/${sanitizedGameTitle}.png`, sha: imageBlobSha }] : [])
 				]
 			);
 
