@@ -4,7 +4,7 @@ This code was made on 24 August
 
 @title: TicTacToe game
 @author: surojit 
-@tags: []
+@tags: ['multiplayer']
 @addedOn: 2024-08-28 
 */
 
