@@ -1,7 +1,7 @@
 /*
 @title: Box Guy
 @author: jli46
-@tags: ["puzzle"]
+@tags: ['puzzle']
 @addedOn: 2024-04-23
 */
 

@@ -1,8 +1,8 @@
 /*
 @title: BoxCubeGuy
-@tags: ['sokoban-style']
-@addedOn: 2022-11-25
 @author: CaptainATW
+@tags: ['puzzle']
+@addedOn: 2022-11-25
 */
 
 var x = 0;

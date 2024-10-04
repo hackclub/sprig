@@ -1,8 +1,8 @@
 /*
 @title: spongebob_squaremaze
-@tags: ['maze']
-@addedOn: 2023-01-26
 @author: Jainam_Jain
+@tags: ['puzzle']
+@addedOn: 2023-01-26
 
 Instructions: 
 

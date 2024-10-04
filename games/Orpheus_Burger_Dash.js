@@ -1,8 +1,8 @@
 /*
 @title: Orpheus Burger Dash
+@author: SamsonC
 @tags: []
 @addedOn: 2023-06-16
-@author: SamsonC
 */
 
 const player = "p";

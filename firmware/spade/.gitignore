@@ -5,6 +5,8 @@ rpi_build/
 .DS_Store
 src/pc/jerry/include
 src/pc/jerry/lib
+src/rpi/jerry/include
+src/rpi/jerry/lib
 CMakeFiles/
 Makefile
 cmake_install.cmake
@@ -17,3 +19,4 @@ game.min.js
 dockerBuildLog.txt
 spade.uf2
 spade.elf
+src/shared/version.h

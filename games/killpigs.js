@@ -1,8 +1,8 @@
 /*
 @title: kill pigs
-@tags: ['logic']
-@addedOn: 2022-09-13
 @author: luiç
+@tags: ['puzzle']
+@addedOn: 2022-09-13
 
 Instructions:
   You are a storm god and you want some pigs to make your dinner...

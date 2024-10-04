@@ -1,11 +1,11 @@
 /*
+@title: BlockMaze
+@author: Arjun
+@tags: ['puzzle']
+@addedOn: 2024-07-08
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: BlockMaze
-@author: Arjun
-@tags: ['maze', 'puzzle', 'color']
-@addedOn: 2024-07-08
 */
 
 const player = "p";

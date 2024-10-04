@@ -1,8 +1,8 @@
 /*
 @title: randomworld
-@tags: ['explore']
-@addedOn: 2022-12-11
 @author: Wojtek Widomski
+@tags: ['adventure']
+@addedOn: 2022-12-11
 */
 
 

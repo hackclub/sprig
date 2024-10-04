@@ -1,11 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: shortest_porky
 @author: mjh316
 @tags: []
 @addedOn: 2024-07-29
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 
 const littlerootTheme = tune`

@@ -1,8 +1,8 @@
 /*
 @title: lights_out
-@tags: ['logic']
-@addedOn: 2022-12-16
 @author: StarGazer1258 (Nathaniel Johns)
+@tags: ['puzzle']
+@addedOn: 2022-12-16
 
 Controls:
   WASD to move cursor

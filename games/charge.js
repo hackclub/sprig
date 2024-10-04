@@ -1,8 +1,8 @@
 /*
 @title: charge
-@tags: ['choice']
-@addedOn: 2022-12-23
 @author: ZeroQLi
+@tags: []
+@addedOn: 2022-12-23
 */
 let easy = true;
 /*

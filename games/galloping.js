@@ -1,8 +1,8 @@
 /*
 @title: galloping!
-@tags: ['dodge']
-@addedOn: 2023-05-23
 @author: Daniel Cui
+@tags: ['action']
+@addedOn: 2023-05-23
 
 Description:
 A gallant horse is travelling at breakneck speeds! 

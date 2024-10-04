@@ -1,8 +1,8 @@
 /*
 @title: Apple Skedaddle
-@tags: ['sokoban-style']
-@addedOn: 2022-11-06
 @author: DieselFalcon
+@tags: ['puzzle']
+@addedOn: 2022-11-06
 
 Rules:
 You are an apple who wants to be reunited with his Watermelon friend.

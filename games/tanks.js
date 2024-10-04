@@ -1,10 +1,10 @@
 /*
-Shoot your projectile at the other tank before they get you!
-
 @title: Tanks
 @author: Om Raheja
-@tags: ["two-player", "fighting", "pvp"]
+@tags: ['action','multiplayer']
 @addedOn: 2024-06-30
+Shoot your projectile at the other tank before they get you!
+
 
 In the color picker:
 AD to move player one cursor.
