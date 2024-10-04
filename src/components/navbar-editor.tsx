@@ -370,7 +370,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	};
 
 	async function validateGameName(gameName: string): Promise<{ valid: boolean; message: string }> {
-
 		let existingGames: any[] = [];
 		try {
 			const response = await fetch(import.meta.env.PUBLIC_GALLERY_API);
@@ -382,11 +381,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		} catch (error) {
 			console.error('Error fetching gallery games:', error);
 			return { valid: false, message: "Failed to fetch gallery games. Please try again later." };
-		}
-
-		const validNamePattern = /^[a-zA-Z0-9_-]+$/;
-		if (!validNamePattern.test(gameName)) {
-			return { valid: false, message: "The game name can only contain alphanumeric characters, dashes, or underscores." };
 		}
 
 		const lowerCaseGameName = gameName.toLowerCase();
