@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Tetris
 @author: BonzaiDev, Adrian T.
-@tags: ["tetris", "score", "levels"]
+@tags: ["retro", "endless", "puzzle", "timed"]
 @addedOn: 2024-07-23
 */
 
