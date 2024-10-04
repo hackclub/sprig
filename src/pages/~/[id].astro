@@ -4,72 +4,160 @@ import { firestore, getGame, getSession } from '../../lib/game-saving/account'
 import Editor from '../../components/big-interactive-pages/editor'
 import StandardHead from '../../components/standard-head.astro'
 import { signal } from '@preact/signals'
-import type { PersistenceState } from '../../lib/state'
+import { ConnectionStatus, PersistenceStateKind, RoomState, type PersistenceState } from '../../lib/state'
 import MobileUnsupported from '../../components/popups-etc/mobile-unsupported'
 import { mobileUserAgent } from '../../lib/utils/mobile'
 
 const session = await getSession(Astro.cookies)
 if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 
-const game = await getGame(Astro.params.id!)
-if (!game || game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
-
-const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
-
-let tutorial: string[] | undefined;
-let tutorialIndex: number | undefined;
-if (game.tutorialName) {
-	const files = await Astro.glob('/games/*.md')
-		
-		tutorial = files.filter(file => {
-			const regexedFile = file.file.match(fileRegexp)
-			return regexedFile && regexedFile[1] === game.tutorialName
-		})
-		?.map(md => md.compiledContent())
-	tutorialIndex = game.tutorialIndex
+function convertStringToNumber(id:string){
+	let number = "";
+	for(let i = 0; i < id.length; i++){
+		number+=id.charCodeAt(i)
+	}
+	return Number(number)
 }
+let persistenceState;
+let isMobile;
+let roomState;
+if(convertStringToNumber(session.user.id) % 10 == -1 || session.user.email == "development@hackclub.com" || session.user.email == "cosmin@hackclub.com"){
+	let checkRoom = false;
+	const game = await getGame(Astro.params.id!)
+	if (!game) return Astro.redirect('/404', 302)
+	if(game.ownerId !== session.user.id) checkRoom = true;
 
-let _persistenceState: PersistenceState
-if (session.session.full) {
-	if (game.unprotected) {
-		await firestore.collection('games').doc(game.id).update({ unprotected: false })
-		game.unprotected = false
+	const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
+
+	let tutorial: string[] | undefined;
+	let tutorialIndex: number | undefined;
+	if (game.tutorialName) {
+		const files = await Astro.glob('/games/*.md')
+			
+			tutorial = files.filter(file => {
+				const regexedFile = file.file.match(fileRegexp)
+				return regexedFile && regexedFile[1] === game.tutorialName
+			})
+			?.map(md => md.compiledContent())
+		tutorialIndex = game.tutorialIndex
 	}
-	if (Astro.cookies.get('sprigTempGame').value === game.id)
-		Astro.cookies.delete('sprigTempGame', { path: '/' })
 
-	_persistenceState = {
-		kind: 'PERSISTED',
-		session,
-		cloudSaveState: 'SAVED',
-		game,
-		tutorial,
-		tutorialIndex,
-		stale: false
+	let _persistenceState: PersistenceState
+	if(checkRoom){
+		_persistenceState = {
+			kind: PersistenceStateKind.COLLAB,
+			game: game.id,
+			password: undefined,
+			cloudSaveState: "SAVED",
+			session: session,
+			stale: false
+		}
+	} else {
+		if (session.session.full) {
+			if (game.unprotected) {
+				await firestore.collection('games').doc(game.id).update({ unprotected: false })
+				game.unprotected = false
+			}
+			if (Astro.cookies.get('sprigTempGame').value === game.id)
+				Astro.cookies.delete('sprigTempGame', { path: '/' })
+
+			_persistenceState = {
+				kind: PersistenceStateKind.PERSISTED,
+				session,
+				cloudSaveState: 'SAVED',
+				game,
+				tutorial,
+				tutorialIndex,
+				stale: false
+			}
+
+		} else {
+			if (!game.unprotected) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
+			if (game.ownerId !== session.user.id) checkRoom = true
+
+			_persistenceState = {
+				kind: PersistenceStateKind.PERSISTED,
+				session,
+				cloudSaveState: 'SAVED',
+				game,
+				tutorial,
+				tutorialIndex,
+				stale: false
+			}
+		}
+	}
+	if(checkRoom){
+		if(game.roomParticipants?.filter(participant => participant.userEmail === session.user.email)[0]?.isBanned) return Astro.redirect('/404', 302)
+		if(game.password == undefined) return Astro.redirect('/404', 302)
 	}
 
+	persistenceState = signal<PersistenceState>(_persistenceState)
+	let _roomState = {
+		connectionStatus: ConnectionStatus.DISCONNECTED,
+		roomId: game.id,
+		password: "",
+		participants: [],
+	}
+	roomState = signal<RoomState>(_roomState)
+	isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 } else {
-	if (!game.unprotected) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
-	if (game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
+	const game = await getGame(Astro.params.id!)
+	if (!game || game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
 
-	_persistenceState = {
-		kind: 'PERSISTED',
-		session,
-		cloudSaveState: 'SAVED',
-		game,
-		tutorial,
-		tutorialIndex,
-		stale: false
+	const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
+
+	let tutorial: string[] | undefined;
+	let tutorialIndex: number | undefined;
+	if (game.tutorialName) {
+		const files = await Astro.glob('/games/*.md')
+			
+			tutorial = files.filter(file => {
+				const regexedFile = file.file.match(fileRegexp)
+				return regexedFile && regexedFile[1] === game.tutorialName
+			})
+			?.map(md => md.compiledContent())
+		tutorialIndex = game.tutorialIndex
 	}
+
+	let _persistenceState: PersistenceState
+	if (session.session.full) {
+		if (game.unprotected) {
+			await firestore.collection('games').doc(game.id).update({ unprotected: false })
+			game.unprotected = false
+		}
+		if (Astro.cookies.get('sprigTempGame').value === game.id)
+			Astro.cookies.delete('sprigTempGame', { path: '/' })
+
+		_persistenceState = {
+			kind: PersistenceStateKind.PERSISTED,
+			session,
+			cloudSaveState: 'SAVED',
+			game,
+			tutorial,
+			tutorialIndex,
+			stale: false
+		}
+
+	} else {
+		if (!game.unprotected) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
+		if (game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
+
+		_persistenceState = {
+			kind: PersistenceStateKind.PERSISTED,
+			session,
+			cloudSaveState: 'SAVED',
+			game,
+			tutorial,
+			tutorialIndex,
+			stale: false
+		}
+	}
+
+	persistenceState = signal<PersistenceState>(_persistenceState)
+	isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 }
 
-const persistenceState = signal<PersistenceState>(_persistenceState)
-const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 ---
-<script>
-	import { isNewSaveStrat } from "../../lib/state";
-	isNewSaveStrat.value = false; // This code is executed on the client side and it disables the new features implemented (save strat and collab)
-</script>
 <html lang='en'>
 	<head>
 		<StandardHead title='Editor' />
@@ -78,8 +166,10 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 		<Editor
 			client:load
 			persistenceState={persistenceState}
+			roomState={roomState}
 			cookies={{
 				outputAreaSize: Astro.cookies.get('outputAreaSize').number(),
+				helpAreaSize: Astro.cookies.get('helpAreaSize').number(),
 				hideHelp: Astro.cookies.get('hideHelp').boolean()
 			}}
 		/>

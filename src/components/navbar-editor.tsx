@@ -565,6 +565,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					userEmail ?? "???"
 				:
 					props.roomState?.value.participants.filter((participant) => {
+						console.log(participant.userEmail)
 						if(participant.isHost) return true
 						return false
 					})[0]?.userEmail === userEmail ? userEmail : "the host"
