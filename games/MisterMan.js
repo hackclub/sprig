@@ -1,3 +1,9 @@
+/*
+@author: waitwhat653
+@title: MisterMan
+@tags: []
+@addedOn: 2024-10-04
+*/
 //controls are I, J, K, L, and D for reset
 
 //define the sprites in our game
