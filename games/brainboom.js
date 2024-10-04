@@ -1,8 +1,8 @@
 /*
-  @title:  BrainBoom
-  @author: Kapilarny
-  @tags: ['advanced', 'brainf***', 'puzzle']
-  @addedOn: 2024-07-09
+@title:  BrainBoom
+@author: Kapilarny
+@tags: ['humor','puzzle']
+@addedOn: 2024-07-09
 */
 
 /*

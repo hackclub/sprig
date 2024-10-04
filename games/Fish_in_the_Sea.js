@@ -1,8 +1,8 @@
 /*
 @title: Fish_in_the_Sea
-@tags: ['energy-control']
-@addedOn: 2022-12-01
 @author: Hugh Wilks
+@tags: ['puzzle']
+@addedOn: 2022-12-01
 */
 
 /*

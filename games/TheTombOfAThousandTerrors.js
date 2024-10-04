@@ -1,8 +1,8 @@
 /*
 @title: The Tomb of a Thousand (T)errors
-@tags: ['logic']
-@addedOn: 2022-09-13
 @author: Fabian
+@tags: ['puzzle']
+@addedOn: 2022-09-13
 */
 
 const splash = "s";

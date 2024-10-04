@@ -1,8 +1,8 @@
 /*
 @title: color_domination
+@author: adrianoapj
 @tags: ['multiplayer']
 @addedOn: 2022-09-19
-@author: adrianoapj
 */
 
 /*

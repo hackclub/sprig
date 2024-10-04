@@ -1,11 +1,11 @@
 /*
+@title: oneway
+@author: SpeedyGo55
+@tags: ['puzzle']
+@addedOn: 2024-08-23
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: oneway
-@author: SpeedyGo55
-@tags: ["labyrinth", "topdown"]
-@addedOn: 2024-08-23
 */
 
 const step_sound = tune`

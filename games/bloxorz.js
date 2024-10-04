@@ -1,8 +1,8 @@
 /*
 @title: bloxorz
-@tags: ['logic']
-@addedOn: 2023-02-20
 @author: itona
+@tags: ['puzzle']
+@addedOn: 2023-02-20
 */
 
 const player = "p";

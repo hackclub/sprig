@@ -1,7 +1,7 @@
 /*
-@title: Fruit_Catcher 
+@title: Fruit_Catcher
 @author: Navneet Saxena
-@tags: ['catch']
+@tags: []
 @addedOn: 2024-01-16
 */
 

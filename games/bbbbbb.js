@@ -1,8 +1,8 @@
 /*
 @title: bbbbbb
-@tags: ['logic']
-@addedOn: 2022-12-06
 @author: hoggie
+@tags: ['puzzle']
+@addedOn: 2022-12-06
 */
 
 const player = "p";

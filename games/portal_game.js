@@ -1,8 +1,8 @@
 /*
 @title: portal_game
-@tags: ['logic']
-@addedOn: 2023-05-05
 @author: DanPlayz (danplayz0)
+@tags: ['puzzle']
+@addedOn: 2023-05-05
 @remixed: getting_started by leo
 
 Instructions:

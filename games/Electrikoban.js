@@ -1,8 +1,8 @@
 /*
 @title: Electrikoban
+@author: algov
 @tags: ['strategy']
 @addedOn: 2022-11-16
-@author: algov
 */
 
 const player = "p";
