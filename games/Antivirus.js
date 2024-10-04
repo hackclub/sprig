@@ -2,7 +2,7 @@
 /* 
 @title: Antivirus
 @author: Nathan Jereb
-@tags: ['dodge']
+@tags: ['action']
 @addedOn: 2023-05-03
 */
 

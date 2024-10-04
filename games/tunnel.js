@@ -1,8 +1,8 @@
 /*
 @title: tunnel
+@author: amin
 @tags: ['endless']
 @addedOn: 2023-02-19
-@author: amin
 */
 
 const HEIGHT = 20;

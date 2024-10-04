@@ -1,8 +1,8 @@
 /*
 @title: among_us_maze
-@tags: ['advanced', 'web-only']
-@addedOn: 2022-08-16
 @author: Riya and Christy
+@tags: []
+@addedOn: 2022-08-16
 */
 
 // This game can be played with mouse

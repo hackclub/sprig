@@ -2,7 +2,7 @@
 /* 
 @title: The_Legend_Of_Sprig
 @author: Medieval Apple
-@tags: ['advanced']
+@tags: []
 @addedOn: 2023-10-15
 */
 

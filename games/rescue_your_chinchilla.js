@@ -1,11 +1,11 @@
 /*
+@title: Rescue your chinchilla!
+@author: KamilloDev
+@tags: ['puzzle','adventure']
+@addedOn: 2024-02-07
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Rescue your chinchilla!
-@author: KamilloDev
-@tags: ["Animal", "Rescue", "Teleporters"]
-@addedOn: 2024-02-07
 */
 const lever = 'y'
 const player = "p"

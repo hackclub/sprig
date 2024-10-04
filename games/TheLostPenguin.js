@@ -1,7 +1,7 @@
 /*
 @title: The Lost Penguin
 @author: Luca
-@tags: ['puzzle', 'maze']
+@tags: ['puzzle']
 @addedOn: 2024-07-15
 */
 

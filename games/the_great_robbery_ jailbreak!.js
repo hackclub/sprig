@@ -1,11 +1,11 @@
 /*
+@title: jailbreak :)
+@author: navya
+@tags: ['multiplayer']
+@addedOn: 2024-06-26
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: jailbreak :)
-@author: navya 
-@tags: ["2_player"]
-@addedOn: 2024-06-26
 */
 
 

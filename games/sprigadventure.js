@@ -1,8 +1,8 @@
 /*
 @title: sprig adventure
-@tags: ['advanced']
-@addedOn: 2022-12-23
 @author: stormypluto3865
+@tags: []
+@addedOn: 2022-12-23
  
 hi!
  

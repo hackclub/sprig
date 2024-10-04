@@ -1,8 +1,8 @@
 /*
 @title: disco
+@author: rakshit rangaprasad
 @tags: []
 @addedOn: 2023-03-05
-@author: rakshit rangaprasad
 
 How to Play:
 Watch as the arrows move down the screen. Once the arrows hit the DJ controller,

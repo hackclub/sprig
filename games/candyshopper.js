@@ -1,7 +1,7 @@
 /*
 @title: candyshopper
 @author: ayaangrover
-@tags: ["puzzle"]
+@tags: ['puzzle']
 @addedOn: 2024-07-19
 */
 

@@ -1,8 +1,8 @@
 /*
 @title: multiplayer_soccer
+@author: shannon yeow
 @tags: ['multiplayer']
 @addedOn: 2022-08-12
-@author: shannon yeow
 */
 
 const player = "p";

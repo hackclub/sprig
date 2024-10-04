@@ -1,8 +1,8 @@
 /*
 @title: fractal_generator
-@tags: ['sandbox', 'simulation']
-@addedOn: 2023-01-10
 @author: Graham Darcey
+@tags: ['sandbox','simulation']
+@addedOn: 2023-01-10
 
 Controls:
   w - Pan up

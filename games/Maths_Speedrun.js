@@ -2,7 +2,7 @@
 /* 
 @title: Maths_Speedrun
 @author: Anshuman M.
-@tags: ['logic']
+@tags: ['puzzle']
 @addedOn: 2023-05-17
 */
 

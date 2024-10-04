@@ -1,11 +1,11 @@
 /*
+@title: Ninja Run
+@author: Acidicts
+@tags: ['action']
+@addedOn: 2024-00-00
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Ninja Run
-@author: Acidicts
-@tags: ["ninja"]
-@addedOn: 2024-00-00
 */
 
 const left_wall = "l"

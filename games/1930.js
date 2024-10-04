@@ -1,9 +1,9 @@
 {}
 /*
 @title: 1930
+@author: tejasag (@tej on slack)
 @tags: ['strategy']
 @addedOn: 2023-01-16
-@author: tejasag (@tej on slack)
 Keys: 
 - W to jump
 - A to move left

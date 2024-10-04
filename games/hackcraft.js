@@ -1,8 +1,8 @@
 /*
 @title: hack_craft
-@tags: ['classic', 'simulation']
-@addedOn: 2022-12-22
 @author: khushraj
+@tags: ['simulation','retro']
+@addedOn: 2022-12-22
 
 Instructions:
 

@@ -1,4 +1,8 @@
 /*
+@title: Order the kitchen!
+@author: mrdarip
+@tags: ['endless']
+@addedOn: 2024-06-29
 👨‍🍳 DESCRIPTION:
 You are running a restaurant, so you must keep it ordered, as you recive dishes,
 you must put them beside others of their kind, let's see how long you last!
@@ -8,10 +12,6 @@ a/d: move
 l: interact
 k: reset
 
-@title: Order the kitchen!
-@author: mrdarip
-@tags: ['casual','infinite', 'endless']
-@addedOn: 2024-06-29
 */
 
 const player = "i";

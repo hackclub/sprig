@@ -1,11 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: Banana runner 
+@title: Banana runner
 @author: Aaron Lei
 @tags: []
 @addedOn: 2024-07-11
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 const player = "p"
 const knife = "k"

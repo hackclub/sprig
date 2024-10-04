@@ -1,9 +1,9 @@
 /*
 @title: Quest_to_Heaven
 @author: Alainy R
-@tags: ["puzzle"]
-@img: ""
+@tags: ['puzzle']
 @addedOn: 2024-05-20
+@img: ""
 */
 	const player = "p"
     const goal = "e"
