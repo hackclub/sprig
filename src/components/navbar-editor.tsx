@@ -414,7 +414,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			const authorName = authorNameElement.value;
 			const gameDescription = gameDescriptionElement.value;
 			const gameCode = codeMirror.value?.state.doc.toString() ?? "";
-			const image = thumbnailPreview.value;
 			const gameControlsDescription = gameControlsDescriptionElement.value;
 
 			clearError("gameDescription");
