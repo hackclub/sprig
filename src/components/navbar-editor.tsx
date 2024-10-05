@@ -41,6 +41,7 @@ import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
 import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage } from "../lib/game-saving/github";
+import metrics from "../../metrics";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -107,15 +108,17 @@ type StuckData = {
 
 const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any) => {
 	try {
+		metrics.increment("github_auth_popup.initiated");
+
 		const githubSession = document.cookie
-			.split('; ')
-			.find(row => row.startsWith('githubSession='))
-			?.split('=')[1];
+			.split("; ")
+			.find((row) => row.startsWith("githubSession="))
+			?.split("=")[1];
 
 		if (isPublish) {
 			publishDropdown.value = true;
 			publishSuccess.value = true;
-			return
+			return;
 		}
 
 		if (githubSession) {
@@ -123,54 +126,71 @@ const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, 
 			readyPublish.value = true;
 			return;
 		}
-		const clientId = import.meta.env.PUBLIC_GITHUB_CLIENT_ID;
-		const redirectUri = import.meta.env.PUBLIC_GITHUB_REDIRECT_URI;
-		const scope = 'repo';
 
-		const state = encodeURIComponent(JSON.stringify({ userId }));
+		const githubAuthUrl = constructGithubAuthUrl(userId);
 
-		const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}`;
-
-		const width = 600, height = 700;
+		const width = 600,
+			height = 700;
 		const left = (screen.width - width) / 2;
 		const top = (screen.height - height) / 2;
 
 		const authWindow = window.open(
 			githubAuthUrl,
-			'GitHub Authorization',
+			"GitHub Authorization",
 			`width=${width},height=${height},top=${top},left=${left}`
 		);
 
-		if (!authWindow || authWindow.closed || typeof authWindow.closed === 'undefined') {
-            alert('Popup blocked. Please allow popups for this site.');
-            return;
-        }
+		if (!authWindow || authWindow.closed || typeof authWindow.closed === "undefined") {
+			alert("Popup blocked. Please allow popups for this site.");
+			return;
+		}
 
-		authWindow?.focus();
+		authWindow.focus();
 
-		window.addEventListener('message', (event) => {
-
-			if (event.origin !== window.location.origin) {
-				return;
+		const authCheckInterval = setInterval(() => {
+			if (authWindow.closed) {
+				clearInterval(authCheckInterval);
+				alert("Authentication window was closed unexpectedly.");
+				metrics.increment("github_auth_popup.closed_unexpectedly");
 			}
+		}, 1000);
+
+		const handleMessage = (event: MessageEvent) => {
+			if (event.origin !== window.location.origin) return;
 
 			const { status, message, accessToken } = event.data;
 
-			if (status === 'success') {
+			if (status === "success") {
 				const expires = new Date(Date.now() + 7 * 864e5).toUTCString();
-                document.cookie = `githubSession=${encodeURIComponent(accessToken)}; expires=${expires}; path=/; SameSite=None; Secure`;
+				document.cookie = `githubSession=${encodeURIComponent(accessToken)}; expires=${expires}; path=/; SameSite=None; Secure`;
 				publishDropdown.value = true;
 				readyPublish.value = true;
+				metrics.increment("github_auth_popup.success");
+
+				clearInterval(authCheckInterval);
+				window.removeEventListener("message", handleMessage);
+			} else if (status === "error") {
+				console.error("Error during GitHub authorization:", message);
+				alert("An error occurred: " + message);
+				metrics.increment("github_auth_popup.failure");
 			}
-			else if (status === 'error') {
-				console.error('Error during GitHub authorization:', message);
-				alert('An error occurred: ' + message);
-			}
-		});
+		};
+
+		window.addEventListener("message", handleMessage);
 	} catch (error) {
-		console.error('Error during GitHub authorization:', error);
-		alert('An error occurred: ' + (error as Error).message);
+		console.error("Error during GitHub authorization:", error);
+		alert("An error occurred: " + (error instanceof Error ? error.message : String(error)));
+		metrics.increment("github_auth_popup.failure");
 	}
+};
+
+const constructGithubAuthUrl = (userId: string | null): string => {
+	const clientId = import.meta.env.PUBLIC_GITHUB_CLIENT_ID;
+	const redirectUri = import.meta.env.PUBLIC_GITHUB_REDIRECT_URI;
+	const scope = "repo";
+	const state = encodeURIComponent(JSON.stringify({ userId }));
+
+	return `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}`;
 };
 
 const prettifyCode = () => {
@@ -394,6 +414,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 	const publishToGithub = async (accessToken: string | null | undefined, yourGithubUsername: string | undefined, gameID: string | undefined) => {
 		try {
+			metrics.increment("github_publish.initiated");
 			const gameTitleElement = document.getElementById('gameTitle') as HTMLInputElement | null;
 			const authorNameElement = document.getElementById('authorName') as HTMLInputElement | null;
 			const gameDescriptionElement = document.getElementById('gameDescription') as HTMLTextAreaElement | null;
@@ -427,6 +448,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			}
 
 			if (!accessToken) {
+				metrics.increment("github_publish.failure.token_missing");
 				throw new Error("GitHub access token not found.");
 			}
 
@@ -450,6 +472,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				}
 				accessToken = sessionStorage.getItem("githubAccessToken");
 				if (!accessToken || !(await validateGitHubToken(accessToken))) {
+					metrics.increment("github_publish.failure.token_reauth_failed");
 					throw new Error("Failed to re-authenticate with GitHub.");
 				}
 			}
@@ -462,57 +485,101 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			let forkedRepo;
 			try {
 				forkedRepo = await forkRepository(accessToken, "hackclub", "sprig");
-			} catch {
+			} catch (error) {
+				metrics.increment("github_publish.failure.fork");
 				console.warn("Fork might already exist. Fetching existing fork...");
-				forkedRepo = await fetchForkedRepository(accessToken, "hackclub", "sprig", yourGithubUsername || "");
+				try {
+					forkedRepo = await fetchForkedRepository(accessToken, "hackclub", "sprig", yourGithubUsername || "");
+				} catch (fetchError: any) {
+					metrics.increment("github_publish.failure.fetch_fork");
+					throw new Error("Failed to fetch fork: " + fetchError.message);
+				}
 			}
 
 			const latestCommitSha = await fetchLatestCommitSha(accessToken, forkedRepo.owner.login, forkedRepo.name, forkedRepo.default_branch);
 			if (!latestCommitSha) {
+				metrics.increment("github_publish.failure.commit_sha");
 				throw new Error("Failed to fetch the latest commit SHA.");
 			}
 
 			const newBranchName = `Automated-PR-${Date.now()}`;
-
-			await createBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, latestCommitSha);
+			try {
+				await createBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, latestCommitSha);
+			} catch (error) {
+				metrics.increment("github_publish.failure.branch");
+				throw new Error("Failed to create branch: " + (error instanceof Error ? error.message : String(error)));
+			}
 
 			const imageBase64 = thumbnailPreview.value || null;
-			const imageBlobSha = imageBase64 ? await createBlobForImage(accessToken, forkedRepo.owner.login, forkedRepo.name, imageBase64.split(',')[1]) : null;
+			let imageBlobSha = null;
+			try {
+				if (imageBase64) {
+					imageBlobSha = await createBlobForImage(accessToken, forkedRepo.owner.login, forkedRepo.name, imageBase64.split(',')[1]);
+				}
+			} catch (error) {
+				metrics.increment("github_publish.failure.image_blob");
+				throw new Error("Failed to create image blob: " + (error instanceof Error ? error.message : String(error)));
+			}
+
 			const sanitizedGameTitle = gameTitle.replace(/\s+/g, '-');
 
-			const treeSha = await createTreeAndCommit(
-				accessToken,
-				forkedRepo.owner.login,
-				forkedRepo.name,
-				latestCommitSha,
-				[
-					{ path: `games/${sanitizedGameTitle}.js`, content: gameCode },
-					...(imageBlobSha ? [{ path: `games/img/${sanitizedGameTitle}.png`, sha: imageBlobSha }] : [])
-				]
-			);
+			let treeSha;
+			try {
+				treeSha = await createTreeAndCommit(
+					accessToken,
+					forkedRepo.owner.login,
+					forkedRepo.name,
+					latestCommitSha,
+					[
+						{ path: `games/${sanitizedGameTitle}.js`, content: gameCode },
+						...(imageBlobSha ? [{ path: `games/img/${sanitizedGameTitle}.png`, sha: imageBlobSha }] : [])
+					]
+				);
+			} catch (error) {
+				metrics.increment("github_publish.failure.tree_commit");
+				throw new Error("Failed to create tree and commit: " + (error instanceof Error ? error.message : String(error)));
+			}
 
-			const newCommit = await createCommit(accessToken, forkedRepo.owner.login, forkedRepo.name, `Automated Commit - ${gameTitle}`, treeSha, latestCommitSha);
+			let newCommit;
+			try {
+				newCommit = await createCommit(accessToken, forkedRepo.owner.login, forkedRepo.name, `Sprig App - ${gameTitle}`, treeSha, latestCommitSha);
+			} catch (error) {
+				metrics.increment("github_publish.failure.commit");
+				throw new Error("Failed to create commit: " + (error instanceof Error ? error.message : String(error)));
+			}
 
-			await updateBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, newCommit.sha);
+			try {
+				await updateBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, newCommit.sha);
+			} catch (error) {
+				metrics.increment("github_publish.failure.branch_update");
+				throw new Error("Failed to update branch: " + (error instanceof Error ? error.message : String(error)));
+			}
 
-			const pr = await createPullRequest(
-				accessToken,
-				"hackclub",
-				"sprig",
-				`[Sprig App] ${gameTitle}`,
-				newBranchName,
-				"main",
-				`### Author name\nAuthor: ${authorName}\n\n### About your game\n\n**What is your game about?**\n${gameDescription}\n\n**How do you play your game?**\n${gameControlsDescription}`,
-				forkedRepo.owner.login,
-				gameID ?? ''
-			);
+			try {
+				const pr = await createPullRequest(
+					accessToken,
+					"hackclub",
+					"sprig",
+					`[Sprig App] ${gameTitle}`,
+					newBranchName,
+					"main",
+					`### Author name\nAuthor: ${authorName}\n\n### About your game\n\n**What is your game about?**\n${gameDescription}\n\n**How do you play your game?**\n${gameControlsDescription}`,
+					forkedRepo.owner.login,
+					gameID ?? ''
+				);
 
-			githubPRUrl.value = pr.html_url;
+				githubPRUrl.value = pr.html_url;
+				metrics.increment("github_publish.success");
+			} catch (error) {
+				metrics.increment("github_publish.failure.pr_creation");
+				throw new Error("Failed to create pull request: " + (error instanceof Error ? error.message : String(error)));
+			}
 
 			publishSuccess.value = true;
 		} catch (error) {
 			console.error("Publishing failed:", error);
 			publishError.value = true;
+			metrics.increment("github_publish.failure.general");
 		} finally {
 			isPublishing.value = false;
 		}
