@@ -107,8 +107,9 @@ type StuckData = {
 };
 
 const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any) => {
+	const startTime = Date.now();
 	try {
-		metrics.increment("github_auth_popup.initiated");
+		metrics.increment('github_auth_popup.initiated', 1);
 
 		const githubSession = document.cookie
 			.split("; ")
@@ -151,7 +152,7 @@ const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, 
 			if (authWindow.closed) {
 				clearInterval(authCheckInterval);
 				alert("Authentication window was closed unexpectedly.");
-				metrics.increment("github_auth_popup.closed_unexpectedly");
+				metrics.increment("github_auth_popup.closed_unexpectedly", 1);
 			}
 		}, 1000);
 
@@ -160,19 +161,23 @@ const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, 
 
 			const { status, message, accessToken } = event.data;
 
+			const timeTaken = Date.now() - startTime;
+
 			if (status === "success") {
 				const expires = new Date(Date.now() + 7 * 864e5).toUTCString();
 				document.cookie = `githubSession=${encodeURIComponent(accessToken)}; expires=${expires}; path=/; SameSite=None; Secure`;
 				publishDropdown.value = true;
 				readyPublish.value = true;
-				metrics.increment("github_auth_popup.success");
+				metrics.increment("github_auth_popup.success", 1);
+				metrics.timing('github_auth_popup.time_taken', timeTaken);
 
 				clearInterval(authCheckInterval);
 				window.removeEventListener("message", handleMessage);
 			} else if (status === "error") {
 				console.error("Error during GitHub authorization:", message);
 				alert("An error occurred: " + message);
-				metrics.increment("github_auth_popup.failure");
+				metrics.increment("github_auth_popup.failure", 1);
+				metrics.timing('github_auth_popup.failure_time', timeTaken);
 			}
 		};
 
@@ -180,7 +185,9 @@ const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, 
 	} catch (error) {
 		console.error("Error during GitHub authorization:", error);
 		alert("An error occurred: " + (error instanceof Error ? error.message : String(error)));
-		metrics.increment("github_auth_popup.failure");
+		const timeTaken = Date.now() - startTime;
+		metrics.increment("github_auth_popup.failure", 1);
+		metrics.timing('github_auth_popup.failure_time', timeTaken);
 	}
 };
 
@@ -413,8 +420,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	}
 
 	const publishToGithub = async (accessToken: string | null | undefined, yourGithubUsername: string | undefined, gameID: string | undefined) => {
+		const startTime = Date.now();
 		try {
-			metrics.increment("github_publish.initiated");
+			metrics.increment("github_publish.initiated", 1);
 			const gameTitleElement = document.getElementById('gameTitle') as HTMLInputElement | null;
 			const authorNameElement = document.getElementById('authorName') as HTMLInputElement | null;
 			const gameDescriptionElement = document.getElementById('gameDescription') as HTMLTextAreaElement | null;
@@ -448,7 +456,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			}
 
 			if (!accessToken) {
-				metrics.increment("github_publish.failure.token_missing");
+				metrics.increment("github_publish.failure.token_missing", 1);
 				throw new Error("GitHub access token not found.");
 			}
 
@@ -472,7 +480,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				}
 				accessToken = sessionStorage.getItem("githubAccessToken");
 				if (!accessToken || !(await validateGitHubToken(accessToken))) {
-					metrics.increment("github_publish.failure.token_reauth_failed");
+					metrics.increment("github_publish.failure.token_reauth_failed", 1);
 					throw new Error("Failed to re-authenticate with GitHub.");
 				}
 			}
@@ -486,19 +494,19 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			try {
 				forkedRepo = await forkRepository(accessToken, "hackclub", "sprig");
 			} catch (error) {
-				metrics.increment("github_publish.failure.fork");
+				metrics.increment("github_publish.failure.fork", 1);
 				console.warn("Fork might already exist. Fetching existing fork...");
 				try {
 					forkedRepo = await fetchForkedRepository(accessToken, "hackclub", "sprig", yourGithubUsername || "");
 				} catch (fetchError: any) {
-					metrics.increment("github_publish.failure.fetch_fork");
+					metrics.increment("github_publish.failure.fetch_fork", 1);
 					throw new Error("Failed to fetch fork: " + fetchError.message);
 				}
 			}
 
 			const latestCommitSha = await fetchLatestCommitSha(accessToken, forkedRepo.owner.login, forkedRepo.name, forkedRepo.default_branch);
 			if (!latestCommitSha) {
-				metrics.increment("github_publish.failure.commit_sha");
+				metrics.increment("github_publish.failure.commit_sha", 1);
 				throw new Error("Failed to fetch the latest commit SHA.");
 			}
 
@@ -506,7 +514,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			try {
 				await createBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, latestCommitSha);
 			} catch (error) {
-				metrics.increment("github_publish.failure.branch");
+				metrics.increment("github_publish.failure.branch", 1);
 				throw new Error("Failed to create branch: " + (error instanceof Error ? error.message : String(error)));
 			}
 
@@ -517,7 +525,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					imageBlobSha = await createBlobForImage(accessToken, forkedRepo.owner.login, forkedRepo.name, imageBase64.split(',')[1]);
 				}
 			} catch (error) {
-				metrics.increment("github_publish.failure.image_blob");
+				metrics.increment("github_publish.failure.image_blob", 1);
 				throw new Error("Failed to create image blob: " + (error instanceof Error ? error.message : String(error)));
 			}
 
@@ -536,7 +544,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					]
 				);
 			} catch (error) {
-				metrics.increment("github_publish.failure.tree_commit");
+				metrics.increment("github_publish.failure.tree_commit", 1);
 				throw new Error("Failed to create tree and commit: " + (error instanceof Error ? error.message : String(error)));
 			}
 
@@ -544,14 +552,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			try {
 				newCommit = await createCommit(accessToken, forkedRepo.owner.login, forkedRepo.name, `Sprig App - ${gameTitle}`, treeSha, latestCommitSha);
 			} catch (error) {
-				metrics.increment("github_publish.failure.commit");
+				metrics.increment("github_publish.failure.commit", 1);
 				throw new Error("Failed to create commit: " + (error instanceof Error ? error.message : String(error)));
 			}
 
 			try {
 				await updateBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, newCommit.sha);
 			} catch (error) {
-				metrics.increment("github_publish.failure.branch_update");
+				metrics.increment("github_publish.failure.branch_update", 1);
 				throw new Error("Failed to update branch: " + (error instanceof Error ? error.message : String(error)));
 			}
 
@@ -569,17 +577,23 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				);
 
 				githubPRUrl.value = pr.html_url;
-				metrics.increment("github_publish.success");
+				metrics.increment("github_publish.success", 1);
+
+				const timeTaken = Date.now() - startTime;
+				metrics.timing('github_publish.time_taken', timeTaken);
+
+				publishSuccess.value = true;
 			} catch (error) {
-				metrics.increment("github_publish.failure.pr_creation");
+				metrics.increment("github_publish.failure.pr_creation", 1);
 				throw new Error("Failed to create pull request: " + (error instanceof Error ? error.message : String(error)));
 			}
-
-			publishSuccess.value = true;
 		} catch (error) {
 			console.error("Publishing failed:", error);
 			publishError.value = true;
-			metrics.increment("github_publish.failure.general");
+			metrics.increment("github_publish.failure.general", 1);
+
+			const timeTaken = Date.now() - startTime;
+			metrics.timing('github_publish.failure_time', timeTaken);
 		} finally {
 			isPublishing.value = false;
 		}
