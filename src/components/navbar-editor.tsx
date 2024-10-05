@@ -40,7 +40,7 @@ import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
-import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage } from "../lib/game-saving/github";
+import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, synchronizeForkWithUpstream } from "../lib/game-saving/github";
 import metrics from "../../metrics";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
@@ -422,7 +422,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const publishToGithub = async (accessToken: string | null | undefined, yourGithubUsername: string | undefined, gameID: string | undefined) => {
 		const startTime = Date.now();
 		try {
+
 			metrics.increment("github_publish.initiated", 1);
+
 			const gameTitleElement = document.getElementById('gameTitle') as HTMLInputElement | null;
 			const authorNameElement = document.getElementById('authorName') as HTMLInputElement | null;
 			const gameDescriptionElement = document.getElementById('gameDescription') as HTMLTextAreaElement | null;
@@ -443,7 +445,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			clearError("thumbnail");
 			clearError("gameControlsDescription");
 			clearError("gameTitle");
-
 			hasError = false;
 
 			const { valid, message: gameNameMessage } = await validateGameName(gameTitle);
@@ -502,6 +503,13 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					metrics.increment("github_publish.failure.fetch_fork", 1);
 					throw new Error("Failed to fetch fork: " + fetchError.message);
 				}
+			}
+
+			try {
+				await synchronizeForkWithUpstream(accessToken, forkedRepo.owner.login, forkedRepo.name);
+			} catch (error) {
+				metrics.increment("github_publish.failure.sync_with_upstream", 1);
+				console.warn("Failed to sync fork with upstream: ", error);
 			}
 
 			const latestCommitSha = await fetchLatestCommitSha(accessToken, forkedRepo.owner.login, forkedRepo.name, forkedRepo.default_branch);
