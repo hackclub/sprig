@@ -121,7 +121,7 @@ setLegend(
 );
 
 
-let level = 6; // this tracks the level we are on
+let level = 0; // this tracks the level we are on
 const levels = [
   map`
 p.f.ww.
