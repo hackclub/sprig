@@ -181,6 +181,21 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				if(props.roomState)
 					props.roomState.value = { ...props.roomState?.value, connectionStatus: ConnectionStatus.CONNECTED };
 		});
+			provider.awareness.on("update", () => {
+				let participants: RoomParticipant[] = [];
+				provider.awareness.getStates().forEach((state) => {
+					try{
+						participants.push({
+							userEmail: state.user.name,
+							isHost: state.user.host
+						})
+					} catch(e){
+						return
+					}
+				});
+				if(props.roomState)
+					props.roomState.value.participants = participants;
+			})
 			yDoc.on("update", () => {
 				if(!props.persistenceState) return;
 				if (!initialUpdate) return;
