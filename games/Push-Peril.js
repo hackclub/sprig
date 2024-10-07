@@ -1,11 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Box Pushing Game
 @author: HEHE-HTML
 @tags: []
 @addedOn: 2024-08-18
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 
 const player = "p"

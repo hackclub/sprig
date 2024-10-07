@@ -2,7 +2,7 @@
 /* 
 @title: MyForestMaze
 @author: MI2
-@tags: ['explore']
+@tags: ['adventure']
 @addedOn: 2023-06-15
 */
 

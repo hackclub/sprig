@@ -1,10 +1,10 @@
 /*
-First time? Check out my code: its not half bad!
-
 @title: Dance Dance Engine!!
 @author: Shibedev12
-@tags: ["DDR Engine"]
+@tags: ['music']
 @addedOn: 2024-07-22
+First time? Check out my code: its not half bad!
+
 For Documentation on how to work with this, check out my site!
 https://shibedevsite.neocities.org/DDE/whatis
 */

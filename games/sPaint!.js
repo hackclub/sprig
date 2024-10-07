@@ -1,8 +1,8 @@
 /*
 @title: sPaint!
+@author: yzde
 @tags: ['sandbox']
 @addedOn: 2023-02-02
-@author: yzde
 
 controls:
 use w (at the first screen) to start

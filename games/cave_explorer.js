@@ -1,8 +1,8 @@
 /*
 @title: cave_explorer
+@author: Sid Khare
 @tags: ['strategy']
 @addedOn: 2022-11-12
-@author: Sid Khare
 
 
 Instructions:

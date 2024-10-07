@@ -1,11 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Cheese Collector
 @author: Sonya
 @tags: []
 @addedOn: 2024-09-03
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 
 const leftPlayer = "p";

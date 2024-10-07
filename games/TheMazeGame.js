@@ -1,7 +1,7 @@
 /*
 @title: TheMazeGame
 @author: Navrit Angurana
-@tags: ['advanced']
+@tags: []
 @addedOn: 2024-02-17
 
 First time? Check out the tutorial game:

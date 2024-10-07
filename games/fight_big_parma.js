@@ -1,8 +1,8 @@
 /*
 @title: fight_big_parma
+@author: jakempock
 @tags: []
 @addedOn: 2023-03-13
-@author: jakempock
 */
 
 const parmas = ["9", "8", "7", "6"];

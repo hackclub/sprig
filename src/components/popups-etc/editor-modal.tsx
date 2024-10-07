@@ -1,5 +1,5 @@
 import { useSignal, useSignalEffect } from '@preact/signals'
-import { useEffect } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import { IoClose } from 'react-icons/io5'
 import tinykeys from 'tinykeys'
 import { usePopupCloseClick } from '../../lib/utils/popup-close-click'
@@ -8,16 +8,39 @@ import styles from './editor-modal.module.css'
 import levenshtein from 'js-levenshtein'
 import { runGameHeadless } from '../../lib/engine'
 
+const enum UpdateCulprit {
+	RESET,
+	OpenEditor,
+	CodeMirror		
+}
 export default function EditorModal() {
 	const Content = openEditor.value ? editors[openEditor.value.kind].modalContent : () => null
-	const text = useSignal(openEditor.value?.text ?? '')
+	const text = useSignal(openEditor.value?.text ?? '');
+	const [updateCulprit, setUpdateCulprit] = useState<UpdateCulprit>(UpdateCulprit.RESET);
 
 	useSignalEffect(() => {
 		if (openEditor.value) text.value = openEditor.value.text
 	})
 
+	/**
+	 * @Josias
+	 * The two useEffect's below can be naughty but they help ensure two things
+	 * 1. If an update comes from the underlying codemirror document, the first effect doesn't run as we're already updating the editor modal from there
+	 * 2. If an update was originally made from the currently open editor modal, the changes to the codemirror document will
+	 * not trigger an update to the open editor modal
+	 * 
+	 * Both of these help us avoid Out-of-order errors or Cycles
+	 */
+
 	// Sync editor text changes with code
-	useSignalEffect(() => {
+	useEffect(() => { // useEffect #1
+		// if update comes from codemirror doc (probably from a collab session)
+		// this ensures that updates are not triggered from this effect which may cause an 
+		// Out-of-order / Cycles
+		if (updateCulprit === UpdateCulprit.CodeMirror) {
+			setUpdateCulprit(UpdateCulprit.RESET);
+			return;
+		}
 		// Signals are killing me but useEffect was broken and I need to ship this
 		// This is probably bad practice
 		const _openEditor = openEditor.peek() // Gotta peek to avoid cycles
@@ -48,14 +71,28 @@ export default function EditorModal() {
 				}
 			};
 		}
-	});
+
+		setUpdateCulprit(UpdateCulprit.OpenEditor);
+	}, [text.value]);
+
+	useEffect(() => {
+		// if update comes from codemirror doc (probably from a collab session)
+		// this ensures that updates are not triggered from this effect which may cause an 
+		// Out-of-order / Cycles
+		if (updateCulprit === UpdateCulprit.OpenEditor) {
+			setUpdateCulprit(UpdateCulprit.RESET);
+			return;
+		}
+		// just do this to sync the editor text with the code mirror text
+		computeAndUpdateModalEditor();
+		setUpdateCulprit(UpdateCulprit.CodeMirror);
+		// updateCulprit.value = UPDATE_CULPRIT.CodeMirror;
+	}, [codeMirrorEditorText.value]);
+
 
 	// the challenge now is making the editor keep track of what map editor it's currently focused on and streaming the changes in the map editor
 	// it's tricky because maps can grow and shrink
-
-	useEffect(() => {
-		// just do this to sync the editor text with the code mirror text
-
+	function computeAndUpdateModalEditor() {
 		if (!openEditor.value) return;
 
 		const code = codeMirror.value?.state.doc.toString() ?? '';
@@ -94,7 +131,7 @@ export default function EditorModal() {
 				text: openEditorCode
 			}
 		}
-	}, [codeMirrorEditorText.value]);
+	}
 
 	// Handle closing modal on escape key press or outside click
 	usePopupCloseClick(styles.content!, () => openEditor.value = null, !!openEditor.value)

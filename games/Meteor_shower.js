@@ -1,8 +1,8 @@
 /* 
 @title: Meteorshower
+@author: Mate P.
 @tags: ['strategy']
 @addedOn: 2022-11-22
-@author: Mate P.
 */
 
 const player = "p";

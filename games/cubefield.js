@@ -1,8 +1,8 @@
 /*
 @title: cubefield
+@author: jai
 @tags: ['endless']
 @addedOn: 2023-01-10
-@author: jai
 */
 
 // A + D to move. Dodge the cubes :)

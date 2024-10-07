@@ -1,11 +1,11 @@
 /*
+@title: Timing
+@author: Darsh Gupta
+@tags: []
+@addedOn: 2024-06-24
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Timing
-@author: Darsh Gupta 
-@tags: []
-@addedOn: 2024-06-24
 */
 
 const player = "p"

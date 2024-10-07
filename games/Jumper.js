@@ -1,8 +1,8 @@
 /*
 @title: Jumper
+@author: TC
 @tags: ['endless']
 @addedOn: 2022-11-13
-@author: TC
 */
 
 const player = "p";

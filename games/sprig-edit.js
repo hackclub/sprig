@@ -2,8 +2,8 @@
 @title: Sprig-Edit
 @author: Colack
 @tags: ['utility']
-@img: ""
 @addedOn: 2024-05-22
+@img: ""
 
 This is Sprig-Edit, a basic text editor for Sprig.
 

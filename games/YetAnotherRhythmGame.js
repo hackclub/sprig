@@ -1,11 +1,11 @@
 /*
+@title: fruit catch
+@author: Sreekar617
+@tags: []
+@addedOn: 2024-08-15
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: fruit catch
-@author: Sreekar617
-@tags: ['beginner']
-@addedOn: 2024-08-15
 */
 
 function sleep(ms) {

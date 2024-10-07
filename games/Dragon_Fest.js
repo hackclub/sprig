@@ -1,8 +1,8 @@
 /*
 @title: Dragon_Fest
+@author: Peyeyey
 @tags: ['endless']
 @addedOn: 2022-12-27
-@author: Peyeyey
 */
 
 const player = "p";

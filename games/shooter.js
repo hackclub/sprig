@@ -1,8 +1,8 @@
 /*
 @title: Shooter
+@author: Tyler Sousa
 @tags: ['strategy']
 @addedOn: 2023-10-24
-@author: Tyler Sousa
 
 WASD to move
 K to shoot

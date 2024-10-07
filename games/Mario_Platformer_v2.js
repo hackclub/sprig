@@ -1,8 +1,8 @@
 /*
 @title: Mario Platformer
+@author: Jackson Flanders
 @tags: []
 @addedOn: 2023-10-20
-@author: Jackson Flanders
 */
 
 /*

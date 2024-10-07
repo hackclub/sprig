@@ -1,8 +1,8 @@
 /*
-@title: Christmas_Themed_Sokoban 
-@tags: ['sokoban-style']
-@addedOn: 2023-01-19
+@title: Christmas_Themed_Sokoban
 @author: Joshua
+@tags: ['puzzle']
+@addedOn: 2023-01-19
 */
 
 

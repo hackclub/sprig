@@ -1,9 +1,9 @@
 /*
-
 @title: fruit_pusher
 @author: kirby-b
-@tags: ["puzzle"]
+@tags: ['puzzle']
 @addedOn: 2024-01-15
+
 */
 
 const player = "p"

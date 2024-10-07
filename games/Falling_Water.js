@@ -1,8 +1,8 @@
 /*
 @title: Falling Water
-@tags: ['simulation', 'advanced']
-@addedOn: 2022-09-23
 @author: Captainexpo
+@tags: ['simulation']
+@addedOn: 2022-09-23
 
 Version: 2.1
 

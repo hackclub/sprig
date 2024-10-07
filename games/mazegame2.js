@@ -1,11 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Maze
 @author: Darshan Choudhary
 @tags: []
 @addedOn: 2024-00-00
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 const script = document.createElement('script');
 script.src = 'https://cdn.jsdelivr.net/gh/hackclub/sprig@1.1.0/dist/sprig.min.js';
