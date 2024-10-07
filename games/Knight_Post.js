@@ -1,8 +1,8 @@
 /*
 @title: Knight Post
-@tags: ['sokoban-style']
-@addedOn: 2023-10-23
 @author: Aditya P Venugopal
+@tags: ['puzzle']
+@addedOn: 2023-10-23
 Keys: 
 - W to move forward
 - A to move left

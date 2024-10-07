@@ -1,8 +1,8 @@
 /*
 @title: Colour_Game
+@author: Thuvaragan
 @tags: ['endless']
 @addedOn: 2022-12-26
-@author: Thuvaragan
 
 Instructions:
 Press J if you see BLUE 

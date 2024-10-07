@@ -1,8 +1,8 @@
 /*
 @title: chuckman_go
+@author: faisalsayed10
 @tags: ['strategy']
 @addedOn: 2022-11-17
-@author: faisalsayed10
 */
 
 let gameover = false;

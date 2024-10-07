@@ -1,11 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Multiplayer maze
 @author: odczik
 @tags: []
 @addedOn: 2024-08-05
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 
 let mazeSize = 10 // must be even, min: 10

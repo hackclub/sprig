@@ -1,8 +1,8 @@
 /*
 @title: Coding Demo 1 - Linked sprites
-@tags: ['demo', 'hackable', 'beginner']
-@addedOn: 2022-09-13
 @author: Leonard (Omay)
+@tags: []
+@addedOn: 2022-09-13
 
 Important code at bottom 
 Movement code

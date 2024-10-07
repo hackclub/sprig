@@ -1,11 +1,11 @@
 /*
+@title: WrongLane
+@author: KaspianDev
+@tags: ['endless','action']
+@addedOn: 2024-08-15
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: WrongLane
-@author: KaspianDev
-@tags: ['dodge', 'endless', 'singleplayer']
-@addedOn: 2024-08-15
 */
 
 /* Controls:

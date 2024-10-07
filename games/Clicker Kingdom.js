@@ -1,11 +1,11 @@
 /*
+@title: clicker
+@author: MaxMph
+@tags: []
+@addedOn: 2024-08-15
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: clicker
-@author: MaxMph 
-@tags: []
-@addedOn: 2024-08-15
 */
 
 const player = "p"

@@ -1,8 +1,8 @@
 /*
 @title: purge
-@tags: ['sokoban-style']
-@addedOn: 2022-09-08
 @author: noviicee
+@tags: ['puzzle']
+@addedOn: 2022-09-08
 
 Instructions:
 

@@ -1,8 +1,8 @@
 /*
 @title: Sus_Runner
+@author: Johna
 @tags: ['endless']
 @addedOn: 2023-02-10
-@author: Johna
 */
 
 const player = "p";

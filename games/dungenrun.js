@@ -1,11 +1,11 @@
 /*
-
-@title: dungen run 
-@description : move to exit from start collecting keys give you automatic points
-use A S W D for movement & I to reset game
-@author: Saurav Alva & Gaurav Alva 
+@title: dungen run
+@author: Saurav Alva & Gaurav Alva
 @tags: []
 @addedOn: 2024-08-15
+
+@description : move to exit from start collecting keys give you automatic points
+use A S W D for movement & I to reset game
 */
 
 

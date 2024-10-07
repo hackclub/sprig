@@ -1,7 +1,7 @@
 /*
 @title: Something Fishy
 @author: Suryaansh Chawla
-@tags: ['fishing']
+@tags: ['sports']
 @addedOn: 2024-09-16
 */
 

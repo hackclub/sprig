@@ -1,11 +1,11 @@
 /*
+@title: UltimateTicTacToe
+@author: Grace
+@tags: ['puzzle','multiplayer']
+@addedOn: 2024-07-20
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: UltimateTicTacToe
-@author: Grace
-@tags: ['tictactoe', 'puzzle', 'two-player']
-@addedOn: 2024-07-20
 */
 
 const player = "p"

@@ -1,8 +1,8 @@
 /*
 @title: find_the_suspect
+@author: jonas
 @tags: []
 @addedOn: 2023-02-02
-@author: jonas
 */
 
 const left = "v";

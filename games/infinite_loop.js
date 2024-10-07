@@ -1,11 +1,11 @@
 /*
+@title: The Infinite Loop
+@author: Matthew Soh
+@tags: []
+@addedOn: 2024-08-28
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: The Infinite Loop
-@author: Matthew Soh
-@tags: ["arcade-jam"]
-@addedOn: 2024-08-28
 */
 
 const soundtrack = tune`

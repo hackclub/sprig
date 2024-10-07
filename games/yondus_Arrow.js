@@ -2,7 +2,7 @@
 /* 
 @title: yondus_Arrow
 @author: Cayden Robbins
-@tags: ['sokoban-style']
+@tags: ['puzzle']
 @addedOn: 2023-06-15
 */
 

@@ -1,8 +1,8 @@
 /*
 @title: thefake chrome dino
-@tags: ['endless', 'color dino']
-@addedOn: 2024-08-23
 @author: crabby605
+@tags: ['endless']
+@addedOn: 2024-08-23
 */
 
 const h = 10;

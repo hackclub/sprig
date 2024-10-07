@@ -1,8 +1,8 @@
 /*
 @title: bullet-dodge
-@tags: ['dodge']
-@addedOn: 2023-01-13
 @author: vishram1123
+@tags: ['action']
+@addedOn: 2023-01-13
 
 Controls:
   W/A/S/D to move up/left/down/right
