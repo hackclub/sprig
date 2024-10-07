@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: A Monster Maze
 @author: Alicia
-@tags: []
+@tags: ['maze', 'puzzle']
 @addedOn: 2024-00-00
 */
 
