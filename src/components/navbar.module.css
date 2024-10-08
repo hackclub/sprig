@@ -154,7 +154,7 @@
 	width: 24px;
 }
 
-.stuckBtn {
+.stuckBtn:not(:disabled):hover {
 	background-color: rgb(255, 66, 66);
 }
 
