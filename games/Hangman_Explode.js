@@ -1,8 +1,8 @@
 /*
 @title: Hangman Explode
 @author: Frank Z
-@tags: ['typing', 'word-game']
-@addedOn: 2024-10-6
+@tags: ['retro', 'puzzle', 'endless']
+@addedOn: 2024-10-08
 */
 
 /*
