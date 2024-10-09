@@ -16,6 +16,9 @@ const Maze = "G"
 const Enemy = "E"
 const Poodle = "R"
 
+
+
+
 //Tunes And General
 
 const level3 = tune`
@@ -455,6 +458,23 @@ function PoodleMove() {
     });
 }
 
+function resetLevel() {
+    // Clear any text on the screen
+    clearText();
+    
+    // Reset the level variable to the initial level (e.g., level 0)
+    level = 0;
+    
+    // Get the current level map based on the reset level
+    const currentLevel = levels[level];
+    
+    // Reset the game map to the initial level map
+    setMap(currentLevel);
+    
+    // Additional reset logic for any other game elements if needed
+}
+
+
 // Main Menu
 
   setTimeout(() => {
@@ -484,14 +504,9 @@ onInput("d", () => {
   playTune(step4, 1)
 });
 
-onInput("j", () => {
-  const currentLevel = levels[level];
-  
-  if (currentLevel !== undefined) {
-    clearText("");
-    setMap(currentLevel);
-  }
-});
+onInput("j", resetLevel);
+ 
+
 
 
 
@@ -506,7 +521,9 @@ const currentLevel = levels[level];
   let iterationCount = 0;
   const maxIte = 10;
   const max2 = 2;
-  
+  let LevelText = 0;
+  const LevelTextNumber = LevelText.toString();
+
   // Starting the game!
   
   while (level == 5 && iterationCount < maxIte) {
@@ -522,10 +539,16 @@ const currentLevel = levels[level];
     
   }
 
+    setTimeout(() => {
+      clearText();
+   }, 3000)
+             
+
 
   
   if (NumberCovered == targetfound) {
-    level += 1 
+    level += 1 ;
+    LevelText += 1;
     current += 1;
     
 
@@ -542,9 +565,6 @@ const currentLevel = levels[level];
 
 
 
-  
-  setTimeout(() => {
-      clearText();
-   }, 3000)
-             
+
+
 });
