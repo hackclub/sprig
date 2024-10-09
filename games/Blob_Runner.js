@@ -1,7 +1,7 @@
 /*
 @title: Blob_Runner
 @author: Bright Li
-@tags: ["platformer" , "maze"]
+@tags: ['platformer', 'maze']
 @addedOn: 2023-01-09
 */
 
