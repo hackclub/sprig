@@ -1,7 +1,7 @@
 /*
 @title: Don't Touch the Cat
 @author: Adeline Greene
-@tags: []
+@tags: ["puzzle" , "strategy" ,"endless" , "survival"]
 @addedOn: 2024-09-16
 */
 
