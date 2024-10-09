@@ -246,6 +246,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			githubPRUrl.value = null;
 		}
 	});
+	
+	useSignalEffect(() => {
+		if ((props.persistenceState.value.kind == "PERSISTED" || props.persistenceState.value.kind == "COLLAB") 
+			&& typeof props.persistenceState.value.game == "object") 
+			document.title = props.persistenceState.value.game.name + " | Sprig"
+	})
 
 	// we will accept the current user's
 	// - name,
