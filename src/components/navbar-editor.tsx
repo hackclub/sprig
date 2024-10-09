@@ -41,7 +41,6 @@ import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
 import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, synchronizeForkWithUpstream } from "../lib/game-saving/github";
-import metrics from "../../metrics";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -85,6 +84,18 @@ const canDelete = (persistenceState: Signal<PersistenceState>) => {
 	);
 };
 
+async function reportMetric(metricName: string, value = 1, type = 'increment') {
+	try {
+		await fetch('/api/games/metrics', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ metric: metricName, value, type })
+		});
+	} catch (error) {
+		console.error('Failed to send metric:', error);
+	}
+}
+
 interface EditorNavbarProps {
 	persistenceState: Signal<PersistenceState>
 	roomState: Signal<RoomState> | undefined
@@ -109,7 +120,7 @@ type StuckData = {
 const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any) => {
 	const startTime = Date.now();
 	try {
-		metrics.increment('github_auth_popup.initiated', 1);
+		reportMetric('github_auth_popup.initiated');
 
 		const githubSession = document.cookie
 			.split("; ")
@@ -152,7 +163,7 @@ const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, 
 			if (authWindow.closed) {
 				clearInterval(authCheckInterval);
 				alert("Authentication window was closed unexpectedly.");
-				metrics.increment("github_auth_popup.closed_unexpectedly", 1);
+				reportMetric("github_auth_popup.closed_unexpectedly");
 			}
 		}, 1000);
 
@@ -168,16 +179,16 @@ const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, 
 				document.cookie = `githubSession=${encodeURIComponent(accessToken)}; expires=${expires}; path=/; SameSite=None; Secure`;
 				publishDropdown.value = true;
 				readyPublish.value = true;
-				metrics.increment("github_auth_popup.success", 1);
-				metrics.timing('github_auth_popup.time_taken', timeTaken);
+				reportMetric("github_auth_popup.success");
+				reportMetric('github_auth_popup.time_taken', timeTaken, 'timing');
 
 				clearInterval(authCheckInterval);
 				window.removeEventListener("message", handleMessage);
 			} else if (status === "error") {
 				console.error("Error during GitHub authorization:", message);
 				alert("An error occurred: " + message);
-				metrics.increment("github_auth_popup.failure", 1);
-				metrics.timing('github_auth_popup.failure_time', timeTaken);
+				reportMetric("github_auth_popup.failure");
+				reportMetric('github_auth_popup.failure_time', timeTaken, 'timing');
 			}
 		};
 
@@ -186,8 +197,8 @@ const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, 
 		console.error("Error during GitHub authorization:", error);
 		alert("An error occurred: " + (error instanceof Error ? error.message : String(error)));
 		const timeTaken = Date.now() - startTime;
-		metrics.increment("github_auth_popup.failure", 1);
-		metrics.timing('github_auth_popup.failure_time', timeTaken);
+		reportMetric("github_auth_popup.failure");
+		reportMetric('github_auth_popup.failure_time', timeTaken, 'timing');
 	}
 };
 
@@ -423,7 +434,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		const startTime = Date.now();
 		try {
 
-			metrics.increment("github_publish.initiated", 1);
+			reportMetric("github_publish.initiated");
 
 			const gameTitleElement = document.getElementById('gameTitle') as HTMLInputElement | null;
 			const authorNameElement = document.getElementById('authorName') as HTMLInputElement | null;
@@ -457,7 +468,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			}
 
 			if (!accessToken) {
-				metrics.increment("github_publish.failure.token_missing", 1);
+				reportMetric("github_publish.failure.token_missing");
 				throw new Error("GitHub access token not found.");
 			}
 
@@ -481,7 +492,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				}
 				accessToken = sessionStorage.getItem("githubAccessToken");
 				if (!accessToken || !(await validateGitHubToken(accessToken))) {
-					metrics.increment("github_publish.failure.token_reauth_failed", 1);
+					reportMetric("github_publish.failure.token_reauth_failed");
 					throw new Error("Failed to re-authenticate with GitHub.");
 				}
 			}
@@ -495,12 +506,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			try {
 				forkedRepo = await forkRepository(accessToken, "hackclub", "sprig");
 			} catch (error) {
-				metrics.increment("github_publish.failure.fork", 1);
+				reportMetric("github_publish.failure.fork");
 				console.warn("Fork might already exist. Fetching existing fork...");
 				try {
 					forkedRepo = await fetchForkedRepository(accessToken, "hackclub", "sprig", yourGithubUsername || "");
 				} catch (fetchError: any) {
-					metrics.increment("github_publish.failure.fetch_fork", 1);
+					reportMetric("github_publish.failure.fetch_fork");
 					throw new Error("Failed to fetch fork: " + fetchError.message);
 				}
 			}
@@ -508,13 +519,13 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			try {
 				await synchronizeForkWithUpstream(accessToken, forkedRepo.owner.login, forkedRepo.name);
 			} catch (error) {
-				metrics.increment("github_publish.failure.sync_with_upstream", 1);
+				reportMetric("github_publish.failure.sync_with_upstream");
 				console.warn("Failed to sync fork with upstream: ", error);
 			}
 
 			const latestCommitSha = await fetchLatestCommitSha(accessToken, forkedRepo.owner.login, forkedRepo.name, forkedRepo.default_branch);
 			if (!latestCommitSha) {
-				metrics.increment("github_publish.failure.commit_sha", 1);
+				reportMetric("github_publish.failure.commit_sha");
 				throw new Error("Failed to fetch the latest commit SHA.");
 			}
 
@@ -522,7 +533,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			try {
 				await createBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, latestCommitSha);
 			} catch (error) {
-				metrics.increment("github_publish.failure.branch", 1);
+				reportMetric("github_publish.failure.branch");
 				throw new Error("Failed to create branch: " + (error instanceof Error ? error.message : String(error)));
 			}
 
@@ -533,7 +544,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					imageBlobSha = await createBlobForImage(accessToken, forkedRepo.owner.login, forkedRepo.name, imageBase64.split(',')[1]);
 				}
 			} catch (error) {
-				metrics.increment("github_publish.failure.image_blob", 1);
+				reportMetric("github_publish.failure.image_blob");
 				throw new Error("Failed to create image blob: " + (error instanceof Error ? error.message : String(error)));
 			}
 
@@ -552,7 +563,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					]
 				);
 			} catch (error) {
-				metrics.increment("github_publish.failure.tree_commit", 1);
+				reportMetric("github_publish.failure.tree_commit");
 				throw new Error("Failed to create tree and commit: " + (error instanceof Error ? error.message : String(error)));
 			}
 
@@ -560,14 +571,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			try {
 				newCommit = await createCommit(accessToken, forkedRepo.owner.login, forkedRepo.name, `Sprig App - ${gameTitle}`, treeSha, latestCommitSha);
 			} catch (error) {
-				metrics.increment("github_publish.failure.commit", 1);
+				reportMetric("github_publish.failure.commit");
 				throw new Error("Failed to create commit: " + (error instanceof Error ? error.message : String(error)));
 			}
 
 			try {
 				await updateBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, newCommit.sha);
 			} catch (error) {
-				metrics.increment("github_publish.failure.branch_update", 1);
+				reportMetric("github_publish.failure.branch_update");
 				throw new Error("Failed to update branch: " + (error instanceof Error ? error.message : String(error)));
 			}
 
@@ -585,23 +596,23 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				);
 
 				githubPRUrl.value = pr.html_url;
-				metrics.increment("github_publish.success", 1);
+				reportMetric("github_publish.success");
 
 				const timeTaken = Date.now() - startTime;
-				metrics.timing('github_publish.time_taken', timeTaken);
+				reportMetric('github_publish.time_taken', timeTaken, 'timing');
 
 				publishSuccess.value = true;
 			} catch (error) {
-				metrics.increment("github_publish.failure.pr_creation", 1);
+				reportMetric("github_publish.failure.pr_creation");
 				throw new Error("Failed to create pull request: " + (error instanceof Error ? error.message : String(error)));
 			}
 		} catch (error) {
 			console.error("Publishing failed:", error);
 			publishError.value = true;
-			metrics.increment("github_publish.failure.general", 1);
+			reportMetric("github_publish.failure.general");
 
 			const timeTaken = Date.now() - startTime;
-			metrics.timing('github_publish.failure_time', timeTaken);
+			reportMetric('github_publish.failure_time', timeTaken, 'timing');
 		} finally {
 			isPublishing.value = false;
 		}
