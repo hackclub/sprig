@@ -233,7 +233,8 @@ export const makeOrUpdateSession = async (cookies: AstroCookies, userId: string,
 		path: '/',
 		maxAge: 60 * 60 * 24 * 365,
 		httpOnly: true,
-		sameSite: 'lax'
+		sameSite: 'lax',
+		secure: true,
 	})
 	return {
 		session: { id: _session.id, ...data } as Session,
