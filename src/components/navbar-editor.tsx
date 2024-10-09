@@ -436,6 +436,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 			reportMetric("github_publish.initiated");
 
+			accessToken = accessToken || document.cookie
+				.split('; ')
+				.find((row) => row.startsWith('githubSession='))
+				?.split('=')[1];
+
 			const gameTitleElement = document.getElementById('gameTitle') as HTMLInputElement | null;
 			const authorNameElement = document.getElementById('authorName') as HTMLInputElement | null;
 			const gameDescriptionElement = document.getElementById('gameDescription') as HTMLTextAreaElement | null;
@@ -490,7 +495,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						);
 					}
 				}
-				accessToken = sessionStorage.getItem("githubAccessToken");
+				
+				accessToken = document.cookie
+					.split('; ')
+					.find((row) => row.startsWith('githubSession='))
+					?.split('=')[1];
+
 				if (!accessToken || !(await validateGitHubToken(accessToken))) {
 					reportMetric("github_publish.failure.token_reauth_failed");
 					throw new Error("Failed to re-authenticate with GitHub.");
