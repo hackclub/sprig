@@ -2,10 +2,9 @@ import { useState } from "preact/hooks";
 import styles from "./project-name-creator.module.css";
 import Button from "../design-system/button";
 
-
 export default function ProjectNameCreator() {
-	const [stateName, setStateName] = useState("");
-	const [loading, setLoading] = useState(false);
+    const [stateName, setStateName] = useState("");
+    const [loading, setLoading] = useState(false);
 
 	return <div class={styles.container}>
 		<div></div>
