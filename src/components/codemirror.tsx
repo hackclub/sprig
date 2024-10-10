@@ -181,6 +181,23 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				if(props.roomState)
 					props.roomState.value = { ...props.roomState?.value, connectionStatus: ConnectionStatus.CONNECTED };
 		});
+			// On each update of the awareness(aka whenever a new participant joins/leaves via the awareness state), update the list of participants
+			provider.awareness.on("update", () => {
+				let participants: RoomParticipant[] = [];
+				provider.awareness.getStates().forEach((state) => {
+					try{
+						participants.push({
+							userEmail: state.user.name,
+							isHost: state.user.host
+						})
+					} catch(e){
+						return // This means that the participant doesn't have an email, which means it's the saving instance so we don't want it to 
+						// be in the list of participants
+					}
+				});
+				if(props.roomState)
+					props.roomState.value.participants = participants;
+			})
 			yDoc.on("update", () => {
 				if(!props.persistenceState) return;
 				if (!initialUpdate) return;
