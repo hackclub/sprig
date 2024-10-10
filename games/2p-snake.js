@@ -1,7 +1,7 @@
 /*
 @title: 2p-snake
 @author: Sigfredo feat. whatware
-@tags: ['multiplayer']
+@tags: ['multiplayer', 'retro', 'endless']
 @addedOn: 2024-08-13
 */
 
