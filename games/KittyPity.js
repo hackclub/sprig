@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: KittyPity
-@author: 
-@tags: []
-@addedOn: 2024-00-00
+@author: GodlyAngel1613
+@tags: ['puzzle', 'music', 'strategy']
+@addedOn: 2024-10-10
 */
 
 // Sprites
