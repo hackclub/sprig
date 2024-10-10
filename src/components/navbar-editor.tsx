@@ -526,12 +526,17 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				}
 			}
 
+			/*
+			// Shubham: This is to fix potentional problem where it bring the changes made on personal main branch to also come to PR
+			// this fixed it by updating the branch before making it so there is only the 2 file needed for PR
+			// I am commenting this out for now and tackle this later if needed / if there been this senario issue
 			try {
 				await synchronizeForkWithUpstream(accessToken, forkedRepo.owner.login, forkedRepo.name);
 			} catch (error) {
 				reportMetric("github_publish.failure.sync_with_upstream");
 				console.warn("Failed to sync fork with upstream: ", error);
 			}
+			*/
 
 			const latestCommitSha = await fetchLatestCommitSha(accessToken, forkedRepo.owner.login, forkedRepo.name, forkedRepo.default_branch);
 			if (!latestCommitSha) {
