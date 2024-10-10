@@ -2,6 +2,7 @@ import { useSignal } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
 import { runGame } from '../../lib/engine'
 import styles from './mobile-player.module.css'
+import {exitFullscreen, fullscreenElement, requestFullscreen} from "../../lib/utils/fullscreen";
 
 interface MobilePlayerProps {
 	code: string
@@ -30,6 +31,34 @@ export default function MobilePlayer(props: MobilePlayerProps) {
 	}
 
 	const keyTouches = useSignal<Record<string, number>>({})
+
+	// There is no clear guidance there when it comes to handling device and browser-specific differentiations on mobile browsers,as such we need to do a custom implementation of vh
+	const calculateCSS = () => {
+		document.documentElement.style.setProperty(
+			"--vh",
+			`${window.innerHeight * 0.01}px`
+		);
+		document.documentElement.style.setProperty(
+			"--vw",
+			`${window.innerWidth * 0.01}px`
+		);
+	};
+	
+	const toggleFullscreen = async () => {
+		if (fullscreenElement()) {
+			exitFullscreen();
+		} else {
+			requestFullscreen(document.documentElement);
+		}
+	};
+	
+	useEffect(() => {
+		calculateCSS();
+		window.addEventListener("resize", calculateCSS);
+		document
+			.getElementById("toggle-fullscreen")
+			?.addEventListener("click", toggleFullscreen);
+	}, []);
 
 	return (
 		<div class={styles.root}>

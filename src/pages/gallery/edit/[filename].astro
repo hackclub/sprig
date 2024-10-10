@@ -1,0 +1,124 @@
+---
+import '../../../global.css'
+import Editor from '../../../components/big-interactive-pages/editor'
+import StandardHead from '../../../components/standard-head.astro'
+import { signal } from '@preact/signals'
+import type { PersistenceState } from '../../../lib/state'
+import { getSession } from '../../../lib/game-saving/account'
+import { getGalleryGames } from '../../../lib/game-saving/gallery'
+import { mobileUserAgent } from '../../../lib/utils/mobile'
+import fs from 'fs'
+import path from 'path'
+
+const session = await getSession(Astro.cookies)
+
+const filename = Astro.params.filename ?? ''
+const gameContentPath = path.resolve(`./games/${filename}.js`)
+const code = fs.readFileSync(gameContentPath).toString()
+if (code == null) {
+	return Astro.redirect('/404', 302)
+}
+
+const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
+
+const files = await Astro.glob('/games/*.md')
+let tutorial: string[] | undefined = files
+	.filter(file => {
+		const regexedFile = file.file.match(fileRegexp)
+		return regexedFile && regexedFile[1] === filename
+	})
+	?.map(md => md.compiledContent())
+if (tutorial.length == 0) tutorial = undefined
+
+const games = getGalleryGames()
+const metadata = games.find(game => game.filename === filename)
+const name = metadata?.title
+const authorName = metadata?.author
+
+const persistenceState = signal<PersistenceState>({
+	kind: 'SHARED',
+	name: (name ?? filename) || 'Untitled',
+	authorName: authorName || '',
+	code: code,
+	stale: false,
+	tutorial,
+	tutorialName: tutorial ? filename : undefined,
+	tutorialIndex: 0,
+	session
+})
+const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
+
+if (isMobile) return Astro.redirect(`/gallery/${filename}`, 302)
+---
+
+<html lang='en'>
+<head>
+	<StandardHead title={(name ?? filename) || 'Untitled'} />
+</head>
+<body>
+	<Editor
+		client:load
+		persistenceState={persistenceState}
+		cookies={{
+			outputAreaSize: Astro.cookies.get('outputAreaSize').number(),
+			hideHelp: Astro.cookies.get('hideHelp').boolean()
+		}}
+	/>
+<script is:inline>
+	// There is no clear guidance there when it comes to handling device and browser-specific differentiations on mobile browsers,as such we need to do a custom implementation of vh
+	const calculateCSS = () => {
+		document.documentElement.style.setProperty(
+			"--vh",
+			`${window.innerHeight * 0.01}px`
+		);
+		document.documentElement.style.setProperty(
+			"--vw",
+			`${window.innerWidth * 0.01}px`
+		);
+	};
+
+	// Vendor Agnostic Fullscreen Functions
+	const requestFullscreen = (element) => {
+		if (element.requestFullscreen) {
+			element.requestFullscreen();
+		} else if (element.mozRequestFullScreen) {
+			element.mozRequestFullScreen();
+		} else if (element.webkitRequestFullscreen) {
+			element.webkitRequestFullscreen();
+		}
+	};
+
+	const exitFullscreen = () => {
+		if (document.exitFullscreen) {
+			document.exitFullscreen();
+		} else if (document.mozCancelFullScreen) {
+			document.mozCancelFullScreen();
+		} else if (document.webkitExitFullscreen) {
+			document.webkitExitFullscreen();
+		}
+	};
+
+	const fullscreenElement = () => {
+		return (
+			document.fullscreenElement ||
+			document.mozFullScreenElemen ||
+			document.webkitFullscreenElement
+		);
+	};
+
+	const toggleFullscreen = async () => {
+		if (fullscreenElement()) {
+			exitFullscreen();
+		} else {
+			requestFullscreen(document.documentElement);
+		}
+	};
+
+	calculateCSS();
+	window.addEventListener("resize", calculateCSS);
+	document
+		.getElementById("toggle-fullscreen")
+		?.addEventListener("click", toggleFullscreen);
+</script>
+</body>
+</html>
