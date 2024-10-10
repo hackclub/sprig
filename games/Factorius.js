@@ -2,6 +2,8 @@
 @title: Factorius
 @author: Hitu
 @description: Rudimentary clone of Factorio
+@tags: ['strategy', 'survival']
+@img: "Factorius.png"
 */
 
 const player = "p";
