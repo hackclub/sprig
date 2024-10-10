@@ -30,6 +30,7 @@ import {
 	IoShareOutline,
 	IoShuffle,
 	IoWarning,
+	IoStop,
 } from "react-icons/io5";
 import { FaBrush } from "react-icons/fa";
 import { usePopupCloseClick } from "../lib/utils/popup-close-click";
@@ -590,7 +591,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			</Button>
 		);
 	}
-
+	
 	return (
 		<>
 			<nav class={styles.container}>
@@ -886,7 +887,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				<li>
 					<div class={styles.runButtonContainer}>
 						<button className={styles.runButton} onClick={() => onRun()}>
-							Run
+							<IoPlay/> Run 
 						</button>
 						<button className={styles.dropdownButton} onClick={() => (showDropdown.value = !showDropdown.value)}>
 							<IoChevronDown />
