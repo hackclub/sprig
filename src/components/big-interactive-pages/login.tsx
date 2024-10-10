@@ -21,10 +21,11 @@ export default function Login({ session, email, to }: LoginProps) {
 	useSignalEffect(() => {
 		const handleLogin = async () => {
 			if (auth.stage.value === 'LOGGED_IN') {
+				// This code saves the user's unsaved work in the editor as a game on their account when they log in
 				const savedGame = localStorage.getItem("sprigMemory")
 				if (savedGame && savedGame !== defaultExampleCode) {
 					try {
-						const res = await fetch('/api/games/new', {
+						await fetch('/api/games/new', {
 							method: 'POST',
 							headers: { 'Content-Type': 'application/json' },
 							body: JSON.stringify({
