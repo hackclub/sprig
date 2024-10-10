@@ -4,6 +4,7 @@
 @description: Rudimentary clone of Factorio
 @tags: ['strategy', 'survival']
 @img: "Factorius.png"
+@addedOn: 2024-10-10
 */
 
 const player = "p";
