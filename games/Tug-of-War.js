@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Tug-of-War
-@author: 
-@tags: [multiplayer]
-@addedOn: 2024-00-00
+@author: liamcharger
+@tags: ['multiplayer']
+@addedOn: 2024-10-10
 */
 
 const player = "p"
