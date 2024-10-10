@@ -154,8 +154,23 @@ onInput("l", () => {
   }
 })
 
-afterInput(() => {
-  if (!gameOver && !isCounting) {
-    startGame()
+onInput("k", () => {
+  if (gameOver && !isCounting) {
+    clearText();
+    countdown = 3;
+    isCounting = true;
+    gameOver = false;
+    msg = `Begin in ${countdown}`;
+    
+    getFirst(player).x = 3;
+
+    const ropes = getAll(rope);
+    
+    ropes[0].x = 4;
+    ropes[1].x = 5;
+    
+    getFirst(opponent).x = 6;
+    
+    addText(msg, { x: 1, y: 1, color: color`3` });
   }
 })
