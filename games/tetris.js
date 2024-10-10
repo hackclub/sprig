@@ -1,7 +1,7 @@
 /*
 @title: tetris
 @author: neesh
-@tags: ['retro']
+@tags: ["endless" , "puzzle" , "retro"]
 @addedOn: 2022-09-12
 */
 

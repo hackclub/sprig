@@ -1,7 +1,7 @@
 /*
 @title: CaveEscape
 @author: Michael Taylor
-@tags: []
+@tags: ["strategy" , "action" , "real-time"]
 @addedOn: 2024-02-16
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
