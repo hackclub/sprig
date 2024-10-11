@@ -39,7 +39,7 @@ const authorName = metadata?.author
 
 const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 
-const isLoggedIn = !!session
+const isLoggedIn = !!session?.session.full
 
 const hearted = isLoggedIn && await findDocument('upvotes', [
 	['filename', '==', filename],
