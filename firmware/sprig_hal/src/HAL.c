@@ -152,7 +152,7 @@ struct audio_buffer_pool *audio_buffer_pool_init() {
     };
 
 #ifndef SAMPLES_PER_BUFFER
-#define SAMPLES_PER_BUFFER (256*6)
+#define SAMPLES_PER_BUFFER (256*8)
 #endif
 
 #ifndef BUFFER_COUNT
