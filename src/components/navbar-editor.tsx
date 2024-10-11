@@ -875,6 +875,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 												type="text"
 												placeholder="Enter author name"
 											/>
+										    <div id="error-authorName" class="error-message" style="display: none;"></div>
 										</div>
 
 										<div className={styles.inputField}>
