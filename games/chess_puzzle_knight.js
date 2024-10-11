@@ -1,7 +1,7 @@
 /*
 @title: Chess Puzzle
 @author: Silver Canvas
-@tags: []
+@tags: ["puzzle", "strategy"]
 @addedOn: 2024-06-25
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
