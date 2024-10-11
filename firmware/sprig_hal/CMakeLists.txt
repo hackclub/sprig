@@ -15,10 +15,11 @@ include(pico_sdk_import.cmake)
 include(pico_extras_import.cmake)
 
 pico_sdk_init()
-add_definitions(-DPICO_NO_BI_PROGRAM_BUILD_DATE)
+add_definitions(-DPICO_NO_BI_PROGRAM_BUILD_DATE) # don't add build date into the build
 
 add_library(sprig_hal STATIC src/HAL.c)
 
+# expose stuff in /include but don't expose stuff in /src
 target_include_directories(sprig_hal PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_include_directories(sprig_hal PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
