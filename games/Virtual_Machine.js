@@ -1,7 +1,7 @@
 /*
 @title: Virtual_Machine
 @author: N_Rizwan
-@tags: ['strategy']
+@tags: ["strategy" , "maze"]
 @addedOn: 2022-09-08
 */
 
