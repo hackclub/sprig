@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: KittyPity
-@author: GodlyAngel1613
-@tags: ['puzzle', 'music', 'strategy']
-@addedOn: 2024-10-10
+@author: 
+@tags: []
+@addedOn: 2024-00-00
 */
 
 // Sprites
@@ -28,10 +28,10 @@ const level3 = tune`
 410.958904109589: E5~410.958904109589,
 410.958904109589: F5~410.958904109589,
 410.958904109589: G5~410.958904109589,
-410.958904109589: F5~410.958904109589 + B5~410.958904109589,
+410.958904109589: F5~410.9589041095.. . B5.4.0......4109589,
 410.958904109589: A5~410.958904109589 + C5^410.958904109589,
-410.958904109589: G5~410.958904109589 + B4^410.958904109589,
-410.958904109589: F5~410.958904109589 + B5~410.958904109589 + C5^410.958904109589 + A4^410.958904109589,
+410.958904109589: G5~410.958904109589 + B4^410..58904109589,
+410.958904109589: F5~410.958904109589 + B5~410..58904109589 + C5^410.958904109589 + A4^410.958904109589,
 410.958904109589: G5-410.958904109589,
 410.958904109589: A5-410.958904109589 + B4^410.958904109589,
 410.958904109589: G5-410.958904109589 + C5^410.958904109589 + A4^410.958904109589,
@@ -163,13 +163,10 @@ const Sun = "s"
 const nighttime = "n"
 const grass = "g"
 
-
-
 // ImportantVariable
-var current = 0
 
 setLegend(
-  [ player, bitmap`
+  [player, bitmap`
 ................
 ................
 ....LL000000....
@@ -307,7 +304,7 @@ FFFFFFFFFDDFFFDF`],
 .....020200.....
 .....020200.....
 .....000000.....`],
-    [Maze, bitmap`
+  [Maze, bitmap`
 0000000000000000
 0000000000000000
 0000000000000000
@@ -324,7 +321,7 @@ FFFFFFFFFDDFFFDF`],
 0000000000000000
 0000000000000000
 0000000000000000`],
-   [Poodle, bitmap`
+  [Poodle, bitmap`
 .........2......
 ........222.222.
 ........281.182.
@@ -346,147 +343,152 @@ FFFFFFFFFDDFFFDF`],
 let level = 0;
 
 const levels = [
-   map`
-....
-....
-....`,
-    map`
+  map`
+........
+........
+........
+........
+........
+........
+........`,
+  map`
 GGGGG
 G.t.R
 G.B.G
 G...G
 GGpGG`,
-    map`
+  map`
 WWWWW
 BBp.W
 tB..W
 BWWWW`,
-    map`
+  map`
 nnns
 ngBp
 nnng`,
-     map`
+  map`
 GG...t
 G..B..
 p.....
 .....G
 EG.GEG
 GGGGGG`,
-    map`
+  map`
 GGGGGG
 GR..tG
 G...BG
 G....G
 GR..pG
 GGGGGG`,
-      map`
+  map`
 GGGGGG
 GG...G
 G.G..G
 G..G.G
 G...GG
 GGGGGG`,
- ];
+];
 
 // Main Menu
 
- addText("Press K to play!", {x:4, y:4, color: color`1`});
+addText("Press K to start", { x: 2, y: 4, color: color`1` });
 
 ////
 
 const currentLevel = levels[level];
 setMap(currentLevel);
 
-setSolids([ player, box, nighttime, Sun, Wall, Maze, Enemy]);
+setSolids([player, box, nighttime, Sun, Wall, Maze, Enemy]);
 
 setPushables({
-  [ player ]: [box]
+  [player]: [box]
 });
 
 function StartGame() {
-if (level == 0 ) {
-   playTune(level3)
-  }
-
-  else {
+  if (level == 0) {
+    playTune(level3)
+  } else {
     return false;
   }
 }
 
 function EnemyMove() {
-    let playerSprite = getFirst(player);
-    let Enemies = getAll(Enemy);
+  let playerSprite = getFirst(player);
+  let Enemies = getAll(Enemy);
 
-    Enemies.forEach(Enemy => {
-        // Calculate distance between enemy and player
-        let dx = playerSprite.x - Enemy.x;
-        let dy = playerSprite.y - Enemy.y;
+  Enemies.forEach(Enemy => {
+    // Calculate distance between enemy and player
+    let dx = playerSprite.x - Enemy.x;
+    let dy = playerSprite.y - Enemy.y;
 
-        // Move towards player in the direction with the highest change
-        if (Math.abs(dx) > Math.abs(dy)) {
-            // Move horizontally
-            Enemy.x += Math.sign(dx);
-        } else {
-            // Move vertically
-            Enemy.y += Math.sign(dy);
-        }
-    });
+    // Move towards player in the direction with the highest change
+    if (Math.abs(dx) > Math.abs(dy)) {
+      // Move horizontally
+      Enemy.x += Math.sign(dx);
+    } else {
+      // Move vertically
+      Enemy.y += Math.sign(dy);
+    }
+  });
 }
 
 function PoodleMove() {
-    let playerSprite = getFirst(player);
-    let Poodles = getAll(Poodle);
+  let playerSprite = getFirst(player);
+  let Poodles = getAll(Poodle);
 
-    Poodles.forEach(Poodle => {
-        // Calculate distance between enemy and player
-        let dx = playerSprite.x - Poodle.x;
-        let dy = playerSprite.y - Poodle.y;
+  Poodles.forEach(Poodle => {
+    // Calculate distance between enemy and player
+    let dx = playerSprite.x - Poodle.x;
+    let dy = playerSprite.y - Poodle.y;
 
-        // Move towards player in the direction with the highest change
-        if (Math.abs(dx) > Math.abs(dy)) {
-            // Move horizontally
-            Poodle.x += Math.sign(dx);
-        } else {
-            // Move vertically
-            Poodle.y += Math.sign(dy);
+    // Move towards player in the direction with the highest change
+    if (Math.abs(dx) > Math.abs(dy)) {
+      // Move horizontally
+      Poodle.x += Math.sign(dx);
+    } else {
+      // Move vertically
+      Poodle.y += Math.sign(dy);
+    }
+    if (playerSprite.y - Poodle.y == 0 && playerSprite.x - Poodle.x == 0) {
+
+
+      setTimeout(() => {
+        if (level < 7) {
+        addText("Your dead!", { x: 4, y: 4, color: color`7` });
         }
-        if (playerSprite.y - Poodle.y == 0 && playerSprite.x - Poodle.x == 0) {
-          addText("Your dead!", {x:4, y:4, color: color`7`});
+      }, 2000)
 
-            setMap(currentLevel);
-        }
-    });
+      clearText()
+
+      setMap(currentLevel);
+    }
+  });
 }
 
 function resetLevel() {
-    // Clear any text on the screen
-    clearText();
-    
-    // Reset the level variable to the initial level (e.g., level 0)
-    level = 0;
-    
-    // Get the current level map based on the reset level
-    const currentLevel = levels[level];
-    
-    // Reset the game map to the initial level map
-    setMap(currentLevel);
-    
-    // Additional reset logic for any other game elements if needed
+  // Clear any text on the screen
+  clearText();
+
+  // Reset the level variable to the initial level (e.g., level 0)
+  level = 0;
+
+  // Get the current level map based on the reset level
+  const currentLevel = levels[level];
+
+  // Reset the game map to the initial level map
+  setMap(currentLevel);
+
+}
+
+let LevelTextNumber = level.toString(); // the int turned Into a string
+
+function LevelSystem() {
+  addText(LevelTextNumber, { x: 1, y: 1, color: color`6` });
 }
 
 
-// Main Menu
-
-  setTimeout(() => {
-   onInput("k", () => {
-    StartGame()
-  });
-      clearText()
-   }, 1000)
-////
-
 onInput("s", () => {
-  getFirst(player).y +=1
+  getFirst(player).y += 1
 });
 
 onInput("w", () => {
@@ -496,72 +498,79 @@ onInput("w", () => {
 
 onInput("a", () => {
   getFirst(player).x -= 1
-  
+
 });
 
 onInput("d", () => {
-  getFirst(player).x +=1
+  getAll(player).x += 1
   playTune(step4, 1)
 });
 
+setTimeout(() => {
+  onInput("k", () => {
+    StartGame()
+  });
+  clearText()
+}, 200)
+
 onInput("j", resetLevel);
- 
+
 
 
 
 
 afterInput(() => {
-  
-const targetfound = tilesWith(Goal).length;
-const NumberCovered = tilesWith(Goal, box).length;
-const grassfall = tilesWith(box).length;
-const Covered = tilesWith(box, grass).length;
-const currentLevel = levels[level];
+
+  const targetfound = tilesWith(Goal).length;
+  const NumberCovered = tilesWith(Goal, box).length;
+  const grassfall = tilesWith(box).length;
+  const Covered = tilesWith(box, grass).length;
+  const currentLevel = levels[level];
 
   let iterationCount = 0;
   const maxIte = 10;
   const max2 = 2;
-  let LevelText = 0;
-  const LevelTextNumber = LevelText.toString();
 
+  LevelSystem();
+LevelTextNumber = `${level}`;
+
+    console.log(LevelTextNumber)
   // Starting the game!
-  
+
   while (level == 5 && iterationCount < maxIte) {
-  // do stuff
+    // do stuff
     EnemyMove();
 
     iterationCount++;
- }
+  }
 
   while (level <= 6 && iterationCount < max2) {
     PoodleMove();
     iterationCount++;
-    
+
   }
 
-    setTimeout(() => {
-      clearText();
-   }, 3000)
-             
-
-
-  
   if (NumberCovered == targetfound) {
-    level += 1 ;
-    LevelText += 1;
-    current += 1;
+    level += 1;
+
     
 
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     }
 
-    if (level == 8) {
-     addText("Thats the end!", {x:4, y:4, color: color`3`});
+    if (level == 7) {
+      setTimeout(() => {
+        addText("Thats the end!", { x: 4, y: 4, color: color`3` });
+      }, 1000)
+
     }
-  
+
   }
 
+  setTimeout(() => {}, 2500)
+
+  clearText();
 
 
 
