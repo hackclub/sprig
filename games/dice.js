@@ -1,5 +1,5 @@
 /*
-@title: Roll a Dice
+@title: dice
 @author: Tawhid
 @tags: ['retro']
 @addedOn: 2024-10-11
