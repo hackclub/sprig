@@ -171,3 +171,7 @@
 .button.hearted > svg {
 	color: #ef2828;
 }
+
+.heartDisabled {
+	cursor: not-allowed;
+}

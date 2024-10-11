@@ -224,9 +224,9 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 					<div class={styles.title}>
 					<h1>{props.gameName}</h1>
 					<div class={styles.titleButtons}>
-						<div class={`${styles.button} ${hearted.value && styles.hearted}`}
+						<div class={`${styles.button} ${hearted.value && styles.hearted} ${props.isLoggedIn || styles.heartDisabled}`}
 							 onClick={() => {
-								 hearted.value ? removeUpvote() : upvoteGame()
+								 props.isLoggedIn && (hearted.value ? removeUpvote() : upvoteGame())
 							 }}
 						>{hearted.value ? <IoHeart/> : <IoHeartOutline/>}</div>
 						
