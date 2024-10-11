@@ -10,6 +10,7 @@ import { nanoid } from "nanoid";
 import { useState, useEffect } from "preact/hooks";
 import { sha256Hash } from "../../lib/codemirror/util";
 import { PersistenceStateKind } from "../../lib/state";
+import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 
 interface ChatProps {
 	persistenceState: Signal<PersistenceState>;
@@ -41,9 +42,9 @@ ${errorLog.value[0]?.description}
 Answer the questions that follow based on this unless new code is provided.`;
 
 	const [messages, setMessages] = useLocalStorage<
-		{ content: string; role: string; render?: boolean }[]
+		{ content: string; role: string; id: string; render?: boolean }[]
 	>(`chat-${game}`, [
-		{ content: "Hello! How can I help you today?", role: "assistant" },
+		{ content: "Hello! How can I help you today?", role: "assistant", id: nanoid() },
 	]);
 	const loading = useSignal(false);
 	const input = useSignal("");
@@ -89,22 +90,23 @@ Answer the questions that follow based on this unless new code is provided.`;
 				content: systemPrompt(),
 				role: "user",
 				render: false,
+				id: nanoid(),
 			};
-			const newMessage = { content: input.value.trim(), role: "user" };
+			const newMessage = { content: input.value.trim(), role: "user", id: nanoid() };
 
 			setMessages([...messages, newSystemMessage, newMessage]);
 			input.value = "";
 
 			// sends the message to the server and appends it to the messages list
 			const sendAndAppendMessage = async () => {
-					const data = await sendMessage(newMessage.content);
+				const data = await sendMessage(newMessage.content);
 
-					setMessages([
-						...messages,
-						newSystemMessage,
-						newMessage,
-						{ content: data.raw, role: "assistant" },
-					]);
+				setMessages([
+					...messages,
+					newSystemMessage,
+					newMessage,
+					{ content: data.raw, role: "assistant", id: nanoid() },
+				]);
 			}
 
 			const newCodeHash = await sha256Hash(codeMirror.value?.state.doc.toString()!);
@@ -114,14 +116,13 @@ Answer the questions that follow based on this unless new code is provided.`;
 				sendMessage(newSystemMessage.content)
 					.then(() => setCodeHash(newCodeHash))
 					.then(async () => { await sendAndAppendMessage() })
-			    .catch(err => { throw err } );
+					.catch(err => { throw err });
 			} else { await sendAndAppendMessage() };
 
 			loading.value = false;
 			info.value = "";
 		} catch (err) {
 			loading.value = false;
-			// info.value = "An error occurred...";
 			info.value = (err as Error).message;
 		}
 	};
@@ -141,6 +142,24 @@ Answer the questions that follow based on this unless new code is provided.`;
 		if (!result.success) throw new Error("Failed to end session");
 	}
 
+	const handleFeedback = async (messageId: string, feedback: 'upvote' | 'downvote') => {
+		try {
+			await fetch(`${import.meta.env.PUBLIC_SPRIG_LLM_API}/feedback`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					session_id: chatSession,
+					message_id: messageId,
+					feedback: feedback,
+				}),
+			});
+		} catch (error) {
+			console.error('Error sending feedback:', error);
+		}
+	};
+
 	useEffect(() => {
 		window.addEventListener("beforeunload", async () => {
 			await endSession();
@@ -159,11 +178,25 @@ Answer the questions that follow based on this unless new code is provided.`;
 								? styles.messageUser
 								: styles.messageBot
 								}`}
-							dangerouslySetInnerHTML={{
-								__html:
-									(markdown(message.content) as string) || "",
+						>
+							<div dangerouslySetInnerHTML={{
+								__html: (markdown(message.content) as string) || "",
 							}}
-						></div>
+							/>
+
+							{message.role === 'assistant' && message.content !== "Hello! How can I help you today?" && (
+								<div className={styles.feedbackButtons}>
+									<button onClick={() => handleFeedback(message.id, 'upvote')} className={styles.feedbackButton}>
+										<FaThumbsUp />
+									</button>
+
+									<button onClick={() => handleFeedback(message.id, 'downvote')} className={styles.feedbackButton}>
+										<FaThumbsDown />
+									</button>
+
+								</div>
+							)}
+						</div>
 					))}
 				{info.value && <div class={styles.message}>{info.value}</div>}
 			</div>
