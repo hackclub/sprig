@@ -1,7 +1,7 @@
 /*
 @title: Roll a Dice
 @author: Tawhid
-@tags: ['simple']
+@tags: ['retro']
 @addedOn: 2024-10-11
 */
 
