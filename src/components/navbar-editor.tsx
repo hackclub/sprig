@@ -452,8 +452,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			}
 
 			const gameTitle = gameTitleElement.value.trim();
-			const authorName = authorNameElement.value;
-			const gameDescription = gameDescriptionElement.value;
+			const authorName = authorNameElement.value.trim();
+			const gameDescription = gameDescriptionElement.value.trim();
 			const gameCode = codeMirror.value?.state.doc.toString() ?? "";
 			const gameControlsDescription = gameControlsDescriptionElement.value;
 
@@ -461,8 +461,18 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			clearError("thumbnail");
 			clearError("gameControlsDescription");
 			clearError("gameTitle");
+			clearError("authorName")
 			hasError = false;
 
+			if (!gameTitle) {
+				displayError("gameTitle", "Please enter a game title.");
+				hasError = true;
+			}
+	
+			if (!authorName) {
+				displayError("authorName", "Please enter an author name.");
+				hasError = true;
+			}	
 			const { valid, message: gameNameMessage } = await validateGameName(gameTitle);
 			handleError("gameTitle", !valid, gameNameMessage);
 			handleError("gameDescription", !gameDescription, "Please provide a game description.");
@@ -850,7 +860,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 													value={props.persistenceState.value.game.name ?? githubUsername.value}
 													type="text"
 													placeholder="Enter your game title"
-													disabled
 												/>
 											) : (
 												<span>Fetching Name...</span>
@@ -865,7 +874,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 												value={props.persistenceState.value.session?.user?.githubUsername ?? ""}
 												type="text"
 												placeholder="Enter author name"
-												disabled
 											/>
 										</div>
 
