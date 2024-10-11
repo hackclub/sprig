@@ -7,6 +7,7 @@ import type { PersistenceState } from '../../lib/state'
 import { getSession } from '../../lib/game-saving/account'
 import { getGalleryGames } from '../../lib/game-saving/gallery'
 import { mobileUserAgent } from '../../lib/utils/mobile'
+import MobilePlayer from "../../components/big-interactive-pages/mobile-player";
 import fs from 'fs'
 import path from 'path'
 
@@ -48,7 +49,7 @@ const persistenceState = signal<PersistenceState>({
 })
 const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 
-if (isMobile) return Astro.redirect(`/gallery/${filename}`, 302)
+// if (isMobile) return Astro.redirect(`/gallery/${filename}`, 302)
 ---
 
 <html lang='en'>
@@ -56,6 +57,14 @@ if (isMobile) return Astro.redirect(`/gallery/${filename}`, 302)
 	<StandardHead title={(name ?? filename) || 'Untitled'} />
 </head>
 <body>
+{isMobile ? (
+	<MobilePlayer
+		client:load
+		code={code}
+		gameName={(name ?? filename) || 'Untitled'}
+		authorName={authorName || ''}
+	/>
+) : (
 	<Editor
 		client:load
 		persistenceState={persistenceState}
@@ -64,61 +73,6 @@ if (isMobile) return Astro.redirect(`/gallery/${filename}`, 302)
 			hideHelp: Astro.cookies.get('hideHelp').boolean()
 		}}
 	/>
-<script is:inline>
-	// There is no clear guidance there when it comes to handling device and browser-specific differentiations on mobile browsers,as such we need to do a custom implementation of vh
-	const calculateCSS = () => {
-		document.documentElement.style.setProperty(
-			"--vh",
-			`${window.innerHeight * 0.01}px`
-		);
-		document.documentElement.style.setProperty(
-			"--vw",
-			`${window.innerWidth * 0.01}px`
-		);
-	};
-
-	// Vendor Agnostic Fullscreen Functions
-	const requestFullscreen = (element) => {
-		if (element.requestFullscreen) {
-			element.requestFullscreen();
-		} else if (element.mozRequestFullScreen) {
-			element.mozRequestFullScreen();
-		} else if (element.webkitRequestFullscreen) {
-			element.webkitRequestFullscreen();
-		}
-	};
-
-	const exitFullscreen = () => {
-		if (document.exitFullscreen) {
-			document.exitFullscreen();
-		} else if (document.mozCancelFullScreen) {
-			document.mozCancelFullScreen();
-		} else if (document.webkitExitFullscreen) {
-			document.webkitExitFullscreen();
-		}
-	};
-
-	const fullscreenElement = () => {
-		return (
-			document.fullscreenElement ||
-			document.mozFullScreenElemen ||
-			document.webkitFullscreenElement
-		);
-	};
-
-	const toggleFullscreen = async () => {
-		if (fullscreenElement()) {
-			exitFullscreen();
-		} else {
-			requestFullscreen(document.documentElement);
-		}
-	};
-
-	calculateCSS();
-	window.addEventListener("resize", calculateCSS);
-	document
-		.getElementById("toggle-fullscreen")
-		?.addEventListener("click", toggleFullscreen);
-</script>
+)}
 </body>
 </html>
