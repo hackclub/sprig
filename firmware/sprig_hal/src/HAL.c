@@ -25,6 +25,7 @@ void init_features() {
                 .has_speaker = 1
         };
     } else {
+	// hw_rev = 0, so data is probably empry
         hw_unsupported("floating pin is not floating");
         features = (Sprig_Features) {};
     }
@@ -151,10 +152,12 @@ struct audio_buffer_pool *audio_buffer_pool_init() {
             .sample_stride = 2
     };
 
+// number of samples for each buffer that is read (24000 per second)
 #ifndef SAMPLES_PER_BUFFER
 #define SAMPLES_PER_BUFFER (256*8)
 #endif
 
+// number of seperate buffers to be rotated through
 #ifndef BUFFER_COUNT
 #define BUFFER_COUNT 3
 #endif
@@ -177,13 +180,15 @@ struct audio_buffer_pool *audio_buffer_pool_init() {
         panic("PicoAudio: Unable to open audio device.\n");
     }
 
+    // connect i2s interface to audio buffers
     ok = audio_i2s_connect(producer_pool);
     assert(ok);
     audio_i2s_set_enabled(true);
-
+	
     return producer_pool;
 }
 
+// pool of audio buffers that are read by the i2s speaker
 static struct audio_buffer_pool *audio_bufpool;
 
 void audio_init() {
