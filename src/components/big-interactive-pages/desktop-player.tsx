@@ -37,6 +37,9 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 	const outputArea = useRef<HTMLDivElement>(null);
 	const screenContainer = useRef<HTMLDivElement>(null);
 	const screenControls = useRef<HTMLDivElement>(null);
+	
+	// acts a bit like a timer; if >0, shake game canvas
+	// activated when a game is run to show it's being run
 	const screenShake = useSignal(0);
 
 	const onStop = async () => {
@@ -78,9 +81,11 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 		onRun()
 	}, [props.code])
 	
+	// mouse move timeout for auto-hiding fullscreen controls
 	const mouseMoveTimeout = useSignal(0);
 	const showFullscreenControls = useSignal(false);
 	
+	// show fullscreen controls code + timers
 	useEffect(() => {
 		window.addEventListener("mousemove", () => {
 			clearTimeout(mouseMoveTimeout.value)
