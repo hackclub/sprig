@@ -1,7 +1,3 @@
-//
-// Created by Cheru Berhanu on 10/7/24.
-//
-
 #ifndef C_SCAFFOLD_AUDIO_H
 #define C_SCAFFOLD_AUDIO_H
 
