@@ -1,0 +1,177 @@
+.rootContainer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: fixed; /* TODO: this is bad! figure out how to make better */
+	top: 0;
+	height: 100vh;
+	width: 100vw;
+}
+
+.root {
+	display: flex;
+	margin: 20px
+}
+
+.screenContainer {
+	position: relative;
+}
+
+.screen {
+	border: 2px solid var(--accent);
+	display: block;
+	background: #000000;
+	height: auto;
+	aspect-ratio: 1000 / 800;
+	image-rendering: pixelated;
+	outline: none;
+	width: 100%;
+}
+
+.screenControls {
+	color: var(--accent);
+	font-size: 0.9em;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	gap: 10px;
+	align-items: center;
+	padding: 8px 0;
+	position: absolute;
+	width: 100%;
+}
+
+.screenControls > div {
+	display: flex;
+}
+
+.screenControls > div > :not(:first-child) {
+	margin-left: 30px;
+}
+
+@media all and (display-mode: fullscreen) {
+	.screenControls {
+		display: none;
+	}
+	
+	.screenContainer {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	
+	.screen {
+		border: none;
+		height: 100%;
+		width: unset
+	}
+	
+	.canvasWrapper {
+		height: 100%;
+	}
+	
+	.screenControls.enabled {
+		display: flex;
+		position: relative;
+		bottom: 0;
+		width: 100%;
+		background: var(--bg-base);
+		padding: 8px 20px;
+	}
+}
+
+.screenControls .mute,
+.screenControls .stop {
+	cursor: var(--cursor-interactive);
+	user-select: none;
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+	border: none;
+	background: none;
+	padding: 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 6px;
+}
+
+.screenControls .mute :global(svg),
+.screenControls .stop :global(svg) {
+	--size: 24px;
+	display: block;
+	width: var(--size);
+	height: var(--size);
+}
+
+.meta {
+	margin-left: 20px;
+	border: 2px solid var(--accent);
+	padding: 20px;
+	min-width: 25%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	background: var(--bg-surface);
+}
+
+
+.metaActions {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
+
+.metaActions > button:not(:first-child){
+	margin-left: 8px;
+}
+
+.title {
+	display: flex;
+	justify-content: space-between;
+}
+
+.titleButtons {
+	display: flex;
+	align-items: center;
+	position: relative;
+}
+
+.button {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	margin-left: 10px;
+	position: relative;
+}
+
+.button > svg {
+	height: 30px;
+	width: auto;
+}
+
+.shareMenu {
+	position: absolute;
+	min-width: 200px;
+	bottom: -10px;
+	transform: translateY(100%);
+	right: 0;
+	cursor: auto;
+	border: 2px black solid;
+}
+
+.shareButtonContainer {
+	position: relative;
+}
+
+.shareMenuButton {
+	width: 100%;
+}
+
+.button.hearted > svg {
+	color: #ef2828;
+}
+
+.heartDisabled {
+	cursor: not-allowed;
+}
