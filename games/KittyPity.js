@@ -1,4 +1,5 @@
 /*
+/*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
@@ -502,7 +503,7 @@ onInput("a", () => {
 });
 
 onInput("d", () => {
-  getAll(player).x += 1
+  getFirst(player).x += 1
   playTune(step4, 1)
 });
 
@@ -530,11 +531,6 @@ afterInput(() => {
   let iterationCount = 0;
   const maxIte = 10;
   const max2 = 2;
-
-  LevelSystem();
-LevelTextNumber = `${level}`;
-
-    console.log(LevelTextNumber)
   // Starting the game!
 
   while (level == 5 && iterationCount < maxIte) {
@@ -571,10 +567,4 @@ LevelTextNumber = `${level}`;
   setTimeout(() => {}, 2500)
 
   clearText();
-
-
-
-
-
-
 });
