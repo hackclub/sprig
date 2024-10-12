@@ -574,6 +574,3 @@ LevelTextNumber = `${level}`;
 
 
 
-
-
-});
