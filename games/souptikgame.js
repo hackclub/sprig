@@ -1,7 +1,9 @@
-// @title:GameForNoInternet
-// @author:Souptik Samanta
-// @tags:[]
-// @addedOn:2024-10-12
+/*
+@title: GameForNoInternet
+@author: Souptik Samanta
+@tags: ['endless']
+@addedOn: 2024-10-12
+*/
 
 
 let mapHeight = 10;
