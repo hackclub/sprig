@@ -1,9 +1,9 @@
 /*
 @title: Gomoku
 @author: Bianca
-@tags: [strategy, multiplayer]
+@tags: ['strategy', 'multiplayer']
 @addedOn: 2024-10-11
-
+*/
 
 Controls:
 - WASD to move cursor
