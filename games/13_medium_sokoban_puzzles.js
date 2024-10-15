@@ -1,6 +1,6 @@
 /*
 @title: 13 medium sokoban puzzles
-@description: "13 Medium Sokoban Puzzles" is a puzzle game where players must push red-brown boxes onto black goals to complete each level. The game includes various levels of increasing difficulty, featuring walls and obstacles that challenge the player's problem-solving skills. Created by Zachary Miller, it offers a traditional Sokoban-style experience with a series of 13 medium-difficulty puzzles.
+@description: "13 Medium Sokoban Puzzles" is a puzzle game created by Zachary Miller, where players push red-brown boxes onto black goals across 13 medium-difficulty levels. The game challenges players' problem-solving skills with obstacles and walls that increase in complexity as they progress through each Sokoban-style puzzle.
 @author: Zachary Miller
 @tags: ['puzzle']
 @addedOn: 2022-12-19

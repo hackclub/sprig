@@ -54,7 +54,7 @@ while True:
     if is_ok:
         print("Great, thanks!")
     else:
-        all_games[index]["filename"] = input("Please write an accurate description: ")
+        all_games[index]["description"] = input("Please write an accurate description: ")
 
     add_to_metadata(filename, all_games[index]["description"])
 
