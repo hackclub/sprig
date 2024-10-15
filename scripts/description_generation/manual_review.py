@@ -24,10 +24,13 @@ def add_to_metadata(filename, description):
         with open("games/" + filename, "w") as f:
             f.writelines(lines)
 
-    subprocess.run(["code", "games/" + filename])
+    if has_code:
+        subprocess.run(["code", "games/" + filename])
 
 with open("scripts/description_generation/all_games.json", "r") as f:
     all_games = json.load(f)
+
+has_code = input("Are you using Visual Studio Code and have 'code' installed? (y/n) ").lower() == "y"
 
 index = int(input("What description would you like to start at? "))
 
