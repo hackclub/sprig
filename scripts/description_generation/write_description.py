@@ -46,16 +46,14 @@ def get_description(game, client):
 
     return completion.choices[0].message.content
 
-with open("scripts/all_games.json", "r") as f:
+with open("scripts/description_generation/all_games.json", "r") as f:
     all_games = json.load(f)
-
-all_descriptions = {}
 
 for game in all_games:
     description = get_description(game, client)
-    all_descriptions[game["filename"]] = description
+    game["description"] = description
 
-    print(game["filename"], description)
+    print(game["filename"], game["description"],)
 
-with open("scripts/descriptions.json", "w") as f:
-    json.dump(all_descriptions, f)
+with open("scripts/description_generation/all_games.json", "w") as f:
+    json.dump(all_games, f)
