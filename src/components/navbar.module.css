@@ -418,6 +418,9 @@
 
   .runButton {
 	border-right: 1px solid #004d40;
+	display: flex;
+	gap: 5px;
+	align-items: center;
   }
 
 .publishButton {
