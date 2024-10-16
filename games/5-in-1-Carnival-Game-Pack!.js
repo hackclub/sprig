@@ -1,5 +1,6 @@
 /*
 @title: 5-in-1 Carnival Game Pack!
+@description: 5-in-1 Carnival Game Pack by Ada Dyer is a collection of mini-games set in a carnival atmosphere, where players can explore various game areas. The game includes diverse activities such as racing, maze navigation, and zombie shooting. Hidden surprises like easter eggs add an extra layer of exploration and fun.
 @author: Ada Dyer
 @tags: []
 @addedOn: 2023-01-07

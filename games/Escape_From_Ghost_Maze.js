@@ -1,5 +1,6 @@
 /*
 @title: escape from ghost maze
+@description: "Escape from Ghost Maze" is a puzzle game where players navigate through mazes while being pursued by a ghost that can move through walls. Players must reach the correct door to progress to the next level, using talismans to temporarily stun the ghost. The game offers varying levels of difficulty, challenging players to escape before the ghost catches them.
 @author: Jlee123
 @tags: ['puzzle']
 @addedOn: 2024-05-10

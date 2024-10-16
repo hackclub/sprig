@@ -1,5 +1,6 @@
 /*
 @title: Another Maze Runner
+@description: "Another Maze Runner" is a simple maze game with 10 levels, where the objective is to reach the Crown. Players must avoid obstacles and solve simple puzzles along the way. Before starting, players can choose from three different themes to customize their gameplay experience.
 @author: AyoubChafiq
 @tags: []
 @addedOn: 2024-06-07

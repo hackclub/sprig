@@ -1,5 +1,6 @@
 /*
 @title: Conquerers
+@description: Conquerers is a multiplayer strategy game where players compete to claim the most tiles using ships. Players take turns placing boats adjacent to their existing ones on the board to expand their territory. The goal is to strategically occupy the board and outmaneuver the opponent to win.
 @author: Leonard (Omay)
 @tags: ['multiplayer']
 @addedOn: 2022-11-15

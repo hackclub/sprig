@@ -1,5 +1,6 @@
 /*
 @title: BoxCubeGuy
+@description: BoxCubeGuy is a puzzle game by CaptainATW, where players navigate through levels by moving a character and pushing boxes to designated goal areas. The objective is to cover all the goals with boxes to advance to the next level.
 @author: CaptainATW
 @tags: ['puzzle']
 @addedOn: 2022-11-25

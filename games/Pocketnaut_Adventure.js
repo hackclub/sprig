@@ -1,5 +1,6 @@
 /*
 @title: Pockenmaut Adventures I
+@description: "Pockenmaut Adventures I" is a platform game where players help Pocketnaut reach his spaceship to get back to Earth, as the planet requires his help. The game features engaging levels filled with obstacles like space lava, and provides a nostalgic challenge reminiscent of classic arcade games. As Pocketnaut, players must navigate through the levels using a jetpack, overcoming environmental hazards to complete their mission.
 @author: Ray Rumore
 @tags: []
 @addedOn: 2023-12-24

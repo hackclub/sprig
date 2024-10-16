@@ -1,5 +1,6 @@
 /*
 @title: Puzzle_Game
+@description: "Puzzle_Game" is a timed puzzle game created by Amelia, where players must navigate a series of levels using logic and problem-solving skills. The goal is to move the player to cover all goal tiles within a time limit while pushing boxes and avoiding obstacles. Each level presents new challenges and obstacles that test the player's strategic thinking.
 @author: Amelia
 @tags: ['puzzle','timed']
 @addedOn: 2022-10-20

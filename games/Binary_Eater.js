@@ -1,5 +1,6 @@
 /*
 @title:  Binary Eater
+@description: **Binary Eater** is a puzzle game where players input custom binary commands using (W, A, S, D) to type characters before a binary-eater consumes them. Inspired by the game Trash Guy, the objective is to quickly and correctly type characters based on binary codes representing the alphabet and increase the score. The challenge lies in maintaining accuracy and speed to avoid the game ending when inputting incorrect values or being outpaced by the eater.
 @author: Kumaraswamy
 @tags: ['puzzle']
 @addedOn: 2023-03-10
