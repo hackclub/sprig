@@ -412,3 +412,12 @@ export async function createBlobForImage(
 	const data = await handleResponse(response); // Return the blob SHA
 	return data.sha;
 }
+
+export const synchronizeForkWithUpstream = async (accessToken: string, forkOwner: string, forkRepo: string) => {
+	
+	// Fetch the latest commit SHA of the upstream (hackclub/sprig) main branch
+	const upstreamCommitSha = await fetchLatestCommitSha(accessToken, "hackclub", "sprig", "main");
+
+	// Update the fork's main branch to match the upstream's main branch
+	await updateBranch(accessToken, forkOwner, forkRepo, "main", upstreamCommitSha);
+};
