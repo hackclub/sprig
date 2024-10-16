@@ -16,8 +16,10 @@ const session = await getSession(Astro.cookies)
 
 const filename = Astro.params.filename ?? ''
 const gameContentPath = path.resolve(`./games/${filename}.js`)
-const code = fs.readFileSync(gameContentPath).toString()
-if (code == null) {
+let code: string
+try {
+	code = fs.readFileSync(gameContentPath).toString()
+} catch {
 	return Astro.redirect('/404', 302)
 }
 
