@@ -1,6 +1,6 @@
 ---
 import '../../global.css'
-import { firestore, getGame, getSession } from '../../lib/game-saving/account'
+import { firestore, getGame, getSession, moveGameToBackendSaving } from '../../lib/game-saving/account'
 import Editor from '../../components/big-interactive-pages/editor'
 import StandardHead from '../../components/standard-head.astro'
 import { signal } from '@preact/signals'
@@ -16,10 +16,13 @@ let persistenceState;
 let isMobile;
 let roomState;
 
-if(await isAccountWhitelistedToUseCollabAndSavingBetaFeatures(session.user.id, session.user.email)){
+const game = await getGame(Astro.params.id!)
+if (!game) return Astro.redirect('/404', 302)
+if(await isAccountWhitelistedToUseCollabAndSavingBetaFeatures(session.user.id, session.user.email) || game.isSavedOnBackend){
+	if(!game.isSavedOnBackend){
+		Astro.redirect(`/~/${(await moveGameToBackendSaving(game)).id}`)
+	}
 	let checkRoom = false;
-	const game = await getGame(Astro.params.id!)
-	if (!game) return Astro.redirect('/404', 302)
 	if(game.ownerId !== session.user.id) checkRoom = true;
 
 	const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
@@ -96,8 +99,7 @@ if(await isAccountWhitelistedToUseCollabAndSavingBetaFeatures(session.user.id, s
 	roomState = signal<RoomState>(_roomState)
 	isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 } else {
-	const game = await getGame(Astro.params.id!)
-	if (!game || game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
+	if (game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
 
 	const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
 

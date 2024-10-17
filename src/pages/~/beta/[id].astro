@@ -1,6 +1,6 @@
 ---
 import '../../../global.css'
-import { firestore, getGame, getSession } from '../../../lib/game-saving/account'
+import { firestore, getGame, getSession, moveGameToBackendSaving } from '../../../lib/game-saving/account'
 import Editor from '../../../components/big-interactive-pages/editor'
 import StandardHead from '../../../components/standard-head.astro'
 import { signal } from '@preact/signals'
@@ -15,6 +15,11 @@ if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 let checkRoom = false;
 const game = await getGame(Astro.params.id!)
 if (!game) return Astro.redirect('/404', 302)
+if(!game.isSavedOnBackend){
+	Astro.redirect(`/~/${(await moveGameToBackendSaving(game)).id}`)
+}else{
+	Astro.redirect(`/~/${game.id}`)
+}
 if(await isAccountWhitelistedToUseCollabAndSavingBetaFeatures(session.user.id, session.user.email)) Astro.redirect(`/~/${game.id}`)
 if(game.ownerId !== session.user.id) checkRoom = true;
 
