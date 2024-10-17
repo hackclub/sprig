@@ -10,7 +10,7 @@ import SearchBox from '../../components/search-box'
 import { EditorView, keymap, lineNumbers, highlightActiveLineGutter, highlightSpecialChars, drawSelection, dropCursor, rectangularSelection, crosshairCursor, highlightActiveLine } from '@codemirror/view'
 import { lintGutter } from "@codemirror/lint";
 import type { NormalizedError } from '../state'
-import { codeMirrorEditorText, lastFoldRanges, codeMirror } from '../state'
+import { codeMirrorEditorText, codeMirror } from '../state'
 import { foldTemplateLiteral } from '../../components/big-interactive-pages/editor'
 
 export function diagnosticsFromErrorLog(view: EditorView, errorLog: NormalizedError[]) {
