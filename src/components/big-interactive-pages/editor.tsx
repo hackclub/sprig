@@ -88,6 +88,14 @@ const minHelpAreaHeight = 32;
 let defaultHelpAreaHeight = 350;
 const helpAreaHeightMargin = 0; // The margin between the screen and help area
 
+export const foldTemplateLiteral = (from: number, to: number) => {
+	if (!codeMirror.value) return;
+	collapseRanges(
+		codeMirror.value,
+		[[from, to]]
+	);
+}
+
 export const foldAllTemplateLiterals = () => {
 	if (!codeMirror.value) return;
 	const code = codeMirror.value.state.doc.toString() ?? "";
