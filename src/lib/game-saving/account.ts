@@ -62,6 +62,7 @@ export interface Game {
 	code: string
 	tutorialName?: string
 	tutorialIndex?: number
+	isSavedOnBackend?: boolean
 	roomParticipants?: RoomParticipant[]
 	isRoomOpen?: boolean
 	password?: string
@@ -258,7 +259,7 @@ export const getGame = async (id: string | undefined): Promise<Game | null> => {
 	return { id: _game.id, ..._game.data() } as Game
 }
 
-export const makeGame = async (ownerId: string, unprotected: boolean, name?: string, code?: string, tutorialName?: string, tutorialIndex?: number): Promise<Game> => {
+export const makeGame = async (ownerId: string, unprotected: boolean, name?: string, code?: string, tutorialName?: string, tutorialIndex?: number, isSavedOnBackend?: boolean): Promise<Game> => {
 	
 	const createdDate = Timestamp.now()
 	const data = {
@@ -269,7 +270,8 @@ export const makeGame = async (ownerId: string, unprotected: boolean, name?: str
 		name: name ?? generateGameName(),
 		code: code ?? '',
 		tutorialName: tutorialName ?? null,
-		tutorialIndex: tutorialIndex ?? null
+		tutorialIndex: tutorialIndex ?? null,
+		isSavedOnBackend: isSavedOnBackend ?? false,
 	}
 	const _game = await addDocument('games', data);
 	return { id: _game.id, ...data } as Game
@@ -355,4 +357,8 @@ export async function isAccountWhitelistedToUseCollabAndSavingBetaFeatures(id: s
 		return true
 	}
 	return false;
+}
+
+export const moveGameToBackendSaving = async (game: Game): Promise<Game> => {
+	return makeGame(game.ownerId, game.unprotected, game.name, game.code, game.tutorialName, game.tutorialIndex, true);
 }
