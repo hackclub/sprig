@@ -7,7 +7,6 @@ import { codeMirror, editors, openEditor, codeMirrorEditorText, _foldRanges, _wi
 import styles from './editor-modal.module.css'
 import levenshtein from 'js-levenshtein'
 import { runGameHeadless } from '../../lib/engine'
-import { foldAllTemplateLiterals } from "../big-interactive-pages/editor"
 
 const enum LastUpdater {
 	RESET,
@@ -18,8 +17,6 @@ export default function EditorModal() {
 	const Content = openEditor.value ? editors[openEditor.value.kind].modalContent : () => null
 	const text = useSignal(openEditor.value?.text ?? '');
 	const [lastUpdater, setLastUpdater] = useState<LastUpdater>(LastUpdater.RESET);
-
-  const setUpdaterAndFold = (lastUpdater: LastUpdater) => { setLastUpdater(lastUpdater); foldAllTemplateLiterals(); }
 
 	useSignalEffect(() => {
 		if (openEditor.value) text.value = openEditor.value.text
@@ -41,7 +38,7 @@ export default function EditorModal() {
 		// this ensures that updates are not triggered from this effect which may cause an
 		// Out-of-order / Cycles
 		if (lastUpdater === LastUpdater.CodeMirror) {
-			setUpdaterAndFold(LastUpdater.RESET);
+			setLastUpdater(LastUpdater.RESET);
 			return;
 		}
 		// Signals are killing me but useEffect was broken and I need to ship this
@@ -65,7 +62,7 @@ export default function EditorModal() {
 				to: _openEditor.editRange.from + _text.length
 			}
 		}
-		setUpdaterAndFold(LastUpdater.OpenEditor);
+		setLastUpdater(LastUpdater.OpenEditor);
 	}, [text.value]);
 
 
@@ -74,12 +71,12 @@ export default function EditorModal() {
 		// this ensures that updates are not triggered from this effect which may cause an
 		// Out-of-order / Cycles
 		if (lastUpdater === LastUpdater.OpenEditor) {
-			setUpdaterAndFold(LastUpdater.RESET);
+			setLastUpdater(LastUpdater.RESET);
 			return;
 		}
 		// just do this to sync the editor text with the code mirror text
 		computeAndUpdateModalEditor();
-		setUpdaterAndFold(LastUpdater.CodeMirror);
+		setLastUpdater(LastUpdater.CodeMirror);
 		// updateCulprit.value = UPDATE_CULPRIT.CodeMirror;
 	}, [codeMirrorEditorText.value]);
 
