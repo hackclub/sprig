@@ -1,7 +1,8 @@
 import { useSignalEffect } from '@preact/signals'
 import { IoPaperPlaneOutline } from 'react-icons/io5'
 import { SessionInfo } from '../../lib/game-saving/account'
-import {DevEmail, useAuthHelper} from '../../lib/game-saving/auth-helper'
+import { DevEmail, useAuthHelper } from '../../lib/game-saving/auth-helper'
+import { defaultExampleCode } from "../../lib/examples";
 import Button from '../design-system/button'
 import Input from '../design-system/input'
 import LinkButton from '../design-system/link-button'
@@ -16,8 +17,30 @@ interface LoginProps {
 
 export default function Login({ session, email, to }: LoginProps) {
 	const auth = useAuthHelper('EMAIL_ENTRY', email)
+
 	useSignalEffect(() => {
-		if (auth.stage.value === 'LOGGED_IN') window.location.replace(to)
+		const handleLogin = async () => {
+			if (auth.stage.value === 'LOGGED_IN') {
+				// This code saves the user's unsaved work in the editor as a game on their account when they log in
+				const savedGame = localStorage.getItem("sprigMemory")
+				if (savedGame && savedGame !== defaultExampleCode) {
+					try {
+						await fetch('/api/games/new', {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({
+								code: savedGame
+							})
+						})
+						localStorage.setItem("sprigMemory", defaultExampleCode)
+					} catch (error) {
+						console.error('Failed to save game:', error)
+					}
+				}
+				window.location.replace(to)
+			}
+		}
+		handleLogin()
 	})
 
 	return (

@@ -5,6 +5,7 @@ import StandardHead from '../components/standard-head.astro'
 import '../global.css'
 import '../legacy/homepage.scss'
 import { firestore, getSession } from '../lib/game-saving/account'
+import { defaultExampleCode } from "../lib/examples"
 
 const stories = [
 	{ id: 'sprig-front', width: 800, height: 602 },
@@ -32,7 +33,20 @@ if (session && session.session.full) {
 		<StandardHead title={null} />
 		<title>Sprig</title>
 	</head>
+
 	<body>
+
+		<script define:vars={{session, defaultExampleCode}}>
+			window.makeGameRedirect = function() {
+				const savedGame = localStorage.getItem("sprigMemory");
+				if (!session && (!savedGame || savedGame === defaultExampleCode)) {
+					window.location.href = '/editor';
+				} else {
+					window.location.href = '/~/new-game';
+				}
+			}
+		</script>
+
 		<Navbar transparent goldLogo session={session} />
 
 		<div class='magic' id='m'>
@@ -52,11 +66,10 @@ if (session && session.session.full) {
 				<h1>Every player is a creator.</h1>
 				<p>Explore 430+ games built by other teenagers, <br />or make your own and we'll send you a console!</p>
 				<div>
-					<a href='/~/new-game'>
-						<button class='btn active top'>
-							Make a game &raquo;
-						</button>
-					</a>
+					<button class='btn active top' onclick="makeGameRedirect()">
+						Make a game &raquo;
+					</button>
+
 					<a href='/gallery'>
 						<button class='btn active'>
 							Play a game &raquo;
