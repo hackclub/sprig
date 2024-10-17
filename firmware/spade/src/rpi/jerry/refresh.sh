@@ -22,7 +22,7 @@ python3 jerryscript/tools/build.py \
   --jerry-cmdline=OFF
 make -C $(pwd)/example_build install\
 
-cd ~/spade/src/rpi/jerry
+cd ~/sprig/firmware/spade/src/rpi/jerry
 cp -r ~/jerryscript_build/example_build/lib/ lib/
 # cp ~/jerryscript_build/example_install/include
 rm -rf include
