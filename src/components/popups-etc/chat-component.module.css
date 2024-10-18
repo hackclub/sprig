@@ -106,3 +106,37 @@
 	display: inline;
 	opacity: 1;
 }
+
+.feedbackButtons {
+	display: flex;
+	justify-content: center;
+	margin-top: 10px;
+}
+
+.feedbackButton {
+	background-color: #f0f0f0;
+	border: 1px solid #ccc;
+	border-radius: 50%;
+	padding: 10px;
+	margin: 0 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.feedbackButton:hover {
+	background-color: #d9d9d9;
+	transform: scale(1.1);
+}
+
+.feedbackButton:active {
+	transform: scale(0.95);
+}
+
+.feedbackButton svg {
+	font-size: 20px;
+	color: #333;
+}
+
+.feedbackButton:hover svg {
+	color: #007bff;
+}
