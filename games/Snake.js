@@ -1,7 +1,7 @@
 /*
 @title: Snake
 @author: Boyne
-@tags: ['endless']
+@tags: ["endless" , "retro" , "strategy"]
 @addedOn: 2022-11-10
 */
 
