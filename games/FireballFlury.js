@@ -1,3 +1,9 @@
+/*
+@title: Fireball Flury
+@author: Mpro256
+@tags: ['survival', 'endless']
+*/
+
 const player = "p";
 const fireball = "f";
 const background = "b";
