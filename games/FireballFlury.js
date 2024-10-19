@@ -2,6 +2,7 @@
 @title: Fireball Flury
 @author: Mpro256
 @tags: ['survival', 'endless']
+@addedOn: 2024-10-19
 */
 
 const player = "p";
