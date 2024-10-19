@@ -1,8 +1,8 @@
 /*
 @title: Generic Platformer
 @author: DaInfLoop
-@tags: [platformer]
-@addedOn: 2024-00-00
+@tags: ['platformer']
+@addedOn: 2024-10-19
 */
 
 const player = "p"
