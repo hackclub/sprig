@@ -35,9 +35,6 @@ export interface User {
 	createdAt: Timestamp
 	email: string
 	username: string | null
-	githubAccessToken?: string
-	githubId?: string
-	githubUsername?: string
 	failedLoginAttempts?: number
 	lockoutUntil?: Timestamp
 }
@@ -334,8 +331,4 @@ export const getSnapshotData = async (id: string): Promise<SnapshotData | null> 
 		ownerName: user?.username ?? snapshot.ownerName,
 		code: snapshot.code
 	}
-}
-
-export const updateUserGitHubToken = async (userId: string, githubAccessToken: string, githubId: string, githubUsername: string): Promise<void> => {
-    await updateDocument('users', userId, { githubAccessToken, githubId, githubUsername });
 }

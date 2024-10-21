@@ -8,7 +8,7 @@ import {
 	theme,
 	switchTheme,
 	isNewSaveStrat,
-	screenRef,
+	screenRef, GithubState,
 } from "../lib/state";
 import type { RoomState, ThemeType } from "../lib/state";
 import Button from "./design-system/button";
@@ -40,7 +40,7 @@ import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
-import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, synchronizeForkWithUpstream } from "../lib/game-saving/github";
+import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage } from "../lib/game-saving/github";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -117,15 +117,10 @@ type StuckData = {
 	description: string;
 };
 
-const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any) => {
+const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any, githubState: any) => {
 	const startTime = Date.now();
 	try {
 		reportMetric('github_auth_popup.initiated');
-
-		const githubSession = document.cookie
-			.split("; ")
-			.find((row) => row.startsWith("githubSession="))
-			?.split("=")[1];
 
 		if (isPublish) {
 			publishDropdown.value = true;
@@ -133,7 +128,7 @@ const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, 
 			return;
 		}
 
-		if (githubSession) {
+		if (githubState.value) {
 			publishDropdown.value = true;
 			readyPublish.value = true;
 			return;
@@ -170,13 +165,18 @@ const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, 
 		const handleMessage = (event: MessageEvent) => {
 			if (event.origin !== window.location.origin) return;
 
-			const { status, message, accessToken } = event.data;
+			const { status, message, accessToken, githubUsername } = event.data;
 
 			const timeTaken = Date.now() - startTime;
 
 			if (status === "success") {
-				const expires = new Date(Date.now() + 7 * 864e5).toUTCString();
+				const expires = new Date(Date.now() + 7 * 864e5).toUTCString(); // 7 days
 				document.cookie = `githubSession=${encodeURIComponent(accessToken)}; expires=${expires}; path=/; SameSite=None; Secure`;
+				document.cookie = `githubUsername=${encodeURIComponent(githubUsername)}; expires=${expires}; path=/; SameSite=None; Secure`;
+				githubState.value = {
+					username: githubUsername,
+					session: accessToken
+				}
 				publishDropdown.value = true;
 				readyPublish.value = true;
 				reportMetric("github_auth_popup.success");
@@ -250,6 +250,23 @@ const prettifyCode = () => {
 	);
 };
 
+
+const getGithubStateFromCookie = () => {
+	const username = document.cookie
+		.split('; ')
+		.find((row) => row.startsWith('githubUsername='))
+		?.split('=')[1];
+	const session = document.cookie
+		.split('; ')
+		.find((row) => row.startsWith('githubSession='))
+		?.split('=')[1];
+	if (!username || !session) return
+	return {
+		username: username as string,
+		session: session as string
+	}
+}
+
 export default function EditorNavbar(props: EditorNavbarProps) {
 	const showNavPopup = useSignal(false);
 	const showStuckPopup = useSignal(false);
@@ -262,18 +279,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
     const publishSuccess = useSignal(false);
     const publishError = useSignal(false);
 	const githubPRUrl = useSignal<string | null>(null);
-
+	
+	const githubState = useSignal<GithubState | undefined>(undefined)
+	
 	let hasError = false;
-	const githubUsername = useSignal<string | null>(null);
-
+	
 	useSignalEffect(() => {
-		const session = props.persistenceState.value.session;
-		if (session && session.user && session.user.githubUsername) {
-			githubUsername.value = session.user.githubUsername;
-		} else {
-			githubUsername.value = "user";
-		}
-	});
+		githubState.value = getGithubStateFromCookie()
+	})
 
 	useSignalEffect(() => {
 		const persistenceState = props.persistenceState.value;
@@ -429,17 +442,16 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 		return { valid: true, message: "The game name is valid and unique." };
 	}
+	
 
-	const publishToGithub = async (accessToken: string | null | undefined, yourGithubUsername: string | undefined, gameID: string | undefined) => {
+
+	const publishToGithub = async (githubState: Signal<GithubState | undefined>, gameID: string | undefined) => {
 		const startTime = Date.now();
 		try {
 
 			reportMetric("github_publish.initiated");
-
-			accessToken = accessToken || document.cookie
-				.split('; ')
-				.find((row) => row.startsWith('githubSession='))
-				?.split('=')[1];
+			
+			githubState.value = githubState?.value ?? getGithubStateFromCookie()
 
 			const gameTitleElement = document.getElementById('gameTitle') as HTMLInputElement | null;
 			const authorNameElement = document.getElementById('authorName') as HTMLInputElement | null;
@@ -481,13 +493,13 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			if (hasError) {
 				return;
 			}
-
-			if (!accessToken) {
+ 
+			if (!githubState.value?.session) {
 				reportMetric("github_publish.failure.token_missing");
 				throw new Error("GitHub access token not found.");
 			}
 
-			let isValidToken = await validateGitHubToken(accessToken);
+			let isValidToken = await validateGitHubToken(githubState.value.session);
 			if (!isValidToken) {
 				console.warn("Token invalid or expired. Attempting re-authentication...");
 				if (
@@ -497,21 +509,19 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				) {
 					if (typeof props.persistenceState.value.game !== 'string') {
 						await openGitHubAuthPopup(
-							props.persistenceState.value.session?.user?.id ?? null,
+							props.persistenceState.value.session?.user.id ?? null,
 							publishDropdown,
 							readyPublish,
 							props.persistenceState.value.game.isPublished,
-							publishSuccess
+							publishSuccess,
+							githubState
 						);
 					}
 				}
 				
-				accessToken = document.cookie
-					.split('; ')
-					.find((row) => row.startsWith('githubSession='))
-					?.split('=')[1];
+				githubState.value = getGithubStateFromCookie()
 
-				if (!accessToken || !(await validateGitHubToken(accessToken))) {
+				if (!githubState.value?.session || !(await validateGitHubToken(githubState.value.session))) {
 					reportMetric("github_publish.failure.token_reauth_failed");
 					throw new Error("Failed to re-authenticate with GitHub.");
 				}
@@ -521,6 +531,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			readyPublish.value = false;
 			publishError.value = false;
 			publishSuccess.value = false;
+			
+			const accessToken = githubState.value.session
+			const yourGithubUsername = githubState.value.username
 
 			let forkedRepo;
 			try {
@@ -536,19 +549,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				}
 			}
 
-			/*
-			// Shubham: This is to fix potentional problem where it bring the changes made on personal main branch to also come to PR
-			// this fixed it by updating the branch before making it so there is only the 2 file needed for PR
-			// I am commenting this out for now and tackle this later if needed / if there been this senario issue
-			try {
-				await synchronizeForkWithUpstream(accessToken, forkedRepo.owner.login, forkedRepo.name);
-			} catch (error) {
-				reportMetric("github_publish.failure.sync_with_upstream");
-				console.warn("Failed to sync fork with upstream: ", error);
-			}
-			*/
-
-			const latestCommitSha = await fetchLatestCommitSha(accessToken, forkedRepo.owner.login, forkedRepo.name, forkedRepo.default_branch);
+			const latestCommitSha = await fetchLatestCommitSha(accessToken, "hackclub", "sprig", forkedRepo.default_branch);
 			if (!latestCommitSha) {
 				reportMetric("github_publish.failure.commit_sha");
 				throw new Error("Failed to fetch the latest commit SHA.");
@@ -822,11 +823,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								) {
 									if (typeof props.persistenceState.value.game !== 'string') {
 										await openGitHubAuthPopup(
-											props.persistenceState.value.session?.user?.id ?? null,
+											props.persistenceState.value.session?.user.id ?? null,
 											publishDropdown,
 											readyPublish,
 											props.persistenceState.value.game.isPublished,
-											publishSuccess
+											publishSuccess,
+											githubState
 										);
 									}
 								} else {
@@ -846,7 +848,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									<div className={styles.popupHeader}>
 										<h2>Connected to GitHub</h2>
 										<p className={styles.successMessage}>
-											Awesome! You're now connected to GitHub as {props.persistenceState.value.session?.user?.githubUsername || githubUsername.value}.
+											Awesome! You're now connected to GitHub as {githubState.value?.username}.
 										</p>
 									</div>
 
@@ -857,7 +859,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 												props.persistenceState.value.game !== "LOADING" ? (
 												<input
 													id="gameTitle"
-													value={props.persistenceState.value.game.name ?? githubUsername.value}
+													value={props.persistenceState.value.game.name ?? ""}
 													type="text"
 													placeholder="Enter your game title"
 												/>
@@ -871,7 +873,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											<label htmlFor="authorName">Author Name</label>
 											<input
 												id="authorName"
-												value={props.persistenceState.value.session?.user?.githubUsername ?? ""}
+												value={githubState.value?.username ?? ""}
 												type="text"
 												placeholder="Enter author name"
 											/>
@@ -941,8 +943,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 													const gameId = game?.id || null;
 													await publishToGithub(
-														props.persistenceState.value.session?.user?.githubAccessToken,
-														props.persistenceState.value.session?.user?.githubUsername,
+														githubState,
 														gameId ?? ''
 													);
 												} catch (error) {
@@ -973,6 +974,15 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									</p>
 									<Button onClick={() => { githubPRUrl.value && window.open(githubPRUrl.value, "_blank") }}>
 										View on GitHub
+									</Button>
+									<Button class={styles.newPRButton} onClick={() => {publishSuccess.value = false; 
+										if (props.persistenceState.value.kind == "PERSISTED" 
+										&& props.persistenceState.value.game != "LOADING") 
+											props.persistenceState.value.game.isPublished = false;
+										readyPublish.value = true
+									}
+									}>
+										Make a new PR
 									</Button>
 								</div>
 							)}
@@ -1216,7 +1226,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								</li>
 								<li>
 									<a
-										href="javascript:void"
+										href={"javascript:void"}
 										role="button"
 										onClick={() => {
 											if (resetState.value === "idle") {

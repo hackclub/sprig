@@ -114,6 +114,11 @@ export type RoomState = {
 	participants: RoomParticipant[]
 }
 
+export type GithubState = {
+	username: string,
+	session: string
+}
+
 export const codeMirror = signal<EditorView | null>(null)
 export const codeMirrorEditorText = signal<string>('');
 export const muted = signal<boolean>(false)
