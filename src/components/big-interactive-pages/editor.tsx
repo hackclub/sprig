@@ -66,7 +66,7 @@ export const onRun = async () => {
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
-	roomState?: Signal<RoomState>;
+	roomState?: Signal<RoomState> | undefined;
 	cookies: {
 		outputAreaSize: number | null;
 		helpAreaSize: number | null;
@@ -261,16 +261,6 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	const screenControls = useRef<HTMLDivElement>(null);
 
 	const [sessionId] = useState(nanoid());
-
-
-	useEffect(() => {
-		if(roomState){
-			isNewSaveStrat.value = true;
-		} else {
-			isNewSaveStrat.value = false;
-		}
-	}, [])
-
 
 	useEffect(() => {
 		const channel = new BroadcastChannel('session_channel');
