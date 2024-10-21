@@ -5,6 +5,7 @@ import styles from './share-room.module.css'
 import { PersistenceState } from '../../lib/state'
 import { Game } from '../../lib/game-saving/account'
 import { PersistenceStateKind } from '../../lib/state'
+import { useEffect } from 'preact/hooks'
 
 export interface RoomPasswordPopupProps {
 	persistenceState: Signal<PersistenceState>
@@ -31,6 +32,7 @@ export default function RoomPasswordPopup(props: RoomPasswordPopupProps) {
 			}
 		});
 	}
+	useEffect(checkPassword, [])
 	return (
 		<div class={styles.overlay}>
 			<div class={styles.modal}>
