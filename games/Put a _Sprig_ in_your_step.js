@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Put a "Sprig" in your step
+@title: Put a Sprig in your step
 @author: grhu
-@tags: [sprig]
-@addedOn: 2024-00-00
+@tags: []
+@addedOn: 2024-10-22
 */
 
 
