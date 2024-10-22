@@ -5,7 +5,6 @@ import {
 } from "../../../../lib/game-saving/github";
 import {
 	getSession,
-	updateUserGitHubToken,
 } from "../../../../lib/game-saving/account";
 
 export const get: APIRoute = async ({ request, cookies }) => {
@@ -45,11 +44,7 @@ export const get: APIRoute = async ({ request, cookies }) => {
 		if (!sessionInfo) {
 			console.error("No active session found");
 			return new Response(
-				'<script>window.opener.postMessage({ status: "error", message: "No active session" }, "*"); window.close();</script>',
-				{
-					headers: { "Content-Type": "text/html" },
-				}
-			);
+				'<script>window.opener.postMessage({ status: "error", message: "No active session" }, "*"); window.close();</script>')
 		} else if (sessionInfo.user.id !== userId) {
 			console.error(
 				`Session user ID mismatch: expected ${userId}, got ${sessionInfo.user.id}`
@@ -62,19 +57,13 @@ export const get: APIRoute = async ({ request, cookies }) => {
 			);
 		}
 
-		await updateUserGitHubToken(
-			userId,
-			accessToken,
-			githubUser.id,
-			githubUser.login
-		);
-
 		return new Response(
 			`<script>window.opener.postMessage({
-				status: "success",
-				message: "GitHub authorization successful",
-				accessToken: "${accessToken}"
-			}, "*"); window.close();</script>`,
+                status: "success",
+                message: "GitHub authorization successful",
+                accessToken: "${accessToken}",
+                githubUsername: "${githubUser.login}"
+            }, "*"); window.close();</script>`,
 			{
 				headers: { "Content-Type": "text/html" },
 			}
@@ -83,8 +72,8 @@ export const get: APIRoute = async ({ request, cookies }) => {
 		console.error("GitHub OAuth callback error:", error);
 		return new Response(
 			'<script>window.opener.postMessage({ status: "error", message: "Error during GitHub OAuth callback: ' +
-				(error as Error).message +
-				'" }, "*"); window.close();</script>',
+			(error as Error).message +
+			'" }, "*"); window.close();</script>',
 			{
 				headers: { "Content-Type": "text/html" },
 			}
