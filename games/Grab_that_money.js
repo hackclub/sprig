@@ -1,9 +1,11 @@
 /*
 @title: grab_that_money
 @author: Dh
-@tags: ['fun', 'multiplayer']
+@tags: ['multiplayer']
 @addedOn: 2024-10-17
+*/
 
+/*
 Controls:
 - WASD to move player
 -IJKL for player 2
