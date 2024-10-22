@@ -1010,12 +1010,19 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 				<li>
 					<div class={styles.runButtonContainer}>
-						<button className={styles.runButton} onClick={() => onRun()}>
-							Run
-						</button>
-						<button className={styles.dropdownButton} onClick={() => (showDropdown.value = !showDropdown.value)}>
-							<IoChevronDown />
-						</button>
+					<Button
+						accent
+						icon={IoPlay}
+						onClick={onRun}
+					>
+						Run
+					</Button>
+
+					<Button
+						accent
+						icon={IoChevronDown}
+						onClick={() => (showDropdown.value = !showDropdown.value)}
+					/>
 
 						{showDropdown.value && (
 							<div class={styles.playPopup}>

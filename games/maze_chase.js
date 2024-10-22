@@ -1,7 +1,7 @@
 /*
 @title: Maze Chase
 @author: Armaanpreet Singh
-@tags: ['puzzle','multiplayer']
+@tags: ["puzzle" , "timed" , "multiplayer"]
 @addedOn: 2024-08-05
 Capture the flag before the other player does!
 */
