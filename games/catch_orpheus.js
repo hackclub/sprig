@@ -1,7 +1,7 @@
 /*
 @title: catch_orpheus
 @author: sampoder
-@tags: []
+@tags: ["endless"]
 @addedOn: 2022-10-08
 
 Instructions
