@@ -96,6 +96,9 @@
                                    gpio_put(SPI_TFT_RST,1); \
                                    asm volatile("nop \n nop \n nop")
 
+#include "pico/stdlib.h"
+#include "hardware/spi.h"
+
 static void spi_command(uint8_t x) {
   tft_dc_low();
   spi_write_blocking(SPI_TFT_PORT, &x, sizeof(x)); 

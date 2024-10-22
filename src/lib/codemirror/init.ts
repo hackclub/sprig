@@ -3,14 +3,15 @@ import { getSearchQuery, highlightSelectionMatches, search, searchKeymap, setSea
 import widgets from './widgets'
 import { effect, signal } from '@preact/signals'
 import { h, render } from 'preact'
-import { bracketMatching, defaultHighlightStyle, foldGutter, foldKeymap, indentOnInput, indentUnit, syntaxHighlighting } from '@codemirror/language'
+import { bracketMatching, defaultHighlightStyle, foldedRanges, foldEffect, unfoldEffect, foldGutter, foldKeymap, indentOnInput, indentUnit, syntaxHighlighting } from '@codemirror/language'
 import { history, defaultKeymap, historyKeymap, indentWithTab, insertNewlineAndIndent } from '@codemirror/commands'
 import { javascript } from '@codemirror/lang-javascript'
 import SearchBox from '../../components/search-box'
 import { EditorView, keymap, lineNumbers, highlightActiveLineGutter, highlightSpecialChars, drawSelection, dropCursor, rectangularSelection, crosshairCursor, highlightActiveLine } from '@codemirror/view'
 import { lintGutter } from "@codemirror/lint";
 import type { NormalizedError } from '../state'
-import { codeMirrorEditorText } from '../state'
+import { codeMirrorEditorText, codeMirror } from '../state'
+import { foldTemplateLiteral } from '../../components/big-interactive-pages/editor'
 
 export function diagnosticsFromErrorLog(view: EditorView, errorLog: NormalizedError[]) {
 	return errorLog.filter(error => error.line)
@@ -27,6 +28,42 @@ export function diagnosticsFromErrorLog(view: EditorView, errorLog: NormalizedEr
 
 export const initialExtensions = (onUpdate: any, onRunShortcut: any, yCollab?: any) => ([
 	EditorView.updateListener.of(update => {
+		update.transactions.forEach(transaction => {
+			// if it's a simple fold/unfold command, resolve
+			const isFoldOrUnfoldEffect = transaction.effects.map(stateEffect => {
+				return stateEffect.is(unfoldEffect) || stateEffect.is(foldEffect)
+			});
+
+			if (isFoldOrUnfoldEffect.includes(true)) return;
+
+			const previousFoldedRanges = foldedRanges(transaction.startState);
+			const currentFoldedRanges = foldedRanges(codeMirror.value!.state);
+			function arrayFromFoldRangeIter(foldRanges: any) {
+				const iter = foldRanges.iter();
+				const out: any[] = [];
+				while (iter.value != null) {
+					out.push({ from: iter.from, to: iter.to });
+					iter.next();
+				}
+				return out;
+			}
+
+			const previousFoldRanges = arrayFromFoldRangeIter(previousFoldedRanges);
+			const currentFoldRanges = arrayFromFoldRangeIter(currentFoldedRanges);
+
+			const foldRangeDiffs = [
+				...previousFoldRanges.filter(range => {
+					return !currentFoldRanges.some(oRange => (oRange.from === range.from && oRange.to === range.to))
+				}),
+				...currentFoldRanges.filter(range => {
+					return !previousFoldRanges.some(oRange => (oRange.from === range.from && oRange.to === range.to))
+				}),
+			];
+
+			foldRangeDiffs.forEach(range => foldTemplateLiteral(range.from, range.to));
+
+		});
+
 		const newEditorText = update.state.doc.toString();
 		codeMirrorEditorText.value = newEditorText;
 	}),

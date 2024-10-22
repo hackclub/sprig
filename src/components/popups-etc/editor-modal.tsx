@@ -8,15 +8,15 @@ import styles from './editor-modal.module.css'
 import levenshtein from 'js-levenshtein'
 import { runGameHeadless } from '../../lib/engine'
 
-const enum UpdateCulprit {
+const enum LastUpdater {
 	RESET,
 	OpenEditor,
-	CodeMirror		
+	CodeMirror
 }
 export default function EditorModal() {
 	const Content = openEditor.value ? editors[openEditor.value.kind].modalContent : () => null
 	const text = useSignal(openEditor.value?.text ?? '');
-	const [updateCulprit, setUpdateCulprit] = useState<UpdateCulprit>(UpdateCulprit.RESET);
+	const [lastUpdater, setLastUpdater] = useState<LastUpdater>(LastUpdater.RESET);
 
 	useSignalEffect(() => {
 		if (openEditor.value) text.value = openEditor.value.text
@@ -28,64 +28,55 @@ export default function EditorModal() {
 	 * 1. If an update comes from the underlying codemirror document, the first effect doesn't run as we're already updating the editor modal from there
 	 * 2. If an update was originally made from the currently open editor modal, the changes to the codemirror document will
 	 * not trigger an update to the open editor modal
-	 * 
+	 *
 	 * Both of these help us avoid Out-of-order errors or Cycles
 	 */
 
 	// Sync editor text changes with code
 	useEffect(() => { // useEffect #1
 		// if update comes from codemirror doc (probably from a collab session)
-		// this ensures that updates are not triggered from this effect which may cause an 
+		// this ensures that updates are not triggered from this effect which may cause an
 		// Out-of-order / Cycles
-		if (updateCulprit === UpdateCulprit.CodeMirror) {
-			setUpdateCulprit(UpdateCulprit.RESET);
+		if (lastUpdater === LastUpdater.CodeMirror) {
+			setLastUpdater(LastUpdater.RESET);
 			return;
 		}
 		// Signals are killing me but useEffect was broken and I need to ship this
 		// This is probably bad practice
 		const _openEditor = openEditor.peek() // Gotta peek to avoid cycles
 		const _text = text.value // But we want to sub to this
+		if (!codeMirror.value || !_openEditor) return
 
-		// Sync only if there's an active CodeMirror editor and an open editor
-		if (!codeMirror.value || !_openEditor) return;
+		codeMirror.value.dispatch({
+			changes: {
+				..._openEditor.editRange,
+				insert: _text
+			}
+		})
 
-		// Differentiate between map and palette updates
-		if (_openEditor.kind === 'palette' || _openEditor.kind === 'map') {
-			console.log('dispatching', _openEditor.editRange, _text);
-
-			codeMirror.value.dispatch({
-				changes: {
-					from: _openEditor.editRange.from,
-					to: _openEditor.editRange.to,
-					insert: _text
-				}
-			})
-
-			// Update openEditor with new text and correct range
-			openEditor.value = {
-				..._openEditor,
-				text: _text,
-				editRange: {
-					from: _openEditor.editRange.from,
-					to: _openEditor.editRange.from + _text.length
-				}
-			};
+		openEditor.value = {
+			..._openEditor,
+			text: _text,
+			editRange: {
+				from: _openEditor.editRange.from,
+				to: _openEditor.editRange.from + _text.length
+			}
 		}
-
-		setUpdateCulprit(UpdateCulprit.OpenEditor);
+		setLastUpdater(LastUpdater.OpenEditor);
 	}, [text.value]);
+
 
 	useEffect(() => {
 		// if update comes from codemirror doc (probably from a collab session)
-		// this ensures that updates are not triggered from this effect which may cause an 
+		// this ensures that updates are not triggered from this effect which may cause an
 		// Out-of-order / Cycles
-		if (updateCulprit === UpdateCulprit.OpenEditor) {
-			setUpdateCulprit(UpdateCulprit.RESET);
+		if (lastUpdater === LastUpdater.OpenEditor) {
+			setLastUpdater(LastUpdater.RESET);
 			return;
 		}
 		// just do this to sync the editor text with the code mirror text
 		computeAndUpdateModalEditor();
-		setUpdateCulprit(UpdateCulprit.CodeMirror);
+		setLastUpdater(LastUpdater.CodeMirror);
 		// updateCulprit.value = UPDATE_CULPRIT.CodeMirror;
 	}, [codeMirrorEditorText.value]);
 
@@ -96,53 +87,55 @@ export default function EditorModal() {
 		if (!openEditor.value) return;
 
 		const code = codeMirror.value?.state.doc.toString() ?? '';
-		const levenshtainDistances = _foldRanges.value.map((foldRange, index) => {
-			const widgetKind = _widgets.value[index]?.value.spec.widget.props.kind;
+		const levenshteinDistances = _foldRanges.value.map((foldRange, foldRangeIndex) => {
+			const widgetKind = _widgets.value[foldRangeIndex]?.value.spec.widget.props.kind;
 
-			// Filter out unrelated widgets
-			if (!openEditor.value || widgetKind !== openEditor.value.kind) return -1;
+			// if the widget kind is not the same as the open editor kind, don't do anything
+			if (widgetKind !== openEditor.value?.kind) return -1;
 
-			const foldCode = code.slice(foldRange.from, foldRange.to);
-			return levenshtein(text.value, foldCode);
+			const theCode = code.slice(foldRange?.from, foldRange?.to);
+
+			const distance = levenshtein(text.value, theCode)
+			return distance;
 		});
 
-		// Find closest matching fold range
-		const validDistances = levenshtainDistances.filter(d => d >= 0);
-		if (validDistances.length === 0) return;
+		// if (levenshtainDistances.length === 0) alert(`You are currently editing a deleted ${openEditor.value?.kind}`);
+		if (levenshteinDistances.length === 0) return;
 
-		const indexOfMinDistance = validDistances.indexOf(Math.min(...validDistances));
-		const editRange = _foldRanges.value[indexOfMinDistance];
+		// compute the index of the min distance
+		let indexOfMinDistance = 0;
+		levenshteinDistances.forEach((distance, didx) => {
+			if (levenshteinDistances[indexOfMinDistance]! < 0) indexOfMinDistance = didx;
+			const min = levenshteinDistances[indexOfMinDistance]!;
+			if (distance >= 0 && distance <= min) indexOfMinDistance = didx;
+		});
 
-		// Update the open editor range and content
-		if (editRange) {
-			const openEditorCode = code.slice(editRange.from, editRange.to);
+		// update the open editor if the index is not -1
+		if (indexOfMinDistance !== -1) {
+			const editRange = _foldRanges.value[indexOfMinDistance]
+			const openEditorCode = code.slice(editRange?.from, editRange?.to)
 
-			// If it's a map editor, update bitmaps based on headless game logic
-			if (openEditor.value.kind === 'map') {
-				runGameHeadless(code);
-			}
+			// the map editor needs to get the bitmaps after running the code
+			if (openEditor.value?.kind === 'map') runGameHeadless(code ?? '');
 
-			openEditor.value = {
-				...openEditor.value as OpenEditor,
-				editRange: {
-					from: editRange.from,
-					to: editRange.to
-				},
-				text: openEditorCode
-			}
+				text.value = openEditorCode;
+
+				openEditor.value = {
+					...openEditor.value as OpenEditor,
+					editRange: {
+						from: editRange!.from,
+						to: editRange!.to
+					},
+					text: openEditorCode
+				}
+
 		}
 	}
 
-	// Handle closing modal on escape key press or outside click
 	usePopupCloseClick(styles.content!, () => openEditor.value = null, !!openEditor.value)
-	useEffect(() => {
-		const unsubscribe = tinykeys(window, {
-			'Escape': () => openEditor.value = null
-		});
-		return () => unsubscribe()
-	}, [])
-
-	// Render only when there's an open editor
+	useEffect(() => tinykeys(window, {
+		'Escape': () => openEditor.value = null
+	}), [])
 	if (!openEditor.value) return null
 
 	return (
