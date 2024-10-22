@@ -567,5 +567,7 @@ afterInput(() => {
 
   clearText();
 
-  console.log();
+  console.debug(App[Symbol.metadata])
+
+  console.log(context.metadata);
 });
