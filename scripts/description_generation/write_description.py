@@ -58,4 +58,4 @@ for i in range(len(all_games)):
     print(all_games[i]["filename"], all_games[i]["description"])
 
 with open("scripts/description_generation/all_games.json", "w") as f:
-    json.dump(all_games, f)
+    json.dump(all_games, f, indent=4)

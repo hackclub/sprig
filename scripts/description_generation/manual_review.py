@@ -64,7 +64,7 @@ while True:
     all_games[index]["reviewed"] = True
 
     with open("scripts/description_generation/all_games.json", "w") as f:
-        json.dump(all_games, f)
+        json.dump(all_games, f, indent=4)
     
     index += 1
     
