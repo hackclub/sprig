@@ -2,7 +2,7 @@
 @title: Generic Platformer
 @author: DaInfLoop
 @tags: ['platformer']
-@addedOn: 2024-10-19
+@addedOn: 2024-10-22
 
 A very simple and generic platformer game.
 Press W to jump, and then A/D for left/right respectively.
