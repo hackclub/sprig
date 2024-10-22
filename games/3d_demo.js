@@ -1,8 +1,8 @@
 /*
 @title: 3D Demo
 @author: William Choi-Kim
-@tags: []https://github.com/hackclub/sprig/
-@addedOn: 2024-00-00
+@tags: []
+@addedOn: 2024-08-22
 */
 
 // rendering framework
