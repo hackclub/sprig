@@ -118,11 +118,11 @@ static void js_promises(void) {
   }
 }
 
-static void spade_call_press(int pin) {
+static void spade_call_press(Sprig_Button button) {
   if (!spade_state.press_cb) return;
 
   jerry_value_t this_value = jerry_create_undefined();
-  jerry_value_t args[] = { jerry_create_number(pin) };
+  jerry_value_t args[] = { jerry_create_number(button) };
 
   jerry_value_t res = jerry_call_function(
     spade_state.press_cb,
