@@ -1,7 +1,7 @@
 /*
 @title: 2048
 @author: linkai101
-@tags: ['retro']
+@tags: ["puzzle" , "endless"]
 @addedOn: 2022-09-16
 */
 
