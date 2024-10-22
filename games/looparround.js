@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: looparround
 @author: Emarald64
-@tags: []
+@tags: ['puzzle', 'maze']
 @addedOn: 2024-10-22
 */
 
