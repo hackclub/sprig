@@ -454,7 +454,7 @@ function PoodleMove() {
 
       setTimeout(() => {
         if (level < 7) {
-        addText("Your dead!", { x: 4, y: 4, color: color`7` });
+          addText("Your dead!", { x: 4, y: 4, color: color`7` });
         }
       }, 2000)
 
@@ -548,7 +548,7 @@ afterInput(() => {
   if (NumberCovered == targetfound) {
     level += 1;
 
-    
+
 
     if (currentLevel !== undefined) {
       setMap(currentLevel);
@@ -566,4 +566,6 @@ afterInput(() => {
   setTimeout(() => {}, 2500)
 
   clearText();
+
+  console.log();
 });
