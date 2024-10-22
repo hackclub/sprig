@@ -3,6 +3,12 @@
 @author: DaInfLoop
 @tags: ['platformer']
 @addedOn: 2024-10-19
+
+A very simple and generic platformer game.
+Press W to jump, and then A/D for left/right respectively.
+Charge over large gaps by holding down a directional button, and jump on enemies to kill them.
+
+Push boxes and climb chains by standing on them.
 */
 
 const player = "p"
