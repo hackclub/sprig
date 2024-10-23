@@ -1,7 +1,7 @@
 /*
 @title: Simon Sees
 @author: Armand
-@tags: ['endless']
+@tags: ['endless', 'memory']
 @addedOn: 2024-08-15
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
