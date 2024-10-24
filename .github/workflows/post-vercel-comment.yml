@@ -1,0 +1,16 @@
+name: Sprig Review Preview Links
+
+on:
+  deployment_status:
+    types: [success]
+
+jobs:
+  post-deployment-comment:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Post deployment comment
+      run: |
+        echo "Deployment succeeded!
+        ### Sprig Review Preview Link:
+        Click [here](${{ github.event.deployment_status.environment_url }}) to review the live preview."
