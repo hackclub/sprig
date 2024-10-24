@@ -1,11 +1,7 @@
 /*
-@title: getting_started
-@author: leo, edits
-@tags: ['tutorial']
-@addedOn: 2022-07-26
-
-Check the tutorial in the bottom right, the run button is in the top right.
-Make sure to remix this tutorial if you want to save your progress!
+@title: Platformer
+@author: Kirin
+@addedOn: 2024-10-24
 */
 
 // define the sprites in our game
