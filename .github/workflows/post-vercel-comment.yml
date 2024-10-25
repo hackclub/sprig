@@ -1,14 +1,12 @@
 name: Sprig Review Preview Links
 
 on:
-  deployment_status:
-    types: ['success']
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   post-vercel-preview-comment:
     runs-on: ubuntu-latest
-
-    if: github.event.deployment_status.environment == 'preview'
 
     steps:
       - name: Get list of changed files
@@ -38,16 +36,25 @@ jobs:
             echo "Comment already exists. Skipping."
             exit 0
 
-      - name: Post Vercel Preview Link on Pull Request
-        if: steps.check-comment.outputs.COMMENT_EXISTS == '0'
+      - name: Construct Preview URL and Post Comment
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEPLOYMENT_URL: ${{ github.event.deployment_status.target_url }}
+          PROJECT_NAME: "sprig"
+          BRANCH_NAME: "${{ github.head_ref }}"
+          FORK_AUTHOR: "${{ github.event.pull_request.head.user.login }}"
+          DOMAIN: "hackclub.dev"
           JS_FILE: ${{ env.FIRST_JS_FILE }}
+          IS_FORK: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
         run: |
           PR_NUMBER=$(echo "${{ github.ref }}" | grep -oE "[0-9]+")
           
-          COMMENT_BODY="Your Game Preview is Available at [${DEPLOYMENT_URL}/gallery/beta/${JS_FILE}](${DEPLOYMENT_URL}/gallery/beta/${JS_FILE})"
+          if [ "${IS_FORK}" = "true" ]; then
+            PREVIEW_URL="https://${PROJECT_NAME}-git-fork-${FORK_AUTHOR}-${BRANCH_NAME}.${DOMAIN}"
+          else
+            PREVIEW_URL="https://${PROJECT_NAME}-git-${BRANCH_NAME}.${DOMAIN}"
+          fi
+          
+          COMMENT_BODY="Your Game Preview is Available at [${PREVIEW_URL}/gallery/beta/${JS_FILE}](${PREVIEW_URL}/gallery/beta/${JS_FILE})"
           
           curl -s -H "Authorization: token $GITHUB_TOKEN" \
             -X POST \
