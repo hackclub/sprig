@@ -1,7 +1,7 @@
 /*
 @title: SOS_Game
 @author: Milán Leskó
-@tags: ['multiplayer']
+@tags: ['multiplayer', 'strategy', 'turn-based']
 @addedOn: 2022-11-13
 
 The aim of game is to make as many SOS words (in any direction) as you can.
