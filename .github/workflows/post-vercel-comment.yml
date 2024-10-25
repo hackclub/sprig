@@ -2,7 +2,7 @@ name: Sprig Review Preview Links
 
 on:
   pull_request_target:
-    types: [opened, synchronize]
+    types: [opened, synchronize, reopened]
 
 jobs:
   post-vercel-preview-comment:
@@ -13,6 +13,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
+      - name: Fetch base and head branches
+        run: |
+          git fetch origin ${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}
+          git fetch origin ${{ github.event.pull_request.head.ref }}:refs/remotes/origin/${{ github.event.pull_request.head.ref }}
 
       - name: Get list of changed files
         id: changed-files
@@ -32,7 +37,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          PR_NUMBER=$(echo "${{ github.ref }}" | grep -oE "[0-9]+")
+          PR_NUMBER=$(echo "${{ github.event.pull_request.number }}")
           COMMENTS_URL="https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments"
           COMMENTS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" $COMMENTS_URL)
           echo "$COMMENTS" > comments.json
@@ -40,8 +45,8 @@ jobs:
       - name: Check if comment already exists
         if: env.FIRST_JS_FILE
         run: |
-          COMMENT_EXISTS=$(cat comments.json | grep -c "/gallery/beta/${{ env.FIRST_JS_FILE }}")
-          if [ $COMMENT_EXISTS -ne 0 ]; then
+          COMMENT_EXISTS=$(jq '.[] | select(.body | contains("/gallery/beta/${{ env.FIRST_JS_FILE }}"))' comments.json)
+          if [ -n "$COMMENT_EXISTS" ]; then
             echo "Comment already exists. Skipping."
             exit 0
 
@@ -56,7 +61,7 @@ jobs:
           JS_FILE: ${{ env.FIRST_JS_FILE }}
           IS_FORK: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
         run: |
-          PR_NUMBER=$(echo "${{ github.ref }}" | grep -oE "[0-9]+")
+          PR_NUMBER=$(echo "${{ github.event.pull_request.number }}")
           
           if [ "${IS_FORK}" = "true" ]; then
             PREVIEW_URL="https://${PROJECT_NAME}-git-fork-${FORK_AUTHOR}-${BRANCH_NAME}.${DOMAIN}"
