@@ -49,6 +49,7 @@ jobs:
           if [ -n "$COMMENT_EXISTS" ]; then
             echo "Comment already exists. Skipping."
             exit 0
+          fi
 
       - name: Construct Preview URL and Post Comment
         if: env.FIRST_JS_FILE
