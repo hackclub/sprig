@@ -11,6 +11,15 @@ jobs:
     if: github.event.deployment_status.environment == 'preview'
 
     steps:
+      - name: Get list of changed files
+        id: changed-files
+        run: |
+          echo "Pull Request Base SHA: ${{ github.event.pull_request.base.sha }}"
+          echo "Pull Request Head SHA: ${{ github.event.pull_request.head.sha }}"
+          js_files=$(git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep 'games/.*\.js$' | xargs)
+          first_js_file=$(basename "$js_files" .js)
+          echo "FIRST_JS_FILE=$first_js_file" >> $GITHUB_ENV
+
       - name: Fetch existing comments on the pull request
         id: fetch-comments
         env:
@@ -19,28 +28,26 @@ jobs:
           PR_NUMBER=$(echo "${{ github.ref }}" | grep -oE "[0-9]+")
           COMMENTS_URL="https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments"
           COMMENTS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" $COMMENTS_URL)
-
           echo "$COMMENTS" > comments.json
 
       - name: Check if comment already exists
         id: check-comment
         run: |
-          COMMENT_EXISTS=$(cat comments.json | grep -c "/gallery/beta/3d_demo")
-
+          COMMENT_EXISTS=$(cat comments.json | grep -c "/gallery/beta/${{ env.FIRST_JS_FILE }}")
           if [ $COMMENT_EXISTS -ne 0 ]; then
             echo "Comment already exists. Skipping."
             exit 0
-          fi
 
       - name: Post Vercel Preview Link on Pull Request
         if: steps.check-comment.outputs.COMMENT_EXISTS == '0'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEPLOYMENT_URL: ${{ github.event.deployment_status.target_url }}
+          JS_FILE: ${{ env.FIRST_JS_FILE }}
         run: |
           PR_NUMBER=$(echo "${{ github.ref }}" | grep -oE "[0-9]+")
           
-          COMMENT_BODY="Your Game Preview is Available at [${DEPLOYMENT_URL}/gallery/beta/3d_demo](${DEPLOYMENT_URL}/gallery/beta/3d_demo)"
+          COMMENT_BODY="Your Game Preview is Available at [${DEPLOYMENT_URL}/gallery/beta/${JS_FILE}](${DEPLOYMENT_URL}/gallery/beta/${JS_FILE})"
           
           curl -s -H "Authorization: token $GITHUB_TOKEN" \
             -X POST \
