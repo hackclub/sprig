@@ -11,7 +11,29 @@ jobs:
     if: github.event.deployment_status.environment == 'preview'
 
     steps:
+      - name: Fetch existing comments on the pull request
+        id: fetch-comments
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=$(echo "${{ github.ref }}" | grep -oE "[0-9]+")
+          COMMENTS_URL="https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments"
+          COMMENTS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" $COMMENTS_URL)
+
+          echo "$COMMENTS" > comments.json
+
+      - name: Check if comment already exists
+        id: check-comment
+        run: |
+          COMMENT_EXISTS=$(cat comments.json | grep -c "/gallery/beta/3d_demo")
+
+          if [ $COMMENT_EXISTS -ne 0 ]; then
+            echo "Comment already exists. Skipping."
+            exit 0
+          fi
+
       - name: Post Vercel Preview Link on Pull Request
+        if: steps.check-comment.outputs.COMMENT_EXISTS == '0'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEPLOYMENT_URL: ${{ github.event.deployment_status.target_url }}
