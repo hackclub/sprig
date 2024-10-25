@@ -1,6 +1,7 @@
 /*
 @title: Platformer
 @author: Kirin
+@tags: []
 @addedOn: 2024-10-24
 */
 
