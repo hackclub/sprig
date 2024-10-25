@@ -2,15 +2,25 @@ name: Sprig Review Preview Links
 
 on:
   deployment_status:
-    types: [success]
+    types: ['success']
 
 jobs:
-  post-deployment-comment:
+  post-vercel-preview-comment:
     runs-on: ubuntu-latest
 
+    if: github.event.deployment_status.environment == 'preview'
+
     steps:
-    - name: Post deployment comment
-      run: |
-        echo "Deployment succeeded!
-        ### Sprig Review Preview Link:
-        Click [here](${{ github.event.deployment_status.environment_url }}) to review the live preview."
+      - name: Post Vercel Preview Link on Pull Request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEPLOYMENT_URL: ${{ github.event.deployment_status.target_url }}
+        run: |
+          PR_NUMBER=$(echo "${{ github.ref }}" | grep -oE "[0-9]+")
+          
+          COMMENT_BODY="Your Game Preview is Available at [${DEPLOYMENT_URL}/gallery/beta/3d_demo](${DEPLOYMENT_URL}/gallery/beta/3d_demo)"
+          
+          curl -s -H "Authorization: token $GITHUB_TOKEN" \
+            -X POST \
+            -d "{\"body\": \"$COMMENT_BODY\"}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments"
