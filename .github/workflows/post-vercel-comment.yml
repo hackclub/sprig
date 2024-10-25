@@ -31,6 +31,7 @@ jobs:
           else
             echo "No matching .js files found in games/ directory."
             exit 0
+          fi
 
       - name: Fetch existing comments on the pull request
         if: env.FIRST_JS_FILE
