@@ -1,7 +1,7 @@
 name: Sprig Review Preview Links
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize]
 
 jobs:
@@ -19,14 +19,13 @@ jobs:
         run: |
           echo "Pull Request Base SHA: ${{ github.event.pull_request.base.sha }}"
           echo "Pull Request Head SHA: ${{ github.event.pull_request.head.sha }}"
-          js_files=$(git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep 'games/.*\.js$' | xargs)
+          js_files=$(git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep 'games/.*\.js$' | awk '{print $1}')
           first_js_file=$(basename "$js_files" .js)
           if [ -n "$first_js_file" ]; then
             echo "FIRST_JS_FILE=$first_js_file" >> $GITHUB_ENV
           else
             echo "No matching .js files found in games/ directory."
             exit 0
-          fi
 
       - name: Fetch existing comments on the pull request
         if: env.FIRST_JS_FILE
