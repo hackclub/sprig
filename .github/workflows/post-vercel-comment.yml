@@ -70,7 +70,7 @@ jobs:
             PREVIEW_URL="https://${PROJECT_NAME}-git-${BRANCH_NAME}.${DOMAIN}"
           fi
           
-          COMMENT_BODY="Your Game Preview is Available at [${PREVIEW_URL}/gallery/beta/${JS_FILE}](${PREVIEW_URL}/gallery/beta/${JS_FILE})"
+          COMMENT_BODY="You can play your game at [Play Here](${PREVIEW_URL}/gallery/beta/${JS_FILE})!"
           
           curl -s -H "Authorization: token $GITHUB_TOKEN" \
             -X POST \
