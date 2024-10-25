@@ -1,7 +1,7 @@
 /*
 @title: 15 puzzle
 @author: maggie
-@tags: []
+@tags: ["puzzle"]
 @addedOn: 2022-07-18
 
 INSTRUCTIONS:

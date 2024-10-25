@@ -9,7 +9,6 @@
 	align-items: center;
 }
 
-
 .containerInner {
 	height: 100vh;
 	width: 100%;
@@ -32,6 +31,20 @@
 	box-shadow: 10px 10px 0px -3px var(--accent);
 }
 
+p {
+	line-height: 1.5;
+}
+
+.muted {
+	color: var(--fg-muted);
+	font-size: 0.9rem;
+}
+
+.subtitle {
+	color: var(--fg-switch-low);
+	font-size: 1rem;
+	margin-bottom: 5px;
+}
 
 .input{
 	background: white;
@@ -51,21 +64,15 @@
 }
 
 .buttonContainer{
-	margin-top: 10px;
+	margin-top: 15px;
 	display: flex;
 	justify-content: center;
 	width: 100%;
+	gap: 5px;
 }
 
 .done{
 	margin-right: 0.25rem;
-	width: 50%;
-	display: flex;
-	justify-content: center;
-	cursor: pointer;
-}
-
-.cancel{
 	width: 50%;
 	display: flex;
 	justify-content: center;
