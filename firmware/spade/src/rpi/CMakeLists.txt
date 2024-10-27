@@ -1,6 +1,6 @@
 pico_sdk_init()
 add_definitions(-DSPADE_EMBEDDED -DSPADE_AUDIO)
-set(DCMAKE_BUILD_TYPE Debug)
+set(DCMAKE_BUILD_TYPE Release)
 target_compile_definitions(spade PRIVATE
         # compile time configuration of I2S
         PICO_AUDIO_I2S_MONO_INPUT=1
