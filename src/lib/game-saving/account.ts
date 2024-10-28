@@ -38,9 +38,6 @@ export interface User {
 	createdAt: Timestamp
 	email: string
 	username: string | null
-	githubAccessToken?: string
-	githubId?: string
-	githubUsername?: string
 	failedLoginAttempts?: number
 	lockoutUntil?: Timestamp
 }
@@ -237,7 +234,8 @@ export const makeOrUpdateSession = async (cookies: AstroCookies, userId: string,
 		path: '/',
 		maxAge: 60 * 60 * 24 * 365,
 		httpOnly: true,
-		sameSite: 'strict'
+		sameSite: 'lax',
+		secure: true,
 	})
 	return {
 		session: { id: _session.id, ...data } as Session,

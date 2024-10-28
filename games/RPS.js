@@ -1,7 +1,7 @@
 /*
 @title: RPS
 @author: Shahm Najeeb
-@tags: []
+@tags: ['endless']
 @addedOn: 2024-08-23
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
