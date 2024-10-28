@@ -190,6 +190,45 @@ if (games.length === 0 && unnamedGames.length > 0) {
 				overflow: hidden;
 				text-overflow: ellipsis;
 			}
+			
+			.game .title-container{
+				display: flex;
+				justify-content: space-between;
+				max-height: 1.5rem;
+			}
+			.icon{
+				height: 100%;
+				width: 1rem;
+			}
+			.tooltip {
+				position: relative;
+				display: inline-block;
+			}
+
+			.tooltip .tooltip-text {
+				visibility: hidden;
+				width: 300px;
+				background-color: rgba(0, 0, 0, 0.5);
+				color: #fff;
+				text-align: center;
+				border-radius: 6px;
+				padding: 5px 0;
+				
+				/* Position the tooltip */
+				position: absolute;
+				z-index: 1;
+				bottom: 100%;
+				left: 50%;
+				margin-left: -150px;
+			}
+
+			.tooltip:hover .tooltip-text {
+				visibility: visible;
+			}
+
+			.game:hover .icon-container{
+				margin-right:5%
+			}
 		</style>
 	</head>
 	<body>
@@ -208,7 +247,36 @@ if (games.length === 0 && unnamedGames.length > 0) {
 					<div class='games'>
 						{games.map(game => (
 							<a class='game' href={`/~/${game.id}`}>
-								<h3>{game.name || 'Untitled'}</h3>
+								<div class="title-container">
+									<h3>{game.name || 'Untitled'}</h3>
+									<div class="icon-container">
+										{game.isRoomOpen && 
+											<div class="tooltip">
+												<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon">
+												<path d="M9 12C9 13.3807 7.88071 14.5 6.5 14.5C5.11929 14.5 4 13.3807 4 12C4 10.6193 5.11929 9.5 6.5 9.5C7.88071 9.5 9 10.6193 9 12Z" stroke="#000000" stroke-width="1.5"/>
+												<path d="M14 6.5L9 10" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+												<path d="M14 17.5L9 14" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+												<path d="M19 18.5C19 19.8807 17.8807 21 16.5 21C15.1193 21 14 19.8807 14 18.5C14 17.1193 15.1193 16 16.5 16C17.8807 16 19 17.1193 19 18.5Z" stroke="#000000" stroke-width="1.5"/>
+												<path d="M19 5.5C19 6.88071 17.8807 8 16.5 8C15.1193 8 14 6.88071 14 5.5C14 4.11929 15.1193 3 16.5 3C17.8807 3 19 4.11929 19 5.5Z" stroke="#000000" stroke-width="1.5"/>
+												</svg>
+												<p class="tooltip-text">This game has collab features enabled and has been shared</p>
+											</div>
+										}
+										{game.isSavedOnBackend && 
+											<div class="tooltip">
+												<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon">
+												<path d="M4 18V6" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+												<path d="M20 12L20 18" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+												<path d="M12 10C16.4183 10 20 8.20914 20 6C20 3.79086 16.4183 2 12 2C7.58172 2 4 3.79086 4 6C4 8.20914 7.58172 10 12 10Z" stroke="#000000" stroke-width="1.5"/>
+												<path d="M20 12C20 14.2091 16.4183 16 12 16C7.58172 16 4 14.2091 4 12" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+												<path d="M20 18C20 20.2091 16.4183 22 12 22C7.58172 22 4 20.2091 4 18" stroke="#000000" stroke-width="1.5"/>
+												</svg>
+												<p class="tooltip-text">This game is saved on the backend and collab features are available</p>
+											</div>
+										}
+										
+									</div>	
+								</div>
 								<p class='modified-at'>
 									Edited {ms(Math.max(Date.now() - game.modifiedAt.toMillis(), 1000), { long: true })} ago
 								</p>

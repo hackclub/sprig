@@ -52,6 +52,10 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		});
 	};
 
+	useEffect(() => {
+		isNewSaveStrat.value = props.roomState ? true : false; // If a roomState was passed, move to new save strat
+	}, [])
+
 	// Alert the parent to code changes (not reactive)
 	const onCodeChangeRef = useRef(props.onCodeChange)
 	useEffect(() => { onCodeChangeRef.current = props.onCodeChange }, [props.onCodeChange])
@@ -104,7 +108,6 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	});
 	useEffect(() => {
 		if (!parent.current) throw new Error('Oh golly! The editor parent ref is null')
-
 		if(!isNewSaveStrat.value){
 			const editor = new EditorView({
 				state: createEditorState(props.initialCode ? props.initialCode : '', () => {
@@ -118,7 +121,6 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			props.onEditorView?.(editor)
 			return
 		}
-
 		if(!props.roomState) return
 		if(!props.persistenceState) return
 		try{
