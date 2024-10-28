@@ -7,14 +7,7 @@ import { signal } from '@preact/signals'
 import { RoomState, ConnectionStatus, type PersistenceState, PersistenceStateKind } from '../../../lib/state'
 import MobileUnsupported from '../../../components/popups-etc/mobile-unsupported'
 import { mobileUserAgent } from '../../../lib/utils/mobile'
-
-function convertStringToNumber(id:string){
-	let number = "";
-	for(let i = 0; i < id.length; i++){
-		number+=id.charCodeAt(i)
-	}
-	return Number(number)
-}
+import {isAccountWhitelistedToUseCollabAndSavingBetaFeatures} from "../../../lib/game-saving/account"
 
 const session = await getSession(Astro.cookies)
 if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
@@ -22,7 +15,7 @@ if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 let checkRoom = false;
 const game = await getGame(Astro.params.id!)
 if (!game) return Astro.redirect('/404', 302)
-if(convertStringToNumber(session.user.id) % 10 == 0 || session.user.email == "development@hackclub.com") Astro.redirect(`/~/${game.id}`)
+if(await isAccountWhitelistedToUseCollabAndSavingBetaFeatures(session.user.id, session.user.email)) Astro.redirect(`/~/${game.id}`)
 if(game.ownerId !== session.user.id) checkRoom = true;
 
 const fileRegexp = /^.*\/(.+)-(\d+)\.md$/

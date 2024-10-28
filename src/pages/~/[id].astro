@@ -7,21 +7,16 @@ import { signal } from '@preact/signals'
 import { ConnectionStatus, PersistenceStateKind, RoomState, type PersistenceState } from '../../lib/state'
 import MobileUnsupported from '../../components/popups-etc/mobile-unsupported'
 import { mobileUserAgent } from '../../lib/utils/mobile'
+import { isAccountWhitelistedToUseCollabAndSavingBetaFeatures } from '../../lib/game-saving/account'
 
 const session = await getSession(Astro.cookies)
 if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 
-function convertStringToNumber(id:string){
-	let number = "";
-	for(let i = 0; i < id.length; i++){
-		number+=id.charCodeAt(i)
-	}
-	return Number(number)
-}
 let persistenceState;
 let isMobile;
 let roomState;
-if(convertStringToNumber(session.user.id) % 10 == -1 || session.user.email == "development@hackclub.com" || session.user.email == "cosmin@hackclub.com"){
+
+if(await isAccountWhitelistedToUseCollabAndSavingBetaFeatures(session.user.id, session.user.email)){
 	let checkRoom = false;
 	const game = await getGame(Astro.params.id!)
 	if (!game) return Astro.redirect('/404', 302)
