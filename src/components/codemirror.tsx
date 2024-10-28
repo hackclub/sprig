@@ -53,11 +53,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	};
 
 	useEffect(() => {
-		if(props.roomState){
-			isNewSaveStrat.value = true;
-		} else {
-			isNewSaveStrat.value = false;
-		}
+		isNewSaveStrat.value = props.roomState ? true : false; // If a roomState was passed, move to new save strat
 	}, [])
 
 	// Alert the parent to code changes (not reactive)

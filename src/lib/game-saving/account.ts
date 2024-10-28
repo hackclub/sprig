@@ -7,8 +7,11 @@ import { lazy } from '../utils/lazy'
 import { generateGameName } from '../words'
 import metrics from '../../../metrics'
 import { RoomParticipant } from '../state'
+import { sha256Hash } from "../../lib/codemirror/util";
 
 const numberid = customAlphabet('0123456789')
+
+const whitelistedBetaCollabAndSavingStratEmails = ["development@hackclub.com", "cosmin@hackclub.com", "graham@hackclub.com"]
 
 const app = lazy(() => {
 	if (admin.apps.length === 0) {
@@ -337,4 +340,19 @@ export const getSnapshotData = async (id: string): Promise<SnapshotData | null> 
 
 export const updateUserGitHubToken = async (userId: string, githubAccessToken: string, githubId: string, githubUsername: string): Promise<void> => {
     await updateDocument('users', userId, { githubAccessToken, githubId, githubUsername });
+}
+
+async function hashCodeToBigInt(string : string) : Promise<bigint>{
+	return BigInt(`0x${ await sha256Hash(string)}`);
+}
+
+export async function isAccountWhitelistedToUseCollabAndSavingBetaFeatures(id: string, email: string) : Promise<boolean>{
+	if(import.meta.env.PERCENT_OF_USERS_WHITELISTED_FOR_BETA_FEATURE == 0 || import.meta.env.PERCENT_OF_USERS_WHITELISTED_FOR_BETA_FEATURE == undefined) return false;
+	let hashedId = await hashCodeToBigInt(id);
+	
+	if(hashedId % BigInt(100) < import.meta.env.PERCENT_OF_USERS_WHITELISTED_FOR_BETA_FEATURE || 
+	whitelistedBetaCollabAndSavingStratEmails.includes(email)){
+		return true
+	}
+	return false;
 }
