@@ -57,7 +57,6 @@ async function handlePersistenceState(isSessionFull : boolean, game : Game, tuto
 }
 
 function checkRoomAccess(game : Game, userEmail : string){
-	console.log(game)
 	if(game.roomParticipants?.filter(participant => participant.userEmail === userEmail)[0]?.isBanned) return Astro.redirect('/404', 302)
 	if(game.password == undefined) return Astro.redirect('/404', 302)
 	return undefined;
