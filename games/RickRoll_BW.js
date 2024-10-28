@@ -1,7 +1,7 @@
 /*
 @title: RickRoll
 @author: MMKF
-@tags: []
+@tags: ['endless']
 @addedOn: 2024-09-18
 */
 

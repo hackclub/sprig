@@ -1,7 +1,7 @@
 /*
 @title: Catch the apples
 @author: Jack
-@tags: ['endless']
+@tags: ["endless" , "timed"]
 @addedOn: 2024-01-13
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
