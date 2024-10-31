@@ -1,8 +1,8 @@
 /*
 @title: Platformer
 @author: Kirin
-@tags: []
-@addedOn: 2024-10-29
+@tags: ['platformer']
+@addedOn: 2024-10-31
 */
 
 // define the sprites in our game
