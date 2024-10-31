@@ -1,4 +1,9 @@
 /*
+@title: Sprigin Snakey
+@author: hcjk
+@tags: []
+@addedOn: 2024-10-31
+
 use w, s, a, d to control the snake
 
 collect 250 leaves to win this game.
@@ -6,9 +11,6 @@ collect 250 leaves to win this game.
 Also if you die you need to restart the whole game.
 
 Whenever you collect an leave you move faster.
-
-author: hcjk
-
 */
 let speed = 250;
 const player = "p";
