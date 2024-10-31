@@ -1,3 +1,10 @@
+/*
+@title: Gifted Mankey
+@author: Divyansh Pandey
+@tags: []
+@addedOn: 2024-10-31
+*/
+
 // Create canvas and add it to the document
 const canvas = document.createElement('canvas');
 canvas.width = 400;
