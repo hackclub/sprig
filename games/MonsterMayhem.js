@@ -10,7 +10,15 @@ https://sprig.hackclub.com/gallery/getting_started
 
 
 const EMPTY = "_";
-const GROUND="~";
+const GROUND1="1";
+const GROUND2="2";
+const GROUND3="3";
+const GROUND4="4";
+const GROUND5="5";
+const GROUND6="6";
+const GROUND7="7";
+const GROUND8="8";
+const GROUND9="9";
 const HOLE_RED = "R";
 const HOLE_BLUE = "B";
 const ZOMBIE = "Z";
@@ -35,7 +43,41 @@ const EMPTY_BITMAP = bitmap`
 
 const CORE_LEGEND = [
 	[ EMPTY, EMPTY_BITMAP ],
-	[ GROUND, bitmap`
+	[ GROUND1, bitmap`
+CCCCCCCCCCCCCCCC
+CCCC6CCCCCCCCCCC
+CCCCCFCCCCCCCCCC
+CCCCCFCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CC6CCCCCCCCCCCCC
+CCC6CC6CCCCCCCCC
+CCC6CFCCCCCCCCCC
+CCCFCFCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC` ],
+	[ GROUND2, bitmap`
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCC6CC
+CCCCCCCCCCCC6CCC
+CCCCCCCCCCCCFCCC
+CCCCCCCCCC6CFCCC
+CCCCCCCCCCCFCCCC
+C6CCCCCCCCCCCCCC
+CCFCCCCCCCCCCCCC
+CCFCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC` ],
+	[ GROUND3, bitmap`
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
@@ -43,13 +85,115 @@ CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
+CCCCCCCCCCC6CCCC
+CCCCCCCCCCCCFCCC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC` ],
+	[ GROUND4, bitmap`
 CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCC6CCCCCCCCCC
+CCCC6CCCCCCCCCCC
+CCCC6CCCCCCCCCCC
+CCCCFCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCC6CFCCCCC
+CCCCCCC6CFCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC` ],
+	[ GROUND5, bitmap`
+CCCCCCCCCCCCCCCC
+CCCC6CCCCCCCCCCC
+CCCCCFCCCCCCCCCC
+CCCCCFCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCC11CCCC
+CCCCCCCCC111CCCC
+CCCCCCCCCCCCCCCC
+CC6CCCCCCCCCCCCC
+CCC6CC6CCCCCCCCC
+CCC6CFCCCCCCCCCC
+CCCFCFCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC` ],
+	[ GROUND6, bitmap`
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCLLCCCCCCCCCC
+CCC9LCCCCCCCCCCC
+CC9999CCCCCCC6CC
+CC9999CCCCCC6CCC
+CCC999CCCCCCFCCC
+CCCCCCCCCC6CFCCC
+CCCCCCCCCCCFCCCC
+C6CCCCCCCCCCCCCC
+CCFCCCCCCCCCCCCC
+CCFCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC` ],
+	[ GROUND7, bitmap`
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCLCCCCCCCCCCC
+CCCLCCCCCCC6CCCC
+CC9999CCCCCCFCCC
+C969969CCCCCCCCC
+C999999CCCCCCCCC
+C996699CCCCCCCCC
+CC9999CCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC` ],
+	[ GROUND8, bitmap`
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCC6CCCCCCCCCC
+CCCC6CCCCCCCCCCC
+CCCC6CCCCC11CCCC
+CCCCFCCCCC1LLCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCC6CFCCCCC
+CCCCCCC6CFCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC` ],
+	[ GROUND9, bitmap`
+CCCCCCCCCCCCCCCC
+CCCC6CCCCCCCCCCC
+CCCCCFCCCCCCCCCC
+CCCCCFCCCCCCCCCC
+CCCCCCCCCCCCCC8C
+CCCCCCCCCCC88C8C
+CCCCCCCCCC8CC8CC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CC6CCCCCCCCCCCCC
+CCC6CC6CCCCCCCCC
+CCC6CFCCCCCCCCCC
+CCCFCFCCCCCCCCCC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC` ],
 	[ HOLE_RED, bitmap`
@@ -157,11 +301,16 @@ const MONSTERS = [
 ]
 
 
+// get a unique number given an x and y, using cantor's pairing function
+function getPositionHash(x, y) {
+	return ((x+y) * (x+y+1) * 0.5) + y; // cantor's pairing function
+}
+
+// get a unique character for each position
 function getLegendChar(x, y) {
 	x++;
 	y++;
-	const charCode = ((x+y) * (x+y+1) * 0.5) + y; // cantor's pairing function
-	return String.fromCharCode(charCode + 128); // add 128 so it's past all the normal chars we might want to use;
+	return String.fromCharCode(getPositionHash(x, y) + 128); // add 128 so it's past all the normal chars we might want to use;
 }
 
 const STARTING_LEGEND=[];
@@ -177,35 +326,62 @@ for (let y = 0; y < 5; y++) {
 }
 
 const HOLES = [
-	{x: 2, y: 1},
-	{x: 4, y: 1},
-	{x: 1, y: 2},
-	{x: 2, y: 2},
-	{x: 3, y: 2},
-	{x: 4, y: 2},
-	{x: 2, y: 3},
-	{x: 4, y: 3},
+	{x: 2, y: 1, type: -1, bonking: false},
+	{x: 3, y: 1, type: -1, bonking: false},
+	{x: 1, y: 2, type: -1, bonking: false},
+	{x: 2, y: 2, type: -1, bonking: false},
+	{x: 3, y: 2, type: -1, bonking: false},
+	{x: 4, y: 2, type: -1, bonking: false},
+	{x: 2, y: 3, type: -1, bonking: false},
+	{x: 3, y: 3, type: -1, bonking: false},
 ]
 
-function popup(x, y, typeIndex) {
-	setLegend([getLegendChar(x, y), MONSTERS[typeIndex][0]], ...CORE_LEGEND);
-	setTimeout(() => {
-		setLegend([getLegendChar(x, y), MONSTERS[typeIndex][1]], ...CORE_LEGEND);
-	}, 50);
-	setTimeout(() => {
-		setLegend([getLegendChar(x, y), MONSTERS[typeIndex][2]], ...CORE_LEGEND);
-	}, 100);
-  	setTimeout(() => {
-		setLegend([getLegendChar(x, y), MONSTERS[typeIndex][3]], ...CORE_LEGEND);
-	}, 200);
+const CURRENT_ANIMATIONS_LEGEND = [];
+
+function updateAnimations() {
+	console.log("Updating animations w", CURRENT_ANIMATIONS_LEGEND)
+	setLegend(...CURRENT_ANIMATIONS_LEGEND, ...CORE_LEGEND);
 }
 
+function popup(holeIndex, typeIndex) {
+	const hole = HOLES[holeIndex];
+	x = hole.x;
+	y = hole.y;
+	hole.type = typeIndex;
+
+	let LEGEND_ARRAY = [getLegendChar(x, y), MONSTERS[typeIndex][0]];
+	CURRENT_ANIMATIONS_LEGEND.push(LEGEND_ARRAY);
+
+	setTimeout(() => {
+		if (!hole.bonking) {
+			LEGEND_ARRAY[1] = MONSTERS[typeIndex][1];
+			updateAnimations();
+		}
+	}, 50);
+	setTimeout(() => {
+		if (!hole.bonking) {
+			LEGEND_ARRAY[1] = MONSTERS[typeIndex][2];
+			updateAnimations();
+		}
+	}, 100);
+  	setTimeout(() => {
+		if (!hole.bonking) {
+			LEGEND_ARRAY[1] = MONSTERS[typeIndex][3];
+			updateAnimations();
+		}
+	}, 200);
+}
+function bonk(holeIndex) {
+	setLegend([getLegendChar(x, y), MONSTERS[typeIndex][4]], ...CORE_LEGEND);
+}
+
+// looks weird bc the ground is varied
 const MAIN_MAP = map`
-~~~~~~
-~~RB~~
-~RBRB~
-~~RB~~
-~~~~~~`;
+163181
+43RB49
+2RBRB2
+35RB47
+124324`;
 
 // TODO: title screen
 
@@ -220,4 +396,5 @@ for (let x = 0; x < 6; x++) {
 	}
 }
 
-popup(HOLES[0].x, HOLES[0].y, 0);
+popup(0, 0);
+popup(1, 0);
