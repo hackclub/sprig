@@ -23,6 +23,7 @@ import ShareRoomPopup from "./popups-etc/share-room";
 import { PersistenceStateKind } from "../lib/state";
 
 import {
+	IoBoat,
 	IoChevronDown,
 	IoLogoGithub,
 	IoPlay,
@@ -41,6 +42,7 @@ import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
 import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage } from "../lib/game-saving/github";
+import {useEffect, useState} from "preact/hooks";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -708,9 +710,28 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			</Button>
 		);
 	}
+	
+	const [showHighSeasAnnouncement, setShowHighSeasAnnouncement] = useState(false);
+
+	const highSeasAnnouncementsSeenKey = "highSeasAnnouncementSeen"
+	
+	useEffect(() => {
+		setShowHighSeasAnnouncement(
+			!localStorage.getItem(highSeasAnnouncementsSeenKey)
+		)
+	}, []);
+	
+	const hideHighSeasAnnouncement = () => {
+		setShowHighSeasAnnouncement(false)
+		localStorage.setItem(highSeasAnnouncementsSeenKey, "true")
+	}
 
 	return (
 		<>
+		{showHighSeasAnnouncement && <div class={styles.highSeasAnnouncement}>
+			<div><IoBoat/><span>Coming from High Seas? You can still log your work - <a href="https://google.com">click here</a> to set it up for Sprig.</span></div>
+			<button onClick={hideHighSeasAnnouncement}>Don't show again</button>
+			</div> }
 			<nav class={styles.container}>
 				<ul class={styles.editorStats}>
 					<li

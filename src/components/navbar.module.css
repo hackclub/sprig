@@ -345,7 +345,7 @@
 	max-width: 100%;
 	height: auto;
 	border-radius: 4px;
-	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 
 .publishPopup {
@@ -485,4 +485,38 @@
 
 .newPRButton {
 	margin-left: 10px;
+}
+
+.highSeasAnnouncement {
+	display: flex;
+	justify-content: space-between;
+	font-size: 1em;
+	padding: 7px 20px; 
+	background-color: #075389;
+	color: white;
+}
+
+.highSeasAnnouncement * a {
+	color: white;
+	text-decoration: underline;
+}
+
+.highSeasAnnouncement > div {
+	display: flex;
+	align-items: center;
+	padding: 3px 0px;
+}
+
+.highSeasAnnouncement > div > svg {
+	margin-right: 10px
+}
+
+.highSeasAnnouncement > button {
+	background: #0a75c2;
+	border: none;
+	color: white;
+	font-size: inherit;
+	padding: 0px 10px;
+	height: 100%;
+	cursor: pointer;
 }
