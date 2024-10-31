@@ -1,5 +1,5 @@
 /*
-@title: Monster Mauler
+@title: Monster-Mauler
 @author: DUMBHOG
 @tags: ['action', 'music']
 @addedOn: 2024-10-31
