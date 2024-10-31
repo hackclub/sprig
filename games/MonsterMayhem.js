@@ -140,7 +140,7 @@ const HOLES = [
 ]
 
 function popup(x, y, typeIndex) {
-	setLegend([getLegendChar(x, y), MONSTERS[typeIndex], ...CORE_LEGEND)
+	setLegend([getLegendChar(x, y), MONSTERS[typeIndex]], ...CORE_LEGEND);
 }
 
 const MAIN_MAP = map`
