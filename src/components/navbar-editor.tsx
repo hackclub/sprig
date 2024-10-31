@@ -729,7 +729,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	return (
 		<>
 		{showHighSeasAnnouncement && <div class={styles.highSeasAnnouncement}>
-			<div><IoBoat/><span>Coming from High Seas? You can still log your work - <a href="https://google.com">click here</a> to set it up for Sprig.</span></div>
+			<div><IoBoat/><span>Coming from High Seas? You can still log your work - <a href="https://github.com/hackclub/sprig/blob/main/docs/HACKATIME.md">click here</a> to set it up for Sprig.</span></div>
 			<button onClick={hideHighSeasAnnouncement}>Don't show again</button>
 			</div> }
 			<nav class={styles.container}>
