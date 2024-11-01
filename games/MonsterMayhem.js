@@ -470,7 +470,7 @@ function bonk(holeIndex) {
 	if (hole.type == -1) {
 		hole.missedBonk = true;
 		const LEGEND_ARRAY = [getLegendChar(x, y), HAMMER];
-		CURRENT_ANIMATIONS_LEGEND.push(LEGEND_ARRAY);
+		CURRENT_ANIMATIONS_LEGEND.unshift(LEGEND_ARRAY);
 		updateAnimations();
 
 		setTimeout(() => {
