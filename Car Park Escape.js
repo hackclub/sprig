@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: car park escape
-@author: 
-@tags: []
-@addedOn: 2024-00-00
+@author: miqdad1234
+@tags: ['puzzle']
+@addedOn: 2024-11-1
 */
 
 // define the sprites in our game
