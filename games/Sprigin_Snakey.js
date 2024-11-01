@@ -1,0 +1,284 @@
+const player = "p";
+const wall = "w";
+const food = "l"; // leaves
+const uitop = "u";
+const uidown = "d";
+const uidown2 = "2";
+const speedIncrement = 0.25;
+const body = "b";
+const background = "s";
+let baseSpeed = 2; // Adjusts base movement speed
+const maxSpeed = 12; // Define maximum speed
+let speed = baseSpeed;
+let score = 0;
+let gameOver = false;
+let snake = [{ x: 5, y: 5 }];
+let direction = { x: 0, y: 0 };
+let nextDirection = { x: 0, y: 0 };
+let lastPositionUpdate = Date.now();
+
+// Define player, walls, and leaves
+setLegend(
+  [player, bitmap`
+......4444......
+......444444....
+....004440......
+...002222000....
+..00222222200...
+..020022200.0...
+..00270207200...
+..02000200020...
+..02222222220...
+..02222222220...
+..00022222000...
+.0222202022220..
+.0222220222220..
+.0222222222220..
+..00000000000...
+................`], 
+  [wall, bitmap`
+4444444444444444
+4DD4444DD4444DD4
+4DD4444DD4444DD4
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4DD4444DD4444DD4
+4DD4444DD4444DD4
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4DD4444DD4444DD4
+4DD4444DD4444DD4
+4444444444444444`],
+  [food, bitmap`
+................
+..D.............
+..DDDD..........
+..D44DD.........
+..D444D.........
+..D444DD........
+..D4444DD.......
+..D44D44DD......
+..DD44D44DDDD...
+...D444D44444D..
+...DD444D4444D..
+....DD444D444DD.
+.....DDD444444D.
+.......DDDDDDDD.
+................
+................`],
+  [uitop, bitmap`
+5777777777777775
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+5777777777777775`], 
+  [uidown, bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+0000000000000000
+4444444444444444
+4444444444444444
+44DD44444444DD44
+44DD44444444DD44
+4444444444444444
+4444444444444444`], 
+  [uidown2, bitmap`
+4444444444444444
+4444444444444444
+44DD44444444DD44
+44DD44444444DD44
+4444444444444444
+4444444444444444
+0000000000000000
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777`],   
+  [body, bitmap`
+................
+....00000000....
+...0222222220...
+..022222222220..
+.02222222222220.
+.02222222222220.
+.02222222222220.
+.02222222222220.
+.02222222222220.
+.02222222222220.
+.02222222222220.
+.02222222222220.
+..022222222220..
+...0222222220...
+....00000000....
+................`],
+  [background, bitmap`
+1122222222222211
+1222222222222221
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+1222222222222221
+1122222222222211`]
+);
+
+// Set up the walls
+setMap(map`
+www22222222222222www
+wwwuuuuuuuuuuuuuuwww
+wwwddddddddddddddwww
+w..................w
+w..................w
+w..................w
+w..................w
+w..................w
+w..................w
+w..................w
+w..................w
+w..................w
+w..................w
+w..................w
+w..................w
+wwwwwwwwwwwwwwwwwwww`);
+
+setBackground(background)
+
+setSolids([player, wall]);
+
+// Function to spawn food
+function spawnFood() {
+  let validPositions = [];
+  for (let x = 0; x < width(); x++) {
+    for (let y = 0; y < height(); y++) {
+      if (
+        tilesWith(wall).some(tile => tile.x === x && tile.y === y) || 
+        snake.some(segment => segment.x === x && segment.y === y) ||
+        y < 4 || y >= height() - 2 || x < 2 || x >= width() - 2
+      ) continue;
+      
+      validPositions.push({ x, y });
+    }
+  }
+
+  if (validPositions.length > 0) {
+    const spawnPoint = validPositions[Math.floor(Math.random() * validPositions.length)];
+    addSprite(spawnPoint.x, spawnPoint.y, food);
+  }
+}
+
+// Initialize game
+function startGame() {
+  speed = baseSpeed;
+  score = 0;
+  gameOver = false;
+  snake = [{ x: 5, y: 5 }];
+  direction = { x: 0, y: 0 };
+  nextDirection = { x: 0, y: 0 };
+  clearText();
+  addSprite(snake[0].x, snake[0].y, player);  // Render initial player position
+  spawnFood();
+  loop();
+}
+
+// Main game loop
+function loop() {
+  if (gameOver) return;
+
+  const now = Date.now();
+  if (now - lastPositionUpdate < 1000 / speed) {
+    setTimeout(loop, 50); // Delay loop if not enough time has passed
+    return;
+  }
+
+  direction = nextDirection;  // Apply new direction after input
+  const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
+
+  // Collision with walls or boundaries
+  if (
+    head.x < 1 || head.x >= width() - 1 || head.y < 3 || head.y >= height() - 1
+  ) {
+    gameOver = true;
+    addText("Game Over!", { x: 5, y: 5, color: color`3` });
+    return;
+  }
+
+  // Self-collision
+  const isCollidingWithSelf = snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y);
+  if (isCollidingWithSelf) {
+    gameOver = true;
+    addText("Game Over!", { x: 5, y: 5, color: color`3` });
+    return;
+  }
+
+  // Food collection
+  if (getTile(head.x, head.y).some(sprite => sprite.type === food)) {
+    score += 1;
+    if (speed < maxSpeed) {
+        speed += speedIncrement;
+        // Ensure speed does not exceed the speed limit
+        if (speed > maxSpeed) {
+            speed = maxSpeed; // Set speed to speedLimit if it exceeds
+        }
+    }
+    spawnFood();
+  } else {
+    const tail = snake.pop();
+    clearTile(tail.x, tail.y);
+  }
+
+  snake.unshift(head);
+  clearTile(snake[0].x, snake[0].y);
+  addSprite(snake[0].x, snake[0].y, player);
+  for (let i = 1; i < snake.length; i++) {
+    clearTile(snake[i].x, snake[i].y);
+    addSprite(snake[i].x, snake[i].y, body);
+  }
+
+  addText("Leaves: " + score, { x: 4, y: 1, color: color`5` });
+
+  lastPositionUpdate = now; // Reset last update time
+  setTimeout(loop, 50);
+}
+
+// Handle input
+onInput("w", () => { if (direction.y === 0) nextDirection = { x: 0, y: -1 }; });
+onInput("a", () => { if (direction.x === 0) nextDirection = { x: -1, y: 0 }; });
+onInput("s", () => { if (direction.y === 0) nextDirection = { x: 0, y: 1 }; });
+onInput("d", () => { if (direction.x === 0) nextDirection = { x: 1, y: 0 }; });
+
+startGame();
