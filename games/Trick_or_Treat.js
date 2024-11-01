@@ -2,6 +2,7 @@
 @title: pumpkin_hunt
 @author: Elijah R. Spitzer
 @tags: []
+@addedOn: 2024-10-31
 */
 
 const collectSound = tune`
