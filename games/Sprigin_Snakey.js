@@ -1,14 +1,14 @@
 const player = "p";
 const wall = "w";
-const food = "l"; // leaves
+const food = "l";
 const uitop = "u";
 const uidown = "d";
 const uidown2 = "2";
 const speedIncrement = 0.25;
 const body = "b";
 const background = "s";
-let baseSpeed = 2; // Adjusts base movement speed
-const maxSpeed = 12; // Define maximum speed
+let baseSpeed = 2;
+const maxSpeed = 12;
 let speed = baseSpeed;
 let score = 0;
 let gameOver = false;
@@ -17,7 +17,6 @@ let direction = { x: 0, y: 0 };
 let nextDirection = { x: 0, y: 0 };
 let lastPositionUpdate = Date.now();
 
-// Define player, walls, and leaves
 setLegend(
   [player, bitmap`
 ......4444......
@@ -157,7 +156,6 @@ setLegend(
 1122222222222211`]
 );
 
-// Set up the walls
 setMap(map`
 www22222222222222www
 wwwuuuuuuuuuuuuuuwww
@@ -180,7 +178,6 @@ setBackground(background)
 
 setSolids([player, wall]);
 
-// Function to spawn food
 function spawnFood() {
   let validPositions = [];
   for (let x = 0; x < width(); x++) {
@@ -201,7 +198,6 @@ function spawnFood() {
   }
 }
 
-// Initialize game
 function startGame() {
   speed = baseSpeed;
   score = 0;
@@ -210,25 +206,23 @@ function startGame() {
   direction = { x: 0, y: 0 };
   nextDirection = { x: 0, y: 0 };
   clearText();
-  addSprite(snake[0].x, snake[0].y, player);  // Render initial player position
+  addSprite(snake[0].x, snake[0].y, player);
   spawnFood();
   loop();
 }
 
-// Main game loop
 function loop() {
   if (gameOver) return;
 
   const now = Date.now();
   if (now - lastPositionUpdate < 1000 / speed) {
-    setTimeout(loop, 50); // Delay loop if not enough time has passed
+    setTimeout(loop, 50);
     return;
   }
 
-  direction = nextDirection;  // Apply new direction after input
+  direction = nextDirection;
   const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
 
-  // Collision with walls or boundaries
   if (
     head.x < 1 || head.x >= width() - 1 || head.y < 3 || head.y >= height() - 1
   ) {
@@ -237,7 +231,6 @@ function loop() {
     return;
   }
 
-  // Self-collision
   const isCollidingWithSelf = snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y);
   if (isCollidingWithSelf) {
     gameOver = true;
@@ -245,14 +238,12 @@ function loop() {
     return;
   }
 
-  // Food collection
   if (getTile(head.x, head.y).some(sprite => sprite.type === food)) {
     score += 1;
     if (speed < maxSpeed) {
         speed += speedIncrement;
-        // Ensure speed does not exceed the speed limit
         if (speed > maxSpeed) {
-            speed = maxSpeed; // Set speed to speedLimit if it exceeds
+            speed = maxSpeed;
         }
     }
     spawnFood();
@@ -271,11 +262,10 @@ function loop() {
 
   addText("Leaves: " + score, { x: 4, y: 1, color: color`5` });
 
-  lastPositionUpdate = now; // Reset last update time
+  lastPositionUpdate = now;
   setTimeout(loop, 50);
 }
 
-// Handle input
 onInput("w", () => { if (direction.y === 0) nextDirection = { x: 0, y: -1 }; });
 onInput("a", () => { if (direction.x === 0) nextDirection = { x: -1, y: 0 }; });
 onInput("s", () => { if (direction.y === 0) nextDirection = { x: 0, y: 1 }; });
