@@ -1,3 +1,9 @@
+/*
+@title: Sprigin Snakey
+@author: hcjk
+@tags: []
+@addedOn: 2024-11-01
+*/
 const player = "p";
 const wall = "w";
 const food = "l";
