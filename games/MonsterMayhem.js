@@ -232,6 +232,93 @@ C77777777777777C
 CCCCCCCCCCCCCCCC` ],
 ];
 
+const OVERLAYS = [
+	bitmap`
+................
+................
+................
+................
+..........FFFFFF
+.........FFFFFFF
+.........FFFFFFF
+.........FFFFFFF
+.........FFFFFFF
+.........FFFFFFF
+.........6FFFFFF
+..........666666
+................
+................
+................
+................`,
+	bitmap`
+................
+................
+................
+................
+FFFFF...........
+FFFFFF..........
+FFFFFF..........
+FFFFFF..........
+FFFFFF..........
+FFFFFF..........
+FFFFF6..........
+66666...........
+................
+................
+................
+................`,
+	bitmap`
+................
+................
+................
+................
+................
+......FFFFFFFFFF
+.....FFFFFFFFFFF
+.....FFFFFFFFFFF
+.....FFFFFFFFFFF
+.....FFFFFFFFFFF
+.....FFFFFFFFFFF
+.....6FFFFFFFFFF
+......6666666666
+................
+................
+................`,
+	bitmap`
+................
+................
+................
+................
+................
+FFFFFFFFFFFFFF..
+FFFFFFFFFFFFFFF.
+FFFFFFFFFFFFFFF.
+FFFFFFFFFFFFFFF.
+FFFFFFFFFFFFFFF.
+FFFFFFFFFFFFFFF.
+FFFFFFFFFFFFFF6.
+66666666666666..
+................
+................
+................`,
+  	bitmap`
+................
+................
+................
+................
+................
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+6666666666666666
+................
+................
+................`,
+]
 
 const HAMMER = bitmap`
 ........9666....
@@ -409,14 +496,14 @@ for (let y = 0; y < 5; y++) {
 }
 
 const HOLES = [
-	{x: 2, y: 1, type: -1, bonking: false, missedBonk: false},
-	{x: 3, y: 1, type: -1, bonking: false, missedBonk: false},
-	{x: 1, y: 2, type: -1, bonking: false, missedBonk: false},
-	{x: 2, y: 2, type: -1, bonking: false, missedBonk: false},
-	{x: 3, y: 2, type: -1, bonking: false, missedBonk: false},
-	{x: 4, y: 2, type: -1, bonking: false, missedBonk: false},
-	{x: 2, y: 3, type: -1, bonking: false, missedBonk: false},
-	{x: 3, y: 3, type: -1, bonking: false, missedBonk: false},
+	{x: 2, y: 1, type: -1, bonking: false, missedBonk: false, popupTime: -1},
+	{x: 3, y: 1, type: -1, bonking: false, missedBonk: false, popupTime: -1},
+	{x: 1, y: 2, type: -1, bonking: false, missedBonk: false, popupTime: -1},
+	{x: 2, y: 2, type: -1, bonking: false, missedBonk: false, popupTime: -1},
+	{x: 3, y: 2, type: -1, bonking: false, missedBonk: false, popupTime: -1},
+	{x: 4, y: 2, type: -1, bonking: false, missedBonk: false, popupTime: -1},
+	{x: 2, y: 3, type: -1, bonking: false, missedBonk: false, popupTime: -1},
+	{x: 3, y: 3, type: -1, bonking: false, missedBonk: false, popupTime: -1},
 ]
 
 const CURRENT_ANIMATIONS_LEGEND = [];
@@ -430,6 +517,7 @@ function popup(holeIndex, typeIndex) {
 	x = hole.x;
 	y = hole.y;
 	hole.type = typeIndex;
+	hole.popupTime = Date.now();
 
 	const LEGEND_ARRAY = [getLegendChar(x, y), MONSTERS[typeIndex][0]];
 	CURRENT_ANIMATIONS_LEGEND.push(LEGEND_ARRAY);
@@ -488,6 +576,8 @@ function bonk(holeIndex) {
 	}
 	
 	hole.bonking = true;
+	score += Math.max(100, 1000 - (Date.now() - hole.popupTime));
+	drawStats();
 	
 	const LEGEND_ARRAY = [getLegendChar(x, y), MONSTERS[hole.type][4]];
 	CURRENT_ANIMATIONS_LEGEND.push(LEGEND_ARRAY);
@@ -543,6 +633,17 @@ function mole() {
 	setTimeout(mole, timeout);
 }
 
+function drawStats() {
+	clearText();
+
+	addText(timer.toString(), { x: 9, y: 1, color: color`2` });
+	let scoreX = 6;
+	if (score >= 100) {
+		scoreX = 5;
+	}
+	addText("Score: " + score.toString(), {x: scoreX, y: 14, color: color`2` });
+}
+	
 
 // looks weird bc the ground is varied
 const MAIN_MAP = map`
@@ -552,6 +653,16 @@ const MAIN_MAP = map`
 35RB47
 124324`;
 
+// stuff for the background that goes behind the text
+const OVERLAY_LEGEND = [
+	[getLegendChar(2, 0), OVERLAYS[0]], // left (behind timer)
+	[getLegendChar(3, 0), OVERLAYS[1]], // right (behind timer)
+	[getLegendChar(1, 4), OVERLAYS[2]], // left (behind score)
+	[getLegendChar(2, 4), OVERLAYS[4]], // center (behind score)
+	[getLegendChar(3, 4), OVERLAYS[4]], // center (behind score)
+	[getLegendChar(4, 4), OVERLAYS[3]], // right (behind score)
+];
+
 // TODO: title screen
 var gameRunning = false;
 const START_TIME = 25;
@@ -559,16 +670,18 @@ const START_INTERVAL = 3000; // starting time between moles
 const END_INTERVAL = 500; // ending time between moles
 const DOUBLE_TIME = 5 // when the timer hits this number, 2 moles appear at once
 var timer;
+var score;
 
 function startGame() {
 	console.log("%cStarting Game", "color: blue; font-size:16px")
-	gameRunning = true;
 	timer = START_TIME;
+	score = 0;
+	gameRunning = true;
 
 	// the way this works is, it sets a map where each tile has a different sprite. then, those can be controlled indiviudally by setting the legend.
 	// it sets the map afterward by adding sprites 1 by 1. This way, the top layer of sprites can be controlled individually
 	// this is basically all just a workaround for the fact that adding a new sprite adds it at the bottom of the z-order stack
-	setLegend(...CORE_LEGEND, ...STARTING_LEGEND);
+	setLegend(...CORE_LEGEND, ...STARTING_LEGEND, ...OVERLAY_LEGEND);
 	setMap(MAIN_MAP);
 	for (let x = 0; x < 6; x++) {
 		for (let y = 0; y < 5; y++) {
@@ -576,7 +689,7 @@ function startGame() {
 		}
 	}
 
-	addText(timer.toString(), { x: 9, y: 1, color: color`2` });
+	drawStats();
 	const timerInterval = setInterval(() => {
 		timer--;
 		if (timer == 0) {
@@ -585,7 +698,7 @@ function startGame() {
 		};
 
 		clearText();
-		addText(timer.toString(), { x: 9, y: 1, color: color`2` });
+		drawStats();
 	}, 1000)
 
 	mole();
