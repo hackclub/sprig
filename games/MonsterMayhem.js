@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Monster Mayhem
 @author: Gus Ruben
-@tags: ['endless', 'halloween']
-@addedOn: 2024-00-00
+@tags: ['halloween', 'arcade']
+@addedOn: 2024-10-31
 */
 
 
