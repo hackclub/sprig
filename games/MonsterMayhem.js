@@ -526,6 +526,7 @@ function mole() {
 			return;
 		}
 	}
+	holeIndex = 0;
 
 	popup(holeIndex, 0);
 
@@ -550,7 +551,7 @@ const MAIN_MAP = map`
 var gameRunning = false;
 const START_TIME = 25;
 const START_INTERVAL = 3000; // starting time between moles
-const END_INTERVAL = 1000; // ending time between moles
+const END_INTERVAL = 500; // ending time between moles
 const DOUBLE_TIME = 5 // when the timer hits this number, 2 moles appear at once
 var timer;
 
@@ -570,14 +571,25 @@ function startGame() {
 		}
 	}
 
+	addText(timer.toString(), { x: 9, y: 1, color: color`2` });
 	const timerInterval = setInterval(() => {
 		timer--;
-		if (timer == 0) clearInterval(timerInterval);
+		if (timer == 0) {
+			clearInterval(timerInterval)
+			endGame();	
+		};
+
+		clearText();
+		addText(timer.toString(), { x: 9, y: 1, color: color`2` });
 	}, 1000)
 
 	mole();
 	// when the timer hits DOUBLE_TIME, 2 moles appear at once
-	setTimeout(mole, timer - DOUBLE_TIME)
+	setTimeout(mole, (timer - DOUBLE_TIME) * 1000)
+}
+
+function endGame() {
+	gameRunning = false;
 }
 
 startGame();
