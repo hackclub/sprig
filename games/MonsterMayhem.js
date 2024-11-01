@@ -422,7 +422,6 @@ const HOLES = [
 const CURRENT_ANIMATIONS_LEGEND = [];
 
 function updateAnimations() {
-	console.log("Updating animations w", CURRENT_ANIMATIONS_LEGEND)
 	setLegend(...CURRENT_ANIMATIONS_LEGEND, ...CORE_LEGEND);
 }
 
@@ -485,8 +484,30 @@ function bonk(holeIndex) {
 		LEGEND_ARRAY[1] = EMPTY_BITMAP;
 		updateAnimations();
 		CURRENT_ANIMATIONS_LEGEND.splice(CURRENT_ANIMATIONS_LEGEND.indexOf(LEGEND_ARRAY), 1);
+		hole.bonking = false;
+		hole.type = -1;
 	}, 750);
 }
+
+
+function mole() {
+	if (!gameRunning) return;
+
+	let holeIndex = -1;
+	let attempts = 0;
+	// repeat until we get an unused hole
+	while (holeIndex < 0 || HOLES[holeIndex].type != -1) {
+		holeIndex = Math.floor(Math.random() * 8);
+		if (++attempts > 36) {
+			console.log("Holes are full!");
+			return;
+		}
+	}
+	popup(holeIndex, 0);
+
+	setTimeout(mole, 3000 - (2800 / (timer / 4)));
+}
+
 
 // looks weird bc the ground is varied
 const MAIN_MAP = map`
@@ -497,19 +518,31 @@ const MAIN_MAP = map`
 124324`;
 
 // TODO: title screen
+var gameRunning = false;
+var timer;
 
-// the way this works is, it sets a map where each tile has a different sprite. then, those can be controlled indiviudally by setting the legend.
-// it sets the map afterward by adding sprites 1 by 1. This way, the top layer of sprites can be controlled individually
-// this is basically all just a workaround for the fact that adding a new sprite adds it at the bottom of the z-order stack
-setLegend(...CORE_LEGEND, ...STARTING_LEGEND);
-setMap(MAIN_MAP);
-for (let x = 0; x < 6; x++) {
-	for (let y = 0; y < 5; y++) {
-		addSprite(x, y, CUSTOM_LEGEND_CHARS[y][x]);
+function startGame() {
+	gameRunning = true;
+	timer = 20;
+
+	// the way this works is, it sets a map where each tile has a different sprite. then, those can be controlled indiviudally by setting the legend.
+	// it sets the map afterward by adding sprites 1 by 1. This way, the top layer of sprites can be controlled individually
+	// this is basically all just a workaround for the fact that adding a new sprite adds it at the bottom of the z-order stack
+	setLegend(...CORE_LEGEND, ...STARTING_LEGEND);
+	setMap(MAIN_MAP);
+	for (let x = 0; x < 6; x++) {
+		for (let y = 0; y < 5; y++) {
+			addSprite(x, y, CUSTOM_LEGEND_CHARS[y][x]);
+		}
 	}
+
+	const timerInterval = setInterval(() => {
+		timer--;
+		if (timer == 0) clearInterval(timerInterval);
+	}, 1000)
+
+	// start 3 loops
+	mole();
 }
 
-popup(0, 0);
-popup(1, 0);
-
-setTimeout(()=>bonk(0), 1000);
+startGame();
