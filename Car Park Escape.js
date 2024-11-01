@@ -1,8 +1,8 @@
 /*
 @title: Get The Car Out
 @author: miqdad1234
-@tags: []
-@addedOn: 2024-08-05
+@tags: ['puzzle']
+@addedOn: 2024-11-1
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
