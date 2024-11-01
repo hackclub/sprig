@@ -409,14 +409,14 @@ for (let y = 0; y < 5; y++) {
 }
 
 const HOLES = [
-	{x: 2, y: 1, type: -1, bonking: false},
-	{x: 3, y: 1, type: -1, bonking: false},
-	{x: 1, y: 2, type: -1, bonking: false},
-	{x: 2, y: 2, type: -1, bonking: false},
-	{x: 3, y: 2, type: -1, bonking: false},
-	{x: 4, y: 2, type: -1, bonking: false},
-	{x: 2, y: 3, type: -1, bonking: false},
-	{x: 3, y: 3, type: -1, bonking: false},
+	{x: 2, y: 1, type: -1, bonking: false, missedBonk: false},
+	{x: 3, y: 1, type: -1, bonking: false, missedBonk: false},
+	{x: 1, y: 2, type: -1, bonking: false, missedBonk: false},
+	{x: 2, y: 2, type: -1, bonking: false, missedBonk: false},
+	{x: 3, y: 2, type: -1, bonking: false, missedBonk: false},
+	{x: 4, y: 2, type: -1, bonking: false, missedBonk: false},
+	{x: 2, y: 3, type: -1, bonking: false, missedBonk: false},
+	{x: 3, y: 3, type: -1, bonking: false, missedBonk: false},
 ]
 
 const CURRENT_ANIMATIONS_LEGEND = [];
@@ -459,29 +459,35 @@ function popup(holeIndex, typeIndex) {
 function bonk(holeIndex) {
 	const hole = HOLES[holeIndex];
 	
-	if (hole.bonking) {
+	if (hole.bonking || hole.missedBonk) {
 		return
 	}
 	
-	hole.bonking = true;
 	const x = hole.x;
 	const y = hole.y;
 	
 	// if they mis-bonk an empty hole
 	if (hole.type == -1) {
+		hole.missedBonk = true;
 		const LEGEND_ARRAY = [getLegendChar(x, y), HAMMER];
 		CURRENT_ANIMATIONS_LEGEND.push(LEGEND_ARRAY);
 		updateAnimations();
 
 		setTimeout(() => {
-			LEGEND_ARRAY[1] = EMPTY_BITMAP;
-			hole.bonking = false;
-			updateAnimations();
+			hole.missedBonk = false;
+
+			// don't overwrite a currently running animation
+			if (hole.type != -1) {
+				LEGEND_ARRAY[1] = EMPTY_BITMAP;
+				updateAnimations();
+			}
+
 			CURRENT_ANIMATIONS_LEGEND.splice(CURRENT_ANIMATIONS_LEGEND.indexOf(LEGEND_ARRAY), 1);
 		}, 1000)
 		return;
 	}
 	
+	hole.bonking = true;
 	
 	const LEGEND_ARRAY = [getLegendChar(x, y), MONSTERS[hole.type][4]];
 	CURRENT_ANIMATIONS_LEGEND.push(LEGEND_ARRAY);
@@ -534,7 +540,6 @@ function mole() {
 	const adjustedStartTime = START_TIME - DOUBLE_TIME
 	const adjustedTimer = Math.max(timer - DOUBLE_TIME, DOUBLE_TIME);
 	const timeout = START_INTERVAL - (START_INTERVAL - END_INTERVAL) * ((adjustedStartTime - adjustedTimer)/ adjustedStartTime)
-	console.log(timer, "time for next mole:", timeout)
 	setTimeout(mole, timeout);
 }
 
