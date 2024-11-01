@@ -253,7 +253,7 @@ function playWinSound() {
 
 function startGame() {
   speed = baseSpeed;
-  score = 214;
+  score = 0;
   gameOver = false;
   snake = [{ x: 5, y: 5 }];
   direction = { x: 0, y: 0 };
