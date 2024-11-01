@@ -1,7 +1,7 @@
 /*
 @title: Monster Mayhem
 @author: Gus Ruben
-@tags: ['halloween', 'arcade']
+@tags: ['retro', 'timed']
 @addedOn: 2024-10-31
 */
 
