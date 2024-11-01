@@ -458,6 +458,20 @@ function popup(holeIndex, typeIndex) {
 
 function bonk(holeIndex) {
 	const hole = HOLES[holeIndex];
+	// if they mis-bonk an empty hole
+	if (hole.type == -1) {
+		const LEGEND_ARRAY = [getLegendChar(x, y), HAMMER];
+		updateAnimations();
+		setTimeout(() => {
+			LEGEND_ARRAY[1] = EMPTY_BITMAP;
+			updateAnimations();
+			CURRENT_ANIMATIONS_LEGEND.splice(CURRENT_ANIMATIONS_LEGEND.indexOf(LEGEND_ARRAY), 1);
+		}, 500)
+		return;
+	}
+
+	if (hole.bonking) return;
+
 	hole.bonking = true;
 	
 	const LEGEND_ARRAY = [getLegendChar(x, y), MONSTERS[hole.type][4]];
@@ -541,8 +555,16 @@ function startGame() {
 		if (timer == 0) clearInterval(timerInterval);
 	}, 1000)
 
-	// start 3 loops
 	mole();
 }
 
 startGame();
+
+onInput("w", () => bonk(0));
+onInput("a", () => bonk(2));
+onInput("s", () => bonk(6));
+onInput("d", () => bonk(4));
+onInput("i", () => bonk(1));
+onInput("j", () => bonk(7));
+onInput("k", () => bonk(3));
+onInput("l", () => bonk(5));
