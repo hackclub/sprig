@@ -526,9 +526,15 @@ function mole() {
 			return;
 		}
 	}
+
 	popup(holeIndex, 0);
 
-	setTimeout(mole, 3000);
+	// adjust the current timer and start time to hit the max speed before 'double time' starts
+	const adjustedStartTime = START_TIME - DOUBLE_TIME
+	const adjustedTimer = Math.max(timer - DOUBLE_TIME, DOUBLE_TIME);
+	const timeout = START_INTERVAL - (START_INTERVAL - END_INTERVAL) * ((adjustedStartTime - adjustedTimer)/ adjustedStartTime)
+	console.log(timer, "time for next mole:", timeout)
+	setTimeout(mole, timeout);
 }
 
 
@@ -542,12 +548,16 @@ const MAIN_MAP = map`
 
 // TODO: title screen
 var gameRunning = false;
+const START_TIME = 25;
+const START_INTERVAL = 3000; // starting time between moles
+const END_INTERVAL = 1000; // ending time between moles
+const DOUBLE_TIME = 5 // when the timer hits this number, 2 moles appear at once
 var timer;
 
 function startGame() {
 	console.log("%cStarting Game", "color: blue; font-size:16px")
 	gameRunning = true;
-	timer = 20;
+	timer = START_TIME;
 
 	// the way this works is, it sets a map where each tile has a different sprite. then, those can be controlled indiviudally by setting the legend.
 	// it sets the map afterward by adding sprites 1 by 1. This way, the top layer of sprites can be controlled individually
@@ -565,7 +575,9 @@ function startGame() {
 		if (timer == 0) clearInterval(timerInterval);
 	}, 1000)
 
-	// mole();
+	mole();
+	// when the timer hits DOUBLE_TIME, 2 moles appear at once
+	setTimeout(mole, timer - DOUBLE_TIME)
 }
 
 startGame();
