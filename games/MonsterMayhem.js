@@ -564,11 +564,8 @@ function bonk(holeIndex) {
 		setTimeout(() => {
 			hole.missedBonk = false;
 
-			// don't overwrite a currently running animation
-			if (hole.type != -1) {
-				LEGEND_ARRAY[1] = EMPTY_BITMAP;
-				updateAnimations();
-			}
+			LEGEND_ARRAY[1] = EMPTY_BITMAP;
+			updateAnimations();
 
 			CURRENT_ANIMATIONS_LEGEND.splice(CURRENT_ANIMATIONS_LEGEND.indexOf(LEGEND_ARRAY), 1);
 		}, 1000)
@@ -622,7 +619,6 @@ function mole() {
 			return;
 		}
 	}
-	holeIndex = 0;
 
 	popup(holeIndex, 0);
 
