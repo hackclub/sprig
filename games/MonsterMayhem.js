@@ -458,21 +458,30 @@ function popup(holeIndex, typeIndex) {
 
 function bonk(holeIndex) {
 	const hole = HOLES[holeIndex];
+	
+	if (hole.bonking) {
+		return
+	}
+	
+	hole.bonking = true;
+	const x = hole.x;
+	const y = hole.y;
+	
 	// if they mis-bonk an empty hole
 	if (hole.type == -1) {
 		const LEGEND_ARRAY = [getLegendChar(x, y), HAMMER];
+		CURRENT_ANIMATIONS_LEGEND.push(LEGEND_ARRAY);
 		updateAnimations();
+
 		setTimeout(() => {
 			LEGEND_ARRAY[1] = EMPTY_BITMAP;
+			hole.bonking = false;
 			updateAnimations();
 			CURRENT_ANIMATIONS_LEGEND.splice(CURRENT_ANIMATIONS_LEGEND.indexOf(LEGEND_ARRAY), 1);
-		}, 500)
+		}, 1000)
 		return;
 	}
-
-	if (hole.bonking) return;
-
-	hole.bonking = true;
+	
 	
 	const LEGEND_ARRAY = [getLegendChar(x, y), MONSTERS[hole.type][4]];
 	CURRENT_ANIMATIONS_LEGEND.push(LEGEND_ARRAY);
@@ -519,7 +528,7 @@ function mole() {
 	}
 	popup(holeIndex, 0);
 
-	setTimeout(mole, 3000 - (2800 / (timer / 4)));
+	setTimeout(mole, 3000);
 }
 
 
@@ -536,6 +545,7 @@ var gameRunning = false;
 var timer;
 
 function startGame() {
+	console.log("%cStarting Game", "color: blue; font-size:16px")
 	gameRunning = true;
 	timer = 20;
 
@@ -555,7 +565,7 @@ function startGame() {
 		if (timer == 0) clearInterval(timerInterval);
 	}, 1000)
 
-	mole();
+	// mole();
 }
 
 startGame();
@@ -565,6 +575,6 @@ onInput("a", () => bonk(2));
 onInput("s", () => bonk(6));
 onInput("d", () => bonk(4));
 onInput("i", () => bonk(1));
-onInput("j", () => bonk(7));
-onInput("k", () => bonk(3));
+onInput("j", () => bonk(3));
+onInput("k", () => bonk(7));
 onInput("l", () => bonk(5));
