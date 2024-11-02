@@ -1146,6 +1146,19 @@ function mole() {
 function drawStats() {
 	clearText();
 
+	// controls
+	if (START_TIME - timer <= 10) {
+		addText("W", {x: 3, y: 3, color: HOLES[0].type == -1 ? color`3` : color`2`});
+		addText("A", {x: 2, y: 4, color: HOLES[2].type == -1 ? color`3` : color`2`});
+		addText("S", {x: 3, y: 5, color: HOLES[6].type == -1 ? color`3` : color`2`});
+		addText("D", {x: 4, y: 4, color: HOLES[4].type == -1 ? color`3` : color`2`});
+
+		addText("I", {x: 16, y: 3, color: HOLES[1].type == -1 ? color`7` : color`2`});
+		addText("J", {x: 15, y: 4, color: HOLES[3].type == -1 ? color`7` : color`2`});
+		addText("K", {x: 16, y: 5, color: HOLES[7].type == -1 ? color`7` : color`2`});
+		addText("L", {x: 17, y: 4, color: HOLES[5].type == -1 ? color`7` : color`2`});
+	}
+
 	addText(timer.toString(), { x: 9, y: 1, color: color`2` });
 	let scoreX = 6;
 	if (score >= 100) {
