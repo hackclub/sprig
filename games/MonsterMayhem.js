@@ -1159,6 +1159,10 @@ function drawStats() {
 		addText("L", {x: 17, y: 4, color: HOLES[5].type == -1 ? color`7` : color`2`});
 	}
 
+	if (START_TIME - timer <= 5) {
+		addText("Whack the monsters!", {x: 1, y: 0, color: color`6`})
+	}
+
 	addText(timer.toString(), { x: 9, y: 1, color: color`2` });
 	let scoreX = 6;
 	if (score >= 100) {
