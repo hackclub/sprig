@@ -1081,6 +1081,10 @@ function bonk(holeIndex) {
 	if (hole.bonking || hole.missedBonk) {
 		return
 	}
+
+	const current = Date.now();
+	if (current - lastBonk < 500) return;
+	lastBonk = current;
 	
 	const x = hole.x;
 	const y = hole.y;
@@ -1225,6 +1229,7 @@ const END_INTERVAL = 500; // ending time between moles
 const DOUBLE_TIME = 15 // when the timer hits this number, 2 moles appear at once
 var timer;
 var score = 0;
+var lastBonk;
 
 function startGame() {
 	console.log("%cStarting Game", "color: blue; font-size:16px")
