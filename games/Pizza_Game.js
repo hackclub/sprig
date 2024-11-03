@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Pizza Game
 @author: Daniel Davidson
-@tags: []
+@tags: ['endless', 'puzzle', 'music']
 @addedOn: 2024-11-03
 */
 
