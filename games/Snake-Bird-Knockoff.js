@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Snake Bird Knockoff
 @author: CreativityShark
 @tags: ['puzzle', 'platformer']
-@addedOn: 2024-00-00
+@addedOn: 2024-11-03
 */
 
 class Move {
