@@ -118,10 +118,17 @@ const MELODY3 = tune`
 const GAME_OVER_MELODY1 = tune`
 1034.4827586206898: F5-1034.4827586206898 + E5~1034.4827586206898 + D5^1034.4827586206898 + C5/1034.4827586206898,
 1034.4827586206898: E5-1034.4827586206898 + D5~1034.4827586206898 + C5^1034.4827586206898 + B4/1034.4827586206898,
-31034.482758620692`
+31034.482758620692`;
 const GAME_OVER_MELODY2 = tune`
 2000: C5~2000 + D5-2000 + B4^2000 + A4/2000,
-62000`
+62000`;
+
+const BONK_MELODY_HIT = tune`
+333.3333333333333: D5~333.3333333333333,
+10333.333333333332`;
+const BONK_MELODY_MISS = tune`
+333.3333333333333: D4^333.3333333333333,
+10333.333333333332`;
 
 const EMPTY_BITMAP = bitmap`
 ................
@@ -1194,6 +1201,9 @@ function bonk(holeIndex) {
 	// if they mis-bonk an empty hole
 	if (hole.type == -1) {
 		hole.missedBonk = true;
+
+		playTune(BONK_MELODY_MISS);
+
 		const LEGEND_ARRAY = [getLegendChar(x, y), HAMMER];
 		CURRENT_ANIMATIONS_LEGEND.unshift(LEGEND_ARRAY);
 		updateAnimations();
@@ -1218,6 +1228,8 @@ function bonk(holeIndex) {
 		}, 500)
 		return;
 	}
+
+	playTune(BONK_MELODY_HIT);
 	
 	hole.bonking = true;
 	score += Math.max(100, 1000 - (Date.now() - hole.popupTime));
@@ -1325,7 +1337,7 @@ const OVERLAY_LEGEND = [
 
 // TODO: title screen
 var gameRunning = false;
-const START_TIME = 5;
+const START_TIME = 60;
 const START_INTERVAL = 3000; // starting time between moles
 const END_INTERVAL = 500; // ending time between moles
 const DOUBLE_TIME = 15 // when the timer hits this number, 2 moles appear at once
