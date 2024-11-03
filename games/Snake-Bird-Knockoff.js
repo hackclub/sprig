@@ -3,10 +3,11 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Snake Bird Knockoff
-@author: 
-@tags: []
+@author: CreativityShark
+@tags: ['puzzle', 'platformer']
 @addedOn: 2024-00-00
 */
+
 class Move {
   constructor(x_change, y_change) {
     this.x_change = x_change;
