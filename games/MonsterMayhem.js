@@ -23,7 +23,38 @@ const HOLE_RED = "R";
 const HOLE_BLUE = "B";
 const ZOMBIE = "Z";
 
-const MELODY = tune`
+// 2 instruments (title)
+const MELODY1 = tune`
+250: C5^250,
+250: E4/250,
+500,
+250: E4/250,
+250,
+250: E4/250,
+250: G4^250,
+250: A4^250,
+250: E4/250,
+500,
+250: E4/250,
+250,
+250: E4/250,
+250: C5^250,
+250: B4^250,
+250: E4/250,
+500,
+250: E4/250,
+250,
+250: E4/250,
+250: F5^250,
+250: E5^250,
+250: E4/250,
+500,
+250: E4/250,
+250: A5^250,
+250: E4/250 + G5^250,
+250: B4^250`;
+// 3 instruments (game)
+const MELODY2 = tune`
 250: C5^250,
 250: E4/250 + E5~250,
 250: E5~250,
@@ -56,7 +87,41 @@ const MELODY = tune`
 250: A5^250 + B4~250,
 250: E4/250 + G5^250 + C5~250,
 250: B4^250 + C5~250`;
-playTune(MELODY, Infinity)
+// 1 instrument (end)
+const MELODY3 = tune`
+250,
+250: E4/250,
+500,
+250: E4/250,
+250,
+250: E4/250,
+500,
+250: E4/250,
+500,
+250: E4/250,
+250,
+250: E4/250,
+500,
+250: E4/250,
+500,
+250: E4/250,
+250,
+250: E4/250,
+500,
+250: E4/250,
+500,
+250: E4/250,
+250,
+250: E4/250,
+250`;
+
+const GAME_OVER_MELODY1 = tune`
+1034.4827586206898: F5-1034.4827586206898 + E5~1034.4827586206898 + D5^1034.4827586206898 + C5/1034.4827586206898,
+1034.4827586206898: E5-1034.4827586206898 + D5~1034.4827586206898 + C5^1034.4827586206898 + B4/1034.4827586206898,
+31034.482758620692`
+const GAME_OVER_MELODY2 = tune`
+2000: C5~2000 + D5-2000 + B4^2000 + A4/2000,
+62000`
 
 const EMPTY_BITMAP = bitmap`
 ................
@@ -1260,19 +1325,23 @@ const OVERLAY_LEGEND = [
 
 // TODO: title screen
 var gameRunning = false;
-const START_TIME = 60;
+const START_TIME = 5;
 const START_INTERVAL = 3000; // starting time between moles
 const END_INTERVAL = 500; // ending time between moles
 const DOUBLE_TIME = 15 // when the timer hits this number, 2 moles appear at once
 var timer;
 var score = 0;
 var lastBonk;
+let musicPlayback;
 
 function startGame() {
 	console.log("%cStarting Game", "color: blue; font-size:16px")
 	timer = START_TIME;
 	score = 0;
 	gameRunning = true;
+
+	titlePlayback.end();
+	musicPlayback = playTune(MELODY2, Infinity)
 
 	clearInterval(titleAnimationInterval);
 	
@@ -1306,6 +1375,12 @@ function startGame() {
 
 function endGame() {
 	gameRunning = false;
+
+	musicPlayback.end();
+	playTune(GAME_OVER_MELODY1);
+	setTimeout(() => playTune(GAME_OVER_MELODY2), 2000);
+	setTimeout(() => playTune(MELODY3, Infinity), 3000);
+
 	setLegend(...gameOverLegend);
     setMap(gameOverMap);
 
@@ -1316,6 +1391,10 @@ function endGame() {
 	}
 	addText("Score: " + score.toString(), {x: scoreX, y: 10, color: color`2` });
 }
+
+
+// title music
+const titlePlayback = playTune(MELODY1, Infinity);
 
 setLegend(...titleScreenLegend);
 setMap(titleScreenMap);
