@@ -1337,6 +1337,7 @@ const OVERLAY_LEGEND = [
 
 // TODO: title screen
 var gameRunning = false;
+var gameOver = false;
 const START_TIME = 60;
 const START_INTERVAL = 3000; // starting time between moles
 const END_INTERVAL = 500; // ending time between moles
@@ -1351,6 +1352,7 @@ function startGame() {
 	timer = START_TIME;
 	score = 0;
 	gameRunning = true;
+	gameOver = false;
 
 	titlePlayback.end();
 	musicPlayback = playTune(MELODY2, Infinity)
@@ -1387,6 +1389,8 @@ function startGame() {
 
 function endGame() {
 	gameRunning = false;
+	gameOver = true;
+	setTimeout(() => {gameOver = false}, 6000);
 
 	musicPlayback.end();
 	playTune(GAME_OVER_MELODY1);
@@ -1424,11 +1428,11 @@ const titleAnimationInterval = setInterval(() => {
 }, 750)
 
 
-onInput("w", () => { if (gameRunning) {bonk(0)} else {startGame()} });
-onInput("a", () => { if (gameRunning) {bonk(2)} else {startGame()} });
-onInput("s", () => { if (gameRunning) {bonk(6)} else {startGame()} });
-onInput("d", () => { if (gameRunning) {bonk(4)} else {startGame()} });
-onInput("i", () => { if (gameRunning) {bonk(1)} else {startGame()} });
-onInput("j", () => { if (gameRunning) {bonk(3)} else {startGame()} });
-onInput("k", () => { if (gameRunning) {bonk(7)} else {startGame()} });
-onInput("l", () => { if (gameRunning) {bonk(5)} else {startGame()} });
+onInput("w", () => { if (gameRunning) {bonk(0)} else if (!gameOver) {startGame()} });
+onInput("a", () => { if (gameRunning) {bonk(2)} else if (!gameOver) {startGame()} });
+onInput("s", () => { if (gameRunning) {bonk(6)} else if (!gameOver) {startGame()} });
+onInput("d", () => { if (gameRunning) {bonk(4)} else if (!gameOver) {startGame()} });
+onInput("i", () => { if (gameRunning) {bonk(1)} else if (!gameOver) {startGame()} });
+onInput("j", () => { if (gameRunning) {bonk(3)} else if (!gameOver) {startGame()} });
+onInput("k", () => { if (gameRunning) {bonk(7)} else if (!gameOver) {startGame()} });
+onInput("l", () => { if (gameRunning) {bonk(5)} else if (!gameOver) {startGame()} });
