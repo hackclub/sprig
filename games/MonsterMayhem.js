@@ -1,4 +1,7 @@
 /*
+Whack all the ghouls you can!
+Controls: WASD to hit the red holes, IJKL to hit the blue holes
+
 @title: Monster Mayhem
 @author: Gus Ruben
 @tags: ['retro', 'timed']
