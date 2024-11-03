@@ -1,3 +1,10 @@
+/*
+@author: The-UnknownHacker
+@title: The Warrior's Quest
+@tags: ['puzzle', 'platformer']
+@addedOn: 2024-11-2
+*/
+
 // Define sprite keys using numbers
 const player = "1"; // Player represented by 1
 const wall = "2";   // Wall represented by 2
