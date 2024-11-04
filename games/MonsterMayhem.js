@@ -1477,8 +1477,7 @@ function mole() {
 		}
 	}
 
-	// popup(holeIndex, Math.floor(Math.random() * MONSTERS.length));
-    popup(0, 2);
+	popup(holeIndex, Math.floor(Math.random() * MONSTERS.length));
 
 	// adjust the current timer and start time to hit the max speed before 'double time' starts
 	const adjustedStartTime = START_TIME - DOUBLE_TIME
