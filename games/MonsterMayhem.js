@@ -1463,7 +1463,7 @@ function drawStats() {
 	clearText();
 
 	// controls
-	if (START_TIME - timer <= 10) {
+	if (START_TIME - timer <= 15) {
 		addText("W", {x: 3, y: 3, color: HOLES[0].type == -1 ? color`3` : color`2`});
 		addText("A", {x: 2, y: 4, color: HOLES[2].type == -1 ? color`3` : color`2`});
 		addText("S", {x: 3, y: 5, color: HOLES[6].type == -1 ? color`3` : color`2`});
