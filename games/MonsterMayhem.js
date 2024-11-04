@@ -1457,7 +1457,7 @@ function mole() {
 	setTimeout(mole, timeout);
 }
 
-function drawStats() {
+function drawStats(hideTimer = false) {
 	updateCat();
 	
 	clearText();
@@ -1479,7 +1479,10 @@ function drawStats() {
 		addText("Whack the monsters!", {x: 1, y: 0, color: color`6`})
 	}
 
-	addText(timer.toString(), { x: 9, y: 1, color: color`2` });
+	if (!hideTimer) {
+		addText(timer.toString(), { x: 9, y: 1, color: color`2` });
+	}
+	
 	let scoreX = 6;
 	if (score >= 100) {
 		scoreX = 5;
@@ -1550,7 +1553,7 @@ function startGame() {
 		};
 
 		clearText();
-		drawStats();
+		drawStats(true);
 	}, 1000)
 
 	mole();
