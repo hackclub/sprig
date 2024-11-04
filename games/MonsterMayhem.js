@@ -1358,7 +1358,7 @@ function bonk(holeIndex) {
 	}
 
 	const current = Date.now();
-	if (current - lastBonk < 500) return;
+	if (current - lastBonk < 250) return;
 	lastBonk = current;
 	
 	const x = hole.x;
@@ -1369,6 +1369,9 @@ function bonk(holeIndex) {
 		hole.missedBonk = true;
 
 		playTune(BONK_MELODY_MISS);
+
+		// increase the cooldown
+		lastBonk = current + 250;
 
 		const LEGEND_ARRAY = [getLegendChar(x, y), HAMMER];
 		CURRENT_ANIMATIONS_LEGEND.unshift(LEGEND_ARRAY);
