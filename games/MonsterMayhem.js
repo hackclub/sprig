@@ -1561,12 +1561,12 @@ function startGame() {
 function endGame() {
 	gameRunning = false;
 	gameOver = true;
-	setTimeout(() => {gameOver = false}, 6000);
+	setTimeout(() => {gameOver = false}, 4000);
 
 	musicPlayback.end();
 	playTune(GAME_OVER_MELODY1);
 	setTimeout(() => playTune(GAME_OVER_MELODY2), 2000);
-	setTimeout(() => playTune(MUSIC_TITLE, Infinity), 3000);
+	setTimeout(() => titlePlayback = playTune(MUSIC_TITLE, Infinity), 3000);
 
 	setLegend(...gameOverLegend);
     setMap(gameOverMap);
@@ -1581,7 +1581,7 @@ function endGame() {
 
 
 // title music
-const titlePlayback = playTune(MUSIC_TITLE, Infinity);
+var titlePlayback = playTune(MUSIC_TITLE, Infinity);
 
 setLegend(...titleScreenLegend);
 setMap(titleScreenMap);
