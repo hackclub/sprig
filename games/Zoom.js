@@ -3,8 +3,8 @@ Use WASD to move
 Use J to restart a level
 @title: Zoom
 @author: Aperaine
-@tags: [puzzle, quick, movement]
-@addedOn: 2024-00-00
+@tags: ['puzzle']
+@addedOn: 2024-11-05
 */
 
 const player = "p"
