@@ -13,7 +13,8 @@ export interface RoomPasswordPopupProps {
 
 export default function RoomPasswordPopup(props: RoomPasswordPopupProps) {
 	let password = useSignal("");
-	function checkPassword() {
+	let isWrong = useSignal(false);
+	function checkPassword(noPassCheck = false) {
 		if(props.persistenceState.value.kind !== PersistenceStateKind.COLLAB) return
 		fetch("/api/rooms/check-password", {
 			method: "POST",
@@ -29,10 +30,12 @@ export default function RoomPasswordPopup(props: RoomPasswordPopupProps) {
 						}
 					}
 				)
+			} else {
+				isWrong.value = !noPassCheck;
 			}
 		});
 	}
-	useEffect(checkPassword, [])
+	useEffect(() => checkPassword(true), [])
 	return (
 		<div class={styles.overlay}>
 			<div class={styles.modal}>
@@ -54,7 +57,8 @@ export default function RoomPasswordPopup(props: RoomPasswordPopupProps) {
 								Enter room
 							</Button>
 						</div>
-					</form>	
+					</form>
+					{isWrong.value && <p className={styles.error}>Incorrect password!</p>}
 			</div>
 		</div>
 	)
