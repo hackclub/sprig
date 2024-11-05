@@ -72,95 +72,11 @@ function updateLegend() {
       if (color == COLORS.length) color = 0;
     }
   }
-  setLegend(
-    [ sprites[0][0], bitmap`${strings[0]}`],
-    [ sprites[0][1], bitmap`${strings[1]}`],
-    [ sprites[0][2], bitmap`${strings[2]}`],
-    [ sprites[0][3], bitmap`${strings[3]}`],
-    [ sprites[0][4], bitmap`${strings[4]}`],
-    [ sprites[0][5], bitmap`${strings[5]}`],
-    [ sprites[0][6], bitmap`${strings[6]}`],
-    [ sprites[0][7], bitmap`${strings[7]}`],
-    [ sprites[0][8], bitmap`${strings[8]}`],
-    [ sprites[0][9], bitmap`${strings[9]}`],
-
-    [ sprites[1][0], bitmap`${strings[10]}`],
-    [ sprites[1][1], bitmap`${strings[11]}`],
-    [ sprites[1][2], bitmap`${strings[12]}`],
-    [ sprites[1][3], bitmap`${strings[13]}`],
-    [ sprites[1][4], bitmap`${strings[14]}`],
-    [ sprites[1][5], bitmap`${strings[15]}`],
-    [ sprites[1][6], bitmap`${strings[16]}`],
-    [ sprites[1][7], bitmap`${strings[17]}`],
-    [ sprites[1][8], bitmap`${strings[18]}`],
-    [ sprites[1][9], bitmap`${strings[19]}`],
-
-    [ sprites[2][0], bitmap`${strings[20]}`],
-    [ sprites[2][1], bitmap`${strings[21]}`],
-    [ sprites[2][2], bitmap`${strings[22]}`],
-    [ sprites[2][3], bitmap`${strings[23]}`],
-    [ sprites[2][4], bitmap`${strings[24]}`],
-    [ sprites[2][5], bitmap`${strings[25]}`],
-    [ sprites[2][6], bitmap`${strings[26]}`],
-    [ sprites[2][7], bitmap`${strings[27]}`],
-    [ sprites[2][8], bitmap`${strings[28]}`],
-    [ sprites[2][9], bitmap`${strings[29]}`],
-
-    [ sprites[3][0], bitmap`${strings[30]}`],
-    [ sprites[3][1], bitmap`${strings[31]}`],
-    [ sprites[3][2], bitmap`${strings[32]}`],
-    [ sprites[3][3], bitmap`${strings[33]}`],
-    [ sprites[3][4], bitmap`${strings[34]}`],
-    [ sprites[3][5], bitmap`${strings[35]}`],
-    [ sprites[3][6], bitmap`${strings[36]}`],
-    [ sprites[3][7], bitmap`${strings[37]}`],
-    [ sprites[3][8], bitmap`${strings[38]}`],
-    [ sprites[3][9], bitmap`${strings[39]}`],
-
-    [ sprites[4][0], bitmap`${strings[40]}`],
-    [ sprites[4][1], bitmap`${strings[41]}`],
-    [ sprites[4][2], bitmap`${strings[42]}`],
-    [ sprites[4][3], bitmap`${strings[43]}`],
-    [ sprites[4][4], bitmap`${strings[44]}`],
-    [ sprites[4][5], bitmap`${strings[45]}`],
-    [ sprites[4][6], bitmap`${strings[46]}`],
-    [ sprites[4][7], bitmap`${strings[47]}`],
-    [ sprites[4][8], bitmap`${strings[48]}`],
-    [ sprites[4][9], bitmap`${strings[49]}`],
-
-    [ sprites[5][0], bitmap`${strings[50]}`],
-    [ sprites[5][1], bitmap`${strings[51]}`],
-    [ sprites[5][2], bitmap`${strings[52]}`],
-    [ sprites[5][3], bitmap`${strings[53]}`],
-    [ sprites[5][4], bitmap`${strings[54]}`],
-    [ sprites[5][5], bitmap`${strings[55]}`],
-    [ sprites[5][6], bitmap`${strings[56]}`],
-    [ sprites[5][7], bitmap`${strings[57]}`],
-    [ sprites[5][8], bitmap`${strings[58]}`],
-    [ sprites[5][9], bitmap`${strings[59]}`],
-
-    [ sprites[6][0], bitmap`${strings[60]}`],
-    [ sprites[6][1], bitmap`${strings[61]}`],
-    [ sprites[6][2], bitmap`${strings[62]}`],
-    [ sprites[6][3], bitmap`${strings[63]}`],
-    [ sprites[6][4], bitmap`${strings[64]}`],
-    [ sprites[6][5], bitmap`${strings[65]}`],
-    [ sprites[6][6], bitmap`${strings[66]}`],
-    [ sprites[6][7], bitmap`${strings[67]}`],
-    [ sprites[6][8], bitmap`${strings[68]}`],
-    [ sprites[6][9], bitmap`${strings[69]}`],
-
-    [ sprites[7][0], bitmap`${strings[70]}`],
-    [ sprites[7][1], bitmap`${strings[71]}`],
-    [ sprites[7][2], bitmap`${strings[72]}`],
-    [ sprites[7][3], bitmap`${strings[73]}`],
-    [ sprites[7][4], bitmap`${strings[74]}`],
-    [ sprites[7][5], bitmap`${strings[75]}`],
-    [ sprites[7][6], bitmap`${strings[76]}`],
-    [ sprites[7][7], bitmap`${strings[77]}`],
-    [ sprites[7][8], bitmap`${strings[78]}`],
-    [ sprites[7][9], bitmap`${strings[79]}`],
-  );
+  let param = []
+  for (let i = 0; i < 80; i++) {
+    param.push([sprites[Math.trunc(i/10)][i%10], bitmap`${strings[i]}`])
+  }
+  setLegend(...param)
 }
 
 updateLegend()
