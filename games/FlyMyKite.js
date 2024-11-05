@@ -338,4 +338,4 @@ setInterval(() => {
   accY = 0
   
   render()
-}, 10)
+}, navigator.userAgent.includes("Chrome") ? 20 : 10)
