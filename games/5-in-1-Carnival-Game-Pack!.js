@@ -1,8 +1,8 @@
 /*
 @title: 5-in-1 Carnival Game Pack!
+@author: Ada Dyer
 @tags: []
 @addedOn: 2023-01-07
-@author: Ada Dyer
 
 This game was made so you wouldn't have to upload something to your Sprig every time you want to play something different - but sadly, the Sprig doesn't take files this large. :'(
 

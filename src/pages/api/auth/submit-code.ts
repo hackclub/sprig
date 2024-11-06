@@ -1,7 +1,8 @@
 import type { APIRoute } from 'astro'
-import { getSession, getUserByEmail, makeOrUpdateSession, findDocument } from '../../../lib/game-saving/account'
+import { getSession, getUserByEmail, makeOrUpdateSession, findDocument, updateDocument } from '../../../lib/game-saving/account'
 import { isValidEmail } from '../../../lib/game-saving/email'
 import {DevEmail} from "../../../lib/game-saving/auth-helper";
+import { Timestamp } from 'firebase-admin/firestore';
 
 export const post: APIRoute = async ({ request, cookies }) => {
 	const session = await getSession(cookies)
@@ -25,7 +26,22 @@ export const post: APIRoute = async ({ request, cookies }) => {
 
 	const user = await getUserByEmail(email!) ?? session?.user
 	if (!user) return new Response('Invalid email or session', { status: 401 })
-	
+ 
+	const now = Timestamp.now();
+
+	const failedLoginAttempts = user.failedLoginAttempts ?? 0;
+	const lockoutUntil = user.lockoutUntil ?? null;
+
+	if (lockoutUntil && lockoutUntil.toMillis() > now.toMillis()) {
+		const lockoutMinutes = Math.ceil(
+			(lockoutUntil.toMillis() - now.toMillis()) / 60000
+		);
+		return new Response(
+			`Account locked. Try again in ${lockoutMinutes} minute(s).`,
+			{ status: 429 }
+		);
+	}
+
 	if (email === DevEmail && code == import.meta.env.DEV_CODE) {
 		await makeOrUpdateSession(cookies, user.id, 'code')
 		return new Response(JSON.stringify({ user }), { status: 200 })
@@ -36,9 +52,37 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		['userId', '==', user.id]
 	], 1);
 
-	if (_codes.empty) return new Response('Invalid login code', { status: 401 })
+    if (_codes.empty) {
+		const newFailedAttempts = failedLoginAttempts + 1;
 
-	await makeOrUpdateSession(cookies, user.id, 'code')
+		if (newFailedAttempts >= +import.meta.env.MAX_ATTEMPTS) {
+			const lockoutUntil = Timestamp.fromMillis(
+				now.toMillis() + parseInt(import.meta.env.PUBLIC_LOCKOUT_DURATION_MS)
+			);
+			await updateDocument("users", user.id, {
+				failedLoginAttempts: newFailedAttempts,
+				lockoutUntil: lockoutUntil,
+			});
+			return new Response(
+				`Too many attempts. Account locked for ${
+					import.meta.env.LOCKOUT_DURATION_MS / 60000
+				} minutes.`,
+				{ status: 429 }
+			);
+		} else {
+			await updateDocument("users", user.id, {
+				failedLoginAttempts: newFailedAttempts,
+			});
+			return new Response("Invalid login code", { status: 401 });
+		}
+	}
+
+	await updateDocument("users", user.id, {
+		failedLoginAttempts: 0,
+		lockoutUntil: null,
+	});
+
+	await makeOrUpdateSession(cookies, user.id, "code");
 	
 	const snap = await findDocument('loginCodes', ['userId', '==', user.id]);
 	// const snap = await firestore.collection('loginCodes').where('userId', '==', user.id).get()

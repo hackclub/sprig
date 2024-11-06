@@ -1,8 +1,8 @@
 /*
 @title: shitpest
+@author: Mason Meirs
 @tags: ['strategy']
 @addedOn: 2022-12-24
-@author: Mason Meirs
 snwy.me
 */
 

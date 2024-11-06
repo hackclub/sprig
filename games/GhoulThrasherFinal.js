@@ -1,7 +1,7 @@
 /*
 @title: Ghoul Thrasher
 @author: Kushagra
-@tags: ['dungeon', 'rougelike', 'shooter']
+@tags: ['role-playing','action','adventure']
 @addedOn: 2024-08-06
 */
 
@@ -388,7 +388,7 @@ let buttonCoords = {
 }
 
 let nuclearBarrelCurrent = 0;
-let nuclearBarrelMax = 25;
+let nuclearBarrelMax = 15;
 
 setLegend(
   [skull, bitmap`
@@ -1706,7 +1706,7 @@ C333333333333330
 
 setBackground(grass);
 
-setSolids([player, wall, invertedPlayer, pushable, health55, health54, health53, health52, health51, health50, health30, health31, health32, health33, butcheryGemFrameEmpty, butcheryGemFrameGotten, mazeGemFrameEmpty, mazeGemFrameGotten, inverterGemFrameEmpty, inverterGemFrameGotten]);
+setSolids([nuclearBarrel, player, wall, invertedPlayer, pushable, health55, health54, health53, health52, health51, health50, health30, health31, health32, health33, butcheryGemFrameEmpty, butcheryGemFrameGotten, mazeGemFrameEmpty, mazeGemFrameGotten, inverterGemFrameEmpty, inverterGemFrameGotten, nuclearBarrel]);
 
 let levelI = initI;
 let levelJ = initJ;
@@ -2811,14 +2811,14 @@ setInterval(() => {
     attackCounter++;
     if (houseHealth === phaseTwoChange) {
       bossPhase = 2;
-      nuclearBarrelMax = 35
+      nuclearBarrelMax = 25
     }
     if (houseHealth === phaseThreeChange) {
       bossPhase = 3;
-      nuclearBarrelMax = 45
+      nuclearBarrelMax = 35
     }
     if (houseHealth === phaseFourChange) {
-      nuclearBarrelMax = 55
+      nuclearBarrelMax = 45
     }
     if (attackCounter >= attackCounterMax / bossPhase) {
       attackCounter = 0;

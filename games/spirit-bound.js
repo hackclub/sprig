@@ -2,7 +2,7 @@
 /* 
 @title: spirit-bound
 @author: Tom-on
-@tags: ['dungeon']
+@tags: ['adventure']
 @addedOn: 2023-08-31
 */
 

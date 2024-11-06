@@ -68,7 +68,7 @@ Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) 
 
 - `#sprig-platform`: For discussion of development of the Sprig platform as a whole. 
 - `#sprig-gaming-controller`: Building a case for the Sprig console to make it a portable gaming controller.
-- `#sprig-emulator`: Development of emulator.
+- `#sprig-emulator`: Development of a Gameboy emulator for Sprig.
 - `#sprig-multiplayer`: Development of multiplayer support.
 - `#sprig-lora`: Development of Sprig-Lora communicator.
 - `#sdsprig`: Development of Sprig loading from an SD Card.

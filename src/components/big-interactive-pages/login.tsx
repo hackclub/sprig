@@ -1,7 +1,8 @@
 import { useSignalEffect } from '@preact/signals'
 import { IoPaperPlaneOutline } from 'react-icons/io5'
 import { SessionInfo } from '../../lib/game-saving/account'
-import {DevEmail, useAuthHelper} from '../../lib/game-saving/auth-helper'
+import { DevEmail, useAuthHelper } from '../../lib/game-saving/auth-helper'
+import { defaultExampleCode } from "../../lib/examples";
 import Button from '../design-system/button'
 import Input from '../design-system/input'
 import LinkButton from '../design-system/link-button'
@@ -16,8 +17,30 @@ interface LoginProps {
 
 export default function Login({ session, email, to }: LoginProps) {
 	const auth = useAuthHelper('EMAIL_ENTRY', email)
+
 	useSignalEffect(() => {
-		if (auth.stage.value === 'LOGGED_IN') window.location.replace(to)
+		const handleLogin = async () => {
+			if (auth.stage.value === 'LOGGED_IN') {
+				// This code saves the user's unsaved work in the editor as a game on their account when they log in
+				const savedGame = localStorage.getItem("sprigMemory")
+				if (savedGame && savedGame !== defaultExampleCode) {
+					try {
+						await fetch('/api/games/new', {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({
+								code: savedGame
+							})
+						})
+						localStorage.setItem("sprigMemory", defaultExampleCode)
+					} catch (error) {
+						console.error('Failed to save game:', error)
+					}
+				}
+				window.location.replace(to)
+			}
+		}
+		handleLogin()
 	})
 
 	return (
@@ -57,8 +80,9 @@ export default function Login({ session, email, to }: LoginProps) {
 						</p>
 						<Input onChange={() => undefined} value={auth.code.value} id='code' type='text' maxLength={auth.email.value == DevEmail ? 70 : 6} placeholder='123456'  bind={auth.code} />
 						{auth.state.value === 'CODE_INCORRECT' && <p class={styles.error}>Incorrect login code.</p>}
+						{auth.state.value === 'ACCOUNT_LOCKED' && <p class={styles.error}>Account locked due to too many failed attempts. Please try again in {+import.meta.env.PUBLIC_LOCKOUT_DURATION_MS / 60000} minutes.</p>}
 
-						<Button class={styles.submit} accent type='submit' disabled={!auth.codeValid.value} loading={auth.isLoading.value}>
+                        <Button class={styles.submit} accent type='submit' disabled={!auth.codeValid.value || auth.state.value === 'ACCOUNT_LOCKED'} loading={auth.isLoading.value}>
 							Finish logging in
 						</Button>
 					</>)}

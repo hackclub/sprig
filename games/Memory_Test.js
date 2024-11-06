@@ -1,8 +1,8 @@
 /*
 @title: Memory_Test
+@author: Albert_M
 @tags: ['memory']
 @addedOn: 2023-03-03
-@author: Albert_M
 A simple memory test. 
 Use WASD to move and L to click the tiles that light up. 
 (Code for timer inspired by "Flurffy" by Lucas )

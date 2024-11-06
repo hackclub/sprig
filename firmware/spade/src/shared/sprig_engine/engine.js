@@ -97,26 +97,8 @@ exports.afterInput = fn => (console.log('engine.js:afterInputs'), afterInputs.pu
 // exports.afterInput = fn => afterInputs.push(fn);
 
 const button = {
-  pinToHandlers: {
-     "5": [],
-     "7": [],
-     "6": [],
-     "8": [],
-    "12": [],
-    "14": [],
-    "13": [],
-    "15": [],
-  },
-  keyToPin: {
-    "w":  "5",
-    "s":  "7",
-    "a":  "6",
-    "d":  "8",
-    "i": "12",
-    "k": "14",
-    "j": "13",
-    "l": "15",
-  }
+  pinToHandlers: [...Array(8)].map(_ => []),
+  keys: ["w", "s", "a", "d", "i", "k", "j", "l"]
 };
 
 native.press_cb(pin => {
@@ -172,9 +154,9 @@ native.press_cb(pin => {
 }
 
 exports.onInput = (key, fn) => {
-  const pin = button.keyToPin[key];
+  const pin = button.keys.indexOf(key);
 
-  if (pin === undefined)
+  if (pin === -1)
     throw new Error(`the sprig doesn't have a "${key}" button!`);
 
   button.pinToHandlers[pin].push(fn);

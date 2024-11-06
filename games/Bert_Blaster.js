@@ -1,8 +1,8 @@
 /*
 @title: Bert Blaster
+@author: Waterbyte
 @tags: ['endless']
 @addedOn: 2022-11-05
-@author: Waterbyte
 */
 
 const grass1 = "a";

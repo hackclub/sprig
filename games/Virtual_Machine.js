@@ -1,8 +1,8 @@
 /*
 @title: Virtual_Machine
-@tags: ['strategy']
-@addedOn: 2022-09-08
 @author: N_Rizwan
+@tags: ["strategy" , "maze"]
+@addedOn: 2022-09-08
 */
 
 //===================VARIABLES=====================    

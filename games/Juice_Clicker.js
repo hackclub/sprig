@@ -1,8 +1,8 @@
 /*
 @title: Juice Clicker
+@author: ikejlemieux
 @tags: []
 @addedOn: 2024-07-29
-@author: ikejlemieux
 */
 
 const player = "p";

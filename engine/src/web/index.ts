@@ -24,7 +24,7 @@ export function webEngine(canvas: HTMLCanvasElement): {
 	cleanup(): void
 } {
 	const { api, state } = baseEngine()
-	
+
 	const ctx = canvas.getContext('2d')!
 	const offscreenCanvas = makeCanvas(1, 1)
 	const offscreenCtx = offscreenCanvas.getContext('2d')!
@@ -71,19 +71,19 @@ export function webEngine(canvas: HTMLCanvasElement): {
 		const actualWidth = offscreenCanvas.width*scale
 		const actualHeight = offscreenCanvas.height*scale
 		ctx.drawImage(
-			offscreenCanvas, 
-			(canvas.width-actualWidth)/2, 
-			(canvas.height-actualHeight)/2, 
-			actualWidth, 
+			offscreenCanvas,
+			(canvas.width-actualWidth)/2,
+			(canvas.height-actualHeight)/2,
+			actualWidth,
 			actualHeight
 		)
 
 		const textCanvas = getTextImg(state.texts)
 		ctx.drawImage(
-			textCanvas, 
+			textCanvas,
 			0,
-			0, 
-			canvas.width, 
+			0,
+			canvas.width,
 			canvas.height
 		)
 
@@ -155,7 +155,7 @@ export function webEngine(canvas: HTMLCanvasElement): {
 		api: {
 			...api,
 			setLegend,
-			onInput, 
+			onInput,
 			afterInput,
 			getState: () => state,
 			playTune: (text: string, n: number) => {

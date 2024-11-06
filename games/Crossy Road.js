@@ -1,11 +1,11 @@
 /*
+@title: Crossy Road
+@author: Bunnzulu
+@tags: ["retro" , "timed" , "puzzle"]
+@addedOn: 2024-07-26
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Crossy Road
-@author: Bunnzulu
-@tags: []
-@addedOn: 2024-07-26
 */
 
 const player = "p"
