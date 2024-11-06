@@ -3,7 +3,7 @@ Use WASD to move
 Use J to restart a level
 @title: Zoom
 @author: Aperaine
-@tags: ['puzzle']
+@tags: ['puzzle', 'music']
 @addedOn: 2024-11-05
 */
 
