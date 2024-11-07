@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: MineSweeper
-@author: 
-@tags: []
-@addedOn: 2024-00-00
+@author: 0day-Yash
+@tags: ['puzzle']
+@addedOn: 2024-11-07
 */
 
 const mine = "m";
