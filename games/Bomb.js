@@ -1,7 +1,8 @@
 /*
 @title: Bomb
 @author: Scaratek
-@addedOn: 2024-00-00
+@tags: []
+@addedOn: 2024-11-6
 */
 
 const player = "p";
