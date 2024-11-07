@@ -2,7 +2,7 @@
 @title: Dangerous Pac
 @author: MananCoder
 @tags: ['survival']
-@addedOn: 2024-11-5
+@addedOn: 2024-11-6
 */
 const player = "p";
 const ghost = "g";
