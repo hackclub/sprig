@@ -1,8 +1,8 @@
 /*
-@title: getting_started
-@author: leo, edits
-@tags: ['tutorial']
-@addedOn: 2022-07-26
+@title: Murder's Helper :)
+@author: Seungmins-leftfoot
+@tags: ['action']
+@addedOn: 2022-11-6
 
 Check the tutorial in the bottom right, the run button is in the top right.
 Make sure to remix this tutorial if you want to save your progress!
