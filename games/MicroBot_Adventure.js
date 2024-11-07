@@ -1,8 +1,8 @@
 /*
 @title: MicroBot_Adventure
+@author: Kartikey Singh Chauhan
 @tags: ['puzzle']
 @addedOn: 2024-01-24
-@author: Kartikey Singh Chauhan
 
 In this game, you are a robot navigating through maze-like sprinkled with enemies. 
 The primary objective is to outmaneuver enemies, strategically use boxes to block enemy attacks, and eliminate hostile turrets with a lasers 

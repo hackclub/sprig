@@ -20,8 +20,8 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Compare50 && beautifulsoup4
-        run: pip install compare50 beautifulsoup4
+      - name: Install python requirements
+        run: pip install jsbeautifier nltk argparse
 
       - name: Get list of changed files
         id: changed-files
@@ -34,37 +34,4 @@ jobs:
 
       - name: Run Plagiarism Detection Script
         if: env.FILES != ''
-        run: python .github/scripts/plagiarism_check.py "${{ env.FILES }}" games output_dir saved_dir
-
-      - name: Extract and Display Similarity Percentages
-        run: python .github/scripts/extract_percentages.py saved_dir/
-        id: extract-percentages
-
-      - name: Upload Compare50 Results as Artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: compare50-results
-          path: saved_dir/
-
-      - name: Save PR number to file
-        if: always()
-        run: echo ${{ github.event.pull_request.number }} > pr_number.txt
-
-      - name: Upload PR Number as Artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: pr-number
-          path: pr_number.txt
-
-      - name: Upload Plagiarism Report as Artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: plagiarism-report
-          path: plagiarism-report.md
-
-      - name: Check for High Plagiarism Percentages
-        if: always() && steps.extract-percentages.outcome == 'failure'
-        run: echo "Plagiarism percentage over threshold detected."
+        run: python ./.github/scripts/plagiarism_check.py games 0.5 "${{ env.FILES }}"

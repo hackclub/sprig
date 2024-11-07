@@ -1,6 +1,6 @@
 import { effect, Signal } from '@preact/signals'
-import { type InstrumentType, tones, type Tune } from 'sprig'
-import { playFrequency } from 'sprig/web'
+import { type InstrumentType, tones, type Tune } from '../../../engine/src/api'
+import { playFrequency } from '../../../engine/src/web'
 import { lazy } from '../../lib/utils/lazy'
 
 // Weird representations are used here:
@@ -55,7 +55,7 @@ export const tuneToCells = (tune: Tune) => {
 	const nonRestBeats = tune.filter(el => el.length > 1)
 	if (!nonRestBeats.length) return {}
 	const beatTime = nonRestBeats[0]![0]
-	
+
 	const cells: Cells = {}
 	let x = 0
 	for (const [ duration, ...rest ] of tune) {
@@ -99,14 +99,14 @@ export const playNote = (symbol: string, duration: number, instrument: Instrumen
 
 const playBeat = (beat: number, cells: Cells, bpm: number) => {
 	const notes: [number, InstrumentType][] = []
-  
+
 	Object
 		.entries(cells)
 		.forEach(([ key, value ]) => {
 			const [ x, y ] = key.split('_').map(Number)
 			if (x === beat) notes.push([ y!, value ])
 		})
-  
+
 	notes.forEach(([ y, instrument ]) => {
 		const note = yNoteMap[y]!
 		const duration = (1000*60) / bpm
@@ -128,7 +128,7 @@ export const play = (cells: Signal<Cells>, bpm: Signal<number>, beat: Signal<num
 				if (_timeout) clearTimeout(_timeout as number)
 				_timeout = setTimeout(go, ((1000 * 60) / bpm.value) - (audioCtx.outputLatency * 1000))
 			})
-			
+
 		}, audioCtx.outputLatency * 1000)
 	}
 	go()

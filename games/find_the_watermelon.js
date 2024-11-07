@@ -1,8 +1,8 @@
 /*
 @title: Find the Watermelon
+@author: Mohamad
 @tags: []
 @addedOn: 2023-10-05
-@author: Mohamad
 
 Check the tutorial in the bottom right, the run button is in the top right.
 Make sure to remix this tutorial if you want to save your progress!

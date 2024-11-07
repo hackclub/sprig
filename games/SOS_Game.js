@@ -1,8 +1,8 @@
 /*
 @title: SOS_Game
-@tags: ['multiplayer']
-@addedOn: 2022-11-13
 @author: Milán Leskó
+@tags: ['multiplayer', 'strategy', 'turn-based']
+@addedOn: 2022-11-13
 
 The aim of game is to make as many SOS words (in any direction) as you can.
 The game ends when there are no more empty space left.

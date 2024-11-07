@@ -1,8 +1,8 @@
 /*
 @title: Fire Hound
-@tags: ['puzzle-score']
-@addedOn: 2023-01-30
 @author: Himir Desai
+@tags: ['puzzle']
+@addedOn: 2023-01-30
 */
 
 const player = "p";

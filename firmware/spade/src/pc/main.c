@@ -145,14 +145,14 @@ static void keyboard(struct mfb_window *window, mfb_key key, mfb_key_mod mod, bo
     mfb_close(window);
   }
 
-  if (key == KB_KEY_W) spade_call_press( 5); // map_move(map_get_first('p'),  0, -1);
-  if (key == KB_KEY_S) spade_call_press( 7); // map_move(map_get_first('p'),  0,  1);
-  if (key == KB_KEY_A) spade_call_press( 6); // map_move(map_get_first('p'),  1,  0);
-  if (key == KB_KEY_D) spade_call_press( 8); // map_move(map_get_first('p'), -1,  0);
-  if (key == KB_KEY_I) spade_call_press(12); // map_move(map_get_first('p'),  0, -1);
-  if (key == KB_KEY_K) spade_call_press(14); // map_move(map_get_first('p'),  0,  1);
-  if (key == KB_KEY_J) spade_call_press(13); // map_move(map_get_first('p'),  1,  0);
-  if (key == KB_KEY_L) spade_call_press(15); // map_move(map_get_first('p'), -1,  0);
+  if (key == KB_KEY_W) spade_call_press(0); // map_move(map_get_first('p'),  0, -1);
+  if (key == KB_KEY_S) spade_call_press(1); // map_move(map_get_first('p'),  0,  1);
+  if (key == KB_KEY_A) spade_call_press(2); // map_move(map_get_first('p'),  1,  0);
+  if (key == KB_KEY_D) spade_call_press(3); // map_move(map_get_first('p'), -1,  0);
+  if (key == KB_KEY_I) spade_call_press(4); // map_move(map_get_first('p'),  0, -1);
+  if (key == KB_KEY_K) spade_call_press(5); // map_move(map_get_first('p'),  0,  1);
+  if (key == KB_KEY_J) spade_call_press(6); // map_move(map_get_first('p'),  1,  0);
+  if (key == KB_KEY_L) spade_call_press(7); // map_move(map_get_first('p'), -1,  0);
 }
 #endif
 
@@ -224,8 +224,7 @@ static void js_init(char *file, int file_size) {
   strcpy(combined, engine_script);
   strcpy(combined + sizeof(engine_script) - 1, file);
 
-  const jerry_length_t combined_size = sizeof (engine_script) - 1 + file_size;
-  js_run(combined, combined_size);
+  js_run(combined, 0);
 }
 
 /**

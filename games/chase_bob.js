@@ -1,8 +1,8 @@
 /*
 @title: chase_bob
+@author: garfieldfatcat3pack
 @tags: []
 @addedOn: 2023-04-01
-@author: garfieldfatcat3pack
 */
 
 const player = "p";

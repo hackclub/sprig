@@ -1,8 +1,8 @@
 /*
 @title: pong-multiplayer
+@author: sean
 @tags: ['multiplayer']
 @addedOn: 2023-01-01
-@author: sean
 */
 // Sprites
 const player1 = "1";

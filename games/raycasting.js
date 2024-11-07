@@ -1,8 +1,8 @@
 /*
 @title: Raycasting Demo
-@tags: ['advanced']
-@addedOn: 2022-07-22
 @author: Henry Bass
+@tags: []
+@addedOn: 2022-07-22
 
 Press W to move forwards, S to move back
 A and D to look

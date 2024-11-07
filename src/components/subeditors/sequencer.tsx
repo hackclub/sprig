@@ -3,8 +3,8 @@ import type { EditorProps } from '../../lib/state'
 import { type Signal, useSignal, useSignalEffect, signal } from '@preact/signals'
 import { IoPause, IoPlay, IoStop } from 'react-icons/io5'
 import { cellsToTune, height, tuneToCells, beats, Cells, yNoteMap, playNote, play, cellsEq } from './sequencer-utils'
-import { instruments, type InstrumentType, reverseInstrumentKey } from 'sprig'
-import { textToTune, tuneToText } from 'sprig/base'
+import { instruments , type InstrumentType, reverseInstrumentKey } from '../../../engine/src/api'
+import { textToTune, tuneToText } from '../../../engine/src/base'
 import { leftDown, rightDown } from '../../lib/utils/events'
 import { useEffect } from 'preact/hooks'
 import Button from '../design-system/button'
@@ -150,13 +150,15 @@ export default function SequencerEditor(props: EditorProps) {
 	}
 
 	// Sync text changes with cells
-	useSignalEffect(() => {
-		const newCells = tuneToCells(textToTune(props.text.value))
+	useEffect(() => {
+		const newCells = tuneToCells(textToTune(props.text.value));
 		const count = props.text.value.match(/(.+):/)
 		bpm.value = count ? Math.round(60 * 1000 / Number(count[1])) : 120
 		if (!cellsEq(newCells, cells.peek())) // Perf boost for rapid BPM changes
 			cells.value = newCells
-	})
+	
+	}, [ props.text.value ]);
+
 	// Sync cell changes with text
 	useSignalEffect(() => {
 		props.text.value = '\n' + tuneToText(cellsToTune(cells.value, bpm.value)).trim()

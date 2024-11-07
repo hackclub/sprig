@@ -1,9 +1,9 @@
 
 /*
 @title: loadsamoney
-@tags: ['simulation', 'endless']
-@addedOn: 2022-11-28
 @author: geschmit
+@tags: ['endless','simulation']
+@addedOn: 2022-11-28
 
 probaly.
 (https://www.youtube.com/watch?v=ULeDlxa3gyc)

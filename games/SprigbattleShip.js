@@ -1,10 +1,10 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
 @title: SprigbattleShip
 @author: Legonathanjereb
-@tags: ["classic"]
+@tags: ['retro']
 @addedOn: 2024-04-26
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
 */
 
 // based on battleship

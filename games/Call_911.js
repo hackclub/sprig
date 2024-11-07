@@ -1,8 +1,8 @@
 /*
 @title: Call 911
-@tags: ['strategy']
-@addedOn: 2022-10-18
 @author: Rohit
+@tags: ["strategy" , "puzzle" , "maze"]
+@addedOn: 2022-10-18
 */
 //credits: Nathan Pease
 

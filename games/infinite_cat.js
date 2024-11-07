@@ -1,9 +1,9 @@
 /* 
-
 @title: infinite_cat
+@author: Deven Jadhav
 @tags: ['strategy']
 @addedOn: 2022-11-07
-@author: Deven Jadhav
+
 
 
 Greetings Hacker,

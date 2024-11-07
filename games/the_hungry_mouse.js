@@ -1,8 +1,8 @@
 /*
 @title: the_hungry_mouse
+@author: KaiEtkin
 @tags: ['strategy']
 @addedOn: 2023-03-01
-@author: KaiEtkin
 */
 
 const player = "p";

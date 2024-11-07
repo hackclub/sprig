@@ -1,8 +1,8 @@
 /*
 @title: Falling Blocks
-@tags: ['hackable']
-@addedOn: 2022-09-17
 @author: Thanosan Prathifkumar
+@tags: []
+@addedOn: 2022-09-17
 
 Use A and D to move. Don't get hit by the falling blocks.
 */

@@ -1,11 +1,11 @@
 /*
+@title: Get the GREEN!
+@author: Dhyan99
+@tags: ['endless']
+@addedOn: 2024-06-28
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Get the GREEN!
-@author: Dhyan99
-@tags: ["endless"]
-@addedOn: 2024-06-28
 */
 
 const player = "p"

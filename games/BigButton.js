@@ -1,8 +1,8 @@
 /*
 @title: BigButton
+@author: LinusSkucas
 @tags: []
 @addedOn: 2022-12-17
-@author: LinusSkucas
 */
 
 const buttonBitmaps = ["a"];
