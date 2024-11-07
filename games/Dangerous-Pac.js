@@ -1,7 +1,7 @@
 /*
 @title: Dangerous Pac
 @author: MananCoder
-@tags: []
+@tags: ['survival']
 @addedOn: 2024-11-5
 */
 const player = "p";
