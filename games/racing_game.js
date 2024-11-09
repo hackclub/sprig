@@ -132,7 +132,7 @@ pgggr
 gorod
 gggrr`,
   map`
-pgogd
+pgord
 ..gor
 gorgr`,
   map`
@@ -157,6 +157,17 @@ g.gg.gg..
 ..ooooo..
 ..od.....
 ggggggggg`
+  map`
+pgggggggg
+oooooooog
+ogggggggg
+ogggggggg
+oooooooog
+gggoggdog
+gogggggog
+gooooooog
+ggggggggg`
+
 ];
 
 let destinationPosition = null;
