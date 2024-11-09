@@ -22,17 +22,17 @@ setLegend(
 ................
 ................
 ................
-.......CC..CC...
-........CCCC....
-........C0C0....
-...C....CCCCC0..
-..C.....CCCCC...
-..C..CCCCCC.....
-...CCCCCCCC.....
-....CCCCCCC.....
-....CCCCCCC.....
-....C.C.C.C.....
-....C.C.C.C.....` ],
+.......1L..L1...
+........LLLL....
+........L0L0....
+...1....LLLLL0..
+..1.....LLLLL...
+..L..LLLL11.....
+...LLLLLLLL.....
+....LLLLLLL.....
+....LLLLLLL.....
+....L.L.L.L.....
+....L.L.L.L.....` ],
   [ car, bitmap`
 ................
 ..3333..........
@@ -203,7 +203,7 @@ function Death() {
   Dead = true
   Score = 0
   playTune(DeathJingle)
-  setTimeout(() => {dwdwdddd
+  setTimeout(() => {
     const randomLevelIndex = Math.floor(Math.random() * levels.length);
     setMap(levels[randomLevelIndex]);
     spawnPlayer();
@@ -243,7 +243,7 @@ function spawnCar() {
   }
 }
 
-setInterval(spawnCar, Math.random() * 90 + 10 ); // Spawn a car at a random interval between 0.01 and 0.09 seconds
+setInterval(spawnCar, Math.random() * 90 + 40 ); // Spawn a car at a random interval between 0.01 and 0.09 seconds
 
 function MoveCars() {
     const cars = getAll(car);
@@ -254,7 +254,7 @@ function MoveCars() {
     cars.forEach(carSprite => {
       if (carSprite.x === playerSprite.x && carSprite.y === playerSprite.y) {
         playerSprite.remove(); // Remove the player sprite if hit by a car
-        console.log("Player died."); // Display a message or perform game over actions
+        console.log("Player died."); // Display a message and perform game over actions
         Death();
         }
       else {
@@ -269,15 +269,15 @@ function MoveCars() {
     });
 }
 
-setInterval(MoveCars, Math.random() * 350 + 50);
+setInterval(MoveCars, Math.random() * 50 + 25);
 
 
 let logsSpawned = 0; // Variable to track the number of logs spawned
 
 function spawnLogs() {
   const randomY = Math.floor(Math.random() * height()); // Generate a random Y coordinate
-  if (getTile(0, randomY).some(sprite => sprite.type === water && logsSpawned  <8)) { // Check if the tile at (0, randomY) is a road tile
-    addSprite(0, randomY, log); // Spawn a car sprite on the left side of the map at the random Y coordinate on a road tile
+  if (getTile(0, randomY).some(sprite => sprite.type === water && logsSpawned  <8)) { // Check if the tile at (0, randomY) is a water tile
+    addSprite(0, randomY, log); // Spawn a car sprite on the left side of the map at the random Y coordinate on a water tile
   }
 }
 
@@ -289,17 +289,31 @@ setInterval(spawnLogs, 150); // Spawn logs at a random interval between 1 and 2 
 
 function moveLogs() {
   const logs = getAll(log);
+  const playerSprite = getFirst(player);
 
   logs.forEach(logSprite => {
     if (logSprite.x >= width() - 1) {
-      logSprite.remove(); // Remove the log sprite when it reaches the end
-    } else {
-      logSprite.x += 1; // Move the sswwsslog sprite to the right
+      if (playerSprite && playerSprite.x === logSprite.x && playerSprite.y === logSprite.y) {
+        playerSprite.remove(); // Remove the player sprite if on a log and hitting the right side
+        console.log("Player rode the river off the map.");
+        Death();
+      } 
+      else {
+        logSprite.remove(); // Remove the log sprite when it reaches the end
+      }
+    } 
+    else {
+      logSprite.x += 1; // Move the log sprite to the right
+
+      // Check if the player is on the log and move the player with the log
+      if (playerSprite && playerSprite.x === logSprite.x - 1 && playerSprite.y === logSprite.y) {
+        playerSprite.x += 1; // Move the player along with the log
+      }
     }
   });
 }
 
-setInterval(moveLogs, 550); // Move logs at a random interval between 0.05 and 0.15 seconds
+setInterval(moveLogs, 550);
 
 const keyState = {}; // Object to track key states
 
@@ -347,6 +361,7 @@ function movePlayer(direction) {
   } else if (!isOnLog && getTile(newX, newY).some(sprite => sprite.type === water)) {
     // If the player is not on a log and is on water, consider it as death
     console.log("Player drowned in water.");
+    playerSprite.remove();
     Death();
   }
   
