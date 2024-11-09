@@ -1,7 +1,7 @@
 /*
 @title: Up, Down, Top-down
 @author: Somebud0180
-@tags: ['platformer', 'maze']
+@tags: ['puzzle','platformer']
 @addedOn: 2024-07-15
 */
 

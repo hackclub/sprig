@@ -1,9 +1,9 @@
 /* 
 @title: The Ambitious Ape Maze Game
 @author: atharv gupta
-@tags: ['maze']
-@img: ""
+@tags: ['puzzle']
 @addedOn: 2024-05-28
+@img: ""
 */
 
 const player = "p";

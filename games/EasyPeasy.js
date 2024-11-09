@@ -1,4 +1,8 @@
 /*
+@title: Easy Peasy
+@author: ChasedDraco
+@tags: ['simulation']
+@addedOn: 2024-08-20
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
@@ -8,10 +12,6 @@ You start off with 2 money; buy lemons to squeeze with "I"; squeeze the lemons w
 "W", "S", and "D" are used for purchasing upgrades.
 
 
-@title: Easy Peasy
-@author: ChasedDraco
-@tags: ["lemons","clicker"]
-@addedOn: 2024-08-20
 */
 
 const music = tune`
@@ -267,14 +267,19 @@ function juicing() {
 }
 
 function autoJuicing() {
-  if(level === 0){
+  if(level === 0 && -1<lemons-autoJuicer-2){
   juice += autoJuicer-2
   lemons -= autoJuicer-2
   updateScore()
   juicable = true
   }
+  else if(0>lemons-autoJuicer-2){
+  juice += lemons
+  lemons -= lemons
+  updateScore()
+  juicable = true
+  }
 }
-
 function juicingLoop() {
   if(autoJuicer > 2){
         if(juicable===true){

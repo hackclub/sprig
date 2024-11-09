@@ -1,8 +1,8 @@
 /*
 @title: 2048 Alphabet Edition
+@author: OptimalBlock489
 @tags: ['strategy']
 @addedOn: 2022-10-19
-@author: OptimalBlock489
 
 Credits : linkai101
 

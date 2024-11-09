@@ -1,8 +1,8 @@
 /*
 @title: maze bird
-@tags: ['sokoban-style']
-@addedOn: 2023-01-01
 @author: rkohm
+@tags: ['puzzle']
+@addedOn: 2023-01-01
 */
 
 const player = "p";

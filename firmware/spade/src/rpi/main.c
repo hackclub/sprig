@@ -1,9 +1,6 @@
 #include "pico/stdlib.h"
-#include "hardware/pwm.h"
-#include "hardware/spi.h"
 #include "hardware/timer.h"
 #include "hardware/watchdog.h"
-#include "hardware/adc.h"
 #include "pico/util/queue.h"
 #include "pico/multicore.h"
 #include "jerryscript.h"
@@ -26,12 +23,9 @@
 // Debugging shortcut
 #define yell puts
 
-#ifdef SPADE_AUDIO
-  #include "audio.c"
-#endif
+#include "HAL.h"
 
 // More firmware stuiff
-#include "ST7735_TFT.h"
 #include "upload.h"
 
 // Other imports
@@ -40,6 +34,12 @@
 #include "shared/js_runtime/jerry_mem.h"
 #include "shared/js_runtime/jerryxx.c"
 #include "shared/js_runtime/js.h"
+#include "shared/audio/piano.c"
+#include "shared/version.h"
+
+// screen is 20 characters wide
+#define SCREEN_WIDTH_CHARS 20
+#define SCREEN_HEIGHT_LINES 10
 
 // Externs for shared/ui/errorbuf.h
 char errorbuf[512] = "";
@@ -50,9 +50,9 @@ static void fatal_error() {
   while (1) {
     text_clear();
     render_errorbuf();
-    st7735_fill_start();
-    render(st7735_fill_send);
-    st7735_fill_finish();
+    fill_start();
+    render(write_pixel);
+    fill_end();
   }
 }
 #include "shared/ui/errorbuf.h"
@@ -72,8 +72,8 @@ typedef struct {
   uint8_t last_state;
   uint8_t ring_i;
 } ButtonState;
-uint button_pins[] = {  5,  7,  6,  8, 12, 14, 13, 15 };
-static ButtonState button_states[ARR_LEN(button_pins)] = {0};
+
+static ButtonState button_states[8] = {0};
 
 static bool button_history_read(ButtonState *bs, int i) {
   // We want to store bools compactly so we have to do some bit twiddling.
@@ -87,25 +87,17 @@ static void button_history_write(ButtonState *bs, int i, bool value) {
     bs->history[i/8] &= ~(1 << (i % 8));
 }
 
-static void button_init(void) {
-  for (int i = 0; i < ARR_LEN(button_pins); i++) {
-    ButtonState *bs = button_states + i;
-    gpio_set_dir(button_pins[i], GPIO_IN);
-    gpio_pull_up(button_pins[i]);
-  }
-}
-
 /**
  * Poll the buttons and push any keypresses to the main core.
  * 
  * (Should be run in a loop on a non-primary core.)
  */
 static void button_poll(void) {
-  for (int i = 0; i < ARR_LEN(button_pins); i++) {
+  for (int i = 0; i < 8; i++) {
     ButtonState *bs = button_states + i;
 
     bs->ring_i = (bs->ring_i + 1) % HISTORY_LEN; // Incrememnt ringbuffer index
-    button_history_write(bs, bs->ring_i, gpio_get(button_pins[i]));
+    button_history_write(bs, bs->ring_i, get_button(i));
 
     // up is true if more than 5/6 are true
     int up = 0;
@@ -118,61 +110,17 @@ static void button_poll(void) {
       bs->last_state = up;
       if (!up) {
         // Send the keypress to the main core
-        multicore_fifo_push_blocking(button_pins[i]); 
+        multicore_fifo_push_blocking(i);
       }
     }
   }
 }
 
-// Turn on the power lights and dim them with PWM.
-static void power_lights() {
-  // left white light
-  const int pin_num_0 = 28;
-  gpio_set_function(pin_num_0, GPIO_FUNC_PWM);
-  uint slice_num_0 = pwm_gpio_to_slice_num(pin_num_0);
-  pwm_set_enabled(slice_num_0, true);
-  pwm_set_gpio_level(pin_num_0, 65535/8);
-
-  // right blue light
-  // const pin_num_1 = 4;
-  // gpio_set_function(pin_num_1, GPIO_FUNC_PWM);
-  // uint slice_num_1 = pwm_gpio_to_slice_num(pin_num_1);
-  // pwm_set_enabled(slice_num_1, true);
-  // pwm_set_gpio_level(pin_num_1, 65535/4);
-}
-
 // Entry point for the second core that polls the buttons.
 static void core1_entry(void) {
-  button_init();
-
   while (1) {
     button_poll();
   }
-}
-
-/**
- * Seed the random number generator with entropy from
- * random electricity as well as temperature readings.
- */
-static void rng_init(void) {
-  adc_init();
-  uint32_t seed = 0;
-
-  // Read some random electricity
-  for (int i = 0; i < 4; i++) {
-    adc_select_input(4);
-    sleep_ms(1);
-    seed ^= adc_read();
-  }
-
-  // Read some temperature data
-  adc_set_temp_sensor_enabled(true);
-  adc_select_input(4);
-  sleep_ms(1);
-  seed ^= adc_read();
-  adc_set_temp_sensor_enabled(false);
-
-  srand(seed);
 }
 
 char serial_commands[][128] = {
@@ -248,91 +196,245 @@ static int load_new_scripts(void) {
   }
 #endif
 
+typedef enum {
+  NEW_SLOT,
+  GAME_MENU,
+  DELETE_CONFIRM,
+  RUN_GAME
+  } Welcome_Screen;
+
+  int count_digits(uint32_t number) {
+      if (number < 10) return 1;
+      if (number < 100) return 2;
+      if (number < 1000) return 3;
+      if (number < 10000) return 4;
+      if (number < 100000) return 5;
+      if (number < 1000000) return 6;
+      if (number < 10000000) return 7;
+      if (number < 100000000) return 8;
+      if (number < 1000000000) return 9;
+      return 10;
+  }
+
+  static Sprig_Button get_button_press() {
+      if (!multicore_fifo_rvalid()) return Button_None;
+      return (Sprig_Button) multicore_fifo_pop_blocking();
+  }
+
+typedef struct {
+    Welcome_Screen screen;
+    int games_len;
+    int games_i;
+    Game* games;
+} Welcome_State;
+
+  const char delete_confirm_screen[] = "                    \n"
+                                      "                    \n"
+                                      "                    \n"
+                                      "                    \n"
+                                      "                    \n"
+                                      " Do you really      \n"
+                                      " want to delete     \n"
+                                      " this game?         \n"
+                                      "                    \n"
+                                      "                    \n"
+                                      " W: confirm         \n"
+                                      " S: exit            \n"
+                                      "                    \n"
+                                      "                    \n"
+                                      " sprig.hackclub.com \n";
+
+  const char upload_game_screen[] = "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    " Please upload      \n"
+                                    " a game.            \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    "                    \n"
+                                    " sprig.hackclub.com \n";
+
+void render_game_menu_screen(char *buffer, Welcome_State welcome_state) {
+    // padding to be written after game num & size
+    char game_padding[] = "                    ";
+    char size_padding[] = "                    ";
+
+    game_padding[
+            SCREEN_WIDTH_CHARS
+            - count_digits(welcome_state.games_i + 1)
+            - count_digits(welcome_state.games_len)
+            - 8 // 7 chars used for " Game: " + account for slash
+    ] = '\0';
+
+    size_padding[
+            SCREEN_WIDTH_CHARS
+            - count_digits(GAME_SLOTS(welcome_state.games[welcome_state.games_i].size_b))
+            - count_digits(MAX_SLOTS)
+            - 8 // 7 chars used for " Size: " + account for slash
+    ] = '\0';
+
+    // 6lines, for game name
+    char game_split_lines[] = {
+            "                    \n"
+            "                    \n"
+            "                    \n"
+            "                    \n"
+            "                    \n"
+            "                    \n"
+    };
+
+    // buffer of 3 chars at beginning, subtract from total width
+    int chars_per_line = SCREEN_WIDTH_CHARS - 3;
+    unsigned int lines_used = strlen(welcome_state.games[welcome_state.games_i].name) / chars_per_line + 1;
+    for (int i = 0; i < lines_used; i++) {
+        // write to game_split_lines, segmented per line,
+        // +1 for the newline, +1 to get next open char
+        char *write_dest = &game_split_lines[i * (SCREEN_WIDTH_CHARS + 1) + 1];
+
+        // read from the game name, segmented by chars_per_line
+        char *game_line = &welcome_state.games[welcome_state.games_i].name[i * chars_per_line];
+
+        // write length is chars_per_line except if the last segment of game name is less than that
+        unsigned int write_length = chars_per_line;
+        if (strlen(welcome_state.games[welcome_state.games_i].name) - i * write_length < write_length) {
+            write_length = strlen(welcome_state.games[welcome_state.games_i].name) - i * chars_per_line;
+        }
+
+        memcpy(write_dest, game_line, write_length);
+    }
+
+
+    sprintf(buffer,
+            "                    \n"
+            "                    \n"
+            "%s"
+            "                    \n"
+            " Game: %d/%d%s\n"
+            " Size: %lu/%d%s\n"
+            "                    \n"
+            " W: PLAY            \n"
+            " S: DELETE          \n"
+            " <-  A , D  ->      \n",
+            game_split_lines,
+            welcome_state.games_i + 1, welcome_state.games_len, game_padding,
+            GAME_SLOTS(welcome_state.games[welcome_state.games_i].size_b), MAX_SLOTS, size_padding);
+}
+
+void update_welcome_state(Welcome_State* welcome_state) {
+    welcome_state->games_len = get_games(&welcome_state->games);
+
+    if (welcome_state->games_i >= welcome_state->games_len && welcome_state->games_i != 0) {
+        welcome_state->games_i = welcome_state->games_len - 1;
+    }
+
+    if (welcome_state->screen == DELETE_CONFIRM) {
+        // no-op
+    } else if (welcome_state->games_len == 0) {
+        welcome_state->screen = NEW_SLOT;
+    } else {
+        welcome_state->screen = GAME_MENU;
+        set_game(welcome_state->games[welcome_state->games_i]);
+    }
+
+    Sprig_Button button_pressed = get_button_press();
+
+    if (welcome_state->screen == GAME_MENU)
+        switch (button_pressed) {
+            case Button_A:
+                if (welcome_state->games_i > 0) welcome_state->games_i--;
+                break;
+            case Button_D:
+                if (welcome_state->games_i < welcome_state->games_len - 1) welcome_state->games_i++;
+                break;
+            case Button_S:
+                welcome_state->screen = DELETE_CONFIRM;
+                break;
+            case Button_W:
+                welcome_state->screen = RUN_GAME;
+                break;
+            default:
+                break;
+        }
+    else if (welcome_state->screen == DELETE_CONFIRM)
+        switch (button_pressed) {
+            case Button_S:
+                welcome_state->screen = GAME_MENU;
+                break;
+            case Button_W:
+                delete_game(welcome_state->games[welcome_state->games_i]);
+                welcome_state->screen = GAME_MENU;
+                update_welcome_state(welcome_state);
+                break;
+            default:
+                break;
+        }
+}
+
+void audio_try_push_samples(void) {
+    struct audio_buffer *buffer = get_audio_buffer(false);
+    if (buffer == NULL) return;
+
+    piano_fill_sample_buf((int16_t *)buffer->buffer->bytes, buffer->max_sample_count);
+    buffer->sample_count = buffer->max_sample_count;
+
+    // send to PIO DMA
+    push_audio_buffer( buffer);
+}
+
 int main() {
     timer_hw->dbgpause = 0;
 
   // Overclock the RP2040!
   set_sys_clock_khz(270000, true);
 
-  errorbuf_color = color16(0, 255, 255); // cyan
+    hw_init(); // init HAL
+    stdio_init_all(); // Init serial port
 
-  power_lights();   // Turn on the power lights
-  stdio_init_all(); // Init serial port
-  st7735_init();    // Init display
-  rng_init();       // Init RNG
+  errorbuf_color = color16(0, 255, 255); // cyan
 
   // Init JerryScript
   jerry_init(JERRY_INIT_MEM_STATS);
   init(sprite_free_jerry_object); // TODO: document
 
-  while(!save_read()) {
-    // No game stored in memory
-    strcpy(errorbuf, "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "    PLEASE UPLOAD   \n"
-                     "       A GAME       \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     " sprig.hackclub.com \n");
-    render_errorbuf();
-    st7735_fill_start();
-    render(st7735_fill_send);
-    st7735_fill_finish();
+    // Start a core to listen for keypresses.
+    multicore_reset_core1();
 
-    load_new_scripts();
-  }
+    update_save_version(); // init here to avoid irqs on other core
 
-  // Start a core to listen for keypresses.
-  multicore_launch_core1(core1_entry);
+    multicore_launch_core1(core1_entry);
 
-  /**
-   * We get a bunch of fake keypresses at startup, so we need to
-   * drain them from the FIFO queue.
-   *
-   * What really needs to be done here is to have button_init
-   * record when it starts so that we can ignore keypresses after
-   * that timestamp.
-   */
-  sleep_ms(50);
-  while (multicore_fifo_rvalid()) multicore_fifo_pop_blocking();
+    Welcome_State welcome_state = {
+            .screen = NEW_SLOT,
+            .games = malloc(METADATA_MAX_ENTRIES * sizeof(Game)), // leaks but it's fine since lifetime=program
+            .games_len = 0,
+            .games_i = 0
+    };
 
-  /**
-   * Wait for a keypress to start the game.
-   *
-   * This is important so games with e.g. infinite loops don't
-   * brick the device as soon as they start up.
-   */
-  while(!multicore_fifo_rvalid()) {
-    strcpy(errorbuf, "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "  PRESS ANY BUTTON  \n"
-                     "       TO RUN       \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     "                    \n"
-                     " sprig.hackclub.com \n");
-    render_errorbuf();
-    st7735_fill_start();
-    render(st7735_fill_send);
-    st7735_fill_finish();
+    for (;;) {
+        update_welcome_state(&welcome_state);
 
-    load_new_scripts();
-  }
+        if (welcome_state.screen == RUN_GAME)
+            break;
+        else if (welcome_state.screen == NEW_SLOT)
+            strcpy(errorbuf, upload_game_screen);
+        else if (welcome_state.screen == GAME_MENU)
+            render_game_menu_screen(errorbuf, welcome_state);
+        else if (welcome_state.screen == DELETE_CONFIRM)
+            strcpy(errorbuf, delete_confirm_screen);
+
+        render_errorbuf();
+        fill_start();
+        render(write_pixel);
+        fill_end();
+
+        load_new_scripts();
+    }
 
   // Wow, we can actually run a game now!
 
@@ -345,7 +447,7 @@ int main() {
   while (multicore_fifo_rvalid()) multicore_fifo_pop_blocking();
 
   // Run the code!
-  js_run(save_read(), strlen(save_read()));
+  js_run(save_read(), !welcome_state.games[welcome_state.games_i].is_legacy);
 
   #ifdef SPADE_AUDIO
     // Initialize audio
@@ -353,7 +455,6 @@ int main() {
       .song_free = piano_jerry_song_free,
       .song_chars = piano_jerry_song_chars,
     });
-    audio_init();
   #endif
 
   // Current time for timer handling (see frame_cb in shared/sprig_engine/engine.js)
@@ -364,7 +465,7 @@ int main() {
   while (1) {
     // Handle any new button presses
     while (multicore_fifo_rvalid()) {
-      spade_call_press(multicore_fifo_pop_blocking());
+      spade_call_press(get_button_press());
     }
 
     // Run async code
@@ -386,9 +487,9 @@ int main() {
 
     // Render
     render_errorbuf();
-    st7735_fill_start();
-    render(st7735_fill_send);
-    st7735_fill_finish();
+    fill_start();
+    render(write_pixel);
+    fill_end();
   }
 
   /**
@@ -416,9 +517,9 @@ int main() {
                    "                    \n"
                    " sprig.hackclub.com \n");
   render_errorbuf();
-  st7735_fill_start();
-  render(st7735_fill_send);
-  st7735_fill_finish();
+  fill_start();
+  render(write_pixel);
+  fill_end();
 
   /**
    * Watchdog is a mechanism designed to catch infinite loops. It will

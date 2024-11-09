@@ -1,8 +1,8 @@
 /*
 @title: sprigle
-@tags: ['classic', 'advanced']
-@addedOn: 2022-11-19
 @author: jedgrei
+@tags: ['retro']
+@addedOn: 2022-11-19
 */
 
 const valid_answer = [

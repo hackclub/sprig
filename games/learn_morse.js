@@ -1,8 +1,8 @@
 /*
 @title: Learn Morse
+@author: Ashen Chathuranga
 @tags: []
 @addedOn: 2023-10-15
-@author: Ashen Chathuranga
 */
 
 // define the sprites in our game

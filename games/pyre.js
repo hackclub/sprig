@@ -1,8 +1,8 @@
 /*
 @title: pyre
+@author: ced
 @tags: ['strategy']
 @addedOn: 2022-07-18
-@author: ced
 
 Instructions:
 

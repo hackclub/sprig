@@ -1,8 +1,8 @@
 /*
 @title: Spike_Avoider
+@author: Hrushal Nikhare
 @tags: ['endless']
 @addedOn: 2023-05-16
-@author: Hrushal Nikhare
 
 ¯\_(ツ)_/¯
 

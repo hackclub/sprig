@@ -1,11 +1,11 @@
 /*
+@title: Bad_Apple
+@author: Sychamis
+@tags: []
+@addedOn: 2024-01-27
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Bad_Apple
-@author: Sychamis
-@tags: ['advanced']
-@addedOn: 2024-01-27
 */
 
 //I noticed that no one made a bad apple port on sprig yet so I convinced myself I had to do it ;)

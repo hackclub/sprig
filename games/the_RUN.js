@@ -1,8 +1,8 @@
 /*
 @title: the RUN
+@author: lumos studio
 @tags: []
 @addedOn: 2022-11-21
-@author: lumos studio
 */
 
 const player = "p";

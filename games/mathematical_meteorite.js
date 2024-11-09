@@ -1,8 +1,8 @@
 /*
 @title: mathematical_meteorite
-@tags: ['thematic-puzzle']
-@addedOn: 2023-02-23
 @author: Arash
+@tags: ['puzzle']
+@addedOn: 2023-02-23
 
 There's a special meteorite falling that only seems to care about 
 special mathematical campfires! Guide the meteorite to the right 
