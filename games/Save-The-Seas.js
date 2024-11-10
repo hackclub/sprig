@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: erm idk
-@author: 
+@title: Save the Seas
+@author: RyanBran888
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-11-10
 */
 
 const player = "p"
