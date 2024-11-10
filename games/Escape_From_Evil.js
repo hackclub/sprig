@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: escape from evil
 @author: noobieyuh
-@tags: []
+@tags: ['puzzle', 'music']
 @addedOn: 2024-11-10
 */
 
