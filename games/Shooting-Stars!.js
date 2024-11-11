@@ -2,7 +2,7 @@
 @title: Shooting Stars!
 @author: Sapmix
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-11-11
 */
 
 const player = "p"
