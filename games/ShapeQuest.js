@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: matching
 @author: Kaiyuran
-@tags: ['puzzle']
+@tags: ['puzzle', 'maze']
 @addedOn: 2024-11-12
 */
 console.log("start")
