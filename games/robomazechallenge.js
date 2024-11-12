@@ -1,3 +1,9 @@
+/*
+@title: Robo Maze Runner
+@author: Sindhoora Raja
+@tags: ['maze', 'survival']
+@addedOn: 2024-11-12
+*/
 const player = "p";
 const wall = "w";
 const goal = "g";
