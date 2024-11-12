@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Pong
-@author: 
-@tags: []
-@addedOn: 2024-00-00
+@title: Sprong
+@author: Licnex
+@tags: ['multiplayer', 'retro']
+@addedOn: 2024-11-12
 */
 
 const player2 = "q"
