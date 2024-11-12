@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: matching
-@author: 
-@tags: []
-@addedOn: 2024-00-00
+@author: Kaiyuran
+@tags: ['puzzle']
+@addedOn: 2024-11-12
 */
 console.log("start")
 const player = "p";
