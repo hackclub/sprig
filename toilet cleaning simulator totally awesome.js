@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: programming club fricking rules
+@title: Toilet Cleaning Simulator
 @author: klaus-E2S
-@tags: []
-@addedOn: 2024-00-00
+@tags: ['simulation', 'humor']
+@addedOn: 2024-11-12
 */
 
 const player = "p"
