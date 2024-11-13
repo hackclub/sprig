@@ -1,3 +1,10 @@
+/*
+@author: Tonkatsu DJ Agetarō
+@title: Snake Classic
+@tags: []
+@addedOn: 2024-11-12
+*/
+
 const snakeBody = "s";
 const food = "f";
 const background = "b";
