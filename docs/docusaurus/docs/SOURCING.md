@@ -1,3 +1,7 @@
+---
+sidebar_position: 8
+---
+
 # Sourcing!
 
 Sprig is a physical game console designed by Hack Club where you write your **own** [games](https://sprig.hackclub.com/editor)! With any hardware device, it’s obvious you need to buy parts and have the board built. So all I need to do: is to find parts, buy parts, find a manufacturer, and boom! We get Sprigs. Yeah, no.

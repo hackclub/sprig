@@ -1,3 +1,7 @@
+---
+sidebar_position: 5
+---
+
 # Assembling your Sprig
 
 Your Sprig console is a piece of open source hardware and can also be used as a hardware development kit (all the unused GPIO pins are broken out!). We made it into a game console and invite you to enjoy it as such. But we encourage you to make it something else.

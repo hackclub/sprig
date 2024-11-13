@@ -1,3 +1,8 @@
+---
+mdx.format: md
+sidebar_position: 3
+---
+
 # The Toolkit
 
 Sprig is a tiny construction kit to build tile based games. 

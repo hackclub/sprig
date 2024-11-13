@@ -1,3 +1,7 @@
+---
+sidebar_position: 6
+---
+
 # Your Game, on Sprig ... in a Flash!
 
 So you have it, resting on your desk in front of you, in all of its spriggy glory: the handheld Sprig console!
@@ -18,14 +22,14 @@ Click on [this link](https://sprig.hackclub.com/pico-os.uf2) to download Spade, 
 
 ## BOOTSEL
 
-![sprig!](./assets/sprig.png)
+![sprig!](../static/img/sprig.png)
 
 Hold that button right there, and plug in the sprig!
 
 ## Drag n Drop
 
 It should appear in your file menu as a separate drive, much like a USB.
-![drop!](./assets/drag_n_drop.png)
+![drop!](../static/img/drag_n_drop.png)
 
 Just drop the .uf2 in there, and you're good to go! The device should immediately restart, and a message should appear on the screen.
 
@@ -36,7 +40,7 @@ Just drop the .uf2 in there, and you're good to go! The device should immediatel
 cp -X ~/Downloads/pico-os.uf2 /Volumes/RPI-RP2
 ```
 
-![upload a game screen](./assets/default_screen.jpg)
+![upload a game screen](../static/img/default_screen.jpg)
 
 ## Okay but how do I upload MY game?
 
@@ -46,7 +50,7 @@ Open up your game in the editor, click the "Run on Device" button in the top rig
 
 That's it! You're done :)
 
-> [!NOTE]
+> **Note:**
 > Make sure you're using a Chromium-based browser such as Edge or Chrome.
 > If you're using Linux, check the Linux section below because you probably need more setup!
 
@@ -65,7 +69,7 @@ To add a user to a group, run the following command replacing the groupname and 
 ```sh
 sudo usermod -aG dialout orpheus
 ```
-> [!NOTE]
+> **Note:**
 > You will likely be prompted for your password. Don't worry if you can't see it - that's normal! Just type it out as normal and press enter
 
 **Make sure to reboot your system after making this change** and you should be good to get flashing!
@@ -77,7 +81,7 @@ Is your browser installed as a Flatpak? This means that you need to do more setu
 ```sh
 flatpak override --device=all org.chromium.Chromium
 ```
-> [!NOTE]
+> **Note:**
 > Depending on your setup, you may need to run this command with sudo.
 
 Now you should be good to flash your game to your Sprig! Oh, but make sure to restart your browser after making that change :)
