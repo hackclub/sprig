@@ -28,7 +28,7 @@ typedef struct {
 static Note i2snote_sound(int freq, Sound sound) {
   return (Note) {
     .sound = sound,
-    .step = (freq * TABLE_LEN) / SAMPLES_PER_SECOND * 0x10000,
+    .step = (int) (((float) freq * TABLE_LEN) / SAMPLES_PER_SECOND * 0x10000),
   };
 }
 
