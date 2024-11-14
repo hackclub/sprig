@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Defend Your House!
 @author: Gabbs
-@tags: []
-@addedOn: 2024-00-00
+@tags: ['strategy', 'survival', 'music']
+@addedOn: 2024-11-13
 */
 const placed = tune`
 161.29032258064515: F4^161.29032258064515 + C5^161.29032258064515,
