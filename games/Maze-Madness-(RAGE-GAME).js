@@ -9,7 +9,7 @@ REACH THE 🏁 BEFORE THE TIMER ENDS
 
 @title: Maze Madness
 @author: Flaine
-@tags: []s
+@tags: ['maze', 'music']
 @addedOn: 2024-11-13
 */
 
