@@ -528,7 +528,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	}, [initialCode]);
 
 	return (
-		isNewSaveStrat.value && persistenceState.value.kind === PersistenceStateKind.COLLAB && typeof persistenceState.value.game === 'string' 
+		roomState != undefined && persistenceState.value.kind === PersistenceStateKind.COLLAB && typeof persistenceState.value.game === 'string' 
 		? 
 			(<>
 				<RoomPasswordPopup persistenceState={persistenceState} />
