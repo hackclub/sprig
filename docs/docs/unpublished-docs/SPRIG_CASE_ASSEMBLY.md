@@ -1,6 +1,5 @@
 ---
 draft: true
-unlisted: true
 ---
 
 # Sprig Case Assembly
