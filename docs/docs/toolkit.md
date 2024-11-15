@@ -302,7 +302,7 @@ const textInterval = setInterval(() => {
 }, 10000)
 ```
 
-## clearInterval(callback)
+### clearInterval(callback)
 
 Stops the interval `id`.
 
