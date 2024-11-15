@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Save the balloon
-@author: 
-@tags: []
-@addedOn: 2024-00-00
+@author: hrit09
+@tags: ['strategy', 'survival']
+@addedOn: 2024-11-14
 */
 const player = "p";
 const obstacle = "o";
