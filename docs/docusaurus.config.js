@@ -11,11 +11,11 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Sprig Docs',
-  tagline: 'Sprig is a game console where every user is a creator. Made by teenagers @ Hack Club.',
-  favicon: 'img/favicon.ico',
+  tagline: 'Documentation, guides, and tutorials for Sprig.',
+  favicon: 'img/favicon.png',
 
   // Set the production url of your site here
-  url: 'https://sprig.hackclub.com',
+  url: 'https://spri-docs.vercel.app',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -42,7 +42,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: './sidebars.js',
+          routeBasePath: '/',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -60,14 +60,18 @@ const config = {
         title: 'Sprig Docs',
         logo: {
           alt: 'Sprig Logo',
-          src: 'img/logo.svg',
+          src: 'img/SPRIGDINO.svg',
         },
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
-            label: 'Docs',
+            href: 'https://sprig.hackclub.com',
+            label: 'Sprig Site',
+            position: 'right',
+          },
+          {
+            href: 'https://sprig.hackclub.com/gallery',
+            label: 'Gallery',
+            position: 'right',
           },
           {
             href: 'https://github.com/hackclub/sprig',
@@ -83,8 +87,8 @@ const config = {
             title: 'Sprig',
             items: [
               {
-                label: 'Docs',
-                to: '/docs/intro',
+                label: 'Website',
+                href: 'https://sprig.hackclub.com',
               },
               {
                 label: 'Gallery',
@@ -114,7 +118,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Hack Club. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Hack Club. 501(c)(3) nonprofit (EIN: 81-2908499)`,
       },
       prism: {
         theme: prismThemes.github,

@@ -66,6 +66,22 @@ export default function MainNavbar(props: MainNavbarProps) {
 					<>
 						<li class={styles.plainLink}>
 							<a
+								href="https://sprig.hackclub.com/docs"
+								target="_blank"
+							>
+								Docs{" "}
+								<span
+									style={{
+										verticalAlign: "middle",
+										lineHeight: 1,
+									}}
+								>
+									<IoOpenOutline />
+								</span>
+							</a>
+						</li>
+						<li class={styles.plainLink}>
+							<a
 								href="https://github.com/hackclub/sprig/"
 								target="_blank"
 							>

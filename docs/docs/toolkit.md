@@ -1,5 +1,4 @@
 ---
-mdx.format: md
 sidebar_position: 3
 ---
 
@@ -114,9 +113,9 @@ Use `setPushables` to make sprites push other sprites around. The sprite on the 
 const player = "p"
 const block = "b"
 
-setPushables({'{'} 
+setPushables({ 
   [player]: [ block, player ] 
-{'}'})
+})
 ```
 
 **Watch out!** Make sure everything you pass to `setPushables` is also marked as a solid or they won't be pushed around.
@@ -140,10 +139,10 @@ Typically `w`, `a`, `s`, `d` are used as directional controls.
 Do something when the player presses a control:
 
 ```js
-onInput("d", () => {'{'}
+onInput("d", () => {
   // Move the player one tile to the right
   getFirst(player).x += 1
-{'}'})
+})
 ```
 
 ### afterInput(callback)
@@ -151,11 +150,11 @@ onInput("d", () => {'{'}
 Runs after every input event has finished being handled. Useful for tasks like checking win states:
 
 ```js
-afterInput(() => {'{'}
+afterInput(() => {
   if (getAll(block).length > 0) {
     console.log("you win")
   }
-{'}'})
+})
 ```
 
 ## Sprites and Tiles
@@ -163,12 +162,12 @@ afterInput(() => {'{'}
 Each tile can contain any number of sprites stacked on top of each other.
 
 Sprites contain:
-```
-{'{'}
+```js
+{
   type
   x
   y
-{'}'}
+}
 ```
 
 You can move the sprite by setting `x` and `y`. 
@@ -225,7 +224,7 @@ Shortcut for `getAll(type)[0]`.
 
 ## Text
 
-### addText(string, options = { x, y, color })
+### addText(string, options = \{ x, y, color })
 
 You can add text with optional `x`, `y`, and `color`.
 
@@ -234,11 +233,11 @@ In Sprig, each color is represented by a single character. Like `bitmap` and `ma
 For example:
 
 ```js
-addText("hello", {'{'} 
+addText("hello", { 
   x: 10,
   y: 4,
   color: color`3`
-{'}'})
+})
 ```
 
 ### clearText()
@@ -317,15 +316,15 @@ const getTypeFromTile = (x, y, type) => getTile(x, y, type).find(s => s.type ===
 The Sprig editor will automatically insert a heuristic in your `for`, `while` and or `do-while` loops to detect potential infinite loops.
 Code looking like
 ```js
-while (condition) {'{'}
+while (condition) {
   // do stuff
-{'}'}
+}
 ```
 will become
 ```js
 startTime = performance.now()
-while (condition) {'{'}if (++_loopIt > 2000 && performance.now() - startTime > 1500) throw new RangeError("Potential infinite loop")
+while (condition) {if (++_loopIt > 2000 && performance.now() - startTime > 1500) throw new RangeError("Potential infinite loop")
   // do stuff
-{'}'}
+}
 ```
 Note that all original line numbers in your code will be preserved.

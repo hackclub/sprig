@@ -1,5 +1,6 @@
 ---
 sidebar_position: 1
+slug: /
 ---
 
 # Getting Started
@@ -12,7 +13,7 @@ If this is your first time making a Sprig game, we recommend that you take a loo
 
 ## Getting Your Sprig
 
-After you've made your game, you can request a Sprig! Instructions on how to do this are [here](https://sprig.hackclub.com/get).
+After you've made your game, you can request a Sprig! Instructions on how to do this are [here](https://sprig.hackclub.com/get). You can only get a Sprig if you are a high schooler or younger.
 
 ## Playing your game on your Sprig
 
@@ -20,6 +21,6 @@ You finally got your Sprig! Now it's time to for all of that hard work to pay of
 
 At the moment, all you have is bunch of parts, and you may be wondering how to put them together to make your Sprig. Our [assembly guide](ASSEMBLY.md) goes through this, with lots of images to help you along the way! Once you've assembled your Sprig, you can [upload your game](UPLOAD.md) onto it.
 
-That's it! You've come a long way from where you started. You've made a unique Sprig game in the Sprig editor, published your game to the [Sprig gallery](https://sprig.hackclub.com/gallery), got your very own Sprig, and assembled it. It was no easy feat, but you did it! Give yourself a pat on the back. Now, you can play your amazing game over and over, try somebody else's game, make another one yourself, or even play [Doom](https://cloud-mu2xu4vzb-hack-club-bot.vercel.app/0pxl_20240407_024452716.mp4)! Whatever you do, we have one last thing to say...
+That's it! You've made a unique Sprig game in the Sprig editor, published your game to the [Sprig gallery](https://sprig.hackclub.com/gallery), got your very own Sprig, and assembled it. Now, you can play your amazing game over and over, try somebody else's game, make another one yourself, or even play [Doom](https://cloud-mu2xu4vzb-hack-club-bot.vercel.app/0pxl_20240407_024452716.mp4)! Make sure to join the [Hack Club Slack](https://hackclub.com/slack) and the #sprig channel if you're not already in it.
 
 **Happy Sprigging! :D**

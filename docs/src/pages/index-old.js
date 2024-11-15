@@ -31,7 +31,6 @@ export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
       description="Documentation for Hack Club's Sprig, a game console where every user is a creator">
       <HomepageHeader />
     </Layout>
