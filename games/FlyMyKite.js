@@ -23,77 +23,69 @@
 /*
  * PIXEL ENGINE
  *
- * The pixel engine is copied from the game
+ * The pixel engine is adapted from the game
  * Sprigenstein3D by TheBlueOomaLoompa 
  * (https://sprig.hackclub.com/gallery/Sprigenstein3D)
  *
  */
 
 // CONFIG
-const TILE_WIDTH=10
-const TILE_HEIGHT=8
-const TILE_SIZE=16
+const SCREEN_X = 160
+const SCREEN_Y = 128
+const TILES_X = 10
+const TILES_Y = 8
+const TILE_SIZE = 16
 
 // ASSETS
-const sprites = [
-  ['a','b','c','d','e','f','g','h','i','j'],
-  ['k','l','m','n','o','p','q','r','s','t'],
-  ['u','v','w','x','y','z','0','1','2','3'],
-  ['4','5','6','7','8','9','`','~','!','@'],
-  ['#','$','%','^','&','*','(',')','-','_',],
-  ['+','=','A','B','C','D','E','F','G','H',],
-  ['I','J','K','L','M','N','O','P','Q','R',],
-  ['S','T','U','V','W','X','Y','Z','<','>',],
-];
-
-const COLORS = ['0', 'L', '1', '2', '3','C','7','5','6','F','4','D','8','H','9'];
-
-let pixels = new Array(160*128)
-function clear() {
-  for (let i = 0; i < 160*128; i++) { 
-    pixels[i] = i > 160*110 ? COLORS[1] : COLORS[6] 
-  }
-}
-clear();
-
-function updateLegend() {
-  let strings = [];
-  let color = 0;
-  for (let ty = 0; ty < TILE_HEIGHT; ty++) {
-    for (let tx = 0; tx < TILE_WIDTH; tx++) {
-      strings.push(''); // Populate array TODO: Prepopulate for performance
-      for (let y = 0; y < TILE_SIZE; y++) {
-        for (let x = 0; x < TILE_SIZE; x++) {
-          strings[tx+ty*TILE_WIDTH] += pixels[tx*TILE_SIZE+x+(ty*TILE_SIZE+y)*TILE_WIDTH*TILE_SIZE];          
-        }
-        strings[tx+ty*TILE_WIDTH] += '\n'
-      }
-      color += 1;
-      if (color == COLORS.length) color = 0;
-    }
-  }
-  let param = []
-  for (let i = 0; i < 80; i++) {
-    param.push([sprites[Math.trunc(i/10)][i%10], bitmap`${strings[i]}`])
-  }
-  setLegend(...param)
-}
-
-updateLegend()
-
-setMap(map`
-abcdefghij
+const tiles = 
+`abcdefghij
 klmnopqrst
 uvwxyz0123
 456789\`~!@
 #$%^&*()-_
 +=ABCDEFGH
 IJKLMNOPQR
-STUVWXYZ<>`);
+STUVWXYZ<>`
+
+const sprites = tiles.split("\n").map(x => x.split(""))
+
+const COLORS = "0L123C756F4D8H9".split("")
+
+let pixels = new Array(160*128)
+
+function clear() {
+  for (let i = 0; i < SCREEN_X*SCREEN_Y; i++) { 
+    pixels[i] = i > SCREEN_X*110 ? COLORS[1] : COLORS[6] 
+  }
+}
+
+clear();
+
+function updateLegend() {
+  let param = []
+  let buf = new Array(TILE_SIZE*TILE_SIZE+1) // pixel buffer for one tile at a time
+  for (let ty = 0; ty < TILES_Y; ty++) {
+    for (let tx = 0; tx < TILES_X; tx++) {
+      let i = 0
+      for (let y = 0; y < TILE_SIZE; y++) {
+        for (let x = 0; x < TILE_SIZE; x++) {
+          buf[i++] = (pixels[tx*TILE_SIZE+x+(ty*TILE_SIZE+y)*TILES_X*TILE_SIZE])
+        }
+        buf[i++] = ("\n")
+      }
+      let str = buf.join("")
+      param.push([sprites[ty][tx], bitmap`${str}`])
+    }
+  }
+  setLegend(...param)
+}
+
+updateLegend()
+
+setMap(map`${tiles}`)
 
 function setPixel(x, y, color) {
-  const idx = x+y*TILE_WIDTH*TILE_SIZE;
-  pixels[idx] = color //pixels.substring(0, idx) + color + pixels.substring(idx+1);
+  pixels[x+y*TILES_X*TILE_SIZE] = color
 }
 
 
