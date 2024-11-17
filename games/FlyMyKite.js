@@ -2,7 +2,7 @@
 @title: FlyMyKite
 @author: Julius Rompf
 @tags: ['endless', 'action', 'retro']
-@addedOn: 2024-11-03
+@addedOn: 2024-11-16
 */
 
 /*
