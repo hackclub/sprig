@@ -40,7 +40,7 @@ const loseSound = tune`
 6126.760563380281`
 
 setLegend(
-  [ player1, bitmap`
+  [player1, bitmap`
 ...222222.......
 ...222222.......
 ...222222.......
@@ -57,7 +57,7 @@ setLegend(
 ...222222.......
 ...222222.......
 ...222222.......`],
-  [ player2, bitmap`
+  [player2, bitmap`
 .......222222...
 .......222222...
 .......222222...
@@ -74,7 +74,7 @@ setLegend(
 .......222222...
 .......222222...
 .......222222...`],
-  [ background, bitmap`
+  [background, bitmap`
 0000000000000000
 0000000000000000
 0000000000000000
@@ -91,7 +91,7 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000`],
-  [ ball, bitmap`
+  [ball, bitmap`
 ................
 ....22222222....
 ...2222222222...
@@ -168,23 +168,27 @@ function menu() {
   setMap(levels[level])
   clearText();
   addText("Select Game Mode:", { y: 5, color: color`2` });
-  addText("A. Single Player", { y: 8, color: color`2`  });
-  addText("L. Multiplayer", { y: 10, color: color`2`  });
+  addText("A. Single Player", { y: 8, color: color`2` });
+  addText("L. Multiplayer", { y: 10, color: color`2` });
 
   onInput("a", () => {
-    singlePlayer = true;
-    aiMoving = true
-    level += 1
-    setMap(levels[level]);
-    clearText();
+      if (level === 0) {
+        singlePlayer = true;
+        aiMoving = true
+        level += 1
+        setMap(levels[level]);
+        clearText();
+    }
   });
 
   onInput("l", () => {
+    if (level === 0) {
     singlePlayer = false;
     aiMoving = false
     level += 1
     setMap(levels[level]);
     clearText();
+    }
   });
 }
 
@@ -206,26 +210,27 @@ onInput("s", () => {
     p.y += playerSpeed;
   })
 });
-  onInput("i", () => {
-    getAll(player2).forEach(p => {
-      if (singlePlayer === false) {
-        p.y -= playerSpeed;
-      }
-    })
-  });
+onInput("i", () => {
+  getAll(player2).forEach(p => {
+    if (singlePlayer === false) {
+      p.y -= playerSpeed;
+    }
+  })
+});
 
-  onInput("k", () => {
-    getAll(player2).reverse().forEach(p => {
-      if (singlePlayer === false) {
-       p.y += playerSpeed;
-      }
-    })
-  });
+onInput("k", () => {
+  getAll(player2).reverse().forEach(p => {
+    if (singlePlayer === false) {
+      p.y += playerSpeed;
+    }
+  })
+});
 
 setPushables({
   [player1]: [player1],
   [player2]: [player2]
 });
+
 function dist(x1, y1, x2, y2) {
   const dx = x1 - x2;
   const dy = y1 - y2;
@@ -242,23 +247,22 @@ function writeScore() {
 
 function restart(sprite) {
   if (level > 0) {
-  writeScore()
-  ballDx = 0;
-  ballDy = 0;
-  sprite.x = Math.round(width() / 2);
-  sprite.y = Math.round(height() / 2);
-  setTimeout(() => {
-    ballDx = Math.random() < 0.5 ? -1 : 1;
-    ballDy = Math.random() < 0.5 ? -2 : 2;
-  }, 1000);
+    writeScore()
+    ballDx = 0;
+    ballDy = 0;
+    sprite.x = Math.round(width() / 2);
+    sprite.y = Math.round(height() / 2);
+    setTimeout(() => {
+      ballDx = Math.random() < 0.5 ? -1 : 1;
+      ballDy = Math.random() < 0.5 ? -2 : 2;
+    }, 1000);
   }
 }
 
 function makeSound() {
   if (soundOne) {
     playTune(hitSound1);
-  }
-  else {
+  } else {
     playTune(hitSound1);
   }
   soundOne = !soundOne
@@ -268,12 +272,11 @@ setInterval(() => {
     const sprite = getFirst(ball);
     sprite.x += ballDx;
     sprite.y += ballDy;
-    
+
     if (sprite.y >= height() - 2) {
       ballDy = Math.abs(ballDy) * -1;
       makeSound()
-    }
-    else if (sprite.y <= 2) {
+    } else if (sprite.y <= 2) {
       ballDy = Math.abs(ballDy);
       makeSound()
     }
@@ -284,8 +287,7 @@ setInterval(() => {
     if (getAll(player2).some(isPast) && ballDx > 0) {
       ballDx = ballDx * -1;
       makeSound()
-    }
-    else if (sprite.x >= width() - 1) {
+    } else if (sprite.x >= width() - 1) {
       player1Score += 1;
       playTune(pointSound);
       restart(sprite)
@@ -293,13 +295,11 @@ setInterval(() => {
     if (getAll(player1).some(isPast) && ballDx < 0) {
       ballDx = ballDx * -1;
       makeSound()
-    }
-    else if (sprite.x <= 1 & singlePlayer === true){
+    } else if (sprite.x <= 1 & singlePlayer === true) {
       player2Score += 1;
       playTune(loseSound);
       restart(sprite)
-    }
-    else if (sprite.x <= 1 & singlePlayer === false){
+    } else if (sprite.x <= 1 & singlePlayer === false) {
       player2Score += 1;
       playTune(pointSound);
       restart(sprite)
@@ -309,15 +309,14 @@ setInterval(() => {
 
 let aiYValues;
 setInterval(() => {
-  if (level > 0 && singlePlayer === true ){
+  if (level > 0 && singlePlayer === true) {
     const sprite = getFirst(ball);
     if (ballDx < 0) {
       aiSpeed = 1;
-    }
-    else {
+    } else {
       aiSpeed = 2;
     }
-  
+
     if (aiMoving) {
       if ((Math.random() * 100) < 40) {
         aiMoving = false;
@@ -327,14 +326,13 @@ setInterval(() => {
       };
     }
     if (!aiMoving) return;
-  
+
     aiYValues = getAll(player2).map(e => e.y);
     if (Math.min(...aiYValues) > sprite.y) {
-        getAll(player2).forEach(p => {
-          p.y -= 2;
-        })
-    }
-    else if (Math.max(...aiYValues) < sprite.y) {
+      getAll(player2).forEach(p => {
+        p.y -= 2;
+      })
+    } else if (Math.max(...aiYValues) < sprite.y) {
       getAll(player2).reverse().forEach((p, i) => {
         p.y += 2;
       })
