@@ -1,7 +1,7 @@
 /*
 @title: Sprong
 @author: Licnex
-@tags: ['retro', 'endless', 'multiplayer', 'bot']
+@tags: ['retro', 'endless', 'multiplayer']
 @addedOn: 2024-11-12
 */
 
