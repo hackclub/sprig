@@ -1,12 +1,14 @@
 /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
-
 @title: Defend Your House!
 @author: Gabbs
 @tags: ['strategy', 'survival', 'music']
 @addedOn: 2024-11-13
 */
+const moving = tune`
+161.29032258064515: F4~161.29032258064515 + C5~161.29032258064515,
+5000`
 const placed = tune`
 161.29032258064515: F4^161.29032258064515 + C5^161.29032258064515,
 161.29032258064515: B4^161.29032258064515 + G5^161.29032258064515,
@@ -69,7 +71,10 @@ const win = tune`
 var z = 1;
 var pos = 4;
 
-
+const reinforcedWall = "V"
+const FIREBALLR = "J";
+const FIREBALL = "j";
+const bg = "g"
 const cursor = "c"
 const pizzaOne = "p"
 const wall = "w"
@@ -95,7 +100,7 @@ var challengeState = false;
 var youLost = false;
 var randomChallenge = 0;
 setLegend(
-  [ cursor, bitmap`
+  [cursor, bitmap`
 LLLLLLLLLLLLLLLL
 L..............L
 L.1........111.L
@@ -111,7 +116,7 @@ L..........1.1.L
 L.1.........11.L
 L.11.......111.L
 L..............L
-LLLLLLLLLLLLLLLL` ],
+LLLLLLLLLLLLLLLL`],
   [pizzaOne, bitmap `
 CCCCCCCCCCCCCCCC
 C33333399333999C
@@ -232,22 +237,22 @@ F6F6F6F6F6F6F6F6`],
 6F6F6F6F6F6F6F6F
 6F6F6F6F6F6F6F6F`],
   [white, bitmap`
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222`],
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555`],
   [wood, bitmap`
 CCCCCCCCCCCCCCCC
 C11111111111111C
@@ -265,6 +270,23 @@ CCCCCCCCCCCCCCCC
 C11111111111111C
 CFFFFFFFFFFFFFFC
 CCCCCCCCCCCCCCCC`],
+  [reinforcedWall, bitmap`
+LLLLLLLLLLLLLLLL
+L11111111111111L
+LFFFFFFFFFFFFFFL
+LLLLLLLLLLLLLLLL
+L11111111111111L
+LFFFFFFFFFFFFFFL
+LLLLLLLLLLLLLLLL
+L11111111111111L
+LFFFFFFFFFFFFFFL
+LLLLLLLLLLLLLLLL
+L11111111111111L
+LFFFFFFFFFFFFFFL
+LLLLLLLLLLLLLLLL
+L11111111111111L
+LFFFFFFFFFFFFFFL
+LLLLLLLLLLLLLLLL`],
   [downLeftDoor, bitmap`
 C6CCCCCCCCCCC666
 C6CCCCCCCCCCCCCC
@@ -350,7 +372,7 @@ LL111L1111L1111L
 L1111L1111L1111L
 L1LLLL1111111LLL
 LLLLLL1111111LLL`],
-   [ROCKF, bitmap`
+  [ROCKF, bitmap`
 LLLLLLLLLLLLLLLL
 L1111LLLLLLLLLLL
 L1111111L11111LL
@@ -383,9 +405,60 @@ LLL1111111LLLLLL`],
 ........57675...
 .......57675....
 ......57675.....
-.......555......`]
-  
-  
+.......555......`],
+  [FIREBALL, bitmap`
+6666666993393933
+6666699699393333
+6666666699939933
+9666996969933933
+9699699966993333
+9969966699399933
+6966996999939933
+6699966999993333
+9669996699999333
+9999999933933933
+9999999393393333
+3933399339939333
+3393939333993933
+9333333333339333
+3333333333333333
+3333333333333333`],
+  [FIREBALLR, bitmap`
+3393933996666666
+3333939969966666
+3399399966666666
+3393399696996669
+3333996699969969
+3399939966699699
+3399399996996696
+3333999996699966
+3339999966999669
+3393393399999999
+3333933939999999
+3339399339933393
+3393993339393933
+3339333333333339
+3333333333333333
+3333333333333333`],
+  [bg, bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777`]
+
+
 )
 
 const level = map`
@@ -406,68 +479,66 @@ WWW....ppuUpp....WWW
 WWW....ppdDpp....WWW
 wwwwwwwwwwwwwwwwwwww`
 setMap(level)
-
+setBackground("g")
 onInput("k", () => {
   // Move the player one tile to the right
+  playTune(moving);
   updateWoodCount();
 })
 
 onInput("d", () => {
   // Move the player one tile to the right
+  playTune(moving);
   getFirst(cursor).x += 1
 })
 
 onInput("s", () => {
   // Move the player one tile down
+  playTune(moving);
   getFirst(cursor).y += 1
 })
 
 onInput("a", () => {
   // Move the player one tile to the left
+  playTune(moving);
   getFirst(cursor).x -= 1
 })
 
 onInput("w", () => {
   // Move the player one tile up
+  playTune(moving);
   getFirst(cursor).y -= 1
 })
 
 onInput("j", () => {
-   // Start the event
-   clearText();
-  if(youLost == false)
-  {
-      if(challenge == false)
-      {
-        challenge = true;
-        
-      }
-      if(challenge == true && challengeState == false)
-      { 
-       EventSystem();
-        
-      }
-      else if(challenge == true && challengeState == true)
-      {
-        addText(`Wait until`, { 
+  // Start the event
+  clearText();
+  if (youLost == false) {
+    if (challenge == false) {
+      challenge = true;
+
+    }
+    if (challenge == true && challengeState == false) {
+      EventSystem();
+
+    } else if (challenge == true && challengeState == true) {
+      addText(`Wait until`, {
         x: 1,
         y: 1,
         color: color`4`
       });
-        addText(`the event finishes!`, { 
+      addText(`the event finishes!`, {
         x: 1,
         y: 2,
         color: color`4`
       });
-      }
-  }
-  else
-  {
-    addText(`Restarted! press K`, { 
-        x: 1,
-        y: 1,
-        color: color`4`
-      });
+    }
+  } else {
+    addText(`Restarted! press K`, {
+      x: 1,
+      y: 1,
+      color: color`4`
+    });
     numberOfWood = 15;
     roundSurvived = 0;
     z = 1;
@@ -477,30 +548,30 @@ onInput("j", () => {
     setMap(level); // Ricarica il livello
     youLost = false;
   }
- 
 
-  
+
+
 })
 
 // Funzione per visualizzare il numero di blocchi rimanenti
 function updateWoodCount() {
   clearText(); // Cancella il conteggio precedente
-  addText(`Wood Remaining: ${numberOfWood}`, { 
+  addText(`Wood Remaining: ${numberOfWood}`, {
     x: 1,
     y: 1,
-    color: color`L`
+    color: color`3`
   });
-  addText(`Round survived: ${roundSurvived}`, { 
+  addText(`Round survived: ${roundSurvived}`, {
     x: 1,
     y: 2,
-    color: color`L`
+    color: color`9`
   });
 }
 
 // Aggiornamento iniziale del conteggio dei blocchi rimanenti
 updateWoodCount();
 onInput("l", () => {
-  
+
   if (challenge == false) {
     PlaceWood();
     playTune(placed);
@@ -511,15 +582,18 @@ onInput("l", () => {
 function gameLoop() {
   console.log(randomChallenge);
   if (challenge && youLost == false) {
-    if(randomChallenge == 1)
+    if (randomChallenge == 1) {
+      ZapEvent();
+    } else if (randomChallenge == 2) {
+      RockLEvent();
+    } else if (randomChallenge == 3) {
+      RockREvent();
+    }else if (randomChallenge == 4)
     {
-    ZapEvent();
-    }
-    else if (randomChallenge == 2)
-    { RockLEvent();
-    }
-    else if(randomChallenge == 3)
-    { RockREvent();
+      FireBallLEvent();
+    }else if(randomChallenge == 4)
+    {
+      FireBallREvent();
     }
   }
 }
@@ -527,266 +601,440 @@ function gameLoop() {
 // Imposta l'intervallo per eseguire la funzione gameLoop ogni tot millisecondi
 const interval = setInterval(gameLoop, 500); // Esegui ogni secondo (1000 millisecondi)
 
-function ZapEvent()
-{
+function FireBallLEvent() {
   console.log("The value of z is: " + z);
 
-// Move the ZAP sprite down
-    if (z == 1) {
+  // Move the ROCK sprite down
+  if (z == 1) {
+    z = 1;
+
+    pos = 3;
+    var randomY = Math.floor(Math.random() * (14 - 4 + 1)) + 4;
+    challengeState = true;
+    addSprite(pos, 4, FIREBALL);
+    z = 2;
+  } else {
+    const fireballSprite = getFirst(FIREBALL);
+    fireballSprite.x += 1; // Move the ROCK sprite down
+    fireballSprite.y += 1;
+
+    // Check if the ROCK sprite hits a wood block
+    const spritesAtFireball = getTile(fireballSprite.x, fireballSprite.y);
+
+    spritesAtFireball.forEach(sprite => {
+      if (sprite.type === wood) {
+        // If the ROCK hits a wood block, remove both sprites
+        sprite.remove(); // Remove the wood block
+        fireballSprite.remove(); // Remove the ROCK sprite
+        playTune(collision);
+
+        z = 3;
+      } 
+        //ATTENTO
+      else if(sprite.type === reinforcedWall)
+      {
+        sprite.remove(); // Remove the wood block
+        addSprite(fireballSprite.x, fireballSprite.y, wood);
+        fireballSprite.remove(); // Remove the ROCK sprite
+        playTune(collision);
+        z = 3;
+      }
+      else if (sprite.type === roof || sprite.type === roofl || sprite.type === pizzaOne || sprite.type === center || sprite.type === centerL || sprite.type === centerR) {
+        // If the ZAP hits a wood block, remove both sprites
+        sprite.remove(); // Remove the wood block
+        fireballSprite.remove(); // Remove the ZAP sprite
+
+        z = 4;
+      }
+
+    });
+
+    if (fireballSprite.x == 18 || z == 3) {
+      fireballSprite.remove();
+      challengeState = false;
+      challenge = false;
       z = 1;
       pos = 4;
-      var randomX = Math.floor(Math.random() * (16 - 3 + 1)) + 3;
-      challengeState = true;
-      addSprite(randomX, pos, ZAP);
-      z = 2;
-    } else {
-      const zapSprite = getFirst(ZAP);
-      zapSprite.y += 1; // Move the ZAP sprite down
-      
-
-      // Check if the ZAP sprite hits a wood block
-      const spritesAtZap = getTile(zapSprite.x, zapSprite.y);
-
-      spritesAtZap.forEach(sprite => {
-        if (sprite.type === wood) {
-          // If the ZAP hits a wood block, remove both sprites
-          sprite.remove(); // Remove the wood block
-          zapSprite.remove(); // Remove the ZAP sprite
-          playTune(collision);
-          
-          z = 3;
-        }
-        else if (sprite.type === roof || sprite.type === roofl||sprite.type === pizzaOne) {
-          // If the ZAP hits a wood block, remove both sprites
-          sprite.remove(); // Remove the wood block
-          zapSprite.remove(); // Remove the ZAP sprite
-          
-          z = 4;
-        }
-        
-      });
-
-      if (zapSprite.y == 15 || z == 3) {
-        zapSprite.remove();
-        challengeState = false;
-        challenge = false;
-        z = 1;
-        pos = 4;
-        addText("press J", { 
-    x: 7,
-    y: 5,
-    color: color`4`
-    })
-      }else if(z == 4)
-      {challengeState = false;
-        GameOver();
-      }
+      addText("press J", {
+        x: 7,
+        y: 5,
+        color: color`4`
+      })
+    } else if (z == 4) {
+      challengeState = false;
+      GameOver();
     }
+  }
 
-  
+
 }
-function RockLEvent()
-{
+
+function FireBallREvent() {
   console.log("The value of z is: " + z);
 
-// Move the ROCK sprite down
-    if (z == 1) {
-      z = 1;
-    
-      pos = 3;
-      var randomY = Math.floor(Math.random() * (14 - 4 + 1)) + 4;
-      challengeState = true;
-      addSprite(pos, randomY, ROCK);
-      z = 2;
-    } else {
-      const rockSprite = getFirst(ROCK);
-      rockSprite.x += 1; // Move the ROCK sprite down
-      
+  // Move the ROCK sprite down
+  if (z == 1) {
+    z = 1;
 
-      // Check if the ROCK sprite hits a wood block
-      const spritesAtRock = getTile(rockSprite.x, rockSprite.y);
+    pos = 17;
+    var randomY = Math.floor(Math.random() * (14 - 4 + 1)) + 4;
+    challengeState = true;
+    addSprite(pos, 4, FIREBALLR);
+    z = 2;
+  } else {
+    const fireballSprite = getFirst(FIREBALLR);
+    fireballSprite.x -= 1; // Move the ROCK sprite down
+    fireballSprite.y += 1;
 
-      spritesAtRock.forEach(sprite => {
-        if (sprite.type === wood) {
-          // If the ROCK hits a wood block, remove both sprites
-          sprite.remove(); // Remove the wood block
-          rockSprite.remove(); // Remove the ROCK sprite
-          playTune(collision);
-          
-          z = 3;
-        }else if (sprite.type === roof || sprite.type === roofl||sprite.type === pizzaOne) {
-          // If the ZAP hits a wood block, remove both sprites
-          sprite.remove(); // Remove the wood block
-          rockSprite.remove(); // Remove the ZAP sprite
-          
-          z = 4;
-        }
-        
-      });
+    // Check if the ROCK sprite hits a wood block
+    const spritesAtFireball = getTile(fireballSprite.x, fireballSprite.y);
 
-      if (rockSprite.x == 18 || z == 3) {
-        rockSprite.remove();
-        challengeState = false;
-        challenge = false;
-        z = 1;
-        pos = 4;
-        addText("press J", { 
-    x: 7,
-    y: 5,
-    color: color`4`
-    })
-      }else if(z == 4)
-      {challengeState = false;
-        GameOver();
-      }
-    }
+    spritesAtFireball.forEach(sprite => {
+      if (sprite.type === wood) {
+        // If the ROCK hits a wood block, remove both sprites
+        sprite.remove(); // Remove the wood block
+        fireballSprite.remove(); // Remove the ROCK sprite
+        playTune(collision);
 
-  
-}
-function RockREvent()
-{
-  console.log("The value of z is: " + z);
-
-// Move the ROCKF sprite down
-    if (z == 1) {
-      z = 1;
-    
-      pos = 17;
-      var randomY = Math.floor(Math.random() * (14 - 4 + 1)) + 4;
-      challengeState = true;
-      addSprite(pos, randomY, ROCKF);
-      z = 2;
-    } else {
-      const rockfSprite = getFirst(ROCKF);
-      rockfSprite.x -= 1; // Move the ROCK sprite down
-      
-
-      // Check if the ROCK sprite hits a wood block
-      const spritesAtRockf = getTile(rockfSprite.x, rockfSprite.y);
-
-      spritesAtRockf.forEach(sprite => {
-        if (sprite.type === wood) {
-          // If the ROCKF hits a wood block, remove both sprites
-          sprite.remove(); // Remove the wood block
-          rockfSprite.remove(); // Remove the ROCKF sprite
-          playTune(collision);
-          
-          z = 3;
-        }else if (sprite.type === roof || sprite.type === roofl||sprite.type === pizzaOne) {
-          // If the ZAP hits a wood block, remove both sprites
-          sprite.remove(); // Remove the wood block
-          rockfSprite.remove(); // Remove the ZAP sprite
-          
-          z = 4;
-        }
-        
-      });
-
-      if (rockfSprite.x == 2 || z == 3) {
-        rockfSprite.remove();
-        challengeState = false;
-        challenge = false;
-        z = 1;
-        pos = 4;
-        addText("press J", { 
-    x: 7,
-    y: 5,
-    color: color`4`
-    })
-      }else if(z == 4)
+        z = 3;
+      } 
+        //ATTENTO
+      else if(sprite.type === reinforcedWall)
       {
-        
-        challengeState = false;
-        GameOver();
+        sprite.remove(); // Remove the wood block
+        addSprite(fireballSprite.x, fireballSprite.y, wood);
+        fireballSprite.remove(); // Remove the ROCK sprite
+        playTune(collision);
+        z = 3;
       }
-      
-    }
+      else if (sprite.type === roof || sprite.type === roofl || sprite.type === pizzaOne || sprite.type === center || sprite.type === centerL || sprite.type === centerR) {
+        // If the ZAP hits a wood block, remove both sprites
+        sprite.remove(); // Remove the wood block
+        fireballSprite.remove(); // Remove the ZAP sprite
 
-  
-}
-function PlaceWood()
-{
-  const cursorSprite = getFirst(cursor);
-    const cursorX = cursorSprite.x;
-    const cursorY = cursorSprite.y;
+        z = 4;
+      }
 
-    // Verifica se il posto nella mappa è vuoto
-    const spritesAtCursor = getTile(cursorX, cursorY);
-    const isEmpty = spritesAtCursor.every(sprite => sprite.type === cursor);
-
-    if (isEmpty && numberOfWood > 0) {
-      // Aggiungi lo sprite alla posizione del cursore sulla mappa solo se è vuoto
-      addSprite(cursorX, cursorY, wood); // Sostituisci "wood" con lo sprite desiderato
-      numberOfWood--;
-      updateWoodCount();
-    }
-    else if(numberOfWood == 0)
-    {
-      addText(`Press j to continue!`, { 
-    x: 0,
-    y: 2,
-    color: color`L`
     });
+
+    if (fireballSprite.x == 2 || z == 3) {
+      fireballSprite.remove();
+      challengeState = false;
+      challenge = false;
+      z = 1;
+      pos = 4;
+      addText("press J", {
+        x: 7,
+        y: 5,
+        color: color`4`
+      })
+    } else if (z == 4) {
+      challengeState = false;
+      GameOver();
     }
-  
+  }
+
+
 }
-function EventSystem()
-{
-if(events == 5)
-   {playTune(start);
-     randomChallenge = Math.floor(Math.random() * 3) + 1;
-    addText("Event started", { 
-    x: 4,
-    y: 4,
-    color: color`4`
+
+function ZapEvent() {
+  console.log("The value of z is: " + z);
+
+  // Move the ZAP sprite down
+  if (z == 1) {
+    z = 1;
+    pos = 4;
+    var randomX = Math.floor(Math.random() * (16 - 3 + 1)) + 3;
+    challengeState = true;
+    addSprite(randomX, pos, ZAP);
+    z = 2;
+  } else {
+    const zapSprite = getFirst(ZAP);
+    zapSprite.y += 1; // Move the ZAP sprite down
+
+
+    // Check if the ZAP sprite hits a wood block
+    const spritesAtZap = getTile(zapSprite.x, zapSprite.y);
+
+    spritesAtZap.forEach(sprite => {
+      if (sprite.type === wood) {
+        // If the ZAP hits a wood block, remove both sprites
+        sprite.remove(); // Remove the wood block
+        zapSprite.remove(); // Remove the ZAP sprite
+        playTune(collision);
+
+        z = 3;
+      }
+        //ATTENTO
+      else if(sprite.type === reinforcedWall)
+      {
+        sprite.remove(); // Remove the wood block
+        addSprite(zapSprite.x, zapSprite.y, wood);
+        zapSprite.remove(); // Remove the ROCK sprite
+        playTune(collision);
+        z = 3;
+        
+      }
+      else if (sprite.type === roof || sprite.type === roofl || sprite.type === pizzaOne) {
+        // If the ZAP hits a wood block, remove both sprites
+        sprite.remove(); // Remove the wood block
+        zapSprite.remove(); // Remove the ZAP sprite
+
+        z = 4;
+      }
+
+    });
+
+    if (zapSprite.y == 15 || z == 3) {
+      zapSprite.remove();
+      challengeState = false;
+      challenge = false;
+      z = 1;
+      pos = 4;
+      addText("press J", {
+        x: 7,
+        y: 5,
+        color: color`4`
+      })
+    } else if (z == 4) {
+      challengeState = false;
+      GameOver();
+    }
+  }
+
+
+}
+
+function RockLEvent() {
+  console.log("The value of z is: " + z);
+
+  // Move the ROCK sprite down
+  if (z == 1) {
+    z = 1;
+
+    pos = 3;
+    var randomY = Math.floor(Math.random() * (14 - 4 + 1)) + 4;
+    challengeState = true;
+    addSprite(pos, randomY, ROCK);
+    z = 2;
+  } else {
+    const rockSprite = getFirst(ROCK);
+    rockSprite.x += 1; // Move the ROCK sprite down
+
+
+    // Check if the ROCK sprite hits a wood block
+    const spritesAtRock = getTile(rockSprite.x, rockSprite.y);
+
+    spritesAtRock.forEach(sprite => {
+      if (sprite.type === wood) {
+        // If the ROCK hits a wood block, remove both sprites
+        sprite.remove(); // Remove the wood block
+        rockSprite.remove(); // Remove the ROCK sprite
+        playTune(collision);
+
+        z = 3;
+      }
+        //ATTENTO
+      else if(sprite.type === reinforcedWall)
+      {
+        sprite.remove(); // Remove the wood block
+        addSprite(rockSprite.x, rockSprite.y, wood);
+        rockSprite.remove(); // Remove the ROCK sprite
+        playTune(collision);
+        z = 3;
+      }
+      else if (sprite.type === roof || sprite.type === roofl || sprite.type === pizzaOne) {
+        // If the ZAP hits a wood block, remove both sprites
+        sprite.remove(); // Remove the wood block
+        rockSprite.remove(); // Remove the ZAP sprite
+
+        z = 4;
+      }
+
+    });
+
+    if (rockSprite.x == 18 || z == 3) {
+      rockSprite.remove();
+      challengeState = false;
+      challenge = false;
+      z = 1;
+      pos = 4;
+      addText("press J", {
+        x: 7,
+        y: 5,
+        color: color`4`
+      })
+    } else if (z == 4) {
+      challengeState = false;
+      GameOver();
+    }
+  }
+
+
+}
+
+function RockREvent() {
+  console.log("The value of z is: " + z);
+
+  // Move the ROCKF sprite down
+  if (z == 1) {
+    z = 1;
+
+    pos = 17;
+    var randomY = Math.floor(Math.random() * (14 - 4 + 1)) + 4;
+    challengeState = true;
+    addSprite(pos, randomY, ROCKF);
+    z = 2;
+  } else {
+    const rockfSprite = getFirst(ROCKF);
+    rockfSprite.x -= 1; // Move the ROCK sprite down
+
+
+    // Check if the ROCK sprite hits a wood block
+    const spritesAtRockf = getTile(rockfSprite.x, rockfSprite.y);
+
+    spritesAtRockf.forEach(sprite => {
+      if (sprite.type === wood) {
+        // If the ROCKF hits a wood block, remove both sprites
+        sprite.remove(); // Remove the wood block
+        rockfSprite.remove(); // Remove the ROCKF sprite
+        playTune(collision);
+
+        z = 3;
+      }
+      //ATTENTO
+      else if(sprite.type === reinforcedWall)
+      {
+        sprite.remove(); // Remove the wood block
+        addSprite(rockfSprite.x, rockfSprite.y, wood);
+        rockfSprite.remove(); // Remove the ROCK sprite
+        playTune(collision);
+        z = 3;
+      }
+      else if (sprite.type === roof || sprite.type === roofl || sprite.type === pizzaOne) {
+        // If the ZAP hits a wood block, remove both sprites
+        sprite.remove(); // Remove the wood block
+        rockfSprite.remove(); // Remove the ZAP sprite
+
+        z = 4;
+      }
+
+    });
+
+    if (rockfSprite.x == 2 || z == 3) {
+      rockfSprite.remove();
+      challengeState = false;
+      challenge = false;
+      z = 1;
+      pos = 4;
+      addText("press J", {
+        x: 7,
+        y: 5,
+        color: color`4`
+      })
+    } else if (z == 4) {
+
+      challengeState = false;
+      GameOver();
+    }
+
+  }
+
+
+}
+
+function PlaceWood() {
+  const cursorSprite = getFirst(cursor);
+  const cursorX = cursorSprite.x;
+  const cursorY = cursorSprite.y;
+
+  // Verifica se il posto nella mappa è vuoto
+  const spritesAtCursor = getTile(cursorX, cursorY);
+  const isEmpty = spritesAtCursor.every(sprite => sprite.type === cursor);
+  const isWood = spritesAtCursor.every(sprite => sprite.type === wood);
+  
+  
+  if (isEmpty && numberOfWood > 0) {
+    // Aggiungi lo sprite alla posizione del cursore sulla mappa solo se è vuoto
+    addSprite(cursorX, cursorY, wood); // Sostituisci "wood" con lo sprite desiderato
+    numberOfWood--;
+    updateWoodCount();
+  } 
+    
+  
+  else if (numberOfWood == 0) {
+    addText(`Press j to continue!`, {
+      x: 0,
+      y: 2,
+      color: color`3`
+    });
+  }
+  //ATTENTO
+spritesAtCursor.forEach(sprite => {
+ if(sprite.type === wood && numberOfWood > 0)
+  {
+    sprite.remove();
+    addSprite(cursorX, cursorY, reinforcedWall); // Sostituisci "wood" con lo sprite desiderato 
+    numberOfWood--;
+    updateWoodCount();
+    
+  }
+});
+}
+
+function EventSystem() {
+  if (events == 5) {
+    playTune(start);
+    randomChallenge = Math.floor(Math.random() * 5) + 1;
+    addText("Event started", {
+      x: 4,
+      y: 4,
+      color: color`4`
     })
-   addText("press J", { 
-    x: 7,
-    y: 5,
-    color: color`4`
+    addText("press J", {
+      x: 7,
+      y: 5,
+      color: color`4`
     })
-     
-     events--;
-   }
-   else if(events > 0)
-   {
-     randomChallenge = Math.floor(Math.random() * 3) + 1;
-     clearText();
-     
-       events--;
-   }
-   else
-   {playTune(win)
-     challenge = false;
+
+    events--;
+  } else if (events > 0) {
+    randomChallenge = Math.floor(Math.random() * 3) + 1;
+    clearText();
+
+    events--;
+  } else {
+    playTune(win)
+    challenge = false;
     roundSurvived++;
-    numberOfWood= 3;
+    numberOfWood = 3;
     updateWoodCount();
     events = 5;
-   }
+  }
 
-  
-  
+
+
 }
-function GameOver()
-{
+
+function GameOver() {
   playTune(gameOver);
   clearText();
   youLost = true;
-  
-  addText("Game Over!", { 
+
+  addText("Game Over!", {
     x: 5,
     y: 5,
     color: color`3`
-    })
- addText(`you survived`, { 
+  })
+  addText(`you survived`, {
     x: 1,
     y: 6,
     color: color`3`
-    })
-  addText(`for: ${roundSurvived} round!`, { 
+  })
+  addText(`for: ${roundSurvived} round!`, {
     x: 6,
     y: 7,
     color: color`3`
-    })
-  
+  })
+
 }
