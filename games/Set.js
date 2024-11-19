@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Set
-@author: 
+@author: jwseph
 @tags: []
-@addedOn: 2024-07-23
+@addedOn: 2024-11-19
 */
 
 // Naming: rgp - cdq - 123 - ehs
