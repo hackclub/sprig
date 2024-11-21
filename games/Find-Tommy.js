@@ -730,7 +730,7 @@ afterInput(() => {
 
   
   if (level === 4) {
-    addText("L to search\n boxes and\nreveal Tommy!", {
+    addText("L to search\nboxes and\nreveal Tommy!", {
       x: 2,
       y: 0,
       color: color`0`
