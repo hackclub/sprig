@@ -11,6 +11,8 @@
 	position: relative;
 	text-align: center;
 	justify-content: space-between;
+	white-space: nowrap; /* P3baf */
+	overflow: hidden; /* Pad2a */
 }
 
 .container ul {
@@ -107,7 +109,6 @@
 	font-weight: bold;
 	gap: 6px;
 	padding: 0 10px;
-	margin-left: 10px;
 }
 
 .logo .longImg {
