@@ -19,7 +19,7 @@ Below are instructions for assembling your Sprig console.
 | 1        | Raspberry Pi Pico                                                         |
 | 4        | clear backings (2 with D-pad cutouts, 2 solid)                            |
 | 1        | bag of 10 tactile button switches                                         |
-| 1        | bag of hardware for screen (2 spacers, 2 M2\*14mm screws, 2 hex nuts)\*    |
+| 1        | bag of hardware for screen (1 white spacer, 2 M2\*14mm screws, 2 hex nuts)\*    |
 | 1        | bag of hardware for backings (8 M2\*10mm screws, 8 hex nuts, allen key)\* |
 | 1        | adapter or micro-USB cable                                                |
 | 1        | bag of 2 AAA batteries                                                    |
@@ -32,9 +32,9 @@ Below are instructions for assembling your Sprig console.
 
 ![Photo of a PCB with LCD attached](https://cloud-6po09tv9d-hack-club-bot.vercel.app/2lcd-no-spacers.jpg)
 
-2. Add spacers, put the longer screws through the holes, and screw the nuts on the back side.
+2. Add the spacer as shown, put the longer screws through the holes, and screw the nuts on the back side.
 
-![Photo of an LCD assembled with screws and spacers](https://cloud-6po09tv9d-hack-club-bot.vercel.app/1screws-through-spacers.jpg)
+![Photo of an LCD assembled with screws and spacers](https://cloud-9dv2o5m13-hack-club-bot.vercel.app/0image_from_ios.jpg)
 
 3. Put 4 buttons in corresponding holes on each side of the board. You'll have 2 extra buttons.
 
