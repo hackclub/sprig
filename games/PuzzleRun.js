@@ -1,3 +1,9 @@
+/*
+@title: Puzzle Run
+@author: Biffot
+@tags: []
+@addedOn: 2024-11-24
+*/
 const player = "p";
 const wall = "w";
 const wall2 = "2";
