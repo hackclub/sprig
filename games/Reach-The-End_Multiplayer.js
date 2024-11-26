@@ -8,7 +8,7 @@ https://sprig.hackclub.com/gallery/getting_started
 */
 
 //My first attempt at a Sprig Game! Fight your way to the opposing player's endzone while they push back, the twine will get shorter with more pushes.
-//Each Player Gets to freeze the other player 3 times! Use them wisely!
+//Each Player Gets to freeze the other player five times! Use them wisely!
 
 //vars
 
@@ -167,7 +167,7 @@ onInput("i", () => {
       lpaused = true;
       setTimeout(() => {
         lpaused = false;
-      }, 1000);
+      }, 500);
     }
   }
 });
@@ -180,7 +180,7 @@ onInput("w", () => {
       rpaused = true;
       setTimeout(() => {
         rpaused = false;
-      }, 1000);
+      }, 500);
     }
   }
 });
