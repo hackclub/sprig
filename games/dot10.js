@@ -1,7 +1,8 @@
 /*
 @title: dot10
-@tags: ['maze']
-@input: arrows to move
+@author: ashfelloff
+@tags: []
+@addedOn: 2024-11-26
 */
 
 const player = "p";
