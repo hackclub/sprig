@@ -1,5 +1,8 @@
 /*
 @title: FlatFormer
+@author: Sterling Duncan
+@tags: []
+@addedOn: 2024-11-23
 */
 
 const player = "p"
