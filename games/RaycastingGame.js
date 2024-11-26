@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: RaycastingGame
-@author: 
+@author: Simone2011
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-11-25
 */
 const player = "l"
 const pen = "p"
