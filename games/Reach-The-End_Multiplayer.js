@@ -1,7 +1,6 @@
 /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
-
 @title: Reach The End Multiplayer
 @author: Bluelightning26
 @tags: []
@@ -9,6 +8,7 @@ https://sprig.hackclub.com/gallery/getting_started
 */
 
 //My first attempt at a Sprig Game! Fight your way to the opposing player's endzone while they push back, the twine will get shorter with more pushes.
+//Each Player Gets to freeze the other player 3 times! Use them wisely!
 
 //vars
 
@@ -151,23 +151,69 @@ setPushables({
   [twine]: [twine]
 })
 
+//Pausing
+let lpaused = false;
+let rpaused = false;
+let lcount = 0;
+let rcount = 0;
+
+const maxFreezeCount = 5;
+
+//Freezing Left
+onInput("i", () => {
+  if (lcount < maxFreezeCount) {
+    if (!lpaused) {
+      lcount += 1;
+      lpaused = true;
+      setTimeout(() => {
+        lpaused = false;
+      }, 1000);
+    }
+  }
+});
+
+//Freezing Right
+onInput("w", () => {
+  if (rcount < maxFreezeCount) {
+    if (!rpaused) {
+      rcount += 1;
+      rpaused = true;
+      setTimeout(() => {
+        rpaused = false;
+      }, 1000);
+    }
+  }
+});
+
 //Moving to the Left
 onInput("d", () => {
+
+  if (lpaused == false)
+  {
   getAll(twine).forEach(twineSprite => {
     twineSprite.x += 1
   })
   getFirst(player1).x += 1
   getFirst(player2).x += 1
+  }
+  
 })
 
 //Moving to the Right
 onInput("j", () => {
+  
+  if (rpaused == false)
+  {
   getAll(twine).forEach(twineSprite => {
     twineSprite.x -= 1
   })
   getFirst(player1).x -= 1
   getFirst(player2).x -= 1
+  }
+  
 })
+
+
 
 
 //Left Won
