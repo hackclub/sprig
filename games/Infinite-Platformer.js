@@ -1,8 +1,8 @@
 /*
 @title: Infinite Platformer
 @author: EnterpriseGoose
-@tags: []
-@addedOn: 2024-00-00
+@tags: ['platformer', 'endless']
+@addedOn: 2024-11-25
 */
 
 // Core Game Constants
