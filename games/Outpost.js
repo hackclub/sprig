@@ -1,3 +1,9 @@
+/*
+@title: Outpost
+@author: muwahhid2006
+@tags: []
+@addedOn: 2024-11-26
+*/
 // Define sprites
 const player = "p";
 const enemy = "e";
