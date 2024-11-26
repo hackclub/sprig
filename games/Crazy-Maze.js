@@ -1,12 +1,8 @@
 /*
-@title: Crazy Maze
+@title: Crazy-Maze
 @author: BennyGaming635
 @tags: []
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@img: ""
-
+@addedOn: 2024-11-26
 */
 
 const player = "p"
