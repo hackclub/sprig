@@ -2,7 +2,7 @@
 /* 
 @title: Maze_Escape
 @author: Madison Shaw
-@tags: ['sokoban-style']
+@tags: ['puzzle']
 @addedOn: 2023-07-27
 */
 

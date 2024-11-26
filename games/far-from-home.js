@@ -1,8 +1,8 @@
 /*
 @title: far from home
+@author: hayward
 @tags: []
 @addedOn: 2023-10-04
-@author: hayward
 
 Instructions:
 bring the kid home

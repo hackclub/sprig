@@ -1,7 +1,7 @@
 /*
 @title: The Maze
 @author: TRXAlpha
-@tags: ['maze']
+@tags: ['puzzle']
 @addedOn: 2024-07-18
 */
 

@@ -1,75 +1,115 @@
 ---
 import '../../global.css'
-import { firestore, getGame, getSession } from '../../lib/game-saving/account'
+import { firestore, Game, getGame, getSession, moveGameToBackendSaving } from '../../lib/game-saving/account'
 import Editor from '../../components/big-interactive-pages/editor'
 import StandardHead from '../../components/standard-head.astro'
 import { signal } from '@preact/signals'
-import type { PersistenceState } from '../../lib/state'
+import { ConnectionStatus, PersistenceStateKind, RoomState, type PersistenceState } from '../../lib/state'
 import MobileUnsupported from '../../components/popups-etc/mobile-unsupported'
 import { mobileUserAgent } from '../../lib/utils/mobile'
+import { isAccountWhitelistedToUseCollabAndSavingBetaFeatures } from '../../lib/game-saving/account'
 
 const session = await getSession(Astro.cookies)
 if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 
-const game = await getGame(Astro.params.id!)
-if (!game || game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
+let persistenceState;
+let isMobile;
+let roomState;
+let _persistenceState: PersistenceState | undefined
 
-const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
+async function handleTutorial(game: Game) : Promise<[string[] | undefined, number | undefined]>{
+	const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
 
-let tutorial: string[] | undefined;
-let tutorialIndex: number | undefined;
-if (game.tutorialName) {
-	const files = await Astro.glob('/games/*.md')
-		
-		tutorial = files.filter(file => {
+	if (game.tutorialName) {
+		const files = await Astro.glob('/games/*.md')
+			
+		return [files.filter(file => {
 			const regexedFile = file.file.match(fileRegexp)
 			return regexedFile && regexedFile[1] === game.tutorialName
 		})
-		?.map(md => md.compiledContent())
-	tutorialIndex = game.tutorialIndex
+		?.map(md => md.compiledContent()), game.tutorialIndex]
+	}
+
+	return [undefined, undefined]
 }
 
-let _persistenceState: PersistenceState
-if (session.session.full) {
-	if (game.unprotected) {
-		await firestore.collection('games').doc(game.id).update({ unprotected: false })
-		game.unprotected = false
+async function handlePersistenceState(isSessionFull : boolean, game : Game, tutorial : string[] | undefined, tutorialIndex : number | undefined) : Promise<PersistenceState | undefined>{
+	if (isSessionFull) {
+		if (game.unprotected) {
+			await firestore.collection('games').doc(game.id).update({ unprotected: false })
+			game.unprotected = false
+		}
+		if (Astro.cookies.get('sprigTempGame').value === game.id)
+			Astro.cookies.delete('sprigTempGame', { path: '/' })
+	} else {
+		if (!game.unprotected) return undefined;
 	}
-	if (Astro.cookies.get('sprigTempGame').value === game.id)
-		Astro.cookies.delete('sprigTempGame', { path: '/' })
 
-	_persistenceState = {
-		kind: 'PERSISTED',
+	return {
+		kind: PersistenceStateKind.PERSISTED,
 		session,
 		cloudSaveState: 'SAVED',
 		game,
 		tutorial,
 		tutorialIndex,
 		stale: false
+	} as PersistenceState
+}
+
+function checkRoomAccess(game : Game, userEmail : string){
+	if(game.roomParticipants?.filter(participant => participant.userEmail === userEmail)[0]?.isBanned) return Astro.redirect('/404', 302)
+	if(game.password == undefined) return Astro.redirect('/404', 302)
+	return undefined;
+}
+
+const game = await getGame(Astro.params.id!)
+
+if (!game) return Astro.redirect('/404', 302)
+
+let shouldGameUseBetaCollabAndSavingFeatures = 
+await isAccountWhitelistedToUseCollabAndSavingBetaFeatures(session.user.id, session.user.email) || game.isSavedOnBackend
+
+if(shouldGameUseBetaCollabAndSavingFeatures){
+	if(!game.isSavedOnBackend){
+		return Astro.redirect(`/~/${(await moveGameToBackendSaving(game)).id}`)
+	}
+	let checkRoom = false; // Whether or not to check whether the user has access to the room he's trying to enter
+	if(game.ownerId !== session.user.id) checkRoom = true;
+
+	let [tutorial, tutorialIndex] = await handleTutorial(game);
+	if(checkRoom){
+		_persistenceState = {
+			kind: PersistenceStateKind.COLLAB,
+			game: game.id,
+			password: undefined,
+			cloudSaveState: "SAVED",
+			session: session,
+			stale: false
+		} as PersistenceState
+		let roomAccess = checkRoomAccess(game, session.user.email)
+		if(roomAccess != undefined) return roomAccess
+	} else {
+		_persistenceState = await handlePersistenceState(session.session.full, game, tutorial, tutorialIndex)
+		if(!_persistenceState) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 	}
 
+	roomState = signal<RoomState>({
+		connectionStatus: ConnectionStatus.DISCONNECTED,
+		roomId: game.id,
+		participants: [],
+	})
 } else {
-	if (!game.unprotected) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 	if (game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
 
-	_persistenceState = {
-		kind: 'PERSISTED',
-		session,
-		cloudSaveState: 'SAVED',
-		game,
-		tutorial,
-		tutorialIndex,
-		stale: false
-	}
+	let [tutorial, tutorialIndex] = await handleTutorial(game)
+	
+	_persistenceState = await handlePersistenceState(session.session.full, game, tutorial, tutorialIndex)
+		if(!_persistenceState) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
 }
 
-const persistenceState = signal<PersistenceState>(_persistenceState)
-const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
+persistenceState = signal<PersistenceState>(_persistenceState)
+isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 ---
-<script>
-	import { isNewSaveStrat } from "../../lib/state";
-	isNewSaveStrat.value = false; // This code is executed on the client side and it disables the new features implemented (save strat and collab)
-</script>
 <html lang='en'>
 	<head>
 		<StandardHead title='Editor' />
@@ -78,8 +118,10 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 		<Editor
 			client:load
 			persistenceState={persistenceState}
+			roomState={roomState}
 			cookies={{
 				outputAreaSize: Astro.cookies.get('outputAreaSize').number(),
+				helpAreaSize: Astro.cookies.get('helpAreaSize').number(),
 				hideHelp: Astro.cookies.get('hideHelp').boolean()
 			}}
 		/>

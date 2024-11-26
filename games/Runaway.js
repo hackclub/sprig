@@ -1,9 +1,9 @@
 /*
-
 @title: Runaway
 @author: Theenash Muneeswaran
 @tags: []
 @addedOn: 2024-07-08
+
 
 Welcome to Runaway!
 There is a ghost that wants to be friends with you, but it does not know it's 

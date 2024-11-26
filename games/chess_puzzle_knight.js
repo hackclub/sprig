@@ -1,11 +1,11 @@
 /*
+@title: Chess Puzzle
+@author: Silver Canvas
+@tags: ["puzzle", "strategy"]
+@addedOn: 2024-06-25
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Chess Puzzle
-@author: Silver Canvas
-@tags: []
-@addedOn: 2024-06-25
 */
 
 const rook = "r"

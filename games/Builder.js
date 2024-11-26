@@ -1,8 +1,8 @@
 /*
 @title: Builder
+@author: Leonard (Omay)
 @tags: ['strategy']
 @addedOn: 2022-11-06
-@author: Leonard (Omay)
 
 WAD to move
 S to reset

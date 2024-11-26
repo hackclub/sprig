@@ -1,7 +1,7 @@
 /*
 @title: Orb Dungeon
 @author: Dimitris Toulis
-@tags: ['dungeon']
+@tags: ['adventure']
 @addedOn: 2024-08-15
 */
 /*

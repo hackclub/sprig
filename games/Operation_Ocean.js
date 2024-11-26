@@ -1,8 +1,8 @@
 /*
 @title: Operation_Ocean
+@author: ari-tistic
 @tags: ['strategy']
 @addedOn: 2023-05-23
-@author: ari-tistic
 
 Keys:
   - A to move left

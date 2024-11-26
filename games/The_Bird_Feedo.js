@@ -1,8 +1,8 @@
 /*
 @title: The Bird Feedo
+@author: Arpan Pandey
 @tags: ['endless']
 @addedOn: 2023-01-09
-@author: Arpan Pandey
 */
 const bird = "b";
 const cookie = "c";

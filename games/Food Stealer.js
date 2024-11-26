@@ -1,10 +1,10 @@
 /*
-
-
 @title: Food Stealer
 @author: Julia Nadolska
 @tags: []
 @addedOn: 2024-08-20
+
+
 
 RULES
 You can move using 'WSAD'

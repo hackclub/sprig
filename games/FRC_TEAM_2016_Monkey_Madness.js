@@ -2,7 +2,7 @@
 /* 
 @title: FRC_TEAM_2016_Monkey_Madness
 @author: Hunter
-@tags: ['dodge']
+@tags: ['action']
 @addedOn: 2023-04-30
 */
 

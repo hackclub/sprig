@@ -1,8 +1,8 @@
 /*
 @title: PASS_ALL
+@author: Shivang0
 @tags: ['strategy']
 @addedOn: 2022-10-03
-@author: Shivang0
 Instructions:
 1) Cover All Tiles
 2) You cannot take a step back. So, be careful

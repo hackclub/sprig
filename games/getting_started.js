@@ -1,8 +1,8 @@
 /*
 @title: getting_started
-@tags: ['beginner', 'tutorial']
+@author: leo, edits
+@tags: ['tutorial']
 @addedOn: 2022-07-26
-@author: leo, edits: samliu, belle, kara
 
 Check the tutorial in the bottom right, the run button is in the top right.
 Make sure to remix this tutorial if you want to save your progress!

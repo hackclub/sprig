@@ -1,5 +1,5 @@
 import { useSignal, useSignalEffect } from '@preact/signals'
-import { useEffect } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import { IoClose } from 'react-icons/io5'
 import tinykeys from 'tinykeys'
 import { usePopupCloseClick } from '../../lib/utils/popup-close-click'
@@ -8,16 +8,39 @@ import styles from './editor-modal.module.css'
 import levenshtein from 'js-levenshtein'
 import { runGameHeadless } from '../../lib/engine'
 
+const enum LastUpdater {
+	RESET,
+	OpenEditor,
+	CodeMirror
+}
 export default function EditorModal() {
 	const Content = openEditor.value ? editors[openEditor.value.kind].modalContent : () => null
-	const text = useSignal(openEditor.value?.text ?? '')
+	const text = useSignal(openEditor.value?.text ?? '');
+	const [lastUpdater, setLastUpdater] = useState<LastUpdater>(LastUpdater.RESET);
 
 	useSignalEffect(() => {
 		if (openEditor.value) text.value = openEditor.value.text
 	})
 
+	/**
+	 * @Josias
+	 * The two useEffect's below can be naughty but they help ensure two things
+	 * 1. If an update comes from the underlying codemirror document, the first effect doesn't run as we're already updating the editor modal from there
+	 * 2. If an update was originally made from the currently open editor modal, the changes to the codemirror document will
+	 * not trigger an update to the open editor modal
+	 *
+	 * Both of these help us avoid Out-of-order errors or Cycles
+	 */
+
 	// Sync editor text changes with code
-	useSignalEffect(() => {
+	useEffect(() => { // useEffect #1
+		// if update comes from codemirror doc (probably from a collab session)
+		// this ensures that updates are not triggered from this effect which may cause an
+		// Out-of-order / Cycles
+		if (lastUpdater === LastUpdater.CodeMirror) {
+			setLastUpdater(LastUpdater.RESET);
+			return;
+		}
 		// Signals are killing me but useEffect was broken and I need to ship this
 		// This is probably bad practice
 		const _openEditor = openEditor.peek() // Gotta peek to avoid cycles
@@ -39,18 +62,32 @@ export default function EditorModal() {
 				to: _openEditor.editRange.from + _text.length
 			}
 		}
-	})
+		setLastUpdater(LastUpdater.OpenEditor);
+	}, [text.value]);
+
+
+	useEffect(() => {
+		// if update comes from codemirror doc (probably from a collab session)
+		// this ensures that updates are not triggered from this effect which may cause an
+		// Out-of-order / Cycles
+		if (lastUpdater === LastUpdater.OpenEditor) {
+			setLastUpdater(LastUpdater.RESET);
+			return;
+		}
+		// just do this to sync the editor text with the code mirror text
+		computeAndUpdateModalEditor();
+		setLastUpdater(LastUpdater.CodeMirror);
+		// updateCulprit.value = UPDATE_CULPRIT.CodeMirror;
+	}, [codeMirrorEditorText.value]);
+
 
 	// the challenge now is making the editor keep track of what map editor it's currently focused on and streaming the changes in the map editor
 	// it's tricky because maps can grow and shrink
-
-	useEffect(() => {
-		// just do this to sync the editor text with the code mirror text
-
+	function computeAndUpdateModalEditor() {
 		if (!openEditor.value) return;
 
 		const code = codeMirror.value?.state.doc.toString() ?? '';
-		const levenshtainDistances = _foldRanges.value.map((foldRange, foldRangeIndex) => {
+		const levenshteinDistances = _foldRanges.value.map((foldRange, foldRangeIndex) => {
 			const widgetKind = _widgets.value[foldRangeIndex]?.value.spec.widget.props.kind;
 
 			// if the widget kind is not the same as the open editor kind, don't do anything
@@ -62,16 +99,14 @@ export default function EditorModal() {
 			return distance;
 		});
 
-
-
 		// if (levenshtainDistances.length === 0) alert(`You are currently editing a deleted ${openEditor.value?.kind}`);
-		if (levenshtainDistances.length === 0) return;
+		if (levenshteinDistances.length === 0) return;
 
 		// compute the index of the min distance
 		let indexOfMinDistance = 0;
-		levenshtainDistances.forEach((distance, didx) => {
-			if (levenshtainDistances[indexOfMinDistance]! < 0) indexOfMinDistance = didx;
-			const min = levenshtainDistances[indexOfMinDistance]!;
+		levenshteinDistances.forEach((distance, didx) => {
+			if (levenshteinDistances[indexOfMinDistance]! < 0) indexOfMinDistance = didx;
+			const min = levenshteinDistances[indexOfMinDistance]!;
 			if (distance >= 0 && distance <= min) indexOfMinDistance = didx;
 		});
 
@@ -83,18 +118,19 @@ export default function EditorModal() {
 			// the map editor needs to get the bitmaps after running the code
 			if (openEditor.value?.kind === 'map') runGameHeadless(code ?? '');
 
-			openEditor.value = {
-				...openEditor.value as OpenEditor,
-				editRange: {
-					from: editRange!.from,
-					to: editRange!.to
-				},
-				text: openEditorCode
-			}
+				text.value = openEditorCode;
+
+				openEditor.value = {
+					...openEditor.value as OpenEditor,
+					editRange: {
+						from: editRange!.from,
+						to: editRange!.to
+					},
+					text: openEditorCode
+				}
+
 		}
-
-	}, [codeMirrorEditorText.value]);
-
+	}
 
 	usePopupCloseClick(styles.content!, () => openEditor.value = null, !!openEditor.value)
 	useEffect(() => tinykeys(window, {

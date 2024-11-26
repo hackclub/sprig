@@ -1,8 +1,8 @@
 /*
 @title: Snake
-@tags: ['endless']
-@addedOn: 2022-11-10
 @author: Boyne
+@tags: ["endless" , "retro" , "strategy"]
+@addedOn: 2022-11-10
 */
 
 const logo1 = "1";

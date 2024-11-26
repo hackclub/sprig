@@ -1,8 +1,8 @@
 /*
 @title: Treasure Maze
 @author: AiyuuHacks
-@addedOn: 2024-09-03
 @tags: []
+@addedOn: 2024-09-03
 */
 
 const player = "p"

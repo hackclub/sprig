@@ -1,11 +1,11 @@
 /*
+@title: Hole In the Wall
+@author: Abel0000
+@tags: []
+@addedOn: 2024-08-23
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Hole In the Wall
-@author: Abel0000 
-@tags: []
-@addedOn: 2024-08-23
 
 Instructions:
 Right handed movement

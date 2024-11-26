@@ -1,8 +1,8 @@
 /*
 @title: Candy Rush
-@tags: ['sokoban-style']
-@addedOn: 2022-10-07
 @author: Tasbia Uddin
+@tags: ['puzzle']
+@addedOn: 2022-10-07
 */
 
 

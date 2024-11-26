@@ -1,7 +1,7 @@
 /*
 @title: Sewer_Flood
 @author: Eduardo
-@tags: ["infinite"]
+@tags: ['endless', 'survival', 'platformer']
 @addedOn: 2024-08-22
 */
 

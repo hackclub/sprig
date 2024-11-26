@@ -1,8 +1,8 @@
 /*
 @title: Traditional Snake
-@tags: ['classic']
-@addedOn: 2024-07-05
 @author: dmcegan
+@tags: ['retro']
+@addedOn: 2024-07-05
 */
 const snakeBody = "s";
 const apple = "a";

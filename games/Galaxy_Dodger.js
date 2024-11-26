@@ -1,7 +1,7 @@
 /*
 @title: Galaxy Dodger
-@tags: ['space', 'asteroids', 'build']
 @author: Caleb B
+@tags: ['real-time','action']
 @addedOn: 2024-07-15
 */
 
