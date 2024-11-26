@@ -2,7 +2,7 @@
 @title: Advanced Clicking Simulator
 @author: Lun Ivanov
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-11-26
 */
 
 const player = "p";
