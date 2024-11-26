@@ -1,8 +1,8 @@
 /*
 @title: Travelling Courier
 @author: Lukáš Nagy
-@tags: [Courier, Adventure]
-@addedOn: 2024-00-00
+@tags: ['adventure']
+@addedOn: 2024-11-23
 */
 
 const player = "p";
