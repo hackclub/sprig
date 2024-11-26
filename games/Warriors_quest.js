@@ -1,3 +1,11 @@
+/*
+@author: The-UnknownHacker
+@title: The Warrior's Quest
+@tags: ['puzzle', 'platformer']
+@addedOn: 2024-11-25
+*/
+
+
 // USE W,A,S,D to move and find the right coin
 // Only one coin will work and the other ones are fake
 // Enjoy
