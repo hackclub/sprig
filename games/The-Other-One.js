@@ -1,3 +1,10 @@
+/*
+@title: The Other One
+@author: Malakbnz
+@tags: []
+@addedOn: 2024-11-26
+*/
+
 const player = "p";
 const shadow = "s";
 const goal = "g";
