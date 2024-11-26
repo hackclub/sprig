@@ -1,3 +1,10 @@
+/*
+@title: Play
+@author: deepnilray
+@tags: []
+@addedOn: 2024-11-25
+*/
+
 // Creating the piano keys and their corresponding sounds
 
 const notes = [
