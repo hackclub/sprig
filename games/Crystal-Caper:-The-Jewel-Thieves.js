@@ -1,3 +1,9 @@
+/*
+@title: Crystal Caper: The Jewel Thieves
+@author: Jaisinh
+@tags: []
+@addedOn: 2024-11-21
+*/
 const player = "p";
 const Bot = "b";
 const Emerald = "e";
