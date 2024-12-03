@@ -1,5 +1,8 @@
 /*
 @title: You Are the Enemy
+@author: Suratii
+@addedOn: 2024-12-03
+@tags: []
 */
 
 const player = "p";
