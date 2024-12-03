@@ -1,8 +1,8 @@
 /*
 @title: Save havoc
-@author: 
-@tags: ['save havoc']
-@addedOn: 2024-011-27
+@author: Frecnh
+@tags: []
+@addedOn: 2024-12-04
 */
 
 const BG = "b";
