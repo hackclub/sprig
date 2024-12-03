@@ -1,3 +1,9 @@
+/*
+@title: (not) Just Another Maze Game
+@author: a-meriac
+@tags: []
+@addedOn: 2024-12-04
+*/
 const player = "p";
 const wall = "w";
 const goal = "g";
