@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Emoji_Rush
 @author: Noah
-@tags: [emoji]
+@tags: []
 @addedOn: 2024-11-28
 */
 
