@@ -1,3 +1,9 @@
+/*
+@title: Snake Game
+@author: Stardrex001
+@tags: []
+@addedOn: 2024-12-04
+*/
 const snakeBody = "s";
 const food = "f";
 const background = "b";
