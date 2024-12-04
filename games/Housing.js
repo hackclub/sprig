@@ -4,8 +4,22 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Housing
 @author: Isaac and Nathan Jones
-@tags: []
+@tags: ['puzzle']
 @addedOn: 2024-00-00
+
+Get the spridget home while avoiding the fireballs!
+
+Press WASD to move the brown "spridget" and IJKL to move 
+the yellow spridget (if present). The fireballs (red circles) 
+can move either vertically or horizontally, one space for 
+each move the player makes. Get all spridgets to home to 
+advance to the next level!
+
+--HINTS--
+o The fireballs move even if the player tries to move to an 
+invalid space, such as off of the board or into a wall (orange).
+o Its possible to _switch places_ with a fireball (without 
+losing).
 */
 
 const spridget_brown = "b"
@@ -74,14 +88,14 @@ setLegend(
 ................
 .....333333.....
 ...3333333333...
-...3333333333...
-..333333333333..
-..333333333333..
-..333333333333..
-..333333333333..
-..333333333333..
-..333333333333..
-...3333333333...
+...3333033333...
+..333300033333..
+..333030303333..
+..333330333333..
+..333330333333..
+..333330333333..
+..333330333333..
+...3333033333...
 ...3333333333...
 .....333333.....
 ................
@@ -92,13 +106,13 @@ setLegend(
 .....333333.....
 ...3333333333...
 ...3333333333...
-..333333333333..
-..333333333333..
-..333333333333..
-..333333333333..
-..333333333333..
-..333333333333..
-...3333333333...
+..333330333333..
+..333330333333..
+..333330333333..
+..333330333333..
+..333030303333..
+..333300033333..
+...3333033333...
 ...3333333333...
 .....333333.....
 ................
@@ -109,11 +123,11 @@ setLegend(
 .....333333.....
 ...3333333333...
 ...3333333333...
-..333333333333..
-..333333333333..
-..333333333333..
-..333333333333..
-..333333333333..
+..333303333333..
+..333033333333..
+..330000000033..
+..333033333333..
+..333303333333..
 ..333333333333..
 ...3333333333...
 ...3333333333...
@@ -126,11 +140,11 @@ setLegend(
 .....333333.....
 ...3333333333...
 ...3333333333...
-..333333333333..
-..333333333333..
-..333333333333..
-..333333333333..
-..333333333333..
+..333333330333..
+..333333333033..
+..300000000003..
+..333333333033..
+..333333330333..
 ..333333333333..
 ...3333333333...
 ...3333333333...
@@ -156,9 +170,8 @@ setLegend(
 9999999999999999` ]
 )
 
-setSolids([ spridget_brown, wall ], [ spridget_yellow, wall ])
+setSolids([ spridget_brown, wall ])
 
-let level = 0
 const levels = [
   map`
 .b.
@@ -214,7 +227,147 @@ hu.....`,
 map`
 ..b
 l..
-hu.`]
+hu.`,
+map`
+.www.d.
+l....w.
+ww...w.
+bw.h.wy
+.w...ww
+.w....r
+.u.www.`,
+map`
+...w....
+.w.wuw..
+.wbw.ww.
+.www..w.
+...wh...
+...l..w.
+..ww.ww.
+.ww..uw.
+......w.`,
+map`
+b...y
+ww.ww
+uw.wu
+..u..
+wwhww`,
+map`
+b...d
+wwww.
+...u.
+.wwww
+..u..
+wwww.
+hu...`,
+map`
+w.bww
+ww.ww
+lw.wr
+..u..
+wwhww`,
+map`
+..bw...
+.wwwdw.
+u....w.
+.www.w.
+..wh.r.
+..l...w
+w...www`,
+map`
+....b
+.l.w.
+..hru
+.u...
+.....`,
+map`
+d...d
+..d..
+..b..
+.www.
+uuhuu`,
+map`
+...d
+..w.
+lbwr
+wwwh`,
+map`
+b..d
+..u.
+.u..
+u..h`,
+map`
+...b...
+.wwwww.
+u..w..u
+w.www.w
+.u.w.u.
+ww.w.ww
+..uhu..`,
+map`
+...d
+.ww.
+.ww.
+.bw.
+ww..
+huu.`,
+map`
+...d
+ddd.
+b..h
+uuuu`,
+map`
+..r.
+.w.r
+.ww.
+bwhr`,
+map`
+bwdw
+...w
+w..h
+wuww`,
+map`
+hd.wh
+ww.wr
+..b..
+lw.ww
+hw.uh`,
+map`
+..b..
+.....
+..u..
+.uhu.
+u.u.u`,
+map`
+y..r
+b.w.
+.w..
+u..h`,
+map`
+wd.d.d
+ww.w.w
+wwhw.w
+wwww.w
+.....w
+.wwwww
+u.u.ub`,
+map`
+b..w
+u..d
+uu.w
+uuuh`,
+map`
+..d...b
+.wwwwww
+.u.u...
+wwwwww.
+u...u..
+.wwwwww
+.....u.
+wwwwww.
+h.....u`]
+
+let level = 0
 setMap(levels[level])
 
 onInput("w", () => {
@@ -239,22 +392,58 @@ onInput("d", () => {
 
 onInput("i", () => {
   me = getFirst(spridget_yellow);
-  if(me) me.y -= 1
+  if(me)
+  {
+    sprites = getTile(me.x, me.y-1)
+    wallThere = false
+    for(let i = 0; i < sprites.length; i++)
+    {
+      if(sprites[i].type == "w") wallThere = true;
+    }
+    if(!wallThere) me.y -= 1
+  }
 })
 
 onInput("j", () => {
   me = getFirst(spridget_yellow);
-  if(me) me.x -= 1
+  if(me)
+  {
+    sprites = getTile(me.x-1, me.y)
+    wallThere = false
+    for(let i = 0; i < sprites.length; i++)
+    {
+      if(sprites[i].type == "w") wallThere = true;
+    }
+    if(!wallThere) me.x -= 1
+  }
 })
 
 onInput("k", () => {
   me = getFirst(spridget_yellow);
-  if(me) me.y += 1
+  if(me)
+  {
+    sprites = getTile(me.x, me.y+1)
+    wallThere = false
+    for(let i = 0; i < sprites.length; i++)
+    {
+      if(sprites[i].type == "w") wallThere = true;
+    }
+    if(!wallThere) me.y += 1
+  }
 })
 
 onInput("l", () => {
   me = getFirst(spridget_yellow);
-  if(me) me.x += 1
+  if(me)
+  {
+    sprites = getTile(me.x+1, me.y)
+    wallThere = false
+    for(let i = 0; i < sprites.length; i++)
+    {
+      if(sprites[i].type == "w") wallThere = true;
+    }
+    if(!wallThere) me.x += 1
+  }
 })
 
 afterInput(() => {
@@ -278,8 +467,7 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("you win!", { y: 4, color: color`D` });
-      playing = false;
+      addText("you win!", { y: 4, color: color`D`});
     }
   }
   else
@@ -344,7 +532,7 @@ afterInput(() => {
           if(spridgets[j].x == objs[i].x && 
              spridgets[j].y == objs[i].y)
           {
-            addText("try again!", { y: 4, color: color`3` });
+            setMap(levels[level]);
           }
         }
       }
