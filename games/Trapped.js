@@ -1,7 +1,7 @@
 /*
 @title: Trapped
 @author: Lockloo50
-@tags: ['escape', 'puzzle']
+@tags: ['puzzle']
 @addedOn: 2024-11-30
 */
 
