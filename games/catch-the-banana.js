@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Catch The Banana
 @author: Sayed Hashim
 @tags: ["timed", "retro"]
-@addedOn: 2024-00-00
+@addedOn: 2024-11-29
 */
 
 const player = "p";
