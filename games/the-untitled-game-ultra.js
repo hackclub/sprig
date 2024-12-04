@@ -1,3 +1,10 @@
+/*
+@title: the untitled game ultra
+@author: Rayaan4819
+@tags: []
+@addedOn: 2024-11-29
+*/
+
 function startGame() {
     const endings = [
         "You find a hidden treasure! Ending 1: Rich Beyond Dreams.",
