@@ -1,10 +1,7 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: Test One
+@title: Be Younique
 @author: pixelianWarrior
-@tags: ['shooter']
+@tags: []
 @addedOn: 2024-11-29
 */
 
