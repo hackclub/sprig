@@ -1,7 +1,7 @@
 /*
 @title: Beyblade Battle
 @author: Shweta Shaw
-@tags: ['multiplayer', 'showdown']
+@tags: ['multiplayer']
 @addedOn: 2024-12-1
 
 Instructions:
