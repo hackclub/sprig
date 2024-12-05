@@ -1,7 +1,7 @@
 /*
 @title: DVD Screensaver 
 @author: YashVardhan Niranjan
-@tags: [DVD, Screensaver, DVDscreensaver, DVDLOGO]
+@tags: ["utility"]
 @addedOn: 2024-09-18
 */
 
