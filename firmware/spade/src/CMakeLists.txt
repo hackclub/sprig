@@ -13,9 +13,6 @@ target_link_libraries(spade
 include_directories(${SPADE_TARGET}/jerry/include)
 include_directories(./)
 
-pico_enable_stdio_usb(${PROJECT_NAME} 1)
-pico_enable_stdio_uart(${PROJECT_NAME} 1)
-
 file(READ version.json VERSION_JSON)
 
 string(JSON VERSION GET ${VERSION_JSON} version)

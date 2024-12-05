@@ -1,8 +1,8 @@
 /*
 @title: SprigBoy
+@author: NA
 @tags: []
 @addedOn: 2023-06-19
-@author: NA
 */
 const createArray = (size) => [...Array(size).keys()];
 const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));

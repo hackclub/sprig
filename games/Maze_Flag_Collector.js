@@ -1,11 +1,11 @@
 /*
+@title: Maze Flag Collector Game
+@author: Ravin
+@tags: ['puzzle']
+@addedOn: 2024-08-28
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Maze Flag Collector Game
-@author: Ravin
-@tags: ["maze", "game"]
-@addedOn: 2024-08-28
 */
 
 const player = "p";

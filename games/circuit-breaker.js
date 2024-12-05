@@ -1,7 +1,7 @@
 /*
 @title: Circuit Breaker
 @author: Stefan D
-@tags: ["maze", "wire"]
+@tags: ['puzzle']
 @addedOn: 2024-08-18
 */
 

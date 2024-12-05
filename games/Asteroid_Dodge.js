@@ -1,8 +1,8 @@
 /*
 @title: Asteroid_Dodge!
-@tags: ['dodge']
-@addedOn: 2023-08-09
 @author: V205
+@tags: ['action']
+@addedOn: 2023-08-09
 */
 // Thanks to Hackclub and tutorials!
 // Setup stuff!

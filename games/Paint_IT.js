@@ -1,8 +1,8 @@
 /*
 @title: Paint_IT
+@author: N Rizwan
 @tags: ['sandbox']
 @addedOn: 2022-09-14
-@author: N Rizwan
 */
 
 /*

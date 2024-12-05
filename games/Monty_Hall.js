@@ -1,8 +1,8 @@
 /*
 @title: Monty Hall
-@tags: ['beginner', 'simulation']
-@addedOn: 2022-11-06
 @author: Leonard (Omay)
+@tags: ['simulation']
+@addedOn: 2022-11-06
 
 Why switching is better:
 The door you choose has a 1/3 chance of having the car.

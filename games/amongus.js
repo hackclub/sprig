@@ -1,7 +1,7 @@
 /*
 @title: Among Us Survival
-@tags: ['among us', 'survive']
 @author: anvayajmera
+@tags: ['survival']
 @addedOn: 2024-07-26
 */
 

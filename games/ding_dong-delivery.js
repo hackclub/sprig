@@ -1,7 +1,9 @@
-//@title: ding_dong-delivery
+/*
+@title: ding_dong-delivery
+@author: cott3-github * efe - slack
 @tags: []
 @addedOn: 2023-09-09
-//@author: cott3-github * efe - slack 
+*/
 //controls:
 //wasd to move, j to restart level
 const bell = tune`

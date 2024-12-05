@@ -1,8 +1,8 @@
 /*
 @title: bannai-snake
-@tags: ['thematic-puzzle']
-@addedOn: 2023-02-13
 @author: aagrim hoysal
+@tags: ['puzzle']
+@addedOn: 2023-02-13
 */
 
 const player = "p"

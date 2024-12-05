@@ -1,11 +1,11 @@
 /*
+@title: bone_hunt
+@author: Andrew Cromar
+@tags: ['puzzle']
+@addedOn: 2024-01-15
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: bone_hunt
-@author: Andrew Cromar
-@tags: ["puzzle"]
-@addedOn: 2024-01-15
 */
 
 const player = "p";
