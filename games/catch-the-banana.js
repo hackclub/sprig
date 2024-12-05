@@ -177,12 +177,12 @@ onInput("a", () => {
 });
 
 let score = 0;
-let timer = 15;
+let timer = 60;
 
 onInput("j", () => {
   gameOver = false;
   score = 0;
-  timer = 15;
+  timer = 60;
   setMap(levels[level]);
   clearText();
 });
