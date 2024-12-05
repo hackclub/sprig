@@ -12,6 +12,7 @@ import { WebrtcProvider } from 'y-webrtc'
 import * as Y from 'yjs'
 import { startSavingGame } from './big-interactive-pages/editor'
 import { yCollab } from 'y-codemirror.next'
+import { PersistenceStateKind } from '../lib/state'
 
 interface CodeMirrorProps {
 	class?: string | undefined
@@ -51,6 +52,10 @@ export default function CodeMirror(props: CodeMirrorProps) {
 		});
 	};
 
+	useEffect(() => {
+		isNewSaveStrat.value = props.roomState ? true : false; // If a roomState was passed, move to new save strat
+	}, [])
+
 	// Alert the parent to code changes (not reactive)
 	const onCodeChangeRef = useRef(props.onCodeChange)
 	useEffect(() => { onCodeChangeRef.current = props.onCodeChange }, [props.onCodeChange])
@@ -86,12 +91,12 @@ export default function CodeMirror(props: CodeMirrorProps) {
 					if(props.persistenceState === undefined) throw new Error("Persistence state is undefined");
 					if(state.saved == "saved"){
 						let persistenceState = props.persistenceState.peek();
-						if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING"){
+						if((persistenceState.kind === PersistenceStateKind.PERSISTED || persistenceState.kind === PersistenceStateKind.COLLAB) && persistenceState.game !== "LOADING"){
 							props.persistenceState.value = {...persistenceState, cloudSaveState: "SAVED"};
 						}
 					} else if(state.saved == "error"){
 						let persistenceState = props.persistenceState.peek();
-						if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING"){
+						if((persistenceState.kind === PersistenceStateKind.PERSISTED || persistenceState.kind === PersistenceStateKind.COLLAB) && persistenceState.game !== "LOADING"){
 							props.persistenceState.value = {...persistenceState, cloudSaveState: "ERROR"};
 						}
 					}
@@ -103,7 +108,6 @@ export default function CodeMirror(props: CodeMirrorProps) {
 	});
 	useEffect(() => {
 		if (!parent.current) throw new Error('Oh golly! The editor parent ref is null')
-
 		if(!isNewSaveStrat.value){
 			const editor = new EditorView({
 				state: createEditorState(props.initialCode ? props.initialCode : '', () => {
@@ -117,7 +121,6 @@ export default function CodeMirror(props: CodeMirrorProps) {
 			props.onEditorView?.(editor)
 			return
 		}
-
 		if(!props.roomState) return
 		if(!props.persistenceState) return
 		try{
@@ -134,14 +137,14 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				signaling: [
 					import.meta.env.PUBLIC_SIGNALING_SERVER_HOST as string,
 				],
-				// password: ((persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING" && persistenceState.game.password) ? persistenceState.game.password : "")
+				// password: ((persistenceState.kind === PersistenceStateKind.PERSISTED && persistenceState.game !== "LOADING" && persistenceState.game.password) ? persistenceState.game.password : "")
 			});
 			//get yjs document from provider
 			let ytext = yDoc.getText("codemirror");
 			const yUndoManager = new Y.UndoManager(ytext);
 
 			yProviderAwarenessSignal.value = provider.awareness
-			const isHost = ((persistenceState.kind == "PERSISTED" && persistenceState.game != "LOADING") && persistenceState.session?.user.id === persistenceState.game.ownerId)
+			const isHost = ((persistenceState.kind == PersistenceStateKind.PERSISTED && persistenceState.game != "LOADING") && persistenceState.session?.user.id === persistenceState.game.ownerId)
 			provider.awareness.setLocalStateField("user", {
 				name:
 					props.persistenceState.peek().session?.user.email ??
@@ -180,6 +183,23 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				if(props.roomState)
 					props.roomState.value = { ...props.roomState?.value, connectionStatus: ConnectionStatus.CONNECTED };
 		});
+			// On each update of the awareness(aka whenever a new participant joins/leaves via the awareness state), update the list of participants
+			provider.awareness.on("update", () => {
+				let participants: RoomParticipant[] = [];
+				provider.awareness.getStates().forEach((state) => {
+					try{
+						participants.push({
+							userEmail: state.user.name,
+							isHost: state.user.host
+						})
+					} catch(e){
+						return // This means that the participant doesn't have an email, which means it's the saving instance so we don't want it to 
+						// be in the list of participants
+					}
+				});
+				if(props.roomState)
+					props.roomState.value.participants = participants;
+			})
 			yDoc.on("update", () => {
 				if(!props.persistenceState) return;
 				if (!initialUpdate) return;
@@ -197,7 +217,7 @@ export default function CodeMirror(props: CodeMirrorProps) {
 				if(props.roomState)
 					props.roomState.value.participants = participants;
 				let persistenceState = props.persistenceState.peek();
-				if(persistenceState.kind === "PERSISTED" && persistenceState.game !== "LOADING"){
+				if(persistenceState.kind === PersistenceStateKind.PERSISTED && persistenceState.game !== "LOADING"){
 					if(persistenceState.game.ownerId === persistenceState.session?.user.id){
 						startSavingGame(props.persistenceState, props.roomState);
 					}

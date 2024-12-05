@@ -1,8 +1,8 @@
 /*
 @title: Ping Pong
-@tags: ['classic']
-@addedOn: 2024-07-05
 @author: Cral-Cactus
+@tags: ['retro']
+@addedOn: 2024-07-05
 */
 const paddle = "p";
 const ball = "b";

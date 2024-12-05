@@ -1,7 +1,7 @@
 /*
 @title: Hue Havoc
 @author: Gus Ruben
-@tags: ["2-player", "multiplayer", "pvp"]
+@tags: ['multiplayer']
 @addedOn: 2024-09-01
 */
 

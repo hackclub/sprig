@@ -2,7 +2,7 @@
 /* 
 @title: breakfast_maze!
 @author: Alex
-@tags: ['sokoban-style']
+@tags: ['puzzle']
 @addedOn: 2023-08-01
 */
 

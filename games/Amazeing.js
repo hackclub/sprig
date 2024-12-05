@@ -1,12 +1,12 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Amazing
 @author: Dilon
 @tags: []
-@img: ""
 @addedOn: 2024-06-07
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
+@img: ""
 
 Mechanics inspired by Maze_Runner3 by Charlie
 */

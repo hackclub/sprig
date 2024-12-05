@@ -2,7 +2,7 @@
 /* 
 @title: two-birds_one-stone
 @author: t3mp0r4ry
-@tags: ['dodge']
+@tags: ['action']
 @addedOn: 2023-06-06
 */
 

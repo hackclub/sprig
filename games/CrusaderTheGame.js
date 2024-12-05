@@ -1,11 +1,11 @@
 /*
+@title: Crusader
+@author: Skyfall
+@tags: ['platformer']
+@addedOn: 2024-07-18
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Crusader
-@author: Skyfall
-@tags: ["platformer"]
-@addedOn: 2024-07-18
 */
 
 const player = "p"

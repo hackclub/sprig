@@ -1,11 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Ghosbly: Turn Based Combat
 @author: SlimeBind
 @tags: []
 @addedOn: 2024-06-24
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 let inputEnabled = true;
 const player = "p"

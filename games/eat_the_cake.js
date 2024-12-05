@@ -1,8 +1,8 @@
 /*
 @title: Eat the cake
-@tags: ['beginner', 'hackable']
-@addedOn: 2022-10-13
 @author: _klyap_
+@tags: []
+@addedOn: 2022-10-13
 */
 
 const player = "p";

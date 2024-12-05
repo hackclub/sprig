@@ -1,11 +1,11 @@
 /*
+@title: CaveEscape
+@author: Michael Taylor
+@tags: ["strategy" , "action" , "real-time"]
+@addedOn: 2024-02-16
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: CaveEscape
-@author: Michael Taylor
-@tags: []
-@addedOn: 2024-02-16
 
 use WASD to move the cursor and J to select and use an action, the enemy will automatically deal damage to you after every action you take
 */

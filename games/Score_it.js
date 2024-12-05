@@ -1,11 +1,11 @@
 /*
+@title: Score_it
+@author: asmahdi08
+@tags: ['sports']
+@addedOn: 2024-08-22
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Score_it
-@author: asmahdi08
-@tags: []
-@addedOn: 2024-08-22
 */
 
 const player = "p"
