@@ -5,8 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Housing
 @author: Isaac and Nathan Jones
 @tags: ['puzzle']
-@addedOn: 2024-00-00
-
+@addedOn: 2024-12-05
 Get the spridget home while avoiding the fireballs!
 
 Press WASD to move the brown "spridget" and IJKL to move 
