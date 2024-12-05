@@ -66,7 +66,7 @@ export const onRun = async () => {
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
-	roomState?: Signal<RoomState>;
+	roomState?: Signal<RoomState> | undefined;
 	cookies: {
 		outputAreaSize: number | null;
 		helpAreaSize: number | null;
@@ -87,6 +87,14 @@ const outputAreaWidthMargin = 130; // The margin between the editor and output a
 const minHelpAreaHeight = 32;
 let defaultHelpAreaHeight = 350;
 const helpAreaHeightMargin = 0; // The margin between the screen and help area
+
+export const foldTemplateLiteral = (from: number, to: number) => {
+	if (!codeMirror.value) return;
+	collapseRanges(
+		codeMirror.value,
+		[[from, to]]
+	);
+}
 
 export const foldAllTemplateLiterals = () => {
 	if (!codeMirror.value) return;
@@ -253,16 +261,6 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	const screenControls = useRef<HTMLDivElement>(null);
 
 	const [sessionId] = useState(nanoid());
-
-
-	useEffect(() => {
-		if(roomState){
-			isNewSaveStrat.value = true;
-		} else {
-			isNewSaveStrat.value = false;
-		}
-	}, [])
-
 
 	useEffect(() => {
 		const channel = new BroadcastChannel('session_channel');
@@ -530,7 +528,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	}, [initialCode]);
 
 	return (
-		isNewSaveStrat.value && persistenceState.value.kind === PersistenceStateKind.COLLAB && typeof persistenceState.value.game === 'string' 
+		roomState != undefined && persistenceState.value.kind === PersistenceStateKind.COLLAB && typeof persistenceState.value.game === 'string' 
 		? 
 			(<>
 				<RoomPasswordPopup persistenceState={persistenceState} />

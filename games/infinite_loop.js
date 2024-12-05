@@ -1,7 +1,7 @@
 /*
 @title: The Infinite Loop
 @author: Matthew Soh
-@tags: []
+@tags: ['maze', 'music']
 @addedOn: 2024-08-28
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started

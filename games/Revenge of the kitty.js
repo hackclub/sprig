@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Revenge of the kitty
 @author: Pugx23
-@tags: []
+@tags: ['action']
 @addedOn: 2024-09-27
 */
 

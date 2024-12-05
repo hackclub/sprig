@@ -107,7 +107,6 @@
 	font-weight: bold;
 	gap: 6px;
 	padding: 0 10px;
-	margin-left: 10px;
 }
 
 .logo .longImg {
@@ -154,7 +153,7 @@
 	width: 24px;
 }
 
-.stuckBtn {
+.stuckBtn:not(:disabled):hover {
 	background-color: rgb(255, 66, 66);
 }
 
@@ -269,7 +268,7 @@
 	z-index: 9;
 	position: absolute;
 	top: 48px;
-	right: 140px;
+	right: 100px;
 	box-shadow: 0 4px 8px 0 #0000005e;
 	min-width: 160px;
 	border-radius: 4px;
@@ -401,23 +400,8 @@
 
 .runButtonContainer {
 	display: inline-flex;
-	border: 1px solid #004d40;
 	overflow: hidden;
 	height: 35px;
-  }
-  
-  .runButton, .dropdownButton {
-	background-color: var(--accent);
-	color: white;
-	border: none;
-	padding: 10px 20px;
-	cursor: pointer;
-	font-size: 14px;
-	width: 60%;
-  }
-
-  .runButton {
-	border-right: 1px solid #004d40;
   }
 
 .publishButton {
@@ -496,4 +480,8 @@
 	.logo button {
 		padding: 0 8px;
 	}
+}
+
+.newPRButton {
+	margin-left: 10px;
 }

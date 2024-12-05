@@ -1,0 +1,78 @@
+name: Sprig Review Preview Links
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  post-vercel-preview-comment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Fetch base and head branches
+        run: |
+          git fetch origin ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
+
+      - name: Get list of changed files
+        id: changed-files
+        run: |
+          echo "Pull Request Base SHA: ${{ github.event.pull_request.base.sha }}"
+          echo "Pull Request Head SHA: ${{ github.event.pull_request.head.sha }}"
+          js_files=$(git diff --name-only --diff-filter=AM --find-renames --find-copies ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep 'games/.*\.js$' | awk '{print $1}')
+          first_js_file=$(basename "$js_files" .js)
+          if [ -n "$first_js_file" ]; then
+            echo "FIRST_JS_FILE=$first_js_file" >> $GITHUB_ENV
+          else
+            echo "No matching .js files found in games/ directory."
+            exit 0
+          fi
+
+      - name: Fetch existing comments on the pull request
+        if: env.FIRST_JS_FILE
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=$(echo "${{ github.event.pull_request.number }}")
+          COMMENTS_URL="https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments"
+          COMMENTS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" $COMMENTS_URL)
+          echo "$COMMENTS" > comments.json
+
+      - name: Check if comment already exists
+        if: env.FIRST_JS_FILE
+        run: |
+          COMMENT_EXISTS=$(jq '.[] | select(.body | contains("/gallery/beta/${{ env.FIRST_JS_FILE }}"))' comments.json)
+          if [ -n "$COMMENT_EXISTS" ]; then
+            echo "Comment already exists. Skipping."
+            exit 0
+          fi
+
+      - name: Construct Preview URL and Post Comment
+        if: env.FIRST_JS_FILE
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PROJECT_NAME: "sprig"
+          BRANCH_NAME: "${{ github.head_ref }}"
+          FORK_AUTHOR: "${{ github.event.pull_request.head.user.login }}"
+          DOMAIN: "hackclub.dev"
+          JS_FILE: ${{ env.FIRST_JS_FILE }}
+          IS_FORK: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
+        run: |
+          PR_NUMBER=$(echo "${{ github.event.pull_request.number }}")
+          
+          if [ "${IS_FORK}" = "true" ]; then
+            PREVIEW_URL="https://${PROJECT_NAME}-git-fork-${FORK_AUTHOR}-${BRANCH_NAME}.${DOMAIN}"
+          else
+            PREVIEW_URL="https://${PROJECT_NAME}-git-${BRANCH_NAME}.${DOMAIN}"
+          fi
+          
+          COMMENT_BODY="You can play your game at [Play Here](${PREVIEW_URL}/gallery/beta/${JS_FILE})!"
+          
+          curl -s -H "Authorization: token $GITHUB_TOKEN" \
+            -X POST \
+            -d "{\"body\": \"$COMMENT_BODY\"}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments"

@@ -7,8 +7,11 @@ import { lazy } from '../utils/lazy'
 import { generateGameName } from '../words'
 import metrics from '../../../metrics'
 import { RoomParticipant } from '../state'
+import { sha256Hash } from "../../lib/codemirror/util";
 
 const numberid = customAlphabet('0123456789')
+
+const whitelistedBetaCollabAndSavingStratEmails = ["development@hackclub.com", "cosmin@hackclub.com", "graham@hackclub.com"]
 
 const app = lazy(() => {
 	if (admin.apps.length === 0) {
@@ -35,9 +38,6 @@ export interface User {
 	createdAt: Timestamp
 	email: string
 	username: string | null
-	githubAccessToken?: string
-	githubId?: string
-	githubUsername?: string
 	failedLoginAttempts?: number
 	lockoutUntil?: Timestamp
 }
@@ -59,6 +59,7 @@ export interface Game {
 	code: string
 	tutorialName?: string
 	tutorialIndex?: number
+	isSavedOnBackend?: boolean
 	roomParticipants?: RoomParticipant[]
 	isRoomOpen?: boolean
 	password?: string
@@ -233,7 +234,8 @@ export const makeOrUpdateSession = async (cookies: AstroCookies, userId: string,
 		path: '/',
 		maxAge: 60 * 60 * 24 * 365,
 		httpOnly: true,
-		sameSite: 'strict'
+		sameSite: 'lax',
+		secure: true,
 	})
 	return {
 		session: { id: _session.id, ...data } as Session,
@@ -255,7 +257,7 @@ export const getGame = async (id: string | undefined): Promise<Game | null> => {
 	return { id: _game.id, ..._game.data() } as Game
 }
 
-export const makeGame = async (ownerId: string, unprotected: boolean, name?: string, code?: string, tutorialName?: string, tutorialIndex?: number): Promise<Game> => {
+export const makeGame = async (ownerId: string, unprotected: boolean, name?: string, code?: string, tutorialName?: string, tutorialIndex?: number, isSavedOnBackend?: boolean): Promise<Game> => {
 	
 	const createdDate = Timestamp.now()
 	const data = {
@@ -266,7 +268,8 @@ export const makeGame = async (ownerId: string, unprotected: boolean, name?: str
 		name: name ?? generateGameName(),
 		code: code ?? '',
 		tutorialName: tutorialName ?? null,
-		tutorialIndex: tutorialIndex ?? null
+		tutorialIndex: tutorialIndex ?? null,
+		isSavedOnBackend: isSavedOnBackend ?? false,
 	}
 	const _game = await addDocument('games', data);
 	return { id: _game.id, ...data } as Game
@@ -337,4 +340,23 @@ export const getSnapshotData = async (id: string): Promise<SnapshotData | null> 
 
 export const updateUserGitHubToken = async (userId: string, githubAccessToken: string, githubId: string, githubUsername: string): Promise<void> => {
     await updateDocument('users', userId, { githubAccessToken, githubId, githubUsername });
+}
+
+async function hashCodeToBigInt(string : string) : Promise<bigint>{
+	return BigInt(`0x${ await sha256Hash(string)}`);
+}
+
+export async function isAccountWhitelistedToUseCollabAndSavingBetaFeatures(id: string, email: string) : Promise<boolean>{
+	if(whitelistedBetaCollabAndSavingStratEmails.includes(email)) return true;
+	if(import.meta.env.PERCENT_OF_USERS_WHITELISTED_FOR_BETA_FEATURE == 0 || import.meta.env.PERCENT_OF_USERS_WHITELISTED_FOR_BETA_FEATURE == undefined) return false;
+	let hashedId = await hashCodeToBigInt(id);
+	
+	if(hashedId % BigInt(100) < import.meta.env.PERCENT_OF_USERS_WHITELISTED_FOR_BETA_FEATURE){
+		return true
+	}
+	return false;
+}
+
+export const moveGameToBackendSaving = async (game: Game): Promise<Game> => {
+	return makeGame(game.ownerId, game.unprotected, game.name, game.code, game.tutorialName, game.tutorialIndex, true);
 }

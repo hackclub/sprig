@@ -1,7 +1,7 @@
 /*
 @title: Sound Memory
 @author: meronemo
-@tags: []
+@tags: ["memory" , "timed" , "music"]
 @addedOn: 2024-07-28
 Sound Memory
 Listen and memorize the order of the sound playing.

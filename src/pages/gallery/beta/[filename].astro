@@ -1,0 +1,86 @@
+---
+import {findDocument} from "../../../lib/game-saving/account";
+
+import '../../../global.css'
+import DesktopPlayer from "../../../components/big-interactive-pages/desktop-player";
+import StandardHead from '../../../components/standard-head.astro'
+import { getSession } from '../../../lib/game-saving/account'
+import { getGalleryGames } from '../../../lib/game-saving/gallery'
+import MobilePlayer from '../../../components/big-interactive-pages/mobile-player'
+import { mobileUserAgent } from '../../../lib/utils/mobile'
+import fs from 'fs'
+import path from 'path'
+import Navbar from "../../../components/navbar-main";
+
+const session = await getSession(Astro.cookies)
+
+const filename = Astro.params.filename ?? ''
+const gameContentPath = path.resolve(`./games/${filename}.js`)
+let code: string
+try {
+	code = fs.readFileSync(gameContentPath).toString()
+} catch {
+	return Astro.redirect('/404', 302)
+}
+
+const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
+
+const files = await Astro.glob('/games/*.md')
+let tutorial: string[] | undefined = files
+	.filter(file => {
+		const regexedFile = file.file.match(fileRegexp)
+		return regexedFile && regexedFile[1] === filename
+	})
+	?.map(md => md.compiledContent())
+if (tutorial.length == 0) tutorial = undefined
+
+const games = getGalleryGames()
+const metadata = games.find(game => game.filename === filename)
+const name = metadata?.title
+const authorName = metadata?.author
+
+const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
+
+const isLoggedIn = !!session?.session.full
+
+const hearted = isLoggedIn && await findDocument('upvotes', [
+	['filename', '==', filename],
+	['userId', '==', session.user.id]
+]).then(records => !records.empty)
+
+---
+
+<html lang='en'>
+<head>
+	<StandardHead title={(name ?? filename) || 'Untitled'} />
+	<script>
+		import {theme, switchTheme} from "../../../lib/state";
+		import type {ThemeType} from "../../../lib/state";
+		const currentTheme = localStorage.getItem("theme") ?? localStorage.getItem("isDark") ?? "light"
+		theme.value = currentTheme as ThemeType;
+
+		switchTheme(theme.value);
+	</script>
+</head>
+<body style="display: flex; flex-direction: column">
+{isMobile ? (
+	<MobilePlayer
+		client:load
+		code={code}
+		gameName={(name ?? filename) || 'Untitled'}
+		authorName={authorName || ''}
+	/>
+) : (
+	<Navbar session={session} />
+	<DesktopPlayer
+		client:load
+		code={code}
+		gameName={(name ?? filename) || 'Untitled'}
+		authorName={authorName || ''}
+		filename={filename}
+		hearted={hearted}
+		isLoggedIn={isLoggedIn}
+	/>
+)}
+</body>
+</html>
