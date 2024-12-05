@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Cube Castle
 @author: Paylicier
-@tags: [platformer, lore, cube, mario]
-@addedOn: 2024-00-00
+@tags: ['platformer', 'lore', 'cube', 'mario', 'king']
+@addedOn: 2024-12-05
 */
 
 const player = "p"
