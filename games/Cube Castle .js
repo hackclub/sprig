@@ -154,13 +154,13 @@ const levels = [
 ..........
 .........s
 .......###
-...###....
+...#.#....
 p.........
 ##########`,
   map`
 ..........
 .........s
-.....#####
+.....##.##
 ....###...
 p..####...
 #@@#@@#@@@`,
@@ -241,6 +241,7 @@ const melody = tune`
 185.1851851851852: D4^185.1851851851852,
 185.1851851851852: C4-185.1851851851852`
 let playback = playTune(melody, Infinity)
+let time = 0;
 
 const dialogues = [{
     level: 1,
@@ -331,6 +332,7 @@ function kill() {
       clearText()
       level = 1
       lives = 5
+      time = 0
       setMap(levels[1])
     }, 1200)
     return;
@@ -369,7 +371,7 @@ function bossFight() {
     if (kingSprite) {
       jump(king);
     }
-  }, 1200)
+  }, 1500)
 }
 
 function interactCheck() {
@@ -401,6 +403,10 @@ function interact() {
     if (level === 3) spawnFireballs();
     setMap(levels[level]);
     if (level === 6) bossFight();
+    if (level === 1) {
+      time = 0;
+      lives = 5;
+    }
     return;
   }
   const adjacentSprites = [
@@ -412,7 +418,6 @@ function interact() {
 
   if (isNearSign) {
     const dialogue = dialogues.find((dial) => dial?.level === level);
-    console.log(dialogue?.text)
     setMap(levels[DIAL_SCENE])
     clearText()
     addText(dialogue?.text.replace("{TIME}", time) || "notext", { x: 3, y: 1, color: color`0` })
@@ -462,7 +467,6 @@ afterInput(() => {
 
 
 //time
-let time = 0;
 setInterval(function() {
   time++
 }, 1000)
