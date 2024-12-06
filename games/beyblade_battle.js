@@ -2,7 +2,6 @@
 @title: Beyblade Battle
 @author: Shweta Shaw
 @tags: ['multiplayer']
-@addedOn: 2024-12-1
 
 Instructions:
 
@@ -21,7 +20,8 @@ Controls for Player 2:
   k -> DOWN
   l -> RIGHT
 
-On Game Over, i to Restart
+i for next level
+w to reset the game
 */
 
 const player1 = "1";
@@ -423,8 +423,9 @@ setLegend(
 7777777777666666
 7777777777666666`],
 );
+let level = 0;
 
-const k = map`
+const lvl0 = map`
 .dbbbbbr.
 nx.....tl
 o.9...9.c
@@ -432,7 +433,34 @@ o.1.9.2.c
 o.9...9.c
 am.....zi
 .yuuuuup.`;
-setMap(k);
+const lvl1 = map`
+.dbbbbbr.
+nx..9..tl
+o.......c
+o91...29c
+o.......c
+am..9..zi
+.yuuuuup.`;
+const lvl2 = map`
+.dbbbbbr.
+nx9...9tl
+o.......c
+o91.9.29c
+o.......c
+am9...9zi
+.yuuuuup.`;
+const lvl3 = map`
+9dbbbbbr9
+nx..9..tl
+o9.....9c
+o91.9.29c
+o9.....9c
+am..9..zi
+9yuuuuup9`;
+if(level==0){
+  setMap(lvl0);
+}
+
 
 setSolids([player1, player2]);
 
@@ -446,6 +474,15 @@ setPushables({
 });
 
 onInput("w", () => {
+  if (v == 1){
+    setMap(lvl0);
+    level=0;
+    setSolids([player1,player2]);
+    clearText();
+    v=0;
+    playback = playTune(play1, Infinity);
+    return;
+  }
   if (v == 0) getFirst(player1).y -= 1;
 });
 onInput("s", () => {
@@ -461,13 +498,26 @@ onInput("d", () => {
 onInput("i", () => {
   // reset the game if the game is over
   if (v == 1) {
-    clearText();
-    setMap(k);
-    v = 0;
+    if(level==1){
+      setMap(lvl1);
+      clearText();
+      setSolids([fillWhite,player1,player2]);
+    }
+    if(level==2){
+      setMap(lvl2);
+      clearText();
+      setSolids([fillWhite,player1,player2]);
+    }
+    if(level==3){
+      setMap(lvl3);
+      clearText();
+      setSolids([fillWhite,player1,player2]);
+    }
     playback = playTune(play1, Infinity);
+    v=0;
     return;
   }
-  getFirst(player2).y -= 1
+  if (v == 0) getFirst(player2).y -= 1
 });
 onInput("k", () => {
   if (v == 0) getFirst(player2).y += 1;
@@ -488,11 +538,21 @@ afterInput(() => {
       y: 7,
       color: color`5`,
     });
-    addText("Press i to restart", {
+    level++;
+    if(level<=3){
+    addText("Press i for Level " + level, {
       x: 1,
       y: 9,
       color: color`C`,
     });
+    }
+    if(level==4){
+      addText("Press w to ResetGame", {
+      x: 0,
+      y: 9,
+      color: color`C`,
+    });
+    }
     v = 1;
     playback.end();
   }
@@ -501,13 +561,23 @@ afterInput(() => {
     addText("Player1 Wins", {
       x: 4,
       y: 7,
-      color: color`5`
+      color: color`5`,
     });
-    addText("Press i to restart", {
+    level++;
+    if(level<=3){
+    addText("Press i for Level " + level, {
       x: 1,
       y: 9,
       color: color`C`,
     });
+    }
+    if(level==4){
+      addText("Press w to ResetGame", {
+      x: 0,
+      y: 9,
+      color: color`C`,
+    });
+    }
     v = 1;
     playback.end();
   }
