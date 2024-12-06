@@ -1,7 +1,7 @@
 /*
 @title: Hole in Wall
 @author: udu3324
-@tags: [dodge, fun, game, platform, walls]
+@tags: []
 @addedOn: 2024-00-00
 */
 
