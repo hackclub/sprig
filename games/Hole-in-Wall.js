@@ -377,8 +377,8 @@ function levelThree() {
                                                               addText("Level 3: Good Luck", {x: 1, y: 1, color: color`2`})
                                                               addText("You did it.", {x: 5, y: 2, color: color`4`})
 
-                                                              addText("Press (right) down", {x: 2, y: 13, color: color`2`})
-                                                              addText("for freeplay!", {x: 2, y: 14, color: color`2`})
+                                                              addText("You beat the game!", {x: 2, y: 13, color: color`2`})
+                                                              addText("Challenge others!", {x: 2, y: 14, color: color`2`})
 
                                                               finishedLevelThree = true
                                                               ended = true
