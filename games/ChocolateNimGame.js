@@ -198,4 +198,4 @@ function isValidMove(direction) {
   if (direction === 'l') return spoiledCol > 0
   if (direction === 'r') return spoiledCol < chocolateBar[0].length - 1
   return false
-}s
+}
