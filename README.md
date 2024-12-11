@@ -82,7 +82,7 @@ Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) 
 - `#spade`: For discussions of Spade firmware/OS of the Sprig.
 - `#spaint`: Make art with your sprig with sPaint and share.
 
-Learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs). 
+Learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs/docs). 
 
 Sprig's editor and site pages are built with [Astro](https://astro.build/) using [Preact](https://preactjs.com/) for rendering. Perhaps somewhat unusually, we predominantly use [Preact Signals](https://preactjs.com/guide/v10/signals/) for state management. The project structure is as follows:
 

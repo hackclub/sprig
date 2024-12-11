@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # The Toolkit
 
 Sprig is a tiny construction kit to build tile based games. 
@@ -158,7 +162,7 @@ afterInput(() => {
 Each tile can contain any number of sprites stacked on top of each other.
 
 Sprites contain:
-```
+```js
 {
   type
   x
@@ -218,9 +222,13 @@ Useful if you know there's only one of a sprite, such as with a player character
 
 Shortcut for `getAll(type)[0]`.
 
+### getGrid()
+
+Returns a 2D array (an array of arrays) of all sprites on the grid.
+
 ## Text
 
-### addText(string, options = { x, y, color })
+### addText(string, options = \{ x, y, color })
 
 You can add text with optional `x`, `y`, and `color`.
 
@@ -262,6 +270,44 @@ const playback = playTune(melody, Infinity)
 
 // Or make it shut up early:
 playback.end()
+```
+
+## Timing Control
+
+### setTimeout(callback, ms)
+
+Waits `ms` milliseconds before executing `callback`. Returns the timeout ID.
+
+```js
+const textTimer = setTimeout(() => {
+  addText("Time's up!")
+}, 10000)
+```
+
+### clearTimeout(id)
+
+Stops the timeout `id`.
+
+```js
+clearTimeout(textTimer)
+```
+
+### setInterval(callback, ms)
+
+Execute `callback` every `ms` milliseconds. Returns the interval ID.
+
+```js
+const textInterval = setInterval(() => {
+  addText("Interval triggered...")
+}, 10000)
+```
+
+### clearInterval(callback)
+
+Stops the interval `id`.
+
+```js
+clearInterval(textInterval)
 ```
 
 <!-- 
