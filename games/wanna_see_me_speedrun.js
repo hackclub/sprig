@@ -1,4 +1,5 @@
 /*
+@title: Wanna See Me Speedrun
 @author: alex tran
 @tags: ['action', 'strategy', 'realtime']
 @addedOn: 2024-12-12
