@@ -1,5 +1,8 @@
 /*
-game by alex tran
+@author: alex tran
+@tags: ['action', 'strategy', 'realtime']
+@addedOn: 2024-12-12
+
 modified from tutorial
 
 game description:
