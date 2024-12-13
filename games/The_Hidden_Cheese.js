@@ -592,6 +592,18 @@ function incrementScore(player, mimicPlayer, cheese) {
     score += scoreIncrement;
     cheeseX = Math.floor(Math.random() * (gameWidth - wallPos - 1)) + wallPos + 1;
     cheeseY = Math.floor(Math.random() * (gameHeight - 1)) + 1;
+    if (score === 15) {
+      scoreIncrement++;
+    }
+    else if (score >= 40) {
+      scoreIncrement++;
+    }
+    if (score >= 75) {
+      scoreIncrement++;
+    }
+    if (score >= 100) {
+      scoreIncrement++;
+    }
   }
 }
 
@@ -927,22 +939,26 @@ const updateEverything = setInterval(() => { //timer is set to seconds
       checkCollisionPosition(downPlayer, enemyXM, enemyY1) || checkCollisionPosition(leftPlayer, enemyXM, enemyY1) ||
       checkCollisionPosition(mimicPlayer, enemyXM, enemyY1) || checkCollisionPosition(upPlayerM, enemyXM, enemyY1) ||
       checkCollisionPosition(downPlayerM, enemyXM, enemyY1) || checkCollisionPosition(leftPlayerM, enemyXM, enemyY1))) {
-
+      endGame();
+      gameOver = true;
   }
   if (score >= 30 && (checkCollisionPosition(player, enemyX3, enemyY3) || checkCollisionPosition(upPlayer, enemyX3, enemyY3) ||
       checkCollisionPosition(downPlayer, enemyX3, enemyY3) || checkCollisionPosition(leftPlayer, enemyX3, enemyY3) ||
       checkCollisionPosition(mimicPlayer, enemyX3, enemyY3) || checkCollisionPosition(upPlayerM, enemyX3, enemyY3) ||
       checkCollisionPosition(downPlayerM, enemyX3, enemyY3) || checkCollisionPosition(leftPlayerM, enemyX3, enemyY3)))
+  {
+    endGame();
+    gameOver = true;
+  }
     if (score >= 100 && (checkCollisionPosition(player, enemyX4, enemyY4) || checkCollisionPosition(upPlayer, enemyX4, enemyY4) ||
         checkCollisionPosition(downPlayer, enemyX4, enemyY4) || checkCollisionPosition(leftPlayer, enemyX4, enemyY4) ||
         checkCollisionPosition(mimicPlayer, enemyX4, enemyY4) || checkCollisionPosition(upPlayerM, enemyX4, enemyY4) ||
         checkCollisionPosition(downPlayerM, enemyX4, enemyY4) || checkCollisionPosition(leftPlayerM, enemyX4, enemyY4)))
-      if (score === 10 && level === 0) {
-        addSprite(doorsX, doorsY, door);
-      }
-  if (score % 15 == 0 && score != 0) {
-    scoreIncrement += 2;
-  }
+    {
+      endGame();
+      gameOver = true;
+    }
+      
   if (score >= 350) {
     wonGame()
   }
