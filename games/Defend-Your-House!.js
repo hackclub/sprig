@@ -4,10 +4,11 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Defend Your House!
 @author: Gabbs
 @tags: ['strategy', 'survival', 'music']
-@addedOn: 2024-11-19
+@addedOn: 2024-11-27
 */
+
 const moving = tune`
-161.29032258064515: F4~161.29032258064515 + C5~161.29032258064515,
+161.29032258064515: F4^161.29032258064515 + C5^161.29032258064515,
 5000`
 const placed = tune`
 161.29032258064515: F4^161.29032258064515 + C5^161.29032258064515,
@@ -35,8 +36,8 @@ const collision = tune`
 84.50704225352112: E5/84.50704225352112,
 2450.7042253521126`
 const win = tune`
-178.57142857142858: E5/178.57142857142858,
-178.57142857142858: E5/178.57142857142858,
+178.57142857142858: E5/178.57142857142858 + F5~178.57142857142858,
+178.57142857142858: E5/178.57142857142858 + F5~178.57142857142858,
 178.57142857142858: F5/178.57142857142858 + E5-178.57142857142858 + G5^178.57142857142858,
 178.57142857142858: G5/178.57142857142858,
 178.57142857142858: G5/178.57142857142858,
@@ -480,10 +481,14 @@ WWW....ppdDpp....WWW
 wwwwwwwwwwwwwwwwwwww`
 setMap(level)
 setBackground("g")
+
 onInput("k", () => {
   // Move the player one tile to the right
+  if(youLost == false)
+  {
   playTune(moving);
   updateWoodCount();
+  }
 })
 
 onInput("d", () => {
@@ -584,14 +589,17 @@ function gameLoop() {
   if (challenge && youLost == false) {
     if (randomChallenge == 1) {
       ZapEvent();
+      
     } else if (randomChallenge == 2) {
       RockLEvent();
+      
     } else if (randomChallenge == 3) {
       RockREvent();
+      
     }else if (randomChallenge == 4)
     {
       FireBallLEvent();
-    }else if(randomChallenge == 4)
+    }else if(randomChallenge == 5)
     {
       FireBallREvent();
     }
@@ -676,8 +684,8 @@ function FireBallREvent() {
   if (z == 1) {
     z = 1;
 
-    pos = 17;
-    var randomY = Math.floor(Math.random() * (14 - 4 + 1)) + 4;
+    pos = 16;
+    
     challengeState = true;
     addSprite(pos, 4, FIREBALLR);
     z = 2;
