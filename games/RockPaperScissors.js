@@ -2,7 +2,7 @@
 @title: [BEAT ME!] Rock & Paper & Scissors
 @author: Andrea Ivanov
 @tags: ['arcade', 'choice', 'challenge']
-@addedOn: 06-12-2024
+@addedOn: 2024-12-06
 */
 
 const player = 'p';
