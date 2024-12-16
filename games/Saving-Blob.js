@@ -1,3 +1,10 @@
+/*
+@title: Saving Blob
+@author: ARTISM30
+@tags: []
+@addedOn: 2024-11-12
+*/
+
 // define the sprites in our game
 const player = "p";
 const blob = "b";
