@@ -20,7 +20,6 @@ def add_to_metadata(filename, description):
         print("Filename: " + filename)
         print("Description: " + description)
     else:
-        # test if this overwrites or appends
         with open("games/" + filename, "w") as f:
             f.writelines(lines)
 
