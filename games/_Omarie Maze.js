@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title:  Omarie Maze
-@author: 
+@author: Omarie Rose
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-12-06
 */
 
 let won = false
