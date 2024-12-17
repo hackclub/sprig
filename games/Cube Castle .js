@@ -1,10 +1,7 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Cube Castle
 @author: Paylicier
-@tags: ['platformer', 'lore', 'cube', 'mario', 'king']
+@tags: ['platformer']
 @addedOn: 2024-12-05
 */
 
