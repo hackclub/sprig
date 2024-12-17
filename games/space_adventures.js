@@ -1,7 +1,7 @@
 /*
 @title: Space Adventures
 @author: Shreyas Jain
-@tags: ['platformer', 'space']
+@tags: ['platformer']
 @addedOn: 2024-06-25
 */
 

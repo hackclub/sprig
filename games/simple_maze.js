@@ -1,8 +1,8 @@
 /*
 @title: simple maze
-@tags: ['sokoban-style']
-@addedOn: 2022-09-13
 @author: Itamar Davidyan
+@tags: ['puzzle']
+@addedOn: 2022-09-13
 */
 
 

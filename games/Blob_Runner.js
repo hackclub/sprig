@@ -1,8 +1,8 @@
 /*
 @title: Blob_Runner
-@tags: []
-@addedOn: 2023-01-09
 @author: Bright Li
+@tags: ['platformer', 'maze']
+@addedOn: 2023-01-09
 */
 
 const player = "p"

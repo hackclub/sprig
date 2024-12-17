@@ -1,10 +1,10 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
 @title: Catch the apples
 @author: Jack
-@tags: ['endless', 'catch']
+@tags: ["endless" , "timed"]
 @addedOn: 2024-01-13
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
 
 Instructions:
 Catch as many apples as you can and avoid the bugs. Each apple caught will increase the score by 1, 

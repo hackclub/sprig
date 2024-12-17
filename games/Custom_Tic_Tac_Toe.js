@@ -1,8 +1,8 @@
 /*
 @title: Custom Tic Tac Toe
+@author: Cael Ganem
 @tags: ['multiplayer']
 @addedOn: 2023-10-30
-@author: Cael Ganem
 
 Controls:
 -WASD to control the selector

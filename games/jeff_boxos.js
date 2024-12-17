@@ -1,7 +1,7 @@
 /*
 @title: jeff boxos
 @author: snwy
-@tags: ["puzzle"]
+@tags: ['puzzle']
 @addedOn: 2024-04-12
 */
 

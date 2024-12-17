@@ -1,10 +1,10 @@
 /*
+@title: Monkey Bannana
+@author: Daivik
+@tags: ['humor','action']
+@addedOn: 2024-07-23
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
-@title: Monkey Bannana
-@author: Daivik 
-@tags: ["bananas", "catching"]
-@addedOn: 2024-07-23
 */
 const player = "p";
 const banana = "b";

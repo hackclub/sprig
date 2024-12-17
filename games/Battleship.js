@@ -2,7 +2,7 @@
 /* 
 @title: Battleship
 @author: Johna-123
-@tags: ['advanced']
+@tags: []
 @addedOn: 2023-08-25
 */
 

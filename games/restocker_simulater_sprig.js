@@ -1,8 +1,8 @@
 /*
 @title: restocker simulater
-@tags: ['sokoban-style']
-@addedOn: 2022-11-23
 @author: omegakitty
+@tags: ['puzzle']
+@addedOn: 2022-11-23
 */
 
 //wasd for banana player

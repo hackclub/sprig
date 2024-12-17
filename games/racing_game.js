@@ -1,8 +1,8 @@
 /*
 @title: Car Race
+@author: saumil
 @tags: ['strategy']
 @addedOn: 2024-06-20
-@author: saumil
 
 Collect all green stuff (grass) and go to the blue thing (the destination) 
 */

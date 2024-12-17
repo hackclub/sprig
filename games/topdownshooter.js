@@ -1,7 +1,7 @@
 /*
 @title: Top Down Shooter
 @author: Orkpeko
-@tags: ["real-time", "strategy", "action"]
+@tags: ['strategy','real-time','action']
 @addedOn: 2024-07-15
 */
 

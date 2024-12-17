@@ -1,8 +1,8 @@
 /*
 @title: Mario_Kart
+@author: nucleiav */
 @tags: ['endless']
 @addedOn: 2023-01-13
-@author: nucleiav */
 
 let n = 0;
 

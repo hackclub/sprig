@@ -1,8 +1,8 @@
 /*
 @title: Sort
+@author: Mohan
 @tags: []
 @addedOn: 2022-12-26
-@author: Mohan
 */
 
 const right = 'r';

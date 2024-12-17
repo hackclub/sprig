@@ -1,8 +1,8 @@
 /*
 @title: sudoku
-@tags: ['classic']
-@addedOn: 2023-01-25
 @author: wyatt
+@tags: ['retro']
+@addedOn: 2023-01-25
 
 This is a sudoku implementation - difficulty is set as "very-hard" by default, but can be
 changed by editting line 39.

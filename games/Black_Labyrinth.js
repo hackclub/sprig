@@ -1,7 +1,7 @@
 /*
 @title: Black Labyrinth
 @author: Somebud0180
-@tags: ['maze']
+@tags: ['puzzle']
 @addedOn: 2024-08-13
 */
 

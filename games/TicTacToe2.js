@@ -1,11 +1,11 @@
 /*
+@title: TicTacToe
+@author: Benjamin
+@tags: ['multiplayer']
+@addedOn: 2024-07-01
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: TicTacToe
-@author: Benjamin
-@tags: ['tictactoe','tic-tac-toe']
-@addedOn: 2024-07-01
 */
 
 const player = "p";

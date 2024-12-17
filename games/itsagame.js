@@ -2,8 +2,8 @@
 @title: Chest Game
 @author: Izaiaz2121
 @tags: []
-@img: ""
 @addedOn: 2024-05-20
+@img: ""
 */
 
 const player = "p";

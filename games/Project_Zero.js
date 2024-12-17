@@ -1,7 +1,7 @@
 /*
 @title: Project Zero
 @author: Creeperlulu
-@tags: ["arcade", "puzzle", "advanced"]
+@tags: ['puzzle']
 @addedOn: 2024-09-03
 */
 
