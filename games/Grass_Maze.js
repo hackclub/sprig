@@ -1,8 +1,8 @@
 /* 
-@title: maze_game_starter
-@author: Cheru Berhanu
+@title: Grass Maze
+@author: steponme449
 @tags: []
-@addedOn: 2023-08-08
+@addedOn: 2024-12-16
 */
 const player = "p";
 const wall = "w";
