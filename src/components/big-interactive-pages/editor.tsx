@@ -16,7 +16,7 @@ import {
 import { useEffect, useRef, useState} from "preact/hooks";
 import { codeMirror, errorLog, isNewSaveStrat, muted, PersistenceState, RoomState,  screenRef, cleanupRef } from "../../lib/state";
 import EditorModal from "../popups-etc/editor-modal";
-import { runGame } from "../../lib/engine";
+import { runGame, _performSyntaxCheck } from "../../lib/engine";
 import DraftWarningModal from "../popups-etc/draft-warning";
 import { debounce } from "throttle-debounce";
 import Help from "../popups-etc/help";
@@ -35,6 +35,15 @@ import KeyBindingsModal from '../popups-etc/KeyBindingsModal'
 import { PersistenceStateKind } from "../../lib/state";
 
 let screenShakeSignal: Signal<number> | null = null;
+
+const performSyntaxCheck = () => {
+	const code = codeMirror.value?.state.doc.toString() ?? "";
+	const res = _performSyntaxCheck(code);
+	errorLog.value = [];
+	if (res.error) {
+		errorLog.value = [res.error];
+	}
+}
 
 export const onRun = async () => {
 	foldAllTemplateLiterals();
@@ -261,6 +270,12 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	const screenControls = useRef<HTMLDivElement>(null);
 
 	const [sessionId] = useState(nanoid());
+
+	useEffect(() => {
+		setInterval(() => {
+			performSyntaxCheck();
+		}, 2000);
+	}, []);
 
 	useEffect(() => {
 		const channel = new BroadcastChannel('session_channel');
