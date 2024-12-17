@@ -1,8 +1,10 @@
 /*
 @title: RockPaperScissors
 @author: Andrea Ivanov
-
+@tags: []
+@addedOn: 2024-12-16
 */
+
 
 const player = 'p';
 const rock = 'r';
