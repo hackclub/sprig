@@ -123,7 +123,7 @@ export function BuildDuplicateFunctionDetector(engineApiKeys: string[]) {
 
 }
 
-export function dissallowBackticksInDoubleQuotes({ types: t}) {
+export function dissallowBackticksInDoubleQuotes() {
 	return {
 		visitor: {
 			StringLiteral(path: any) {
