@@ -1,3 +1,9 @@
+/*
+@title: The Unwinnable Chase
+@author: Wyatt Brashear
+@tags: []
+@addedOn: 2024-12-03
+*/
 const player = "p"
 const enemy = "e"
 
