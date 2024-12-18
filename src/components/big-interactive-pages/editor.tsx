@@ -39,8 +39,8 @@ let screenShakeSignal: Signal<number> | null = null;
 const performSyntaxCheck = () => {
 	const code = codeMirror.value?.state.doc.toString() ?? "";
 	const res = _performSyntaxCheck(code);
-	errorLog.value = [];
 	if (res.error) {
+		errorLog.value = [];
 		errorLog.value = [res.error];
 	}
 }
