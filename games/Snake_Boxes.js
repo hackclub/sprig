@@ -1,5 +1,6 @@
 /*
 @title: Snake_Boxes
+@description: Snake_Boxes is a version of the classic snake game where you use your snake to try to score boxes onto a goal.
 @author: Aryavrat Mishra
 @tags: ['retro']
 @addedOn: 2024-01-30
