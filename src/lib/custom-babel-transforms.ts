@@ -122,3 +122,18 @@ export function BuildDuplicateFunctionDetector(engineApiKeys: string[]) {
 	}
 
 }
+
+export function dissallowBackticksInDoubleQuotes() {
+	return {
+		visitor: {
+			StringLiteral(path: any) {
+				const { value, extra } = path.node;
+				if (value.includes('`')) {
+					const loc = path.node.loc.start;
+					const quoteType = extra.raw[0];
+					throw path.buildCodeFrameError(`Backtick found within ${quoteType === '"' ? 'double' : 'single'}-quoted string at (${loc.line}:${loc.column})`);
+				}
+			}
+		}
+	}
+}
