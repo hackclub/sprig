@@ -37,7 +37,7 @@ function parseErrorStack(err?: Error): [number | null, number | null] {
     return [null, null];
 }
 
-function transformAndThrowErrors(code: string, engineAPIKeys: string[], runCb: (code: any) => any) {
+export function transformAndThrowErrors(code: string, engineAPIKeys: string[], runCb: (code: any) => any) {
 	try {
 		const transformedCode = Babel.transform(code, {
 			plugins: [TransformDetectInfiniteLoop, BuildDuplicateFunctionDetector(engineAPIKeys), dissallowBackticksInDoubleQuotes],
