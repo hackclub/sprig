@@ -1,0 +1,386 @@
+/*
+This is a port of one of my favorite Scratch projects, Cash Clicker!
+You can see the Scratch version here: https://scratch.mit.edu/projects/515730164/
+I thought that this would be a fun game to play on the go, since it's a simple idle game.
+It's also interesting to learn how to port games, especially from block programming to JavaScript.
+
+@title: Cash Clicker!
+@author: 3XAY (Ayan Bindal)
+@tags: []
+@addedOn: 2024-11-01
+*/
+
+// define the sprites in our game
+const coin1 = "0";
+const coin2 = "1";
+const coin3 = "2";
+const coin4 = "3";
+const shopBtn1 = "5";
+const shopBtn2 = "6";
+const shopClsBtn = "7";
+const autoClicker1 = "8";
+const clicksPerClicks1 = "9";
+const autoClicker2 = "a";
+const clicksPerClicks2 = "c";
+const background = "b";
+const shopBg = "s";
+
+// assign bitmap art to each sprite
+setLegend(
+[ coin1, bitmap`
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577
+5577557766666666
+5577557666666666
+5577556666666660
+5577566666666660
+5577666600000000
+5577666600000000
+5577666600666660
+5577666600666660
+5577666600666660
+5577666600666660
+5577666600666660
+5577666600666660`],
+  [ coin2, bitmap`
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577
+6666666655775577
+6666666665775577
+0666666666775577
+0666666666675577
+0000006666665577
+0000006666665577
+0666666666665577
+0666666666665577
+0666666666665577
+0666666666665577
+0666666666665577
+0666666666665577`],
+  [ coin3, bitmap`
+5577666600666660
+5577666600666660
+5577666600666660
+5577666600666660
+5577666600000000
+5577666600000000
+5577666666666660
+5577666666666660
+5577566666666660
+5577556666666666
+5577557666666666
+5577557766666666
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577`],
+  [ coin4, bitmap`
+0666666666665577
+0666666666665577
+0666666666665577
+0666666666665577
+0000006666665577
+0000006666665577
+0666666666665577
+0666666666675577
+0666666666675577
+6666666666775577
+6666666655775577
+6666666755775577
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577`],
+  [ shopBtn1, bitmap`
+6666666666666666
+6666666666666666
+6600000066066606
+6606666666066606
+6606666666066606
+6606666666066606
+6606666666066606
+6606666666066606
+6600000066000006
+6666666066066606
+6666666066066606
+6666666066066606
+6666666066066606
+6600000066066606
+6666666666666666
+6666666666666666`],
+  [ shopBtn2, bitmap`
+6666666666666666
+6666666666666666
+6600006660006666
+6066660660660666
+6066660660666066
+6066660660666606
+6066660660666606
+6066660660666066
+6066660660000666
+6066660660666666
+6066660660666666
+6066660660666666
+6066660660666666
+6066660660666666
+6600006660666666
+6666666666666666`],
+  [ shopClsBtn, bitmap`
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6663333333336666
+6663233333236666
+6663323332336666
+6663332323336666
+6663333233336666
+6663332323336666
+6663323332336666
+6663233333236666
+6663333333336666
+6666666666666666
+6666666666666666
+6666666666666666`],
+  [ autoClicker1, bitmap`
+4444444444444444
+4444444444444444
+4444440000444444
+4444404444044444
+4444404444044444
+4444044444404444
+4440444444440444
+4440444444440444
+4440000000000444
+4440444444440444
+4404444444444044
+4404444444444044
+4404444444444044
+4404444444444044
+4444444444444444
+4444444444444444`],
+  [ autoClicker2, bitmap`
+4444444444444444
+4444444444444444
+4440000000000044
+4440444444444444
+4440444444444444
+4440444444444444
+4440444444444444
+4440444444444444
+4440444444444444
+4440444444444444
+4440444444444444
+4440444444444444
+4440444444444444
+4440000000000044
+4444444444444444
+4444444444444444`],
+  [ clicksPerClicks1, bitmap`
+4444444444444444
+4000000444444400
+4000000444444400
+4004444444444400
+4004444444444400
+4004444444444400
+4004444444444400
+4004444444444400
+4004444444444400
+4004444444444400
+4004444444444400
+4004444444444400
+4000000444444400
+4000000444444400
+4444444444444444
+4444444444444444`],
+  [ clicksPerClicks2, bitmap`
+4444444444444444
+0000044440000004
+0000044440000004
+4440044440044444
+4440044440044444
+4440044440044444
+4440044440044444
+0000044440044444
+0000044440044444
+4444444440044444
+4444444440044444
+4444444440044444
+4444444440000004
+4444444440000004
+4444444444444444
+4444444444444444`],
+  [ background, bitmap`
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577
+5577557755775577`],
+  [ shopBg, bitmap`
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666`]
+);
+
+//Create levels
+let level = 0; //Current level (Menu in this case)
+const levels = [
+    map`
+bbbbbbbbbb
+bbbbbbb56b
+bbbbbbbbbb
+bbbb01bbbb
+bbbb23bbbb
+bbbbbbbbbb
+bbbbbbbbbb
+bbbbbbbbbb`,
+    map`
+bbbbbbbbbb
+bsssssss7b
+bsss8asssb
+bssssssssb
+bssssssssb
+bsss9csssb
+bssssssssb
+bbbbbbbbbb`
+]
+
+//Set current level
+const currentLevel = levels[level];
+setMap(currentLevel);
+
+//Create vars
+let money = 0;
+let autoClicksPerSec = 0;
+let moneyPerClick = 1;
+let autoPrice = 100;
+let cpcPrice = 100;
+let apc = 5;
+let cpc = 2;
+let audio = true;
+
+//create music
+const clickSound = tune`
+128.75536480686696: A5-128.75536480686696,
+128.75536480686696: B5-128.75536480686696,
+3862.660944206009`;
+
+//Display vars
+addText(`Money:  ${money}`, {x: 1, y:1, color: color`2`})
+
+//Click the coin
+onInput("w", () =>{
+  money = money + moneyPerClick; //Add money
+  if(audio){
+    playTune(clickSound); //Plays a chime when you click the coin
+  }
+})
+
+//Toggle audio
+onInput("a", () =>{
+  if(audio){
+    audio = false;
+  }
+  else{
+    audio = true;
+  }
+})
+
+//Toggle the shop
+onInput("i", () =>{
+  if(level === 0 ){
+    setMap(levels[1]);
+    level = 1;
+  }
+  else{
+    setMap(levels[0]);
+    level = 0;
+  }
+})
+
+//Buy autoclicker
+onInput("j", ()=>{
+  if(level === 1){
+    if(money >= autoPrice){
+      money = money - autoPrice;
+      autoPrice = Number((autoPrice * 1.5).toFixed(0));
+      autoClicksPerSec = autoClicksPerSec + apc;
+      apc = Number((apc * 1.25).toFixed(0));
+    }
+  }
+})
+
+//Buy clicks per click
+onInput("l", ()=>{
+  if(level === 1){
+    if(money >= cpcPrice){
+      money = money - cpcPrice;
+      cpcPrice = Number((cpcPrice * 1.5).toFixed(0));
+      moneyPerClick = moneyPerClick + cpc;
+      cpc = Number((cpc * 1.25).toFixed(0));
+    }
+  }
+})
+
+//Runs after every input
+afterInput(() =>{
+  //Clear all text on screen
+  clearText();
+
+  //Check if you are in shop or not
+  if(level === 0){
+    addText(`Money:  ${money}`, {x: 1, y:1, color: color`2`}) //Adds the money back (refreshes the variable)
+  }
+  else{
+    addText(`${autoClicksPerSec}`, {x: 3, y:4, color: color`0`})
+    addText(`${moneyPerClick}`, {x: 3, y:11, color: color`0`})
+    addText(`Cost: ${autoPrice}`, {x: 3, y:6, color: color`0`})
+    addText(`Cost: ${cpcPrice}`, {x: 3, y:12, color: color`0`})
+  }
+})
+
+//Autoclicker
+function autoClick(){
+  money = money + autoClicksPerSec;
+  //Check if you are in shop or not
+  if(level === 0){
+    addText(`Money:  ${money}`, {x: 1, y:1, color: color`2`}) //Adds the money back (refreshes the variable)
+  }
+  else{
+    addText(`${autoClicksPerSec}`, {x: 3, y:4, color: color`0`})
+    addText(`${moneyPerClick}`, {x: 3, y:11, color: color`0`})
+    addText(`Cost: ${autoPrice}`, {x: 3, y:6, color: color`0`})
+    addText(`Cost: ${cpcPrice}`, {x: 3, y:12, color: color`0`})
+  }
+}
+
+//Call autoclicker every second
+setInterval(autoClick, 1000);
