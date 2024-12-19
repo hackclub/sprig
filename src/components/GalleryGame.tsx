@@ -17,6 +17,7 @@ export default function GalleryGame({ setFilter, filter, show, filename, title, 
 	const gameRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
+		setThumbnailUrl(null);
 		const observer = new IntersectionObserver(entries => {
 			entries.forEach(async entry => {
 				if (entry.isIntersecting) {
