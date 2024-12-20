@@ -1,3 +1,9 @@
+/*
+@title: Game
+@author: Codingmaster123fe
+@tags: []
+@addedOn: 2024-12-08
+*/
 // Define game sprites
 setLegend(
   [ p ], // player sprite
