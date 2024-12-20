@@ -1,9 +1,8 @@
-
 /* 
-@title: maze_game_starter
-@author: Cheru Berhanu
+@title: the robbery
+@author: Skibdirizzler
 @tags: []
-@addedOn: 2023-08-08
+@addedOn: 2023-12-20
 */
 
     const player = "p";
