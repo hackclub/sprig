@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: PuzzleMania
 @author: Johamez_Wilzoney
-@tags: [Puzzle, Mania, PuzzleMania]
-@addedOn: 2024-00-00
+@tags: ["puzzle"]
+@addedOn: 2024-12-17
 */
 
 const player = "p"
