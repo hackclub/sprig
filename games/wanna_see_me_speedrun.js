@@ -1,7 +1,7 @@
 /*
 @title: Wanna See Me Speedrun
 @author: alex tran
-@tags: ['action', 'strategy', 'realtime']
+@tags: ['action', 'strategy', 'real-time']
 @addedOn: 2024-12-12
 
 modified from tutorial
