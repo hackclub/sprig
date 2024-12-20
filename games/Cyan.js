@@ -1,8 +1,8 @@
 /*
 @title: Cyan
 @author: Boyce Dyson
-@tags: [puzzle, singleplayer]
-@addedOn: 2024-00-00
+@tags: ['puzzle']
+@addedOn: 2024-12-16
 */
 
 let blocky = 0
