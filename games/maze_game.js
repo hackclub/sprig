@@ -1,10 +1,7 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: 2_character_maze_game
 @author: ivg1
-@tags: [maze, puzzle]
+@tags: ['maze', 'puzzle']
 @addedOn: 2024-12-13
 controls:
   w = up
