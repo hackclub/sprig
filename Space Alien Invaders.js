@@ -1,3 +1,9 @@
+/*
+@title: Space Alien Invaders
+@author: Mik1
+@tags: []
+@addedOn: 2024-12-18
+*/
 // Space Alien Invaders Game
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
