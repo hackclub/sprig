@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Puzzle
-@author: 
+@author: Mattercon124
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-12-16
 */
 
 const player = "p"
