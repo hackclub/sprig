@@ -1,7 +1,7 @@
 /*
 @title: BetterDino
 @author: @rocristoi
-@tags: ['retro', 'improved']
+@tags: ['retro']
 @addedOn: 2024-12-09
 */
 
