@@ -1,3 +1,9 @@
+/*
+@title: The Floor is Lava
+@author: Knaifu0030
+@tags: []
+@addedOn: 2024-12-18
+*/
 // Define sprites
 const player = "p";
 const lava = "l";
