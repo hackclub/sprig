@@ -9,7 +9,7 @@
 		"start": "astro dev",
 		"build": "astro build",
 		"test": "deno run --allow-read ./tests/sprigfuzzy.js",
-		"test:unit": "vitest"
+		"test:unit": "cross-env PUBLIC_MAX_ITERATIONS=2000 PUBLIC_MAX_LOOP_TIME_MS=1500 vitest"
 	},
 	"dependencies": {
 		"@astrojs/preact": "^2.0.1",
@@ -29,6 +29,7 @@
 		"@wcj/markdown-to-html": "^3.0.2",
 		"astro": "2.7.0",
 		"bcryptjs": "^2.4.3",
+		"cross-env": "^7.0.3",
 		"dotenv": "^16.3.1",
 		"firebase-admin": "^11.10.1",
 		"js-beautify": "^1.15.1",
