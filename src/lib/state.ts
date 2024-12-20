@@ -139,6 +139,7 @@ type Theme = {
 	navbarIcon: string,
 	accent: string,
 	accentDark: string,
+	accentLight: string,
 	fgMutedOnAccent: string,
 	background: string,
 	color: string
@@ -149,6 +150,7 @@ const baseTheme: Theme = {
 	navbarIcon: "/SPRIGDINO.png",
 	accent: "#078969",
 	accentDark: "#136853",
+	accentLight: '#80c3a0',
 	fgMutedOnAccent: "#8fcabb",
 	background: "#2f2f2f",
 	color: "black",
@@ -170,6 +172,7 @@ export const themes: Partial<Record<ThemeType, Theme>> = {
 		navbarIcon: "/PENNY_HEAD.png",
 		accent: "#FFAE06",
 	 	accentDark: "#ff9d00",
+		accentLight: "#06b0ffb0",
 		fgMutedOnAccent: "#6d83ff",
 		background: "#3E29ED",
 	}
@@ -188,6 +191,7 @@ export const switchTheme = (themeType: ThemeType) => {
 	documentStyle.background = themeValue?.background?? '';
 	document.documentElement.style.setProperty(`--accent`, themeValue?.accent?? '');
 	document.documentElement.style.setProperty(`--accent-dark`, themeValue?.accentDark?? '');
+	document.documentElement.style.setProperty(`--accent-light`, themeValue?.accentLight?? '');
 	document.documentElement.style.setProperty(`--fg-muted-on-accent`, themeValue?.fgMutedOnAccent?? '');
 	documentStyle.color = themeValue?.color ?? '';
 
