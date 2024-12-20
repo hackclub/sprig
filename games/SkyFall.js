@@ -93,24 +93,20 @@ function respawnMeteor() {
 
 function moveMeteors() {
   const meteorSprites = getAll(meteor);
+  
+  if (meteorSprites.length < 4) {
+    respawnMeteor();
+  }
 
   meteorSprites.forEach(meteorSprite => {
     meteorSprite.y += 1;
 
     if (meteorSprite.y >= height() - 1) {
-      if (Math.random() > 0.75) {
-        respawnMeteor();
-      }
-      detectCollisions();
       meteorSprite.remove();
     }
-    
+
     detectCollisions();
   });
-  
-  if (meteorSprites.length < 4) {
-    respawnMeteor();
-  }
 }
 
 onInput("j", () => {
