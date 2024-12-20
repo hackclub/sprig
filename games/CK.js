@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: jumper man
-@author: 
+@author: jasonG4
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-12-17
 */
 
 const player = "p"
