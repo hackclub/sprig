@@ -1,7 +1,7 @@
 /*
 @title: ChocolateNimGame
 @author: Sarah Akhtar
-@tags: ['strategy', 'puzzle', 'mathematics']
+@tags: ['strategy', 'puzzle']
 @addedOn: 2024-12-10
 */
 
