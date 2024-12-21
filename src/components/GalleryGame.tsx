@@ -30,7 +30,7 @@ export default function GalleryGame({ setFilter, filter, show, filename, title, 
 		return () => {
 			observer.unobserve(gameRef.current!);
 		}
-	}, [filename]);
+	}, []);
 
 	if (!show) return null;
 	return (

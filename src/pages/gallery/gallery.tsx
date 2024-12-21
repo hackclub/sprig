@@ -54,6 +54,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 		}
 
 		countTags(_games)
+		sortGames(gamesState, SortOrder.TUTORIALS_AND_CHRONOLOGICAL);
 	}, [filter]);
 
 	function sortGames(games: GameMetadata[], order: SortOrder): GameMetadata[] {
@@ -92,10 +93,6 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 
 		setTagCount(tags)
 	}
-
-	useEffect(() => {
-		sortGames(gamesState, SortOrder.TUTORIALS_AND_CHRONOLOGICAL);
-	}, [gamesState]);
 
 	return (
 		<div>
@@ -189,6 +186,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 			<div id="games">
 				{gamesState.map((game) => (
 					<GalleryGame 
+						key={game.filename}
 						show={game.show}
 						filename={game.filename}
 						title={game.title}
