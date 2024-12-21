@@ -121,7 +121,9 @@ function opprm() {
 function checkHit() {
   let opps = getAll(opponent);
   let p = getFirst(player);
-
+	
+  if (!p) return;
+	
   for (let i = 0; i < opps.length; i++) {
     if (opps[i].x == p.x && opps[i].y + 1 == p.y) {
       setMap(levels[1]);
