@@ -121,9 +121,9 @@ function opprm() {
 function checkHit() {
   let opps = getAll(opponent);
   let p = getFirst(player);
-	
+
   if (!p) return;
-	
+  
   for (let i = 0; i < opps.length; i++) {
     if (opps[i].x == p.x && opps[i].y + 1 == p.y) {
       setMap(levels[1]);
@@ -132,6 +132,11 @@ function checkHit() {
       y: 6,
       color: color`3`
     });
+      
+    for (let interval of gameIntervals) {
+       clearInterval(interval);
+      }
+
     } else {
       addText("" + score, {
         x: 2,
@@ -143,21 +148,28 @@ function checkHit() {
   
 }
 
-onInput("d", () => {
-  getFirst(player).x += 1
-})
-onInput("a", () => {
-  getFirst(player).x -= 1
-})
+onInput("d", () => { 
+  let p = getFirst(player); 
+  if (p) p.x += 1; 
+});
+
+onInput("a", () => { 
+  let p = getFirst(player); 
+  if (p) p.x -= 1; }
+);
 
 afterInput(() =>{
 }) 
 
 
-setInterval(spwn, 500)
-setInterval(moveopp, 500)
-setInterval(checkHit, 100)
-setInterval(opprm, 40)
+let gameIntervals = []; 
+
+
+gameIntervals.push(setInterval(spwn, 500));
+gameIntervals.push(setInterval(moveopp, 500));
+gameIntervals.push(setInterval(checkHit, 100));
+gameIntervals.push(setInterval(opprm, 40));
+
 
 setBackground(back);
 
