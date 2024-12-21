@@ -1,5 +1,6 @@
 /*
 @title: Spider
+@description: In "Spider" by AlexGaloy, you play as a spider aiming to eat bugs by placing webs to catch flies and mosquitoes. Navigate through challenging levels as you strategically place webs in the paths of bugs and consume them once they're caught to earn points. Progress by meeting point goals and utilizing webs creatively to surpass obstacles.
 @author: AlexGaloy
 @tags: []
 @addedOn: 2024-08-15
