@@ -1,5 +1,6 @@
 /*
 @title: The Two Bananas Game
+@description: "The Two Bananas Game" is a playful multiplayer experience centered around two bananas seeking revenge through competitive minigames. Players engage in various challenges like racing, avoiding lava, playing soccer, scoring in basketball, and sumo wrestling.
 @author: sridhar
 @tags: []
 @addedOn: 2024-07-29
