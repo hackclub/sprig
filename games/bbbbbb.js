@@ -1,5 +1,6 @@
 /*
 @title: bbbbbb
+@description: bbbbbb is a simple platformer puzzle game with a unique twist, inspired by Terry Cavanagh's vvvvvv. Players must navigate through levels by moving left or right and altering gravity to overcome obstacles and reach the goal. The game features elements like spikes and keys, offering a challenging experience as players advance through the levels.
 @author: hoggie
 @tags: ['puzzle']
 @addedOn: 2022-12-06

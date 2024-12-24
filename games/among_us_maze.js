@@ -1,5 +1,6 @@
 /*
 @title: among_us_maze
+@description: "Among Us Maze" was made for Hack Club's Hackathon Assemble. You navigate a maze with an Among Us character in the middle trying not to hit the walls because they deduct points from your total.
 @author: Riya and Christy
 @tags: []
 @addedOn: 2022-08-16

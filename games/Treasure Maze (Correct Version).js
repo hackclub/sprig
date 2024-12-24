@@ -1,5 +1,6 @@
 /*
 @title: Treasure Maze
+@description: Treasure Maze is a maze game where you have to avoid guards to reach the treasure at the end of the maze.
 @author: AiyuuHacks
 @tags: []
 @addedOn: 2024-09-03

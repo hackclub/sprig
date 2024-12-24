@@ -1,5 +1,6 @@
 /*
 @title: Chess
+@description: Chess, created by Thomas Stubblefield, is a retro-themed multiplayer game that emulates a classic chess match.
 @author: Thomas Stubblefield
 @tags: ['multiplayer','retro']
 @addedOn: 2022-10-31

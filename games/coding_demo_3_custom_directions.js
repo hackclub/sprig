@@ -1,5 +1,6 @@
 /*
 @title: Coding Demo 3: Custom Directional Solids
+@description: This game is a coding demo that showcases custom directional movement mechanics, where certain types of blocks restrict movement in specific directions. The demo includes a map with one-way tiles that only allow movement in designated directions.
 @author: Leonard (Omay)
 @tags: []
 @addedOn: 2022-10-20
