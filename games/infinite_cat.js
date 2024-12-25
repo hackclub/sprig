@@ -1,5 +1,6 @@
 /* 
 @title: infinite_cat
+@description: Infinite Cat is a strategic puzzle game where you help an expanding cat take over a garden. The goal is to guide the cat to fill all the green blocks while avoiding running into itself.
 @author: Deven Jadhav
 @tags: ['strategy']
 @addedOn: 2022-11-07

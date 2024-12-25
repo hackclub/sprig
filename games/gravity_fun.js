@@ -1,5 +1,6 @@
 /*
 @title: gravity_fun
+@description: Similar to flappy bird, gravity_fun is a game where you try to survive as long as you can by jumping through the gaps in pipes that come scrolling towards you.
 @author: phantomeniasll
 @tags: ['retro']
 @addedOn: 2022-12-22

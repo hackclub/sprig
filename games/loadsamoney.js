@@ -1,6 +1,7 @@
 
 /*
 @title: loadsamoney
+@description: "loadsamoney" is a simulation game where players aim to generate wealth by printing money and purchasing upgrades. The game features an endless cycle of clicking and buying to increase monetary gain, offering upgrades such as money printers and multipliers to streamline the process.
 @author: geschmit
 @tags: ['endless','simulation']
 @addedOn: 2022-11-28

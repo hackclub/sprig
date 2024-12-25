@@ -1,5 +1,6 @@
 /*
 @title: Froggo's Dunegon Adventures
+@description: Froggo's Dungeon Adventures is an adventure-themed game where players guide Froggo through various rooms filled with obstacles and enemies. The objective is simply to reach the end, which is quite a challenge in itself. Players must navigate mazes, avoid enemies, and utilize Froggo's abilities to overcome barriers on their quest.
 @author: amuseee (slack
 @tags: ['adventure']
 @addedOn: 2023-11-06
