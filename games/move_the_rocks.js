@@ -1,6 +1,7 @@
 
 /* 
 @title: move_the_rocks
+@description: "Move the Rocks" is a puzzle game where the player navigates and pushes rocks to reach the treasure. The objective is to strategically move obstacles and bypass traps to successfully collect the gold. Players advance through increasingly challenging levels as they solve each puzzle.
 @author: playfun24
 @tags: ['puzzle']
 @addedOn: 2023-12-21
