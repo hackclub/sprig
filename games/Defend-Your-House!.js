@@ -2,6 +2,7 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 @title: Defend Your House!
+@description: In this game you have to protect your house from the meteorogical event placing the blocks around the house. If the house get hit then you lose. You must protect your house as long as you can. In this game every block counts! So... don't waste it! This game is a mix of strategy and luck.
 @author: Gabbs
 @tags: ['strategy', 'survival', 'music']
 @addedOn: 2024-11-27

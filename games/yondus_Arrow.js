@@ -1,6 +1,7 @@
 
 /* 
 @title: yondus_Arrow
+@description: Yondus_Arrow is a puzzle game where the player navigates an arrow through various mazes.
 @author: Cayden Robbins
 @tags: ['puzzle']
 @addedOn: 2023-06-15

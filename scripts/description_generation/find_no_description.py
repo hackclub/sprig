@@ -16,7 +16,7 @@ for file in files:
     with open("games/" + file, "r") as file:
         content = file.read()
 
-    if "@description" not in content:
+    if "@description" not in content and file.name[-3:] == ".js":
         no_description.append(file.name)
         print(file.name)
 

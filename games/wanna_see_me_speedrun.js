@@ -1,5 +1,6 @@
 /*
 @title: Wanna See Me Speedrun
+@description: Think and move fast as you speed past mazes on a 3 second timer! Dodge enemies and reach the file to go onto the next level, picking up bonuses and time extensions on your way.
 @author: alex tran
 @tags: ['action', 'strategy', 'real-time']
 @addedOn: 2024-12-12

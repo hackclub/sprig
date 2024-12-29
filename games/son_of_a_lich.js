@@ -1,5 +1,6 @@
 /*
 @title: son_of_a_lich
+@description: This game is a turn-based RPG where you play as a knight whose father has gone missing near a dangerous castle currently occupied by a lich. Fight against armored enemies and eventually slay the lich and uncover the truth of what happened to your father!
 @author: William Lay
 @tags: []
 @addedOn: 2023-01-30
