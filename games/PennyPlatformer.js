@@ -1,6 +1,6 @@
 /*
 @title: Penny Platformer
-@description: **Penny Platformer** is a three-level platform game featuring assets from the Penny's Big Breakaway asset pack. Players control Penny, the main character, as they collect coins while navigating levels filled with obstacles, avoiding penguins along the way. The game is part of a competition where community-voted entries can win a copy of Penny's Big Breakaway for Windows or Linux.
+@description: Penny Platformer is a three-level platform game featuring assets from the Penny's Big Breakaway asset pack. Players control Penny, the main character, as they collect coins while navigating levels filled with obstacles, avoiding penguins along the way. The game is part of a competition where community-voted entries can win a copy of Penny's Big Breakaway for Windows or Linux.
 @author: Bright Li
 @tags: []
 @addedOn: 2024-04-23

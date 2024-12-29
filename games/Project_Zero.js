@@ -1,6 +1,6 @@
 /*
 @title: Project Zero
-@description: **Project Zero** is a puzzle game where you play as a small robot trying to escape from a mysterious laboratory. The story unfolds through interaction with various objects and logs found throughout the facility, revealing the robot's past and the secrets of the lab. As you explore, you must solve challenging puzzles and work with a fellow robot named Zero to find your way out.
+@description: Project Zero is a puzzle game where you play as a small robot trying to escape from a mysterious laboratory. The story unfolds through interaction with various objects and logs found throughout the facility, revealing the robot's past and the secrets of the lab. As you explore, you must solve challenging puzzles and work with a fellow robot named Zero to find your way out.
 @author: Creeperlulu
 @tags: ['puzzle']
 @addedOn: 2024-09-03

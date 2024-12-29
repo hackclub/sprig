@@ -1,6 +1,6 @@
 /*
 @title: The UFO farm
-@description: **The UFO Farm** is an endless farming game where players aim to harvest as many crops as possible before being caught by UFOs. As the game progresses, more UFOs appear every 10 harvests, increasing the challenge. The goal is to evade the UFOs while maximizing your crop yield.
+@description: The UFO Farm is an endless farming game where players aim to harvest as many crops as possible before being caught by UFOs. As the game progresses, more UFOs appear every 10 harvests, increasing the challenge. The goal is to evade the UFOs while maximizing your crop yield.
 @author: Harrison Ng
 @tags: ['endless']
 @addedOn: 2023-01-20
