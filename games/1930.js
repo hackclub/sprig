@@ -2,7 +2,6 @@
 /*
 @title: 1930
 @description: "1930" is a strategy game where players must simultaneously guide Blobs and defeat Java aliens, both of which move in unison. Players need to eliminate all Javas to unlock the portals, allowing the Blobs to advance to the next level. Beware of spikes, as they can destroy both Blobs and Javas upon contact.
-@description: "1930" is a strategy game where players must simultaneously guide Blobs and defeat Java aliens, both of which move in unison. Players need to eliminate all Javas to unlock the portals, allowing the Blobs to advance to the next level. Beware of spikes, as they can destroy both Blobs and Javas upon contact.
 @author: tejasag (@tej on slack)
 @tags: ['strategy']
 @addedOn: 2023-01-16
