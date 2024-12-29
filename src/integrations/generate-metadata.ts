@@ -16,6 +16,7 @@ import { generateImageJson } from "./thumbnail";
  */
 const regexExpr = {
 	title: /@title: (.+)/,
+	description: /@description: (.+)/,
 	author: /@author: (.+)/,
 	tags: /@tags: (.+)/,
 	addedOn: /@addedOn: (.+)/,
@@ -71,16 +72,18 @@ const setup = () => {
 
 			// Extract the file data
 			const title = regexExpr.title.exec(fileData);
+			const description = regexExpr.description.exec(fileData);
 			const author = regexExpr.author.exec(fileData);
 			const tags = regexExpr.tags.exec(fileData);
 			const addedOn = regexExpr.addedOn.exec(fileData);
 
 			// Check if all of the fields are defined
-			if (title && author && tags && addedOn && tags[1]) {
+			if (title && description && author && tags && addedOn && tags[1]) {
 				// Create a meta entry
 				const metaEntry = {
 					filename: gameFile.replace(".js", ""),
 					title: title[1],
+					description: description[1],
 					author: author[1],
 					tags: JSON.parse(tags[1].replaceAll("'", '"')), // Replace all ' with " in order for compatibility issues
 					addedOn: addedOn[1],
