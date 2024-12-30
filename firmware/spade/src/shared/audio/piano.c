@@ -28,7 +28,7 @@ typedef struct {
 static Note i2snote_sound(int freq, Sound sound) {
   return (Note) {
     .sound = sound,
-    .step = (freq * TABLE_LEN) / SAMPLES_PER_SECOND * 0x10000,
+    .step = (int) (((float) freq * TABLE_LEN) / SAMPLES_PER_SECOND * 0x10000),
   };
 }
 
@@ -48,9 +48,9 @@ typedef struct {
 #define SONG_COUNT 4
 const float sound_weights[Sound_COUNT] = {
   [Sound_Sine]     = 1.00f,
-  [Sound_Triangle] = 0.59f,
-  [Sound_Square]   = 0.08f,
-  [Sound_Sawtooth] = 0.08f
+  [Sound_Triangle] = 0.7f,
+  [Sound_Square]   = 0.2f,
+  [Sound_Sawtooth] = 0.2f
 };
 static struct {
   int16_t sample_table[Sound_COUNT][TABLE_LEN];
@@ -111,12 +111,12 @@ void piano_init(PianoOpts opts) {
 
   // fill sample table
   for (int i = 0; i < TABLE_LEN; i++) {
-    float t = (float)i / (float)TABLE_LEN;
+    float t = (float)i / (float)(TABLE_LEN + 1);
     float soundf[Sound_COUNT] = {
-      [Sound_Sine]     = cosf(i * 2 * (float) (M_PI / TABLE_LEN)),
+      [Sound_Sine]     = sinf(i * 2 * (float) (M_PI / TABLE_LEN)),
       [Sound_Triangle] = (1.0f - 2.0f * 2.0f * fabsf(0.5f - t)),
-      [Sound_Sawtooth] = (1.0f - 2.0f * 2.0f * fmodf(t, 0.5f)),
-      [Sound_Square]   = (fmodf(t, 0.5f) > 0.25f) ? 1.0f : -1.0f
+      [Sound_Sawtooth] = (1.0f - 2.0f * fmodf(t, 1.0f)),
+      [Sound_Square]   = (fmodf(t, 1.0f) > 0.5f) ? 1.0f : -1.0f
     };
 
     for (int s = 0; s < Sound_COUNT; s++)
