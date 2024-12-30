@@ -1,3 +1,7 @@
+---
+unlisted: true
+---
+
 # Sprig Runbook 
 
 ## References
@@ -9,10 +13,10 @@
 ## Rollback to the latest stable deployment
 
 Go to [vercel hackclub/sprig](https://vercel.com/hackclub/sprig) project and click the instant rollback button.
-![rollback_01](./assets/rollback01.png)
+![rollback_01](../../static/img/rollback01.png)
 
 Then select the previous deployment. 
-![rollback_02](./assets/rollback02.png)
+![rollback_02](../../static/img/rollback02.png)
 
 ## Database operations fail or take too long
 - To see what database operations are failing, open the sprig dashboard in grafana [here](https://telemetry.hackclub.com/d/b7ac7960-a18f-4c83-a4e5-767d50ad62c7/sprig?orgId=1) and look under the 'Endpoint latencies over time' visualization or the 'Endpoint failures' visualizations. 

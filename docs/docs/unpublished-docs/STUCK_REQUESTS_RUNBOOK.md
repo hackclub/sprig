@@ -1,4 +1,8 @@
+---
+unlisted: true
+---
 
+# Stuck Requests Runbook
 ## Getting new Sprig Stuck Action Items
 Run `/slacker list sprig stuck` to get all action items regarding sprig-stuck-requests.
 
@@ -51,7 +55,7 @@ Kindly,
 
 After sending the email, please create a new record in [this Airtable](https://airtable.com/appN9cSnDgORAM2bp/tblU5A9l1H53a18yy/viwgD4xFcb4RVV0u1?blocks=hide) with the your name, the email you sent and a reference to the request you sent.
 
-![stuck request response](./assets/stuck_response_ex1.png)
+![stuck request response](../../static/img/stuck_response_ex1.png)
 
 ### Data Schema for Stuck Requests
 

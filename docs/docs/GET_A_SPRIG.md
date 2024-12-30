@@ -1,3 +1,7 @@
+---
+sidebar_position: 4
+---
+
 # Get a Sprig!
 
 **Anyone can submit to the gallery, but read the details below if you want your very own Sprig.** If you have any questions, join #sprig on our [Slack](https://hackclub.com/slack)!
