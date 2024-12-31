@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Flappy-bird-with-gravity-and-sound
 @author: Yug Khandelwal
-@addedOn: 2024-12-24
+@addedOn: 2024-12-30
 */
 
 const player = "p";
