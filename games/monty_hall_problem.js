@@ -1,5 +1,6 @@
 /*
 @title: Monty Hall Game
+@author: NOT-Bugha
 @tags: ['puzzle']
 @addedOn: 2024-01-01
 */
