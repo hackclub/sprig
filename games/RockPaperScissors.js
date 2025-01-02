@@ -1,9 +1,10 @@
 /*
-@title: [BEAT ME!] Rock & Paper & Scissors
+@title: RockPaperScissors
 @author: Andrea Ivanov
 @tags: []
-@addedOn: 2024-12-06
+@addedOn: 2024-12-16
 */
+
 
 const player = 'p';
 const rock = 'r';
@@ -86,7 +87,7 @@ function resolveGame() {
 
   if (playerChoice === botChoice) {
     result = ("Tie! -_-");
-    updateProvocativeText('tie');
+    updatePrText('tie');
 
     resultColor = color`6`; 
   } else if (
@@ -95,7 +96,7 @@ function resolveGame() {
     (playerChoice === 's' && botChoice === 'a')
   ) {
     result = "You won >:( !";
-    updateProvocativeText('win');
+    updatePrText('win');
     resultColor = color`7`; 
     score++;
     streak++;
@@ -105,8 +106,8 @@ function resolveGame() {
     addSprite(1, 0, player);
   }
   } else {
-    result = "You lost AHAHA!";
-    updateProvocativeText('lose');
+    result = "You lost!";
+    updatePrText('lose');
     resultColor = color`3`;
     playerSprite.x = 1;
     streak = 0;
@@ -117,7 +118,6 @@ function resolveGame() {
   if (playerSprite.x === 14) {
     level++;
     playerSprite.x = 1;
-    addText("Wait? you are creazy!", { x: 0, y: 6, color: color`6` });
     score = 0;
     streak = 0;
     updateText(`Level ${level}!`, color`6`);
@@ -154,11 +154,11 @@ function resetGame() {
   }, 2500);
 }
 
-function updateProvocativeText(outcome) {
+function updatePrText(outcome) {
   const texts = {
     win: ["Not bad...!", "Luck!", "Impossible!"],
-    lose: ["Pathetic!", "You call that skill?", "Try harder!"],
-    tie: ["That's all?", "A tie? Seriously?", "NO SKILL"]
+    lose: ["Try Again", "Try harder!"],
+    tie: ["That's all?", "Seriously?", "Wow"]
   };
 
   const randomText = texts[outcome][Math.floor(Math.random() * texts[outcome].length)];
@@ -182,8 +182,7 @@ function displayInstructions(resetColor = false) {
   addText('Press W for Rock', { x: 0, y: 0, color: color`3` });
   addText('Press S for Paper', { x: 0, y: 1, color: color`4` });
   addText('Press D for Scissors', { x: 0, y: 2, color: color`5` });
-  addText("Credits : A.Ivanov", { x: 1, y: 15, color: color`L` });
-  addText("Ready to lose?", { x: 0, y: 6, color: color`3` });
+  addText("Ready?", { x: 0, y: 6, color: color`3` });
   addText("!", { x: 19, y: 6, color: color`6` });
   const scoreColor = color`2`;
   addText(`Score: ${score}`, { x: 0, y: 10, color: scoreColor });
