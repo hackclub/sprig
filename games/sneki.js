@@ -1,8 +1,8 @@
 /*
 @title: snek
 @author: spacefall
-@tags: [retro, endless]
-@addedOn: 2024-00-00
+@tags: []
+@addedOn: 2025-01-02
 */
 
 const left = "l";
