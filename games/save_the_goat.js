@@ -1,3 +1,9 @@
+/*
+@title: Save The Goat
+@author: tejasag (@tej on slack)
+@tags: []
+@addedOn: 2024-01-02
+*/
 const player = "p";
 const hammerhead = "o";
 const mapa = "m";
