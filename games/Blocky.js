@@ -1,3 +1,9 @@
+/**
+@title: Blocky
+@author: skwok707
+@tags: []
+@addedOn: 2025-01-02
+*/
 const player = "p";
 const box = "b";
 const goal = "g";
