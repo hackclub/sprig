@@ -4,22 +4,65 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Toilet Cleaning Simulator
 @author: klaus-E2S
-@tags: ['simulation', 'humor']
-@addedOn: 2024-11-12
+@tags: []
+@addedOn: 2025-01-03
 */
 
 const player = "p"
 const toilet = "t"
 const tp = "q"
-const victory1 = [tune`
-500: C4-500,
-15500`]
+const victorytune = tune`
+225.5639097744361: B4/225.5639097744361 + G5~225.5639097744361 + C4^225.5639097744361 + G4-225.5639097744361,
+225.5639097744361: D5/225.5639097744361 + D4^225.5639097744361,
+225.5639097744361: C4^225.5639097744361,
+225.5639097744361: D4^225.5639097744361,
+225.5639097744361: G5/225.5639097744361 + C4^225.5639097744361 + G4-225.5639097744361,
+225.5639097744361: F5/225.5639097744361 + D4^225.5639097744361,
+225.5639097744361: C4^225.5639097744361,
+225.5639097744361: D5/225.5639097744361 + D4^225.5639097744361 + G4-225.5639097744361,
+225.5639097744361: E5/225.5639097744361 + C4^225.5639097744361,
+225.5639097744361: D4^225.5639097744361,
+225.5639097744361: B4/225.5639097744361 + C4^225.5639097744361 + G4-225.5639097744361,
+225.5639097744361: A4/225.5639097744361 + D4^225.5639097744361,
+225.5639097744361: G4/225.5639097744361 + C4^225.5639097744361,
+225.5639097744361: D4^225.5639097744361,
+225.5639097744361: E4/225.5639097744361 + C4^225.5639097744361 + G4-225.5639097744361,
+225.5639097744361: G4/225.5639097744361 + D4^225.5639097744361,
+225.5639097744361: B4/225.5639097744361 + C4^225.5639097744361,
+225.5639097744361: D4^225.5639097744361,
+225.5639097744361: C4^225.5639097744361,
+225.5639097744361: E5/225.5639097744361 + A5~225.5639097744361 + D4^225.5639097744361 + G4-225.5639097744361,
+225.5639097744361: C4^225.5639097744361,
+225.5639097744361: B4/225.5639097744361 + D4^225.5639097744361 + G4-225.5639097744361,
+225.5639097744361: A4/225.5639097744361 + C4^225.5639097744361,
+225.5639097744361: G4/225.5639097744361 + D4^225.5639097744361,
+225.5639097744361: F4/225.5639097744361 + C4^225.5639097744361,
+225.5639097744361: E4/225.5639097744361 + D4^225.5639097744361,
+225.5639097744361: G4/225.5639097744361 + C4^225.5639097744361,
+225.5639097744361: B4/225.5639097744361 + D4^225.5639097744361,
+225.5639097744361: C4^225.5639097744361,
+225.5639097744361: D5/225.5639097744361 + D4^225.5639097744361 + G4-225.5639097744361,
+225.5639097744361: C5/225.5639097744361 + C4^225.5639097744361,
+225.5639097744361: B4/225.5639097744361 + D4^225.5639097744361`
 const s = "s"
 const t = "y"
 const o = "o"
 const r = "r"
 const e = "e"
 const plunger = "l"
+const brick = "b"
+const rock = "d"
+const tree = "g"
+const faketreelmao = "f"
+const downarrow = "a"
+const satan = "c"
+const fire = "h"
+const ammorock = "j"
+const fakefire = "x"
+const rightarrow = "w"
+const step = tune`
+500: C4~500,
+15500`
 
 setLegend(
   [ player, bitmap`
@@ -174,39 +217,284 @@ setLegend(
 ......3330333...
 ......333333....
 ................
+................`],
+  [ brick, bitmap`
+CCCCC0CCCCC0CCCC
+CCCCC0CCCCC0CCCC
+0000000000000000
+CC0CCCCC0CCCCC0C
+CC0CCCCC0CCCCC0C
+0000000000000000
+CCCCC0CCCCC0CCCC
+CCCCC0CCCCC0CCCC
+0000000000000000
+CC0CCCCC0CCCCC0C
+CC0CCCCC0CCCCC0C
+0000000000000000
+CCCCC0CCCCC0CCCC
+CCCCC0CCCCC0CCCC
+0000000000000000
+CC0CCCCC0CCCCC0C`],
+  [ rock, bitmap`
+L111111111111111
+1111111111111111
+1111111111111111
+1111111LLLLL1111
+1111111LLLLLLLLL
+LL111LLLL11LLLLL
+LLLLLLL111111111
+111LLL1111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+LL11111111LLL111
+LLLLLLLLLLLLLLLL
+LLLLLLLL11111111
+LL11111111111111`],
+  [ tree, bitmap`
+................
+....DD..........
+...D4DD.DD......
+..D44DDDDDD.....
+.D4DDDD44DDD4...
+.DDDDDD4DDDD4...
+..DDDDDDDDDDD...
+..DD4DDD44DDDD..
+..D44DDD4DDDD4..
+.D44DDDDDDCDD4..
+.DDDDDDDCCC.DD..
+...DDDCCCCC.....
+.....CCCCCC.....
+.....CCCCCC.....
+..CCCCCCCCCCCC..
+.CCCCCCCCCCCCCC.`],
+  [ faketreelmao, bitmap`
+................
+....DD..........
+...D4DD.DD......
+..D44DDDDDD.....
+.D4DDDD44DDD4...
+.DDDDDD4DDDD4...
+..DDDDDDDDDDD...
+..DD4DDD44DDDD..
+..D44DDD4DDDD4..
+.D44DDDDDDCDD4..
+.DDDDDDDCCC.DD..
+...DDDCC..C.....
+.....C....C.....
+.....C....C.....
+..CCCCCCCCCCCC..
+.CCCCCCCCCCCCCC.`],
+  [ downarrow, bitmap`
+......0000......
+......0220......
+......0330......
+......0330......
+......0330......
+......0330......
+......0330......
+......0330......
+...0000330000...
+....02233220....
+....0C3333C0....
+.....033330.....
+.....0C33C0.....
+......0330......
+......0CC0......
+.......00.......`],
+  [ satan, bitmap`
+......2...2.....
+.....2.....2....
+.....2233322....
+......33333.....
+......30303.....
+......33333.....
+......33333.....
+.....3333333....
+....333333333...
+..3333333333333.
+..333.33333.333.
+..323.33333.323.
+...2..33333..2..
+......33.33.....
+......22.22.....
+....2222.2222...`],
+  [ fire, bitmap`
+................
+................
+..6.............
+.66..6..66......
+.66.66..66......
+.66.666.66......
+.66.666.666.6...
+.666666666666...
+.663666663666...
+.663633663666...
+.663333633666...
+.663333333666...
+..66332233666...
+...633333366....
+....6633666.....
+.....66666......`],
+  [ ammorock, bitmap`
+................
+................
+................
+........00......
+......00110.....
+...000111110....
+..01111111110...
+.0111111111110..
+.0001111111110..
+.0LL0001110000..
+..0LLLL000LLL0..
+..0LLLLL0LLLLL0.
+..0LLLLL0LLLLL0.
+...0LLLL0LLL0L0.
+....00LL0000.00.
+......000.......`],
+  [ fakefire, bitmap`
+................
+...66..6......6.
+..66...6.6....6.
+..66...6.6...66.
+..66..66.6...66.
+..666.6666...66.
+..666.66666.666.
+..666666366.666.
+..636666336666..
+..633663336666..
+..663333236366..
+..663322233366..
+..66632222366...
+...6633222366...
+...666333336....
+....6666666.....`],
+  [ rightarrow, bitmap`
+................
+................
+................
+........0.......
+........000.....
+........02200...
+000000000332200.
+0222222223333220
+0CCCCCCCC3333CC0
+00000000033CC00.
+........0CC00...
+........000.....
+........0.......
+................
+................
 ................`]
 )
 
 let level = 0
 const levels = [ 
   map`
-.....
-...q.
-..p..
-.....
-.t...`,
+......
+....q.
+...p..
+......
+..t...`,
   map`
 .............
 .............
 .......syore.
-.............
-........q.l..
-.............
-.............
+......b.....b
+......b.q.l.b
+......b.....b
+.......bb.bb.
 .............
 .............
 .p...........
-.t...........`
+.t...........`,
+  map`
+dddg...................
+dddd...................
+ddddg..................
+ddddgg.................
+d...ggg................
+d.q.gggg...............
+dg..ggggg..............
+dd..dggggg.............
+dd..ddddggg............
+dd..d...dgggg..........
+dd.......dggggg........
+dd..d......dgggg.......
+dd..d..d...dddgg.......
+dd..d.d....d..dd.......
+dd....d..dd............
+dddd..d.......dddg....p
+ddddddd......dddddgg..t
+dddddddddddddddddddd...`,
+  map`
+gggggggggggggggggggg..a.gggggggggggg
+gggggggggggg.ggg.....q.......ggggggg
+ggggggg....g.ggg.ggggg.ggggg.ggggggg
+gg......gg.g.g.g.gg..g.gg...gggggggg
+gg.ggg..gg.g.g.g.g..gg.gg.ggggg..ggg
+gg.gggg.gg.g.g.g.gg.gg.gg.ggggg..ggg
+gg.gggg.gg.g.g...gg.gg.gg...gg..g.gg
+gg.ggg..gg.g.g.g.g...g.gggg..g.gg.gg
+gg.ggg.ggg.g.g.g.g.g.g.g.ggg.g.gg.gg
+gg.ggg.ggg...g.g.g.g.g.g.g...g.gg.gg
+gg.ggg..gg..gg.g.ggg.g.g.g.ggg.gg.gg
+gg.gggg.ggg.gggg.....g.g.g.ggg.gg.gg
+gg.gggg..ggggg....gg.g.g.g.g..gg.ggg
+gg.ggggg.......gg..g.g.g.g...gg..ggg
+gg..gggggggggg..gggggg.g.gggg...gggg
+ggg...gggg...gg......g.g.gg...gggggg
+ggggg....ggg.ggggg.g.g.g.g..gggggggg
+gggggggg..gg.gg....g.g.g.g..gggggggg
+g......gg..g.gg.gggggg.g.gg......ggg
+g.gggggggg.g.g..gg...g.g.ggggggg..gg
+g.gggggggg.g.gg.gg.g.g.g....gggg..gg
+g.gg.......g.gg.gg.g.g.gg.g......ggg
+g.gg.ggggggg.gg.gg.g.g.gg.ggggggg...
+g.gg.....ggg.gg....g.g.gg.gggggg..gg
+g.gggggg.ggg.gg.gggg.g.gg........ggg
+g.............g....g.g.ggggggggggggg
+gggggggggggggggggg.gggfggggggggggggg
+..................p.................
+..................t.................
+....................................`,
+  map`
+hxxxxxxhhhxphhhhhhhhhhh
+hxhhhhxhxhxhhhxxxxxxxxh
+hxxhxhxxxxxhhxxhhhhhhxh
+hhxhxhhhhhhhhhxxxxxhhxh
+hhxhxxxxxxxhhhhhhhxxhxh
+hhxxhhhhhhxxxxxxhhhxhxh
+hhhxxhhchhhhhhhxhhhxhxh
+hhhhxhhxxxxhhhhxhhhxhxh
+hhxxxxhxhhxxxxhxhhhxhhx
+hxxhhxxxhhhhhhhhxhxhhhx
+hxhhhhhhxxxhhhhhxxhhhhx
+hxhhhhhhhhhxxxxxxhhhhhx
+hxxhhhhhhhhhhhhhhhhxxhx
+hhxxxxhhhxxxhhhhhxxxhhx
+hhxhhxxxhhhxxxxxxxhhhxx
+hxxhxxhhhhhhhhhhxhhhhxh
+hxhhxhhhxxq.thxxxhhhxxh
+hhhhxxxxxhhhhhhhxxxxxhh
+hhhhhhhhhhhhhhhhhhhhhhh`,
+  map`
+......
+......
+p..q.t
+......
+......`
 ]
 
 setMap(levels[level])
 
 setPushables({
-  [ player ]: [ tp ],
-  [ plunger ]: [ plunger ]
+  [ player ]: [ tp ]
 })
 
-setSolids([ player, tp ], [player, plunger])
+setSolids([ player, tp, s, t, o, r, e, brick, rock, tree, fire, ammorock, plunger ])
 
 onInput("s", () => {
   getFirst(player).y += 1;
@@ -230,14 +518,19 @@ onInput("j", () => {
   if (currentLevel !== undefined) {
     clearText("");
     setMap(currentLevel);
+  } else {
+    playTune(victorytune);
   }
 });
 
 afterInput(() => {
+  playTune(step);
   const targetNumber = tilesWith(toilet).length;
   const numberCovered = tilesWith(toilet, tp).length;
   const numberCovered2 = tilesWith(toilet, plunger).length;
-  if (numberCovered == targetNumber) {
+  const eviltargetNumber = tilesWith(satan).length;
+  const evilnumberCovered = tilesWith(satan, tp).length;
+  if (numberCovered === targetNumber) {
     level = level + 1;
     const currentLevel = levels[level];
     if (currentLevel !== undefined) {
@@ -247,3 +540,6 @@ afterInput(() => {
     }
   }
 })
+
+
+  
