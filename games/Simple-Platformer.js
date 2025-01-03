@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Platformer
 @author: Adam Xu
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2025-01-03
 */
 
 const player = "p"
