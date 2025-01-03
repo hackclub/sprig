@@ -1,6 +1,7 @@
-/*@title: Grass Run
-@description: Help the player run through a grassy field
-@tags: [game, grass, running]
+/*
+@title: Grass Run
+@author: Jawdem010
+@tags: []
 @addedOn: 2024-00-00
 */
 
