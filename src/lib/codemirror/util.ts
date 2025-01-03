@@ -66,8 +66,10 @@ export const collapseRanges = (view: EditorView, ranges: [number, number][]) => 
 		for (let pos = start; pos < end;) {
 			const line = view.lineBlockAt(pos)
 			const range = foldable(view.state, line.from, line.to)
-			if (range) effects.push(foldEffect.of(range))
-			pos = (range ? view.lineBlockAt(range.to) : line).to + 1
+			if (!range) break;
+			
+			effects.push(foldEffect.of(range))
+			pos = view.lineBlockAt(range.to).to + 1
 		}
 	}
 
