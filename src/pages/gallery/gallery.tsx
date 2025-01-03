@@ -1,9 +1,9 @@
 import { useState, useEffect } from "preact/hooks";
-import { loadThumbnailUrl } from "../../lib/thumbnail";
 import { GameMetadata } from "../../lib/game-saving/gallery";
 import Button from "../../components/design-system/button";
 import Input from "../../components/design-system/input";
 import { IoCaretDown, IoSearch } from "react-icons/io5";
+import GalleryGame from "../../components/GalleryGame";
 import "./gallery.css";
 
 enum SortOrder {
@@ -54,6 +54,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 		}
 
 		countTags(_games)
+		sortGames(gamesState, SortOrder.TUTORIALS_AND_CHRONOLOGICAL);
 	}, [filter]);
 
 	function sortGames(games: GameMetadata[], order: SortOrder): GameMetadata[] {
@@ -92,59 +93,6 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 
 		setTagCount(tags)
 	}
-
-	useEffect(() => {
-		sortGames(gamesState, SortOrder.TUTORIALS_AND_CHRONOLOGICAL);
-
-		interface GameCard {
-			element: HTMLLIElement;
-			filename: string;
-			title: string;
-			author: string;
-			tags: string[];
-			isNew: boolean;
-		}
-		for (const element of document.querySelectorAll("#games > .game")) {
-			element.querySelector("img")?.setAttribute("data-loaded", "false");
-		}
-
-		const loadImage = async (gameCard: GameCard): Promise<void> => {
-			const img = gameCard.element.querySelector(
-				"img"
-			) as HTMLImageElement;
-			if (["loading", "true"].includes(img.dataset.loaded!)) return;
-			img.dataset.loaded = "loading";
-			const thumbnail = await loadThumbnailUrl(gameCard.filename);
-			img.src = thumbnail;
-			img.dataset.loaded = "true";
-		};
-
-		const gameCards: GameCard[] = [];
-		for (const _element of document.querySelectorAll(
-			"#games > .game"
-		)) {
-			const element = _element as HTMLLIElement;
-			const gameCard = {
-				element,
-				filename: element.dataset.filename!,
-				title: element.dataset.title!,
-				author: element.dataset.author!,
-				tags: element.dataset.tags!.split(","),
-				isNew: element.dataset.isNew === "true",
-			};
-
-			gameCards.push(gameCard);
-			new IntersectionObserver((_update) => {
-				const update = (_update[0] ||
-					_update) as IntersectionObserverEntry;
-				if (update.isIntersecting) loadImage(gameCard);
-			}).observe(element);
-		}
-
-		setTimeout(() => {
-			for (const gameCard of gameCards) loadImage(gameCard);
-		}, 500);
-	}, [gamesState]);
 
 	return (
 		<div>
@@ -236,39 +184,17 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 			</div>
 
 			<div id="games">
-				{
-					gamesState.map((game: GalleryGameMetadata) => (
-						<div
-							style={`display:${game.show ? "block" : "none"}`}
-							class="game"
-							href={`/gallery/${game.filename}`}
-							onClick={() => window.open(`/gallery/${game.filename}`, '_blank')}
-							data-filename={game.filename}
-							data-title={game.title}
-							data-author={game.author}
-							data-tags={game.tags.join(",")}
-							data-is-new={String(game.isNew)}
-						>
-							{game.tags.includes("tutorial") ? (
-								<span class="badge tutorial">Tutorial</span>
-							) : game.isNew ? (
-								<span class="badge new">New</span>
-							) : null}
-
-							<img
-								alt={`preview of ${game.filename}.js`}
-							/>
-							<h3>{game.title}</h3>
-							<p class="author">by @{game.author}</p>
-							<p class="tags" onClick={(e) => e.stopPropagation()}>
-
-								{game.tags.map((tag) =>
-									<span class="game-tag" onClick={() => setFilter(_filter => ({ ..._filter, tags: [...filter.tags, tag] }))}>#{tag} </span>
-								)}
-							</p>
-						</div>
-					))
-				}
+				{gamesState.map((game) => (
+					<GalleryGame 
+						key={game.filename}
+						show={game.show}
+						filename={game.filename}
+						title={game.title}
+						author={game.author}
+						tags={game.tags}
+						isNew={game.isNew!}
+						setFilter={setFilter} filter={filter} />
+				))}
 			</div>
 		</div>
 	)
