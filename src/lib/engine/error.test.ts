@@ -1,7 +1,51 @@
 import { expect, test } from "vitest"
+import TransformDetectInfiniteLoop, { BuildDuplicateFunctionDetector, dissallowBackticksInDoubleQuotes} from "../custom-babel-transforms";
+import * as Babel from "@babel/standalone";
+import { baseEngine } from "../../../engine/src/base";
 import {normalizeGameError} from "./error"
 
 // SyntaxErrors (not in evals) seem to go through babel (i.e. have an error.code), so they are not tested here
+
+export function transformAndThrowErrors(code: string, engineAPIKeys: string[], runCb: (code: any) => any) {
+	try {
+		const transformedCode = Babel.transform(code, {
+			plugins: [TransformDetectInfiniteLoop, BuildDuplicateFunctionDetector(engineAPIKeys), dissallowBackticksInDoubleQuotes],
+			retainLines: true
+		});
+		runCb(transformedCode);
+		return null;
+	} catch (error: any) {
+		return normalizeGameError({ kind: "runtime", error });
+	}
+}
+
+test('detect infinite while loops', () => {
+	const code = 'while (true) {}'
+	const engine = baseEngine();
+	const res = transformAndThrowErrors(code, Object.keys(engine.api), (transformedCode) => {
+		const fn = new Function(transformedCode.code);
+		fn();
+	});
+
+	const workDir = process.cwd();
+	const expectedError = `RangeError: Potential infinite loop
+    at eval (${workDir}/src/lib/engine/error.test.ts:1:152)`;
+	expect(res?.description).toBe(expectedError);
+});
+
+test('detect infinite for loop', () => {
+	const code = 'for (;;) {}'
+	const engine = baseEngine();
+	const res = transformAndThrowErrors(code, Object.keys(engine.api), (transformedCode) => {
+		const fn = new Function(transformedCode.code);
+		fn();
+	});
+
+	const workDir = process.cwd();
+	const expectedError = `RangeError: Potential infinite loop
+    at eval (${workDir}/src/lib/engine/error.test.ts:1:148)`;
+	expect(res?.description).toBe(expectedError);
+});
 
 test('calls a mistyped console.log function (line 2)', () => {
     const payload = {kind: "runtime", error: new TypeError("console.llog is not a function")}
