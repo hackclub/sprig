@@ -1,7 +1,8 @@
 /*
 @title: Giggler Puzzles
 @author: Portable-Certified
-
+@addedOn: 2025-01-03
+@tags: []
 Hi! This is a puzzle game. That's about it.
 
 YOUR OBJECTIVE:
