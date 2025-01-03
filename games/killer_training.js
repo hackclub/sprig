@@ -1,5 +1,6 @@
 /*
 @title: killer_training
+@description: "Killer Training" is a timed puzzle game where players must shoot a puppet while navigating through mazes to find the correct path. Players have limited time to complete 31 levels, losing time if they miss a shot, and restarting if they touch the puppet. The game features a tutorial, practice mode, and a highscore system to track progress.
 @author: jakjakob
 @tags: ['puzzle','timed']
 @addedOn: 2023-09-16

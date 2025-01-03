@@ -1,5 +1,6 @@
 /*
 @title: Slippy-Slidey
+@description: "Slippy-Slidey" is a puzzle game inspired by the slippery ice puzzles from "Undertale." Players must press all the unpressed tiles, marked by red 'X's, and activate a button to progress to the next level. The challenge lies in navigating across ice, where movement direction can't be altered once started.
 @author: B0redChungus
 @tags: []
 @addedOn: 2024-09-17

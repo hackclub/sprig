@@ -1,5 +1,6 @@
 /*
 @title: Super Efficient Bunny
+@description: Super Efficient Bunny is a puzzle game where your objective is to guide a bunny to collect carrots by making the most efficient movements possible. You must advance through as many levels as you can within a limit of 400 steps. Collecting each carrot allows you to progress to the next level.
 @author: Mihir Surlaker (Mihirsur007)
 @tags: ['puzzle']
 @addedOn: 2023-01-31

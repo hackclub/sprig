@@ -1,5 +1,6 @@
 /*
 @title: Dragon_Fest
+@description: "Dragon Fest" is an endless survival game where the player must shoot down orbs with fireballs to prevent them from reaching the hedge. The objective is to survive for one minute, and the game involves strategic movement and shooting to manage the orbs effectively. It provides a dynamic challenge with increasing difficulty as the timer counts down.
 @author: Peyeyey
 @tags: ['endless']
 @addedOn: 2022-12-27

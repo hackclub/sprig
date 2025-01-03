@@ -1,5 +1,6 @@
 /*
 @title: yellowman12
+@description: A game where you play as a yellow fish and avoid sharks to try to reach the other side of the map.
 @author: cheter
 @tags: []
 @addedOn: 2024-12-13

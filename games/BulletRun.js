@@ -1,5 +1,6 @@
 /* 
 @title: Bullet Run
+@description: "Bullet Run" is a strategic puzzle game where players must navigate levels to reach a goal while avoiding bullets. Created by Vivaan Shahani, the game emphasizes careful planning and foresight to plot a safe route. As players advance, they encounter various power-ups and obstacles that add depth and challenge to the gameplay.
 @author: GeoWizard4645
 @tags: []
 @addedOn: 2024-07-29

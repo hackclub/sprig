@@ -1,5 +1,6 @@
 /*
 @title: Blob_Runner
+@description: Blob_Runner is a platformer and maze game where players guide a little blob through various levels. The objective is to navigate through obstacles and reach the very right side of the screen to progress to the next level. The game features elements like pushable blocks and spikes, challenging players to think strategically to solve each maze.
 @author: Bright Li
 @tags: ['platformer', 'maze']
 @addedOn: 2023-01-09

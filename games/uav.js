@@ -1,5 +1,6 @@
 /*
 @title: uav
+@description: "UAV" is a game where you control a ship and must avoid collisions with unmanned aerial vehicles (UAVs) that appear on the screen. The objective is to maneuver the ship by pressing any button to avoid incoming UAVs.
 @author: malted
 @tags: []
 @addedOn: 2024-03-04

@@ -1,5 +1,6 @@
 /*
 @title: huff_ptegwu
+@description: A two player soccer inspired game but with the slight twist of teleportation. Score on the opponent by pushing the ball to win points. First to five wins!
 @author: PenJonathan
 @tags: ['multiplayer']
 @addedOn: 2023-12-29

@@ -1,5 +1,6 @@
 /*
 @title: Coding Demo 5: Gravity
+@description: This game is a simulation that demonstrates the concept of gravity. Players control a character that can jump and move left or right, navigating through a series of platforms. The game aims to illustrate how gravity affects motion in a simple platforming environment.
 @author: Leonard (Omay)
 @tags: ['simulation']
 @addedOn: 2022-11-12

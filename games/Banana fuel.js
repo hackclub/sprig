@@ -1,5 +1,6 @@
 /*
 @title: Banana fuel
+@description: "Banana Fuel" is a game where the objective is to collect bananas and jewels to progress through levels, with the option to use a door to advance. An interesting twist is the presence of an easter egg, offering a secret room with non-claimable bananas. The game features a unique mechanic where eating bananas changes the player's sprite.
 @author: Neon
 @tags: []
 @addedOn: 2024-09-12

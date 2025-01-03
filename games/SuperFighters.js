@@ -1,5 +1,6 @@
 /*
 @title: SuperFighters
+@description: SuperFighters is an action-packed platformer where players navigate through challenging parkour jumps, break blocks, and dodge enemy fire. The game requires strategic movement and timely attacks to survive and advance through its levels. The player's goal is to successfully complete all levels and reach the final stage.
 @author: retrooper
 @tags: ['action','platformer']
 @addedOn: 2024-08-15

@@ -1,6 +1,7 @@
 
 /* 
 @title: Swapper
+@description: "Swapper" is a simple puzzle game with a swapping mechanic, suitable for solo or cooperative play. The game involves solving puzzles by maneuvering characters and interacting with various elements like buttons, doors, portals, and boxes to progress through levels.
 @author: RaidTheWeb
 @tags: []
 @addedOn: 2023-10-18

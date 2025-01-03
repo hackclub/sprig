@@ -1,5 +1,6 @@
 /*
 @title: CaveEscape
+@description: CaveEscape is a strategy game where players use a combination of skills such as attacking, gambling for resources, and casting spells to defeat enemies and escape from a cave. Players must strategically manage their health and mana while facing enemy attacks after every action they take. The goal is to successfully navigate through levels, utilizing magic or relying on health to overcome adversaries and reach freedom.
 @author: Michael Taylor
 @tags: ["strategy" , "action" , "real-time"]
 @addedOn: 2024-02-16

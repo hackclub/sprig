@@ -1,5 +1,6 @@
 /*
 @title: Asteroid Field
+@description: Asteroid Field is a game about being lost in space and navigating through an asteroid field. Players embark on an endless journey to find a semblance of home, moving through levels filled with obstacles. The game emphasizes exploration and survival in a vast, perilous space environment.
 @author: Kaitlyn
 @tags: []
 @addedOn: 2022-11-25

@@ -1,5 +1,6 @@
 /*
 @title: Slot Machine
+@description: "Slot Machine" by Alexander Li is a retro-themed utility game that simulates a basic slot machine experience. Players spin virtual reels to match symbols and aim for a win. The game involves pressing a key to initiate the spin and waiting to see if the symbols align.
 @author: Alexander Li
 @tags: ['utility','retro']
 @addedOn: 2024-05-23

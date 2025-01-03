@@ -1,6 +1,7 @@
 
 /* 
 @title: Dragon-Rush
+@description: Dragon-Rush is a Sokoban-like puzzle game where the player controls a cute dragon tasked with pushing a flower to a green spot on the grid. The game involves avoiding red obstacles, moving crates, collecting keys to unlock doors, and using portals for complex maneuvers. With progressively harder levels, players must strategically navigate the challenges to succeed.
 @author: Xhaiden, Aaron, and Brenden
 @tags: []
 @addedOn: 2023-07-18

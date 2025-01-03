@@ -1,6 +1,7 @@
 
 /* 
 @title: two-birds_one-stone
+@description: "Two Birds, One Stone" is an action game where you control two birds trying to avoid stones thrown by an aggressive opponent. The objective is to keep both birds safe for as long as possible, and the game ends if even one bird is hit. Your score increases the longer you survive.
 @author: t3mp0r4ry
 @tags: ['action']
 @addedOn: 2023-06-06

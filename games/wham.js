@@ -1,6 +1,7 @@
 
 /* 
 @title: wham
+@description: "Wham!" is a simple retro-style game where the objective is to hit a "monster" that appears in a green pipe as many times as you can.
 @author: Aaman Patnaik
 @tags: ['retro']
 @addedOn: 2023-09-18

@@ -1,5 +1,6 @@
 /*
 @title: Alien poop
+@description: "Alien Poop" is a puzzle game by Luis Guerrero in which a player controls an alien tasked with pushing a poop into a toilet to clean the world. The game's objective is to solve each level by moving the poop to the designated goal area, exploring the different challenges presented across multiple stages. As players progress, they will need to strategize to overcome obstacles, such as walls and other boxes.
 @author: Luis Guerrero
 @tags: []
 @addedOn: 2024-05-20

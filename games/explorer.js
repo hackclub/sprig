@@ -1,5 +1,6 @@
 /*
 @title: explorer
+@description: "Explorer" is a game set in an abandoned laboratory where players must strategically navigate through different rooms to defeat enemies. Players can switch between having a sword, which allows them to kill monsters and pass through walls, and being unarmed, which makes them immune to monsters but unable to progress far just by pushing stumps. Success is achieved by defeating all enemies in the red room, while the game's non-linear layout offers some freedom in how players can approach this challenge.
 @author: akshur
 @tags: []
 @addedOn: 2023-01-22

@@ -1,5 +1,6 @@
 /*
 @title: far from home
+@description: "Far from Home" is a puzzle game where the objective is to guide a child safely home. Navigate through various obstacles and avoid hazards such as lasers while solving challenges to progress through levels.
 @author: hayward
 @tags: []
 @addedOn: 2023-10-04

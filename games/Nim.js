@@ -1,5 +1,6 @@
 /*
 @title: Nim
+@description: Nim is a retro strategy game where players take turns removing matches from a pile, aiming to avoid taking the last one. The objective is to plan your moves carefully to force your opponent to pick up the final match.
 @author: Leonard (Omay)
 @tags: ['strategy','retro']
 @addedOn: 2022-11-15

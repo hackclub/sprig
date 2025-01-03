@@ -1,5 +1,6 @@
 /*
 @title: Mastermind
+@description: Mastermind is a retro-themed puzzle game where players must deduce the correct sequence of colors by interpreting small hints provided after each guess. The objective is to identify the pattern using strategic color and position selections.
 @author: Leonard (Omay)
 @tags: ['puzzle','retro']
 @addedOn: 2022-11-14

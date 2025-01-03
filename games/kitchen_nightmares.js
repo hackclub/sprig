@@ -1,5 +1,6 @@
 /*
 @title: Kitchen Nightmares
+@description: "Kitchen Nightmares" is a game inspired by Space Invaders and the TV show Kitchen Nightmares, where you play as a chef dodging tomatoes thrown at you after cooking a bad meal. The aim is to survive as long as possible while avoiding tomatoes flying in from both the top and left sides, accumulating points for every frame you survive.
 @author: Aditya Nair
 @tags: []
 @addedOn: 2024-05-31

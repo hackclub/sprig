@@ -1,6 +1,7 @@
 
 /* 
 @title: Space_Odyssey
+@description: Space Odyssey is an action game where players navigate a spaceship through a field of moving asteroids. The objective is to avoid collisions with asteroids and the boundary obstacles while the game progresses. The challenge increases as you aim to survive as long as possible, with the game ending upon collision.
 @author: Devon S
 @tags: ['action']
 @addedOn: 2023-11-27

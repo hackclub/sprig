@@ -1,6 +1,7 @@
 
 /* 
 @title: Morse_trainer
+@description: Morse Trainer is an educational game designed by Yuuta for learning international Morse code. The game features two modes: converting text to Morse code and converting Morse code to text, allowing users to practice encoding and decoding messages. It aims to make learning Morse code more engaging through interactive flashcard-like gameplay.
 @author: Yuuta
 @tags: []
 @addedOn: 2023-12-21

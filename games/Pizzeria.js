@@ -1,5 +1,6 @@
 /*
 @title: Pizzeria
+@description: "Pizzeria" is a retro-themed game where you take on the role of a pizzeria worker responsible for handling various tasks in the kitchen. Players create dough, bake it into pizzas in the oven, and deliver the finished pizzas to the chef to earn money and progress through levels. The game challenges players to efficiently manage the pizza-making process to advance through increasingly complex levels.
 @author: dilbert335
 @tags: ['retro']
 @addedOn: 2024-08-06

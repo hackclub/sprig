@@ -1,5 +1,6 @@
 /*
 @title: Puzzle Run
+@description: Puzzle Run is a puzzle game where you navigate through mazes while pushing a rocks onto detectors to unlock areas and reach the goal.
 @author: Biffot
 @tags: []
 @addedOn: 2024-11-24

@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Journey to the Secret Village
+@description: Journey to the Secret Village is a game where you navigate through mazes and solve puzzles to reach the secret village. Each level has a different challenge to overcome.
 @author: Abigail Loken
 @tags: []
 @addedOn: 2024-12-03

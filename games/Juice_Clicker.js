@@ -1,5 +1,6 @@
 /*
 @title: Juice Clicker
+@description: Juice Clicker is a simulation game where players manage a juice-making store by producing juice and purchasing automatic juicers to increase juice production speed. The goal is to accumulate juices and strategically invest in different quantities of auto juicers to optimize productivity.
 @author: ikejlemieux
 @tags: []
 @addedOn: 2024-07-29

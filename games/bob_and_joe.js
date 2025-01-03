@@ -1,6 +1,7 @@
 
 /* 
 @title: bob_and_joe
+@description: Bob and Joe is a puzzle game where you guide Bob through mazes to reach his friend Joe. Bob dislikes mazes, but loves being with Joe, and your goal is to help him navigate through the challenges. The game features a series of mazes and even hides a secret level for players to discover.
 @author: aramshiva
 @tags: ['puzzle']
 @addedOn: 2023-12-08

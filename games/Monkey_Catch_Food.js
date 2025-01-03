@@ -1,5 +1,6 @@
 /*
 @title: Monkey_Catch_Food
+@description: "Monkey Catch Food" is a game where you play as a monkey trying to catch falling fruits to increase your score, while avoiding bombs and collecting power-ups like life fruits and speed boosters. Your goal is to catch as many fruits as possible without running out of lives. The game challenges you to survive as long as you can while managing the rising difficulty.
 @author: Ahmet Dedeler
 @tags: []
 @addedOn: 2023-12-30

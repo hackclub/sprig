@@ -1,5 +1,6 @@
 /*
 @title: sokobanlike
+@description: "Sokobanlike" is a short puzzle game by Neptune1190 where players embark on a Sokoban-style adventure that incorporates the use of portals. In addition to the traditional box-pushing mechanics, the game features levels where players can shoot and navigate through portals, adding a unique twist to the classic Sokoban gameplay.
 @author: Neptune1190
 @tags: ['puzzle']
 @addedOn: 2024-07-18

@@ -1,5 +1,6 @@
 /*
 @title: Harder Block Push
+@description: "Harder Block Push" is a challenging puzzle game inspired by Sokoban, where the objective is to push red blocks into green goals. Players navigate through levels by strategically moving blocks while being mindful of obstacles. This game tests problem-solving skills and offers a more challenging twist to the classic block-pushing puzzle.
 @author: Game
 @tags: ['puzzle']
 @addedOn: 2024-09-14

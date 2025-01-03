@@ -1,5 +1,6 @@
 /*
 @title: Little Archeologist
+@description: "Little Archeologist" is a puzzle game where you play as a small archeologist navigating through an environment to discover artifacts. Players must strategically push buttons to open paths and remove barriers that lead to hidden objects. Collecting all the artifacts in a level allows progression to the next challenge.
 @author: Ro-ry
 @tags: []
 @addedOn: 2024-06-19

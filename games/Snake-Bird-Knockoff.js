@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Snake Bird Knockoff
+@description: Snake Bird but recreated on Sprig. Control the Snake Bird to make it to the portal and move to the next level, avoid spikes, and eat apples to make the Snake Bird grow.
 @author: CreativityShark
 @tags: ['puzzle', 'platformer']
 @addedOn: 2024-11-03

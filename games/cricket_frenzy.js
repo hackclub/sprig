@@ -1,5 +1,6 @@
 /*
 @title: cricket_frenzy
+@description: Cricket Frenzy is a puzzle game where players use a cricket bat to move balls to designated targets through a maze.
 @author: aryan.k
 @tags: ['puzzle']
 @addedOn: 2022-12-10

@@ -1,5 +1,6 @@
 /*
 @title: Rico Rodriguez
+@description: "Rico Rodriguez" is a fast-paced action game where players must dodge incoming bullets from the "black hand" while navigating with reversed controls.
 @author: DefinitelyInconspicuous
 @tags: []
 @addedOn: 2024-09-04

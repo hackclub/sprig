@@ -1,5 +1,6 @@
 /*=
 @title: conway-gol
+@description: "Conway-GOL" is a sandbox simulation game based on the Game of Life, a cellular automaton devised by mathematician John Horton Conway. Players can manipulate the state of cells, toggling between alive and dead, to observe how patterns evolve over iterations, guided by simple rules. The game offers features like debug mode, speed control, single stepping, and a play/pause mechanism to enhance user experimentation and exploration of this classic computational model.
 @author: the456gamer
 @tags: ['sandbox','simulation']
 @addedOn: 2022-11-08

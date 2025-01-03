@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Hard Dragon Game
+@description: "Hard Dragon Game" is a challenging puzzle game where players control a telepathic dragon to navigate through levels while avoiding obstacles and creatively solving bugs. The goal is to reach the green box to progress to the next level, but players face the added difficulty of not being able to choose which fireball to control, alongside intentional bugs that must be figured out.
 @author: VoidDevX1
 @tags: []
 @addedOn: 2024-09-27

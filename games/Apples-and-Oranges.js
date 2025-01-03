@@ -1,5 +1,6 @@
 /*
 @title: Archery
+@description: "Archery" is a competitive two-player game where each player aims to shoot as many moving targets as possible within 60 seconds. The game features a head-to-head match with simple controls for moving and shooting arrows. The player with the highest score at the end of the time limit wins.
 @author: Raghav Sinha
 @tags: []
 @addedOn: 2024-08-23

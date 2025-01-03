@@ -1,5 +1,6 @@
 /*
 @title: WrongLane
+@description: WrongLane is an action-packed, endless game where you navigate a car driving on the wrong side of the road, avoiding collisions with oncoming traffic. The game challenges players with varying difficulties as they attempt to maintain control and achieve a high score.
 @author: KaspianDev
 @tags: ['endless','action']
 @addedOn: 2024-08-15

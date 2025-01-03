@@ -1,5 +1,6 @@
 /*
 @title: Catch The Banana
+@description: Catch as many bananas falling from the sky as you can in the time you have! You can also the blue bananas for extra points and time.
 @author: Sayed Hashim
 @tags: ["timed", "retro"]
 @addedOn: 2024-11-29

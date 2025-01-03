@@ -1,5 +1,6 @@
 /*
 @title: sprig_dodging
+@description: Dodge the maze tutorials and learn how to use Sprig with a dodge game! Learn about functions and fix the code so you can dodge objects and earn points in the game.
 @author: sam liu and lucas
 @tags: ['tutorial']
 @addedOn: 2022-12-15

@@ -1,5 +1,6 @@
 /*
 @title: type_or_die
+@description: "Type_or_die" is a fast-paced word-typing game where players must compose words by navigating a grid to select letters before time runs out.
 @author: Jesse Blum (@jblum-coder)
 @tags: []
 @addedOn: 2024-01-23

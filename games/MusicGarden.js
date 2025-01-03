@@ -1,5 +1,6 @@
 /*
 @title: Music Garden
+@description: Music Garden is a creative game where players plant flowers in a virtual garden to compose and hear music. Each type of flower corresponds to a musical note, allowing players to grow their own melodic creations. This game is a standalone version inspired by an original project developed on Scratch.
 @author: kubits
 @tags: []
 @addedOn: 2024-05-20

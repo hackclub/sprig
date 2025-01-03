@@ -1,5 +1,6 @@
 /*
 @title: Sprig Invaders
+@description: Sprig Invaders is an homage to the classic arcade game Space Invaders, where players face endless waves of alien attackers. The objective is to achieve the highest score possible by defeating the aliens while navigating a ship that can withstand up to 25 hits. The game adds complexity with a moving shield that aids players but can also be inadvertently damaged, and after Wave 10, more challenging alien reinforcements appear.
 @author: Bunnzulu
 @tags: ["retro" , "strategy" , "timed"]
 @addedOn: 2024-08-13

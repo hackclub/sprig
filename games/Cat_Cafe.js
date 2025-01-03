@@ -1,5 +1,6 @@
 /*
 @title: Cat Cafe
+@description: "Cat Cafe" is a puzzle arcade game featuring a cat named Marv on a journey to make bubble tea in his cafe. Players navigate through mazes while collecting ingredients like boba, tea, and sugar to fulfill orders. The game includes various challenges such as avoiding fire and fragile tiles, all while Marv and his friend May work together to gather the necessary items.
 @author: Nunu(greatplansahead)
 @tags: ['puzzle']
 @addedOn: 2024-08-28

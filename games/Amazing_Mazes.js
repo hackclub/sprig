@@ -1,6 +1,7 @@
 
 /* 
 @title: Amazing_Mazes
+@description: Amazing Mazes is a puzzle game where players navigate through complex mazes to reach the goal. The game challenges players to maneuver their way using strategic moves, progressing through various levels of increasing difficulty. Enhance your problem-solving skills as you explore each intricate maze designed by Dexter Speed.
 @author: Dexter Speed
 @tags: ['puzzle']
 @addedOn: 2023-07-25

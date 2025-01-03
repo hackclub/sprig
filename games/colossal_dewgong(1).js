@@ -1,5 +1,6 @@
 /*
 @title: Journey of the Yeti
+@description: "Journey of the Yeti" is a puzzle adventure game where you guide a yeti on its quest to reach a portal. Navigate through icy terrains by pushing stones, sliding on ice, and overcoming obstacles to progress through levels.
 @author: Andrew Zhu
 @tags: []
 @addedOn: 2024-09-03

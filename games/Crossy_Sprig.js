@@ -1,5 +1,6 @@
 /*
 @title: Crossy_Sprig
+@description: Crossy_Sprig is an endless, Frogger-like game that humorously attempts to resolve the age-old question of "Why did the chicken cross the road?". Players control a chicken navigating across roads, grass, and waters while avoiding obstacles such as cars and trucks. The game offers upwards and sideways movements without the ability to move backward, providing progressively challenging levels.
 @author: hatanuk
 @tags: ['endless']
 @addedOn: 2024-03-21

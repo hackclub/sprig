@@ -1,5 +1,6 @@
 /*
 @title: Monster Mauler
+@description: Monster Mauler is a retro shooter game where you try and get as high as a score as possible before the time runs out or you die. The game features action packed gameplay and contains an additional challenge...
 @author: DUMBHOG
 @tags: ['action', 'music']
 @addedOn: 2024-10-31

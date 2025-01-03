@@ -1,5 +1,6 @@
 /*
 @title: Apple Skedaddle
+@description: "Apple Skedaddle" is a puzzle game where you play as an apple trying to reunite with your Watermelon friend. The challenge lies in navigating through mazes while avoiding dangerous bombs. Use your wits to outsmart the obstacles and reach your friend safely.
 @author: DieselFalcon
 @tags: ['puzzle']
 @addedOn: 2022-11-06

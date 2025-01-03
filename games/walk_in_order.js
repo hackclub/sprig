@@ -1,5 +1,6 @@
 /*
 @title: Walk-In Order
+@description: "Walk-In Order" is a maze game that challenges players to navigate through levels by stepping on colored blocks in a specific sequence. The sequence is displayed at the top of the screen, and failing to step on the blocks in the correct order requires restarting the level. With each level, new colors and complex mazes are introduced to increase the challenge.
 @author: prwrit_
 @tags: []
 @addedOn: 2024-07-03

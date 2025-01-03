@@ -1,5 +1,6 @@
 /*
 @title: Bolt Battle
+@description: Bolt Battle is a puzzle game where players navigate levels by pushing lightning bolts onto batteries of matching colors.
 @author: Arnav Ambre
 @tags: ['puzzle']
 @addedOn: 2022-10-10

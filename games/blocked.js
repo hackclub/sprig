@@ -1,5 +1,6 @@
 /*
 @title: aMaze
+@description: aMaze is a puzzle game where players push boxes onto buttons to activate or deactivate spikes and solve puzzles to reach the goal. The game involves careful navigation to avoid spikes, which restart the level if touched, while strategically placing boxes to progress to the next level.
 @author: Sumedh Natu
 @tags: ['puzzle']
 @addedOn: 2024-08-13

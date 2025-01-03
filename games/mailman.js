@@ -1,6 +1,7 @@
 
 /* 
 @title: mailman
+@description: "Mailman" is a game where you take on the role of a mailman tasked with delivering packages to prevent the world from sinking into despair. Navigate through various levels, avoiding obstacles such as badboxes and evilboxes, to reach the conveyor belt where deliveries are made.
 @author: Akko
 @tags: []
 @addedOn: 2023-09-07

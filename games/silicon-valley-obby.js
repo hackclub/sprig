@@ -1,5 +1,6 @@
 /*
 @title: silicon-valley-obby
+@description: "Silicon Valley Obby" is a fun platformer game where you guide Richard Hendricks through obstacle-filled levels to collect his friends before his TechCrunch Disrupt presentation. Navigate through tricky courses, avoiding code-bug-filled lava, while gathering characters like Erlich, Jared, Gilfoyle, Dinesh, and Monica. Successfully collecting all friends is crucial for reaching the presentation on time!
 @author: Savina Jabbo
 @tags: []
 @addedOn: 2024-03-20

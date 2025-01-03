@@ -1,6 +1,7 @@
 
 /* 
 @title: bastion
+@description: Bastion is a simple, two-player game inspired by the Fireboy and Watergirl series, where players control Fireboy and Watergirl characters navigating through puzzles and obstacles. The goal of the game is for each player to reach their respective doors while avoiding hazards like water and lava which can kill the character that isn't suited for that tile.
 @author: de-y (Dheeraj Chintapalli)
 @tags: []
 @addedOn: 2023-10-19

@@ -1,5 +1,6 @@
 /*
 @title: QuadraPedal
+@description: "QuadraPedal," created by Jamarkis, is a puzzle game where players must edit the code to solve each level. The main objective is to push purple boxes onto green goals while managing four characters simultaneously. Inspired by the "Getting Started" level, the game encourages creativity and customization, allowing players to modify game mechanics, add players, and explore different block and goal types.
 @author: Jamarkis
 @tags: ['puzzle']
 @addedOn: 2022-11-04

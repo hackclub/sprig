@@ -1,5 +1,6 @@
 /*
 @title: Problem Maze
+@description: Problem Maze is a maze game where you try to reach the asteroid goal by moving obstacles out of the way with buttons, traversing through portals, and using keys to unlock doors.
 @author: Gramgra07
 @tags: ['puzzle']
 @addedOn: 2024-09-17

@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 javascript:void(0);
 @title: lasers vs fog
+@description: "Lasers vs Fog" is a multiplayer game where players engage in a battle between lasers and fog, aiming to survive and dominate the board. One player controls the lasers, which can shoot to clear the fog, while the other player manages the fog, attempting to spread and cover the board. The game features multiple levels with escalating challenges and requires strategic moves for either side to claim victory.
 @author: e-rairigh
 @tags: ['multiplayer']
 @addedOn: 2024-09-27

@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Apple_Drop
+@description: A game where you catch apples as they fall from the sky. Try to catch them all - once one gets by you, you lose!
 @author: wvminecraftkid
 @tags: []
 @addedOn: 2024-10-30

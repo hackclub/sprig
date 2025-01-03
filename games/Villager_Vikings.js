@@ -1,6 +1,7 @@
 
 /*
 @title: Villager Vikings
+@description: "Villager Vikings" is an action game where you, as the king's son, are tasked with saving the kingdom of Norgal from evil monsters led by Kharaz the Red's avatar, "The Center." Equipped with the "Spawning Stone," you can summon good monsters like Morguls, Dinos, and Knights to battle the enemy's forces. Your objective is to strategically spawn and maneuver your allies to defeat "The Center" before time runs out and he unleashes his devastating power on Norgal.
 @author: D.M.R
 @tags: ['action']
 @addedOn: 2024-08-15

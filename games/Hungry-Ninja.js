@@ -1,5 +1,6 @@
 /*
 @title: Hungry-Ninja
+@description: "Hungry Ninja" is an action-packed game where players control a stealthy ninja on a mission to collect as many apples as possible from dangerous orchards. Players must navigate through these orchards while deftly avoiding explosive bombs and tricky apple bombs. It's a thrilling challenge of speed and agility as players strive to become the ultimate apple-collecting ninja sensation.
 @author: Prajval Raval
 @tags: []
 @addedOn: 2023-12-19

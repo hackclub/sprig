@@ -1,5 +1,6 @@
 /*
 @title: TicTacGPT
+@description: TicTacGPT is a version of the game tic-tac-toe where you can play against a computer!
 @author: 2008wbbv
 @tags: ['retro']
 @addedOn: 2023-09-08

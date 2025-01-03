@@ -1,5 +1,6 @@
 /*
 @title: fungi-frog-maze
+@description: "Fungi-Frog-Maze" is a puzzle game where players help a fungi-frog navigate through various mazes to reach a goal. Players must push the fungi to move rocks, traverse through wooden walls, and avoid water obstacles across increasingly challenging levels.
 @author: @jzaleta
 @tags: ['puzzle']
 @addedOn: 2023-05-13

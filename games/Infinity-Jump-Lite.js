@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Infinity Jump Lite
+@description: Infinity Jump Lite is a simple platformer game where you must jump to the top of the screen to advance to the next level. Be careful not to fall off the screen!
 @author: levi
 @tags: []
 @addedOn: 2024-00-00

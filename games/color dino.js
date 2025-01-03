@@ -1,5 +1,6 @@
 /*
 @title: thefake chrome dino
+@description: "The Fake Chrome Dino" is an endless runner game inspired by the classic Chrome dinosaur game. Players control a dinosaur that must avoid obstacles like cacti while running, aiming to achieve the highest score possible. The game features a simple pixel art style and a continuously scrolling environment.
 @author: crabby605
 @tags: ['endless']
 @addedOn: 2024-08-23

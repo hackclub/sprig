@@ -1,5 +1,6 @@
 /*
 @title: Rythym-Mania
+@description: Rythym-Mania is an action music game where players must hit the correct keys (A, S, D, J, K, L) as notes fall onto blocks. It features six levels with set patterns and a random mode that generates random notes.
 @author: sosenteam
 @tags: ['action','music']
 @addedOn: 2024-7-18

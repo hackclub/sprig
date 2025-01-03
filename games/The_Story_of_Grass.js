@@ -1,6 +1,7 @@
 
 /* 
 @title: The_Story_of_Grass
+@description: "The Story of Grass" is a puzzle game that takes the player on a transformative journey starting as a lawnmower and progressing through unique roles: a cow, a car, a milk carton, and finally a shopping cart. Each level presents a unique challenge: mow grass without touching flowers, eat grass and flowers as a cow, transport milk to market, navigate a storage room, and finally purchase with a shopping cart.
 @author: Sarah Wang / Sarinara
 @tags: ['puzzle']
 @addedOn: 2023-05-28

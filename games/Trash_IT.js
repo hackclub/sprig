@@ -1,5 +1,6 @@
 /*
 @title: Trash_IT
+@description: "Trash_IT" is a puzzle game where the objective is to delete files by moving folders into a trash bin while avoiding dangerous skulls through a maze.
 @author: N Rizwan
 @tags: ['strategy']
 @addedOn: 2022-09-14

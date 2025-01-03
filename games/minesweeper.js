@@ -1,5 +1,6 @@
 /*
 @title: minesweeper
+@description: This game is a classic Minesweeper experience made with Sprig, featuring a 9x9 grid and 10 hidden bombs. The objective is to uncover all the tiles without detonating any bombs, using numerical clues to locate them.
 @author: sam liu
 @tags: ['retro']
 @addedOn: 2022-08-29

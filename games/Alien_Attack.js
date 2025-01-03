@@ -1,6 +1,7 @@
 //
 /*
 @title: Alien_Attack
+@description: Alien Attack is a fast-paced arcade game where players aim to shoot alien invaders with lasers. The objective is to shoot as many aliens as possible without getting hit, with increasing difficulty as the speed of the aliens rises every 25 points. The game emphasizes quick reflexes and strategic movement to outlast the alien onslaught.
 @author: whatware
 @tags: []
 @addedOn: 2023-03-15

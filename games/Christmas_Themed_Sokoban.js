@@ -1,5 +1,6 @@
 /*
 @title: Christmas_Themed_Sokoban
+@description: Christmas_Themed_Sokoban is a festive puzzle game where you guide a Candy Cane Character to push presents underneath Christmas trees within 60 seconds to advance through levels. Each level is a new puzzle that requires strategic thinking to properly place all presents. Complete all levels to receive a special prize.
 @author: Joshua
 @tags: ['puzzle']
 @addedOn: 2023-01-19

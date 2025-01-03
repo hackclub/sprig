@@ -1,5 +1,6 @@
 /*
 @title: codekuun
+@description: Codekuun is a puzzle game where players create 'programs' by selecting commands that the character Heidi will follow to collect scraps. The game involves moving through levels by using directional commands and loops to navigate obstacles and collect items.
 @author: Jomar Milan
 @tags: ['puzzle']
 @addedOn: 2024-09-16

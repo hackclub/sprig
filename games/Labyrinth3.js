@@ -1,5 +1,6 @@
 /*
 @title: Labyrinth3
+@description: Labyrinth3 is a puzzle game where players navigate through a maze to find the exit. It is the final installment in this series of simple labyrinth games. Players must traverse various levels, avoiding walls and obstacles to reach the endpoint.
 @author: DorukSarpAlwaysStrikesBack!
 @tags: ['puzzle']
 @addedOn: 2023-03-01

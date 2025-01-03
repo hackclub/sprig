@@ -1,5 +1,6 @@
 /*
 @title: Astrovoid
+@description: Astrovoid is an endless survival game where players navigate a spaceship to dodge falling asteroids. The objective is to keep dodging and survive for as long as possible, with difficulty increasing over time as more asteroids appear. The game focuses on movement and quick reflexes, providing an evolving challenge as the player's score increases.
 @author: Aspen :D
 @tags: ['endless']
 @addedOn: 2023-01-23

@@ -1,6 +1,7 @@
 
 /* 
 @title: bomb_dodge
+@description:   "Bomb Dodge" is a puzzle game where you must survive for as long as possible by maneuvering around exploding bombs. The bombs can be pushed and will detonate in straight lines along the x and y axes. The goal is to evade explosions and achieve a high score.
 @author: AstralTurtle
 @tags: ['puzzle']
 @addedOn: 2023-12-10

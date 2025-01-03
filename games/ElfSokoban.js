@@ -1,5 +1,6 @@
 /*
 @title: ElfSokoban
+@description: Elf Sokoban is a Christmas-themed puzzle game where players help an elf move presents to designated spots so Santa can collect them. The game consists of 17 progressively challenging levels that require strategic thinking to complete.
 @author: Markonije
 @tags: []
 @addedOn: 2023-03-15

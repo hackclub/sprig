@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Housing
+@description: A puzzle game where you move the spridgets to their home while avoiding the fireballs.
 @author: Isaac and Nathan Jones
 @tags: ['puzzle']
 @addedOn: 2024-12-05

@@ -1,5 +1,6 @@
 /*
 @title: Chess Puzzle
+@description: Chess Puzzle is a strategic puzzle game where you control a chess knight, maneuvering it around a board filled with obstacles to reach a goal marked by a pink and purple box.
 @author: Silver Canvas
 @tags: ["puzzle", "strategy"]
 @addedOn: 2024-06-25

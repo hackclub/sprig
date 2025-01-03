@@ -1,5 +1,6 @@
 /*
 @title: Burger_Maker
+@description: Burger Maker is a puzzle game where you play as Mr. Chef, an up-and-coming burger maker showcasing your new secret ingredient to become the best in the world. The objective is to push burger ingredients into their designated spots on a grid to create a perfect burger, maneuvering around obstacles that form a maze. Ingredients cannot be pushed into each other, adding an extra layer of challenge to the gameplay.
 @author: Captain_AJ
 @tags: ['puzzle']
 @addedOn: 2022-12-28

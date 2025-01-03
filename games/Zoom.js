@@ -2,6 +2,7 @@
 Use WASD to move
 Use J to restart a level
 @title: Zoom
+@description: A puzzle game where you move the player to the goal while avoiding the walls. Every time you move, you move as far as you can in that direction.
 @author: Aperaine
 @tags: ['puzzle', 'music']
 @addedOn: 2024-11-05

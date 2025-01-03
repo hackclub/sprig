@@ -1,6 +1,7 @@
 
 /* 
 @title: Mom,_have_you_seen_Coco?
+@description: "Mom, Have You Seen Coco?" is a search-and-find game where you help the author locate their runaway cat, Coco, across various scenes. Players use a selector to navigate through chaotic environments to find Coco and bring her back. Each level presents a different setting and challenge in the hunt to reunite with Coco.
 @author: Lillian Curi
 @tags: []
 @addedOn: 2024-05-10

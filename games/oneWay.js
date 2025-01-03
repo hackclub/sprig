@@ -1,5 +1,6 @@
 /*
 @title: oneway
+@description: "Oneway" is a puzzle game where players must collect all the relics to open the exit door. The unique challenge is that each tile can only be stepped on once, requiring strategic planning to navigate through levels successfully.
 @author: SpeedyGo55
 @tags: ['puzzle']
 @addedOn: 2024-08-23

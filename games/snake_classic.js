@@ -1,5 +1,6 @@
 /*
 @author: Tonkatsu DJ Agetarō
+@description: A classic snake game where you control a snake to eat food and grow longer. In this version, you don't die by hitting the walls - the map wraps back around.
 @title: Snake Classic
 @tags: []
 @addedOn: 2024-11-12

@@ -1,5 +1,6 @@
 /*
 @title: boxy
+@description: "Boxy" is a retro-themed puzzle game where the objective is to push a package (box) to Mr. Poptato, depicted as a green character, while avoiding yellow enemies that attempt to take your parcels. Players must strategize quickly to complete levels efficiently, as their time to victory is tracked and compared against their best performance.
 @author: olii-dev
 @tags: ['retro']
 @addedOn: 2024-07-08

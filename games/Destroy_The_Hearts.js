@@ -1,6 +1,7 @@
 
 /* 
 @title: Destroy_The_Hearts
+@description: "Destroy the Hearts" is a puzzle game where players solve sokoban-style puzzles to destroy hearts using swords. As you navigate through each level, strategically push boxes to cover goals and progress through increasingly challenging stages. Designed as a debut game by Deniz Melik Aktın, it invites players to engage in logical problem-solving across multiple levels.
 @author: Deniz Melik Aktın
 @tags: ['puzzle']
 @addedOn: 2023-10-09

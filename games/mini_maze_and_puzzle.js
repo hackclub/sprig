@@ -1,5 +1,6 @@
 /*
 @title: mini_maze_and_puzzle
+@description: "Mini Maze and Puzzle" is a strategy game where the objective is to find the door while navigating through traps and lava. Players must also move blocks to their designated 'medium' to advance levels.
 @author: muhammad tsaqif mukhayyar
 @tags: ['strategy']
 @addedOn: 2022-09-16

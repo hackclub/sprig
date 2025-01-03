@@ -1,5 +1,6 @@
 /*
 @title: connect the dots
+@description: "Connect the Dots" is a strategy game where players aim to connect all the dots on each level, taking inspiration from the game Flow Free. Players use various colors to create paths between pairs of corresponding dots on a grid.
 @author: Alex Howden
 @tags: ['strategy']
 @addedOn: 2023-02-26

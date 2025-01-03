@@ -1,6 +1,7 @@
 
 /* 
 @title: turtle_game_reach_the_beach
+@description: "Turtle Game: Reach the Beach" is a puzzle game where the goal is to navigate a turtle safely across various levels to reach the ocean without getting caught by seagulls or crabs.
 @author: Daniel Dunavetsky
 @tags: ['puzzle']
 @addedOn: 2023-10-25

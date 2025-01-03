@@ -1,5 +1,6 @@
 /*
 @title: Fallen Sand (Sandbox)
+@description: A simple, easy-to-use physics sandbox with sand, water, and concrete.
 @author: Chris
 @tags: []
 @addedOn: 2024-05-28

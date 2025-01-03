@@ -1,6 +1,7 @@
 
 /* 
 @title: Maths_Speedrun
+@description: Maths Speedrun is a puzzle game where players must quickly determine if the operation shown on the screen is addition or multiplication. The player indicates their choice using designated keys, and the objective is to correctly identify as many equations as possible to increase the score. The game ends if the player makes an incorrect selection.
 @author: Anshuman M.
 @tags: ['puzzle']
 @addedOn: 2023-05-17

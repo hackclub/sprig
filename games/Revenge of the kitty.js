@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Revenge of the kitty
+@description: "Revenge of the Kitty" is an action-adventure game where players control a feline protagonist navigating through levels, defeating enemies, and aiming to defeat bosses. The game features various interactive elements such as projectiles, obstacles, and enemies, creating a challenging environment for players to explore. The goal is to advance through levels and successfully defeat the final boss to claim victory.
 @author: Pugx23
 @tags: ['action']
 @addedOn: 2024-09-27

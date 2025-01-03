@@ -1,5 +1,6 @@
 /*
 @title: Banana runner
+@description: "Banana Runner" is a strategic movement puzzle game where the player navigates through levels to reach a portal while avoiding moving knives. The player must also collect as many keys as possible, using clever maneuvers to bypass obstacles like trees.
 @author: Aaron Lei
 @tags: []
 @addedOn: 2024-07-11

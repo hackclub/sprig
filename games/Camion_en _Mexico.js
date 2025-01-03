@@ -1,5 +1,6 @@
 /*
 @title: Camión en México
+@description: "Camión en México" is a puzzle game where players aim to finish levels with the least amount of money by navigating through challenges and avoiding hostile stickmen. Players collect points by encountering various types of stickmen, each offering different point values, while reaching the blue-capped stickman to progress. The game introduces challenges such as other buses that reset the level, testing strategy and patience.
 @author: Cesar Garnica
 @tags: ['puzzle']
 @addedOn: 2024-08-23

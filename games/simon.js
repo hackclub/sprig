@@ -1,5 +1,6 @@
 /*
 @title: simon
+@description: "Simon" by Riley is a retro-themed memory game where players must replicate a sequence of illuminated tiles. In this 2x2 version, tiles light up in a specific order, and the challenge is to correctly recreate the pattern as it grows longer. Scoring is based on how many tiles the player can remember, with a maximum possible score of 99.
 @author: riley
 @tags: ['retro']
 @addedOn: 2022-09-29

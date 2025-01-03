@@ -1,5 +1,6 @@
 /*
 @title: Pokemon Game
+@description: The game is a Pokémon-themed adventure where players can explore a free-roaming area, collect Pokéballs, and battle other Pokémon. Players choose their starter Pokémon from options like Bulbasaur, Charmander, Squirtle, and Pikachu to engage in battles against 15 different Pokémon, using strategic moves and types to win. The objective is to defeat all Pokémon and collect all Pokéballs to win the game.
 @author: ItzShubhamDev
 @tags: []
 @addedOn: 2024-09-17

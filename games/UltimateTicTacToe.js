@@ -1,5 +1,6 @@
 /*
 @title: UltimateTicTacToe
+@description: UltimateTicTacToe, developed by Grace, is a multiplayer puzzle game that adds complexity to traditional Tic Tac Toe by incorporating a meta-board. Players take turns placing Xs and Os with the goal of winning three small boards in a row to achieve victory on the larger grid. Gameplay introduces strategic depth, as moves are restricted to specific mini-boards based on the opponent's last move, challenging players to think ahead and adapt their tactics.
 @author: Grace
 @tags: ['puzzle','multiplayer']
 @addedOn: 2024-07-20

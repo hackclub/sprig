@@ -1,6 +1,7 @@
 
 /* 
 @title: drab_bullets
+@description: "Drab Bullets" is an endless dodging game where players must avoid bullets falling from above. The challenge increases as players navigate to keep their character alive while maintaining their score.
 @author: Chirag
 @tags: ['endless']
 @addedOn: 2023-05-14

@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Shapes_That_Go
+@description: A game where you control a player and try to reach the end of the level while avoiding obstacles by jumping and reversing gravity.
 @author: Parritz
 @tags: []
 @addedOn: 2024-11-23

@@ -1,5 +1,6 @@
 /*
 @title: Advanced Clicking Simulator
+@description: Try to get as much money as you can! Click on upgrades to increase your click value. Avoid downgrades to prevent losing click value.
 @author: Lun Ivanov
 @tags: []
 @addedOn: 2024-11-26

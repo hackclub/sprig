@@ -1,5 +1,6 @@
 /*
 @title: Tanks
+@description: Tanks is an action-packed multiplayer game where players control tanks that automatically move and fire projectiles with each directional change. The objective is to strategically shoot and hit the opponent's tank before they do the same to you.
 @author: Om Raheja
 @tags: ['action','multiplayer']
 @addedOn: 2024-06-30

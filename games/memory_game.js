@@ -1,5 +1,6 @@
 /*
 @title: Memory Game
+@description: Memory Game is a card-matching game where you try to match pairs of fruits in as few guesses as possible.
 @author: uped
 @tags: []
 @addedOn: 2024-06-18

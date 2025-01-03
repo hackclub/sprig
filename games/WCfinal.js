@@ -1,5 +1,6 @@
 /*
 @title: WCfinal
+@description: A soccer game where you play against a friend. Try to score as many goals as you can!
 @author: pulvis16
 @tags: []
 @addedOn: 2024-12-04

@@ -1,5 +1,6 @@
 /*
 @title: Photosynthesis
+@description: "Photosynthesis" is a strategy game where you collect sunlight, water, and carbon dioxide to help a plant grow. As you gather these resources, the plant progresses to the next level, challenging you to collect the elements in more difficult levels.
 @author: Vanessa Tan
 @tags: []
 @addedOn: 2024-08-26

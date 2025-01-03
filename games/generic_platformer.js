@@ -1,5 +1,6 @@
 /*
 @title: Generic Platformer
+@description: A very simple and generic platformer game. Charge over large gaps by holding down a directional button, and jump on enemies to kill them.
 @author: DaInfLoop
 @tags: ['platformer']
 @addedOn: 2024-10-22

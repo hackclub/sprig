@@ -1,7 +1,8 @@
 /*
 @author: The-UnknownHacker
+@description: The Warrior's Quest is a puzzle game where the player must navigate through a series of mazes to find the coin in each one.
 @title: The Warrior's Quest
-@tags: ['puzzle', 'platformer']
+@tags: ['puzzle']
 @addedOn: 2024-11-25
 */
 

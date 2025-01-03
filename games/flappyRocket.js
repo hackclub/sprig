@@ -1,5 +1,6 @@
 /*
 @title: Flappy Rocket
+@description: Flappy Rocket is a game where you navigate a rocket through a series of endless pipes without touching them.
 @author: quantumDSflux
 @tags: []
 @addedOn: 2024-09-16

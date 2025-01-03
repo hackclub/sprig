@@ -1,5 +1,6 @@
 /*
 @title: PASS_ALL
+@description: PASS_ALL is a strategic puzzle game where the goal is to cover all the tiles without retracing your steps. Players must plan their movements carefully to ensure they can cover all the boxes in each level to win. Avoid obstacles as you navigate the map to successfully advance through increasingly challenging levels.
 @author: Shivang0
 @tags: ['strategy']
 @addedOn: 2022-10-03

@@ -1,5 +1,6 @@
 /*
 @title: Rythym
+@description: Rythym is a rhythm-based game where players must hit the correct pad using the WASD keys as arrows descend the screen, aiming to match the timing accurately. Missing an arrow or activating a pad prematurely results in lost points.
 @author: Shadman
 @tags: []
 @addedOn: 2023-12-25

@@ -1,5 +1,6 @@
 /*
 @title: Phil_Tom_Bug
+@description: Phil_Tom_Bug is an adventurous game about guiding the character Phil Tom Bug through various levels filled with obstacles to reunite with his mom. Players navigate through increasing challenges involving moving enemies, pushable boxes, and traps set within intricate environments. The game explores the life story of Phil Tom Bug, highlighting both the beginning and the end of his life within its gameplay levels.
 @author: Alexis, Westmoreland, Joy
 @tags: []
 @addedOn: 2024-05-20

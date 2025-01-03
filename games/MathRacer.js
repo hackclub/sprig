@@ -1,5 +1,6 @@
 /*
 @title: MathRacer
+@description: MathRacer is a game where players solve mathematical equations by collecting gems while driving. Players must collect either green or blue gems in the correct order to match the given equation before the timer runs out.
 @author: spageektti
 @tags: []
 @addedOn: 2024-00-00

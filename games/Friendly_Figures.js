@@ -1,5 +1,6 @@
 /*
 @title: Friendly Figures
+@description: Friendly Figures is a puzzle game that follows the journey of two characters, Circle and Square, as they navigate puzzling mazes to reach their respective home doors. Designed for multiplayer enjoyment, players must work together to solve maze challenges using strategic movements. Developed by Ali A. Saleh, the game emphasizes creativity and collaboration.
 @author: Ali A. Saleh | January 2023
 @tags: ['puzzle','multiplayer']
 @addedOn: 2022-12-28

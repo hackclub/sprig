@@ -1,5 +1,6 @@
 /*
 @title: Sprig Machine
+@description: Sprig Machine is a sandbox-style puzzle game where players manipulate various types of cells to solve levels. The game includes elements like Movers, Generators, Rotators, Push cells, and Enemies, each with specific behaviors and interactions. Inspired by Cell Machine Mystic Mod, the objective is to strategically combine these elements to overcome obstacles and progress through the game.
 @author: Leonard (Omay)
 @tags: ['sandbox']
 @addedOn: 2022-10-21

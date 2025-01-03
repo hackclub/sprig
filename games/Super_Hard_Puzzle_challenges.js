@@ -1,6 +1,7 @@
 
 /* 
 @title: Super_Hard_Puzzle_challenges
+@description: Super_Hard_Puzzle_challenges is a puzzle game by Ruihan Cao where the player must push gold tiles onto designated boxes to complete levels. The game includes several challenging puzzles, each rewarding the player with gold upon completion. Players can also spend gold to receive hints, or reset levels if needed.
 @author: Ruihan Cao
 @tags: ['puzzle']
 @addedOn: 2023-04-23

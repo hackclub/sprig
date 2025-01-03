@@ -1,5 +1,6 @@
 /*
 @title: Memory game
+@description: Memory Game by TitanStar73 is a pattern replication game where players must memorize and recreate displayed patterns using a grid. The game dynamically adjusts its difficulty based on player performance, providing an endless challenge. Players progress by correctly matching patterns, with difficulty increasing or decreasing accordingly.
 @author: TitanStar73
 @tags: []
 @addedOn: 2024-08-18

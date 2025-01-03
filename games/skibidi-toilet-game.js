@@ -1,5 +1,6 @@
 /*
 @title: skibidi-toilet-game
+@description: In the "Skibidi Toilet Game," players assume the role of a camera in the Skibidiverse, aiming to stop attacking Skibidi toilets by glaring at them.
 @author: spedward
 @tags: ['humor']
 @addedOn: 2024-08-15

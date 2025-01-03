@@ -1,5 +1,6 @@
 /*
 @title: Invisible Maze
+@description: "Invisible Maze" is a puzzle game where the player navigates through levels with hidden paths, facing a challenge where the course is not visible. Each level presents winding routes designed to mislead, and there's even an easter egg hidden in a particular level. The players must rely on their memory and intuition to successfully complete each level and potentially uncover secrets along the way.
 @author: Ryan Qin
 @tags: ['puzzle']
 @addedOn: 2022-12-07

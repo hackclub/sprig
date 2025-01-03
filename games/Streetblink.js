@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Streetblink
+@description: Streetblink is a game where you drive a car down a road and try to avoid obstacles. Every 3 seconds you can point your car in a new direction and see where it ended up.
 @author: 2PBHD
 @tags: []
 @addedOn: 2024-11-01

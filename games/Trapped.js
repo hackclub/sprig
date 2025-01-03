@@ -1,5 +1,6 @@
 /*
 @title: Trapped
+@description: You are a detective trapped in an apartment. Find your way out using tools you find along the way.
 @author: Lockloo50
 @tags: ['puzzle']
 @addedOn: 2024-11-30

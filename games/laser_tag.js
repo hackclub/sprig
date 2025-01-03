@@ -1,5 +1,6 @@
 /*
 @title: laser tag
+@description: Control two characters at the same time and try to get both of them on the green goal spaces.
 @author: leo
 @tags: ['strategy']
 @addedOn: 2022-07-14

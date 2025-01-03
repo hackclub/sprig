@@ -1,5 +1,6 @@
 /*
 @title: Countdown Golf
+@description: Countdown Golf is a puzzle game inspired by Herugolf where players must hit balls into holes without crossing paths. Each ball displays a number indicating how far it can be hit, decreasing with each move, while navigating around water hazards. With 360 unique courses to solve, players can aim for perfect par scores by using strategic moves and undo options.
 @author: schoblaska
 @tags: ['puzzle']
 @addedOn: 2024-03-30

@@ -1,5 +1,6 @@
 /*
 @title: Davinci Lit Trivia
+@description: Davinci Lit Trivia is a platformer game, inspired by Mario Brothers. Players progress through five levels while avoiding obstacles such as acid and carrots, and using mystery boxes to gain jump boosts. The aim is to help strawberries reach a bright yellow goal.
 @author: RubixTV
 @tags: []
 @addedOn: 2024-05-20

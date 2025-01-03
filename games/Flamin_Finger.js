@@ -1,5 +1,6 @@
 /*
 @title: Flamin_Finger
+@description: Flamin' Finger is a timed puzzle game where players navigate a pointer to collect white circles on each level, requiring quick thinking and precision. This game is a digital rendition of the classic, offering multiple tested levels and an easter egg challenge. Levels have varying time limits, ensuring a thrilling experience as players progress.
 @author: Richie Tran
 @tags: ['puzzle','timed']
 @addedOn: 2023-02-23

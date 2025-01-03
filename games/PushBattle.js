@@ -1,5 +1,6 @@
 /*
 @title: PushBattle
+@description: PushBattle is a two-player competitive game where players aim to push each other into hazard blocks to win rounds. The game tracks the number of rounds and victories for each player, allowing for continuous play.
 @author: MatrixMongoose
 @tags: ['multiplayer']
 @addedOn: 2022-11-05

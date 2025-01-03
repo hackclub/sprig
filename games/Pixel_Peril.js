@@ -1,5 +1,6 @@
 /*
 @title: Pixel Peril
+@description: "Pixel Peril" is a maze navigation game where you play as a chill blue ghost trying to escape through a spooky maze while collecting coins. Beware of the creepy red ghost that's constantly chasing you, as well as various hazards like spikes. The goal is to grab the coin and progress through increasingly challenging levels without getting caught.
 @author: Outdatedcandy92
 @tags: []
 @addedOn: 2024-07-08

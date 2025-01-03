@@ -1,5 +1,6 @@
 /*
 @title: 2p-snake
+@description: "2p-snake" is a multiplayer adaptation of the classic Snake game where two players collaborate to navigate their snakes around an increasingly crowded and fast-paced grid. The central challenge is to manage the growing speed and limited space while sharing a single score, emphasizing teamwork over individual success. Players must work together to collect apples while avoiding obstacles and their own snake tails.
 @author: Sigfredo feat. whatware
 @tags: ['multiplayer']
 @addedOn: 2024-08-13

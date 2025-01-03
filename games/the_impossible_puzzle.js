@@ -1,5 +1,6 @@
 /*
 @title: the impossible puzzle
+@description: "The Impossible Puzzle" is a challenging game where players aim to rearrange the squares by pushing them into the correct positions. Despite its apparent simplicity, completing the puzzle is notoriously difficult, giving the game its name. The objective is to achieve a specific arrangement of pieces.
 @author: monish
 @tags: ['puzzle']
 @addedOn: 2022-11-13

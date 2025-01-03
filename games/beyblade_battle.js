@@ -1,5 +1,6 @@
 /*
 @title: Beyblade Battle
+@description: Beyblade Battle is a multiplayer game where two players compete to push each other out of the stadium. The first player to push the other player out of the stadium wins the game.
 @author: Shweta Shaw
 @tags: ['multiplayer']
 @addedOn: 2024-12-6

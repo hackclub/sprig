@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Donkey Kong
+@description: A version of the classic game Donkey Kong. Climb the levels and avoid the barrels to reach the princess!
 @author: Pratyush Verma
 @tags: ['retro', 'action']
 @addedOn: 2024-11-12

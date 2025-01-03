@@ -1,5 +1,6 @@
 /*
 @title: JB's Pushy Blocky Portal Game
+@description: JB's Pushy Blocky Portal Game, created by Justin Burns II, is a puzzle game where you maneuver a character to push a brown box into a portal, which resembles a swirling orange and yellow pattern. The game involves strategizing to navigate through various levels, each becoming progressively more challenging as you align the box with the portal. The character adds a quirky element to this brain-teasing adventure with its "sus" appearance.
 @author: Justin Burns II :)
 @tags: []
 @addedOn: 2024-09-03

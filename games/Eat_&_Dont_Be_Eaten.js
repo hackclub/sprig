@@ -1,6 +1,7 @@
 
 /* 
 @title: Eat_&_Dont_Be_Eaten
+@description: "Eat_&_Dont_Be_Eaten" is a simple survival game where the player navigates a grid to eat food while avoiding a pursuing enemy. The objective is to score points by consuming food while preventing the enemy from catching the player.
 @author: Nathan Man
 @tags: []
 @addedOn: 2023-08-30

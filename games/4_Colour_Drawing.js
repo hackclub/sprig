@@ -1,6 +1,7 @@
 
 /* 
 @title: 4_Colour_Drawing
+@description: 4 Colour Drawing is a sandbox game where players can create pixel art using a limited color palette inspired by the original Gameboy, but with shades of gray instead of green.
 @author: Dexter Speed
 @tags: ['sandbox']
 @addedOn: 2023-08-18

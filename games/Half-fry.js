@@ -1,5 +1,6 @@
 /*
 @title: Half-fry
+@description: Half-fry is a puzzle adventure game where you play as a "half-fry" trying to become a full fry by collecting volts to power a pan. Navigate through various levels, move boxes, and avoid traps to reach the pan and advance. The game offers a creative and challenging experience as you strive to complete your transformation.
 @author: Abhay Gupta
 @tags: []
 @addedOn: 2024-07-11

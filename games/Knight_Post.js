@@ -1,5 +1,6 @@
 /*
 @title: Knight Post
+@description: In "Knight Post," you play as Sir Mailus Postus, a knight with the duty of delivering mail in a medieval kingdom. Navigate through puzzles by strategically pushing mail and moveable bookshelves to clear paths to deliver all the mail to its destinations. The game combines strategic puzzle-solving with a whimsical medieval postman theme.
 @author: Aditya P Venugopal
 @tags: ['puzzle']
 @addedOn: 2023-10-23

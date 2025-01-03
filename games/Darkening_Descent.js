@@ -1,5 +1,6 @@
 /*
 @title: Darkening Descent
+@description: Darkening Descent is a role-playing adventure game where players explore a series of randomly generated dungeons. As players descend through different stages, they encounter enemies, solve puzzles, collect items, and face bosses. The game progresses from the Surface, through the Caverns, to the Hollows, each offering unique challenges and secrets.
 @author: noxi
 @tags: ['role-playing','adventure']
 @addedOn: 2024-07-07

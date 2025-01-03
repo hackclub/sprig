@@ -1,5 +1,6 @@
 /*
 @title: A_Really_One_Sided_Duel
+@description: "A Really One Sided Duel" is an endless shooter game where the player defends their country by dodging enemy projectiles and meteors while aiming to shoot the enemy. Players can move side to side and enter attack mode to shoot, but they cannot move while in attack mode. The player must score 10 points by hitting the enemy to win, while ensuring they dodge any incoming projectiles to avoid an instant loss.
 @author: Saatwik Das
 @tags: ['endless']
 @addedOn: 2022-12-28

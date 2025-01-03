@@ -1,5 +1,6 @@
 /*
 @title: pumpkin_hunt
+@description: Collect pumpkins in a maze while avoiding obstacles. Get as many as you can in 60 seconds!
 @author: Elijah R. Spitzer
 @tags: []
 @addedOn: 2024-10-31

@@ -1,5 +1,6 @@
 /*
 @title: pyre
+@description: "Pyre" is a strategy game created by Ced in which the player is tasked with burning down a blue hut. The game involves strategic thinking to spread fire across various tiles, while managing flammable objects like logs and cubes.
 @author: ced
 @tags: ['strategy']
 @addedOn: 2022-07-18

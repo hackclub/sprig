@@ -1,5 +1,6 @@
 /*
 @title: Labyrinth
+@description: Labyrinth is a simple puzzle game where the objective is to navigate through a maze and find the exit. Players must strategize to avoid walls and reach their goal to progress through multiple levels. The game offers a straightforward concept with increasing complexity to challenge problem-solving skills.
 @author: DorukSarpAlwaysStrikesBack!
 @tags: ['puzzle']
 @addedOn: 2023-02-12

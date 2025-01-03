@@ -1,5 +1,6 @@
 /*
 @title: lights_out
+@description: The game "Lights Out" by StarGazer1258 is a puzzle game where the objective is to turn off all the lights on a 5x5 grid. Players must strategically flip tiles, which also affects the four adjacent tiles, to solve 20 increasingly challenging levels with the fewest moves possible.
 @author: StarGazer1258 (Nathaniel Johns)
 @tags: ['puzzle']
 @addedOn: 2022-12-16

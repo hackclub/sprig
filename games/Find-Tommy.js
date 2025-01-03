@@ -1,5 +1,6 @@
 /*
 @title: Find-Tommy!
+@description: Find Tommy is a game where you navigate through mazes to find Tommy. Collect coins, push boxes, and unlock doors to find Tommy and progress to the next level.
 @author: Mysteryman386
 @tags: []
 @addedOn: 2024-11-20

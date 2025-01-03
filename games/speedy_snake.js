@@ -1,5 +1,6 @@
 /*
 @title: speedy_snake
+@description: This is a new take on the classic snake game. Instead of growing when it eats, this speedy snake increases in speed after eating apples, creating a unique mechanic that is a novel way to play a classic game!
 @author: ItsAStarryKnight
 @tags: ['endless']
 @addedOn: 2022-11-11

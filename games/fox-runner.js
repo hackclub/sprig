@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Fox Runner
+@description: Fox Runner is a game where you navigate through mazes covering all the tiles while avoiding obstacles to reach the goal.
 @author: PGtheVRguy
 @tags: ['maze']
 @addedOn: 2024-11-12

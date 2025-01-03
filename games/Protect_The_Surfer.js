@@ -1,5 +1,6 @@
 /*
 @title: Protect The Surfer
+@description: "Protect The Surfer" is an engaging and challenging game where you guide a surfer through shark-infested waters, aiming to reach the safety of the shore. Avoid sharks to prevent a game over and increase your score by successfully reaching the right side of the screen. Collect points and power-ups to achieve the highest score possible while surviving the treacherous ocean.
 @author: thinkingjet
 @tags: []
 @addedOn: 2023-01-03

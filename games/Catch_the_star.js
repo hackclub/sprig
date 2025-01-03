@@ -1,5 +1,6 @@
 /*
 @title: Catch the star
+@description: "Catch the Star" is a game where a reindeer embarks on a quest to reach a star while collecting gifts along the way. The player navigates through levels, ensuring all gifts are collected before advancing. With its holiday theme, the game challenges players to strategically move the reindeer, capturing both the festive spirit and a sense of adventure.
 @author: Saumya
 @tags: []
 @addedOn: 2023-12-20

@@ -1,5 +1,6 @@
 /*
 @title: getting_started
+@description: "Getting Started" is a tutorial game that guides players through basic game mechanics.
 @author: leo, edits
 @tags: ['tutorial']
 @addedOn: 2022-07-26

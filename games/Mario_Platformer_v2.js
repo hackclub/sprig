@@ -1,5 +1,6 @@
 /*
 @title: Mario Platformer
+@description: Mario Platformer, created by Jackson Flanders, is a puzzle game where players guide Mario through various levels to collect stars and reach the goal. Players can create their own levels, adding complexity and replayability, while encountering a mix of sturdy bricks and movable blocks. The game involves solving puzzles with strategic movement and timing to advance.
 @author: Jackson Flanders
 @tags: []
 @addedOn: 2023-10-20

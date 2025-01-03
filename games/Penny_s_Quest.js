@@ -1,5 +1,6 @@
 /*
 @title: Penny s Quest
+@description: Penny's Quest is a roguelike game where players explore randomly generated levels, engaging in battles against penguins and gathering resources to prepare for the final showdown with the emperor. As players progress through levels, they encounter shops to purchase health and upgrades or prize rooms offering free items. Strategic movement and combat, using a yoyo as a weapon, are key to surviving the challenges presented in this dynamic world.
 @author: OHIO-MAN
 @tags: []
 @addedOn: 2024-04-20

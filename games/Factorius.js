@@ -1,5 +1,6 @@
 /*
 @title: Factorius
+@description: "Factorius" is a rudimentary clone of the game Factorio, blending elements of strategy and survival genres. Players gather resources, such as coal and iron, and use them to build defenses like turrets, all while surviving rounds of enemy "biters." The objective revolves around efficient resource management, strategic placement, and continuous progression through increasing waves of enemies.
 @author: Hitu
 @description: Rudimentary clone of Factorio
 @tags: ['strategy', 'survival']

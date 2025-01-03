@@ -1,5 +1,6 @@
 /*
 @title: Saving Blob
+@description: Saving Blob is a puzzle game where you must navigate through levels to help Blob get back home. Use the arrow keys to move Blob and avoid obstacles. Push the blobs to cover the portals and advance to the next level.
 @author: ARTISM30
 @tags: []
 @addedOn: 2024-11-12

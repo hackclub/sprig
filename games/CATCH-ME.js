@@ -1,5 +1,6 @@
 /*
 @title: CATCH ME!
+@description: Catch Me if you can! is a pattern recognition game where you must navigate through increasingly complex levels to catch the goal. Each level presents a unique challenge requiring strategic movement to succeed. The game features multiple levels to test and enhance your pattern-solving skills.
 @author: Nidheesh
 @tags: []
 @addedOn: 2023-01-07

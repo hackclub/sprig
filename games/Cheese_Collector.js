@@ -1,5 +1,6 @@
 /*
 @title: Cheese Collector
+@description: "Cheese Collector" is a puzzle game where you play as a mouse that pushes cheeses to their home over 5 increasingly difficult levels. The game's challenges involve maneuvering around obstacles and avoiding or distracting moving cats by solving environmental puzzles. Players unlock safes and bowls using keys and milk, navigating strategically to complete each level.
 @author: Sonya
 @tags: []
 @addedOn: 2024-09-03

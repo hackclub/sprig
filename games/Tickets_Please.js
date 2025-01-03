@@ -1,5 +1,6 @@
 /*
 @title: Tickets Please!
+@description: "Tickets Please!" is a single-player simulation game inspired by "Papers, Please," where players assume the role of a ticket inspector. The objective is to spot discrepancies between a passenger's ticket and their information, ensuring only valid tickets are approved. With a limited number of mistakes allowed, players strive to achieve the highest score by accurately verifying tickets.
 @author: Vaporform (ysk)
 @tags: ['simulation']
 @addedOn: 2024-09-18

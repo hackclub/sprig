@@ -1,5 +1,6 @@
 /*
 @title: Ice Cream Chef
+@description: "Ice Cream Chef" is a fast-paced game where players aim to create perfect ice cream sundaes by selecting the correct ingredients to match customer orders. Increase your score by accurately completing orders before time runs out, while avoiding mistakes to maintain your lives.
 @author: sophia
 @tags: []
 @addedOn: 2024-06-24

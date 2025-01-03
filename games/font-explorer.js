@@ -1,5 +1,6 @@
 /*
 @title: Font Explorer
+@description: Font Explorer is a utility tool created by Shane Celis for exploring the font set on the Sprig platform.
 @author: Shane Celis
 @tags: ['utility']
 @addedOn: 2023-01-04

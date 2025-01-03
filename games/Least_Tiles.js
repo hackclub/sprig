@@ -1,5 +1,6 @@
 /*
 @title: Least_Tiles
+@description: "Least_Tiles" is a puzzle game where the goal is to color every tile in a maze using the least number of moves possible. Navigate through different levels with increasing complexity, aiming to touch each tile while avoiding walls. The game challenges players to optimize their paths for efficiency.
 @author: cluac
 @tags: []
 @addedOn: 2024-08-28

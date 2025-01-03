@@ -1,5 +1,6 @@
 /*
 @title: Pong
+@description: This is a 2-player remake of the classic pong game! You control a paddle to bounce back a ball. If the ball touches your wall you lose.
 @author: Irtaza2009
 @tags: ['retro']
 @addedOn: 2024-07-01

@@ -1,5 +1,6 @@
 /*
 @title: tolls
+@description: "Tolls" is a puzzle game where players navigate through levels to reach a green exit block. Collect coins to pass through doors, as each passage costs one coin. Use strategic movement to progress through challenges and complete levels.
 @author: leo
 @tags: []
 @addedOn: 2022-07-19

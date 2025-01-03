@@ -1,5 +1,6 @@
 /*
 @title: The_Sky_Is_Falling_For_Real_This_Time
+@description: "The Sky Is Falling For Real This Time" is an endless game where the player must dodge falling clouds by moving left and right, aiming to achieve a new high score.
 @author: Sawgur
 @tags: ['endless']
 @addedOn: 2023-02-11

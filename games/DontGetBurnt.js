@@ -1,5 +1,6 @@
 /*
 @title: Don't Get Burnt!
+@description: "Don't Get Burnt!" is an action arcade game where you play as Crummington the Ninth, a slice of bread trying to escape from malevolent toasters. You must dodge the toasters and collect jam jars to boost your score as you attempt to get as far as possible. The game begins with a storyline introduction before the action unfolds.
 @author: Alexandra Miller, Mariia Tymoshenko, Elaine Liu, Shenelle Jayakody, Ariane Clarke
 @tags: ["endless"]
 @addedOn: 2023-05-28

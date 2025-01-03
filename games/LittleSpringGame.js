@@ -1,5 +1,6 @@
 /*
 @title: Little Spring Game
+@description: "Little Spring Game" is a puzzle game where the player must navigate and move boxes to reach their home. The player must also destroy rocks to complete levels and progress through the game.
 @author: Jonas Heilig
 @tags: []
 @addedOn: 2024-07-08

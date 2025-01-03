@@ -1,5 +1,6 @@
 /*
 @title: Turn based game
+@description: This turn-based game involves a strategic battle between square characters where you, as the player, must outmaneuver a red square enemy on the grid. The gameplay focuses on managing your limited stamina to move or block attacks strategically. Every move affects the game's cycle, and players gain stamina every third turn, adding layers of tactical decision-making.
 @author: Michael
 @tags: []
 @addedOn: 2024-09-18

@@ -1,5 +1,6 @@
 /*
 @title: Sprig Shooter
+@description: "Sprig Shooter" is a retro-style, endless space-themed action shooter game where you control your ship to shoot down enemy formations of purple asteroids.
 @author: Heliodex
 @tags: ["endless", "action", "real-time", "retro"]
 @addedOn: 2024-10-03

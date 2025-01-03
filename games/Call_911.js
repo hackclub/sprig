@@ -1,5 +1,6 @@
 /*
 @title: Call 911
+@description: "Call 911" is a strategy game where players navigate a firetruck through various levels to extinguish fires. The game involves planning your moves strategically within a limited number of actions to successfully route the firetruck to fire locations. Each level presents different challenges and obstacles that players must overcome to progress.
 @author: Rohit
 @tags: ["strategy" , "puzzle" , "maze"]
 @addedOn: 2022-10-18

@@ -1,5 +1,6 @@
 /*
 @title: Fight against COVID
+@description: "Fight against COVID" is a game where you must eliminate the COVID virus before it infects you. Players use limited ammunition to shoot incoming viruses while navigating the game area. Collecting power-ups grants temporary abilities to enhance your defensive actions against the virus onslaught.
 @author: Swaraj Singh
 @tags: []
 @addedOn: 2024-07-01

@@ -1,5 +1,6 @@
 /*
 @title: Up, Down, Top-down
+@description: "Up, Down, Top-down" is a platformer puzzle game where players navigate through a series of 20 maps featuring a maze and gravity-altering blocks. The objective is to reach flags by overcoming challenges like long jumps and changing gravitational forces. Check out the menu - it has a lot of information on how to play!
 @author: Somebud0180
 @tags: ['puzzle','platformer']
 @addedOn: 2024-07-15

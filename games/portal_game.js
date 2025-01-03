@@ -1,5 +1,6 @@
 /*
 @title: portal_game
+@description: "Portal Game" is a puzzle game where the objective is to move boxes to flags using portals strategically. Players navigate through levels by pushing boxes and utilizing blue and red portals to transport them and the boxes across obstacles.
 @author: DanPlayz (danplayz0)
 @tags: ['puzzle']
 @addedOn: 2023-05-05

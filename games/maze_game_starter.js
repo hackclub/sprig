@@ -1,6 +1,7 @@
 
 /* 
 @title: maze_game_starter
+@description: A simple template to help you get started with making a maze game.
 @author: Cheru Berhanu
 @tags: []
 @addedOn: 2023-08-08
