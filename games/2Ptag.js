@@ -2,7 +2,7 @@
 @title: 2Ptag
 @author: Shadow8928
 @tags: []
-@addedOn: 2024-20-14
+@addedOn: 2025-01-03
 */
 var end = 0
 const player = "p"
