@@ -1,3 +1,10 @@
+/*
+@title: save-the-goat
+@author: Cookiesgobrr
+@tags: []
+@addedOn: 2025-01-03
+*/
+
 const player = "p";
 const hammerhead = "o";
 const mapa = "m";
