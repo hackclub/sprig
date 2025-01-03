@@ -2,10 +2,10 @@ import { playTune } from './tune'
 import { normalizeGameError } from './error'
 import { bitmaps, NormalizedError } from '../state'
 import type { PlayTuneRes } from '../../../engine/src/api'
-import { textToTune } from '../../../engine/src/base'
+import { baseEngine, textToTune } from '../../../engine/src/base'
 import { webEngine } from '../../../engine/src/web'
 import * as Babel from "@babel/standalone"
-import TransformDetectInfiniteLoop, { BuildDuplicateFunctionDetector } from '../custom-babel-transforms'
+import TransformDetectInfiniteLoop, { BuildDuplicateFunctionDetector, dissallowBackticksInDoubleQuotes } from '../custom-babel-transforms'
 import {logInfo} from "../../components/popups-etc/help";
 
 interface RunResult {
@@ -35,6 +35,26 @@ function parseErrorStack(err?: Error): [number | null, number | null] {
         }
     }
     return [null, null];
+}
+
+export function transformAndThrowErrors(code: string, engineAPIKeys: string[], runCb: (code: any) => any) {
+	try {
+		const transformedCode = Babel.transform(code, {
+			plugins: [TransformDetectInfiniteLoop, BuildDuplicateFunctionDetector(engineAPIKeys), dissallowBackticksInDoubleQuotes],
+			retainLines: true
+		});
+		runCb(transformedCode);
+		return null;
+	} catch (error: any) {
+		return normalizeGameError({ kind: "runtime", error });
+	}
+}
+
+export function _performSyntaxCheck(code: string): { error: NormalizedError | null, cleanup: () => void } {
+	const game = baseEngine();
+
+	const engineAPIKeys = Object.keys(game.api);
+	return { error: transformAndThrowErrors(code, engineAPIKeys, () => {}), cleanup: () => void 0 };
 }
 
 export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (error: NormalizedError) => void): RunResult | undefined {
@@ -112,19 +132,11 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 	}
 
     const engineAPIKeys = Object.keys(api);
-    try {
-        const transformResult = Babel.transform(code, {
-            plugins: [TransformDetectInfiniteLoop, BuildDuplicateFunctionDetector(engineAPIKeys)],
-            retainLines: true
-        });
-        logInfo.value = [];
-        const fn = new Function(...engineAPIKeys, transformResult.code!);
-        fn(...Object.values(api));
-        return { error: null, cleanup };
-    } catch (error: any) {
-        onPageError(normalizeGameError({ kind: "runtime", error }));
-        return { error: normalizeGameError({ kind: "runtime", error }), cleanup };
-    }
+	return { error: transformAndThrowErrors(code, engineAPIKeys, (transformedCode) => {
+		logInfo.value = [];
+		const fn = new Function(...engineAPIKeys, transformedCode.code!)
+		fn(...Object.values(api))
+	}), cleanup };
 }
 
 export function runGameHeadless(code: string): void {
