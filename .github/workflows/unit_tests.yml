@@ -4,6 +4,10 @@ on:
   pull_request:
     types: [opened, reopened, edited, synchronize]
 
+env:
+  PUBLIC_MAX_LOOP_TIME_MS: 1500
+  PUBLIC_MAX_ITERATIONS: 2000
+
 jobs:
   build:
     runs-on: ubuntu-latest
