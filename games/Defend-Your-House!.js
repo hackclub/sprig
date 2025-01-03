@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Defend Your House!
 @author: Gabbs
 @tags: ['strategy', 'survival', 'music']
-@addedOn: 2024-11-27
+@addedOn: 2024-11-13
 */
 
 const moving = tune`
@@ -36,38 +36,38 @@ const collision = tune`
 84.50704225352112: E5/84.50704225352112,
 2450.7042253521126`
 const win = tune`
-178.57142857142858: E5/178.57142857142858 + F5~178.57142857142858,
-178.57142857142858: E5/178.57142857142858 + F5~178.57142857142858,
-178.57142857142858: F5/178.57142857142858 + E5-178.57142857142858 + G5^178.57142857142858,
-178.57142857142858: G5/178.57142857142858,
-178.57142857142858: G5/178.57142857142858,
-178.57142857142858: F5/178.57142857142858 + E5-178.57142857142858 + G5^178.57142857142858,
-178.57142857142858: E5/178.57142857142858,
-178.57142857142858: D5/178.57142857142858 + C5~178.57142857142858,
-178.57142857142858: C5/178.57142857142858,
-178.57142857142858: C5/178.57142857142858,
-178.57142857142858: D5/178.57142857142858 + E5-178.57142857142858 + C5~178.57142857142858,
-178.57142857142858: E5/178.57142857142858 + D5~178.57142857142858,
-178.57142857142858: E5/178.57142857142858,
-178.57142857142858: D5/178.57142857142858 + E5-178.57142857142858,
-178.57142857142858: D5/178.57142857142858,
-178.57142857142858: E5/178.57142857142858 + D5~178.57142857142858,
-178.57142857142858: E5/178.57142857142858,
-178.57142857142858: F5/178.57142857142858 + E5-178.57142857142858 + G5^178.57142857142858,
-178.57142857142858: G5/178.57142857142858,
-178.57142857142858: G5/178.57142857142858,
-178.57142857142858: F5/178.57142857142858 + E5-178.57142857142858 + G5^178.57142857142858,
-178.57142857142858: E5/178.57142857142858,
-178.57142857142858: D5/178.57142857142858,
-178.57142857142858: C5/178.57142857142858,
-178.57142857142858: C5/178.57142857142858,
-178.57142857142858: D5/178.57142857142858 + E5-178.57142857142858 + C5~178.57142857142858,
-178.57142857142858: E5/178.57142857142858,
-178.57142857142858: D5/178.57142857142858 + E5-178.57142857142858 + C5~178.57142857142858,
-178.57142857142858: C5/178.57142857142858,
-178.57142857142858: C5/178.57142857142858,
+178.57142857142858: F5~178.57142857142858 + E4-178.57142857142858 + F4~178.57142857142858,
+178.57142857142858: F5~178.57142857142858 + E4-178.57142857142858 + F4~178.57142857142858,
+178.57142857142858: G5^178.57142857142858 + E4-178.57142857142858 + F4-178.57142857142858,
+178.57142857142858: G4-178.57142857142858,
+178.57142857142858: G4-178.57142857142858,
+178.57142857142858: G5^178.57142857142858 + F4-178.57142857142858 + E4-178.57142857142858,
+178.57142857142858: E4-178.57142857142858,
+178.57142857142858: C5~178.57142857142858 + D4-178.57142857142858 + C4~178.57142857142858,
 178.57142857142858: C4-178.57142857142858,
-178.57142857142858: C4-178.57142857142858`
+178.57142857142858: C4-178.57142857142858,
+178.57142857142858: C5~178.57142857142858 + D4-178.57142857142858 + E4-178.57142857142858 + C4~178.57142857142858,
+178.57142857142858: D5~178.57142857142858 + E4-178.57142857142858 + D4~178.57142857142858,
+178.57142857142858: E4-178.57142857142858,
+178.57142857142858: E4-178.57142857142858 + D4-178.57142857142858,
+178.57142857142858: D4-178.57142857142858,
+178.57142857142858: D5~178.57142857142858 + E4-178.57142857142858 + D4~178.57142857142858,
+178.57142857142858: E4-178.57142857142858,
+178.57142857142858: G5^178.57142857142858 + E4-178.57142857142858 + F4-178.57142857142858 + G4^178.57142857142858,
+178.57142857142858: G5-178.57142857142858 + G4-178.57142857142858,
+178.57142857142858: G5-178.57142857142858 + G4-178.57142857142858,
+178.57142857142858: G5^178.57142857142858 + F4-178.57142857142858 + E4-178.57142857142858 + G4^178.57142857142858,
+178.57142857142858: E4-178.57142857142858,
+178.57142857142858: D4-178.57142857142858,
+178.57142857142858: C4-178.57142857142858,
+178.57142857142858: C4-178.57142857142858,
+178.57142857142858: D4-178.57142857142858 + E4-178.57142857142858 + C4~178.57142857142858,
+178.57142857142858: E4-178.57142857142858,
+178.57142857142858: D4-178.57142857142858 + E4-178.57142857142858 + C4~178.57142857142858,
+178.57142857142858: C4-178.57142857142858,
+178.57142857142858: C4-178.57142857142858,
+178.57142857142858: C4/178.57142857142858,
+178.57142857142858: C4/178.57142857142858`
 
 var z = 1;
 var pos = 4;
@@ -82,7 +82,7 @@ const wall = "w"
 const roof = "r"
 const roofl = "R"
 const centerR = "C"
-const center = "ç"
+const center = "k"
 const centerL = "O"
 const white = "W"
 const wood = "o";
@@ -474,13 +474,14 @@ WWW..............WWW
 WWW..............WWW
 WWW......rR......WWW
 WWW.....rCOR.....WWW
-WWW....rCççOR....WWW
+WWW....rCkkOR....WWW
 WWW....pppppp....WWW
 WWW....ppuUpp....WWW
 WWW....ppdDpp....WWW
 wwwwwwwwwwwwwwwwwwww`
 setMap(level)
 setBackground("g")
+setSolids([ cursor, wall, white ])
 
 onInput("k", () => {
   // Move the player one tile to the right
@@ -607,7 +608,7 @@ function gameLoop() {
 }
 
 // Imposta l'intervallo per eseguire la funzione gameLoop ogni tot millisecondi
-const interval = setInterval(gameLoop, 500); // Esegui ogni secondo (1000 millisecondi)
+const interval = setInterval(gameLoop, 300); // Esegui ogni secondo (1000 millisecondi)
 
 function FireBallLEvent() {
   console.log("The value of z is: " + z);
@@ -616,12 +617,12 @@ function FireBallLEvent() {
   if (z == 1) {
     z = 1;
 
-    pos = 3;
+    pos = 2;
     var randomY = Math.floor(Math.random() * (14 - 4 + 1)) + 4;
     challengeState = true;
-    addSprite(pos, 4, FIREBALL);
+    addSprite(pos, 3, FIREBALL);
     z = 2;
-  } else {
+  } else if(z === 2 ){
     const fireballSprite = getFirst(FIREBALL);
     fireballSprite.x += 1; // Move the ROCK sprite down
     fireballSprite.y += 1;
@@ -631,34 +632,48 @@ function FireBallLEvent() {
 
     spritesAtFireball.forEach(sprite => {
       if (sprite.type === wood) {
+        z = 3;
         // If the ROCK hits a wood block, remove both sprites
         sprite.remove(); // Remove the wood block
         fireballSprite.remove(); // Remove the ROCK sprite
         playTune(collision);
 
-        z = 3;
+        
       } 
         //ATTENTO
       else if(sprite.type === reinforcedWall)
       {
+        z = 3;
         sprite.remove(); // Remove the wood block
         addSprite(fireballSprite.x, fireballSprite.y, wood);
         fireballSprite.remove(); // Remove the ROCK sprite
         playTune(collision);
-        z = 3;
+        
       }
       else if (sprite.type === roof || sprite.type === roofl || sprite.type === pizzaOne || sprite.type === center || sprite.type === centerL || sprite.type === centerR) {
+        z = 4;
         // If the ZAP hits a wood block, remove both sprites
         sprite.remove(); // Remove the wood block
         fireballSprite.remove(); // Remove the ZAP sprite
 
-        z = 4;
+        
       }
 
     });
 
-    if (fireballSprite.x == 18 || z == 3) {
+    if (fireballSprite.x == 18) {
       fireballSprite.remove();
+      challengeState = false;
+      challenge = false;
+      z = 1;
+      pos = 4;
+      addText("press J", {
+        x: 7,
+        y: 5,
+        color: color`4`
+      })
+    }else if (z == 3)
+    {
       challengeState = false;
       challenge = false;
       z = 1;
@@ -684,12 +699,12 @@ function FireBallREvent() {
   if (z == 1) {
     z = 1;
 
-    pos = 16;
+    pos = 17;
     
     challengeState = true;
-    addSprite(pos, 4, FIREBALLR);
+    addSprite(pos, 3, FIREBALLR);
     z = 2;
-  } else {
+  } else if(z === 2 ) {
     const fireballSprite = getFirst(FIREBALLR);
     fireballSprite.x -= 1; // Move the ROCK sprite down
     fireballSprite.y += 1;
@@ -699,33 +714,36 @@ function FireBallREvent() {
 
     spritesAtFireball.forEach(sprite => {
       if (sprite.type === wood) {
+        z = 3;
         // If the ROCK hits a wood block, remove both sprites
         sprite.remove(); // Remove the wood block
         fireballSprite.remove(); // Remove the ROCK sprite
         playTune(collision);
 
-        z = 3;
+        
       } 
         //ATTENTO
       else if(sprite.type === reinforcedWall)
       {
+        z = 3;
         sprite.remove(); // Remove the wood block
         addSprite(fireballSprite.x, fireballSprite.y, wood);
         fireballSprite.remove(); // Remove the ROCK sprite
         playTune(collision);
-        z = 3;
+        
       }
       else if (sprite.type === roof || sprite.type === roofl || sprite.type === pizzaOne || sprite.type === center || sprite.type === centerL || sprite.type === centerR) {
+        z = 4;
         // If the ZAP hits a wood block, remove both sprites
         sprite.remove(); // Remove the wood block
         fireballSprite.remove(); // Remove the ZAP sprite
 
-        z = 4;
+        
       }
 
     });
 
-    if (fireballSprite.x == 2 || z == 3) {
+    if (fireballSprite.x == 2) {
       fireballSprite.remove();
       challengeState = false;
       challenge = false;
@@ -736,7 +754,18 @@ function FireBallREvent() {
         y: 5,
         color: color`4`
       })
-    } else if (z == 4) {
+    } else if (z == 3)
+    {
+      challengeState = false;
+      challenge = false;
+      z = 1;
+      pos = 4;
+      addText("press J", {
+        x: 7,
+        y: 5,
+        color: color`4`
+      })
+    }else if (z == 4) {
       challengeState = false;
       GameOver();
     }
@@ -751,12 +780,12 @@ function ZapEvent() {
   // Move the ZAP sprite down
   if (z == 1) {
     z = 1;
-    pos = 4;
+    pos = 3;
     var randomX = Math.floor(Math.random() * (16 - 3 + 1)) + 3;
     challengeState = true;
     addSprite(randomX, pos, ZAP);
     z = 2;
-  } else {
+  } else if(z === 2 ){
     const zapSprite = getFirst(ZAP);
     zapSprite.y += 1; // Move the ZAP sprite down
 
@@ -766,35 +795,49 @@ function ZapEvent() {
 
     spritesAtZap.forEach(sprite => {
       if (sprite.type === wood) {
+        z = 3;
         // If the ZAP hits a wood block, remove both sprites
         sprite.remove(); // Remove the wood block
         zapSprite.remove(); // Remove the ZAP sprite
         playTune(collision);
 
-        z = 3;
+
       }
         //ATTENTO
       else if(sprite.type === reinforcedWall)
       {
+        z = 3;
         sprite.remove(); // Remove the wood block
         addSprite(zapSprite.x, zapSprite.y, wood);
         zapSprite.remove(); // Remove the ROCK sprite
         playTune(collision);
-        z = 3;
+        
         
       }
       else if (sprite.type === roof || sprite.type === roofl || sprite.type === pizzaOne) {
+        z = 4;
         // If the ZAP hits a wood block, remove both sprites
         sprite.remove(); // Remove the wood block
         zapSprite.remove(); // Remove the ZAP sprite
 
-        z = 4;
+        
       }
 
     });
 
-    if (zapSprite.y == 15 || z == 3) {
+    if (zapSprite.y == 15) {
       zapSprite.remove();
+      challengeState = false;
+      challenge = false;
+      z = 1;
+      pos = 4;
+      addText("press J", {
+        x: 7,
+        y: 5,
+        color: color`4`
+      })
+    }else if (z == 3)
+    {
       challengeState = false;
       challenge = false;
       z = 1;
@@ -820,12 +863,12 @@ function RockLEvent() {
   if (z == 1) {
     z = 1;
 
-    pos = 3;
+    pos = 2;
     var randomY = Math.floor(Math.random() * (14 - 4 + 1)) + 4;
     challengeState = true;
     addSprite(pos, randomY, ROCK);
     z = 2;
-  } else {
+  } else if(z===2){
     const rockSprite = getFirst(ROCK);
     rockSprite.x += 1; // Move the ROCK sprite down
 
@@ -835,33 +878,36 @@ function RockLEvent() {
 
     spritesAtRock.forEach(sprite => {
       if (sprite.type === wood) {
+        z = 3;
         // If the ROCK hits a wood block, remove both sprites
         sprite.remove(); // Remove the wood block
         rockSprite.remove(); // Remove the ROCK sprite
         playTune(collision);
 
-        z = 3;
+        
       }
         //ATTENTO
       else if(sprite.type === reinforcedWall)
       {
+        z = 3;
         sprite.remove(); // Remove the wood block
         addSprite(rockSprite.x, rockSprite.y, wood);
         rockSprite.remove(); // Remove the ROCK sprite
         playTune(collision);
-        z = 3;
+        
       }
       else if (sprite.type === roof || sprite.type === roofl || sprite.type === pizzaOne) {
+        z = 4;
         // If the ZAP hits a wood block, remove both sprites
         sprite.remove(); // Remove the wood block
         rockSprite.remove(); // Remove the ZAP sprite
 
-        z = 4;
+        
       }
 
     });
 
-    if (rockSprite.x == 18 || z == 3) {
+    if (rockSprite.x == 18) {
       rockSprite.remove();
       challengeState = false;
       challenge = false;
@@ -872,7 +918,18 @@ function RockLEvent() {
         y: 5,
         color: color`4`
       })
-    } else if (z == 4) {
+    } else if (z == 3)
+    {
+      challengeState = false;
+      challenge = false;
+      z = 1;
+      pos = 4;
+      addText("press J", {
+        x: 7,
+        y: 5,
+        color: color`4`
+      })
+    }else if (z == 4) {
       challengeState = false;
       GameOver();
     }
@@ -888,12 +945,12 @@ function RockREvent() {
   if (z == 1) {
     z = 1;
 
-    pos = 17;
+    pos = 18;
     var randomY = Math.floor(Math.random() * (14 - 4 + 1)) + 4;
     challengeState = true;
     addSprite(pos, randomY, ROCKF);
     z = 2;
-  } else {
+  } else if(z === 2 ) {
     const rockfSprite = getFirst(ROCKF);
     rockfSprite.x -= 1; // Move the ROCK sprite down
 
@@ -903,34 +960,48 @@ function RockREvent() {
 
     spritesAtRockf.forEach(sprite => {
       if (sprite.type === wood) {
+        z = 3;
         // If the ROCKF hits a wood block, remove both sprites
         sprite.remove(); // Remove the wood block
         rockfSprite.remove(); // Remove the ROCKF sprite
         playTune(collision);
 
-        z = 3;
+        
       }
       //ATTENTO
       else if(sprite.type === reinforcedWall)
       {
+        z = 3;
         sprite.remove(); // Remove the wood block
         addSprite(rockfSprite.x, rockfSprite.y, wood);
         rockfSprite.remove(); // Remove the ROCK sprite
         playTune(collision);
-        z = 3;
+        
       }
       else if (sprite.type === roof || sprite.type === roofl || sprite.type === pizzaOne) {
+        z = 4;
         // If the ZAP hits a wood block, remove both sprites
         sprite.remove(); // Remove the wood block
         rockfSprite.remove(); // Remove the ZAP sprite
 
-        z = 4;
+        
       }
 
     });
 
-    if (rockfSprite.x == 2 || z == 3) {
+    if (rockfSprite.x == 2) {
       rockfSprite.remove();
+      challengeState = false;
+      challenge = false;
+      z = 1;
+      pos = 4;
+      addText("press J", {
+        x: 7,
+        y: 5,
+        color: color`4`
+      })
+    }else if (z == 3)
+    {
       challengeState = false;
       challenge = false;
       z = 1;
