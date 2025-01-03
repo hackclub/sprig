@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: heartgame
 @author: Anmol Kumar Singh
 @tags: []
-@addedOn: 2024-12-17
+@addedOn: 2025-01-03
 */
 
 const player = "p";
