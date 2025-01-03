@@ -2,7 +2,8 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Flappy-bird-with-gravity-and-sound
+@title: Flappy Bird with Gravity and Sound
+@tags: []
 @author: Yug Khandelwal
 @addedOn: 2024-12-30
 */
