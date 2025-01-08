@@ -1,3 +1,9 @@
+/*
+@title: alexandru moga
+@author: flappy-bird
+@tags: []
+@addedOn: 2025-01-09
+*/
 const player = "p";
 const wall = "w";
 const background = "b";
