@@ -1,6 +1,6 @@
 /*
-@title: Cooking by PythonSharpPlus
-@author: PythonSharpPlus
+@title: Taco Man's Taco Stand
+@author: David, Etah, Oliver, and Collin
 @tags: []
 @addedOn: 01-10-2025
 */
