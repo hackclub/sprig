@@ -1,0 +1,4164 @@
+/*
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
+@title: maze
+@author: 
+@tags: []
+@addedOn: 2024-00-00
+*/
+
+const player = "p"
+const block = "b"
+const finish = "f"
+const h = "h"
+const e = "e"
+const l = "l"
+const o = "o"
+const finishh = "fh"
+const finishe = "fe"
+const finishl = "fl"
+const finisho = "fo"
+const win = "w"
+const enemy = "E"
+
+
+
+
+
+
+setLegend(
+  [ player, bitmap`
+.......000......
+.......0..0.....
+.....00000......
+....0000000.....
+...030000030....
+...000000000....
+...003333300....
+...037777730....
+...037777730....
+...037777730....
+...037777730....
+...003333300....
+...000000000....
+...000...000....
+...000...000....
+...000...000....` ],
+  [ block, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
+  [ finish, bitmap`
+................
+................
+.33333..3333333.
+......33........
+.....0330.......
+......33........
+.33333223333333.
+......33........
+......33........
+......33........
+......33........
+......33........
+.33333..333333..
+................
+................
+................`],
+  [ h, bitmap`
+................
+................
+................
+..000......000..
+..000......000..
+..000000000000..
+..000000000000..
+..000000000000..
+..000000000000..
+..000......000..
+..000......000..
+................
+................
+................
+................
+................`],
+  [ e, bitmap`
+................
+................
+................
+....00000000....
+...0000000000...
+...00000000000..
+..000......000..
+..000......000..
+..00000000000...
+..0000000000....
+....0000000.....
+....00000.......
+.....0000.......
+......0000000...
+......00000000..
+.......0000000..`],
+  [ l, bitmap`
+................
+................
+................
+....000.........
+....000.........
+....000.........
+....000.........
+....000.........
+....000.........
+....000.........
+....000.........
+....00000000....
+....00000000....
+................
+................
+................`],
+  [ o, bitmap`
+................
+................
+................
+....0000000.....
+...0000000000...
+...00......00...
+...00......00...
+...00......00...
+...00......00...
+...00......00...
+...0000000000...
+.....000000.....
+................
+................
+................
+................`],
+  [ win, bitmap`
+................
+................
+................
+....3.......3...
+....3.......3...
+....3.......3...
+....3.......3...
+.0..3.......3...
+.0..3.......3...
+.00.3..........0
+..00..........00
+....00.......00.
+......0000..0...
+..........000...
+................
+................`],
+  [ enemy, bitmap`
+................
+...22222222.....
+..2.......22....
+..233...33..22..
+.2.30...03...22.
+2..............2
+2..............2
+0000.......00..2
+0000000000000..2
+.00.......00...2
+..00.....00...22
+..0000000....22.
+2............2..
+.22........22...
+..2222...222....
+.....22222......`],
+ 
+  
+)
+
+setSolids([block, e, h, l, o, player, ]);
+
+let level = 0
+const levels = [
+  map`
+...f...
+bb.bbb.
+E......
+.bbb.bb
+......E
+bb.bbb.
+E.e....
+bbbpbbb`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+f......E
+bbE..E..
+..E..E.E
+.E......
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+b.........b
+..E.E.E.E..
+...E.E.E...
+...........
+.....p.....`,
+  map`
+E.........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+...Ebee.eee
+.eeebbb....
+E....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+b...E.E...b
+.E.E.E.E.E.
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+    map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.Eee....
+....bee.eee
+.eeebbE....
+.E...eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+    map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+    map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bEbbbE.
+.......
+.bbEEbb
+.......
+bE..bb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+.E..bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+E.bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.Eee....
+....bee.eee
+.eeeEbE....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+    map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbEbbEbbEbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bEbbbb.
+.......
+.bbbbEb
+.......
+bEbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+.....f...
+..Ebbbbb.
+.........
+...bEbbbE
+.........
+..bEbbbb.
+....e....
+..bbbpbbb`,
+    map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+    map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+    map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+    map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,  
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+w...........f
+bbbb.....bbbb
+.............
+....hello....
+.....p.......`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeeEbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bbEEEEEE
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbEb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+..E.bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+EEbebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.Eee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbEb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bEbbbb.
+.......
+.bbbbbb
+E......
+bbbbbE.
+..e....
+Ebbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+EEbebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eeeEbeeE...
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbEb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+E.ebbe..
+..ebbeE.
+...ee...
+....p...`,
+  map`
+f.......
+bbbbb...
+..EbEbb.
+........
+....p...`,
+   map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+bebbbbbf
+bebbbbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebe
+..b.bbb
+..b..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+bbbbbbbbbbb
+...........
+...........
+...........
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeebbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+b.....bf
+b...E.e.
+b.....b.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+fb......
+bb......
+........
+........
+....p...`,
+  map`
+...f...
+bbbbbb.
+.......
+.bbbbbb
+.......
+bbbbbb.
+..e....
+bbbpbbb`,
+  map`
+......f
+.bbbbbb
+....bbb
+..b.ebE
+..b.bbb
+.Eb..be
+..bb...
+..bebbp`,
+  map`
+eeeeee.f
+eeebbe.e
+eebeeb.e
+eebbbe.e
+eebeee.e
+eeebbb.e
+e......e
+p.eeeeee`,
+  map`
+bbbbbbbbbbb
+b....f....b
+b.........b
+...EE.EE...
+..b..b..b..
+.eeeeeeeee.
+.....p.....`,
+  map`
+..........f
+.eeeeeeeee.
+....beeeee.
+eee.bee....
+....bee.eee
+.eeeEbb....
+.....eeeee.
+eeee.......
+eeeepeeeeee`,
+  map`
+bebbbbbf
+bebbwbb.
+beebbbb.
+bbbbbbb.
+eebbbbb.
+p.......`,
+  map`
+....f...
+...ee...
+..ebbe..
+..ebbe..
+...ee...
+....p...`,
+  map`
+f.......
+bEEE...l
+hhhhhhhl
+........
+....p...`,
+  map`
+p.
+..
+..
+..
+..
+..
+..
+..
+..
+w.
+..
+..`
+
+]
+  
+
+const currentLevel = levels[level];
+setMap(currentLevel);
+
+setPushables({
+    [ player ]: [e, h, l, o, player],
+    [ enemy ] : [e]
+})
+
+onInput("w", () => {
+  getFirst(player).y -= 1
+})
+onInput("a", () => {
+  getFirst(player).x -= 1
+})
+onInput("s", () => {
+  getFirst(player).y += 1
+})
+onInput("d", () => {
+  getFirst(player).x += 1
+})
+
+afterInput(() => {
+  const targetNumber = tilesWith(finish).length;
+  const numberCovered = tilesWith(finish, player).length;
+  const numbersCovered = tilesWith(win, player).length;
+  if (numberCovered === targetNumber) {
+    level = Math.floor((Math.random() * levels.length));
+
+    const currentLevel = levels[level];
+    if (currentLevel !== undefined) {
+      setMap(currentLevel)
+    }
+    }
+  if (numbersCovered == targetNumber) {
+      addText("you win");
+  }
+  
+});
+let speed = 500 // The function will run every 500 milliseconds
+
+function game() {
+  const gameLoop = setInterval(() => { // Any code within these brackets will run constantly
+
+    clearText()
+
+    if (tilesWith(player, enemy).length == 1) { // If an enemy touches a player
+      clearInterval(gameLoop); // Turn off the infinite loop
+      addText("you lose!", options = { x: 6, y: 5, color:color`3` })
+    }
+
+    // Iterate through a list of all the enemies
+    for (let i = 0; i < getAll(enemy).length; i++) {
+      // Make the currently iterated enemy move in a random direction
+      getAll(enemy)[i].x += Math.floor(Math.random() * 3) - 1
+      getAll(enemy)[i].y += Math.floor(Math.random() * 3) - 1
+    }
+
+  }, speed)
+}
+
+game() // Run the infinite loop
+
+  
