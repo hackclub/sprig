@@ -1,3 +1,9 @@
+/*
+@title: Cooking by PythonSharpPlus
+@author: PythonSharpPlus
+@tags: []
+@addedOn: 01-10-2025
+*/
 let randomDecimal = Math.random();
 
 // Sprite Initializations (the same as before)
