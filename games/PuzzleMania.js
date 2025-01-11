@@ -1,8 +1,8 @@
 /*
 @title: PuzzleMania
 @author: Johamez_Wilzoney
-@tags: [Puzzle, Mania, PuzzleMania]
-@addedOn: 2024-21-12
+@tags: ["puzzle"]
+@addedOn: 2024-12-21
 */
 
 const player = "p"
