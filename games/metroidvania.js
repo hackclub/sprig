@@ -1616,7 +1616,7 @@ var collectibles = 0;
 var codesFound = [];
 var found = {
   fireWand: false,
-  speedBoots: true,
+  speedBoots: false,
   harmonica: false,
   duck: false,
   frog: false,
