@@ -460,6 +460,40 @@ const bloomedFlowersSprite = bitmap`
 ........HH8HH...
 .........HHH....
 ................`;
+const boxButtonSprite = bitmap`
+................
+................
+................
+................
+...0000000000...
+...0CCCCCCCC0...
+...0CC0CC0CC0...
+...0CCC00CCC0...
+...0CCC00CCC0...
+...0CC0CC0CC0...
+..L0CCCCCCCC0L..
+..LLLLLLLLLLLL..
+..LLLLLLLLLLLL..
+..LLLLLLLLLLLL..
+................
+................`;
+const boxDoorSprite = bitmap`
+0111111111111110
+01LLLLLLLLLLLLL0
+01LLLLLLLLLLLLL0
+01LL000000001LL0
+01LL00CCCC001LL0
+01LL0C0CC0C01LL0
+01LL0C0000C01LL0
+01LL0CC00CC01LL0
+01LL0CC00CC01LL0
+01LL0C0000C01LL0
+01LL0C0CC0C01LL0
+01LL00CCCC001LL0
+01LL000000001LL0
+01LL111111111LL0
+01LLLLLLLLLLLLL0
+0000000000000000`;
 const normalLegend = [
   ["harmonicaIndicator", bitmap`
 ................
@@ -718,9 +752,9 @@ const normalLegend = [
 .999.....99999..`],
   ["boss", bitmap`
 ................
-...0.......00...
-...000222000....
-...2200202222...
+...3.......33...
+...333222333....
+...2233232222...
 .2222222222222..
 223332222333222.
 223332222333222.
@@ -1126,6 +1160,7 @@ function swapLegend(sprites) {
 }
 
 setLegendAndSprites(normalLegend);
+setBoxPuzzleComponents();
 
 for (var i = 0; i < normalLegend.length; i++) {
   flashLegend.push([normalLegend[i][0], grayscaleBitmap(normalLegend[i][1])]);
@@ -1136,6 +1171,22 @@ function flash(duration) {
   setTimeout(function () {
     swapLegend(normalLegend);
   }, duration);
+}
+
+function setBoxPuzzleComponents() {
+  for (var i = 0; i < normalLegend.length; i++) {
+    if (normalLegend[i][0] == button) {
+      normalLegend[i][1] = boxButtonSprite;
+      continue;
+    }
+
+    if (normalLegend[i][0] == door) {
+      normalLegend[i][1] = boxDoorSprite;
+      continue;
+    }
+  }
+
+  swapLegend(normalLegend);
 }
 
 function bloomFlowers() {
@@ -1150,8 +1201,8 @@ function bloomFlowers() {
 
 const singers = [duckSinger, frogSinger, snakeSinger, catSinger, ratSinger, whitetailSinger];
 const decoration = [floor, floor2, sign, greyPillar];
-const speedBootsSkippable = [boss, hole, musicNotes, buttonRed, buttonBlue, buttonGreen, ...decoration, ...singers];
-const solids = [player, greyPillar, wall, wallIce, wallMusic, wallBoss, box, jail, hole, doorRed, doorBlue, doorGreen, ...singers];
+const speedBootsSkippable = [boss, hole, musicNotes, button, buttonRed, buttonBlue, buttonGreen, ...decoration, ...singers];
+const solids = [player, greyPillar, wall, wallIce, wallMusic, wallBoss, box, jail, hole, door, doorRed, doorBlue, doorGreen, ...singers];
 const pushables = [box, jail, ...singers];
 setSolids(solids);
 setBackground(floor);
@@ -1190,8 +1241,8 @@ const rooms = [
 .....
 ........Ñ»..
 .....¤...
-.ÿ......
-¤.....¤
+i....ß
+¤.X...¤
 .`, map`
 °°°°°
 ..°°°°°
@@ -1304,14 +1355,14 @@ const rooms = [
 .Â........»
 .`, map`
 °°
-°°.¤......
+°°.¤.....ß
 .....¤.
 .33....ñ..
 .ÂĖ....
 ...y¤...
-.......
+......ß
 ..¤.......
-¤`, map`
+¤ii`, map`
 ...°°
 ñ....¤.°°
 .......°°
@@ -1358,13 +1409,13 @@ const rooms = [
 ....Ė
 yñ....3.
 .`, map`
-.°°
-.......ÿ°°
-..X.¤...
-¤....¶¸....
-.¸..¶.¤.
-°°°.¶..¸...
-°°°..¸¶..
+...
+......XX
+..X.¤.
+¤....¸¶....
+.¶..¸.¤.
+°°°.¸..¶...
+°°°..¶¸..
 °°°ÿ.....°
 °°°°`, map`
 °°°°°.¤.°°
@@ -1560,12 +1611,12 @@ function generateSecretCode() {
   return parseInt(number);
 }
 
-const totalCollectibles = "24";
+const totalCollectibles = "27";
 var collectibles = 0;
 var codesFound = [];
 var found = {
   fireWand: false,
-  speedBoots: false,
+  speedBoots: true,
   harmonica: false,
   duck: false,
   frog: false,
@@ -2280,6 +2331,17 @@ afterInput(() => {
       codesFound.push(readSecretCode());
     }
     addText(readSecretCode().toString(), {x: 0, y: 14, color: color`2`});
+  }
+
+
+  // Check for box puzzle components
+  const bbs = getAll(button);
+  for (let i = 0; i < bbs.length; i++) {
+    const btile = getTile(bbs[i].x, bbs[i].y)[0];
+    if (btile && (btile.type == box || btile.type == jail)) {
+      openDoor(door);
+      bbs[i].remove();
+    }
   }
 
   if (toolEquipped === harmonica) displayHarmonicaUI();
