@@ -1,9 +1,9 @@
 /* 
-@title: maze_game_starter
-@author: Cheru Berhanu
+@title: Dungeon Quest
+@author: egg948
 @tags: []
 @img: ""
-@addedOn: 2023-08-08
+@addedOn: 2025-01-15
 */
 
 const player = "p"
