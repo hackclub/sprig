@@ -2,7 +2,7 @@
   @title: metroidvania
   @author: Ajay S
   @tags: ['puzzle', 'adventure']
-  @addedOn: 2024-00-00
+  @addedOn: 2024-01-15
 
   W,A,S,D to move.
   K to reset current room.
