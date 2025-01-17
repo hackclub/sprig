@@ -1,7 +1,4 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Legally Distinct Yellow Creature Collects Bananas
 @author: DogeJr
 @tags: ['silly']
