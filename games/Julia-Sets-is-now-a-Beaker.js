@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Julia Sets Attempt
 @author: Rafi
-@tags: ['Simulation']
-@addedOn: 2025-01-14
+@tags: ['simulation']
+@addedOn: 2025-01-17
 
 Controls:
 W = Move Up
