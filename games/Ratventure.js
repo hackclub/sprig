@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Ratventure
 @author: j4y_boi
-@tags: [rat,platformer]
-@addedOn: 2025-12-01
+@tags: ['platformer']
+@addedOn: 2025-01-17
 */
 
 const player = "p"
