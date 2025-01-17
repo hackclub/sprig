@@ -1,8 +1,8 @@
 /*
-@title: sprig_dodging
-@author: sam liu and lucas
-@tags: ['tutorial']
-@addedOn: 2022-12-15
+@title: Sprig bounce
+@author: Vinesh-0710
+@tags: []
+@addedOn: 2025-01-17
 */
 
 // define the sprites in our game
