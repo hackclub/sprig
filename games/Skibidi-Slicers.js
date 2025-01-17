@@ -1,3 +1,9 @@
+/*
+@title: Skibidi Slicers
+@author: 22yeets22
+@tags: []
+@addedOn: 2025-01-17
+*/
 const player = "p";
 const enemy = "e";
 const swordUp = "u";
