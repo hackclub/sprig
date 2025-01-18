@@ -1,5 +1,5 @@
 /* 
-@title: maze runner 2
+@title: maze runner 5
 @author: sagrusea
 @tags: [maze, puzzle]
 @addedOn: 2024-00-00
