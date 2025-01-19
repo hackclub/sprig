@@ -2,13 +2,14 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Flappy Bird with Gravity and Sound
+@title: Flappy Bird with Animated Bird, Gravity and Sound
 @tags: []
 @author: Yug Khandelwal
-@addedOn: 2024-12-30
+@addedOn: 2025-1-19
 */
 
-const player = "p";
+const flapUp = "u";
+const flapDown = "d"
 const obstacle = "o";
 const background = "b";
 const gameOverMelody = tune`
@@ -47,41 +48,61 @@ const gameOverMelody = tune`
 const keyTune = tune`
 500: G4-500,
 15500`;
+
+const bird = () => getFirst("u") || getFirst("d");
+
 setLegend(
-  [player, bitmap`
+  [flapUp, bitmap`
 ................
 ................
-................
-.....00000......
-...00666600.....
-000206666060....
-0222206660250...
-0666606660250...
-.0660666600000..
-..0006660999990.
+00..............
+220..00000......
+62200666600.....
+062206666060....
+0662206660250...
+.066606660250...
+..060666600000..
+...006660999990.
 ....0666099990..
 .....006600000..
 .......000......
 ................
 ................
 ................`],
+  [flapDown, bitmap`
+................
+................
+................
+....00000.......
+..00666600......
+.0206666060.....
+022206660250....
+026606660250....
+2260666600000...
+26606660999990..
+6000666099990...
+60..006600000...
+0.....000.......
+................
+................
+................`],
   [obstacle, bitmap`
 LLLLLLLLLLLLLLLL
+L333L333333L333L
+L333L333333L333L
+L333L333333L333L
 LLLLLLLLLLLLLLLL
+L3333333L333333L
+L3333333L333333L
+L3333333L333333L
 LLLLLLLLLLLLLLLL
+L333L333333L333L
+L333L333333L333L
+L333L333333L333L
 LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL`],
+L3333333L333333L
+L3333333L333333L
+L3333333L333333L`],
   [background, bitmap`
 7777777777777777
 7777777777777777
@@ -107,7 +128,7 @@ const levels = [
 .......o..
 .......o..
 .......o..
-p.........
+u.........
 .......o..
 .......o..
 .......o..`
@@ -116,7 +137,8 @@ p.........
 setMap(levels[level]);
 setBackground(background);
 setPushables({
-  [player]: []
+  [flapUp]: [],
+  [flapDown]: [],
 });
 var isGameOver = false;
 var speed = 250;
@@ -124,16 +146,17 @@ var gap = 4;
 var count = 0;
 var score = 0;
 onInput("s", () => {
+  const bird = () => getFirst("u") || getFirst("d");
   if (!isGameOver) {
     playTune(keyTune);
-    getFirst(player).y += 1;
+    bird().y += 1;
   }
 });
-
 onInput("w", () => {
+  const bird = () => getFirst("u") || getFirst("d");
   if (!isGameOver) {
     playTune(keyTune);
-    getFirst(player).y -= 1;
+    bird().y -= 1;
   }
 });
 
@@ -149,12 +172,11 @@ function generateObstacle() {
 
 function gameLoop() {
   addText(`Score: ${score}`, { x: 10, y: 1, color: color`2` })
+  
   if (count % 4 == 0) {
-    getAll(player).forEach((p) => {
-      if (p.y == 8) {} else {
-        p.y += 1;
-      };
-    });
+    if (bird().y == 8) {} else {
+      bird().y += 1;
+    };
   }
   getAll(obstacle).forEach((o) => {
     if (o.x == 0) {
@@ -166,10 +188,13 @@ function gameLoop() {
   if (getAll(obstacle).length == 0) {
     generateObstacle();
   }
-  if (getFirst(obstacle).x == getFirst(player).x && getFirst(player).y != gap) {
+  bird().type = [flapUp, flapDown][count % 2];
+  if (getFirst(obstacle).x == bird().x && bird().y != gap) {
     gameOver();
   }
   count += 1;
+
+ 
   speed -= (250 - speed);
   if (!isGameOver) {
     setTimeout(gameLoop, speed);
