@@ -14,6 +14,9 @@ jobs:
   build-uf2:
       runs-on: 'ubuntu-latest' # Run on the latest stable Ubuntu version
       steps:
+      - name: 'Install OpenOCD'
+        run: |
+          sudo apt-get install openocd
       - name: 'Clone Spade repo'
         run: |
           cd ~/
