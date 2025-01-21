@@ -100,7 +100,6 @@ function moveMeteors() {
 
   meteorSprites.forEach(meteorSprite => {
     meteorSprite.y += 1;
-
     if (meteorSprite.y >= height() - 1) {
       meteorSprite.remove();
     }
