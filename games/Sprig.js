@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Catch the block
 @author: Ethan
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2025-01-22
 */
 
 const player = "p";
