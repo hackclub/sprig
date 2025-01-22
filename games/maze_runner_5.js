@@ -1,8 +1,8 @@
 /* 
 @title: maze runner 5
 @author: sagrusea
-@tags: [maze, puzzle]
-@addedOn: 2024-00-00
+@tags: ['maze', 'puzzle']
+@addedOn: 2024-01-22
 */
 let hp = 3; // Initialize HP
 const bgmusic1 = tune`
