@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: subway surfish
-@author: 
+@author: scottwellcorn
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-01-22
 */
 const player = "p"
 const wall = "w"
