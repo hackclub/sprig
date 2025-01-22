@@ -1,3 +1,11 @@
+/*
+@title: Pixel Carnage
+@author: buzzarc
+@tags: []
+@addedOn: 2025-01-22
+*/
+
+
 // Define the sprites in the game
 const player = "p";
 const coin = "c";
