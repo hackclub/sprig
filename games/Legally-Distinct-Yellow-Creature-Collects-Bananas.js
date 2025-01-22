@@ -1,8 +1,8 @@
 /*
 @title: Legally Distinct Yellow Creature Collects Bananas
 @author: DogeJr
-@tags: ['silly']
-@addedOn: 2025-01-17
+@tags: []
+@addedOn: 2025-01-22
 */
 
 //Starting the game
