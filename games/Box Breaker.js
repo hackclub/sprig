@@ -1,3 +1,9 @@
+/*
+@title: Box Breaker
+@author: chips39
+@tags: []
+@addedOn: 2025-01-22
+*/
 
 const player = "p"
 const wall = "w"
