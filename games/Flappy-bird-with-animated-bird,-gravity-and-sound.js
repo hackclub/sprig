@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Flappy Bird with Animated Bird, Gravity and Sound
 @tags: []
 @author: Yug Khandelwal
-@addedOn: 2025-1-19
+@addedOn: 2025-01-22
 */
 
 const flapUp = "u";
