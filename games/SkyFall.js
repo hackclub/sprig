@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: SkyFall
-@author: 
+@author: Skyfall
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2025-01-22
 */
 
 const player = "p";
