@@ -1,8 +1,8 @@
 /*
 @title: Frog
 @author: Felix
-@tags: [endless, retro, adventure, survival]
-@addedOn: 2025-01-20
+@tags: ['endless', 'retro', 'adventure', 'survival']
+@addedOn: 2025-01-22
 */
 
 const frog = "f"
