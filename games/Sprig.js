@@ -89,14 +89,21 @@ onInput("d", () => {
   getFirst(player).x += 1
 })
 
+addText(`Score: ${score}`, {
+    x: 2,
+    y: 0,
+  });
+
 afterInput(() => {
   if (getFirst(player).x === getFirst(apple).x && getFirst(player).y === getFirst(apple).y) {
     getFirst(apple).x = Math.floor(Math.random() * 10);
     getFirst(apple).y = Math.floor(Math.random() * 10);
     score++;
-  }
 
-  if (score > 15) {
-    console.log("YOU WIN!");
+    clearText();
+    addText(`Score: ${score}`, {
+      x: 2,
+      y: 0,
+    });
   }
 })
