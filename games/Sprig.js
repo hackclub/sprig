@@ -74,18 +74,22 @@ setPushables({
 })
 
 onInput("w", () => {
+  if (score >= 40) return;
   getFirst(player).y -= 1
 })
 
 onInput("a", () => {
+  if (score >= 40) return;
   getFirst(player).x -= 1
 })
 
 onInput("s", () => {
+  if (score >= 40) return;
   getFirst(player).y += 1
 })
 
 onInput("d", () => {
+  if (score >= 40) return;
   getFirst(player).x += 1
 })
 
@@ -95,7 +99,7 @@ addText(`Score: ${score}`, {
   });
 
 afterInput(() => {
-  if (getFirst(player).x === getFirst(apple).x && getFirst(player).y === getFirst(apple).y) {
+  if (score < 40 && (getFirst(player).x === getFirst(apple).x && getFirst(player).y === getFirst(apple).y)) {
     getFirst(apple).x = Math.floor(Math.random() * 10);
     getFirst(apple).y = Math.floor(Math.random() * 10);
     score++;
@@ -106,4 +110,17 @@ afterInput(() => {
       y: 0,
     });
   }
+  if (score >= 40) {
+      for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+          clearTile(i, j);
+        }
+      }
+      clearText();
+
+      addText("YOU WIN!", {
+        x: 6,
+        y: 6
+      })
+    }
 })
