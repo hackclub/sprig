@@ -92,6 +92,28 @@ setPushables({
   [player]: []
 })
 
+function killFunc() {
+  
+  if (getFirst(player).x == getFirst(kill).x && getFirst(player).y == getFirst(kill).y) {
+    loose = true;
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+          clearTile(i, j);
+        }
+      }
+      clearText();
+
+      addText("You loose :(", {
+        x: 5,
+        y: 6
+      })
+     addText(`Score: ${score}`, {
+        x: 5,
+        y: 7
+      })
+  }
+}
+
 onInput("w", () => {
   if (score >= 40 || loose) return;
   getFirst(player).y -= 1
@@ -122,7 +144,7 @@ getFirst(kill).x = Math.floor(Math.random() * 10);
 getFirst(kill).y = Math.floor(Math.random() * 10);
 
 afterInput(() => {
-  if ((score < 40 && !loose) && (getFirst(player).x === getFirst(block).x && getFirst(player).y === getFirst(block).y)) {
+  if ((score < 40 && !loose) && (getFirst(player).x == getFirst(block).x && getFirst(player).y == getFirst(block).y)) {
     getFirst(block).x = Math.floor(Math.random() * 10);
     getFirst(block).y = Math.floor(Math.random() * 10);
     score++;
@@ -133,24 +155,11 @@ afterInput(() => {
       y: 0,
     });
   }
-  if (loose || (getFirst(player).x === getFirst(kill).x && getFirst(player).y === getFirst(kill).y)) {
-    loose = true;
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
-          clearTile(i, j);
-        }
-      }
-      clearText();
 
-      addText("You loose :(", {
-        x: 5,
-        y: 6
-      })
-     addText(`Score: ${score}`, {
-        x: 5,
-        y: 7
-      })
+  if (!loose) {
+    killFunc()
   }
+  
   if (score >= 40) {
       for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
@@ -164,4 +173,23 @@ afterInput(() => {
         y: 6
       })
     }
+
+  if (score < 40 && !loose) {
+    const playerPos = [getFirst(player).x, getFirst(player).y];
+    const killPos = [getFirst(kill).x, getFirst(kill).y];
+
+    if (playerPos[0] - killPos[0] > 0) {
+      getFirst(kill).x = getFirst(kill).x + 1;
+    } else if (playerPos[0] - killPos[0] < 0) {
+      getFirst(kill).x = getFirst(kill).x - 1;
+    }
+
+    if (playerPos[1] - killPos[1] > 0) {
+      getFirst(kill).y = getFirst(kill).y + 1;
+    } else if (playerPos[1] - killPos[1] < 0) {
+      getFirst(kill).y = getFirst(kill).y - 1;
+    }
+
+    killFunc();
+  }
 })
