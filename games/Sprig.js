@@ -9,9 +9,11 @@ https://sprig.hackclub.com/gallery/getting_started
 */
 
 const player = "p";
-const apple = "a";
+const block = "a";
+const kill = 'k';
 
 let score = 0;
+let loose = false;
 
 setLegend(
   [player, bitmap`
@@ -31,7 +33,24 @@ setLegend(
 ......0.0.......
 .....00.00......
 ................`],
-  [apple, bitmap`
+  [block, bitmap`
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555`],
+  [kill, bitmap`
 3333333333333333
 3333333333333333
 3333333333333333
@@ -61,7 +80,7 @@ const levels = [
 ......a...
 ..........
 ..........
-..........
+....k.....
 ..........
 p.........
 ..........`
@@ -74,34 +93,38 @@ setPushables({
 })
 
 onInput("w", () => {
-  if (score >= 40) return;
+  if (score >= 40 || loose) return;
   getFirst(player).y -= 1
 })
 
 onInput("a", () => {
-  if (score >= 40) return;
+  if (score >= 40 || loose) return;
   getFirst(player).x -= 1
 })
 
 onInput("s", () => {
-  if (score >= 40) return;
+  if (score >= 40 || loose) return;
   getFirst(player).y += 1
 })
 
 onInput("d", () => {
-  if (score >= 40) return;
+  if (score >= 40 || loose) return;
   getFirst(player).x += 1
 })
 
 addText(`Score: ${score}`, {
-    x: 2,
-    y: 0,
-  });
+  x: 2,
+  y: 0,
+});
+getFirst(block).x = Math.floor(Math.random() * 10);
+getFirst(block).y = Math.floor(Math.random() * 10);
+getFirst(kill).x = Math.floor(Math.random() * 10);
+getFirst(kill).y = Math.floor(Math.random() * 10);
 
 afterInput(() => {
-  if (score < 40 && (getFirst(player).x === getFirst(apple).x && getFirst(player).y === getFirst(apple).y)) {
-    getFirst(apple).x = Math.floor(Math.random() * 10);
-    getFirst(apple).y = Math.floor(Math.random() * 10);
+  if ((score < 40 && !loose) && (getFirst(player).x === getFirst(block).x && getFirst(player).y === getFirst(block).y)) {
+    getFirst(block).x = Math.floor(Math.random() * 10);
+    getFirst(block).y = Math.floor(Math.random() * 10);
     score++;
 
     clearText();
@@ -109,6 +132,24 @@ afterInput(() => {
       x: 2,
       y: 0,
     });
+  }
+  if (loose || (getFirst(player).x === getFirst(kill).x && getFirst(player).y === getFirst(kill).y)) {
+    loose = true;
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+          clearTile(i, j);
+        }
+      }
+      clearText();
+
+      addText("You loose :(", {
+        x: 5,
+        y: 6
+      })
+     addText(`Score: ${score}`, {
+        x: 5,
+        y: 7
+      })
   }
   if (score >= 40) {
       for (let i = 0; i < 10; i++) {
