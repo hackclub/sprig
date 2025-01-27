@@ -2,8 +2,8 @@
 
 @title: X and O
 @author: Deskime
-@tags: [game]
-@addedOn: 2024-00-00
+@tags: []
+@addedOn: 2025-01-27
 
 First you use "a", "s", or "d" to control your X position, then do the same thing to place your Y position.
 
