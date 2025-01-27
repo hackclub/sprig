@@ -1,10 +1,8 @@
 /*
 @title: Push Box Challenge
-@tags: ['tutorial']
-@addedOn: 2022-07-26
-
-This is a simple tutorial game where you move a box to its goal.
-The goal is to push the box to the correct location.
+@author: 89Aman
+@tags: []
+@addedOn: 2025-01-27
 */
 
 // Define the sprites used in the game
