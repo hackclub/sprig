@@ -1,7 +1,6 @@
 /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
-
 @title: Catch the block
 @author: Ethan
 @tags: []
@@ -93,7 +92,7 @@ setPushables({
 })
 
 function killFunc() {
-  
+
   if (getFirst(player).x == getFirst(kill).x && getFirst(player).y == getFirst(kill).y) {
     loose = true;
     for (let i = 0; i < 10; i++) {
@@ -159,7 +158,7 @@ afterInput(() => {
   if (!loose) {
     killFunc()
   }
-  
+
   if (score >= 40) {
       for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
@@ -182,9 +181,7 @@ afterInput(() => {
       getFirst(kill).x = getFirst(kill).x + 1;
     } else if (playerPos[0] - killPos[0] < 0) {
       getFirst(kill).x = getFirst(kill).x - 1;
-    }
-
-    if (playerPos[1] - killPos[1] > 0) {
+    } else if (playerPos[1] - killPos[1] > 0) {
       getFirst(kill).y = getFirst(kill).y + 1;
     } else if (playerPos[1] - killPos[1] < 0) {
       getFirst(kill).y = getFirst(kill).y - 1;
