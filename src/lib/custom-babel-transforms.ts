@@ -79,16 +79,18 @@ export default function TransformDetectInfiniteLoop({ types: t }: { types: any }
 				);
 
 				// No block statment e.g. `while (1) 1;`
-				if (!path.get('body').isBlockStatement()) {
+				const pathBodyAll = path.get('body');
+				const pathBody = Array.isArray(pathBodyAll) ? pathBodyAll[pathBodyAll.length - 1] : pathBodyAll;
+				if (!pathBody.isBlockStatement()) {
 					const statement = path.get('body').node;
-					path.get('body').replaceWith(
+					pathBody.replaceWith(
 						t.blockStatement([
 							guard,
 							statement,
 						]),
 					);
 				} else {
-					path.get('body').unshiftContainer('body', guard);
+					pathBody.unshiftContainer('body', guard);
 				}
 			}
 		}
