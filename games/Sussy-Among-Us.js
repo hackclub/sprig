@@ -1,7 +1,7 @@
 /*
 @title: Sussy Among Us
-@author:doggo_74
-@tags: ['amongus']
+@author: doggo_74
+@tags: []
 @addedOn: 2022-07-26
 
 Push the boxes to the designated zone- but don't get stuck!!!
