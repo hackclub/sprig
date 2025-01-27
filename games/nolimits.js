@@ -1,3 +1,10 @@
+/*
+@title: no limits
+@author: AdrianRang
+@tags: []
+@addedOn: 2025-01-27
+*/
+
 let getLinePositions = (xs, ys, xe, ye) => {
   let posArr = []
   let dx = xe - xs;
