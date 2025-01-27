@@ -126,6 +126,8 @@ function moveKill() {
     } else if (playerPos[1] - killPos[1] < 0) {
       getFirst(kill).y = getFirst(kill).y - 1;
     }
+
+  killFunc();
 }
 
 setInterval(moveKill, 1000)
