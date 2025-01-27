@@ -113,6 +113,23 @@ function killFunc() {
   }
 }
 
+function moveKill() {
+  const playerPos = [getFirst(player).x, getFirst(player).y];
+    const killPos = [getFirst(kill).x, getFirst(kill).y];
+
+    if (playerPos[0] - killPos[0] > 0) {
+      getFirst(kill).x = getFirst(kill).x + 1;
+    } else if (playerPos[0] - killPos[0] < 0) {
+      getFirst(kill).x = getFirst(kill).x - 1;
+    } else if (playerPos[1] - killPos[1] > 0) {
+      getFirst(kill).y = getFirst(kill).y + 1;
+    } else if (playerPos[1] - killPos[1] < 0) {
+      getFirst(kill).y = getFirst(kill).y - 1;
+    }
+}
+
+setInterval(moveKill, 1000)
+
 onInput("w", () => {
   if (score >= 40 || loose) return;
   getFirst(player).y -= 1
@@ -146,6 +163,7 @@ afterInput(() => {
   if ((score < 40 && !loose) && (getFirst(player).x == getFirst(block).x && getFirst(player).y == getFirst(block).y)) {
     getFirst(block).x = Math.floor(Math.random() * 10);
     getFirst(block).y = Math.floor(Math.random() * 10);
+
     score++;
 
     clearText();
@@ -174,19 +192,6 @@ afterInput(() => {
     }
 
   if (score < 40 && !loose) {
-    const playerPos = [getFirst(player).x, getFirst(player).y];
-    const killPos = [getFirst(kill).x, getFirst(kill).y];
-
-    if (playerPos[0] - killPos[0] > 0) {
-      getFirst(kill).x = getFirst(kill).x + 1;
-    } else if (playerPos[0] - killPos[0] < 0) {
-      getFirst(kill).x = getFirst(kill).x - 1;
-    } else if (playerPos[1] - killPos[1] > 0) {
-      getFirst(kill).y = getFirst(kill).y + 1;
-    } else if (playerPos[1] - killPos[1] < 0) {
-      getFirst(kill).y = getFirst(kill).y - 1;
-    }
-
     killFunc();
   }
 })
