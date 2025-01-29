@@ -2,7 +2,7 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: lewis is autistic
+@title: epic space invaders
 @author: 
 @tags: []
 @addedOn: 2024-00-00
