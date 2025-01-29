@@ -1,8 +1,8 @@
 /*
 @title: CatchIt
+@author: Shrey Mehra
 @tags: []
 @addedOn: 2023-03-14
-@author: Shrey Mehra
 
 Creds:-
 A_Really_One_Sided_Duel by Saatwik Das (The working was similar so I copied algorithms)

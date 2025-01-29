@@ -2,7 +2,7 @@
 /* 
 @title: Swapper
 @author: RaidTheWeb
-@tags: ['advanced']
+@tags: []
 @addedOn: 2023-10-18
 */
 

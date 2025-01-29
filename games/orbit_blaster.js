@@ -1,11 +1,11 @@
 /*
+@title: orbit_blaster
+@author: blackpolygon
+@tags: ['action']
+@addedOn: 2024-04-08
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: orbit_blaster
-@author: blackpolygon
-@tags: ["dodge"]
-@addedOn: 2024-04-08
 */
 
 const player = "p"

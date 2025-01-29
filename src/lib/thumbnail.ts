@@ -25,7 +25,7 @@ const decode = ({ data, width }: RawThumbnail) => {
 }
 
 export const loadThumbnailUrl = async (key: string): Promise<string> => {
-	const res = await fetch(`/api/thumbnail?key=${encodeURIComponent(key)}`)
+	const res = await fetch(`/${key}.json`)
 	const json = await res.json() as Thumbnail
 
 	if (json.kind === 'png') {

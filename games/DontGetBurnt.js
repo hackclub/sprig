@@ -1,8 +1,8 @@
 /*
 @title: Don't Get Burnt!
-@tags: ['']
-@addedOn: 2023-05-28
 @author: Alexandra Miller, Mariia Tymoshenko, Elaine Liu, Shenelle Jayakody, Ariane Clarke
+@tags: ["endless"]
+@addedOn: 2023-05-28
 
 Use WASD keys to move Crummington and dodge the evil toasters! Try to collect jam jars, they boost your score
 

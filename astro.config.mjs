@@ -4,8 +4,10 @@ import vercel from '@astrojs/vercel/serverless'
 import prefresh from '@prefresh/vite'
 import svelte from '@astrojs/svelte'
 import rehypeExternalLinks from 'rehype-external-links'
-
+import fs from "node:fs";
 import generateMetadata from "./src/integrations/generate-metadata"
+
+const gameFiles = fs.readdirSync("games").filter(f => f.endsWith(".js")).map(game => `./games/${game}`);
 
 export default defineConfig({
 	site: 'https://sprig.hackclub.com',
@@ -15,7 +17,9 @@ export default defineConfig({
 		generateMetadata()
 	],
 	output: 'server',
-	adapter: vercel(),
+	adapter: vercel({
+		includeFiles: gameFiles,
+	}),
 	vite: {
 		optimizeDeps: {
 			exclude: ['https']

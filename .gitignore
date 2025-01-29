@@ -6,3 +6,6 @@ yarn-error.log
 .env
 dist/
 games/metadata.json
+public/*.json
+firmware/spade/firmware.elf
+firmware/spade/firmware.uf2

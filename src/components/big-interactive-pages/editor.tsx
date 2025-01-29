@@ -3,7 +3,6 @@ import CodeMirror from "../codemirror";
 import Navbar from "../navbar-editor";
 import {
 	IoClose,
-	IoPlayCircleOutline,
 	IoStopCircleOutline,
 	IoVolumeHighOutline,
 	IoVolumeMuteOutline,
@@ -15,11 +14,10 @@ import {
 	useSignalEffect,
 } from "@preact/signals";
 import { useEffect, useRef, useState} from "preact/hooks";
-import { codeMirror, errorLog, muted, PersistenceState } from "../../lib/state";
+import { codeMirror, errorLog, isNewSaveStrat, muted, PersistenceState, RoomState,  screenRef, cleanupRef } from "../../lib/state";
 import EditorModal from "../popups-etc/editor-modal";
-import { runGame } from "../../lib/engine";
+import { runGame, _performSyntaxCheck } from "../../lib/engine";
 import DraftWarningModal from "../popups-etc/draft-warning";
-import Button from "../design-system/button";
 import { debounce } from "throttle-debounce";
 import Help from "../popups-etc/help";
 import { collapseRanges } from "../../lib/codemirror/util";
@@ -29,11 +27,55 @@ import { nanoid } from "nanoid";
 import TutorialWarningModal from "../popups-etc/tutorial-warning";
 import { editSessionLength, switchTheme, ThemeType, continueSaving, LAST_SAVED_SESSION_ID, showSaveConflictModal } from '../../lib/state'
 import SessionConflictWarningModal from '../popups-etc/session-conflict-warning-modal'
-import {versionState} from "../../lib/upload";
+import {eotMessage, versionState} from "../../lib/upload";
 import VersionWarningModal from "../popups-etc/version-warning";
+import OutOfSpaceModal from "../popups-etc/out-of-space";
+import RoomPasswordPopup from "../popups-etc/room-password";
+import KeyBindingsModal from '../popups-etc/KeyBindingsModal'
+import { PersistenceStateKind } from "../../lib/state";
+
+let screenShakeSignal: Signal<number> | null = null;
+
+const performSyntaxCheck = () => {
+	const code = codeMirror.value?.state.doc.toString() ?? "";
+	const res = _performSyntaxCheck(code);
+	if (res.error) {
+		errorLog.value = [];
+		errorLog.value = [res.error];
+	}
+}
+
+export const onRun = async () => {
+	foldAllTemplateLiterals();
+	if (!screenRef.value) return;
+
+	if (cleanupRef.value) cleanupRef.value();
+	errorLog.value = [];
+	const code = codeMirror.value?.state.doc.toString() ?? "";
+	const res = runGame(code, screenRef.value, (error) => {
+		errorLog.value = [...errorLog.value, error];
+	});
+
+	screenRef.value.focus();
+	if (screenShakeSignal) {
+		screenShakeSignal.value++;
+	}
+	setTimeout(() => {
+		if (screenShakeSignal) {
+			screenShakeSignal.value--;
+		}
+	}, 200);
+
+	cleanupRef.value = res?.cleanup;
+	if (res && res.error) {
+		console.error(res.error.raw);
+		errorLog.value = [...errorLog.value, res.error];
+	}
+};
 
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
+	roomState?: Signal<RoomState> | undefined;
 	cookies: {
 		outputAreaSize: number | null;
 		helpAreaSize: number | null;
@@ -54,6 +96,14 @@ const outputAreaWidthMargin = 130; // The margin between the editor and output a
 const minHelpAreaHeight = 32;
 let defaultHelpAreaHeight = 350;
 const helpAreaHeightMargin = 0; // The margin between the screen and help area
+
+export const foldTemplateLiteral = (from: number, to: number) => {
+	if (!codeMirror.value) return;
+	collapseRanges(
+		codeMirror.value,
+		[[from, to]]
+	);
+}
 
 export const foldAllTemplateLiterals = () => {
 	if (!codeMirror.value) return;
@@ -137,7 +187,7 @@ export const saveGame = debounce(
 			saveQueueSize--;
 			if (
 				saveQueueSize === 0 &&
-				persistenceState.value.kind === "PERSISTED"
+				persistenceState.value.kind === PersistenceStateKind.PERSISTED
 			) {
 				persistenceState.value = {
 					...persistenceState.value,
@@ -151,8 +201,49 @@ export const saveGame = debounce(
 	}
 );
 
+export async function startSavingGame(persistenceState: Signal<PersistenceState>, roomState: Signal<RoomState> | undefined) {
+	const attemptSaveGame = async () => {
+		try {
+			const game =
+				persistenceState.value.kind === PersistenceStateKind.PERSISTED &&
+				persistenceState.value.game !== "LOADING"
+					? persistenceState.value.game
+					: null;
+			const res = await fetch("/api/games/start-saving", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					gameId: game?.id,
+					tutorialName: game?.tutorialName,
+					roomParticipants: roomState?.value.participants
+				}),
+			});
+			if (!res.ok)
+				throw new Error(`Error saving game: ${await res.text()}`);
+			return true;
+		} catch (error) {
+			console.error(error);
+
+			persistenceState.value = {
+				...persistenceState.value,
+				cloudSaveState: "ERROR",
+			} as any;
+			return false;
+		}
+	};
+	while (!(await attemptSaveGame())) {
+		await new Promise((resolve) => setTimeout(resolve, 2000));
+	}
+	console.log("SUCCESS SAVE")
+	if (persistenceState.value.kind === PersistenceStateKind.PERSISTED)
+		persistenceState.value = {
+			...persistenceState.value,
+			cloudSaveState: "SAVED",
+		};
+}
+
 const exitTutorial = (persistenceState: Signal<PersistenceState>, sessionId: string) => {
-	if (persistenceState.value.kind === "PERSISTED") {
+	if (persistenceState.value.kind === PersistenceStateKind.PERSISTED) {
 		delete persistenceState.value.tutorial;
 		if (typeof persistenceState.value.game !== "string") {
 			delete persistenceState.value.game.tutorialName;
@@ -162,19 +253,29 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>, sessionId: str
 			stale: true,
 			cloudSaveState: "SAVING",
 		};
-        saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
+		if(isNewSaveStrat.value)
+			startSavingGame(persistenceState, undefined);
+		else
+        	saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
+
 	} else {
-		if (persistenceState.value.kind == "SHARED")
+		if (persistenceState.value.kind == PersistenceStateKind.SHARED)
 			delete persistenceState.value.tutorial;
 	}
 };
 
-export default function Editor({ persistenceState, cookies }: EditorProps) {
+export default function Editor({ persistenceState, cookies, roomState }: EditorProps) {
 	const outputArea = useRef<HTMLDivElement>(null);
 	const screenContainer = useRef<HTMLDivElement>(null);
 	const screenControls = useRef<HTMLDivElement>(null);
 
 	const [sessionId] = useState(nanoid());
+
+	useEffect(() => {
+		setInterval(() => {
+			performSyntaxCheck();
+		}, 2000);
+	}, []);
 
 	useEffect(() => {
 		const channel = new BroadcastChannel('session_channel');
@@ -201,10 +302,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		};
 	}, []);
 
-	const handleSave = (code: string) => {
-		saveGame(persistenceState, code, sessionId);
-	};
-
 	// Resize state storage
 	const outputAreaSize = useSignal(
 		Math.max(
@@ -222,7 +319,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	);
 
 	const canvasScreenSize = useSignal({
-		height: outputArea.current?.clientHeight! - helpAreaSize.value - screenControls.current?.clientHeight!,
+		height: outputArea.current?.clientHeight! - helpAreaSize.value, // - screenControls.current?.clientHeight!,
 		maxHeight: screenContainer.current?.clientHeight
 	});
 
@@ -345,48 +442,28 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 		return () => window.removeEventListener("mousemove", onMouseMove);
 	}, []);
 
+	useEffect(() => {
+		screenRef.value = screen.current;
+
+		screenShakeSignal = screenShake;
+	});
+	useEffect(() => () => cleanupRef.value?.(), []);
 	// We like running games!
 	const screen = useRef<HTMLCanvasElement>(null);
-	const cleanup = useRef<(() => void) | null>(null);
 	const screenShake = useSignal(0);
-	const onRun = async () => {
-		foldAllTemplateLiterals();
-		if (!screen.current) return;
-
-		if (cleanup.current) cleanup.current();
-		errorLog.value = [];
-
-		const code = codeMirror.value?.state.doc.toString() ?? "";
-		const res = runGame(code, screen.current, (error) => {
-			errorLog.value = [...errorLog.value, error];
-		});
-
-		screen.current.focus();
-		screenShake.value++;
-		setTimeout(() => screenShake.value--, 200);
-
-		cleanup.current = res.cleanup;
-		if (res.error) {
-			console.error(res.error.raw);
-			errorLog.value = [...errorLog.value, res.error];
-		}
-	};
 
 	const onStop = async () => {
 		if (!screen.current) return;
-
-		if (cleanup.current) cleanup.current();
+		if (cleanupRef.value) cleanupRef.value?.();
 	};
-
-	useEffect(() => () => cleanup.current?.(), []);
 
 	// Warn before leave
 	useSignalEffect(() => {
 		let needsWarning = false;
-		if (["SHARED", "IN_MEMORY"].includes(persistenceState.value.kind)) {
+		if ([PersistenceStateKind.SHARED, PersistenceStateKind.IN_MEMORY].includes(persistenceState.value.kind)) {
 			needsWarning = persistenceState.value.stale;
 		} else if (
-			persistenceState.value.kind === "PERSISTED" &&
+			persistenceState.value.kind === PersistenceStateKind.PERSISTED &&
 			persistenceState.value.stale &&
 			persistenceState.value.game !== "LOADING"
 		) {
@@ -409,33 +486,42 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 
 	// Disable native save shortcut
 	useEffect(() => {
-		const handler = (event: KeyboardEvent) => {
-			if (event.key === "s" && (event.metaKey || event.ctrlKey)) { 
-				event.preventDefault();
-				if (!continueSaving.value) { 
-					continueSaving.value = true;
-					saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
+		if(!isNewSaveStrat.value){
+			const handler = (event: KeyboardEvent) => {
+				if (event.key === "s" && (event.metaKey || event.ctrlKey)) {
+					event.preventDefault();
+					if (!continueSaving.value) {
+						continueSaving.value = true;
+						saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
+					}
 				}
-			}
-		};
-		window.addEventListener("keydown", handler);
-		return () => window.removeEventListener("keydown", handler);
+			};
+			window.addEventListener("keydown", handler);
+			return () => window.removeEventListener("keydown", handler);
+		}
+		return
 	}, [continueSaving.value]);
 
 	let initialCode = "";
 	let gameId = '';
 	if (
-		persistenceState.value.kind === "PERSISTED" &&
+		persistenceState.value.kind === PersistenceStateKind.PERSISTED &&
 		persistenceState.value.game !== "LOADING"
 	){
 		initialCode = persistenceState.value.game.code;
 		gameId = persistenceState.value.game?.id ?? '';
 
 	}
-	else if (persistenceState.value.kind === "SHARED")
+	else if (persistenceState.value.kind === PersistenceStateKind.SHARED)
 		initialCode = persistenceState.value.code;
-	else if (persistenceState.value.kind === "IN_MEMORY")
+	else if (persistenceState.value.kind === PersistenceStateKind.IN_MEMORY)
 		initialCode = localStorage.getItem("sprigMemory") ?? defaultExampleCode;
+	else if (isNewSaveStrat.value && persistenceState.value.kind === PersistenceStateKind.COLLAB){
+		if(typeof persistenceState.value.game !== 'string')
+			// @ts-ignore
+			initialCode = persistenceState.value.game.game.code;
+	}
+	
 	// Firefox has weird tab restoring logic. When you, for example, Ctrl-Shift-T, it opens
 	// a kinda broken cached version of the page. And for some reason this reverts the CM
 	// state. Seems like manipulating Preact state is unpredictable, but sessionStorage is
@@ -457,12 +543,21 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 	}, [initialCode]);
 
 	return (
+		roomState != undefined && persistenceState.value.kind === PersistenceStateKind.COLLAB && typeof persistenceState.value.game === 'string' 
+		? 
+			(<>
+				<RoomPasswordPopup persistenceState={persistenceState} />
+			</>) 
+		:
+			(
 		<div class={styles.page}>
-			<Navbar persistenceState={persistenceState} />
+			<Navbar persistenceState={persistenceState} roomState={roomState}/>
 
 			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>
 					<CodeMirror
+						persistenceState={persistenceState}
+						roomState={roomState}
 						class={styles.code}
 						initialCode={initialCode}
 						onEditorView={(editor) => {
@@ -475,15 +570,17 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 								...persistenceState.value,
 								stale: true,
 							};
-							if (persistenceState.value.kind === "PERSISTED") {
+							if (persistenceState.value.kind === PersistenceStateKind.PERSISTED || persistenceState.value.kind === PersistenceStateKind.COLLAB) {
 								persistenceState.value = {
 									...persistenceState.value,
 									cloudSaveState: "SAVING",
 								};
-								handleSave(codeMirror.value!.state.doc.toString());
+								console.log("SAVING")
+								if(!isNewSaveStrat.value)
+									saveGame(persistenceState, codeMirror.value!.state.doc.toString(), sessionId);
 							}
 
-							if (persistenceState.value.kind === "IN_MEMORY") {
+							if (persistenceState.value.kind === PersistenceStateKind.IN_MEMORY) {
 								localStorage.setItem(
 									"sprigMemory",
 									codeMirror.value!.state.doc.toString()
@@ -507,16 +604,6 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 							))}
 						</div>
 					)}
-					<Button
-						accent
-						icon={IoPlayCircleOutline}
-						bigIcon
-						iconSide="right"
-						class={styles.playButton}
-						onClick={onRun}
-					>
-						Run
-					</Button>
 				</div>
 
 				<div
@@ -545,13 +632,21 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 					ref={outputArea}
 					style={{ width: realOutputAreaSize.value }}
 				>
-					<div ref={screenContainer}>
+					<div ref={screenContainer} style={ outputArea.current ? {
+					height: canvasScreenSize.value.height,
+						maxHeight: canvasScreenSize.value.maxHeight,
+					} : {} }>
 						<div class={styles.canvasWrapper}>
 							<canvas
 								class={`${styles.screen} ${
 									screenShake.value > 0 ? "shake" : ""
 								}`}
-								style={ outputArea.current ? { height: canvasScreenSize.value.height, maxHeight:  canvasScreenSize.value.maxHeight }: { } }
+								style={ outputArea.current ? {
+								height: canvasScreenSize.value.height,
+								maxHeight:  canvasScreenSize.value.maxHeight,
+									width: (1.25 * canvasScreenSize.value.height),
+									maxWidth: "100%",
+								}: { } }
 								ref={screen}
 								tabIndex={0}
 								width="1000"
@@ -577,7 +672,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 							</button>
 							<button
 								className={styles.stop}
-								onClick={() => onStop()}
+								onClick={onStop}
 							>
 								<IoStopCircleOutline />
 								<span>Stop</span>
@@ -614,15 +709,17 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 						/>
 						<div
 							class={styles.helpContainer}
-							style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenControls.current?.clientHeight! + screenContainer.current?.clientHeight!) }}
+							// style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenControls.current?.clientHeight! + screenContainer.current?.clientHeight!) }}
+							style={{ height: realHelpAreaSize.value, maxHeight: outputArea.current?.clientHeight! - (screenContainer.current?.clientHeight! - screenControls.current?.clientHeight!) }}
 						>
 							{!(
-								(persistenceState.value.kind === "SHARED" ||
+								(persistenceState.value.kind === PersistenceStateKind.SHARED ||
 									persistenceState.value.kind ===
-										"PERSISTED") &&
+										PersistenceStateKind.PERSISTED) &&
 								persistenceState.value.tutorial
 							) && (
 								<Help
+									sessionId={sessionId}
 									defaultHelpAreaHeight={
 										defaultHelpAreaHeight
 									}
@@ -632,10 +729,11 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 								/>
 							)}
 
-							{(persistenceState.value.kind === "SHARED" ||
-								persistenceState.value.kind === "PERSISTED") &&
+							{(persistenceState.value.kind === PersistenceStateKind.SHARED ||
+								persistenceState.value.kind === PersistenceStateKind.PERSISTED) &&
 								persistenceState.value.tutorial && (
 									<Help
+										sessionId={sessionId}
 										defaultHelpAreaHeight={
 											defaultHelpAreaHeight
 										}
@@ -655,13 +753,17 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			</div>
 
 			<EditorModal />
-			{persistenceState.value.kind === "IN_MEMORY" &&
+			{persistenceState.value.kind === PersistenceStateKind.IN_MEMORY &&
 				persistenceState.value.showInitialWarning && (
 					<DraftWarningModal persistenceState={persistenceState} />
 				)}
 
 			{versionState.value != "OK" && (
 				<VersionWarningModal versionState={versionState} />
+			)}
+
+			{eotMessage.value && eotMessage.value.status != "ALL_GOOD" && (
+				<OutOfSpaceModal eotMessage={eotMessage} />
 			)}
 
 			{showingTutorialWarning.value && (
@@ -672,6 +774,7 @@ export default function Editor({ persistenceState, cookies }: EditorProps) {
 			)}
 			<MigrateToast persistenceState={persistenceState} />
 			<SessionConflictWarningModal sessionId={sessionId} gameId={gameId} />
+			<KeyBindingsModal />
 		</div>
-	);
+	));
 }

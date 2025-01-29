@@ -1,7 +1,7 @@
 /*
 @title: Mind_game
-@author: brunoblaise 
-@tags: ['logic']
+@author: brunoblaise
+@tags: ["puzzle" , "strategy"]
 @addedOn: 2024-04-05
 
 */

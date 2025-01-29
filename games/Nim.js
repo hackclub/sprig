@@ -1,8 +1,8 @@
 /*
 @title: Nim
-@tags: ['strategy', 'classic']
-@addedOn: 2022-11-15
 @author: Leonard (Omay)
+@tags: ['strategy','retro']
+@addedOn: 2022-11-15
 */
 
 const match = "m";
