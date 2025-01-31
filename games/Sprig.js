@@ -10,6 +10,7 @@ https://sprig.hackclub.com/gallery/getting_started
 const player = "p";
 const block = "a";
 const kill = 'k';
+const killOne = "b";
 
 let score = 0;
 let loose = false;
@@ -65,6 +66,23 @@ setLegend(
 3333333333333333
 3333333333333333
 3333333333333333
+3333333333333333`],
+  [killOne, bitmap`
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
 3333333333333333`]
 )
 
@@ -75,7 +93,7 @@ const levels = [
   map`
 ..........
 ..........
-..........
+..b.......
 ......a...
 ..........
 ..........
@@ -92,8 +110,7 @@ setPushables({
 })
 
 function killFunc() {
-
-  if (getFirst(player).x == getFirst(kill).x && getFirst(player).y == getFirst(kill).y) {
+  if (!loose && (getFirst(player).x == getFirst(kill).x && getFirst(player).y == getFirst(kill).y) || (getFirst(player).x == getFirst(killOne).x && getFirst(player).y == getFirst(killOne).y)) {
     loose = true;
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
@@ -114,6 +131,10 @@ function killFunc() {
 }
 
 function moveKill() {
+  if (loose) {
+    return;
+  }
+  
   const playerPos = [getFirst(player).x, getFirst(player).y];
     const killPos = [getFirst(kill).x, getFirst(kill).y];
 
@@ -125,6 +146,18 @@ function moveKill() {
       getFirst(kill).y = getFirst(kill).y + 1;
     } else if (playerPos[1] - killPos[1] < 0) {
       getFirst(kill).y = getFirst(kill).y - 1;
+    }
+
+  const killOnePos = [getFirst(killOne).x, getFirst(killOne).y];
+
+    if (playerPos[0] - killOnePos[0] > 0) {
+      getFirst(killOne).x = getFirst(killOne).x + 1;
+    } else if (playerPos[0] - killOnePos[0] < 0) {
+      getFirst(killOne).x = getFirst(killOne).x - 1;
+    } else if (playerPos[1] - killOnePos[1] > 0) {
+      getFirst(killOne).y = getFirst(killOne).y + 1;
+    } else if (playerPos[1] - killOnePos[1] < 0) {
+      getFirst(killOne).y = getFirst(killOne).y - 1;
     }
 
   killFunc();
