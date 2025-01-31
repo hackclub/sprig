@@ -66,8 +66,10 @@ const game = await getGame(Astro.params.id!)
 
 if (!game) return Astro.redirect('/404', 302)
 
+let isCollabEnabled = false
+
 let shouldGameUseBetaCollabAndSavingFeatures = 
-await isAccountWhitelistedToUseCollabAndSavingBetaFeatures(session.user.id, session.user.email) || game.isSavedOnBackend
+await (isAccountWhitelistedToUseCollabAndSavingBetaFeatures(session.user.id, session.user.email) || game.isSavedOnBackend) && isCollabEnabled
 
 if(shouldGameUseBetaCollabAndSavingFeatures){
 	if(!game.isSavedOnBackend){
