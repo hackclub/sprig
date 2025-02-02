@@ -27,9 +27,9 @@ test('detect infinite while loops', () => {
 		fn();
 	});
 
-	console.log(res?.description);
+	const workDir = process.cwd();
 	const expectedError = `RangeError: Potential infinite loop
-    at eval (/Volumes/Code/code/hackclub/sprig/src/lib/engine/error.test.ts:1:152)`;
+    at eval (${workDir}/src/lib/engine/error.test.ts:1:152)`;
 	expect(res?.description).toBe(expectedError);
 });
 
@@ -41,9 +41,9 @@ test('detect infinite for loop', () => {
 		fn();
 	});
 
-	console.log(res?.description);
+	const workDir = process.cwd();
 	const expectedError = `RangeError: Potential infinite loop
-    at eval (/Volumes/Code/code/hackclub/sprig/src/lib/engine/error.test.ts:1:148)`;
+    at eval (${workDir}/src/lib/engine/error.test.ts:1:148)`;
 	expect(res?.description).toBe(expectedError);
 });
 

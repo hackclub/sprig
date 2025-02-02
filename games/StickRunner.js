@@ -282,7 +282,6 @@ hghghghghghghghghghghghghghghg`,
       x: 1,
       y: 5,
     })
-    }
     addText("" + score, { 
       x: 1,
       y: 5,
