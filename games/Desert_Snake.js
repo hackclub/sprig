@@ -1,10 +1,9 @@
 /*
-@title: serpent affamé
-@author: clement, edits
+@title: Desert Snake
+@author: clement
 @addedOn: 2025-02-06
 
-Check the tutorial in the bottom right, the run button is in the top right.
-Make sure to remix this tutorial if you want to save your progress!
+Eat cacti and get the biggest possible score!
 */
 
 function getRandomInt(min, max) {
