@@ -1,8 +1,11 @@
 /*
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 @title: SkyFall
-@author: Skyfall
+@author: 
 @tags: []
-@addedOn: 2025-01-22
+@addedOn: 2024-00-00
 */
 
 const player = "p";
@@ -71,11 +74,11 @@ function endGame() {
 }
 
 function detectCollisions() {
-  const playerSprite = getFirst(player);
+  const playerTiles = getTile(getFirst(player).x, getFirst(player).y);
   const meteorSprites = getAll(meteor);
 
   meteorSprites.forEach(meteorSprite => {
-    if (playerSprite.x === meteorSprite.x && playerSprite.y === meteorSprite.y) {
+    if(meteorSprite && playerTiles.some(tile => tile === meteorSprite)) {
       endGame();
     }
   });
@@ -97,8 +100,9 @@ function moveMeteors() {
 
   meteorSprites.forEach(meteorSprite => {
     meteorSprite.y += 1;
+    
     if (meteorSprite.y >= height() - 1) {
-      meteorSprite.remove();
+      setTimeout(() => meteorSprite.remove(), 1000);
     }
 
     detectCollisions();
