@@ -21,7 +21,7 @@ export default defineConfig({
 		server: {
       allowedHosts: [
 				"sprig.hackclub.com",
-        "d444goccow80c8wkgsq4sss.a.selfhosted.hackclub.com"
+        "d444gocccow80c8wkgsg4sss.a.selfhosted.hackclub.com"
       ],
       host: true, // Allow access from non-localhost domains
       cors: true, // Allow CORS (optional)
