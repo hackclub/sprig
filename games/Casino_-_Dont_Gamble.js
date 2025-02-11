@@ -1,5 +1,5 @@
 /*
-@title: Casino - Don't Gamble
+@title: Casino - Dont Gamble
 @author: FrankZ
 @tags: []
 @addedOn: 2025-01-28
