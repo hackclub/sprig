@@ -1,5 +1,5 @@
-# Use Node.js 23 with Alpine as the base image
-FROM node:23-alpine
+# Use Node.js 20 with Alpine as the base image
+FROM node:20-alpine
 
 # Set working directory in the container
 WORKDIR /app
@@ -14,7 +14,7 @@ RUN yarn install --frozen-lockfile
 COPY . .
 
 # Expose the default Astro port
-EXPOSE 4321
+EXPOSE 3000
 
 # Default command to start the Astro app
-CMD ["yarn", "dev"]
+CMD ["yarn", "dev", "--host"]

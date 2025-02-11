@@ -4,9 +4,9 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: ./docker/frontend_Dockerfile
+      dockerfile: Dockerfile
     ports:
-      - "4321:4321"
+      - "3000:3000"
     environment:
       - NODE_ENV=production
       - NODE_OPTIONS=--max-old-space-size=4096  # Increase to 4GB
