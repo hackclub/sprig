@@ -5,7 +5,6 @@ import { lazy } from '../utils/lazy'
 
 export const isValidEmail = (email: string): boolean => /^\S+@\S+\.\S+$/.test(email)
 
-
 const sendgrid = lazy(() => {
 	// Sekurity
 	_sendgrid.setApiKey(import.meta.env.SENDGRID_API_KEY)
@@ -13,8 +12,6 @@ const sendgrid = lazy(() => {
 })
 
 const loops = lazy(() => {
-	console.log("SENDGRID: " + import.meta.env.SENDGRID_API_KEY)
-	console.log("LOOPS: " + import.meta.env.LOOPS_API_KEY)
 	return new LoopsClient(import.meta.env.LOOPS_API_KEY)
 })
 
