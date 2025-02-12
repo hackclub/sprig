@@ -3,7 +3,9 @@
 @author: JungleHornet
 @tags: ['singleplayer', 'endless']
 @addedOn: 2025-02-11
+*/
 
+/*
 Changelog:
     - v1.0.0 (1/11/2025) :
       - Initial version
@@ -18,9 +20,12 @@ Changelog:
       - Added main menu
       - Added endless mode
       - Added changelog
-      - First version published to gallery
+
+    - v1.2.1 (1/12/2025 :
+      - Separated changelog from header
 
 */
+
 // define the sprites in our game
 const player = "p";
 const wall = "w";
