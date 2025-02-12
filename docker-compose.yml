@@ -8,7 +8,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "9996:3000"
     environment:
       - NODE_ENV=production
       - NODE_OPTIONS=--max-old-space-size=4096  # Increase to 4GB
