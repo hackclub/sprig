@@ -3,24 +3,22 @@
 @author: JungleHornet
 @tags:
 @addedOn: 2025-02-11
-
-Check the tutorial in the bottom right, the run button is in the top right.
-Make sure to remix this tutorial if you want to save your progress!
 */
 
 // define the sprites in our game
 const player = "p";
 const wall = "w";
-const crocodile = "c";
-const house = "h";
+const crocodile = ["c", "e", "b"];
+const house = ["h", "o", "f"];
+const smoke = ["s", "2"]
 
 var dead = false;
 var paused = false;
 var runid = 0;
 var wallStep = 0;
-const winstep = 150;
-const tickspeed = 500;
-const walldist = 3;
+const winStep = 175;
+const tickSpeed = 500;
+const wallDist = 3;
 
 // assign bitmap art to each sprite
 setLegend(
@@ -58,7 +56,7 @@ CCCC............
 CCCC............
 CCCC............
 CCCC............`],
-  [crocodile, bitmap`
+  [crocodile[0], bitmap`
 ................
 ................
 .DD....DD.......
@@ -75,23 +73,91 @@ DDD323333.......
 .....DD32D......
 .......DD.......
 ................`],
-  [house, bitmap`
-................
-................
-......0000......
-.....000000.....
+  [crocodile[1], bitmap`
+.......C........
+...........C..C.
+........C.......
+DDD.....C..C....
+D4DD........C...
+DD4D..........C.
+DDDDDDDDDD......
+DD32323232D.....
+DD32323232C.CC..
+DD23232323D.....
+DD23232323D.....
+.DDDDDDDDD.C....
+............C..C
+.........C......
+.........CC.....
+.......C....C..C`],
+  [crocodile[2], bitmap`
+.......3........
+...........3..3.
+........3.......
+DDD.....3..3....
+D4DD........3...
+DD4D..........3.
+DDDDDDDDDD......
+DD32323232D.....
+DD32323232C.33..
+DD23232323D.....
+DD23232323D.....
+.DDDDDDDDD.3....
+............3..3
+.........3......
+.........33.....
+.......3....3..3`],
+  [house[0], bitmap`
+..........00....
+..........00....
+......000000....
+.....0000000....
 ....00333300....
 ...0033333300...
 ..003333333300..
 ....33333333....
 ....33333333....
-....3CC33223....
-....3CC33223....
+....3CC33FF3....
+....3CC33FF3....
 ....3C033333....
 ....3CC33333....
 ................
 ................
-................`]
+................`],
+  [house[1], bitmap`
+..........00....
+..........00....
+......000000....
+.....0000000....
+....00333300....
+...0033333300...
+..003333333300..
+....33333333....
+....33333333....
+....3CC33663....
+....3CC33663....
+....3C033333....
+....3CC33333....
+................
+................
+................`],
+  [smoke[0], bitmap`
+................
+................
+..............11
+.............111
+............1111
+...........11111
+..........111111
+.........1111111
+.........1111111
+.........1111111
+..........111111
+...........1LL11
+...........LLL1.
+...........LL...
+..........LLL...
+..........LL....`]
 )
 
 let level = 0; // this tracks the level we are on
@@ -143,12 +209,7 @@ function togglePaused() {
 
 // input to reset level
 onInput("l", () => {
-  if (dead) {
-    clearTimeout(runid);
-  }
-  if (paused) {
-    togglePaused();
-  }
+  clearTimeout(runid);
   dead = false;
   wallStep = 0;
   const currentLevel = levels[level]; // get the original map of the level
@@ -157,6 +218,11 @@ onInput("l", () => {
   if (currentLevel !== undefined) {
     clearText("");
     setMap(currentLevel);
+  }
+  if (paused) {
+    togglePaused();
+  } else {
+    run();
   }
 });
 
@@ -168,56 +234,67 @@ function checkDead() {
   if (getFirst(player).x == 0) {
     dead = true
     addText("You Lose!", { y: 4, color: color`3` })
+    x = getFirst(player).x
+    y = getFirst(player).y
     getFirst(player).remove()
+    getTile(x, y)[0].remove()
+    addSprite(x, y, crocodile[2])
   }
 }
 
 // these get run after every input
 afterInput(() => {
-
   if (!dead) { checkDead() }
-  // count the number of tiles with goals
-  // const targetNumber = tilesWith(goal).length;
-
-  // count the number of tiles with goals and boxes
-  // const numberCovered = tilesWith(goal, box).length;
-
-  // if the number of goals is the same as the number of goals covered
-  // all goals are covered and we can go to the next level
-  // if (numberCovered === targetNumber) {
-  // increase the current level number
-  // level = level + 1;
-
-  // const currentLevel = levels[level];
-
-  // make sure the level exists and if so set the map
-  // otherwise, we have finished the last level, there is no level
-  // after the last level
-  // if (currentLevel !== undefined) {
-  // setMap(currentLevel);
-  // } else {
-  // addText("you win!", { y: 4, color: color`3` });
-  // }
-  // }
 });
+
+function flipCroco(x, y) {
+  sprite = getTile(x, y)[0];
+
+  if (sprite.type != crocodile[0] && sprite.type != crocodile[1]) {
+    for (i = 1; i < getTile.length; i++) {
+      sprite = getTile(x, y)[i]
+      if (sprite.type == crocodile[0] || sprite.type == crocodile[1]) { break; }
+    }
+    return
+  }
+
+  if (sprite.type == crocodile[0]) {
+    type = 1;
+  } else {
+    type = 0;
+  }
+
+  sprite.remove();
+  addSprite(x, y, crocodile[type]);
+}
 
 function run() {
 
-  if (!dead) {
+  if (!dead && !paused) {
     wallStep++;
+    for (i = 0; i < 6; i++) {
+      flipCroco(0, i);
+      if (getTile(0, i)[0].type == crocodile[1]) {
+        flipCroco(0, i);
+      }
+    }
+
     addText(wallStep.toString(), { y: 1, color: color`0` });
     walls = getAll(wall)
     for (i = 0; i < walls.length; i++) {
       walls[i].x += -1
       if (walls[i].x == 0) {
-        walls[i].remove()
+        x = walls[i].x;
+        y = walls[i].y;
+        walls[i].remove();
+        flipCroco(x, y);
       }
     }
-    if (wallStep == winstep) {
-      addSprite(7, 3, house)
+    if (wallStep == winStep) {
+      addSprite(7, 3, house[0])
     }
 
-    if (wallStep % walldist == 0 && wallStep < winstep) {
+    if (wallStep % wallDist == 0 && wallStep < winStep) {
       door = Math.floor(Math.random() * 6);
       if (getFirst(player).x == 7 && getFirst(player).y != door) {
         getFirst(player).x += -1;
@@ -232,23 +309,38 @@ function run() {
 
     checkDead()
   }
-  if (!dead) {
+  if (!dead && !paused) {
 
-    if (wallStep >= winstep && getFirst(player).x == 7 && getFirst(player).y == 3) {
+    if (wallStep >= winStep && getFirst(player).x == 7 && getFirst(player).y == 3) {
       addText("You Win!", { y: 4, color: color`4` });
       dead = true;
       getFirst(player).remove()
-      crocs = getAll(crocodile)
+      for (i = 0; i < crocodile.length; i++) {
+      crocs = getAll(crocodile[i])
       for (i = 0; i < crocs.length; i++) {
         crocs[i].remove()
+      }
       }
       walls = getAll(wall)
       for (i = 0; i < walls.length; i++) {
         walls[i].remove()
       }
+      getFirst(house[0]).remove()
+      addSprite(7, 3, house[1])
+      addSprite(7, 2, smoke[0])
     }
-    runid = setTimeout(run, tickspeed);
+    runid = setTimeout(run, tickSpeed - (3 * Math.floor(wallStep / 2)));
   }
 }
 
-runid = setTimeout(run, tickspeed)
+/*
+function timer() {
+  seconds += 1;
+  addText(seconds.toString(), {y: 2});
+}
+
+var seconds = 0;
+setInterval(timer, 1000);
+*/
+
+run();
