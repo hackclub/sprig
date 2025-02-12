@@ -1,20 +1,42 @@
 /*
 @title: CrocodileRun
 @author: JungleHornet
-@tags:
+@tags: ['singleplayer', 'endless']
 @addedOn: 2025-02-11
-*/
 
+Changelog:
+    - v1.0.0 (1/11/2025) :
+      - Initial version
+
+    - v1.1.0 (1/12/2025) :
+      - Added alternate texture of house after winning
+      - Updated logo with new house texture
+      - Added increasing speed
+      - Added animations for when the crocodiles eat the walls and the player
+
+    - v1.2.0 (1/12/2025) :
+      - Added main menu
+      - Added endless mode
+      - Added changelog
+      - First version published to gallery
+
+*/
 // define the sprites in our game
 const player = "p";
 const wall = "w";
 const crocodile = ["c", "e", "b"];
 const house = ["h", "o", "f"];
-const smoke = ["s", "2"]
+const smoke = "s"
+const button = ["n", "m"]
+const border = ["1", "2", "3", "4", "5", "6", "7", "8"]
 
+var inMenu = true
+var selected = 1;
 var dead = false;
 var paused = false;
+var endless = false;
 var runid = 0;
+var menuTextId = 0;
 var wallStep = 0;
 const winStep = 175;
 const tickSpeed = 500;
@@ -157,7 +179,177 @@ DD23232323D.....
 ...........LLL1.
 ...........LL...
 ..........LLL...
-..........LL....`]
+..........LL....`],
+  [button[0], bitmap`
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444`],
+  [button[1], bitmap`
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555`],
+  [border[0], bitmap`
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+.............000
+.............000
+.............000`],
+  [border[1], bitmap`
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+0000000000000000
+0000000000000000
+0000000000000000`],
+  [border[2], bitmap`
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+000.............
+000.............
+000.............`],
+  [border[3], bitmap`
+000.............
+000.............
+000.............
+000.............
+000.............
+000.............
+000.............
+000.............
+000.............
+000.............
+000.............
+000.............
+000.............
+000.............
+000.............
+000.............`],
+  [border[4], bitmap`
+000.............
+000.............
+000.............
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................`],
+  [border[5], bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................`],
+  [border[6], bitmap`
+.............000
+.............000
+.............000
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................`],
+  [border[7], bitmap`
+.............000
+.............000
+.............000
+.............000
+.............000
+.............000
+.............000
+.............000
+.............000
+.............000
+.............000
+.............000
+.............000
+.............000
+.............000
+.............000`]
 )
 
 let level = 0; // this tracks the level we are on
@@ -167,12 +359,74 @@ c......w
 c......w
 c..p....
 c......w
-c......w`
+c......w`,
+  map`
+12223
+8nnn4
+76665
+.mmm.
+.....`,
+  map`
+.....
+.nnn.
+12223
+8mmm4
+76665`
 ];
 
-// set the map displayed to the current level
-const currentLevel = levels[level];
-setMap(currentLevel);
+function mup() {
+  if (selected == 2) {
+    setMap(levels[1]);
+  }
+  selected = 1
+}
+
+function mdown() {
+  if (selected == 1) {
+    setMap(levels[2]);
+  }
+  selected = 2
+}
+
+function select() {
+  if (selected == 1) {
+    endless = false;
+  } else {
+    endless = true;
+  }
+  inMenu = false;
+  clearText()
+  addText("Press I to", {y: 2})
+  addText("return to menu", {y: 3})
+
+  menuTextId = setTimeout(function () {
+    clearText();
+    addText(wallStep.toString(), { y: 1, color: color`0` });
+  }, 2500)
+  
+  // set the map displayed to the current level
+  const currentLevel = levels[level];
+  setMap(currentLevel);
+  dead = false
+  paused = false
+  run()
+}
+
+function menu() {
+  clearTimeout(menuTextId);
+  clearTimeout(runid);
+  clearText()
+  inMenu = true;
+  dead = true;
+  paused = true;
+  wallStep = 0;
+  setMap(levels[1]);
+  addText("Use L to select", {y: 1, color: color`0`});
+  addText("Normal", {y: 4, color: color`0`});
+  addText("Endless", {y: 11, color: color`0`});
+}
+
+menu()
 
 setSolids([player, wall]); // other sprites cannot go inside of these sprites
 
@@ -183,19 +437,31 @@ setPushables({
 
 // inputs for player movement control
 onInput("w", () => {
+  if (inMenu) {
+    mup()
+    return
+  }
   if (!dead && !paused) { getFirst(player).y += -1; } // positive y is downwards
 });
 
 onInput("a", () => {
-  if (!dead && !paused) { getFirst(player).x += -1; }
+  if (!dead && !paused && !inMenu) { getFirst(player).x += -1; }
 });
 
 onInput("s", () => {
+  if (inMenu) {
+    mdown()
+    return
+  }
   if (!dead && !paused) { getFirst(player).y += 1; } // positive y is downwards
 });
 
 onInput("d", () => {
-  if (!dead && !paused) { getFirst(player).x += 1; }
+  if (!dead && !paused && !inMenu) { getFirst(player).x += 1; }
+});
+
+onInput("i", () => {
+    menu()
 });
 
 function togglePaused() {
@@ -209,6 +475,10 @@ function togglePaused() {
 
 // input to reset level
 onInput("l", () => {
+  if (inMenu) {
+    select()
+    return
+  }
   clearTimeout(runid);
   dead = false;
   wallStep = 0;
@@ -230,7 +500,7 @@ onInput("j", () => {
   togglePaused()
 })
 
-function checkDead() {
+function checkPlayer() {
   if (getFirst(player).x == 0) {
     dead = true
     addText("You Lose!", { y: 4, color: color`3` })
@@ -240,11 +510,30 @@ function checkDead() {
     getTile(x, y)[0].remove()
     addSprite(x, y, crocodile[2])
   }
+
+  if (wallStep >= winStep && getFirst(player).x == 7 && getFirst(player).y == 3 && !endless) {
+      addText("You Win!", { y: 4, color: color`4` });
+      dead = true;
+      getFirst(player).remove()
+      for (i = 0; i < crocodile.length; i++) {
+      crocs = getAll(crocodile[i])
+      for (i = 0; i < crocs.length; i++) {
+        crocs[i].remove()
+      }
+      }
+      walls = getAll(wall)
+      for (i = 0; i < walls.length; i++) {
+        walls[i].remove()
+      }
+      getFirst(house[0]).remove()
+      addSprite(7, 3, house[1])
+      addSprite(7, 2, smoke[0])
+    }
 }
 
 // these get run after every input
 afterInput(() => {
-  if (!dead) { checkDead() }
+  if (!dead) { checkPlayer() }
 });
 
 function flipCroco(x, y) {
@@ -290,11 +579,11 @@ function run() {
         flipCroco(x, y);
       }
     }
-    if (wallStep == winStep) {
+    if (wallStep == winStep && !endless) {
       addSprite(7, 3, house[0])
     }
 
-    if (wallStep % wallDist == 0 && wallStep < winStep) {
+    if (wallStep % wallDist == 0 && wallStep < winStep || endless && wallStep % wallDist == 0) {
       door = Math.floor(Math.random() * 6);
       if (getFirst(player).x == 7 && getFirst(player).y != door) {
         getFirst(player).x += -1;
@@ -307,40 +596,13 @@ function run() {
       }
     }
 
-    checkDead()
+    checkPlayer()
   }
   if (!dead && !paused) {
-
-    if (wallStep >= winStep && getFirst(player).x == 7 && getFirst(player).y == 3) {
-      addText("You Win!", { y: 4, color: color`4` });
-      dead = true;
-      getFirst(player).remove()
-      for (i = 0; i < crocodile.length; i++) {
-      crocs = getAll(crocodile[i])
-      for (i = 0; i < crocs.length; i++) {
-        crocs[i].remove()
-      }
-      }
-      walls = getAll(wall)
-      for (i = 0; i < walls.length; i++) {
-        walls[i].remove()
-      }
-      getFirst(house[0]).remove()
-      addSprite(7, 3, house[1])
-      addSprite(7, 2, smoke[0])
+    tick = tickSpeed - (3 * Math.floor(wallStep / 2));
+    if (wallStep >= 250) {
+      tick = tickSpeed - (3 * Math.floor(wallStep / 2));
     }
-    runid = setTimeout(run, tickSpeed - (3 * Math.floor(wallStep / 2)));
+    runid = setTimeout(run, tick);
   }
 }
-
-/*
-function timer() {
-  seconds += 1;
-  addText(seconds.toString(), {y: 2});
-}
-
-var seconds = 0;
-setInterval(timer, 1000);
-*/
-
-run();
