@@ -15,7 +15,7 @@ export const post: APIRoute = async ({ request }) => {
 	try {
 		const user = await getUserByEmail(email) ?? await makeUser(email, null)
 		const code = await makeLoginCode(user.id)
-		console.log("user: " + user)
+		console.log("user: " + JSON.stringify(user))
 		console.log("code: " + code)
 		await mail(user.email, loginCodeTemplate(code))
 		//await addToEmailList(user)
