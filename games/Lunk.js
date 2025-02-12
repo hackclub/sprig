@@ -1,3 +1,10 @@
+/*
+@title:Lunk 
+@author:PotatoHacker 
+@tags: []
+@addedOn: 2025-02-11
+*/
+
 //sprites
 const player = "p";
 const wall = "X";
