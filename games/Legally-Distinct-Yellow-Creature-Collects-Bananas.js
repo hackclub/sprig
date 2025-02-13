@@ -1,16 +1,25 @@
 /*
 @title: Legally Distinct Yellow Creature Collects Bananas
 @author: DogeJr
-@tags: []
+@tags: ['endless', 'humor']
 @addedOn: 2025-01-22
+
+Update Log:
+Version 1.1 (2025-01-29)
+Add shields to make you invincible for a 5 seconds (they spawn every 20 seconds)
+New Player sprite when shielded
+Make bananas spawn randomly at start
+Added score at the start
+454 lines
 */
 
 //Starting the game
 
 const player = "p"
+const shieldplayer = "j"
 const banana = "w"
 const wall = "i"
-
+const shieldsprite= "s"
 
 const health4 = "9"
 const health35 = "8"
@@ -26,6 +35,23 @@ const health0 = "1"
 
 //Making da map
 setLegend(
+  [shieldsprite, bitmap `
+................
+................
+......5555......
+....55777755....
+...5777777775...
+...5757757775...
+..577577577775..
+..575577577575..
+..575775577575..
+..577775775775..
+...5775577575...
+...5777777775...
+....55777755....
+......5555......
+................
+................`],
   [player, bitmap`
 .......666......
 .....666666.....
@@ -41,6 +67,23 @@ setLegend(
 .66.55555555.66.
 .66.55555555.66.
 .66.55555555.66.
+....55555555....
+....00....00....`],
+  [shieldplayer, bitmap `
+.......666......
+...5.66666657...
+..56666116657...
+.5766616616657..
+.570016006105...
+..70016006100...
+...6661661666...
+...6666116666...
+...6666666666...
+.7.5666666665.5.
+.57656666665675.
+.65.55555555775.
+.65.57555555.56.
+.66.55775555.66.
 ....55555555....
 ....00....00....`],
   [banana, bitmap`
@@ -236,7 +279,7 @@ let level = 0
 const levels = [
   map`
 iiiiiiii
-.p...w..
+.p......
 ........
 ........`,
   map `
@@ -261,7 +304,9 @@ const ding = tune`
 var Points = 0
 var health = 9
 var difficulty = 800
-var hLoop = 0;
+var shielded = false
+var hLoop = 0
+var sLoop = 0
 
 function placeRandomSprite(spriteType) {
   const emptyTiles = [];
@@ -297,19 +342,49 @@ function updateHealth() {
   addSprite(0, 0, health)}
   addSprite(0, 0, wall)}
 
+function shield() {
+  if (shielded === false) {
+    shielded = true
+    const sprite = getFirst("p")
+    const sprite2 = getFirst("s")
+    const { x, y } = sprite;
+    sprite.remove()
+    sprite2.remove()
+    addSprite(x, y, shieldplayer)
+    setTimeout(function(){
+      shielded = false
+      const sprite = getFirst("j")
+      const { x, y } = sprite;
+      sprite.remove()
+      addSprite(x, y, player)
+      healthLoop()
+    }, 5000)
+  }
+}
 
-
+function shieldLoop(){
+    setTimeout(function(){
+      if (health > 0) {
+        if (tilesWith(shieldsprite, ).length < 1)
+      placeRandomSprite(shieldsprite)}
+      if (sLoop < 9999999) {
+        shieldLoop()
+      }
+    }, 20000)
+  }
 
 function healthLoop() {
   if (health > 0) {
+    if (shielded === false) {
     setTimeout(function(){
       health--
       updateHealth();
       difficulty = difficulty - 5
       if (hLoop < 9999999) {
-        healthLoop();
+        healthLoop()
       }
     }, difficulty)
+  }
   }
   else {
     setMap(levels[1])
@@ -318,26 +393,42 @@ function healthLoop() {
       x: 3,
       y: 7,
       color: color`0`,})
+    addText("score: " + Points, {
+      x: 6,
+      y: 9,
+      color: color`0`,})
     };
   }
 
 
 //inputs
 onInput("w", () => {
-  getFirst(player).y -= 1;
+  if (tilesWith(player).length >= 1) {
+    getFirst(player).y -= 1;}
+  if (tilesWith(shieldplayer).length >= 1) {
+    getFirst(shieldplayer).y -= 1;}
 });
 onInput("a", () => {
-  getFirst(player).x -= 1;
+  if (tilesWith(player).length >= 1) {
+    getFirst(player).x -= 1;}
+  if (tilesWith(shieldplayer).length >= 1) {
+    getFirst(shieldplayer).x -= 1;}
 });
 onInput("s", () => {
-  getFirst(player).y += 1;
+  if (tilesWith(player).length >= 1) {
+    getFirst(player).y += 1;}
+  if (tilesWith(shieldplayer).length >= 1) {
+    getFirst(shieldplayer).y += 1;}
 });
 onInput("d", () => {
-  getFirst(player).x += 1;
+  if (tilesWith(player).length >= 1) {
+    getFirst(player).x += 1;}
+  if (tilesWith(shieldplayer).length >= 1) {
+    getFirst(shieldplayer).x += 1;}
 });
 
 afterInput(() => {
-  if (tilesWith(banana, player, ).length >= 1) {
+  if (tilesWith(banana, player,).length >= 1 || tilesWith(banana, shieldplayer,).length >= 1) {
     getFirst(banana).remove();
     Points = Points + 1
     if (health > 0) {
@@ -350,10 +441,14 @@ afterInput(() => {
     placeRandomSprite(banana)
     playTune(ding)}
   }
+  if (tilesWith(shieldsprite, player,).length >= 1 || tilesWith(shieldsprite, shieldplayer,).length >= 1) {
+    shield()
+  }         
 })
 
 setMap(levels[0])
 updatePoints()
 updateHealth()
 healthLoop()
-console.log("startup initiated")
+shieldLoop()
+placeRandomSprite(banana)
