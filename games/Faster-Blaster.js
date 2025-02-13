@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Faster Blaster!!!
 @author: Michealtheratz
 @tags: [turn-based, heart, hard, random, lasers]
-@addedOn: 2024-00-00
+@addedOn: 2024-13-25
 */
 
 const player = "p"
