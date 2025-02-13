@@ -1,7 +1,7 @@
 /*
 @title: Faster Blaster
 @author: Michealtheratz
-@tags: ['turn-based', 'heart', 'hard', 'random', 'lasers']
+@tags: []
 @addedOn: 2024-13-25
 */
 
