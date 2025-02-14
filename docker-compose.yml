@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  frontend:
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9996:3000"
+    environment:
+      - NODE_ENV=production
+      - NODE_OPTIONS=--max-old-space-size=4096  # Increase to 4GB
+    deploy:
+      resources:
+        limits:
+          memory: 5G  # Total memory allocation for the container
+
+  yjs-client:
+    env_file:
+      - .env
+    build:
+      context: ./yjs-client
+      dockerfile: Dockerfile
+    ports:
+      - "3000"
+
+  yjs-signaling-server:
+    env_file:
+      - .env
+    build:
+      context: ./yjs-signaling-server
+      dockerfile: Dockerfile
+    ports:
+      - "8080"
