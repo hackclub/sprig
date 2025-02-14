@@ -1,0 +1,29 @@
+{
+  "name": "webrtc-save",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@josias_aurel/lib0": "^0.2.94",
+    "@mapbox/node-pre-gyp": "^1.0.11",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase-admin": "^12.1.0",
+    "firestore": "^1.1.6",
+    "from": "^0.1.7",
+    "import": "^0.0.6",
+    "lib0-server-ws": "^0.2.94",
+    "node-statsd": "^0.1.1",
+    "simple-peer": "^9.11.1",
+    "wrtc": "^0.4.7",
+    "y-protocols": "^1.0.6",
+    "yjs": "^13.6.15"
+  }
+}
