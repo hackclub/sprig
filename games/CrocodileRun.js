@@ -6,6 +6,16 @@
 */
 
 /*
+Description:
+    You are being chased through a building by angry crocodiles!
+    Run through the doors to make it back home.
+
+Controls:
+    WASD: Movement
+    J: Pause/unpause
+    L: Restart/select game mode
+    I: Return to menu
+
 Changelog:
     - v1.0.0 (1/11/2025) :
       - Initial version
@@ -21,19 +31,26 @@ Changelog:
       - Added endless mode
       - Added changelog
 
-    - v1.2.1 (1/12/2025 :
+    - v1.2.1 (1/12/2025) :
       - Separated changelog from header
+
+    - v1.2.2 (1/12/2025) :
+      - Added description and instructions in js file
+      - Bug fixes
+      - First version in gallery
 
 */
 
 // define the sprites in our game
 const player = "p";
 const wall = "w";
+const topWall = "0";
+const bottomWall = "_";
 const crocodile = ["c", "e", "b"];
 const house = ["h", "o", "f"];
 const smoke = "s"
-const button = ["n", "m"]
-const border = ["1", "2", "3", "4", "5", "6", "7", "8"]
+const button = ["n", "m"];
+const border = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
 var inMenu = true
 var selected = 1;
@@ -83,6 +100,40 @@ CCCC............
 CCCC............
 CCCC............
 CCCC............`],
+  [topWall, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC`],
+  [bottomWall, bitmap`
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
   [crocodile[0], bitmap`
 ................
 ................
@@ -359,7 +410,8 @@ DD23232323D.....
 
 let level = 0; // this tracks the level we are on
 const levels = [
-  map`c......w
+  map`
+c......w
 c......w
 c......w
 c..p....
@@ -421,6 +473,7 @@ function menu() {
   clearTimeout(menuTextId);
   clearTimeout(runid);
   clearText()
+  selected = 1;
   inMenu = true;
   dead = true;
   paused = true;
@@ -514,6 +567,7 @@ function checkPlayer() {
     getFirst(player).remove()
     getTile(x, y)[0].remove()
     addSprite(x, y, crocodile[2])
+    return
   }
 
   if (wallStep >= winStep && getFirst(player).x == 7 && getFirst(player).y == 3 && !endless) {
@@ -605,8 +659,8 @@ function run() {
   }
   if (!dead && !paused) {
     tick = tickSpeed - (3 * Math.floor(wallStep / 2));
-    if (wallStep >= 250) {
-      tick = tickSpeed - (3 * Math.floor(wallStep / 2));
+    if (wallStep >= 200) {
+      tick = tickSpeed - (3 * Math.floor(200 / 2));
     }
     runid = setTimeout(run, tick);
   }
