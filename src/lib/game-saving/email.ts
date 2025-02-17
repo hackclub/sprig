@@ -25,12 +25,20 @@ export const mail = async (to: string, spec: EmailSpec): Promise<void> => {
   const EMAIL_FROM = import.meta.env.EMAIL_FROM;
   const EMAIL_REPLY_TO = import.meta.env.EMAIL_REPLY_TO;
 
-	await sendgrid.send({
-		from: `Hack Club Sprig <${EMAIL_FROM}>`,
-		replyTo: `Hack Club <${EMAIL_REPLY_TO}>`,
-		to,
-		...spec
-	})
+	try {
+    await sendgrid.send({
+      from: `Hack Club Sprig <${EMAIL_FROM}>`,
+      replyTo: `Hack Club <${EMAIL_REPLY_TO}>`,
+      to,
+      ...spec
+    });
+    console.log(`Email sent successfully to ${to}`);
+  } catch (error) {
+    console.error("Failed to send email:", error);
+
+    // Optionally, rethrow the error if you want it to be handled at a higher level
+    throw error;
+  }
 }
 
 const findOrCreateEmailListContact = async (email: string): Promise<Object | undefined> => {

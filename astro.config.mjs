@@ -1,12 +1,11 @@
 import { defineConfig } from 'astro/config'
 import preact from '@astrojs/preact'
-import vercel from '@astrojs/vercel/serverless'
 import prefresh from '@prefresh/vite'
 import svelte from '@astrojs/svelte'
 import rehypeExternalLinks from 'rehype-external-links'
 import fs from "node:fs";
 import generateMetadata from "./src/integrations/generate-metadata"
-
+import node from "@astrojs/node"
 const gameFiles = fs.readdirSync("games").filter(f => f.endsWith(".js")).map(game => `./games/${game}`);
 
 export default defineConfig({
@@ -17,10 +16,16 @@ export default defineConfig({
 		generateMetadata()
 	],
 	output: 'server',
-	adapter: vercel({
-		includeFiles: gameFiles,
-	}),
+	adapter: node({ mode: 'standalone' }),
 	vite: {
+		server: {
+      allowedHosts: [
+				"sprig.hackclub.com",
+        "d444gocccow80c8wkgsg4sss.a.selfhosted.hackclub.com"
+      ],
+      host: true, // Allow access from non-localhost domains
+      cors: true, // Allow CORS (optional)
+    },
 		optimizeDeps: {
 			exclude: ['https']
 		},

@@ -56,7 +56,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		trackingId = session.user.id;
 		trackingType = "user";
 
-		await updateEmailListLastModifiedTime(session.user, new Date());
+		//await updateEmailListLastModifiedTime(session.user, new Date());
 	}
 	const session = await getSession(cookies);
 	if (!session) return new Response("Unauthorized", { status: 401 });
@@ -67,14 +67,14 @@ export const post: APIRoute = async ({ request, cookies }) => {
 
 	try{
 		if(roomParticipants)
-			await updateDocument("games", gameId, { 
+			await updateDocument("games", gameId, {
 				tutorialName: tutorialName ?? "",
 				modifiedAt: Timestamp.now(),
 				roomParticipants: roomParticipants,
 				isOpen: isOpen
 			});
-		else 
-			await updateDocument("games", gameId, { 
+		else
+			await updateDocument("games", gameId, {
 				tutorialName: tutorialName ?? "",
 				modifiedAt: Timestamp.now(),
 				isOpen: isOpen
