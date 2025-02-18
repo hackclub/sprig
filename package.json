@@ -9,12 +9,12 @@
 		"start": "astro dev",
 		"build": "astro build",
 		"test": "deno run --allow-read ./tests/sprigfuzzy.js",
-		"test:unit": "vitest"
+		"test:unit": "cross-env PUBLIC_MAX_ITERATIONS=2000 PUBLIC_MAX_LOOP_TIME_MS=1500 vitest"
 	},
 	"dependencies": {
+		"@astrojs/node": "^4.0.0",
 		"@astrojs/preact": "^2.0.1",
 		"@astrojs/svelte": "^2.0.1",
-		"@astrojs/vercel": "^0.0.0-vercel-fix-20230227215002",
 		"@codemirror/commands": "^6.2.0",
 		"@codemirror/lang-javascript": "^6.1.2",
 		"@codemirror/language": "^6.4.0",
@@ -29,6 +29,7 @@
 		"@wcj/markdown-to-html": "^3.0.2",
 		"astro": "2.7.0",
 		"bcryptjs": "^2.4.3",
+		"cross-env": "^7.0.3",
 		"dotenv": "^16.3.1",
 		"firebase-admin": "^11.10.1",
 		"js-beautify": "^1.15.1",
