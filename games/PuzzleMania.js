@@ -2,7 +2,7 @@
 @title: PuzzleMania
 @author: Johamez_Wilzoney
 @tags: ["puzzle"]
-@addedOn: 2024-12-21
+@addedOn: 2025-02-18
 */
 
 const player = "p"
