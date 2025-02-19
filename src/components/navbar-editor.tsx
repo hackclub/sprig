@@ -941,8 +941,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
 											spinnyIcon={uploadState.value === "LOADING"}
 											loading={uploadState.value === "LOADING"}
+											disabled={isPublishing.value}
 											onClick={async () => {
+												if (isPublishing.value) return;
 												try {
+													isPublishing.value = true;
 													const game = props.persistenceState.value.kind === 'PERSISTED' && typeof props.persistenceState.value.game === 'object'
 														? props.persistenceState.value.game
 														: null;
@@ -954,6 +957,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 													);
 												} catch (error) {
 													console.error("Publishing failed:", error);
+												} finally {
+													isPublishing.value = false;
 												}
 											}}
 										>
