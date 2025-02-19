@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Just take sushi 
 @author: Hugo
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2025-02-18
 */
 
 const man = "c"
