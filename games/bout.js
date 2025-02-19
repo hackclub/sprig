@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Atari Breakout
+@title: Classic Breakout
 @author: 
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2025-02-18
 todo:
 kunna vinna
 random spawn av boll?
