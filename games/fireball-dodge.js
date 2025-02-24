@@ -1,3 +1,9 @@
+/*
+@title: Fireball dodge
+@author: cocotree1
+@tags: []
+@addedOn: 2025-02-24
+*/
 // fireball dodge
 
 const dfireball = "d"
