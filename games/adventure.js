@@ -1088,9 +1088,14 @@ afterInput(() => {
       y:3,
       color: color`0`
     });
-    addText("PRESS J TO PLAY AGAIN", {
-      x:9,
-      y:6,
+    addText("PRESS J TO PLAY", {
+      x:3,
+      y:7,
+      color: color`0`
+    });
+    addText("AGAIN", {
+      x:8,
+      y:8,
       color: color`0`
     });
   }
