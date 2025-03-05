@@ -1,11 +1,12 @@
 // Sprig Simon Says Game
 /*
 
-@title: TicTacToe
+@title: SimonSays
 @author: Youssef Tech
 @tags: [memory]
 @addedOn: 2025-03-03
 
+How to play: WASD to move cursor, I to select color
 */
 
 // Sprites
