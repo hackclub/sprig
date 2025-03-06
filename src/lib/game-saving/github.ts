@@ -5,9 +5,8 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 async function handleResponse(response: Response): Promise<any> {
 	if (!response.ok) {
 		const errorData = await response.json().catch(() => ({}));
-		const errorMessage = `GitHub API Error (${response.status}): ${
-			response.statusText
-		} - ${JSON.stringify(errorData)}`;
+		const errorMessage = `GitHub API Error (${response.status}): ${response.statusText
+			} - ${JSON.stringify(errorData)}`;
 		console.error(errorMessage);
 		throw new Error(errorMessage);
 	}
@@ -116,8 +115,7 @@ export async function validateGitHubToken(
 // Revokes the provided GitHub access token by removing it from the user's authorized applications.
 export async function revokeGitHubToken(accessToken: string): Promise<void> {
 	const response = await fetchWithRetry(
-		`https://github.com/settings/connections/applications/${
-			import.meta.env.PUBLIC_GITHUB_CLIENT_ID
+		`https://github.com/settings/connections/applications/${import.meta.env.PUBLIC_GITHUB_CLIENT_ID
 		}`,
 		{
 			method: "DELETE",
@@ -156,7 +154,7 @@ export async function createBranch(
 	sha: string
 ): Promise<any> {
 	const response = await fetchWithRetry(
-		`https://api.github.com/repos/${owner}/${repo}/git/refs`, // GitHub API endpoint to create a branch
+		`https://api.github.com/repos/${owner}/${repo}/git/refs`,
 		{
 			method: "POST",
 			headers: getAuthHeaders(accessToken),
@@ -167,7 +165,8 @@ export async function createBranch(
 		}
 	);
 
-	return handleResponse(response);
+	const data = await handleResponse(response);
+	return data;
 }
 
 // Creates a new commit in the GitHub repository.
@@ -205,7 +204,8 @@ export async function createPullRequest(
 	base: string,
 	body: string,
 	forkOwner: string,
-	gameId: string
+	gameId: string,
+	gameCode: string
 ): Promise<any> {
 	await delay(5000); // Delay to ensure the forked repository is ready
 	const fullHead = `${forkOwner}:${head}`;
@@ -240,6 +240,7 @@ export async function createPullRequest(
 					gameId,
 					githubPR: prUrl,
 					isPublished: true,
+					lastPullRequestCode: gameCode,
 				}),
 			}
 		);
@@ -411,4 +412,62 @@ export async function createBlobForImage(
 
 	const data = await handleResponse(response); // Return the blob SHA
 	return data.sha;
+}
+
+export async function getUserPullRequest(accessToken: string, owner: string, repo: string, username: string): Promise<any> {
+	const response = await fetchWithRetry(
+		`https://api.github.com/repos/${owner}/${repo}/pulls?state=open`,
+		{ headers: getAuthHeaders(accessToken) }
+	);
+
+	const pullRequests = await handleResponse(response);
+
+	return pullRequests.find((pr: any) => pr.head.repo.owner.login === username) || null;
+}
+
+export async function updatePullRequest(accessToken: string, forkOwner: string, forkRepo: string, branchName: string, gameID: string | undefined): Promise<void> {
+	console.log(`🔄 Updating PR on branch ${branchName}...`);
+
+	const latestCommitSha = await fetchLatestCommitSha(accessToken, forkOwner, forkRepo, branchName);
+	if (!latestCommitSha) throw new Error("❌ Failed to fetch latest commit SHA.");
+
+	const newCommit = await createCommit(
+		accessToken,
+		forkOwner,
+		forkRepo,
+		`Updated game - ${gameID}`,
+		latestCommitSha,
+		latestCommitSha
+	);
+
+	console.log(`✅ Committed new changes: ${newCommit.sha}`);
+
+	await updateBranch(accessToken, forkOwner, forkRepo, branchName, newCommit.sha);
+	console.log(`✅ Successfully updated branch ${branchName}!`);
+}
+
+export async function createNewPullRequest(accessToken: string, forkOwner: string, forkRepo: string, gameID: string | undefined): Promise<any> {
+	console.log("➕ Creating a new PR from the forked repository...");
+
+	const latestCommitSha = await fetchLatestCommitSha(accessToken, forkOwner, forkRepo, "main");
+	if (!latestCommitSha) throw new Error("❌ Failed to fetch latest commit SHA.");
+
+	const newBranchName = `new-game-${Date.now()}`;
+	await createBranch(accessToken, forkOwner, forkRepo, newBranchName, latestCommitSha);
+
+	const pr = await createPullRequest(
+		accessToken,
+		"hackclub",
+		"sprig",
+		`New Game - ${gameID}`,
+		`${forkOwner}:${newBranchName}`,
+		"main",
+		"Automated PR for new game",
+		forkOwner,
+		gameID ?? "",
+		""
+	);
+
+	console.log(`✅ Created new PR: ${pr.html_url}`);
+	return pr;
 }

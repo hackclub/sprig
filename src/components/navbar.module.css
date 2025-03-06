@@ -444,6 +444,23 @@
 	color: inherit;
 }
 
+pre {
+	background: #222;
+	color: white;
+	padding: 10px;
+	border-radius: 5px;
+	white-space: pre-wrap;
+  }
+  
+  div {
+	font-family: monospace;
+  }
+  
+  span {
+	display: inline-block;
+	min-width: 30px;
+  }
+  
 /* responsive design */
 @media (min-width: 600px) {
 	.mobile {

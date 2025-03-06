@@ -4,7 +4,7 @@ import { updateDocument } from "../../../lib/game-saving/account";
 export const post: APIRoute = async ({ request }) => {
 	try {
 		const body = await request.json();
-		const { gameId, githubPR, isPublished } = body;
+		const { gameId, githubPR, isPublished, lastPullRequestCode } = body;
 
 		const errors: string[] = [];
 
@@ -14,6 +14,8 @@ export const post: APIRoute = async ({ request }) => {
 			errors.push(`Invalid githubPR: ${githubPR}`);
 		if (typeof isPublished !== "boolean")
 			errors.push(`Invalid isPublished: ${isPublished}`);
+		if (typeof lastPullRequestCode !== "string")
+			errors.push(`Invalid lastPullRequestCode: ${lastPullRequestCode}`);
 
 		if (errors.length > 0) {
 			console.error("Validation errors:", errors);
@@ -29,6 +31,7 @@ export const post: APIRoute = async ({ request }) => {
 		await updateDocument("games", gameId, {
 			githubPR,
 			isPublished,
+			lastPullRequestCode,
 		});
 
 		return new Response(JSON.stringify({ success: true }), { status: 200 });
