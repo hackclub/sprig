@@ -5,8 +5,8 @@ No audio sorry.
 
 @title: Who is you
 @author: MeZackari
-@tags: [puzzle, cute, single-player, new]
-@addedOn: 2024-00-00
+@tags: []
+@addedOn: 2025-03-07
 */
 
 let errored = false
