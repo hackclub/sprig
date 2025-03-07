@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: adventure
-@author: 
+@author: Loshua1
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2025-03-07
 */
 
 const bandit = "a"
