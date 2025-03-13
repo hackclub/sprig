@@ -1,7 +1,7 @@
 /*
 @title: mr gold
 @author: BoKi
-@tags: ['fantasy', 'fun', 'puzzle']
+@tags: []
 @addedOn: 2024-00-00
 */
 
