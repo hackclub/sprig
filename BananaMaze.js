@@ -1,12 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: BananaMaze
 @author: Joshua Abernathy
-@tags: ['fun', 'adventure']
-@img: ""
-@addedOn: 2024-01-19
+@tags: ['adventure']
+@addedOn: 2025-01-19
 */
 const invisf = "u";
 const player = "p";
