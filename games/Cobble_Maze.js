@@ -1,5 +1,6 @@
 /*
 @title: Cobble Maze
+@description: Cobble Maze is a straightforward maze-solving game featuring three increasingly challenging levels. Players navigate the maze using WASD controls, collecting keys to unlock paths and ultimately aiming to reach the trophy to advance. The game requires strategic planning to overcome obstacles and complete each level.
 @author: yashsethu
 @tags: []
 @addedOn: 2024-08-13

@@ -1,5 +1,6 @@
 /*
 @title: Castle_Drop
+@description: Castle_Drop is an action game where you navigate your character as it falls through a castle, avoiding spikes and collecting life pads for extra lives. The objective is to survive as long as possible by moving left and right to dodge obstacles while ensuring you gather green pads to maintain or increase your life count.
 @author: aISaidJak
 @tags: ['action']
 @addedOn: 2024-05-14

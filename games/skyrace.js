@@ -1,5 +1,6 @@
 /*
 @title: skyrace
+@description: "Skyrace" is a multiplayer game where players control two different planes to avoid collisions with mountains. One plane, identified by a green indicator, is controlled using the WASD keys, while the other, with an orange indicator, is controlled using the IJKL keys. The goal is to navigate through the sky without crashing.
 @author: Shourya Pandey
 @tags: ['multiplayer']
 @addedOn: 2023-07-16

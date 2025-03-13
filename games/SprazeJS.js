@@ -1,5 +1,6 @@
 /*
 @title: Spraze
+@description: Spraze is a puzzle maze game created by Peipr where players navigate through increasingly challenging levels. The objective is to reach the goal by maneuvering around walls and movable obstacles.
 @author: Peipr (@peiprjs)
 @tags: ['puzzle']
 @addedOn: 2022-08-29

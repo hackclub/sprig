@@ -1,5 +1,6 @@
 /*
 @title: the_invisible_man
+@description: In this game, you have to collect coins. The catch? You are invisible! (the player is invisible, but it is there somewhere)
 @author: Gárdonyi Bálint (Valentine)
 @tags: ['puzzle']
 @addedOn: 2022-11-14

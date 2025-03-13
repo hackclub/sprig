@@ -1,5 +1,6 @@
 /*
 @title: Sprig Clicker
+@description: Sprig Clicker is an endless game where the goal is to collect 2 million sprigs by clicking a sprig icon and upgrading your abilities in the shop. Players can purchase upgrades such as increased clicks before relocation, additional sprigs per click, and multipliers to enhance their sprig accumulation rate. Even after achieving the target and "winning," players can continue to play and collect more sprigs.
 @author: xriiitox (Josh Baron)
 @tags: ['endless']
 @addedOn: 2024-06-29

@@ -1,5 +1,6 @@
 /*
 @title: Hole In the Wall
+@description: "Hole In the Wall" is a game about filling in randomly generated gaps on a grid-based map. Players must strategically move around the map using WASD keys, collect power-ups to aid their progress, and use them with designated keys, while using the 'i' key to fill the gaps. The main challenge lies in managing time and difficulty as the game progresses, making timely use of power-ups to regenerate the map, add extra time, or reduce the game's difficulty.
 @author: Abel0000
 @tags: []
 @addedOn: 2024-08-23

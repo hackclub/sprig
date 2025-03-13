@@ -1,5 +1,6 @@
 /*
 @title: Math Mechanics
+@description: "Math Mechanics" is a puzzle game where players push a character into the correct hole that answers true or false questions about calculus, often featuring humorous inside jokes. As players successfully complete levels by choosing the right answers, they progress through increasingly challenging puzzles while helping restore mathematical order.
 @author: Oikko
 @tags: []
 @addedOn: 2024-09-03

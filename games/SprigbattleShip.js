@@ -1,5 +1,6 @@
 /*
 @title: SprigbattleShip
+@description: SprigbattleShip is a digital adaptation of the classic Battleship game designed in a retro style. Players strategically place ships on a 10x10 board and attempt to locate and destroy the opponent's fleet by selecting targeted grid spaces.
 @author: Legonathanjereb
 @tags: ['retro']
 @addedOn: 2024-04-26

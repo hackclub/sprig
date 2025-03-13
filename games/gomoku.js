@@ -1,5 +1,6 @@
 /*
 @title: Gomoku
+@description: Gomoku is a strategic multiplayer board game where players compete to be the first to align five stones in a row, either horizontally, vertically, or diagonally.
 @author: Bianca
 @tags: ['strategy', 'multiplayer']
 @addedOn: 2024-10-12

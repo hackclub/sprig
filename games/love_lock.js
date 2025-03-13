@@ -1,5 +1,6 @@
 /*
 @title: love_lock
+@description: "Love Lock" is a strategy game by N Rizwan where the player navigates a maze to rescue their loved one, who is locked away. The goal is to find the key that unlocks a teleport to your lover, overcoming various obstacles and puzzles along the way.
 @author: N Rizwan
 @tags: ['strategy']
 @addedOn: 2022-09-15

@@ -1,5 +1,6 @@
 /*
 @title: hack_craft
+@description: Hack Craft is a voxel game in which you can build and mine structures. It's a version of minecraft, but 2D.
 @author: khushraj
 @tags: ['simulation','retro']
 @addedOn: 2022-12-22

@@ -1,5 +1,6 @@
 /*
 @title: Tretris
+@description: Tretris is a classic block-stacking puzzle game where players aim to fill horizontal lines to clear them and score points. The challenge is to prevent the blocks from stacking all the way to the top of the screen.
 @author: Xander K.
 @tags: []
 @addedOn: 2024-07-08

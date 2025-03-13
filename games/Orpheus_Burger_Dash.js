@@ -1,5 +1,6 @@
 /*
 @title: Orpheus Burger Dash
+@description: Orpheus Burger Dash is a fast-paced game where players attempt to craft burgers by catching ingredients like bread, meat, cheese, tomato, and lettuce while avoiding rotten eggs. As players increase their score, the speed of falling ingredients accelerates every three points, challenging their reflexes. The goal is to continuously build complete burgers and earn the highest score possible.
 @author: SamsonC
 @tags: []
 @addedOn: 2023-06-16

@@ -1,5 +1,6 @@
 /*
 @title: SOS_Game
+@description: "SOS_Game" is a multiplayer game where players aim to create the word "SOS" in any direction on a grid. The game ends when there are no more empty spaces, and it displays the total number of successful SOS sequences made by each player. The winner is the player who made the most! Players take turns placing letters, earning additional turns by forming an "SOS."
 @author: Milán Leskó
 @tags: ['multiplayer', 'strategy', 'turn-based']
 @addedOn: 2022-11-13

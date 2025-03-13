@@ -1,5 +1,6 @@
 /*
 @title: battle bots
+@description: "Battle Bots" is a multiplayer game where two players compete to push each other into hazardous red squares while avoiding them to achieve the highest score. Players navigate a fixed arena, strategically trying to outmaneuver their opponent in an infinite duel.
 @author: kyle
 @tags: ['multiplayer']
 @addedOn: 2022-10-20

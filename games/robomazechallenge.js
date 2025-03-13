@@ -1,5 +1,6 @@
 /*
 @title: Robo Maze Runner
+@description: Navigate through the maze to reach the gaol without hitting the traps. You only have 3 health points and 30 seconds to reach the goal.
 @author: Sindhoora Raja
 @tags: ['maze', 'survival']
 @addedOn: 2024-11-12

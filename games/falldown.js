@@ -1,5 +1,6 @@
 /*
 @title: Falldown mini
+@description: Falldown mini is a recreation of the classic falldown game where players navigate a falling object through moving obstacles. The objective is to continuously descend by avoiding horizontal barriers that rise from the bottom of the screen.
 @author: Riptide
 @tags: []
 @addedOn: 2024-08-04

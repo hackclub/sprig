@@ -1,5 +1,6 @@
 /*
 @title: spiano
+@description: "Spiano" is a music-themed game where players can create an 8-bit symphony using a virtual piano. By pressing specific keys, players can play different notes and compose their own melodies.
 @author: thezebix
 @tags: ['music']
 @addedOn: 2024-04-19

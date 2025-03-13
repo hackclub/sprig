@@ -1,5 +1,6 @@
 /*
 @title: spriggy_morse
+@description: The game "spriggy_morse" by Srishti Pandey is a simple and fun educational game designed to help users learn to type in Morse code. Players input Morse code using specific keys to translate it into characters, aiming to match a given word.
 @author: Srishti Pandey
 @tags: []
 @addedOn: 2023-01-29

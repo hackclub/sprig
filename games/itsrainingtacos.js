@@ -1,5 +1,6 @@
 /*
 @title: It's Raining Tacos
+@description: "It's Raining Tacos" is a playful action-survival game where tacos, avocados, and chili peppers fall from the sky. Players dodge falling tacos while shooting other obstacles.
 @author: omarko
 @tags: ['action','survival']
 @addedOn: 2024-08-05

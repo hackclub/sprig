@@ -1,6 +1,7 @@
 
 /* 
 @title: Hard-Hat_Helper
+@description: Hard-Hat Helper is a puzzle platformer inspired by Mario vs. Donkey Kong: Mini-Land Mayhem! for the 3DS. Players guide a hard-hat-wearing character through various levels by manipulating the layout with inputs, effectively altering platforms and conveyor belts to create pathways to the goal. The game involves strategic planning and timing to ensure the character reaches the goal without obstacles blocking the way.
 @author: Nathan Jereb
 @tags: []
 @addedOn: 2023-12-21

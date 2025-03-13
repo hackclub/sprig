@@ -1,5 +1,6 @@
 /*
 @title: racer
+@description: "Racer" is a classic puzzle game port where players switch lanes to avoid obstacles and reach the goal.
 @author: Snow
 @tags: ['puzzle']
 @addedOn: 2022-11-08

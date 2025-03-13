@@ -1,5 +1,6 @@
 /*
 @title: Tic-Tac-Toe
+@description: Tic-Tac-Toe by bochk0 is a retro-inspired game where players compete against an AI opponent. This version introduces unique elements such as power-ups that can give players advantages like causing the AI to skip turns.
 @author: bochk0
 @tags: ['retro']
 @addedOn: 2024-07-17

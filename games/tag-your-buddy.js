@@ -1,5 +1,6 @@
 /*
 @title: Tag Your Buddy
+@description: "Tag Your Buddy" is a puzzle-solving game where the objective is to reunite two separated characters by navigating the black character through obstacles to reach the red character. Players must avoid blue characters while strategically moving around the map to achieve their goal.
 @author: Aadarsh Jonnalagadda
 @tags: []
 @addedOn: 2024-05-20

@@ -1,5 +1,6 @@
 /*
 @title: taikoMania
+@description: taikoMania is a rhythm game inspired by osu!mania and Taiko no Tatsujin, combining elements from both to challenge players with precise timing. Players aim to hit notes in time with the music, striving for high scores across a variety of songs.
 @author: Isaac Wong
 @tags: []
 @addedOn: 2023-12-29

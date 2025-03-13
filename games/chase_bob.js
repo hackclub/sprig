@@ -1,5 +1,6 @@
 /*
 @title: chase_bob
+@description: "Chase Bob" is a maze-themed game where the player navigates through levels to catch Bob while avoiding obstacles like hitmen and Orpheus. The game's objective is to reach Bob to win, but colliding with enemies results in a loss.
 @author: garfieldfatcat3pack
 @tags: []
 @addedOn: 2023-04-01

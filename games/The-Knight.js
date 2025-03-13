@@ -1,5 +1,6 @@
 /*
 @title: The Knight
+@description: "The Knight" is an adventure puzzle game where you play as a knight trying to escape from a captor's castle. The game involves exploring the castle, solving puzzles, and revisiting areas to ultimately find the path to freedom.
 @author: CragglesG
 @tags: []
 @addedOn: 2024-08-15

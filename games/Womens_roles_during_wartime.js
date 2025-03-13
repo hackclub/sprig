@@ -1,6 +1,7 @@
 
 /* 
 @title: Women's roles during wartime
+@description: My game is about women's roles during the world wars. They were able to gain some rights and open new doors by entering the workforce while the men had gone to fight int he war. But when the soldiers returned, women were usually forced to give up their jobs or settle for low-paying ones. My game aims to depict their story. A player moves the crown (symbolizes the metamorphosis of women from fragile princesses to queens running a kingdom) around to pick up rights and opportunities. The player must pick up all items available in order to advance to the next part of the story.
 @author: cupcakes
 @tags: ['puzzle']
 @addedOn: 2023-06-04

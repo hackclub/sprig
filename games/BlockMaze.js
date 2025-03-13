@@ -1,5 +1,6 @@
 /*
 @title: BlockMaze
+@description: BlockMaze is a simple puzzle game where you navigate through a maze, filling the floor behind you as you move. The goal is to fill the entire maze to progress to the next level. As you advance, you must strategically block the maze paths while collecting items along the way.
 @author: Arjun
 @tags: ['puzzle']
 @addedOn: 2024-07-08

@@ -1,5 +1,6 @@
 /*
 @title: Dance Dance Engine!!
+@description: Dance Dance Engine!! is a rhythm game creation tool that simplifies the process of building rhythm games by allowing you to add note names and music to create your game. It's designed to be a revolutionary way to make rhythm games, with the theme centered around music and rhythm. For more information on how to use the engine, you can check out the provided [documentation](https://shibedevsite.neocities.org/DDE/whatis).
 @author: Shibedev12
 @tags: ['music']
 @addedOn: 2024-07-22

@@ -1,5 +1,6 @@
 /*
 @title: spider_home
+@description: "Spider Home" is a puzzle game where you guide a spider to its home, navigating through obstacles like walls and mines while dealing with the challenges of gravity.
 @author: usermaatre setepenre
 @tags: ['puzzle']
 @addedOn: 2023-10-09

@@ -1,5 +1,6 @@
 /*
 @title: CrimbLetips
+@description: CrimbLetips is a text-based adventure game where you navigate, interact with, and explore the world around you with the goal of escaping.
 @author: ShawnM
 @tags: []
 @addedOn: 2022-12-19

@@ -1,5 +1,6 @@
 /*
 @title: PlasticPickup
+@description: PlasticPickup is a game about collecting recyclable materials, such as plastic bottles, while avoiding unrecyclable items like batteries. The player's objective is to improve their score by collecting bottles while ensuring they don't pick up batteries.
 @author: pizzalover125
 @tags: []
 @addedOn: 2024-08-15

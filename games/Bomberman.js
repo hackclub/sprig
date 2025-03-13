@@ -1,5 +1,6 @@
 /*
 @title: Bomberman
+@description: Bomberman is a two-player action game where players duel each other using bombs in an enclosed arena featuring multiple random maps. Players navigate using specific controls to place bombs against destructible walls, which can also reveal upgrades to increase the range and quantity of bombs they can deploy. The game ends when one player successfully defeats the other by strategically using their bombs.
 @author: Jahn
 @tags: ['action','multiplayer']
 @addedOn: 2024-07-02

@@ -1,5 +1,6 @@
 /*
 @title: Block_Stacker
+@description: Block_Stacker is a simple yet challenging game where players stack blocks on top of each other to reach the top. The game tests your timing and precision as you aim to align each block perfectly. Can you achieve the highest stack and claim victory?
 @author: vracto
 @tags: []
 @addedOn: 2024-05-02

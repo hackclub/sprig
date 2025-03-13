@@ -1,5 +1,6 @@
 /*
 @title: Operation_Ocean
+@description: "Operation_Ocean" is a strategy game focused on reducing CO2 emissions to combat ocean acidification. Players shoot CO2 structures to gain points, with the goal of reaching 120 points to "save the ocean." As players progress, they witness changes in the background environment, signifying the positive impact of their actions on ocean health.
 @author: ari-tistic
 @tags: ['strategy']
 @addedOn: 2023-05-23

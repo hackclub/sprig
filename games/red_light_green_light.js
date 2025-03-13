@@ -1,5 +1,6 @@
 /*
 @title: red_light_green_light
+@description: "Red Light Green Light" is a strategy game with multiple levels where players must collect at least three coins to progress to the next level, while avoiding movement during red lights. Players navigate through maps, occasionally moving roadblocks to reach the finish line. The game features a timer, adding an extra layer of challenge.
 @author: annie
 @tags: ['strategy']
 @addedOn: 2022-11-16

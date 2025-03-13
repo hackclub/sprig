@@ -1,5 +1,6 @@
 /*
 @title: simple maze
+@description: "Simple Maze" is a puzzle game created by Itamar Davidyan, where players navigate a maze to reach the goal.
 @author: Itamar Davidyan
 @tags: ['puzzle']
 @addedOn: 2022-09-13

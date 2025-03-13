@@ -1,5 +1,6 @@
 /*
 @title: Coin Clash
+@description: Coin Clash is a two-player, turn-based strategy game where each player takes on the role of a coin. The objective is for players to strategically move and knock the opponent out of the playing field within a set number of moves. The game emphasizes planning and tactical maneuvering to achieve victory.
 @author: PhyoTP
 @tags: ['multiplayer', 'turn-based', 'strategy']
 @addedOn: 2024-10-04

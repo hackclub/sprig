@@ -1,5 +1,6 @@
 /*
 @title: Mancala
+@description: Mancala, also known as Bantumi, is a strategic two-player board game involving the distribution of stones across a series of pits with the aim of capturing the most pieces. The game is steeped in strategy, requiring players to wisely select pits for sowing seeds anticlockwise, with the potential for additional turns and strategic captures. This retro-styled multiplayer version presents a classic rendition of this time-honored game.
 @author: Lenochodik
 @tags: ['puzzle','strategy','multiplayer','retro']
 @addedOn: 2024-08-06

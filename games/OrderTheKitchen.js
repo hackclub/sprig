@@ -1,5 +1,6 @@
 /*
 @title: Order the kitchen!
+@description: "Order the Kitchen!" is an endless management game where you run a restaurant and must organize incoming dishes by placing them next to others of their kind. Your goal is to see how long you can last by strategically arranging the dishes as rounds progress. The game challenges your organization skills under time pressure in a bustling restaurant setting.
 @author: mrdarip
 @tags: ['endless']
 @addedOn: 2024-06-29

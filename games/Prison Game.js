@@ -1,5 +1,6 @@
 /*
 @title: Prison Game
+@description: "Prison Game" is a puzzle game where you play as a policeman tasked with capturing prisoners and putting them inside prisons. The objective is to collect keys to unlock prison cells while ensuring all prisoners are successfully contained. It involves strategic movement and problem-solving to complete levels successfully.
 @author: Fallhicory
 @tags: ['puzzle']
 @addedOn: 2024-08-15

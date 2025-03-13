@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Pixel Box
+@description: A sandbox game where you can place different materials and watch them interact with each other. Play with sand, water, fire, wood, and black holes.
 @author: GriffinHengelsberg
 @tags: ['sandbox', 'simulation']
 @addedOn: 2024-11-12

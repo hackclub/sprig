@@ -7,6 +7,7 @@ REACH THE 🏁 BEFORE THE TIMER ENDS
 
 
 @title: Maze Madness
+@description: Reach the goal at the end of all the mazes in under 120 seconds while avoiding invisible barriers. Every time you hit a barrier, it becomes visible and you are transported back to the beginning of the maze.
 @author: Flaine
 @tags: ['maze', 'music']
 @addedOn: 2024-11-17

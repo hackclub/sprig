@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: 2048
+@description: "2048" by VeressIris is an endless puzzle game where players merge tiles with identical numbers to form new tiles, aiming to reach the elusive 2048 tile. The game continues until there are no more possible moves or a player achieves a 2048 tile, with the objective being strategic tile placement and movement to maximize merges on a 4x4 grid. The theme is based on numerical progression, challenging players to think ahead and adapt as the board becomes increasingly populated.
 @author: VeressIris
 @tags: ['endless', 'puzzle']
 @addedOn: 2024-08-19

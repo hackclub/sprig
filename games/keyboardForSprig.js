@@ -1,5 +1,6 @@
 /*
 @title: keyboard for sprig
+@description: This game is a utility tool designed as a digital keyboard inspired by T9 technology, allowing users to input words and see what they have written by pressing certain keys.
 @author: mrdarip
 @tags: ['utility']
 @addedOn: 2024-08-15

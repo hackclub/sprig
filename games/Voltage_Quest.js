@@ -1,5 +1,6 @@
 /*
 @title: Voltage_Quest
+@description: Voltage_Quest is a puzzle game where players aim to power a factory by strategically pushing batteries to complete electrical circuits. Navigate through various levels, ensuring each circuit is complete to progress further.
 @author: Jase
 @tags: ['puzzle']
 @addedOn: 2024-03-29

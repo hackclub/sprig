@@ -1,5 +1,6 @@
 /*
 @title: 3d Renderer
+@description: 3D Renderer is a tech demo showcasing 3D rasterization using the Sprig engine. The demo allows you to explore and manipulate 3D objects through camera movements and rotations. This demonstration highlights the visual capabilities of rendering 3D graphics in a virtual environment.
 @author: Ruadhan
 @tags: ['3d']
 @addedOn: 2024-08-13

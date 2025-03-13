@@ -1,5 +1,6 @@
 /*
 @title: Flurffy
+@description: Flurffy is a retro-style version of Flappy Bird where players must navigate through levels and complete them in 35 seconds to win. The game was created by Lucas as part of his third game project.
 @author: Lucas
 @tags: ['retro']
 @addedOn: 2022-09-13

@@ -1,5 +1,6 @@
 /*
 @title: Maze Chase
+@description: Maze Chase is an engaging two-player puzzle game where players race through complex mazes to capture a flag before their opponent. Each player navigates their character through walls and obstacles with the goal of reaching the flag located at different points in each maze.
 @author: Armaanpreet Singh
 @tags: ["puzzle" , "timed" , "multiplayer"]
 @addedOn: 2024-08-05

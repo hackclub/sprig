@@ -1,5 +1,6 @@
 /*
 @title: Rescue your chinchilla!
+@description: "Rescue your chinchilla!" is a puzzle-adventure game where the objective is to maneuver a chinchilla back to its home by pushing it through challenging levels. Players will navigate obstacles, use teleporters, interact with levers, and collect coins to successfully complete each level.
 @author: KamilloDev
 @tags: ['puzzle','adventure']
 @addedOn: 2024-02-07

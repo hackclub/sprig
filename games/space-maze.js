@@ -1,6 +1,7 @@
 
 /* 
 @title: space_maze
+@description: y
 @author: klumey
 @tags: ['puzzle']
 @addedOn: 2024-08-31

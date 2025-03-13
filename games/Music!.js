@@ -1,5 +1,6 @@
 /*
 @title: Music!
+@description: "Music!" is a fun and simple music maker game where players move a character to different colored blocks to create music. The bright colors represent higher-pitched notes, while grey ones denote lower-pitched equivalents, and special multi-colored blocks feature pre-written songs by the creator. Players can also use additional keys to play extra notes, adding to the musical experience.
 @author: Akeell
 @tags: []
 @addedOn: 2022-10-16

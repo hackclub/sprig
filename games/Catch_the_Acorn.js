@@ -1,5 +1,6 @@
 /* 
 @title: Catch_the_Acorn
+@description: "Catch the Acorn" is a puzzle game where you help a hungry squirrel collect acorns by navigating through various levels. Players must strategically push boxes, avoid traps, and use portals to reach the acorn in each level. The game challenges players to use problem-solving skills to guide the squirrel safely to its goal.
 @author: Anna
 @tags: []
 @addedOn: 2024-05-14

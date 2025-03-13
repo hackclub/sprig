@@ -1,5 +1,6 @@
 /*
 @title: Amazing
+@description: "Amazing" is a maze-based puzzle game inspired by "Maze_Runner3" by Charlie. Players navigate through complex mazes, collecting keys to unlock blocked paths and reaching coins to progress to the next level. The game challenges players to strategically plan their moves to solve each maze.
 @author: Dilon
 @tags: []
 @addedOn: 2024-06-07

@@ -1,5 +1,6 @@
 /*
 @title: Snake Feast
+@description: A version of snake where the snake isn't continuously moving.
 @author: chaste
 @tags: []
 @addedOn: 2024-06-07

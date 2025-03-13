@@ -1,5 +1,6 @@
 /*
 @title: Top Down Shooter
+@description: "Top Down Shooter" by Orkpeko is a real-time action game where players must strategically navigate through levels, avoiding enemies and shooting in multiple directions to survive as long as possible.
 @author: Orkpeko
 @tags: ['strategy','real-time','action']
 @addedOn: 2024-07-15

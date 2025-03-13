@@ -1,5 +1,6 @@
 /*
 @title: Learn Morse
+@description: "Learn Morse" is a game designed to help players learn and recognize Morse code. Players must match English letters to corresponding Morse code characters in randomized levels.
 @author: Ashen Chathuranga
 @tags: []
 @addedOn: 2023-10-15

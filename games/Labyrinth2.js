@@ -1,5 +1,6 @@
 /*
 @title: Labyrinth2
+@description: Labyrinth2 is a puzzle game that serves as a sequel to a simple labyrinth game, where the objective is to find the exit. The gameplay involves navigating through mazes, avoiding walls, and reaching the endpoint to advance through levels. Each level is progressively more challenging, requiring strategic movement to reach the exit.
 @author: DorukSarpAlwaysStrikesBack!
 @tags: ['puzzle']
 @addedOn: 2023-02-14

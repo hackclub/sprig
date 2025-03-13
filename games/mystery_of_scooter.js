@@ -1,5 +1,6 @@
 /*
 @title: Mystery of scooter
+@description: Try to find the right house with the clues you're given!
 @author: Lucas
 @tags: []
 @addedOn: 2022-09-08

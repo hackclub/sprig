@@ -1,5 +1,6 @@
 /*
 @title: Circuit Breaker
+@description: Circuit Breaker is a puzzle game developed by Stefan D, where the player must navigate through levels by constructing a path or "circuit" to reach an objective within a restricted number of moves. Along the way, players must avoid "ghosts" that patrol the levels, adding an element of strategic planning and timing. The challenge is to reach the marked objective while managing movement constraints and avoiding these adversaries.
 @author: Stefan D
 @tags: ['puzzle']
 @addedOn: 2024-08-18

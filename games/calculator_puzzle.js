@@ -1,6 +1,7 @@
 
 /* 
 @title: calculator_puzzle
+@description: "Calculator Puzzle" is a math-based puzzle game where players start with a given number and aim to reach a target number by performing operations bound to the WASD keys, which represent different mathematical operations indicated on the screen. The game consists of 10 levels, each presenting a unique starting point, goal, and set of operations to solve the puzzle.
 @author: aboutdavid
 @tags: ['puzzle']
 @addedOn: 2023-04-25

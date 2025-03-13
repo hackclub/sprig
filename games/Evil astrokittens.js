@@ -1,5 +1,6 @@
 /*
 @title: Evil space kittens
+@description: "Evil Space Kittens" is a space shooter game where players battle against a kitten empire that has taken over the galaxy. Each kitten has unique abilities, making the game progressively challenging as players advance through levels to face a formidable final boss. Set in a galactic backdrop, players must strategically shoot down these feline foes to reclaim the universe.
 @author: Dragos Gabriel Matu
 @tags: []
 @addedOn: 2024-09-03

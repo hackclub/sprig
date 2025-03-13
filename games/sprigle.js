@@ -1,5 +1,6 @@
 /*
 @title: sprigle
+@description: Sprigle is a retro-themed game that serves as a Wordle port onto the Sprig platform. Players aim to guess a five-letter word by selecting letters through a virtual keyboard interface.
 @author: jedgrei
 @tags: ['retro']
 @addedOn: 2022-11-19

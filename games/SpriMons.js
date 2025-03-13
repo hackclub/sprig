@@ -1,5 +1,6 @@
 /*
 @title: SpriMons
+@description: SpriMons is a role-playing game set in the Hack Club universe where players assume the role of the ultimate Hack Club member tasked with saving the Arcade event. To accomplish this, players must collect enough tickets to awaken Hakkuun, who has fallen asleep, while training their SpriMon to become the best trainer by battling wild SpriMons. The game involves exploration, collecting tickets, battling SpriMons, and making strategic choices to ensure the success of the event.
 @author: Bartosz Budnik
 @tags: ['role-playing']
 @addedOn: 2024-07-30

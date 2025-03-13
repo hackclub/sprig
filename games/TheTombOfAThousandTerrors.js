@@ -1,5 +1,6 @@
 /*
 @title: The Tomb of a Thousand (T)errors
+@description: "The Tomb of a Thousand (T)errors" is a puzzle game where players must navigate through increasingly complex, randomly generated labyrinths. The objective is to collect keys to open passages and gather diamonds while progressing through the levels.
 @author: Fabian
 @tags: ['puzzle']
 @addedOn: 2022-09-13

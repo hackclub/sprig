@@ -1,5 +1,6 @@
 /*
 @title: TheSpaceGuardian
+@description: TheSpaceGuardian is a game centered around shooting UFOs with lasers. Players move to evade and shoot at different types of UFOs, trying to rack up a high score while avoiding enemy attacks and reaching the bottom. The game includes power-ups, special ammo, and the challenge of a boss UFO appearing as the player progresses.
 @author: Adrian DeGendt
 @tags: []
 @addedOn: 2024-07-22

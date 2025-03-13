@@ -1,5 +1,6 @@
 /*
 @title: Snake against a friend
+@description: "Snake against a Friend" is a multiplayer game where two players control snakes trying to outmaneuver each other on the same screen. Player 1 controls their snake with WASD keys, while Player 2 uses IJKL. The game is played in rounds, with snakes speeding up over time, and the goal is to avoid collisions with walls, each other, and self, with the winner being the last snake standing.
 @author: Hidden
 @tags: []
 @addedOn: 2024-06-19

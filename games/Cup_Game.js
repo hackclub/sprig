@@ -1,5 +1,6 @@
 /*
 @title: Cup_Game
+@description: Cup Game is a classic shell game where the player tries to follow and guess which cup the ball is under after they are shuffled. Players start the game, watch the cups mix, and then select a cup using the controls to see if they can correctly guess the ball's location. The goal is to achieve a high score by making accurate guesses across multiple rounds.
 @author: Dante Squires
 @tags: []
 @addedOn: 2024-01-29

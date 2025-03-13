@@ -1,5 +1,6 @@
 /*
 @title: Pusher game
+@description: Pusher Game is a strategy puzzle game where the player must navigate through mazes filled with obstacles to reach the final destination. The goal is to push obstacles strategically to clear a path towards the endpoint in each level.
 @author: liam
 @tags: ['strategy']
 @addedOn: 2023-02-08

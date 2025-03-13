@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Put a Sprig in your step
+@description: A platformer game where you collect leaves to advance to the next level while avoiding thorns. Reach the end to win!
 @author: grhu
 @tags: []
 @addedOn: 2024-10-22

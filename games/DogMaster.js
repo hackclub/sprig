@@ -1,5 +1,6 @@
 /*
 @title: DogMaster
+@description: DogMaster is an endless retro game where you help a dog satisfy its craving for snacks by moving its bowl to catch falling treats like bones, ham, and sausages, each worth points. Avoid dangerous chocolates and collect bonuses like extra lives and score multipliers to aim for the highest score as the game speeds up every 30 seconds. Don't let treats hit the floor or the dog's head, or you'll lose lives!
 @author: Lenochodik
 @tags: ['endless','retro']
 @addedOn: 2024-08-04

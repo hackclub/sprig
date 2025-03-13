@@ -1,5 +1,6 @@
 /*
 @title: connect_four
+@description: The game "Connect Four" by Sam Liu is a digital version of the classic board game where players take turns dropping colored tokens into a grid, aiming to connect four of their tokens in a row either horizontally, vertically, or diagonally. This version maintains a retro aesthetic and captures the traditional competitive gameplay experience.
 @author: sam liu
 @tags: ['retro']
 @addedOn: 2022-08-29

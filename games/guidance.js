@@ -1,5 +1,6 @@
 /*
 @title: guidance
+@description: You have to get to the green goal with as little time as possible, but you do not control the player. You place down arrow blocks that when the player steps on them, it changes their direction.
 @author: danush_ramanan
 @tags: ['strategy']
 @addedOn: 2022-12-27

@@ -1,5 +1,6 @@
 /*
 @title: Exodus
+@description: "Exodus" is a game where you must navigate levels by avoiding moving ogres to reach the end gate safely. The challenge lies in timing your moves to dodge these threats and proceed to subsequent levels. Each collision with an ogre reduces your attempts, making strategic movement crucial to success.
 @author: Jarsa
 @tags: []
 @addedOn: 2024-06-07

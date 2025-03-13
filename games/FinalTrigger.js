@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: FinalTrigger
+@description: "FinalTrigger" is a platforming game where you play as Frog from Chrono Trigger and navigate through three levels of jumping challenges. The game involves evading spikes, moving boxes, and reaching a flag to advance through the levels. It features a unique blend of original graphics and music to enhance the gameplay experience.
 @author: MrDomocle
 @tags: []
 @addedOn: 2024-00-00

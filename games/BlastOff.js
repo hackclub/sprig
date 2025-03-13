@@ -1,5 +1,6 @@
 /*
 @title: BlastOff
+@description: BlastOff is an endless action game where you control a rocket navigating through a flock of birds. Your objective is to dodge incoming birds and achieve a high score with each successful dodge. The game offers a continuous and challenging experience as you strive to avoid collisions and maintain your flight path.
 @author: Fahad
 @tags: ['endless','action']
 @addedOn: 2024-06-04

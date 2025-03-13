@@ -1,6 +1,7 @@
 
 /* 
 @title: Maze_Escape
+@description: Maze_Escape is a puzzle game created by Madison Shaw where the player guides a character through 5 different maze levels. The objective is to navigate from the starting point to the green flag, using strategic movements to find the exit in each maze. The game requires problem-solving skills to successfully escape all the mazes.
 @author: Madison Shaw
 @tags: ['puzzle']
 @addedOn: 2023-07-27

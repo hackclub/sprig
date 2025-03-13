@@ -1,5 +1,6 @@
 /*
 @title: Sort
+@description: In Sort, you try to sort as many images as you can in 60 seconds into whether they match the left or right.
 @author: Mohan
 @tags: []
 @addedOn: 2022-12-26

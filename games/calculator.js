@@ -1,5 +1,6 @@
 /*
 @title: calculator
+@description: This game is a utility simulation designed as a calculator for the Sprig platform. It provides a user interface with a grid layout where a player moves a cursor to input numbers and operations to perform basic arithmetic calculations. The game supports functions like selecting numbers, executing operations, clearing the screen, and calculating results.
 @author: Sameer Murthy
 @tags: ['utility','simulation']
 @addedOn: 2023-03-03

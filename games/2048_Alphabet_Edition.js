@@ -1,5 +1,6 @@
 /*
 @title: 2048 Alphabet Edition
+@description: 2048 Alphabet Edition is a strategic puzzle game that reimagines the classic 2048 game by using letters instead of numbers. The objective is to merge matching alphabet tiles to reach the letter "L" and win the game. The game offers a fresh twist on a familiar gameplay, appealing to fans of the original with a novel challenge.
 @author: OptimalBlock489
 @tags: ['strategy']
 @addedOn: 2022-10-19

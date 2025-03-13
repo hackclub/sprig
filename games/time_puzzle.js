@@ -1,5 +1,6 @@
 /*
 @title: Time puzzle
+@description: Time Puzzle is a game where you try to move boxes to cover green goals in under a minute. Try to finish all the levels!
 @author: Akeell
 @tags: ['puzzle','timed']
 @addedOn: 2022-10-13

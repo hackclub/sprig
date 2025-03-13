@@ -1,5 +1,6 @@
 /*
 @title: Sus_Runner
+@description: Sus_Runner is an endless runner game inspired by the Chrome dinosaur game, featuring an Among Us character. The player needs to navigate through an obstacle-filled environment, jumping over obstacles to continue running. The game ends if the character hits an obstacle.
 @author: Johna
 @tags: ['endless']
 @addedOn: 2023-02-10

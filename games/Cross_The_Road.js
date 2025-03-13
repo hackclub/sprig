@@ -1,5 +1,6 @@
 /*
 @title: Cross_The_Road
+@description: "Cross The Road" is a basic endless game where players must dodge randomly spawning vehicles to safely cross the road and reach the finish line. The longer you successfully avoid vehicles, the higher your score. The game is about timing and positioning as players navigate through the traffic.
 @author: Haneesh Pediredla
 @tags: ['endless']
 @addedOn: 2022-12-27

@@ -1,5 +1,6 @@
 /*
 @title: Pac Man
+@description: Pac Man, developed by Nico Koundakjian, is a retro-style game where players must navigate through mazes, eating all the dots to win while avoiding ghosts. The game's ghost AI behaves similarly to the original Pac-Man, adding a challenging element as players strive to outmaneuver and escape them. Enjoy the classic thrill as Pac, our unstoppable yellow hero, chows down to victory!
 @author: Nico Koundakjian
 @tags: ['retro']
 @addedOn: 2022-12-07

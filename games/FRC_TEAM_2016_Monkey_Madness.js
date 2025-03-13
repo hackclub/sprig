@@ -1,6 +1,7 @@
 
 /* 
 @title: FRC_TEAM_2016_Monkey_Madness
+@description: FRC_TEAM_2016_Monkey_Madness is an action game where players control a character representing the FRC Team 2016 Mighty Monkey Wrenches. The objective is to defeat your team's rivals, Nemesis, by navigating and shooting down enemies that appear on the screen. The game features increasing difficulty levels as players score more points, with enhanced speed and frequency of enemies.
 @author: Hunter
 @tags: ['action']
 @addedOn: 2023-04-30

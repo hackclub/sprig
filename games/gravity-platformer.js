@@ -1,5 +1,6 @@
 /*
 @title: Gravity Platformer
+@description: A funny little platformer game, where the player needs to "jump" their way to the goal. Each level gets progressively harder as the player goes on. Features mechanics such as collecting keys to open different sections of the level and of course, inverting gravity (it isn't called Gravity Platformer just for nothing).
 @author: NotRewd
 @tags: ['platformer']
 @addedOn: 2024-07-15

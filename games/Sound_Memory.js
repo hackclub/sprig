@@ -1,5 +1,6 @@
 /*
 @title: Sound Memory
+@description: "Sound Memory" is a memory and music-themed game where players listen to a sequence of tunes and then repeat the sequence by pressing the corresponding keys in the same order. The challenge intensifies as the sequence length increases with each round.
 @author: meronemo
 @tags: ["memory" , "timed" , "music"]
 @addedOn: 2024-07-28

@@ -1,5 +1,6 @@
 /*
 @title: Flying Game
+@description: Flying Game is a puzzle game where players navigate through levels by moving a player character and pushing boxes to cover goals.
 @author: Zainab Khorakiwala
 @tags: ['puzzle']
 @addedOn: 2022-10-08

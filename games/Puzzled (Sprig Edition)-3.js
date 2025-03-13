@@ -1,5 +1,6 @@
 /*
 @title: Puzzled (Sprig Edtion!)
+@description: Puzzled (Sprig Edition!) is a maze puzzle game where players navigate through randomly generated mazes to find the exit. The game challenges the player to explore and identify paths while avoiding dead ends. With each completed level, a new maze is created to offer continuous challenges.
 @author: cbbcsa
 @tags: ['maze', 'puzzle']
 @addedOn: 2024-09-21

@@ -1,5 +1,6 @@
 /*
 @title: Raincatch
+@description: Raincatch is a game where you use a bucket to catch raindrops falling from the sky to quench your thirst. The objective is to gather as many raindrops as possible to achieve a high score.
 @author: A Malladi
 @tags: ['endless']
 @addedOn: 2023-12-31

@@ -1,5 +1,6 @@
 /*
 @title: GameForNoInternet
+@description: "GameForNoInternet" is an endless runner game where players must jump over obstacles to accumulate points.
 @author: Souptik Samanta
 @tags: ['endless']
 @addedOn: 2024-10-12

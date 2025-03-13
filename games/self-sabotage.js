@@ -1,5 +1,6 @@
 /*
 @title: You Are the Enemy
+@description: A game where you try to destroy a target. If you fail on your first attempt, a horde of your alter egos attack you. Try to survive!
 @author: Suratii
 @addedOn: 2024-12-03
 @tags: []

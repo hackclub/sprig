@@ -1,5 +1,6 @@
 /*
 @title: The Impossible Game
+@description: The Impossible Game is a challenging game inspired by the classic Flash game, designed to be extremely difficult and nearly unbeatable. Players use the WASD keys to navigate a player character through obstacles in an attempt to reach the end of the level.
 @author: @SahilChess
 @tags: []
 @addedOn: 2024-06-18

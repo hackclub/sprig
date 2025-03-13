@@ -1,5 +1,6 @@
 /*
 @title: FRC CHARGED UP
+@description: "FRC CHARGED UP" is a competitive multiplayer game where players control robots to move cones and cubes to their alliance's grid, aiming to fill it faster than the opponent. Each grid holds 10 game pieces, and strategic gameplay involves maneuvering around obstacles and possibly defending against the opponent. The first player to fill their grid wins the game.
 @author: Wyatt459
 @tags: []
 @addedOn: 2024-04-22

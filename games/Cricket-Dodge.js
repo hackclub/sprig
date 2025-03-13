@@ -1,5 +1,6 @@
 /*
 @title: Cricket Dodge
+@description: Cricket Dodge, created by Harsh Singh, is an endless game where the player must prevent a wicket from getting hit by falling cricket balls, losing a life each time a ball hits. The player starts with five lives and can move the wicket left or right to avoid the obstacles. The goal is to survive as long as possible without losing all lives.
 @author: Harsh Singh
 @tags: ['endless']
 @addedOn: 2023-01-17

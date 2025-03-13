@@ -1,5 +1,6 @@
 /*
 @title: Classic Pong
+@description: Classic Pong by Atari gets a modern twist with added power-ups in this version ported to Sprig. Players control paddles to hit a bouncing ball, using power-ups that affect ball speed, paddle size, and even introduce unique abilities like sticky or ghost paddles.
 @author: AVSC2-ops
 @tags: []
 @addedOn: 2024-09-16

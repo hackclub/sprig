@@ -1,5 +1,6 @@
 /*
 @title: Mandelbrot
+@description: "Mandelbrot" is a sandbox simulation game where players can explore the complex and intricate patterns of the Mandelbrot set. It allows users to navigate the set using directional controls and adjust zoom levels to examine different levels of detail.
 @author: Henry
 @tags: ['sandbox','simulation']
 @addedOn: 2022-09-14

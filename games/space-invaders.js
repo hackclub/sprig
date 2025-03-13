@@ -2,6 +2,7 @@
 
 /*
 @title: Space_Invaders
+@description: Space Invaders is a strategic game where players must defeat waves of alien invaders before they reach Earth.
 @author: Carmel132
 @tags: ['strategy']
 @addedOn: 2023-04-19

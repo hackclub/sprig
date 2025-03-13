@@ -1,5 +1,6 @@
 /*
 @title: A Maze
+@description: "A Maze" is a puzzle game where players navigate through mazes, avoiding enemies and solving puzzles to reach the end goal. The game involves moving and manipulating block obstacles while ensuring not to die or accidentally push a block onto the goal. Players will encounter various challenges and secrets as they progress through multiple levels.
 @author: Ethan C
 @tags: []
 @addedOn: 2024-09-03

@@ -1,5 +1,6 @@
 /*
 @title: Frog_Maze
+@description: "Frog_Maze" is a puzzle game where the player navigates a frog through challenging mazes to reach a lilypad at the end of each level. The levels become progressively more difficult as the player advances. The game includes a help menu that allows players to manually select the level they want to play.
 @author: Jeremiah Kellison
 @tags: ['puzzle']
 @addedOn: 2024-02-04

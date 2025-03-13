@@ -1,5 +1,6 @@
 /*
 @title: aMAZE
+@description: aMAZE is a puzzle game where you help a princess navigate through 3 challenging mazes to reach her coronation.
 @author: anabia
 @tags: ['puzzle']
 @addedOn: 2023-01-08

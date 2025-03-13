@@ -1,5 +1,6 @@
 /*
 @title: Knight Buster
+@description: "Knight Buster" is a multiplayer game where one player controls a playful Halloween ghost trying to catch a friendly knight, who is attempting to escape. The knight can push boxes to hinder the ghost, and wins if the ghost bumps into boxes three times, while the ghost wins by catching the knight three times.
 @author: Isobel P
 @tags: ['multiplayer']
 @addedOn: 2024-07-22

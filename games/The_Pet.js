@@ -1,5 +1,6 @@
 /*
 @title: The_Pet
+@description: "The_Pet" is a simulation game where players nurture a virtual pet through its various life stages. The pet begins as an egg and progresses to adulthood, requiring food and care at each stage to evolve and thrive.
 @author: wyn-cmd
 @tags: ['simulation']
 @addedOn: 2022-12-07

@@ -1,5 +1,6 @@
 /*
 @title: Street Racer
+@description: Street Racer, developed by Cdogo, is a simple 90s-style action game where players race their cars on a highway, avoiding obstacles and other vehicles. The goal is to navigate the moving traffic without collision while controlling your car's movement using keyboard inputs.
 @author: Cdogo
 @tags: ['action']
 @addedOn: 2023-02-24

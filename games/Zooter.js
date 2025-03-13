@@ -1,5 +1,6 @@
 /*
 @title: Zooter
+@description: Zooter is an action game where players control a character to shoot projectiles at incoming enemies to prevent them from reaching the left side of the screen. The goal is to achieve a high score by successfully eliminating enemies.
 @author: PerrinPerson
 @tags: ['action']
 @addedOn: 2022-10-21

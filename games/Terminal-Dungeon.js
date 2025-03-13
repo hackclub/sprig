@@ -1,5 +1,6 @@
 /*
 @title: Terminal-Dungeon
+@description: Terminal-Dungeon is a puzzle game where players learn to use the Linux command line while navigating through a dungeon. As you progress, you'll solve command-based puzzles, interact with Tux the Linux Penguin, and find your way to freedom.
 @author: adadyer
 @tags: ['puzzle']
 @addedOn: 2022-12-20

@@ -1,5 +1,6 @@
 /*
 @title: RickRoll
+@description: This game is a RickRoll in black and white. Hit play to see it!
 @author: MMKF
 @tags: ['endless']
 @addedOn: 2024-09-18

@@ -1,5 +1,6 @@
 /*
 @title: bannai-snake
+@description: "Bannai Snake" is a puzzle game where players navigate through a grid, solving challenges by creating valid paths. The game emphasizes avoiding diagonal connections and keeping paths one tile thick, with various levels guiding players through these mechanics.
 @author: aagrim hoysal
 @tags: ['puzzle']
 @addedOn: 2023-02-13

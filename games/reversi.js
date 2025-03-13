@@ -1,5 +1,6 @@
 /*
 @title: reversi
+@description: Reversi is a classic strategy board game for one or two players, featuring an 8x8 grid where players take turns placing discs to capture their opponent's pieces. The objective is to have the majority of your color discs on the board by the end of the game. This retro-style game offers a single-player mode against a bot or a two-player mode for a competitive experience.
 @author: veehj
 @tags: ['multiplayer','retro']
 @addedOn: 2022-09-13

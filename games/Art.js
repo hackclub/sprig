@@ -1,5 +1,6 @@
 /*
 @title: Art
+@description: "Art" is a sandbox game by Leonard (Omay) where players can create pixel art by selecting and applying colors on a grid. Players can move a cursor around the grid to draw, switch colors, and reset their artwork. The game takes inspiration from a similar painting game and emphasizes creative expression within defined boundaries.
 @author: Leonard (Omay)
 @tags: ['sandbox']
 @addedOn: 2022-11-06

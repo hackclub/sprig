@@ -1,5 +1,6 @@
 /*
 @title: alien_invaders
+@description: Alien Invaders is a simple clone of the classic Space Invaders game with a retro theme. Players control a spaceship, moving it left and right to shoot at descending aliens. The goal is to eliminate all enemy invaders before they reach the player's level or cause defeat.
 @author: stati30241
 @tags: ['retro']
 @addedOn: 2022-09-28

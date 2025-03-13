@@ -1,5 +1,6 @@
 /*
 @title: Space Game
+@description: "Space Game" is a nostalgic arcade-style game where you navigate a spaceship to dodge incoming missiles that progressively get faster. Players can temporarily escape danger by landing on helipads or increase the challenge by disabling them. The objective is to survive as long as possible while setting personal time records.
 @author: Abhimanyu Chaudhary
 @tags: []
 @addedOn: 2024-08-13

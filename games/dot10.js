@@ -1,5 +1,6 @@
 /*
 @title: dot10
+@description: A game where you move a dot to the goal while avoiding walls. Beat all 10 levels in under 30 seconds to win!
 @author: ashfelloff
 @tags: []
 @addedOn: 2024-11-26

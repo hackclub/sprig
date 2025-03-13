@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: buildBurger
+@description: A game where you build burgers to match the burger you're shown.
 @author: Kevin
 @tags: []
 @addedOn: 2024-11-26

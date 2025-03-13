@@ -1,5 +1,6 @@
 /*
 @title: Snake_4_2
+@description: Snake_4_2 is a version of the classic snake game where you can play singleplayer, just trying to collect the apples yourself, or multiplayer where you can compete against a friend!
 @author: Stephen King
 @tags: ['endless']
 @addedOn: 2022-11-18

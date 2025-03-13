@@ -1,5 +1,6 @@
 /*
 @title: Orb Dungeon
+@description: "Orb Dungeon" is an adventure game where players navigate a dungeon using powers from collected orbs to reach the ultimate orb. Each orb grants a unique ability—from destroying objects to becoming invisible—that aids in overcoming various obstacles like lava, traps, and enemies. The goal is to strategically use these powers to successfully acquire the ultimate orb and win the game.
 @author: Dimitris Toulis
 @tags: ['adventure']
 @addedOn: 2024-08-15

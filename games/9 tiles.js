@@ -1,5 +1,6 @@
 /*
 @title: 9 Tiles
+@description: "9 Tiles" is a simplified version of the classic 15-tile puzzle, featuring 8 numbered tiles and a red circle. The goal is to rearrange the tiles from 1 to 8 while moving the circle to the lower left corner. This game presents a more accessible challenge by reducing the size of the grid and the number of tiles in play.
 @author: Arrow07
 @tags: []
 @addedOn: 2024-08-28

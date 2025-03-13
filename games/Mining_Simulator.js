@@ -1,6 +1,7 @@
 
 /* 
 @title: Mining_Simulator
+@description: Mining_Simulator is a 2D simulation game where players mine and place blocks in a dynamic world. Players can navigate the environment to extract resources and build structures while managing available resources. The game provides an interactive experience focused on exploration and resource management.
 @author: MiniCube11
 @tags: ['simulation']
 @addedOn: 2023-04-10

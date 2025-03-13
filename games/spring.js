@@ -1,5 +1,6 @@
 /*
 @title: Spring
+@description: "Spring" is a platformer where players navigate through levels by collecting coins to progress. The game's name is a playful nod to its mechanics, as players "spring" around using directional arrows to reach their goals.
 @author: TechPandaPro
 @tags: []
 @addedOn: 2024-08-15

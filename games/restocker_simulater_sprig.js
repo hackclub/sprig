@@ -1,5 +1,6 @@
 /*
 @title: restocker simulater
+@description: "Restocker Simulator" is a puzzle game where players work together to push boxes onto designated goal areas in various levels.
 @author: omegakitty
 @tags: ['puzzle']
 @addedOn: 2022-11-23

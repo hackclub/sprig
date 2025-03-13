@@ -1,6 +1,7 @@
 
 /* 
 @title: really_really_bad_music_maker
+@description: The game "really_really_bad_music_maker" by Shav (secondary-smiles) is a simple interactive experience that explores Sprig's sonic capabilities through a generative music algorithm. Players can influence the music by starting or stopping playback, cycling through different sound types, shifting octaves, and selecting various note scales.
 @author: Shav (secondary-smiles)
 @tags: ['music']
 @addedOn: 2023-06-23

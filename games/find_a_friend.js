@@ -1,5 +1,6 @@
 /*
 @title: Find a Friend
+@description: "Find a Friend" is a simple game created by Doodle Studio where players navigate using W and S keys to avoid "bad influences" and connect with good "friends". The game's objective is to dodge enemies while reaching friendly figures on the game map.
 @author: Doodle Studio
 @tags: []
 @addedOn: 2024-07-22

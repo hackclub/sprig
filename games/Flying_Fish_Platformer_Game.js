@@ -1,5 +1,6 @@
 /*
 @title: Flying Fish
+@description: "Flying Fish" is a platformer game where you control a flying fish navigating through platforms in the sky. The objective is to reach the trophy by moving through levels and overcoming obstacles. Progress by reaching the light-colored blue square at the top and avoid falling to win the game.
 @author: Reese Ochitwa
 @tags: []
 @addedOn: 2024-08-28

@@ -1,5 +1,6 @@
 /*
 @title: 2_character_maze_game
+@description: A puzzle game where you control two characters at the same time to solve mazes. Use keys to unlock doors and reach the goal.
 @author: ivg1
 @tags: ['maze', 'puzzle']
 @addedOn: 2024-12-13

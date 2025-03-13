@@ -1,5 +1,6 @@
 /*
 @title: Pipes Puzzle
+@description: Pipes Puzzle is a randomly generated, solvable puzzle game where the goal is to connect all the pipes in a square grid. Players rotate the pipes to form connections, with successfully connected pipes turning the background blue to indicate progress. Each level is generated randomly, providing a unique challenge every time.
 @author: RayhanADev
 @tags: ['puzzle']
 @addedOn: 2022-10-14

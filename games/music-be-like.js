@@ -1,5 +1,6 @@
 /*
 @title: music-be-like
+@description: Very Good Music™. Nothing strange here.
 @author: trueGrand
 @tags: ['puzzle']
 @addedOn: 2022-12-04

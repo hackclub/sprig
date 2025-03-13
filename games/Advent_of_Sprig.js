@@ -1,5 +1,6 @@
 /*
 @title: Advent of Sprig
+@description: "Advent of Sprig" is a utility-themed game created by Leonard (Omay), where new games or levels are added each day. It features a menu from which players can select different game levels, involving puzzle-solving elements like pushing boxes and toggling on/off switches to reach goals. The game is designed to reveal new content over time, enhancing replayability and engagement.
 @author: Leonard (Omay)
 @tags: ['utility']
 @addedOn: 2022-12-01

@@ -1,5 +1,6 @@
 /*
 @title: Crystal Caper: The Jewel Thieves
+@description: "Crystal Caper: The Jewel Thieves" is a strategy game where the player must collect all the emeralds in a maze while avoiding the bots.
 @author: Jaisinh
 @tags: []
 @addedOn: 2024-11-21

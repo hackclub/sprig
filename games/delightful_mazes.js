@@ -1,5 +1,6 @@
 /*
 @title: delightful_mazes
+@description: Delightful Mazes is a puzzle game where players navigate through a series of mazes with invisible walls and exits. The objective is to uncover secret trapdoors to increase your score, with the ultimate goal of opening all trapdoors to win.
 @author: hephaestushex
 @tags: ['puzzle']
 @addedOn: 2022-11-15

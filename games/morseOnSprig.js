@@ -1,5 +1,6 @@
 /*
 @title: morse on sprig
+@description: "Morse on Sprig" is a utility game themed around learning and practicing Morse code. Users can input Morse code signals, which are then translated into alphanumeric characters, providing an interactive way to familiarize themselves with Morse code patterns. The game emphasizes auditory feedback through coded tunes and visual representation of signals.
 @author: mrdarip
 @tags: ['utility']
 @addedOn: 2024-07-28

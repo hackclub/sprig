@@ -1,5 +1,6 @@
 /*
 @title: asteroid apocalypse
+@description: "Asteroid Apocalypse" is an intense endless game where you must protect your base from incoming asteroids using a keyboard-controlled laser. The goal is to destroy as many asteroids as possible before they crash into the base, earning points for each successful hit. The game ends if an asteroid hits the base.
 @author: zcsop1206
 @tags: ['endless']
 @addedOn: 2022-12-31

@@ -1,5 +1,6 @@
 /*
 @title: HELP ME I CANT CODE
+@description: "Help Me I Can't Code" is a puzzle-adventure game where players must collect pieces to build a game without getting distracted. Navigate through levels avoiding red boxes while seeking the green box, or the purple box in the last level, to progress. The game challenges players to maintain focus and gather essential elements amid various obstacles.
 @author: PotatoMoth
 @tags: ['puzzle','adventure']
 @addedOn: 2024-08-15

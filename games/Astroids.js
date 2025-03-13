@@ -1,5 +1,6 @@
 /*
 @title: Astroids
+@description: Astroids is a real-time action game where the player must avoid incoming asteroids using WASD controls. The objective is to maneuver the player's sprite through a field of randomly appearing asteroids, preventing collisions to survive as long as possible. The game challenges players with increasing time pressure as they navigate through obstacles.
 @author: Alex
 @tags: ['real-time','action']
 @addedOn: 2024-08-17

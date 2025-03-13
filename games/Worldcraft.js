@@ -1,5 +1,6 @@
 /*
 @title: Worldcraft
+@description: Worldcraft is a peaceful 2D adventure game inspired by Minecraft, where players control a small blob character to explore the world, gather supplies, and build structures. There is no specific objective, allowing players to freely explore the environment, use portals to travel, and collect different items to create new things. The game focuses on creativity and exploration in a serene setting.
 @author: adadyer
 @tags: ['adventure']
 @addedOn: 2022-12-09

@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: car park escape
+@description: Car park escape is a puzzle game where you move cars out of the way to help your car reach the goal. Each car can only move in certain directions, so you need to figure out how to coordinate them!
 @author: miqdad1234
 @tags: ['puzzle']
 @addedOn: 2024-11-1

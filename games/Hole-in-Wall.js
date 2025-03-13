@@ -1,5 +1,6 @@
 /*
 @title: Hole in Wall
+@description: Avoid the walls that come scrolling at you to stay on your island and reach the end of the level. Beat all 3 levels to win!
 @author: udu3324
 @tags: []
 @addedOn: 2024-00-00

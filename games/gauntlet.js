@@ -1,5 +1,6 @@
 /*
 @title: gauntlet
+@description: "Gauntlet" is an endless dodging game where players navigate through obstacles by swapping colors to match gates and avoid collisions. The objective is to progress as far as possible while maintaining the correct color to pass through each gate.
 @author: hex4
 @tags: ['endless']
 @addedOn: 2024-09-16

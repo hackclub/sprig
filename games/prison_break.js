@@ -1,5 +1,6 @@
 /*
 @title: prison break
+@description: Try to escape prison through the maze before the guards catch you!
 @author: emily liu
 @tags: []
 @addedOn: 2024-00-00

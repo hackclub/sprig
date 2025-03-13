@@ -1,5 +1,6 @@
 /*
 @title: Electrikoban
+@description: Electrikoban is a strategy game where players push wires to power up lights. The objective is to connect the wires to generators, enabling the lamps to turn on. As players progress through levels, they must strategically navigate obstacles to achieve their goal.
 @author: algov
 @tags: ['strategy']
 @addedOn: 2022-11-16

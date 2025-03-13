@@ -1,5 +1,6 @@
 /*
 @title: dropper
+@description: "Dropper" is an action-packed simulation puzzle game where players must navigate through gaps and dodge obstacles to reach a gold block. The objective is to carefully move left or right to avoid black boxes while progressing through various levels.
 @author: hinoob
 @tags: ['action','simulation','puzzle']
 @addedOn: 2024-08-18

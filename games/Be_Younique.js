@@ -1,5 +1,6 @@
 /*
 @title: Be Younique
+@description: A game where you must defeat all the enemies to win with a limited number of bullets.
 @author: pixelianWarrior
 @tags: []
 @addedOn: 2024-11-29

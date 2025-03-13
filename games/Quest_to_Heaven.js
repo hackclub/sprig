@@ -1,5 +1,6 @@
 /*
 @title: Quest_to_Heaven
+@description: Quest_to_Heaven is a puzzle game where you play as an angel trying to escape a dark place by navigating through demons and entities. The player must find keys, unlock locks, and avoid touching demons to progress through the levels.
 @author: Alainy R
 @tags: ['puzzle']
 @addedOn: 2024-05-20

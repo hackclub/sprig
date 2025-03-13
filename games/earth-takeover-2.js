@@ -1,5 +1,6 @@
 /*
 @title: EARTH TAKEOVER (maze)
+@description: Earth Takeover is a space-themed maze adventure where players navigate through challenging levels to collect "Earths" while avoiding traps. Each level introduces new obstacles such as fake walls and rocket traps, requiring players to be strategic with their steps.
 @author: @SeanK
 @tags: []
 @addedOn: 2024-4-20

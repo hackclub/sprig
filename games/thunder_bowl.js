@@ -1,6 +1,7 @@
 
 /* 
 @title: thunder_bowl
+@description: "Thunder Bowl" is a puzzle game where players must strategically push footballs into their respective goals. The challenge lies in maneuvering around obstacles to correctly position each ball. Players can reset the level or seek hints at the cost of points to help solve each puzzle.
 @author: Alex
 @tags: []
 @addedOn: 2023-08-03

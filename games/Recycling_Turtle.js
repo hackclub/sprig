@@ -1,5 +1,6 @@
 /*
 @title: Recycling_Turtle
+@description: Recycling Turtle is a puzzle game where players help a turtle educate others about proper plastic disposal by sorting different types of plastics with a recycling bin. Players earn points by catching recyclable plastics like water bottles and detergent bottles, while non-recyclable items like pipes and shopping bags cost points. The goal is to reach 100 points to become a Master Recycler and learn more about recycling practices.
 @author: ari-tistic
 @tags: ['puzzle']
 @addedOn: 2023-05-19

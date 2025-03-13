@@ -1,5 +1,6 @@
 /*
 @title: Dungeon_Master
+@description: "Dungeon Master" is a strategic dungeon crawler where players navigate through perilous levels, battling zombies and collecting keys to unlock doors and progress. The game involves solving puzzles, pushing obstacles, and overcoming challenges to reach the exit portal in each level. Players must manage their health and utilize strategic movements and attacks to survive and defeat enemies as they strive to become the ultimate dungeon master.
 @author: BrandenLordNov
 @tags: []
 @addedOn: 2024-08-28

@@ -2,6 +2,7 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 @title: Reach The End Multiplayer
+@description: Fight your way to the opposing player's endzone while they push back, the twine will get shorter with more pushes. Each player gets to freeze the other player five times! Use them wisely!
 @author: Bluelightning26
 @tags: []
 @addedOn: 2024-11-22

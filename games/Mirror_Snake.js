@@ -1,6 +1,7 @@
 
 /* 
 @title: Mirror_Snake
+@description: "Mirror_Snake" is a strategy game where you control a blue snake while an orange snake mirrors your movements. The goal is to eat apples to increase your score and size, all while avoiding collisions with walls or the mirrored snake. The game offers a challenging twist on the classic snake game as the mirrored movement of the second snake adds an extra layer of strategy.
 @author: funnoodle11
 @tags: ['strategy']
 @addedOn: 2023-05-26

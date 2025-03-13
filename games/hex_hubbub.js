@@ -1,5 +1,6 @@
 /*
 @title: hex_hubbub
+@description: Hex Hubbub is a puzzle game designed to help players practice converting hexadecimal numbers to binary. A hex number is displayed using a seven-segment style, and players must correctly flip bits to match it in binary format. Successfully converting all 16 hexadecimal digits wins the game.
 @author: ajs256
 @tags: ['puzzle']
 @addedOn: 2023-01-28

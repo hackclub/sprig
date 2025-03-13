@@ -1,5 +1,6 @@
 /*
 @title: Get_the_birdie!
+@description: Get_the_birdie! is a puzzle game where the objective is to navigate through levels and capture a bird.
 @author: Sophie
 @tags: ['puzzle']
 @addedOn: 2022-12-23

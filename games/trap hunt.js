@@ -1,5 +1,6 @@
 /*
 @title: trap runner
+@description: "Trap Runner" is a maze-based puzzle game where players navigate through intricate mazes to find a chest, unlock a lock, and reach the trophy.
 @author: surojit roy
 @tags: []
 @addedOn: 2024-08-28

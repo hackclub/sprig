@@ -1,5 +1,6 @@
 /*
 @title: Lava the impossible maze
+@description: "Lava the Impossible Maze" is a timed puzzle game where the objective is to navigate through a series of challenging mazes inspired by "Treasure_hunt." Players must strategically move to reach the goal within a limited time while avoiding obstacles and pushing boxes as needed. Each level presents a unique puzzle, testing the player’s problem-solving skills in a fiery maze setting.
 @author: Augustin Z Youtube-@Aaron Dragonheart
 @tags: ['puzzle','timed']
 @addedOn: 2022-12-21

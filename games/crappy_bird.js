@@ -1,5 +1,6 @@
 /*
 @title: crappy_bird
+@description: Crappy bird is a rendition of flappy bird! Try to get as far as you can without hitting the walls that come scrolling at you!
 @author: ced
 @tags: ['endless','retro']
 @addedOn: 2022-07-14

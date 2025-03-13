@@ -1,5 +1,6 @@
 /*
 @title: Shooting Stars!
+@description: Shoot the spaceships that come falling towards you to gain XP! Make sure not to let them reach the bottom of the screen.
 @author: Sapmix
 @tags: []
 @addedOn: 2024-11-11

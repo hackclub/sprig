@@ -1,5 +1,6 @@
 /*
 @title: kill pigs
+@description: "Kill Pigs" is a puzzle game where you play as a storm god aiming to select and eliminate the correct pig for your dinner across four increasing levels of difficulty. The goal is to kill the right pig in every level.
 @author: luiç
 @tags: ['puzzle']
 @addedOn: 2022-09-13

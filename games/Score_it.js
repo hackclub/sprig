@@ -1,5 +1,6 @@
 /*
 @title: Score_it
+@description: "Score_it" is a progressive football-themed game where the objective is to shoot the ball into the goal across 10 challenging levels. Each level increases in difficulty as players navigate different obstacles to score.
 @author: asmahdi08
 @tags: ['sports']
 @addedOn: 2024-08-22

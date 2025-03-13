@@ -1,6 +1,7 @@
 
 /* 
 @title: ocean-maze-escape
+@description: Ocean-Maze-Escape is a cooperative puzzle game where two players work together to navigate an underwater maze. The goal is for Player 1, a squid, to reach the submarine and Player 2, a shark, to reach the boat. Players must strategically move through the maze to achieve their objectives concurrently.
 @author: michael barrera
 @tags: ['puzzle']
 @addedOn: 2023-10-13

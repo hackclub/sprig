@@ -1,5 +1,6 @@
 /*
 @title: dihydrogen_monoxide_free_fall
+@description: In this game you are a rain drop that is falling from the sky.  Damaging fireballs fall faster then you and healing droplets fall slower then you.  The goal of this game is to survive as long as possible.
 @author: aksel s.
 @tags: ['endless']
 @addedOn: 2022-11-06

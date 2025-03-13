@@ -1,5 +1,6 @@
 /*
 @title: Cops and criminals
+@description: "Cops and Criminals" is a multiplayer puzzle-adventure game where players compete to escape from jail, advancing through higher security levels. One player takes on the role of a criminal trying to escape, while the other plays as a cop trying to stop them.
 @author: Adrian T
 @tags: ['puzzle','multiplayer','adventure']
 @addedOn: 2024-08-15

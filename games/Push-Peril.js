@@ -1,5 +1,6 @@
 /*
 @title: Box Pushing Game
+@description: The Box Pushing Game is a minimalistic puzzle game where players must navigate various levels to unlock a chest with a key to progress. The game features obstacles like spikes and crates that require strategic movement to solve. Each level presents unique challenges, emphasizing puzzle-solving and careful planning to succeed.
 @author: HEHE-HTML
 @tags: []
 @addedOn: 2024-08-18

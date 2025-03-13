@@ -1,5 +1,6 @@
 /*
 @title: hot-digitty-dog
+@description: "Hot-Digitty-Dog" is an endless survival game where a hotdog tries to escape an invasion of pineapples while staying hydrated with mustard. The player needs to maneuver the hotdog to avoid pineapples and collect mustard to increase their score. The challenge increases as the game's speed accelerates over time.
 @author: Urjith Mishra
 @tags: ['endless']
 @addedOn: 2023-01-10

@@ -1,6 +1,7 @@
 
 /* 
 @title: Watermellen_man_and_bluebarry_man
+@description: "Watermellen_man_and_bluebarry_man" is a cooperative puzzle game where two players must navigate characters, Watermellen Man and Bluebarry Man, to their respective portals. The challenge lies in coordinating movements so both characters reach their portals simultaneously, allowing players to advance to the next level.
 @author: Joel Robbins
 @tags: []
 @addedOn: 2023-06-05

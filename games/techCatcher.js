@@ -1,5 +1,6 @@
 /*
 @title: Tech Catchers V2
+@description: What a lovely day, rain then sun and now SSD's. You must catch the raining tech! Each piece of tech gives 1 point
 @author: Shaheer
 @tags: ['endless','action']
 @addedOn: 2024-06-25

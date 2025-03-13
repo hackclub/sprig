@@ -1,5 +1,6 @@
 /*
 @title: MusicalTiles
+@description: MusicalTiles is a small music player game where each key press on the WASD keys corresponds to a different musical note, producing a unique tune. The game is inspired by musical projects like "Nomis" by Cheru Berhanu and "Music!" by Akeell.
 @author: Shreeya Rani
 @tags: []
 @addedOn: 2023-03-14

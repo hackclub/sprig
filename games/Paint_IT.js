@@ -1,5 +1,6 @@
 /*
 @title: Paint_IT
+@description: "Paint_IT" is a sandbox-style game that allows players to create art using different colors on a canvas. The objective is to express creativity by painting with black, red, blue, and yellow hues. Players are encouraged to capture and share their artwork.
 @author: N Rizwan
 @tags: ['sandbox']
 @addedOn: 2022-09-14

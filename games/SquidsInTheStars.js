@@ -1,5 +1,6 @@
 /*
 @title: SquidsInTheStarts
+@description: SquidsInTheStarts is an endless action game set in a galaxy, where players aim to defeat evil squids. As the game progresses, it becomes increasingly challenging, with the objective of defeating as many squids as possible to achieve a high score.
 @author: Lucas4680
 @tags: []
 @addedOn: 2024-02-11

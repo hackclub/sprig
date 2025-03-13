@@ -1,5 +1,6 @@
 /*
 @title: Ghoul Thrasher
+@description: Ghoul Thrasher is a roguelike game that features permadeath and combines unique puzzles with engaging gameplay. Players will navigate through challenging levels, facing various enemies, and solving puzzles as they progress. The game offers an immersive action-adventure experience with elements of role-playing.
 @author: Kushagra
 @tags: ['role-playing','action','adventure']
 @addedOn: 2024-08-06

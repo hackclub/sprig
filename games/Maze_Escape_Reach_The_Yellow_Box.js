@@ -1,5 +1,6 @@
 /*
 @title: Escape the evil moving purple block
+@description: In "Escape the Evil Moving Purple Block," you play as a pumpkin character navigating through a maze while avoiding various enemies. The game's primary threats include moving purple blocks, an angry cannon, an evil disc, and stagnant spikes, each with unique movement patterns and challenges. The objective is to reach the yellow box in each level to advance, while managing your health and collecting healing potions for survival.
 @author: Owski
 @tags: []
 @addedOn: 2024-07-29

@@ -1,5 +1,6 @@
 /*
 @title: LabyrinthBoardGame
+@description: LabyrinthBoardGame, created by rivques, is a digital port of the classic Labyrinth board game, adapted for Sprig. In this tactical game, players compete to collect artifacts in a maze that constantly shifts, requiring strategic movement and tile manipulation. For complete instructions on gameplay, please visit [rivques.dev/hackclub/labyrinth](https://rivques.dev/hackclub/labyrinth).
 @author: rivques
 @tags: []
 @addedOn: 2024-09-03

@@ -1,5 +1,6 @@
 /*
 @title: randomworld
+@description: randomworld is an adventure game by Wojtek Widomski featuring a dynamically generated world where players explore, fight enemies, and discover bases with various items. The game includes strategic elements like teleportation, inventory management, and base interaction, with the world populated by different enemy types that challenge the player. Additionally, unique elements such as computers, portals, and hidden items add depth to the gameplay experience.
 @author: Wojtek Widomski
 @tags: ['adventure']
 @addedOn: 2022-12-11

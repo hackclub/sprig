@@ -1,5 +1,6 @@
 /*
 @title: dino
+@description: "Dino" is an endless game where the player must jump over birds to avoid obstacles and stay alive. The main objective is to survive for as long as possible, accumulating a score based on the time you remain in the game.
 @author: Pfostierer
 @tags: ['endless']
 @addedOn: 2023-02-19

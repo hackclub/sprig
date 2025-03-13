@@ -1,5 +1,6 @@
 /*
 @title: Mice Catcher
+@description: Mice Catcher is a fast-paced game where players aim to catch as many mice as possible within one minute.
 @author: Slippy
 @tags: []
 @addedOn: 2024-08-06
