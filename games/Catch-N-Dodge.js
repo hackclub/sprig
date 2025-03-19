@@ -5,6 +5,7 @@ const banana = "b"
 const bomb = "x"
 
 let point_lookup = {
+  [bomb]: 0,
   [apple]: 1,
   [orange]: 2,
   [banana]: 3
@@ -144,7 +145,7 @@ function updateFruits() {
     if(fruitObj.y != height() && fruitObj.y != initialY)
       return;
 
-    if(fruit == bomb)
+    if(fruit == bomb && fruitObj.y == height() - 2 && fruitObj.x == getFirst(player).x)
       endGame()
       
     updateScore(score + (point_lookup[fruit] * (fruitObj.x == getFirst(player).x ? 1 : -1)))
