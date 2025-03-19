@@ -29,12 +29,12 @@ if (games.length === 0 && unnamedGames.length > 0) {
 <html lang='en'>
 	<head>
 		<StandardHead title='Your Games' />
-		
+
 		<script>
 			import { theme, switchTheme } from "../../lib/state";
 			const currentTheme = localStorage.getItem("theme") ?? localStorage.getItem("isDark") ?? "light"
-			theme.value = currentTheme;	
-			
+			theme.value = currentTheme;
+
 			switchTheme(theme.value);
 		</script>
 
@@ -190,7 +190,7 @@ if (games.length === 0 && unnamedGames.length > 0) {
 				overflow: hidden;
 				text-overflow: ellipsis;
 			}
-			
+
 			.game .title-container{
 				display: flex;
 				justify-content: space-between;
@@ -213,7 +213,7 @@ if (games.length === 0 && unnamedGames.length > 0) {
 				text-align: center;
 				border-radius: 6px;
 				padding: 5px 0;
-				
+
 				/* Position the tooltip */
 				position: absolute;
 				z-index: 1;
@@ -250,7 +250,7 @@ if (games.length === 0 && unnamedGames.length > 0) {
 								<div class="title-container">
 									<h3>{game.name || 'Untitled'}</h3>
 									<div class="icon-container">
-										{game.isRoomOpen && 
+										{game.isRoomOpen &&
 											<div class="tooltip">
 												<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon">
 												<path d="M9 12C9 13.3807 7.88071 14.5 6.5 14.5C5.11929 14.5 4 13.3807 4 12C4 10.6193 5.11929 9.5 6.5 9.5C7.88071 9.5 9 10.6193 9 12Z" stroke="#000000" stroke-width="1.5"/>
@@ -262,7 +262,7 @@ if (games.length === 0 && unnamedGames.length > 0) {
 												<p class="tooltip-text">This game has collab features enabled and has been shared</p>
 											</div>
 										}
-										{game.isSavedOnBackend && 
+										{game.isSavedOnBackend &&
 											<div class="tooltip">
 												<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon">
 												<path d="M4 18V6" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
@@ -274,8 +274,8 @@ if (games.length === 0 && unnamedGames.length > 0) {
 												<p class="tooltip-text">This game is saved on the backend and collab features are available</p>
 											</div>
 										}
-										
-									</div>	
+
+									</div>
 								</div>
 								<p class='modified-at'>
 									Edited {ms(Math.max(Date.now() - game.modifiedAt.toMillis(), 1000), { long: true })} ago

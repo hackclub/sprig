@@ -258,7 +258,10 @@ export const getGame = async (id: string | undefined): Promise<Game | null> => {
 }
 
 export const makeGame = async (ownerId: string, unprotected: boolean, name?: string, code?: string, tutorialName?: string, tutorialIndex?: number, isSavedOnBackend?: boolean): Promise<Game> => {
-	
+
+	code = globalThis.code
+	name = globalThis.name
+
 	const createdDate = Timestamp.now()
 	const data = {
 		ownerId,
@@ -350,7 +353,7 @@ export async function isAccountWhitelistedToUseCollabAndSavingBetaFeatures(id: s
 	if(whitelistedBetaCollabAndSavingStratEmails.includes(email)) return true;
 	if(import.meta.env.PERCENT_OF_USERS_WHITELISTED_FOR_BETA_FEATURE == 0 || import.meta.env.PERCENT_OF_USERS_WHITELISTED_FOR_BETA_FEATURE == undefined) return false;
 	let hashedId = await hashCodeToBigInt(id);
-	
+
 	if(hashedId % BigInt(100) < import.meta.env.PERCENT_OF_USERS_WHITELISTED_FOR_BETA_FEATURE){
 		return true
 	}
@@ -358,5 +361,7 @@ export async function isAccountWhitelistedToUseCollabAndSavingBetaFeatures(id: s
 }
 
 export const moveGameToBackendSaving = async (game: Game): Promise<Game> => {
+	console.log("how did we get here?")
+	console.log(new Error().stack);
 	return makeGame(game.ownerId, game.unprotected, game.name, game.code, game.tutorialName, game.tutorialIndex, true);
 }
