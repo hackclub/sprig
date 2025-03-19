@@ -65,7 +65,7 @@ const CHARS = {
   CLOSEDPARENTHESIS: ")"
   
 }
-// Sprites from Sameer Murthy (@SameeraMurthy on Github)
+// Number/operation sprites from Sameer Murthy (@SameeraMurthy on Github)
 const 
 zero= "0",
 one = "1",
@@ -579,7 +579,7 @@ class Game {
     this.state = "UI";
     this.cursorPos = {x:0,y:4};
     this.selectedChar = CHARS.ZERO;
-    this.equation = "X^2";
+    this.equation = "";
     this.errorMessage = "";
     this.equationCheck = "";
     this.errorOccured = false;
