@@ -32,7 +32,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		trackingId = session.user.id
 		trackingType = 'user'
 
-		await updateEmailListLastModifiedTime(session.user, new Date())
+		//await updateEmailListLastModifiedTime(session.user, new Date())
 	}
 
 	await updateDocument('games', gameId, {

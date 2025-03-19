@@ -18,9 +18,9 @@ However, on-device debugging is hard, so the engine can also be compiled to run 
 #### Building
  - Clone the repository
  - Change into the spade directory and change code as desired
- - Run `../../scripts/gardenshed/build.sh`
+ - Run `python3 gardenshed.py build`
    
-this will produce the ``./spade.uf2`` file which you can flash to your sprig. 
+this will produce the ``./firmware.uf2`` file which you can flash to your sprig. 
 
 ### Manual
 Prerequisites:
