@@ -1,3 +1,12 @@
+/*
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+@title: catch the ghost
+@author: vladutzu
+@tags: []
+@addedOn: 2025-03-26
+*/
+
 // Ghost Hunter pentru consola Sprig
 // Jucătorul trebuie să vâneze fantome într-un conac întunecat
 
