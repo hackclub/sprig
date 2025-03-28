@@ -17,28 +17,31 @@ Controls:
     I: Return to menu
 
 Changelog:
-    - v1.0.0 (1/11/2025) :
+    - v1.0.0 (2/11/2025) :
       - Initial version
 
-    - v1.1.0 (1/12/2025) :
+    - v1.1.0 (2/12/2025) :
       - Added alternate texture of house after winning
       - Updated logo with new house texture
       - Added increasing speed
       - Added animations for when the crocodiles eat the walls and the player
 
-    - v1.2.0 (1/12/2025) :
+    - v1.2.0 (2/12/2025) :
       - Added main menu
       - Added endless mode
       - Added changelog
 
-    - v1.2.1 (1/12/2025) :
+    - v1.2.1 (2/12/2025) :
       - Separated changelog from header
 
-    - v1.2.2 (1/12/2025) :
+    - v1.2.2 (2/12/2025) :
       - Added description and instructions in js file
       - Bug fixes
       - First version in gallery
 
+    - v1.2.3 (3/26/2025) :
+      - Fixed dates in changelog
+      - Fixed tons of errors that only occur when playing on sprig (not in editor)
 */
 
 // define the sprites in our game
@@ -60,7 +63,8 @@ var endless = false;
 var runid = 0;
 var menuTextId = 0;
 var wallStep = 0;
-const winStep = 175;
+let i = 0;
+const winStep = 15;
 const tickSpeed = 500;
 const wallDist = 3;
 
@@ -453,12 +457,12 @@ function select() {
   }
   inMenu = false;
   clearText()
-  addText("Press I to", {y: 2})
-  addText("return to menu", {y: 3})
+  addText("Press I to", {y: 3})
+  addText("return to menu", {y: 4})
 
   menuTextId = setTimeout(function () {
     clearText();
-    addText(wallStep.toString(), { y: 1, color: color`0` });
+    addText(wallStep.toString(), { y: 2, color: color`0` });
   }, 2500)
   
   // set the map displayed to the current level
@@ -479,9 +483,9 @@ function menu() {
   paused = true;
   wallStep = 0;
   setMap(levels[1]);
-  addText("Use L to select", {y: 1, color: color`0`});
-  addText("Normal", {y: 4, color: color`0`});
-  addText("Endless", {y: 11, color: color`0`});
+  addText("Use L to select", {y: 2, color: color`0`});
+  addText("Normal", {y: 6, color: color`0`});
+  addText("Endless", {y: 10, color: color`0`});
 }
 
 menu()
@@ -562,8 +566,8 @@ function checkPlayer() {
   if (getFirst(player).x == 0) {
     dead = true
     addText("You Lose!", { y: 4, color: color`3` })
-    x = getFirst(player).x
-    y = getFirst(player).y
+    var x = getFirst(player).x
+    var y = getFirst(player).y
     getFirst(player).remove()
     getTile(x, y)[0].remove()
     addSprite(x, y, crocodile[2])
@@ -575,12 +579,12 @@ function checkPlayer() {
       dead = true;
       getFirst(player).remove()
       for (i = 0; i < crocodile.length; i++) {
-      crocs = getAll(crocodile[i])
+      var crocs = getAll(crocodile[i])
       for (i = 0; i < crocs.length; i++) {
         crocs[i].remove()
       }
       }
-      walls = getAll(wall)
+      var walls = getAll(wall)
       for (i = 0; i < walls.length; i++) {
         walls[i].remove()
       }
@@ -596,7 +600,7 @@ afterInput(() => {
 });
 
 function flipCroco(x, y) {
-  sprite = getTile(x, y)[0];
+  var sprite = getTile(x, y)[0];
 
   if (sprite.type != crocodile[0] && sprite.type != crocodile[1]) {
     for (i = 1; i < getTile.length; i++) {
@@ -607,9 +611,9 @@ function flipCroco(x, y) {
   }
 
   if (sprite.type == crocodile[0]) {
-    type = 1;
+    var type = 1;
   } else {
-    type = 0;
+    var type = 0;
   }
 
   sprite.remove();
@@ -627,13 +631,13 @@ function run() {
       }
     }
 
-    addText(wallStep.toString(), { y: 1, color: color`0` });
-    walls = getAll(wall)
+    addText(wallStep.toString(), { y: 2, color: color`0` });
+    let walls = getAll(wall)
     for (i = 0; i < walls.length; i++) {
       walls[i].x += -1
       if (walls[i].x == 0) {
-        x = walls[i].x;
-        y = walls[i].y;
+        var x = walls[i].x;
+        var y = walls[i].y;
         walls[i].remove();
         flipCroco(x, y);
       }
@@ -643,7 +647,7 @@ function run() {
     }
 
     if (wallStep % wallDist == 0 && wallStep < winStep || endless && wallStep % wallDist == 0) {
-      door = Math.floor(Math.random() * 6);
+      var door = Math.floor(Math.random() * 6);
       if (getFirst(player).x == 7 && getFirst(player).y != door) {
         getFirst(player).x += -1;
       }
@@ -658,9 +662,9 @@ function run() {
     checkPlayer()
   }
   if (!dead && !paused) {
-    tick = tickSpeed - (3 * Math.floor(wallStep / 2));
+    let tick = tickSpeed - (3 * Math.floor(wallStep / 2));
     if (wallStep >= 200) {
-      tick = tickSpeed - (3 * Math.floor(200 / 2));
+      let tick = tickSpeed - (3 * Math.floor(200 / 2));
     }
     runid = setTimeout(run, tick);
   }
