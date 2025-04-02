@@ -92,14 +92,13 @@ const levels = [
 setMap(levels[0]);
 setPushables({ [player]: [] });
 
-/* Game Settings */
 const jumpForce = -3;
 const gravity = 0.3;
 const moveSpeed = 1;
 const groundY = 7;
 const ceilingY = 3;
+let gravityFlipped = false;
 
-/* State Variables */
 let gameRunning = false;
 let score = 0;
 let velocityY = 0;
@@ -109,7 +108,6 @@ let preciseY = groundY;
 displayScore();
 setTimeout(() => { gameRunning = true; }, 2000);
 
-/* Gravity & Movement Loop */
 setInterval(() => {
   if (gameRunning) {
     applyGravity();
@@ -119,29 +117,42 @@ setInterval(() => {
   }
 }, 50);
 
-/* Controls */
 onInput("j", () => {
   const p = getFirst(player);
-  if (p && gameRunning && Math.round(preciseY) >= groundY) {
-    velocityY = jumpForce;
+  if (p && gameRunning && Math.round(preciseY) >= (gravityFlipped ? ceilingY : groundY)) {
+    velocityY = gravityFlipped ? -jumpForce : jumpForce;
   }
+});
+
+onInput("i", () => {
+  gravityFlipped = !gravityFlipped;
 });
 
 /* Functions */
 function applyGravity() {
   const p = getFirst(player);
   if (p) {
-    velocityY += gravity;
+    velocityY += gravity * (gravityFlipped ? -1 : 1);
     preciseY += velocityY;
 
-    if (preciseY < ceilingY) {
-      preciseY = ceilingY;
-      velocityY = 0;
-    }
-
-    if (preciseY >= groundY) {
-      preciseY = groundY;
-      velocityY = 0;
+    if (gravityFlipped) {
+      if (preciseY > groundY) {
+        preciseY = groundY;
+        velocityY = 0;
+      }
+      if (preciseY <= ceilingY) {
+        preciseY = ceilingY;
+        velocityY = 0;
+      }
+    } else {
+      if (preciseY < ceilingY) {
+        preciseY = ceilingY;
+        velocityY = 0;
+      }
+      if (preciseY >= groundY) {
+        preciseY = groundY;
+        velocityY = 0;
+      }
     }
 
     p.y = Math.round(preciseY);
@@ -170,13 +181,13 @@ function moveEnemies() {
 function generateEnemy() {
   let amount = Math.random() < 0.7 ? 1 : 2;
   for (let i = 0; i < amount; i++) {
-    let posX = 15 - i; // Ensure within bounds
+    let posX = 15 - i;
     addSprite(posX, groundY, enemy);
   }
 }
 
 function generateEnemyBird() {
-  addSprite(15, 3, bird); // Valid position
+  addSprite(15, 3, bird);
 }
 
 function checkOffScreen() {
@@ -189,13 +200,11 @@ function checkOffScreen() {
   displayScore();
 }
 
-/* FIXED Collision Check */
 function checkCollision() {
   const p = getFirst(player);
   const enemies = getAll(enemy);
   const birds = getAll(bird);
   
-  // Check collision with enemies
   enemies.forEach(e => {
     if (e.x === p.x && e.y === p.y) {
       p.remove();
@@ -203,7 +212,6 @@ function checkCollision() {
     }
   });
 
-  // Check collision with birds
   birds.forEach(b => {
     if (b.x === p.x && b.y === p.y) {
       p.remove();
@@ -233,4 +241,3 @@ function onGameOver() {
   deleteEnemies();
   displayGameOver();
 }
-
