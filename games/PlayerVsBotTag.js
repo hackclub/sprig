@@ -48,9 +48,9 @@ setLegend(
 `],
   [trap, bitmap`
 ................
-....XXXXXX......
-...XXXXXXXX.....
-....XXXXXX......
+....666666......
+...66666666.....
+....666666......
 ................
 `],
   [ground, bitmap`
@@ -64,16 +64,17 @@ setLegend(
 
 const levels = [
   map`
-..t....o..s
-.o...t...x
-..o.......
-...t..o...
-.t...s.t..
-..o...o...
-.t...t...o
-...o...t..
-..t...p.b.
-...t...o..`,
+..t....o..s.
+.o...t...x..
+..o....t....
+...t..o.....
+.t...s.t....
+..o...o.....
+.t...t...o..
+...o...t....
+..t...p.b...
+...t...o....
+`
 ];
 
 let currentRound = 1;
@@ -128,23 +129,39 @@ function checkPowerUp(x, y) {
 }
 
 function botMovement() {
-  if (!isTagger || botStunned) return;
+  if (botStunned) return;
   let botSprite = getFirst(bot);
   let playerSprite = getFirst(player);
 
   let dx = Math.sign(playerSprite.x - botSprite.x);
   let dy = Math.sign(playerSprite.y - botSprite.y);
 
-  if (!tileHasObject(botSprite.x + dx, botSprite.y)) botSprite.x += dx;
-  else if (!tileHasObject(botSprite.x, botSprite.y + dy)) botSprite.y += dy;
+  if (isTagger) {
+    if (dx !== 0 && !tileHasObject(botSprite.x + dx, botSprite.y)) {
+      botSprite.x += dx;
+    } else if (dy !== 0 && !tileHasObject(botSprite.x, botSprite.y + dy)) {
+      botSprite.y += dy;
+    }
+  } else {
+    if (dx !== 0 && !tileHasObject(botSprite.x - dx, botSprite.y)) {
+      botSprite.x -= dx;
+    } else if (dy !== 0 && !tileHasObject(botSprite.x, botSprite.y - dy)) {
+      botSprite.y -= dy;
+    }
+  }
 }
 setInterval(botMovement, 500);
 
-function endRound() {
+afterInput(() => {
   if (tilesWith(player, bot).length > 0) {
     clearText();
-    addText("YOU'RE TAGGED!", { x: 5, y: 1, color: color`3` });
+    if (isTagger) {
+      addText("Your It!", { x: 5, y: 1, color: color`3` });
+    } else {
+      addText("Bot is it!", { x: 5, y: 1, color: color`3` });
+    }
     isTagger = !isTagger;
+    setTimeout(() => { clearText(); }, 2000);
     currentRound++;
     if (currentRound > 5) {
       clearText();
@@ -152,5 +169,5 @@ function endRound() {
       currentRound = 1;
     }
   }
-}
-afterInput(endRound);
+});
+
