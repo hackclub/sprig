@@ -40,7 +40,8 @@ import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
-import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage } from "../lib/game-saving/github";
+import { diffLines } from "diff";
+import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, getUserPullRequest, updatePullRequest, createNewPullRequest} from "../lib/game-saving/github";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -117,12 +118,19 @@ type StuckData = {
 	description: string;
 };
 
-const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any, githubState: any) => {
+const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any, githubState: any, isCodeChanged: any, showChangeConfirmation: any, lastPullRequestCode: any) => {
 	const startTime = Date.now();
 	try {
 		reportMetric('github_auth_popup.initiated');
 
 		if (isPublish) {
+			const gameCode = codeMirror.value?.state.doc.toString() ?? "";
+			
+			if (lastPullRequestCode !== "" && gameCode !== lastPullRequestCode) {				isCodeChanged.value = true;
+				showChangeConfirmation.value = true;
+				return;
+			}
+
 			publishDropdown.value = true;
 			publishSuccess.value = true;
 			return;
@@ -272,12 +280,15 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const showStuckPopup = useSignal(false);
 	const showThemePicker = useSignal(false);
 	const shareRoomPopup = useSignal(false);
+	const showChangeConfirmation = useSignal(false);
 	const thumbnailPreview = useSignal<string | null>(null);
+	const diffContainer = useSignal<HTMLDivElement | null>(null);
 
 	const readyPublish = useSignal(false);
 	const isPublishing = useSignal(false);
     const publishSuccess = useSignal(false);
     const publishError = useSignal(false);
+	const isCodeChanged = useSignal(false);
 	const githubPRUrl = useSignal<string | null>(null);
 	
 	const githubState = useSignal<GithubState | undefined>(undefined)
@@ -303,6 +314,38 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			&& typeof props.persistenceState.value.game == "object") 
 			document.title = props.persistenceState.value.game.name + " | Sprig"
 	})
+
+	useSignalEffect(() => {
+		if (showChangeConfirmation.value && diffContainer.value) {
+			const state = props.persistenceState.value;
+
+			if (state.kind === "PERSISTED" && state.game !== "LOADING" && typeof state.game === "object") {
+				const oldCode = state.game.lastPullRequestCode ?? "";
+				const newCode = codeMirror.value?.state.doc.toString() ?? "";
+
+				const diffResult = diffLines(oldCode, newCode);
+
+				let formattedDiff = "<pre style='font-family: monospace; padding: 10px;'>";
+
+				diffResult.forEach((part: { value: string; added: any; removed: any; }) => {
+					const lines = part.value.split("\n").filter(Boolean);
+
+					lines.forEach((line) => {
+						const color = part.added ? "#4CAF50" : part.removed ? "#FF5252" : "gray";
+						const prefix = part.added ? "+ " : part.removed ? "- " : "  ";
+
+						formattedDiff += `<div style="color: ${color};">${prefix}${line}</div>`;
+					});
+				});
+
+				formattedDiff += "</pre>";
+
+				if (diffContainer.value) {
+					diffContainer.value.innerHTML = formattedDiff;
+				}
+			}
+		}
+	});
 
 	// we will accept the current user's
 	// - name,
@@ -448,9 +491,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 		return { valid: true, message: "The game name is valid and unique." };
 	}
-	
-
-
 	const publishToGithub = async (githubState: Signal<GithubState | undefined>, gameID: string | undefined) => {
 		const startTime = Date.now();
 		try {
@@ -520,7 +560,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							readyPublish,
 							props.persistenceState.value.game.isPublished,
 							publishSuccess,
-							githubState
+							githubState,
+							isCodeChanged,
+							showChangeConfirmation,
+							props.persistenceState.value.game.lastPullRequestCode ?? ""
 						);
 					}
 				}
@@ -624,7 +667,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					"main",
 					`### Author name\nAuthor: ${authorName}\n\n### About your game\n\n**What is your game about?**\n${gameDescription}\n\n**How do you play your game?**\n${gameControlsDescription}`,
 					forkedRepo.owner.login,
-					gameID ?? ''
+					gameID ?? '',
+					gameCode ?? ''
 				);
 
 				githubPRUrl.value = pr.html_url;
@@ -647,6 +691,70 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			reportMetric('github_publish.failure_time', timeTaken, 'timing');
 		} finally {
 			isPublishing.value = false;
+		}
+	};
+
+	const commitChangesToGithub = async (githubState: Signal<GithubState | undefined>, gameID: string | undefined) => {
+		try {
+			console.log("🔹 Starting GitHub commit process...");
+	
+			let accessToken = githubState.value?.session;
+			if (!accessToken) {
+				console.warn("GitHub token missing. Asking user to authenticate...");
+				await openGitHubAuthPopup(
+					githubState.value?.username ?? null,
+					publishDropdown,
+					readyPublish,
+					false,
+					publishSuccess,
+					githubState,
+					isCodeChanged,
+					showChangeConfirmation,
+					""
+				);
+	
+				accessToken = githubState.value?.session;
+				if (!accessToken) {
+					console.error("❌ Authentication failed or user cancelled.");
+					return;
+				}
+			}
+	
+			const username = githubState.value?.username;
+			if (!username) {
+				console.error("❌ GitHub username missing, aborting.");
+				return;
+			}
+	
+			console.log("🔹 Checking for existing fork...");
+			let forkedRepo;
+			try {
+				forkedRepo = await fetchForkedRepository(accessToken, "hackclub", "sprig", username);
+				console.log(`✅ Found existing fork: ${forkedRepo.html_url}`);
+			} catch (error) {
+				console.log("❌ No fork found. Forking repository...");
+				forkedRepo = await forkRepository(accessToken, "hackclub", "sprig");
+				console.log("✅ Fork created:", forkedRepo.html_url);
+			}
+	
+			const activePR = await getUserPullRequest(accessToken, "hackclub", "sprig", username);
+	
+			if (activePR) {
+				const prState = activePR.state; // "open", "closed", "merged"
+	
+				if (prState === "open") {
+					console.log(`🔄 Found active PR: ${activePR.html_url}. Updating the existing PR...`);
+					await updatePullRequest(accessToken, forkedRepo.owner.login, forkedRepo.name, activePR.head.ref, gameID);
+				} else {
+					console.log(`Existing PR is ${prState}. Creating a new PR...`);
+					await createNewPullRequest(accessToken, forkedRepo.owner.login, forkedRepo.name, gameID);
+				}
+			} else {
+				console.log("➕ No active PR found. Creating a new one...");
+				await createNewPullRequest(accessToken, forkedRepo.owner.login, forkedRepo.name, gameID);
+			}
+		} catch (error) {
+			console.error("❌ Error committing changes to GitHub:", error);
 		}
 	};
 
@@ -834,7 +942,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											readyPublish,
 											props.persistenceState.value.game.isPublished,
 											publishSuccess,
-											githubState
+											githubState,
+											isCodeChanged,
+											showChangeConfirmation,
+											props.persistenceState.value.game.lastPullRequestCode ?? ""
+
 										);
 									}
 								} else {
@@ -845,6 +957,63 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						>
 							Publish To GitHub
 						</Button>
+					)}
+					{showChangeConfirmation.value && (
+						<div className={styles.publishPopup}>
+							<div className={styles.popupHeader}>
+								<h2>Game Code Changed</h2>
+								<p className={styles.successMessage}>
+									Your game code has been modified since the last GitHub publish.
+								</p>
+								<p className={styles.successMessage}>
+									Would you like to commit the changes?
+								</p>
+							</div>
+
+							<div
+								className={styles.codeDiffContainer}
+								style={{
+									maxHeight: "300px",
+									overflowY: "auto",
+									whiteSpace: "pre-wrap",
+									wordBreak: "break-word",
+								}}
+								ref={(el) => {
+									if (el) diffContainer.value = el;
+								}}
+							></div>
+
+
+							<div className={styles.buttonGroup}>
+								<Button
+									accent
+									onClick={async () => {
+										console.log("Committing changes...");
+										if (
+											props.persistenceState.value.kind === "PERSISTED" &&
+											props.persistenceState.value.game !== "LOADING"
+										) {
+											const game = props.persistenceState.value.game;
+											if (typeof game !== "string") {
+												await commitChangesToGithub(githubState, game.id);
+											}
+										}
+										showChangeConfirmation.value = false;
+									}}
+								>
+									Commit Changes
+								</Button>
+
+								<Button
+									class={styles.cancelButton}
+									onClick={() => {
+										showChangeConfirmation.value = false;
+									}}
+								>
+									Cancel
+								</Button>
+							</div>
+						</div>
 					)}
 
 					{publishDropdown.value && (
@@ -980,15 +1149,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									</p>
 									<Button onClick={() => { githubPRUrl.value && window.open(githubPRUrl.value, "_blank") }}>
 										View on GitHub
-									</Button>
-									<Button class={styles.newPRButton} onClick={() => {publishSuccess.value = false; 
-										if (props.persistenceState.value.kind == "PERSISTED" 
-										&& props.persistenceState.value.game != "LOADING") 
-											props.persistenceState.value.game.isPublished = false;
-										readyPublish.value = true
-									}
-									}>
-										Make a new PR
 									</Button>
 								</div>
 							)}

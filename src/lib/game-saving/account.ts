@@ -57,6 +57,7 @@ export interface Game {
 	unprotected: boolean // Can be edited by partial user session (email only)
 	name: string
 	code: string
+	lastPullRequestCode?: string
 	tutorialName?: string
 	tutorialIndex?: number
 	isSavedOnBackend?: boolean
@@ -250,12 +251,19 @@ export const updateSessionAuthLevel = async (id: string, authLevel: 'email' | 'c
 }
 
 export const getGame = async (id: string | undefined): Promise<Game | null> => {
-	if (!id) return null
+	if (!id) return null;
+
 	const _game = await getDocument('games', id);
-	// const _game = await firestore.collection('games').doc(id).get()
-	if (!_game.exists) return null
-	return { id: _game.id, ..._game.data() } as Game
-}
+	if (!_game.exists) return null;
+
+	let gameData = _game.data() as Game;
+
+	if (!gameData.hasOwnProperty('lastPullRequestCode')) {
+		await updateDocument('games', id, { lastPullRequestCode: '' });
+		gameData.lastPullRequestCode = '';
+	}
+	return { id: _game.id, ..._game.data() } as Game;
+};
 
 export const makeGame = async (ownerId: string, unprotected: boolean, name?: string, code?: string, tutorialName?: string, tutorialIndex?: number, isSavedOnBackend?: boolean): Promise<Game> => {
 	
@@ -267,6 +275,7 @@ export const makeGame = async (ownerId: string, unprotected: boolean, name?: str
 		unprotected,
 		name: name ?? generateGameName(),
 		code: code ?? '',
+		lastPullRequestCode: '',
 		tutorialName: tutorialName ?? null,
 		tutorialIndex: tutorialIndex ?? null,
 		isSavedOnBackend: isSavedOnBackend ?? false,
