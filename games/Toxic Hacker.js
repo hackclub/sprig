@@ -4,7 +4,6 @@
 @tags: [Hacking]
 @addedOn: 2025-00-00
 */
-
 const player = "p"
 const Target = "t"
 const usb = "u"
