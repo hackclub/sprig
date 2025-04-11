@@ -1,7 +1,9 @@
-//@title: Flappy bird v.2
-//@author: Alexandru Moga
-//@tags: []
-//@addedOn: 02/26/2026
+/*
+@title: Flappy Bird v.2
+@author: Alexandru Moga
+@tags: ['action', 'retro']
+@addedOn: 2024-02-26
+*/
 
 const bird = "b";
 const pipe = "p";

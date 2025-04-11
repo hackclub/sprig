@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: SkyFall
-@author: 
+@author: Anonymous
 @tags: []
 @addedOn: 2024-00-00
 */

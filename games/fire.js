@@ -1,11 +1,9 @@
-
-/* 
+/*
 @title: fire!
 @author: shambhavi
-@tags: ['fire','maze','obstacle','puzzle']
+@tags: ['maze', 'puzzle']
 @addedOn: 2023-08-08
 */
-
 
 /* INSTRUCTIONS!
 - collect the water to get rid of the fires

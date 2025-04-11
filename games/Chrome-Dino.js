@@ -1,3 +1,10 @@
+/*
+@title: Chrome Dino
+@author: unknown
+@tags: []
+@addedOn: 2024-01-01
+*/
+
 const dino = "d"
 const cactus = "c"
 

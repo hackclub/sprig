@@ -7,8 +7,8 @@ Use A and D to move left and right, W to jump (when you have the spring you can 
 
 @title: bomber
 @author: Paolo08
-@tags: [#adventure, #action, #platformer]
-@addedOn: 2025-02-14
+@tags: ['adventure', 'action', 'platformer']
+@addedOn: 2025-04-11
 */
 
 

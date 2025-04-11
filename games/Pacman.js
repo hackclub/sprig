@@ -1,8 +1,8 @@
 /*
-    @title: Pacman
-    @author: Pradyumn Tandon AKA Gamecooler19
-    @tags: [classic, retro, arcade]
-    @addedOn: 2025-02-05
+@title: Pacman
+@author: Pradyumn Tandon AKA Gamecooler19
+@tags: ['retro']
+@addedOn: 2024-02-05
 */
 
     // Game sprites

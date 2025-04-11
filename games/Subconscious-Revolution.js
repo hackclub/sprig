@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Subconscious Revolution
-@author: 
+@author: Anonymous
 @tags: []
 @addedOn: 2024-00-00
 */
@@ -258,11 +258,11 @@ LLLL0LLL3330LLLL
 .....127221.....
 .....122721.....
 .....127221.....
-.....122721.....
 .....127221.....
-.....122721.....
 .....127221.....
-.....122721.....`],
+.....127221.....
+.....127221.....
+.....127221.....`],
   [starbackground1, bitmap`
 0000000000000000
 0000000000000000
@@ -299,8 +299,8 @@ LLLL0LLL3330LLLL
 0000000000000000`],
   [starbackground3, bitmap`
 0000000000000000
-0000000000000000
 0000000000000200
+0000000000000000
 0000000000000000
 0000000000000000
 0000000002000000

@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Pac Man Test
-@author: 
+@author: unknown
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-01-01
 */
 function startTimer(callback, interval) {
   const timer = setInterval(callback, interval);

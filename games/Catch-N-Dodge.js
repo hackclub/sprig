@@ -1,3 +1,10 @@
+/*
+@title: Catch-N-Dodge
+@author: unknown
+@tags: []
+@addedOn: 2024-04-11
+*/
+
 const player = "p"
 const apple = "a"
 const orange = "o"

@@ -1,4 +1,9 @@
-// Sprig Piano Simulator
+/*
+@title: Sprig Piano Simulator
+@author: unknown
+@tags: []
+@addedOn: 0000-00-00
+*/
 
 const tunes = {
     'C': tune`

@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: bombs and boxs
 @author: JadenDownie
-@tags: [puzzle]
-@addedOn: 2024-00-00
+@tags: ['puzzle']
+@addedOn: 2024-01-01
 */
 let onslect = false
 

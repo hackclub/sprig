@@ -2,6 +2,7 @@
 
 @title: Navigating a nightmare
 @author: B-S-M-C
+@tags: ['maze', 'puzzle']
 @addedOn: 2024-02-23
 */
 const PLAYER = "p";

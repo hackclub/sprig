@@ -1,7 +1,7 @@
 /*
 @title: Simple Graphing Calculator
 @author: apinguen
-@tags: ['utility','math']
+@tags: ['utility']
 @addedOn: 3/19/25
 
 Github: @apinguen

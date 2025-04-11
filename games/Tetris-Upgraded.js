@@ -1,8 +1,8 @@
 /*
 @title: Tetris
 @author: MostLime12195
-@tags: [retro, endless]
-@addedOn: 2024-00-00
+@tags: ['retro', 'endless']
+@addedOn: 2024-01-01
 */
 
 /*
@@ -153,7 +153,6 @@ HHHHHHHHHHHHHHHH`],
   [yellowBlock, bitmap`
 FFFFFFFFFFFFFFFF
 FFFFFFFFFFFFFFFF
-FF666666666666FF
 FF666666666666FF
 FF666666666666FF
 FF666666666666FF

@@ -2,7 +2,7 @@
 @title: yet_another_platformer
 @author: gicorada
 @tags: ['platformer']
-@addedOn: 2024
+@addedOn: 2024-01-01
 */
 
 // define the sprites in our game

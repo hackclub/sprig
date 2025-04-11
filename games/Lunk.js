@@ -1,6 +1,6 @@
 /*
-@title:Lunk 
-@author:PotatoHacker 
+@title: Lunk
+@author: PotatoHacker
 @tags: []
 @addedOn: 2025-02-11
 */

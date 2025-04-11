@@ -1,10 +1,8 @@
 /*
-
-
-@title: Ultimate Showdown: Dog Vs. Shark
-@author:  Elyse and Edlyn To
+@title: Ultimate Showdown - Dog Vs Shark
+@author: Elyse and Edlyn To
 @tags: []
-@addedOn:
+@addedOn: 2024-03-27
 */
 
 const player_1 = "p";

@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Classic Breakout
-@author: 
+@author: Anonymous
 @tags: []
 @addedOn: 2025-02-18
 todo:

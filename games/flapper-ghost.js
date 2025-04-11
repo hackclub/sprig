@@ -1,6 +1,6 @@
 /*
 @title: Flapper Ghost
-@tags: [ghost, spooky, halloween, Flapper]
+@tags: []
 @author: Ragib
 @addedOn: 2025-02-14
 */

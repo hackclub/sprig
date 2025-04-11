@@ -1,7 +1,7 @@
 /*
 @title: CrocodileRun
 @author: JungleHornet
-@tags: ['singleplayer', 'endless']
+@tags: ['endless']
 @addedOn: 2025-02-11
 */
 

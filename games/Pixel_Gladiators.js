@@ -1,7 +1,7 @@
 /*
 @title: PixelGladiators
 @author: Abdur Rehman
-@tags: [ fighting, top down, action ]
+@tags: ['action']
 @addedOn: 2025-02-05
 
 A game about fighting monsters.

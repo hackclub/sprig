@@ -3,8 +3,8 @@ Greetings fellows programmers <3
 
 @title: Temple Escape
 @author: Andrea
-@tags: [Arcade, Infinite, Hability, Demake, Action, Platform]
-@addedOn: 2025-03-15
+@tags: ['action', 'endless']
+@addedOn: 2024-03-15
 */
 
 const player_right = "q",

@@ -3,9 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Trinfin
-@author: 
+@author: Unknown
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-01-01
 
 Istruzioni: Benvenuti nel mondo di Trinfin, uno gnomo che dovrai aiutare ad uscire da questo incasinato mondo pieno di scatole, e non solo.
             Per liberare Trinfin dovrai superare vari livelli tra i quali ne roverai alcuni più facili altri più impegnativi e dovrai raccogliere 
