@@ -3,6 +3,7 @@
 @author: shambhavi
 @tags: ['maze', 'puzzle']
 @addedOn: 2023-08-08
+@description: A puzzle game where you collect water to extinguish fires. Avoid the green fire while putting out smaller fires first, which will shrink larger fires. Navigate through the maze to collect water and strategically eliminate all fires.
 */
 
 /* INSTRUCTIONS!

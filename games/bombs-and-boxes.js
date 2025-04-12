@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: JadenDownie
 @tags: ['puzzle']
 @addedOn: 2024-01-01
+@description: A puzzle game where you navigate through levels by pushing boxes and avoiding bombs. Use strategy to clear your path and reach the goal.
 */
 let onslect = false
 

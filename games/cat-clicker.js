@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: Anonymous
 @tags: []
 @addedOn: 2024-01-01
+@description: A clicker game where you click to earn points and buy upgrades. Click on the cat to earn points, then visit the shop to purchase various upgrades like grandmas, harvesters, helpers, treasurers, and moguls to increase your idle income.
 */
 
 const cursor = "c"

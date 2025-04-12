@@ -5,6 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: Zenneth
 @tags: []
 @addedOn: 2024-01-01
+@description: A challenging arcade game where you control a platform to bounce a ball and score points. Use A/D to move the platform left/right, and press J repeatedly to control bounce height. Don't let the ball touch the top of the screen!
 
 press a and d to move the platorm, spam j to jump less high, if you touch the top of the screen you loose
 */

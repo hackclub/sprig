@@ -6,6 +6,8 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: Anonymous
 @tags: []
 @addedOn: 2025-02-18
+@description: A classic Breakout-style game where you control a paddle to bounce a ball and break blocks. Use 'A' and 'D' keys to move the paddle left and right. Clear all the blocks to win!
+
 todo:
 kunna vinna
 random spawn av boll?

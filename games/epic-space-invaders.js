@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: Anonymous
 @tags: []
 @addedOn: 2024-01-01
+@description: A classic Space Invaders clone where you control a spaceship to shoot down alien invaders. Use 'A' and 'D' to move left and right, and shoot lasers to destroy the enemies. Keep track of your score as you eliminate the alien threats.
 */
 
 const player = "p"
