@@ -1,5 +1,6 @@
   /*
 @title: under_fire
+@description: "Under Fire" is a strategy game where players must survive waves of laser attacks by repairing their spaceship and managing resources. As the game progresses, difficulty increases with new mechanics introduced, culminating in a final battle where players shoot back at the enemy to win. The objective is to reach a score of 50 and defeat the enemy ship by strategically gathering materials and repairing the ship's tiles under pressure.
 @author: alex_dvc
 @tags: ['strategy']
 @addedOn: 2023-02-08

@@ -1,5 +1,6 @@
 /*
 @title: bobs_bad_apple
+@description: "Bobs Bad Apple" is a puzzle game where Bob is trapped in a maze and must eat apples to progress through the levels. Players must navigate the maze, dealing with obstacles like pushable blocks, to collect all the apples and advance.
 @author: L. Clark
 @tags: ['puzzle']
 @addedOn: 2023-03-01

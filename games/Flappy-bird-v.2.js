@@ -3,6 +3,7 @@
 @author: Alexandru Moga
 @tags: ['action', 'retro']
 @addedOn: 2024-02-26
+@description: A classic Flappy Bird clone where you control a bird through a series of pipes. Press 'w' to move up and 's' to move down. Avoid hitting the pipes and try to get the highest score possible. When game over, press any key to restart.
 */
 
 const bird = "b";

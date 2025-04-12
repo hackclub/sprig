@@ -1,5 +1,6 @@
 /*
 @title: Coding Demo 1 - Linked sprites
+@description: This game is a simple coding demonstration focusing on linked sprite movement, where two parts of a character, the top and bottom, move together through a map with wall obstacles.
 @author: Leonard (Omay)
 @tags: []
 @addedOn: 2022-09-13

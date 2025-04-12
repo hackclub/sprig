@@ -1,5 +1,6 @@
 /*
 @title: Sprigin Snakey
+@description: A snake game where you must eat leaves to grow and avoid running into walls or yourself.
 @author: hcjk
 @tags: []
 @addedOn: 2024-11-01

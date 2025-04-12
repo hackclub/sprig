@@ -3,6 +3,7 @@
 @author: PotatoHacker
 @tags: []
 @addedOn: 2025-02-11
+@description: A puzzle game where you control a character through various challenges. Navigate through walls, interact with blocks and buttons, and find your way to the goal. Features multiple puzzle elements including movable blocks, locks, and special wall types.
 */
 
 //sprites
@@ -128,8 +129,7 @@ LLLLLLLLLLLLLLLL`],
   0000000000000000
   0000000000000000
   0000000000000000`],
-  [goal, bitmap`
-4444444444444444
+  [goal, bitmap`4444444444444444
 4444444444444444
 4444444444444444
 4444444444444444

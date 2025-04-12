@@ -1,6 +1,7 @@
 
 /* 
 @title: fill_the_map
+@description: "Fill the Map" is a strategy game where the objective is to cover all the tiles on the map without overlapping or retracing your steps.
 @author: Ansh Kumar
 @tags: ['strategy']
 @addedOn: 2023-03-14

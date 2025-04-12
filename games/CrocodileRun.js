@@ -3,6 +3,7 @@
 @author: JungleHornet
 @tags: ['endless']
 @addedOn: 2025-02-11
+@description: You are being chased through a building by angry crocodiles! Run through the doors to make it back home. Use WASD for movement, J to pause/unpause, L to restart/select game mode, and I to return to menu.
 */
 
 /*

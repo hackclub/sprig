@@ -2,6 +2,7 @@
 @title: Snail Maze
 @author: unknown
 @tags: []
+@description: A recreation of Sega's Snail Maze easter egg from the Master System. Guide your snail through a maze using the arrow keys. Collect items and avoid obstacles to reach the goal. The game features classic maze navigation mechanics with a nostalgic twist.
 @addedOn: 2025-01-04
 
 Based on Sega's Snail Maze easter egg(?) for the Master System
@@ -288,7 +289,6 @@ setLegend(
 77..............
 77..............
 77..............
-77..............
 7777777777777777
 7777777777777777`],
   ["j", bitmap`
@@ -345,7 +345,6 @@ setLegend(
   ["m", bitmap`
 7777777777777777
 7777777777777777
-................
 ................
 ................
 ................
@@ -605,11 +604,6 @@ let bgmTracks = [
 266.667: D2^66.66674999999955,
 133.3335: G#2^66.66674999999955,
 133.3335: G#2^66.66675000000043,
-266.667: D2^66.66674999999955,
-266.667: G#2^66.66674999999955,
-266.667: D2^66.66674999999955,
-133.3334999999991: G#2^66.66674999999955,
-133.33350000000087: G#2^66.66675000000133,
 266.667: D2^66.66674999999955,
 266.667: G#2^66.66674999999955,
 266.667: D2^66.66674999999955,

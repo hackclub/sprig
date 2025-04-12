@@ -1,5 +1,6 @@
 /*
 @title: Spike_Avoider
+@description: Spike_Avoider is an endless runner game where the main objective is to avoid spikes as you navigate. The game challenges players to maintain their momentum while dodging obstacles, testing their reflexes and timing.
 @author: Hrushal Nikhare
 @tags: ['endless']
 @addedOn: 2023-05-16

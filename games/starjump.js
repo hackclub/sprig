@@ -1,5 +1,6 @@
 /*
 @title: Starjump
+@description: Starjump is a puzzle game where the objective is to navigate through mazes to collect stars, completing each level. Some levels require you to find keys before accessing the star, which then transports you to the next level. The challenge lies in strategically moving through the maze and unlocking pathways.
 @author: skifli
 @tags: ['puzzle']
 @addedOn: 2023-12-21

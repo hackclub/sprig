@@ -3,6 +3,7 @@
 @author: Elyse and Edlyn To
 @tags: []
 @addedOn: 2024-03-27
+@description: A two-player battle game where a dog and shark face off. Player 1 (shark) uses W/S to move up/down and D to shoot. Player 2 (dog) uses I/K to move up/down and L to shoot. First to score 6 points wins!
 */
 
 const player_1 = "p";

@@ -3,6 +3,7 @@
 @author: chips39
 @tags: []
 @addedOn: 2025-01-22
+@description: A puzzle game where you push boxes, break cracked walls, and avoid spike boxes to reach the goal. Navigate through increasingly challenging levels using strategic box pushing and wall breaking.
 */
 
 const player = "p"
@@ -221,7 +222,7 @@ function checkTileType(x, y, type) {
 
 function updateBox(x, y, dx, dy) {
   /*
-  Attempts to update box-related tiles based on a player’s position and movement direction.
+  Attempts to update box-related tiles based on a player's position and movement direction.
 
   x: The current x-coordinate of the player.
   y: The current y-coordinate of the player.

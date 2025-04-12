@@ -1,5 +1,6 @@
 /*
 @title: Faby Flies
+@description: "Faby Flies" is a retro-themed endless game resembling "Flappy Bird," where players navigate a bird through pipes to earn points. These points accumulate to unlock medals, with the challenge increasing based on the chosen difficulty level. The game also features a secret Konami code for additional gameplay elements.
 @author: Eny
 @tags: ['endless','retro']
 @addedOn: 2024-06-22

@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: Judah Chung
 @tags: []
 @addedOn: 2024-00-00
+@description: A 2048-style game where you combine blocks to create larger numbers. Use arrow keys to move blocks and try to reach the highest number possible!
 */
 
 /*

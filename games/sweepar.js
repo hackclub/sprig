@@ -1,5 +1,6 @@
 /*
 @title: Sweepar
+@description: Sweepar is a suspenseful, minesweeper-inspired game where players must rely on their instincts to navigate the board. Unlike traditional Minesweeper, Sweepar does not offer clues, requiring players to carefully open or flag squares while avoiding hidden bombs.
 @author: eshangonemad
 @tags: []
 @addedOn: 2024-03-20

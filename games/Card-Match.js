@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: unknown
 @tags: []
 @addedOn: 2024-01-01
+@description: A memory card matching game where you flip cards to find matching pairs. Keep track of card positions and match all pairs to win!
 */
 
 

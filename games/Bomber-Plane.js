@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: unknown
 @tags: []
 @addedOn: 2024-01-01
+@description: A bombing game where you pilot a plane and drop bombs on enemy tanks and planes. Avoid getting hit while trying to destroy all enemies!
 */
 
 const player = "p"

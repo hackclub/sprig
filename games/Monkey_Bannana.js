@@ -1,5 +1,6 @@
 /*
 @title: Monkey Bannana
+@description: "Monkey Banana" is a humorous action game where players collect bananas while navigating through various levels filled with walls and monkeys. The objective is to increase your score by gathering regular and special bananas, as well as power-ups that provide temporary advantages. As you progress, the game introduces new challenges and opportunities to achieve high scores.
 @author: Daivik
 @tags: ['humor','action']
 @addedOn: 2024-07-23

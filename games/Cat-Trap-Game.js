@@ -4,6 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Pac Man Test
 @author: unknown
+@description: A cat and mouse chase game where you must navigate through a maze while avoiding a pursuing cat. Collect keys and find the true exit to win, but be careful - the cat is always on your trail!
 @tags: []
 @addedOn: 2024-01-01
 */

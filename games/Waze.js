@@ -2,6 +2,7 @@
 
 /*
 @title: Waze
+@description: "Waze" is a game where you try to survive as long as possible by shooting the oncoming zombies before they attack you. Try to get to the second level and maximize your score!
 @author: DragonRoyal
 @tags: ['action','survival']
 @addedOn: 2024-07-17

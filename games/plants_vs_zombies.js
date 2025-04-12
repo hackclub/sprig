@@ -1,5 +1,6 @@
 /*
 @title: Plants vs. Zombies
+@description: Plants vs. Zombies is a strategy game where players use different plant types to defend their lawn from waves of invading zombies. By strategically placing plants like Peashooters and Wallnuts, players aim to defeat 10 zombies to win, while ensuring zombies do not reach their defenses.
 @author: jianmin-chen
 @tags: []
 @addedOn: 2023-02-15

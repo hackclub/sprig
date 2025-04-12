@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: Unknown
 @tags: []
 @addedOn: 2024-01-01
+@description: Help Trinfin the gnome escape from a chaotic world filled with boxes and challenges. Navigate through various levels of increasing difficulty, collecting coins along the way. Use W, A, S, D to move and J to restart a level. Each level presents unique puzzles and obstacles to overcome.
 
 Istruzioni: Benvenuti nel mondo di Trinfin, uno gnomo che dovrai aiutare ad uscire da questo incasinato mondo pieno di scatole, e non solo.
             Per liberare Trinfin dovrai superare vari livelli tra i quali ne roverai alcuni più facili altri più impegnativi e dovrai raccogliere 

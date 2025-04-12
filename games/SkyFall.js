@@ -5,7 +5,8 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: SkyFall
 @author: Anonymous
 @tags: []
-@addedOn: 2024-00-00
+@description: A meteor dodging game where you control a character trying to survive a meteor shower. Use 'A' and 'D' to move left and right, 'J' to restart the game, and 'L' to end the game. Avoid the falling meteors to stay alive!
+@addedOn: 2024-01-01
 */
 
 const player = "p";

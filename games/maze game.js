@@ -1,5 +1,6 @@
 /*
 @title: ducky maze game
+@description: "Ducky Maze Game" challenges players to help Ducky, the duck, navigate through intricate mazes to reach his food while avoiding large spikes. Players must strategically maneuver around lilypads and use teleportation portals to progress through the levels.
 @author: kayla wong
 @tags: []
 @addedOn: 2024-07-22

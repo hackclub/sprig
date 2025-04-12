@@ -1,5 +1,6 @@
 /*
 @title: soko_quest
+@description: Soko_quest is a puzzle game where the player must push different types of boxes to create a path to the "golden g" goal, allowing them to advance to the next level.
 @author: swarit choudhari
 @tags: ['puzzle']
 @addedOn: 2022-11-13

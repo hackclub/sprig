@@ -1,5 +1,6 @@
 /*
 @title: Robot_Party | Basic Build v1
+@description: "Robot_Party" is a puzzle game where the player controls a robot named John to push boxes, collect coins, and discover a secret level. The objective is to navigate through various levels, solving box-pushing puzzles to reach the goal. There is a chance to uncover a secret level featuring special music and a unique ending.
 @author: Gam3rrXD
 @tags: ['puzzle', 'timed']
 @addedOn: 2022-12-20
