@@ -1,5 +1,6 @@
 /*
 @title: Find the Watermelon
+@description: Find the Watermelon is about a character who is trying to get the watermelon across the maze. There are walls and bombs which are preventing him and the character has to work around it.
 @author: Mohamad
 @tags: []
 @addedOn: 2023-10-05

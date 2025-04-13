@@ -1,5 +1,6 @@
 /*
 @title: Ping Pong
+@description: "Ping Pong" is a retro-style game where players score points by hitting the ball past their opponent's paddle. Player 1 controls the left paddle using keyboard inputs, while the right paddle is operated by an AI that tracks the ball's movement. The game features continuous play with score tracking and resets the ball to the center after each point scored.
 @author: Cral-Cactus
 @tags: ['retro']
 @addedOn: 2024-07-05

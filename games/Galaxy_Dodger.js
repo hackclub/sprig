@@ -1,5 +1,6 @@
 /*
 @title: Galaxy Dodger
+@description: Galaxy Dodger is an action-packed, real-time game where players must dodge and destroy asteroids coming from all directions. The challenge intensifies as players build their spaceship from a randomly selected pool of components, which can restrict movement and tactics. Players aim to survive for as long as possible by skillfully navigating and eliminating threats in this dynamic space environment.
 @author: Caleb B
 @tags: ['real-time','action']
 @addedOn: 2024-07-15

@@ -1,5 +1,6 @@
 /*
 @title: Multiplayer maze
+@description: Multiplayer Maze is a competitive game where two players race to solve a randomly generated maze. The first player to reach the end wins the challenge. Players can adjust the maze's difficulty before starting the game.
 @author: odczik
 @tags: []
 @addedOn: 2024-08-05

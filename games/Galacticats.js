@@ -1,5 +1,6 @@
 /*
 @title: Galacticats
+@description: Galacticats is a puzzle-strategy game where you guide a space cat safely back to its spaceship while avoiding enemies. The enemies move in response to the player's movements, creating a challenging dynamic as you attempt to navigate through each level. Strategically plan your moves to avoid landing on the same squares as the enemies, ensuring the cat's safe return to the spaceship.
 @author: adadyer
 @tags: []
 @addedOn: 2022-11-23

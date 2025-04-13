@@ -1,5 +1,6 @@
 /*
 @title: Sprock Blast
+@description: "Sprock Blast" is a retro-style puzzle game where players strategically place randomly selected block shapes on an 8x8 grid to complete rows and columns. The game's objective is to clear as many rows and columns as possible for high scores, utilizing various block shapes that resemble classic Tetris pieces.
 @author: cayleb247
 @tags: ['puzzle', 'retro']
 @addedOn: 2024-10-03

@@ -1,5 +1,6 @@
 /*
 @title: the RUN
+@description: "The RUN" is a game inspired by the Crossy Road mobile game, where players navigate a character through obstacles and try to reach a finish line without colliding with moving enemies.
 @author: lumos studio
 @tags: []
 @addedOn: 2022-11-21

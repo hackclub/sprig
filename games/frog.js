@@ -3,6 +3,7 @@
 @author: Felix
 @tags: ['endless', 'retro', 'adventure', 'survival']
 @addedOn: 2025-01-22
+@description: A retro-style frog crossing game where you navigate through traffic and obstacles. Use WASD keys to move the frog, avoid cars, and try to progress as far as you can while increasing your score.
 */
 
 const frog = "f"

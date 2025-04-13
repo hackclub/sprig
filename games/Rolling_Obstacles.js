@@ -1,5 +1,6 @@
 /*
 @title: Rolling Obstacles
+@description: Rolling Obstacles is a puzzle game where the player maneuvers a ball to collect coins without crossing obstacles. The goal is to gather 15 coins to win the game.
 @author: Ruhan Pandit
 @tags: ['puzzle']
 @addedOn: 2023-02-02

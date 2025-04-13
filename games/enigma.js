@@ -1,5 +1,6 @@
 /*
 @title: Enigma
+@description: "Enigma" is a simulation game focused on encoding and decoding messages using a simulated Enigma machine. Players can configure the machine's wheels and plugs, then input letters to encrypt or decrypt messages.
 @author: Ben Gertler
 @tags: ['sandbox','simulation']
 @addedOn: 2024-08-28

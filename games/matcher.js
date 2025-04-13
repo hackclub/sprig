@@ -1,5 +1,6 @@
 /*
 @title: matcher
+@description: Matcher is a puzzle game where players move blocks on a grid to align them according to specific rules. The goal is to match 'left' and 'right' blocks next to each other to clear them from the board. Players advance through levels by completing all matches on a grid.
 @author: Brian
 @tags: ['puzzle']
 @addedOn: 2022-08-12

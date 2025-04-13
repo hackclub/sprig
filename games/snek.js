@@ -1,5 +1,6 @@
 /*
 @title: snek
+@description: Snek is a simple, retro-themed game in which the player controls a snake to collect fruit while avoiding crashing into its own body and the screen borders. As the snake consumes fruit, it grows longer, increasing the challenge. The game ends when the snake hits an obstacle or itself.
 @author: userjhansen
 @tags: ['retro']
 @addedOn: 2022-08-30

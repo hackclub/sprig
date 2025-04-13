@@ -1,5 +1,6 @@
 /*
 @title: Unfinished Game
+@description: A story about finishing a game left unfinished, by pushing boxes to their goals.
 @author: Vi Du Tran
 @tags: []
 @addedOn: 2024-08-06

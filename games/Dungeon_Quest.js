@@ -4,6 +4,7 @@
 @tags: []
 @img: ""
 @addedOn: 2025-01-15
+@description: Navigate through a challenging dungeon filled with boxes, walls, and puzzles. Use buttons to unlock doors, push boxes to reach new areas, and collect items to progress. Can you find your way to the exit?
 */
 
 const player = "p"

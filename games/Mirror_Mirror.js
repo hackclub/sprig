@@ -1,5 +1,6 @@
 /*
 @title: Mirror_Mirror
+@description: "Mirror_Mirror" is a puzzle game where you must simultaneously guide a player and their clone through a complex maze. The challenge lies in ensuring both characters reach the exit at the same time, requiring careful planning and coordination. Players must navigate through obstacles while considering the mirrored movements of the clone to successfully escape.
 @author: Benjamin Grelk
 @tags: ['puzzle']
 @addedOn: 2022-12-19

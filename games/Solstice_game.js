@@ -1,6 +1,7 @@
 
 /* 
 @title: Solstice_game
+@description: Solstice_game is a puzzle game where players navigate a sun character through a maze to collect treasures. The gameplay involves pushing boxes, avoiding enemy creatures called vaselings, and reaching the goal at the end of each level.
 @author: Stephanie Zhou
 @tags: ['puzzle']
 @addedOn: 2024-07-022

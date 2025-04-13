@@ -1,5 +1,6 @@
 /*
 @title: tower_of_hanoi
+@description: Tower of Hanoi is a simple and retro puzzle game developed by nicholasz2510. The objective of the game is to move a set of rings from one post to another, following specific rules, to recreate the stack by ascending size on the final post.
 @author: nicholasz2510
 @tags: ['retro']
 @addedOn: 2022-10-02

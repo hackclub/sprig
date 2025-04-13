@@ -1,5 +1,6 @@
 /*
 @title: It_Is_Coming_Out!
+@description: "It_Is_Coming_Out!" is a puzzle game where players must navigate through obstacles to reach a toilet before progressing to the next level. The main objective is to eat food, find the toilet to poop, and then proceed through the door. The gameplay involves overcoming various challenges to complete each level.
 @author: Onovez
 @tags: []
 @addedOn: 2023-03-15

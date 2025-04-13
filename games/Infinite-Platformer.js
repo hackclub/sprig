@@ -1,5 +1,6 @@
 /*
 @title: Infinite Platformer
+@description: An endless platformer where you must jump from platform to platform to stay alive. The platforms are randomly generated and you must avoid falling off the screen.
 @author: EnterpriseGoose
 @tags: ['platformer', 'endless']
 @addedOn: 2024-11-25

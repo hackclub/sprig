@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Tug-of-War
+@description: Tug-of-War is a multiplayer game where two players compete to pull each other to their side of the screen. The game requires one player to rapidly press 'A' and the other to press 'L', and the first to succeed in pulling their opponent to their side wins.
 @author: liamcharger
 @tags: ['multiplayer']
 @addedOn: 2024-10-10
