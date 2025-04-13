@@ -1,9 +1,10 @@
-const player = "p";
-const goal = "g";
-const obstacle = "o";
+const p = "p"
+const g = "g"
+const o = "o"
 
+// didn't feel like typing all this every time lol
 setLegend(
-  [player, bitmap`
+  [p, bitmap`
 ......CCCC......
 ......0707......
 ......1000......
@@ -20,7 +21,7 @@ setLegend(
 ......CCCC......
 ......CCCC......
 ......CCCC......`],
-  [goal, bitmap`
+  [g, bitmap`
 ......000000....
 ....00CCCCCC00..
 .000CCCCCCCCCC00
@@ -37,7 +38,7 @@ setLegend(
 .0CC0CCCCCCCC0C0
 .0CC0CCCCCCCC0C0
 .0CC0CCCCCCCC0C0`],
-  [obstacle, bitmap`
+  [o, bitmap`
 .....9L9........
 ......9L9.......
 ....0009L900....
@@ -54,11 +55,13 @@ setLegend(
 ..000000000000..
 ...0000000000...
 ....00000000....`]
-);
+)
 
-setSolids([obstacle]);
+setSolids([o])
 
-let level = 0;
+let level = 0
+
+// messy maps lol, works tho
 const levels = [
   map`
 o.ooo.o....o..o.o.oo
@@ -78,80 +81,60 @@ oooooooooooooooooooo`,
 p.
 o.
 g.`
-];
+]
 
-setMap(levels[level]);
+setMap(levels[level])
 
-setPushables({
-  [player]: []
-});
+setPushables({ [p]: [] })
 
-// Function to spawn obstacles
-function spawnObstacles() {
-  const obstacleCount = 3; // Number of obstacles to spawn
-  for (let i = 0; i < obstacleCount; i++) {
-    const x = Math.floor(Math.random() * 2); // Random x position
-    const y = Math.floor(Math.random() * 2) + 1; // Random y position (1 or 2)
-    if (getTile(x, y) === ".") { // Check if the tile is empty
-      setTile(x, y, obstacle); // Place the obstacle
+// temp fix: spawn a few random rocks
+function plopObstacles() {
+  for (let i = 0; i < 3; i++) {
+    const x = Math.floor(Math.random() * 2)
+    const y = 1 + Math.floor(Math.random() * 2)
+    if (getTile(x, y) === ".") {
+      setTile(x, y, o)
+    }
+  }
+}
+plopObstacles()
+
+// kinda cheating but this works for now
+const spawn = { x: 0, y: 0 }
+
+onInput("w", () => move(0, -1))
+onInput("s", () => move(0, 1))
+onInput("a", () => move(-1, 0))
+onInput("d", () => move(1, 0))
+
+function move(dx, dy) {
+  const player = getFirst(p)
+  player.x += dx
+  player.y += dy
+  handleStuff()
+}
+
+// didn't feel like splitting these up tbh
+function handleStuff() {
+  const you = getFirst(p)
+  const win = getFirst(g)
+
+  if (you.x === win.x && you.y === win.y) {
+    addText(" nice one!", { x: 1, y: 1 })
+  }
+
+  const danger = getAll(o)
+  for (let rock of danger) {
+    if (you.x === rock.x && you.y === rock.y) {
+      addText(" bruh", { x: 1, y: 1 })
+      respawn()
+      break
     }
   }
 }
 
-// Spawn obstacles at the start
-spawnObstacles();
-
-// Store the initial position of the player
-const initialPosition = { x: 0, y: 0 };
-
-onInput("s", () => {
-  movePlayer(0, 1);
-});
-
-onInput("w", () => {
-  movePlayer(0, -1);
-});
-
-onInput("a", () => {
-  movePlayer(-1, 0);
-});
-
-onInput("d", () => {
-  movePlayer(1, 0);
-});
-
-function movePlayer(dx, dy) {
-  const playerEntity = getFirst(player);
-  playerEntity.x += dx;
-  playerEntity.y += dy;
-  checkWin();
+function respawn() {
+  const you = getFirst(p)
+  you.x = spawn.x
+  you.y = spawn.y
 }
-
-function checkWin() {
-  const playerPos = getFirst(player);
-  const goalPos = getFirst(goal);
-
-  // Check if player reached the goal
-  if (playerPos.x === goalPos.x && playerPos.y === goalPos.y) {
-    addText("You reached the goal!", { x: 1, y: 1 });
-    // Optionally, you can reset the level or move to the next level
-  }
-
-  // Check for collision with obstacles
-  const obstaclePos = getAll(obstacle);
-  for (let obs of obstaclePos) {
-    if (playerPos.x === obs.x && playerPos.y === obs.y) {
-      addText("You hit an obstacle! Respawning...", { x: 1, y: 1 });
-      respawnPlayer(); // Call the respawn function
-      break; // Exit the loop after respawning
-    }
-  }
-}
-
-function respawnPlayer() {
-  const playerEntity = getFirst(player);
-  playerEntity.x = initialPosition.x; // Reset to initial x position
-  playerEntity.y = initialPosition.y; // Reset to initial y position
-}
-
-// After
