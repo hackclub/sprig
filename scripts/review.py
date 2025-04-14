@@ -1,5 +1,6 @@
 import argparse
 import sys
+import os
 from datetime import datetime, timezone, timedelta
 
 import pytz as pytz
@@ -40,8 +41,11 @@ def is_plagiarized(doc_string):
     process = subprocess.run(command, capture_output=True, text=True)
     return process.returncode != 0
 
-# Replace with your personal access token (PAT)
-GITHUB_TOKEN = "YOU_NEED_TO_REPLACE_THIS"
+# Get GitHub token from environment variable
+GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
+if not GITHUB_TOKEN:
+    print("Error: GITHUB_TOKEN environment variable not set")
+    sys.exit(1)
 
 # Replace with your target repository (e.g., "owner/repo_name")
 REPO_NAME = "hackclub/sprig"
