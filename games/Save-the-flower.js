@@ -1,5 +1,6 @@
 /*
 @title: Save-The-Flower
+@description: "Save-The-Flower" is a strategy game where you control a firetruck to protect a flower in the center of the screen from approaching fires. The fires originate from two corners, and your goal is to extinguish them before they reach the flower. The challenge lies in the increasing speed of the fires and additional obstacles appearing over time, creating a test of both strategy and reflexes.
 @author: Mahir Ishum
 @tags: ['strategy', 'endless']
 @addedOn: 2024-02-17

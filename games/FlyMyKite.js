@@ -1,5 +1,6 @@
 /*
 @title: FlyMyKite
+@description: Fly your kite, collect yellow gems. Watch out, the wind increases with every 10 gems collected.
 @author: Julius Rompf
 @tags: ['endless', 'action', 'retro']
 @addedOn: 2024-11-16

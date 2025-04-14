@@ -1,5 +1,6 @@
 /*
 @title: Maze_Runner3
+@description: Maze_Runner3 is a puzzle game where players navigate through mazes to reach a designated goal, represented by a coin. As players progress through levels, they encounter invisible obstacles, requiring them to strategize and find alternate routes.
 @author: Charlie
 @tags: ['puzzle']
 @addedOn: 2023-03-19

@@ -1,5 +1,6 @@
 /*
 @title: The Maze of Sprig
+@description: "The Maze of Sprig" is a puzzle game where players navigate a character through a maze to reach a teleporters, advancing to the next level.
 @author: SahilD
 @tags: ['puzzle']
 @addedOn: 2023-02-14

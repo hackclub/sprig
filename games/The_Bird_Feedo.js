@@ -1,5 +1,6 @@
 /*
 @title: The Bird Feedo
+@description: The Bird Feedo is an endless game where players help a cute little bird by moving it around to catch randomly generated cookies. The primary objective is to feed the bird while avoiding obstacles and keeping the game going for as long as possible.
 @author: Arpan Pandey
 @tags: ['endless']
 @addedOn: 2023-01-09

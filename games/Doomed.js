@@ -1,5 +1,6 @@
 /*
 @title: Doomed
+@description: Doomed is an action-packed game where players must shoot and kill demons before getting overwhelmed. The game progressively becomes more challenging, introducing more demons and culminating in a boss battle that players must win to conquer the game. Inspired by the classic game Doom, players navigate the map and engage in combat to survive.
 @author: m5kro
 @tags: ['action']
 @addedOn: 2024-07-24

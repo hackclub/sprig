@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: j4y_boi
 @tags: ['platformer']
 @addedOn: 2025-01-17
+@description: A platformer game where you play as a rat navigating through various obstacles. Jump and crouch to avoid enemies, collect cheese, and explore crystal-filled caves while enjoying background music.
 */
 
 const player = "p"

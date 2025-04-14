@@ -1,6 +1,7 @@
 
 /* 
 @title: compudino
+@description: "Compudino" is a virtual pet game where players take care of a dinosaur by performing actions such as playing, feeding, and providing medical care. Inspired by Tamagotchi, the game involves interacting with the pet to keep it healthy and happy, evolving as the player progresses.
 @author: rcyaon
 @tags: []
 @addedOn: 2023-12-08

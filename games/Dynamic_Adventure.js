@@ -1,6 +1,7 @@
 
 /* 
 @title: Dynamic_Adventure
+@description: Dynamic_Adventure is a puzzle game where the player navigates a rabbit through various obstacles to reach a flag. The game involves strategic movement across different terrains such as grass, water, lava, and poison, each presenting unique challenges. Players use keyboard inputs to guide the rabbit while avoiding hazards, aiming for successful completion of each level.
 @author: Alexis Martel
 @tags: []
 @addedOn: 2023-08-18

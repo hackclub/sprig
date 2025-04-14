@@ -1,5 +1,6 @@
 /*
 @title: Crossy Road
+@description: "Crossy Road" by Bunnzulu is a retro-themed, timed puzzle game where players must navigate through traffic without getting hit by cars. The game challenges players to strategically move across lanes, avoiding various colored cars to reach the other side and score points. As the game progresses, the difficulty increases with faster car movements and more complex traffic patterns.
 @author: Bunnzulu
 @tags: ["retro" , "timed" , "puzzle"]
 @addedOn: 2024-07-26

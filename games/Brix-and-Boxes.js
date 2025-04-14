@@ -1,5 +1,6 @@
 /*
 @title: Bricks And Boxes
+@description: Push the boxes out of your way and get to the flags to win!
 @author: Amino47
 @tags: []
 @addedOn: 2024-11-11

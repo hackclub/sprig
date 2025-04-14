@@ -1,5 +1,6 @@
 /*
 @title: Save the Seas
+@description: Collect the litter in the ocean to increase your score and save the seas!
 @author: RyanBran888
 @tags: []
 @addedOn: 2024-11-10

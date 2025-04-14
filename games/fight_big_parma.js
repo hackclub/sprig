@@ -1,5 +1,6 @@
 /*
 @title: fight_big_parma
+@description: "Fight Big Parma" is a tower defense game where players must fend off waves of giant wheels of Parmesan cheese. Using strategic placement of towers and barriers, players aim to protect their laser structures while managing resources to buy and upgrade defenses. The goal is to keep the lasers alive as the waves of cheese increase in intensity.
 @author: jakempock
 @tags: []
 @addedOn: 2023-03-13

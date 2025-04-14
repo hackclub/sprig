@@ -1,14 +1,11 @@
 /*
 First time? Check out the tutorial gamehttps://sprig.hackclub.com/gallery/getting_started
 
-In this game you will have to move trough the map while fighting off monsters, get the dropped springs and bombs, destroy the walls that get in your way and reach the door of salvation.
-
-Use A and D to move left and right, W to jump (when you have the spring you can jump higher), J and L to throw bomb left or right.
-
 @title: bomber
 @author: Paolo08
-@tags: [#adventure, #action, #platformer]
-@addedOn: 2025-02-14
+@tags: ['adventure', 'action', 'platformer']
+@addedOn: 2025-04-11
+@description: Move through the map while fighting off monsters, collect springs and bombs, destroy walls that get in your way, and reach the door of salvation. Use A and D to move left/right, W to jump (springs let you jump higher), and J/L to throw bombs left/right.
 */
 
 

@@ -1,5 +1,6 @@
 /**
 @title: Kilroy Saves the Game!
+@description: "Kilroy Saves the Game!" is a puzzle adventure game where the player assists Kilroy in retrieving a replacement bolt to fix a broken robot. As part of a high school robotics team, the challenge involves navigating through various puzzles and tasks to locate the correct drawer with the bolt.
 @author: Jacob Fisher
 @tags: []
 @addedOn: 2024-07-08

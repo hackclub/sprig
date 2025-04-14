@@ -1,5 +1,6 @@
 /*
 @title: Clutter Cleanup
+@description: Clutter Cleanup is a puzzle game where the player must navigate through levels to eliminate boxes using fire. The objective is to strategically spread fire to clear all boxes, while avoiding obstacles like water that can extinguish the flames. It challenges players to carefully plan their moves to complete each level successfully.
 @author: CmdrApollo
 @tags: []
 @addedOn: 2024-07-09

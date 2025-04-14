@@ -1,5 +1,6 @@
 /*
 @title: botdotpng
+@description: "botdotpng" is a puzzle game where you guide a robot to its destination by strategically placing and manipulating arrows. Players must teach the robot to navigate obstacles and reach its flag by rotating and changing tiles, which can include conditionals and portals. The game introduces new elements and mechanics level by level, encouraging problem-solving and planning skills.
 @author: mavdotjs
 @tags: ['puzzle']
 @addedOn: 2024-08-14

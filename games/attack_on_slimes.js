@@ -1,5 +1,6 @@
 /*
 @title: attack_on_slimes
+@description: "Attack on Slimes" is an endless defense game where players protect a tower from waves of pesky slimes by casting random spells. The game's difficulty ramps up over time, with players earning points for each second survived and for defeating slimes. Various spell types, like fire and mud, are used strategically to combat the advancing slime hordes.
 @author: OwOSwordsman
 @tags: ['endless']
 @addedOn: 2022-12-26

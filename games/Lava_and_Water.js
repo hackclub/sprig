@@ -1,5 +1,6 @@
 /*
 @title: Lava and Water
+@description: "Lava and Water" is a retro-style multiplayer puzzle game designed by Akeell, where you must collaborate to navigate two players to their respective teleporters. You have 100 seconds to complete each level together, avoiding obstacles and strategically moving blocks without obstructing the teleporters, else you risk restarting from the beginning. Suitable for a cooperative experience or solo play, this is Akeell's third game for the Sprig platform.
 @author: Akeell
 @tags: ['puzzle','multiplayer','retro']
 @addedOn: 2022-10-15

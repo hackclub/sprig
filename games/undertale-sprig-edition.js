@@ -1,5 +1,6 @@
 /*
 @title: Undertale Sprig Edition
+@description: "Undertale Sprig Edition" is a fan-made game inspired by Undertale's theme, where players are confined in a box and must dodge flying bones to increase their score. The challenge lies in maneuvering around the arena without getting hit by the obstacles, reminiscent of Undertale's unique battle mechanics. The objective is to survive and dodge as many bones as possible, steadily racking up points for each successful dodge.
 @author: i-suck-at-most-stuff
 @tags: []
 @addedOn: 2024-00-00

@@ -1,3 +1,11 @@
+/*
+@title: Chrome Dino
+@author: unknown
+@tags: []
+@addedOn: 2024-01-01
+@description: A recreation of Chrome's offline dinosaur game. Press 'w' to make the dinosaur jump over incoming cacti. Try to achieve the highest score possible without hitting any obstacles!
+*/
+
 const dino = "d"
 const cactus = "c"
 

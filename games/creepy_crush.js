@@ -1,5 +1,6 @@
 /*
 @title: creepy_crush
+@description: "Creepy Crush" is a horror-themed match-three puzzle game where you have two minutes to make as many vertical and horizontal matches as possible, earning bonuses for matching four or more tiles. The game, designed in the style of "Candy Crush," includes special tiles like crosses that act as bombs and hourglasses that extend your timer.
 @author: issac
 @tags: ['puzzle']
 @addedOn: 2022-11-27
