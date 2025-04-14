@@ -34,12 +34,48 @@ parser.add_argument(
 args = parser.parse_args()
 
 def is_plagiarized(doc_string):
-    with open("/Users/graham/Work/sprig/games/game.js", "w") as f:
-        f.write(doc_string)
+    try:
+        # Use relative paths from script location
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        repo_root = os.path.dirname(script_dir)
+        temp_game_path = os.path.join(repo_root, "games", "game.js")
+        games_dir = os.path.join(repo_root, "games")
+        
+        with open(temp_game_path, "w") as f:
+            f.write(doc_string)
 
-    command = ["python", "plagiarism_check.py", "/Users/graham/Work/sprig/games", "0.5", "/Users/graham/Work/sprig/games/game.js"]
-    process = subprocess.run(command, capture_output=True, text=True)
-    return process.returncode != 0
+        command = ["python", "plagiarism_check.py", games_dir, "0.5", temp_game_path]
+        process = subprocess.run(command, capture_output=True, text=True)
+        
+        # Return codes:
+        # 0 = No plagiarism
+        # 1 = Plagiarism detected
+        # 2 = Service is down/unavailable
+        # Other = Unknown error
+        
+        if process.returncode == 2:
+            print("Error: Plagiarism check service is down")
+            return None
+        elif process.returncode == 1:
+            return True  # Plagiarism detected
+        elif process.returncode == 0:
+            return False  # No plagiarism
+        else:
+            print(f"Error: Unexpected return code {process.returncode} from plagiarism check")
+            print(f"stdout: {process.stdout}")
+            print(f"stderr: {process.stderr}")
+            return None
+            
+    except Exception as e:
+        print(f"Error running plagiarism check: {e}")
+        return None
+    finally:
+        # Clean up the temporary file
+        try:
+            if os.path.exists(temp_game_path):
+                os.remove(temp_game_path)
+        except:
+            pass
 
 # Get GitHub token from environment variable
 GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
@@ -297,7 +333,11 @@ def review(pr):
         return
 
     print("Length of game file: %d" % (len(code)))
-    if is_plagiarized(code):
+    plagiarism_result = is_plagiarized(code)
+    if plagiarism_result is None:
+        print("ERROR! Could not check for plagiarism - service may be down")
+		sys.exit(1)
+    elif plagiarism_result:
         print("PLAGIARISM DETECTED!")
     else:
         print("NO PLAGIARISM DETECTED!")
@@ -335,16 +375,14 @@ def upload_code_and_play(game_name, code):
 
 
 def show_high_level_metadata(pr, code):
-    is_game = ("NO" if code is None else "YES")
-    todaytime = datetime.now().astimezone(EST).replace(tzinfo=None)
-    created_at = pr.created_at.astimezone(EST).replace(tzinfo=None)
-    days = (todaytime - created_at).days
-    mergeable = is_mergeable(pr)
-    outdated = is_outdated(pr)
-    last_commit_time = get_last_commit_timestamp(pr).astimezone(EST).replace(tzinfo=None)
-    last_commit_days = (datetime.today().replace(tzinfo=None) - last_commit_time).days
-    print(f"[{pr.html_url} - {pr.title} - {days:.2f} days old (isGame: {is_game}, isMergeable: {mergeable}, isOutdated: {outdated}) - last commit time: {last_commit_days} days old")
-
+    print("Title: %s" % (pr.title))
+    print("Author: %s" % (pr.user.login))
+    print("Created: %s" % (pr.created_at))
+    print("Last Updated: %s" % (get_last_commit_timestamp(pr)))
+    print("URL: %s" % (pr.html_url))
+    print("Mergeable: %s" % (is_mergeable(pr)))
+    print("Outdated: %s" % (is_outdated(pr)))
+    
 
 def open_url(url):
     webbrowser.get("chrome").open(url)
