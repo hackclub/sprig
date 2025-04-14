@@ -14,7 +14,7 @@ You should be able to get started in Sprig with very little programming experien
 
 ## Sprig is a...
 
-...**custom handheld game console** built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenage hacker that successfully shares a game they create in our [community gallery](https://sprig.hackclub.com/gallery).
+...**custom handheld game console** built by Hack Club. we are giving a Sprig to every teenage hacker that successfully shares a game they create in our [community gallery](https://sprig.hackclub.com/gallery).
 
 <p align="left">
 <a>
