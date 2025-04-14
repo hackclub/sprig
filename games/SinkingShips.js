@@ -6,7 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: DO3EET
 @tags: []
 @addedOn: 2025-03-16
-@description A game w/ sinking ships
+@description: A game w/ sinking ships
 */
 
 const player = "p"
