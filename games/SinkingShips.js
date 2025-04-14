@@ -4,8 +4,9 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Sinking ships
 @author: DO3EET
-@tags: ["luck","boardgames"]
+@tags: []
 @addedOn: 2025-03-16
+@description A game w/ sinking ships
 */
 
 const player = "p"
