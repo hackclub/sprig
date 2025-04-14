@@ -76,6 +76,7 @@ function mainLoop(song, video) {
   }
   
   // Start playback
+  clearText();
   playSong();
   playFrames();
 }
@@ -151,6 +152,11 @@ onInput("j", () => {
   if (!running) {
     running = true;
     clearText();
+    addText("Loading...", {
+      x: 2,
+      y: 9,
+      color: color`2`
+    });
     badApple();
   }
 })
