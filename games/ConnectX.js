@@ -1,5 +1,6 @@
 /*
 @title: ConnectX
+@description: ConnectX is a two-player strategy game that builds on the classic Connect 4 concept. Players compete over 10 rounds, each requiring a different number of connections, from Connect 3 to Connect 12, to win the round. The player who wins the most rounds by the end is declared the overall winner.
 @author: Siddh Patel
 @tags: []
 @addedOn: 2024-02-03

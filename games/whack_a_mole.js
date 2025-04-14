@@ -1,5 +1,6 @@
 /*
 @title: whack_a_mole
+@description: Whack-a-Mole is an endless game where you try to catch moles appearing from their holes without hitting the bombs that randomly pop up. The challenge increases as you play, with more frequent bomb appearances. Your objective is to score as high as possible by successfully whacking the moles while avoiding the bombs.
 @author: Sameer Murthy
 @tags: ['endless']
 @addedOn: 2023-03-01

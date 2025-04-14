@@ -1,9 +1,9 @@
-
 /* 
 @title: king of slimes
 @author: Laslu1
 @tags: []
 @addedOn: 2025-02-19
+@description: A puzzle game where you play as a slime navigating through levels filled with boxes, doors, and monsters. Push boxes, collect keys to unlock doors, and avoid monsters to progress through increasingly challenging stages.
 */
 
     const player = "p"

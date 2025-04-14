@@ -1,5 +1,6 @@
 /*
 @title: Bike Mayhem
+@description: Bike Mayhem is an endless survival game where players navigate a bike along a road, avoiding obstacles and staying alive as long as possible. Players can collect various power-ups such as speed boosts, immunity, and items to destroy cars, which help enhance the gameplay and extend survival time. The game challenges players to manage their speed and strategically use power-ups to avoid collisions and improve scores.
 @author: Eddie B
 @tags: []
 @addedOn: 2024-08-18

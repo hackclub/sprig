@@ -1,5 +1,6 @@
 /*
 @title: platform_rogue
+@description: "Platform Rogue" is a challenging platformer game where players navigate through levels filled with obstacles like walls, coins, and deadly spikes. The goal is to reach the end of each level without getting killed by the obstacles while collecting coins along the way.
 @author: @farreltobias
 @tags: []
 @addedOn: 2022-08-22

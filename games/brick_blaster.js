@@ -1,5 +1,6 @@
 /*
 @title: Brick Blaster
+@description: Brick Blaster is a real-time action game where the objective is to destroy bricks using a ball. Players have a 10% chance to receive a power-up that makes their player wider, providing an advantage as they progress through four levels.
 @author: MohammedMMc
 @tags: ['real-time','action']
 @addedOn: 2024-08-28

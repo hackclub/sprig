@@ -1,5 +1,6 @@
 /*
 @title: Tic-Tac-Toe
+@description: A simple verision of the game tic-tac-toe! Play with a friend and try to place three of your shape in a row before your opponent does.
 @author: Atharv Gupta
 @tags: ['retro']
 @addedOn: 2023-01-19

@@ -1,5 +1,6 @@
 /*
 @title: Cube Castle
+@description: Cube Castle is a platformer game where you play as a cube that needs to free the princess from the cube king.
 @author: Paylicier
 @tags: ['platformer']
 @addedOn: 2024-12-05

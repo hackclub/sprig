@@ -6,6 +6,7 @@ No audio sorry.
 @title: Who is you
 @author: MeZackari
 @tags: []
+@description: A puzzle game inspired by Baba Is You where you manipulate word blocks to change the rules of the game. Move objects, create new rules, and solve puzzles by rearranging words to define what objects do and how they interact.
 @addedOn: 2025-03-07
 */
 
@@ -197,7 +198,6 @@ setLegend(
 .88..8.8.88..8.8
 .8.8.888.8.8.888
 .88..8.8.88..8.8
-................
 ................
 ................
 ................

@@ -1,8 +1,9 @@
 /*
 @title: Tetris
 @author: MostLime12195
-@tags: [retro, endless]
-@addedOn: 2024-00-00
+@tags: ['retro', 'endless']
+@addedOn: 2024-01-01
+@description: A classic Tetris game where you arrange falling blocks to create complete lines. Use A/D to move left/right, S to move down, W/K to rotate clockwise, J to rotate counter-clockwise, L for hard drop, and I to restart when game over.
 */
 
 /*
@@ -68,7 +69,6 @@ setLegend(
   [redBlock, bitmap`
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
-CC333333333333CC
 CC333333333333CC
 CC333333333333CC
 CC333333333333CC
@@ -153,8 +153,6 @@ HHHHHHHHHHHHHHHH`],
   [yellowBlock, bitmap`
 FFFFFFFFFFFFFFFF
 FFFFFFFFFFFFFFFF
-FF666666666666FF
-FF666666666666FF
 FF666666666666FF
 FF666666666666FF
 FF666666666666FF

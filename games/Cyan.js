@@ -1,5 +1,6 @@
 /*
 @title: Cyan
+@description: Try to make the whole screen cyan! Each level is a different puzzle.
 @author: Boyce Dyson
 @tags: ['puzzle']
 @addedOn: 2024-12-16

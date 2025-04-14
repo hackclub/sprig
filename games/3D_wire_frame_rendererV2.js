@@ -1,5 +1,6 @@
 /*
 @title: 3D Wireframe Renderer (v2)
+@description: 3D Wireframe Renderer (v2) is a simulation game developed by Patcybermind, where users can explore and manipulate a 3D wireframe environment. The game allows players to move in various directions and rotate their perspective to view and interact with the rendered shapes. It provides a visual representation of geometric forms using wireframe graphics, bringing a classic 3D visualization experience.
 @author: Patcybermind
 @tags: ['simulation']
 @addedOn: 2024-06-11

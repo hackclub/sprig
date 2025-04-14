@@ -1,5 +1,6 @@
 /*
 @title: Maze Flag Collector Game
+@description: Maze Flag Collector Game is a puzzle-themed game where players navigate a maze to collect flags, aiming to do so while also gathering all coins within the maze. The player uses a top-down view to move through the maze and must reach the flag only after collecting all coins to progress to the next level.
 @author: Ravin
 @tags: ['puzzle']
 @addedOn: 2024-08-28

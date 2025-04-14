@@ -1,5 +1,6 @@
 /*
 @title: SprigClick
+@description: SprigClick is a simple clicker game where the main objective is to achieve a higher score. Players can earn money by clicking, and use that money to purchase upgrades that increase their earnings per click and activate an autoclicker. The game focuses on progressing through these upgrades to maximize the score.
 @author: CatR3kd
 @tags: ['endless']
 @addedOn: 2023-01-06

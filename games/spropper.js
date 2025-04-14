@@ -1,5 +1,6 @@
 /*
 @title: spropper
+@description: "Spropper" is a minimalist JavaScript game inspired by the roguelite "Downwell," where the objective is to avoid red spikes while descending to the bottom of the screen. Players navigate through levels by jumping off platforms hanging from walls.
 @author: bea
 @tags: []
 @addedOn: 2024-08-21

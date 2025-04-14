@@ -1,5 +1,6 @@
 /*
 @title: Zombie Defense
+@description: Zombie Defense is an endless zombie shooter game that becomes progressively more challenging. It incorporates a bullet management mechanic with reloading times, where players aim to achieve the highest score by fending off waves of zombies. The objective is to survive as long as possible while managing limited ammunition.
 @author: Edmund
 @tags: ['endless']
 @addedOn: 2022-09-19

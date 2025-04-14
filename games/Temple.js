@@ -1,5 +1,6 @@
 /*
 @title: Temple
+@description: "Temple" is a puzzle game where players explore a labyrinthine temple, collecting diamonds to increase their value and navigate through levels. The goal is to reach the treasure room by traversing waypoints while avoiding corrupt elements that reset progress.
 @author: Wynston
 @tags: ['puzzle']
 @addedOn: 2022-12-07

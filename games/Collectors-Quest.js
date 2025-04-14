@@ -1,5 +1,6 @@
 /*
 @title: Collector's Quest
+@description: Collector's Quest is a game about collecting items while avoiding enemies and navigating through obstacles. Players progress through levels by gathering all collectibles, and winning the game by completing the final level. The challenge lies in maneuvering through complex maps without getting caught by enemies.
 @author: PawiX25
 @tags: []
 @addedOn: 2024-08-13

@@ -1,5 +1,6 @@
 /*
 @title: Eat the cake
+@description: Choose between eating cake or broccoli - will you be healthy or not?
 @author: _klyap_
 @tags: []
 @addedOn: 2022-10-13

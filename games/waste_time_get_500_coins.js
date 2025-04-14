@@ -1,5 +1,6 @@
 /*
 @title: Get 500 Coins
+@description: "Get 500 Coins" is a timed game by oliverlinux where the objective is to collect as many coins as possible. Don't collect the fake coins or you'll lose!
 @author: oliverlinux
 @tags: ['timed']
 @addedOn: 2024-06-19

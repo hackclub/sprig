@@ -1,5 +1,6 @@
 /*
 @title: cube_escape
+@description: Cube_Escape is a puzzle game that follows the story of a cube trying to escape from a cube prison. Players navigate through levels by moving, shooting obstacles, and using portals to progress or restart.
 @author: marios_mitsios
 @tags: ['puzzle']
 @addedOn: 2023-01-07

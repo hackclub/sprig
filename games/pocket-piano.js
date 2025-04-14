@@ -1,5 +1,6 @@
 /*
 @title: Pocket Piano
+@description: Pocket Piano is a simulation game where players can play musical notes using a virtual piano. It allows you to simulate playing a piano by pressing keys that correspond to different musical notes.
 @author: Odysseus Kirikopoulos
 @tags: ['simulation']
 @addedOn: 2023-02-15

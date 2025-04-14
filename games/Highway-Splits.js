@@ -5,7 +5,8 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Highway Splits
 @author: jazxtech |OPHS STEAM Society|
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-01-01
+@description: A highway driving game where you navigate through traffic, avoid collisions, and collect coins. Use your skills to maneuver your car and achieve the highest score possible.
 */
 
 // S

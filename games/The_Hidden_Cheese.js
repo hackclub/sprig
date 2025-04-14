@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: The Hidden Cheese
+@description: A simple mind-stretching single player game to warm-up your mind! Consume as many pieces of cheese as you can! Dodge enemies! Memorize patterns!
 @author: Jayden Chun
 @tags: ['puzzle', 'memory']
 @addedOn: 2024-12-12

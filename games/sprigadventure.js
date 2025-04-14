@@ -1,5 +1,6 @@
 /*
 @title: sprig adventure
+@description: Sprig Adventure is a maze navigation game where the player must dodge fireballs while making their way through the maze. The objective is to reach the green box at the end of each level while avoiding various hazards and complete all levels to reach the win screen with a smiley face.
 @author: stormypluto3865
 @tags: []
 @addedOn: 2022-12-23

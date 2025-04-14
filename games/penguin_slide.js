@@ -1,5 +1,6 @@
 /*
 @title: penguin_slide
+@description: "Penguin Slide" is a puzzle game where the player navigates a penguin towards a portal by sliding over ice. The objective is to strategically maneuver the penguin to collect all coins and reach the target while avoiding obstacles.
 @author: veehz
 @tags: ['strategy']
 @addedOn: 2022-09-08

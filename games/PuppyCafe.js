@@ -1,5 +1,6 @@
 /*
 @title: PuppyCafe
+@description: "PuppyCafe" is an endless retro game where you play as a puppy managing a café, inspired by the classic arcade game "Tapper" (1984). Your goal is to serve pumpkin lattes to thirsty customers, catch any cups they slide back, and prevent drinks from breaking if misdirected. The game speeds up every 30 seconds, challenging your quick reflexes and timing.
 @author: Lenochodik
 @tags: ['endless','retro']
 @addedOn: 2024-08-15
