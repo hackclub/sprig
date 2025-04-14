@@ -1,5 +1,6 @@
 /*
 @title: Anomaly
+@description: "Anomaly" is a suspenseful puzzle-adventure game where players navigate a series of levels to avoid a mysterious entity mimicking people. Set in a world with cryptic warnings and eerie environments, players must stay cautious and indoors as instructed by the game's narrative, progressing through various maps with puzzles and hidden dangers. The game combines exploration and strategy, immersing players in an intriguing and unsettling atmosphere.
 @author: Liam
 @tags: []
 @addedOn: 2024-05-20

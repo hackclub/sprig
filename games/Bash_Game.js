@@ -1,6 +1,7 @@
 
 /* 
 @title: Bash_Game
+@description: Bash_Game is a strategic two-player game where players take turns choosing 1 to 4 coins from a pile, with the goal of taking the last coin to win a gold sack from their opponent. Successfully capturing all 6 sacks results in a win, while losing all sacks means defeat. It's a test of strategy as players balance offense and defense to control the flow of coins and capture sacks.
 @author: WelchJ
 @tags: []
 @addedOn: 2023-04-28

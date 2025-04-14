@@ -1,5 +1,6 @@
 /*
 @title: MicroBot_Adventure
+@description: MicroBot Adventure is a puzzle game where players control a robot navigating through maze-like environments filled with enemies and obstacles. The main objective is to outmaneuver enemy attacks, strategically use boxes for defense, and destroy hostile turrets with lasers to reach the portal and progress through levels. As the game advances, players unlock abilities to tackle more challenging puzzles and enemies.
 @author: Kartikey Singh Chauhan
 @tags: ['puzzle']
 @addedOn: 2024-01-24

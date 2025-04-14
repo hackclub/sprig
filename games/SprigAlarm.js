@@ -1,5 +1,6 @@
 /*
 @title: SprigAlarm
+@description: SprigAlarm is an alarm clock where you can set an alarm. When it goes off, you need to memorize a code and enter it to turn the alarm off.
 @author: Manitej Boorgu
 @tags: []
 @addedOn: 2024-03-26

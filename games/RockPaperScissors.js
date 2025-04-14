@@ -1,5 +1,6 @@
 /*
 @title: RockPaperScissors
+@description: Play Rock, Paper, Scissors against the computer. Beat the computer 14 times to move to the next level!
 @author: Andrea Ivanov
 @tags: []
 @addedOn: 2024-12-16

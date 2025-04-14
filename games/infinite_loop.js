@@ -1,5 +1,6 @@
 /*
 @title: The Infinite Loop
+@description: A Sprig Maze Game for arcade-jam (theme Loopholes) where you get through the two (yes, only two!) levels in the fastest time possible!
 @author: Matthew Soh
 @tags: ['maze', 'music']
 @addedOn: 2024-08-28

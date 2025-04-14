@@ -1,6 +1,7 @@
 
 /* 
 @title: MyForestMaze
+@description: MyForestMaze is an adventure game where players explore a simple maze through a forest, designed to test various JavaScript functionalities. The goal is to navigate through different levels, uncovering secrets and changing environments. It's a creative project built as a learning exercise for JavaScript.
 @author: MI2
 @tags: ['adventure']
 @addedOn: 2023-06-15

@@ -1,5 +1,6 @@
 /*
 @title: gateway
+@description: "Gateway" is a maze game where players navigate through challenging levels using portals, or gateways, that instantly teleport the main character across different maze locations. Each level presents unique challenges, including death gateways that threaten the player's progress if not carefully avoided. The objective is to successfully reach the final destination in each level while strategically using the portals.
 @author: eminentquasar34
 @tags: []
 @addedOn: 2024-00-00

@@ -1,5 +1,6 @@
 /*
 @title: Sprig Music Streaming
+@description: Sprig Music Streaming is about listening to different recreations of songs by selecting songs from three different albums. You can choose between MBDTF by Kanye West, Full Moon Fever by Tom Petty, or Immunity by Clairo. 
 @author: jesse563
 @tags: []
 @addedOn: 2024-06-24

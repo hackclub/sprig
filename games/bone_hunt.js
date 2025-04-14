@@ -1,5 +1,6 @@
 /*
 @title: bone_hunt
+@description: Bone Hunt is a puzzle game where you play as a dog on a mission to collect all of your bones in each level. Once all bones are collected, you advance to the next level.
 @author: Andrew Cromar
 @tags: ['puzzle']
 @addedOn: 2024-01-15

@@ -1,5 +1,6 @@
 /*
 @title: Builder
+@description: "Builder" is a strategy game where the objective is to move boxes to a designated goal area. Players must navigate through levels by strategically creating and moving boxes to reach the goal. Each level presents a unique puzzle that challenges players to think ahead and find the best path to victory.
 @author: Leonard (Omay)
 @tags: ['strategy']
 @addedOn: 2022-11-06

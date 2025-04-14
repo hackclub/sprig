@@ -3,6 +3,7 @@
 @author: sagrusea
 @tags: ['maze', 'puzzle']
 @addedOn: 2024-01-22
+@description: A maze puzzle game with multiple levels where you navigate through walls, collect keys, and unlock doors. Features background music, sound effects, and a health system. Avoid hazards while solving puzzles to progress through increasingly challenging mazes.
 */
 let hp = 3; // Initialize HP
 const bgmusic1 = tune`

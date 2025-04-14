@@ -3,9 +3,10 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: cat clicker
-@author: 
+@author: Anonymous
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-01-01
+@description: A clicker game where you click to earn points and buy upgrades. Click on the cat to earn points, then visit the shop to purchase various upgrades like grandmas, harvesters, helpers, treasurers, and moguls to increase your idle income.
 */
 
 const cursor = "c"

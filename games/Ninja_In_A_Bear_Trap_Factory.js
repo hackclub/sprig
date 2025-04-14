@@ -1,5 +1,6 @@
 /*
 @title: Ninja In A Bear Trap Factory
+@description: Ninja In A Bear Trap Factory is a strategic puzzle game where players navigate through levels filled with obstacles like swords and bear traps. The goal is to cleverly use collected swords to disable traps and reach the exit, all while managing limited resources. This theme involves tactical planning and resource management to escape the factory safely.
 @author: Matt The Banana
 @tags: ['strategy']
 @addedOn: 2022-12-04

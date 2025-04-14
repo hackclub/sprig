@@ -1,5 +1,6 @@
 /*
 @title: JB_Dodgy_Meteor_Game
+@description: JB_Dodgy_Meteor_Game is an action game where the objective is to dodge falling meteors for as long as possible. Players maneuver back and forth using the A and D keys to avoid being hit by the meteors. The challenge increases over time as the player's survival time determines the score.
 @author: JbBurnsWasHere
 @tags: ['action']
 @addedOn: 2024-09-03

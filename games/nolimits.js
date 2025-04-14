@@ -3,6 +3,7 @@
 @author: AdrianRang
 @tags: []
 @addedOn: 2025-01-27
+@description: A 3D maze exploration game with ray-casting graphics. Navigate through procedurally generated mazes using first-person perspective, with realistic lighting and wall rendering. The game features collision detection and dynamic maze generation.
 */
 
 let getLinePositions = (xs, ys, xe, ye) => {

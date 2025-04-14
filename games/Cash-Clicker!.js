@@ -5,6 +5,7 @@ I thought that this would be a fun game to play on the go, since it's a simple i
 It's also interesting to learn how to port games, especially from block programming to JavaScript.
 
 @title: Cash Clicker!
+@description: "Cash Clicker!" is a simple idle game where you click a coin to earn money. You can buy upgrades to earn more money per click or have the game click for you. The objective is to earn as much money as possible!
 @author: 3XAY (Ayan Bindal)
 @tags: []
 @addedOn: 2024-11-01

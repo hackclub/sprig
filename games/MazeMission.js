@@ -1,5 +1,6 @@
 /*
 @title: MazeMission
+@description: MazeMission is a puzzle game where the player navigates through mazes as a character named Orange, aiming to reach the exit while collecting coins to increase the score. Players must strategically avoid AntiCoins, which decrease the score, as they work to escape each maze and achieve the title of ultimate maze master. The game combines strategic coin collection with maze navigation challenges.
 @author: CaitlinOchuwa
 @tags: ['puzzle']
 @addedOn: 2024-08-06

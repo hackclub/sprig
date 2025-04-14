@@ -1,6 +1,7 @@
 
 /* 
 @title: Sprigressbar
+@description: Sprigressbar is a game where you try to fill a progress bar by collecting blue or orange segments while dodging red ones and small sprigs.
 @author: MathR
 @tags: []
 @addedOn: 2023-08-21

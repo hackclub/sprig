@@ -1,5 +1,6 @@
 /*
 @title: trap_it
+@description: "Trap It" is a strategy game where the goal is to trap a robot by strategically placing walls around it. As you move, you can lay down walls to restrict the robot's motion, ultimately causing it to lose health when trapped. The challenge lies in effectively enclosing the robot before it can break free and regenerate its health.
 @author: PRairigh
 @tags: ['strategy']
 @addedOn: 2024-07-31

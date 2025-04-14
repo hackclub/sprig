@@ -1,5 +1,6 @@
 /*
 @title: kindless
+@description: Try to land the rocket on the landing pad across all the levels!
 @author: Ishan (@quackduck)
 @tags: []
 @addedOn: 2022-07-26

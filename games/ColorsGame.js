@@ -1,5 +1,6 @@
 /*
 @title: Colors Game
+@description: Colors Game is a simple educational game designed to help young children recognize and remember colors. Players guide an alien soldier named Bob as he navigates through levels, identifying and attacking enemy aliens based on color instructions. With 26 levels to explore, the game challenges players to select the correct color or risk losing.
 @author: Liana24601
 @tags: []
 @addedOn: 2024-09-03

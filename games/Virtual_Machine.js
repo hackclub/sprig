@@ -1,5 +1,6 @@
 /*
 @title: Virtual_Machine
+@description: Virtual Machine is a game where you can navigate different pages of a virtual machine. It's just designed to be fun - no worries about trying to improve your score!
 @author: N_Rizwan
 @tags: ["strategy" , "maze"]
 @addedOn: 2022-09-08

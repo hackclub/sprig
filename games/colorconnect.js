@@ -1,5 +1,6 @@
 /*
 @title: colorconnect
+@description: Color Connect is a simple puzzle game where your objective is to connect pairs of circles of the same color using lines. The challenge lies in ensuring that these lines do not cross each other, and every square in the grid must be filled.
 @author: Newton
 @tags: []
 @addedOn: 2024-09-16

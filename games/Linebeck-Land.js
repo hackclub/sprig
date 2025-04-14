@@ -1,5 +1,6 @@
 /*
 @title: Linebeck Land
+@description: Linebeck Land is a simple platformer game that offers multiple endings and hidden secrets. Players navigate through levels using WASD controls, collecting items and avoiding hazards. The game features different challenges and secret modes to discover.
 @author: CatR3kd
 @tags: []
 @addedOn: 2023-01-18

@@ -1,6 +1,7 @@
 
 /* 
 @title: get_the_gift
+@description: "Get the Gift" is a two-player game. One player controls a dog and the other controls a cat, and each must navigate through levels to reach their respective goals. The game requires cooperation and strategy to overcome obstacles and win.
 @author: Annaleah Sauceda
 @tags: []
 @addedOn: 2023-08-08

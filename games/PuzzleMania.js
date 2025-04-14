@@ -3,6 +3,7 @@
 @author: Johamez_Wilzoney
 @tags: ["puzzle"]
 @addedOn: 2025-02-18
+@description: A challenging puzzle game featuring portals, switches, and obstacles. Navigate through various levels, collect coins, find keys to unlock doors, and use portals strategically to reach your goals.
 */
 
 const player = "p"

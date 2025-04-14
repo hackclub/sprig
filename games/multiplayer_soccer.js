@@ -1,5 +1,6 @@
 /*
 @title: multiplayer_soccer
+@description: "Multiplayer Soccer" is a game where two players work together to move soccer balls into their respective goals.
 @author: shannon yeow
 @tags: ['multiplayer']
 @addedOn: 2022-08-12

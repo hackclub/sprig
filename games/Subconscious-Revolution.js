@@ -3,9 +3,10 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Subconscious Revolution
-@author: 
+@description: A psychological adventure game where you navigate through your subconscious mind. Face shadows, personas, and illusions while avoiding meteors and enemy ships. Use the controls to guide your character through various phases and challenges in this introspective journey.
+@author: Anonymous
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-01-01
 */
 
 let Phase2count = 10
@@ -256,13 +257,13 @@ LLLL0LLL3330LLLL
 .....127221.....
 .....122721.....
 .....127221.....
-.....122721.....
 .....127221.....
-.....122721.....
 .....127221.....
-.....122721.....
 .....127221.....
-.....122721.....`],
+.....127221.....
+.....127221.....
+.....127221.....
+.....127221.....`],
   [starbackground1, bitmap`
 0000000000000000
 0000000000000000
@@ -299,8 +300,8 @@ LLLL0LLL3330LLLL
 0000000000000000`],
   [starbackground3, bitmap`
 0000000000000000
-0000000000000000
 0000000000000200
+0000000000000000
 0000000000000000
 0000000000000000
 0000000002000000

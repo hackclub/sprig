@@ -1,5 +1,6 @@
 /*
 @title: Orb Journey
+@description: Orb Journey is a simple game where players navigate two orbs, a water orb and a lava orb, to their respective destinations through small obstacle courses. Each orb can only traverse its compatible tiles: the water orb on water tiles and the lava orb on lava tiles.
 @author: trungu
 @tags: []
 @addedOn: 2024-06-10
