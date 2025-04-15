@@ -1,5 +1,6 @@
 /*
 @title: The Lost Penguin
+@description: The Lost Penguin is a puzzle game where you help a penguin navigate through icy mazes filled with various obstacles. Players solve puzzles by moving rocks, disabling force walls with buttons, and using keys to unlock gates, all while avoiding traps and using teleport portals. The goal is to reach the exit of each maze to progress to the next level.
 @author: Luca
 @tags: ['puzzle']
 @addedOn: 2024-07-15

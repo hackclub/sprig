@@ -1,5 +1,6 @@
 /*
 @title: bullet-dodge
+@description: "Bullet Dodge" is an action game where players must maneuver a heart to avoid incoming bullets from all sides. Players have 13 hit points and can use powerups like time warp to slow bullet spawning or heal to regain health. The objective is to dodge bullets and survive as long as possible.
 @author: vishram1123
 @tags: ['action']
 @addedOn: 2023-01-13

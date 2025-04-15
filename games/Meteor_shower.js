@@ -1,5 +1,6 @@
 /* 
 @title: Meteorshower
+@description: Meteorshower is a strategy game where the objective is to navigate a rocket to collect a coin without coming into contact with meteors. The player must carefully maneuver through levels filled with hazardous meteors using strategic movements. The game challenges the player's navigation skills while avoiding obstacles to progress through different levels.
 @author: Mate P.
 @tags: ['strategy']
 @addedOn: 2022-11-22

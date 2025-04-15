@@ -1,5 +1,6 @@
 /*
 @title: Mirror_Mirror
+@description: *Mirror_Mirror* is a game where you play as a rampaging monkey tasked with destroying a city. Your objective is to break 50 buildings to win the game. Players must strategically position themselves in front of buildings to demolish them and progress.
 @author: ethanJPope
 @tags: []
 @addedOn: 2024-07-11

@@ -1,5 +1,6 @@
 /*
 @title: Space Adventures
+@description: Space Adventures is a 2D platformer game where the player must navigate through 15 increasingly difficult, space-themed levels to reach the goal and win. Each level challenges the player to reach the end by maneuvering across platforms and overcoming obstacles.
 @author: Shreyas Jain
 @tags: ['platformer']
 @addedOn: 2024-06-25

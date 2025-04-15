@@ -1,5 +1,6 @@
 /*
 @title: Arcade runner
+@description: Arcade Runner is an endless runner game by Artem4852 where players collect arcade tickets while avoiding bugs and bans. The objective is to gather as many tickets as possible without getting banned or collecting too many bugs, which causes malfunctions. The game challenges players to achieve high scores through strategic movement on the game board.
 @author: Artem4852
 @tags: ['endless']
 @addedOn: 2024-08-04

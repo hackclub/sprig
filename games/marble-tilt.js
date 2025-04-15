@@ -1,5 +1,6 @@
 /*
 @title: marble-tilt
+@description: Marble Tilt is a puzzle game where the objective is to navigate a purple marble to a green square while avoiding red/orange lava. Players control the tilt of the board to move the marble, working through various obstacles and progressing through levels.
 @author: @jdogcoder (Jasper Mayone)
 @tags: ['puzzle']
 @addedOn: 2024-02-06

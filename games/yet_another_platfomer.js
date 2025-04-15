@@ -1,8 +1,9 @@
 /*
 @title: yet_another_platformer
+@description: "Yet Another Platformer" is a small platformer game where players navigate through levels to reach a diamond-shaped black goal. Players use WASD keys to move and can restart the level with the J key.
 @author: gicorada
 @tags: ['platformer']
-@addedOn: 2024
+@addedOn: 2024-01-01
 */
 
 // define the sprites in our game

@@ -1,5 +1,6 @@
 /*
 @title: charge
+@description: Charge is a turn-based strategy game where players use items to outsmart their opponent, Bob, in a battle of wits. The game involves charging up power, attacking, and defending using various items like guns, fireballs, shields, and mirrors, each with strategic advantages and drawbacks. The aim is to effectively manage resources and counter Bob's moves to secure victory.
 @author: ZeroQLi
 @tags: []
 @addedOn: 2022-12-23

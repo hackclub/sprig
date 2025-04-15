@@ -1,5 +1,6 @@
 /*
 @title: Limits
+@description: "Limits" is a puzzle game by Nathan Pease where players navigate through levels with a limited number of moves. The game incorporates elements like portals for teleportation and coins to increase available moves, featuring a main menu, win screen, and level selection. It challenges players to strategically plan their actions to reach the goal before running out of moves.
 @author: Nathan Pease
 @tags: ['puzzle']
 @addedOn: 2022-09-15

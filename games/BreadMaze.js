@@ -1,5 +1,6 @@
 /*
 @title: BreadMaze
+@description: BreadMaze is a puzzle game where the player navigates through mazes filled with bread tiles, pushing boxes to reach a goal. Players must manage time effectively as they solve each level, aiming to cover all goal tiles with boxes. The game features multiple levels with varied challenges and obstacles.
 @author: Aiden
 @tags: ['puzzle']
 @addedOn: 2022-10-20

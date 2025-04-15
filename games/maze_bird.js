@@ -1,5 +1,6 @@
 /*
 @title: maze bird
+@description: "Maze Bird" is a puzzle game where the player navigates a bird through a series of mazes.
 @author: rkohm
 @tags: ['puzzle']
 @addedOn: 2023-01-01

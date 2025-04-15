@@ -3,6 +3,7 @@
 @author: 22yeets22
 @tags: []
 @addedOn: 2025-01-17
+@description: A sword-throwing action game where you defend against waves of enemies. Control your character and throw swords in different directions to defeat enemies. Features background music and sound effects. Keep an eye on your health and survive as long as possible!
 */
 const player = "p";
 const enemy = "e";

@@ -1,5 +1,6 @@
 /*
 @title: The Sequence
+@description: "The Sequence" is a memory-based game designed by liaa-dev where players must remember and replicate a series of flashing tiles on a grid. As the game progresses, players are challenged with increasingly longer sequences which they must input correctly to continue to the next round.
 @author: liaa-dev
 @tags: []
 @addedOn: 2024-08-28

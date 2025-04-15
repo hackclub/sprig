@@ -1,5 +1,6 @@
 /*
 @title: Maze Runner
+@description: "Maze Runner" is a game where you have to collect keys from a maze. The catch is, you start losing health points once you've been in the maze for a few seconds and you'll die when you run out. Try to collect all the keys with the time you have!
 @author: Alan Alwakeel, Samuel Sapatla, Suhaan Palakamshetty, Martin Beythoon
 @tags: ['puzzle']
 @addedOn: 2022-12-10

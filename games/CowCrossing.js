@@ -1,5 +1,6 @@
 /*
 @title: Cow Crossing
+@description: Cow Crossing is a game where you help a cow avoid getting run over by cars while aiming to reach a score of 1000 points. Inspired by a local cow, this game adds an interesting twist by allowing players to get a speed boost from milk trucks that appear on the road. It's an engaging challenge as you navigate through roads with varying speeds of vehicles.
 @author: GGGalang
 @tags: []
 @addedOn: 2024-06-24

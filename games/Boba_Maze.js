@@ -1,5 +1,6 @@
 /*
 @title: Boba_Maze
+@description: Boba Maze is a puzzle game where players navigate through a series of mazes, reflecting the stages of creating a boba drink. The objective is to move the cup to the globe to progress through levels, with two special keys providing hidden functions to aid advancement. As players complete each maze, they simulate adding ingredients and creating their own virtual boba drink.
 @author: audreyolafz
 @tags: ['puzzle']
 @addedOn: 2024-02-20

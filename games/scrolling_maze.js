@@ -1,5 +1,6 @@
 /*
 @title: scrolling_maze
+@description: "Scrolling Maze" is a large, scrolling maze game where the player navigates to reach the end. Unlike typical maze games, it features a limited field of view, offering a unique challenge as players explore its expansive layout.
 @author: Ben
 @tags: []
 @addedOn: 2023-01-15

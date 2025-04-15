@@ -1,6 +1,7 @@
 
 /* 
 @title: Space-war
+@description: "Space War" is an arcade-style space shooter game where players control a spaceship to battle against enemy ships. The goal is to shoot down enemies, avoid collisions, and achieve high scores. The game features dynamic enemy movements, explosion animations, and background music to enhance the space combat experience.
 @author: Yash
 @tags: []
 @addedOn: 2023-10-02

@@ -1,5 +1,6 @@
 /*
 @title: shark_dodger
+@description: "Shark Dodger" is an action game where players aim to survive as long as possible by dodging dangerous harpoons and consuming fish to gain extra lives. The goal is to skillfully maneuver through an underwater environment, avoiding obstacles while maintaining health.
 @author: angelgames
 @tags: ['action']
 @addedOn: 2024-05-23

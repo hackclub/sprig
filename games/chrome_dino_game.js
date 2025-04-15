@@ -1,5 +1,6 @@
 /*
 @title: Chrome Dinosaur Game
+@description: The Chrome Dinosaur Game by @blazecoding.xyz is an endless, retro-style game that replicates the familiar offline chrome dino game, with additional color themes and extras such as power-ups. Players control a dinosaur using a single button to jump and overcome obstacles while the game speed increases.
 @author: @blazecoding.xyz
 @tags: ['endless','retro']
 @addedOn: 2024-07-27

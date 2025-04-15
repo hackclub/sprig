@@ -2,6 +2,7 @@
   @title: metroidvania
   @author: Ajay S
   @tags: ['puzzle', 'adventure']
+  @description: A metroidvania-style adventure game where you explore interconnected rooms using various tools. Wield a fire wand for combat, use a harmonica to solve musical puzzles, and equip speed boots for enhanced movement. Features boss battles, secret codes, and puzzle-solving mechanics. Use W,A,S,D to move, J for fire wand, I for harmonica, L for speed boots, and K to reset the current room.
   @addedOn: 2024-01-15
 
   W,A,S,D to move.

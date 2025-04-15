@@ -3,6 +3,7 @@
 @author: NOT-Bugha
 @tags: ['puzzle']
 @addedOn: 2024-01-01
+@description: A game based on the famous Monty Hall probability puzzle. Choose one of three doors, then decide whether to stick with your choice or switch after one door with a goat is revealed. Use A/D to select doors, K to confirm, and J to switch your choice.
 */
 
 const door = "d"

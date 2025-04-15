@@ -1,5 +1,6 @@
 /*
 @title: jeffrey's house escape
+@description: Jeffrey's House Escape is a puzzle game where the goal is to collect a key and find the exit door by navigating a grid. Players must carefully plan their moves, as they move as far as possible in one direction each time. The levels are randomly generated, adding variety to the gameplay.
 @author: bingleypro
 @tags: []
 @addedOn: 2024-06-19

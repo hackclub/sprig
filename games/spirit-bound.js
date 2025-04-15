@@ -1,6 +1,7 @@
 
 /* 
 @title: spirit-bound
+@description: Spirit Bound is a 2D puzzle adventure game where you navigate a complex of rooms while avoiding deadly spirits. As you move, the spirits mimic your moves, creating strategic challenges. Collect keys, open doors, and reach the exit across 16 maps and 4 challenge maps, with each level solvable without taking damage.
 @author: Tom-on
 @tags: ['adventure']
 @addedOn: 2023-08-31

@@ -1,5 +1,6 @@
 /*
 @title: Sprigorous Vigor
+@description: Sprigorous Vigor is a game set in a mysterious maze where the objective is to reach the end by navigating through various levels. Players progress by moving their character to portals, solving puzzles, and pushing obstacles out of the way.
 @author: boston2029
 @tags: []
 @addedOn: 2024-07-27

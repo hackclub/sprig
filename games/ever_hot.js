@@ -1,5 +1,6 @@
 /*
 @title: ever_hot
+@description: "Ever Hot" is an endless survival game inspired by the rhythm indie game "Everhood" and the time-bending mechanics of "Superhot." Players must dodge attacks they create by moving, with every directional movement spawning an attack from the opposite direction. The objective is to survive as long as possible, as getting hit results in game over.
 @author: Leo H
 @tags: ['endless']
 @addedOn: 2022-11-11

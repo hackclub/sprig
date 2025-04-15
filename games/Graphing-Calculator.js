@@ -1,8 +1,9 @@
 /*
 @title: Simple Graphing Calculator
 @author: apinguen
-@tags: ['utility','math']
-@addedOn: 3/19/25
+@tags: ['utility']
+@addedOn: 2025-03-19
+@description: A graphing calculator that can plot mathematical functions using simple operations (addition, subtraction, multiplication, division, exponent). Enter equations and see them visualized on a coordinate plane.
 
 Github: @apinguen
 
@@ -25,6 +26,8 @@ MULTIPLICATION USING TERMS NEXT TO EACH OTHER DOESN'T WORK
 You need a multiplication sign in between
 
 */
+var isdead = false
+
 graphStats = {
   // Width and height need to be odd numbers
   

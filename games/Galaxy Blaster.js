@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Galaxy Blaster
+@description: Galaxy Blaster is a fast-paced arcade-style shooting game where you control a spaceship to fend off waves of enemy ships. You move your ship horizontally and shoot bullets to destroy incoming enemies while dodging their return fire. The game ends if an enemy or an enemy bullet collides with your ship.
 @author: G1useppeV
 @tags: []
 @addedOn: 2024-09-27
