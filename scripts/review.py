@@ -9,6 +9,9 @@ import readchar as readchar
 import requests as requests
 from github import Github
 import subprocess
+import urllib.parse
+import uuid
+import tempfile
 
 EST = pytz.timezone("EST")
 
@@ -38,49 +41,62 @@ def is_plagiarized(doc_string):
         # Use relative paths from script location
         script_dir = os.path.dirname(os.path.abspath(__file__))
         repo_root = os.path.dirname(script_dir)
-        temp_game_path = os.path.join(repo_root, "games", "game.js")
         games_dir = os.path.join(repo_root, "games")
+        plagiarism_script = os.path.join(script_dir, "plagiarism_check.py")
         
-        with open(temp_game_path, "w") as f:
-            f.write(doc_string)
+        # Create a temporary directory for the check
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_game_path = os.path.join(temp_dir, "game.js")
+            
+            with open(temp_game_path, "w") as f:
+                f.write(doc_string)
 
-        command = ["python", "plagiarism_check.py", games_dir, "0.5", temp_game_path]
-        process = subprocess.run(command, capture_output=True, text=True)
-        
-        # Return codes:
-        # 0 = No plagiarism
-        # 1 = Plagiarism detected
-        # 2 = Service is down/unavailable
-        # Other = Unknown error
-        
-        if process.returncode == 2:
-            print("Error: Plagiarism check service is down")
-            return None
-        elif process.returncode == 1:
-            return True  # Plagiarism detected
-        elif process.returncode == 0:
-            return False  # No plagiarism
-        else:
-            print(f"Error: Unexpected return code {process.returncode} from plagiarism check")
-            print(f"stdout: {process.stdout}")
-            print(f"stderr: {process.stderr}")
-            return None
+            print("Running plagiarism check...")
+            command = ["python", plagiarism_script, games_dir, "0.5", temp_game_path]
+            print(f"Executing command: {' '.join(command)}")
+            process = subprocess.run(command, capture_output=True, text=True)
+            
+            # Return codes:
+            # 0 = No plagiarism
+            # 1 = Plagiarism detected
+            # 2 = Service is down/unavailable
+            # Other = Unknown error
+            
+            if process.returncode == 2:
+                print("Error: Plagiarism check service is down")
+                print(f"Command output: {process.stdout}")
+                print(f"Command error: {process.stderr}")
+                return None
+            elif process.returncode == 1:
+                print("Plagiarism detected!")
+                print(f"Command output: {process.stdout}")
+                return True
+            elif process.returncode == 0:
+                print("No plagiarism detected")
+                print(f"Command output: {process.stdout}")
+                return False
+            else:
+                print(f"Error: Unexpected return code {process.returncode} from plagiarism check")
+                print(f"Command output: {process.stdout}")
+                print(f"Command error: {process.stderr}")
+                return None
             
     except Exception as e:
-        print(f"Error running plagiarism check: {e}")
+        print(f"Error running plagiarism check: {str(e)}")
+        print("Please check that the plagiarism check service is running")
         return None
-    finally:
-        # Clean up the temporary file
-        try:
-            if os.path.exists(temp_game_path):
-                os.remove(temp_game_path)
-        except:
-            pass
 
 # Get GitHub token from environment variable
 GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
 if not GITHUB_TOKEN:
     print("Error: GITHUB_TOKEN environment variable not set")
+    sys.exit(1)
+
+# Get base URL from environment variable
+SPRIG_BASE_URL = os.environ.get('SPRIG_BASE_URL')
+if not SPRIG_BASE_URL:
+    print("Error: SPRIG_BASE_URL environment variable not set")
+    print("Please set SPRIG_BASE_URL to the base URL of the Sprig service (e.g. https://sprig.hackclub.dev)")
     sys.exit(1)
 
 # Replace with your target repository (e.g., "owner/repo_name")
@@ -336,7 +352,7 @@ def review(pr):
     plagiarism_result = is_plagiarized(code)
     if plagiarism_result is None:
         print("ERROR! Could not check for plagiarism - service may be down")
-		sys.exit(1)
+        sys.exit(1)
     elif plagiarism_result:
         print("PLAGIARISM DETECTED!")
     else:
@@ -370,9 +386,23 @@ def upload_code_and_play(game_name, code):
         "name": game_name,
         "code": code
     }
-    requests.post("http://localhost:3000/~/new", data=post_data)
-    webbrowser.get("chrome").open("http://localhost:3000/~/new?name=null")
-
+    try:
+        # Use the base URL from environment variable
+        print(f"Attempting to upload game to {SPRIG_BASE_URL}/~/new...")
+        response = requests.post(f"{SPRIG_BASE_URL}/~/new", data=post_data)
+        if response.status_code != 200:
+            print(f"Error: Server returned status code {response.status_code}")
+            print(f"Response: {response.text}")
+            return
+        
+        print("Game uploaded successfully, opening in browser...")
+        webbrowser.get("chrome").open(f"{SPRIG_BASE_URL}/~/new?name=null")
+    except requests.exceptions.ConnectionError:
+        print(f"Error: Could not connect to {SPRIG_BASE_URL}")
+        print("Please check that the Sprig service is running and the URL is correct")
+    except Exception as e:
+        print(f"Unexpected error: {str(e)}")
+        print("Please check your network connection and try again")
 
 def show_high_level_metadata(pr, code):
     print("Title: %s" % (pr.title))
