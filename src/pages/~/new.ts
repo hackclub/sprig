@@ -51,5 +51,15 @@ export const post: APIRoute = async ({ request, cookies, redirect }) => {
         return new Response(JSON.stringify({ error: 'Bad request body' }), { status: 400 });
     }
 
-		return new Response("Not Found", { status: 404 });
+    const session = await getSession(cookies)
+    if (!session) {
+        return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
+    }
+
+    try {
+        const game = await makeGame(session.user.id, !session.session.full, name, code || "")
+        return redirect(`/~/${game.id}`, 302)
+    } catch (error) {
+        return new Response(JSON.stringify({ error: 'Failed to create game' }), { status: 500 });
+    }
 };
