@@ -15,6 +15,27 @@ import tempfile
 
 EST = pytz.timezone("EST")
 
+# Check all required environment variables at startup
+required_env_vars = {
+    'GITHUB_TOKEN': 'GitHub token for API access',
+    'SPRIG_BASE_URL': 'Base URL of the Sprig service (e.g. http://localhost:3000)'
+}
+
+missing_vars = []
+for var, description in required_env_vars.items():
+    if not os.environ.get(var):
+        missing_vars.append(f"- {var}: {description}")
+
+if missing_vars:
+    print("Error: Missing required environment variables:")
+    print("\n".join(missing_vars))
+    print("\nPlease set these environment variables before running the script.")
+    sys.exit(1)
+
+# Store env vars in constants
+GITHUB_TOKEN = os.environ['GITHUB_TOKEN']
+SPRIG_BASE_URL = os.environ['SPRIG_BASE_URL']
+
 parser = argparse.ArgumentParser(description="Filter items based on type (games or non-games).")
 
 # Add a choice-based argument
@@ -32,7 +53,6 @@ parser.add_argument(
     default=None,  # Defaults to an empty string if not provided
     help="Skips all PRs that have commentary containing a string"
 )
-
 
 args = parser.parse_args()
 
@@ -307,8 +327,8 @@ def show_comments(pr):
         # Print review comments
         print("\nReview Comments:")
         for comment in review_comments:
-            print(f"[{comment.created_at}] {comment.created_atcomment.user.login} (line {comment.path}): {comment.body}")
-            if args.skip is not None and args.skip in comment.created_atcomment.user.login:
+            print(f"[{comment.created_at}] {comment.created_at.astimezone(EST)} {comment.user.login} (line {comment.path}): {comment.body}")
+            if args.skip is not None and args.skip in comment.created_at.comment.user.login:
                 should_skip = True
     else:
         print("No review commentary.")
@@ -387,16 +407,24 @@ def upload_code_and_play(game_name, code):
         "code": code
     }
     try:
-        # Use the base URL from environment variable
         print(f"Attempting to upload game to {SPRIG_BASE_URL}/~/new...")
-        response = requests.post(f"{SPRIG_BASE_URL}/~/new", data=post_data)
-        if response.status_code != 200:
+        response = requests.post(f"{SPRIG_BASE_URL}/~/new", json=post_data, allow_redirects=False)
+        
+        if response.status_code == 302:
+            redirect_url = response.headers.get('Location')
+            if redirect_url:
+                # Extract the game ID from the redirect URL
+                game_id = redirect_url.split('/')[-1]
+                # Construct the gallery play URL with type=document
+                gallery_url = f"{SPRIG_BASE_URL}/gallery/play/{game_id}?type=document"
+                print(f"Opening game at {gallery_url}")
+                webbrowser.get("chrome").open(gallery_url)
+            else:
+                print("Error: No redirect URL provided by server")
+        else:
             print(f"Error: Server returned status code {response.status_code}")
             print(f"Response: {response.text}")
-            return
-        
-        print("Game uploaded successfully, opening in browser...")
-        webbrowser.get("chrome").open(f"{SPRIG_BASE_URL}/~/new?name=null")
+            
     except requests.exceptions.ConnectionError:
         print(f"Error: Could not connect to {SPRIG_BASE_URL}")
         print("Please check that the Sprig service is running and the URL is correct")
