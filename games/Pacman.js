@@ -1,8 +1,9 @@
 /*
-    @title: Pacman
-    @author: Pradyumn Tandon AKA Gamecooler19
-    @tags: [classic, retro, arcade]
-    @addedOn: 2025-02-05
+@title: Pacman
+@author: Pradyumn Tandon AKA Gamecooler19
+@tags: ['retro']
+@addedOn: 2024-02-05
+@description: A classic recreation of the iconic Pacman game. Navigate through the maze, collect dots while avoiding ghosts, and use power pellets to turn the tables on your pursuers. Features different ghost behaviors and classic sound effects.
 */
 
     // Game sprites

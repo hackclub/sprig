@@ -1,5 +1,6 @@
 /*
 @title: solar_system
+@description: This game is a simulation that visually represents a simplified model of the solar system with orbiting planets. While it includes planets like Mercury, Venus, Earth, and others, the scale is noted to be inaccurate. It provides an interactive way to observe the relative positions of these celestial bodies around the sun.
 @author: CD
 @tags: ['simulation']
 @addedOn: 2022-11-23

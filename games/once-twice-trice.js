@@ -1,5 +1,6 @@
 /*
 @title: once,twice,trice
+@description: "Once, Twice, Trice" is a puzzle game where players navigate obstacles to reach a checkered flag, inspired by mobile and Cool Math Games. As players progress, new mechanics like boxes, keys, and a mysterious doppelganger add complexity to the puzzles.
 @author: Xinyang Wang
 @tags: []
 @addedOn: 2024-08-11

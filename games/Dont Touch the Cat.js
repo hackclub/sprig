@@ -1,5 +1,6 @@
 /*
 @title: Don't Touch the Cat
+@description: "Don't Touch the Cat" is a puzzle and strategy game where players collect points by capturing colored tiles while avoiding an increasingly fast evil cat. The tiles have different point values, and the game ends if the player touches the cat or vice versa. As the game progresses, the cat's speed increases, adding to the challenge of surviving as long as possible.
 @author: Adeline Greene
 @tags: ["puzzle" , "strategy" ,"endless" , "survival"]
 @addedOn: 2024-09-16

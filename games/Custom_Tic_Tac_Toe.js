@@ -1,5 +1,6 @@
 /*
 @title: Custom Tic Tac Toe
+@description: Custom Tic Tac Toe, created by Cael Ganem, is a multiplayer game that allows players to enjoy tic tac toe on customizable grids of any size. Players can alter the grid and the number of marks required to win, adding variety to the classic game. The game also features a "crazy mode," where the traditional Xs and Os don't matter, and any row of marks causes you to lose.
 @author: Cael Ganem
 @tags: ['multiplayer']
 @addedOn: 2023-10-30

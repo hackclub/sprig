@@ -1,5 +1,6 @@
 /*
 @title: Fish_in_the_Sea
+@description: Fish_in_the_Sea is a puzzle game where the objective is to navigate through levels and reach any portal. Each move costs energy, so players must strategically move and collect energy boosts to continue progressing. The game challenges players to manage their energy effectively while finding the best path to reach the goal.
 @author: Hugh Wilks
 @tags: ['puzzle']
 @addedOn: 2022-12-01

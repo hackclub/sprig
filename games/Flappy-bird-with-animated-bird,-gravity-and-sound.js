@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @tags: []
 @author: Yug Khandelwal
 @addedOn: 2025-01-22
+@description: A Flappy Bird clone with animated bird sprites, gravity mechanics, and sound effects. Use 'W' to make the bird fly up and 'S' to make it fall faster. Navigate through the obstacles to score points. The game gets progressively faster as you play.
 */
 
 const flapUp = "u";

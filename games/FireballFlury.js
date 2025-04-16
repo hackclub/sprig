@@ -1,5 +1,6 @@
 /*
 @title: Fireball Flury
+@description: Fireball Flury is a survival game where you must dodge fireballs falling from the sky. The longer you survive, the higher your score!
 @author: Mpro256
 @tags: ['survival', 'endless']
 @addedOn: 2024-10-22

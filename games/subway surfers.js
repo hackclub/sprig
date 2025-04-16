@@ -1,5 +1,6 @@
 /*
 @title: subway surfers
+@description: An infinite runner like subway surfers.
 @author: AKKS1013
 @tags: []
 @addedOn: 2024-09-03

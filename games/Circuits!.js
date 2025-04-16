@@ -1,5 +1,6 @@
 /*
 @title: Circuits!
+@description: "Circuits!" is a sandbox game designed to educate players about electrical circuits, including components such as wires, resistors, and switches. Players can experiment with building their own circuits and possibly discover a special screen during gameplay. The game aims to provide an engaging learning experience about electricity and circuitry concepts.
 @author: Kevin Butchard
 @tags: ['sandbox']
 @addedOn: 2024-09-16

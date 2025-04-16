@@ -1,5 +1,6 @@
 /* 
 @title: TheCombine
+@description: TheCombine, inspired by "One Flew Over the Cuckoo's Nest," is a two-part game where players take on the role of McMurphy. In the first module, you must escape the ward by using your strength to push blocks, breaking into the nurse's glass to steal a key, and bringing it to a checkpoint. In the second module, you're free to go fishing, where you have 60 seconds to catch at least 3 of the 4 fish using your fishing pole.
 @author: Sidharth B
 @tags: []
 @addedOn: 2024-05-16

@@ -1,6 +1,7 @@
 
 /* 
 @title: Kalo
+@description: "Kalo" is a fast-paced typing game where players must quickly input an increasingly complex sequence of characters displayed on the screen. With each round, there is less time to type the sequence, challenging players to improve their speed and accuracy. The game ends if a wrong key is pressed, testing reflexes and memory under time pressure.
 @author: Fatiha
 @tags: []
 @addedOn: 2023-07-15

@@ -1,5 +1,6 @@
 /*
 @title: burger build
+@description: "Burger Build" is an action game where players assemble burgers by catching falling food items like meat, cheese, tomato, and lettuce. As players progress through levels, they must build increasingly complex burgers by moving the buns to catch the right ingredients. The goal is to accurately stack the ingredients in the correct order to successfully complete each burger and advance to the next level.
 @author: emily27yee
 @tags: ['action']
 @addedOn: 2023-08-19

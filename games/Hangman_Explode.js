@@ -1,5 +1,6 @@
 /*
 @title: Hangman Explode
+@description: Hangman Explode is a modern twist on the classic word-guessing game Hangman. In this game, players attempt to reveal hidden words by guessing letters, with the added challenge of defusing a bomb by avoiding wrong guesses. It features a retro puzzle theme and offers endless gameplay with various difficulty levels that determine the number of wrong guesses allowed before the bomb explodes.
 @author: Frank Z
 @tags: ['retro', 'puzzle', 'endless']
 @addedOn: 2024-10-08

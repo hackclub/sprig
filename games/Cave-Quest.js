@@ -1,5 +1,6 @@
 /*
 @title: Cave-Quest
+@description: Cave-Quest is a puzzle game where you play as an explorer navigating through a series of treacherous caves. Inspired by Spelunky, your goal is to solve puzzles, avoid traps, and reach the exit across 10 challenging levels. Be cautious, as running out of hearts will set you back to the beginning.
 @author: OHIO-MAN
 @tags: ['puzzle']
 @addedOn: 2023-02-18

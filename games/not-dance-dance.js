@@ -1,5 +1,6 @@
 /*
 @title: not dance dance revolution
+@description: Take on the challenge of a rhythm game inspired by Dance Dance Revolution and osu!mania, where you synchronize your actions to the music. In this game, you’ll hit notes in time to an 8-bit rendition of the Tetris theme by pressing keys corresponding to four distinct lanes. This music-themed game tests your rhythm and accuracy as you strive to hit notes perfectly in sync with the beat.
 @author: Victor Lee
 @tags: ['music']
 @addedOn: 2024-02-22

@@ -1,5 +1,6 @@
 /*
 @title: pong-multiplayer
+@description: "Pong Multiplayer" is a two-player game that reimagines the classic Pong experience, allowing players to compete against each other. Each player controls a paddle on opposite sides of the screen, with Player 1 using the 'W' and 'S' keys and Player 2 using the 'I' and 'K' keys to move their paddles up and down. The goal is to score points by bouncing the ball past the opposing player's paddle.
 @author: sean
 @tags: ['multiplayer']
 @addedOn: 2023-01-01

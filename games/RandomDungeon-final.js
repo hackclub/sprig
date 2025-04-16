@@ -1,5 +1,6 @@
 /*
 @title: RandomDungeon
+@description: "RandomDungeon" is an adventure game where players dig through walls to explore rooms, battle enemies, and collect treasure and weapons. The goal is to accumulate as much gold as possible before meeting their demise. With various weapons and enemy types, players navigate through procedurally generated dungeons to maximize their loot.
 @author: JonathanLevi
 @tags: ['adventure']
 @addedOn: 2023-02-20

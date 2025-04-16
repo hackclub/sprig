@@ -20,3 +20,5 @@ dockerBuildLog.txt
 spade.uf2
 spade.elf
 src/shared/version.h
+firmware.elf
+firmware.uf2

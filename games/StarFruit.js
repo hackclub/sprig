@@ -1,5 +1,6 @@
 /*
 @title: StarFruit
+@description: StarFruit is a retro endless arcade game where you control a star collecting fruit while avoiding beetles. The objective is to gather as much fruit as possible and deliver it to the farm without getting caught by the beetles, which become increasingly difficult to dodge.
 @author: irstupid
 @tags: ['endless', 'retro']
 @addedOn: 2024-10-04

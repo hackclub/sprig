@@ -5,6 +5,7 @@ Controls: WASD to hit the red holes, IJKL to hit the blue holes
 Thank you to @RuadhanKM for help with the music!
 
 @title: Monster Mayhem
+@description: Whack all the ghouls you can in 60 seconds as they pop up from their holes!
 @author: Gus Ruben
 @tags: ['retro', 'timed']
 @addedOn: 2024-11-4

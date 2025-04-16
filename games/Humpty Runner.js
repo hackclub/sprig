@@ -1,5 +1,6 @@
 /*
 @title: Humpty Dumpty
+@description: "Humpty Dumpty" is an endless runner game where players help Humpty jump over walls to prevent him from falling again. The game requires quick reflexes as one wrong move ends the run. Aim to get Humpty as far as possible without crashing into obstacles.
 @author: Arnav R
 @tags: []
 @addedOn: 2024-08-23

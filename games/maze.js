@@ -1,5 +1,6 @@
 /*
 @title: Maze
+@description: My goal of my game is to have the prisoner break out of the jail by reaching the flag in a maze style.
 @author: Darshan Choudhary
 @tags: []
 @addedOn: 2024-00-00

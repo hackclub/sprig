@@ -224,7 +224,7 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 					</button>
 				</div>
 			</div>
-			<div className={styles.meta}>
+			<div className={styles.meta} id="desktop-player-meta">
 				<div>
 					<div class={styles.title}>
 					<h1>{props.gameName}</h1>

@@ -1,5 +1,6 @@
 /*
 @title: Sprong
+@description: Sprong is a version of pong. Bounce the ball back and forth between two paddles and score points if your opponent lets the ball go past their paddle!
 @author: Licnex
 @tags: ['retro', 'endless', 'multiplayer']
 @addedOn: 2024-11-12

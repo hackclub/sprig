@@ -1,5 +1,6 @@
 /*
 @title: Black Labyrinth
+@description: "Black Labyrinth" is a puzzle game centered around navigating intricate mazes filled with various challenges. Players must solve these mazes by collecting keys, unlocking doors, and dealing with dynamic light elements. The game offers levels where mazes combine lights and boxes, requiring strategic thinking and exploration.
 @author: Somebud0180
 @tags: ['puzzle']
 @addedOn: 2024-08-13

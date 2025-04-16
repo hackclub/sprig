@@ -1,5 +1,6 @@
 /*
 @title: Shooter
+@description: "Shooter" is a strategy survival game where players fend off endless waves of zombies.
 @author: Tyler Sousa
 @tags: ['strategy']
 @addedOn: 2023-10-24

@@ -3,6 +3,7 @@
 @author: Shadow8928
 @tags: []
 @addedOn: 2025-01-03
+@description: A two-player tag game where players try to catch each other. Player 1 uses WASD keys and Player 2 uses IJKL keys to move. First player to catch the other wins!
 */
 var end = 0
 const player = "p"

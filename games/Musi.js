@@ -1,6 +1,7 @@
 
 /* 
 @title: Musi
+@description: Musi is a memory game inspired by Simon, where players must remember and replicate a sequence of musical notes rather than colors. Players use specific keys to input notes, aiming to correctly reproduce a 4-note melody played by the game. If the sequence is replayed correctly, the game progresses to the next melody, otherwise, a wrong answer sound is played.
 @author: levi - blockish
 @tags: ['memory']
 @addedOn: 2023-10-25
