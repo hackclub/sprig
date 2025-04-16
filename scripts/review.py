@@ -275,7 +275,7 @@ def comment(pr):
         match get_char():
             case "n":
                 return
-            case "y":
+            case "y": 
                 pr.create_review(
                     body=comment,
                     event="REQUEST_CHANGES"  # This marks the PR as "Changes Requested"
