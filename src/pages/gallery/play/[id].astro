@@ -1,0 +1,226 @@
+---
+import { getGalleryGames, GameMetadata } from '../../../lib/game-saving/gallery'
+import StandardHead from '../../../components/standard-head.astro'
+import MainNavbar from "../../../components/navbar-main";
+import { getSession } from '../../../lib/game-saving/account'
+import { getGame } from '../../../lib/game-saving/account'
+import "../../../global.css";
+import DesktopPlayer from '../../../components/big-interactive-pages/desktop-player'
+import fs from 'fs'
+import path from 'path'
+import Button from '../../../components/design-system/button'
+import { IoShuffle } from 'react-icons/io5'
+
+interface Props {
+  game: GameMetadata;
+  session: any;
+}
+
+console.log("Gallery play endpoint hit");
+console.log("Request URL:", Astro.request.url);
+console.log("ID from params:", Astro.params.id);
+
+const session = await getSession(Astro.cookies)
+console.log("Session status:", session ? "Found" : "Not found");
+
+const id = Astro.params.id ?? ''
+const type = Astro.url.searchParams.get('type') ?? 'filename'
+let code: string;
+let game: GameMetadata;
+
+if (type === 'document') {
+    console.log("Loading game from document ID:", id);
+    const dbGame = await getGame(id);
+    if (!dbGame) {
+        console.log("Game not found in database");
+        return Astro.redirect('/404', 302);
+    }
+    code = dbGame.code;
+    game = {
+        filename: id,
+        title: dbGame.name,
+        lowerCaseTitle: dbGame.name.toLowerCase(),
+        author: dbGame.ownerId,
+        lowerCaseAuthor: dbGame.ownerId.toLowerCase(),
+        tags: [],
+        addedOn: new Date().toISOString(),
+        isNew: undefined,
+        description: ""
+    };
+} else {
+    console.log("Looking up game metadata for filename:", id);
+    const games = getGalleryGames()
+    const foundGame = games.find(g => g.filename === id)
+    console.log("Game metadata lookup result:", foundGame ? "Found" : "Not found");
+
+    if (!foundGame) {
+        console.log(`Game metadata not found for filename: ${id}`);
+        return Astro.redirect('/404', 302)
+    }
+    game = foundGame;
+
+    // Read the game code
+    const gameContentPath = path.resolve(`./games/${id}.js`)
+    console.log("Attempting to read game code from:", gameContentPath);
+    try {
+        code = fs.readFileSync(gameContentPath).toString()
+        console.log("Successfully read game code, length:", code.length);
+    } catch (error) {
+        console.error("Failed to read game code:", error);
+        return Astro.redirect('/404', 302)
+    }
+}
+
+const props: Props = {
+    game,
+    session
+}
+---
+
+<html lang='en'>
+<head>
+  <StandardHead title={props.game.title || props.game.filename} />
+  <style>
+    .game-view {
+      min-height: calc(100vh - 48px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .game-header {
+      padding: 12px 24px 32px;
+      background: var(--bg-darker);
+      border-bottom: 1px solid var(--border);
+      flex: 0 0 auto;
+    }
+
+    .game-info {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 24px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .game-title-section {
+      text-align: right;
+      justify-self: end;
+      padding-right: 12px;
+      border-right: 1px solid var(--border);
+    }
+
+    .game-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .game-author {
+      font-size: 14px;
+      color: var(--text-dimmed);
+      margin: 4px 0 0;
+    }
+
+    .game-description {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.5;
+      max-width: 600px;
+      text-align: left;
+      padding-left: 12px;
+    }
+
+    .game-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 12px;
+    }
+
+    .tag {
+      background: var(--accent);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      border: none;
+      transition: background 0.2s ease;
+    }
+
+    .tag:hover {
+      background: var(--accent-dark);
+    }
+
+    .player-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 800px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    :global(.rootContainer) {
+      position: absolute !important;
+      height: 100% !important;
+      width: 100% !important;
+      top: 0 !important;
+      left: 0 !important;
+      overflow: hidden !important;
+    }
+
+    /* Hide the metadata panel */
+    :global(#desktop-player-meta) {
+      display: none !important;
+    }
+
+    :global(.screen) {
+      aspect-ratio: 1.25;
+      border: 2px solid var(--accent);
+      background: #000000;
+      image-rendering: pixelated;
+      max-height: 70vh;
+      width: auto;
+    }
+  </style>
+</head>
+<body>
+  <MainNavbar session={props.session}>
+    <a href={`/~/new-game?remix=${props.game.filename}`}>
+      <Button icon={IoShuffle}>Remix Game</Button>
+    </a>
+  </MainNavbar>
+  <div class="game-view">
+    <div class="game-header">
+      <div class="game-info">
+        <div class="game-title-section">
+          <h1 class="game-title">{props.game.title}</h1>
+          <div class="game-author">by {props.game.author}</div>
+        </div>
+        <p class="game-description">{props.game.description}</p>
+      </div>
+      <div class="game-tags">
+        {props.game.tags.map(tag => (
+          <span class="tag">{tag}</span>
+        ))}
+      </div>
+    </div>
+    <div class="player-container">
+      <DesktopPlayer 
+        client:load
+        code={code}
+        gameName={props.game.title}
+        authorName={props.game.author}
+        filename={props.game.filename}
+        isLoggedIn={!!props.session?.session.full}
+        hearted={false}
+      />
+    </div>
+  </div>
+</body>
+</html> 

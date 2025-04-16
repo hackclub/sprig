@@ -4,7 +4,7 @@ import { getSession } from '../lib/game-saving/account'
 import Editor from '../components/big-interactive-pages/editor'
 import StandardHead from '../components/standard-head.astro'
 import { signal } from '@preact/signals'
-import { PersistenceState } from '../lib/state'
+import { PersistenceState, reviewState } from '../lib/state'
 import { mobileUserAgent } from '../lib/utils/mobile'
 import MobileUnsupported from '../components/popups-etc/mobile-unsupported'
 import UploadWarningModal from '../components/popups-etc/upload-failed-warning'
@@ -30,6 +30,23 @@ const persistenceState = signal<PersistenceState>({
 	session: null
 })
 const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
+
+// Check for review mode
+const reviewMode = Astro.url.searchParams.get('review') === 'true'
+const reviewCode = reviewMode ? Astro.url.searchParams.get('code') : null
+
+// If no session and not in review mode, redirect to login
+if (!session?.session.full && !reviewMode) {
+	return Astro.redirect('/login', 302)
+}
+
+// Set review state
+if (reviewMode && reviewCode) {
+	reviewState.value = {
+		isReviewMode: true,
+		reviewCode: decodeURIComponent(reviewCode)
+	}
+}
 ---
 
 <html lang='en'>

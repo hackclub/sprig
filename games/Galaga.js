@@ -1,5 +1,6 @@
 /*
 @title: Galaga
+@description: "Galaga" by wormmeatapple is a classic arcade-inspired game where players control a spaceship to shoot down waves of aliens and aim for a high score. The game's design draws inspiration from the original "Galaga" and includes features like shooting mechanics and a life system reminiscent of classic arcade games. Players must avoid losing all their lives while defeating alien enemies to progress.
 @author: wormmeatapple
 @tags: []
 @addedOn: 2024-08-15

@@ -1,5 +1,6 @@
 /*
 @title: dungen run
+@description: "Dungen Run" is a maze-based game where players navigate through increasingly challenging levels to collect keys and reach the exit. The game features seven levels, and collecting keys provides automatic points.
 @author: Saurav Alva & Gaurav Alva
 @tags: []
 @addedOn: 2024-08-15

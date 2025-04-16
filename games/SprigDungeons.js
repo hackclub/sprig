@@ -1,5 +1,6 @@
 /*
 @title: Sprig Dungeons
+@description: Sprig Dungeons is a dungeon crawler game where players explore and conquer dungeons. The game involves killing enemies, collecting weapons and potions, and fighting bosses. With a focus on exploration and combat, players aim to delve deep into dungeons and emerge victorious.
 @author: Mirrek
 @tags: []
 @addedOn: 2024-07-15

@@ -1,5 +1,6 @@
 /*
 @title: Sprigenstein3D
+@description: "Sprigenstein3D" is a 3D puzzle game where players navigate a maze to find a trophy and advance to the next level. Players collect keys to unlock doors and must strategize their path through progressively challenging layouts.
 @author: TheBlueOomaLoompa
 @tags: ['puzzle']
 @addedOn: 2024-07-22

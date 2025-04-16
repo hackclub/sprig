@@ -1,6 +1,7 @@
 
 /* 
 @title: Golem-Rush
+@description: Golem Rush is an action game where you control a golem running down a hill, avoiding trees as obstacles. The objective is to maneuver the golem away from trees to score points. It allows players to restart after "Game over."
 @author: Spllit1
 @tags: ['action']
 @addedOn: 2023-05-22

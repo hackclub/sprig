@@ -1,5 +1,6 @@
 /*
 @title: Runaway
+@description: There is a ghost that wants to be friends with you, but it does not know it's own power as it has enough power to scare you to death. Here you will have to runaway from the ghost because he is chasing you wanting to be friends, and to exit, you will have to go through the door in each level and avoid landmines! The ghost will teleport randomly to scare you. But sometimes he will teleport right next to you and scare you to death. You are the person with the yellow face. The ghost is the one with a white body.
 @author: Theenash Muneeswaran
 @tags: []
 @addedOn: 2024-07-08

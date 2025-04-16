@@ -33,11 +33,14 @@ export default function GalleryGame({ setFilter, filter, show, filename, title, 
 	}, []);
 
 	if (!show) return null;
+
+	const gameUrl = `/gallery/play/${filename}`;
+
 	return (
 		<div
 			ref={gameRef}
 			className="game"
-			onClick={() => window.open(`/gallery/${filename}`, '_blank')}
+			onClick={() => window.open(gameUrl, '_blank')}
 		>
 			{tags.includes("tutorial") ? (
 				<span class="badge tutorial">Tutorial</span>

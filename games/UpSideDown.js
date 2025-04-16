@@ -1,5 +1,6 @@
 /*
 @title: UpSideDown
+@description: UpSideDown is an endless retro game where players must survive by avoiding falling into the void or colliding with incoming platforms. The player controls gravity shifts, flipping between falling upwards and downwards to navigate through a series of moving platforms. The objective is to land safely on platforms and survive as long as possible.
 @author: Sidak08
 @tags: ['endless','retro']
 @addedOn: 2024-06-26

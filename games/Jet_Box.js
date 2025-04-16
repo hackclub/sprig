@@ -1,5 +1,6 @@
 /*
 @title: Jet_Box
+@description: Jet_Box is a puzzle game where players control a jet, aiming to reach and blast a yellow square using a "blast" action to clear a path. The challenge lies in timing and positioning, as players must navigate the jet in front of the open path before a green dot reaches the top, indicating how far you are from crashing. The game focuses on strategic movement and quick decision-making to prevent crashing and continue progressing.
 @author: Hugh Wilks
 @tags: ['puzzle']
 @addedOn: 2022-12-03

@@ -6,6 +6,7 @@
 
 /*
 @title: Top_Hat_Turtles
+@description: "Top Hat Turtles" is a cooperative multiplayer game where two players control turtles with unique top hats, aiming to reach their respective Top Hat Totems to advance to the next level. The game focuses on teamwork through progressively challenging levels. Each turtle's objective is to align with its matching totem, denoted by hat colors.
 @author: Dreck Yam
 @tags: ['multiplayer']
 @addedOn: 2024-05-29

@@ -1,8 +1,9 @@
 /*
 @title: Flapper Ghost
-@tags: [ghost, spooky, halloween, Flapper]
+@tags: []
 @author: Ragib
 @addedOn: 2025-02-14
+@description: A Flappy Bird-style game where you control a ghost navigating through obstacles. Collect power-ups to enhance your abilities while avoiding trees. The ghost moves up and down as you play, requiring precise timing to survive.
 */
 
 const GHOST_UP = "g";

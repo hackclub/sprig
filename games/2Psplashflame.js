@@ -1,5 +1,6 @@
 /*
 @title: 2Psplashflame
+@description: 2Psplashflame is a competitive two-player game where each player must navigate through various levels to reach the exit first. This engaging, level-based challenge tests players' speed and strategic planning.
 @author: Josh Deva
 @tags: []
 @addedOn: 2024-04-19

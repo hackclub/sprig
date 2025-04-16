@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: looparround
+@description: A puzzle game where you push a box onto a button to change the map so you can reach the flag.
 @author: Emarald64
 @tags: ['puzzle', 'maze']
 @addedOn: 2024-10-22

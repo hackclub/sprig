@@ -1,6 +1,7 @@
 
 /* 
 @title: hidden_maze_infinite
+@description: Welcome to Hidden Maze Infinite (or Hidden Maze 2 if you will), the 2nd game in the planned trilogoy of my Hidden Maze games here one sprig, 
 @author: Rylan Berry
 @tags: ['endless']
 @addedOn: 2023-05-12

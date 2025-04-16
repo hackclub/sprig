@@ -1,5 +1,6 @@
 /*
 @title: sprigish
+@description: "Sprigish" is a puzzle game where you assist a radish dad on his quest to find his missing radish children, drawing inspiration from the game Dadish. Navigate through different levels and avoid obstacles to reunite the dad with his kids from the vegetable patch.
 @author: dom
 @tags: ['puzzle']
 @addedOn: 2024-01-16

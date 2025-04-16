@@ -1,5 +1,6 @@
 /*
 @title: Guess the tune
+@description: "Guess the Tune" is a music-themed memory game where players listen to a sequence of melodies and attempt to replicate them using specific keys. The game allows you to adjust the length of the melody for different levels of challenge. It tests and enhances your auditory memory and musical recognition skills.
 @author: Sajeg
 @tags: ['music']
 @addedOn: 2024-06-19

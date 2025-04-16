@@ -1,5 +1,6 @@
 /*
 @title: Cookie_Click!
+@description: Cookie Click is a classic cookie clicker game where players collect cash to upgrade their cookie to reach the coveted Legend status. Players use in-game currency to purchase three upgrades: Diamond, Emerald, and Legend, with unique price points. Keep grinding to achieve the ultimate cookie upgrade and showcase your achievement!
 @author: briyandyju09
 @tags: []
 @addedOn: 2023-01-17

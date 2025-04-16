@@ -1,5 +1,6 @@
 /*
 @title: SnakeGame
+@description: SnakeGame is a classic arcade-style game where players control a snake to eat apples, grow longer, and aim to beat their high scores.
 @author: Elijah Grandell
 @tags: []
 @addedOn: 2024-09-16

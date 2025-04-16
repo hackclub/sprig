@@ -1,5 +1,6 @@
 /*
 @title: Little jump and run game
+@description: "Little Jump and Run Game" is a platformer where you navigate through various levels of a parkour-style course to collect coins and reach the finish line. As you progress, you can utilize special abilities like spawning temporary clouds to aid your path. This game offers multiple levels with increasing complexity.
 @author: Vincent Abeln
 @tags: []
 @addedOn: 2024-06-24

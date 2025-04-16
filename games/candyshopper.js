@@ -1,5 +1,6 @@
 /*
 @title: candyshopper
+@description: "Candyshopper" is a puzzle game where the objective is to push different candies into a shopping basket. Players must strategically maneuver to avoid obstacles and traps as they move candies into the correct positions.
 @author: ayaangrover
 @tags: ['puzzle']
 @addedOn: 2024-07-19

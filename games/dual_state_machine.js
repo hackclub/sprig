@@ -1,5 +1,6 @@
 /*
 @title: dual_state_machine
+@description: "Dual State Machine" is a strategy puzzle game where players aim to turn all tiles yellow by stepping on them; tiles alternate between yellow and blue with each step. Retracing your steps changes the squares back to blue, so be careful about where you step!
 @author: Leonard (Omay)
 @tags: ['strategy']
 @addedOn: 2022-11-11

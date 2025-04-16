@@ -1,5 +1,6 @@
 /*
 @title: wet-sand
+@description: Wet-Sand is a falling sand simulator inspired by projects like TodePond's SandPond. Created largely in one day during MIT Blueprint 2023, it allows users to experiment with sand, water, blocks, and fish in a simple grid environment. Players can place materials, watch sand pile up, observe water flow, and even see fish swim around.
 @author: mint
 @tags: ['simulation']
 @addedOn: 2023-02-20

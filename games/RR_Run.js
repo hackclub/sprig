@@ -1,5 +1,6 @@
 /*
 @title: RR Run
+@description: "RR Run" is a puzzle game where players navigate through levels by moving their character to reach the RR goal. Players must avoid bombs, move boxes, and collect keys to unlock paths, progressing through each level until the end screen. The game challenges players to strategize their moves to overcome obstacles and reach the goal.
 @author: Weston Bui
 @tags: ['puzzle']
 @addedOn: 2024-05-10

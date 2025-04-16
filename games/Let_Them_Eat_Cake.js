@@ -1,5 +1,6 @@
 /*
 @title: Let_Them_Eat_Cake
+@description: "Let Them Eat Cake" is a puzzle game where players push cakes to cheer up sad characters and then return to the starting door at each level. It provides a speed-running feel without any timers, requiring strategic moves to complete levels efficiently. The game is designed by Xander Reyes, offering a simple yet engaging experience with elements like pushable crates introduced in later stages.
 @author: Xander Reyes
 @tags: ['puzzle']
 @addedOn: 2023-01-10

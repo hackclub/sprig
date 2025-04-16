@@ -3,8 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 @title: Zelix 2D
 @author: Zenneth
-@tags: [#jumping]
-@addedOn: 2024-00-00
+@tags: []
+@addedOn: 2024-01-01
+@description: A challenging arcade game where you control a platform to bounce a ball and score points. Use A/D to move the platform left/right, and press J repeatedly to control bounce height. Don't let the ball touch the top of the screen!
 
 press a and d to move the platorm, spam j to jump less high, if you touch the top of the screen you loose
 */
@@ -33,7 +34,6 @@ setLegend(
 )
 
 const level = map`
-................
 ................
 ................
 ................

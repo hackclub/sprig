@@ -1,5 +1,6 @@
 /*
 @title: sprig_shoot
+@description: "Sprig_shoot" is an endless shooting game where players aim to shoot approaching enemies, known as "angry guys," to score points while avoiding hitting bombs, which result in immediate game over. When enemies are shot, players gain points, but letting them pass results in a point deduction.
 @author: Holden L
 @tags: ['endless']
 @addedOn: 2023-02-11
