@@ -1,5 +1,6 @@
 /*
 @title: Jumper
+@description: "Jumper" is an endless game focused on dodging obstacles to achieve a high score. It challenges players to enhance their reaction times as they navigate the character through a series of moving obstacles. The game is designed to be fun and engaging, inviting players to beat their previous highscores with each playthrough.
 @author: TC
 @tags: ['endless']
 @addedOn: 2022-11-13

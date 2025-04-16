@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: escape from evil
+@description: Escape from evil is a puzzle game where you need to escape from the monster and reach the escape portal in each level. If you get caught by the monster in any level, you will be sent back to the start. Navigate the mazes and rach the portal without touching any of the monsters.
 @author: noobieyuh
 @tags: ['puzzle', 'music']
 @addedOn: 2024-11-10

@@ -1,5 +1,6 @@
 /*
 @title: WheatField
+@description: WheatField is a simulation game where the objective is to plant a variety of crops, primarily flowers, and harvest seeds which can be sold for tokens. Tokens collected can be used to upgrade your seeds, enhancing the types of crops you can grow. Additionally, players need to be wary of the planting order and crop disappearance, and can interact with various elements like fences and villagers throughout the game.
 @author: FEEJEE
 @tags: ['simulation']
 @addedOn: 2024-03-00

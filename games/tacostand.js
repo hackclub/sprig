@@ -3,6 +3,7 @@
 @author: David, Etah, Oliver, and Collin
 @tags: []
 @addedOn: 01-10-2025
+@description: Run your own taco stand by preparing tacos according to recipes. Collect ingredients like tortillas, meat, tomatoes, onions, sauce, and cheese. Cook the meat on the frying pan and assemble tacos in the correct order to score points.
 */
 let randomDecimal = Math.random();
 

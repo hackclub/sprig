@@ -1,5 +1,6 @@
 /*
 @title: Among Us Survival
+@description: Among Us Survival is a survival game where you control an Among Us character trying to avoid falling fire bombs in order to stay alive. If the character is hit by a bomb, the game restarts, challenging you to survive as long as possible.
 @author: anvayajmera
 @tags: ['survival']
 @addedOn: 2024-07-26

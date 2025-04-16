@@ -2,9 +2,10 @@
 Greetings fellows programmers <3
 
 @title: Temple Escape
+@description: An endless runner game where you navigate through a treacherous temple filled with obstacles. Use your agility to jump and roll through barriers while avoiding water hazards. The game gets progressively more challenging as your score increases.
 @author: Andrea
-@tags: [Arcade, Infinite, Hability, Demake, Action, Platform]
-@addedOn: 2025-03-15
+@tags: ['action', 'endless']
+@addedOn: 2024-03-15
 */
 
 const player_right = "q",

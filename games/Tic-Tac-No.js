@@ -1,5 +1,6 @@
 /*
 @title: Tic-Tac-No
+@description: Tic-Tac-No is a twist on the classic Tic-Tac-Toe game where both players use Xs and aim to avoid creating a line of three Xs, as doing so results in a loss.
 @author: Ojas Somethin'
 @tags: ['multiplayer']
 @addedOn: 2023-02-02

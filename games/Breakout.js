@@ -1,5 +1,6 @@
 /*
 @title: Breakout
+@description: "Breakout" is a retro-themed game where players control a paddle to bounce a ball and break bricks on the screen. The goal is to clear all the bricks by strategically directing the ball while avoiding missing it with the paddle. Points are earned with each brick broken, and the game ends when the ball hits the bottom of the screen.
 @author: Holly
 @tags: ['retro']
 @addedOn: 2022-09-28

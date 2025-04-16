@@ -1,6 +1,7 @@
 
 /* 
 @title: Tile_Slider
+@description: Tile Slider is a puzzle game where players move tiles to form a complete image, in this case, a picture of a gift. The gameplay involves memorizing the original picture, shuffling the tiles, and then rearranging them using directional controls to recreate the image. This game is inspired by Monish's "The Impossible Puzzle."
 @author: Susman
 @tags: []
 @addedOn: 2023-11-30

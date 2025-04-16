@@ -1,5 +1,6 @@
 /*
 @title: reaction_timer
+@description: "Reaction Timer" is a two-player game where players test their reflexes by reacting quickly to randomly appearing colors, each assigned to specific keys. Players compete to see who can respond faster, with the game measuring the reaction times in milliseconds.
 @author: sampoder
 @tags: ['multiplayer']
 @addedOn: 2022-09-16

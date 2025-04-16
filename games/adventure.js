@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: Loshua1
 @tags: []
 @addedOn: 2025-03-07
+@description: An adventure game where players explore a world, collect items, and complete quests. Use arrow keys to move and interact with the environment.
 */
 
 const bandit = "a"

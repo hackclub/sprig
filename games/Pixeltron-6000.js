@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Pixeltron 6000
+@description: A sandbox game where you can draw and erase with different colors.
 @author: salping
 @tags: ['sandbox', 'utility']
 @addedOn: 2024-11-12

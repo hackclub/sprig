@@ -1,5 +1,6 @@
 /*
 @title: Desine Mini
+@description: Desine Mini is a strategic action game where players focus on defeating and dodging enemies. It challenges players to navigate through levels, attacking opponents and avoiding hazards to reach the goal. This is a mini version, and players can also experience an original full version at [this link](https://webeaftos.olive2.repl.co/).
 @author: Guy Sandler
 @tags: []
 @addedOn: 2023-11-18

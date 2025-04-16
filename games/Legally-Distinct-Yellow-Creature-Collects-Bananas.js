@@ -3,6 +3,7 @@
 @author: DogeJr
 @tags: ['endless', 'humor']
 @addedOn: 2025-01-22
+@description: A humorous endless game where you control a totally original yellow character collecting bananas. Features shield power-ups for temporary invincibility and a health system. Dodge obstacles and see how many bananas you can collect!
 
 Update Log:
 Version 1.1 (2025-01-29)

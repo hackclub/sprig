@@ -1,5 +1,6 @@
 /*
 @title: Blackjack
+@description: Blackjack, developed by Josh Baron, is a card game where the objective is to get your card total as close to 21 as possible without exceeding it. Utilizing rules similar to traditional blackjack, face cards are worth 10, and aces can count as either 1 or 11. This version includes the "5-Card Charlie" rule, allowing an automatic win if you collect five cards without busting.
 @author: Josh Baron <xriiitox>
 @tags: ['endless']
 @addedOn: 2024-07-02

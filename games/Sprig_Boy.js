@@ -1,5 +1,6 @@
 /*
 @title: SprigBoy
+@description: SprigBoy is a puzzle game where you play as a lonely sprig boy aiming to earn a trophy for his parents but must overcome obstacles using his box-creating abilities. Inspired by the Nintendo game BoxBoy!, players solve puzzles by strategically placing boxes to navigate challenging levels. The goal is to reach the trophy at the end of each level.
 @author: NA
 @tags: []
 @addedOn: 2023-06-19

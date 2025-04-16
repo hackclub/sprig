@@ -1,5 +1,6 @@
 /*
 @title: Pixelated Medieval Times
+@description: "Pixelated Medieval Times" is a role-playing game where players navigate a pixel-art medieval world. The objective is to collect keys and swords to defeat the boss and save a princess. The game involves strategic movement through levels while overcoming challenges and unlocking areas.
 @author: TabishAhmad
 @tags: ['role-playing']
 @addedOn: 2024-05-31

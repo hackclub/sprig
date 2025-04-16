@@ -1,5 +1,6 @@
 /*
 @title: Dungeon
+@description: "Dungeon" is a puzzle adventure game where you navigate through a dungeon to find the exit. Your objective is to collect keys to unlock doors and progress through the levels. The game's main challenge is solving the spatial puzzles to clear the path and escape the dungeon.
 @author: Jonas07123
 @tags: []
 @addedOn: 2024-05-20

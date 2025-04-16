@@ -1,5 +1,6 @@
 /*
 @title: Traditional Snake
+@description: "Traditional Snake" is a retro-style game where players control a snake using directional keys to eat apples and grow in length. The objective is to maximize the snake's size without crashing into walls or itself. As the player collects apples, the game becomes more challenging with the increased size of the snake.
 @author: dmcegan
 @tags: ['retro']
 @addedOn: 2024-07-05

@@ -1,5 +1,6 @@
 /*
 @title: Bert Blaster
+@description: "Bert Blaster" is an endless game where you control a character that jumps and shoots obstacles to gain points. The game features a moving landscape and dynamic enemy obstacles that you must avoid or shoot to continue progressing. The emphasis is on achieving a high score by surviving as long as possible.
 @author: Waterbyte
 @tags: ['endless']
 @addedOn: 2022-11-05

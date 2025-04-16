@@ -1,5 +1,6 @@
 /*
 @title: Slimer
+@description: Slimer is a puzzle game where players navigate through levels by utilizing keys, blocks, and other items to reach the goal. Players must strategically move to unlock doors and clear obstacles, solving each level's unique challenges along the way. The game features various elements like crates, key-doors, and power-ups, adding complexity to the path-finding puzzles.
 @author: DevCmb
 @tags: []
 @addedOn: 2024-07-04

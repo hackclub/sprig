@@ -1,5 +1,6 @@
 /*
 @title: the maze with metors
+@description: "The Maze with Meteors" is a puzzle game where the player navigates through a maze while avoiding asteroids that fall from the sky. The objective is to reach the trophy from the starting point without getting hit by the asteroids.
 @author: Daksh Thapar (DakshRocks21/dak5h.exe)
 @tags: ['puzzle']
 @addedOn: 2024-08-15

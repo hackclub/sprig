@@ -1,6 +1,7 @@
 
 /* 
 @title: galactic
+@description: "Galactic" is a strategy game where you build and manage a city on another planet. The objective is to keep your citizens alive by collecting resources like wood and stone and using them to construct and upgrade buildings. As your city grows, you must maintain a balance to prevent overcrowding and ensure the survival of your population.
 @author: polypixeldev
 @tags: ['strategy']
 @addedOn: 2023-11-12

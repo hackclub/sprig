@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: matching
+@description: A puzzle game where you match the shapes to their corresponding holes in a maze.
 @author: Kaiyuran
 @tags: ['puzzle', 'maze']
 @addedOn: 2024-11-12

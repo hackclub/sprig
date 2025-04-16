@@ -1,6 +1,7 @@
 
 /* 
 @title: run
+@description: "Run" is a puzzle game where players navigate a character while avoiding moving rockets. The objective is to survive for as long as possible, as the player's score increases over time.
 @author: Nguyễn Gia Bách
 @tags: ['puzzle']
 @addedOn: 2023-07-20

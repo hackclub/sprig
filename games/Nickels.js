@@ -1,5 +1,6 @@
 /*
 @title: Nickels
+@description: Nickels is a strategy dice game where players compete to fill a board by rolling dice and covering the resulting sum with a nickel. If a player lands on a previously covered number, the next player can steal it for their board. The digital version automates decisions, and the objective is to beat the computer opponent by filling all ten board spaces first.
 @author: Adam Miller
 @tags: ['strategy']
 @addedOn: 2023-12-30

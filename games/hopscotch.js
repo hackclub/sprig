@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: hopscotch
+@description: Jump over the rope as it comes towards you!
 @author: brycen weeks
 @tags: []
 @addedOn: 2024-11-26

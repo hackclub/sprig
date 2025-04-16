@@ -1,5 +1,6 @@
 /*
 @title: Rift Jump
+@description: Rift Jump is a challenging platformer where players collect coins and navigate through levels to reach a portal. The game involves maneuvering through various obstacles using jump and directional controls. It's designed to test players' skills in a classic platforming style.
 @author: sharonbasovich
 @tags: ['platformer']
 @addedOn: 2024-05-28
