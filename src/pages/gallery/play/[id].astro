@@ -1,8 +1,9 @@
 ---
-import { getGalleryGames } from '../../../lib/game-saving/gallery'
+import { getGalleryGames, GameMetadata } from '../../../lib/game-saving/gallery'
 import StandardHead from '../../../components/standard-head.astro'
 import MainNavbar from "../../../components/navbar-main";
 import { getSession } from '../../../lib/game-saving/account'
+import { getGame } from '../../../lib/game-saving/account'
 import "../../../global.css";
 import DesktopPlayer from '../../../components/big-interactive-pages/desktop-player'
 import fs from 'fs'
@@ -11,44 +12,74 @@ import Button from '../../../components/design-system/button'
 import { IoShuffle } from 'react-icons/io5'
 
 interface Props {
-  game: {
-    filename: string;
-    title: string;
-    author: string;
-    description: string;
-    tags: string[];
-  };
+  game: GameMetadata;
   session: any;
 }
 
+console.log("Gallery play endpoint hit");
+console.log("Request URL:", Astro.request.url);
+console.log("ID from params:", Astro.params.id);
+
 const session = await getSession(Astro.cookies)
-const filename = Astro.params.filename ?? ''
+console.log("Session status:", session ? "Found" : "Not found");
 
-const games = getGalleryGames()
-const game = games.find(g => g.filename === filename)
+const id = Astro.params.id ?? ''
+const type = Astro.url.searchParams.get('type') ?? 'filename'
+let code: string;
+let game: GameMetadata;
 
-if (!game) {
-  return Astro.redirect('/404', 302)
-}
+if (type === 'document') {
+    console.log("Loading game from document ID:", id);
+    const dbGame = await getGame(id);
+    if (!dbGame) {
+        console.log("Game not found in database");
+        return Astro.redirect('/404', 302);
+    }
+    code = dbGame.code;
+    game = {
+        filename: id,
+        title: dbGame.name,
+        lowerCaseTitle: dbGame.name.toLowerCase(),
+        author: dbGame.ownerId,
+        lowerCaseAuthor: dbGame.ownerId.toLowerCase(),
+        tags: [],
+        addedOn: new Date().toISOString(),
+        isNew: undefined,
+        description: ""
+    };
+} else {
+    console.log("Looking up game metadata for filename:", id);
+    const games = getGalleryGames()
+    const foundGame = games.find(g => g.filename === id)
+    console.log("Game metadata lookup result:", foundGame ? "Found" : "Not found");
 
-// Read the game code
-const gameContentPath = path.resolve(`./games/${filename}.js`)
-let code: string
-try {
-  code = fs.readFileSync(gameContentPath).toString()
-} catch {
-  return Astro.redirect('/404', 302)
+    if (!foundGame) {
+        console.log(`Game metadata not found for filename: ${id}`);
+        return Astro.redirect('/404', 302)
+    }
+    game = foundGame;
+
+    // Read the game code
+    const gameContentPath = path.resolve(`./games/${id}.js`)
+    console.log("Attempting to read game code from:", gameContentPath);
+    try {
+        code = fs.readFileSync(gameContentPath).toString()
+        console.log("Successfully read game code, length:", code.length);
+    } catch (error) {
+        console.error("Failed to read game code:", error);
+        return Astro.redirect('/404', 302)
+    }
 }
 
 const props: Props = {
-  game,
-  session
+    game,
+    session
 }
 ---
 
 <html lang='en'>
 <head>
-  <StandardHead title={props.game.title || filename} />
+  <StandardHead title={props.game.title || props.game.filename} />
   <style>
     .game-view {
       min-height: calc(100vh - 48px);
