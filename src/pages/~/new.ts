@@ -1,7 +1,8 @@
 import type { APIRoute } from 'astro'
-import { getSession, makeGame } from '../../lib/game-saving/account'
+import { getSession, makeGame, getGame } from '../../lib/game-saving/account'
 import { defaultExampleCode } from '../../lib/examples'
 
+const SPRIG_BASE_URL = import.meta.env.SPRIG_BASE_URL || 'http://localhost:3000'
 
 const createDefaultWithTitle = (title:string) =>{
 	return defaultExampleCode.replace("@title: ", `@title: ${title}`)
@@ -28,38 +29,56 @@ export const get: APIRoute = async ({request, cookies, redirect }) => {
 	return redirect(`/~/${game.id}`, 302)
 }
 
-export const post: APIRoute = async ({ request, cookies, redirect }) => {
+export const post: APIRoute = async ({ request, redirect }) => {
     let name: string | undefined;
     let code: string | undefined;
 
     try {
-        // Use request.text() for large form data instead of formData()
+        console.log("Received request to create new game");
+        
         if (request.headers.get('content-type')?.includes('application/json')) {
             const body = await request.json();
             name = body.name || undefined;
             code = body.code || undefined;
+            console.log(`Creating game with name: ${name || 'unnamed'}, code length: ${code?.length || 0} characters`);
         } else {
-            // Fallback to traditional form parsing for smaller form data
             const formData = await request.formData();
             name = formData.get("name") as string | undefined;
             code = formData.get("code") as string | undefined;
+            console.log(`Creating game with name: ${name || 'unnamed'}, code length: ${code?.length || 0} characters`);
         }
 
-        console.log("Received name:", name);
-        console.log("Received code (truncated):", code?.slice(0, 100)); // Log first 100 chars
-    } catch (error) {
-        return new Response(JSON.stringify({ error: 'Bad request body' }), { status: 400 });
-    }
+        if (!code) {
+            console.log("Error: No code provided in request");
+            return new Response(JSON.stringify({ error: 'No code provided' }), { status: 400 });
+        }
 
-    const session = await getSession(cookies)
-    if (!session) {
-        return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 });
-    }
+        // Create an unprotected game that anyone can access
+        console.log("Creating game document...");
+        const game = await makeGame("review-user", true, name, code)
+        console.log(`Successfully created game with ID: ${game.id}`);
 
-    try {
-        const game = await makeGame(session.user.id, !session.session.full, name, code || "")
-        return redirect(`/~/${game.id}`, 302)
+        // Verify the game was actually created in the database
+        console.log("Verifying game creation in database...");
+        const createdGame = await getGame(game.id);
+        if (!createdGame) {
+            console.error("Error: Game was not found in database after creation");
+            return new Response(JSON.stringify({ error: 'Game creation failed' }), { status: 500 });
+        }
+        console.log("Game verified in database");
+
+        const redirectUrl = new URL(`/gallery/play/${game.id}`, SPRIG_BASE_URL).toString();
+        console.log(`Redirecting to play URL: ${redirectUrl}`);
+        return redirect(redirectUrl, 302)
     } catch (error) {
+        console.error("Failed to create game:", error);
+        if (error instanceof Error) {
+            console.error("Error details:", {
+                message: error.message,
+                stack: error.stack,
+                name: error.name
+            });
+        }
         return new Response(JSON.stringify({ error: 'Failed to create game' }), { status: 500 });
     }
 };
