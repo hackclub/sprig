@@ -1,8 +1,9 @@
 /*
-
 @title: Navigating a nightmare
 @author: B-S-M-C
+@tags: ['maze', 'puzzle']
 @addedOn: 2024-02-23
+@description: A challenging maze game where you navigate through darkness. Use your wits to find your way through the maze while avoiding obstacles and finding the exit.
 */
 const PLAYER = "p";
 const WALL = "w";

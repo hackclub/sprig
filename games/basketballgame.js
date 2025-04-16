@@ -1,6 +1,7 @@
 
 /* 
 @title: basketballgame
+@description: Basketball Game is a simple, original game developed by Dheeraj Chintapalli. In this game, players navigate through levels, avoiding obstacles and enemies, while trying to reach designated goal points. It features various elements such as blocks, spikes, and a resurrection stone that could potentially alter the gameplay.
 @author: de-y (Dheeraj Chintapalli)
 @tags: []
 @addedOn: 2023-10-19

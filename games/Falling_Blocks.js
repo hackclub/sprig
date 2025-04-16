@@ -1,5 +1,6 @@
 /*
 @title: Falling Blocks
+@description: "Falling Blocks" is an action game where the player must avoid being hit by descending blocks. The objective is to survive as long as possible by moving left or right to dodge the obstacles. The game ends when all lives are lost through contact with the falling blocks.
 @author: Thanosan Prathifkumar
 @tags: []
 @addedOn: 2022-09-17

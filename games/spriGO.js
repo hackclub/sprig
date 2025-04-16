@@ -1,5 +1,6 @@
 /*
 @title: spriGO
+@description: spriGO is a two-player strategy game inspired by the ancient board game Go, designed for players to compete in capturing more territory and stones than their opponent. The game emphasizes strategic depth, much like chess, as players place stones on a grid to surround territories and capture opposing pieces.
 @author: InfinityCity18
 @tags: ['strategy','multiplayer']
 @addedOn: 2024-08-12

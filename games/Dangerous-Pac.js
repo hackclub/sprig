@@ -1,5 +1,6 @@
 /*
 @title: Dangerous Pac
+@description: A survival game where you must collect diamonds and trophies while avoiding ghosts.
 @author: MananCoder
 @tags: ['survival']
 @addedOn: 2024-11-6

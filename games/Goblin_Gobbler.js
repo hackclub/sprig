@@ -1,5 +1,6 @@
 /*
 @title: Goblin_Gobbler
+@description: "Goblin Gobbler" is a puzzle game where the objective is to push goblins into holes. Players can move around and manipulate boxes to guide the goblins to the target locations. The game includes multiple levels, and the difficulty varies as players progress.
 @author: Tyler P Evans
 @tags: []
 @addedOn: 2024-03-11

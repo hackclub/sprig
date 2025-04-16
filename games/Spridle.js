@@ -1,5 +1,6 @@
 /*
 @title: Spridle
+@description: Spridle is a retro-themed game inspired by Wordle, but uses sequences of 5 numbers instead of letters. Players move a selection arrow to choose numbers, attempting to match a hidden sequence, with feedback given through green and red boxes to indicate correct and incorrect numbers.
 @author: Duclings
 @tags: ['retro']
 @addedOn: 2024-06-23

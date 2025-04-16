@@ -1,5 +1,6 @@
 /*
 @title: Roodkapje
+@description: "Roodkapje" is a puzzle game where the objective is to find your way to the house while avoiding wolves. Try to make your way through the mazes!
 @author: Ebit22
 @tags: ['puzzle']
 @addedOn: 2024-05-30

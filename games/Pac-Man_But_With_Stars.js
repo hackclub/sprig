@@ -1,5 +1,6 @@
 /*
 @title: Pac-Man But With Stars
+@description: "Pac-Man But With Stars" is a retro-style strategy game where players control Pac-Man in a quest to collect all the stars for their collection while avoiding spooky ghosts. These ghosts can phase through walls, adding an extra layer of challenge to the gameplay. The goal is to gather all the stars on each level without getting caught by the ghosts.
 @author: Austin
 @tags: ['strategy','retro']
 @addedOn: 2022-12-01

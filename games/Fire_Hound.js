@@ -1,5 +1,6 @@
 /*
 @title: Fire Hound
+@description: Fire Hound is a puzzle game where players control a character, the Fire Hound, who must navigate through an obstacle course filled with portals and avoid rain drops to reach home. The objective is to pass as many portals as possible without dying, using strategic movement and occasionally summoning a shield for protection. This can be played solo to achieve a high score or with friends taking turns.
 @author: Himir Desai
 @tags: ['puzzle']
 @addedOn: 2023-01-30

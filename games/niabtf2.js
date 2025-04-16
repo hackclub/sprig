@@ -1,5 +1,6 @@
 /*
 @title: Ninja In A Bear Trap Factory 2
+@description: "Ninja In A Bear Trap Factory 2" is a strategy game where players navigate a ninja through a factory filled with bear traps. Players must collect swords to jump over traps and find the correct buttons to open doors while avoiding obstacles.
 @author: Matt The Banana
 @tags: ['strategy']
 @addedOn: 2022-12-06

@@ -1,5 +1,6 @@
 /*
 @title: squarey_runs_away_from_the_fireball
+@description: Squarey Runs Away from the Fireball is a two-player game where one player controls Squarey and tries to evade the fire for 30 seconds, while the other player controls the fire and attempts to catch Squarey. Using basic directional controls, players engage in a race against time with the goal of either surviving or capturing before time runs out.
 @author: jack_mole_and_sam_poder
 @tags: ['multiplayer']
 @addedOn: 2023-01-28

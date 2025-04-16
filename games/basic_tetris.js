@@ -1,5 +1,6 @@
 /*
 @title: Basic Tetris
+@description: "Basic Tetris" by Ivan Jehad is a slightly more challenging version of classic Tetris, where tetrominos are not complete blocks, making it tricky to determine how they fit into spaces.
 @author: Ivan-Jehad
 @tags: []
 @addedOn: 2024-06-10

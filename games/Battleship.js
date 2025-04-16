@@ -1,6 +1,7 @@
 
 /* 
 @title: Battleship
+@description: Battleship is a strategy game where players take turns attempting to locate and destroy the opponent's ships hidden on a grid. Each player places their ships on a grid and then takes turns targeting coordinates to hit the opponent's ships. The goal is to sink all of the opponent's ships before your own fleet is destroyed.
 @author: Johna-123
 @tags: []
 @addedOn: 2023-08-25

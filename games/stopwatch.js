@@ -1,5 +1,6 @@
 /*
 @title: Stopwatch
+@description: A stopwatch. You can start, stop, reset, and record split times.
 @author: DominantDuck
 @tags: ['utility','timed']
 @addedOn: 2024-06-26

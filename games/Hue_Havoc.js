@@ -1,5 +1,6 @@
 /*
 @title: Hue Havoc
+@description: Hue Havoc is a multiplayer game where two players compete to cover the most area on a canvas with their color of paint. Both players have 20 seconds to navigate the canvas using specific controls (WASD and IJKL) in an attempt to outpaint each other. The aim is to claim as much territory as possible before the time runs out.
 @author: Gus Ruben
 @tags: ['multiplayer']
 @addedOn: 2024-09-01

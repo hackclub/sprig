@@ -1,5 +1,6 @@
 /*
 @title: Boxxod
+@description: Boxxod is a puzzle game where players manipulate boxes using the power of gravity. The objective is to navigate a red cube to a green goal by shifting the movable boxes in different directions. It challenges players to think uniquely about gravity and spatial movement.
 @author: Kokonico
 @tags: ['puzzle']
 @addedOn: 2023-10-20

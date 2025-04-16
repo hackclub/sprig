@@ -1,6 +1,7 @@
 
 /* 
 @title: Minigame-Mania
+@description: Minigame-Mania is a strategic platform game where players navigate a player character through levels filled with obstacles and lava. The game features a side-scrolling environment where precise timing and movement are essential to progress and avoid hazards. As you advance through increasingly challenging levels, your goal is to reach the end without falling into the lava.
 @author: FlubbedAlpaca, ManushPatell, AiyuuGames, MatiasSharofi
 @tags: ['strategy']
 @addedOn: 2023-05-27

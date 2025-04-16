@@ -1,5 +1,6 @@
 /*
 @title: Nomis
+@description: Nomis is a retro-style, Simon-like memory game created by Cheru Berhanu, where players must recall and replicate sequences of colors to progress. As the game moves forward, the sequence of colors becomes longer and more challenging, testing the player's memory and attention. The object of the game is to achieve the highest score by correctly repeating as many sequences as possible before making a mistake.
 @author: Cheru Berhanu
 @tags: ['retro']
 @addedOn: 2022-08-29

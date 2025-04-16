@@ -1,5 +1,6 @@
 /*
 @title: Squilium_Escape
+@description: Squilium_Escape is a puzzle game where players must navigate multiple characters to designated X marks. The challenge lies in strategically moving the characters while pushing crates and avoiding obstacles, as all characters move simultaneously in response to input commands. The objective is to complete each level using the fewest moves possible, aiming to beat the creator's high score of 181 moves.
 @author: Ali Mustafa
 @tags: []
 @addedOn: 2023-01-06

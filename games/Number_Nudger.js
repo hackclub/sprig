@@ -1,5 +1,6 @@
 /*
 @title: Number_Nudger
+@description: Number_Nudger is a strategy game where players use the red player character to push blue number blocks into corresponding green number slots without getting them stuck. Players must navigate around obstacles in each level to successfully align the blocks with the slots. The game challenges players' problem-solving skills as they progress through multiple levels.
 @author: Boon
 @tags: ['strategy']
 @addedOn: 2023-01-02

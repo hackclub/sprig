@@ -1,5 +1,6 @@
 /*
 @title: cookie_clicker
+@description: "Cookie Clicker" by kunevi is an endless incremental game where the objective is to earn money by clicking a cookie. Players can enhance their earnings over time by purchasing upgrades that increase cookies per second and cookies per click.
 @author: kunevi
 @tags: ['endless']
 @addedOn: 2022-12-16

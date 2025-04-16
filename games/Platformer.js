@@ -1,5 +1,6 @@
 /*
 @title: Platformer
+@description: A platformer game where you must push boxes to reach the goal.
 @author: Kirin
 @tags: ['platformer']
 @addedOn: 2024-10-31

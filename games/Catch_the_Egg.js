@@ -1,5 +1,6 @@
 /*
 @title: Catch_the_Egg
+@description: Catch the Egg is a game where players must quickly move their basket under hens to catch falling eggs. The objective is to score points by catching eggs while avoiding multiple misses. The game ends when too many eggs are missed or a maximum score is reached.
 @author: Jonak-Adipta-Kalita
 @tags: []
 @addedOn: 2024-04-18

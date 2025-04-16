@@ -1,5 +1,6 @@
 /*
 @title: find_the_suspect
+@description: "Find the Suspect" is a detective-themed game where you play as a police officer tasked with identifying and arresting the correct suspect among 12 guests based on a given description. Your objective is to carefully assess each person presented to you and decide whether they match the perpetrator's description to successfully catch the thief. The game challenges your attention to detail and decision-making skills to ensure justice is served.
 @author: jonas
 @tags: []
 @addedOn: 2023-02-02

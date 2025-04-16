@@ -1,5 +1,6 @@
 /*
 @title: Asteroid_Dodge!
+@description: Asteroid Dodge! is an action game where the player maneuvers a spaceship to avoid incoming asteroids while collecting coins. As the game progresses, the difficulty increases, potentially becoming almost impossible after a certain point. The objective is to survive as long as possible and gather coins without crashing into asteroids.
 @author: V205
 @tags: ['action']
 @addedOn: 2023-08-09

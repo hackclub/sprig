@@ -1,5 +1,6 @@
 /*
 @title: Box Guy
+@description: Box Guy is an unforgiving puzzle game where you must navigate the titular character, Box Guy, through ten challenging levels by reaching the door at the end of each one. As you play, you'll encounter immovable walls and moveable boxes, which can be strategically utilized to overcome obstacles. Inspired by the classic game "Block Dude" on the TI-83 Plus calculator, Box Guy tests players' spatial reasoning and strategic planning skills.
 @author: jli46
 @tags: ['puzzle']
 @addedOn: 2024-04-23

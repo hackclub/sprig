@@ -1,5 +1,6 @@
 /*
 @title: Simon Sees
+@description: "Simon Sees" is an endless memory game where players aim to remember and replicate sequences of direction and color pairs to achieve a high score. As the game progresses, each correct sequence is replayed with an additional pair, challenging the player's memory skills. An error results in a game over, and players start again, trying to surpass their previous scores.
 @author: Armand
 @tags: ['endless', 'memory']
 @addedOn: 2024-08-15

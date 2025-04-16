@@ -1,5 +1,6 @@
 /*
 @title: Cheese-Hunt
+@description: Cheese-Hunt is a puzzle game where the player navigates a mouse through levels filled with obstacles and traps to reach a piece of cheese. The game requires strategic thinking as players encounter various challenges, such as decoys and big traps, along the way. It offers a progression of puzzles that test both problem-solving skills and reflexes.
 @author: Sophia E
 @tags: ['puzzle']
 @addedOn: 2024-04-15

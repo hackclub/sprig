@@ -1,6 +1,7 @@
 
 /* 
 @title: Push_The_Box
+@description: "Push_The_Box" is a puzzle game where the player must maneuver a box onto a button to progress through 15 increasingly challenging levels. The game features mechanics such as spikes and togglable walls, which can be activated by pushing the box onto toggle buttons. Players must carefully plan their moves to avoid hazards, as colliding with spikes will restart the level.
 @author: Sandy Burger
 @tags: ['puzzle']
 @addedOn: 2023-12-07
