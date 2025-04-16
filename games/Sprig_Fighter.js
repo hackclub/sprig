@@ -1,6 +1,7 @@
 
 /* 
 @title: Sprig_Fighter
+@description: Sprig_Fighter is a multiplayer game where two players fight until one loses all their health points.
 @author: Akshat Singhania
 @tags: ['multiplayer']
 @addedOn: 2023-12-22

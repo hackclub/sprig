@@ -1,5 +1,6 @@
 /*
 @title: Morph-Madness
+@description: Morph Madness is a puzzle game where players solve challenges by alternating between two forms: a player and a bat. Inspired by Sokoban, the objective is to strategically push blocks onto goals. The player can push blocks but can't move through walls, while the bat can pass through any obstacle but cannot push blocks.
 @author: SimonDMC
 @tags: ['puzzle']
 @addedOn: 2024-02-21

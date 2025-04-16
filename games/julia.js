@@ -3,6 +3,7 @@
 @author: Nathan
 @tags: ['sandbox','simulation']
 @addedOn: 2025-01-08
+@description: An interactive Julia Set explorer where you can visualize and explore different complex number patterns. Use WASD keys to navigate through the fractal patterns and discover the beautiful mathematical structures hidden within the complex plane.
 Instructions:
 Explore different Julia Sets
 

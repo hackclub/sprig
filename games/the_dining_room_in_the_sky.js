@@ -1,5 +1,6 @@
 /*
 @title: the_dining_room_in_the_sky
+@description: The game "The Dining Room in the Sky" is a puzzle game where players catch objects falling from the sky, eating meat, and sorting other items to achieve a high score. The objective is to manage the falling objects efficiently, depositing them correctly to maximize points. Players aim to improve their scores by catching and sorting items quickly and accurately.
 @author: Dylan Tran
 @tags: ['puzzle']
 @addedOn: 2023-02-28

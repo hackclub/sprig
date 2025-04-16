@@ -1,6 +1,7 @@
 
 /* 
 @title: The_Legend_Of_Sprig
+@description: The Legend Of Sprig is a treasure-hunting adventure in which you play as Marin, navigating through a vast labyrinth originally crafted by the treasure hunter Sprig. The labyrinth contains 68 rooms filled with enemies and treasures, demanding strategy and courage as you fight foes, gather keys to unlock doors, and collect pumpkins. With a trusty sword and shield, you must explore the maze to find Sprig's fabled treasure while overcoming various challenges.
 @author: Medieval Apple
 @tags: []
 @addedOn: 2023-10-15

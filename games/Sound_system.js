@@ -1,4 +1,10 @@
-// Sprig Piano Simulator
+/*
+@title: Sprig Piano Simulator
+@author: unknown
+@tags: []
+@description: A piano simulator that lets you play musical notes using keyboard controls. Features a built-in example tune (Twinkle Twinkle Little Star) and allows you to play individual notes. Each key on the virtual piano corresponds to a different musical note.
+@addedOn: 2024-01-01
+*/
 
 const tunes = {
     'C': tune`

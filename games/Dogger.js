@@ -1,5 +1,6 @@
 /*
 @title: Dogger
+@description: Dogger is a classic arcade game where you must help the dog cross the road and river to reach the other side. Avoid cars and falling in the river to stay alive and reach the goal.
 @author: Boyce Dyson
 @tags: []
 @addedOn: 2024-00-00

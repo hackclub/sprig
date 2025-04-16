@@ -1,6 +1,7 @@
 
 /* 
 @title: Antivirus
+@description: "Antivirus" is an action game inspired by "Space Invaders" where you control a computer to battle incoming viruses. Players navigate and shoot in different directions to eliminate viruses approaching from all sides. The game challenges players to maneuver quickly and strategically to defend their digital space.
 @author: Nathan Jereb
 @tags: ['action']
 @addedOn: 2023-05-03

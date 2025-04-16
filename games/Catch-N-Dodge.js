@@ -1,3 +1,11 @@
+/*
+@title: Catch-N-Dodge
+@description: A fast-paced arcade game where you catch fruits like apples, oranges, and bananas for points while dodging dangerous bombs. Move strategically to maximize your score, but be careful - missing fruits or getting hit by bombs will cost you!
+@author: unknown
+@tags: []
+@addedOn: 2024-04-11
+*/
+
 const player = "p"
 const apple = "a"
 const orange = "o"

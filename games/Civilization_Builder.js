@@ -1,6 +1,7 @@
 
 /* 
 @title: Civilization_Builder
+@description: Civilization Builder is a strategic game where players aim to develop the most successful civilization by enhancing the economy and training soldiers to conquer neighboring nations. Players must manage resources carefully, expand territories by building structures like farms and mines, and create a strong military to defend and attack. The game challenges players to balance growth, strategic planning, and resource management to emerge as the greatest empire.
 @author: Ivan S
 @tags: []
 @addedOn: 2023-06-08

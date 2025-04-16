@@ -1,5 +1,6 @@
 /*
 @title: Monkey quest 3: lightless knights
+@description: "Monkey Quest 3: Lightless Knights" is an action-adventure game where you play as a brave monkey. Your objective is to protect your banana from the encroaching lightless knights by stopping them before they reach it. Maneuver around the map to fend off these foes and defend your precious banana.
 @author: Eamonn
 @tags: []
 @addedOn: 2024-08-20

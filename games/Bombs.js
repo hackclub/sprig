@@ -1,5 +1,6 @@
 /*
 @title: Bombs
+@description: "Bombs" is a game where players drop bombs to defeat enemies, navigating levels by moving horizontally while strategically placing and detonating bombs at the right time. As players progress through increasingly challenging levels, they must ensure their bombs land on the red enemies and explode, with the ultimate goal of defeating the final enemy by placing a bomb directly under them. The game involves timing and precision to successfully clear each stage.
 @author: a-potted-plant
 @tags: []
 @addedOn: 2024-09-18

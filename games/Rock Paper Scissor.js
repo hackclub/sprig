@@ -1,5 +1,6 @@
 /*
 @title: Rock Paper Scissor
+@description: Rock Paper Scissors is a digital version of the classic hand game featuring rock, paper, and scissors. Players select their move, and the computer generates a random choice, displaying each selection on the screen. The game then announces the winner based on traditional game rules.
 @author: akshatjaiin
 @tags: []
 @addedOn: 2024-08-05

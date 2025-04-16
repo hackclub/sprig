@@ -1,5 +1,6 @@
 /*
 @title: Box_Maze
+@description: Box_Maze is a puzzle game where players must navigate through a maze by pushing boxes to reach a multicolored goal, progressing to the next level. A timer adds urgency, challenging players to complete each level before time runs out.
 @author: Boden
 @tags: ['puzzle']
 @addedOn: 2022-10-19

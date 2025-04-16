@@ -1,5 +1,6 @@
 /*
 @title: dicee_dare
+@description: This is the game of Random dice rolling where you can carry Sprig as a dice in your pocket and Play Game of  Dares. In this game you have to prepare a bowl of Dares and write numbers on the chits , now you can use you Sprig and roll the dice to give each other the dares and have fun.
 @author: Harsh Kumar
 @tags: []
 @addedOn: 2024-01-15

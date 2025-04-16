@@ -1,5 +1,6 @@
 /*
 @title: untitled taiko game
+@description: "Untitled Taiko Game" is a rhythm music game inspired by titles like "Taiko no Tatsujin" and "osu!taiko." Players must use designated keys to hit notes of corresponding colors as they move across the screen, following the rhythm of the music.
 @author: Joey Lent
 @tags: ['music']
 @addedOn: 2023-01-10

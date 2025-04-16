@@ -1,5 +1,6 @@
 /*
 @title: bloxorz
+@description: Bloxorz, created by itona, is a puzzle game where players must skillfully roll a rectangular block to fit into a 1x1 goal. The challenge lies in maneuvering the 2-block-length piece on a grid without getting stuck and making it land on the goal in the right orientation.
 @author: itona
 @tags: ['puzzle']
 @addedOn: 2023-02-20

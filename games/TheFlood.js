@@ -1,5 +1,6 @@
 /*
 @title: The Flood
+@description: "The Flood" is a strategic puzzle game where players must protect ships from rising water by placing walls. The objective is to strategically block the water's path and ensure the ships are safe. Each action progresses the game, requiring careful planning and placement to win the level.
 @author: TheTruePickle
 @tags: []
 @addedOn: 2024-09-18

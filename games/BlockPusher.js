@@ -1,5 +1,6 @@
 /*
 @title: BlockPusher
+@description: BlockPusher is a puzzle game where the player must navigate a character to push a piece of gold to a designated goal flag. The game features multiple levels, each with its own unique layout of walls and obstacles, challenging the player to strategically maneuver the gold to complete the level. The game opens with a character selection, adding a personal touch to your puzzle-solving journey.
 @author: JubilantMarmot
 @tags: []
 @addedOn: 2024-00-00

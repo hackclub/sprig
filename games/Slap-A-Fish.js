@@ -1,5 +1,6 @@
 /*
 @title: Slap-a-Fish
+@description: "Slap-a-Fish" is a fast-paced game where the player's goal is to slap fish as quickly as possible when they appear on the screen. Your speed in slapping determines the points awarded!
 @author: Ben Park
 @tags: []
 @addedOn: 2024-06-28

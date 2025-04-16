@@ -1,5 +1,6 @@
 /*
 @title: Hope
+@description: "Hope" is an adventure game set in a post-apocalyptic world where almost all life has perished due to extreme heat. Players navigate through an abandoned landscape in a semi-truck, scavenging for resources and making decisions in encounters to survive each day. The game involves managing resources like gas and items while engaging in narrative-driven encounters that test the player's strategy and decision-making skills.
 @author: Tyler P Evans
 @tags: ['adventure']
 @addedOn: 2024-09-15

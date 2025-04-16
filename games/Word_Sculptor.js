@@ -1,5 +1,6 @@
 /* 
 @title: Word Sculptor
+@description: Word Sculptor is a word guessing game that adds a unique twist: incorrect letter guesses can change the positions of visible letters. Players try to guess the hidden word while navigating shifting clues and can even add custom words to the game.
 @author: S1K
 @tags: []
 @addedOn: 2024-09-03

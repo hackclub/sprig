@@ -1,5 +1,6 @@
 /*
 @title: Dodge_The_Rock
+@description: Dodge_The_Rock is a reflex-based game where players must maneuver to avoid incoming rocks, earning points for successfully dodging. The game features increasing difficulty levels to enhance the challenge, moving from easy to extreme as the score increases. The game ends when a rock hits the player.
 @author: dutamot
 @tags: []
 @addedOn: 2023-03-09

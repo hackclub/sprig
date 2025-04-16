@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: pmm-inf
 @tags: []
 @addedOn: 2025-01-03
+@description: A classic two-player Pong game. Player 1 uses 'w' and 's' to move up and down, while Player 2 uses 'i' and 'k'. Press 'a' to start the game. Keep the ball in play and try to score points against your opponent!
 */
 
 const player1 = "1"

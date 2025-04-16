@@ -1,5 +1,6 @@
 /*
 @title: Marble Run
+@description: Marble Run is a puzzle game where players navigate a series of levels, aiming to reach the green flag in each. Players must avoid lava and colorful boxes that send them back to the start.
 @author: @KrishanuIyengar
 @tags: ['puzzle']
 @addedOn: 2024-05-28

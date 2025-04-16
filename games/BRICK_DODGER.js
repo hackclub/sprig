@@ -1,5 +1,6 @@
 /*
 @title: BRICK DODGER
+@description: BRICK DODGER is an endless dodging game where the player must move left or right to avoid falling bricks. The goal is to survive as long as possible while the bricks keep coming down. Created by Logan Fick, the game encourages players to edit and customize their experience.
 @author: Logan Fick
 @tags: ['endless']
 @addedOn: 2022-11-06

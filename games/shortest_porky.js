@@ -1,5 +1,6 @@
 /*
 @title: shortest_porky
+@description: Shortest Porky is a game about helping the "porcupine" reach her way to the exit of a maze! Since she is a little on the shorter side, she cannot see over the water and traps disguised as presents, so it is your job to help her. There are multiple levels (you can think of it as a left to right maze), and once you get the berry from all the levels, you have escaped the maze! Oh also, the game is different from other maze games in that it randomly generates mazes, so no two playthroughs will ever have the same maze! (Assuming good seeded PRNG & you aren't astronomically luckier than luck itself).
 @author: mjh316
 @tags: []
 @addedOn: 2024-07-29

@@ -1,5 +1,6 @@
 /*
 @title: clicker
+@description: Clicker Kingdom is a management clicker game where players aim to grow their population to 100 by gathering resources and upgrading infrastructure. You progress by collecting wood and stone, increasing your village's population, and improving resource collection capabilities. The higher your population, the more efficiently you can gather resources to achieve your ultimate goal.
 @author: MaxMph
 @tags: []
 @addedOn: 2024-08-15

@@ -1,5 +1,6 @@
 /*
 @title: Falling Water
+@description: Falling Water is a simulation game that uses cellular automata to mimic the behavior of water, sand, fire, and smoke. Created as a first JavaScript project by Captainexpo, the game provides a simple yet accurate simulation experience inspired by the falling sand style of games. Players can interact with the simulation by adding water and barriers, observing the dynamic behavior as it follows basic rule sets.
 @author: Captainexpo
 @tags: ['simulation']
 @addedOn: 2022-09-23

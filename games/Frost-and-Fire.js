@@ -5,7 +5,8 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Magic
 @author: Layan Jethwa
 @tags: []
-@addedOn: 2024-00-00
+@addedOn: 2024-01-01
+@description: A platformer game where you navigate through a magical world with frost and fire elements. Collect keys, avoid enemies, and use ladders to reach your goal. Watch out for lava and geysers!
 */
 
 var isdead = false

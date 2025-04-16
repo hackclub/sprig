@@ -1,6 +1,7 @@
 
 /* 
 @title: Defend_the_Keep
+@description: "Defend_the_Keep" is an action-based game where players must use rotation and positioning to block incoming bullets from reaching a keep. The goal is to strategically orient a shield to destroy bullets hitting the same position as the player. Players navigate the game environment while protecting their keep by destroying projectiles using their shield.
 @author: alphaom33
 @tags: ['action']
 @addedOn: 2023-06-04

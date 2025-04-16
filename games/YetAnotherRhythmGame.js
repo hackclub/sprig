@@ -1,5 +1,6 @@
 /*
 @title: fruit catch
+@description: "Fruit Catch" by Sreekar617 is a rhythm-based game where players must catch falling apples by matching their descent with key presses, similar to games like osu! mania and Guitar Hero. As apples align with receptors at the bottom of the screen, players hit corresponding keys to score points, with a randomly generated melody to guide their rhythm.
 @author: Sreekar617
 @tags: []
 @addedOn: 2024-08-15

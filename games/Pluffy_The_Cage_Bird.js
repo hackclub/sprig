@@ -1,5 +1,6 @@
 /*
 @title: Pluffy_The_Cage_Bird
+@description: "Pluffy_The_Cage_Bird" is a timed puzzle game where you guide a bird through various challenges to reach its home, a cage. Inspired by 'Flurffy Game', players must navigate obstacles and solve puzzles to progress through levels. The game tests strategic movement and quick thinking as players race against the clock.
 @author: Nihal_K
 @tags: ['puzzle','timed']
 @addedOn: 2023-12-24

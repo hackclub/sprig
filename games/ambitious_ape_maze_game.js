@@ -1,5 +1,6 @@
 /* 
 @title: The Ambitious Ape Maze Game
+@description: The Ambitious Ape Maze Game is a puzzle game where players help an ape navigate through a forest maze to find his "poop crown" and win. Players must collect keys to unlock areas and push boxes to clear their path while progressing through different levels. The goal is to reach the crown by solving each maze challenge.
 @author: atharv gupta
 @tags: ['puzzle']
 @addedOn: 2024-05-28

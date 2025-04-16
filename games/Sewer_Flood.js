@@ -1,5 +1,6 @@
 /*
 @title: Sewer_Flood
+@description: Sewer Flood is an endless survival game where the goal is to last as long as possible in a flooding sewer by jumping on top of water pipes. The player must avoid rising water by constantly moving and jumping onto falling pipes. Power-ups like wrenches and leap potions can be collected to aid in survival.
 @author: Eduardo
 @tags: ['endless', 'survival', 'platformer']
 @addedOn: 2024-08-22

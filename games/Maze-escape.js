@@ -1,5 +1,6 @@
 /*
 @title: Maze_escape
+@description: "Maze_escape" is a challenging maze navigation game where players must collect coins and reach the exit while avoiding enemies. As players progress through various levels with increasing difficulty, they encounter walls that block their paths and randomly moving enemies that present additional obstacles. The game involves strategy and quick decision-making to successfully navigate each maze layout.
 @author: NikosDev
 @tags: []
 @addedOn: 2024-08-15
