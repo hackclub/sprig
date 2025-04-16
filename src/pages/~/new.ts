@@ -1,6 +1,9 @@
 import type { APIRoute } from 'astro'
 import { getSession, makeGame, getGame } from '../../lib/game-saving/account'
 import { defaultExampleCode } from '../../lib/examples'
+import { getGalleryGames } from '../../lib/game-saving/gallery'
+import fs from 'fs'
+import path from 'path'
 
 const SPRIG_BASE_URL = import.meta.env.SPRIG_BASE_URL || 'http://localhost:3000'
 
@@ -14,18 +17,52 @@ export const get: APIRoute = async ({request, cookies, redirect }) => {
 	if (!session) return redirect('/editor', 302)
 
 	let name: string|undefined;
+	let remixId: string|undefined;
 	try {
 		const urlParams = new URL(request.url).searchParams;
 		if(urlParams.get("name")){
 			name = urlParams.get("name") || undefined;
-			console.log(name)
+			console.log("Game name:", name)
+		}
+		if(urlParams.get("remix")){
+			remixId = urlParams.get("remix") || undefined;
+			console.log("Remixing game:", remixId)
 		}
 
 	} catch (error) {
 		return new Response(typeof error === 'string' ? error : 'Bad request body', { status: 400 })
 	}
 
-	const game = await makeGame(session.user.id, !session.session.full, name, createDefaultWithTitle(name || ""))
+	let code: string;
+	if (remixId) {
+		// Try to find the game in the gallery first
+		const games = getGalleryGames()
+		const foundGame = games.find(g => g.filename === remixId)
+		if (foundGame) {
+			// Read the game code from the gallery
+			const gameContentPath = path.resolve(`./games/${remixId}.js`)
+			try {
+				code = fs.readFileSync(gameContentPath).toString()
+				console.log("Successfully loaded gallery game code for remix")
+			} catch (error) {
+				console.error("Failed to read gallery game code:", error)
+				return new Response('Failed to load game code', { status: 500 })
+			}
+		} else {
+			// Try to find the game in the database
+			const originalGame = await getGame(remixId)
+			if (!originalGame) {
+				console.error("Game not found for remix:", remixId)
+				return new Response('Game not found', { status: 404 })
+			}
+			code = originalGame.code
+			console.log("Successfully loaded database game code for remix")
+		}
+	} else {
+		code = createDefaultWithTitle(name || "")
+	}
+
+	const game = await makeGame(session.user.id, !session.session.full, name, code)
 	return redirect(`/~/${game.id}`, 302)
 }
 
