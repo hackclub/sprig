@@ -1,5 +1,6 @@
 /*
 @title: purge
+@description: "Purge" is a puzzle game inspired by Sokoban, where the objective is to cover all the purple tiles with green by strategically moving boxes. You have to control multiple characters at once, so pay attention to what all of them are doing!
 @author: noviicee
 @tags: ['puzzle']
 @addedOn: 2022-09-08

@@ -1,5 +1,6 @@
 /*
 @title: 3D Demo
+@description: A 3D renderer that can render a teapot, a cylinder, or a cone.
 @author: William Choi-Kim
 @tags: []
 @addedOn: 2024-10-22

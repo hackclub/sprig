@@ -1,5 +1,6 @@
 /*
 @title: Easy Peasy
+@description: "Easy Peasy" is a casual simulation game where the player manages a lemonade stand, aiming to earn 100 money. Players start with minimal resources and progress by buying lemons, squeezing them into juice, filling cups, and selling the lemonade, with opportunities to purchase upgrades like AutoJuicers or LemonTrees. The game offers a light-hearted and engaging experience focused on simple economic management and growth strategies.
 @author: ChasedDraco
 @tags: ['simulation']
 @addedOn: 2024-08-20

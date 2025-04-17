@@ -1,5 +1,6 @@
 /*
 @title: 2048
+@description: 2048 is a retro-themed puzzle game where players combine tiles with the same number to form a new tile with the sum of the two, aiming to create a tile with the value of 2048. The game ends when the player successfully creates this tile or runs out of possible moves. This version is a clone of the classic game.
 @author: linkai101
 @tags: ["puzzle" , "endless"]
 @addedOn: 2022-09-16

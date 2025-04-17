@@ -1,6 +1,7 @@
 
 /* 
 @title: FOOD-CATCH
+@description: FOOD-CATCH is a game where you need to catch all the food falling from the sky. If you fail to catch the food three times, the game is over.
 @author: Jakob
 @tags: []
 @addedOn: 2023-09-02

@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Pizza Game
+@description: Deliver pizzas to hungry people in this endless puzzle game.
 @author: Daniel Davidson
 @tags: ['endless', 'puzzle', 'music']
 @addedOn: 2024-11-04

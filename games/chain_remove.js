@@ -1,6 +1,7 @@
 
 /* 
 @title: chain_remove
+@description: "Chain Remove" is a simple endless game where you eliminate connected squares of the same color on a grid. Removing one square also eliminates all adjacent squares of the same color, and if any square contains a bomb, it triggers the removal of a 3x3 area around it. The game has no points or goals, focusing instead on the satisfaction of clearing the grid.
 @author: imcute
 @tags: ['endless']
 @addedOn: 2023-07-22

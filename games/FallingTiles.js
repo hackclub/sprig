@@ -1,5 +1,6 @@
 /*
 @title: FallingTiles
+@description: "FallingTiles" is a fast-paced action game where players eliminate falling tiles by pressing the correct buttons when the tiles align with a specified line. With a focus on quick reflexes and timing, players must prevent the tiles from piling up and avoid missing too many to continue the game. Accumulate points by successfully stopping tiles on the red dashed line, but note that missing five results in a game over.
 @author: Rishabh R
 @tags: []
 @addedOn: 2024-09-03

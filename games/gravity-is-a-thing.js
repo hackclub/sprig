@@ -1,5 +1,6 @@
 /*
 @title: Gravity is a Thing
+@description: "Gravity is a Thing" is a puzzle platformer game where players navigate through levels by jumping on boxes to reach a trophy. The challenge is to avoid orange lava boxes, which reset the level upon contact, and use strategic jumps to overcome obstacles.
 @author: Will_Rigney
 @tags: ['puzzle']
 @addedOn: 2022-09-30

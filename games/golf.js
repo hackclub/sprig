@@ -1,5 +1,6 @@
 /*
 @title: Pixel Peril
+@description: Pixel Peril is a golf-themed game where the objective is to get the ball into the hole in the fewest strokes possible. Players adjust the ball's angle and power before taking a shot, aiming for precision and efficiency.
 @author: fishdrcrd
 @tags: []
 @addedOn: 2024-07-26

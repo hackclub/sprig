@@ -1,5 +1,6 @@
 /*
 @title: air_hockey
+@description: "Air Hockey" is a retro-themed game that simulates a classic air hockey match, where two players control paddles with the objective of preventing a puck from hitting their respective corners. Players must strategically move their paddles to block the puck and score against their opponent, mimicking the fast-paced dynamics of real air hockey.
 @author: @Soumay Manderna
 @tags: ['retro']
 @addedOn: 2023-04-01

@@ -3,6 +3,7 @@
 @author: TromboneBoi9
 @tags: ['music', 'retro', 'adventure']
 @addedOn: 2025-02-18
+@description: An artistic game inspired by Philip Glass's opera "Einstein on the Beach". Features unique music arrangements and explores themes of politics, philosophy, and autism through analog horror aesthetics.
 
 I have a website!!!
 << https://tilde.town/~/tromboneboi9/ >>
@@ -401,8 +402,7 @@ const texts = [
   "AT",
   "AT ALL.",
   "(cont)",
-  "","","","",
-  "(end)"
+  ","
 ]
 
 addText("WASD", { y: 0, color: color`3` })

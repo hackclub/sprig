@@ -1,6 +1,7 @@
 
 /* 
 @title: Pet_the_Cat
+@description: "Pet the Cat" is a simple, lighthearted game where players interact with a cat by petting it. The game's primary activity involves using specific keys to increase the number of times you pet the cat.
 @author: Nathan Jereb
 @tags: []
 @addedOn: 2023-05-08

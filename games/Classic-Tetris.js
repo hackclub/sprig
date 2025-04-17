@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Tetris
+@description: Tetris is a classic endless puzzle game where players arrange falling tetromino blocks to create complete lines, which vanish to earn points. The game is retro-themed and challenges players to think quickly under time constraints as the blocks descend. It offers an engaging, timeless experience that tests spatial-awareness and strategy skills.
 @author: BonzaiDev, Adrian T.
 @tags: ["retro", "endless", "puzzle", "timed"]
 @addedOn: 2024-07-23

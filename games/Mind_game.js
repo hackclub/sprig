@@ -1,5 +1,6 @@
 /*
 @title: Mind_game
+@description: Mind Game is inspired by the Prisoner's Dilemma and explores concepts from game theory, encouraging players to learn and predict the computer's patterns to outsmart it. As a strategic puzzle game, players decide whether to cooperate or deflect during each turn to maximize their score and progress through increasingly challenging levels. The game challenges the player to engage in a mental battle of wits against the computer, testing their ability to adapt and strategize effectively.
 @author: brunoblaise
 @tags: ["puzzle" , "strategy"]
 @addedOn: 2024-04-05

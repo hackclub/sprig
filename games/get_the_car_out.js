@@ -1,5 +1,6 @@
 /*
 @title: Get The Car Out
+@description: "Get The Car Out" is a puzzle game where the objective is to maneuver other vehicles out of the way to guide your car to the exit of a parking lot. The game features six levels, and players must strategically move cars, which can only travel in specific directions, to create a clear path.
 @author: miqdad1234
 @tags: []
 @addedOn: 2024-08-05

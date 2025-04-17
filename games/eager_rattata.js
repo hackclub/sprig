@@ -1,5 +1,6 @@
 /*
 @title: JumperWho
+@description: JumperWho is a platformer where you play as a smily face lost in an acid factory. Try to reach the green goal in all 5 levels to escape!
 @author: CreativeDragon1
 @tags: []
 @addedOn: 2024-09-03

@@ -1,6 +1,7 @@
 
 /* 
 @title: fire_boom
+@description: Try to avoid the falling fire for as long as you can! If you get stuck, you can shoot the fire with water.
 @author: Samarpan
 @tags: ['action']
 @addedOn: 2023-09-25

@@ -1,5 +1,6 @@
 /*
 @title: Snowman_Escape
+@description: "Snowman_Escape" is a puzzle game where you play as a snowman trying to reach the goal of each level without dying. You must carefully navigate through obstacles, push rocks to cover blue circle buttons, and avoid deadly lasers. The objective is to achieve the goal in each level by strategically moving through the environment.
 @author: Michael Q
 @tags: ['puzzle']
 @addedOn: 2024-01-18

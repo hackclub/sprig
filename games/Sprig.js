@@ -4,6 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Catch the block
 @author: Ethan
 @tags: []
+@description: A challenging game where you control a character to catch blocks while avoiding enemies. Use WASD keys to move your character. Score points by catching blocks, but be careful of the enemies that chase you! The game ends when you reach 40 points or get caught.
 @addedOn: 2025-01-22
 */
 

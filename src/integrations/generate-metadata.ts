@@ -19,6 +19,7 @@ const regexExpr = {
 	author: /@author: (.+)/,
 	tags: /@tags: (.+)/,
 	addedOn: /@addedOn: (.+)/,
+	description: /@description: (.+)/,
 };
 
 /**
@@ -34,11 +35,18 @@ const allowedTags = ["tutorial", "maze", "puzzle", "strategy", "endless", "multi
  * TODO!
  */
 const isMetadataValid = (metadata: any): boolean => {
+	// Check tags
 	for (let tag of metadata.tags) {
 		if (!allowedTags.includes(tag)) {
 			return false;
 		}
 	}
+	
+	// Check description
+	if (!metadata.description || metadata.description.trim() === '') {
+		return false;
+	}
+	
 	return true;
 };
 
@@ -74,9 +82,10 @@ const setup = () => {
 			const author = regexExpr.author.exec(fileData);
 			const tags = regexExpr.tags.exec(fileData);
 			const addedOn = regexExpr.addedOn.exec(fileData);
+			const description = regexExpr.description.exec(fileData);
 
 			// Check if all of the fields are defined
-			if (title && author && tags && addedOn && tags[1]) {
+			if (title && author && tags && addedOn && tags[1] && description) {
 				// Create a meta entry
 				const metaEntry = {
 					filename: gameFile.replace(".js", ""),
@@ -84,6 +93,7 @@ const setup = () => {
 					author: author[1],
 					tags: JSON.parse(tags[1].replaceAll("'", '"')), // Replace all ' with " in order for compatibility issues
 					addedOn: addedOn[1],
+					description: description[1],
 				};
 
 				if (!isMetadataValid(metaEntry)) {

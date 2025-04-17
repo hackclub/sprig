@@ -1,5 +1,6 @@
 /*
 @title: Food Stealer
+@description: "Food Stealer" is a simple JavaScript game where players navigate through levels to find stolen apples while avoiding fast food to maintain a healthy diet. Players must also dispose of tempting cakes to progress, adding a layer of challenge. Achieving a high score depends on collecting apples and resisting unhealthy food temptations.
 @author: Julia Nadolska
 @tags: []
 @addedOn: 2024-08-20

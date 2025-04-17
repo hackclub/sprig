@@ -1,5 +1,6 @@
 /*
 @title: Raycasting Demo
+@description: Raycasting Demo by Henry Bass is a 2D game engine demo that showcases basic raycasting techniques. In this demo, players can move within a grid map and explore the surroundings, with the player's view represented by marked tiles.
 @author: Henry Bass
 @tags: []
 @addedOn: 2022-07-22

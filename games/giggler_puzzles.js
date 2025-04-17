@@ -3,6 +3,8 @@
 @author: Portable-Certified
 @addedOn: 2025-01-03
 @tags: []
+@description: A puzzle game where you help a smiling friend reach the giggler by solving various challenges. Move boxes, identify suspicious walls, and activate pressure plates to unlock paths. Use WASD to move, I to reset level, and K to skip levels (max 5 skips).
+
 Hi! This is a puzzle game. That's about it.
 
 YOUR OBJECTIVE:

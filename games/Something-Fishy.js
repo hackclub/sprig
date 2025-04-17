@@ -1,5 +1,6 @@
 /*
 @title: Something Fishy
+@description: In "Something Fishy", you control a net to catch fish of varying speeds in levels of increasing difficulty.
 @author: Suryaansh Chawla
 @tags: ['sports']
 @addedOn: 2024-09-16

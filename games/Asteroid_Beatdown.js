@@ -1,5 +1,6 @@
 /*
 @title: Asteroid Beatdown
+@description: Asteroid Beatdown is an arcade-style, space-invaders-type game where players control a spaceship to shoot down incoming asteroids. As players progress, the game becomes more challenging with faster asteroids, but players also gain increased bullet capacity. The goal is to achieve the highest score possible while managing limited lives as asteroids become increasingly difficult to destroy.
 @author: aidanq06
 @tags: []
 @addedOn: 2024-09-15

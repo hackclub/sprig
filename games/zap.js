@@ -1,6 +1,7 @@
 
 /* 
 @title: zap
+@description: "Zap" by Samvid Konchada is a multiplayer competition game where two players race to reach a white "goal" box first in various rounds. The game is won by the player who wins three rounds. Players don't move in a straight line but "zap" to the nearest solid object in their direction on the grid.
 @author: Samvid Konchada
 @tags: ['multiplayer']
 @addedOn: 2023-10-21

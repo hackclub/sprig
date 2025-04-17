@@ -1,5 +1,6 @@
 /*...
 @title: L0st
+@description: L0st is a puzzle game where players navigate through mazes to reach an exit, represented by a green and black object, while interacting with NPCs and pushing obstacles. The game features a narrative element involving NPCs that hints at deeper themes, such as escape and corruption. Created by a new game developer, this is their first original project.
 @author: B00
 @tags: ['puzzle']
 @addedOn: 2022-11-07

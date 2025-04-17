@@ -1,5 +1,6 @@
 /*
 @title: the_hungry_mouse
+@description: "The Hungry Mouse" is a strategy game where players navigate a maze, helping a mouse collect different types of cheese while avoiding traps. Progress through multiple levels, each increasing in complexity, by strategically moving the mouse to gather all available cheese. The game is over if the mouse gets trapped.
 @author: KaiEtkin
 @tags: ['strategy']
 @addedOn: 2023-03-01

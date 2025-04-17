@@ -1,5 +1,6 @@
 /*
 @title: Guardian
+@description: "Guardian" is a game where players control an eternal protector of Earth, tasked with defending the planet from falling asteroids. The game ends when three asteroids manage to hit Earth. Players maneuver the "Guardian" using the WASD keys to intercept and destroy asteroids before they can cause harm.
 @author: srijan-raghavula
 @tags: []
 @addedOn: 2024-08-18

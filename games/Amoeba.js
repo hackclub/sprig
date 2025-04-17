@@ -1,5 +1,6 @@
 /*
 @title: Amoeba
+@description: Amoeba is a two-player strategy puzzle game inspired by Gomoku, where players alternate turns to place their marks on an infinite grid. The objective is to align at least five of your marks in a row either horizontally, vertically, or diagonally while preventing your opponent from doing the same. This version was created by LUKÁCS Gergely and offers a unique twist with its infinite playing field.
 @author: LUKÁCS Gergely
 @tags: ['puzzle']
 @addedOn: 2022-11-08
