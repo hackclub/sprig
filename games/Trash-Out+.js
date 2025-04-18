@@ -363,51 +363,6 @@ pbt`, // Level 13: Let me do nothing...
 p..............................................................t` // END
 ];
 
-// REMOVE THIS PART AFTER TESTING --------------- [
-const konamiCode = ["w", "w", "s", "s", "a", "d", "a", "d", "l", "d"]; // Up, Up, Down, Down, Left, Right, Left, Right, B, A
-let konamiIndex = 0; // Current index in the Konami Code
-
-// Function to check the Konami Code
-const checkKonamiCode = (input) => {
-  if (input === konamiCode[konamiIndex]) {
-    konamiIndex++;
-    if (konamiIndex === konamiCode.length) {
-      // Code entered correctly, skip to the next level
-      level = levels.length - 1
-      setMap(levels[level])
-      konamiIndex = 0; // Reset the index
-    }
-  } else {
-    // Reset the index if the input is incorrect
-    konamiIndex = 0;
-  }
-};
-
-// Modify the input handling to include the Konami Code check
-onInput("s", () => {
-  getFirst(player).y += 1;
-  checkKonamiCode("s");
-});
-onInput("w", () => {
-  getFirst(player).y -= 1;
-  checkKonamiCode("w");
-});
-onInput("a", () => {
-  getFirst(player).x -= 1;
-  checkKonamiCode("a");
-});
-onInput("d", () => {
-  getFirst(player).x += 1;
-  checkKonamiCode("d");
-});
-onInput("l", () => {
-  setMap(levels[level])
-  checkKonamiCode("l");
-});
-// REMOVE THIS PART AFTER TESTING ]
-
-
-
 setMap(levels[level])
 
 afterInput(() => {
@@ -429,7 +384,7 @@ setPushables({
 })
 
 // UNCOMMENT AFTER TESTING
-/*onInput("s", () => {
+onInput("s", () => {
   getFirst(player).y += 1
 })
 onInput("w", () => {
@@ -443,7 +398,7 @@ onInput("d", () => {
 })
 onInput("l", () => {
   setMap(levels[level])
-})*/
+})
 
 let obstacleDirection = 1; // 1 for right, -1 for left
 const initialObstacleX = 0; // Starting position of the obstacle
