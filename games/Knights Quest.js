@@ -7,22 +7,22 @@ const floor = "f";
 
 setLegend(
   [player, bitmap`
-....3333....
-...366663...
-..36666663..
-..36666663..
-..36666663..
-..36666663..
-...366663...
-....3333....
-.....33.....
-....3333....
-...366663...
-..36666663..
-..36666663..
-...366663...
-....3333....
-............`],
+2222333322222222
+2223666632222222
+2236666663222222
+2236666663222222
+2236666663222222
+2236666663222222
+2223666632222222
+2222333322222222
+2222233222222222
+2222333322222222
+2223666632222222
+2236666663222222
+2236666663222222
+2223666632222222
+2222333322222222
+2222222222222222`],
 
   [wall, bitmap`
 LLLLLLLLLLLLLLLL
@@ -43,58 +43,58 @@ LLLLLLLLLLLLLLLL
 LLLLLLLLLLLLLLLL`],
 
   [key, bitmap`
-................
-....0000........
-...055550.......
-..05555550......
-..05555550......
-..05555550......
-...055550.......
-....0000........
-................
-................
-................
-................
-................
-................
-................
-................`],
+2222222222222222
+2222000022222222
+2220555502222222
+2205555550222222
+2205555550222222
+2205555550222222
+2220555502222222
+2222000022222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222`],
 
   [door, bitmap`
 3333333333333333
-3............... 
-3.333333333333.. 
-3.3.........3.3. 
-3.3.3333333.3.3. 
-3.3.3.....3.3.3. 
-3.3.3.333.3.3.3. 
-3.3.3.3..3.3.3.3 
-3.3.3.3..3.3.3.3 
-3.3.3.333.3.3.3. 
-3.3.3.....3.3.3. 
-3.3.3333333.3.3. 
-3.3.........3.3. 
-3.333333333333.. 
-3............... 
+3222222222222222
+3233333333333322
+3232222222223232
+3232333333323232
+3232322222323232
+3232323332323232
+3232323223232323
+3232323223232323
+3232323332323232
+3232322222323232
+3232333333323232
+3232222222223232
+3233333333333322
+3222222222222222
 3333333333333333`],
 
   [guard, bitmap`
-................
-..99999999999...
-.9999111199999..
-.9911111111999..
-.9911199911999..
-.9911199911999..
-.9911111111999..
-.9999111199999..
-..99999999999...
-.....99999......
-....9999999.....
-...999999999....
-...999999999....
-....9999999.....
-.....99999......
-................`],
+2222222222222222
+2299999999999222
+2999911119999922
+2991111111199922
+2991119991199922
+2991119991199922
+2991111111199922
+2999911119999922
+2299999999999222
+2222299999222222
+2222999999922222
+2229999999992222
+2229999999992222
+2222999999922222
+2222299999222222
+2222222222222222`],
 
   [floor, bitmap`
 2222222222222222
@@ -117,8 +117,9 @@ LLLLLLLLLLLLLLLL`],
 
 setBackground(floor);
 
-// 30 characters wide!
-setMap(map`
+// 🔁 3 LEVELS from your Python version
+const maps = [
+  map`
 wwwwwwwwwwwwwwwwwwwwwwwwwwwww
 wfffffffffffffffffffffffffffw
 wfffffffffffffffffffffffffffw
@@ -133,85 +134,136 @@ wfffffffffffffffffffffffffffd
 wwwwwwwwwwwwwwwwwwwwwwwwwwwww
 wfffffffffffffffffffffffffffw
 wfffffffffffffffffffffffffffw
-wwwwwwwwwwwwwwwwwwwwwwwwwwwww`);
+wwwwwwwwwwwwwwwwwwwwwwwwwwwww`,
 
-let keysLeft = 2;
+  map`
+wwwwwwwwwwwwwwwwwwwwwwwwwwwww
+wfff.ff.f.w....wgwg.fffwffg.w
+wfff.ff.f.w.f..wfwg.fffwffffw
+wfffff....ff....fwg.fffwffffd
+wfffw.gfkf.....wfwf.wffwffffw
+wfffwwwwwwwwwwww.f.fwf.wffffw
+wffffffffff.f..wk.ffwf.wffffw
+wffffffffff.ff.w.f.fwf.wffffw
+wfffwwwww.fwwfwf.f.fwffwffffw
+wfffw.f....w.fkw.f.fwffwffffw
+wfffw.pff..wg.fwf.f.wffwffffw
+wfffwwwwwwwww.fwk.ffwfffffffw
+wfffffgfffffff.w.fffwfffffffw
+wfffffkffffffffwgfkfwfffffffw
+wwwwwwwwwwwwwwwwwwwwwwwwwwwww`,
+
+  map`
+wwwwwwwwwwwwwwwwwwwwwwwwwwwdw
+wfffffkffffgffffffwfffffffffw
+wfffwwwwwfffffffffwfffgfffffw
+wfffwfffwfffffffffwfffwfffffw
+wfffwfffwfffffgfffwfffwfffffw
+wfffwfffwwwwwwwfffwfffwfffffw
+wfffwfffffffffffffwfffwfffffw
+wfffwwwwwwfwwwwwwwwfffwfffffw
+wffffffffwfffkfffffffffwffffw
+wfffwwwwwwwwwwwwwwwffffwffffw
+wfffwkkkkkkkkkkkkkwffffwffffw
+wfffwpkkkkkkkkkkkkwffffgffffw
+wfffwkkkkkkkkkkkkkwfffffffffw
+wfffffffffffffffffffffffkfffw
+wwwwwwwwwwwwwwwwwwwwwwwwwwwww`
+];
+
+let level = 0;
+let keysLeft = 0;
 let gameOver = false;
 
-// 🕹️ Input
+function loadLevel() {
+  clearText();
+  gameOver = false;
+  keysLeft = 0;
+  setMap(maps[level]);
+
+  getAll(key).forEach(() => keysLeft++);
+}
+
+function getNextFrom(x, y, dir) {
+  if (dir === "up") return { x, y: y - 1 };
+  if (dir === "down") return { x, y: y + 1 };
+  if (dir === "left") return { x: x - 1, y };
+  if (dir === "right") return { x: x + 1, y };
+}
+
+// 🎮 Movement
 onInput("w", () => movePlayer("up"));
 onInput("s", () => movePlayer("down"));
 onInput("a", () => movePlayer("left"));
 onInput("d", () => movePlayer("right"));
+onInput("j", () => loadLevel()); // 🔁 Restart current level
 
-function movePlayer(direction) {
+
+function movePlayer(dir) {
   if (gameOver) return;
 
-  const playerSprite = getFirst(player);
-  const next = getNextFrom(playerSprite.x, playerSprite.y, direction);
-  const tileContents = getTile(next.x, next.y).map(o => o.type);
+  const p = getFirst(player);
+  const next = getNextFrom(p.x, p.y, dir);
+  const contents = getTile(next.x, next.y).map(o => o.type);
 
-  if (tileContents.includes(wall)) return;
+  if (contents.includes(wall)) return;
 
-  if (tileContents.includes(key)) {
+  if (contents.includes(key)) {
     clearTile(next.x, next.y);
     keysLeft--;
   }
 
-  if (tileContents.includes(door)) {
+  if (contents.includes(door)) {
     if (keysLeft === 0) {
-      endGame(true);
+      level++;
+      if (level < maps.length) {
+        loadLevel();
+      } else {
+        endGame(true);
+      }
     }
-    return; // can't open door unless all keys collected
-  }
-
-  if (tileContents.includes(guard)) {
-    endGame(false);
     return;
   }
 
-  playerSprite.x = next.x;
-  playerSprite.y = next.y;
+  if (contents.includes(guard)) return endGame(false);
+
+  p.x = next.x;
+  p.y = next.y;
 }
 
-// 👮‍♂️ Guard AI
+// 🧠 Guard AI
 setInterval(() => {
   if (gameOver) return;
-  const playerSprite = getFirst(player);
+
+  const p = getFirst(player);
 
   getAll(guard).forEach(g => {
-    const dx = playerSprite.x - g.x;
-    const dy = playerSprite.y - g.y;
-
+    const dx = p.x - g.x;
+    const dy = p.y - g.y;
     let dir = Math.abs(dx) > Math.abs(dy)
       ? (dx > 0 ? "right" : "left")
       : (dy > 0 ? "down" : "up");
 
-    const target = getNextFrom(g.x, g.y, dir);
-    const contents = getTile(target.x, target.y).map(o => o.type);
+    const moveTo = getNextFrom(g.x, g.y, dir);
+    const nextTypes = getTile(moveTo.x, moveTo.y).map(o => o.type);
 
-    if (contents.includes(wall) || contents.includes(guard)) return;
-
-    g.x = target.x;
-    g.y = target.y;
-
-    if (g.x === playerSprite.x && g.y === playerSprite.y) {
-      endGame(false);
+    if (!nextTypes.includes(wall) && !nextTypes.includes(guard)) {
+      g.x = moveTo.x;
+      g.y = moveTo.y;
     }
+
+    if (g.x === p.x && g.y === p.y) endGame(false);
   });
-}, 500);
+}, 700);
 
-function getNextFrom(x, y, dir) {
-  if (dir === "up") return { x: x, y: y - 1 };
-  if (dir === "down") return { x: x, y: y + 1 };
-  if (dir === "left") return { x: x - 1, y: y };
-  if (dir === "right") return { x: x + 1, y: y };
-}
-
+// 💀 Game Over
 function endGame(won) {
   gameOver = true;
-  addText(won ? "YOU WON!" : "YOU LOST!", {
+  addText(won ? "YOU BEAT ALL 3 LEVELS!" : "YOU LOST!", {
     y: 7,
-    color: won ? color`9` : color`3`
+    color: won ? color`L` : color`3`
   });
 }
+
+// 🚀 Load first level
+loadLevel();
