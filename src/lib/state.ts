@@ -205,3 +205,13 @@ export const switchTheme = (themeType: ThemeType) => {
 export const isNewSaveStrat = signal<boolean>(false)
 export const screenRef = signal<HTMLCanvasElement | null>(null);
 export const cleanupRef = signal<(() => void) | undefined>(undefined);
+
+export interface ReviewState {
+	isReviewMode: boolean;
+	reviewCode: string | null;
+}
+
+export const reviewState = signal<ReviewState>({
+	isReviewMode: false,
+	reviewCode: null
+});
