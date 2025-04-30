@@ -10,7 +10,10 @@ import { mobileUserAgent } from '../../lib/utils/mobile'
 import { isAccountWhitelistedToUseCollabAndSavingBetaFeatures } from '../../lib/game-saving/account'
 
 const session = await getSession(Astro.cookies)
-if (!session) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
+if (!session) {
+	console.log("No session found, redirecting to login");
+	return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
+}
 
 let persistenceState;
 let isMobile;
@@ -57,27 +60,49 @@ async function handlePersistenceState(isSessionFull : boolean, game : Game, tuto
 }
 
 function checkRoomAccess(game : Game, userEmail : string){
-	if(game.roomParticipants?.filter(participant => participant.userEmail === userEmail)[0]?.isBanned) return Astro.redirect('/404', 302)
-	if(game.password == undefined) return Astro.redirect('/404', 302)
+	if(game.roomParticipants?.filter(participant => participant.userEmail === userEmail)[0]?.isBanned) {
+		console.log("User is banned from this room");
+		return Astro.redirect('/404', 302)
+	}
+	if(!game.unprotected && game.password == undefined) {
+		console.log("Protected game has no password set");
+		return Astro.redirect('/404', 302)
+	}
 	return undefined;
 }
 
+console.log(`Attempting to load game with ID: ${Astro.params.id}`);
 const game = await getGame(Astro.params.id!)
 
-if (!game) return Astro.redirect('/404', 302)
+if (!game) {
+	console.log(`Game not found in database for ID: ${Astro.params.id}`);
+	return Astro.redirect('/404', 302)
+}
 
-let shouldGameUseBetaCollabAndSavingFeatures = 
-await isAccountWhitelistedToUseCollabAndSavingBetaFeatures(session.user.id, session.user.email) || game.isSavedOnBackend
+console.log(`Found game: ${game.id}, name: ${game.name}, unprotected: ${game.unprotected}`);
+
+// Disable beta features for review games (unprotected games)
+let shouldGameUseBetaCollabAndSavingFeatures = false;
+// if (!game.unprotected) {
+// 	const isWhitelisted = await isAccountWhitelistedToUseCollabAndSavingBetaFeatures(session.user.id, session.user.email);
+// 	shouldGameUseBetaCollabAndSavingFeatures = false;//Boolean(isWhitelisted) || Boolean(game.isSavedOnBackend);
+// }
 
 if(shouldGameUseBetaCollabAndSavingFeatures){
+	console.log("Game is using beta collab and saving features");
 	if(!game.isSavedOnBackend){
-		return Astro.redirect(`/~/${(await moveGameToBackendSaving(game)).id}`)
+		console.log("Game is not saved on backend, moving it...");
+		return Astro.redirect('/404', 302)
 	}
 	let checkRoom = false; // Whether or not to check whether the user has access to the room he's trying to enter
-	if(game.ownerId !== session.user.id) checkRoom = true;
+	if(game.ownerId !== session.user.id) {
+		console.log("User is not the owner, checking room access");
+		checkRoom = true;
+	}
 
 	let [tutorial, tutorialIndex] = await handleTutorial(game);
 	if(checkRoom){
+		console.log("Setting up persistence state for collab mode");
 		_persistenceState = {
 			kind: PersistenceStateKind.COLLAB,
 			game: game.id,
@@ -89,8 +114,12 @@ if(shouldGameUseBetaCollabAndSavingFeatures){
 		let roomAccess = checkRoomAccess(game, session.user.email)
 		if(roomAccess != undefined) return roomAccess
 	} else {
+		console.log("Setting up persistence state for single user mode");
 		_persistenceState = await handlePersistenceState(session.session.full, game, tutorial, tutorialIndex)
-		if(!_persistenceState) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
+		if(!_persistenceState) {
+			console.log("Failed to set up persistence state, redirecting to login");
+			return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
+		}
 	}
 
 	roomState = signal<RoomState>({
@@ -99,12 +128,20 @@ if(shouldGameUseBetaCollabAndSavingFeatures){
 		participants: [],
 	})
 } else {
-	if (game.ownerId !== session.user.id) return Astro.redirect('/404', 302)
+	console.log("Using standard game mode");
+	// Allow access to unprotected games regardless of owner
+	if (!game.unprotected && game.ownerId !== session.user.id) {
+		console.log("Protected game access denied - user is not owner");
+		return Astro.redirect('/404', 302)
+	}
 
 	let [tutorial, tutorialIndex] = await handleTutorial(game)
 	
 	_persistenceState = await handlePersistenceState(session.session.full, game, tutorial, tutorialIndex)
-		if(!_persistenceState) return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
+	if(!_persistenceState) {
+		console.log("Failed to set up persistence state");
+		return Astro.redirect(`/login?to=${Astro.request.url}`, 302)
+	}
 }
 
 persistenceState = signal<PersistenceState>(_persistenceState)
