@@ -13,6 +13,7 @@ const wall = "w";
 const pellet = "d";
 const power = "o";
 const ghost = "g";
+const eyes = "y"; // New eyes sprite for eaten ghosts
 const empty = "e";
 const background = "b";
 
@@ -75,10 +76,10 @@ setLegend(
 ................
 ................
 ................
-.......6666.....
-.......6666.....
-.......6666.....
-.......6666.....
+......6666......
+......6666......
+......6666......
+......6666......
 ................
 ................
 ................
@@ -119,6 +120,23 @@ setLegend(
 .02202200220220.
 .00000000000000.
 ................`],
+  [eyes, bitmap`
+................
+................
+................
+..00000..00000..
+..02220..02220..
+..02220..02220..
+..00220..00220..
+..00220..00220..
+..00220..00220..
+..00220..00220..
+..02220..02220..
+..00000..00000..
+................
+................
+................
+................`], // New eyes sprite
   [empty, bitmap`
 ................
 ................
@@ -238,7 +256,6 @@ tune`
 37.500000000000085: B3^37.500000000000085,
 2100: D4^37.499999999999645,
 `
-
 ];
 
 let winTracks = [
@@ -349,13 +366,41 @@ function setRandomMap() {
 }
 
 setRandomMap();
-setSolids([wall, ghost]);
+setSolids([wall, ghost]); // Eyes are not solid
 
 // --- GHOST AI ---
 function moveGhosts() {
   if (gameOver || win) return;
   let p = getFirst(pacman);
   ghosts.forEach(g => {
+    if (g.eaten) {
+      // Handle eaten ghosts (eyes)
+      if (g.respawnTimer > 0) {
+        g.respawnTimer--;
+        // Move randomly
+        let options = [];
+        if (!getTile(g.x + 1, g.y).some(s => s.type === wall)) options.push([g.x + 1, g.y]);
+        if (!getTile(g.x - 1, g.y).some(s => s.type === wall)) options.push([g.x - 1, g.y]);
+        if (!getTile(g.x, g.y + 1).some(s => s.type === wall)) options.push([g.x, g.y + 1]);
+        if (!getTile(g.x, g.y - 1).some(s => s.type === wall)) options.push([g.x, g.y - 1]);
+        if (options.length > 0) {
+          let best = options[Math.floor(Math.random() * options.length)];
+          clearTile(g.x, g.y);
+          g.x = best[0];
+          g.y = best[1];
+          addSprite(g.x, g.y, eyes);
+        }
+        // Respawn as normal ghost
+        if (g.respawnTimer === 0) {
+          g.eaten = false;
+          clearTile(g.x, g.y);
+          g.x = WIDTH - 2; // Respawn near original position
+          g.y = HEIGHT - 2;
+          addSprite(g.x, g.y, ghost);
+        }
+      }
+      return;
+    }
     let dx = p.x - g.x;
     let dy = p.y - g.y;
     let options = [];
@@ -377,10 +422,13 @@ function moveGhosts() {
     let tile = getTile(best[0], best[1]);
     if (tile.some(s => s.type === pacman)) {
       if (powered > 0) {
-        // Eat ghost
-        let idx = ghosts.indexOf(g);
-        ghosts.splice(idx, 1);
+        // Eat ghost, turn to eyes
+        g.eaten = true;
+        g.respawnTimer = 20; // ~7 seconds (20 * 350ms)
         clearTile(g.x, g.y);
+        g.x = best[0];
+        g.y = best[1];
+        addSprite(g.x, g.y, eyes);
         score += 50;
       } else {
         gameOver = true;
@@ -400,31 +448,56 @@ setInterval(moveGhosts, 350);
 function tryMove(dx, dy) {
   if (gameOver || win) return;
   let p = getFirst(pacman);
+  if (!p) {
+    console.log("Pacman sprite not found!");
+    gameOver = true;
+    stopBackgroundMusic();
+    play(deathTracks);
+    return;
+  }
   let newX = p.x + dx;
   let newY = p.y + dy;
   let tile = getTile(newX, newY);
   if (tile.some(s => s.type === wall)) return;
-  if (tile.some(s => s.type === ghost)) {
+
+  // Handle ghost collision
+  let ghostSprite = tile.find(s => s.type === ghost);
+  if (ghostSprite) {
     if (powered > 0) {
-      clearTile(newX, newY);
-      score += 200;
+      let ghost = ghosts.find(g => g.x === newX && g.y === newY);
+      if (ghost) {
+        ghost.eaten = true;
+        ghost.respawnTimer = 20;
+        clearTile(newX, newY); // Clear ghost sprite
+        addSprite(newX, newY, eyes);
+        ghost.x = newX;
+        ghost.y = newY;
+        score += 200;
+        // Move Pacman to new position
+        clearTile(p.x, p.y);
+        addSprite(newX, newY, pacman);
+      }
     } else {
       gameOver = true;
       stopBackgroundMusic();
       play(deathTracks);
       return;
     }
+  } else {
+    // Handle pellet or power pellet
+    if (tile.some(s => s.type === pellet)) {
+      score += 10;
+    }
+    if (tile.some(s => s.type === power)) {
+      powered = 20;
+      score += 50;
+    }
+    // Move Pacman
+    clearTile(p.x, p.y);
+    addSprite(newX, newY, pacman);
   }
-  if (tile.some(s => s.type === pellet)) {
-    score += 10;
-  }
-  if (tile.some(s => s.type === power)) {
-    powered = 20;
-    score += 50;
-  }
-  clearTile(p.x, p.y);
-  addSprite(newX, newY, pacman);
-  // Win condition: count pellets and power pellets left
+
+  // Check win condition
   let pelletsLeft = 0;
   for (let y = 0; y < HEIGHT; y++) {
     for (let x = 0; x < WIDTH; x++) {
