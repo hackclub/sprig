@@ -13,7 +13,10 @@ const wall = "w";
 const pellet = "d";
 const power = "o";
 const ghost = "g";
-const eyes = "y"; // New eyes sprite for eaten ghosts
+const redGhost = "r"; // Red ghost
+const pinkGhost = "k"; // Pink ghost  
+const orangeGhost = "n"; // Orange ghost
+const eyes = "y"; // Eyes
 const empty = "e";
 const background = "b";
 
@@ -109,7 +112,7 @@ setLegend(
 .00222222222200.
 .02222222222220.
 .02200222002220.
-.02200222002220.
+.02202222022220.
 .02200222002220.
 .02222222222220.
 .02222222222220.
@@ -120,6 +123,57 @@ setLegend(
 .02202200220220.
 .00000000000000.
 ................`],
+  [redGhost, bitmap`
+.....000000.....
+..000033330000..
+.00333333333300.
+.03333333333330.
+.03300333003330.
+.03302333023330.
+.03300333003330.
+.03333333333330.
+.03333333333330.
+.03333333333330.
+.03333333333330.
+.03333333333330.
+.03333333333330.
+.03303300330330.
+.00000000000000.
+................`],
+  [pinkGhost, bitmap`
+.....000000.....
+..000088880000..
+.00888888888800.
+.08888888888880.
+.08800888008880.
+.08802888028880.
+.08800888008880.
+.08888888888880.
+.08888888888880.
+.08888888888880.
+.08888888888880.
+.08888888888880.
+.08888888888880.
+.08808800880880.
+.00000000000000.
+................`],
+  [orangeGhost, bitmap`
+.....000000.....
+..000099990000..
+.00999999999900.
+.09999999999990.
+.09900999009990.
+.09902999029990.
+.09900999009990.
+.09999999999990.
+.09999999999990.
+.09999999999990.
+.09999999999990.
+.09999999999990.
+.09999999999990.
+.09909900990990.
+.00000000000000.
+................`],
   [eyes, bitmap`
 ................
 ................
@@ -128,7 +182,7 @@ setLegend(
 ..02220..02220..
 ..02220..02220..
 ..00220..00220..
-..00220..00220..
+..02220..02220..
 ..00220..00220..
 ..00220..00220..
 ..02220..02220..
@@ -136,7 +190,7 @@ setLegend(
 ................
 ................
 ................
-................`], // New eyes sprite
+................`],
   [empty, bitmap`
 ................
 ................
@@ -274,6 +328,62 @@ let backgroundTracks = [
   tune``
 ];
 
+const eatingSoundTrack = [
+  tune`
+  25,
+  12.5: E4^12.5,
+  12.5: G#4^12.5,
+  12.5: C5^12.5,
+  12.5: D#5^12.5,
+  12.5: F#5^12.5,
+  62.5: A#5^12.5,
+  12.5: B5^12.5,
+  12.5: G5^12.5,
+  12.5: E5^12.5,
+  12.5: C#5^12.5,
+  12.5: A4^12.5,
+  87.5: F4^12.5,
+  12.5: E4^12.5,
+  12.5: G#4^12.5,
+  12.5: C5^12.5,
+  12.5: D#5^12.5,
+  12.5: F#5^12.5,
+  62.5: A#5^12.5,
+  12.5: B5^12.5,
+  12.5: G5^12.5,
+  12.5: E5^12.5,
+  12.5: C#5^12.5,
+  12.5: A4^12.5,
+  87.5: F4^12.5,
+  12.5: E4^12.5,
+  12.5: G#4^12.5,
+  12.5: C5^12.5,
+  12.5: D#5^12.5,
+  12.5: F#5^12.5,
+  62.5: A#5^12.5,
+  12.5: B4^12.5,
+  12.5: G4^12.5,
+  12.5: E4^12.5,
+  12.5: C#4^12.5,
+  12.5: A3^12.5,
+  87.5: F3^12.5,
+  12.5: E3^12.5,
+  12.5: G#3^12.5,
+  12.5: C4^12.5,
+  12.5: D#4^12.5,
+  12.5: F#4^12.5,
+  62.5: A#4^12.5,
+  12.5: B3^12.5,
+  12.5: G3^12.5,
+  12.5: E3^12.5,
+  12.5: C#3^12.5,
+  12.5: A2^12.5,
+  2137.5: F2^12.5,
+  `
+];
+let eatingPlayback = null;
+let pacmanIsActivelyEating = false; // Eating sound state
+
 let playbacks = [];
 let backgroundPlayback = null;
 
@@ -282,6 +392,22 @@ function stop() {
   if (backgroundPlayback) {
     backgroundPlayback.forEach(p => p.end());
     backgroundPlayback = null;
+  }
+  // Note: eatingPlayback is managed by stopEatingSoundNow() now
+}
+
+function stopEatingSoundNow() {
+  if (eatingPlayback) {
+    eatingPlayback.end();
+    eatingPlayback = null;
+  }
+  pacmanIsActivelyEating = false;
+}
+
+function startEatingSound() {
+  if (!eatingPlayback) {
+    eatingPlayback = playTune(eatingSoundTrack[0]);
+    eatingPlayback.loop = true;
   }
 }
 
@@ -306,7 +432,6 @@ function stopBackgroundMusic() {
 // Play intro at start
 play(introTracks);
 
-// Start background music after intro
 setTimeout(() => {
   startBackgroundMusic();
 }, 70); 
@@ -320,6 +445,7 @@ let gameOver = false;
 let win = false;
 let ghosts = [];
 let seed = Math.floor(Math.random() * 1000000);
+let pacDirection = "right"; // Track Pacman's direction
 
 // --- RANDOM MAZE GENERATION ---
 function rand(x, y) {
@@ -347,78 +473,280 @@ function generateMaze() {
   // Place Pacman
   let px = 1, py = 1;
   map[py] = map[py].substring(0, px) + pacman + map[py].substring(px + 1);
-  // Place ghosts
-  ghosts = [];
+  
+  // Place ghost markers in the map (actual ghost objects are created in setRandomMap)
+  // Use different ghost sprites based on personality
   for (let i = 0; i < 3; i++) {
     let gx = WIDTH - 2 - i, gy = HEIGHT - 2;
-    map[gy] = map[gy].substring(0, gx) + ghost + map[gy].substring(gx + 1);
-    ghosts.push({ x: gx, y: gy, scatter: false });
+    let ghostType;
+    switch(i) {
+      case 0: ghostType = redGhost; break;
+      case 1: ghostType = pinkGhost; break;
+      case 2: ghostType = orangeGhost; break;
+      default: ghostType = ghost;
+    }
+    map[gy] = map[gy].substring(0, gx) + ghostType + map[gy].substring(gx + 1);
   }
+  
   return map;
 }
 
 function setRandomMap() {
+  stopEatingSoundNow(); // Stop any eating sound from a previous game
+  // Create the maze
   setMap(generateMaze().join("\n"));
   score = 0;
   powered = 0;
   gameOver = false;
   win = false;
+  
+  // Initialize ghosts with specialized behaviors
+  ghosts = [];
+  for (let i = 0; i < 3; i++) {
+    let gx = WIDTH - 2 - i, gy = HEIGHT - 2;
+    let ghostType;
+    switch(i) {
+      case 0: ghostType = redGhost; break;
+      case 1: ghostType = pinkGhost; break;
+      case 2: ghostType = orangeGhost; break;
+      default: ghostType = ghost;
+    }
+    
+    let g = { 
+      x: gx, 
+      y: gy, 
+      scatter: false,
+      eaten: false, // Explicitly set eaten property to false
+      personality: i, // 0=Red (direct), 1=Pink (ambush), 2=Orange (random)
+      moveTimer: i * 3, // Stagger ghost movement timing
+      scatterMode: false,
+      scatterTimer: 0,
+      scatterTarget: { x: 0, y: 0 },
+      type: ghostType  // Store the ghost type
+    };
+    
+    // Set different scatter corners
+    switch(i) {
+      case 0: // Red - top right
+        g.scatterTarget = { x: WIDTH - 2, y: 1 };
+        break;
+      case 1: // Pink - top left
+        g.scatterTarget = { x: 1, y: 1 };
+        break;
+      case 2: // Orange - bottom left
+        g.scatterTarget = { x: 1, y: HEIGHT - 2 };
+        break;
+    }
+    
+    ghosts.push(g);
+  }
 }
 
 setRandomMap();
-setSolids([wall, ghost]); // Eyes are not solid
+// Explicitly exclude eyes from solids
+setSolids([wall, redGhost, pinkGhost, orangeGhost, ghost]);
 
 // --- GHOST AI ---
 function moveGhosts() {
   if (gameOver || win) return;
   let p = getFirst(pacman);
-  ghosts.forEach(g => {
+  
+  ghosts.forEach((g, index) => {
+    // Update ghost movement timer
+    if (g.moveTimer > 0) {
+      g.moveTimer--;
+      return; // Skip this ghost's turn to move
+    }
+    
+    // Reset timer - different speeds based on ghost type and powered state
+    g.moveTimer = powered > 0 ? 1 : (g.personality === 0 ? 0 : g.personality);
+    
+    // Periodically toggle scatter mode
+    if (!powered > 0 && Math.random() < 0.005) {
+      g.scatterMode = !g.scatterMode;
+      g.scatterTimer = g.scatterMode ? 15 : 0; // Scatter mode lasts ~5 seconds
+    }
+    
+    // Decrease scatter timer
+    if (g.scatterTimer > 0) {
+      g.scatterTimer--;
+      if (g.scatterTimer === 0) {
+        g.scatterMode = false;
+      }
+    }
+    
     if (g.eaten) {
       // Handle eaten ghosts (eyes)
       if (g.respawnTimer > 0) {
         g.respawnTimer--;
-        // Move randomly
+        
+        let oldEyeX = g.x;
+        let oldEyeY = g.y;
+        let pacmanSprite = getFirst(pacman); // Get current Pacman sprite reference
+
+        // Eyes move directly toward home for respawn (or randomly if preferred)
         let options = [];
         if (!getTile(g.x + 1, g.y).some(s => s.type === wall)) options.push([g.x + 1, g.y]);
         if (!getTile(g.x - 1, g.y).some(s => s.type === wall)) options.push([g.x - 1, g.y]);
         if (!getTile(g.x, g.y + 1).some(s => s.type === wall)) options.push([g.x, g.y + 1]);
         if (!getTile(g.x, g.y - 1).some(s => s.type === wall)) options.push([g.x, g.y - 1]);
+        
         if (options.length > 0) {
-          let best = options[Math.floor(Math.random() * options.length)];
-          clearTile(g.x, g.y);
-          g.x = best[0];
-          g.y = best[1];
-          addSprite(g.x, g.y, eyes);
+          let homeX = WIDTH - 2; // Example home X
+          let homeY = HEIGHT - 2; // Example home Y
+          let best = options.reduce((a, b) => {
+            let distA = Math.abs(a[0] - homeX) + Math.abs(a[1] - homeY);
+            let distB = Math.abs(b[0] - homeX) + Math.abs(b[1] - homeY);
+            return distA < distB ? a : b;
+          });
+          
+          let newEyeX = best[0];
+          let newEyeY = best[1];
+
+          // Clear the old eye position. This might also clear Pacman if they were on the same tile.
+          clearTile(oldEyeX, oldEyeY);
+          
+          g.x = newEyeX;
+          g.y = newEyeY;
+          addSprite(g.x, g.y, eyes); // Add eye to its new position
+
+          // Ensure Pacman sprite is preserved and correctly placed
+          if (pacmanSprite) {
+            // If Pacman was at the old eye position AND the eye moved away from it,
+            // Pacman needs to be re-added to that old position.
+            if (pacmanSprite.x === oldEyeX && pacmanSprite.y === oldEyeY && 
+                (oldEyeX !== newEyeX || oldEyeY !== newEyeY)) {
+              addSprite(oldEyeX, oldEyeY, pacman);
+            }
+            // If Pacman is at the new eye position (either it was there already, or eye moved to it),
+            // ensure Pacman is drawn (typically on top by being added last or if engine handles layers).
+            if (pacmanSprite.x === newEyeX && pacmanSprite.y === newEyeY) {
+              addSprite(newEyeX, newEyeY, pacman);
+            }
+          }
         }
+        
         // Respawn as normal ghost
         if (g.respawnTimer === 0) {
           g.eaten = false;
-          clearTile(g.x, g.y);
-          g.x = WIDTH - 2; // Respawn near original position
+          g.scatterMode = false;
+          // Clear current eyes sprite before adding ghost sprite
+          clearTile(g.x, g.y); 
+          g.x = WIDTH - 2 - index; 
           g.y = HEIGHT - 2;
-          addSprite(g.x, g.y, ghost);
+          addSprite(g.x, g.y, g.type); 
         }
       }
-      return;
+      return; // I THINK FIXED COLLISION LOGIC
     }
-    let dx = p.x - g.x;
-    let dy = p.y - g.y;
+    
+    // Get available move options
     let options = [];
     if (!getTile(g.x + 1, g.y).some(s => s.type === wall)) options.push([g.x + 1, g.y]);
     if (!getTile(g.x - 1, g.y).some(s => s.type === wall)) options.push([g.x - 1, g.y]);
     if (!getTile(g.x, g.y + 1).some(s => s.type === wall)) options.push([g.x, g.y + 1]);
     if (!getTile(g.x, g.y - 1).some(s => s.type === wall)) options.push([g.x, g.y - 1]);
     if (options.length === 0) return;
-    // Scatter if powered, else chase
-    let best;
-    if (powered > 0) {
-      // Move away from Pacman
-      best = options.reduce((a, b) => (Math.abs(a[0] - p.x) + Math.abs(a[1] - p.y) > Math.abs(b[0] - p.x) + Math.abs(b[1] - p.y) ? a : b));
-    } else {
-      // Move toward Pacman
-      best = options.reduce((a, b) => (Math.abs(a[0] - p.x) + Math.abs(a[1] - p.y) < Math.abs(b[0] - p.x) + Math.abs(b[1] - p.y) ? a : b));
+    
+    // Remove the option that would make the ghost turn back (no 180° turns)
+    if (g.lastX !== undefined && g.lastY !== undefined) {
+      options = options.filter(opt => !(opt[0] === g.lastX && opt[1] === g.lastY));
+      if (options.length === 0) {
+        // If removing the backtracking option leaves no options, allow backtracking
+        if (!getTile(g.lastX, g.lastY).some(s => s.type === wall)) {
+          options.push([g.lastX, g.lastY]);
+        }
+      }
     }
-    // Move ghost
+    
+    let targetX = p.x;
+    let targetY = p.y;
+    
+    // Different ghost behaviors based on index
+    if (powered > 0 || g.scatterMode) {
+      // Scatter behavior - target specific corners
+      targetX = g.scatterTarget.x;
+      targetY = g.scatterTarget.y;
+      
+      // If powered, run away directly from Pacman
+      if (powered > 0) {
+        targetX = WIDTH - p.x;
+        targetY = HEIGHT - p.y;
+      }
+    } else {
+      // Normal chase behavior
+      switch (g.personality) {
+        case 0: // Red ghost - direct chase
+          // Just chase directly
+          targetX = p.x;
+          targetY = p.y;
+          break;
+        case 1: // Pink ghost - ambush ahead of Pacman
+          // Use the tracked direction
+          if (pacDirection === "right") {
+            targetX = p.x + 4;
+            targetY = p.y;
+          } else if (pacDirection === "left") {
+            targetX = p.x - 4;
+            targetY = p.y;
+          } else if (pacDirection === "up") {
+            targetX = p.x;
+            targetY = p.y - 4;
+          } else if (pacDirection === "down") {
+            targetX = p.x;
+            targetY = p.y + 4;
+          }
+          
+          // Keep within bounds
+          targetX = Math.max(1, Math.min(WIDTH-2, targetX));
+          targetY = Math.max(1, Math.min(HEIGHT-2, targetY));
+          break;
+        case 2: // Orange ghost - patrol
+          // Calculate distance to Pacman
+          let dist = Math.abs(g.x - p.x) + Math.abs(g.y - p.y);
+          if (dist < 6) {
+            // When close, move to bottom left corner
+            targetX = 1;
+            targetY = HEIGHT - 2;
+          } else {
+            // When far, chase directly
+            targetX = p.x;
+            targetY = p.y;
+          }
+          break;
+      }
+    }
+    
+    // Choose the best move option
+    let best;
+    if (options.length === 1) {
+      best = options[0]; // Only one choice
+    } else {
+      // Add randomness based on ghost personality
+      let randomChance = 0.1;
+      if (g.personality === 2) randomChance = 0.25; // Orange is more random
+      
+      if (Math.random() < randomChance) {
+        // Occasional random move to prevent getting stuck and add unpredictability
+        best = options[Math.floor(Math.random() * options.length)];
+      } else {
+        // Normal targeting behavior
+        best = options.reduce((a, b) => {
+          let distA = Math.abs(a[0] - targetX) + Math.abs(a[1] - targetY);
+          let distB = Math.abs(b[0] - targetX) + Math.abs(b[1] - targetY);
+          
+          if (powered > 0 || g.scatterMode) {
+            // During scatter or when powered, prioritize moves that are further from target
+            return distA > distB ? a : b;
+          } else {
+            // During chase, prioritize moves that are closer to target
+            return distA < distB ? a : b;
+          }
+        });
+      }
+    }
+    
+    // Move ghost - use ghost's specific type
     let tile = getTile(best[0], best[1]);
     if (tile.some(s => s.type === pacman)) {
       if (powered > 0) {
@@ -430,14 +758,18 @@ function moveGhosts() {
         g.y = best[1];
         addSprite(g.x, g.y, eyes);
         score += 50;
-      } else {
+      } else if (!g.eaten) {
+        // Only regular ghosts kill pacman, eyes don't
         gameOver = true;
       }
     } else {
       clearTile(g.x, g.y);
+      // Save last position before moving
+      g.lastX = g.x;
+      g.lastY = g.y;
       g.x = best[0];
       g.y = best[1];
-      addSprite(g.x, g.y, ghost);
+      addSprite(g.x, g.y, g.type); // Use the ghost's type
     }
   });
 }
@@ -447,67 +779,108 @@ setInterval(moveGhosts, 350);
 // --- INPUT ---
 function tryMove(dx, dy) {
   if (gameOver || win) return;
+  
   let p = getFirst(pacman);
   if (!p) {
     console.log("Pacman sprite not found!");
     gameOver = true;
     stopBackgroundMusic();
+    stopEatingSoundNow(); // Stop eating sound on game over
     play(deathTracks);
     return;
   }
-  let newX = p.x + dx;
-  let newY = p.y + dy;
-  let tile = getTile(newX, newY);
-  if (tile.some(s => s.type === wall)) return;
+  
+  // Update Pacman direction based on movement
+  if (dx === 1) pacDirection = "right";
+  else if (dx === -1) pacDirection = "left";
+  else if (dy === 1) pacDirection = "down";
+  else if (dy === -1) pacDirection = "up";
+  
+  let currentPacmanX = p.x;
+  let currentPacmanY = p.y;
+  let newX = currentPacmanX + dx;
+  let newY = currentPacmanY + dy;
+  
+  let targetTileSprites = getTile(newX, newY);
+  
+  // Check for wall collision
+  if (targetTileSprites.some(s => s.type === wall)) {
+    pacmanIsActivelyEating = false; // Not moving, so not eating
+    return;
+  }
 
-  // Handle ghost collision
-  let ghostSprite = tile.find(s => s.type === ghost);
-  if (ghostSprite) {
+  // Check if the target tile has a pellet or power pellet
+  let hasPellet = targetTileSprites.some(s => s.type === pellet || s.type === power);
+  
+  // Set eating flag if moving to tile with a pellet
+  pacmanIsActivelyEating = hasPellet;
+  
+  // Check for ghost collision (any non-eaten ghost type)
+  let ghostSpriteOnTargetTile = targetTileSprites.find(s => 
+    !s.eaten && (s.type === ghost || s.type === redGhost || s.type === pinkGhost || s.type === orangeGhost)
+  );
+  
+  if (ghostSpriteOnTargetTile) {
     if (powered > 0) {
-      let ghost = ghosts.find(g => g.x === newX && g.y === newY);
-      if (ghost) {
-        ghost.eaten = true;
-        ghost.respawnTimer = 20;
-        clearTile(newX, newY); // Clear ghost sprite
-        addSprite(newX, newY, eyes);
-        ghost.x = newX;
-        ghost.y = newY;
+      let ghostObject = ghosts.find(g => g.x === newX && g.y === newY && !g.eaten);
+      if (ghostObject) {
+        ghostObject.eaten = true;
+        ghostObject.respawnTimer = 20;
+        // Ghost object's location remains newX, newY as eyes
+
         score += 200;
-        // Move Pacman to new position
-        clearTile(p.x, p.y);
-        addSprite(newX, newY, pacman);
+
+        // Sprite management:
+        // 1. Clear Pacman from its original tile if it actually moved.
+        if (currentPacmanX !== newX || currentPacmanY !== newY) {
+          clearTile(currentPacmanX, currentPacmanY);
+        }
+        // 2. Clear the target tile (which contained the original ghost, and Pacman if it didn't move)
+        clearTile(newX, newY); 
+        // 3. Add eyes and Pacman to the target tile.
+        addSprite(newX, newY, eyes);
+        addSprite(newX, newY, pacman); // Pacman is now definitively at newX, newY
       }
     } else {
+      // Pacman not powered and hits a ghost.
       gameOver = true;
       stopBackgroundMusic();
+      stopEatingSoundNow(); // Stop eating sound on game over
       play(deathTracks);
       return;
     }
   } else {
-    // Handle pellet or power pellet
-    if (tile.some(s => s.type === pellet)) {
+    // No ghost collision on the target tile. Pacman moves normally.
+    clearTile(currentPacmanX, currentPacmanY); // Clear Pacman from old position
+    
+    // Handle pellet or power pellet collection on new tile before adding Pacman
+    if (targetTileSprites.some(s => s.type === pellet)) {
       score += 10;
+      // Remove pellet sprite - clear and re-add other things or manage tile carefully
+      // For simplicity, Sprig games often just let Pacman cover it.
+      // To properly remove: get all sprites on newX,newY, filter out pellet, clearTile, re-add others.
     }
-    if (tile.some(s => s.type === power)) {
+    if (targetTileSprites.some(s => s.type === power)) {
       powered = 20;
       score += 50;
+      // Similar removal logic for power pellet if desired.
     }
-    // Move Pacman
-    clearTile(p.x, p.y);
-    addSprite(newX, newY, pacman);
+    
+    addSprite(newX, newY, pacman); // Add Pacman to new position
   }
 
-  // Check win condition
+  // Check win condition (pellets and power pellets)
   let pelletsLeft = 0;
-  for (let y = 0; y < HEIGHT; y++) {
-    for (let x = 0; x < WIDTH; x++) {
-      let t = getTile(x, y);
+  for (let y_coord = 0; y_coord < HEIGHT; y_coord++) {
+    for (let x_coord = 0; x_coord < WIDTH; x_coord++) {
+      let t = getTile(x_coord, y_coord);
       if (t.some(s => s.type === pellet || s.type === power)) pelletsLeft++;
     }
   }
   if (pelletsLeft === 0) {
     win = true;
     stopBackgroundMusic();
+    stopEatingSoundNow(); // Stop eating sound on win
     play(winTracks);
   }
 }
@@ -520,6 +893,7 @@ onInput("k", () => {
   seed = Math.floor(Math.random() * 1000000);
   setRandomMap();
   stop(); // Stop any current sounds
+  stopEatingSoundNow(); // Stop eating sound when restarting
   play(introTracks); // Play intro again
   setTimeout(() => {
     startBackgroundMusic();
@@ -534,6 +908,14 @@ setInterval(() => {
 // --- UI ---
 afterInput(() => {
   clearText();
+  
+  // Handle eating sound based on eating state
+  if (pacmanIsActivelyEating && !gameOver && !win) {
+    startEatingSound();
+  } else {
+    stopEatingSoundNow();
+  }
+  
   // Top left: Game title
   addText("SPRIGMAN", { x: 0, y: 0 });
   // Top right: Score
