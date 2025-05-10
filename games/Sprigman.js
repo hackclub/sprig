@@ -453,42 +453,147 @@ function rand(x, y) {
   let n = Math.sin(x * 928371 + y * 123456 + seed) * 10000;
   return n - Math.floor(n);
 }
-function generateMaze() {
-  let map = [];
+
+function generateFallbackMaze() {
+    let map = [];
+    const ghostStartsFallback = [
+        { x: WIDTH - 2, y: HEIGHT - 2, type: redGhost },
+        { x: WIDTH - 3, y: HEIGHT - 2, type: pinkGhost },
+        { x: WIDTH - 4, y: HEIGHT - 2, type: orangeGhost }
+    ];
+    for (let y = 0; y < HEIGHT; y++) {
+        let row = "";
+        for (let x = 0; x < WIDTH; x++) {
+            if (y === 0 || y === HEIGHT - 1 || x === 0 || x === WIDTH - 1) {
+                row += wall;
+            } else if (x === 1 && y === 1) {
+                row += pacman;
+            } else if (ghostStartsFallback.some(gs => gs.x === x && gs.y === y)) {
+                const ghost = ghostStartsFallback.find(gs => gs.x ===x && gs.y ===y);
+                row += ghost.type;
+            }
+            else {
+                row += pellet; // Very open map
+            }
+        }
+        map.push(row);
+    }
+    return map;
+}
+
+function tryGenerateMazeInternal() {
+  const ghostStarts = [
+    { x: WIDTH - 2, y: HEIGHT - 2, type: redGhost },
+    { x: WIDTH - 3, y: HEIGHT - 2, type: pinkGhost },
+    { x: WIDTH - 4, y: HEIGHT - 2, type: orangeGhost }
+  ];
+  
+  let tempGrid = []; 
   for (let y = 0; y < HEIGHT; y++) {
-    let row = "";
+    let row = [];
     for (let x = 0; x < WIDTH; x++) {
       if (y === 0 || y === HEIGHT - 1 || x === 0 || x === WIDTH - 1) {
-        row += wall;
+        row.push(wall);
+      } else if (x === 1 && y === 1) {
+        row.push('P_START_MARKER'); 
+      } else if (ghostStarts.some(gs => gs.x === x && gs.y === y)) {
+        row.push('G_START_MARKER'); 
       } else if (rand(x, y) < 0.18) {
-        row += wall;
-      } else if (rand(x, y) > 0.98) {
-        row += power;
+        row.push(wall);
       } else {
-        row += pellet;
+        row.push('EMPTY_MARKER');
       }
     }
-    map.push(row);
+    tempGrid.push(row);
   }
-  // Place Pacman
-  let px = 1, py = 1;
-  map[py] = map[py].substring(0, px) + pacman + map[py].substring(px + 1);
-  
-  // Place ghost markers in the map (actual ghost objects are created in setRandomMap)
-  // Use different ghost sprites based on personality
-  for (let i = 0; i < 3; i++) {
-    let gx = WIDTH - 2 - i, gy = HEIGHT - 2;
-    let ghostType;
-    switch(i) {
-      case 0: ghostType = redGhost; break;
-      case 1: ghostType = pinkGhost; break;
-      case 2: ghostType = orangeGhost; break;
-      default: ghostType = ghost;
+
+  let reachableCells = new Set();
+  if (tempGrid[1][1] === wall) return null; 
+
+  let queue = [[1, 1]]; // [y, x] for Pacman's start
+  reachableCells.add(`1,1`);
+
+  const directions = [[0, 1], [0, -1], [1, 0], [-1, 0]]; // dy, dx
+
+  while (queue.length > 0) {
+    const [cy, cx] = queue.shift();
+    
+    for (const [dy, dx] of directions) {
+      const ny = cy + dy;
+      const nx = cx + dx;
+
+      if (ny > 0 && ny < HEIGHT - 1 && nx > 0 && nx < WIDTH - 1) {
+        if (tempGrid[ny][nx] !== wall && !reachableCells.has(`${ny},${nx}`)) {
+          reachableCells.add(`${ny},${nx}`);
+          queue.push([ny, nx]);
+        }
+      }
     }
-    map[gy] = map[gy].substring(0, gx) + ghostType + map[gy].substring(gx + 1);
+  }
+
+  for (const gs of ghostStarts) {
+    if (tempGrid[gs.y][gs.x] === wall || !reachableCells.has(`${gs.y},${gs.x}`)) {
+      return null; 
+    }
   }
   
-  return map;
+  let finalMapRows = [];
+  for (let y = 0; y < HEIGHT; y++) {
+    let rowStr = "";
+    for (let x = 0; x < WIDTH; x++) {
+      const cellKey = `${y},${x}`;
+      const initialCellTypeInGrid = tempGrid[y][x];
+
+      if (initialCellTypeInGrid === wall) {
+        rowStr += wall;
+      } else if (reachableCells.has(cellKey)) {
+        if (x === 1 && y === 1) {
+          rowStr += pacman;
+        } else {
+          let isGhostStartCell = false;
+          for (const gs of ghostStarts) {
+            if (gs.x === x && gs.y === y) {
+              rowStr += gs.type;
+              isGhostStartCell = true;
+              break;
+            }
+          }
+          if (!isGhostStartCell) {
+            if (rand(x, y) > 0.98) {
+              rowStr += power;
+            } else {
+              rowStr += pellet;
+            }
+          }
+        }
+      } else { 
+        rowStr += wall;
+      }
+    }
+    finalMapRows.push(rowStr);
+  }
+  return finalMapRows;
+}
+
+function generateMaze() {
+  let mapData;
+  let attempts = 0;
+  const MAX_ATTEMPTS = 25; // Increased max attempts slightly
+
+  do {
+    if (attempts > 0) {
+      seed = Math.floor(Math.random() * 1000000); 
+    }
+    mapData = tryGenerateMazeInternal();
+    attempts++;
+  } while (!mapData && attempts < MAX_ATTEMPTS);
+
+  if (!mapData) {
+    console.warn("Failed to generate a valid connected maze after " + MAX_ATTEMPTS + " attempts. Using fallback.");
+    return generateFallbackMaze(); 
+  }
+  
+  return mapData;
 }
 
 function setRandomMap() {
