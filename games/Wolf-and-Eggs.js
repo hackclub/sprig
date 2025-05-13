@@ -11,9 +11,25 @@ https://sprig.hackclub.com/gallery/getting_started
 const wolf = "w"
 const eggSprite = "e"
 const stoneSprite = "s"
+const goldenEggSprite = "g"
 
-setLegend(
-  [wolf, bitmap`
+const sfxCatch = tune`
+200: C5^200,
+200: G5~200,
+6000`
+const sfxGolden = tune`
+100: C5^100,
+100: E5~100,
+100: G5^100,
+2900`
+const sfxHit = tune`
+200: C4-200,
+200: C4-200,
+6000`
+
+let fontColor = color`3`
+
+const wolfDarkBitmap = bitmap`
 ......000000......
 .....00000000.....
 ....0000000000....
@@ -29,8 +45,27 @@ setLegend(
 00000000000000....
 ..000000000000....
 ...00000000000....
-.....00000000.....`],
-  [eggSprite, bitmap`
+.....00000000.....`
+
+const wolfLightBitmap = bitmap`
+......111111......
+.....11111111.....
+....1111111111....
+...111111111111...
+...000020200000...
+...000000000000...
+....0000000000....
+..000000000000....
+00000000000000....
+00000000000000....
+.....000000000....
+.....000000000....
+00000000000000....
+..000000000000....
+...00000000000....
+.....00000000.....`
+
+const eggDarkBitmap = bitmap`
 ................
 ................
 ................
@@ -46,8 +81,27 @@ setLegend(
 .......00.......
 ................
 ................
-................`],
-  [stoneSprite, bitmap`
+................`
+
+const eggLightBitmap = bitmap`
+................
+................
+................
+................
+.......99.......
+.....999999.....
+....99....99....
+...99......99...
+...99......99...
+...99......99...
+....99....99....
+.....999999.....
+.......99.......
+................
+................
+................`
+
+const stoneDarkBitmap = bitmap`
 ................
 ................
 ................
@@ -63,13 +117,82 @@ setLegend(
 .....000000.....
 ................
 ................
-................`]
+................`
+
+const stoneLightBitmap = bitmap`
+................
+................
+................
+................
+.....LLLLLL.....
+...LL......LL...
+..L..LL..LL..L..
+..L...LLLL...L..
+..L....LL....L..
+..L...LLLL...L..
+..L..L....L..L..
+...LL......LL...
+.....LLLLLL.....
+................
+................
+................`
+
+const goldenEggDarkBitmap =  bitmap`
+................
+................
+................
+................
+.......33.......
+......3333......
+.....33..33.....
+.....3....3.....
+....33....33....
+....3......3....
+....3......3....
+....33....33....
+.....33..33.....
+......3333......
+................
+................`
+
+const goldenEggLightBitmap = bitmap`
+................
+................
+................
+................
+.......66.......
+......6666......
+.....66..66.....
+.....6....6.....
+....66....66....
+....6......6....
+....6......6....
+....66....66....
+.....66..66.....
+......6666......
+................
+................`
+
+let wolfBitmap = wolfDarkBitmap
+let eggBitmap = eggDarkBitmap
+let goldenEggBitmap = goldenEggDarkBitmap
+let stoneBitmap = stoneDarkBitmap
+
+setLegend(
+  [wolf, wolfBitmap],
+  [eggSprite, eggBitmap],
+  [stoneSprite, stoneBitmap],
+  [goldenEggSprite, goldenEggBitmap]
 )
 
 setSolids([])
 
 let score = 0
-let gameOver = false
+let highScore = 0
+let level = 1
+let speed = 800
+let gameInterval = null
+let isGameActive = false
 
 const eggPaths = [
   { x: 1, spawnY: 0, catchY: 6 },
@@ -77,7 +200,7 @@ const eggPaths = [
 ]
 
 let wolfPos = 0
-let fallingItems = [] // now contains both eggs and stones
+let fallingItems = []
 
 function placeWolf() {
   getAll(wolf).forEach(w => w.remove())
@@ -95,19 +218,51 @@ setMap(map`
 ........`)
 placeWolf()
 
-onInput("a", () => { if (!gameOver) { wolfPos = 0; placeWolf() } })
-onInput("d", () => { if (!gameOver) { wolfPos = 1; placeWolf() } })
+onInput("a", () => { if (isGameActive) {wolfPos = 0; placeWolf() }})
+onInput("d", () => { if (isGameActive) {wolfPos = 1; placeWolf() }})
+onInput("s", () => { if (!isGameActive) { resetGame() }})
+onInput("w", () => { applyTheme() })
+
+let isDarkMode = true
+
+function applyTheme() {
+  isDarkMode = !isDarkMode
+  if (isDarkMode){
+    fontColor = color`3`
+    wolfBitmap = wolfDarkBitmap
+    eggBitmap = eggDarkBitmap
+    stoneBitmap = stoneDarkBitmap
+    goldenEggBitmap = goldenEggDarkBitmap
+  }else{
+    fontColor  =color`7`
+    wolfBitmap = wolfLightBitmap
+    eggBitmap = eggLightBitmap    
+    stoneBitmap = stoneLightBitmap
+    goldenEggBitmap = goldenEggLightBitmap
+  }
+
+  setLegend(
+    [wolf, wolfBitmap],
+    [eggSprite, eggBitmap],
+    [stoneSprite, stoneBitmap],
+    [goldenEggSprite, goldenEggBitmap]
+  )  
+}
+
+function resetGame() {
+  placeWolf()
+  updateText() 
+  startGameLoop()
+}
 
 function spawnItem() {
   const i = Math.floor(Math.random() * 2)
-  const isEgg = Math.random() < 0.7 // 70% chance for egg, 30% for stone
   const { x, spawnY } = eggPaths[i]
-  fallingItems.push({
-    type: isEgg ? "egg" : "stone",
-    path: i,
-    x: x,
-    y: spawnY
-  })
+  const r = Math.random()
+  let type = eggSprite
+  if (r < 0.15) type = stoneSprite
+  else if (r < 0.3) type = goldenEggSprite
+  fallingItems.push({ path: i, x, y: spawnY, type })
 }
 
 function updateItems() {
@@ -120,52 +275,84 @@ function updateItems() {
 
     if (item.y >= end.catchY) {
       if (item.x === wolfSpot.x && item.y === wolfSpot.catchY) {
-        if (item.type === "egg") {
-          score++
-        } else if (item.type === "stone") {
-          endGame("You caught a stone!\nGAME OVER\nScore:" + score)
+        if (item.type === eggSprite) {
+          playTune(sfxCatch)
+          score += 1
+        } else if (item.type === goldenEggSprite) {
+          playTune(sfxGolden)
+          score += 2
+        } else if (item.type === stoneSprite) {
+          playTune(sfxHit)
+          endGame(`You caught a stone!\nGAME OVER\nScore: ${score} Lv: ${level}`)
           return
         }
       } else {
-        if (item.type === "egg") {
+        if (item.type === eggSprite) {
           score = 0
         }
       }
 
       clearText()
-      addText(`Score: ${score}`, { x: 1, y: 0, color: color`3` })
+      updateText()
       fallingItems.splice(i, 1)
+      updateLevel()
     }
+  }
+}
+
+function updateLevel(){
+  if (score > 0 && score % 10 === 0){
+    level++
+    speed = Math.max(200, speed - 50)
+    startGameLoop()
   }
 }
 
 function drawItems() {
   getAll(eggSprite).forEach(e => e.remove())
-  getAll(stoneSprite).forEach(s => s.remove())
+  getAll(stoneSprite).forEach(e => e.remove())
+  getAll(goldenEggSprite).forEach(e => e.remove())
 
-  fallingItems.forEach(item => {
-    const sprite = item.type === "egg" ? eggSprite : stoneSprite
-    addSprite(item.x, item.y, sprite)
-  })
+  fallingItems.forEach(f => addSprite(f.x, f.y, f.type))
 }
 
 function endGame(msg) {
-  gameOver = true
+  clearInterval(gameInterval)
+  gameInterval = null
   clearText()
-  addText(msg, { x: 1, y: 3, color: color`3` })
+  addText(msg, { x: 1, y: 3, color: fontColor })
+
+  score = 0
+  level = 1
+  speed = 600
+  fallingItems = []
+  drawItems()
+  isGameActive = false
 }
 
-setInterval(() => {
-  if (gameOver) return
+function updateText() {
+  clearText()
+  addText(`Score: ${score} Lv: ${level}`, {
+    x: 1,
+    y: 0,
+    color: fontColor
+  })
+}
 
-  if (Math.random() < 0.7) spawnItem()
-  updateItems()
-  drawItems()
-}, 600)
+function startGameLoop() {
+  if (gameInterval) clearInterval(gameInterval)
+
+  isGameActive = true
+  updateText()
+  gameInterval = setInterval(() => {
+    if (Math.random() < 0.7) spawnItem()
+    updateItems()
+    drawItems()
+  }, speed)
+}
+
+startGameLoop()
 
 afterInput(() => {
-  if (!gameOver) {
-    clearText()
-    addText(`Score: ${score}`, { x: 1, y: 0, color: color`3` })
-  }
+    //updateText()
 })
