@@ -26,7 +26,7 @@ jobs:
         run: cd ~/sprig/firmware/spade && python3 gardenshed.py build
       
       - name: 'Upload artifact'
-        uses: 'actions/upload-artifact@v3'
+        uses: 'actions/upload-artifact@v4'
         with:
           name: 'firmware.uf2'
           path: '~/sprig/firmware/spade/firmware.uf2'

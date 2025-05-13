@@ -7,6 +7,7 @@ from functools import cmp_to_key
 import argparse
 import re
 import random
+import sys
 
 
 def load_files_from_dir(dir, suffix):
@@ -136,17 +137,18 @@ def check_all_games():
         exit(1)
 
 
+def main():
+    parser = argparse.ArgumentParser(description='Compare an input javascript file w/ the contents of a directory, and returns similarity')
+    parser.add_argument('doc_dir', type=str, help='a path to a directory of documents')
+    parser.add_argument('threshold', type=float, help='similarity threshold (above which duplicate warnings will be returned)')
+    parser.add_argument('input_doc', type=str, help='a path to an input document')
+    args = parser.parse_args()
+
+    all_gallery_items = load_files_from_dir(args.doc_dir, ".js")
+    num_bad_docs = find_matching_docs(args.input_doc, all_gallery_items, args.threshold, True)
+    return 0 if num_bad_docs == 0 else 1
+
+
 if __name__ == '__main__':
-        # run_tests()
-        # check_all_games()
-
-        parser = argparse.ArgumentParser(description='Compare an input javascript file w/ the contents of a directory, and returns similarity scores')
-        parser.add_argument('doc_dir', type=str, help='a path to a directory of documents')
-        parser.add_argument('threshold', type=float, help='similarity threshold (above which duplicate warnings will be returned)')
-        parser.add_argument('input_doc', type=str, help='a path to an input document')
-        args = parser.parse_args()
-
-        all_gallery_items = load_files_from_dir(args.doc_dir, ".js")
-
-        num_bad_docs = find_matching_docs(args.input_doc, all_gallery_items, args.threshold, True)
-        exit(0 if num_bad_docs == 0 else 1) 
+    result = main()
+    sys.exit(result) 
