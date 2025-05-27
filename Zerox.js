@@ -13,19 +13,16 @@ const wall = "w";
 const sea = "s";
 const object = "b";
 const goal = "g";
-const enemy = "e";
-const teleporter = "t";
-const key = "k";
-const lockedGoal = "l";
+
 const stepLimits = [100,13,27,22,15,14];
 const totalStepLimit =269;
 let totalSteps = 0;
 let moveCount = 0;
 let score = 0;
-let completedLevels = [false, false, false, false, false, false]; // One for each level
 let isGameOver = false;
-let hasKey = false;
 let menuShown = false;
+
+let completedLevels = [false, false, false, false, false, false]; 
 
 setLegend(
   [player, bitmap`
@@ -113,78 +110,10 @@ setLegend(
 4666666664666646
 4444444444444446
 4444444444444444`],
-  [enemy, bitmap`
-..LLLLLL........
-..L.LL.L........
-..LLLLLL........
-..L....L........
-..L....L........
-..LLLLLL........
-....L...........
-..LLLLL.........
-....L...........
-....L...........
-...LLLL.........
-................
-................
-................
-................
-................`],
-  [teleporter, bitmap`
-..888888888888..
-.88888888888888.
-8888888888888888
-8888888..8888888
-88888....8888888
-888........88888
-88..........8888
-88..........8888
-88..........8888
-888........88888
-88888....8888888
-8888888..8888888
-8888888888888888
-.88888888888888.
-..888888888888..
-................`],
-  [key, bitmap`
-................
-................
-................
-.......33.......
-......3223......
-.....322223.....
-....32222223....
-....32222223....
-.....322223.....
-......3223......
-.......33.......
-................
-................
-................
-................
-................`],
-  [lockedGoal, bitmap`
-................
-................
-....444444......
-....4....4......
-....4.33.4......
-....4....4......
-....444444......
-....433334......
-....433334......
-....433334......
-....433334......
-....444444......
-................
-................
-................
-................`]
 
 );
 
-setSolids([player, wall, object, enemy]);
+setSolids([player, wall, object]);
 
 const levels = [
    map`
@@ -230,7 +159,7 @@ setPushables({
   [player]: [object]
 });
 
-// Music & Sounds
+// Music!
 const moveSound = tune`
 100: C5^100,
 100: D5^100,
@@ -249,7 +178,7 @@ const seaSound = tune`
 2900`;
 
 
-// INTRO
+// Intro to the Game
 addText(" SPRIG QUEST ", { y: 3, color: color`3` });
 addText("Move: W A S D", { y: 6, color: color`1` });
 addText("Reset: J", { y: 8, color: color`9` });
@@ -259,7 +188,7 @@ onInput("i", () => startGame());
 onInput("j", () => {
   level = 0;
   score = 0;
-  hasKey = false;
+
   moveCount = 0;
   setMap(levels[level]);
   clearText();
@@ -267,13 +196,13 @@ onInput("j", () => {
 
 function startGame() {
   if (!menuShown) {
-    level = 1;  // skip menu
+    level = 1; 
     menuShown = true;
   }
   moveCount = 0;
   totalSteps = 0;
   score = 0;
-  hasKey = false;
+
   isGameOver = false;
   clearText();
   setMap(levels[level]);
@@ -307,7 +236,7 @@ onInput("j", () => {
 onInput("k", () => {
   if (isGameOver) {
     moveCount = 0;
-    setMap(levels[level]); // Replay current level
+    setMap(levels[level]); 
     clearText();
     isGameOver = false;
   }
@@ -316,9 +245,8 @@ onInput("k", () => {
 
 afterInput(() => {
   clearText();
-addText(`Moves: ${moveCount}/${stepLimits[level]}`, { y: 14, color: color`5` });
-addText(`Score: ${score}`, { y: 15, color: color`4` });
-
+  addText(`Moves: ${moveCount}/${stepLimits[level]}`, { y: 14, color: color`5` });
+  addText(`Score: ${score}`, { y: 15, color: color`4` });
 
   let p = getFirst(player);
   let currentTile = getTile(p.x, p.y);
@@ -328,18 +256,17 @@ addText(`Score: ${score}`, { y: 15, color: color`4` });
     playTune(seaSound);
   }
 
-    // Lose if exceeded step limit for this level
+  // Lose if exceeded step limit for this level
   if (moveCount > stepLimits[level]) {
-   playTune(loseSound);
-clearText();
-addText("LEVEL FAILED", { y: 5, color: color`3` });
-addText("Too many steps!", { y: 7, color: color`3` });
-addText(`Used: ${moveCount}/${stepLimits[level]}`, { y: 8, color: color`1` });
-addText("J: Restart Game", { y: 10, color: color`D` });
-addText("K: Retry Level", { y: 11, color: color`3` });
-isGameOver = true;
-return;
-
+    playTune(loseSound);
+    clearText();
+    addText("LEVEL FAILED", { y: 5, color: color`3` });
+    addText("Too many steps!", { y: 7, color: color`3` });
+    addText(`Used: ${moveCount}/${stepLimits[level]}`, { y: 8, color: color`1` });
+    addText("J: Restart Game", { y: 10, color: color`D` });
+    addText("K: Retry Level", { y: 11, color: color`3` });
+    isGameOver = true;
+    return;
   }
 
   // Lose if exceeded total step limit
@@ -352,23 +279,16 @@ return;
     return;
   }
 
-  // Teleporters
-  if (currentTile.some(t => t.type === teleporter)) {
-    const other = tilesWith(teleporter).find(t => t[0].x !== p.x || t[0].y !== p.y);
-    if (other) {
-      p.x = other[0].x;
-      p.y = other[0].y;
-    }
-  }
-
   const allGoals = tilesWith(goal);
   const goalsCovered = tilesWith(object, goal);
 
   if (goalsCovered.length === allGoals.length) {
+    if (!completedLevels[level]) {
+      score += 10;
+      completedLevels[level] = true;
+    }
     if (level < levels.length - 1) {
       level++;
-      score += 10;
-      hasKey = false;
       moveCount = 0;
       setMap(levels[level]);
     } else {
