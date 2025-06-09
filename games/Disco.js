@@ -1,5 +1,6 @@
 /*
 @title: disco
+@description: "Disco" is a rhythm-based game where players assume the role of a DJ, attempting to hit corresponding keys as arrows move down the screen towards a DJ controller. Players need to quickly match blue arrows with WASD keys and red arrows with IJKL keys, while the pace intensifies over time. Achieving the highest score involves precise timing and avoiding incorrect or missed inputs.
 @author: rakshit rangaprasad
 @tags: []
 @addedOn: 2023-03-05

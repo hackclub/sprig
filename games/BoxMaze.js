@@ -1,6 +1,7 @@
 
 /* 
 @title: BoxMaze
+@description: BoxMaze is a puzzle-based maze game where the objective is to push boxes onto activators, which then open up walls, allowing players to reach a teleporter. As players progress through levels with multiple boxes and activators, they must carefully plan their moves. This engaging game challenges players' strategic thinking and problem-solving skills.
 @author: Kalo
 @tags: ["puzzle" , "maze"]
 @addedOn: 2023-11-13

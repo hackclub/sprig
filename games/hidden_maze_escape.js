@@ -1,6 +1,7 @@
 
 /* 
 @title: hidden_maze_escape
+@description: This game is the final game in my hidden maze trilogy, this game uses the same starting maps as the original, but you can see the walls, but if you complete those five only, you'll get the first ending. For the second ending, you have to find the secret in each map and complete each of their puzzles, then you get the second ending.
 @author: Rylan Berry
 @tags: ['puzzle']
 @addedOn: 2023-05-23

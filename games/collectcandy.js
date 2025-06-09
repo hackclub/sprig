@@ -1,6 +1,7 @@
 
 /* 
 @title: collectcandy
+@description: "CollectCandy" is an arcade-style game where the player collects candies while avoiding ghosts on a dynamic map that changes every time 6 candies are collected. The player navigates through each level, aiming to reach score thresholds and progress to new challenges. With each successful collection, the obstacle-filled map becomes more challenging.
 @author: James C
 @tags: []
 @addedOn: 2023-11-04

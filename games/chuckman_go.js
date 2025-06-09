@@ -1,5 +1,6 @@
 /*
 @title: chuckman_go
+@description: "Chuckman Go" is a strategy game where players navigate a grid-based path to reach the goal while avoiding enemies. Players must carefully plan their moves to dodge various enemy types and reach the finishing position safely.
 @author: faisalsayed10
 @tags: ['strategy']
 @addedOn: 2022-11-17

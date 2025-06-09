@@ -1,5 +1,6 @@
 /*
 @title: Treasure_Hunt
+@description: "Treasure Hunt" is a strategy game where players navigate through various levels to collect treasures while avoiding obstacles and strategically moving boxes.
 @author: Manikandan_M
 @tags: ['strategy']
 @addedOn: 2022-09-28

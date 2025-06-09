@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: Adam Xu
 @tags: []
 @addedOn: 2025-01-03
+@description: A simple platformer game where you navigate through levels by jumping across platforms. Use arrow keys to move left and right, and space to jump. Reach the glowing end point to complete each level.
 */
 
 const player = "p"

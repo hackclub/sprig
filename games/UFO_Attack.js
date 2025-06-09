@@ -1,5 +1,6 @@
 /*
 @title: UFO Attack
+@description: UFO Attack is a strategy game where you play as a cow trying to eat hay while avoiding being abducted by aliens. Navigate through levels, strategically moving to consume your hay without falling prey to UFOs lurking around. The UFO moves the same way you do, so you need to strategically move it out of your way on the way to your hay!
 @author: Troy
 @tags: ['strategy']
 @addedOn: 2022-11-13

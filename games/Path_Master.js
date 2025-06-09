@@ -1,5 +1,6 @@
 /*
 @title: Path Master
+@description: Path Master is a challenging puzzle game inspired by Sokoban, where players navigate through levels featuring sliding enemies and movable objects. The goal is to strategically move boxes to designated goals while avoiding obstacles and enemies that move back and forth. Engage with intricate puzzles that require careful planning and quick thinking to succeed.
 @author: Mir Muhammad Abidul Haq (Ahnaf)
 @tags: ['puzzle']
 @addedOn: 2024-07-08

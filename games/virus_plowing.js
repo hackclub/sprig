@@ -1,5 +1,6 @@
 /*
 @title: virus_plowing
+@description: Virus Plowing is an endless game where you aim to plow away infected spots on the board using a shield. You control a player who pushes a shield (blue) into virus-infected tiles (green) to clear them. Avoid direct contact with the viruses to survive and increase your score.
 @author: Danush Ramanan
 @tags: ['endless']
 @addedOn: 2022-11-11

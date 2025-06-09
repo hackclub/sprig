@@ -1,5 +1,6 @@
 /*
 @title: BrainTeaserMaze
+@description: BrainTeaserMaze is a puzzle game where the objective is to navigate a maze and reach the green square to advance to the next level. The game challenges players to solve intricate mazes, enhancing their problem-solving skills.
 @author: Arhan
 @tags: ['puzzle']
 @addedOn: 2022-12-19

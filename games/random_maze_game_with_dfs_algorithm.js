@@ -1,5 +1,6 @@
 /*
 @title: random_maze_game_with_dfs_algorithm
+@description: This game is a maze exploration game created to demonstrate an understanding of graph theory, specifically using a randomized depth-first search (DFS) algorithm to generate mazes. The player, represented by a red square, must navigate through the maze to reach the target, a green square. The game features endless procedural generation of mazes, offering a new challenge each time a maze is created.
 @author: Hanz Po
 @tags: ['endless']
 @addedOn: 2023-12-29

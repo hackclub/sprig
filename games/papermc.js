@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: nulladmin1
 @tags: []
 @addedOn: 2024-12-24
+@description: A 2D Minecraft-inspired game where you can interact with various blocks including grass, wood, planks, leaves, cobblestone, TNT, and diamonds. Navigate the world while affected by gravity and explore different block interactions.
 */
 
 // The player sprite

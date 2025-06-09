@@ -1,5 +1,6 @@
 /*
 @title: The Floor is Lava
+@description: A fast-paced survival game where you must navigate through a room while avoiding the spreading lava. Jump between furniture, collect snacks, and manage your time wisely as you try to reach the goal. Watch out for debris and use time power-ups strategically!
 @author: Knaifu0030
 @tags: []
 @addedOn: 2024-12-18

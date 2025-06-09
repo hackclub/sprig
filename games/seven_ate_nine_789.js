@@ -1,5 +1,6 @@
 /*
 @title: Seven Ate Nine (789)
+@description: Seven Ate Nine (789) is a fast-paced, 2-player game where one player controls the number 7, aiming to catch and "eat" the number 9. If the number 9 crosses a certain line, the number 8 enters the game and chases the number 7, with increasing speed, to rescue 9. The game results in a win for player 7 if they catch player 9, while player 9 wins if the 8 catches player 7.
 @author: Arjun V
 @tags: ['multiplayer']
 @addedOn: 2022-09-12

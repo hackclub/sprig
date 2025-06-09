@@ -1,5 +1,6 @@
 /*
 @title: Target Practice
+@description: "Target Practice" is a 3rd person shooter game where the player controls a character equipped with a gun and aims to shoot a randomly appearing target.
 @author: Ankit Kantheti
 @tags: []
 @addedOn: 2024-09-03

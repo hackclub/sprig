@@ -7,6 +7,7 @@ interface MainNavbarProps {
 	session: SessionInfo | null;
 	transparent?: boolean;
 	goldLogo?: boolean;
+	children?: any;
 }
 
 export default function MainNavbar(props: MainNavbarProps) {
@@ -57,9 +58,11 @@ export default function MainNavbar(props: MainNavbarProps) {
 							</a>
 						</li>
 						<li>
-							<a href="/~/new-game">
-								<Button icon={IoAdd}>New Game</Button>
-							</a>
+							{props.children || (
+								<a href="/~/new-game">
+									<Button icon={IoAdd}>New Game</Button>
+								</a>
+							)}
 						</li>
 					</>
 				) : (

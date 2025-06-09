@@ -1,5 +1,6 @@
 /*
 @title: Sokoban+
+@description: Sokoban+ is a puzzle game featuring 25 levels, where players must strategically push different types of boxes to their respective goals. The game includes three types of boxes and goals, requiring unique strategies to match each colored box with its corresponding target.
 @author: Leonard (Omay)
 @tags: ['puzzle']
 @addedOn: 2022-09-06

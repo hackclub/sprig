@@ -1,5 +1,6 @@
 /*
 @title: Maze
+@description: "Maze" is a maze navigation game where the objective is to escape while collecting coins. Players navigate through various levels and upon completion, have the opportunity to use collected coins to purchase new backgrounds for the game.
 @author: Darshan Choudhary
 @tags: []
 @addedOn: 2024-00-00

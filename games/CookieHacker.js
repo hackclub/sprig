@@ -1,5 +1,6 @@
 /*
 @title: Cookie Hacker
+@description: "Cookie Hacker" is a game where players code cookies and buy upgrades such as a computer factory or social media app to generate more cookies and work towards reaching a goal of $1 billion in value. The game involves strategic decision-making to purchase and manage upgrades that accelerate cookie production and increase monetary value.
 @author: felixexists
 @tags: []
 @addedOn: 2024-09-03

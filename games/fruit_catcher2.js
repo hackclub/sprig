@@ -1,5 +1,6 @@
 /*
 @title: Fruit Catcher Deluxe
+@description: Try to catch as many fruits as you can before time is up!
 @author: Prathyush Yeturi
 @tags: []
 @addedOn: 2022-06-4

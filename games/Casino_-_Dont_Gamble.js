@@ -3,6 +3,7 @@
 @author: FrankZ
 @tags: []
 @addedOn: 2025-01-28
+@description: A casino game collection featuring Blackjack, Roulette, Slots, and Bingo. Use WASD for cursor movement, J to select/hit/clear, I to repeat previous bet, L for betting confirm/slots spin, and K to return home. Start with $1000 and try your luck, but remember - don't get addicted!
 */
 
 /*

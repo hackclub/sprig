@@ -1,5 +1,6 @@
 /*
 @title: Wordescaper
+@description: "Wordescaper" is a word-guessing game where players aim to discover all possible words that can be formed using a set of seven letters. With up to 9 levels, each level challenges players to find 8 distinct words by selecting and confirming letters. The game avoids plural and similar words to create unique and engaging puzzles.
 @author: Frank Z
 @tags: ['utility']
 @addedOn: 2024-09-16

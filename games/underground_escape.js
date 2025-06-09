@@ -1,6 +1,7 @@
 
 /* 
 @title: underground_escape
+@description: You wake up trapped in a dungeon underground. Your main goal is to find the real key and unlock to lock to the exit. You might also come across fake doors or be fooled by the levels too.
 @author: Ezra York
 @tags: []
 @addedOn: 2024-05-20

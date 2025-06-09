@@ -1,3 +1,4 @@
+.vscode
 package-lock.json
 *.swp
 .DS_Store

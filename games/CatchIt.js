@@ -1,5 +1,6 @@
 /*
 @title: CatchIt
+@description: CatchIt is a simple game where players must catch falling points by moving a character left or right. The objective is to catch as many points as possible while avoiding misses, which end the game. This game builds on algorithms from other games and incorporates tunes for scoring hits and game-over events.
 @author: Shrey Mehra
 @tags: []
 @addedOn: 2023-03-14

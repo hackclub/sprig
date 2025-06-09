@@ -1,5 +1,6 @@
 /*
 @title: brick_breaker
+@description: "Brick Breaker" is a strategy game where the player uses a paddle to control a ball with the objective of breaking all the bricks in a level. The challenge is to ensure the ball does not fall below the paddle, as this results in a loss.
 @author: shaunba
 @tags: ['strategy']
 @addedOn: 2023-01-14

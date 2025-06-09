@@ -1,5 +1,6 @@
 /*
 @title: Physics Sandbox
+@description: Physics Sandbox is a simulation game that demonstrates the principles of Verlet Integration physics, allowing users to create, manipulate, and observe objects in a sandbox environment. It provides a range of customization options such as altering gravity, changing object size, linking objects, and applying forces, enabling users to experiment with various physics-based scenarios. The game is designed to offer a flexible and educational experience for those interested in physics simulations.
 @author: Henry Bass
 @tags: ['simulation']
 @addedOn: 2023-03-27

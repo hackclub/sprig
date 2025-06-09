@@ -1,5 +1,6 @@
 /*
 @title:  BrainBoom
+@description: BrainBoom is a game where players write Brainfuck programs to achieve specific tasks. Each puzzle challenges you to manipulate code to produce the correct output.
 @author: Kapilarny
 @tags: ['humor','puzzle']
 @addedOn: 2024-07-09

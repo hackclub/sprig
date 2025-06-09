@@ -1,5 +1,6 @@
 /*
 @title: Travelling Courier
+@description: Travelling Courier is a game where you navigate through mazes collecting parcels and delivering them to the exit.
 @author: Lukáš Nagy
 @tags: ['adventure']
 @addedOn: 2024-11-23

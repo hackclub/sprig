@@ -1,5 +1,6 @@
 /*
 @title: Coding Demo 2 - Dual Maps
+@description: "Coding Demo 2 - Dual Maps," created by Leonard Maculo, is a simple 2D game focused on demonstrating the use of layered maps. The game involves placing a player and a box on a grid, allowing for interactions such as pushing the box, and highlighting how additional map layers can be added to create a more complex playing field.
 @author: Leonard Maculo
 @tags: []
 @addedOn: 2022-09-13

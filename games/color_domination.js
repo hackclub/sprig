@@ -1,5 +1,6 @@
 /*
 @title: color_domination
+@description: Color Domination is a multiplayer strategy game where each player controls a color and takes turns dominating adjacent spaces. The objective is to outmaneuver the opponent by capturing territory until the other player can no longer make a move.
 @author: adrianoapj
 @tags: ['multiplayer']
 @addedOn: 2022-09-19

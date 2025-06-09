@@ -1,5 +1,6 @@
 /*
 @title: toto
+@description: "Toto" is a platformer game where the objective is to navigate your character to the end of each level. Players must maneuver past obstacles and platforms, while avoiding falling.
 @author: marsisus
 @tags: []
 @addedOn: 2024-08-18
