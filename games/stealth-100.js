@@ -1,14 +1,17 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: seed-and-shadow
-@author: 
+@author: me
 @tags: []
 @addedOn: 2025-00-00
 */
 
 // Stealth 100 — Stealth Puzzle Game (10 Levels)
+
+/* Instructions:
+- WASD controls
+- avoid coming in the bird (yellow coloured)'s vision
+- reach the blue gem
+- can hide in the bush (safe from bird's vision) */
 
 const player = "p"
 const wall = "w"
@@ -18,6 +21,32 @@ const goal = "g"
 const birdLeft = "l"
 const birdRight = "r"
 const birdUpDown = "v"
+
+const stepTune = tune`
+50: C5~50,
+50`
+const caughtTune = tune`
+75: C5~75,
+75: A4~75,
+75: G4~75,
+75`
+const goalTune = tune`
+80: C5~80,
+80: E5~80,
+80: G5~80,
+80: B5~80,
+160: C6~160`
+const bushTune = tune`
+40: F4~40,
+40: C4~40,
+40`
+const winTune = tune`
+100: G4~100,
+100: B4~100,
+100: D5~100,
+100: G5~100,
+200`
+
 
 setLegend(
   [player, bitmap`
@@ -105,7 +134,7 @@ LLLLLLLLLLLLLLLL`],
 ................
 ................
 ................`],
-  [birdLeft, bitmap`
+  [birdRight, bitmap`
 ................
 ................
 ......33........
@@ -122,7 +151,7 @@ LLLLLLLLLLLLLLLL`],
 ................
 ................
 ................`],
-  [birdRight, bitmap`
+  [birdLeft, bitmap`
 ................
 ................
 ........33......
@@ -166,12 +195,12 @@ let gameOver = false
 const levels = [
   map`
 wwwwwwwwww
-w.p..b..gw
+w.p..b...w
 w..w.....w
 w..r.....w
 w........w
 w........w
-w..b.....w
+w..b....gw
 wwwwwwwwww`,
 
   map`
@@ -186,21 +215,21 @@ wwwwwwwwww`,
 
   map`
 wwwwwwwwww
-wp...b..gw
+wp...b...w
 w...w....w
-w..wr....w
+w..w....lw
+wr.......w
 w........w
-w........w
-w..b.....w
+w..b....gw
 wwwwwwwwww`,
 
   map`
 wwwwwwwwww
-w.p..b..gw
+w.p..b...w
 w..w.....w
 w..r..r..w
 w........w
-w..b.....w
+w..b..g..w
 w........w
 wwwwwwwwww`,
 
@@ -271,35 +300,78 @@ function getPlayer() {
   return getFirst(player)
 }
 
+// function tryMove(dx, dy) {
+//   if (gameOver) return
+//   const p = getPlayer()
+//   const tx = p.x + dx
+//   const ty = p.y + dy
+//   const next = getTile(tx, ty)
+//   if (next.some(t => t.type === wall || t.type == birdLeft || t.type == birdRight || t.type == birdUpDown)) return
+//   p.x = tx
+//   p.y = ty
+// }
 function tryMove(dx, dy) {
   if (gameOver) return
+
   const p = getPlayer()
   const tx = p.x + dx
   const ty = p.y + dy
+
+  // Check for out-of-bounds
+  if (tx < 0 || tx >= width() || ty < 0 || ty >= height()) return
+
   const next = getTile(tx, ty)
-  if (next.some(t => t.type === wall)) return
+
+  // Prevent movement into walls or birds
+  if (next.some(t =>
+    t.type === wall ||
+    t.type === birdLeft ||
+    t.type === birdRight ||
+    t.type === birdUpDown
+  )) return
+
+  // Move the player + play sound accordinglyd
+  if (getTile(tx, ty).some(t => t.type === bush)) {
+    playTune(bushTune)
+  } else {
+    playTune(stepTune)
+  }
+
   p.x = tx
   p.y = ty
 }
 
-onInput("w", () => tryMove(0, -1))
-onInput("s", () => tryMove(0, 1))
-onInput("a", () => tryMove(-1, 0))
-onInput("d", () => tryMove(1, 0))
-onInput("j", () => {
+
+let gameMode = "wasd";
+let upKey = "w"
+let downKey = "s"
+let leftKey = "a"
+let rightKey = "d"
+let levelResetKey = "j"
+let gameResetKey = "l"
+
+
+// movement functions
+onInput(upKey, () => tryMove(0, -1))
+onInput(downKey, () => tryMove(0, 1))
+onInput(leftKey, () => tryMove(-1, 0))
+onInput(rightKey, () => tryMove(1, 0))
+onInput(levelResetKey, () => {
   gameOver = false
   clearText()
   setMap(levels[level])
   // level = 0
 })
+onInput(gameResetKey, () => {
+  gameOver = false
+  clearText()
+  level = 0
+  setMap(levels[level])
+})
 
-// function getLine(x1, x2, y) {
-//   let line = []
-//   for (let x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) {
-//     line.push([x, y])
-//   }
-//   return line
-// }
+
+
+// game logic functions
 function getLine(x1, x2, y) {
   let line = []
   if (x2 < x1) return line // avoid invalid range
@@ -309,49 +381,6 @@ function getLine(x1, x2, y) {
   return line
 }
 
-
-// function checkVision() {
-//   const p = getPlayer()
-//   const px = p.x
-//   const py = p.y
-//   const inBush = getTile(px, py).some(t => t.type === bush)
-
-//   let birds = [...getAll(birdLeft), ...getAll(birdRight), ...getAll(birdUpDown)]
-//   for (let b of birds) {
-//     if (!inBush) {
-//       // Horizontal birds
-//       if ((b.type === birdLeft || b.type === birdRight) && b.y === py) {
-//         const bx = b.x
-//         const vision = bx < px ? getLine(bx + 1, px - 1, py) : getLine(px + 1, bx - 1, py)
-//         const blocked = vision.some(([x, y]) =>
-//           getTile(x, y).some(t => t.type === wall || t.type === bush)
-//         )
-//         if (!blocked) {
-//           gameOver = true
-//           addText("Caught! Press J", { x: 2, y: 7, color: color`3` })
-//           return
-//         }
-//       }
-
-//       // Vertical birds
-//       if (b.type === birdUpDown && b.x === px) {
-//         const by = b.y
-//         const vision = py < by
-//           ? Array.from({length: by - py - 1}, (_, i) => [px, py + i + 1])
-//           : Array.from({length: py - by - 1}, (_, i) => [px, by + i + 1])
-
-//         const blocked = vision.some(([x, y]) =>
-//           getTile(x, y).some(t => t.type === wall || t.type === bush)
-//         )
-//         if (!blocked) {
-//           gameOver = true
-//           addText("Caught! Press J", { x: 2, y: 7, color: color`3` })
-//           return
-//         }
-//       }
-//     }
-//   }
-// }
 function checkVision() {
   const p = getPlayer()
   const px = p.x
@@ -375,6 +404,7 @@ function checkVision() {
       if (!blocked) {
         gameOver = true
         addText("Caught! Press J", { x: 2, y: 7, color: color`3` })
+        playTune(caughtTune)
         return
       }
     }
@@ -388,6 +418,7 @@ function checkVision() {
       if (!blocked) {
         gameOver = true
         addText("Caught! Press J", { x: 2, y: 7, color: color`3` })
+        playTune(caughtTune)
         return
       }
     }
@@ -405,6 +436,7 @@ function checkVision() {
         if (!blocked) {
           gameOver = true
           addText("Caught! Press J", { x: 2, y: 7, color: color`3` })
+          playTune(caughtTune)
           return
         }
       }
@@ -418,6 +450,7 @@ function checkVision() {
         if (!blocked) {
           gameOver = true
           addText("Caught! Press J", { x: 2, y: 7, color: color`3` })
+          playTune(caughtTune)
           return
         }
       }
@@ -425,29 +458,164 @@ function checkVision() {
   }
 }
 
+function moveBird(oldX, oldY, newX, newY, newType) {
+  // Remove just the bird from old position
+  const oldSprites = getTile(oldX, oldY).filter(s => 
+    s.type !== birdLeft && s.type !== birdRight && s.type !== birdUpDown
+  )
+  clearTile(oldX, oldY)
+  oldSprites.forEach(s => addSprite(oldX, oldY, s.type))
 
-function moveBirds() {
-  getAll(birdLeft).forEach(b => {
-    const next = getTile(b.x - 1, b.y)
-    if (next.some(t => t.type === wall)) {
-      clearTile(b.x, b.y)
-      addSprite(b.x, b.y, birdRight)
-    } else {
-      b.x -= 1
-    }
-  })
-  getAll(birdRight).forEach(b => {
-    const next = getTile(b.x + 1, b.y)
-    if (next.some(t => t.type === wall)) {
-      clearTile(b.x, b.y)
-      addSprite(b.x, b.y, birdLeft)
-    } else {
-      b.x += 1
-    }
-  })
-  // Vertical birds stay static (optional movement can be added later)
+  // Move the bird to the new position
+  const newSprites = getTile(newX, newY).map(s => s.type)
+  clearTile(newX, newY)
+  newSprites.forEach(t => addSprite(newX, newY, t))
+  addSprite(newX, newY, newType)
 }
+// function moveBirds() {
+//   getAll(birdLeft).forEach(b => {
+//     const nx = b.x - 1
+//     const ny = b.y
+//     if (getTile(nx, ny).some(t => t.type === wall)) {
+//       clearTile(b.x, b.y)
+//       addSprite(b.x, b.y, birdRight)
+//     } else {
+//       // if (getTile(nx, ny).some(t => t.type === bush)) {
+//       //   clearTile(b.x, b.y)
+//       //   addSprite(nx+1, ny+1, birdLeft)
+//       // } else {
+//         clearTile(b.x, b.y)
+//         addSprite(nx, ny, birdLeft)
+//       // }
+//     }
+//   })
 
+//   getAll(birdRight).forEach(b => {
+//     const nx = b.x + 1
+//     const ny = b.y
+//     if (getTile(nx, ny).some(t => t.type === wall)) {
+//       clearTile(b.x, b.y)
+//       addSprite(b.x, b.y, birdLeft)
+//     } else {
+//       clearTile(b.x, b.y)
+//       addSprite(nx, ny, birdRight)
+//     }
+//   })
+// }
+// function moveBirds() {
+//   getAll(birdLeft).forEach(b => {
+//     const nx = b.x - 1
+//     const ny = b.y
+//     if (getTile(nx, ny).some(t => t.type === wall)) {
+//       moveBird(b.x, b.y, b.x, b.y, birdRight)
+//     } else {
+//       moveBird(b.x, b.y, nx, ny, birdLeft)
+//     }
+//   })
+
+//   getAll(birdRight).forEach(b => {
+//     const nx = b.x + 1
+//     const ny = b.y
+//     if (getTile(nx, ny).some(t => t.type === wall)) {
+//       moveBird(b.x, b.y, b.x, b.y, birdLeft)
+//     } else {
+//       moveBird(b.x, b.y, nx, ny, birdRight)
+//     }
+//   })
+// }
+function moveBirds() {
+  const birdMovements = []
+
+  // First pass: determine movements for birdLeft
+  getAll(birdLeft).forEach(b => {
+    const nx = b.x - 1
+    const ny = b.y
+    if (getTile(nx, ny).some(t => t.type === wall)) {
+      birdMovements.push({ fromX: b.x, fromY: b.y, toX: b.x, toY: b.y, type: birdRight })
+    } else {
+      birdMovements.push({ fromX: b.x, fromY: b.y, toX: nx, toY: ny, type: birdLeft })
+    }
+  })
+
+  // First pass: determine movements for birdRight
+  getAll(birdRight).forEach(b => {
+    const nx = b.x + 1
+    const ny = b.y
+    if (getTile(nx, ny).some(t => t.type === wall)) {
+      birdMovements.push({ fromX: b.x, fromY: b.y, toX: b.x, toY: b.y, type: birdLeft })
+    } else {
+      birdMovements.push({ fromX: b.x, fromY: b.y, toX: nx, toY: ny, type: birdRight })
+    }
+  })
+
+  // Second pass: remove only bird sprites from all origin tiles
+  for (let move of birdMovements) {
+    const survivors = getTile(move.fromX, move.fromY).filter(s =>
+      s.type !== birdLeft && s.type !== birdRight && s.type !== birdUpDown
+    )
+    clearTile(move.fromX, move.fromY)
+    survivors.forEach(s => addSprite(move.fromX, move.fromY, s.type))
+  }
+
+  // Third pass: place birds at new positions
+  for (let move of birdMovements) {
+    const existing = getTile(move.toX, move.toY).map(t => t.type)
+    clearTile(move.toX, move.toY)
+    existing.forEach(t => addSprite(move.toX, move.toY, t))
+    addSprite(move.toX, move.toY, move.type)
+  }
+}
+// function moveBirds() {
+//   const birdMovements = []
+
+//   // Collect birdLeft movement intents
+//   getAll(birdLeft).forEach(b => {
+//     const nx = b.x - 1
+//     const ny = b.y
+//     if (getTile(nx, ny).some(t => t.type === wall || t.type === birdLeft || t.type === birdRight || t.type === birdUpDown || t.type === player)) {
+//       birdMovements.push({ fromX: b.x, fromY: b.y, toX: b.x, toY: b.y, type: birdRight })
+//     } else {
+//       birdMovements.push({ fromX: b.x, fromY: b.y, toX: nx, toY: ny, type: birdLeft })
+//     }
+//   })
+
+//   // Collect birdRight movement intents
+//   getAll(birdRight).forEach(b => {
+//     const nx = b.x + 1
+//     const ny = b.y
+//     if (getTile(nx, ny).some(t => t.type === wall || t.type === birdLeft || t.type === birdRight || t.type === birdUpDown || t.type === player)) {
+//       birdMovements.push({ fromX: b.x, fromY: b.y, toX: b.x, toY: b.y, type: birdLeft })
+//     } else {
+//       birdMovements.push({ fromX: b.x, fromY: b.y, toX: nx, toY: ny, type: birdRight })
+//     }
+//   })
+
+//   // Remove birds only from origin tiles
+//   for (let move of birdMovements) {
+//     const survivors = getTile(move.fromX, move.fromY).filter(s =>
+//       s.type !== birdLeft && s.type !== birdRight && s.type !== birdUpDown
+//     )
+//     clearTile(move.fromX, move.fromY)
+//     survivors.forEach(s => addSprite(move.fromX, move.fromY, s.type))
+//   }
+
+//   // Add birds to their new destinations (without clearing other entities)
+//   for (let move of birdMovements) {
+//     // Check if the destination already contains a bird — if so, skip adding to avoid overlaps
+//     const destinationTypes = getTile(move.toX, move.toY).map(t => t.type)
+//     if (
+//       !destinationTypes.includes(birdLeft) &&
+//       !destinationTypes.includes(birdRight) &&
+//       !destinationTypes.includes(birdUpDown)
+//     ) {
+//       addSprite(move.toX, move.toY, move.type)
+//     }
+//   }
+// }
+
+
+
+// game running functions
 afterInput(() => {
   if (gameOver) return
 
@@ -456,17 +624,15 @@ afterInput(() => {
 
   const p = getPlayer()
   if (getTile(p.x, p.y).some(t => t.type === goal)) {
-    playTune(tune`
-    100: C5~100,
-    100: E5~100,
-    100: G5~100,
-    100`)
+    playTune(goalTune)
     level++
     if (level >= levels.length) {
-      addText("YOU WIN!", { x: 6, y: 6, color: color`H` })
+      addText("YOU WIN!", { x: 6, y: 7, color: color`H` })
+      playTune(winTune)
       gameOver = true
       level = 0
-    } else {
+    } 
+    else {
       setMap(levels[level])
     }
   }
