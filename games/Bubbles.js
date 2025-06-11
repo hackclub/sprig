@@ -204,10 +204,11 @@ function resetLevel() {
 
 function updateUI() {
   clearText()
-  addText(`Lives: ${lives}`, { x: 0, y: 0, color: color`green` })
-  addText(`Level: ${level}`, { x: 0, y: 1, color: color`blue` })
-  addText(`Goal: ${collected}/${goal}`, { x: 0, y: 2, color: color`yellow` })
+  addText(`Lives: ${lives}`, { x: 2, y: 0, color: color`green` })
+  addText(`Level: ${level}`, { x: 2, y: 1, color: color`blue` })
+  addText(`Goal: ${collected}/${goal}`, { x: 2, y: 2, color: color`yellow` })
 }
+
 
 // Movement
 onInput("a", () => {
