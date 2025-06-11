@@ -2,8 +2,7 @@
 ## ✍️ Author name
 
 **Author:**  
-CSF <!-- or your preferred name/nickname -->
-
+Yashvi Jain
 ---
 
 ## 🎮 About your game
