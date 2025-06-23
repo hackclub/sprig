@@ -1,4 +1,4 @@
-// Coin Hunter - one at a time, 10 to win!
+// Collect the coin, 100 to win!
 const player = "p";
 const wall = "w";
 const coin = "c";
