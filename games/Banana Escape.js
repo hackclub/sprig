@@ -117,6 +117,17 @@ www.w..www
 ..w.w..www
 .wwb.b...g
 ww..www...`,
+    map`
+pwwwwwwwww
+.wwwwwwwg.
+.www.ww.ww
+bwwww..www
+bw.....www
+.ww.wwwwww
+....w.....
+.wwb.b.wwb
+.w..www...
+w......gw.`,
   map`
 g...wwg...w
 www.wwwww.w
@@ -125,11 +136,11 @@ www.wwwww.w
 ....bw....b
 wwwwpwwwwwp`,
   map`
-ggggggg
-ggggggg
-ppppppp
-ggggggg
-ggggggg`
+wwwww.g
+.......
+bbbbbbb
+p......
+wwwwwww`
 ];
 
 // set the map displayed to the current level
