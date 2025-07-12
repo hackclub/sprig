@@ -1,5 +1,6 @@
 /*
 @title: shitpest
+@description: Shitpest is a strategy game that functions as a humorous clone of Tempest. Players navigate the game using strategic movement and shooting to eliminate enemies, with an occasional super ability to clear the screen.
 @author: Mason Meirs
 @tags: ['strategy']
 @addedOn: 2022-12-24

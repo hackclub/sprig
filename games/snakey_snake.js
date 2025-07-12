@@ -1,5 +1,6 @@
 /*
 @title: snakey snake
+@description: "Snakey Snake" is a strategy game where players navigate a snake to eat all the apples, aiming to eventually confront Orphy. Players can gain "rock eater" power-ups, which allow the snake to consume rocks, with each power-up corresponding to one rock.
 @author: Alexander Chin
 @tags: ['strategy']
 @addedOn: 2022-08-12

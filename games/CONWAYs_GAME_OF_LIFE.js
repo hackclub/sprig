@@ -1,5 +1,6 @@
 /*
 @title: The game of life
+@description: The game is a functional replica of Conway's Game of Life, a cellular automaton devised by mathematician John Conway. It involves a grid of cells that evolve over time based on a set of rules that determine if cells live, die, or are born, simulating population dynamics. Players can interact with the grid by switching cell states, changing simulation speed, and resetting the game.
 @author: Jules Pouvreaux
 @tags: []
 @addedOn: 2024-00-00

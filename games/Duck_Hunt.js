@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: BSD-3-Clause OR MIT
 /*
 @title: DCKHNT
+@description: DCKHNT is a quirky and straightforward game where your main objective is to catch a duck that has stolen your baguette. You're tasked to catch up to the duck while managing your limited energy moves. The game challenges you to be strategic with movement as you try to catch the duck before you run out of energy.
 @author: el
 @tags: []
 @addedOn: 2023-03-25

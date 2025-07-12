@@ -1,5 +1,6 @@
 /*
 @title: 256
+@description: "256" is a retro-themed puzzle game where players combine numbered tiles on a grid to increase their score, aiming to reach the 256 tile to win. Inspired by classic tile-merging mechanics, the game ends when there are no more moves available. The simplistic design and strategic gameplay offer a nostalgic experience.
 @author: jzhao
 @tags: ['retro']
 @addedOn: 2022-08-22

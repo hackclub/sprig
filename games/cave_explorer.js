@@ -1,5 +1,6 @@
 /*
 @title: cave_explorer
+@description: Cave Explorer is a strategy game where you try to paint all the walls without retracing your steps.
 @author: Sid Khare
 @tags: ['strategy']
 @addedOn: 2022-11-12

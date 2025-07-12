@@ -1,5 +1,6 @@
 /*
 @title: floppyMatch
+@description: floppyMatch is a puzzle game where you control a pointer to match floppy disk parts by selecting top and bottom sections that align with a disk example shown at the top of the screen. You earn points for correct matches and get strikes for incorrect selections, with the goal of reaching ten points to win before accruing three strikes that reset your progress. The game also features a timer for an added challenge in beating your best time.
 @author: GBan22
 @tags: ['puzzle']
 @addedOn: 2022-10-05

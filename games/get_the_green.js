@@ -1,5 +1,6 @@
 /*
 @title: Get the GREEN!
+@description: "Get the GREEN!" is an endless game where the objective is to quickly reach the green square without touching the red before the timer runs out. Players navigate through randomly placed obstacles, aiming to advance as many levels as possible.
 @author: Dhyan99
 @tags: ['endless']
 @addedOn: 2024-06-28

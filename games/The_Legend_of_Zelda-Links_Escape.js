@@ -1,6 +1,7 @@
 
 /* 
 @title: The_Legend_of_Zelda-Links_Escape
+@description: The game "The Legend of Zelda: Link's Escape" by ItzHex is a thematic escape adventure inspired by the classic Zelda series. The player assumes the role of Link as he navigates through levels filled with enemies such as Moblins and Lynels.
 @author: ItzHex
 @tags: []
 @addedOn: 2023-08-28

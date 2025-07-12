@@ -1,5 +1,6 @@
 /*
 @title: Chest Game
+@description: Chest Game is a simple puzzle game where you push a box to reach a goal.
 @author: Izaiaz2121
 @tags: []
 @addedOn: 2024-05-20

@@ -1,5 +1,6 @@
 /*
 @title: BigButton
+@description: BigButton is a simple reaction-based game where the challenge is to press the specified button as quickly as possible when prompted. The twist is that it's deceptively difficult to beat, designed to frustrate and humorously waste your time. Despite its simplicity, it will keep you engaged as you strive to improve your response time.
 @author: LinusSkucas
 @tags: []
 @addedOn: 2022-12-17

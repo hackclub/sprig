@@ -1,5 +1,6 @@
 /*
 @title: go_home
+@description: "Go Home" is a puzzle game by Arthur Beck where players push boxes to specific targetsto try to escape and get back to the mothership.
 @author: Arthur Beck
 @tags: ['puzzle']
 @addedOn: 2024-01-25

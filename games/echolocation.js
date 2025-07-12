@@ -1,5 +1,6 @@
 /*
 @title: echolocation
+@description: "echolocation" is a challenging puzzle game where players navigate a maze using sound cues. By listening to distinct sounds, such as a triangle indicating a wall and a sine wave signaling the goal, players must deduce their surroundings and find their way to the goal.
 @author: Leonard (Omay)
 @tags: ['puzzle']
 @addedOn: 2022-11-13

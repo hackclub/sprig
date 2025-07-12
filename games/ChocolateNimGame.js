@@ -1,5 +1,6 @@
 /*
 @title: ChocolateNimGame
+@description: Inspired by the classic Nim game, this version adds a chocolatey twist to the gameplay! The goal? Avoid eating the spoiled piece of chocolate while forcing your opponent (the computer) to take it instead.
 @author: Sarah Akhtar
 @tags: ['strategy', 'puzzle']
 @addedOn: 2024-12-10

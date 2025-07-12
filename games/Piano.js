@@ -1,5 +1,6 @@
 /*
 @title: Piano
+@description: "Piano" by Scott is a simple piano simulation game where players move an arrow using the keys A and D to select a piano key and press W to play its corresponding note. The game provides an interactive way to explore basic musical notes and enjoy creating melodies.
 @author: Scott
 @tags: ['simulation']
 @addedOn: 2022-09-14

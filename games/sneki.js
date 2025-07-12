@@ -3,6 +3,7 @@
 @author: spacefall
 @tags: []
 @addedOn: 2025-01-02
+@description: A unique take on the classic Snake game with various power-up fruits that can help or hinder your progress. Collect melons to swap head and tail, cherries to modify speed, oranges for temporary tail removal, pretzels to change length, pears to teleport, bread to remove effects, and cocktails to invert controls.
 */
 
 const left = "l";

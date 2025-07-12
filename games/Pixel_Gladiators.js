@@ -1,20 +1,9 @@
 /*
 @title: PixelGladiators
 @author: Abdur Rehman
-@tags: [ fighting, top down, action ]
+@tags: ['action']
 @addedOn: 2025-02-05
-
-A game about fighting monsters.
-
-GOAL:
-- Kill as many monsters as you can, while trying to get the highest score!
-
-Controls:
-- WASD keys to move.
-- K to attack (the direction of movement determines where you attack).
-  
-TIP:
-- Pickup health drops to prolong your survival.
+@description: A game about fighting monsters. Kill as many monsters as you can while trying to get the highest score! Use WASD keys to move and K to attack in the direction of movement. Pickup health drops to prolong your survival.
 */
 
 class InputHandler {

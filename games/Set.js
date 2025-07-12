@@ -1,5 +1,6 @@
 /*
 @title: Set
+@description: Play the card game Set on Sprig! Select correct sets of three cards until there are no cards left. For each one of the four categories of features -- color, number, shape, and shading, the three cards must avoid having two cards showing one version of the feature and the remaining card showing a different version.
 @author: jwseph
 @tags: []
 @addedOn: 2024-11-19

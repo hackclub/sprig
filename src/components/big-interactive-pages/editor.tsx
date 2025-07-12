@@ -14,7 +14,7 @@ import {
 	useSignalEffect,
 } from "@preact/signals";
 import { useEffect, useRef, useState} from "preact/hooks";
-import { codeMirror, errorLog, isNewSaveStrat, muted, PersistenceState, RoomState,  screenRef, cleanupRef } from "../../lib/state";
+import { codeMirror, errorLog, isNewSaveStrat, muted, PersistenceState, RoomState,  screenRef, cleanupRef, reviewState } from "../../lib/state";
 import EditorModal from "../popups-etc/editor-modal";
 import { runGame, _performSyntaxCheck } from "../../lib/engine";
 import DraftWarningModal from "../popups-etc/draft-warning";
@@ -541,6 +541,22 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 			}
 		});
 	}, [initialCode]);
+
+	// Use the review state
+	useEffect(() => {
+		if (reviewState.value.isReviewMode && reviewState.value.reviewCode) {
+			// Set the code in the editor
+			if (codeMirror.value) {
+				codeMirror.value.dispatch({
+					changes: {
+						from: 0,
+						to: codeMirror.value.state.doc.length,
+						insert: reviewState.value.reviewCode
+					}
+				});
+			}
+		}
+	}, [reviewState.value.isReviewMode, reviewState.value.reviewCode]);
 
 	return (
 		roomState != undefined && persistenceState.value.kind === PersistenceStateKind.COLLAB && typeof persistenceState.value.game === 'string' 

@@ -2,6 +2,7 @@
 @title: mr gold
 @author: BoKi
 @tags: []
+@description: A challenging puzzle game where you play as Mr. Gold, collecting gold pieces while avoiding traps. You can survive 3 burns before losing. Navigate carefully through each level to reach the house while collecting gold pieces.
 @addedOn: 2024-00-00
 */
 

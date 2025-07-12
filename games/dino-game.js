@@ -1,5 +1,6 @@
 /*
 @title: Save Orpheus - Chrome Dino Game Remake
+@description: "Save Orpheus" is a retro-style game that is a remake of the classic Chrome dinosaur game. Become Orpheus and try to jump over the cacti and avoid the raptors for as long as you can!
 @author: @thetridentguy
 @tags: ['retro']
 @addedOn: 2024-03-29

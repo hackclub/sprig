@@ -1,5 +1,6 @@
 /*
 @title: RPS
+@description: "RPS" by Shahm Najeeb is a simple and fun rock-paper-scissors game where you play against an AI. Choose rock, paper, or scissors using designated keys, and see if you win or lose based on your choice. The game provides immediate feedback with a message indicating the outcome of each round.
 @author: Shahm Najeeb
 @tags: ['endless']
 @addedOn: 2024-08-23

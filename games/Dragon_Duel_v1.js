@@ -1,5 +1,6 @@
 /*
 @title: Dragon Duel
+@description: "Dragon Duel" is a simple two-player game focusing on dodging and shooting in a gravity-affected environment. Players take on the role of dragons, using a single key to flap their wings and another to shoot fireballs at their opponent. The objective is to hit the opponent with fireballs while avoiding getting hit themselves.
 @author: giragon6
 @tags: []
 @addedOn: 2024-07-30

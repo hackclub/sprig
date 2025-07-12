@@ -1,5 +1,6 @@
 /*
 @title: Generative Maze
+@description: Generative Maze is a puzzle game created by Zeyu Yao where players navigate through mazes that become increasingly complex with each level. The goal is to guide the player character to the exit of each maze before the 30-second timer runs out.
 @author: Zeyu Yao
 @tags: ['puzzle','endless']
 @addedOn: 2024-09-14

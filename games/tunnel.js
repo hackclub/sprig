@@ -1,5 +1,6 @@
 /*
 @title: tunnel
+@description: Tunnel is an endless game where you navigate a space shuttle through an increasingly thin tunnel, aiming to stay alive as long as possible. If the shuttle touches the walls, the game ends. The objective is to keep moving without crashing into the tunnel's sides.
 @author: amin
 @tags: ['endless']
 @addedOn: 2023-02-19

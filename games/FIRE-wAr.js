@@ -3,10 +3,7 @@
 @author: Adapted by Grok from DaInfLoop's Generic Platformer
 @tags: ['platformer']
 @addedOn: 2025-03-05
-
-Guide the holy sword through 4 heavenly levels. Avoid fire (D) and fallen angels (F) which reset you.
-Collect blessings (*) for points. Reach the golden gate to advance!
-Controls: W (hover up), A (left), S (dive down), D (right).
+@description: Guide the holy sword through 4 heavenly levels. Avoid fire (D) and fallen angels (F) which reset you. Collect blessings (*) for points. Reach the golden gate to advance! Controls: W (hover up), A (left), S (dive down), D (right).
 */
 
 // Define sprites (unchanged from previous)

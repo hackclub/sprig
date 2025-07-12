@@ -1,5 +1,6 @@
 /*
 @title: orbit_blaster
+@description: "Orbit Blaster" is an action game where you play as a spaceship tasked with defending Earth from incoming asteroids. Your mission is to maneuver the spaceship using strategic movements and shoot down the asteroids before they hit the planet. The game offers two difficulty levels.
 @author: blackpolygon
 @tags: ['action']
 @addedOn: 2024-04-08

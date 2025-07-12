@@ -1,5 +1,6 @@
 /*
 @title: maze-eye
+@description: Maze-eye is an action-packed game where players navigate through multiple mazes while dodging eye-themed monsters that move in both horizontal and vertical directions. As you progress to later levels, certain sections of the maze become blind spots, adding to the challenge. 
 @author: acon
 @tags: ['action']
 @addedOn: 2023-12-23

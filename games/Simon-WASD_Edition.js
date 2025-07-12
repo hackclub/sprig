@@ -1,5 +1,6 @@
 /*
 @title: Simon-WASD_Edition
+@description: Simon-WASD_Edition is a retro-style game where players must memorize and replicate a growing sequence of colors using the W, A, S, and D keys. The objective is to achieve the highest score possible by correctly remembering and inputting the sequence as it extends with each successful round. Inspired by the classic Simon game, this version challenges players' memory and quick thinking.
 @author: Eli Coustan
 @tags: ['retro']
 @addedOn: 2022-11-13

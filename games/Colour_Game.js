@@ -1,5 +1,6 @@
 /*
 @title: Colour_Game
+@description: Colour_Game is an endless game where players must respond quickly to colors displayed on the screen by pressing the corresponding button: J for blue, L for green, and A for black. Successfully matching the color earns a point, but pressing the wrong button ends the game. The objective is to score as many points as possible by carefully observing and reacting to the changing colors.
 @author: Thuvaragan
 @tags: ['endless']
 @addedOn: 2022-12-26

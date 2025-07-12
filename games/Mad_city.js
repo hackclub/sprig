@@ -1,6 +1,7 @@
 
 /* 
 @title: Mad_city
+@description: Mad City is an endless runner game where players navigate through a chaotic urban environment. The objective is to avoid obstacles like cones, holes, and pedestrians while maintaining high speeds. The game tests players' reflexes as they aim to survive as long as possible in the bustling city streets.
 @author: Andromeda
 @tags: ['endless']
 @addedOn: 2023-04-26
