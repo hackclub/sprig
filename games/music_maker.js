@@ -1,9 +1,6 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: musprig
-@author: 
+@title: music laker
+@author: uplabdmeuris
 @tags: []
 @addedOn: 2025-00-00
 */
