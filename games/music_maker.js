@@ -1,6 +1,6 @@
 /*
 @title: music laker
-@author: uplabdmeuris
+@author: uplandmeuris
 @tags: []
 @addedOn: 2025-00-00
 */
