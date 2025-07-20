@@ -1,8 +1,8 @@
 /*
 @title: Colorshift
 @author: Syntax-Surfer-1
-@tags: []
-@addedOn: 2025-00-00
+@tags: [game, puzzle, fun, color]
+@addedOn: 26-07-2025
 */
 
 const player = "p";
