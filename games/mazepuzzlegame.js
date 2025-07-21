@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: maze
 @author: infinityloop
-@tags: []
-@addedOn: 2025-00-00
+@tags: ["maze", "puzzle", "game"]
+@addedOn: 2025-20-07
 */
 
 const player = "p"
