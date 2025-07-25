@@ -1,6 +1,6 @@
 /*
-@title: Dungeon of Sprig
-@author: Your Name
+@title: Legend of george
+@author: Fred
 @tags: ["adventure", "dungeon", "zelda"]
 @addedOn: 2025-07-19
 */
