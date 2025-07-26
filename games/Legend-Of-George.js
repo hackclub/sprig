@@ -131,7 +131,7 @@ let gameState = "playing"; // "playing", "gameOver", "win"
 
 // --- SOUNDS ---
 const attackSound = tune`
-100`;
+16000`;
 const enemyHitSound = tune`
 250,
 125`;
@@ -188,7 +188,7 @@ w.e.ww.e.w
 wwwwwwwwww`,
   map`
 wwwwwwwwww
-w.p.w....w
+w.p.w....d
 w.e.w.e..w
 w...w....w
 w.w.w.w.ww
@@ -196,7 +196,41 @@ w.w.e.w..w
 w.w...w..w
 w.w.w.w.ew
 w.e.w....w
+wwwwwwwwww`,
+  map`
+wwwwwwwwww
+w.p....e.w
+w.wwwdww.w
+w...e....w
+w........w
+w......www
+w.ww.w...w
+w.ww.w...w
+we...w.eew
+wwwwwwwwww`,
+  map`
+wwwwdwwwww
+w.pw.....w
+w..we....w
+w.ewww...w
+w...ewe..w
+w....www.w
+w...ewe..w
+w.wwww...w
+w..e.....w
+wwwwwwwwww`,
+  map`
+wwwwwwwwww
+w.p.....ew
+w.w....w.w
+w..weew..w
+w..ewwe..w
+w...ww...w
+w..weew..w
+w.w....w.w
+we......ew
 wwwwwwwwww`
+  
 ];
 
 setMap(levels[level]);
