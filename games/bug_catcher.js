@@ -1,3 +1,9 @@
+/*
+@title: Bug Catcher
+@author: Viraj
+@tags: [sprig, game]
+@addedOn: 2025-05-23
+*/
 const player = "p"
 const bug = "b"
 const wall = "w"
