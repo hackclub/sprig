@@ -214,10 +214,12 @@ function showMenu() {
   clearText()
   setMap(menuMap)
   addText("GREMLIN EXPRESS", { y: 1, color: color`cyan` })
-  addText("i: Easy   k: Medium   l: Hard", { y: 3 })
-  addText("Use WASD to move   J to pull lever", { y: 5 })
-  addText("Press i, k, or l to start", { y: 7 })
+  addText("i: Easy  k: Med", { y: 3 })
+  addText("l: Hard", { y: 4 })
+  addText("WASD: Move  J: Use", { y: 5 })
+  addText("Press i/k/l to go", { y: 7 })
 }
+
 
 function configureDifficulty(key) {
   if (key === "i") { chaosLimit = 2; guardSpeed1 = 800; guardSpeed2 = 900; timeLeft = 90 }
@@ -310,9 +312,10 @@ function endGame(win) {
   clearInterval(timerInterval)
   gameState = "menu"
   clearText()
-  addText(win ? "You Escaped!" : "Caught or Time Up", { y: 3, color: win ? color`green` : color`red` })
-  addText("Press i, k, or l to play again", { y: 5 })
+  addText(win ? "ESCAPED!" : "CAUGHT/TIME UP", { y: 3, color: win ? color`green` : color`red` })
+  addText("Press i/k/l to go", { y: 5 })
 }
+
 
 onInput("i", () => { if (gameState === "menu") { configureDifficulty("i"); startGame() } })
 onInput("k", () => { if (gameState === "menu") { configureDifficulty("k"); startGame() } })
