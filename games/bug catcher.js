@@ -118,10 +118,6 @@ function playBackgroundMusic() {
   playTune(funkpopTune, 0) // 0 means loop infinitely
 }
 
-function stopBackgroundMusic() {
-  stopTune()
-}
-
 // Spawn bug at random empty tile
 function spawnBug() {
   const emptyTiles = []
