@@ -1,8 +1,9 @@
 /*
 @title: Colorshift
+@description: The "Colorshift" is the game where you need to chang color to pass thrue some blocks and collect the points to open gate("Only in some level 😅") and Remember There are some ghost blocks you can pass thrue ("in any color")
 @author: Syntax-Surfer-1
-@tags: [game, puzzle, fun, color]
-@addedOn: 26-07-2025
+@tags: ["puzzle"]
+@addedOn: 2025-07-30
 */
 
 const player = "p";
