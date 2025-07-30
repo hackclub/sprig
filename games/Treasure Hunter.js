@@ -224,8 +224,8 @@ function checkCollisions() {
       level++
       if (level >= levels.length) {
         gameWon = true
-        addText("HAI VINTO!", { x: 4, y: 4, color: color`4` })
-        addText(`Punteggio: ${score}`, { x: 3, y: 6, color: color`6` })
+        addText("YOU WIN!", { x: 4, y: 4, color: color`4` })
+        addText(`Score: ${score}`, { x: 3, y: 6, color: color`6` })
         playTune(tune`
 300: C5^300,
 300: E5^300,
@@ -242,7 +242,7 @@ function checkCollisions() {
 150: E5^150`)
       }
     } else {
-      addText("Raccogli tutti i tesori!", { x: 1, y: 8, color: color`3` })
+      addText("Take all the treasure!", { x: 1, y: 8, color: color`3` })
       setTimeout(() => {
         clearText()
       }, 2000)
@@ -251,9 +251,9 @@ function checkCollisions() {
   
   clearText()
   if (!gameWon) {
-    addText(`Livello: ${level + 1}`, { x: 1, y: 1, color: color`2` })
-    addText(`Punteggio: ${score}`, { x: 1, y: 2, color: color`6` })
-    addText(`Tesori: ${getAll(treasure).length}`, { x: 1, y: 3, color: color`4` })
+    addText(`Level: ${level + 1}`, { x: 1, y: 1, color: color`2` })
+    addText(`Score: ${score}`, { x: 1, y: 2, color: color`6` })
+    addText(`Treasure: ${getAll(treasure).length}`, { x: 1, y: 3, color: color`4` })
   }
 }
 
@@ -296,5 +296,5 @@ setInterval(() => {
 
 checkCollisions()
 
-addText("WASD per muoverti", { x: 1, y: 14, color: color`0` })
-addText("Raccogli tesori gialli", { x: 1, y: 15, color: color`0` })
+addText("WASD for moving", { x: 1, y: 14, color: color`0` })
+addText("take all the treasure", { x: 1, y: 15, color: color`0` })
