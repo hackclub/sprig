@@ -1,6 +1,6 @@
 /*
 @title: Treasure Hunter
-@author: Claude
+@author: Rudy Deana
 @tags: ['adventure', 'collection']
 @addedOn: 2025-07-30
 */
