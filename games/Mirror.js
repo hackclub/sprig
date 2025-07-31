@@ -1,10 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-@title: Mirror
-@author: 
-@tags: []
-@addedOn: 2025-00-00
+@title: Mirror Maze
+@author: Aly Kotb
+@tags: ["puzzle", "maze"]
+@addedOn: 2025-05-26
 */
 
 const player = "p"
