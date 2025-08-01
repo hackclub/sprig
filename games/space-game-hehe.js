@@ -10,6 +10,7 @@ const player1 = "p";
 const player2 = "q";
 const wall = "X";
 const asteroid = "A";
+const alien = "E";
 const shield = "H";
 const star = "*";
 const crown = "C";
@@ -85,6 +86,23 @@ setLegend(
 ..CC003303300CC.
 ...CC0333330CC..
 ....CCCCCCCCC...
+................`],
+  [alien, bitmap`
+..4..........4..
+...44......44...
+....4......4....
+....44444444....
+..444444444444..
+.44444444444444.
+.44440044004444.
+4444400440044444
+4444444444444444
+4444444444444444
+4.444444444444.4
+4...44444444...4
+4...4......4...4
+4...444..444...4
+................
 ................`],
   [shield, bitmap`
 ................
@@ -237,6 +255,7 @@ let p1Shield = 0;
 let p2Shield = 0;
 
 let asteroidSpawnRate = 0.3;
+let alienSpawnRate = 0.1;
 let powerUpSpawnRate = 0.03;
 let gameSpeed = 1;
 
@@ -247,6 +266,7 @@ function resetGame() {
   gameStarted = true;
   
   getAll(asteroid).forEach(a => a.remove());
+  getAll(alien).forEach(e => e.remove());
   getAll(shield).forEach(h => h.remove());
   getAll(star).forEach(s => s.remove());
   getAll(crown).forEach(c => c.remove());
@@ -274,6 +294,7 @@ function resetGame() {
   p2Shield = 0;
   
   asteroidSpawnRate = 0.3;
+  alienSpawnRate = 0.1;
   powerUpSpawnRate = 0.03;
   gameSpeed = 1;
 }
@@ -282,6 +303,13 @@ function spawnAsteroid() {
   if (Math.random() < asteroidSpawnRate) {
     const x = Math.floor(Math.random() * 18) + 1;
     addSprite(x, 1, asteroid);
+  }
+}
+
+function spawnAlien() {
+  if (Math.random() < alienSpawnRate) {
+    const x = Math.floor(Math.random() * 18) + 1;
+    addSprite(x, 1, alien);
   }
 }
 
@@ -296,6 +324,32 @@ function moveAsteroids() {
   const allAsteroids = getAll(asteroid);
   allAsteroids.forEach(a => {
     a.y += gameSpeed;
+    if (a.y >= 15) {
+      a.remove();
+    }
+  });
+}
+
+function moveAliens() {
+  const allAliens = getAll(alien);
+  allAliens.forEach(a => {
+    a.y += gameSpeed;
+    
+    if (!a.direction) {
+      a.direction = 1;
+      a.moveCounter = 0;
+    }
+    
+    a.moveCounter++;
+    if (a.moveCounter >= 2) {
+      const newX = a.x + a.direction;
+      if (newX >= 1 && newX < 19) {
+        a.x = newX;
+      }
+      a.direction *= -1;
+      a.moveCounter = 0;
+    }
+    
     if (a.y >= 15) {
       a.remove();
     }
@@ -336,15 +390,49 @@ function checkCollisions() {
   
   const asteroidTiles = getAll(asteroid);
   asteroidTiles.forEach(a => {
-    if (p1.x === a.x && p1.y === a.y && p1Shield === 0) {
-      gameOver = true;
-      winner = "Player 2";
-      showWinner();
+    if (p1.x === a.x && p1.y === a.y) {
+      if (p1Shield === 0) {
+        gameOver = true;
+        winner = "Player 2";
+        showWinner();
+      } else {
+        a.remove();
+        p1Shield = Math.max(0, p1Shield - 5);
+      }
     }
-    if (p2.x === a.x && p2.y === a.y && p2Shield === 0) {
-      gameOver = true;
-      winner = "Player 1";
-      showWinner();
+    if (p2.x === a.x && p2.y === a.y) {
+      if (p2Shield === 0) {
+        gameOver = true;
+        winner = "Player 1";
+        showWinner();
+      } else {
+        a.remove();
+        p2Shield = Math.max(0, p2Shield - 5);
+      }
+    }
+  });
+  
+  const alienTiles = getAll(alien);
+  alienTiles.forEach(e => {
+    if (p1.x === e.x && p1.y === e.y) {
+      if (p1Shield === 0) {
+        gameOver = true;
+        winner = "Player 2";
+        showWinner();
+      } else {
+        e.remove();
+        p1Shield = Math.max(0, p1Shield - 10);
+      }
+    }
+    if (p2.x === e.x && p2.y === e.y) {
+      if (p2Shield === 0) {
+        gameOver = true;
+        winner = "Player 1";
+        showWinner();
+      } else {
+        e.remove();
+        p2Shield = Math.max(0, p2Shield - 10);
+      }
     }
   });
   
@@ -376,6 +464,7 @@ function updatePowerUps() {
 
 function showWinner() {
   getAll(asteroid).forEach(a => a.remove());
+  getAll(alien).forEach(e => e.remove());
   getAll(shield).forEach(h => h.remove());
   getAll(p1ShieldAura).forEach(a => a.remove());
   getAll(p2ShieldAura).forEach(a => a.remove());
@@ -452,12 +541,14 @@ function movePlayer(playerType, dx) {
       otherPlayer.x = pushX;
       player.x = newX;
       updateShieldAuras();
+      checkCollisions();
     }
     return;
   }
   
   player.x = newX;
   updateShieldAuras();
+  checkCollisions();
 }
 
 onInput("a", () => {
@@ -477,13 +568,17 @@ onInput("l", () => {
 function gameLoop() {
   if (!gameOver && gameStarted) {
     spawnAsteroid();
+    spawnAlien();
     spawnPowerUp();
     moveAsteroids();
     movePowerUps();
     checkCollisions();
+    moveAliens();
+    checkCollisions();
     updatePowerUps();
     
     asteroidSpawnRate = Math.min(0.7, asteroidSpawnRate + 0.001);
+    alienSpawnRate = Math.min(0.3, alienSpawnRate + 0.0005);
     powerUpSpawnRate = Math.min(0.08, powerUpSpawnRate + 0.0002);
     
     clearText();
