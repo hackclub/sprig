@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Binx's Timed Maze
+@title: Binxs Timed Maze
 @author: Wafers
 @tags: [Maze]
-@addedOn: 2024-00-00
+@addedOn: 2024-05-12
 */
 let score = 0;
 
