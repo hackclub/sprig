@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: cat
-@author: 
+@author: K116
 @tags: []
 @addedOn: 2025-00-00
 */
