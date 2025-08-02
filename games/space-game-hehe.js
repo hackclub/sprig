@@ -2,6 +2,7 @@
 
 @title: space game hehe
 @author: Naman S
+@description: A space-themed game. Avoid the asteroids and the aliens. Two player game. Last one standing wins!
 @tags: [space, multiplayer]
 @addedOn: 2025-00-00
 */
