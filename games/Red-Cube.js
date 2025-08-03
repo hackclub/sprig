@@ -6,6 +6,8 @@
 */
 
 const gravity = 1;
+let jumping = false;
+let moving = false;
 
 const player = "p";
 const background = "b";
@@ -78,7 +80,7 @@ const levels = [
 ............
 ............
 p...........
-111111111111`, // Level 1 — flat intro, hold D to win
+111111111111`,
 
   map`
 ............
@@ -89,7 +91,7 @@ p...........
 ............
 ....11......
 p...........
-111....11111`, // Level 2 — simple jump needed
+111....11111`,
 
   map`
 ............
@@ -100,7 +102,7 @@ p...........
 ............
 p..111......
 1.......1...
-11.....11111`, // Level 3 — small jump challenge
+11.....11111`,
 
   map`
 ............
@@ -111,7 +113,7 @@ p..111......
 .....1......
 p..1........
 1...........
-111....11111`, // Level 4 — stair-like pattern within 2-tile jump
+111....11111`,
 
   map`
 ............
@@ -122,7 +124,7 @@ p..1........
 ....1.......
 ..1.........
 p......1....
-1.......1111`, // Level 5 — narrow jump with climbable stairs
+1.......1111`,
 
   map`
 ............
@@ -133,7 +135,7 @@ p......1....
 ............
 ....1.......
 p...........
-11.....11111`, // Level 6 — upper challenge, timing needed
+11.....11111`,
 
   map`
 ............
@@ -144,7 +146,7 @@ p...........
 ............
 ..1.........
 p...........
-1.......1111`, // Level 7 — 2-tile jump required
+1.......1111`,
 
   map`
 ............
@@ -152,10 +154,10 @@ p...........
 ............
 ......1.....
 ...1........
-......1.....
-...1........
+......11....
+...11.......
 p...........
-11........11`, // Level 8 — back-and-forth motion forced
+11........11`,
 
   map`
 ............
@@ -163,10 +165,10 @@ p...........
 ........1...
 .11.....1...
 .1..........
-........1...
+........11..
 .11.........
 p...111.....
-1.........11`, // Level 9 — cross-over jumps
+1.........11`,
 
   map`
 ............
@@ -174,13 +176,11 @@ p...111.....
 ..1..1..1...
 ............
 ............
-..1..1..1...
+..11.11.11..
 ............
 p1..........
-11........11`  // Level 10 — symmetrical but not "hold D"-able
+11........11` 
 ];
-
-
 
 let currentLevel = 0;
 setMap(levels[currentLevel]);
@@ -197,29 +197,70 @@ function isOnGround() {
   return below.some(t => t.type === platform1);
 }
 
+function canJump() {
+  const p = getPlayer();
+  const top1 = getTile(p.x, p.y - 1);
+  const top2 = getTile(p.x, p.y - 2);
+  const top3 = getTile(p.x, p.y - 3);
+  const bool1 = top1.some(t => t.type === platform1);
+  const bool2 = top2.some(t => t.type === platform1);
+  const bool3 = top3.some(t => t.type === platform1);
+
+  if (bool1 || bool2 || bool3) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function smoothJump(player, totalHeight) {
+  let jumpCount = 0;
+  
+  const jumpInterval = setInterval(() => {
+    if (jumpCount < totalHeight) {
+      player.y -= 1;
+      jumpCount++;
+    } else {
+      clearInterval(jumpInterval);
+      jumping = false;
+    }
+  }, 150);
+}
+
 function respawn() {
   setMap(levels[currentLevel]);
   velocityY = 0;
-  isJumping = false;
+  jumping = false;
 }
 
 onInput("a", () => {
-  getPlayer().x -= 1;
+  if (!moving) {
+    getPlayer().x -= 1;
+    moving = true;
+  }
 });
 onInput("d", () => {
-  getPlayer().x += 1;
+  if (!moving) {
+    getPlayer().x += 1;
+    moving = true;
+  }
 });
 onInput("w", () => {
-  if (isOnGround()) {
-    getPlayer().y -= 3;
+  if (isOnGround() && canJump() && !jumping) {
+    jumping = true;
+    smoothJump(getPlayer(), 3);
   }
 });
 
 setInterval(() => {
-  if (!isOnGround()) {
+  if (!isOnGround() && !jumping) {
     getPlayer().y += 1;
   }
-}, 500);
+}, 150);
+
+setInterval(() => {
+  moving = false;
+}, 100);
 
 setInterval(() => {
   if (getPlayer().y >= height() - 1) {
@@ -229,10 +270,6 @@ setInterval(() => {
 
 afterInput(() => {
   const p = getPlayer();
-
-  if (getPlayer().y >= height() - 1) {
-    respawn();
-  }
 
   if (p.x >= width() - 1) {
     currentLevel++;
