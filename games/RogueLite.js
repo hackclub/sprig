@@ -73,8 +73,8 @@ setLegend(
 ......L1333.....
 ......L13333....
 ......L13333....
-......L133333...
-......L1333333..
+......L137733...
+......L1377333..
 ......L133333...
 ......L13333....
 ......L1333.....
@@ -109,8 +109,8 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000
-0000000000000000
+0000000770000000
+0000000770000000
 0000000000000000
 0000000000000000
 0000000000000000
@@ -226,14 +226,14 @@ fffffffffgffffff`,
   map`
 ..........
 p...y....e
-wwwwywwwww
-wwwwyywwww
-wwwwwywwww
-wwwwwywwww
-wyyyyywwww
-wywwwwwwww
-wywwwwww..
-wyyyyyyy.g`,
+wwwwywwwyw
+yyyyyywwyw
+ywwwwywwyw
+wwwwwyyyyw
+wyyyyywwyy
+yywwwyywww
+wywwwwyw..
+wywwwwyy.g`,
   map`
 fffffffgff
 ffffffffff
@@ -246,6 +246,50 @@ ffffffffff
 ..........
 .p......e.`,
   map`
+..p.......
+.wwwwwyww.
+.w......w.
+.w.wwww.w.
+.w.wfgw.w.
+.w.yffw.w.
+.w.wwww.w.
+.w......we
+.wwwwwwww.
+..........`,
+  map`
+p...wgww...fwwe
+....w..www.ww..
+...fw......w...
+.wwww...wwwwf..
+........w.fwww.
+....w...w......
+...fwww......w.
+...ww..wwf...w.
+...w....wwwwww.
+..w....fw...w..
+.wwww.www.w.w..
+.w......w.wfw..
+.wf.....w.www..
+.wwwwww.w.w....
+....wf........f`,
+  map`
+...wwww.wwww...
+......w.w....f.
+...wwww.wwww...
+ww.w.gw.wf.w.ww
+.w....w.w....w.
+.w.w.ww.ww.w.w.
+ww.www...www.w.
+...............
+ww.wwwe.pwww.ww
+.w.w.ww.ww.w.w.
+.w....w.w....w.
+ww.w.fw.wf.w.ww
+...wwww.wwww...
+.f....w.w....f.
+...wwww.wwww...`,
+
+  map`
 ........
 ........
 ........
@@ -256,6 +300,7 @@ ffffffffff
 .e....p.`,
   
 ]
+
 
 // Create a tune:
 const melody = tune`
@@ -418,24 +463,6 @@ function checkWin() {
 
 
 let finalWinner = scorePlayer1 > scorePlayer2 ? "Player1" : "Player2";
-
-// Display on the last map after all levels have been completed
-afterInput(() => {
-  // Check if all levels have been completed
-  if (level === levels.length) {
-    clearText();
-    // Determine the final winner based on the scores
-    const finalWinner = scorePlayer1 > scorePlayer2 ? "Player1" : "Player2";
-    // Display the final winner on the screen
-    addText(`Final Winner: ${finalWinner}`, { x: 5, y: 5, color: color`7` });
-  } else {
-    // Display scores for each player during the game
-    clearText();
-    addText(`Player1: ${scorePlayer1}`, { x: 1, y: 1, color: color`7` });
-    addText(`Player2: ${scorePlayer2}`, { x: 1, y: 2, color: color`3` });
-  }
-});
-
 
 afterInput(() => {
   checkWin();
