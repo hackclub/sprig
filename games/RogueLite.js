@@ -1,7 +1,7 @@
 /*
 @title: RogueLite
 @author: A41K
-@tags: [CTF, puzzle, multiplayer]
+@tags: ["CTF", "puzzle", "multiplayer"]
 @addedOn: 2025-08-01
 @description: A very simple 2 player capture the flag game. Player1 moves with WASD, Player2 moves with IJKL. You need to be the first to get the flag for that level, but beware there are fake "ghost" walls and "ghost goals" that 
 don't work and just try to misguide/make your life harder. Can you be the one who is the winner in the maps or can you find the secrets that lie beneath this simple game. Only you tell by playing
