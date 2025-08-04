@@ -652,7 +652,7 @@ afterInput(() => {
 ...........
 ...........
 e....v....p`)
-    addText("Easter Egg Found <3", { x: 1, y: 5, color: color`3` });
+    addText("Easter Egg Found <3", { x: 1, y: 5, color: color`3`, });
   }
 
   if (player2Tile.some(sprite => sprite.type === eastereggpass)) {
@@ -668,7 +668,7 @@ e....v....p`)
 ...........
 ...........
 e....v....p`)
-    addText("Easter Egg Found <3", { x: 5, y: 5, color: color`3` });
+    addText("Easter Egg Found <3", { x: 1, y: 5, color: color`3`});
   }
 
 
@@ -704,6 +704,6 @@ function restartGame() {
 
 
     // Display scores
-  addText(`Player1: ${scorePlayer1}`, { x: 1, y: 1, color: color`3` });
-  addText(`Player2: ${scorePlayer2}`, { x: 1, y: 2, color: color`7` });
+  addText(`Player1: ${scorePlayer1}`, { x: 0, y: 1, color: color`3` });
+  addText(`Player2: ${scorePlayer2}`, { x: 0, y: 2, color: color`7` });
 });
