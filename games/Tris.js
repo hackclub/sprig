@@ -1,5 +1,9 @@
 /*
-"Tris" game using pseudo-triminos (3-block shapes, that can be connected by corners). Move (A/D), soft drop (S), rotate (W), hard drop (j), and restart (I).
+@title: Tris
+@author: dear-satan
+@description: "Tris" game using pseudo-triminos (3-block shapes, that can be connected by corners). Move (A/D), soft drop (S), rotate (W), hard drop (j), and restart (I).
+@tags: [game, infinite]
+@addedOn: 2025-08-04
 */
 
 const blockMoveSpeed = 0.6;
