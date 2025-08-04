@@ -2,7 +2,7 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: 2048- new
+@title: 2048
 @author: Waleed Ajmal
 @tags: [puzzle,logic]
 @addedOn: 2025-08-04
