@@ -1,3 +1,11 @@
+/*
+@title:Dirty Dice
+@author:Aditya Mendiratta
+@description:An infinite platformer game
+@tags: []
+@addedOn: 2025-MM-DD 
+*/
+
 const player = "p"
 const platform = "g"
 const background = "b"
