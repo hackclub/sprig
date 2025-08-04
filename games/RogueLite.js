@@ -19,6 +19,9 @@ const help2= "u";
 const easteregg= "s";
 const eastereggpass = "r";
 const nolevel = "z";
+const background = "b";
+
+setBackground("b")
 
 
 setLegend(
@@ -243,6 +246,23 @@ setLegend(
 ......L1........
 ......L1........
 ......L1........`],
+  [ background, bitmap`
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222`]
 )
 
 setSolids([player1, player2, wall,]);
@@ -382,6 +402,17 @@ e..wwwwwwwwwwwwwwwww
 ...w.w.ww...w.ww...w
 ...wfw.gw..fwfwf..fw
 p..wwwwwwwwwwwwwwwww`,
+  map`
+yyyyyyyyyy
+ywwwwwwwyw
+yyyywgyyyw
+ywwywwwwyy
+ywyywwwyyw
+wwywwywyww
+yyyyyyyyyy
+wywywywwyw
+wpwwwwwwew`,
+  
   
   map`
 ........
@@ -468,9 +499,6 @@ const secret = tune`
 
 // Play it:
 playTune(melody)
-
-// Play it 10 times:
-playTune(melody, 10)
 
 // Play it until the heat death of the universe:
 const playback = playTune(melody, Infinity)
