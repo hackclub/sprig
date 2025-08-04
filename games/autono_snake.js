@@ -2,7 +2,7 @@
 @title: Autono Snake
 @description: A real-time snake game where you compete against several AI-controlled snakes to eat food and grow the longest.
 @author: Dhruv Suthar (@0xdhrv)
-@tags: ['snake', 'ai', 'real-time']
+@tags: ['endless', 'real-time']
 @addedOn: 2025-06-11
 */
 
