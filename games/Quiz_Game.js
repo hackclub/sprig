@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: idk yet
-@author: 
-@tags: []
-@addedOn: 2025-00-00
+@title: Quiz Game
+@author: Nandi
+@tags: [quiz]
+@addedOn: 2025-08-05
 */
 
 
