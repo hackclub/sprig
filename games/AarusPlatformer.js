@@ -1,7 +1,7 @@
      /*
-    @title: 2D Platformer Adventure
+    @title: AarusPlatformer
     @author: Aarav Gupta
-    @tags: []
+    @tags: [Platformer, Adventure, Singleplayer]
     @addedOn: 2025-06-16
     */
 
@@ -391,6 +391,8 @@ wwwwwwwwwwwwwwGw`
         // Check for spike collision
         let spikesAtPlayer = getTile(playerSprite.x, playerSprite.y).filter(sprite => sprite.type === spike);
         if (spikesAtPlayer.length > 0) {
+            // Reset score when player dies
+            score = 0;
             // Death effect
             clearText();
             addText("Don't lose hope.", { x: 3, y: 0, color: color`2` });
@@ -490,7 +492,7 @@ wwwwwwwwwwwwwwGw`
     function updateUI() {
     clearText();
     // Simple yellow title at top
-    addText("Aarav's Platformer!", { x: 1, y: 0, color: color`3` });
+    addText("AarusPlatformer", { x: 3, y: 0, color: color`3` });
     
     // Bottom UI - positioned 4 blocks lower
     addText(`Coins:${score/10}`, { x: 0, y: 15, color: color`6` });
