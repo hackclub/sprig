@@ -2,7 +2,7 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: cat
+@title: Missing cat
 @author: KurikoKazumi116
 @tags: []
 @addedOn: 7/19/2025
