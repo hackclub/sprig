@@ -346,14 +346,6 @@ onInput("w", () => {
     smoothJump(getPlayer(), 3);
   }
 });
-onInput("l", () => {
-  currentLevel++;
-  setMap(levels[currentLevel]);
-});
-onInput("k", () => {
-  currentLevel--;
-  setMap(levels[currentLevel]);
-});
 
 setInterval(() => {
   if (!isOnGround() && !jumping) {
