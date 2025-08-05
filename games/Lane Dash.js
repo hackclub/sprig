@@ -1,3 +1,13 @@
+/*
+@title: Lane Dash
+@author: Mustafa Ali 
+@description:Dodge your way to victory in Lane Dodger! You control a top-down car racing down a highway packed with hazards. Switch lanes quickly to avoid oncoming obstacles and survive as long as possible. Get a point for every obstacle you dodge!
+@tags: ["endless runner", "car"]
+@addedOn: 2025-7-22 
+*/
+
+
+
 const player = "p"
 const obstacle = "o" 
 const track = "t"
