@@ -1,8 +1,9 @@
 /*
-@title: music laker
-@author: uplandmeuris
+@title: music maker
+@description: A game where you can create your own music.
+@author: Yarne Meuris
 @tags: []
-@addedOn: 2025-00-00
+@addedOn: 2025-08-05
 */
 
 const tile = "t"
