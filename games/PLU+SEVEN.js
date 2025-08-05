@@ -1,8 +1,8 @@
 /*
-@title: TBD
+@title: PLU+SEVEN
 @author: solace
-@tags: []
-@addedOn: 2025-00-00
+@tags: [ "maze", "dungeon" ]
+@addedOn: 2025-07-16
 */
 
 const player = "p"
