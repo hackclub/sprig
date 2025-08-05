@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: Dekoder-py
 @tags: []
 @addedOn: 2025-07-10
+@description: Fun Maze Game!
 */
 
 const player = "p"
