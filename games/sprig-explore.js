@@ -2,7 +2,7 @@
 @title: sprig-explore
 @author: moustache cat productions
 @tags: ["rpg"]
-@addedOn: 2025-04-10
+@addedOn: 2025-07-16
 @description: In sprig-explore, you journey across the large, complex world of the sprig console and collect pieces of a mysterious PCB for some... random child that's curious.
 */
 //for those wondering, this project makes little to no use of generative AI. i asked the editor's built in chatbot a few times for support and it did not help whatsoever so you can consider this project AI-free.
