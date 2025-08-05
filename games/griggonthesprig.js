@@ -4,7 +4,8 @@
         
         @title: Grigg on the Sprig
         @author: kingsuper195
-        @tags: [platformer]
+		@description: Evil red people have stolen the Grigg's keys! He must get them back! Press WASD to move, don't fall on spikes, collect keys to end at the door! Don't let the evil red guys kill you.
+        @tags: ["platformer"]
         @addedOn: 2025-7-13
         */
 
