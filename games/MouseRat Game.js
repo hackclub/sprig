@@ -2,14 +2,11 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Pac Man Test
-@author: 
-@tags: []
-@addedOn: 2024-00-00
-
-Things to Improve:
-**Title Screen
-**In between process add a loading screen
+@title: MouseCat
+@author:  Lor14N
+@description: Pac Man like game where you escape from a mouse and collect keys.
+@tags: [maze]
+@addedOn: 2025-08-04
 */
 
 //Create a title screen
