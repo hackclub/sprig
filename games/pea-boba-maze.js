@@ -1,9 +1,9 @@
 /* 
-@title: maze_game_starter
-@description: A simple template to help you get started with making a maze game.
-@author: Cheru Berhanu
+@title: pea-boba-maze
+@description: My game has 14 levels of different mazes that increasingly get more challenging. The goal is to get the green pea to the boba.
+@author: Kailey Liou
 @tags: []
-@addedOn: 2023-08-08
+@addedOn: 2025-08-04
 */
 
 const player = "p"
