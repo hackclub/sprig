@@ -3,9 +3,10 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: cat
-@author: K116
+@author: KurikoKazumi116
 @tags: []
-@addedOn: 2025-00-00
+@addedOn: 7/19/2025
+@description: Your cat is missing, push your cat to the house to win.
 */
 
 const player = "p"
