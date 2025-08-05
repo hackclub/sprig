@@ -5,7 +5,8 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Banana Escape
 @author: mel-cruz
 @tags: []
-@addedOn: 2025-00-00
+@addedOn: 2025-08-25
+@description: Banana Game: The objective is to get the banana to the doors and away (last level) from the people
 */
 // banana game: objective is to get the banana to the door and away to not get eaten
 
