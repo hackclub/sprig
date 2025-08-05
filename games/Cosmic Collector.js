@@ -3,6 +3,7 @@
 @author: Maxine Guo
 @tags: ['space', 'arcade']
 @description: Fly your ship, collect valuable coins, and avoid dangerous asteroids. Moving costs energy, so grab energy boosts when you can!
+@addedOn: 2025-08-05
 */
 
 // === COSMIC COLLECTOR RELOADED ===
