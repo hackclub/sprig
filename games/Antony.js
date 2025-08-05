@@ -3,6 +3,7 @@
 @author: Chee Yong Lee
 @tags: ['puzzle']
 @addedOn: 2025-08-05
+@description: The objective of the game is to lead Antony to collect crumbs and proceed to the next room.
 
 Instructions:
 
