@@ -1,15 +1,20 @@
 /*
 @title: dino-square
-@author: Efe-Cal
-@addedOn: 06-21-2025
+@author: Efe Çalışkan
+@description: This is a dino game where the player goes around the screen instead of going on a straight line
+@tags: []
+@addedOn: 2025-06-22
 */
 
 const player = "p"
-
+const cactus_normal = "n"
+const cactus_right = "r"
 const block = "b"
 
+let game_ended = false
+
 setLegend(
-  [player, bitmap`
+  [ player, bitmap`
 ................
 ................
 .....0000.......
@@ -25,26 +30,62 @@ setLegend(
 .....0..0.......
 .....0..0.......
 .....0..0.......
-.....0..0.......`],
-  [block, bitmap`
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDD......DDDDD
-DDDD........DDDD
-DDD..........DDD
-DDD..........DDD
-DDD..........DDD
-DDD..........DDD
-DDD..........DDD
-DDD..........DDD
-DDDD........DDDD
-DDDDD......DDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD`]
+.....0..0.......` ],
+  [ cactus_normal, bitmap`
+................
+................
+................
+................
+...0000000000...
+...0000000000...
+...0000000000...
+...0000000000...
+...0000000000...
+...0000000000...
+...0000000000...
+...0000000000...
+...0000000000...
+...0000000000...
+...0000000000...
+...0000000000...`],
+  [ cactus_right, bitmap`
+................
+................
+................
+....000000000000
+....000000000000
+....000000000000
+....000000000000
+....000000000000
+....000000000000
+....000000000000
+....000000000000
+....000000000000
+....000000000000
+................
+................
+................`],
+  [ block, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+00000......00000
+0000........0000
+000..........000
+000..........000
+000..........000
+000..........000
+000..........000
+000..........000
+0000........0000
+00000......00000
+0000000000000000
+0000000000000000
+0000000000000000`]
+
 )
 
+setSolids([player, cactus_normal, cactus_right])
 
 let level = 0
 const levels = [map`
@@ -64,157 +105,104 @@ const levels = [map`
 setMap(levels[level])
 
 setPushables({
-  [player]: []
+  [ player ]: []
 })
 
-function jump(h, d) {
+function move(h,d){
 
-  if (getFirst(player).y == height() - 1) {
-    getFirst(player).y -= h
-    setTimeout(() => {
-      getFirst(player).y += h
-    }, d)
+  if(getFirst(player).y==height()-1){
+    getFirst(player).y-=h
+    setTimeout(()=>{
+      getFirst(player).y+=h
+    },d)
   }
-  if (getFirst(player).x == width() - 1) {
-    getFirst(player).x -= h
-    setTimeout(() => {
-      getFirst(player).x += h
-    }, d)
+  if(getFirst(player).x==width()-1){
+    getFirst(player).x-=h
+    setTimeout(()=>{
+      getFirst(player).x+=h
+    },d)
   }
-  if (getFirst(player).y == 0) {
-    getFirst(player).y += h
-    setTimeout(() => {
-      getFirst(player).y -= h
-    }, d)
+  if(getFirst(player).y==0){
+    getFirst(player).y+=h
+    setTimeout(()=>{
+      getFirst(player).y-=h
+    },d)
   }
-  if (getFirst(player).x == 0) {
+  if(getFirst(player).x==0){
     getFirst(player).x += h
-    setTimeout(() => {
-      getFirst(player).x -= h
-    }, d)
+    setTimeout(()=>{
+      getFirst(player).x-=h
+    },d)
   }
 }
 
 
-onInput("w", () => { jump(1, 1000) })
-onInput("s", () => { jump(2, 1500) })
+onInput("w",()=>{move(1,1000)})
+onInput("s",()=>{move(2,1500)})
 let floor = 0
 
-const gameLoop = () => {
-
+const gameLoop = () =>{
+  
   // movement 
-  if (getFirst(player).x < width() - 1 && floor == 0) {
-    getFirst(player).x += 1
-    if (getFirst(player).x == width() - 1) floor = 1
-  } else if (0 < getFirst(player).y && floor == 1) {
-    getFirst(player).y -= 1
-    if (getFirst(player).y == 0) floor = 2
-  } else if (0 < getFirst(player).x && floor == 2) {
-    getFirst(player).x -= 1
-    if (getFirst(player).x == 0) floor = 3
-  } else if (height() - 1 > getFirst(player).y && floor == 3) {
-    getFirst(player).y += 1
-    if (getFirst(player).y == height() - 1) floor = 0
+  if(getFirst(player).x<width()-1 && floor == 0){
+    getFirst(player).x+=1
+    if (getFirst(player).x == width()-1) floor =1
+  }
+  else if(0<getFirst(player).y && floor == 1){
+    getFirst(player).y-=1
+    if (getFirst(player).y == 0) floor =2
+  }
+  else if (0<getFirst(player).x && floor == 2){
+    getFirst(player).x-=1
+    if(getFirst(player).x==0) floor = 3
+  }
+  else if (height()-1>getFirst(player).y && floor==3){
+    getFirst(player).y +=1
+    if(getFirst(player).y==height()-1) floor = 0
   }
 
-
+  
   // Game Over
-  if (tilesWith(player, block).length != 0) {
-    console.log("Game Over");
-    clearText();
-    addText("Game Over", {
-      x: 5,
-      y: 5,
-      color: color`3`
-    });
-  } else {
-    setTimeout(() => { gameLoop() }, 500)
-  }
+  if(tilesWith(player,block).length!=0){
+    console.log("Game Over")
+  }//else{
+    setTimeout(()=>{gameLoop()},500)
+  //}
 }
 
-
-function checkSpritesInRange_({ x, y }) {
-
-  // Check neighboring tiles for sprites
-  var neighborSprites = [];
-
-  const neighbors = [
-    { x: x + 1, y },
-    { x: x - 1, y },
-    { x, y: y + 1 },
-    { x, y: y - 1 }
-  ];
-
-  neighbors.forEach(neighbor => {
-    if (!(neighbor.x > width() || neighbor.y > height() || neighbor.x < 0 || neighbor.y < 0)) {
-      console.log(neighbor.x, neighbor.y)
-      let sprites = []
-      sprites = getTile(neighbor.x, neighbor.y);
-      console.log(neighborSprites.length)
-      neighborSprites.push(...sprites);
+function blockGen0(){
+  for(let i=0;i<3;i++){
+      setTimeout(()=>{
+        let blocks = getAll(block)
+        let y = Math.floor(Math.random() * height())
+        let minus_x = (Math.random() < 0.75 ? 1 : 0) + 1
+        addSprite(width()-minus_x,y,block)
+        //clearTile(blocks[i].x,blocks[i].y)
+      },2500*i)
     }
-  });
+} 
 
-  return neighborSprites.length > 0;
+function blockGen1(){
+  for(let i=0;i<3;i++){
+      setTimeout(()=>{
+        let blocks = getAll(block)
+        let x = Math.floor(Math.random() * width())
+        let plus_y = (Math.random() < 0.25 ? 1 : 0)
+        addSprite(x,plus_y,block)
+        //clearTile(blocks[i].x,blocks[i].y)
+      },2500*i)
+    }
 }
-
-function checkSpritesInRange({ x, y }) {
-  const neighbors = [
-    { x: x + 1, y },
-    { x: x - 1, y },
-    { x, y: y + 1 },
-    { x, y: y - 1 }
-  ];
-  getAll(block).forEach(b => {
-    neighbors.forEach(n => {
-      if (n.x == b.x && n.y == b.y) {
-        return true;
-      }
-    })
-  })
-}
-
-function blockGen0() {
-  for (let i = 0; i < 3; i++) {
-    setTimeout(() => {
-      let blocks = getAll(block)
-      let y, minus_x
-
-      do {
-        y = Math.floor(Math.random() * height())
-        minus_x = (Math.random() < 0.75 ? 0 : 1) + 1
-      } while (checkSpritesInRange({ "x": width() - minus_x, "y": y }))
-      addSprite(width() - minus_x, y, block)
-    }, 2500 * i)
-  }
-}
-
-function blockGen1() {
-  for (let i = 0; i < 3; i++) {
-    setTimeout(() => {
-      let blocks = getAll(block)
-      let x, plus_y
-      do {
-        x = Math.floor(Math.random() * width())
-        plus_y = (Math.random() < 0.25 ? 1 : 0)
-      } while (checkSpritesInRange({ "x": x, "y": plus_y }))
-      addSprite(x, plus_y, block)
-    }, 2500 * i)
-  }
-}
-
-function blockGen2() {
-  for (let i = 0; i < 3; i++) {
-    setTimeout(() => {
-      let blocks = getAll(block)
-      let x, y
-      do {
-        x = (Math.random() < 0.25 ? 1 : 0)
-        y = Math.floor(Math.random() * height())
-      } while (checkSpritesInRange({ "x": x, "y": y }))
-      addSprite(x, y, block)
-    }, 2500 * i)
-  }
+function blockGen2(){
+  for(let i=0;i<3;i++){
+      setTimeout(()=>{
+        let blocks = getAll(block)
+        let x = (Math.random() < 0.25 ? 1 : 0)
+        let y = Math.floor(Math.random()* height())
+        addSprite(x,y,block)
+        //clearTile(blocks[i].x,blocks[i].y)
+      },2500*i)
+    }
 }
 
 function clearAll(type) {
@@ -223,26 +211,24 @@ function clearAll(type) {
   })
 }
 
-function blockGen3() {
-  for (let i = 0; i < 3; i++) {
-    setTimeout(() => {
-      let blocks = getAll(block)
-      let x, minus_y
-      do {
-        x = Math.floor(Math.random() * width())
-        minus_y = (Math.random() < 0.75 ? 1 : 0) + 1
-      } while (checkSpritesInRange({ "x": x, "y": height() - minus_y }))
-      addSprite(x, height() - minus_y, block)
-    }, 2500 * i)
-  }
-  setTimeout(() => { clearAll(block) }, 15000)
+function blockGen3(){
+  for(let i=0;i<3;i++){
+      setTimeout(()=>{
+        let blocks = getAll(block)
+        let x = Math.floor(Math.random() * width())
+        let minus_y = (Math.random() < 0.75 ? 1 : 0) + 1
+        addSprite(x,height()-minus_y,block)
+        //clearTile(blocks[i].x,blocks[i].y)
+      },2500*i)
+    }
+  setTimeout(()=>{clearAll(block)},10000)
 }
 
 const blockGen = () => {
-
-  function wait(_floor) {
-    if (floor == _floor) {
-      switch (_floor) {
+  
+  function wait(_floor){
+    if (floor==_floor){
+      switch (_floor){
         case 0:
           blockGen0()
           break;
@@ -256,24 +242,23 @@ const blockGen = () => {
           blockGen3()
           break;
       }
-    } else {
-      setTimeout(() => { wait(_floor) }, 100)
+    }
+    else{
+      setTimeout(()=>{wait(_floor)},100)
     }
   }
-
-  function work() {
+  function work(){
     wait(0)
     wait(1)
     wait(2)
     wait(3)
   }
   work()
-  for (let i = 1; i < 100; i++) {
-    setTimeout(() => { clearAll(block);
-      work() }, (width() + height()) * 2 * 500 * i)
+  for(let i=1;i<100;i++){
+    setTimeout(()=>{clearAll(block);work()},(width()+height())*2*500*i)
   }
-
+  
 }
 
 gameLoop()
-setTimeout(blockGen, 3000)
+setTimeout(blockGen,3000)
