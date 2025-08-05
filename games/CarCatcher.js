@@ -1,11 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: kitten_Drop
-@author: wvminecraftkid
-@tags: []
-@addedOn: 2024-10-30
+@title: CarCatcher
+@author: Pranav
+@description: watch out!, its raining cats!
+@tags: ["cats","catch","cute"]
+@addedOn: 2025-08-05 
 */
 
 const player = "p"
