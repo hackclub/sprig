@@ -1,7 +1,7 @@
 /*
 @title: sprig-explore
 @author: moustache cat productions
-@tags: [rpg]
+@tags: ["rpg"]
 @addedOn: 2025-04-10
 @description: In sprig-explore, you journey across the large, complex world of the sprig console and collect pieces of a mysterious PCB for some... random child that's curious.
 */
