@@ -1,6 +1,6 @@
 /*
-@title: Super Mario Sprig
-@author: Assistant
+@title: Femto
+@author: Siddharthan pradeep
 @tags: ['platformer']
 @addedOn: 2024-01-01
 */
