@@ -1,8 +1,9 @@
 /*
 @title: CHIP-8
 @author: Milk_Cool
-@tags: []
-@addedOn: 2025-00-00
+@tags: ['retro']
+@addedOn: 2025-08-06
+@description: A simple CHIP-8 emulator for Sprig.
 */
 
 // https://github.com/skni-kod/chip-8/blob/main/src/main/java/chip8/Memory.java
