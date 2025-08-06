@@ -2,7 +2,8 @@
 @title: Mania
 @author: 13SHR
 @tags: [osu, rythm, mania, music, miku]
-@addedOn: 2025-05-30
+@description: Catch the notes in rhythm with the music !
+@addedOn: 2025-08-06
 */
 
 /******** VARIABLES DEFINITIONS ******/
@@ -618,7 +619,7 @@ setInterval(() => {
   
   for (const n of notes) {
     const d = Math.abs(n.y - keys_y)
-    if ( d <= 1 ) {
+    if ( d <= 2 ) {
       const row = keys_x.indexOf(n.x);
       if (!removed[row] && is_pressed(row)) {
         n.remove();
@@ -629,24 +630,27 @@ setInterval(() => {
           max_combo = combo;
         }
 
-        if (d === 0) {
+        if (d === 0) { // Perfect
           passed[0] += 1;
           score += 300 + 10 * combo;
-        } else {
+        } else if (d === 2) { // Miss (early)
+          combo = 0;
+          passed[2] += 1;
+        } else { // Great
           passed[1] += 1;
           score += 100 + 5  * combo;
         }
         
-      updateScore()
+        updateScore();
       }
     }
   }
-}, te/4)
+}, 100)
 
-// Make all the notes move down or disappear every 250ms
+// Make all the notes move down every 250ms
 setInterval(() => {
   getAll(note).forEach(note => {
-    if (note.y === keys_y + 1) {
+    if (note.y === keys_y + 1) { // disappear if already at the bottom, and score a MISS
       note.remove();
       combo = 0;
       passed[2] += 1;
@@ -673,7 +677,7 @@ const spawner = setInterval(() => {
       setMap(states[1]);
       setBackground(heart);
       finalScore();
-    }, 5 * te);
+    }, 6 * te);
   }
 }, te);
 
