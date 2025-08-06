@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: MouseCat
 @author:  Lor14N
 @description: Pac Man like game where you escape from a mouse and collect keys.
-@tags: [maze]
+@tags: ["maze"]
 @addedOn: 2025-08-04
 */
 
