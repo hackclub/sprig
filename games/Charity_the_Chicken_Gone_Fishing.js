@@ -2,7 +2,7 @@
 @title: Charity the Chicken Gone Fishing
 @author: Moses Shriver
 @description: Fishing using wasd to move, j to cast line, and spamming j to reel in fish
-@tags: [fishing]
+@tags: ["fishing"]
 @addedOn: 2025-8-4
 */
 const charity = "C";
