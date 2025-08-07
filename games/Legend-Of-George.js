@@ -3,6 +3,7 @@
 @author: Fred
 @tags: ["adventure", "dungeon", "zelda"]
 @addedOn: 2025-07-19
+@description: A game inspired by the first legend of zelda game. But Instead enemies only move when you do. Try your best to get through each level to defeat the dungeon!
 */
 
 // --- SPRITE DEFINITIONS ---
