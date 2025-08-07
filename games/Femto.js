@@ -3,6 +3,7 @@
 @author: Siddharthan pradeep
 @tags: ['platformer']
 @addedOn: 2024-01-01
+@description: Save Femto the hen from enemies and fire! Collect coins and diamonds to help you survive. Use WASD to move and jump through multiple phases to complete each level.
 */
 
 const player = "p"
