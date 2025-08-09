@@ -1,8 +1,9 @@
 /*
-@title: seed-and-shadow
-@author: me
-@tags: []
-@addedOn: 2025-00-00
+@title: Stealth 100
+@author: unowen[https://github.com/pari55051]
+@description: Use your stealth skills to retrieve the Gem succesfully withut being seen by the guard birds
+@tags: [stealth, puzzle game, navigation, hideout, heist, hide, guard birds]
+@addedOn: 2025-08-03 
 */
 
 // Stealth 100 — Stealth Puzzle Game (10 Levels)
