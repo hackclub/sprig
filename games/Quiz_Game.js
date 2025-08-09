@@ -1,11 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Quiz Game
 @author: Nandi
+@description: A simple quiz game with 10 questions.
 @tags: [quiz]
-@addedOn: 2025-08-05
+@addedOn: 2025-08-09
 */
 
 
