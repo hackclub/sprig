@@ -1,6 +1,7 @@
 /*
 @title: Treasure Hunter
 @author: Rudy Deana
+@description: A little game about taking some coins and don't get killes
 @tags: ['adventure', 'collection']
 @addedOn: 2025-07-30
 */
