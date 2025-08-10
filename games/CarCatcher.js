@@ -10,18 +10,20 @@ const player = "p"
 const kitten = "k"
 const background = "b"
 const black = "d"
-
+const sky = "s"
+const ground = "g"
+const cloud = "c"
 // Player Sprites
 const playerIdle = bitmap`
-.00..........00.
-..0..........0..
-..00........00..
-...0000000000...
+.CC..........CC.
+.CC..........CC.
+..CC........CC..
+..CCCCCCCCCCCC..
 ....L......L....
 ....L.0L0L.L....
 ....L.0L0L.L....
 ....L.LLLL.L....
-.....LL0LLL.....
+....LLL0LLLL....
 ......LLLL......
 ......LLLL......
 ......LLLL......
@@ -138,7 +140,10 @@ const death = tune`
 333: G4-333 + E4-333,
 5000`;
 
-const playback = playTune(beautifulTune, Infinity)
+
+
+let playback = playTune(beautifulTune, Infinity);
+let playbackDeath;
 
 let gameOver = false;
 
@@ -153,18 +158,18 @@ function forever(callback) {
 setLegend(
   [player, playerIdle],
   [background, bitmap `
-7777777777777777
-7722777777767777
-7722277777777722
-7777777777777777
-2777777777777777
-2277777777777777
-2777777777777777
-7777777777777777
-7D77777777777777
-DDD7777777777777
-DDD7777774444444
-DCD4444444444444
+5555555555555555
+5555555555555555
+5522555555555555
+5522555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
 4C44444444444444
 4C44DDDDDD444D44
 444DDDDDDDDDDDDD
@@ -202,11 +207,62 @@ DDDDDDDDDDDDDDDD`],
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000`]
+0000000000000000`],
+  [sky,bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777`],
+  [ground,bitmap`
+0777777777722227
+0777777777772277
+0777772227777777
+0777772222777777
+0777222222777777
+0777222277777777
+0777777777777777
+0777777777777777
+0777777777777777
+0222777777222777
+0222777777222227
+0227777777772227
+0777777777777777
+0777772277777777
+0777222277777777
+0777222777722277` ],
+  [cloud,bitmap`
+.........2222...
+................
+................
+.2222222........
+.2222222........
+.2222222222.....
+.2222222222.....
+....2222222...22
+.............222
+................
+................
+...222222.......
+...222222.......
+................
+..........222...
+........222222..` ]
 )
 
 setSolids([player, black])
-setBackground("b")
+setBackground(ground)
 
 let level = 0
 const levels = [
@@ -301,7 +357,11 @@ setup(() => {
         addSprite(kittenSprite.x, kittenSprite.y, kitten);
       } else if (!gameOver) {
         playback.end();
-        playTune(death);
+        if (playbackDeath && playbackDeath.end){
+          playbackDeath.end();
+        }
+
+        playbackDeath = playTune(death);
         clearText();
         addText("P", { x: 17, y: 1, color: color`2` });
         addText("o", { x: 17, y: 2, color: color`2` });
@@ -337,5 +397,25 @@ onInput("d", () => {
   if (playerSprite.x < width() - 1) {
     playerSprite.x += 1;
     playerSprite.bitmap = playerRight;
+  }
+});
+
+onInput("s", () => {
+  if (gameOver) {
+    // Stop the death tune playback if it's currently playing
+    if (playback && playback.end) {
+      playback.end();
+    }
+
+    if (playbackDeath && playbackDeath.end) {
+      playbackDeath.end();
+    }
+    
+    gameOver = false;
+    setMap(levels[level]);
+    setPushables({ [player]: [] });
+    
+    // Start the main tune again after stopping the death tune
+    playback = playTune(beautifulTune, Infinity);
   }
 });
