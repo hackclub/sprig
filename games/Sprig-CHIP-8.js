@@ -6,6 +6,15 @@
 @description: A simple CHIP-8 emulator for Sprig.
 */
 
+/*
+WASD are mapped to 5789, K is mapped to 4 and L is mapped to 6.
+
+You can swich between games using J and open the full sized keyboard with I (WASD to navigate, L to toggle)
+
+You can upload your own ROMs by chaning the ROMS array in the main file.
+By default, this emulator keeps a pressed key held until its status is queried by the CPU. If you'd like to disable that behavior, change KB_STICKY to false.
+*/
+
 // https://github.com/skni-kod/chip-8/blob/main/src/main/java/chip8/Memory.java
 const HEX_SPRITES = [
   // 0
@@ -118,6 +127,7 @@ const ROMS = [
 
 const INTERVAL_TIME = 5;
 const TICKS_PER_TIME = 10;
+const KB_STICKY = true; // Whether we should hold the keys until the next scan
 const KB_DOWN = 30; // For how many cycles we should hold the keys
 
 const screenParts = "01234567";
@@ -333,15 +343,18 @@ const tick = () => {
   } else if(parts[0] === 0xe && inst[1] === 0x9e) {
     if(ctx.kb[ctx.reg[parts[1]]] > 0)
       ctx.pc += 2
+    if(KB_STICKY) ctx.kb[ctx.reg[parts[1]]] = 0;
   } else if(parts[0] === 0xe && inst[1] === 0xa1) {
     if(!ctx.kb[ctx.reg[parts[1]]] > 0)
       ctx.pc += 2
+    if(KB_STICKY) ctx.kb[ctx.reg[parts[1]]] = 0;
   } else if(parts[0] === 0xf && inst[1] === 0x07) {
     ctx.reg[parts[1]] = ctx.delay;
   } else if(parts[0] === 0xf && inst[1] === 0x0a) {
     const key = ctx.kb.findIndex(x => x > 0);
     if(key === -1) add2 = false;
     else ctx.reg[parts[1]] = key;
+    if(KB_STICKY) ctx.kb = ctx.kb.map(() => 0);
   } else if(parts[0] === 0xf && inst[1] === 0x15)
     ctx.delay = ctx.reg[parts[1]];
   else if(parts[0] === 0xf && inst[1] === 0x18)
@@ -367,7 +380,7 @@ const tick = () => {
   }
   
   if(add2) ctx.pc += 2;
-  ctx.kb = ctx.kb.map(x => x > 0 ? x - 1 : x);
+  if(!KB_STICKY) ctx.kb = ctx.kb.map(x => x > 0 ? x - 1 : x);
   ctx.reg = ctx.reg.map(norm8b);
   ctx.ram = ctx.ram.map(norm8b);
   ctx.i = norm12b(ctx.i);
