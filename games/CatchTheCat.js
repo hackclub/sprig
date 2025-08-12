@@ -1,3 +1,12 @@
+/*
+@title: CatchTheCat
+@author: PrathamGhaywat
+@description: A game where you try to catch a cat
+@tags: [#cat, #catch]
+@addedOn: 2025-08-12 
+*/
+
+
 const player = "p"
 const cat = "c"
 const grass = "g"
