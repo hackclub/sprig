@@ -15,6 +15,10 @@ const block = "b"
 const confetti = "c"
 const string = "s"
 
+const door = "d"
+const key = "k"
+
+
 setLegend(
   [ player, bitmap`
 ................
@@ -101,64 +105,89 @@ L..............L
 ................
 ................
 ................`],
+  [ door, bitmap`
+................
+................
+................
+...CCCCCCCC.....
+...CCCFCF9C.....
+...CFF9CCC9.....
+...CCCCCCCC.....
+...CCCCCCCC.....
+...CC9CC66C.....
+...CCFCC66C.....
+...CCCCC66C.....
+...CCCCCCCC.....
+...CFCCCCCC.....
+...C9FCCCF9.....
+...CCCCCCCC.....
+...CCCCCCCC.....`],
+  [ key, bitmap`
+................
+................
+................
+................
+................
+................
+.CCC............
+.C.C6666666666..
+.C.C...6F..6.6..
+.CCC...6..F6.6..
+.......F...6F...
+..........6F....
+................
+................
+................
+................` ],
 
 )
 
 setSolids([player, wall, block])
 
-
+let hasKey = false
 
 function levelCheck() {
-  if (level == 0) {
-  if (getFirst(player).y == 5 && getFirst(player).x == 4) {
-    level = 1
-    setMap(levels[level])
-    coinCollected = false
-    
+ const p = getFirst(player)
+  if (tilesWith(player, key).length) {
+    hasKey = true
+    clearTile(p.x, p.y)
+    addSprite(p.x, p.y, player)
   }
-} else if (level == 1) {
-    if (getFirst(player).x == 0 && getFirst(player).y == 5) {
-      level = 2
-      setMap(levels[level])
-    }
-} else if (level == 2) {
-    if (getFirst(player).x == 0 && getFirst(player).y == 0) {
-      level = 3
-      setMap(levels[3])
-      addText("You Won!", {
-        x: 6,
-        y: 6,
-        color: color`7`
-    })
-    }
-  }  
+  if (tilesWith(player, door).length && hasKey) {
+    level++
+    loadLevel()
+  }
 }
 
 
+function loadLevel(){
+   hasKey = false
+  setMap(levels[level])
+}
 
 let level = 0
 const levels = [
   map`
 wwwww
-.www.
+.wwwk
 .....
 .www.
 pwww.
-wwww.`,
+wwwwd`,
   map `
 wwwpw
 ....w
 .w.ww
-.w...
+kw...
 wwww.
-.....`,
+d....`,
   map `
-...wp
+d..wp
 w.ww.
 w....
 wwbww
 w...w
-....w`,
+k...w`,
   map `
 cscsc
 scscs
@@ -198,4 +227,3 @@ onInput("j", () => {
 afterInput(() => {
   levelCheck()
 })
-
