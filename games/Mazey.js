@@ -15,10 +15,6 @@ const block = "b"
 const confetti = "c"
 const string = "s"
 
-
-let coinCollected = false
-
-
 setLegend(
   [ player, bitmap`
 ................
