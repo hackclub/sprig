@@ -15,6 +15,10 @@ const block = "b"
 const confetti = "c"
 const string = "s"
 
+
+let coinCollected = false
+
+
 setLegend(
   [ player, bitmap`
 ................
@@ -100,10 +104,39 @@ L..............L
 ................
 ................
 ................
-................`]
+................`],
+
 )
 
 setSolids([player, wall, block])
+
+
+
+function levelCheck() {
+  if (level == 0) {
+  if (getFirst(player).y == 5 && getFirst(player).x == 4) {
+    level = 1
+    setMap(levels[level])
+    coinCollected = false
+    
+  }
+} else if (level == 1) {
+    if (getFirst(player).x == 0 && getFirst(player).y == 5) {
+      level = 2
+      setMap(levels[level])
+    }
+} else if (level == 2) {
+    if (getFirst(player).x == 0 && getFirst(player).y == 0) {
+      level = 3
+      setMap(levels[3])
+      addText("You Won!", {
+        x: 6,
+        y: 6,
+        color: color`7`
+    })
+    }
+  }  
+}
 
 
 
@@ -167,25 +200,6 @@ onInput("j", () => {
 
 
 afterInput(() => {
-  if (level == 0) {
-  if (getFirst(player).y == 5 && getFirst(player).x == 4) {
-    level = 1
-    setMap(levels[level])
-  }
-} else if (level == 1) {
-    if (getFirst(player).x == 0 && getFirst(player).y == 5) {
-      level = 2
-      setMap(levels[level])
-    }
-} else if (level == 2) {
-    if (getFirst(player).x == 0 && getFirst(player).y == 0) {
-      level = 3
-      setMap(levels[3])
-      addText("You Won!", {
-        x: 6,
-        y: 6,
-        color: color`7`
-    })
-    }
-  }
+  levelCheck()
 })
+
