@@ -327,8 +327,8 @@ wwwwwwwwwww`,
   
   map`
 ...........
-.p.......e.
 ...........
+.p.......e.
 ...........
 ...........
 ...........
@@ -336,24 +336,26 @@ wwwwwwwwwww`,
 .....g.....`,
   map`
 ...........
-.p.......e.
 ...........
+.p.......e.
 ...........
 ...........
 ...........
 ...........
 ffffffgffff`,
   map`
-.......w..
-.p.w..wwe.
-wwww..wf..
-......www.
-..........
-ww.ww.www.
-....w..w..
-f...w.fw..
-www.wwww..
-wf..gwf...`,
+ww...wwwyyyy
+f..w.wfy....
+www....wfw..
+...p.w..wwe.
+fywwww..wf..
+yy......www.
+yf..........
+yyww.ww.www.
+fy....w..w..
+......w.fwf.
+.ywww.wwwwy.
+.rwf..gwf...`,
   map`
 ................
 .....p....e.....
@@ -706,10 +708,10 @@ function restartGame() {
   setMap(levels[level]);
 
   // Reset player positions
-  getFirst(player1).x = 0;
-  getFirst(player1).y = 0;
-  getFirst(player2).x = 10;
-  getFirst(player2).y = 0;
+  getFirst(player1).x = 1;
+  getFirst(player1).y = 1;
+  getFirst(player2).x = 9;
+  getFirst(player2).y = 1;
 
   clearText();
 }
