@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Encircle
 @author: Shaven Wickramanayaka
-@tags: []
-@addedOn: 2025-00-00
+@tags: ["multiplayer","strategy","blocks"]
+@addedOn: 2025-08-13
 */
 
 const player1 = "p";
