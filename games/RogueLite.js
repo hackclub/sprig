@@ -344,17 +344,17 @@ wwwwwwwwwww`,
 ...........
 ffffffgffff`,
   map`
-ww...wwwyyyy
-f..w.wfy....
+ww...wwwwwww
+f..w.wfw....
 www....wfw..
 ...p.w..wwe.
-fywwww..wf..
-yy......www.
-yf..........
-yyww.ww.www.
-fy....w..w..
+fwwwww..wf..
+ww......www.
+wf..........
+wwww.ww.www.
+fw....w..w..
 ......w.fwf.
-.ywww.wwwwy.
+.wwww.wwwww.
 .rwf..gwf...`,
   map`
 ................
@@ -422,19 +422,19 @@ p...wgww...fwwe
 ....wf........f`,
   map`
 ...wwww.wwww...
-......w.w....f.
+.f...fw.wf...f.
 ...wwww.wwww...
 ww.w.gw.wf.w.ww
-.w....w.w....w.
-.w.w.ww.ww.w.w.
-ww.www...www.w.
+......w.w......
+f..wfww.wwfw..f
+ww.www...www.ww
 ...............
 ww.wwwe.pwww.ww
-.w.w.ww.ww.w.w.
-.w....w.w....w.
+f..wfww.wwfw..f
+......w.w......
 ww.w.fw.wf.w.ww
 ...wwww.wwww...
-.f....w.w....f.
+.f...fw.wf...f.
 ...wwww.wwww...`,
   map`
 e..wwwwwwwwwwwwwwwww
@@ -457,6 +457,18 @@ wwywwywyww
 yyyyyyyyyy
 wywywywwyw
 wpwwwwwwew`,
+  map`
+...........
+p..w...w..e
+wwww...wwww
+...........
+www.wyw.www
+wfy.wfw.wfw
+www.www.wyw
+...........
+www.www.wyw
+wfy.wgy.wfw
+www.www.www`,
   
   
   map`
@@ -495,7 +507,7 @@ function showTutorial() {
   setTimeout(() => {
     tutorialActive = false;
     clearText(); 
-  }, 1500);
+  }, 1000);
 }
 
 const melody = tune`
