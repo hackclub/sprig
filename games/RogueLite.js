@@ -316,8 +316,8 @@ let scorePlayer2 = 0;
 // MAPS
 const levels = [
   map`
-p.........e
 ...........
+.p.......e.
 ...........
 ...........
 jjj.....wwy
@@ -469,6 +469,27 @@ wpwwwwwwew`,
   
 ]      
 
+// Define a variable to track if the game is currently in the title screen state
+let inTitleScreen = true;
+
+// Display the title screen
+addText("Rogue Lite", { x: 5, y: 3, color: color`1`, size: 3 });
+addText("Move to Start", { x: 4, y: 5, color: color`9` });
+
+// Add input handling for starting the game from the title screen
+onInput("i", () => {
+  if (inTitleScreen) {
+    inTitleScreen = false;
+    
+    // Remove the title screen text
+    clearText();
+    
+    // Start the game at the first level
+    setMap(levels[0]);
+  }
+});
+
+
 let tutorialShown = false;
 
 function showTutorial() {
@@ -572,7 +593,7 @@ onInput("d", () => {
   getFirst(player1).x += 1
 })
 
-// Player 2 (Arrow Keys Controls)
+// Player 2 (IJKL Keys Controls)
 onInput("k", () => {
   getFirst(player2).y += 1
 })
