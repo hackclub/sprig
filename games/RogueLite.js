@@ -438,7 +438,7 @@ ww.w.fw.wf.w.ww
 ...wwww.wwww...`,
   map`
 e..wwwwwwwwwwwwwwwww
-...w..fwf.wfww.fwwfw
+...w..fwf.wfww.fwwrw
 ...w..ww.....ww.w..w
 ...w..w..www..w.w..w
 ...j.....w......w..w
@@ -462,8 +462,8 @@ wpwwwwwwew`,
 p..w...w..e
 wwww...wwww
 ...........
-www.wyw.www
-wfy.wfw.wfw
+www.wjw.www
+wfj.wfw.wfw
 www.www.wyw
 ...........
 www.www.wyw
