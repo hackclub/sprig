@@ -471,14 +471,12 @@ wpwwwwwwew`,
   
 ]      
 
-// Define a variable to track if the game is currently in the title screen state
 let inTitleScreen = true;
 
 // Display the title screen
 addText("Rogue Lite", { x: 5, y: 3, color: color`1`, size: 3 });
 addText("Move to Start", { x: 4, y: 5, color: color`9` });
 
-// Add input handling for starting the game from the title screen
 onInput("i", () => {
   if (inTitleScreen) {
     inTitleScreen = false;
@@ -495,7 +493,13 @@ onInput("i", () => {
 let tutorialShown = false;
 
 function showTutorial() {
+  tutorialActive = true;
   addText("Tutorial!", { x: 5, y: 5, color: color`4` });
+
+  setTimeout(() => {
+    tutorialActive = false;
+    clearText(); 
+  }, 1500);
 }
 
 const melody = tune`
@@ -557,10 +561,8 @@ const secret = tune`
 187.5: D5~187.5,
 1687.5`;
 
-// Play it:
 playTune(melody)
 
-// Play it until the heat death of the universe:
 const playback = playTune(melody, Infinity)
 
 
@@ -649,14 +651,19 @@ function checkWin() {
   }
 }
 
+tutorialShown = false; 
+let tutorialActive = false;
 
 afterInput(() => {
   checkWin();
   clearText();
-    // Check if tutorial has been shown
+  if (tutorialActive) {
+    addText("Tutorial!", { x: 5, y: 5, color: color`4` });
+  }
+
   if (!tutorialShown) {
     showTutorial();
-    tutorialShown = true; // Mark tutorial as shown
+    tutorialShown = true;
   }
 
   const player1Tile = getTile(getFirst(player1).x, getFirst(player1).y);
