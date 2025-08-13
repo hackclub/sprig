@@ -480,11 +480,7 @@ addText("Move to Start", { x: 4, y: 5, color: color`9` });
 onInput("i", () => {
   if (inTitleScreen) {
     inTitleScreen = false;
-    
-    // Remove the title screen text
     clearText();
-    
-    // Start the game at the first level
     setMap(levels[0]);
   }
 });
@@ -710,8 +706,8 @@ function restartGame() {
   scorePlayer1 = 0;
   scorePlayer2 = 0;
 
-  // Reset level
-  level = 0;
+  // Reset level (skip tutorial)
+  level = 1;
   setMap(levels[level]);
 
   // Reset player positions
