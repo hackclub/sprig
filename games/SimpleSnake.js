@@ -1,6 +1,7 @@
 /*
 @title: SimpleSnake
-@author: wolf-yuan-6115
+@description: Just a simple snake game, with kinda good art(?) and some sounds for it.
+@author: @wolf-yuan-6115
 @tags: []
 @addedOn: 2025-08-14
 */
