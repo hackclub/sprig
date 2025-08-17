@@ -1,20 +1,3 @@
-# Battery Blitz
-
-Battery Blitz is a maze runner with a twist - energy is limited.
-It is also a semi-puzzle game
-
-### Completed:
-- Basic game
-- 7 levels of increasing difficulty
-- score system
-- energy system
-- timer
-- learned javascript
-
-### TODO:
-- Procedural Generation
-- Time pressure?
-
 # 🍃 Hack Club Sprig 🍃
 
 **[💻 Online Editor: Make a game](https://sprig.hackclub.com/editor)** | **[👀 Gallery: Find games](https://sprig.hackclub.com/gallery)** | **[🕸 Landing Page](https://sprig.hackclub.com)** | **[🎮 Firmware](https://github.com/hackclub/spade)** | **[👾 Engine](https://github.com/hackclub/sprig-engine)**
