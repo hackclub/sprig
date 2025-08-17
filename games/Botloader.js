@@ -1,3 +1,11 @@
+/*
+@title: Botloader
+@author: Rainier-PS
+@description: Botloader is a puzzle game where players control a robot with limited battery power. Push boxes onto all target spots before running out of energy. Collect extra batteries along the way to keep moving and complete each level.
+@tags: ["puzzle", "logic", "strategy", "box-pushing", "sokoban", "battery", "robot", "sci-fi"]
+@addedOn: 2025-08-17 
+*/
+
 const robot = "r"
 const wall = "w"
 const box = "b"
