@@ -117,7 +117,7 @@ let score = 0
 let timeLeft = 60
 let gameOver = false
 let timerId
-let stingCount = 0   // 🐝 track player stings
+let stingCount = 0   //  track player stings
 
 // background music playback handle
 let bgmPlayback = null
@@ -208,7 +208,7 @@ function spawnBug() {
   }
 }
 
-// 🧪 Spawn potion in empty tile
+//  Spawn potion in empty tile
 function spawnPotion() {
   if (gameOver) return
   const emptyTiles = []
@@ -299,7 +299,7 @@ function startGame() {
   if (potionInterval) clearInterval(potionInterval)
   potionInterval = setInterval(() => {
     if (!gameOver) spawnPotion()
-  }, 15000) // 🧪 every 15s
+  }, 15000) //  every 15s
 
   playBackgroundMusic()
 }
@@ -346,7 +346,7 @@ afterInput(() => {
   const potions = getTile(p.x, p.y).filter(t => t.type === potion)
   if (potions.length > 0) {
     potions[0].remove()
-    if (stingCount > 0) stingCount--  // 🧪 heal 1 sting
+    if (stingCount > 0) stingCount--  //  heal 1 sting
     clearText()
     drawHud()
     addText("+1 Extra Chance!", { y: 13, color: color`0` })
@@ -383,7 +383,7 @@ setInterval(() => {
   })
 }, 500)
 
-// 🕷️ Move bad bugs slower (400ms)
+//  Move bad bugs slower (400ms)
 setInterval(() => {
   if (gameOver) return
   const allBadBugs = getAll(badbug)
@@ -407,7 +407,7 @@ setInterval(() => {
       bb.y = newY
     }
   })
-}, 400) // ⚡ slower now
+}, 400) //  slower now
 
 // Start
 startGame()
