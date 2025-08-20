@@ -1,6 +1,6 @@
 
 /* 
-@title: Infinite generating maze
+@title: cherry farmer 
 @description: A game where you try to collect as much cherry as posible without falling behind
 @author: Thai Bao Anh (tab1540)
 @tags: []
