@@ -1,5 +1,6 @@
      /*
     @title: AarusPlatformer
+    @description: A 2D platformer game where players navigate through levels, collect coins, and avoid spikes.
     @author: Aarav Gupta
     @tags: [Platformer, Adventure, Singleplayer]
     @addedOn: 2025-06-16
@@ -160,7 +161,7 @@ ggggsgg..ggsgggg
 w..............w
 w......GG......w
 wwwwwwwwwwwwwwww`,
-    
+
     map`
 wwwwwwwwwwwwwwww
 w..............w
@@ -173,7 +174,7 @@ ggg...........Gw
 w............ggg
 w..ssssssssss..w
 wwwwwwwwwwwwwwww`,
-    
+
     map`
 wwwwwwwwwwwwwwww
 w..............w
@@ -301,20 +302,20 @@ wwwwwwwwwwwwwwGw`
         playerVelocityY = maxFallSpeed;
         }
     }
-    
+
     // Apply vertical movement
     if (playerVelocityY != 0) {
         let playerSprite = getFirst(player);
         if (playerSprite) {
         let newY = playerSprite.y + Math.sign(playerVelocityY);
-        
+
         // Check collision
         if (newY >= 0 && newY < height()) {
             let testMove = { x: playerSprite.x, y: newY };
-            let collision = getTile(testMove.x, testMove.y).some(sprite => 
+            let collision = getTile(testMove.x, testMove.y).some(sprite =>
             sprite.type === wall || sprite.type === ground
             );
-            
+
             if (!collision) {
             playerSprite.y = newY;
             playerOnGround = false;
@@ -330,7 +331,7 @@ wwwwwwwwwwwwwwGw`
         }
         }
     }
-    
+
     // Check collisions every frame, not just on input
     checkCollisions();
     }, 50);
@@ -373,7 +374,7 @@ wwwwwwwwwwwwwwGw`
     function checkCollisions() {
         let playerSprite = getFirst(player);
         if (!playerSprite) return;
-        
+
         // Check for coin collection
         let coinsAtPlayer = getTile(playerSprite.x, playerSprite.y).filter(sprite => sprite.type === coin);
         if (coinsAtPlayer.length > 0) {
@@ -387,7 +388,7 @@ wwwwwwwwwwwwwwGw`
         1125`);
             });
         }
-        
+
         // Check for spike collision
         let spikesAtPlayer = getTile(playerSprite.x, playerSprite.y).filter(sprite => sprite.type === spike);
         if (spikesAtPlayer.length > 0) {
@@ -406,16 +407,16 @@ wwwwwwwwwwwwwwGw`
         150: E4~150 + F4~150 + G4~150,
         4350`);
         }
-        
+
         // Check for goal
         let goalAtPlayer = getTile(playerSprite.x, playerSprite.y).filter(sprite => sprite.type === goal);
         if (goalAtPlayer.length > 0) {
             nextLevel();
         }
-        
+
         // Update ground detection
         if (playerSprite.y < height() - 1) {
-            let groundBelow = getTile(playerSprite.x, playerSprite.y + 1).some(sprite => 
+            let groundBelow = getTile(playerSprite.x, playerSprite.y + 1).some(sprite =>
             sprite.type === wall || sprite.type === ground
             );
             playerOnGround = groundBelow;
@@ -440,7 +441,7 @@ wwwwwwwwwwwwwwGw`
     score = 0;
     playerVelocityY = 0;
     playerOnGround = false;
-    
+
     // Restart game loop if it was stopped
     if (!gameLoop) {
         gameLoop = setInterval(() => {
@@ -451,20 +452,20 @@ wwwwwwwwwwwwwwGw`
             playerVelocityY = maxFallSpeed;
             }
         }
-        
+
         // Apply vertical movement
         if (playerVelocityY != 0) {
             let playerSprite = getFirst(player);
             if (playerSprite) {
             let newY = playerSprite.y + Math.sign(playerVelocityY);
-            
+
             // Check collision
             if (newY >= 0 && newY < height()) {
                 let testMove = { x: playerSprite.x, y: newY };
-                let collision = getTile(testMove.x, testMove.y).some(sprite => 
+                let collision = getTile(testMove.x, testMove.y).some(sprite =>
                 sprite.type === wall || sprite.type === ground
                 );
-                
+
                 if (!collision) {
                 playerSprite.y = newY;
                 playerOnGround = false;
@@ -480,12 +481,12 @@ wwwwwwwwwwwwwwGw`
             }
             }
         }
-        
+
         // Check collisions every frame, not just on input
         checkCollisions();
         }, 50);
     }
-    
+
     restartLevel();
     }
 
@@ -493,7 +494,7 @@ wwwwwwwwwwwwwwGw`
     clearText();
     // Simple yellow title at top
     addText("AarusPlatformer", { x: 3, y: 0, color: color`3` });
-    
+
     // Bottom UI - positioned 4 blocks lower
     addText(`Coins:${score/10}`, { x: 0, y: 15, color: color`6` });
     addText(`Level:${level + 1}/10`, { x: 10, y: 15, color: color`4` });
@@ -506,24 +507,24 @@ wwwwwwwwwwwwwwGw`
         // Game completed
         clearText();
         addText("You Win!", { x: 6, y: 0, color: color`6` });
-        
+
         // Rating system
         let rating = "";
         if (score >= 60) rating = "Perfect!";
         else if (score >= 40) rating = "Great!";
         else if (score >= 20) rating = "Good!";
         else rating = "Try Again";
-        
+
         // Bottom UI - score and rating
         addText(`Score: ${score}`, { x: 0, y: 15, color: color`1` });
         addText(`-`, { x: 11, y: 15, color: color`8` });
         addText(rating, { x: 12, y: 15, color: color`7` });
-        
+
         // Stop the game loop and reset for restart
         clearInterval(gameLoop);
         level = 0;
         score = 0;
-        
+
         playTune(tune`
     150: C5^150,
     150: E5^150,
