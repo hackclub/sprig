@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Snake — Single File HTML Game</title>
+  <style>
+    :root{--bg:#0f1724;--panel:#0b1220;--accent:#22c55e;--muted:#94a3b8;}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, Arial, Helvetica, sans-serif;background:linear-gradient(180deg,#071126 0%, #081728 100%);color:#e6eef8}
+    .container{max-width:900px;margin:28px auto;padding:20px;background:rgba(255,255,255,0.03);border-radius:12px;box-shadow:0 6px 30px rgba(2,6,23,0.7)}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    h1{font-size:20px;margin:0}
+    .meta{color:var(--muted);font-size:13px}
+    .game-wrap{display:flex;gap:20px;flex-wrap:wrap;margin-top:18px}
+    canvas{background:linear-gradient(180deg,#081426,#03203a);border-radius:8px;border:3px solid rgba(255,255,255,0.03);display:block}
+    .side{flex:1;min-width:220px}
+    .controls{display:flex;flex-direction:column;gap:8px}
+    .row{display:flex;gap:8px}
+    button{background:#0b1220;border:1px solid rgba(255,255,255,0.04);color:#e6eef8;padding:8px 10px;border-radius:8px;cursor:pointer}
+    button.primary{background:var(--accent);color:#042014;font-weight:700}
+    .score{font-weight:700;font-size:18px}
+    .small{font-size:13px;color:var(--muted)}
+    .touch-controls{display:none;margin-top:10px}
+    .touch-row{display:flex;justify-content:center;gap:8px}
+    .touch-row button{width:56px;height:56px;border-radius:10px;font-size:20px}
+    @media (max-width:720px){
+      .game-wrap{flex-direction:column;align-items:center}
+      .side{width:100%}
+      .touch-controls{display:block}
+      canvas{width:92vw;height:92vw}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Snake</h1>
+        <div class="meta">Arrow keys / WASD to move • Tap buttons on mobile</div>
+      </div>
+      <div style="text-align:right">
+        <div class="score" id="score">Score: 0</div>
+        <div class="small">Best: <span id="best">0</span></div>
+      </div>
+    </header>
+
+    <div class="game-wrap">
+      <div>
+        <canvas id="game" width="600" height="600"></canvas>
+      </div>
+
+      <aside class="side">
+        <div class="controls">
+          <div class="row">
+            <button id="start" class="primary">Start</button>
+            <button id="pause">Pause</button>
+            <button id="restart">Restart</button>
+          </div>
+
+          <div class="row">
+            <label class="small">Speed</label>
+            <input id="speed" type="range" min="4" max="18" value="8" />
+          </div>
+
+          <div class="row small">Grid size: <span id="gridSize">20</span> px</div>
+
+          <div style="margin-top:12px">
+            <div class="small">How to play</div>
+            <ul class="small" style="margin:8px 0 0 18px;">
+              <li>Eat the food (square) to grow and score points.</li>
+              <li>Avoid running into walls and your own tail.</li>
+              <li>Speed increases as you move the speed slider.</li>
+            </ul>
+          </div>
+
+          <div class="touch-controls" id="touchControls">
+            <div class="small" style="text-align:center;margin-bottom:6px">Touch Controls</div>
+            <div class="touch-row">
+              <button data-dir="up">▲</button>
+            </div>
+            <div class="touch-row" style="margin-top:8px">
+              <button data-dir="left">◄</button>
+              <button data-dir="down">▼</button>
+              <button data-dir="right">►</button>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+    </div>
+
+    <div style="margin-top:14px;color:var(--muted);font-size:13px">Tip: You can press Space to pause/resume. This file is a single HTML — save as <code>snake.html</code> and open in your browser.</div>
+  </div>
+
+<script>
+(() => {
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const scoreEl = document.getElementById('score');
+  const bestEl = document.getElementById('best');
+  const startBtn = document.getElementById('start');
+  const pauseBtn = document.getElementById('pause');
+  const restartBtn = document.getElementById('restart');
+  const speedInput = document.getElementById('speed');
+  const gridSizeDisplay = document.getElementById('gridSize');
+  const touchControls = document.getElementById('touchControls');
+
+  // Config
+  let grid = 20; // size of each cell in px
+  let cols = Math.floor(canvas.width / grid);
+  let rows = Math.floor(canvas.height / grid);
+
+  let snake = [{x: Math.floor(cols/2), y: Math.floor(rows/2)}];
+  let dir = {x:1,y:0};
+  let nextDir = dir;
+  let food = null;
+  let running = false;
+  let paused = false;
+  let score = 0;
+  let best = Number(localStorage.getItem('snake_best') || 0);
+  bestEl.textContent = best;
+
+  function placeFood(){
+    while(true){
+      const fx = Math.floor(Math.random()*cols);
+      const fy = Math.floor(Math.random()*rows);
+      if(!snake.some(s=>s.x===fx && s.y===fy)){
+        food = {x:fx,y:fy};
+        return;
+      }
+    }
+  }
+
+  function reset(){
+    grid = parseInt(gridSizeDisplay.dataset?.g || 20) || 20;
+    cols = Math.floor(canvas.width / grid);
+    rows = Math.floor(canvas.height / grid);
+    snake = [{x: Math.floor(cols/2), y: Math.floor(rows/2)}];
+    dir = {x:1,y:0};
+    nextDir = dir;
+    score = 0;
+    running = false;
+    paused = false;
+    food = null;
+    updateScore();
+    placeFood();
+    draw();
+  }
+
+  function updateScore(){
+    scoreEl.textContent = 'Score: ' + score;
+    bestEl.textContent = best;
+  }
+
+  function draw(){
+    // clear
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    // draw grid (subtle)
+    ctx.save();
+    ctx.globalAlpha = 0.06;
+    for(let x=0;x<=cols;x++){
+      ctx.fillRect(x*grid-1,0,1,canvas.height);
+    }
+    for(let y=0;y<=rows;y++){
+      ctx.fillRect(0,y*grid-1,canvas.width,1);
+    }
+    ctx.restore();
+
+    // draw snake
+    for(let i=snake.length-1;i>=0;i--){
+      const s = snake[i];
+      ctx.fillStyle = i===0 ? '#43d17a' : '#22a55a';
+      ctx.fillRect(s.x*grid+2, s.y*grid+2, grid-4, grid-4);
+    }
+
+    // draw food
+    if(food){
+      ctx.fillStyle = '#ff6b6b';
+      ctx.fillRect(food.x*grid+4, food.y*grid+4, grid-8, grid-8);
+    }
+  }
+
+  function step(){
+    if(!running || paused) return;
+    // apply next dir
+    dir = nextDir;
+    const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+
+    // check collisions with walls
+    if(head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows){
+      return gameOver();
+    }
+
+    // check collisions with tail
+    if(snake.some((s,idx)=> idx>0 && s.x===head.x && s.y===head.y)){
+      return gameOver();
+    }
+
+    snake.unshift(head);
+
+    // eat food
+    if(food && head.x===food.x && head.y===food.y){
+      score += 1;
+      if(score>best){ best = score; localStorage.setItem('snake_best', best); }
+      placeFood();
+      updateScore();
+    } else {
+      snake.pop();
+    }
+
+    draw();
+  }
+
+  function gameOver(){
+    running = false;
+    paused = false;
+    updateScore();
+    draw();
+    // flash effect
+    ctx.save();
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.restore();
+    setTimeout(()=>{
+      alert('Game Over! Your score: ' + score);
+    }, 50);
+  }
+
+  // Game loop uses setInterval based on speed
+  let ticker = null;
+  function start(){
+    if(running) return;
+    running = true;
+    paused = false;
+    // calculate fps from speed slider (higher value -> faster)
+    const speed = Number(speedInput.value);
+    const fps = Math.max(4, speed);
+    if(ticker) clearInterval(ticker);
+    ticker = setInterval(step, 1000 / fps);
+  }
+
+  function pauseToggle(){
+    if(!running) return;
+    paused = !paused;
+    pauseBtn.textContent = paused ? 'Resume' : 'Pause';
+  }
+
+  function restart(){
+    reset();
+    start();
+  }
+
+  // keyboard input
+  window.addEventListener('keydown', (e) => {
+    const key = e.key;
+    if(['ArrowUp','w','W'].includes(key)) tryChangeDir(0,-1);
+    if(['ArrowDown','s','S'].includes(key)) tryChangeDir(0,1);
+    if(['ArrowLeft','a','A'].includes(key)) tryChangeDir(-1,0);
+    if(['ArrowRight','d','D'].includes(key)) tryChangeDir(1,0);
+    if(key===' '){ // space toggles pause
+      if(!running){ start(); } else { pauseToggle(); }
+      e.preventDefault();
+    }
+  });
+
+  function tryChangeDir(x,y){
+    // prevent reversing into itself
+    if(snake.length>1 && snake[0].x + x === snake[1].x && snake[0].y + y === snake[1].y) return;
+    nextDir = {x,y};
+  }
+
+  // touch buttons
+  touchControls.addEventListener('click', (e)=>{
+    const dir = e.target.dataset?.dir;
+    if(!dir) return;
+    if(dir==='up') tryChangeDir(0,-1);
+    if(dir==='down') tryChangeDir(0,1);
+    if(dir==='left') tryChangeDir(-1,0);
+    if(dir==='right') tryChangeDir(1,0);
+  });
+
+  // UI hooks
+  startBtn.addEventListener('click', ()=>{
+    start();
+  });
+  pauseBtn.addEventListener('click', ()=>{
+    if(!running) return;
+    pauseToggle();
+  });
+  restartBtn.addEventListener('click', ()=>{
+    restart();
+  });
+
+  speedInput.addEventListener('input', ()=>{
+    // restart interval with new speed if running
+    const speed = Number(speedInput.value);
+    if(ticker){ clearInterval(ticker); ticker = setInterval(step, 1000/Math.max(4,speed)); }
+  });
+
+  // allow grid size to be changed by double-clicking the grid-size text (simple inline control)
+  gridSizeDisplay.textContent = grid;
+  gridSizeDisplay.dataset.g = grid;
+  gridSizeDisplay.style.cursor = 'pointer';
+  gridSizeDisplay.title = 'Double-click to change grid size';
+  gridSizeDisplay.addEventListener('dblclick', ()=>{
+    const val = prompt('Enter grid size in px (12 - 40):', grid);
+    const n = parseInt(val);
+    if(!isNaN(n) && n>=12 && n<=40){
+      grid = n; gridSizeDisplay.textContent = grid; gridSizeDisplay.dataset.g = grid; reset();
+    }
+  });
+
+  // handle window resize for neatness
+  function handleResize(){
+    // keep canvas resolution constant but CSS scales on mobile; no aggressive resizing to keep grid math simple
+  }
+  window.addEventListener('resize', handleResize);
+
+  // initial setup
+  placeFood();
+  draw();
+
+})();
+</script>
+</body>
+</html>
