@@ -3,9 +3,10 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: lader climber 1
-@author: 
-@tags: []
+@author:judedanger2012 
+@tags: [game]
 @addedOn: 2025-00-00
+//this is my first sprig game i made what i wanted to be a fun simple entertaining game.
 */
 
 let isFrozen = false; // Define isFrozen variable at the beginning
