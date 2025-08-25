@@ -1,6 +1,7 @@
 /*
 @title: Snake Adventure
 @author: Kazi Zayeed
+@description: Classic snake game where you control a growing snake to collect food while avoiding obstacles.
 @tags: []
 @img: ""
 @addedOn: 2025-08-25
