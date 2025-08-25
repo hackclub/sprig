@@ -1,6 +1,10 @@
-/*
-@title: Space Blaster Détaillé
-*/
+	>     /*
+	>     @title: Alien Blast
+	>     @author: Aloys
+	>     @description: A game where you kill aliens 
+	>     @tags: [alien]
+	>     @addedOn: 2025-08-25
+	>     */
 
 const player = "p"
 const alien = "a"
