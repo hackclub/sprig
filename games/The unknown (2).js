@@ -1,9 +1,10 @@
-
+/*
 @title: The Unknown
 @author: Adam Nguyen
 @tags: []
 @addedOn: 2025-24-07
 @description: An endless Google dino insperated game. You play as a fish trying to avoid obstical
+*/
 const player = "p"
 const cactus = "c"
 const rock = "r"
