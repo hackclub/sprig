@@ -1,3 +1,4 @@
+
 # Your checklist for this pull request
 
 ## Author name
@@ -24,6 +25,14 @@ Check off the items that are true. <!-- Put a `x` in the  `[ ]`. Example: `[x] T
 - [ ] The game runs without errors. 
 - [ ] The name of the file/game contains only alphanumeric characters, `-`s, or `_`s.
 - [ ] The game name is not the same as the others from [gallery](https://sprig.hackclub.com/gallery)
+- [ ] The game has metadata at the top of the file in the following format:
+	>     /*
+	>     @title:
+	>     @author:
+	>     @description:
+	>     @tags: []
+	>     @addedOn: 2025-MM-DD
+	>     */
 
 ## Image (If an image is used)
 
