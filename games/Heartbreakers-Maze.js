@@ -1,4 +1,4 @@
->     /*
+/*
 	>     @title:Heartbreakers Maze
 	>     @author:Ethan
 	>     @description:Collect the gems
