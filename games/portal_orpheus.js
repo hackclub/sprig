@@ -1,5 +1,5 @@
 /*
-@title: Portal Dino Version
+@title: Portal: Orpheus Edition
 @author: [Lucas11, Art3mis]
 @tags: [puzzle, deno]
 @description: "An sprig game inspired by portal."
@@ -529,12 +529,12 @@ afterInput(() => {
 
   if (finalredPortalsCovered === targetNumber) {
       level = level + 1;  
-  }
+  }     
   
   if (redPortalsCoveredcube.length >= 1) {
     const bp = getFirst(blueportal);
     const cb = getFirst(cube);
-    
+
         cb.x = bp.x;
         cb.y = bp.y;
         
@@ -554,7 +554,7 @@ afterInput(() => {
         cb.x = rp.x;
         cb.y = rp.y + 1;
       
-
+        
   }
   if (numberCoveredButton === targetNumber) {
       addSprite(getFirst(spawner).x, getFirst(spawner).y + 1, cube);
@@ -629,3 +629,4 @@ afterInput(() => {
 
   }
 })
+
