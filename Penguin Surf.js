@@ -1,9 +1,9 @@
 /*
-@title: 
-@author:  
-@description
+@title: Penguin Surf
+@author: Larissa G.
+@description: On your mark, set, get ready to surf through an avalanche as you, playing as a penguin. attempt to escape snowballs. Make sure you do not collide or else you will end up as penguin mush. Dodge, surf and repeat! Play with standard w.a.d.s commands and press 'i' to restart. Have fun and tysm for surfing by!
 @tags: []
-@addedOn: 2025-00-00
+@addedOn: 2025-08-28
 */
 
 const player = "p";
@@ -332,7 +332,7 @@ function updateScore() {
   addText("Score: " + score.toString(), { x: 0, y: 1, color: color`2` });
 
   if (score > highscore) {
-    highscore = score; // Update highscore if current score is higher
+    highscore = score; 
   }
 
   addText("Highscore: " + highscore.toString(), { x: 0, y: 0, color: color`2` });
@@ -367,14 +367,11 @@ onInput("a", () => {
 
 onInput("i", () => {
   if (deadStatus) {
-    // Reset game variables
     score = 0;
     deadStatus = false;
 
-    // Clear existing obstacles
     getAll(snowball).forEach(obstacle => obstacle.remove());
 
-    // Restart game loop
     gameLoop = setInterval(() => {
       despawnObstacles();
       moveObstacles();
@@ -394,7 +391,6 @@ onInput("i", () => {
       }
     }, 370);
 
-    // Update score display
     updateScore();
   }
 });
