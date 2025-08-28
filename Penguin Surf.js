@@ -1,9 +1,7 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: Penguin Surf 🐧 
-@author: Larissa G. 
+@title: 
+@author:  
+@description
 @tags: []
 @addedOn: 2025-00-00
 */
