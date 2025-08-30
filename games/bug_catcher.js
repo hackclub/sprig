@@ -1,7 +1,8 @@
 /*
 @title: Bug catcher
 @author: Viraj
-@tags: [In this game which i've made you've to catch the bug moving all around the map and keep your player safe from badbug which can sting you make you slower and even kill you if they sting more than 2 times and they also take away your points you can save yourself by taking potion bottle whcich spawns in every 15 seconds they give you extra life and you can restart the game by pressing K ]
+@tags: ['Action']
+@description: "In this game you have to catch bugs and prevent bad bugs to stung you, use wasd to move and k to restart and also take potion which spawn every 15 sec if you get stung by badbugs"
 @addedOn: 2025-05-23
 */
 const player = "p"
