@@ -30,7 +30,7 @@ Check off the items that are true. <!-- Put a `x` in the  `[ ]`. Example: `[x] T
 	>     @title:
 	>     @author:
 	>     @description:
-	>     @ghost of astra (tone tags please): []`  
+	>     @tags: []
 	>     @addedOn: 2025-MM-DD
 	>     */
 
