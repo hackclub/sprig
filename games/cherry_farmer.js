@@ -3,8 +3,8 @@
 @title: cherry farmer 
 @description: A game where you try to collect as much cherry as posible without falling behind
 @author: Thai Bao Anh (tab1540)
-@tags: []
-@addedOn: 2025-06-09
+@tags: ['endless']
+@addedOn: 2025-08-30
 */
 
 const player = "p";
