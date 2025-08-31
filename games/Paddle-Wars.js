@@ -1,3 +1,9 @@
+/*
+@title: Paddle Wars
+@author: R09Aditya
+@tags: arcade, pong, multiplayer, competitive, retro, 2player, ball-game
+@addedOn: 2025-08-25
+*/
 const paddle = "p";
 const ball = "b";
 const darkBackground = "d";
