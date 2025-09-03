@@ -1,9 +1,9 @@
 /*
 @title: Bug catcher
 @author: Viraj
-@tags: ['Action']
+@tags: ['action']
 @description: "In this game you have to catch bugs and prevent bad bugs to stung you, use wasd to move and k to restart and also take potion which spawn every 15 sec if you get stung by badbugs"
-@addedOn: 2025-05-23
+@addedOn: 2025-09-02
 */
 const player = "p"
 const bug = "b"
