@@ -1,6 +1,7 @@
 /*
 @title: Zombie Rush
 @author: Arghya Vyas
+@description: A simple shooter game where you shoot zombies!
 @tags: [zombie, shooter, arcade, game]
 @addedOn: 2025-00-00
 */
