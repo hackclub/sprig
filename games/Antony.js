@@ -3,7 +3,7 @@
 @author: Chee Yong Lee
 @tags: ['puzzle']
 @addedOn: 2025-08-05
-@description: The objective of the game is to lead Antony to collect crumbs and proceed to the next room.
+@description: The objective of the game is to lead Antony to collect crumbs and proceed to the next room, while using the least time as possible.
 
 Instructions:
 
@@ -18,6 +18,8 @@ const wall = "w"
 const crumb = "c"
 const exit = "e"
 const floor = "f"
+var inputTimes = 0
+var startTime
 
 setLegend(
   [ ant, bitmap`
@@ -140,16 +142,72 @@ w..w.c.w
 w...c..w
 w......w
 wwwwwwww`,
-`wwwwwwww
+map`wwwwwwww
 w.c.a..w
 w...w..w
 w.c....w
 w..w.c.w
 w.w....w
 w...c..w
-wwwwwwww`
+wwwwwwww`,
+map`
+wwwwwwww
+w.c.a.cw
+wwwww..w
+w.cw...w
+w..w.c.w
+w.ww.www
+wc..c..w
+wwwwwwww`,
+map`
+wwwwwwww
+wwc.awcw
+ww.wwwfw
+wwcw...w
+w..w.c.w
+w.wwww.w
+w...c..w
+wwwwwwww`,
+map`
+wwwwwwww
+w.c.a.ww
+www.wwww
+wwc.w.ww
+w..wwc.w
+w.w.ww.w
+w...c..w
+wwwwwwww`,
+map`
+wwwwwwww
+w.c.awcw
+wfwwwwfw
+wfw.f.fw
+w.wccw.w
+w.wwww.w
+w...c..w
+wwwwwwww`,
+map`
+wwwwwwww
+waw.f.cw
+wfwcwfww
+wfcwwcfw
+ww.www.w
+wcfwwf.w
+ww..c.ww
+wwwwwwww`,
 ]
 
+function shuffle(array) {
+  let currentIndex = array.length;
+  while (currentIndex != 0) {
+    let randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+}
+
+shuffle(levels)
 setMap(levels[level])
 setBackground(floor)
 
@@ -161,6 +219,12 @@ function checkCrumbs() {
   }
 }
 
+function msToMinSec(millis) {
+  var minutes = Math.floor(millis / 60000);
+  var seconds = ((millis % 60000) / 1000).toFixed(0);
+  return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+}
+
 function checkWin() {
   if (tilesWith(ant, exit).length > 0) {
     level++
@@ -168,6 +232,7 @@ function checkWin() {
       setMap(levels[level])
     } else {
       addText("Antony Wins!", { y: 4, color: color`0` })
+      addText("Time Elapsed: "+msToMinSec(performance.now() - startTime), { y: 6, color: color`7` })
     }
   }
 }
@@ -178,6 +243,10 @@ onInput("a", () => moveAnt(-1, 0))
 onInput("d", () => moveAnt(1, 0))
 
 function moveAnt(dx, dy) {
+  if(inputTimes == 0) {
+    startTime = performance.now()
+  }
+  inputTimes ++
   const antSprite = getFirst(ant)
   const newX = antSprite.x + dx
   const newY = antSprite.y + dy
