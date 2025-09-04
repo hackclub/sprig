@@ -1,15 +1,22 @@
 /*
 @title: Treasure Hunter
 @author: Rudy Deana
-@description: A little game about taking some coins and don't get killes
-@tags: ['adventure', 'collection']
-@addedOn: 2025-07-30
+@description: An treasure hunting adventure with power-ups, traps, and more levels!
+@tags: ['adventure', 'collection', 'arcade']
+@addedOn: 2025-09-04
 */
+
 const player = "p"
 const wall = "w"
 const treasure = "t"
 const enemy = "e"
 const goal = "g"
+const powerup = "u"
+const trap = "x"
+const key = "k"
+const door = "d"
+const crystal = "c"
+
 setLegend(
   [ player, bitmap`
 ................
@@ -95,6 +102,91 @@ setLegend(
 .....444444.....
 ......4444......
 .......44.......
+................`],
+  [ powerup, bitmap`
+................
+......5555......
+.....555555.....
+....55555555....
+...5555555555...
+..555555555555..
+.55555555555555.
+5555555555555555
+5555555555555555
+.55555555555555.
+..555555555555..
+...5555555555...
+....55555555....
+.....555555.....
+......5555......
+................`],
+  [ trap, bitmap`
+................
+................
+.....222222.....
+....22222222....
+...2222222222...
+..222222222222..
+.22222222222222.
+2222222222222222
+2222222222222222
+.22222222222222.
+..222222222222..
+...2222222222...
+....22222222....
+.....222222.....
+................
+................`],
+  [ key, bitmap`
+................
+................
+......9999......
+.....999999.....
+.....999999.....
+.....999999.....
+.....999999.....
+.....9999.......
+.....9999.......
+.....9999999....
+.....9999999....
+.....9999.......
+................
+................
+................
+................`],
+  [ door, bitmap`
+7777777777777777
+7..............7
+7..............7
+7..............7
+7..............7
+7......77......7
+7......77......7
+7......77......7
+7......77......7
+7......77......7
+7..............7
+7..............7
+7..............7
+7..............7
+7..............7
+7777777777777777`],
+  [ crystal, bitmap`
+................
+......1111......
+.....111111.....
+....11111111....
+...1111111111...
+..111111111111..
+.11111111111111.
+1111111111111111
+1111111111111111
+.11111111111111.
+..111111111111..
+...1111111111...
+....11111111....
+.....111111.....
+......1111......
 ................`]
 )
 
@@ -111,6 +203,7 @@ w.t....t.w
 w........w
 w......g.w
 wwwwwwwwww`,
+  
   map`
 wwwwwwwwww
 w.t.....tw
@@ -122,6 +215,7 @@ w..wwww..w
 w........w
 wp......gw
 wwwwwwwwww`,
+  
   map`
 wwwwwwwwww
 wt......tw
@@ -133,169 +227,403 @@ w.ww..ww.w
 wt......tw
 w...g....w
 wwwwwwwwww`,
+  
   map`
 wwwwwwwwww
 wt.e....tw
 w.www.ww.w
-w.......ew
-w..p.....w
-we.......w
+w..u....ew
+w..p.x...w
+we....u..w
 w.ww.www.w
 wt....e.tw
 w...g....w
+wwwwwwwwww`,
+  
+  map`
+wwwwwwwwww
+wt.....ktw
+w.wwdwww.w
+w.......ew
+w..p.....w
+we.......w
+w.wwwdww.w
+wt.k...etw
+w...g....w
+wwwwwwwwww`,
+  
+  map`
+wwwwwwwwww
+wc.e.w.ecw
+w.www.w..w
+w.....w..w
+w.wp..w..w
+w.....w.ew
+w..ww.w..w
+wc....w.cw
+w....g...w
+wwwwwwwwww`,
+  
+  map`
+wwwwwwwwww
+wtxwewxktw
+w...w....w
+www.w.wwww
+w.u...e..w
+w.wwdwww.w
+w...p....w
+wt.www.t.w
+w.....g..w
+wwwwwwwwww`,
+  
+  map`
+wwwwwwwwww
+wcxexexecw
+wuwwwwwwuw
+w.......ew
+w.kpd....w
+we.......w
+wuwwwwwwuw
+wcxexexecw
+w...gx...w
 wwwwwwwwww`
 ]
 
 let score = 0
 let gameWon = false
+let lives = 3
+let hasKey = false
+let invulnerable = false
+let invulnerableTime = 0
+let crystalBonus = 0
+
+// Store player movement direction for collision handling
+let lastDirection = { x: 0, y: 0 }
+
 setMap(levels[level])
 
 setPushables({
   [player]: []
 })
+
 playTune(tune`
-500: C4~500 + E4~500 + G4~500,
-500: D4~500 + F4~500 + A4~500,
-500: E4~500 + G4~500 + B4~500,
-500: F4~500 + A4~500 + C5~500,
-500: G4~500 + B4~500 + D5~500,
-500: A4~500 + C5~500 + E5~500,
-500: B4~500 + D5~500 + F5~500,
-500: C5~500 + E5~500 + G5~500`)
+400: C4~400 + E4~400 + G4~400,
+400: D4~400 + F4~400 + A4~400,
+400: E4~400 + G4~400 + B4~400,
+400: F4~400 + A4~400 + C5~400,
+400: G4~400 + B4~400 + D5~400,
+400: A4~400 + C5~400 + E5~400,
+400: B4~400 + D5~400 + F5~400,
+400: C5~400 + E5~400 + G5~400`)
 
 onInput("w", () => {
-  getFirst(player).y -= 1
-  checkCollisions()
+  if (!gameWon && lives > 0) {
+    lastDirection = { x: 0, y: -1 }
+    getFirst(player).y -= 1
+    checkCollisions()
+  }
 })
 
 onInput("s", () => {
-  getFirst(player).y += 1
-  checkCollisions()
+  if (!gameWon && lives > 0) {
+    lastDirection = { x: 0, y: 1 }
+    getFirst(player).y += 1
+    checkCollisions()
+  }
 })
 
 onInput("a", () => {
-  getFirst(player).x -= 1
-  checkCollisions()
+  if (!gameWon && lives > 0) {
+    lastDirection = { x: -1, y: 0 }
+    getFirst(player).x -= 1
+    checkCollisions()
+  }
 })
 
 onInput("d", () => {
-  getFirst(player).x += 1
-  checkCollisions()
+  if (!gameWon && lives > 0) {
+    lastDirection = { x: 1, y: 0 }
+    getFirst(player).x += 1
+    checkCollisions()
+  }
 })
+
+onInput("j", () => {
+  if (!gameWon && lives > 0) {
+    resetLevel()
+    score = Math.max(0, score - 10)
+    addText("Restarted!", { x: 3, y: 7, color: color`3` })
+    setTimeout(() => {
+      clearText()
+      updateHUD()
+    }, 1000)
+  }
+})
+
+function resetLevel() {
+  setMap(levels[level])
+  hasKey = false
+  invulnerable = false
+  invulnerableTime = 0
+}
 
 function checkCollisions() {
   const playerSprite = getFirst(player)
+  if (!playerSprite) return
   
+  // Wall collision
   const wallHit = getTile(playerSprite.x, playerSprite.y).find(sprite => sprite.type === wall)
   if (wallHit) {
-    if (getFirst(player).x !== playerSprite.x) {
-      playerSprite.x = playerSprite.x > 0 ? playerSprite.x - 1 : playerSprite.x + 1
-    }
-    if (getFirst(player).y !== playerSprite.y) {
-      playerSprite.y = playerSprite.y > 0 ? playerSprite.y - 1 : playerSprite.y + 1
-    }
+    playerSprite.x -= lastDirection.x
+    playerSprite.y -= lastDirection.y
     return
   }
   
+  // Door collision
+  const doorHit = getTile(playerSprite.x, playerSprite.y).find(sprite => sprite.type === door)
+  if (doorHit) {
+    if (!hasKey) {
+      playerSprite.x -= lastDirection.x
+      playerSprite.y -= lastDirection.y
+      addText("Need key!", { x: 3, y: 7, color: color`3` })
+      setTimeout(() => {
+        clearText()
+        updateHUD()
+      }, 1000)
+      return
+    } else {
+      doorHit.remove()
+      hasKey = false
+      score += 5
+      playTune(tune`100: G4^100, 100: A4^100, 100: B4^100`)
+    }
+  }
+  
+  // Treasure collision
   const treasureHit = getTile(playerSprite.x, playerSprite.y).find(sprite => sprite.type === treasure)
   if (treasureHit) {
     treasureHit.remove()
     score += 10
-    playTune(tune`
-150: G4^150,
-150: A4^150,
-150: B4^150,
-150: C5^150`)
+    playTune(tune`100: G4^100, 100: A4^100, 100: B4^100, 100: C5^100`)
   }
   
+  // Crystal collision
+  const crystalHit = getTile(playerSprite.x, playerSprite.y).find(sprite => sprite.type === crystal)
+  if (crystalHit) {
+    crystalHit.remove()
+    score += 25
+    crystalBonus += 1
+    playTune(tune`80: C5^80, 80: E5^80, 80: G5^80, 80: C6^80`)
+    addText("Crystal!", { x: 3, y: 7, color: color`1` })
+    setTimeout(() => {
+      clearText()
+      updateHUD()
+    }, 1000)
+  }
+  
+  // Key collision
+  const keyHit = getTile(playerSprite.x, playerSprite.y).find(sprite => sprite.type === key)
+  if (keyHit) {
+    keyHit.remove()
+    hasKey = true
+    score += 15
+    playTune(tune`120: F4^120, 120: A4^120, 120: C5^120`)
+    addText("Got Key!", { x: 3, y: 7, color: color`9` })
+    setTimeout(() => {
+      clearText()
+      updateHUD()
+    }, 1000)
+  }
+  
+  // Power-up collision
+  const powerupHit = getTile(playerSprite.x, playerSprite.y).find(sprite => sprite.type === powerup)
+  if (powerupHit) {
+    powerupHit.remove()
+    invulnerable = true
+    invulnerableTime = 5000
+    score += 20
+    playTune(tune`100: C5^100, 100: D5^100, 100: E5^100, 100: F5^100, 100: G5^100`)
+    addText("Power-up!", { x: 2, y: 7, color: color`5` })
+    setTimeout(() => {
+      clearText()
+      updateHUD()
+    }, 1000)
+  }
+  
+  // Trap collision
+  const trapHit = getTile(playerSprite.x, playerSprite.y).find(sprite => sprite.type === trap)
+  if (trapHit && !invulnerable) {
+    playTune(tune`150: C4^150, 150: A3^150, 150: F3^150`)
+    score = Math.max(0, score - 15)
+    addText("Trap!", { x: 3, y: 7, color: color`2` })
+    setTimeout(() => {
+      clearText()
+      updateHUD()
+    }, 1000)
+  }
+  
+  // Enemy collision
   const enemyHit = getTile(playerSprite.x, playerSprite.y).find(sprite => sprite.type === enemy)
-  if (enemyHit) {
-    playTune(tune`
-200: C4^200,
-200: B3^200,
-200: A3^200,
-200: G3^200`)
+  if (enemyHit && !invulnerable) {
+    playTune(tune`200: C4^200, 200: B3^200, 200: A3^200, 200: G3^200`)
+    lives -= 1
     score = Math.max(0, score - 20)
-    setMap(levels[level])
+    
+    if (lives <= 0) {
+      addText("GAME OVER!", { x: 2, y: 4, color: color`3` })
+      addText(`Score: ${score}`, { x: 3, y: 6, color: color`6` })
+      return
+    }
+    
+    resetLevel()
+    addText(`Lives: ${lives}`, { x: 3, y: 7, color: color`3` })
+    setTimeout(() => {
+      clearText()
+      updateHUD()
+    }, 1000)
   }
   
+  // Goal collision
   const goalHit = getTile(playerSprite.x, playerSprite.y).find(sprite => sprite.type === goal)
   if (goalHit) {
-    if (getAll(treasure).length === 0) {
+    const treasuresLeft = getAll(treasure).length + getAll(crystal).length
+    if (treasuresLeft === 0) {
       level++
+      hasKey = false
+      score += 50
+      
       if (level >= levels.length) {
         gameWon = true
-        addText("YOU WIN!", { x: 4, y: 4, color: color`4` })
-        addText(`Score: ${score}`, { x: 3, y: 6, color: color`6` })
-        playTune(tune`
-300: C5^300,
-300: E5^300,
-300: G5^300,
-300: C6^300,
-600: C6^600`)
+        let finalScore = score + (lives * 100) + (crystalBonus * 50)
+        addText("VICTORY!", { x: 2, y: 3, color: color`4` })
+        addText(`Score: ${finalScore}`, { x: 2, y: 5, color: color`6` })
+        addText(`Lives: +${lives * 100}`, { x: 2, y: 6, color: color`0` })
+        addText(`Crystal: +${crystalBonus * 50}`, { x: 1, y: 7, color: color`1` })
+        playTune(tune`250: C5^250, 250: E5^250, 250: G5^250, 250: C6^250, 500: C6^500`)
       } else {
-        setMap(levels[level])
-        playTune(tune`
-150: C4^150,
-150: E4^150,
-150: G4^150,
-150: C5^150,
-150: E5^150`)
+        resetLevel()
+        addText(`Level ${level + 1}!`, { x: 2, y: 7, color: color`4` })
+        playTune(tune`120: C4^120, 120: E4^120, 120: G4^120, 120: C5^120, 120: E5^120`)
+        setTimeout(() => {
+          clearText()
+          updateHUD()
+        }, 1500)
       }
     } else {
-      addText("Take all the treasure!", { x: 1, y: 8, color: color`3` })
+      addText("Get all treasures!", { x: 1, y: 7, color: color`3` })
       setTimeout(() => {
         clearText()
-      }, 2000)
+        updateHUD()
+      }, 1500)
     }
   }
   
+  updateHUD()
+}
+
+function updateHUD() {
   clearText()
-  if (!gameWon) {
-    addText(`Level: ${level + 1}`, { x: 1, y: 1, color: color`2` })
-    addText(`Score: ${score}`, { x: 1, y: 2, color: color`6` })
-    addText(`Treasure: ${getAll(treasure).length}`, { x: 1, y: 3, color: color`4` })
+  if (!gameWon && lives > 0) {
+    addText(`L:${level + 1} S:${score}`, { x: 0, y: 0, color: color`2` })
+    addText(`♥${lives} T:${getAll(treasure).length + getAll(crystal).length}`, { x: 0, y: 1, color: color`3` })
+    
+    if (hasKey) {
+      addText("K", { x: 8, y: 0, color: color`9` })
+    }
+    
+    if (invulnerable) {
+      addText("P", { x: 9, y: 0, color: color`5` })
+    }
   }
 }
 
+// Enemy movement
+let enemyTimer = 0
 setInterval(() => {
-  if (gameWon) return
+  if (gameWon || lives <= 0) return
   
+  enemyTimer++
   const enemies = getAll(enemy)
-  enemies.forEach(enemySprite => {
-    const directions = [
-      { x: 0, y: -1 },
-      { x: 0, y: 1 },
-      { x: -1, y: 0 },
-      { x: 1, y: 0 }
-    ]
+  
+  enemies.forEach((enemySprite, index) => {
+    const playerSprite = getFirst(player)
+    if (!playerSprite) return
     
-    const randomDir = directions[Math.floor(Math.random() * directions.length)]
-    const newX = enemySprite.x + randomDir.x
-    const newY = enemySprite.y + randomDir.y
+    let newX = enemySprite.x
+    let newY = enemySprite.y
     
+    // Different movement patterns
+    if (index % 3 === 0) {
+      // Random movement
+      const directions = [
+        { x: 0, y: -1 }, { x: 0, y: 1 }, { x: -1, y: 0 }, { x: 1, y: 0 }
+      ]
+      const randomDir = directions[Math.floor(Math.random() * directions.length)]
+      newX += randomDir.x
+      newY += randomDir.y
+    } else if (index % 3 === 1) {
+      // Chase player
+      if (Math.abs(playerSprite.x - enemySprite.x) > Math.abs(playerSprite.y - enemySprite.y)) {
+        newX += playerSprite.x > enemySprite.x ? 1 : -1
+      } else {
+        newY += playerSprite.y > enemySprite.y ? 1 : -1
+      }
+    } else {
+      // Patrol
+      const patrolDirs = [
+        { x: 1, y: 0 }, { x: 0, y: 1 }, { x: -1, y: 0 }, { x: 0, y: -1 }
+      ]
+      const patrolDir = patrolDirs[Math.floor(enemyTimer / 3) % 4]
+      newX += patrolDir.x
+      newY += patrolDir.y
+    }
+    
+    // Check if move is valid
     const tileAtNewPos = getTile(newX, newY)
-    const hasWall = tileAtNewPos.some(sprite => sprite.type === wall)
+    const hasObstacle = tileAtNewPos.some(sprite => 
+      sprite.type === wall || sprite.type === door
+    )
     
-    if (!hasWall && newX >= 0 && newY >= 0 && newX < width() && newY < height()) {
+    if (!hasObstacle && newX >= 0 && newY >= 0 && newX < width() && newY < height()) {
       enemySprite.x = newX
       enemySprite.y = newY
       
-      const playerSprite = getFirst(player)
-      if (enemySprite.x === playerSprite.x && enemySprite.y === playerSprite.y) {
-        playTune(tune`
-200: C4^200,
-200: B3^200,
-200: A3^200,
-200: G3^200`)
+      // Check collision with player
+      if (enemySprite.x === playerSprite.x && enemySprite.y === playerSprite.y && !invulnerable) {
+        playTune(tune`200: C4^200, 200: B3^200, 200: A3^200, 200: G3^200`)
+        lives -= 1
         score = Math.max(0, score - 20)
-        setMap(levels[level])
+        
+        if (lives <= 0) {
+          addText("GAME OVER!", { x: 2, y: 4, color: color`3` })
+          addText(`Score: ${score}`, { x: 3, y: 6, color: color`6` })
+          return
+        }
+        
+        resetLevel()
+        addText(`Lives: ${lives}`, { x: 3, y: 7, color: color`3` })
+        setTimeout(() => {
+          clearText()
+          updateHUD()
+        }, 1000)
       }
     }
   })
-}, 1000)
+}, 800)
 
-checkCollisions()
+// Invulnerability timer
+setInterval(() => {
+  if (invulnerable) {
+    invulnerableTime -= 100
+    if (invulnerableTime <= 0) {
+      invulnerable = false
+      invulnerableTime = 0
+      updateHUD()
+    }
+  }
+}, 100)
 
-addText("WASD for moving", { x: 1, y: 14, color: color`0` })
-addText("take all the treasure", { x: 1, y: 15, color: color`0` })
+updateHUD()
+
+addText("WASD: Move, J: Restart", { x: 0, y: 14, color: color`0` })
+addText("Collect all treasures!", { x: 0, y: 15, color: color`0` })
