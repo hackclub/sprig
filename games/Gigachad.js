@@ -1,8 +1,11 @@
 /*
-@title: Giga-Mech Tandem
-@author: Sprig Developer
-@tags: []
-@addedOn: 2025-07-24
+@title: Giga Chad
+@description: "Giga Chad" is a chaotic arcade game where players control a hyper-muscled hero in a wild series of challenges. Inspired by meme culture and classic beat 'em ups, Giga Chad smashes through obstacles, lifts impossible weights, and battles over-the-top enemies. The game features fast-paced action, humorous animations, and power-ups that turn the hero even more giga. Score points by performing feats of strength, dodging hazards, and unleashing special moves. Only the chaddest can conquer every stage!
+@author: Vrund4591
+@tags: ['arcade','action','meme']
+@addedOn: 2025-09-07
+
+[Game description and controls will be customized based on the actual game mechanics]
 
 The Asymmetrical Pilot: Control a huge mech with dual D-pad controls!
 Left D-pad: Move the mech's legs (tank-style movement)
