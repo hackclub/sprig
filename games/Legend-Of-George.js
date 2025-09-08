@@ -2,7 +2,7 @@
 @title: Legend of george
 @author: Fred
 @tags: ["adventure", "dungeon", "zelda"]
-@addedOn: 2025-07-19
+@addedOn: 2025-09-08
 @description: A game inspired by the first legend of zelda game. But Instead enemies only move when you do. Try your best to get through each level to defeat the dungeon! use W,A,S,D keys to move around, You can then ue I,J,K,L to attack in the direction you want to. A strategy is to wait for the enemies to come at you and attack first.
 */
 
