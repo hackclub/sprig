@@ -2,7 +2,7 @@
 @title: Super Market Aisle Sorter
 @author: pkd2210, peleg2210, Peleg 
 @tags: []
-@addedOn: 2025-07-01
+@addedOn: 2025-09-08
 @description: A fast-paced educational sorting game where you categorize grocery items into their correct supermarket aisles. Sort 24 different food items across 6 categories (Fruits & Vegetables, Dairy, Bakery, Meat & Fish, Pasta & Dry goods, Spices & Oils) as quickly as possible - one wrong choice ends the game!
 */
 
