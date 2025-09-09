@@ -3,13 +3,15 @@
 @author: Chee Yong Lee
 @tags: ['puzzle']
 @addedOn: 2025-08-05
-@description: The objective of the game is to lead Antony to collect crumbs and proceed to the next room, while using the least time as possible.
+@description: The objective of the game is to lead Antony to collect crumbs and proceed to the next room while dodging zombies, while using the least time as possible.
 
 Instructions:
 
 Click "run" to start the game
+Press "j" to restart game
+Use "w,a,s,d" to move Antony 
 
-The objective is to collect the crumbs and find the way out to the next room
+The objective is to collect the crumbs, prevent the zombies and find the way out to the next room
 */
 
 
@@ -18,8 +20,11 @@ const wall = "w"
 const crumb = "c"
 const exit = "e"
 const floor = "f"
+const enemy = "x"
+
 var inputTimes = 0
 var startTime
+let gameOver = false
 
 setLegend(
   [ ant, bitmap`
@@ -106,10 +111,28 @@ CCCCCCCCC1111111
 ................
 ................
 ................
+................` ],
+  [ enemy, bitmap`
+................
+................
+......3333......
+.....366663.....
+.....366663.....
+......3333......
+......3333......
+.....366663.....
+.....366663.....
+......3333......
+......3333......
+......3333......
+......3333......
+................
+................
 ................` ]
 )
 
 setSolids([ant, wall])
+
 setPushables({ [ant]: [] })
 
 let level = 0
@@ -140,9 +163,10 @@ w..ww..w
 w.c....w
 w..w.c.w
 w...c..w
-w......w
+w..x...w
 wwwwwwww`,
-map`wwwwwwww
+  map`
+wwwwwwww
 w.c.a..w
 w...w..w
 w.c....w
@@ -150,7 +174,7 @@ w..w.c.w
 w.w....w
 w...c..w
 wwwwwwww`,
-map`
+  map`
 wwwwwwww
 w.c.a.cw
 wwwww..w
@@ -159,7 +183,7 @@ w..w.c.w
 w.ww.www
 wc..c..w
 wwwwwwww`,
-map`
+  map`
 wwwwwwww
 wwc.awcw
 ww.wwwfw
@@ -168,42 +192,48 @@ w..w.c.w
 w.wwww.w
 w...c..w
 wwwwwwww`,
-map`
-wwwwwwww
-w.c.a.ww
-www.wwww
-wwc.w.ww
-w..wwc.w
-w.w.ww.w
-w...c..w
-wwwwwwww`,
-map`
-wwwwwwww
-w.c.awcw
-wfwwwwfw
-wfw.f.fw
-w.wccw.w
-w.wwww.w
-w...c..w
-wwwwwwww`,
-map`
-wwwwwwww
-waw.f.cw
-wfwcwfww
-wfcwwcfw
-ww.www.w
-wcfwwf.w
-ww..c.ww
-wwwwwwww`,
+  map`
+wwwwwwwwww
+wa..c....w
+w..ww..c.w
+w.c....x.w
+w..w.c..ww
+w.w....c.w
+w...c...ww
+w..c....cw
+w........w
+wwwwwwwwww`,
+  map`
+wwwwwwwwww
+w.c.a...cw
+w..ww..x.w
+w.c....c.w
+w..w.c..ww
+w.ww.www.w
+w.c..c..cw
+w.....c..w
+w..x.....w
+wwwwwwwwww`,
+  map`
+wwwwwwwwww
+wa..c..x.w
+wfwcwf..cw
+wfcwwcf..w
+ww.www.w.w
+wcfwwf...w
+ww..c..c.w
+w..c..c..w
+w......x.w
+wwwwwwwwww`
 ]
 
 function shuffle(array) {
-  let currentIndex = array.length;
+  let currentIndex = array.length
   while (currentIndex != 0) {
-    let randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
+    let randomIndex = Math.floor(Math.random() * currentIndex)
+    currentIndex--
     [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex], array[currentIndex]];
+      array[randomIndex], array[currentIndex]]
   }
 }
 
@@ -213,29 +243,68 @@ setBackground(floor)
 
 function checkCrumbs() {
   if (tilesWith(crumb).length === 0 && tilesWith(exit).length === 0) {
-    const centerX = 3
-    const centerY = 6
-    addSprite(centerX, centerY, exit)
+    const widthMap = width()
+    const heightMap = height()
+    const centerX = Math.floor(widthMap / 2)
+    const centerY = Math.floor(heightMap / 2)
+
+    const tile = getTile(centerX, centerY)
+    if (!tile.some(t => t.type === wall)) {
+      addSprite(centerX, centerY, exit)
+    } else {
+      const antSprite = getFirst(ant)
+      addSprite(antSprite.x, antSprite.y, exit)
+    }
   }
 }
 
 function msToMinSec(millis) {
-  var minutes = Math.floor(millis / 60000);
-  var seconds = ((millis % 60000) / 1000).toFixed(0);
-  return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+  var minutes = Math.floor(millis / 60000)
+  var seconds = ((millis % 60000) / 1000).toFixed(0)
+  return minutes + ":" + (seconds < 10 ? '0' : '') + seconds
 }
 
 function checkWin() {
-  if (tilesWith(ant, exit).length > 0) {
+  if (tilesWith(ant, exit).length > 0 && !gameOver) {
     level++
     if (level < levels.length) {
       setMap(levels[level])
     } else {
+      clearText()
       addText("Antony Wins!", { y: 4, color: color`0` })
       addText("Time Elapsed: "+msToMinSec(performance.now() - startTime), { y: 6, color: color`7` })
+      gameOver = true
     }
   }
 }
+
+function checkGameOver() {
+  if (tilesWith(ant, enemy).length > 0 && !gameOver) {
+    gameOver = true
+    clearText()
+    addText("Game Over!", { y: 4, color: color`3` })
+    addText("Press J to Restart", { y: 6, color: color`7` })
+  }
+}
+
+function moveEnemies() {
+  if (gameOver) return
+  const enemies = getAll(enemy)
+  enemies.forEach(e => {
+    const dir = [[1,0],[-1,0],[0,1],[0,-1]][Math.floor(Math.random()*4)]
+    const newX = e.x + dir[0]
+    const newY = e.y + dir[1]
+    const tile = getTile(newX, newY)
+
+    if (!tile.some(t => t.type === wall || t.type === enemy)) {
+      e.x = newX
+      e.y = newY
+    }
+  })
+  checkGameOver()
+}
+
+setInterval(moveEnemies, 700)
 
 onInput("w", () => moveAnt(0, -1))
 onInput("s", () => moveAnt(0, 1))
@@ -243,6 +312,8 @@ onInput("a", () => moveAnt(-1, 0))
 onInput("d", () => moveAnt(1, 0))
 
 function moveAnt(dx, dy) {
+  if (gameOver) return
+
   if(inputTimes == 0) {
     startTime = performance.now()
   }
@@ -264,5 +335,16 @@ function moveAnt(dx, dy) {
 
     checkCrumbs()
     checkWin()
+    checkGameOver()
   }
 }
+
+onInput("j", () => {
+  level = 0
+  shuffle(levels)
+  setMap(levels[level])
+  inputTimes = 0
+  startTime = undefined
+  gameOver = false
+  clearText()
+})
