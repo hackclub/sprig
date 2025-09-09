@@ -499,7 +499,7 @@ const playBackgroundMusic = (tune) => {
 
 const updateHPDisplay = () => {
   clearText();
-  addText(`HP: ${hp}`, { y: 0, color: color`2` });
+  addText(`HP: ${hp}`, { y: 0, color: color`4` });
 };
 
 setMap(levels[level]);
@@ -581,7 +581,7 @@ afterInput(() => {
       setMap(levels[level]);
       playBackgroundMusic(bgmusic2); // Switch to action music
     } else {
-      addText("you win!", { y: 4, color: color`2` });
+      addText("you win!", { y: 4, color: color`4` });
       if (musicInterval) {
         clearInterval(musicInterval);
       }
@@ -603,7 +603,7 @@ afterInput(() => {
   const playerOnLock = tilesWith(char1, lock);
   if (playerOnLock.length > 0 && doorUnlck > 0) {
     touchingLock = true;
-    addText("Press L to unlock door", { y: 1, color: color`2` });
+    addText("Press L to unlock door", { y: 1, color: color`4` });
   } else {
     touchingLock = false;
   }
