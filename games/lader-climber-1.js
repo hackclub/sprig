@@ -3,9 +3,10 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: lader climber 1
-@author: 
-@tags: []
+@author: judeprivett2012@gmail.com 
+@tags: [retro]
 @addedOn: 2025-00-00
+just added a fix to the level this is just a retro layer game umm idk what else to say
 */
 
 let isFrozen = false; // Define isFrozen variable at the beginning
