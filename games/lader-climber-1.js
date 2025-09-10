@@ -6,7 +6,8 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: judeprivett2012@gmail.com 
 @tags: [retro]
 @addedOn: 2025-00-00
-just added a fix to the level this is just a retro layer game umm idk what else to say
+just added a fix to the level this is just a retro ladder game with the goal of doing every bird ad you go up to the top of the letter attempting to get to the Golden hammer and beat every level without having to reset!!
+
 */
 
 let isFrozen = false; // Define isFrozen variable at the beginning
