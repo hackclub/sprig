@@ -1,0 +1,123 @@
+.root {
+	overflow: hidden;
+	position: absolute;
+	left: 0;
+	top: 0;
+	transform-origin: left top;
+	width: calc(var(--vw, 0.935vw) * 100);
+	height: calc(var(--vh, 0.935vh) * 100);
+	background: url('/pcb.svg'), var(--accent-dark);
+	background-position: center center;
+	background-size: cover;
+	display: flex;
+	flex-direction: column;
+}
+
+@media (orientation: portrait) {
+	.root {
+		transform: rotate(-90deg);
+		height: calc(var(--vw, 0.935vw) * 100);
+		overflow-x: hidden;
+		top: 100%;
+		left: 0;
+
+		/* Custom vh implementation */
+		/* Fallback value is 93.5vh */
+		width: calc(var(--vh, 0.935vh) * 100);
+	}
+}
+
+.meta {
+	text-align: center;
+	color: #ffffff;
+	user-select: none;
+	padding-top: 8px;
+	margin-bottom: 8px;
+}
+
+.meta .author {
+	color: var(--fg-muted-on-accent);
+}
+
+.disclaimer {
+	font-size: 0.8rem;
+	color: var(--fg-muted-on-accent);
+	text-align: center;
+	user-select: none;
+	padding: 8px 0;
+}
+
+.player {
+	flex: 1;
+	overflow: hidden;
+}
+
+.screenContainer {
+	height: 97.5%;
+}
+
+.screen {
+	display: block;
+	height: 95%;
+	width: auto;
+	margin: 0 auto;
+	user-select: none;
+	background: #ffffff;
+}
+
+.key {
+	position: absolute;
+	width: 45px;
+	height: 45px;
+	border-radius: 4px;
+	background: #b6b6b6;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: var(--font-code);
+	text-transform: uppercase;
+	text-align: center;
+	font-size: 0.8rem;
+	user-select: none;
+}
+
+.keyInner {
+	background: #000000;
+	color: var(--fg-muted);
+	border-radius: 50%;
+	width: 34px;
+	height: 34px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.key.pressing .keyInner {
+	background: var(--accent);
+	color: var(--fg-muted-on-accent);
+}
+
+.i { top: calc(50% - 75px);	right: calc(5% + 25px); }
+.j { top: calc(50% - 25px);	right: calc(5% + 75px); }
+.k { top: calc(50% + 25px);	right: calc(5% + 25px); }
+.l { top: calc(50% - 25px);	right: calc(5% - 25px); }
+.w { top: calc(50% - 75px);	left: calc(5% + 25px); }
+.a { top: calc(50% - 25px);	left: calc(5% - 25px); }
+.s { top: calc(50% + 25px);	left: calc(5% + 25px); }
+.d { top: calc(50% - 25px);	left: calc(5% + 75px); }
+
+.actionItems {
+	justify-content: space-between;
+	margin: 0px 25px 0px 25px;
+	display: flex;
+}
+
+.action {
+	color: var(--fg-muted-on-accent);
+	background-color: var(--accent);
+	padding: 10px 20px 10px 20px;
+	margin:  0px 8px 0px 8px;
+	border-radius: 8px;
+	font-weight: 600;
+	user-select: none;
+}

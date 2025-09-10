@@ -1,0 +1,36 @@
+.container {
+	height: 100%;
+	background: var(--bg-floating);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+	text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    padding: 60px 80px;
+    padding-top: 50px;
+}
+
+h2 {
+    margin: 0;
+}
+
+.grid {
+    width: 380px;
+    height: 300px;
+    background: transparent;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 10px;
+}
+
+.grid div {
+    padding: 2px;
+    cursor: var(--cursor-interactive);
+}
+
+.grid .active {
+	box-shadow: 0 0 0 2px var(--bg-overlay), 0 0 0 4px var(--fg-switch-high);
+}

@@ -1,0 +1,80 @@
+---
+import '../../global.css'
+import Editor from '../../components/big-interactive-pages/editor'
+import StandardHead from '../../components/standard-head.astro'
+import { signal } from '@preact/signals'
+import type { PersistenceState } from '../../lib/state'
+import { getSession } from '../../lib/game-saving/account'
+import { getGalleryGames } from '../../lib/game-saving/gallery'
+import { mobileUserAgent } from '../../lib/utils/mobile'
+import MobilePlayer from "../../components/big-interactive-pages/mobile-player";
+import fs from 'fs'
+import path from 'path'
+
+const session = await getSession(Astro.cookies)
+
+const filename = Astro.params.filename ?? ''
+const gameContentPath = path.resolve(`./games/${filename}.js`)
+let code: string
+try {
+	code = fs.readFileSync(gameContentPath).toString()
+} catch {
+	return Astro.redirect('/404', 302)
+}
+
+const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
+
+const files = await Astro.glob('/games/*.md')
+let tutorial: string[] | undefined = files
+	.filter(file => {
+		const regexedFile = file.file.match(fileRegexp)
+		return regexedFile && regexedFile[1] === filename
+	})
+	?.map(md => md.compiledContent())
+if (tutorial.length == 0) tutorial = undefined
+
+const games = getGalleryGames()
+const metadata = games.find(game => game.filename === filename)
+const name = metadata?.title
+const authorName = metadata?.author
+
+const persistenceState = signal<PersistenceState>({
+	kind: 'SHARED',
+	name: (name ?? filename) || 'Untitled',
+	authorName: authorName || '',
+	code: code,
+	stale: false,
+	tutorial,
+	tutorialName: tutorial ? filename : undefined,
+	tutorialIndex: 0,
+	session
+})
+const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
+
+// if (isMobile) return Astro.redirect(`/gallery/${filename}`, 302)
+---
+
+<html lang='en'>
+<head>
+	<StandardHead title={(name ?? filename) || 'Untitled'} />
+</head>
+<body>
+{isMobile ? (
+	<MobilePlayer
+		client:load
+		code={code}
+		gameName={(name ?? filename) || 'Untitled'}
+		authorName={authorName || ''}
+	/>
+) : (
+	<Editor
+		client:load
+		persistenceState={persistenceState}
+		cookies={{
+			outputAreaSize: Astro.cookies.get('outputAreaSize').number(),
+			hideHelp: Astro.cookies.get('hideHelp').boolean()
+		}}
+	/>
+)}
+</body>
+</html>

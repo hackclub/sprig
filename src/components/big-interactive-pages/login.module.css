@@ -1,0 +1,59 @@
+.page {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.pageMain {
+	flex: 1;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20vh 20px;
+}
+
+form {
+	width: 100%;
+	max-width: 500px;
+	background: var(--bg-surface);
+	border: 5px solid var(--accent);
+	padding:2rem;
+	padding-top: 2rem;
+	box-shadow: 10px 10px 0px -3px var(--accent);
+}
+
+h1 {
+	margin: 0;
+	margin-bottom: 12px;
+	font-weight: 900;
+}
+
+p {
+	line-height: var(--line-height-copy);
+	margin: 0;
+	margin-bottom: 16px;
+}
+
+label {
+	display: block;
+	font-size: 0.9rem;
+	margin-bottom: 2px;
+}
+
+.error {
+	font-weight: bold;
+	font-size: 0.9rem;
+	color: var(--error);
+	margin-top: 4px;
+	margin-bottom: 0;
+}
+
+.submit {
+	font-weight: bold;
+	margin-top: 16px;
+}
+
+.muted {
+	color: var(--fg-muted);
+}

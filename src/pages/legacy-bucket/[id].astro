@@ -1,0 +1,57 @@
+---
+import '../../global.css'
+import Editor from '../../components/big-interactive-pages/editor'
+import StandardHead from '../../components/standard-head.astro'
+import { signal } from '@preact/signals'
+import type { PersistenceState } from '../../lib/state'
+import { getSession } from '../../lib/game-saving/account'
+import { extractMetadata } from '../../lib/game-saving/extract-metadata'
+import { mobileUserAgent } from '../../lib/utils/mobile'
+import MobilePlayer from '../../components/big-interactive-pages/mobile-player'
+
+const session = await getSession(Astro.cookies)
+
+const id = Astro.params.id ?? ''
+const res = await fetch(`https://project-bucket-hackclub.s3.eu-west-1.amazonaws.com/${encodeURIComponent(id)}.json`)
+if (!res.ok) {
+	console.error(await res.text())
+	return Astro.redirect('/404', 302)
+}
+const { text } = await res.json()
+
+const { name, authorName, cleanedCode } = extractMetadata(text)
+const persistenceState = signal<PersistenceState>({
+	kind: 'SHARED',
+	name: name || 'Untitled',
+	authorName: authorName || '',
+	code: cleanedCode,
+	stale: false,
+	session
+})
+const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
+---
+
+<html lang='en'>
+	<head>
+		<StandardHead title={name} />
+	</head>
+	<body>
+		{isMobile ? (
+			<MobilePlayer
+				client:load
+				code={cleanedCode}
+				gameName={name || 'Untitled'}
+				authorName={authorName || ''}
+			/>
+		) : (
+			<Editor
+				client:load
+				persistenceState={persistenceState}
+				cookies={{
+					outputAreaSize: Astro.cookies.get('outputAreaSize').number(),
+					hideHelp: Astro.cookies.get('hideHelp').boolean()
+				}}
+			/>
+		)}
+	</body>
+</html>

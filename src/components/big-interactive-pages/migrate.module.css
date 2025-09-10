@@ -1,0 +1,73 @@
+.split {
+	display: flex;
+	flex-direction: row;
+	background: var(--bg-surface);
+	height: 600px;
+	overflow: hidden;
+}
+
+.games {
+	flex: 1;
+	overflow-y: auto;
+}
+
+.game {
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+	padding: 8px 10px;
+	cursor: var(--cursor-interactive);
+	user-select: none;
+}
+
+.game.selected { background: #dadada; }
+.game.migrating { background: var(--accent); color: #ffffff; }
+.game.migrating.selected { background: var(--accent-dark); }
+
+.game .metadata {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	flex: 1;
+	overflow: hidden;
+}
+
+.author { color: var(--fg-muted); }
+.game.migrating .author { color: var(--fg-muted-on-accent); }
+
+.code {
+	background: #ffffff;
+	flex: 1;
+	overflow: auto;
+	padding: 20px;
+}
+
+.code pre {
+	margin: 0;
+}
+
+.code code {
+	font-family: var(--font-code);
+	font-size: 0.9rem;
+}
+
+.emailEntry {
+	margin-top: 40px;
+}
+
+label {
+	display: block;
+	margin-bottom: 4px;
+}
+
+.migrateButton {
+	margin-top: 16px;
+	font-weight: bold;
+}
+
+.migratedList {
+	margin-top: 40px;
+}
+
+.migratedList li {
+	margin: 8px 0;
+}

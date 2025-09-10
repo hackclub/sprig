@@ -1,0 +1,63 @@
+---
+import '../global.css'
+import StandardHead from '../components/standard-head.astro'
+
+const file = Astro.url.searchParams.get('file') ?? ''
+const codeRes = await fetch(file)
+const code = await codeRes.text()
+---
+
+<html lang='en'>
+	<head>
+		<StandardHead title='(Deprecated) File Player' />
+		<style>
+			#screen-container {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			#screen {
+				max-width: 100%;
+				max-height: 100%;
+				background: black;
+			}
+		</style>
+	</head>
+	<body>
+		<div id='screen-container'>
+			<canvas id='screen' width='1000' height='800' tabindex='-1' />
+		</div>
+
+		<script define:vars={{ code }}>
+			window.__sprig_intitial_code__ = code
+		</script>
+		<script>
+			import { runGame } from '../lib/engine'
+
+			const screen = document.getElementById('screen') as HTMLCanvasElement
+			const { __sprig_intitial_code__ } = window as unknown as { __sprig_intitial_code__: string }
+			
+			let runRes = runGame(__sprig_intitial_code__, screen, (_) => {})
+			if (runRes.error) console.error(runRes.error.raw)
+			
+			const params = new URLSearchParams(window.location.search)
+			if (params.has('watch')) {
+				let oldCode = __sprig_intitial_code__
+				setInterval(async () => {
+					const codeRes = await fetch(params.get('file') || '')
+					const code = await codeRes.text()
+
+					if (oldCode !== code) {
+						oldCode = code
+						runRes.cleanup()
+						runRes = runGame(code, screen, (_) => {})
+						if (runRes.error) console.error(runRes.error.raw)
+					}
+				}, Number(params.get('watch') || 1000))
+			}
+		</script>
+	</body>
+</html>

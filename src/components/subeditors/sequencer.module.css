@@ -1,0 +1,130 @@
+.container {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	background-color: var(--bg-surface);
+}
+
+.grid {
+	--seq-grid-playhead: #e4e4e4;
+    --seq-grid-low: #cfcfcf;
+    --seq-grid-high: #aaaaaa;
+
+	flex: 1;
+	display: flex;
+	flex-direction: row;
+}
+
+.column {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.column.playhead {
+	background: var(--seq-grid-playhead);
+}
+
+.cell {
+	flex: 1;
+	border-left: 1px solid var(--seq-grid-low);
+	border-bottom: 1px solid var(--seq-grid-low);
+	color: #ffffff;
+	font-size: 1.2em;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.cell.beat { border-left-color: var(--seq-grid-high); }
+.cell.root { border-bottom-color: var(--seq-grid-high); }
+.column:first-of-type .cell { border-left: none; }
+.cell:last-of-type { border-bottom: none; }
+
+.toolbox {
+	background: var(--bg-floating);
+	color: #ffffff;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 16px 20px;
+}
+
+.label {
+	margin-right: 8px;
+	user-select: none;
+	font-size: 0.9em;
+	color: var(--fg-muted);
+}
+
+.buttons {
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+}
+
+.transportControls {
+	flex: 1;
+}
+
+.bpm, .instruments {
+	display: flex;
+	flex-direction: row;
+	gap: 2px;
+	align-items: center;
+}
+
+.bpm .slider {
+	height: 6px;
+	border-radius: 3px;
+	width: 300px;
+	background: var(--bg-btn-inactive);
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+.bpm .slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	height: 20px;
+	width: 20px;
+	border-radius: 50%;
+	background: var(--accent);
+	cursor: var(--cursor-interactive);
+}
+
+.bpm .slider::-moz-range-thumb {
+	height: 20px;
+	width: 20px;
+	border-radius: 50%;
+	background: var(--accent);
+	border: none;
+	cursor: var(--cursor-interactive);
+}
+
+.bpm .number {
+	outline: none;
+	font-size: inherit;
+	font-family: inherit;
+	border: none;
+	background: transparent;
+	color: var(--accent);
+	width: 6ch;
+	text-align: center;
+	padding: 4px 6px;
+}
+
+.instruments {
+	flex: 1;
+	justify-content: flex-end;
+}
+
+.instruments .key {
+	color: var(--accent-light);
+	font-weight: bold;
+	margin-right: 2px;
+}
+
+.instruments .active {
+	box-shadow: 0 0 0 2px inset var(--fg-muted);
+}

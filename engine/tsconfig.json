@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"incremental": true,
+		"target": "ES2022",
+		"lib": [ "ES2022", "DOM" ],
+		"module": "NodeNext",
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
+		"outDir": "./dist",
+		"isolatedModules": true,
+		"esModuleInterop": false,
+		"forceConsistentCasingInFileNames": true,
+		"strict": true
+	},
+	"include": [ "./src/**/*" ]
+}

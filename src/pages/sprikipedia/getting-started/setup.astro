@@ -1,0 +1,21 @@
+---
+import '../../../global.css'
+import Categories from '../../../layouts/categories.astro'
+import Code from '../../../components/spriki-components/Code.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+<Categories name={data["start.categories.name.setup"]} title={data["start.categories.title.setup"]} >
+<p>In a terminal, clone the repo and install packages:</p>
+    
+<Code content="git clone https://github.com/hackclub/sprig/ <br /> sprig <br /> yarn install" />
+
+<p>Next, you'll want to give Sprig access to the Firebase credentials you created. Make a .env file in the root of the project and enter FIREBASE_CREDENTIAL= followed by the base64 string you generated.</p>
+    
+<p>art the dev server, run yarn dev and visit http://localhost:3000 in your web browser! Please create a GitHub issue if you cannot get something to work properly.</p>
+</Categories>

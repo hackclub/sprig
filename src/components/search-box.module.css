@@ -1,0 +1,111 @@
+.container {
+	--error: #ff8787;
+	background: var(--bg-floating);
+	color: #ffffff;
+	width: fit-content;
+	position: absolute;
+	bottom: 6px;
+	right: 6px;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding: 8px;
+	border-left: 4px solid #5f5f5f;
+	box-shadow: 0 2px 6px 0 #0000005e;
+}
+
+.row {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 8px;
+}
+
+.icons {
+	display: flex;
+	flex-direction: row;
+	gap: 2px;
+}
+
+.icons button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: none;
+	color: inherit;
+	font-size: inherit;
+	border: none;
+	margin: 0;
+	padding: 6px;
+	outline: none;
+}
+
+.icons button:disabled {
+	color: var(--fg-muted);
+	cursor: default;
+}
+
+.icons button:hover:not(.active):not(:disabled),
+.icons button:focus-visible {
+	background: #9797974c;
+}
+
+.icons button.active {
+	box-shadow: 0 0 0 1px inset var(--accent);
+}
+
+.icons :global(svg) {
+	display: block;
+}
+
+.input {
+	border: 1px solid transparent;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	background: #ffffff;
+	color: #000000;
+	width: 240px;
+}
+
+.input:focus-within {
+	border-color: var(--accent-light);
+}
+
+.input input {
+	display: block;
+	flex: 1;
+	padding: 4px;
+	background: none;
+	border: none;
+	min-width: 0;
+	outline: none;
+	font-family: inherit;
+	font-size: 0.9rem;
+	color: inherit;
+}
+
+.input input::placeholder {
+	user-select: none;
+	color: var(--fg-muted);
+}
+
+.input .icons {
+	gap: 1px;
+	padding-right: 2px;
+}
+
+.input .icons button {
+	padding: 3px;
+}
+
+.results {
+	font-size: 0.9rem;
+	width: 80px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	user-select: none;
+}
+.results.error {
+	color: var(--error);
+}

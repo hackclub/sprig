@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang='en'>
+	<head>
+		<meta charset='utf-8'>
+		<title>Sprig Web Example</title>
+	</head>
+
+	<body>
+		<canvas width='500' height='400' id='canvas' tabindex='0'></canvas>
+		
+		<script type='module'>
+			import { webEngine } from 'https://esm.sh/sprig@1/web'
+
+			const runGame = (api) => {
+				const {
+					setLegend,
+					bitmap,
+					map,
+					setBackground,
+					setMap,
+					onInput,
+					getFirst,
+					afterInput
+				} = api
+				
+				setLegend(
+					[ 'p', bitmap`
+................
+................
+.......000......
+.......0.0......
+......0..0......
+......0...0.0...
+....0003.30.0...
+....0.0...000...
+....0.05550.....
+......0...0.....
+.....0....0.....
+.....0...0......
+......000.......
+......0.0.......
+.....00.00......
+................` ],
+					[ 'b', bitmap`
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888` ]
+				)
+
+				setMap(map`
+p.
+..`)
+				setBackground('b')
+
+				onInput('w', () => getFirst('p').y -= 1)
+				onInput('s', () => getFirst('p').y += 1)
+				onInput('a', () => getFirst('p').x -= 1)
+				onInput('d', () => getFirst('p').x += 1)
+			}
+
+			const game = webEngine(document.getElementById('canvas'))
+			runGame(game.api)
+		</script>
+	</body>
+</html>
