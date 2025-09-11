@@ -137,7 +137,7 @@ setPushables({ [ant]: [] })
 
 let level = 0
 
-const levels = [
+const trueLevels = [
   map`
 wwwwwwww
 wa....cw
@@ -227,6 +227,20 @@ w......x.w
 wwwwwwwwww`
 ]
 
+var levels = [...trueLevels]
+
+const lastLevel = map`
+wwwwwwwwww
+wa..c.wx.w
+wfwcwfw.cw
+wfcwwcw..w
+ww.xwwww.w
+wcfwwf...w
+ww..c.wcww
+ww.c.wc.ww
+wx....wxww
+wwwwwwwwww`
+
 function shuffle(array) {
   let currentIndex = array.length
   while (currentIndex != 0) {
@@ -238,6 +252,7 @@ function shuffle(array) {
 }
 
 shuffle(levels)
+levels.push(lastLevel)
 setMap(levels[level])
 setBackground(floor)
 
@@ -269,11 +284,13 @@ function checkWin() {
     level++
     if (level < levels.length) {
       setMap(levels[level])
-    } else {
-      clearText()
-      addText("Antony Wins!", { y: 4, color: color`0` })
-      addText("Time Elapsed: "+msToMinSec(performance.now() - startTime), { y: 6, color: color`7` })
-      gameOver = true
+    }
+    else {
+        clearText()
+        addText("Antony Wins!", { y: 4, color: color`0` })
+        addText("Time Elapsed: "+msToMinSec(performance.now() - startTime), { y: 6, color: color`7` })
+        gameOver = true
+        
     }
   }
 }
@@ -341,7 +358,10 @@ function moveAnt(dx, dy) {
 
 onInput("j", () => {
   level = 0
+  levels.length = 0
+  levels = [...trueLevels]
   shuffle(levels)
+  levels.push(lastLevel)
   setMap(levels[level])
   inputTimes = 0
   startTime = undefined
