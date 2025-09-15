@@ -5,6 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: maze
 @author: infinityloop
 @tags: ["maze", "puzzle", "game"]
+@description: a very generic maze puzzle game
 @addedOn: 2025-20-07
 */
 
