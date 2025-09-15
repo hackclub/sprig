@@ -213,6 +213,49 @@ setPushables({
 	[ player ]: []
 })
 
+let trapDirections = new Map();
+
+setInterval(() => {
+  const traps = getAll(trap);
+  if (traps.length === 0) return;
+
+  for (let t of traps) {
+    if (!trapDirections.has(`${t.x},${t.y}`)) {
+      trapDirections.set(`${t.x},${t.y}`, 1);
+    }
+
+    let dir = trapDirections.get(`${t.x},${t.y}`);
+    let nextX = t.x + dir;
+
+    const nextTile = getTile(nextX, t.y);
+    if (
+      nextX < 0 ||
+      nextX >= width() ||
+      nextTile.some(tile => tile.type === wall || tile.type === trap)
+    ) {
+      trapDirections.set(`${t.x},${t.y}`, -dir);
+      continue;
+    }
+
+    clearTile(t.x, t.y);
+    addSprite(nextX, t.y, trap);
+
+    trapDirections.set(`${nextX},${t.y}`, dir);
+    trapDirections.delete(`${t.x},${t.y}`);
+
+    const tileNow = getTile(nextX, t.y);
+    if (tileNow.some(s => s.type === player)) {
+      addText("You hit a trap!", { y: 6, color: color`3` });
+      setTimeout(() => {
+        setMap(levels[level]);
+        stepsRemaining = stepLimits[level];
+        clearText();
+      }, 1000);
+      return;
+    }
+  }
+}, 400);
+
 onInput("w", () => {
     if (stepsRemaining > 0) {
       getFirst(player).y -= 1;
