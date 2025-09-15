@@ -73,6 +73,10 @@ let playerY = 6
 let score = 0
 let gameOver = false
 
+
+let speed = 600
+let loop
+
 let customMap = [
   "tt.t.t.tt",
   "tt.t.t.tt",
@@ -113,6 +117,14 @@ function moveObstacles() {
     if (tile.some(s => s.type === obstacle)) {
       clearTile(x, 6)
       score++
+      updateScore()
+
+     
+      if (score % 5 === 0 && speed > 200) {
+        clearInterval(loop)
+        speed -= 50
+        startLoop()
+      }
     }
   }
 }
@@ -127,10 +139,19 @@ function checkCollision() {
 
     addText("Game Over\nScore: " + score + "\nPress J to restart", {
       x: 1,
-      y: 2,
+      y: 3,
       color: color`3`
     })
   }
+}
+
+function updateScore() {
+  clearText()
+  addText("Score: " + score, {
+    x: 1,
+    y: 0,
+    color: color`6`
+  })
 }
 
 function restartGame() {
@@ -144,15 +165,20 @@ function restartGame() {
   score = 0
   gameOver = false
   currentLane = 1
+  speed = 600 
   setMap(map`${customMap.join('\n')}`)
   drawPlayer()
+  updateScore()
+  startLoop()
+}
 
+function startLoop() {
   loop = setInterval(() => {
     moveObstacles()
     checkCollision()
     spawnObstacle()
     drawPlayer()
-  }, 600)
+  }, speed)
 }
 
 onInput("j", () => {
@@ -176,10 +202,5 @@ onInput("d", () => {
 })
 
 drawPlayer()
-
-let loop = setInterval(() => {
-  moveObstacles()
-  checkCollision()
-  spawnObstacle()
-  drawPlayer()
-}, 600)
+updateScore()
+startLoop()
