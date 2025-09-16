@@ -1,8 +1,8 @@
 /*
 @title: trickster_trials
-@description: Hard troll puzzle game full of traps, disappearing floors, moving spikes, and fake walls!
+@description: A rage-platformer where walls may betray you — some tiles are fake, some are solid walls, and the player must survive tricky levels to reach the goal.
 @author: Yax
-@tags: ['troll', 'puzzle', 'trap']
+@tags: ['troll', 'puzzle', 'trap', 'rage']
 @addedOn: 2025-08-24
 */
 
@@ -16,6 +16,7 @@ const floor = "f";    // disappearing floor
 const mover = "m";    // moving spike
 const hidden = "h";   // hidden trap
 const fakeWall = "x"; // fake wall (looks real, no collision)
+const trapWall = "b"; // --- NEW --- Looks like a wall, but is a trap.
 
 // --- Artwork & Legend ---
 setLegend(
@@ -54,39 +55,57 @@ setLegend(
 ................
 ................`],
   [ wall, bitmap`
-00000000DDDDDDDD
-00000000DDDDDDDD
-DDDDDDDD00000000
-DDDDDDDD00000000
-00000000DDDDDDDD
-00000000DDDDDDDD
-DDDDDDDD00000000
-DDDDDDDD00000000
-00000000DDDDDDDD
-00000000DDDDDDDD
-DDDDDDDD00000000
-DDDDDDDD00000000
-00000000DDDDDDDD
-00000000DDDDDDDD
-DDDDDDDD00000000
-DDDDDDDD00000000`],
+LLLLLLLLLLLLLLLL
+LCCCCLCCCCLCCCCL
+LCCCCLCCCCLCCCCL
+LLLLLLLLLLLLLLLL
+CCCCLCCCCLCCCCLC
+CCCCLCCCCLCCCCLC
+LLLLLLLLLLLLLLLL
+LCCCCLCCCCLCCCCL
+LCCCCLCCCCLCCCCL
+LLLLLLLLLLLLLLLL
+CCCCLCCCCLCCCCLC
+CCCCLCCCCLCCCCLC
+LLLLLLLLLLLLLLLL
+LCCCCLCCCCLCCCCL
+LCCCCLCCCCLCCCCL
+LLLLLLLLLLLLLLLL`],
   [ fakeWall, bitmap`
-00000000DDDDDDDD
-00000000DDDDDDDD
-DDDDDDDD00000000
-DDDDDDDD00000000
-00000000DDDDDDDD
-00000000DDDDDDDD
-DDDDDDDD00000000
-DDDDDDDD00000000
-00000000DDDDDDDD
-00000000DDDDDDDD
-DDDDDDDD00000000
-DDDDDDDD00000000
-00000000DDDDDDDD
-00000000DDDDDDDD
-DDDDDDDD00000000
-DDDDDDDD00000000`],
+LLLLLLLLLLLLLLLL
+LCCCCLCCCCLCCCCL
+LCCCCLCCCCLCCCCL
+LLLLLLLLLLLLLLLL
+CCCCLCCCCLCCCCLC
+CCCCLCCCCLCCCCLC
+LLLLLLLLLLLLLLLL
+LCCCCLCCCCLCCCCL
+LCCCCLCCCCLCCCCL
+LLLLLLLLLLLLLLLL
+CCCCLCCCCLCCCCLC
+CCCCLCCCCLCCCCLC
+LLLLLLLLLLLLLLLL
+LCCCCLCCCCLCCCCL
+LCCCCLCCCCLCCCCL
+LLLLLLLLLLLLLLLL`],
+  // --- NEW --- Trap Wall sprite, looks identical to the others.
+  [ trapWall, bitmap`
+LLLLLLLLLLLLLLLL
+LCCCCLCCCCLCCCCL
+LCCCCLCCCCLCCCCL
+LLLLLLLLLLLLLLLL
+CCCCLCCCCLCCCCLC
+CCCCLCCCCLCCCCLC
+LLLLLLLLLLLLLLLL
+LCCCCLCCCCLCCCCL
+LCCCCLCCCCLCCCCL
+LLLLLLLLLLLLLLLL
+CCCCLCCCCLCCCCLC
+CCCCLCCCCLCCCCLC
+LLLLLLLLLLLLLLLL
+LCCCCLCCCCLCCCCL
+LCCCCLCCCCLCCCCL
+LLLLLLLLLLLLLLLL`],
   [ spike, bitmap`
 ................
 ................
@@ -240,43 +259,81 @@ x.x..fx.x
 xmx.x.x.x
 x...w..mx
 xxxxxxxxx`,
-  // --- NEW LEVELS START HERE ---
+  // --- NEW, LARGER & MORE COMPLEX LEVELS ---
   map`
-p.m.w.m.g
-.w..w..w.
-.m.ww.m..
-.w..w..w.
-.........
-.t.t.t.t.
-xxxxxxxxx`,
+p.x.wwwwwwwww.g
+w.w.w.x.w...w.w
+w.w.x.w.w.w.w.w
+w.w.w.w.w.w.w.w
+w...w.x.w...x.w
+wwwwwww.w.wwwww
+w.t.x.w.w.w...w
+w.w.w.w.x.w.w.w
+w...w.w...w.x.w
+wwwwwwwwwwwww.w`,
+  // --- UPDATED with trap wall 'b' ---
   map`
-p.f.f.f.g
-.h.h.h.h.
-.f.f.f.f.
-.h.h.h.h.
-.f.f.f.f.
-.h.h.h.h.
-.........`,
+p.f.f.f.f...
+............
+wwwwxwxwwwww
+w...b....w.w
+wwwwwxwwww.w
+w...x....w.w
+wwwwxwwwwwww
+w..tx...tw.w
+wwwwwwwxwwww
+w........w.w
+w.wwwwww.w.w
+w...g....w.w
+wwwwwwwwwwww`,
+  // --- UPDATED with trap wall 'b' ---
   map`
-p.w...w.g
-..w.x.w..
-m.w.w.w.m
-..w.w.w..
-x...f...x
-..w.w.w..
-m.w.w.w.m
-..w.x.w..
-..w...w..`,
+p.m...x.w.w...w...t.b.g
+wwww.wx.w.w.w.w.w.w.w.w
+....w.....w.f.w.w.m.w.w
+..t.wwwwwwwwwwwwwwwww.w
+..m.x...t...............w
+wwwwwwwwwwwwwwwwwwwwwww`
+, map`
+p.w...w...w...w.w.g
+.b.w.x.w.b.w.x.w.b.
+.w.w.w.w.w.w.w.w.w.
+.x.w.t.w.x.w.t.w.x.
+.w.w.w.w.w.w.w.w.w.
+...f...f...f...f...
+.m.w.w.w.m.w.w.w.m.
+.w.b.w.x.w.b.w.x.w.
+.w.w.w.w.w.w.w.w.w.
+.x.w.t.w.x.w.t.w.x.
+.w.w.w.w.w.w.w.w.w.
+...................`,
   map`
-p.x.m.w.g
-w.m.w.w.w
-w.f.m.x.w
-w.w.x.w.w
-m...x.h.m
-w.w.w.w.w
-w.x.f.x.w
-w.m.w.m.w
-xxxxxxxxx`
+p.t.w.t.w.t.w.t.wddw
+..w...w...w...w.w..w
+m.w.x.w.b.w.x.w.wm.w
+..w...w...w...w.w..w
+x.w.t.w.t.w.t.w.tw.w
+..w...w...w...w.w..w
+m.w.x.w.b.w.x.w.wm.w
+..w...w...w...w.w..w
+b.w.t.w.t.w.t.w.tw.w
+..w...w...w...w.w..w
+f.w.x.w.b.w.x.w.wf.w
+..w...w...w...w.w..w
+k..................g`,
+  map`
+p.f.f.f.f.f.f.f.f.f.e
+.w.w.w.w.w.w.w.w.w.w.
+.x.b.x.b.x.b.x.b.x.b.
+.w.w.w.w.w.w.w.w.w.w.
+.f.f.f.f.f.f.f.f.f.f.
+.w.w.w.w.w.w.w.w.w.w.
+.b.x.b.x.b.x.b.x.b.x.
+.w.w.w.w.w.w.w.w.w.w.
+.f.f.f.f.f.f.f.f.f.f.
+.w.w.w.w.w.w.w.w.w.w.
+...................g.
+.m.m.m.m.m.m.m.m.m.m.`
 ];
 
 setMap(levels[level]);
@@ -319,8 +376,13 @@ function movePlayer(dx, dy) {
     addSprite(here.x, here.y, player);
   }
 
-  // Check for traps
-  if (tilesWith(player, hidden).length > 0 || tilesWith(player, trap).length > 0 || tilesWith(player, spike).length > 0 || tilesWith(player, mover).length > 0) {
+  // Check for traps (and the new trap wall)
+  // --- UPDATED --- condition now includes trapWall
+  if (tilesWith(player, hidden).length > 0
+   || tilesWith(player, trap).length > 0
+   || tilesWith(player, spike).length > 0
+   || tilesWith(player, mover).length > 0
+   || tilesWith(player, trapWall).length > 0) {
     deaths++;
     resetLevel();
     return;
