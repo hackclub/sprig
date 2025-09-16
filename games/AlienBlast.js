@@ -4,11 +4,6 @@
 @description: A simple space shooter where you kill aliens before they reach you
 @tags: [alien, shooter, arcade]
 @addedOn: 2025-08-25
-@instructions: 
-  - Use "A" and "D" to move your ship left and right
-  - Use "W" to shoot bullets
-  - Destroy the aliens before they reach the bottom
-  - The game ends if an alien touches your row
 */
 
 // === Sprite definitions ===
