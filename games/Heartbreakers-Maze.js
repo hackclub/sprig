@@ -1,9 +1,9 @@
 /*
-	>     @title:Heartbreakers Maze
-	>     @author:Ethan
-	>     @description:Collect the gems
-	>     @tags: [Maze, Gems, Monster]
-	>     @addedOn: 2025-08-26
+ @title:Heartbreakers Maze
+ @author:Ethan
+ @description:Collect the gems
+ @tags: [Maze, Gems, Monster]
+ @addedOn: 2025-08-26
     */
 /*
   GEM COLLECTOR
