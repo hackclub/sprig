@@ -1,18 +1,26 @@
-	>     /*
-	>     @title: Alien Blast
-	>     @author: Aloys
-	>     @description: A game where you kill aliens 
-	>     @tags: [alien]
-	>     @addedOn: 2025-08-25
-	>     */
+/*
+@title: Alien Blast
+@author: Aloys
+@description: A simple space shooter where you kill aliens before they reach you
+@tags: [alien, shooter, arcade]
+@addedOn: 2025-08-25
+@instructions: 
+  - Use "A" and "D" to move your ship left and right
+  - Use "W" to shoot bullets
+  - Destroy the aliens before they reach the bottom
+  - The game ends if an alien touches your row
+*/
 
+// === Sprite definitions ===
 const player = "p"
 const alien = "a"
 const bullet = "b"
 
+// Global variables
 let score = 0
 let gameOver = false
 
+// Sprite graphics
 setLegend(
   [ player, bitmap`
 ......33........
@@ -46,7 +54,6 @@ setLegend(
 ................
 ................
 ................
-................
 ................` ],
   [ bullet, bitmap`
 ......33........
@@ -67,7 +74,7 @@ setLegend(
 ................` ]
 )
 
-
+// Starting map
 const startMap = map`
 ..........
 ..........
@@ -80,17 +87,19 @@ const startMap = map`
 p.........`
 setMap(startMap)
 
-
+// Collision settings
 setSolids([ player ])
 setPushables({ [ player ]: [] })
 
-//fin de partie
+// === Utility functions ===
+
+// End screen
 function gameOverScreen() {
   gameOver = true
-  addText("GAME OVER", { x: 8, y: 4, color: color`3` })
+  addText("GAME OVER", { x: 4, y: 4, color: color`3` })
 }
 
-//controles
+// === Player controls ===
 onInput("a", () => {
   if (gameOver) return
   let ship = getFirst(player)
@@ -109,18 +118,20 @@ onInput("w", () => {
   addSprite(ship.x, ship.y - 1, bullet)
 })
 
-//mouvement tirs
+// === Game mechanics ===
+
+// Bullet movement
 setInterval(() => {
   if (gameOver) return
 
   let allBullets = getAll(bullet)
   for (let b of allBullets) {
     b.y -= 1
-    if (b.y < 0) b.remove()
+    if (b.y < 0) b.remove() // Remove bullets off-screen
   }
 }, 150)
 
-//spawn
+// Alien spawning
 setInterval(() => {
   if (gameOver) return
 
@@ -128,7 +139,7 @@ setInterval(() => {
   addSprite(randomX, 0, alien)
 }, 700)
 
-//mouvement
+// Alien movement
 setInterval(() => {
   if (gameOver) return
 
@@ -141,7 +152,7 @@ setInterval(() => {
   }
 }, 500)
 
-//colisions
+// Bullet/alien collision detection
 afterInput(() => {
   if (gameOver) return
 
@@ -158,10 +169,10 @@ afterInput(() => {
     }
   }
 })
-//score
+
+// Score display
 setInterval(() => {
   if (gameOver) return
   clearText()
   addText(`Score: ${score}`, { x: 4, y: 0, color: color`0` })
 }, 100)
-
