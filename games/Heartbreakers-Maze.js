@@ -4,18 +4,7 @@
 	>     @description:Collect the gems
 	>     @tags: [Maze, Gems, Monster]
 	>     @addedOn: 2025-08-26
-	>     */
-/*
-  GEM COLLECTOR
-  An original game by Kai (ethan)
-
-  Collect all gems before the monsters get you!!!! 
-  Push blocks to trap the monsters and clear your path.
-   :D
-  Controls:
-  w a s d - Move your character
-*/
-
+    */
 /*
   GEM COLLECTOR
   An original game by Kai (ethan)
