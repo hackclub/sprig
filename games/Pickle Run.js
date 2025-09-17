@@ -1,8 +1,8 @@
 /*
-@title: Cam's Puzzle
-@author: Cam Phillips
-@tags: [adventure]
-@addedOn: 2025-09-17
+@title: 
+@author: 
+@tags: []
+@addedOn: 2025-00-00
 */
 
 const background = "o"
