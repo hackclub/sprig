@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Obstacle Game
 @author: endless
-@tags: []
-@addedOn: 2025-9-15
+@tags: [puzzle,strategy]
+@addedOn: 2025-9-16
 */
 
 const player = "p"
