@@ -1,8 +1,9 @@
 /*
-@title: 
-@author: 
+@title:
+@author:
+@description:
 @tags: []
-@addedOn: 2025-00-00
+@addedOn: 2025-MM-DD
 */
 
 const background = "o"
