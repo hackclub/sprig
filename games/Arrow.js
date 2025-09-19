@@ -1,4 +1,12 @@
 /*
+@title: Arrow
+@description: Control an arrow to dodge flying objects and hazards
+@author: AmazinAxel
+@tags: [avoid, dodge, fast-paced, levels, difficult]
+@addedOn: 2025-09-19
+*/
+
+/*
   Arrow:
   - You're an arrow trying to dodge flying objects!
   - Levels get harder w/ more hazards as you progress
