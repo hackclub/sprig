@@ -11,12 +11,12 @@ const player = "p";
 const goal = "g";
 const wall = "w";
 const spike = "s";
-const trap = "t";     // skull trap
-const floor = "f";    // disappearing floor
-const mover = "m";    // moving spike
-const hidden = "h";   // hidden trap
-const fakeWall = "x"; // fake wall (looks real, no collision)
-const trapWall = "b"; // --- NEW --- Looks like a wall, but is a trap.
+const trap = "t";      // skull trap
+const floor = "f";     // disappearing floor
+const mover = "m";     // moving spike
+const hidden = "h";    // hidden trap
+const fakeWall = "x";  // fake wall (looks real, no collision)
+const trapWall = "b";  // Looks like a wall, but is a trap.
 
 // --- Artwork & Legend ---
 setLegend(
@@ -88,7 +88,6 @@ LLLLLLLLLLLLLLLL
 LCCCCLCCCCLCCCCL
 LCCCCLCCCCLCCCCL
 LLLLLLLLLLLLLLLL`],
-  // --- NEW --- Trap Wall sprite, looks identical to the others.
   [ trapWall, bitmap`
 LLLLLLLLLLLLLLLL
 LCCCCLCCCCLCCCCL
@@ -259,7 +258,6 @@ x.x..fx.x
 xmx.x.x.x
 x...w..mx
 xxxxxxxxx`,
-  // --- NEW, LARGER & MORE COMPLEX LEVELS ---
   map`
 p.x.wwwwwwwww.g
 w.w.w.x.w...w.w
@@ -271,11 +269,10 @@ w.t.x.w.w.w...w
 w.w.w.w.x.w.w.w
 w...w.w...w.x.w
 wwwwwwwwwwwww.w`,
-  // --- UPDATED with trap wall 'b' ---
   map`
 p.f.f.f.f...
 ............
-wwwwxwxwwwww
+wwwwxwwxwwww
 w...b....w.w
 wwwwwxwwww.w
 w...x....w.w
@@ -284,45 +281,44 @@ w..tx...tw.w
 wwwwwwwxwwww
 w........w.w
 w.wwwwww.w.w
-w...g....w.w
+w...g.w..w.w
 wwwwwwwwwwww`,
-  // --- UPDATED with trap wall 'b' ---
   map`
 p.m...x.w.w...w...t.b.g
 wwww.wx.w.w.w.w.w.w.w.w
 ....w.....w.f.w.w.m.w.w
 ..t.wwwwwwwwwwwwwwwww.w
 ..m.x...t...............w
-wwwwwwwwwwwwwwwwwwwwwww`
-, map`
+wwwwwwwwwwwwwwwwwwwwwww`,
+  map`
 p.w...w...w...w.w.g
 .b.w.x.w.b.w.x.w.b.
 .w.w.w.w.w.w.w.w.w.
 .x.w.t.w.x.w.t.w.x.
 .w.w.w.w.w.w.w.w.w.
-...f...f...f...f...
-.m.w.w.w.m.w.w.w.m.
+...x...w...w...w...
+.m.w.w.w.m.w.x.x.m.
 .w.b.w.x.w.b.w.x.w.
 .w.w.w.w.w.w.w.w.w.
 .x.w.t.w.x.w.t.w.x.
 .w.w.w.w.w.w.w.w.w.
-...................`,
+.wwwwwwwwwxxxwwwww.`,
   map`
-p.t.w.t.w.t.w.t.wddw
+p.t.w.t.w.t.w.t.w..w
 ..w...w...w...w.w..w
 m.w.x.w.b.w.x.w.wm.w
 ..w...w...w...w.w..w
 x.w.t.w.t.w.t.w.tw.w
-..w...w...w...w.w..w
+..x...w...w...w.w..w
 m.w.x.w.b.w.x.w.wm.w
 ..w...w...w...w.w..w
 b.w.t.w.t.w.t.w.tw.w
-..w...w...w...w.w..w
+..w...x...w...w.w..w
 f.w.x.w.b.w.x.w.wf.w
 ..w...w...w...w.w..w
-k..................g`,
+..wwwwwwwwwwwwwww..g`,
   map`
-p.f.f.f.f.f.f.f.f.f.e
+p.f.f.f.f.f.f.f.f.f..
 .w.w.w.w.w.w.w.w.w.w.
 .x.b.x.b.x.b.x.b.x.b.
 .w.w.w.w.w.w.w.w.w.w.
@@ -337,6 +333,8 @@ p.f.f.f.f.f.f.f.f.f.e
 ];
 
 setMap(levels[level]);
+
+// --- Solids ---
 setSolids([player, wall, spike, trap, mover]);
 
 // --- Player Controls ---
@@ -346,14 +344,10 @@ onInput("a", () => movePlayer(-1, 0));
 onInput("d", () => movePlayer(1, 0));
 
 onInput("j", () => { // Reset game
-  if (level >= levels.length) {
-    level = 0;
-    deaths = 0;
-    clearText();
-    setMap(levels[level]);
-  } else {
-    resetLevel();
-  }
+  level = 0;
+  deaths = 0;
+  clearText();
+  setMap(levels[level]);
 });
 
 // --- Game Logic ---
@@ -361,54 +355,50 @@ function movePlayer(dx, dy) {
   const p = getFirst(player);
   if (!p) return;
 
-  const nx = p.x + dx;
-  const ny = p.y + dy;
-  if (nx < 0 || ny < 0 || nx >= width() || ny >= height()) return;
+  // Move the player
+  p.x += dx;
+  p.y += dy;
 
-  p.x = nx;
-  p.y = ny;
+  const here = getFirst(player);
 
-  // Check for disappearing floor
-  if (tilesWith(player, floor).length > 0) {
-    const here = getFirst(player);
-    clearTile(here.x, here.y);
-    addSprite(here.x, here.y, spike); // Leave a spike behind
-    addSprite(here.x, here.y, player);
-  }
-
-  // Check for traps (and the new trap wall)
-  // --- UPDATED --- condition now includes trapWall
-  if (tilesWith(player, hidden).length > 0
-   || tilesWith(player, trap).length > 0
-   || tilesWith(player, spike).length > 0
-   || tilesWith(player, mover).length > 0
-   || tilesWith(player, trapWall).length > 0) {
+  // --- Trap Checks ---
+  if (tilesWith(player, trap).length > 0 ||
+      tilesWith(player, spike).length > 0 ||
+      tilesWith(player, mover).length > 0 ||
+      tilesWith(player, trapWall).length > 0 ||
+      tilesWith(player, hidden).length > 0) {
     deaths++;
     resetLevel();
     return;
   }
 
-  // Check for goal
+  // --- Disappearing Floor ---
+  if (tilesWith(player, floor).length > 0) {
+    clearTile(here.x, here.y);
+    addSprite(here.x, here.y, spike);
+    addSprite(here.x, here.y, player);
+  }
+
+  // --- Goal Check ---
   if (tilesWith(player, goal).length > 0) {
     level++;
-    const next = levels[level];
-    if (next) {
-      clearText();
-      setMap(next);
+    const nextLevel = levels[level];
+    if (nextLevel) {
+      setMap(nextLevel);
     } else {
-      // Game Win Condition
+      setMap(map``); 
       clearText();
       addText("YOU SURVIVED!", { y: 4, color: color`L` });
       addText(`Total Deaths: ${deaths}`, { y: 6, color: color`C` });
       addText("Press J to restart", { y: 8, color: color`2` });
     }
+    return;
   }
 
   moveSpikes();
 }
 
 function resetLevel() {
-  clearText();
   setMap(levels[level]);
 }
 
@@ -419,8 +409,11 @@ function moveSpikes() {
     const [dx, dy] = dirs[Math.floor(Math.random() * dirs.length)];
     const nx = m.x + dx;
     const ny = m.y + dy;
+    
+    // Check if the target tile is empty before moving
     if (nx >= 0 && nx < width() && ny >= 0 && ny < height()) {
-      if (getTile(nx, ny).length === 0) { // Can only move to empty tiles
+      const targetTiles = getTile(nx, ny);
+      if (targetTiles.length === 0) {
         clearTile(m.x, m.y);
         addSprite(nx, ny, mover);
       }
