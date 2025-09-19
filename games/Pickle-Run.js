@@ -1,5 +1,5 @@
 /*
-@title: Pickle Run
+@title: Pickle-Run
 @author: Cam Phillips
 @description: Ever Want To Be A Pickle, Well Here's Your Chance
 @tags: [adventure,strategy, puzzle]
