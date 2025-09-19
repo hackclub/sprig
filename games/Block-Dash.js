@@ -1,11 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Block Dash
 @author: Vaughn
-@tags: []
-@addedOn: 2025-00-00
+@description: Geometry Dash remake in Sprig! Reach the end to win.
+@tags: [platformer]
+@addedOn: 2025-MM-DD
 */
 
 
