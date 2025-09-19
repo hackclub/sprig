@@ -1,9 +1,9 @@
 /*
-@title:
-@author:
-@description:
-@tags: []
-@addedOn: 2025-MM-DD
+@title: Pickle Run
+@author: Cam Phillips
+@description: Ever Want To Be A Pickle, Well Here's Your Chance
+@tags: [adventure,strategy, puzzle]
+@addedOn: 2025-09/18
 */
 
 const background = "o"
