@@ -20,7 +20,7 @@ const trapWall = "b";  // Looks like a wall, but is a trap.
 
 // --- Artwork & Legend ---
 setLegend(
-  [ player, bitmap`
+  [player, bitmap`
 ................
 ................
 .......C.C......
@@ -37,7 +37,7 @@ setLegend(
 ................
 ................
 ................`],
-  [ goal, bitmap`
+  [goal, bitmap`
 ................
 ....LLLLLLLL....
 ...LLLLLLLLLL...
@@ -54,7 +54,7 @@ setLegend(
 ................
 ................
 ................`],
-  [ wall, bitmap`
+  [wall, bitmap`
 LLLLLLLLLLLLLLLL
 LCCCCLCCCCLCCCCL
 LCCCCLCCCCLCCCCL
@@ -71,7 +71,7 @@ LLLLLLLLLLLLLLLL
 LCCCCLCCCCLCCCCL
 LCCCCLCCCCLCCCCL
 LLLLLLLLLLLLLLLL`],
-  [ fakeWall, bitmap`
+  [fakeWall, bitmap`
 LLLLLLLLLLLLLLLL
 LCCCCLCCCCLCCCCL
 LCCCCLCCCCLCCCCL
@@ -88,7 +88,7 @@ LLLLLLLLLLLLLLLL
 LCCCCLCCCCLCCCCL
 LCCCCLCCCCLCCCCL
 LLLLLLLLLLLLLLLL`],
-  [ trapWall, bitmap`
+  [trapWall, bitmap`
 LLLLLLLLLLLLLLLL
 LCCCCLCCCCLCCCCL
 LCCCCLCCCCLCCCCL
@@ -105,7 +105,7 @@ LLLLLLLLLLLLLLLL
 LCCCCLCCCCLCCCCL
 LCCCCLCCCCLCCCCL
 LLLLLLLLLLLLLLLL`],
-  [ spike, bitmap`
+  [spike, bitmap`
 ................
 ................
 ................
@@ -122,7 +122,7 @@ LLLLLLLLLLLLLLLL`],
 ...222222222....
 ..22222222222...
 .2222222222222..`],
-  [ trap, bitmap`
+  [trap, bitmap`
 ................
 .....CCCCCC.....
 ...CCCCCCCCCC...
@@ -139,7 +139,7 @@ LLLLLLLLLLLLLLLL`],
 ................
 ................
 ................`],
-  [ floor, bitmap`
+  [floor, bitmap`
 DDDDDDDDDDDDDDDD
 D.D.D.D.D.D.D.D.
 D.D.D.D.D.D.D.D.
@@ -156,7 +156,7 @@ D.D.D.D.D.D.D.D.
 D.D.D.D.D.D.D.D.
 D.D.D.D.D.D.D.D.
 DDDDDDDDDDDDDDDD`],
-  [ mover, bitmap`
+  [mover, bitmap`
 ................
 .......2........
 ......222.......
@@ -173,7 +173,7 @@ DDDDDDDDDDDDDDDD`],
 ................
 ................
 ................`],
-  [ hidden, bitmap`
+  [hidden, bitmap`
 ................
 ................
 ................
@@ -202,22 +202,22 @@ const levels = [
 p..g
 ....
 ....
-....`,
+....`,//1
   map`
 p..t
 .t.t
 .t.t
-..g.`,
+..g.`, //2
   map`
 p.tg
 ..w.
 ..x.
-..w.`,
+..w.`, //3
   map`
 p...
 .w.w
 .t.g
-x...`,
+x...`, //4
   map`
 p.......g
 x.xxwxx.x
@@ -225,7 +225,7 @@ x.xxwxx.x
 ..x..x..x
 ..wxxw..x
 ..w......
-xxxxxxxxx`,
+xxxxxxxxx`, //5
   map`
 p....wg..
 xxxx..xx.
@@ -233,7 +233,7 @@ xxxx..xx.
 ..w.xx.x.
 ..w.xx.x.
 ..x....x.
-xxxxxxxxx`,
+xxxxxxxxx`, //6
   map`
 p..x....g
 x..x..w.x
@@ -241,7 +241,7 @@ x..x..w.x
 x..xxx..x
 x..w....x
 x..xxxxx.
-x........`,
+x........`, //7
   map`
 pxxxwxxxg
 x.......x
@@ -249,7 +249,7 @@ x.xxx.x.x
 x.x...x.x
 x.x.x.x.x
 x...w...x
-xxxxxxxxx`,
+xxxxxxxxx`, //8
   map`
 pxxxwxxxg
 x...x...x
@@ -257,7 +257,7 @@ x.xxx.x.x
 x.x..fx.x
 xmx.x.x.x
 x...w..mx
-xxxxxxxxx`,
+xxxxxxxxx`, //9
   map`
 p.x.wwwwwwwww.g
 w.w.w.x.w...w.w
@@ -268,28 +268,28 @@ wwwwwww.w.wwwww
 w.t.x.w.w.w...w
 w.w.w.w.x.w.w.w
 w...w.w...w.x.w
-wwwwwwwwwwwww.w`,
+wwwwwwwwwwwww.w`, //10
   map`
-p.f.f.f.f...
-............
-wwwwxwwxwwww
-w...b....w.w
-wwwwwxwwww.w
-w...x....w.w
-wwwwxwwwwwww
-w..tx...tw.w
-wwwwwwwxwwww
-w........w.w
-w.wwwwww.w.w
-w...g.w..w.w
-wwwwwwwwwwww`,
+p.f.f.f.f....
+.............
+wwwwxwwxwwww.
+w...b....w.w.
+wwwwwxwwww.w.
+w...x....w.w.
+wwwwxwwwwwww.
+w..tx...tw.w.
+wwwwwwwxwwww.
+w........w.w.
+w.wwwwww.w.w.
+w...g.w..w.w.
+wwwwwwwwwwww.`, //11
   map`
-p.m...x.w.w...w...t.b.g
+p.m.x.w.w...w.t.b.g
 wwww.wx.w.w.w.w.w.w.w.w
 ....w.....w.f.w.w.m.w.w
 ..t.wwwwwwwwwwwwwwwww.w
-..m.x...t...............w
-wwwwwwwwwwwwwwwwwwwwwww`,
+..m.x...t.......w.w.w.w
+wwwwwwwwwwwwwwwwwwwwwww`, //12
   map`
 p.w...w...w...w.w.g
 .b.w.x.w.b.w.x.w.b.
@@ -302,34 +302,34 @@ p.w...w...w...w.w.g
 .w.w.w.w.w.w.w.w.w.
 .x.w.t.w.x.w.t.w.x.
 .w.w.w.w.w.w.w.w.w.
-.wwwwwwwwwxxxwwwww.`,
+.wwwwwwwwwxxxwwwww.`, //13
   map`
 p.t.w.t.w.t.w.t.w..w
-..w...w...w...w.w..w
+..w...w...x...w.w..w
 m.w.x.w.b.w.x.w.wm.w
 ..w...w...w...w.w..w
 x.w.t.w.t.w.t.w.tw.w
-..x...w...w...w.w..w
+..x...w...w...w.x..w
 m.w.x.w.b.w.x.w.wm.w
-..w...w...w...w.w..w
+..w...w...w...x.w..w
 b.w.t.w.t.w.t.w.tw.w
 ..w...x...w...w.w..w
 f.w.x.w.b.w.x.w.wf.w
 ..w...w...w...w.w..w
-..wwwwwwwwwwwwwww..g`,
+..wwwwwwwwwwwwwww..g`, //14
   map`
-p.f.f.f.f.f.f.f.f.f..
-.w.w.w.w.w.w.w.w.w.w.
-.x.b.x.b.x.b.x.b.x.b.
-.w.w.w.w.w.w.w.w.w.w.
-.f.f.f.f.f.f.f.f.f.f.
-.w.w.w.w.w.w.w.w.w.w.
-.b.x.b.x.b.x.b.x.b.x.
-.w.w.w.w.w.w.w.w.w.w.
-.f.f.f.f.f.f.f.f.f.f.
-.w.w.w.w.w.w.w.w.w.w.
-...................g.
-.m.m.m.m.m.m.m.m.m.m.`
+p.f.f.f.f.f.f.f.f.f..w
+.w.w.w.w.w.w.w.w.w.w.w
+.x.b.x.b.x.b.x.b.x.b.w
+.w.w.w.w.w.w.w.w.w.w.w
+.w.w.w.x.w.w.w.w.w.w.w
+.w.w.x.w.x.w.w.w.w.w.w
+.b.x.b.x.b.x.b.x.b.x.w
+.w.w.w.w.x.x.x.x.x.x.w
+.w.w.w.x.w.w.w.w.w.w.w
+.w.w.w.x.w.w.w.w.w.w.w
+wm.m.m.m.m.m.m.m.mm.gw
+wwwwwwwwwwwwwwwwwwwwww` //15
 ];
 
 setMap(levels[level]);
@@ -363,10 +363,10 @@ function movePlayer(dx, dy) {
 
   // --- Trap Checks ---
   if (tilesWith(player, trap).length > 0 ||
-      tilesWith(player, spike).length > 0 ||
-      tilesWith(player, mover).length > 0 ||
-      tilesWith(player, trapWall).length > 0 ||
-      tilesWith(player, hidden).length > 0) {
+    tilesWith(player, spike).length > 0 ||
+    tilesWith(player, mover).length > 0 ||
+    tilesWith(player, trapWall).length > 0 ||
+    tilesWith(player, hidden).length > 0) {
     deaths++;
     resetLevel();
     return;
@@ -386,11 +386,10 @@ function movePlayer(dx, dy) {
     if (nextLevel) {
       setMap(nextLevel);
     } else {
-      setMap(map``); 
       clearText();
-      addText("YOU SURVIVED!", { y: 4, color: color`L` });
+      addText("YOU SURVIVED!", { y: 4, color: color`0` });
       addText(`Total Deaths: ${deaths}`, { y: 6, color: color`C` });
-      addText("Press J to restart", { y: 8, color: color`2` });
+      addText("Press J to restart", { y: 8, color: color`3` });
     }
     return;
   }
