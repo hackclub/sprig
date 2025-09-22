@@ -1475,7 +1475,15 @@ function tryMove(dx, dy) {
         clearTile(...ppos)
         addSprite(...ppos, brickD)
         addSprite(...ppos, player)
-        timer += 20
+        if (level < 2) {
+          timer += 20
+        } else if (level < 4) {
+          timer += 15
+        } else if (level < 8) {
+          timer += 10
+        } else {
+          timer += 5
+        }
         flashTimer = true
         displayHUD()
         scheduleTimeout(()=>{
@@ -1575,4 +1583,3 @@ onInput("i", () => {
     canInp = true
   }
 })*/
-
