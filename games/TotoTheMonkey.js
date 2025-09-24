@@ -2,7 +2,7 @@
 @title: TotoTheMonkey
 @author: Armaan Soni
 @description:A Game of monkey who lves math but needs to learn new things choose correct option to teach him rember he is monkey so dont frustrate if the process goes to infinity
-@tags: []
+@tags: ["Logical","Fun","Endless"]
 @addedOn: 2025-09-19
 */
 
