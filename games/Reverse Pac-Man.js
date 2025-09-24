@@ -1,13 +1,8 @@
 /*
 @title: Reverse Pac-Man
 @author: Evah Shaji
-@addedOn: 2025-08-23
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-Reverse Pac-Man - You are the ghost! Chase and catch all the Pac-Men!
-Controls: WASD to move
-Goal: Catch all yellow Pac-Men within the time limit
+@tags: [game, arcade, retro, pacman, chase]
+@addedOn: 2025-08-03
 */
 
 const player = "p"
