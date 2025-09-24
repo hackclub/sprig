@@ -1,10 +1,13 @@
 /*
-@title: RetroFarmin Simulator v1.0
+@title: RetroFarmin_Simulator_v1
 @author: Stavros Arg 
 @tags: ['retro', 'simulation', 'role-playing', 'humor']
 @addedOn: 2025-09-17
+@description: You can now be a farmer! In this game you are collecting eggs and selling them to upgrade your farm!
 
 Welcome to RetroFarmin Simulator!
+working on it since summer of 2024 :)
+
 !DISCLAIMER: I am sorry for the messy code, this is my first 
 actual code-javascript game. I have mostly worked on scratch!
 
