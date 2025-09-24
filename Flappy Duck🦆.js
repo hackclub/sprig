@@ -1,8 +1,9 @@
 /*
-Flappy Duck 🦆 - Defensive version
-- Tries to add the player sprite 'p'
-- If that fails, uses a fallback sprite 'd' (defined here)
-- Logs helpful debug info and shows an on-screen error if all else fails
+@title: Fallpy Duck!🦆
+@author: DD
+@description: Flappy Duck is a cute one-button arcade game: you control a little pixel duck that constantly falls and must flap through a never-ending series of procedurally generated pipe columns. The goal is simple — stay alive as long as you can, pass as many gaps as possible, and beat your high score.
+@tags: [flappy, jump, fun, easy, ongoing]
+@addedOn: 2025-9-23
 */
 
 const player = "p"
