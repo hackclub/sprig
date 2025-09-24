@@ -2,6 +2,7 @@
 @title: Reverse Pac-Man
 @author: Evah Shaji
 @tags: [game, arcade, retro, pacman, chase]
+@description: A flipped twist on the classic arcade game—play as the ghost and hunt down Pac-Man while he scrambles for survival.
 @addedOn: 2025-08-03
 */
 
