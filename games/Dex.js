@@ -1,17 +1,22 @@
 /*
 @title: dexter_nightshift
-@description: Dexter must grab the knife and kill the victim before Doakes catches him! 
-@author: edits
-@tags: ['stealth', 'puzzle']
+@description: Dexter must grab the knife and kill the victim before Doakes catches him! Includes hazards and multiple maps. 
+@author: Kings-Indian
+@tags: ['stealth', 'puzzle', 'multiplayer']
 @addedOn: 2025-08-19
+Instructions:
+Player 1 (Dexter): Use WASD to move. Grab the knife (k) and then reach the victim (t).
+Player 2 (Doakes): Use IJKL to move. Catch Dexter (d) before he kills the victim.
+Walls (w) block movement. Hazards (h) instantly kill Dexter if he steps on them.
+If Dexter wins a map, the game automatically advances to the next one.
 */
-
 const dexter = "d";
 const target = "t";
 const doakes = "c";
 const knife = "k";
 const wall = "w";
-
+const hazard = "h";
+// Sprites
 setLegend(
   [ dexter, bitmap`
 ................
@@ -97,10 +102,26 @@ setLegend(
 0000000000000000
 000LL00000L00000
 0000000000000000
-0000000000000000` ]
+0000000000000000` ],
+  [ hazard, bitmap`
+................
+................
+................
+................
+......6666......
+.....688886.....
+.....688886.....
+......6666......
+......6666......
+.....688886.....
+.....688886.....
+......6666......
+................
+................
+................
+................` ]
 );
-
-// Level design
+// Levels
 const levels = [
   map`
 wwwwwwwwwwwwwwww
@@ -110,100 +131,56 @@ w..............w
 w.....c........w
 w..........t...w
 w..............w
+wwwwwwwwwwwwwwww`,
+  map`
+wwwwwwwwwwwwwwww
+wd....w...k....w
+w.w..h.w.......w
+w.w............w
+w....c....h....w
+w....h......t..w
+w..............w
+wwwwwwwwwwwwwwww`,
+  map`
+wwwwwwwwwwwwwwww
+w..d...........w
+w....wwwwwww...w
+w..k....h......w
+w..............w
+w.....c........w
+w..........t...w
 wwwwwwwwwwwwwwww`
 ];
-
 let level = 0;
 setMap(levels[level]);
-
-// Only walls are solid
+// Solids
 setSolids([ wall ]);
-
+// State
 let dexterHasKnife = false;
 let gameOver = false;
-
 // Dexter’s movement (WASD)
-onInput("w", () => {
-  if (!gameOver) {
-    const d = getFirst(dexter);
-    const nextY = d.y - 1;
-    if (!tileHasType(d.x, nextY, wall)) {
-      d.y = nextY;
-    }
+onInput("w", () => moveCharacter(dexter, 0, -1));
+onInput("s", () => moveCharacter(dexter, 0, 1));
+onInput("a", () => moveCharacter(dexter, -1, 0));
+onInput("d", () => moveCharacter(dexter, 1, 0));
+// Doakes’ movement (IJKL)
+onInput("i", () => moveCharacter(doakes, 0, -1));
+onInput("k", () => moveCharacter(doakes, 0, 1));
+onInput("j", () => moveCharacter(doakes, -1, 0));
+onInput("l", () => moveCharacter(doakes, 1, 0));
+// Movement helper
+function moveCharacter(type, dx, dy) {
+  if (gameOver) return;
+  const sprite = getFirst(type);
+  const nextX = sprite.x + dx;
+  const nextY = sprite.y + dy;
+  if (!tileHasType(nextX, nextY, wall)) {
+    sprite.x = nextX;
+    sprite.y = nextY;
   }
-});
-
-onInput("s", () => {
-  if (!gameOver) {
-    const d = getFirst(dexter);
-    const nextY = d.y + 1;
-    if (!tileHasType(d.x, nextY, wall)) {
-      d.y = nextY;
-    }
-  }
-});
-
-onInput("a", () => {
-  if (!gameOver) {
-    const d = getFirst(dexter);
-    const nextX = d.x - 1;
-    if (!tileHasType(nextX, d.y, wall)) {
-      d.x = nextX;
-    }
-  }
-});
-
-onInput("d", () => {
-  if (!gameOver) {
-    const d = getFirst(dexter);
-    const nextX = d.x + 1;
-    if (!tileHasType(nextX, d.y, wall)) {
-      d.x = nextX;
-    }
-  }
-});
-
-// Doakes’ movement (Arrows)
-onInput("i", () => {
-  if (!gameOver) {
-    const c = getFirst(doakes);
-    const nextY = c.y - 1;
-    if (!tileHasType(c.x, nextY, wall)) {
-      c.y = nextY;
-    }
-  }
-});
-
-onInput("k", () => {
-  if (!gameOver) {
-    const c = getFirst(doakes);
-    const nextY = c.y + 1;
-    if (!tileHasType(c.x, nextY, wall)) {
-      c.y = nextY;
-    }
-  }
-});
-
-onInput("j", () => {
-  if (!gameOver) {
-    const c = getFirst(doakes);
-    const nextX = c.x - 1;
-    if (!tileHasType(nextX, c.y, wall)) {
-      c.x = nextX;
-    }
-  }
-});
-
-onInput("l", () => {
-  if (!gameOver) {
-    const c = getFirst(doakes);
-    const nextX = c.x + 1;
-    if (!tileHasType(nextX, c.y, wall)) {
-      c.x = nextX;
-    }
-  }
-});
-
+}
+// Check tile contents
+const tileHasType = (x, y, type) => getTile(x, y).some(s => s.type === type);
 // Full screen message
 function fullScreenMessage(text, colorCode) {
   clearText();
@@ -211,27 +188,25 @@ function fullScreenMessage(text, colorCode) {
     addText(text, { y, color: colorCode });
   }
 }
-
-// Function to check if a specific type of sprite is present in a tile
-const tileHasType = (x, y, type) => getTile(x, y).some(s => s.type === type);
-// After every input
+// Load next level or end
+function nextLevel() {
+  level++;
+  if (level < levels.length) {
+    setMap(levels[level]);
+    dexterHasKnife = false;
+    gameOver = false;
+    clearText();
+  } else {
+    fullScreenMessage("GAME COMPLETE!", color`9`);
+    gameOver = true;
+  }
+}
+// After each move
 afterInput(() => {
   if (gameOver) return;
-
   const d = getFirst(dexter);
   const c = getFirst(doakes);
-
-  // Check for collisions with walls
-  if (tileHasType(d.x, d.y, wall)) {
-    // Dexter is trying to move into a wall, prevent movement
-    return;
-  }
-
-  if (tileHasType(c.x, c.y, wall)) {
-    // Doakes is trying to move into a wall, prevent movement
-    return;
-  }
-
+  if (!d || !c) return;
   // Dexter interactions
   const tile = getTile(d.x, d.y);
   tile.forEach(obj => {
@@ -245,12 +220,16 @@ afterInput(() => {
         obj.remove();
         fullScreenMessage("DEXTER WINS!", color`9`);
         gameOver = true;
+        setTimeout(nextLevel, 1000);
       } else {
         addText("Need a weapon!", { y: 1, color: color`6` });
       }
     }
+    if (obj.type === hazard) {
+      fullScreenMessage("DEXTER DIED!", color`6`);
+      gameOver = true;
+    }
   });
-
   // Doakes catches Dexter
   if (d.x === c.x && d.y === c.y) {
     fullScreenMessage("DOAKES WINS!", color`2`);
