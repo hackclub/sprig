@@ -11,12 +11,12 @@ const player = "p";
 const goal = "g";
 const wall = "w";
 const spike = "s";
-const trap = "t";      // skull trap
-const floor = "f";     // disappearing floor
-const mover = "m";     // moving spike
-const hidden = "h";    // hidden trap
-const fakeWall = "x";  // fake wall (looks real, no collision)
-const trapWall = "b";  // Looks like a wall, but is a trap.
+const trap = "t";     // skull trap
+const floor = "f";    // disappearing floor
+const mover = "m";    // moving spike
+const hidden = "h";   // hidden trap
+const fakeWall = "x"; // fake wall (looks real, no collision)
+const trapWall = "b"; // Looks like a wall, but is a trap.
 
 // --- Artwork & Legend ---
 setLegend(
@@ -284,13 +284,6 @@ w.wwwwww.w.w.
 w...g.w..w.w.
 wwwwwwwwwwww.`, //11
   map`
-p.m.x.w.w...w.t.b.g
-wwww.wx.w.w.w.w.w.w.w.w
-....w.....w.f.w.w.m.w.w
-..t.wwwwwwwwwwwwwwwww.w
-..m.x...t.......w.w.w.w
-wwwwwwwwwwwwwwwwwwwwwww`, //12
-  map`
 p.w...w...w...w.w.g
 .b.w.x.w.b.w.x.w.b.
 .w.w.w.w.w.w.w.w.w.
@@ -302,7 +295,7 @@ p.w...w...w...w.w.g
 .w.w.w.w.w.w.w.w.w.
 .x.w.t.w.x.w.t.w.x.
 .w.w.w.w.w.w.w.w.w.
-.wwwwwwwwwxxxwwwww.`, //13
+.wwwwwwwwwxxxwwwww.`, //12
   map`
 p.t.w.t.w.t.w.t.w..w
 ..w...w...x...w.w..w
@@ -316,7 +309,7 @@ b.w.t.w.t.w.t.w.tw.w
 ..w...x...w...w.w..w
 f.w.x.w.b.w.x.w.wf.w
 ..w...w...w...w.w..w
-..wwwwwwwwwwwwwww..g`, //14
+..wwwwwwwwwwwwwww..g`, //13
   map`
 p.f.f.f.f.f.f.f.f.f..w
 .w.w.w.w.w.w.w.w.w.w.w
@@ -329,7 +322,7 @@ p.f.f.f.f.f.f.f.f.f..w
 .w.w.w.x.w.w.w.w.w.w.w
 .w.w.w.x.w.w.w.w.w.w.w
 wm.m.m.m.m.m.m.m.mm.gw
-wwwwwwwwwwwwwwwwwwwwww` //15
+wwwwwwwwwwwwwwwwwwwwww` //14
 ];
 
 setMap(levels[level]);
