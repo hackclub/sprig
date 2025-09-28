@@ -1,12 +1,10 @@
-
-
-	>     /*
-	>     @title: Plant survivor
-	>     @author: Olli Becker
-	>     @description: In my game you are a plant. You need to make sure you get enough water and sunlight while not getting hit bye the flying birds.
-	>     @tags: []
-	>     @addedOn: 2025-09-22
-	>     */
+/*
+@title: plant survivor
+@description: In my game you are a plant. You need to make sure you get enough water and sunlight while not getting hit bye the flying birds.
+@author: Olli Becker
+@tags: ['tutorial']
+@addedOn: 2025-9-28
+*/
 
 const player = "p"
 const sun = "S"
@@ -609,4 +607,3 @@ gameLoop = setInterval(tick, tickMs)
 
 // Initial HUD
 drawHUD()
-
