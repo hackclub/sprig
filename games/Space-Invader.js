@@ -1,7 +1,9 @@
 /*
 @title: Space Invader
+@description: A compitive shooting game where you need to kill the aliens before they touch the bottom.
 @author: avalynndev
 @tags: ['shooter']
+@addedOn: 2025-9-29
 */
 
 const player = "p"
