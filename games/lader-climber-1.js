@@ -6,9 +6,11 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: judeprivett2012@gmail.com
 @tags: [game]
 @addedOn: 2025-00-00
-@description: fixed a messed up level that was impossible to beat.
-my first javascript program and im very happy to say ive learned quit a bit through sprig.
+@description: this is just a retro ladder game with the goal of doing every bird ad you go up to the top of the letter attempting to get to the Golden hammer and beat every level without having to reset!!
+
+this is my first javascript program and im very happy to say ive learned quit a bit through sprig.
 this was the game that introduced me to tile based game development so thank you.
+
 */
 
 let isFrozen = false; // Define isFrozen variable at the beginning
