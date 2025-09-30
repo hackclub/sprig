@@ -6,7 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: judeprivett2012@gmail.com
 @tags: [game]
 @addedOn: 2025-00-00
-fixed a messed up level that was impossible to beat.
+@description: fixed a messed up level that was impossible to beat.
 my first javascript program and im very happy to say ive learned quit a bit through sprig.
 this was the game that introduced me to tile based game development so thank you.
 */
