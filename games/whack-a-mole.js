@@ -3,6 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: whack a mole
+@description: a whack a mole game where you can control the speed and get points by hiting the mole
 @author: Praneel
 @tags: [#timed]
 @addedOn: 2025-09-22
