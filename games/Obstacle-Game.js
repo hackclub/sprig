@@ -188,7 +188,7 @@ setLegend(
 )
 
 setSolids([player, wallV, wallH, wallVSolid, wallHSolid,gate])
-let currentLevel = 9;
+let currentLevel = 0;
 const levelNames = [
 
   "Starting out",
