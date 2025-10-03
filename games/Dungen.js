@@ -10,7 +10,9 @@ Otherwise, made entirely by Tsunami014 with no AI :)
 
 @title: Dungen
 @author: Tsunami014
-@tags: []
+@description: A procedurally generated maze dungeon
+@tags: ['maze', 'dungeon', 'procedural']
+@addedOn: 2025-10-04
 */
 
 const player = "p"
