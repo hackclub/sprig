@@ -9,23 +9,24 @@
 const player = "p"
 const alien = "a"
 const bullet = "b"
+const bg = "x"
 
 setLegend(
   [ player, bitmap`
 ................
 ................
-.......00.......
-......0000......
-.....077770.....
-....00777700....
-....00777700....
-....00000000....
-....00000000....
-....00.00.00....
-....00.00.00....
-...000.00.000...
-...00..00..00...
-..00...00...00..
+.......22.......
+......2222......
+.....277772.....
+....22777722....
+....22777722....
+....22222222....
+....22222222....
+....22.22.22....
+....22.22.22....
+...222.22.222...
+...22..22..22...
+..22...22...22..
 ................
 ................`],
   [ alien, bitmap`
@@ -34,7 +35,7 @@ setLegend(
 ....44....44....
 ...4444444444...
 ..444444444444..
-..444LLL4LL444..
+..444224411444..
 ..444444444444..
 ....44....44....
 ...44......44...
@@ -61,7 +62,24 @@ setLegend(
 ................
 ................
 ................
-................`]
+................`],
+  [ bg, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`]
 )
 
 const level = map`
@@ -80,7 +98,10 @@ const level = map`
 ...................
 ...................
 ....p..............`
+
+
 setMap(level)
+setBackground(bg)
 let gameOver = false
 let score = 0
 let alienDir = 1
@@ -118,6 +139,7 @@ onInput("s", () => {
   alienDir = 1
   moveCount = 0
   clearText()
+  addText(`Score: 0`, { x: 1, y: 1, color: color`7` })
   setMap(level)
 })
 
@@ -131,7 +153,7 @@ setInterval(() => {
       b.remove()
       score += 10
       clearText()
-      addText(`Score: ${score}`, { x: 1, y: 1, color: color`9` })
+      addText(`Score: ${score}`, { x: 1, y: 1, color: color`7` })
       continue
     }
     
@@ -150,7 +172,7 @@ setInterval(() => {
         gameOver = true
         clearText()
         addText("GAME OVER!", { x: 2, y: 4, color: color`3` })
-        addText(`Score: ${score}`, { x: 2, y: 5, color: color`7` })
+        addText(`Score: ${score}`, { x: 2, y: 6, color: color`7` })
       }
     }
   }
@@ -159,8 +181,8 @@ setInterval(() => {
     gameOver = true
     clearText()
     addText("YOU WIN!", { x: 2, y: 4, color: color`4` })
-    addText(`Score: ${score}`, { x: 2, y: 5, color: color`7` })
+    addText(`Score: ${score}`, { x: 2, y: 6, color: color`7` })
   }
 }, 100)
 
-addText(`Score: 0`, { x: 1, y: 1, color: color`9` })
+addText(`Score: 0`, { x: 1, y: 1, color: color`7` })
