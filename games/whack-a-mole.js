@@ -189,6 +189,7 @@ onInput("d",()=>{
 });
 onInput("i",()=>{
   const p = getFirst(player)
+  if (p){
   getTile(p.x,p.y).forEach((o)=>{
     if (o.type=="m"){
       score+=1
@@ -206,6 +207,7 @@ onInput("i",()=>{
     
     p.type="p"
     },200)
+  }
 })
 onInput("l",()=>{
   if (speed>0){
