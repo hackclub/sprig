@@ -2,10 +2,11 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Obstacle Game
+@title: Obstacle-Game
+@description: Obstacle game is a 2d game where players push walls around to reach the goal.
 @author: endless
-@tags: []
-@addedOn: 2025-9-15
+@tags: ["puzzle"]
+@addedOn: 2025-10-3
 */
 
 const player = "p"
