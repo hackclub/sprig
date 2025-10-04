@@ -492,6 +492,11 @@ wwwwwwwwwwwwwww`, //keys, boxes **, step limit, traps, portals ** , fragile ** ,
 
 const COUNTER_MAX = 300; 
 const LEVELS_MAX = levels.length-1; 
+const MELODY = tune`
+139.53488372093022,
+139.53488372093022: B4-139.53488372093022,
+139.53488372093022: C5/139.53488372093022 + F5-139.53488372093022,
+4046.5116279069766`; 
 
 let counter = COUNTER_MAX; 
 let level = LEVELS_MAX - LEVELS_MAX;
@@ -509,9 +514,11 @@ function checkWinL() {
     if (tilesWith(player,goal).length >= 1 && tilesWith(playertwo,goaltwo).length >= 1) {
       if (level < LEVELS_MAX) { //less than last level  
         level += 1; 
+        playTune(MELODY);
         setNewMap(level); 
       } else if (level == LEVELS_MAX) { //last level 
         text(LEVELS_MAX+1);
+        playTune(MELODY);
       }
     } else {
       return false; 
@@ -520,9 +527,11 @@ function checkWinL() {
     if (tilesWith(player,goal).length >= 1) {
       if (level < LEVELS_MAX) { //less than last level  
         level += 1; 
+        playTune(MELODY);
         setNewMap(level); 
       } else if (level == LEVELS_MAX) { //last level 
         text(LEVELS_MAX+1);
+        playTune(MELODY);
       }
     } else {
       return false; 
