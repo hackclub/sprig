@@ -54,6 +54,11 @@ const tutorialbgr = "1"
 const tutorialbgl = "2"
 const hiddenwall = "w"
 const boss = "a"
+
+// tuning
+const ZOMBIE_MOVE_DELAY = 5 
+
+
 setLegend(
   [ player, bitmap`
 ................
@@ -123,7 +128,7 @@ setLegend(
 .......00.......
 ......0..0......
 ......0..0......` ],
-[ playershootingr, bitmap`
+  [ playershootingr, bitmap`
 ................
 ................
 ................
@@ -140,7 +145,7 @@ setLegend(
 .......00....6..
 ......0..0......
 ......0..0......` ],
-[ tutorialbgr, bitmap`
+  [ tutorialbgr, bitmap`
 ................
 ................
 ................
@@ -157,7 +162,7 @@ setLegend(
 ................
 ................
 ................` ],
-[ tutorialbgl, bitmap`
+  [ tutorialbgl, bitmap`
 ................
 .......0........
 ......000.......
@@ -174,7 +179,7 @@ setLegend(
 .....0.0.0......
 ......000.......
 .......0........` ],
-[ hiddenwall, bitmap`
+  [ hiddenwall, bitmap`
 ................
 ................
 ................
@@ -191,7 +196,7 @@ setLegend(
 ................
 ................
 ................` ],
-[ boss, bitmap`
+  [ boss, bitmap`
 ......8H88......
 ...888888H888...
 ..888HH88888888.
@@ -210,9 +215,11 @@ setLegend(
 .44444444444444.` ]
 )
 
-setSolids([player, zombie, tutorialbgr, tutorialbgl, hiddenwall])
+setSolids([player, tutorialbgr, tutorialbgl, hiddenwall])
 
-let level = 0
+let level = 6
+let gameOver = false
+
 const levels = [
   map`
 ww..z.z.
@@ -228,25 +235,48 @@ p....z..
 ..z...z.`,
   map`
 z..z......
-...z..z..z
-z.z.z.z...
-z...z..z..
-..zz..zz.z
-z....z..z.
+......z...
+z.z.......
+z.........
+.........z
+z.......z.
 ..p...z...
-....z..z..`,
+..........`,
   map`
-..........
+.z......z.
 ...a..a..a
-z.z.z.z...
-z...z..za.
-..zz..zz.z
+..z.z.....
+z......za.
+...z...z.z
 z....z..z.
-..p...z.a.
-....z..z..`
+..p.....a.
+.......z..`,
+  map`
+.z...z....
+...z...z.z
+..z.z.z...
+z....z.z..
+..az...zzz
+a....z..z.
+..p.......
+....a..z.z`,
+  map`
+.z...z.z..
+.z.z.a.zzz
+..z.z.z.z.
+z.z..z.za.
+...z.a.zzz
+a....z..z.
+..p..zz..a
+a....z.z.z`,
+
 ]
+
 setMap(levels[level])
 playTune(bgmusic, Infinity)
+
+
+
 function animateShoot(p, shootingSprite) {
   clearTile(p.x, p.y)
   addSprite(p.x, p.y, shootingSprite)
@@ -259,9 +289,11 @@ function animateShoot(p, shootingSprite) {
     }
   }, 150) 
 }
+
 setPushables({
   [ player ]: []
 })
+
 addText("Controls", { 
   x: 0,
   y: 4,
@@ -272,101 +304,171 @@ addText("wasd, j&l to shoot", {
   y: 14,
   color: color`3`
 })
+addText("dont touch zombies", { 
+  x: 1,
+  y: 1,
+  color: color`3`
+})
 
-onInput("s", () => {
-  getFirst(player).y += 1
-})
-onInput("w", () => {
-  getFirst(player).y -= 1
-})
-onInput("d", () => {
-  getFirst(player).x += 1
-})
-onInput("a", () => {
-  getFirst(player).x -= 1
-})
-onInput("l", () => { // shoot right
+
+onInput("s", () => { if (gameOver) return; getFirst(player).y += 1 })
+onInput("w", () => { if (gameOver) return; getFirst(player).y -= 1 })
+onInput("d", () => { if (gameOver) return; getFirst(player).x += 1 })
+onInput("a", () => { if (gameOver) return; getFirst(player).x -= 1 })
+
+onInput("l", () => { 
+  if (gameOver) return
   const p = getFirst(player)
   if (!p) return
 
   addSprite(p.x + 1, p.y, bullet)
   const b = getTile(p.x + 1, p.y).find(s => s.type === bullet)
-  if (b) b.direction = 1   // right
+  if (b) b.direction = 1 
   playTune(shootl)
   animateShoot(p, playershootingr)
 })
 
-onInput("j", () => { // shoot left
+onInput("j", () => {
+  if (gameOver) return
   const p = getFirst(player)
   if (!p) return
 
   addSprite(p.x - 1, p.y, bullet)
   const b = getTile(p.x - 1, p.y).find(s => s.type === bullet)
-  if (b) b.direction = -1  // left
+  if (b) b.direction = -1 
   playTune(shootr)
   animateShoot(p, playershootingl)
 })
 
-function bosshealth() {
-  const bosses = getAll(boss)
-  for (const b of bosses) {
-    if (b.health === undefined) {
-      b.health = 5 
+function isBlockedForZombie(x, y) {
+  if (x < 0 || x >= width() || y < 0 || y >= height()) return true
+  const tile = getTile(x, y)
+ 
+  return tile.some(s => s.type === zombie || s.type === boss || s.type === hiddenwall || s.type === tutorialbgr || s.type === tutorialbgl)
+}
+
+function lose() {
+  clearText()
+  addText("YOU LOSE!", { x: 5, y: 7, color: color`3` })
+  addText("Dont walk", {x:5, y: 8, color: color`9` })
+  addText("into zombies", {x:5, y: 9, color: color`9` })
+  gameOver = true
+}
+
+
+function handleHit(sprite, bulletSprite) {
+  if (sprite.type === boss) {
+    if (sprite.health === undefined) sprite.health = BOSS_STARTING_HEALTH
+    sprite.health -= 1
+    if (sprite.health <= 0) {
+      sprite.remove()
     }
+  } else if (sprite.type === zombie) {
+    sprite.remove()
   }
+  bulletSprite.remove()
 }
 
 afterInput(() => {
+  if (gameOver) return
+
+  const p = getFirst(player)
+  if (!p) return
+
+
+  if (getTile(p.x, p.y).some(s => s.type === zombie || s.type === boss)) {
+    lose()
+    return
+  }
+
   const bullets = getAll(bullet)
   for (const b of bullets) {
+    if (gameOver) break
     if (b.direction === undefined) {
       b.remove()
       continue
     }
 
+
     let hit = getTile(b.x, b.y).find(s => s.type === zombie || s.type === boss)
     if (hit) {
-  if (hit.type === boss) {
-    hit.health -= 1
-    if (hit.health <= 0) {
-      hit.remove()
-    }
-  } else {
-    hit.remove()
-  }
-  b.remove()
-  continue
-}
-
-    b.x += b.direction  
-
-    if (b.x === 0 || b.x === width() - 1) {
-      b.remove()
+      handleHit(hit, b)
       continue
-    } else if (b.x < 0 || b.x >= width()) {
+    }
+
+    b.x += b.direction
+
+
+    if (b.x < 0 || b.x >= width()) {
       b.remove()
       continue
     }
 
-    hit = getTile(b.x, b.y).find(s => s.type === zombie)
+
+    hit = getTile(b.x, b.y).find(s => s.type === zombie || s.type === boss)
     if (hit) {
-      hit.remove()
-      b.remove()
+      handleHit(hit, b)
+      continue
+    }
+  }
+
+
+  const zombies = getAll(zombie)
+  for (const z of zombies) {
+    if (gameOver) break
+
+    if (z.moveCooldown === undefined) z.moveCooldown = 0
+    if (z.moveCooldown > 0) {
+      z.moveCooldown--
+      continue
+    }
+
+    const dx = Math.sign(p.x - z.x)
+    const dy = Math.sign(p.y - z.y)
+
+    let moved = false
+
+ 
+    if (Math.abs(p.x - z.x) > Math.abs(p.y - z.y)) {
+      if (dx !== 0 && !isBlockedForZombie(z.x + dx, z.y)) {
+        z.x += dx
+        moved = true
+      }
+    }
+
+    if (!moved && dy !== 0 && !isBlockedForZombie(z.x, z.y + dy)) {
+      z.y += dy
+      moved = true
+    }
+
+    if (!moved && dx !== 0 && !isBlockedForZombie(z.x + dx, z.y)) {
+      z.x += dx
+      moved = true
+    }
+
+    if (moved) {
+      z.moveCooldown = ZOMBIE_MOVE_DELAY
+    }
+
+
+    if (getTile(z.x, z.y).some(s => s.type === player)) {
+      lose()
+      return
     }
   }
 
   if (getAll(zombie).length === 0) {
-    clearText()
-    level++
-    if (level < levels.length) {
-      setMap(levels[level])
-      bosshealth()
-    } else {
-      addText("YOU WIN!", {
-        x: 5,
-        y: 7,
-        color: color`6`
-      })
+  clearText()
+  level++
+  if (level < levels.length) {
+    setMap(levels[level])
+    if (level === 3) {
+      addText("walk around the bosses!", { x: 1, y:1 , color: color`H` })
+      addText("they cant be shot", { x: 1, y:8 , color: color`H` })
     }
+  } else {
+    addText("YOU WIN!", { x: 5, y: 7, color: color`6` })
+    gameOver = true
+  }
   }
 })
