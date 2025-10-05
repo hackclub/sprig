@@ -1,6 +1,7 @@
 /*
 @title: Platformation
 @author: temidaradev
+@description: "Platformation is an annoying but at the same fun platformer type game, just collect the coins and make it to the next level!"
 @tags: [platformer, easy, annoying]
 @addedOn: 2025-10-05
 
@@ -537,9 +538,7 @@ afterInput(() => {
 60: C5-60,
 1580`)
         
-        // Close game after 3 seconds
         setTimeout(() => {
-          // Clear everything and show final message
           clearText()
           setMap(map`
 ....................
