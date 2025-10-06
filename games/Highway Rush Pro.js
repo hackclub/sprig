@@ -2,6 +2,7 @@
 @title: Highway Rush Pro
 @author: Vihanga
 @tags: ['racing']
+@addedOn: 2025-10-06
 */
 
 const player = "p";
