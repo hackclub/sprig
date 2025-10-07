@@ -217,7 +217,7 @@ setLegend(
 
 setSolids([player, tutorialbgr, tutorialbgl, hiddenwall])
 
-let level = 6
+let level = 0
 let gameOver = false
 
 const levels = [
