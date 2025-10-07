@@ -1,12 +1,10 @@
-/* 
-@title: ultimate maze :D 
+/*
+@title: the-unbeliyahhble-maze-game 
+@author: liyahhshangg, cheru berhanu 
 @description: a simple maze game following the maze_game_starter tutorial 
-@author: liyah shang, tutorial by cheru berhanu 
-
-info for liyah's reference: 
-  width board: 0 - 14 
-  height board: 0 - 17 
-*/ 
+@tags: [] 
+@addedOn: 2025-10-06 
+*/
 
 //SPRITES 
 const player = "p"; 
