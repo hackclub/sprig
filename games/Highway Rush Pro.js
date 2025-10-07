@@ -1,7 +1,8 @@
 /*
 @title: Highway Rush Pro
 @author: Vihanga
-@tags: ['racing']
+@description: Arcade-style racing game where players avoid obstacles, collect coins and fuel, and try to achieve the highest score.
+@tags: ['racing', 'arcade', 'highscore']
 @addedOn: 2025-10-06
 */
 
