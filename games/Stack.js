@@ -71,22 +71,47 @@ setSolids([])
 
 const levels = [
   map`
-sssssssssss
-sssssssssss
-sssssssssss
-sssssssssss
-sssssssssss
-sssssssssss
-sssssssssss
-sssssssssss
-sssssssssss
-sssssssssss
-sssssssssss
-sssssssssss
-sssqqqqqsss`
+sssssssssssss
+sssssssssssss
+sssssssssssss
+sssssssssssss
+sssssssssssss
+sssssssssssss
+sssssssssssss
+sssssssssssss
+sssssssssssss
+sssssssssssss
+sssssssssssss
+sssssssssssss
+ssssqqqqqssss`
 ]
 
-setMap(levels[0])
+let gameStarted = false
+
+function showTitleScreen() {
+  setMap(levels[0])
+  clearText()
+  addText("STACK", { x: 7, y: 3, color: color`3` })
+  addText("Press A to Start", { x: 2, y: 5, color: color`5` })
+  addText("Controls:", { x: 6, y: 7, color: color`2` })
+  addText("A = Drop Block", { x: 3, y: 10, color: color`2` })
+}
+
+function startGame() {
+  clearText()
+  gameStarted = true
+  setMap(levels[0])
+  currentX = 3
+  currentY = gridHeight - 2
+  blockWidth = 5
+  lastBlockStart = 3
+  moving = true
+  score = 0
+  direction = 1
+  placeBlock(currentX, blockWidth, currentY)
+}
+
+showTitleScreen()
 
 let direction = 1
 let currentX = 3
@@ -115,9 +140,8 @@ function clearRow(y) {
 }
 
 function moveBlock() {
-  if (!moving) return
+  if (!moving || !gameStarted) return
 
-  // Clear current row
   clearRow(currentY)
 
   if (currentX + blockWidth + direction > gridWidth || currentX + direction < 0) {
@@ -125,14 +149,16 @@ function moveBlock() {
   }
 
   currentX += direction
-
-  // Draw new position
   placeBlock(currentX, blockWidth, currentY)
 }
 
 function dropBlock() {
-  moving = false
+  if (!gameStarted) {
+    startGame()
+    return
+  }
 
+  moving = false
   const overlapStart = Math.max(currentX, lastBlockStart)
   const overlapEnd = Math.min(currentX + blockWidth, lastBlockStart + blockWidth)
   const overlapWidth = overlapEnd - overlapStart
@@ -140,21 +166,19 @@ function dropBlock() {
   clearRow(currentY)
 
   if (overlapWidth <= 0) {
-    // Game Over
     placeBlock(currentX, blockWidth, currentY)
     addText("Game Over", { x: 2, y: 6, color: color`red` })
     addText("Score: " + score, { x: 3, y: 8, color: color`white` })
+    gameStarted = false
     return
   }
 
-  // Place the trimmed block
   placeBlock(overlapStart, overlapWidth, currentY)
-
-  // Update for next round
   currentY -= 1
   if (currentY < 0) {
     addText("You Win!", { x: 3, y: 6, color: color`green` })
     addText("Score: " + score, { x: 3, y: 8, color: color`white` })
+    gameStarted = false
     return
   }
 
@@ -165,12 +189,8 @@ function dropBlock() {
   score += 1
 }
 
-// Input to drop the block
 onInput("a", () => {
-  if (moving) {
-    dropBlock()
-  }
+  dropBlock()
 })
 
-// Start moving blocks
 setInterval(moveBlock, 110)
