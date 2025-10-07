@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: BoxStack
 @author: Ice (Very Chill)
-@tags: []
+@tags: [#puzzle]
 @addedOn: 2025-10-06
 */
 
