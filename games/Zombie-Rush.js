@@ -309,12 +309,42 @@ addText("dont touch zombies", {
   y: 1,
   color: color`3`
 })
+  addText("i=reset lvl", { 
+    x: 0,
+    y: 3,
+    color: color`3`
+  })
+  addText("k=reset game", { 
+    x: 0,
+    y: 10,
+    color: color`3`
+  })
 
 
-onInput("s", () => { if (gameOver) return; getFirst(player).y += 1 })
-onInput("w", () => { if (gameOver) return; getFirst(player).y -= 1 })
-onInput("d", () => { if (gameOver) return; getFirst(player).x += 1 })
-onInput("a", () => { if (gameOver) return; getFirst(player).x -= 1 })
+onInput("s", () => {
+  if (gameOver) return
+  const p = getFirst(player)
+  if (!p) return
+  p.y += 1
+})
+onInput("w", () => {
+  if (gameOver) return
+  const p = getFirst(player)
+  if (!p) return
+  p.y -= 1
+})
+onInput("d", () => {
+  if (gameOver) return
+  const p = getFirst(player)
+  if (!p) return
+  p.x += 1
+})
+onInput("a", () => {
+  if (gameOver) return
+  const p = getFirst(player)
+  if (!p) return
+  p.x -= 1
+})
 
 onInput("l", () => { 
   if (gameOver) return
@@ -340,6 +370,45 @@ onInput("j", () => {
   animateShoot(p, playershootingl)
 })
 
+onInput("i", () => {
+  if (gameOver) return
+  clearText()
+  setMap(levels[level])
+})
+
+onInput("k", () => {
+  clearText()
+  level = 0
+  gameOver = false
+  setMap(levels[level])
+  addText("Controls", { 
+    x: 0,
+    y: 4,
+    color: color`3`
+  })
+  addText("wasd, j&l to shoot", { 
+    x: 1,
+    y: 14,
+    color: color`3`
+  })
+  addText("dont touch zombies", { 
+    x: 1,
+    y: 1,
+    color: color`3`
+  })
+  addText("i=reset lvl", { 
+    x: 0,
+    y: 3,
+    color: color`3`
+  })
+  addText("k=reset game", { 
+    x: 0,
+    y: 10,
+    color: color`3`
+  })
+})
+
+
 function isBlockedForZombie(x, y) {
   if (x < 0 || x >= width() || y < 0 || y >= height()) return true
   const tile = getTile(x, y)
@@ -357,18 +426,11 @@ function lose() {
 
 
 function handleHit(sprite, bulletSprite) {
-  if (sprite.type === boss) {
-    if (sprite.health === undefined) sprite.health = BOSS_STARTING_HEALTH
-    sprite.health -= 1
-    if (sprite.health <= 0) {
-      sprite.remove()
-    }
-  } else if (sprite.type === zombie) {
-    sprite.remove()
-  }
-  bulletSprite.remove()
+  if (sprite.type === zombie) {
+  sprite.remove()
 }
-
+bulletSprite.remove()
+}
 afterInput(() => {
   if (gameOver) return
 
