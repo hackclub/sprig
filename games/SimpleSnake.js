@@ -1,7 +1,6 @@
 /*
 @title: SimpleSnake
-@description: Just a simple snake game, with kinda good art(?) and some sounds for it.
-@author: @wolf-yuan-6115
+@author: wolf-yuan-6115
 @tags: []
 @addedOn: 2025-08-14
 */
@@ -27,6 +26,7 @@ const single_right = "y"
 const food = "f"
 const wall = "z"
 const empty = "e"
+const dark_bg = "L"
 
 setLegend(
   // Snake head sprites
@@ -396,7 +396,24 @@ setLegend(
 ................
 ................
 ................
-................`]
+................`],
+  [dark_bg, bitmap`
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL`]
 )
 
 setSolids([head_up, head_down, head_left, head_right, single_up, single_down, single_left, single_right, wall])
@@ -436,7 +453,30 @@ const startMelody = tune`
 const GAME_STATE = {
   START_SCREEN: 0,
   PLAYING: 1,
-  GAME_OVER: 2
+  GAME_OVER: 2,
+  SETTINGS: 3
+}
+
+// Settings system
+const THEMES = {
+  LIGHT: 0,
+  DARK: 1
+}
+
+const SPEEDS = {
+  LOW: 0,
+  MEDIUM: 1,
+  HIGH: 2
+}
+
+let gameSettings = {
+  theme: THEMES.LIGHT,
+  speed: SPEEDS.MEDIUM
+}
+
+let settingsMenu = {
+  selectedOption: 0,
+  options: ['Theme', 'Speed']
 }
 
 let gameState = GAME_STATE.START_SCREEN
@@ -468,7 +508,19 @@ const startScreenMap = map`
 ..........
 ..........`
 
-let snake = [{ x: 4, y: 5 }]
+const settingsScreenMap = map`
+..........
+..........
+..........
+..........
+..........
+..........
+..........
+..........
+..........
+..........`
+
+let snake = [{ x: 4, y: 5 }, { x: 3, y: 5 }, { x: 2, y: 5 }]
 let direction = { x: 1, y: 0 }
 let prevDirection = { x: 1, y: 0 }
 let food_pos = { x: 6, y: 3 }
@@ -483,11 +535,101 @@ let gameInterval = null
 
 setMap(startScreenMap)
 
+function getSpeedMultiplier() {
+  switch(gameSettings.speed) {
+    case SPEEDS.LOW: return 0.7
+    case SPEEDS.HIGH: return 1.4
+    default: return 1.0
+  }
+}
+
+function getThemeName() {
+  return gameSettings.theme === THEMES.DARK ? "Dark" : "Light"
+}
+
+function getSpeedName() {
+  switch(gameSettings.speed) {
+    case SPEEDS.LOW: return "Low"
+    case SPEEDS.HIGH: return "High"
+    default: return "Medium"
+  }
+}
+
+function applyTheme() {
+  if (gameSettings.theme === THEMES.DARK) {
+    // Fill background with dark tiles
+    for (let x = 0; x < 10; x++) {
+      for (let y = 0; y < 10; y++) {
+        const sprites = getTile(x, y)
+        let hasDarkBg = false
+        sprites.forEach(sprite => {
+          if (sprite.type === dark_bg) {
+            hasDarkBg = true
+          }
+        })
+        if (!hasDarkBg && !sprites.some(s => s.type === wall)) {
+          addSprite(x, y, dark_bg)
+        }
+      }
+    }
+  } else {
+    // Remove dark background tiles
+    for (let x = 0; x < 10; x++) {
+      for (let y = 0; y < 10; y++) {
+        const sprites = getTile(x, y)
+        sprites.forEach(sprite => {
+          if (sprite.type === dark_bg) {
+            sprite.remove()
+          }
+        })
+      }
+    }
+  }
+}
+
+function clearTileAndReapplyTheme(x, y) {
+  clearTile(x, y)
+  if (gameSettings.theme === THEMES.DARK) {
+    const sprites = getTile(x, y)
+    const hasWall = sprites.some(s => s.type === wall)
+    if (!hasWall) {
+      addSprite(x, y, dark_bg)
+    }
+  }
+}
+
+function showSettingsScreen() {
+  gameState = GAME_STATE.SETTINGS
+  setMap(settingsScreenMap)
+  applyTheme()
+  
+  clearText()
+  addText("SETTINGS", { x: 2, y: 2, color: color`7` })
+  
+  // Show theme option
+  const themeColor = settingsMenu.selectedOption === 0 ? color`4` : color`0`
+  addText(`> Theme: ${getThemeName()}`, { x: 1, y: 5, color: themeColor })
+  
+  // Show speed option
+  const speedColor = settingsMenu.selectedOption === 1 ? color`4` : color`0`
+  addText(`> Speed: ${getSpeedName()}`, { x: 1, y: 7, color: speedColor })
+  
+  addText("W/S: Navigate", { x: 2, y: 10, color: color`9` })
+  addText("A/D: Change", { x: 2, y: 11, color: color`9` })
+  addText("I: Back", { x: 2, y: 12, color: color`9` })
+}
+
 function showStartScreen() {
+  gameState = GAME_STATE.START_SCREEN
+  setMap(startScreenMap)
+  applyTheme()
+  
   clearText()
   addText("Simply just", { x: 4, y: 2, color: color`0` })
   addText("SNAKE", { x: 4, y: 4, color: color`7` })
-  addText("Press I!", { y: 14, color: color`4` })
+  addText("Press I!", { y: 12, color: color`4` })
+  addText("Press K for", { y: 13, color: color`6` })
+  addText("settings!", { y: 14, color: color`6` })
 
   addSprite(2, 5, head_right)
   addSprite(1, 5, body_horizontal)
@@ -496,7 +638,8 @@ function showStartScreen() {
 }
 
 function calculateSpeed(score) {
-  const newSpeed = BASE_SPEED - (score * SPEED_DECREASE_PER_POINT)
+  const baseSpeed = BASE_SPEED * getSpeedMultiplier()
+  const newSpeed = baseSpeed - (score * SPEED_DECREASE_PER_POINT)
   return Math.max(newSpeed, MIN_SPEED)
 }
 
@@ -629,7 +772,7 @@ function moveSnake() {
   // Check food collision
   if (newHead.x === food_pos.x && newHead.y === food_pos.y) {
     score++
-    clearTile(food_pos.x, food_pos.y)
+    clearTileAndReapplyTheme(food_pos.x, food_pos.y)
     food_pos = generateFood()
     addSprite(food_pos.x, food_pos.y, food)
     clearText()
@@ -654,29 +797,31 @@ function gameOver() {
     gameInterval = null
   }
 
+  playTune(gameOverMelody)
+
   clearText()
   addText("Game Over!", { y: 6, color: color`3` })
   addText(`Your Score: ${score}`, { y: 8, color: color`6` })
   addText("I to restart!", { y: 10, color: color`7` })
-
-  playTune(gameOverMelody)
+  addText("K for menu!", { y: 11, color: color`5` })
 }
 
 function startGame() {
   gameState = GAME_STATE.PLAYING
-  snake = [{ x: 4, y: 5 }]
+  snake = [{ x: 4, y: 5 }, { x: 3, y: 5 }, { x: 2, y: 5 }]
   direction = { x: 1, y: 0 }
   prevDirection = { x: 1, y: 0 }
   score = 0
   gameRunning = true
 
-  currentSpeed = BASE_SPEED
+  currentSpeed = BASE_SPEED * getSpeedMultiplier()
 
   if (gameInterval) {
     clearInterval(gameInterval)
   }
 
   setMap(levels[level])
+  applyTheme()
   food_pos = generateFood()
   addSprite(food_pos.x, food_pos.y, food)
   drawSnake()
@@ -703,12 +848,41 @@ function checkDirectionChange(newDirection) {
   }
 }
 
+// Settings navigation
+function navigateSettings(direction) {
+  if (direction === 'up') {
+    settingsMenu.selectedOption = Math.max(0, settingsMenu.selectedOption - 1)
+  } else if (direction === 'down') {
+    settingsMenu.selectedOption = Math.min(settingsMenu.options.length - 1, settingsMenu.selectedOption + 1)
+  }
+  showSettingsScreen()
+}
+
+function changeSettingValue(direction) {
+  if (settingsMenu.selectedOption === 0) { // Theme
+    if (direction === 'left') {
+      gameSettings.theme = THEMES.LIGHT
+    } else if (direction === 'right') {
+      gameSettings.theme = THEMES.DARK
+    }
+  } else if (settingsMenu.selectedOption === 1) { // Speed
+    if (direction === 'left') {
+      gameSettings.speed = Math.max(0, gameSettings.speed - 1)
+    } else if (direction === 'right') {
+      gameSettings.speed = Math.min(2, gameSettings.speed + 1)
+    }
+  }
+  showSettingsScreen()
+}
+
 // Controls
 onInput("w", () => {
   if (gameState === GAME_STATE.PLAYING && gameRunning && direction.y !== 1) {
     const newDirection = { x: 0, y: -1 }
     checkDirectionChange(newDirection)
     direction = newDirection
+  } else if (gameState === GAME_STATE.SETTINGS) {
+    navigateSettings('up')
   }
 })
 
@@ -717,6 +891,8 @@ onInput("s", () => {
     const newDirection = { x: 0, y: 1 }
     checkDirectionChange(newDirection)
     direction = newDirection
+  } else if (gameState === GAME_STATE.SETTINGS) {
+    navigateSettings('down')
   }
 })
 
@@ -725,6 +901,8 @@ onInput("a", () => {
     const newDirection = { x: -1, y: 0 }
     checkDirectionChange(newDirection)
     direction = newDirection
+  } else if (gameState === GAME_STATE.SETTINGS) {
+    changeSettingValue('left')
   }
 })
 
@@ -733,6 +911,8 @@ onInput("d", () => {
     const newDirection = { x: 1, y: 0 }
     checkDirectionChange(newDirection)
     direction = newDirection
+  } else if (gameState === GAME_STATE.SETTINGS) {
+    changeSettingValue('right')
   }
 })
 
@@ -741,6 +921,16 @@ onInput("i", () => {
     startGame()
   } else if (gameState === GAME_STATE.GAME_OVER) {
     restartGame()
+  } else if (gameState === GAME_STATE.SETTINGS) {
+    showStartScreen()
+  }
+})
+
+onInput("k", () => {
+  if (gameState === GAME_STATE.START_SCREEN) {
+    showSettingsScreen()
+  } else if (gameState === GAME_STATE.GAME_OVER) {
+    showStartScreen()
   }
 })
 
