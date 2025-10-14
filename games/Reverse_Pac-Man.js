@@ -156,7 +156,7 @@ wm....d.d....m.w
 w.w.w.w.w.w.w.dw
 w.d.d.d.p.d.d.dw
 wd.w.w.w.w.w.w.w
-wm....d.d....mw
+wm....d.d....m.w
 w.w.w.w.w.w.w.dw
 w.d.d.d.d.d.d.dw
 wd.w.w.w.w.w.w.w
