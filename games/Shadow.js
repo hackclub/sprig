@@ -4,6 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Shadow
 @author: Ofer Afik
+@description: A game where you must reach the exit door, by toggling the solidity of walls.
 @tags: [Black/White, Platformer]
 @addedOn: 2025-9-22
 */
