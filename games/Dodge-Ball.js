@@ -1,11 +1,18 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Dogdge Ball
 @author: ikane(on slack)
 @tags: ['multiplayer']
-@addedOn: 2025-00-00
+@addedOn: 2025-10-18
+
+Controls:
+
+Player1 controls(red): WS to move up and down, D to shoot red balls.
+Player2 controls(blue): IK to move up and down, J to shoot balls.
+To continue the battle please click on A (WARNING: This will ONLY work if round has ended).
+
+Objective:
+
+The objective of the game is hit your opponent with your balls and to dodge the opponent's balls.
 */
 
 
