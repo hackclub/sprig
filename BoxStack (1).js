@@ -4,6 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: BoxStack
 @author: Ice (Very Chill)
+@description: Push boxes and flatten them all out to win!
 @tags: [#puzzle]
 @addedOn: 2025-10-06
 */
