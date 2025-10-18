@@ -1,4 +1,9 @@
-/*made by j4mik*/
+/*
+@title: Nonemade by j4mik*/
+@author: None
+@description: None
+@tags: []
+@addedOn: None
 
 const tileA = "a";
 const tileB = "b";

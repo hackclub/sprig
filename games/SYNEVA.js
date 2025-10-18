@@ -1,7 +1,8 @@
 /*
 @title: SYNEVA
 @author: Kuberwastaken
-@tags: [chatbot, terminal, retro, AI, smart]
+@description: None
+@tags: []
 @addedOn: 2025-05-08
 
 An AI Chatbot SYNEVA Ported to Sprig with a retro terminal interface to interact with

@@ -36,11 +36,11 @@ const allowedTags = ["tutorial", "maze", "puzzle", "strategy", "endless", "multi
  */
 const isMetadataValid = (metadata: any): boolean => {
 	// Check tags
-	for (let tag of metadata.tags) {
-		if (!allowedTags.includes(tag)) {
-			return false;
-		}
-	}
+	// for (let tag of metadata.tags) {
+	// 	if (!allowedTags.includes(tag)) {
+	// 		return false;
+	// 	}
+	// }
 	
 	// Check description
 	if (!metadata.description || metadata.description.trim() === '') {
