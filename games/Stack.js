@@ -2,7 +2,7 @@
 @title: Stack
 @author: Maksim Nikolov
 @description: You need to stack the blocks and reach the top!
-@tags: [Retro]
+@tags: []
 @addedOn: 2025-10-03
 */
 

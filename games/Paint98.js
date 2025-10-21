@@ -4,7 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Paint98
 @author: NullClock
-@tags: [paint, windows, microsoft, ms, mspaint, pnt, pain, t, p, a, i, n, t]
+@description: None
+@tags: []
 @addedOn: 2025-00-00
 */
 

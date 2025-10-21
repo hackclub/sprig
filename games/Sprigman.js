@@ -1,7 +1,8 @@
 /*
 @title: Sprigman
 @author: Kuberwastaken
-@tags: [pacman, arcade, random, maze]
+@description: None
+@tags: []
 @addedOn: 2025-05-05
 
 A Pac-Man style game with a randomly generated maze every time you start or refresh.
