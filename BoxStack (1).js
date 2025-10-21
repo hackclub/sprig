@@ -1,13 +1,9 @@
-/*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
 
 @title: BoxStack
 @author: Ice (Very Chill)
 @description: Push boxes and flatten them all out to win!
 @tags: [#puzzle]
 @addedOn: 2025-10-06
-*/
 
 const player = "p"
 const stackof1 = "1"
