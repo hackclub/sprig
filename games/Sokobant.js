@@ -1,6 +1,7 @@
 /*
 @title: Sokobant
 @author: Brenda Díaz Bordón
+@description: Can an ant sokoban? Indeed it can! Push the piles of sugar into the anthill to win.
 @tags: ['sokoban', 'puzzle']
 @addedOn: 2025-10-20
 */
