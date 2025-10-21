@@ -2,7 +2,7 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Pickman!
+@title: Pickman
 @author: overcheer
 @tags: [game, pacman, adventure]
 @addedOn: 2025-18-10
