@@ -1,4 +1,14 @@
-    const player="p"
+/*
+@title: Frog Maze game
+@author: Froggy1018
+@description: Solve the maze
+@tags: [Maze]
+@addedOn: 2025-10-22
+*/
+
+
+
+	const player="p"
     const fly = "y"
     const worm="e"
     const wall= "w"
