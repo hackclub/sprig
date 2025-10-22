@@ -1,3 +1,11 @@
+/*
+@title: None
+@author: None
+@description: None
+@tags: []
+@addedOn: None
+*/
+
 // Define sprite types (single characters only)
 const pDown = "p";    // Down-facing player
 const pLeft = "l";    // Left-facing player
