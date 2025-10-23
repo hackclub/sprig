@@ -2,7 +2,7 @@
 @title: Quiz Game
 @author: Nandi
 @description: A simple quiz game with 10 questions.
-@tags: [quiz]
+@tags: []
 @addedOn: 2025-08-09
 */
 

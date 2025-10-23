@@ -4,7 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Binx's Timed Maze
 @author: Wafers
-@tags: [Maze]
+@description: None
+@tags: ["Maze"]
 @addedOn: 2024-05-12
 */
 let score = 0;
