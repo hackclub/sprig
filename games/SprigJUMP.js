@@ -4,6 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Sprig... JUMP!
 @author: Yanella FT
+@description: get Sprig to safety without hittin birds or cactuses!
 @tags: ['game']
 @addedOn: 2025-10-13
 */
