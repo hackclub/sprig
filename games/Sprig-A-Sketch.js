@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Sprig Drawer
+@title: Sprig-A-Sketch
 @author: ConstintCreations
-@tags: [sandbox]
-@addedOn: 2025-00-00
+@tags: ['utility', 'sandbox']
+@addedOn: 2025-10-22
 */
 
 const white = "w"
