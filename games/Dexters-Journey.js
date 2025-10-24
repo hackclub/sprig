@@ -4,7 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: dexter finds his bff
 @author: aavin.soman
-@tags: []
+@description: Dexters Journey is a adventure puzzle game where you play as Dexter, a determined dog on a quest to reunite with his best friend.
+@tags: [adventure, puzzle, fun, story]
 @addedOn: 2025-16-10
 */
 
