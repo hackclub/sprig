@@ -3,12 +3,9 @@
 /*
 @title: The Floor is Lava
 @author: Malte Hansen
-@tags: [top-down]
+@tags: [top-down, maze]
 @addedOn: 2025-10-12
 */
-
-// TODO: Multiple grids/tilemaps for different levels
-// TODO: fix out of bounds (no out of bounds possible)
 
 const playerPixel = "p"
 const background = "b"
