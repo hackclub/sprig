@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Capture The Base
-@author: 
+@author: LeoLevd
 @tags: []
 @addedOn: 2025-00-00
 */
