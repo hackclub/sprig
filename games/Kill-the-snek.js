@@ -2,6 +2,7 @@
 @title: Kill-the-snek
 @author: CodeWhiteWeb
 @tags: ['maze', 'puzzle', 'retro']
+@addedOn: None
 @description: Snake-style game but with Smart Enemy, multiple levels, and obstacles.
 */
 

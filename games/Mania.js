@@ -1,7 +1,7 @@
 /*
 @title: Mania
 @author: 13SHR
-@tags: [osu, rythm, mania, music, miku]
+@tags: []
 @description: Catch the notes in rhythm with the music !
 @addedOn: 2025-08-06
 */

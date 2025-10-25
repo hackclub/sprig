@@ -1,7 +1,7 @@
 /*
 @title: Portal: Orpheus Edition
 @author: [Lucas11, Art3mis]
-@tags: [puzzle, deno]
+@tags: []
 @description: "An sprig game inspired by portal."
 @addedOn: 2025-00-00
 */
