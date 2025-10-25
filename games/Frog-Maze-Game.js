@@ -287,6 +287,3 @@ function resetGame() {
     setMap(levels[level]);
     hasKey = false;
 }
-
-document.querySelector("#run").addEventListener("click", resetGame);
-
