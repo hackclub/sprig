@@ -1,7 +1,7 @@
 // !!!! If the game is too laggy I will change the map size (so that i halve the current resolution)
 
 /*
-@title: The Floor is Lava
+@title: Precise Maze Game
 @author: Malte Hansen
 @tags: [top-down, maze]
 @addedOn: 2025-10-12
@@ -429,7 +429,7 @@ let grid = [
 ];
 
 
-function initializeGame() { // (int) level could be a param of initializeGame()
+function initializeGame() { // For more levels: (int) level could be a param of initializeGame()
   alive = true
   clearText()
   
