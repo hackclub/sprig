@@ -223,7 +223,6 @@ setLegend(
 
 // Start
 
-setSolids([ player, wall])
 setBackground(bg)
 
 let level = 0
@@ -278,10 +277,10 @@ function moveNote() {
 
   allNotes = getAll(note);
   for (j = 0; j < allNotes.length; j++) {
-    for (i = 0; i < 1000; i++) {
+    for (i = 0; i < 10; i++) {
       allNotes[i].y += 1
       if (allNotes[i].y == 6) {
-        if (getFirst(player).x == allNotes[i].x) {ad
+        if (getFirst(player).x == allNotes[i].x) {
           
           score += 1
           console.log("score increased!")
