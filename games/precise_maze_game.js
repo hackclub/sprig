@@ -3,6 +3,7 @@
 /*
 @title: Precise Maze Game
 @author: Malte Hansen
+@description: a precise, full resolution maze game
 @tags: [top-down, maze]
 @addedOn: 2025-10-12
 */
