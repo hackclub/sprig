@@ -438,7 +438,7 @@ w.w....wbbww.w.
 t.wwww.ww....b.
 t....b.....w.b.
 wwww.w.wwwww..w
-gytw.w..kw....r
+gytw.w...w....r
 wwwwwwwwwwwwwww
 wwwwwwwwwwwwwww
 wwwwwwwwwwwwwww`, //keys, boxes, step limit, traps, portals, fragile ** , player two 
