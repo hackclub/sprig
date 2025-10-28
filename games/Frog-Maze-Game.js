@@ -8,7 +8,7 @@
 
 
 
-	const player="p"
+    const player="p"
     const fly = "y"
     const worm="e"
     const wall= "w"
@@ -164,7 +164,7 @@ DD4..D..4.DD.4..
 ......66C.......` ]
 )
 
-setSolids([player, wall, wall2, key])
+setSolids([player, wall, wall2, door])
 
 let level = 0
 const levels = [
@@ -175,24 +175,18 @@ w.wwwww.w
 w.w..ew.w
 w.w.www.w
 w.w.....w
-wpwwwwwww`
-]
-levels.push(level)
+wpwwwwwww`,
 
-level = level + 1
-const newLevel1 = map`
+  map`
 wwwwewwww
 wwww.wwww
 wwww.wwww
 e...p...y
 wwww.wwww
 wwww.wwww
-wwwwywwww`
+wwwwywwww`,
 
-levels.push(newLevel1)
-
-level = level + 1
-const newLevel2 = map`
+  map`
 wpwwwwwwwww
 w.w...wywew
 w.w.www.www
@@ -203,12 +197,9 @@ w.wwww.w.ww
 w...w..w.ww
 www.w.ww.ww
 wy....w...e
-wwwwwwwwwww`
+wwwwwwwwwww`,
 
-levels.push(newLevel2)
-
-level = level + 1
-const newLevel3 = map`
+  map`
 wpwwwwwwwwwwwwwwwww
 w.v..............fw
 w.w.wvw.w.wvwvwvwvw
@@ -228,10 +219,9 @@ w..kv.v.v...v...v.w
 w.wvw.w.wvwvw.w.w.w
 w.....v.......v.vde
 wwwwwwwwwwwwwwwwwww`
+]
 
-levels.push(newLevel3)
 setMap(levels[level])
-
 
 setPushables({
 	[ player ]: []
@@ -261,29 +251,28 @@ onInput("j", () => {
 let hasKey = false;
 
 afterInput(() => {
-    const goalsCovered = tilesWith(player, worm, door, key);
     const playerSprite = getFirst(player);
-
-    goalsCovered.forEach((goal) => {
-        if (goal.type === key) {
-            hasKey = true;
-            goal.remove(); } 
-        else if (goal.type === door && hasKey) 
-        {goal.remove();} 
-        else if (goal.type === worm) 
-        {level = level + 1;
-            if (level < levels.length) {
-                setMap(levels[level]);
-            } 
-            else {
-                addText("you win!", { y: 4, color: color`0` });
-            }
+    
+    const wormTiles = tilesWith(player, worm);
+    if (wormTiles.length > 0) {
+        level++;
+        if (level < levels.length) {
+            setMap(levels[level]);
+            hasKey = false; // Reset key state for new level
+        } else {
+            addText("you win!", { y: 4, color: color`0` });
         }
-    });
-});
+        return; // Exit early since we changed level
+    }
+    
+    const keyTiles = tilesWith(player, key);
+    if (keyTiles.length > 0) {
+        hasKey = true;
+      clearTile(17,17)
+    }
 
-function resetGame() {
-    level = 0;
-    setMap(levels[level]);
-    hasKey = false;
-}
+    const doorTiles = tilesWith(player, door);
+    if (doorTiles.length > 0 && hasKey) {
+
+    }
+});
