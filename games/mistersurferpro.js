@@ -10,17 +10,45 @@
 Controls:
   L = Start
   W = Jump
-  S = Duck (toggle)
   K = Restart
 */
+
+
+ // Jump sound melody
+const jumpMelody = tune`
+179.64071856287424: E5^179.64071856287424 + G5~179.64071856287424,
+179.64071856287424: C6^179.64071856287424`;
+
+// Game over melody
+const gameOverMelody = tune`
+174.41860465116278: C4/174.41860465116278,
+174.41860465116278: D4/174.41860465116278,
+174.41860465116278: E4/174.41860465116278,
+174.41860465116278: E4/174.41860465116278,
+174.41860465116278: D4-174.41860465116278,
+174.41860465116278: C4-174.41860465116278,
+4534.883720930232`;
+
+// Coin collect sound
+const coinMelody = tune`
+100: C6^100,
+100: E6^100,
+100: G6^100`;
+
+// High score sound
+const highScoreMelody = tune`
+200: C6^200,
+200: D6^200,
+200: E6^200,
+200: G6^200`;
 
 const PLAYER = "p";
 const SKY = "s";
 const WAVE = "w";
 const REEF = "r";
-const SEAGULL = "b";
 const ROCK = "o";
 const CLOUD = "c";
+const COIN = "x";
 
 let vy = 0;
 const JUMP_V = -8;
@@ -28,48 +56,46 @@ const GRAVITY = 1;
 const MAX_FALL = 8;
 
 let score = 0;
-let speed = 140;
+let highScore = 0;
+let speed = 120; // Start slow
 let gameOver = true;
-let ducking = false;
-let spawnRate = 0.15;
+let spawnRate = 0.15; // Start with slow spawn
 
 setLegend(
   [PLAYER, bitmap`
 ................
+...00...00......
+....0...0.......
+....00000.......
+...0777770......
+...0707070......
+..077777770.....
+..077777770.....
+..077666770.....
+...0777770......
+...0000000......
+....00..00......
+....0....0......
 ................
-................
-................
-....9999........
-...966669.......
-...966669.......
-..96066069......
-..96066069......
-..96644669......
-...966669.......
-...999999.......
-....9..9........
-...99..99.......
 ................
 ................`],
-
   [SKY, bitmap`
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD`],
-
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555`],
   [WAVE, bitmap`
 ................
 ................
@@ -82,12 +108,11 @@ DDDDDDDDDDDDDDDD`],
 ................
 ................
 ................
-................
-................
-4CCCCCCCCCCCC4CC
-CCCCC4CC4CCCCCCC
-C4CCCCCCCCCCCC4C`],
-
+0CCCCC0CCCCCCCCC
+CCCCCC0CCCC0C0CC
+CCCCCCCCCCCCCCCC
+C0CC0CCC0CCCC0CC
+CCCCCCCCC0CCCCCC`],
   [REEF, bitmap`
 ................
 ................
@@ -95,35 +120,15 @@ C4CCCCCCCCCCCC4C`],
 ................
 ................
 ....C.CCC.C.....
-....CC4CCC4.....
+....CC0CCC0.....
 ....CCCCCCC.....
-.....CC4CCC.....
+.....CC0CCC.....
 ....CCCCCC......
 ....CCCCCCC.....
-....CC.CC4C.....
-................
-................
-................
-................`],
-
-  [SEAGULL, bitmap`
-................
-........00......
-.......0606.....
-......0666660...
-.....066666660..
-.....0600660....
-.....0....0.....
-....000000000...
-................
-................
-................
-................
-................
+....CC.CC0C.....
 ................
 ................
 ................`],
-
   [ROCK, bitmap`
 ................
 ................
@@ -141,17 +146,32 @@ C4CCCCCCCCCCCC4C`],
 ................
 ................
 ................`],
-
   [CLOUD, bitmap`
 ................
 ................
 ................
 ...11111........
-..1LLLLL1.......
-.1LLLLLLL1......
-..1LLLLL1.......
-...1LLL1........
+..1CCCCC1.......
+.1CCCCCCC1......
+..1CCCCC1.......
+...1CCC1........
 ....111.........
+................
+................
+................
+................
+................
+................`],
+  [COIN, bitmap`
+................
+....5555........
+...5FFFF5.......
+...5FFFF5.......
+....5555........
+................
+................
+................
+................
 ................
 ................
 ................
@@ -167,8 +187,8 @@ setSolids([PLAYER]);
 const levels = [
   map`
 ssssssss
-ssssssss
-pwwwwwww`
+psssssss
+wwwwwwww`
 ];
 
 let level = 0;
@@ -178,7 +198,7 @@ setPushables({
   [PLAYER]: []
 });
 
-// physics tick
+// --- Physics ---
 function physicsTick() {
   const player = getFirst(PLAYER);
   if (!player) return;
@@ -192,95 +212,125 @@ function physicsTick() {
     vy = 0;
   }
 
-  const delay = Math.max(50, speed - Math.abs(vy) * 6);
-  if (!gameOver) setTimeout(physicsTick, delay);
+  if (!gameOver) setTimeout(physicsTick, 30);
 }
 
-// game loop
+// --- Game Loop ---
 function gameLoop() {
   const player = getFirst(PLAYER);
   if (!player) return;
 
-  // move obstacles
-  getAll(REEF).concat(getAll(ROCK), getAll(SEAGULL), getAll(CLOUD)).forEach((o) => {
+  // Move all objects
+  const allObjects = [
+    ...(getAll(REEF) || []),
+    ...(getAll(ROCK) || []),
+    ...(getAll(CLOUD) || []),
+    ...(getAll(COIN) || [])
+  ];
+
+  allObjects.forEach((o) => {
     if (o.x <= 0) {
       o.remove();
-      if (o.type !== CLOUD) score += 1;
+      if (![CLOUD, COIN].includes(o.type)) score += 1;
     } else {
       o.x -= 1;
     }
   });
 
-  // spawn obstacles & clouds
+  // Spawn obstacles
   if (Math.random() < spawnRate) {
     const type = Math.random();
-    if (type < 0.5) {
+    if (type < 0.7) {
       if (Math.random() < 0.6) addSprite(width() - 1, 2, REEF);
       else addSprite(width() - 1, 2, ROCK);
-    } else {
-      addSprite(width() - 1, 1, SEAGULL);
     }
   }
-  // clouds spawn slowly
-  if (Math.random() < 0.03) addSprite(width() - 1, 0, CLOUD);
 
-  // collision detection
+  // Spawn clouds
+  if (Math.random() < 0.05) addSprite(width() - 1, 0, CLOUD);
+
+  // Spawn coins
+  if (Math.random() < 0.08) addSprite(width() - 1, 1 + Math.floor(Math.random() * 2), COIN);
+
+  // Collision detection
   const px = player.x;
   const py = player.y;
   let collided = false;
 
-  getAll(REEF).concat(getAll(ROCK), getAll(SEAGULL)).forEach((o) => {
-    if (o.x === px && o.y === py) {
-      if (o.type === SEAGULL && ducking) return;
-      collided = true;
-    }
+  const obstacles = [
+    ...(getAll(REEF) || []),
+    ...(getAll(ROCK) || [])
+  ];
+
+  obstacles.forEach((o) => {
+    if (o.x === px && o.y === py) collided = true;
   });
 
-  if (tilesWith(REEF, PLAYER).length > 0 || tilesWith(ROCK, PLAYER).length > 0) collided = true;
-  if (tilesWith(SEAGULL, PLAYER).length > 0 && !ducking) collided = true;
+  if (tilesWith(REEF, PLAYER).length > 0 || tilesWith(ROCK, PLAYER).length > 0) {
+    collided = true;
+  }
 
   if (collided) {
     onLost();
     return;
   }
 
-  // difficulty scaling
-  if (score > 0 && score % 10 === 0) {
-    speed = Math.max(80, 140 - Math.floor(score / 10) * 6);
-    spawnRate = Math.min(0.35, 0.15 + score * 0.004);
-  }
+  // Collect coins
+  const coins = getAll(COIN) || [];
+  coins.forEach((coin) => {
+    if (coin.x === px && coin.y === py) {
+      coin.remove();
+      score += 5; // Each coin gives 5 points
+      playTune(coinMelody); // Coin collect sound
+    }
+  });
+
+  if (score < 20) {
+  speed = 200;       // slow
+  spawnRate = 0.10;
+} else if (score < 50) {
+  speed = 150;       // medium
+  spawnRate = 0.19;
+} else {
+  speed = 120;       // fast
+  spawnRate = 0.20;
+}
+
+
+  // Display score
+  clearText();
+  addText(`Score: ${score}`, { x: 0, y: 0, color: color`4` });
 
   if (!gameOver) setTimeout(gameLoop, speed);
 }
 
-// input handlers
-onInput("l", () => {
-  if (gameOver) startGame();
-});
-
+// --- Input handlers ---
+onInput("l", () => { if (gameOver) startGame(); });
 onInput("w", () => {
   const player = getFirst(PLAYER);
   if (!player) return;
-  if (player.y === 2) vy = JUMP_V;
+  if (player.y === 2) {
+    vy = JUMP_V;
+    playTune(jumpMelody); // Jump sound
+  }
 });
+onInput("k", () => { if (gameOver) startGame(); });
 
-onInput("s", () => {
-  ducking = !ducking;
-  clearText();
-  addText(`Score: ${score}`, { x: 0, y: 0, color: color`6` });
-  if (ducking) addText(`Duck`, { x: 12, y: 0, color: color`5` });
-});
-
-onInput("k", () => {
-  if (gameOver) startGame();
-});
-
+// --- Game Over ---
 function onLost() {
   gameOver = true;
   clearText();
-  addText(`GAME OVER`, { x: 3, y: 3, color: color`6` });
+  addText(`GAME OVER`, { x: 3, y: 3, color: color`4` });
   addText(`Score: ${score}`, { x: 4, y: 5, color: color`6` });
-  addText(`Press K to restart`, { x: 1, y: 7, color: color`6` });
+
+  if (score > highScore) {
+    highScore = score;
+    addText(`NEW HIGH SCORE!`, { x: 2, y: 7, color: color`3` });
+    playTune(highScoreMelody); // High score sound
+  }
+
+  addText(`Press K to restart`, { x: 1, y: 9, color: color`6` });
+  playTune(gameOverMelody);
 
   setMap(map`
 ssssssssssss
@@ -289,17 +339,15 @@ ssssssssssss
 ssssssssssss
 ssssssssssss
 ssssssssssss
-ssssssssssss
-spssssssssss
-wwwwwwwwwwww`);
+pwwwwwwwwwww`);
 }
 
+// --- Start Game ---
 function startGame() {
   gameOver = false;
   score = 0;
   vy = 0;
-  ducking = false;
-  speed = 140;
+  speed = 120; 
   spawnRate = 0.15;
   clearText();
 
@@ -308,10 +356,8 @@ function startGame() {
 
   getAll(REEF).forEach((s) => s.remove());
   getAll(ROCK).forEach((s) => s.remove());
-  getAll(SEAGULL).forEach((s) => s.remove());
   getAll(CLOUD).forEach((s) => s.remove());
-
-  addText(`Score: ${score}`, { x: 0, y: 0, color: color`3` });
+  getAll(COIN).forEach((s) => s.remove());
 
   const p = getFirst(PLAYER);
   if (p) {
@@ -323,12 +369,17 @@ function startGame() {
   gameLoop();
 }
 
+// --- Main Menu ---
 function showMainMenu() {
   gameOver = true;
   clearText();
-  addText(`MISTER SURFER PRO`, { x: 0, y: 2, color: color`6` });
-  addText(`Jump (W) / Duck (S)`, { x: 0, y: 5, color: color`5` });
-  addText(`Press L to start`, { x: 3, y: 9, color: color`6` });
+  addText(`MISTER SURFER PRO`, { x: 0, y: 2, color: color`4` });
+  addText(`Neon Surf Edition`, { x: 1, y: 4, color: color`6` });
+  addText(`W = Jump`, { x: 4, y: 6, color: color`2` });
+  addText(`Collect Coins!`, { x: 4, y: 7, color: color`2` });
+  addText(`Press L to Start`, { x: 2, y: 9, color: color`7` });
+  addText(`High Score: ${highScore}`, { x: 0, y: 10, color: color`5` });
 }
 
 showMainMenu();
+
