@@ -1,5 +1,9 @@
 /*
 @title: Memory Maze
+@author: None
+@description: None
+@tags: []
+@addedOn: None
 */
 
 const startScreenTile = "s"

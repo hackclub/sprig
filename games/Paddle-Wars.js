@@ -2,7 +2,7 @@
 @title: Paddle Wars
 @description: Paddle Wars is a fast-paced 2-player arcade game where players use paddles to hit a bouncing ball. Player 1 controls with W/S and Player 2 with I/K. Score by passing the ball past the opponent—first to 6 wins. Featuring dynamic ball movement, grid background, score display, and looping music, it’s a simple and competitive head-to-head challenge.
 @author: R09Aditya
-@tags: [arcade, pong, multiplayer, classic, sports, competitive, retro, 2player, ball-game, skill, fast-paced, pixel, challenge]
+@tags: []
 @addedOn: 2025-08-25
 */
 const paddle = "p";

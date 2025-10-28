@@ -4,6 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Mini rocket league
 @author: Rhys
+@description: None
 @tags: []
 @addedOn: 2024-00-00
 */

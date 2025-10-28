@@ -2,7 +2,7 @@
 @title: Platformation
 @author: temidaradev
 @description: "Platformation is an annoying but at the same fun platformer type game, just collect the coins and make it to the next level!"
-@tags: [platformer, easy, annoying]
+@tags: []
 @addedOn: 2025-10-05
 
 Collect all coins to progress through the game.

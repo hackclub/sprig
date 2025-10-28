@@ -1,7 +1,7 @@
 /* 
 @title: The Treasure Labrynth
 @description: A game about getting treasure.
-@author:James Reegan II
+@author: James Reegan II
 @tags: []
 @addedOn: 2025-04-28
 */
