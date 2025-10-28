@@ -5,44 +5,263 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: 2 Player Tag Game
 @author: Leo B
 @tags: [2 Player]
-@addedOn: 2025-10-21
+@addedOn: 2025-10-28
 */
+
+const restart = tune`
+473.6842105263158,
+157.89473684210526: E4/157.89473684210526,
+157.89473684210526: E4~157.89473684210526,
+473.6842105263158,
+157.89473684210526: G4/157.89473684210526,
+157.89473684210526: G4~157.89473684210526,
+315.7894736842105,
+157.89473684210526: B4/157.89473684210526,
+157.89473684210526: B4~157.89473684210526,
+473.6842105263158,
+157.89473684210526: D5/157.89473684210526,
+157.89473684210526: D5/157.89473684210526,
+157.89473684210526: D5/157.89473684210526,
+1894.7368421052631`
+const music = tune`
+109.89010989010988: C4~109.89010989010988,
+109.89010989010988: C4-109.89010989010988,
+109.89010989010988: C4~109.89010989010988,
+109.89010989010988: C5/109.89010989010988,
+109.89010989010988: C4~109.89010989010988,
+109.89010989010988: G4/109.89010989010988,
+109.89010989010988: D4~109.89010989010988,
+109.89010989010988: C4^109.89010989010988,
+109.89010989010988: D4~109.89010989010988,
+109.89010989010988: F4-109.89010989010988,
+109.89010989010988: D4~109.89010989010988,
+109.89010989010988: C4/109.89010989010988,
+109.89010989010988: E4~109.89010989010988,
+109.89010989010988: D4^109.89010989010988,
+109.89010989010988: E4~109.89010989010988,
+109.89010989010988: F4^109.89010989010988,
+109.89010989010988: E4~109.89010989010988,
+109.89010989010988: B4/109.89010989010988,
+109.89010989010988: F4~109.89010989010988,
+109.89010989010988: C4-109.89010989010988,
+109.89010989010988: F4~109.89010989010988,
+109.89010989010988: A4^109.89010989010988,
+109.89010989010988: F4~109.89010989010988,
+109.89010989010988: A4/109.89010989010988,
+109.89010989010988: G4~109.89010989010988,
+109.89010989010988: A4^109.89010989010988,
+109.89010989010988: G4~109.89010989010988,
+109.89010989010988: E4-109.89010989010988,
+109.89010989010988: G4~109.89010989010988,
+109.89010989010988: C5^109.89010989010988,
+109.89010989010988: D4~109.89010989010988 + B4/109.89010989010988,
+109.89010989010988: D4~109.89010989010988 + G4-109.89010989010988`
 const player = "p"
 const player2 = "2"
 const wall = "w"
+const endColor = "e"
 const background = "b"
 let tagged = false 
 let time = 0 
 let gameActive = true
+let redScore = 0
+let blueScore = 0
+let bPointGiven = false
+let rPointGiven = false
+let restartSongPlaying = false 
+let waitTime = 0          
+let display = false
+let bothZero = false
+
+  
+var playback = playTune(music, Infinity)
+
+
+
+
+
+
+
+
+setInterval(() => {
+
+
+
+if (time == 1 && blueScore == 0 && redScore == 0) {
+
+
+  addText("First to 7", {
+      x: 5,
+      y: 12,
+      color: color`8`
+  })
+}
+  
+  if (time == 200) {
+    clearText()
+    bothZero = false
+    display = false
+  }
 
 
 
   
-
-setInterval(() => {
-  let checkTagged = tilesWith(player, player2).length;
-  if (checkTagged >= 1) {
- tagged = true
+if(blueScore == 7 ) {
+  setMap(end)
+  clearText()
   gameActive = false
-  addText ("Red Wins", {
-    x:6,
-    y:2,
+  restartSongPlaying = true
+  playback.end()
+  
+  addText("Blue Wins!", {
+    x: 5,
+    y: 5,
+    color: color`7`
+  })
+  }
+
+if(redScore == 7 ) {
+  setMap(end)
+  clearText()
+  gameActive = false
+  restartSongPlaying = true
+  playback.end()
+  
+  addText("Red Wins!", {
+    x: 5,
+    y: 5,
     color: color`3`
   })
   }
 
+
+  
+  if(restartSongPlaying == false & gameActive == false) {
+  waitTime += 1 
+  }
+
+
+  if(waitTime >= 500){
+    setMap(level)
+    clearText()
+    
+    
+     playback = playTune(music, Infinity)
+
+
+      addText(`${redScore}`, {
+  x:17,
+  y:1,
+  color: color`3`
+})
+
+ 
+addText("-", {
+  x:18,
+  y:1,
+  color:color`0`
+})
+  
+addText(`${blueScore}`, {
+  x:19,
+  y:1,
+  color: color`7`
+})
+
+    gameActive = true
+    tagged = false
+    time = 0
+   bPointGiven = false
+   rPointGiven = false
+  restartSongPlaying = false 
+  waitTime = 0 
+      
+    
+  }
+
+
+  
+  
+  let checkTagged = tilesWith(player, player2).length;
+  if (checkTagged >= 1 && !rPointGiven) {
+  gameActive = false
+  redScore += 1
+  tagged = true
+  rPointGiven = true
+    playback.end()
+  playTune(restart,1)
+     
+    
+    
+    addText ("Red Point", {
+    x:6,
+    y:5,
+    color: color`3`
+  })
+  
+  }
+
+    
   time += 1
-  if (time >= 400 && tagged == false) { // Make sure to multiply desired time (in seconds) by 1000
+  if (time >= 700 && !tagged && !bPointGiven ) { // Make sure to multiply desired time (in seconds) by 100
+    bPointGiven = true
     gameActive = false
-    addText("Blue Wins", {
+    blueScore += 1
+    playback.end()
+    playTune(restart, 1)
+ 
+    addText("Blue Point", {
     x: 6,
-    y:2,
+    y:5,
     color: color`7`
   })
+
+    
     
 }
-}, 1)
 
+  
+   
+  
+  addText(`${redScore}`, {
+  x:17,
+  y:1,
+  color: color`3`
+})
+
+addText("-", {
+  x:18,
+  y:1,
+  color:color`0`
+})
+  
+addText(`${blueScore}`, {
+  x:19,
+  y:1,
+  color: color`7`
+})
+
+
+
+
+if(redScore == 6) {
+  addText("Match Point", {
+    x:5,
+    y:13, 
+    color: color`3`
+  })
+}
+
+  if(blueScore == 6) {
+  addText("Match Point", {
+    x:5,
+    y:13, 
+    color: color`7`
+  })
+}
+  
+  
+}, 1)
 
 
 
@@ -116,20 +335,49 @@ setLegend(
 2222222222222222
 2222222222222222
 2222222222222222`],
+  [endColor, bitmap`
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222`],
+
 )
+
+const level = map`
+p...........
+.....w......
+............
+.........w..
+............
+............
+..w.........
+........w...
+...........2`
+const end = map`
+bbbbbbbbbbbb
+bbbeeeeeeeee
+bbbeeeeeeeee
+bbbeeeeeeeee
+bbbeeeeeeeee
+bbbeeeeeeeee
+bbbeeeeeeeee
+bbbeeeeeeeee
+bbbeeeeeeeee`
 
 setBackground(background)
 
-const level = map`
-p........
-..w......
-.........
-......w..
-.........
-w........
-.........
-.....w...
-........2`
 
 setMap(level)
 
@@ -143,6 +391,12 @@ function canMove(sprite, dx, dy) {
   // if there’s any wall in the target tile, block the move
   return !things.some(t => t.type === wall)
 }
+
+
+
+
+
+
 
 // Player 1 movement
 onInput("s", () => {
@@ -193,3 +447,4 @@ onInput("j", () => {
   if (canMove(p2, -1, 0) && gameActive) 
     p2.x -= 1
 })
+
