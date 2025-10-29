@@ -267,9 +267,6 @@ C0C0C0C0C0C0C0C0
 
 setSolids([player, invis, wall, box, castle, door])
 let level = 0
-// Teleport cooldown prevents immediate re-teleport back and forth
-let teleportCooldown = false
-// Track whether a key has been collected (unlocks all doors)
 let keysCollected = 0
 const levels = [
   map`
@@ -466,40 +463,33 @@ onInput("j", () => {
 });
 
 afterInput(() => {
-  // --- Key collection and door unlocking ---
   if (tilesWith(player, key).length > 0) {
-    // collect the key under the player
     clearTile(tilesWith(key, player))
     keysCollected += 1
     addText("Unlocked!", { x: getFirst(player).x, y: getFirst(player).y - 1, color: color`3` })
-    // remove all doors from the map (unlock)
     clearTile(tilesWith(door))
-    // make doors passable by removing them from solids
     setSolids([player, invis, wall, box, castle])
   }
-  // --- Key collection and door unlocking ---
+
   if (tilesWith(player, key).length > 0) {
-    // collect the key under the player
     clearTile(tilesWith(key, player))
     keysCollected += 1
     addText("Unlocked!", { x: getFirst(player).x, y: getFirst(player).y - 1, color: color`3` })
-    // remove all doors from the map (unlock)
     clearTile(tilesWith(door))
-    // make doors passable by removing them from solids
     setSolids([player, invis, wall, box, castle])
   }
   if (level === 9) {
     if (tilesWith(player, invis_portal).length === tilesWith(invis_portal).length) {
-      level++; // Move to the next level
-      setMap(levels[level]); // Load the next level
+      level++; 
+      setMap(levels[level]); 
       addText("The End! You Win!", { y: 5, color: color`3` });
     }
   } else if (level === 8) {
     if (tilesWith(player, cat).length === tilesWith(cat).length) {
       clearText()
       if (levels[level + 1] !== undefined) {
-        level++; // Move to the next level
-        setMap(levels[level]); // Load the next level
+        level++; 
+        setMap(levels[level]); 
       }
     }
   } else if (level === 2 && sorw) {
@@ -512,8 +502,8 @@ afterInput(() => {
   } else if (level === 3) {
     if (tilesWith(box, goal).length === tilesWith(goal).length && tilesWith(player, port).length === tilesWith(port).length) {
       if (levels[level + 1] !== undefined) {
-        level++; // Move to the next level
-        setMap(levels[level]); // Load the next level
+        level++; 
+        setMap(levels[level]);
       } else {
         addText("you win!", { y: 4, color: color`3` });
       }
@@ -521,9 +511,9 @@ afterInput(() => {
   } else if (tilesWith(player, port).length === tilesWith(port).length && level !== 3) {
     clearText()
     if (levels[level + 1] !== undefined) {
-      level++; // Move to the next level
-      setMap(levels[level]); // Load the next level
-      if (level === 1) { // Check for the second level
+      level++; 
+      setMap(levels[level]);
+      if (level === 1) {
         addText("slide!!", {
           x: 6,
           y: 2,
