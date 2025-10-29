@@ -21,6 +21,9 @@ const castle = "a"
 const background = "x"
 const invis_portal = "t"
 const dead_evil = "r"
+const tele = "y"
+const key = "k"
+const door = "d"
 setLegend(
   [player, bitmap`
 .......00....00.
@@ -209,6 +212,40 @@ C0C0C0C0C0C0C0C0
 ................
 ................
 ................`],
+  [key, bitmap`
+................
+................
+................
+................
+................
+..6666..........
+.666666.........
+.66..6666666666.
+.66..6666666666.
+.66..66....6.6..
+.666666....6.6..
+..6666.....6.6..
+................
+................
+................
+................`],
+  [door, bitmap`
+0000000000000000
+0LLLLLLLLLLLLLL0
+0L000000000000L0
+0L0LLLLLLLLLL0L0
+0L0L00000000L0L0
+0L0L0LLLLLL0L0L0
+0L0L0L0000L0L0L0
+0L0L0L0LLL0L0L0L
+0L0L0L0000L0L0L0
+0L0L0LLLLLL0L0L0
+0L0L00000000L0L0
+0L0LLLLLLLLLL0L0
+0L000000000000L0
+0LLLLLLLLLLLLLL0
+0000000000000000
+0000000000000000`],
   [dead_evil, bitmap`
 ................
 .....00050000...
@@ -228,8 +265,12 @@ C0C0C0C0C0C0C0C0
 ................`]
 )
 
-setSolids([player, invis, wall, box, castle])
+setSolids([player, invis, wall, box, castle, door])
 let level = 0
+// Teleport cooldown prevents immediate re-teleport back and forth
+let teleportCooldown = false
+// Track whether a key has been collected (unlocks all doors)
+let keysCollected = 0
 const levels = [
   map`
 ..........
@@ -271,6 +312,18 @@ b...w..
 ..bg...
 ...wb.g
 p.....o`,
+    map`
+aaaaa.......
+k.aaa.aaaaa.
+a...a.....a.
+aaa.aaaaa.a.
+....a...a.a.
+.aaaapa.a.a.
+..a...a...a.
+a...aaaaaaa.
+aaaaaaa...a.
+a...a...a.a.
+oda...aaa...`,
   map`
 aaaaaaaaaaaaaaaaa
 xxxxwwxxxwxxxwxxx
@@ -300,17 +353,17 @@ axa
 axa
 apa`,
   map`
-.i.i.aeacii...
-.....aaa....i.
-ii.i....iiiii.
-...iiii.......
-.ii...iiiiiii.
-....i.......ii
-iiiiiiiii.i...
-i.......i.i.i.
-..iiiii.i.i.i.
-.i....i.iii.i.
-...iipi.....i.`,
+..ii.aeaci.....i
+i..iiaaa...i.i..
+ii.iii..iiii.ii.
+i....ii.....i...
+..ii..i.iii.i.ii
+.i..i...i...i...
+..i...iii.iii.ii
+i.iiii....i.i...
+...iii.i.i..iii.
+.ii...i..ii.....
+....ipii....i.i.`,
   map`
 .ara.
 .aaa.
@@ -327,7 +380,7 @@ wwwwwwwwwwwwwwww
 ii.ppppppccccccc
 pc.ppppppccccccc`
 ]
-level = 8
+level = 0
 setMap(levels[level])
 
 setPushables({
@@ -335,20 +388,21 @@ setPushables({
   [box]: [player]
 })
 
-if(level === 0){
-addText("your best\nfriends mine!", {
-  x: 5,
-  y: 2,
-  color: color`0`
-})
+if (level === 0) {
+  addText("your best\nfriends mine!", {
+    x: 5,
+    y: 2,
+    color: color`0`
+  })
 }
-if(level === 8){
+if (level === 9) {
   setSolids([player, invis, wall, box, castle, cat])
 }
 
 let sorw = false;
 let w = false
 onInput("s", () => {
+  
   getFirst(player).y += 1
   if (level === 1) {
     for (i = 1; i < 100; i++) {
@@ -412,31 +466,50 @@ onInput("j", () => {
 });
 
 afterInput(() => {
-  if(level === 8){
-    if(tilesWith(player, invis_portal).length === tilesWith(invis_portal).length){
+  // --- Key collection and door unlocking ---
+  if (tilesWith(player, key).length > 0) {
+    // collect the key under the player
+    clearTile(tilesWith(key, player))
+    keysCollected += 1
+    addText("Unlocked!", { x: getFirst(player).x, y: getFirst(player).y - 1, color: color`3` })
+    // remove all doors from the map (unlock)
+    clearTile(tilesWith(door))
+    // make doors passable by removing them from solids
+    setSolids([player, invis, wall, box, castle])
+  }
+  // --- Key collection and door unlocking ---
+  if (tilesWith(player, key).length > 0) {
+    // collect the key under the player
+    clearTile(tilesWith(key, player))
+    keysCollected += 1
+    addText("Unlocked!", { x: getFirst(player).x, y: getFirst(player).y - 1, color: color`3` })
+    // remove all doors from the map (unlock)
+    clearTile(tilesWith(door))
+    // make doors passable by removing them from solids
+    setSolids([player, invis, wall, box, castle])
+  }
+  if (level === 9) {
+    if (tilesWith(player, invis_portal).length === tilesWith(invis_portal).length) {
       level++; // Move to the next level
       setMap(levels[level]); // Load the next level
       addText("The End! You Win!", { y: 5, color: color`3` });
-  }
-  }
-  else if (level === 7) {
-    if(tilesWith(player, cat).length === tilesWith(cat).length){
-    clearText()
-    if (levels[level + 1] !== undefined) {
-      level++; // Move to the next level
-      setMap(levels[level]); // Load the next level
+    }
+  } else if (level === 8) {
+    if (tilesWith(player, cat).length === tilesWith(cat).length) {
+      clearText()
+      if (levels[level + 1] !== undefined) {
+        level++; // Move to the next level
+        setMap(levels[level]); // Load the next level
       }
-  }
-  }
-  else if (level === 2 && sorw) {
+    }
+  } else if (level === 2 && sorw) {
     addSprite(0, 3, "w")
     sorw = false;
     if (w) {
       addText("HAHAHAHA", { x: 8, y: 2, color: color`3` })
-      w=false;
+      w = false;
     }
-  }
-  else if (level === 3) {
+  } else if (level === 3) {
     if (tilesWith(box, goal).length === tilesWith(goal).length && tilesWith(player, port).length === tilesWith(port).length) {
       if (levels[level + 1] !== undefined) {
         level++; // Move to the next level
@@ -445,8 +518,7 @@ afterInput(() => {
         addText("you win!", { y: 4, color: color`3` });
       }
     }
-  }
-  else if (tilesWith(player, port).length === tilesWith(port).length && level !== 3) {
+  } else if (tilesWith(player, port).length === tilesWith(port).length && level !== 3) {
     clearText()
     if (levels[level + 1] !== undefined) {
       level++; // Move to the next level
@@ -466,11 +538,11 @@ afterInput(() => {
           color: color`1`
         })
       }
-      if(level === 7){
-    addText("Finally, you're\nhere, now find\nyour way to her", {x:2,y:3,color:color`0`})
+      if (level === 8) {
+        addText("Finally, you're\nhere, now find\nyour way to her", { x: 2, y: 3, color: color`0` })
       }
-    }else{
-            addText("The End! You Win!", { y: 5, color: color`3` });
+    } else {
+      addText("The End! You Win!", { y: 5, color: color`3` });
     }
   }
 });
