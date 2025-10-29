@@ -3,12 +3,11 @@
 @author:PenguinBoyMo
 @tags: platformer
 @addedOn: 2025-10-05
+@description: Journey with BitBoy on his latest adventure
 */
-
 // --- Sprites ---
 const player = "B";
 const wall = "W";
-2
 const wall2 = "R";
 const background = "G";
 const spike = "S";
