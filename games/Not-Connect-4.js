@@ -1,8 +1,9 @@
 /*
-@title: (Not) Connect 4
-@author: anant_hq
-@tags: []
-@addedOn: 2025-10-16
+@title: not_connect_4
+@author: GithubAnant
+@description: A chaotic twist on Connect 4 where the board changes after every move.
+@tags: [strategy, chaos, puzzle]
+@addedOn: 2025-10-30
 */
 
 const player = "p"
