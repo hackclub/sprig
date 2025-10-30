@@ -1,7 +1,7 @@
 /*
 @title: Parkour-Course
 @author: OneForFreedom
-@tags: [platformer, parkour, physics]
+@tags: [platformer, parkour, physics, description]
 @addedOn: 2025-10-18
 */
 
