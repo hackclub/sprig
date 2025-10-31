@@ -472,7 +472,7 @@ function loadMap(mapNum) {
 
 // setup
 setBackground(" ");
-loadMap(5);
+loadMap(1);
 
 // controls
 onInput("s", () => {
