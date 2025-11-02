@@ -31,6 +31,7 @@ const dark_pass = 'w'
 const spike_wall = 'x'
 const dark_door = 'y'
 const door_uni = 'z'
+let pause = false
 let half_done = false
 let last_light = {x: 0, y: 0}
 let last_dark = {x: 0, y: 0}
@@ -635,6 +636,7 @@ function door_script(x, y, doo) {
         y = getFirst(player_select).y
         addSprite(x, y, player_sel)
       } else {
+        pause = true
         if (level < 9) {
           addText("Next level", {x: 5, y: 5, color: color`5`})
           setTimeout(() => {
@@ -644,6 +646,7 @@ function door_script(x, y, doo) {
             half_done = false
             getFirst(player_sel).x = getFirst(player_select).x
             getFirst(player_sel).y = getFirst(player_select).y
+            pause = false
           }, 2000)
         } else {
           alive = false
@@ -661,22 +664,22 @@ setPushables({
 })
 
 onInput("w", () => {
-  if (alive) { 
+  if (alive && !pause) { 
     getFirst(player_select).y -= 1
   }
 })
 onInput("s", () => {
-  if (alive) {
+  if (alive && !pause) {
     getFirst(player_select).y += 1
   }
 })
 onInput("d", () => {
-  if (alive) {
+  if (alive && !pause) {
     getFirst(player_select).x += 1
   }
 })
 onInput("a", () => {
-  if (alive) {
+  if (alive && !pause) {
     getFirst(player_select).x -= 1
   }
 })
@@ -698,94 +701,96 @@ onInput("k", () => {
 })
 
 afterInput(() => {
-  let x = getFirst(player_select).x
-  let y = getFirst(player_select).y
-  getFirst(player_sel).x = x
-  getFirst(player_sel).y = y
-  let tile = getTile(x, y)
-  for (let t of tile) {
-    let type = t.type
-    if (type === button_red_off) {
-      clearTile(x, y)
-      addSprite(x, y, button_red_on)
-      addSprite(x, y, player_select)
-      addSprite(x, y, player_sel)
-      delete_wall(red_wall)
-    } else if (type === button_green_off) {
-      clearTile(x, y)
-      addSprite(x, y, button_green_on)
-      addSprite(x, y, player_select)
-      addSprite(x, y, player_sel)
-      delete_wall(green_wall)
-    } else if (type === button_yellow_off) {
-      clearTile(x, y)
-      addSprite(x, y, button_yellow_on)
-      addSprite(x, y, player_select)
-      addSprite(x, y, player_sel)
-      delete_wall(yellow_wall)
-    } else if (type === button_blue_off) {
-      clearTile(x, y)
-      addSprite(x, y, button_blue_on)
-      addSprite(x, y, player_select)
-      addSprite(x, y, player_sel)
-      delete_wall(blue_wall)
-    } else if (type === door) {
-      if (player_select === light) {
-        door_script(x, y, door)
-      }
-    } else if (type === lever_off) {
-      for (let hb of hidden_buttons[level]) {
-        if (hb.c === button_blue_off) {
-          addSprite(hb.x, hb.y, hb.c)
-          clearTile(x, y)
-          addSprite(x, y, player_select)
-          addSprite(x, y, player_sel)
-          addSprite(x, y, lever_on)
+  if (!pause) {
+    let x = getFirst(player_select).x
+    let y = getFirst(player_select).y
+    getFirst(player_sel).x = x
+    getFirst(player_sel).y = y
+    let tile = getTile(x, y)
+    for (let t of tile) {
+      let type = t.type
+      if (type === button_red_off) {
+        clearTile(x, y)
+        addSprite(x, y, button_red_on)
+        addSprite(x, y, player_select)
+        addSprite(x, y, player_sel)
+        delete_wall(red_wall)
+      } else if (type === button_green_off) {
+        clearTile(x, y)
+        addSprite(x, y, button_green_on)
+        addSprite(x, y, player_select)
+        addSprite(x, y, player_sel)
+        delete_wall(green_wall)
+      } else if (type === button_yellow_off) {
+        clearTile(x, y)
+        addSprite(x, y, button_yellow_on)
+        addSprite(x, y, player_select)
+        addSprite(x, y, player_sel)
+        delete_wall(yellow_wall)
+      } else if (type === button_blue_off) {
+        clearTile(x, y)
+        addSprite(x, y, button_blue_on)
+        addSprite(x, y, player_select)
+        addSprite(x, y, player_sel)
+        delete_wall(blue_wall)
+      } else if (type === door) {
+        if (player_select === light) {
+          door_script(x, y, door)
         }
-      }
-    } else if (type === lever_y_off) {
-      for (let hb of hidden_buttons[level]) {
-        if (hb.c === button_yellow_off) {
-          addSprite(hb.x, hb.y, hb.c)
-          clearTile(x, y)
-          addSprite(x, y, player_select)
-          addSprite(x, y, player_sel)
-          addSprite(x, y, lever_on)
+      } else if (type === lever_off) {
+        for (let hb of hidden_buttons[level]) {
+          if (hb.c === button_blue_off) {
+            addSprite(hb.x, hb.y, hb.c)
+            clearTile(x, y)
+            addSprite(x, y, player_select)
+            addSprite(x, y, player_sel)
+            addSprite(x, y, lever_on)
+          }
         }
+      } else if (type === lever_y_off) {
+        for (let hb of hidden_buttons[level]) {
+          if (hb.c === button_yellow_off) {
+            addSprite(hb.x, hb.y, hb.c)
+            clearTile(x, y)
+            addSprite(x, y, player_select)
+            addSprite(x, y, player_sel)
+            addSprite(x, y, lever_on)
+          }
+        }
+      } else if (type === spike_wall) {
+        alive = false
+        addText("You died", {x: 5, y: 5, color: color`5`})
+        addText("Press k to try again", {x: 0, y: 6, color: color`5`})
+      } else if (type === dark_pass) {
+        if (player_select === light) {
+          getFirst(light).x = last_light.x
+          getFirst(light).y = last_light.y
+          getFirst(player_sel).x = last_light.x
+          getFirst(player_sel).y = last_light.y
+        }
+      } else if (type === light_pass) {
+        if (player_select === dark) {
+          getFirst(dark).x = last_dark.x
+          getFirst(dark).y = last_dark.y
+          getFirst(player_sel).x = last_dark.x
+          getFirst(player_sel).y = last_dark.y
+        }
+      } else if (type === dark_door) {
+        if (player_select === dark) {
+          door_script(x, y, dark_door)
+        }
+      } else if (type === door_uni) {
+        door_script(x, y, door_uni)
       }
-    } else if (type === spike_wall) {
-      alive = false
-      addText("You died", {x: 5, y: 5, color: color`5`})
-      addText("Press k to try again", {x: 0, y: 6, color: color`5`})
-    } else if (type === dark_pass) {
-      if (player_select === light) {
-        getFirst(light).x = last_light.x
-        getFirst(light).y = last_light.y
-        getFirst(player_sel).x = last_light.x
-        getFirst(player_sel).y = last_light.y
-      }
-    } else if (type === light_pass) {
-      if (player_select === dark) {
-        getFirst(dark).x = last_dark.x
-        getFirst(dark).y = last_dark.y
-        getFirst(player_sel).x = last_dark.x
-        getFirst(player_sel).y = last_dark.y
-      }
-    } else if (type === dark_door) {
-      if (player_select === dark) {
-        door_script(x, y, dark_door)
-      }
-    } else if (type === door_uni) {
-      door_script(x, y, door_uni)
     }
-  }
-  if (getFirst(dark)) {
-    last_dark.x = getFirst(dark).x
-    last_dark.y = getFirst(dark).y
-  }
-  if (getFirst(light)) {
-    last_light.x = getFirst(light).x
-    last_light.y = getFirst(light).y
+    if (getFirst(dark)) {
+      last_dark.x = getFirst(dark).x
+      last_dark.y = getFirst(dark).y
+    }
+    if (getFirst(light)) {
+      last_light.x = getFirst(light).x
+      last_light.y = getFirst(light).y
+    }
   }
 })
   
