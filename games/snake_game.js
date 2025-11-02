@@ -1,352 +1,199 @@
 /*
-@title: snake_game
-@description: The game "snake_game" by souvikpal2000 is a retro-style classic Snake game where the player navigates a growing snake around the screen to collect food while avoiding collisions with walls and its own body.
-@author: souvikpal2000
-@tags: ['retro']
-@addedOn: 2022-09-13
+@title: Snake_game
+@author: Tejaji
+@description: Guide your hungry snake to gobble up as many apples as possible without hitting the walls or biting its own tail. Each apple you eat makes the snake longer — and surviving longer means scoring higher!
+@tags: [snake]
+@addedOn: 2025-11-02
 */
 
-/*
-Use Key "w", "s", "a", "d" to start the Game.
-
-Use Key "w" to change the direction of snake Upwards.
-Use Key "s" to change the direction of snake Downwards.
-Use Key "a" to change the direction of snake Left.
-Use Key "d" to change the direction of snake Right.
-Use Key "l" to Reset the Game.
-
-Key "l" can only be used after the Message LOST.
-*/
-
-const player = "p";
-const body = "h";
-const background = "s";
-const food = "f";
-const border = "b";
+const snake = "s"
+const apple = "a"
+const grass = "g"
+const head = "h"
 
 setLegend(
-  [ player, bitmap`
-................
-....22222222....
-...2222222222...
-..222222222222..
-.22222222222222.
-.22222222222222.
-.22222222222222.
-.22222222222222.
-.22222222222222.
-.22222222222222.
-.22222222222222.
-.22222222222222.
-..222222222222..
-...2222222222...
-....22222222....
-................`],
-  [ body, bitmap`
-................
-....66666666....
-...6666666666...
-..666666666666..
-.66666666666666.
-.66666666666666.
-.66666666666666.
-.66666666666666.
-.66666666666666.
-.66666666666666.
-.66666666666666.
-.66666666666666.
-..666666666666..
-...6666666666...
-....66666666....
-................`],
-  [ background, bitmap`
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL
-LLLLLLLLLLLLLLLL`],
-  [ food, bitmap`
-..444444........
-444444444333....
-4444444443333...
-..344444333333..
-.33333333333333.
-.33333333333333.
-.33333333333333.
-.33333333333333.
-.33333333333333.
-.33333333333333.
-.33333333333333.
-.33333333333333.
-..333333333333..
-...3333333333...
-....33333333....
-................`],
-  [ border, bitmap`
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000`]
-);
+  [snake, bitmap`
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD`],
+  [apple, bitmap`
+......D...D.....
+.......D.D......
+...9999999999...
+..999999999999..
+.99999999999999.
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+.99999999999999.
+..999999999999..
+...9999999999...
+....99999999....
+.....999999.....`],
+  [grass, bitmap`
+4444444444444444
+4444444444444444
+44DDD4444D444D44
+4D444D4444DDD444
+4444444444444444
+4444444444444444
+4D444D4444DDD444
+44DDD4444D444D44
+4444444444444444
+4444444444444444
+44DDD4444D444D44
+4D444D4444DDD444
+4444444444444444
+4444DD4444DD4444
+44DD44444444DD44
+4444444444444444`],
+  [head, bitmap`
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDD5
+DDDDDDDDDDDDDD55
+DDDDDDDDDDDDDD55
+DDDDDDDDDDDDDD55
+DDDDDDDDDDDDDDD5
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDD5
+DDDDDDDDDDDDDD55
+DDDDDDDDDDDDDD55
+DDDDDDDDDDDDDD55
+DDDDDDDDDDDDDDD5
+DDDDDDDDDDDDDDDD`]
+)
 
-setBackground(background);
+setSolids([snake])
 
-let level = 0;
-const levels = [
+let level = [
   map`
-bbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbb
-bbbbbbbbbbbbbbbbb
-b...............b
-b...............b
-b............f..b
-b...............b
-b...............b
-b...............b
-b...............b
-b.......p.......b
-b...............b
-b...............b
-b...............b
-b...............b
-b...............b
-b...............b
-b...............b
-bbbbbbbbbbbbbbbbb`,
-];
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg
+gggggggggggggggggggg`,
+]
 
-setMap(levels[level]);
+setMap(level[0])
 
-setPushables({
-  [ player ]: [],
-});
+let snakeBody = [{ x: 4, y: 4 }]
+let dir = { x: 1, y: 0 }
+let applePos = randomApple()
 
-let reset = null;
-let game = null;
+addSprite(snakeBody[0].x, snakeBody[0].y, head)
+addSprite(applePos.x, applePos.y, apple)
 
-const lostMsg = () => {
-  addText("LOST", { 
-      x: 8, 
-      y: 8, 
-      color: color`3`
-  });
+function randomApple() {
+  let x = Math.floor(Math.random() * width())
+  let y = Math.floor(Math.random() * height())
+  return { x, y }
 }
 
-const congratulation = () => {
-  addText("CONGRATS !!", { 
-      x: 5, 
-      y: 8, 
-      color: color`3`
-  });
-}
+onInput("w", () => { if (dir.y == 0) dir = { x: 0, y: -1 } })
+onInput("s", () => { if (dir.y == 0) dir = { x: 0, y: 1 } })
+onInput("a", () => { if (dir.x == 0) dir = { x: -1, y: 0 } })
+onInput("d", () => { if (dir.x == 0) dir = { x: 1, y: 0 } })
 
-let score = 0;
-let snake = [{ xPos: getFirst(player).x, yPos: getFirst(player).y }];
-//console.log(getFirst(player).x+" "+getFirst(player).y)
-//console.log(getFirst(food).x+" "+getFirst(food).y)
+let speed = 250
+let alive = true
+let score = 0
 
-const showScore = () => {
-  addText(`${score}`, { 
-      x: 4, 
-      y: 1, 
-      color: color`2`
-  });
-}
-showScore();
+function move() {
+  if (!alive) return
 
-const checkFoodPlacement = () => {
-  let found = 1;
-  while(found === 1){
-    getFirst(food).x = Math.floor(Math.random()*15) + 1;
-    getFirst(food).y = Math.floor(Math.random()*15) + 3;
-    found = 0;
-    for(let i=0;i<snake.length;i++){
-      if(snake[i].xPos === getFirst(food).x && snake[i].yPos === getFirst(food).y){
-        found = 1;
-        break;
-      }
+  let headPos = snakeBody[0]
+  let newHead = { x: headPos.x + dir.x, y: headPos.y + dir.y }
+
+  if (
+    newHead.x < 0 ||
+    newHead.x >= width() ||
+    newHead.y < 0 ||
+    newHead.y >= height()
+  ) {
+    gameOver()
+    return
+  }
+
+  for (let part of snakeBody) {
+    if (part.x === newHead.x && part.y === newHead.y) {
+      gameOver()
+      return
     }
-    if(found === 0){
-      break;
-    }
-  } 
+  }
+
+  snakeBody.unshift(newHead)
+
+  if (newHead.x === applePos.x && newHead.y === applePos.y) {
+    score++
+    playTune(music)
+    applePos = randomApple()
+  } else {
+    snakeBody.pop()
+  }
+
+  clearTiles()
+  addSprite(applePos.x, applePos.y, apple)
+
+  addSprite(snakeBody[0].x, snakeBody[0].y, head)
+  for (let i = 1; i < snakeBody.length; i++) {
+    addSprite(snakeBody[i].x, snakeBody[i].y, snake)
+  }
 }
 
-const eatFoodMelody = tune`
-82.64462809917356: b5~82.64462809917356,
-2561.9834710743803`;
-const collisionMelody = tune`
-84.50704225352112: c4-84.50704225352112,
-84.50704225352112: d4-84.50704225352112,
-84.50704225352112: e4-84.50704225352112,
-84.50704225352112: d4-84.50704225352112,
-84.50704225352112: c4-84.50704225352112,
-2281.6901408450703`;
-
-let lost = 0;
-
-const collision = () => {
-  for(let i=0;i<snake.length;i++){
-    if(getFirst(player).x === snake[i].xPos && getFirst(player).y === snake[i].yPos){
-      playTune(collisionMelody);
-      lost = 1;
-      clearInterval(game);
-      clearInterval(reset);
-      lostMsg();
-      break;
+function clearTiles() {
+  for (let y = 0; y < height(); y++) {
+    for (let x = 0; x < width(); x++) {
+      clearTile(x, y)
     }
   }
 }
 
-const eatFood = () => {
-  let xPosHead = getFirst(player).x;
-  let yPosHead = getFirst(player).y;
-  if(xPosHead === getFirst(food).x && yPosHead === getFirst(food).y){
-    playTune(eatFoodMelody);
-    score++;
-    if(score === 150){
-      clearInterval(game);
-      congratulation();
-    }  
-    showScore();
-    snake.unshift({ xPos: xPosHead, yPos: yPosHead });
-    checkFoodPlacement();
-  }else{
-    collision();
-    const tail = snake.pop();
-    clearTile(tail.xPos, tail.yPos);
-    snake.unshift({ xPos: xPosHead, yPos: yPosHead });
-  }
-  bodyMovement();
+function gameOver() {
+  alive = false
+  clearTiles()
+  addText("Game Over!", { x: 6, y: 7, color: color`3` })
+  addText(`Score: ${score}`, { x: 7, y: 9, color: color`2` })
 }
 
-let keyPressed = "";
+const music = tune`
+100,
+100: c5~100,
+100: d5~100,
+100: e5~100,
+100: g5~100,
+100: a5~100,
+100: c6~100`
 
-const collisionWithWall = () => {
-  playTune(collisionMelody);
-  lost = 1;
-  clearInterval(game);
-  clearInterval(reset);
-  lostMsg();
-}
-
-const moveForward = () => {
-  if(keyPressed === "a"){
-    if(getFirst(player).x === 1){
-      collisionWithWall();
-      return;
-    }
-    getFirst(player).x -= 1;
-    eatFood();
-  }
-  if(keyPressed === "d"){
-    if(getFirst(player).x === 15){
-      collisionWithWall();
-      return;
-    }
-    getFirst(player).x += 1;
-    eatFood();
-  }
-  if(keyPressed === "w"){
-    if(getFirst(player).y === 3){
-      collisionWithWall();
-      return;
-    }
-    getFirst(player).y -= 1;
-    eatFood();
-  }
-  if(keyPressed === "s"){
-    if(getFirst(player).y === 17){
-      collisionWithWall();
-      return;
-    }
-    getFirst(player).y += 1;
-    eatFood();
-  }
-}
-
-const bodyMovement = () => {
-  for(let i=0;i<snake.length;i++){
-    let xPos = snake[i].xPos;
-    let yPos = snake[i].yPos;
-    if(i != 0){
-      addSprite(xPos, yPos, body);
-    }
-  }
-}
-
-onInput("a", () => {
-  if(keyPressed !== "d"){
-    keyPressed = "a";
-  }
-});
-
-onInput("d", () => {
-  if(keyPressed !== "a"){
-    keyPressed = "d";
-  }
-});
-
-onInput("w", () => {
-  if(keyPressed !== "s"){
-    keyPressed = "w";
-  }
-});
-
-onInput("s", () => {
-  if(keyPressed !== "w"){
-    keyPressed = "s";
-  }
-});
-// console.log(keyPressed);
-
-const resetGame = () => {
-  keyPressed = "";
-  
-  snake.map((body) => {
-    return clearTile(body.xPos, body.yPos); // Removing Snake Body
-  })
-  clearTile(getFirst(food).x, getFirst(food).y); // Removing Food
-  
-  clearText() // Clearing all Text in playing Area
-  score = 0; // Resetting Score
-  showScore(); // Show Score Text in Screen Again
-  
-  addSprite(8, 10, player); // Add Snake Head
-  snake = [{ xPos: getFirst(player).x, yPos: getFirst(player).y }];
-  addSprite(13, 5, food); // Add Food
-
-  reset = setInterval(moveForward, 120);
-}
-
-onInput("l", () => {
-  if(lost === 1){
-    resetGame();
-    lost = 0;
-  }
-})
-
-game = setInterval(moveForward, 120);
+setInterval(move, speed)
