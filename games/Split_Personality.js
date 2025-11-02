@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: Testing
-@author: 
+@title: Split Personality
+@author: Ashmit Jeevan
 @tags: []
-@addedOn: 2025-00-00
+@addedOn: 2025-11-02
 */
 
 const light = 'a'
