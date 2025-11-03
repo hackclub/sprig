@@ -1,7 +1,7 @@
 /*
 @title: Parkour-Course
 @author: OneForFreedom
-@description: Push crates all the way to the end, into the underworld. push the final box and complete the game. 
+@description: Push crates all the way to the end, into the underworld. Avoid the lava and push the final box and complete the game. 
 @tags: [platformer, parkour, physics]
 @addedOn: 2025-10-18
 */
@@ -14,6 +14,7 @@ const wall = "w";
 const red = "r";
 const melting = "m";
 const blk = "k";
+const lava = "a";
 
 setLegend(
   [ player, bitmap`
@@ -32,7 +33,7 @@ setLegend(
 ....0.00........
 ....0..0........
 ....0..0........
-....L..L........`],
+....0..0........`],
   [ box, bitmap`
 ................
 ................
@@ -134,50 +135,68 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000`]
+0000000000000000`],
+  [ lava, bitmap`
+3363333333333333
+3663333333333363
+3936666333366669
+3333333666699999
+3333366663333399
+9999699996333933
+3996633339666663
+3369333366669999
+3366666633693333
+3363399996993336
+9999333336396663
+6339993336363399
+6666399363693333
+3666666666666666
+3633633333366666
+3666333666633333`]
   );
+
 let level = 0;
 const levels = [
   map`
 pb.g`,
   map`
-p....
+p...a
 wwwbw
-.....
-.....
+a....
+a....
 w.www
-.....
-.....
+....a
+....a
 www.w
-.....
-.....
+a....
+a....
 ..www
 ....g`,
   map`
-wwwwwwwp.wwwwwwwww
-wwwwwww.bwwwwwwwww
-wwwwwww..www.....w
-wwwwwww..........w
-w.....wwwwwwwww..w
+waaaaaap.aaaaaaaww
+wwaaaaaabaaaaaawww
+wwwaaaa..aaaaa...w
+wwwwaaa..........w
+w...aaaaaaaaaaa..w
 w................w
-w..........www...w
-wwwwwwwww..wwwwwww
-wwwwwwwww..wwwwwww
-wwww.......wwwwwww
-wwww.......wwwwwww
-wwww..www..wwwwwww
-wwww..wwwwwwwwwwww
-wwww......ww.....w
-wwww.......wwwwwww
-wwwwwwww........gw
-wwwwwwwwwwwwwwwwww
+w..........aaa...w
+wwwaaaaaa..aaawwww
+wwwaaaaaa..aaawwww
+wwwa.......aaawwww
+wwwa.......aaawwww
+wwwa..aaa..aaawwww
+wwwa..aaaaaaaawwww
+wwwa......aaaaaaaw
+wwwa.......aaaaaaw
+wwwaaaaa........gw
+wwwwwwwaaaaaaaaaaw
 wwwwwwwwwwwwwwwwww`,
   map`
-pww.....
-.wwwb.bb
-.ww.bbb.
-.ww.bbwb
-....bbwg`,
+paa.....
+.aawb.bb
+.aw.bbb.
+.w..baab
+....baag`,
   map`
 bg.bggb
 .b.b.b.
@@ -197,23 +216,54 @@ ggggggg`,
   map`
 ...w.....g
 p..w..w...
-.b....w.ww
-...w..w.ww
+.b....waww
+aaaw..waww
 wwwwwwwwww
 ...w.....g
 p..w..w...
-.b....w.ww
-...w..w.ww
+.b....waww
+aaaw..waww
 wwwwwwwwww
 ...w.....g
 p..w..w...
-.b....w.ww
-...w..w.ww
+.b....waww
+aaaw..waww
 wwwwwwwwww
 ...w.....g
 p..w..w...
-.b....w.ww
-...w..w.ww
+.b....waww
+aaaw..waww
+wwwwwwwwww
+...w.....g
+p..w..w...
+.b....waww
+aaaw..waww
+wwwwwwwwww
+...w.....g
+p..w..w...
+.b....waww
+aaaw..waww
+wwwwwwwwww`,
+  map`
+..a......g
+p.a.......
+.b........
+..a.......
+wwwwwwwwww
+.........g
+p..a......
+.b........
+...a......
+wwwwwwwwww
+....aa...g
+p........a
+.b....a..a
+......a...
+wwwwwwwwww
+......a..g
+p.........
+.b........
+.......aaa
 wwwwwwwwww`,
   map`
 p.w.....wg....w.....
@@ -232,11 +282,11 @@ p.w.....wg....w.....
 ...........................
 ...........................
 ...........................
-.....wwwwwww..w...w..w.....
-........w......w.w...w.....
-........w.......w....w.....
-.b......w.......w..........
-p.......w.......w....w....g`,
+.....aaaaaaa..a...a..a.....
+........a......a.a...a.....
+........a.......a....a.....
+.b......a.......a..........
+p.......a.......a....a....g`,
   map`
 rrrrrrrrrrrrrrrrrrrrrrrrrrm
 rrrrrrrrrrrrrrrrrrrrrrrrmmb
@@ -249,77 +299,74 @@ kkkkkkkkbbbbbbbbbbbbbbbbbbb
 p..b.g.bbbbbbbbbbbbbbbbbbbb`
 ];
 
-
 const currentLevel = levels[level];
 setMap(currentLevel);
 
-setSolids([ player, box, wall, blk ]); 
-
+setSolids([ player, box, wall, blk ]);
 
 setPushables({
     [player]: [ box ],
     [box]: [ box ]
 });
 
-
-
-
 onInput("s", () => {
   getAll(player).forEach(sprite => {
-    sprite.y += 1; 
+      sprite.y += 1;
   });
 });
 
 onInput("d", () => {
   getAll(player).forEach(sprite => {
-    sprite.x += 1;
+      sprite.x += 1;
   });
 });
 
 onInput("w", () => {
   getAll(player).forEach(sprite => {
-    sprite.y -= 1;
+      sprite.y -= 1;
   });
 });
 
 onInput("a", () => {
   getAll(player).forEach(sprite => {
-    sprite.x -= 1;
+      sprite.x -= 1;
   });
 });
 
+function checkCollisionWithLava() {
+    const playerSprites = getAll(player);
+    const boxSprites = getAll(box);
 
-onInput("j", () => {
-  const currentLevel = levels[level]; 
+    const allSprites = playerSprites.concat(boxSprites);
 
+    allSprites.forEach(sprite => {
+        const tiles = getTile(sprite.x, sprite.y);
+        if (tiles.some(tile => tile.type === lava)) {
+            resetLevel();
+        }
+    });
+}
 
-  if (currentLevel !== undefined) {
+function resetLevel() {
     clearText("");
-    setMap(currentLevel);
-  }
-});
-
+    setMap(levels[level]);
+}
 
 afterInput(() => {
+    checkCollisionWithLava();
 
-  const targetNumber = tilesWith(goal).length;
-  
+    const targetNumber = tilesWith(goal).length;
+    const numberCovered = tilesWith(goal, box).length;
 
-  const numberCovered = tilesWith(goal, box).length;
+    if (numberCovered === targetNumber) {
+        level++;
 
-
-  if (numberCovered === targetNumber) {
-    level = level + 1;
-
-    const currentLevel = levels[level];
-
-
-    if (currentLevel !== undefined) {
-      setMap(currentLevel);
-    } else {
-      addText("Game Complete!", { y: 1, color: color`2`, width: 14 });
-      addText("Ty for playing! <3", { y: 3, color: color`2`, width: 14 });
-      addText("By One For Freedom!", { y: 13, color: color`2`, width: 14 });
+        if (level < levels.length) {
+            setMap(levels[level]);
+        } else {
+            addText("Game Complete!", { y: 1, color: color`2`, width: 14 });
+            addText("Thanks for playing! <3", { y: 3, color: color`2`, width: 14 });
+            addText("By One For Freedom!", { y: 13, color: color`2`, width: 14 });
+        }
     }
-  }
 });
