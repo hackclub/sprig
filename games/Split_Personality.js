@@ -2,6 +2,7 @@
 @title: Split Personality
 @author: Ashmit Jeevan
 @tags: []
+@description: Two players unite to reach the end.
 @addedOn: 2025-11-02
 */
 
