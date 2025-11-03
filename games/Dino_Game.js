@@ -1,10 +1,7 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Dino Game
 @author: Jos
-@tags: [runner, jump, dinosaur]
+@tags: runner, jump, dinosaur, chrome
 @addedOn: 2025-11-01
 */
 
