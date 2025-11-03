@@ -1,10 +1,7 @@
 /* 
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Capture The Base
 @author: LeoLevd
-@tags: []
+@tags: [2P, BaseCapture, 2-Player]
 @addedOn: 2025-00-00
 */
 
