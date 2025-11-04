@@ -357,6 +357,28 @@ onInput("j", () => {
   resetLevel();
     });
 
+onInput("l", () => { // this is intentional
+  resetLevel();
+    });
+
+function moveBackLevel() {
+  level = Math.max(level - 1, 0);
+  setMap(levels[level]);
+}
+
+function moveForwardLevel() {
+  level = Math.min(level + 1, levels.length - 1);
+  setMap(levels[level]);
+}
+
+onInput("k", () => {
+  moveForwardLevel();
+});
+
+onInput("i", () => {
+  moveBackLevel();
+});
+
 afterInput(() => {
     checkCollisionWithLava();
 
