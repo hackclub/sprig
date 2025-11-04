@@ -392,7 +392,7 @@ afterInput(() => {
             setMap(levels[level]);
         } else {
             addText("Game Complete!", { y: 1, color: color`2`, width: 14 });
-            addText("Thanks for playing! <3", { y: 3, color: color`2`, width: 14 });
+            addText("Thanks for playing!", { y: 3, color: color`2`, width: 14 });
             addText("By One For Freedom!", { y: 13, color: color`2`, width: 14 });
         }
     }
