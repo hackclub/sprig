@@ -49,7 +49,7 @@ let Y = 0; // Y register
 let SP = 0xFF; // Stack Pointer
 let PC = 0; // Program counter (i will change this to be hex)
 let P = 0x24; // Processor status flag
-let memory = [0xA9, 0x01, 0x8D, 0x00, 0x02, 0xA9, 0x05, 0x8D, 0x01, 0x02, 0xA9, 0x08, 0x8D, 0x02, 0x02]; // mod this with the opcodes of any 6502 program youd like
+let memory = [0x49, 0x01, 0x8D, 0x02, 0x00, 0xE8, 0xEA, 0x00]; // mod this with the opcodes of any 6502 program youd like
 let delay = 2000 // delay between exec cycles (this is only here so you can read the logs)
 // convert SP and P to hex
 SP = "0x" + SP.toString(16).toUpperCase().padStart(2, '0');
