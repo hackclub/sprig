@@ -1,7 +1,7 @@
 /*
 @title: Split Personality
 @author: Ashmit Jeevan
-@description: 
+@description: Two players co-operate to reach the end.
 @tags: []
 @addedOn: 2025-11-02
 */
