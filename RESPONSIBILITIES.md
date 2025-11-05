@@ -41,7 +41,7 @@ The goal of this document is to make ownership of responsibilities / decision-ma
 * supports the process of obtaining replacement parts for Hack Clubbers
 
 ## App Review
-**Owner**: Lucas & Graham\
+**Owner**: whatware & Graham\
 **Responsibilities**:
 * responsible for welcoming newcomers (Sprig app authors) to the Sprig project warmly when they send their initial pull requests
 * ensuring that games are submitted in the proper format and according to defined policies
