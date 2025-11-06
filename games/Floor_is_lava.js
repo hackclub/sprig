@@ -4,9 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Floor is lava
 @author: Sawyer
-@description: Side Scroller with platforming
-@tags: ['plattformer']
-@addedOn: 2025-11-5
+@tags: []
+@addedOn: 11-5-2025
 */
 
 const player = "p"
@@ -314,6 +313,16 @@ let onGround = true;
 function tick() {
 
   const currentY = getCoordinates(getFirst(player)).y;
+
+  if (currentY === a.y) {
+    onGround = true;
+  } else {
+    onGround = false;
+  }
+  a = getCoordinates(getFirst(player));
+  if (!isJumping) {
+    getFirst(player).y += 1;
+  }
   if (currentY == 7) {
     start = false;
     playAgain = false
@@ -345,15 +354,5 @@ function tick() {
       playAgain = true;
     }, 1000);
   }
-  if (currentY === a.y) {
-    onGround = true;
-  } else {
-    onGround = false;
-  }
-  a = getCoordinates(getFirst(player));
-  if (!isJumping) {
-    getFirst(player).y += 1;
-  }
-
 
 }
