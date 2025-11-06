@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Floor is lava
 @author: Sawyer
 @tags: []
-@addedOn: 11-5-2025
+@addedOn: 2025-11-5
 */
 
 const player = "p"
