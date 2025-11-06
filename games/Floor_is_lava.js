@@ -4,8 +4,9 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Floor is lava
 @author: Sawyer
-@tags: []
-@addedOn: 11-5-2025
+@description: Side Scroller with platforming
+@tags: ['plattformer']
+@addedOn: 2025-11-5
 */
 
 const player = "p"
