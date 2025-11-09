@@ -1,4 +1,13 @@
 /*
+@title: Catch The Moon
+@author: RoboticsKid
+@description: Get the sun to the moon while avoiding the stars!
+@tags: [ #strategy ]
+@addedOn: 2025-11-09
+*/
+
+/*
+Remixing and want help? Here:
 Player - The sun
 Obstacle - The star
 Target - The moon
@@ -11,11 +20,6 @@ General Tips & Notes:
 - Stars always move sideways first unless blocked or already in line with the sun.
 - If the sun and a star are on the moon at the same time then the sun gets the points and no lives are lost.
 - Getting confused which sprite is the player, obstacle, and target? Try tracking mode!
-
-@title: Catch The Moon
-@author: RoboticsKid
-@tags: [ #strategy ]
-@addedOn: 2024-00-00
 */
 
 // **************************************************
