@@ -1,8 +1,8 @@
 /*
 @title: 2 Player Tag Game
 @author: Leo B
-@description: Simple tag game, WASD for red, IJKL for blue. Red has to try catch blue within the time limit, if they do, red gets the point. If blue evades, blue gets the point. First to 7 points wins. 
-@tags: [2 Player]
+@description: Simple tag game, WASD for red, IJKL for blue. Red has to try catch blue within the time limit, if they do, red gets the point. If blue evades, blue gets the point. First to 7 points wins.
+@tags: ['2 Player']
 @addedOn: 2025-11-04
 */
 
@@ -59,19 +59,19 @@ const player2 = "2"
 const wall = "w"
 const endColor = "e"
 const background = "b"
-let tagged = false 
-let time = 0 
+let tagged = false
+let time = 0
 let gameActive = true
 let redScore = 0
 let blueScore = 0
 let bPointGiven = false
 let rPointGiven = false
-let restartSongPlaying = false 
-let waitTime = 0          
+let restartSongPlaying = false
+let waitTime = 0
 let display = false
 let bothZero = false
 
-  
+
 var playback = playTune(music, Infinity)
 
 
@@ -92,7 +92,7 @@ if (time == 1 && blueScore == 0 && redScore == 0) {
       color: color`8`
   })
 }
-  
+
   if (time == 200) {
     clearText()
     bothZero = false
@@ -101,14 +101,14 @@ if (time == 1 && blueScore == 0 && redScore == 0) {
 
 
 
-  
+
 if(blueScore == 7 ) {
   setMap(end)
   clearText()
   gameActive = false
   restartSongPlaying = true
   playback.end()
-  
+
   addText("Blue Wins!", {
     x: 5,
     y: 5,
@@ -122,7 +122,7 @@ if(redScore == 7 ) {
   gameActive = false
   restartSongPlaying = true
   playback.end()
-  
+
   addText("Red Wins!", {
     x: 5,
     y: 5,
@@ -131,9 +131,9 @@ if(redScore == 7 ) {
   }
 
 
-  
+
   if(restartSongPlaying == false & gameActive == false) {
-  waitTime += 1 
+  waitTime += 1
   }
 
 
@@ -141,8 +141,8 @@ if(redScore == 7 ) {
     level += 1
     setMap(levels[level])
     clearText()
-    
-    
+
+
      playback = playTune(music, Infinity)
 
 
@@ -152,33 +152,33 @@ if(redScore == 7 ) {
   color: color`3`
 })
 
- 
+
 addText("-", {
   x:18,
   y:1,
   color:color`0`
 })
-  
+
 addText(`${blueScore}`, {
   x:19,
   y:1,
   color: color`7`
 })
-    
+
     gameActive = true
     tagged = false
     time = 0
    bPointGiven = false
    rPointGiven = false
-  restartSongPlaying = false 
-  waitTime = 0 
-      
-    
+  restartSongPlaying = false
+  waitTime = 0
+
+
   }
 
 
-  
-  
+
+
   let checkTagged = tilesWith(player, player2).length;
   if (checkTagged >= 1 && !rPointGiven) {
   gameActive = false
@@ -187,18 +187,18 @@ addText(`${blueScore}`, {
   rPointGiven = true
     playback.end()
   playTune(restart,1)
-     
-    
-    
+
+
+
     addText ("Red Point", {
     x:6,
     y:5,
     color: color`3`
   })
-  
+
   }
 
-    
+
   time += 1
   if (time >= 700 && !tagged && !bPointGiven ) { // Make sure to multiply desired time (in seconds) by 100
     bPointGiven = true
@@ -206,20 +206,20 @@ addText(`${blueScore}`, {
     blueScore += 1
     playback.end()
     playTune(restart, 1)
- 
+
     addText("Blue Point", {
     x: 6,
     y:5,
     color: color`7`
   })
 
-    
-    
+
+
 }
 
-  
-   
-  
+
+
+
   addText(`${redScore}`, {
   x:17,
   y:1,
@@ -231,7 +231,7 @@ addText("-", {
   y:1,
   color:color`0`
 })
-  
+
 addText(`${blueScore}`, {
   x:19,
   y:1,
@@ -244,7 +244,7 @@ addText(`${blueScore}`, {
 if(redScore == 6 && gameActive == true) {
   addText("Match Point", {
     x:5,
-    y:13, 
+    y:13,
     color: color`3`
   })
 }
@@ -252,12 +252,12 @@ if(redScore == 6 && gameActive == true) {
   if(blueScore == 6 && gameActive == false) {
   addText("Match Point", {
     x:5,
-    y:13, 
+    y:13,
     color: color`7`
   })
 }
-  
-  
+
+
 }, 1)
 
 
@@ -431,7 +431,7 @@ onInput("l", () => {
 
 onInput("j", () => {
   const p2 = getFirst(player2)
-  if (canMove(p2, -1, 0) && gameActive) 
+  if (canMove(p2, -1, 0) && gameActive)
     p2.x -= 1
 })
 

@@ -2,7 +2,7 @@
 @title: Precise Maze Game
 @author: Malte Hansen
 @description: a precise, full resolution (160x128) maze game. Press WASD to move. The game consists of 6 levels. Everytime you complete a level, you get one shield (so you can take one spike hit without dying). Be careful of dying, because every death will increment the death counter.
-@tags: [top-down, maze, precise, full resolution]
+@tags: ['top-down', 'maze', 'precise', 'full resolution']
 @addedOn: 2025-10-12
 */
 
