@@ -6,32 +6,48 @@
 @addedOn: 2025-11-02
 */
 
-const snake = "s"
-const apple = "a"
-const grass = "g"
-const head = "h"
+const player1 = "1";
+const player2 = "2";
+const food = "f";
 
 setLegend(
-  [snake, bitmap`
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD`],
-  [apple, bitmap`
-......D...D.....
-.......D.D......
+  [player1, bitmap`
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333`],
+  [player2, bitmap`
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444`],
+  [food, bitmap`
+.....D.....D....
+......D.D.D.....
 ...9999999999...
 ..999999999999..
 .99999999999999.
@@ -45,155 +61,126 @@ DDDDDDDDDDDDDDDD`],
 ..999999999999..
 ...9999999999...
 ....99999999....
-.....999999.....`],
-  [grass, bitmap`
-4444444444444444
-4444444444444444
-44DDD4444D444D44
-4D444D4444DDD444
-4444444444444444
-4444444444444444
-4D444D4444DDD444
-44DDD4444D444D44
-4444444444444444
-4444444444444444
-44DDD4444D444D44
-4D444D4444DDD444
-4444444444444444
-4444DD4444DD4444
-44DD44444444DD44
-4444444444444444`],
-  [head, bitmap`
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDD5
-DDDDDDDDDDDDDD55
-DDDDDDDDDDDDDD55
-DDDDDDDDDDDDDD55
-DDDDDDDDDDDDDDD5
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDD5
-DDDDDDDDDDDDDD55
-DDDDDDDDDDDDDD55
-DDDDDDDDDDDDDD55
-DDDDDDDDDDDDDDD5
-DDDDDDDDDDDDDDDD`]
-)
+.....999999.....`]
+);
 
-setSolids([snake])
+setSolids([]);
 
-let level = [
-  map`
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg
-gggggggggggggggggggg`,
-]
+// 8x8 map
+let level = map`
+..............
+..............
+..............
+..............
+..............
+..............
+..............
+..............
+..............
+..............
+..............
+..............
+..............
+..............`;
 
-setMap(level[0])
+setMap(level);
 
-let snakeBody = [{ x: 4, y: 4 }]
-let dir = { x: 1, y: 0 }
-let applePos = randomApple()
+let snake1 = [{x: 1, y: 1}];
+let dir1 = {x: 1, y: 0};
 
-addSprite(snakeBody[0].x, snakeBody[0].y, head)
-addSprite(applePos.x, applePos.y, apple)
+let snake2 = [{x: 6, y: 6}];
+let dir2 = {x: -1, y: 0};
 
-function randomApple() {
-  let x = Math.floor(Math.random() * width())
-  let y = Math.floor(Math.random() * height())
-  return { x, y }
+let foodPos = {x: 4, y: 4};
+addSprite(foodPos.x, foodPos.y, food);
+
+function draw() {
+  setMap(level);
+  addSprite(foodPos.x, foodPos.y, food);
+  snake1.forEach(seg => {
+    if (inBounds(seg)) addSprite(seg.x, seg.y, player1);
+  });
+  snake2.forEach(seg => {
+    if (inBounds(seg)) addSprite(seg.x, seg.y, player2);
+  });
 }
 
-onInput("w", () => { if (dir.y == 0) dir = { x: 0, y: -1 } })
-onInput("s", () => { if (dir.y == 0) dir = { x: 0, y: 1 } })
-onInput("a", () => { if (dir.x == 0) dir = { x: -1, y: 0 } })
-onInput("d", () => { if (dir.x == 0) dir = { x: 1, y: 0 } })
-
-let speed = 250
-let alive = true
-let score = 0
-
-function move() {
-  if (!alive) return
-
-  let headPos = snakeBody[0]
-  let newHead = { x: headPos.x + dir.x, y: headPos.y + dir.y }
-
-  if (
-    newHead.x < 0 ||
-    newHead.x >= width() ||
-    newHead.y < 0 ||
-    newHead.y >= height()
-  ) {
-    gameOver()
-    return
-  }
-
-  for (let part of snakeBody) {
-    if (part.x === newHead.x && part.y === newHead.y) {
-      gameOver()
-      return
-    }
-  }
-
-  snakeBody.unshift(newHead)
-
-  if (newHead.x === applePos.x && newHead.y === applePos.y) {
-    score++
-    playTune(music)
-    applePos = randomApple()
-  } else {
-    snakeBody.pop()
-  }
-
-  clearTiles()
-  addSprite(applePos.x, applePos.y, apple)
-
-  addSprite(snakeBody[0].x, snakeBody[0].y, head)
-  for (let i = 1; i < snakeBody.length; i++) {
-    addSprite(snakeBody[i].x, snakeBody[i].y, snake)
-  }
+function inBounds(pos) {
+  return pos.x >= 0 && pos.x < 8 && pos.y >= 0 && pos.y < 8;
 }
 
-function clearTiles() {
-  for (let y = 0; y < height(); y++) {
-    for (let x = 0; x < width(); x++) {
-      clearTile(x, y)
-    }
+function moveSnake(snake, dir) {
+  const head = snake[0];
+  const newHead = {x: head.x + dir.x, y: head.y + dir.y};
+  snake.unshift(newHead);
+  snake.pop();
+}
+
+function growSnake(snake) {
+  const tail = snake[snake.length - 1];
+  snake.push({...tail});
+}
+
+function samePos(a, b) {
+  return a.x === b.x && a.y === b.y;
+}
+
+function spawnFood() {
+  foodPos = {x: Math.floor(Math.random() * 8), y: Math.floor(Math.random() * 8)};
+}
+
+function checkCollision(snake) {
+  const head = snake[0];
+  if (!inBounds(head)) return true;
+  for (let i = 1; i < snake.length; i++) {
+    if (samePos(head, snake[i])) return true;
   }
+  return false;
 }
 
-function gameOver() {
-  alive = false
-  clearTiles()
-  addText("Game Over!", { x: 6, y: 7, color: color`3` })
-  addText(`Score: ${score}`, { x: 7, y: 9, color: color`2` })
+onInput("w", () => (dir1 = {x: 0, y: -1}));
+onInput("s", () => (dir1 = {x: 0, y: 1}));
+onInput("a", () => (dir1 = {x: -1, y: 0}));
+onInput("d", () => (dir1 = {x: 1, y: 0}));
+
+onInput("i", () => (dir2 = {x: 0, y: -1}));
+onInput("k", () => (dir2 = {x: 0, y: 1}));
+onInput("j", () => (dir2 = {x: -1, y: 0}));
+onInput("l", () => (dir2 = {x: 1, y: 0}));
+
+function gameOver(msg) {
+  addText(msg, {x: 1, y: 3, color: color`3`});
+  setTimeout(() => resetGame(), 1500);
 }
 
-const music = tune`
-100,
-100: c5~100,
-100: d5~100,
-100: e5~100,
-100: g5~100,
-100: a5~100,
-100: c6~100`
+function resetGame() {
+  snake1 = [{x: 1, y: 1}];
+  dir1 = {x: 1, y: 0};
+  snake2 = [{x: 6, y: 6}];
+  dir2 = {x: -1, y: 0};
+  spawnFood();
+}
 
-setInterval(move, speed)
+setInterval(() => {
+  moveSnake(snake1, dir1);
+  moveSnake(snake2, dir2);
+
+  // Eating food
+  if (samePos(snake1[0], foodPos)) {
+    growSnake(snake1);
+    spawnFood();
+  }
+  if (samePos(snake2[0], foodPos)) {
+    growSnake(snake2);
+    spawnFood();
+  }
+
+  // Collisions
+  if (checkCollision(snake1) || samePos(snake1[0], snake2[0])) {
+    gameOver("Player 2 Wins!");
+  } else if (checkCollision(snake2) || samePos(snake2[0], snake1[0])) {
+    gameOver("Player 1 Wins!");
+  }
+
+  draw();
+}, 300);
