@@ -12,3 +12,4 @@
 - 1x Keystone 1022
 - 1x 10 pin, 2.54mm THT Female Header, 5mm height
 - 1x 0805 1M Resistor, 1/4W
+- 1x Adafruit TFT_ST7735
