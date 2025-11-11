@@ -2,7 +2,7 @@
 @title: Catch The Moon
 @author: RoboticsKid
 @description: Get the sun to the moon while avoiding the stars!
-@tags: [ #strategy ]
+@tags: [ "strategy" ]
 @addedOn: 2025-11-09
 */
 
