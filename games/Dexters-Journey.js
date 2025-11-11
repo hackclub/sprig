@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: dexter finds his bff
 @author: aavin.soman
 @description: Dexters Journey is a adventure puzzle game where you play as Dexter, a determined dog on a quest to reunite with his best friend.
-@tags: [adventure, puzzle, fun, story]
+@tags: ['adventure', 'puzzle', 'fun', 'story']
 @addedOn: 2025-16-10
 */
 
@@ -399,7 +399,7 @@ if (level === 9) {
 let sorw = false;
 let w = false
 onInput("s", () => {
-  
+
   getFirst(player).y += 1
   if (level === 1) {
     for (i = 1; i < 100; i++) {
@@ -480,16 +480,16 @@ afterInput(() => {
   }
   if (level === 9) {
     if (tilesWith(player, invis_portal).length === tilesWith(invis_portal).length) {
-      level++; 
-      setMap(levels[level]); 
+      level++;
+      setMap(levels[level]);
       addText("The End! You Win!", { y: 5, color: color`3` });
     }
   } else if (level === 8) {
     if (tilesWith(player, cat).length === tilesWith(cat).length) {
       clearText()
       if (levels[level + 1] !== undefined) {
-        level++; 
-        setMap(levels[level]); 
+        level++;
+        setMap(levels[level]);
       }
     }
   } else if (level === 2 && sorw) {
@@ -502,7 +502,7 @@ afterInput(() => {
   } else if (level === 3) {
     if (tilesWith(box, goal).length === tilesWith(goal).length && tilesWith(player, port).length === tilesWith(port).length) {
       if (levels[level + 1] !== undefined) {
-        level++; 
+        level++;
         setMap(levels[level]);
       } else {
         addText("you win!", { y: 4, color: color`3` });
@@ -511,7 +511,7 @@ afterInput(() => {
   } else if (tilesWith(player, port).length === tilesWith(port).length && level !== 3) {
     clearText()
     if (levels[level + 1] !== undefined) {
-      level++; 
+      level++;
       setMap(levels[level]);
       if (level === 1) {
         addText("slide!!", {

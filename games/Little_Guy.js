@@ -2,7 +2,7 @@
 @title: Little Guy
 @author: RHW
 @description: An infinite scroller where you can get coins and avoid spikes. Gets harder the more you play!
-@tags: [Scroller, Infinite, Challenging, Sprig]
+@tags: ['Scroller', 'Infinite', 'Challenging', 'Sprig']
 @addedOn: 2025-10-08
 */
 
@@ -11,7 +11,7 @@
 const P = "p"; // player
 const X = "x"; // grass top
 const G = "g"; // ground beneath grass
-const H = "h"; // spikess 
+const H = "h"; // spikess
 const C = "c"; // coin
 const S = "s"; // super jump powerup
 const BG = "b"; // background cloud

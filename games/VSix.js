@@ -3,7 +3,7 @@
 @title: V6 Block and friend
 @description: a game that envolves 2 characters to rely on one another
 @author: TNL_Name
-@tags: [time building experiment]
+@tags: ['time', 'building', 'experiment']
 @addedOn: 2025-00-00
 */
 
@@ -22,23 +22,23 @@ const swordkey = "d"
 const swordkey2 = "D"
 const box2 = "n"
 const tree = "t"
-const forest_mid = "v" 
+const forest_mid = "v"
 const neutral_path = "V"
 const path_sideways = "i"
 const keylock = "L"
 const keylock2 = "l"
 const basement = "T"
-const basement_up = "^" 
+const basement_up = "^"
 const path_vertical = "F"
 const house = "h"
 const door = "H"
 const death_block = "_"
 const house_floor = "-"
 const push_key = "/"
-const push_lock = "+" 
+const push_lock = "+"
 const push_key_lock_block = "%"
 const player2 = "P"
-//make multiple sprites for variation 
+//make multiple sprites for variation
 //create a proper forest for game
 //add houses to enter
 
@@ -563,15 +563,15 @@ const sublevels = [
 
 setMap(sublevels[0])
 
-setMap(levels[0]) 
+setMap(levels[0])
 
 
 setPushables({
   [ player ]: [box, player, push_key],
   [ box ]: [box, push_key],
   [ box2 ]: [box2, player, push_key],
-  [ player2 ]: [box2, player, push_key], 
-  
+  [ player2 ]: [box2, player, push_key],
+
 })
 
 
@@ -633,13 +633,13 @@ afterInput(() => {
        addText("You Win!", { x: 6, y: 1, color: color`4` });
 setTimeout(()=>{
          window.open("https://docs.google.com/document/d/19AoDjOnayW5170jqFZeFFfvvlIY-PiZfC2jZaHNviOc/edit?tab=t.0");
-},250) 
+},250)
        }}})
 afterInput(() => {
   const enter = tilesWith(player, house)
     if (enter.length >= 1){
       sublevel = sublevel + 1;
-      setMap(sublevels[sublevel]) 
+      setMap(sublevels[sublevel])
       setBackground(house_floor)
     }})
 
@@ -650,7 +650,7 @@ afterInput(() => {
     if (exit.length >= 1){
       level = level;
       sublevel = sublevel - 1;
-      setMap(levels[level]) 
+      setMap(levels[level])
       setBackground() }},250)
   })
 
@@ -660,7 +660,7 @@ afterInput(() => {
   const enter_basement = tilesWith(player, basement)
     if (enter_basement.length >= 1){
       sublevel = sublevel + 1;
-      setMap(sublevels[sublevel]) 
+      setMap(sublevels[sublevel])
       setBackground(house_floor) }},250)
   })
 
@@ -672,7 +672,7 @@ afterInput(() => {
     if (exit_basement.length >= 1){
       level = level;
       sublevel = sublevel - 1;
-      setMap(sublevels[sublevel]) 
+      setMap(sublevels[sublevel])
       setBackground(house_floor) }},250)
   })
 
@@ -690,20 +690,20 @@ afterInput(() => {
   const lockgone = tilesWith(player, swordkey);
   if (lockgone.length >= 1) /* lockgone.length increases when player/swordkey touch and if it = or is more than 1 triggers the next code line*/
   {
-    getFirst(keylock).remove(); 
+    getFirst(keylock).remove();
     getFirst(swordkey).remove();
-    
-  }  
+
+  }
   })
 
 afterInput(() => {
   const lockgone2 = tilesWith(player2, swordkey2);
   if (lockgone2.length >= 1) /* lockgone.length increases when player/swordkey touch and if it = or is more than 1 triggers the next code line*/
   {
-    getFirst(keylock2).remove(); 
+    getFirst(keylock2).remove();
     getFirst(swordkey2).remove();
-    
-  }  
+
+  }
   })
 
 
@@ -711,13 +711,13 @@ afterInput(() => {
   const push_key_destroy = tilesWith(push_key, push_lock);
   if (push_key_destroy.length >= 1) // push_key will touch hole deleting all three sprites
   {
-    getFirst(push_key).remove(); 
+    getFirst(push_key).remove();
     getFirst(push_lock).remove();
     getFirst(push_key_lock_block).remove();
   }
-  })  
+  })
 
-  
+
 
 afterInput(() => {
 
@@ -741,32 +741,32 @@ level = level
 
 
 addText("welcome", {
-  x: 6, 
-  y: 1, 
+  x: 6,
+  y: 1,
   color: color`H`,
 })
 
 addText("to", {
-  x: 8, 
-  y: 3, 
+  x: 8,
+  y: 3,
   color: color`H`,
 })
 
 addText("block", {
-  x: 7, 
-  y: 5, 
+  x: 7,
+  y: 5,
   color: color`H`,
 })
 
 addText("and", {
-  x: 8, 
-  y: 7, 
+  x: 8,
+  y: 7,
   color: color`H`,
 })
 
 addText("friends ", {
-  x: 6, 
-  y: 9, 
+  x: 6,
+  y: 9,
   color: color`H`,
 })
 

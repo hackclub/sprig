@@ -1,8 +1,8 @@
 /*
 @title: Parkour-Course
 @author: OneForFreedom
-@description: Push crates all the way to the end, into the underworld. push the final box and complete the game. 
-@tags: [platformer, parkour, physics]
+@description: Push crates all the way to the end, into the underworld. push the final box and complete the game.
+@tags: ['platformer', 'parkour', 'physics']
 @addedOn: 2025-10-18
 */
 

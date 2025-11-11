@@ -2,7 +2,7 @@
 @title: Mister Surfer Pro
 @author: Prashanta Bhusal
 @description: Advanced endless runner with waves, reefs, clouds, and hoverboard effects. Jump, duck, dodge, and surf as far as you can!
-@tags: [endless, action, surfing, arcade]
+@tags: ['endless', 'action', 'surfing', 'arcade']
 @addedOn: 2025-10-15
 */
 

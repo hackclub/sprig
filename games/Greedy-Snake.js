@@ -2,7 +2,7 @@
 @title: Greedy Snake
 @description: This is a very simple Greedy snake game
 @author: ZhengRu
-@tags: [Greedy Snake]
+@tags: ['Snake']
 @addedOn: 2025-10-30
 */
 
@@ -163,10 +163,10 @@ let snake = [
 
 function placeFood() {
     let position = [Math.floor(Math.random() * 9)+1, Math.floor(Math.random() * 7)+1];
-  
+
   addSprite(position[0], position[1], food);
 
-  
+
 }
 
 function addScore() {
@@ -223,7 +223,7 @@ onInput("i", () => {
   getAll().forEach(tile => {
     clearTile(tile.x, tile.y);
   });
-  
+
   score = 0;
   direction = "e";
   directionToSet = "e";
@@ -244,11 +244,11 @@ placeFood();
 function move() {
 
   direction = directionToSet;
-  
+
   if (tilesWith(food) == 0) {
     placeFood();
   }
-  
+
   switch(direction) {
     case "n":
       snake.push([snake[snake.length-1][0], snake[snake.length-1][1]-1])
@@ -263,7 +263,7 @@ function move() {
       snake.push([snake[snake.length-1][0]-1, snake[snake.length-1][1]])
       break;
   }
-  
+
   if (tilesWith(player, food).length != 0 || tilesWith(body, food).length != 0) {
     // console.log(tilesWith(player).length);
     placeFood();
@@ -276,7 +276,7 @@ function move() {
   interval = setInterval(move, 400 - (score*10));
   }
   else if (snake.length > 1) {
-    
+
     let removed = snake.shift();
     clearTile(removed[0], removed[1]);
   }
@@ -290,7 +290,7 @@ function move() {
   }
   else {
     if ((el[0] < 0 || el[0] > 9) || (el[1] < 0 || el[1] > 7)) {
-      
+
       gameOver();
     } else {
     addSprite(el[0], el[1], player);
