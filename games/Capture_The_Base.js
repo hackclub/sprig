@@ -2,7 +2,7 @@
 @title: Capture The Base
 @author: LeoLevd
 @description: A 2-player capture the flag style game for sprig. Controls: Player1: WASD to move, to win move to P2 base. Player2: IJKL to move, reach P1 base to win. Obstacles: Protector bots and glue traps
-@tags: [2P, BaseCapture, 2-Player]
+@tags: ['2P', 'BaseCapture', '2-Player', 'Battle']
 @addedOn: 2025-00-00
 */
 
