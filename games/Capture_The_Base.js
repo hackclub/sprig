@@ -1,8 +1,8 @@
-/* 
+/*
 @title: Capture The Base
 @author: LeoLevd
-@description: A 2-player capture the flag style game for sprig. Controls: Player1: WASD to move, to win move to P2 base. Player2: IJKL to move, reach P1 base to win. Obstacles: pushy bots and smily glue traps.
-@tags: ['2P', 'BaseCapture', '2-Player']
+@description: A 2-player capture the flag style game for sprig. Controls: Player1: WASD to move, to win move to P2 base. Player2: IJKL to move, reach P1 base to win. Obstacles: Protector bots and glue traps
+@tags: [2P, BaseCapture, 2-Player]
 @addedOn: 2025-00-00
 */
 
@@ -15,10 +15,44 @@ const botF = "F"
 const botW = "W"
 const glueTrap = "g"
 
+// CONFIG (Experimental)
+const botMoveFreq = 700
 
 
 setLegend(
-  [ player, bitmap`
+  [botF, bitmap`
+.D..H.H..H.H..D.
+DDDH.H.HH.H.HDDD
+.D..H.H..H.H..D.
+0D000000000000D0
+0333333333333330
+0332333333332330
+0329233333329230
+0329223333229230
+0329992332999230
+0332292332922330
+0333323333233330
+0333333333333330
+0333333333333330
+0333333333333330
+0333333333333330
+0000000000000000`], [botW, bitmap`
+.3..6.6..6.6..3.
+3336.6.66.6.6333
+.3..6.6..6.6..3.
+0300000000000030
+0555555555555550
+0552555555552550
+0527255555527250
+0527225555227250
+0527772552777250
+0552272552722550
+0555525555255550
+0555555555555550
+0555555555555550
+0555555555555550
+0555555555555550
+0000000000000000`], [ player, bitmap`
 ................
 ..33..33..3.....
 .333..393.3.....
@@ -98,39 +132,7 @@ setLegend(
 2244424224244444
 4442444444444444
 4442224444244424
-4444424444244444`], [botF, bitmap`
-.D..H.H..H.H..D.
-DDDH.H.HH.H.HDDD
-.D..H.H..H.H..D.
-0D000000000000D0
-0333333333333330
-0332333333332330
-0329233333329230
-0329223333229230
-0329992332999230
-0332292332922330
-0333323333233330
-0333333333333330
-0333333333333330
-0333333333333330
-0333333333333330
-0000000000000000`], [botW, bitmap`
-.3..6.6..6.6..3.
-3336.6.66.6.6333
-.3..6.6..6.6..3.
-0300000000000030
-0555555555555550
-0552555555552550
-0527255555527250
-0527225555227250
-0527772552777250
-0552272552722550
-0555525555255550
-0555555555555550
-0555555555555550
-0555555555555550
-0555555555555550
-0000000000000000`], [glueTrap, bitmap`
+4444424444244444`], [glueTrap, bitmap`
 ...2222222222...
 ...22222222222..
 ..2221112222222.
@@ -182,6 +184,16 @@ setPushables({
 
 function botMove() {
   if (finished) return;
+
+  
+  if (Math.abs(getFirst(player2).x - getFirst(p1base).x) <= 2 && Math.abs(getFirst(player2).y - getFirst(p1base).y) <= 2) {
+    getFirst(botF).x = getFirst(p1base).x
+    getFirst(botF).y = getFirst(p1base).y
+  }
+  if (Math.abs(getFirst(player).x - getFirst(p2base).x) <= 2 && Math.abs(getFirst(player).y - getFirst(p2base).y) <= 2) {
+    getFirst(botW).x = getFirst(p2base).x
+    getFirst(botW).y = getFirst(p2base).y
+  }
   if (getFirst(botF).y != getFirst(player2).y) {
     if (getFirst(botF).y > getFirst(player2).y) {
       getFirst(botF).y -= 1
@@ -333,5 +345,5 @@ onInput("l", () => {
 afterInput(() => {
     check()
 })
-setInterval(botMove, 1000)
+setInterval(botMove, botMoveFreq)
 drawScore()
