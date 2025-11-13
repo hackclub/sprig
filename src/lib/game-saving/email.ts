@@ -1,5 +1,8 @@
 import _sendgrid from '@sendgrid/mail'
-import { LoopsClient } from 'loops'
+//@ts-expect-error
+import loopsPkg from 'loops';
+const { LoopsClient } = loopsPkg;
+
 import type { Game, User } from './account'
 import { lazy } from '../utils/lazy'
 
