@@ -184,7 +184,7 @@ setLegend(
 
 
 setSolids([ player, playerwithSword, playerwithPistol, shop, slime, bat, ghost, floor1, floor2]) 
-let money = 100 
+let money = 0 
 let level = 6 
 let currentPlayerTile = player; 
 let hasSword = false;
