@@ -2,10 +2,18 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Adventure game
-@author: 
-@tags: []
-@addedOn: 2025-00-00
+@title: Pixel Plunge
+@author: Jayden
+@tags: [adventure]
+@addedOn: 2025-11-15
+
+Kill different enemies (slime, bat and ghost) to earn money and buy weapon from the shop
+
+w: up/jump
+a: left/back
+s: down
+d: right
+l: interact/fight
 */
 
 const player = "p"
