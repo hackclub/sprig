@@ -297,7 +297,7 @@ fmm..fb.bbbbbbb....b......
 .ffmbh.b...........b..j...
 ...fbbb............b......
 ..h...f............bbbbbbb
-......f....h.......mgfbt.k`,
+......f....h.......mgfbt.kd`,
 
 map`
 bbbbbbbbbbbbbbbb
@@ -380,7 +380,7 @@ bebeebbbbbbbeebe
 bebeebejjhbeebe
 beeeebeeeebeeeeb
 bmbbbbeebbbbmbbb
-beeeeeefeeeeg eeb
+beeeeeefeeeegeeb
 bbbbbbbbbbbbbbbb
 `,
 
