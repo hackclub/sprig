@@ -2,7 +2,7 @@
 @title: Sprout
 @author: Serena Ni
 @description: Sprout is a tile-filling game where you control a seed that leaves green sprouts behind as it moves. Pink flowers appear randomly, and walls and rocks block movement. The game ends with a message once all fillable ground tiles are covered.
-@tags: [puzzle, movement, tilefilling]
+@tags: ["puzzle", "movement", "tilefilling"]
 @addedOn: 2025-11-12
 */
 
