@@ -3,7 +3,7 @@
 @author: Hadi Abbasi
 @description: Push rocks around to make your way to the exit
 @tags: []
-@addedOn: 2025-00-00
+@addedOn: 2025-11-16
 */
 
 const player = "p"
