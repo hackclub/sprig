@@ -85,7 +85,6 @@ setPushables({
   [player]: [rock] })
 
 
-let level = 0
 const levels = [
   map`
 ........r..r..r.....
