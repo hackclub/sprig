@@ -1,9 +1,7 @@
 /*
 @title: Colour Switcher
 @author: Unknown Gamer
-@description: Color Switcher is a logic-based puzzle game where every move counts. You control a small player icon on a 5×5 grid made of red and blue tiles. Each time you step on a tile, it flips, and the four tiles around it also flip. Your goal is to change the entire board to a single color while using as few moves as possible.
-
-The game features rising difficulty, smooth animations, sound effects, and a simple design that keeps each level fun and challenging.
+@description: Color Switcher is a logic-based puzzle game where every move counts. You control a small player icon on a 5×5 grid made of red and blue tiles. Each time you step on a tile, it flips, and the four tiles around it also flip. Your goal is to change the entire board to a single color while using as few moves as possible. The game features rising difficulty, smooth animations, sound effects, and a simple design that keeps each level fun and challenging.
 @tags: []
 @addedOn: 2025-11-13
 */
