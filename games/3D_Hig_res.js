@@ -2,10 +2,11 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: TW3DG
+@title: 3D Hig res
 @author: n0o0b090lv
-@tags: [3d]
-@addedOn: 2025-00-00
+@description: It's a 3d rendering engine in spirg, that has house as an preset :DD
+@tags: ['3d']
+@addedOn: 2025-17-11
 
 USES:
 https://gist.github.com/officialErnests/ca5e80d4a61fcfbcc84c5f8f4a88bd08
