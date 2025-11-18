@@ -1,0 +1,37 @@
+---
+import '../../../global.css'
+import Categories from '../../../layouts/categories.astro'
+import Outside from '../../../components/spriki-components/Outside.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+<Categories name={data["firmware.categories.name"]} title={data["firmware.categories.title"]} >
+  <p>{data["firmware.categories.about"]}</p>  
+  <div>
+    <Outside
+      links="github.com/hackclub/spade"
+      name="Spade"
+      description={data["firmware.spade.description"]} />
+    <Outside
+      links="github.com/shanecelis/trowel"
+      name="Trowel"
+      description={data["firmware.trowel.description"]} />
+    <Outside
+      links="github.com/DedFishy/Spryg"
+      name="Spryg"
+      description={data["firmware.spryg.description"]} />
+    <Outside
+      links="circuitpython.org/board/hack_club_sprig/"
+      name="CircuitPython"
+      description={data["firmware.circuitpython.description"]} />
+    <Outside
+      links="github.com/geschmit/hp-printer-trolling"
+      name="hp-trolling"
+      description={data["firmware.hp-trolling.description"]} />
+  </div>
+</Categories>

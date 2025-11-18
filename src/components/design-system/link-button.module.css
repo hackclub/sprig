@@ -1,0 +1,10 @@
+.button {
+	background: none;
+	border: none;
+	color: inherit;
+	font-size: inherit;
+	font-family: inherit;
+	padding: 0;
+	text-decoration: underline;
+	cursor: pointer;
+}

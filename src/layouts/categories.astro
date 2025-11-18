@@ -1,0 +1,18 @@
+---
+import '../pages/sprikipedia/global.css'
+import Navspriki from '../components/spriki-components/Navspriki.astro'
+import StandardHead from '../components/standard-head.astro'
+const { name, title } = Astro.props
+---
+<html lang="en">
+    <head>
+        <StandardHead title={name} />
+    </head>
+    <body>
+        <Navspriki />
+        <div class="main-spriki">
+            <h1>{title}</h1>
+            <slot />
+        </div>
+    </body>
+</html>

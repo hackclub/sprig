@@ -1,0 +1,65 @@
+---
+import '../../../global.css'
+import Categories from '../../../layouts/categories.astro'
+import Docs from '../../../components/spriki-components/Docs.astro'
+import Outside from '../../../components/spriki-components/Outside.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+<Categories name={data["start.categories.name"]} title={data["start.categories.title"]} >
+<p>Sprig is a game console where every user is a creator. It can only be obtained by building a tile-based game in the web-based game editor and shipping it in the community gallery. It's made by Hack Club.</p>
+<img class="img-tutorial" src="https://user-images.githubusercontent.com/27078897/186769641-5b1181b4-9969-4276-9fa0-9f15140e4a9b.jpg">
+<p>You should be able to get started in Sprig with very little programming experience. Even if you're an expert, you should still be able to have fun. Sprig games are designed to be shared and hacked on with friends. Every game submitted is easily viewable and editable in our gallery allowing people to learn from and build off each other.</p>
+<h2>Sprig is a...</h2>
+<p>...custom handheld game console built by Hack Club. Fall of 2022, we are giving a Sprig (valued at over $100 in components alone) to every teenage hacker that successfully shares a game they create in our community gallery.</p>
+<img class="img-tutorial" src="https://sprig.hackclub.com/stories-tiny/sprig-back.jpeg">
+<p>...web-based game editor that transforms learning to code from studying language syntax to making small creative projects. The Sprig game engine exposes a small construction kit for making tile-based games. This construction kit helps you focus on being creative instead of learning big APIs. The games are just JavaScript and we built a custom system to run that same JavaScript on the microcontroller!</p>
+<img class="img-tutorial" src="https://cloud-l94lfbasw-hack-club-bot.vercel.app/0image.png">
+<p>...hardware development kit. It’s not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It’s a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.</p>
+<img class="img-tutorial" src="https://user-images.githubusercontent.com/27078897/186015708-860df540-6c41-4400-aed5-d0fe8c9d31aa.jpg">
+
+<h2>More resources:</h2>
+<div class="docs-preview">
+  <Docs
+    links="sprig.hackclub.com/sprikipedia/tutorials"
+    name="Tutorials"
+    description="Tutorials section of Sprikipedia" />
+  <Docs
+    links="../sprikipedia/getting-started/slack-channels"
+    name="Slack channels"
+    description="A list of Slack channels" />
+  <Docs
+    links="../sprikipedia/getting-started/setup"
+    name="Project setup"
+    description="Run Sprig locally" />
+  <Docs
+    links="../sprikipedia/getting-started/acknowledgements"
+    name="Acknowledgements"
+    description="Special thanks" />
+  <Docs
+    links="../sprikipedia/getting-started/engine-development"
+    name="Engine development"
+    description="Run our engine" />
+  <Docs
+    links="../sprikipedia/getting-started/philosophy"
+    name="Philosophy"
+    description="Our philosophy" />
+  <Docs
+    links="../sprikipedia/getting-started/you-ship-we-ship"
+    name="You ship, we ship"
+    description="Other you ship, we ship Hack Club projects" />
+  <Outside
+    links="jams.hackclub.com/batch/sprig"
+    name="Hack Club Jams"
+    description="Collaborative coding workshops." />
+  <Outside
+    links="workshops.hackclub.com/batch/sprig"
+    name="Hack Club Workshops"
+    description="Collaborative coding workshops." />
+</div>
+</Categories>

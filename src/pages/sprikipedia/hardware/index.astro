@@ -1,0 +1,37 @@
+---
+import '../../../global.css'
+import Categories from '../../../layouts/categories.astro'
+import Outside from '../../../components/spriki-components/Outside.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+<Categories name={data["hardware.categories.name"]} title={data["hardware.categories.title"]} >
+  <p>{data["hardware.categories.about"]}</p> 
+  <div class="docs-preview">
+    <Outside
+      links="github.com/hackclub/sprig-hardware/tree/main/hardware/kicad"
+      name={data["hardware.kicad.description"]}
+      description=" " />
+    <Outside
+      links="github.com/hackclub/sprig-hardware/blob/main/hardware/BOM.md"
+      name={data["hardware.bom.description"]}
+      description=" " />
+    <Outside
+      links="github.com/hackclub/sprig-hardware/blob/main/hardware/ORDERING.md"
+      name={data["hardware.ordering.description"]}
+      description=" " />
+    <Outside
+      links="github.com/hackclub/sprig-hardware/blob/main/hardware/schematic.png"
+      name={data["hardware.schematic.description"]}
+      description=" " />
+    <Outside
+      links="github.com/hackclub/sprig-hardware/tree/main/back_covers"
+      name={data["hardware.back-covers.description"]}
+      description="" />
+  </div>
+</Categories>

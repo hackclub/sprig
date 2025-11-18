@@ -1,0 +1,44 @@
+.openButton {
+	line-height: 1;
+	vertical-align: middle;
+	position: relative;
+	top: -1px;
+	padding: 2px 4px;
+	font-size: inherit;
+	font-family: inherit;
+	border: none;
+	background: var(--accent);
+	color: #ffffff;
+	cursor: var(--cursor-interactive);
+}
+  
+.openButton:hover {
+	background: var(--accent-dark);
+}
+
+.openButton .label {
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: 0.06em;
+}
+  
+.openButton :global(svg) {
+	display: inline-block;
+	height: 0.9em;
+	width: 0.9em;
+	margin-left: 4px;
+	vertical-align: middle;
+}
+
+.openButton .bitmapPreview {
+	position: absolute;
+	left: 0;
+	width: 100px;
+	z-index: 1;
+	display: none;
+	pointer-events: none;
+}
+
+.openButton:hover .bitmapPreview {
+	display: block;
+}

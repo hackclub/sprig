@@ -1,0 +1,33 @@
+name: Build Spade UF2
+on: # This workflow should run on...
+  push: # a push...
+    branches: # to one of these branches:
+      - 'main'
+      - 'add-ci' # TEMP for testing
+  workflow_dispatch: # or when manually triggered
+
+defaults:
+  run:
+    shell: 'bash'
+
+jobs:
+  build-uf2:
+      runs-on: 'ubuntu-latest' # Run on the latest stable Ubuntu version
+      steps:
+      - name: 'Install OpenOCD'
+        run: |
+          sudo apt-get install openocd
+      - name: 'Clone Spade repo'
+        run: |
+          cd ~/
+          git clone https://github.com/hackclub/sprig.git sprig/
+          
+      - name: 'Build Script'
+        run: cd ~/sprig/firmware/spade && python3 gardenshed.py build
+      
+      - name: 'Upload artifact'
+        uses: 'actions/upload-artifact@v4'
+        with:
+          name: 'firmware.uf2'
+          path: '~/sprig/firmware/spade/firmware.uf2'
+          if-no-files-found: error

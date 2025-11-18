@@ -1,0 +1,10 @@
+---
+import { getGame, moveGameToBackendSaving } from '../../../lib/game-saving/account'
+
+const game = await getGame(Astro.params.id!)
+if (!game) return Astro.redirect('/404', 302)
+if(game.isSavedOnBackend){
+	return Astro.redirect(`/~/${game.id}`, 302)
+}else{
+	return Astro.redirect(`/~/${(await moveGameToBackendSaving(game)).id}`, 302)
+}

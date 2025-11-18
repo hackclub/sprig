@@ -1,0 +1,55 @@
+// ====== FONTS ======
+
+$heading-font: 'Billy', monospace;
+$pixel-text-font: 'Billy', monospace;
+$text-font: 'Inter', sans-serif;
+
+// ====== END FONTS ======
+
+// ====== COLORS ======
+
+$base-background: #0a0a16;
+$accent: #ffc225;
+
+// gallery
+
+$gallery-border-dark: rgb(118, 118, 143);
+$gallery-border-light: rgb(167, 171, 185);
+$gallery-background: rgba(54, 66, 85, 0.75);
+$gallery-background-hover: rgba(77, 90, 114, 0.8);
+
+$gallery-highlight-border-dark: rgb(163, 119, 31);
+$gallery-highlight-border-light: rgb(248, 195, 49);
+$gallery-highlight-border-xlight: rgb(255, 225, 141);
+$gallery-highlight-background: rgba(189, 154, 55, 0.6);
+$gallery-highlight-background-hover: rgba(242, 195, 9, 0.6);
+
+// buttons + tags
+
+$button-text-border: rgb(33, 37, 41);
+$button-background: rgb(248, 207, 1);
+$button-highlight: rgb(251, 247, 177);
+$button-shadow: rgb(229, 148, 0);
+$button-hover-background: rgb(242, 196, 9);
+$button-hover-highlight: rgba(251, 247, 177, 0.5);
+
+$tag-color: white;
+$tag-background: rgb(78, 49, 158);
+$new-tag-background: rgb(165, 50, 40);
+
+$button-inactive-color: rgb(255, 255, 255);
+$button-inactive-background: rgb(118, 126, 143);
+$button-inactive-highlight: rgb(167, 175, 185);
+$button-inactive-shadow: rgb(90, 86, 105);
+$button-inactive-hover-shadow: rgb(110, 114, 131);
+$button-inactive-hover-background: rgb(157, 166, 182);
+$button-inactive-hover-highlight: rgb(196, 200, 214);
+
+// ====== END COLORS ======
+
+// ====== BREAKPOINTS ======
+
+$breakpoint-1: 760px;
+$breakpoint-2: 1400px;
+
+// ====== END BREAKPOINTS ======

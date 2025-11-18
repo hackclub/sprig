@@ -1,357 +1,160 @@
-# 👾 **[Hack Club Game Lab →](https://game-lab.hackclub.dev/)**
+# 🍃 Hack Club Sprig 🍃
 
-The best way to learn is by making things you care about and sharing them with others. **That's what Game Lab is all about**.
+**[💻 Online Editor: Make a game](https://sprig.hackclub.com/editor)** | **[👀 Gallery: Find games](https://sprig.hackclub.com/gallery)** | **[🕸 Landing Page](https://sprig.hackclub.com)** | **[🎮 Firmware](https://github.com/hackclub/sprig/tree/main/firmware/spade)** | **[👾 Engine](https://github.com/hackclub/sprig-engine)**
 
-Have you ever wanted to...
+[Sprig](https://sprig.hackclub.com) is a game console where **every user is a creator**. It can only be obtained by building a tile-based game in the [web-based game editor](https://sprig.hackclub.com/editor) and shipping it in the [community gallery](https://sprig.hackclub.com/gallery). It's made by [Hack Club](https://hackclub.com).
 
-- Make Pong in 30 lines of code?
-- Create the Chrome dino game in 50?
-- Or... even better... make a delightful game that doesn't exist yet?
+<p align="left">
+<a>
+<img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://user-images.githubusercontent.com/27078897/186769641-5b1181b4-9969-4276-9fa0-9f15140e4a9b.jpg">
+</a>
+</p>
 
-Then get building with Game Lab!
+You should be able to get started in Sprig with very little programming experience. Even if you're an expert, you should still be able to have fun. Sprig games are designed to be shared and hacked on with friends. Every game submitted is easily viewable and editable in our gallery allowing people to learn from and build off each other. 
 
-You should be able to get started in Game Lab with very little experience programming but you should still be able to have fun with it even if you're an expert. Enjoy and we'd love to see what you make!
+## Sprig is a...
 
-### ⮑ _**[Click here to launch Game Lab](https://game-lab.hackclub.dev/)**_ ⮐
-_(and scroll down for a brief tutorial to get started)_
-!
+...**custom handheld game console** built by Hack Club. we are giving a Sprig to every teenage hacker that successfully shares a game they create in our [community gallery](https://sprig.hackclub.com/gallery).
 
-## Tutorial / How To Get Started Building Games
+<p align="left">
+<a>
+<img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://sprig.hackclub.com/stories-tiny/sprig-back.jpeg">
+</a>
+</p>
 
-Learning from functional examples is the best way to get started building games with Game Lab.
+...**[web-based game editor](https://sprig.hackclub.com/editor)** that transforms learning to code from studying language syntax to making small creative projects. The Sprig game engine exposes a small construction kit for making tile-based games. This construction kit helps you focus on being creative instead of learning big APIs. The games are just JavaScript and we built a custom system to run that same JavaScript on the microcontroller!
 
-Below we have created a series of short examples with code that works, that grow from creating a character on the screen to creating a more complicated game.
+<p align="left">
+<a href="https://sprig.hackclub.com/editor">
+<img width="500" alt="Screen Shot 2022-03-07 at 6 21 27 PM" src="https://cloud-l94lfbasw-hack-club-bot.vercel.app/0image.png">
+</a>
+</p>
 
-Initialize the game engine (this should already be written for you when you open the editor)
+...**[hardware development kit](https://github.com/hackclub/sprig/blob/main/docs/ASSEMBLY.md)**. It’s not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It’s a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.
 
-```js
-const e = createEngine(gameCanvas, 300, 300);
-```
+<p align="left">
+<a href="https://sprig.hackclub.com">
+<img width="500" alt="Screen Shot 2022-08-22 at 4 04 08 PM" src="https://user-images.githubusercontent.com/27078897/186015708-860df540-6c41-4400-aed5-d0fe8c9d31aa.jpg">
+</a>
+</p>
 
----
+## Fully open source
 
-Make a character:
+**Sprig is open source**. Shipping a game to the Sprig Gallery is contributing to an open-source project. Everything about Sprig is transparent and editable. That includes the [hardware designs](https://github.com/hackclub/sprig/tree/main/hardware), the [game engine](https://github.com/hackclub/sprig/tree/main/engine), the [embedded game engine for the RP2040 chip](https://github.com/hackclub/sprig/tree/main/firmware/spade), and the editor and website itself in this repo!
 
-<img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149362983-6f82a61c-c3d5-40b7-920f-f673c3ff2646.png">
+We did some fun engineering to get Sprig to work and to make your games run the same on your desktop computer and a $4 microcontroller. That involved custom JS runtimes with optimizations in C and even PIO assembly. We also documented some [behind-the-scenes](https://github.com/hackclub/sprig/tree/main/docs).
 
-```js
-const e = createEngine(gameCanvas, 300, 300);
+## You Ship, We Ship
 
-e.add({
-  x: 188,
-  y: 69,
-  sprite: test_sprite,
-  scale: 4, // this makes the sprite larger than its default 32 x 32 pixel size
-})
+Make a game 
+&rarr; Share it with the community 
+&rarr; Receive your device 
+&rarr; Play Sprig games on it 
+&rarr; Hack on the device for more projects
 
-e.start();
-```
-
----
-
-Add a floor with gravity:
-
-<img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149363706-453a45e8-d0d4-44a3-acc3-09e4bb577392.gif">
-
-```js
-const e = createEngine(gameCanvas, 300, 300);
-
-e.add({
-  solid: true, // the solid property makes this object collideable
-  x: 135,
-  y: 114,
-  sprite: test_sprite,
-  scale: 4,
-  update(me) { // update runs every frame
-    me.vy += 2; // adding velocity every frame is acceleration
-  }
-})
-
-e.add({
-  solid: true, // the solid property makes this object collideable
-  x: -6,
-  y: 283,
-  sprite: floor,
-  scale: 11,
-})
-
-e.start();
-```
-
----
-
-Add movement:
-
-<img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149365452-7b042996-2beb-40a8-866e-f5748b5631da.gif">
-
-```js
-const e = createEngine(gameCanvas, 300, 300);
-
-e.add({
-  solid: true,
-  x: 135,
-  y: 114,
-  sprite: test_sprite,
-  scale: 4,
-  update(me) {
-    me.vy += 2;
-
-    // we can add key inputs by checking the keys in the update loop
-    if (e.heldKey("ArrowLeft")) me.x -= 3;
-    if (e.heldKey("ArrowRight")) me.x += 3; 
-  }
-})
-
-e.add({
-  solid: true,
-  x: -6,
-  y: 283,
-  sprite: floor,
-  scale: 11,
-})
-
-e.start();
-```
-
----
-
-Add jump:
-
-<img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149366181-588ae196-03dd-4268-9907-9477caa8a834.gif">
-
-```js
-const e = createEngine(gameCanvas, 300, 300);
-
-e.add({
-  tags: ["player"], // we can add tags so we can reference objects
-  solid: true,
-  x: 135,
-  y: 114,
-  sprite: test_sprite,
-  scale: 4,
-  collides(me, them) { // this runs when we collide with another object
-    if (e.pressedKey(" ")) {
-      // here we are checking if we are standing on the floor
-      if (them.hasTag("floor")) me.vy -= 19;
-    }
-  },
-  update(me) {
-    me.vy += 2;
-
-    if (e.heldKey("ArrowLeft")) me.x -= 3;
-    if (e.heldKey("ArrowRight")) me.x += 3;
-  }
-})
-
-e.add({
-  tags: ["floor"], // we can add tags so we can reference objects
-  solid: true,
-  x: -6,
-  y: 283,
-  sprite: floor,
-  scale: 11,
-})
-
-e.start();
-```
-
----
-
-Add platforms:
-
-<img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149367516-7edb2780-edbd-4977-9a07-dcfbf47fcf93.gif">
-
-```js
-const e = createEngine(gameCanvas, 300, 300);
-const ctx = e.ctx;
-
-e.add({
-  tags: ["player"],
-  sprite: test_sprite,
-  scale: 3,
-  solid: true,
-  x: 50,
-  y: 16,
-  collides(me, them) {
-    if (them.hasTag("platform")) me.vx = them.vx;
-    
-    if (e.pressedKey(" ")) {
-      if (them.hasTag("platform")) me.vy -= 11;
-    }
-  },
-  update: (me) => {
-      me.vy += 0.4;
-  
-      if (e.heldKey("ArrowLeft")) me.x -= 3;
-      if (e.heldKey("ArrowRight")) me.x += 3;
-  },
-})
-
-// we can use a function to make multiple instances of an object
-const addPlatform = (x, y) => e.add({
-  tags: ["platform"],
-  sprite: floor,
-  scale: 3,
-  solid: true,
-  x: x,
-  y: y,
-  vx: -1,
-  bounce: -1, // bounce determines how much velocity changes when we collide with something
-  update: (me) => {
-      if (me.x < 0) me.vx = 1;
-      if (me.x + me.width > e.width) me.vx = -1
-  },
-})
-
-addPlatform(50, 200);
-addPlatform(20, 100);
-
-e.start();
-```
-
----
-
-Collections:
-
-<img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149369879-7d384b3a-2f15-4816-a59e-76b56bb9a944.gif">
-
-```js
-const e = createEngine(gameCanvas, 300, 300);
-const ctx = e.ctx;
-
-e.add({
-  tags: ["player"],
-  sprite: test_sprite,
-  scale: 2,
-  x: 150,
-  y: 50,
-  update: (me) => {
-    if (e.heldKey("ArrowUp")) me.y -= 3;
-    if (e.heldKey("ArrowDown")) me.y += 3;
-  },
-})
-
-e.add({
-  tags: ["target"],
-  sprite: floor,
-  scale: 3,
-  x: 112,
-  y: 232,
-  collides(me, them) {
-    if (them.hasTag("player")) {
-      e.remove("target"); // we can remove objects by their tag name
-    }
-  }
-})
-
-e.start();
-```
-
----
-
-Add a background:
-
-<img width="333" alt="Screen Shot 2022-01-13 at 11 21 43 AM" src="https://user-images.githubusercontent.com/27078897/149368356-c343a214-0d31-4d5f-a2d4-d0575b18047b.png">
-
-```js
-const e = createEngine(gameCanvas, 300, 300);
-
-e.add({
-  update() { // we can also draw on the game canvas
-    e.ctx.fillStyle = "pink";
-    e.ctx.fillRect(0, 0, e.width, e.height);
-  }
-})
-
-e.start();
-```
-
----
-
-Refer to the following example for all the available object properties:
-
-```js
-e.add({
-  tags: ["tag-name"], // assign tags to later reference object
-  solid: true, // add solid property to make object bump into other solids
-  x: 178, // x position
-  y: 126, // y position
-  vx: 1, // x velocity
-  vy: 3, // y velocity
-  sprite: ball,
-  scale: 2,
-  rotate: 90, // rotate by some degrees
-  bounce: 1, // how much velocity is lost on collisions
-  origin: [0, 0], // this moves the origin of the object
-  collides(me, them) { // function run on collision
-    if (them.hasTag("tag-name")) {} // check tag names to figure out what you've collided with
-  },
-  update: (me) => {
-    if (e.heldKey("ArrowDown")) me.y += 3; // add key inputs
-    if (e.pressedKey("ArrowUp")) me.y -= 3; // add key inputs
-
-    if (me.x < 0) {
-      e.end(); // end the game
-      e.addText("Game Over", e.width/2, e.height/2, { color: "blue", size: 32 }) // add text
-    }
-  },
-})
-```
-
-## Tiny Games
-
-[Pong-ish](https://game-lab.hackclub.dev/?id=bd5087c16160988e4d2e27ca2c6157f9)
-
-<img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149371012-faf3e45f-9d3a-47d4-831b-566d9171d2bd.gif">
-
----
-
-[Crappy Birds](https://game-lab.hackclub.dev/?id=c66c509f01eb83f7bc67053818b75159)
-
-<img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/149380918-a1855ab3-cc2d-4a9a-adc0-d5316d6f17ba.gif">
-
----
-
-[Brick Broken](https://game-lab.hackclub.dev/?id=8f18ab06c1a8f5267e6f4a6b3bec06f5)
-
-<img width="345" alt="Screen Shot 2022-01-13 at 10 50 41 AM" src="https://user-images.githubusercontent.com/27078897/150606449-5b73d7fe-f2d3-432f-9cc5-346c20919ec8.gif">
-
-## My game used to work but now it doesn't?
-
-This could be because you made your game in an old version of Game Lab.
-
-Game Lab is in active development. We want to make sure you can play the games you make even if they aren't compatible with the newest version of the editor. If you made a game and need to run it on an old version of Game Lab you can use this site: 
-
-`https://game-lab-versions.hackclub.dev/[SEMANTIC_VERSION]/index.html`
-
-For example the first release of Game Lab is available here: 
-
-https://game-lab-versions.hackclub.dev/0.1.0/index.html
-
+***Only teenagers and younger can receive Sprigs!*** All are welcome to submit to the [gallery](https://sprig.hackclub.com/gallery) though.
 
 ## Philosophy
 
-As we said before people learn best when they make things that they care about which they can share with others. This learning philosophy is called [constructionism](https://en.wikipedia.org/wiki/Constructionism_(learning_theory)) and Game Lab is a type of microworld. It's an environment where you can discover programming by using it to express yourself. 
+People learn best when they make things that they care about, which they can then share with others. This type of learning philosophy is called constructionism, and Sprig is a type of microworld. A microworld is an environment where you can discover programming by using it to express yourself. 
 
-Game Lab could also be considered a minimalist [fantasy console](https://en.wikipedia.org/wiki/Fantasy_video_game_console#:~:text=A%20fantasy%20video%20game%20console,their%20fictional%20hardware%20will%20have.) sort of like [Pico-8](https://www.lexaloffle.com/pico-8.php).
+## Tutorials
+
+To get started you can follow [this challenge in the editor](https://sprig.hackclub.com/gallery/getting_started), check out some [Sprig workshops](https://workshops.hackclub.com#sprig) or [Sprig jams](https://jams.hackclub.com/batch/sprig).
 
 ## Development
 
-Join `#gamelab-dev` on the [Hack Club Slack](https://hackclub.com/slack/) to join the development discussion
+Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) where you can join the development discussion and ask for help. We also have other channels for Sprig specific stuff:
 
-The Hack Club Game Lab requires a local HTTP server to run in development. Here's how to get it running on your own machine.
+- `#sprig-platform`: For discussion of development of the Sprig platform as a whole. 
+- `#sprig-gaming-controller`: Building a case for the Sprig console to make it a portable gaming controller.
+- `#sprig-emulator`: Development of a Gameboy emulator for Sprig.
+- `#sprig-multiplayer`: Development of multiplayer support.
+- `#sprig-lora`: Development of Sprig-Lora communicator.
+- `#sdsprig`: Development of Sprig loading from an SD Card.
+- `#sprig-minecraft`: Development of Minecraft for Sprig.
+- `#sprig-ios-app`: Development of iOS app.
+- `#sprig-engagement`: Development of a bot to post every new game to `#sprig`.
+- `#vs-sprig`: Development of Sprig extension for VS Code.
+- `#stationary-sprig`: Making Sprig a home console.
+- `#spriggy-doom`: Development of a clone of Doom.
+- `#sprigos-development`: Development of the sprigOS, the sprig game that acts like an operating system.
+- `#spade`: For discussions of Spade firmware/OS of the Sprig.
+- `#spaint`: Make art with your sprig with sPaint and share.
 
-Clone repo:
+Learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs). 
 
-    $ git clone https://github.com/hackclub/game-lab
+Sprig's editor and site pages are built with [Astro](https://astro.build/) using [Preact](https://preactjs.com/) for rendering. Perhaps somewhat unusually, we predominantly use [Preact Signals](https://preactjs.com/guide/v10/signals/) for state management. The project structure is as follows:
 
-Start a local HTTP server inside the repo:
+- `src/pages/` contains all the site's main pages and API routes. In general, `.ts` files are API routes and `.astro` files are pages. All pages are server-side rendered on demand and can make database calls and such.
+- `src/components/` contains all the components used in the editor and site pages. Most components will have accompanying `.module.css` files which contain vanilla CSS stylesheets which are scoped to the component. These "CSS modules" can be imported as a JS object containing referencable class names.
+- `src/lib/` contains all the support code. Currently this is a mix of server and client code.
+- `src/legacy/` has a bunch of old code from the v1 version of the editor which is kept for ease of porting the home and Get a Sprig pages. Since Astro lets us combine multiple frameworks, we're also using old Svelte code in some places.
+- `docs/` contains documentation on how to use Sprig, including `docs.md` which contains the help file embedded in the editor.
+- `public/` contains static assets which are directly served.
+- `src/global.css` and `src/components/standard-head.astro` contain code that's generally shared across all pages.
 
-    $ cd game-lab/
-    $ python3 -m http.server 3000
+Everything pushed to GitHub and all pull requests are automatically deployed on [Vercel](https://vercel.com/hackclub).
 
-And then go to http://localhost:3000 in your web browser, and it should work!
+### Prerequisites
+
+Things you'll want installed:
+
+- [Git](https://git-scm.com/)
+- [Node.js](https://nodejs.org/en/)
+- [Yarn](https://yarnpkg.com/)
+
+We use Firebase as a database. To develop login/saving related features locally, you'll likely want to [create a Firebase project](https://console.firebase.google.com/) for yourself. Then, create a service account, download the JSON file, and convert the contents to base64 ([link to a tool to easily do this](https://gchq.github.io/CyberChef/#recipe=JSON_Minify()To_Base64('A-Za-z0-9%2B/%3D'))).
+
+We recommend [Visual Studio Code](https://code.visualstudio.com/) as a code editor. You should be automatically prompted to install some recommended extensions when you open the project.
+
+### Project Setup
+
+In a terminal, clone the repo and install packages:
+
+```
+git clone https://github.com/hackclub/sprig/
+cd sprig
+yarn install
+```
+
+Next, you'll want to give Sprig access to the Firebase credentials, as well as some extra credentials that you can request from the @creds team on Slack. Complete the `.env.example` file with those credentials and rename it to `.env`.
+
+To start the dev server, run `yarn dev` and visit <http://localhost:3000> in your web browser! Please create a GitHub issue if you cannot get something to work properly.
+
+### Engine Development
+
+All *engine code* (responsible for running games, playing tunes, etc.) is in a different repo: <https://github.com/hackclub/sprig-engine/>.
+
+If you want to work on the engine and test out your changes in the context of this repo, you'll want to use a feature called linking.
+
+First set up the engine repo:
+
+```
+git clone https://github.com/hackclub/sprig-engine/
+cd sprig-engine
+yarn install
+yarn link
+```
+
+Then, in this website's repo:
+
+```
+yarn link sprig
+```
+
+Now, run `yarn dev` in the engine repo to start the TypeScript build process.
+
+## Acknowledgements 
+
+The Sprig was developed by a team at Hack Club with assistance from Brian Silverman (who helped develop Scratch and the precursor to Lego Mindstorms), Vadim Gerasimov (engineer at Google who helped create Tetris when he was 15), and Quentin Bolsée (researcher at MIT and Vrije University Brussels), and dozens contributions from teenage open-source developers!
+
+We're also grateful for amazing open-source projects that make this possible like [Kaluma](https://kalumajs.org/), [JerryScript](https://jerryscript.net/), [uhtml](https://github.com/WebReflection/uhtml), and [CodeMirror](https://codemirror.net/).
+
+## Responsibilities
+
+Please refer to [this document](./RESPONSIBILITIES.md) for a list of current team members who are accountable for maintaining certain aspects of the Sprig platform.
 
 ## License
 
-The Hack Club Game Lab is open source and licensed under the [MIT License](./LICENSE). Fork, remix, and make it your own! Pull requests and other contributions greatly appreciated.
+The Hack Club Sprig is open source and licensed under the [MIT License](./LICENSE). Fork, remix, and make it your own! Pull requests and other contributions greatly appreciated.

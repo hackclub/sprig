@@ -1,0 +1,47 @@
+.popup {
+	background: var(--bg-surface);
+	z-index: 99;
+	padding: 14px;
+	position: absolute;
+	width: 340px;
+	top: calc(48px + 4px);
+	right: 8px;
+	box-shadow: 0 4px 8px 0 #0000005e;
+}
+
+.popup, .popup > form {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	align-items: flex-start;
+}
+
+.popup > form {
+	width: 100%;
+}
+
+.popup p {
+	margin: 0;
+	line-height: var(--line-height-copy);
+	font-size: 0.9rem;
+}
+
+.inputRow {
+	display: flex;
+	flex-direction: row;
+	gap: 6px;
+	width: 100%;
+}
+
+.inputRow :global(input) {
+	flex: 1;
+}
+
+p.muted {
+	color: var(--fg-muted);
+	font-size: 0.8rem;
+}
+
+.error {
+	color: var(--error);
+}

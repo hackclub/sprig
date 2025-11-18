@@ -1,0 +1,45 @@
+---
+import { recaptchaKeyId } from '../lib/recaptcha'
+
+interface Props {
+	title: string | null
+	socialImage?: string
+}
+
+const { title, socialImage } = Astro.props as Props
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site)
+const image = socialImage ?? 'https://sprig.hackclub.com/stories-tiny/sprig-front.jpeg'
+---
+
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='icon' href='/favicon.png'>
+
+<link rel='preconnect' href='https://fonts.googleapis.com' />
+<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+<link href='https://fonts.googleapis.com/css2?family=Fira+Mono&family=Inter:wght@400;700&display=swap' rel='stylesheet' />
+
+<title>{title ? `${title} | Sprig` : 'Sprig'}</title>
+<link rel='canonical' href={canonicalUrl} />
+<meta property='og:title' content={title} />
+<meta property='og:site_name' content='Sprig' />
+<meta
+	name='description'
+	content='The best way to learn is by making things that you care about and sharing them with other people. Check out games created by Hack Clubbers.'
+/>
+<meta
+	property='og:description'
+	content='The best way to learn is by making things that you care about and sharing them with other people. Check out games created by Hack Clubbers.'
+/>
+<meta name='keywords' content='game, sprig, hack club' />
+<meta name='author' content='@hackclub' />
+<meta name='twitter:creator' content='@hackclub' />
+<meta name='theme-color' content='#0a0a16' />
+<meta property='og:url' content={canonicalUrl} />
+<meta property='og:type' content='website' />
+<meta property='og:image' content={image} />
+<meta property='twitter:image' content={image} />
+<meta name='twitter:card' content='summary_large_image'>
+
+<script defer data-domain='sprig.hackclub.com' src='https://plausible.io/js/plausible.js' />
+<script defer src={`https://www.google.com/recaptcha/enterprise.js?render=${recaptchaKeyId}`}></script>

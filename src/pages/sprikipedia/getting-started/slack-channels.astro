@@ -1,0 +1,36 @@
+---
+import '../../../global.css'
+import Categories from '../../../layouts/categories.astro'
+import Outside from '../../../components/spriki-components/Outside.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+<Categories name={data["start.categories.name.slack"]} title={data["start.categories.title.slack"]} >
+<div class="docs-preview">
+    <Outside
+    links="hackclub.com/slack/"
+    name="Hack Club Slack"
+    description="Join Hack Club Slack!" />
+</div>
+<h2>Slack channels:</h2>
+<p>#sprig-platform: For discussion of development of the Sprig platform as a whole.</p>
+<p>#sprig-gaming-controller: Building a case for the Sprig console to make it a portable gaming controller.</p>
+<p>#sprig-emulator: Development of emulator.</p>
+<p>#sprig-multiplayer: Development of multiplayer support.</p>
+<p>#sprig-lora: Development of Sprig-Lora communicator.</p>
+<p>#sdsprig: Development of Sprig loading from an SD Card.</p>
+<p>#sprig-minecraft: Development of Minecraft for Sprig.</p>
+<p>#sprig-ios-app: Development of iOS app.</p>
+<p>#sprig-engagement: Development of a bot to post every new game to #sprig.</p>
+<p>#vs-sprig: Development of Sprig extension for VS Code.</p>
+<p>#stationary-sprig: Making Sprig a home console.</p>
+<p>#spriggy-doom: Development of a clone of Doom.</p>
+<p>#sprigos-development: Development of the sprigOS, the sprig game that acts like an operating system.</p>
+<p>#spade: For discussions of Spade firmware/OS of the Sprig.</p>
+<p>#spaint: Make art with your sprig with sPaint and share.</p>
+</Categories>

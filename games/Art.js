@@ -1,0 +1,414 @@
+/*
+@title: Art
+@description: "Art" is a sandbox game by Leonard (Omay) where players can create pixel art by selecting and applying colors on a grid. Players can move a cursor around the grid to draw, switch colors, and reset their artwork. The game takes inspiration from a similar painting game and emphasizes creative expression within defined boundaries.
+@author: Leonard (Omay)
+@tags: ['sandbox']
+@addedOn: 2022-11-06
+
+Inspired by this game: https://editor.sprig.hackclub.com/?file=https://raw.githubusercontent.com/hackclub/sprig/main/games/Paint_IT.js
+Border is the color you have selected.
+
+WASD to move the cursor
+I and K to switch color
+J to draw
+L to reset
+*/
+let mapWidth = 10*8;
+let mapHeight = 8*8;
+
+const colors = "ascdefghijklmno".split('');
+
+setLegend(
+  ["p", bitmap`
+0000000000000000
+0000000000000000
+0022222222222200
+0022222222222200
+0022........2200
+0022........2200
+0022........2200
+0022........2200
+0022........2200
+0022........2200
+0022........2200
+0022........2200
+0022222222222200
+0022222222222200
+0000000000000000
+0000000000000000`],
+  ["a", bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
+  ["s", bitmap`
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL`],
+  ["c", bitmap`
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111`],
+  ["d", bitmap`
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222`],
+  ["e", bitmap`
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333`],
+  ["f", bitmap`
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC`],
+  ["g", bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777`],
+  ["h", bitmap`
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555`],
+  ["i", bitmap`
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666`],
+  ["j", bitmap`
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF`],
+  ["k", bitmap`
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444`],
+  ["l", bitmap`
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD`],
+  ["m", bitmap`
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888`],
+  ["n", bitmap`
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH`],
+  ["o", bitmap`
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999`],
+  ["q", bitmap`
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................`],
+  ["r", bitmap`
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................`]
+);
+setSolids(["p", "r"]);
+let level = ``;
+for(var i = 0; i < mapHeight; i++){
+  for(var j = 0; j < mapWidth; j++){
+    if(i === 0 || i === mapHeight-1 || j === 0 || j === mapWidth-1){
+      level += "r";
+    }else{
+      level += "q";
+    }
+  }
+  level += "\n";
+}
+setMap(level);
+addSprite(1, 1, "p");
+let current = "a";
+let confirmDel = false;
+let hideDel = false;
+function doBorder(){
+  var border = tilesWith("r");
+  for(var i = 0; i < border.length; i++){
+    var currentB = border[i];
+    var found = false;
+    for(var j = 0; j < currentB.length; j++){
+      if(colors.includes(currentB[j].type)){
+        currentB[j].type = current;
+        found = true;
+      }
+    }
+    if(!found){
+      addSprite(currentB[0].x, currentB[0].y, "a");
+    }
+  }
+}
+function mod(n, m) {
+  return (n<0)?(m+n):((n>=m)?(n-m):(n));
+}
+onInput("w", () => {
+  getFirst("p").y -= 1
+});
+onInput("a", () => {
+  getFirst("p").x -= 1
+});
+onInput("s", () => {
+  getFirst("p").y += 1
+});
+onInput("d", () => {
+  getFirst("p").x += 1
+});
+onInput("i", () => {
+  current = colors[mod(colors.indexOf(current)+1, colors.length)];
+});
+onInput("k", () => {
+  current = colors[mod(colors.indexOf(current)-1, colors.length)];
+});
+onInput("j", () => {
+  var tile = getTile(getFirst("p").x, getFirst("p").y);
+  for(var i = 0; i < tile.length; i++){
+    if(colors.includes(tile[i].type) || tile[i].type === "q"){
+      tile[i].type = current;
+    }
+  }
+});
+onInput("l", () => {
+  if(!confirmDel){
+    addText("Are you sure you\nwant to delete\nyour work? Press L\nagain to confirm.\nOtherwise, press\nany other button", {x: 1, y:1});
+    confirmDel = true;
+  }else{
+    setMap(level);
+    doBorder();
+    addSprite(1, 1, "p");
+    clearText();
+  }
+});
+doBorder();
+afterInput(() => {
+  doBorder();
+  if(hideDel){
+    clearText();
+    confirmDel = false;
+  }
+  if(confirmDel){
+    hideDel = true;
+  }else{
+    hideDel = false;
+  }
+});

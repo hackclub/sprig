@@ -1,0 +1,68 @@
+---
+import '../global.css'
+import { getSession } from '../lib/game-saving/account'
+import Editor from '../components/big-interactive-pages/editor'
+import StandardHead from '../components/standard-head.astro'
+import { signal } from '@preact/signals'
+import { PersistenceState, reviewState } from '../lib/state'
+import { mobileUserAgent } from '../lib/utils/mobile'
+import MobileUnsupported from '../components/popups-etc/mobile-unsupported'
+import UploadWarningModal from '../components/popups-etc/upload-failed-warning'
+import { showUploadWarningModal } from '../lib/upload'
+
+// Redirects for legacy Sprig URLs
+const galleryRegex = /^https:\/\/raw\.githubusercontent\.com\/hackclub\/sprig\/main\/games\/(.+)\.js$/
+const galleryMatches = Astro.url.searchParams.get('file')?.match(galleryRegex) ?? null
+if (galleryMatches) return Astro.redirect(`/gallery/${galleryMatches[1]}`, 302)
+if (Astro.url.searchParams.has('id'))
+	return Astro.redirect(`/legacy-bucket/${Astro.url.searchParams.get('id')}`, 302)
+
+const tempGame = Astro.cookies.get('sprigTempGame').value
+if (tempGame) return Astro.redirect(`/~/${encodeURIComponent(tempGame)}`, 302)
+
+const session = await getSession(Astro.cookies)
+if (session?.session.full) return Astro.redirect('/~', 302)
+
+const persistenceState = signal<PersistenceState>({
+	kind: 'IN_MEMORY',
+	showInitialWarning: true,
+	stale: false,
+	session: null
+})
+const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
+
+// Check for review mode
+const reviewMode = Astro.url.searchParams.get('review') === 'true'
+const reviewCode = reviewMode ? Astro.url.searchParams.get('code') : null
+
+// If no session and not in review mode, redirect to login
+if (!session?.session.full && !reviewMode) {
+	return Astro.redirect('/login', 302)
+}
+
+// Set review state
+if (reviewMode && reviewCode) {
+	reviewState.value = {
+		isReviewMode: true,
+		reviewCode: decodeURIComponent(reviewCode)
+	}
+}
+---
+
+<html lang='en'>
+	<head>
+		<StandardHead title='Editor' />
+	</head>
+	<body>
+		<Editor
+			client:load
+			persistenceState={persistenceState}
+			cookies={{
+				outputAreaSize: Astro.cookies.get('outputAreaSize').number(),
+				hideHelp: Astro.cookies.get('hideHelp').boolean()
+			}}
+		/>
+		{isMobile ? <MobileUnsupported /> : null}
+		<UploadWarningModal client:load showWarning={showUploadWarningModal} />
+	</body>
+</html>

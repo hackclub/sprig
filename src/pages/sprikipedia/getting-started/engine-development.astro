@@ -1,0 +1,25 @@
+---
+import '../../../global.css'
+import Categories from '../../../layouts/categories.astro'
+import Code from '../../../components/spriki-components/Code.astro'
+
+const data = (
+  (await Astro.glob(`/src/translations/*.json`)).find(
+    (translation) =>
+      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
+  ) || {}
+).default;
+---
+<Categories name={data["start.categories.name.engine-dev"]} title={data["start.categories.title.engine-dev"]} >
+<p>All engine code (responsible for running games, playing tunes, etc.) is in a different repo: https://github.com/hackclub/sprig-engine/.</p>
+<p>If you want to work on the engine and test out your changes in the context of this repo, you'll want to use a feature called linking.</p>
+<p>First set up the engine repo:</p>
+
+<Code content="git clone https://github.com/hackclub/sprig-engine/ <br /> cd sprig-engine <br /> yarn install <br /> yarn link" />
+    
+<p>Then, in this website's repo:</p>
+
+<Code content="yarn link sprig" />
+
+<p>Now, run <code>yarn dev</code> in the engine repo to start the TypeScript build process.</p>
+</Categories>

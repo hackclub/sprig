@@ -1,0 +1,261 @@
+html { box-sizing: border-box; }
+body { margin: 0; }
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+	scrollbar-color: lighten($base-background, 20%) $base-background;
+}
+
+::selection {
+	color: black;
+	background-color: white;
+}
+
+a {
+	text-decoration: none;
+}
+
+.btn {
+	font-family: $pixel-text-font;
+	font-size: 1.4rem;
+	margin: 4px;
+	display: inline-block;
+	color: $button-inactive-color;
+	background: $button-inactive-background;
+	position: relative;
+	left: -4px;
+
+	padding: 6px 12px;
+	text-align: center;
+	display: inline-flex;
+	align-items: center;
+	user-select: none;
+	border-style: solid;
+	border-width: 4px;
+
+	border-image-slice: 2;
+	border-image-width: 2;
+	border-image-source: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" ?><svg version="1.1" width="5" height="5" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 h1 v1 h-1 z M1 2 h1 v1 h-1 z M3 2 h1 v1 h-1 z M2 3 h1 v1 h-1 z" fill="' + $button-text-border + '" /></svg>');
+	border-image-outset: 2;
+
+	&, * {
+	cursor: pointer;    
+	}
+
+	&.big {
+	font-size: 1.6rem;
+	padding: 10px 16px;
+	}
+
+	&.active {
+	color: $button-text-border;
+	background: $button-background;
+
+	&::after {
+		box-shadow: inset 4px 4px $button-highlight, inset -4px -4px $button-shadow;
+	}
+
+	&:hover {
+		background: $button-hover-background;
+
+		&::after {
+		box-shadow: inset 4px 4px $button-hover-highlight, inset -6px -6px $button-shadow;
+		}
+	}
+	}
+
+	&::after {
+	position: absolute;
+	top: -4px;
+	left: -4px;
+	right: -4px;
+	bottom: -4px;
+	content: '';
+	box-shadow: inset 4px 4px $button-inactive-highlight, inset -4px -4px $button-inactive-shadow;
+	box-sizing: border-box;
+	}
+
+	&:hover {
+	background: $button-inactive-hover-background;
+	transform: scale(1.05);
+	text-decoration: none;
+
+	&::after {
+		box-shadow: inset 4px 4px $button-inactive-hover-highlight, inset -6px -6px $button-inactive-hover-shadow;
+	}
+	}
+}
+
+.filtering {
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+}
+
+.select-btn {
+	padding: 0;
+	isolation: isolate;
+	display: block; 
+
+	select {
+	width: 100%;
+	border: none;
+	background: none;
+	font-size: inherit;
+	z-index: 1;
+	}
+
+	&::after {
+	z-index: -1;
+	}
+}
+
+.select-btn select, .searchbar {
+	outline: none;
+	text-align: left;
+	font-family: inherit;
+	color: inherit;
+	line-height: inherit;
+	padding: 6px 12px;
+	background-color: #767E8F;
+}
+
+.searchbar {
+	cursor: initial;
+	display: block;
+}
+
+.searchbar:hover {
+	transform: none;
+	background: $button-inactive-background;
+}
+
+.searchbar::placeholder {
+	color: #b4bbc6;
+}
+
+@media (max-width: 1020px) {
+	.searchbar {
+	display: none;
+	}
+}
+
+.logo {
+	position: absolute;
+	top: 0;
+	right: 30px;
+	background-size: contain;
+	flex-shrink: 0;
+	z-index: 9999;
+	transition: cubic-bezier(0.375, 0, 0.675, 1) transform;
+	transform-origin: top left;
+
+	img {
+	width: 112px;
+	height: auto;
+	}
+
+	&:hover,
+	&:focus {
+	animation: waveFlag 0.5s linear infinite alternate;
+	}
+}
+
+.sprig {
+	&-logo {
+	position: absolute;
+	height: auto;
+	left: 40px;
+	top: 20px;
+	width: 6rem;
+	z-index: 9999;
+
+	&:hover {
+		transform: scale(1.05);
+	}
+	}
+
+	&-dino {
+	height: auto;
+	position: fixed;
+	left: 30px;
+	width: 4rem;
+	bottom: -3.8rem;
+	transition: all 0.5s linear;
+
+	&:hover {
+		bottom: 0;
+	}
+	}
+}
+
+@keyframes waveFlag {
+	from {
+	transform: rotate(0deg);
+	}
+
+	to {
+	transform: rotate(-5deg);
+	}
+}
+
+@media (max-width: 650px) {
+	.logo { display: none; }
+}
+
+@media (max-width: 450px) {
+	.btn.active.top {
+		margin-bottom: 10px;
+	}
+}
+
+@media (max-width: $breakpoint-2) {
+	.btn {
+	font-size: 1.6rem;
+	}
+
+	.logo img {
+	width: 128px;
+	height: auto;
+	}
+}
+
+@media (max-width: $breakpoint-1) {
+	.btn {
+	font-size: 1.4rem;
+	}
+}
+
+@media (resolution: 1.5dppx) {
+	p {
+	font-size: 1.3rem;
+	}
+
+	.btn {
+	font-size: 1.3rem;
+	}
+}
+
+::-webkit-scrollbar {
+	height: 10px;
+	width: 10px;
+}
+
+::-webkit-scrollbar-corner {
+	background: $base-background;
+}
+
+::-webkit-scrollbar-track {
+	background: $base-background;
+}
+
+::-webkit-scrollbar-thumb {
+	background: lighten($base-background, 20%);
+	border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: lighten($base-background, 30%);
+}

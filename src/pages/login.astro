@@ -1,0 +1,25 @@
+---
+import '../global.css'
+import { getSession } from '../lib/game-saving/account'
+import Login from '../components/big-interactive-pages/login'
+import StandardHead from '../components/standard-head.astro'
+
+const to = Astro.url.searchParams.get('to') ?? '/~'
+const session = await getSession(Astro.cookies)
+if (session?.session.full) return Astro.redirect(to, 302)
+const email = Astro.url.searchParams.get('email') ?? session?.user.email ?? ''
+---
+
+<html lang='en'>
+	<head>
+		<StandardHead title='Log In' />
+	</head>
+	<body>
+		<Login
+			client:load
+			to={to}
+			email={email}
+			session={session}
+		/>
+	</body>
+</html>
