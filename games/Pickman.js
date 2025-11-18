@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Pickman!
 @author: overcheer
 @description: Wake up! You have been locked away in an (semi) abandoned mine for hundreds of years. Luckily you're prepared with a safety helmet, a pick, and a bad sense of humour. Can you get out and touch some grass? Nobody knows...
-@tags: [game, pacman, adventure]
+@tags: [game, mine, adventure]
 @addedOn: 2025-18-10
 */
 
@@ -31,8 +31,8 @@ const tickSprite = "t";
 const crossSprite = "c";
 const gsparkle = "s";
 const ksparkle = "q";
-const trap = "h"; // for hidden :) 
-const heartSprite = "v"; 
+const trap = "h"; // for hidden :)
+const heartSprite = "v";
 const pressurePlate = "j";
 const faded= "x";
 const boulderOverlay = "i";
@@ -91,7 +91,7 @@ setLegend(
 0000000330000000
 0000000000000000` ],
 
-  
+
   [ player, bitmap`
 ................
 .....66666......
@@ -210,7 +210,7 @@ setLegend(
 .12222222222221.
 .12222222222221.
 .11111111111111.
-................`],  
+................`],
   [ fog, bitmap`
 0000000000000000
 0000000000000000
@@ -313,7 +313,7 @@ L000000LL0000000
 ..111LLLLL111...
 ...111111111....
 ....1111111.....` ],
-   
+
   [ gem, bitmap`
 L11LLLLLLLLLLLL1
 LL1LLL1LLLL107LL
@@ -330,8 +330,8 @@ LLLL1LLLLLL1LLLL
 0LLLLLL01LLLLL10
 7LLLLLL10LLLLLLL
 7LLLLLLL7L11LLLL
-LLL11LLLLLLLLL11`],   
-   
+LLL11LLLLLLLLL11`],
+
   [ faded, bitmap`
 L0000000000001L0
 L0000000000001L0
@@ -463,8 +463,8 @@ w.........z....w
 wwwwwwwwwwwwwwww`,
 ]
 leal = level+1
- const base = 1 + (leal - 1) * (4 / 3);           
-  const rand = Math.floor(Math.random() * 3) - 1;  
+ const base = 1 + (leal - 1) * (4 / 3);
+  const rand = Math.floor(Math.random() * 3) - 1;
   const enemyCalc = Math.max(1, Math.round(base + rand));
 
 
@@ -533,22 +533,22 @@ addGem();
 console.log("Current Level: "+ level);
 
 
-function drawFog() { 
-  const p = getFirst(player); 
+function drawFog() {
+  const p = getFirst(player);
   const here = getTile(p.x, p.y);
-  for (let s of getAll(fog)) s.remove() 
-    for (let y = 0; y < 16; y++) { 
-    for (let x = 0; x < 16; x++) { 
-      const here = getTile(x, y); 
-      if (seen[y][x]) { 
-        let want = overlay[y][x]; 
-        if (!want) { 
-          want = overlay[y][x] = Math.random() > 0.5 ? tile2 : tile1; } 
-        const hasCorrect = here.some(s => s.type === want); 
-        const hasAnyOverlay = here.some(s => s.type === tile1 || s.type === tile2); 
+  for (let s of getAll(fog)) s.remove()
+    for (let y = 0; y < 16; y++) {
+    for (let x = 0; x < 16; x++) {
+      const here = getTile(x, y);
+      if (seen[y][x]) {
+        let want = overlay[y][x];
+        if (!want) {
+          want = overlay[y][x] = Math.random() > 0.5 ? tile2 : tile1; }
+        const hasCorrect = here.some(s => s.type === want);
+        const hasAnyOverlay = here.some(s => s.type === tile1 || s.type === tile2);
         if (!hasCorrect) { if (hasAnyOverlay) { for (const s of here) {
-          if (s.type === tile1 || s.type === tile2){ s.remove()}; } } 
-                           addSprite(x, y, want); } } else { addSprite(x, y, fog); 
+          if (s.type === tile1 || s.type === tile2){ s.remove()}; } }
+                           addSprite(x, y, want); } } else { addSprite(x, y, fog);
                                                            } } } }
 
 
@@ -574,20 +574,20 @@ function updateSeen(x, y) {
 
 
 function checkGem(newX,newY){
-  
-  
+
+
   const t = getTile(newX, newY);
   const g = t.find(s => s.type === gem);
    if (g) {
-     
+
      tickGem = true;
      g.remove();
-      
-      
+
+
 }
     }
 onInput("j", () => {
-  
+
   const currentLevel = levels[level]; // get the original map of the level
 
   // make sure the level exists before we load it
@@ -599,12 +599,12 @@ onInput("j", () => {
   }
 });
 function checkTrap(newX,newY){
-  
-  
+
+
   const t = getTile(newX, newY);
   const g = t.find(s => s.type === trap);
    if (g) {
-     
+
      lives = lives -1;
      drawFog();
      const currentLevel = levels[level];
@@ -613,22 +613,22 @@ function checkTrap(newX,newY){
     setMap(currentLevel);
   }
      g.remove();
-      
-      
+
+
 }
     }
 
 function checkKey(newX,newY){
-  
-  
+
+
   const t = getTile(newX, newY);
   const k = t.find(s => s.type === key);
    if (k) {
-     
+
      tickKey = true;
      k.remove();
-      
-      
+
+
 }
     }
 
@@ -659,7 +659,7 @@ function movePlayer(dx, dy) {
       }
     }
 
-  
+
 
 const start = getFirst(player)
 updateSeen(start.x, start.y)
@@ -706,12 +706,12 @@ const playback = playTune(hit)
 
 let text = "Score:" + score
 
-addText("Gem:", { 
+addText("Gem:", {
         x: 4,
         y: 15,
         color: color`7`
       })
-addText("Key:", { 
+addText("Key:", {
         x: 11,
         y: 15,
         color: color`6`
@@ -722,27 +722,27 @@ onInput("a", () => movePlayer(-1, 0))
 onInput("d", () => movePlayer(1, 0))
 addSprite(6, 15, crossSprite) // adds ----------------
 addSprite(13, 15, crossSprite)
-function addgText(){  
-      addText("Gem:", { 
+function addgText(){
+      addText("Gem:", {
         x: 4,
         y: 15,
         color: color`7`
       });}
-function addlText(){  
-      addText("Lives:", { 
+function addlText(){
+      addText("Lives:", {
         x: 9,
         y: 0,
         color: color`3`
       });}
-function addLevelText(){  
-      addText("LVL:"+(level+1) , { 
+function addLevelText(){
+      addText("LVL:"+(level+1) , {
         x: 2,
         y: 0,
         color: color`2`
       });}
-function addkText(){  
+function addkText(){
 
-addText("Key:", { 
+addText("Key:", {
         x: 11,
         y: 15,
         color: color`6`
@@ -754,7 +754,7 @@ setInterval(() => {
 }, 800);
 addLevelText()
 setInterval(() => {
-  
+
   for (const s of getAll(gsparkle)) s.remove();
   for (const g of getAll(gem)) {
     if (chance < 0.5) {
@@ -786,10 +786,10 @@ let yesd = false;
 setInterval(() => {
 
   if (yesd){addText("FIND THE KEY!", {x: 4, y: 4, color: color`2`})}
-  
+
 }, 200);
 
-function gOverT(){clearText; addText("GAME OVER", { 
+function gOverT(){clearText; addText("GAME OVER", {
   x: 5,
   y: 5,
   color: color`3`
@@ -799,7 +799,7 @@ function gOverT(){clearText; addText("GAME OVER", {
 addlText();
 for (let i = 0; i < lives; i++){
     addSprite(13+i, 0, heartSprite);
-    
+
   }
 addTrap(enemyCalc)
 
@@ -809,7 +809,7 @@ function endGame() {
 
   try { if (typeof playback !== "undefined" && playback && playback.end) playback.end(); } catch(e) {};
   try { if (typeof gameOverPlayback !== "undefined" && gameOverPlayback && gameOverPlayback.end) gameOverPlayback.end(); } catch(e) {};
-  
+
   clearText();
   addText("GAME OVER", { x: 3, y: 4, color: color`3` });
 
@@ -858,19 +858,19 @@ if (covered.length >= 1) {
 
   }
 }
-  
+
   currentLevelB4 = levels[level];
   for (let i = 0; i < lives; i++){
     addSprite(13+i, 0, heartSprite);
-    
+
   }
-  
+
   if ((tilesWith(door, player).length>=1) && (tickKey === false)){
     console.log("tried to pass")
     yesd = true;}
   else{yesd = false}
-  
-  
+
+
   const gtx = 6, gty = 15;
   const ktx = 13, kty = 15;
   for (const s of [...getTile(gtx, gty)]) {
@@ -896,7 +896,7 @@ if (covered.length >= 1) {
   addLevelText()
   if (gameOver){gOverT()}
   const targetNumber = tilesWith(pressurePlate).length;
-  
+
 
   const numberCovered = tilesWith(pressurePlate, boulderOverlay).length;
   if (tilesWith(door, player).length === 1){
@@ -960,9 +960,9 @@ if (start) {
       playTune(winT)
     }
     }
-     else if (numberCovered!==targetNumber){addText("MOVE THE BOULDER", {x: 2, y: 4, color: color`2`})} 
+     else if (numberCovered!==targetNumber){addText("MOVE THE BOULDER", {x: 2, y: 4, color: color`2`})}
   }
-  
+
                                                 }
 });
 

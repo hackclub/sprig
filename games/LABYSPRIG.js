@@ -4,6 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: LabySprig
 @author: Robin Berchemin-Sirven
+@description: None
 @description : Make the phantom finds his way to the castle. It's dfferent from other labyrinth as, depending on the difficulty, you may not see the full map, or even see only your position so that you'll have to remember when you already went.
 @tags: ['labyrinth']
 @addedOn: 2025-09-14

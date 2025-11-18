@@ -2,7 +2,7 @@
 @title: Alien Blast
 @author: Aloys
 @description: A simple space shooter where you kill aliens before they reach you
-@tags: [alien, shooter, arcade]
+@tags: ["alien", "shooter", "arcade"]
 @addedOn: 2025-08-25
 */
 

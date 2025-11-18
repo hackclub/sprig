@@ -2,7 +2,7 @@
 @title: Block Dash
 @author: Vaughn
 @description: Geometry Dash remake in Sprig! Reach the end to win.
-@tags: [platformer]
+@tags: ["platformer"]
 @addedOn: 2025-09-18
 */
 

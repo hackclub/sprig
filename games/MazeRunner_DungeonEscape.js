@@ -1,6 +1,7 @@
 /*
 @title: Maze Runner (Dungeon Escape Edition)
 @author: Adya
+@description: None
 @tags: ['maze', 'runner', 'puzzle', 'action', 'escape']
 @addedOn: 2025-06-02
 */
