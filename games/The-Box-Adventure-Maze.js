@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Box Adventure Mazeddd
 @author: Logan
-@description:a fun maze for you and a friend 
-@tags: [#maze #puzzle]
+@description: a fun maze for you and a friend 
+@tags: ["maze", "puzzle"]
 @addedOn: 2025-09-10 
 
 To reset the game press W, A, S, D at the same time
