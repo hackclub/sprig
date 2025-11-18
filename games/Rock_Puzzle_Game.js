@@ -1,7 +1,7 @@
 /*
 @title:Rock_Puzzle_Game
 @author: Hadi Abbasi
-@description: Push rocks around to make your way to the exit
+@description: Push rocks around to make your way to the exit. Press J to reset level.
 @tags: []
 @addedOn: 2025-11-16
 */
@@ -83,9 +83,26 @@ L1L111111111111L
 setSolids([picker, player, rock])
 setPushables({
   [player]: [rock] })
-
+let level = 0
 
 const levels = [
+  map`
+....................
+..iiii..i..i.iiii...
+...ii...i..i.i.ii...
+...ii...iiii.ii.....
+...ii...i..i.iiii...
+....................
+..iiii.iiii..ii..i..
+..i....i..i.i..i.i..
+..i.ii.i..i.iiii.i..
+..iiii.iiii.i..i.iii
+................i...
+................i...
+...............iii..
+..p.............i...
+................g...
+....................`,
   map`
 ........r..r..r.....
 .........r..r.i.....
@@ -103,6 +120,15 @@ ii...ii..ri.i.pr..i.
 .i...i.r..r..r.rrr.i
 .i...i....rri......i
 gi...i......iiiiiiii`,
+  map`
+iiiiiiiiii
+.....r.rii
+.p..r.rr.i
+....r.r.gi
+....r.rr.i
+.....r.rii
+iiiiiiiiii
+iiiiiiiiii`,
   map`
 ....................
 .i...i..ii..i..i....
@@ -139,8 +165,13 @@ onInput("a", () => {
   getFirst(player).x -= 1
 })
 
+onInput("j", () => {
+  setMap(levels[level]);
+});
+
 afterInput(() => {
   if (tilesWith(player, goal).length > 0) {
-    setMap(levels[1])
+    level+=1
+    setMap(levels[level])
   }
 })
