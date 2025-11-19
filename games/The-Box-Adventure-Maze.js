@@ -581,8 +581,8 @@ function are_you_dead(player_tile){
 
 function addScoreText(score){
     addText(score.toString(), { 
-      x: 10,
-      y: 4,
+      x: 0,
+      y: 1,
       color: color`3`
     });
   
