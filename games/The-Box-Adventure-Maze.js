@@ -2,7 +2,7 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Box Adventure Mazeddd
+@title: Box Adventure Maze
 @author: Logan
 @description: a fun maze for you and a friend 
 @tags: ["maze", "puzzle"]
@@ -11,7 +11,9 @@ https://sprig.hackclub.com/gallery/getting_started
 To reset the game press W, A, S, D at the same time
 */
 
-let won = false
+let won = false;
+let score = 0;
+
 
 const player = "p"
 const player2 = "x" 
@@ -24,6 +26,7 @@ const fake2 = "k"
 const wall2 = "v"
 const block = "b"
 const deathblock = "d"
+const collectable = "c"
 setLegend(
   [ player, bitmap`
 CCCCCCC66CCCCCCC
@@ -195,6 +198,23 @@ LL111111111111LL
 LL111111111111LL
 LLLLLLLLLLLLLLLL
 LLLLLLLLLLLLLLLL` ],
+ [ collectable, bitmap`
+................
+................
+................
+.....6666666....
+....666666666...
+...66666666666..
+...6666FFF6666..
+...666F6666666..
+...666F6666666..
+...666F6666666..
+...6666FFF6666..
+...66666666666..
+....666666666...
+.....6666666....
+................
+................` ],
 )
 
 setSolids([player, player2, wall, glass, wall2, block])
@@ -206,7 +226,7 @@ const levels = [
 wwwwwwwwwwwwww
 p............w
 wwwww.wwww.w.w
-w...w.wwww.w.w
+wc..w.wwww.w.w
 www.w.wwww...w
 ww..w......w.w
 ww.ww..wwwww.w
@@ -227,7 +247,7 @@ w.w..wwww.wwww
 w.ww......wwww
 w..wwwwwwwwwww
 w......wwwwwww
-w.www..w...www
+w.www.cw...www
 w...wwww.w.www
 www......w...w
 wwwwwwwwwwwwew`,
@@ -235,7 +255,7 @@ wwwwwwwwwwwwew`,
 wwwwwwwwwwwwwwwwww
 www.............ww
 wwwwww.wwwwwwww.ww
-www.ww..wwwwwww.ww
+wwwcww..wwwwwww.ww
 www.www.......wpww
 www.www.wwwww..www
 www...w......w..ww
@@ -252,8 +272,8 @@ wwwwwwwwww.......w
 wwwwwwwwwwwwwwwwww`,
   map`
 wwwwwwwwwwwwwwwww
-w......ww.....fpw
-w.wwwww.w.....www
+w.....cww.....fpw
+wfwwwww.w.....www
 w.......w.......w
 wwwfww..wwwww...w
 w...www....ww...w
@@ -274,7 +294,7 @@ v.v....v................vvpv
 v.v....vvv............vvvv.v
 v........vv............v.v.v
 v.vvv.....v....vvvvvvv...v.v
-v.vvv.........vvvvvv.v...v.v
+v.vvv.........vvvvvvcv...v.v
 v.v.vvv....vvvv......v...v.v
 v.v.v.vvvv.v.......vvv...v.v
 v.v.v....v.vv...v..v.v...v.v
@@ -308,7 +328,7 @@ v...vv...........vv...v....v
 v....vvv..........vvv.vv...v
 v......vv.............vv...v
 v..v....v......vvvvvvvv....v
-v..vv...v.vvvvvv...vv......v
+v..vv...v.vvvvvv..cvv......v
 v.......v..........v...vvv.v
 v...vvvvvvvvvvvvvvvvv..vev.v
 v...v...............v..vkv.v
@@ -332,7 +352,7 @@ vvv.v.vvvvv.v.vvvvvv...v
 v...v.vvvvv.v......vv.vv
 v.vvv.vvvvv.vvvvvv.v.b.v
 v...v.vvv...vv...vvvv..v
-vvvbv...v.vvvv.v.v....vv
+vvvbv...v.vvvv.v.vc...vv
 v.v..vv.v.v..b...vvv.vvv
 v.......v....v.v.....vvv
 vvvvvvvvvvvvvvvvvvvvvvvv`,
@@ -559,8 +579,29 @@ function are_you_dead(player_tile){
     });
   }
 
+function addScoreText(score){
+    addText(score.toString(), { 
+      x: 10,
+      y: 4,
+      color: color`3`
+    });
+  
+}
+function clickCoin(player){
+  let x = player.x
+  let y = player.y
+  getFirst(collectable).remove()
+  console.log("runs")
+  score+=1;}
 
+let doitnow = false
+addScoreText(score)
 afterInput(() => {
+  addScoreText(score)
+  if ((tilesWith(player, collectable)).length>=1){
+    clickCoin(player); doitnow = true
+    console.log(player.x,player.y)
+  }
   // WASD to reset
   if (aPressed && sPressed && wPressed && dPressed){
     reset()
