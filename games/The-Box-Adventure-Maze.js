@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Box Adventure Maze
-@author: Logan
+@author: T9R3X
 @description: a fun maze for you and a friend 
 @tags: ["maze", "puzzle"]
 @addedOn: 2025-09-10 
