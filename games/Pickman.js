@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Pickman!
 @author: overcheer
 @description: Wake up! You have been locked away in an (semi) abandoned mine for hundreds of years. Luckily you're prepared with a safety helmet, a pick, and a bad sense of humour. Can you get out and touch some grass? Nobody knows...
-@tags: ['game', 'pacman', 'adventure']
+@tags: [game, mine, adventure]
 @addedOn: 2025-18-10
 */
 
@@ -499,17 +499,13 @@ const gPos = findEmptyTile();
 if (gPos) {
   gX = gPos.x;
   gY = gPos.y;
-} else {
-  console.warn("NO empty tile for gem");
 }
 
 const tPos = findEmptyTile();
 if (tPos) {
   tX = tPos.x;
   tY = tPos.y;
-} else {
-  console.warn("no empty tile for trap");
-}
+} 
 
 function playMove(){}
 
@@ -522,7 +518,6 @@ function addTrap(count) {
   for (let i = 0; i < n; i++) {
     const pos = findEmptyTile(triesPerTrap);
     if (!pos) {
-      console.warn("addTrap- no empty tile");
       break;
     }
     addSprite(pos.x, pos.y, trap);
