@@ -1,6 +1,10 @@
 /*
 @title: Minecraft-Maze-Game
-@author: Angel
+@author: Angel Madrigal
+@description: A Minecraft inspired maze game.
+You play as a creeper going through the nether and overworld through multiple nether portals.
+Avoid the lava in the nether!
+If you touch lava you will be sent back the start.
 @tags: ["Puzzle", "Maze", "Minecraft"]
 @addedOn: 2025-11-17
 */
