@@ -1,8 +1,9 @@
 /*
 @title: Sprig Arcade
-@author: Wowstar
-@tags: [game]
-@addedOn: 2025-11-13
+@author: wowstar2504
+@description: Sprig Arcade is a game with multiple games inside hence the name arcade.
+@tags: ['arcade', 'games', 'game']
+@addedOn: 2025-11-10
 */
 
 // ------------------ Game States ------------------
