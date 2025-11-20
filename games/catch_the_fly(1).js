@@ -1,7 +1,7 @@
 /*
 @title: catch_the_fly
-@author: 
-@tags: []
+@author: archaeopteriks
+@tags: ["puzzle"]
 @addedOn: 2025-00-00
 */
 const moveEnemyRandomly = () => {
