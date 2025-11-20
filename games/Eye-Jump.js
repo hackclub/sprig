@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Eye Jump
 @author:  Sawyer
 @description: Platformer
-@tags: [Platformer, Jumping, Collecting]
+@tags: ["Platformer", "Jumping", "Collecting"]
 @addedOn: 2025-11-08
 */
 
