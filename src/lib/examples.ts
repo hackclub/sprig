@@ -6,7 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: 
 @description: 
 @author: 
-@tags: []
+@tags: ['tag1', 'tag2']
 @addedOn: 2025-00-00
 */
 
