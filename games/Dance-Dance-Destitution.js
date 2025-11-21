@@ -1,8 +1,8 @@
 /*
-@title: Dance Dance Destitution
+@title: Dance-Dance-Destitution
 @author: Ovane
 @tags: []
-@addedOn: 1943-02-34
+@addedOn: 2025-11-20
 */
 setLegend(
   ["U", bitmap`
