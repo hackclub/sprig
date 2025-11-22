@@ -2,7 +2,7 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Pickman!
+@title: Pickman
 @author: overcheer
 @description: Wake up! You have been locked away in an (semi) abandoned mine for hundreds of years. Luckily you're prepared with a safety helmet, a pick, and a bad sense of humour. Can you get out and touch some grass? Nobody knows...
 @tags: ['game', 'mine', 'adventure']
