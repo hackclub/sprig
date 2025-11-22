@@ -1,7 +1,7 @@
 /*
 @title: Minecraft-Maze-Game
 @author: Angel Madrigal
-@description: Move with WASD. A Minecraft inspired maze game. You play as a creeper going through the nether and overworld through multiple nether portals. Avoid the lava in the nether! If you touch lava you will be sent back the start.
+@description: Move with WASD. Reset room with J. A Minecraft inspired maze game. You play as a creeper going through the nether and overworld through multiple nether portals. Avoid the lava in the nether! If you touch lava you will be sent back the start. Move the TNT by pushing it. If you push it into a pressure plate it will explode and break blocks around it besides obsidian.
 @tags: ["Puzzle", "Maze", "Minecraft"]
 @addedOn: 2025-11-17
 */
@@ -14,12 +14,13 @@ const magma = "m"
 const back_1 = "b"
 const back_2 = "q"
 const lava = "l"
-const tnt = "n"
+const tnt = "n" 
 const plate = "s"
 const obsidian = "o"
 const empty_portal = "e"
 const breakable_wall = "w"
 const back_3 = "k"
+const back_4 = "a"
 
 //Player Sprites
 setLegend(
@@ -231,10 +232,32 @@ L1111DD1111111L1
 6666666666666666
 6666666666666666
 6666666666666666
-6666666666666666` ])
+6666666666666666` ], [ back_4, bitmap`
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999` ])
 
 //Set Background
-setBackground(back_1)
+setBackground(back_4)
+
+addText("Move with WASD\n\nReset room with J.\n\n\nPress I to start.", { 
+  x: 1,
+  y: 1,
+  color: color`2`
+})
 
 //Set Pushables
 setPushables({ 
@@ -242,11 +265,20 @@ setPushables({
 })
 
 //Set Solids
-setSolids([player, magma, cobblestone, tnt, obsidian])
+setSolids([player, magma, cobblestone, tnt, obsidian, breakable_wall])
 
 //Map Sprites
 let level = 0
-const levels = [
+const levels = [ map`
+...........
+...........
+...........
+...........
+...........
+...........
+...........
+...........
+...........`,
   map`
 ccpcc
 cc.cc
@@ -285,16 +317,56 @@ mm.l.ll
 ll.lll.
 ll.ll..
 ll.ll.l
-ll....l`,  map`
+ll....l`, map`
 ccccccccccc
-cep.n..n.no
+cep.......o
 l.........o
-c....n..n.o
-c.n....n.oo
-c...n....oo
-c.n.....ooo
-c......swto
-c..n....ooo`,  map`
+l....n....o
+l.n......oo
+l........oo
+l..n....woo
+l......swto
+l.......woo`,map`
+oooootooooo
+oooowwwoooo
+ep...s.....
+...........
+...........
+l.........l
+..l.l.l.l..
+...........
+..l.l.l.l..
+.l.......l.
+l.........l
+...l.l.l...
+...........
+l.l.l.l.l.l
+...........
+..n..n..n..
+...........
+ooooooooooo`, map`
+oooolllllllllllllllllll
+ootolllllllllllllllllll
+owwwooooooooooooooooooo
+..s.....l...m..........
+........l..............
+mmmmm......l...........
+....m...l..........www.
+....mmmmmmmmmmmmmmoosoo
+.....m.....m.........oo
+.....m.....m.........mm
+.....m..m..m..mmmmmm.mm
+mmmmmm..mepm..m....m.mm
+........mmmm..mln..m.mm
+..mmmm........m....m.mm
+..m..m........m....m.mm
+..m..mmmmmmmmmm.l..m.mm
+..m...........m....m.mm
+..m...mmmmm...m....m.mm
+..m...m...m...m.mmmm.mm
+......m.n....mm..mmm.mm
+......m...m..m.......mm
+......mmmmm..m.......mm`,  map`
 ........p.......
 ..m.m.oooo.c.c..
 ..mmm.o..o.c.c..
@@ -310,34 +382,69 @@ c..n....ooo`,  map`
 setMap(levels[level])
 
 //Movement Controls
-onInput("s", () => {
-  getFirst(player).y += 1
-})
-
 onInput("w", () => {
+  if (level>=1){
   getFirst(player).y -= 1
-})
-
-onInput("d", () => {
-  getFirst(player).x += 1
+  }
 })
 
 onInput("a", () => {
+  if (level>=1){
   getFirst(player).x -= 1
+  }
 })
 
+onInput("s", () => {
+  if (level>=1){
+  getFirst(player).y += 1
+  }
+})
+onInput("d", () => {
+  if (level>=1){
+  getFirst(player).x += 1
+  }
+})
+
+
+//Resets screen
+onInput("j", () => {
+  setMap(levels[level])
+})
+
+onInput("l", () => {
+  if (level==levels.length-1) {
+    level = 0
+    setMap(levels[0])
+    setBackground(back_4)
+    clearText();
+    addText("Move with WASD\n\nReset room with J.\n\n\nPress I to start.", { 
+  x: 1,
+  y: 1,
+  color: color`2`
+})
+  }
+})
+
+onInput("i", () => {
+  if (level==0) {
+    setMap(levels[level+1])
+    setBackground(back_1)
+    level= level+1
+    clearText();
+  }
+})
 //All the checks after an input
 afterInput(() => {
 
 //Get sprite reference variables
   playerp = getFirst(player);
   teleportp = getFirst(teleport);
-  platep = getFirst(plate);
-  breakable_wallp = getFirst(breakable_wall)
   lava_array = getAll(lava);
   tnt_array = getAll(tnt);
-
-//Player touches teleport gets set back to first level
+  plate_array = getAll(plate);
+  breakable_array = getAll(breakable_wall);
+  
+//Player touches teleport gets sent into next level
   if (teleportp && playerp.y == teleportp.y && playerp.x == teleportp.x)
   {
     level = level+1;
@@ -346,12 +453,18 @@ afterInput(() => {
 //Set background based on level
     if(level==levels.length-1){
       setBackground(back_3)
+addText("Press l to Replay.", { 
+  x: 1,
+  y: 1,
+  color: color`3`
+})
+      
   }
     else if(level % 2 === 0){
-      setBackground(back_1)
+      setBackground(back_2)
   }
     else{
-      setBackground(back_2)
+      setBackground(back_1)
     }
   }
 
@@ -359,22 +472,30 @@ afterInput(() => {
 for (let lava_single of lava_array) {
   if (playerp.y == lava_single.y && playerp.x == lava_single.x)
   {
-    level = 0;
+    level = 1;
     setMap(levels[level])
     setBackground(back_1)
 }
 }
   
 //tnt touches plate and removes plate, tnt, and breakable wall
-if(platep){
 for (let tnt_single of tnt_array) {
-  if (platep.y == tnt_single.y && platep.x == tnt_single.x)
-  {
-    platep.remove();
-    tnt_single.remove();
-    breakable_wallp.remove();
-}
-}
+    for (let plate_single of plate_array){
+      if (plate_single.y == tnt_single.y && plate_single.x == tnt_single.x)
+      {
+        plate_single.remove();
+        tnt_single.remove();
+        
+        for (let breakable_single of breakable_array){
+          let dx = Math.abs(breakable_single.x - tnt_single.x);
+          let dy = Math.abs(breakable_single.y - tnt_single.y);
+          
+          if ((dx <= 1 && dy <= 1)) {
+            breakable_single.remove();
+          }
+        }
+      }
+    }
 
 //lava destroys tnt
 for (let tnt_single of tnt_array) {
@@ -383,7 +504,7 @@ for (let tnt_single of tnt_array) {
   {
     tnt_single.remove();
   }
-  
+    
 }
 }
 }
