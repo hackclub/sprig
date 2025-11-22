@@ -1,3 +1,11 @@
+/*
+@title: dungeonry
+@author: kohese
+@description: dungeon game with 3 levels
+@tags: ['dungeon']
+@addedOn: 2025-11-22
+*/
+
 const player = "p";
 const wall = "w";
 const coin = "c";
