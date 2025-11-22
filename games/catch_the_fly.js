@@ -1,8 +1,13 @@
 /*
 @title: catch_the_fly
+@description: "Catch the Fly is a game wher you have to move the boxes to make the fly go into the hole."
 @author: archaeopteriks
 @tags: ["puzzle"]
 @addedOn: 2025-00-00
+
+Instructions
+Move with WASD
+Restart Level with J
 */
 const moveEnemyRandomly = () => {
   const enemySprite = getFirst(enemy)
