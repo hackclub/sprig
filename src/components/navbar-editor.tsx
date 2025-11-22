@@ -753,7 +753,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 										)
 									}
 								/>
-								<span class={styles.attribution}>by you</span>
+								<span class={styles.attribution}> by you</span>
 							</>
 						) : props.persistenceState.value.kind === PersistenceStateKind.SHARED ? (
 							<>
