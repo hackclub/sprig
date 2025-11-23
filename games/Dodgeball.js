@@ -1,8 +1,9 @@
 /*
 @title Dodgeball: Neon Escape
-@author Shlok
+@author Shlok Vaidya
 @description A fast paced dodgeball survival game with increasing difficulty.
 @tags arcade, dodge, action
+@addedOn: 2025-11-23
 */
 // ⚡ DODGEBALL: Neon Escape - HARD MODE
 
