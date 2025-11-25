@@ -1,7 +1,7 @@
 /*
 @title: BitBoy_Platformer
 @author:PenguinBoyMo
-@tags: platformer
+@tags: ["Platformer", "Game", "Fun"]
 @addedOn: 2025-10-05
 @description: Journey with BitBoy on his latest adventure
 */
