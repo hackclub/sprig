@@ -628,11 +628,17 @@ onInput("a", () => {
     moveLeft();
     makeMap();
 })
+let inter = setInterval(a, 150)
+function a() {
+  //do nothing
+}
 onInput("d", () => {
     if (!started) {
         clearText();
         started = true;
-        setInterval(tick, 150)
+        inter = setInterval(tick, 150)
+        level = 0
+        elevation = 0
         setMap(levels[0])
         makeMap();
         return
@@ -812,7 +818,8 @@ function tick() {
         return;
     }
     if (lose) {
-        // setMap(levels[2])
+        
+        
         return;
     }
     let a = getFirst(player3)
@@ -852,13 +859,24 @@ function tick() {
                 addText(`Game Over`, { x: 5, y: 2, color: color`0` })
                 addText(`Nice Try`, { x: 5, y: 3, color: color`0` })
 
-                started = false;
                 lose = true;
+              setMap(levels[2])
+              clearInterval(inter); 
                 return
             }
         }
     }
     if (!isJumping && getFirstElementIfNotEmpty(inWay).type != ground && getFirstElementIfNotEmpty(inWay2).type != ground) {
+        if(elevation == -6){
+          clearText();
+          addText(`Game Over`, { x: 5, y: 2, color: color`0` })
+          addText(`Nice Try`, { x: 5, y: 3, color: color`0` })
+
+          lose = true;
+          clearInterval(inter); 
+          setMap(levels[2])
+          return;
+        } 
         elevation -= 1;
         makeMap();
     }
@@ -866,4 +884,3 @@ function tick() {
     addText(`${score}`, { x: 1, y: 1, color: color`2` })
     addText("<3".repeat(lives), { x: 1, y: 2, color: color`3` })
 }
-
