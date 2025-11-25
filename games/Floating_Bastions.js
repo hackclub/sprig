@@ -2,7 +2,7 @@
 @title: Floating Bastions
 @author: M-Su
 @description: Escape the factory using Parkour
-@tags: [platformer]
+@tags: ['platformer']
 @addedOn: 2025-11-19
 */
 
