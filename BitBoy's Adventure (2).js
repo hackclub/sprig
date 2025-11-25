@@ -1,5 +1,5 @@
 /*
-@title: BitBoy Platformer
+@title: BitBoy_ Platformer
 @author:PenguinBoyMo
 @tags: platformer
 @addedOn: 2025-10-05
