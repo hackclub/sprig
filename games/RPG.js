@@ -59,7 +59,7 @@ const camera = map`
 ..........`;
 
 // Starting values
-const start = {
+let start = {
   ingame: true,
   // All the maps reset
   maps: {
@@ -1609,40 +1609,69 @@ T.T..TTT.T
         data.menu.restart();
       },
       "Credits": () => {
-        let newwindow = window.open("about:blank", "_blank", "popup=yes");
-        newwindow.document.body.innerHTML = `
-        <style>
-          body {
-            background-color: black;
-            color: white;
-          }
-        </style>
-        <h1>This game is made by: Me_Myself_and_I it could not be made without these people</h1>
-        Most contributed: Me_Myself_and_I<br>
-        Game design: Me_Myself_and_I<br>
-        Game concept: Me_Myself_and_I<br>
-        Art: Me_Myself_and_I<br>
-        Making the home screen: Me_Myself_and_I<br>
-        Programming: Me_Myself_and_I<br>
-        Music: Me_Myself_and_I<br>
-        Sound Effects: Me_Myself_and_I<br>
-        Finding bugs: Me_Myself_and_I<br>
-        Fixing bugs: Me_Myself_and_I<br>
-        Making the credits: Me_Myself_and_I<br>
-        Made in: sprig<br>
-        Invented html: Tim Berners-Lee<br>
-        Invented css: Håkon Wium Lie<br>
-        Invented js: Brendan Eich<br>
-        Who made sprig: hackclub<br>
-        Where I got most of the bitmap character names from: <a href="https://copypastecharacter.com/all-characters">https://copypastecharacter.com/all-characters</a><br>
-        Where I got most of the enemy names from: <a href="https://randomwordgenerator.com/name.php">https://randomwordgenerator.com/name.php</a><br>
-        Playing this game I made for fun: You the player<br>
-        Thank you for checking out my game<br>
-        P.S. Have you found some easter eggs?`;
+        try {
+          unde
+          let newwindow = window.open("about:blank", "_blank", "popup=yes");
+          newwindow.document.body.innerHTML = `
+          <style>
+            body {
+              background-color: black;
+              color: white;
+            }
+          </style>
+          <h1>This game is made by: Me_Myself_and_I it could not be made without these people</h1>
+          Most contributed: Me_Myself_and_I<br>
+          Game design: Me_Myself_and_I<br>
+          Game concept: Me_Myself_and_I<br>
+          Art: Me_Myself_and_I<br>
+          Making the home screen: Me_Myself_and_I<br>
+          Programming: Me_Myself_and_I<br>
+          Music: Me_Myself_and_I<br>
+          Sound Effects: Me_Myself_and_I<br>
+          Finding bugs: Me_Myself_and_I<br>
+          Fixing bugs: Me_Myself_and_I<br>
+          Making the credits: Me_Myself_and_I<br>
+          Made in: sprig<br>
+          Invented html: Tim Berners-Lee<br>
+          Invented css: Håkon Wium Lie<br>
+          Invented js: Brendan Eich<br>
+          Who made sprig: hackclub<br>
+          Where I got most of the bitmap character names from: <a href="https://copypastecharacter.com/all-characters">https://copypastecharacter.com/all-characters</a><br>
+          Where I got most of the enemy names from: <a href="https://randomwordgenerator.com/name.php">https://randomwordgenerator.com/name.php</a><br>
+          Playing this game I made for fun: You the player<br>
+          Thank you for checking out my game<br>
+          P.S. Have you found some easter eggs?`;
+        } catch {
+          console.log(`
+This game is made by: Me_Myself_and_I it could not be made without these people
+Most contributed: Me_Myself_and_I
+Game design: Me_Myself_and_I
+Game concept: Me_Myself_and_I
+Art: Me_Myself_and_I
+Making the home screen: Me_Myself_and_I
+Programming: Me_Myself_and_I
+Music: Me_Myself_and_I
+Sound Effects: Me_Myself_and_I
+Finding bugs: Me_Myself_and_I
+Fixing bugs: Me_Myself_and_I
+Making the credits: Me_Myself_and_I
+Made in: sprig
+Invented html: Tim Berners-Lee
+Invented css: Håkon Wium Lie
+Invented js: Brendan Eich
+Who made sprig: hackclub
+Where I got most of the bitmap character names from: https://copypastecharacter.com/all-characters
+Where I got most of the enemy names from: https://randomwordgenerator.com/name.php
+Playing this game I made for fun: You the player
+Thank you for checking out my game
+P.S. Have you found some easter eggs?`)
+        }
       },
       "Rage Quit": () => {
-        document.querySelector("canvas").remove()
-        //window.close();
+        clearInterval(data.enemy.interval);
+        [start, data] = [];
+        setMap(map`
+⦰`);
       },
     },
 
@@ -2088,102 +2117,119 @@ entrances/exits.`, { x: 0, y: 0, color: color`2` })
 
 // Walking Inputs
 onInput("\i", () => {
-  data.text.input = true;
-  if (data.ingame)
-    data.player.move(0, -1);
-  else if (!data.menu.howToPlay)
-    data.menu.move(0, -1);
+  if (data) {
+    data.text.input = true;
+    if (data.ingame)
+      data.player.move(0, -1);
+    else if (!data.menu.howToPlay)
+      data.menu.move(0, -1);
+  }
 });
 onInput("\j", () => {
-  data.text.input = true;
-  if (data.ingame)
-    data.player.move(-1, 0);
-  else if (!data.menu.howToPlay)
-    data.menu.move(-1, 0);
+  if (data) {
+    data.text.input = true;
+    if (data.ingame)
+      data.player.move(-1, 0);
+    else if (!data.menu.howToPlay)
+      data.menu.move(-1, 0);
+  }
 });
 onInput("\k", () => {
-  data.text.input = true;
-  if (data.ingame)
-    data.player.move(0, 1);
-  else if (!data.menu.howToPlay)
-    data.menu.move(0, 1);
+  if (data) {
+    data.text.input = true;
+    if (data.ingame)
+      data.player.move(0, 1);
+    else if (!data.menu.howToPlay)
+      data.menu.move(0, 1);
+  }
 });
 onInput("\l", () => {
-  data.text.input = true;
-  if (data.ingame)
-    data.player.move(1, 0);
-  else if (!data.menu.howToPlay)
-    data.menu.move(1, 0);
+  if (data) {
+    data.text.input = true;
+    if (data.ingame)
+      data.player.move(1, 0);
+    else if (!data.menu.howToPlay)
+      data.menu.move(1, 0);
+  }
 });
 
 // Action inputs
 onInput("\w", () => {
-  if (data.ingame) {
-    data.shop.open = false;
-    data.inventory.open = !data.inventory.open;
-    if (data.inventory.open)
-      playTune(tune`
-166.66666666666666: C4-166.66666666666666,
-166.66666666666666: D4-166.66666666666666,
-5000`);
-    else
-      playTune(tune`
-125: D4-125,
-125: C4-125,
-3750`);
+  if (data) {
+    if (data.ingame) {
+      data.shop.open = false;
+      data.inventory.open = !data.inventory.open;
+      if (data.inventory.open)
+        playTune(tune`
+  166.66666666666666: C4-166.66666666666666,
+  166.66666666666666: D4-166.66666666666666,
+  5000`);
+      else
+        playTune(tune`
+  125: D4-125,
+  125: C4-125,
+  3750`);
+    }
   }
 });
 onInput("\a", () => {
-  if (data.ingame) {
-    if (data.inventory.open) {
-      if (data.inventory.use())
-        playTune(tune`
-500: C4~500,
-15500`);
-    } else if (data.shop.open) {
-      if (data.shop.buy())
-        playTune(tune`
-500: B5/500,
-15500`);
-    } else {
-      if (!data.text.input)
-        data.text.input = true;
-      data.attack();
-      /*playTune(tune`
-500: C4-500,
-15500`);*/
-    }
-  } else if (!data.menu.howToPlay)
-    data.menu.select();
+  if (data) {
+    if (data.ingame) {
+      if (data.inventory.open) {
+        if (data.inventory.use())
+          playTune(tune`
+  500: C4~500,
+  15500`);
+      } else if (data.shop.open) {
+        if (data.shop.buy())
+          playTune(tune`
+  500: B5/500,
+  15500`);
+      } else {
+        if (!data.text.input)
+          data.text.input = true;
+        data.attack();
+        /*playTune(tune`
+  500: C4-500,
+  15500`);*/
+      }
+    } else if (!data.menu.howToPlay)
+      data.menu.select();
+  }
+  
 });
 onInput("\s", () => {
-  if (data.ingame) {
-    data.inventory.open = false;
-    data.shop.open = !data.shop.open;
-    if (data.shop.open)
-      playTune(tune`
-166.66666666666666: C4-166.66666666666666,
-166.66666666666666: D4-166.66666666666666,
-5000`);
-    else
-      playTune(tune`
-125: D4-125,
-125: C4-125,
-3750`);
+  if (data) {
+    if (data.ingame) {
+      data.inventory.open = false;
+      data.shop.open = !data.shop.open;
+      if (data.shop.open)
+        playTune(tune`
+  166.66666666666666: C4-166.66666666666666,
+  166.66666666666666: D4-166.66666666666666,
+  5000`);
+      else
+        playTune(tune`
+  125: D4-125,
+  125: C4-125,
+  3750`);
+    }
   }
 });
 onInput("\d", () => {
-  if (data.ingame) {
-    if (data.inventory.open)
-      data.inventory.drop();
-    else if (!data.shop.open) {
-      if (data.ispush(data.player.x + data.player.lastMove[0] * 2, data.player.y + data.player.lastMove[1] * 2)) {
-        if (data.push(data.player.x + data.player.lastMove[0] * 2, data.player.y + data.player.lastMove[1] * 2, [-data.player.lastMove[0], -data.player.lastMove[1]])) {
-          if (!data.text.input)
-            data.text.input = true;
-          playTune(tune`
-500: D4-500,
-15500`);
+  if (data) {
+    if (data.ingame) {
+      if (data.inventory.open)
+        data.inventory.drop();
+      else if (!data.shop.open) {
+        if (data.ispush(data.player.x + data.player.lastMove[0] * 2, data.player.y + data.player.lastMove[1] * 2)) {
+          if (data.push(data.player.x + data.player.lastMove[0] * 2, data.player.y + data.player.lastMove[1] * 2, [-data.player.lastMove[0], -data.player.lastMove[1]])) {
+            if (!data.text.input)
+              data.text.input = true;
+            playTune(tune`
+  500: D4-500,
+  15500`);
+          }
         }
       }
     }
@@ -2192,24 +2238,26 @@ onInput("\d", () => {
 
 // Update and other stuff after input
 afterInput(() => {
-  eval(data.afterInputEval);
-  data.afterInputEval = ``;
-  if (data.ingame) {
-    if (!data.inventory.open) {
-      if (debug.logPos && debug.logMap)
-        console.log([data.player.x, data.player.y, data.currentMap]);
-      else if (debug.logPos)
-        console.log([data.player.x, data.player.y]);
-      else if (debug.logMap)
-        console.log(data.currentMap);
-      clearText()
-      if (!data.text.input) {
-        addText(data.text.text, data.text.options);
+  if (data) {
+    eval(data.afterInputEval);
+    data.afterInputEval = ``;
+    if (data.ingame) {
+      if (!data.inventory.open) {
+        if (debug.logPos && debug.logMap)
+          console.log([data.player.x, data.player.y, data.currentMap]);
+        else if (debug.logPos)
+          console.log([data.player.x, data.player.y]);
+        else if (debug.logMap)
+          console.log(data.currentMap);
+        clearText()
+        if (!data.text.input) {
+          addText(data.text.text, data.text.options);
+        }
       }
     }
+    data.menu.howToPlay = false;
+    data.update();
   }
-  data.menu.howToPlay = false;
-  data.update();
 });
 
 // I'm too lasy to set variables for all of them
