@@ -8,7 +8,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @tags: ["maze", "puzzle"]
 @addedOn: 2025-09-10 
 
-To reset the game press W, A, S, D at the same time
+To reset the game press W, A, S, D at the same time, Press twice to reset score.
 */
 
 let won = false;
@@ -461,6 +461,7 @@ function record_start_positions(){
 }
 function reset(){
   level = 0
+  score = 0
   player1_start_x = 0
   player1_start_y = 0
   player2_start_x = 0
@@ -616,3 +617,4 @@ afterInput(() => {
   */
 
 });
+
