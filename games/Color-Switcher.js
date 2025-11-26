@@ -2,10 +2,9 @@
 @title: Colour Switcher
 @author: Unknown Gamer
 @description: Color Switcher is a logic-based puzzle game where every move counts. You control a small player icon on a 5×5 grid made of red and blue tiles. Each time you step on a tile, it flips, and the four tiles around it also flip. Your goal is to change the entire board to a single color while using as few moves as possible. The game features rising difficulty, smooth animations, sound effects, and a simple design that keeps each level fun and challenging.
-@tags: []
+@tags: ['puzzle', 'endless', 'strategy']
 @addedOn: 2025-11-13
 */
-
 /* ---------- SPRITES ---------- */
 
 const PLAYER_A = "p";
@@ -17,7 +16,6 @@ const HUD_BG = "h";
 const BORDER = "x";
 const MARK_R = "m";
 const MARK_B = "n";
-
 
 setLegend(
   [PLAYER_A, bitmap`
@@ -38,7 +36,7 @@ setLegend(
 ................
 ................`],
 
- [PLAYER_B, bitmap`
+  [PLAYER_B, bitmap`
 ................
 ................
 ......3333......
@@ -196,21 +194,9 @@ let totalLevels = levels.length;
 
 /* ---------- SOUNDS ---------- */
 
-const flipSound = tune`
-50: C5-200 + B4-200
-50: D5-200
-100`;
-
-const solvedSound = tune`
-80: G5-200 + C6-200
-80: D6-200
-80: G6-200
-240`;
-
-const gameEndSound = tune`
-80: E5-120 + G5-120
-80: C6-120
-120: G5-120`;
+const flipSound = tune`50: C5-200 + B4-200 50: D5-200 100`;
+const solvedSound = tune`80: G5-200 + C6-200 80: D6-200 80: G6-200 240`;
+const gameEndSound = tune`80: E5-120 + G5-120 80: C6-120 120: G5-120`;
 
 /* ---------- STATE ---------- */
 
@@ -225,21 +211,19 @@ let idleInterval = null;
 let inMenu = true;
 let menuCursor = 0;
 
-// Unlock system
 let unlocked = [true, false, false, false];
 
-/* ---------- MENU BACKGROUND (FIX FOR BLACK SCREEN) ---------- */
-
+/* ---------- MENU MAP ---------- */
 function loadMenuMap() {
   setMap(`
-hhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhh
+hhhhhhhh
+hhhhhhhh
+hhhhhhhh
+hhhhhhhh
+hhhhhhhh
+hhhhhhhh
+hhhhhhhh
+hhhhhhhh
 `);
 }
 
@@ -249,62 +233,53 @@ let hudBgSprites = [];
 let borderSprites = [];
 let overlayMarkers = [];
 
-function clearHUDSprites() {
-  hudBgSprites.forEach(s => { try{s.remove()}catch{} });
-  hudBgSprites = [];
-}
-function clearBorderSprites() {
-  borderSprites.forEach(s => { try{s.remove()}catch{} });
-  borderSprites = [];
-}
-function clearOverlayMarkers() {
-  overlayMarkers.forEach(s => { try{s.remove()}catch{} });
-  overlayMarkers = [];
-}
+const clearArr = arr => arr.forEach(s => { try{s.remove()}catch{} });
 
 /* ---------- HUD DRAW ---------- */
 
 function drawHUD() {
-  clearHUDSprites();
-  const mapW = width();
+  clearArr(hudBgSprites);
+  hudBgSprites = [];
 
-  // 2-row HUD bar
-  for (let bx = 0; bx < Math.min(8, mapW); bx++) {
-    hudBgSprites.push(addSprite(bx, 0, HUD_BG));
-    hudBgSprites.push(addSprite(bx, 1, HUD_BG));
+  for (let x=0; x<width(); x++) {
+    hudBgSprites.push(addSprite(x,0,HUD_BG));
+    hudBgSprites.push(addSprite(x,1,HUD_BG));
   }
 
-  addText(`Level ${levelIndex + 1}`, { x:0, y:0, color:color`6` });
-  addText(`Moves ${moves}`, { x:0, y:1, color:color`4` });
+  addText(`Level ${levelIndex+1}`, {x:0,y:0,color:color`6`});
+  addText(`Moves ${moves}`, {x:0,y:1,color:color`4`});
 }
 
-/* ---------- BORDER ---------- */
-
+/* ---------- BORDER (SAFE) ---------- */
 function drawBorder() {
-  clearBorderSprites();
+  clearArr(borderSprites);
+  borderSprites = [];
+
   const w = width(), h = height();
 
-  for (let x = -1; x <= w; x++) {
-    borderSprites.push(addSprite(x, -1, BORDER));
-    borderSprites.push(addSprite(x, h, BORDER));
+  for (let x=0; x<w; x++) {
+    borderSprites.push(addSprite(x, 2, BORDER));
+    borderSprites.push(addSprite(x, h-1, BORDER));
   }
-  for (let y = 0; y < h; y++) {
-    borderSprites.push(addSprite(-1, y, BORDER));
-    borderSprites.push(addSprite(w, y, BORDER));
+  for (let y=2; y<h; y++) {
+    borderSprites.push(addSprite(0, y, BORDER));
+    borderSprites.push(addSprite(w-1, y, BORDER));
   }
 }
 
-/* ---------- COLORBLIND OVERLAYS ---------- */
+/* ---------- COLORBLIND ---------- */
 
 function refreshOverlayMarkers() {
-  clearOverlayMarkers();
+  clearArr(overlayMarkers);
+  overlayMarkers = [];
+
   if (!colorblindMode) return;
 
   for (let y=0; y<height(); y++) {
     for (let x=0; x<width(); x++) {
       const t = getTile(x,y).find(o => o.type===RED || o.type===BLUE);
       if (!t) continue;
-      overlayMarkers.push(addSprite(x,y, t.type===RED?MARK_R:MARK_B));
+      overlayMarkers.push(addSprite(x,y, t.type===RED ? MARK_R : MARK_B));
     }
   }
 }
@@ -313,22 +288,26 @@ function refreshOverlayMarkers() {
 
 function loadLevel(i) {
   inMenu = false;
-  clearText();
-  clearHUDSprites();
-  clearBorderSprites();
-  clearOverlayMarkers();
-
   solved = false;
   gameComplete = false;
   moves = 0;
 
+  clearText();
+  clearArr(hudBgSprites);
+  clearArr(borderSprites);
+  clearArr(overlayMarkers);
+
+  hudBgSprites=[];
+  borderSprites=[];
+  overlayMarkers=[];
+
   setMap(levels[i].join("\n"));
 
-  // Force PLAYER_A start
-  for(let y=0;y<height();y++){
-    for(let x=0;x<width();x++){
+  // remove PLAYER_B if spawned
+  for (let y=0;y<height();y++){
+    for (let x=0;x<width();x++){
       getTile(x,y).forEach(s=>{
-        if(s.type===PLAYER_B) s.remove();
+        if (s.type===PLAYER_B) s.remove();
       });
     }
   }
@@ -338,24 +317,20 @@ function loadLevel(i) {
   refreshOverlayMarkers();
 }
 
-/* ---------- ANIMATION ---------- */
+/* ---------- TILE FLIP ---------- */
 
 function flipAnimation(x,y) {
   const s = addSprite(x,y,FLASH);
   setTimeout(()=>{ try{s.remove()}catch{} }, 90);
 }
 
-function clearSpecificTile(x,y,t) {
-  getTile(x,y).forEach(s => { if(s.type===t) s.remove(); });
-}
-
 function toggleTile(x,y){
-  if(x<0||x>=width()||y<0||y>=height()) return;
+  if (x<0 || y<0 || x>=width() || y>=height()) return;
 
-  const t = getTile(x,y).find(o=>o.type===RED || o.type===BLUE);
+  const t = getTile(x,y).find(o=>o.type===RED||o.type===BLUE);
   if(!t) return;
 
-  clearSpecificTile(x,y,t.type);
+  t.remove();
   addSprite(x,y, t.type===RED ? BLUE : RED);
 
   playTune(flipSound);
@@ -375,9 +350,10 @@ function toggleAround(x,y){
 /* ---------- SOLVE CHECK ---------- */
 
 function isSolved(){
-  let first = null;
-  for(let y=0;y<height();y++){
-    for(let x=0;x<width();x++){
+  let first=null;
+
+  for (let y=0;y<height();y++){
+    for (let x=0;x<width();x++){
       const t = getTile(x,y).find(o=>o.type===RED||o.type===BLUE);
       if(!t) continue;
       if(first===null) first=t.type;
@@ -387,48 +363,25 @@ function isSolved(){
   return true;
 }
 
-/* ---------- IDLE ---------- */
-
-function startIdleAnimation(){
-  stopIdleAnimation();
-  idleInterval = setInterval(()=>{
-    if(solved||inMenu) return;
-    const p = getFirst(PLAYER_A) || getFirst(PLAYER_B);
-    if(!p) return;
-    const {x,y} = p;
-    const current = getTile(x,y).find(s=>s.type===PLAYER_A||s.type===PLAYER_B);
-    if(!current) return;
-    const next = current.type===PLAYER_A ? PLAYER_B : PLAYER_A;
-    current.remove();
-    addSprite(x,y,next);
-  },600);
-}
-function stopIdleAnimation(){
-  if(idleInterval){
-    clearInterval(idleInterval);
-    idleInterval=null;
-  }
-}
-
 /* ---------- MOVEMENT ---------- */
 
 function safeMove(dx,dy){
-  if(solved||inMenu) return;
+  if(inMenu || solved) return;
 
   const p = getFirst(PLAYER_A) || getFirst(PLAYER_B);
   if(!p) return;
 
-  const nx = p.x+dx, ny=p.y+dy;
-  if(nx<0||nx>=width()||ny<0||ny>=height()) return;
+  const nx=p.x+dx, ny=p.y+dy;
+  if(nx<0||ny<0||nx>=width()||ny>=height()) return;
 
   getTile(p.x,p.y).forEach(s=>{
-    if(s.type===PLAYER_A || s.type===PLAYER_B) s.remove();
+    if(s.type===PLAYER_A||s.type===PLAYER_B) s.remove();
   });
   addSprite(nx,ny,PLAYER_A);
 
   toggleAround(nx,ny);
-
   moves++;
+
   clearText();
   drawHUD();
 
@@ -436,7 +389,7 @@ function safeMove(dx,dy){
     solved=true;
     playTune(solvedSound);
 
-    unlocked[levelIndex+1] = true;  // unlock next level
+    unlocked[levelIndex+1] = true;
 
     if(levelIndex===totalLevels-1){
       gameComplete=true;
@@ -445,11 +398,7 @@ function safeMove(dx,dy){
       addText("Press K to menu",{x:0,y:4,color:color`9`});
     } else {
       addText("LEVEL SOLVED!",{x:0,y:3,color:color`2`});
-      addText("Next...",{x:0,y:4,color:color`9`});
-      setTimeout(()=>{
-        levelIndex++;
-        loadLevel(levelIndex);
-      },700);
+      setTimeout(()=>{ levelIndex++; loadLevel(levelIndex); },700);
     }
   }
 }
@@ -457,69 +406,51 @@ function safeMove(dx,dy){
 /* ---------- MENU ---------- */
 
 function showMenu(){
-  inMenu = true;
-  stopIdleAnimation();
+  inMenu=true;
+
+  clearText();
+  clearArr(hudBgSprites);
+  clearArr(borderSprites);
+  clearArr(overlayMarkers);
 
   loadMenuMap();
 
-  clearText();
-  clearHUDSprites();
-  clearBorderSprites();
-  clearOverlayMarkers();
-
-  const boxW = 26;
-
-  addText("#".repeat(boxW),{x:0,y:0,color:color`3`});
-  addText("#      SELECT LEVEL      #",{x:0,y:1,color:color`3`});
-  addText("#".repeat(boxW),{x:0,y:2,color:color`3`});
+  addText("SELECT LEVEL",{x:0,y:0,color:color`3`});
 
   for(let i=0;i<totalLevels;i++){
     const pointer = menuCursor===i ? ">" : " ";
     const lock = unlocked[i] ? "" : " (LOCKED)";
     addText(`${pointer} Level ${i+1}${lock}`,{
       x:1,
-      y:4+i,
+      y:2+i,
       color: unlocked[i] ? color`6` : color`2`
     });
   }
 
-  addText("-".repeat(boxW),{x:0,y:5+totalLevels,color:color`3`});
-  addText(" Press J to play",{x:1,y:6+totalLevels,color:color`5`});
-  addText(" Press K to return",{x:1,y:7+totalLevels,color:color`5`});
+  addText("J = Play",{x:1,y:2+totalLevels,color:color`5`});
+  addText("K = Menu",{x:1,y:3+totalLevels,color:color`5`});
 }
 
 /* ---------- INPUT ---------- */
 
-// Movement
 onInput("w",()=>{ if(inMenu){ menuCursor=Math.max(0,menuCursor-1); showMenu(); } else safeMove(0,-1); });
 onInput("s",()=>{ if(inMenu){ menuCursor=Math.min(totalLevels-1,menuCursor+1); showMenu(); } else safeMove(0,1); });
 onInput("a",()=>safeMove(-1,0));
 onInput("d",()=>safeMove(1,0));
 
-// Play level
 onInput("j",()=>{
-  if(!inMenu) return;
-  if(!unlocked[menuCursor]) return; 
+  if(!inMenu || !unlocked[menuCursor]) return;
   levelIndex = menuCursor;
   loadLevel(levelIndex);
-  startIdleAnimation();
 });
 
-// Back to menu / restart
-onInput("k",()=>{
-  showMenu();
-});
+onInput("k",()=> showMenu() );
 
-// Toggle colorblind
 onInput("i",()=>{
   colorblindMode=!colorblindMode;
   refreshOverlayMarkers();
 });
 
-
-
-
 /* ---------- START ---------- */
 
 showMenu();
-startIdleAnimation();
