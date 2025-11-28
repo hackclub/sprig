@@ -1,4 +1,10 @@
-// Toxic Zone Survival - Sprig Edition (Lowercase-only IDs)
+/*
+@title: Toxic Zone Survival
+@author: Rudra Jadaun
+@description: A survival challenge where expanding toxic clouds fill the arena, and you must stay alive by avoiding them and collecting oxygen tanks.
+@tags: ['Survival', 'Time-based']
+@addedOn: 2025-11-19
+*/
 
 const p = "p"
 const t = "t"
