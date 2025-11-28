@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: lader climber 1
 @author: judeprivett2012@gmail.com
-@tags: [game]
+@tags: []
 @addedOn: 2025-00-00
 @description: this is just a retro ladder game with the goal of doing every bird ad you go up to the top of the letter attempting to get to the Golden hammer and beat every level without having to reset!!
 

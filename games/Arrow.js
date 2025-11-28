@@ -2,7 +2,7 @@
 @title: Arrow
 @description: Control an arrow to dodge flying objects and hazards
 @author: AmazinAxel
-@tags: [avoid, dodge, fast-paced, levels, difficult]
+@tags: ["avoid", "dodge", "fast-paced", "levels", "difficult"]
 @addedOn: 2025-09-19
 */
 

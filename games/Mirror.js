@@ -1,6 +1,7 @@
 /*
 @title: Mirror Maze
 @author: Aly Kotb
+@description: None
 @tags: ["puzzle", "maze"]
 @addedOn: 2025-05-26
 */
