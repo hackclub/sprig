@@ -1,3 +1,11 @@
+/*
+@title: Flappy Parrot
+@author: TheBlisteringSun
+@description: Flappity Parrity 
+@tags: ['endless', 'cool']
+@addedOn: 2025-11-30
+*/
+
 const player = "p"
 const pipe = "l" // Change the type of the pipe sprites to "l"
 const food = "f"
