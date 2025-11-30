@@ -310,10 +310,10 @@ function newQuestion() {
     case "/": answer = Math.floor(a / b); break
   }
   let wrong
-  do {
-    const delta = Math.floor(Math.random() * 5) + 1
-    wrong = Math.random() < 0.5 ? answer + delta : answer - delta
-  } while (wrong === answer || wrong < 0)
+do {
+  const delta = Math.floor(Math.random() * 5) + 1
+  wrong = Math.random() < 0.5 ? answer + delta : answer - delta
+} while (wrong === answer)
   const leftIsCorrect = Math.random() < 0.5
   correctSide = leftIsCorrect ? "left" : "right"
   addText(`Q: ${a} ${op} ${b} = ?`, { x: 3, y: 2, color: color`7` })
