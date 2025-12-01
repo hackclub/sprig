@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Coptic Maze
 @author: Salt and Light
 @tags: []
-@addedOn: 2025-00-00
+@addedOn: 2025-12-01
 */
 
 // 1. fix background
