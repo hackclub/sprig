@@ -1222,6 +1222,7 @@ let data = {
       let name = data.enemy.firstNames[0];
       data.enemy.firstNames.splice(0, 1);
       data.enemy.firstNames.push(name);
+      return name;
     },
     
     // All the enemy types
@@ -1533,6 +1534,23 @@ let data = {
   },
   // Menu data
   menu: {
+    credits: {
+      text: ['This game is made by: Me_Myself_and_I it could not be made without these people', 'Most contributed: Me_Myself_and_I', 'Game design: Me_Myself_and_I', 'Game concept: Me_Myself_and_I', 'Art: Me_Myself_and_I', 'Making the home screen: Me_Myself_and_I', 'Programming: Me_Myself_and_I', 'Music: Me_Myself_and_I', 'Sound Effects: Me_Myself_and_I', 'Finding bugs: Me_Myself_and_I', 'Fixing bugs: Me_Myself_and_I', 'Making the credits: Me_Myself_and_I', 'Made in: sprig', 'Invented html: Tim Berners-Lee', 'Invented css: Håkon Wium Lie', 'Invented js: Brendan Eich', 'Who made sprig: hackclub', 'Where I got most of the bitmap character names from: https://copypastecharacter.com/all-characters', 'Where I got most of the enemy names from: https://randomwordgenerator.com/name.php', 'Playing this game I made for fun: You the player', 'Thank you for checking out my game', 'P.S. Have you found some easter eggs?'],
+      open: false,
+      at: [0, 0],
+      move: (x, y) => {
+        data.menu.credits.at[0] += x;
+        data.menu.credits.at[1] += y;
+        if (data.menu.credits.at[0] < 0)
+          data.menu.credits.at[0] = 0;
+        if (data.menu.credits.at[1] < 0)
+          data.menu.credits.at[1] = 0;
+        if (data.menu.credits.at[1] > data.menu.credits.text.length - 16)
+          data.menu.credits.at[1] = data.menu.credits.text.length - 16;
+        if (data.menu.credits.at[0] > Math.max(...data.menu.credits.text.map(el => el.length)) - 20)
+          data.menu.credits.at[0] = Math.max(...data.menu.credits.text.map(el => el.length)) - 20;
+      }
+    },
     // This is just so it shows the screen htat says what the buttons do
     howToPlay: true,
     y: 0,
@@ -1609,63 +1627,7 @@ T.T..TTT.T
         data.menu.restart();
       },
       "Credits": () => {
-        try {
-          unde
-          let newwindow = window.open("about:blank", "_blank", "popup=yes");
-          newwindow.document.body.innerHTML = `
-          <style>
-            body {
-              background-color: black;
-              color: white;
-            }
-          </style>
-          <h1>This game is made by: Me_Myself_and_I it could not be made without these people</h1>
-          Most contributed: Me_Myself_and_I<br>
-          Game design: Me_Myself_and_I<br>
-          Game concept: Me_Myself_and_I<br>
-          Art: Me_Myself_and_I<br>
-          Making the home screen: Me_Myself_and_I<br>
-          Programming: Me_Myself_and_I<br>
-          Music: Me_Myself_and_I<br>
-          Sound Effects: Me_Myself_and_I<br>
-          Finding bugs: Me_Myself_and_I<br>
-          Fixing bugs: Me_Myself_and_I<br>
-          Making the credits: Me_Myself_and_I<br>
-          Made in: sprig<br>
-          Invented html: Tim Berners-Lee<br>
-          Invented css: Håkon Wium Lie<br>
-          Invented js: Brendan Eich<br>
-          Who made sprig: hackclub<br>
-          Where I got most of the bitmap character names from: <a href="https://copypastecharacter.com/all-characters">https://copypastecharacter.com/all-characters</a><br>
-          Where I got most of the enemy names from: <a href="https://randomwordgenerator.com/name.php">https://randomwordgenerator.com/name.php</a><br>
-          Playing this game I made for fun: You the player<br>
-          Thank you for checking out my game<br>
-          P.S. Have you found some easter eggs?`;
-        } catch {
-          console.log(`
-This game is made by: Me_Myself_and_I it could not be made without these people
-Most contributed: Me_Myself_and_I
-Game design: Me_Myself_and_I
-Game concept: Me_Myself_and_I
-Art: Me_Myself_and_I
-Making the home screen: Me_Myself_and_I
-Programming: Me_Myself_and_I
-Music: Me_Myself_and_I
-Sound Effects: Me_Myself_and_I
-Finding bugs: Me_Myself_and_I
-Fixing bugs: Me_Myself_and_I
-Making the credits: Me_Myself_and_I
-Made in: sprig
-Invented html: Tim Berners-Lee
-Invented css: Håkon Wium Lie
-Invented js: Brendan Eich
-Who made sprig: hackclub
-Where I got most of the bitmap character names from: https://copypastecharacter.com/all-characters
-Where I got most of the enemy names from: https://randomwordgenerator.com/name.php
-Playing this game I made for fun: You the player
-Thank you for checking out my game
-P.S. Have you found some easter eggs?`)
-        }
+        data.menu.credits.open = true;
       },
       "Rage Quit": () => {
         clearInterval(data.enemy.interval);
@@ -2060,6 +2022,17 @@ to hide this. You
 
 can attack through
 entrances/exits.`, { x: 0, y: 0, color: color`2` })
+      } else if (data.menu.credits.open) {
+        setMap(map`⦰`);
+        clearText()
+
+        let list = data.menu.credits.text.slice(data.menu.credits.at[1], data.menu.credits.at[1] + 16)
+
+        let text = "";
+
+        for (let item of list)
+          text += item.slice(data.menu.credits.at[0], data.menu.credits.at[0] + 20) + "\n";
+        addText(text, {x: 0, y: 0, color: color`2`});
       } else {
         let screen = data.returnIfRandomList("Menu Screen", data.menu.screens.length, ...data.menu.screens);
         setMap(screen.map);
@@ -2121,8 +2094,10 @@ onInput("\i", () => {
     data.text.input = true;
     if (data.ingame)
       data.player.move(0, -1);
-    else if (!data.menu.howToPlay)
+    else if (!data.menu.howToPlay && !data.menu.credits.open)
       data.menu.move(0, -1);
+    else
+      data.menu.credits.move(0, -1)
   }
 });
 onInput("\j", () => {
@@ -2130,8 +2105,10 @@ onInput("\j", () => {
     data.text.input = true;
     if (data.ingame)
       data.player.move(-1, 0);
-    else if (!data.menu.howToPlay)
+    else if (!data.menu.howToPlay && !data.menu.credits.open)
       data.menu.move(-1, 0);
+    else
+      data.menu.credits.move(-1, 0)
   }
 });
 onInput("\k", () => {
@@ -2139,8 +2116,10 @@ onInput("\k", () => {
     data.text.input = true;
     if (data.ingame)
       data.player.move(0, 1);
-    else if (!data.menu.howToPlay)
+    else if (!data.menu.howToPlay && !data.menu.credits.open)
       data.menu.move(0, 1);
+    else
+      data.menu.credits.move(0, 1)
   }
 });
 onInput("\l", () => {
@@ -2148,8 +2127,10 @@ onInput("\l", () => {
     data.text.input = true;
     if (data.ingame)
       data.player.move(1, 0);
-    else if (!data.menu.howToPlay)
+    else if (!data.menu.howToPlay && !data.menu.credits.open)
       data.menu.move(1, 0);
+    else
+      data.menu.credits.move(1, 0)
   }
 });
 
@@ -2169,7 +2150,8 @@ onInput("\w", () => {
   125: D4-125,
   125: C4-125,
   3750`);
-    }
+    } else
+      data.menu.credits.open = false;
   }
 });
 onInput("\a", () => {
@@ -2193,8 +2175,10 @@ onInput("\a", () => {
   500: C4-500,
   15500`);*/
       }
-    } else if (!data.menu.howToPlay)
+    } else if (!data.menu.howToPlay && !data.menu.credits.open)
       data.menu.select();
+    else
+      data.menu.credits.open = false;
   }
   
 });
@@ -2213,7 +2197,8 @@ onInput("\s", () => {
   125: D4-125,
   125: C4-125,
   3750`);
-    }
+    } else
+      data.menu.credits.open = false;
   }
 });
 onInput("\d", () => {
@@ -2232,7 +2217,8 @@ onInput("\d", () => {
           }
         }
       }
-    }
+    } else
+      data.menu.credits.open = false;
   }
 });
 
@@ -3619,7 +3605,7 @@ function merge(dat, merg) {
   if (typeof merg === "object" && !Array.isArray(merg)) {
     for (let key of Object.keys(merg)) {
       if (merg[key] === null)
-        dat[key] = null
+        dat[key] = null;
       else if (typeof merg[key] === "function")
         dat[key] = merg[key];
       else if (Array.isArray(merg[key])) {
