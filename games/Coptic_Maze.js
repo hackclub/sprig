@@ -1,11 +1,14 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Coptic Maze
 @author: Salt and Light
-@tags: []
+@tags: ["Coptic", "Good Deacon"]
 @addedOn: 2025-12-01
+
+INSTRUCTIONS:
+Use WASD to navigate around the level and use J to reset the current level
+
+GOAL:
+get to the end of the map to become a "Good Deacon"
 */
 
 // 1. fix background
