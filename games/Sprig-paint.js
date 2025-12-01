@@ -1,0 +1,706 @@
+const cursor = "C"
+const colors = ["1", "2", "3", "4", "5", "6", "7", "8"]
+let currentColor = 0
+let isDrawingMode = true
+let isViewMode = false
+let isHoldingDraw = false
+// sprites
+setLegend(
+  [ cursor, bitmap`
+................
+................
+................
+................
+................
+......LLLL......
+.....L....L.....
+.....L.LL.L.....
+.....L.LL.L.....
+.....L....L.....
+......LLLL......
+................
+................
+................
+................
+................`],
+  [ "1", bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
+  [ "2", bitmap`
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222`],
+  [ "3", bitmap`
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333`],
+  [ "4", bitmap`
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444`],
+  [ "5", bitmap`
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555`],
+  [ "6", bitmap`
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666`],
+  [ "7", bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777`],
+  [ "8", bitmap`
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888`],
+  [ "H", bitmap`
+0000000000000000
+0000000000000000
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0000000000000000
+0000000000000000`],
+  [ "S", bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
+  [ "T", bitmap`
+0000000000000000
+0222222222222220
+0222222222222220
+0222222222222220
+0222222222222220
+0222222222222220
+0222222222222220
+0222222222222220
+0222222222222220
+0222222222222220
+0222222222222220
+0222222222222220
+0222222222222220
+0222222222222220
+0222222222222220
+0000000000000000`],
+  [ "U", bitmap`
+0000000000000000
+0333333333333330
+0333333333333330
+0333333333333330
+0333333333333330
+0333333333333330
+0333333333333330
+0333333333333330
+0333333333333330
+0333333333333330
+0333333333333330
+0333333333333330
+0333333333333330
+0333333333333330
+0333333333333330
+0000000000000000`],
+  [ "V", bitmap`
+0000000000000000
+0444444444444440
+0444444444444440
+0444444444444440
+0444444444444440
+0444444444444440
+0444444444444440
+0444444444444440
+0444444444444440
+0444444444444440
+0444444444444440
+0444444444444440
+0444444444444440
+0444444444444440
+0444444444444440
+0000000000000000`],
+  [ "W", bitmap`
+0000000000000000
+0555555555555550
+0555555555555550
+0555555555555550
+0555555555555550
+0555555555555550
+0555555555555550
+0555555555555550
+0555555555555550
+0555555555555550
+0555555555555550
+0555555555555550
+0555555555555550
+0555555555555550
+0555555555555550
+0000000000000000`],
+  [ "X", bitmap`
+0000000000000000
+0666666666666660
+0666666666666660
+0666666666666660
+0666666666666660
+0666666666666660
+0666666666666660
+0666666666666660
+0666666666666660
+0666666666666660
+0666666666666660
+0666666666666660
+0666666666666660
+0666666666666660
+0666666666666660
+0000000000000000`],
+  [ "Y", bitmap`
+0000000000000000
+0777777777777770
+0777777777777770
+0777777777777770
+0777777777777770
+0777777777777770
+0777777777777770
+0777777777777770
+0777777777777770
+0777777777777770
+0777777777777770
+0777777777777770
+0777777777777770
+0777777777777770
+0777777777777770
+0000000000000000`],
+  [ "Z", bitmap`
+0000000000000000
+0888888888888880
+0888888888888880
+0888888888888880
+0888888888888880
+0888888888888880
+0888888888888880
+0888888888888880
+0888888888888880
+0888888888888880
+0888888888888880
+0888888888888880
+0888888888888880
+0888888888888880
+0888888888888880
+0000000000000000`],
+  [ "P", bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000DD0000000
+0000000DD0000000
+00000DDDDDD00000
+00000DDDDDD00000
+0000000DD0000000
+0000000DD0000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
+  [ "Q", bitmap`
+0000000000000000
+0222222222222220
+0222222222222220
+0222222222222220
+0222222222222220
+0222222DD2222220
+0222222DD2222220
+02222DDDDDD22220
+02222DDDDDD22220
+0222222DD2222220
+0222222DD2222220
+0222222222222220
+0222222222222220
+0222222222222220
+0222222222222220
+0000000000000000`],
+  [ "R", bitmap`
+0000000000000000
+0333333333333330
+0333333333333330
+0333333333333330
+0333333333333330
+0333333DD3333330
+0333333DD3333330
+03333DDDDDD33330
+03333DDDDDD33330
+0333333DD3333330
+0333333DD3333330
+0333333333333330
+0333333333333330
+0333333333333330
+0333333333333330
+0000000000000000`],
+  [ "O", bitmap`
+0000000000000000
+0444444444444440
+0444444444444440
+0444444444444440
+0444444444444440
+0444444DD4444440
+0444444DD4444440
+04444DDDDDD44440
+04444DDDDDD44440
+0444444DD4444440
+0444444DD4444440
+0444444444444440
+0444444444444440
+0444444444444440
+0444444444444440
+0000000000000000`],
+  [ "N", bitmap`
+0000000000000000
+0555555555555550
+0555555555555550
+0555555555555550
+0555555555555550
+0555555DD5555550
+0555555DD5555550
+05555DDDDDD55550
+05555DDDDDD55550
+0555555DD5555550
+0555555DD5555550
+0555555555555550
+0555555555555550
+0555555555555550
+0555555555555550
+0000000000000000`],
+  [ "M", bitmap`
+0000000000000000
+0666666666666660
+0666666666666660
+0666666666666660
+0666666666666660
+0666666DD6666660
+0666666DD6666660
+06666DDDDDD66660
+06666DDDDDD66660
+0666666DD6666660
+0666666DD6666660
+0666666666666660
+0666666666666660
+0666666666666660
+0666666666666660
+0000000000000000`],
+  [ "L", bitmap`
+0000000000000000
+0777777777777770
+0777777777777770
+0777777777777770
+0777777777777770
+0777777DD7777770
+0777777DD7777770
+07777DDDDDD77770
+07777DDDDDD77770
+0777777DD7777770
+0777777DD7777770
+0777777777777770
+0777777777777770
+0777777777777770
+0777777777777770
+0000000000000000`],
+  [ "K", bitmap`
+0000000000000000
+0888888888888880
+0888888888888880
+0888888888888880
+0888888888888880
+0888888DD8888880
+0888888DD8888880
+08888DDDDDD88880
+08888DDDDDD88880
+0888888DD8888880
+0888888DD8888880
+0888888888888880
+0888888888888880
+0888888888888880
+0888888888888880
+0000000000000000`]
+)
+
+setMap(map`
+........
+........
+........
+........
+........
+........
+........
+........`)
+
+let cursorPos = { x: 3, y: 3 }
+
+// minecraft hot bar
+function createHotbar() {
+  // Hotbar background
+  for (let x = 0; x < 8; x++) {
+    addSprite(x, 7, "H")
+  }
+  
+  // Color slots in hotbar
+  const outlinedColors = ["S", "T", "U", "V", "W", "X", "Y", "Z"]
+  for (let i = 0; i < outlinedColors.length; i++) {
+    addSprite(i, 7, outlinedColors[i])
+  }
+  
+  // Initial selector position
+  updateHotbarSelector()
+}
+
+// toggle UI visibility
+function toggleUI() {
+  const allSprites = getAll()
+  
+  if (isViewMode) {
+    // Hide UI: remove cursor, hotbar background, and color selectors
+    for (const sprite of allSprites) {
+      if (sprite.type === cursor || sprite.type === "H" || 
+          ["S", "T", "U", "V", "W", "X", "Y", "Z", 
+           "P", "Q", "R", "O", "N", "M", "L", "K"].includes(sprite.type)) {
+        sprite.remove()
+      }
+    }
+  } else {
+    // Show UI: restore cursor and hotbar
+    addSprite(cursorPos.x, cursorPos.y, cursor)
+    createHotbar()
+  }
+}
+
+// Draw the initial cursor and hotbar
+addSprite(cursorPos.x, cursorPos.y, cursor)
+createHotbar()
+
+// Show initial status
+updateDisplay()
+
+onInput("w", () => {
+  if (cursorPos.y > 0 && !isViewMode) {
+    cursorPos.y -= 1
+    updateCursor()
+    if (isHoldingDraw) {
+      performDrawAction()
+    }
+  }
+})
+
+onInput("s", () => {
+  if (cursorPos.y < 6 && !isViewMode) {
+    cursorPos.y += 1
+    updateCursor()
+    if (isHoldingDraw) {
+      performDrawAction()
+    }
+  }
+})
+
+onInput("a", () => {
+  if (cursorPos.x > 0 && !isViewMode) {
+    cursorPos.x -= 1
+    updateCursor()
+    if (isHoldingDraw) {
+      performDrawAction()
+    }
+  }
+})
+
+onInput("d", () => {
+  if (cursorPos.x < 7 && !isViewMode) {
+    cursorPos.x += 1
+    updateCursor()
+    if (isHoldingDraw) {
+      performDrawAction()
+    }
+  }
+})
+
+// J key to start drawing/erasing (hold down)
+onInput("j", () => {
+  if (!isViewMode) {
+    isHoldingDraw = true
+    performDrawAction()
+  }
+})
+
+// Use I and K for color selection
+onInput("i", () => {
+  if (!isViewMode) {
+    selectColor((currentColor - 1 + colors.length) % colors.length)
+  }
+})
+
+onInput("k", () => {
+  if (!isViewMode) {
+    selectColor((currentColor + 1) % colors.length)
+  }
+})
+
+// L key to toggle between draw, erase, and view modes
+onInput("l", () => {
+  if (isDrawingMode) {
+    isDrawingMode = false
+    isViewMode = false
+    isHoldingDraw = false // Reset hold state when switching modes
+  } else if (!isViewMode) {
+    isViewMode = true
+    isHoldingDraw = false // Reset hold state when switching modes
+  } else {
+    isDrawingMode = true
+    isViewMode = false
+    isHoldingDraw = false // Reset hold state when switching modes
+  }
+  
+  toggleUI()
+  updateDisplay()
+})
+
+// Reset holding state when any key is released (simplified approach)
+// Since Sprig doesn't have key release events, we'll reset the hold state after a short delay
+let holdResetTimer = null
+
+function performDrawAction() {
+  if (isDrawingMode) {
+    drawAtCursor()
+  } else {
+    eraseAtCursor()
+  }
+  
+  // Reset the holding state after a short delay (simulates key release)
+  if (holdResetTimer) {
+    clearTimeout(holdResetTimer)
+  }
+  holdResetTimer = setTimeout(() => {
+    isHoldingDraw = false
+  }, 100)
+}
+
+function selectColor(index) {
+  currentColor = index
+  updateHotbarSelector()
+  updateDisplay()
+}
+
+function updateHotbarSelector() {
+  // Remove all color sprites from hotbar
+  const outlinedColors = ["S", "T", "U", "V", "W", "X", "Y", "Z"]
+  const plusColors = ["P", "Q", "R", "O", "N", "M", "L", "K"]
+  const allSprites = getAll()
+  for (const sprite of allSprites) {
+    if ((outlinedColors.includes(sprite.type) || plusColors.includes(sprite.type)) && sprite.y === 7) {
+      sprite.remove()
+    }
+  }
+  
+  // Add all colors back with proper selection
+  for (let i = 0; i < outlinedColors.length; i++) {
+    if (i === currentColor) {
+      // Use plus version for selected color
+      addSprite(i, 7, plusColors[i])
+    } else {
+      // Use regular outlined version for others
+      addSprite(i, 7, outlinedColors[i])
+    }
+  }
+}
+
+function updateCursor() {
+  // Clear all cursor sprites
+  const allSprites = getAll()
+  for (const sprite of allSprites) {
+    if (sprite.type === cursor) {
+      sprite.remove()
+    }
+  }
+  
+  // Always add cursor on top (unless in view mode)
+  if (!isViewMode) {
+    addSprite(cursorPos.x, cursorPos.y, cursor)
+  }
+}
+
+function drawAtCursor() {
+  // Don't draw on hotbar
+  if (cursorPos.y === 7) return
+  
+  // Remove any existing colors from current position
+  const tileSprites = getTile(cursorPos.x, cursorPos.y)
+  for (const sprite of tileSprites) {
+    if (colors.includes(sprite.type)) {
+      sprite.remove()
+    }
+  }
+  // Add current color (use the regular colors, not outlined ones)
+  addSprite(cursorPos.x, cursorPos.y, colors[currentColor])
+  // Add cursor back on top
+  if (!isViewMode) {
+    addSprite(cursorPos.x, cursorPos.y, cursor)
+  }
+}
+
+function eraseAtCursor() {
+  // Don't erase hotbar
+  if (cursorPos.y === 7) return
+  
+  // Remove any color sprites at cursor position
+  const tileSprites = getTile(cursorPos.x, cursorPos.y)
+  for (const sprite of tileSprites) {
+    if (colors.includes(sprite.type)) {
+      sprite.remove()
+    }
+  }
+  // Ensure cursor is visible
+  if (!isViewMode) {
+    addSprite(cursorPos.x, cursorPos.y, cursor)
+  }
+}
+
+function updateDisplay() {
+  clearText()
+  
+  if (isViewMode) {
+    addText("VIEW MODE", { 
+      x: 3, 
+      y: 0, 
+      color: color`D`
+    })
+  } else {
+    // Status display at top
+    addText(isDrawingMode ? " DRAW MODE" : " ERASE MODE", { 
+      x: 1, 
+      y: 0, 
+      color: isDrawingMode ? color`C` : color`F`
+    })
+  }
+}
