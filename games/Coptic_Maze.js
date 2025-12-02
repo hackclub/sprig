@@ -1,14 +1,9 @@
 /*
 @title: Coptic Maze
 @author: Salt and Light
+@description: simple maze explorer game, try to get to the end to become a "good deacon". Use WASD to navigate around the level and use J to reset the current level, there are 7 levels, try to get to the end, if you touch a burger you die, since you broke your fast, use the "curtain" to teleport, use the cross to unlock the cross keyhole, and the goal is to get the bible to go to the next level.
 @tags: ["Coptic", "Good Deacon"]
 @addedOn: 2025-12-01
-
-INSTRUCTIONS:
-Use WASD to navigate around the level and use J to reset the current level
-
-GOAL:
-get to the end of the map to become a "Good Deacon"
 */
 
 // 1. fix background
