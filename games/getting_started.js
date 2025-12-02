@@ -14,6 +14,9 @@ const player = "p";
 const box = "b";
 const goal = "g";
 const wall = "w";
+const move = tune `
+29.73240832507433: D4~29.73240832507433,
+921.7046580773043`;
 
 // assign bitmap art to each sprite
 setLegend(
@@ -99,10 +102,10 @@ p..
 .b.
 ..g`,
   map`
-p.wg
-.bw.
-..w.
-..w.`,
+p..g
+.b..
+....
+....`,
   map`
 p...
 ...b
@@ -127,16 +130,29 @@ setSolids([ player, box, wall ]); // other sprites cannot go inside of these spr
 
 // allow certain sprites to push certain other sprites
 setPushables({
-  [player]: []
+  [player]: [box],
+  [box]: [box]
 });
 
 // inputs for player movement control
 onInput("s", () => {
   getFirst(player).y += 1; // positive y is downwards
+  playTune(move)
 });
 
 onInput("d", () => {
   getFirst(player).x += 1;
+  playTune(move)
+});
+
+onInput("w", () => {
+  getFirst(player).y -= 1; // positive y is downwards
+  playTune(move)
+});
+
+onInput("a", () => {
+  getFirst(player).x -= 1; // positive x is right
+  playTune(move)
 });
 
 // input to reset level
