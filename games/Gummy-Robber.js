@@ -7,6 +7,7 @@ const gummyeat = tune`
 15500`
 
 let score = 0
+let won = false
 
 // Sprites
 setLegend(
@@ -87,12 +88,6 @@ setPushables({
   [ player ]: []
 })
 
-// Movement
-onInput("s", () => getFirst(player).y += 1)
-onInput("w", () => getFirst(player).y -= 1)
-onInput("a", () => getFirst(player).x -= 1)
-onInput("d", () => getFirst(player).x += 1)
-
 // Eat gummies & spike collision
 afterInput(() => {
   const p = getFirst(player)
@@ -113,52 +108,78 @@ afterInput(() => {
   clearText()
   addText("Score: " + score, { x: 0, y: 0, color: color`3` })
   addText("Goal: Get 25 score", { x: 0, y: 1, color: color`3` })
+
+  if (score >= 25) {
+    won = true
+    clearText()
+    addText("You Won!!!111!!", { x: 2, y: 2, color: color`9` })
+  }
 })
+
+if (won == false) {
+  onInput("s", () => getFirst(player).y += 1)
+  onInput("w", () => getFirst(player).y -= 1)
+  onInput("a", () => getFirst(player).x -= 1)
+  onInput("d", () => getFirst(player).x += 1)
+}
 
 // Spawn gummies faster and more often
 setInterval(() => {
-  for (let i = 0; i < 3; i++) { // spawn 3 gummies
-    const x = Math.floor(Math.random() * 7)
-    const y = Math.floor(Math.random() * 6)
-    if (getTile(x, y).length === 0) addSprite(x, y, gummy)
+  if (won == false) {
+    for (let i = 0; i < 1; i++) { // spawn 3 gummies
+      const x = Math.floor(Math.random() * 7)
+      const y = Math.floor(Math.random() * 6)
+      if (getTile(x, y).length === 0) addSprite(x, y, gummy)
+    }
   }
-}, 500) // every 0.5 seconds
+}, 750) // every 0.5 seconds
 
 // Spawn more spikes
 setInterval(() => {
-  if (Math.random() < 0.6) { // 60% chance
-    const x = Math.floor(Math.random() * 7)
-    const y = Math.floor(Math.random() * 6)
-    const p = getFirst(player)
-    if (getTile(x, y).length === 0 && !(x === p.x && y === p.y)) {
-      addSprite(x, y, spike)
+  if (won == false) {
+    if (Math.random() < 0.7) { // 60% chance
+      const x = Math.floor(Math.random() * 7)
+      const y = Math.floor(Math.random() * 6)
+      const p = getFirst(player)
+      if (getTile(x, y).length === 0 && !(x === p.x && y === p.y)) {
+        addSprite(x, y, spike)
+      }
     }
   }
 }, 1200)
 
 // Move spikes towards the player faster
 setInterval(() => {
-  const p = getFirst(player)
-  for (let s of getAll(spike)) {
-    let nx = s.x
-    let ny = s.y
+  if (won == false) {
+    const p = getFirst(player)
+    for (let s of getAll(spike)) {
+      let nx = s.x
+      let ny = s.y
 
-    // Move horizontally toward player
-    if (p.x > s.x) nx += 1
-    if (p.x < s.x) nx -= 1
+      // Move horizontally toward player
+      if (p.x > s.x) nx += 1
+      if (p.x < s.x) nx -= 1
 
-    // Move vertically toward player
-    if (p.y > s.y) ny += 1
-    if (p.y < s.y) ny -= 1
+      // Move vertically toward player
+      if (p.y > s.y) ny += 1
+      if (p.y < s.y) ny -= 1
 
-    // Keep inside map & avoid other spikes & avoid player
-    if (
-      nx >= 0 && nx < 7 &&
-      ny >= 0 && ny < 6 &&
-      getTile(nx, ny).every(t => t.type !== spike && t.type !== player)
-    ) {
-      s.x = nx
-      s.y = ny
+      // Keep inside map & avoid other spikes
+      if (
+        nx >= 0 && nx < 7 &&
+        ny >= 0 && ny < 6 &&
+        getTile(nx, ny).every(t => t.type !== spike)
+      ) {
+        s.x = nx
+        s.y = ny
+      }
+
+      // Check if spike hit player
+      if (s.x === p.x && s.y === p.y) {
+        resetLevel()
+        addText("Ouch! Hit a spike!", { x: 0, y: 2, color: color`1` })
+        return
+      }
     }
   }
-}, 300)
+}, 500)
