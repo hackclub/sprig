@@ -1,5 +1,10 @@
 /*
+ /*
 @title: formulaWon
+   @author: Nicholas K.
+   @description: F1-style racing game.
+  @tags: ['racing', 'simulation']
+ @addedOn: 2025-12-03
 */
 
 const player = "p"
