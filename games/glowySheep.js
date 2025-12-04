@@ -2,7 +2,7 @@
 @title: Glowy Sheep
 @author: atomicra1n
 @tags: [puzzle, simulation]
-@addedOn: 2025-00-00
+@addedOn: 2025-12-04
 */
 
 // --- SPRITES ---
