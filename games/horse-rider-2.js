@@ -128,6 +128,7 @@ jf.j..jj.fjj.jf.
 jffjj.j.j.jjfjff
 fffffffffffj.j..`,
   map`
+...
 pjn`
 ]
 
@@ -190,7 +191,7 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      addText("you win!", { y: 4, color: color`3` });
+      addText("you win!", { y: 1, color: color`3` });
     }
   }
 });
