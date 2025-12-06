@@ -325,7 +325,3 @@ afterInput(() => {
   if (gameState === "play") checkEndConditions()
 })
 
-
-    playerInputEnabled = false
-  }
-})
