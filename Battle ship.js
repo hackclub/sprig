@@ -175,10 +175,10 @@ function placeShip(existingShips, minX, maxX, minY, maxY) {
 }
 
 const existingShips = [];
-const ship1 = placeShip(existingShips, 0, 9, 0, 7)
-const ship2 = placeShip(existingShips, 0, 9, 0, 7)
-const ship3 = placeShip(existingShips, 0, 9, 0, 7)
-const ship4 = placeShip(existingShips, 0, 9, 0, 7)
+const ship1 = placeShip(existingShips, 0, 6, 0, 6)
+const ship2 = placeShip(existingShips, 0, 6, 0, 6)
+const ship3 = placeShip(existingShips, 0, 6, 0, 6)
+const ship4 = placeShip(existingShips, 0, 6, 0, 6)
 
 addSprite(ship1.x, ship1.y, hiddenship)
 addSprite(ship2.x, ship2.y, hiddenship)
