@@ -1,28 +1,31 @@
 /*
-@title: Battleship
+@title: Battleship+
 */
 
+// --- SYMBOLS ---
 const player = "p"
 const water = "w"
-const hit = "h"
+const hit = "h"    // yellow hit marker
 const miss = "x"
-const hiddenship = "s"
+const hiddenship = "s" // invisible enemy ship sprite
 
-let playerInputEnabled = true
+let gameState = "start" // "start", "play", "end"
+let playerInputEnabled = false
+let playerLives = 3
 
-const winSound = tune`
-16000`
+const winSound = tune`16000`
 const lossSound = tune`
-1666.6666666666667,
-833.3333333333334: A4~833.3333333333334 + C4/833.3333333333334,
-833.3333333333334: A4~833.3333333333334,
-833.3333333333334: A4~833.3333333333334 + C4/833.3333333333334,
-833.3333333333334: F4~833.3333333333334 + G4-833.3333333333334,
-833.3333333333334: E4^833.3333333333334 + F4-833.3333333333334,
-833.3333333333334: D4^833.3333333333334 + E4-833.3333333333334,
-833.3333333333334: C4^833.3333333333334 + D4-833.3333333333334,
-19166.666666666668`
+1666.66,
+833.33: A4~833 + C4/833,
+833.33: A4~833,
+833.33: A4~833 + C4/833,
+833.33: F4~833 + G4-833,
+833.33: E4^833 + F4-833,
+833.33: D4^833 + E4-833,
+833.33: C4^833 + D4-833,
+19166.66`
 
+// --- SPRITES ---
 setLegend(
   [player, bitmap`
 LLLLLLLLLLLLLLLL
@@ -79,22 +82,22 @@ LLLLLLLLLLLLLLLL`],
 ................`],
 
   [hit, bitmap `
-....33333333....
-...3333333333...
-..333333333333..
-.33333333333333.
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-3333333333333333
-.33333333333333.
-..333333333333..
-...3333333333...
-....33333333....`],
+....66666666....
+...6666666666...
+..666666666666..
+.66666666666666.
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+.66666666666666.
+..666666666666..
+...6666666666...
+....66666666....`],
 
   [miss, bitmap `
 ....22222222....
@@ -112,69 +115,125 @@ LLLLLLLLLLLLLLLL`],
 .22222222222222.
 ..222222222222..
 ...2222222222...
-....22222222....`],
+....22222222....`]
 )
 
 setBackground(water)
 setSolids([])
 
-// --- MAP ---
-const levels = [
-  map`
+//
+// Utility: remove all sprites (keeps the map intact)
+//
+function clearSprites() {
+  for (let y = 0; y < height(); y++) {
+    for (let x = 0; x < width(); x++) {
+      const ts = getTile(x, y)
+      ts.forEach(t => {
+        // remove all sprites (map tiles remain)
+        try { t.remove() } catch (e) {}
+      })
+    }
+  }
+}
+
+//
+// Start screen (keeps map present)
+//
+function showStartScreen() {
+  clearSprites()
+  clearText()
+  setMap(map`
+.......
+.......
+.......
+...p...
+.......
+.......
+.......`)
+  addText(" BATTLESHIP ", {x: 1, y: 2, color: color`3`})
+  addText("PRESS L", {x: 2, y: 4, color: color`3`})
+  addText("TO START", {x: 2, y: 5, color: color`3`})
+  gameState = "start"
+  playerInputEnabled = false
+}
+
+showStartScreen()
+
+// ============================
+// GAME VARS / PLACEMENT
+// ============================
+let ships = []    // list of enemy ship coords (for placement uniqueness)
+let enemyShots = []
+
+function randomCoord() {
+  return { x: Math.floor(Math.random()*7), y: Math.floor(Math.random()*7) }
+}
+
+function placeShip(size) {
+  let valid = false
+  let coords = []
+  while (!valid) {
+    coords = []
+    const horizontal = Math.random() < 0.5
+    const start = randomCoord()
+    for (let i = 0; i < size; i++) {
+      const x = start.x + (horizontal ? i : 0)
+      const y = start.y + (horizontal ? 0 : i)
+      if (x > 6 || y > 6) break
+      coords.push({x, y})
+    }
+    valid = coords.length === size && coords.every(c =>
+      !ships.some(s => s.x === c.x && s.y === c.y)
+    )
+  }
+  coords.forEach(c => {
+    ships.push(c)
+    addSprite(c.x, c.y, hiddenship) // invisible on purpose (green concept kept)
+  })
+}
+
+function placeAllShips() {
+  ships = []
+  placeShip(2)
+  placeShip(3)
+  placeShip(3)
+}
+
+function resetGame() {
+  clearSprites()
+  clearText()
+  playerLives = 3
+  playerInputEnabled = true
+  gameState = "play"
+  setMap(map`
 p......
 .......
 .......
 .......
 .......
 .......
-.......`
-]
-
-setMap(levels[0])
-
-// --------------------
-//   SHIP PLACEMENT
-// --------------------
-function getRandomCoord() {
-  return {
-    x: Math.floor(Math.random() * 7),
-    y: Math.floor(Math.random() * 7)
-  }
+.......`)
+  enemyShots = []
+  placeAllShips()
 }
 
-function shipsOverlap(a, b) {
-  return a.x === b.x && a.y === b.y
-}
-
-const ships = []
-
-function placeShip() {
-  let pos
-  do {
-    pos = getRandomCoord()
-  } while (ships.some(s => shipsOverlap(s, pos)))
-
-  ships.push(pos)
-  addSprite(pos.x, pos.y, hiddenship)
-}
-
-placeShip()
-placeShip()
-placeShip()
-placeShip()
-
-// --------------------
-//   MOVEMENT
-// --------------------
+// ============================
+// CONTROLS (WASD)
+// ============================
 onInput("w", () => { if (playerInputEnabled) getFirst(player).y -= 1 })
 onInput("s", () => { if (playerInputEnabled) getFirst(player).y += 1 })
 onInput("a", () => { if (playerInputEnabled) getFirst(player).x -= 1 })
 onInput("d", () => { if (playerInputEnabled) getFirst(player).x += 1 })
 
-// --------------------
-//   SHOOTING
-// --------------------
+// ============================
+// SHOOT (L)
+// ============================
 onInput("l", () => {
+  if (gameState === "start") {
+    resetGame()
+    return
+  }
+  if (gameState !== "play") return
   if (!playerInputEnabled) return
 
   const px = getFirst(player).x
@@ -185,42 +244,88 @@ onInput("l", () => {
   const hasHit = tile.some(t => t.type === hit)
   const hasMiss = tile.some(t => t.type === miss)
 
-  // Already shot here
   if (hasHit || hasMiss) return
 
-  // Hit
   if (hasShip) {
-    clearTile(px, py)
-    addSprite(px, py, hit)
+    // only remove hidden-ship sprites so player and other sprites stay
+    tile.filter(t => t.type === hiddenship).forEach(s => s.remove())
+    addSprite(px, py, hit) // yellow marker
     playTune(winSound)
-    return
+  } else {
+    addSprite(px, py, miss)
   }
 
-  // Miss
-  addSprite(px, py, miss)
+  // enemy shoots back after a short delay
+  setTimeout(() => {
+    enemyShoot()
+    checkEndConditions()
+  }, 120)
 })
 
-// --------------------
-//   CHECK WIN/LOSS
-// --------------------
-afterInput(() => {
-  // Win condition: all ships hit
-  if (tilesWith(hiddenship).length === 0) {
-    addText("You Win!")
-    playTune(winSound)
-    playerInputEnabled = false
-    return
-  }
+// ============================
+// ENEMY SHOOT (AI)
+// ============================
+function enemyShoot() {
+  let x, y, tile
+  do {
+    x = Math.floor(Math.random()*7)
+    y = Math.floor(Math.random()*7)
+    tile = getTile(x, y)
+  } while (tile.some(t => t.type === miss || t.type === hit))
 
-  // Loss: 10 misses
-  if (tilesWith(miss).length >= 10) {
-    addText("No more Ammo")
+  // if enemy hits player, decrement lives and show text
+  if (tile.some(t => t.type === player)) {
+    playerLives -= 1
+    addText("YOU WERE HIT!", {x: 0, y: 0, color: color`3`})
     playTune(lossSound)
-    playerInputEnabled = false
+    if (playerLives <= 0) {
+      addText("YOU LOSE", {x: 2, y: 3, color: color`3`})
+      playerInputEnabled = false
+      gameState = "end"
+      addText("PRESS J TO RESTART", {x: 0, y: 5, color: color`3`})
+    }
+    return
   }
+
+  // otherwise show enemy miss visually
+  addSprite(x, y, miss)
+
+  // also ensure enemy's shot removes any hidden ship(s) at that tile (keeps win logic correct)
+  tile.filter(t => t.type === hiddenship).forEach(s => s.remove())
+}
+
+// ============================
+// END CHECK
+// ============================
+function checkEndConditions() {
+  if (gameState !== "play") return
+
+  // win if no more hidden-ship sprites
+  if (tilesWith(hiddenship).length === 0) {
+    addText("YOU WIN!", {x: 2, y: 3, color: color`3`})
+    playTune(winSound)
+    playerInputEnabled = false
+    gameState = "end"
+    addText("PRESS J TO RESTART", {x: 0, y: 5, color: color`3`})
+    return
+  }
+}
+
+// ============================
+// RESTART (J)
+// ============================
+onInput("j", () => {
+  clearSprites()
+  clearText()
+  showStartScreen()
 })
 
-    addText("No more Ammo")
+// keep checking end each input cycle (safety)
+afterInput(() => {
+  if (gameState === "play") checkEndConditions()
+})
+
+
     playerInputEnabled = false
   }
 })
