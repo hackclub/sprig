@@ -1,3 +1,12 @@
+/*
+@title: Escape the Room
+@author: Riv
+@description: Simple game about escaping a room
+@tags: ['puzzle', 'maze']
+@addedOn: 2025-12-07
+*/
+
+
 const player = "p";
 const enemy = "e";
 const wall = "w";
