@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Journey to the Centre of the Earth
 @author: HorseMagic
 @tags: ['platformer']
-@addedOn: 2025-8-12
+@addedOn: 2025-12-8
 @description: A platformer game based on the book called Journey to the Centre of the Earth. Jump and crouch to avoid stalagmites, stalagtights, lava, bats, and geysers, and try to reach the doors. Get the golden trophy.
 */
 
