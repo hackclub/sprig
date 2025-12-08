@@ -467,26 +467,20 @@ function updateDisplay() {
     statusText += " CHECK!"
     playerColor = color`3`
   }
-  addText(statusText, { x: 1, y: 1, color: playerColor })
+  addText(statusText, { x: 1, y: 0, color: playerColor })
   
   // Selected piece info
   if (selectedSquare) {
     let piece = board[selectedSquare.y][selectedSquare.x]
     let pieceName = getPieceName(piece)
-    addText(`>${pieceName}`, { x: 1, y: 2, color: color`5` })
+    addText(`>${pieceName}`, { x: 9, y: 1, color: color`5` })
   }
-  
-  // Controls
-  addText("WASD:Move", { x: 1, y: 11, color: color`6` })
-  addText("I:Select", { x: 1, y: 14, color: color`4` })
-  addText("K:Reset", { x: 11, y: 14, color: color`4` })
   
   // Move counter
   if (moveHistory.length > 0) {
-    addText(`Move:${moveHistory.length}`, { x: 11, y: 13, color: color`1` })
+    addText(`M:${moveHistory.length}`, { x: 1, y: 1, color: color`1` })
   }
 }
-
 // === CHESS LOGIC ===
 function getPieceColor(piece) {
   if (piece === 'e') return null
