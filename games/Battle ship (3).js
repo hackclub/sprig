@@ -1,5 +1,11 @@
-/*
-@title: Battleship Classic
+
+/* 
+@title Battleship Classic
+@author Ella
+@desc A WASD-controlled battleship game with enemy AI, hits, misses, and win/lose conditions.
+@genre strategy
+@theme ocean
+@created 2025-12-05
 */
 
 // --- SPRITES & CONSTANTS ---
