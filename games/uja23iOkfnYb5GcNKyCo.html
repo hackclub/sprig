@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Mono&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+<title>Editor | Sprig</title>
+<link rel="canonical" href="https://sprig.hackclub.com/~/uja23iOkfnYb5GcNKyCo">
+<meta property="og:title" content="Editor">
+<meta property="og:site_name" content="Sprig">
+<meta name="description" content="The best way to learn is by making things that you care about and sharing them with other people. Check out games created by Hack Clubbers.">
+<meta property="og:description" content="The best way to learn is by making things that you care about and sharing them with other people. Check out games created by Hack Clubbers.">
+<meta name="keywords" content="game, sprig, hack club">
+<meta name="author" content="@hackclub">
+<meta name="twitter:creator" content="@hackclub">
+<meta name="theme-color" content="#0a0a16">
+<meta property="og:url" content="https://sprig.hackclub.com/~/uja23iOkfnYb5GcNKyCo">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://sprig.hackclub.com/stories-tiny/sprig-front.jpeg">
+<meta property="twitter:image" content="https://sprig.hackclub.com/stories-tiny/sprig-front.jpeg">
+<meta name="twitter:card" content="summary_large_image">
+
+<script defer data-domain="sprig.hackclub.com" src="https://plausible.io/js/plausible.js"></script>
+<script defer src="https://www.google.com/recaptcha/enterprise.js?render=6LdopcUkAAAAADUyrxhp32xJ1PAh9pS9mmX00UPE"></script>
+	<link rel="stylesheet" href="/src/components/big-interactive-pages/editor.module.css" />
+<link rel="stylesheet" href="/src/components/subeditors/bitmap-editor.module.css" />
+<link rel="stylesheet" href="/src/components/subeditors/color-picker.module.css" />
+<link rel="stylesheet" href="/src/components/subeditors/map-editor.module.css" />
+<link rel="stylesheet" href="/src/components/design-system/bitmap-preview.module.css" />
+<link rel="stylesheet" href="/src/components/subeditors/sequencer.module.css" />
+<link rel="stylesheet" href="/src/components/design-system/button.module.css" />
+<link rel="stylesheet" href="/src/components/codemirror-widgets/open-button.module.css" />
+<link rel="stylesheet" href="/src/components/popups-etc/help.module.css" />
+<link rel="stylesheet" href="/src/components/popups-etc/chat-component.module.css" />
+<link rel="stylesheet" href="/src/components/codemirror-widgets/swatch.module.css" />
+<link rel="stylesheet" href="/src/components/search-box.module.css" />
+<link rel="stylesheet" href="/src/components/codemirror.module.css" />
+<link rel="stylesheet" href="/src/components/design-system/textarea.module.css" />
+<link rel="stylesheet" href="/src/components/design-system/input.module.css" />
+<link rel="stylesheet" href="/src/components/popups-etc/navbar-popup.module.css" />
+<link rel="stylesheet" href="/src/components/navbar.module.css" />
+<link rel="stylesheet" href="/src/components/design-system/inline-input.module.css" />
+<link rel="stylesheet" href="/src/components/design-system/link-button.module.css" />
+<link rel="stylesheet" href="/src/components/popups-etc/share-room.module.css" />
+<link rel="stylesheet" href="/src/components/popups-etc/editor-modal.module.css" />
+<link rel="stylesheet" href="/src/components/popups-etc/draft-warning.module.css" />
+<link rel="stylesheet" href="/src/components/popups-etc/migrate-toast.module.css" />
+<link rel="stylesheet" href="/src/components/popups-etc/tutorial-warning.module.css" />
+<link rel="stylesheet" href="/src/components/popups-etc/session-conflict-warning.module.css" />
+<link rel="stylesheet" href="/src/components/popups-etc/key-bindings-modal.module.css" />
+<link rel="stylesheet" href="/src/components/popups-etc/mobile-unsupported.module.css" /><style type="text/css" data-astro-dev-id="/app/src/global.css">*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+html,
+body {
+	height: 100%;
+}
+html {
+	box-sizing: border-box;
+	overflow: hidden;
+}
+body {
+	overflow: auto;
+	overflow-x: hidden;
+}
+
+:root {
+	--font-text: "Inter", sans-serif;
+	--font-code: "Fira Mono", monospace;
+
+	--bg-base: #fafed7;
+	--bg-dark: #2f2f2f;
+	--bg-overlay: #000000cf;
+	--bg-drawing-hover: #9b9b9b52;
+	--bg-floating: #191919;
+	--bg-surface: #f8f9fa;
+	--bg-overflow: #dee2e6;
+	--bg-btn-inactive: #434343;
+	--bg-btn-inactive-dark: #2e2e2e;
+
+	--fg-muted: #9d9d9d;
+	--fg-muted-on-accent: #8fcabb;
+	--error: #e03131;
+	--accent: #078969;
+	--accent-light: #80c3a0;
+	--accent-dark: #136853;
+	--fg-switch-low: #515151;
+	--fg-switch-high: #f3f3f3;
+
+	--cursor-interactive: default;
+	--line-height-copy: 1.5;
+}
+
+body {
+	font-family: var(--font-text);
+	margin: 0;
+	background: var(--bg-base);
+	position: relative;
+}
+
+a {
+	color: var(--accent);
+	text-decoration: none;
+}
+
+a:hover {
+	color: var(--accent-dark);
+}
+
+@keyframes shake {
+	0% {
+		transform: translate(2px, 1px) rotate(0deg);
+	}
+	10% {
+		transform: translate(-1px, -2px) rotate(-1deg);
+	}
+	20% {
+		transform: translate(-3px, 0px) rotate(1deg);
+	}
+	30% {
+		transform: translate(0px, 2px) rotate(0deg);
+	}
+	40% {
+		transform: translate(1px, -1px) rotate(1deg);
+	}
+	50% {
+		transform: translate(-1px, 2px) rotate(-1deg);
+	}
+	60% {
+		transform: translate(-3px, 1px) rotate(0deg);
+	}
+	70% {
+		transform: translate(2px, 1px) rotate(-1deg);
+	}
+	80% {
+		transform: translate(-1px, -1px) rotate(1deg);
+	}
+	90% {
+		transform: translate(2px, 2px) rotate(0deg);
+	}
+	100% {
+		transform: translate(1px, -2px) rotate(-1deg);
+	}
+}
+
+.shake {
+	animation-name: shake;
+	animation-duration: 0.5s;
+	transform-origin: 50% 50%;
+	animation-iteration-count: infinite;
+}
+
+.copy-container {
+	width: 100%;
+	max-width: 900px;
+	margin: 40px auto;
+	padding: 10px;
+}
+
+.copy-container > h1 {
+	margin: 0;
+	font-size: 2.5rem;
+}
+
+.copy-container p {
+	line-height: var(--line-height-copy);
+}
+
+.grecaptcha-badge {
+	visibility: hidden;
+}
+
+select {
+	line-height: 1.2;
+	background: var(--bg-btn-inactive);
+	background: white;
+	color: var(--bg-btn-inactive);
+	border: 2px solid var(--bg-btn-inactive);
+	padding: 8px 12px;
+	padding-right: 20px;
+	appearance: none;
+	display: block;
+	font-size: 0.9rem;
+	font-family: inherit;
+	outline: none;
+	width: 100%;
+	user-select: none;
+}</style>
+<style type="text/css" data-astro-dev-id="/app/src/components/popups-etc/chat-syntax.css">/*
+    Pulled from CodeMirror's default syntax highlighting theme:
+
+    https://github.com/codemirror/language/blob/3c9ad8ffee32e158512d252fee9457a0e6469e2e/src/highlight.ts#L199
+*/
+
+.code-highlight .token.string {
+	color: #a11;
+}
+
+.code-highlight .token.keyword {
+	color: #708;
+}
+
+.code-highlight .token.number {
+	color: #164;
+}
+
+.code-highlight .token.comment {
+	color: #940;
+}
+
+.code-highlight .token.constant,
+.code-highlight .token.function {
+	color: #00f;
+}
+
+.code-highlight .token.class-name {
+	color: #167;
+}
+</style><script type="module" src="/@vite/client"></script>
+<script type="module" src="/@fs/app/node_modules/astro/dist/runtime/client/hmr.js?v=26fa5530"></script>
+<script type="module" src="/src/global.css"></script>
+<script type="module" src="/src/components/popups-etc/chat-syntax.css"></script></head>
+	<body>
+		<style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();;(()=>{var c;{let d={0:t=>t,1:t=>JSON.parse(t,o),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(JSON.parse(t,o)),5:t=>new Set(JSON.parse(t,o)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(JSON.parse(t)),9:t=>new Uint16Array(JSON.parse(t)),10:t=>new Uint32Array(JSON.parse(t))},o=(t,r)=>{if(t===""||!Array.isArray(r))return r;let[e,n]=r;return e in d?d[e](n):void 0};customElements.get("astro-island")||customElements.define("astro-island",(c=class extends HTMLElement{constructor(){super(...arguments);this.hydrate=()=>{var l;if(!this.hydrator||!this.isConnected||(l=this.parentElement)!=null&&l.closest("astro-island[ssr]"))return;let r=this.querySelectorAll("astro-slot"),e={},n=this.querySelectorAll("template[data-astro-template]");for(let s of n){let i=s.closest(this.tagName);!i||!i.isSameNode(this)||(e[s.getAttribute("data-astro-template")||"default"]=s.innerHTML,s.remove())}for(let s of r){let i=s.closest(this.tagName);!i||!i.isSameNode(this)||(e[s.getAttribute("name")||"default"]=s.innerHTML)}let a=this.hasAttribute("props")?JSON.parse(this.getAttribute("props"),o):{};this.hydrator(this)(this.Component,a,e,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),window.removeEventListener("astro:hydrate",this.hydrate),window.dispatchEvent(new CustomEvent("astro:hydrate"))}}connectedCallback(){!this.hasAttribute("await-children")||this.firstChild?this.childrenConnectedCallback():new MutationObserver((r,e)=>{e.disconnect(),setTimeout(()=>this.childrenConnectedCallback(),0)}).observe(this,{childList:!0})}async childrenConnectedCallback(){window.addEventListener("astro:hydrate",this.hydrate);let r=this.getAttribute("before-hydration-url");r&&await import(r),this.start()}start(){let r=JSON.parse(this.getAttribute("opts")),e=this.getAttribute("client");if(Astro[e]===void 0){window.addEventListener(`astro:${e}`,()=>this.start(),{once:!0});return}Astro[e](async()=>{let n=this.getAttribute("renderer-url"),[a,{default:l}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),s=this.getAttribute("component-export")||"default";if(!s.includes("."))this.Component=a[s];else{this.Component=a;for(let i of s.split("."))this.Component=this.Component[i]}return this.hydrator=l,this.hydrate},r,this)}attributeChangedCallback(){this.hydrate()}},c.observedAttributes=["props"],c))}})();</script><astro-island uid="BioFS" data-preact-signals="{&quot;persistenceState&quot;:&quot;p0&quot;}" component-url="/src/components/big-interactive-pages/editor.tsx" component-export="default" renderer-url="/node_modules/.vite/deps/@astrojs_preact_client-dev__js.js?v=26fa5530" props="{&quot;persistenceState&quot;:[0,{&quot;kind&quot;:[0,&quot;PERSISTED&quot;],&quot;session&quot;:[0,{&quot;session&quot;:[0,{&quot;id&quot;:[0,&quot;vQPJxMiToVNPD2p25dfw&quot;],&quot;createdAt&quot;:[0,{&quot;_seconds&quot;:[0,1765402276],&quot;_nanoseconds&quot;:[0,711000000]}],&quot;userId&quot;:[0,&quot;lCkOthDGjB1klayXl1Gh&quot;],&quot;full&quot;:[0,true]}],&quot;user&quot;:[0,{&quot;id&quot;:[0,&quot;lCkOthDGjB1klayXl1Gh&quot;],&quot;email&quot;:[0,&quot;smith.tyler10@icloud.com&quot;],&quot;username&quot;:[0,null],&quot;createdAt&quot;:[0,{&quot;_seconds&quot;:[0,1764082397],&quot;_nanoseconds&quot;:[0,703000000]}],&quot;lockoutUntil&quot;:[0,null],&quot;failedLoginAttempts&quot;:[0,0]}]}],&quot;cloudSaveState&quot;:[0,&quot;SAVED&quot;],&quot;game&quot;:[0,{&quot;id&quot;:[0,&quot;uja23iOkfnYb5GcNKyCo&quot;],&quot;ownerId&quot;:[0,&quot;lCkOthDGjB1klayXl1Gh&quot;],&quot;createdAt&quot;:[0,{&quot;_seconds&quot;:[0,1764770073],&quot;_nanoseconds&quot;:[0,220000000]}],&quot;unprotected&quot;:[0,false],&quot;tutorialName&quot;:[0,null],&quot;tutorialIndex&quot;:[0,null],&quot;isSavedOnBackend&quot;:[0,false],&quot;name&quot;:[0,&quot;Mario Run&quot;],&quot;code&quot;:[0,&quot;const dino = \&quot;d\&quot;;\nconst raptor = \&quot;r\&quot;;\nconst cactus1 = \&quot;0\&quot;;\nconst cactus2 = \&quot;2\&quot;;\nconst ground = \&quot;g\&quot;;\nconst bg = \&quot;b\&quot;;\nsetLegend(\n  [\n    dino,\n    bitmap`\n.....333333.....\n....3333333333..\n....CCC66606....\n...C6C66660666..\n...C6CC6666L666.\n...CC66666LLLL..\n.....66666666...\n....3353333.....\n...3335335333...\n..333355553333..\n..663565565366..\n..666555555666..\n..665555555566..\n....555..555....\n...CCC....CCC...\n..CCCC....CCCC..`,\n  ],\n  [\n    raptor,\n    bitmap`\n.....00000......\n...00LLLLL00....\n..0LL11111LL0...\n.0L112222211L0..\n.0L0202222221L0.\n0L102022220001L0\n0L102022202201L0\n0L1222222222010.\n0L3232322220.1L0\n0L33333222221LL0\n0L333332222221L0\n.0L33333222221L0\n.0L313.322211L0.\n..0LL111111LL0..\n...00LLLLLL00...\n.....000000.....`,\n  ],\n  [\n    cactus1,\n    bitmap`\n...4DD444464444.\n...46664466644..\n4.666166661664..\n446606660666444.\n.4602060206644..\n.66020602066664.\n.616061606661644\n.60666666606666.\n.66000000066666.\n..660888066166..\n...L6666666L4...\n..44LLLLLLL44...\n.446666666LL44..\n..66166166666...\n.644666666666444\n.664416616616444`,\n  ],\n  [\n    cactus2,\n    bitmap`\n................\n........0.......\n.......060......\n..0...02660...00\n.020..02660..060\n.062002666600260\n.066202666602660\n.066623666326660\n.066663333366660\n0336639321336630\n.223393226933330\n.002393966F39330\n020023939F333222\n0000C93333322200\n000F6C222222C660\n.06CCC000000CCC6`,\n  ],\n  [\n    ground,\n    bitmap`\n................\n................\n................\n................\n................\n................\n................\n................\n................\n................\n................\n................\n................\n................\n9999999999999999\n9999999999999999`,\n  ],\n  [\n    bg,\n    bitmap`\n0999999999999990\n9666666666666660\n9606666666666060\n9666699999666660\n9666990009966660\n9666990669906660\n9666990669906660\n9666600699906660\n9666666990006660\n9666666990666660\n9666666600666660\n9666666996666661\n9666666990666661\n9606666600666060\n9666666666666660\n0000000000000000`,\n  ],\n);\nsetBackground(bg);\nvar runmap = map`\n........\ndggggggg`;\nsetMap(runmap);\nvar const_time = 500;\nvar time = const_time;\nvar const_jump_time = 800;\nvar jump_time = 800;\nvar min_time = 200;\nvar jump = 0;\nvar top_map = \&quot;..........\&quot;;\nvar mid_map = \&quot;d.........\&quot;;\nvar bot_map = \&quot;gggggggggg\&quot;;\nvar top_next = \&quot;.\&quot;;\nvar next = \&quot;.\&quot;;\nvar top_first = \&quot;.\&quot;;\nvar bot_first = \&quot;.\&quot;;\nvar last = ground;\nvar tick_timer;\nvar jump_timer;\nvar playing = 0;\nvar score = 0;\nvar waiting = !1;\nfunction do_jump() {\n  if (jump == 1) {\n    return;\n  } else {\n    if (top_map[0] == raptor) {\n      game_over();\n    }\n    if (getFirst(dino).y) {\n      getFirst(dino).y -= 1;\n      jump = 1;\n      jump_timer = setTimeout(end_jump, jump_time);\n    }\n  }\n}\nfunction end_jump() {\n  if (bot_map[0] != ground) {\n    game_over();\n  }\n  if (getFirst(dino).y == 0) {\n    getFirst(dino).y += 1;\n    jump = 0;\n  }\n}\nonInput(\&quot;w\&quot;, () =&gt; {\n  if (playing == 0 &amp;&amp; !waiting) {\n    playing = 1;\n    addText(\&quot;                   \&quot;, { x: 0, y: 6, color: color`0` });\n    top_map = \&quot;........\&quot;;\n    bot_map = \&quot;gggggggg\&quot;;\n    runmap = top_map + \&quot;\\n\&quot; + bot_map;\n    setMap(runmap);\n    addSprite(0, 1, dino);\n    jump = 0;\n    tick();\n  } else if (!waiting) {\n    do_jump();\n  }\n});\nvar obstacle_cooldown = 0;\nfunction tick() {\n  top_next = \&quot;.\&quot;;\n  if (obstacle_cooldown &gt; 0) obstacle_cooldown--;\n  switch (last) {\n    case ground:\n      var options = [\n        ground,\n        ground,\n        ground,\n        ground,\n        ground,\n        ground,\n        cactus1,\n        cactus2,\n        raptor,\n      ];\n      if (obstacle_cooldown &gt; 0) {\n        next = ground;\n      } else {\n        next = options[Math.floor(Math.random() * options.length)];\n        if (next === cactus1 || next === cactus2 || next === raptor) {\n          obstacle_cooldown = 3;\n        }\n      }\n      last = next;\n      if (next == raptor) {\n        top_next = raptor;\n        next = ground;\n      }\n      break;\n    default:\n      next = ground;\n      last = next;\n      break;\n  }\n  top_map = top_map.slice(1) + top_next;\n  bot_map = bot_map.slice(1) + next;\n  runmap = top_map + \&quot;\\n\&quot; + bot_map;\n  setMap(runmap);\n  if (jump == 0) {\n    if (bot_map[0] != ground) {\n      game_over();\n      return;\n    }\n    addSprite(0, 1, dino);\n  } else {\n    if (top_map[0] == raptor) {\n      game_over();\n      return;\n    }\n    addSprite(0, 0, dino);\n  }\n  if (time &gt; min_time) {\n    time -= 10;\n    jump_time -= 10;\n  }\n  score += const_time - time;\n  addText(String(1000000 + score).slice(1), { x: 14, y: 6, color: color`0` });\n  tick_timer = setTimeout(tick, time);\n}\nfunction game_over() {\n  clearTimeout(tick_timer);\n  clearTimeout(jump_timer);\n  playing = 0;\n  score = 0;\n  time = const_time;\n  jump_time = const_jump_time;\n  addText(\&quot;Game Over\&quot;, { x: 0, y: 6, color: color`0` });\n  waiting = !0;\n  setTimeout(() =&gt; {\n    waiting = !1;\n  }, 2000);\n}\naddText(\&quot;Press W to start\&quot;, { x: 0, y: 6, color: color`0` });&quot;],&quot;modifiedAt&quot;:[0,{&quot;_seconds&quot;:[0,1765373113],&quot;_nanoseconds&quot;:[0,501000000]}]}],&quot;tutorial&quot;:[0,null],&quot;tutorialIndex&quot;:[0,null],&quot;stale&quot;:[0,false]}],&quot;roomState&quot;:[0,null],&quot;cookies&quot;:[0,{&quot;outputAreaSize&quot;:[0,400],&quot;helpAreaSize&quot;:[0,30],&quot;hideHelp&quot;:[0,false]}]}" ssr="" client="load" before-hydration-url="/@id/astro:scripts/before-hydration.js" opts="{&quot;name&quot;:&quot;Editor&quot;,&quot;value&quot;:true}" await-children=""><div class="_page_hzr47_1"><nav class="_container_1m1l8_2"><ul class="_editorStats_1m1l8_62"><li class="_logo_1m1l8_36 "><button><img src="/SPRIGDINO.png" height="38" class="_dino_1m1l8_116" /><div class="_caret_1m1l8_120"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M112 184l144 144 144-144"></path></svg></div></button></li><li><div style="width: 0px;" class="_container_1jlii_1"><input value="Mario Run" style="width: 30px;" placeholder="Untitled" class="_input_1jlii_7" /><span aria-hidden="true" class="_measure_1jlii_28">Mario Run</span></div><span class="_attribution_1m1l8_67">by you</span></li><li class="_saveState_1m1l8_72 ">Saved to smith.tyler10@icloud.com</li></ul><li class="_actionIcon_1m1l8_131"><a href="https://github.com/hackclub/sprig/" target="_blank"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M256 32C132.3 32 32 134.9 32 261.7c0 101.5 64.2 187.5 153.2 217.9a17.56 17.56 0 003.8.4c8.3 0 11.5-6.1 11.5-11.4 0-5.5-.2-19.9-.3-39.1a102.4 102.4 0 01-22.6 2.7c-43.1 0-52.9-33.5-52.9-33.5-10.2-26.5-24.9-33.6-24.9-33.6-19.5-13.7-.1-14.1 1.4-14.1h.1c22.5 2 34.3 23.8 34.3 23.8 11.2 19.6 26.2 25.1 39.6 25.1a63 63 0 0025.6-6c2-14.8 7.8-24.9 14.2-30.7-49.7-5.8-102-25.5-102-113.5 0-25.1 8.7-45.6 23-61.6-2.3-5.8-10-29.2 2.2-60.8a18.64 18.64 0 015-.5c8.1 0 26.4 3.1 56.6 24.1a208.21 208.21 0 01112.2 0c30.2-21 48.5-24.1 56.6-24.1a18.64 18.64 0 015 .5c12.2 31.6 4.5 55 2.2 60.8 14.3 16.1 23 36.6 23 61.6 0 88.2-52.4 107.6-102.3 113.3 8 7.1 15.2 21.1 15.2 42.5 0 30.7-.3 55.5-.3 63 0 5.4 3.1 11.5 11.4 11.5a19.35 19.35 0 004-.4C415.9 449.2 480 363.1 480 261.7 480 134.9 379.7 32 256 32z"></path></svg></a></li><li class="_actionIcon_1m1l8_131"><a target="_blank"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 384 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M352 0H32C14.33 0 0 14.33 0 32v224h384V32c0-17.67-14.33-32-32-32zM0 320c0 35.35 28.66 64 64 64h64v64c0 35.35 28.66 64 64 64s64-28.65 64-64v-64h64c35.34 0 64-28.65 64-64v-32H0v32zm192 104c13.25 0 24 10.74 24 24 0 13.25-10.75 24-24 24s-24-10.75-24-24c0-13.26 10.75-24 24-24z"></path></svg></a></li><li><button role="button" type="button" class="
+				_button_218hp_1
+				
+				
+				
+				
+				_stuckBtn_1m1l8_156
+			">Report a bug</button></li><li><button role="button" type="button" class="
+				_button_218hp_1
+				
+				
+				
+				
+				
+			">Publish To GitHub</button></li><li><div class="_runButtonContainer_1m1l8_401"><button role="button" type="button" class="
+				_button_218hp_1
+				_accent_218hp_55
+				
+				
+				
+				
+			"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M133 440a35.37 35.37 0 01-17.5-4.67c-12-6.8-19.46-20-19.46-34.33V111c0-14.37 7.46-27.53 19.46-34.33a35.13 35.13 0 0135.77.45l247.85 148.36a36 36 0 010 61l-247.89 148.4A35.5 35.5 0 01133 440z"></path></svg>Run</button><button role="button" type="button" class="
+				_button_218hp_1
+				_accent_218hp_55
+				
+				
+				
+				
+			"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M112 184l144 144 144-144"></path></svg></button></div></li><li><button role="button" type="button" class="
+				_button_218hp_1
+				
+				
+				
+				
+				
+			"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M336 192h40a40 40 0 0140 40v192a40 40 0 01-40 40H136a40 40 0 01-40-40V232a40 40 0 0140-40h40m160-64l-80-80-80 80m80 193V48"></path></svg>Share</button></li></nav><div class="_pageMain_hzr47_7"><div class="_codeContainer_hzr47_16"><div class="_container_1bpzb_1 _containerSkeleton_1bpzb_15 _code_hzr47_16"></div></div><div class="_resizeBar_hzr47_86 "></div><div style="width: 400px;" class="_outputArea_hzr47_184"><div><div class="_canvasWrapper_hzr47_116"><canvas tabIndex="0" width="1000" height="800" class="_screen_hzr47_125 "></canvas></div><div class="_screenControls_hzr47_141"><button class="_mute_hzr47_152"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M126 192H56a8 8 0 00-8 8v112a8 8 0 008 8h69.65a15.93 15.93 0 0110.14 3.54l91.47 74.89A8 8 0 00240 392V120a8 8 0 00-12.74-6.43l-91.47 74.89A15 15 0 01126 192zm194 128c9.74-19.38 16-40.84 16-64 0-23.48-6-44.42-16-64m48 176c19.48-33.92 32-64.06 32-112s-12-77.74-32-112m48 272c30-46 48-91.43 48-160s-18-113-48-160"></path></svg> <span>Mute</span></button><button class="_stop_hzr47_40"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke-miterlimit="10" stroke-width="32" d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z"></path><path d="M310.4 336H201.6a25.62 25.62 0 01-25.6-25.6V201.6a25.62 25.62 0 0125.6-25.6h108.8a25.62 25.62 0 0125.6 25.6v108.8a25.62 25.62 0 01-25.6 25.6z"></path></svg><span>Stop</span></button><div class="_screenSize_hzr47_176">(Sprig screen is 1/8&quot; / 160×128 px)</div></div></div><div class="_helpContainer_hzr47_193"><div class="_horizontalResizeBar_hzr47_98 "></div><div style="height: 32px; max-height: NaNpx;" class="_helpContainer_hzr47_193"><div class="_container_61ddc_1"><div class="_tabs_61ddc_10"><div role="button" class="_tab_61ddc_10 _selected_61ddc_44">Toolkit</div><div class="_tooltipContainer_61ddc_281"><button role="button" type="button" class="
+				_button_218hp_1
+				_accent_218hp_55
+				
+				
+				
+				_tab_61ddc_10 
+			">Get AI Help</button><span class="_tooltipText_61ddc_286">Ask AI for help with your code</span></div><div class="_tooltipContainer_61ddc_281"><button role="button" type="button" class="
+				_button_218hp_1
+				_accent_218hp_55
+				
+				
+				
+				_tab_61ddc_10 
+			">Log</button></div><button role="button" type="button" class="
+				_button_218hp_1
+				_accent_218hp_55
+				
+				
+				
+				_tab_61ddc_10
+			">Hide</button></div><div style="display: none;" class="_content_61ddc_64"><div></div><br /><div class="_paginationContainer_61ddc_231"><div class="_backContainer_61ddc_245"></div><div class="_centerContainer_61ddc_250"></div><div class="_forwardContainer_61ddc_240"></div></div></div><div style="display: block;" class="_content_61ddc_64"><h1 id="the-toolkit">The Toolkit</h1>
+<p>Sprig is a tiny construction kit to build tile based games.
+The games are written in JavaScript.
+It was made by Hack Club, a global community of teen coders who
+believe people learn best by making things they care about
+and sharing them with others. You can watch <a href="https://www.youtube.com/watch?v=ZOPYB6dw4Os" target="_blank" rel="nofollow">this video</a> for an introduction to Sprig website.</p>
+<p>Run games by hitting the <code>Run</code> button or pressing <code>Shift+Enter</code>.</p>
+<h2 id="getting-help">Getting Help</h2>
+<p>If this is your first time using Sprig, try playing through the <a href="https://sprig.hackclub.com/gallery/getting_started" target="_blank" rel="nofollow">tutorial</a>. From there, we suggest hacking on any of the <a href="https://sprig.hackclub.com/gallery" target="_blank" rel="nofollow">current games</a> or starting from scratch.</p>
+<!-- If this is your first time using Sprig, try playing through the [tutorial](https://sprig.hackclub.com/gallery/getting_started).
+
+You can also watch this [introduction to the editor](https://www.youtube.com/watch?v=GEbDRR_cqJI) or [walkthrough](https://www.youtube.com/watch?v=1UTLS4aO9bQ) on how to make a game. From there, we suggest hacking on any of the [current games](https://sprig.hackclub.com/gallery) or starting from scratch. -->
+<p>If you ever need help, have ideas, or want to meet other game-makers, join the community in the <a href="https://hackclub.slack.com/archives/C02UN35M7LG" target="_blank" rel="nofollow">#sprig</a> channel on the <a href="https://hackclub.com/slack" target="_blank" rel="nofollow">Hack Club Slack</a>. You can access this guide <a href="https://github.com/hackclub/sprig/blob/main/docs/docs.md" target="_blank" rel="nofollow">here</a>.</p>
+<h2 id="level-design">Level Design</h2>
+<p>Sprig games are made up of grids of square tiles.</p>
+<h3 id="setlegendbitmaps">setLegend(bitmaps)</h3>
+<p>Tell Sprig what types of sprites are available in your game.
+Bitmap keys must be a single character.
+We recommend storing character keys in variables.</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #D73A49">const</span><span style="color: #24292E"> </span><span style="color: #005CC5">player</span><span style="color: #24292E"> </span><span style="color: #D73A49">=</span><span style="color: #24292E"> </span><span style="color: #032F62">"p"</span></span>
+<span class="line"><span style="color: #D73A49">const</span><span style="color: #24292E"> </span><span style="color: #005CC5">wall</span><span style="color: #24292E"> </span><span style="color: #D73A49">=</span><span style="color: #24292E"> </span><span style="color: #032F62">"w"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #6F42C1">setLegend</span><span style="color: #24292E">(</span></span>
+<span class="line"><span style="color: #24292E">  [ player, </span><span style="color: #6F42C1">bitmap</span><span style="color: #032F62">`...`</span><span style="color: #24292E"> ],</span></span>
+<span class="line"><span style="color: #24292E">  [ wall, </span><span style="color: #6F42C1">bitmap</span><span style="color: #032F62">`...`</span><span style="color: #24292E"> ],</span></span>
+<span class="line"><span style="color: #24292E">)</span></span></code></pre>
+<p>To create a new bitmap, type</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #24292e">bitmap`.`</span></span></code></pre>
+<p>Those are backticks! Click on the highlighted “bitmap” button to edit your drawing.</p>
+<p>The order of sprite types in your legend also determines the z-order of drawing them. Sprite types that come first are drawn on top.</p>
+<h3 id="setbackgroundbitmapkey">setBackground(bitmapKey)</h3>
+<p>Tiles a bitmap as the background of the game:</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #6F42C1">setBackground</span><span style="color: #24292E">(spriteKey)</span></span></code></pre>
+<p>This only changes the visuals of the game.</p>
+<h3 id="setmaplevel">setMap(level)</h3>
+<p>Designing a level is like drawing a bitmap:</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #6F42C1">map</span><span style="color: #032F62">`...`</span></span></code></pre>
+<p>The characters in the map come from the order of your bitmap legend.
+Levels don’t have to be kept track of in a legend, you should store them in a variable yourself.
+You can call <code>setMap</code> to clear the game and load a new level:</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #D73A49">const</span><span style="color: #24292E"> </span><span style="color: #005CC5">level</span><span style="color: #24292E"> </span><span style="color: #D73A49">=</span><span style="color: #24292E"> </span><span style="color: #6F42C1">map</span><span style="color: #032F62">`...`</span></span>
+<span class="line"><span style="color: #6F42C1">setMap</span><span style="color: #24292E">(level)</span></span></code></pre>
+<p>You might want to keep track of multiple levels using an array to switch between them mid-game:</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #D73A49">const</span><span style="color: #24292E"> </span><span style="color: #005CC5">levels</span><span style="color: #24292E"> </span><span style="color: #D73A49">=</span><span style="color: #24292E"> [</span></span>
+<span class="line"><span style="color: #24292E">  </span><span style="color: #6F42C1">map</span><span style="color: #032F62">`...`</span><span style="color: #24292E">,</span></span>
+<span class="line"><span style="color: #24292E">  </span><span style="color: #6F42C1">map</span><span style="color: #032F62">`...`</span><span style="color: #24292E">,</span></span>
+<span class="line"><span style="color: #24292E">  </span><span style="color: #6A737D">// etc.</span></span>
+<span class="line"><span style="color: #24292E">]</span></span>
+<span class="line"><span style="color: #6F42C1">setMap</span><span style="color: #24292E">(levels[</span><span style="color: #005CC5">0</span><span style="color: #24292E">])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #6A737D">// Later:</span></span>
+<span class="line"><span style="color: #6F42C1">setMap</span><span style="color: #24292E">(levels[</span><span style="color: #005CC5">1</span><span style="color: #24292E">])</span></span></code></pre>
+<h3 id="setsolidsbitmapkey">setSolids(bitmapKey)</h3>
+<p>Solid sprites can’t overlap with each other.
+This is useful for creating things like walls:</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #D73A49">const</span><span style="color: #24292E"> </span><span style="color: #005CC5">player</span><span style="color: #24292E"> </span><span style="color: #D73A49">=</span><span style="color: #24292E"> </span><span style="color: #032F62">"p"</span></span>
+<span class="line"><span style="color: #D73A49">const</span><span style="color: #24292E"> </span><span style="color: #005CC5">wall</span><span style="color: #24292E"> </span><span style="color: #D73A49">=</span><span style="color: #24292E"> </span><span style="color: #032F62">"w"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #6F42C1">setSolids</span><span style="color: #24292E">([ player, wall ])</span></span></code></pre>
+<h3 id="setpushablespushmap">setPushables(pushMap)</h3>
+<p>Use <code>setPushables</code> to make sprites push other sprites around. The sprite on the left will be able to push all sprites listed on the right.</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #D73A49">const</span><span style="color: #24292E"> </span><span style="color: #005CC5">player</span><span style="color: #24292E"> </span><span style="color: #D73A49">=</span><span style="color: #24292E"> </span><span style="color: #032F62">"p"</span></span>
+<span class="line"><span style="color: #D73A49">const</span><span style="color: #24292E"> </span><span style="color: #005CC5">block</span><span style="color: #24292E"> </span><span style="color: #D73A49">=</span><span style="color: #24292E"> </span><span style="color: #032F62">"b"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #6F42C1">setPushables</span><span style="color: #24292E">({ </span></span>
+<span class="line"><span style="color: #24292E">  [player]: [ block, player ] </span></span>
+<span class="line"><span style="color: #24292E">})</span></span></code></pre>
+<p><strong>Watch out!</strong> Make sure everything you pass to <code>setPushables</code> is also marked as a solid or they won’t be pushed around.</p>
+<h3 id="width">width()</h3>
+<p>Get the width of the current map.</p>
+<h3 id="height">height()</h3>
+<p>Get the height of the current map.</p>
+<h2 id="user-input">User Input</h2>
+<p>Sprig has eight inputs  <code>w</code>, <code>a</code>, <code>s</code>, <code>d</code>, <code>i</code>, <code>j</code>, <code>k</code>, <code>l</code>.</p>
+<p>Typically <code>w</code>, <code>a</code>, <code>s</code>, <code>d</code> are used as directional controls.</p>
+<h3 id="oninputtype-callback">onInput(type, callback)</h3>
+<p>Do something when the player presses a control:</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #6F42C1">onInput</span><span style="color: #24292E">(</span><span style="color: #032F62">"d"</span><span style="color: #24292E">, () </span><span style="color: #D73A49">=></span><span style="color: #24292E"> {</span></span>
+<span class="line"><span style="color: #24292E">  </span><span style="color: #6A737D">// Move the player one tile to the right</span></span>
+<span class="line"><span style="color: #24292E">  </span><span style="color: #6F42C1">getFirst</span><span style="color: #24292E">(player).x </span><span style="color: #D73A49">+=</span><span style="color: #24292E"> </span><span style="color: #005CC5">1</span></span>
+<span class="line"><span style="color: #24292E">})</span></span></code></pre>
+<h3 id="afterinputcallback">afterInput(callback)</h3>
+<p>Runs after every input event has finished being handled. Useful for tasks like checking win states:</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #6F42C1">afterInput</span><span style="color: #24292E">(() </span><span style="color: #D73A49">=></span><span style="color: #24292E"> {</span></span>
+<span class="line"><span style="color: #24292E">  </span><span style="color: #D73A49">if</span><span style="color: #24292E"> (</span><span style="color: #6F42C1">getAll</span><span style="color: #24292E">(block).</span><span style="color: #005CC5">length</span><span style="color: #24292E"> </span><span style="color: #D73A49">></span><span style="color: #24292E"> </span><span style="color: #005CC5">0</span><span style="color: #24292E">) {</span></span>
+<span class="line"><span style="color: #24292E">    console.</span><span style="color: #6F42C1">log</span><span style="color: #24292E">(</span><span style="color: #032F62">"you win"</span><span style="color: #24292E">)</span></span>
+<span class="line"><span style="color: #24292E">  }</span></span>
+<span class="line"><span style="color: #24292E">})</span></span></code></pre>
+<h2 id="sprites-and-tiles">Sprites and Tiles</h2>
+<p>Each tile can contain any number of sprites stacked on top of each other.</p>
+<p>Sprites contain:</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #24292e">{</span></span>
+<span class="line"><span style="color: #24292e">  type</span></span>
+<span class="line"><span style="color: #24292e">  x</span></span>
+<span class="line"><span style="color: #24292e">  y</span></span>
+<span class="line"><span style="color: #24292e">}</span></span></code></pre>
+<p>You can move the sprite by setting <code>x</code> and <code>y</code>.</p>
+<p>The <code>bitmapKey</code> can also be changed to update the rendered graphic and collision rules the sprite will follow.</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #24292E">sprite.y </span><span style="color: #D73A49">+=</span><span style="color: #24292E"> </span><span style="color: #005CC5">1</span></span>
+<span class="line"><span style="color: #24292E">sprite.type </span><span style="color: #D73A49">=</span><span style="color: #24292E"> </span><span style="color: #032F62">"p"</span></span></code></pre>
+<!-- `dx` and `dy` are cleared after `afterInput`. 
+They can be used to check if the sprite moved and by how much.
+ -->
+<p>You can remove a sprite with <code>sprite.remove()</code>.</p>
+<h3 id="gettilex-y">getTile(x, y)</h3>
+<p>Returns a list of the sprites in the specified tile.</p>
+<h3 id="tileswithtype">tilesWith(type, …)</h3>
+<p>Returns a list of the tiles that contain type.</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #6F42C1">tilesWith</span><span style="color: #24292E">(block)</span></span></code></pre>
+<p><code>tilesWith</code> accepts multiple sprite types.</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #6F42C1">tilesWith</span><span style="color: #24292E">(block, player, </span><span style="color: #D73A49">...</span><span style="color: #24292E">)</span></span></code></pre>
+<h3 id="addspritex-y-spritetype">addSprite(x, y, spriteType)</h3>
+<p>Creates a new sprite of the given type.</p>
+<h3 id="cleartilex-y">clearTile(x, y)</h3>
+<p>Removes all sprites from the specified tile.</p>
+<h3 id="getalltype">getAll(type)</h3>
+<p>Returns all sprites of the given type.
+If no bitmap key is specified, it returns all the sprites in the game.</p>
+<h3 id="getfirsttype">getFirst(type)</h3>
+<p>Returns the first sprite of a given type.
+Useful if you know there’s only one of a sprite, such as with a player character.</p>
+<p>Shortcut for <code>getAll(type)[0]</code>.</p>
+<h2 id="text">Text</h2>
+<h3 id="addtextstring-options---x-y-color">addText(string, options = { x, y, color })</h3>
+<p>You can add text with optional <code>x</code>, <code>y</code>, and <code>color</code>.</p>
+<p>In Sprig, each color is represented by a single character. Like <code>bitmap</code> and <code>map</code>, you can use the <code>color</code> keyword to pick a color for your text. A preview of your selected color will also show next to the character.</p>
+<p>For example:</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #6F42C1">addText</span><span style="color: #24292E">(</span><span style="color: #032F62">"hello"</span><span style="color: #24292E">, { </span></span>
+<span class="line"><span style="color: #24292E">  x: </span><span style="color: #005CC5">10</span><span style="color: #24292E">,</span></span>
+<span class="line"><span style="color: #24292E">  y: </span><span style="color: #005CC5">4</span><span style="color: #24292E">,</span></span>
+<span class="line"><span style="color: #24292E">  color: </span><span style="color: #6F42C1">color</span><span style="color: #032F62">`3`</span></span>
+<span class="line"><span style="color: #24292E">})</span></span></code></pre>
+<h3 id="cleartext">clearText()</h3>
+<p>Clears all text on the screen.</p>
+<h2 id="music-and-sound-effects">Music and Sound Effects</h2>
+<p>Sprig comes bundled with a built-in sound engine and sequencer! You can use this to write background music, or with a high BPM to make sound effects.</p>
+<p>You can create a tune with the <code>tune</code> keyword.
+As usual, click on the button to open an editor window.</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #6A737D">// Create a tune:</span></span>
+<span class="line"><span style="color: #D73A49">const</span><span style="color: #24292E"> </span><span style="color: #005CC5">melody</span><span style="color: #24292E"> </span><span style="color: #D73A49">=</span><span style="color: #24292E"> </span><span style="color: #6F42C1">tune</span><span style="color: #032F62">`...`</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #6A737D">// Play it:</span></span>
+<span class="line"><span style="color: #6F42C1">playTune</span><span style="color: #24292E">(melody)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #6A737D">// Play it 5 times:</span></span>
+<span class="line"><span style="color: #6F42C1">playTune</span><span style="color: #24292E">(melody, </span><span style="color: #005CC5">5</span><span style="color: #24292E">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #6A737D">// Play it until the heat death of the universe:</span></span>
+<span class="line"><span style="color: #D73A49">const</span><span style="color: #24292E"> </span><span style="color: #005CC5">playback</span><span style="color: #24292E"> </span><span style="color: #D73A49">=</span><span style="color: #24292E"> </span><span style="color: #6F42C1">playTune</span><span style="color: #24292E">(melody, </span><span style="color: #005CC5">Infinity</span><span style="color: #24292E">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #6A737D">// Or make it shut up early:</span></span>
+<span class="line"><span style="color: #24292E">playback.</span><span style="color: #6F42C1">end</span><span style="color: #24292E">()</span></span></code></pre>
+<!-- 
+
+## Idioms
+
+Find Pattern
+
+```
+const neighbors = (sprite) => {
+  const neighbors = []
+
+  const x = sprite.x
+  const y = sprite.y
+
+  getTile(x+1, y).forEach(s => {
+    neighbors.push(s)
+  })
+
+  getTile(x-1, y).forEach(s => {
+    neighbors.push(s)
+  })
+
+  getTile(x, y+1).forEach(s => {
+    neighbors.push(s)
+  })
+
+  getTile(x, y-1).forEach(s => {
+    neighbors.push(s)
+  })
+
+  return neighbors
+}
+
+const replace = (oldType, newType) => getAll(oldType).forEach(s => {
+  s.type = newType
+})
+
+const overlaps = tilesWith(type0, type1, ...).length
+
+const tileHasType = (x, y, type) => getTile(x, y).some(s => s.type === type)
+
+const getTypeFromTile = (x, y, type) => getTile(x, y, type).find(s => s.type === type)
+```
+ -->
+<h2 id="infinite-loop-detection">Infinite loop detection</h2>
+<p>The Sprig editor will automatically insert a heuristic in your <code>for</code>, <code>while</code> and or <code>do-while</code> loops to detect potential infinite loops.
+Code looking like</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #D73A49">while</span><span style="color: #24292E"> (condition) {</span></span>
+<span class="line"><span style="color: #24292E">  </span><span style="color: #6A737D">// do stuff</span></span>
+<span class="line"><span style="color: #24292E">}</span></span></code></pre>
+<p>will become</p>
+<pre is:raw="" class="astro-code github-light" style="background-color: #fff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color: #24292E">startTime </span><span style="color: #D73A49">=</span><span style="color: #24292E"> performance.</span><span style="color: #6F42C1">now</span><span style="color: #24292E">()</span></span>
+<span class="line"><span style="color: #D73A49">while</span><span style="color: #24292E"> (condition) {</span><span style="color: #D73A49">if</span><span style="color: #24292E"> (</span><span style="color: #D73A49">++</span><span style="color: #24292E">_loopIt </span><span style="color: #D73A49">></span><span style="color: #24292E"> </span><span style="color: #005CC5">2000</span><span style="color: #24292E"> </span><span style="color: #D73A49">&#x26;&#x26;</span><span style="color: #24292E"> performance.</span><span style="color: #6F42C1">now</span><span style="color: #24292E">() </span><span style="color: #D73A49">-</span><span style="color: #24292E"> startTime </span><span style="color: #D73A49">></span><span style="color: #24292E"> </span><span style="color: #005CC5">1500</span><span style="color: #24292E">) </span><span style="color: #D73A49">throw</span><span style="color: #24292E"> </span><span style="color: #D73A49">new</span><span style="color: #24292E"> </span><span style="color: #6F42C1">RangeError</span><span style="color: #24292E">(</span><span style="color: #032F62">"Potential infinite loop"</span><span style="color: #24292E">)</span></span>
+<span class="line"><span style="color: #24292E">  </span><span style="color: #6A737D">// do stuff</span></span>
+<span class="line"><span style="color: #24292E">}</span></span></code></pre>
+<p>Note that all original line numbers in your code will be preserved.</p></div></div></div></div></div></div><div style="display: none;" class="_overlay_vvp6g_1"><div class="_modal_vvp6g_16"><h2>Session Conflict!</h2><p>It seems you have another session open with changes. Would you like to overwrite the changes from the other session or reload to retrieve those changes to this tab?</p><div class="_buttonGroup_vvp6g_35"><button role="button" type="button" class="
+				_button_218hp_1
+				
+				
+				
+				
+				
+			">Cancel</button><button role="button" type="button" class="
+				_button_218hp_1
+				_accent_218hp_55
+				
+				
+				
+				
+			">Overwrite</button><button role="button" type="button" class="
+				_button_218hp_1
+				_accent_218hp_55
+				
+				
+				
+				
+			">Reload</button></div></div></div><div class="_overlay_r2et5_1 "><div class="_modal_r2et5_16"><h2 class="_modalTitle_r2et5_27">Change Key Bindings</h2><div class="_modalDescription_r2et5_34">To remap, select the input field and press your chosen key.</div><div class="_bindingsContainer_r2et5_40"><div class="_binding_r2et5_40"><label class="_label_r2et5_55">Key w:</label><input type="text" value="w" readOnly class="_input_r2et5_62" /></div><div class="_binding_r2et5_40"><label class="_label_r2et5_55">Key a:</label><input type="text" value="a" readOnly class="_input_r2et5_62" /></div><div class="_binding_r2et5_40"><label class="_label_r2et5_55">Key s:</label><input type="text" value="s" readOnly class="_input_r2et5_62" /></div><div class="_binding_r2et5_40"><label class="_label_r2et5_55">Key d:</label><input type="text" value="d" readOnly class="_input_r2et5_62" /></div><div class="_binding_r2et5_40"><label class="_label_r2et5_55">Key i:</label><input type="text" value="i" readOnly class="_input_r2et5_62" /></div><div class="_binding_r2et5_40"><label class="_label_r2et5_55">Key j:</label><input type="text" value="j" readOnly class="_input_r2et5_62" /></div><div class="_binding_r2et5_40"><label class="_label_r2et5_55">Key k:</label><input type="text" value="k" readOnly class="_input_r2et5_62" /></div><div class="_binding_r2et5_40"><label class="_label_r2et5_55">Key l:</label><input type="text" value="l" readOnly class="_input_r2et5_62" /></div></div><div class="_buttonContainer_r2et5_76"><button role="button" type="button" class="
+				_button_218hp_1
+				
+				
+				
+				
+				
+			">Save Changes</button><button role="button" type="button" class="
+				_button_218hp_1
+				
+				
+				
+				
+				
+			">Cancel</button></div></div></div></div></astro-island>
+		<div class="_overlay_cgo50_1"><div class="_modal_cgo50_16"><p>The Sprig editor doesn't work very well on mobile yet. You can still play games shared with you and in the gallery.</p><div><a href="/gallery"><button role="button" type="button" class="
+				_button_218hp_1
+				_accent_218hp_55
+				
+				
+				
+				
+			">Open gallery<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M268 112l144 144-144 144m124-144H100"></path></svg></button></a></div></div></div>
+	</body>
+</html>
