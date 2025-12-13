@@ -20,9 +20,9 @@ If not both, but one of their guesses are correct, they receive an amount equal 
 If the total value of their guess matches the total value of the dice rolled, they receive an amount that's half of what they bet.
 If neither guess is correct, but the value of the red die matches the guess for blue and/or the value of the blue die matches the guess for red then they
 get something called a "pity loss" in which the amount deducted is reduced so -
-if neither guess is correct, but both dies match the value of the guess for the other then the amount deducted is reduced by 5 times, but
-if only one of the dies matches the value guessed for the other then the amount lost is halved. They can also receive something called a "pity gain"
-if they have 3+ losses in row then the next correct guess, they'll receive twice the amount they're betting.
+if neither guess is correct, but only one of the dies matches the value guessed for the other then the amount lost is halved. 
+They can also receive something called a "pity gain" if they have 3+ losses in row then the next correct guess, they'll receive twice the amount they're 
+betting.
 
 TIERS; Player will reach different tiers as they continue racking up money, each tier increases the betting amount and gives them a tier bonus.
 Obviously if they manage to lose enough money and go below the amount required for a tier then their tier becomes a lower tier.
@@ -69,6 +69,13 @@ const line1 = "*"
 const boot = "&"
 const burningMoney = "^"
 const line = "%"
+
+// Constants for tiers and goals
+const GOAL = 10000;
+const bronzeCap = 500;
+const silverCap = 2000;
+const goldCap = 3500;
+const platCap = 5000;
 
 // Variables
 let bVal = 1;
@@ -872,31 +879,42 @@ function gameOver()
 function displayMnyAndBAmnt()
 {
   clearText();
-  // Displays money, bet amount, and tier
-  addText("Money: " + money.toString() + "\nBet Amount: " + betAmnt.toString(), { x: 2, y: 0, color: color`F` });
   
   // Checks value of money and displays tier
-    if(money < 500)
+    if(money < bronzeCap)
     {
+      betAmnt = 50;
+      tierBonus = 0;
       addText("Bronze Tier", { x: 4, y: 15, color: color`C` });
     }
-    else if(money < 2000)
+    else if(money < silverCap)
     {
+      betAmnt = 100;
+      tierBonus = 10;
       addText("Silver Tier", { x: 4, y: 15, color: color`1` });
     }
-    else if(money < 3500)
+    else if(money < goldCap)
     {
+      betAmnt = 200;
+      tierBonus = 20;
       addText("Gold Tier", { x: 4, y: 15, color: color`6` });
     }
-    else if(money < 5000)
+    else if(money < platCap)
     {
+      betAmnt = 500;
+      tierBonus = 50;
       addText("Platinum Tier", { x: 4, y: 15, color: color`7` });
     }
-    else if(money < 10000)
+    else if(money < GOAL)
     {
+      betAmnt = 750;
+      tierBonus = 100;
       addText("Emerald Tier", { x: 4, y: 15, color: color`4` });
     }
-
+  
+    // Displays money, bet amount, and tier bonus
+    addText("Money: " + money.toString() + "\nBet Amount: " + betAmnt.toString(), { x: 2, y: 0, color: color`F` });
+    addText("Tier Bonus: " + tierBonus.toString(), { x: 3, y: 14, color: color`9` });
   
 }
 // Okay NOTE to self - this function should only roll one value at a time and return it as this accomplishes multiple things
@@ -1149,35 +1167,35 @@ function bet(){
   }
 
   // Checks value of money and adjusts bet amount & tier bonus
-  if(money < 500)
+  if(money < bronzeCap)
   {
     betAmnt = 50;
     tierBonus = 0;
 
     additionalAmnt = gainCounter * (betAmnt * 0.1);
   }
-  else if(money < 2000)
+  else if(money < silverCap)
   {
     betAmnt = 100;
     tierBonus = 10;
 
     additionalAmnt = gainCounter * (betAmnt * 0.2);
   }
-  else if(money < 3500)
+  else if(money < goldCap)
   {
     betAmnt = 200;
     tierBonus = 20;
 
     additionalAmnt = gainCounter * (betAmnt * 0.3);
   }
-  else if(money < 5000)
+  else if(money < platCap)
   {
     betAmnt = 500;
     tierBonus = 50;
 
     additionalAmnt = gainCounter * (betAmnt * 0.4);
   }
-  else if(money < 10000)
+  else if(money < GOAL)
   {
     betAmnt = 750;
     tierBonus = 100;
@@ -1212,7 +1230,7 @@ function bet(){
     playTune(gameover);
     gameOver();
   }
-  else if(money >= 10000) // Checks if user has reached 10,000
+  else if(money >= GOAL) // Checks if user has reached 10,000
   {
     victoryScreen();
   }
@@ -1239,8 +1257,7 @@ function bet(){
     }
 
     displayMnyAndBAmnt();
-    addText("Amount Gained: " + amntGained.toString(), { x: 1, y: 2, color: color`D` });
-    addText("Tier Bonus: " + tierBonus.toString(), { x: 3, y: 14, color: color`9` });
+    addText("Earned: " + amntGained.toString(), { x: 2, y: 2, color: color`D` });
     addText(gainCounter.toString() + "x", { x: 4, y: 13, color: color`5` });
     addText("+" + additionalAmnt, { x: 13, y: 13, color: color`5` });
     
@@ -1363,6 +1380,9 @@ onInput("d", () => {
     }
 
 
+    // Gets a random value (1 - 6) and changes the sprite of the blue die to reflect new value
+    newDVal = rollDice();
+    
     if(isWildcard == true && wildRule == 4)
     {
       let randomDice = Math.floor(Math.random() * 2 + 1);
@@ -1370,11 +1390,6 @@ onInput("d", () => {
         newDVal = wcRando;
       else
         wildRule = -4;
-    }
-    else
-    {
-      // Gets a random value (1 - 6) and changes the sprite of the blue die to reflect new value
-      newDVal = rollDice();
     }
     
     if (newDVal == 1)
@@ -1492,5 +1507,7 @@ onInput("a", () => {
 });
 
 afterInput(() => {
+  
+})
   
 })
