@@ -1,12 +1,11 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Dice Game
 @author: Malakai Wicker
-@tags: []
-@addedOn: 2025-00-00
+@description: Player can guess one blue dice value and red die value, and then roll the die, the amount they bet corresponds to the tier they're at before the roll. Goal's to reach 10,000. More info in Game Rules & How It Works
+@tags: ['dice', 'rng']
+@addedOn: 2025-12-13
 
+HOW TO PLAY: L to start game or return to menu, D to roll die, W to increase and S to decrease guess value for blue die. I to increase and K to decrease guess value for red die. A to return to game when on victory or gameover screen.
 GOAL: Make it to 10,000
 
 Code is very messy. I didn't get a good grasp of Javascript until there was too little time left and I still had stuff to add
