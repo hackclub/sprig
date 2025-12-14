@@ -1,8 +1,11 @@
-/*
-  JOJO GAME-STARDUST CRUSADERS
-  made by tanmay chhabra!
-  controls: WASD to move,I to summon star platinum
-*/
+
+ /*
+ @title:star crusaders
+ @author:tanmay chhabra
+ @description:use wasd to move and avoid knives and use i to ORA ORA ORA!!
+ @tags: ['role playing']
+ @addedOn: 2025-12-14
+ */
 const jojoSprite = bitmap`
 ................
 ...00000000.....
