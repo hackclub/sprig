@@ -239,6 +239,15 @@ for (let i = 0; i < TOTAL_LEVELS; i++) {
   levels.push(generateLevel(i));
 }
 
+function resetGame() {
+  level = 0;
+  hasKey = false;
+  levels.length = 0;
+  for (let i = 0; i < TOTAL_LEVELS; i++) {
+    levels.push(generateLevel(i));
+  }
+  startLevel();
+}
 function startLevel() {
   setMap(levels[level]);
   setBackground(floor);
