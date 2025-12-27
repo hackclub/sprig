@@ -2,10 +2,18 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
+Author:Moma120
+
+**What is your game about?**
+jumping over obstackles in order to get to the portal
+
+**How do you play your game?**
+you move with wasd and jump with ijkl
+
 @title: horse rider 1
-@author: mozes
-@tags: []
-@addedOn: 2025-12-05
+@author: Moma120
+@tags: [horse, jumping, puzzle]
+@addedOn: 2025-12-27
 */
 
 const player = "p"
