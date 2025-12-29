@@ -2058,7 +2058,7 @@ entrances/exits.`, { x: 0, y: 0, color: color`2` })
           }
           addText(Object.keys(data.menu.buttons)[idx], { y: Math.round(height() + idx * 4 - Object.keys(data.menu.buttons).length), color: color`0` });
         }
-        addText(document.title.replace(" | Sprig", ""), { y: 1, color: color`0` });
+        addText("RPG", { y: 1, color: color`0` });
       }
     }
   },
