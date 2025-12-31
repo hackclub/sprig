@@ -1,6 +1,6 @@
 /*
-@title:sliding_puzzle
-@author:BagelVulture
+@title: sliding_puzzle
+@author: BagelVulture
 @description: use WASD controls do decide which tile to slide into the empty space. assemble mario. the empty tile is bottom right when complete.
 @tags: []
 @addedOn: 2025-10-21

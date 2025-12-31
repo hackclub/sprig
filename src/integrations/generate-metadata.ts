@@ -26,7 +26,7 @@ const regexExpr = {
  * An array containing all of the valid strings
  */
 
-const allowedTags = ["tutorial", "maze", "puzzle", "strategy", "endless", "multiplayer", "action", "sandbox", "adventure", "memory", "timed", "music", "role-playing", "turn-based", "real-time", "exploration", "survival", "simulation", "utility", "sports", "retro", "platformer", "humor", "3d"];
+// const allowedTags = ["tutorial", "maze", "puzzle", "strategy", "endless", "multiplayer", "action", "sandbox", "adventure", "memory", "timed", "music", "role-playing", "turn-based", "real-time", "exploration", "survival", "simulation", "utility", "sports", "retro", "platformer", "humor", "3d"];
 
 
 /**
@@ -41,12 +41,12 @@ const isMetadataValid = (metadata: any): boolean => {
 	// 		return false;
 	// 	}
 	// }
-	
+
 	// Check description
 	if (!metadata.description || metadata.description.trim() === '') {
 		return false;
 	}
-	
+
 	return true;
 };
 
@@ -83,21 +83,32 @@ const setup = () => {
 			const tags = regexExpr.tags.exec(fileData);
 			const addedOn = regexExpr.addedOn.exec(fileData);
 			const description = regexExpr.description.exec(fileData);
+			const gamePath = "./games/" + gameFile;
 
 			// Check if all of the fields are defined
 			if (title && author && tags && addedOn && tags[1] && description) {
+
 				// Create a meta entry
-				const metaEntry = {
-					filename: gameFile.replace(".js", ""),
-					title: title[1],
-					author: author[1],
-					tags: JSON.parse(tags[1].replaceAll("'", '"')), // Replace all ' with " in order for compatibility issues
-					addedOn: addedOn[1],
-					description: description[1],
-				};
+				let metaEntry;
+				try {
+					metaEntry = {
+						filename: gameFile.replace(".js", ""),
+						title: title[1],
+						author: author[1],
+						tags: JSON.parse(tags[1].replaceAll("'", '"')), // Replace all ' with " in order for compatibility issues
+						addedOn: addedOn[1],
+						description: description[1],
+					};
+				} catch (error) {
+					if (error instanceof SyntaxError) {
+						throw Error("Tags metadata is not valid in: \n" + gamePath);
+					  } else {
+						throw error;
+					  }
+				}
 
 				if (!isMetadataValid(metaEntry)) {
-					throw Error("Metadata is not valid in " + metaEntry.filename);
+					throw Error("Metadata is not valid in: \n" + gamePath);
 				}
 
 
@@ -108,7 +119,7 @@ const setup = () => {
 				console.log(" OK!");
 			} else {
 				console.log(" ERR!");
-				throw Error(`A game metadata field is undefined! ${gameFile}`);
+				throw Error("A game metadata field is undefined! " + gamePath);
 			}
 		});
 
