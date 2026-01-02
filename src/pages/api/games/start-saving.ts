@@ -5,7 +5,6 @@ import {
 	setDocument,
 	updateDocument,
 } from "../../../lib/game-saving/account";
-import { updateEmailListLastModifiedTime } from "../../../lib/game-saving/email";
 import { Timestamp } from "firebase-admin/firestore";
 import { RoomParticipant } from "../../../lib/state";
 

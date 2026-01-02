@@ -8,7 +8,9 @@ const audioCtx = lazy(() => new AudioContext())
 const volGain = lazy(() => {
 	const volGain = audioCtx.createGain()
 	volGain.connect(audioCtx.destination)
-	effect(() => volGain.gain.value = 1 - +muted.value)
+	effect(() => {
+		volGain.gain.value = 1 - +muted.value
+	})
 	return volGain
 })
 
