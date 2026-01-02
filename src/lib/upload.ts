@@ -44,7 +44,7 @@ export const logSerialOutput = (value: string) => (value.trim().length > 0) && c
 
 
 export const uploadToSerial = async (name: string, message: string,
-																		 writer: WritableStreamDefaultWriter<ArrayBuffer>,
+																		 writer: WritableStreamDefaultWriter<Uint8Array>,
 																		 reader: ReadableStreamDefaultReader<string>) => {
 
 	const receivedEOT = new Promise<void>(resolve => {
@@ -111,7 +111,7 @@ export const uploadToSerial = async (name: string, message: string,
 	await writer.write(nameString)
 
 	console.log('[UPLOAD > SERIAL] Checkpoint 2 - writing length')
-	await writer.write(new Uint32Array([ buf.length ]).buffer)
+	await writer.write(new Uint8Array(new Uint32Array([ buf.length ]).buffer))
 
 	console.log('[UPLOAD > SERIAL] Checkpoint 3')
 	await writer.ready
@@ -134,7 +134,7 @@ export const uploadToSerial = async (name: string, message: string,
 }
 
 export const getVersionNumber = async (
-	writer: WritableStreamDefaultWriter<ArrayBuffer>,
+	writer: WritableStreamDefaultWriter<Uint8Array>,
 	reader: ReadableStreamDefaultReader<string>): Promise<string | null> => {
 	await writer.ready
 	await writer.write(new TextEncoder().encode("VERSION"))
@@ -165,11 +165,11 @@ export const getVersionNumber = async (
 }
 
 export const getIsLegacySerial = async (
-	writer: WritableStreamDefaultWriter<ArrayBuffer>,
+	writer: WritableStreamDefaultWriter<Uint8Array>,
 	reader: ReadableStreamDefaultReader<string>): Promise<boolean | null> => {
 
 	await writer.ready
-	await writer.write(new Uint8Array([ 0, 1, 2, 3, 4 ]).buffer)
+	await writer.write(new Uint8Array([ 0, 1, 2, 3, 4 ]))
 
 	// 128-char buffer
 	let serialBuffer = " ".repeat(128)
