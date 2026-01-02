@@ -9,6 +9,8 @@
  */
 import type { AstroIntegration } from "astro";
 import fs from "fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { generateImageJson } from "./thumbnail";
 
 /**
@@ -149,6 +151,55 @@ const walk = () => {
 	return files.filter((file) => file.endsWith(".js"));
 };
 
+export async function generateMetadataJson(options?: { generateThumbnails?: boolean }) {
+	const generateThumbnails = options?.generateThumbnails ?? true;
+
+	const metadata: ParsedMetaEntry[] = [];
+
+	for (const gameFile of walk()) {
+		process.stdout.write(`[${gameFile}] Looking for metadata...`);
+
+		const fileData = fs.readFileSync(`./games/${gameFile}`).toString();
+
+		// Extract the file data
+		const gamePath = "./games/" + gameFile;
+
+		const rawMatches: RawMetaMatches = {
+			title: regexExpr.title.exec(fileData),
+			author: regexExpr.author.exec(fileData),
+			tags: regexExpr.tags.exec(fileData),
+			addedOn: regexExpr.addedOn.exec(fileData),
+			description: regexExpr.description.exec(fileData),
+		};
+
+		const { entry: metaEntry, issues } = validateAndBuildMetadata(gameFile, rawMatches);
+
+		if (issues.length || !metaEntry) {
+			console.log(" ERR!");
+			const formattedIssues = issues.map((i) => `- ${i.field}: ${i.message}`).join("\n");
+			throw new Error(`Metadata issues in ${gamePath}:\n${formattedIssues}\n`);
+		}
+
+		// Keep legacy validation as a final guardrail (should be redundant with validateAndBuildMetadata).
+		if (!isMetadataValid(metaEntry)) {
+			console.log(" ERR!");
+			throw new Error(`Metadata is not valid in: \n${gamePath}`);
+		}
+
+		if (generateThumbnails) {
+			// generate game image json data
+			await generateImageJson(metaEntry.filename);
+		}
+
+		metadata.push(metaEntry);
+		console.log(" OK!");
+	}
+
+	process.stdout.write("[METADATA] Writing metadata file...");
+	fs.writeFileSync("./games/metadata.json", JSON.stringify(metadata));
+	console.log(" OK!");
+}
+
 /**
  * The function that runs on integration setup
  */
@@ -161,50 +212,8 @@ const setup = () => {
 
 	// Hook a function on the config:done integration
 	// More info: https://docs.astro.build/en/reference/integrations-reference/#astroconfigdone
-	integration.hooks["astro:config:done"] = () => {
-		const metadata: any = [];
-		walk().forEach((gameFile) => {
-			process.stdout.write(`[${gameFile}] Looking for metadata...`);
-
-			const fileData = fs.readFileSync(`./games/${gameFile}`).toString();
-
-			// Extract the file data
-			const gamePath = "./games/" + gameFile;
-
-			const rawMatches: RawMetaMatches = {
-				title: regexExpr.title.exec(fileData),
-				author: regexExpr.author.exec(fileData),
-				tags: regexExpr.tags.exec(fileData),
-				addedOn: regexExpr.addedOn.exec(fileData),
-				description: regexExpr.description.exec(fileData),
-			};
-
-			const { entry: metaEntry, issues } = validateAndBuildMetadata(gameFile, rawMatches);
-
-			if (issues.length || !metaEntry) {
-				console.log(" ERR!");
-				const formattedIssues = issues
-					.map((i) => `- ${i.field}: ${i.message}`)
-					.join("\n");
-				throw new Error(`Metadata issues in ${gamePath}:\n${formattedIssues}\n`);
-			}
-
-			// Keep legacy validation as a final guardrail (should be redundant with validateAndBuildMetadata).
-			if (!isMetadataValid(metaEntry)) {
-				console.log(" ERR!");
-				throw new Error(`Metadata is not valid in: \n${gamePath}`);
-			}
-
-			// generate game image json data
-			generateImageJson(metaEntry.filename);
-
-			metadata.push(metaEntry);
-			console.log(" OK!");
-		});
-
-		process.stdout.write("[METADATA] Writing metadata file...");
-		fs.writeFileSync("./games/metadata.json", JSON.stringify(metadata));
-		console.log(" OK!");
+	integration.hooks["astro:config:done"] = async () => {
+		await generateMetadataJson({ generateThumbnails: true });
 	};
 
 	// Return the astro integration
@@ -212,3 +221,27 @@ const setup = () => {
 };
 
 export default setup;
+
+// Allow running this file directly (useful for CI / local validation).
+const isDirectRun = (() => {
+	const argv1 = process.argv[1];
+	if (!argv1) return false;
+	try {
+		return path.resolve(argv1) === path.resolve(fileURLToPath(import.meta.url));
+	} catch {
+		return false;
+	}
+})();
+
+if (isDirectRun) {
+	const generateThumbnails =
+		process.argv.includes("--thumbnails") ? true
+		: process.argv.includes("--no-thumbnails") ? false
+		: process.env.CI ? false
+		: true;
+
+	generateMetadataJson({ generateThumbnails }).catch((err) => {
+		console.error(err);
+		process.exitCode = 1;
+	});
+}

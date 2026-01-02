@@ -12,16 +12,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install Node
-        uses: actions/setup-node@v4
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: 20.x
+          bun-version: latest
 
       - name: Install Dependencies
         run: |
-          yarn install
+          bun install
 
       - name: Build Project
         run: |
-          node .github/scripts/generate-metadata.js
-          yarn tsc --noEmit
+          bun src/integrations/generate-metadata.ts
+          bunx tsc --noEmit
