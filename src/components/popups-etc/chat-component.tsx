@@ -181,9 +181,10 @@ Answer the questions that follow based on this unless new code is provided.`;
 				</div>
 				<textarea
 					disabled={loading.value}
-					type="text"
 					value={input}
-					onChange={(e) => (input.value = e.currentTarget?.value)}
+					onChange={(e) => {
+						input.value = e.currentTarget.value
+					}}
 					onKeyPress={(e) => {
 						if (e.key === "Enter" && e.shiftKey) handleSendClick();
 					}}

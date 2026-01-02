@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { getUserByEmail, makeLoginCode, makeUser } from '../../../lib/game-saving/account'
-import { isValidEmail, loginCodeTemplate, mail, addToEmailList } from '../../../lib/game-saving/email'
+import { isValidEmail, loginCodeTemplate, mail } from '../../../lib/game-saving/email'
 
 export const post: APIRoute = async ({ request }) => {
 	let email: string
