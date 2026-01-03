@@ -1,3 +1,11 @@
+/*
+@title: Maze Runner
+@author: Alistair Tomori
+@description: Complete the maze!
+@tags: 
+@addedOn: 2026-01-03
+*/
+
 const P = "p"
 const W = "w"
 const G = "g"
