@@ -1,9 +1,10 @@
 /*
 @title: Giga Chad
-@description: "Giga Chad" is a chaotic arcade game where players control a hyper-muscled hero in a wild series of challenges. Inspired by meme culture and classic beat 'em ups, Giga Chad smashes through obstacles, lifts impossible weights, and battles over-the-top enemies. The game features fast-paced action, humorous animations, and power-ups that turn the hero even more giga. Score points by performing feats of strength, dodging hazards, and unleashing special moves. Only the chaddest can conquer every stage!
+@description: An asymmetrical mech shooter. Use the left D-pad to move the mech's legs (tank controls) and the right D-pad to independently aim the torso and shoot. Survive waves of enemies and collect powerups!
 @author: Vrund4591
-@tags: ['arcade','action','meme']
+@tags: ['arcade', 'shooter', 'mech']
 @addedOn: 2025-09-07
+*/
 
 [Game description and controls will be customized based on the actual game mechanics]
 
