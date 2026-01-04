@@ -1,3 +1,11 @@
+/*
+	>     @title: NS Shoot em up
+	>     @author: Muhammad Uzzam Butt
+	>     @description its a shooting game
+	>     @tags: ['shooting', 'arcade']
+	>     @addedOn: 2026-01-04
+	>     */
+
 const player = "p";
 const bullet = "b";
 const enemy = "e";
