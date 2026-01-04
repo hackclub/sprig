@@ -9,7 +9,7 @@
 @title: horse rider 1
 @author: Moma120
 @descrpition: In this game you jump over obstacles in order to get into the portal in order to go to the next level and if you beat all levels you win
-@tags: [horse, jumping, puzzle]
+@tags: ['horse', 'jumping', 'puzzle']
 @addedOn: 2025-12-27
 */
 
