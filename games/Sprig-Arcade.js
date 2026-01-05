@@ -1,7 +1,7 @@
 /*
 @title: Sprig Arcade
 @author: Wowstar
-@tags: [game]
+@tags: ['arcade' 'game' 'games']
 @addedOn: 2025-11-13
 */
  
