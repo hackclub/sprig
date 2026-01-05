@@ -1,6 +1,11 @@
-// =====================
-// 2PLAYER CHESS 
-// =====================
+/*
+@title: 2Player Chess
+@author: Philipp Mehringer
+@description: A complete digital chess game in Sprig with piece movement, check detection, and vertical indicators for turns and check.
+@tags: ['chess', 'strategy', 'board game']
+@addedOn: 2026-01-05
+*/
+
 
 const CURSOR="c", HIGHLIGHT="h", TILE="t"
 const WP="P",WR="R",WN="N",WB="B",WQ="Q",WK="K"
