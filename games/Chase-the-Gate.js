@@ -232,6 +232,5 @@ function gameStep() {
 const TICK_MS = 150;
 setInterval(gameStep, TICK_MS);
 
-afterInput(() => {
-  // nothing needed; logic runs in gameStep
-});
+// intentionally empty: all game logic runs in gameStep via setInterval
+afterInput(() => {});
