@@ -229,6 +229,8 @@ function gameStep() {
 }
 
 // gate + logic tick
+// 150ms (~6-7 updates/second) keeps the gate movement readable but still challenging;
+// lowering this makes the game feel faster/harder, raising it makes it slower/easier.
 const TICK_MS = 150;
 setInterval(gameStep, TICK_MS);
 
