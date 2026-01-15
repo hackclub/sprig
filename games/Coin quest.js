@@ -1,4 +1,5 @@
- @title: Coin quest
+/*
+@title: Coin quest
 @author: Sivasankar
  @description: Collect all the collectibles to win and increse all lives
  @tags: ['tag1', 'tag2']
