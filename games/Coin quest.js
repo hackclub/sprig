@@ -1,4 +1,4 @@
-// GAME: COIN QUEST - WORKING TEXT DISAPPEARANCE
+
 const player = "p";
 const wall = "w";
 const coin = "c";
@@ -154,12 +154,10 @@ function getPlayer() {
   return getFirst(player);
 }
 
-// SIMPLE CLEAR TEXT - WORKS RELIABLY
+
 function clearAllText() {
-  // Clear screen by covering with spaces
   for (let y = 0; y < 16; y++) {
     for (let x = 0; x < 16; x++) {
-      // Add empty text to overwrite any existing text
       addText(" ", { x: x, y: y, color: color`0` });
     }
   }
@@ -304,9 +302,9 @@ function handleCollisions() {
   }
 }
 
-// UPDATE UI - SIMPLE AND RELIABLE
+
 function updateUI() {
-  clearArea(0, 0, 16, 2); // Clear top area
+  clearArea(0, 0, 16, 2); 
   
   // Add updated UI
   addText(`Score: ${score}`, { 
@@ -328,7 +326,7 @@ function updateUI() {
   });
 }
 
-// GAME STATE FUNCTIONS
+// GAME STATE 
 function gameOver() {
   gameActive = false;
   clearAllText();
@@ -418,12 +416,11 @@ function initGame() {
   // Update UI
   updateUI();
   
-  // Welcome message - THIS WILL DISAPPEAR!
+  
   addText("COIN QUEST", { y: 4, color: color`3` });
   addText("WASD = Move", { y: 6, color: color`5` });
   addText("J = Restart", { y: 7, color: color`5` });
-  
-  // Remove welcome messages after 2 seconds
+
   setTimeout(() => {
     clearArea(0, 4, 16, 4); // Clear area from y=4 to y=7
   }, 2000);
