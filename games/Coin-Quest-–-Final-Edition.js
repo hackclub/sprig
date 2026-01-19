@@ -1,7 +1,7 @@
 /*
 @title: Coin Quest Final Edition
 @author: Kabir Saini
-@description: A maze-based arcade game where players collect coins, avoid enemies, gain extra lives from hearts, and progress through handcrafted and infinite procedurally generated levels.
+@description: A maze-based arcade game where players collect coins, avoid enemies, gain extra lives from hearts, and progress through infinite procedurally generated levels.
 @tags: ['maze', 'collect', 'enemy', 'arcade']
 @addedOn: 2025-01-19
 */
@@ -103,7 +103,8 @@ setLegend(
 ................`]
 )
 
-setSolids([PLAYER, WALL, ENEMY])
+/* IMPORTANT: enemies are NOT solid */
+setSolids([PLAYER, WALL])
 
 let level = 0
 let score = 0
@@ -124,17 +125,16 @@ function generateLevel(difficulty) {
     grid[i][size - 1] = WALL
   }
 
-  // Player
-  grid[1][1] = PLAYER
-
-  // Guaranteed paths (prevents isolation)
+  // Guaranteed open path
   for (let y = 1; y < size - 1; y++) {
     grid[y][2] = "."
   }
 
-  // Light walls (never block fully)
+  grid[1][1] = PLAYER
+
+  // Light random walls
   for (let i = 0; i < size; i++) {
-    placeRandom(grid, WALL, 0.25)
+    placeRandom(grid, WALL, 0.3)
   }
 
   const coinCount = 2 + Math.floor(difficulty / 2)
@@ -150,15 +150,13 @@ function generateLevel(difficulty) {
 
 function placeRandom(grid, tile, chance = 1) {
   if (Math.random() > chance) return
-  let tries = 0
-  while (tries < 50) {
+  for (let i = 0; i < 50; i++) {
     const x = Math.floor(Math.random() * (grid.length - 2)) + 1
     const y = Math.floor(Math.random() * (grid.length - 2)) + 1
     if (grid[y][x] === ".") {
       grid[y][x] = tile
       return
     }
-    tries++
   }
 }
 
@@ -194,13 +192,13 @@ onInput("i", () => {
   loadLevel()
 })
 
-/* ---------------- COLLISIONS ---------------- */
+/* ---------------- DAMAGE ---------------- */
 
 function checkEnemyDamage() {
   if (hitCooldown > 0) return
   if (tilesWith(PLAYER, ENEMY).length) {
     lives--
-    hitCooldown = 5
+    hitCooldown = 6
     if (lives <= 0) {
       gameOver = true
       clearText()
@@ -212,6 +210,8 @@ function checkEnemyDamage() {
     }
   }
 }
+
+/* ---------------- GAME LOOP ---------------- */
 
 afterInput(() => {
   if (gameOver) return
@@ -234,16 +234,15 @@ afterInput(() => {
 
   checkEnemyDamage()
 
-  if (tilesWith(COIN).length === 0 && !gameOver) {
+  if (!gameOver && tilesWith(COIN).length === 0) {
     level++
     loadLevel()
   }
 })
 
-/* ---------------- ENEMY MOVEMENT ---------------- */
-
 setInterval(() => {
   if (gameOver) return
+
   for (const enemy of getAll(ENEMY)) {
     const d = Math.floor(Math.random() * 4)
     if (d === 0) enemy.y--
@@ -251,5 +250,6 @@ setInterval(() => {
     if (d === 2) enemy.x--
     if (d === 3) enemy.x++
   }
+
   checkEnemyDamage()
 }, 600)
