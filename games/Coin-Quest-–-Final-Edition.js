@@ -13,6 +13,7 @@ const ENEMY = "e"
 const HEART = "h"
 
 const MAX_LIVES = 5
+let hitCooldown = 0
 
 setLegend(
   [PLAYER, bitmap`
@@ -109,65 +110,13 @@ let score = 0
 let lives = 3
 let gameOver = false
 
-/* ---------------- HANDCRAFTED LEVELS ---------------- */
-
-const baseLevels = [
-  map`
-wwwwwwwww
-wp..c...w
-w.www.w.w
-w..c....w
-wwwwwwwww`,
-
-  map`
-wwwwwwwww
-wp..c..ew
-w.www.w.w
-w..c....w
-wwwwwwwww`,
-
-  map`
-wwwwwwwwww
-wp.c..w..w
-w.www.we.w
-w..c.....w
-wwwwwwwwww`,
-
-  map`
-wwwwwwwwww
-wp.c..w.ew
-w.www.we.w
-w..c..h..w
-wwwwwwwwww`,
-
-  map`
-wwwwwwwwwww
-wp..c...e.w
-w.www.w.w.w
-w..c..c.h.w
-wwwwwwwwwww`,
-
-  map`
-wwwwwwwwwww
-wp.c.e.c..w
-w.www.w.w.w
-w..c..e.h.w
-wwwwwwwwwww`,
-
-  map`
-wwwwwwwwwwww
-wp.c.e..c..w
-w.www.w.w.we
-w..c..e..c.w
-wwwwwwwwwwww`
-]
-
-/* ---------------- PROCEDURAL LEVEL ---------------- */
+/* ---------------- SAFE PROCEDURAL LEVEL ---------------- */
 
 function generateLevel(difficulty) {
-  const size = Math.min(7 + difficulty, 13)
+  const size = Math.min(9 + difficulty, 13)
   let grid = Array(size).fill(0).map(() => Array(size).fill("."))
 
+  // Border walls
   for (let i = 0; i < size; i++) {
     grid[0][i] = WALL
     grid[size - 1][i] = WALL
@@ -175,11 +124,18 @@ function generateLevel(difficulty) {
     grid[i][size - 1] = WALL
   }
 
-  for (let i = 0; i < size * 2; i++) {
-    placeRandom(grid, WALL)
+  // Player
+  grid[1][1] = PLAYER
+
+  // Guaranteed paths (prevents isolation)
+  for (let y = 1; y < size - 1; y++) {
+    grid[y][2] = "."
   }
 
-  grid[1][1] = PLAYER
+  // Light walls (never block fully)
+  for (let i = 0; i < size; i++) {
+    placeRandom(grid, WALL, 0.25)
+  }
 
   const coinCount = 2 + Math.floor(difficulty / 2)
   const enemyCount = Math.min(1 + Math.floor(difficulty / 2), 6)
@@ -192,19 +148,21 @@ function generateLevel(difficulty) {
   return map`${grid.map(r => r.join("")).join("\n")}`
 }
 
-function placeRandom(grid, tile) {
-  let placed = false
-  while (!placed) {
+function placeRandom(grid, tile, chance = 1) {
+  if (Math.random() > chance) return
+  let tries = 0
+  while (tries < 50) {
     const x = Math.floor(Math.random() * (grid.length - 2)) + 1
     const y = Math.floor(Math.random() * (grid.length - 2)) + 1
     if (grid[y][x] === ".") {
       grid[y][x] = tile
-      placed = true
+      return
     }
+    tries++
   }
 }
 
-/* ---------------- GAME FLOW ---------------- */
+/* ---------------- HUD ---------------- */
 
 function drawHUD() {
   clearText()
@@ -214,11 +172,7 @@ function drawHUD() {
 }
 
 function loadLevel() {
-  if (level < baseLevels.length) {
-    setMap(baseLevels[level])
-  } else {
-    setMap(generateLevel(level - baseLevels.length + 1))
-  }
+  setMap(generateLevel(level))
   drawHUD()
 }
 
@@ -242,8 +196,27 @@ onInput("i", () => {
 
 /* ---------------- COLLISIONS ---------------- */
 
+function checkEnemyDamage() {
+  if (hitCooldown > 0) return
+  if (tilesWith(PLAYER, ENEMY).length) {
+    lives--
+    hitCooldown = 5
+    if (lives <= 0) {
+      gameOver = true
+      clearText()
+      addText("GAME OVER", { x: 4, y: 6 })
+      addText("Final Score: " + score, { x: 3, y: 8 })
+      addText("Press I to Restart", { x: 1, y: 10 })
+    } else {
+      loadLevel()
+    }
+  }
+}
+
 afterInput(() => {
   if (gameOver) return
+
+  if (hitCooldown > 0) hitCooldown--
 
   const coinHit = tilesWith(PLAYER, COIN)
   if (coinHit.length) {
@@ -259,21 +232,9 @@ afterInput(() => {
     drawHUD()
   }
 
-  if (tilesWith(PLAYER, ENEMY).length) {
-    lives--
-    if (lives <= 0) {
-      gameOver = true
-      clearText()
-      addText("GAME OVER", { x: 4, y: 6 })
-      addText("Final Score: " + score, { x: 3, y: 8 })
-      addText("Press I to Restart", { x: 1, y: 10 })
-      return
-    }
-    loadLevel()
-    return
-  }
+  checkEnemyDamage()
 
-  if (tilesWith(COIN).length === 0) {
+  if (tilesWith(COIN).length === 0 && !gameOver) {
     level++
     loadLevel()
   }
@@ -290,4 +251,5 @@ setInterval(() => {
     if (d === 2) enemy.x--
     if (d === 3) enemy.x++
   }
+  checkEnemyDamage()
 }, 600)
