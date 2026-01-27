@@ -3,7 +3,7 @@
 @author: None
 @description: None
 @tags: []
-@addedOn: None
+@addedOn: 2025-04-17
 */
 
 // Define sprite types (single characters only)
