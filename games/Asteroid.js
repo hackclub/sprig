@@ -11,6 +11,7 @@ https://sprig.hackclub.com/gallery/getting_started
 const player = "p";
 const obs = "o";
 const backg = "b";
+const powup = "x";
 
 let lastSpawnX; // last position of spawned obstacle
 
@@ -20,6 +21,9 @@ let timeBetweenUpdate = 1000;
 
 let gameover = false;
 let gamestarted = false;
+
+let powerup = true;
+let insuperPower = false;
 
 
 setLegend(
@@ -73,7 +77,24 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000`]
+0000000000000000`],
+  [powup, bitmap`
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666`]
 );
 
 setSolids(
@@ -105,7 +126,12 @@ function mainMenu() {
   });
   addText("J to start", {
     x: 5,
-    y: 10,
+    y: 9,
+    color: color`2`
+  });
+  addText("W for powerup", {
+    x: 4,
+    y: 12,
     color: color`2`
   });
   addText("A and D to move", {
@@ -143,6 +169,14 @@ function gameOver()
     color: color`2`
   });
   gameover = true;
+  clearAll();
+  setTimeout(clearAll, 100);
+}
+function clearAll(){
+  let currentObs = getAll(obs);
+  for (let i = 0; i < currentObs.length; i++){
+    clearTile(currentObs[i].x, currentObs[i].y);
+  }
 }
 
 function spawnNew() {
@@ -169,6 +203,36 @@ function moveObstacles() {
     gameOver(); }
 }
 
+function superPower(){
+  insuperPower = true;
+  let currentObs = getAll(obs);
+  clearAll();
+  spY();
+  setTimeout(spB, 50);
+  setTimeout(spY, 100);
+  setTimeout(spB, 150);
+  setTimeout(spY, 200);
+  setTimeout(spB, 250);
+  setTimeout(spY, 300);
+  setTimeout(spB, 350);
+  setTimeout(spY, 400);
+  setTimeout(spB, 450);
+  setTimeout(sP, 500);
+  
+  
+  powerup = false;
+}
+
+function spY(){
+  setBackground(powup);
+}
+function spB(){
+  setBackground(backg);
+}
+function sP(){
+  insuperPower = false;
+}
+
 function calculateTime() {
   elapsedTime = performance.now() - startTime;
   timeBetweenUpdate = 1000 * Math.pow(0.75, elapsedTime / 10000); // Adjust the multiplier for desired game speed
@@ -190,6 +254,9 @@ onInput("d", () => {
 onInput("j", () => {
   if (!gamestarted) { gameStart(); }
 });
+onInput("w", () => {
+  if (powerup) {superPower() }
+});
 
 afterInput(() => {
   // console.log(getFirst(player).x + " " + getFirst(player).y);
@@ -198,8 +265,10 @@ afterInput(() => {
 });
 
 function gameLoop() {
-  moveObstacles();
-  spawnNew();
+  if (!insuperPower) {
+    moveObstacles();
+    spawnNew();
+  }
   calculateTime();
   if (!gameover) { setTimeout(gameLoop, timeBetweenUpdate); } // 1000 milliseconds = 1 second
 }
