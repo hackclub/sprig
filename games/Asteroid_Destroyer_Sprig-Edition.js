@@ -1,31 +1,37 @@
 /*
 @title: Asteroid Destroyer
 @author: mihranrazaa
+@description: Classic arcade space shooter with combo system, power-ups, and color-shifting gameplay(Inspired by ChromeDino), Based on my Asteroid_Destroyer game (only for linux and win..).
 @tags: ['action', 'arcade']
-@addedOn: 2025-01-06
+@addedOn: 2026-01-06
 */
 
 const player = "p";
 const asteroid = "a";
+const smallAsteroid = "m";
 const shot = "s";
 const particle = "x";
+const powerup = "u";
+const star = "t";
 const playerInv = "P";
 const asteroidInv = "A";
+const smallAsteroidInv = "M";
 const shotInv = "S";
 const particleInv = "X";
+const powerupInv = "U";
 
 setLegend(
   [ player, bitmap`
 ................
 ................
-.......00.......
-......0330......
-......0330......
-.....033330.....
-.....033330.....
-....03333330....
-....03333330....
-...0333333330...
+................
+................
+......3..3......
+.......33.......
+.......33.......
+.....000000.....
+.....000000.....
+.....000000.....
 ...0333333330...
 ..033333333330..
 ..033333333330..
@@ -47,6 +53,23 @@ setLegend(
 .0111111111110..
 ..00111111100...
 ...000000000....
+................
+................` ],
+  [ smallAsteroid, bitmap`
+................
+................
+................
+.....00000......
+....0011100.....
+....0111110.....
+....0111110.....
+....0111110.....
+.....00000......
+................
+................
+................
+................
+................
 ................
 ................` ],
   [ shot, bitmap`
@@ -83,23 +106,57 @@ setLegend(
 ................
 ................
 ................` ],
+  [ powerup, bitmap`
+................
+................
+.....666666.....
+....66666666....
+....66666666....
+....66666666....
+....66666666....
+....66666666....
+.....666666.....
+................
+................
+................
+................
+................
+................
+................` ],
+  [ star, bitmap`
+................
+................
+................
+................
+................
+.......2........
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................` ],
   [ playerInv, bitmap`
-0000000000000000
-0000000000000000
-0000000220000000
-0000002002000000
-0000002002000000
-0000020000200000
-0000020000200000
-0000200000020000
-0000200000020000
-0002000000002000
-0002000000002000
-0020000000000200
-0020000000000200
-0222222222222220
-0222222222222220
-0000000000000000` ],
+................
+................
+................
+................
+......1..1......
+.......11.......
+.......11.......
+.....LLLLLL.....
+.....LLLLLL.....
+.....LLLLLL.....
+...L11111111L...
+..L1111111111L..
+..L1111111111L..
+.LLLLLLLLLLLLLL.
+.LLLLLLLLLLLLLL.
+................` ],
   [ asteroidInv, bitmap`
 0000000000000000
 0002222222220000
@@ -115,6 +172,23 @@ setLegend(
 0220000000002200
 0022000000222000
 0002222222220000
+0000000000000000
+0000000000000000` ],
+  [ smallAsteroidInv, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000022222000000
+0000220002000000
+0000220000200000
+0000220000200000
+0000220000200000
+0000022222000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
 0000000000000000
 0000000000000000` ],
   [ shotInv, bitmap`
@@ -150,6 +224,23 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000
+0000000000000000` ],
+  [ powerupInv, bitmap`
+0000000000000000
+0000000000000000
+0000044444000000
+0000440000440000
+0000440000440000
+0000440000440000
+0000440000440000
+0000440000440000
+0000044444000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
 0000000000000000` ]
 );
 
@@ -158,8 +249,11 @@ setSolids([]);
 let level = 0;
 let score = 0;
 let gameOver = false;
-let asteroidSpeed = 1000;
 let inverted = false;
+let combo = 0;
+let maxCombo = 0;
+let rapidFireActive = false;
+let rapidFireTimeout = null;
 
 const levels = [
   map`
@@ -180,24 +274,58 @@ setMap(levels[level]);
 let asteroids = [];
 let shots = [];
 let particles = [];
+let powerups = [];
+let stars = [];
 
+function createStars() {
+  for (let i = 0; i < 15; i++) {
+    const x = Math.floor(Math.random() * 10);
+    const y = Math.floor(Math.random() * 10);
+    addSprite(x, y, star);
+    stars.push({ x, y, speed: 0.1 + Math.random() * 0.2 });
+  }
+}
+
+createStars();
+
+// Spawn asteroid
 function spawnAsteroid() {
   if (gameOver) return;
   
   const x = Math.floor(Math.random() * 10);
   const y = 0;
+  const isSmall = Math.random() < 0.3;
   
-  const asteroidType = inverted ? asteroidInv : asteroid;
+  const asteroidType = inverted ? 
+    (isSmall ? smallAsteroidInv : asteroidInv) : 
+    (isSmall ? smallAsteroid : asteroid);
+  
   addSprite(x, y, asteroidType);
-  asteroids.push({ x, y, dx: (Math.random() - 0.5) * 0.2, dy: 0.5 });
+  asteroids.push({ 
+    x, 
+    y, 
+    dx: (Math.random() - 0.5) * 0.2, 
+    dy: 0.4 + Math.random() * 0.2,
+    isSmall: isSmall
+  });
 }
 
-// Initialize game with some asteroids
+function spawnPowerup() {
+  if (gameOver || powerups.length > 0) return;
+  
+  const x = Math.floor(Math.random() * 10);
+  const y = 0;
+  
+  const powerupType = inverted ? powerupInv : powerup;
+  addSprite(x, y, powerupType);
+  powerups.push({ x, y, dy: 0.3 });
+}
+
 for (let i = 0; i < 5; i++) {
   spawnAsteroid();
 }
 
-// Movement controls
+// Movement input (Walking no jutsu)
 onInput("w", () => {
   if (gameOver) return;
   const p = getFirst(inverted ? playerInv : player);
@@ -235,8 +363,10 @@ onInput("j", () => {
   shoot();
 });
 
-onInput("k", () => {
-  resetGame();
+onInput("i", () => {
+  if (gameOver) {
+    resetGame();
+  }
 });
 
 function shoot() {
@@ -247,6 +377,17 @@ function shoot() {
   addSprite(p.x, p.y - 1, shotType);
   shots.push({ x: p.x, y: p.y - 1 });
   
+  if (rapidFireActive) {
+    if (p.x > 0) {
+      addSprite(p.x - 1, p.y - 1, shotType);
+      shots.push({ x: p.x - 1, y: p.y - 1 });
+    }
+    if (p.x < 9) {
+      addSprite(p.x + 1, p.y - 1, shotType);
+      shots.push({ x: p.x + 1, y: p.y - 1 });
+    }
+  }
+  
   playTune(tune`
 37.5: C5^37.5,
 1162.5`);
@@ -256,20 +397,39 @@ function resetGame() {
   clearText();
   gameOver = false;
   score = 0;
+  combo = 0;
+  maxCombo = 0;
   asteroids = [];
   shots = [];
   particles = [];
+  powerups = [];
   inverted = false;
+  rapidFireActive = false;
+  
+  if (rapidFireTimeout) {
+    clearTimeout(rapidFireTimeout);
+    rapidFireTimeout = null;
+  }
   
   // Clear all sprites
   getAll(asteroid).forEach(s => s.remove());
   getAll(asteroidInv).forEach(s => s.remove());
+  getAll(smallAsteroid).forEach(s => s.remove());
+  getAll(smallAsteroidInv).forEach(s => s.remove());
   getAll(shot).forEach(s => s.remove());
   getAll(shotInv).forEach(s => s.remove());
   getAll(particle).forEach(s => s.remove());
   getAll(particleInv).forEach(s => s.remove());
+  getAll(powerup).forEach(s => s.remove());
+  getAll(powerupInv).forEach(s => s.remove());
   
+  // Reset player position
   setMap(levels[level]);
+  
+  // Recreate stars
+  stars = [];
+  getAll(star).forEach(s => s.remove());
+  createStars();
   
   // Spawn initial asteroids
   for (let i = 0; i < 5; i++) {
@@ -280,16 +440,15 @@ function resetGame() {
 function updateGame() {
   if (gameOver) return;
   
-  // Check for color inversion at score 100
-  if (score >= 150 && !inverted) {
+  if (score >= 250 && score < 350 && !inverted) {
     inverted = true;
     
-    // Clear all sprites and let them respawn with new colors
     getAll(asteroid).forEach(s => s.remove());
+    getAll(smallAsteroid).forEach(s => s.remove());
     getAll(shot).forEach(s => s.remove());
     getAll(particle).forEach(s => s.remove());
+    getAll(powerup).forEach(s => s.remove());
     
-    // Reset player with inverted sprite
     const p = getFirst(player);
     if (p) {
       const px = p.x;
@@ -298,29 +457,89 @@ function updateGame() {
       addSprite(px, py, playerInv);
     }
     
-    // Clear arrays and respawn
+    // Clear arrays & Respawn (Summoning no jutsu)
     asteroids = [];
     shots = [];
     particles = [];
+    powerups = [];
     
     for (let i = 0; i < 5; i++) {
       spawnAsteroid();
     }
     
     clearText();
+    addText(`COLOR INVERTED!`, { x: 2, y: 7, color: color`6` });
     setTimeout(() => {
       clearText();
-      addText(`Score: ${score}`, { x: 1, y: 1, color: inverted ? color`0` : color`3` });
+      const textColor = inverted ? color`0` : color`3`;
+      addText(`Score: ${score}`, { x: 1, y: 1, color: textColor });
     }, 1500);
     return;
   }
   
+  // Reverse no justu
+  if (score >= 350 && inverted) {
+    inverted = false;
+    
+    getAll(asteroidInv).forEach(s => s.remove());
+    getAll(smallAsteroidInv).forEach(s => s.remove());
+    getAll(shotInv).forEach(s => s.remove());
+    getAll(particleInv).forEach(s => s.remove());
+    getAll(powerupInv).forEach(s => s.remove());
+    
+    const p = getFirst(playerInv);
+    if (p) {
+      const px = p.x;
+      const py = p.y;
+      p.remove();
+      addSprite(px, py, player);
+    }
+    
+    asteroids = [];
+    shots = [];
+    particles = [];
+    powerups = [];
+    
+    for (let i = 0; i < 5; i++) {
+      spawnAsteroid();
+    }
+    
+    clearText();
+    addText(`BACK TO NORMAL!`, { x: 2, y: 7, color: color`6` });
+    setTimeout(() => {
+      clearText();
+      const textColor = inverted ? color`0` : color`3`;
+      addText(`Score: ${score}`, { x: 1, y: 1, color: textColor });
+    }, 1500);
+    return;
+  }
+  
+  //parallax effect
+  stars.forEach(s => {
+    s.y += s.speed;
+    if (s.y > 9) {
+      s.y = 0;
+      s.x = Math.floor(Math.random() * 10);
+    }
+    const starSprites = getAll(star);
+    starSprites.forEach(sprite => {
+      if (Math.abs(sprite.x - s.x) < 0.1 && Math.abs(sprite.y - Math.floor(s.y)) < 0.1) {
+        sprite.y = Math.floor(s.y);
+      }
+    });
+  });
+  
   // Update asteroids
-  const allAsteroids = getAll(inverted ? asteroidInv : asteroid);
+  const allAsteroids = [
+    ...getAll(inverted ? asteroidInv : asteroid),
+    ...getAll(inverted ? smallAsteroidInv : smallAsteroid)
+  ];
+  
   asteroids = asteroids.filter((ast, index) => {
     ast.y += ast.dy;
     ast.x += ast.dx;
     
+    // Wrap horizontally
     if (ast.x < 0) ast.x = 9;
     if (ast.x > 9) ast.x = 0;
     
@@ -329,13 +548,12 @@ function updateGame() {
       sprite.x = Math.floor(ast.x);
       sprite.y = Math.floor(ast.y);
       
-      // Check if asteroid hit bottom
-      if (ast.y > 9) {
+      if (ast.y > 9.5) {
         sprite.remove();
+        combo = 0; 
         return false;
       }
       
-      // Check collision with player
       const p = getFirst(inverted ? playerInv : player);
       if (p && Math.floor(ast.x) === p.x && Math.floor(ast.y) === p.y) {
         endGame();
@@ -346,7 +564,44 @@ function updateGame() {
     return true;
   });
   
-  // Update shots
+  const allPowerups = getAll(inverted ? powerupInv : powerup);
+  powerups = powerups.filter((pow, index) => {
+    pow.y += pow.dy;
+    
+    const sprite = allPowerups[index];
+    if (sprite) {
+      sprite.y = Math.floor(pow.y);
+      
+      if (pow.y > 9) {
+        sprite.remove();
+        return false;
+      }
+      
+      const p = getFirst(inverted ? playerInv : player);
+      if (p && sprite.x === p.x && Math.floor(pow.y) === p.y) {
+        // rapid fire
+        rapidFireActive = true;
+        score += 10;
+        sprite.remove();
+        
+        playTune(tune`
+75: C5^75,
+75: E5^75,
+75: G5^75,
+2175`);
+        
+        if (rapidFireTimeout) clearTimeout(rapidFireTimeout);
+        rapidFireTimeout = setTimeout(() => {
+          rapidFireActive = false;
+        }, 5000);
+        
+        return false;
+      }
+    }
+    
+    return true;
+  });
+  
   const allShots = getAll(inverted ? shotInv : shot);
   shots = shots.filter((s, index) => {
     s.y -= 1;
@@ -364,7 +619,13 @@ function updateGame() {
       asteroids = asteroids.filter((ast, astIndex) => {
         if (Math.floor(ast.x) === s.x && Math.floor(ast.y) === s.y) {
           hit = true;
-          score += 5;
+          const points = ast.isSmall ? 10 : 5;
+          score += points;
+          combo++;
+          if (combo > maxCombo) maxCombo = combo;
+          
+          // Bonus points for combos
+          if (combo >= 5) score += combo;
           
           const particleType = inverted ? particleInv : particle;
           for (let i = 0; i < 4; i++) {
@@ -377,7 +638,7 @@ function updateGame() {
 37.5: E4^37.5,
 1087.5`);
           
-          const astSprite = getAll(inverted ? asteroidInv : asteroid)[astIndex];
+          const astSprite = allAsteroids[astIndex];
           if (astSprite) astSprite.remove();
           
           return false;
@@ -394,7 +655,7 @@ function updateGame() {
     return true;
   });
   
-  // Update particles
+  // Updates particles
   const allParticles = getAll(inverted ? particleInv : particle);
   particles = particles.filter((p, index) => {
     p.life -= 1;
@@ -410,10 +671,22 @@ function updateGame() {
     spawnAsteroid();
   }
   
-  // Display score
+  if (Math.random() < 0.01 && score > 20) {
+    spawnPowerup();
+  }
+  
+  // Displays score and combo
   clearText();
   const textColor = inverted ? color`0` : color`3`;
   addText(`Score: ${score}`, { x: 1, y: 1, color: textColor });
+  
+  if (combo >= 3) {
+    addText(`Combo: ${combo}x`, { x: 1, y: 2, color: color`6` });
+  }
+  
+  if (rapidFireActive) {
+    addText(`RAPID FIRE!`, { x: 1, y: 3, color: color`6` });
+  }
 }
 
 function endGame() {
@@ -428,15 +701,17 @@ function endGame() {
 3750`);
   
   clearText();
-  addText(`GAME OVER!`, { x: 4, y: 6, color: color`3` });
-  addText(`Score: ${score}`, { x: 4, y: 8, color: color`3` });
-  addText(`Press K to`, { x: 3, y: 10, color: color`2` });
-  addText(`restart`, { x: 5, y: 11, color: color`2` });
+  addText(`GAME OVER!`, { x: 4, y: 5, color: color`3` });
+  addText(`Score: ${score}`, { x: 4, y: 7, color: color`3` });
+  addText(`Max Combo: ${maxCombo}x`, { x: 2, y: 9, color: color`6` });
+  addText(`Press I to`, { x: 3, y: 11, color: color`2` });
+  addText(`restart`, { x: 5, y: 12, color: color`2` });
 }
 
 setInterval(updateGame, 100);
 
-// Background music
+
+// Crazzy aah BGM
 const backgroundMusic = tune`
 500: C4~500 + E4~500 + G4~500,
 500: C4~500 + E4~500 + G4~500,
@@ -467,6 +742,15 @@ const backgroundMusic = tune`
 
 const playback = playTune(backgroundMusic, Infinity);
 
+// Show intructions on first opening
+addText(`Asteroid Destroyer`, { x: 1, y: 1, color: color`3` });
+addText(`WASD: Move`, { x: 1, y: 12, color: color`6` });
+addText(`J: Shoot`, { x: 1, y: 13, color: color`6` });
+addText(`Collect powerups!`, { x: 0, y: 14, color: color`6` });
+addText(`I: Restart`, { x: 1, y: 15, color: color`6` });
+
+
+// Why are you still here? LOL
 setTimeout(() => {
   clearText();
 }, 3000);
