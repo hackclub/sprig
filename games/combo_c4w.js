@@ -10,10 +10,8 @@ const WIDTH = 4;
 const WELL_X = 6;
 const MAP_WIDTH = 16; // Total map width
 const HEIGHT = 20;
-const MAX_LOCK_DELAY = 5000; // Time allowed on floor before auto-lock
+const MAX_LOCK_DELAY = 5000; // Time (ms) allowed on floor before auto-lock
 
-// Capital letters is for temporary sprites, for example ghost pieces and the current falling block
-// Lowercase is for pernament, locked pieces
 setLegend(
   ["E", bitmap`
 ................
@@ -310,20 +308,30 @@ setSolids([]);
 
 // Patterns for the 3 residual blocks
 const RESIDUAL_PATTERNS = [
+  { type: 's', coords: [
+      [2, 19],
+      [3, 19],
+      [1, 18]
+    ] },
   { type: 'i', coords: [
       [1, 19],
       [2, 19],
       [3, 19]
     ] },
   { type: 't', coords: [
-      [3, 19],
       [2, 19],
-      [3, 18]
+      [1, 19],
+      [2, 18]
+    ] },
+  { type: 'j', coords: [
+      [3, 19],
+      [3, 18],
+      [3, 17]
     ] },
   { type: 'l', coords: [
+      [1, 19],
       [2, 19],
-      [3, 19],
-      [3, 18]
+      [2, 18]
     ] }
 ];
 
@@ -377,6 +385,18 @@ const PIECES = [
       [1, 0],
       [1, 1],
       [1, 2]
+    ],
+    [
+      [0, 1],
+      [1, 1],
+      [2, 1],
+      [3, 1]
+    ],
+    [
+      [2, -1],
+      [2, 0],
+      [2, 1],
+      [2, 2]
     ]
   ], // I
   [
@@ -425,6 +445,18 @@ const PIECES = [
       [1, 1],
       [2, 1],
       [2, 2]
+    ],
+    [
+      [1, 1],
+      [2, 1],
+      [0, 2],
+      [1, 2]
+    ],
+    [
+      [0, 0],
+      [0, 1],
+      [1, 1],
+      [1, 2]
     ]
   ], // S
   [
@@ -439,6 +471,18 @@ const PIECES = [
       [1, 1],
       [2, 1],
       [1, 2]
+    ],
+    [
+      [0, 1],
+      [1, 1],
+      [1, 2],
+      [2, 2]
+    ],
+    [
+      [1, 0],
+      [0, 1],
+      [1, 1],
+      [0, 2]
     ]
   ], // Z
   [
@@ -552,8 +596,9 @@ const SRS_KICKS = {
     [1, 1],
     [0, -2],
     [1, -2]
-  ]
+  ],
 };
+
 const SRS_KICKS_I = {
   "0->1": [
     [0, 0],
@@ -610,6 +655,39 @@ const SRS_KICKS_I = {
     [2, 0],
     [-1, 2],
     [2, -1]
+  ],
+  // I-piece 180s
+  "0->2": [
+    [0, 0],
+    [-1, 0],
+    [-2, 0],
+    [1, 0],
+    [2, 0],
+    [0, 1]
+  ],
+  "2->0": [
+    [0, 0],
+    [1, 0],
+    [2, 0],
+    [-1, 0],
+    [-2, 0],
+    [0, -1]
+  ],
+  "1->3": [
+    [0, 0],
+    [0, 1],
+    [0, 2],
+    [0, -1],
+    [0, -2],
+    [-1, 0]
+  ],
+  "3->1": [
+    [0, 0],
+    [0, -1],
+    [0, -2],
+    [0, 1],
+    [0, 2],
+    [1, 0]
   ]
 };
 
@@ -660,7 +738,6 @@ function collides(dx, dy, rot = current.rot) {
 }
 
 function clearCurrentOnly() {
-  // Clears any temporary sprites from the well
   for (let y = 0; y < HEIGHT; y++) {
     for (let x = WELL_X; x < WELL_X + WIDTH; x++) {
       getTile(x, y).forEach(t => {
@@ -724,16 +801,15 @@ function drawUI() {
   }
   nextQueue.slice(0, 4).forEach((type, index) => {
     PIECES[TYPES.indexOf(type)][0].forEach(([px, py]) => {
-      addSprite(11 + px, (index * 5) + 1 + py, type.toLowerCase());
+      addSprite(12 + px, (index * 5) + 1 + py, type.toLowerCase());
     });
   });
-  if (combo > 0) addText(`${combo}`, { x: 2, y: 7, color: color`5` });
+  if (combo > 0) addText(`${combo}`, { x: 5, y: 7, color: color`5` });
   else clearText();
 }
 
 function lockPiece() {
   const settledType = current.type.toLowerCase();
-  // Clear the well of any temporary piece markers (including the ghost) before settling
   clearCurrentOnly();
   cells().forEach(([x, y]) => {
     if (y >= 0 && y < HEIGHT) {
