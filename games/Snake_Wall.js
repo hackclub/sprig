@@ -5,6 +5,7 @@
 @tags: ['onelife', 'game', 'snake', 'difficult']
 @addedOn: 2026-2-14
 */
+
 const snakeBody = "s";
 const food = "f";
 const background = "b";
