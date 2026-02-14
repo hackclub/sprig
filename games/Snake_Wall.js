@@ -336,7 +336,7 @@ function pause() {
         addText(`Back`, { x: 4, y: 10, color: menulevel === 3 ? color`D` : color`4` });
       } else {
         if (isabout == true) {
-          addText(`Snake(s) 2025`, { x: 4, y: 4, color: menulevel === 1 ? color`1` : color`2` });
+          addText(`Snake: Wall`, { x: 4, y: 4, color: menulevel === 1 ? color`1` : color`2` });
           addText(`12/8/25 M/D/Y`, { x: 4, y: 5, color: menulevel === 1 ? color`1` : color`2` });
           addText(`by goober234`, { x: 4, y: 7, color: menulevel === 2 ? color`1` : color`2` });
           addText(`(discord)`, { x: 4, y: 8, color: menulevel === 2 ? color`1` : color`2` });
