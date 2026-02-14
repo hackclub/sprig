@@ -655,7 +655,11 @@ if (gameRunning === false) {
               restart();
               return;
               }
-            if (cursorP.y == 8) {           
+            if (cursorP.y == 8) { 
+              clearInterval(deadInt);
+              clearTile(cursorP.x, cursorP.y)
+              restartmenu();
+              return;
               }
             }
       }
