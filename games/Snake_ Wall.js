@@ -21,6 +21,24 @@ const eat = tune`
 150: C5-150,
 150: G5-150,
 4500`
+const high = tune`
+150: C5-150,
+150: D5-150,
+150: E5-150,
+150: C5-150,
+150: E5-150,
+150: G5-150,
+150: C5-150,
+150: F5-150,
+150: A5-150,
+150: F5-150,
+150: G5-150,
+3150`
+const higheat = tune`
+150: C5-150,
+150: E5-150,
+150: G5-150,
+4350`
 const gameover = tune`
 150: G5-150,
 150: E5-150,
@@ -36,6 +54,8 @@ let direction = { x: 0, y: 0 };
 let foodP = { x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10) };
 let wallP = { x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10) };
 let score = 0;
+let prehighscore = 0;
+let highscore = 0;
 let gameRunning = true;
 let wallAmt = 1;
 let ispause = 1;
@@ -56,6 +76,16 @@ let deadInt = null;
 let maxH = 2
 let maxL = (!isspeedselect && !isabout) ? 8 : 6;
 let blinkOn = null;
+
+function stopAllLoops() {
+  if (initv) clearInterval(initv);
+  if (pauseInt) clearInterval(pauseInt);
+  if (deadInt) clearInterval(deadInt);
+
+  initv = null;
+  pauseInt = null;
+  deadInt = null;
+}
 
 setLegend(
   [cursor, bitmap`
@@ -153,29 +183,83 @@ onInput("s", () => { if (direction.y === 0) direction = { x: 0, y: 1 } });
 onInput("a", () => { if (direction.x === 0) direction = { x: -1, y: 0 } });
 onInput("d", () => { if (direction.x === 0) direction = { x: 1, y: 0 } });
 
-onInput("i", () => { menuselect(); if (gameRunning !== true){ endmenu(); }});
+ onInput("i", () => { menuselect(); if (gameRunning !== true){ endmenu(); }});
+// onInput("i", () => { menuselect();});
 onInput("j", () => { if (realpause == true && gameRunning == true) { pause() } });
 direction = { x: 0, y: 0 }
 pause()
 
 function init(speed) {
+
+  stopAllLoops();
+
   placeNewFood();
-  placeNewWall()
+  placeNewWall();
+
   initv = setInterval(() => {
-    if (ispause !== 1)
-      if (gameRunning) {
-        checkFood();
-        checkWall();
-        updateSnakePosition();
-        render()
-      } else { gameOver(); if (ismute == false) { playTune(gameover); } clearInterval(initv); }
+
+    if (!gameRunning) return;
+
+    if (ispause === 1) return;
+
+    checkFood();
+    checkWall();
+
+    if (!gameRunning) {
+      clearInterval(initv);
+      gameOver();
+      return;
+    }
+
+    updateSnakePosition();
+    render();
+
   }, speed);
 }
 
+
 function restart() {
   if (gameRunning == false) {
-  clearInterval(pauseInt);
-  clearInterval(deadInt);
+  
+  stopAllLoops();
+    
+  deadInt = null;
+  initv = null;
+  pauseInt = null;
+  maxH = 2
+  maxL = (!isspeedselect && !isabout) ? 8 : 6;
+              for (let y = 0; y < 10; y++) {
+  for (let x = 0; x < 10; x++) {
+    clearTile(x, y);
+    }
+  }
+  snake = [{ x: 5, y: 5 }];
+  direction = { x: 0, y: 0 };
+  foodP = { x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10) };
+  wallP = { x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10) };
+  score = 0;
+  gameRunning = true;
+  wallAmt = 1;
+  ispause = 0;
+  ismenu = false;
+  cursorP = { x: 0, y: 4 };
+  realpause = false;
+  menulevel = 0;
+  isspeedselect = false;
+  isabout = false;
+  ismodeselect = false;
+  walls = [];
+  foods = [];
+  clearText();    
+  init(speed);
+  }
+}
+
+function restartmenu() {
+  if (gameRunning == false) {
+  
+  stopAllLoops();
+    
   deadInt = null;
   initv = null;
   pauseInt = null;
@@ -194,7 +278,7 @@ function restart() {
   gameRunning = true;
   wallAmt = 1;
   ispause = 1;
-  ismenu = 1;
+  ismenu = true;
   cursorP = { x: 0, y: 4 };
   realpause = false;
   menulevel = 0;
@@ -203,7 +287,7 @@ function restart() {
   ismodeselect = false;
   walls = [];
   foods = [];
-  clearText();
+  clearText();    
   pause();
   }
 }
@@ -246,7 +330,45 @@ function pause() {
       blinkOn = !blinkOn;
       direction = { x: 0, y: 0 }
 
-      function menuselect() {
+      if (isspeedselect == true) {
+        addText(`Speed Select`, { x: 4, y: 4, color: menulevel === 1 ? color`D` : color`4` });
+        addText(`${speed}ms`, { x: 4, y: 7, color: menulevel === 2 ? color`D` : color`4` });
+        addText(`Back`, { x: 4, y: 10, color: menulevel === 3 ? color`D` : color`4` });
+      } else {
+        if (isabout == true) {
+          addText(`Snake(s) 2025`, { x: 4, y: 4, color: menulevel === 1 ? color`1` : color`2` });
+          addText(`12/8/25 M/D/Y`, { x: 4, y: 5, color: menulevel === 1 ? color`1` : color`2` });
+          addText(`by goober234`, { x: 4, y: 7, color: menulevel === 2 ? color`1` : color`2` });
+          addText(`(discord)`, { x: 4, y: 8, color: menulevel === 2 ? color`1` : color`2` });
+          addText(`Back`, { x: 4, y: 10, color: menulevel === 3 ? color`D` : color`4` });
+        } else {
+          if (ismodeselect == true) {
+
+          } else {
+            addText(`Snake: Wall`, { x: 4, y: 4, color: menulevel === 1 ? color`D` : color`4` });
+            addText(`Speed Select`, { x: 4, y: 7, color: menulevel === 2 ? color`D` : color`4` });
+            addText(`Start`, { x: 4, y: 10, color: menulevel === 3 ? color`D` : color`4` });
+            addText(`Mute`, { x: 4, y: 13, color: ismute == true ? color`D` : color`4` });
+          }
+        }
+      }
+    }, 200);
+
+  } else {
+    if (ispause == 1 && realpause == true) {
+      ismenu = 0;
+      ispause = 0;
+      clearText();
+    } else {
+      if (ispause == 0 && realpause == true) {
+        ispause = 1;
+        addText("Paused", { x: 7, y: 7, color: color`2` });
+      }
+    }
+  }
+}
+
+  function menuselect() {
         if (realpause !== true && gameRunning) {
           if (ismute == false) { playTune(selection); }
 
@@ -312,51 +434,9 @@ function pause() {
               }
             }
           }
-          wait(200, () => {
             menulevel = 0
-          });
         }
       }
-
-
-      globalThis.menuselect = menuselect;
-      if (isspeedselect == true) {
-        addText(`Speed Select`, { x: 4, y: 4, color: menulevel === 1 ? color`D` : color`4` });
-        addText(`${speed}ms`, { x: 4, y: 7, color: menulevel === 2 ? color`D` : color`4` });
-        addText(`Back`, { x: 4, y: 10, color: menulevel === 3 ? color`D` : color`4` });
-      } else {
-        if (isabout == true) {
-          addText(`Snake(s) 2025`, { x: 4, y: 4, color: menulevel === 1 ? color`1` : color`2` });
-          addText(`12/8/25 M/D/Y`, { x: 4, y: 5, color: menulevel === 1 ? color`1` : color`2` });
-          addText(`by goober234`, { x: 4, y: 7, color: menulevel === 2 ? color`1` : color`2` });
-          addText(`(discord)`, { x: 4, y: 8, color: menulevel === 2 ? color`1` : color`2` });
-          addText(`Back`, { x: 4, y: 10, color: menulevel === 3 ? color`D` : color`4` });
-        } else {
-          if (ismodeselect == true) {
-
-          } else {
-            addText(`Snake: Wall`, { x: 4, y: 4, color: menulevel === 1 ? color`D` : color`4` });
-            addText(`Speed Select`, { x: 4, y: 7, color: menulevel === 2 ? color`D` : color`4` });
-            addText(`Start`, { x: 4, y: 10, color: menulevel === 3 ? color`D` : color`4` });
-            addText(`Mute`, { x: 4, y: 13, color: ismute == true ? color`D` : color`4` });
-          }
-        }
-      }
-    }, 200);
-
-  } else {
-    if (ispause == 1 && realpause == true) {
-      ismenu = 0;
-      ispause = 0;
-      clearText();
-    } else {
-      if (ispause == 0 && realpause == true) {
-        ispause = 1;
-        addText("Paused", { x: 7, y: 7, color: color`2` });
-      }
-    }
-  }
-}
 
 function createMap() {
   return map`
@@ -409,7 +489,10 @@ function wait(ms, callback) {
 function checkFood() {
   if (snake[0].x === foodP.x && snake[0].y === foodP.y) {
     score++;
-    if (ismute == false) { playTune(eat); }
+    if (ismute == false) { if (score >= highscore) {playTune(higheat);} else {playTune(eat);} }
+          if (score > highscore) {
+  prehighscore = score;
+  }
     placeNewWall();
     placeNewFood();
     wallAmt++;
@@ -456,10 +539,34 @@ function placeNewFood() {
 }
 
 function placeNewWall() {
-  wallP = {
-    x: Math.floor(Math.random() * 10),
-    y: Math.floor(Math.random() * 10)
-  };
+  let valid = false;
+
+  while (!valid) {
+    wallP = {
+      x: Math.floor(Math.random() * 10),
+      y: Math.floor(Math.random() * 10)
+    };
+    valid = true;
+
+
+    for (let part of snake) {
+      if (part.x === wallP.x && part.y === wallP.y) {
+        valid = false;
+        break;
+      }
+    }
+
+    if (wallP.x === foodP.x && wallP.y === foodP.y) {
+      valid = false;
+    }
+
+    for (let w of walls) {
+      if (w.x === wallP.x && w.y === wallP.y) {
+        valid = false;
+        break;
+      }
+    }
+  }
 
   walls.push({ x: wallP.x, y: wallP.y });
 }
@@ -480,21 +587,27 @@ function render() {
   }
   clearText();
   addText(`${score}`, { x: 3, y: 1, color: color`4` });
+  addText(`${prehighscore}`, { x: 3, y: 2, color: color`6` });
 }
 
-function gameOver() {
+function gameOver() {                                
+  stopAllLoops();
+  if (ismute == false) { if (score >= prehighscore) {playTune(high);} else {playTune(gameover);} }
   pauseInt = null;
   gameRunning = false;
   clearText();
+  if (score > highscore) {
+  highscore = score;
+}
   addText("Game Over", { x: 6, y: 5, color: color`7` });
   addText(`Score: ${score}`, { x: 6, y: 6, color: color`4` });
+  addText(`Highscore: ${highscore}`, { x: 4, y: 8, color: color`6` });
   addText(`Walls: ${wallAmt}`, { x: 6, y: 7, color: color`9` });
- // addText(`Restart`, { x: 4, y: 10, color: menulevel === 3 ? color`1` : color`2` });
- // addText(`Main Menu`, { x: 4, y: 13, color: menulevel === 3 ? color`1` : color`2` });
+  addText(`Restart`, { x: 4, y: 10, color: menulevel === 3 ? color`1` : color`2` });
+  addText(`Main Menu`, { x: 4, y: 13, color: menulevel === 3 ? color`1` : color`2` });
  // cant figure out lol
-
-
-if (1233123123 === false) {
+ // update: i figured it out :D
+if (gameRunning === false) {
     blinkOn = true;
     cursorP = { x: 0, y: 6 };
     maxH = 6;
@@ -529,12 +642,16 @@ if (1233123123 === false) {
       }
       blinkOn = !blinkOn;
       direction = { x: 0, y: 0 }
+          }, 200);
+        }
+}
 
-      
-      function endmenu() {
+  function endmenu() {
         if (gameRunning !== true) {
           if (ismute == false) { playTune(selection); }
             if (cursorP.y == 6) {
+              clearInterval(deadInt);
+              clearTile(cursorP.x, cursorP.y)
               restart();
               return;
               }
@@ -542,7 +659,3 @@ if (1233123123 === false) {
               }
             }
       }
-      globalThis.endmenu = endmenu;
-          }, 200);
-        }
-}
