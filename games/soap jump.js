@@ -1,11 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: soap jump
-@author: 
-@tags: []
-@addedOn: 2025-00-00
+@author: Nathan Yanchus
+@description: Traverse your way through various obstacles as a soap with limited jumps!
+@tags: ['soap', 'jump', 'maze']
+@addedOn: 2025-02-23
 */
 
 const player = "p"
@@ -481,39 +479,49 @@ setPushables({
 })
 
 onInput("d", () => {
-  getFirst(player).x += 1
-  playTune(sound)
+  if (level < 15) {
+    getFirst(player).x += 1
+    playTune(sound)
+  }
+
 })
 
 onInput("a", () => {
-  getFirst(player).x -= 1
-  playTune(sound)
+  if (level < 15) {
+      getFirst(player).x -= 1
+      playTune(sound)
+  }
 })
 
 onInput("w", () => {
-  if (jumps >= 1) {
-    getFirst(player).y -= 1
-    playTune(jumpsound)
-    jumps -= 1
-  } else {
-   setMap(levels[level]) 
-    jumps = 10
+  if (level < 15) {
+    if (jumps >= 1) {
+      getFirst(player).y -= 1
+      playTune(jumpsound)
+      jumps -= 1
+    } else {
+      setMap(levels[level]) 
+      jumps = 10
 
+    }
+    textit();
   }
-  textit();
+
 })
 
 onInput("s", () => {
-  if (jumps >= 1) {
-    getFirst(player).y += 1
-    playTune(jumpsound)
-    jumps -= 1
-  } else {
-   setMap(levels[level])
-    jumps = 10
+  if (level < 15) {
+    if (jumps >= 1) {
+      getFirst(player).y += 1
+      playTune(jumpsound)
+      jumps -= 1
+    } else {
+      setMap(levels[level]) 
+      jumps = 10
 
+    }
+    textit();
   }
-  textit();
 })
 
 afterInput(() => {
