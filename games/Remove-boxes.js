@@ -1,9 +1,9 @@
 /*
-@title: getting_started
-@description: "Getting Started" is a tutorial game that guides players through basic game mechanics.
-@author: leo, edits
+@title: Remove Boxes one by one
+@description: guided by the tutorial. This version removes boxes one by one when they are pushed over a goal. 
+@author: thomas.brodkorb@gmx.net
 @tags: ['tutorial']
-@addedOn: 2022-07-26
+@addedOn: 2026-03-01
 
 Check the tutorial in the bottom right, the run button is in the top right.
 Make sure to remix this tutorial if you want to save your progress!
@@ -133,6 +133,15 @@ p.w.
 ..bg`
 ];
 
+const removeMelody = tune`
+112.78195488721805,
+112.78195488721805: F5~112.78195488721805,
+112.78195488721805: E5~112.78195488721805,
+112.78195488721805: F5~112.78195488721805,
+112.78195488721805: A5~112.78195488721805,
+112.78195488721805: A5/112.78195488721805,
+2932.3308270676694`;
+
 // set the map displayed to the current level
 const currentLevel = levels[level];
 setMap(currentLevel);
@@ -180,10 +189,13 @@ afterInput(() => {
   // count the number of tiles with goals and boxes
   let aBoxesOnGoals = tilesWith(goal, box);
   const numberCovered = aBoxesOnGoals.length;
-  if (numberCovered === 1) {
-    for (sprite of aBoxesOnGoals[0]) {
-      if (sprite.type === "b") 
-        sprite.remove();
+  if (numberCovered >= 1) {
+    for (boxesOnGoals of aBoxesOnGoals) {
+      for (sprite of boxesOnGoals) {
+        if (sprite.type === "b") 
+          sprite.remove();
+          playTune(removeMelody);
+      }
     }
     
   }
