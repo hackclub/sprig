@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: dungeon adventure
-@author: Evan Bennett
+@author: CTEBennett
 @tags: []
 @addedOn: 2026-00-00
 */
@@ -14,7 +14,8 @@ const goal ="g"
 const key = "k"
 const door = "d"
 const invis = "i"
-let score;
+const chest = "c"
+let score = 0;
 let count;
 
 setLegend(
@@ -120,6 +121,23 @@ setLegend(
 2122222222222212
 2111111111111112
 2222222222222222`],
+  [chest, bitmap`
+................
+................
+................
+..0000000000000.
+..0CCCCCCCCCCC0.
+..0CCCCCCC666C0.
+..0666666666660.
+.66666666666666.
+6600000000000066
+..0CCCCCCCCCCC06
+..0CCCC000CCCC06
+..0CCCC0C0CCCC0.
+..0CCCC0C0CCCC0.
+..0CCCC000CCCC0.
+..0CCCCCCCCCCC0.
+..0CCCCCCCCCCC0.`]
 )
 setBackground(invis);
 setSolids([player, wall, door])
@@ -131,29 +149,29 @@ const levels = [
 .w.w.w...w.w.
 ...w.w.www.w.
 .www.w.w.....
-.w.w.w.w.www.
+.wcw.w.w.www.
 .w.w.w.w.w.w.
-...w.w.w...w.
+...w.wcw...w.
 .www.wwwww.w.
 ..kw...dgw.ww
-wwwwwwwwww.w.
+wwwwwwwwww.wc
 .............
 .w.wwwwwww.ww
-pw.....w.....`,
+pw....cw.....`,
   map`
-.w....w..w.w.
+.w....wc.w.wc
 ...w.www.w.w.
 .w.w.....w...
 ww.wwwww...ww
 ...w.....w.w.
-.w.w.www.w.w.
+.wcw.www.w.w.
 .www...w.w...
 ...www.w.www.
 wwdwgw.w.w.w.
 ...w...w.....
 .wwwwwwww.ww.
 .w.kw.....w..
-p..ww.wwwww.w`,
+p..ww.wwwwwcw`,
   map`
 w.....wwwwwww
 w.w.w..ww...w
@@ -163,8 +181,8 @@ w.ww..w.w.w.w
 ...ww.w.w.w.w
 .w..w.w.www.w
 .ww.wgw.....w
-.w..wwwwwwwww
-.ww..........
+.wc.wwwwwwwww
+.ww.........c
 ..w..w.wwwwww
 wwwwdwww....w
 p........ww.k`,
@@ -173,29 +191,29 @@ w..........ww
 ..wwwwwwww...
 .ww......www.
 .w...www.....
-.w.w.w.....w.
-.w.w.w.wwwww.
+.w.w.w....cw.
+.wcw.w.wwwww.
 .w...w.......
 .www.wwwwwwww
 ...w.........
 wwdwww.w.ww.w
 ....kw.w.w..w
 .wwwww.w.w.ww
-pwg....w.w...`,
+pwg....wcw...`,
   map`
 .....d....k.p
 .wwwwwwwwwwww
 .............
-wwwwwwwwwwww.
+wwwwwwwwwwwwc
 .............
 .wwwwwwwwwwww
 .............
 wwwwwwwwwwww.
-.............
-.wwwwwwwwwwww
+............c
+cwwwwwwwwwwww
 .............
 wwwwwwwwwwww.
-g............`,
+g...........c`,
   map`
 w....w
 ......
@@ -295,6 +313,7 @@ afterInput(() => {
     if(locat == intial){
         setMap(levels[level+=1]);
         count = 0;
+        score += 1000;
     }
   }
   if(level === 5){
@@ -303,6 +322,23 @@ afterInput(() => {
       y: 6,
       color: color`3`
     })
+    addText("Score: " + score, {
+      x: 6,
+      y: 7,
+      color: color`3`
+    })
   }
 })
-
+afterInput(() => {
+  let character = getFirst(player);
+  let chests = getAll(chest);
+  let contact = tilesWith(player, chest);
+  if(contact.length === 1){
+    for(let i = 0; i < chests.length; i++){
+      if(character.x === chests[i].x && character.y === chests[i].y){
+        chests[i].remove()
+        score += 500;
+      }
+    }
+  }
+})
