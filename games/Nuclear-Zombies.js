@@ -1,3 +1,11 @@
+/*
+@title: None
+@author: None
+@description: None
+@tags: []
+@addedOn: 2025-06-03
+*/
+
 const player = "p";
 const zombie = "z";
 const bulletR = "r";

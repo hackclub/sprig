@@ -3,7 +3,8 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Echoes of the Rift
-@author: 
+@author: None
+@description: None
 @tags: []
 @addedOn: 2024-00-00
 */

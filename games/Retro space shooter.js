@@ -1,3 +1,11 @@
+/*
+@title: None
+@author: None
+@description: None
+@tags: []
+@addedOn: 2025-06-03
+*/
+
 //Michael Qu, Period 5, 5/7/25
 
 const player = "p";

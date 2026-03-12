@@ -4,7 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Can't Log In!
 @author: Maarten & Caro
-@tags: [#puzzle]
+@description: None
+@tags: ["puzzle"]
 @addedOn: 2024-00-00
 */
 

@@ -1,6 +1,6 @@
 # 🍃 Hack Club Sprig 🍃
 
-**[💻 Online Editor: Make a game](https://sprig.hackclub.com/editor)** | **[👀 Gallery: Find games](https://sprig.hackclub.com/gallery)** | **[🕸 Landing Page](https://sprig.hackclub.com)** | **[🎮 Firmware](https://github.com/hackclub/spade)** | **[👾 Engine](https://github.com/hackclub/sprig-engine)**
+**[💻 Online Editor: Make a game](https://sprig.hackclub.com/editor)** | **[👀 Gallery: Find games](https://sprig.hackclub.com/gallery)** | **[🕸 Landing Page](https://sprig.hackclub.com)** | **[🎮 Firmware](https://github.com/hackclub/sprig/tree/main/firmware/spade)** | **[👾 Engine](https://github.com/hackclub/sprig-engine)**
 
 [Sprig](https://sprig.hackclub.com) is a game console where **every user is a creator**. It can only be obtained by building a tile-based game in the [web-based game editor](https://sprig.hackclub.com/editor) and shipping it in the [community gallery](https://sprig.hackclub.com/gallery). It's made by [Hack Club](https://hackclub.com).
 
@@ -40,7 +40,7 @@ You should be able to get started in Sprig with very little programming experien
 
 ## Fully open source
 
-**Sprig is open source**. Shipping a game to the Sprig Gallery is contributing to an open-source project. Everything about Sprig is transparent and editable. That includes the [hardware designs](https://github.com/hackclub/sprig-hardware), the [game engine](https://github.com/hackclub/sprig-engine), the [embedded game engine for the RP2040 chip](https://github.com/hackclub/spade), and the editor and website itself (this repo)!
+**Sprig is open source**. Shipping a game to the Sprig Gallery is contributing to an open-source project. Everything about Sprig is transparent and editable. That includes the [hardware designs](https://github.com/hackclub/sprig/tree/main/hardware), the [game engine](https://github.com/hackclub/sprig/tree/main/engine), the [embedded game engine for the RP2040 chip](https://github.com/hackclub/sprig/tree/main/firmware/spade), and the editor and website itself in this repo!
 
 We did some fun engineering to get Sprig to work and to make your games run the same on your desktop computer and a $4 microcontroller. That involved custom JS runtimes with optimizations in C and even PIO assembly. We also documented some [behind-the-scenes](https://github.com/hackclub/sprig/tree/main/docs).
 
