@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: puzzled cat
+@title: puzzledcat
 @author: Jon G-L
 @tags: []
-@addedOn: 2025-00-00
+@addedOn: 2026-03-13
 */
 
 const player = "p"
