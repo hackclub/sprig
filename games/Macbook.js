@@ -1,10 +1,9 @@
 /*
-MacBook Virus Escape
-Collect files then reach Finder
-Avoid viruses
-
-WASD = move
-J = restart after game over
+@title: macbook_virus_escape
+@author: aytida
+@description: Play as a MacBook cursor collecting files while avoiding viruses and reaching Finder to save the system.
+@tags: ['arcade', 'survival', 'mac', 'virus']
+@addedOn: 2026-03-14
 */
 
 const cursor = "c"
