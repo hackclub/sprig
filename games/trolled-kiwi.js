@@ -1,7 +1,7 @@
 /*
 @title: kiwi
 @description: "kiwi" is a puzzle game where you guide a kiwi, and help it push a coquette box into the void
-@author: leo, edits
+@author: shaheeraazfar07-blip
 @tags: ['tutorial']
 @addedOn: 2026-03-09
 
