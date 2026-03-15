@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Spriggle Smash
 @author: Jacob Navaratne
-@tags: [my first project!]
+@tags: []
 @addedOn: 2026-02-23
 */
 
