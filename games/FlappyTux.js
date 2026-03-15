@@ -1,8 +1,10 @@
 /*
-@title: Flappy Tux (Flappy bird with the linux mascot)
-@author: Darshan Saravanan
-@Inspiration: Yug Khandelwal
+@title:Flappy Tux (flappy bird with the linux mascot)
+@author: Darshan Saravanan (@D4rsh)
 @description: A Flappy Bird clone with the Linux Mascot TUX. Use 'W' to make the bird fly up and 'S' to make it fall faster. The game gets progressively faster as you play.
+@tags: ['retro', 'flappy bird','Linux','I use Arch BTW']
+@addedOn: 2026-03-15
+@Inspiration: Yug Khandelwal's Flappy Bird clone with animations
 */
 
 const flapitUp = "u";
