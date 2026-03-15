@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Spriggle Smash
 @author: Jacob Navaratne
 @tags: [my first project!]
-@addedOn: 2025-02-23
+@addedOn: 2026-02-23
 */
 
 const player = "p"
