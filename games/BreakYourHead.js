@@ -1,8 +1,9 @@
 /*
-@title: Dungeon Escape: Fixed
-@author: You
+@title: Dungeon_Escape
+@author: Azmeer Pirani
 @tags: []
-@addedOn: 2025-00-00
+@addedOn: 2024-12-07
+
 */
 
 const tuneMusic = tune`
