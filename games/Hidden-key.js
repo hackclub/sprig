@@ -1,4 +1,10 @@
-// controls: w->up,a->left,s->down,d->right.j->Reset level
+/*
+@title: Hidden-Key
+@description: This is a simple game which consistes of 8 levels and each level has one key hidden somewhere random. Go through the entire maze to find the hidden key and unlock the next level
+@author: Shashank Kumar
+@tags: ['escape', 'puzzle']
+@addedOn: 2025-12-10
+*/
 const P = "p";
 const WALL = "w";
 const KEY = "k";
