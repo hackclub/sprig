@@ -3,7 +3,7 @@
 @author: Ethan Lasky
 @description: Keybinds: WASD, W & S for cursor moving, I for menu select, ingame J for pause. snake hell, uh oh- ill add more gamemodes & QOL soon, including TUNES! & this game is based off of the 'classic snake' but i like HEAVILY modified it.
 @tags: ['onelife', 'game', 'snake', 'difficult']
-@addedOn: 2026-2-14
+@addedOn: 2026-02-14
 */
 
 const snakeBody = "s";
