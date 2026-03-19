@@ -2,7 +2,7 @@
 @title: Paws Up!
 @description: Paws up is a challenging game where you a cat jump onto platforms. 
 @tags: ['platformer']
-@addedOn: 2025-012-06
+@addedOn: 2025-12-06
 
 @img: ""
 */
