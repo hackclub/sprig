@@ -1,3 +1,11 @@
+/*
+@title: Slope Shooter
+@author: shuvo8904654
+@tags: ["puzzle", "math", "trajectory"]
+@addedOn: 2025-12-09
+*/
+
+
 const cursor = "c"; 
 const target = "t"; 
 const pixel  = "p"; 
