@@ -1,6 +1,9 @@
 /*
-@title: Sliding Puzzle
+@title: Sliding_Puzzle
 @author: Eren Karababa
+@tags: [puzzle,fun]
+@addedOn: 2026-03-21
+@website erenk.de
 */
 
 const player = "p";
@@ -225,14 +228,14 @@ function showMenu() {
   clearText();
   addText("Sliding Puzzle", { y: 2, color: color`3` });
   addText("", { y: 4, color: color`2` });
-  addText("Arrange tiles", { y: 5, color: color`2` });
-  addText("in order 1-8", { y: 6, color: color`2` });
+  addText("Arrange tiles", { y: 5, color: color`7` });
+  addText("in order 1-8", { y: 6, color: color`7` });
   addText("", { y: 8, color: color`2` });
-  addText("Use WASD keys", { y: 9, color: color`2` });
-  addText("to slide tiles", { y: 10, color: color`2` });
-  addText("into the empty", { y: 11, color: color`2` });
-  addText("space", { y: 12, color: color`2` });
-  addText("", { y: 13, color: color`2` });
+  addText("Use WASD keys", { y: 9, color: color`7` });
+  addText("to slide tiles", { y: 10, color: color`7` });
+  addText("into the empty", { y: 11, color: color`7` });
+  addText("space", { y: 12, color: color`7` });
+  addText("", { y: 13, color: color`7` });
   addText("Press W to", { y: 14, color: color`4` });
   addText("START!", { y: 15, color: color`4` });
 }
@@ -336,8 +339,8 @@ onInput("s", () => {
     if (checkWin()) {
       clearPuzzle();
       addText("You Win!", { y: 4, color: color`4` });
-      addText("Press J to", { y: 6, color: color`2` });
-      addText("play again!", { y: 7, color: color`2` });
+      addText("Press J to", { y: 6, color: color`3` });
+      addText("play again!", { y: 7, color: color`3` });
     }
   }
 });
@@ -351,8 +354,8 @@ onInput("a", () => {
     if (checkWin()) {
       clearPuzzle();
       addText("You Win!", { y: 4, color: color`4` });
-      addText("Press J to", { y: 6, color: color`2` });
-      addText("play again!", { y: 7, color: color`2` });
+      addText("Press J to", { y: 6, color: color`3` });
+      addText("play again!", { y: 7, color: color`3` });
     }
   }
 });
