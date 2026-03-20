@@ -1,6 +1,7 @@
 /*
 @title: Cassette Player
 @author: Foxyy
+@description: a silly sprig game which plays sounds/music 
 @tags: ["music", "retro"]
 @addedOn: 2025-12-05
 
