@@ -1,7 +1,7 @@
 /*
 @title: Cassette Player
-@author: 
-@tags: [music, retro]
+@author: Foxyy
+@tags: ["music", "retro"]
 @addedOn: 2025-12-05
 
 */
