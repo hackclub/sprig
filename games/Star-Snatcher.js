@@ -1,7 +1,9 @@
 /*
-@title: Star Snatcher
-@author: 
-@tags: ['game']
+@title: Star-Snatcher
+@description: Catch 'em all!
+@author: tap
+@tags: [Game]
+@addedOn: 2025-12-13
 */
 
 const player = "p"
@@ -125,9 +127,6 @@ ww.w.w.w.w.w
 w....w.ww.pw
 wwwwwwwwwwww`
 ]
-
-setMap(levels[level])
-
 
 setMap(levels[level])
 
