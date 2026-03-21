@@ -2,7 +2,7 @@
 @title: Star-Snatcher
 @description: Catch 'em all!
 @author: tap
-@tags: [Game]
+@tags: []
 @addedOn: 2025-12-13
 */
 
@@ -102,7 +102,7 @@ wwwwwwwww
 wp.w.w..w
 w.s.w.w.w
 w.w...w.w
-w..w.w.s.w
+w..w.w.sw
 wwwwwwwww`,
 
   // Level 5
