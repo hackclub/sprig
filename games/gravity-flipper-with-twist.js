@@ -1,7 +1,7 @@
 /*
 @title: gravity flipper with a twist
 @author: manikanta vasamsetti
-@tags: [gravity,platformer,block]
+@tags: ['gravity','platformer','block']
 @addedOn: 2026-03-19
 */
 
