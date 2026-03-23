@@ -2,7 +2,7 @@
 @title: SprigoPhobia
 @author: Lukypuky11cz
 @description: Inspired by the horror game Phasmophobia, you go inside a house with equipment, check the rooms for evidences, record the found evindences and indentify what type of ghost you are dealing with.
-@tags: [paranormal, ghost]
+@tags: ['paranormal', 'ghost']
 @addedOn: 2026-02-25
 */
 
