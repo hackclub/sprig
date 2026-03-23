@@ -1,7 +1,7 @@
 /*
 @title: Deep Dig
 @author: Zeyad Bekhet
-@tags: [puzzle, retro, logic]
+@tags: ['puzzle', 'retro', 'logic']
 @addedOn: 2026-02-23
 */
 
