@@ -253,7 +253,7 @@ function drawHud() {
     y: 0,
     color: color`2`
   });
-  addText(hasKey ? "Key: ✓" : "Key: ?", {
+  addText(hasKey ? "Key: YES" : "Key: NO", {
     x: 0,
     y: 1,
     color: color`4`
