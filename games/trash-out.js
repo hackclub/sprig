@@ -4,6 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Trash out+
 @author: sapbot
+@description: None
 @tags: []
 @addedOn: 2025-00-00
 */

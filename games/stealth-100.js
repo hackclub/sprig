@@ -2,7 +2,7 @@
 @title: Stealth 100
 @author: unowen[https://github.com/pari55051]
 @description: Use your stealth skills to retrieve the Gem succesfully withut being seen by the guard birds
-@tags: [stealth, puzzle game, navigation, hideout, heist, hide, guard birds]
+@tags: []
 @addedOn: 2025-08-03 
 */
 

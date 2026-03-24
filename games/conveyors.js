@@ -3,7 +3,7 @@
 @description: A sandbox game where you use conveyors. The "$" (dollar sign symbol) brings you back to the starting point. The "eraser" (pink rectangle) erases tiles. The arrows with symbols behind them are trampolines that jump 2 spaces ahead.
 @author: koa
 @tags: ['sandbox', 'factory']
-@addedOn: 2025-11-12
+@addedOn: 2025-7-11
 */
 const add = tune`
 178.57142857142858: E4/178.57142857142858,

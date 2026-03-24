@@ -2,7 +2,7 @@
 @title: Red Cube
 @author: AxelMontlahuc
 @description: A platformer game where you're a red cube trying to reach the end!
-@tags: [platformer, cube, game]
+@tags: []
 @addedOn: 2025-08-05
 */
 

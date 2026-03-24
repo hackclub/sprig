@@ -4,7 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Happy Escape
 @author: LifelagCheats
-@tags: [maze]
+@description: None
+@tags: ["maze"]
 @addedOn: 2025-00-00
 */
 

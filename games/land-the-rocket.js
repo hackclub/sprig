@@ -1,6 +1,7 @@
 /*
 @title: getting_started
 @author: leo, edits
+@description: None
 @tags: ['tutorial']
 @addedOn: 2022-07-26
 

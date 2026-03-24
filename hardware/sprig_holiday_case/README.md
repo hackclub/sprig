@@ -4,6 +4,9 @@ This repo documents all the open source components of the ShawnXSprig holiday ca
 
 _Did you get a holiday case? Check here for an [assembly video](https://www.youtube.com/watch?v=fLDae7_Njko)_
 
+## CAD
+the CAD for the winter case (as well as other 3D printed parts, including the template used for the winter case) can be found [here.](https://cad.onshape.com/documents/00626a43b80da8d19583d051/w/d52e3ec16c3e7ade5dde9692/e/3b1859067dc9a071f73adb1e?renderMode=0&uiState=6848883484a8e32159f354a3). 
+
 ## Parts list
 
 - [BackPlate.stl](./parts/BackPlate.stl) (3d printed): This is the back side of the case that comes in 2 parts: one part mirrored for the other side of the Sprig main board. It should be printed with the nut traps facing down.
