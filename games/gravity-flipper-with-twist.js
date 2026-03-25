@@ -7,8 +7,8 @@
 
 const player = "p";
 const wall = "w";
-const normalPlatform = "n"; // Blue, active in normal gravity
-const invertPlatform = "i"; // Red, active in flipped gravity
+const normalPlatform = "n";
+const invertPlatform = "i"; 
 const goal = "g";
 const spike = "s";
 const background = "b";
