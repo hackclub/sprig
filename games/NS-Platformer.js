@@ -1,3 +1,12 @@
+
+/*
+@title: NS-Platformer
+@author: Uzzam Butt
+@tags: v1.5
+@addedOn: 25-03-2026
+*/
+
+
 const player = "p";
 const bullet = "b";
 const enemy = "e";
