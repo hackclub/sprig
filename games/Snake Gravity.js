@@ -1,3 +1,11 @@
+/*
+@title: Snake-Gravity
+@author: Jojotheamazing
+@description: Don't fall eat appless go to portal
+@tags: ['Fun', 'Puzzle']
+@addedOn: 2025-MM-DD
+*/
+
 const head = "h";
 const body = "b";
 const apple = "a";
@@ -203,7 +211,8 @@ function saveState() {
   history.push({
     snake: snake.map(p => ({ ...p })),
     
-    apples: apples.map(a => ({ ...a })),
+    apples: apples.map(a=> ({ ...a })),
+    
     portalUnlocked:portalUnlocked,
     dir:dir
   });
@@ -487,7 +496,7 @@ onInput("k", () => {
     
     addText("ALL LEVELS DONE!", { y: 2, color: color`4` });
     
-    addText("L: Replay", { y: 4, color: color`3` });
+    addText("L: Replay", { y: 4,color: color`3` });
   }
 });
 
