@@ -1,7 +1,7 @@
 /*
 @title: Sliding_Puzzle
 @author: Eren Karababa
-@tags: [puzzle,fun]
+@tags: []
 @addedOn: 2026-03-21
 @website erenk.de
 */
