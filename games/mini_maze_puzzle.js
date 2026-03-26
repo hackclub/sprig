@@ -11,6 +11,7 @@ const wall = "w";
 const floor = "f";
 const key = "k";
 const door = "d";
+const endBg = "e";
 
 setLegend(
   [player, bitmap`
@@ -97,7 +98,24 @@ setLegend(
 39F6666666666F93
 39FFFFFFFFFFFF93
 3999999999999993
-3333333333333333`]
+3333333333333333`],
+  [endBg, bitmap`
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222`]
 );
 
 setSolids([player, wall]);
@@ -260,8 +278,25 @@ function drawHud() {
   });
 }
 
+function showWinScreen() {
+  const w = width();
+  const h = height();
+  const rows = [];
+  for (let y = 0; y < h; y++) {
+    rows.push(endBg.repeat(w));
+  }
+  setMap(rows.join("\n"));
+  clearText();
+  addText("Congrats! 10/10", {
+    x: 2,
+    y: Math.floor(h / 2),
+    color: color`0`
+  });
+}
+
 onInput("w", () => {
   const p = getFirst(player);
+  if (!p) return;
   if (p.y > 0) {
     p.y -= 1;
   }
@@ -269,6 +304,7 @@ onInput("w", () => {
 
 onInput("s", () => {
   const p = getFirst(player);
+  if (!p) return;
   if (p.y < height() - 1) {
     p.y += 1;
   }
@@ -276,6 +312,7 @@ onInput("s", () => {
 
 onInput("a", () => {
   const p = getFirst(player);
+  if (!p) return;
   if (p.x > 0) {
     p.x -= 1;
   }
@@ -283,6 +320,7 @@ onInput("a", () => {
 
 onInput("d", () => {
   const p = getFirst(player);
+  if (!p) return;
   if (p.x < width() - 1) {
     p.x += 1;
   }
@@ -309,11 +347,7 @@ afterInput(() => {
         level += 1;
         startLevel();
       } else {
-        clearText();
-        addText("Congrats! 10/10", {
-          y: 6,
-          color: color`2`
-        });
+        showWinScreen();
       }
     } else {
       addText("Need the key", {
