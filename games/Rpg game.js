@@ -3,7 +3,7 @@
 @description: You have to escape from a forest. You need to get the key and escape through the door.
 @author: sami singh
 @tags: ['puzzle']
-@addedOn: 28/11/2025
+@addedOn: 2025/11/28
 
 Instructions:
 
