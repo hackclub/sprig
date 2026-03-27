@@ -1,14 +1,14 @@
 /*
 @title: gravity flipper with a twist
 @author: manikanta vasamsetti
-@tags: ['gravity','platformer','block']
+@tags: [gravity,platformer,block]
 @addedOn: 2026-03-19
 */
 
 const player = "p";
 const wall = "w";
-const normalPlatform = "n";
-const invertPlatform = "i"; 
+const normalPlatform = "n"; // Blue, active in normal gravity
+const invertPlatform = "i"; // Red, active in flipped gravity
 const goal = "g";
 const spike = "s";
 const background = "b";
@@ -37,56 +37,56 @@ setLegend(
 .00000000000000.
 .00.000..000.00.`],
   [wall, bitmap`
-LLLLLLLLLLLLLLLL
-L44444444444444L
-L4D4DD4D4DD4DD4L
-LDDDDDDDDDDDDDDL
-LDDDCDDDDDDCDDDL
-LDDCCCDDDDCCCDDL
-LDCCCCCDDCCCCCDL
-LCCCCCCCCCCCCCCL
-LCCCCFCCCCCCCDDL
-LCCFCCCCCCCFCCCL
-LCCCCCCCCCCCCCCL
-LCCCCCCFCCCCCCCL
-LCCCCCCCCCCCCCCL
-LCCCCCCCCCCCCCCL
-LCCCCCCCCCCCCCCL
-LLLLLLLLLLLLLLLL`],
+0000000000000000
+0LLLLLLLLLLLLLL0
+0L111111111111L0
+0L111111111111L0
+0L111111111111L0
+0L111111111111L0
+0L111111111111L0
+0L111111111111L0
+0L111111111111L0
+0L111111111111L0
+0L111111111111L0
+0L111111111111L0
+0L111111111111L0
+0L111111111111L0
+0LLLLLLLLLLLLLL0
+0000000000000000`],
   [normalPlatform, bitmap`
-LLLLLLLLLLLLLLLL
-L55555555555555L
-L57777777777775L
-L57777777777775L
-L57777777777775L
-L57777777777775L
-L57777777777775L
-L57777777777775L
-L57777777777775L
-L57777777777775L
-L57777777777775L
-L57777777777775L
-L57777777777775L
-L57777777777775L
-L55555555555555L
-LLLLLLLLLLLLLLLL`],
+0000000000000000
+0555555555555550
+0577777777777750
+0577777777777750
+0577777777777750
+0577777777777750
+0577777777777750
+0577777777777750
+0577777777777750
+0577777777777750
+0577777777777750
+0577777777777750
+0577777777777750
+0577777777777750
+0555555555555550
+0000000000000000`],
   [invertPlatform, bitmap`
-LLLLLLLLLLLLLLLL
-L99999999999999L
-L93333333333339L
-L93333333333339L
-L93333333333339L
-L93333333333339L
-L93333333333339L
-L93333333333339L
-L93333333333339L
-L93333333333339L
-L93333333333339L
-L93333333333339L
-L93333333333339L
-L93333333333339L
-L99999999999999L
-LLLLLLLLLLLLLLLL`],
+0000000000000000
+0999999999999990
+0933333333333390
+0933333333333390
+0933333333333390
+0933333333333390
+0933333333333390
+0933333333333390
+0933333333333390
+0933333333333390
+0933333333333390
+0933333333333390
+0933333333333390
+0933333333333390
+0999999999999990
+0000000000000000`],
   [goal, bitmap`
 ................
 ................
@@ -139,7 +139,6 @@ LLLLLLLLLLLLLLLL`],
 7777777777777777
 7777777777777777`]
 );
-
 
 setBackground(background);
 setSolids([wall]);
@@ -427,10 +426,10 @@ function showIntro() {
   introBob = false;
   setMap(introMap);
   clearText();
-  addText("GRAVITY PLATFORMER", { x: 1, y: 1, color: color`6` });
+  addText("GRAVITY PLATFORMER", { x: 1, y: 1, color: color`5` });
   addText("WITH TWISTS", { x: 4, y: 2, color: color`3` });
   addText("A shifting world", { x: 2, y: 4, color: color`2` });
-  addText("Press L to continue", { x: 0, y: 14, color: color`2` });
+  addText("Press L to continue", { x: 1, y: 13, color: color`2` });
 }
 
 function showInstructions() {
@@ -441,12 +440,12 @@ function showInstructions() {
   addText("HOW TO PLAY", { x: 4, y: 1, color: color`6` });
   addText("- PAGE 1/4 -", { x: 4, y: 2, color: color`2` });
   addText("", { x: 0, y: 3, color: color`2` });
-  addText("CONTROLS:", { x: 5, y: 4, color: color`4` });
+  addText("CONTROLS:", { x: 5, y: 4, color: color`L` });
   addText("A/D: Move", { x: 5, y: 5, color: color`2` });
   addText("W: Flip Gravity", { x: 2, y: 6, color: color`2` });
   addText("J: Reset Level", { x: 3, y: 7, color: color`2` });
   addText("", { x: 0, y: 8, color: color`2` });
-  addText("THE TWIST:", { x: 5, y: 9, color: color`4` });
+  addText("THE TWIST:", { x: 5, y: 9, color: color`L` });
   addText("Platforms change!", { x: 1, y: 10, color: color`5` });
   addText("Blue & Red switch", { x: 1, y: 11, color: color`3` });
   addText("based on gravity", { x: 2, y: 12, color: color`2` });
