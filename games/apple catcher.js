@@ -5,7 +5,8 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: apple catcher
 @author: TheUtkarsh8939
 @tags: []
-@addedOn: 2025-00-00
+@addedOn: 2026-03-18
+@description: You are a bowl, catch as many apples as you can, There are wacky controls ;)
 */
 
 const player = "p"
