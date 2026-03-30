@@ -3,7 +3,7 @@
 @author: CheetahDoesStuff
 @description: Simple puzzle game. Wait, you control 2 players, AT ONCE???
 @tags: ["Puzzle"]
-@addedOn: 2025-01-03
+@addedOn: 2026-01-03
 
 Controls (also shown ingame):
 WASD - Move
