@@ -2,9 +2,9 @@
 Use left keys to move player, right keys to move enemies
 
 @title: Enemy Pushing
-@author: 
-@tags: []
-@addedOn: 2025-00-00
+@author: ratmuds
+@tags: ['maze']
+@addedOn: 2026-03-31
 */
 
 const player = "p"
