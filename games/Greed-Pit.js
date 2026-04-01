@@ -1,9 +1,4 @@
-/*
-  GREED PIT - FINAL FIXED VERSION
-  - Background is solid dark (no white spots).
-  - Game Over text is centered and guaranteed to show.
-  - Fixed "Multiple Player" bug on restart.
-*/
+
 
 const player = "p"
 const coin = "c"
