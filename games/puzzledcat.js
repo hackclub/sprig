@@ -6,6 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: Jon G-L
 @tags: []
 @addedOn: 2026-03-13
+@description: A puzzle game featuring a cat
 */
 
 const player = "p"
