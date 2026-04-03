@@ -2,7 +2,7 @@
 @title: BoxStack
 @author: Ice (Very Chill)
 @description: Push boxes and flatten them all out to win!
-@tags: [#puzzle]
+@tags: ["puzzle"]
 @addedOn: 2025-10-06
 */
 
