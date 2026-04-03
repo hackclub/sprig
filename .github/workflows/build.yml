@@ -4,9 +4,10 @@ on: # This workflow should run on...
     branches: # to one of these branches:
       - 'main'
   workflow_dispatch: # or when manually triggered
-  pull_request: # or when a pull request is opened against main
-    branches:
-      - 'main'
+  pull_request:
+
+permissions:
+  contents: read
 
 defaults:
   run:

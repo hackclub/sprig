@@ -2,7 +2,9 @@ name: Unit Tests
 
 on:
   pull_request:
-    types: [opened, reopened, edited, synchronize]
+
+permissions:
+  contents: read
 
 env:
   PUBLIC_MAX_LOOP_TIME_MS: 1500
