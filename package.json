@@ -66,6 +66,7 @@
 		"@types/three": "^0.149.0",
 		"@types/throttle-debounce": "^5.0.0",
 		"@types/w3c-web-serial": "^1.0.3",
+		"typescript": "^6.0.2",
 		"vitest-canvas-mock": "^0.3.3"
 	}
 }
