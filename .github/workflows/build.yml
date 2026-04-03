@@ -5,6 +5,9 @@ on: # This workflow should run on...
       - 'main'
       - 'add-ci' # TEMP for testing
   workflow_dispatch: # or when manually triggered
+  pull_request: # or when a pull request is opened against main
+    branches:
+      - 'main'
 
 defaults:
   run:
