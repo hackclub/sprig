@@ -1,8 +1,9 @@
 /*
-@title: Anubis - Guide the Dead
+@title: Anubis
 @author: dev-ananta
 @tags: ["puzzle", "egypt", "souls"]
 @addedOn: 2026-04-01
+@description: Guide the Souls of the Dead to their Eternal Resting Places
 */
 
 const player = "p"
