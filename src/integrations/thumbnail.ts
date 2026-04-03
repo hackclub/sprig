@@ -126,10 +126,17 @@ export const generateImageJson = async (name: string) => {
 	} catch (error) {
 		// If everything breaks, use a default image
 		// console.error(error)
-		const image = await fetch('https://cloud-i203j2e6a-hack-club-bot.vercel.app/1confused_dinosaur.png')
-		thumbnail = {
-			kind: 'png',
-			data: Buffer.from(await image.arrayBuffer()).toString('base64')
+		try {
+			const image = await fetch('https://cdn.hackclub.com/019d4786-52d6-7332-9365-698a4fb22e22/2026_04_01_02j_Kleki.png')
+			thumbnail = {
+				kind: 'png',
+				data: Buffer.from(await image.arrayBuffer()).toString('base64')
+			}
+		} catch {
+			thumbnail = {
+				kind: 'png',
+				data: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQI12NgAAIABQABNjN9GQAAAAlwSFlzAAAWJQAAFiUBSVIk8AAAAA0lEQVQI12P4z8BQDwAEgAF/QualzQAAAABJRU5ErkJggg=='
+			}
 		}
 	}
 
