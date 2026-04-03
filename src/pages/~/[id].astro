@@ -42,7 +42,7 @@ async function handlePersistenceState(isSessionFull : boolean, game : Game, tuto
 			await firestore.collection('games').doc(game.id).update({ unprotected: false })
 			game.unprotected = false
 		}
-		if (Astro.cookies.get('sprigTempGame').value === game.id)
+		if (Astro.cookies.get('sprigTempGame')?.value === game.id)
 			Astro.cookies.delete('sprigTempGame', { path: '/' })
 	} else {
 		if (!game.unprotected) return undefined;
@@ -157,9 +157,9 @@ isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 			persistenceState={persistenceState}
 			roomState={roomState}
 			cookies={{
-				outputAreaSize: Astro.cookies.get('outputAreaSize').number(),
-				helpAreaSize: Astro.cookies.get('helpAreaSize').number(),
-				hideHelp: Astro.cookies.get('hideHelp').boolean()
+				outputAreaSize: Astro.cookies.get('outputAreaSize')?.number(),
+				helpAreaSize: Astro.cookies.get('helpAreaSize')?.number(),
+				hideHelp: Astro.cookies.get('hideHelp')?.boolean()
 			}}
 		/>
 		{isMobile ? <MobileUnsupported /> : null}
