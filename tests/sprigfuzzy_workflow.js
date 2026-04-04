@@ -160,7 +160,7 @@ function simEngine() {
     getState: () => { throw new Error(" BAD! NO! ") },
 
     /* not implementing these */
-    playTune: () => {},
+    playTune: () => ({ end: () => {}, isPlaying: () => false }),
     setBackground: (type) => {},
 
     /* will simulate input into these */
