@@ -1,43 +1,17 @@
+import { readdir, readFile } from "node:fs/promises";
 import { baseEngine } from "../engine/dist/base/index.js"
-// import { iterateReader } from "https://deno.land/std@0.162.0/streams/conversion.ts";
-// import * as pathUtils from "https://deno.land/std/path/mod.ts";
-
-// async function spadeRun(path) {
-//   const H = Deno.env.get("HOME");
-//   const p = Deno.run({
-//     cmd: [H + "/spade/pc_build/spade", H + "/sprig/games/" + path],
-//     stdout: "piped",
-//     stdin: "piped"
-//   });
-// 
-//   /* feels like this is necessary, to get 'er warmed up */
-//   await new Promise(res => setTimeout(res, 100));
-// 
-//   async function *mapReader() {
-//     const decoder = new TextDecoder();
-// 
-//     for await (const out of iterateReader(p.stdout))
-//       yield decoder.decode(out).trim();
-//   }
-// 
-//   const encoder = new TextEncoder();
-//   return {
-//     out: mapReader(),
-//     simKey: key => p.stdin.write(encoder.encode(key + '\n')),
-//     cleanup: () => p.close(),
-//   };
-// }
 
 let brokenGames = [];
 const SKIP = ["mandelbrot.js"];
 
-const ONLY = Deno.args.filter(x => x.startsWith('games/')).map(x => x.slice(6)).concat(Deno.args.filter(x => !x.startsWith('games/')));
+const args = process.argv.slice(2);
+const ONLY = args.filter(x => x.startsWith('games/')).map(x => x.slice(6)).concat(args.filter(x => !x.startsWith('games/')));
 
 async function main() {
   brokenGames = [];
   const tasks = [];
-  for await (const dirEntry of Deno.readDir('./games')) {
-    const name = dirEntry.name;
+  const entries = await readdir('./games');
+  for (const name of entries) {
 
     if (ONLY.length > 0) {
       if (ONLY.some(x => x === name)) {
@@ -70,7 +44,7 @@ async function main() {
 main();
 
 async function testScript(name) {
-  const script = await Deno.readTextFile(`./games/${name}`);
+  const script = await readFile(`./games/${name}`, 'utf-8');
 
   const { api, cleanup, simulateKey } = simEngine();
 
