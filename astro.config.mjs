@@ -10,6 +10,7 @@ const gameFiles = fs.readdirSync("games").filter(f => f.endsWith(".js")).map(gam
 
 export default defineConfig({
 	site: 'https://sprig.hackclub.com',
+	devToolbar: { enabled: false },
 	integrations: [
 		preact({ compat: true }),
 		svelte(),
