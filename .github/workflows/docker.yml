@@ -25,7 +25,7 @@ jobs:
         run: |
           docker run -d \
             --name sprig-ci \
-            -p 3000:3000 \
+            -p 4321:4321 \
             -e NODE_OPTIONS="--max-old-space-size=4096" \
             sprig-ci
 
@@ -33,7 +33,7 @@ jobs:
         run: |
           echo "Waiting for Astro dev server to start..."
           for i in $(seq 1 15); do
-            if curl -sf -o /dev/null http://localhost:3000; then
+            if curl -sf -o /dev/null http://localhost:4321; then
               echo "Server is up after ${i}s!"
               exit 0
             fi
