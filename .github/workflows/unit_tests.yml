@@ -1,6 +1,10 @@
 name: Unit Tests
 
-on:
+on: # This workflow should run on...
+  push: # a push...
+    branches: # to one of these branches:
+      - 'main'
+  workflow_dispatch: # or when manually triggered
   pull_request:
 
 permissions:
