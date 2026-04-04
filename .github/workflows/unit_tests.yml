@@ -1,10 +1,10 @@
 name: Unit Tests
 
-on: # This workflow should run on...
-  push: # a push...
-    branches: # to one of these branches:
+on:
+  push:
+    branches:
       - 'main'
-  workflow_dispatch: # or when manually triggered
+  workflow_dispatch:
   pull_request:
 
 permissions:
@@ -18,19 +18,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [24.x]
-
     steps:
       - uses: actions/checkout@v6
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "yarn"
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
 
       - name: Execute Unit tests
         run: |
-          yarn install --frozen-lockfile
-          yarn run test:unit
+          bun install --frozen-lockfile
+          bun run test:unit

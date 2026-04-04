@@ -1,20 +1,20 @@
-# Use Node.js 24 with Alpine as the base image
-FROM node:24-alpine
+# Use the official Bun image
+FROM oven/bun:alpine
 
-# Set working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and yarn.lock before installing dependencies (for better caching)
-COPY package.json yarn.lock ./
+# Copy lockfile and package.json for caching
+COPY package.json bun.lock ./
 
 # Install dependencies
-RUN yarn install --frozen-lockfile
+RUN bun install --frozen-lockfile
 
-# Copy the rest of the application files
+# Copy the rest of the application
 COPY . .
 
 # Expose the default Astro port
 EXPOSE 4321
 
-# Default command to start the Astro app
-CMD ["yarn", "dev", "--host"]
+# Start the Astro dev server
+CMD ["bun", "run", "dev", "--", "--host"]
