@@ -8,7 +8,7 @@
 		"dev": "astro dev",
 		"start": "astro dev",
 		"build": "astro build",
-		"test": "deno run --allow-read ./tests/sprigfuzzy.js",
+		"test": "bun run ./tests/sprigfuzzy.js",
 		"test:unit": "cross-env PUBLIC_MAX_ITERATIONS=2000 PUBLIC_MAX_LOOP_TIME_MS=1500 vitest"
 	},
 	"dependencies": {

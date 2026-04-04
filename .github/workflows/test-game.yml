@@ -46,19 +46,14 @@ jobs:
           echo "Changed Files:"
           echo "${{ steps.changed-files.outputs.all_changed_files }}"
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
 
       - name: Build Engine
         run: |
-          yarn install --frozen-lockfile
-          yarn build
+          bun install --frozen-lockfile
+          bun run build
         working-directory: engine
 
-      - name: Setup Deno
-        uses: denoland/setup-deno@v2
-
       - name: Check Games
-        run: deno run --allow-read tests/sprigfuzzy_workflow.js ${{ steps.changed-files.outputs.all_changed_files }}
+        run: bun run tests/sprigfuzzy_workflow.js ${{ steps.changed-files.outputs.all_changed_files }}
