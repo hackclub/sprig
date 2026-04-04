@@ -32,14 +32,14 @@ jobs:
       - name: Wait for Server to Start
         run: |
           echo "Waiting for Astro dev server to start..."
-          for i in $(seq 1 60); do
+          for i in $(seq 1 15); do
             if curl -sf -o /dev/null http://localhost:3000; then
               echo "Server is up after ${i}s!"
               exit 0
             fi
             sleep 1
           done
-          echo "Server failed to respond within 60s"
+          echo "Server failed to respond within 15s"
           docker logs sprig-ci
           exit 1
 
