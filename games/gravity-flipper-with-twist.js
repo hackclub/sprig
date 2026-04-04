@@ -1,8 +1,9 @@
 /*
 @title: gravity flipper with a twist
 @author: manikanta vasamsetti
-@tags: [gravity,platformer,block]
+@tags: ['gravity','platformer','block']
 @addedOn: 2026-03-19
+@description: A gravity-flipping platformer where you navigate through levels by toggling gravity to activate different platforms and avoid spikes.
 */
 
 const player = "p";
