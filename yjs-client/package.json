@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@josias_aurel/lib0": "^0.2.94",
-    "@mapbox/node-pre-gyp": "^1.0.11",
+    "@mapbox/node-pre-gyp": "^2.0.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "firebase-admin": "^12.1.0",
