@@ -27,7 +27,7 @@
         "firebase-admin": "^11.10.1",
         "js-beautify": "^1.15.1",
         "js-levenshtein": "^1.1.6",
-        "loops": "^1.0.1",
+        "loops": "^6.2.1",
         "ms": "^2.1.3",
         "nanoid": "^4.0.1",
         "node-statsd": "^0.1.1",
@@ -1081,7 +1081,7 @@
 
     "longest-streak": ["longest-streak@3.1.0", "", {}, "sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g=="],
 
-    "loops": ["loops@1.0.9", "", {}, "sha512-6tlInBHzsidTTH8C80B92ZnxxqbFNAsNsXhuPaOMkQTZG4+Xy/TOWRXIP8R3LVmJDtvaD2/7QnjaS46NIRrNPQ=="],
+    "loops": ["loops@6.2.1", "", {}, "sha512-UF321fEmlX7KeGlbjxXnL49hk8gVyMqHB2sbeEiEbHyacHYJN20NRh0f2FQSvW2r9X9/xpKBwO5gFYqy5ztauQ=="],
 
     "loupe": ["loupe@3.1.3", "", {}, "sha512-kkIp7XSkP78ZxJEsSxW3712C6teJVoeHHwgo9zJ380de7IYyJ2ISlxojcH2pC5OFLewESmnRi/+XCDIEEVyoug=="],
 
