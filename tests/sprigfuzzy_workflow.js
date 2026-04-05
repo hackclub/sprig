@@ -53,7 +53,7 @@ async function testScript(name) {
   const shakespeareMonKeys = [...Array(1000)].map(_ => choose("wasdjilk".split('')));
 
   // const spade = await spadeRun(name);
-  // try {
+  try {
     // const compareMaps = async () => {
     //   const spadeMap = (await spade.out.next()).value;
     //   const sprigMap = gridToString(api);
@@ -76,17 +76,17 @@ async function testScript(name) {
       // if (log) console.log(`<<< pressing ${key} >>>`);
       // if (log) console.log(gridToString(api));
     }
-  // } catch(e) {
-    // console.log(`ERROR WHILE RUNNING "${name}"`);
-    // brokenGames.push({
-    //   name,
-    //   error: e
-    // })
-  // }
-  // finally {
+  } catch(e) {
+    console.log(`ERROR WHILE RUNNING "${name}"`);
+    brokenGames.push({
+      name,
+      error: e
+    })
+  }
+  finally {
     cleanup();
     // spade.cleanup();
-  // }
+  }
  }
 
 function gridToString(api) {
