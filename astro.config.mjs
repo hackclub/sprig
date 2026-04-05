@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config'
 import preact from '@astrojs/preact'
-import prefresh from '@prefresh/vite'
+
 import svelte from '@astrojs/svelte'
 import rehypeExternalLinks from 'rehype-external-links'
 import fs from "node:fs";
@@ -37,7 +37,7 @@ export default defineConfig({
 		optimizeDeps: {
 			exclude: ['https']
 		},
-		plugins: [ prefresh({ exclude: [/orbit-controls/] }) ],
+		plugins: [],
 		ssr: {
 			// If an import is broken in the Vercel deployment, adding it here might fix it!
 			noExternal: [ 'react-icons', 'tinykeys' ]
