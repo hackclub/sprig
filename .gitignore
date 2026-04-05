@@ -1,4 +1,5 @@
 .vscode
+.astro
 package-lock.json
 yarn.lock
 *.swp

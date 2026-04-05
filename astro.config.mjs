@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config'
 import preact from '@astrojs/preact'
-import prefresh from '@prefresh/vite'
+
 import svelte from '@astrojs/svelte'
 import rehypeExternalLinks from 'rehype-external-links'
 import fs from "node:fs";
@@ -19,6 +19,13 @@ export default defineConfig({
 	output: 'server',
 	adapter: node({ mode: 'standalone' }),
 	vite: {
+		css: {
+			preprocessorOptions: {
+				scss: {
+					api: 'modern'
+				}
+			}
+		},
 		server: {
       allowedHosts: [
 				"sprig.hackclub.com",
@@ -30,7 +37,7 @@ export default defineConfig({
 		optimizeDeps: {
 			exclude: ['https']
 		},
-		plugins: [ prefresh() ],
+		plugins: [],
 		ssr: {
 			// If an import is broken in the Vercel deployment, adding it here might fix it!
 			noExternal: [ 'react-icons', 'tinykeys' ]

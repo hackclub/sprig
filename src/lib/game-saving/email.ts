@@ -1,5 +1,6 @@
 import _sendgrid from '@sendgrid/mail'
-import { LoopsClient } from 'loops'
+import pkg from 'loops'
+const { LoopsClient } = pkg
 import type { Game, User } from './account'
 import { lazy } from '../utils/lazy'
 
