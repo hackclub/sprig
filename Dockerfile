@@ -1,20 +1,26 @@
-# Use the official Bun image
-FROM oven/bun:alpine
+# build
+FROM oven/bun:alpine AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy lockfile and package.json for caching
 COPY package.json bun.lock ./
-
-# Install dependencies
 RUN bun install --frozen-lockfile
 
-# Copy the rest of the application
 COPY . .
+RUN bun run build
 
-# Expose the default Astro port
+# prod
+FROM oven/bun:alpine
+
+WORKDIR /app
+
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json ./
+
 EXPOSE 4321
 
-# Start the Astro dev server
-CMD ["bun", "run", "dev", "--", "--host"]
+ENV HOST=0.0.0.0
+ENV PORT=4321
+
+CMD ["bun", "run", "dist/server/entry.mjs"]
