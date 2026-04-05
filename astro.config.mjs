@@ -37,7 +37,7 @@ export default defineConfig({
 		optimizeDeps: {
 			exclude: ['https']
 		},
-		plugins: [ prefresh() ],
+		plugins: [ prefresh({ exclude: [/orbit-controls/] }) ],
 		ssr: {
 			// If an import is broken in the Vercel deployment, adding it here might fix it!
 			noExternal: [ 'react-icons', 'tinykeys' ]
