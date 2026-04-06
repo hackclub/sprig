@@ -288,10 +288,10 @@ async function hashCodeToBigInt(string : string) : Promise<bigint>{
 
 export async function isAccountWhitelistedToUseCollabAndSavingBetaFeatures(id: string, email: string) : Promise<boolean>{
 	if(whitelistedBetaCollabAndSavingStratEmails.includes(email)) return true;
-	if(import.meta.env.PERCENT_OF_USERS_WHITELISTED_FOR_BETA_FEATURE == 0 || import.meta.env.PERCENT_OF_USERS_WHITELISTED_FOR_BETA_FEATURE == undefined) return false;
+	if(process.env.PERCENT_OF_USERS_WHITELISTED_FOR_BETA_FEATURE == '0' || process.env.PERCENT_OF_USERS_WHITELISTED_FOR_BETA_FEATURE == undefined) return false;
 	let hashedId = await hashCodeToBigInt(id);
-	
-	if(hashedId % BigInt(100) < import.meta.env.PERCENT_OF_USERS_WHITELISTED_FOR_BETA_FEATURE){
+
+	if(hashedId % BigInt(100) < BigInt(process.env.PERCENT_OF_USERS_WHITELISTED_FOR_BETA_FEATURE)){
 		return true
 	}
 	return false;

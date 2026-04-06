@@ -5,7 +5,7 @@ import { getGalleryGames } from '../../lib/game-saving/gallery'
 import fs from 'fs'
 import path from 'path'
 
-const SPRIG_BASE_URL = import.meta.env.SPRIG_BASE_URL || 'http://localhost:3000'
+const SPRIG_BASE_URL = process.env.SPRIG_BASE_URL || 'http://localhost:3000'
 
 const createDefaultWithTitle = (title:string) =>{
 	return defaultExampleCode.replace("@title: ", `@title: ${title}`)

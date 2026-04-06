@@ -7,12 +7,12 @@ export { isValidEmail } from './account-types'
 
 const sendgrid = lazy(() => {
 	// Sekurity
-	_sendgrid.setApiKey(import.meta.env.SENDGRID_API_KEY)
+	_sendgrid.setApiKey(process.env.SENDGRID_API_KEY!)
 	return _sendgrid
 })
 
 const loops = lazy(() => {
-	return new LoopsClient(import.meta.env.LOOPS_API_KEY)
+	return new LoopsClient(process.env.LOOPS_API_KEY!)
 })
 
 interface EmailSpec {
@@ -22,8 +22,8 @@ interface EmailSpec {
 }
 
 export const mail = async (to: string, spec: EmailSpec): Promise<void> => {
-  const EMAIL_FROM = import.meta.env.EMAIL_FROM;
-  const EMAIL_REPLY_TO = import.meta.env.EMAIL_REPLY_TO;
+  const EMAIL_FROM = process.env.EMAIL_FROM;
+  const EMAIL_REPLY_TO = process.env.EMAIL_REPLY_TO;
 
 	try {
     await sendgrid.send({
