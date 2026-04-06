@@ -1,5 +1,6 @@
 /*
 @title: Two Player Snake Game
+@description: A multiplayer retro snake game
 @author: Tejaji
 @tags: ['multiplayer']
 @addedOn: 2025-11-26
