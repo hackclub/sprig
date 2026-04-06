@@ -1,17 +1,17 @@
 name: Duplicate Submission Labeler
 on:
-  pull_request:
-    # Trigger on open AND when labels are added (in case 'submission' is added later)
+  pull_request_target:
     types: [opened, labeled]
 
 jobs:
   label-duplicates:
+    # THE FIX: Only run if the 'submission' label is present
+    if: contains(github.event.pull_request.labels.*.name, 'submission')
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-
     steps:
-      - name: Check for Duplicate Submissions
+      - name: Check and Label
         env:
           GH_TOKEN: ${{ github.token }}
           USER_LOGIN: ${{ github.event.pull_request.user.login }}
@@ -19,15 +19,11 @@ jobs:
           # Fetch open PRs by author that have the "submission" label
           USER_PRS=$(gh pr list --state open --author "$USER_LOGIN" --label "submission" --json number --jq '.[].number')
           
-          # Count the results
           PR_COUNT=$(echo "$USER_PRS" | wc -w)
 
-          # If more than 1 submission is open, check labeling
           if [ "$PR_COUNT" -gt 1 ]; then
             for PR_NUM in $USER_PRS; do
-              # Check if it already has the 'potential-duplicate' label
               HAS_LABEL=$(gh pr view "$PR_NUM" --json labels --jq '.labels[].name' | grep -i "potential-duplicate" || true)
-              
               if [ -z "$HAS_LABEL" ]; then
                 gh pr edit "$PR_NUM" --add-label "potential-duplicate"
               fi
