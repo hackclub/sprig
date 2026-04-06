@@ -1,4 +1,4 @@
-name: Sprig PR Manager
+name: Sprig Auto Triage
 on:
   pull_request_target:
     types: [opened, labeled, synchronized]
@@ -27,7 +27,7 @@ jobs:
                 repo: context.repo.repo,
                 body: `[SYSTEM] PR detected. Apply \`submission\` label or comment \`/check\` to run validation.`
               });
-            } catch (e) { console.log("Initial comment blocked (403): " + e.message); }
+            } catch (e) { console.log("Initial comment blocked: " + e.message); }
 
   validate-submission:
     if: |
@@ -46,7 +46,6 @@ jobs:
       - name: Run CLI Validation
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
             const path = require('path');
@@ -65,19 +64,12 @@ jobs:
               return (2.0 * [...c1].filter(x => c2.has(x)).length) / (c1.size + c2.size);
             };
 
-            // --- UNIVERSAL PR RESOLVER ---
-            let prNumber = null;
-            if (context.payload.pull_request) {
-              prNumber = context.payload.pull_request.number;
-            } else if (context.payload.issue && context.payload.issue.pull_request) {
-              prNumber = context.payload.issue.number;
-            } else {
-              prNumber = context.issue.number;
-            }
-
+            // --- DEFENSIVE DATA SETUP ---
+            let prNumber = context.issue.number || (context.payload.pull_request ? context.payload.pull_request.number : (context.payload.issue ? context.payload.issue.number : null));
+            
             if (!prNumber) {
-              console.log("[SYSTEM] CRITICAL: Could not resolve PR number. Check event payload.");
-              return;
+              console.log("[SYSTEM] No PR/Issue number found. Running in standalone mode.");
+              return; 
             }
 
             const { data: pullFiles } = await github.rest.pulls.listFiles({
