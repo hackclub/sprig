@@ -25,7 +25,7 @@ jobs:
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: `[SYSTEM] PR detected. Apply \`submission\` label or comment \`/check\` to run validation.`
+                body: `[Auto Triage] PR detected. Apply \`submission\` label or comment \`/check\` to run validation.`
               });
             } catch (e) { console.log("Initial comment blocked: " + e.message); }
 
@@ -70,7 +70,7 @@ jobs:
             if (context.payload.pull_request) prNumber = context.payload.pull_request.number;
 
             if (!prNumber) {
-              console.log("[SYSTEM] No PR/Issue number found. Running in standalone mode.");
+              console.log("[Auto Triage] No PR/Issue number found. Running in standalone mode.");
               return; 
             }
 
@@ -141,7 +141,7 @@ jobs:
             const statusIcon = isFailed ? "❌" : "✅";
             const statusTitle = isFailed ? "Submission Issues Found" : "Submission Verified";
             
-            let body = `### ${statusIcon} [SPRIG-VALIDATOR] ${statusTitle}\n\`\`\`text\n`;
+            let body = `### ${statusIcon} [Auto Triage] ${statusTitle}\n\`\`\`text\n`;
             body += logs.length ? logs.join('\n') : "Everything looks great! Your submission is ready be reviewed.";
             body += "\n```\n";
             
@@ -162,7 +162,7 @@ jobs:
                 body
               });
             } catch (e) {
-              console.log("[SYSTEM] Commenting failed. Logs:");
+              console.log("[Auto Triage] Commenting failed. Logs:");
               console.log(body);
             }
 
