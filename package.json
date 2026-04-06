@@ -28,7 +28,7 @@
 		"@sendgrid/mail": "^7.7.0",
 		"@wcj/markdown-to-html": "^3.0.2",
 		"astro": "5.18.1",
-		"bcryptjs": "^2.4.3",
+		"bcryptjs": "^3.0.3",
 		"cross-env": "^7.0.3",
 		"dotenv": "^17.2.3",
 		"firebase-admin": "^11.10.1",
