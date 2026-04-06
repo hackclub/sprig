@@ -1,10 +1,11 @@
 /*
 @title: BreakYourHead
 @author: Azmeer Pirani
-@tags: []
-@addedOn: 2024-12-07
-
+@description: A game where you have to escape from a ghost while dodging obstacles, without letting your head break!
+@tags: ['escape', 'horror'] what tags?
+@addedOn: 2025-12-07
 */
+
 
 const tuneMusic = tune`
 120,
