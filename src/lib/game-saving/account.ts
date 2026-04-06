@@ -7,8 +7,10 @@ import { customAlphabet } from 'nanoid/async'
 import { lazy } from '../utils/lazy'
 import { generateGameName } from '../words'
 import metrics from '../../../metrics'
-import { RoomParticipant } from '../state'
 import { sha256Hash } from "../../lib/codemirror/util";
+
+export type { User, Session, Game, LoginCode, Snapshot, SnapshotData, SessionInfo, RoomParticipant } from './account-types'
+import type { User, Game, Snapshot, SessionInfo } from './account-types'
 
 const numberid = customAlphabet('0123456789')
 
@@ -33,69 +35,6 @@ export const firestore = lazy(() => {
 	}
 	return firestore
 })
-
-export interface User {
-	id: string
-	createdAt: Timestamp
-	email: string
-	username: string | null
-	failedLoginAttempts?: number
-	lockoutUntil?: Timestamp
-}
-
-export interface Session {
-	id: string
-	createdAt: Timestamp
-	userId: string
-	full: boolean // Means they can access all games, not just unprotected access ones
-}
-
-export interface Game {
-	id: string
-	ownerId: string
-	createdAt: Timestamp
-	modifiedAt: Timestamp
-	unprotected: boolean // Can be edited by partial user session (email only)
-	name: string
-	code: string
-	tutorialName?: string
-	tutorialIndex?: number
-	isSavedOnBackend?: boolean
-	roomParticipants?: RoomParticipant[]
-	isRoomOpen?: boolean
-	password?: string
-	isPublished?: boolean
-	githubPR?: string
-}
-
-export interface LoginCode {
-	id: string
-	createdAt: Timestamp
-	userId: string
-}
-
-export interface Snapshot {
-	id: string
-	createdAt: Timestamp
-	gameId: string
-	ownerId: string
-	name: string
-	ownerName: string
-	code: string
-}
-
-export interface SnapshotData {
-	id: string
-	createdAt: Timestamp
-	name: string
-	ownerName: string
-	code: string
-}
-
-export interface SessionInfo {
-	session: Session
-	user: User
-}
 
 const timedOperation = async (metricKey: string, callback: Function) => {
 	const startTime = new Date().getTime();
@@ -197,7 +136,7 @@ export const findDocument = async (path: string, where: WhereParam[] | [WherePar
 
 export const getSession = async (cookies: AstroCookies): Promise<SessionInfo | null> => {
 	if (!cookies.has('sprigSession')) return null
-	const _session = await getDocument('sessions', cookies.get('sprigSession').value!);
+	const _session = await getDocument('sessions', cookies.get('sprigSession')?.value!);
 	if (!_session.exists) return null
 	const session = { id: _session.id, ..._session.data() } as Session
 
@@ -213,7 +152,7 @@ export const getSession = async (cookies: AstroCookies): Promise<SessionInfo | n
 }
 
 export const makeOrUpdateSession = async (cookies: AstroCookies, userId: string, authLevel: 'email' | 'code'): Promise<SessionInfo> => {
-	const curSessionId = cookies.get('sprigSession').value
+	const curSessionId = cookies.get('sprigSession')?.value
 	const _curSession = curSessionId
 		? await getDocument('sessions', curSessionId)
 		: null

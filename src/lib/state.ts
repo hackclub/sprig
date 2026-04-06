@@ -8,7 +8,8 @@ import BitmapEditor from '../components/subeditors/bitmap-editor'
 import ColorPickerEditor from '../components/subeditors/color-picker'
 import MapEditor from '../components/subeditors/map-editor'
 import SequencerEditor from '../components/subeditors/sequencer'
-import type { Game, SessionInfo } from './game-saving/account'
+import type { Game, SessionInfo, RoomParticipant } from './game-saving/account-types'
+export type { RoomParticipant } from './game-saving/account-types'
 
 // Error handling
 export interface NormalizedError {
@@ -100,12 +101,6 @@ export enum ConnectionStatus {
 	CONNECTED,
 	CONNECTING,
 	DISCONNECTED
-}
-
-export type RoomParticipant = {
-	userEmail: string
-	isHost: boolean
-	isBanned?: boolean
 }
 
 export type RoomState = {
