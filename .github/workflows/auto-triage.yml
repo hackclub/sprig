@@ -1,0 +1,142 @@
+name: Sprig PR Manager
+on:
+  pull_request:
+    types: [opened, labeled]
+  issue_comment:
+    types: [created] # Trigger on new comments
+  workflow_dispatch: 
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  triage-comment:
+    if: github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    steps:
+      - name: System Message
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `[SYSTEM] PR detected. Apply \`submission\` label or comment \`/check\` to run validation.`
+            })
+
+  validate-submission:
+    # Trigger if: Labeled 'submission' OR Manual button OR Commented '/check'
+    if: |
+      github.event.pull_request && contains(github.event.pull_request.labels.*.name, 'submission') ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '/check'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run CLI Validation
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            // --- ENGINES ---
+            const analyze = (c) => c.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '').replace(/(let|const|var)\s+\w+/g, '$1 VAR').replace(/\s+/g, '').toLowerCase();
+            const checkSimilarity = (a, b) => {
+              const s1 = analyze(a); const s2 = analyze(b);
+              const chunks = (s) => {
+                const set = new Set();
+                for (let i = 0; i <= s.length - 10; i++) set.add(s.substring(i, i + 10));
+                return set;
+              };
+              const c1 = chunks(s1); const c2 = chunks(s2);
+              if (!c1.size || !c2.size) return 0;
+              return (2.0 * [...c1].filter(x => c2.has(x)).length) / (c1.size + c2.size);
+            };
+
+            // --- DATA SETUP ---
+            const prNumber = context.issue.number || context.payload.pull_request.number;
+            const { data: pullFiles } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner, repo: context.repo.repo, pull_number: prNumber,
+            });
+
+            let logs = [];
+            let isFailed = false;
+
+            for (const file of pullFiles) {
+              const filename = path.basename(file.filename);
+              
+              if (!file.filename.startsWith('games/')) {
+                logs.push(`[ERROR] Out-of-bounds: \`${file.filename}\`. Only \`games/\` allowed.`);
+                isFailed = true; continue;
+              }
+              if (file.status !== 'added') {
+                logs.push(`[ERROR] File modified: \`${filename}\`. Modifications not permitted.`);
+                isFailed = true; continue;
+              }
+
+              if (filename.endsWith('.js')) {
+                const content = fs.readFileSync(file.filename, 'utf8');
+
+                if (!/^[a-zA-Z0-9-_]+\.js$/.test(filename)) {
+                  logs.push(`[ERROR] Bad filename: \`${filename}\`. Use alphanumeric/dashes only.`);
+                  isFailed = true;
+                }
+
+                const metaRegex = /\/\*[\s\S]*?@title:([\s\S]*?)@author:([\s\S]*?)@description:([\s\S]*?)@tags:[\s\S]*?@addedOn:([\s\S]*?)\*\//;
+                const match = content.match(metaRegex);
+                if (!match) {
+                  logs.push(`[ERROR] Missing metadata: \`${filename}\`. Header required.`);
+                  isFailed = true;
+                } else {
+                  if (match[1].includes("getting_started") || match[2].includes("leo, edits")) {
+                    logs.push(`[ERROR] Template values detected in \`${filename}\` metadata.`);
+                    isFailed = true;
+                  }
+                  const subD = new Date(match[4].trim());
+                  const diff = Math.abs(new Date() - subD) / (1000 * 60 * 60 * 24 * 30.44);
+                  if (isNaN(subD.getTime()) || diff > 6) {
+                    logs.push(`[ERROR] Invalid date: \`${match[4].trim()}\`. Must be +/- 6mo.`);
+                    isFailed = true;
+                  }
+                }
+
+                if ([/document\./i, /window\./i, /alert\(/i, /fetch\(/i].some(r => r.test(content))) {
+                  logs.push(`[ERROR] Forbidden API used in \`${filename}\`.`);
+                  isFailed = true;
+                }
+
+                for (const existing of fs.readdirSync('games').filter(f => f.endsWith('.js'))) {
+                  if (file.filename === `games/${existing}`) continue;
+                  const score = checkSimilarity(content, fs.readFileSync(path.join('games', existing), 'utf8'));
+                  if (score > 0.70) {
+                    const rawUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/raw/main/games/${existing}`;
+                    logs.push(`[WARN] Similarity: ${(score * 100).toFixed(0)}% match found for [${existing}](${rawUrl}).`);
+                    break;
+                  }
+                }
+              }
+            }
+
+            // --- REPORTING ---
+            let body = "### [SPRIG-VALIDATOR] Result\n```text\n";
+            body += logs.length ? logs.join('\n') : "STATUS: SUCCESS\nALL CHECKS PASSED";
+            body += "\n```\n";
+            
+            if (!isFailed) {
+              body += "#### [TOOLS]\n";
+              pullFiles.filter(f => f.filename.endsWith('.js')).forEach(f => {
+                const raw = `https://github.com/${context.repo.owner}/${context.repo.repo}/raw/${context.payload.pull_request?.head?.sha || 'main'}/${f.filename}`;
+                body += `- [VIEW_RAW](${raw}) : ${path.basename(f.filename)}\n`;
+              });
+            }
+
+            await github.rest.issues.createComment({
+              issue_number: prNumber, owner: context.repo.owner, repo: context.repo.repo, body
+            });
+            if (isFailed) process.exit(1);
