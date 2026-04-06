@@ -1,6 +1,9 @@
 /*
 @title: Terraria Lite
 @author: Nathan458
+@description: This game is Terraria Lite
+@tags: ['Terraria', 'Terraria Lite']
+@addedOn: 2026-04-06
 */
 
 const breaker = tune`
