@@ -19,7 +19,7 @@ const whitelistedBetaCollabAndSavingStratEmails = ["development@hackclub.com", "
 const app = lazy(() => {
 	if (admin.apps.length === 0) {
 		return initializeApp({
-			credential: admin.credential.cert(JSON.parse(Buffer.from(import.meta.env.FIREBASE_CREDENTIAL, 'base64').toString()))
+			credential: admin.credential.cert(JSON.parse(Buffer.from(process.env.FIREBASE_CREDENTIAL, 'base64').toString()))
 		})
 	} else {
 		return admin.apps[0]!
