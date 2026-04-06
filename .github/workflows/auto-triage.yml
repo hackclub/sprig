@@ -128,7 +128,7 @@ jobs:
                 for (const existing of gamesList) {
                   if (file.filename === `games/${existing}`) continue;
                   const score = checkSimilarity(content, fs.readFileSync(path.join('games', existing), 'utf8'));
-                  if (score > 0.70) {
+                  if (score > 0.49) {
                     const rawUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/raw/main/games/${existing}`;
                     logs.push(`- This code looks very similar to [${existing}](${rawUrl}). Is this a remix or a duplicate?`);
                     break;
