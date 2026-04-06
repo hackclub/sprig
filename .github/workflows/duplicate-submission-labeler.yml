@@ -5,7 +5,6 @@ on:
 
 jobs:
   label-duplicates:
-    # THE FIX: Only run if the 'submission' label is present
     if: contains(github.event.pull_request.labels.*.name, 'submission')
     runs-on: ubuntu-latest
     permissions:
@@ -14,9 +13,10 @@ jobs:
       - name: Check and Label
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
           USER_LOGIN: ${{ github.event.pull_request.user.login }}
         run: |
-          # Fetch open PRs by author that have the "submission" label
+          # The rest of your script remains exactly the same
           USER_PRS=$(gh pr list --state open --author "$USER_LOGIN" --label "submission" --json number --jq '.[].number')
           
           PR_COUNT=$(echo "$USER_PRS" | wc -w)
