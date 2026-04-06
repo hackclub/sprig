@@ -4,7 +4,7 @@ import { isValidEmail } from '../../../lib/game-saving/email'
 import {DevEmail} from "../../../lib/game-saving/auth-helper";
 import { Timestamp } from 'firebase-admin/firestore';
 
-export const post: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
 	const session = await getSession(cookies)
 
 	let code: string

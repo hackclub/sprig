@@ -3,7 +3,7 @@ import { LoopsClient } from 'loops'
 import type { Game, User } from './account'
 import { lazy } from '../utils/lazy'
 
-export const isValidEmail = (email: string): boolean => /^\S+@\S+\.\S+$/.test(email)
+export { isValidEmail } from './account-types'
 
 const sendgrid = lazy(() => {
 	// Sekurity
