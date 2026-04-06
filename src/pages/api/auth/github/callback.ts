@@ -7,7 +7,7 @@ import {
 	getSession,
 } from "../../../../lib/game-saving/account";
 
-export const get: APIRoute = async ({ request, cookies }) => {
+export const GET: APIRoute = async ({ request, cookies }) => {
 	const url = new URL(request.url);
 	const code = url.searchParams.get("code");
 	const state = url.searchParams.get("state");
