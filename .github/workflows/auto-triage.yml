@@ -39,7 +39,6 @@ jobs:
       - name: Checkout PR Code
         uses: actions/checkout@v4
         with:
-          # Safely checkout the contributor's code in a pull_request_target context
           ref: ${{ github.event.pull_request.head.sha || github.event.workflow_dispatch.ref || github.sha }}
           persist-credentials: false
           fetch-depth: 0
@@ -67,14 +66,8 @@ jobs:
             };
 
             // --- UNIVERSAL PR RESOLVER ---
-            let prNumber = null;
-            if (context.payload.pull_request) {
-              prNumber = context.payload.pull_request.number;
-            } else if (context.payload.issue && context.payload.issue.pull_request) {
-              prNumber = context.payload.issue.number;
-            } else {
-              prNumber = context.issue.number;
-            }
+            let prNumber = context.issue.number; 
+            if (context.payload.pull_request) prNumber = context.payload.pull_request.number;
 
             if (!prNumber) {
               console.log("[SYSTEM] No PR/Issue number found. Running in standalone mode.");
@@ -92,11 +85,11 @@ jobs:
               const filename = path.basename(file.filename);
               
               if (!file.filename.startsWith('games/')) {
-                logs.push(`[ERROR] Out-of-bounds: \`${file.filename}\`. Only \`games/\` allowed.`);
+                logs.push(`- It looks like "${file.filename}" is outside the games folder. Only files in /games are allowed.`);
                 isFailed = true; continue;
               }
               if (file.status !== 'added') {
-                logs.push(`[ERROR] File modified: \`${filename}\`. Modifications not permitted.`);
+                logs.push(`- Heads up: "${filename}" was modified, but you can only add new games here.`);
                 isFailed = true; continue;
               }
 
@@ -104,30 +97,30 @@ jobs:
                 const content = fs.readFileSync(file.filename, 'utf8');
 
                 if (!/^[a-zA-Z0-9-_]+\.js$/.test(filename)) {
-                  logs.push(`[ERROR] Bad filename: \`${filename}\`. Use alphanumeric/dashes only.`);
+                  logs.push(`- The filename "${filename}" should only use letters, numbers, and dashes.`);
                   isFailed = true;
                 }
 
                 const metaRegex = /\/\*[\s\S]*?@title:([\s\S]*?)@author:([\s\S]*?)@description:([\s\S]*?)@tags:[\s\S]*?@addedOn:([\s\S]*?)\*\//;
                 const match = content.match(metaRegex);
                 if (!match) {
-                  logs.push(`[ERROR] Missing metadata: \`${filename}\`. Header required.`);
+                  logs.push(`- The metadata header in "${filename}" is missing or formatted incorrectly. Check the template!`);
                   isFailed = true;
                 } else {
                   if (match[1].includes("getting_started") || match[2].includes("leo, edits")) {
-                    logs.push(`[ERROR] Template values detected in \`${filename}\` metadata.`);
+                    logs.push(`- It looks like "${filename}" still has some example/template values in the metadata.`);
                     isFailed = true;
                   }
                   const subD = new Date(match[4].trim());
                   const diff = Math.abs(new Date() - subD) / (1000 * 60 * 60 * 24 * 30.44);
                   if (isNaN(subD.getTime()) || diff > 6) {
-                    logs.push(`[ERROR] Invalid date: \`${match[4].trim()}\`. Must be +/- 6mo.`);
+                    logs.push(`- The date in "${filename}" doesn't look right. Please set it to the current date.`);
                     isFailed = true;
                   }
                 }
 
                 if ([/document\./i, /window\./i, /alert\(/i, /fetch\(/i].some(r => r.test(content))) {
-                  logs.push(`[ERROR] Forbidden API used in \`${filename}\`.`);
+                  logs.push(`- Found some non-Sprig APIs (like window or fetch) in "${filename}". Please remove them.`);
                   isFailed = true;
                 }
 
@@ -137,7 +130,7 @@ jobs:
                   const score = checkSimilarity(content, fs.readFileSync(path.join('games', existing), 'utf8'));
                   if (score > 0.70) {
                     const rawUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/raw/main/games/${existing}`;
-                    logs.push(`[WARN] Similarity: ${(score * 100).toFixed(0)}% match found for [${existing}](${rawUrl}).`);
+                    logs.push(`- This code looks very similar to [${existing}](${rawUrl}). Is this a remix or a duplicate?`);
                     break;
                   }
                 }
@@ -145,8 +138,11 @@ jobs:
             }
 
             // --- DEFENSIVE REPORTING ---
-            let body = "### [SPRIG-VALIDATOR] Result\n```text\n";
-            body += logs.length ? logs.join('\n') : "STATUS: SUCCESS\nALL CHECKS PASSED";
+            const statusIcon = isFailed ? "❌" : "✅";
+            const statusTitle = isFailed ? "Submission Issues Found" : "Submission Verified";
+            
+            let body = `### ${statusIcon} [SPRIG-VALIDATOR] ${statusTitle}\n\`\`\`text\n`;
+            body += logs.length ? logs.join('\n') : "Everything looks great! Your submission is ready be reviewed.";
             body += "\n```\n";
             
             if (!isFailed) {
@@ -166,7 +162,7 @@ jobs:
                 body
               });
             } catch (e) {
-              console.log("[SYSTEM] Commenting failed (403). Dumping logs to terminal:");
+              console.log("[SYSTEM] Commenting failed. Logs:");
               console.log(body);
             }
 
