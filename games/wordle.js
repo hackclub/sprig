@@ -3,7 +3,7 @@
 @description: "A sprig port of the popular game Worldle"
 @author: hashikono
 @tags: ['puzzle']
-@addedOn: 2025-00-00
+@addedOn: 2026-04-06
 */
 
 // letter sprites (capital letters)
