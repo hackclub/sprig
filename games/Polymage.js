@@ -2,7 +2,6 @@
 @title: Polymage
 @author: Coderpillar
 @tags: [rogue]
-@addedOn: 2025-00-00
 @description: thx to davnotdev for code insperation
 */
 
