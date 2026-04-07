@@ -1,3 +1,9 @@
+Title: It-takes-Energy-to-Escape
+Author: Chetan11069-oops
+Description:
+I made my game with simple coding so you can play it without any errors.
+You must gather the yellow energy brick in order for the gates to open in this game. There are seven levels and a timer to test your mettle and beat your own score.
+
 // ================== LEGEND ==================
 setLegend(
   ["p", bitmap`
