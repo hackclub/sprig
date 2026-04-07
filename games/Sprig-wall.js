@@ -1,9 +1,9 @@
 /*
 @title: Sprig-wall
-@description: 
-@author: 
+@description: This is a basic spring game , Collect the apple and Go home 
+@author: elite_punitn
 @tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@addedOn: 2025-04-07
 */
 
 const player = "p"
