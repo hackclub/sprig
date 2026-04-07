@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Maze Game
-@author: 
-@tags: []
-@addedOn: 2025-00-00
+@title: maze_game
+@author: fynr1x
+@tags: [maze]
+@addedOn: 2026-07-April
 */
 
 const player = "p"
