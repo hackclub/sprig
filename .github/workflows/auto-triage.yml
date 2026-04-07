@@ -35,9 +35,12 @@ jobs:
       (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '/check')) ||
       github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    # This env var opts into Node.js 24 immediately
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout PR Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4 # You can also update to v5 here if preferred
         with:
           ref: ${{ github.event.pull_request.head.sha || github.event.workflow_dispatch.ref || github.sha }}
           persist-credentials: false
@@ -52,7 +55,7 @@ jobs:
             const path = require('path');
 
             // --- ENGINES ---
-            const analyze = (c) => c.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '').replace(/(let|const|var)\s+\w+/g, '$1 VAR').replace(/\s+/g, '').toLowerCase();
+            const analyze = (c) => c.replace(/\/\*[\s\S]*? \*\//g, '').replace(/\/\/.*/g, '').replace(/(let|const|var)\s+\w+/g, '$1 VAR').replace(/\s+/g, '').toLowerCase();
             const checkSimilarity = (a, b) => {
               const s1 = analyze(a); const s2 = analyze(b);
               const chunks = (s) => {
