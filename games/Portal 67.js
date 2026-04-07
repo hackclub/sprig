@@ -1,3 +1,11 @@
+/*
+@title: Portal-67
+@author: Dawcio232, aka. 0Verox
+@description: Simpel portal game
+@tags: ['tag1', 'tag2']
+@addedOn: 2025-07-04
+*/
+
 // Game: THE LINKER (Stability Patch)
 // Fixed: 'remove' of undefined by adding existence checks
 
