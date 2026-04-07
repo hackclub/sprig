@@ -3,7 +3,8 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: BASIS phoenix game
-@author: 
+@description: A Flappy-bird inspired phoenix game.
+@author: FYC23
 @tags: ['arcade', 'flappy']
 @addedOn: 2025-00-00
 */
