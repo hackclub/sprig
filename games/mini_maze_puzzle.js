@@ -1,9 +1,9 @@
 /*
-@title: Mini Maze Puzzle
+@title: Very Mini Little Maze Puzzle
 @description: Small maze puzzle where you grab a key and escape the maze.
 @author: alexlam0206
 @tags: ['puzzle']
-@addedOn: 2025-12-24
+@addedOn: 2026-04-07
 */
 
 const player = "p";
