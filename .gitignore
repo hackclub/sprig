@@ -12,3 +12,4 @@ games/metadata.json
 public/*.json
 firmware/spade/firmware.elf
 firmware/spade/firmware.uf2
+.env*.local
