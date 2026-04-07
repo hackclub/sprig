@@ -35,12 +35,11 @@ jobs:
       (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '/check')) ||
       github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    # This env var opts into Node.js 24 immediately
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout PR Code
-        uses: actions/checkout@v4 # You can also update to v5 here if preferred
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.event.workflow_dispatch.ref || github.sha }}
           persist-credentials: false
@@ -68,14 +67,8 @@ jobs:
               return (2.0 * [...c1].filter(x => c2.has(x)).length) / (c1.size + c2.size);
             };
 
-            // --- UNIVERSAL PR RESOLVER ---
-            let prNumber = context.issue.number; 
-            if (context.payload.pull_request) prNumber = context.payload.pull_request.number;
-
-            if (!prNumber) {
-              console.log("[Auto Triage] No PR/Issue number found. Running in standalone mode.");
-              return; 
-            }
+            let prNumber = context.payload.pull_request?.number || context.payload.issue?.number;
+            if (!prNumber) return;
 
             const { data: pullFiles } = await github.rest.pulls.listFiles({
               owner: context.repo.owner, repo: context.repo.repo, pull_number: prNumber,
@@ -88,85 +81,83 @@ jobs:
               const filename = path.basename(file.filename);
               
               if (!file.filename.startsWith('games/')) {
-                logs.push(`- It looks like "${file.filename}" is outside the games folder. Only files in /games are allowed.`);
+                logs.push(`- "${file.filename}" is outside the /games folder.`);
                 isFailed = true; continue;
               }
               if (file.status !== 'added') {
-                logs.push(`- Heads up: "${filename}" was modified, but you can only add new games here.`);
+                logs.push(`- "${filename}" was modified; only new games are allowed.`);
                 isFailed = true; continue;
               }
 
               if (filename.endsWith('.js')) {
                 const content = fs.readFileSync(file.filename, 'utf8');
 
+                // 1. Filename Check
                 if (!/^[a-zA-Z0-9-_]+\.js$/.test(filename)) {
-                  logs.push(`- The filename "${filename}" should only use letters, numbers, and dashes.`);
+                  logs.push(`- Filename "${filename}" should only use letters, numbers, and dashes.`);
                   isFailed = true;
                 }
 
-                const metaRegex = /\/\*[\s\S]*?@title:([\s\S]*?)@author:([\s\S]*?)@description:([\s\S]*?)@tags:[\s\S]*?@addedOn:([\s\S]*?)\*\//;
-                const match = content.match(metaRegex);
-                if (!match) {
-                  logs.push(`- The metadata header in "${filename}" is missing or formatted incorrectly. Check the template!`);
+                // 2. ORDER-INDEPENDENT METADATA CHECK
+                const required = ['@title:', '@author:', '@description:', '@tags:', '@addedOn:'];
+                const missing = required.filter(tag => !content.includes(tag));
+
+                if (missing.length > 0) {
+                  logs.push(`- "${filename}" is missing required metadata or colons: ${missing.join(' ')}`);
                   isFailed = true;
                 } else {
-                  if (match[1].includes("getting_started") || match[2].includes("leo, edits")) {
-                    logs.push(`- It looks like "${filename}" still has some example/template values in the metadata.`);
+                  // Values extraction helper
+                  const getVal = (tag) => {
+                    const regex = new RegExp(`${tag}\\s*([\\s\\S]*?)(?=@\\w+:|\\*\\/)`);
+                    const match = content.match(regex);
+                    return match ? match[1].trim() : "";
+                  };
+
+                  const title = getVal('@title:');
+                  const author = getVal('@author:');
+                  const addedOn = getVal('@addedOn:');
+
+                  if (title.includes("getting_started") || author.includes("leo, edits")) {
+                    logs.push(`- "${filename}" contains template values (getting_started/leo).`);
                     isFailed = true;
                   }
-                  const subD = new Date(match[4].trim());
+
+                  const subD = new Date(addedOn);
                   const diff = Math.abs(new Date() - subD) / (1000 * 60 * 60 * 24 * 30.44);
                   if (isNaN(subD.getTime()) || diff > 6) {
-                    logs.push(`- The date in "${filename}" doesn't look right. Please set it to the current date.`);
+                    logs.push(`- The date in "${filename}" is invalid or too old.`);
                     isFailed = true;
                   }
                 }
 
+                // 3. API Check
                 if ([/document\./i, /window\./i, /alert\(/i, /fetch\(/i].some(r => r.test(content))) {
-                  logs.push(`- Found some non-Sprig APIs (like window or fetch) in "${filename}". Please remove them.`);
+                  logs.push(`- Forbidden APIs found in "${filename}".`);
                   isFailed = true;
                 }
 
+                // 4. Similarity Check
                 const gamesList = fs.readdirSync('games').filter(f => f.endsWith('.js'));
                 for (const existing of gamesList) {
                   if (file.filename === `games/${existing}`) continue;
                   const score = checkSimilarity(content, fs.readFileSync(path.join('games', existing), 'utf8'));
                   if (score > 0.49) {
-                    const rawUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/raw/main/games/${existing}`;
-                    logs.push(`- This code looks very similar to [${existing}](${rawUrl}). Is this a remix or a duplicate?`);
+                    logs.push(`- High similarity to [${existing}]. Duplicate or remix?`);
                     break;
                   }
                 }
               }
             }
 
-            // --- DEFENSIVE REPORTING ---
             const statusIcon = isFailed ? "❌" : "✅";
-            const statusTitle = isFailed ? "Submission Issues Found" : "Submission Verified";
-            
-            let body = `### ${statusIcon} [Auto Triage] ${statusTitle}\n\`\`\`text\n`;
-            body += logs.length ? logs.join('\n') : "Everything looks great! Your submission is ready be reviewed.";
+            let body = `### ${statusIcon} [Auto Triage] Validation Report\n\`\`\`text\n`;
+            body += logs.length ? logs.join('\n') : "Everything looks great!";
             body += "\n```\n";
             
-            if (!isFailed) {
-              body += "#### [TOOLS]\n";
-              const headSha = context.payload.pull_request?.head?.sha || context.sha;
-              pullFiles.filter(f => f.filename.endsWith('.js')).forEach(f => {
-                const raw = `https://github.com/${context.repo.owner}/${context.repo.repo}/raw/${headSha}/${f.filename}`;
-                body += `- [VIEW_RAW](${raw}) : ${path.basename(f.filename)}\n`;
-              });
-            }
-
             try {
               await github.rest.issues.createComment({
-                issue_number: prNumber, 
-                owner: context.repo.owner, 
-                repo: context.repo.repo, 
-                body
+                issue_number: prNumber, owner: context.repo.owner, repo: context.repo.repo, body
               });
-            } catch (e) {
-              console.log("[Auto Triage] Commenting failed. Logs:");
-              console.log(body);
-            }
+            } catch (e) { console.log("Failed to post comment"); }
 
             if (isFailed) process.exit(1);
