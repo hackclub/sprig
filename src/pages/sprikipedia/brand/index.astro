@@ -1,13 +1,9 @@
 ---
 import '../../../global.css'
 import Categories from '../../../layouts/categories.astro'
+import { getSprikipediaTranslation } from '../../../lib/astro-content'
 
-const data = (
-  (await Astro.glob(`/src/translations/*.json`)).find(
-    (translation) =>
-      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
-  ) || {}
-).default;
+const data = getSprikipediaTranslation(Astro.url.searchParams.get("lang"))
 ---
 <Categories name={data["brand.categories.name"]} title={data["brand.categories.title"]} >
     <p>If you're a club leader, hackathon organizer, or community member, you're authorized to print, distribute or translate these for Hack Club-related purposes. You're also welcome to use them personally, or give to friends! This Brand material is copyright Hack Club.</p>
@@ -140,4 +136,3 @@ const data = (
         </tr>
     </table>
 </Categories>
-
