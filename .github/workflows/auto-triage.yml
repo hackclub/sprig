@@ -2,8 +2,6 @@ name: Sprig Auto Triage
 on:
   pull_request_target:
     types: [opened, labeled, synchronized]
-  issue_comment:
-    types: [created]
   workflow_dispatch: 
 
 permissions:
@@ -25,14 +23,13 @@ jobs:
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: `[Auto Triage] PR detected. Apply \`submission\` label or comment \`/check\` to run validation.`
+                body: `[Auto Triage] PR detected. Apply \`submission\` label to run validation.`
               });
             } catch (e) { console.log("Initial comment blocked: " + e.message); }
 
   validate-submission:
     if: |
       (github.event.pull_request && contains(github.event.pull_request.labels.*.name, 'submission')) ||
-      (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '/check')) ||
       github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     env:
