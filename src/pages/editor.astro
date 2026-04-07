@@ -17,7 +17,7 @@ if (galleryMatches) return Astro.redirect(`/gallery/${galleryMatches[1]}`, 302)
 if (Astro.url.searchParams.has('id'))
 	return Astro.redirect(`/legacy-bucket/${Astro.url.searchParams.get('id')}`, 302)
 
-const tempGame = Astro.cookies.get('sprigTempGame').value
+const tempGame = Astro.cookies.get('sprigTempGame')?.value
 if (tempGame) return Astro.redirect(`/~/${encodeURIComponent(tempGame)}`, 302)
 
 const session = await getSession(Astro.cookies)
@@ -58,8 +58,8 @@ if (reviewMode && reviewCode) {
 			client:load
 			persistenceState={persistenceState}
 			cookies={{
-				outputAreaSize: Astro.cookies.get('outputAreaSize').number(),
-				hideHelp: Astro.cookies.get('hideHelp').boolean()
+				outputAreaSize: Astro.cookies.get('outputAreaSize')?.number(),
+				hideHelp: Astro.cookies.get('hideHelp')?.boolean()
 			}}
 		/>
 		{isMobile ? <MobileUnsupported /> : null}

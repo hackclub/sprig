@@ -48,8 +48,8 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 				client:load
 				persistenceState={persistenceState}
 				cookies={{
-					outputAreaSize: Astro.cookies.get('outputAreaSize').number(),
-					hideHelp: Astro.cookies.get('hideHelp').boolean()
+					outputAreaSize: Astro.cookies.get('outputAreaSize')?.number(),
+					hideHelp: Astro.cookies.get('hideHelp')?.boolean()
 				}}
 			/>
 		)}

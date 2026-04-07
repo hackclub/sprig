@@ -2,13 +2,9 @@
 import '../../../global.css'
 import Categories from '../../../layouts/categories.astro'
 import Staff from '../../../components/spriki-components/Staff.astro'
+import { getSprikipediaTranslation } from '../../../lib/astro-content'
 
-const data = (
-  (await Astro.glob(`/src/translations/*.json`)).find(
-    (translation) =>
-      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
-  ) || {}
-).default;
+const data = getSprikipediaTranslation(Astro.url.searchParams.get("lang"))
 ---
 
 <Categories name={data["team.categories.name"]} title={data["team.categories.title"]} >
