@@ -3,13 +3,9 @@ import '../../../global.css'
 import Categories from '../../../layouts/categories.astro'
 import Docs from '../../../components/spriki-components/Docs.astro'
 import Outside from '../../../components/spriki-components/Outside.astro'
+import { getSprikipediaTranslation } from '../../../lib/astro-content'
 
-const data = (
-  (await Astro.glob(`/src/translations/*.json`)).find(
-    (translation) =>
-      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
-  ) || {}
-).default;
+const data = getSprikipediaTranslation(Astro.url.searchParams.get("lang"))
 ---
 <Categories name={data["start.categories.name"]} title={data["start.categories.title"]} >
 <p>Sprig is a game console where every user is a creator. It can only be obtained by building a tile-based game in the web-based game editor and shipping it in the community gallery. It's made by Hack Club.</p>

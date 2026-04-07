@@ -3,8 +3,11 @@ on: # This workflow should run on...
   push: # a push...
     branches: # to one of these branches:
       - 'main'
-      - 'add-ci' # TEMP for testing
   workflow_dispatch: # or when manually triggered
+  pull_request:
+
+permissions:
+  contents: read
 
 defaults:
   run:
@@ -26,7 +29,7 @@ jobs:
         run: cd ~/sprig/firmware/spade && python3 gardenshed.py build
       
       - name: 'Upload artifact'
-        uses: 'actions/upload-artifact@v4'
+        uses: 'actions/upload-artifact@v7'
         with:
           name: 'firmware.uf2'
           path: '~/sprig/firmware/spade/firmware.uf2'
