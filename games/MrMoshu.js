@@ -1,8 +1,20 @@
-// TERMINAL HACKER: Mr. Moshu
-// Controls: W-A-S-D to move, I to Restart Level.
+/*
+@title: Mr. Moshu
+@author: Jamally Emin
+@description: A terminal-themed hacker puzzle game.
+@tags: ["hacker", "puzzle", "terminal"]
+@addedOn: 2026-04-07
+*/
+const p = "p";
+const w = "w";
+const v = "v";
+const d = "d";
+const k = "k";
+const f = "f";
+const z = "z";
 
 setLegend(
-  ["p", bitmap`
+  [p, bitmap`
 ....00000000....
 ...00LLLLLL00...
 ...0LL00011L0...
@@ -19,7 +31,7 @@ setLegend(
 .0LLLLLLLLLLLL0.
 .0LLLLLLLLLLLL0.
 .00000000000000.`], 
-  ["w", bitmap`
+  [w, bitmap`
 0000000000000000
 0777777777777770
 0700000000000070
@@ -36,7 +48,7 @@ setLegend(
 0700000000000070
 0777777777777770
 0000000000000000`],
-  ["v", bitmap`
+  [v, bitmap`
 0LLLLLLLLLLLLLL0
 LLLLLLLLLLLLLLLL
 L66L66L66L7L111L
@@ -53,7 +65,7 @@ L1L1L1LLLLLLLLLL
 L66L66L66L77LLLL
 L66L66L66L77LLLL
 0LLLLLLLLLLLLLL0`],
-  ["d", bitmap`
+  [d, bitmap`
 .D...D..D..D....
 D.D.DD.DD.D.D...
 D.D..D..D.D.D...
@@ -70,7 +82,7 @@ D.D.D.D.D.D..D..
 ................
 ................
 ................`],
-  ["k", bitmap`
+  [k, bitmap`
 ...0000000000...
 ..011111111110..
 .01000000000010.
@@ -87,7 +99,7 @@ D.D.D.D.D.D..D..
 .01LL1LLLLLLL10.
 0111111111111110
 0000000000000000`],
-  ["f", bitmap`
+  [f, bitmap`
 .00033333333000.
 0033333333333300
 0333333333333330
@@ -104,7 +116,7 @@ D.D.D.D.D.D..D..
 .03333333333330.
 ..000333333300..
 ....00000000....`],
-  ["z", bitmap`
+  [z, bitmap`
 .D...D..D...D...
 D.D.DD.D.D.D.D..
 D.D..D.D.D.D.D..
@@ -121,7 +133,6 @@ DD.DD.D.D.D.D...
 ................
 ................
 ................`],
-    
 );
 
 const levels = [
@@ -143,7 +154,7 @@ w...w.....w.w
 w.p.w..z....w
 w...w.....w.w
 w...wwwwwwwww
-w.......d...w
+w-------d---w
 wwwwwwwwwwwww`,
   map`
 wwwwwwwwwwwwwww
@@ -158,29 +169,6 @@ w.w.wwwwwww.w.w
 w.w.dw....w.w.w
 w.wwww.w.ww.w.w
 w......w....wdw
-wwwwwwwwwwwwwww`,
-  map`
-wwwwwwwwwwwwwww
-w............pw
-w..wwwwwwwwww.w
-w..w........wfw
-w..w.wvvvw....w
-wf.w.v...vwww.w
-w..w.v.k....w.w
-w..w.v...v..w.w
-w..w.wvvvw..w.w
-w..w........w.w
-w.fwwwwwwwwww.w
-w.............w
-wwwwwwwwwwwwwww`,
-  map`
-wwwwwwwwwwwwwww
-w.d.ww......d.w
-w...fw...wf...w
-w.k....pww..k.w
-w......www....w
-w...f.wwwwf...w
-w.d....z....d.w
 wwwwwwwwwwwwwww`
 ];
 
@@ -188,31 +176,15 @@ let currentLevel = 0;
 
 function setupLevel() {
   setMap(levels[currentLevel]);
-  getAll("f").forEach((f, i) => {
-    if (i % 2 === 0) { f.vx = 1; f.vy = 0; }
-    else { f.vx = 0; f.vy = 1; }
-  });
 }
 
 setupLevel();
 
-onInput("w", () => { const p = getFirst("p"); if(p && !getTile(p.x, p.y-1).some(t=>["w","v"].includes(t.type))) p.y -= 1; });
-onInput("s", () => { const p = getFirst("p"); if(p && !getTile(p.x, p.y+1).some(t=>["w","v"].includes(t.type))) p.y += 1; });
-onInput("a", () => { const p = getFirst("p"); if(p && !getTile(p.x-1, p.y).some(t=>["w","v"].includes(t.type))) p.x -= 1; });
-onInput("d", () => { const p = getFirst("p"); if(p && !getTile(p.x+1, p.y).some(t=>["w","v"].includes(t.type))) p.x += 1; });
+onInput("w", () => { const p = getFirst("p"); if(p) p.y -= 1; });
+onInput("s", () => { const p = getFirst("p"); if(p) p.y += 1; });
+onInput("a", () => { const p = getFirst("p"); if(p) p.x -= 1; });
+onInput("d", () => { const p = getFirst("p"); if(p) p.x += 1; });
 onInput("i", () => setupLevel());
-
-setInterval(() => {
-  getAll("f").forEach(f => {
-    let nx = f.x + (f.vx || 0);
-    let ny = f.y + (f.vy || 0);
-    if (nx < 0 || nx >= width() || ny < 0 || ny >= height() || getTile(nx, ny).some(t => ["w", "v", "k", "z"].includes(t.type))) {
-      f.vx *= -1; f.vy *= -1;
-    } else { f.x = nx; f.y = ny; }
-  });
-  const p = getFirst("p");
-  if(p && getTile(p.x, p.y).some(t=>t.type === "f")) setupLevel();
-}, 350); 
 
 afterInput(() => {
   const p = getFirst("p");
@@ -220,7 +192,6 @@ afterInput(() => {
 
   getTile(p.x, p.y).forEach(t => {
     if (t.type === "z") { 
-      alert("SYSTEM VIRUS!"); 
       currentLevel = 0; 
       setupLevel(); 
     }
@@ -228,45 +199,12 @@ afterInput(() => {
     if (t.type === "d") t.remove();
     
     if (t.type === "k") {
-      if (getAll("d").length > 0) {
-        alert("ACCESS DENIED: Data cubes required.");
-        p.y += 1;
-      } else {
-        // LEVEL 5: MIRROR SYSTEM LOGIC
-        if (currentLevel === 4) {
-          if (p.x < 7) { 
-            alert("TRAP DETECTED! SYSTEM WIPED.");
-            currentLevel = 0;
-            setupLevel();
-          } else {
-            alert("Hint: You take over the system, what are you now? (5 letters)");
-            const pass = prompt("FINAL DECRYPTION KEY:");
-            if (pass && pass.toLowerCase() === "owner") {
-              alert("✓ SYSTEM OVERRIDDEN\nYOU ARE THE NEW OWNER.");
-              alert("THE END.");
-              currentLevel = 0; 
-              setupLevel();
-            } else { 
-              alert("✖ WRONG"); 
-              p.y += 1; 
-            }
-          }
+      if (getAll("d").length === 0) {
+        currentLevel++;
+        if (currentLevel >= levels.length) {
+            addText("VICTORY", { y: 10, color: [255, 255, 255] });
         } else {
-          // köhnə səviyyələrin məntiqi (0, 1, 2, 3)
-          const hints = [
-            "Hint: Administrator (5)", "Hint: Core Access (4)", 
-            "Hint: You are a Hac... (6)", "Hint: Linux command (4)"
-          ];
-          const codes = ["admin", "root", "hacker", "sudo"];
-          
-          alert(hints[currentLevel]);
-          const pass = prompt("PASSWORD:");
-          if (pass && pass.toLowerCase() === codes[currentLevel]) {
-            currentLevel++;
             setupLevel();
-          } else { 
-            p.y += 1; 
-          }
         }
       }
     }
