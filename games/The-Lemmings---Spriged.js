@@ -5,7 +5,8 @@ IF YOU ENJOY THIS GAME FEEL FREE TO REMIX IT AND ADD YOUR OWN LEVEL!
 
 @title: The Lemmings - Proof of Concept (Multi-Level + Abilities)
 @author: mtthsschrbr
-@tags: []
+@description: A sprig remake of the iconic 1991 Lemmings for the Amiga featuring 10 levels and mainly is about the fun of Lemmings rather than being super hard to beat. It is demonstrating the mechanic and it's integration for the sprig.
+@tags: ["retro", "remake", "strategy", "difficult", "puzzle", "physics", "90s", "realt-time", "timed"]
 @addedOn: 2025-11-12
 */
 
