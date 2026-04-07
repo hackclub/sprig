@@ -3,7 +3,6 @@
 @author: Eren Karababa
 @tags: []
 @addedOn: 2026-03-21
-@website erenk.de
 */
 
 const player = "p";
