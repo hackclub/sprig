@@ -76,10 +76,11 @@ Anyway, write me a mail in case you have trouble understanding what I did. Maybe
 did with that code. I hope it inspired you for some great game ideas.
 
 @title: GoodChemistry
-@author: Tobias
+@author: Tobias Reich
 @mail: mad.scientist@freenet.de
-@tags: [Quiz, learning game, multiplayer, chemistry]
+@tags: ['quiz', 'quiz game','chemistry','singleplayer','2 player game','multiplayer','non violent']
 @addedOn: 2026-01-04
+@description: This is a quiz game for children to learn some chemistry and can be played alone or with another player.
 */
 
 // --------------------------- ASSETS ---------------------------
