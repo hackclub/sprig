@@ -157,14 +157,13 @@ jobs:
             body += logs.length ? logs.join('\n') : "Everything looks great! Your submission is ready be reviewed.";
             body += "\n```\n";
             
-            if (!isFailed) {
-              body += "#### [TOOLS]\n";
-              const headSha = context.payload.pull_request?.head?.sha || context.sha;
-              pullFiles.filter(f => f.filename.endsWith('.js')).forEach(f => {
-                const raw = `https://github.com/${context.repo.owner}/${context.repo.repo}/raw/${headSha}/${f.filename}`;
-                body += `- [VIEW_RAW](${raw}) : ${path.basename(f.filename)}\n`;
-              });
-            }
+
+            body += "#### [TOOLS]\n";
+            const headSha = context.payload.pull_request?.head?.sha || context.sha;
+            pullFiles.filter(f => f.filename.endsWith('.js')).forEach(f => {
+              const raw = `https://github.com/${context.repo.owner}/${context.repo.repo}/raw/${headSha}/${f.filename}`;
+              body += `- [VIEW_RAW](${raw}) : ${path.basename(f.filename)}\n`;
+
 
             try {
               await github.rest.issues.createComment({
