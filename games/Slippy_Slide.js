@@ -2,6 +2,8 @@
 @title: Slippy Slide
 @author: schnoplet
 @tags: []
+@addedOn: 2026-04-07
+@description: A sliding puzzle game where you must use careful alignment and directional movement to reach the goal.
 */
 
 const P = "p"
