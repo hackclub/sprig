@@ -1,7 +1,8 @@
 /*
 @title: Switch Floor
-@author:
-@tags: []
+@author: InfinityByte
+@description: Navigate to the goal while avoiding red danger tiles. Press J to flip the entire floor, turning safe tiles into danger and danger tiles into safe. The tile you stand on never flips. Beat all 3 levels to unlock Infinite Mode.
+@tags: ['puzzle', 'platformer', 'arcade', 'infinite']
 @addedOn: 2026-03-22
 */
 
