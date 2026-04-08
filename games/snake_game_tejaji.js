@@ -224,8 +224,8 @@ function drawSnakes() {
 function spawnFood() {
   let x, y;
   do {
-    x = Math.floor(Math.random() * 8) + 1;
-    y = Math.floor(Math.random() * 8) + 1;
+    x = Math.floor(Math.random() * (width() - 2)) + 1;
+    y = Math.floor(Math.random() * (height() - 2)) + 1;
   } while (isOccupied(x, y));
   
   addSprite(x, y, food);
@@ -247,7 +247,7 @@ function checkCollision(snake, otherSnake) {
   const head = snake[0];
   
   // Wall collision
-  if (head.x <= 0 || head.x >= 9 || head.y <= 0 || head.y >= 9) {
+  if (head.x <= 0 || head.x >= width() - 1 || head.y <= 0 || head.y >= height() - 1) {
     return true;
   }
   
