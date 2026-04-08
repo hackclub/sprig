@@ -6,7 +6,7 @@ import { palette, type PaletteItem, rgbaToHex, transparent  } from '../../../eng
 import { transparentBgUrl } from '../../lib/utils/transparent-bg'
 import { drawingTools, makeTempGrid, mirrorGrid, TempGrid, transformTools, Vector } from './bitmap-editor-tools'
 import { useEffect, useRef } from 'preact/hooks'
-import tinykeys from 'tinykeys'
+import { tinykeys } from 'tinykeys'
 import { IoArrowRedo, IoArrowUndo, IoImage, IoTrash } from 'react-icons/io5'
 import { leftDown, modIcon, rightDown } from '../../lib/utils/events'
 

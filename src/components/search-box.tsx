@@ -5,7 +5,7 @@ import type { Command } from '@codemirror/view'
 import { Signal } from '@preact/signals'
 import { modIcon } from '../lib/utils/events'
 import { useEffect, useRef } from 'preact/hooks'
-import tinykeys from 'tinykeys'
+import { tinykeys } from 'tinykeys'
 
 interface SearchBoxProps {
 	query: Signal<SearchQuery>
