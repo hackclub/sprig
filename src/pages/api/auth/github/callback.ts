@@ -1,4 +1,4 @@
-import { APIRoute } from "astro";
+import type { APIRoute } from "astro";
 import {
 	fetchGitHubAccessToken,
 	fetchGitHubUser,
