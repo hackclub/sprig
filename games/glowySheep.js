@@ -2,7 +2,7 @@
 @title: Glowy Sheep
 @author: atomicra1n
 @description: A herding puzzle where you must save your flock from a glowing, radioactive infection.
-@tags: [puzzle, simulation]
+@tags: ['puzzle', 'simulation']
 @addedOn: 2025-12-04
 */
 
