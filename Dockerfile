@@ -23,4 +23,7 @@ EXPOSE 4321
 ENV HOST=0.0.0.0
 ENV PORT=4321
 
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:4321/up || exit 1
+
 CMD ["bun", "run", "dist/server/entry.mjs"]
