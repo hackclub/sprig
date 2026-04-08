@@ -1,11 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: HackClubGame
-@author: 
-@tags: []
-@addedOn: 2025-00-00
+@title: Enemy-Rush
+@author:DeWitt Solutions
+@description: enemies slimes rush you you must thread the gap to find the space
+@tags: ['Enemy', 'Side Scroller']
+@addedOn: 2026-04-08
 */
 
 const player = "p"
