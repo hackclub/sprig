@@ -2,7 +2,7 @@
 @title: BreakYourHead
 @author: Azmeer Pirani
 @description: A game where you have to escape from a ghost while dodging obstacles, without letting your head break!
-@tags: ['escape', 'horror'] what tags?
+@tags: ['escape', 'horror']
 @addedOn: 2025-12-07
 */
 
