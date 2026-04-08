@@ -4,41 +4,43 @@ import { baseEngine } from "../engine/dist/base/index.js"
 let brokenGames = [];
 const SKIP = ["mandelbrot.js"];
 
+const CONCURRENCY = 16;
+const PER_GAME_TIMEOUT_MS = 10_000;
+
 const args = process.argv.slice(2);
 const ONLY = args.filter(x => x.startsWith('games/')).map(x => x.slice(6)).concat(args.filter(x => !x.startsWith('games/')));
 
+async function runBatch(names) {
+  const queue = [...names];
+  const workers = Array.from({ length: Math.min(CONCURRENCY, queue.length) }, async () => {
+    while (queue.length > 0) {
+      const name = queue.shift();
+      await testScript(name);
+    }
+  });
+  await Promise.all(workers);
+}
+
 async function main() {
   brokenGames = [];
-  const tasks = [];
-  const entries = await readdir('./games');
-  for (const name of entries) {
+  let gamesToRun = [];
 
-    if (ONLY.length > 0) {
-      if (ONLY.some(x => x === name)) {
-        console.log("running", name);
-        await testScript(name);
-      }
-      continue;
-    }
-
-    const isJS = name.slice(-3) === ".js";
-    if (!isJS || SKIP.some(x => x === name)) continue;
-    console.log("running", name);
-    tasks.push((async () => {
-      const i = setInterval(() => console.log(name + ' is still running'), 10000);
-      await testScript(name);
-      clearInterval(i);
-    })());
+  if (ONLY.length > 0) {
+    gamesToRun = ONLY.filter(name => name.endsWith('.js') && !SKIP.includes(name));
+  } else {
+    const entries = await readdir('./games');
+    gamesToRun = entries.filter(name => name.endsWith('.js') && !SKIP.includes(name));
   }
-  await Promise.all(tasks);
 
-  // console.log("broken games:", brokenGames);
-  // for (const { error, name } of brokenGames)
-  //   console.log(` --- ${name} ---\n` + error);
-  // console.log("number of broken games:", brokenGames.length);
-  
+  console.log(`Testing ${gamesToRun.length} game(s) with concurrency ${CONCURRENCY}`);
+  await runBatch(gamesToRun);
 
-  return brokenGames;
+  if (brokenGames.length > 0) {
+    console.log(`\n${brokenGames.length} game(s) had errors:`);
+    for (const { name, error } of brokenGames)
+      console.log(`  - ${name}: ${error?.message ?? error}`);
+    process.exit(1);
+  }
 }
 
 main();
@@ -48,46 +50,33 @@ async function testScript(name) {
 
   const { api, cleanup, simulateKey } = simEngine();
 
-  /* generate simulated inputs */
   const choose = arr => arr[Math.floor(Math.random() * arr.length)];
   const shakespeareMonKeys = [...Array(1000)].map(_ => choose("wasdjilk".split('')));
 
-  // const spade = await spadeRun(name);
   try {
-    // const compareMaps = async () => {
-    //   const spadeMap = (await spade.out.next()).value;
-    //   const sprigMap = gridToString(api);
+    await new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error(`timed out after ${PER_GAME_TIMEOUT_MS}ms`)), PER_GAME_TIMEOUT_MS);
+      try {
+        const fn = new Function(...Object.keys(api), script);
+        fn(...Object.values(api));
 
-    //   if (spadeMap != sprigMap) {
-    //     const text = `maps different!\nsprig map:\n${sprigMap}\nspade map:\n${spadeMap}`;
-    //     throw new Error(text);
-    //   }
-    // }
-
-    console.log(`running ${name}!`);
-    const fn = new Function(...Object.keys(api), script);
-    fn(...Object.values(api)); /* init */
-
-    for (const key of shakespeareMonKeys) {
-      // await compareMaps();
-      simulateKey(key);
-      // await spade.simKey(key);
-
-      // if (log) console.log(`<<< pressing ${key} >>>`);
-      // if (log) console.log(gridToString(api));
-    }
+        for (const key of shakespeareMonKeys) {
+          simulateKey(key);
+        }
+        clearTimeout(timer);
+        resolve();
+      } catch (e) {
+        clearTimeout(timer);
+        reject(e);
+      }
+    });
   } catch(e) {
-    console.log(`ERROR WHILE RUNNING "${name}"`);
-    brokenGames.push({
-      name,
-      error: e
-    })
-  }
-  finally {
+    console.log(`ERROR: ${name} — ${e.message}`);
+    brokenGames.push({ name, error: e });
+  } finally {
     cleanup();
-    // spade.cleanup();
   }
- }
+}
 
 function gridToString(api) {
   const w = api.width()
