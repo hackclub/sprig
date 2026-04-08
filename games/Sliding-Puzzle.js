@@ -3,6 +3,7 @@
 @author: Eren Karababa
 @tags: []
 @addedOn: 2026-03-21
+@description: Classic Sliding puzzle game in your Sprig !
 */
 
 const player = "p";
