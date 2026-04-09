@@ -1,9 +1,9 @@
 /*
 @title:Hidden-Key
-@author:This is a simple game which consistes of 8 levels and each level has one key hidden somewhere random. Go through the entire maze to find the hidden key and unlock the next level
-@description:Shashank Kumar
-@tags: ['escape', 'puzzle']
-@addedOn: 2025-12-10
+@description:This is a simple game which consistes of 8 levels and each level has one key hidden somewhere random. Go through the entire maze to find the hidden key and unlock the next level
+@author:Shashank Kumar
+@tags:['escape', 'puzzle']
+@addedOn:2025-12-10
 */
 const P = "p";
 const WALL = "w";
