@@ -89,7 +89,7 @@ if (!(props.persistenceState.value.kind == PersistenceStateKind.PERSISTED && pro
 						}
 					}>
 						<div class={styles.inputRow}>
-							<Input onChange={() => undefined} value={password.value} bind={password} placeholder='Enter a room password here' />
+							<Input bind={password} placeholder='Enter a room password here' />
 							<Button accent type='submit' disabled={password.value.length == 0}>
 								Create Room
 							</Button>
@@ -131,7 +131,7 @@ if (!(props.persistenceState.value.kind == PersistenceStateKind.PERSISTED && pro
 					</div>
 
 					<div class={styles.inputRow}>
-					<Input onChange={() => undefined} 
+					<Input
 					value={roomLink}
 					readonly
 					/>
@@ -150,7 +150,7 @@ if (!(props.persistenceState.value.kind == PersistenceStateKind.PERSISTED && pro
 						}
 					} class={styles.stack}>
 						<div class={styles.inputRow}>
-							<Input onChange={() => undefined} value={password.value} bind={password} placeholder='Enter a room password here' />
+							<Input bind={password} placeholder='Enter a room password here' />
 							<Button accent type='submit' disabled={password.value.length == 0}>
 								Change password
 							</Button>
