@@ -1,7 +1,7 @@
-import { APIRoute } from "astro"
+import type { APIRoute } from "astro"
 
 
-export const post: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request }) => {
 	const AIRTABLE_PAT = process.env.AIRTABLE_TOKEN; // get the airtable base personal access token
 	const AIRTABLE_BASE = process.env.STUCK_AIRTABLE_BASE; // get the airtable base id
 
