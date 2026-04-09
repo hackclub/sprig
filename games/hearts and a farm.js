@@ -1,7 +1,9 @@
-/*@title: hearts and a farm!
-@author:
-@tags: []
-@addedOn: 2025-00-00
+/*
+@title: hearts and a farm
+@author: petee125678
+@description: Plant your flower! move around the map to buy a seed and let it grow! but you have to find the coin first!
+@tags: ['farm', 'flowers']
+@addedOn: 2025-01-19
 */
 
 const melody = tune `
