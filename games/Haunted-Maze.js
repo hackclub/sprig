@@ -1,9 +1,10 @@
+
 /*
-@Haunted-Maze
-@Savit Arora (Slack: SomeRandom Guy)
-@You are in a haunted mansion your goal is too escape without being killed by the ghost chasing you through the maps 
+@title:Haunted-Maze
+@author:Savit Arora (Slack: SomeRandom Guy)
+@description:You are in a haunted mansion your goal is too escape without being killed by the ghost chasing you through the maps 
 @tags: ['maze', 'puzzle']
-@addedOn: 2026-03-26
+@addedOn: 2026-03-22
 */
 
 
