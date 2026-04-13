@@ -1,10 +1,10 @@
-     /*
-	>     @title: Tronduel
-	>     @author: Jqseph9972
-	>     @description: 2 snakes 1v1ing until the other dies
-	>     @tags: ['multiplayer']
-	>     @addedOn: 2026-01-30
-	>     */
+/*
+@title: Tronduel
+@author: Jqseph9972
+@description: 2 snakes 1v1ing until the other dies
+@tags: ['multiplayer']
+@addedOn: 2026-01-30
+*/
 
 const p1h = "a"
 const p1b = "b"
