@@ -1,23 +1,23 @@
 /*
 @title: Sprig-wall
-@description: This is a basic spring game , Collect the apple and Go home 
+@description: getting the apple and avoiding the weird looking monsters. 
 @author: elite_punith
-@tags: ['tag1', 'tag2']
+@tags: ['puzzle', 'maze', 'hard']
 @addedOn: 2026-04-13
 */
 
-const player = "p"
-const wall = "w"
-const background = "b"
-const home = "h"
-const enter = "e"
-const monster = "m"
-const Lwall = "L"
-const Fwall = "F"
-const Wwall = "W"
+const p = "p"
+const w = "w"
+const bg = "b"
+const house = "h"
 const apple = "a"
+const evil = "m" 
+const L = "L"
+const F = "F"
+const W = "W"
 
-const melody = tune`
+
+const my_tune = tune`
 153.84615384615384: E4^153.84615384615384,
 153.84615384615384: C4~153.84615384615384 + E4^153.84615384615384,
 153.84615384615384: C4~153.84615384615384 + E4^153.84615384615384,
@@ -50,11 +50,10 @@ const melody = tune`
 153.84615384615384: D4~153.84615384615384 + C4~153.84615384615384,
 153.84615384615384: E4/153.84615384615384 + C4-153.84615384615384,
 153.84615384615384: D4~153.84615384615384`
-
-const playback = playTune(melody, Infinity)
+playTune(my_tune, Infinity)
 
 setLegend(
-  [ player, bitmap`
+  [ p, bitmap`
 2222000000022222
 22220.....022222
 22220.7.7.022222
@@ -71,7 +70,7 @@ setLegend(
 2222000000022222
 2222722222722222
 2222222222222222` ],
-  [ apple , bitmap`
+  [ apple, bitmap`
 2222222222222222
 2222222242222222
 2222222D42222222
@@ -88,7 +87,7 @@ setLegend(
 2222222332222222
 2222222222222222
 2222222222222222` ] ,
-  [ home , bitmap`
+  [ house, bitmap`
 0000000000000000
 0CCCCCCCCCCCCCC0
 0CCCCCCCCCCCCCC0
@@ -105,7 +104,7 @@ setLegend(
 0CCCC02220CCCCC0
 0CCCC02220CCCCC0
 0000002220000000`] ,
-  [ background, bitmap`
+  [ bg, bitmap`
 2222222222222222
 2222222222222222
 2222222222222222
@@ -122,7 +121,7 @@ setLegend(
 2222222222222222
 2222222222222222
 2222222222222222` ],
-  [ wall , bitmap`
+  [ w, bitmap`
 2222222LL2222222
 2222222L02222222
 2222222LL2222222
@@ -139,63 +138,29 @@ setLegend(
 2222222L02222222
 2222222LL2222222
 2222222L02222222` ] ,
-  [ Lwall , bitmap`
-22222220L2222222
-2222222LL2222222
-22222220L2222222
-2222222LL2222222
-22222220L2222222
-2222222LL2222222
-22222220L2222222
-2222222LL2222222
-22222220L2222222
-2222222LL2222222
-22222220L2222222
-2222222LL2222222
-22222220L2222222
-2222222LL2222222
-22222220LLLLLLLL
-2222222L0L0L0L0L` ] ,
-  [ Fwall , bitmap`
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-0L0L0L0L0L0L0L0L
+  [ evil, bitmap`
 0000000000000000
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222` ] ,
-  [ Wwall , bitmap`
-L0L0L0L0L2222222
-LLLLLLLL02222222
-2222222LL2222222
-2222222L02222222
-2222222LL2222222
-2222222L02222222
-2222222LL2222222
-2222222L02222222
-2222222LL2222222
-2222222L02222222
-2222222LL2222222
-2222222L02222222
-2222222LL2222222
-2222222L02222222
-2222222LL2222222
-2222222L02222222` ]
+0000000000000000
+0000000000000000
+0000070000700000
+0000070000700000
+0000000000000000
+0007777777770000
+0007000000070000
+0007077770070000
+0007000000070000
+0007777777770000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`]
 )
 
-setSolids([player , apple , wall ,Fwall , Wwall , Lwall ])
+setSolids([p, apple, w, F, W, L, evil])
 
-let level = 0
-const levels = [
+let cur_lvl = 0
+const maps = [
   map`
 p...W..........L
 .LFa....W..WaW..
@@ -203,44 +168,77 @@ p...W..........L
 .ww.w.w..w.w....
 ..L.w..awL.w.W.L
 ......W.........
-.L......W.F.L..h`
+.L......W.F.L..h`,
+  map`
+p.w........m...h
+.aw.wwwwww.wwwww
+..w.w....w.....w
+..w.w.ww.wwwww.w
+..w...wm.......w
+..wwwww.wwwwwwww
+........a......L`,
+  map`
+p...m..........h
+wwwwwwwwwwwww..w
+w.a..........a.w
+w..wwwwwwwwww..w
+w..w........w..w
+w..w..m..m..w..w
+w..aaaaaaaaaa..w`
 ]
 
-setBackground(background)
-setMap(levels[level])
+function load_map() {
+  setMap(maps[cur_lvl])
+  clearText()
+  addText("Level " + (cur_lvl + 1), { y: 1, color: color`3` })
+}
+
+setBackground(bg)
+load_map()
 
 setPushables({
-  [ player ]: [apple]
+  [p]: [apple],
+  [apple]: [apple] 
 })
 
-onInput("s", () => {
-  getFirst(player).y += 1
-})
+function shift_guy(x_dir, y_dir) {
+  let guy = getFirst(p)
+  let nextX = guy.x + x_dir
+  let nextY = guy.y + y_dir
+  
+  
+  let stuff_there = getTile(nextX, nextY)
+  for (let i = 0; i < stuff_there.length; i++) {
+    if (stuff_there[i].type == evil) {
+      load_map()
+      return
+    }
+  }
 
-onInput("w", () => {
-  getFirst(player).y -= 1
-})
+  guy.x += x_dir
+  guy.y += y_dir
+}
 
-onInput("a", () => {
-  getFirst(player).x -= 1
-})
+onInput("s", () => shift_guy(0, 1))
+onInput("w", () => shift_guy(0, -1))
+onInput("a", () => shift_guy(-1, 0))
+onInput("d", () => shift_guy(1, 0))
 
-onInput("d", () => {
-  getFirst(player).x += 1
+onInput("j", () => {
+  load_map() 
 })
-
-onInput("j" , () => {
-  clearText()
-  addText("Press J to reset" , { x:2 , y:1 , color:color`3`})
-  setMap(levels[level])
-})
-
-clearText()
-addText("Press J to reset" , { x:2 , y:1 , color:color`3`})
 
 afterInput(() => {
-  if(tilesWith(apple,home).length >= 1){
-    clearText() 
-    addText("You won!" , {x:5 , y:4 , color:color`3`})
+  let finished_apples = tilesWith(apple, house).length
+
+  
+  if (finished_apples >= 1) { 
+    if (cur_lvl < maps.length - 1) {
+      cur_lvl += 1
+      load_map()
+    } else {
+      clearText()
+      addText("YOU WIN!!!", { x: 3, y: 4, color: color`3` })
+    }
   }
 })
