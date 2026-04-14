@@ -26,6 +26,7 @@
 		"@lezer/common": "^1.5.1",
 		"@preact/signals": "2.9.0",
 		"@sendgrid/mail": "^8.1.6",
+		"@types/react": "^19.2.14",
 		"@wcj/markdown-to-html": "^3.0.6",
 		"astro": "6.1.2",
 		"bcryptjs": "^3.0.3",
