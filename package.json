@@ -12,9 +12,9 @@
 		"test:unit": "cross-env PUBLIC_MAX_ITERATIONS=2000 PUBLIC_MAX_LOOP_TIME_MS=1500 vitest"
 	},
 	"dependencies": {
-		"@astrojs/node": "10.0.4",
 		"@astrojs/preact": "5.1.1",
 		"@astrojs/svelte": "8.0.4",
+		"@astrojs/vercel": "^10.0.4",
 		"@codemirror/commands": "^6.10.3",
 		"@codemirror/lang-javascript": "^6.2.5",
 		"@codemirror/language": "^6.12.3",
