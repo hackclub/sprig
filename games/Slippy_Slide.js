@@ -184,7 +184,9 @@ function transformMove(move, mirrorX, mirrorY) {
     dx: mirrorX ? -move.dx : move.dx,
     dy: mirrorY ? -move.dy : move.dy,
     len: move.len,
-    key: move.dx !== 0 ? (mirrorX ? (move.dx === 1 ? "L" : "R") : (move.dx === 1 ? "R" : "L")) : (mirrorY ? (move.dy === 1 ? "U" : "D") : (move.dy === 1 ? "D" : "U"))
+    key: move.dx !== 0
+      ? (mirrorX ? (move.dx === 1 ? "L" : "R") : (move.dx === 1 ? "R" : "L"))
+      : (mirrorY ? (move.dy === 1 ? "U" : "D") : (move.dy === 1 ? "D" : "U"))
   }
 }
 
@@ -195,18 +197,49 @@ function transformPoint(pt, mirrorX, mirrorY) {
   }
 }
 
+function fallbackLevel() {
+  const grid = cloneGrid(W)
+
+  for (let y = 0; y < HEIGHT; y++) {
+    for (let x = 0; x < WIDTH; x++) {
+      grid[y][x] = F
+    }
+  }
+
+  for (let x = 0; x < WIDTH; x++) {
+    grid[0][x] = W
+    grid[HEIGHT - 1][x] = W
+  }
+
+  for (let y = 0; y < HEIGHT; y++) {
+    grid[y][0] = W
+    grid[y][WIDTH - 1] = W
+  }
+
+  grid[1][1] = P
+  grid[HEIGHT - 2][WIDTH - 2] = G
+
+  let walls = 8
+  while (walls > 0) {
+    const x = randInt(1, WIDTH - 2)
+    const y = randInt(1, HEIGHT - 2)
+
+    if (grid[y][x] === F) {
+      grid[y][x] = W
+      walls--
+    }
+  }
+
+  return map`${grid.map(r => r.join("")).join("\n")}`
+}
+
 function showTitle() {
   titleMode = true
   moving = false
   setMap(TITLE_MAP)
   clearText()
-  addText("", { x: 1, y: 1, color: color`0` })
-  addText("", { x: 1, y: 2, color: color`0` })
-  addText("", { x: 1, y: 3, color: color`0` })
-  addText("", { x: 1, y: 4, color: color`0` })
   addText("   SLIPPY SLIDE", { x: 1, y: 5, color: color`0` })
   addText("   by Schnoplet", { x: 1, y: 6, color: color`0` })
-  addText("", { x: 1, y: 7, color: color`0` })
   addText("   WASD to slide", { x: 1, y: 8, color: color`0` })
   addText("   'I' to start", { x: 1, y: 9, color: color`0` })
 }
@@ -261,25 +294,6 @@ function bfsSolvable(grid, start, goal) {
   return false
 }
 
-function carveLine(grid, routeSet, a, b) {
-  const dx = Math.sign(b.x - a.x)
-  const dy = Math.sign(b.y - a.y)
-  let x = a.x
-  let y = a.y
-
-  while (true) {
-    if (!inBounds(x, y)) return false
-    const k = keyOf(x, y)
-    routeSet.add(k)
-    grid[y][x] = F
-    if (x === b.x && y === b.y) break
-    x += dx
-    y += dy
-  }
-
-  return true
-}
-
 function addBranch(grid, routeSet, start, dx, dy, len) {
   let x = start.x
   let y = start.y
@@ -314,7 +328,8 @@ function buildLevel() {
     const mirrorY = Math.random() < 0.5
     const startBase = pick(baseStarts)
     const start = transformPoint(startBase, mirrorX, mirrorY)
-    const pattern = PATTERNS[randInt(0, PATTERNS.length - 1)].map(m => transformMove(m, mirrorX, mirrorY))
+    const pattern = PATTERNS[randInt(0, PATTERNS.length - 1)]
+      .map(m => transformMove(m, mirrorX, mirrorY))
 
     let current = { x: start.x, y: start.y }
     const path = [current]
@@ -336,28 +351,35 @@ function buildLevel() {
       const lineCells = []
       let cx = current.x
       let cy = current.y
+
       for (let i = 0; i < move.len; i++) {
         cx += move.dx
         cy += move.dy
+
         if (!inBounds(cx, cy)) {
           ok = false
           break
         }
+
         const k = keyOf(cx, cy)
         if (routeSet.has(k)) {
           ok = false
           break
         }
+
         lineCells.push({ x: cx, y: cy })
       }
+
       if (!ok) break
 
       signatureParts.push(move.key + move.len)
+
       for (const cell of lineCells) {
         grid[cell.y][cell.x] = F
         routeSet.add(keyOf(cell.x, cell.y))
         path.push({ x: cell.x, y: cell.y })
       }
+
       current = { x: nx, y: ny }
     }
 
@@ -371,32 +393,35 @@ function buildLevel() {
     grid[start.y][start.x] = P
     grid[current.y][current.x] = G
 
-    // add dead ends
     const branchAnchors = shuffle(path.slice(1, path.length - 1)).slice(0, 4)
+
     for (const anchor of branchAnchors) {
-      const tryDirs = shuffle([
+      const dirs = shuffle([
         { dx: 1, dy: 0 },
         { dx: -1, dy: 0 },
         { dx: 0, dy: 1 },
         { dx: 0, dy: -1 },
       ])
 
-      for (const d of tryDirs) {
-        const len = randInt(1, 2)
-        if (addBranch(grid, routeSet, anchor, d.dx, d.dy, len)) break
+      for (const d of dirs) {
+        if (addBranch(grid, routeSet, anchor, d.dx, d.dy, randInt(1, 2))) {
+          break
+        }
       }
     }
 
-    // more walls
     let extraWalls = Math.min(8 + levelNumber, 14)
     let tries = 0
+
     while (extraWalls > 0 && tries < 200) {
       tries++
       const x = randInt(1, WIDTH - 2)
       const y = randInt(1, HEIGHT - 2)
+
       const k = keyOf(x, y)
       if (routeSet.has(k)) continue
       if (grid[y][x] !== W) continue
+
       grid[y][x] = W
       extraWalls--
     }
@@ -406,11 +431,10 @@ function buildLevel() {
     recentSignatures.push(signature)
     if (recentSignatures.length > 10) recentSignatures.shift()
 
-    const mapString = grid.map(row => row.join("")).join("\n")
-    return map`${mapString}`
+    return map`${grid.map(r => r.join("")).join("\n")}`
   }
 
-  return STATIC_FALLBACK
+  return fallbackLevel()
 }
 
 function loadLevel() {
@@ -422,10 +446,12 @@ function loadLevel() {
 function checkWin() {
   const p = getFirst(P)
   if (!p) return
+
   if (getTile(p.x, p.y).some(t => t.type === G)) {
     moving = true
     clearText()
     addText("CLEAR", { x: 3, y: 3, color: color`0` })
+
     setTimeout(() => {
       levelNumber++
       loadLevel()
