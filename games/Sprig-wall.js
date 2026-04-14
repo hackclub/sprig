@@ -12,6 +12,8 @@ const bg = "b"
 const house = "h"
 const apple = "a"
 const evil = "m" 
+const key = "k"
+const door = "d"
 
 const my_tune = tune`
 153.84615384615384: E4^153.84615384615384,
@@ -83,7 +85,7 @@ setLegend(
 2222223223222222
 2222222332222222
 2222222222222222
-2222222222222222` ] ,
+2222222222222222` ],
   [ house, bitmap`
 0000000000000000
 0CCCCCCCCCCCCCC0
@@ -100,7 +102,7 @@ setLegend(
 0CCCC02220CCCCC0
 0CCCC02220CCCCC0
 0CCCC02220CCCCC0
-0000002220000000`] ,
+0000002220000000`],
   [ bg, bitmap`
 2222222222222222
 2222222222222222
@@ -151,12 +153,47 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000`]
+0000000000000000`],
+  [ door, bitmap`
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444F44444444
+444444FFF4444444
+444444FFF4444444
+4444444F44444444
+4444444F44444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444` ],
+  [ key, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000066600000000
+0000660660000000
+0000660660000000
+0000066600000000
+0000006000000000
+0000006600000000
+0000006000000000
+0000006600000000
+0000006000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000` ]
 )
 
-setSolids([p, apple, w, evil])
+setSolids([p, apple, w, door, evil])
 
 let cur_lvl = 0
+let game_over = false
 
 const maps = [
   map`
@@ -168,24 +205,25 @@ p...w..........w
 ......w.........
 .w......w.w.w..h`,
   map`
-p.w........m...h
-.aw.wwwwww.wwwww
-..w.w....w.....w
-..w.w.ww.wwwww.w
-..w...wm.......w
-..wwwww.wwwwwwww
-........a......w`,
+p..............k
+wwwwwwwwwwwwww.w
+w.a..........h.w
+w.wwwwwwwwwwww.w
+w..............w
+wwwwwwwwwwwwww.w
+.......d........`,
   map`
-p...m..........h
-wwwwwwwwwwwww..w
-w.a..........a.w
-w..wwwwwwwwww..w
-w..w........w..w
-w..w..m..m..w..w
-w..aaaaaaaaaa..w`
+p..............k
+wwwwwwwwwwwwww.w
+h.........a....w
+wwwwwwmwwwwwww.w
+h.........a....d
+wwwwwwwwwwwwww.w
+...............w`
 ]
 
 function load_map() {
+  game_over = false
   setMap(maps[cur_lvl])
   clearText()
   addText("Level " + (cur_lvl + 1), { y: 1, color: color`3` })
@@ -201,16 +239,20 @@ setPushables({
 })
 
 function shift_guy(x_dir, y_dir) {
+  if (game_over) return
   let guy = getFirst(p)
+  if (!guy) return
+  
   let nextX = guy.x + x_dir
   let nextY = guy.y + y_dir
   
   let stuff_there = getTile(nextX, nextY)
-  for (let i = 0; i < stuff_there.length; i++) {
-    if (stuff_there[i].type == evil) {
-      load_map()
-      return
-    }
+  if (stuff_there.some(tile => tile.type === evil)) {
+     clearText()
+     addText("YOU LOST!", { x: 4, y: 4, color: color`3` })
+     addText("Press J to retry", { x: 3, y: 6, color: color`2` })
+     game_over = true
+     return
   }
   
   guy.x += x_dir
@@ -222,20 +264,37 @@ onInput("w", () => shift_guy(0, -1))
 onInput("a", () => shift_guy(-1, 0))
 onInput("d", () => shift_guy(1, 0))
 onInput("j", () => {
-  load_map() 
-})
+  if (game_over && cur_lvl === maps.length) {
+    cur_lvl = 0 
+  }
+  load_map()
+}) 
 
 afterInput(() => {
-  let finished_apples = tilesWith(apple, house).length
+  if (game_over) return
+  let guy = getFirst(p)
+  if (!guy) return
+
+  getAll(key).forEach(k => {
+    if (guy.x === k.x && guy.y === k.y) {
+      k.remove()
+      getAll(door).forEach(d => d.remove())
+    }
+  })
+
+  let houses = getAll(house)
+  let filled_houses = tilesWith(apple, house).length
   
-  if (finished_apples >= 1) { 
+  if (houses.length > 0 && filled_houses >= houses.length) { 
     if (cur_lvl < maps.length - 1) {
       cur_lvl += 1
       load_map()
     } else {
+      cur_lvl += 1 
       clearText()
-      addText("YOU WIN!!!", { x: 3, y: 4, color: color`3` })
-      addText("Refresh to play again", { x: 2, y: 6, color: color`2` })
+      addText("YOU WON!!!", { x: 4, y: 4, color: color`3` })
+      addText("Press J to restart", { x: 2, y: 6, color: color`2` })
+      game_over = true
     }
   }
 })
