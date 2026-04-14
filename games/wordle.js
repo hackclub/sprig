@@ -3,7 +3,7 @@
 @description: "A sprig port of the popular game Worldle"
 @author: hashikono
 @tags: ['puzzle']
-@addedOn: 2026-04-06
+@addedOn: 2026-04-14
 */
 
 // letter sprites (capital letters)
@@ -1117,7 +1117,6 @@ w : up
 a : left
 s : right
 d : down
-
 i : start/next Level
 j : choose
 k : 
@@ -1147,18 +1146,22 @@ onInput("d", () => {
 });
 
 //start/next level
+let beginning = 0;
+let done = 0;
 onInput("i", () => {
   word = wordList[Math.floor(Math.random() * 150)];
   wordInput = "";
   inputCol = 0;
   setMap(levels[1]);
+  beginning = 1;
+  done = 0;
 });
 
 //choose
 onInput("j", () => {
   let currentTile = tilesWith(selector)[0];
   //checks valid tile
-  if (currentTile.length > 1) {
+  if (beginning == 1 && done == 0 && currentTile.length > 1) {
     if (currentTile[1].type == "~" && wordInput.length > 0) { //backspace
       wordInput = wordInput.slice(0, -1);;
     } else if (currentTile[1].type != "~" && wordInput.length < 5) { //everything else
@@ -1215,12 +1218,15 @@ onInput("l", () => {
     if (scoreTracker == 5) { //win
       getFirst(selector).remove();
       inputCol = 5;
+      done = 1;
     } else if (inputCol == 4) { //lose
       getFirst(selector).remove();
       wordInput = "";
+      done = 1;
     } else { //reset for next attempt
       wordInput = "";
       inputCol += 1;
+      done = 0;
     }
   }
 });
