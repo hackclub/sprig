@@ -5,7 +5,7 @@ import svelte from '@astrojs/svelte'
 import rehypeExternalLinks from 'rehype-external-links'
 import fs from "node:fs";
 import generateMetadata from "./src/integrations/generate-metadata"
-import node from "@astrojs/node"
+import vercel from "@astrojs/vercel"
 const gameFiles = fs.readdirSync("games").filter(f => f.endsWith(".js")).map(game => `./games/${game}`);
 
 export default defineConfig({
@@ -17,7 +17,7 @@ export default defineConfig({
 		generateMetadata()
 	],
 	output: 'server',
-	adapter: node({ mode: 'standalone' }),
+	adapter: vercel(),
 	vite: {
 		css: {
 			preprocessorOptions: {
@@ -40,7 +40,7 @@ export default defineConfig({
 		plugins: [],
 		ssr: {
 			// If an import is broken in the Vercel deployment, adding it here might fix it!
-			noExternal: [ 'react-icons', 'tinykeys' ]
+			noExternal: [ 'tinykeys' ]
 		}
 	},
 	markdown: {

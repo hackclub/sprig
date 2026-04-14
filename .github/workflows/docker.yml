@@ -21,28 +21,3 @@ jobs:
       - name: Build Docker Image
         run: docker build -t sprig-ci .
 
-      - name: Start Container
-        run: |
-          docker run -d \
-            --name sprig-ci \
-            -p 4321:4321 \
-            -e NODE_OPTIONS="--max-old-space-size=4096" \
-            sprig-ci
-
-      - name: Wait for Server to Start
-        run: |
-          echo "Waiting for Astro dev server to start..."
-          for i in $(seq 1 15); do
-            if curl -sf -o /dev/null http://localhost:4321; then
-              echo "Server is up after ${i}s!"
-              exit 0
-            fi
-            sleep 1
-          done
-          echo "Server failed to respond within 15s"
-          docker logs sprig-ci
-          exit 1
-
-      - name: Show Container Logs on Failure
-        if: failure()
-        run: docker logs sprig-ci

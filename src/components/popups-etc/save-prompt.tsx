@@ -1,4 +1,4 @@
-import { Signal, useComputed, useSignal } from '@preact/signals'
+import { type Signal, useComputed, useSignal } from '@preact/signals'
 import { persist } from '../../lib/game-saving/persist'
 import { isValidEmail } from '../../lib/game-saving/account-types'
 import { usePopupCloseClick } from '../../lib/utils/popup-close-click'

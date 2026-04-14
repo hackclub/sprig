@@ -56,4 +56,12 @@ jobs:
         working-directory: engine
 
       - name: Check Games
-        run: bun run tests/sprigfuzzy_workflow.js ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          if [ -n "${{ steps.changed-files.outputs.all_changed_files }}" ]; then
+            bun run tests/sprigfuzzy_workflow.js ${{ steps.changed-files.outputs.all_changed_files }}
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Running all games (workflow_dispatch)"
+            bun run tests/sprigfuzzy_workflow.js
+          else
+            echo "No game files changed, skipping"
+          fi

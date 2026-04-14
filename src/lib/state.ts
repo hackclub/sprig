@@ -1,6 +1,6 @@
 import type { EditorView, Decoration } from '@codemirror/view'
 import type { Range } from '@codemirror/state'
-import { Signal, signal } from '@preact/signals'
+import { type Signal, signal } from '@preact/signals'
 import { IoColorPalette, IoImage, IoMap, IoMusicalNotes } from 'react-icons/io5'
 import type { FromTo } from './codemirror/util'
 

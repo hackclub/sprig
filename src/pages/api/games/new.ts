@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import { getSession, getUserByEmail, makeGame, makeOrUpdateSession, makeUser, User } from '../../../lib/game-saving/account'
+import { getSession, getUserByEmail, makeGame, makeOrUpdateSession, makeUser, type User } from '../../../lib/game-saving/account'
 import { isValidEmail, mail, tempGameTemplate } from '../../../lib/game-saving/email'
 import { assessCaptcha } from '../../../lib/recaptcha'
 

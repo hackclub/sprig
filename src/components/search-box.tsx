@@ -2,10 +2,10 @@ import styles from './search-box.module.css'
 import { VscArrowDown, VscArrowUp, VscCaseSensitive, VscClose, VscRegex, VscReplace, VscReplaceAll, VscWholeWord } from 'react-icons/vsc'
 import { closeSearchPanel, findNext, findPrevious, replaceAll, replaceNext, SearchQuery } from '@codemirror/search'
 import type { Command } from '@codemirror/view'
-import { Signal } from '@preact/signals'
+import type { Signal } from '@preact/signals'
 import { modIcon } from '../lib/utils/events'
 import { useEffect, useRef } from 'preact/hooks'
-import tinykeys from 'tinykeys'
+import { tinykeys } from 'tinykeys'
 
 interface SearchBoxProps {
 	query: Signal<SearchQuery>

@@ -1,7 +1,7 @@
 import Button from '../design-system/button'
 import styles from './draft-warning.module.css'
-import {VersionState} from "../../lib/upload";
-import {Signal} from "@preact/signals";
+import type {VersionState} from "../../lib/upload";
+import type {Signal} from "@preact/signals";
 
 export default function VersionWarningModal({ versionState }: {versionState: Signal<VersionState>}) {
 	return (

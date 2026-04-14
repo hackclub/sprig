@@ -11,7 +11,7 @@ const createDefaultWithTitle = (title:string) =>{
 	return defaultExampleCode.replace("@title: ", `@title: ${title}`)
 }
 
-export const get: APIRoute = async ({request, cookies, redirect }) => {
+export const GET: APIRoute = async ({request, cookies, redirect }) => {
 	const session = await getSession(cookies)
 
 	if (!session) return redirect('/editor', 302)
@@ -66,7 +66,7 @@ export const get: APIRoute = async ({request, cookies, redirect }) => {
 	return redirect(`/~/${game.id}`, 302)
 }
 
-export const post: APIRoute = async ({ request, redirect }) => {
+export const POST: APIRoute = async ({ request, redirect }) => {
     let name: string | undefined;
     let code: string | undefined;
 

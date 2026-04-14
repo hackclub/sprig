@@ -1,6 +1,6 @@
 import type { Signal } from '@preact/signals'
 import type { Game, SessionInfo } from './account-types'
-import { codeMirror, PersistenceState, PersistenceStateKind } from '../state'
+import { codeMirror, type PersistenceState, PersistenceStateKind } from '../state'
 import { executeCaptcha } from '../recaptcha'
 
 export const persist = async (persistenceState: Signal<PersistenceState>, email?: string) => {
