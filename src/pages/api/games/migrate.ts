@@ -3,7 +3,7 @@ import { Timestamp } from 'firebase-admin/firestore'
 import { firestore, getSession, getUserByEmail, makeOrUpdateSession, makeUser, User } from '../../../lib/game-saving/account'
 import { isValidEmail } from '../../../lib/game-saving/email'
 
-export const post: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
 	let partialSessionEmail: string | null
 	let games: { name: string, code: string }[]
 	try {

@@ -15,7 +15,7 @@ import Button from "./design-system/button";
 import Textarea from "./design-system/textarea";
 import SavePrompt from "./popups-etc/save-prompt";
 import styles from "./navbar.module.css";
-import { persist } from "../lib/game-saving/auth-helper";
+import { persist } from "../lib/game-saving/persist";
 import InlineInput from "./design-system/inline-input";
 import { throttle } from "throttle-debounce";
 import SharePopup from "./popups-etc/share-popup";

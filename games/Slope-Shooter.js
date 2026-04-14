@@ -3,6 +3,7 @@
 @author: shuvo8904654
 @tags: ['puzzle', 'math', 'trajectory']
 @addedOn: 2025-12-09
+@description: Aim and shoot along slopes using math and trajectory mechanics
 */
 
 

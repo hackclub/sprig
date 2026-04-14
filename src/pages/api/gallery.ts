@@ -4,7 +4,7 @@ import {
 	getGalleryGames,
 } from "../../lib/game-saving/gallery";
 
-export const get: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async ({ request }) => {
 	const params = new URL(request.url).searchParams;
 
 	let games = getGalleryGames().map((game) => ({

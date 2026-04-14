@@ -2,7 +2,8 @@
 @title: Maximus
 @author: KeshavDaBoss (Pratham Yadav)
 @tags: ['shooter', 'arcade']
-@addedOn: 2026-01-28jj
+@addedOn: 2026-01-28
+@description: A shooter arcade game where you move and blast enemies
 
 Controls:
 - W/S: Move up/down

@@ -3,7 +3,7 @@ import { getSession, getUserByEmail, makeGame, makeOrUpdateSession, makeUser, Us
 import { isValidEmail, mail, tempGameTemplate } from '../../../lib/game-saving/email'
 import { assessCaptcha } from '../../../lib/recaptcha'
 
-export const post: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
 	let name: string
 	let code: string
 	let partialSessionEmail: string | null // For temp games

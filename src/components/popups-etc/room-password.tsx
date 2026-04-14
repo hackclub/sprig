@@ -3,7 +3,7 @@ import Button from '../design-system/button'
 import Input from '../design-system/input'
 import styles from './share-room.module.css'
 import { PersistenceState } from '../../lib/state'
-import { Game } from '../../lib/game-saving/account'
+import type { Game } from '../../lib/game-saving/account-types'
 import { PersistenceStateKind } from '../../lib/state'
 import { useEffect } from 'preact/hooks'
 
@@ -52,7 +52,7 @@ export default function RoomPasswordPopup(props: RoomPasswordPopupProps) {
 						}
 					}>
 						<div class={styles.inputRow}>
-							<Input onChange={() => undefined} value={password.value} bind={password} placeholder='Enter the room password here' />
+							<Input bind={password} placeholder='Enter the room password here' />
 							<Button accent type='submit'>
 								Enter room
 							</Button>

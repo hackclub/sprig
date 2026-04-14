@@ -3,6 +3,7 @@
 @author: sapbotgit
 @tags: []
 @addedOn: 2025-02-27
+@description: A font rendering engine for Sprig
 */
 
 // Hardware specs: 160x128 LCD, 20x16 tile grid (8x8px tiles)

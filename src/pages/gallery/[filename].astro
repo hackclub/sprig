@@ -7,6 +7,7 @@ import type { PersistenceState } from '../../lib/state'
 import { getSession } from '../../lib/game-saving/account'
 import { getGalleryGames } from '../../lib/game-saving/gallery'
 import { mobileUserAgent } from '../../lib/utils/mobile'
+import { getGameTutorialContent } from '../../lib/astro-content'
 import MobilePlayer from "../../components/big-interactive-pages/mobile-player";
 import fs from 'fs'
 import path from 'path'
@@ -22,16 +23,7 @@ try {
 	return Astro.redirect('/404', 302)
 }
 
-const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
-
-const files = await Astro.glob('/games/*.md')
-let tutorial: string[] | undefined = files
-	.filter(file => {
-		const regexedFile = file.file.match(fileRegexp)
-		return regexedFile && regexedFile[1] === filename
-	})
-	?.map(md => md.compiledContent())
-if (tutorial.length == 0) tutorial = undefined
+const tutorial = await getGameTutorialContent(filename)
 
 const games = getGalleryGames()
 const metadata = games.find(game => game.filename === filename)
@@ -71,8 +63,8 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 		client:load
 		persistenceState={persistenceState}
 		cookies={{
-			outputAreaSize: Astro.cookies.get('outputAreaSize').number(),
-			hideHelp: Astro.cookies.get('hideHelp').boolean()
+			outputAreaSize: Astro.cookies.get('outputAreaSize')?.number(),
+			hideHelp: Astro.cookies.get('hideHelp')?.boolean()
 		}}
 	/>
 )}
