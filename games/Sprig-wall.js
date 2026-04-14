@@ -5,6 +5,7 @@
 @tags: ['puzzle', 'maze', 'hard']
 @addedOn: 2026-04-14
 */
+
 const p = "p"
 const w = "w"
 const bg = "b"
@@ -188,6 +189,7 @@ function load_map() {
   setMap(maps[cur_lvl])
   clearText()
   addText("Level " + (cur_lvl + 1), { y: 1, color: color`3` })
+  addText("WASD: Move  J: Reset", { y: 14, color: color`2` })
 }
 
 setBackground(bg)
@@ -210,6 +212,7 @@ function shift_guy(x_dir, y_dir) {
       return
     }
   }
+  
   guy.x += x_dir
   guy.y += y_dir
 }
@@ -232,6 +235,7 @@ afterInput(() => {
     } else {
       clearText()
       addText("YOU WIN!!!", { x: 3, y: 4, color: color`3` })
+      addText("Refresh to play again", { x: 2, y: 6, color: color`2` })
     }
   }
 })
