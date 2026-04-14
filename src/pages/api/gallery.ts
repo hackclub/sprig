@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import {
-	GameMetadata,
+	type GameMetadata,
 	getGalleryGames,
 } from "../../lib/game-saving/gallery";
 

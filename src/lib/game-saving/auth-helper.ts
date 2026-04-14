@@ -1,4 +1,4 @@
-import { Signal, useComputed, useSignal, useSignalEffect } from '@preact/signals'
+import { type Signal, useComputed, useSignal, useSignalEffect } from '@preact/signals'
 import { isValidEmail } from './account-types'
 
 export type AuthState =

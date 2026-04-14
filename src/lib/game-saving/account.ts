@@ -1,7 +1,7 @@
 import type { AstroCookies } from 'astro'
 import admin from 'firebase-admin'
 import { initializeApp } from 'firebase-admin/app'
-import { FieldPath, getFirestore, Timestamp } from 'firebase-admin/firestore'
+import { getFirestore, Timestamp } from 'firebase-admin/firestore'
 import type { WhereFilterOp } from 'firebase-admin/firestore'
 import { customAlphabet } from 'nanoid'
 import { lazy } from '../utils/lazy'

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "preact/hooks";
-import { GameMetadata } from "../../lib/game-saving/gallery";
+import type { GameMetadata } from "../../lib/game-saving/gallery";
 import Button from "../../components/design-system/button";
 import Input from "../../components/design-system/input";
 import { IoCaretDown, IoSearch } from "react-icons/io5";

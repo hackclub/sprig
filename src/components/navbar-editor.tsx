@@ -1,14 +1,14 @@
-import { Signal, useSignal, useSignalEffect } from "@preact/signals";
+import { type Signal, useSignal, useSignalEffect } from "@preact/signals";
 import {
 	codeMirror,
-	PersistenceState,
+	type PersistenceState,
 	errorLog,
 	editSessionLength,
 	themes,
 	theme,
 	switchTheme,
 	isNewSaveStrat,
-	screenRef, GithubState,
+	screenRef, type GithubState,
 } from "../lib/state";
 import type { RoomState, ThemeType } from "../lib/state";
 import Button from "./design-system/button";
