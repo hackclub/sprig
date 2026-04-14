@@ -3,19 +3,14 @@
 @description: getting the apple and avoiding the weird looking monsters. 
 @author: elite_punith
 @tags: ['puzzle', 'maze', 'hard']
-@addedOn: 2026-04-13
+@addedOn: 2026-04-14
 */
-
 const p = "p"
 const w = "w"
 const bg = "b"
 const house = "h"
 const apple = "a"
 const evil = "m" 
-const L = "L"
-const F = "F"
-const W = "W"
-
 
 const my_tune = tune`
 153.84615384615384: E4^153.84615384615384,
@@ -50,6 +45,7 @@ const my_tune = tune`
 153.84615384615384: D4~153.84615384615384 + C4~153.84615384615384,
 153.84615384615384: E4/153.84615384615384 + C4-153.84615384615384,
 153.84615384615384: D4~153.84615384615384`
+
 playTune(my_tune, Infinity)
 
 setLegend(
@@ -157,18 +153,19 @@ setLegend(
 0000000000000000`]
 )
 
-setSolids([p, apple, w, F, W, L, evil])
+setSolids([p, apple, w, evil])
 
 let cur_lvl = 0
+
 const maps = [
   map`
-p...W..........L
-.LFa....W..WaW..
-....W.L..w....w.
+p...w..........w
+.wwa....w..waw..
+....w.w..w....w.
 .ww.w.w..w.w....
-..L.w..awL.w.W.L
-......W.........
-.L......W.F.L..h`,
+..w.w..aww.w.w.w
+......w.........
+.w......w.w.w..h`,
   map`
 p.w........m...h
 .aw.wwwwww.wwwww
@@ -176,7 +173,7 @@ p.w........m...h
 ..w.w.ww.wwwww.w
 ..w...wm.......w
 ..wwwww.wwwwwwww
-........a......L`,
+........a......w`,
   map`
 p...m..........h
 wwwwwwwwwwwww..w
@@ -206,7 +203,6 @@ function shift_guy(x_dir, y_dir) {
   let nextX = guy.x + x_dir
   let nextY = guy.y + y_dir
   
-  
   let stuff_there = getTile(nextX, nextY)
   for (let i = 0; i < stuff_there.length; i++) {
     if (stuff_there[i].type == evil) {
@@ -214,7 +210,6 @@ function shift_guy(x_dir, y_dir) {
       return
     }
   }
-
   guy.x += x_dir
   guy.y += y_dir
 }
@@ -223,14 +218,12 @@ onInput("s", () => shift_guy(0, 1))
 onInput("w", () => shift_guy(0, -1))
 onInput("a", () => shift_guy(-1, 0))
 onInput("d", () => shift_guy(1, 0))
-
 onInput("j", () => {
   load_map() 
 })
 
 afterInput(() => {
   let finished_apples = tilesWith(apple, house).length
-
   
   if (finished_apples >= 1) { 
     if (cur_lvl < maps.length - 1) {
