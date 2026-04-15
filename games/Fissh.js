@@ -4,20 +4,45 @@
 @title: Fissh
 @author: stilk (me!)
 @tags: []
-@addedOn: 2025-00-00
+@addedOn: 2025-12-07
 */
+let speed = 1000
+const up = tune`
+252.10084033613447: F5^252.10084033613447,
+7815.126050420168`
+const down = tune`
+500: E5^500,
+15500`
 let score = 0;
-let  gameRunning = true ;
+let gameRunning = true;
 const player = "p"
 const trash1 = "0"
 const trash2 = "1"
 const trash3 = "2"
+const trash4 = "3"
 const wall = "w"
 const sand = "s"
 const sand2 = "x"
 const sand3 = "c"
 setLegend(
-  [ player, bitmap`
+  [trash4, bitmap`
+................
+................
+................
+.....2....2.....
+....222..222....
+....222..222....
+....22222222....
+....22222222....
+....23333322....
+...22222222.....
+...22222222.....
+....22222222....
+.....2222222....
+................
+................
+................`],
+  [player, bitmap`
 ................
 ................
 ................
@@ -25,7 +50,7 @@ setLegend(
 ..55...55555....
 ..575.5777775...
 ..577577777775..
-..5777777770775.
+..5777777775775.
 ..5777777777775.
 ..577577777775..
 ..575.5777775...
@@ -33,7 +58,7 @@ setLegend(
 ................
 ................
 ................
-................` ],
+................`],
   [trash1, bitmap`
 ................
 ......555.......
@@ -68,7 +93,7 @@ setLegend(
 ................
 ................
 ................`],
-  [ wall, bitmap`
+  [wall, bitmap`
 7777777777777777
 7777777777777777
 7777777777777777
@@ -84,7 +109,7 @@ setLegend(
 7777777777777777
 7777777777777777
 7777777777777777
-7777777777777777` ],
+7777777777777777`],
   [trash3, bitmap`
 ................
 ................
@@ -157,6 +182,9 @@ setLegend(
 
 setSolids([player, sand, sand2, sand3])
 
+function switchSound(tune) {
+  playTune(tune)
+}
 let level = 0
 const levels = [
   map`
@@ -171,15 +199,15 @@ function groupAll(...types) {
 }
 //fairness thing
 function rightSideIsClear() {
-  const stuff = groupAll(trash1, trash2, trash3);
-  return !stuff.some(s => s.x >= 5);  
+  const stuff = groupAll(trash1, trash2, trash3, trash4);
+  return !stuff.some(s => s.x >= 5);
 }
 //fairness thing 2 electric boogaloo
 function spawnTrashFair() {
 
   const hole = Math.floor(Math.random() * 3);
 
-  const types = [trash1, trash2, trash3];
+  const types = [trash1, trash2, trash3, trash4];
 
   for (let y = 0; y < 3; y++) {
     if (y !== hole) {
@@ -190,102 +218,121 @@ function spawnTrashFair() {
 }
 
 //remove when touchuing edge
-function despawnTrash(){
-    const group = groupAll(trash1, trash2, trash3);
-   for (let i = 0; i < group.length; i++) {
-        const s = group[i];
-         if (s.x == 0){
-           s.remove();
-         }
-      
-     
-   }
+function despawnTrash() {
+  const group = groupAll(trash1, trash2, trash3,trash4);
+  for (let i = 0; i < group.length; i++) {
+    const s = group[i];
+    if (s.x == 0) {
+      s.remove();
+    }
+
+
+  }
 }
 
 function moveTrash() {
-  const group = groupAll(trash1, trash2, trash3);
+  const group = groupAll(trash1, trash2, trash3,trash4);
 
   for (let i = 0; i < group.length; i++) {
     const s = group[i];
     s.x -= 1;
-    
-  
+
+
   }
 }
 //collision check
 function checkHit() {
-  let obstacles = groupAll(trash1,trash2,trash3);
+  let obstacles = groupAll(trash1, trash2, trash3,trash4);
   let p = getFirst(player);
- 
+
   for (let i = 0; i < obstacles.length; i++) {
     if (obstacles[i].x == p.x && obstacles[i].y == p.y) {
       return true;
     }
   }
- 
+
   return false;
 }
 
-function resetGame(){
-  setMap(levels[level])
-  clearText()
+function resetGame() {
+  //ok so here idk what the heck i was doing but its cool we ball
+  //it should be fixed i think...
+  clearInterval(window.gameLoopInterval); 
+  cancelAnimationFrame(window.collisionRequestId); 
+  
+  setMap(levels[level]);
+  clearText();
+  
   gameRunning = true;
-  score = 0
-  var gameLoop = setInterval(() => { 
-    
-   score++
-   if (checkHit()) {
-    clearInterval(gameLoop);
+  score = 0;
+  speed = 400;
+  let lastMoveTime = 0;
+
+  window.hitLoop = setInterval(() => {
+    if (checkHit()) {
+      gameOver();
+    }
+  }, 20);
+
+  function startMoving() {
+    window.moveLoop = setTimeout(() => {
+        if (!gameRunning) return;
+
+        score++;
+        if (speed > 50) speed -= 5; 
+
+          despawnTrash();
+        moveTrash();
+        if (rightSideIsClear()) spawnTrashFair();
+      
+        addText("Score:" + score.toString(), {color: color`2`});
+
+        startMoving();
+      }, speed);
   }
-  despawnTrash();
-  moveTrash();
-  if (rightSideIsClear()) {
-    spawnTrashFair();
-  }
-  if (checkHit()) {
-     clearInterval(gameLoop);
+
+    function gameOver() {
       gameRunning = false;
-      addText("Game Over!", {
-        x: 5,
-        y: 6,
-        color: color`3`
-    });
-    addText(" Press J to restart.", {
-        x: 0,
-        y: 7,
-        color: color`3`
-    });
+      clearInterval(hitLoop);
+      clearTimeout(moveLoop);
+      addText("Game Over!", { x: 5, y: 6, color: color`3` });
+      addText(" Press J to restart.", { x: 0, y: 7, color: color`3` });
+    }
+      startMoving();
   }
-  addText("Score:" + score.toString(),{color: color`2`})
-}, 300);}
-                           
+
+function endGame() {
+    gameRunning = false;
+    cancelAnimationFrame(window.collisionRequestId);
+    addText("Game Over!", { x: 5, y: 6, color: color`3` });
+    addText(" Press J to restart.", { x: 0, y: 7, color: color`3` });
+}
 
 setMap(levels[level])
 setBackground([wall])
 resetGame()
 
- 
-
-
 //input
 onInput("s", () => {
-  if (gameRunning){
+  if (gameRunning) {
+    switchSound(down)
     getFirst(player).y += 1;
   }
 });
 onInput("w", () => {
-  if (gameRunning){
+  if (gameRunning) {
+    switchSound(up)
     getFirst(player).y -= 1;
   }
-  
+
 });
 onInput("j", () => {
-  
-     resetGame();
-  
+  if(!gameRunning){
+    resetGame();
+  }
   
 });
 
 afterInput(() => {
-  
+
 })
