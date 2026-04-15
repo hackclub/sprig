@@ -5,7 +5,7 @@ export default function AnnouncementBanner() {
 		<div class={styles.banner}>
 			<a href="https://sprig.hackclub.com/share/nSkVqpI6YoUOqDTQW9fV/">
 				<img
-					src="https://cloud-7jnwcp68c-hack-club-bot.vercel.app/0image.png"
+					src="https://cdn.hackclub.com/019d4787-897c-7fb3-9dd2-f23357f404fd/2026_04_01_02k_Kleki%20(1).png"
 					alt="Penny"
 					width={50}
 					height={50}

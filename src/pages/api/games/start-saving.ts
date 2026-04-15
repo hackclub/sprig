@@ -7,12 +7,12 @@ import {
 } from "../../../lib/game-saving/account";
 import { updateEmailListLastModifiedTime } from "../../../lib/game-saving/email";
 import { Timestamp } from "firebase-admin/firestore";
-import { RoomParticipant } from "../../../lib/state";
+import type { RoomParticipant } from "../../../lib/state";
 
 /* This route is used to start saving a game. The way this is done is update some fields on the database,
 and another service will listen to these changes and start savin the game code to the db by connecting
 to the yjs room */
-export const post: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
 	let gameId: string;
 	let tutorialName: string | undefined;
 	let roomParticipants: RoomParticipant[]

@@ -27,10 +27,7 @@ test('detect infinite while loops', () => {
 		fn();
 	});
 
-	const workDir = process.cwd();
-	const expectedError = `RangeError: Potential infinite loop
-    at eval (${workDir}/src/lib/engine/error.test.ts:1:152)`;
-	expect(res?.description).toBe(expectedError);
+	expect(res?.description).toMatch(/^RangeError: Potential infinite loop\n\s+at eval \(.*:1:152\)$/);
 });
 
 test('detect infinite for loop', () => {
@@ -41,10 +38,7 @@ test('detect infinite for loop', () => {
 		fn();
 	});
 
-	const workDir = process.cwd();
-	const expectedError = `RangeError: Potential infinite loop
-    at eval (${workDir}/src/lib/engine/error.test.ts:1:148)`;
-	expect(res?.description).toBe(expectedError);
+	expect(res?.description).toMatch(/^RangeError: Potential infinite loop\n\s+at eval \(.*:1:148\)$/);
 });
 
 test('calls a mistyped console.log function (line 2)', () => {

@@ -2,13 +2,13 @@ import styles from './migrate.module.css'
 import MainNavbar from '../navbar-main'
 import { useEffect } from 'preact/hooks'
 import { useSignal } from '@preact/signals'
-import { ExtractedMetadata, extractMetadata } from '../../lib/game-saving/extract-metadata'
+import { type ExtractedMetadata, extractMetadata } from '../../lib/game-saving/extract-metadata'
 import Button from '../design-system/button'
 import { IoArrowForward, IoCheckmark } from 'react-icons/io5'
 import Input from '../design-system/input'
 import { getPuzzleLabFromLocalStorage } from '../../lib/game-saving/legacy-migration'
-import { SessionInfo } from '../../lib/game-saving/account'
-import { isValidEmail } from '../../lib/game-saving/email'
+import type { SessionInfo } from '../../lib/game-saving/account-types'
+import { isValidEmail } from '../../lib/game-saving/account-types'
 
 interface LegacyGame {
 	name: string
@@ -177,7 +177,7 @@ export default function Migrate({ session, intitialEmail }: MigrateProps) {
 					{session?.session.full ? null : (
 						<div class={styles.emailEntry}>
 							<label for='email'>Enter your email:</label>
-							<Input onChange={() => undefined} value={email.value} type='email' autoComplete='email' id='email' placeholder={'fiona@hackclub.com'} bind={email} />
+							<Input type='email' autoComplete='email' id='email' placeholder={'fiona@hackclub.com'} bind={email} />
 						</div>
 					)}
 

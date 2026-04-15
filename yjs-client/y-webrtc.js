@@ -12,7 +12,7 @@ import * as buffer from "lib0-server-ws/buffer";
 import * as math from "lib0-server-ws/math";
 import { createMutex } from "lib0-server-ws/mutex";
 
-import wrtc from "wrtc";
+import wrtc from "@roamhq/wrtc";
 import * as Y from "yjs"; // eslint-disable-line
 import Peer from "simple-peer";
 
