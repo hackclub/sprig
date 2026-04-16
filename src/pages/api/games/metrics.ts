@@ -1,7 +1,7 @@
 import type { APIContext } from 'astro';
 import metrics from "../../../../metrics";
 
-export async function post({ request }: APIContext) {
+export async function POST({ request }: APIContext) {
 	try {
 		const { metric, value, type } = await request.json();
 

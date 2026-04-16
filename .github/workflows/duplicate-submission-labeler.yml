@@ -1,0 +1,37 @@
+name: Duplicate Submission Labeler
+on:
+  pull_request_target:
+    types: [opened, labeled]
+
+jobs:
+  label-duplicates:
+    if: contains(github.event.pull_request.labels.*.name, 'submission')
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Check and Label
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          USER_LOGIN: ${{ github.event.pull_request.user.login }}
+        run: |
+          # 1. Fetch all open PRs from this user (ignore the label for a second)
+          ALL_USER_PRS=$(gh pr list --state open --author "$USER_LOGIN" --json number,labels --limit 100)
+          
+          # 2. Use 'jq' to filter that list for only those that have the "submission" label
+          SUBMISSION_PRS=$(echo "$ALL_USER_PRS" | jq -r '.[] | select(.labels[].name == "submission") | .number')
+          
+          PR_COUNT=$(echo "$SUBMISSION_PRS" | wc -w)
+
+          # If count > 1, apply the duplicate label to the entire list
+          if [ "$PR_COUNT" -gt 1 ]; then
+            for PR_NUM in $SUBMISSION_PRS; do
+              # Double check if duplicate label is already there
+              HAS_DUPE_LABEL=$(gh pr view "$PR_NUM" --json labels --jq '.labels[].name' | grep -i "potential-duplicate" || true)
+              
+              if [ -z "$HAS_DUPE_LABEL" ]; then
+                gh pr edit "$PR_NUM" --add-label "potential-duplicate"
+              fi
+            done
+          fi
