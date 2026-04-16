@@ -1,5 +1,5 @@
 /*
-@title: Sprig-wall: The 10-Level Edition
+@title: Sprig-wall
 @description: getting the apple and avoiding the weird looking monsters. 
 @author: elite_punith
 @tags: ['puzzle', 'maze', 'hard']
