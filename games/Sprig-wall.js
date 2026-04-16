@@ -3,7 +3,7 @@
 @description: getting the apple and avoiding the weird looking monsters. 
 @author: elite_punith
 @tags: ['puzzle', 'maze', 'hard']
-@addedOn: 2026-04-14
+@addedOn: 2026-04-16
 */
 
 const p = "p"
@@ -232,13 +232,13 @@ h.....a......w.w
 h...m........w.w
 ..wwwwwwwwwwww.w
 ...............w`,
-  // Level 5: The Twin Halls
+  // Level 5: The Twin Halls (FIXED)
   map`
 wwwwwwwwwwwwwwww
 w..............k
-wh.wwwwwwdwwwwww
+wh..wwwwwdwwwwww
 w..a.....a.....w
-wh.wwwmwwwmwww.w
+wh..wwmwwwmwww.w
 w..p...........w
 wwwwwwwwwwwwwwww`,
   // Level 6: The Long Push
