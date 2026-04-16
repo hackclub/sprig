@@ -1,5 +1,5 @@
 /*
-@title: Sprig-wall
+@title: Sprig-wall: The 10-Level Edition
 @description: getting the apple and avoiding the weird looking monsters. 
 @author: elite_punith
 @tags: ['puzzle', 'maze', 'hard']
@@ -232,7 +232,7 @@ h.....a......w.w
 h...m........w.w
 ..wwwwwwwwwwww.w
 ...............w`,
-  // Level 5: The Twin Halls (FIXED)
+  // Level 5: The Twin Halls
   map`
 wwwwwwwwwwwwwwww
 w..............k
@@ -247,25 +247,52 @@ w..wwwwwwwwww.kw
 w.a........d..hw
 w..wwmwwwwww..ww
 w..a..........hw
-wwwwwwmwwwww..ww
+w..wwwmwwwww..ww
 wp............ww
 wwwwwwwwwwwwwwww`,
-  // Level 7: The Grand Finale
+  // Level 7: The Box (Fixed Pathing)
   map`
-w.k..........w.w
-w.wwwwwwwwwm.w.w
-w.d.a...a......w
-w.w...m....w.w.w
+w.k............w
+w.w.w.w.w.w.wm.w
+w.d............w
+w.w.a...a......w
 w.w...h...h..w.w
 w.w..........w.w
-w..pwwwwwwwwww.w`
+w..pwwwwwwwwww.w`,
+  // Level 8: The Cross
+  map`
+p..............k
+..wwwwwwwwwmww.w
+..a..........d.h
+..wwwwwwwwwwww.w
+..a..........d.h
+..wwmwwwwwwwww.w
+...............w`,
+  // Level 9: The Squeeze
+  map`
+p..............k
+wwwwwwwwwwwww..w
+h.....d...a....w
+wwwwwwmwwwwww..w
+h.....d...a....w
+wwwwwwwwwwwww..w
+...............w`,
+  // Level 10: The Grand Finale
+  map`
+p..............k
+wwwwwwwwwwwww..w
+h.....d.a......w
+w..wwwwwwwwwmwww
+w......a.d.....h
+w..wwwwwwwwwwwww
+w..............w`
 ]
 
 function load_map() {
   game_over = false
   setMap(maps[cur_lvl])
   clearText()
-  addText("Level " + (cur_lvl + 1), { y: 1, color: color`3` })
+  addText("Level " + (cur_lvl + 1) + " of 10", { y: 1, color: color`3` })
   addText("WASD: Move  J: Reset", { y: 14, color: color`2` })
 }
 
