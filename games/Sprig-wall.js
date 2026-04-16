@@ -196,6 +196,7 @@ let cur_lvl = 0
 let game_over = false
 
 const maps = [
+  // Level 1: Intro to movement
   map`
 p...w..........w
 .wwa....w..waw..
@@ -204,6 +205,7 @@ p...w..........w
 ..w.w..aww.w.w.w
 ......w.........
 .w......w.w.w..h`,
+  // Level 2: Intro to Keys
   map`
 p..............k
 wwwwwwwwwwwwww.w
@@ -212,6 +214,7 @@ w.wwwwwwwwwwww.w
 w..............w
 wwwwwwwwwwwwww.w
 .......d........`,
+  // Level 3: Monsters and multiple doors
   map`
 p..............k
 wwwwwwwwwwwwww.w
@@ -219,7 +222,43 @@ h.........a....w
 wwwwwwmwwwwwww.w
 h.........a....d
 wwwwwwwwwwwwww.w
-...............w`
+...............w`,
+  // Level 4: The Central Chamber
+  map`
+p.w............k
+..w.wwwwwwwwww.w
+a...m........d.w
+h.....a......w.w
+h...m........w.w
+..wwwwwwwwwwww.w
+...............w`,
+  // Level 5: The Twin Halls
+  map`
+wwwwwwwwwwwwwwww
+w..............k
+wh.wwwwwwdwwwwww
+w..a.....a.....w
+wh.wwwmwwwmwww.w
+w..p...........w
+wwwwwwwwwwwwwwww`,
+  // Level 6: The Long Push
+  map`
+w..wwwwwwwwww.kw
+w.a........d..hw
+w..wwmwwwwww..ww
+w..a..........hw
+wwwwwwmwwwww..ww
+wp............ww
+wwwwwwwwwwwwwwww`,
+  // Level 7: The Grand Finale
+  map`
+w.k..........w.w
+w.wwwwwwwwwm.w.w
+w.d.a...a......w
+w.w...m....w.w.w
+w.w...h...h..w.w
+w.w..........w.w
+w..pwwwwwwwwww.w`
 ]
 
 function load_map() {
