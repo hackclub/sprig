@@ -1,6 +1,6 @@
 import type { EditorView, Decoration } from '@codemirror/view'
 import type { Range } from '@codemirror/state'
-import { Signal, signal } from '@preact/signals'
+import { type Signal, signal } from '@preact/signals'
 import { IoColorPalette, IoImage, IoMap, IoMusicalNotes } from 'react-icons/io5'
 import type { FromTo } from './codemirror/util'
 
@@ -8,7 +8,8 @@ import BitmapEditor from '../components/subeditors/bitmap-editor'
 import ColorPickerEditor from '../components/subeditors/color-picker'
 import MapEditor from '../components/subeditors/map-editor'
 import SequencerEditor from '../components/subeditors/sequencer'
-import type { Game, SessionInfo } from './game-saving/account'
+import type { Game, SessionInfo, RoomParticipant } from './game-saving/account-types'
+export type { RoomParticipant } from './game-saving/account-types'
 
 // Error handling
 export interface NormalizedError {
@@ -100,12 +101,6 @@ export enum ConnectionStatus {
 	CONNECTED,
 	CONNECTING,
 	DISCONNECTED
-}
-
-export type RoomParticipant = {
-	userEmail: string
-	isHost: boolean
-	isBanned?: boolean
 }
 
 export type RoomState = {

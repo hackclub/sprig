@@ -72,7 +72,7 @@ export async function fetchGitHubAccessToken(
 				},
 				body: JSON.stringify({
 					client_id: import.meta.env.PUBLIC_GITHUB_CLIENT_ID,
-					client_secret: import.meta.env.GITHUB_CLIENT_SECRET,
+					client_secret: process.env.GITHUB_CLIENT_SECRET,
 					code: code,
 				}),
 			}
