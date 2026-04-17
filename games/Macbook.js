@@ -16,14 +16,14 @@ const dock = "d"
 let level = 0
 let score = 0
 let gameOver = false
+let inIntro = true
+let inLevelScreen = false
 
 setLegend(
-
 [cursor, bitmap`
 ................
 ......000.......
 .....00000......
-....0000000.....
 ....000000......
 ....00000.......
 ....000.........
@@ -35,36 +35,37 @@ setLegend(
 ................
 ................
 ................
+................
 ................`],
 
 [wall, bitmap`
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111`],
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222`],
 
 [file, bitmap`
 ................
-....66666666....
-....6......6....
-....6......6....
-....6......6....
-....6......6....
-....6......6....
-....6......6....
-....66666666....
+....666666......
+....6....6......
+....6....6......
+....6....6......
+....6....6......
+....666666......
+................
+................
 ................
 ................
 ................
@@ -76,12 +77,12 @@ setLegend(
 [virus, bitmap`
 ................
 .....333333.....
-....33333333....
-...3333333333...
-...3333333333...
-...3333333333...
-....33333333....
+....3......3....
+...3..3333..3...
+...3..3333..3...
+....3......3....
 .....333333.....
+................
 ................
 ................
 ................
@@ -93,14 +94,14 @@ setLegend(
 
 [finder, bitmap`
 ................
-....77777777....
-....77777777....
-....77777777....
-....77777777....
-....77777777....
-....77777777....
-....77777777....
-....77777777....
+....44444444....
+....4......4....
+....4..44..4....
+....4......4....
+....4......4....
+....44444444....
+................
+................
 ................
 ................
 ................
@@ -110,35 +111,34 @@ setLegend(
 ................`],
 
 [dock, bitmap`
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222
-2222222222222222`]
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111`]
 )
 
-setSolids([cursor, wall])
+setSolids([cursor])
 
 const levels = [
-
 map`
 wwwwwwwwww
-wc...f...w
+wc..f....w
 w........w
 w....v...w
 w........w
-w....f...w
+w..f.....w
 w........w
 w.......gw
 w........w
@@ -147,7 +147,7 @@ wwwwwwwwww`,
 map`
 wwwwwwwwww
 wc..f....w
-w...v....w
+w..v.....w
 w........w
 w..f.....w
 w........w
@@ -159,23 +159,11 @@ wwwwwwwwww`,
 map`
 wwwwwwwwww
 wc..f....w
-w...v....w
+w..v.....w
 w........w
-w..f.....w
+w..f..v..w
+w........w
 w....v...w
-w........w
-w.......gw
-w........w
-wwwwwwwwww`,
-
-map`
-wwwwwwwwww
-wc..f....w
-w..v..v..w
-w........w
-w..f.....w
-w....v...w
-w........w
 w.......gw
 w........w
 wwwwwwwwww`,
@@ -235,7 +223,19 @@ w..v..v..w
 w........w
 w..f..v..w
 w..v..v..w
-w..v.....w
+w..v..v..w
+w.......gw
+w........w
+wwwwwwwwww`,
+
+map`
+wwwwwwwwww
+wc..f....w
+w..v..v..w
+w........w
+w..f..v..w
+w..v..v..w
+w..v..v..w
 w.......gw
 w........w
 wwwwwwwwww`,
@@ -253,48 +253,107 @@ w........w
 wwwwwwwwww`
 ]
 
-function startLevel(){
-  setMap(levels[level])
-  setBackground(dock)
-  clearText()
-  addText("FILES:"+score,{x:1,y:1,color:color`4`})
+function drawDock(){
+  for(let x=0;x<width();x++){
+    addSprite(x,height()-1,dock)
+  }
 }
 
-startLevel()
+function introScreen(){
+  clearText()
+  setMap(map`
+..........
+..........
+..........
+..........
+..........
+..........
+..........
+..........
+..........
+..........`)
+  setBackground(wall)
+  drawDock()
 
-onInput("w",()=>{ if(!gameOver)getFirst(cursor).y-- })
-onInput("s",()=>{ if(!gameOver)getFirst(cursor).y++ })
-onInput("a",()=>{ if(!gameOver)getFirst(cursor).x-- })
-onInput("d",()=>{ if(!gameOver)getFirst(cursor).x++ })
+  addText("MACBOOK",{x:5,y:5,color:color`0`})
+  addText("Press K",{x:5,y:8,color:color`4`})
+}
+
+function levelScreen(){
+  inLevelScreen = true
+  clearText()
+  setMap(map`
+..........
+..........
+..........
+..........
+..........
+..........
+..........
+..........
+..........
+..........`)
+  setBackground(wall)
+  drawDock()
+
+  addText("LEVEL "+(level+1),{x:6,y:5,color:color`4`})
+  addText("Press K",{x:5,y:7,color:color`0`})
+}
+
+function startLevel(){
+  setMap(levels[level])
+  setBackground(wall)
+  clearText()
+  drawDock()
+  addText("MAC",{x:1,y:0,color:color`0`})
+  addText("FILES:"+score,{x:10,y:0,color:color`6`})
+}
+
+introScreen()
+
+onInput("k",()=>{
+  if(inIntro){
+    inIntro=false
+    levelScreen()
+    return
+  }
+  if(inLevelScreen){
+    inLevelScreen=false
+    startLevel()
+  }
+})
+
+onInput("w",()=>{ if(!gameOver && !inIntro && !inLevelScreen)getFirst(cursor).y-- })
+onInput("s",()=>{ if(!gameOver && !inIntro && !inLevelScreen)getFirst(cursor).y++ })
+onInput("a",()=>{ if(!gameOver && !inIntro && !inLevelScreen)getFirst(cursor).x-- })
+onInput("d",()=>{ if(!gameOver && !inIntro && !inLevelScreen)getFirst(cursor).x++ })
 
 onInput("j",()=>{
   if(gameOver){
     level=0
     score=0
     gameOver=false
-    startLevel()
+    inIntro=true
+    introScreen()
   }
 })
 
+let dirs = [[1,0],[-1,0],[0,1],[0,-1]]
+
 function moveViruses(){
-
-  if(gameOver) return
-
+  if(gameOver || inIntro || inLevelScreen) return
   getAll(virus).forEach(v=>{
-    let r=Math.floor(Math.random()*4)
-    if(r===0)v.x++
-    if(r===1)v.x--
-    if(r===2)v.y++
-    if(r===3)v.y--
+    let d = dirs[Math.floor(Math.random()*dirs.length)]
+    v.x += d[0]
+    v.y += d[1]
   })
-
 }
 
 setInterval(moveViruses,700)
 
 afterInput(()=>{
 
-  if(gameOver) return
+  if(gameOver || inIntro || inLevelScreen) return
 
   tilesWith(cursor,file).forEach(t=>{
     t[1].remove()
@@ -302,32 +361,21 @@ afterInput(()=>{
   })
 
   if(tilesWith(cursor,virus).length>0){
-
     gameOver=true
     clearText()
-
-    addText("GAME OVER",{x:4,y:5,color:color`3`})
+    addText("SYSTEM CRASH",{x:3,y:5,color:color`3`})
     addText("Press J",{x:5,y:7,color:color`3`})
-
   }
 
   if(getAll(file).length===0 && tilesWith(cursor,finder).length>0){
-
     level++
-
     if(level>=levels.length){
-
       clearText()
-      addText("YOU SAVED",{x:4,y:5,color:color`4`})
-      addText("THE MAC!",{x:4,y:7,color:color`4`})
+      addText("MAC SAVED",{x:4,y:5,color:color`4`})
       gameOver=true
-
     } else {
-
-      startLevel()
-
+      levelScreen()
     }
-
   }
 
 })
