@@ -12,6 +12,8 @@ const G = "g";
 const E = "e";
 const W = "w";
 const S = "s";
+const B = "b";
+const D = "d";
 
 setLegend(
   [G, bitmap`
@@ -81,10 +83,44 @@ setLegend(
 ..LLL....LLL....
 ................
 ................
-................`]
+................`],
+  [B, bitmap`
+................
+................
+....3333333.....
+...333333333....
+..333333333333..
+..333333333333..
+..333333333333..
+..333333333333..
+...333333333....
+....3333333.....
+.....33333......
+......333.......
+................
+................
+................
+................`],
+  [D, bitmap`
+5555555555555555
+5555555555555555
+5566666666666655
+5566666666666655
+5566500000566655
+5566500000566655
+5566500000566655
+556650LLLL566655
+556650LLLL566655
+5566500000566655
+5566566665566655
+5566566665566655
+5566666666666655
+5555555555555555
+5555555555555555
+5555555555555555`]
 );
 
-setSolids([W, G, S]);
+setSolids([W, G, S, B]);
 
 const levels = [
   map`
@@ -153,16 +189,86 @@ w.w.w.wwwwww.w.w
 w.w.w........w.w
 w.g.wwwwwwwwww.w
 wew..........s.w
+wwwwwwwwwwwwwwww`,
+
+  map`
+wwwwwwwwwwwwwwww
+wg.............w
+w.wwwwwwwwwwww.w
+w.w..........w.w
+w.w.wwwwwwww.w.w
+w.w.w......w.w.w
+w.w.w.wwww.w.w.w
+w.w.w.w..w.w.w.w
+w.w.w.w.ww.w.w.w
+w.w.w.w....w.w.w
+w.w.w.wwwwww.w.w
+w.w.w........w.w
+w.www.wwwwwwww.w
+wew....d.....sw.
+wwwwwwwwwwwwwwww`,
+
+  map`
+wwwwwwwwwwwwwwww
+w.............gw
+w.wwwwwwwwwwww.w
+w.w..........w.w
+w.w.wwwwwwww.w.w
+w.w.w......w.w.w
+w.w.w.wwww.w.w.w
+w.w.w.w..w.w.w.w
+w.w.w.w.ww.w.w.w
+w.w.w.w....w.w.w
+w.w.w.wwwwww.w.w
+w.w.w....s...w.w
+w.www.wwwwwwww.w
+wed..........s.w
+wwwwwwwwwwwwwwww`,
+
+  map`
+wwwwwwwwwwwwwwww
+w.............gw
+w.wwwwwwwwwwww.w
+w.w....s.....w.w
+w.w.wwwwwwww.w.w
+w.w.w......w.w.w
+w.w.w.wwww.w.w.w
+w.w.w.w..w.w.w.w
+w.w.w.w.ww.w.w.w
+w.w.w.w....w.w.w
+w.w.w.wwwwww.w.w
+w.w.w...s....w.w
+w.www.wwwwwwww.w
+wed..........s.w
+wwwwwwwwwwwwwwww`,
+
+  map`
+wwwwwwwwwwwwwwww
+w.............gw
+w.wwwwwwwwwwww.w
+w.w..........w.w
+w.w.wwwwwwww.w.w
+w.w.w......w.w.w
+w.w.w.wwww.w.w.w
+w.w.w.w..w.w.w.w
+w.w.w.w.ww.w.w.w
+w.w.w.w....w.w.w
+w.w.w.wwwwww.w.w
+w.w.w....b...w.w
+w.www.wwwwwwww.w
+wed...........w.
 wwwwwwwwwwwwwwww`
 ];
 
 let level = 0;
 let moveCount = 0;
 let dead = false;
+let bossFastToggle = false;
 
 function loadLevel(n) {
   moveCount = 0;
   dead = false;
+  bossFastToggle = false;
   setMap(levels[n]);
   updateHUD();
   startInterval();
@@ -175,18 +281,15 @@ function updateHUD() {
 }
 
 function isWall(x, y) {
-  return tilesWith(W, {x: x, y: y}).length > 0;
+  return tilesWith(W, { x, y }).length > 0;
 }
 
-function moveSkeleton() {
-  const skeleton = getFirst(S);
+function bfsMove(enemy, ignoreWalls, steps) {
   const ghost = getFirst(G);
-  if (!skeleton || !ghost) return;
+  if (!enemy || !ghost) return;
 
-  const sx = skeleton.x;
-  const sy = skeleton.y;
-  const gx = ghost.x;
-  const gy = ghost.y;
+  const sx = enemy.x, sy = enemy.y;
+  const gx = ghost.x, gy = ghost.y;
   if (sx === gx && sy === gy) return;
 
   const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
@@ -194,16 +297,15 @@ function moveSkeleton() {
   const prev = {};
   prev[sx + "," + sy] = null;
 
-  for (let qi = 0; qi < queue.length; qi++) {
-    const cx = queue[qi][0];
-    const cy = queue[qi][1];
+  for (let i = 0; i < queue.length; i++) {
+    const cx = queue[i][0], cy = queue[i][1];
     if (cx === gx && cy === gy) break;
-    for (let di = 0; di < 4; di++) {
-      const nx = cx + dirs[di][0];
-      const ny = cy + dirs[di][1];
+    for (let d = 0; d < 4; d++) {
+      const nx = cx + dirs[d][0];
+      const ny = cy + dirs[d][1];
       const key = nx + "," + ny;
       if (prev[key] !== undefined) continue;
-      if (isWall(nx, ny)) continue;
+      if (!ignoreWalls && isWall(nx, ny)) continue;
       prev[key] = [cx, cy];
       queue.push([nx, ny]);
     }
@@ -211,63 +313,69 @@ function moveSkeleton() {
 
   if (prev[gx + "," + gy] === undefined) return;
 
-  // Walk back from goal to skeleton, collecting the path
   const path = [];
   let cur = [gx, gy];
   while (cur !== null) {
     path.push(cur);
     cur = prev[cur[0] + "," + cur[1]];
   }
-  // path is [goal, ..., firstStepAfterSkeleton, skeletonPos]
-  // The next step for skeleton is path[path.length - 2]
-  if (path.length >= 2) {
-    const next = path[path.length - 2];
-    skeleton.x = next[0];
-    skeleton.y = next[1];
+
+  const target = path[Math.max(0, path.length - 1 - steps)];
+  if (target) {
+    enemy.x = target[0];
+    enemy.y = target[1];
   }
 }
 
-onInput("w", () => { if (!dead) { getFirst(G).y -= 1; moveCount++; updateHUD(); } });
-onInput("s", () => { if (!dead) { getFirst(G).y += 1; moveCount++; updateHUD(); } });
-onInput("a", () => { if (!dead) { getFirst(G).x -= 1; moveCount++; updateHUD(); } });
-onInput("d", () => { if (!dead) { getFirst(G).x += 1; moveCount++; updateHUD(); } });
+function moveEnemies() {
+  const enemies = getAll(S);
+  const bosses = getAll(B);
+  enemies.forEach(e => bfsMove(e, false, 1));
+  bossFastToggle = !bossFastToggle;
+  const bossSteps = bossFastToggle ? 3 : 2;
+  bosses.forEach(b => bfsMove(b, true, bossSteps));
+}
+
+function checkDeath() {
+  const g = getFirst(G);
+  if (!g) return;
+  const enemies = getAll(S).concat(getAll(B));
+  for (let i = 0; i < enemies.length; i++) {
+    const e = enemies[i];
+    if (e.x === g.x && e.y === g.y) {
+      dead = true;
+      clearText();
+      addText("CAUGHT!", { x: 3, y: 3, color: color`2` });
+      addText("press i", { x: 3, y: 4, color: color`L` });
+      return;
+    }
+  }
+}
+
+onInput("w", () => { if (!dead) { getFirst(G).y--; moveCount++; updateHUD(); checkDeath(); } });
+onInput("s", () => { if (!dead) { getFirst(G).y++; moveCount++; updateHUD(); checkDeath(); } });
+onInput("a", () => { if (!dead) { getFirst(G).x--; moveCount++; updateHUD(); checkDeath(); } });
+onInput("d", () => { if (!dead) { getFirst(G).x++; moveCount++; updateHUD(); checkDeath(); } });
 onInput("i", () => loadLevel(level));
 
-const speeds = [700, 500, 380, 280];
+const speeds = [700, 520, 400, 320, 260, 220, 180, 160];
 let intervalId = null;
 
 function startInterval() {
   if (intervalId) clearInterval(intervalId);
   intervalId = setInterval(() => {
     if (dead) return;
-    moveSkeleton();
-    const ghost = getFirst(G);
-    const skeleton = getFirst(S);
-    if (skeleton && ghost && ghost.x === skeleton.x && ghost.y === skeleton.y) {
-      dead = true;
-      clearText();
-      addText("CAUGHT!", { x: 3, y: 3, color: color`2` });
-      addText("press i", { x: 3, y: 4, color: color`L` });
-    }
-  }, speeds[level] || 280);
+    moveEnemies();
+    checkDeath();
+  }, speeds[level] || 160);
 }
 
 afterInput(() => {
   if (dead) return;
   const ghost = getFirst(G);
   const exit = getFirst(E);
-  const skeleton = getFirst(S);
-  if (!ghost) return;
-
-  if (skeleton && ghost.x === skeleton.x && ghost.y === skeleton.y) {
-    dead = true;
-    clearText();
-    addText("CAUGHT!", { x: 3, y: 3, color: color`2` });
-    addText("press i", { x: 3, y: 4, color: color`L` });
-    return;
-  }
-
-  if (exit && ghost.x === exit.x && ghost.y === exit.y) {
+  if (!ghost || !exit) return;
+  if (ghost.x === exit.x && ghost.y === exit.y) {
     dead = true;
     clearText();
     addText("ESCAPED!", { x: 2, y: 3, color: color`4` });
@@ -278,12 +386,12 @@ afterInput(() => {
         level = 0;
         dead = true;
         clearText();
-        addText("YOU WIN!", { x: 2, y: 3, color: color`4` });
-        addText("Aight thats it", { x: 2, y: 4, color: color`L` });
+        addText("YOU WIN!", { x: 3, y: 3, color: color`4` });
+        addText("Aight good job thats it", { x: 2, y: 4, color: color`4` });
       } else {
         loadLevel(level);
       }
-    }, 1200);
+    }, 250);
   }
 });
 
