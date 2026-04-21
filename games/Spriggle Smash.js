@@ -1,19 +1,24 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Spriggle Smash
 @author: Jacob Navaratne
-@tags: []
-@addedOn: 2026-02-23
+@description: A game where "Lil' Guy" gets lost in a maze!
 */
 
 const player = "p"
 const wall = "w"
 const goal = "a"
+const portal = "e"
+const background = "b"
+const level_complete = tune`
+164.83516483516485: C5/164.83516483516485 + C4-164.83516483516485,
+164.83516483516485: C5/164.83516483516485 + C4-164.83516483516485,
+164.83516483516485: G5/164.83516483516485 + C4-164.83516483516485,
+164.83516483516485: G5/164.83516483516485 + C4-164.83516483516485,
+164.83516483516485: C5/164.83516483516485 + C4-164.83516483516485,
+4450.549450549451`
 
 setLegend(
-  [ player, bitmap`
+  [player, bitmap`
 ................
 ................
 ....DDFDF4......
@@ -29,8 +34,8 @@ setLegend(
 ................
 ................
 ................
-................` ],
-  [ wall, bitmap`
+................`],
+  [wall, bitmap`
 LLLLLLLLLLLLLLL1
 L2121LLLL1LL2L1L
 L1LL11LL12LLL1LL
@@ -46,8 +51,8 @@ LLL1LL1L1LLL1LLL
 1LLLLLL1LL1LLLL1
 LLLL1LLLLLLL1LLL
 LLL2LLL1LL121LL1
-LL1LLLLLLL1L12LL` ],
-  [ goal, bitmap`
+LL1LLLLLLL1L12LL`],
+  [goal, bitmap`
 4DDDDDDDDDDDDDD4
 D44444444444444D
 D44DDDDDDDDDD44D
@@ -63,50 +68,72 @@ D4D44DDDDDD44D4D
 D4D4444444444D4D
 D44DDDDDDDDDD44D
 D44444444444444D
-4DDDDDDDDDDDDDD4`] 
+4DDDDDDDDDDDDDD4`],
+  [portal, bitmap`
+HHHHHHHHHHHHH8HH
+H8888888888H888H
+H8HHHHHHHHHH8H8H
+H8H888888888HH8H
+H8H8HHHHHHHH8H8H
+H8H8H888888H8H8H
+H8H8H8HHHH8H8H8H
+H8H8H8H88H8H8H8H
+H8H8H8H88H8H8H8H
+H8H8H8HHHH8H8H8H
+H8H8H8H8888H8H8H
+H8H8H8HHHHHH8H8H
+H8H88HH888888H8H
+H8HHH8HHHHHHHH8H
+H888H8888888888H
+HHHHHHHHHHHHHHHH`],
+  [background, bitmap`
+5555555555555555
+5222222222222227
+5222222222222227
+5222222222222227
+5222222222222227
+5222222222222227
+5222222222222227
+5222222222222227
+5222222222222227
+5222222222222227
+5222222222222227
+5222222222222227
+5222222222222227
+5222222222222227
+5222222222222227
+5777777777777777`]
 )
 
-// short success chime (tune editor format)
-const winTune = tune`
-t120
-c4-8 e4-8 g4-8 c5-4
+const startScreen = map`
+ewbbbbbbbbbbwe
+wbbbbbbbbbbbbw
+bbbbbbbbbbbbbb
+bbbbbbbbbbbbbb
+bbbbbbbbbbbbbb
+bbbbbbbbbbbbbb
+wbbbbbbbbbbbbw
+wwbbbabbbbwwbw
+wwweeweaawwwww
+wwwwwwaawwwwww
+wwwwwwwwwwwwww
 `
 
-let currentPlayback = null
+setSolids([wall, player])
+setBackground(background)
 
-let startTime = null        // timestamp in ms when run starts
-let timerHandle = null      // interval id so we can stop it
-
-let level = -1  // start at the start screen
-
-const startScreen = map`
-..............
-..............
-..............
-..............
-..............
-..............
-..............
-..............
-..............
-..............
-..............`
-
-setSolids([ wall , player ])
-
-/* ---------- levels (all maps must be rectangular) ---------- */
 const levels = [
-  /* level 0: 7 cols x 7 rows (rectangular) */
+  /* level 0 */
   map`
 .w.......
 ...www.w.
 ..w..w...
-..w...w..
+..wbb.w..
 ....wpw..
 .ww.www..
 ..w.wwa..`,
 
-  /* level 1: 11 cols x 11 rows (rectangular) */
+  /* level 1 */
   map`
 ......w..ww.p
 .ww..ww.ww..w
@@ -120,7 +147,7 @@ ww....w......
 ...w....w..ww
 ...aw...w...w`,
 
-  /* level 2: 18 cols x 16 rows (rectangular) */
+  /* level 2: */
   map`
 wwwwwwwwwwwwwwwwww
 w....w......w....w
@@ -139,7 +166,7 @@ w...w....w......aw
 www.w.ww.w.wwwwwww
 p...w....w........`,
 
-  /* level 3: 20 cols x 18 rows (rectangular) */
+  /* level 3 */
   map`
 wwwwwwwwwwwwwwwwwwww
 w..w....w....w....aw
@@ -158,135 +185,106 @@ w.w....w..w.w.....ww
 w.wwww.w.ww.w.wwwwww
 w......w....w.....ww
 w.wwwwwwwwww.wwww.ww
-p.................ww`
+p.................ww`,
+  
+  /* level 4 */
+  map`
+wwwwwwwwwa....w...bwwwww
+wwwwwwwwww..w...w..wwwww
+wwwwb..wwwwwwww..w..wwww
+wwb...........wwwbw..www
+ww..ww.ww.ww..wbwbww..ww
+wwp.w..w...w.ww.w.w...ww
+w..w...w.w......w...w...
+.....w.w.ww.ww..ww...w.w
+www.ww.w.....ww.w..w.w.w
+bw......w..w....w.ww.w..
+...w.ww..w.ww..w..w..ww.
+w..w..ww......ww.w...ww.
+b..ww....wwwwwww...w....
+ww.www.ww..ww.bww.w.ww..
+w......www.w..wbw.w..w..
+w.ww.w.w.w....w.w....ww.
+...w.w.w...ww...w..w....
+.w..ww.w..ww..w.w.ww...w
+bww...www.ww.w..w...ww..
+wbb.w.....wbw.....w.....`
 ]
 
-/* ---------- initial screen ---------- */
-setMap(startScreen)
-addText("Press J to start", { y: 6, color: color`3` })
-
-setPushables({
-  [ player ]: []
-})
-
-/* movement controls */
-onInput("s", () => {
-  getFirst(player).y += 1
-})
-
-onInput("w", () => {
-  getFirst(player).y -= 1
-})
-
-onInput("a", () => {
-  getFirst(player).x -= 1
-})
-
-onInput("d", () => {
-  getFirst(player).x += 1
-})
-
-/* --- New small state & helpers to prevent accidental immediate wins --- */
+let level = -1
 let isRunning = false
 let canWin = false
+let startTime = 0
+let timerHandle = null
+
+setMap(startScreen)
+addText("Press J to start", { y: 6, color: color`0` })
+
+setPushables({
+  [player]: [] })
+
+onInput("w", () => getFirst(player).y--)
+onInput("s", () => getFirst(player).y++)
+onInput("a", () => getFirst(player).x--)
+onInput("d", () => getFirst(player).x++)
 
 function startLevel(n) {
   level = n
   setMap(levels[level])
   isRunning = true
   canWin = false
-  // small delay so map load doesn't immediately trigger a win if player spawns on goal
-  setTimeout(() => {
-    canWin = true
-  }, 50)
+  setTimeout(() => canWin = true, 50)
 }
 
 function startTimer() {
   if (timerHandle) clearInterval(timerHandle)
   startTime = Date.now()
-  // update timer at top of screen; use a readable color (color`7`)
   timerHandle = setInterval(() => {
     const seconds = Math.floor((Date.now() - startTime) / 1000)
     clearText()
-    addText(`Time: ${seconds}s`, { y: 0, color: color`7` })
+    addText(`Time: ${seconds}s`, { y: 0, color: color`0` })
   }, 250)
 }
 
 function stopTimer() {
-  if (timerHandle) {
-    clearInterval(timerHandle)
-    timerHandle = null
-  }
+  clearInterval(timerHandle)
+  timerHandle = null
 }
 
-/* start / restart button */
 onInput("j", () => {
-  if (level === -1) {
-    // start the first level properly
-    startLevel(0)
-    startTimer()
-    clearText()
-  } else if (!isRunning && level === -1) {
-    // fallback (not strictly necessary)
-    startLevel(0)
-    startTimer()
-    clearText()
-  } else if (!isRunning && level !== -1) {
-    // if we are in a non-running state but not start screen, allow restart
+  if (!isRunning) {
     startLevel(0)
     startTimer()
     clearText()
   }
 })
 
-// these get run after every input
 afterInput(() => {
-  // only check wins while a level is actively running
   if (!isRunning) return
 
-  // check if player reached the goal
   const p = getFirst(player)
   const g = getFirst(goal)
-
-  // safety: if player or goal missing, do nothing (but keep timer running)
   if (!p || !g) return
 
-  // only allow winning if the small guard has been lifted
   if (canWin && p.x === g.x && p.y === g.y) {
     level++
 
-    const currentLevel = levels[level]
-
-    // when finishing all levels
-    if (currentLevel === undefined) {
-      // stop timer
+    if (levels[level] === undefined) {
       stopTimer()
-
       const elapsed = Math.floor((Date.now() - startTime) / 1000)
       clearText()
-      addText("Well done!", { y: 4, color: color`7` })
-      addText(`Your time: ${elapsed}s`, { y: 5, color: color`7` })
-      addText("Press J to restart", { y: 6, color: color`7` })
-
-      // reset state to start screen
+      addText("Well done!", { y: 4, color: color`0` })
+      addText(`Your time: ${elapsed}s`, { y: 5, color: color`0` })
+      addText("Press J to restart", { y: 6, color: color`0` })
       isRunning = false
       level = -1
       setMap(startScreen)
-    } else {
-      // load next level and reset the small win guard
-      setMap(currentLevel)
-      canWin = false
-      setTimeout(() => {
-        canWin = true
-      }, 50)
-      // stop any previous playback
-if (currentPlayback) {
-  currentPlayback.end()
-  currentPlayback = null
-}
-
-// play the win chime once
-currentPlayback = playTune(winTune, 1)
+      return
     }
+
+    setMap(levels[level])
+    canWin = false
+    setTimeout(() => canWin = true, 50)
+    playTune(level_complete)
   }
 })
