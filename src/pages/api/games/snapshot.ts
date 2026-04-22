@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro'
 import { getGame, getSession, makeSnapshot } from '../../../lib/game-saving/account'
 
-export const post: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
 	let gameId: string
 	try {
 		const body = await request.json()

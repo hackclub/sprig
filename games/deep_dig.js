@@ -3,6 +3,7 @@
 @author: Zeyad Bekhet
 @tags: ['puzzle', 'retro', 'logic']
 @addedOn: 2026-02-23
+@description: Dig deep through layers of dirt and rock in this retro puzzle game
 */
 
 const player = "p";

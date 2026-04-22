@@ -1,21 +1,21 @@
-import { Signal, useSignal, useSignalEffect } from "@preact/signals";
+import { type Signal, useSignal, useSignalEffect } from "@preact/signals";
 import {
 	codeMirror,
-	PersistenceState,
+	type PersistenceState,
 	errorLog,
 	editSessionLength,
 	themes,
 	theme,
 	switchTheme,
 	isNewSaveStrat,
-	screenRef, GithubState,
+	screenRef, type GithubState,
 } from "../lib/state";
 import type { RoomState, ThemeType } from "../lib/state";
 import Button from "./design-system/button";
 import Textarea from "./design-system/textarea";
 import SavePrompt from "./popups-etc/save-prompt";
 import styles from "./navbar.module.css";
-import { persist } from "../lib/game-saving/auth-helper";
+import { persist } from "../lib/game-saving/persist";
 import InlineInput from "./design-system/inline-input";
 import { throttle } from "throttle-debounce";
 import SharePopup from "./popups-etc/share-popup";

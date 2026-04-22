@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro'
 import { getGame } from '../../../lib/game-saving/account'
 import bcrypt from 'bcryptjs'
 
-export const post: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request }) => {
 	let roomId: string
 	let password: string
 	try {

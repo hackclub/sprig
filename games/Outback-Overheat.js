@@ -1,7 +1,7 @@
 /*
 @title: Outback Overheat
 @author: Chickenking9080
-@description:Outback Overheat is a fast-paced rally game designed for the Sprig console. Set against the harsh Australian landscape, you must navigate a never-ending stretch of gravel road while battling both the elements trying. to prevent your car from overheating by running through puddles and the local traffic of which is the truck drivers that are erratic all over the road.
+@description: Outback Overheat is a fast-paced rally game designed for the Sprig console. Set against the harsh Australian landscape, you must navigate a never-ending stretch of gravel road while battling both the elements trying. to prevent your car from overheating by running through puddles and the local traffic of which is the truck drivers that are erratic all over the road.
 @tags: ['racing', 'australian']
 @addedOn: 2026-03-17
 */
