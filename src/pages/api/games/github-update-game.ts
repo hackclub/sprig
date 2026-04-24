@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { updateDocument } from "../../../lib/game-saving/account";
 
-export const post: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request }) => {
 	try {
 		const body = await request.json();
 		const { gameId, githubPR, isPublished } = body;

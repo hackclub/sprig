@@ -1,9 +1,9 @@
 import { useState, useEffect } from "preact/hooks";
-import { GameMetadata } from "../../lib/game-saving/gallery";
-import Button from "../../components/design-system/button";
-import Input from "../../components/design-system/input";
+import type { GameMetadata } from "../lib/game-saving/gallery";
+import Button from "./design-system/button";
+import Input from "./design-system/input";
 import { IoCaretDown, IoSearch } from "react-icons/io5";
-import GalleryGame from "../../components/GalleryGame";
+import GalleryGame from "./GalleryGame";
 import "./gallery.css";
 
 enum SortOrder {

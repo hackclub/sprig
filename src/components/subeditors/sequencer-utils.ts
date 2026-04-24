@@ -1,4 +1,4 @@
-import { effect, Signal } from '@preact/signals'
+import { effect, type Signal } from '@preact/signals'
 import { type InstrumentType, tones, type Tune } from '../../../engine/src/api'
 import { playFrequency } from '../../../engine/src/web'
 import { lazy } from '../../lib/utils/lazy'

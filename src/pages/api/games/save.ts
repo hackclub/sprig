@@ -3,7 +3,7 @@ import { Timestamp } from 'firebase-admin/firestore'
 import { getGame, getSession, setDocument, updateDocument } from '../../../lib/game-saving/account'
 import { updateEmailListLastModifiedTime } from '../../../lib/game-saving/email'
 
-export const post: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
 	let code: string
 	let gameId: string
 	let tutorialName: string | undefined

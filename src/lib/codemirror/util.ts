@@ -2,7 +2,8 @@ import { foldable, foldEffect } from '@codemirror/language'
 import type { Text } from '@codemirror/state'
 import { EditorView, WidgetType } from '@codemirror/view'
 import type { SyntaxNodeRef, Tree } from '@lezer/common'
-import { ComponentType, h, render } from 'preact'
+import { h, render } from 'preact'
+import type { ComponentType } from 'preact'
 
 export function getTag(name: string, node: SyntaxNodeRef, syntax: Tree, doc: Text) {
 	if (node.name !== 'TaggedTemplateExpression') return
