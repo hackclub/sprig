@@ -2,7 +2,8 @@
 @title: Spriggle Smash
 @author: Jacob Navaratne
 @description: A game where "Lil' Guy" gets lost in a maze!
-@addedon: 2026-04-25
+@addedOn: 2026-04-25
+@tags: []
 */
 
 const player = "p"
