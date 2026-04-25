@@ -30,9 +30,6 @@ const c9 = "l"
 let colours = [w,b,r,y,g,o,c1,c2,c3,c4,c5,c6,c7,c8,c9]
 let current = 0
 
-// todo -
-// make the board more big
-
 // sound effects
 const placeTune = tune`
 185.1851851851852,
