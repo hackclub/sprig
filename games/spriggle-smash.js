@@ -187,7 +187,7 @@ w.wwww.w.ww.w.wwwwww
 w......w....w.....ww
 w.wwwwwwwwww.wwww.ww
 p.................ww`,
-  
+
   /* level 4 */
   map`
 wwwwwwwwwa....w...bwwwww
@@ -222,12 +222,29 @@ setMap(startScreen)
 addText("Press J to start", { y: 6, color: color`0` })
 
 setPushables({
-  [player]: [] })
+  [player]: []
+})
 
-onInput("w", () => getFirst(player).y--)
-onInput("s", () => getFirst(player).y++)
-onInput("a", () => getFirst(player).x--)
-onInput("d", () => getFirst(player).x++)
+onInput("w", () => {
+  const p = getFirst(player)
+  if (p) p.y--
+})
+
+onInput("s", () => {
+  const p = getFirst(player)
+  if (p) p.y++
+})
+
+onInput("a", () => {
+  const p = getFirst(player)
+  if (p) p.x--
+})
+
+onInput("d", () => {
+  const p = getFirst(player)
+  if (p) p.x++
+})
+
 
 function startLevel(n) {
   level = n
