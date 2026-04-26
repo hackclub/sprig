@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import {
+	getFullSession,
 	getGame,
-	getSession,
 	setDocument,
 	updateDocument,
 } from "../../../lib/game-saving/account";
@@ -47,7 +47,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 	const trackingDate = new Date().toDateString()
 
 	if (!game.unprotected) {
-		const session = await getSession(cookies);
+		const session = await getFullSession(cookies);
 		if (!session) return new Response("Unauthorized", { status: 401 });
 		if (session.user.id !== game.ownerId)
 			return new Response(`Can't edit a game you don't own`, {
@@ -58,7 +58,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
 		//await updateEmailListLastModifiedTime(session.user, new Date());
 	}
-	const session = await getSession(cookies);
+	const session = await getFullSession(cookies);
 	if (!session) return new Response("Unauthorized", { status: 401 });
 	if (session.user.id !== game.ownerId)
 		return new Response(`Can't edit a game you don't own`, {
