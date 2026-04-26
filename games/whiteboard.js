@@ -30,6 +30,9 @@ const c9 = "l"
 let colours = [w,b,r,y,g,o,c1,c2,c3,c4,c5,c6,c7,c8,c9]
 let current = 0
 
+// todo -
+// make the board more big
+
 // sound effects
 const placeTune = tune`
 185.1851851851852,
@@ -408,8 +411,8 @@ onInput("l", () => {
 
 onInput("w", () => getFirst(player).y = Math.max(0, getFirst(player).y - 1))
 onInput("a", () => getFirst(player).x = Math.max(0, getFirst(player).x - 1))
-onInput("s", () => getFirst(player).y = Math.min(15, getFirst(player).y + 1))
-onInput("d", () => getFirst(player).x = Math.min(15, getFirst(player).x + 1))
+onInput("s", () => getFirst(player).y = Math.min(19, getFirst(player).y + 1))
+onInput("d", () => getFirst(player).x = Math.min(19, getFirst(player).x + 1))
 
 onInput("i", () => {
   let p = getFirst(player)
