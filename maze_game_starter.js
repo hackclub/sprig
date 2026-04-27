@@ -17,7 +17,7 @@
     const rportal = "r";
     const bportal = "o";
     const fragile = "e";
-    const broken = "h";
+    const hole = "h";
     
     
 
@@ -193,7 +193,7 @@ DD....DD....DD..
 .11....11..1..1.
 .......1111..11.
 .....11.........` ],
-  [ broken, bitmap`
+  [ hole, bitmap`
 ................
 ................
 ................
@@ -347,6 +347,10 @@ onInput("s", () => {
     Onsteps()
 })
 
+onInput("j", () => {
+      level = level + 1;
+})
+
 afterInput(() => {
 
 })
@@ -390,7 +394,9 @@ setInterval(() => {
     }
 }, 500)
    
-
+let ishole = 0
+let holex = 0
+let holey = 0
 afterInput(() => {
     const goalsCovered = tilesWith(player, goal); // tiles that both contain the player and goal
     const keygrabbed = tilesWith(player, key); // checks if there are any tiles with the key and the player ontop
@@ -398,11 +404,21 @@ afterInput(() => {
     const onrportal = tilesWith(player, rportal) // checks if players on red portal
     const onbportal = tilesWith(player, bportal) // checks if players on blue portal
 
-    const brokenCovered = tilesWith(player, broken); // ADDED: tiles with players on broken tiles
+    const onfragile = tilesWith(player, fragile)
+    const onhole = tilesWith(player, hole)
 
-    const previousX = getFirst(player).x
-    const previousY = getFirst(player).y
+
+
     
+    if (ishole == 1){
+      addText("X Coordinate: "  , { y: 4, color: color`3` });
+      clearTile(holex,holey)
+      addSprite(holex, holey, hole)
+
+      
+    }
+
+    ishole = 0
 
     // if at least one goal is overlapping with a player, proceed to the next level
     if (goalsCovered.length >= 1) {
@@ -413,7 +429,9 @@ afterInput(() => {
         if (level < levels.length) {
             setMap(levels[level]);
         } else {
-            addText("you win!", { y: 4, color: color`7` });
+          clearText()  
+          addText("you win!", { y: 4, color: color`7` });
+            
         }
     }
 
@@ -441,17 +459,21 @@ afterInput(() => {
       pp.x = rp.x
       pp.y = rp.y
     }
-    
-  // check if the previous tile is a fragile one
-  const sprite = getTile(previousX, previousY)[0]; // an array of sprites on that tile
-    if (sprite.type === fragile) {
-      sprite.type = broken;
+    if (onfragile.length >= 1) {
+      ishole += 1
+      const pp = getFirst(player)
+
+
+      holex = pp.x
+      holey = pp.y
+
+
     }
 
-  // ADDED: check if the player is on top of a broken tile
-  if (brokenCovered.length >= 1) {
-    lose();
-  }
+    if (onhole.length >= 1) {
+      setMap(levels[level])
+    }
+  
 
       
 });
