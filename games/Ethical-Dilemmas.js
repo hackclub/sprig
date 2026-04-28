@@ -6,7 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @description: A simple game about simple dilemmas
 @author: Arik-Charset
 @tags: []
-@addedOn: 2025-00-00
+@addedOn: 2026-04-28
 */
 
 // Game states
