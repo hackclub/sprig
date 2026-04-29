@@ -1,6 +1,9 @@
 /*
 @title: The Floor Is Emotionally Unstable
 @description: The floor has feelings. Navigate its mood swings to reach the exit!
+@author: NellowTCS
+@tags: ["puzzle", "maze", "movement", "randomness", "multi-level"]
+@addedOn: 2026-04-25
 */
 
 const player = "p"
