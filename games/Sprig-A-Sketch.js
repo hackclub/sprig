@@ -6,7 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: ConstintCreations
 @description: Draw on your Sprig! There are 15 colors and 5 brush sizes to choose from.
 @tags: ['utility', 'sandbox']
-@addedOn: 2025-10-22
+@addedOn: 2025-04-30
 */
 
 const white = "w"
