@@ -2,10 +2,10 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: my dungeon escape game
-@author: Anycircle11139s (Darsh Shah)
-@tags: [escape]
-@addedOn: 2026-03-05
+@title: idek
+@author: 
+@tags: []
+@addedOn: 2025-00-00
 
 /*
   dungeon escape game
