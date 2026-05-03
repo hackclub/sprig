@@ -5,7 +5,8 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: My dungeon escape game
 @author: Darsh Shah (Anycircle11139s)
 @tags: [submission]
-@addedOn: 2026-03-05
+@addedOn: 2026-05-03
+@description: A cool dungeon escape game where you have to collect coins before exiting through a door. It has 2 levels and it has bout 5 minutes of playtime.
 
 /*
   dungeon escape game
