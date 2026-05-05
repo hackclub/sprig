@@ -10,7 +10,7 @@ Instructions:
 Hit "run" to execute the code and
 start the game (you can also press shift+enter).
 
-the objective is to escape by getting the key and avoid the enemie
+the objective is to escape by getting the key and avoid the enemies
 */
 
 const player = "p";
@@ -350,7 +350,8 @@ function startGame() {
   gameState = "playing";
   setMap(levels[level]);
   setBackground(ground);
-  setSolids([player, wall, door]);
+  // FIX: door removed from solids so the player can step onto it to trigger win/next-level
+  setSolids([wall]);
   showHUD();
 }
 
@@ -360,6 +361,7 @@ function moveEnemies() {
   if (enemyMoveCounter % moveFreq !== 0) return;
   const pl = getFirst(player);
   if (!pl) return;
+
   const enemies = getAll(enemy);
   for (let i = 0; i < enemies.length; i++) {
     const en = enemies[i];
@@ -373,10 +375,7 @@ function moveEnemies() {
       let canMove = true;
       for (let j = 0; j < targetTile.length; j++) {
         const t = targetTile[j].type;
-        if (t === wall || t === door || t === spikes) {
-          canMove = false;
-          break;
-        }
+        if (t === wall || t === door || t === spikes) { canMove = false; break; }
       }
       if (canMove) en.x = newX;
     } else if (dy !== 0) {
@@ -385,14 +384,12 @@ function moveEnemies() {
       let canMove = true;
       for (let j = 0; j < targetTile.length; j++) {
         const t = targetTile[j].type;
-        if (t === wall || t === door || t === spikes) {
-          canMove = false;
-          break;
-        }
+        if (t === wall || t === door || t === spikes) { canMove = false; break; }
       }
       if (canMove) en.y = newY;
     }
   }
+
   const fastEnemies = getAll(fastEnemy);
   for (let i = 0; i < fastEnemies.length; i++) {
     const en = fastEnemies[i];
@@ -406,10 +403,7 @@ function moveEnemies() {
       let canMove = true;
       for (let j = 0; j < targetTile.length; j++) {
         const t = targetTile[j].type;
-        if (t === wall || t === door || t === spikes) {
-          canMove = false;
-          break;
-        }
+        if (t === wall || t === door || t === spikes) { canMove = false; break; }
       }
       if (canMove) en.x = newX;
     } else if (dy !== 0) {
@@ -418,14 +412,12 @@ function moveEnemies() {
       let canMove = true;
       for (let j = 0; j < targetTile.length; j++) {
         const t = targetTile[j].type;
-        if (t === wall || t === door || t === spikes) {
-          canMove = false;
-          break;
-        }
+        if (t === wall || t === door || t === spikes) { canMove = false; break; }
       }
       if (canMove) en.y = newY;
     }
   }
+
   const bosses = getAll(boss);
   for (let i = 0; i < bosses.length; i++) {
     const en = bosses[i];
@@ -437,10 +429,7 @@ function moveEnemies() {
       let canMove = true;
       for (let j = 0; j < targetTile.length; j++) {
         const t = targetTile[j].type;
-        if (t === wall || t === door) {
-          canMove = false;
-          break;
-        }
+        if (t === wall || t === door) { canMove = false; break; }
       }
       if (canMove) en.x = newX;
     } else if (dy !== 0) {
@@ -449,10 +438,7 @@ function moveEnemies() {
       let canMove = true;
       for (let j = 0; j < targetTile.length; j++) {
         const t = targetTile[j].type;
-        if (t === wall || t === door) {
-          canMove = false;
-          break;
-        }
+        if (t === wall || t === door) { canMove = false; break; }
       }
       if (canMove) en.y = newY;
     }
@@ -477,14 +463,16 @@ function takeDamage() {
   }
 }
 
-setMap(map`
+const menuMap = map`
 wwwwwwwwww
 w........w
 w........w
 w........w
 w........w
 w........w
-wwwwwwwwww`);
+wwwwwwwwww`;
+
+setMap(menuMap);
 setBackground(ground);
 showMenu();
 
@@ -493,124 +481,156 @@ onInput("i", () => {
     startGame();
     return;
   }
-  if (gameState === "playing") getFirst(player).y -= 1;
+  if (gameState === "playing") {
+    const pl = getFirst(player);
+    if (!pl) return;
+    const newY = pl.y - 1;
+    const targetTile = getTile(pl.x, newY);
+    let blocked = false;
+    for (let j = 0; j < targetTile.length; j++) {
+      const t = targetTile[j].type;
+      if (t === wall) { blocked = true; break; }
+      // FIX: block door if player has no key
+      if (t === door && !hasKey) { blocked = true; playTune(tune`100: f4^100`); break; }
+    }
+    if (!blocked) pl.y = newY;
+  }
 });
 
 onInput("k", () => {
-  if (gameState === "playing") getFirst(player).y += 1;
+  if (gameState === "playing") {
+    const pl = getFirst(player);
+    if (!pl) return;
+    const newY = pl.y + 1;
+    const targetTile = getTile(pl.x, newY);
+    let blocked = false;
+    for (let j = 0; j < targetTile.length; j++) {
+      const t = targetTile[j].type;
+      if (t === wall) { blocked = true; break; }
+      if (t === door && !hasKey) { blocked = true; playTune(tune`100: f4^100`); break; }
+    }
+    if (!blocked) pl.y = newY;
+  }
 });
 
 onInput("j", () => {
-  if (gameState === "playing") getFirst(player).x -= 1;
+  if (gameState === "playing") {
+    const pl = getFirst(player);
+    if (!pl) return;
+    const newX = pl.x - 1;
+    const targetTile = getTile(newX, pl.y);
+    let blocked = false;
+    for (let j = 0; j < targetTile.length; j++) {
+      const t = targetTile[j].type;
+      if (t === wall) { blocked = true; break; }
+      if (t === door && !hasKey) { blocked = true; playTune(tune`100: f4^100`); break; }
+    }
+    if (!blocked) pl.x = newX;
+  }
 });
 
 onInput("l", () => {
   if (gameState === "gameover" || gameState === "win") {
     gameState = "menu";
+    setMap(menuMap);
+    setBackground(ground);
     showMenu();
-    setMap(map`
-wwwwwwwwww
-w........w
-w........w
-w........w
-w........w
-w........w
-wwwwwwwwww`);
     return;
   }
-  if (gameState === "playing") getFirst(player).x += 1;
+  if (gameState === "playing") {
+    const pl = getFirst(player);
+    if (!pl) return;
+    const newX = pl.x + 1;
+    const targetTile = getTile(newX, pl.y);
+    let blocked = false;
+    for (let j = 0; j < targetTile.length; j++) {
+      const t = targetTile[j].type;
+      if (t === wall) { blocked = true; break; }
+      if (t === door && !hasKey) { blocked = true; playTune(tune`100: f4^100`); break; }
+    }
+    if (!blocked) pl.x = newX;
+  }
 });
 
 afterInput(() => {
   if (gameState !== "playing") return;
   enemyMoveCounter = enemyMoveCounter + 1;
   moveEnemies();
-  showHUD();
+
   const pl = getFirst(player);
   if (!pl) return;
-  tilesWith(coin).forEach(tile => {
-    tile.forEach(sprite => {
-      if (sprite.type === coin && sprite.x === pl.x && sprite.y === pl.y) {
-        sprite.remove();
-        coins = coins + 1;
-        score = score + 10;
-        playTune(tune`100: c5^100`);
-      }
-    });
+
+  // Collect coins
+  getAll(coin).forEach(sprite => {
+    if (sprite.x === pl.x && sprite.y === pl.y) {
+      sprite.remove();
+      coins = coins + 1;
+      score = score + 10;
+      playTune(tune`100: c5^100`);
+    }
   });
-  tilesWith(keyItem).forEach(tile => {
-    tile.forEach(sprite => {
-      if (sprite.type === keyItem && sprite.x === pl.x && sprite.y === pl.y) {
-        sprite.remove();
-        hasKey = true;
-        score = score + 50;
-        playTune(tune`100: g5^100, 100: c6^100, 100: e6^100`);
-      }
-    });
+
+  // Collect key
+  getAll(keyItem).forEach(sprite => {
+    if (sprite.x === pl.x && sprite.y === pl.y) {
+      sprite.remove();
+      hasKey = true;
+      score = score + 50;
+      playTune(tune`100: g5^100, 100: c6^100, 100: e6^100`);
+    }
   });
-  tilesWith(potion).forEach(tile => {
-    tile.forEach(sprite => {
-      if (sprite.type === potion && sprite.x === pl.x && sprite.y === pl.y) {
-        sprite.remove();
-        health = Math.min(health + 1, maxHealth);
-        playTune(tune`100: e5^100, 100: g5^100`);
-      }
-    });
+
+  // Collect potion
+  getAll(potion).forEach(sprite => {
+    if (sprite.x === pl.x && sprite.y === pl.y) {
+      sprite.remove();
+      health = Math.min(health + 1, maxHealth);
+      playTune(tune`100: e5^100, 100: g5^100`);
+    }
   });
-  tilesWith(spikes).forEach(tile => {
-    tile.forEach(sprite => {
-      if (sprite.type === spikes && sprite.x === pl.x && sprite.y === pl.y) {
-        takeDamage();
-      }
-    });
+
+  // Spike damage
+  getAll(spikes).forEach(sprite => {
+    if (sprite.x === pl.x && sprite.y === pl.y) {
+      takeDamage();
+    }
   });
-  tilesWith(enemy).forEach(tile => {
-    tile.forEach(sprite => {
-      if (sprite.type === enemy && sprite.x === pl.x && sprite.y === pl.y) {
-        takeDamage();
-      }
-    });
+
+  // Enemy collision
+  getAll(enemy).forEach(sprite => {
+    if (sprite.x === pl.x && sprite.y === pl.y) takeDamage();
   });
-  tilesWith(fastEnemy).forEach(tile => {
-    tile.forEach(sprite => {
-      if (sprite.type === fastEnemy && sprite.x === pl.x && sprite.y === pl.y) {
-        takeDamage();
-      }
-    });
+  getAll(fastEnemy).forEach(sprite => {
+    if (sprite.x === pl.x && sprite.y === pl.y) takeDamage();
   });
-  tilesWith(boss).forEach(tile => {
-    tile.forEach(sprite => {
-      if (sprite.type === boss && sprite.x === pl.x && sprite.y === pl.y) {
-        takeDamage();
-      }
-    });
+  getAll(boss).forEach(sprite => {
+    if (sprite.x === pl.x && sprite.y === pl.y) takeDamage();
   });
-  tilesWith(door).forEach(tile => {
-    tile.forEach(sprite => {
-      if (sprite.type === door && sprite.x === pl.x && sprite.y === pl.y) {
-        if (hasKey) {
-          level = level + 1;
-          if (level < levels.length) {
-            hasKey = false;
-            score = score + 100;
-            enemyMoveCounter = 0;
-            setMap(levels[level]);
-            playTune(tune`200: c5^200, 200: e5^200, 200: g5^200, 200: c6^200`);
-          } else {
-            gameState = "win";
-            clearText();
-            addText("ESCAPED!", { x: 3, y: 5, color: color`6` });
-            addText("Coins:" + coins, { x: 3, y: 7, color: color`6` });
-            addText("You Win!", { x: 3, y: 8, color: color`5` });
-            addText("Press L", { x: 3, y: 10, color: color`5` });
-            addText("Restart", { x: 3, y: 11, color: color`5` });
-            playTune(tune`500: c5^500, 500: e5^500, 500: g5^500, 1000: c6^1000`);
-          }
-        } else {
-          playTune(tune`100: f4^100`);
-        }
+
+  // Door: player can only reach here if they have the key (movement blocked otherwise)
+  getAll(door).forEach(sprite => {
+    if (sprite.x === pl.x && sprite.y === pl.y && hasKey) {
+      level = level + 1;
+      if (level < levels.length) {
+        hasKey = false;
+        score = score + 100;
+        enemyMoveCounter = 0;
+        setMap(levels[level]);
+        setBackground(ground);
+        playTune(tune`200: c5^200, 200: e5^200, 200: g5^200, 200: c6^200`);
+      } else {
+        gameState = "win";
+        clearText();
+        addText("ESCAPED!", { x: 3, y: 5, color: color`6` });
+        addText("Coins:" + coins, { x: 3, y: 7, color: color`6` });
+        addText("You Win!", { x: 3, y: 8, color: color`5` });
+        addText("Press L", { x: 3, y: 10, color: color`5` });
+        addText("Restart", { x: 3, y: 11, color: color`5` });
+        playTune(tune`500: c5^500, 500: e5^500, 500: g5^500, 1000: c6^1000`);
       }
-    });
+    }
   });
+
   if (invincible > 0) invincible = invincible - 1;
+  showHUD();
 });
