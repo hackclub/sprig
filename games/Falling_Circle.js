@@ -1,6 +1,7 @@
 /*
 @title: Falling Circle
 @author: A
+@description: A rhythm game in which circles fall and you must score large combos.
 @tags: []
 @addedOn: 2026-02-11
 */
