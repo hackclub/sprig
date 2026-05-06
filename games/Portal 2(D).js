@@ -1,5 +1,6 @@
 /*
 @title: Portal 2(D)
+@description: A Portal Style Game Featuring 7 Fun Levels
 @author: NicTrix23
 @tags: []
 @addedOn: 2026-01-28
