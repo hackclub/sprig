@@ -3,6 +3,7 @@
 @author: Dreamxhava
 @description: Use any button jump
 @tags: ['game', 'runner', 'dash']
+@addedOn: 2025-05-09
 */
 
 const player = "p";
