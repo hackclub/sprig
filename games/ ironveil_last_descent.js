@@ -24,6 +24,7 @@ var CH = "x";
 var PT = "t";
 var SH = "r";
 var LR = "o";
+var SW = "y";
 
 setLegend(
 
@@ -349,6 +350,24 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000
+0000000000000000`],
+
+[SW, bitmap`
+0000000000000000
+0000000050000000
+0000000550000000
+0000005550000000
+0000055500000000
+0000555000000000
+0005550000000000
+0055500000000000
+0555000000000000
+0553333000000000
+0005533300000000
+0000055330000000
+0000005533000000
+0000000553000000
+0000000055000000
 0000000000000000`]
 
 );
@@ -370,6 +389,13 @@ var bossHP     = 5;
 var dialogStep = 0;
 var dialogData = null;
 var loreSeen   = 0;
+var kills      = 0;
+var killFlash  = 0;
+var combo      = 0;
+var comboTimer = 0;
+var hasSword   = false;
+var swordCD    = 0;
+var milestone  = 0;
 
 function cx(s) {
   var n = Math.floor((20 - s.length) / 2);
@@ -377,14 +403,16 @@ function cx(s) {
 }
 
 var menuMap = map`
-..........
-..........
-..........
-..........
-..........
-..........
-..........
-..........`;
+wwwwwwwwwwww
+wp.c..y....w
+w..........w
+w..........w
+w.w.wwww...w
+w.w.....c..w
+w.w........w
+w....c...k.w
+w.....e...dw
+wwwwwwwwwwww`;
 
 var loreScrolls = [
   ["Vault: sealed", "by Aldric III.", "None returned."],
@@ -401,7 +429,7 @@ var loreScrolls = [
 
 var dialogs = [
   null,
-  ["Kael:", "Barracks fell.", "Something did", "them all mad."],
+  ["Kael:", "Found a blade.", "This changes", "everything."],
   ["Kael:", "Spike traps.", "Someone reset", "Set recently."],
   ["Guard Captain:", "Turn back now.", "Crown chose", "a new master."],
   ["Kael:", "The air tastes", "wrong. Like", "burnt shadow."],
@@ -413,13 +441,13 @@ var dialogs = [
 ];
 
 var levelTitles = [
-  ["ACT I", "Entrance Hall"],
+  ["ACT I", "The Entrance"],
   ["ACT I", "The Barracks"],
-  ["ACT I", "Spike Maze"],
-  ["ACT I", "Antechamber"],
-  ["ACT II", "Poison Depths"],
-  ["ACT II", "The Crypts"],
-  ["ACT II", "Rune Labyrinth"],
+  ["ACT I", "Inner Maze"],
+  ["ACT I", "The Vault"],
+  ["ACT II", "Specter Halls"],
+  ["ACT II", "Revenant Crypt"],
+  ["ACT II", "Zombie Warren"],
   ["ACT II", "Warden Keep"],
   ["ACT III", "Obsidian Halls"],
   ["ACT III", "Final Stand"]
@@ -429,73 +457,61 @@ var levels = [
 
 map`
 wwwwwwwwwwww
-wp..c.....cw
-w..........w
-w.w.www.w.ww
-w.w.w.c.w..w
-w.w.w...w..w
-w.....c..k.w
-w..........w
-w.........dw
-wwwwwwwwwwww`,
-
-map`
-wwwwwwwwwwww
 wp.c.w.....w
 w....w..c..w
 w.e..w.....w
-wwww.w.w.w.w
-w....w.e...w
-w.c.....h.kw
-w..........w
-w.........dw
+wwww.wwww..w
+w....w.....w
+w.c..w.h.k.w
+w....w.sss.w
+w..e......dw
 wwwwwwwwwwww`,
 
 map`
 wwwwwwwwwwww
-wp.c.......w
+wp.c.y.....w
 w.wwwwwwww.w
-w.w.c.....ww
-w.w..sss..ww
-w.w.c.e...ww
+w.w.c......w
+w.w....e...w
+w.w.c......w
 w.wwwwwwww.w
-w..c.....k.w
-w.........dw
+w....c...k.w
+w.s.......dw
 wwwwwwwwwwww`,
 
 map`
 wwwwwwwwwwww
 wp..c......w
 w..........w
+w..y....r..w
+w..........w
 w....b.....w
 w..........w
-w..r....x..w
-w..........w
 w..c.....k.w
-w.........dw
+w....sss..dw
 wwwwwwwwwwww`,
 
 map`
 wwwwwwwwwwww
 wp.c..w....w
 w.....w.c..w
-w.a...w....w
+w.....w....w
 w.ww..ww.w.w
 w..w.f.w...w
 w..w...w.h.w
-w..c.a...k.w
-w.........dw
+w..c...a.k.w
+w.....e...dw
 wwwwwwwwwwww`,
 
 map`
 wwwwwwwwwwww
-wp.c.w.....w
+wp.c.w.y...w
 w.v..w..c..w
 w....wt....w
 wwww.w.....w
-w....w..v..w
+w....w.....w
 w.c.....t.kw
-w..h.......w
+w..h...v...w
 w.........dw
 wwwwwwwwwwww`,
 
@@ -503,36 +519,48 @@ map`
 wwwwwwwwwwww
 wp.c.w.c.h.w
 w.....w....w
-w..t..w.z..w
+w..t..w....w
 wwwwwz.wwwww
 w......t...w
-w.c.....z..w
-w........k.w
-w.........dw
+w.c..z.....w
+w..s..z..k.w
+w.z.......dw
 wwwwwwwwwwww`,
 
 map`
 wwwwwwwwwwww
-wpc.w....h.w
+wp.c.r...h.w
 w...w..c...w
-w.v.w.sss..w
-wwwww.sbks.w
+w.e.w......w
+wwwww.sbk..w
 w....w.sss.w
-w.c........w
+w.c.v......w
 w.......f..w
 w.........dw
 wwwwwwwwwwww`,
 
 map`
 wwwwwwwwwwww
-wp.c.r.c.h.w
-w..wwwwes.zw
+wp.c.y.c.h.w
+w..wwwwes..w
 w.z..ax.e..w
-w..........w
+w.e..a.....w
 wwwww..www.w
-w.f.ze...k.w
-w.ssa.sss..w
-w.........dw
+w.f.z....k.w
+w.ssa..ss..w
+w.s.......dw
+wwwwwwwwwwww`,
+
+map`
+wwwwwwwwwwww
+wp.c.r..y..w
+w..twweszf.w
+w..f.ssxe..w
+w.ea.a.....w
+wwwww..wwwww
+w.ef.bva.k.w
+w.ssas.ss..w
+w.e.......dw
 wwwwwwwwwwww`,
 
 map`
@@ -540,32 +568,27 @@ wwwwwwwwwwww
 wp.c.r..chww
 w..twweszf.w
 w..f.ssxea.w
-w..........w
+w.e..a.....w
 wwwww..wwwww
 wxef.bva.k.w
 w.ssassss..w
-w.........dw
+w.e.......dw
 wwwwwwwwwwww`
 
 ];
 
 function showMenu() {
   clearText();
-  var t = "IRONVEIL";
-  var s = "Last Descent";
-  var div = "- - - - -";
-  var a = "W: New Game";
-  var b = "IJKL: Move";
-  addText(t, { x: cx(t), y: 1, color: color`3` });
-  addText(s, { x: cx(s), y: 3, color: color`D` });
-  addText(div, { x: cx(div), y: 6, color: color`5` });
+  addText("IRONVEIL", { x: cx("IRONVEIL"), y: 1, color: color`3` });
+  addText("Last Descent", { x: cx("Last Descent"), y: 3, color: color`D` });
+  addText("- - - - - - -", { x: cx("- - - - - - -"), y: 5, color: color`1` });
   if (best > 0) {
-    var bs = "Best " + best;
-    addText(bs, { x: cx(bs), y: 8, color: color`5` });
+    var bs = "Best: " + best;
+    addText(bs, { x: cx(bs), y: 7, color: color`5` });
   }
-  addText(div, { x: cx(div), y: 10, color: color`5` });
-  addText(a, { x: cx(a), y: 12, color: color`6` });
-  addText(b, { x: cx(b), y: 14, color: color`7` });
+  addText("W - Start", { x: cx("W - Start"), y: 9, color: color`6` });
+  addText("WASD: Move", { x: cx("WASD: Move"), y: 11, color: color`7` });
+  addText("W+Sword: Attack", { x: cx("W+Sword: Attack"), y: 13, color: color`5` });
 }
 
 function showCard() {
@@ -573,10 +596,10 @@ function showCard() {
   var pair = levelTitles[level] || ["LEVEL", "" + (level + 1)];
   var act = pair[0];
   var sub = pair[1];
-  addText(act, { x: cx(act), y: 4, color: color`7` });
-  addText(sub, { x: cx(sub), y: 7, color: color`3` });
-  var pr = "- any key -";
-  addText(pr, { x: cx(pr), y: 12, color: color`6` });
+  addText(act, { x: cx(act), y: 3, color: color`7` });
+  addText(sub, { x: cx(sub), y: 6, color: color`3` });
+  addText("- - - - - - -", { x: cx("- - - - - - -"), y: 9, color: color`1` });
+  addText("any key", { x: cx("any key"), y: 11, color: color`6` });
 }
 
 function showDialog() {
@@ -604,35 +627,41 @@ function showLore(lines) {
 
 function showHUD() {
   clearText();
-  var hearts = "";
-  for (var i = 0; i < hp; i++) hearts += "H";
-  for (var i = hp; i < maxHp; i++) hearts += "-";
-  addText(hearts, { x: 0, y: 0, color: color`3` });
-  var gs = "G" + gold;
-  addText(gs, { x: cx(gs), y: 0, color: color`5` });
-  var ls = "L" + (level + 1);
-  addText(ls, { x: 19 - ls.length, y: 0, color: color`7` });
-  var row = "";
-  if (hasKey) row = "KEY";
-  if (shielded) row = row.length ? row + " SH" : "SH";
-  if (slowed > 0) row = row.length ? row + " SLW" : "SLW";
-  if (row.length) addText(row, { x: 0, y: 1, color: color`6` });
-  if (inv > 0) {
-    var iv = "INV";
-    addText(iv, { x: 19 - iv.length, y: 1, color: color`7` });
+  var hpBar = "";
+  for (var i = 0; i < hp; i++) hpBar += "<3";
+  for (var i = hp; i < maxHp; i++) hpBar += "..";
+  if (shielded) hpBar += "[S]";
+  addText(hpBar, { x: 0, y: 0, color: color`3` });
+  var ls = "L" + (level + 1) + " G" + gold;
+  addText(ls, { x: 20 - ls.length, y: 0, color: color`5` });
+  var row2 = "";
+  if (hasKey) row2 += "KEY ";
+  if (hasSword) row2 += (swordCD > 0 ? ">SW" : "SW "); 
+  if (slowed > 0) row2 += "SLW ";
+  if (inv > 0) row2 += "INV";
+  if (row2.length) addText(row2, { x: 0, y: 1, color: color`7` });
+  if (combo > 1) {
+    var cmb = "x" + combo + "!";
+    addText(cmb, { x: cx(cmb), y: 1, color: color`5` });
+  }
+  if (score > 0) {
+    var sc = "" + score;
+    addText(sc, { x: 20 - sc.length, y: 1, color: color`6` });
   }
 }
 
 function showGameOver() {
   clearText();
   var t = "KAEL FALLS";
-  addText(t, { x: cx(t), y: 2, color: color`3` });
+  addText(t, { x: cx(t), y: 1, color: color`3` });
   var lv = "Level " + (level + 1);
-  addText(lv, { x: cx(lv), y: 5, color: color`7` });
-  var g = "Gold  " + gold;
-  addText(g, { x: cx(g), y: 7, color: color`5` });
-  var sc = "Score " + score;
-  addText(sc, { x: cx(sc), y: 8, color: color`D` });
+  addText(lv, { x: cx(lv), y: 4, color: color`7` });
+  var g = "Gold   " + gold;
+  addText(g, { x: cx(g), y: 6, color: color`5` });
+  var sc = "Score  " + score;
+  addText(sc, { x: cx(sc), y: 7, color: color`D` });
+  var kl = "Kills  " + kills;
+  addText(kl, { x: cx(kl), y: 8, color: color`3` });
   if (score > best) {
     best = score;
     var nb = "NEW BEST!";
@@ -647,20 +676,22 @@ function showWin() {
   var t = "CROWN RETURNED";
   addText(t, { x: cx(t), y: 1, color: color`5` });
   var l1 = "Kael emerges.";
-  addText(l1, { x: cx(l1), y: 4, color: color`D` });
-  var l2 = "Ironveil lives";
-  addText(l2, { x: cx(l2), y: 6, color: color`D` });
-  var g = "Gold  " + gold;
-  addText(g, { x: cx(g), y: 9, color: color`5` });
-  var sc = "Score " + score;
-  addText(sc, { x: cx(sc), y: 10, color: color`D` });
+  addText(l1, { x: cx(l1), y: 3, color: color`D` });
+  var l2 = "Ironveil lives.";
+  addText(l2, { x: cx(l2), y: 4, color: color`D` });
+  var g = "Gold   " + gold;
+  addText(g, { x: cx(g), y: 7, color: color`5` });
+  var sc = "Score  " + score;
+  addText(sc, { x: cx(sc), y: 8, color: color`D` });
+  var kl = "Kills  " + kills;
+  addText(kl, { x: cx(kl), y: 9, color: color`3` });
   if (score > best) {
     best = score;
-    var lg = "LEGEND";
-    addText(lg, { x: cx(lg), y: 12, color: color`3` });
+    var lg = "LEGEND!";
+    addText(lg, { x: cx(lg), y: 11, color: color`3` });
   }
   var r = "W - menu";
-  addText(r, { x: cx(r), y: 14, color: color`7` });
+  addText(r, { x: cx(r), y: 13, color: color`7` });
 }
 
 function startGame() {
@@ -668,16 +699,18 @@ function startGame() {
   hp = 4; maxHp = 4; hasKey = false;
   shielded = false; slowed = 0;
   ticker = 0; inv = 0; portalCD = 0; bossHP = 5;
+  kills = 0; killFlash = 0; combo = 0; comboTimer = 0;
+  hasSword = false; swordCD = 0; milestone = 0;
   loadLevel();
 }
 
 function loadLevel() {
   hasKey = false; ticker = 0; inv = 0;
   portalCD = 0; bossHP = 5;
-  shielded = false; slowed = 0;
+  shielded = false; slowed = 0; swordCD = 0;
   setMap(levels[level]);
   setBackground(FL);
-  setSolids([WL]);
+  setSolids([WL, EX]);
   state = "card";
   showCard();
 }
@@ -695,8 +728,8 @@ function afterCard() {
 }
 
 function getFreq() {
-  var base = Math.max(1, 4 - Math.floor(level / 3));
-  return ticker >= 20 ? Math.max(1, base - 1) : base;
+  var base = Math.max(1, 3 - Math.floor(level / 4));
+  return ticker >= 15 ? Math.max(1, base - 1) : base;
 }
 
 function isSolid(x, y, avoidTypes) {
@@ -729,7 +762,6 @@ function stepTo(en, pl, avoidTypes) {
 }
 
 function moveEnemies() {
-  if (ticker % getFreq() !== 0) return;
   var pl = getFirst(P);
   if (!pl) return;
   var hazards = [SK, VN];
@@ -737,15 +769,18 @@ function moveEnemies() {
   var grunts = getAll(EN);
   for (var i = 0; i < grunts.length; i++) {
     var d = Math.abs(pl.x - grunts[i].x) + Math.abs(pl.y - grunts[i].y);
-    if (d <= 5) stepTo(grunts[i], pl, hazards);
+    if (d <= 6 && ticker % getFreq() === 0) {
+      stepTo(grunts[i], pl, hazards);
+      if (d <= 2) stepTo(grunts[i], pl, hazards);
+    }
   }
 
   var specters = getAll(SP);
   for (var i = 0; i < specters.length; i++) {
     var d = Math.abs(pl.x - specters[i].x) + Math.abs(pl.y - specters[i].y);
-    if (d <= 7) {
+    if (d <= 8) {
       stepTo(specters[i], pl, hazards);
-      if (ticker % Math.max(1, getFreq() - 1) === 0) stepTo(specters[i], pl, hazards);
+      stepTo(specters[i], pl, hazards);
     }
   }
 
@@ -754,7 +789,8 @@ function moveEnemies() {
 
   var zombies = getAll(ZM);
   for (var i = 0; i < zombies.length; i++) {
-    if (ticker % (getFreq() * 2) === 0) stepTo(zombies[i], pl, hazards);
+    var dz = Math.abs(pl.x - zombies[i].x) + Math.abs(pl.y - zombies[i].y);
+    if (ticker % (getFreq() * 2) === 0 || dz <= 2) stepTo(zombies[i], pl, hazards);
   }
 
   var bosses = getAll(BS);
@@ -806,6 +842,32 @@ function tryMove(pl, nx, ny) {
     var tp = t[i].type;
     if (tp === WL) return false;
     if (tp === EX && !hasKey) { playTune(tune`80: f4^60`); return false; }
+    if (tp === EN || tp === SP || tp === ZM || tp === RV) {
+      if (hasSword && swordCD === 0) {
+        t[i].remove();
+        kills++; score += 25;
+        swordCD = 2;
+        playTune(tune`50: c6^40, 50: g5^40`);
+        return true;
+      }
+      hurt(tp === RV);
+      return false;
+    }
+    if (tp === BS) {
+      if (hasSword && swordCD === 0) {
+        bossHP--;
+        swordCD = 2;
+        playTune(tune`80: a4^70, 80: f3^70`);
+        if (bossHP <= 0) {
+          t[i].remove();
+          kills++; score += 200;
+          playTune(tune`100: c6^80, 100: e6^80, 200: g6^150`);
+        }
+        return true;
+      }
+      hurt(false);
+      return false;
+    }
   }
   if (slowed > 0 && ticker % 2 === 1) { slowed--; return false; }
   pl.x = nx; pl.y = ny;
@@ -856,37 +918,49 @@ function advanceW() {
   }
 }
 
-onInput("w", function() { advanceW(); });
-
-onInput("i", function() {
+function moveUp() {
   if (state !== "playing") { advanceW(); return; }
-  var pl = getFirst(P);
-  if (pl) tryMove(pl, pl.x, pl.y - 1);
-});
-
-onInput("k", function() {
+  var pl = getFirst(P); if (pl) tryMove(pl, pl.x, pl.y - 1);
+}
+function moveDown() {
   if (state !== "playing") { advanceW(); return; }
-  var pl = getFirst(P);
-  if (pl) tryMove(pl, pl.x, pl.y + 1);
-});
-
-onInput("j", function() {
+  var pl = getFirst(P); if (pl) tryMove(pl, pl.x, pl.y + 1);
+}
+function moveLeft() {
   if (state !== "playing") { advanceW(); return; }
-  var pl = getFirst(P);
-  if (pl) tryMove(pl, pl.x - 1, pl.y);
-});
-
-onInput("l", function() {
+  var pl = getFirst(P); if (pl) tryMove(pl, pl.x - 1, pl.y);
+}
+function moveRight() {
   if (state !== "playing") { advanceW(); return; }
-  var pl = getFirst(P);
-  if (pl) tryMove(pl, pl.x + 1, pl.y);
-});
+  var pl = getFirst(P); if (pl) tryMove(pl, pl.x + 1, pl.y);
+}
 
+onInput("w", function() {
+  if (state === "playing") {
+    var pl = getFirst(P);
+    if (pl) tryMove(pl, pl.x, pl.y - 1);
+  } else {
+    advanceW();
+  }
+});
 onInput("s", function() {
-  if (state !== "playing") return;
-  var pl = getFirst(P);
-  if (pl) checkLore(pl);
+  if (state === "playing") {
+    var pl = getFirst(P);
+    if (pl) { if (!checkLore(pl)) tryMove(pl, pl.x, pl.y + 1); }
+  } else advanceW();
 });
+onInput("a", function() {
+  if (state !== "playing") { advanceW(); return; }
+  var pl = getFirst(P); if (pl) tryMove(pl, pl.x - 1, pl.y);
+});
+onInput("d", function() {
+  if (state !== "playing") { advanceW(); return; }
+  var pl = getFirst(P); if (pl) tryMove(pl, pl.x + 1, pl.y);
+});
+onInput("i", function() { moveUp(); });
+onInput("k", function() { moveDown(); });
+onInput("j", function() { moveLeft(); });
+onInput("l", function() { moveRight(); });
 
 afterInput(function() {
   if (state !== "playing") return;
@@ -902,7 +976,9 @@ afterInput(function() {
   var coins = getAll(CN);
   for (var i = 0; i < coins.length; i++) {
     if (coins[i].x === pl.x && coins[i].y === pl.y) {
-      coins[i].remove(); gold++; score += 10;
+      coins[i].remove(); gold++;
+      if (comboTimer > 0) { combo++; score += 10 * (1 + combo); } else { combo = 0; score += 10; }
+      comboTimer = 4;
       playTune(tune`60: c5^50`);
     }
   }
@@ -937,6 +1013,13 @@ afterInput(function() {
     if (shields[i].x === pl.x && shields[i].y === pl.y) {
       shields[i].remove(); shielded = true;
       playTune(tune`60: e6^50, 60: g6^60`);
+    }
+  }
+  var swords = getAll(SW);
+  for (var i = 0; i < swords.length; i++) {
+    if (swords[i].x === pl.x && swords[i].y === pl.y) {
+      swords[i].remove(); hasSword = true;
+      playTune(tune`60: c6^50, 80: e6^60, 80: g6^80`);
     }
   }
 
@@ -976,15 +1059,6 @@ afterInput(function() {
   var bsArr = getAll(BS);
   for (var i = 0; i < bsArr.length; i++) {
     if (bsArr[i].x === pl.x && bsArr[i].y === pl.y) {
-      if (inv === 0) {
-        bossHP--;
-        if (bossHP === 2) playTune(tune`100: a4^80, 100: f3^80`);
-        if (bossHP <= 0) {
-          bsArr[i].remove();
-          score += 200;
-          playTune(tune`100: c6^80, 100: e6^80, 200: g6^150`);
-        }
-      }
       hurt(false);
     }
   }
@@ -1010,5 +1084,8 @@ afterInput(function() {
 
   if (inv > 0) inv--;
   if (slowed > 0 && ticker % 2 === 0) slowed--;
+  if (comboTimer > 0) comboTimer--; else combo = 0;
+  if (killFlash > 0) killFlash--;
+  if (swordCD > 0) swordCD--;
   if (state === "playing") showHUD();
 });
