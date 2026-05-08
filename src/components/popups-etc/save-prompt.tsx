@@ -1,6 +1,6 @@
-import { Signal, useComputed, useSignal } from '@preact/signals'
-import { persist } from '../../lib/game-saving/auth-helper'
-import { isValidEmail } from '../../lib/game-saving/email'
+import { type Signal, useComputed, useSignal } from '@preact/signals'
+import { persist } from '../../lib/game-saving/persist'
+import { isValidEmail } from '../../lib/game-saving/account-types'
 import { usePopupCloseClick } from '../../lib/utils/popup-close-click'
 import type { PersistenceState } from '../../lib/state'
 import Button from '../design-system/button'
@@ -38,7 +38,7 @@ export default function SavePrompt(props: SavePromptProps) {
 				}}>
 					<p>Enter your email to save your work, we'll send you a link for later:</p>
 					<div class={popupStyles.inputRow}>
-						<Input onChange={() => undefined} value={email.value} type='email' autoComplete='email' placeholder='fiona@hackclub.com' bind={email} />
+						<Input type='email' autoComplete='email' placeholder='fiona@hackclub.com' bind={email} />
 						<Button accent type='submit' disabled={!emailValid.value}>
 							Save
 						</Button>

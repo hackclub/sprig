@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro'
-import {addDocument, deleteDocument, findDocument, getSession} from '../../../lib/game-saving/account'
+import {addDocument, deleteDocument, findDocument, getFullSession} from '../../../lib/game-saving/account'
 
-export const post: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
 	let filename: string
 	let action: "upvote" | "remove";
 	try {
@@ -15,7 +15,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		return new Response(typeof error === 'string' ? error : 'Bad request body', { status: 400 })
 	}
 
-	const session = await getSession(cookies)
+	const session = await getFullSession(cookies)
 	if (!session) return new Response('Unauthorized', { status: 401 })
 
 	const existingRecords = await findDocument('upvotes', [
