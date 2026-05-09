@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Jail break
 @description: Help Gary escape jail. 
-@author: goldfish
+@author: goldfish__revathi
 @tags: ['puzzle', 'maze', 'strategy', 'levels']
 @addedOn: 2026-05-09
 */
