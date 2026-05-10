@@ -1,5 +1,5 @@
 /*
-@title: Portal 2D
+@title: Portal2D
 @description: A Portal Style Game Featuring 7 Fun Levels
 @author: NicTrix23
 @tags: []
