@@ -24,7 +24,6 @@ var CH = "x";
 var PT = "t";
 var SH = "r";
 var LR = "o";
-var SW = "y";
 
 setLegend(
 
@@ -209,22 +208,22 @@ setLegend(
 1111111111111111`],
 
 [FL, bitmap`
-0000000000000000
-0110000000011000
-0110000000011000
-0000000000000000
-0000000000000000
-0000011000000110
-0000011000000110
-0000000000000000
-0000000000000000
-0110000000011000
-0110000000011000
-0000000000000000
-0000000000000000
-0000011000000110
-0000011000000110
-0000000000000000`],
+2222222222222222
+2112222222211222
+2112222222211222
+2222222222222222
+2222222222222222
+2222211222222112
+2222211222222112
+2222222222222222
+2222222222222222
+2112222222211222
+2112222222211222
+2222222222222222
+2222222222222222
+2222211222222112
+2222211222222112
+2222222222222222`],
 
 [SK, bitmap`
 0010100101000000
@@ -350,24 +349,6 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000`],
-
-[SW, bitmap`
-0000000000000000
-0000000050000000
-0000000550000000
-0000005550000000
-0000055500000000
-0000555000000000
-0005550000000000
-0055500000000000
-0555000000000000
-0553333000000000
-0005533300000000
-0000055330000000
-0000005533000000
-0000000553000000
-0000000055000000
 0000000000000000`]
 
 );
@@ -389,13 +370,6 @@ var bossHP     = 5;
 var dialogStep = 0;
 var dialogData = null;
 var loreSeen   = 0;
-var kills      = 0;
-var killFlash  = 0;
-var combo      = 0;
-var comboTimer = 0;
-var hasSword   = false;
-var swordCD    = 0;
-var milestone  = 0;
 
 function cx(s) {
   var n = Math.floor((20 - s.length) / 2);
@@ -427,7 +401,7 @@ var loreScrolls = [
 
 var dialogs = [
   null,
-  ["Kael:", "Found a blade.", "This changes", "everything."],
+  ["Kael:", "Barracks fell.", "Something did", "them all mad."],
   ["Kael:", "Spike traps.", "Someone reset", "Set recently."],
   ["Guard Captain:", "Turn back now.", "Crown chose", "a new master."],
   ["Kael:", "The air tastes", "wrong. Like", "burnt shadow."],
@@ -439,13 +413,13 @@ var dialogs = [
 ];
 
 var levelTitles = [
-  ["ACT I", "The Entrance"],
+  ["ACT I", "Entrance Hall"],
   ["ACT I", "The Barracks"],
-  ["ACT I", "Inner Maze"],
-  ["ACT I", "The Vault"],
-  ["ACT II", "Specter Halls"],
-  ["ACT II", "Revenant Crypt"],
-  ["ACT II", "Zombie Warren"],
+  ["ACT I", "Spike Maze"],
+  ["ACT I", "Antechamber"],
+  ["ACT II", "Poison Depths"],
+  ["ACT II", "The Crypts"],
+  ["ACT II", "Rune Labyrinth"],
   ["ACT II", "Warden Keep"],
   ["ACT III", "Obsidian Halls"],
   ["ACT III", "Final Stand"]
@@ -455,73 +429,73 @@ var levels = [
 
 map`
 wwwwwwwwwwww
-wp.c..y....w
+wp..c.....cw
 w..........w
+w.w.www.w.ww
+w.w.w.c.w..w
+w.w.w...w..w
+w.....c..k.w
 w..........w
-w.www......w
-w...w..c...w
-w...w......w
-w....c...k.w
+w.........dw
+wwwwwwwwwwww`,
+
+map`
+wwwwwwwwwwww
+wp.c.w.....w
+w....w..c..w
+w.e..w.....w
+wwww.w.w.w.w
+w....w.e...w
+w.c.....h.kw
+w..........w
 w.........dw
 wwwwwwwwwwww`,
 
 map`
 wwwwwwwwwwww
 wp.c.......w
-w..........w
-w.e..www...w
-w....w.....w
-w....w..c..w
-w....w..h..w
-w.c.....e.kw
-w..s.s....dw
-wwwwwwwwwwww`,
-
-map`
-wwwwwwwwwwww
-wp.c.......w
-w..........w
-w.wwww.....w
-w....w..e..w
-w.y..w.....w
-w....wwww..w
-w....c...k.w
-w..c......dw
+w.wwwwwwww.w
+w.w.c.....ww
+w.w..sss..ww
+w.w.c.e...ww
+w.wwwwwwww.w
+w..c.....k.w
+w.........dw
 wwwwwwwwwwww`,
 
 map`
 wwwwwwwwwwww
 wp..c......w
 w..........w
-w..y....r..w
-w..........w
 w....b.....w
 w..........w
-w..c.....k.w
-w....s.s..dw
-wwwwwwwwwwww`,
-
-map`
-wwwwwwwwwwww
-wp.c.......w
+w..r....x..w
 w..........w
-w...www....w
-w...w.f....w
-w.a.w......w
-w...wwww...w
-w..c...a.k.w
-w......e..dw
+w..c.....k.w
+w.........dw
 wwwwwwwwwwww`,
 
 map`
 wwwwwwwwwwww
-wp.c.......w
-w.v........w
-w....www...w
-w....w.....w
+wp.c..w....w
+w.....w.c..w
+w.a...w....w
+w.ww..ww.w.w
+w..w.f.w...w
+w..w...w.h.w
+w..c.a...k.w
+w.........dw
+wwwwwwwwwwww`,
+
+map`
+wwwwwwwwwwww
+wp.c.w.....w
+w.v..w..c..w
 w....wt....w
+wwww.w.....w
+w....w..v..w
 w.c.....t.kw
-w...h..v...w
+w..h.......w
 w.........dw
 wwwwwwwwwwww`,
 
@@ -529,76 +503,80 @@ map`
 wwwwwwwwwwww
 wp.c.w.c.h.w
 w.....w....w
-w..t..w....w
-w.....z....w
-w....wt....w
-w.c..z.....w
-w....z...k.w
-w.z...s...dw
-wwwwwwwwwwww`,
-
-map`
-wwwwwwwwwwww
-wp.c.r...h.w
-w..........w
-w.e.www....w
-w...w.sbk..w
-w...w.s.s..w
-w.c.v......w
-w......f...w
+w..t..w.z..w
+wwwwwz.wwwww
+w......t...w
+w.c.....z..w
+w........k.w
 w.........dw
 wwwwwwwwwwww`,
 
 map`
 wwwwwwwwwwww
-wp.c.y.c.h.w
-w..........w
-w.z.www.e..w
-w...w......w
-w...w.a....w
-w.f.wwww...w
-w....c...k.w
-w.s..a....dw
+wpc.w....h.w
+w...w..c...w
+w.v.w.sss..w
+wwwww.sbks.w
+w....w.sss.w
+w.c........w
+w.......f..w
+w.........dw
 wwwwwwwwwwww`,
 
 map`
 wwwwwwwwwwww
-wp.c.r..y..w
+wp.c.r.c.h.w
+w..wwwwes.zw
+w.z..ax.e..w
 w..........w
-w.f.www.e..w
-w...w......w
-w.e.w.bv...w
-w...wwww...w
-w.ef.c...k.w
-w.s..a....dw
+wwwww..www.w
+w.f.ze...k.w
+w.ssa.sss..w
+w.........dw
+wwwwwwwwwwww`,
+
+map`
+wwwwwwwwwwww
+wp.c.r..chww
+w..twweszf.w
+w..f.ssxea.w
+w..........w
+wwwww..wwwww
+wxef.bva.k.w
+w.ssassss..w
+w.........dw
 wwwwwwwwwwww`
 
 ];
 
 function showMenu() {
   clearText();
-  addText("IRONVEIL", { x: cx("IRONVEIL"), y: 1, color: color`3` });
-  addText("Last Descent", { x: cx("Last Descent"), y: 3, color: color`D` });
-  addText("- - - - - - -", { x: cx("- - - - - - -"), y: 5, color: color`1` });
+  var t = "IRONVEIL";
+  var s = "Last Descent";
+  var div = "- - - - -";
+  var a = "W: New Game";
+  var b = "IJKL: Move";
+  addText(t, { x: cx(t), y: 1, color: color`3` });
+  addText(s, { x: cx(s), y: 3, color: color`C` });
+  addText(div, { x: cx(div), y: 6, color: color`1` });
   if (best > 0) {
-    var bs = "Best: " + best;
-    addText(bs, { x: cx(bs), y: 7, color: color`5` });
+    var bs = "Best " + best;
+    addText(bs, { x: cx(bs), y: 8, color: color`5` });
   }
-  addText("Press any key", { x: cx("Press any key"), y: 9, color: color`6` });
-  addText("to start!", { x: cx("to start!"), y: 10, color: color`6` });
-  addText("WASD: Move", { x: cx("WASD: Move"), y: 12, color: color`7` });
-  addText("I: Attack/Move", { x: cx("I: Attack/Move"), y: 13, color: color`5` });
+  addText(div, { x: cx(div), y: 10, color: color`1` });
+  addText(a, { x: cx(a), y: 12, color: color`6` });
+  addText(b, { x: cx(b), y: 14, color: color`7` });
 }
 
 function showCard() {
   clearText();
-  var pair = levelTitles[level] || ["GENERATED", "Floor " + (level + 1)];
+  var pair = levelTitles[level] || ["LEVEL", "" + (level + 1)];
   var act = pair[0];
   var sub = pair[1];
-  addText(act, { x: cx(act), y: 3, color: color`7` });
-  addText(sub, { x: cx(sub), y: 6, color: color`3` });
-  addText("- - - - - - -", { x: cx("- - - - - - -"), y: 9, color: color`1` });
-  addText("any key", { x: cx("any key"), y: 11, color: color`6` });
+  addText(act, { x: cx(act), y: 4, color: color`7` });
+  addText(sub, { x: cx(sub), y: 7, color: color`3` });
+  var pr = "- any key -";
+  addText(pr, { x: cx(pr), y: 12, color: color`6` });
 }
 
 function showDialog() {
@@ -606,7 +584,7 @@ function showDialog() {
   var d = dialogData;
   if (!d) return;
   for (var i = 0; i < d.length; i++) {
-    var col = i === 0 ? color`5` : color`D`;
+    var col = i === 0 ? color`5` : color`C`;
     addText(d[i], { x: cx(d[i]), y: 3 + i * 3, color: col });
   }
   var pr = "W - continue";
@@ -618,7 +596,7 @@ function showLore(lines) {
   var hd = "~ Lore Scroll~";
   addText(hd, { x: cx(hd), y: 2, color: color`7` });
   for (var i = 0; i < lines.length; i++) {
-    addText(lines[i], { x: cx(lines[i]), y: 5 + i * 2, color: color`D` });
+    addText(lines[i], { x: cx(lines[i]), y: 5 + i * 2, color: color`C` });
   }
   var pr = "W - continue";
   addText(pr, { x: cx(pr), y: 13, color: color`6` });
@@ -626,41 +604,35 @@ function showLore(lines) {
 
 function showHUD() {
   clearText();
-  var hpBar = "";
-  for (var i = 0; i < hp; i++) hpBar += "<3";
-  for (var i = hp; i < maxHp; i++) hpBar += "..";
-  if (shielded) hpBar += "[S]";
-  addText(hpBar, { x: 0, y: 0, color: color`3` });
-  var ls = "L" + (level + 1) + " G" + gold;
-  addText(ls, { x: 20 - ls.length, y: 0, color: color`5` });
-  var row2 = "";
-  if (hasKey) row2 += "KEY ";
-  if (hasSword) row2 += (swordCD > 0 ? ">SW" : "SW "); 
-  if (slowed > 0) row2 += "SLW ";
-  if (inv > 0) row2 += "INV";
-  if (row2.length) addText(row2, { x: 0, y: 1, color: color`7` });
-  if (combo > 1) {
-    var cmb = "x" + combo + "!";
-    addText(cmb, { x: cx(cmb), y: 1, color: color`5` });
-  }
-  if (score > 0) {
-    var sc = "" + score;
-    addText(sc, { x: 20 - sc.length, y: 1, color: color`6` });
+  var hearts = "";
+  for (var i = 0; i < hp; i++) hearts += "H";
+  for (var i = hp; i < maxHp; i++) hearts += "-";
+  addText(hearts, { x: 0, y: 0, color: color`3` });
+  var gs = "G" + gold;
+  addText(gs, { x: cx(gs), y: 0, color: color`5` });
+  var ls = "L" + (level + 1);
+  addText(ls, { x: 19 - ls.length, y: 0, color: color`7` });
+  var row = "";
+  if (hasKey) row = "KEY";
+  if (shielded) row = row.length ? row + " SH" : "SH";
+  if (slowed > 0) row = row.length ? row + " SLW" : "SLW";
+  if (row.length) addText(row, { x: 0, y: 1, color: color`6` });
+  if (inv > 0) {
+    var iv = "INV";
+    addText(iv, { x: 19 - iv.length, y: 1, color: color`7` });
   }
 }
 
 function showGameOver() {
   clearText();
   var t = "KAEL FALLS";
-  addText(t, { x: cx(t), y: 1, color: color`3` });
+  addText(t, { x: cx(t), y: 2, color: color`3` });
   var lv = "Level " + (level + 1);
-  addText(lv, { x: cx(lv), y: 4, color: color`7` });
-  var g = "Gold   " + gold;
-  addText(g, { x: cx(g), y: 6, color: color`5` });
-  var sc = "Score  " + score;
-  addText(sc, { x: cx(sc), y: 7, color: color`D` });
-  var kl = "Kills  " + kills;
-  addText(kl, { x: cx(kl), y: 8, color: color`3` });
+  addText(lv, { x: cx(lv), y: 5, color: color`7` });
+  var g = "Gold  " + gold;
+  addText(g, { x: cx(g), y: 7, color: color`5` });
+  var sc = "Score " + score;
+  addText(sc, { x: cx(sc), y: 8, color: color`C` });
   if (score > best) {
     best = score;
     var nb = "NEW BEST!";
@@ -675,158 +647,20 @@ function showWin() {
   var t = "CROWN RETURNED";
   addText(t, { x: cx(t), y: 1, color: color`5` });
   var l1 = "Kael emerges.";
-  addText(l1, { x: cx(l1), y: 3, color: color`D` });
-  var l2 = "Ironveil lives.";
-  addText(l2, { x: cx(l2), y: 4, color: color`D` });
-  var g = "Gold   " + gold;
-  addText(g, { x: cx(g), y: 7, color: color`5` });
-  var sc = "Score  " + score;
-  addText(sc, { x: cx(sc), y: 8, color: color`D` });
-  var kl = "Kills  " + kills;
-  addText(kl, { x: cx(kl), y: 9, color: color`3` });
+  addText(l1, { x: cx(l1), y: 4, color: color`C` });
+  var l2 = "Ironveil lives";
+  addText(l2, { x: cx(l2), y: 6, color: color`C` });
+  var g = "Gold  " + gold;
+  addText(g, { x: cx(g), y: 9, color: color`5` });
+  var sc = "Score " + score;
+  addText(sc, { x: cx(sc), y: 10, color: color`C` });
   if (score > best) {
     best = score;
-    var lg = "LEGEND!";
-    addText(lg, { x: cx(lg), y: 11, color: color`3` });
+    var lg = "LEGEND";
+    addText(lg, { x: cx(lg), y: 12, color: color`3` });
   }
   var r = "W - menu";
-  addText(r, { x: cx(r), y: 13, color: color`7` });
-}
-
-
-function rng(n) {
-  ticker = (ticker * 1664525 + 1013904223) & 0x7fffffff;
-  return ((ticker >>> 0) % n);
-}
-
-function bfsCheck(grid, sr, sc, tr, tc) {
-  var W = grid[0].length;
-  var H = grid.length;
-  var visited = [];
-  var i;
-  for (i = 0; i < H * W; i++) visited.push(false);
-  var queue = [sr * W + sc];
-  visited[sr * W + sc] = true;
-  while (queue.length > 0) {
-    var cur = queue.shift();
-    var r = Math.floor(cur / W);
-    var c = cur % W;
-    if (r === tr && c === tc) return true;
-    var dirs = [[-1,0],[1,0],[0,-1],[0,1]];
-    for (i = 0; i < 4; i++) {
-      var nr = r + dirs[i][0];
-      var nc = c + dirs[i][1];
-      if (nr >= 0 && nr < H && nc >= 0 && nc < W) {
-        var idx = nr * W + nc;
-        if (!visited[idx] && grid[nr][nc] !== WL) {
-          visited[idx] = true;
-          queue.push(idx);
-        }
-      }
-    }
-  }
-  return false;
-}
-
-function generateMap(lvl) {
-  var W = 12; var H = 10;
-  var attempts = 0;
-  var grid, r, c, i;
-
-  while (attempts < 30) {
-    attempts++;
-    grid = [];
-    for (r = 0; r < H; r++) {
-      var row = [];
-      for (c = 0; c < W; c++) {
-        row.push((r === 0 || r === H-1 || c === 0 || c === W-1) ? WL : ".");
-      }
-      grid.push(row);
-    }
-
-    grid[1][1] = P;
-    var kr = 1 + rng(3);
-    var kc = 7 + rng(3);
-    var dr = 6 + rng(2);
-    var dc = 8 + rng(2);
-    grid[kr][kc] = KY;
-    grid[dr][dc] = EX;
-
-    var wallCount = 3 + rng(4);
-    for (i = 0; i < wallCount; i++) {
-      var wr = 2 + rng(H - 4);
-      var wc = 2 + rng(W - 4);
-      var wlen = 2 + rng(3);
-      var horiz = rng(2) === 0;
-      for (var wi = 0; wi < wlen; wi++) {
-        var tr2 = horiz ? wr : wr + wi;
-        var tc2 = horiz ? wc + wi : wc;
-        if (tr2 > 0 && tr2 < H-1 && tc2 > 0 && tc2 < W-1) {
-          if (grid[tr2][tc2] === ".") grid[tr2][tc2] = WL;
-        }
-      }
-    }
-
-    if (!bfsCheck(grid, 1, 1, kr, kc)) continue;
-    if (!bfsCheck(grid, kr, kc, dr, dc)) continue;
-
-    var diff = Math.min(lvl, 10);
-    var enemyTypes = [EN, EN, SP, ZM, RV];
-    var numEnemies = 1 + Math.floor(diff / 2);
-    var numSpikes = Math.floor(diff / 3);
-    var placed = 0;
-    var tries = 0;
-    while (placed < numEnemies && tries < 50) {
-      tries++;
-      var er = 2 + rng(H - 4);
-      var ec = 3 + rng(W - 5);
-      if (grid[er][ec] === ".") {
-        grid[er][ec] = enemyTypes[rng(Math.min(3 + Math.floor(diff/4), 5))];
-        placed++;
-      }
-    }
-    placed = 0; tries = 0;
-    while (placed < numSpikes && tries < 30) {
-      tries++;
-      var sr2 = 3 + rng(H - 5);
-      var sc2 = 2 + rng(W - 4);
-      if (grid[sr2][sc2] === ".") { grid[sr2][sc2] = SK; placed++; }
-    }
-
-    if (rng(3) === 0) {
-      for (tries = 0; tries < 20; tries++) {
-        var ir = 1 + rng(H - 3); var ic = 1 + rng(W - 3);
-        if (grid[ir][ic] === ".") { grid[ir][ic] = HP; break; }
-      }
-    }
-    if (diff >= 3 && rng(2) === 0) {
-      for (tries = 0; tries < 20; tries++) {
-        var ir = 1 + rng(H - 3); var ic = 1 + rng(W - 3);
-        if (grid[ir][ic] === ".") { grid[ir][ic] = SW; break; }
-      }
-    }
-
-    var coins = 2 + rng(3);
-    placed = 0; tries = 0;
-    while (placed < coins && tries < 40) {
-      tries++;
-      var cr = 1 + rng(H - 3); var cc = 1 + rng(W - 3);
-      if (grid[cr][cc] === ".") { grid[cr][cc] = CN; placed++; }
-    }
-
-    return grid;
-  }
-  return null;
-}
-
-function applyGeneratedMap(grid) {
-  if (!grid) return;
-  var rows = [];
-  for (var r = 0; r < grid.length; r++) {
-    rows.push(grid[r].join(""));
-  }
-  var mapStr = rows.join("\n");
-  setMap(map(mapStr));
+  addText(r, { x: cx(r), y: 14, color: color`7` });
 }
 
 function startGame() {
@@ -834,29 +668,16 @@ function startGame() {
   hp = 4; maxHp = 4; hasKey = false;
   shielded = false; slowed = 0;
   ticker = 0; inv = 0; portalCD = 0; bossHP = 5;
-  kills = 0; killFlash = 0; combo = 0; comboTimer = 0;
-  hasSword = false; swordCD = 0; milestone = 0;
   loadLevel();
 }
 
 function loadLevel() {
   hasKey = false; ticker = 0; inv = 0;
   portalCD = 0; bossHP = 5;
-  shielded = false; slowed = 0; swordCD = 0;
-  if (level < levels.length) {
-    setMap(levels[level]);
-  } else {
-    var gen = generateMap(level + 1);
-    if (gen) {
-      var rows = [];
-      for (var r = 0; r < gen.length; r++) rows.push(gen[r].join(""));
-      setMap(map(rows[0] + "\n" + rows[1] + "\n" + rows[2] + "\n" + rows[3] + "\n" + rows[4] + "\n" + rows[5] + "\n" + rows[6] + "\n" + rows[7] + "\n" + rows[8] + "\n" + rows[9]));
-    } else {
-      setMap(levels[level % levels.length]);
-    }
-  }
+  shielded = false; slowed = 0;
+  setMap(levels[level]);
   setBackground(FL);
-  setSolids([WL, EX]);
+  setSolids([WL]);
   state = "card";
   showCard();
 }
@@ -874,7 +695,8 @@ function afterCard() {
 }
 
 function getFreq() {
-  return Math.max(1, 2 - Math.floor(level / 5));
+  var base = Math.max(1, 4 - Math.floor(level / 3));
+  return ticker >= 20 ? Math.max(1, base - 1) : base;
 }
 
 function isSolid(x, y, avoidTypes) {
@@ -894,58 +716,45 @@ function isSolid(x, y, avoidTypes) {
 function stepTo(en, pl, avoidTypes) {
   var dx = pl.x - en.x;
   var dy = pl.y - en.y;
-  if (dx === 0 && dy === 0) return;
-  var ox = dx > 0 ? 1 : (dx < 0 ? -1 : 0);
-  var oy = dy > 0 ? 1 : (dy < 0 ? -1 : 0);
-  if (!isSolid(en.x + ox, en.y, avoidTypes) && ox !== 0) {
-    en.x += ox; return;
-  }
-  if (!isSolid(en.x, en.y + oy, avoidTypes) && oy !== 0) {
-    en.y += oy; return;
-  }
-  if (oy !== 0 && !isSolid(en.x + ox, en.y, avoidTypes)) {
-    en.x += ox; return;
-  }
-  if (ox !== 0 && !isSolid(en.x, en.y + oy, avoidTypes)) {
-    en.y += oy; return;
-  }
-  var sides = [1, -1];
-  for (var si = 0; si < 2; si++) {
-    if (!isSolid(en.x + sides[si], en.y, avoidTypes)) { en.x += sides[si]; return; }
-    if (!isSolid(en.x, en.y + sides[si], avoidTypes)) { en.y += sides[si]; return; }
+  var nx, ny;
+  if (Math.abs(dx) >= Math.abs(dy)) {
+    nx = en.x + (dx > 0 ? 1 : -1);
+    if (!isSolid(nx, en.y, avoidTypes)) { en.x = nx; return; }
+    if (dy !== 0) { ny = en.y + (dy > 0 ? 1 : -1); if (!isSolid(en.x, ny, avoidTypes)) en.y = ny; }
+  } else {
+    ny = en.y + (dy > 0 ? 1 : -1);
+    if (!isSolid(en.x, ny, avoidTypes)) { en.y = ny; return; }
+    if (dx !== 0) { nx = en.x + (dx > 0 ? 1 : -1); if (!isSolid(nx, en.y, avoidTypes)) en.x = nx; }
   }
 }
 
 function moveEnemies() {
+  if (ticker % getFreq() !== 0) return;
   var pl = getFirst(P);
   if (!pl) return;
   var hazards = [SK, VN];
-  var freq = getFreq();
 
   var grunts = getAll(EN);
   for (var i = 0; i < grunts.length; i++) {
     var d = Math.abs(pl.x - grunts[i].x) + Math.abs(pl.y - grunts[i].y);
-    if (d <= 4) { stepTo(grunts[i], pl, hazards); }
-    else if (d <= 8 && ticker % 2 === 0) { stepTo(grunts[i], pl, hazards); }
+    if (d <= 5) stepTo(grunts[i], pl, hazards);
   }
 
   var specters = getAll(SP);
   for (var i = 0; i < specters.length; i++) {
     var d = Math.abs(pl.x - specters[i].x) + Math.abs(pl.y - specters[i].y);
-    if (d <= 9) {
+    if (d <= 7) {
       stepTo(specters[i], pl, hazards);
-      if (ticker % freq === 0) stepTo(specters[i], pl, hazards);
+      if (ticker % Math.max(1, getFreq() - 1) === 0) stepTo(specters[i], pl, hazards);
     }
   }
 
   var revs = getAll(RV);
-  for (var i = 0; i < revs.length; i++) {
-    if (ticker % freq === 0) stepTo(revs[i], pl, []);
-  }
+  for (var i = 0; i < revs.length; i++) stepTo(revs[i], pl, []);
 
   var zombies = getAll(ZM);
   for (var i = 0; i < zombies.length; i++) {
-    if (ticker % (freq + 1) === 0) stepTo(zombies[i], pl, hazards);
+    if (ticker % (getFreq() * 2) === 0) stepTo(zombies[i], pl, hazards);
   }
 
   var bosses = getAll(BS);
@@ -1047,65 +856,36 @@ function advanceW() {
   }
 }
 
-function swordHitTile(tx, ty) {
-  var tile = getTile(tx, ty);
-  var hit = false;
-  for (var ti = tile.length - 1; ti >= 0; ti--) {
-    var tp = tile[ti].type;
-    if (tp === EN || tp === SP || tp === ZM || tp === RV) {
-      tile[ti].remove(); kills++; score += 25; hit = true;
-    } else if (tp === BS) {
-      bossHP--;
-      if (bossHP <= 0) { tile[ti].remove(); kills++; score += 200; }
-      hit = true;
-    }
-  }
-  return hit;
-}
-function doSwordAttack(pl) {
-  if (!hasSword || swordCD > 0) return false;
-  swordCD = 1;
-  var hit = false;
-  if (swordHitTile(pl.x, pl.y - 1)) hit = true;
-  if (swordHitTile(pl.x, pl.y + 1)) hit = true;
-  if (swordHitTile(pl.x - 1, pl.y)) hit = true;
-  if (swordHitTile(pl.x + 1, pl.y)) hit = true;
-  playTune(hit ? tune`50: c6^40, 50: g5^40` : tune`50: f4^40`);
-  return true;
-}
-
 onInput("w", function() { advanceW(); });
 
 onInput("i", function() {
   if (state !== "playing") { advanceW(); return; }
   var pl = getFirst(P);
-  if (!pl) return;
-  if (!doSwordAttack(pl)) tryMove(pl, pl.x, pl.y - 1);
+  if (pl) tryMove(pl, pl.x, pl.y - 1);
 });
+
 onInput("k", function() {
   if (state !== "playing") { advanceW(); return; }
-  var pl = getFirst(P); if (pl) tryMove(pl, pl.x, pl.y + 1);
+  var pl = getFirst(P);
+  if (pl) tryMove(pl, pl.x, pl.y + 1);
 });
+
 onInput("j", function() {
   if (state !== "playing") { advanceW(); return; }
-  var pl = getFirst(P); if (pl) tryMove(pl, pl.x - 1, pl.y);
+  var pl = getFirst(P);
+  if (pl) tryMove(pl, pl.x - 1, pl.y);
 });
+
 onInput("l", function() {
   if (state !== "playing") { advanceW(); return; }
-  var pl = getFirst(P); if (pl) tryMove(pl, pl.x + 1, pl.y);
-});
-onInput("a", function() {
-  if (state !== "playing") { advanceW(); return; }
-  var pl = getFirst(P); if (pl) tryMove(pl, pl.x - 1, pl.y);
-});
-onInput("d", function() {
-  if (state !== "playing") { advanceW(); return; }
-  var pl = getFirst(P); if (pl) tryMove(pl, pl.x + 1, pl.y);
-});
-onInput("s", function() {
-  if (state !== "playing") { advanceW(); return; }
   var pl = getFirst(P);
-  if (pl) { if (!checkLore(pl)) tryMove(pl, pl.x, pl.y + 1); }
+  if (pl) tryMove(pl, pl.x + 1, pl.y);
+});
+
+onInput("s", function() {
+  if (state !== "playing") return;
+  var pl = getFirst(P);
+  if (pl) checkLore(pl);
 });
 
 afterInput(function() {
@@ -1122,9 +902,7 @@ afterInput(function() {
   var coins = getAll(CN);
   for (var i = 0; i < coins.length; i++) {
     if (coins[i].x === pl.x && coins[i].y === pl.y) {
-      coins[i].remove(); gold++;
-      if (comboTimer > 0) { combo++; score += 10 * (1 + combo); } else { combo = 0; score += 10; }
-      comboTimer = 4;
+      coins[i].remove(); gold++; score += 10;
       playTune(tune`60: c5^50`);
     }
   }
@@ -1159,13 +937,6 @@ afterInput(function() {
     if (shields[i].x === pl.x && shields[i].y === pl.y) {
       shields[i].remove(); shielded = true;
       playTune(tune`60: e6^50, 60: g6^60`);
-    }
-  }
-  var swords = getAll(SW);
-  for (var i = 0; i < swords.length; i++) {
-    if (swords[i].x === pl.x && swords[i].y === pl.y) {
-      swords[i].remove(); hasSword = true;
-      playTune(tune`60: c6^50, 80: e6^60, 80: g6^80`);
     }
   }
 
@@ -1205,6 +976,15 @@ afterInput(function() {
   var bsArr = getAll(BS);
   for (var i = 0; i < bsArr.length; i++) {
     if (bsArr[i].x === pl.x && bsArr[i].y === pl.y) {
+      if (inv === 0) {
+        bossHP--;
+        if (bossHP === 2) playTune(tune`100: a4^80, 100: f3^80`);
+        if (bossHP <= 0) {
+          bsArr[i].remove();
+          score += 200;
+          playTune(tune`100: c6^80, 100: e6^80, 200: g6^150`);
+        }
+      }
       hurt(false);
     }
   }
@@ -1220,14 +1000,9 @@ afterInput(function() {
         playTune(tune`150: c5^120, 150: e5^120, 150: g5^120, 200: c6^180`);
         loadLevel();
       } else {
-        if (level <= levels.length) {
-          state = "win";
-          showWin();
-          playTune(tune`200: c5^180, 200: e5^180, 200: g5^180, 200: c6^180, 200: e6^180, 400: g6^350`);
-        } else {
-          playTune(tune`150: c5^120, 150: e5^120, 150: g5^120, 200: c6^180`);
-          loadLevel();
-        }
+        state = "win";
+        showWin();
+        playTune(tune`200: c5^180, 200: e5^180, 200: g5^180, 200: c6^180, 200: e6^180, 400: g6^350`);
       }
       return;
     }
@@ -1235,8 +1010,5 @@ afterInput(function() {
 
   if (inv > 0) inv--;
   if (slowed > 0 && ticker % 2 === 0) slowed--;
-  if (comboTimer > 0) comboTimer--; else combo = 0;
-  if (killFlash > 0) killFlash--;
-  if (swordCD > 0) swordCD--;
   if (state === "playing") showHUD();
 });
