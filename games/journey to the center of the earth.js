@@ -2,24 +2,22 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Journey to the Centre of the Earth
+@title: Journey_to_the_Centre_of_the_Earth
 @author: HorseMagic
 @tags: ['platformer']
-@addedOn: 2025-01-17
-@description: A platformer game based on the book called Journey to the Centre of the Earth. as a rat navigating through various obstacles. Jump and crouch to avoid stalagmites, stalagtights, lava, bats, and geysers, and try to reach the doors. Get the golden trophy, then complete the extra challenge!
+@addedOn: 2025-12-8
+@description: A platformer game based on the book called Journey to the Centre of the Earth. Jump and crouch to avoid stalagmites, stalagtights, lava, bats, and geysers, and try to reach the doors. Get the golden trophy.
 */
 
 const player = "p"
 const enemy = "e"
 const lava = "q"
-const crates = "c"
 const ground = "g"
 const dirt = "d"
 const sky = "s"
 const cloud = "a"
 const playerCrouch = "w"
 const rock = "m"
-const caveCrystal = "x"
 const cheese = "h"
 const caveSky = "i"
 const door = "o"
@@ -31,68 +29,21 @@ const batUp = "u"
 const geyser = "y"
 const water = "f"
 
+
+
 let crouching = false;
 let jumping = false;
 let canRestart = false;
 let musicPlaying = true;
+let music = 1;
 let deathCount = 0;
 let batDirect = 1;
 let batX = 1
 let batY = 1
 let waterY = 1
+let batData = new Map();
 
-const jump = tune`
-64.51612903225806: F4^64.51612903225806,
-64.51612903225806: B4^64.51612903225806,
-1935.483870967742`
-const fail = tune `
-125: G4^125,
-125: E4^125,
-125: C4^125,
-3625`
-const bgm = tune `
-333.3333333333333: A4~333.3333333333333 + C5-333.3333333333333 + E4^333.3333333333333,
-333.3333333333333: G5~333.3333333333333 + B5-333.3333333333333,
-333.3333333333333: D4^333.3333333333333,
-333.3333333333333: E5~333.3333333333333 + G5-333.3333333333333 + D4^333.3333333333333,
-333.3333333333333,
-333.3333333333333: C5~333.3333333333333 + E5-333.3333333333333 + E4^333.3333333333333,
-333.3333333333333,
-333.3333333333333: D4^333.3333333333333,
-333.3333333333333: G5~333.3333333333333 + B5-333.3333333333333 + D4^333.3333333333333,
-333.3333333333333,
-333.3333333333333: D5~333.3333333333333 + F5-333.3333333333333 + E4^333.3333333333333,
-333.3333333333333: F5~333.3333333333333 + A5-333.3333333333333,
-333.3333333333333: E5~333.3333333333333 + G5-333.3333333333333 + D4^333.3333333333333,
-333.3333333333333: D4^333.3333333333333,
-333.3333333333333: D5~333.3333333333333 + F5-333.3333333333333,
-333.3333333333333: E4^333.3333333333333,
-333.3333333333333: B4~333.3333333333333 + D5-333.3333333333333,
-333.3333333333333: C5~333.3333333333333 + E5-333.3333333333333 + D4^333.3333333333333,
-333.3333333333333: D4^333.3333333333333,
-333.3333333333333: C5~333.3333333333333 + E5-333.3333333333333,
-333.3333333333333: E4^333.3333333333333,
-333.3333333333333: E5~333.3333333333333 + G5-333.3333333333333,
-333.3333333333333: D4^333.3333333333333,
-333.3333333333333: C5~333.3333333333333 + E5-333.3333333333333 + D4^333.3333333333333,
-333.3333333333333: B4~333.3333333333333 + D5-333.3333333333333,
-333.3333333333333: B4~333.3333333333333 + D5-333.3333333333333 + E4^333.3333333333333,
-333.3333333333333,
-333.3333333333333: C5~333.3333333333333 + E5-333.3333333333333 + D4^333.3333333333333,
-333.3333333333333: D4^333.3333333333333,
-333.3333333333333: D5~333.3333333333333 + F5-333.3333333333333,
-333.3333333333333: E4^333.3333333333333,
-333.3333333333333: C5~333.3333333333333 + E5-333.3333333333333`
-const win = tune `
-125,
-125: C5~125,
-125: F4~125,
-125: B4~125,
-125: D5~125,
-125: B4~125,
-125: D5~125,
-125: G5~125,
-3000`
+
 
 setLegend(
   [player, bitmap`
@@ -180,23 +131,6 @@ setLegend(
 9999399999999939
 9999999399999999
 9999999999999999`],
-  [crates, bitmap`
-CCCCCCCCCCCCCCCC
-CC9999CCCC9999CC
-C9C99C9CC9C99C9C
-C99CC99CC99CC99C
-C99CC99CC99CC99C
-C9C99C9CC9C99C9C
-CC9999CCCC9999CC
-CCCCCCCCCCCCCCCC
-CCCCCCCCCCCCCCCC
-CC9999CCCC9999CC
-C9C99C9CC9C99C9C
-C99CC99CC99CC99C
-C99CC99CC99CC99C
-C9C99C9CC9C99C9C
-CC9999CCCC9999CC
-CCCCCCCCCCCCCCCC`],
   [ground, bitmap`
 4444444444444444
 4444444444444444
@@ -282,23 +216,6 @@ CCCCCCCCCCCCCCCC`],
 11111L1111111111
 1111111111111111
 1111111111111111`],
-  [caveCrystal, bitmap`
-LLLLLL000LLLLLLL
-LLLLL00700LLLLLL
-LLLL0077700LLLLL
-LLLL0527270LLLLL
-L00005272700000L
-L05505272700220L
-L05555272707220L
-L05255272777770L
-L05775272777770L
-L05775272777700L
-L0557527277770LL
-L0055577277700LL
-LL00555557700LLL
-LLL001111100LLLL
-LLLLL11111LLLLLL
-LLLLLLLLLLLLLLLL`],
   [caveSky, bitmap`
 LLLLLLLLLLLLLLLL
 LLLLLLLLLLLLLLLL
@@ -452,22 +369,101 @@ CCCCCCCCCCCCCCCC`],
 .......57.......
 .......575......
 .......575......`],
+  
 )
 
-setSolids([player, playerCrouch, dirt, ground, crates, rock, ladder, cradder, geyser])
-let playback = playTune(bgm, Infinity)
+setSolids([player, playerCrouch, dirt, ground, rock, ladder, cradder, geyser])
+const jump = tune`
+220.58823529411765: F4^220.58823529411765,
+6838.235294117647`
+const fail = tune `
+125: G4/125,
+125: A4/125,
+125: E4/125,
+125,
+125: C4/125,
+125: C4/125,
+125: C4/125,
+125: C4/125,
+3000`
+const bgm = tune `
+405.4054054054054: E4~405.4054054054054 + E5^405.4054054054054,
+405.4054054054054: F4^405.4054054054054,
+405.4054054054054: A4~405.4054054054054 + G5^405.4054054054054,
+405.4054054054054: G4^405.4054054054054 + A5~405.4054054054054,
+405.4054054054054: D5~405.4054054054054 + C4~405.4054054054054,
+405.4054054054054: A4^405.4054054054054 + E5^405.4054054054054,
+405.4054054054054: A4~405.4054054054054 + F5^405.4054054054054,
+405.4054054054054: B4^405.4054054054054,
+405.4054054054054: E4~405.4054054054054,
+405.4054054054054: F4^405.4054054054054 + E5^405.4054054054054,
+405.4054054054054: A4~405.4054054054054 + G5^405.4054054054054,
+405.4054054054054: G4^405.4054054054054 + A5~405.4054054054054,
+405.4054054054054: D5~405.4054054054054 + C4~405.4054054054054,
+405.4054054054054: A4^405.4054054054054,
+405.4054054054054: A4~405.4054054054054 + E5^405.4054054054054,
+405.4054054054054: B4^405.4054054054054 + F5^405.4054054054054,
+405.4054054054054: E4~405.4054054054054,
+405.4054054054054: F4^405.4054054054054,
+405.4054054054054: A4~405.4054054054054 + E5^405.4054054054054,
+405.4054054054054: G4^405.4054054054054 + G5^405.4054054054054,
+405.4054054054054: D5~405.4054054054054 + C4~405.4054054054054 + A5~405.4054054054054,
+405.4054054054054: A4^405.4054054054054,
+405.4054054054054: A4~405.4054054054054,
+405.4054054054054: B4^405.4054054054054 + E5^405.4054054054054,
+405.4054054054054: E4~405.4054054054054 + F5^405.4054054054054,
+405.4054054054054: F4^405.4054054054054,
+405.4054054054054: A4~405.4054054054054,
+405.4054054054054: G4^405.4054054054054 + E5^405.4054054054054,
+405.4054054054054: D5~405.4054054054054 + C4~405.4054054054054 + G5^405.4054054054054,
+405.4054054054054: A4^405.4054054054054 + A5~405.4054054054054,
+405.4054054054054: A4~405.4054054054054,
+405.4054054054054: B4^405.4054054054054`
+const win = tune `
+125,
+125: C5~125,
+125: F4~125,
+125: B4~125,
+125: D5~125,
+125: B4~125,
+125: D5~125 + F4^125,
+125: G5~125,
+125: B4^125,
+125,
+125: C5^125,
+125: F5^125,
+375,
+125: A4^125,
+125: C5~125,
+125: F4~125,
+125,
+125: E4~125,
+125,
+125: D4~125,
+125: G4^125,
+125,
+125: B4^125,
+125,
+125: G4^125,
+125,
+125: E4^125,
+125,
+125: F5^125,
+125: C4^125`
 
 let level = 0
 const levels = [
+ 
+
   map`
-...a......
-.....a..a.
-.a.......g
-........ad
-....ag...d
+.....a....
+.a........
+........ag
+...a.....d
+.....g...d
 p...gd...d
 gg.gdd..od
-ddgdddggld`,
+ddgdddggdd`,
   map`
 dlddmddddm
 dp.mmmdmdd
@@ -548,16 +544,16 @@ mmmddmmmdld
 m...zzz..pm
 m.m......mm
 m..m....mdm
-mf..mqqqd.m
+mf..mqmqd.m
 mym.mdddm.m
 mmm......uo
 mmmqmmmmmmm`,
   map`
 mmmmmmmmmmmmmmmm
-m..b...........m
-m....mmmmmmm.m.m
-mf.mm......mum.m
-my.....m..emqm.m
+m..b........u..m
+m....mmmmmm....m
+mf.mm......m.m.m
+my.....m...mqm.m
 mmmmmm....mmmm.m
 zzz.....m......m
 mmm...m........m
@@ -565,27 +561,51 @@ p...m.........om
 mmmmmqqqqqqqqqrm`,
   map`
 mmmmmmmmmmmmmmrm
-mmdzdmzz......rm
+mmdzdmzz.......m
 mzz.........f.pm
 m......b.m..y.mm
-o...um...z..m.zm
-mm...z......z..m
-m..............m
+o...u....z..m.zm
+mm...m......z..m
+m....z.........m
 mqqqqqqqqqqqqqqm
 mmmmmmmmmmmmmmmm`,
   map`
+mmmmmmmmmmmm
+mmm..b....bo
+m..bmmm..b.m
+m..m..bmmmmm
+mm...m.....m
+mmm.mmm...bm
+mmmm..f.m..m
+mm..f.y..bmm
+p...ymmm.mmm
+mmmmmmmmmmmm`,
+  map`
+mmmmmmmmmm
+m.......bo
+m..mmmmmdm
+mmu...zzmm
+p.m..b...m
+m.zmem...m
+mu.zm..umm
+m...m..mzm
+d.u.mdu..m
+m..u.mm..m
+meee..b.mm
+mmmmqmmdmm`, 
+  map`
 mmmmmmmmmmmmmmmm
-mzz.zz......zzzm
-m.........e....m
-m........mmm...m
-m.me.....zzmme.p
+mzz.zzz.....zzzm
+m........fe....m
+m........ymm...m
+m.mee....zzmme.p
 mummmm.....zmmmm
 m..hbme.....zzzm
-mmmmmmmqqqqqqqqm`,
+mqmmmomqqqqqqqqm`,
 ]
 
 setMap(levels[level])
-if (level == 1 || level == 3 || level == 4 || level == 5 || level == 6 || level == 7 || level == 8 || level == 9 || level == 10 || level == 11 || level == 12) {
+if (level == 1 || level == 3 || level == 4 || level == 5 || level == 6 || level == 7 || level == 8 || level == 9 || level == 10 || level == 11 || level == 12 || level == 13 || level == 14 || level == 15 || level == 16) {
   setBackground(caveSky)
 } else {
   setBackground(sky)
@@ -595,15 +615,22 @@ let gravity = 1;
 
 function isGroundBelow(playerX, playerY) {
   const belowTile = getTile(playerX, playerY + 1);
-  return belowTile.some(sprite => sprite.type === ground);
+  return belowTile.some(sprite =>
+    sprite.type === ground ||
+    sprite.type === dirt ||
+    sprite.type === rock ||
+    sprite.type === ladder ||
+    sprite.type === cradder ||
+    sprite.type === geyser
+  );
 }
-
 function isTouchingEnemy(playerX, playerY) {
   const frontTile = getTile(playerX, playerY);
-  return frontTile.some(sprite => sprite.type === enemy || sprite.type === lava || sprite.type === enemyDown || sprite.type === batUp || sprite.type === batAcross || sprite.type === water);
+ return frontTile.some(sprite => sprite.type === enemy || sprite.type === lava  || sprite.type === enemyDown || sprite.type === batUp || sprite.type === batAcross || sprite.type === water);
 waterY = 1
   batX = 1
   batY = 1
+
 }
 
 
@@ -641,7 +668,7 @@ function generateElement(levelID) {
       color: color`3`
     })
   }
-  }
+
   if (level == 1) {
     addText("Good luck!", {
       x: 5,
@@ -649,33 +676,40 @@ function generateElement(levelID) {
       color: color`6`
     })
   }
+}
 
 generateElement(level)
 
 onInput("w", () => {
-  const playerSprite = getFirst(player);
-  if (!jumping) {
+  const playerSprite = getFirst(player) || getFirst(playerCrouch);
+
+  if (!playerSprite) return;
+
+  if (!jumping && isGroundBelow(playerSprite.x, playerSprite.y)) {
     jumping = true;
-    playerSprite.y -= 1; // weeeee
-    playTune(jump)
+
+    playerSprite.y -= 1;
+    playTune(jump);
+
     setTimeout(() => {
-      playerSprite.y += 1; // waaaaa
+      playerSprite.y += 1;
       jumping = false;
+
       if (isTouchingEnemy(playerSprite.x, playerSprite.y)) {
-        death()
+        death();
       }
     }, 500);
   }
 });
 
 onInput("a", () => {
-  const playerSprite = getFirst(player);
-  playerSprite.x -= 1; // Move left
+ const playerSprite = getFirst(player) || getFirst(playerCrouch);
+if (playerSprite) playerSprite.x -= 1;// Move left
 });
 
 onInput("d", () => {
-  const playerSprite = getFirst(player);
-  playerSprite.x += 1; // Move right
+  const playerSprite = getFirst(player) || getFirst(playerCrouch);
+if (playerSprite) playerSprite.x += 1;// Move right
 });
 
 onInput("s", () => {
@@ -684,7 +718,8 @@ onInput("s", () => {
     // Replace the player's sprite with the crouching sprite
     getFirst(player).type = playerCrouch;
     setTimeout(() => {
-      getFirst(playerCrouch).type = player;
+      const crouchSprite = getFirst(playerCrouch);
+if (crouchSprite) crouchSprite.type = player;
     }, 500);
   }
 });
@@ -705,7 +740,7 @@ onInput("j", () => {
 
 afterInput(() => {
 
-  const playerSprite = getFirst(player);
+  const playerSprite = getFirst(player) || getFirst(playerCrouch);
   if (playerSprite) {
     const playerX = playerSprite.x;
     const playerY = playerSprite.y;
@@ -728,9 +763,9 @@ afterInput(() => {
       }
     }
 
-    if (!jumping) {
-      applyGravity(playerSprite);
-    }
+  if (!jumping) {
+  applyGravity(playerSprite);
+  }
 
     if (isTouchingEnemy(playerSprite.x, playerSprite.y)) {
       death()
@@ -740,14 +775,16 @@ afterInput(() => {
     }
 
     if (isTouchingCheese(playerSprite.x, playerSprite.y)) {
+      playback.end()
       playTune(win)
+      
       addText("You win!", {
         x: 1,
         y: 1,
         color: color`4`
       })
-      const cheesess = getFirst(cheese)
-      cheesess.remove()
+const cheesess = getFirst(cheese)
+if (cheesess) cheesess.remove()
       setTimeout(() => {
         addText("Press j to restart!", {
           x: 1,
@@ -766,89 +803,111 @@ afterInput(() => {
   }
 })
 
-afterInput(() => {
+//automate bats
   
-  if (tilesWith(batAcross) < 1) {
-  } else {  
-    if (batX < 3) {
-    batX = batX + 1;
-    getFirst(batAcross).x -= 1;
+afterInput(() => {
+  const bats = getAll(batAcross);
+
+  if (bats.length === 0) return;
+
+  if (batX < 3) {
+    batX++;
+    for (let b of bats) {
+      b.x -= 1;
+    }
   } else {
     if (batX > 3) {
-      batX = 1
-      getFirst(batAcross).x += 1;
-    }else{
+      batX = 1;
+      for (let b of bats) {
+        b.x += 1;
+      }
+    } else {
       if (batX > 2) {
-      batX = batX + 1;
-      getFirst(batAcross).x += 1;
+        batX++;
+        for (let b of bats) {
+          b.x += 1;
+        }
       }
     }
-  } 
   }
-})
-
-afterInput(() => {
-if (tilesWith(batUp) < 1 ) {
-  } else {
-  if (batY < 3) {
-    batY = batY + 1;
-    getFirst(batUp).y -= 1;
-  } else {
-    if (batY > 3) {
-      batY = 1
-      getFirst(batUp).y += 1;
-    }else{
-      if (batY > 2) {
-      batY = batY + 1;
-      getFirst(batUp).y += 1;
-      }
-    }
-  } 
-}
-})
-
-afterInput(() => {
-if (tilesWith(water) < 1 ) {
-  } else {
-  if (waterY < 3) {
-    waterY = waterY + 1;
-    getFirst(water).y += 1
-  } else {
-    if (waterY > 3) {
-      waterY = 1
-    getFirst(water).y -= 1
-    }else{
-      if (waterY > 2) {
-      waterY = waterY + 1;
-      getFirst(water).y -= 1
-        } else {
-    
-      
-    }
-  } 
-}
-}
-})
-
-
-onInput("i", () => {
-  if (musicPlaying) {
-    playback.end(); // Stop the music
-    musicPlaying = false;
-  } else {
-    playback = playTune(bgm, Infinity); // Start the music
-    musicPlaying = true;
-  }
-  console.log(musicPlaying);
 });
 
-// these get run after every input
+
+
+afterInput(() => {
+  const bats = getAll(batUp);
+
+  if (bats.length === 0) return;
+
+  if (batY < 3) {
+    batY++;
+    for (let b of bats) {
+      b.y -= 1;
+    }
+  } else {
+    if (batY > 3) {
+      batY = 1;
+      for (let b of bats) {
+        b.y += 1;
+      }
+    } else {
+      if (batY > 2) {
+        batY++;
+        for (let b of bats) {
+          b.y += 1;
+        }
+      }
+    }
+  }
+});
+
+// automate geysers
+afterInput(() => {
+  const waters = getAll(water);
+
+  if (waters.length === 0) return;
+
+  if (waterY < 3) {
+    waterY++;
+    for (let w of waters) {
+      w.y += 1;
+    }
+  } else if (waterY > 3) {
+    waterY = 1;
+    for (let w of waters) {
+      w.y -= 1;
+    }
+  } else {
+    waterY++;
+    for (let w of waters) {
+      w.y -= 1;
+    }
+  }
+});
+
+let playback = playTune(bgm, Infinity)
+
+onInput("i", () => {
+    playback = playTune(bgm, Infinity)
+});
+
+
+
+ onInput("k", () => {
+   
+ playback.end() 
+ 
+  
+});
+  
+
+
 afterInput(() => {
   // count the number of tiles with door
   const targetNumber = tilesWith(door).length;
   
-  // count the number of tiles with goals and boxes
-  const numberCovered = tilesWith(door, player).length;
+  // count the number of tiles with goals.
+  const numberCovered = tilesWith(door, player).length || tilesWith(door, playerCrouch).length ;
 
   // if the number of goals is the same as the number of goals covered
   // all goals are covered and we can go to the next level
