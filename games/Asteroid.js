@@ -6,7 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author: sleekez
 @description: Asteroid is a game of quick reaction time. Your goal is to dodge the asteroids coming from the top of the screen using A and D. Once a game, you can activate your superpower to wipe all enemies with W.
 @tags: [endless]
-@addedOn: 2025-02-16
+@addedOn: 2026-05-11
 */
 
 const player = "p";
