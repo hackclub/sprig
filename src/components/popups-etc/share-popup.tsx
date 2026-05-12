@@ -1,4 +1,4 @@
-import { Signal, useSignal } from '@preact/signals'
+import { type Signal, useSignal } from '@preact/signals'
 import { IoLink } from 'react-icons/io5'
 import { usePopupCloseClick } from '../../lib/utils/popup-close-click'
 import type { PersistenceState } from '../../lib/state'
