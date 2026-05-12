@@ -1,6 +1,9 @@
 /*
 @title: Match Point
 @author: Vidit
+@description: A retro-style 2 player pong game where the first player to reach 7 points wins.
+@tags: sports, arcade, multiplayer, pong
+@addedOn: 2026-05-12
 */
 
 const leftPaddle = "l"
@@ -20,7 +23,6 @@ const tablecorner44 = "k"
 const plus = "s"
 const plus2 = "y"
 const plus3 = "u"
-
 
 setLegend(
   [ leftPaddle, bitmap`
@@ -149,7 +151,7 @@ CCCC33333333333.
 2255555555555555
 2255555555555555`],
 
-  [tablecorner2, bitmap `
+  [ tablecorner2, bitmap`
 2222222222222222
 2222222222222222
 5555555555555555
@@ -167,7 +169,7 @@ CCCC33333333333.
 5555555555555555
 5555555555555555`],
 
-  [tablecorner3, bitmap `
+  [ tablecorner3, bitmap`
 5555555555555555
 5555555555555555
 5555555555555555
@@ -185,7 +187,7 @@ CCCC33333333333.
 2222222222222222
 2222222222222222`],
 
-  [tablecorner4, bitmap `
+  [ tablecorner4, bitmap`
 5555555555555522
 5555555555555522
 5555555555555522
@@ -201,8 +203,8 @@ CCCC33333333333.
 5555555555555522
 5555555555555522
 5555555555555522
-5555555555555522`], 
-  
+5555555555555522`],
+
   [ tablecorner11, bitmap`
 2222222222222222
 2222222222222222
@@ -221,7 +223,7 @@ CCCC33333333333.
 2255555555555555
 2255555555555555`],
 
-  [tablecorner22, bitmap `
+  [ tablecorner22, bitmap`
 2222222222222222
 2222222222222222
 5555555555555522
@@ -239,7 +241,7 @@ CCCC33333333333.
 5555555555555522
 5555555555555522`],
 
-  [tablecorner33, bitmap `
+  [ tablecorner33, bitmap`
 5555555555555522
 5555555555555522
 5555555555555522
@@ -257,7 +259,7 @@ CCCC33333333333.
 2222222222222222
 2222222222222222`],
 
-  [tablecorner44, bitmap `
+  [ tablecorner44, bitmap`
 2255555555555555
 2255555555555555
 2255555555555555
@@ -275,7 +277,7 @@ CCCC33333333333.
 2222222222222222
 2222222222222222`],
 
-  [plus, bitmap`
+  [ plus, bitmap`
 2255555555555555
 2255555555555555
 2255555555555555
@@ -293,7 +295,7 @@ CCCC33333333333.
 2255555555555555
 2255555555555555`],
 
-  [plus2, bitmap`
+  [ plus2, bitmap`
 5555555555555555
 5555555555555555
 5555555555555555
@@ -310,8 +312,8 @@ CCCC33333333333.
 5555555555555555
 5555555555555555
 5555555555555555`],
-  
-  [plus3, bitmap`
+
+  [ plus3, bitmap`
 5555555555555522
 5555555555555522
 5555555555555522
@@ -330,8 +332,7 @@ CCCC33333333333.
 5555555555555522`]
 )
 
-setSolids([ leftPaddle, rightPaddle, wall, table ])
-
+setSolids([leftPaddle, rightPaddle, wall, table])
 
 const level = map`
 wwwwwwwwwwwwwwwwww
@@ -346,26 +347,24 @@ w..vtttttvtttth..w
 w..kdddddkddddo..w
 wwwwwwwwwwwwwwwwww`
 
-
 setMap(level)
-
 
 let ballDX = 1
 let ballDY = 1
 let leftScore = 0
 let rightScore = 0
+
 const WIN_SCORE = 7
 
 let gameRunning = false
 let gameOverState = false
 
-
 let tick = 0
 const MOVE_DELAY = 4
 
-
 function showBeige() {
   clearText()
+
   for (let y = 0; y < height(); y++) {
     for (let x = 0; x < width(); x++) {
       clearTile(x, y)
@@ -378,20 +377,39 @@ function startGameMap() {
   setMap(level)
 }
 
-
 let introStep = 0
+
 const intro = setInterval(() => {
   showBeige()
 
-  if (introStep === 0)
-    addText("MATCH POINT", { x: 3, y: 4, color: color`3` })
+  if (introStep === 0) {
+    addText("MATCH POINT", {
+      x: 3,
+      y: 4,
+      color: color`3`
+    })
+  }
 
-  if (introStep === 1)
-    addText("MATCH POINT", { x: 3, y: 4, color: color`2` })
+  if (introStep === 1) {
+    addText("MATCH POINT", {
+      x: 3,
+      y: 4,
+      color: color`2`
+    })
+  }
 
   if (introStep === 2) {
-    addText("MATCH POINT", { x: 3, y: 4, color: color`2` })
-    addText("FIRST TO 7", { x: 4, y: 6, color: color`3` })
+    addText("MATCH POINT", {
+      x: 3,
+      y: 4,
+      color: color`2`
+    })
+
+    addText("FIRST TO 7", {
+      x: 4,
+      y: 6,
+      color: color`3`
+    })
   }
 
   if (introStep === 3) {
@@ -403,45 +421,85 @@ const intro = setInterval(() => {
   introStep++
 }, 500)
 
+onInput("w", () => {
+  if (gameRunning) getFirst(leftPaddle).y--
+})
 
-onInput("w", () => { if (gameRunning) getFirst(leftPaddle).y-- })
-onInput("s", () => { if (gameRunning) getFirst(leftPaddle).y++ })
-onInput("i", () => { if (gameRunning) getFirst(rightPaddle).y-- })
-onInput("k", () => { if (gameRunning) getFirst(rightPaddle).y++ })
+onInput("s", () => {
+  if (gameRunning) getFirst(leftPaddle).y++
+})
 
-onInput("j", () => { if (gameOverState) restartGame() })
-onInput("l", () => { if (gameOverState) powerOff() })
+onInput("i", () => {
+  if (gameRunning) getFirst(rightPaddle).y--
+})
 
+onInput("k", () => {
+  if (gameRunning) getFirst(rightPaddle).y++
+})
+
+onInput("j", () => {
+  if (gameOverState) restartGame()
+})
+
+onInput("l", () => {
+  if (gameOverState) powerOff()
+})
 
 setInterval(() => {
   if (!gameRunning) return
 
   tick++
+
   if (tick < MOVE_DELAY) return
+
   tick = 0
 
   const b = getFirst(ball)
+
   b.x += ballDX
   b.y += ballDY
 
-  if (b.y <= 1 || b.y >= height() - 2) ballDY *= -1
-  if (tilesWith(ball, leftPaddle).length) ballDX = 1
-  if (tilesWith(ball, rightPaddle).length) ballDX = -1
+  if (b.y <= 1 || b.y >= height() - 2) {
+    ballDY *= -1
+  }
 
-  if (b.x <= 0) { rightScore++; resetBall() }
-  if (b.x >= width() - 1) { leftScore++; resetBall() }
+  if (tilesWith(ball, leftPaddle).length) {
+    ballDX = 1
+  }
+
+  if (tilesWith(ball, rightPaddle).length) {
+    ballDX = -1
+  }
+
+  if (b.x <= 0) {
+    rightScore++
+    resetBall()
+  }
+
+  if (b.x >= width() - 1) {
+    leftScore++
+    resetBall()
+  }
 
   clearText()
-  addText(`${leftScore} : ${rightScore}`, { x: 7, y: 0, color: color`3` })
 
-  if (leftScore === WIN_SCORE || rightScore === WIN_SCORE) endGame()
+  addText(`${leftScore} : ${rightScore}`, {
+    x: 7,
+    y: 0,
+    color: color`3`
+  })
+
+  if (leftScore === WIN_SCORE || rightScore === WIN_SCORE) {
+    endGame()
+  }
 }, 120)
-
 
 function resetBall() {
   const b = getFirst(ball)
+
   b.x = Math.floor(width() / 2)
   b.y = Math.floor(height() / 2)
+
   ballDX *= -1
   ballDY = Math.random() > 0.5 ? 1 : -1
 }
@@ -451,20 +509,42 @@ function endGame() {
   gameOverState = true
 
   showBeige()
-  addText("MATCH POINT", { x: 3, y: 3, color: color`2` })
-  addText(leftScore > rightScore ? "LEFT WINS" : "RIGHT WINS", {
-    x: 4, y: 5, color: color`3`
+
+  addText("MATCH POINT", {
+    x: 3,
+    y: 3,
+    color: color`2`
   })
-  addText("J = RESTART", { x: 3, y: 7, color: color`3` })
-  addText("L = EXIT", { x: 5, y: 8, color: color`3` })
+
+  addText(leftScore > rightScore ? "LEFT WINS" : "RIGHT WINS", {
+    x: 4,
+    y: 5,
+    color: color`3`
+  })
+
+  addText("J = RESTART", {
+    x: 3,
+    y: 7,
+    color: color`3`
+  })
+
+  addText("L = EXIT", {
+    x: 5,
+    y: 8,
+    color: color`3`
+  })
 }
 
 function restartGame() {
   leftScore = 0
   rightScore = 0
+
   gameOverState = false
+
   startGameMap()
+
   gameRunning = true
+
   resetBall()
 }
 
