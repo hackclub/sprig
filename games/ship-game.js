@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: ship game
 @author: OneAvargeCoder193
-@tags: []
-@addedOn: 2025-00-00
+@tags: ['game']
+@addedOn: 2026-05-15
 */
 
 setMap(map`
