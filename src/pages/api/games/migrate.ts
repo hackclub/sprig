@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { Timestamp } from 'firebase-admin/firestore'
-import { firestore, getSession, getUserByEmail, makeOrUpdateSession, makeUser, type User } from '../../../lib/game-saving/account'
+import { firestore, getOrCreateUserForPartialSessionEmail, getSession, makeOrUpdateSession, type User } from '../../../lib/game-saving/account'
 import { isValidEmail } from '../../../lib/game-saving/email'
 
 export const POST: APIRoute = async ({ request, cookies }) => {
@@ -26,13 +26,16 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 	const session = await getSession(cookies)
 	let user: User
 	let unprotected: boolean
-	if (partialSessionEmail) {
-		user = await getUserByEmail(partialSessionEmail) ?? await makeUser(partialSessionEmail, null)
-		unprotected = true
-		if (!session) await makeOrUpdateSession(cookies, user.id, 'email')
-	} else if (session && session.session.full) {
+	if (session?.session.full) {
 		user = session.user
 		unprotected = false
+	} else if (partialSessionEmail) {
+		const partialUser = await getOrCreateUserForPartialSessionEmail(partialSessionEmail, session)
+		if (!partialUser) return new Response('An account with this email already exists. Please log in.', { status: 403 })
+
+		user = partialUser
+		unprotected = true
+		if (!session) await makeOrUpdateSession(cookies, user.id, 'email')
 	} else {
 		return new Response('Unauthorized', { status: 401 })
 	}
