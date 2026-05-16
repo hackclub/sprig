@@ -1,11 +1,10 @@
 /*
 @title: Star-Snatcher
-@description: Catch 'em all!
 @author: tap
+@description:Catch 'em all!
 @tags: []
 @addedOn: 2025-12-13
 */
-
 const player = "p"
 const star = "s"
 const wall = "w"
