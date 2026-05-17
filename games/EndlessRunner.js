@@ -3,7 +3,7 @@
 @description: "
 @author: Ansh Verma
 @tags: ['runner']
-@addedOn: 2022-05-13
+@addedOn: 2026-05-13
 
 Instructions:
 A fun endless runner game, where you must avoid the boxes and avoid getting pushed to the edge of the screen and become "squashed." 
