@@ -6,7 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @description: memorize the patterns
 @author: 
 @tags: ['memory', 'pattern']
-@addedOn: 2025-00-00
+@addedOn: 2026-05-10
 */
 
 const player1 = "p"
