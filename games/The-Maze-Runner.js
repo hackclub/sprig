@@ -3,7 +3,7 @@
 @description: "The Maze Runner" is a grid-based maze adventure where players explore complex layouts, collect coins, and search for the exit while avoiding roaming enemies. Each level introduces tighter paths and smarter enemy placement, encouraging careful movement and planning.
 @author: AymenD
 @tags: ['maze', 'puzzle', 'strategy']
-@addedOn: 2025-12-14
+@addedOn: 2026-05-18
 */
 
 const player = "s";
