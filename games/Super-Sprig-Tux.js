@@ -1,8 +1,8 @@
 /*
 @title Super Sprig Tux
 @author Darshan Saravanan
-@tags: ['platformer','endless','arcade','mario','Linux','Tux','The real ones']
 @description Bringing the legendary Super Tux to the Sprig platform, This is a Endless Platformer where you have to collect score by travelling further, opening boxes and smashing the enemies.
+@tags: ['platformer','endless','arcade','mario','Linux','Tux','The real ones']
 @addedOn: 2026-04-25
 */
 
