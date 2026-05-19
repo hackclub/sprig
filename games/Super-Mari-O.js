@@ -2,7 +2,7 @@
 @title: Super Mari-O
 @author: EVan XaVier
 @tags: ['collector', 'arcade']
-@addedOn: 2025-00-00
+@addedOn: 2025-05-19
 */
 
 const player = "p"
