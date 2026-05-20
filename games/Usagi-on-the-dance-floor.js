@@ -1,10 +1,7 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: smokedsalmon
 @description: memorize the patterns
-@author: 
+@author:
 @tags: ['memory', 'pattern']
 @addedOn: 2026-05-10
 */
@@ -18,6 +15,22 @@ const right = "r"
 const down = "d"
 const left = "l"
 const flash = "f"
+
+const soundUp = tune`
+100: C5~100,
+100`
+
+const soundRight = tune`
+100: E5~100,
+100`
+
+const soundDown = tune`
+100: G5~100,
+100`
+
+const soundLeft = tune`
+100: A5~100,
+100`
 
 setLegend(
   [ player1, bitmap`
@@ -37,6 +50,7 @@ setLegend(
 ...000666660....
 .....0660060....
 ......00.00.....`],
+
   [ player2, bitmap`
 .......000......
 ......06060.....
@@ -54,6 +68,7 @@ setLegend(
 ....0660600.....
 .....00.00......
 ................`],
+
   [ up, bitmap`
 ................
 ................
@@ -71,6 +86,7 @@ setLegend(
 ................
 ................
 ................`],
+
   [ right, bitmap`
 ................
 ................
@@ -88,6 +104,7 @@ setLegend(
 ................
 ................
 ................`],
+
   [ down, bitmap`
 ................
 ................
@@ -105,6 +122,7 @@ setLegend(
 ................
 ................
 ................`],
+
   [ left, bitmap`
 ................
 ................
@@ -122,6 +140,7 @@ setLegend(
 ................
 ................
 ................`],
+
   [ flash, bitmap`
 7777777777777777
 7777777777777777
@@ -180,7 +199,19 @@ const patterns = [
 let level = 0
 let inputSpot = 0
 let showing = true
-let won = false
+let currentPattern = []
+
+function getPattern() {
+  if (!patterns[level]) {
+    const lastPattern = patterns[patterns.length - 1]
+    const choices = ["u", "r", "d", "l"]
+    const nextKey = choices[Math.floor(Math.random() * choices.length)]
+
+    patterns[level] = lastPattern.concat([nextKey])
+  }
+
+  return patterns[level]
+}
 
 function drawKeys() {
   clearTile(0, 0)
@@ -219,7 +250,15 @@ function showPattern() {
   clearText()
   drawKeys()
 
-  addText("Level " + (level + 1), { x: 5, y: 1 })
+  currentPattern = getPattern()
+  const pattern = currentPattern
+
+  if (level < 5) {
+    addText("Level " + (level + 1), { x: 5, y: 1 })
+  } else {
+    addText("Infinite " + (level - 4), { x: 4, y: 1 })
+  }
+
   addText("Memorize!", { x: 4, y: 14 })
 
   let i = 0
@@ -227,14 +266,14 @@ function showPattern() {
   const loop = () => {
     drawKeys()
 
-    if (i >= patterns[level].length) {
+    if (i >= pattern.length) {
       clearText()
       addText("Your turn!", { x: 5, y: 1 })
       showing = false
       return
     }
 
-    lightKey(patterns[level][i])
+    lightKey(pattern[i])
     i++
     setTimeout(loop, 700)
   }
@@ -243,23 +282,31 @@ function showPattern() {
 }
 
 function press(k) {
-  if (showing || won) return
+  if (showing) return
+
+  if (k === "u") playTune(soundUp)
+  if (k === "r") playTune(soundRight)
+  if (k === "d") playTune(soundDown)
+  if (k === "l") playTune(soundLeft)
+
+  const pattern = currentPattern
 
   pose = 1 - pose
   lightKey(k)
   setTimeout(drawKeys, 200)
 
-  if (k === patterns[level][inputSpot]) {
+  if (k === pattern[inputSpot]) {
     inputSpot++
 
-    if (inputSpot === patterns[level].length) {
+    if (inputSpot === pattern.length) {
       level++
 
       if (level === 5) {
-        won = true
         clearText()
         drawKeys()
-        addText("YOU WIN!", { x: 6, y: 7 })
+        addText("THE END", { x: 6, y: 6 })
+        addText("Infinite mode!", { x: 3, y: 8 })
+        setTimeout(showPattern, 2000)
       } else {
         clearText()
         addText("Nice!", { x: 7, y: 7 })
@@ -268,6 +315,7 @@ function press(k) {
     }
   } else {
     clearText()
+    drawKeys()
     addText("Wrong!", { x: 7, y: 6 })
     addText("Try again", { x: 5, y: 8 })
     setTimeout(showPattern, 1000)
