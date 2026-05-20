@@ -1,7 +1,11 @@
 /*
-@title Magnetic Maze Prototype
-@author SV
+@title: Magnetic Maze
+@author: Sarvesh V
+@description: A grid-based puzzle game where you use a magnet to push/pull metal boxes.
+@tags: ['puzzle', 'magnet', 'logic']
+@addedOn: 2026-05-20
 */
+
 
 const player = "p";
 const box = "m";
