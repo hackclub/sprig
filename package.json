@@ -55,7 +55,7 @@
 	},
 	"devDependencies": {
 		"@babel/standalone": "^7.29.4",
-		"@prefresh/vite": "^2.4.12",
+		"@prefresh/vite": "^3.0.1",
 		"@types/babel__standalone": "^7.1.9",
 		"@types/bcryptjs": "^3.0.0",
 		"@types/debounce": "^1.2.4",
