@@ -1,12 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Dodge ball
-@description: 
-@author: 
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@description: Dodge ball is a fun game where your objective is to avoid 500 balls and become victorious. The key mechanics are falling dodgeballs, an in-game key allowing the player to retry and the ability to win, these features make the game unique.
+@author: @Ivan
+@tags: ['dodging', 'ifinite']
+@addedOn: 2026-05-25
 */
 
 const player = "p"
@@ -14,7 +11,6 @@ const ball = "b"
 const wall = "w"
 const background = "k"
 const over = "o"
-
 
 
 setLegend(
@@ -169,7 +165,7 @@ onInput("w", ()=> {
         addText(" GAME OVER", {x: 4, y: 6, color:color`3`})
         addText("Score:" + count, {x: 6, y: 7, color:color`1`})
     }
-  }, 200);
+  }, 170);
     }
 })
 
@@ -232,6 +228,6 @@ var gameLoop = setInterval(() => {
       addText("Press W to retry", {x: 2, y: 9, color:color`C`});
     }
   }
-}, 200);
+}, 170);
 
 playTune(melody, Infinity)
