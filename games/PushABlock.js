@@ -1,7 +1,7 @@
 /*
 @title: Push A Block
 @description: Push the block to get to the "goal" thing
-@author: leo, edits
+@author: Vis
 @tags: ['push']
 @addedOn: 2026-05-15
 
