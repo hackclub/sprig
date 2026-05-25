@@ -3,7 +3,7 @@
 @author: Xr9 
 @description: i am a maze
 @tags: ["maze"]
-@addedOn: 2025-08-05
+@addedOn: 2026-05-15
 */
 
 const player = "p";
