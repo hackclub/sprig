@@ -1,9 +1,9 @@
 /*
-@title: getting_started
-@description: "Getting Started" is a tutorial game that guides players through basic game mechanics.
-@author: leo, edits
-@tags: ['tutorial']
-@addedOn: 2022-07-26
+@title: TwoShots
+@description: Unlike Hamaltin you can give up one shot and still have one
+@author: Nat
+@tags: ['light']
+@addedOn: 2026-05-15
 
 Check the tutorial in the bottom right, the run button is in the top right.
 Make sure to remix this tutorial if you want to save your progress!
