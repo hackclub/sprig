@@ -119,10 +119,14 @@ onInput("d", () => {
   getFirst(player).x += 1
 })
 
-afterInput(() => {
+let coinsCollected = 0
 
+afterInput(() => {
   tilesWith(player, coin).forEach(tile => {
     tile[1].remove()
+    coinsCollected++
+    clearText()
+    addText(`Coins: ${coinsCollected}`, { x: 1, y: 1, color: color`H` })
   })
 
   const p = getFirst(player)
@@ -130,9 +134,8 @@ afterInput(() => {
 
   if (p.x == g.x && p.y == g.y) {
     clearText()
-
-    addText("YOU WIN!", {
-      x: 4,
+    addText(`YOU WIN! Coins: ${coinsCollected}`, {
+      x: 2,
       y: 6,
       color: color`3`
     })
