@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro'
 import { Timestamp } from 'firebase-admin/firestore'
-import { getGame, getSession, updateDocument } from '../../../lib/game-saving/account'
+import { getFullSession, getGame, updateDocument } from '../../../lib/game-saving/account'
 
-export const post: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
 	let gameId: string
 	let newName: string
 	try {
@@ -19,7 +19,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 	if (!game) return new Response('Game does not exist', { status: 404 })
 
 	if (!game.unprotected) {
-		const session = await getSession(cookies)
+		const session = await getFullSession(cookies)
 		if (!session) return new Response('Unauthorized', { status: 401 })
 		if (session.user.id !== game.ownerId) return new Response(`Can't rename a game you don't own`, { status: 403 })
 	}

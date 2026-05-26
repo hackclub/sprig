@@ -1,7 +1,7 @@
 import { IoAdd, IoLogoGithub, IoOpenOutline } from "react-icons/io5";
 import Button from "./design-system/button";
 import styles from "./navbar.module.css";
-import { SessionInfo } from "../lib/game-saving/account";
+import type { SessionInfo } from "../lib/game-saving/account-types";
 // import AnnouncementBanner from "./popups-etc/announcement-banner";
 interface MainNavbarProps {
 	session: SessionInfo | null;
