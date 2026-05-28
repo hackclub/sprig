@@ -1,3 +1,10 @@
+/*
+@title: Sprig-Paint
+@author: Err0rinC0de
+@description: Paint app for sprig
+@tags: ['paint', 'drawling']
+@addedOn: 2026-05-28
+*/
 const cursor = "C"
 const colors = ["1", "2", "3", "4", "5", "6", "7", "8"]
 let currentColor = 0
