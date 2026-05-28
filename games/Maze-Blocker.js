@@ -119,7 +119,40 @@ o.e.o......o
 o.....oo.e.o
 o.eooe.o.o.o
 o.........go
-oooooooooooo`
+oooooooooooo`,
+    map`
+oooooooooo
+opo.....eo
+o.o.ooo..o
+o.e...o..o
+o.....o..o
+ooeoo.e..o
+o.....o.eo
+o.eeo....o
+og.......o
+oooooooooo`,
+      map`
+oooooooooo
+opo.....eo
+o.o.e....o
+o.e...e..o
+o.o..e...o
+o.e.e.e..o
+o.......eo
+o..e..e..o
+o.......go
+oooooooooo`,
+    map`
+oooooooooo
+ogoooo..po
+o........o
+o....e.e.o
+o..o.o.o.o
+o..o.e.o.o
+o.eooo.e.o
+o.o..o.o.o
+o........o
+oooooooooo`
 ];
 
 setMap(levels[level]);
