@@ -18,6 +18,8 @@
 
 * Bingo: Get a boll, mark it on your csrd, get 5 in a row. With cool stuff like.  (currently overpowered, so ig WIP, but the game works)
 
+* Shop: buy things with your earned credits
+
 
 #### Mechanics
 
@@ -25,7 +27,7 @@
 
 * Auto-Scaling Bets: Betting options automatically adjust based on your current bankroll (from 5 to 50,000+).
 
-* Fast Pacing: We rigged the odds slightly in your favor. If you're on a cold streak in Bingo, the game steps in and guarantees a 		match to keep things exciting.
+* Fast Pacing: We rigged the odds slightly in your favor. If you're on a cold streak in Bingo, the game steps in and guarantees a match to keep things exciting.
 
 #### Controls
 
@@ -37,7 +39,7 @@
 
 **controls kinda depend on what game you are on so yeah**
 
-note: I used AI for some backend stuff like mostly the math/economy/odds since im bad at math and too lazy to do it
+note: I used AI for some parts of the more backend stuff like mostly the math/economy/odds since im bad at math and too lazy to do it, I did the rest
 
 game location: https://github.com/SSoggyTacoMan/sprig/blob/3338334157c40f9ab74987385ec4740a76aa0e96/games/GamblingCasino.js
 
