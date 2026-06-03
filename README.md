@@ -4,6 +4,10 @@
 
 ### A 6-in-1 casino arcade built for the Hack Club Sprig engine. It features 6 games sharing a balanced good unified economy, global jackpot, a shop, and dynamic betting tiers.
 
+__**Game Location: https://github.com/SSoggyTacoMan/sprig/blob/3338334157c40f9ab74987385ec4740a76aa0e96/games/GamblingCasino.js**__
+
+__**Share Link: https://sprig.hackclub.com/share/WPt8KRndAAOVMnoASb4a**__
+
 #### The Games
 
 * Slots: 3-reel machine with an optional 50/50 double-or-nothing risk roll.
@@ -40,10 +44,6 @@
 **Controls kinda depend on what game you are on, but it is always indicated on screen so should be ok.**
 
 Note: I used AI for some parts of the more backend stuff like mostly the math/economy/odds since im bad at math and too lazy to do it, I did the rest
-
-Game Location: https://github.com/SSoggyTacoMan/sprig/blob/3338334157c40f9ab74987385ec4740a76aa0e96/games/GamblingCasino.js
-
-Share Link: https://sprig.hackclub.com/share/WPt8KRndAAOVMnoASb4a
 
 Also btw pls don't actually go gambling irl, it's a waste of money, this game is just for fun!
 
