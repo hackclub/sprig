@@ -2,7 +2,7 @@
 @title: Falling Circle
 @author: A
 @description: A rhythm game in which circles fall and you must score large combos.
-@tags: []
+@tags: ['rhythm', 'arcade', 'timing', 'reflex', 'combo', 'score']
 @addedOn: 2026-02-11
 */
 
@@ -90,15 +90,15 @@ afterInput(() => {
   addText(time_on_bottom.toString(), {x: 15, y: 4, color: color`3`});
 })
 
-setInterval(() => {
+function loop() {
   const p = getFirst(player);
   p.y += 1
 
   if (p.y == 1) {
     time_on_bottom += 1
-    addText((4 - time_on_bottom).toString(), {x: 15, y: 4, color: color`3`});
+    addText((time_on_bottom).toString(), {x: 15, y: 4, color: color`3`});
 
-    if (time_on_bottom > 3) {
+    if (time_on_bottom > 1) {
       combo = 0
       time_on_bottom = 0
       addText(time_on_bottom.toString(), {x: 15, y: 4, color: color`3`});
@@ -107,9 +107,17 @@ setInterval(() => {
       } else {
         addText(combo.toString(), {x: 4, y: 4, color: color`5`});
       }
+      clearText();
+      getFirst(player).remove();
+      addSprite(Math.floor(Math.random() * 2), 0, player);
+      time_on_bottom = 0;
     }
   } else {
-    time_on_bottom = 0
+    time_on_bottom = 0;
     addText(time_on_bottom.toString(), {x: 15, y: 4, color: color`3`});
   }
-}, 1000);
+
+  setTimeout(loop, Math.floor(Math.random() * (1500 - 500 + 1)) + 500);
+}
+
+loop();
