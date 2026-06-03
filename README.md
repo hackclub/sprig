@@ -2,7 +2,7 @@
 
 ![https://github.com/SSoggyTacoMan/sprig/blob/main/games/img/GamblingCasino.png?raw=true](https://github.com/SSoggyTacoMan/sprig/blob/main/games/img/GamblingCasino.png?raw=true)
 
-### A 6-in-1 casino arcade built for the Hack Club Sprig engine. It features 6 games sharing a balanced good unified economy, global jackpot, and dynamic betting tiers.
+### A 6-in-1 casino arcade built for the Hack Club Sprig engine. It features 6 games sharing a balanced good unified economy, global jackpot, a shop, and dynamic betting tiers.
 
 #### The Games
 
@@ -37,13 +37,18 @@
 
 * K: Back / Menu.
 
-**controls kinda depend on what game you are on so yeah**
+**Controls kinda depend on what game you are on, but it is always indicated on screen so should be ok.**
 
-note: I used AI for some parts of the more backend stuff like mostly the math/economy/odds since im bad at math and too lazy to do it, I did the rest
+Note: I used AI for some parts of the more backend stuff like mostly the math/economy/odds since im bad at math and too lazy to do it, I did the rest
 
-game location: https://github.com/SSoggyTacoMan/sprig/blob/3338334157c40f9ab74987385ec4740a76aa0e96/games/GamblingCasino.js
+Game Location: https://github.com/SSoggyTacoMan/sprig/blob/3338334157c40f9ab74987385ec4740a76aa0e96/games/GamblingCasino.js
 
-also btw pls don't actually go gambling irl, it's a waste of money, this game is just for fun
+Share Link: https://sprig.hackclub.com/share/WPt8KRndAAOVMnoASb4a
 
-todo:
-fix formattng of dashes and + that look like _
+Also btw pls don't actually go gambling irl, it's a waste of money, this game is just for fun!
+
+Todo:
+- [ ] fix formattng of dashes and + that look like _
+- [ ] update splash screen with the new games
+
+Please let me know if anything else you want me to add or fix, using Github issues, or contact me directly on Hackclub Slack or Discord.
