@@ -35,7 +35,7 @@ Human labels are used so the queue is readable in GitHub.
 
 | Label | Meaning |
 | --- | --- |
-| `Submission` | Game submission automation should process. |
+| `Submission` | *(Deprecated)* Bot now automatically detects and runs on game submissions. |
 | `Verified` | Automated checks passed. |
 | `Failed` | Automated checks failed. |
 | `Ready for Playtest` | Reviewer can playtest. |
@@ -66,7 +66,12 @@ The auto-triage workflow checks:
 - PR body about blurb
 - PR body gameplay description
 - required checklist boxes
-- exactly one new `games/*.js` file
+- silently ignores PRs that don't modify any files in the `/games` directory
+- fails if any file submitted in the `/games` folder does not end in `.js` (e.g. images, text)
+- enforces games are flat in the `/games` directory and not nested inside subfolders
+- exactly one `.js` game file (multiple games in one PR will fail with a request to split them)
+- only allows new game additions, but allows maintainers to bypass and edit existing games
+- properly paginates the GitHub API to handle large engine PRs
 - no changed files outside the allowed submission paths
 - optional image path under `games/img/`
 - optional image basename matching the game file
