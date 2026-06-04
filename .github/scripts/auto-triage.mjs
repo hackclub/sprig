@@ -70,34 +70,7 @@ function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, 
 		if (!ok && detail) problems.push(detail);
 	};
 
-	const jsFiles = pullFiles.filter((file) => file.filename.startsWith("games/") && file.filename.endsWith(".js"));
-	const imageFiles = pullFiles.filter((file) => /\.(png|jpe?g|webp)$/i.test(file.filename));
-	const disallowedFiles = pullFiles.filter((file) => !isAllowedSubmissionFile(file.filename));
-
-	addCheck(
-		"Files stay in allowed folders",
-		disallowedFiles.length === 0,
-		disallowedFiles.length
-			? `Only game files in \`games/\` and optional images in \`games/img/\` are allowed. Found ${disallowedFiles.map((file) => `\`${file.filename}\``).join(", ")}.`
-			: "Only submission files changed."
-	);
-
-	addCheck(
-		"Exactly one game file",
-		jsFiles.length === 1,
-		jsFiles.length === 0
-			? "Add exactly one JavaScript game file in `games/`."
-			: `Only one game file is allowed per submission. Found ${jsFiles.map((file) => `\`${file.filename}\``).join(", ")}.`
-	);
-
-	const changedNonAdded = pullFiles.filter((file) => file.status !== "added");
-	addCheck(
-		"Only new files added",
-		changedNonAdded.length === 0,
-		changedNonAdded.length
-			? `Submissions should add new files only. These files were not added: ${changedNonAdded.map((file) => `\`${file.filename}\``).join(", ")}.`
-			: "All submitted files are new."
-	);
+	const { jsFiles, imageFiles } = validateSubmissionFiles(pullFiles, addCheck);
 
 	const bodyChecks = validatePullRequestBody(pullRequest.body ?? "", imageFiles.length > 0);
 	for (const check of bodyChecks.checks) addCheck(check.name, check.ok, check.detail);
@@ -111,47 +84,9 @@ function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, 
 
 	if (jsFiles.length === 1) {
 		gameFile = jsFiles[0];
-		const filename = path.basename(gameFile.filename);
-		const gamePath = path.join(workspace, gameFile.filename);
-		const content = readFileSafe(gamePath);
-
-		addCheck(
-			"Filename uses safe characters",
-			/^[a-zA-Z0-9_-]+\.js$/.test(filename),
-			/^[a-zA-Z0-9_-]+\.js$/.test(filename)
-				? "Filename is safe."
-				: `Rename \`${filename}\` to use only letters, numbers, \`-\`, and \`_\`.`
-		);
-
-		addCheck(
-			"Game file is directly inside games/",
-			path.dirname(gameFile.filename) === "games",
-			path.dirname(gameFile.filename) === "games"
-				? "Game file is in `games/`."
-				: `Move \`${gameFile.filename}\` directly into \`games/\`, not a nested folder.`
-		);
-
-		if (content === null) {
-			addCheck("Game file readable", false, `Unable to read \`${gameFile.filename}\` from the checked-out PR.`);
-		} else {
-			metadata = validateMetadata(content, filename, workspace);
-			for (const check of metadata.checks) addCheck(check.name, check.ok, check.detail);
-
-			const codeWithoutComments = stripComments(content);
-			const unsupportedApis = [/document\./i, /window\./i, /alert\(/i, /fetch\(/i].filter((regex) => regex.test(codeWithoutComments));
-			addCheck(
-				"Sprig-only APIs",
-				unsupportedApis.length === 0,
-				unsupportedApis.length
-					? `Remove browser APIs like \`window\`, \`document\`, \`alert\`, or \`fetch\` from \`${filename}\`.`
-					: "No unsupported browser APIs found."
-			);
-
-			similarity = findMostSimilarGame(content, gameFile.filename, workspace);
-			if (similarity.score >= 0.5) {
-				warnings.push(`Similarity is ${formatPercent(similarity.score)} against \`${similarity.match}\`. A reviewer or lead should compare both games.`);
-			}
-		}
+		const result = validateSingleGameFile(gameFile, workspace, addCheck, warnings);
+		metadata = result.metadata;
+		similarity = result.similarity;
 
 		rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${gameFile.filename}`;
 		const reviewUrl = new URL(reviewBaseUrl);
@@ -164,29 +99,7 @@ function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, 
 
 	if (gameFile) {
 		const gameBase = path.basename(gameFile.filename, ".js");
-		const badImagePaths = imageFiles.filter((file) => !file.filename.startsWith("games/img/"));
-		const mismatchedImages = imageFiles.filter((file) => path.basename(file.filename, path.extname(file.filename)) !== gameBase);
-
-		addCheck(
-			"Optional image path",
-			badImagePaths.length === 0,
-			badImagePaths.length
-				? `Move images into \`games/img/\`: ${badImagePaths.map((file) => `\`${file.filename}\``).join(", ")}.`
-				: imageFiles.length ? "Image files are in `games/img/`." : "No image provided; this is OK."
-		);
-
-		addCheck(
-			"Optional image name",
-			mismatchedImages.length === 0,
-			mismatchedImages.length
-				? `Image filename must match \`${gameBase}.js\`. Found ${mismatchedImages.map((file) => `\`${file.filename}\``).join(", ")}.`
-				: imageFiles.length ? "Image filename matches the game file." : "No image provided; gallery thumbnail can be generated/default."
-		);
-
-		if (imageFiles.length > 0) {
-			const image = imageFiles.find((file) => path.basename(file.filename, path.extname(file.filename)) === gameBase) ?? imageFiles[0];
-			screenshotUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${image.filename}`;
-		}
+		screenshotUrl = validateImages(imageFiles, gameBase, owner, repo, pullRequest, addCheck);
 	}
 
 	const ok = checks.every((check) => check.ok);
@@ -222,44 +135,48 @@ function validatePullRequestBody(body, imageProvided) {
 	add("PR about blurb", Boolean(about), about ? "About blurb is filled." : "Fill in `What is your game about?` in the PR description.");
 	add("PR gameplay description", Boolean(gameplay), gameplay ? "Gameplay description is filled." : "Fill in `How do you play your game?` in the PR description.");
 
+	validateChecklists(body, imageProvided, add);
+
+	return { checks };
+}
+
+function validateChecklists(body, imageProvided, add) {
 	const imageHeaderIndex = body.search(/^##\s+Image/im);
 	const codeSection = imageHeaderIndex >= 0 ? body.slice(0, imageHeaderIndex) : body;
 	const imageSection = imageHeaderIndex >= 0 ? body.slice(imageHeaderIndex) : "";
 
 	const codeBoxes = getCheckboxes(codeSection);
 	const uncheckedCodeBoxes = codeBoxes.filter((box) => !box.checked);
+	const uncheckedCodeNames = uncheckedCodeBoxes.map((box) => `\`${box.text}\``).join(", ");
+	let codeBoxDetail = "All required code boxes are checked.";
+	if (codeBoxes.length === 0) codeBoxDetail = "Keep the PR checklist and check every required code box.";
+	else if (uncheckedCodeBoxes.length) codeBoxDetail = `Check every required code box. Still unchecked: ${uncheckedCodeNames}.`;
 	add(
 		"Code checklist",
 		codeBoxes.length > 0 && uncheckedCodeBoxes.length === 0,
-		codeBoxes.length === 0
-			? "Keep the PR checklist and check every required code box."
-			: uncheckedCodeBoxes.length
-				? `Check every required code box. Still unchecked: ${uncheckedCodeBoxes.map((box) => `\`${box.text}\``).join(", ")}.`
-				: "All required code boxes are checked."
+		codeBoxDetail
 	);
 
 	if (imageProvided) {
 		const imageBoxes = getCheckboxes(imageSection);
 		const uncheckedImageBoxes = imageBoxes.filter((box) => !box.checked);
+		const uncheckedImgNames = uncheckedImageBoxes.map((box) => `\`${box.text}\``).join(", ");
+		let imgBoxDetail = "Image checklist is checked.";
+		if (imageBoxes.length === 0) imgBoxDetail = "An image was added, so keep and complete the image checklist.";
+		else if (uncheckedImageBoxes.length) imgBoxDetail = `Image was added, so check the image checklist boxes. Still unchecked: ${uncheckedImgNames}.`;
 		add(
 			"Image checklist",
 			imageBoxes.length > 0 && uncheckedImageBoxes.length === 0,
-			imageBoxes.length === 0
-				? "An image was added, so keep and complete the image checklist."
-				: uncheckedImageBoxes.length
-					? `Image was added, so check the image checklist boxes. Still unchecked: ${uncheckedImageBoxes.map((box) => `\`${box.text}\``).join(", ")}.`
-					: "Image checklist is checked."
+			imgBoxDetail
 		);
 	} else {
 		add("Image checklist", true, "No image was added, so image checklist is optional.");
 	}
-
-	return { checks };
 }
 
 function extractBoldField(body, label) {
-	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-	const pattern = new RegExp(`\\*\\*${escaped}:?\\*\\*\\s*([\\s\\S]*?)(?=\\n\\s*(?:\\*\\*|##|#)|$)`, "i");
+	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+	const pattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|##|#)|$)`, "i");
 	const match = body.match(pattern);
 	if (!match) return "";
 	return stripTemplateNoise(match[1]);
@@ -308,17 +225,7 @@ function validateMetadata(content, filename, workspace) {
 			: `Set \`@tags:\` to a non-empty array, for example \`@tags: ['maze']\`.\nReason: ${parsedTags.issue}`
 	);
 
-	const validDate = /^\d{4}-\d{2}-\d{2}$/.test(values.addedOn);
-	const parsedDate = validDate ? new Date(`${values.addedOn}T00:00:00Z`) : null;
-	const now = new Date();
-	const tooOld = parsedDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
-	add(
-		"Metadata date",
-		validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld,
-		validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld
-			? "Date looks current."
-			: `Set \`@addedOn:\` to a recent date in \`YYYY-MM-DD\` format.`
-	);
+	checkMetadataDate(values.addedOn, add);
 
 	const titleLooksLikeTemplate = /getting_started/i.test(values.title) || /template/i.test(values.title);
 	const authorLooksLikeTemplate = /leo,\s*edits/i.test(values.author);
@@ -343,12 +250,12 @@ function validateMetadata(content, filename, workspace) {
 }
 
 function getMetadataValue(content, key) {
-	const match = content.match(new RegExp(`@${key}:\\s*([^\\r\\n]*)`));
+	const match = content.match(new RegExp(String.raw`@${key}:\s*([^\r\n]*)`));
 	return match?.[1]?.trim() ?? "";
 }
 
 function parseTags(raw) {
-	if (!raw || !raw.trim()) return { issue: "is empty (expected a JSON-ish array like ['maze','puzzle'])." };
+	if (!raw?.trim()) return { issue: "is empty (expected a JSON-ish array like ['maze','puzzle'])." };
 
 	try {
 		const parsed = JSON.parse(raw.replaceAll("'", '"'));
@@ -512,4 +419,123 @@ ${result.ok ? "Reviewers: claim this PR, use the play link, then approve or requ
 
 function formatPercent(value) {
 	return `${Math.round(value * 100)}%`;
+}
+
+function checkMetadataDate(addedOn, add) {
+	const validDate = /^\d{4}-\d{2}-\d{2}$/.test(addedOn);
+	const parsedDate = validDate ? new Date(`${addedOn}T00:00:00Z`) : null;
+	const now = new Date();
+	const tooOld = parsedDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
+	add(
+		"Metadata date",
+		validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld,
+		validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld
+			? "Date looks current."
+			: `Set \`@addedOn:\` to a recent date in \`YYYY-MM-DD\` format.`
+	);
+}
+
+function validateSubmissionFiles(pullFiles, addCheck) {
+	const jsFiles = pullFiles.filter((file) => file.filename.startsWith("games/") && file.filename.endsWith(".js"));
+	const imageFiles = pullFiles.filter((file) => /\.(png|jpe?g|webp)$/i.test(file.filename));
+	const disallowedFiles = pullFiles.filter((file) => !isAllowedSubmissionFile(file.filename));
+
+	const disallowedNames = disallowedFiles.map((file) => `\`${file.filename}\``).join(", ");
+	addCheck(
+		"Files stay in allowed folders",
+		disallowedFiles.length === 0,
+		disallowedFiles.length
+			? `Only game files in \`games/\` and optional images in \`games/img/\` are allowed. Found ${disallowedNames}.`
+			: "Only submission files changed."
+	);
+
+	const jsNames = jsFiles.map((file) => `\`${file.filename}\``).join(", ");
+	addCheck(
+		"Exactly one game file",
+		jsFiles.length === 1,
+		jsFiles.length === 0
+			? "Add exactly one JavaScript game file in `games/`."
+			: `Only one game file is allowed per submission. Found ${jsNames}.`
+	);
+
+	const changedNonAdded = pullFiles.filter((file) => file.status !== "added");
+	const changedNames = changedNonAdded.map((file) => `\`${file.filename}\``).join(", ");
+	addCheck(
+		"Only new files added",
+		changedNonAdded.length === 0,
+		changedNonAdded.length
+			? `Submissions should add new files only. These files were not added: ${changedNames}.`
+			: "All submitted files are new."
+	);
+	return { jsFiles, imageFiles };
+}
+
+function validateImages(imageFiles, gameBase, owner, repo, pullRequest, addCheck) {
+	const badImagePaths = imageFiles.filter((file) => !file.filename.startsWith("games/img/"));
+	const badImgNames = badImagePaths.map((file) => `\`${file.filename}\``).join(", ");
+	let imgPathDetail = "No image provided; this is OK.";
+	if (badImagePaths.length) imgPathDetail = `Move images into \`games/img/\`: ${badImgNames}.`;
+	else if (imageFiles.length) imgPathDetail = "Image files are in `games/img/`.";
+	addCheck("Optional image path", badImagePaths.length === 0, imgPathDetail);
+
+	const mismatchedImages = imageFiles.filter((file) => path.basename(file.filename, path.extname(file.filename)) !== gameBase);
+	const mismatchNames = mismatchedImages.map((file) => `\`${file.filename}\``).join(", ");
+	let imgNameDetail = "No image provided; gallery thumbnail can be generated/default.";
+	if (mismatchedImages.length) imgNameDetail = `Image filename must match \`${gameBase}.js\`. Found ${mismatchNames}.`;
+	else if (imageFiles.length) imgNameDetail = "Image filename matches the game file.";
+	addCheck("Optional image name", mismatchedImages.length === 0, imgNameDetail);
+
+	if (imageFiles.length > 0) {
+		const image = imageFiles.find((file) => path.basename(file.filename, path.extname(file.filename)) === gameBase) ?? imageFiles[0];
+		return `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${image.filename}`;
+	}
+	return null;
+}
+
+function validateSingleGameFile(gameFile, workspace, addCheck, warnings) {
+	let metadata = null;
+	let similarity = { score: 0, match: null };
+
+	const filename = path.basename(gameFile.filename);
+	const gamePath = path.join(workspace, gameFile.filename);
+	const content = readFileSafe(gamePath);
+
+	addCheck(
+		"Filename uses safe characters",
+		/^[a-zA-Z0-9_-]+\.js$/.test(filename),
+		/^[a-zA-Z0-9_-]+\.js$/.test(filename)
+			? "Filename is safe."
+			: `Rename \`${filename}\` to use only letters, numbers, \`-\`, and \`_\`.`
+	);
+
+	addCheck(
+		"Game file is directly inside games/",
+		path.dirname(gameFile.filename) === "games",
+		path.dirname(gameFile.filename) === "games"
+			? "Game file is in `games/`."
+			: `Move \`${gameFile.filename}\` directly into \`games/\`, not a nested folder.`
+	);
+
+	if (content === null) {
+		addCheck("Game file readable", false, `Unable to read \`${gameFile.filename}\` from the checked-out PR.`);
+	} else {
+		metadata = validateMetadata(content, filename, workspace);
+		for (const check of metadata.checks) addCheck(check.name, check.ok, check.detail);
+
+		const codeWithoutComments = stripComments(content);
+		const unsupportedApis = [/document\./i, /window\./i, /alert\(/i, /fetch\(/i].filter((regex) => regex.test(codeWithoutComments));
+		addCheck(
+			"Sprig-only APIs",
+			unsupportedApis.length === 0,
+			unsupportedApis.length
+				? `Remove browser APIs like \`window\`, \`document\`, \`alert\`, or \`fetch\` from \`${filename}\`.`
+				: "No unsupported browser APIs found."
+		);
+
+		similarity = findMostSimilarGame(content, gameFile.filename, workspace);
+		if (similarity.score >= 0.5) {
+			warnings.push(`Similarity is ${formatPercent(similarity.score)} against \`${similarity.match}\`. A reviewer or lead should compare both games.`);
+		}
+	}
+	return { metadata, similarity };
 }
