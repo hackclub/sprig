@@ -588,7 +588,7 @@ export default function Editor({ persistenceState, cookies, roomState, review }:
 								<button type="button" onClick={onRun}>
 									<IoReloadOutline /> Restart
 								</button>
-								<button type="button" onClick={() => navigator.clipboard.writeText(window.location.href)}>
+								<button type="button" onClick={() => navigator.clipboard?.writeText(window.location.href)}>
 									<IoCopyOutline /> Copy Link
 								</button>
 							</div>
