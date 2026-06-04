@@ -302,10 +302,10 @@ function validateMetadata(content, filename, workspace) {
 	const parsedTags = parseTags(values.tags);
 	add(
 		"Metadata tags parse",
-		Array.isArray(parsedTags) && parsedTags.length > 0,
-		Array.isArray(parsedTags) && parsedTags.length > 0
+		parsedTags.tags !== undefined && parsedTags.tags.length > 0,
+		parsedTags.tags !== undefined && parsedTags.tags.length > 0
 			? "Tags are a non-empty array."
-			: `Set \`@tags:\` to a non-empty array, for example \`@tags: ['maze']\`.`
+			: `Set \`@tags:\` to a non-empty array, for example \`@tags: ['maze']\`.\nReason: ${parsedTags.issue}`
 	);
 
 	const validDate = /^\d{4}-\d{2}-\d{2}$/.test(values.addedOn);
@@ -339,7 +339,7 @@ function validateMetadata(content, filename, workspace) {
 			: "Game title appears unique."
 	);
 
-	return { checks, values: { ...values, tags: parsedTags ?? values.tags } };
+	return { checks, values: { ...values, tags: parsedTags.tags ?? values.tags } };
 }
 
 function getMetadataValue(content, key) {
@@ -347,12 +347,23 @@ function getMetadataValue(content, key) {
 	return match?.[1]?.trim() ?? "";
 }
 
-function parseTags(value) {
-	if (!value) return null;
+function parseTags(raw) {
+	if (!raw || !raw.trim()) return { issue: "is empty (expected a JSON-ish array like ['maze','puzzle'])." };
+
 	try {
-		return JSON.parse(value.replaceAll("'", "\""));
-	} catch {
-		return null;
+		const parsed = JSON.parse(raw.replaceAll("'", '"'));
+		if (!Array.isArray(parsed)) return { issue: "must be an array (example: ['maze','puzzle'])." };
+		if (parsed.some((tag) => typeof tag !== "string")) {
+			return { issue: "must be an array of strings (example: ['maze','puzzle'])." };
+		}
+
+		return { tags: parsed };
+	} catch (error) {
+		if (error instanceof SyntaxError) {
+			return { issue: "is not valid JSON (example: ['maze','puzzle'])." };
+		}
+
+		return { issue: "could not be parsed." };
 	}
 }
 
