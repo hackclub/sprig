@@ -192,7 +192,6 @@ async function collectPullRequests(existingRows) {
 
 	return [...pullMap.values()];
 }
-}
 
 function latestReview(reviews) {
 	return [...reviews]
