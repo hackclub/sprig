@@ -3,6 +3,9 @@ import CodeMirror from "../codemirror";
 import Navbar from "../navbar-editor";
 import {
 	IoClose,
+	IoCopyOutline,
+	IoOpenOutline,
+	IoReloadOutline,
 	IoStopCircleOutline,
 	IoVolumeHighOutline,
 	IoVolumeMuteOutline,
@@ -14,7 +17,7 @@ import {
 	useSignalEffect,
 } from "@preact/signals";
 import { useEffect, useRef, useState} from "preact/hooks";
-import { codeMirror, errorLog, isNewSaveStrat, muted, type PersistenceState, type RoomState,  screenRef, cleanupRef, reviewState } from "../../lib/state";
+import { codeMirror, errorLog, isNewSaveStrat, muted, type PersistenceState, type RoomState,  screenRef, cleanupRef } from "../../lib/state";
 import EditorModal from "../popups-etc/editor-modal";
 import { runGame, _performSyntaxCheck } from "../../lib/engine";
 import DraftWarningModal from "../popups-etc/draft-warning";
@@ -76,6 +79,12 @@ export const onRun = async () => {
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
 	roomState?: Signal<RoomState> | undefined;
+	review?: {
+		code?: string;
+		rawUrl?: string;
+		prUrl?: string;
+		error?: string;
+	};
 	cookies: {
 		outputAreaSize: number | null;
 		helpAreaSize: number | null;
@@ -264,10 +273,12 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>, sessionId: str
 	}
 };
 
-export default function Editor({ persistenceState, cookies, roomState }: EditorProps) {
+export default function Editor({ persistenceState, cookies, roomState, review }: EditorProps) {
 	const outputArea = useRef<HTMLDivElement>(null);
 	const screenContainer = useRef<HTMLDivElement>(null);
 	const screenControls = useRef<HTMLDivElement>(null);
+	const reviewAutoRun = useRef(false);
+	const isReviewMode = !!review;
 
 	const [sessionId] = useState(nanoid());
 
@@ -514,6 +525,8 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	}
 	else if (persistenceState.value.kind === PersistenceStateKind.SHARED)
 		initialCode = persistenceState.value.code;
+	else if (review?.code)
+		initialCode = review.code;
 	else if (persistenceState.value.kind === PersistenceStateKind.IN_MEMORY)
 		initialCode = localStorage.getItem("sprigMemory") ?? defaultExampleCode;
 	else if (isNewSaveStrat.value && persistenceState.value.kind === PersistenceStateKind.COLLAB){
@@ -542,22 +555,6 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 		});
 	}, [initialCode]);
 
-	// Use the review state
-	useEffect(() => {
-		if (reviewState.value.isReviewMode && reviewState.value.reviewCode) {
-			// Set the code in the editor
-			if (codeMirror.value) {
-				codeMirror.value.dispatch({
-					changes: {
-						from: 0,
-						to: codeMirror.value.state.doc.length,
-						insert: reviewState.value.reviewCode
-					}
-				});
-			}
-		}
-	}, [reviewState.value.isReviewMode, reviewState.value.reviewCode]);
-
 	return (
 		roomState != undefined && persistenceState.value.kind === PersistenceStateKind.COLLAB && typeof persistenceState.value.game === 'string' 
 		? 
@@ -571,6 +568,32 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 
 			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>
+					{isReviewMode && (
+						<div class={styles.reviewBanner}>
+							<div>
+								<strong>Review Mode</strong>
+								<span>{review?.error ?? "Loaded from pull request source. Edits here stay local."}</span>
+							</div>
+							<div class={styles.reviewLinks}>
+								{review?.prUrl && (
+									<a href={review.prUrl} target="_blank" rel="noreferrer">
+										<IoOpenOutline /> PR
+									</a>
+								)}
+								{review?.rawUrl && (
+									<a href={review.rawUrl} target="_blank" rel="noreferrer">
+										<IoOpenOutline /> Raw
+									</a>
+								)}
+								<button type="button" onClick={onRun}>
+									<IoReloadOutline /> Restart
+								</button>
+								<button type="button" onClick={() => navigator.clipboard.writeText(window.location.href)}>
+									<IoCopyOutline /> Copy Link
+								</button>
+							</div>
+						</div>
+					)}
 					<CodeMirror
 						persistenceState={persistenceState}
 						roomState={roomState}
@@ -579,9 +602,15 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 						onEditorView={(editor) => {
 							codeMirror.value = editor;
 							setTimeout(() => foldAllTemplateLiterals(), 100); // Fold after the document is parsed (gross)
+							if (isReviewMode && review?.code && !reviewAutoRun.current) {
+								reviewAutoRun.current = true;
+								setTimeout(() => onRun(), 500);
+							}
 						}}
 						onRunShortcut={onRun}
 						onCodeChange={() => {
+							if (isReviewMode) return;
+
 							persistenceState.value = {
 								...persistenceState.value,
 								stale: true,
