@@ -1,7 +1,7 @@
 /*
 @title: smokedsalmon
 @description: memorize the patterns
-@author:
+@author: Unknown
 @tags: ['memory', 'pattern']
 @addedOn: 2026-05-10
 */
