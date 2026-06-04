@@ -106,9 +106,9 @@ function normalizeGitHubRawUrl(value: string | null) {
 				persistenceState={persistenceState}
 				review={review}
 				cookies={{
-					outputAreaSize: Astro.cookies.get('outputAreaSize')?.number(),
-					helpAreaSize: Astro.cookies.get('helpAreaSize')?.number(),
-					hideHelp: Astro.cookies.get('hideHelp')?.boolean()
+					outputAreaSize: Astro.cookies.get('outputAreaSize')?.number() ?? null,
+					helpAreaSize: Astro.cookies.get('helpAreaSize')?.number() ?? null,
+					hideHelp: Astro.cookies.get('hideHelp')?.boolean() ?? false
 				}}
 		/>
 		{isMobile ? <MobileUnsupported /> : null}
