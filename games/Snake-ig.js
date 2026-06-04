@@ -2,7 +2,7 @@
 @title: Snake
 @author: Darxander6
 @description: snake eats food ,gets bigger
-@tags: ['animal','replayable'dsa]
+@tags: ['animal','replayable','dsa']
 @addedOn: 2026-05-08
 */
 
