@@ -192,7 +192,7 @@ const mapWithConcurrency = async <T, R>(
 	await Promise.all(Array.from({ length: Math.min(n, items.length) }, async () => {
 		while (idx < items.length) {
 			const i = idx++;
-			out[i] = await fn(items[i] as T, i);
+			out[i] = await fn(items[i], i);
 		}
 	}));
 	return out;
@@ -260,12 +260,14 @@ const generateMetadataArtifacts = async () => {
 	);
 };
 
-export default (): AstroIntegration => ({
-	name: "generate-metadata",
-	hooks: {
-		"astro:config:done": async () => {
-			await mkdir(ASTRO_DIR, { recursive: true });
-			await generateMetadataArtifacts();
+export default function generateMetadata(): AstroIntegration {
+	return {
+		name: "generate-metadata",
+		hooks: {
+			"astro:config:done": async () => {
+				await mkdir(ASTRO_DIR, { recursive: true });
+				await generateMetadataArtifacts();
+			},
 		},
-	},
-});
+	};
+}
