@@ -81,7 +81,7 @@ export const MAINTAINER_REMINDER_MARKER = "<!-- sprig-maintainer-reminder -->";
 
 export function getRepository() {
 	const value = process.env.GITHUB_REPOSITORY;
-	if (!value || !value.includes("/")) {
+	if (!value || !/^[^\/]+\/[^\/]+$/.test(value)) {
 		throw new Error("GITHUB_REPOSITORY must be set to owner/repo");
 	}
 	const [owner, repo] = value.split("/");
