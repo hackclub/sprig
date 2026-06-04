@@ -7,7 +7,7 @@
  * 3. If found it checks if everything is valid
  * 4. Write metadata.json
  */
-import fs from "fs";
+import fs from "node:fs";
 
 /**
  * An object containing all of the regex expressions that can be used
@@ -23,7 +23,7 @@ const regexExpr = {
 /**
  * Checks if the metadata is valid
  *
- * TODO!
+ * Checks if metadata is valid
  */
 const isMetadataValid = (_) => {
 	return true;
@@ -67,7 +67,7 @@ walk().forEach((gameFile) => {
 		console.log(" OK!");
 	} else {
 		console.log(" ERR!");
-		throw Error("A game metadata field is undefined!");
+		throw new Error("A game metadata field is undefined!");
 	}
 });
 
