@@ -20,6 +20,7 @@ jobs:
   sync-sheet:
     if: github.event_name != 'issue_comment' || (github.event.issue.pull_request && startsWith(github.event.comment.body, '/'))
     runs-on: ubuntu-latest
+    steps:
       - name: Checkout automation
         uses: actions/checkout@v6
         with:
@@ -32,7 +33,7 @@ jobs:
           node-version: 24
 
       - name: Install Google Sheets client
-        run: npm install --no-save googleapis
+        run: npm install --no-save googleapis@173.0.0
 
       - name: Sync review sheet
         run: node .github/scripts/sync-review-sheet.mjs
