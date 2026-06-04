@@ -273,7 +273,7 @@ async function writeFilteredTabs() {
 	};
 	const lastColumn = columnLetter(columns.length);
 	for (const [tab, condition] of Object.entries(filters)) {
-		const formula = `={'${mainTab}'!A1:${lastColumn}1; FILTER('${mainTab}'!A2:${lastColumn}, '${mainTab}'!${condition})}`;
+		const formula = `={'${mainTab}'!A1:${lastColumn}1; IFERROR(FILTER('${mainTab}'!A2:${lastColumn}, '${mainTab}'!${condition}), MAKEARRAY(1, ${columns.length}, LAMBDA(row, col, "")))}`;
 		await sheets.spreadsheets.values.update({
 			spreadsheetId,
 			range: quoteRange(tab, "A1"),
