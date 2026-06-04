@@ -42,9 +42,11 @@ for (const pullRequest of openPulls) {
 }
 
 async function handleNeedsAuthor(pullRequest, labels) {
-	const needsAuthorSince = await latestLabelTime(pullRequest.number, "Needs Author");
-	const failedSince = await latestLabelTime(pullRequest.number, "Failed");
-	const since = newestDate([needsAuthorSince, failedSince].filter(Boolean));
+	const dates = [];
+	if (hasLabel(labels, "Needs Author")) dates.push(await latestLabelTime(pullRequest.number, "Needs Author"));
+	if (hasLabel(labels, "Failed")) dates.push(await latestLabelTime(pullRequest.number, "Failed"));
+	if (hasLabel(labels, "Stale")) dates.push(await latestLabelTime(pullRequest.number, "Stale"));
+	const since = newestDate(dates.filter(Boolean));
 	if (!since) return;
 
 	const age = daysBetween(since);
