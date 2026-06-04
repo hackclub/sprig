@@ -109,7 +109,10 @@ export async function githubRequest(token, method, route, body) {
 	if (response.status === 204) return null;
 
 	const text = await response.text();
-	const data = text ? JSON.parse(text) : null;
+	let data = null;
+	try {
+		data = text ? JSON.parse(text) : null;
+	} catch {}
 	if (!response.ok) {
 		const message = data?.message ?? text ?? `${response.status}`;
 		throw new Error(`${method} ${route} failed: ${message}`);
