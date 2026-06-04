@@ -32,13 +32,14 @@ const reviewBaseUrl = process.env.SPRIG_REVIEW_BASE_URL ?? "https://sprig.hackcl
 
 await ensureReviewLabels({ owner, repo, token });
 
+const pullFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/files`);
+const modifiesGames = pullFiles.some((f) => f.filename.startsWith("games/"));
 const labels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
-if (!hasLabel(labels, "Submission")) {
-	console.log("Submission label missing; validation not needed yet.");
+
+if (!modifiesGames && !hasLabel(labels, "Submission")) {
+	console.log("Not a submission PR (no games/ files modified and no Submission label); skipping.");
 	process.exit(0);
 }
-
-const pullFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/files`);
 const result = validateSubmission({
 	pullRequest,
 	pullFiles,

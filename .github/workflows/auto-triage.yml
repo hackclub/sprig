@@ -11,10 +11,6 @@ permissions:
 
 jobs:
   validate-submission:
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      contains(github.event.pull_request.labels.*.name, 'Submission') ||
-      contains(github.event.pull_request.labels.*.name, 'submission')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout trusted automation
