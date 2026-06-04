@@ -279,6 +279,10 @@ export default function Editor({ persistenceState, cookies, roomState, review }:
 	const screenControls = useRef<HTMLDivElement>(null);
 	const reviewAutoRun = useRef(false);
 	const isReviewMode = !!review;
+	const copyReviewLink = () => {
+		if (!navigator.clipboard) return;
+		navigator.clipboard.writeText(window.location.href).catch(() => {});
+	};
 
 	const [sessionId] = useState(nanoid());
 
@@ -588,7 +592,7 @@ export default function Editor({ persistenceState, cookies, roomState, review }:
 								<button type="button" onClick={onRun}>
 									<IoReloadOutline /> Restart
 								</button>
-								<button type="button" onClick={() => navigator.clipboard?.writeText(window.location.href)}>
+								<button type="button" onClick={copyReviewLink}>
 									<IoCopyOutline /> Copy Link
 								</button>
 							</div>
