@@ -52,12 +52,12 @@ jobs:
               return; 
             }
 
-            const { data: pullFiles } = await github.rest.pulls.listFiles({
+            const pullFiles = await github.paginate(github.rest.pulls.listFiles, {
               owner: context.repo.owner, repo: context.repo.repo, pull_number: prNumber,
             });
 
-            const modifiesGames = pullFiles.some(f => f.filename.startsWith('games/'));
-            if (!modifiesGames && context.event_name !== 'workflow_dispatch') {
+            const gameFiles = pullFiles.filter(f => f.filename.startsWith('games/'));
+            if (gameFiles.length === 0 && context.event_name !== 'workflow_dispatch') {
               console.log("[Auto Triage] No games/ files modified. Skipping.");
               return;
             }
@@ -65,15 +65,33 @@ jobs:
             let logs = [];
             let isFailed = false;
 
+            if (gameFiles.length > 1) {
+              logs.push(`- It looks like you submitted ${gameFiles.length} games at once! Please submit only one game per Pull Request to make reviewing easier.`);
+              isFailed = true;
+            }
+
+            const isMaintainer = ['OWNER', 'MEMBER', 'COLLABORATOR'].includes(context.payload.pull_request?.author_association);
+
             for (const file of pullFiles) {
               const filename = path.basename(file.filename);
               
               if (!file.filename.startsWith('games/')) {
-                logs.push(`- It looks like "${file.filename}" is outside the games folder. Only files in /games are allowed.`);
+                logs.push(`- It looks like "${file.filename}" is outside the games folder. Only files in /games are allowed in a game submission.`);
                 isFailed = true; continue;
               }
-              if (file.status !== 'added') {
-                logs.push(`- Heads up: "${filename}" was modified, but you can only add new games here.`);
+              
+              if (!file.filename.endsWith('.js')) {
+                logs.push(`- "${file.filename}" is not a Javascript file. Only .js files are allowed in /games.`);
+                isFailed = true; continue;
+              }
+              
+              if (!/^games\/[^/]+\.js$/.test(file.filename)) {
+                logs.push(`- "${file.filename}" seems to be inside a subdirectory. Games must be placed directly in the /games folder.`);
+                isFailed = true; continue;
+              }
+
+              if (file.status !== 'added' && !isMaintainer) {
+                logs.push(`- Heads up: "${filename}" was modified, but you can only add new games here. (Maintainers bypass this check)`);
                 isFailed = true; continue;
               }
 
