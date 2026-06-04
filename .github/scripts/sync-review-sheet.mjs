@@ -184,7 +184,7 @@ async function collectPullRequests(existingRows) {
 			pullMap.set(pullRequest.number, pullRequest);
 		}
 
-		const lastUpdated = new Date(closedPage[closedPage.length - 1].updated_at).getTime();
+		const lastUpdated = new Date(closedPage.at(-1).updated_at).getTime();
 		if (lastUpdated <= recentCutoff) break;
 		if (closedPage.length < 100) break;
 		page += 1;
@@ -239,13 +239,13 @@ function parseAutoReview(comments) {
 		playLink: firstMarkdownLink(body, "Play in Sprig Editor"),
 		rawLink: firstMarkdownLink(body, "View Raw"),
 		screenshotLink: firstMarkdownLink(body, "View Screenshot"),
-		similarity: body.match(/Similarity:\s*([0-9]+%)/)?.[1] ?? "",
+		similarity: body.match(/Similarity:\s*(\d+%)/)?.[1] ?? "",
 	};
 }
 
 function firstMarkdownLink(markdown, label) {
-	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-	return markdown.match(new RegExp(`\\[${escaped}\\]\\(([^)]+)\\)`))?.[1] ?? "";
+	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+	return markdown.match(new RegExp(String.raw`\[${escaped}\]\(([^)]+)\)`))?.[1] ?? "";
 }
 
 async function writeRows(rows) {
@@ -311,7 +311,7 @@ function columnLetter(index) {
 	let current = index;
 	while (current > 0) {
 		const remainder = (current - 1) % 26;
-		value = String.fromCharCode(65 + remainder) + value;
+		value = String.fromCodePoint(65 + remainder) + value;
 		current = Math.floor((current - 1) / 26);
 	}
 	return value;
