@@ -56,11 +56,20 @@ async function getReviewPayload(url: URL) {
 	}
 
 	try {
-		const response = await fetch(rawUrl, { headers: { Accept: 'text/plain' } })
-		if (!response.ok) {
-			return { code: undefined, rawUrl, prUrl, error: `Could not load game code from GitHub (${response.status}).` }
+		const controller = new AbortController()
+		const timeout = setTimeout(() => controller.abort(), 5000)
+		try {
+			const response = await fetch(rawUrl, {
+				headers: { Accept: 'text/plain' },
+				signal: controller.signal
+			})
+			if (!response.ok) {
+				return { code: undefined, rawUrl, prUrl, error: `Could not load game code from GitHub (${response.status}).` }
+			}
+			return { code: await response.text(), rawUrl, prUrl, error: undefined }
+		} finally {
+			clearTimeout(timeout)
 		}
-		return { code: await response.text(), rawUrl, prUrl, error: undefined }
 	} catch {
 		return { code: undefined, rawUrl, prUrl, error: 'Could not load game code from GitHub.' }
 	}

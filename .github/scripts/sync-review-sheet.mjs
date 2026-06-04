@@ -164,19 +164,34 @@ async function buildRows(existingRows) {
 
 async function collectPullRequests(existingRows) {
 	const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open&sort=created&direction=asc`);
-	const closedPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=closed&sort=updated&direction=desc`);
 	const recentCutoff = Date.now() - 90 * 86_400_000;
 	const pullMap = new Map();
 
 	for (const pullRequest of openPulls) pullMap.set(pullRequest.number, pullRequest);
-	for (const pullRequest of closedPulls) {
-		const isRecent = new Date(pullRequest.updated_at).getTime() > recentCutoff;
-		if (isRecent || existingRows.has(pullRequest.number)) {
+
+	let page = 1;
+	for (;;) {
+		const closedPage = await githubRequest(
+			token,
+			"GET",
+			`/repos/${owner}/${repo}/pulls?state=closed&sort=updated&direction=desc&per_page=100&page=${page}`
+		);
+		if (!Array.isArray(closedPage) || closedPage.length === 0) break;
+
+		for (const pullRequest of closedPage) {
+			const updatedAt = new Date(pullRequest.updated_at).getTime();
+			if (updatedAt <= recentCutoff) continue;
 			pullMap.set(pullRequest.number, pullRequest);
 		}
+
+		const lastUpdated = new Date(closedPage[closedPage.length - 1].updated_at).getTime();
+		if (lastUpdated <= recentCutoff) break;
+		if (closedPage.length < 100) break;
+		page += 1;
 	}
 
 	return [...pullMap.values()];
+}
 }
 
 function latestReview(reviews) {

@@ -18,8 +18,8 @@ permissions:
 
 jobs:
   sync-sheet:
+    if: github.event_name != 'issue_comment' || (github.event.issue.pull_request && startsWith(github.event.comment.body, '/'))
     runs-on: ubuntu-latest
-    steps:
       - name: Checkout automation
         uses: actions/checkout@v6
         with:
