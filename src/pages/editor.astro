@@ -1,23 +1,24 @@
 ---
 import '../global.css'
 import { getSession } from '../lib/game-saving/account'
-import Editor from '../components/big-interactive-pages/editor'
+import SprigEditor from '../components/big-interactive-pages/editor'
 import StandardHead from '../components/standard-head.astro'
 import { signal } from '@preact/signals'
-import { PersistenceState } from '../lib/state'
+import { type PersistenceState, PersistenceStateKind } from '../lib/state'
 import { mobileUserAgent } from '../lib/utils/mobile'
 import MobileUnsupported from '../components/popups-etc/mobile-unsupported'
 import UploadWarningModal from '../components/popups-etc/upload-failed-warning'
 import { showUploadWarningModal } from '../lib/upload'
 
-const reviewMode = Astro.url.searchParams.get('review') === 'true'
+const requestUrl = new URL(Astro.request.url)
+const reviewMode = requestUrl.searchParams.get('review') === 'true' || requestUrl.searchParams.has('raw') || requestUrl.searchParams.has('pr')
 
 // Redirects for legacy Sprig URLs
 const galleryRegex = /^https:\/\/raw\.githubusercontent\.com\/hackclub\/sprig\/main\/games\/(.+)\.js$/
-const galleryMatches = Astro.url.searchParams.get('file')?.match(galleryRegex) ?? null
+const galleryMatches = requestUrl.searchParams.get('file')?.match(galleryRegex) ?? null
 if (!reviewMode && galleryMatches) return Astro.redirect(`/gallery/${galleryMatches[1]}`, 302)
-if (Astro.url.searchParams.has('id'))
-	return Astro.redirect(`/legacy-bucket/${Astro.url.searchParams.get('id')}`, 302)
+if (requestUrl.searchParams.has('id'))
+	return Astro.redirect(`/legacy-bucket/${requestUrl.searchParams.get('id')}`, 302)
 
 const tempGame = Astro.cookies.get('sprigTempGame')?.value
 if (tempGame && !reviewMode) return Astro.redirect(`/~/${encodeURIComponent(tempGame)}`, 302)
@@ -26,14 +27,14 @@ const session = await getSession(Astro.cookies)
 if (session?.session.full && !reviewMode) return Astro.redirect('/~', 302)
 
 const persistenceState = signal<PersistenceState>({
-	kind: 'IN_MEMORY',
+	kind: PersistenceStateKind.IN_MEMORY,
 	showInitialWarning: true,
 	stale: false,
 	session: null
 })
 const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 
-const review = reviewMode ? await getReviewPayload(Astro.url) : undefined
+const review = reviewMode ? await getReviewPayload(requestUrl) : undefined
 
 // If no session and not in review mode, redirect to login
 if (!session?.session.full && !reviewMode) {
@@ -100,7 +101,7 @@ function normalizeGitHubRawUrl(value: string | null) {
 		<StandardHead title='Editor' />
 	</head>
 	<body>
-			<Editor
+			<SprigEditor
 				client:load
 				persistenceState={persistenceState}
 				review={review}
