@@ -137,7 +137,8 @@ function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, 
 			metadata = validateMetadata(content, filename, workspace);
 			for (const check of metadata.checks) addCheck(check.name, check.ok, check.detail);
 
-			const unsupportedApis = [/document\./i, /window\./i, /alert\(/i, /fetch\(/i].filter((regex) => regex.test(content));
+			const codeWithoutComments = stripComments(content);
+			const unsupportedApis = [/document\./i, /window\./i, /alert\(/i, /fetch\(/i].filter((regex) => regex.test(codeWithoutComments));
 			addCheck(
 				"Sprig-only APIs",
 				unsupportedApis.length === 0,
@@ -398,6 +399,10 @@ function analyze(code) {
 		.toLowerCase();
 }
 
+function stripComments(code) {
+	return code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, "");
+}
+
 function checkSimilarity(a, b) {
 	const s1 = analyze(a);
 	const s2 = analyze(b);
@@ -426,12 +431,20 @@ function readFileSafe(filePath) {
 
 async function applyLabels(result) {
 	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Submission"] });
+	const currentLabels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
+	const preserveReviewState = result.ok &&
+		["edited", "labeled", "unlabeled"].includes(event.action) &&
+		(hasLabel(currentLabels, "Claimed") || hasLabel(currentLabels, "Ready for Maintainer"));
 
 	if (result.ok) {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Verified"] });
-		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Playtest" });
+		if (!preserveReviewState) {
+			await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Playtest" });
+		}
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Failed" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Needs Author" });
+		if (!preserveReviewState) {
+			await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Needs Author" });
+		}
 	} else {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Failed"] });
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
