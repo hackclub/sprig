@@ -4,24 +4,26 @@ import { getSession } from '../lib/game-saving/account'
 import Editor from '../components/big-interactive-pages/editor'
 import StandardHead from '../components/standard-head.astro'
 import { signal } from '@preact/signals'
-import { PersistenceState, reviewState } from '../lib/state'
+import { PersistenceState } from '../lib/state'
 import { mobileUserAgent } from '../lib/utils/mobile'
 import MobileUnsupported from '../components/popups-etc/mobile-unsupported'
 import UploadWarningModal from '../components/popups-etc/upload-failed-warning'
 import { showUploadWarningModal } from '../lib/upload'
 
+const reviewMode = Astro.url.searchParams.get('review') === 'true'
+
 // Redirects for legacy Sprig URLs
 const galleryRegex = /^https:\/\/raw\.githubusercontent\.com\/hackclub\/sprig\/main\/games\/(.+)\.js$/
 const galleryMatches = Astro.url.searchParams.get('file')?.match(galleryRegex) ?? null
-if (galleryMatches) return Astro.redirect(`/gallery/${galleryMatches[1]}`, 302)
+if (!reviewMode && galleryMatches) return Astro.redirect(`/gallery/${galleryMatches[1]}`, 302)
 if (Astro.url.searchParams.has('id'))
 	return Astro.redirect(`/legacy-bucket/${Astro.url.searchParams.get('id')}`, 302)
 
 const tempGame = Astro.cookies.get('sprigTempGame')?.value
-if (tempGame) return Astro.redirect(`/~/${encodeURIComponent(tempGame)}`, 302)
+if (tempGame && !reviewMode) return Astro.redirect(`/~/${encodeURIComponent(tempGame)}`, 302)
 
 const session = await getSession(Astro.cookies)
-if (session?.session.full) return Astro.redirect('/~', 302)
+if (session?.session.full && !reviewMode) return Astro.redirect('/~', 302)
 
 const persistenceState = signal<PersistenceState>({
 	kind: 'IN_MEMORY',
@@ -31,20 +33,55 @@ const persistenceState = signal<PersistenceState>({
 })
 const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 
-// Check for review mode
-const reviewMode = Astro.url.searchParams.get('review') === 'true'
-const reviewCode = reviewMode ? Astro.url.searchParams.get('code') : null
+const review = reviewMode ? await getReviewPayload(Astro.url) : undefined
 
 // If no session and not in review mode, redirect to login
 if (!session?.session.full && !reviewMode) {
 	return Astro.redirect('/login', 302)
 }
 
-// Set review state
-if (reviewMode && reviewCode) {
-	reviewState.value = {
-		isReviewMode: true,
-		reviewCode: decodeURIComponent(reviewCode)
+async function getReviewPayload(url: URL) {
+	const rawUrl = normalizeGitHubRawUrl(url.searchParams.get('raw') ?? url.searchParams.get('file'))
+	const code = url.searchParams.get('code')
+	const repo = url.searchParams.get('repo')
+	const pr = url.searchParams.get('pr')
+	const prUrl = repo && pr ? `https://github.com/${repo}/pull/${pr}` : undefined
+
+	if (code) {
+		return { code, rawUrl: undefined, prUrl, error: undefined }
+	}
+
+	if (!rawUrl) {
+		return { code: undefined, rawUrl: undefined, prUrl, error: 'Review link is missing a valid GitHub raw URL.' }
+	}
+
+	try {
+		const response = await fetch(rawUrl, { headers: { Accept: 'text/plain' } })
+		if (!response.ok) {
+			return { code: undefined, rawUrl, prUrl, error: `Could not load game code from GitHub (${response.status}).` }
+		}
+		return { code: await response.text(), rawUrl, prUrl, error: undefined }
+	} catch {
+		return { code: undefined, rawUrl, prUrl, error: 'Could not load game code from GitHub.' }
+	}
+}
+
+function normalizeGitHubRawUrl(value: string | null) {
+	if (!value) return null
+	try {
+		const url = new URL(value)
+		if (url.protocol !== 'https:') return null
+		if (url.hostname === 'raw.githubusercontent.com') return url.toString()
+		if (url.hostname !== 'github.com') return null
+
+		const parts = url.pathname.split('/').filter(Boolean)
+		if (parts.length < 5) return null
+		const [owner, repo, mode, ref, ...filePath] = parts
+		if (!owner || !repo || !ref || !filePath.length) return null
+		if (mode !== 'raw' && mode !== 'blob') return null
+		return `https://raw.githubusercontent.com/${owner}/${repo}/${ref}/${filePath.join('/')}`
+	} catch {
+		return null
 	}
 }
 ---
@@ -54,13 +91,15 @@ if (reviewMode && reviewCode) {
 		<StandardHead title='Editor' />
 	</head>
 	<body>
-		<Editor
-			client:load
-			persistenceState={persistenceState}
-			cookies={{
-				outputAreaSize: Astro.cookies.get('outputAreaSize')?.number(),
-				hideHelp: Astro.cookies.get('hideHelp')?.boolean()
-			}}
+			<Editor
+				client:load
+				persistenceState={persistenceState}
+				review={review}
+				cookies={{
+					outputAreaSize: Astro.cookies.get('outputAreaSize')?.number(),
+					helpAreaSize: Astro.cookies.get('helpAreaSize')?.number(),
+					hideHelp: Astro.cookies.get('hideHelp')?.boolean()
+				}}
 		/>
 		{isMobile ? <MobileUnsupported /> : null}
 		<UploadWarningModal client:load showWarning={showUploadWarningModal} />
