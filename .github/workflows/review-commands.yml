@@ -11,7 +11,12 @@ permissions:
 
 jobs:
   handle-command:
-    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/')
+    if: |
+      github.event.issue.pull_request &&
+      startsWith(github.event.comment.body, '/') &&
+      (github.event.comment.author_association == 'MEMBER' ||
+        github.event.comment.author_association == 'COLLABORATOR' ||
+        github.event.comment.author_association == 'OWNER')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout automation
