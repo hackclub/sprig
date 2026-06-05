@@ -113,19 +113,19 @@ async function ensureSheets() {
 
 	sheetIdMap = Object.fromEntries(spreadsheet.data.sheets.map((s) => [s.properties.title, s.properties.sheetId]));
 
-	await sheets.spreadsheets.values.update({
+	await withRetry(() => sheets.spreadsheets.values.update({
 		spreadsheetId,
 		range: quoteRange(mainTab, "A1"),
 		valueInputOption: "RAW",
 		requestBody: { values: [columns] },
-	});
+	}));
 }
 
 async function readExistingRows() {
-	const response = await sheets.spreadsheets.values.get({
+	const response = await withRetry(() => sheets.spreadsheets.values.get({
 		spreadsheetId,
 		range: quoteRange(mainTab, `A2:${columnLetter(columns.length)}10000`),
-	});
+	}));
 	const rows = response.data.values ?? [];
 	const map = new Map();
 	for (const row of rows) {
@@ -282,17 +282,17 @@ function firstMarkdownLink(markdown, label) {
 }
 
 async function writeRows(rows) {
-	await sheets.spreadsheets.values.clear({
+	await withRetry(() => sheets.spreadsheets.values.clear({
 		spreadsheetId,
 		range: quoteRange(mainTab, `A2:${columnLetter(columns.length)}10000`),
-	});
+	}));
 	if (!rows.length) return;
-	await sheets.spreadsheets.values.update({
+	await withRetry(() => sheets.spreadsheets.values.update({
 		spreadsheetId,
 		range: quoteRange(mainTab, "A2"),
 		valueInputOption: "USER_ENTERED",
 		requestBody: { values: rows.map((row) => columns.map((column) => row[column] ?? "")) },
-	});
+	}));
 }
 
 async function writeFilteredTabs() {
@@ -410,12 +410,12 @@ async function writeMetrics() {
 		["Merged", `=COUNTIF('${mainTab}'!E:E,"Merged")`],
 		["Oldest Active PR Age", `=MAX(FILTER('${mainTab}'!L:L,'${mainTab}'!E:E<>"Merged",'${mainTab}'!E:E<>"Closed"))`],
 	];
-	await sheets.spreadsheets.values.update({
+	await withRetry(() => sheets.spreadsheets.values.update({
 		spreadsheetId,
 		range: quoteRange("Metrics", "A1"),
 		valueInputOption: "USER_ENTERED",
 		requestBody: { values },
-	});
+	}));
 }
 
 function quoteRange(sheetName, a1) {
