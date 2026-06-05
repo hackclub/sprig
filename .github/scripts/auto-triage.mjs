@@ -224,14 +224,19 @@ function validateMetadata(content, filename, workspace) {
 
 	checkMetadataDate(values.addedOn, add);
 
-	const titleLooksLikeTemplate = /getting_started/i.test(values.title) || /template/i.test(values.title);
-	const authorLooksLikeTemplate = /leo,\s*edits/i.test(values.author);
+	const titleLooksLikeTemplate = /getting_started/i.test(values.title) || /template/i.test(values.title) || /^my game$/i.test(values.title?.trim());
+	const authorLooksLikeTemplate = /leo,\s*edits/i.test(values.author) || /^my name$/i.test(values.author?.trim());
+	const descriptionLooksLikeTemplate = /short description about the game/i.test(values.description?.trim());
+	const hasExampleTags = parsedTags.tags?.some(t => ["tag1", "tag2", "example", "another-example"].includes(t.toLowerCase()));
+
+	const hasTemplateValues = titleLooksLikeTemplate || authorLooksLikeTemplate || descriptionLooksLikeTemplate || hasExampleTags;
+
 	add(
 		"Metadata template values",
-		!titleLooksLikeTemplate && !authorLooksLikeTemplate,
-		!titleLooksLikeTemplate && !authorLooksLikeTemplate
+		!hasTemplateValues,
+		!hasTemplateValues
 			? "No template metadata values found."
-			: "Replace example/template values in the metadata header."
+			: "Replace example/template values in the metadata header (like 'MY GAME', 'MY NAME', 'Short description...', or placeholder tags)."
 	);
 
 	const titleConflict = values.title ? findTitleConflict(values.title, filename, workspace) : null;
