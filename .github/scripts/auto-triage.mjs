@@ -107,7 +107,7 @@ function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, 
 
 	const { jsFiles, imageFiles } = validateSubmissionFiles(pullFiles, addCheck);
 
-	const bodyChecks = validatePullRequestBody(pullRequest.body ?? "", imageFiles.length > 0);
+	const bodyChecks = validatePullRequestBody(pullRequest.body ?? "");
 	for (const check of bodyChecks.checks) addCheck(check.name, check.ok, check.detail);
 
 	let gameFile = null;
@@ -163,7 +163,7 @@ function isAllowedSubmissionFile(filename) {
 	return false;
 }
 
-function validatePullRequestBody(body, imageProvided) {
+function validatePullRequestBody(body) {
 	const checks = [];
 	const add = (name, ok, detail) => checks.push({ name, ok, detail });
 
@@ -175,43 +175,7 @@ function validatePullRequestBody(body, imageProvided) {
 	add("PR about blurb", Boolean(about), about ? "About blurb is filled." : "Fill in `What is your game about?` in the PR description.");
 	add("PR gameplay description", Boolean(gameplay), gameplay ? "Gameplay description is filled." : "Fill in `How do you play your game?` in the PR description.");
 
-	validateChecklists(body, imageProvided, add);
-
 	return { checks };
-}
-
-function validateChecklists(body, imageProvided, add) {
-	const imageHeaderIndex = body.search(/^##\s+Image/im);
-	const codeSection = imageHeaderIndex >= 0 ? body.slice(0, imageHeaderIndex) : body;
-	const imageSection = imageHeaderIndex >= 0 ? body.slice(imageHeaderIndex) : "";
-
-	const codeBoxes = getCheckboxes(codeSection);
-	const uncheckedCodeBoxes = codeBoxes.filter((box) => !box.checked);
-	const uncheckedCodeNames = uncheckedCodeBoxes.map((box) => `\`${box.text}\``).join(", ");
-	let codeBoxDetail = "All required code boxes are checked.";
-	if (codeBoxes.length === 0) codeBoxDetail = "Keep the PR checklist and check every required code box.";
-	else if (uncheckedCodeBoxes.length) codeBoxDetail = `Check every required code box. Still unchecked: ${uncheckedCodeNames}.`;
-	add(
-		"Code checklist",
-		codeBoxes.length > 0 && uncheckedCodeBoxes.length === 0,
-		codeBoxDetail
-	);
-
-	if (imageProvided) {
-		const imageBoxes = getCheckboxes(imageSection);
-		const uncheckedImageBoxes = imageBoxes.filter((box) => !box.checked);
-		const uncheckedImgNames = uncheckedImageBoxes.map((box) => `\`${box.text}\``).join(", ");
-		let imgBoxDetail = "Image checklist is checked.";
-		if (imageBoxes.length === 0) imgBoxDetail = "An image was added, so keep and complete the image checklist.";
-		else if (uncheckedImageBoxes.length) imgBoxDetail = `Image was added, so check the image checklist boxes. Still unchecked: ${uncheckedImgNames}.`;
-		add(
-			"Image checklist",
-			imageBoxes.length > 0 && uncheckedImageBoxes.length === 0,
-			imgBoxDetail
-		);
-	} else {
-		add("Image checklist", true, "No image was added, so image checklist is optional.");
-	}
 }
 
 function extractBoldField(body, label) {
@@ -227,13 +191,6 @@ function stripTemplateNoise(value) {
 		.replace(/<!--[\s\S]*?-->/g, "")
 		.replace(/^>\s?.*$/gm, "")
 		.trim();
-}
-
-function getCheckboxes(markdown) {
-	return [...markdown.matchAll(/^\s*-\s+\[([ xX])\]\s+(.+)$/gm)].map((match) => ({
-		checked: match[1].toLowerCase() === "x",
-		text: match[2].replace(/<!--[\s\S]*?-->/g, "").trim(),
-	}));
 }
 
 function validateMetadata(content, filename, workspace) {

@@ -1,7 +1,7 @@
 name: Sprig Auto Triage
 on:
   pull_request_target:
-    types: [opened, synchronize, assigned, unassigned]
+    types: [opened, synchronize, assigned, unassigned, edited]
   pull_request_review:
     types: [submitted]
   workflow_dispatch: 
