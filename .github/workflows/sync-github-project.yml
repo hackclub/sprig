@@ -1,5 +1,4 @@
-name: Sync Sprig Review Sheet
-
+name: Sync Sprig Project Board
 on:
   pull_request_target:
     types: [opened, edited, labeled, unlabeled, synchronize, reopened, closed]
@@ -32,14 +31,10 @@ jobs:
         with:
           node-version: 24
 
-      - name: Install Google Sheets client
-        run: npm install --no-save googleapis@173.0.0
-
-      - name: Sync review sheet
-        run: node .github/scripts/sync-review-sheet.mjs
+      - name: Sync project board
+        run: node .github/scripts/sync-github-project.mjs
         env:
+          PROJECT_GITHUB_TOKEN: ${{ secrets.PROJECT_PAT }}
+          GITHUB_PROJECT_URL: ${{ secrets.GITHUB_PROJECT_URL }}
           GITHUB_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
-          SPRIG_REVIEW_SHEET_TAB: All
