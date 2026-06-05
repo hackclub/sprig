@@ -5,9 +5,9 @@ on:
   workflow_dispatch: 
 
 permissions:
-  contents: read
-  issues: write
   pull-requests: write
+  issues: write
+  contents: read
 
 jobs:
   validate-submission:
