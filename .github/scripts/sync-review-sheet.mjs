@@ -54,6 +54,23 @@ await writeRows(syncedRows);
 await writeFilteredTabs();
 await writeMetrics();
 
+async function withRetry(operation) {
+	let attempt = 0;
+	while (true) {
+		try {
+			return await operation();
+		} catch (error) {
+			attempt++;
+			if (attempt > 3 || error.code !== 429) {
+				throw error;
+			}
+			const delayMs = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
+			console.log(`Rate limited (429). Retrying in ${Math.round(delayMs)}ms...`);
+			await new Promise((resolve) => setTimeout(resolve, delayMs));
+		}
+	}
+}
+
 async function makeSheetsClient(rawCredentials) {
 	const { google } = await import("googleapis");
 	const credentials = parseCredentials(rawCredentials);
@@ -90,8 +107,8 @@ async function ensureSheets() {
 		.map((title) => ({ addSheet: { properties: { title } } }));
 
 	if (requests.length) {
-		await sheets.spreadsheets.batchUpdate({ spreadsheetId, requestBody: { requests } });
-		spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
+		await withRetry(() => sheets.spreadsheets.batchUpdate({ spreadsheetId, requestBody: { requests } }));
+		spreadsheet = await withRetry(() => sheets.spreadsheets.get({ spreadsheetId }));
 	}
 
 	sheetIdMap = Object.fromEntries(spreadsheet.data.sheets.map((s) => [s.properties.title, s.properties.sheetId]));
@@ -378,7 +395,7 @@ async function writeFilteredTabs() {
 	}
 
 	if (requests.length) {
-		await sheets.spreadsheets.batchUpdate({ spreadsheetId, requestBody: { requests } });
+		await withRetry(() => sheets.spreadsheets.batchUpdate({ spreadsheetId, requestBody: { requests } }));
 	}
 }
 
