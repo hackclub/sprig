@@ -43,6 +43,21 @@ if (event.action === "unassigned") {
 	}
 	process.exit(0);
 }
+
+if (event.review && event.action === "submitted") {
+	const reviewState = event.review.state.toLowerCase();
+	
+	if (reviewState === "changes_requested") {
+		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
+		console.log(`Review requested changes, set "Needs Author".`);
+	} else if (reviewState === "approved") {
+		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Maintainer" });
+		console.log(`Review approved, set "Ready for Maintainer".`);
+	} else {
+		console.log(`Review state is ${reviewState}, ignoring.`);
+	}
+	process.exit(0);
+}
 const workspace = path.resolve(process.env.SUBMISSION_PATH ?? process.cwd());
 const reviewBaseUrl = process.env.SPRIG_REVIEW_BASE_URL ?? "https://sprig.hackclub.com/editor";
 

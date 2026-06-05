@@ -140,17 +140,21 @@ async function buildRows(existingRows) {
 		const autoReview = parseAutoReview(comments);
 		const existing = existingRows.get(pullRequest.number) ?? {};
 
+		const customNote = commandNote?.text || lastReview?.body || existing["Triage Note"] || "";
+		const nextAction = nextActionFromState(state, labels);
+		const displayAction = customNote ? `${nextAction}: ${customNote}` : nextAction;
+
 		nextRows.set(pullRequest.number, {
 			"PR #": pullRequest.number,
 			"PR URL": pullRequest.html_url,
 			Title: pullRequest.title,
 			Submitter: pullRequest.user.login,
 			State: state,
-			"Next Action": nextActionFromState(state, labels),
+			"Next Action": displayAction,
 			Triager: commandNote?.user ?? lastReview?.user?.login ?? existing.Triager ?? "",
 			Reviewer: (issue.assignees ?? []).filter(u => !isBot(u)).map((user) => user.login).join(", "),
 			"Review Decision": formatReviewDecision(lastReview?.state ?? ""),
-			"Triage Note": commandNote?.text ?? existing["Triage Note"] ?? "",
+			"Triage Note": customNote,
 			"Internal Note": existing["Internal Note"] ?? "",
 			"Age Days": daysBetween(pullRequest.created_at),
 			"Last Activity": pullRequest.updated_at,
