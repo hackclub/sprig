@@ -49,11 +49,11 @@ async function getReviewPayload(url: URL) {
 	const prUrl = repo && pr ? `https://github.com/${repo}/pull/${pr}` : undefined
 
 	if (code) {
-		return { code, rawUrl: undefined, prUrl, error: undefined }
+		return { code, rawUrl: undefined, prUrl, repo, pr, error: undefined }
 	}
 
 	if (!rawUrl) {
-		return { code: undefined, rawUrl: undefined, prUrl, error: 'Review link is missing a valid GitHub raw URL.' }
+		return { code: undefined, rawUrl: undefined, prUrl, repo, pr, error: 'Review link is missing a valid GitHub raw URL.' }
 	}
 
 	try {
@@ -65,14 +65,14 @@ async function getReviewPayload(url: URL) {
 				signal: controller.signal
 			})
 			if (!response.ok) {
-				return { code: undefined, rawUrl, prUrl, error: `Could not load game code from GitHub (${response.status}).` }
+				return { code: undefined, rawUrl, prUrl, repo, pr, error: `Could not load game code from GitHub (${response.status}).` }
 			}
-			return { code: await response.text(), rawUrl, prUrl, error: undefined }
+			return { code: await response.text(), rawUrl, prUrl, repo, pr, error: undefined }
 		} finally {
 			clearTimeout(timeout)
 		}
 	} catch {
-		return { code: undefined, rawUrl, prUrl, error: 'Could not load game code from GitHub.' }
+		return { code: undefined, rawUrl, prUrl, repo, pr, error: 'Could not load game code from GitHub.' }
 	}
 }
 

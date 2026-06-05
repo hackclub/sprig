@@ -7,6 +7,7 @@ import {
 	getIssueLabels,
 	getRepository,
 	githubPaginated,
+	githubRequest,
 	hasLabel,
 	readGitHubEvent,
 	removeLabel,
@@ -27,6 +28,21 @@ if (!pullRequest) {
 }
 
 const prNumber = pullRequest.number;
+
+if (event.action === "assigned") {
+	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Claimed"] });
+	console.log(`PR assigned, added "Claimed" label.`);
+	process.exit(0);
+}
+
+if (event.action === "unassigned") {
+	const issueData = await githubRequest(token, "GET", `/repos/${owner}/${repo}/issues/${prNumber}`);
+	if ((issueData.assignees ?? []).length === 0) {
+		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Claimed" });
+		console.log(`PR has no assignees left, removed "Claimed" label.`);
+	}
+	process.exit(0);
+}
 const workspace = path.resolve(process.env.SUBMISSION_PATH ?? process.cwd());
 const reviewBaseUrl = process.env.SPRIG_REVIEW_BASE_URL ?? "https://sprig.hackclub.com/editor";
 
@@ -59,6 +75,9 @@ await upsertBotComment({
 	body: buildComment(result),
 });
 
+console.log("Validation Result:", JSON.stringify(result, null, 2));
+console.log("\nBot Comment Body:\n", buildComment(result));
+
 if (!result.ok) process.exit(1);
 
 function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, owner, repo }) {
@@ -90,12 +109,17 @@ function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, 
 		similarity = result.similarity;
 
 		rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${gameFile.filename}`;
-		const reviewUrl = new URL(reviewBaseUrl);
-		reviewUrl.searchParams.set("review", "true");
-		reviewUrl.searchParams.set("raw", rawUrl);
-		reviewUrl.searchParams.set("pr", String(prNumber));
-		reviewUrl.searchParams.set("repo", `${owner}/${repo}`);
-		playUrl = reviewUrl.toString();
+		
+		const buildReviewUrl = (base) => {
+			const u = new URL(base);
+			u.searchParams.set("review", "true");
+			u.searchParams.set("raw", rawUrl);
+			u.searchParams.set("pr", String(prNumber));
+			u.searchParams.set("repo", `${owner}/${repo}`);
+			return u.toString();
+		};
+
+		playUrl = buildReviewUrl(reviewBaseUrl);
 	}
 
 	if (gameFile) {
@@ -382,13 +406,84 @@ async function applyLabels(result) {
 function buildComment(result) {
 	const status = result.ok ? "✅ Auto Review: Verified" : "❌ Auto Review: Needs Fixes";
 	const metadata = result.metadata ?? {};
-	const checkLines = result.checks.map((check) => {
-		const icon = check.ok ? "✅" : "❌";
-		return `- ${icon} ${check.name}: ${check.detail}`;
-	});
+
+	const categories = {
+		file: { name: "📂 Files & Directories", checks: [] },
+		pr: { name: "📝 PR Description & Checklists", checks: [] },
+		metadata: { name: "🏷️ Game Metadata Header", checks: [] },
+		code: { name: "💻 Code & Assets", checks: [] },
+		other: { name: "🔍 Other Checks", checks: [] },
+	};
+
+	const categoryMap = {
+		"Files stay in allowed folders": "file",
+		"Exactly one game file": "file",
+		"Only new files added": "file",
+		"Filename uses safe characters": "file",
+		"Game file is directly inside games/": "file",
+
+		"PR author name": "pr",
+		"PR about blurb": "pr",
+		"PR gameplay description": "pr",
+		"Code checklist": "pr",
+		"Image checklist": "pr",
+
+		"Metadata @title": "metadata",
+		"Metadata @author": "metadata",
+		"Metadata @description": "metadata",
+		"Metadata @tags": "metadata",
+		"Metadata @addedOn": "metadata",
+		"Metadata tags parse": "metadata",
+		"Metadata date": "metadata",
+		"Metadata template values": "metadata",
+		"Unique game title": "metadata",
+
+		"Sprig-only APIs": "code",
+		"Optional image path": "code",
+		"Optional image name": "code",
+	};
+
+	for (const check of result.checks) {
+		const catKey = categoryMap[check.name] ?? "other";
+		categories[catKey].checks.push(check);
+	}
+
+	const failedChecks = result.checks.filter((c) => !c.ok);
+
+	let checksSection = "";
+	if (failedChecks.length > 0) {
+		checksSection += `> [!WARNING]\n> **Failed Checks (${failedChecks.length}):**\n`;
+		for (const check of failedChecks) {
+			checksSection += `> - ❌ **${check.name}:** ${check.detail}\n`;
+		}
+		checksSection += "\n";
+	}
+
+	checksSection += "#### Checks Status\n";
+	for (const [key, cat] of Object.entries(categories)) {
+		if (cat.checks.length === 0) continue;
+		const total = cat.checks.length;
+		const passed = cat.checks.filter((c) => c.ok).length;
+		const allPassed = passed === total;
+		const lines = cat.checks.map((c) => {
+			const icon = c.ok ? "✅" : "❌";
+			return `- ${icon} **${c.name}:** ${c.detail}`;
+		}).join("\n");
+
+		if (allPassed) {
+			checksSection += `<details>\n<summary><b>${cat.name} (${passed}/${total} passed)</b></summary>\n\n${lines}\n</details>\n`;
+		} else {
+			checksSection += `<details open>\n<summary><b>${cat.name} (${passed}/${total} passed) - Needs Attention ⚠️</b></summary>\n\n${lines}\n</details>\n`;
+		}
+	}
+
+	const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
+	const headRef = pullRequest.head.ref;
+	const editUrl = `https://github.com/${headRepo}/edit/${headRef}/${result.gameFile ?? ""}`;
 
 	const links = [];
 	if (result.playUrl) links.push(`- [Play in Sprig Editor](${result.playUrl})`);
+	if (result.gameFile) links.push(`- [Edit Game File](${editUrl})`);
 	if (result.rawUrl) links.push(`- [View Raw](${result.rawUrl})`);
 	if (result.screenshotUrl) links.push(`- [View Screenshot](${result.screenshotUrl})`);
 	links.push(`- [PR Files](${pullRequest.html_url}/files)`);
@@ -411,10 +506,9 @@ ${result.ok ? "This submission is ready for human playtest." : "This submission 
 #### Links
 ${links.join("\n")}
 
-#### Checks
-${checkLines.join("\n")}${warningLines.join("\n")}
+${checksSection}${warningLines.join("\n")}
 
-${result.ok ? "Reviewers: claim this PR, use the play link, then approve or request changes." : "Authors: push fixes to this PR. These checks rerun automatically."}
+${result.ok ? "Reviewers: claim this PR, use the play link, then approve or request changes." : `@${pullRequest.user.login}: push fixes to this PR ([edit file](${editUrl})). These checks rerun automatically.`}
 `;
 }
 

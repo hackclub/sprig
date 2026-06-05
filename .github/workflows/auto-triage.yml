@@ -1,7 +1,7 @@
 name: Sprig Auto Triage
 on:
   pull_request_target:
-    types: [opened, synchronize]
+    types: [opened, synchronize, assigned, unassigned]
   workflow_dispatch: 
 
 permissions:
@@ -16,7 +16,7 @@ jobs:
       - name: Checkout trusted automation
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.base.sha || github.sha }}
+          ref: refs/heads/main
           path: automation
           persist-credentials: false
 
