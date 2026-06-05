@@ -298,8 +298,6 @@ export default function Editor({ persistenceState: persistenceStateProp, cookies
 	const isReviewMode = !!review;
 
 	const [copiedLink, setCopiedLink] = useState(false);
-	const [copiedCheckout, setCopiedCheckout] = useState(false);
-	const [copiedCommentText, setCopiedCommentText] = useState(false);
 
 	const copyReviewLink = () => {
 		if (!navigator.clipboard) return;
@@ -311,16 +309,6 @@ export default function Editor({ persistenceState: persistenceStateProp, cookies
 			.catch(() => {});
 	};
 
-	const copyCheckoutCommand = () => {
-		if (!navigator.clipboard) return;
-		const cmd = `gh pr checkout ${review?.pr}`;
-		navigator.clipboard.writeText(cmd)
-			.then(() => {
-				setCopiedCheckout(true);
-				setTimeout(() => setCopiedCheckout(false), 2000);
-			})
-			.catch(() => {});
-	};
 
 	const [sessionId] = useState(nanoid());
 
@@ -391,24 +379,6 @@ export default function Editor({ persistenceState: persistenceStateProp, cookies
 		}
 	}
 
-	const copyReviewComment = () => {
-		if (!navigator.clipboard) return;
-		let comment = "";
-		if (failedLines.length > 0) {
-			const bulletPoints = failedLines.map(line => `- [ ] ${line}`).join("\n");
-			const editSection = editFileUrl ? `\n\nYou can edit the file directly on GitHub here: ${editFileUrl}` : "";
-			comment = `Thanks for submitting your game! Before we can playtest this, please fix the following issue(s):\n\n${bulletPoints}${editSection}\n\nThese checks will automatically rerun when you push your changes!`;
-		} else {
-			const playLink = window.location.href;
-			comment = `All automated checks passed successfully! 🎉\n\nI playtested this game here: ${playLink}\n\nEverything looks great. Ready for final maintainer review!`;
-		}
-		navigator.clipboard.writeText(comment)
-			.then(() => {
-				setCopiedCommentText(true);
-				setTimeout(() => setCopiedCommentText(false), 2000);
-			})
-			.catch(() => {});
-	};
 
 	useEffect(() => {
 		setInterval(() => {
@@ -774,14 +744,6 @@ export default function Editor({ persistenceState: persistenceStateProp, cookies
 													All automated checks passed successfully! 🎉
 												</div>
 											)}
-											<div class={styles.prActionsRow}>
-												<button class={styles.reviewActionLink} onClick={copyCheckoutCommand}>
-													{copiedCheckout ? "Copied!" : "Copy CLI Checkout"}
-												</button>
-												<button class={styles.reviewActionLink} onClick={copyReviewComment}>
-													{copiedCommentText ? "Copied!" : "Copy Review Comment"}
-												</button>
-											</div>
 										</div>
 									)}
 								</div>

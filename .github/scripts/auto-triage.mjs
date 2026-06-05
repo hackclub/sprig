@@ -484,6 +484,10 @@ function buildComment(result) {
 	const links = [];
 	if (result.playUrl) links.push(`- [Play in Sprig Editor](${result.playUrl})`);
 	if (result.gameFile) links.push(`- [Edit Game File](${editUrl})`);
+	if (result.similarity?.match) {
+		const similarName = result.similarity.match.replace(/^games\//, "").replace(/\.js$/, "");
+		links.push(`- [Play Similar Game (Gallery)](https://sprig.hackclub.com/gallery/${similarName})`);
+	}
 	if (result.rawUrl) links.push(`- [View Raw](${result.rawUrl})`);
 	if (result.screenshotUrl) links.push(`- [View Screenshot](${result.screenshotUrl})`);
 	links.push(`- [PR Files](${pullRequest.html_url}/files)`);
@@ -508,7 +512,7 @@ ${links.join("\n")}
 
 ${checksSection}${warningLines.join("\n")}
 
-${result.ok ? "Reviewers: claim this PR, use the play link, then approve or request changes." : `@${pullRequest.user.login}: push fixes to this PR ([edit file](${editUrl})). These checks rerun automatically.`}
+${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: push fixes to this PR ([edit file](${editUrl})). These checks rerun automatically.`}
 `;
 }
 
