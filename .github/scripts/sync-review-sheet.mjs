@@ -45,6 +45,8 @@ const columns = [
 	"Closed At",
 ];
 
+let sheetIdMap = {};
+
 await ensureSheets();
 const existingRows = await readExistingRows();
 const syncedRows = await buildRows(existingRows);
@@ -89,7 +91,10 @@ async function ensureSheets() {
 
 	if (requests.length) {
 		await sheets.spreadsheets.batchUpdate({ spreadsheetId, requestBody: { requests } });
+		spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
 	}
+
+	sheetIdMap = Object.fromEntries(spreadsheet.data.sheets.map((s) => [s.properties.title, s.properties.sheetId]));
 
 	await sheets.spreadsheets.values.update({
 		spreadsheetId,
@@ -143,7 +148,7 @@ async function buildRows(existingRows) {
 			State: state,
 			"Next Action": nextActionFromState(state, labels),
 			Triager: commandNote?.user ?? lastReview?.user?.login ?? existing.Triager ?? "",
-			Reviewer: (issue.assignees ?? []).map((user) => user.login).join(", "),
+			Reviewer: (issue.assignees ?? []).filter(u => !isBot(u)).map((user) => user.login).join(", "),
 			"Review Decision": formatReviewDecision(lastReview?.state ?? ""),
 			"Triage Note": commandNote?.text ?? existing["Triage Note"] ?? "",
 			"Internal Note": existing["Internal Note"] ?? "",
@@ -193,8 +198,15 @@ async function collectPullRequests(existingRows) {
 	return [...pullMap.values()];
 }
 
+function isBot(user) {
+	if (!user || !user.login) return true;
+	const login = user.login.toLowerCase();
+	return login.endsWith("[bot]") || login === "chatgpt-codex-connector" || login.includes("github-actions");
+}
+
 function latestReview(reviews) {
 	return [...reviews]
+		.filter((review) => !isBot(review.user))
 		.sort((a, b) => new Date(b.submitted_at).getTime() - new Date(a.submitted_at).getTime())
 		.find((review) => ["APPROVED", "CHANGES_REQUESTED", "COMMENTED"].includes(review.state));
 }
@@ -227,7 +239,7 @@ function latestReviewerNote(comments) {
 		})
 		.filter(Boolean);
 
-	return notes.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0] ?? null;
+	return notes.filter(note => !isBot({ login: note.user })).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0] ?? null;
 }
 
 function parseAutoReview(comments) {
@@ -264,22 +276,105 @@ async function writeRows(rows) {
 
 async function writeFilteredTabs() {
 	const filters = {
-		"Ready for Playtest": `E2:E="Ready for Playtest"`,
-		Claimed: `E2:E="Claimed"`,
-		"Needs Author": `E2:E="Needs Author"`,
-		"Ready for Maintainer": `E2:E="Ready for Maintainer"`,
-		Stale: `E2:E="Stale"`,
-		Merged: `E2:E="Merged"`,
+		"Ready for Playtest": `E = 'Ready for Playtest'`,
+		Claimed: `E = 'Claimed'`,
+		"Needs Author": `E = 'Needs Author'`,
+		"Ready for Maintainer": `E = 'Ready for Maintainer'`,
+		Stale: `E = 'Stale'`,
+		Merged: `E = 'Merged'`,
 	};
 	const lastColumn = columnLetter(columns.length);
+	
 	for (const [tab, condition] of Object.entries(filters)) {
-		const formula = `={'${mainTab}'!A1:${lastColumn}1; IFERROR(FILTER('${mainTab}'!A2:${lastColumn}, '${mainTab}'!${condition}), MAKEARRAY(1, ${columns.length}, LAMBDA(row, col, "")))}`;
+		const formula = `=QUERY('${mainTab}'!A1:${lastColumn}, "SELECT A, G, E, H, F WHERE ${condition} label F 'Action'", 1)`;
 		await sheets.spreadsheets.values.update({
 			spreadsheetId,
 			range: quoteRange(tab, "A1"),
 			valueInputOption: "USER_ENTERED",
 			requestBody: { values: [[formula]] },
 		});
+	}
+
+	const requests = [];
+	for (const tab of Object.keys(filters)) {
+		const sheetId = sheetIdMap[tab];
+		if (sheetId === undefined) continue;
+
+		requests.push({
+			repeatCell: {
+				range: { sheetId, startRowIndex: 0, endRowIndex: 1, startColumnIndex: 0, endColumnIndex: 5 },
+				cell: {
+					userEnteredFormat: {
+						backgroundColor: { red: 0.176, green: 0.443, blue: 0.302 },
+						textFormat: { bold: true, foregroundColor: { red: 1, green: 1, blue: 1 }, fontFamily: "Roboto" },
+					}
+				},
+				fields: "userEnteredFormat(backgroundColor,textFormat)"
+			}
+		});
+
+		requests.push({
+			repeatCell: {
+				range: { sheetId, startRowIndex: 1, startColumnIndex: 0, endColumnIndex: 5 },
+				cell: {
+					userEnteredFormat: {
+						verticalAlignment: "MIDDLE",
+						wrapStrategy: "WRAP",
+						textFormat: { fontFamily: "Roboto" }
+					}
+				},
+				fields: "userEnteredFormat(verticalAlignment,wrapStrategy,textFormat)"
+			}
+		});
+
+		requests.push({
+			repeatCell: {
+				range: { sheetId, startRowIndex: 1, startColumnIndex: 0, endColumnIndex: 1 },
+				cell: {
+					userEnteredFormat: {
+						textFormat: { fontSize: 24, bold: true, fontFamily: "Roboto" }
+					}
+				},
+				fields: "userEnteredFormat(textFormat)"
+			}
+		});
+
+		requests.push({
+			setDataValidation: {
+				range: { sheetId, startRowIndex: 1, startColumnIndex: 2, endColumnIndex: 3 },
+				rule: {
+					condition: {
+						type: "ONE_OF_LIST",
+						values: [
+							{ userEnteredValue: "Ready for Playtest" },
+							{ userEnteredValue: "Needs Author" },
+							{ userEnteredValue: "Ready for Maintainer" },
+							{ userEnteredValue: "Claimed" },
+							{ userEnteredValue: "Merged" },
+							{ userEnteredValue: "Stale" },
+							{ userEnteredValue: "Triaged" },
+						]
+					},
+					showCustomUi: true,
+					strict: false
+				}
+			}
+		});
+
+		const widths = [100, 200, 180, 150, 400];
+		for (let i = 0; i < widths.length; i++) {
+			requests.push({
+				updateDimensionProperties: {
+					range: { sheetId, dimension: "COLUMNS", startIndex: i, endIndex: i + 1 },
+					properties: { pixelSize: widths[i] },
+					fields: "pixelSize"
+				}
+			});
+		}
+	}
+
+	if (requests.length) {
+		await sheets.spreadsheets.batchUpdate({ spreadsheetId, requestBody: { requests } });
 	}
 }
 
