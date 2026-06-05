@@ -472,6 +472,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 
 	const publishToGithub = async (githubState: Signal<GithubState | undefined>, gameID: string | undefined) => {
+		if (isPublishing.value) return;
 		const startTime = Date.now();
 		try {
 
@@ -515,6 +516,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			handleError("gameTitle", !valid, gameNameMessage);
 			handleError("gameDescription", !gameDescription, "Please provide a game description.");
 			handleError("gameControlsDescription", !gameControlsDescription, "Please provide game controls description.");
+
+			const tagsMatch = gameCode.match(/@tags:\s*\[.*\]/);
+			if (!tagsMatch) {
+				displayError("gameTitle", "Please ensure your code has a valid @tags array at the top!");
+				hasError = true;
+			}
 
 			if (hasError) {
 				return;
