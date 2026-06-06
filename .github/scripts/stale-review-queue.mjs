@@ -91,13 +91,21 @@ async function handleReadyForMaintainer(pullRequest) {
 }
 
 async function handleClaimed(pullRequest) {
-	const since = await latestLabelTime(pullRequest.number, "Claimed");
-	if (!since || daysBetween(since) < 3) return;
+	const since = pullRequest.updated_at;
+	if (daysBetween(since) < 3) return;
+
+	const assignees = (pullRequest.assignees || []).map(a => a.login);
+	if (assignees.length > 0) {
+		await githubRequest(token, "DELETE", `/repos/${owner}/${repo}/issues/${pullRequest.number}/assignees`, {
+			assignees
+		});
+	}
+
 	await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: "Claimed" });
 	await commentOnce({
 		issueNumber: pullRequest.number,
 		marker: "<!-- sprig-unclaim-stale -->",
-		body: "Unclaiming because this review has had no activity for 3 days.",
+		body: "Unassigning because this review has had no activity for 3 days.",
 	});
 }
 
