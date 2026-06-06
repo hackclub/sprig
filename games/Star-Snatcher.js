@@ -1,7 +1,7 @@
 /*
 @title: Star-Snatcher
 @author: tap
-@description:Catch 'em all! Run From Lava And Survive!
+@description: Catch 'em all! Run From Lava And Survive!
 @tags: []
 @addedOn: 2025-12-13
 */
