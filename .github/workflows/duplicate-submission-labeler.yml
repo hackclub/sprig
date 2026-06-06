@@ -1,7 +1,7 @@
 name: Duplicate Submission Labeler
 on:
   pull_request_target:
-    types: [opened, labeled]
+    types: [opened, labeled, closed]
 
 jobs:
   label-duplicates:
@@ -36,6 +36,14 @@ jobs:
               
               if [ -z "$HAS_DUPE_LABEL" ]; then
                 gh pr edit "$PR_NUM" --add-label "Potential Duplicate"
+              fi
+            done
+          else
+            # If count is 1 or 0, remove the Potential Duplicate label if it's there
+            for PR_NUM in $SUBMISSION_PRS; do
+              HAS_DUPE_LABEL=$(gh pr view "$PR_NUM" --json labels --jq '.labels[].name' | grep -i "Potential Duplicate" || true)
+              if [ -n "$HAS_DUPE_LABEL" ]; then
+                gh pr edit "$PR_NUM" --remove-label "Potential Duplicate"
               fi
             done
           fi

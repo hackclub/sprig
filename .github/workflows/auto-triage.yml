@@ -1,7 +1,7 @@
 name: Sprig Auto Triage
 on:
     pull_request_target:
-        types: [opened, synchronize, assigned, unassigned, edited, reopened]
+        types: [opened, synchronize, assigned, unassigned, edited, reopened, ready_for_review]
     pull_request_review:
         types: [submitted]
     issue_comment:
@@ -16,6 +16,9 @@ permissions:
 jobs:
     validate-submission:
         runs-on: ubuntu-latest
+        concurrency:
+            group: auto-triage-${{ github.event.pull_request.number || github.event.issue.number || github.run_id }}
+            cancel-in-progress: true
         steps:
             - name: Checkout trusted automation
               uses: actions/checkout@v4

@@ -29,6 +29,11 @@ if (!pullRequest || (!event.pull_request && !event.issue?.pull_request)) {
 
 const prNumber = pullRequest.number;
 
+if (pullRequest.draft) {
+	console.log("PR is a draft. Skipping triage.");
+	process.exit(0);
+}
+
 if (event.comment && event.action === "created") {
 	if (pullRequest.state === "closed" && event.comment.user.login === pullRequest.user.login) {
 		const labels = (pullRequest.labels ?? []).map(l => typeof l === "string" ? l : l.name);

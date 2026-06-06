@@ -118,9 +118,11 @@ async function updateItemField(projectId, itemId, field, value) {
 // Reusing logic from sync-review-sheet.mjs
 async function collectPullRequests() {
 	const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open&sort=created&direction=asc`);
-	// For GitHub projects we don't need to sync closed PRs necessarily, but let's keep it simple for now
-	// We'll just process all open PRs
-	return openPulls;
+	
+	// Fetch the last 100 closed PRs (merged or unmerged)
+	const closedPulls = await githubRequest(token, "GET", `/repos/${owner}/${repo}/pulls?state=closed&sort=updated&direction=desc&per_page=100`);
+	
+	return [...openPulls, ...(closedPulls || [])];
 }
 
 function isBot(user) {
