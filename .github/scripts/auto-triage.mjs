@@ -20,14 +20,29 @@ if (!token) throw new Error("GITHUB_TOKEN is required");
 
 const { owner, repo } = getRepository();
 const event = readGitHubEvent();
-const pullRequest = event.pull_request;
+const pullRequest = event.pull_request || event.issue;
 
-if (!pullRequest) {
+if (!pullRequest || (!event.pull_request && !event.issue?.pull_request)) {
 	console.log("No pull request in event; skipping auto triage.");
 	process.exit(0);
 }
 
 const prNumber = pullRequest.number;
+
+if (event.comment && event.action === "created") {
+	if (pullRequest.state === "closed" && event.comment.user.login === pullRequest.user.login) {
+		const labels = (pullRequest.labels ?? []).map(l => typeof l === "string" ? l : l.name);
+		if (hasLabel(labels, "Submission")) {
+			console.log("Author commented on closed submission, reopening.");
+			await githubRequest(token, "PATCH", `/repos/${owner}/${repo}/pulls/${prNumber}`, { state: "open" });
+			await ensureReviewLabels({ owner, repo, token });
+			await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Playtest" });
+			process.exit(0);
+		}
+	}
+	console.log("Comment event ignored.");
+	process.exit(0);
+}
 
 if (event.action === "assigned") {
 	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Claimed"] });
