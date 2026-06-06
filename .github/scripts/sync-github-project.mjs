@@ -145,23 +145,7 @@ function formatReviewDecision(state) {
 	}
 }
 
-function latestReviewerNote(comments) {
-	const notes = comments
-		.map((comment) => {
-			const match = comment.body?.match(/^\/(triage-note|needs-author|ready-maintainer|ai-concern|plagiarism-risk)\s*([\s\S]*)/i);
-			if (!match) return null;
-			const text = match[2].trim();
-			if (!text) return null;
-			return {
-				text,
-				user: comment.user?.login ?? "",
-				createdAt: comment.created_at,
-			};
-		})
-		.filter(Boolean);
 
-	return notes.filter(note => !isBot({ login: note.user })).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0] ?? null;
-}
 
 function parseAutoReview(comments) {
 	const comment = [...comments]
@@ -201,10 +185,9 @@ async function main() {
 		
 		const state = currentStateFromLabels(labels, pullRequest);
 		const lastReview = latestReview(reviews);
-		const commandNote = latestReviewerNote(comments);
 		const autoReview = parseAutoReview(comments);
 
-		const customNote = commandNote?.text || lastReview?.body || "";
+		const customNote = lastReview?.body || "";
 		const nextAction = nextActionFromState(state, labels);
 		const displayAction = customNote ? `${nextAction}: ${customNote}` : nextAction;
 
@@ -214,7 +197,7 @@ async function main() {
 			"Submitter": pullRequest.user.login,
 			"Review State": state,
 			"Next Action": displayAction,
-			"Triager": commandNote?.user ?? lastReview?.user?.login ?? "",
+			"Triager": lastReview?.user?.login ?? "",
 			"Review Decision": formatReviewDecision(lastReview?.state ?? ""),
 			"Triage Note": customNote,
 			"Age Days": daysBetween(pullRequest.created_at),
