@@ -1,40 +1,40 @@
 name: Sprig Auto Triage
 on:
-  pull_request_target:
-    types: [opened, synchronize, assigned, unassigned, edited, reopened]
-  pull_request_review:
-    types: [submitted]
-  workflow_dispatch: 
+    pull_request_target:
+        types: [opened, synchronize, assigned, unassigned, edited, reopened]
+    pull_request_review:
+        types: [submitted]
+    workflow_dispatch:
 
 permissions:
-  pull-requests: write
-  issues: write
-  contents: read
+    pull-requests: write
+    issues: write
+    contents: read
 
 jobs:
-  validate-submission:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout trusted automation
-        uses: actions/checkout@v4
-        with:
-          ref: refs/heads/main
-          path: automation
-          persist-credentials: false
+    validate-submission:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout trusted automation
+              uses: actions/checkout@v6
+              with:
+                  ref: refs/heads/main
+                  path: automation
+                  persist-credentials: false
 
-      - name: Checkout submitted files
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          path: submission
-          persist-credentials: false
-          fetch-depth: 0
+            - name: Checkout submitted files
+              uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha || github.sha }}
+                  path: submission
+                  persist-credentials: false
+                  fetch-depth: 0
 
-      - name: Validate submission
-        run: node automation/.github/scripts/auto-triage.mjs
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_EVENT_PATH: ${{ github.event_path }}
-          SUBMISSION_PATH: ${{ github.workspace }}/submission
-          SPRIG_REVIEW_BASE_URL: https://sprig.hackclub.com/editor
+            - name: Validate submission
+              run: node automation/.github/scripts/auto-triage.mjs
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+                  GITHUB_REPOSITORY: ${{ github.repository }}
+                  GITHUB_EVENT_PATH: ${{ github.event_path }}
+                  SUBMISSION_PATH: ${{ github.workspace }}/submission
+                  SPRIG_REVIEW_BASE_URL: https://sprig.hackclub.com/editor
