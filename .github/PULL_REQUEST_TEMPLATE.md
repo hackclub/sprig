@@ -26,8 +26,8 @@ Our automated bot will instantly check your game as soon as you submit this! To 
     @title: MY GAME
     @author: MY NAME
     @description: Short description about the game
-    @tags: ['example', 'another-example']/Users/maaren/Desktop/Screenshots/ishare-1780674992-firefox.png
-    @addedOn: 2026-06-05
+    @tags: ['example', 'another-example']
+    @addedOn: YYYY-MM-DD
     */
     ```
 2. **Is your file in the right place?** Your game must be a `.js` file inside the [`/games` directory](https://github.com/hackclub/sprig/tree/main/games).
