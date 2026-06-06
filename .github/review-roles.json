@@ -1,9 +1,7 @@
 {
   "_comment": "GitHub usernames for the Sprig review team. Update this file to add/remove team members.",
   "maintainers": [
-    "lachlanjc",
-    "maxwofford",
-    "sampoder"
+    "whatwareweb" 
   ],
   "triagers": [
     "SSoggyTacoMan"
