@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 import {
 	MAINTAINER_REMINDER_MARKER,
 	STALE_REMINDER_MARKER,
@@ -11,6 +14,15 @@ import {
 	removeLabel,
 	setStateLabel,
 } from "./review-utils.mjs";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const rolesPath = path.resolve(__dirname, "../review-roles.json");
+let roles = { maintainers: [], triagers: [] };
+try {
+	roles = JSON.parse(readFileSync(rolesPath, "utf8"));
+} catch {
+	console.warn("review-roles.json not found or invalid, role pings will be skipped.");
+}
 
 const token = process.env.GITHUB_TOKEN;
 if (!token) throw new Error("GITHUB_TOKEN is required");
@@ -88,10 +100,11 @@ function newestDate(dates) {
 async function handleReadyForMaintainer(pullRequest) {
 	const since = await latestLabelTime(pullRequest.number, "Ready for Maintainer");
 	if (!since || daysBetween(since) < 7) return;
+	const pings = roles.maintainers.map(u => `@${u}`).join(" ") || "maintainers";
 	await commentOnce({
 		issueNumber: pullRequest.number,
 		marker: MAINTAINER_REMINDER_MARKER,
-		body: "This submission has been ready for maintainer review for 7 days.",
+		body: `This submission has been ready for maintainer review for 7 days. ${pings} — could one of you take a look?`,
 	});
 }
 
