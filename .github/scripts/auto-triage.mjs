@@ -613,6 +613,11 @@ async function validateSingleGameFile(gameFile, workspace, addCheck, warnings) {
 	const gamePath = path.join(workspace, gameFile.filename);
 	const content = readFileSafe(gamePath);
 
+	if (content === null) {
+		addCheck("Game file readable", false, `Unable to read \`${gameFile.filename}\` from the checked-out PR.`);
+		return { metadata, similarity };
+	}
+
 	const maxFileSize = 2 * 1024 * 1024; // 2MB
 	if (content.length > maxFileSize) {
 		addCheck("File size limit", false, `The file \`${filename}\` is too large (${(content.length / 1024 / 1024).toFixed(2)}MB). Maximum allowed size is 2MB.`);
@@ -635,26 +640,23 @@ async function validateSingleGameFile(gameFile, workspace, addCheck, warnings) {
 			: `Move \`${gameFile.filename}\` directly into \`games/\`, not a nested folder.`
 	);
 
-	if (content === null) {
-		addCheck("Game file readable", false, `Unable to read \`${gameFile.filename}\` from the checked-out PR.`);
-	} else {
-		metadata = await validateMetadata(content, filename, workspace);
-		for (const check of metadata.checks) addCheck(check.name, check.ok, check.detail);
+	metadata = await validateMetadata(content, filename, workspace);
+	for (const check of metadata.checks) addCheck(check.name, check.ok, check.detail);
 
-		const codeWithoutComments = stripComments(content);
-		const unsupportedApis = [/document\./i, /window\./i, /alert\(/i, /fetch\(/i].filter((regex) => regex.test(codeWithoutComments));
-		addCheck(
-			"Sprig-only APIs",
-			unsupportedApis.length === 0,
-			unsupportedApis.length
-				? `Remove browser APIs like \`window\`, \`document\`, \`alert\`, or \`fetch\` from \`${filename}\`.`
-				: "No unsupported browser APIs found."
-		);
+	const codeWithoutComments = stripComments(content);
+	const unsupportedApis = [/document\./i, /window\./i, /alert\(/i, /fetch\(/i].filter((regex) => regex.test(codeWithoutComments));
+	addCheck(
+		"Sprig-only APIs",
+		unsupportedApis.length === 0,
+		unsupportedApis.length
+			? `Remove browser APIs like \`window\`, \`document\`, \`alert\`, or \`fetch\` from \`${filename}\`.`
+			: "No unsupported browser APIs found."
+	);
 
-		similarity = findMostSimilarGame(content, gameFile.filename, workspace);
-		if (similarity.score >= 0.5) {
-			warnings.push(`Similarity is ${formatPercent(similarity.score)} against \`${similarity.match}\`. A reviewer or lead should compare both games.`);
-		}
+	similarity = findMostSimilarGame(content, gameFile.filename, workspace);
+	if (similarity.score >= 0.5) {
+		warnings.push(`Similarity is ${formatPercent(similarity.score)} against \`${similarity.match}\`. A reviewer or lead should compare both games.`);
 	}
+
 	return { metadata, similarity };
 }
