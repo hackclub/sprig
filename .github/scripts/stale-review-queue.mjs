@@ -38,7 +38,10 @@ for (const pullRequest of openPulls) {
 
 	if (hasLabel(labels, "Claimed")) {
 		await handleClaimed(pullRequest);
+		continue;
 	}
+
+	await handleUntouchedSubmission(pullRequest);
 }
 
 async function handleNeedsAuthor(pullRequest, labels) {
@@ -96,6 +99,17 @@ async function handleClaimed(pullRequest) {
 		marker: "<!-- sprig-unclaim-stale -->",
 		body: "Unclaiming because this review has had no activity for 3 days.",
 	});
+}
+
+async function handleUntouchedSubmission(pullRequest) {
+	if (daysBetween(pullRequest.updated_at) >= 30) {
+		await setStateLabel({ owner, repo, token, issueNumber: pullRequest.number, state: "Stale" });
+		await commentOnce({
+			issueNumber: pullRequest.number,
+			marker: STALE_REMINDER_MARKER,
+			body: "This submission hasn't had any activity in over 30 days. Marking as Stale to get reviewer attention.",
+		});
+	}
 }
 
 async function latestLabelTime(issueNumber, labelName) {
