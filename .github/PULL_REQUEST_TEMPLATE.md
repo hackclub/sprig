@@ -16,18 +16,18 @@
 
 <!-- Example: Press WASD to move, J to restart and K to toggle trails, Get A boxes (cyan) to A goals (green), Get B boxes (magenta) to B goals (red), Get normal boxes (gray) to either goal. (from [Sokoban plus](https://sprig.hackclub.com/gallery/sokoban_plus)) -->
 
-## Pre-Flight Checklist
+## Pre Apply Checklist
 
 Our automated bot will instantly check your game as soon as you submit this! To make sure your game passes the bot's checks, please verify the following **before** you click submit:
 
 1. **Did you add metadata?** The very top of your `.js` file MUST have the following metadata block filled out:
     ```javascript
     /*
-    @title: My Game
-    @author: My Name
-    @description: Pushing boxes to the goal.
-    @tags: ['puzzle', 'action']
-    @addedOn: 2026-06-05
+    @title: MY GAME
+    @author: MY NAME
+    @description: Short description about the game
+    @tags: ['example', 'another-example']
+    @addedOn: YYYY-MM-DD
     */
     ```
 2. **Is your file in the right place?** Your game must be a `.js` file inside the [`/games` directory](https://github.com/hackclub/sprig/tree/main/games).

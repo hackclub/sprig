@@ -71,7 +71,7 @@ if (!modifiesGames && !hasLabel(labels, "Submission")) {
 	console.log("Not a submission PR (no games/ files modified and no Submission label); skipping.");
 	process.exit(0);
 }
-const result = validateSubmission({
+const result = await validateSubmission({
 	pullRequest,
 	pullFiles,
 	workspace,
@@ -95,7 +95,7 @@ console.log("\nBot Comment Body:\n", buildComment(result));
 
 if (!result.ok) process.exit(1);
 
-function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, owner, repo }) {
+async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, owner, repo }) {
 	const checks = [];
 	const problems = [];
 	const warnings = [];
@@ -119,7 +119,7 @@ function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, 
 
 	if (jsFiles.length === 1) {
 		gameFile = jsFiles[0];
-		const result = validateSingleGameFile(gameFile, workspace, addCheck, warnings);
+		const result = await validateSingleGameFile(gameFile, workspace, addCheck, warnings);
 		metadata = result.metadata;
 		similarity = result.similarity;
 
@@ -159,7 +159,7 @@ function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, 
 
 function isAllowedSubmissionFile(filename) {
 	if (/^games\/[A-Za-z0-9_-]+\.js$/.test(filename)) return true;
-	if (/^games\/img\/[^/]+\.(png|jpe?g|webp)$/i.test(filename)) return true;
+	if (/^games\/img\/[A-Za-z0-9_-]+\.png$/i.test(filename)) return true;
 	return false;
 }
 
@@ -193,7 +193,7 @@ function stripTemplateNoise(value) {
 		.trim();
 }
 
-function validateMetadata(content, filename, workspace) {
+async function validateMetadata(content, filename, workspace) {
 	const checks = [];
 	const values = {
 		title: getMetadataValue(content, "title"),
@@ -224,17 +224,22 @@ function validateMetadata(content, filename, workspace) {
 
 	checkMetadataDate(values.addedOn, add);
 
-	const titleLooksLikeTemplate = /getting_started/i.test(values.title) || /template/i.test(values.title);
-	const authorLooksLikeTemplate = /leo,\s*edits/i.test(values.author);
+	const titleLooksLikeTemplate = /^getting(_|\s)started$/i.test(values.title?.trim()) || /^template$/i.test(values.title?.trim()) || /^my game$/i.test(values.title?.trim());
+	const authorLooksLikeTemplate = /leo,\s*edits/i.test(values.author) || /^my name$/i.test(values.author?.trim());
+	const descriptionLooksLikeTemplate = /short description about the game/i.test(values.description?.trim());
+	const hasExampleTags = parsedTags.tags?.some(t => ["tag1", "tag2", "example", "another-example"].includes(t.toLowerCase()));
+
+	const hasTemplateValues = titleLooksLikeTemplate || authorLooksLikeTemplate || descriptionLooksLikeTemplate || hasExampleTags;
+
 	add(
 		"Metadata template values",
-		!titleLooksLikeTemplate && !authorLooksLikeTemplate,
-		!titleLooksLikeTemplate && !authorLooksLikeTemplate
+		!hasTemplateValues,
+		!hasTemplateValues
 			? "No template metadata values found."
-			: "Replace example/template values in the metadata header."
+			: "Replace example/template values in the metadata header (like 'MY GAME', 'MY NAME', 'Short description...', or placeholder tags)."
 	);
 
-	const titleConflict = values.title ? findTitleConflict(values.title, filename, workspace) : null;
+	const titleConflict = values.title ? await findTitleConflict(values.title, filename, workspace) : null;
 	add(
 		"Unique game title",
 		!titleConflict,
@@ -247,7 +252,7 @@ function validateMetadata(content, filename, workspace) {
 }
 
 function getMetadataValue(content, key) {
-	const match = content.match(new RegExp(String.raw`@${key}:\s*([^\r\n]*)`));
+	const match = content.match(new RegExp(String.raw`@${key}:\s*([\s\S]*?)(?=\n\s*@|\n\s*\*\/)`));
 	return match?.[1]?.trim() ?? "";
 }
 
@@ -271,7 +276,7 @@ function parseTags(raw) {
 	}
 }
 
-function findTitleConflict(title, filename, workspace) {
+async function findTitleConflict(title, filename, workspace) {
 	const gamesDir = path.join(workspace, "games");
 	const normalizedTitle = normalize(title);
 	for (const gameFile of readdirSync(gamesDir).filter((file) => file.endsWith(".js"))) {
@@ -280,6 +285,22 @@ function findTitleConflict(title, filename, workspace) {
 		if (!content) continue;
 		const existingTitle = getMetadataValue(content, "title");
 		if (normalize(existingTitle) === normalizedTitle) return `games/${gameFile}`;
+	}
+
+	const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
+	for (const pr of openPulls) {
+		if (pr.number === prNumber) continue;
+		const prFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pr.number}/files`);
+		for (const file of prFiles) {
+			if (file.filename.startsWith("games/") && file.filename.endsWith(".js")) {
+				const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/${pr.head.sha}/${file.filename}`);
+				if (res.ok) {
+					const content = await res.text();
+					const existingTitle = getMetadataValue(content, "title");
+					if (normalize(existingTitle) === normalizedTitle) return `PR #${pr.number} (${file.filename})`;
+				}
+			}
+		}
 	}
 	return null;
 }
@@ -508,15 +529,21 @@ function checkMetadataDate(addedOn, add) {
 
 function validateSubmissionFiles(pullFiles, addCheck) {
 	const jsFiles = pullFiles.filter((file) => file.filename.startsWith("games/") && file.filename.endsWith(".js"));
-	const imageFiles = pullFiles.filter((file) => /\.(png|jpe?g|webp)$/i.test(file.filename));
+	const imageFiles = pullFiles.filter((file) => /\.(png)$/i.test(file.filename));
 	const disallowedFiles = pullFiles.filter((file) => !isAllowedSubmissionFile(file.filename));
+
+	const uppercaseGames = pullFiles.filter((file) => file.filename.toLowerCase().startsWith("games/") && !file.filename.startsWith("games/"));
+	if (uppercaseGames.length > 0) {
+		const badNames = uppercaseGames.map((file) => `\`${file.filename}\``).join(", ");
+		addCheck("Directory must be lowercase", false, `Your file must be in the lowercase \`games/\` directory. Found ${badNames}.`);
+	}
 
 	const disallowedNames = disallowedFiles.map((file) => `\`${file.filename}\``).join(", ");
 	addCheck(
 		"Files stay in allowed folders",
 		disallowedFiles.length === 0,
 		disallowedFiles.length
-			? `Only game files in \`games/\` and optional images in \`games/img/\` are allowed. Found ${disallowedNames}.`
+			? `Only game files in \`games/\` and optional images in \`games/img/\` are allowed. Filenames cannot contain spaces. Images must be .png. Found ${disallowedNames}.`
 			: "Only submission files changed."
 	);
 
@@ -563,13 +590,19 @@ function validateImages(imageFiles, gameBase, owner, repo, pullRequest, addCheck
 	return null;
 }
 
-function validateSingleGameFile(gameFile, workspace, addCheck, warnings) {
+async function validateSingleGameFile(gameFile, workspace, addCheck, warnings) {
 	let metadata = null;
 	let similarity = { score: 0, match: null };
 
 	const filename = path.basename(gameFile.filename);
 	const gamePath = path.join(workspace, gameFile.filename);
 	const content = readFileSafe(gamePath);
+
+	const maxFileSize = 2 * 1024 * 1024; // 2MB
+	if (content.length > maxFileSize) {
+		addCheck("File size limit", false, `The file \`${filename}\` is too large (${(content.length / 1024 / 1024).toFixed(2)}MB). Maximum allowed size is 2MB.`);
+		return { metadata, similarity };
+	}
 
 	addCheck(
 		"Filename uses safe characters",
@@ -590,7 +623,7 @@ function validateSingleGameFile(gameFile, workspace, addCheck, warnings) {
 	if (content === null) {
 		addCheck("Game file readable", false, `Unable to read \`${gameFile.filename}\` from the checked-out PR.`);
 	} else {
-		metadata = validateMetadata(content, filename, workspace);
+		metadata = await validateMetadata(content, filename, workspace);
 		for (const check of metadata.checks) addCheck(check.name, check.ok, check.detail);
 
 		const codeWithoutComments = stripComments(content);

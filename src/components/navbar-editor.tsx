@@ -472,6 +472,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 
 	const publishToGithub = async (githubState: Signal<GithubState | undefined>, gameID: string | undefined) => {
+		if (isPublishing.value) return;
 		const startTime = Date.now();
 		try {
 
@@ -515,6 +516,12 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			handleError("gameTitle", !valid, gameNameMessage);
 			handleError("gameDescription", !gameDescription, "Please provide a game description.");
 			handleError("gameControlsDescription", !gameControlsDescription, "Please provide game controls description.");
+
+			const tagsMatch = gameCode.match(/@tags:\s*\[.*\]/);
+			if (!tagsMatch) {
+				displayError("gameTitle", "Please ensure your code has a valid @tags array at the top!");
+				hasError = true;
+			}
 
 			if (hasError) {
 				return;
@@ -642,7 +649,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					`[Sprig App] ${gameTitle}`,
 					newBranchName,
 					"main",
-					`### Author name\nAuthor: ${authorName}\n\n### About your game\n\n**What is your game about?**\n${gameDescription}\n\n**How do you play your game?**\n${gameControlsDescription}`,
+					`### Author name\n**Author:** ${authorName}\n\n### About your game\n\n**What is your game about?**\n${gameDescription}\n\n**How do you play your game?**\n${gameControlsDescription}`,
 					forkedRepo.owner.login,
 					gameID ?? ''
 				);
@@ -876,6 +883,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 										<p className={styles.successMessage}>
 											Awesome! You're now connected to GitHub as {githubState.value?.username}.
 										</p>
+									</div>
+
+									<div style={{ backgroundColor: "#fff3cd", border: "1px solid #ffeeba", color: "#856404", padding: "10px", borderRadius: "5px", marginBottom: "15px", fontSize: "0.9rem" }}>
+										<strong>⚠️ Important:</strong> The auto-grader will read your code! Make sure the <code>@title</code>, <code>@author</code>, <code>@description</code>, and <code>@tags</code> at the very top of your game code are filled out with real values (don't leave them as <code>tag1</code>, <code>tag2</code>), or your submission will fail!
 									</div>
 
 									<div className={styles.inputGroup}>
