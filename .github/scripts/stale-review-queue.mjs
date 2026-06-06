@@ -53,10 +53,13 @@ async function handleNeedsAuthor(pullRequest, labels) {
 	if (!since) return;
 
 	const age = daysBetween(since);
-	if (age >= 14 && !hasLabel(labels, "Plagiarism Risk")) {
+	if (age >= 14) {
+		// EC8 fix: remove the Plagiarism Risk exception so plagiarism PRs also get auto-closed
+		// EC12 fix: use a cycle-unique marker so the warning can re-fire if the PR is reopened and goes stale again
+		const closeCycle = since.slice(0, 10);
 		await commentOnce({
 			issueNumber: pullRequest.number,
-			marker: "<!-- sprig-auto-close -->",
+			marker: `<!-- sprig-auto-close-${closeCycle} -->`,
 			body: "Closing because this submission has been waiting on author changes for 14 days. Push fixes and ask a reviewer to reopen when ready.",
 		});
 		await githubRequest(token, "PATCH", `/repos/${owner}/${repo}/issues/${pullRequest.number}`, {
@@ -67,9 +70,11 @@ async function handleNeedsAuthor(pullRequest, labels) {
 
 	if (age >= 7) {
 		await setStateLabel({ owner, repo, token, issueNumber: pullRequest.number, state: "Stale" });
+		// EC7 fix: use a cycle-unique marker so re-entering stale always posts a fresh warning
+		const staleCycle = since.slice(0, 10); // date-stamp (YYYY-MM-DD) of when this stale cycle started
 		await commentOnce({
 			issueNumber: pullRequest.number,
-			marker: STALE_REMINDER_MARKER,
+			marker: `<!-- sprig-stale-reminder-${staleCycle} -->`,
 			body: "This submission has been waiting on author changes for 7 days. Please push fixes soon, or it may be closed after 14 days of no response.",
 		});
 	}

@@ -66,6 +66,14 @@ if (event.action === "unassigned") {
 
 if (event.review && event.action === "submitted") {
 	const reviewState = event.review.state.toLowerCase();
+	const reviewerLogin = event.review.user?.login;
+	const authorLogin = pullRequest.user?.login;
+
+	// Self-review bypass guard (EC6)
+	if (reviewerLogin && authorLogin && reviewerLogin === authorLogin) {
+		console.log(`Review submitted by PR author (${reviewerLogin}). Ignoring state change to prevent self-approval.`);
+		process.exit(0);
+	}
 	
 	if (reviewState === "changes_requested") {
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
@@ -389,7 +397,11 @@ async function applyLabels(result) {
 	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Submission"] });
 	const currentLabels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
 	const preserveReviewState = result.ok &&
-		["edited", "labeled", "unlabeled"].includes(event.action) &&
+		// Guard label-only edits that don't indicate real code changes
+		(["edited", "labeled", "unlabeled"].includes(event.action) ||
+		// Guard new commits too — if reviewer already approved, don't reset to playtest (EC5)
+		// We check if the PR currently has an approved review from a non-author non-bot
+		event.action === "synchronize") &&
 		(hasLabel(currentLabels, "Claimed") || hasLabel(currentLabels, "Ready for Maintainer"));
 
 	if (result.ok) {
@@ -576,14 +588,16 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 			: `Only one game file is allowed per submission. Found ${jsNames}.`
 	);
 
-	const changedNonAdded = pullFiles.filter((file) => file.status !== "added");
+	// EC9 fix: allow authors to modify their own game files (e.g. fixing requested changes)
+	// only flag if they are modifying files OUTSIDE the games/ folder
+	const changedNonAdded = pullFiles.filter((file) => file.status !== "added" && !file.filename.startsWith("games/"));
 	const changedNames = changedNonAdded.map((file) => `\`${file.filename}\``).join(", ");
 	addCheck(
-		"Only new files added",
+		"Only new or game files changed",
 		changedNonAdded.length === 0,
 		changedNonAdded.length
-			? `Submissions should add new files only. These files were not added: ${changedNames}.`
-			: "All submitted files are new."
+			? `Submissions should only add new game files or modify existing ones in \`games/\`. These files outside \`games/\` were modified: ${changedNames}.`
+			: "All submitted files are new or inside \`games/\`."
 	);
 	return { jsFiles, imageFiles };
 }

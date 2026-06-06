@@ -175,8 +175,8 @@ async function main() {
 	const pulls = await collectPullRequests();
 
 	for (const pullRequest of pulls) {
-		const issue = await githubRequest(token, "GET", `/repos/${owner}/${repo}/issues/${pullRequest.number}`);
-		const labels = (issue.labels ?? []).map((label) => label.name);
+		// EC10 fix: use labels already on the PR object instead of making a redundant /issues/{n} API call
+		const labels = (pullRequest.labels ?? []).map((label) => typeof label === "string" ? label : label.name);
 		
 		// Only sync valid submissions
 		if (!hasLabel(labels, "Submission")) continue;
