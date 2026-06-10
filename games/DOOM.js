@@ -1,4 +1,13 @@
 /*
+@title: DOOM
+@author: Satvik Hardat
+@description: A Doom-style fake 3D raycaster shooter with enemies, ammo, HUD, minimap, and an exit goal.
+@tags: ['action', 'shooter', 'raycaster']
+@addedOn: 2026-06-10
+*/
+
+
+/*
   SPRIG DOOM - pushing the limits
 
   CONTROLS:
