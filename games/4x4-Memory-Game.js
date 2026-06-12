@@ -5,10 +5,10 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Memory Game
-@description:
-@author:
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@description: A game that requires users to pick up 2 cards out of 16 at a time to try and match them. Controls WASD to move around, J to select cards
+@author: Ishank Ramnath
+@tags: [memory], [strategy] 
+@addedOn: 2026-06-12
 */
 
 const backcard = "b";
