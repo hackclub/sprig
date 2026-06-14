@@ -187,12 +187,16 @@ const loadCache = async (): Promise<CacheFile> => {
 const mapWithConcurrency = async <T, R>(
 	items: T[], n: number, fn: (item: T, i: number) => Promise<R>,
 ) => {
-	const out = new Array<R>(items.length);
+	const out = new Array<R | Error>(items.length);
 	let idx = 0;
 	await Promise.all(Array.from({ length: Math.min(n, items.length) }, async () => {
 		while (idx < items.length) {
 			const i = idx++;
-			out[i] = await fn(items[i] as T, i);
+			try {
+				out[i] = await fn(items[i] as T, i);
+			} catch (error) {
+				out[i] = error instanceof Error ? error : new Error(String(error));
+			}
 		}
 	}));
 	return out;
@@ -246,14 +250,22 @@ const generateMetadataArtifacts = async () => {
 	const prev = await loadCache();
 	const results = await mapWithConcurrency(files, CONCURRENCY, (f) => processGame(f, prev.entries[f]));
 
-	const metaOut = await writeTextIfChanged(METADATA_PATH, JSON.stringify(results.map((r) => r.metadata)));
+	const errors = results.filter((r) => r instanceof Error) as Error[];
+	const successful = results.filter((r) => !(r instanceof Error)) as ProcessedGame[];
+
+	if (errors.length) {
+		const errorMsg = errors.map((e) => `- ${e.message}`).join("\n");
+		throw new Error(`Failed to process ${errors.length} game(s):\n${errorMsg}`);
+	}
+
+	const metaOut = await writeTextIfChanged(METADATA_PATH, JSON.stringify(successful.map((r) => r.metadata)));
 	const cacheOut = await writeTextIfChanged(CACHE_PATH, JSON.stringify({
 		version: CACHE_VERSION,
-		entries: Object.fromEntries(results.map((r) => [`${r.metadata.filename}.js`, r.cacheEntry])),
+		entries: Object.fromEntries(successful.map((r) => [`${r.metadata.filename}.js`, r.cacheEntry])),
 	} satisfies CacheFile));
 
-	const hits = results.filter((r) => r.metadataCacheHit).length;
-	const thumbs = results.filter((r) => r.thumbnailUpdated).length;
+	const hits = successful.filter((r) => r.metadataCacheHit).length;
+	const thumbs = successful.filter((r) => r.thumbnailUpdated).length;
 	console.log(
 		`[generate-metadata] ${files.length} games, ${hits} cache hits, ${thumbs} thumbnails regenerated, ` +
 		`metadata ${metaOut ? "updated" : "unchanged"}, cache ${cacheOut ? "updated" : "unchanged"}`,
