@@ -397,9 +397,9 @@ async function applyLabels(result) {
 	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Submission"] });
 	const currentLabels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
 	const preserveReviewState = result.ok &&
-		// Guard label-only edits that don't indicate real code changes
+		// Guard label only edits that don't indicate real code changes
 		(["edited", "labeled", "unlabeled"].includes(event.action) ||
-		// Guard new commits too — if reviewer already approved, don't reset to playtest (EC5)
+		// Guard new commits too if reviewer already approved, don't reset to playtest 
 		// We check if the PR currently has an approved review from a non-author non-bot
 		event.action === "synchronize") &&
 		(hasLabel(currentLabels, "Claimed") || hasLabel(currentLabels, "Ready for Maintainer"));
