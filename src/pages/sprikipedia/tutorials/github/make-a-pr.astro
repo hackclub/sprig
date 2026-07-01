@@ -1,13 +1,9 @@
 ---
 import '../../../../global.css'
 import Docs from '../../../../layouts/docs.astro'
+import { getSprikipediaTranslation } from '../../../../lib/astro-content'
 
-const data = (
-  (await Astro.glob(`/src/translations/*.json`)).find(
-    (translation) =>
-      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
-  ) || {}
-).default;
+const data = getSprikipediaTranslation(Astro.url.searchParams.get("lang"))
 ---
 
 <Docs dspriki={data["tutorials.categories.dspriki.github.pr"]} dtitle={data["tutorials.categories.dtitle.github.pr"]} dauthor={data["tutorials.categories.dauthor.github.pr"]} >

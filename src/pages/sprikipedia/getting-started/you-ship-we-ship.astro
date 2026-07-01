@@ -2,13 +2,9 @@
 import '../../../global.css'
 import Categories from '../../../layouts/categories.astro'
 import Outside from '../../../components/spriki-components/Outside.astro'
+import { getSprikipediaTranslation } from '../../../lib/astro-content'
 
-const data = (
-  (await Astro.glob(`/src/translations/*.json`)).find(
-    (translation) =>
-      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
-  ) || {}
-).default;
+const data = getSprikipediaTranslation(Astro.url.searchParams.get("lang"))
 ---
 <Categories name={data["start.categories.name.ysws"]} title={data["start.categories.title.ysws"]} >
 <h2>Sprig: You ship, we ship</h2>

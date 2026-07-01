@@ -1,13 +1,9 @@
 ---
 import '../../../global.css'
 import Categories from '../../../layouts/categories.astro'
+import { getSprikipediaTranslation } from '../../../lib/astro-content'
 
-const data = (
-  (await Astro.glob(`/src/translations/*.json`)).find(
-    (translation) =>
-      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
-  ) || {}
-).default;
+const data = getSprikipediaTranslation(Astro.url.searchParams.get("lang"))
 ---
 <Categories name={data["about.categories.name"]} title={data["about.categories.title"]} >
         <blockquote>
@@ -19,4 +15,3 @@ const data = (
         <p>{data["about.content.p3"]}</p>
         <p>{data["about.content.p4"]}</p>
 </Categories>
-

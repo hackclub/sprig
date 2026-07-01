@@ -7,9 +7,9 @@ You can find KiCAD 6 files for the PCB of Sprig, a BOM, and CAD models for the a
 
 The main [Sprig Repo is available here](https://www.github.com/hackclub/sprig).
 
-<img width="500" alt="Assembled Green Sprig, Front View" src="https://cloud-8at89q6ay-hack-club-bot.vercel.app/1sprig_green_front_assembled.jpg">
+<img width="500" alt="Assembled Green Sprig, Front View" src="https://cdn.hackclub.com/rescue?url=https://cloud-8at89q6ay-hack-club-bot.vercel.app/1sprig_green_front_assembled.jpg">
 
-<img width="500" alt="Assembled Green Sprig, Rear View" src="https://cloud-8at89q6ay-hack-club-bot.vercel.app/0sprig_green_back_assembled.jpg">
+<img width="500" alt="Assembled Green Sprig, Rear View" src="https://cdn.hackclub.com/rescue?url=https://cloud-8at89q6ay-hack-club-bot.vercel.app/0sprig_green_back_assembled.jpg">
 
 # Description
 

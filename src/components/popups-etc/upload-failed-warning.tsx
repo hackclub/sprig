@@ -1,4 +1,4 @@
-import { Signal } from '@preact/signals';
+import type { Signal } from '@preact/signals';
 import Button from '../design-system/button'
 import styles from './draft-warning.module.css'
 
