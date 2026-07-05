@@ -1,3 +1,9 @@
+// @title: Grid Run Sysadmin
+// @author: hack club sprig contest entry
+// @description: You are an IT guy trying to save servers from bugs and overheating.
+// @tags: [arcade, strategy]
+// @addedOn: 2026-07-06
+
 // grid run sysadmin
 // you are an IT guy trying to save servers from bugs and overheating
 // made for hack club sprig contest!!
@@ -94,7 +100,6 @@ setLegend(
 .01000000000010.
 .01111111111110.
 .00000000000000.
-................
 ................
 ................` ],
 
