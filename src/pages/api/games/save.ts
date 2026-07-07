@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { Timestamp } from 'firebase-admin/firestore'
-import { getGame, getSession, setDocument, updateDocument } from '../../../lib/game-saving/account'
+import { getFullSession, getGame, setDocument, updateDocument } from '../../../lib/game-saving/account'
 import { updateEmailListLastModifiedTime } from '../../../lib/game-saving/email'
 
 export const POST: APIRoute = async ({ request, cookies }) => {
@@ -26,7 +26,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 	const trackingDate = new Date().toDateString()
 
 	if (!game.unprotected) {
-		const session = await getSession(cookies)
+		const session = await getFullSession(cookies)
 		if (!session) return new Response('Unauthorized', { status: 401 })
 		if (session.user.id !== game.ownerId) return new Response(`Can't edit a game you don't own`, { status: 403 })
 		trackingId = session.user.id

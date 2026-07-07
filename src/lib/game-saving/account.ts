@@ -151,6 +151,11 @@ export const getSession = async (cookies: AstroCookies): Promise<SessionInfo | n
 	return { session, user };
 }
 
+export const getFullSession = async (cookies: AstroCookies): Promise<SessionInfo | null> => {
+	const session = await getSession(cookies)
+	return session?.session.full ? session : null
+}
+
 export const makeOrUpdateSession = async (cookies: AstroCookies, userId: string, authLevel: 'email' | 'code'): Promise<SessionInfo> => {
 	const curSessionId = cookies.get('sprigSession')?.value
 	const _curSession = curSessionId
@@ -225,6 +230,12 @@ export const getUserByEmail = async (email: string): Promise<User | null> => {
 	const _users = await findDocument('users', ['email', '==', email]);
 	if (_users.empty) return null
 	return { id: _users.docs[0]!.id, ..._users.docs[0]!.data() } as User
+}
+
+export const getOrCreateUserForPartialSessionEmail = async (email: string, sessionInfo: SessionInfo | null): Promise<User | null> => {
+	const existingUser = await getUserByEmail(email)
+	if (existingUser) return sessionInfo?.user.id === existingUser.id ? existingUser : null
+	return makeUser(email, null)
 }
 
 export const makeUser = async (email: string, username: string | null): Promise<User> => {
