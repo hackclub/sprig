@@ -316,9 +316,9 @@ g.ggggggg.ggooboog
 g.g.22.22eggooboog
 g.g.gg.ggggggg2..g
 g222g.222222.gg.2g
-ggggg.gggggg.g.2gg
-g.2.22g.2222.gyggg
-g.g.ggg.gggg.ggggg
+ggggg.gggggggg.2gg
+g.2.22g..gy2222ggg
+g.g.ggg..ggggggggg
 g2t232....22223.2g
 gggggg2...ggggg.gg
 g...2.g.2222..g.2g
@@ -395,6 +395,7 @@ function checkCollision() {
             addText("Level " + (level + 1) + " cleared!\nPress J to go\nto next level", { y: 6, x: 1, color: color`3` });
         } else {
             addText("Level " + (level + 1) + " cleared!\nyou win!", { y: 6, x: 2, color: color`7` });
+            playTune(collection);
         }
     }
     
@@ -423,7 +424,7 @@ function checkCollision() {
         const exit = onPortalA.length > 0 ? getFirst(portalB) : getFirst(portalA);
         if (p && exit) {
             p.x = exit.x;
-            p.y = exit.y - 1;
+            p.y = exit.y;
             portalCooldown = 4;
         }
     }
