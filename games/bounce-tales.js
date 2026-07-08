@@ -298,8 +298,8 @@ g.22g22.2.g22....g
 g.ggggg.g.ggg.22.g
 g222x22.g2222ygg.g
 ggggggg.gggggg..2g
-g2222222g.22222.gg
-g2ggggggggggggg..g
+g.222222g.22222.gg
+g.ggggggggggggg..g
 g222e.2223g..g2e2g
 ggggg.ggggg..ggggg
 g33..............g
@@ -319,12 +319,12 @@ g222g.222222.gg.2g
 ggggg.gggggg.g.2gg
 g.2.22g.2222.gyggg
 g.g.ggg.gggg.ggggg
-g2t2322.g.22223.2g
-ggggggg.g.ggggg.gg
-g.222.g.g2222.g22g
-g.ggg.g.ggggg.ggg1
-1...g222te2.g....1
-1te21111111222t2e1
+g2t232....22223.2g
+gggggg2...ggggg.gg
+g...2.g.2222..g.2g
+g...g.g.gggg2...g1
+1..2g222te2.g....1
+1teg1111111222t2e1
 111111111111111111`
 ]
 
