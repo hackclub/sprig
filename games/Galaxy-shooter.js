@@ -2,7 +2,7 @@
  * @title: Space Shooter: Galaxy Attack
  * @author: Anonymous
  * @description: A rapid-fire arcade space shooter game where you dodge and destroy incoming enemies.
- * @tags: game, space, shooter, arcade, 2d
+ * @tags: ['game','space','shooter','arcade','2d']
  * @addedOn: 2026-07-08
  */
 
