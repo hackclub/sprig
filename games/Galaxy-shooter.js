@@ -247,13 +247,13 @@ setInterval(() => {
   const allBullets = getAll(bullet)
   for (let i = 0; i < allBullets.length; i++) {
     const b = allBullets[i]
+    if (b.y === 0) {
+      b.remove()          // already at top row → gone instantly
+      continue             // (y can't go negative — sprite.y clamps to the grid,
+    }                       //  so we must catch this *before* decrementing)
     b.y--
-    if (b.y < 0) {
-      b.remove()          // hit top of screen → gone instantly
-    } else {
-      if (checkHit(b.x, b.y)) {
-        b.remove()        // hit enemy → both vanish, +1 score
-      }
+    if (checkHit(b.x, b.y)) {
+      b.remove()          // hit enemy → both vanish, +1 score
     }
   }
 
