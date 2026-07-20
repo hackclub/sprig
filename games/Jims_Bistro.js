@@ -1,11 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: Jim's Bistro
+@title: Jims_Bistro
 @author: SpookySpoon
-@tags: []
-@addedOn: 2025-00-00
+@tags: ['pizza', 'bistro']
+@addedOn: 2026-04-20
+@description: In this game you're trying to make as much pizza as you can in given time.
 */
 
 
@@ -58,11 +56,34 @@ Enjoy!
 
 
 
+//soundeffects
+const melodySuccess = tune `
+200: C5/200,
+200: E5/200,
+200: G5/200,
+5800`
 
 
+const melodyFail = tune `
+200: G4-200,
+200: E4-200,
+200: C4-200,
+5800`
 
 
-
+const melodyEnd = tune `
+200: C5-200,
+200,
+200: G4-200 + F4~200,
+200: G5/200 + A5-200,
+1200,
+200: B4-200,
+200: A4-200 + G4/200,
+200: G4-200 + F4/200,
+200: E4-200 + D4/200,
+200: C4-200,
+200: C4~200,
+3200`
 
 
 
@@ -260,11 +281,17 @@ function objednavkaOsm(){
 }
 }
 
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 //jeste nevim jestli bude fungovat
 function dalsiZakaznik(){
       if(novyZakaznik){
         //test
+      clearText()
+     addText(`${score}`,
+        { x: 17,
+          y: 14, 
+          color: color`3`
+        })
       clearTile(3, 1)
       addSprite(3, 1, obrubaVnitrekStranaP)
         
@@ -1713,9 +1740,11 @@ function loadmap(){
           y: 11, 
           color: color`2`
         })
+
+        playTune(melodyEnd)
   }
 }
-
+///////////TADYY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 
@@ -2062,6 +2091,15 @@ function kontrolaObjednavky(){
     zakaznikHotov = true
 
     score += 10
+    addText(`${"+5"}`,
+        { x: 17,
+          y: 2, 
+          color: color`4`
+        })
+        
+    playTune(melodySuccess)
+    zbyvajiciOdpocet += 5
+    ///////////////////////////////////////////////////////////////////////////////////////
   } else {
     clearTile(3, 1)
     addSprite(3, 1, obrubaVnitrekStranaP)
@@ -2069,6 +2107,7 @@ function kontrolaObjednavky(){
     clearText()
     addSprite(3,1, orderSpatna)
     zakaznikHotov = true
+    playTune(melodyFail)
     score -= 5
   }
 }
@@ -2131,77 +2170,7 @@ if(level === 1 && zbyvajiciOdpocet >= 10){
 
 
 
-
-
-
-
-
-
-
-/*
-
-s => pohyb mapy smerem dolu
-w => pohyb mapy smerem nahoru
-
-pokud v kuchyni (mapa c. 2):
-k, i => vyber ingredienci
-l => dat ingredienci na pizzu
-j => smazat ingerdience na pizze 
-
-d => vzit pizzu do ruky, u okna odevzdat zakaznikovi
-
-
-Jak hrat?
-U okna (mapa c. 1) se objevi zakaznik s cislem objednavky 
-Podivate se do menu (mapa c. 3) o jakou objednavku se jedna
-V kuchyni (mapa c. 2) pripravite pizzu a hotovou ji vezmete do ruky
-Vratite se zpet k vydejnimu oknu a date zakaznikovi pizzu
-
-Za kazdou spravnou objednavku dostavate 10 bodu
-Za kazdou nepovedenou ztracite 5 bodu
-
-Doba jedne hry je minuta a pul (muze byt upraveno)
-=============================================================
-
-Keys:
-s => to move the map down
-w => to move the map up
-
-In the kitchen (map num. 2):
-  k, i => to select ingredients, (move up and down)
-  l => to put selected ingredient on a pizza
-  j => to delete all ingredients currently on a pizza
-
-d => to take/release the pizza
-
-
-Maps:
-num.0 => the splash screen (ignore this and scroll down)
-num.1 => the serving window
-num.2 => the kitchen
-num.3 => the menu
-
-
-
-How to play?
-You're working at Jim's Bistro, where the best pizzas are served!
-At the serving window will appear a new customer with an order number.
-You'll need to look into the menu and search for the right order to know what ingredients to use.
-In the kitchen you'll prepare the pizza by selecting the ingredients and placing them on a dough.
-Once the pizza is ready deliver it to a customer.
-
-If you get the order right you'll receive 10 points otherwise you'll lose 5.
-
-Your goal is to get as many points as you can before the 90-seconds timer runs out!
-(tip: time limit can be changed by editing the "zbyvajiciOdpocet" variable!)
-
-Enjoy!
-
-
-
-*/
-
-
+const melody = tune`...`;
 
 
 
