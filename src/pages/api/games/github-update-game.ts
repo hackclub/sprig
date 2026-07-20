@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
-import { updateDocument } from "../../../lib/game-saving/account";
+import { getFullSession, getGame, updateDocument } from "../../../lib/game-saving/account";
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
 	try {
 		const body = await request.json();
 		const { gameId, githubPR, isPublished } = body;
@@ -24,6 +24,17 @@ export const POST: APIRoute = async ({ request }) => {
 				}),
 				{ status: 400 }
 			);
+		}
+
+		const game = await getGame(gameId);
+		if (!game) return new Response("Game does not exist", { status: 404 });
+
+		const session = await getFullSession(cookies);
+		if (!session) return new Response("Unauthorized", { status: 401 });
+		if (session.user.id !== game.ownerId) {
+			return new Response("Can't update a game you don't own", {
+				status: 403,
+			});
 		}
 
 		await updateDocument("games", gameId, {

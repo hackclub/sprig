@@ -83,3 +83,7 @@ flatpak override --device=all org.chromium.Chromium
 Now you should be good to flash your game to your Sprig! Oh, but make sure to restart your browser after making that change :)
 
 Happy sprigging! :D
+
+## Still having problems?
+
+Don't fret! The Sprig team and community members are happy to help over on the Hack Club Slack. Just ask your question in our [#sprig channel](https://hackclub.enterprise.slack.com/archives/C02UN35M7LG)!

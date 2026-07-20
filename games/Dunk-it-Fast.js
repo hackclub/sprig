@@ -3,7 +3,7 @@
 	     @title: Dunk it fast
 	     @author: Sefa
 	     @description: Eliminate enemies to advance to the next level! Don't get fast your you'll trap yourself, be methodical and push the boxes into the right place!
-	     @tags: 'maze', 'levels', 'strategy']
+	     @tags: ['maze', 'levels', 'strategy']
 	     @addedOn: 2026-04-18
      */
     

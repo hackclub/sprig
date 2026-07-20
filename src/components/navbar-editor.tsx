@@ -202,11 +202,31 @@ const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, 
 	}
 };
 
+const x = (): string => {
+	if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+		return crypto.randomUUID();
+	}
+	const bytes = new Uint8Array(32);
+	crypto.getRandomValues(bytes);
+	return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+};
+
 const constructGithubAuthUrl = (userId: string | null): string => {
 	const clientId = import.meta.env.PUBLIC_GITHUB_CLIENT_ID;
 	const redirectUri = import.meta.env.PUBLIC_GITHUB_REDIRECT_URI;
 	const scope = "repo";
-	const state = encodeURIComponent(JSON.stringify({ userId }));
+
+	const nonce = x();
+	const attrs = [
+		`githubOAuthState=${encodeURIComponent(nonce)}`,
+		"path=/",
+		"max-age=600",
+		"SameSite=Lax",
+	];
+	if (window.location.protocol === "https:") attrs.push("Secure");
+	document.cookie = attrs.join("; ");
+
+	const state = encodeURIComponent(JSON.stringify({ userId, nonce }));
 
 	return `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}`;
 };
