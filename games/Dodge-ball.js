@@ -1,8 +1,8 @@
 /*
 @title: Dodge ball
-@description: Dodge ball is a fun game where your objective is to avoid 500 balls and become victorious. The key mechanics are falling dodgeballs, an in-game key allowing the player to retry and the ability to win, these features make the game unique.
-@author: @Ivan
-@tags: ['dodging', 'ifinite']
+@description: Dodge ball is a fun game where your objective is to avoid 500 balls and become victorious. The key mechanics are falling dodgeballs, an in-game key allowing the player to retry and survive endless waves of projectiles.
+@author: @Ivan
+@tags: ['dodging', 'infinite']
 @addedOn: 2026-05-25
 */
 
