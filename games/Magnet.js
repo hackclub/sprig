@@ -254,6 +254,7 @@ function loadLevel(index) {
   if (index === 0) {
     addText("WASD to Move", { y: 0 });
     addText("J:Pull  K:Push", { y: 1 });
+    addText("L to Restart", { y: 2 });
     addText("Box on switch!", { y: 9 });
   }
 }
@@ -286,6 +287,13 @@ onInput("w", () => tryMove(0, -1));
 onInput("s", () => tryMove(0, 1));
 onInput("a", () => tryMove(-1, 0));
 onInput("d", () => tryMove(1, 0));
+
+// Restart Level (Press L)
+onInput("l", () => {
+  if (!gameWon) {
+    loadLevel(currentLevel);
+  }
+});
 
 // 4. ATTRACT ABILITY (Press J)
 onInput("j", () => {
