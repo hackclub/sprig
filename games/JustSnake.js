@@ -1,7 +1,7 @@
 /*
 @title: just_snake
 @author: jonasvanleeuwen19
-@tags: [snake, classic]
+@tags: ['snake', 'classic']
 @addedOn: 2026-07-27
 */
 
