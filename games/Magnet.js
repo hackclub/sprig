@@ -250,11 +250,11 @@ function loadLevel(index) {
   clearText(); // Clear any old text off the screen
   setMap(levels[index]);
 
-  // If we are on the tutorial level, show the controls
+  // Tutorial text adjusted to fit within Sprig screen limits
   if (index === 0) {
-    addText("WASD to Move", { y: 1 });
-    addText("J to Attract, K to Repel", { y: 2 });
-    addText("Put the box on the switch!", { y: 13 });
+    addText("WASD to Move", { y: 0 });
+    addText("J:Pull  K:Push", { y: 1 });
+    addText("Box on switch!", { y: 9 });
   }
 }
 
