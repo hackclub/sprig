@@ -1,3 +1,10 @@
+/*
+@title: just_snake
+@author: jonasvanleeuwen19
+@tags: [snake, classic]
+@addedOn: 2026-07-27
+*/
+
 const head_up = "u"
 const head_down = "n"
 const head_left = "l"
