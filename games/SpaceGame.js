@@ -2,9 +2,9 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: MyGame
-@description: 
-@author: 
+@title: SpaceGame
+@description: A game set in space where the aim is to get the rocket back to Earth
+@author: Enginerd14
 @tags: ['tag1', 'tag2']
 @addedOn: 2026-07-01(July 1st 2026)
 */
