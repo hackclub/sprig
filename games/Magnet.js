@@ -1,11 +1,10 @@
 /*
 @title: Magnetic Maze
 @author: Sarvesh V
-@description: A grid-based puzzle game where you use a magnet to push/pull metal boxes.
+@description: A grid-based puzzle game where you use a magnet to push/pull metal boxes onto switches.
 @tags: ['puzzle', 'magnet', 'logic']
 @addedOn: 2026-05-20
 */
-
 
 const player = "p";
 const box = "m";
@@ -238,13 +237,13 @@ w......p......w
 wwwwwwwwwwwwwww`;
 
 // Put them all in a list
-// Put them all in a list
 const levels = [
   level0, level1, level2, level3, level4, level5,
   level6, level7, level8, level9, level10,
   level11, level12, level13, level14, level15
 ];
 let currentLevel = 0;
+let gameWon = false;
 
 // Custom function to load levels and text
 function loadLevel(index) {
@@ -261,6 +260,7 @@ function loadLevel(index) {
 
 // Start the game by loading Level 0
 loadLevel(currentLevel);
+
 // Track the direction the player is facing (defaults to left)
 let dx = -1;
 let dy = 0;
@@ -362,6 +362,8 @@ onInput("k", () => {
 
 // 6. WIN CONDITION
 afterInput(() => {
+  if (gameWon) return;
+
   let switches = getAll(switchTarget);
   let allCovered = true;
 
@@ -380,6 +382,7 @@ afterInput(() => {
     if (currentLevel < levels.length) {
       loadLevel(currentLevel); // Load the next map
     } else {
+      gameWon = true;
       clearText();
       addText("YOU BEAT THE GAME!", { y: 2 });
     }
