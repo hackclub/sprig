@@ -1,7 +1,7 @@
 /* @title: bounce tales
 @description: maze-based version of the og nokia game , GOAL : collect eggs , reach the black zone!
 @author: Bhuvan-rai
-@tags: [#og #bouncetales]
+@tags: []
 @addedOn: 2026-06-18
 */
 
