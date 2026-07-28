@@ -2,6 +2,7 @@
 @title: Rushed
 @tags: ['action', 'boss-rush']
 @author: ZyluxXD
+@description: Rushed is a fast-paced boss rush game where you have to defeat increasingly difficult bosses before the timer runs out. Each completed round makes the bosses stronger and faster. If you make it far enough, there is a challenge at the end...
 @addedOn: 2026-07-28
 */
 
