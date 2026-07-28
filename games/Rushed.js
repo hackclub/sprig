@@ -949,6 +949,10 @@ function loseGame() {
 
 // Restart using J after winning or losing.
 onInput("j", () => {
+  if (screenState === "title") {
+    startGame()
+    return
+  }
   if (screenState === "roundWon") {
     if (roundNumber >= bonusBossRound) {
       startBonusBoss()
@@ -1020,7 +1024,33 @@ function isWall(x, y) {
 
   return getTile(x, y).some(sprite => sprite.type === wall)
 }
+function showTitleScreen() {
+  clearArenaSprites()
+  clearProjectiles()
+  clearText()
 
+  gameRunning = false
+  transitioning = false
+  screenState = "title"
+
+  addText("RUSHED", {
+    x: 7,
+    y: 4,
+    color: color`3`
+  })
+
+  addText("BOSS RUSH", {
+    x: 5,
+    y: 6,
+    color: color`7`
+  })
+
+  addText("J TO START", {
+    x: 5,
+    y: 9,
+    color: color`2`
+  })
+}
 // lowkey this game is too hard so uhhh
 // the mode only for developers trust
 function devMode() {
@@ -1038,6 +1068,6 @@ setInterval(updateTimer, 1000)
 // don't do it....
 // resist the urge to remove those two characters..
 // stop
-// devMode();
+devMode();
 
-startGame()
+showTitleScreen()
