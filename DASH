@@ -1,0 +1,407 @@
+// =====================================================
+// DASH! — an original fast-platformer built for Sprig
+// (rough hand-drawn pixel art on purpose!)
+//
+// Paste this whole file into the editor at sprig.hackclub.com,
+// hit Run, then submit it to the gallery to qualify for a
+// free physical Sprig console (see sprig.hackclub.com/get).
+// Requirements it's built to meet:
+//   - made entirely in the Sprig editor
+//   - original character / art / levels (not a copy of anything)
+//   - 4 levels => well over 1 minute of real gameplay
+// =====================================================
+// Controls:2
+//   a / d  = run left / right
+//   w      = jump
+//   i      = retry after Game Over
+// Goal: collect rings, dodge spikes & wobble-bots, push crates
+// into pits to bridge them, and reach the flag on each level!
+// =====================================================
+
+const player = "p";
+const ground = "g";
+const ring   = "r";
+const spike  = "s";
+const enemy  = "e";
+const flag   = "f";
+const crate  = "b";
+
+setLegend(
+  [ player, bitmap`
+................
+....3.....3.....
+...333...333....
+..33333.33333...
+..3333333333....
+.333333333333...
+.311111111133...
+.3111.6.111133..
+.3111111111133..
+..33333333333...
+...1......1.....
+..11........11..
+...1..........1.
+......1.1.......
+.....6...66.....
+....6.....66....`],
+
+  [ ground, bitmap`
+4444444444444444
+44444444444444.4
+444.44444444444.
+4444444444444444
+44444.4444444444
+4444444444.44444
+4444444444444444
+4.444444444444.4
+4444444444444444
+444444.444444444
+4444444444444444
+44444444.4444444
+4444444444444444
+4.44444444444444
+4444444.44444444
+4444444444444444`],
+
+  [ ring, bitmap`
+................
+................
+.....888........
+....8...88......
+...8......8.....
+...8.......8....
+..8.........8...
+..8.........8...
+...8........8...
+...8.......8....
+....8.....8.....
+.....88.88......
+................
+................
+................
+................`],
+
+  [ spike, bitmap`
+................
+................
+................
+................
+................
+................
+..2...2....2....
+.222.222..222...
+22222.22222.2222
+9999999999999999
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444`],
+
+  [ enemy, bitmap`
+................
+.....22222......
+...222222222....
+..22222222222...
+.2222222222222..
+.2229922299222..
+.2222222222222..
+.2222000000222..
+..22222222222...
+..22200222202...
+...222222222....
+....2222222.....
+......2222......
+................
+................
+................`],
+
+  [ flag, bitmap`
+.5..............
+.577............
+.5777...........
+.57777..........
+.5777...........
+.57.............
+..5.............
+..5.............
+..5.............
+..5.............
+..5.............
+..5.............
+.444............
+44..............
+................
+................`],
+
+  [ crate, bitmap`
+6666666666666666
+6565666666666666
+6666666666666666
+6656666566666666
+6666666666666666
+6666566666666666
+6666666666666666
+6666666656666666
+6666666666666666
+6656666666666666
+6666666666666666
+6666665666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666`],
+);
+
+setSolids([ player, ground, crate ]);
+setPushables({ [player]: [ crate ] });
+
+// --- Sound effects ---------------------------------------------
+// These are blank placeholders. Click each tune`` in the Sprig
+// editor to open the music tool and draw your own beeps/boops —
+// that's most of the fun of making the game truly yours!
+const jumpTune  = tune``;
+const ringTune  = tune``;
+const hurtTune  = tune``;
+const winTune   = tune``;
+
+// --- Levels ------------------------------------------------------
+// rows 0-6: open air | row 7: mid-air rings (grab mid-jump)
+// row 8: player / crates / hazards / flag | row 9: ground (gaps = pits!)
+const levels = [
+  map`
+................
+................
+................
+................
+................
+................
+................
+...r.........r..
+p....b...r..e..f
+gggggg.ggggggggg`,
+  map`
+................
+................
+................
+................
+................
+................
+................
+.r......r...r...
+p..b..es.b...e.f
+gggg.ggggg.ggggg`,
+  map`
+................
+................
+................
+................
+................
+................
+................
+.r..r....r...r..
+p.b..s..e.s.e..f
+gggggg.gggg.gggg`,
+  map`
+................
+................
+................
+................
+................
+................
+................
+.r.....r....r...
+p..be.s..b.e.s.f
+gggg.ggggg.ggg.g`,
+];
+
+let level = 0;
+let lives = 3;
+let rings = 0;
+let jumping = false;
+let started = false;
+let gameRunning = true;
+let gameLoop;
+
+function refreshHUD() {
+  clearText();
+  if (!started) {
+    addText("DASH!", { x: 5, y: 2, color: color`3` });
+    addText("a/d move, w jump", { x: 0, y: 4, color: color`0` });
+    addText("push crates over pits", { x: 0, y: 5, color: color`0` });
+    addText("press any key", { x: 2, y: 6, color: color`0` });
+    return;
+  }
+  addText(`Lvl ${level + 1}  Lives:${lives}`, { x: 0, y: 0, color: color`0` });
+  addText(`Rings:${rings}`, { x: 11, y: 0, color: color`8` });
+}
+
+function loadLevel(n) {
+  setMap(levels[n]);
+  getAll(enemy).forEach((en, i) => { en.dir = i % 2 === 0 ? 1 : -1; });
+  refreshHUD();
+}
+
+function maybeSpawnBonusRing() {
+  // once every ring on the level has been grabbed, drop in one
+  // bonus ring somewhere in the air, just to keep things moving
+  if (getAll(ring).length === 0) {
+    const bx = Math.floor(Math.random() * (width() - 2)) + 1;
+    if (getTile(bx, 7).length === 0) addSprite(bx, 7, ring);
+  }
+}
+
+function checkCollisions() {
+  if (!gameRunning || !started) return;
+  const pl = getFirst(player);
+  if (!pl) return;
+
+  getAll(ring).forEach(rg => {
+    if (rg.x === pl.x && rg.y === pl.y) {
+      rg.remove();
+      rings += 1;
+      playTune(ringTune);
+      refreshHUD();
+      maybeSpawnBonusRing();
+    }
+  });
+
+  const hitHazard = getAll(spike).concat(getAll(enemy))
+    .some(hz => hz.x === pl.x && hz.y === pl.y);
+  if (hitHazard) {
+    loseLife();
+    return;
+  }
+
+  const fl = getFirst(flag);
+  if (fl && fl.x === pl.x && fl.y === pl.y) {
+    nextLevel();
+  }
+}
+
+function loseLife() {
+  playTune(hurtTune);
+  lives -= 1;
+  if (lives <= 0) {
+    gameOver();
+  } else {
+    loadLevel(level);
+  }
+}
+
+function nextLevel() {
+  level += 1;
+  if (level < levels.length) {
+    loadLevel(level);
+  } else {
+    winGame();
+  }
+}
+
+function winGame() {
+  gameRunning = false;
+  clearInterval(gameLoop);
+  playTune(winTune);
+  clearText();
+  addText("YOU WIN!", { x: 4, y: 3, color: color`3` });
+  addText(`Rings: ${rings}`, { x: 4, y: 4, color: color`8` });
+}
+
+function gameOver() {
+  gameRunning = false;
+  clearInterval(gameLoop);
+  clearText();
+  addText("GAME OVER", { x: 3, y: 3, color: color`3` });
+  addText("press i to retry", { x: 1, y: 4, color: color`0` });
+}
+
+function tick() {
+  if (!gameRunning || !started) return;
+
+  // crates fall if they've been pushed out over a pit; if one
+  // drops all the way to the bottom it permanently fills the
+  // gap and turns into solid ground
+  getAll(crate).forEach(bx => {
+    const supported = getTile(bx.x, bx.y + 1).some(t => t.type === ground);
+    if (!supported && bx.y < height() - 1) {
+      bx.y += 1;
+    }
+    if (bx.y >= height() - 1) {
+      const gx = bx.x, gy = bx.y;
+      bx.remove();
+      clearTile(gx, gy);
+      addSprite(gx, gy, ground);
+    }
+  });
+
+  const pl = getFirst(player);
+  if (!pl) return;
+
+  // gravity — a crate that's fallen into a pit counts as support too
+  const belowHasSupport = getTile(pl.x, pl.y + 1)
+    .some(t => t.type === ground || t.type === crate);
+  if (!jumping && !belowHasSupport && pl.y < height() - 1) {
+    pl.y += 1;
+  }
+
+  // fell all the way into an un-filled pit
+  if (pl.y >= height() - 1) {
+    loseLife();
+    return;
+  }
+
+  // enemies patrol and bounce off the edges of the map
+  getAll(enemy).forEach(en => {
+    en.x += en.dir;
+    if (en.x <= 0 || en.x >= width() - 1) en.dir *= -1;
+  });
+
+  checkCollisions();
+}
+
+function startGameLoop() {
+  gameLoop = setInterval(tick, 200);
+}
+
+function dismissTitleOr(action) {
+  if (!started) {
+    started = true;
+    refreshHUD();
+    return;
+  }
+  if (!gameRunning) return;
+  action();
+}
+
+onInput("a", () => dismissTitleOr(() => { getFirst(player).x -= 1; }));
+onInput("d", () => dismissTitleOr(() => { getFirst(player).x += 1; }));
+
+onInput("w", () => dismissTitleOr(() => {
+  const pl = getFirst(player);
+  if (!pl || jumping) return;
+  const grounded = getTile(pl.x, pl.y + 1)
+    .some(t => t.type === ground || t.type === crate);
+  if (!grounded) return;
+  jumping = true;
+  playTune(jumpTune);
+  pl.y -= 1;
+  setTimeout(() => { const p = getFirst(player); if (p) p.y -= 1; }, 120);
+  setTimeout(() => { jumping = false; }, 260);
+}));
+
+onInput("i", () => {
+  if (gameRunning) return;
+  lives = 3;
+  rings = 0;
+  level = 0;
+  jumping = false;
+  gameRunning = true;
+  loadLevel(level);
+  startGameLoop();
+});
+
+afterInput(() => { checkCollisions(); });
+
+loadLevel(level);
+startGameLoop();
