@@ -1068,6 +1068,6 @@ setInterval(updateTimer, 1000)
 // don't do it....
 // resist the urge to remove those two characters..
 // stop
-devMode();
+// devMode();
 
 showTitleScreen()
