@@ -1,12 +1,13 @@
 /*
 @title: Push the Bucket
 @author: KowKow
-@description: This game is all about pushing buckets and save some water from a leaking pipe. And there is a 120 second timer so water doesnt flood ur screen!
+@description: This game is all about pushing buckets and save some water from a leaking pipe. And there is a 120 second timer so water doesnt flood ur screen! Pss.Beware of mobs and use teleporters!!!
 @tags:['Puzzle']
-@addedOn: 2026-7-15
+@addedOn: 2026-7-09
 */
 
 const player = "p";
+const teleporter = "t";
 const bucket = "b";
 const waterleak = "g";
 const wall = "w";
@@ -15,8 +16,11 @@ const rightBelt = ">";
 const leftBelt = "<";
 const upBelt = "^";
 const downBelt = "v";
+const mob = "m";
+const breakableWall = "x";
 
 setLegend(
+
   [player, bitmap`
 ................
 ................
@@ -34,6 +38,60 @@ setLegend(
 .......3.3......
 .......3.3......
 .......3.3......`],
+
+  [teleporter, bitmap`
+................
+................
+....77777777....
+...7755555577...
+..775777777577..
+..757755557757..
+..757577775757..
+..757575575757..
+..757577775757..
+..757755557757..
+..775777777577..
+...7755555577...
+....77777777....
+................
+................
+................`],
+
+  [mob, bitmap`
+................
+................
+....33333333....
+...3333333333...
+..333333333333..
+..33..3333..33..
+..33..3333..33..
+..333333333333..
+..333333333333..
+..333333333333..
+...3333333333...
+....33333333....
+....33....33....
+...33......33...
+................
+................`],
+
+  [breakableWall, bitmap`
+LLLLLLLLLLLLLLLL
+L1111111LL11111L
+L1111111LL11111L
+LLL1111L1L11111L
+L1LL11LL1L1111LL
+L111LLL1L1111LLL
+L1111LLLL111LL1L
+L11111LLL11LL11L
+L1111L1LL1L1111L
+L1111L11LL1111LL
+L1111L11LL1111LL
+L1111LL1LL1111LL
+L11111LLL1L11LLL
+L11111LL1LL11L1L
+L11111L1L111LL1L
+LLLLLLLLLLLLLLLL`],
 
   [rightBelt, bitmap`
 1111111111111111
@@ -180,33 +238,13 @@ L11111111111111L
 LLLLLLLLLLLLLLLL`]
 );
 
+
 let level = 0;
 let time = 120;
 
-function drawTimer() {
-  clearText();
-  addText("Time: " + time, {
-    x: 0,
-    y: 0,
-    color: color`3`
-  });
-}
-
-drawTimer();
-
-const timer = setInterval(() => {
-  time--;
-  drawTimer();
-
-  if (time <= 0) {
-    level = 0;
-    time = 56;
-    setMap(levels[level]);
-    drawTimer();
-  }
-}, 1000);
 
 const levels = [
+
   map`
 pwwwwwww
 .w...wg.
@@ -218,19 +256,51 @@ pwwwwwww
 .......w`,
 
   map`
+p....w....
+.....w....
+...b.x....
+.....w....
+.....w.g..
+.....w....`,
+
+  map`
+p.........
+..........
+.m..m.m.m.
+..........
+....b.....
+..........
+........g.
+..........
+..........
+..........`,
+
+  map`
+p......t..
+.wwwwwwww.
+.w.......w
+.w.......w
+.w.......w
+.w..b....w
+.w.......w
+.w....t.gw
+.wwwwwwww.
+..........`,
+
+  map`
 p.w.
 .bwg
 ....
-....`,
+..m.`,
 
-    map`
+  map`
 p.wl
 .bwg
 ..l.
 ....
 ....`,
 
-    map`
+  map`
 p.wg.....
 lbwwwww..
 w.wwwww..
@@ -239,21 +309,21 @@ w.wl.....
 ......www
 wlll..lll`,
 
-    map`
+  map`
 l...
 ..l.
 plwb
 llwg`,
 
-    map`
+  map`
 wwp.w.
 ..b.wg
 ....l.
-..wwl.
+.mwwl.
 ......
 w.....`,
 
-      map`
+  map`
 pwwwwwwwwwwwwwg.w
 .wlll...........w
 vw.....ll.......w
@@ -269,52 +339,38 @@ vw.wwwwwwwww.w..w
 vw.wwwwwwwww.w..w
 vw...........w..w
 vwwwwwww.wwwww..w
->>>>>>>>.w......w
+>>>>>>>>twt.....w
 wwwwwwwwwwwwwwwww`,
 
-        map`
+  map`
 pllllllllllllllwg
-vw.............w.
-vw.............w^
-vw.............w^
+vwt........m..tw.
+vw...m.........w^
+vw....m........w^
 vw.............w^
 vw.....>..<....w^
 vw.............w^
 vw....w....w...w^
 vw.....wwww....w^
-vw.............w^
-vw.............w^
-vw.............w^
-vw.............w^
-vw.............w^
-vw.............w^
+vw...........m.w^
+vw..m..........w^
+vw.......m.....w^
+vw.........m...w^
+vw.....m.......w^
+vwt.......m...tw^
 vwwwwwwwwwwwwwwwb
 >>>>>>>>>>>>>>>>^`,
 
-         map`
-p...........
-.wwwwwwwww..
-.l.....l.w..
-.w.www.w.w..
-.w.w...w.w..
-.w.w.b.w.w..
-.w.www.w.w..
-.w...l.w.w..
-.wwwww.w.w..
-.....w..g...
-.llllwwww...
-............`,
-
   map`
-p...........
+pt..........
 ............
-.w.wwwwwww..
+.w.wxxxwww.m
 .w..........
 .w.wwww.....
 .w.w..w..w^^
 .w.w..w..w..
 .w.ww.w..w^^
-.w....w..w..
+.w....w..w.t
 .w.b..w..w^^
 ......w..g..
 ^wwwwwwwwww.
@@ -324,13 +380,28 @@ p...........
 p..wg...
 ..bw....
 ...w....
-...w....
+..twt...
 ...w..ww
 ........
 ........`
 ];
 
+
+function drawTimer() {
+  clearText();
+
+  addText("Time: " + time, {
+    x: 0,
+    y: 0,
+    color: color`3`
+  });
+}
+
+drawTimer();
+
+
 setMap(levels[level]);
+
 
 setSolids([
   player,
@@ -338,9 +409,11 @@ setSolids([
   wall
 ]);
 
+
 setPushables({
   [player]: [bucket]
 });
+
 
 onInput("w", () => {
   getFirst(player).y -= 1;
@@ -358,45 +431,197 @@ onInput("d", () => {
   getFirst(player).x += 1;
 });
 
+
 onInput("j", () => {
   setMap(levels[level]);
   drawTimer();
 });
 
+
+const timer = setInterval(() => {
+
+  time--;
+  drawTimer();
+
+  if (time <= 0) {
+
+    level = 0;
+    time = 120;
+
+    setMap(levels[level]);
+    drawTimer();
+  }
+
+}, 1000);
+
+
+const conveyor = setInterval(() => {
+
+  const p = getFirst(player);
+
+  if (p) {
+
+    if (tilesWith(rightBelt, player).length) {
+      p.x++;
+    }
+
+    if (tilesWith(leftBelt, player).length) {
+      p.x--;
+    }
+
+    if (tilesWith(upBelt, player).length) {
+      p.y--;
+    }
+
+    if (tilesWith(downBelt, player).length) {
+      p.y++;
+    }
+  }
+
+
+  const b = getFirst(bucket);
+
+  if (b) {
+
+    if (tilesWith(rightBelt, bucket).length) {
+      b.x++;
+    }
+
+    if (tilesWith(leftBelt, bucket).length) {
+      b.x--;
+    }
+
+    if (tilesWith(upBelt, bucket).length) {
+      b.y--;
+    }
+
+    if (tilesWith(downBelt, bucket).length) {
+      b.y++;
+    }
+  }
+
+}, 300);
+
+
+let mobDirection = 1;
+
+const mobTimer = setInterval(() => {
+
+  const m = getFirst(mob);
+
+  if (!m) return;
+
+  const nextX = m.x + mobDirection;
+
+  if (nextX < 0 || nextX >= width()) {
+    mobDirection *= -1;
+    return;
+  }
+
+  const nextTile = getTile(nextX, m.y);
+
+  if (nextTile.some(tile => tile.type === wall)) {
+    mobDirection *= -1;
+    return;
+  }
+
+  m.x += mobDirection;
+
+
+  const p = getFirst(player);
+
+  if (p && p.x === m.x && p.y === m.y) {
+    setMap(levels[level]);
+  }
+
+}, 500);
+
+
 afterInput(() => {
 
-  let p = getFirst(player);
+  const breakable = getFirst(breakableWall);
+  const b = getFirst(bucket);
 
-if (tilesWith(rightBelt, player).length) p.x++;
-if (tilesWith(leftBelt, player).length) p.x--;
-if (tilesWith(upBelt, player).length) p.y--;
-if (tilesWith(downBelt, player).length) p.y++;
+  if (breakable && b) {
 
-let b = getFirst(bucket);
+    if (
+      b.x === breakable.x &&
+      b.y === breakable.y
+    ) {
 
-if (b) {
-  if (tilesWith(rightBelt, bucket).length) b.x++;
-  if (tilesWith(leftBelt, bucket).length) b.x--;
-  if (tilesWith(upBelt, bucket).length) b.y--;
-  if (tilesWith(downBelt, bucket).length) b.y++;
-}
-  
+      breakable.remove();
+    }
+  }
+
+  const teleporters = getAll(teleporter);
+
+  if (teleporters.length >= 2) {
+
+    const p = getFirst(player);
+
+    if (
+      p &&
+      tilesWith(teleporter, player).length > 0
+    ) {
+
+      const first = teleporters[0];
+      const second = teleporters[1];
+
+      if (
+        p.x === first.x &&
+        p.y === first.y
+      ) {
+
+        p.x = second.x;
+        p.y = second.y;
+
+      } else {
+
+        p.x = first.x;
+        p.y = first.y;
+      }
+    }
+  }
+
+
   if (tilesWith(player, laser).length > 0) {
+
     setMap(levels[level]);
     return;
   }
 
-  const numberCovered = tilesWith(waterleak, bucket).length;
-  const targetNumber = tilesWith(waterleak).length;
 
-  if (numberCovered === targetNumber) {
+  const numberCovered =
+    tilesWith(waterleak, bucket).length;
+
+  const targetNumber =
+    tilesWith(waterleak).length;
+
+
+  if (
+    numberCovered === targetNumber &&
+    targetNumber > 0
+  ) {
+
     level++;
 
+
+
     if (level < levels.length) {
+
       setMap(levels[level]);
-    } else {
+
+    }
+
+
+    else {
+
       clearInterval(timer);
+      clearInterval(conveyor);
+      clearInterval(mobTimer);
+
       clearText();
+
       addText("You Win!", {
         x: 4,
         y: 4,
@@ -404,29 +629,5 @@ if (b) {
       });
     }
   }
+
 });
-
-onInput("j", () => {
-  setMap(levels[level]);
-  drawTimer();
-});
-
-const conveyor = setInterval(() => {
-
-   let p = getFirst(player);
-
-   if (tilesWith(rightBelt, player).length) p.x++;
-   if (tilesWith(leftBelt, player).length) p.x--;
-   if (tilesWith(upBelt, player).length) p.y--;
-   if (tilesWith(downBelt, player).length) p.y++;
-
-   let b = getFirst(bucket);
-
-   if (b) {
-     if (tilesWith(rightBelt, bucket).length) b.x++;
-     if (tilesWith(leftBelt, bucket).length) b.x--;
-     if (tilesWith(upBelt, bucket).length) b.y--;
-     if (tilesWith(downBelt, bucket).length) b.y++;
-   }
-
- }, 300);
