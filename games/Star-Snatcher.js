@@ -1,9 +1,7 @@
 /*
-@title: Star-Snatcher
+@title: Star-Snatcher Deluxe
 @author: tap
-@description: Catch 'em all! Run From Lava And Survive!
-@tags: []
-@addedOn: 2025-12-13
+@description: Catch everything!
 */
 
 const player = "p"
