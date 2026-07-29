@@ -290,9 +290,9 @@ onInput("d", () => tryMove(1, 0));
 
 // Restart Level (Press L)
 onInput("l", () => {
-  if (!gameWon) {
-    loadLevel(currentLevel);
-  }
+  if (currentLevel >= levels.length) currentLevel = levels.length - 1;
+  gameWon = false;
+  loadLevel(currentLevel);
 });
 
 // 4. ATTRACT ABILITY (Press J)
