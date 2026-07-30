@@ -1,4 +1,11 @@
-/* CONTROLS:
+  /*
+     @title: Cube Duel
+ @author: Ritvik
+ @description: A red cube chasing you down as you use attacks, vaults, movement, and waiting to take them down across different maps.
+ @tags: 
+@addedOn: 2026-07-29
+
+ CONTROLS:
   'w', 'a', 's', 'd' : Move (Restores 1 Energy)
   'j'                : Strike (Costs 1 Energy. 1 DMG in open, 3 DMG against walls!)
   'k'                : Brace (Restores ALL Energy, Heals 1 HP, skips turn)
