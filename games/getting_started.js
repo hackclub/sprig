@@ -14,6 +14,15 @@ const player = "p";
 const box = "b";
 const goal = "g";
 const wall = "w";
+const melody = tune`
+16000`;
+const secondmelody = tune`
+5000,
+500: E4~500,
+10500`;
+
+
+playTune(melody);
 
 // assign bitmap art to each sprite
 setLegend(
@@ -101,17 +110,18 @@ p..
   map`
 p.wg
 .bw.
-..w.
-..w.`,
+....
+....`,
   map`
 p...
 ...b
 ...b
 .bbg`,
   map`
-...
-.p.
-...`,
+.ggg..
+gbbb..
+gbbb..
+gbbbp.`,
   map`
 p.w.
 .bwg
@@ -127,16 +137,29 @@ setSolids([ player, box, wall ]); // other sprites cannot go inside of these spr
 
 // allow certain sprites to push certain other sprites
 setPushables({
-  [player]: []
+  [player]: [box],
+  [box]: [box]
 });
 
 // inputs for player movement control
 onInput("s", () => {
   getFirst(player).y += 1; // positive y is downwards
+  playTune(secondmelody);
 });
 
 onInput("d", () => {
   getFirst(player).x += 1;
+  playTune(secondmelody);
+});
+
+onInput("w", () => {
+  getFirst(player).y -= 1;
+  playTune(secondmelody);
+});
+
+onInput("a", () => {
+  getFirst(player).x -= 1;
+  playTune(secondmelody);
 });
 
 // input to reset level
