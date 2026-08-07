@@ -1,8 +1,15 @@
-/* Stage 0: structural sanity check only. This draws an 10x8 court with one
-   movable player placeholder and no tennis logic. dx/dy were NOT used as
-   settable velocities anywhere in this file. */
+/* Stage 1: adds a visual tennis court split into opponent/player halves,
+   a static opponent, and a net row. dx/dy were NOT used as settable velocities. */
 const player = "p";
+const opponent = "o";
 const court = "c";
+const net = "n";
+const PLAYER_MIN_Y = 5;
+const PLAYER_MAX_Y = 7;
+const OPPONENT_MIN_Y = 0;
+const OPPONENT_MAX_Y = 3;
+const COURT_MIN_X = 0;
+const COURT_MAX_X = 9;
 
 setLegend(
   [player, bitmap`
@@ -22,6 +29,23 @@ setLegend(
 2222222222222222
 2222222222222222
 2222222222222222`],
+  [opponent, bitmap`
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333`],
   [court, bitmap`
 5555555555555555
 5555555555555555
@@ -38,26 +62,43 @@ setLegend(
 5555555555555555
 5555555555555555
 5555555555555555
-5555555555555555`]
+5555555555555555`],
+  [net, bitmap`
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111`]
 );
 
 setBackground(court);
 const level = map`
 cccccccccc
+ccccoccccc
 cccccccccc
 cccccccccc
-cccccccccc
-cccccccccc
-cccccccccc
+nnnnnnnnnn
 ccccpccccc
+cccccccccc
 cccccccccc`;
 setMap(level);
 
 function movePlayer(dx, dy) {
   const sprite = getFirst(player);
   if (!sprite) return;
-  sprite.x = Math.max(0, Math.min(9, sprite.x + dx));
-  sprite.y = Math.max(0, Math.min(7, sprite.y + dy));
+  sprite.x = Math.max(COURT_MIN_X, Math.min(COURT_MAX_X, sprite.x + dx));
+  sprite.y = Math.max(PLAYER_MIN_Y, Math.min(PLAYER_MAX_Y, sprite.y + dy));
 }
 
 onInput("w", () => movePlayer(0, -1));
@@ -65,4 +106,4 @@ onInput("a", () => movePlayer(-1, 0));
 onInput("s", () => movePlayer(0, 1));
 onInput("d", () => movePlayer(1, 0));
 
-// Assumption to verify: sprite.x/y and map positions use tile-grid units.
+// Assumption to verify: legend order does not alter rendering for this map.
