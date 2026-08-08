@@ -2,7 +2,7 @@
 @title: Sliding_Puzzle_REMIX
 @author: Ruben Galvan
 @tags: [puzzle, forest]
-@addedOn: 2026-03-21
+@addedOn: 2026-08-8
 @description: A remix built upon Eren Karababa's Classic Sliding puzzle game! Features refined sprites, dark forest color themes, and a noise effect win animation.
 */
 
