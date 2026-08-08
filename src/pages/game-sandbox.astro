@@ -1,0 +1,36 @@
+---
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Sprig Game Sandbox</title>
+		<style>
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				overflow: hidden;
+				background: #000000;
+			}
+
+			canvas {
+				display: block;
+				width: 100%;
+				height: 100%;
+				outline: none;
+				image-rendering: crisp-edges;
+				image-rendering: pixelated;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="sprig-sandbox-screen" width="1000" height="800" tabindex="0"></canvas>
+		<script>
+			import '../lib/engine/sandbox-runner'
+		</script>
+	</body>
+</html>
