@@ -1,8 +1,10 @@
-/* Stage 4: adds a single hardcoded AI opponent that reacts to incoming shots,
-   tracks the ball along the x-axis, and returns it with topspin when its
-   accuracy check succeeds. Stages 0-3 still provide movement, wall bounces,
-   baseline OUT detection, four shot trajectories, fake ball height, and a
-   shadow for lob visuals. dx/dy were NOT used as settable velocities. */
+/* Stage 5: adds persistent tennis scoring to the Stage 4 game: point wins,
+   deuce/advantage, games, and a single-set match that is first to 4 games
+   while winning by 2. Stages 0-4 still provide movement, serves, wall
+   bounces, four shot trajectories, fake ball height, lob shadows, and the
+   single hardcoded AI opponent. dx/dy were NOT used as settable velocities;
+   fractional physics positions are written to sprites only through
+   Math.round. */
 
 const player = "p";
 const opponent = "o";
@@ -166,6 +168,15 @@ const opponentState = {
   x: null
 };
 
+const matchState = {
+  playerPoints: 0,
+  opponentPoints: 0,
+  playerGames: 0,
+  opponentGames: 0,
+  matchOver: false,
+  matchWinner: null
+};
+
 function resetAIForIncomingShot() {
   aiState.reactionTicksRemaining = AI_REACTION_DELAY_TICKS;
   aiState.isReacting = true;
@@ -173,8 +184,104 @@ function resetAIForIncomingShot() {
   aiState.wasMovingTowardOpponent = true;
 }
 
+function getPointDisplayString(winCount, otherWinCount) {
+  if (winCount >= 4 && winCount - otherWinCount >= 2) return "Game";
+  if (winCount >= 3 && otherWinCount >= 3) {
+    if (winCount === otherWinCount) return "Deuce";
+    if (winCount - otherWinCount === 1) return "Advantage";
+  }
+  return ["0", "15", "30", "40"][Math.min(winCount, 3)];
+}
+
+function updateScoreDisplay() {
+  if (matchState.matchOver) return;
+  const playerPoints = getPointDisplayString(
+    matchState.playerPoints,
+    matchState.opponentPoints
+  );
+  const opponentPoints = getPointDisplayString(
+    matchState.opponentPoints,
+    matchState.playerPoints
+  );
+  let pointText = "P: " + playerPoints + "-" + opponentPoints;
+  if (playerPoints === "Deuce") {
+    pointText = "Deuce";
+  } else if (playerPoints === "Advantage") {
+    pointText = "Ad You";
+  } else if (opponentPoints === "Advantage") {
+    pointText = "Ad Opp";
+  }
+  clearText();
+  addText(pointText, { x: 0, y: 0, color: color`3` });
+  addText(
+    "G: " + matchState.playerGames + "-" + matchState.opponentGames,
+    { x: 0, y: 1, color: color`3` }
+  );
+}
+
+function checkSetWin() {
+  let winner = null;
+  if (matchState.playerGames >= 4 &&
+      matchState.playerGames - matchState.opponentGames >= 2) {
+    winner = "player";
+  } else if (matchState.opponentGames >= 4 &&
+             matchState.opponentGames - matchState.playerGames >= 2) {
+    winner = "opponent";
+  }
+  if (!winner) return;
+
+  matchState.matchOver = true;
+  matchState.matchWinner = winner;
+  const ballSprite = getFirst(ball);
+  const shadowSprite = getFirst(shadow);
+  if (ballSprite) ballSprite.remove();
+  if (shadowSprite) shadowSprite.remove();
+  ballState.inPlay = false;
+  clearInterval(ballTick);
+  clearText();
+  const resultText = winner === "player" ? "You Win! " : "You Lose. ";
+  addText(
+    resultText + matchState.playerGames + "-" + matchState.opponentGames,
+    { x: 0, y: 3, color: color`3` }
+  );
+}
+
+function checkGameWin() {
+  let winner = null;
+  if (matchState.playerPoints >= 4 &&
+      matchState.playerPoints - matchState.opponentPoints >= 2) {
+    winner = "player";
+  } else if (matchState.opponentPoints >= 4 &&
+             matchState.opponentPoints - matchState.playerPoints >= 2) {
+    winner = "opponent";
+  }
+  if (!winner) return;
+
+  if (winner === "player") {
+    matchState.playerGames += 1;
+  } else {
+    matchState.opponentGames += 1;
+  }
+  matchState.playerPoints = 0;
+  matchState.opponentPoints = 0;
+  checkSetWin();
+}
+
+function awardPoint(winner) {
+  if (matchState.matchOver) return;
+  if (winner === "player") {
+    matchState.playerPoints += 1;
+  } else if (winner === "opponent") {
+    matchState.opponentPoints += 1;
+  } else {
+    return;
+  }
+  checkGameWin();
+  if (!matchState.matchOver) updateScoreDisplay();
+}
+
 function serveBall() {
-  if (ballState.inPlay) return;
+  if (ballState.inPlay || matchState.matchOver) return;
   const playerSprite = getFirst(player);
   if (!playerSprite) return;
   ballState.x = playerSprite.x;
@@ -188,7 +295,7 @@ function serveBall() {
   resetAIForIncomingShot();
 }
 
-function finishRally() {
+function finishRally(winner) {
   const ballSprite = getFirst(ball);
   const shadowSprite = getFirst(shadow);
   if (ballSprite) ballSprite.remove();
@@ -200,8 +307,7 @@ function finishRally() {
   aiState.isReacting = false;
   aiState.accuracyRolled = false;
   aiState.wasMovingTowardOpponent = false;
-  addText("OUT", { x: 4, y: 3, color: color`3` });
-  setTimeout(() => clearText(), 1000);
+  awardPoint(winner);
 }
 
 // Move the ball, bounce off side walls, then end the rally past a baseline.
@@ -232,8 +338,12 @@ function updateBall() {
   }
 
   // End the rally before Sprig receives a y value outside the map.
-  if (nextY < OPPONENT_MIN_Y || nextY > PLAYER_MAX_Y) {
-    finishRally();
+  if (nextY < OPPONENT_MIN_Y) {
+    finishRally("player");
+    return;
+  }
+  if (nextY > PLAYER_MAX_Y) {
+    finishRally("opponent");
     return;
   }
 
@@ -317,6 +427,7 @@ function updateOpponentAI() {
 const ballTick = setInterval(updateBall, 75);
 
 function movePlayer(dx, dy) {
+  if (matchState.matchOver) return;
   const sprite = getFirst(player);
   if (!sprite) return;
   sprite.x = Math.max(COURT_MIN_X, Math.min(COURT_MAX_X, sprite.x + dx));
@@ -365,6 +476,7 @@ onInput("l", () => {
 });
 
 onInput("k", () => {
+  if (matchState.matchOver) return;
   if (!ballState.inPlay) {
     serveBall();
     return;
@@ -376,10 +488,17 @@ onInput("k", () => {
   resetAIForIncomingShot();
 });
 
+updateScoreDisplay();
+
 // Assumptions to verify: setInterval needs no separate Sprig lifecycle cleanup;
 // clamping a bottom-edge shadow to row 7 is preferable to placing it off-map.
 // Tuning: topspin -0.4, slice/lob -0.14, smash -0.5, lob vHeight 0.2,
 // gravity 0.02, and smash threshold height > 1.
 // Stage 4 AI tuning: AI_REACTION_DELAY_TICKS = 6, AI_MOVE_SPEED = 0.2,
 // AI_ACCURACY = 0.8, for a 450 ms reaction delay at the 75 ms tick rate.
+// The AI miss path is not duplicated: when its one accuracy roll fails,
+// updateBall leaves the ball's velocity untouched, so crossing the opponent's
+// baseline naturally awards that point to the player. Persistent score text is
+// at the top-left text origin (column 0, row 0 for points and row 1 for games);
+// the final result is at column 0, row 3.
 // dx/dy remain read-only and are never assigned as velocities.
