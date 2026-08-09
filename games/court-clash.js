@@ -1,9 +1,11 @@
 /* Stage 6a: adds a pre-match roster menu with three parody opponents,
    cosmetic opponent recoloring, match-start gating, and a return to the
-   roster after the single-set Stage 5 match ends. Stages 0-5 still provide
-   movement, serves, wall bounces, four shot trajectories, fake ball height,
-   lob shadows, the single hardcoded AI, and tennis scoring. All roster
-   choices currently use identical AI stats; dx/dy were NOT used as settable
+   roster after the single-set Stage 5 match ends. The menu uses a separate
+   blank map, while every match rebuilds the court map so the opponent starts
+   fresh as type "o" before recoloring. Stages 0-5 still provide movement,
+   serves, wall bounces, four shot trajectories, fake ball height, lob
+   shadows, the single hardcoded AI, and tennis scoring. All roster choices
+   currently use identical AI stats; dx/dy were NOT used as settable
    velocities, and fractional positions are written to sprites only through
    Math.round. */
 
@@ -19,8 +21,6 @@ const OPPONENT_MIN_Y = 0;
 const OPPONENT_MAX_Y = 3;
 const COURT_MIN_X = 0;
 const COURT_MAX_X = 9;
-const OPPONENT_INITIAL_X = 4;
-
 const ROSTER = [
   { name: "Carlos Alcatraz", typeChar: "o" },
   { name: "Rafa Nadale", typeChar: "q" },
@@ -182,7 +182,15 @@ nnnnnnnnnn
 ccccpccccc
 cccccccccc
 cccccccccc`;
-setMap(level);
+const menuMap = map`
+cccccccccc
+cccccccccc
+cccccccccc
+cccccccccc
+cccccccccc
+cccccccccc
+cccccccccc
+cccccccccc`;
 
 // x/y are fractional physics coordinates; the sprite receives rounded values.
 // Lob values are tuned for about 24 ticks of rise-and-fall.
@@ -349,6 +357,7 @@ function enterRosterMenu() {
   if (ballSprite) ballSprite.remove();
   if (shadowSprite) shadowSprite.remove();
   ballState.inPlay = false;
+  setMap(menuMap);
   rosterState.selectedIndex = 0;
   gameStage = "ROSTER";
   renderRosterMenu();
@@ -381,14 +390,15 @@ function resetAIState() {
 }
 
 function startMatch() {
+  setMap(level);
+  const opponentSprite = getFirst(opponent);
+  if (opponentSprite) {
+    opponentSprite.type = ROSTER[rosterState.selectedIndex].typeChar;
+  }
   resetMatchState();
   resetBallState();
   resetAIState();
   opponentState.x = null;
-  const selectedOpponent = getFirst(
-    ROSTER[rosterState.selectedIndex].typeChar
-  );
-  if (selectedOpponent) selectedOpponent.x = OPPONENT_INITIAL_X;
   gameStage = "MATCH";
   if (ballTick) clearInterval(ballTick);
   ballTick = setInterval(updateBall, 75);
@@ -397,9 +407,6 @@ function startMatch() {
 }
 
 function confirmRosterSelection() {
-  const selected = ROSTER[rosterState.selectedIndex];
-  const opponentSprite = getFirst(opponent);
-  if (opponentSprite) opponentSprite.type = selected.typeChar;
   startMatch();
 }
 
@@ -661,7 +668,7 @@ onInput("k", () => {
   resetAIForIncomingShot();
 });
 
-renderRosterMenu();
+enterRosterMenu();
 
 // Assumptions to verify: setInterval needs no separate Sprig lifecycle cleanup;
 // clamping a bottom-edge shadow to row 7 is preferable to placing it off-map.
@@ -674,10 +681,8 @@ renderRosterMenu();
 // baseline naturally awards that point to the player. Persistent score text is
 // at the top-left text origin (column 0, row 0 for points and row 1 for games);
 // the final result is at column 0, row 3.
-// The opponent's .type reassignment is supported by the Sprig sprite API, but
-// Sprig runtime behavior is not available to this static validation run. This
-// implementation intentionally uses getFirst(opponent) after reassignment as
-// requested; verify in Sprig whether that lookup still finds the same sprite
-// after a second roster selection. If it does not, that behavior should be
-// reported before adding a later-stage workaround.
+// The opponent's .type reassignment is safe on every selection because
+// startMatch() first rebuilds level, recreating the opponent as type "o" before
+// getFirst(opponent) performs the recolor. During the active match, the AI
+// continues using the selected roster type for its lookup.
 // dx/dy remain read-only and are never assigned as velocities.
