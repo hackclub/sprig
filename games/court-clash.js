@@ -1,9 +1,10 @@
-/* Stage 5: adds persistent tennis scoring to the Stage 4 game: point wins,
-   deuce/advantage, games, and a single-set match that is first to 4 games
-   while winning by 2. Stages 0-4 still provide movement, serves, wall
-   bounces, four shot trajectories, fake ball height, lob shadows, and the
-   single hardcoded AI opponent. dx/dy were NOT used as settable velocities;
-   fractional physics positions are written to sprites only through
+/* Stage 6a: adds a pre-match roster menu with three parody opponents,
+   cosmetic opponent recoloring, match-start gating, and a return to the
+   roster after the single-set Stage 5 match ends. Stages 0-5 still provide
+   movement, serves, wall bounces, four shot trajectories, fake ball height,
+   lob shadows, the single hardcoded AI, and tennis scoring. All roster
+   choices currently use identical AI stats; dx/dy were NOT used as settable
+   velocities, and fractional positions are written to sprites only through
    Math.round. */
 
 const player = "p";
@@ -18,8 +19,15 @@ const OPPONENT_MIN_Y = 0;
 const OPPONENT_MAX_Y = 3;
 const COURT_MIN_X = 0;
 const COURT_MAX_X = 9;
+const OPPONENT_INITIAL_X = 4;
 
-// Stage 4 uses one hardcoded difficulty; the menu belongs to Stage 6.
+const ROSTER = [
+  { name: "Carlos Alcatraz", typeChar: "o" },
+  { name: "Rafa Nadale", typeChar: "q" },
+  { name: "Novak Djokopoulos", typeChar: "z" }
+];
+
+// Stage 4 uses one hardcoded difficulty; the menu belongs to Stage 6b.
 const AI_REACTION_DELAY_TICKS = 6; // 6 * 75 ms = 450 ms before the AI moves.
 const AI_MOVE_SPEED = 0.2; // Fractional x movement per 75 ms tick.
 const AI_ACCURACY = 0.8; // 80% chance to return a ball that reaches the AI.
@@ -60,6 +68,40 @@ setLegend(
 3333333333333333
 3333333333333333
 3333333333333333`],
+  ["q", bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777`],
+  ["z", bitmap`
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888`],
   [ball, bitmap`
 ................
 ................
@@ -177,6 +219,12 @@ const matchState = {
   matchWinner: null
 };
 
+const rosterState = {
+  selectedIndex: 0
+};
+
+let gameStage = "ROSTER";
+
 function resetAIForIncomingShot() {
   aiState.reactionTicksRemaining = AI_REACTION_DELAY_TICKS;
   aiState.isReacting = true;
@@ -232,12 +280,14 @@ function checkSetWin() {
 
   matchState.matchOver = true;
   matchState.matchWinner = winner;
+  gameStage = "GAME_OVER";
   const ballSprite = getFirst(ball);
   const shadowSprite = getFirst(shadow);
   if (ballSprite) ballSprite.remove();
   if (shadowSprite) shadowSprite.remove();
   ballState.inPlay = false;
   clearInterval(ballTick);
+  ballTick = null;
   clearText();
   const resultText = winner === "player" ? "You Win! " : "You Lose. ";
   addText(
@@ -278,6 +328,79 @@ function awardPoint(winner) {
   }
   checkGameWin();
   if (!matchState.matchOver) updateScoreDisplay();
+}
+
+function renderRosterMenu() {
+  clearText();
+  ROSTER.forEach((entry, index) => {
+    const cursor = index === rosterState.selectedIndex ? ">" : " ";
+    addText(cursor + " " + entry.name, { x: 0, y: index, color: color`3` });
+  });
+  addText("w/s select  k ok", { x: 0, y: 4, color: color`3` });
+}
+
+function enterRosterMenu() {
+  if (ballTick) {
+    clearInterval(ballTick);
+    ballTick = null;
+  }
+  const ballSprite = getFirst(ball);
+  const shadowSprite = getFirst(shadow);
+  if (ballSprite) ballSprite.remove();
+  if (shadowSprite) shadowSprite.remove();
+  ballState.inPlay = false;
+  rosterState.selectedIndex = 0;
+  gameStage = "ROSTER";
+  renderRosterMenu();
+}
+
+function resetMatchState() {
+  matchState.playerPoints = 0;
+  matchState.opponentPoints = 0;
+  matchState.playerGames = 0;
+  matchState.opponentGames = 0;
+  matchState.matchOver = false;
+  matchState.matchWinner = null;
+}
+
+function resetBallState() {
+  ballState.inPlay = false;
+  ballState.x = 0;
+  ballState.y = 0;
+  ballState.vx = 0;
+  ballState.vy = 0;
+  ballState.height = 0;
+  ballState.vHeight = 0;
+}
+
+function resetAIState() {
+  aiState.reactionTicksRemaining = 0;
+  aiState.isReacting = false;
+  aiState.accuracyRolled = false;
+  aiState.wasMovingTowardOpponent = false;
+}
+
+function startMatch() {
+  resetMatchState();
+  resetBallState();
+  resetAIState();
+  opponentState.x = null;
+  const selectedOpponent = getFirst(
+    ROSTER[rosterState.selectedIndex].typeChar
+  );
+  if (selectedOpponent) selectedOpponent.x = OPPONENT_INITIAL_X;
+  gameStage = "MATCH";
+  if (ballTick) clearInterval(ballTick);
+  ballTick = setInterval(updateBall, 75);
+  clearText();
+  updateScoreDisplay();
+}
+
+function confirmRosterSelection() {
+  const selected = ROSTER[rosterState.selectedIndex];
+  const opponentSprite = getFirst(opponent);
+  if (opponentSprite) opponentSprite.type = selected.typeChar;
+  startMatch();
 }
 
 function serveBall() {
@@ -396,7 +519,9 @@ function updateOpponentAI() {
     aiState.isReacting = false;
   }
 
-  const opponentSprite = getFirst(opponent);
+  const opponentSprite = getFirst(
+    ROSTER[rosterState.selectedIndex].typeChar
+  );
   if (!opponentSprite) return;
   if (opponentState.x === null) opponentState.x = opponentSprite.x;
 
@@ -423,21 +548,45 @@ function updateOpponentAI() {
   }
 }
 
-// 75 ms keeps fractional movement smooth without adding a busy loop.
-const ballTick = setInterval(updateBall, 75);
+// The match interval starts only after roster confirmation.
+let ballTick = null;
 
 function movePlayer(dx, dy) {
-  if (matchState.matchOver) return;
+  if (gameStage !== "MATCH" || matchState.matchOver) return;
   const sprite = getFirst(player);
   if (!sprite) return;
   sprite.x = Math.max(COURT_MIN_X, Math.min(COURT_MAX_X, sprite.x + dx));
   sprite.y = Math.max(PLAYER_MIN_Y, Math.min(PLAYER_MAX_Y, sprite.y + dy));
 }
 
-onInput("w", () => movePlayer(0, -1));
-onInput("a", () => movePlayer(-1, 0));
-onInput("s", () => movePlayer(0, 1));
-onInput("d", () => movePlayer(1, 0));
+onInput("w", () => {
+  if (gameStage === "ROSTER") {
+    rosterState.selectedIndex = Math.max(0, rosterState.selectedIndex - 1);
+    renderRosterMenu();
+  } else if (gameStage === "MATCH") {
+    movePlayer(0, -1);
+  }
+});
+
+onInput("a", () => {
+  if (gameStage === "MATCH") movePlayer(-1, 0);
+});
+
+onInput("s", () => {
+  if (gameStage === "ROSTER") {
+    rosterState.selectedIndex = Math.min(
+      ROSTER.length - 1,
+      rosterState.selectedIndex + 1
+    );
+    renderRosterMenu();
+  } else if (gameStage === "MATCH") {
+    movePlayer(0, 1);
+  }
+});
+
+onInput("d", () => {
+  if (gameStage === "MATCH") movePlayer(1, 0);
+});
 
 function isBallInRangeOf(sprite) {
   const ballSprite = getFirst(ball);
@@ -450,8 +599,16 @@ function isBallInRange() {
   return isBallInRangeOf(getFirst(player));
 }
 
+function returnToRosterMenu() {
+  enterRosterMenu();
+}
+
 onInput("i", () => {
-  if (!ballState.inPlay || !isBallInRange()) return;
+  if (gameStage === "GAME_OVER") {
+    returnToRosterMenu();
+    return;
+  }
+  if (gameStage !== "MATCH" || !ballState.inPlay || !isBallInRange()) return;
   ballState.vy = -0.4;
   ballState.height = 0;
   ballState.vHeight = 0;
@@ -459,7 +616,11 @@ onInput("i", () => {
 });
 
 onInput("j", () => {
-  if (!ballState.inPlay || !isBallInRange()) return;
+  if (gameStage === "GAME_OVER") {
+    returnToRosterMenu();
+    return;
+  }
+  if (gameStage !== "MATCH" || !ballState.inPlay || !isBallInRange()) return;
   ballState.vy = -0.14;
   ballState.vx += Math.random() * 0.1 - 0.05;
   ballState.height = 0;
@@ -468,7 +629,11 @@ onInput("j", () => {
 });
 
 onInput("l", () => {
-  if (!ballState.inPlay || !isBallInRange()) return;
+  if (gameStage === "GAME_OVER") {
+    returnToRosterMenu();
+    return;
+  }
+  if (gameStage !== "MATCH" || !ballState.inPlay || !isBallInRange()) return;
   ballState.vy = -0.14;
   ballState.height = 0;
   ballState.vHeight = LOB_INITIAL_VHEIGHT;
@@ -476,7 +641,15 @@ onInput("l", () => {
 });
 
 onInput("k", () => {
-  if (matchState.matchOver) return;
+  if (gameStage === "ROSTER") {
+    confirmRosterSelection();
+    return;
+  }
+  if (gameStage === "GAME_OVER") {
+    returnToRosterMenu();
+    return;
+  }
+  if (gameStage !== "MATCH" || matchState.matchOver) return;
   if (!ballState.inPlay) {
     serveBall();
     return;
@@ -488,7 +661,7 @@ onInput("k", () => {
   resetAIForIncomingShot();
 });
 
-updateScoreDisplay();
+renderRosterMenu();
 
 // Assumptions to verify: setInterval needs no separate Sprig lifecycle cleanup;
 // clamping a bottom-edge shadow to row 7 is preferable to placing it off-map.
@@ -501,4 +674,10 @@ updateScoreDisplay();
 // baseline naturally awards that point to the player. Persistent score text is
 // at the top-left text origin (column 0, row 0 for points and row 1 for games);
 // the final result is at column 0, row 3.
+// The opponent's .type reassignment is supported by the Sprig sprite API, but
+// Sprig runtime behavior is not available to this static validation run. This
+// implementation intentionally uses getFirst(opponent) after reassignment as
+// requested; verify in Sprig whether that lookup still finds the same sprite
+// after a second roster selection. If it does not, that behavior should be
+// reported before adding a later-stage workaround.
 // dx/dy remain read-only and are never assigned as velocities.
