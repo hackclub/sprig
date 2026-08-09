@@ -1,6 +1,9 @@
-/* Stage 3: adds topspin, slice, lob, and context-sensitive serve-smash shots,
-   plus fake ball height and a shadow for lob visuals. dx/dy were NOT used as
-   settable velocities. */
+/* Stage 4: adds a single hardcoded AI opponent that reacts to incoming shots,
+   tracks the ball along the x-axis, and returns it with topspin when its
+   accuracy check succeeds. Stages 0-3 still provide movement, wall bounces,
+   baseline OUT detection, four shot trajectories, fake ball height, and a
+   shadow for lob visuals. dx/dy were NOT used as settable velocities. */
+
 const player = "p";
 const opponent = "o";
 const court = "c";
@@ -13,6 +16,12 @@ const OPPONENT_MIN_Y = 0;
 const OPPONENT_MAX_Y = 3;
 const COURT_MIN_X = 0;
 const COURT_MAX_X = 9;
+
+// Stage 4 uses one hardcoded difficulty; the menu belongs to Stage 6.
+const AI_REACTION_DELAY_TICKS = 6; // 6 * 75 ms = 450 ms before the AI moves.
+const AI_MOVE_SPEED = 0.2; // Fractional x movement per 75 ms tick.
+const AI_ACCURACY = 0.8; // 80% chance to return a ball that reaches the AI.
+const TOPSPIN_VY = -0.4; // Exact topspin vy used by player input "i".
 
 setLegend(
   [player, bitmap`
@@ -146,6 +155,24 @@ const ballState = {
   vHeight: 0
 };
 
+const aiState = {
+  reactionTicksRemaining: 0,
+  isReacting: false,
+  accuracyRolled: false,
+  wasMovingTowardOpponent: false
+};
+
+const opponentState = {
+  x: null
+};
+
+function resetAIForIncomingShot() {
+  aiState.reactionTicksRemaining = AI_REACTION_DELAY_TICKS;
+  aiState.isReacting = true;
+  aiState.accuracyRolled = false;
+  aiState.wasMovingTowardOpponent = true;
+}
+
 function serveBall() {
   if (ballState.inPlay) return;
   const playerSprite = getFirst(player);
@@ -158,6 +185,7 @@ function serveBall() {
   ballState.vy = -0.2;
   ballState.height = 0;
   ballState.vHeight = 0;
+  resetAIForIncomingShot();
 }
 
 function finishRally() {
@@ -168,6 +196,10 @@ function finishRally() {
   ballState.inPlay = false;
   ballState.height = 0;
   ballState.vHeight = 0;
+  aiState.reactionTicksRemaining = 0;
+  aiState.isReacting = false;
+  aiState.accuracyRolled = false;
+  aiState.wasMovingTowardOpponent = false;
   addText("OUT", { x: 4, y: 3, color: color`3` });
   setTimeout(() => clearText(), 1000);
 }
@@ -225,6 +257,60 @@ function updateBall() {
   } else if (shadowSprite) {
     shadowSprite.remove();
   }
+
+  updateOpponentAI();
+}
+
+function updateOpponentAI() {
+  if (!ballState.inPlay) return;
+
+  // Negative vy is the existing convention for travel toward the opponent.
+  if (ballState.vy >= 0) {
+    aiState.wasMovingTowardOpponent = false;
+    aiState.isReacting = false;
+    aiState.reactionTicksRemaining = 0;
+    return;
+  }
+
+  // This also catches a direction flip that was not caused by a player input.
+  if (!aiState.wasMovingTowardOpponent) {
+    resetAIForIncomingShot();
+  }
+
+  if (aiState.isReacting) {
+    if (aiState.reactionTicksRemaining > 1) {
+      aiState.reactionTicksRemaining -= 1;
+      return;
+    }
+    aiState.reactionTicksRemaining = 0;
+    aiState.isReacting = false;
+  }
+
+  const opponentSprite = getFirst(opponent);
+  if (!opponentSprite) return;
+  if (opponentState.x === null) opponentState.x = opponentSprite.x;
+
+  const distanceX = ballState.x - opponentState.x;
+  const movementX = Math.max(-AI_MOVE_SPEED, Math.min(AI_MOVE_SPEED, distanceX));
+  opponentState.x = Math.max(
+    COURT_MIN_X,
+    Math.min(COURT_MAX_X, opponentState.x + movementX)
+  );
+  opponentSprite.x = Math.round(opponentState.x);
+
+  if (!aiState.accuracyRolled && isBallInRangeOf(opponentSprite)) {
+    aiState.accuracyRolled = true;
+    if (Math.random() < AI_ACCURACY) {
+      // Use the player's exact topspin speed, reversed so the return travels
+      // back toward the player instead of immediately back toward the AI.
+      ballState.vy = -TOPSPIN_VY;
+      ballState.height = 0;
+      ballState.vHeight = 0;
+      aiState.wasMovingTowardOpponent = false;
+      aiState.isReacting = false;
+      aiState.reactionTicksRemaining = 0;
+    }
+  }
 }
 
 // 75 ms keeps fractional movement smooth without adding a busy loop.
@@ -242,12 +328,15 @@ onInput("a", () => movePlayer(-1, 0));
 onInput("s", () => movePlayer(0, 1));
 onInput("d", () => movePlayer(1, 0));
 
-function isBallInRange() {
-  const playerSprite = getFirst(player);
+function isBallInRangeOf(sprite) {
   const ballSprite = getFirst(ball);
-  return !!(playerSprite && ballSprite &&
-    Math.abs(ballState.x - playerSprite.x) <= 1.5 &&
-    Math.abs(ballState.y - playerSprite.y) <= 1.5);
+  return !!(sprite && ballSprite &&
+    Math.abs(ballState.x - sprite.x) <= 1.5 &&
+    Math.abs(ballState.y - sprite.y) <= 1.5);
+}
+
+function isBallInRange() {
+  return isBallInRangeOf(getFirst(player));
 }
 
 onInput("i", () => {
@@ -255,6 +344,7 @@ onInput("i", () => {
   ballState.vy = -0.4;
   ballState.height = 0;
   ballState.vHeight = 0;
+  resetAIForIncomingShot();
 });
 
 onInput("j", () => {
@@ -263,6 +353,7 @@ onInput("j", () => {
   ballState.vx += Math.random() * 0.1 - 0.05;
   ballState.height = 0;
   ballState.vHeight = 0;
+  resetAIForIncomingShot();
 });
 
 onInput("l", () => {
@@ -270,6 +361,7 @@ onInput("l", () => {
   ballState.vy = -0.14;
   ballState.height = 0;
   ballState.vHeight = LOB_INITIAL_VHEIGHT;
+  resetAIForIncomingShot();
 });
 
 onInput("k", () => {
@@ -281,9 +373,13 @@ onInput("k", () => {
   ballState.vy = -0.5;
   ballState.height = 0;
   ballState.vHeight = 0;
+  resetAIForIncomingShot();
 });
 
 // Assumptions to verify: setInterval needs no separate Sprig lifecycle cleanup;
 // clamping a bottom-edge shadow to row 7 is preferable to placing it off-map.
 // Tuning: topspin -0.4, slice/lob -0.14, smash -0.5, lob vHeight 0.2,
 // gravity 0.02, and smash threshold height > 1.
+// Stage 4 AI tuning: AI_REACTION_DELAY_TICKS = 6, AI_MOVE_SPEED = 0.2,
+// AI_ACCURACY = 0.8, for a 450 ms reaction delay at the 75 ms tick rate.
+// dx/dy remain read-only and are never assigned as velocities.
