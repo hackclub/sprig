@@ -1,15 +1,15 @@
-/* Stage 6a: adds a pre-match roster menu with three parody opponents,
-   cosmetic opponent recoloring, match-start gating, and a return to the
-   roster after the single-set Stage 5 match ends. The menu uses a separate
-   blank map, while every match rebuilds the court map so the opponent starts
-   fresh as type "o" before recoloring. Stages 0-5 still provide movement,
-   serves, wall bounces, four shot trajectories, fake ball height, lob
-   shadows, the single hardcoded AI, and tennis scoring. All roster choices
-   currently use identical AI stats; dx/dy were NOT used as settable
-   velocities, and fractional positions are written to sprites only through
-   Math.round. */
+/*
+@title: Court Clash
+@author: Sai Konchada
+@description: A 2D tennis game with parody pro players, adjustable AI difficulty, and real tennis scoring.
+@tags: ['sports', 'tennis', 'ai']
+@addedOn: 2026-08-10
+*/
+
+// LEGEND & ASSETS
 
 const player = "p";
+
 const opponent = "o";
 const court = "c";
 const net = "n";
@@ -21,16 +21,70 @@ const OPPONENT_MIN_Y = 0;
 const OPPONENT_MAX_Y = 3;
 const COURT_MIN_X = 0;
 const COURT_MAX_X = 9;
+const SINGLES_LEFT_X = 1;
+const SINGLES_RIGHT_X = 8;
+const SERVICE_LINE_OPPONENT_Y = 2;
+const SERVICE_LINE_PLAYER_Y = 6;
+const AIM_BUFFER_TICKS = 6; // 6 * 75 ms = a 450 ms directional-input window.
+const AIM_VX = 0.15; // Horizontal velocity added by a buffered diagonal aim.
+const HIT_BUFFER_TICKS = 3; // 3 * 75 ms = a 225 ms forgiving hit window.
 const ROSTER = [
-  { name: "Carlos Alcatraz", typeChar: "o" },
-  { name: "Rafa Nadale", typeChar: "q" },
-  { name: "Novak Djokopoulos", typeChar: "z" }
+  {
+    name: "Carlos Alcatraz",
+    typeChar: "o",
+    baseReactionDelayTicks: 6,
+    baseMoveSpeed: 0.2,
+    baseAccuracy: 0.8
+  },
+  {
+    name: "Rafa Nadale",
+    typeChar: "q",
+    baseReactionDelayTicks: 8,
+    baseMoveSpeed: 0.15,
+    baseAccuracy: 0.9
+  },
+  {
+    name: "Novak Djokopoulos",
+    typeChar: "z",
+    baseReactionDelayTicks: 4,
+    baseMoveSpeed: 0.28,
+    baseAccuracy: 0.85
+  }
 ];
 
-// Stage 4 uses one hardcoded difficulty; the menu belongs to Stage 6b.
-const AI_REACTION_DELAY_TICKS = 6; // 6 * 75 ms = 450 ms before the AI moves.
-const AI_MOVE_SPEED = 0.2; // Fractional x movement per 75 ms tick.
-const AI_ACCURACY = 0.8; // 80% chance to return a ball that reaches the AI.
+const DIFFICULTY_LEVELS = [
+  {
+    label: "Very Easy",
+    reactionMultiplier: 1.6,
+    moveSpeedMultiplier: 0.6,
+    accuracyMultiplier: 0.7
+  },
+  {
+    label: "Easy",
+    reactionMultiplier: 1.3,
+    moveSpeedMultiplier: 0.8,
+    accuracyMultiplier: 0.85
+  },
+  {
+    label: "Normal",
+    reactionMultiplier: 1.0,
+    moveSpeedMultiplier: 1.0,
+    accuracyMultiplier: 1.0
+  },
+  {
+    label: "Hard",
+    reactionMultiplier: 0.75,
+    moveSpeedMultiplier: 1.2,
+    accuracyMultiplier: 1.1
+  },
+  {
+    label: "Very Hard",
+    reactionMultiplier: 0.5,
+    moveSpeedMultiplier: 1.4,
+    accuracyMultiplier: 1.2
+  }
+];
+
 const TOPSPIN_VY = -0.4; // Exact topspin vy used by player input "i".
 
 setLegend(
@@ -102,6 +156,40 @@ setLegend(
 8888888888888888
 8888888888888888
 8888888888888888`],
+  ["v", bitmap`
+................
+................
+.......77.......
+.......77.......
+.......77.......
+.......77.......
+.......77.......
+.......77.......
+.......77.......
+.......77.......
+.......77.......
+.......77.......
+.......77.......
+.......77.......
+................
+................`],
+  ["u", bitmap`
+................
+................
+................
+................
+................
+................
+................
+7777777777777777
+................
+................
+................
+................
+................
+................
+................
+................`],
   [ball, bitmap`
 ................
 ................
@@ -113,6 +201,23 @@ setLegend(
 ....4444444.....
 .....44444......
 ......444.......
+................
+................
+................
+................
+................
+................`],
+  ["g", bitmap`
+................
+................
+................
+................
+......999.......
+.....99999......
+....9999999.....
+....9999999.....
+.....99999......
+......999.......
 ................
 ................
 ................
@@ -172,16 +277,26 @@ setLegend(
 1111111111111111`]
 );
 
+// SOUND
+
+// These are intentionally short one-shot cues to avoid overlapping long music.
+const TUNE_HIT = tune`60: c5^50`;
+const TUNE_POINT_LOST = tune`100: c4/80`;
+const TUNE_WIN = tune`80: c5^60, 80: e5^60, 120: g5^100`;
+const TUNE_LOSE = tune`80: g4/60, 80: e4/60, 120: c4/100`;
+
+// COURT & MAPS
+
 setBackground(court);
 const level = map`
-cccccccccc
-ccccoccccc
-cccccccccc
-cccccccccc
+cvccccccvc
+cvccocccvc
+cvuuuuuuvc
+cvccccccvc
 nnnnnnnnnn
-ccccpccccc
-cccccccccc
-cccccccccc`;
+cvccpcccvc
+cuuuuuuuuc
+cvccccccvc`;
 const menuMap = map`
 cccccccccc
 cccccccccc
@@ -192,6 +307,8 @@ cccccccccc
 cccccccccc
 cccccccccc`;
 
+// GAME STATE
+
 // x/y are fractional physics coordinates; the sprite receives rounded values.
 // Lob values are tuned for about 24 ticks of rise-and-fall.
 const LOB_INITIAL_VHEIGHT = 0.2;
@@ -199,12 +316,23 @@ const HEIGHT_GRAVITY = 0.02;
 const HIGH_BALL_THRESHOLD = 1;
 const ballState = {
   inPlay: false,
+  isServeInFlight: false,
   x: 0,
   y: 0,
   vx: 0,
   vy: 0,
   height: 0,
   vHeight: 0
+};
+
+const aimState = {
+  direction: null,
+  ticksRemaining: 0
+};
+
+const hitBufferState = {
+  ticksRemaining: 0,
+  pendingShot: null
 };
 
 const aiState = {
@@ -231,14 +359,28 @@ const rosterState = {
   selectedIndex: 0
 };
 
+// This selection intentionally persists when returning to the roster menu.
+const difficultyState = {
+  selectedIndex: 2
+};
+
 let gameStage = "ROSTER";
 
-function resetAIForIncomingShot() {
-  aiState.reactionTicksRemaining = AI_REACTION_DELAY_TICKS;
-  aiState.isReacting = true;
-  aiState.accuracyRolled = false;
-  aiState.wasMovingTowardOpponent = true;
+function getLiveBallSprite() {
+  return getFirst(ball) || getFirst("g");
 }
+
+function clearHitBuffer() {
+  hitBufferState.ticksRemaining = 0;
+  hitBufferState.pendingShot = null;
+}
+
+function queueHitBuffer(shotType) {
+  hitBufferState.ticksRemaining = HIT_BUFFER_TICKS;
+  hitBufferState.pendingShot = shotType;
+}
+
+// SCORING LOGIC
 
 function getPointDisplayString(winCount, otherWinCount) {
   if (winCount >= 4 && winCount - otherWinCount >= 2) return "Game";
@@ -289,12 +431,13 @@ function checkSetWin() {
   matchState.matchOver = true;
   matchState.matchWinner = winner;
   gameStage = "GAME_OVER";
-  const ballSprite = getFirst(ball);
+  const ballSprite = getLiveBallSprite();
   const shadowSprite = getFirst(shadow);
   if (ballSprite) ballSprite.remove();
   if (shadowSprite) shadowSprite.remove();
   ballState.inPlay = false;
   clearInterval(ballTick);
+  playTune(winner === "player" ? TUNE_WIN : TUNE_LOSE);
   ballTick = null;
   clearText();
   const resultText = winner === "player" ? "You Win! " : "You Lose. ";
@@ -338,6 +481,8 @@ function awardPoint(winner) {
   if (!matchState.matchOver) updateScoreDisplay();
 }
 
+// MENU LOGIC
+
 function renderRosterMenu() {
   clearText();
   ROSTER.forEach((entry, index) => {
@@ -347,12 +492,31 @@ function renderRosterMenu() {
   addText("w/s select  k ok", { x: 0, y: 4, color: color`3` });
 }
 
+function renderDifficultyMenu() {
+  const difficulty = DIFFICULTY_LEVELS[difficultyState.selectedIndex];
+  const filledSegments = "=".repeat(difficultyState.selectedIndex + 1);
+  const emptySegments = "-".repeat(4 - difficultyState.selectedIndex);
+  clearText();
+  addText(ROSTER[rosterState.selectedIndex].name, {
+    x: 0,
+    y: 0,
+    color: color`3`
+  });
+  addText(filledSegments + emptySegments, {
+    x: 0,
+    y: 2,
+    color: color`3`
+  });
+  addText(difficulty.label, { x: 0, y: 3, color: color`3` });
+  addText("a/d: adjust  k: start", { x: 0, y: 5, color: color`3` });
+}
+
 function enterRosterMenu() {
   if (ballTick) {
     clearInterval(ballTick);
     ballTick = null;
   }
-  const ballSprite = getFirst(ball);
+  const ballSprite = getLiveBallSprite();
   const shadowSprite = getFirst(shadow);
   if (ballSprite) ballSprite.remove();
   if (shadowSprite) shadowSprite.remove();
@@ -373,7 +537,9 @@ function resetMatchState() {
 }
 
 function resetBallState() {
+  clearHitBuffer();
   ballState.inPlay = false;
+  ballState.isServeInFlight = false;
   ballState.x = 0;
   ballState.y = 0;
   ballState.vx = 0;
@@ -399,6 +565,8 @@ function startMatch() {
   resetBallState();
   resetAIState();
   opponentState.x = null;
+  aimState.direction = null;
+  aimState.ticksRemaining = 0;
   gameStage = "MATCH";
   if (ballTick) clearInterval(ballTick);
   ballTick = setInterval(updateBall, 75);
@@ -407,17 +575,24 @@ function startMatch() {
 }
 
 function confirmRosterSelection() {
-  startMatch();
+  gameStage = "DIFFICULTY";
+  renderDifficultyMenu();
 }
+
+// BALL PHYSICS & RALLY
 
 function serveBall() {
   if (ballState.inPlay || matchState.matchOver) return;
+  clearHitBuffer();
+  aimState.direction = null;
+  aimState.ticksRemaining = 0;
   const playerSprite = getFirst(player);
   if (!playerSprite) return;
   ballState.x = playerSprite.x;
-  ballState.y = PLAYER_MIN_Y - 0.5;
+  ballState.y = PLAYER_MAX_Y;
   addSprite(Math.round(ballState.x), Math.round(ballState.y), ball);
   ballState.inPlay = true;
+  ballState.isServeInFlight = true;
   ballState.vx = 0;
   ballState.vy = -0.2;
   ballState.height = 0;
@@ -426,24 +601,37 @@ function serveBall() {
 }
 
 function finishRally(winner) {
-  const ballSprite = getFirst(ball);
+  const ballSprite = getLiveBallSprite();
   const shadowSprite = getFirst(shadow);
   if (ballSprite) ballSprite.remove();
   if (shadowSprite) shadowSprite.remove();
   ballState.inPlay = false;
+  ballState.isServeInFlight = false;
   ballState.height = 0;
   ballState.vHeight = 0;
+  aimState.direction = null;
+  aimState.ticksRemaining = 0;
   aiState.reactionTicksRemaining = 0;
   aiState.isReacting = false;
   aiState.accuracyRolled = false;
   aiState.wasMovingTowardOpponent = false;
+  clearHitBuffer();
+  if (winner === "opponent") playTune(TUNE_POINT_LOST);
   awardPoint(winner);
 }
 
 // Move the ball, bounce off side walls, then end the rally past a baseline.
 function updateBall() {
+  // Expire the most recent directional input even between active rallies.
+  if (aimState.ticksRemaining > 0) {
+    aimState.ticksRemaining -= 1;
+    if (aimState.ticksRemaining === 0) aimState.direction = null;
+  }
+  if (hitBufferState.ticksRemaining > 0) {
+    hitBufferState.ticksRemaining -= 1;
+  }
   if (!ballState.inPlay) return;
-  const ballSprite = getFirst(ball);
+  const ballSprite = getLiveBallSprite();
   if (!ballSprite) {
     ballState.inPlay = false;
     return;
@@ -467,6 +655,18 @@ function updateBall() {
     ballState.vx = -ballState.vx;
   }
 
+  // A serve faults immediately when it crosses the opponent service line
+  // outside the singles width. Use the wall-clamped nextX for this crossing.
+  const crossesOpponentServiceLine =
+    ballState.y > SERVICE_LINE_OPPONENT_Y &&
+    nextY <= SERVICE_LINE_OPPONENT_Y;
+  if (ballState.isServeInFlight &&
+      crossesOpponentServiceLine &&
+      (nextX < SINGLES_LEFT_X || nextX > SINGLES_RIGHT_X)) {
+    finishRally("opponent");
+    return;
+  }
+
   // End the rally before Sprig receives a y value outside the map.
   if (nextY < OPPONENT_MIN_Y) {
     finishRally("player");
@@ -481,6 +681,19 @@ function updateBall() {
   ballState.y = nextY;
   ballSprite.x = Math.round(ballState.x);
   ballSprite.y = Math.round(ballState.y);
+
+  if (hitBufferState.pendingShot !== null && isBallInRange() &&
+      (hitBufferState.pendingShot !== "smash" ||
+       ballState.height > HIGH_BALL_THRESHOLD)) {
+    const pendingShot = hitBufferState.pendingShot;
+    clearHitBuffer();
+    applyPendingShot(pendingShot);
+  } else if (hitBufferState.pendingShot !== null &&
+             hitBufferState.ticksRemaining === 0) {
+    clearHitBuffer();
+  }
+
+  ballSprite.type = isBallInRange() ? "g" : ball;
 
   // Show one grounded shadow only while the ball is visibly elevated.
   const shadowSprite = getFirst(shadow);
@@ -499,6 +712,34 @@ function updateBall() {
   }
 
   updateOpponentAI();
+}
+
+// AI LOGIC
+
+function getActiveAIStats() {
+  const rosterEntry = ROSTER[rosterState.selectedIndex];
+  const difficulty = DIFFICULTY_LEVELS[difficultyState.selectedIndex];
+  return {
+    reactionDelayTicks: Math.max(
+      1,
+      Math.round(rosterEntry.baseReactionDelayTicks *
+        difficulty.reactionMultiplier)
+    ),
+    moveSpeed: rosterEntry.baseMoveSpeed * difficulty.moveSpeedMultiplier,
+    accuracy: Math.max(
+      0,
+      Math.min(0.98, rosterEntry.baseAccuracy *
+        difficulty.accuracyMultiplier)
+    )
+  };
+}
+
+function resetAIForIncomingShot() {
+  const activeAIStats = getActiveAIStats();
+  aiState.reactionTicksRemaining = activeAIStats.reactionDelayTicks;
+  aiState.isReacting = true;
+  aiState.accuracyRolled = false;
+  aiState.wasMovingTowardOpponent = true;
 }
 
 function updateOpponentAI() {
@@ -532,8 +773,12 @@ function updateOpponentAI() {
   if (!opponentSprite) return;
   if (opponentState.x === null) opponentState.x = opponentSprite.x;
 
+  const activeAIStats = getActiveAIStats();
   const distanceX = ballState.x - opponentState.x;
-  const movementX = Math.max(-AI_MOVE_SPEED, Math.min(AI_MOVE_SPEED, distanceX));
+  const movementX = Math.max(
+    -activeAIStats.moveSpeed,
+    Math.min(activeAIStats.moveSpeed, distanceX)
+  );
   opponentState.x = Math.max(
     COURT_MIN_X,
     Math.min(COURT_MAX_X, opponentState.x + movementX)
@@ -542,18 +787,22 @@ function updateOpponentAI() {
 
   if (!aiState.accuracyRolled && isBallInRangeOf(opponentSprite)) {
     aiState.accuracyRolled = true;
-    if (Math.random() < AI_ACCURACY) {
+    if (Math.random() < activeAIStats.accuracy) {
       // Use the player's exact topspin speed, reversed so the return travels
       // back toward the player instead of immediately back toward the AI.
       ballState.vy = -TOPSPIN_VY;
+      ballState.isServeInFlight = false;
       ballState.height = 0;
       ballState.vHeight = 0;
       aiState.wasMovingTowardOpponent = false;
       aiState.isReacting = false;
       aiState.reactionTicksRemaining = 0;
+      playTune(TUNE_HIT);
     }
   }
 }
+
+// INPUT HANDLERS
 
 // The match interval starts only after roster confirmation.
 let ballTick = null;
@@ -576,7 +825,17 @@ onInput("w", () => {
 });
 
 onInput("a", () => {
-  if (gameStage === "MATCH") movePlayer(-1, 0);
+  if (gameStage === "DIFFICULTY") {
+    difficultyState.selectedIndex = Math.max(
+      0,
+      difficultyState.selectedIndex - 1
+    );
+    renderDifficultyMenu();
+  } else if (gameStage === "MATCH") {
+    movePlayer(-1, 0);
+    aimState.direction = "left";
+    aimState.ticksRemaining = AIM_BUFFER_TICKS;
+  }
 });
 
 onInput("s", () => {
@@ -592,18 +851,88 @@ onInput("s", () => {
 });
 
 onInput("d", () => {
-  if (gameStage === "MATCH") movePlayer(1, 0);
+  if (gameStage === "DIFFICULTY") {
+    difficultyState.selectedIndex = Math.min(
+      DIFFICULTY_LEVELS.length - 1,
+      difficultyState.selectedIndex + 1
+    );
+    renderDifficultyMenu();
+  } else if (gameStage === "MATCH") {
+    movePlayer(1, 0);
+    aimState.direction = "right";
+    aimState.ticksRemaining = AIM_BUFFER_TICKS;
+  }
 });
 
 function isBallInRangeOf(sprite) {
-  const ballSprite = getFirst(ball);
+  const ballSprite = getLiveBallSprite();
   return !!(sprite && ballSprite &&
-    Math.abs(ballState.x - sprite.x) <= 1.5 &&
-    Math.abs(ballState.y - sprite.y) <= 1.5);
+    Math.abs(ballState.x - sprite.x) <= 2.0 &&
+    Math.abs(ballState.y - sprite.y) <= 2.0);
 }
 
 function isBallInRange() {
   return isBallInRangeOf(getFirst(player));
+}
+
+function applyBufferedAim() {
+  if (aimState.direction !== null && aimState.ticksRemaining > 0) {
+    ballState.vx += aimState.direction === "left" ? -AIM_VX : AIM_VX;
+    aimState.direction = null;
+    aimState.ticksRemaining = 0;
+  }
+}
+
+function applyTopspinShot() {
+  clearHitBuffer();
+  ballState.vy = -0.4;
+  ballState.height = 0;
+  ballState.vHeight = 0;
+  ballState.isServeInFlight = false;
+  applyBufferedAim();
+  playTune(TUNE_HIT);
+  resetAIForIncomingShot();
+}
+
+function applySliceShot() {
+  clearHitBuffer();
+  ballState.vy = -0.14;
+  ballState.vx += Math.random() * 0.1 - 0.05;
+  ballState.height = 0;
+  ballState.vHeight = 0;
+  ballState.isServeInFlight = false;
+  applyBufferedAim();
+  playTune(TUNE_HIT);
+  resetAIForIncomingShot();
+}
+
+function applyLobShot() {
+  clearHitBuffer();
+  ballState.vy = -0.14;
+  ballState.height = 0;
+  ballState.vHeight = LOB_INITIAL_VHEIGHT;
+  ballState.isServeInFlight = false;
+  applyBufferedAim();
+  playTune(TUNE_HIT);
+  resetAIForIncomingShot();
+}
+
+function applySmashShot() {
+  clearHitBuffer();
+  ballState.vy = -0.5;
+  ballState.height = 0;
+  ballState.vHeight = 0;
+  ballState.isServeInFlight = false;
+  applyBufferedAim();
+  playTune(TUNE_HIT);
+  resetAIForIncomingShot();
+}
+
+function applyPendingShot(shotType) {
+  if (shotType === "topspin") applyTopspinShot();
+  if (shotType === "slice") applySliceShot();
+  if (shotType === "lob") applyLobShot();
+  if (shotType === "smash") applySmashShot();
 }
 
 function returnToRosterMenu() {
@@ -615,11 +944,12 @@ onInput("i", () => {
     returnToRosterMenu();
     return;
   }
-  if (gameStage !== "MATCH" || !ballState.inPlay || !isBallInRange()) return;
-  ballState.vy = -0.4;
-  ballState.height = 0;
-  ballState.vHeight = 0;
-  resetAIForIncomingShot();
+  if (gameStage !== "MATCH" || !ballState.inPlay) return;
+  if (!isBallInRange()) {
+    queueHitBuffer("topspin");
+    return;
+  }
+  applyTopspinShot();
 });
 
 onInput("j", () => {
@@ -627,12 +957,12 @@ onInput("j", () => {
     returnToRosterMenu();
     return;
   }
-  if (gameStage !== "MATCH" || !ballState.inPlay || !isBallInRange()) return;
-  ballState.vy = -0.14;
-  ballState.vx += Math.random() * 0.1 - 0.05;
-  ballState.height = 0;
-  ballState.vHeight = 0;
-  resetAIForIncomingShot();
+  if (gameStage !== "MATCH" || !ballState.inPlay) return;
+  if (!isBallInRange()) {
+    queueHitBuffer("slice");
+    return;
+  }
+  applySliceShot();
 });
 
 onInput("l", () => {
@@ -640,16 +970,21 @@ onInput("l", () => {
     returnToRosterMenu();
     return;
   }
-  if (gameStage !== "MATCH" || !ballState.inPlay || !isBallInRange()) return;
-  ballState.vy = -0.14;
-  ballState.height = 0;
-  ballState.vHeight = LOB_INITIAL_VHEIGHT;
-  resetAIForIncomingShot();
+  if (gameStage !== "MATCH" || !ballState.inPlay) return;
+  if (!isBallInRange()) {
+    queueHitBuffer("lob");
+    return;
+  }
+  applyLobShot();
 });
 
 onInput("k", () => {
   if (gameStage === "ROSTER") {
     confirmRosterSelection();
+    return;
+  }
+  if (gameStage === "DIFFICULTY") {
+    startMatch();
     return;
   }
   if (gameStage === "GAME_OVER") {
@@ -661,21 +996,22 @@ onInput("k", () => {
     serveBall();
     return;
   }
-  if (!isBallInRange() || ballState.height <= HIGH_BALL_THRESHOLD) return;
-  ballState.vy = -0.5;
-  ballState.height = 0;
-  ballState.vHeight = 0;
-  resetAIForIncomingShot();
+  if (ballState.height <= HIGH_BALL_THRESHOLD) return;
+  if (!isBallInRange()) {
+    queueHitBuffer("smash");
+    return;
+  }
+  applySmashShot();
 });
 
 enterRosterMenu();
 
-// Assumptions to verify: setInterval needs no separate Sprig lifecycle cleanup;
-// clamping a bottom-edge shadow to row 7 is preferable to placing it off-map.
-// Tuning: topspin -0.4, slice/lob -0.14, smash -0.5, lob vHeight 0.2,
-// gravity 0.02, and smash threshold height > 1.
-// Stage 4 AI tuning: AI_REACTION_DELAY_TICKS = 6, AI_MOVE_SPEED = 0.2,
-// AI_ACCURACY = 0.8, for a 450 ms reaction delay at the 75 ms tick rate.
+// Tuning: singles lines at x=1 and x=8; service lines at opponent row 2
+// and player row 6. A serve faults wide when it crosses row 2 outside x=1..8.
+// Buffered diagonal aim adds vx +/-0.15 and lasts 6 ticks = 450 ms at 75 ms
+// per tick. The hit-intent buffer lasts 3 ticks = 225 ms at 75 ms per tick.
+// Tuning: topspin -0.4, slice/lob -0.14, smash -0.5, lob vHeight
+// 0.2, gravity 0.02, and smash threshold height > 1.
 // The AI miss path is not duplicated: when its one accuracy roll fails,
 // updateBall leaves the ball's velocity untouched, so crossing the opponent's
 // baseline naturally awards that point to the player. Persistent score text is
@@ -685,4 +1021,16 @@ enterRosterMenu();
 // startMatch() first rebuilds level, recreating the opponent as type "o" before
 // getFirst(opponent) performs the recolor. During the active match, the AI
 // continues using the selected roster type for its lookup.
-// dx/dy remain read-only and are never assigned as velocities.
+// Computed AI stats table (reaction ticks / move speed / accuracy), ordered
+// Very Easy, Easy, Normal, Hard, Very Hard:
+// Carlos: 10/0.12/0.56, 8/0.16/0.68, 6/0.20/0.80, 5/0.24/0.88, 3/0.28/0.96
+// Rafa:   13/0.09/0.63, 10/0.12/0.765, 8/0.15/0.90, 6/0.18/0.98, 4/0.21/0.98
+// Novak:   6/0.168/0.595, 5/0.224/0.7225, 4/0.28/0.85, 3/0.336/0.935, 2/0.392/0.98
+// Difficulty selection intentionally persists across matches when returning
+// to the roster menu. The corrected v bitmap remains a rectangular 16-by-16
+// asset, and the new g in-range ball bitmap is verified as a rectangular
+// 16-by-16 grid. The tune tagged-template
+// syntax follows the short, established tune examples used in this project;
+// I am confident these four definitions are valid, with the Sprig editor as
+// the final runtime confirmation. dx/dy remain read-only and are never
+// assigned as velocities.
