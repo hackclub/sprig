@@ -1,15 +1,10 @@
-// =====================================================
-// PIZZA MAKER — for sprig.hackclub.com 
-// Pick your ingredients, bake the pizza, and have it
-// judged by a picky customer who compares it to what
-// they actually ordered!
-//
-// Controls:
-//  W / S = move the cursor in menus
-//  J     = confirm / select / take pizza out / retry
-//  K     = confirm toppings and bake / new order
-//  I     = go back one step (in the ingredient menus)
-// =====================================================
+/*
+@title: Pizza Maker
+@author: Jack
+@description: Pick your ingredients, bake the pizza, and have it judged by a picky customer who compares it to what they actually ordered!
+@tags: ['simulator']
+@addedOn: 2026-08-13
+*/
 
 // ---------- SPRITES ----------
 const pizzaRaw = "r";
