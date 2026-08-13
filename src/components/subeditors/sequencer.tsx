@@ -2,7 +2,7 @@ import styles from './sequencer.module.css'
 import type { EditorProps } from '../../lib/state'
 import { type Signal, useSignal, useSignalEffect, signal } from '@preact/signals'
 import { IoPause, IoPlay, IoStop } from 'react-icons/io5'
-import { cellsToTune, height, tuneToCells, beats, type Cells, yNoteMap, playNote, play, cellsEq } from './sequencer-utils'
+import { cellsToTune, getBPM, height, tuneToCells, beats, type Cells, yNoteMap, playNote, play, cellsEq } from './sequencer-utils'
 import { instruments , type InstrumentType, reverseInstrumentKey } from '../../../engine/src/api'
 import { textToTune, tuneToText } from '../../../engine/src/base'
 import { leftDown, rightDown } from '../../lib/utils/events'
@@ -152,8 +152,7 @@ export default function SequencerEditor(props: EditorProps) {
 	// Sync text changes with cells
 	useEffect(() => {
 		const newCells = tuneToCells(textToTune(props.text.value));
-		const count = props.text.value.match(/(.+):/)
-		bpm.value = count ? Math.round(60 * 1000 / Number(count[1])) : 120
+		bpm.value = getBPM(props.text.value)
 		if (!cellsEq(newCells, cells.peek())) // Perf boost for rapid BPM changes
 			cells.value = newCells
 	
