@@ -252,7 +252,6 @@ function playSequence() {
           addSprite(currentButton.x, currentButton.y, hoverButton)
           hoverSprite = getFirst(hoverButton)
           start = true
-          console.log(start)
         }
       }, 1000)
   
