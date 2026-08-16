@@ -3,18 +3,22 @@ import CodeMirror from "../codemirror";
 import Navbar from "../navbar-editor";
 import {
 	IoClose,
+	IoCopyOutline,
+	IoOpenOutline,
+	IoReloadOutline,
 	IoStopCircleOutline,
 	IoVolumeHighOutline,
 	IoVolumeMuteOutline,
 } from "react-icons/io5";
 import {
+	signal,
 	type Signal,
 	useComputed,
 	useSignal,
 	useSignalEffect,
 } from "@preact/signals";
-import { useEffect, useRef, useState} from "preact/hooks";
-import { codeMirror, errorLog, isNewSaveStrat, muted, type PersistenceState, type RoomState,  screenRef, cleanupRef, reviewState } from "../../lib/state";
+import { useEffect, useRef, useState, useMemo} from "preact/hooks";
+import { codeMirror, errorLog, isNewSaveStrat, muted, type PersistenceState, type RoomState,  screenRef, cleanupRef } from "../../lib/state";
 import EditorModal from "../popups-etc/editor-modal";
 import { runGame, _performSyntaxCheck } from "../../lib/engine";
 import DraftWarningModal from "../popups-etc/draft-warning";
@@ -76,6 +80,14 @@ export const onRun = async () => {
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
 	roomState?: Signal<RoomState> | undefined;
+	review?: {
+		code?: string;
+		rawUrl?: string;
+		prUrl?: string;
+		repo?: string;
+		pr?: string;
+		error?: string;
+	};
 	cookies: {
 		outputAreaSize: number | null;
 		helpAreaSize: number | null;
@@ -264,12 +276,109 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>, sessionId: str
 	}
 };
 
-export default function Editor({ persistenceState, cookies, roomState }: EditorProps) {
+export default function Editor({ persistenceState: persistenceStateProp, cookies, roomState: roomStateProp, review }: EditorProps) {
+	const persistenceState = useMemo(() => {
+		if (persistenceStateProp && ('value' in (persistenceStateProp as any))) {
+			return persistenceStateProp;
+		}
+		return signal(persistenceStateProp);
+	}, [persistenceStateProp]);
+
+	const roomState = useMemo(() => {
+		if (!roomStateProp) return undefined;
+		if ('value' in (roomStateProp as any)) {
+			return roomStateProp;
+		}
+		return signal(roomStateProp);
+	}, [roomStateProp]);
 	const outputArea = useRef<HTMLDivElement>(null);
 	const screenContainer = useRef<HTMLDivElement>(null);
 	const screenControls = useRef<HTMLDivElement>(null);
+	const reviewAutoRun = useRef(false);
+	const isReviewMode = !!review;
+
+	const [copiedLink, setCopiedLink] = useState(false);
+
+	const copyReviewLink = () => {
+		if (!navigator.clipboard) return;
+		navigator.clipboard.writeText(window.location.href)
+			.then(() => {
+				setCopiedLink(true);
+				setTimeout(() => setCopiedLink(false), 2000);
+			})
+			.catch(() => {});
+	};
+
 
 	const [sessionId] = useState(nanoid());
+
+	const [triageComment, setTriageComment] = useState<string | null>(null);
+	const [loadingChecks, setLoadingChecks] = useState(false);
+	const [showChecks, setShowChecks] = useState(false);
+
+	useEffect(() => {
+		if (!review?.repo || !review?.pr) return;
+		setLoadingChecks(true);
+		fetch(`https://api.github.com/repos/${review.repo}/issues/${review.pr}/comments`)
+			.then(res => {
+				if (!res.ok) throw new Error("Failed to fetch comments");
+				return res.json();
+			})
+			.then(data => {
+				if (Array.isArray(data)) {
+					const botComment = data.find(c => c.body && c.body.includes("<!-- sprig-auto-review -->"));
+					if (botComment) {
+						setTriageComment(botComment.body);
+					}
+				}
+			})
+			.catch(err => {
+				console.error("Error fetching PR comments:", err);
+			})
+			.finally(() => {
+				setLoadingChecks(false);
+			});
+	}, [review?.repo, review?.pr]);
+
+	const failedLines: string[] = [];
+	let similarity: string | null = null;
+	let similarityText = "";
+	let similarGameLink = "";
+	let similarGameName = "";
+	if (triageComment) {
+		const lines = triageComment.split("\n");
+		for (const line of lines) {
+			const trimmed = line.trim();
+			if (trimmed.startsWith("> - ❌") || trimmed.startsWith("- ❌")) {
+				const cleaned = trimmed
+					.replace(/^>\s*-\s*❌\s*/, "")
+					.replace(/^-\s*❌\s*/, "")
+					.replace(/\*\*/g, "");
+				failedLines.push(cleaned);
+			}
+		}
+		const similarityMatch = triageComment.match(/Similarity:\s*([^\n]+)/);
+		if (similarityMatch) {
+			similarity = similarityMatch[1].replace(/\*\*/g, "").trim();
+			const gameFileMatch = similarity.match(/(?:games\/)?([^.`\s]+)\.js/);
+			if (gameFileMatch) {
+				similarGameName = gameFileMatch[1];
+				similarGameLink = `https://sprig.hackclub.com/gallery/${similarGameName}`;
+				similarityText = similarity.replace(`games/${similarGameName}.js`, "").replace(`${similarGameName}.js`, "").replace(/\s+/g, " ").trim();
+			} else {
+				similarityText = similarity;
+			}
+		}
+	}
+
+	let editFileUrl = "";
+	if (triageComment) {
+		const editUrlMatch = triageComment.match(/\[Edit Game File\]\(([^)]+)\)/) || triageComment.match(/\[edit file\]\(([^)]+)\)/);
+		if (editUrlMatch) {
+			editFileUrl = editUrlMatch[1];
+		}
+	}
+
 
 	useEffect(() => {
 		setInterval(() => {
@@ -514,6 +623,8 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	}
 	else if (persistenceState.value.kind === PersistenceStateKind.SHARED)
 		initialCode = persistenceState.value.code;
+	else if (review?.code)
+		initialCode = review.code;
 	else if (persistenceState.value.kind === PersistenceStateKind.IN_MEMORY)
 		initialCode = localStorage.getItem("sprigMemory") ?? defaultExampleCode;
 	else if (isNewSaveStrat.value && persistenceState.value.kind === PersistenceStateKind.COLLAB){
@@ -542,22 +653,6 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 		});
 	}, [initialCode]);
 
-	// Use the review state
-	useEffect(() => {
-		if (reviewState.value.isReviewMode && reviewState.value.reviewCode) {
-			// Set the code in the editor
-			if (codeMirror.value) {
-				codeMirror.value.dispatch({
-					changes: {
-						from: 0,
-						to: codeMirror.value.state.doc.length,
-						insert: reviewState.value.reviewCode
-					}
-				});
-			}
-		}
-	}, [reviewState.value.isReviewMode, reviewState.value.reviewCode]);
-
 	return (
 		roomState != undefined && persistenceState.value.kind === PersistenceStateKind.COLLAB && typeof persistenceState.value.game === 'string' 
 		? 
@@ -571,6 +666,90 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 
 			<div class={styles.pageMain}>
 				<div className={styles.codeContainer}>
+					{isReviewMode && (
+						<div class={styles.reviewBanner} style={{ flexDirection: "column", alignItems: "stretch" }}>
+							<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", width: "100%" }}>
+								<div>
+									<strong>Review Mode</strong>
+									<span>{review?.error ?? "Loaded from pull request source. Edits here stay local."}</span>
+								</div>
+								<div class={styles.reviewLinks}>
+									{review?.prUrl && (
+										<a href={review.prUrl} target="_blank" rel="noreferrer">
+											<IoOpenOutline /> PR
+										</a>
+									)}
+									{review?.rawUrl && (
+										<a href={review.rawUrl} target="_blank" rel="noreferrer">
+											<IoOpenOutline /> Raw
+										</a>
+									)}
+									<button type="button" onClick={onRun}>
+										<IoReloadOutline /> Restart
+									</button>
+									<button type="button" onClick={copyReviewLink}>
+										<IoCopyOutline /> {copiedLink ? "Copied!" : "Copy Link"}
+									</button>
+								</div>
+							</div>
+
+							{loadingChecks && (
+								<div class={styles.reviewStatusPanel} style={{ fontSize: "0.8rem", color: "#666", textAlign: "center" }}>
+									Loading review status from GitHub...
+								</div>
+							)}
+
+							{!loadingChecks && triageComment && (
+								<div class={styles.reviewStatusPanel}>
+									<div class={styles.reviewStatusHeader} onClick={() => setShowChecks(!showChecks)}>
+										<span class={styles.statusBadge} data-ok={!triageComment.includes("❌")}>
+											{triageComment.includes("❌") ? "❌ Needs Fixes" : "✅ Verified"}
+										</span>
+										{similarity && (
+											<span class={styles.similarityBadge}>
+												🔍 Similarity: {similarGameLink ? (
+													<>
+														{similarityText}{" "}
+														<a
+															href={similarGameLink}
+															target="_blank"
+															rel="noreferrer"
+															style={{ textDecoration: "underline", color: "inherit", fontWeight: "bold" }}
+															onClick={(e) => e.stopPropagation()}
+														>
+															{similarGameName}
+														</a>
+													</>
+												) : similarity}
+											</span>
+										)}
+										<button class={styles.toggleChecksBtn}>
+											{showChecks ? "Hide Checks ▲" : "Show Checks ▼"}
+										</button>
+									</div>
+									
+									{showChecks && (
+										<div class={styles.checksList}>
+											{failedLines.length > 0 ? (
+												<div class={styles.failedChecksBlock}>
+													<strong>Requires Attention:</strong>
+													<ul>
+														{failedLines.map(line => (
+															<li>{line}</li>
+														))}
+													</ul>
+												</div>
+											) : (
+												<div class={styles.allPassedBlock}>
+													All automated checks passed successfully! 🎉
+												</div>
+											)}
+										</div>
+									)}
+								</div>
+							)}
+						</div>
+					)}
 					<CodeMirror
 						persistenceState={persistenceState}
 						roomState={roomState}
@@ -579,9 +758,15 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 						onEditorView={(editor) => {
 							codeMirror.value = editor;
 							setTimeout(() => foldAllTemplateLiterals(), 100); // Fold after the document is parsed (gross)
+							if (isReviewMode && review?.code && !reviewAutoRun.current) {
+								reviewAutoRun.current = true;
+								setTimeout(() => onRun(), 500);
+							}
 						}}
 						onRunShortcut={onRun}
 						onCodeChange={() => {
+							if (isReviewMode) return;
+
 							persistenceState.value = {
 								...persistenceState.value,
 								stale: true,

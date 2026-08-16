@@ -7,7 +7,7 @@
  * 3. If found it checks if everything is valid
  * 4. Write metadata.json
  */
-import fs from "fs";
+import fs from "node:fs";
 
 /**
  * An object containing all of the regex expressions that can be used
@@ -37,20 +37,17 @@ const walk = () => {
 	const files = fs.readdirSync("./games/");
 	return files.filter((file) => file.endsWith(".js"));
 };
-
 // Loop for each game
 walk().forEach((gameFile) => {
 	process.stdout.write(`[${gameFile}] Looking for metadata...`);
 
 	const fileData = fs.readFileSync(`./games/${gameFile}`).toString();
-
 	// Extract the file data
 	const title = regexExpr.title.exec(fileData);
 	const author = regexExpr.author.exec(fileData);
 	const tags = regexExpr.tags.exec(fileData);
 	const addedOn = regexExpr.addedOn.exec(fileData);
 	const description = regexExpr.description.exec(fileData);
-
 	// Check if all of the fields are defined
 	if (title && author && tags && addedOn && description && tags[1]) {
 		// Create a meta entry
@@ -67,7 +64,7 @@ walk().forEach((gameFile) => {
 		console.log(" OK!");
 	} else {
 		console.log(" ERR!");
-		throw Error("A game metadata field is undefined!");
+		throw new Error("A game metadata field is undefined!");
 	}
 });
 
