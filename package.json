@@ -13,7 +13,7 @@
 	},
 	"dependencies": {
 		"@astrojs/preact": "5.1.2",
-		"@astrojs/svelte": "8.0.4",
+		"@astrojs/svelte": "8.1.1",
 		"@astrojs/vercel": "^10.0.7",
 		"@codemirror/commands": "^6.10.3",
 		"@codemirror/lang-javascript": "^6.2.5",
