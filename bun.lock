@@ -40,7 +40,7 @@
         "svelte": "5.55.8",
         "three": "0.183.2",
         "throttle-debounce": "^5.0.2",
-        "tinykeys": "^3.1.0",
+        "tinykeys": "^4.0.0",
         "vitest": "^4.1.7",
         "y-codemirror.next": "^0.3.5",
         "y-webrtc": "^10.3.0",
@@ -1529,7 +1529,7 @@
 
     "tinyglobby": ["tinyglobby@0.2.15", "", { "dependencies": { "fdir": "^6.5.0", "picomatch": "^4.0.3" } }, "sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ=="],
 
-    "tinykeys": ["tinykeys@3.1.0", "", {}, "sha512-LyQgmvqSSCBzK6PJjDy1kJWlanBVY0LFnJtte3AzJfdoijCZ+nDWjT0GvJAoHI+LUiBGpQQfvRrRNmValIZQiw=="],
+    "tinykeys": ["tinykeys@4.0.0", "", {}, "sha512-z5bQRQHL1PSx3lGOZEAMM2oKp0EBtn5T5f7HJnaKPOzk6vEH0wUPvdHLeQ7F4tmkek8AgoTQISUFmn/5SNF2xA=="],
 
     "tinyrainbow": ["tinyrainbow@3.1.0", "", {}, "sha512-Bf+ILmBgretUrdJxzXM0SgXLZ3XfiaUuOj/IKQHuTXip+05Xn+uyEYdVg0kYDipTBcLrCVyUzAPz7QmArb0mmw=="],
 
