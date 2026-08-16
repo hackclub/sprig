@@ -8,13 +8,13 @@ import {
 	IoVolumeMuteOutline,
 } from "react-icons/io5";
 import {
-	Signal,
+	type Signal,
 	useComputed,
 	useSignal,
 	useSignalEffect,
 } from "@preact/signals";
 import { useEffect, useRef, useState} from "preact/hooks";
-import { codeMirror, errorLog, isNewSaveStrat, muted, PersistenceState, RoomState,  screenRef, cleanupRef, reviewState } from "../../lib/state";
+import { codeMirror, errorLog, isNewSaveStrat, muted, type PersistenceState, type RoomState,  screenRef, cleanupRef, reviewState } from "../../lib/state";
 import EditorModal from "../popups-etc/editor-modal";
 import { runGame, _performSyntaxCheck } from "../../lib/engine";
 import DraftWarningModal from "../popups-etc/draft-warning";
@@ -25,7 +25,7 @@ import { defaultExampleCode } from "../../lib/examples";
 import MigrateToast from "../popups-etc/migrate-toast";
 import { nanoid } from "nanoid";
 import TutorialWarningModal from "../popups-etc/tutorial-warning";
-import { editSessionLength, switchTheme, ThemeType, continueSaving, LAST_SAVED_SESSION_ID, showSaveConflictModal } from '../../lib/state'
+import { editSessionLength, switchTheme, type ThemeType, continueSaving, LAST_SAVED_SESSION_ID, showSaveConflictModal } from '../../lib/state'
 import SessionConflictWarningModal from '../popups-etc/session-conflict-warning-modal'
 import {eotMessage, versionState} from "../../lib/upload";
 import VersionWarningModal from "../popups-etc/version-warning";

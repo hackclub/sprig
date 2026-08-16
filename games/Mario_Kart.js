@@ -1,9 +1,10 @@
 /*
 @title: Mario_Kart
 @description: Mario_Kart is an arcade-style game with a Mario theme where the player must jump over incoming blocks to earn points. As more blocks are successfully jumped over, the score increases. The game features a simple jumping mechanic to test the player's timing and reflexes in an endless format.
-@author: nucleiav */
+@author: nucleiav
 @tags: ['endless']
 @addedOn: 2023-01-13
+*/
 
 let n = 0;
 

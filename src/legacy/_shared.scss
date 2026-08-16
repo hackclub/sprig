@@ -1,3 +1,6 @@
+@use "sass:color";
+@use './_variables.scss' as *;
+
 html { box-sizing: border-box; }
 body { margin: 0; }
 
@@ -5,7 +8,7 @@ body { margin: 0; }
 *::before,
 *::after {
 	box-sizing: inherit;
-	scrollbar-color: lighten($base-background, 20%) $base-background;
+	scrollbar-color: color.adjust($base-background, $lightness: 20%) $base-background;
 }
 
 ::selection {
@@ -252,10 +255,10 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-	background: lighten($base-background, 20%);
+	background: color.adjust($base-background, $lightness: 20%);
 	border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: lighten($base-background, 30%);
+	background: color.adjust($base-background, $lightness: 30%);
 }
