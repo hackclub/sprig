@@ -1,5 +1,5 @@
 /*
-@title: Twin Shift
+@title: Signal Shift
 @author: Atharv Mantri
 @description: Guide two linked agents through a neon vault. The white agent follows your movement while the echo moves in reverse, unless you spend limited charge to synchronize them. Collect every signal shard, avoid corruption spikes, and dock both agents at their matching exits.
 @tags: ['puzzle', 'strategy', 'original', 'sci-fi']
