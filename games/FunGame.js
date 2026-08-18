@@ -4,7 +4,10 @@
 @description: A retro Arkanoid style game
 @tags: ['#Arkanoid', '#retro']
 @addedOn: 2025-08-18
+
+## image FunGame.png
 */
+
 
 
 // Setup
