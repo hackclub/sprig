@@ -16,6 +16,8 @@ const blast1 = "1"
 const blast2 = "2"
 const castle = "c"
 
+
+
 setLegend(
   [ player, bitmap`
 ....99999999....
@@ -152,16 +154,17 @@ bbbbbbbbbb`]
 const currentLevel = levels[level]
 setMap(currentLevel)
 
+
 var gameRunning = true
 
 addText("Health: 10", {
   x: 1,
   y: 1,
-  color: color`2`
+  color: color `2`
 });
 
 
-addSprite(9, 9, player)
+addSprite(8, 9, player)
 addSprite(0,9,castle)
 addSprite(1,9,castle)
 addSprite(2,9,castle)
@@ -176,56 +179,68 @@ addSprite(9,9,castle)
 
 onInput("w", () => {
   if (gameRunning === true) {
+    if (getFirst(player).y > 0) {
   getFirst(player).y-=1
+    }
   }
 })
 
 onInput("s", () => {
-  if (getFirst(player).y === 9) {
   if (gameRunning === true) {
+    if (getFirst(player).y < 10) {
   getFirst(player).y-=-1
-  }else{
-  }
+    }
   }
 })
 
 onInput("d", () => {
   if (gameRunning === true) {
+    if (getFirst(player).x < 8) {
   getFirst(player).x-=-1
+  }
   }
 })
 
 onInput("a", () => {
   if (gameRunning === true) {
+    if (getFirst(player).x > 1) {
   getFirst(player).x-=1
+  }
   }
 })
 
   onInput("l",() => {
     if (gameRunning === true) {
+    if (getFirst(player).x < 9) {
    let l = getFirst(player)
     addSprite(l.x+1, l.y, blast1)
+    }
     }
 })
 
   
 onInput("j",() => {
   if (gameRunning === true) {
+  if (getFirst(player).x > 0) {
    let j = getFirst(player)
     addSprite(j.x-1, j.y, blast1)
+    }
   }
 })
 
 
 onInput("i",() => {
   if (gameRunning === true) {
+   if (getFirst(player).y > 0) {
    let i = getFirst(player)
     addSprite(i.x, i.y-1, blast2)
+    }
   }
 })
 
 onInput("k",() => {
-  if (gameRunning === true) {
+  if (gameRunning === true) 
+  if (getFirst(player).y < 9) {
    let k = getFirst(player)
     addSprite(k.x, k.y+1, blast2)
   }
@@ -246,7 +261,7 @@ function spawnEnemy() {
   }
  }else{
 let x = Math.floor(Math.random() * 10)
-  let y = 1
+  let y = 0
   addSprite(x,y,enemy)
   }
 }
@@ -332,14 +347,14 @@ for (let e of enemies) {
 
 
 var gameLoop = setInterval(() => {
+  castleCrusher()
   destroyEnemy()
   checkHit()
-  spawnEnemy()
   moveEnemy()
-  castleCrusher()
   checkHit()
   destroyEnemy()
   removeBlasts()
+  spawnEnemy()
   ticks = ticks +1
       addText("score: " + ticks, {
   x: 1,
