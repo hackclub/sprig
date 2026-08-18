@@ -1,3 +1,12 @@
+ /*
+@FunGame:
+@author: Rosario Alexandros Morabito
+@description: A retro Arkanoid style game
+@tags: ['#Arkanoid', '#retro']
+@addedOn: 2025-08-18
+*/
+
+
 // Setup
 
 const player = "p";
