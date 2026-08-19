@@ -14,12 +14,12 @@ import {
 	useSignalEffect,
 } from "@preact/signals";
 import { useEffect, useRef, useState} from "preact/hooks";
-import { codeMirror, errorLog, isNewSaveStrat, muted, type PersistenceState, type RoomState,  screenRef, cleanupRef, reviewState } from "../../lib/state";
+import { codeMirror, errorLog, gamePlayerRef, isNewSaveStrat, muted, type PersistenceState, type RoomState, cleanupRef, reviewState } from "../../lib/state";
 import EditorModal from "../popups-etc/editor-modal";
-import { runGame, _performSyntaxCheck } from "../../lib/engine";
+import { _performSyntaxCheck } from "../../lib/engine";
 import DraftWarningModal from "../popups-etc/draft-warning";
 import { debounce } from "throttle-debounce";
-import Help from "../popups-etc/help";
+import Help, { logInfo } from "../popups-etc/help";
 import { collapseRanges } from "../../lib/codemirror/util";
 import { defaultExampleCode } from "../../lib/examples";
 import MigrateToast from "../popups-etc/migrate-toast";
@@ -33,6 +33,7 @@ import OutOfSpaceModal from "../popups-etc/out-of-space";
 import RoomPasswordPopup from "../popups-etc/room-password";
 import KeyBindingsModal from '../popups-etc/KeyBindingsModal'
 import { PersistenceStateKind } from "../../lib/state";
+import SandboxedGameFrame from "./sandboxed-game-frame";
 
 let screenShakeSignal: Signal<number> | null = null;
 
@@ -47,16 +48,15 @@ const performSyntaxCheck = () => {
 
 export const onRun = async () => {
 	foldAllTemplateLiterals();
-	if (!screenRef.value) return;
+	if (!gamePlayerRef.value) return;
 
 	if (cleanupRef.value) cleanupRef.value();
 	errorLog.value = [];
+	logInfo.value = [];
 	const code = codeMirror.value?.state.doc.toString() ?? "";
-	const res = runGame(code, screenRef.value, (error) => {
-		errorLog.value = [...errorLog.value, error];
-	});
+	gamePlayerRef.value.run(code);
 
-	screenRef.value.focus();
+	gamePlayerRef.value.focus();
 	if (screenShakeSignal) {
 		screenShakeSignal.value++;
 	}
@@ -66,11 +66,7 @@ export const onRun = async () => {
 		}
 	}, 200);
 
-	cleanupRef.value = res?.cleanup;
-	if (res && res.error) {
-		console.error(res.error.raw);
-		errorLog.value = [...errorLog.value, res.error];
-	}
+	cleanupRef.value = () => gamePlayerRef.value?.stop();
 };
 
 interface EditorProps {
@@ -443,17 +439,13 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	}, []);
 
 	useEffect(() => {
-		screenRef.value = screen.current;
-
 		screenShakeSignal = screenShake;
 	});
 	useEffect(() => () => cleanupRef.value?.(), []);
 	// We like running games!
-	const screen = useRef<HTMLCanvasElement>(null);
 	const screenShake = useSignal(0);
 
 	const onStop = async () => {
-		if (!screen.current) return;
 		if (cleanupRef.value) cleanupRef.value?.();
 	};
 
@@ -653,7 +645,7 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 						maxHeight: canvasScreenSize.value.maxHeight,
 					} : {} }>
 						<div class={styles.canvasWrapper}>
-							<canvas
+							<SandboxedGameFrame
 								class={`${styles.screen} ${
 									screenShake.value > 0 ? "shake" : ""
 								}`}
@@ -663,10 +655,13 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 									width: (1.25 * canvasScreenSize.value.height),
 									maxWidth: "100%",
 								}: { } }
-								ref={screen}
-								tabIndex={0}
-								width="1000"
-								height="800"
+								onController={(controller) => {
+									gamePlayerRef.value = controller;
+								}}
+								onError={(error) => {
+									console.error(error.raw);
+									errorLog.value = [...errorLog.value, error];
+								}}
 							/>
 						</div>
 						<div ref={screenControls} class={styles.screenControls}>

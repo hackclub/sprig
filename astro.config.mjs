@@ -33,6 +33,9 @@ export default defineConfig({
       ],
       host: true, // Allow access from non-localhost domains
       cors: true, // Allow CORS (optional)
+			headers: {
+				"Access-Control-Allow-Origin": "*"
+			}
     },
 		optimizeDeps: {
 			exclude: ['https']
