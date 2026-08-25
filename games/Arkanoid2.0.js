@@ -1,27 +1,26 @@
- /*
-@FunGame:
-@author: Rosario Alexandros Morabito
-@description: A retro Arkanoid style game
-@tags: ['#Arkanoid', '#retro']
+/*
+@Arkanoid 2.0:
+@author: Rosario Alexandros Morabito & Gemini
+@description: A retro Arkanoid style game with Independent Ball Physics & 7-brick charge!
+@tags: ['#Arkanoid', '#retro', '#arkanoid2']
 @addedOn: 2025-08-18
 
 ## image FunGame.png
 */
 
-
-
 // Setup
-
 const player = "p";
 const wall = "w";
 const ball = "b";
 const brick = "r";
 
 let currentLevel = 0; 
-let ballDirX = 1;
-let ballDirY = -1;
 let isPlaying = false;
 let isGameOver = false;
+
+// Mechanic: Ball Cloning & Charge Bar State
+let chargeCount = 0;
+const MAX_CHARGE = 7;
 
 // Game Clock
 let gameClock;
@@ -71,8 +70,8 @@ setLegend(
 0222222222222220
 0222222222222220
 0222222222222220
-0222222222222210
 0222222222222110
+0222222222221100
 02222222222211L0
 .022222222211L0.
 ..0222222211L0..
@@ -98,9 +97,9 @@ setLegend(
 );
 
 // Sounds
-const moveSound = tune``; // Paddle movement sound
-const hitSound = tune`107.52688172043011: B4/107.52688172043011,
-3333.3333333333335`;  // Ball bounce sound (wall, brick, paddle)
+const moveSound = tune``; 
+const hitSound = tune`107.52688172043011: B4/107.52688172043011, 3333.3333333333335`;
+const cloneSound = tune`100: C5^150, E5^150, G5^150, C6^250`;
 const bgMusic = tune`
 500: E4~500 + C5^500,
 500: E4~500,
@@ -133,14 +132,14 @@ const bgMusic = tune`
 500: E4~500 + C5^500,
 500: E4~500,
 500: E4~500,
-500`;  // Background music loop
+500`;
 
 let bgPlayback = null;
 
-// Helper function to manage background audio playback
+// Audio Management
 function startBgMusic() {
   if (!bgPlayback) {
-    bgPlayback = playTune(bgMusic, Infinity); // Endless playback using Sprig API
+    bgPlayback = playTune(bgMusic, Infinity);
   }
 }
 
@@ -149,6 +148,14 @@ function stopBgMusic() {
     bgPlayback.end();
     bgPlayback = null;
   }
+}
+
+// UI Helper: Render Charge Meter for 7 Bricks
+function updateUI() {
+  let meterStr = "CHG " + chargeCount + "/7";
+  if (chargeCount >= MAX_CHARGE) meterStr = "READY!";
+
+  addText(meterStr, { x: 6, y: 0, color: color`3` });
 }
 
 // Levels
@@ -330,12 +337,13 @@ setSolids([ player, wall ]);
 // Set Pushables
 setPushables({ [player]: [player] });
 
-// Player Movement
+// Player Movement (Exact Original Controls)
 onInput("a", () => {
   if (isGameOver) return;
   if (!isPlaying) {
     clearText();
     startBgMusic();
+    updateUI();
   }
   isPlaying = true;
   playTune(moveSound);
@@ -351,68 +359,118 @@ onInput("d", () => {
   if (!isPlaying) {
     clearText();
     startBgMusic();
+    updateUI();
   }
   isPlaying = true;
   playTune(moveSound);
   getFirst(player).x += 1;
 });
 
-// Setup GameClock
+// Duplicate Ball Ability (Key W)
+onInput("w", () => {
+  if (!isPlaying || isGameOver || chargeCount < MAX_CHARGE) return;
+
+  const paddle = getFirst(player);
+  if (!paddle) return;
+
+  // Consume charge
+  chargeCount = 0;
+  playTune(cloneSound);
+  updateUI();
+
+  // Spawn extra ball above the paddle safely
+  addSprite(paddle.x + 1, paddle.y - 1, ball);
+});
+
+// Setup GameClock with Safe Independent Ball Motion
 gameClock = setInterval(() => {
   if (isPlaying) {
-    const b = getFirst(ball);
-    if (!b) return;
+    const balls = getAll(ball);
+    if (balls.length === 0) return;
 
-    let nextX = b.x + ballDirX;
-    let nextY = b.y + ballDirY;
+    // Safely assign individual velocities to any ball missing them
+    balls.forEach(b => {
+      if (b.vx === undefined) b.vx = 1;
+      if (b.vy === undefined) b.vy = -1;
+    });
 
-    // Helper function to check for obstacles and destroy hit bricks
-    const handleCollisionAt = (x, y) => {
-      const tile = getTile(x, y);
-      const hitWall = tile.some(s => s.type === wall);
-      const hitPlayer = tile.some(s => s.type === player);
-      const bricks = tile.filter(s => s.type === brick);
+    // Check ball-to-ball interactions to scatter them independently
+    for (let i = 0; i < balls.length; i++) {
+      for (let j = i + 1; j < balls.length; j++) {
+        let b1 = balls[i];
+        let b2 = balls[j];
+        
+        if (Math.abs(b1.x - b2.x) <= 1 && Math.abs(b1.y - b2.y) <= 1) {
+          b1.vx *= -1;
+          b1.vy *= -1;
+          b2.vx *= -1;
+          b2.vy *= -1;
+          playTune(hitSound);
+        }
+      }
+    }
 
-      // Destroy any brick hit by the ball
-      if (bricks.length > 0) {
-        bricks.forEach(s => s.remove());
+    balls.forEach(b => {
+      let nextX = b.x + b.vx;
+      let nextY = b.y + b.vy;
+
+      // Helper function to check obstacles and destroy bricks
+      const handleCollisionAt = (x, y) => {
+        const tile = getTile(x, y);
+        const hitWall = tile.some(s => s.type === wall);
+        const hitPlayer = tile.some(s => s.type === player);
+        const bricks = tile.filter(s => s.type === brick);
+
+        // Destroy bricks and update charge meter
+        if (bricks.length > 0) {
+          bricks.forEach(s => s.remove());
+          if (chargeCount < MAX_CHARGE) {
+            chargeCount++;
+            updateUI();
+          }
+        }
+
+        return hitWall || hitPlayer || bricks.length > 0;
+      };
+
+      // 1. Horizontal Hit
+      let hitHorizontal = handleCollisionAt(nextX, b.y);
+      if (hitHorizontal) {
+        b.vx *= -1;
+        playTune(hitSound);
       }
 
-      return hitWall || hitPlayer || bricks.length > 0;
-    };
+      // 2. Vertical Hit
+      let hitVertical = handleCollisionAt(b.x, nextY);
+      if (hitVertical) {
+        b.vy *= -1;
+        if (!hitHorizontal) playTune(hitSound);
+      }
 
-    // 1. Check Horizontal Hit
-    let hitHorizontal = handleCollisionAt(nextX, b.y);
-    if (hitHorizontal) {
-      ballDirX *= -1;
-      playTune(hitSound);
-    }
+      // 3. Diagonal Hit
+      if (!hitHorizontal && !hitVertical && handleCollisionAt(nextX, nextY)) {
+        b.vx *= -1;
+        b.vy *= -1;
+        playTune(hitSound);
+      }
 
-    // 2. Check Vertical Hit
-    let hitVertical = handleCollisionAt(b.x, nextY);
-    if (hitVertical) {
-      ballDirY *= -1;
-      if (!hitHorizontal) playTune(hitSound);
-    }
+      // Move ball safely along its own unique path
+      let destX = b.x + b.vx;
+      let destY = b.y + b.vy;
 
-    // 3. Check Diagonal (Corner) Hit
-    if (!hitHorizontal && !hitVertical && handleCollisionAt(nextX, nextY)) {
-      ballDirX *= -1;
-      ballDirY *= -1;
-      playTune(hitSound);
-    }
+      if (!handleCollisionAt(destX, destY)) {
+        b.x = destX;
+        b.y = destY;
+      }
 
-    // Move ball safely (check new destination after direction bounces)
-    let destX = b.x + ballDirX;
-    let destY = b.y + ballDirY;
+      // Despawn ball if it hits the bottom
+      if (b.y >= height() - 1) {
+        b.remove();
+      }
+    });
 
-    if (!handleCollisionAt(destX, destY)) {
-      b.x = destX;
-      b.y = destY;
-    }
-
-    // 4. Loss Condition: Hit bottom row
-    if (b.y >= height() - 1) {
+    // Loss Condition: All balls dropped below the screen
+    if (getAll(ball).length === 0) {
       isPlaying = false;
       isGameOver = true;
       stopBgMusic();
@@ -422,20 +480,17 @@ gameClock = setInterval(() => {
       return;
     }
 
-    // 5. Check Win Condition (All bricks cleared)
+    // Win Condition: All bricks cleared
     if (getAll(brick).length === 0) {
       currentLevel += 1;
 
       if (currentLevel < levels.length) {
-        // Load next level and reset ball state
         setMap(levels[currentLevel]);
-        ballDirX = 1;
-        ballDirY = -1;
+        chargeCount = 0;
         isPlaying = false;
         clearText();
         addText("LEVEL " + (currentLevel + 1), { x: 7, y: 7, color: color`3` });
       } else {
-        // Beat all 10 levels
         isPlaying = false;
         stopBgMusic();
         clearText();
@@ -449,20 +504,19 @@ gameClock = setInterval(() => {
 // Input to start/restart game
 onInput("j", () => {
   if (isGameOver) {
-    // Reset to Level 1 on game over
     currentLevel = 0;
     setMap(levels[currentLevel]);
-    ballDirX = 1;
-    ballDirY = -1;
+    chargeCount = 0;
     isGameOver = false;
     clearText();
     isPlaying = true;
     startBgMusic();
+    updateUI();
   } else if (!isPlaying) {
-    // Unpause and wipe on-screen level text
     clearText();
     isPlaying = true;
     startBgMusic();
+    updateUI();
   }
 });
 
@@ -470,3 +524,4 @@ onInput("j", () => {
 setMap(levels[currentLevel]);
 addText("PRESS J", { x: 6, y: 7, color: color`3` });
 addText("TO PLAY", { x: 7, y: 8, color: color`3` });
+addText("W:CLONE BALL", { x: 4, y: 9, color: color`3` });
