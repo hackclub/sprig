@@ -1,5 +1,5 @@
 /*
-@title: endless_color_sokoban
+@title: Box_Office
 @author: The Five Fools
 @description: Push each colored box onto a goal of its own color. Clear three levels, then endless mode generates a new random level every win.
 @tags: ['puzzle', 'sokoban', 'endless']
