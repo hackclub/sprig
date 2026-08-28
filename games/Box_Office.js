@@ -1,6 +1,6 @@
 /*
 @title: Box_Office
-@author: The Five Fools
+@author: justacookie
 @description: Push each colored box onto a goal of its own color. Clear three levels, then endless mode generates a new random level every win.
 @tags: ['puzzle', 'sokoban', 'endless']
 @addedOn: 2026-08-28
@@ -9,7 +9,7 @@
 const player = "p";
 const wall = "w";
 
-// CHANGE 1: three colored box+goal pairs (red / blue / purple)
+// differently colored boxes
 const redBox = "b";
 const redGoal = "g";
 const blueBox = "c";
@@ -196,7 +196,7 @@ let endlessLevel = 0;
 let currentLevel = levels[level];
 setMap(currentLevel);
 
-// CHANGE 1/3: a level is done only when every goal is covered by a box of ITS color
+// a level is done only when every goal is covered by a box of ITS color
 function levelComplete() {
   for (const pair of pairs) {
     const goals = tilesWith(pair.goal).length;
@@ -207,7 +207,7 @@ function levelComplete() {
 }
 
 // CHANGE 2: procedural endless generator
-const GEN_W = 10; // total width, wall border included -> 8x8 of floor
+const GEN_W = 10; // total width, wall border included, 8x8
 const GEN_H = 10;
 
 function randInt(n) {
