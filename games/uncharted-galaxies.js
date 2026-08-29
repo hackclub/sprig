@@ -1,3 +1,11 @@
+/*
+@title:
+@author:
+@description: A
+@tags: ['survival', 'space', 'shooter']
+@addedOn: 2026-07-02
+*/
+
 // 1. Asset Definitions and Legend
 setLegend(
   [ "p", bitmap`
