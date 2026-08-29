@@ -27,7 +27,7 @@
 		"@preact/signals": "2.9.0",
 		"@sendgrid/mail": "^8.1.6",
 		"@types/react": "^19.2.15",
-		"astro": "6.1.10",
+		"astro": "6.3.7",
 		"bcryptjs": "^3.0.3",
 		"cross-env": "^10.1.0",
 		"dotenv": "^17.4.2",
