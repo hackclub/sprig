@@ -1,16 +1,9 @@
-// POLARITY INVADERS — a classic-style Space Invaders build for Sprig
-// (sprig.hackclub.com), with one twist mechanic layered on top.
-//
-// CLASSIC FEATURES: full-width invader formation, invaders shoot back,
-// destructible shield bunkers, a bonus UFO that crosses the top, 3 lives,
-// and the swarm speeds up the fewer invaders are left (the classic
-// "panic" acceleration).
-//
-// THE TWIST: invaders come in two types, Orb and Spike. Your laser also
-// has a type, toggled on the fly. Matching laser kills an invader. Wrong
-// laser doesn't kill it — it flips the invader's type to match your shot
-// AND shoves it one row closer to you. Read the swarm, switch your laser,
-// don't panic-fire.
+// title: space_adventure  /*
+//author:Buzzarc
+//description: Destroy the evil Diamonds ,Spheres and ufos from the space before they reach your ship! a Classic space invader inspired game!!
+//tags:[space],[shooter]
+//added on: 2026-08-30
+ 	
 //
 // Controls: a/d = move, i = shoot, j = toggle laser type (Orb <-> Spike)
 // s = restart after Game Over
