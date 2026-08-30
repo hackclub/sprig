@@ -1,6 +1,6 @@
 /* 
 @title: Simple Maze Escape
-@author: Junior Developer
+@author: raj00700777-ctrl
 @description: Collect the coin and reach the exit!
 */
 
