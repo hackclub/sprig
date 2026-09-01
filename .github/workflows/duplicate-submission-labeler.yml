@@ -1,13 +1,15 @@
 name: Duplicate Submission Labeler
 on:
   pull_request_target:
-    types: [opened, labeled]
+    types: [opened, labeled, closed]
 
 jobs:
   label-duplicates:
-    if: contains(github.event.pull_request.labels.*.name, 'submission')
+    if: contains(github.event.pull_request.labels.*.name, 'Submission') || contains(github.event.pull_request.labels.*.name, 'submission')
     runs-on: ubuntu-latest
     permissions:
+      contents: read
+      issues: write
       pull-requests: write
     steps:
       - name: Check and Label
@@ -16,11 +18,13 @@ jobs:
           GH_REPO: ${{ github.repository }}
           USER_LOGIN: ${{ github.event.pull_request.user.login }}
         run: |
+          gh label create "Potential Duplicate" --color "8250df" --description "Author has more than one open submission" --force
+
           # 1. Fetch all open PRs from this user (ignore the label for a second)
           ALL_USER_PRS=$(gh pr list --state open --author "$USER_LOGIN" --json number,labels --limit 100)
           
-          # 2. Use 'jq' to filter that list for only those that have the "submission" label
-          SUBMISSION_PRS=$(echo "$ALL_USER_PRS" | jq -r '.[] | select(.labels[].name == "submission") | .number')
+          # 2. Use 'jq' to filter that list for only those that have the submission label
+          SUBMISSION_PRS=$(echo "$ALL_USER_PRS" | jq -r '.[] | select(.labels[].name | ascii_downcase == "submission") | .number')
           
           PR_COUNT=$(echo "$SUBMISSION_PRS" | wc -w)
 
@@ -28,10 +32,31 @@ jobs:
           if [ "$PR_COUNT" -gt 1 ]; then
             for PR_NUM in $SUBMISSION_PRS; do
               # Double check if duplicate label is already there
-              HAS_DUPE_LABEL=$(gh pr view "$PR_NUM" --json labels --jq '.labels[].name' | grep -i "potential-duplicate" || true)
+              HAS_DUPE_LABEL=$(gh pr view "$PR_NUM" --json labels --jq '.labels[].name' | grep -i "Potential Duplicate" || true)
               
               if [ -z "$HAS_DUPE_LABEL" ]; then
-                gh pr edit "$PR_NUM" --add-label "potential-duplicate"
+                gh pr edit "$PR_NUM" --add-label "Potential Duplicate"
+                
+                # If the PR is newly opened (which triggered this workflow), we should drop a helpful comment
+                # We check if this specific PR is the one that triggered the workflow so we don't spam older PRs
+                if [ "$PR_NUM" == "${{ github.event.pull_request.number }}" ]; then
+                  gh pr comment "$PR_NUM" --body "⚠️ **Multiple Submissions Detected!**
+It looks like you have multiple open pull requests! 
+
+If you are trying to **update an existing game**, please note that you do not need to open a new pull request every time you make a change or click publish. You should update your original pull request instead. 
+
+If you opened this pull request by mistake, please **close it**. 
+*(If these are completely different games, you can ignore this message! A reviewer will check them and remove the label shortly).*
+"
+                fi
+              fi
+            done
+          else
+            # If count is 1 or 0, remove the Potential Duplicate label if it's there
+            for PR_NUM in $SUBMISSION_PRS; do
+              HAS_DUPE_LABEL=$(gh pr view "$PR_NUM" --json labels --jq '.labels[].name' | grep -i "Potential Duplicate" || true)
+              if [ -n "$HAS_DUPE_LABEL" ]; then
+                gh pr edit "$PR_NUM" --remove-label "Potential Duplicate"
               fi
             done
           fi
