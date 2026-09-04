@@ -1,8 +1,8 @@
-  /*
+/*
      @title: Cube Duel
  @author: Ritvik
  @description: A red cube chasing you down as you use attacks, vaults, movement, and waiting to take them down across different maps.
- @tags: 
+ @tags: action, puzzle, turn-based
 @addedOn: 2026-07-29
 
  CONTROLS:
@@ -78,8 +78,14 @@ let playerEnergy = 3;
 let enemyHP = 5;
 let gameOver = false;
 let enemyStunned = false;
-let enemyCornered = false; // New mechanic!
+let enemyCornered = false;
 let actionMessage = "FIGHT!";
+
+function sfxStart() { playTune(tune`200: C4-150-sine E4-150-sine G4-300-sine`); }
+function sfxHit() { playTune(tune`100: C3-100-square`); }
+function sfxSlam() { playTune(tune`100: C2-100-sawtooth C2-200-sawtooth`); }
+function sfxVault() { playTune(tune`200: E4-100-triangle A4-200-triangle`); }
+function sfxHurt() { playTune(tune`150: F2-150-sawtooth D2-200-sawtooth`); }
 
 const levels = [
   map`
@@ -113,6 +119,33 @@ w...w..p...w...w
 w...w......w...w
 w...w..e...w...w
 w..............w
+wwwwwwwwwwwwwwww`,
+
+  map`
+wwwwwwwwwwwwwwww
+w.ww...ww...ww.w
+w.ww.p.ww.e.ww.w
+w..............w
+w.ww...ww...ww.w
+w.ww...ww...ww.w
+wwwwwwwwwwwwwwww`,
+
+  map`
+wwwwwwwwwwwwwwww
+w.p............w
+w.wwwwwwwwwwww.w
+w.w..........w.w
+w.w.wwwwwwww.w.w
+w.........e..w.w
+wwwwwwwwwwwwwwww`,
+
+  map`
+wwwwwwwwwwwwwwww
+w..w..w..w..w..w
+wp.............w
+w..w..w..w..w..w
+w.............ew
+w..w..w..w..w..w
 wwwwwwwwwwwwwwww`
 ];
 
@@ -130,6 +163,7 @@ function loadLevel() {
   enemyStunned = false;
   enemyCornered = false;
   actionMessage = `ROUND ${currentLevel + 1}`;
+  sfxStart();
   updateUI();
 }
 
@@ -156,7 +190,7 @@ function attemptMove(dx, dy) {
   if (p && canMoveTo(p.x + dx, p.y + dy)) {
     p.x += dx;
     p.y += dy;
-    if (playerEnergy < 3) playerEnergy++; // Moving restores energy
+    if (playerEnergy < 3) playerEnergy++; 
     actionMessage = "MOVED";
     advanceTurn();
   }
@@ -180,7 +214,7 @@ onInput("j", () => {
       return;
     }
     
-    playerEnergy--; // Hitting costs energy
+    playerEnergy--; 
     const dx = e.x - p.x;
     const dy = e.y - p.y;
     
@@ -189,10 +223,12 @@ onInput("j", () => {
       e.y += dy;
       enemyHP -= 1;
       actionMessage = "PUSHED! (-1)";
+      sfxHit();
     } else {
       enemyHP -= 3;
-      enemyCornered = true; // Triggers double damage on AI turn!
+      enemyCornered = true; 
       actionMessage = "WALL SLAM! (-3)";
+      sfxSlam();
     }
     advanceTurn();
   } else {
@@ -218,6 +254,7 @@ onInput("i", () => {
         playerHP -= 1;
         enemyStunned = true; 
         actionMessage = "VAULT (-1) | STUNNED!";
+        sfxVault();
         advanceTurn();
       } else {
         actionMessage = "VAULT PATH BLOCKED!";
@@ -235,7 +272,7 @@ onInput("i", () => {
 
 onInput("k", () => {
   if (gameOver) return;
-  playerEnergy = 3; // Fully restores energy
+  playerEnergy = 3; 
   if (playerHP < 12) {
     playerHP += 1;
     actionMessage = "BRACED (+1 HP, MAX ENG)";
@@ -274,11 +311,10 @@ function advanceTurn() {
     }
     
     playerHP -= damage;
+    sfxHurt();
   } else {
-    // Enemy is no longer cornered if they have to move
     enemyCornered = false; 
     
-    // Pathfind toward player
     let moved = false;
     if (e.x < p.x && canMoveTo(e.x + 1, e.y)) {
       e.x += 1; moved = true;
