@@ -110,6 +110,26 @@ setLegend(
 ................
 ................`]
 )
+
+const correctHit = tune`
+500: F5-500,
+15500`
+
+const incorrectHit = tune`
+500: E4-500,
+15500`
+
+
+const winSong = tune`
+500: F4-500 + G4-500,
+500: A4-500 + B4-500 + C5-500,
+500: E5-500 + D5-500,
+500: C5-500 + B4-500,
+500: D5-500 + E5-500,
+500: F5-500 + G5-500,
+13000`
+
+
 const buttonGrid = map`
 .....
 .bbb.
@@ -125,50 +145,11 @@ const emptyGrid = map`
 .....
 `
 
-setMap(buttonGrid)
 let hoverSprite
 let currentButton = null
 let currentGuess = 0
-
-//the amount of rounds
-const randRounds = Math.floor(Math.random()*4)+1
-addText(String(randRounds), {x: 3,y: 3})
-
-//all the buttons in the game
-const buttons = tilesWith(button)
-  .map(tile => tile[0])
-  .sort((a,b) => {
-    if (a.y !== b.y) return a.y - b.y;
-    return a.x - b.x;
-  });
-
-
-//per round buttons
-const avaliableButtons = buttons.slice()
-const chosenButtons = []
-
-
-//picks the buttons that are gonna be the goal
-for (let i = 0; i < randRounds; i++) {
-  if (avaliableButtons.length === 0) {
-    console.log("No buttons left to pick.")
-    break
-  }
-
-  //rand amount of buttons
-  const randIndex = Math.floor(Math.random() * avaliableButtons.length)
-
-  const pickedButton = avaliableButtons.splice(randIndex, 1)[0]
-
-
-  if (pickedButton) {
-    chosenButtons.push(pickedButton)
-  } else {
-  }
-}
-
-//displays the blue color for them
-
+let buttons = []
+let chosenButtons = []
 let start = false
 var hoveringButton
 var buttonVal = 0
@@ -209,6 +190,7 @@ function guess(){
  if (currentButton ===  chosenButtons[currentGuess]){
   if (hoverSprite) hoverSprite.remove()
   currentButton.type = clickedButton  
+  playTune(correctHit)
   currentGuess++
   if (currentGuess === chosenButtons.length) {
    winGame()
@@ -216,6 +198,7 @@ function guess(){
  } else {
   if (hoverSprite) hoverSprite.remove()
   currentButton.type = wrongButton
+  playTune(incorrectHit)
   start = false
 
   setTimeout(() => {
@@ -252,6 +235,7 @@ function playSequence() {
           addSprite(currentButton.x, currentButton.y, hoverButton)
           hoverSprite = getFirst(hoverButton)
           start = true
+          console.log(start)
         }
       }, 1000)
   
@@ -266,6 +250,49 @@ function winGame() {
  chosenButtons.forEach(b => addSprite(b.x, b.y, wonButton))
  clearText()
  addText("YOU WON!", { x: 3, y: 3})
+ playTune(winSong)
+ setTimeout(() => {
+  resetGame()
+  }, 3000)
 }
 
-playSequence()
+//allows the game to be infinitely replayable
+function resetGame() {
+ clearText()
+ setMap(buttonGrid)
+
+ currentGuess = 0
+ const randRounds = Math.floor(Math.random()*4)+1
+ addText(String(randRounds), {x: 3,y: 3})
+
+ buttons = tilesWith(button)
+  .map(tile => tile[0])
+  .sort((a,b) => {
+    if (a.y !== b.y) return a.y - b.y;
+    return a.x - b.x;
+  });
+
+ const avaliableButtons = buttons.slice()
+ chosenButtons = []
+
+ for (let i = 0; i < randRounds; i++) {
+  if (avaliableButtons.length === 0) {
+    console.log("No buttons left to pick.")
+    break
+  }
+
+  //rand amount of buttons
+  const randIndex = Math.floor(Math.random() * avaliableButtons.length)
+
+  const pickedButton = avaliableButtons.splice(randIndex, 1)[0]
+
+
+  if (pickedButton) {
+    chosenButtons.push(pickedButton)
+  } else {
+  }
+ }
+ playSequence()
+}
+
+resetGame()
