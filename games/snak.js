@@ -1,3 +1,10 @@
+/*
+@title: snak
+@author: ranveerlabs
+@description: classic snake game but u play as the food
+@tags: ['arcade', 'survival']
+@addedOn: 2026-09-05
+*/
 const head = "h"
 const body = "b"
 const you = "y"
