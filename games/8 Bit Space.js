@@ -1,29 +1,28 @@
 const ship = "p";
-const bullet = "f";      // Player laser bullet
-const enemy = "e";       // Enemy spaceship
-const enemyBullet = "g"; // Enemy laser bullet
-const heart = "h";       // Health UI heart sprite
-const skull = "x";       // Game Over icon sprite
+const bullet = "f";      //Player laser bullet 
+const enemy = "e";       //Enemy
+const enemyBullet = "g"; //Enemy laser bullet 
+const heart = "h";       //Health UI
+const skull = "x";       //Game over icon
 const dark = "b";
 
 function randomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-// === Audio Effects ===
+//Audio
+const shootTune = tune`100: C6-20, G5-20`;
+const damageTune = tune`100: E3-30, C3-30, G2-30`;
+
 function playShootSfx() {
-  try {
-    playTune("100: C6-20, G5-20");
-  } catch (e) {}
+  playTune(shootTune);
 }
 
 function playDamageSfx() {
-  try {
-    playTune("100: E3-30, C3-30, G2-30");
-  } catch (e) {}
+  playTune(damageTune);
 }
 
-// === Star Generator ===
+//Star generator 
 function generateStarBitmap() {
   const px = 3 + randomInt(10);
   const py = 3 + randomInt(10);
@@ -41,7 +40,7 @@ function generateStarBitmap() {
 
 const starTypes = ["k", "l", "m", "n", "o", "q", "r", "t", "u", "v"];
 
-// Digit Bitmaps for Score Display (0-9)
+// Bitmaps
 const digitBitmaps = {
   "0": bitmap`
 ................
@@ -466,7 +465,7 @@ function checkBulletHit(b) {
   return false;
 }
 
-// === Background Stars Scrolling ===
+//Background
 setInterval(() => {
   if (isGameOver) return;
   getAllStars().forEach((st) => {
@@ -479,7 +478,7 @@ setInterval(() => {
   });
 }, 250);
 
-// === Enemy Spawning Loop ===
+//Enemy spawn
 setInterval(() => {
   if (isGameOver) return;
   const maxEnemies = Math.min(6, 3 + Math.floor(score / 8));
@@ -488,7 +487,7 @@ setInterval(() => {
   }
 }, 1000);
 
-// === Enemy Movement & Collision Loop ===
+//Enemy movement and collition
 setInterval(() => {
   if (isGameOver) return;
   const myShip = getFirst(ship);
@@ -526,7 +525,7 @@ setInterval(() => {
   });
 }, 450);
 
-// === Enemy Shooting Loop ===
+//Enemy shootng 
 setInterval(() => {
   if (isGameOver) return;
   getAll(enemy).forEach((e) => {
@@ -536,7 +535,7 @@ setInterval(() => {
   });
 }, 1800);
 
-// === Enemy Bullet Movement Loop ===
+//Enemy bulet movement
 setInterval(() => {
   if (isGameOver) return;
   const myShip = getFirst(ship);
@@ -558,7 +557,7 @@ setInterval(() => {
   });
 }, 110);
 
-// === Player Bullet Movement Loop ===
+//Player bullet movement
 setInterval(() => {
   if (isGameOver) return;
   getAll(bullet).forEach((b) => {
@@ -573,7 +572,7 @@ setInterval(() => {
   });
 }, 60);
 
-// === Controls ===
+//Controls 
 function handleInput(moveAction) {
   if (isGameOver) {
     restartGame();
