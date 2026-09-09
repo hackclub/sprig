@@ -2,7 +2,7 @@
 //@author:Mr Panov
 //@description:A clicker game where u can click to gain money and choose different characters 
 //@tags:Clicker,Fun,Money
-//addedon:2026-09-09
+//@addedon:2026-09-09
 // =========================================================================
 // wemmbu character
 // =========================================================================
