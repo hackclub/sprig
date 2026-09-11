@@ -1,9 +1,5 @@
 import { hasLabel } from "./review-utils.mjs";
 
-/**
- * Compute the labels resulting from automated validation.
- * A synchronized commit is a new review subject: prior approval is invalid.
- */
 export function autoReviewLabelChanges({ labels, validationOk, eventAction }) {
 	const add = new Set(["Submission"]);
 	const remove = new Set();
@@ -22,7 +18,6 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction }) {
 		remove.add("Ready for Maintainer");
 	}
 
-	// Claiming is reviewer ownership, not an approval of a particular commit.
 	if (hasLabel(labels, "Claimed")) add.add("Claimed");
 
 	return {
