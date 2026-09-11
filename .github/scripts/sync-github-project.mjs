@@ -84,35 +84,38 @@ async function addItemToProject(projectId, contentId) {
 	return data.addProjectV2ItemById.item.id;
 }
 
-async function updateItemField(projectId, itemId, field, value) {
-	if (!field || !value) return;
-	
-	let valueInput;
-	if (field.dataType === "TEXT") {
-		valueInput = { text: value.toString() };
-	} else if (field.dataType === "NUMBER") {
-		valueInput = { number: Number(value) };
-	} else if (field.dataType === "SINGLE_SELECT") {
-		const option = field.options?.find(o => o.name === value);
-		if (!option) return; // Invalid option
-		valueInput = { singleSelectOptionId: option.id };
-	} else {
-		return; // Unsupported for now
+function projectFieldValue(field, value) {
+	if (!field || !value) return null;
+	if (field.dataType === "TEXT") return { text: value.toString() };
+	if (field.dataType === "NUMBER") return { number: Number(value) };
+	if (field.dataType === "SINGLE_SELECT") {
+		const option = field.options?.find((candidate) => candidate.name === value);
+		return option ? { singleSelectOptionId: option.id } : null;
 	}
+	return null;
+}
 
-	const query = `
-		mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $value: ProjectV2FieldValue!) {
-			updateProjectV2ItemFieldValue(input: {
-				projectId: $projectId,
-				itemId: $itemId,
-				fieldId: $fieldId,
-				value: $value
-			}) {
-				projectV2Item { id }
-			}
-		}
-	`;
-	await runGraphQL(query, { projectId, itemId, fieldId: field.id, value: valueInput });
+// GraphQL permits multiple aliased mutations in one request. Updating all
+// mapped fields together avoids one round trip per field for every PR.
+async function updateItemFields(projectId, itemId, fields, mappedData) {
+	const entries = Object.entries(mappedData)
+		.map(([key, value], index) => ({ key, value, field: fields[key], alias: `field${index}` }))
+		.map((entry) => ({ ...entry, fieldValue: projectFieldValue(entry.field, entry.value) }))
+		.filter((entry) => entry.fieldValue);
+	if (!entries.length) return;
+
+	const variables = { projectId, itemId };
+	const definitions = ["$projectId: ID!", "$itemId: ID!"];
+	const mutations = entries.map((entry) => {
+		const fieldVariable = `$fieldId${entry.alias}`;
+		const valueVariable = `$value${entry.alias}`;
+		variables[`fieldId${entry.alias}`] = entry.field.id;
+		variables[`value${entry.alias}`] = entry.fieldValue;
+		definitions.push(`${fieldVariable}: ID!`, `${valueVariable}: ProjectV2FieldValue!`);
+		return `${entry.alias}: updateProjectV2ItemFieldValue(input: { projectId: $projectId, itemId: $itemId, fieldId: ${fieldVariable}, value: ${valueVariable} }) { projectV2Item { id } }`;
+	});
+
+	await runGraphQL(`mutation(${definitions.join(", ")}) { ${mutations.join(" ")} }`, variables);
 }
 
 // Reusing logic from sync-review-sheet.mjs
@@ -212,9 +215,7 @@ async function main() {
 			const prNodeId = pullRequest.node_id;
 			const itemId = await addItemToProject(projectId, prNodeId);
 
-			for (const [key, value] of Object.entries(mappedData)) {
-				await updateItemField(projectId, itemId, fields[key], value);
-			}
+			await updateItemFields(projectId, itemId, fields, mappedData);
 			console.log(`Successfully synced PR #${pullRequest.number}`);
 		} catch (err) {
 			console.error(`Failed to sync PR #${pullRequest.number}:`, err.message);

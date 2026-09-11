@@ -18,6 +18,10 @@ jobs:
             group: auto-triage-${{ github.event.pull_request.number || github.event.issue.number || github.run_id }}
             cancel-in-progress: true
         steps:
+            # SECURITY INVARIANT: because this privileged pull_request_target
+            # job has write access to labels/comments, PR-head files are only
+            # untrusted data. Never checkout, import, or execute PR-head code:
+            # doing so could let attacker-controlled code use the job token.
             - name: Checkout trusted automation
               uses: actions/checkout@v4
               with:

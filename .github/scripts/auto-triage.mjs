@@ -14,6 +14,8 @@ import {
 	setStateLabel,
 	upsertBotComment,
 } from "./review-utils.mjs";
+import { buildSubmissionManifest } from "./submission-manifest.mjs";
+import { autoReviewLabelChanges } from "./review-state.mjs";
 
 const token = process.env.GITHUB_TOKEN;
 if (!token) throw new Error("GITHUB_TOKEN is required");
@@ -111,6 +113,8 @@ console.log("\nBot Comment Body:\n", buildComment(result));
 if (!result.ok) process.exit(1);
 
 async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) {
+	// SECURITY INVARIANT: this is pull_request_target. Never checkout, import,
+	// or execute PR-head code. Head files are fetched as untrusted text only.
 	const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
 	const headSha = pullRequest.head.sha;
 	const gameFiles = pullFiles.filter((file) => /^games\/[A-Za-z0-9_-]+\.js$/.test(file.filename));
@@ -189,12 +193,6 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 		screenshotUrl,
 		similarity,
 	};
-}
-
-function isAllowedSubmissionFile(filename) {
-	if (/^games\/[A-Za-z0-9_-]+\.js$/.test(filename)) return true;
-	if (/^games\/img\/[A-Za-z0-9_-]+\.png$/i.test(filename)) return true;
-	return false;
 }
 
 function validatePullRequestBody(body) {
@@ -402,23 +400,14 @@ function readFileSafe(filePath) {
 async function applyLabels(result) {
 	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Submission"] });
 	const currentLabels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
-	const preserveReviewState = result.ok &&
-		// Guard label-only edits that don't indicate real code changes
-		(["edited", "labeled", "unlabeled"].includes(event.action) ||
-		// Guard new commits too — if reviewer already approved, don't reset to playtest (EC5)
-		// We check if the PR currently has an approved review from a non-author non-bot
-		event.action === "synchronize") &&
-		(hasLabel(currentLabels, "Claimed") || hasLabel(currentLabels, "Ready for Maintainer"));
+	const changes = autoReviewLabelChanges({ labels: currentLabels, validationOk: result.ok, eventAction: event.action });
 
 	if (result.ok) {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Verified"] });
-		if (!preserveReviewState) {
-			await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Playtest" });
-		}
+		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: changes.state });
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Failed" });
-		if (!preserveReviewState) {
-			await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Needs Author" });
-		}
+		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Needs Author" });
+		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Maintainer" });
 	} else {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Failed"] });
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
@@ -566,11 +555,8 @@ function checkMetadataDate(addedOn, add) {
 }
 
 function validateSubmissionFiles(pullFiles, addCheck) {
-	const jsFiles = pullFiles.filter((file) => file.filename.startsWith("games/") && file.filename.endsWith(".js"));
-	const imageFiles = pullFiles.filter((file) => /\.(png)$/i.test(file.filename));
-	const disallowedFiles = pullFiles.filter((file) => !isAllowedSubmissionFile(file.filename));
-
-	const uppercaseGames = pullFiles.filter((file) => file.filename.toLowerCase().startsWith("games/") && !file.filename.startsWith("games/"));
+	const manifest = buildSubmissionManifest(pullFiles);
+	const { gameFiles: jsFiles, imageFiles, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
 	if (uppercaseGames.length > 0) {
 		const badNames = uppercaseGames.map((file) => `\`${file.filename}\``).join(", ");
 		addCheck("Directory must be lowercase", false, `Your file must be in the lowercase \`games/\` directory. Found ${badNames}.`);
@@ -596,12 +582,11 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 
 	// EC9 fix: allow authors to modify their own game files (e.g. fixing requested changes)
 	// only flag if they are modifying files OUTSIDE the games/ folder
-	const changedNonAdded = pullFiles.filter((file) => file.status !== "added" && !file.filename.startsWith("games/"));
-	const changedNames = changedNonAdded.map((file) => `\`${file.filename}\``).join(", ");
+	const changedNames = changedNonAddedFiles.map((file) => `\`${file.filename}\``).join(", ");
 	addCheck(
 		"Only new or game files changed",
-		changedNonAdded.length === 0,
-		changedNonAdded.length
+		changedNonAddedFiles.length === 0,
+		changedNonAddedFiles.length
 			? `Submissions should only add new game files or modify existing ones in \`games/\`. These files outside \`games/\` were modified: ${changedNames}.`
 			: "All submitted files are new or inside \`games/\`."
 	);
