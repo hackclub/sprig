@@ -21,8 +21,17 @@ const token = process.env.GITHUB_TOKEN;
 if (!token) throw new Error("GITHUB_TOKEN is required");
 
 const { owner, repo } = getRepository();
-const event = readGitHubEvent();
-const pullRequest = event.pull_request || event.issue;
+let event = readGitHubEvent();
+let pullRequest = event.pull_request || event.issue;
+
+// A workflow_dispatch run can exercise the same state machine against a real
+// PR while keeping trusted automation on this branch. PR files remain
+// untrusted text and are never checked out or executed.
+const dispatchedPrNumber = process.env.REVIEW_PR_NUMBER;
+if (!pullRequest && dispatchedPrNumber) {
+	pullRequest = await githubRequest(token, "GET", `/repos/${owner}/${repo}/pulls/${encodeURIComponent(dispatchedPrNumber)}`);
+	event = { ...event, action: process.env.REVIEW_EVENT_ACTION ?? "workflow_dispatch", pull_request: pullRequest };
+}
 
 if (!pullRequest || (!event.pull_request && !event.issue?.pull_request)) {
 	console.log("No pull request in event; skipping auto triage.");
