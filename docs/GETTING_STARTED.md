@@ -1,3 +1,6 @@
+> [!WARNING]
+> AI policy: Games submitted to the gallery must be primarily created by the person submitting them. Substantially AI-generated games may not be approved.
+
 # Let's make our first game in [Sprig](https://sprig.hackclub.com/editor)!
 
 All Sprig games take place on a grid of tiles.
