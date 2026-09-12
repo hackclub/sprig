@@ -56,6 +56,12 @@ async function getProjectDetails() {
 							... on ProjectV2IterationField { id name dataType }
 						}
 					}
+					items(first: 100) {
+						nodes {
+							id
+							content { ... on PullRequest { id } }
+						}
+					}
 				}
 			}
 		}
@@ -69,7 +75,12 @@ async function getProjectDetails() {
 		if (!field.name) continue;
 		fields[field.name] = field;
 	}
-	return { projectId: project.id, fields };
+	const itemIds = new Map(
+		(project.items?.nodes ?? [])
+			.filter((item) => item.content?.id)
+			.map((item) => [item.content.id, item.id]),
+	);
+	return { projectId: project.id, fields, itemIds };
 }
 
 async function addItemToProject(projectId, contentId) {
@@ -172,7 +183,7 @@ function firstMarkdownLink(markdown, label) {
 
 async function main() {
 	console.log("Fetching project details...");
-	const { projectId, fields } = await getProjectDetails();
+	const { projectId, fields, itemIds } = await getProjectDetails();
 	
 	console.log("Collecting pull requests...");
 	const pulls = await collectPullRequests();
@@ -213,7 +224,11 @@ async function main() {
 		try {
 			// Get node ID for PR
 			const prNodeId = pullRequest.node_id;
-			const itemId = await addItemToProject(projectId, prNodeId);
+			let itemId = itemIds.get(prNodeId);
+			if (!itemId) {
+				itemId = await addItemToProject(projectId, prNodeId);
+				itemIds.set(prNodeId, itemId);
+			}
 
 			await updateItemFields(projectId, itemId, fields, mappedData);
 			console.log(`Successfully synced PR #${pullRequest.number}`);
