@@ -37,7 +37,15 @@ jobs:
             for PR_NUM in $SUBMISSION_PRS; do
               gh pr edit "$PR_NUM" --add-label "Potential Duplicate"
               if [ "$PR_NUM" = "$PR_NUMBER" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
-                gh pr comment "$PR_NUM" --body "Multiple open game submissions detected for this author. If this is an update, add it to the existing PR. If these are different games, a reviewer can remove this label."
+                gh pr comment "$PR_NUM" --body "⚠️ **Multiple Submissions Detected!**
+
+It looks like you have multiple open pull requests.
+
+If you are trying to **update an existing game**, you do not need to open a new pull request every time you make a change or click publish. Update your original pull request instead.
+
+If you opened this pull request by mistake, please **close it**.
+
+If these are completely different games, you can ignore this message. A reviewer will check them and remove the label if appropriate."
               fi
             done
           else
