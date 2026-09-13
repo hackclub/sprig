@@ -1,3 +1,5 @@
+> [!WARNING]
+> AI policy: Games submitted to the gallery must be primarily created by the person submitting them. Substantially AI-generated games may not be approved.
 
 # Your checklist for this pull request
 
