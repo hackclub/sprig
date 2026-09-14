@@ -1,206 +1,134 @@
-# 🍃 Hack Club Sprig 🍃
+this pr introduces a fully automated node.js backend to triage, track, and manage game submissions, replacing the old manual google sheets tracking and fragile one-off yaml scripts. everything described here runs automatically on github actions, nobody needs to press anything to trigger any of it.
 
-**[💻 Online Editor: Make a game](https://sprig.hackclub.com/editor)** | **[👀 Gallery: Find games](https://sprig.hackclub.com/gallery)** | **[🕸 Landing Page](https://sprig.hackclub.com)** | **[🎮 Firmware](https://github.com/hackclub/sprig/tree/main/firmware/spade)** | **[👾 Engine](https://github.com/hackclub/sprig-engine)**
+the main focus is the massive overhaul to the ci workflow. here is exactly how the new pipeline works from start to finish:
 
-[Sprig](https://sprig.hackclub.com) is a game console where **every user is a creator**. It can only be obtained by building a tile-based game in the [web-based game editor](https://sprig.hackclub.com/editor) and shipping it in the [community gallery](https://sprig.hackclub.com/gallery). It's made by [Hack Club](https://hackclub.com).
+---
 
-<p align="left">
-<a>
-<img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://user-images.githubusercontent.com/27078897/186769641-5b1181b4-9969-4276-9fa0-9f15140e4a9b.jpg">
-</a>
-</p>
+### 1. the core workflow (`auto-triage.mjs`)
 
-You should be able to get started in Sprig with very little programming experience. Even if you're an expert, you should still be able to have fun. Sprig games are designed to be shared and hacked on with friends. Every game submitted is easily viewable and editable in our gallery allowing people to learn from and build off each other. 
+the workflow triggers on: `opened`, `synchronize`, `assigned`, `unassigned`, `edited`, `reopened`, `ready_for_review`, `pull_request_review: submitted`, `issue_comment: created`.
 
-## Sprig is a...
+when a game submission pr is opened or updated, the `auto-triage` bot immediately kicks in:
 
-...**custom handheld game console** built by Hack Club. we are giving a Sprig to every teenage hacker that successfully shares a game they create in our [community gallery](https://sprig.hackclub.com/gallery).
+- **validation**: it checks the pr body, validates the metadata block (`@title`, `@author`, `@tags`, `@addedOn`, etc.), ensures files are placed correctly in `games/`, checks file size, and runs the python plagiarism checker against the existing game library.
+- **instant feedback**: it posts a formatted comment on the pr with:
+  - submission info: game name, author, file path, similarity score against the closest existing game.
+  - quick action links to **Play in Sprig Editor**, Edit Game File, Play Similar Game, View Raw, and PR Files.
+  - expandable `<details>` sections for each check category that passed or failed: "Files & Directories", "PR Description", "Game Metadata Header", and "Code & Assets".
+- **state management**: based on check results or human reviews, the bot automatically assigns labels to move the pr through its lifecycle (see below).
+- **draft pr handling**: if a pr is opened as a draft, the bot skips triage entirely. it correctly listens for the `ready_for_review` event to kick off triage when the author marks it ready.
+- **concurrency**: `auto-triage.yml` has a `concurrency` block that cancels older in-progress triage runs if a new event fires for the same pr, so rapid-fire commits don't produce duplicate bot comments.
 
-<p align="left">
-<a>
-<img width="500" alt="Screen Shot 2022-08-22 at 4 02 04 PM" src="https://sprig.hackclub.com/stories-tiny/sprig-back.jpeg">
-</a>
-</p>
+*see it in action:* https://github.com/SSoggyTacoMan/sprig/pull/15#issuecomment-4632461597
+(to see the "play in sprig editor" in action, replace the sprig link before the / with https://sprig-teal.vercel.app/ )
+---
 
-...**[web-based game editor](https://sprig.hackclub.com/editor)** that transforms learning to code from studying language syntax to making small creative projects. The Sprig game engine exposes a small construction kit for making tile-based games. This construction kit helps you focus on being creative instead of learning big APIs. The games are just JavaScript and we built a custom system to run that same JavaScript on the microcontroller!
+### 2. all submission labels & their meanings (`review-utils.mjs`)
 
-<p align="left">
-<a href="https://sprig.hackclub.com/editor">
-<img width="500" alt="Screen Shot 2022-03-07 at 6 21 27 PM" src="https://cdn.hackclub.com/rescue?url=https://cloud-l94lfbasw-hack-club-bot.vercel.app/0image.png">
-</a>
-</p>
+the entire system is state-driven by github labels. all label definitions, colors, and descriptions are centralized in `review-utils.mjs` and automatically created on the repo if they don't exist yet (via `ensureReviewLabels`). here is what each label means and when it gets applied:
 
-...**[hardware development kit](https://github.com/hackclub/sprig/blob/main/docs/ASSEMBLY.md)**. It's not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It's a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.
+- **`Submission`**: added to any pr that modifies a file inside `games/`. this is the main gate thingy the sync script and stale tracker only look at prs with this label.
+- **`Verified`**: automated checks passed. the pr is structurally valid.
+- **`Failed`**: one or more automated checks failed (wrong directory, missing metadata, file too large, etc.). the bot's comment will list exactly what failed.
+- **`Ready for Playtest`**: checks passed and the game is waiting for a human reviewer to actually download and play it.
+- **`Claimed`**: a reviewer assigned themselves to the pr (via the github assignees ui). they are actively testing it. if there is 0 activity for 3 days, the bot fully unassigns them and removes this label so someone else can pick it up.
+- **`Needs Author`**: automated checks failed, OR a human reviewer requested changes. the pr author needs to push fixes. has a 14-day auto-close timer.
+- **`Ready for Maintainer`**: a reviewer approved the pr. a maintainer now needs to do a final check and merge it. if it sits untouched for 7 days, the bot drops a @-mention reminder to the maintainers listed in `.github/review-roles.json`.
+- **`Stale`**: no meaningful activity for a set number of days (7 days in `Needs Author`, 30 days for any open pr with no activity at all).
+- **`Plagiarism Risk`**: the similarity checker found high overlap (above threshold) with an existing game in the library.
+- **`AI Concern`**: a reviewer flagged the game for potential undisclosed ai usage.
+- **`Potential Duplicate`**: the pr author already has another open submission. the bot also drops a comment explaining they can edit their existing pr instead of opening a new one.
+- **`Keep Open`**: a manual override label. if any pr has this label, the stale tracker completely skips it and will never auto-close it, useful for known-good PRs that are just waiting on something external.
 
-<p align="left">
-<a href="https://sprig.hackclub.com">
-<img width="500" alt="Screen Shot 2022-08-22 at 4 04 08 PM" src="https://user-images.githubusercontent.com/27078897/186015708-860df540-6c41-4400-aed5-d0fe8c9d31aa.jpg">
-</a>
-</p>
+---
 
-## Fully open source
+### 3. full state lifecycle
 
-**Sprig is open source**. Shipping a game to the Sprig Gallery is contributing to an open-source project. Everything about Sprig is transparent and editable. That includes the [hardware designs](https://github.com/hackclub/sprig/tree/main/hardware), the [game engine](https://github.com/hackclub/sprig/tree/main/engine), the [embedded game engine for the RP2040 chip](https://github.com/hackclub/sprig/tree/main/firmware/spade), and the editor and website itself in this repo!
+here is the exact path a submission takes through the pipeline from open to close:
 
-We did some fun engineering to get Sprig to work and to make your games run the same on your desktop computer and a $4 microcontroller. That involved custom JS runtimes with optimizations in C and even PIO assembly. We also documented some [behind-the-scenes](https://github.com/hackclub/sprig/tree/main/docs).
+1. **pr opened** → bot runs checks → if pass: `Verified` + `Ready for Playtest`. if fail: `Failed` + `Needs Author`.
+2. **reviewer assigns self** → `Claimed`.
+3. **reviewer requests changes** → `Needs Author`. 14-day clock starts.
+4. **author pushes a fix** → bot re-runs all checks → if pass: `Ready for Playtest` again. state is reset, 14-day clock restarts.
+5. **reviewer approves** → `Ready for Maintainer`. bot skips this transition if the reviewer is the same person as the pr author (self-review bypass).
+6. **author pushes a whitespace/typo fix after approval** → state stays at `Ready for Maintainer`. the bot previously stomped this back to `Ready for Playtest`, now fixed.
+7. **maintainer merges** → pr closes. sync script updates the project board to `Merged`.
 
-## You Ship, We Ship
+---
 
-Make a game
-&rarr; Share it with the community
-&rarr; Receive your device
-&rarr; Play Sprig games on it
-&rarr; Hack on the device for more projects
+### 4. edge cases & automated tracking (`stale-review-queue.mjs`, `duplicate-submission-labeler.yml`)
 
-***Only teenagers and younger can receive Sprigs!*** All are welcome to submit to the [gallery](https://sprig.hackclub.com/gallery) though.
+cron jobs and secondary workflows handle all the edge cases that the main bot can't cover inline:
 
-## Philosophy
+- **the 14-day clock**: if a pr is in `Needs Author` (failed checks or changes requested) with no activity:
+  - *day 7*: bot posts a stale warning comment with a unique date-stamped marker so it always posts a fresh comment on a new cycle.
+  - *day 14*: bot posts a final closing notice and auto-closes the pr.
+  - **`Keep Open` escape hatch**: any maintainer can add the `Keep Open` label to permanently exempt a pr from this timer.
+- **forgotten maintainer approvals**: if a pr sits in `Ready for Maintainer` for 7 days with no activity, the bot posts a reminder comment that @-mentions the maintainers by name (pulled from `.github/review-roles.json`).
 
-People learn best when they make things that they care about, which they can then share with others. This type of learning philosophy is called constructionism, and Sprig is a type of microworld. A microworld is an environment where you can discover programming by using it to express yourself. 
+- **abandoned claims**: if a reviewer assigns themselves (`Claimed`) but there is 0 activity on the pr for 3 days, the bot fully unassigns them from the github ui (removing them from the assignees list, not just the label) and removes `Claimed` so someone else can pick it up. the 3-day timer is based on the pr's `updated_at` field so any activity (comments, commits, reviews) resets it.
 
-## Tutorials
+- **completely untouched submissions**: if any open pr with `Submission` label has had 0 activity for 30 days, the bot flags it with `Stale` to get a reviewer's attention.
 
-To get started you can follow [this challenge in the editor](https://sprig.hackclub.com/gallery/getting_started), check out some [Sprig workshops](https://workshops.hackclub.com#sprig) or [Sprig jams](https://jams.hackclub.com/batch/sprig).
+- **persistent duplicates** (`duplicate-submission-labeler.yml`): if a user has more than one open submission at once, the newer pr gets flagged with `Potential Duplicate` and the bot drops a helpful comment explaining how to update their existing pr instead of opening a new one. if the user closes the extra pr, the workflow automatically removes the label from their surviving pr.
 
-## Development
+- **ghost prs on project board**: the sync script fetches the 100 most recently updated prs (including closed/merged) so prs that get merged don't get stuck in their old state on the project board forever.
 
-Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) where you can join the development discussion and ask for help. We also have other channels for Sprig specific stuff:
+- **synchronize stomps approval**: when an author pushes a fix commit after a reviewer has approved, the bot previously reset the state back to `Ready for Playtest`. now fixed, `synchronize` events check for an existing valid approval and preserve `Ready for Maintainer` if one is found.
 
-- `#sprig-platform`: For discussion of development of the Sprig platform as a whole. 
-- `#sprig-gaming-controller`: Building a case for the Sprig console to make it a portable gaming controller.
-- `#sprig-emulator`: Development of a Gameboy emulator for Sprig.
-- `#sprig-multiplayer`: Development of multiplayer support.
-- `#sprig-lora`: Development of Sprig-Lora communicator.
-- `#sdsprig`: Development of Sprig loading from an SD Card.
-- `#sprig-minecraft`: Development of Minecraft for Sprig.
-- `#sprig-ios-app`: Development of iOS app.
-- `#sprig-engagement`: Development of a bot to post every new game to `#sprig`.
-- `#vs-sprig`: Development of Sprig extension for VS Code.
-- `#stationary-sprig`: Making Sprig a home console.
-- `#spriggy-doom`: Development of a clone of Doom.
-- `#sprigos-development`: Development of the sprigOS, the sprig game that acts like an operating system.
-- `#spade`: For discussions of Spade firmware/OS of the Sprig.
-- `#spaint`: Make art with your sprig with sPaint and share.
+- **self-review bypass**: the review handler checks that the reviewer is not the same person as the pr author before accepting a `CHANGES_REQUESTED` or `APPROVED` review as a state transition.
 
-Learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs).
+- **stale marker collision**: both the 7-day stale warning and the auto-close comment now use unique date-stamped html markers (e.g. `<!-- sprig-stale-reminder-2026-06-01 -->`) so a pr that recovers and re-enters the stale state will always get a fresh comment instead of silently doing nothing because the old marker is still in the thread.
 
-### Tech Stack
+- **plagiarism risk auto-close**: `Plagiarism Risk` prs now follow the same 14-day auto-close as all other stale submissions. the previous exception that kept them open forever has been removed.
 
-Sprig's editor and site pages are built with [Astro](https://astro.build/) (SSR via `@astrojs/node`) using [Preact](https://preactjs.com/) for rendering. Perhaps somewhat unusually, we predominantly use [Preact Signals](https://preactjs.com/guide/v10/signals/) for state management. The code editor uses [CodeMirror](https://codemirror.net/). There is one legacy [Svelte](https://svelte.dev/) component on the homepage. The database is [Firebase](https://firebase.google.com/). Everything pushed to GitHub and all pull requests are automatically deployed on [Vercel](https://vercel.com/hackclub).
+- **fix commits penalized**: the "only new files" check now only flags files added *outside* of `games/`. modifications to an existing file inside `games/` are allowed, so authors pushing fixes to address requested changes aren't penalized.
 
-### Repo Structure
+- **deleted/unreadable file crash**: fixed a null-pointer crash in `validateSingleGameFile` where trying to check `content.length` on a null file (e.g. a deleted game file) would crash the entire action. now it safely logs a failed check and continues.
 
-```tree
-sprig/
-├── src/                        # Astro website + editor
-│   ├── pages/                  # Pages (.astro) and API routes (.ts), all SSR
-│   ├── components/             # Preact (TSX) UI components + CSS modules
-│   ├── lib/                    # Shared support code (server + client)
-│   ├── legacy/                 # Old Svelte code kept for the homepage
-│   ├── layouts/                # Astro layout templates
-│   ├── integrations/           # Custom Astro integrations
-│   ├── translations/           # i18n strings
-│   ├── global.css              # Global styles
-│   └── middleware.ts           # Astro middleware
-│
-├── engine/                     # Sprig game engine (separate package)
-├── games/                      # Community-submitted game files (.js)
-├── public/                     # Static assets (game metadata, images, fonts)
-├── firmware/                   # RP2040 embedded firmware (Spade runtime + HAL)
-├── hardware/                   # PCB designs + 3D-printable console cases
-├── docs/                       # Documentation (assembly, getting started, runbooks)
-├── scripts/                    # Python admin tools (plagiarism check, review, etc.)
-├── bin/                        # lint-sprig game linter
-├── tests/                      # Fuzzy tests for the engine
-├── yjs-client/                 # Yjs WebRTC client for collaborative editing
-├── yjs-signaling-server/       # Yjs signaling server (separate deploy)
-├── font-things/                # Font manipulation script
-└── sprig-hax/                  # Community hardware mods (gyro, etc.)
+- **sync script rate limit**: removed a redundant `GET /issues/{number}` api call per pr in the board sync script by using the labels already present on the pr object from the pulls list. this roughly halves the api call count per sync run.
+
+---
+
+### 5. reviewer roles (`review-roles.json`)
+
+added `.github/review-roles.json` to define which github usernames are maintainers and which are triagers:
+
+```json
+{
+  "maintainers": ["mrbeast", "zachlattacheese", "example"],
+  "triagers": ["ssoggy", "example"]
+}
 ```
 
-Key source directories explained:
+this file is read by `stale-review-queue.mjs` to @-mention the right people in the "7-day waiting on maintainer" reminder comment. update this file to add or remove team members, no code changes needed.
 
-- `src/pages/` contains all the site's main pages and API routes. In general, `.ts` files are API routes and `.astro` files are pages. All pages are server-side rendered on demand and can make database calls and such.
-- `src/components/` contains all the components used in the editor and site pages. Most components will have accompanying `.module.css` files which contain vanilla CSS stylesheets which are scoped to the component. These "CSS modules" can be imported as a JS object containing referencable class names.
-- `src/lib/` contains all the support code. Currently this is a mix of server and client code.
-- `src/legacy/` has a bunch of old code from the v1 version of the editor which is kept for ease of porting the home and Get a Sprig pages. Since Astro lets us combine multiple frameworks, we're also using old Svelte code in some places.
-- `docs/` contains documentation on how to use Sprig, including `docs.md` which contains the help file embedded in the editor.
-- `public/` contains static assets which are directly served.
-- `src/global.css` and `src/components/standard-head.astro` contain code that's generally shared across all pages.
+---
 
-### Prerequisites
+### 6. github projects integration (`sync-github-project.mjs`)
 
-Things you'll want installed:
+as a replacement for the manual google sheets tracking, the state logic is hooked up to a native github project board. (this is optional and can be skipped if the team prefers a different setup.)
 
-- [Git](https://git-scm.com/)
-- [Bun](https://bun.sh/)
+- a script runs on schedule to calculate the current state of every open submission (based on labels) and pushes the data into custom columns via graphql: Review State, Next Action, Triager, Age Days, Play Link, Raw Link.
+- the project board requires two repo secrets to work: `PROJECT_PAT` (a personal access token with `project` scope) and `GITHUB_PROJECT_URL` (the url of the project board to sync to).
+- `setup-project.mjs` is included to automatically create all the required custom fields on any new github project board from scratch.
 
-We use Firebase as a database. To develop login/saving related features locally, you'll likely want to [create a Firebase project](https://console.firebase.google.com/) for yourself. Then, create a service account, download the JSON file, and convert the contents to base64 ([link to a tool to easily do this](https://gchq.github.io/CyberChef/#recipe=JSON_Minify()To_Base64('A-Za-z0-9%2B/%3D'))).
+---
 
-We recommend [Visual Studio Code](https://code.visualstudio.com/) as a code editor. You should be automatically prompted to install some recommended extensions when you open the project.
+### 7. bug fixes
 
-### Project Setup
+- **astro build fix** (`src/integrations/generate-metadata.ts`): one malformed game file used to crash the entire site build. it now catches errors per-game, logs them, and skips the bad file instead of failing the whole build. also made the space after the colon in metadata headers optional (`@description:text` and `@description: text` both parse correctly now).
+- **plagiarism script regex** (`plagiarism_check.py`): fixed regex patterns that were incorrectly matching or failing on certain game files.
+- **generate-metadata.js**: updated to use `node:fs` instead of the bare `fs` import.
+- **sprig web editor**: frontend ui updates and css tweaks across `editor.tsx`, `editor.astro`, `editor.module.css`, and `navbar-editor.tsx`.
 
-In a terminal, clone the repo and install packages:
+---
 
-```bash
-git clone https://github.com/hackclub/sprig/
-cd sprig
-bun install
-```
+### 8. what maintainers need to do after merging
 
-Next, you'll want to give Sprig access to the Firebase credentials, as well as some extra credentials that you can request from the @creds team on Slack. Complete the `.env.example` file with those credentials and rename it to `.env`.
-
-To start the dev server, run `bun dev` and visit <http://localhost:4321> in your web browser! Please create a GitHub issue if you cannot get something to work properly.
-
-### Running Tests
-
-```bash
-bun test          # fuzzy engine tests
-bun run test:unit # vitest unit tests
-```
-
-### Docker
-
-```bash
-docker compose up
-```
-
-This starts the Astro site (port 9996), yjs-client, and yjs-signaling-server.
-
-### Engine Development
-
-All *engine code* (responsible for running games, playing tunes, etc.) is in a different repo: <https://github.com/hackclub/sprig-engine/>.
-
-If you want to work on the engine and test out your changes in the context of this repo, you'll want to use a feature called linking.
-
-First set up the engine repo:
-
-```bash
-git clone https://github.com/hackclub/sprig-engine/
-cd sprig-engine
-bun install
-bun link
-```
-
-Then, in this website's repo:
-
-```bash
-bun link sprig
-```
-
-Now, run `bun dev` in the engine repo to start the TypeScript build process.
-
-## Acknowledgements
-
-The Sprig was developed by a team at Hack Club with assistance from Brian Silverman (who helped develop Scratch and the precursor to Lego Mindstorms), Vadim Gerasimov (engineer at Google who helped create Tetris when he was 15), and Quentin Bolsée (researcher at MIT and Vrije University Brussels), and dozens contributions from teenage open-source developers!
-
-We're also grateful for amazing open-source projects that make this possible like [Kaluma](https://kalumajs.org/), [JerryScript](https://jerryscript.net/), [uhtml](https://github.com/WebReflection/uhtml), and [CodeMirror](https://codemirror.net/).
-
-## Responsibilities
-
-Please refer to [this document](./RESPONSIBILITIES.md) for a list of current team members who are accountable for maintaining certain aspects of the Sprig platform.
-
-## License
-
-The Hack Club Sprig is open source and licensed under the [MIT License](./LICENSE). Fork, remix, and make it your own! Pull requests and other contributions greatly appreciated.
+1. the automated workflows will start running immediately on the next event (pr opened, cron trigger, etc.). no manual bootstrapping needed.
+2. **labels**: `ensureReviewLabels` will automatically create all required labels on `hackclub/sprig` the first time a workflow runs.
+3. **project board (optional)**: if you want the github projects sync, add `PROJECT_PAT` (project-scoped personal access token) and `GITHUB_PROJECT_URL` as repository secrets, then run `node setup-project.mjs` once to scaffold the board columns.
+**4. **review roles**: update `.github/review-roles.json` to reflect the actual maintainer and triager github usernames.
+(I just put active ones on there if it's not accurate just edit it)
+also trisgers will have to get added to the GitHub repo/team with the triage perms (if possible) so they can close (not merge), add labels, request changes etc.** 
