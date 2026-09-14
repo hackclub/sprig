@@ -19,7 +19,7 @@ when a game submission pr is opened or updated, the `auto-triage` bot immediatel
 - **draft pr handling**: if a pr is opened as a draft, the bot skips triage entirely. it correctly listens for the `ready_for_review` event to kick off triage when the author marks it ready.
 - **concurrency**: `auto-triage.yml` has a `concurrency` block that cancels older in-progress triage runs if a new event fires for the same pr, so rapid-fire commits don't produce duplicate bot comments.
 
-*see it in action:* https://github.com/SSoggyTacoMan/sprig/pull/15#issuecomment-4632461597
+*see it in action:* https://github.com/SSoggyTacoMan/sprig/pull/15#issuecomment-4632461597 and https://github.com/SSoggyTacoMan/sprig/pull/24
 (to see the "play in sprig editor" in action, replace the sprig link before the / with https://sprig-teal.vercel.app/ )
 ---
 
