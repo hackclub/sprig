@@ -26,7 +26,6 @@ jobs:
           PR_NUMBER="${{ inputs.pr_number || github.event.pull_request.number }}"
           USER_LOGIN=$(gh pr view "$PR_NUMBER" --json author --jq '.author.login')
 
-          # Find all open submission PRs for same author.
           ALL_USER_PRS=$(gh pr list --state open --author "$USER_LOGIN" --json number,labels --limit 100)
 
           SUBMISSION_PRS=$(echo "$ALL_USER_PRS" | jq -r '.[] | select(.labels[].name | ascii_downcase == "submission") | .number')

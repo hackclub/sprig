@@ -2,7 +2,6 @@ import { execSync } from "child_process";
 
 const projectId = "PVT_kwHOBMVTAs4BZ4Sq";
 
-// get token
 const token = execSync("gh auth token").toString().trim();
 
 async function runGraphQL(query, variables) {

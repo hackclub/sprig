@@ -66,8 +66,6 @@ async function handleNeedsAuthor(pullRequest, labels) {
 
 	const age = daysBetween(since);
 	if (age >= 14) {
-		// EC8 fix: remove the Plagiarism Risk exception so plagiarism PRs also get auto-closed
-		// EC12 fix: use a cycle-unique marker so the warning can re-fire if the PR is reopened and goes stale again
 		const closeCycle = since.slice(0, 10);
 		await commentOnce({
 			issueNumber: pullRequest.number,
@@ -82,8 +80,7 @@ async function handleNeedsAuthor(pullRequest, labels) {
 
 	if (age >= 7) {
 		await setStateLabel({ owner, repo, token, issueNumber: pullRequest.number, state: "Stale" });
-		// EC7 fix: use a cycle-unique marker so re-entering stale always posts a fresh warning
-		const staleCycle = since.slice(0, 10); // date-stamp (YYYY-MM-DD) of when this stale cycle started
+		const staleCycle = since.slice(0, 10);
 		await commentOnce({
 			issueNumber: pullRequest.number,
 			marker: `<!-- sprig-stale-reminder-${staleCycle} -->`,

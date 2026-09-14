@@ -19,10 +19,9 @@ if (!projectUrl) {
 
 const { owner, repo } = getRepository();
 
-// Extract project owner and number from URL: e.g. https://github.com/users/SSoggyTacoMan/projects/1
 const match = projectUrl.match(/github\.com\/(users|orgs)\/([^/]+)\/projects\/(\d+)/);
 if (!match) throw new Error("Invalid GITHUB_PROJECT_URL format");
-const projectOwnerType = match[1]; // users or orgs
+const projectOwnerType = match[1];
 const projectOwnerLogin = match[2];
 const projectNumber = parseInt(match[3], 10);
 
@@ -129,7 +128,6 @@ async function updateItemFields(projectId, itemId, fields, mappedData) {
 	await runGraphQL(`mutation(${definitions.join(", ")}) { ${mutations.join(" ")} }`, variables);
 }
 
-// Reusing logic from sync-review-sheet.mjs
 async function collectPullRequests() {
 	const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open&sort=created&direction=asc`);
 	
@@ -189,7 +187,6 @@ async function main() {
 	const pulls = await collectPullRequests();
 
 	for (const pullRequest of pulls) {
-		// EC10 fix: use labels already on the PR object instead of making a redundant /issues/{n} API call
 		const labels = (pullRequest.labels ?? []).map((label) => typeof label === "string" ? label : label.name);
 		
 		// Only sync valid submissions
@@ -222,7 +219,6 @@ async function main() {
 		};
 
 		try {
-			// Get node ID for PR
 			const prNodeId = pullRequest.node_id;
 			let itemId = itemIds.get(prNodeId);
 			if (!itemId) {

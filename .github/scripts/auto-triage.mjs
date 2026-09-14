@@ -24,9 +24,6 @@ const { owner, repo } = getRepository();
 let event = readGitHubEvent();
 let pullRequest = event.pull_request || event.issue;
 
-// A workflow_dispatch run can exercise the same state machine against a real
-// PR while keeping trusted automation on this branch. PR files remain
-// untrusted text and are never checked out or executed.
 const dispatchedPrNumber = process.env.REVIEW_PR_NUMBER;
 if (!pullRequest && dispatchedPrNumber) {
 	pullRequest = await githubRequest(token, "GET", `/repos/${owner}/${repo}/pulls/${encodeURIComponent(dispatchedPrNumber)}`);
@@ -65,7 +62,6 @@ if (event.review && event.action === "submitted") {
 	const reviewerLogin = event.review.user?.login;
 	const authorLogin = pullRequest.user?.login;
 
-	// Self-review bypass guard (EC6)
 	if (reviewerLogin && authorLogin && reviewerLogin === authorLogin) {
 		console.log(`Review submitted by PR author (${reviewerLogin}). Ignoring state change to prevent self-approval.`);
 		process.exit(0);
@@ -589,8 +585,6 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 			: `Only one game file is allowed per submission. Found ${jsNames}.`
 	);
 
-	// EC9 fix: allow authors to modify their own game files (e.g. fixing requested changes)
-	// only flag if they are modifying files OUTSIDE the games/ folder
 	const changedNames = changedNonAddedFiles.map((file) => `\`${file.filename}\``).join(", ");
 	addCheck(
 		"Only new or game files changed",
@@ -637,7 +631,7 @@ async function validateSingleGameFile(gameFile, workspace, addCheck, warnings) {
 		return { metadata, similarity };
 	}
 
-	const maxFileSize = 2 * 1024 * 1024; // 2MB
+	const maxFileSize = 2 * 1024 * 1024;
 	if (content.length > maxFileSize) {
 		addCheck("File size limit", false, `The file \`${filename}\` is too large (${(content.length / 1024 / 1024).toFixed(2)}MB). Maximum allowed size is 2MB.`);
 		return { metadata, similarity };

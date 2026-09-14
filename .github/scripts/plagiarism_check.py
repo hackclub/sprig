@@ -96,13 +96,10 @@ def find_matching_docs(input_doc_path, all_games, threshold, log):
 		if log:
 			print("Comparing submission against %d gallery entries..." % len(all_game_paths))
 
-		# Create an array of multiple copies of the input document.  This is required for parallelization.
 		input_docs = [input_document for _ in range(len(all_game_paths))]
 
-		# Zip input document array along w/ game paths and game data
 		all_data = zip(input_docs, P.map(load_data, all_game_paths), all_game_paths)
 
-		# Rank documents		
 		results = sorted(P.map(create_doc_comparison, all_data), key=cmp_to_key(lambda i1, i2: i2.score - i1.score))
 
 		if log:
