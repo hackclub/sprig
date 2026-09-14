@@ -105,8 +105,6 @@ function projectFieldValue(field, value) {
 	return null;
 }
 
-// GraphQL permits multiple aliased mutations in one request. Updating all
-// mapped fields together avoids one round trip per field for every PR.
 async function updateItemFields(projectId, itemId, fields, mappedData) {
 	const entries = Object.entries(mappedData)
 		.map(([key, value], index) => ({ key, value, field: fields[key], alias: `field${index}` }))
@@ -131,7 +129,7 @@ async function updateItemFields(projectId, itemId, fields, mappedData) {
 async function collectPullRequests() {
 	const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open&sort=created&direction=asc`);
 	
-	// Fetch the last 100 closed PRs (merged or unmerged)
+	// fetch the last 100 closed prs
 	const closedPulls = await githubRequest(token, "GET", `/repos/${owner}/${repo}/pulls?state=closed&sort=updated&direction=desc&per_page=100`);
 	
 	return [...openPulls, ...(closedPulls || [])];
@@ -189,7 +187,7 @@ async function main() {
 	for (const pullRequest of pulls) {
 		const labels = (pullRequest.labels ?? []).map((label) => typeof label === "string" ? label : label.name);
 		
-		// Only sync valid submissions
+		// dont sync submissions that arent games
 		if (!hasLabel(labels, "Submission")) continue;
 
 		console.log(`Syncing PR #${pullRequest.number}...`);
