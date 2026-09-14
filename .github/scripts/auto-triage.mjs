@@ -118,8 +118,6 @@ console.log("\nBot Comment Body:\n", buildComment(result));
 if (!result.ok) process.exit(1);
 
 async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) {
-	// SECURITY INVARIANT: this is pull_request_target. Never checkout, import,
-	// or execute PR-head code. Head files are fetched as untrusted text only.
 	const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
 	const headSha = pullRequest.head.sha;
 	const gameFiles = pullFiles.filter((file) => /^games\/[A-Za-z0-9_-]+\.js$/.test(file.filename));
