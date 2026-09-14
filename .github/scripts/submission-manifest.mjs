@@ -1,7 +1,6 @@
 const GAME_FILE_RE = /^games\/[A-Za-z0-9_-]+\.js$/;
 const IMAGE_FILE_RE = /^games\/img\/[A-Za-z0-9_-]+\.png$/i;
 
-// One data-only source of truth for submission file validation.
 export function buildSubmissionManifest(pullFiles) {
 	const files = pullFiles.map((file) => ({
 		filename: file.filename,
