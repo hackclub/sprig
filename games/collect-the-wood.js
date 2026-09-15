@@ -2,7 +2,7 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: collect the wwod
+@title: collect the wood
 @description: a game where you have to cut trees down and collect more and more wood. 
 @author: Shivam 
 @tags: ['collect', 'trees']
