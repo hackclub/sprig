@@ -1,9 +1,9 @@
 /*
 @title: Flappy Roguelite
-@description: 
+@description: You fly between pipes, every few points, you can choose to either gain more points per pipe you pass, but get a malus (less control over the bird, pipes become faster) or get a bonus.
 @author: Solenrae
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@tags: ['Limitless', 'Upgrades']
+@addedOn: 2026-15-09
 */
 
 const player = "p";
