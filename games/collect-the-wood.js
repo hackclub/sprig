@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: collect the wood
 @description: a game where you have to cut trees down and collect more and more wood. 
-@author: Shivam 
+@author: Danshivam 
 @tags: ['collect', 'trees']
 @addedOn: 2026-09-12
 */
