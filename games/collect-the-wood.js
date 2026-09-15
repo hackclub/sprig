@@ -3,10 +3,10 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: collect the wwod
-@description: 
-@author: 
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@description: a game where you have to cut trees down and collect more and more wood. 
+@author: Shivam 
+@tags: ['collect', 'trees']
+@addedOn: 2026-09-12
 */
 
 const player = "p"
