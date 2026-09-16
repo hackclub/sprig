@@ -33,7 +33,7 @@ Sprig creates [tile-based games](https://en.wikipedia.org/wiki/Tile-based_game),
 
 `bitmap` don't appear out of nowhere, need to be added to the `map`, to do click on `map`, select player `bitmap` and place on a tile:
 
-![](https://cloud-a1geoehz4-hack-club-bot.vercel.app/1image.png)
+![](https://cdn.hackclub.com/rescue?url=https://cloud-a1geoehz4-hack-club-bot.vercel.app/1image.png)
 
 </details>
 
