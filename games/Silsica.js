@@ -1,14 +1,9 @@
 /*
-@title: Silsica
-@description: "this is a maze where a player escapes the silsica using portals and other upgrades"
-@author: Aadi Vinayak A Pillai
-@tags: ['puzzle']
-@addedOn: 2026-09-14
-
-Instructions:
-Press W,A,S,D for moving
-Objective:
-Escape the silsica maze
+@title: Silsika
+@author: Aadi Vinayak
+@description: A portal-based maze escape game.
+@tags: ['puzzle', 'portal', 'maze']
+@addedOn: 2026-09-16
 */
 
 // --- 1. SPRITE KEYS ---
