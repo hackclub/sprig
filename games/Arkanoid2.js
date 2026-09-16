@@ -2,7 +2,7 @@
 @title: Arkanoid 2.0
 @author: Rosario Alexandros Morabito
 @description: A retro Arkanoid style game with Independent Ball Physics & 7-brick charge!
-@tags: ['Arkanoid', 'retro', 'arkanoid2']
+@tags: ['retro']
 @addedOn: 2026-09-15
 */
 
