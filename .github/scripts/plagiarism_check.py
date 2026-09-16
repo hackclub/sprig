@@ -22,7 +22,7 @@ def load_files_from_dir(dir, suffix):
 def load_data(path):
 	dd = "".join(open(path, "r+").readlines())
 	dlen = len(dd)
-	if dd is None or dlen == 0:
+	if dlen == 0:
 		dd = ""
 
 	return preprocess(dd)
@@ -41,11 +41,11 @@ def remove_whitespace(code):
 
 
 def filter_code(code):
-	code = re.sub('bitmap`.*?`', '', code, flags=re.MULTILINE | re.DOTALL)
-	code = re.sub('tune`.*?`', '', code, flags=re.MULTILINE | re.DOTALL)
-	code = re.sub('map`.*?`', '', code, flags=re.MULTILINE | re.DOTALL)
-	code = re.sub('^/\\*(.|[\r\n])*?\\*/', '', code, flags=re.DOTALL)
-	code = re.sub('(//)(.+?)(?=[\n\r]|\\*\\))', '', code, flags=re.MULTILINE | re.DOTALL)
+	code = re.sub('bitmap`[^`]*`', '', code, flags=re.MULTILINE | re.DOTALL)
+	code = re.sub('tune`[^`]*`', '', code, flags=re.MULTILINE | re.DOTALL)
+	code = re.sub('map`[^`]*`', '', code, flags=re.MULTILINE | re.DOTALL)
+	code = re.sub('^/\\*.*?\\*/', '', code, flags=re.DOTALL)
+	code = re.sub('//.*', '', code)
 	return code
 
 
@@ -96,13 +96,10 @@ def find_matching_docs(input_doc_path, all_games, threshold, log):
 		if log:
 			print("Comparing submission against %d gallery entries..." % len(all_game_paths))
 
-		# Create an array of multiple copies of the input document.  This is required for parallelization.
-		input_docs = [input_document for i in range(len(all_game_paths))]
+		input_docs = [input_document for _ in range(len(all_game_paths))]
 
-		# Zip input document array along w/ game paths and game data
 		all_data = zip(input_docs, P.map(load_data, all_game_paths), all_game_paths)
 
-		# Rank documents		
 		results = sorted(P.map(create_doc_comparison, all_data), key=cmp_to_key(lambda i1, i2: i2.score - i1.score))
 
 		if log:
@@ -138,8 +135,6 @@ def check_all_games():
 
 
 if __name__ == '__main__':
-	# run_tests()
-	# check_all_games()
 
 	parser = argparse.ArgumentParser(
 		description='Compare an input javascript file w/ the contents of a directory, and returns similarity scores')
