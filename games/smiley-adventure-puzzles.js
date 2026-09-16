@@ -4,9 +4,9 @@
 @author: `awesomesauce4646`
 @tags: ['puzzle', 'shortgame']
 @addedOn: 2026-09-16
-
-Instructions: beat the puzzle of each level!
 */
+
+// Instructions: beat the puzzle of each level!
 
 const player = "p"
 const wall = "w"
