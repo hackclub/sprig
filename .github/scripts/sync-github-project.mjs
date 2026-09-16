@@ -1,0 +1,239 @@
+import {
+	currentStateFromLabels,
+	daysBetween,
+	getRepository,
+	githubPaginated,
+	githubRequest,
+	hasLabel,
+	nextActionFromState,
+} from "./review-utils.mjs";
+
+const token = process.env.GITHUB_TOKEN || process.env.PROJECT_GITHUB_TOKEN;
+const projectUrl = process.env.GITHUB_PROJECT_URL;
+
+if (!token) throw new Error("GITHUB_TOKEN or PROJECT_GITHUB_TOKEN is required");
+if (!projectUrl) {
+	console.log("GITHUB_PROJECT_URL not configured; skipping Project sync.");
+	process.exit(0);
+}
+
+const { owner, repo } = getRepository();
+
+const match = projectUrl.match(/github\.com\/(users|orgs)\/([^/]+)\/projects\/(\d+)/);
+if (!match) throw new Error("Invalid GITHUB_PROJECT_URL format");
+const projectOwnerType = match[1];
+const projectOwnerLogin = match[2];
+const projectNumber = parseInt(match[3], 10);
+
+async function runGraphQL(query, variables) {
+	const response = await fetch("https://api.github.com/graphql", {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ query, variables }),
+	});
+	const data = await response.json();
+	if (data.errors) {
+		throw new Error(`GraphQL Error: ${JSON.stringify(data.errors)}`);
+	}
+	return data.data;
+}
+
+async function getProjectDetails() {
+	const queryType = projectOwnerType === "users" ? "user" : "organization";
+	const query = `
+		query($owner: String!, $number: Int!) {
+			${queryType}(login: $owner) {
+				projectV2(number: $number) {
+					id
+					fields(first: 50) {
+						nodes {
+							... on ProjectV2Field { id name dataType }
+							... on ProjectV2SingleSelectField { id name dataType options { id name } }
+							... on ProjectV2IterationField { id name dataType }
+						}
+					}
+					items(first: 100) {
+						nodes {
+							id
+							content { ... on PullRequest { id } }
+						}
+					}
+				}
+			}
+		}
+	`;
+	const data = await runGraphQL(query, { owner: projectOwnerLogin, number: projectNumber });
+	const project = data[queryType].projectV2;
+	if (!project) throw new Error("Project not found");
+	
+	const fields = {};
+	for (const field of project.fields.nodes) {
+		if (!field.name) continue;
+		fields[field.name] = field;
+	}
+	const itemIds = new Map(
+		(project.items?.nodes ?? [])
+			.filter((item) => item.content?.id)
+			.map((item) => [item.content.id, item.id]),
+	);
+	return { projectId: project.id, fields, itemIds };
+}
+
+async function addItemToProject(projectId, contentId) {
+	const query = `
+		mutation($projectId: ID!, $contentId: ID!) {
+			addProjectV2ItemById(input: { projectId: $projectId, contentId: $contentId }) {
+				item { id }
+			}
+		}
+	`;
+	const data = await runGraphQL(query, { projectId, contentId });
+	return data.addProjectV2ItemById.item.id;
+}
+
+function projectFieldValue(field, value) {
+	if (!field || !value) return null;
+	if (field.dataType === "TEXT") return { text: value.toString() };
+	if (field.dataType === "NUMBER") return { number: Number(value) };
+	if (field.dataType === "SINGLE_SELECT") {
+		const option = field.options?.find((candidate) => candidate.name === value);
+		return option ? { singleSelectOptionId: option.id } : null;
+	}
+	return null;
+}
+
+async function updateItemFields(projectId, itemId, fields, mappedData) {
+	const entries = Object.entries(mappedData)
+		.map(([key, value], index) => ({ key, value, field: fields[key], alias: `field${index}` }))
+		.map((entry) => ({ ...entry, fieldValue: projectFieldValue(entry.field, entry.value) }))
+		.filter((entry) => entry.fieldValue);
+	if (!entries.length) return;
+
+	const variables = { projectId, itemId };
+	const definitions = ["$projectId: ID!", "$itemId: ID!"];
+	const mutations = entries.map((entry) => {
+		const fieldVariable = `$fieldId${entry.alias}`;
+		const valueVariable = `$value${entry.alias}`;
+		variables[`fieldId${entry.alias}`] = entry.field.id;
+		variables[`value${entry.alias}`] = entry.fieldValue;
+		definitions.push(`${fieldVariable}: ID!`, `${valueVariable}: ProjectV2FieldValue!`);
+		return `${entry.alias}: updateProjectV2ItemFieldValue(input: { projectId: $projectId, itemId: $itemId, fieldId: ${fieldVariable}, value: ${valueVariable} }) { projectV2Item { id } }`;
+	});
+
+	await runGraphQL(`mutation(${definitions.join(", ")}) { ${mutations.join(" ")} }`, variables);
+}
+
+async function collectPullRequests() {
+	const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open&sort=created&direction=asc`);
+	
+	// fetch the last 100 closed prs
+	const closedPulls = await githubRequest(token, "GET", `/repos/${owner}/${repo}/pulls?state=closed&sort=updated&direction=desc&per_page=100`);
+	
+	return [...openPulls, ...(closedPulls || [])];
+}
+
+function isBot(user) {
+	if (!user || !user.login) return true;
+	const login = user.login.toLowerCase();
+	return login.endsWith("[bot]") || login === "chatgpt-codex-connector" || login.includes("github-actions");
+}
+
+function latestReview(reviews) {
+	return [...reviews]
+		.filter((review) => !isBot(review.user))
+		.sort((a, b) => new Date(b.submitted_at).getTime() - new Date(a.submitted_at).getTime())
+		.find((review) => ["APPROVED", "CHANGES_REQUESTED", "COMMENTED"].includes(review.state));
+}
+
+function formatReviewDecision(state) {
+	switch (state) {
+		case "APPROVED": return "Approved";
+		case "CHANGES_REQUESTED": return "Changes Requested";
+		case "COMMENTED": return "Commented";
+		default: return "";
+	}
+}
+
+
+
+function parseAutoReview(comments) {
+	const comment = [...comments]
+		.reverse()
+		.find((item) => item.body?.includes("<!-- sprig-auto-review -->"));
+	const body = comment?.body ?? "";
+	return {
+		playLink: firstMarkdownLink(body, "Play in Sprig Editor"),
+		rawLink: firstMarkdownLink(body, "View Raw"),
+		screenshotLink: firstMarkdownLink(body, "View Screenshot"),
+		similarity: body.match(/Similarity:\s*(\d+%)/)?.[1] ?? "",
+	};
+}
+
+function firstMarkdownLink(markdown, label) {
+	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+	return markdown.match(new RegExp(String.raw`\[${escaped}\]\(([^)]+)\)`))?.[1] ?? "";
+}
+
+async function main() {
+	console.log("Fetching project details...");
+	const { projectId, fields, itemIds } = await getProjectDetails();
+	
+	console.log("Collecting pull requests...");
+	const pulls = await collectPullRequests();
+
+	for (const pullRequest of pulls) {
+		const labels = (pullRequest.labels ?? []).map((label) => typeof label === "string" ? label : label.name);
+		
+		// dont sync submissions that arent games
+		if (!hasLabel(labels, "Submission")) continue;
+
+		console.log(`Syncing PR #${pullRequest.number}...`);
+		const reviews = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pullRequest.number}/reviews`);
+		const comments = await githubPaginated(token, `/repos/${owner}/${repo}/issues/${pullRequest.number}/comments`);
+		
+		const state = currentStateFromLabels(labels, pullRequest);
+		const lastReview = latestReview(reviews);
+		const autoReview = parseAutoReview(comments);
+
+		const customNote = lastReview?.body || "";
+		const nextAction = nextActionFromState(state, labels);
+		const displayAction = customNote ? `${nextAction}: ${customNote}` : nextAction;
+
+		const mappedData = {
+			"PR #": pullRequest.number,
+			"PR URL": pullRequest.html_url,
+			"Submitter": pullRequest.user.login,
+			"Review State": state,
+			"Next Action": displayAction,
+			"Triager": lastReview?.user?.login ?? "",
+			"Review Decision": formatReviewDecision(lastReview?.state ?? ""),
+			"Triage Note": customNote,
+			"Age Days": daysBetween(pullRequest.created_at),
+			"Play Link": autoReview.playLink ?? "",
+			"Raw Link": autoReview.rawLink ?? "",
+		};
+
+		try {
+			const prNodeId = pullRequest.node_id;
+			let itemId = itemIds.get(prNodeId);
+			if (!itemId) {
+				itemId = await addItemToProject(projectId, prNodeId);
+				itemIds.set(prNodeId, itemId);
+			}
+
+			await updateItemFields(projectId, itemId, fields, mappedData);
+			console.log(`Successfully synced PR #${pullRequest.number}`);
+		} catch (err) {
+			console.error(`Failed to sync PR #${pullRequest.number}:`, err.message);
+		}
+	}
+	console.log("Done!");
+}
+
+main().catch((err) => {
+	console.error(err);
+	process.exit(1);
+});
