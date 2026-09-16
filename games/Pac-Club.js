@@ -1,7 +1,10 @@
-/* Attempt at combining Hack Club and Pac-Man.
-Thanks for playing!
-Developer: Rachel Lin
-Last updated: August 10th, 2023 */
+/*
+@title: Pac-Club
+@description: Attempt at combining Hack Club and Pac-Man. Thanks for playing!
+@author: Rachel Lin
+@tags: ['pacman']
+@addedOn: 2023-08-10
+*/
 
 // Characters
 const pacman = "p"
