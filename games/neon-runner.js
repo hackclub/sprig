@@ -1,8 +1,8 @@
 /*
-@title:NeonRunner
-@author:harveywhite444-hash
+@title: Neon Runner
+@author: harveywhite444-hash
 @description: Collect data chips, avoid enemies, and defeat the core.
-@tags: action, adventure
+@tags: ["action", "adventure"]
 @addedOn: 2026-09-16
 */
 const p = "p"
