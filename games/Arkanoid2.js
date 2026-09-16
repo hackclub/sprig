@@ -4,7 +4,6 @@
 @description: A retro Arkanoid style game with Independent Ball Physics & 7-brick charge!
 @tags: ['Arkanoid', 'retro', 'arkanoid2']
 @addedOn: 2026-09-15
-## image Arkanoid2.png
 */
 
 // Setup
