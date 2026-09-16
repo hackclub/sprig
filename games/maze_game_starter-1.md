@@ -5,7 +5,7 @@ If you haven't already, click [here](https://jams.hackclub.com/batch/sprig/part-
 
 ## Beginning
 ### Keys and locks
-![](https://cloud-mswaasys4-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_11.12.28.gif)
+![](https://cdn.hackclub.com/rescue?url=https://cloud-mswaasys4-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_11.12.28.gif)
 
 Add a system where you have to collect keys to unlock locks and get to the goal!
 
@@ -59,7 +59,7 @@ getFirst(key).remove();
 </details>
 
 ### Pushboxes
-![](https://cloud-ky9cuzm9u-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_11.20.18.gif)
+![](https://cdn.hackclub.com/rescue?url=https://cloud-ky9cuzm9u-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_11.20.18.gif)
 
 Add boxes that you have to push around in order to clear a path to the goal!
 
@@ -99,7 +99,7 @@ setPushables({
 </details>
 
 ### Step limit
-![](https://cloud-f2pz4dd3p-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_11.22.06.gif)
+![](https://cdn.hackclub.com/rescue?url=https://cloud-f2pz4dd3p-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_11.22.06.gif)
 
 Add a counter for the number of steps the player has taken, and reset the level if it counts down to zero!
 
@@ -193,7 +193,7 @@ oninput("w", () => {
 </details>
 
 ### Traps
-![](https://cloud-3v0atmgdg-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_11.24.59.gif)
+![](https://cdn.hackclub.com/rescue?url=https://cloud-3v0atmgdg-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_11.24.59.gif)
 
 Add spots on the map which reset the level if the player steps on them!
 
@@ -237,7 +237,7 @@ afterInput(() => {
 
 ## Intermediate
 ### Portals
-![](https://cloud-7roc3qdvf-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_11.29.05.gif)
+![](https://cdn.hackclub.com/rescue?url=https://cloud-7roc3qdvf-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_11.29.05.gif)
 
 Add sets of portals to your game, which teleport you to the other portal when you step on them! To do this, create sprites for red and blue portals (or substitute with your own colors/designs!), then detect if the player is over a red or blue portal after every input, then teleport them if they are over a portal.
 
@@ -297,7 +297,7 @@ afterInput(() => {
 </details>
 
 ### Fragile tiles
-![](https://cloud-dpqbnhs4n-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_11.31.43.gif)
+![](https://cdn.hackclub.com/rescue?url=https://cloud-dpqbnhs4n-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_11.31.43.gif)
 
 Add tiles that you can only walk over once before turning into holes that you fall through that reset the level! To do this, create two sprites for fragile and broken tiles. Then, after every input, check if the previous tile was fragile, and if so change it to broken. If the current tile is ever broken, reset the level.
 
@@ -341,7 +341,7 @@ afterInput(() => {
 </details>
 
 ### Two player
-![](https://cloud-rl05ba3ol-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_17.25.36.gif)
+![](https://cdn.hackclub.com/rescue?url=https://cloud-rl05ba3ol-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_17.25.36.gif)
 
 Add a second player and goal to your game, and make it playable by two people at the same time!
 
@@ -412,7 +412,7 @@ afterInput(() => {
 
 ## Advanced
 ### Moving obstacles
-![](https://cloud-lalg1dbq4-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_12.49.00__1_.gif)
+![](https://cdn.hackclub.com/rescue?url=https://cloud-lalg1dbq4-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_12.49.00__1_.gif)
 
 Add an obstacle that moves back and forth in a level on a set interval! In order to do this, repeatedly check which level you're on and add or remove certain tiles depending on which level you're on (use `if (level == 3)` for level 3, for example) and where the obstacle was previously. Also, make sure not to run into the player!
 
@@ -503,7 +503,7 @@ setInterval(() => {
 </details>
 
 ### Sliding movement
-![](https://cloud-ooaqynhdl-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_16.08.52.gif)
+![](https://cdn.hackclub.com/rescue?url=https://cloud-ooaqynhdl-hack-club-bot.vercel.app/0screen_recording_2023-07-13_at_16.08.52.gif)
 
 Make each move automatically move the character the furthest it can go in the chosen direction. To do this, keep moving in a certain direction after every button press until the player hits a wall or edge of the screen.
 
