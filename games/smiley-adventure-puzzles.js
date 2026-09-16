@@ -1,9 +1,9 @@
 /*
 @title: smiley adventure puzzles
 @description: a puzzle game where you must complete multiple puzzles in order to get the gem, controlling a smiley character!
-@author:awesomesauce4646
+@author: `awesomesauce4646`
 @tags: ['puzzle', 'shortgame']
-@addedOn:2026-09-15
+@addedOn: 2026-09-16
 
 Instructions: beat the puzzle of each level!
 */
