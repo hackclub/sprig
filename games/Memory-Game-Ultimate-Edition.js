@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Memory Game V2
 @description: Memory Game V4 is a fun Sprig memory-matching game where players choose a board size and test how quickly they can find all the matching pairs. 
 @author: Ishank 
-@tags:['memory-game', 'matching', 'brain-training]
+@tags: ['memory-game', 'matching', 'brain-training']
 @addedOn: 2026-06-15
 */
 
