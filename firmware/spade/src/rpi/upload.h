@@ -70,8 +70,12 @@ static const char *save_read() {
 }
 
 // must be run with core 1 disabled - conflict risk
+// DIAGNOSTIC FIX: static buffer instead of malloc — heap is nearly exhausted
+// after jerry_init, and pico_malloc panics ("Out of memory") on fresh flash
+// where this migration path runs.
+static uint8_t metadata_sector_buf[FLASH_SECTOR_SIZE];
 static void flash_write_version(const char* version) {
-    void *metadata_first_sector = malloc(FLASH_SECTOR_SIZE);
+    void *metadata_first_sector = metadata_sector_buf;
     memcpy(metadata_first_sector, METADATA_START, FLASH_SECTOR_SIZE);
     strcpy(metadata_first_sector, version);
 
@@ -79,8 +83,6 @@ static void flash_write_version(const char* version) {
     flash_range_erase(METADATA_OFFSET - METADATA_ENTRY_SIZE, FLASH_SECTOR_SIZE);
     flash_range_program(METADATA_OFFSET - METADATA_ENTRY_SIZE, metadata_first_sector, FLASH_SECTOR_SIZE);
     restore_interrupts(interrupts);
-
-    free(metadata_first_sector);
 }
 
 // save versions != spade versions
@@ -111,7 +113,7 @@ static int update_save_version() {
                         .is_legacy = 1
                 };
 
-                void *metadata_first_sector = malloc(FLASH_SECTOR_SIZE);
+                void *metadata_first_sector = metadata_sector_buf; // DIAGNOSTIC FIX: was malloc
                 memcpy(metadata_first_sector, METADATA_START, FLASH_SECTOR_SIZE);
                 memcpy(metadata_first_sector + METADATA_ENTRY_SIZE, &game, sizeof(Game));
 
@@ -120,8 +122,6 @@ static int update_save_version() {
                 flash_range_program(METADATA_OFFSET - METADATA_ENTRY_SIZE, metadata_first_sector,
                                     FLASH_SECTOR_SIZE);
                 restore_interrupts(interrupts);
-
-                free(metadata_first_sector);
             }
 
             flash_write_version("2.0.0");
