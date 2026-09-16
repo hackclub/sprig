@@ -1,9 +1,9 @@
 /*
-@title: wip
-@description: 
-@author: 
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@title: smiley puzzles
+@description: a puzzle game where you must complete multiple puzzles in order to get the gem, controlling a smiley character!
+@author: awesomesauce4646
+@tags: ['puzzle', 'shortgame']
+@addedOn: 2026-09-16
 
 Instructions: beat the puzzle of each level!
 */
