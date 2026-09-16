@@ -1,3 +1,11 @@
+/*
+@title: 8 Bit Space
+@author: raiyan-islam-dev
+@description: A retro 8-bit space shooter game.
+@tags: ['space', 'arcade']
+@addedOn: 2026-09-17
+*/
+
 const ship = "p";
 const bullet = "f";      //Player laser bullet 
 const enemy = "e";       //Enemy
