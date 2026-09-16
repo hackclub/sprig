@@ -3,7 +3,7 @@
 @description: "this is a maze where a player escapes the silsica using portals and other upgrades"
 @author: Aadi Vinayak A Pillai
 @tags: ['puzzle']
-@addedOn: 2026-08-19
+@addedOn: 2026-09-16
 
 Instructions:
 Press W,A,S,D for moving
