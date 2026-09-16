@@ -1,5 +1,5 @@
 /*
-@title: smiley puzzles
+@title: happy puzzles
 @description: a puzzle game where you must complete multiple puzzles in order to get the gem, controlling a smiley character!
 @author: awesomesauce4646
 @tags: ['puzzle', 'shortgame']
