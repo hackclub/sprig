@@ -1,3 +1,12 @@
+/*
+@title: Spriggy Spriggy
+@author: YourName
+@description: A fun tile-based maze game!
+@tags: ['maze', 'puzzle']
+@addedOn: 2026-09-17
+*/
+
+
 const player = "p"
 const wall = "w"
 const enemy = "e"
