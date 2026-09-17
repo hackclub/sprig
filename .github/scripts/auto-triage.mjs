@@ -590,7 +590,7 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 		"Files stay in allowed folders",
 		disallowedFiles.length === 0,
 		disallowedFiles.length
-			? `Only game files in \`games/\` and optional images in \`games/img/\` are allowed. Filenames cannot contain spaces. Images must be .png. Found ${disallowedNames}.`
+			? `Only game files in \`games/\` and optional images in \`games/img/\` are allowed. Filenames may only contain letters, numbers, hyphens, and underscores (no spaces, apostrophes, or special characters). Images must be .png. Found ${disallowedNames}.`
 			: "Only submission files changed."
 	);
 
