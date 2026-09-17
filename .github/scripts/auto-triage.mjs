@@ -413,7 +413,8 @@ async function findTitleConflict(title, filename, workspace) {
 	}
 
 	const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
-	for (const pr of openPulls) {
+	const submissionPRs = openPulls.filter((pr) => pr.labels?.some((l) => l.name === "Submission"));
+	for (const pr of submissionPRs) {
 		if (pr.number === prNumber) continue;
 		const prFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pr.number}/files`);
 		for (const file of prFiles) {
