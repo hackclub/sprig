@@ -631,12 +631,17 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 	);
 
 	const jsNames = effectiveGameFiles.map((file) => `\`${file.filename}\``).join(", ");
+	// If the only "extra" JS files are bad-named ones already caught by the filename check,
+	// don't double-report them as extra game files — the filename error is enough.
+	const extraBadNameOnly = effectiveGameFiles === gameFilesLoose && gameFilesLoose.length > 1;
 	addCheck(
 		"Exactly one game file",
-		effectiveGameFiles.length === 1,
+		effectiveGameFiles.length === 1 || extraBadNameOnly,
 		effectiveGameFiles.length === 0
 			? "Add exactly one JavaScript game file in `games/`."
-			: `Only one game file is allowed per submission. Found ${jsNames}.`
+			: extraBadNameOnly
+				? "Fix the filename(s) above — each must use only letters, numbers, hyphens, and underscores."
+				: `Only one game file is allowed per submission. Found ${jsNames}.`
 	);
 
 	const changedNames = changedNonAddedFiles.map((file) => `\`${file.filename}\``).join(", ");
