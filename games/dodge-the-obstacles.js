@@ -1,7 +1,10 @@
-/**
- * @title: Dodge the Obstacles
- * @author: thatSilentGamer
- */
+/*
+@title: Dodge the Obstacles!
+@author: thatSilentGamer
+@tags: ['arcade', 'action']
+@addedOn: 2026-09-17
+@description: Survive as long as possible by guiding a duck through gaps in oncoming obstacles.
+*/
 
 const player = "p"
 const obstacle = "o"
