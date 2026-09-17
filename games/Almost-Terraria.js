@@ -1,8 +1,9 @@
 /*
 @title: Almost Terraria
 @author: Smil
-@tags: [procedural_generation]
-@addedOn: 2025-00-00
+@description: Simplified version of Terraria, with a working Procedural Generation system and place/break block mechanics.
+@tags: ['procedural_generation']
+@addedOn: 2026-09-01
 */
 
 // tiles
