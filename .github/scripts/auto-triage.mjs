@@ -215,10 +215,30 @@ function validatePullRequestBody(body) {
 
 function extractBoldField(body, label) {
 	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
-	const pattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|##|#)|$)`, "i");
-	const match = body.match(pattern);
-	if (!match) return "";
-	return stripTemplateNoise(match[1]);
+
+	// Try **Label:** value (original bold format)
+	const boldPattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|#{1,6})|$)`, "i");
+	const boldMatch = body.match(boldPattern);
+	if (boldMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(boldMatch[1]));
+		if (value) return value;
+	}
+
+	// Fallback: plain "Label: value" on its own line
+	// Handles unbolded fields, heading-style descriptions, etc.
+	const plainPattern = new RegExp(String.raw`(?:^|\n)${escaped}\s*:\s*([^\n]+)`, "i");
+	const plainMatch = body.match(plainPattern);
+	if (plainMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(plainMatch[1]));
+		if (value) return value;
+	}
+
+	return "";
+}
+
+function normalizeFieldValue(value) {
+	// Unwrap markdown links: [@foo](url) or [foo](url) -> foo
+	return value.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").trim();
 }
 
 function stripTemplateNoise(value) {
