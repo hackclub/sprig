@@ -1,6 +1,6 @@
 /*
-@title: Spriggy Spriggy
-@author: YourName
+@title: Dungeonsnodragons
+@author: arsenal4eva
 @description: A fun tile-based maze game!
 @tags: ['maze', 'puzzle']
 @addedOn: 2026-09-17
