@@ -459,7 +459,7 @@ function buildComment(result) {
 	};
 
 	const categoryMap = {
-		"Files stay in allowed folders": "file",
+		"Valid filenames and folders": "file",
 		"Exactly one game file": "file",
 		"Only new files added": "file",
 		"Filename uses safe characters": "file",
@@ -587,7 +587,7 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 
 	const disallowedNames = disallowedFiles.map((file) => `\`${file.filename}\``).join(", ");
 	addCheck(
-		"Files stay in allowed folders",
+		"Valid filenames and folders",
 		disallowedFiles.length === 0,
 		disallowedFiles.length
 			? `Only game files in \`games/\` and optional images in \`games/img/\` are allowed. Filenames may only contain letters, numbers, hyphens, and underscores (no spaces, apostrophes, or special characters). Images must be .png. Found ${disallowedNames}.`
