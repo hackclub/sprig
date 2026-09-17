@@ -1,3 +1,8 @@
+/**
+ * @title: Dodge the Obstacles
+ * @author: thatSilentGamer
+ */
+
 const player = "p"
 const obstacle = "o"
 let gameOver = false
