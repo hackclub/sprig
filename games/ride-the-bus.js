@@ -1,6 +1,11 @@
-//@title: Ride the Bus
-//@author: platoshka
 
+/*
+@title: Ride the Bus
+@**Author**: pandreev67.
+@description: A card game where you ride the bus.
+@tags: ['cards', 'casino']
+@addedOn: 2026-09-17
+*/
 // 1. SPRITE ASSETS 
 setLegend(
   ["p", bitmap`
