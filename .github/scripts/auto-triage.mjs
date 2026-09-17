@@ -155,7 +155,9 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 	const submitterLogin = pullRequest.user?.login;
 	if (submitterLogin) {
 		const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
-		const duplicatePR = openPulls.find((pr) => pr.number !== prNumber && pr.user?.login === submitterLogin);
+		const duplicatePR = openPulls.find(
+			(pr) => pr.number !== prNumber && pr.user?.login === submitterLogin && pr.labels?.some((l) => l.name === "Submission")
+		);
 		addCheck(
 			"No duplicate open submission",
 			!duplicatePR,
