@@ -24,6 +24,14 @@ const { owner, repo } = getRepository();
 let event = readGitHubEvent();
 let pullRequest = event.pull_request || event.issue;
 
+let reviewers = new Set();
+try {
+	const reviewRoles = JSON.parse(readFileSync(path.resolve(process.cwd(), ".github/review-roles.json"), "utf8"));
+	reviewers = new Set([...(reviewRoles.maintainers ?? []), ...(reviewRoles.triagers ?? [])]);
+} catch {
+	console.warn("review-roles.json not found or invalid; review state changes will be skipped.");
+}
+
 const dispatchedPrNumber = process.env.REVIEW_PR_NUMBER;
 if (!pullRequest && dispatchedPrNumber) {
 	pullRequest = await githubRequest(token, "GET", `/repos/${owner}/${repo}/pulls/${encodeURIComponent(dispatchedPrNumber)}`);
@@ -88,6 +96,11 @@ if (event.review && event.action === "submitted") {
 
 	if (reviewerLogin && authorLogin && reviewerLogin === authorLogin) {
 		console.log(`Review submitted by PR author (${reviewerLogin}). Ignoring state change to prevent self-approval.`);
+		process.exit(0);
+	}
+
+	if (!reviewerLogin || !reviewers.has(reviewerLogin)) {
+		console.log(`Review submitted by ${reviewerLogin ?? "unknown reviewer"}. Ignoring state change because reviewer is not listed.`);
 		process.exit(0);
 	}
 	
