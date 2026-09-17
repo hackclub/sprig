@@ -6,6 +6,7 @@
 @addedOn: 2026-09-17
 */
 
+//Controls: W,A,S,D to move up, down, left, right respectively
 
 const player = "p"
 const wall = "w"
