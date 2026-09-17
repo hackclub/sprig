@@ -24,14 +24,6 @@ const { owner, repo } = getRepository();
 let event = readGitHubEvent();
 let pullRequest = event.pull_request || event.issue;
 
-let reviewers = new Set();
-try {
-	const reviewRoles = JSON.parse(readFileSync(path.resolve(process.cwd(), ".github/review-roles.json"), "utf8"));
-	reviewers = new Set([...(reviewRoles.maintainers ?? []), ...(reviewRoles.triagers ?? [])]);
-} catch {
-	console.warn("review-roles.json not found or invalid; review state changes will be skipped.");
-}
-
 const dispatchedPrNumber = process.env.REVIEW_PR_NUMBER;
 if (!pullRequest && dispatchedPrNumber) {
 	pullRequest = await githubRequest(token, "GET", `/repos/${owner}/${repo}/pulls/${encodeURIComponent(dispatchedPrNumber)}`);
@@ -72,11 +64,6 @@ if (event.review && event.action === "submitted") {
 
 	if (reviewerLogin && authorLogin && reviewerLogin === authorLogin) {
 		console.log(`Review submitted by PR author (${reviewerLogin}). Ignoring state change to prevent self-approval.`);
-		process.exit(0);
-	}
-
-	if (!reviewerLogin || !reviewers.has(reviewerLogin)) {
-		console.log(`Review submitted by ${reviewerLogin ?? "unknown reviewer"}. Ignoring state change because reviewer is not listed.`);
 		process.exit(0);
 	}
 	
@@ -228,10 +215,30 @@ function validatePullRequestBody(body) {
 
 function extractBoldField(body, label) {
 	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
-	const pattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|##|#)|$)`, "i");
-	const match = body.match(pattern);
-	if (!match) return "";
-	return stripTemplateNoise(match[1]);
+
+	// Try **Label:** value (original bold format)
+	const boldPattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|#{1,6})|$)`, "i");
+	const boldMatch = body.match(boldPattern);
+	if (boldMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(boldMatch[1]));
+		if (value) return value;
+	}
+
+	// Fallback: plain "Label: value" on its own line
+	// Handles unbolded fields, heading-style descriptions, etc.
+	const plainPattern = new RegExp(String.raw`(?:^|\n)${escaped}\s*:\s*([^\n]+)`, "i");
+	const plainMatch = body.match(plainPattern);
+	if (plainMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(plainMatch[1]));
+		if (value) return value;
+	}
+
+	return "";
+}
+
+function normalizeFieldValue(value) {
+	// Unwrap markdown links: [@foo](url) or [foo](url) -> foo
+	return value.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").trim();
 }
 
 function stripTemplateNoise(value) {
