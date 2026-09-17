@@ -42,6 +42,30 @@ if (pullRequest.draft) {
 	process.exit(0);
 }
 
+if (event.action === "closed") {
+	console.log("PR closed. Dispatching re-validation for other open submissions from the same user.");
+	const submitterLogin = pullRequest.user?.login;
+	if (submitterLogin) {
+		const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
+		const siblingPRs = openPulls.filter((pr) => pr.user?.login === submitterLogin && pr.labels?.some((l) => l.name === "Submission"));
+		for (const sibling of siblingPRs) {
+			console.log(`Triggering auto-triage for sibling PR #${sibling.number}`);
+			try {
+				await githubRequest(token, "POST", `/repos/${owner}/${repo}/actions/workflows/auto-triage.yml/dispatches`, {
+					ref: "main",
+					inputs: {
+						pr_number: String(sibling.number),
+						event_action: "synchronize"
+					}
+				});
+			} catch (err) {
+				console.error(`Failed to dispatch for PR #${sibling.number}:`, err);
+			}
+		}
+	}
+	process.exit(0);
+}
+
 if (event.action === "assigned") {
 	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Claimed"] });
 	console.log(`PR assigned, added "Claimed" label.`);
@@ -120,7 +144,7 @@ if (!result.ok) process.exit(1);
 async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) {
 	const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
 	const headSha = pullRequest.head.sha;
-	const gameFiles = pullFiles.filter((file) => /^games\/[A-Za-z0-9_-]+\.js$/.test(file.filename));
+	const gameFiles = pullFiles.filter((file) => /^games\/[^/]+\.js$/.test(file.filename));
 
 	for (const file of gameFiles) {
 		const contentFile = await githubRequest(
