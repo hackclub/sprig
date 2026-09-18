@@ -1,72 +1,13 @@
-//@Title:Larp CLicker:
-//@author:Mr Panov
-//@description:A clicker game where u can click to gain money and choose different characters 
-//@tags:Clicker,Fun,Money
-//@addedon:2026-09-09
-// =========================================================================
-// wemmbu character
-// =========================================================================
-let ui = 'u'
-let smile_big = 'c'
-let smile_small = 's'
-let social_media = 'x'
-let factory = 'f'
-let atom = 'a'
-let w_money_sign = 'm' 
+/*
+@title: Larp Clicker
+@author: Mr Panov JR
+@description: A clicker game where you can click to gain money and choose different characters
+@tags: ['clicker', 'idle']
+@addedOn: 2026-09-09
+*/
 
-// =========================================================================
-// theobaldthebird character
-// =========================================================================
-let ui_glitch = 'U'     
-let glitch_hero = 'g' 
-let glitch_big = 'C'   
-let glitch_small = 'S' 
-let g_up1 = '1'
-let g_up2 = '2'
-let g_up3 = '3'
-let g_money_sign = 'M' 
-
-// =========================================================================
-// spokeishere character
-// =========================================================================
-let ui_nature = 'Y'     
-let nature_hero = 'n'
-let nature_big = 'N'   
-let nature_small = 'Q' 
-let n_up1 = '4'
-let n_up2 = '5'
-let n_up3 = '6'
-let n_money_sign = 'D' 
-
-let cursor = 'p'      
-let loading_screen = 'l'
-let stall = 't'
-let victory = 'v'
-let bg = 'b'
-
-// =========================================================================
-// admin panel
-// =========================================================================
-let money = 0
-let smiles = 0
-let is_in_main_game = 0
-let is_in_waiting_state = 0
-let is_choosing = 0
-let cursor_x = 0 
-let passives = []
-
-// =========================================================================
-// animation thingies=======================================================
-let current_big = smile_big
-let current_small = smile_small
-let chosen_hero_ui = ui
-let current_money_sign = w_money_sign
-
-// =========================================================================
-// all art
-// =========================================================================
 setLegend(
-  [ui, bitmap`
+  ['u', bitmap`
 ................
 .56H666H65......
 .666888666......
@@ -83,8 +24,7 @@ setLegend(
 .....0.D........
 ...DDDDD........
 .....0..........`],
-
-  [ui_glitch, bitmap`
+  ['U', bitmap`
 ................
 ..662222266.....
 ..666222666.....
@@ -101,8 +41,7 @@ setLegend(
 ......0.F.......
 ....FFFFF.......
 ......0.........`],
-
-  [ui_nature, bitmap`
+  ['Y', bitmap`
 ................
 .000000000......
 .000000000......
@@ -119,8 +58,7 @@ setLegend(
 .....0.F........
 ...FFFFF........
 .....0..........`],
-
-  [glitch_hero, bitmap`
+  ['g', bitmap`
 ................
 ................
 ................
@@ -137,8 +75,7 @@ setLegend(
 ................
 ................
 ................`],
-
-  [nature_hero, bitmap`
+  ['n', bitmap`
 ................
 ................
 ................
@@ -155,8 +92,7 @@ setLegend(
 ................
 ................
 ................`],
-
-  [smile_big, bitmap`
+  ['c', bitmap`
 ................
 ................
 ................
@@ -173,8 +109,7 @@ setLegend(
 ................
 ................
 ................`],
-
-  [smile_small, bitmap`
+  ['s', bitmap`
 .1............1.
 ..1..........1..
 ...1........1...
@@ -191,8 +126,7 @@ setLegend(
 .1............1.
 ................
 ................`],
-
-  [glitch_big, bitmap`
+  ['C', bitmap`
 ................
 ................
 ................
@@ -209,8 +143,7 @@ setLegend(
 ................
 ................
 ................`],
-
-  [glitch_small, bitmap`
+  ['S', bitmap`
 ................
 .1.............1
 ..1...........1.
@@ -227,8 +160,7 @@ setLegend(
 ..1...........1.
 .1.............1
 ................`],
-
-  [nature_big, bitmap`
+  ['N', bitmap`
 ................
 ................
 ................
@@ -245,8 +177,7 @@ setLegend(
 ................
 ................
 ................`],
-
-  [nature_small, bitmap`
+  ['Q', bitmap`
 ................
 .1.............1
 ..1...........1.
@@ -263,8 +194,7 @@ setLegend(
 ..1...........1.
 .1.............1
 ................`],
-
-  [w_money_sign, bitmap`
+  ['m', bitmap`
 ................
 ................
 ................
@@ -281,8 +211,7 @@ setLegend(
 ................
 ................
 ................`],
-
-  [g_money_sign, bitmap`
+  ['M', bitmap`
 ................
 ................
 ................
@@ -299,8 +228,7 @@ setLegend(
 ................
 ................
 ................`],
-
-  [n_money_sign, bitmap`
+  ['D', bitmap`
 ................
 ................
 ................
@@ -317,8 +245,7 @@ setLegend(
 ................
 ................
 ................`],
-
-  [social_media, bitmap`
+  ['x', bitmap`
 ................
 ............LL..
 ...........LC0..
@@ -335,8 +262,7 @@ setLegend(
 .CC0.00..2.2....
 .00......12.....
 ................`],
-
-  [factory, bitmap`
+  ['f', bitmap`
 ................
 ................
 ....LLL00LLL....
@@ -353,8 +279,7 @@ setLegend(
 ...LL......LL...
 ................
 ................`],
-
-  [atom, bitmap`
+  ['a', bitmap`
 .........LL.....
 ........L12L.LL.
 .......L1L120LL.
@@ -371,8 +296,7 @@ setLegend(
 LL75............
 L10.............
 000.............`],
-
-  [g_up1, bitmap`
+  ['1', bitmap`
 .33C333C333C33C.
 .33C333C333C33C.
 .33C333C333C33C.
@@ -389,8 +313,7 @@ L10.............
 .33C333C333C33C.
 .33C333C333C33C.
 ................`],
-
-  [g_up2, bitmap`
+  ['2', bitmap`
 ................
 ...LL...........
 ..L22L..........
@@ -407,8 +330,7 @@ L10.............
 ......0LL0LL10..
 .......0L0000...
 ........00......`],
-
-  [g_up3, bitmap`
+  ['3', bitmap`
 ................
 .......000......
 .....003C30.....
@@ -425,8 +347,7 @@ L10.............
 ...0L10L1L0000..
 ....0L0100......
 .....0000.......`],
-
-  [n_up1, bitmap`
+  ['4', bitmap`
 ................
 ...C33333333C...
 ..33333333333C..
@@ -443,8 +364,7 @@ L10.............
 ..C3333333333C..
 ...CCCCCCCCCC...
 ................`],
-
-  [n_up2, bitmap`
+  ['5', bitmap`
 ................
 ................
 .......CC.......
@@ -461,8 +381,7 @@ L10.............
 ....CCDDDDCC....
 ......C33C......
 ................`],
-
-  [n_up3, bitmap`
+  ['6', bitmap`
 ................
 ......993.......
 .....22222......
@@ -479,8 +398,7 @@ L10.............
 .....22222......
 ................
 ................`],
-
-  [cursor, bitmap`
+  ['p', bitmap`
 ......00........
 .....0660.......
 .....0660.......
@@ -497,8 +415,7 @@ L10.............
 .....066666660..
 ......06666060..
 ......00000.00..`],
-
-  [loading_screen, bitmap`
+  ['l', bitmap`
 6666666666666666
 6666666666666666
 666H5H5693939666
@@ -515,8 +432,7 @@ L10.............
 6666666666666666
 6666666666666666
 6666666666666666`],
-
-  [stall, bitmap`
+  ['t', bitmap`
 ................
 3223332223332223
 3223332223332223
@@ -533,26 +449,24 @@ L10.............
 ..0FFFFFFFFFF0..
 ..0FFFFFFFFFF0..
 ..000000000000..`],
-
-  [victory, bitmap`
+  ['v', bitmap`
+7777777777777777
+7777777777777777
 7777777777777777
 7070700070707677
-7000707070007677
-7707700077077777
+7070707070707677
+7000700070007677
+7707707077077777
 7707707077077677
 7777777777777777
-7777777767777777
-7777777626777777
-7777777767777777
-7777667636766777
-7776336333633677
-7776336333633677
-7777636333636777
-7777766666667777
-7777766666667777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
 7777777777777777`],
-
-  [bg, bitmap`
+  ['b', bitmap`
 9999999999999999
 9999999999999999
 9999999999999999
@@ -568,15 +482,45 @@ L10.............
 9999999999999999
 9999999999999999
 9999999999999999
-9999999999999999`]
+9999999999999999`],
+  ['E', bitmap`
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................
+................`],
+  ['e', bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777`]
 )
 
-// =========================================================================
-// maps
-// =========================================================================
 setSolids([])
-
-const levels = [
+const LEVELS = [
 map`
 ....
 t...
@@ -591,224 +535,228 @@ map`
 ....` 
 ]
 
-setMap(levels[1])
-addText("   S to Start", { x: 2, y: 13, color: color`0` })
+const SCENE = { START: 0, SELECT: 1, PLAY: 2, WIN: 3, END: 4 };
 
-// =========================================================================
-// selection logic
-// =========================================================================
-function drawSelection() {
-  for(let i=0; i<4; i++) { 
-    clearTile(i,1); 
-    clearTile(i,2); 
+const CHARS = [
+  { id: 0, ui: 'u', big: 'c', small: 's', moneySign: 'm', up1: 'x', up2: 'f', up3: 'a' },
+  { id: 1, ui: 'U', big: 'C', small: 'S', moneySign: 'M', up1: '1', up2: '2', up3: '3' },
+  { id: 2, ui: 'Y', big: 'N', small: 'Q', moneySign: 'D', up1: '4', up2: '5', up3: '6' }
+]
+
+let State = {
+  scene: SCENE.START,
+  charIdx: 0,
+  money: 0,
+  smiles: 0,
+  bps: 0,
+  timer: 0,
+  rebirths: 0,
+  targetMoney: 0,
+  animating: false
+};
+
+setScene(SCENE.START);
+
+function formatTime(s) {
+  return `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
+}
+
+setInterval(() => {
+  if (State.scene === SCENE.PLAY) {
+    State.smiles += State.bps;
+    State.timer++;
+    refreshUI();
   }
-  // selection sprites like the icon things
-  addSprite(0,1, smile_big); 
-  addSprite(1,1, glitch_big);
-  addSprite(2,1, nature_big);
-  addSprite(cursor_x, 2, cursor);
+}, 1000);
+
+function setScene(newScene) {
+  State.scene = newScene;
+  clearText();
+  
+  switch(newScene) {
+    case SCENE.START:
+      setMap(LEVELS[1]);
+      addText("   S to Start", { x: 2, y: 13, color: color`0` });
+      break;
+      
+    case SCENE.SELECT:
+      setMap(LEVELS[3]);
+      setBackground('E');
+      drawSelectionScreen();
+      break;
+      
+    case SCENE.PLAY:
+      setMap(LEVELS[0]);
+      setBackground('b');
+      let c = CHARS[State.charIdx];
+      addSprite(0, 0, c.ui);
+      addSprite(3, 0, c.moneySign);
+      addSprite(0, 3, c.big);
+      refreshUI();
+      break;
+      
+    case SCENE.WIN:
+      setMap(LEVELS[2]);
+      let m = State.timer / 60;
+      let msg = "";
+      if (m < 4) msg = "excelent job";
+      else if (m < 5) msg = "good";
+      else if (m < 6) msg = "decent";
+      else msg = "bad";
+      
+      addText(msg, {x: 3, y: 3, color: color`0`});
+      addText("Time: " + formatTime(State.timer), {x: 3, y: 5, color: color`0`});
+      addText("J: Rebirth", {x: 3, y: 8, color: color`0`});
+      addText("I: Keep Going", {x: 3, y: 10, color: color`0`});
+      addText("W: End Game", {x: 3, y: 12, color: color`0`});
+      break;
+      
+    case SCENE.END:
+      setMap(LEVELS[3]);
+      setBackground('e'); 
+      addText("Credits:Mr Panov", {x:2, y:1, color:color`6`});
+      addText("You Beat Game", {x:3, y:5, color:color`6`});
+      addText("Good Job", {x:3, y:9, color:color`6`});
+      addText("S: Restart", {x:3, y:13, color:color`6`});
+      break;
+  }
+}
+
+function drawSelectionScreen() {
+  clearText();
+  addText("Pick Character", {x:3, y:1});
+  
+  for(let i = 0; i < 4; i++) { 
+    clearTile(i, 1); clearTile(i, 2); 
+  }
+  
+  CHARS.forEach((c, i) => addSprite(i, 1, c.big));
+  addSprite(State.charIdx, 2, 'p'); 
+}
+
+function refreshUI() {
+  if (State.scene !== SCENE.PLAY) return;
+  clearText();
+  
+  addText("RB:" + State.rebirths, {x: 10, y: 3, color: color`0`});
+  addText(State.money.toString(), {x:5, y:3, color:color`D`});
+  addText(Math.floor(State.smiles).toString(), {x:5, y:1, color:color`F`});
+  addText(formatTime(State.timer), {x: 10, y: 1, color: color`0`});
+  addText(State.bps + "/s", {x:6, y:6});
+  
+  addText(" S:Click", {x:2, y:11, color:color`7`});
+  addText(" W:Sell", {x:2, y:9, color:color`7`});
+  
+  drawShop();
+  
+  if (State.money >= State.targetMoney) {
+    setScene(SCENE.WIN);
+  }
+}
+
+function drawShop() {
+  let c = CHARS[State.charIdx];
+  const items = [
+    { cost: 100, sprite: c.up1, key: "I", y: 6, tileY: 1 },
+    { cost: 500, sprite: c.up2, key: "K", y: 10, tileY: 2 },
+    { cost: 1000, sprite: c.up3, key: "L", y: 14, tileY: 3 }
+  ];
+  
+  items.forEach(item => {
+    if (State.money >= item.cost) {
+      addSprite(3, item.tileY, item.sprite); 
+      addText(item.key, {x: 13, y: item.y}); 
+    } else {
+      clearTile(3, item.tileY);
+    }
+  });
+}
+
+function attemptPurchase(cost, power) {
+  if (State.scene === SCENE.PLAY && State.money >= cost) {
+    State.money -= cost;
+    State.bps += power;
+    refreshUI();
+  }
 }
 
 onInput('a', () => { 
-  if (is_choosing && cursor_x > 0) { 
-    cursor_x -= 1; 
-    drawSelection(); 
+  if (State.scene === SCENE.SELECT && State.charIdx > 0) { 
+    State.charIdx--; drawSelectionScreen(); 
   } 
-})
+});
 
 onInput('d', () => { 
-  if (is_choosing && cursor_x < 2) { 
-    cursor_x += 1; 
-    drawSelection(); 
+  if (State.scene === SCENE.SELECT && State.charIdx < 2) { 
+    State.charIdx++; drawSelectionScreen(); 
   } 
-})
+});
 
 onInput('j', () => {
-  if (is_choosing) {
-    is_choosing = 0;
-    is_in_main_game = 1;
-    
-
-    if(cursor_x === 0) { 
-      chosen_hero_ui=ui; 
-      current_big=smile_big; 
-      current_small=smile_small; 
-      current_money_sign=w_money_sign; 
-    } else if(cursor_x === 1) { 
-      chosen_hero_ui=ui_glitch; 
-      current_big=glitch_big; 
-      current_small=glitch_small; 
-      current_money_sign=g_money_sign; 
-    } else if(cursor_x === 2) { 
-      chosen_hero_ui=ui_nature; 
-      current_big=nature_big; 
-      current_small=nature_small; 
-      current_money_sign=n_money_sign; 
-    }
-    
-    setMap(levels[0]);
-    setBackground(bg);
-    clearText(); 
-    
-  
-    addSprite(0,0, chosen_hero_ui); 
-    addSprite(3,0, current_money_sign); 
-    addSprite(0,3, current_big); 
-    
-    applyPassives();
-    set_displays(money, smiles);
+  if (State.scene === SCENE.SELECT) {
+    State.timer = 0;
+    setScene(SCENE.PLAY);
+  } else if (State.scene === SCENE.WIN) {
+    State.rebirths++;
+    State.money = 0;
+    State.smiles = 0;
+    State.bps = 0;
+    State.targetMoney = 100000 * Math.pow(10, Math.floor(State.rebirths / 10));
+    setScene(SCENE.SELECT);
   }
-})
+});
 
-// =========================================================================
-// clicks plus most animations
-// =========================================================================
 onInput('s', () => {
-  if (is_in_main_game == 0 && is_choosing == 0) {
-    clearText(); 
-    is_choosing = 1;
-    setMap(levels[3]);
-    drawSelection();
-    addText("Pick Character", {x:3, y:1});
-  } else if (is_in_main_game == 1) {
-    if (is_in_waiting_state == 0) {
-      is_in_waiting_state = 1;
-      smiles += 1;
+  switch (State.scene) {
+    case SCENE.START:
+    case SCENE.END:
+      if (State.scene === SCENE.END) State.rebirths = 0;
+      State.money = 0; State.smiles = 0; State.bps = 0;
+      State.targetMoney = 100000 * Math.pow(10, Math.floor(State.rebirths / 10));
+      setScene(SCENE.SELECT);
+      break;
       
-
-      clearTile(0,3);
-      addSprite(0,3, current_small); 
+    case SCENE.PLAY:
+      if (State.animating) return;
+      State.animating = true;
+      
+      State.smiles += 1 * (1 + (State.rebirths * 0.5));
+      refreshUI();
+      
+      let c = CHARS[State.charIdx];
+      clearTile(0, 3);
+      addSprite(0, 3, c.small); 
       
       setTimeout(() => { 
-        if(is_in_main_game) { 
-          clearTile(0,3); 
-          addSprite(0,3, current_big); 
+        if (State.scene === SCENE.PLAY) { 
+          clearTile(0, 3); 
+          addSprite(0, 3, c.big); 
         }
       }, 200);
       
-      setTimeout(() => { 
-        is_in_waiting_state = 0; 
-      }, 220);
-    }
+      setTimeout(() => State.animating = false, 220);
+      break;
   }
-  set_displays(money,smiles);
-})
+});
 
 onInput('w', () => { 
-  if (is_in_main_game == 1) { 
-    money += Math.floor(smiles); 
-    smiles = 0; 
-    set_displays(money,smiles); 
-  } 
-})
-
-// =========================================================================
-//  texts plus the shop ui
-// =========================================================================
-function set_displays(money,smiles){
-  if(is_in_main_game==1){
-    clearText();
-    
-    // money
-    addText(money.toString(),{x:5,y:3,color:color`D`});
-    addText(Math.floor(smiles).toString(),{x:5,y:1,color:color`F`});
-    
-    // text
-    addText(" S:Click", {x:2, y:11, color:color`7`});
-    addText(" W:Sell", {x:2, y:9, color:color`7`});
-    
-    addText(sumPassives().toString()+"/s",{x:6,y:6});
-    addPurchasables();
+  if (State.scene === SCENE.PLAY) {
+    State.money += Math.floor(State.smiles); 
+    State.smiles = 0; 
+    refreshUI();
+  } else if (State.scene === SCENE.WIN) {
+    setScene(SCENE.END);
   }
-}
+});
 
-// =========================================================================
-// shop upgrade stuff
-// =========================================================================
-function addPurchasables(){
-  if(is_in_main_game==1){
-    let up1, up2, up3;
-    
-   
-    if(chosen_hero_ui === ui) { 
-      up1=social_media; up2=factory; up3=atom; 
-    } else if(chosen_hero_ui === ui_glitch) { 
-      up1=g_up1; up2=g_up2; up3=g_up3; 
-    } else if(chosen_hero_ui === ui_nature) { 
-      up1=n_up1; up2=n_up2; up3=n_up3; 
-    }
-
- 
-    if(money>=100){ 
-      addSprite(3,1,up1); 
-      addText("I",{x:13,y:6}); 
-    } else { clearTile(3,1) }
-    
-    if(money>=500){ 
-      addSprite(3,2,up2); 
-      addText("K",{x:13,y:10}); 
-    } else { clearTile(3,2) }
-    
-    if(money>=1000){ 
-      addSprite(3,3,up3); 
-      addText("L",{x:13,y:14}); 
-    } else { clearTile(3,3) }
+onInput('i', () => {
+  if (State.scene === SCENE.WIN) {
+    State.targetMoney *= 10;
+    setScene(SCENE.PLAY);
+  } else {
+    attemptPurchase(100, 5);
   }
-}
+});
 
-// =========================================================================
-// input buttons for upgrades
-// =========================================================================
-onInput('i',()=>{ 
-  if(money>=100){ 
-    money-=100; 
-    passives.push(5); 
-    set_displays(money,smiles); 
-  } 
-})
-
-onInput('k',()=>{ 
-  if(money>=500){ 
-    money-=500; 
-    passives.push(25); 
-    set_displays(money,smiles); 
-  } 
-})
-
-onInput('l',()=>{ 
-  if(money>=1000){ 
-    money-=1000; 
-    passives.push(50); 
-    set_displays(money,smiles); 
-  } 
-})
-
-// =========================================================================
-// math
-// =========================================================================
-function sumPassives(){
-  let n=0;
-  for(let p of passives){ 
-    n+=p; 
-  }
-  return n;
-}
-
-function applyPassives(){
-  if(is_in_main_game==1){
-    smiles+=sumPassives();
-    set_displays(money,smiles);
-    setTimeout(applyPassives,1000);
-  }
-}
-
-// =========================================================================
-// ezwin thing
-// =========================================================================
-afterInput(()=>{
-  if(is_in_main_game==1 && money>=100000){ 
-    setMap(levels[2]); 
-    clearText(); 
-    is_in_main_game=0; 
-  }
-})
+onInput('k', () => attemptPurchase(500, 25));
+onInput('l', () => attemptPurchase(1000, 50));
