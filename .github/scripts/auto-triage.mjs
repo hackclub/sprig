@@ -50,6 +50,30 @@ if (pullRequest.draft) {
 	process.exit(0);
 }
 
+if (event.action === "closed") {
+	console.log("PR closed. Dispatching re-validation for other open submissions from the same user.");
+	const submitterLogin = pullRequest.user?.login;
+	if (submitterLogin) {
+		const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
+		const siblingPRs = openPulls.filter((pr) => pr.user?.login === submitterLogin && pr.labels?.some((l) => l.name === "Submission"));
+		for (const sibling of siblingPRs) {
+			console.log(`Triggering auto-triage for sibling PR #${sibling.number}`);
+			try {
+				await githubRequest(token, "POST", `/repos/${owner}/${repo}/actions/workflows/auto-triage.yml/dispatches`, {
+					ref: "main",
+					inputs: {
+						pr_number: String(sibling.number),
+						event_action: "synchronize"
+					}
+				});
+			} catch (err) {
+				console.error(`Failed to dispatch for PR #${sibling.number}:`, err);
+			}
+		}
+	}
+	process.exit(0);
+}
+
 if (event.action === "assigned") {
 	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Claimed"] });
 	console.log(`PR assigned, added "Claimed" label.`);
@@ -133,7 +157,7 @@ if (!result.ok) process.exit(1);
 async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) {
 	const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
 	const headSha = pullRequest.head.sha;
-	const gameFiles = pullFiles.filter((file) => /^games\/[A-Za-z0-9_-]+\.js$/.test(file.filename));
+	const gameFiles = pullFiles.filter((file) => /^games\/[^/]+\.js$/.test(file.filename));
 
 	for (const file of gameFiles) {
 		const contentFile = await githubRequest(
@@ -163,6 +187,22 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 
 	const bodyChecks = validatePullRequestBody(pullRequest.body ?? "");
 	for (const check of bodyChecks.checks) addCheck(check.name, check.ok, check.detail);
+
+	// Check for duplicate open PRs from the same user, regardless of filename validity
+	const submitterLogin = pullRequest.user?.login;
+	if (submitterLogin) {
+		const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
+		const duplicatePR = openPulls.find(
+			(pr) => pr.number !== prNumber && pr.user?.login === submitterLogin && pr.labels?.some((l) => l.name === "Submission")
+		);
+		addCheck(
+			"No duplicate open submission",
+			!duplicatePR,
+			duplicatePR
+				? `You already have an open submission (PR #${duplicatePR.number}). Please close one of them.`
+				: "No other open submissions from this user."
+		);
+	}
 
 	let gameFile = null;
 	let metadata = null;
@@ -228,10 +268,30 @@ function validatePullRequestBody(body) {
 
 function extractBoldField(body, label) {
 	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
-	const pattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|##|#)|$)`, "i");
-	const match = body.match(pattern);
-	if (!match) return "";
-	return stripTemplateNoise(match[1]);
+
+	// Try **Label:** value (original bold format)
+	const boldPattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|#{1,6})|$)`, "i");
+	const boldMatch = body.match(boldPattern);
+	if (boldMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(boldMatch[1]));
+		if (value) return value;
+	}
+
+	// Fallback: plain "Label: value" on its own line
+	// Handles unbolded fields, heading-style descriptions, etc.
+	const plainPattern = new RegExp(String.raw`(?:^|\n)${escaped}\s*:\s*([^\n]+)`, "i");
+	const plainMatch = body.match(plainPattern);
+	if (plainMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(plainMatch[1]));
+		if (value) return value;
+	}
+
+	return "";
+}
+
+function normalizeFieldValue(value) {
+	// Unwrap markdown links: [@foo](url) or [foo](url) -> foo
+	return value.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").trim();
 }
 
 function stripTemplateNoise(value) {
@@ -287,6 +347,23 @@ async function validateMetadata(content, filename, workspace) {
 			: "Replace example/template values in the metadata header (like 'MY GAME', 'MY NAME', 'Short description...', or placeholder tags)."
 	);
 
+	// Detect tutorial/starter games by comparing code body to known tutorial files
+	const TUTORIAL_FILES = ["getting_started.js", "maze_game_starter.js"];
+	const isTutorial = TUTORIAL_FILES.some((tutFile) => {
+		try {
+			const tutContent = readFileSync(path.join(workspace, "games", tutFile), "utf8");
+			const stripMeta = (s) => s.replace(/\/\*[\s\S]*?\*\//m, "").replace(/\s+/g, " ").trim();
+			return stripMeta(content) === stripMeta(tutContent);
+		} catch { return false; }
+	});
+	add(
+		"Not a tutorial game",
+		!isTutorial,
+		isTutorial
+			? "This looks like an unmodified tutorial or starter game. Submit your own original game instead."
+			: "Game does not appear to be an unmodified tutorial."
+	);
+
 	const titleConflict = values.title ? await findTitleConflict(values.title, filename, workspace) : null;
 	add(
 		"Unique game title",
@@ -336,7 +413,8 @@ async function findTitleConflict(title, filename, workspace) {
 	}
 
 	const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
-	for (const pr of openPulls) {
+	const submissionPRs = openPulls.filter((pr) => pr.labels?.some((l) => l.name === "Submission"));
+	for (const pr of submissionPRs) {
 		if (pr.number === prNumber) continue;
 		const prFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pr.number}/files`);
 		for (const file of prFiles) {
@@ -452,7 +530,7 @@ function buildComment(result) {
 	};
 
 	const categoryMap = {
-		"Files stay in allowed folders": "file",
+		"Valid filenames and folders": "file",
 		"Exactly one game file": "file",
 		"Only new files added": "file",
 		"Filename uses safe characters": "file",
@@ -472,8 +550,10 @@ function buildComment(result) {
 		"Metadata tags parse": "metadata",
 		"Metadata date": "metadata",
 		"Metadata template values": "metadata",
+		"Not a tutorial game": "metadata",
 		"Unique game title": "metadata",
 
+		"No duplicate open submission": "other",
 		"Sprig-only APIs": "code",
 		"Optional image path": "code",
 		"Optional image name": "code",
@@ -518,15 +598,15 @@ function buildComment(result) {
 	const editUrl = `https://github.com/${headRepo}/edit/${headRef}/${result.gameFile ?? ""}`;
 
 	const links = [];
-	if (result.playUrl) links.push(`- [Play in Sprig Editor](${result.playUrl})`);
-	if (result.gameFile) links.push(`- [Edit Game File](${editUrl})`);
+	if (result.playUrl) links.push(`- ${externalLink("Play in Sprig Editor", result.playUrl)}`);
+	if (result.gameFile) links.push(`- ${externalLink("Edit Game File", editUrl)}`);
 	if (result.similarity?.match) {
 		const similarName = result.similarity.match.replace(/^games\//, "").replace(/\.js$/, "");
-		links.push(`- [Play Similar Game (Gallery)](https://sprig.hackclub.com/gallery/${similarName})`);
+		links.push(`- ${externalLink("Play Similar Game (Gallery)", `https://sprig.hackclub.com/gallery/${similarName}`)}`);
 	}
-	if (result.rawUrl) links.push(`- [View Raw](${result.rawUrl})`);
-	if (result.screenshotUrl) links.push(`- [View Screenshot](${result.screenshotUrl})`);
-	links.push(`- [PR Files](${pullRequest.html_url}/files)`);
+	if (result.rawUrl) links.push(`- ${externalLink("View Raw", result.rawUrl)}`);
+	if (result.screenshotUrl) links.push(`- ${externalLink("View Screenshot", result.screenshotUrl)}`);
+	links.push(`- ${externalLink("PR Files", `${pullRequest.html_url}/files`)}`);
 
 	const warningLines = result.warnings.length
 		? ["", "#### Review Flags", ...result.warnings.map((warning) => `- ⚠️ ${warning}`)]
@@ -548,8 +628,12 @@ ${links.join("\n")}
 
 ${checksSection}${warningLines.join("\n")}
 
-${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: push fixes to this PR ([edit file](${editUrl})). These checks rerun automatically.`}
+${result.ok ? `Reviewers: please use the ${result.playUrl ? externalLink("play link", result.playUrl) : "play link"} to playtest, then approve or request changes.` : `@${pullRequest.user.login}: push fixes to this PR (${externalLink("edit file", editUrl)}). These checks rerun automatically.`}
 `;
+}
+
+function externalLink(label, url) {
+	return `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a><!-- [${label}](${url}) -->`;
 }
 
 function formatPercent(value) {
@@ -572,7 +656,10 @@ function checkMetadataDate(addedOn, add) {
 
 function validateSubmissionFiles(pullFiles, addCheck) {
 	const manifest = buildSubmissionManifest(pullFiles);
-	const { gameFiles: jsFiles, imageFiles, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
+	const { gameFiles: jsFiles, gameFilesLoose, imageFiles, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
+	// jsFiles = strict valid filenames; gameFilesLoose = in games/*.js (may have bad chars)
+	// Use loose for "how many game files" count so bad filename doesn't cascade into false errors
+	const effectiveGameFiles = jsFiles.length > 0 ? jsFiles : gameFilesLoose;
 	if (uppercaseGames.length > 0) {
 		const badNames = uppercaseGames.map((file) => `\`${file.filename}\``).join(", ");
 		addCheck("Directory must be lowercase", false, `Your file must be in the lowercase \`games/\` directory. Found ${badNames}.`);
@@ -580,20 +667,25 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 
 	const disallowedNames = disallowedFiles.map((file) => `\`${file.filename}\``).join(", ");
 	addCheck(
-		"Files stay in allowed folders",
+		"Valid filenames and folders",
 		disallowedFiles.length === 0,
 		disallowedFiles.length
-			? `Only game files in \`games/\` and optional images in \`games/img/\` are allowed. Filenames cannot contain spaces. Images must be .png. Found ${disallowedNames}.`
+			? `Only game files in \`games/\` and optional images in \`games/img/\` are allowed. Filenames may only contain letters, numbers, hyphens, and underscores (no spaces, apostrophes, or special characters). Images must be .png. Found ${disallowedNames}.`
 			: "Only submission files changed."
 	);
 
-	const jsNames = jsFiles.map((file) => `\`${file.filename}\``).join(", ");
+	const jsNames = effectiveGameFiles.map((file) => `\`${file.filename}\``).join(", ");
+	// If the only "extra" JS files are bad-named ones already caught by the filename check,
+	// don't double-report them as extra game files — the filename error is enough.
+	const extraBadNameOnly = effectiveGameFiles === gameFilesLoose && gameFilesLoose.length > 1;
 	addCheck(
 		"Exactly one game file",
-		jsFiles.length === 1,
-		jsFiles.length === 0
+		effectiveGameFiles.length === 1 || extraBadNameOnly,
+		effectiveGameFiles.length === 0
 			? "Add exactly one JavaScript game file in `games/`."
-			: `Only one game file is allowed per submission. Found ${jsNames}.`
+			: extraBadNameOnly
+				? "Fix the filename(s) above — each must use only letters, numbers, hyphens, and underscores."
+				: `Only one game file is allowed per submission. Found ${jsNames}.`
 	);
 
 	const changedNames = changedNonAddedFiles.map((file) => `\`${file.filename}\``).join(", ");
@@ -604,7 +696,7 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 			? `Submissions should only add new game files or modify existing ones in \`games/\`. These files outside \`games/\` were modified: ${changedNames}.`
 			: "All submitted files are new or inside \`games/\`."
 	);
-	return { jsFiles, imageFiles };
+	return { jsFiles: effectiveGameFiles, imageFiles };
 }
 
 function validateImages(imageFiles, gameBase, owner, repo, pullRequest, addCheck) {
