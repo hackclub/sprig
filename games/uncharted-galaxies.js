@@ -1,7 +1,7 @@
 /*
-@title:
-@author:
-@description: A
+@title: Uncharted Galaxies
+@author: FiniteCode
+@description: A space shooter, where you avoid obstacles, survive, and kill enemies
 @tags: ['survival', 'space', 'shooter']
 @addedOn: 2026-07-02
 */
