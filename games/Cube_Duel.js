@@ -1,9 +1,9 @@
 /*
-     @title: Cube Duel
- @author: Ritvik
- @description: A red cube chasing you down as you use attacks, vaults, movement, and waiting to take them down across different maps.
- @tags: ['action', 'puzzle', 'turn-based']
-@addedOn: 2026-08-26
+@title: Cube Duel
+@author: Ritvik
+@description: A red cube chasing you down as you use attacks, vaults, movement, and waiting to take them down across different maps.
+@tags: ['action', 'puzzle', 'turn-based']
+@addedOn: 2026-09-19`
 
  CONTROLS:
   'w', 'a', 's', 'd' : Move (Restores 1 Energy)
