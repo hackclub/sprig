@@ -1,7 +1,6 @@
-
 /*
 @title: Ride the Bus
-@**Author**: pandreev67.
+@author: platoshka
 @description: A card game where you ride the bus.
 @tags: ['cards', 'casino']
 @addedOn: 2026-09-17
@@ -222,7 +221,7 @@ function drawUI(showVal = false) {
     addText(format(lastVal), { y: 5, x: 3, color: "1" });
     addText(format(secondVal), { y: 5, x:9, color: "1" });
     addText(format(thirdVal), { y: 5, x: 16, color: "1" });
-    addText("PRESS K TO PLAY AGAIN", { y: 8, color: "0" }); 
+    addText("PRESS K TO RESTART ", { y: 8, color: "0" }); 
   } else if (level === -1) {
     addText("YOU LOST!", { y: 4, color: "1" }); 
     addText("PRESS K TO RESTART", { y: 6, color: "0" }); 
