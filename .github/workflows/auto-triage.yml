@@ -1,0 +1,52 @@
+name: Sprig Auto Triage
+on:
+    pull_request_target:
+        types: [opened, synchronize, assigned, unassigned, edited, reopened, ready_for_review]
+    pull_request_review:
+        types: [submitted]
+    workflow_dispatch:
+        inputs:
+            pr_number:
+                description: "Real PR number to exercise"
+                required: true
+                type: string
+            event_action:
+                description: "State-machine event to simulate for that PR"
+                required: true
+                default: synchronize
+                type: choice
+                options: [opened, synchronize, assigned, unassigned, reopened, ready_for_review, workflow_dispatch]
+
+permissions:
+    pull-requests: write
+    issues: write
+    contents: read
+
+jobs:
+    validate-submission:
+        runs-on: ubuntu-latest
+        concurrency:
+            group: auto-triage-${{ github.event.pull_request.number || github.event.issue.number || github.run_id }}
+            cancel-in-progress: true
+        steps:
+            # SECURITY INVARIANT: because this privileged pull_request_target
+            # job has write access to labels/comments, PR-head files are only
+            # untrusted data. Never checkout, import, or execute PR-head code:
+            # doing so could let attacker-controlled code use the job token.
+            - name: Checkout trusted automation
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.ref }}
+                  path: automation
+                  persist-credentials: false
+
+            - name: Validate submission
+              run: node automation/.github/scripts/auto-triage.mjs
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+                  GITHUB_REPOSITORY: ${{ github.repository }}
+                  GITHUB_EVENT_PATH: ${{ github.event_path }}
+                  SUBMISSION_PATH: ${{ github.workspace }}/automation
+                  SPRIG_REVIEW_BASE_URL: https://sprig.hackclub.com/editor
+                  REVIEW_PR_NUMBER: ${{ inputs.pr_number }}
+                  REVIEW_EVENT_ACTION: ${{ inputs.event_action }}

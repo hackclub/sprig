@@ -1,6 +1,6 @@
 import { playTune } from './tune'
 import { normalizeGameError } from './error'
-import { bitmaps, NormalizedError } from '../state'
+import { bitmaps, type NormalizedError } from '../state'
 import type { PlayTuneRes } from '../../../engine/src/api'
 import { baseEngine, textToTune } from '../../../engine/src/base'
 import { webEngine } from '../../../engine/src/web'

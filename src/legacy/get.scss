@@ -1,6 +1,6 @@
-@import './_variables.scss';
-@import './_fonts.scss';
-@import './_shared.scss';
+@use './_variables.scss' as *;
+@use './_fonts.scss';
+@use './_shared.scss';
 
 body {
 	color: black;

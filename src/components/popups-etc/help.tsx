@@ -1,9 +1,9 @@
 import {useRef} from "preact/hooks";
-import {signal, Signal, useSignal, useSignalEffect} from "@preact/signals";
+import {signal, type Signal, useSignal, useSignalEffect} from "@preact/signals";
 import {IoCaretBack, IoCaretForward} from "react-icons/io5";
 import styles from "./help.module.css";
 import {compiledContent} from "../../../docs/docs.md";
-import {codeMirror, isNewSaveStrat, PersistenceState} from "../../lib/state";
+import {codeMirror, isNewSaveStrat, type PersistenceState} from "../../lib/state";
 import Button from "../design-system/button";
 import {saveGame, startSavingGame} from "../big-interactive-pages/editor";
 import ChatComponent from "./chat-component";

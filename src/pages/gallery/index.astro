@@ -1,11 +1,11 @@
 ---
 import "../../global.css";
-import "./gallery.css";
+import "../../components/gallery.css";
 import { getSession } from "../../lib/game-saving/account";
 import Navbar from "../../components/navbar-main";
 import StandardHead from "../../components/standard-head.astro";
 import { getGalleryGames } from "../../lib/game-saving/gallery";
-import Gallery from "./gallery";
+import Gallery from "../../components/Gallery";
 
 const session = await getSession(Astro.cookies);
 

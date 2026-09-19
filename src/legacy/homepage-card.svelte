@@ -62,8 +62,8 @@
 </div>
 
 <style lang="scss">
-	@import './_variables.scss';
-	@import './_fonts.scss';
+	@use './_variables.scss' as *;
+	@use './_fonts.scss';
 
 	*,
 	*::before,

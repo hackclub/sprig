@@ -26,11 +26,11 @@ You should be able to get started in Sprig with very little programming experien
 
 <p align="left">
 <a href="https://sprig.hackclub.com/editor">
-<img width="500" alt="Screen Shot 2022-03-07 at 6 21 27 PM" src="https://cloud-l94lfbasw-hack-club-bot.vercel.app/0image.png">
+<img width="500" alt="Screen Shot 2022-03-07 at 6 21 27 PM" src="https://cdn.hackclub.com/rescue?url=https://cloud-l94lfbasw-hack-club-bot.vercel.app/0image.png">
 </a>
 </p>
 
-...**[hardware development kit](https://github.com/hackclub/sprig/blob/main/docs/ASSEMBLY.md)**. It’s not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It’s a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.
+...**[hardware development kit](https://github.com/hackclub/sprig/blob/main/docs/ASSEMBLY.md)**. It's not just for gaming! The Sprig console is designed to be assembled and disassembled. Each kit includes parts needed for getting started with hardware engineering and embedded systems programming. This includes a Raspberry Pi Pico, a TFT7735 screen, a MAX98357A I2S class D audio amplifier, a whole bunch of buttons, LEDs, a speaker, and a carrier board which wires all these components together while exposing the remaining pins on the microcontroller. It's a complete system for generating graphics, sound, and handling tactile inputs which is reprogrammable at the touch of a button.
 
 <p align="left">
 <a href="https://sprig.hackclub.com">
@@ -46,10 +46,10 @@ We did some fun engineering to get Sprig to work and to make your games run the 
 
 ## You Ship, We Ship
 
-Make a game 
-&rarr; Share it with the community 
-&rarr; Receive your device 
-&rarr; Play Sprig games on it 
+Make a game
+&rarr; Share it with the community
+&rarr; Receive your device
+&rarr; Play Sprig games on it
 &rarr; Hack on the device for more projects
 
 ***Only teenagers and younger can receive Sprigs!*** All are welcome to submit to the [gallery](https://sprig.hackclub.com/gallery) though.
@@ -82,9 +82,43 @@ Join the `#sprig` channel on the [Hack Club Slack](https://hackclub.com/slack/) 
 - `#spade`: For discussions of Spade firmware/OS of the Sprig.
 - `#spaint`: Make art with your sprig with sPaint and share.
 
-Learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs). 
+Learn more about how to make games with Sprig check out the [docs](https://github.com/hackclub/sprig/tree/main/docs).
 
-Sprig's editor and site pages are built with [Astro](https://astro.build/) using [Preact](https://preactjs.com/) for rendering. Perhaps somewhat unusually, we predominantly use [Preact Signals](https://preactjs.com/guide/v10/signals/) for state management. The project structure is as follows:
+### Tech Stack
+
+Sprig's editor and site pages are built with [Astro](https://astro.build/) (SSR via `@astrojs/node`) using [Preact](https://preactjs.com/) for rendering. Perhaps somewhat unusually, we predominantly use [Preact Signals](https://preactjs.com/guide/v10/signals/) for state management. The code editor uses [CodeMirror](https://codemirror.net/). There is one legacy [Svelte](https://svelte.dev/) component on the homepage. The database is [Firebase](https://firebase.google.com/). Everything pushed to GitHub and all pull requests are automatically deployed on [Vercel](https://vercel.com/hackclub).
+
+### Repo Structure
+
+```tree
+sprig/
+├── src/                        # Astro website + editor
+│   ├── pages/                  # Pages (.astro) and API routes (.ts), all SSR
+│   ├── components/             # Preact (TSX) UI components + CSS modules
+│   ├── lib/                    # Shared support code (server + client)
+│   ├── legacy/                 # Old Svelte code kept for the homepage
+│   ├── layouts/                # Astro layout templates
+│   ├── integrations/           # Custom Astro integrations
+│   ├── translations/           # i18n strings
+│   ├── global.css              # Global styles
+│   └── middleware.ts           # Astro middleware
+│
+├── engine/                     # Sprig game engine (separate package)
+├── games/                      # Community-submitted game files (.js)
+├── public/                     # Static assets (game metadata, images, fonts)
+├── firmware/                   # RP2040 embedded firmware (Spade runtime + HAL)
+├── hardware/                   # PCB designs + 3D-printable console cases
+├── docs/                       # Documentation (assembly, getting started, runbooks)
+├── scripts/                    # Python admin tools (plagiarism check, review, etc.)
+├── bin/                        # lint-sprig game linter
+├── tests/                      # Fuzzy tests for the engine
+├── yjs-client/                 # Yjs WebRTC client for collaborative editing
+├── yjs-signaling-server/       # Yjs signaling server (separate deploy)
+├── font-things/                # Font manipulation script
+└── sprig-hax/                  # Community hardware mods (gyro, etc.)
+```
+
+Key source directories explained:
 
 - `src/pages/` contains all the site's main pages and API routes. In general, `.ts` files are API routes and `.astro` files are pages. All pages are server-side rendered on demand and can make database calls and such.
 - `src/components/` contains all the components used in the editor and site pages. Most components will have accompanying `.module.css` files which contain vanilla CSS stylesheets which are scoped to the component. These "CSS modules" can be imported as a JS object containing referencable class names.
@@ -94,15 +128,12 @@ Sprig's editor and site pages are built with [Astro](https://astro.build/) using
 - `public/` contains static assets which are directly served.
 - `src/global.css` and `src/components/standard-head.astro` contain code that's generally shared across all pages.
 
-Everything pushed to GitHub and all pull requests are automatically deployed on [Vercel](https://vercel.com/hackclub).
-
 ### Prerequisites
 
 Things you'll want installed:
 
 - [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/en/)
-- [Yarn](https://yarnpkg.com/)
+- [Bun](https://bun.sh/)
 
 We use Firebase as a database. To develop login/saving related features locally, you'll likely want to [create a Firebase project](https://console.firebase.google.com/) for yourself. Then, create a service account, download the JSON file, and convert the contents to base64 ([link to a tool to easily do this](https://gchq.github.io/CyberChef/#recipe=JSON_Minify()To_Base64('A-Za-z0-9%2B/%3D'))).
 
@@ -112,15 +143,30 @@ We recommend [Visual Studio Code](https://code.visualstudio.com/) as a code edit
 
 In a terminal, clone the repo and install packages:
 
-```
+```bash
 git clone https://github.com/hackclub/sprig/
 cd sprig
-yarn install
+bun install
 ```
 
 Next, you'll want to give Sprig access to the Firebase credentials, as well as some extra credentials that you can request from the @creds team on Slack. Complete the `.env.example` file with those credentials and rename it to `.env`.
 
-To start the dev server, run `yarn dev` and visit <http://localhost:3000> in your web browser! Please create a GitHub issue if you cannot get something to work properly.
+To start the dev server, run `bun dev` and visit <http://localhost:4321> in your web browser! Please create a GitHub issue if you cannot get something to work properly.
+
+### Running Tests
+
+```bash
+bun test          # fuzzy engine tests
+bun run test:unit # vitest unit tests
+```
+
+### Docker
+
+```bash
+docker compose up
+```
+
+This starts the Astro site (port 9996), yjs-client, and yjs-signaling-server.
 
 ### Engine Development
 
@@ -130,22 +176,22 @@ If you want to work on the engine and test out your changes in the context of th
 
 First set up the engine repo:
 
-```
+```bash
 git clone https://github.com/hackclub/sprig-engine/
 cd sprig-engine
-yarn install
-yarn link
+bun install
+bun link
 ```
 
 Then, in this website's repo:
 
-```
-yarn link sprig
+```bash
+bun link sprig
 ```
 
-Now, run `yarn dev` in the engine repo to start the TypeScript build process.
+Now, run `bun dev` in the engine repo to start the TypeScript build process.
 
-## Acknowledgements 
+## Acknowledgements
 
 The Sprig was developed by a team at Hack Club with assistance from Brian Silverman (who helped develop Scratch and the precursor to Lego Mindstorms), Vadim Gerasimov (engineer at Google who helped create Tetris when he was 15), and Quentin Bolsée (researcher at MIT and Vrije University Brussels), and dozens contributions from teenage open-source developers!
 

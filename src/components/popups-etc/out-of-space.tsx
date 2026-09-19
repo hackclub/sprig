@@ -1,7 +1,7 @@
 import Button from '../design-system/button'
 import styles from './draft-warning.module.css'
-import {EOTMessage} from "../../lib/upload";
-import {Signal} from "@preact/signals";
+import type {EOTMessage} from "../../lib/upload";
+import type {Signal} from "@preact/signals";
 
 export default function OutOfSpaceModal({ eotMessage }: {eotMessage: Signal<EOTMessage | null>}) {
 	return (

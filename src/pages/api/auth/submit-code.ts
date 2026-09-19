@@ -4,7 +4,7 @@ import { isValidEmail } from '../../../lib/game-saving/email'
 import {DevEmail} from "../../../lib/game-saving/auth-helper";
 import { Timestamp } from 'firebase-admin/firestore';
 
-export const post: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
 	const session = await getSession(cookies)
 
 	let code: string
@@ -42,7 +42,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 		);
 	}
 
-	if (email === DevEmail && code == import.meta.env.DEV_CODE) {
+	if (email === DevEmail && code == process.env.DEV_CODE) {
 		await makeOrUpdateSession(cookies, user.id, 'code')
 		return new Response(JSON.stringify({ user }), { status: 200 })
 	}
@@ -55,9 +55,9 @@ export const post: APIRoute = async ({ request, cookies }) => {
     if (_codes.empty) {
 		const newFailedAttempts = failedLoginAttempts + 1;
 
-		if (newFailedAttempts >= +import.meta.env.MAX_ATTEMPTS) {
+		if (newFailedAttempts >= +(process.env.MAX_ATTEMPTS ?? '3')) {
 			const lockoutUntil = Timestamp.fromMillis(
-				now.toMillis() + parseInt(import.meta.env.PUBLIC_LOCKOUT_DURATION_MS)
+				now.toMillis() + parseInt(process.env.PUBLIC_LOCKOUT_DURATION_MS ?? process.env.LOCKOUT_DURATION_MS ?? '900000')
 			);
 			await updateDocument("users", user.id, {
 				failedLoginAttempts: newFailedAttempts,
@@ -65,7 +65,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 			});
 			return new Response(
 				`Too many attempts. Account locked for ${
-					import.meta.env.LOCKOUT_DURATION_MS / 60000
+					parseInt(process.env.LOCKOUT_DURATION_MS ?? '900000') / 60000
 				} minutes.`,
 				{ status: 429 }
 			);

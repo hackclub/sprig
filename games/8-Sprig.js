@@ -520,7 +520,7 @@ function startGame() {
 }
 
 // special level switcher logic
-function next level() {
+function nextLevel() {
   setSolids([]) // allow block collisions temporarily to allow setting random puzzle config
   
   if (speedrun === true) { // actually switch levels since we are in speedrun mode

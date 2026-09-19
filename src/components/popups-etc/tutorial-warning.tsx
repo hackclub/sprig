@@ -1,4 +1,4 @@
-import { Signal } from '@preact/signals'
+import type { Signal } from '@preact/signals'
 import Button from '../design-system/button'
 import styles from './tutorial-warning.module.css'
 import { usePopupCloseClick } from '../../lib/utils/popup-close-click'

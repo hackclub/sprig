@@ -2,13 +2,9 @@
 import '../../../global.css'
 import Categories from '../../../layouts/categories.astro'
 import Code from '../../../components/spriki-components/Code.astro'
+import { getSprikipediaTranslation } from '../../../lib/astro-content'
 
-const data = (
-  (await Astro.glob(`/src/translations/*.json`)).find(
-    (translation) =>
-      translation.default.lang == (Astro.url.searchParams.get("lang") || "en_US")
-  ) || {}
-).default;
+const data = getSprikipediaTranslation(Astro.url.searchParams.get("lang"))
 ---
 <Categories name={data["start.categories.name.setup"]} title={data["start.categories.title.setup"]} >
 <p>In a terminal, clone the repo and install packages:</p>

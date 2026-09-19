@@ -5,7 +5,7 @@ import Navbar from '../../components/navbar-main'
 import StandardHead from '../../components/standard-head.astro'
 import ms from 'ms'
 import Button from '../../components/design-system/button'
-import { IoLogOutOutline, IoTrashOutline } from 'react-icons/io5'
+import { IoLogOutOutline } from 'react-icons/io5'
 import { isRandomGameName } from '../../lib/words'
 
 const session = await getSession(Astro.cookies)
@@ -281,7 +281,7 @@ if (games.length === 0 && unnamedGames.length > 0) {
 									Edited {ms(Math.max(Date.now() - game.modifiedAt.toMillis(), 1000), { long: true })} ago
 								</p>
 								<button class='delete' data-id={game.id} data-name={game.name || 'Untitled'}>
-									<IoTrashOutline />
+									<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="m112 112 20 320c.95 18.49 14.4 32 32 32h184c17.67 0 30.87-13.51 32-32l20-320"/><path stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 112h352"/><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M192 112V72h0a23.93 23.93 0 0 1 24-24h80a23.93 23.93 0 0 1 24 24h0v40m-64 64v224m-72-224 8 224m136-224-8 224"/></svg>
 								</button>
 							</a>
 						))}
@@ -298,7 +298,7 @@ if (games.length === 0 && unnamedGames.length > 0) {
 											Edited {ms(Math.max(Date.now() - game.modifiedAt.toMillis(), 1000), { long: true })} ago
 										</p>
 										<button class='delete' data-id={game.id} data-name={game.name || 'Untitled'}>
-											<IoTrashOutline />
+											<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="m112 112 20 320c.95 18.49 14.4 32 32 32h184c17.67 0 30.87-13.51 32-32l20-320"/><path stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 112h352"/><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M192 112V72h0a23.93 23.93 0 0 1 24-24h80a23.93 23.93 0 0 1 24 24h0v40m-64 64v224m-72-224 8 224m136-224-8 224"/></svg>
 										</button>
 									</a>
 								))}

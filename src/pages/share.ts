@@ -1,2 +1,2 @@
 import type { APIRoute } from 'astro'
-export const get: APIRoute = ({ redirect }) => redirect('/get', 301)
+export const GET: APIRoute = ({ redirect }) => redirect('/get', 301)

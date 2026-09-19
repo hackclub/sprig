@@ -118,7 +118,7 @@ Check the code comments, which are denoted by `//` (and are in red). Is there an
 
 In our game, the `levels` variable stores an  [array](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps/Arrays) of levels. Each level is a Sprig `map`. By clicking on the green `map` text, you can enter the level editor. It should look like this
 
-![Image of the level editor on level 3](https://cloud-g50cwz2u2-hack-club-bot.vercel.app/0image1.png)
+![Image of the level editor on level 3](https://cdn.hackclub.com/rescue?url=https://cloud-g50cwz2u2-hack-club-bot.vercel.app/0image1.png)
 
 Edit this map and remove some of the walls by clicking on the wall by right clicking.
 </details>

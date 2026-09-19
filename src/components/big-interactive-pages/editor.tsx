@@ -8,13 +8,13 @@ import {
 	IoVolumeMuteOutline,
 } from "react-icons/io5";
 import {
-	Signal,
+	type Signal,
 	useComputed,
 	useSignal,
 	useSignalEffect,
 } from "@preact/signals";
 import { useEffect, useRef, useState} from "preact/hooks";
-import { codeMirror, errorLog, isNewSaveStrat, muted, PersistenceState, RoomState,  screenRef, cleanupRef, reviewState } from "../../lib/state";
+import { codeMirror, errorLog, isNewSaveStrat, muted, type PersistenceState, type RoomState,  screenRef, cleanupRef, reviewState } from "../../lib/state";
 import EditorModal from "../popups-etc/editor-modal";
 import { runGame, _performSyntaxCheck } from "../../lib/engine";
 import DraftWarningModal from "../popups-etc/draft-warning";
@@ -25,7 +25,7 @@ import { defaultExampleCode } from "../../lib/examples";
 import MigrateToast from "../popups-etc/migrate-toast";
 import { nanoid } from "nanoid";
 import TutorialWarningModal from "../popups-etc/tutorial-warning";
-import { editSessionLength, switchTheme, ThemeType, continueSaving, LAST_SAVED_SESSION_ID, showSaveConflictModal } from '../../lib/state'
+import { editSessionLength, switchTheme, type ThemeType, continueSaving, LAST_SAVED_SESSION_ID, showSaveConflictModal } from '../../lib/state'
 import SessionConflictWarningModal from '../popups-etc/session-conflict-warning-modal'
 import {eotMessage, versionState} from "../../lib/upload";
 import VersionWarningModal from "../popups-etc/version-warning";
@@ -76,6 +76,12 @@ export const onRun = async () => {
 interface EditorProps {
 	persistenceState: Signal<PersistenceState>;
 	roomState?: Signal<RoomState> | undefined;
+	review?: {
+		code?: string;
+		rawUrl?: string;
+		prUrl?: string;
+		error?: string;
+	};
 	cookies: {
 		outputAreaSize: number | null;
 		helpAreaSize: number | null;
@@ -264,10 +270,11 @@ const exitTutorial = (persistenceState: Signal<PersistenceState>, sessionId: str
 	}
 };
 
-export default function Editor({ persistenceState, cookies, roomState }: EditorProps) {
+export default function Editor({ persistenceState, cookies, roomState, review }: EditorProps) {
 	const outputArea = useRef<HTMLDivElement>(null);
 	const screenContainer = useRef<HTMLDivElement>(null);
 	const screenControls = useRef<HTMLDivElement>(null);
+	const reviewAutoRun = useRef(false);
 
 	const [sessionId] = useState(nanoid());
 
@@ -514,6 +521,8 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 	}
 	else if (persistenceState.value.kind === PersistenceStateKind.SHARED)
 		initialCode = persistenceState.value.code;
+	else if (review?.code)
+		initialCode = review.code;
 	else if (persistenceState.value.kind === PersistenceStateKind.IN_MEMORY)
 		initialCode = localStorage.getItem("sprigMemory") ?? defaultExampleCode;
 	else if (isNewSaveStrat.value && persistenceState.value.kind === PersistenceStateKind.COLLAB){
@@ -579,6 +588,10 @@ export default function Editor({ persistenceState, cookies, roomState }: EditorP
 						onEditorView={(editor) => {
 							codeMirror.value = editor;
 							setTimeout(() => foldAllTemplateLiterals(), 100); // Fold after the document is parsed (gross)
+							if (review?.code && !reviewAutoRun.current) {
+								reviewAutoRun.current = true;
+								setTimeout(() => onRun(), 500);
+							}
 						}}
 						onRunShortcut={onRun}
 						onCodeChange={() => {
