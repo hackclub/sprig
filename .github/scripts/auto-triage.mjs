@@ -277,9 +277,17 @@ function extractBoldField(body, label) {
 		if (value) return value;
 	}
 
+	// Try **Label: value** (entire field/line bolded)
+	const fullBoldPattern = new RegExp(String.raw`(?:\*\*|\*)${escaped}\s*:\s*(.+?)(?:\*\*|\*)(?:\r?\n|$)`, "i");
+	const fullBoldMatch = body.match(fullBoldPattern);
+	if (fullBoldMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(fullBoldMatch[1]));
+		if (value) return value;
+	}
+
 	// Fallback: plain "Label: value" on its own line
-	// Handles unbolded fields, heading-style descriptions, etc.
-	const plainPattern = new RegExp(String.raw`(?:^|\n)${escaped}\s*:\s*([^\n]+)`, "i");
+	// Handles unbolded fields, bulleted lists, heading-style descriptions, etc.
+	const plainPattern = new RegExp(String.raw`(?:^|\n)\s*(?:[-*]|\d+\.)*\s*(?:\*\*|\*)?${escaped}\s*:\s*([^\n]+)`, "i");
 	const plainMatch = body.match(plainPattern);
 	if (plainMatch) {
 		const value = normalizeFieldValue(stripTemplateNoise(plainMatch[1]));
@@ -290,8 +298,11 @@ function extractBoldField(body, label) {
 }
 
 function normalizeFieldValue(value) {
-	// Unwrap markdown links: [@foo](url) or [foo](url) -> foo
-	return value.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").trim();
+	// Unwrap markdown links: [@foo](url) or [foo](url) -> foo, and strip surrounding formatting
+	return value
+		.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+		.replace(/^[*`_~]+|[*`_~]+$/g, "")
+		.trim();
 }
 
 function stripTemplateNoise(value) {
@@ -331,6 +342,8 @@ async function validateMetadata(content, filename, workspace) {
 	);
 
 	checkMetadataDate(values.addedOn, add);
+	const dateMatch = values.addedOn.match(/\b\d{4}-\d{2}-\d{2}\b/);
+	if (dateMatch) values.addedOn = dateMatch[0];
 
 	const titleLooksLikeTemplate = /^getting(_|\s)started$/i.test(values.title?.trim()) || /^template$/i.test(values.title?.trim()) || /^my game$/i.test(values.title?.trim());
 	const authorLooksLikeTemplate = /leo,\s*edits/i.test(values.author) || /^my name$/i.test(values.author?.trim());
@@ -377,6 +390,10 @@ async function validateMetadata(content, filename, workspace) {
 }
 
 function getMetadataValue(content, key) {
+	if (key === "addedOn" || key === "title" || key === "author") {
+		const match = content.match(new RegExp(String.raw`@${key}:\s*([^\n]*)`));
+		return match?.[1]?.trim() ?? "";
+	}
 	const match = content.match(new RegExp(String.raw`@${key}:\s*([\s\S]*?)(?=\n\s*@|\n\s*\*\/)`));
 	return match?.[1]?.trim() ?? "";
 }
@@ -385,7 +402,9 @@ function parseTags(raw) {
 	if (!raw?.trim()) return { issue: "is empty (expected a JSON-ish array like ['maze','puzzle'])." };
 
 	try {
-		const parsed = JSON.parse(raw.replaceAll("'", '"'));
+		const match = raw.match(/\[[\s\S]*?\]/);
+		const toParse = match ? match[0] : raw;
+		const parsed = JSON.parse(toParse.replaceAll("'", '"'));
 		if (!Array.isArray(parsed)) return { issue: "must be an array (example: ['maze','puzzle'])." };
 		if (parsed.some((tag) => typeof tag !== "string")) {
 			return { issue: "must be an array of strings (example: ['maze','puzzle'])." };
@@ -641,8 +660,10 @@ function formatPercent(value) {
 }
 
 function checkMetadataDate(addedOn, add) {
-	const validDate = /^\d{4}-\d{2}-\d{2}$/.test(addedOn);
-	const parsedDate = validDate ? new Date(`${addedOn}T00:00:00Z`) : null;
+	const dateMatch = addedOn.match(/\b\d{4}-\d{2}-\d{2}\b/);
+	const dateStr = dateMatch ? dateMatch[0] : addedOn.trim();
+	const validDate = /^\d{4}-\d{2}-\d{2}$/.test(dateStr);
+	const parsedDate = validDate ? new Date(`${dateStr}T00:00:00Z`) : null;
 	const now = new Date();
 	const tooOld = parsedDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
 	add(
