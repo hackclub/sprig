@@ -1,7 +1,7 @@
 /*
 @title: Crystal Escape
 @description: Collect every crystal and escape the dungeon!
-@author: Tejus Bhasin
+@author:TejusBhasin
 @tags: ['arcade', 'maze', 'adventure']
 @addedOn: 2026-09-20
 */
