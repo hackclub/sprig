@@ -5,18 +5,6 @@
 @tags: ['adventure', 'arcade']
 @addedOn: 2026-09-20
 */
-Keys:
-- W to move up
-- A to move left
-- S to move down
-- D to move right
-- I to start the game
-Objective:
-- Collect all crystals.
-- Avoid asteroids and enemies.
-- Manage your oxygen and health.
-- Collect power-ups when available.
-- Reach the exit to advance to the next level.
 const player = "p";
 const wall = "w";
 const crystal = "c";
