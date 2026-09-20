@@ -1,3 +1,10 @@
+/*
+@title: Robo Dodge
+@author: ej2508
+@description: Steer your robo with W A S D and dodge the falling rocks. Every rock you dodge scores a point.
+@tags: ['dodge', 'arcade']
+@addedOn: 2026-09-20
+*/
 const player = "p"
 const rock = "r"
 let gameOver = false
