@@ -3,7 +3,7 @@
 @description: "Space Miner" is a retro style space adventure where players explore dangerous sectors, collect crystals, avoid asteroids and enemies, manage their oxygen, and reach the exit to progress through multiple levels.
 @author: greenghostcmd
 @tags: ['adventure', 'arcade']
-@addedOn: 2026-09-18
+@addedOn: 2026-09-20
 Keys:
 - W to move up
 - A to move left
