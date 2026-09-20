@@ -4,6 +4,7 @@
 @author: greenghostcmd
 @tags: ['adventure', 'arcade']
 @addedOn: 2026-09-20
+*/
 Keys:
 - W to move up
 - A to move left
@@ -16,7 +17,6 @@ Objective:
 - Manage your oxygen and health.
 - Collect power-ups when available.
 - Reach the exit to advance to the next level.
-*/
 const player = "p";
 const wall = "w";
 const crystal = "c";
