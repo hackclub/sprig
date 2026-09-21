@@ -56,6 +56,11 @@ if (event.action === "assigned") {
 	process.exit(0);
 }
 
+if (event.action === "labeled" && event.label?.name !== "Submission") {
+	console.log(`PR labeled with "${event.label?.name ?? "unknown"}", not "Submission". Skipping auto triage.`);
+	process.exit(0);
+}
+
 if (event.action === "unassigned") {
 	const issueData = await githubRequest(token, "GET", `/repos/${owner}/${repo}/issues/${prNumber}`);
 	if ((issueData.assignees ?? []).length === 0) {
@@ -97,11 +102,13 @@ const reviewBaseUrl = process.env.SPRIG_REVIEW_BASE_URL ?? "https://sprig.hackcl
 await ensureReviewLabels({ owner, repo, token });
 
 const pullFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/files`);
-const modifiesGames = pullFiles.some((f) => f.filename.startsWith("games/"));
+const modifiesGames = pullFiles.some((f) => f.filename.toLowerCase().startsWith("games/"));
 const labels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
+const body = pullRequest.body ?? "";
+const hasSubmissionTemplate = /what is your game about/i.test(body) || /how do you play your game/i.test(body) || /pre apply checklist/i.test(body);
 
-if (!modifiesGames && !hasLabel(labels, "Submission")) {
-	console.log("Not a submission PR (no games/ files modified and no Submission label); skipping.");
+if (!modifiesGames && !hasLabel(labels, "Submission") && !hasSubmissionTemplate) {
+	console.log("Not a submission PR (no games/ files modified, no Submission label, and no submission template); skipping.");
 	process.exit(0);
 }
 
