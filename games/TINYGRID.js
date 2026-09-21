@@ -1,5 +1,6 @@
 /*
 @title: TINYGRID
+@author: Noamismach
 @description: Thirty turns to grow a tiny city. Made for the Sprig handheld.
 @tags: ["strategy", "simulation"]
 @addedOn: 2026-09-21
