@@ -342,8 +342,6 @@ async function validateMetadata(content, filename, workspace) {
 	);
 
 	checkMetadataDate(values.addedOn, add);
-	const dateMatch = values.addedOn.match(/\b\d{4}-\d{2}-\d{2}\b/);
-	if (dateMatch) values.addedOn = dateMatch[0];
 
 	const titleLooksLikeTemplate = /^getting(_|\s)started$/i.test(values.title?.trim()) || /^template$/i.test(values.title?.trim()) || /^my game$/i.test(values.title?.trim());
 	const authorLooksLikeTemplate = /leo,\s*edits/i.test(values.author) || /^my name$/i.test(values.author?.trim());
@@ -390,10 +388,6 @@ async function validateMetadata(content, filename, workspace) {
 }
 
 function getMetadataValue(content, key) {
-	if (key === "addedOn" || key === "title" || key === "author") {
-		const match = content.match(new RegExp(String.raw`@${key}:\s*([^\n]*)`));
-		return match?.[1]?.trim() ?? "";
-	}
 	const match = content.match(new RegExp(String.raw`@${key}:\s*([\s\S]*?)(?=\n\s*@|\n\s*\*\/)`));
 	return match?.[1]?.trim() ?? "";
 }
@@ -402,9 +396,7 @@ function parseTags(raw) {
 	if (!raw?.trim()) return { issue: "is empty (expected a JSON-ish array like ['maze','puzzle'])." };
 
 	try {
-		const match = raw.match(/\[[\s\S]*?\]/);
-		const toParse = match ? match[0] : raw;
-		const parsed = JSON.parse(toParse.replaceAll("'", '"'));
+		const parsed = JSON.parse(raw.replaceAll("'", '"'));
 		if (!Array.isArray(parsed)) return { issue: "must be an array (example: ['maze','puzzle'])." };
 		if (parsed.some((tag) => typeof tag !== "string")) {
 			return { issue: "must be an array of strings (example: ['maze','puzzle'])." };
@@ -660,19 +652,20 @@ function formatPercent(value) {
 }
 
 function checkMetadataDate(addedOn, add) {
-	const dateMatch = addedOn.match(/\b\d{4}-\d{2}-\d{2}\b/);
-	const dateStr = dateMatch ? dateMatch[0] : addedOn.trim();
-	const validDate = /^\d{4}-\d{2}-\d{2}$/.test(dateStr);
-	const parsedDate = validDate ? new Date(`${dateStr}T00:00:00Z`) : null;
+	const validDate = /^\d{4}-\d{2}-\d{2}$/.test(addedOn);
+	const parsedDate = validDate ? new Date(`${addedOn}T00:00:00Z`) : null;
 	const now = new Date();
 	const tooOld = parsedDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
-	add(
-		"Metadata date",
-		validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld,
-		validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld
-			? "Date looks current."
-			: `Set \`@addedOn:\` to a recent date in \`YYYY-MM-DD\` format.`
-	);
+	const ok = validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld;
+	let detail = "Date looks current.";
+	if (!ok) {
+		if (/\n/.test(addedOn) || /\b\d{4}-\d{2}-\d{2}\b/.test(addedOn)) {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format. Close the metadata header with `*/` immediately after `@addedOn` before any instructions or other comments.";
+		} else {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format.";
+		}
+	}
+	add("Metadata date", ok, detail);
 }
 
 function validateSubmissionFiles(pullFiles, addCheck) {
