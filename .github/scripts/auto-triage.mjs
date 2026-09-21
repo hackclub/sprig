@@ -561,13 +561,18 @@ function checkMetadataDate(addedOn, add) {
 	const parsedDate = validDate ? new Date(`${addedOn}T00:00:00Z`) : null;
 	const now = new Date();
 	const tooOld = parsedDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
-	add(
-		"Metadata date",
-		validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld,
-		validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld
-			? "Date looks current."
-			: `Set \`@addedOn:\` to a recent date in \`YYYY-MM-DD\` format.`
-	);
+	const ok = validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld;
+	let detail = "Date looks current.";
+	if (!ok) {
+		if (validDate && tooOld) {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format (must be within the last 6 months).";
+		} else if (/\n/.test(addedOn) || /\b\d{4}-\d{2}-\d{2}\b/.test(addedOn)) {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format. Close the metadata header with `*/` immediately after `@addedOn` before any instructions or other comments.";
+		} else {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format.";
+		}
+	}
+	add("Metadata date", ok, detail);
 }
 
 function validateSubmissionFiles(pullFiles, addCheck) {
