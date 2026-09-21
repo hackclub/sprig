@@ -548,7 +548,7 @@ ${links.join("\n")}
 
 ${checksSection}${warningLines.join("\n")}
 
-${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: push fixes to this PR ([edit file](${editUrl})). These checks rerun automatically.`}
+${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: push fixes to this PR ([edit file](${editUrl})). These checks rerun automatically.\n If you are in trouble, don't hesitate to ask for help in the #sprig channel on Slack or ping @LucasHT22 here.`}
 `;
 }
 
