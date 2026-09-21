@@ -287,6 +287,22 @@ async function validateMetadata(content, filename, workspace) {
 			: "Replace example/template values in the metadata header (like 'MY GAME', 'MY NAME', 'Short description...', or placeholder tags)."
 	);
 
+	const TUTORIAL_FILES = ["getting_started.js", "maze_game_starter.js"];
+	const isTutorial = TUTORIAL_FILES.some((tutFile) => {
+		try {
+			const tutContent = readFileSync(path.join(workspace, "games", tutFile), "utf8");
+			const normalizeCode = (s) => stripComments(s).replace(/\s+/g, " ").trim();
+			return normalizeCode(content) === normalizeCode(tutContent);
+		} catch { return false; }
+	});
+	add(
+		"Not a tutorial game",
+		!isTutorial,
+		isTutorial
+			? "This looks like an unmodified tutorial or starter game. Submit your own original game instead."
+			: "Game does not appear to be an unmodified tutorial."
+	);
+
 	const titleConflict = values.title ? await findTitleConflict(values.title, filename, workspace) : null;
 	add(
 		"Unique game title",
@@ -472,6 +488,7 @@ function buildComment(result) {
 		"Metadata tags parse": "metadata",
 		"Metadata date": "metadata",
 		"Metadata template values": "metadata",
+		"Not a tutorial game": "metadata",
 		"Unique game title": "metadata",
 
 		"Sprig-only APIs": "code",
