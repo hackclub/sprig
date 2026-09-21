@@ -660,7 +660,7 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 	const { gameFiles: jsFiles, gameFilesLoose, imageFiles, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
 	// jsFiles = strict valid filenames; gameFilesLoose = in games/*.js (may have bad chars)
 	// Use loose for "how many game files" count so bad filename doesn't cascade into false errors
-	const effectiveGameFiles = jsFiles.length > 0 ? jsFiles : gameFilesLoose;
+	const effectiveGameFiles = gameFilesLoose;
 	if (uppercaseGames.length > 0) {
 		const badNames = uppercaseGames.map((file) => `\`${file.filename}\``).join(", ");
 		addCheck("Directory must be lowercase", false, `Your file must be in the lowercase \`games/\` directory. Found ${badNames}.`);
