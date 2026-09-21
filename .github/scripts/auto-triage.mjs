@@ -51,26 +51,7 @@ if (pullRequest.draft) {
 }
 
 if (event.action === "closed") {
-	console.log("PR closed. Dispatching re-validation for other open submissions from the same user.");
-	const submitterLogin = pullRequest.user?.login;
-	if (submitterLogin) {
-		const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
-		const siblingPRs = openPulls.filter((pr) => pr.user?.login === submitterLogin && pr.labels?.some((l) => l.name === "Submission"));
-		for (const sibling of siblingPRs) {
-			console.log(`Triggering auto-triage for sibling PR #${sibling.number}`);
-			try {
-				await githubRequest(token, "POST", `/repos/${owner}/${repo}/actions/workflows/auto-triage.yml/dispatches`, {
-					ref: "main",
-					inputs: {
-						pr_number: String(sibling.number),
-						event_action: "synchronize"
-					}
-				});
-			} catch (err) {
-				console.error(`Failed to dispatch for PR #${sibling.number}:`, err);
-			}
-		}
-	}
+	console.log("PR is closed. Skipping auto triage.");
 	process.exit(0);
 }
 
@@ -173,6 +154,14 @@ async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) 
 	}
 }
 
+let cachedOpenPulls = null;
+async function getOpenPulls() {
+	if (!cachedOpenPulls) {
+		cachedOpenPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
+	}
+	return cachedOpenPulls;
+}
+
 async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, owner, repo }) {
 	const checks = [];
 	const problems = [];
@@ -191,7 +180,7 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 	// Check for duplicate open PRs from the same user, regardless of filename validity
 	const submitterLogin = pullRequest.user?.login;
 	if (submitterLogin) {
-		const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
+		const openPulls = await getOpenPulls();
 		const duplicatePR = openPulls.find(
 			(pr) => pr.number !== prNumber && pr.user?.login === submitterLogin && pr.labels?.some((l) => l.name === "Submission")
 		);
@@ -363,8 +352,8 @@ async function validateMetadata(content, filename, workspace) {
 	const isTutorial = TUTORIAL_FILES.some((tutFile) => {
 		try {
 			const tutContent = readFileSync(path.join(workspace, "games", tutFile), "utf8");
-			const stripMeta = (s) => s.replace(/\/\*[\s\S]*?\*\//m, "").replace(/\s+/g, " ").trim();
-			return stripMeta(content) === stripMeta(tutContent);
+			const normalizeCode = (s) => stripComments(s).replace(/\s+/g, " ").trim();
+			return normalizeCode(content) === normalizeCode(tutContent);
 		} catch { return false; }
 	});
 	add(
@@ -423,7 +412,7 @@ async function findTitleConflict(title, filename, workspace) {
 		if (normalize(existingTitle) === normalizedTitle) return `games/${gameFile}`;
 	}
 
-	const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
+	const openPulls = await getOpenPulls();
 	const submissionPRs = openPulls.filter((pr) => pr.labels?.some((l) => l.name === "Submission"));
 	for (const pr of submissionPRs) {
 		if (pr.number === prNumber) continue;
@@ -541,6 +530,7 @@ function buildComment(result) {
 	};
 
 	const categoryMap = {
+		"Files stay in allowed folders": "file",
 		"Valid filenames and folders": "file",
 		"Exactly one game file": "file",
 		"Only new files added": "file",
@@ -609,15 +599,15 @@ function buildComment(result) {
 	const editUrl = `https://github.com/${headRepo}/edit/${headRef}/${result.gameFile ?? ""}`;
 
 	const links = [];
-	if (result.playUrl) links.push(`- ${externalLink("Play in Sprig Editor", result.playUrl)}`);
-	if (result.gameFile) links.push(`- ${externalLink("Edit Game File", editUrl)}`);
+	if (result.playUrl) links.push(`- [Play in Sprig Editor](${result.playUrl})`);
+	if (result.gameFile) links.push(`- [Edit Game File](${editUrl})`);
 	if (result.similarity?.match) {
 		const similarName = result.similarity.match.replace(/^games\//, "").replace(/\.js$/, "");
-		links.push(`- ${externalLink("Play Similar Game (Gallery)", `https://sprig.hackclub.com/gallery/${similarName}`)}`);
+		links.push(`- [Play Similar Game (Gallery)](https://sprig.hackclub.com/gallery/${similarName})`);
 	}
-	if (result.rawUrl) links.push(`- ${externalLink("View Raw", result.rawUrl)}`);
-	if (result.screenshotUrl) links.push(`- ${externalLink("View Screenshot", result.screenshotUrl)}`);
-	links.push(`- ${externalLink("PR Files", `${pullRequest.html_url}/files`)}`);
+	if (result.rawUrl) links.push(`- [View Raw](${result.rawUrl})`);
+	if (result.screenshotUrl) links.push(`- [View Screenshot](${result.screenshotUrl})`);
+	links.push(`- [PR Files](${pullRequest.html_url}/files)`);
 
 	const warningLines = result.warnings.length
 		? ["", "#### Review Flags", ...result.warnings.map((warning) => `- ⚠️ ${warning}`)]
@@ -639,12 +629,8 @@ ${links.join("\n")}
 
 ${checksSection}${warningLines.join("\n")}
 
-${result.ok ? `Reviewers: please use the ${result.playUrl ? externalLink("play link", result.playUrl) : "play link"} to playtest, then approve or request changes.` : `@${pullRequest.user.login}: push fixes to this PR (${externalLink("edit file", editUrl)}). These checks rerun automatically.`}
+${result.ok ? `Reviewers: please use the ${result.playUrl ? `[play link](${result.playUrl})` : "play link"} to playtest, then approve or request changes.` : `@${pullRequest.user.login}: push fixes to this PR ([edit file](${editUrl})). These checks rerun automatically.`}
 `;
-}
-
-function externalLink(label, url) {
-	return `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a><!-- [${label}](${url}) -->`;
 }
 
 function formatPercent(value) {
@@ -681,25 +667,20 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 
 	const disallowedNames = disallowedFiles.map((file) => `\`${file.filename}\``).join(", ");
 	addCheck(
-		"Valid filenames and folders",
+		"Files stay in allowed folders",
 		disallowedFiles.length === 0,
 		disallowedFiles.length
-			? `Only game files in \`games/\` and optional images in \`games/img/\` are allowed. Filenames may only contain letters, numbers, hyphens, and underscores (no spaces, apostrophes, or special characters). Images must be .png. Found ${disallowedNames}.`
+			? `Only game files in \`games/\` and optional images in \`games/img/\` are allowed. Images must be .png. Found ${disallowedNames}.`
 			: "Only submission files changed."
 	);
 
 	const jsNames = effectiveGameFiles.map((file) => `\`${file.filename}\``).join(", ");
-	// If the only "extra" JS files are bad-named ones already caught by the filename check,
-	// don't double-report them as extra game files — the filename error is enough.
-	const extraBadNameOnly = effectiveGameFiles === gameFilesLoose && gameFilesLoose.length > 1;
 	addCheck(
 		"Exactly one game file",
-		effectiveGameFiles.length === 1 || extraBadNameOnly,
+		effectiveGameFiles.length === 1,
 		effectiveGameFiles.length === 0
 			? "Add exactly one JavaScript game file in `games/`."
-			: extraBadNameOnly
-				? "Fix the filename(s) above — each must use only letters, numbers, hyphens, and underscores."
-				: `Only one game file is allowed per submission. Found ${jsNames}.`
+			: `Only one game file is allowed per submission. Found ${jsNames}.`
 	);
 
 	const changedNames = changedNonAddedFiles.map((file) => `\`${file.filename}\``).join(", ");

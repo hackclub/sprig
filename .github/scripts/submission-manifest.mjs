@@ -10,7 +10,7 @@ export function buildSubmissionManifest(pullFiles) {
 		isGame: GAME_FILE_RE.test(file.filename),
 		isGameLoose: GAME_FILE_LOOSE_RE.test(file.filename), // right place, may have bad chars
 		isImage: IMAGE_FILE_RE.test(file.filename),
-		isAllowed: GAME_FILE_RE.test(file.filename) || IMAGE_FILE_RE.test(file.filename),
+		isAllowed: GAME_FILE_LOOSE_RE.test(file.filename) || IMAGE_FILE_RE.test(file.filename),
 	}));
 
 	return {
