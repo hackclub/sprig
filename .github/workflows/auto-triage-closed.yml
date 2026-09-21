@@ -9,6 +9,7 @@ permissions:
 
 jobs:
     revalidate-siblings:
+        if: contains(github.event.pull_request.labels.*.name, 'Submission')
         runs-on: ubuntu-latest
         steps:
             - name: Checkout trusted automation

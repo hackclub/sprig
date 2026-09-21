@@ -531,7 +531,6 @@ function buildComment(result) {
 
 	const categoryMap = {
 		"Files stay in allowed folders": "file",
-		"Valid filenames and folders": "file",
 		"Exactly one game file": "file",
 		"Only new files added": "file",
 		"Filename uses safe characters": "file",
@@ -645,7 +644,9 @@ function checkMetadataDate(addedOn, add) {
 	const ok = validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld;
 	let detail = "Date looks current.";
 	if (!ok) {
-		if (/\n/.test(addedOn) || /\b\d{4}-\d{2}-\d{2}\b/.test(addedOn)) {
+		if (validDate && tooOld) {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format (must be within the last 6 months).";
+		} else if (/\n/.test(addedOn) || /\b\d{4}-\d{2}-\d{2}\b/.test(addedOn)) {
 			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format. Close the metadata header with `*/` immediately after `@addedOn` before any instructions or other comments.";
 		} else {
 			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format.";
@@ -680,7 +681,9 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 		effectiveGameFiles.length === 1,
 		effectiveGameFiles.length === 0
 			? "Add exactly one JavaScript game file in `games/`."
-			: `Only one game file is allowed per submission. Found ${jsNames}.`
+			: jsFiles.length === 0 && gameFilesLoose.length > 1
+				? `Only one game file is allowed per submission (and filenames must be fixed). Found ${jsNames}.`
+				: `Only one game file is allowed per submission. Found ${jsNames}.`
 	);
 
 	const changedNames = changedNonAddedFiles.map((file) => `\`${file.filename}\``).join(", ");
