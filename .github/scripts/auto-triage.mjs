@@ -104,11 +104,21 @@ await ensureReviewLabels({ owner, repo, token });
 const pullFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/files`);
 const modifiesGames = pullFiles.some((f) => f.filename.toLowerCase().startsWith("games/"));
 const labels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
-const body = pullRequest.body ?? "";
-const hasSubmissionTemplate = /what is your game about/i.test(body) || /how do you play your game/i.test(body) || /pre apply checklist/i.test(body);
+const isLabeledSubmission = hasLabel(labels, "Submission");
 
-if (!modifiesGames && !hasLabel(labels, "Submission") && !hasSubmissionTemplate) {
-	console.log("Not a submission PR (no games/ files modified, no Submission label, and no submission template); skipping.");
+const body = pullRequest.body ?? "";
+const touchesNonGamePaths = pullFiles.some((f) =>
+	!f.filename.toLowerCase().startsWith("games/") &&
+	(f.status !== "added" || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
+);
+const isMisplacedGameSubmission = !touchesNonGamePaths &&
+	pullFiles.some((f) => f.status === "added" && f.filename.endsWith(".js")) &&
+	(/what is your game about/i.test(body) || /how do you play your game/i.test(body));
+
+const isSubmissionPR = modifiesGames || isLabeledSubmission || isMisplacedGameSubmission;
+
+if (!isSubmissionPR) {
+	console.log("Not a submission PR (no games/ files, no Submission label, and not a misplaced game submission); skipping.");
 	process.exit(0);
 }
 
