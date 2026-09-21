@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Pirate bay
 @author: Cassius
-@tags: [Platformer]
-@addedOn: 2025-00-00
+@tags: ['Platformer', 'Pirate']
+@addedOn: 2026-09-09
 */
  
 const player = "p"
