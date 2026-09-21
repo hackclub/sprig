@@ -149,6 +149,14 @@ async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) 
 	}
 }
 
+let cachedOpenPulls = null;
+async function getOpenPulls() {
+	if (!cachedOpenPulls) {
+		cachedOpenPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
+	}
+	return cachedOpenPulls;
+}
+
 async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, owner, repo }) {
 	const checks = [];
 	const problems = [];
@@ -335,8 +343,9 @@ async function findTitleConflict(title, filename, workspace) {
 		if (normalize(existingTitle) === normalizedTitle) return `games/${gameFile}`;
 	}
 
-	const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
-	for (const pr of openPulls) {
+	const openPulls = await getOpenPulls();
+	const submissionPRs = openPulls.filter((pr) => pr.labels?.some((l) => l.name === "Submission"));
+	for (const pr of submissionPRs) {
 		if (pr.number === prNumber) continue;
 		const prFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pr.number}/files`);
 		for (const file of prFiles) {
