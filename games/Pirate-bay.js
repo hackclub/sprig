@@ -4,6 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Pirate bay
 @author: Cassius
+@description: Platformer where you control a slime and escape the sinking pirate ships
 @tags: ['Platformer', 'Pirate']
 @addedOn: 2026-09-09
 */
