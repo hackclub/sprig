@@ -228,10 +228,36 @@ function validatePullRequestBody(body) {
 
 function extractBoldField(body, label) {
 	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
-	const pattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|##|#)|$)`, "i");
-	const match = body.match(pattern);
-	if (!match) return "";
-	return stripTemplateNoise(match[1]);
+
+	const boldPattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|#{1,6})|$)`, "i");
+	const boldMatch = body.match(boldPattern);
+	if (boldMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(boldMatch[1]));
+		if (value) return value;
+	}
+
+	const fullBoldPattern = new RegExp(String.raw`(?:\*\*|\*)${escaped}\s*:\s*(.+?)(?:\*\*|\*)(?:\r?\n|$)`, "i");
+	const fullBoldMatch = body.match(fullBoldPattern);
+	if (fullBoldMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(fullBoldMatch[1]));
+		if (value) return value;
+	}
+
+	const plainPattern = new RegExp(String.raw`(?:^|\n)\s*(?:[-*]|\d+\.)*\s*(?:\*\*|\*)?${escaped}\s*:\s*([^\n]+)`, "i");
+	const plainMatch = body.match(plainPattern);
+	if (plainMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(plainMatch[1]));
+		if (value) return value;
+	}
+
+	return "";
+}
+
+function normalizeFieldValue(value) {
+	return value
+		.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+		.replace(/^[*`_~]+|[*`_~]+$/g, "")
+		.trim();
 }
 
 function stripTemplateNoise(value) {
@@ -548,7 +574,7 @@ ${links.join("\n")}
 
 ${checksSection}${warningLines.join("\n")}
 
-${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: push fixes to this PR ([edit file](${editUrl})). These checks rerun automatically.`}
+${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: push fixes to this PR ([edit file](${editUrl})). These checks rerun automatically.\n If you are in trouble, don't hesitate to ask for help in the #sprig channel on Slack or ping @LucasHT22 here.`}
 `;
 }
 
