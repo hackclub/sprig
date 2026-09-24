@@ -4,11 +4,13 @@
 @author: Harjeet Singh (harciufff)
 @tags: ['retro', 'action']
 @addedOn: 2026-09-24
-
+*/
+ 
+/*
         ESCAPE THE NEIGHBORHOOD
-
+ 
         An ordinary man, an ordinary night.
-        No gun in his pocket: only fear.
+        No gun in pocket: only fear.
         The evidence lies scattered in the alleys,
         the thieves are looking for him in every corner.
         Bribe them with cash, take it all, run.
