@@ -1,25 +1,9 @@
 /*
 @title: Fast snake
 @description: Snake Game
-@author: Xenoe or ugnius0716 on github
+@**Author:** Xenoe or ugnius0716 on github
 @tags: ['game', 'snake']
 @addedOn: 2026-09-22
-  '0' -> Black
-  'L' -> Dark Gray
-  '1' -> Light Gray
-  '2' -> White
-  '3' -> Red
-  'C' -> Brown
-  '7' -> Light Blue
-  '5' -> Dark Blue
-  '6' -> Yellow
-  'F' -> Gold
-  '4' -> Light Green
-  'D' -> Dark Green
-  '8' -> Pink
-  'H' -> Purple
-  '9' -> Orange
-  '.' -> Transparent
 */
 
 const headRight = "q"
