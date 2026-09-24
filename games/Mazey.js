@@ -1,6 +1,6 @@
 /*
 @title: Mazey
-@author: Kartik Biddoliya
+@author: K-BIDDOLIYA
 @description: Just some maze, try to escape.
 @tags: ['maze']
 @addedOn: 2026-09-07
