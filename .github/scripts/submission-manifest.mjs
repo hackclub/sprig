@@ -1,4 +1,5 @@
 const GAME_FILE_RE = /^games\/[A-Za-z0-9_-]+\.js$/;
+const GAME_FILE_LOOSE_RE = /^games\/[^/]+\.js$/;
 const IMAGE_FILE_RE = /^games\/img\/[A-Za-z0-9_-]+\.png$/i;
 
 export function buildSubmissionManifest(pullFiles) {
@@ -7,13 +8,15 @@ export function buildSubmissionManifest(pullFiles) {
 		previousFilename: file.previous_filename ?? null,
 		status: file.status,
 		isGame: GAME_FILE_RE.test(file.filename),
+		isGameLoose: GAME_FILE_LOOSE_RE.test(file.filename),
 		isImage: IMAGE_FILE_RE.test(file.filename),
-		isAllowed: GAME_FILE_RE.test(file.filename) || IMAGE_FILE_RE.test(file.filename),
+		isAllowed: GAME_FILE_LOOSE_RE.test(file.filename) || IMAGE_FILE_RE.test(file.filename),
 	}));
 
 	return {
 		files,
 		gameFiles: files.filter((file) => file.isGame),
+		gameFilesLoose: files.filter((file) => file.isGameLoose),
 		imageFiles: files.filter((file) => file.isImage),
 		disallowedFiles: files.filter((file) => !file.isAllowed),
 		changedNonAddedFiles: files.filter((file) => file.status !== "added" && !file.filename.startsWith("games/")),
