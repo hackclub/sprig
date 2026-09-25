@@ -251,10 +251,36 @@ function validatePullRequestBody(body) {
 
 function extractBoldField(body, label) {
 	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
-	const pattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|##|#)|$)`, "i");
-	const match = body.match(pattern);
-	if (!match) return "";
-	return stripTemplateNoise(match[1]);
+
+	const boldPattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|#{1,6})|$)`, "i");
+	const boldMatch = body.match(boldPattern);
+	if (boldMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(boldMatch[1]));
+		if (value) return value;
+	}
+
+	const fullBoldPattern = new RegExp(String.raw`(?:\*\*|\*)${escaped}\s*:\s*(.+?)(?:\*\*|\*)(?:\r?\n|$)`, "i");
+	const fullBoldMatch = body.match(fullBoldPattern);
+	if (fullBoldMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(fullBoldMatch[1]));
+		if (value) return value;
+	}
+
+	const plainPattern = new RegExp(String.raw`(?:^|\n)\s*(?:[-*]|\d+\.)*\s*(?:\*\*|\*)?${escaped}\s*:\s*([^\n]+)`, "i");
+	const plainMatch = body.match(plainPattern);
+	if (plainMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(plainMatch[1]));
+		if (value) return value;
+	}
+
+	return "";
+}
+
+function normalizeFieldValue(value) {
+	return value
+		.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+		.replace(/^[*`_~]+|[*`_~]+$/g, "")
+		.trim();
 }
 
 function stripTemplateNoise(value) {
@@ -585,13 +611,18 @@ function checkMetadataDate(addedOn, add) {
 	const parsedDate = validDate ? new Date(`${addedOn}T00:00:00Z`) : null;
 	const now = new Date();
 	const tooOld = parsedDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
-	add(
-		"Metadata date",
-		validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld,
-		validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld
-			? "Date looks current."
-			: `Set \`@addedOn:\` to a recent date in \`YYYY-MM-DD\` format.`
-	);
+	const ok = validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld;
+	let detail = "Date looks current.";
+	if (!ok) {
+		if (validDate && tooOld) {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format (must be within the last 6 months).";
+		} else if (/\n/.test(addedOn) || /\b\d{4}-\d{2}-\d{2}\b/.test(addedOn)) {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format. Close the metadata header with `*/` immediately after `@addedOn` before any instructions or other comments.";
+		} else {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format.";
+		}
+	}
+	add("Metadata date", ok, detail);
 }
 
 function validateSubmissionFiles(pullFiles, addCheck) {
