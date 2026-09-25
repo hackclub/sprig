@@ -4,7 +4,8 @@
 @description: A red cube chasing you down as you use attacks, vaults, movement, and waiting to take them down across different maps.
 @tags: ['action', 'puzzle', 'turn-based']
 @addedOn: 2026-09-19
-
+*/
+/*
  CONTROLS:
   'w', 'a', 's', 'd' : Move (Restores 1 Energy)
   'j'                : Strike (Costs 1 Energy. 1 DMG in open, 3 DMG against walls!)
