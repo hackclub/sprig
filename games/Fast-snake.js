@@ -1,7 +1,7 @@
 /*
 @title: Fast snake
 @description: Snake Game
-@**Author:** Xenoe or ugnius0716 on github
+@Author: Xenoe or ugnius0716 on github
 @tags: ['game', 'snake']
 @addedOn: 2026-09-22
 */
