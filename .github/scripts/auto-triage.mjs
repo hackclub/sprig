@@ -287,7 +287,7 @@ async function validateMetadata(content, filename, workspace) {
 			: "Replace example/template values in the metadata header (like 'MY GAME', 'MY NAME', 'Short description...', or placeholder tags)."
 	);
 
-	const TUTORIAL_FILES = ["getting_started.js", "maze_game_starter.js"];
+	const TUTORIAL_FILES = ["getting_started.js", "maze_game_starter.js", "sprig_dodge.js"];
 	const isTutorial = TUTORIAL_FILES.some((tutFile) => {
 		try {
 			const tutContent = readFileSync(path.join(workspace, "games", tutFile), "utf8");
