@@ -3,10 +3,10 @@ import { useEffect, useState } from 'preact/hooks'
 import { IoClose } from 'react-icons/io5'
 import { tinykeys } from 'tinykeys'
 import { usePopupCloseClick } from '../../lib/utils/popup-close-click'
-import { codeMirror, editors, openEditor, codeMirrorEditorText, _foldRanges, _widgets, type OpenEditor } from '../../lib/state'
+import { bitmaps, codeMirror, editors, openEditor, codeMirrorEditorText, _foldRanges, _widgets, type OpenEditor } from '../../lib/state'
 import styles from './editor-modal.module.css'
 import levenshtein from 'js-levenshtein'
-import { runGameHeadless } from '../../lib/engine'
+import { extractLegendBitmaps } from '../../lib/engine/legend-extractor'
 
 const enum LastUpdater {
 	RESET,
@@ -115,8 +115,7 @@ export default function EditorModal() {
 			const editRange = _foldRanges.value[indexOfMinDistance]
 			const openEditorCode = code.slice(editRange?.from, editRange?.to)
 
-			// the map editor needs to get the bitmaps after running the code
-			if (openEditor.value?.kind === 'map') runGameHeadless(code ?? '');
+			if (openEditor.value?.kind === 'map') bitmaps.value = extractLegendBitmaps(code ?? '');
 
 				text.value = openEditorCode;
 

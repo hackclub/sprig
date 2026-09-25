@@ -1,0 +1,21 @@
+{
+	"headers": [
+		{
+			"source": "/_astro/(.*)",
+			"headers": [
+				{
+					"key": "Access-Control-Allow-Origin",
+					"value": "null"
+				},
+				{
+					"key": "Access-Control-Allow-Credentials",
+					"value": "true"
+				},
+				{
+					"key": "Cross-Origin-Resource-Policy",
+					"value": "cross-origin"
+				}
+			]
+		}
+	]
+}
