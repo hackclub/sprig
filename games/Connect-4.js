@@ -1,3 +1,10 @@
+/*
+@title: Connect 4
+@author: AvikRathi
+@description: A recreation of the classic Connect 4 buit for sprig.
+@tags: ['competitive', 'strategy', 'multiplayer', 'fun']
+@addedOn: 2026-09-25
+*/
 const board =map`
 ...c...
 bbbbbbb
