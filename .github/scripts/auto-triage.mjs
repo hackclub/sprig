@@ -56,6 +56,11 @@ if (event.action === "assigned") {
 	process.exit(0);
 }
 
+if (event.action === "labeled" && event.label?.name !== "Submission") {
+	console.log(`PR labeled with "${event.label?.name ?? "unknown"}", not "Submission". Skipping auto triage.`);
+	process.exit(0);
+}
+
 if (event.action === "unassigned") {
 	const issueData = await githubRequest(token, "GET", `/repos/${owner}/${repo}/issues/${prNumber}`);
 	if ((issueData.assignees ?? []).length === 0) {
@@ -97,11 +102,23 @@ const reviewBaseUrl = process.env.SPRIG_REVIEW_BASE_URL ?? "https://sprig.hackcl
 await ensureReviewLabels({ owner, repo, token });
 
 const pullFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/files`);
-const modifiesGames = pullFiles.some((f) => f.filename.startsWith("games/"));
+const modifiesGames = pullFiles.some((f) => f.filename.toLowerCase().startsWith("games/"));
 const labels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
+const isLabeledSubmission = hasLabel(labels, "Submission");
 
-if (!modifiesGames && !hasLabel(labels, "Submission")) {
-	console.log("Not a submission PR (no games/ files modified and no Submission label); skipping.");
+const body = pullRequest.body ?? "";
+const touchesNonGamePaths = pullFiles.some((f) =>
+	!f.filename.toLowerCase().startsWith("games/") &&
+	(f.status !== "added" || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
+);
+const isMisplacedGameSubmission = !touchesNonGamePaths &&
+	pullFiles.some((f) => f.status === "added" && f.filename.endsWith(".js")) &&
+	(/what is your game about/i.test(body) || /how do you play your game/i.test(body));
+
+const isSubmissionPR = modifiesGames || isLabeledSubmission || isMisplacedGameSubmission;
+
+if (!isSubmissionPR) {
+	console.log("Not a submission PR (no games/ files, no Submission label, and not a misplaced game submission); skipping.");
 	process.exit(0);
 }
 
@@ -149,6 +166,14 @@ async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) 
 	}
 }
 
+let cachedOpenPulls = null;
+async function getOpenPulls() {
+	if (!cachedOpenPulls) {
+		cachedOpenPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
+	}
+	return cachedOpenPulls;
+}
+
 async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, owner, repo }) {
 	const checks = [];
 	const problems = [];
@@ -163,6 +188,21 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 
 	const bodyChecks = validatePullRequestBody(pullRequest.body ?? "");
 	for (const check of bodyChecks.checks) addCheck(check.name, check.ok, check.detail);
+
+	const submitterLogin = pullRequest.user?.login;
+	if (submitterLogin) {
+		const openPulls = await getOpenPulls();
+		const duplicatePR = openPulls.find(
+			(pr) => pr.number !== prNumber && pr.user?.login === submitterLogin && pr.labels?.some((l) => l.name === "Submission")
+		);
+		addCheck(
+			"No duplicate open submission",
+			!duplicatePR,
+			duplicatePR
+				? `You already have an open submission (PR #${duplicatePR.number}). Please close one of them.`
+				: "No other open submissions from this user."
+		);
+	}
 
 	let gameFile = null;
 	let metadata = null;
@@ -228,10 +268,36 @@ function validatePullRequestBody(body) {
 
 function extractBoldField(body, label) {
 	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
-	const pattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|##|#)|$)`, "i");
-	const match = body.match(pattern);
-	if (!match) return "";
-	return stripTemplateNoise(match[1]);
+
+	const boldPattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|#{1,6})|$)`, "i");
+	const boldMatch = body.match(boldPattern);
+	if (boldMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(boldMatch[1]));
+		if (value) return value;
+	}
+
+	const fullBoldPattern = new RegExp(String.raw`(?:\*\*|\*)${escaped}\s*:\s*(.+?)(?:\*\*|\*)(?:\r?\n|$)`, "i");
+	const fullBoldMatch = body.match(fullBoldPattern);
+	if (fullBoldMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(fullBoldMatch[1]));
+		if (value) return value;
+	}
+
+	const plainPattern = new RegExp(String.raw`(?:^|\n)\s*(?:[-*]|\d+\.)*\s*(?:\*\*|\*)?${escaped}\s*:\s*([^\n]+)`, "i");
+	const plainMatch = body.match(plainPattern);
+	if (plainMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(plainMatch[1]));
+		if (value) return value;
+	}
+
+	return "";
+}
+
+function normalizeFieldValue(value) {
+	return value
+		.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+		.replace(/^[*`_~]+|[*`_~]+$/g, "")
+		.trim();
 }
 
 function stripTemplateNoise(value) {
@@ -335,8 +401,9 @@ async function findTitleConflict(title, filename, workspace) {
 		if (normalize(existingTitle) === normalizedTitle) return `games/${gameFile}`;
 	}
 
-	const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
-	for (const pr of openPulls) {
+	const openPulls = await getOpenPulls();
+	const submissionPRs = openPulls.filter((pr) => pr.labels?.some((l) => l.name === "Submission"));
+	for (const pr of submissionPRs) {
 		if (pr.number === prNumber) continue;
 		const prFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pr.number}/files`);
 		for (const file of prFiles) {
@@ -474,6 +541,7 @@ function buildComment(result) {
 		"Metadata template values": "metadata",
 		"Unique game title": "metadata",
 
+		"No duplicate open submission": "other",
 		"Sprig-only APIs": "code",
 		"Optional image path": "code",
 		"Optional image name": "code",
@@ -561,13 +629,18 @@ function checkMetadataDate(addedOn, add) {
 	const parsedDate = validDate ? new Date(`${addedOn}T00:00:00Z`) : null;
 	const now = new Date();
 	const tooOld = parsedDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
-	add(
-		"Metadata date",
-		validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld,
-		validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld
-			? "Date looks current."
-			: `Set \`@addedOn:\` to a recent date in \`YYYY-MM-DD\` format.`
-	);
+	const ok = validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld;
+	let detail = "Date looks current.";
+	if (!ok) {
+		if (validDate && tooOld) {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format (must be within the last 6 months).";
+		} else if (/\n/.test(addedOn) || /\b\d{4}-\d{2}-\d{2}\b/.test(addedOn)) {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format. Close the metadata header with `*/` immediately after `@addedOn` before any instructions or other comments.";
+		} else {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format.";
+		}
+	}
+	add("Metadata date", ok, detail);
 }
 
 function validateSubmissionFiles(pullFiles, addCheck) {

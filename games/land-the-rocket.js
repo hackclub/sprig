@@ -1,12 +1,9 @@
 /*
-@title: getting_started
-@author: leo, edits
+@title: land-the-rocket
+@author: nathan yin
 @description: None
-@tags: ['tutorial']
-@addedOn: 2022-07-26
-
-Check the tutorial in the bottom right, the run button is in the top right.
-Make sure to remix this tutorial if you want to save your progress!
+@tags: ['arcade']
+@addedOn: 2025-04-28
 */
 
 // define the sprites in our game
