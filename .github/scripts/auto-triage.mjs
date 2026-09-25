@@ -50,6 +50,11 @@ if (pullRequest.draft) {
 	process.exit(0);
 }
 
+if (event.action === "closed") {
+	console.log("PR is closed. Skipping auto triage.");
+	process.exit(0);
+}
+
 if (event.action === "assigned") {
 	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Claimed"] });
 	console.log(`PR assigned, added "Claimed" label.`);

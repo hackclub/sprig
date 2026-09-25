@@ -1,0 +1,27 @@
+name: Sprig Auto Triage Closed PR Revalidation
+on:
+    pull_request_target:
+        types: [closed]
+
+permissions:
+    pull-requests: read
+    actions: write
+
+jobs:
+    revalidate-siblings:
+        if: contains(github.event.pull_request.labels.*.name, 'Submission')
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout trusted automation
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.ref }}
+                  path: automation
+                  persist-credentials: false
+
+            - name: Revalidate sibling submissions
+              run: node automation/.github/scripts/auto-triage-closed.mjs
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+                  GITHUB_REPOSITORY: ${{ github.repository }}
+                  GITHUB_EVENT_PATH: ${{ github.event_path }}
