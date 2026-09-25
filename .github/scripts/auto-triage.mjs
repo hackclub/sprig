@@ -149,6 +149,14 @@ async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) 
 	}
 }
 
+let cachedOpenPulls = null;
+async function getOpenPulls() {
+	if (!cachedOpenPulls) {
+		cachedOpenPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
+	}
+	return cachedOpenPulls;
+}
+
 async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, owner, repo }) {
 	const checks = [];
 	const problems = [];
@@ -163,6 +171,21 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 
 	const bodyChecks = validatePullRequestBody(pullRequest.body ?? "");
 	for (const check of bodyChecks.checks) addCheck(check.name, check.ok, check.detail);
+
+	const submitterLogin = pullRequest.user?.login;
+	if (submitterLogin) {
+		const openPulls = await getOpenPulls();
+		const duplicatePR = openPulls.find(
+			(pr) => pr.number !== prNumber && pr.user?.login === submitterLogin && pr.labels?.some((l) => l.name === "Submission")
+		);
+		addCheck(
+			"No duplicate open submission",
+			!duplicatePR,
+			duplicatePR
+				? `You already have an open submission (PR #${duplicatePR.number}). Please close one of them.`
+				: "No other open submissions from this user."
+		);
+	}
 
 	let gameFile = null;
 	let metadata = null;
@@ -500,6 +523,7 @@ function buildComment(result) {
 		"Metadata template values": "metadata",
 		"Unique game title": "metadata",
 
+		"No duplicate open submission": "other",
 		"Sprig-only APIs": "code",
 		"Optional image path": "code",
 		"Optional image name": "code",
