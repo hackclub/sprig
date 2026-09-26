@@ -165,7 +165,7 @@ setLegend(
 ................
 ................`],
 
-    [key, bitmap`
+  [key, bitmap`
 ................
 ................
 ......6666......
@@ -223,17 +223,17 @@ setLegend(
 ................
 ....00000000....
 ...0000000000...
-..000..0000..00..
-..000..0000..00..
-..00000000000000.
-..00000000000000.
-..000..0000..00..
-..000..0000..00..
-..00000000000000.
-...000000000000..
-....00000000.....
-.....00..00......
-....00....00.....
+..000..0000..00.
+..000..0000..00.
+..00000000000000
+..00000000000000
+..000..0000..00.
+..000..0000..00.
+..00000000000000
+...000000000000.
+....00000000....
+.....00..00.....
+....00....00....
 ................
 ................`],
 
@@ -291,6 +291,7 @@ let invincible = false
 const levels = [
 
   map`
+............
 wwwwwwwwwwww
 w.p....c...w
 w.wwww.www.w
@@ -304,6 +305,7 @@ w..m..t....w
 wwwwwwwwwwww`,
 
   map`
+............
 wwwwwwwwwwww
 w.p....w...w
 w.wwww.w.c.w
@@ -317,6 +319,7 @@ w..m..t....w
 wwwwwwwwwwww`,
 
   map`
+............
 wwwwwwwwwwww
 w.p...w....w
 w.ww..w.c..w
@@ -330,6 +333,7 @@ w..m.......w
 wwwwwwwwwwww`,
 
   map`
+............
 wwwwwwwwwwww
 w.p..c..e..w
 w.wwww.ww..w
@@ -485,6 +489,7 @@ function loseLife() {
   shield = false
   dashReady = true
   pulseReady = true
+  invincible = false
 
   setMap(levels[level])
 
@@ -855,7 +860,7 @@ function updateHUD() {
   clearText()
 
   addText("LV" + (level + 1), {
-    x: 1,
+    x: 2,
     y: 0,
     color: color`7`
   })
@@ -884,7 +889,7 @@ function updateHUD() {
     color: color`6`
   })
 
-  addText("$" + coins, {
+  addText("O" + coins, {
     x: 26,
     y: 0,
     color: color`7`
@@ -1035,21 +1040,18 @@ onInput("i", () => {
   }
 })
 
+onInput("j", () => {
+  if (gameOver) {
+    startGame()
+    return
+  }
+
+  attackNearbyEnemy()
+})
+
 onInput("k", () => {
   if (!gameOver) {
-    attackNearbyEnemy()
-  }
-})
-
-onInput("f", () => {
-  if (!gameOver) {
-    dash(0, -1)
-  }
-})
-
-onInput("h", () => {
-  if (!gameOver) {
-    dash(-1, 0)
+    dash(0, 1)
   }
 })
 
@@ -1057,16 +1059,6 @@ onInput("l", () => {
   if (!gameOver) {
     dash(1, 0)
   }
-})
-
-onInput("b", () => {
-  if (!gameOver) {
-    dash(0, 1)
-  }
-})
-
-onInput("j", () => {
-  startGame()
 })
 
 afterInput(() => {
