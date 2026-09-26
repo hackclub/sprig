@@ -570,7 +570,13 @@ afterInput(() => {
         updatePowerUps();
         updateEnemies();
         checkCollisions();
-        drawUI();
+        if (gameState === "playing") {
+            drawUI();
+        } else if (gameState === "gameover") {
+            drawGameOverScreen();
+        } else if (gameState === "win") {
+            drawWinScreen();
+        }
     } else if (gameState === "intro") {
         drawIntroScreen();
     } else if (gameState === "paused") {
@@ -584,48 +590,48 @@ afterInput(() => {
 function drawUI() {
     clearText();
     let healthStr = "HP: " + health;
-    addText(healthStr, { x: 1, y: 21, color: color`3` });
+    addText(healthStr, { x: 1, y: 0, color: color`3` });
     const oxygenPercent = Math.floor(oxygen);
-    addText(`O2: ${oxygenPercent}%`, { x: 10, y: 21, color: color`5` });
-    addText(`Score: ${score}`, { x: 1, y: 22, color: color`6` });
-    addText(`Level: ${currentLevel}`, { x: 15, y: 21, color: color`7` });
-    addText(`Crystals: ${crystalsCollected}/${totalCrystals}`, { x: 10, y: 22, color: color`5` });
+    addText(`O2: ${oxygenPercent}%`, { x: 10, y: 0, color: color`5` });
+    addText(`Score: ${score}`, { x: 1, y: 1, color: color`6` });
+    addText(`Level: ${currentLevel}`, { x: 12, y: 1, color: color`7` });
+    addText(`Crystals: ${crystalsCollected}/${totalCrystals}`, { x: 1, y: 2, color: color`5` });
     if (shieldActive) {
-        addText("SHIELD", { x: 1, y: 23, color: color`1` });
+        addText("SHIELD", { x: 1, y: 3, color: color`1` });
     }
     if (speedActive) {
-        addText("SPEED", { x: 10, y: 23, color: color`2` });
+        addText("SPEED", { x: 9, y: 3, color: color`2` });
     }
 }
 function drawIntroScreen() {
     clearText();
-    addText("SPACE MINER", { x: 6, y: 8, color: color`5` });
-    addText("============", { x: 6, y: 9, color: color`5` });
-    addText("Collect all crystals", { x: 4, y: 11, color: color`7` });
-    addText("Avoid asteroids & enemies", { x: 3, y: 12, color: color`7` });
-    addText("Watch your oxygen!", { x: 4, y: 13, color: color`7` });
-    addText("Press I to start", { x: 5, y: 15, color: color`6` });
-    addText("WASD to move", { x: 5, y: 17, color: color`4` });
-    addText("K to pause, J restart", { x: 3, y: 18, color: color`4` });
+    addText("SPACE MINER", { x: 6, y: 4, color: color`5` });
+    addText("============", { x: 6, y: 5, color: color`5` });
+    addText("Collect crystals", { x: 2, y: 6, color: color`7` });
+    addText("Avoid asteroids&foes", { x: 0, y: 7, color: color`7` });
+    addText("Watch oxygen!", { x: 4, y: 8, color: color`7` });
+    addText("Press I to start", { x: 2, y: 9, color: color`6` });
+    addText("WASD to move", { x: 5, y: 10, color: color`4` });
+    addText("K pause, J restart", { x: 1, y: 11, color: color`4` });
 }
 function drawPauseScreen() {
     clearText();
     addText("PAUSED", { x: 8, y: 10, color: color`6` });
-    addText("Press K to resume", { x: 5, y: 12, color: color`7` });
+    addText("Press K to resume", { x: 2, y: 12, color: color`7` });
 }
 function drawGameOverScreen() {
     clearText();
     addText("GAME OVER", { x: 6, y: 9, color: color`3` });
-    addText(`Final Score: ${score}`, { x: 5, y: 11, color: color`7` });
+    addText(`Final Score: ${score}`, { x: 2, y: 11, color: color`7` });
     addText(`Level: ${currentLevel}`, { x: 6, y: 12, color: color`7` });
-    addText("Press J to restart", { x: 5, y: 14, color: color`6` });
+    addText("Press J to restart", { x: 1, y: 14, color: color`6` });
 }
 function drawWinScreen() {
     clearText();
     addText("YOU WIN!", { x: 7, y: 9, color: color`2` });
-    addText(`Final Score: ${score}`, { x: 5, y: 11, color: color`7` });
-    addText("All levels complete!", { x: 4, y: 12, color: color`7` });
-    addText("Press J to play again", { x: 4, y: 14, color: color`6` });
+    addText(`Final Score: ${score}`, { x: 2, y: 11, color: color`7` });
+    addText("All levels done!", { x: 2, y: 12, color: color`7` });
+    addText("Press J to replay", { x: 1, y: 14, color: color`6` });
 }
 setMap(levels[0]);
 addSprite(1, 1, player);
