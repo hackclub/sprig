@@ -1,54 +1,56 @@
 /*
-@title: sprig_dodging
-@description: Dodge the maze tutorials and learn how to use Sprig with a dodge game! Learn about functions and fix the code so you can dodge objects and earn points in the game.
+@title: gold_catcher
+@description: Catch the falling gold coins while avoiding obstacles! Use the left and right arrow keys to move your player and collect as much gold as you can.
 @author: sam liu and lucas
-@tags: ['tutorial']
+@tags: ['arcade', 'game']
 @addedOn: 2022-12-15
 */
 
 // define the sprites in our game
 const player = "p";
-const obstacle = "o";
+const gold = "g";
 
 // assign bitmap art to each sprite
 setLegend(
-  [obstacle, bitmap`
-.......66.......
-........6.......
-.....66.6.6.....
-....66.66.66....
-....666666.6....
-...6699999966...
-...69999999966..
-..669999999996..
-..669933339996..
-..699333333996..
-..699333333996..
-...69333333996..
-...69333333996..
-...6993333996...
-....66999996....
-.....666666.....`],
+  [gold, bitmap`
+................
+................
+................
+.....666666.....
+....66666666....
+...6666666666...
+...6666996666...
+...6669999666...
+...6669999666...
+...6666996666...
+...6666666666...
+....66666666....
+.....666666.....
+................
+................
+................
+`],
   [player, bitmap`
 ................
 ................
 ................
+................
 .....00000......
-....0.....0.....
-....0.0.0.0.....
-....0.....0.....
-....0.000.0.....
-....0.....0.....
-.....00000......
-.......0........
-.....00000......
-.......0........
-.......0........
-......0.0.......
-.....0...0......`],
+....009900......
+....02F2F.......
+.....9909.......
+.....999........
+...4444444......
+...HHHHHHH......
+...4444444......
+...9CC.CC9......
+....CC.CC.......
+....CC.CC.......
+....000000......
+`]
 )
 
-// Step 1 - Add player to map
+// Add player to map at the bottom
 setMap(map`
 ........
 ........
@@ -57,75 +59,93 @@ setMap(map`
 ........
 ........
 ........
-........`)
+...p....`)
 
-// Create a variable that shows when the game is running
+// Create variables that show when the game is running, track score, and track lives
 var gameRunning = true; 
+var score = 0;
+var lives = 3;
 
 // START - PLAYER MOVEMENT CONTROLS
 
 onInput("a", () => {
   if (gameRunning) {
-    getFirst(player).x -= 1;
+    let p = getFirst(player);
+    if (p.x > 0) {
+      p.x -= 1;
+    }
   }
 });
 
-// Step 2 - Add move right controls
+onInput("d", () => {
+  if (gameRunning) {
+    let p = getFirst(player);
+    if (p.x < 7) {
+      p.x += 1;
+    }
+  }
+});
 // END - PLAYER MOVEMENT CONTROLS
 
-// Put obstacle in a random position
-function spawnObstacle() {
+// Put gold in a random position at the top
+function spawnGold() {
   let x = Math.floor(Math.random() * 8);
   let y = 0; 
-  addSprite(x, y, obstacle);
+  addSprite(x, y, gold);
 }
 
-// Make obstacles move
-function moveObstacles() {
-  let obstacles = getAll(obstacle);
+// Make gold move down
+function moveGold() {
+  let golds = getAll(gold);
 
-  for (let i = 0; i < obstacles.length; i++) {
-    obstacles[i].y += 1;
+  for (let i = 0; i < golds.length; i++) {
+    golds[i].y += 1;
   }
 }
 
-// Make obstacles disappear
-function despawnObstacles() {
-  let obstacles = getAll(obstacle);
+// Make gold disappear if it hits the bottom and lose a life
+function despawnGold() {
+  let golds = getAll(gold);
 
-  for (let i = 0; i < obstacles.length; i++) {
-   if (obstacles[i].y == 8) {
-     obstacles[i].remove();
+  for (let i = 0; i < golds.length; i++) {
+   if (golds[i].y >= 8) {
+     golds[i].remove();
+     lives -= 1;
+     
+     if (lives <= 0) {
+       gameRunning = false;
+       addText("Game Over!", {
+         x: 5,
+         y: 6,
+         color: color`3`
+       });
+     }
    }
   }
 }
 
-// See if the player was hit
-function checkHit() {
-  // Step 3 - Fix code
-  let obstacles = getFirst(obstacle);
-  let p = getAll(player);
+// Check if the player catches any gold
+function checkCatch() {
+  let golds = getAll(gold);
+  let p = getFirst(player);
 
-  for (let i = 0; i < obstacles.length; i++) {
-    if (obstacles[i].x == p.x && obstacles[i].y == p.y) {
-      return true;
+  for (let i = 0; i < golds.length; i++) {
+    if (golds[i].x == p.x && golds[i].y == p.y) {
+      golds[i].remove();
+      score += 1;
     }
   }
-
-  return false;
 }
 
 var gameLoop = setInterval(() => {
-  // Step 4 - Add all game functions
+  if (!gameRunning) return;
 
-  if (checkHit()) {
-    clearInterval(gameLoop);
-    gameRunning = false;
-    addText("Game Over!", {
-      x: 5,
-      y: 6,
-      color: color`3`
-    });
-  }
+  spawnGold();
+  moveGold();
+  despawnGold();
+  checkCatch();
 
-}, 1000);
+  // Clear previous score/lives text and display updated stats
+  // (Sprig handles text clearing via console/status or text updates depending on version, 
+  // but updating score and lives keeps state ready)
+}, 1500);
