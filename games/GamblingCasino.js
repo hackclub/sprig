@@ -11,6 +11,14 @@ const PlayerState = {
   vipMode: false, vipTier: 0, lastStake: 0, lastStakeAllIn: false, heat: 0
 };
 
+const SessionStats = {
+  peakBalance: 150, totalWagered: 0, handsPlayed: 0, biggestPayout: 0
+};
+
+const CareerStats = {
+  busts: 0, peakCash: 150, handsWon: 0, handsLost: 0
+};
+
 const UIState = {
   state: "title", tick: 0, fx: 0, resultText: "", resultGood: false, lastGame: "none",
   pendingWin: 0, pendingText: "", pendingBig: false, justRisked: false, introFx: 0, moreMenu: false,
@@ -1968,6 +1976,8 @@ function randJackpot() { return randInt(450, 850);
 }
 function resetJackpot() { PlayerState.jackpot = randJackpot(); }
 function feedJackpotByBet(gameState, amount) {
+  SessionStats.totalWagered += amount;
+  SessionStats.handsPlayed++;
   if (gameState === "slot") PlayerState.jackpot += Math.max(3, Math.floor(amount * 0.12));
   else if (gameState === "wheel") PlayerState.jackpot += Math.max(2, Math.floor(amount * 0.08));
   else if (gameState === "card" || gameState === "blackjack") PlayerState.jackpot += Math.max(1, Math.floor(amount * 0.05));
@@ -2719,12 +2729,27 @@ function drawBingoConfirm() {
   txt("J CONFIRM", 1, 14, color`7`);
   txtR("K CANCEL", 14, color`9`);
 }
+function getRank(cash) {
+  if (cash >= 5000000) return "CASINO OWNER";
+  if (cash >= 1000000) return "WHALE";
+  if (cash >= 50000) return "HIGH ROLLER";
+  if (cash >= 5000) return "PRO GAMBLER";
+  if (cash >= 500) return "REGULAR";
+  return "ROOKIE";
+}
 function drawBust() {
   prepScreen(false);
-  sprs([[3, 2, skull], [6, 2, skull]]);
-  txtC("BROKE", 7, color`3`);
-  txtC("PRESS ANY KEY", 10, color`7`);
-  txtC("TO RESTART", 12, color`7`);
+  txtC("-- BUST RECAP --", 1, color`3`);
+  txtC("RANK: " + getRank(CareerStats.peakCash), 3, color`6`);
+  txtC("SESS PEAK: " + fmt(SessionStats.peakBalance), 4, color`7`);
+  txtC("SESS BET: " + fmt(SessionStats.totalWagered), 5, color`7`);
+  txtC("SESS HANDS: " + SessionStats.handsPlayed, 6, color`7`);
+  txtC("MAX PAY: " + fmt(SessionStats.biggestPayout), 7, color`7`);
+  const totalHands = CareerStats.handsWon + CareerStats.handsLost;
+  const wlRatio = totalHands > 0 ? Math.floor((CareerStats.handsWon / totalHands) * 100) : 0;
+  txtC("W/L RATIO: " + wlRatio + "%", 8, color`7`);
+  txtC("CAREER BUSTS: " + CareerStats.busts, 9, color`7`);
+  txtC("J REBUY | K QUIT", 12, color`4`);
 }
 const screens = {
   title: drawTitle,
@@ -2815,6 +2840,8 @@ function drawShop() { // NOSONAR
   }
 }
 function render() {
+  if (PlayerState.bank > SessionStats.peakBalance) SessionStats.peakBalance = PlayerState.bank;
+  if (PlayerState.bank > CareerStats.peakCash) CareerStats.peakCash = PlayerState.bank;
   if (UIState.state === "lobby" && PlayerState.bank >= 5000000 && !UIState.sawCasinoNotif) {
     UIState.state = "casino_notif";
     UIState.sawCasinoNotif = true;
@@ -3490,6 +3517,8 @@ function finishWheel() { // NOSONAR
 }
 function payWin(amount, text, big, feedJackpot = true) {
   PlayerState.bank += amount;
+  if (amount > SessionStats.biggestPayout) SessionStats.biggestPayout = amount;
+  CareerStats.handsWon++;
   if (feedJackpot) {
     feedJackpotByWin(amount, big);
   }
@@ -3542,6 +3571,7 @@ function showResult(text, good, delay) {
   }, hm(delay));
 }
 function showLoss(text, delay) {
+  CareerStats.handsLost++;
   clearTransition();
   stopFx();
   UIState.state = "loss";
@@ -3892,6 +3922,8 @@ function finishRoulette() { // NOSONAR
   }
   PlayerState.lastStake = totalBet;
   if (totalWin > 0) {
+    if (totalWin > SessionStats.biggestPayout) SessionStats.biggestPayout = totalWin;
+    CareerStats.handsWon++;
     PlayerState.bank += totalWin;
     feedJackpotByWin(totalWin, maxMult >= 36);
     PlayerState.heat += maxMult >= 36 ? 2 : 1; clampHeat();
@@ -3901,6 +3933,7 @@ function finishRoulette() { // NOSONAR
     updateStakes();
     render();
   } else {
+    CareerStats.handsLost++;
     PlayerState.heat -= 1; clampHeat();
     rouMsg = "LOST " + fmt(totalBet);
     if (PlayerState.bank <= 0) { goBust(); return; }
@@ -4124,6 +4157,8 @@ function bingoAction() { // NOSONAR
   render();
 }
 function newGame() {
+  SessionStats.peakBalance = 150; SessionStats.totalWagered = 0;
+  SessionStats.handsPlayed = 0; SessionStats.biggestPayout = 0;
   clearGameTimers();
   clearTransition();
   stopFx();
@@ -4223,13 +4258,26 @@ function enterLobbyFromTitle() {
 }
 function wakeBgm() { if (UIState.state !== "bust") startBgm();
 }
-function titleOrBust() {
+function titleOrBust(key) {
   if (UIState.state === "title") {
     enterLobbyFromTitle();
     return true;
   }
   if (UIState.state === "bust") {
-    newGame();
+    if (key === "j") {
+      CareerStats.busts++;
+      PlayerState.bank = 100;
+      PlayerState.debt = 0;
+      PlayerState.sharkDeadline = 0;
+      PlayerState.sharkDealType = 0;
+      PlayerState.offeredDeal = 0;
+      UIState.state = "lobby";
+      updateStakes();
+      render();
+    } else if (key === "k") {
+      CareerStats.busts++;
+      newGame();
+    }
     return true;
   }
   return false;
@@ -4512,7 +4560,7 @@ const InputStateHandlers = {
 };
 
 function handleInput(key) {
-  if (titleOrBust()) return;
+  if (titleOrBust(key)) return;
   if (UIState.state === "bingoConfirm" && (key !== "j" && key !== "k")) return;
   wakeBgm();
 
