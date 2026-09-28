@@ -26,7 +26,7 @@ All parts should be printed in PLA.  So far, we've used:
 
 The FrontPlate requires a color change on the last layer to print the snowman, snowflakes, and text in another color.
 
-![](https://cloud-eeov02j99-hack-club-bot.vercel.app/0screenshot_2024-01-26_at_11.21.01.png)
+![](https://cdn.hackclub.com/rescue?url=https://cloud-eeov02j99-hack-club-bot.vercel.app/0screenshot_2024-01-26_at_11.21.01.png)
 
 ## Packing
 
