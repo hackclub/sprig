@@ -12,7 +12,7 @@ If you haven't already, click [here](https://jams.hackclub.com/batch/sprig/part-
 6. Wrap-up!
 
 ## 1. Make some characters!
-![](https://cloud-g3a2xtt6b-hack-club-bot.vercel.app/0ezgif.com-video-to-gif.gif)  
+![](https://cdn.hackclub.com/rescue?url=https://cloud-g3a2xtt6b-hack-club-bot.vercel.app/0ezgif.com-video-to-gif.gif)  
 A sprite is anything that is visible on your game, except for text and background.      
 Your game needs at least three sprites. **Create the sprites in code, and design their visuals!**
 
@@ -51,7 +51,7 @@ Once written in the Sprig editor, click on each of the green `bitmap` buttons to
 </details>
 
 ## 2. Draw up your levels
-![](https://cloud-28qt9hlq7-hack-club-bot.vercel.app/0image.png)  
+![](https://cdn.hackclub.com/rescue?url=https://cloud-28qt9hlq7-hack-club-bot.vercel.app/0image.png)  
 A maze game needs a variety of levels! Let's **make two levels** to play through. Feel free to take creative liberty with these!
 
 ### Hints:
@@ -92,7 +92,7 @@ setMap(levels[level]) // update Sprig to the level represented by the level numb
 </details>
 
 ## 3. Add controls to move your player
-![](https://cloud-a2t9nss6h-hack-club-bot.vercel.app/0controls.gif)  
+![](https://cdn.hackclub.com/rescue?url=https://cloud-a2t9nss6h-hack-club-bot.vercel.app/0controls.gif)  
 You need to be able to move your player! **Add controls to move in all four directions and to reset the level.**
 
 ### Hints:
@@ -139,7 +139,7 @@ onInput("j", () => {
 </details>
 
 ## 4. Make walls actually work
-![](https://cloud-9rxbw1xyg-hack-club-bot.vercel.app/0walls.gif)  
+![](https://cdn.hackclub.com/rescue?url=https://cloud-9rxbw1xyg-hack-club-bot.vercel.app/0walls.gif)  
 If you've tried play-testing your game yet (click the green run button in the corner!), you might've noticed that your character can walk through the walls.
 You'll want to **make your player and walls solid** in order to avoid this!
 
@@ -161,7 +161,7 @@ setSolids([ player, wall ]); // sprites cannot go inside of these blocks
 
 ## 5. Add logic to make levels and goals work
 
-![](https://cloud-3du0s66po-hack-club-bot.vercel.app/0walls.gif)
+![](https://cdn.hackclub.com/rescue?url=https://cloud-3du0s66po-hack-club-bot.vercel.app/0walls.gif)
 
 Let's make our game actually work! There's four parts to this step:
 1. Detect if your player is overlapping with a goal
