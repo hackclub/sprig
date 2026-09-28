@@ -5,8 +5,8 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: HexaVoid
 @description: A Spaceship flying game where you have to reach the planet safely without hitting any asteroids
 @author: HexaProgrammer
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@tags: ['obstacle_run', 'levels']
+@addedOn: 2026-09-05
 */
 
 const player = "p"
