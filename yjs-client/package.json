@@ -15,7 +15,7 @@
     "@roamhq/wrtc": "^0.10.0",
     "dotenv": "^17.4.1",
     "express": "^5.2.1",
-    "firebase-admin": "^13.7.0",
+    "firebase-admin": "^14.2.0",
     "lib0-server-ws": "^0.2.94",
     "node-statsd": "^0.1.1",
     "simple-peer": "^9.11.1",
