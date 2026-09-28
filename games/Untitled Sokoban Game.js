@@ -5,8 +5,8 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Untitled_Sokoban_Game
 @description: Push boxes to their goal!
 @author: Toni
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@tags: ['sokoban', 'fun']
+@addedOn: 2026-09-28
 */
 // what they represent on a level bitmap
 const player = "p";
