@@ -1,6 +1,6 @@
 # Back Covers for Sprig
 
-<img src="https://cloud-1kf29t9im-hack-club-bot.vercel.app/0img_3190.jpg" width="500">
+<img src="https://cdn.hackclub.com/rescue?url=https://cloud-1kf29t9im-hack-club-bot.vercel.app/0img_3190.jpg" width="500">
 
 `sprig_cover.f3d` is the Fusion 360 file for the back cover. The back covers can be secured with M2 x 10mm screws and hex nuts.
 
