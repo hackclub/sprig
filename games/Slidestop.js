@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Slidestop
 @description: GLIDE, STOP, GLIDE.
 @author: aayanzaidi
-@tags: ['retro', 'peak', 'tuff', 'puzzle']
+@tags: ['retro', 'puzzle']
 @addedOn: 2026-09-28
 */
 
