@@ -2,7 +2,7 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Untitled Sokoban Game
+@title: Untitled_Sokoban_Game
 @description: Push boxes to their goal!
 @author: Toni
 @tags: ['tag1', 'tag2']
