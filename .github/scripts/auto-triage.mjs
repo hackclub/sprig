@@ -152,7 +152,7 @@ if (!result.ok) process.exit(1);
 async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) {
 	const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
 	const headSha = pullRequest.head.sha;
-	const gameFiles = pullFiles.filter((file) => /^games\/[A-Za-z0-9_-]+\.js$/.test(file.filename));
+	const gameFiles = pullFiles.filter((file) => /^games\/[^/]+\.js$/.test(file.filename));
 
 	for (const file of gameFiles) {
 		const contentFile = await githubRequest(
@@ -354,6 +354,22 @@ async function validateMetadata(content, filename, workspace) {
 			: "Replace example/template values in the metadata header (like 'MY GAME', 'MY NAME', 'Short description...', or placeholder tags)."
 	);
 
+	const TUTORIAL_FILES = ["getting_started.js", "maze_game_starter.js", "sprig_dodge.js"];
+	const isTutorial = TUTORIAL_FILES.some((tutFile) => {
+		try {
+			const tutContent = readFileSync(path.join(workspace, "games", tutFile), "utf8");
+			const normalizeCode = (s) => stripComments(s).replace(/\s+/g, " ").trim();
+			return normalizeCode(content) === normalizeCode(tutContent);
+		} catch { return false; }
+	});
+	add(
+		"Not a tutorial game",
+		!isTutorial,
+		isTutorial
+			? "This looks like an unmodified tutorial or starter game. Submit your own original game instead."
+			: "Game does not appear to be an unmodified tutorial."
+	);
+
 	const titleConflict = values.title ? await findTitleConflict(values.title, filename, workspace) : null;
 	add(
 		"Unique game title",
@@ -540,6 +556,7 @@ function buildComment(result) {
 		"Metadata tags parse": "metadata",
 		"Metadata date": "metadata",
 		"Metadata template values": "metadata",
+		"Not a tutorial game": "metadata",
 		"Unique game title": "metadata",
 
 		"No duplicate open submission": "other",
@@ -646,7 +663,8 @@ function checkMetadataDate(addedOn, add) {
 
 function validateSubmissionFiles(pullFiles, addCheck) {
 	const manifest = buildSubmissionManifest(pullFiles);
-	const { gameFiles: jsFiles, imageFiles, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
+	const { gameFiles: jsFiles, gameFilesLoose, imageFiles, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
+	const effectiveGameFiles = gameFilesLoose;
 	if (uppercaseGames.length > 0) {
 		const badNames = uppercaseGames.map((file) => `\`${file.filename}\``).join(", ");
 		addCheck("Directory must be lowercase", false, `Your file must be in the lowercase \`games/\` directory. Found ${badNames}.`);
@@ -657,17 +675,19 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 		"Files stay in allowed folders",
 		disallowedFiles.length === 0,
 		disallowedFiles.length
-			? `Only game files in \`games/\` and optional images in \`games/img/\` are allowed. Filenames cannot contain spaces. Images must be .png. Found ${disallowedNames}.`
+			? `Only game files in \`games/\` and optional images in \`games/img/\` are allowed. Images must be .png. Found ${disallowedNames}.`
 			: "Only submission files changed."
 	);
 
-	const jsNames = jsFiles.map((file) => `\`${file.filename}\``).join(", ");
+	const jsNames = effectiveGameFiles.map((file) => `\`${file.filename}\``).join(", ");
 	addCheck(
 		"Exactly one game file",
-		jsFiles.length === 1,
-		jsFiles.length === 0
+		effectiveGameFiles.length === 1,
+		effectiveGameFiles.length === 0
 			? "Add exactly one JavaScript game file in `games/`."
-			: `Only one game file is allowed per submission. Found ${jsNames}.`
+			: jsFiles.length === 0 && gameFilesLoose.length > 1
+				? `Only one game file is allowed per submission (and filenames must be fixed). Found ${jsNames}.`
+				: `Only one game file is allowed per submission. Found ${jsNames}.`
 	);
 
 	const changedNames = changedNonAddedFiles.map((file) => `\`${file.filename}\``).join(", ");
@@ -678,7 +698,7 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 			? `Submissions should only add new game files or modify existing ones in \`games/\`. These files outside \`games/\` were modified: ${changedNames}.`
 			: "All submitted files are new or inside \`games/\`."
 	);
-	return { jsFiles, imageFiles };
+	return { jsFiles: effectiveGameFiles, imageFiles };
 }
 
 function validateImages(imageFiles, gameBase, owner, repo, pullRequest, addCheck) {
