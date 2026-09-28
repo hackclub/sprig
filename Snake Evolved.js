@@ -1,28 +1,10 @@
-// ============================================
-// SNAKE: HIGH SCORE CHASE
-// A tiny, endlessly replayable Sprig game.
-//
-// MAIN MENU: choose your mode.
-//   j = Campaign  (3 levels, ends in a gem-hunt boss fight)
-//   i = Infinite  (one huge arena, no end, just chase the high score)
-//
-// CAMPAIGN MODE
-//   Eat food, grow longer, avoid walls/obstacles/yourself.
-//   Golden food is a big bonus but won't wait around.
-//   Score 30 -> Level 2: bigger arena with maze walls.
-//   Score 60 -> Level 3: huge arena, 5 gems scattered around it.
-//              Collect all 5 to summon a boss. Hit the glowing core
-//               that spawns near it to damage it (5 hits to win) while
-//               dodging the boss, which hunts you and speeds up as it
-//               gets hurt.
-//
-// INFINITE MODE
-//   One giant open arena. Obstacles keep piling up and the game keeps
-//   speeding up forever.
-//
-// On death or victory: full blackout screen with your results.
-// Controls: w/a/s/d to move, j to act on menus/end screens.
-// ============================================
+/*
+@title: Snake Evolved
+@author: Aarav Chauhan
+@description: Version of the classic snake game, with 2 modes, campaign and infinite. Infinite is is self-explanatory, eat till you die in a massive arena. Campaign consists of 3 levels, each having a score requirement to progress to the new levels. The first level is a small open level with obstacles spawning as you eat food. Second level is bigger with walls and the third level has a boss you have to defeat. Good luck!
+@tags: ['snake', 'infinite']
+@addedOn: 2026-09-28
+    */
 
 const player = "p"
 const body = "b"
@@ -118,17 +100,34 @@ DDDDDDDD
 .888888.
 ..8888..`],
   [ blackTile, bitmap`
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000`],
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
 )
 
-// ---------- Maps ----------
+
+const menuMap = map`
+..........
+..........
+..........
+..........
+..........
+..........
+..........
+..........`
 
 const level1Map = map`
 wwwwwwwwww
@@ -141,87 +140,76 @@ w........w
 wwwwwwwwww`
 
 const level2Map = map`
-wwwwwwwwwwwwwwww
-w..............w
-w..ww......ww..w
-w..ww......ww..w
-w..............w
-w....wwww......w
-w....wwww......w
-w..............w
-w..ww......ww..w
-w..ww......ww..w
-w..............w
-wwwwwwwwwwwwwwww`
+wwwwwwwwwwwwwww
+w.............w
+w..ww.....ww..w
+w..ww.....ww..w
+w.............w
+w....wwwww....w
+w....wwwww....w
+w.............w
+w..ww.....ww..w
+w..ww.....ww..w
+w.............w
+wwwwwwwwwwwwwww`
 
 const level3Map = map`
-wwwwwwwwwwwwwwwwwwwwww
-w....................w
-w....................w
-w..ww....ww.ww...ww..w
-w..ww....ww.ww...ww..w
-w....................w
-w....................w
-w....................w
-w....................w
-w....................w
-w..ww....ww.ww...ww..w
-w..ww....ww.ww...ww..w
-w....................w
-w....................w
-w....................w
-wwwwwwwwwwwwwwwwwwwwww`
+wwwwwwwwwwwwwwwwwwww
+w..................w
+w..................w
+w..ww....ww....ww..w
+w..ww....ww....ww..w
+w..................w
+w..................w
+w..................w
+w..................w
+w..................w
+w..................w
+w..ww....ww....ww..w
+w..ww....ww....ww..w
+w..................w
+w..................w
+wwwwwwwwwwwwwwwwwwww`
 
-// Infinite mode: one huge open arena. Difficulty comes entirely from
-// obstacles piling up forever and the game speeding up without limit.
 const infiniteMap = map`
-wwwwwwwwwwwwwwwwwwwwwwwwww
-w........................w
-w........................w
-w........................w
-w........................w
-w........................w
-w........................w
-w........................w
-w........................w
-w........................w
-w........................w
-w........................w
-w........................w
-w........................w
-w........................w
-w........................w
-w........................w
-wwwwwwwwwwwwwwwwwwwwwwwwww`
+wwwwwwwwwwwwwwwwwwwwwwwww
+w.......................w
+w.......................w
+w.......................w
+w.......................w
+w.......................w
+w.......................w
+w.......................w
+w.......................w
+w.......................w
+w.......................w
+w.......................w
+w.......................w
+w.......................w
+w.......................w
+w.......................w
+w.......................w
+w.......................w
+w.......................w
+wwwwwwwwwwwwwwwwwwwwwwwww`
 
-// Solid black backdrop, used for the menu and for death/victory screens
 const blackMap = map`
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz
-zzzzzzzzzzzzzzzzzzzzzzzzzz`
+zzzzzzzzzz
+zzzzzzzzzz
+zzzzzzzzzz
+zzzzzzzzzz
+zzzzzzzzzz
+zzzzzzzzzz
+zzzzzzzzzz
+zzzzzzzzzz`
 
-// Fixed gem spots for campaign level 3
+
 const GEM_POSITIONS = [
   { x: 2, y: 2 },
-  { x: 19, y: 2 },
+  { x: 17, y: 2 },
   { x: 2, y: 13 },
-  { x: 19, y: 13 },
-  { x: 10, y: 7 }
+  { x: 17, y: 13 },
+  { x: 9, y: 7 }
 ]
 
 const levelConfigs = {
@@ -256,11 +244,11 @@ const levelConfigs = {
 
 const infiniteConfig = {
   map: infiniteMap,
-  start: [ { x: 12, y: 8 }, { x: 11, y: 8 }, { x: 10, y: 8 } ],
+  start: [ { x: 12, y: 10 }, { x: 11, y: 10 }, { x: 10, y: 10 } ],
   startDir: { x: 1, y: 0 },
-  obstacleEvery: 3,   // obstacles keep coming, no cap
+  obstacleEvery: 3,
   obstacleCap: 9999,
-  minSpeed: 30,        // no real floor - it will get brutally fast
+  minSpeed: 30,
   enterSpeed: 200
 }
 
@@ -271,10 +259,9 @@ const BOSS_MAX_HP = 5
 const CORE_LIFETIME = 14
 const CORE_SPAWN_EVERY = 6
 
-// ---------- State ----------
 
-let gameState = "menu" // "menu" | "playing" | "ended"
-let gameMode = "campaign" // "campaign" | "infinite"
+let gameState = "menu"
+let gameMode = "campaign"
 
 let level = 1
 let snake, dx, dy, nextDx, nextDy
@@ -289,7 +276,7 @@ let goldTicksLeft = 0
 const GOLD_LIFETIME = 22
 const GOLD_CHANCE = 0.28
 
-let level3Phase = "gems" // "gems" -> "boss" -> "won"
+let level3Phase = "gems"
 let gemsCollected = 0
 let bossEntity = null
 let core = null
@@ -305,7 +292,10 @@ const milestones = {
 }
 
 function currentConfig() {
-  return gameMode === "infinite" ? infiniteConfig : levelConfigs[level]
+  if (gameMode === "infinite") {
+    return infiniteConfig
+  }
+  return levelConfigs[level]
 }
 
 function isWallTile(x, y) {
@@ -318,7 +308,7 @@ function emptyTiles() {
     for (let y = 1; y < height() - 1; y++) {
       if (getTile(x, y).length > 0) continue
       if (snake.some(s => s.x === x && s.y === y)) continue
-      tiles.push({ x, y })
+      tiles.push({ x: x, y: y })
     }
   }
   return tiles
@@ -344,9 +334,10 @@ function spawnFood() {
 function fillObstaclesToTarget() {
   const cfg = currentConfig()
   const targetCount = Math.min(Math.floor(score / cfg.obstacleEvery), cfg.obstacleCap)
+
   while (obstacles.length < targetCount) {
+    const head = snake[0]
     const tiles = emptyTiles().filter(t => {
-      const head = snake[0]
       return Math.abs(t.x - head.x) + Math.abs(t.y - head.y) > 2
     })
     if (tiles.length === 0) break
@@ -359,26 +350,32 @@ function fillObstaclesToTarget() {
 function draw() {
   getAll(player).forEach(s => s.remove())
   getAll(body).forEach(s => s.remove())
-  snake.forEach((seg, i) => {
-    addSprite(seg.x, seg.y, i === 0 ? player : body)
-  })
+  for (let i = 0; i < snake.length; i++) {
+    addSprite(snake[i].x, snake[i].y, i === 0 ? player : body)
+  }
 }
 
 function showScore() {
   clearText()
+
   if (milestoneTicksLeft > 0) {
     addText(milestoneText, { x: 0, y: 0, color: color`5` })
     milestoneTicksLeft--
     return
   }
+
   addText(`${score}`, { x: 0, y: 0, color: color`0` })
+
   if (gameMode === "infinite") {
     addText("inf", { x: 0, y: 1, color: color`0` })
-  } else if (level === 3 && level3Phase === "gems") {
+  }
+  else if (level === 3 && level3Phase === "gems") {
     addText(`G${gemsCollected}/5`, { x: 0, y: 1, color: color`0` })
-  } else if (level === 3 && level3Phase === "boss" && bossEntity) {
+  }
+  else if (level === 3 && level3Phase === "boss" && bossEntity) {
     addText(`B${bossEntity.hp}/${BOSS_MAX_HP}`, { x: 0, y: 1, color: color`0` })
-  } else {
+  }
+  else {
     addText(`L${level}`, { x: 0, y: 1, color: color`0` })
   }
 }
@@ -395,12 +392,11 @@ function restartInterval() {
   tickHandle = setInterval(tick, speed)
 }
 
-// ---------- Menu ----------
 
 function showMenu() {
   gameState = "menu"
   if (tickHandle) clearInterval(tickHandle)
-  setMap(infiniteMap) // plain open backdrop - renders as the default white background
+  setMap(menuMap)
   clearText()
   addText("snake", { x: 1, y: 2, color: color`0` })
   addText("j:campaign", { x: 1, y: 5, color: color`0` })
@@ -410,7 +406,6 @@ function showMenu() {
   }
 }
 
-// ---------- Campaign level loading ----------
 
 function loadLevel(lvlNum) {
   level = lvlNum
@@ -494,12 +489,10 @@ function levelUp3() {
   milestoneTicksLeft = 4
 }
 
-// ---------- Boss fight ----------
 
 function startBossFight() {
   level3Phase = "boss"
-  const spot = { x: 10, y: 7 }
-  addSprite(spot.x, spot.y, bossType)
+  addSprite(10, 8, bossType)
   const spr = getFirst(bossType)
   bossEntity = { sprite: spr, hp: BOSS_MAX_HP, moveCounter: 0 }
   core = null
@@ -526,7 +519,14 @@ function stepBossToward(target) {
   const dys = Math.sign(target.y - b.y)
   const distX = Math.abs(target.x - b.x)
   const distY = Math.abs(target.y - b.y)
-  const tryMoves = distX >= distY ? [[dxs, 0], [0, dys]] : [[0, dys], [dxs, 0]]
+
+  let tryMoves
+  if (distX >= distY) {
+    tryMoves = [[dxs, 0], [0, dys]]
+  } else {
+    tryMoves = [[0, dys], [dxs, 0]]
+  }
+
   for (const [mx, my] of tryMoves) {
     if (mx === 0 && my === 0) continue
     const nx = b.x + mx
@@ -556,7 +556,8 @@ function moveBossAndCore() {
   }
 
   bossEntity.moveCounter++
-  const moveEvery = bossEntity.hp <= 2 ? 1 : 2
+  let moveEvery = 2
+  if (bossEntity.hp <= 2) moveEvery = 1
   if (bossEntity.moveCounter >= moveEvery) {
     bossEntity.moveCounter = 0
     stepBossToward(snake[0])
@@ -571,7 +572,6 @@ function moveBossAndCore() {
   return false
 }
 
-// ---------- End screens (blackout) ----------
 
 function endGame() {
   gameState = "ended"
@@ -580,10 +580,10 @@ function endGame() {
   if (score > highScore) highScore = score
   setMap(blackMap)
   clearText()
-  addText("game over", { x: 1, y: 3, color: color`0` })
-  addText(`score ${score}`, { x: 1, y: 5, color: color`0` })
-  addText(`best  ${highScore}`, { x: 1, y: 6, color: color`0` })
-  addText("j: menu", { x: 1, y: 8, color: color`0` })
+  addText("game over", { x: 1, y: 3, color: color`2` })
+  addText(`score ${score}`, { x: 1, y: 5, color: color`2` })
+  addText(`best  ${highScore}`, { x: 1, y: 6, color: color`2` })
+  addText("j: menu", { x: 1, y: 8, color: color`2` })
 }
 
 function winGame() {
@@ -597,13 +597,12 @@ function winGame() {
   if (score > highScore) highScore = score
   setMap(blackMap)
   clearText()
-  addText("you win!", { x: 1, y: 3, color: color`0` })
-  addText(`score ${score}`, { x: 1, y: 5, color: color`0` })
-  addText(`best  ${highScore}`, { x: 1, y: 6, color: color`0` })
-  addText("j: menu", { x: 1, y: 8, color: color`0` })
+  addText("you win!", { x: 1, y: 3, color: color`2` })
+  addText(`score ${score}`, { x: 1, y: 5, color: color`2` })
+  addText(`best  ${highScore}`, { x: 1, y: 6, color: color`2` })
+  addText("j: menu", { x: 1, y: 8, color: color`2` })
 }
 
-// ---------- Main loop ----------
 
 function tick() {
   if (gameState !== "playing") return
@@ -711,7 +710,6 @@ function tick() {
   showScore()
 }
 
-// ---------- Input ----------
 
 onInput("w", () => {
   if (gameState !== "playing") return
@@ -729,6 +727,7 @@ onInput("d", () => {
   if (gameState !== "playing") return
   if (dx === 0) { nextDx = 1; nextDy = 0 }
 })
+
 onInput("j", () => {
   if (gameState === "menu") { startGame("campaign"); return }
   if (gameState === "ended") { showMenu(); return }
