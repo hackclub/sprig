@@ -23,6 +23,8 @@ if (!token) throw new Error("GITHUB_TOKEN is required");
 const { owner, repo } = getRepository();
 let event = readGitHubEvent();
 let pullRequest = event.pull_request || event.issue;
+// keep it in this order pls or the entire thing explodes and fails. thanks
+let cachedOpenPulls = null;
 
 let reviewers = new Set();
 try {
@@ -166,7 +168,6 @@ async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) 
 	}
 }
 
-let cachedOpenPulls = null;
 async function getOpenPulls() {
 	if (!cachedOpenPulls) {
 		cachedOpenPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
