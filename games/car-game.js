@@ -3,7 +3,7 @@
 @author: Chin Jie Hao
 @description: this is a car game where you control a red car, dodging the blue oncoming cars, after every 10 points or 10 car dodged, he game will increase your speed level by 1, the maximum speed level it can increase up to is 8. Have fun!
 @tags: ['car', 'reaction'] 
-@added on: 2026-09-29
+@addedOn: 2026-09-29
 */
 
 
