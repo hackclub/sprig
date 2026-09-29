@@ -1,20 +1,20 @@
 /*
 @title: Fossil Dig
 @author: Advait
+@description: Dig through deadly caves to collect fossils while dodging falling rocks, patrolling beetles, and hungry moles. Use dynamite and avalanches to fight back across 10 levels.
 @tags: ['puzzle', 'action', 'strategy']
 @addedOn: 2026-09-28
+*/
 
-FOSSIL DIG — dig, dodge, detonate.
-
-CONTROLS
+/*
+HOW TO PLAY
 - WASD : move / dig
 - K    : drop dynamite (limited per level, shown as T in the top bar)
 - J    : start / restart level
 
-RULES
 - Collect every fossil, then climb the ladder.
-- Rocks fall when nothing is under them, and ROLL off other rocks.
-- A falling rock crushes you... or any enemy under it (+100).
+- Rocks fall when nothing is under them, and roll off other rocks.
+- A falling rock crushes you, or any enemy under it (+100).
 - Red beetles patrol tunnels. Purple moles hunt you down.
 - Dynamite blasts a 3x3 area: dirt, rocks, cracked stone, enemies, YOU.
   Dynamite next to dynamite = chain reaction.
