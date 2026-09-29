@@ -2,8 +2,8 @@
 @title: Scrap Legion: Overdrive
 @description: Survive chaos, defeat bosses. A true survival game.
 @author: yash
-@tags: [survival, roguelike, action, boss]
-@addedOn: 2026-03-24
+@tags: [ @maze, puzzel, survival, roguelike, action, boss]
+@addedOn: 2026-09-29
 */
 
 const hero = "h"
