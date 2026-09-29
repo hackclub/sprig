@@ -4,8 +4,10 @@
 @author: awesomesauce4646
 @tags: ['puzzle', 'shortgame']
 @addedOn: 2026-09-16
-
+*/
+/*
 Instructions: beat the puzzle of each level!
+Controls: J to reset level, WASD to move
 */
 
 const player = "p"
