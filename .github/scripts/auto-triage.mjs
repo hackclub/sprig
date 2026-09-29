@@ -113,14 +113,15 @@ const modifiesGames = pullFiles.some((f) => f.filename.toLowerCase().startsWith(
 const labels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
 const isLabeledSubmission = hasLabel(labels, "Submission");
 
-const body = pullRequest.body ?? "";
 const touchesNonGamePaths = pullFiles.some((f) =>
 	!f.filename.toLowerCase().startsWith("games/") &&
 	(f.status !== "added" || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
 );
+// Detected by file shape alone (an added .js file outside games/, with nothing else
+// meaningfully touched) rather than by matching PR body wording: contributors often
+// edit the template's bold prompts away, which broke the old body-text regex.
 const isMisplacedGameSubmission = !touchesNonGamePaths &&
-	pullFiles.some((f) => f.status === "added" && f.filename.endsWith(".js")) &&
-	(/what is your game about/i.test(body) || /how do you play your game/i.test(body));
+	pullFiles.some((f) => f.status === "added" && /^[^/]+\.js$/.test(f.filename));
 
 const isSubmissionPR = modifiesGames || isLabeledSubmission || isMisplacedGameSubmission;
 
@@ -157,7 +158,10 @@ if (!result.ok) process.exit(1);
 async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) {
 	const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
 	const headSha = pullRequest.head.sha;
-	const gameFiles = pullFiles.filter((file) => /^games\/[^/]+\.js$/.test(file.filename));
+	const gameFiles = pullFiles.filter((file) =>
+		/^games\/[^/]+\.js$/.test(file.filename) ||
+		(file.status === "added" && /^[^/]+\.js$/.test(file.filename))
+	);
 
 	for (const file of gameFiles) {
 		const contentFile = await githubRequest(
@@ -668,8 +672,8 @@ function checkMetadataDate(addedOn, add) {
 
 function validateSubmissionFiles(pullFiles, addCheck) {
 	const manifest = buildSubmissionManifest(pullFiles);
-	const { gameFiles: jsFiles, gameFilesLoose, imageFiles, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
-	const effectiveGameFiles = gameFilesLoose;
+	const { gameFiles: jsFiles, gameFilesLoose, misplacedGameFiles, imageFiles, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
+	const effectiveGameFiles = gameFilesLoose.length > 0 ? gameFilesLoose : misplacedGameFiles;
 	if (uppercaseGames.length > 0) {
 		const badNames = uppercaseGames.map((file) => `\`${file.filename}\``).join(", ");
 		addCheck("Directory must be lowercase", false, `Your file must be in the lowercase \`games/\` directory. Found ${badNames}.`);
@@ -760,7 +764,9 @@ async function validateSingleGameFile(gameFile, workspace, addCheck, warnings) {
 		path.dirname(gameFile.filename) === "games",
 		path.dirname(gameFile.filename) === "games"
 			? "Game file is in `games/`."
-			: `Move \`${gameFile.filename}\` directly into \`games/\`, not a nested folder.`
+			: path.dirname(gameFile.filename) === "."
+				? `Your game file is in the wrong folder. Move \`${gameFile.filename}\` into the \`games/\` directory.`
+				: `Move \`${gameFile.filename}\` directly into \`games/\`, not a nested folder.`
 	);
 
 	metadata = await validateMetadata(content, filename, workspace);

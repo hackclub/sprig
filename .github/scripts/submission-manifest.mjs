@@ -1,5 +1,6 @@
 const GAME_FILE_RE = /^games\/[A-Za-z0-9_-]+\.js$/;
 const GAME_FILE_LOOSE_RE = /^games\/[^/]+\.js$/;
+const ROOT_JS_FILE_RE = /^[^/]+\.js$/;
 const IMAGE_FILE_RE = /^games\/img\/[A-Za-z0-9_-]+\.png$/i;
 
 export function buildSubmissionManifest(pullFiles) {
@@ -17,6 +18,9 @@ export function buildSubmissionManifest(pullFiles) {
 		files,
 		gameFiles: files.filter((file) => file.isGame),
 		gameFilesLoose: files.filter((file) => file.isGameLoose),
+		// A newly added .js file sitting outside games/ entirely (not even in a
+		// nested folder) — almost always a submission that missed the games/ dir.
+		misplacedGameFiles: files.filter((file) => file.status === "added" && ROOT_JS_FILE_RE.test(file.filename)),
 		imageFiles: files.filter((file) => file.isImage),
 		disallowedFiles: files.filter((file) => !file.isAllowed),
 		changedNonAddedFiles: files.filter((file) => file.status !== "added" && !file.filename.startsWith("games/")),
