@@ -120,7 +120,7 @@ const touchesNonGamePaths = pullFiles.some((f) =>
 );
 const isMisplacedGameSubmission = !touchesNonGamePaths &&
 	pullFiles.some((f) => f.status === "added" && f.filename.endsWith(".js")) &&
-	(/what is your game about/i.test(body) || /how do you play your game/i.test(body));
+	(/what is your game about/i.test(body) || /how do you play your game/i.test(body) || /about your game/i.test(body) || /pre apply checklist/i.test(body));
 
 const isSubmissionPR = modifiesGames || isLabeledSubmission || isMisplacedGameSubmission;
 
