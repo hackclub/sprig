@@ -16,7 +16,7 @@ I'm sorry if my first Sprig game ever is bad, I just like these SEGA days a bunc
 @description: A (simpler, I attempted to make it as complex as possible) port of the 1990 SEGA Columns game onto the Sprig console!
 @author: JustAnEric / Eric Muzyk
 @tags: ['columns', 'fall', 'jewel', 'gem', 'puzzle']
-@addedOn: 2025-00-00
+@addedOn: 2026-09-30
 */
 
 const FPS = 30;
