@@ -8,7 +8,7 @@ import {
 	theme,
 	switchTheme,
 	isNewSaveStrat,
-	screenRef, type GithubState,
+	gamePlayerRef, type GithubState,
 } from "../lib/state";
 import type { RoomState, ThemeType } from "../lib/state";
 import Button from "./design-system/button";
@@ -355,10 +355,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			resetState.value = "idle";
 	});
 
-	// We're listening to changes in screenRef because the game will only run if the screenRef is defined
-	// So we want to re-render the editor navbar when the screenRef changes so the game can actually run when it's defined
   useSignalEffect(() => {
-    screenRef.value;
+    gamePlayerRef.value;
   });
 
 	// usePopupCloseClick closes a popup when you click outside of its area
