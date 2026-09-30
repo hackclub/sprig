@@ -2,6 +2,12 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import {
+	DUPLICATE_CLOSE_AFTER_DAYS,
+	DUPLICATE_LABEL,
+	DUPLICATE_NOTICE_MARKER,
+	parseOlderNotice,
+} from "./duplicate-detection.mjs";
+import {
 	MAINTAINER_REMINDER_MARKER,
 	STALE_REMINDER_MARKER,
 	daysBetween,
@@ -32,11 +38,15 @@ await ensureReviewLabels({ owner, repo, token });
 
 const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open&sort=updated&direction=asc`);
 
+const closedDuplicateNumbers = new Set();
+
 for (const pullRequest of openPulls) {
 	const issueNumber = pullRequest.number;
 	const labels = await getIssueLabels({ owner, repo, token, issueNumber });
 	if (!hasLabel(labels, "Submission")) continue;
 	if (hasLabel(labels, "Keep Open")) continue;
+
+	if (hasLabel(labels, DUPLICATE_LABEL) && (await handleOlderDuplicate(pullRequest, labels))) continue;
 
 	if (hasLabel(labels, "Needs Author") || hasLabel(labels, "Failed") || hasLabel(labels, "Stale")) {
 		await handleNeedsAuthor(pullRequest, labels);
@@ -54,6 +64,61 @@ for (const pullRequest of openPulls) {
 	}
 
 	await handleUntouchedSubmission(pullRequest);
+}
+
+async function handleOlderDuplicate(pullRequest, labels) {
+	const comments = await githubPaginated(token, `/repos/${owner}/${repo}/issues/${pullRequest.number}/comments`);
+	const notice = comments.find((comment) => comment.body?.includes(DUPLICATE_NOTICE_MARKER));
+	const parsed = parseOlderNotice(notice?.body);
+	if (!parsed) {
+		const hasOlderDuplicates = openPulls.some(
+			(pr) =>
+				pr.number !== pullRequest.number &&
+				!closedDuplicateNumbers.has(pr.number) &&
+				pr.user?.login === pullRequest.user?.login &&
+				pr.labels?.some((label) => label.name === DUPLICATE_LABEL)
+		);
+		if (!hasOlderDuplicates) {
+			await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: DUPLICATE_LABEL });
+		}
+		return false;
+	}
+	const { latestNumber, since } = parsed;
+
+	const latest = await githubRequest(token, "GET", `/repos/${owner}/${repo}/pulls/${latestNumber}`).catch(() => null);
+	if (!latest || latest.state !== "open" || latest.draft) {
+		await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: DUPLICATE_LABEL });
+		return false;
+	}
+
+	const reviewerEngaged =
+		(pullRequest.assignees ?? []).length > 0 ||
+		hasLabel(labels, "Claimed") ||
+		hasLabel(labels, "Triaged") ||
+		hasLabel(labels, "Ready for Maintainer");
+	if (reviewerEngaged) return false;
+
+	if (daysBetween(since) < DUPLICATE_CLOSE_AFTER_DAYS) return true;
+
+	await commentOnce({
+		issueNumber: pullRequest.number,
+		marker: "<!-- sprig-duplicate-auto-close -->",
+		body: `Closing because #${latestNumber} is your newer open PR. If you'd rather keep this PR instead, reopen it and close #${latestNumber}.`,
+	});
+	await githubRequest(token, "PATCH", `/repos/${owner}/${repo}/issues/${pullRequest.number}`, { state: "closed" });
+	closedDuplicateNumbers.add(pullRequest.number);
+
+	const stillDuplicated = openPulls.some(
+		(pr) =>
+			pr.number !== latestNumber &&
+			!closedDuplicateNumbers.has(pr.number) &&
+			pr.user?.login === pullRequest.user?.login &&
+			pr.labels?.some((label) => label.name === DUPLICATE_LABEL)
+	);
+	if (!stillDuplicated) {
+		await removeLabel({ owner, repo, token, issueNumber: latestNumber, label: DUPLICATE_LABEL });
+	}
+	return true;
 }
 
 async function handleNeedsAuthor(pullRequest, labels) {
