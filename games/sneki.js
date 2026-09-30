@@ -679,11 +679,11 @@ function swapTail() {
   getFirst(player).type = tail;
 
   // Find direction of last tail piece
-  player = tailSwapDef.find(({ dx, dy }) => {
+  player = (tailSwapDef.find(({ dx, dy }) => {
     const pos = getValidCoords(lastTail.x + dx, lastTail.y + dy);
     const tile = getTile(pos.x, pos.y);
     return tile.length > 0 && tile[0].type === tail;
-  })?.dir;
+  }) || {}).dir;
 
   // Change last tail piece into head with the direction found
   lastTail.type = player;

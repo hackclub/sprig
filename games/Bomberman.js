@@ -40,23 +40,23 @@ let player2BombRange = 1;
 let player2RemainingBombs = 1;
 
 const player1PlaceProgress0 = tune`
-500: 20-500,
+500: B0-500,
 15500`
 const player1PlaceProgress1 = tune`
-500: 40-500,
+500: E2-500,
 15500`
 const player1PlaceProgress2 = tune`
-500: 60-500,
+500: C4-500,
 15500`
 
 const player2PlaceProgress0 = tune`
-500: 70-500,
+500: A#4-500,
 15500`
 const player2PlaceProgress1 = tune`
-500: 80-500,
+500: G#5-500,
 15500`
 const player2PlaceProgress2 = tune`
-500: 90-500,
+500: F#6-500,
 15500`
 
 const collectUpgrade = tune`
@@ -76,7 +76,7 @@ const bombWarning = tune`
 500: B5~500,
 15500`
 const bombExplodeSound = tune`
-500: 15-2000+30-2000+40-500,
+500: B0-2000+F#1-2000+E2-500,
 15500`
 
 const player1 = "p"

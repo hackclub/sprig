@@ -777,6 +777,7 @@ bbobbbb.b.bbobvppvv`,
 let level = getRandomInt(0,map_levels.length);
 
 let speed = 0;
+let fish_speeds, fish_types, fish_flip_types, speed_sprites, fishDelayTime, gravityIntervalTime, fishIntervalTime, fish_x, fish_y, moveHorizontally, horizontalDirection, moveCount;
 fish_speeds = [
   500,
   200,

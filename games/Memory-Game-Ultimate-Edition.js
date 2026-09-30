@@ -817,6 +817,7 @@ let free = 0;
 let firstCardIndex = 0;
 let secondCardIndex = 0;
 let number = 0; 
+let options, currentLevel;
 
 
 function initGame()
@@ -873,21 +874,25 @@ initGame()
 
 
 onInput("w", () => {
+  if (!getFirst(CURSOR)) return
   getFirst(CURSOR).y -= 1
   playTune(MOVE_SOUND)
 })
 
 onInput("s", () => {
+  if (!getFirst(CURSOR)) return
   getFirst(CURSOR).y += 1
   playTune(MOVE_SOUND)
 })
 
 onInput("a", () => {
+  if (!getFirst(CURSOR)) return
   getFirst(CURSOR).x -= 1
   playTune(MOVE_SOUND)
 })
 
 onInput("d", () => {
+  if (!getFirst(CURSOR)) return
   getFirst(CURSOR).x += 1
   playTune(MOVE_SOUND)
 })
@@ -917,7 +922,7 @@ onInput("j", () => {
     addSprite(0, 0, CURSOR)
     intValues()
     
-  } else if (gameState === NO_CARD_SELECTED) {
+  } else if (gameState === NO_CARD_SELECTED && getFirst(CURSOR)) {
   
     firstCardPosition = { x: getFirst(CURSOR).x, y: getFirst(CURSOR).y }
     firstCardValue = getCardValue(firstCardPosition.y, firstCardPosition.x)
@@ -930,7 +935,7 @@ onInput("j", () => {
       gameState = ONE_CARD_SELECTED
     }
 
-  } else if (gameState === ONE_CARD_SELECTED) {
+  } else if (gameState === ONE_CARD_SELECTED && getFirst(CURSOR)) {
     let secondCardPosition = { x: getFirst(CURSOR).x, y: getFirst(CURSOR).y }
     secondCardValue = getCardValue(secondCardPosition.y, secondCardPosition.x)
 

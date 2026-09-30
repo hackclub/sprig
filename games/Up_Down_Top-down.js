@@ -1765,7 +1765,7 @@ function setTextures() {
 
 // Refreshes gameIntervals based on current gameState and menuMode
 function updateGameIntervals() {
-  errorPingInterval = setInterval(errorPing, 1000); // Set interval for error sound being playe
+  let errorPingInterval = setInterval(errorPing, 1000); // Set interval for error sound being playe
   if (gameState == 1) {
     // Clear any existing intervals
     clearInterval(pointerChangeInterval);

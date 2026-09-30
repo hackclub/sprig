@@ -363,8 +363,9 @@ onInput("k", () => {
 function checkNext() {
   let boxPosition = tilesWith(box);
   boxPosition = boxPosition[0]
-  boxPositionX = boxPosition[0].x;
-  boxPositionY = boxPosition[0].y;
+  if (!boxPosition) return false;
+  let boxPositionX = boxPosition[0].x;
+  let boxPositionY = boxPosition[0].y;
 
   // console.log(boxPosition[0].x);
 

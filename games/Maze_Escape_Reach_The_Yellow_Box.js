@@ -396,16 +396,17 @@ setSolids([ player, wall,])
 
 // Define a generic moveObstacle function for all moving obstacles
 function moveObstacle(obstacleSprite) {
+    let dy = obstacleSprite.dy;
     if (obstacleSprite.dy === 0) {
-        obstacleSprite.dy = 1; // Set the initial direction to move down
+        dy = 1; // Set the initial direction to move down
     } else {
         if (obstacleSprite.y <= 5 && obstacleSprite.dy === -1) {
-            obstacleSprite.dy = 1; // Change the direction to move down when at the top boundary
+            dy = 1; // Change the direction to move down when at the top boundary
         } else if (obstacleSprite.y >= 6 && obstacleSprite.dy === 1) {
-            obstacleSprite.dy = -1; // Change the direction to move up when at the bottom boundary
+            dy = -1; // Change the direction to move up when at the bottom boundary
         }
     }
-    obstacleSprite.y += obstacleSprite.dy;
+    obstacleSprite.y += dy;
 }
 
 // Apply the moveObstacle function to all moving obstacle sprites
