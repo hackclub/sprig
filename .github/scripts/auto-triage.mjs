@@ -1,5 +1,6 @@
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import {
 	REVIEW_BOT_MARKER,
 	addLabels,
@@ -28,7 +29,8 @@ let cachedOpenPulls = null;
 
 let reviewers = new Set();
 try {
-	const reviewRoles = JSON.parse(readFileSync(path.resolve(process.cwd(), ".github/review-roles.json"), "utf8"));
+	const rolesPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../review-roles.json");
+	const reviewRoles = JSON.parse(readFileSync(rolesPath, "utf8"));
 	reviewers = new Set([...(reviewRoles.maintainers ?? []), ...(reviewRoles.triagers ?? [])]);
 } catch {
 	console.warn("review-roles.json not found or invalid; review state changes will be skipped.");
@@ -502,23 +504,55 @@ function readFileSafe(filePath) {
 	}
 }
 
+async function getLatestReviewStatus({ owner, repo, token, prNumber, reviewers, authorLogin, headSha }) {
+	if (!reviewers || reviewers.size === 0) return null;
+	try {
+		const reviews = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/reviews`);
+		const validReviews = reviews
+			.filter((r) => r.user?.login && reviewers.has(r.user.login) && r.user.login !== authorLogin)
+			.filter((r) => ["APPROVED", "CHANGES_REQUESTED"].includes(r.state))
+			.sort((a, b) => new Date(b.submitted_at).getTime() - new Date(a.submitted_at).getTime());
+
+		const latest = validReviews[0];
+		if (!latest) return null;
+		if (latest.state === "CHANGES_REQUESTED") return "changes_requested";
+		if (latest.state === "APPROVED") {
+			return latest.commit_id === headSha ? "approved" : null;
+		}
+		return null;
+	} catch (e) {
+		console.warn("Unable to fetch reviews; skipping review reconciliation:", e.message);
+		return null;
+	}
+}
+
 async function applyLabels(result) {
 	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Submission"] });
 	const currentLabels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
-	const changes = autoReviewLabelChanges({ labels: currentLabels, validationOk: result.ok, eventAction: event.action });
+	const reviewStatus = await getLatestReviewStatus({
+		owner,
+		repo,
+		token,
+		prNumber,
+		reviewers,
+		authorLogin: pullRequest.user?.login,
+		headSha: pullRequest.head?.sha,
+	});
+	const changes = autoReviewLabelChanges({
+		labels: currentLabels,
+		validationOk: result.ok,
+		eventAction: event.action,
+		reviewStatus,
+	});
 
 	if (result.ok) {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Verified"] });
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: changes.state });
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Failed" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Needs Author" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Maintainer" });
 	} else {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Failed"] });
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Verified" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Playtest" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Maintainer" });
 	}
 
 	if (result.similarity.score >= 0.5) {
