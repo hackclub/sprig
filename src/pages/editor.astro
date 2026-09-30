@@ -83,7 +83,7 @@ function normalizeGitHubRawUrl(value: string | null) {
 			if (parts.length < 5) return null
 			const [owner, repo, mode, ref, ...filePath] = parts
 			if (owner.toLowerCase() !== 'hackclub' || repo.toLowerCase() !== 'sprig') return null
-			if (mode !== 'raw' && mode !== 'blob' || !filePath.length) return null
+			if ((mode !== 'raw' && mode !== 'blob') || !filePath.length) return null
 			return `https://raw.githubusercontent.com/hackclub/sprig/${ref}/${filePath.join('/')}`
 		}
 		return null
