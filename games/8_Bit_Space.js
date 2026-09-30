@@ -19,8 +19,8 @@ function randomInt(max) {
 }
 
 //Audio
-const shootTune = tune`100: C6-20`;
-const damageTune = tune`100: E3-30`;
+const shootTune = tune`100: C6-20,`;
+const damageTune = tune`100: E3-30,`;
 
 function playShootSfx() {
   playTune(shootTune);
