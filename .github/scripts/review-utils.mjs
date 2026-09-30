@@ -48,7 +48,7 @@ export const LABELS = {
 	},
 	"Potential Duplicate": {
 		color: "8250df",
-		description: "Author has more than one open submission",
+		description: "Author has more than one open submission PR",
 		aliases: ["potential-duplicate"],
 	},
 	"Keep Open": {
