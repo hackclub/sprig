@@ -375,12 +375,13 @@ async function validateMetadata(content, filename, workspace) {
 			: "Game does not appear to be an unmodified tutorial."
 	);
 
+	const safeTitle = values.title ? values.title.replace(/`/g, "'") : "";
 	const titleConflict = values.title ? await findTitleConflict(values.title, filename, workspace) : null;
 	add(
 		"Unique game title",
 		!titleConflict,
 		titleConflict
-			? `Game title \`${values.title}\` already appears in \`${titleConflict}\`; choose a unique title.`
+			? `Game title \`${safeTitle}\` already appears in \`${titleConflict}\`; choose a unique title.`
 			: "Game title appears unique."
 	);
 
@@ -648,19 +649,25 @@ function formatPercent(value) {
 }
 
 function checkMetadataDate(addedOn, add) {
-	const validDate = /^\d{4}-\d{2}-\d{2}$/.test(addedOn);
-	const parsedDate = validDate ? new Date(`${addedOn}T00:00:00Z`) : null;
+	const validFormat = /^\d{4}-\d{2}-\d{2}$/.test(addedOn);
+	const parsedDate = validFormat ? new Date(`${addedOn}T00:00:00Z`) : null;
+	const isRealDate = Boolean(
+		validFormat &&
+		parsedDate &&
+		!Number.isNaN(parsedDate.getTime()) &&
+		parsedDate.toISOString().slice(0, 10) === addedOn
+	);
 	const now = new Date();
-	const tooOld = parsedDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
-	const ok = validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld;
+	const tooOld = isRealDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
+	const ok = isRealDate && !tooOld;
 	let detail = "Date looks current.";
 	if (!ok) {
-		if (validDate && tooOld) {
+		if (isRealDate && tooOld) {
 			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format (must be within the last 6 months).";
 		} else if (/\n/.test(addedOn) || /\b\d{4}-\d{2}-\d{2}\b/.test(addedOn)) {
 			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format. Close the metadata header with `*/` immediately after `@addedOn` before any instructions or other comments.";
 		} else {
-			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format.";
+			detail = "Set `@addedOn:` to a valid recent date in `YYYY-MM-DD` format.";
 		}
 	}
 	add("Metadata date", ok, detail);
