@@ -1,8 +1,10 @@
-//@Title: escape the arena
-//@author: erik
-//@description: escape the scary area 
-//@tags: escape, run, arena
-//addeon: 2026-09-09
+/*
+@title: Escape the maze
+@author: erik
+@description: Escape the maze of dangerous obstacles while collecting the 67
+@tags: ['maze', 'escape']
+@addedOn: 2026-09-09
+*/
 
 
 const playerUp = "u"
