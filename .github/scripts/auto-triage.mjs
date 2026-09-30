@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import {
 	REVIEW_BOT_MARKER,
@@ -129,30 +129,49 @@ if (!isSubmissionPR) {
 	process.exit(0);
 }
 
-await materializeSubmittedGameFiles(pullRequest, pullFiles, workspace);
-const result = await validateSubmission({
-	pullRequest,
-	pullFiles,
-	workspace,
-	reviewBaseUrl,
-	owner,
-	repo,
-});
+try {
+	await materializeSubmittedGameFiles(pullRequest, pullFiles, workspace);
+	const result = await validateSubmission({
+		pullRequest,
+		pullFiles,
+		workspace,
+		reviewBaseUrl,
+		owner,
+		repo,
+	});
 
-await applyLabels(result);
-await upsertBotComment({
-	owner,
-	repo,
-	token,
-	issueNumber: prNumber,
-	marker: REVIEW_BOT_MARKER,
-	body: buildComment(result),
-});
+	await applyLabels(result);
+	await upsertBotComment({
+		owner,
+		repo,
+		token,
+		issueNumber: prNumber,
+		marker: REVIEW_BOT_MARKER,
+		body: buildComment(result),
+	});
 
-console.log("Validation Result:", JSON.stringify(result, null, 2));
-console.log("\nBot Comment Body:\n", buildComment(result));
+	console.log("Validation Result:", JSON.stringify(result, null, 2));
+	console.log("\nBot Comment Body:\n", buildComment(result));
 
-if (!result.ok) process.exit(1);
+	if (!result.ok) process.exit(1);
+} catch (error) {
+	console.error("Auto triage validation failed with error:", error);
+	await upsertBotComment({
+		owner,
+		repo,
+		token,
+		issueNumber: prNumber,
+		marker: REVIEW_BOT_MARKER,
+		body: `${REVIEW_BOT_MARKER}
+### ❌ Auto Review Encountered an Error
+
+Auto triage could not complete validation for this submission:
+> ${error.message}
+
+Please check that submitted files can be accessed, or ask a maintainer for assistance.`,
+	});
+	process.exit(1);
+}
 
 async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) {
 	const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
@@ -160,16 +179,31 @@ async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) 
 	const gameFiles = pullFiles.filter((file) => /^games\/[^/]+\.js$/.test(file.filename));
 
 	for (const file of gameFiles) {
-		const contentFile = await githubRequest(
-			token,
-			"GET",
-			`/repos/${headRepo}/contents/${file.filename.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(headSha)}`
-		);
-		if (typeof contentFile?.content !== "string" || contentFile.encoding !== "base64") {
-			throw new Error(`Unable to read submitted file ${file.filename} from GitHub contents API.`);
+		const targetPath = path.join(workspace, file.filename);
+		if (file.status === "removed") {
+			try {
+				rmSync(targetPath, { force: true });
+			} catch {}
+			continue;
 		}
 
-		writeFileSync(path.join(workspace, file.filename), Buffer.from(contentFile.content, "base64"));
+		const response = await fetch(
+			`https://api.github.com/repos/${headRepo}/contents/${file.filename.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(headSha)}`,
+			{
+				headers: {
+					Accept: "application/vnd.github.raw",
+					Authorization: `Bearer ${token}`,
+					"X-GitHub-Api-Version": "2022-11-28",
+				},
+			}
+		);
+		if (!response.ok) {
+			throw new Error(`Unable to read submitted file ${file.filename} from GitHub API (${response.status}).`);
+		}
+
+		const content = await response.text();
+		mkdirSync(path.dirname(targetPath), { recursive: true });
+		writeFileSync(targetPath, content, "utf8");
 	}
 }
 
