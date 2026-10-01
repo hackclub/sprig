@@ -61,10 +61,7 @@ async function handleNeedsAuthor(pullRequest, labels) {
 	const failedTime = await latestLabelTime(pullRequest.number, "Failed");
 	let since = newestDate([needsAuthorTime, failedTime].filter(Boolean));
 
-	if (!since) {
-		const staleTime = hasLabel(labels, "Stale") ? await latestLabelTime(pullRequest.number, "Stale") : null;
-		since = staleTime || pullRequest.updated_at;
-	}
+	if (!since && hasLabel(labels, "Stale")) since = await latestLabelTime(pullRequest.number, "Stale");
 	if (!since) return;
 
 	const authorLogin = pullRequest.user?.login;
@@ -73,11 +70,14 @@ async function handleNeedsAuthor(pullRequest, labels) {
 		since = lastAuthorActivity;
 	}
 
+	// `since` marks the start of the current inactivity cycle (label time or latest author comment).
+	// Markers are keyed on it so a new cycle after author activity gets its own reminder.
+	const cycle = since;
 	const age = daysBetween(since);
 	if (age >= 14) {
 		await commentOnce({
 			issueNumber: pullRequest.number,
-			marker: "<!-- sprig-auto-close -->",
+			marker: `<!-- sprig-auto-close-${cycle} -->`,
 			body: "Closing because this submission has been waiting on author changes for 14 days without activity. Push fixes and ask a reviewer to reopen when ready.",
 		});
 		await githubRequest(token, "PATCH", `/repos/${owner}/${repo}/issues/${pullRequest.number}`, {
@@ -90,7 +90,7 @@ async function handleNeedsAuthor(pullRequest, labels) {
 		await setStateLabel({ owner, repo, token, issueNumber: pullRequest.number, state: "Stale" });
 		await commentOnce({
 			issueNumber: pullRequest.number,
-			marker: "<!-- sprig-stale-reminder -->",
+			marker: `<!-- sprig-stale-reminder-${cycle} -->`,
 			body: "This submission has been waiting on author changes for 7 days. Please push fixes soon, or it may be closed after 14 days of no response.",
 		});
 	}
