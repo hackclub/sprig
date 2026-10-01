@@ -14,7 +14,7 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction, revi
 			targetState = "Ready for Maintainer";
 		} else if (reviewStatus === "changes_requested") {
 			targetState = "Needs Author";
-		} else if (hasLabel(labels, "Ready for Maintainer") && eventAction !== "synchronize") {
+		} else if (reviewStatus === "unknown" && hasLabel(labels, "Ready for Maintainer") && eventAction !== "synchronize") {
 			targetState = "Ready for Maintainer";
 		}
 
