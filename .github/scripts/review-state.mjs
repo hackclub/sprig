@@ -1,6 +1,7 @@
 import { hasLabel } from "./review-utils.mjs";
 
-export function autoReviewLabelChanges({ labels, validationOk, eventAction, reviewStatus = null }) {
+// reviewStatus: "approved" | "changes_requested" | "none" (reviews read, none active) | "unknown" (reviews unreadable).
+export function autoReviewLabelChanges({ labels, validationOk, eventAction, reviewStatus = "unknown" }) {
 	const add = new Set(["Submission"]);
 	const remove = new Set();
 

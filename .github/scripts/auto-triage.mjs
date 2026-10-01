@@ -504,25 +504,32 @@ function readFileSafe(filePath) {
 	}
 }
 
+// Returns "approved" | "changes_requested" | "none" | "unknown".
+// "none" = reviews were read and no active qualifying review exists (e.g. the approval was dismissed).
+// "unknown" = reviews could not be read, so the caller must not infer anything from the result.
 async function getLatestReviewStatus({ owner, repo, token, prNumber, reviewers, authorLogin, headSha }) {
-	if (!reviewers || reviewers.size === 0) return null;
+	if (!reviewers || reviewers.size === 0) return "unknown";
 	try {
 		const reviews = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/reviews`);
-		const validReviews = reviews
-			.filter((r) => r.user?.login && reviewers.has(r.user.login) && r.user.login !== authorLogin)
-			.filter((r) => ["APPROVED", "CHANGES_REQUESTED"].includes(r.state))
-			.sort((a, b) => new Date(b.submitted_at).getTime() - new Date(a.submitted_at).getTime());
-
-		const latest = validReviews[0];
-		if (!latest) return null;
-		if (latest.state === "CHANGES_REQUESTED") return "changes_requested";
-		if (latest.state === "APPROVED") {
-			return latest.commit_id === headSha ? "approved" : null;
+		const latestByReviewer = new Map();
+		for (const review of reviews) {
+			const login = review.user?.login;
+			if (!login || !reviewers.has(login) || login === authorLogin) continue;
+			// DISMISSED replaces the state of the review it dismissed, so it must still count as that reviewer's latest word.
+			if (!["APPROVED", "CHANGES_REQUESTED", "DISMISSED"].includes(review.state)) continue;
+			const previous = latestByReviewer.get(login);
+			if (!previous || new Date(review.submitted_at).getTime() > new Date(previous.submitted_at).getTime()) {
+				latestByReviewer.set(login, review);
+			}
 		}
-		return null;
+
+		const active = [...latestByReviewer.values()];
+		if (active.some((r) => r.state === "CHANGES_REQUESTED")) return "changes_requested";
+		if (active.some((r) => r.state === "APPROVED" && r.commit_id === headSha)) return "approved";
+		return "none";
 	} catch (e) {
 		console.warn("Unable to fetch reviews; skipping review reconciliation:", e.message);
-		return null;
+		return "unknown";
 	}
 }
 
