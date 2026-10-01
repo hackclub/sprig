@@ -118,9 +118,13 @@ const touchesNonGamePaths = pullFiles.some((f) =>
 	!f.filename.toLowerCase().startsWith("games/") &&
 	(f.status !== "added" || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
 );
+const addedJsFiles = pullFiles.filter((f) => f.status === "added" && f.filename.endsWith(".js"));
+const bodyLooksLikeSubmission =
+	/what is your game about|how do you play your game/i.test(body) ||
+	/^#+\s*(about your game|pre apply checklist)\b/im.test(body);
 const isMisplacedGameSubmission = !touchesNonGamePaths &&
-	pullFiles.some((f) => f.status === "added" && f.filename.endsWith(".js")) &&
-	(/what is your game about/i.test(body) || /how do you play your game/i.test(body));
+	addedJsFiles.length > 0 &&
+	(bodyLooksLikeSubmission || addedJsFiles.some((f) => /^\+\s*@title:/m.test(f.patch ?? "")));
 
 const isSubmissionPR = modifiesGames || isLabeledSubmission || isMisplacedGameSubmission;
 
