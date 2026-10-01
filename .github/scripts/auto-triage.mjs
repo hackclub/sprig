@@ -103,6 +103,31 @@ if (event.review && event.action === "submitted") {
 	}
 	process.exit(0);
 }
+if (event.review && event.action === "dismissed") {
+	const reviewerLogin = event.review.user?.login;
+	if (!reviewerLogin || !reviewers.has(reviewerLogin)) {
+		console.log(`Review dismissed for ${reviewerLogin ?? "unknown reviewer"}. Ignoring because reviewer is not listed.`);
+		process.exit(0);
+	}
+
+	const reviewStatus = await getLatestReviewStatus({
+		owner,
+		repo,
+		token,
+		prNumber,
+		reviewers,
+		authorLogin: pullRequest.user?.login,
+		headSha: pullRequest.head?.sha,
+	});
+	const currentLabels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
+	if (reviewStatus === "none" && hasLabel(currentLabels, "Ready for Maintainer")) {
+		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Playtest" });
+		console.log(`Approval dismissed and no active review remains, set "Ready for Playtest".`);
+	} else {
+		console.log(`Review dismissed; review state is ${reviewStatus}, leaving labels unchanged.`);
+	}
+	process.exit(0);
+}
 const workspace = path.resolve(process.env.SUBMISSION_PATH ?? process.cwd());
 const reviewBaseUrl = process.env.SPRIG_REVIEW_BASE_URL ?? "https://sprig.hackclub.com/editor";
 
