@@ -249,19 +249,19 @@ addText("Escape maze \nfrom spooky ghost \n\npress k for \nregular gameplay \n\n
 setMap(levels[level])
 
 onInput("d", () => {
-  getFirst(player).x += 1
+  if (getFirst(player)) getFirst(player).x += 1
 })
 
 onInput("a", () => {
-  getFirst(player).x -= 1
+  if (getFirst(player)) getFirst(player).x -= 1
 })
 
 onInput("w", () => {
-  getFirst(player).y -= 1
+  if (getFirst(player)) getFirst(player).y -= 1
 })
 
 onInput("s", () => {
-  getFirst(player).y += 1
+  if (getFirst(player)) getFirst(player).y += 1
 })
 
 onInput("k", () => {
@@ -290,14 +290,14 @@ function begin() {
 }
 
 function chase() {
-  if (start == true) {
+  if (start == true && getFirst(chaser)) {
     if (getFirst(player).x == getFirst(goal).x && getFirst(player).y == getFirst(goal).y) {
       level += 1
       setMap(levels[level])
       start = false
       stun = 0
     }
-    if (stun <= 0) {
+    if (stun <= 0 && getFirst(chaser)) {
       if (getFirst(player).x > getFirst(chaser).x) {
         getFirst(chaser).x += 1
       } else if (getFirst(player).x < getFirst(chaser).x) {
@@ -311,12 +311,12 @@ function chase() {
     } else {
       stun -= 1
     }
-    if (getFirst(player).x == getFirst(chaser).x && getFirst(player).y == getFirst(chaser).y) {
+    if (getFirst(chaser) && getFirst(player).x == getFirst(chaser).x && getFirst(player).y == getFirst(chaser).y) {
       setMap(levels[level])
       start = false
       stun = 0
     }
-    if (getFirst(talisman).x == getFirst(chaser).x && getFirst(talisman).y == getFirst(chaser).y) {
+    if (getFirst(talisman) && getFirst(chaser) && getFirst(talisman).x == getFirst(chaser).x && getFirst(talisman).y == getFirst(chaser).y) {
       getFirst(talisman).remove()
       stun = 3
     }

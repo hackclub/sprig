@@ -59,7 +59,7 @@ function newWeapon(weapon) {
       clearText()
     }, 500)
     playerdata.weapon = weapon
-    return True
+    return true
   }
 }
 
@@ -500,7 +500,7 @@ const generateDungeon = (width, height)=> {
 
 			for (var y=0; y<_height; y++) {
 				for (var x=0; x<_width; x++) {
-					cords.push([y+y_offset, x+x_offset].join(","))
+					cords.push((y+y_offset)*1000 + x+x_offset)
 				}
 			}
 
@@ -509,7 +509,7 @@ const generateDungeon = (width, height)=> {
 			for (var r=0; r<rooms.length; r++) {
 				var room = rooms[r]
 				for (var c=0; c<cords.length; c++) {
-					if (room.includes(cords[c])) {
+					if (map[Math.floor(cords[c]/1000)][cords[c]%1000] == ".") {
 						overlaps = true
 						break
 					}
@@ -527,7 +527,7 @@ const generateDungeon = (width, height)=> {
 
 	const draw = (cords)=> {
 		for (var i=0; i<cords.length; i++) {
-			var cord = cords[i].split(",")
+			var cord = [Math.floor(cords[i]/1000), cords[i]%1000]
 			map[cord[0]][cord[1]] = "."
 		}
 	}

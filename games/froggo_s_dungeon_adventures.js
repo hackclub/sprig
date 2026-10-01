@@ -858,6 +858,8 @@ const moveTowardsPlayer = (object, range) => {
 
 
 const spawnTongue = () => {
+  const p = getFirst(player)
+  if (!p || (lastDirection == "right" && p.x == width() - 1) || (lastDirection == "left" && p.x == 0) || (lastDirection == "up" && p.y == 0) || (lastDirection == "down" && p.y == height() - 1)) return
   if (lastDirection == "right") {
     addSprite(getFirst(player).x + 1, getFirst(player).y, tongueright);
     setTimeout(() => {
@@ -962,6 +964,7 @@ afterInput(() => {
   if (getFirst(watermelon) != null) {
     pickup()  
   }
+  if (getFirst(fly) == null && getFirst(enemy) == null) return
   if (getFirst(fly) == null) {
     moveTowardsPlayer(enemy, 3)
     damagecontroller(enemy, enemydata)
