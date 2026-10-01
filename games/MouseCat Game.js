@@ -404,7 +404,7 @@ let level = 1;
 let gameOver = false;
 let lost = false;
 let counter = 0;
-inter = true;
+let inter = true;
 
 
 
@@ -461,7 +461,7 @@ function gameLoop() {
     playerTile.remove();
     catTile.remove();
     gameOver = true;
-    setTimeout(loadLevel(level), 300000);
+    loadLevel(level);
 
     return;
   }

@@ -503,7 +503,7 @@ function updateShieldState(){
   }
 }
 function playerShoot(){
-  if (playerShootCooldown == 0){
+  if (playerShootCooldown == 0 && getFirst(player)){
     addSprite(getFirst(player).x, getFirst(player).y - 1, playerProjectile)
     clearInterval(playerShootCooldownInterval)
     playerShootCooldownInterval = setInterval(() => {if (playerShootCooldown == 1) {playerShootCooldown = 0}}, playerShootCooldownDuration)
@@ -525,7 +525,7 @@ function playerProjectileCollision(){
       if (getTile(proj.x, proj.y).some(x => enemyTypes.includes(x.type)))
       {
         numEnemies -= 1
-        if (numEnemies <= 0) {endgame()}
+        if (numEnemies <= 0) {endgame(); return}
         getTile(proj.x, proj.y).find(x => enemyTypes.includes(x.type)).remove()
         proj.remove()
 
@@ -568,7 +568,7 @@ function enemyProjectileCollision(){
       if (getTile(proj.x, proj.y).length > 1) {
         if (getTile(proj.x, proj.y).find(x => x.type == player) != undefined){
             playerLives -= 1
-            if (playerLives <= 0) {endgame()}
+            if (playerLives <= 0) {endgame(); return}
             proj.remove()
 
             playTune(playerHitSound)
@@ -695,8 +695,8 @@ let intervals = [enemyMoveInterval,
                  UIInterval,
                  UFOMoveInterval
                 ]
-onInput("a", () => {getFirst(player).x -= 1})
-onInput("d", () => {getFirst(player).x += 1})
+onInput("a", () => {if (getFirst(player)) getFirst(player).x -= 1})
+onInput("d", () => {if (getFirst(player)) getFirst(player).x += 1})
 onInput("i", playerShoot)
 onInput("j", start)
 

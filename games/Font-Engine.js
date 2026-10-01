@@ -1012,6 +1012,9 @@ class ScrollableTextRenderer {
    * Render visible portion based on scrollY
    */
   render() {
+    // Clear old UI sprites
+    this.clearUI()
+    
     // Clear screen
     setMap(map`
 ....................
@@ -1030,9 +1033,6 @@ class ScrollableTextRenderer {
 ....................
 ....................
 ....................`)
-    
-    // Clear old UI sprites
-    this.clearUI()
     
     // Render visible lines
     for (let screenY = 0; screenY < SCREEN_HEIGHT; screenY++) {

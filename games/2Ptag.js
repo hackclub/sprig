@@ -104,8 +104,8 @@ setMap(levels[level])
 setPushables({
   [player]: []
 })
-pl1 = getFirst(player)
-pl2 = getFirst(player1)
+let pl1 = getFirst(player)
+let pl2 = getFirst(player1)
 onInput("s", () => {
   if (turn == 1) {
     pl1.y += 1

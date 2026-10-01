@@ -125,6 +125,7 @@ const EMP = 500
 let ehp = 12
 
 let lose = false
+let options, prize_items, spikeds, yoyos, strings
 
 setLegend(
   [p_head_r, bitmap`

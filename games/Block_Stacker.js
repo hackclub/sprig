@@ -257,8 +257,8 @@ const levels = [
 setMap(levels[level])
 
 function wait(t) {
-  let start = performance.now()
-  while (performance.now() - start < t) {}
+  let start = Date.now()
+  while (Date.now() - start < t) {}
 }
 
 let mInterval
@@ -325,7 +325,7 @@ function nextRound() {
           color: color`4`
         })
         setTimeout(function() {
-          addText("Time: " + Math.round(performance.now() - start) / 1000 + "s", {
+          addText("Time: " + Math.round(Date.now() - start) / 1000 + "s", {
             x: 4,
             y: 6,
             color: color`4`
@@ -370,7 +370,7 @@ function nextRound() {
         })
       }, 400)
       setTimeout(function() {
-        addText("Time: " + Math.round(performance.now() - start) / 1000 + "s", {
+        addText("Time: " + Math.round(Date.now() - start) / 1000 + "s", {
           x: 4,
           y: 6,
           color: color`3`
@@ -388,7 +388,7 @@ function nextRound() {
   }
 }
 
-start = performance.now()
+start = Date.now()
 nextRound()
 
 onInput("s", () => {
@@ -435,7 +435,7 @@ onInput("s", () => {
 onInput("w",()=>{
   if (gameOver){
     gameOver = false
-    start = performance.now()
+    start = Date.now()
     len = 5;
     stackSize = 0;
     blockX = 0

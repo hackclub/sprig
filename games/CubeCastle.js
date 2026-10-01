@@ -294,8 +294,8 @@ function gravity(obj) {
   if (!isJumping) {
     const belowSprites = getTile(playerSprite.x, playerSprite.y + 1)
 
-    if (belowSprites.some(sprite => sprite?.type === lava) || belowSprites.some(sprite => sprite?.type === player)) {
-      if (obj != player && !belowSprites.some(sprite => sprite?.type === player)) return playerSprite.remove();
+    if (belowSprites.some(sprite => sprite && sprite.type === lava) || belowSprites.some(sprite => sprite && sprite.type === player)) {
+      if (obj != player && !belowSprites.some(sprite => sprite && sprite.type === player)) return playerSprite.remove();
       // Player touched lava/fireball, reset the game
       kill()
       return;
@@ -358,7 +358,7 @@ function spawnFireballs() {
 
 function breakBlock(x, y) {
   const blockSprite = getTile(x, y)[0]
-  if (blockSprite?.type === plateform) {
+  if (blockSprite && blockSprite.type === plateform) {
     blockSprite.remove() // Remove the block sprite
   }
 }
@@ -381,7 +381,7 @@ function interactCheck() {
     getTile(playerSprite.x, playerSprite.y - 1)[0] // Up
   ]
 
-  const isNearSign = adjacentSprites.some(sprite => sprite?.type === sign)
+  const isNearSign = adjacentSprites.some(sprite => sprite && sprite.type === sign)
 
   if (isNearSign) {
     addText("Press L to interact", { x: 0, y: 14, color: color`2` })
@@ -397,7 +397,7 @@ function interact() {
     if (isDead) return;
     const dialogue = dialogues.find((dial) => dial.level === level);
     clearText();
-    if (dialogue?.targetlvl) level = dialogue.targetlvl
+    if (dialogue && dialogue.targetlvl) level = dialogue.targetlvl
     if (level === 3) spawnFireballs();
     setMap(levels[level]);
     if (level === 6) bossFight();
@@ -412,13 +412,13 @@ function interact() {
     getTile(playerSprite.x - 1, playerSprite.y)[0], // Left
   ]
 
-  const isNearSign = adjacentSprites.some(sprite => sprite?.type === sign)
+  const isNearSign = adjacentSprites.some(sprite => sprite && sprite.type === sign)
 
   if (isNearSign) {
-    const dialogue = dialogues.find((dial) => dial?.level === level);
+    const dialogue = dialogues.find((dial) => dial && dial.level === level);
     setMap(levels[DIAL_SCENE])
     clearText()
-    addText(dialogue?.text.replace("{TIME}", time) || "notext", { x: 3, y: 1, color: color`0` })
+    addText((dialogue && dialogue.text.replace("{TIME}", time)) || "notext", { x: 3, y: 1, color: color`0` })
   }
 }
 
