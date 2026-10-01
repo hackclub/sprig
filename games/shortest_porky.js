@@ -369,7 +369,7 @@ const player = "p"
 const water = "w"
 const endSquare = "e"
 const trap = "t"
-const bruh = performance.now() // can't use startTime, is defined implicitly by sprig engine
+const bruh = Date.now() // can't use startTime, is defined implicitly by sprig engine
 
 setSolids([player, water])
 
@@ -686,7 +686,7 @@ afterInput(() => {
       }
     }
     playTune(endTheme);
-    let seconds = Math.floor((performance.now() - bruh) / 1000 * 100) / 100;
+    let seconds = Math.floor((Date.now() - bruh) / 1000 * 100) / 100;
     addText("Game over", {x: 2, y: 4, color: color`4`})
     addText(`${deaths} deaths!`, {x: 2, y: 6, color: color`3`})
     addText(`${seconds} seconds!`, {x: 2, y: 8, color: color`5`})

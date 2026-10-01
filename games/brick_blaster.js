@@ -68,7 +68,7 @@ const tune_power_up = tune`
 
 
 let time_start_power = 0;
-let time_start = performance.now();
+let time_start = Date.now();
 let time_rest = 0;
 let gameEnded = false;
 let newLevel = false;
@@ -265,7 +265,7 @@ onInput("d", () => {
 });
 onInput("k", () => {
     if (newLevel && gameEnded) {
-        time_start += (performance.now() - time_rest);
+        time_start += (Date.now() - time_rest);
         setMap(levels[level]);
         newLevel = false;
         gameEnded = false;
@@ -281,7 +281,7 @@ afterInput(() => {
 // For the powers
 
 function givePower() {
-    time_start_power = performance.now();
+    time_start_power = Date.now();
     playTune(tune_power_up, 1);
 
     const all_players = getAll(player);
@@ -306,7 +306,7 @@ setInterval(function () {
 
 setInterval(function () {
     if (gameEnded) return;
-    const time_power_have = time_start_power !== 0 ? ((performance.now() - time_start_power) / 1000) % 60 : null;
+    const time_power_have = time_start_power !== 0 ? ((Date.now() - time_start_power) / 1000) % 60 : null;
 
     if (time_power_have && time_power_have >= 10) {
         // Remove the power
@@ -383,11 +383,11 @@ const gameLoop = setInterval(function () {
             if (block.length > 0 && block[0].type === brick) block[0].remove();
         });
 
-        touchedBrick.remove();
         if (Math.floor(Math.random() * 10) + 1 === 5) {
             // OMG ur lucky you got number 5 its a 10% chance ! :D
             addSprite(touchedBrick.x, touchedBrick.y, power);
         }
+        touchedBrick.remove();
 
         score++;
 
@@ -403,7 +403,7 @@ const gameLoop = setInterval(function () {
     clearText();
     addText(String(score), { x: 0, y: 0, color: color`7` });
 
-    let time_diff = (performance.now() - time_start) / 1000;
+    let time_diff = (Date.now() - time_start) / 1000;
     let time_minutes = Math.floor(time_diff / 60);
     let time_seconds = Math.floor(time_diff % 60);
     let time_string = time_minutes > 0 ? `${time_minutes}m ${time_seconds}s` : `${time_seconds}s`;
@@ -419,7 +419,7 @@ const gameLoop = setInterval(function () {
             addText(`lvl.${level} completed!`, { x: 2, y: 10, color: color`4` });
             addText("Next level click K", { x: 1, y: 11, color: color`8` });
             newLevel = true;
-            time_rest = performance.now();
+            time_rest = Date.now();
         } else {
             addText(`YOU WON!`, { x: 6, y: 10, color: color`4` });
             playTune(tune_won_game, 1);

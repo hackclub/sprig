@@ -151,7 +151,7 @@ function checkGrounded(obj){
 }
 
 onInput("w", () => {
-  if(checkGrounded(getFirst(mario))){
+  if(getFirst(mario) && checkGrounded(getFirst(mario))){
     n = jump_ht;
   }
 });

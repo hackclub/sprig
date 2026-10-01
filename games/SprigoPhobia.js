@@ -122,6 +122,7 @@ function movePlayer(dx, dy) {
     drawOutsideLabels()
   }
   const playerSprite = getFirst(player)
+  if (!playerSprite) return
   playerSprite.x += dx
   playerSprite.y += dy
 }
@@ -837,6 +838,7 @@ onInput("d", () => {
 })
 
 onInput("i", () => {
+  if (level === -1) return
   if (inIdentification) {
     if (gameFinished) {
       restartGame()

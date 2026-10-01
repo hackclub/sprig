@@ -29,7 +29,7 @@ const screen_size = [screen_sprite_size[0] * 16, screen_sprite_size[1] * 16]
 //--IGNORE--
 //aka all drawing
 //Initilises canvas
-const aviable_chars = "0123456789qwrtyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNMāēžščģūīņķļĀŠŽĒČĢŪĪŅĶĻ"
+const aviable_chars = "0123456789qwrtyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNMe!#$%&()*+,-/:;<=>?@[]"
 let aviable_chars_incrament = 0
 let screen_sprites = []
 for (let x = 0; x < screen_sprite_size[0]; x++){
@@ -42,9 +42,9 @@ for (let x = 0; x < screen_sprite_size[0]; x++){
 }
 let canvas = []
 for (let x = 0; x < screen_sprite_size[0]*16; x++){
-  let temp_canvas = []
+  let temp_canvas = new Uint8Array(screen_sprite_size[1]*16)
   for (let y = 0; y < screen_sprite_size[1]*16; y++){
-    temp_canvas.push(3)
+    temp_canvas[y] = 3
   }
   canvas.push(temp_canvas)
 }

@@ -462,7 +462,7 @@ w.........zwww.w
 w.........z....w
 wwwwwwwwwwwwwwww`,
 ]
-leal = level+1
+var leal = level+1
  const base = 1 + (leal - 1) * (4 / 3);
   const rand = Math.floor(Math.random() * 3) - 1;
   const enemyCalc = Math.max(1, Math.round(base + rand));
@@ -510,7 +510,7 @@ if (tPos) {
 function playMove(){}
 
 function addGem(){addSprite(gX, gY, gem); console.log("Gem Location: "+gX, gY)}
-a = 1
+var a = 1
 
 function addTrap(count) {
   const triesPerTrap = 2000;
@@ -742,7 +742,7 @@ addText("Key:", {
         y: 15,
         color: color`6`
       });}
-chance = Math.random()*10;
+var chance = Math.random()*10;
 console.log("Chance"+chance)
 setInterval(() => {
   chance = Math.random()*10;
@@ -830,8 +830,8 @@ console.log("tiles", covered.length);
 
 if (covered.length >= 1) {
   for (const t of covered) {
-    let x = t.x ?? (Array.isArray(t) ? (t[0]?.x ?? t[0]) : undefined);
-    let y = t.y ?? (Array.isArray(t) ? (t[1]?.y ?? t[1]) : undefined);
+    let x = t.x ?? (Array.isArray(t) ? ((t[0] != null ? t[0].x : undefined) ?? t[0]) : undefined);
+    let y = t.y ?? (Array.isArray(t) ? ((t[1] != null ? t[1].y : undefined) ?? t[1]) : undefined);
     if (x === undefined || y === undefined) {
       if (t && typeof t === "obect") {
         for (const v of Obect.values(t)) {
@@ -854,7 +854,7 @@ if (covered.length >= 1) {
   }
 }
 
-  currentLevelB4 = levels[level];
+  let currentLevelB4 = levels[level];
   for (let i = 0; i < lives; i++){
     addSprite(13+i, 0, heartSprite);
 
@@ -912,8 +912,8 @@ if (covered.length >= 1) {
     // after the last level
     if (currentLevel !== undefined) {
       setMap(currentLevel);
-      wX = Math.floor(Math.random() * width());
-      hX = Math.floor(Math.random() * width());
+      let wX = Math.floor(Math.random() * width());
+      let hX = Math.floor(Math.random() * width());
       addGem()
       addTrap(enemyCalc)
       seen = Array(16).fill().map(() => Array(16).fill(false));
