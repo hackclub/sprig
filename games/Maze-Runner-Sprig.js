@@ -3,6 +3,7 @@
 // @description: Un juego retro de laberintos de múltiples niveles progresivos con recolección de llaves y sistema de XP.
 // @tags: ['maze', 'puzzle', 'retro']
 // @addedOn: 2026-10-01
+
 // ==========================================
 // GAME: Maze Runner Ultra - Hack Club Edition
 // AUTHOR: John Carlos Caicedo
@@ -121,7 +122,6 @@ w...k.w...w..d.w
 w.www.wwwwwww.ww
 wwwwwwwwwwwwwwww`,
 
-  // NUEVO NIVEL 3: CAMINO DE SERPIENTE (100% SOLUCIONABLE)
   map`
 wwwwwwwwwwwwwwww
 wp.............w
