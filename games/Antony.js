@@ -288,7 +288,7 @@ function checkWin() {
     else {
         clearText()
         addText("Antony Wins!", { y: 4, color: color`0` })
-        addText("Time Elapsed: "+msToMinSec(performance.now() - startTime), { y: 6, color: color`7` })
+        addText("Time Elapsed: "+msToMinSec(Date.now() - startTime), { y: 6, color: color`7` })
         gameOver = true
         
     }
@@ -332,7 +332,7 @@ function moveAnt(dx, dy) {
   if (gameOver) return
 
   if(inputTimes == 0) {
-    startTime = performance.now()
+    startTime = Date.now()
   }
   inputTimes ++
   const antSprite = getFirst(ant)

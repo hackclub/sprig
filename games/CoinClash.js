@@ -274,7 +274,7 @@ function move(bool, button1, button2, pos, isX){
       if (clicked.length < 7){
         clicked.push(button1);
         if (getFirst(target)){
-          for (i of directions) if (getFirst(i)) getFirst(i).remove();
+          for (const i of directions) if (getFirst(i)) getFirst(i).remove();
           switch (button1){
             case "w":
             case "i":

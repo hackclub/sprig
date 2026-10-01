@@ -129,6 +129,7 @@ setPushables({
   [ player ]: []
 })
 onInput("w", () => {
+  if (!getFirst(player)) return
   if (jumped == 0){
   getFirst(player).y -= 1
   jumped = 1
@@ -146,6 +147,7 @@ onInput("w", () => {
   }
 })
 onInput("a", () => {
+  if (!getFirst(player)) return
   getFirst(player).x -= 1
   if (tilesWith(player,fakecoin)[0] != null) {
   point -= 99999
@@ -160,6 +162,7 @@ onInput("a", () => {
   }
 })
 onInput("d", () => {
+  if (!getFirst(player)) return
   getFirst(player).x += 1
   if (tilesWith(player,fakecoin)[0] != null) {
   point -= 99999
@@ -175,6 +178,7 @@ onInput("d", () => {
 })
 
 afterInput(() => {
+  if (!getFirst(player)) return
   
   if (jumped == 2){
     getFirst(player).y += 1
