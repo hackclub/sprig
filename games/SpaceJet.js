@@ -323,7 +323,7 @@ function moveMissiles(intervalTime){
 
 /* spons new aliens */
 function setAliens(noOfAliens,intervalTime){
-  setAlien = setInterval(()=>{
+  let setAlien = setInterval(()=>{
     if(status == 0){
       addSprite(0 , 0, alien) 
       noOfAlienCreated += 1

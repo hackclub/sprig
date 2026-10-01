@@ -39,23 +39,35 @@ let player1RemainingBombs = 1;
 let player2BombRange = 1;
 let player2RemainingBombs = 1;
 
-const player1PlaceProgress0 = tune`
+const player1PlaceProgress0 = typeof window === "undefined" ? tune`
+500: B0-500,
+15500` : tune`
 500: 20-500,
 15500`
-const player1PlaceProgress1 = tune`
+const player1PlaceProgress1 = typeof window === "undefined" ? tune`
+500: E2-500,
+15500` : tune`
 500: 40-500,
 15500`
-const player1PlaceProgress2 = tune`
+const player1PlaceProgress2 = typeof window === "undefined" ? tune`
+500: C4-500,
+15500` : tune`
 500: 60-500,
 15500`
 
-const player2PlaceProgress0 = tune`
+const player2PlaceProgress0 = typeof window === "undefined" ? tune`
+500: A#4-500,
+15500` : tune`
 500: 70-500,
 15500`
-const player2PlaceProgress1 = tune`
+const player2PlaceProgress1 = typeof window === "undefined" ? tune`
+500: G#5-500,
+15500` : tune`
 500: 80-500,
 15500`
-const player2PlaceProgress2 = tune`
+const player2PlaceProgress2 = typeof window === "undefined" ? tune`
+500: F#6-500,
+15500` : tune`
 500: 90-500,
 15500`
 
@@ -75,7 +87,9 @@ const gameOverTune = tune`
 const bombWarning = tune`
 500: B5~500,
 15500`
-const bombExplodeSound = tune`
+const bombExplodeSound = typeof window === "undefined" ? tune`
+500: B0-2000+F#1-2000+E2-500,
+15500` : tune`
 500: 15-2000+30-2000+40-500,
 15500`
 
@@ -433,7 +447,7 @@ function spawnBomb(x, y, range) {
 }
 
 function updateBombState(tile) {
-  tile.remove();
+  if(getTile(tile.x, tile.y).indexOf(tile) !== -1) tile.remove();
   if(tile.type==bomb1) {
     playTune(bombWarning);
     let newTile = addSpriteReturn(tile.x,tile.y,bomb2);
@@ -446,7 +460,6 @@ function updateBombState(tile) {
   }
   if(tile.type==bomb3) {
     playTune(bombExplodeSound);
-    tile.remove();
   }
 }
 
