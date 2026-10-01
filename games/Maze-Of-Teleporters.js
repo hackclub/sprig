@@ -2,11 +2,11 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Maze Game
-@description: just a maze game
+@title: Maze-Of-Teleporters
+@description: just a maze game with teleporters
 @author: NotTacos
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@tags: ['Puzzle', 'Guessing']
+@addedOn: 2026-09-30
 */
 
 const player = "p"
