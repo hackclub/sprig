@@ -118,9 +118,13 @@ const touchesNonGamePaths = pullFiles.some((f) =>
 	!f.filename.toLowerCase().startsWith("games/") &&
 	(f.status !== "added" || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
 );
+const addedJsFiles = pullFiles.filter((f) => f.status === "added" && f.filename.endsWith(".js"));
+const bodyLooksLikeSubmission =
+	/what is your game about|how do you play your game/i.test(body) ||
+	/^#+\s*(about your game|pre apply checklist)\b/im.test(body);
 const isMisplacedGameSubmission = !touchesNonGamePaths &&
-	pullFiles.some((f) => f.status === "added" && f.filename.endsWith(".js")) &&
-	(/what is your game about/i.test(body) || /how do you play your game/i.test(body));
+	addedJsFiles.length > 0 &&
+	(bodyLooksLikeSubmission || addedJsFiles.some((f) => /^\+\s*@title:/m.test(f.patch ?? "")));
 
 const isSubmissionPR = modifiesGames || isLabeledSubmission || isMisplacedGameSubmission;
 
@@ -295,15 +299,54 @@ function validatePullRequestBody(body) {
 	const checks = [];
 	const add = (name, ok, detail) => checks.push({ name, ok, detail });
 
-	const author = extractBoldField(body, "Author");
-	const about = extractBoldField(body, "What is your game about?");
-	const gameplay = extractBoldField(body, "How do you play your game?");
+	const author = extractAuthor(body);
+	const { about, gameplay } = extractAboutAndGameplay(body);
 
 	add("PR author name", Boolean(author), author ? "Author field is filled." : "Fill in the `Author:` field in the PR description.");
 	add("PR about blurb", Boolean(about), about ? "About blurb is filled." : "Fill in `What is your game about?` in the PR description.");
 	add("PR gameplay description", Boolean(gameplay), gameplay ? "Gameplay description is filled." : "Fill in `How do you play your game?` in the PR description.");
 
 	return { checks };
+}
+
+function getSectionBlocks(body, heading) {
+	const pattern = new RegExp(String.raw`(?:^|\n)#+\s*${heading}[^\n]*\n([\s\S]*?)(?=\n#+\s|$)`, "i");
+	const match = body.match(pattern);
+	if (!match) return [];
+	const clean = stripTemplateNoise(match[1]);
+	return clean
+		.split(/\n\s*\n+/)
+		.map((p) => normalizeFieldValue(p))
+		.filter(Boolean);
+}
+
+function extractAuthor(body) {
+	const direct = extractBoldField(body, "Author");
+	if (direct) return direct;
+	const blocks = getSectionBlocks(body, "Author(?:\\s+name)?");
+	for (const block of blocks) {
+		if (/^author:?$/i.test(block)) continue;
+		const clean = block.replace(/^author:\s*/i, "").trim();
+		if (clean) return clean;
+	}
+	return "";
+}
+
+function extractAboutAndGameplay(body) {
+	let about = extractBoldField(body, "What is your game about?");
+	let gameplay = extractBoldField(body, "How do you play your game?");
+	if (about && gameplay) return { about, gameplay };
+
+	const isPrompt = (text) =>
+		/what is your game about/i.test(text) ||
+		/how do you play your game/i.test(text);
+
+	const blocks = getSectionBlocks(body, "About your game").filter((b) => !isPrompt(b));
+
+	if (!about && blocks.length > 0) about = blocks[0];
+	if (!gameplay && blocks.length > 1) gameplay = blocks[1];
+
+	return { about, gameplay };
 }
 
 function extractBoldField(body, label) {
