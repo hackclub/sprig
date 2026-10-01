@@ -59,6 +59,7 @@ let s = placementOptions[placement];
 
 let outputText = "                ";
 let tile;
+let p1;
 
 let clearBoardNext = false;
 let clearBoardText = "clear board";

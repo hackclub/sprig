@@ -108,6 +108,7 @@ setSolids([player, wall]);
 let level = 0;
 let w = 0;
 let interval;
+let timer;
 let collectiblesCollected = 0;
 
 const levels = [

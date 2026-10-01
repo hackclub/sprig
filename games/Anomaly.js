@@ -877,27 +877,32 @@ setPushables({
 })
 
 onInput("s", () => {
+  if (!getFirst(player)) return
   getFirst(player).y += 1
   playTune(walk);
 })
 
 onInput("w", () => {
+  if (!getFirst(player)) return
   getFirst(player).y -= 1
     playTune(walk);
 })
 
 onInput("a", () => {
+  if (!getFirst(player)) return
   getFirst(player).x -= 1
   playTune(walk);
 })
 
 onInput("d", () => {
+  if (!getFirst(player)) return
   getFirst(player).x += 1
   playTune(walk);
 })
 
 onInput("j",()=> {
  level = level - 1
+ if (!levels[level]) return
 setMap(levels[level]);
   clearText();
 })

@@ -395,9 +395,9 @@ function getEntityMovement(oPixels, nPixels) {
 function getPlatform(x, y, length, angle) {
   x = width() / 2 + x
   y = height() / 2 + y
-  dx = Math.cos(-angle) * length
-  dy = Math.sin(-angle) * length
-  r = 2
+  let dx = Math.cos(-angle) * length
+  let dy = Math.sin(-angle) * length
+  let r = 2
 
   let circle = getCircle(r, true)
   let startCircle = transform(circle, x, y)
@@ -415,7 +415,7 @@ function getPlatform(x, y, length, angle) {
 }
 
 function getCircle(r, filled, resolution) {
-  resolution ??= 5
+  resolution = resolution ?? 5
   let pixels = []
   for (let theta = 0; theta < Math.PI * 2; theta += 1 / (r * resolution)) {
     for (let b = (filled ? 0 : r); b <= r; b++) {

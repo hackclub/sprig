@@ -52,7 +52,7 @@ let playerMovement = 1
 let enemyMovement = 1
 
 //music
-const backgroundMusic = new Audio('Downloads/mouseGame.mp3')
+const backgroundMusic = typeof Audio !== "undefined" ? new Audio('Downloads/mouseGame.mp3') : { play() {} }
 //const playback = playTune(backgroundMusic, Infinity)
 backgroundMusic.loop = true; // Loop the music
 backgroundMusic.volume = 1.0

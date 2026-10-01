@@ -216,6 +216,7 @@ addText("WASD to move and\nIJKL to place webs\n \nwebs catch bugs\n \neat bugs s
   y: 1,
   color: color`H`
 })
+let tut, spiders, jumpX, jumpY, screenHeight, screenWidth, lastX, lastY, webs, firstWebX, firstWebY, mosquitoWeb, mosquitoPosX, mosquitoPosY, nowX, nowY, mosquitoEat, flyPosX, flyPosY, flyWeb, flyEat, score, goal
 tut = false
 onInput("w", () => {
   spiders = getAll(spider).length;
@@ -252,7 +253,7 @@ onInput("d", () => {
 })
 onInput("i", () => {
   const spiderSprite = getFirst(spider)
-  if (spiderSprite) {
+  if (spiderSprite && spiderSprite.y > 0) {
     addSprite(spiderSprite.x, spiderSprite.y - 1, web)
 }
 const pitWeb = tilesWith(web, pit).length;
@@ -262,7 +263,7 @@ const pitWeb = tilesWith(web, pit).length;
 }})
 onInput("j", () => {
   const spiderSprite = getFirst(spider)
-  if (spiderSprite) {
+  if (spiderSprite && spiderSprite.x > 0) {
     addSprite(spiderSprite.x - 1, spiderSprite.y, web)
 }
 const pitWeb = tilesWith(web, pit).length;
@@ -272,7 +273,7 @@ const pitWeb = tilesWith(web, pit).length;
 }})
 onInput("k", () => {
   const spiderSprite = getFirst(spider)
-  if (spiderSprite) {
+  if (spiderSprite && spiderSprite.y < height() - 1) {
     addSprite(spiderSprite.x, spiderSprite.y + 1, web)
 }
 const pitWeb = tilesWith(web, pit).length;
@@ -282,7 +283,7 @@ const pitWeb = tilesWith(web, pit).length;
 }})
 onInput("l", () => {
   const spiderSprite = getFirst(spider)
-  if (spiderSprite) {
+  if (spiderSprite && spiderSprite.x < width() - 1) {
     addSprite(spiderSprite.x + 1, spiderSprite.y, web)
 }
 const pitWeb = tilesWith(web, pit).length;

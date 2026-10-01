@@ -196,7 +196,7 @@ setPushables({
 onInput("w", () => {
   speed = -2;
 })
-startTime = performance.now()
+let startTime = Date.now()
 onInput("k", () => {
   clearText()
   setMap(levels[1])
@@ -291,6 +291,7 @@ function updatePipes() {
       const index = pipes.indexOf(pipe);
       pipes.splice(index, 1); // Remove the pipe from the pipes array
       point = 1;
+      return;
     }
     pipe.x -= 1; // Move each pipe to the left
   });
@@ -309,6 +310,7 @@ function updateFood(playerX, playerY) {
       food.remove(); // Remove the food if it goes off the screen
       const index = foods.indexOf(food);
       foods.splice(index, 1); // Remove the food from the foods array
+      return;
     }
     food.x -= 1; // Move each food to the left
   });
