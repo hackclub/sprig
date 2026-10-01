@@ -25,6 +25,8 @@ permissions:
 jobs:
     validate-submission:
         runs-on: ubuntu-latest
+        # Assignment events get their own lane so they never cancel (or are cancelled by) a validation run.
+        # Validation must therefore never read-modify-write the "Claimed" label, which belongs to the assignment lane.
         concurrency:
             group: auto-triage-${{ (github.event.action == 'assigned' || github.event.action == 'unassigned') && 'assignment' || 'validation' }}-${{ github.event.pull_request.number || github.event.issue.number || inputs.pr_number || github.run_id }}
             cancel-in-progress: ${{ github.event.action != 'assigned' && github.event.action != 'unassigned' }}

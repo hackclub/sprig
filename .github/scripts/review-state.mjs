@@ -18,7 +18,8 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction }) {
 		remove.add("Ready for Maintainer");
 	}
 
-	if (hasLabel(labels, "Claimed")) add.add("Claimed");
+	// "Claimed" is owned by the assigned/unassigned handlers, which run in their own concurrency lane.
+	// Never copy it from this label snapshot: a concurrent unassign would be undone by a stale read.
 
 	return {
 		add: [...add],
