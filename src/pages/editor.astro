@@ -75,16 +75,15 @@ function normalizeGitHubRawUrl(value: string | null) {
 			const parts = url.pathname.split('/').filter(Boolean)
 			if (parts.length < 4) return null
 			const [owner, repo, ref, ...filePath] = parts
-			if (owner.toLowerCase() !== 'hackclub' || repo.toLowerCase() !== 'sprig' || !filePath.length) return null
-			return `https://raw.githubusercontent.com/hackclub/sprig/${ref}/${filePath.join('/')}`
+			if (!filePath.length) return null
+			return `https://raw.githubusercontent.com/${owner}/${repo}/${ref}/${filePath.join('/')}`
 		}
 		if (url.hostname === 'github.com') {
 			const parts = url.pathname.split('/').filter(Boolean)
 			if (parts.length < 5) return null
 			const [owner, repo, mode, ref, ...filePath] = parts
-			if (owner.toLowerCase() !== 'hackclub' || repo.toLowerCase() !== 'sprig') return null
 			if ((mode !== 'raw' && mode !== 'blob') || !filePath.length) return null
-			return `https://raw.githubusercontent.com/hackclub/sprig/${ref}/${filePath.join('/')}`
+			return `https://raw.githubusercontent.com/${owner}/${repo}/${ref}/${filePath.join('/')}`
 		}
 		return null
 	} catch {
