@@ -1302,6 +1302,7 @@ function enemyy2(Firstenemy, Firstplayer) {
   }
 }
 
+let turn
 setInterval(() => {
   turn = 1
   let random = getRandomInt(2)

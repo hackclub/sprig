@@ -40,11 +40,16 @@ jobs:
         with:
           files: |
             games/**.js
+          json: true
+          escape_json: false
+          safe_output: false
 
       - name: Log Changed Files
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
           echo "Changed Files:"
-          echo "${{ steps.changed-files.outputs.all_changed_files }}"
+          echo "$CHANGED_FILES"
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -56,10 +61,14 @@ jobs:
         working-directory: engine
 
       - name: Check Games
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
-          if [ -n "${{ steps.changed-files.outputs.all_changed_files }}" ]; then
-            bun run tests/sprigfuzzy_workflow.js ${{ steps.changed-files.outputs.all_changed_files }}
-          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          if [ -n "$CHANGED_FILES" ] && [ "$CHANGED_FILES" != "[]" ]; then
+            mapfile -t files < <(bun -e 'for (const f of JSON.parse(process.env.CHANGED_FILES)) console.log(f)')
+            bun run tests/sprigfuzzy_workflow.js "${files[@]}"
+          elif [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             echo "Running all games (workflow_dispatch)"
             bun run tests/sprigfuzzy_workflow.js
           else

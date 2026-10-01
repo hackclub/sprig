@@ -537,8 +537,8 @@ function shift_grid(is_vertical, down) {
         }
     }
 
-    grid = structuredClone(new_grid);
-    grid_values = structuredClone(new_grid_values);
+    grid = JSON.parse(JSON.stringify(new_grid));
+    grid_values = JSON.parse(JSON.stringify(new_grid_values));
     update_level();
 }
 
@@ -658,7 +658,7 @@ onInput("d", () => {
         shift_grid(false, true)
         spawn_block()
     } else if (gamestate == "menu" || gamestate == "over") {
-        game_state = "loop"
+        gamestate = "loop"
         startloop()
     }
 })

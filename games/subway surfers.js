@@ -62,7 +62,7 @@ setSolids([ player, obstacle_low, obstacle_high ])
 
 function spawnObstacle(obstacle, three) {
   const rand = Math.random()
-  const randx = Math.floor(Math.random() * width())
+  let randx = Math.floor(Math.random() * width())
   const randn = Math.random()
 
   while (obstacle === randx) {
@@ -140,13 +140,13 @@ onInput("d", () => {
 })
 
 onInput("i", () => {
-  if (getTile(getFirst(player).x, getFirst(player).y - 1)[0].type === obstacle_low) {
+  if (getTile(getFirst(player).x, getFirst(player).y - 1).some(s => s.type === obstacle_low)) {
     getFirst(player).y -= 2
   }
 })
 
 onInput("k", () => {
-  if (getTile(getFirst(player).x, getFirst(player).y - 1)[0].type === obstacle_high) {
+  if (getTile(getFirst(player).x, getFirst(player).y - 1).some(s => s.type === obstacle_high)) {
     getFirst(player).y -= 2
   }
 })
