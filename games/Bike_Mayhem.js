@@ -430,8 +430,8 @@ function kaboom_sprite(x, y) {
 }
 
 function checkCollision() {
-  playerx = getFirst(player).x
-  playery = getFirst(player).y
+  let playerx = getFirst(player).x
+  let playery = getFirst(player).y
 
   // for (let i in death_blocks) {
   //   blockx = death_blocks[i][0]
@@ -448,8 +448,8 @@ function checkCollision() {
   //   });
   // }
   getAll(obstacle_block).forEach(death => {
-    blockx = death.x
-    blocky = death.y
+    let blockx = death.x
+    let blocky = death.y
     if (!immunity) {
       if (blockx === playerx && blocky === playery) return gameover()
     }
@@ -458,7 +458,7 @@ function checkCollision() {
         // delete death_blocks[i]
         addSprite(sprite.x, sprite.y, kaboom)
         // addSprite(sprite.x, sprite.y, player_speed)
-        setTimeout(kaboom_sprite(sprite.x, sprite.y), 1000)
+        kaboom_sprite(sprite.x, sprite.y)
         // clearTile(sprite.x, sprite.y)
       }
     });
@@ -492,7 +492,7 @@ function tick() {
   if (game) {
     checkLevel()
     let random_num = Math.floor(Math.random() * 7)
-    random_boost = Math.floor(Math.random() * 8)
+    let random_boost = Math.floor(Math.random() * 8)
     let id = dictCount(death_blocks)
 
     if (getAll(player_speed) == 0) {

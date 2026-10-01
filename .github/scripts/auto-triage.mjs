@@ -28,7 +28,7 @@ let cachedOpenPulls = null;
 
 let reviewers = new Set();
 try {
-	const reviewRoles = JSON.parse(readFileSync(path.resolve(process.cwd(), ".github/review-roles.json"), "utf8"));
+	const reviewRoles = JSON.parse(readFileSync(path.resolve(process.env.SUBMISSION_PATH ?? process.cwd(), ".github/review-roles.json"), "utf8"));
 	reviewers = new Set([...(reviewRoles.maintainers ?? []), ...(reviewRoles.triagers ?? [])]);
 } catch {
 	console.warn("review-roles.json not found or invalid; review state changes will be skipped.");

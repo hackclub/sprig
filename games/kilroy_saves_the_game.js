@@ -844,7 +844,7 @@ onInput("k", async () => {
 
 afterInput(async () => {
   if (phase === "III.ii") {
-    if (tilesWith(brain)[0][1]?.type !== correctBolt) return;
+    if ((tilesWith(brain)[0][1] || {}).type !== correctBolt) return;
     phase = "III.iii"
 
     setMap(maps.blankIntermission)

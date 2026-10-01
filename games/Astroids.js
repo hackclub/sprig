@@ -338,4 +338,4 @@ function detectCollision() {
 
 afterInput(() => {
   detectCollision();
-});d
+});

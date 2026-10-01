@@ -40,7 +40,7 @@ import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
-import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage } from "../lib/game-saving/github";
+import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, findGamePullRequest, recordGamePullRequest, fetchCommitTreeSha, updatePullRequestTitle } from "../lib/game-saving/github";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -299,6 +299,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
     const publishSuccess = useSignal(false);
     const publishError = useSignal(false);
 	const githubPRUrl = useSignal<string | null>(null);
+	const publishOutcome = useSignal<"new" | "updated" | "unchanged">("new");
 	
 	const githubState = useSignal<GithubState | undefined>(undefined)
 	
@@ -471,7 +472,16 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	
 
 
+	// also on the loaded game, so the next publish finds this pull request without searching
+	const rememberPullRequest = (url: string) => {
+		githubPRUrl.value = url;
+		const state = props.persistenceState.value;
+		if (state.kind === "PERSISTED" && typeof state.game === "object") state.game.githubPR = url;
+	};
+
 	const publishToGithub = async (githubState: Signal<GithubState | undefined>, gameID: string | undefined) => {
+		if (isPublishing.value) return;
+		isPublishing.value = true;
 		const startTime = Date.now();
 		try {
 
@@ -553,65 +563,122 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				}
 			}
 
-			isPublishing.value = true;
 			readyPublish.value = false;
 			publishError.value = false;
 			publishSuccess.value = false;
-			
+			publishOutcome.value = "new";
+
 			const accessToken = githubState.value.session
 			const yourGithubUsername = githubState.value.username
+			const sanitizedGameTitle = gameTitle.replace(/\s+/g, '-');
+			const gamePath = `games/${sanitizedGameTitle}.js`;
+			const imagePath = `games/img/${sanitizedGameTitle}.png`;
+			const prTitle = `[Sprig App] ${gameTitle}`;
+			const prBody = `### Author name\nAuthor: ${authorName}\n\n### About your game\n\n**What is your game about?**\n${gameDescription}\n\n**How do you play your game?**\n${gameControlsDescription}`;
 
-			let forkedRepo;
-			try {
-				forkedRepo = await forkRepository(accessToken, "hackclub", "sprig");
-			} catch (error) {
-				reportMetric("github_publish.failure.fork");
-				console.warn("Fork might already exist. Fetching existing fork...");
+			let openPR: { pullRequest: any; files: any[] } | null = null;
+			if (yourGithubUsername) {
 				try {
-					forkedRepo = await fetchForkedRepository(accessToken, "hackclub", "sprig", yourGithubUsername || "");
-				} catch (fetchError: any) {
-					reportMetric("github_publish.failure.fetch_fork");
-					throw new Error("Failed to fetch fork: " + fetchError.message);
+					openPR = await findGamePullRequest(accessToken, "hackclub", "sprig", yourGithubUsername, gamePath, githubPRUrl.value);
+				} catch (error) {
+					reportMetric("github_publish.failure.find_open_pr");
+					if (githubPRUrl.value) {
+						throw new Error("Failed to check this game's pull request: " + (error instanceof Error ? error.message : String(error)));
+					}
+					console.warn("Could not look for an open pull request for this game:", error);
 				}
 			}
 
-			const latestCommitSha = await fetchLatestCommitSha(accessToken, "hackclub", "sprig", forkedRepo.default_branch);
-			if (!latestCommitSha) {
-				reportMetric("github_publish.failure.commit_sha");
-				throw new Error("Failed to fetch the latest commit SHA.");
-			}
+			let repoOwner: string, repoName: string, branchName: string, baseSha: string;
+			let renamedFrom: { game: any; image: any } | null = null;
+			if (openPR) {
+				const pullNumber = openPR.pullRequest.number;
+				repoOwner = openPR.pullRequest.head.repo.owner.login;
+				repoName = openPR.pullRequest.head.repo.name;
+				branchName = openPR.pullRequest.head.ref;
+				try {
+					baseSha = await fetchLatestCommitSha(accessToken, repoOwner, repoName, branchName);
+				} catch (error) {
+					reportMetric("github_publish.failure.commit_sha");
+					throw new Error("Failed to fetch the pull request's latest commit: " + (error instanceof Error ? error.message : String(error)));
+				}
 
-			const newBranchName = `Automated-PR-${Date.now()}`;
-			try {
-				await createBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, latestCommitSha);
-			} catch (error) {
-				reportMetric("github_publish.failure.branch");
-				throw new Error("Failed to create branch: " + (error instanceof Error ? error.message : String(error)));
+				// the game's pull request has it under another name: rename it there, after asking
+				if (!openPR.files.some((file: any) => file.filename === gamePath && file.status !== "removed")) {
+					const addedGames = openPR.files.filter((file: any) => file.status === "added" && /^games\/[^/]+\.js$/.test(file.filename));
+					if (addedGames.length !== 1 || openPR.pullRequest.head.sha !== baseSha) {
+						throw new Error(`Couldn't match this game to pull request #${pullNumber}. Try again in a moment, or update it on GitHub.`);
+					}
+					const oldName = addedGames[0].filename.slice("games/".length, -".js".length);
+					if (!window.confirm(`This renames your game in pull request #${pullNumber} from "${oldName}" to "${sanitizedGameTitle}". Continue?`)) {
+						readyPublish.value = true;
+						return;
+					}
+					renamedFrom = {
+						game: addedGames[0],
+						image: openPR.files.find((file: any) => file.status === "added" && file.filename === `games/img/${oldName}.png`),
+					};
+				}
+			} else {
+				let forkedRepo;
+				try {
+					forkedRepo = await forkRepository(accessToken, "hackclub", "sprig");
+				} catch (error) {
+					reportMetric("github_publish.failure.fork");
+					console.warn("Fork might already exist. Fetching existing fork...");
+					try {
+						forkedRepo = await fetchForkedRepository(accessToken, "hackclub", "sprig", yourGithubUsername || "");
+					} catch (fetchError: any) {
+						reportMetric("github_publish.failure.fetch_fork");
+						throw new Error("Failed to fetch fork: " + fetchError.message);
+					}
+				}
+
+				const latestCommitSha = await fetchLatestCommitSha(accessToken, "hackclub", "sprig", forkedRepo.default_branch);
+				if (!latestCommitSha) {
+					reportMetric("github_publish.failure.commit_sha");
+					throw new Error("Failed to fetch the latest commit SHA.");
+				}
+
+				const newBranchName = `Automated-PR-${Date.now()}`;
+				try {
+					await createBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, latestCommitSha);
+				} catch (error) {
+					reportMetric("github_publish.failure.branch");
+					throw new Error("Failed to create branch: " + (error instanceof Error ? error.message : String(error)));
+				}
+
+				repoOwner = forkedRepo.owner.login;
+				repoName = forkedRepo.name;
+				branchName = newBranchName;
+				baseSha = latestCommitSha;
 			}
 
 			const imageBase64 = thumbnailPreview.value || null;
 			let imageBlobSha = null;
 			try {
 				if (imageBase64) {
-					imageBlobSha = await createBlobForImage(accessToken, forkedRepo.owner.login, forkedRepo.name, imageBase64.split(',')[1]);
+					imageBlobSha = await createBlobForImage(accessToken, repoOwner, repoName, imageBase64.split(',')[1]);
 				}
 			} catch (error) {
 				reportMetric("github_publish.failure.image_blob");
 				throw new Error("Failed to create image blob: " + (error instanceof Error ? error.message : String(error)));
 			}
 
-			const sanitizedGameTitle = gameTitle.replace(/\s+/g, '-');
+			const oldNameFiles = renamedFrom ? [renamedFrom.game, renamedFrom.image].filter(Boolean) : [];
+			const imageSha = imageBlobSha ?? renamedFrom?.image?.sha ?? null;
 
 			let treeSha;
 			try {
 				treeSha = await createTreeAndCommit(
 					accessToken,
-					forkedRepo.owner.login,
-					forkedRepo.name,
-					latestCommitSha,
+					repoOwner,
+					repoName,
+					baseSha,
 					[
-						{ path: `games/${sanitizedGameTitle}.js`, content: gameCode },
-						...(imageBlobSha ? [{ path: `games/img/${sanitizedGameTitle}.png`, sha: imageBlobSha }] : [])
+						{ path: gamePath, content: gameCode },
+						...(imageSha ? [{ path: imagePath, sha: imageSha }] : []),
+						...oldNameFiles.map((file: any) => ({ path: file.filename, sha: null }))
 					]
 				);
 			} catch (error) {
@@ -619,19 +686,52 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				throw new Error("Failed to create tree and commit: " + (error instanceof Error ? error.message : String(error)));
 			}
 
-			let newCommit;
-			try {
-				newCommit = await createCommit(accessToken, forkedRepo.owner.login, forkedRepo.name, `Sprig App - ${gameTitle}`, treeSha, latestCommitSha);
-			} catch (error) {
-				reportMetric("github_publish.failure.commit");
-				throw new Error("Failed to create commit: " + (error instanceof Error ? error.message : String(error)));
+			const codeChanged = !openPR || treeSha !== await fetchCommitTreeSha(accessToken, repoOwner, repoName, baseSha);
+			if (codeChanged) {
+				let newCommit;
+				try {
+					newCommit = await createCommit(accessToken, repoOwner, repoName, `Sprig App - ${gameTitle}`, treeSha, baseSha);
+				} catch (error) {
+					reportMetric("github_publish.failure.commit");
+					throw new Error("Failed to create commit: " + (error instanceof Error ? error.message : String(error)));
+				}
+
+				try {
+					await updateBranch(accessToken, repoOwner, repoName, branchName, newCommit.sha, !openPR);
+				} catch (error) {
+					reportMetric("github_publish.failure.branch_update");
+					throw new Error("Failed to update branch: " + (error instanceof Error ? error.message : String(error)));
+				}
 			}
 
-			try {
-				await updateBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, newCommit.sha);
-			} catch (error) {
-				reportMetric("github_publish.failure.branch_update");
-				throw new Error("Failed to update branch: " + (error instanceof Error ? error.message : String(error)));
+			if (openPR) {
+				const pullRequest = openPR.pullRequest;
+				if (renamedFrom && pullRequest.title !== prTitle) {
+					try {
+						await updatePullRequestTitle(accessToken, "hackclub", "sprig", pullRequest.number, prTitle);
+					} catch (error) {
+						reportMetric("github_publish.failure.pr_update");
+						throw new Error("Failed to update the pull request: " + (error instanceof Error ? error.message : String(error)));
+					}
+				}
+
+				try {
+					await recordGamePullRequest(gameID ?? '', pullRequest.html_url);
+				} catch (error) {
+					reportMetric("github_publish.failure.record_pr");
+					console.warn("The pull request was updated, but saving it on the game failed:", error);
+				}
+
+				rememberPullRequest(pullRequest.html_url);
+				publishOutcome.value = codeChanged ? "updated" : "unchanged";
+				reportMetric("github_publish.success");
+				reportMetric(codeChanged ? "github_publish.success.updated_pr" : "github_publish.success.unchanged_pr");
+
+				const timeTaken = Date.now() - startTime;
+				reportMetric('github_publish.time_taken', timeTaken, 'timing');
+
+				publishSuccess.value = true;
+				return;
 			}
 
 			try {
@@ -639,15 +739,15 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					accessToken,
 					"hackclub",
 					"sprig",
-					`[Sprig App] ${gameTitle}`,
-					newBranchName,
+					prTitle,
+					branchName,
 					"main",
-					`### Author name\nAuthor: ${authorName}\n\n### About your game\n\n**What is your game about?**\n${gameDescription}\n\n**How do you play your game?**\n${gameControlsDescription}`,
-					forkedRepo.owner.login,
+					prBody,
+					repoOwner,
 					gameID ?? ''
 				);
 
-				githubPRUrl.value = pr.html_url;
+				rememberPullRequest(pr.html_url);
 				reportMetric("github_publish.success");
 
 				const timeTaken = Date.now() - startTime;
@@ -885,7 +985,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 												props.persistenceState.value.game !== "LOADING" ? (
 												<input
 													id="gameTitle"
-													value={props.persistenceState.value.game.name ?? ""}
+													defaultValue={props.persistenceState.value.game.name ?? ""}
 													type="text"
 													placeholder="Enter your game title"
 												/>
@@ -899,7 +999,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											<label htmlFor="authorName">Author Name</label>
 											<input
 												id="authorName"
-												value={githubState.value?.username ?? ""}
+												defaultValue={githubState.value?.username ?? ""}
 												type="text"
 												placeholder="Enter author name"
 											/>
@@ -958,9 +1058,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									<div className={styles.buttonGroup}>
 										<Button
 											accent
-											icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
-											spinnyIcon={uploadState.value === "LOADING"}
-											loading={uploadState.value === "LOADING"}
+											icon={isPublishing.value ? VscLoading : IoPlay}
+											spinnyIcon={isPublishing.value}
+											loading={isPublishing.value}
 											onClick={async () => {
 												try {
 													const game = props.persistenceState.value.kind === 'PERSISTED' && typeof props.persistenceState.value.game === 'object'
@@ -983,7 +1083,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								</>
 							)}
 
-							{isPublishing.value && (
+							{isPublishing.value && !readyPublish.value && (
 								<div className={styles.popupHeader}>
 									<h2>Publishing...</h2>
 									<p className={styles.successMessage}>
@@ -996,7 +1096,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								<div className={styles.popupHeader}>
 									<h2>Success!</h2>
 									<p className={styles.successMessage}>
-										Your game has been successfully published to GitHub.
+										{{
+											new: "Your game has been successfully published to GitHub.",
+											updated: "Your open pull request for this game was updated with this version.",
+											unchanged: "Your pull request is already up to date with this version.",
+										}[publishOutcome.value]}
 									</p>
 									<Button onClick={() => { githubPRUrl.value && window.open(githubPRUrl.value, "_blank") }}>
 										View on GitHub
@@ -1008,7 +1112,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 										readyPublish.value = true
 									}
 									}>
-										Make a new PR
+										Publish again
 									</Button>
 								</div>
 							)}
