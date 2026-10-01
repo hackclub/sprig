@@ -389,7 +389,7 @@ async function validateMetadata(content, filename, workspace) {
 }
 
 function getMetadataValue(content, key) {
-	const match = content.match(new RegExp(String.raw`@${key}:\s*([\s\S]*?)(?=\n\s*@|\n\s*\*\/)`));
+	const match = content.match(new RegExp(String.raw`@${key}:\s*([\s\S]*?)(?=\n\s*@|\n\s*\*\/)`, "i"));
 	return match?.[1]?.trim() ?? "";
 }
 
@@ -450,13 +450,16 @@ function normalize(value) {
 function findMostSimilarGame(content, submittedFilename, workspace) {
 	const gamesDir = path.join(workspace, "games");
 	const gameFiles = readdirSync(gamesDir).filter((file) => file.endsWith(".js"));
+	const c1 = chunks(analyze(content));
+	if (!c1.size) return { score: 0, match: null };
+
 	let best = { score: 0, match: null };
 	for (const gameFile of gameFiles) {
 		const relativePath = `games/${gameFile}`;
 		if (relativePath === submittedFilename) continue;
 		const other = readFileSafe(path.join(gamesDir, gameFile));
 		if (!other) continue;
-		const score = checkSimilarity(content, other);
+		const score = compareChunks(c1, other);
 		if (score > best.score) best = { score, match: relativePath };
 	}
 	return best;
@@ -477,22 +480,26 @@ function stripComments(code) {
 	return code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, "");
 }
 
-function checkSimilarity(a, b) {
-	const s1 = analyze(a);
-	const s2 = analyze(b);
-	const chunks = (value) => {
-		const set = new Set();
-		for (let i = 0; i <= value.length - 10; i += 1) set.add(value.slice(i, i + 10));
-		return set;
-	};
-	const c1 = chunks(s1);
-	const c2 = chunks(s2);
-	if (!c1.size || !c2.size) return 0;
+function chunks(value) {
+	const set = new Set();
+	for (let i = 0; i <= value.length - 10; i += 1) set.add(value.slice(i, i + 10));
+	return set;
+}
+
+function compareChunks(c1, code) {
+	if (!c1.size) return 0;
+	const c2 = chunks(analyze(code));
+	if (!c2.size) return 0;
 	let overlap = 0;
 	for (const chunk of c1) {
 		if (c2.has(chunk)) overlap += 1;
 	}
 	return (2 * overlap) / (c1.size + c2.size);
+}
+
+function checkSimilarity(a, b) {
+	const c1 = chunks(analyze(a));
+	return compareChunks(c1, b);
 }
 
 function readFileSafe(filePath) {
