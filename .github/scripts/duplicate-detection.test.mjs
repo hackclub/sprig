@@ -43,19 +43,19 @@ describe("older notice", () => {
 		});
 	});
 
-	it("explains newer PRs usually have updates while letting author choose which PR to keep", () => {
+	it("frames keeping the newest PR as a suggestion rather than an absolute requirement", () => {
 		const notice = buildOlderNotice({ number: 4245, latestNumber: 4248, since: "2026-09-30T10:00:00.000Z" });
-		expect(notice).toContain("Newer PRs usually have your latest updates");
-		expect(notice).toContain("choose whichever PR you want to keep");
-		expect(notice).toContain("close #4248");
+		expect(notice).toContain("We suggest keeping your newest PR (**#4248**)");
+		expect(notice).toContain("you can keep whichever PR you prefer");
+		expect(notice).toContain("close #4248 instead");
 
 		const checkDetail = buildOlderCheckDetail({ number: 4245, latestNumber: 4248 });
-		expect(checkDetail).toContain("Newer PRs usually have your latest updates");
-		expect(checkDetail).toContain("you can keep whichever PR you want");
+		expect(checkDetail).toContain("We suggest keeping #4248");
+		expect(checkDetail).toContain("you can keep whichever PR you prefer");
 
 		const warning = buildLatestWarning({ older: [4244, 4245] });
-		expect(warning).toContain("Newer PRs usually have your latest updates");
-		expect(warning).toContain("choose whichever PR you want to keep");
+		expect(warning).toContain("We suggest keeping this PR");
+		expect(warning).toContain("you can keep whichever PR you prefer");
 	});
 
 	it("ignores notices without a marker", () => {

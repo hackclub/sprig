@@ -23,7 +23,7 @@ export function parseOlderNotice(body) {
 }
 
 export function buildOlderCheckDetail({ number, latestNumber }) {
-	return `You have multiple open submission PRs (newer: #${latestNumber}). Newer PRs usually have your latest updates, but you can keep whichever PR you want (just close the others). If no action is taken, this older PR will be closed automatically in ${DUPLICATE_CLOSE_AFTER_DAYS} days.`;
+	return `You have multiple open submission PRs (newer: #${latestNumber}). We suggest keeping #${latestNumber} and closing this one (#${number}), but you can keep whichever PR you prefer (just close the others). If no action is taken, this older PR will be closed automatically in ${DUPLICATE_CLOSE_AFTER_DAYS} days.`;
 }
 
 export function buildOlderNotice({ number, latestNumber, since }) {
@@ -35,11 +35,11 @@ You have multiple open submission PRs (newer: **#${latestNumber}**).
 
 - Each author should only have one open submission PR at a time.
 - You don't need a new PR to update your game: pushing commits (or editing files) in an existing PR updates it automatically.
-- Newer PRs usually have your latest updates, but choose whichever PR you want to keep and close the other one(s).
-- If no action is taken and both remain open, this older PR will be closed automatically in ${DUPLICATE_CLOSE_AFTER_DAYS} days. If you want to keep this PR instead of #${latestNumber}, close #${latestNumber} (or leave a comment if you need help).`;
+- We suggest keeping your newest PR (**#${latestNumber}**) and closing this one (**#${number}**), but you can keep whichever PR you prefer — just close the other one(s).
+- If no action is taken and both remain open, this older PR will be closed automatically in ${DUPLICATE_CLOSE_AFTER_DAYS} days. If you'd rather keep this one, close #${latestNumber} instead (or leave a comment if you need help).`;
 }
 
 export function buildLatestWarning({ older }) {
 	const list = older.map((n) => `#${n}`).join(", ");
-	return `You have older open PRs (${list}) labeled "${DUPLICATE_LABEL}". Newer PRs usually have your latest updates, but choose whichever PR you want to keep and close the other(s). Older inactive duplicates will be closed automatically after ${DUPLICATE_CLOSE_AFTER_DAYS} days.`;
+	return `You have older open PRs (${list}) labeled "${DUPLICATE_LABEL}". We suggest keeping this PR and closing older ones, but you can keep whichever PR you prefer. Older inactive duplicates will be closed automatically after ${DUPLICATE_CLOSE_AFTER_DAYS} days.`;
 }
