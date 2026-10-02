@@ -6,7 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @description: 
 @author: 
 @tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@addedOn: 2026-10-02
 */
 
 const leftButton = "z"
