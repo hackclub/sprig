@@ -3,8 +3,8 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Beat Drop
-@description: 
-@author: 
+@description: Bubbles are falling from the sky!! Use your lasers to pop them!
+@author: EtMU11
 @tags: ['tag1', 'tag2']
 @addedOn: 2026-10-02
 */
