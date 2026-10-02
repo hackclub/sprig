@@ -340,6 +340,7 @@ function Touching(First, Second) {
   if (InGame && First.x == Second.x && First.y == Second.y) {return true;}
   return false;
 }
+function removeOnce(sprite) { if (getTile(sprite.x, sprite.y).includes(sprite)) sprite.remove(); }
 
 function GameTick() {
   let ufos = getAll(ufo).concat(getAll(ufoFast)).concat(getAll(ufoShooter)).concat(getAll(bossUfo));
@@ -361,7 +362,7 @@ function Explode(ufo) {
   let i = 0;
   var SS = setInterval(() => {
     if (i % 2 == 0) {ufo.type = "l"}
-    else {getFirst(explosion).remove()}
+    else if (getFirst(explosion)) {getFirst(explosion).remove()}
     i++;
     if (i == 2) {clearInterval(SS);}
   },50) 
@@ -375,7 +376,7 @@ function lazerTick() {
     lazers[i].y -= 1;
     ufos = getAll(ufo).concat(getAll(ufoFast)).concat(getAll(ufoShooter)).concat(getAll(bossUfo));
     for (let x = 0; x < ufos.length; x++) {
-      if (Touching(ufos[x], lazers[i])) {Explode(ufos[x]); lazers[i].remove();ScreenShake();Score += 10 * scoreMultiplier;}
+      if (Touching(ufos[x], lazers[i])) {Explode(ufos[x]); removeOnce(lazers[i]);ScreenShake();Score += 10 * scoreMultiplier;}
     }
   }
   // Enemy lazer movement
@@ -518,7 +519,7 @@ onInput("k", () => {
     },Interval)
     
     onInput("i", () => {
-      if (InGame && !getTile(getFirst(player).x, getFirst(player).y - 1).includes(lazer)) {
+      if (InGame && getFirst(player).y > 0 && !getTile(getFirst(player).x, getFirst(player).y - 1).includes(lazer)) {
         for (let j = 0; j < fireRate; j++) {
           addSprite(getFirst(player).x, getFirst(player).y - 1, lazer);
         }
@@ -527,14 +528,14 @@ onInput("k", () => {
         for (let i = 0; i < lazers.length; i++) {
           ufos = getAll(ufo).concat(getAll(ufoFast)).concat(getAll(ufoShooter)).concat(getAll(bossUfo));
           for (let x = 0; x < ufos.length; x++) {
-            if (Touching(ufos[x], lazers[i])) {Explode(ufos[x]); lazers[i].remove();ScreenShake();Score += 10 * scoreMultiplier}
+            if (Touching(ufos[x], lazers[i])) {Explode(ufos[x]); removeOnce(lazers[i]);ScreenShake();Score += 10 * scoreMultiplier}
           }
         }
       }
     })
 
-    onInput("o", () => {
-      if (InGame && specialAmmo > 0 && !getTile(getFirst(player).x, getFirst(player).y - 1).includes(specialLazer)) {
+    onInput("l", () => {
+      if (InGame && specialAmmo > 0 && getFirst(player).y > 0 && !getTile(getFirst(player).x, getFirst(player).y - 1).includes(specialLazer)) {
         addSprite(getFirst(player).x, getFirst(player).y - 1, specialLazer);
         specialAmmo -= 1;
         let lazers = getAll(lazer).concat(getAll(specialLazer));
@@ -542,7 +543,7 @@ onInput("k", () => {
         for (let i = 0; i < lazers.length; i++) {
           ufos = getAll(ufo).concat(getAll(ufoFast)).concat(getAll(ufoShooter)).concat(getAll(bossUfo));
           for (let x = 0; x < ufos.length; x++) {
-            if (Touching(ufos[x], lazers[i])) {Explode(ufos[x]); lazers[i].remove();ScreenShake();Score += 20 * scoreMultiplier}
+            if (Touching(ufos[x], lazers[i])) {Explode(ufos[x]); removeOnce(lazers[i]);ScreenShake();Score += 20 * scoreMultiplier}
           }
         }
       }

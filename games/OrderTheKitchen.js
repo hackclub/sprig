@@ -577,7 +577,7 @@ const gameOverTune = tune`
 500: D5^500,
 500: G4^500`;
 
-let playback = playTune(mainTune, Infinity);
+let playback;
 
 let items = [plate, fork, mug, knife];
 let stored;
@@ -592,16 +592,17 @@ resetGame()
 
 
 onInput("a", () => {
-  getFirst(player).x -= 1;
+  if (getFirst(player)) getFirst(player).x -= 1;
 });
 
 onInput("d", () => {
-  getFirst(player).x += 1;
+  if (getFirst(player)) getFirst(player).x += 1;
 });
 
 onInput("l", () => {
-  playerX = getFirst(player).x;
-  itemOverPlayer = getTile(playerX, 1)[0];
+  if (!getFirst(player)) return;
+  let playerX = getFirst(player).x;
+  let itemOverPlayer = getTile(playerX, 1)[0];
 
   if (addingObjectTurn) {
     if (typeof itemOverPlayer == "undefined") {
@@ -673,7 +674,7 @@ function getRandomInt(max) {
 }
 
 function getItemToGive() {
-  item = getItemFromScreen();
+  let item = getItemFromScreen();
   updateItemToGive(item);
 
   return item;
@@ -681,9 +682,9 @@ function getItemToGive() {
 
 function getItemFromScreen() {
   let itemsOnScreen = stored.reduce((a, b) => a + b, 0);
-  randomCount = getRandomInt(itemsOnScreen);
-  returnIndex = -1;
-  sum = 0;
+  let randomCount = getRandomInt(itemsOnScreen);
+  let returnIndex = -1;
+  let sum = 0;
   do {
     returnIndex++;
     sum += stored[returnIndex];
@@ -763,7 +764,7 @@ function checkScreenIsValid() {
 }
 
 function goToScene(scene, bgTune, bgTiles) {
-  playback.end();
+  if (playback) playback.end();
   playback = playTune(bgTune, Infinity);
 
   clearText();

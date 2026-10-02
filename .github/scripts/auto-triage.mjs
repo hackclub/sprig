@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import {
 	REVIEW_BOT_MARKER,
@@ -23,10 +23,12 @@ if (!token) throw new Error("GITHUB_TOKEN is required");
 const { owner, repo } = getRepository();
 let event = readGitHubEvent();
 let pullRequest = event.pull_request || event.issue;
+// keep it in this order pls or the entire thing explodes and fails. thanks
+let cachedOpenPulls = null;
 
 let reviewers = new Set();
 try {
-	const reviewRoles = JSON.parse(readFileSync(path.resolve(process.cwd(), ".github/review-roles.json"), "utf8"));
+	const reviewRoles = JSON.parse(readFileSync(path.resolve(process.env.SUBMISSION_PATH ?? process.cwd(), ".github/review-roles.json"), "utf8"));
 	reviewers = new Set([...(reviewRoles.maintainers ?? []), ...(reviewRoles.triagers ?? [])]);
 } catch {
 	console.warn("review-roles.json not found or invalid; review state changes will be skipped.");
@@ -50,9 +52,19 @@ if (pullRequest.draft) {
 	process.exit(0);
 }
 
+if (event.action === "closed") {
+	console.log("PR is closed. Skipping auto triage.");
+	process.exit(0);
+}
+
 if (event.action === "assigned") {
 	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Claimed"] });
 	console.log(`PR assigned, added "Claimed" label.`);
+	process.exit(0);
+}
+
+if (event.action === "labeled" && event.label?.name !== "Submission") {
+	console.log(`PR labeled with "${event.label?.name ?? "unknown"}", not "Submission". Skipping auto triage.`);
 	process.exit(0);
 }
 
@@ -97,56 +109,113 @@ const reviewBaseUrl = process.env.SPRIG_REVIEW_BASE_URL ?? "https://sprig.hackcl
 await ensureReviewLabels({ owner, repo, token });
 
 const pullFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/files`);
-const modifiesGames = pullFiles.some((f) => f.filename.startsWith("games/"));
+const modifiesGames = pullFiles.some((f) => f.filename.toLowerCase().startsWith("games/"));
 const labels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
+const isLabeledSubmission = hasLabel(labels, "Submission");
 
-if (!modifiesGames && !hasLabel(labels, "Submission")) {
-	console.log("Not a submission PR (no games/ files modified and no Submission label); skipping.");
+const body = pullRequest.body ?? "";
+const touchesNonGamePaths = pullFiles.some((f) =>
+	!f.filename.toLowerCase().startsWith("games/") &&
+	(f.status !== "added" || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
+);
+const addedJsFiles = pullFiles.filter((f) => f.status === "added" && f.filename.endsWith(".js"));
+const bodyLooksLikeSubmission =
+	/what is your game about|how do you play your game/i.test(body) ||
+	/^#+\s*(about your game|pre apply checklist)\b/im.test(body);
+const isMisplacedGameSubmission = !touchesNonGamePaths &&
+	addedJsFiles.length > 0 &&
+	(bodyLooksLikeSubmission || addedJsFiles.some((f) => /^\+\s*@title:/m.test(f.patch ?? "")));
+
+const isSubmissionPR = modifiesGames || isLabeledSubmission || isMisplacedGameSubmission;
+
+if (!isSubmissionPR) {
+	console.log("Not a submission PR (no games/ files, no Submission label, and not a misplaced game submission); skipping.");
 	process.exit(0);
 }
 
-await materializeSubmittedGameFiles(pullRequest, pullFiles, workspace);
-const result = await validateSubmission({
-	pullRequest,
-	pullFiles,
-	workspace,
-	reviewBaseUrl,
-	owner,
-	repo,
-});
+try {
+	await materializeSubmittedGameFiles(pullRequest, pullFiles, workspace);
+	const result = await validateSubmission({
+		pullRequest,
+		pullFiles,
+		workspace,
+		reviewBaseUrl,
+		owner,
+		repo,
+	});
 
-await applyLabels(result);
-await upsertBotComment({
-	owner,
-	repo,
-	token,
-	issueNumber: prNumber,
-	marker: REVIEW_BOT_MARKER,
-	body: buildComment(result),
-});
+	await applyLabels(result);
+	await upsertBotComment({
+		owner,
+		repo,
+		token,
+		issueNumber: prNumber,
+		marker: REVIEW_BOT_MARKER,
+		body: buildComment(result),
+	});
 
-console.log("Validation Result:", JSON.stringify(result, null, 2));
-console.log("\nBot Comment Body:\n", buildComment(result));
+	console.log("Validation Result:", JSON.stringify(result, null, 2));
+	console.log("\nBot Comment Body:\n", buildComment(result));
 
-if (!result.ok) process.exit(1);
+	if (!result.ok) process.exit(1);
+} catch (error) {
+	console.error("Auto triage validation failed with error:", error);
+	await upsertBotComment({
+		owner,
+		repo,
+		token,
+		issueNumber: prNumber,
+		marker: REVIEW_BOT_MARKER,
+		body: `${REVIEW_BOT_MARKER}
+### ❌ Auto Review Encountered an Error
+
+Auto triage could not complete validation for this submission:
+> ${error.message}
+
+Please check that submitted files can be accessed, or ask a maintainer for assistance.`,
+	});
+	process.exit(1);
+}
 
 async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) {
 	const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
 	const headSha = pullRequest.head.sha;
-	const gameFiles = pullFiles.filter((file) => /^games\/[A-Za-z0-9_-]+\.js$/.test(file.filename));
+	const gameFiles = pullFiles.filter((file) => /^games\/[^/]+\.js$/.test(file.filename));
 
 	for (const file of gameFiles) {
-		const contentFile = await githubRequest(
-			token,
-			"GET",
-			`/repos/${headRepo}/contents/${file.filename.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(headSha)}`
-		);
-		if (typeof contentFile?.content !== "string" || contentFile.encoding !== "base64") {
-			throw new Error(`Unable to read submitted file ${file.filename} from GitHub contents API.`);
+		const targetPath = path.join(workspace, file.filename);
+		if (file.status === "removed") {
+			try {
+				rmSync(targetPath, { force: true });
+			} catch {}
+			continue;
 		}
 
-		writeFileSync(path.join(workspace, file.filename), Buffer.from(contentFile.content, "base64"));
+		const response = await fetch(
+			`https://api.github.com/repos/${headRepo}/contents/${file.filename.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(headSha)}`,
+			{
+				headers: {
+					Accept: "application/vnd.github.raw",
+					Authorization: `Bearer ${token}`,
+					"X-GitHub-Api-Version": "2022-11-28",
+				},
+			}
+		);
+		if (!response.ok) {
+			throw new Error(`Unable to read submitted file ${file.filename} from GitHub API (${response.status}).`);
+		}
+
+		const content = await response.text();
+		mkdirSync(path.dirname(targetPath), { recursive: true });
+		writeFileSync(targetPath, content, "utf8");
 	}
+}
+
+async function getOpenPulls() {
+	if (!cachedOpenPulls) {
+		cachedOpenPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
+	}
+	return cachedOpenPulls;
 }
 
 async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, owner, repo }) {
@@ -163,6 +232,21 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 
 	const bodyChecks = validatePullRequestBody(pullRequest.body ?? "");
 	for (const check of bodyChecks.checks) addCheck(check.name, check.ok, check.detail);
+
+	const submitterLogin = pullRequest.user?.login;
+	if (submitterLogin) {
+		const openPulls = await getOpenPulls();
+		const duplicatePR = openPulls.find(
+			(pr) => pr.number !== prNumber && pr.user?.login === submitterLogin && pr.labels?.some((l) => l.name === "Submission")
+		);
+		addCheck(
+			"No duplicate open submission",
+			!duplicatePR,
+			duplicatePR
+				? `You already have an open submission (PR #${duplicatePR.number}). Please close one of them.`
+				: "No other open submissions from this user."
+		);
+	}
 
 	let gameFile = null;
 	let metadata = null;
@@ -215,9 +299,8 @@ function validatePullRequestBody(body) {
 	const checks = [];
 	const add = (name, ok, detail) => checks.push({ name, ok, detail });
 
-	const author = extractBoldField(body, "Author");
-	const about = extractBoldField(body, "What is your game about?");
-	const gameplay = extractBoldField(body, "How do you play your game?");
+	const author = extractAuthor(body);
+	const { about, gameplay } = extractAboutAndGameplay(body);
 
 	add("PR author name", Boolean(author), author ? "Author field is filled." : "Fill in the `Author:` field in the PR description.");
 	add("PR about blurb", Boolean(about), about ? "About blurb is filled." : "Fill in `What is your game about?` in the PR description.");
@@ -226,12 +309,78 @@ function validatePullRequestBody(body) {
 	return { checks };
 }
 
+function getSectionBlocks(body, heading) {
+	const pattern = new RegExp(String.raw`(?:^|\n)#+\s*${heading}[^\n]*\n([\s\S]*?)(?=\n#+\s|$)`, "i");
+	const match = body.match(pattern);
+	if (!match) return [];
+	const clean = stripTemplateNoise(match[1]);
+	return clean
+		.split(/\n\s*\n+/)
+		.map((p) => normalizeFieldValue(p))
+		.filter(Boolean);
+}
+
+function extractAuthor(body) {
+	const direct = extractBoldField(body, "Author");
+	if (direct) return direct;
+	const blocks = getSectionBlocks(body, "Author(?:\\s+name)?");
+	for (const block of blocks) {
+		if (/^author:?$/i.test(block)) continue;
+		const clean = block.replace(/^author:\s*/i, "").trim();
+		if (clean) return clean;
+	}
+	return "";
+}
+
+function extractAboutAndGameplay(body) {
+	let about = extractBoldField(body, "What is your game about?");
+	let gameplay = extractBoldField(body, "How do you play your game?");
+	if (about && gameplay) return { about, gameplay };
+
+	const isPrompt = (text) =>
+		/what is your game about/i.test(text) ||
+		/how do you play your game/i.test(text);
+
+	const blocks = getSectionBlocks(body, "About your game").filter((b) => !isPrompt(b));
+
+	if (!about && blocks.length > 0) about = blocks[0];
+	if (!gameplay && blocks.length > 1) gameplay = blocks[1];
+
+	return { about, gameplay };
+}
+
 function extractBoldField(body, label) {
 	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
-	const pattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|##|#)|$)`, "i");
-	const match = body.match(pattern);
-	if (!match) return "";
-	return stripTemplateNoise(match[1]);
+
+	const boldPattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|#{1,6})|$)`, "i");
+	const boldMatch = body.match(boldPattern);
+	if (boldMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(boldMatch[1]));
+		if (value) return value;
+	}
+
+	const fullBoldPattern = new RegExp(String.raw`(?:\*\*|\*)${escaped}\s*:\s*(.+?)(?:\*\*|\*)(?:\r?\n|$)`, "i");
+	const fullBoldMatch = body.match(fullBoldPattern);
+	if (fullBoldMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(fullBoldMatch[1]));
+		if (value) return value;
+	}
+
+	const plainPattern = new RegExp(String.raw`(?:^|\n)\s*(?:[-*]|\d+\.)*\s*(?:\*\*|\*)?${escaped}\s*:\s*([^\n]+)`, "i");
+	const plainMatch = body.match(plainPattern);
+	if (plainMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(plainMatch[1]));
+		if (value) return value;
+	}
+
+	return "";
+}
+
+function normalizeFieldValue(value) {
+	return value
+		.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+		.replace(/^[*`_~]+|[*`_~]+$/g, "")
+		.trim();
 }
 
 function stripTemplateNoise(value) {
@@ -287,6 +436,22 @@ async function validateMetadata(content, filename, workspace) {
 			: "Replace example/template values in the metadata header (like 'MY GAME', 'MY NAME', 'Short description...', or placeholder tags)."
 	);
 
+	const TUTORIAL_FILES = ["getting_started.js", "maze_game_starter.js", "sprig_dodge.js"];
+	const isTutorial = TUTORIAL_FILES.some((tutFile) => {
+		try {
+			const tutContent = readFileSync(path.join(workspace, "games", tutFile), "utf8");
+			const normalizeCode = (s) => stripComments(s).replace(/\s+/g, " ").trim();
+			return normalizeCode(content) === normalizeCode(tutContent);
+		} catch { return false; }
+	});
+	add(
+		"Not a tutorial game",
+		!isTutorial,
+		isTutorial
+			? "This looks like an unmodified tutorial or starter game. Submit your own original game instead."
+			: "Game does not appear to be an unmodified tutorial."
+	);
+
 	const titleConflict = values.title ? await findTitleConflict(values.title, filename, workspace) : null;
 	add(
 		"Unique game title",
@@ -335,8 +500,9 @@ async function findTitleConflict(title, filename, workspace) {
 		if (normalize(existingTitle) === normalizedTitle) return `games/${gameFile}`;
 	}
 
-	const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
-	for (const pr of openPulls) {
+	const openPulls = await getOpenPulls();
+	const submissionPRs = openPulls.filter((pr) => pr.labels?.some((l) => l.name === "Submission"));
+	for (const pr of submissionPRs) {
 		if (pr.number === prNumber) continue;
 		const prFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pr.number}/files`);
 		for (const file of prFiles) {
@@ -472,8 +638,10 @@ function buildComment(result) {
 		"Metadata tags parse": "metadata",
 		"Metadata date": "metadata",
 		"Metadata template values": "metadata",
+		"Not a tutorial game": "metadata",
 		"Unique game title": "metadata",
 
+		"No duplicate open submission": "other",
 		"Sprig-only APIs": "code",
 		"Optional image path": "code",
 		"Optional image name": "code",
@@ -548,7 +716,7 @@ ${links.join("\n")}
 
 ${checksSection}${warningLines.join("\n")}
 
-${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: push fixes to this PR ([edit file](${editUrl})). These checks rerun automatically.`}
+${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: push fixes to this PR ([edit file](${editUrl})). These checks rerun automatically.\n If you are in trouble, don't hesitate to ask for help in the #sprig channel on Slack or ping @LucasHT22 here.`}
 `;
 }
 
@@ -561,18 +729,24 @@ function checkMetadataDate(addedOn, add) {
 	const parsedDate = validDate ? new Date(`${addedOn}T00:00:00Z`) : null;
 	const now = new Date();
 	const tooOld = parsedDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
-	add(
-		"Metadata date",
-		validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld,
-		validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld
-			? "Date looks current."
-			: `Set \`@addedOn:\` to a recent date in \`YYYY-MM-DD\` format.`
-	);
+	const ok = validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld;
+	let detail = "Date looks current.";
+	if (!ok) {
+		if (validDate && tooOld) {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format (must be within the last 6 months).";
+		} else if (/\n/.test(addedOn) || /\b\d{4}-\d{2}-\d{2}\b/.test(addedOn)) {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format. Close the metadata header with `*/` immediately after `@addedOn` before any instructions or other comments.";
+		} else {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format.";
+		}
+	}
+	add("Metadata date", ok, detail);
 }
 
 function validateSubmissionFiles(pullFiles, addCheck) {
 	const manifest = buildSubmissionManifest(pullFiles);
-	const { gameFiles: jsFiles, imageFiles, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
+	const { gameFiles: jsFiles, gameFilesLoose, imageFiles, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
+	const effectiveGameFiles = gameFilesLoose;
 	if (uppercaseGames.length > 0) {
 		const badNames = uppercaseGames.map((file) => `\`${file.filename}\``).join(", ");
 		addCheck("Directory must be lowercase", false, `Your file must be in the lowercase \`games/\` directory. Found ${badNames}.`);
@@ -583,17 +757,19 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 		"Files stay in allowed folders",
 		disallowedFiles.length === 0,
 		disallowedFiles.length
-			? `Only game files in \`games/\` and optional images in \`games/img/\` are allowed. Filenames cannot contain spaces. Images must be .png. Found ${disallowedNames}.`
+			? `Only game files in \`games/\` and optional images in \`games/img/\` are allowed. Images must be .png. Found ${disallowedNames}.`
 			: "Only submission files changed."
 	);
 
-	const jsNames = jsFiles.map((file) => `\`${file.filename}\``).join(", ");
+	const jsNames = effectiveGameFiles.map((file) => `\`${file.filename}\``).join(", ");
 	addCheck(
 		"Exactly one game file",
-		jsFiles.length === 1,
-		jsFiles.length === 0
+		effectiveGameFiles.length === 1,
+		effectiveGameFiles.length === 0
 			? "Add exactly one JavaScript game file in `games/`."
-			: `Only one game file is allowed per submission. Found ${jsNames}.`
+			: jsFiles.length === 0 && gameFilesLoose.length > 1
+				? `Only one game file is allowed per submission (and filenames must be fixed). Found ${jsNames}.`
+				: `Only one game file is allowed per submission. Found ${jsNames}.`
 	);
 
 	const changedNames = changedNonAddedFiles.map((file) => `\`${file.filename}\``).join(", ");
@@ -604,7 +780,7 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 			? `Submissions should only add new game files or modify existing ones in \`games/\`. These files outside \`games/\` were modified: ${changedNames}.`
 			: "All submitted files are new or inside \`games/\`."
 	);
-	return { jsFiles, imageFiles };
+	return { jsFiles: effectiveGameFiles, imageFiles };
 }
 
 function validateImages(imageFiles, gameBase, owner, repo, pullRequest, addCheck) {

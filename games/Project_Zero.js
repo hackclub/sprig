@@ -98,8 +98,8 @@ const playerDarkF = bitmap`
 ................`
 
 //decoration
-const labbench1 = "☺"
-const labbench2 = "☻"
+const labbench1 = "a"
+const labbench2 = "c"
 const labbench1t = bitmap`
 1111111111111111
 1222222222222222
@@ -134,8 +134,8 @@ const labbench2t = bitmap`
 ..............LL
 ..............LL
 ..............LL`
-const labbench3 = "♦"
-const labbench4 = "♣"
+const labbench3 = "e"
+const labbench4 = "f"
 const labbench3t = bitmap`
 1111111111111111
 1222222222222222
@@ -170,7 +170,7 @@ const labbench4t = bitmap`
 ..............LL
 ..............LL
 ..............LL`
-const plant = "♥"
+const plant = "h"
 const plantt = bitmap`
 .....4..........
 .....44...4.....
@@ -188,7 +188,7 @@ DDDDDD4444DDDDD.
 .....CCCCCC.....
 ......CCCC......
 ................`
-const plant2 = "♠"
+const plant2 = "i"
 const plant2t = bitmap`
 ................
 ..D...4.........
@@ -206,8 +206,8 @@ const plant2t = bitmap`
 .....CCCCCC.....
 ......CCCC......
 ................`
-const pushplant = "♂"
-const capsuleb = "•"
+const pushplant = "j"
+const capsuleb = "m"
 const capsulebt = bitmap`
 .52277700011175.
 .52777700111075.
@@ -225,7 +225,7 @@ L55777770007755L
 L77LLLLLLLLLL77L
 .LL7777777777LL.
 ...LLLLLLLLLL...`
-const capsulet = "◘"
+const capsulet = "n"
 const capsulett = bitmap`
 ....LLLLLLLL....
 ..LL11111111LL..
@@ -243,7 +243,7 @@ L7LL11111111LL7L
 .57211100000725.
 .52221000000225.
 .52227000001225.`
-const noteonlabbench = "○"
+const noteonlabbench = "o"
 const noteonlabbencht = bitmap`
 1111111111111111
 1222200000002222
@@ -261,7 +261,7 @@ const noteonlabbencht = bitmap`
 LL..............
 LL..............
 LL..............`
-const deadbot = "◙"
+const deadbot = "q"
 const deadbott = bitmap`
 ....1LL1........
 ...LLLLL1LL1....
@@ -279,7 +279,7 @@ const deadbott = bitmap`
 ...1.1LL1LL1.121
 ...LLLLLL1L1L.LL
 ...LL......LL...`
-const noteonwall = "♀"
+const noteonwall = "r"
 const noteonwallt = bitmap`
 1111111L11111111
 1111111L11111111
@@ -297,8 +297,8 @@ LLLL00006660LLLL
 111111111111L111
 111111111111L111
 LLLLLLLLLLLLLLLL`
-const blacktile = "♪"
-const flowers = "♫"
+const blacktile = "s"
+const flowers = "u"
 const flowerst = bitmap`
 LLL7L7LLL3L3LLLL
 LHCH6C8C8C6CCCCL
@@ -316,7 +316,7 @@ LLLLLLLLLLLLLLLL
 11............11
 11............11
 11............11`
-const crops = "☼"
+const crops = "v"
 const cropst = bitmap`
 LLLLL4LLLLLLLLLL
 LCC444C44C44CCCL
@@ -334,7 +334,7 @@ LLLLLLLLLLLLLLLL
 11............11
 11............11
 11............11`
-const salad = "►"
+const salad = "y"
 const saladt = bitmap`
 LLLLLLLLLLLLLLLL
 LCCCCCCCCCCCCCCL
@@ -352,7 +352,7 @@ LLLLLLLLLLLLLLLL
 11............11
 11............11
 11............11`
-const tulips = "◄"
+const tulips = "A"
 const tulipst = bitmap`
 LLLLLLLLLLLLLLLL
 LCFCFFCC9C99CCCL
@@ -1019,7 +1019,7 @@ var wallKickTimes = 0;
 var wallBroken = false
 var talkedToRobot1 = false
 
-var playback = playTune(emptymusic, Infinity)
+var playback = { end: () => {} }
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 let nextDialog = null
@@ -1382,74 +1382,74 @@ const levels = [
 .........`,
   map`
 wwwwdwwww
-♥.......♠
-.♦☻...☺♣.
+h.......i
+.ec...af.
 ....p....
-.☺☻...♦♣.
+.ac...ef.
 .........
-.☺♣...♦☻.`,
+.af...ec.`,
   map`
 wwwwwwwlw
-.◘.◘.....
-.•.•..♦♣.
+.n.n.....
+.m.m..ef.
 .........
-.◘....○☻.
-.•.......
+.n....oc.
+.m.......
 ....p....`,
   map`
-wwlw♀ww....
-♥....gw....
+wwlwrww....
+h....gw....
 ......w....
 wwww..w....
 ...w..wwwww
-...w....◙.♥
+...w....q.h
 ...w.......
-...w..♂....
+...w..j....
 ...w.....p.`,
   map`
 wwwwwlwwwww
-♠.........♠
-.◙.......◙.
-..◙.....◙..
-.◙.......◙.
-..◙........
-...◙...◙...
-..◙.....◙..
-♥....p....♥`,
+i.........i
+.q.......q.
+..q.....q..
+.q.......q.
+..q........
+...q...q...
+..q.....q..
+h....p....h`,
   map`
-◘..wwlww..◘
-•.◘w...w◘k•
-..•w...w•..
+n..wwlww..n
+m.nw...wnkm
+..mw...wm..
 ...w...w...
-wwww...w♀xw
-♥◙........♠
+wwww...wrxw
+hq........i
 ...........
-.........◙.
+.........q.
 .....p.....`,
   map`
 wwwwwwwwwwwwwlw
-♠......z......♥
+i......z......h
 ...............
-.....♪♪♪♪♪.....
-....♪.♪...♪....
-....♪♪..♪♪♪....
-....♪..♪..♪....
-....♪.♪...♪....
-....♪.♪...♪....
-.....♪♪♪♪♪.....
+.....sssss.....
+....s.s...s....
+....ss..sss....
+....s..s..s....
+....s.s...s....
+....s.s...s....
+.....sssss.....
 ...............
-♥......p......♠`,
+h......p......i`,
   map`
 wwwwwwwwwwwwwlw
 ...............
-....♂..........
-..♫☼►♫...♥g♥♠..
+....j..........
+..uvyu...hghi..
 ...............
 ...............
-..◄►♫☼...♠♠♥♥..
+..Ayuv...iihh..
 ...............
 ...............
-.♂♫☼►◄...♥♠♠g..
+.juvyA...hiig..
 .............p.
 .............z.`
 ]
@@ -1747,7 +1747,7 @@ afterInput(() => {
   }
 
   if (level == 5) {
-    isOnBrokenWall = tilesWith(player, brokenwall);
+    var isOnBrokenWall = tilesWith(player, brokenwall);
 
     if (wallBroken == true && tilesWith(brokenwall).length != 0) {
       clearTile(getFirst(brokenwall).x, getFirst(brokenwall).y)
@@ -1787,7 +1787,7 @@ afterInput(() => {
     }
   }
 
-  playerOnLockedDoor = tilesWith(player, lockeddoor);
+  var playerOnLockedDoor = tilesWith(player, lockeddoor);
 
 
   if (cutscene != true && interacting != true) {

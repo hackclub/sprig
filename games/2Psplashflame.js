@@ -33,7 +33,7 @@ const dark = "d";
 
 
 
-move = 1;
+let move = 1;
 
 setLegend(
   [player1, bitmap`

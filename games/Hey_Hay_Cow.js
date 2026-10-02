@@ -51,7 +51,7 @@ playTune(melody, 5)
 const playback = playTune(melody, Infinity)
 
 // Or make it shut up early:
-playback.end()
+setTimeout(() => playback.end(), 0)
 
 // define the sprites in our game
 const player = "p"
