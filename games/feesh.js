@@ -20,7 +20,7 @@ let playerDirection = right
 let rocks = 0
 
 
-directions = [
+let directions = [
   bitmap`
 ................
 ................
@@ -167,7 +167,7 @@ HH8888H888888HH.
 }
 setSprites()
 setSolids([player, wall, shell])
-levels = [
+let levels = [
   map`
 bkw...w.s..k
 ....w.w.wkkk
@@ -256,7 +256,7 @@ bw..w....w.www
 ww..........ww
 pt........wwww`
 ]
-level=0
+let level=0
 setMap(levels[level])
 
 setPushables({

@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import {
 	REVIEW_BOT_MARKER,
@@ -28,7 +28,7 @@ let cachedOpenPulls = null;
 
 let reviewers = new Set();
 try {
-	const reviewRoles = JSON.parse(readFileSync(path.resolve(process.cwd(), ".github/review-roles.json"), "utf8"));
+	const reviewRoles = JSON.parse(readFileSync(path.resolve(process.env.SUBMISSION_PATH ?? process.cwd(), ".github/review-roles.json"), "utf8"));
 	reviewers = new Set([...(reviewRoles.maintainers ?? []), ...(reviewRoles.triagers ?? [])]);
 } catch {
 	console.warn("review-roles.json not found or invalid; review state changes will be skipped.");
@@ -118,9 +118,13 @@ const touchesNonGamePaths = pullFiles.some((f) =>
 	!f.filename.toLowerCase().startsWith("games/") &&
 	(f.status !== "added" || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
 );
+const addedJsFiles = pullFiles.filter((f) => f.status === "added" && f.filename.endsWith(".js"));
+const bodyLooksLikeSubmission =
+	/what is your game about|how do you play your game/i.test(body) ||
+	/^#+\s*(about your game|pre apply checklist)\b/im.test(body);
 const isMisplacedGameSubmission = !touchesNonGamePaths &&
-	pullFiles.some((f) => f.status === "added" && f.filename.endsWith(".js")) &&
-	(/what is your game about/i.test(body) || /how do you play your game/i.test(body));
+	addedJsFiles.length > 0 &&
+	(bodyLooksLikeSubmission || addedJsFiles.some((f) => /^\+\s*@title:/m.test(f.patch ?? "")));
 
 const isSubmissionPR = modifiesGames || isLabeledSubmission || isMisplacedGameSubmission;
 
@@ -129,30 +133,49 @@ if (!isSubmissionPR) {
 	process.exit(0);
 }
 
-await materializeSubmittedGameFiles(pullRequest, pullFiles, workspace);
-const result = await validateSubmission({
-	pullRequest,
-	pullFiles,
-	workspace,
-	reviewBaseUrl,
-	owner,
-	repo,
-});
+try {
+	await materializeSubmittedGameFiles(pullRequest, pullFiles, workspace);
+	const result = await validateSubmission({
+		pullRequest,
+		pullFiles,
+		workspace,
+		reviewBaseUrl,
+		owner,
+		repo,
+	});
 
-await applyLabels(result);
-await upsertBotComment({
-	owner,
-	repo,
-	token,
-	issueNumber: prNumber,
-	marker: REVIEW_BOT_MARKER,
-	body: buildComment(result),
-});
+	await applyLabels(result);
+	await upsertBotComment({
+		owner,
+		repo,
+		token,
+		issueNumber: prNumber,
+		marker: REVIEW_BOT_MARKER,
+		body: buildComment(result),
+	});
 
-console.log("Validation Result:", JSON.stringify(result, null, 2));
-console.log("\nBot Comment Body:\n", buildComment(result));
+	console.log("Validation Result:", JSON.stringify(result, null, 2));
+	console.log("\nBot Comment Body:\n", buildComment(result));
 
-if (!result.ok) process.exit(1);
+	if (!result.ok) process.exit(1);
+} catch (error) {
+	console.error("Auto triage validation failed with error:", error);
+	await upsertBotComment({
+		owner,
+		repo,
+		token,
+		issueNumber: prNumber,
+		marker: REVIEW_BOT_MARKER,
+		body: `${REVIEW_BOT_MARKER}
+### ❌ Auto Review Encountered an Error
+
+Auto triage could not complete validation for this submission:
+> ${error.message}
+
+Please check that submitted files can be accessed, or ask a maintainer for assistance.`,
+	});
+	process.exit(1);
+}
 
 async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) {
 	const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
@@ -160,16 +183,31 @@ async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) 
 	const gameFiles = pullFiles.filter((file) => /^games\/[^/]+\.js$/.test(file.filename));
 
 	for (const file of gameFiles) {
-		const contentFile = await githubRequest(
-			token,
-			"GET",
-			`/repos/${headRepo}/contents/${file.filename.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(headSha)}`
-		);
-		if (typeof contentFile?.content !== "string" || contentFile.encoding !== "base64") {
-			throw new Error(`Unable to read submitted file ${file.filename} from GitHub contents API.`);
+		const targetPath = path.join(workspace, file.filename);
+		if (file.status === "removed") {
+			try {
+				rmSync(targetPath, { force: true });
+			} catch {}
+			continue;
 		}
 
-		writeFileSync(path.join(workspace, file.filename), Buffer.from(contentFile.content, "base64"));
+		const response = await fetch(
+			`https://api.github.com/repos/${headRepo}/contents/${file.filename.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(headSha)}`,
+			{
+				headers: {
+					Accept: "application/vnd.github.raw",
+					Authorization: `Bearer ${token}`,
+					"X-GitHub-Api-Version": "2022-11-28",
+				},
+			}
+		);
+		if (!response.ok) {
+			throw new Error(`Unable to read submitted file ${file.filename} from GitHub API (${response.status}).`);
+		}
+
+		const content = await response.text();
+		mkdirSync(path.dirname(targetPath), { recursive: true });
+		writeFileSync(targetPath, content, "utf8");
 	}
 }
 
@@ -261,15 +299,54 @@ function validatePullRequestBody(body) {
 	const checks = [];
 	const add = (name, ok, detail) => checks.push({ name, ok, detail });
 
-	const author = extractBoldField(body, "Author");
-	const about = extractBoldField(body, "What is your game about?");
-	const gameplay = extractBoldField(body, "How do you play your game?");
+	const author = extractAuthor(body);
+	const { about, gameplay } = extractAboutAndGameplay(body);
 
 	add("PR author name", Boolean(author), author ? "Author field is filled." : "Fill in the `Author:` field in the PR description.");
 	add("PR about blurb", Boolean(about), about ? "About blurb is filled." : "Fill in `What is your game about?` in the PR description.");
 	add("PR gameplay description", Boolean(gameplay), gameplay ? "Gameplay description is filled." : "Fill in `How do you play your game?` in the PR description.");
 
 	return { checks };
+}
+
+function getSectionBlocks(body, heading) {
+	const pattern = new RegExp(String.raw`(?:^|\n)#+\s*${heading}[^\n]*\n([\s\S]*?)(?=\n#+\s|$)`, "i");
+	const match = body.match(pattern);
+	if (!match) return [];
+	const clean = stripTemplateNoise(match[1]);
+	return clean
+		.split(/\n\s*\n+/)
+		.map((p) => normalizeFieldValue(p))
+		.filter(Boolean);
+}
+
+function extractAuthor(body) {
+	const direct = extractBoldField(body, "Author");
+	if (direct) return direct;
+	const blocks = getSectionBlocks(body, "Author(?:\\s+name)?");
+	for (const block of blocks) {
+		if (/^author:?$/i.test(block)) continue;
+		const clean = block.replace(/^author:\s*/i, "").trim();
+		if (clean) return clean;
+	}
+	return "";
+}
+
+function extractAboutAndGameplay(body) {
+	let about = extractBoldField(body, "What is your game about?");
+	let gameplay = extractBoldField(body, "How do you play your game?");
+	if (about && gameplay) return { about, gameplay };
+
+	const isPrompt = (text) =>
+		/what is your game about/i.test(text) ||
+		/how do you play your game/i.test(text);
+
+	const blocks = getSectionBlocks(body, "About your game").filter((b) => !isPrompt(b));
+
+	if (!about && blocks.length > 0) about = blocks[0];
+	if (!gameplay && blocks.length > 1) gameplay = blocks[1];
+
+	return { about, gameplay };
 }
 
 function extractBoldField(body, label) {

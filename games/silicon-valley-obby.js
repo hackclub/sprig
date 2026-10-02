@@ -1122,7 +1122,7 @@ onInput("j", () => {
 onInput("i", () => {
     try {
       getFirst(player).y -= 1
-      setTimeout((getFirst(player).y -= 1), 1000);
+      getFirst(player).y -= 1;
       setTimeout(() => {fall(player); richardDied(level)}, 250);    
     } catch (exceptionVar) {
       // console.log("not moving")

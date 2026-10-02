@@ -585,11 +585,11 @@ onInput("k", () => {
   if (!gameState.isRunning) return
 
   // Limit how fast can cups be send
-  if (performance.now() - gameState.lastCupSpawnedAt <= 2 * cupMovingLeftSpeed)
+  if (Date.now() - gameState.lastCupSpawnedAt <= 2 * cupMovingLeftSpeed)
     return
 
   addSpriteWithReturn(playerObject.x - 1, playerObject.y - 1, cup)
-  gameState.lastCupSpawnedAt = performance.now()
+  gameState.lastCupSpawnedAt = Date.now()
   playTune(soundMovingCup)
 })
 

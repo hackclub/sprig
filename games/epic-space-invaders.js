@@ -164,7 +164,7 @@ function doLaser(l) {
     setTimeout(() => {
         if (!won) getFirst(l).y -= 1
         if (enemy_alive && getFirst(l).x == getFirst(enemy).x && getFirst(l).y == getFirst(enemy).y) {
-            getFirst(enemy)?.remove();
+            getFirst(enemy).remove();
             enemiesDead++
             addText(`Enemies Dead: ${enemiesDead}`, {color: color`7`})
             enemy_alive = false
@@ -174,7 +174,7 @@ function doLaser(l) {
     setTimeout(() => {
         if (!won) getFirst(l).y -= 1
         if (enemy_alive && getFirst(l).x == getFirst(enemy).x && getFirst(l).y == getFirst(enemy).y) {
-            getFirst(enemy)?.remove();
+            getFirst(enemy).remove();
             enemiesDead++
             addText(`Enemies Dead: ${enemiesDead}`, {color: color`7`})
             enemy_alive = false
@@ -184,7 +184,7 @@ function doLaser(l) {
     setTimeout(() => {
         if (!won) getFirst(l).y -= 1
         if (enemy_alive && getFirst(l).x == getFirst(enemy).x && getFirst(l).y == getFirst(enemy).y) {
-            getFirst(enemy)?.remove();
+            getFirst(enemy).remove();
             enemiesDead++
             addText(`Enemies Dead: ${enemiesDead}`, {color: color`7`})
             enemy_alive = false
@@ -194,7 +194,7 @@ function doLaser(l) {
     setTimeout(() => {
         if (!won) getFirst(l).y -= 1
         if (enemy_alive && getFirst(l).x == getFirst(enemy).x && getFirst(l).y == getFirst(enemy).y) {
-            getFirst(enemy)?.remove();
+            getFirst(enemy).remove();
             enemiesDead++
             addText(`Enemies Dead: ${enemiesDead}`, {color: color`7`})
             enemy_alive = false
@@ -204,7 +204,7 @@ function doLaser(l) {
     setTimeout(() => {
         if (!won) getFirst(l).y -= 1
         if (enemy_alive && getFirst(l).x == getFirst(enemy).x && getFirst(l).y == getFirst(enemy).y) {
-            getFirst(enemy)?.remove();
+            getFirst(enemy).remove();
             enemiesDead++
             addText(`Enemies Dead: ${enemiesDead}`, {color: color`7`})
             enemy_alive = false
@@ -214,7 +214,7 @@ function doLaser(l) {
     setTimeout(() => {
         if (!won) getFirst(l).y -= 1
         if (enemy_alive && getFirst(l).x == getFirst(enemy).x && getFirst(l).y == getFirst(enemy).y) {
-            getFirst(enemy)?.remove();
+            getFirst(enemy).remove();
             enemiesDead++
             addText(`Enemies Dead: ${enemiesDead}`, {color: color`7`})
             enemy_alive = false

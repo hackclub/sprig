@@ -425,7 +425,7 @@ setPushables({
       getFirst(alien).y -= 1;
       alienY = getFirst(alien).y;
     }
-    else {
+    else if (getFirst(ship)) {
       getFirst(ship).y -= 1;
       shipY = getFirst(ship).y;
     }
@@ -437,7 +437,7 @@ onInput("s", () => {
       getFirst(alien).y += 1;
       alienY = getFirst(alien).y;
     }
-    else {
+    else if (getFirst(ship)) {
       getFirst(ship).y += 1;
       shipY = getFirst(ship).y;
     }
@@ -449,7 +449,7 @@ onInput("a", () => {
       getFirst(alien).x -= 1;
       alienY = getFirst(alien).x;
     }
-    else {
+    else if (getFirst(ship)) {
       getFirst(ship).x -= 1;
       shipY = getFirst(ship).x;
     }
@@ -461,7 +461,7 @@ onInput("d", () => {
       getFirst(alien).x += 1;
       alienY = getFirst(alien).x;
     }
-    else {
+    else if (getFirst(ship)) {
       getFirst(ship).x += 1;
       shipY = getFirst(ship).x;
     }
@@ -470,7 +470,7 @@ onInput("d", () => {
 
 // ------------ lv reset -------
 onInput("j", () => {
-  playerDeath();
+  if (level < levels.length) playerDeath();
 });
 
 // ---------------levels/maps ------------------------
@@ -868,6 +868,7 @@ const cowSound = tune`
 //--------------------------------------------
 let shipPosX;
 let shipPosY;
+let shipY, alienY;
 let alienPosX;
 let alienPosY;
 let hunger;
@@ -1001,7 +1002,7 @@ addText( "\nj: Start playing!!\n   (reset level)",
 afterInput(() => {
 
 // -------------- level with alien ------------------
-  if(level%2 != 0)
+  if(level%2 != 0 && getFirst(alien))
   {
     if (level>=7)
     {
@@ -1085,7 +1086,7 @@ afterInput(() => {
 
   
 // --------------------------- level with ship ---------------------------
- if(level%2 == 0) 
+ if(level%2 == 0 && getFirst(ship)) 
  { 
     //console.log("ship's prev coordinates(x,y):", previousX, previousY);
 
