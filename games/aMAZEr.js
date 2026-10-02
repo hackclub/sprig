@@ -6,7 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @description: fun maze enjoy
 @author: 
 @tags: ['runner', 'maze']
-@addedOn: 2026-10-2
+@addedOn: 2026-10-02
 */
 
 const player = "p"
