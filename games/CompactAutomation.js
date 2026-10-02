@@ -6,7 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @description: A game about automating things in a small face.
 @author: Simon (sevinatenine)
 @tags: ['automation', 'factory', 'conveyor', 'compact']
-@addedOn: 2026-00-00
+@addedOn: 2026-10-01
 */
 
 const selectU = "x";
