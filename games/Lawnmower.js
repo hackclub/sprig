@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Lawnmower
-@description: 
+@description: Simple but satisying zen loop game. Mow the lawn, and it will come back.
 @author: 
-@tags: ['tag1', 'tag2']
+@tags: ['zen', 'satifying']
 @addedOn: 2025-00-00
 */
 
@@ -88,8 +85,6 @@ CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC` ]
 )
-
-setSolids([])
 
 let level = 0
 let lawnLevel = 0
