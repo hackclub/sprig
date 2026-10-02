@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Beat Drop
 @description: Bubbles are falling from the sky!! Use your lasers to pop them!
 @author: EtMU11
-@tags: ['tag1', 'tag2']
+@tags: ['arcade', 'rhythm', 'action']
 @addedOn: 2026-10-02
 */
 
@@ -236,7 +236,7 @@ function showScore () {
 
     let popped = 0
     if (score + misses > 0) {
-      popped = Math.round((score / totalShots) * 100)
+      popped = Math.round((score / score + misses) * 100)
     }
     addText("Game Over!", { x: 5, y: 1, color: color`2`})
     addText("Final Score: " + score, { x: 2, y:3, color: color`2`})
