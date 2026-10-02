@@ -1,332 +1,506 @@
 /*
 @title: Snake
-@description: A version of the classic snake game! Eat the chicken wings to make your snake longer, and try to avoid hitting yourself or the walls!
-@author: Boyne
-@tags: ["endless" , "retro" , "strategy"]
-@addedOn: 2022-11-10
+@description: Snake Game
+@author: Xenoe
+@tags: ['game', 'snake']
+@addedOn: 2026-09-17
+  '0' -> Black
+  'L' -> Dark Gray
+  '1' -> Light Gray
+  '2' -> White
+  '3' -> Red
+  'C' -> Brown
+  '7' -> Light Blue
+  '5' -> Dark Blue
+  '6' -> Yellow
+  'F' -> Gold
+  '4' -> Light Green
+  'D' -> Dark Green
+  '8' -> Pink
+  'H' -> Purple
+  '9' -> Orange
+  '.' -> Transparent
 */
 
-const logo1 = "1";
-const logo2 = "2";
-const player = "p";
-const wall = "w";
-const gamebg = "g";
-const food = "f";
-const body = "b";
+const headRight = "q"
+const bodyRightLeft = "w"
+const tailRight = "e"
+const headLeft = "r"
+const bodyDownUp = "t"
+const tailLeft = "y"
+const food = "f"
+const tailUp = "i"
+const headUp = "o"
+const tailDown = "p"
+const headDown = "l"
+const bodyRightDown = "a"
+const bodyLeftDown = "b"
+const bodyRightUp = "c"
+const bodyLeftUp = "d"
+const wall = "z"
+
+let gameOver = false
+let score = 0
+const GRID_WIDTH = 18
+const GRID_HEIGHT = 10
+let direction = "right"
+let nextDirection = "right"
 
 setLegend(
-  [ logo1, bitmap`
-99..9..9..99.9.9
-9.9.9..9.9...99.
-99...99...99.9.9
-................
-00..00...0..0...
-0.0.0.0.0.0.0...
-00..00..000.0.0.
-0.0.0.0.0.0.0.0.
-00..0.0.0.0..0.0
+  [ headRight, bitmap`
 ................
 ................
+DDDDDDDDDDDD....
+444444444444DD..
+44444444422244D.
+444444444202444D
+444444444222444D
+444444444444444D
+444444444444444D
+444444444222444D
+444444444202444D
+44444444422244D.
+444444444444DD..
+DDDDDDDDDDDD....
+................
+................` ],
+  [ headLeft, bitmap`
 ................
 ................
+....DDDDDDDDDDDD
+..DD444444444444
+.D44222444444444
+D444202444444444
+D444222444444444
+D444444444444444
+D444444444444444
+D444222444444444
+D444202444444444
+.D44222444444444
+..DD444444444444
+....DDDDDDDDDDDD
 ................
+................` ],
+  [ headDown, bitmap`
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4222442224D..
+..D4202442024D..
+..D4222442224D..
+...D44444444D...
+...D44444444D...
+....D444444D....
+.....DDDDDD.....` ],
+  [ headUp, bitmap`
+.....DDDDDD.....
+....D444444D....
+...D44444444D...
+...D44444444D...
+..D4222442224D..
+..D4202442024D..
+..D4222442224D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..` ],
+  [ bodyRightLeft, bitmap`
+................
+................
+DDDDDDDDDDDDDDDD
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+DDDDDDDDDDDDDDDD
+................
+................` ],
+  [ bodyDownUp, bitmap`
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..` ],
+  [ bodyRightDown, bitmap`
+................
+................
+DDDDDDDDDDD.....
+44444444444D....
+444444444444D...
+4444444444444D..
+4444444444444D..
+4444444444444D..
+4444444444444D..
+4444444444444D..
+4444444444444D..
+4444444444444D..
+4444444444444D..
+D444444444444D..
+.D44444444444D..
+..D4444444444D..` ],
+  [ bodyRightUp, bitmap`
+..D4444444444D..
+.D44444444444D..
+D444444444444D..
+4444444444444D..
+4444444444444D..
+4444444444444D..
+4444444444444D..
+4444444444444D..
+4444444444444D..
+4444444444444D..
+4444444444444D..
+444444444444D...
+44444444444D....
+DDDDDDDDDDD.....
+................
+................` ],
+  [ bodyLeftDown, bitmap`
+................
+................
+.....DDDDDDDDDDD
+....D44444444444
+...D444444444444
+..D4444444444444
+..D4444444444444
+..D4444444444444
+..D4444444444444
+..D4444444444444
+..D4444444444444
+..D4444444444444
+..D4444444444444
+..D44444444444DD
+..D44444444444D.
+..D4444444444D..` ],
+  [ bodyLeftUp, bitmap`
+..D4444444444D..
+..D44444444444D.
+..D444444444444D
+..D4444444444444
+..D4444444444444
+..D4444444444444
+..D4444444444444
+..D4444444444444
+..D4444444444444
+..D4444444444444
+..D4444444444444
+...D444444444444
+....D44444444444
+.....DDDDDDDDDDD
+................
+................` ],
+  [ tailRight, bitmap`
+................
+................
+..........DDDDDD
+........DD444444
+......DD44444444
+....DD4444444444
+..DD444444444444
+DD44444444444444
+DD44444444444444
+..DD444444444444
+....DD4444444444
+......DD44444444
+........DD444444
+..........DDDDDD
 ................
 ................`],
-  [ logo2, bitmap`
-
+  [ tailLeft, bitmap`
 ................
 ................
-................
-................
-0.0...000.00....
-0.0...0...0.0...
-0.0...000.00....
-0.0...0...0.0...
-..000.000.0.0.0.
-................
-................
-................
-................
-................
+DDDDDD..........
+444444DD........
+44444444DD......
+4444444444DD....
+444444444444DD..
+44444444444444DD
+44444444444444DD
+444444444444DD..
+4444444444DD....
+44444444DD......
+444444DD........
+DDDDDD..........
 ................
 ................`],
-  [ player, bitmap`
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD`],
-  [ body, bitmap`
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD
-DDDDDDDDDDDDDDDD`],
-  [ wall, bitmap`
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000`],
-  [ gamebg, bitmap`
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000`],
+  [ tailDown, bitmap`
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+...D44444444D...
+...D44444444D...
+....D444444D....
+....D444444D....
+.....D4444D.....
+.....D4444D.....
+......D44D......
+......D44D......
+.......DD.......
+.......DD.......`],
+  [ tailUp, bitmap`
+.......DD.......
+.......DD.......
+......D44D......
+......D44D......
+.....D4444D.....
+.....D4444D.....
+....D444444D....
+....D444444D....
+...D44444444D...
+...D44444444D...
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..
+..D4444444444D..`],
   [ food, bitmap`
-................
-...CCC..........
-..CCCCC.........
-.CCCCCCC........
-.CCCCCCC........
-.CCCCCCC........
-..CCCCC.........
-...CCC222.......
-......22222.....
-.......222222...
-.........2022...
-.........22.....
-.........22.....
-................
-................
-................`]
-);
+.....333333.....
+...338H111133...
+..3888H11111H3..
+.3H82888881H883.
+.31H88HHHH88283.
+31118H8888H88883
+3118H888888H8HH3
+3118H888888H8113
+3118H888888H8113
+3HH8H888888H8113
+38888H8888H81113
+.38288HHHH88H13.
+.382H18888828H3.
+..3H11111H8883..
+...331111H833...
+.....333333.....`],
+  [ wall, bitmap`
+5555555555555555
+5777777777777775
+5771115555555775
+57115HHHHHHHH575
+5715HHHHHHHHH575
+571HHHHHHHHHH575
+575HHHHHHHHHH575
+575HHHHHHHHHH575
+575HHHHHHHHHH575
+575HHHHHHHHHH575
+575HHHHHHHHHH175
+575HHHHHHHHH5175
+575HHHHHHHH51175
+5775555555111775
+5777777777777775
+5555555555555555`]
+)
+setSolids([])
 
-const music = tune`
-1764.7058823529412: a4-1764.7058823529412 + f4~1764.7058823529412 + a5/1764.7058823529412,
-1764.7058823529412: g4~1764.7058823529412 + b4-1764.7058823529412 + g5/1764.7058823529412,
-1764.7058823529412: a4-1764.7058823529412 + f4~1764.7058823529412,
-1764.7058823529412: g4~1764.7058823529412 + b4-1764.7058823529412,
-1764.7058823529412: a4-1764.7058823529412 + f4~1764.7058823529412,
-1764.7058823529412: g4~1764.7058823529412 + b4-1764.7058823529412,
-1764.7058823529412: a4-1764.7058823529412 + f4~1764.7058823529412,
-1764.7058823529412: f4/1764.7058823529412 + d4^1764.7058823529412,
-1764.7058823529412: g4/1764.7058823529412 + e4^1764.7058823529412,
-1764.7058823529412: a4/1764.7058823529412 + f4^1764.7058823529412,
-1764.7058823529412,
-1764.7058823529412: g4/1764.7058823529412 + e4~1764.7058823529412 + c4-1764.7058823529412 + b4^1764.7058823529412,
-1764.7058823529412: a4/1764.7058823529412 + f4~1764.7058823529412 + d4-1764.7058823529412 + c5^1764.7058823529412,
-1764.7058823529412: b4/1764.7058823529412 + g4~1764.7058823529412 + e4-1764.7058823529412 + d5^1764.7058823529412,
-1764.7058823529412,
-1764.7058823529412: c5/1764.7058823529412 + e5-1764.7058823529412,
-1764.7058823529412: b4/1764.7058823529412 + d5-1764.7058823529412,
-1764.7058823529412: a4/1764.7058823529412 + c5-1764.7058823529412,
-1764.7058823529412: g4/1764.7058823529412 + b4-1764.7058823529412,
-1764.7058823529412: f4/1764.7058823529412 + a4-1764.7058823529412,
-1764.7058823529412: e4^1764.7058823529412 + g4^1764.7058823529412,
-1764.7058823529412: d4^1764.7058823529412 + f4^1764.7058823529412,
-1764.7058823529412: c4^1764.7058823529412 + e4^1764.7058823529412,
-1764.7058823529412: d4~1764.7058823529412 + f4/1764.7058823529412,
-1764.7058823529412: e4~1764.7058823529412 + g4/1764.7058823529412 + c4/1764.7058823529412,
-1764.7058823529412: f4~1764.7058823529412 + a4/1764.7058823529412 + d4/1764.7058823529412,
-1764.7058823529412: g4~1764.7058823529412 + b4/1764.7058823529412 + e4/1764.7058823529412 + c4/1764.7058823529412,
-1764.7058823529412: a4~1764.7058823529412 + c5/1764.7058823529412 + f4/1764.7058823529412 + d4/1764.7058823529412,
-1764.7058823529412: b4~1764.7058823529412 + d5/1764.7058823529412 + g4/1764.7058823529412 + e4/1764.7058823529412 + c4/1764.7058823529412,
-1764.7058823529412: c5~1764.7058823529412 + e5/1764.7058823529412 + a4/1764.7058823529412 + f4/1764.7058823529412 + d4/1764.7058823529412,
-1764.7058823529412: d5~1764.7058823529412 + f5/1764.7058823529412 + c4/1764.7058823529412 + e4/1764.7058823529412 + g4/1764.7058823529412,
-1764.7058823529412`;
-
-let playback = playTune(music, Infinity)
-
-let direction = "e";
-let directionToSet = "e";
-let score = 0;
-
-setMap(map`
-..........
-..........
-..........
-..........
-..........
-..........
-..........
-..........`);
-setBackground(gamebg);
-
-setSolids([ player, wall, body]);
-
-let snake = [
-  [0, 0]
+let level = 0
+const levels = [
+  map `
+zzzzzzzzzzzzzzzzz
+z...............z
+z...............z
+z...............z
+z...............z
+z...............z
+z...............z
+zzzzzzzzzzzzzzzzz
+`
 ]
 
-function placeFood() {
-    let position = [Math.floor(Math.random() * 9)+1, Math.floor(Math.random() * 7)+1];
-  
-  addSprite(position[0], position[1], food);
+setMap(levels[level])
 
+let snake = [
+  { x: 4, y: 1, type: headRight },      // HEAD
+  { x: 3, y: 1, type: bodyRightLeft },  // BODY
+  { x: 2, y: 1, type: tailRight }       // TAIL
+]
+
+let food_pos = { x: 0, y: 0 }
+
+function spawnFood() {
+  let randomX, randomY
+  do {
+    randomX = Math.floor(Math.random() * 14) + 1   // 1-14 instead of 0-15
+    randomY = Math.floor(Math.random() * 6) + 1    // 1-6 instead of 0-7
+  } while (snake.some(s => s.x === randomX && s.y === randomY))
   
+  food_pos = { x: randomX, y: randomY }
 }
 
-function addScore() {
-  clearText();
-  addText("SCORE: " + score, {x: 1, y: 1});
-}
+spawnFood()
 
-function gameOver() {
-  for (let x = 0; x <= 9; x++) {
-    for (let y = 0; y <= 7; y++) {
-      addSprite(x, y, gamebg);
+
+
+setInterval(() => {
+  if (gameOver || snake.length === 0) return
+
+  // UPDATE DIRECTION
+  direction = nextDirection
+
+  const head = snake[0]
+  const newHead = { x: head.x, y: head.y, type: head.type }
+
+  if (direction === "right") {
+    newHead.x += 1
+    newHead.type = headRight
+  } else if (direction === "left") {
+    newHead.x -= 1
+    newHead.type = headLeft
+  } else if (direction === "up") {
+    newHead.y -= 1
+    newHead.type = headUp
+  } else if (direction === "down") {
+    newHead.y += 1
+    newHead.type = headDown
+  }
+
+  // CHECK WALL COLLISION BEFORE CLEARING SPRITES
+  const headTile = getTile(newHead.x, newHead.y)
+  let hitWall = false
+  for (let sprite of headTile) {
+    if (sprite.type === wall) {
+      hitWall = true
+      break
     }
   }
-  clearText();
-  addText("GAME OVER!", {x:5, y:4, color:color`2`});
-  addText("Final Score: " + score, {x: 1, y:6});
-  addText("Try again? Press i.", {x: 1, y:13});
-  clearInterval(interval);
-  if(playback) playback.end();
-}
 
-addScore();
-
-onInput("s", () => {
-  if (direction != "n") {
-  directionToSet = "s";
+  // Clear old sprites
+  for (let segment of snake) {
+    let tile = getTile(segment.x, segment.y)
+    for (let sprite of tile) {
+      sprite.remove()
+    }
   }
-});
 
-onInput("d", () => {
-  if (direction != "w") {
-  directionToSet = "e";
+  let foodTile = getFirst(food)
+  if (foodTile) foodTile.remove()
+
+  // CHECK FOOD COLLISION
+  const ateFood = newHead.x === food_pos.x && newHead.y === food_pos.y
+
+  if (ateFood) {
+    snake.unshift(newHead)
+    score++
+    spawnFood()
+  } else {
+    snake.pop()
+    snake.unshift(newHead)
   }
-});
-onInput("a", () => {
-  if (direction != "e") {
-  directionToSet = "w";
+
+  // Update body/tail graphics
+  for (let i = 1; i < snake.length - 1; i++) {
+    const current = snake[i]
+    const front = snake[i - 1]
+    const back = snake[i + 1]
+
+    if (front.y === current.y && back.y === current.y) {
+      current.type = bodyRightLeft
+    } else if (front.x === current.x && back.x === current.x) {
+      current.type = bodyDownUp
+    } else if ((front.x > current.x && back.y > current.y) || (back.x > current.x && front.y > current.y)) {
+      current.type = bodyLeftDown
+    } else if ((front.x < current.x && back.y > current.y) || (back.x < current.x && front.y > current.y)) {
+      current.type = bodyRightDown
+    } else if ((front.x > current.x && back.y < current.y) || (back.x > current.x && front.y < current.y)) {
+      current.type = bodyLeftUp
+    } else if ((front.x < current.x && back.y < current.y) || (back.x < current.x && front.y < current.y)) {
+      current.type = bodyRightUp
+    }
   }
-});
-onInput("w", () => {
-  if (direction != "s") {
-  directionToSet = "n";
+
+  // Update tail
+  if (snake.length > 1) {
+    const tail = snake[snake.length - 1]
+    const lastBody = snake[snake.length - 2]
+
+    if (tail.x > lastBody.x) tail.type = tailLeft
+    else if (tail.x < lastBody.x) tail.type = tailRight
+    else if (tail.y > lastBody.y) tail.type = tailDown
+    else if (tail.y < lastBody.y) tail.type = tailUp
   }
-});
 
-onInput("i", () => {
-  clearText();
-  getAll().forEach(tile => {
-    clearTile(tile.x, tile.y);
-  });
-  score = 0;
-  direction = "e";
-  directionToSet = "e";
-  snake = [
-  [0, 0]
-];
-  placeFood();
-  clearInterval(interval);
-  interval = setInterval(move, 400);
-  addScore();
-
-  if(playback) playback.end();
-  playback = playTune(music, Infinity);
-});
-
-placeFood();
-
-function move() {
-
-  direction = directionToSet;
-  
-  if (tilesWith(food) == 0) {
-    placeFood();
+  // Redraw everything
+  for (let segment of snake) {
+    addSprite(segment.x, segment.y, segment.type)
   }
-  
-  switch(direction) {
-    case "n":
-      snake.push([snake[snake.length-1][0], snake[snake.length-1][1]-1])
-      break;
-    case "s":
-      snake.push([snake[snake.length-1][0], snake[snake.length-1][1]+1])
-      break;
-    case "e":
-      snake.push([snake[snake.length-1][0]+1, snake[snake.length-1][1]])
-      break;
-    case "w":
-      snake.push([snake[snake.length-1][0]-1, snake[snake.length-1][1]])
-      break;
-  }
-  
-  if (tilesWith(player, food).length != 0 || tilesWith(body, food).length != 0) {
-    // console.log(tilesWith(player).length);
-    placeFood();
-    score += 1;
-    clearTile(getFirst(food).x, getFirst(food).y);
-    addScore();
-    clearTile(snake[0][0], snake[0][1]);
 
-    clearInterval(interval);
-  interval = setInterval(move, 400 - (score*10));
+  addSprite(food_pos.x, food_pos.y, food)
+
+  // NOW CHECK IF WE HIT A WALL
+  if (hitWall) {
+    gameOver = true
+    addText(`GAME OVER! Score: ${score}`, () => {})
   }
-  else if (snake.length > 1) {
+
+  // CHECK SELF COLLISION AFTER REDRAW
+  if (snake.slice(1).some(s => s.x === snake[0].x && s.y === snake[0].y)) {
+    gameOver = true
+    addText(`GAME OVER! Score: ${score}`, () => {})
+  }
+
+}, 150)
+
+// Restart control
+onInput("j", () => {
+  if (gameOver) {
+    // Clear old snake sprites
+    for (let segment of snake) {
+      let tile = getTile(segment.x, segment.y)
+      for (let sprite of tile) {
+        sprite.remove()
+      }
+    }
     
-    let removed = snake.shift();
-    clearTile(removed[0], removed[1]);
+    // Clear old food sprite
+    let foodTile = getFirst(food)
+    if (foodTile) foodTile.remove()
+    
+    gameOver = false
+    score = 0
+    snake = [
+      { x: 4, y: 1, type: headRight },
+      { x: 3, y: 1, type: bodyRightLeft },
+      { x: 2, y: 1, type: tailRight }
+    ]
+    direction = "right"
+    nextDirection = "right"
+    spawnFood()
+    
+    clearText()
   }
+})
 
-  let i = 0;
-  snake.forEach(el => {
-
-    if (i+1 < snake.length) {
-      clearTile(el[0], el[1]);
-      addSprite(el[0], el[1], body);
-  }
-  else {
-    if ((el[0] < 0 || el[0] > 9) || (el[1] < 0 || el[1] > 7)) {
-      
-      gameOver();
-    } else {
-    addSprite(el[0], el[1], player);
-    }
-  }
-    if (tilesWith(player, body).length != 0) {
-      gameOver();
-    }
-    i++;
-  })
-}
-
-let interval = setInterval(move, 400);
+// Controls
+onInput("w", () => { if (!gameOver && direction !== "down") nextDirection = "up" })
+onInput("s", () => { if (!gameOver && direction !== "up") nextDirection = "down" })
+onInput("a", () => { if (!gameOver && direction !== "right") nextDirection = "left" })
+onInput("d", () => { if (!gameOver && direction !== "left") nextDirection = "right" })
