@@ -1,7 +1,7 @@
 /*
 @title: Lawnmower
 @description: Simple but satisying zen loop game. Mow the lawn, and it will come back.
-@author: 
+@author: Aarnav Verma
 @tags: ['zen', 'satifying']
 @addedOn: 2025-00-00
 */
