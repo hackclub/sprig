@@ -244,7 +244,8 @@ export async function createPullRequest(
 	base: string,
 	body: string,
 	forkOwner: string,
-	gameId: string
+	gameId: string,
+	onRecordError?: (error: unknown) => void
 ): Promise<any> {
 	await delay(5000); // Delay to ensure the forked repository is ready
 	const fullHead = `${forkOwner}:${head}`;
@@ -271,18 +272,18 @@ export async function createPullRequest(
 		try {
 			await recordGamePullRequest(gameId, prUrl);
 		} catch (error) {
-			// the pull request exists: report success so the editor remembers it and a retry updates it
-			console.warn("The pull request was created, but saving it on the game failed:", error);
+			if (onRecordError) {
+				onRecordError(error);
+			} else {
+				console.warn("The pull request was created, but saving it on the game failed:", error);
+			}
 		}
 
 		return pullRequest;
 	} catch (error: any) {
-		console.error(
-			"Error creating pull request or updating the game:",
-			error
-		);
+		console.error("Error creating pull request:", error);
 
-		if (error.message.includes("422")) {
+		if (error.message?.includes("422")) {
 			console.error(
 				"422 Unprocessable Content: This usually indicates an issue with the 'head' branch. Ensure the branch exists in the fork."
 			);
@@ -296,6 +297,10 @@ export async function recordGamePullRequest(
 	gameId: string,
 	prUrl: string
 ): Promise<void> {
+	if (!gameId) {
+		return;
+	}
+
 	const updateGamePRResponse = await fetch(
 		`/api/games/github-update-game`, // Endpoint to update game metadata with the pull request
 		{
@@ -316,17 +321,21 @@ export async function recordGamePullRequest(
 			.json()
 			.catch(() => ({}));
 		throw new Error(
-			errorData.message || "Failed to update GitHub PR URL in game"
+			errorData.error || errorData.message || (typeof errorData === "string" ? errorData : "Failed to update GitHub PR URL in game")
 		);
 	}
 }
+
+// Prefix and regex for pull request branches created by the web editor
+export const EDITOR_BRANCH_PREFIX = "Automated-PR-";
+export const EDITOR_BRANCH_REGEX = /^Automated-PR-\d+$/;
 
 // True for an open pull request the editor made from the author's own fork (branch Automated-PR-<time>).
 function isEditorPullRequest(pullRequest: any, author: string): boolean {
 	return (
 		pullRequest?.state === "open" &&
 		pullRequest.head?.repo?.owner?.login?.toLowerCase() === author.toLowerCase() &&
-		/^Automated-PR-\d+$/.test(pullRequest.head?.ref ?? "")
+		EDITOR_BRANCH_REGEX.test(pullRequest.head?.ref ?? "")
 	);
 }
 
@@ -353,10 +362,10 @@ async function fetchPullRequestWithFiles(
 	return { pullRequest, files };
 }
 
-// Finds the open pull request to update when a game is published again, so it doesn't get a second one.
-// The game's own pull request (the URL saved on the game) comes first; errors there are thrown, since
-// opening a new pull request would then likely make a duplicate. Without one, it looks for the author's
-// open editor pull request that adds gamePath. Returns null when there is none.
+// Finds the open pull request to update when a game is published again, avoiding duplicate PRs.
+// If a saved PR URL exists, it is checked first; a 404 falls through to search, while other errors throw.
+// When searching, open editor PRs by the author are examined for games matching gamePath.
+// If any candidate fails to load and no match was found, an error is thrown to avoid false negatives.
 export async function findGamePullRequest(
 	accessToken: string,
 	owner: string,
@@ -365,6 +374,10 @@ export async function findGamePullRequest(
 	gamePath: string,
 	savedPullRequestUrl?: string | null
 ): Promise<{ pullRequest: any; files: any[] } | null> {
+	if (!author) {
+		throw new Error("GitHub username is required to check for existing pull requests.");
+	}
+
 	const saved = savedPullRequestUrl?.match(new RegExp(`^https://github\\.com/${owner}/${repo}/pull/(\\d+)`));
 	if (saved) {
 		try {
@@ -379,6 +392,8 @@ export async function findGamePullRequest(
 		}
 	}
 
+	// Search open PRs by this author. Authors normally have at most a few open PRs in Sprig,
+	// so per_page=100 and sort=created/order=asc easily covers all open PRs in one page.
 	const query = encodeURIComponent(`repo:${owner}/${repo} is:pr is:open author:${author}`);
 	const searchResponse = await fetchWithRetry(
 		`https://api.github.com/search/issues?q=${query}&sort=created&order=asc&per_page=100`,
@@ -388,14 +403,24 @@ export async function findGamePullRequest(
 	);
 	const results = await handleResponse(searchResponse);
 
+	if (results.incomplete_results) {
+		throw new Error("GitHub PR search timed out or returned incomplete results. Please try again.");
+	}
+
+	let skippedCount = 0;
 	for (const item of results.items ?? []) {
 		try {
 			const found = await fetchPullRequestWithFiles(accessToken, owner, repo, item.number);
 			if (!isEditorPullRequest(found.pullRequest, author)) continue;
 			if (found.files.some((file: any) => file.filename === gamePath && file.status !== "removed")) return found;
 		} catch (error) {
+			skippedCount++;
 			console.warn(`Skipping pull request #${item.number} while looking for this game's pull request:`, error);
 		}
+	}
+
+	if (skippedCount > 0) {
+		throw new Error(`Failed to check all open pull requests (${skippedCount} failed to load). Please try again.`);
 	}
 
 	return null;
@@ -415,6 +440,9 @@ export async function fetchCommitTreeSha(
 		}
 	);
 	const data = await handleResponse(response);
+	if (!data?.tree?.sha) {
+		throw new Error("Invalid commit data received from GitHub: missing tree SHA.");
+	}
 	return data.tree.sha;
 }
 

@@ -40,7 +40,7 @@ import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
-import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, findGamePullRequest, recordGamePullRequest, fetchCommitTreeSha, updatePullRequestTitle } from "../lib/game-saving/github";
+import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, findGamePullRequest, recordGamePullRequest, fetchCommitTreeSha, updatePullRequestTitle, EDITOR_BRANCH_PREFIX } from "../lib/game-saving/github";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -485,9 +485,15 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	};
 
 	const publishToGithub = async (githubState: Signal<GithubState | undefined>, gameID: string | undefined) => {
+		// Prevent concurrent publish attempts while another publish or token check is in progress
 		if (isPublishing.value) return;
 		isPublishing.value = true;
 		const startTime = Date.now();
+		let reportedSpecificFailure = false;
+		const trackFailure = (metricName: string) => {
+			reportedSpecificFailure = true;
+			reportMetric(metricName);
+		};
 		try {
 
 			reportMetric("github_publish.initiated");
@@ -536,7 +542,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			}
  
 			if (!githubState.value?.session) {
-				reportMetric("github_publish.failure.token_missing");
+				trackFailure("github_publish.failure.token_missing");
 				throw new Error("GitHub access token not found.");
 			}
 
@@ -563,7 +569,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				githubState.value = getGithubStateFromCookie()
 
 				if (!githubState.value?.session || !(await validateGitHubToken(githubState.value.session))) {
-					reportMetric("github_publish.failure.token_reauth_failed");
+					trackFailure("github_publish.failure.token_reauth_failed");
 					throw new Error("Failed to re-authenticate with GitHub.");
 				}
 			}
@@ -587,12 +593,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				try {
 					openPR = await findGamePullRequest(accessToken, "hackclub", "sprig", yourGithubUsername, gamePath, githubPRUrl.value);
 				} catch (error) {
-					reportMetric("github_publish.failure.find_open_pr");
-					if (githubPRUrl.value) {
-						throw new Error("Failed to check this game's pull request: " + (error instanceof Error ? error.message : String(error)));
-					}
-					console.warn("Could not look for an open pull request for this game:", error);
+					trackFailure("github_publish.failure.find_open_pr");
+					throw new Error("Failed to check this game's pull request: " + (error instanceof Error ? error.message : String(error)));
 				}
+			} else {
+				throw new Error("GitHub username not found. Please re-authenticate.");
 			}
 
 			let repoOwner: string, repoName: string, branchName: string, baseSha: string;
@@ -605,7 +610,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				try {
 					baseSha = await fetchLatestCommitSha(accessToken, repoOwner, repoName, branchName);
 				} catch (error) {
-					reportMetric("github_publish.failure.commit_sha");
+					trackFailure("github_publish.failure.commit_sha");
 					throw new Error("Failed to fetch the pull request's latest commit: " + (error instanceof Error ? error.message : String(error)));
 				}
 
@@ -631,27 +636,27 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				try {
 					forkedRepo = await forkRepository(accessToken, "hackclub", "sprig");
 				} catch (error) {
-					reportMetric("github_publish.failure.fork");
+					trackFailure("github_publish.failure.fork");
 					console.warn("Fork might already exist. Fetching existing fork...");
 					try {
 						forkedRepo = await fetchForkedRepository(accessToken, "hackclub", "sprig", yourGithubUsername || "");
 					} catch (fetchError: any) {
-						reportMetric("github_publish.failure.fetch_fork");
+						trackFailure("github_publish.failure.fetch_fork");
 						throw new Error("Failed to fetch fork: " + fetchError.message);
 					}
 				}
 
 				const latestCommitSha = await fetchLatestCommitSha(accessToken, "hackclub", "sprig", forkedRepo.default_branch);
 				if (!latestCommitSha) {
-					reportMetric("github_publish.failure.commit_sha");
+					trackFailure("github_publish.failure.commit_sha");
 					throw new Error("Failed to fetch the latest commit SHA.");
 				}
 
-				const newBranchName = `Automated-PR-${Date.now()}`;
+				const newBranchName = `${EDITOR_BRANCH_PREFIX}${Date.now()}`;
 				try {
 					await createBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, latestCommitSha);
 				} catch (error) {
-					reportMetric("github_publish.failure.branch");
+					trackFailure("github_publish.failure.branch");
 					throw new Error("Failed to create branch: " + (error instanceof Error ? error.message : String(error)));
 				}
 
@@ -668,7 +673,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					imageBlobSha = await createBlobForImage(accessToken, repoOwner, repoName, imageBase64.split(',')[1]);
 				}
 			} catch (error) {
-				reportMetric("github_publish.failure.image_blob");
+				trackFailure("github_publish.failure.image_blob");
 				throw new Error("Failed to create image blob: " + (error instanceof Error ? error.message : String(error)));
 			}
 
@@ -689,24 +694,35 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					]
 				);
 			} catch (error) {
-				reportMetric("github_publish.failure.tree_commit");
+				trackFailure("github_publish.failure.tree_commit");
 				throw new Error("Failed to create tree and commit: " + (error instanceof Error ? error.message : String(error)));
 			}
 
-			const codeChanged = !openPR || treeSha !== await fetchCommitTreeSha(accessToken, repoOwner, repoName, baseSha);
+			// When updating an existing PR, skip pushing a commit if the file tree is identical
+			let codeChanged = !openPR;
+			if (openPR) {
+				try {
+					const baseTreeSha = await fetchCommitTreeSha(accessToken, repoOwner, repoName, baseSha);
+					codeChanged = treeSha !== baseTreeSha;
+				} catch (error) {
+					trackFailure("github_publish.failure.fetch_tree_sha");
+					throw new Error("Failed to check commit tree: " + (error instanceof Error ? error.message : String(error)));
+				}
+			}
+
 			if (codeChanged) {
 				let newCommit;
 				try {
 					newCommit = await createCommit(accessToken, repoOwner, repoName, `Sprig App - ${gameTitle}`, treeSha, baseSha);
 				} catch (error) {
-					reportMetric("github_publish.failure.commit");
+					trackFailure("github_publish.failure.commit");
 					throw new Error("Failed to create commit: " + (error instanceof Error ? error.message : String(error)));
 				}
 
 				try {
 					await updateBranch(accessToken, repoOwner, repoName, branchName, newCommit.sha, !openPR);
 				} catch (error: any) {
-					reportMetric("github_publish.failure.branch_update");
+					trackFailure("github_publish.failure.branch_update");
 					if (error?.status === 422 || error?.message?.includes("422")) {
 						throw new Error("The pull request branch has new changes on GitHub that would be overwritten. Please merge or reconcile them on GitHub first.");
 					}
@@ -716,20 +732,22 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 			if (openPR) {
 				const pullRequest = openPR.pullRequest;
-				if (renamedFrom && pullRequest.title !== prTitle) {
+				if (pullRequest.title !== prTitle) {
 					try {
 						await updatePullRequestTitle(accessToken, "hackclub", "sprig", pullRequest.number, prTitle);
 					} catch (error) {
-						reportMetric("github_publish.failure.pr_update");
+						trackFailure("github_publish.failure.pr_update");
 						throw new Error("Failed to update the pull request: " + (error instanceof Error ? error.message : String(error)));
 					}
 				}
 
-				try {
-					await recordGamePullRequest(gameID ?? '', pullRequest.html_url);
-				} catch (error) {
-					reportMetric("github_publish.failure.record_pr");
-					console.warn("The pull request was updated, but saving it on the game failed:", error);
+				if (gameID) {
+					try {
+						await recordGamePullRequest(gameID, pullRequest.html_url);
+					} catch (error) {
+						trackFailure("github_publish.failure.record_pr");
+						console.warn("The pull request was updated, but saving it on the game failed:", error);
+					}
 				}
 
 				rememberPullRequest(pullRequest.html_url);
@@ -754,7 +772,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					"main",
 					prBody,
 					repoOwner,
-					gameID ?? ''
+					gameID ?? '',
+					(err) => {
+						trackFailure("github_publish.failure.record_pr");
+						console.warn("The pull request was created, but saving it on the game failed:", err);
+					}
 				);
 
 				rememberPullRequest(pr.html_url);
@@ -765,14 +787,16 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 				publishSuccess.value = true;
 			} catch (error) {
-				reportMetric("github_publish.failure.pr_creation");
+				trackFailure("github_publish.failure.pr_creation");
 				throw new Error("Failed to create pull request: " + (error instanceof Error ? error.message : String(error)));
 			}
 		} catch (error) {
 			console.error("Publishing failed:", error);
 			publishErrorMessage.value = error instanceof Error ? error.message : String(error);
 			publishError.value = true;
-			reportMetric("github_publish.failure.general");
+			if (!reportedSpecificFailure) {
+				reportMetric("github_publish.failure.general");
+			}
 
 			const timeTaken = Date.now() - startTime;
 			reportMetric('github_publish.failure_time', timeTaken, 'timing');
