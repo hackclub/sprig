@@ -301,6 +301,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const publishErrorMessage = useSignal<string | null>(null);
 	const githubPRUrl = useSignal<string | null>(null);
 	const publishOutcome = useSignal<"new" | "updated" | "unchanged">("new");
+	const publishFormTitle = useSignal<string | null>(null);
+	const publishFormAuthor = useSignal<string | null>(null);
+	const publishFormDescription = useSignal("");
+	const publishFormControls = useSignal("");
 	
 	const githubState = useSignal<GithubState | undefined>(undefined)
 	
@@ -613,6 +617,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					}
 					const oldName = addedGames[0].filename.slice("games/".length, -".js".length);
 					if (!window.confirm(`This renames your game in pull request #${pullNumber} from "${oldName}" to "${sanitizedGameTitle}". Continue?`)) {
+						reportMetric("github_publish.cancel_rename");
 						readyPublish.value = true;
 						return;
 					}
@@ -991,7 +996,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 												props.persistenceState.value.game !== "LOADING" ? (
 												<input
 													id="gameTitle"
-													defaultValue={props.persistenceState.value.game.name ?? ""}
+													value={publishFormTitle.value ?? props.persistenceState.value.game.name ?? ""}
+													onInput={(e) => {
+														publishFormTitle.value = (e.currentTarget as HTMLInputElement).value;
+													}}
 													type="text"
 													placeholder="Enter your game title"
 												/>
@@ -1005,7 +1013,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											<label htmlFor="authorName">Author Name</label>
 											<input
 												id="authorName"
-												defaultValue={githubState.value?.username ?? ""}
+												value={publishFormAuthor.value ?? githubState.value?.username ?? ""}
+												onInput={(e) => {
+													publishFormAuthor.value = (e.currentTarget as HTMLInputElement).value;
+												}}
 												type="text"
 												placeholder="Enter author name"
 											/>
@@ -1016,7 +1027,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											<label htmlFor="gameDescription">About Your Game</label>
 											<textarea
 												id="gameDescription"
-												v-model="gameDescription"
+												value={publishFormDescription.value}
+												onInput={(e) => {
+													publishFormDescription.value = (e.currentTarget as HTMLTextAreaElement).value;
+												}}
 												placeholder="Describe the key objectives, gameplay mechanics, and what makes your game unique."
 												rows={4}
 											/>
@@ -1027,7 +1041,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											<label htmlFor="gameControlsDescription">How to Play Your Game</label>
 											<textarea
 												id="gameControlsDescription"
-												v-model="gameControlsDescription"
+												value={publishFormControls.value}
+												onInput={(e) => {
+													publishFormControls.value = (e.currentTarget as HTMLTextAreaElement).value;
+												}}
 												placeholder="Describe how to play your game here (e.g., controls)..."
 												rows={4}
 											/>
