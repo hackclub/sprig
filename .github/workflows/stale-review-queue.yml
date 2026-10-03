@@ -1,0 +1,27 @@
+name: Stale Sprig Review Queue
+
+on:
+  schedule:
+    - cron: "17 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale-review-queue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout automation
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+
+      - name: Process stale submissions
+        run: node .github/scripts/stale-review-queue.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}

@@ -1260,7 +1260,7 @@ function saveMap() {
 
 function loadMap(spawnX = 1, spawnY = Math.max(0, height() - 3), spawnType = playerRightIdle) {
   const key = `${currentMapX},${currentMapY}`
-  const data = savedMaps[key] || supermap[currentMapY]?.[currentMapX]
+  const data = savedMaps[key] || (supermap[currentMapY] || [])[currentMapX]
 
 if (!data) {
   setMap(map`
@@ -1665,6 +1665,7 @@ onInput("j", () => {
   if (direction === "up") sy--
   if (direction === "down") sy++
 
+  if (sx < 0 || sy < 0 || sx >= width() || sy >= height()) return
   addSprite(sx, sy, playersword)
 
   playTune(killer)

@@ -366,22 +366,27 @@ const death = tune `
 
 
 // inputs for player movement control
+let noPlayer = false;
 onInput("s", () => {
+  if (!getFirst(player)) { noPlayer = true; return; }
   getFirst(player).y += 1; // positive y is downwards
   playTune(movement);
 });
 
 onInput("w", () => {
+  if (!getFirst(player)) { noPlayer = true; return; }
   getFirst(player).y -= 1
   playTune(movement);
 });
 
 onInput("a", () => {
+  if (!getFirst(player)) { noPlayer = true; return; }
   getFirst(player).x -= 1;
   playTune(movement);
 });
 
 onInput("d", () => {
+  if (!getFirst(player)) { noPlayer = true; return; }
   getFirst(player).x += 1;
   playTune(movement);
 });
@@ -400,6 +405,7 @@ onInput("j", () => {
 
 // these get run after every input
 afterInput(() => {
+  if (noPlayer) { noPlayer = false; return; }
   // count the number of tiles with goals
   const targetNumber = tilesWith(goal).length;
 

@@ -465,7 +465,7 @@ setMap(levels[level])
   })
 onInput("i", () => {
   // Check if the player can move up and there is no wall in the way
-  if (getFirst(player).x > 0 && (getTile(getFirst(player).x - 1), getFirst(player).y)[0] == undefined || getTile(getFirst(player).x - 1, getFirst(player).y[0].type != wall)) {
+  if (getFirst(player).x > 0 && (getTile(getFirst(player).x - 1, getFirst(player).y), getFirst(player).y)[0] == undefined || getTile(getFirst(player).x - 1, getFirst(player).y[0].type != wall)) {
     getFirst(player).x -= 1; // Move the player up
     
     // Spawn a portal at the player's previous position before the move
@@ -477,7 +477,7 @@ onInput("i", () => {
 onInput("k", () => {
   
   // Check if the player can move up and there is no wall in the way
-  if (getFirst(player).x > 0 && (getTile(getFirst(player).x - 1), getFirst(player).y)[0] == undefined || getTile(getFirst(player).x - 1, getFirst(player).y[0].type != wall)) {
+  if (getFirst(player).x > 0 && (getTile(getFirst(player).x - 1, getFirst(player).y), getFirst(player).y)[0] == undefined || getTile(getFirst(player).x - 1, getFirst(player).y[0].type != wall)) {
     getFirst(player).x -= 1; // Move the player up
     
     // Spawn a portal at the player's previous position before the move
@@ -516,6 +516,7 @@ afterInput(() => {
   const numberCoveredButtonCube = tilesWith(cube, buttonspawner).length;
     if (redPortalsCovered.length >= 1) {
     const bp = getFirst(blueportal);
+    if (!bp) return;
     const pl = getFirst(player);
     
 
@@ -533,6 +534,7 @@ afterInput(() => {
   
   if (redPortalsCoveredcube.length >= 1) {
     const bp = getFirst(blueportal);
+    if (!bp) return;
     const cb = getFirst(cube);
 
         cb.x = bp.x;
@@ -541,6 +543,7 @@ afterInput(() => {
 }
   if (bluePortalsCovered.length >= 1) {
     const rp = getFirst(redportal);
+    if (!rp) return;
     const pl = getFirst(player);
 
     pl.x = rp.x;
@@ -549,6 +552,7 @@ afterInput(() => {
   }
     if (bluePortalsCoveredcube.length >= 1) {
     const rp = getFirst(redportal);
+    if (!rp) return;
     const cb = getFirst(cube);
 
         cb.x = rp.x;
@@ -557,12 +561,15 @@ afterInput(() => {
         
   }
   if (numberCoveredButton === targetNumber) {
+      if (!getFirst(spawner)) return;
       addSprite(getFirst(spawner).x, getFirst(spawner).y + 1, cube);
   }
   else if (numberCoveredfinal === targetNumber) {
+      if (!getFirst(spawner)) return;
       addSprite(getFirst(spawner).x, getFirst(spawner).y + 1, cube);
   }
   else if (numberCoveredButtonCube === targetNumber2) {
+      if (!getFirst(spawner)) return;
       addSprite(getFirst(spawner).x, getFirst(spawner).y + 1, cube);
   }
   const nextLevel = levels[level];

@@ -22,6 +22,7 @@ const win = "n"
 const winX = 0
 const winY = 2
 const movingObstacle = "m"
+const obstacleDy = new Map()
 const movingEnemy = "e"
 const movingDisc = "j"
 const enemy = getFirst(movingEnemy)
@@ -396,19 +397,22 @@ setSolids([ player, wall,])
 
 // Define a generic moveObstacle function for all moving obstacles
 function moveObstacle(obstacleSprite) {
-    if (obstacleSprite.dy === 0) {
-        obstacleSprite.dy = 1; // Set the initial direction to move down
+    let dy = obstacleDy.get(obstacleSprite) || 0;
+    if (dy === 0) {
+        dy = 1; // Set the initial direction to move down
     } else {
-        if (obstacleSprite.y <= 5 && obstacleSprite.dy === -1) {
-            obstacleSprite.dy = 1; // Change the direction to move down when at the top boundary
-        } else if (obstacleSprite.y >= 6 && obstacleSprite.dy === 1) {
-            obstacleSprite.dy = -1; // Change the direction to move up when at the bottom boundary
+        if (obstacleSprite.y <= 5 && dy === -1) {
+            dy = 1; // Change the direction to move down when at the top boundary
+        } else if (obstacleSprite.y >= 6 && dy === 1) {
+            dy = -1; // Change the direction to move up when at the bottom boundary
         }
     }
-    obstacleSprite.y += obstacleSprite.dy;
+    obstacleDy.set(obstacleSprite, dy);
+    obstacleSprite.y += dy;
 }
 
 // Apply the moveObstacle function to all moving obstacle sprites
+obstacleDy.clear();
 getAll(movingObstacle).forEach(obstacle => {
     setInterval(() => {
         moveObstacle(obstacle);
