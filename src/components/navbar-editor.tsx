@@ -40,7 +40,7 @@ import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
-import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, findGamePullRequest, recordGamePullRequest, fetchCommitTreeSha, updatePullRequestTitle, EDITOR_BRANCH_PREFIX } from "../lib/game-saving/github";
+import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, findGamePullRequest, recordGamePullRequest, fetchCommitTreeSha, updatePullRequest, updatePullRequestTitle, EDITOR_BRANCH_PREFIX } from "../lib/game-saving/github";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -729,9 +729,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 			if (openPR) {
 				const pullRequest = openPR.pullRequest;
-				if (pullRequest.title !== prTitle) {
+				const titleChanged = pullRequest.title !== prTitle;
+				const bodyChanged = Boolean(prBody && pullRequest.body !== prBody);
+				if (titleChanged || bodyChanged) {
 					try {
-						await updatePullRequestTitle(accessToken, "hackclub", "sprig", pullRequest.number, prTitle);
+						await updatePullRequest(accessToken, "hackclub", "sprig", pullRequest.number, {
+							title: prTitle,
+							body: prBody,
+						});
 					} catch (error) {
 						trackFailure("github_publish.failure.pr_update");
 						throw new Error("Failed to update the pull request: " + (error instanceof Error ? error.message : String(error)));
@@ -748,9 +753,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				}
 
 				rememberPullRequest(pullRequest.html_url);
-				publishOutcome.value = codeChanged ? "updated" : "unchanged";
+				const prUpdated = codeChanged || titleChanged || bodyChanged;
+				publishOutcome.value = prUpdated ? "updated" : "unchanged";
 				reportMetric("github_publish.success");
-				reportMetric(codeChanged ? "github_publish.success.updated_pr" : "github_publish.success.unchanged_pr");
+				reportMetric(prUpdated ? "github_publish.success.updated_pr" : "github_publish.success.unchanged_pr");
 
 				const timeTaken = Date.now() - startTime;
 				reportMetric('github_publish.time_taken', timeTaken, 'timing');

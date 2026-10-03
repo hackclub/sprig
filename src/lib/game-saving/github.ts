@@ -460,25 +460,32 @@ export async function fetchCommitTreeSha(
 	return data.tree.sha;
 }
 
-// Updates the title of a pull request.
-export async function updatePullRequestTitle(
+export async function updatePullRequest(
 	accessToken: string,
 	owner: string,
 	repo: string,
 	pullNumber: number,
-	title: string
+	updates: { title?: string; body?: string }
 ): Promise<any> {
 	const response = await fetchWithRetry(
 		`https://api.github.com/repos/${owner}/${repo}/pulls/${pullNumber}`,
 		{
 			method: "PATCH",
 			headers: getJsonHeaders(accessToken),
-			body: JSON.stringify({ title }),
+			body: JSON.stringify(updates),
 		}
 	);
 
 	return handleResponse(response);
 }
+
+export const updatePullRequestTitle = (
+	accessToken: string,
+	owner: string,
+	repo: string,
+	pullNumber: number,
+	title: string
+) => updatePullRequest(accessToken, owner, repo, pullNumber, { title });
 
 // Fetches the latest commit SHA for the specified branch in a GitHub repository.
 export async function fetchLatestCommitSha(
