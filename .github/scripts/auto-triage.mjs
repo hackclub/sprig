@@ -15,6 +15,15 @@ import {
 	upsertBotComment,
 } from "./review-utils.mjs";
 import { buildSubmissionManifest } from "./submission-manifest.mjs";
+import {
+	DUPLICATE_LABEL,
+	DUPLICATE_NOTICE_MARKER,
+	buildLatestWarning,
+	buildOlderCheckDetail,
+	buildOlderNotice,
+	findDuplicateGroup,
+	parseOlderNotice,
+} from "./duplicate-detection.mjs";
 import { autoReviewLabelChanges } from "./review-state.mjs";
 
 const token = process.env.GITHUB_TOKEN;
@@ -25,6 +34,7 @@ let event = readGitHubEvent();
 let pullRequest = event.pull_request || event.issue;
 // keep it in this order pls or the entire thing explodes and fails. thanks
 let cachedOpenPulls = null;
+let duplicateGroupNumbers = new Set();
 
 let reviewers = new Set();
 try {
@@ -114,19 +124,7 @@ const labels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber 
 const isLabeledSubmission = hasLabel(labels, "Submission");
 
 const body = pullRequest.body ?? "";
-const touchesNonGamePaths = pullFiles.some((f) =>
-	!f.filename.toLowerCase().startsWith("games/") &&
-	(f.status !== "added" || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
-);
-const addedJsFiles = pullFiles.filter((f) => f.status === "added" && f.filename.endsWith(".js"));
-const bodyLooksLikeSubmission =
-	/what is your game about|how do you play your game/i.test(body) ||
-	/^#+\s*(about your game|pre apply checklist)\b/im.test(body);
-const isMisplacedGameSubmission = !touchesNonGamePaths &&
-	addedJsFiles.length > 0 &&
-	(bodyLooksLikeSubmission || addedJsFiles.some((f) => /^\+\s*@title:/m.test(f.patch ?? "")));
-
-const isSubmissionPR = modifiesGames || isLabeledSubmission || isMisplacedGameSubmission;
+const isSubmissionPR = modifiesGames || isLabeledSubmission || isMisplacedGameSubmission(pullFiles, body);
 
 if (!isSubmissionPR) {
 	console.log("Not a submission PR (no games/ files, no Submission label, and not a misplaced game submission); skipping.");
@@ -135,6 +133,8 @@ if (!isSubmissionPR) {
 
 try {
 	await materializeSubmittedGameFiles(pullRequest, pullFiles, workspace);
+	const duplicates = await detectDuplicateSubmissions(pullFiles);
+	duplicateGroupNumbers = new Set(duplicates.group?.duplicates ?? []);
 	const result = await validateSubmission({
 		pullRequest,
 		pullFiles,
@@ -142,9 +142,11 @@ try {
 		reviewBaseUrl,
 		owner,
 		repo,
+		duplicates,
 	});
 
 	await applyLabels(result);
+	await applyDuplicateActions(duplicates);
 	await upsertBotComment({
 		owner,
 		repo,
@@ -211,6 +213,97 @@ async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) 
 	}
 }
 
+function isMisplacedGameSubmission(files, body) {
+	const touchesNonGamePaths = files.some((f) =>
+		!f.filename.toLowerCase().startsWith("games/") &&
+		(f.status !== "added" || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
+	);
+	const addedJsFiles = files.filter((f) => f.status === "added" && f.filename.endsWith(".js"));
+	const bodyLooksLikeSubmission =
+		/what is your game about|how do you play your game/i.test(body) ||
+		/^#+\s*(about your game|pre apply checklist)\b/im.test(body);
+	return !touchesNonGamePaths &&
+		addedJsFiles.length > 0 &&
+		(bodyLooksLikeSubmission || addedJsFiles.some((f) => /^\+\s*@title:/m.test(f.patch ?? "")));
+}
+
+function addsGame(files, body) {
+	return files.some((f) => f.status === "added" && /^games\/.+\.js$/i.test(f.filename)) ||
+		isMisplacedGameSubmission(files, body);
+}
+
+async function detectDuplicateSubmissions(pullFiles) {
+	const login = pullRequest.user?.login;
+	if (!login || reviewers.has(login) || !addsGame(pullFiles, pullRequest.body ?? "")) return { group: null };
+	try {
+		const openPulls = await getOpenPulls();
+		const targetLogin = login.toLowerCase();
+		const siblings = openPulls
+			.filter((pr) => pr.number !== prNumber && pr.user?.login?.toLowerCase() === targetLogin && !pr.draft)
+			.slice(0, 20);
+
+		const siblingNumbers = [];
+		for (const pr of siblings) {
+			const prFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pr.number}/files`);
+			if (addsGame(prFiles, pr.body ?? "")) siblingNumbers.push(pr.number);
+		}
+
+		const group = findDuplicateGroup(prNumber, siblingNumbers);
+		return { group: group.duplicates.length ? group : null };
+	} catch (error) {
+		console.warn(`Duplicate detection failed, continuing without it: ${error.message}`);
+		return { group: null, failed: true };
+	}
+}
+
+async function applyDuplicateActions({ group, failed }) {
+	if (failed) return;
+	if (!group) {
+		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: DUPLICATE_LABEL });
+		await removeOlderNotice(prNumber);
+		return;
+	}
+
+	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: [DUPLICATE_LABEL] });
+	if (!group.isLatest) {
+		await syncOlderNotice({ issueNumber: prNumber, latestNumber: group.latestNumber, restart: event.action === "reopened" });
+		return;
+	}
+
+	for (const olderNumber of group.older) {
+		try {
+			await addLabels({ owner, repo, token, issueNumber: olderNumber, labels: [DUPLICATE_LABEL] });
+			await syncOlderNotice({ issueNumber: olderNumber, latestNumber: prNumber, restart: false });
+		} catch (error) {
+			console.warn(`Could not notify duplicate PR #${olderNumber}: ${error.message}`);
+		}
+	}
+}
+
+async function removeOlderNotice(issueNumber) {
+	const comments = await githubPaginated(token, `/repos/${owner}/${repo}/issues/${issueNumber}/comments`);
+	for (const comment of comments) {
+		if (comment.user?.type === "Bot" && comment.body?.includes(DUPLICATE_NOTICE_MARKER)) {
+			await githubRequest(token, "DELETE", `/repos/${owner}/${repo}/issues/comments/${comment.id}`);
+		}
+	}
+}
+
+async function syncOlderNotice({ issueNumber, latestNumber, restart }) {
+	const comments = await githubPaginated(token, `/repos/${owner}/${repo}/issues/${issueNumber}/comments`);
+	const existing = comments.find((comment) => comment.body?.includes(DUPLICATE_NOTICE_MARKER));
+	if (!restart && parseOlderNotice(existing?.body)?.latestNumber === latestNumber) return;
+
+	await upsertBotComment({
+		owner,
+		repo,
+		token,
+		issueNumber,
+		marker: DUPLICATE_NOTICE_MARKER,
+		body: buildOlderNotice({ number: issueNumber, latestNumber, since: new Date().toISOString() }),
+	});
+}
+
 async function getOpenPulls() {
 	if (!cachedOpenPulls) {
 		cachedOpenPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
@@ -218,7 +311,7 @@ async function getOpenPulls() {
 	return cachedOpenPulls;
 }
 
-async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, owner, repo }) {
+async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, owner, repo, duplicates }) {
 	const checks = [];
 	const problems = [];
 	const warnings = [];
@@ -233,19 +326,21 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 	const bodyChecks = validatePullRequestBody(pullRequest.body ?? "");
 	for (const check of bodyChecks.checks) addCheck(check.name, check.ok, check.detail);
 
-	const submitterLogin = pullRequest.user?.login;
-	if (submitterLogin) {
-		const openPulls = await getOpenPulls();
-		const duplicatePR = openPulls.find(
-			(pr) => pr.number !== prNumber && pr.user?.login === submitterLogin && pr.labels?.some((l) => l.name === "Submission")
-		);
+	if (duplicates.group && !duplicates.group.isLatest) {
 		addCheck(
 			"No duplicate open submission",
-			!duplicatePR,
-			duplicatePR
-				? `You already have an open submission (PR #${duplicatePR.number}). Please close one of them.`
-				: "No other open submissions from this user."
+			false,
+			buildOlderCheckDetail({ number: prNumber, latestNumber: duplicates.group.latestNumber })
 		);
+	} else {
+		addCheck(
+			"No duplicate open submission",
+			true,
+			duplicates.group ? "This is your newest open submission PR." : "No other open submission PRs from you."
+		);
+		if (duplicates.group?.older.length) {
+			warnings.push(buildLatestWarning({ older: duplicates.group.older }));
+		}
 	}
 
 	let gameFile = null;
@@ -503,7 +598,7 @@ async function findTitleConflict(title, filename, workspace) {
 	const openPulls = await getOpenPulls();
 	const submissionPRs = openPulls.filter((pr) => pr.labels?.some((l) => l.name === "Submission"));
 	for (const pr of submissionPRs) {
-		if (pr.number === prNumber) continue;
+		if (pr.number === prNumber || duplicateGroupNumbers.has(pr.number)) continue;
 		const prFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pr.number}/files`);
 		for (const file of prFiles) {
 			if (file.filename.startsWith("games/") && file.filename.endsWith(".js")) {
@@ -589,7 +684,9 @@ async function applyLabels(result) {
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: changes.state });
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Failed" });
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Needs Author" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Maintainer" });
+		if (changes.state !== "Ready for Maintainer") {
+			await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Maintainer" });
+		}
 	} else {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Failed"] });
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
