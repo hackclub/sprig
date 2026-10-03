@@ -318,12 +318,15 @@ export async function recordGamePullRequest(
 	);
 
 	if (!updateGamePRResponse.ok) {
-		const errorData = await updateGamePRResponse
-			.json()
-			.catch(() => ({}));
-		throw new Error(
-			errorData.error || errorData.message || (typeof errorData === "string" ? errorData : "Failed to update GitHub PR URL in game")
-		);
+		const rawText = await updateGamePRResponse.text().catch(() => "");
+		let parsed: any;
+		try {
+			parsed = JSON.parse(rawText);
+		} catch {
+			parsed = null;
+		}
+		const message = parsed?.error || parsed?.message || rawText || "Failed to update GitHub PR URL in game";
+		throw new Error(message);
 	}
 }
 
