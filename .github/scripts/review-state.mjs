@@ -6,26 +6,40 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction }) {
 
 	if (validationOk) {
 		add.add("Verified");
-		add.add("Ready for Playtest");
 		remove.add("Failed");
 		remove.add("Needs Author");
-		remove.add("Ready for Maintainer");
+
+		const keepApproval = hasLabel(labels, "Ready for Maintainer") && eventAction !== "synchronize";
+		const state = keepApproval ? "Ready for Maintainer" : "Ready for Playtest";
+
+		add.add(state);
+		if (state !== "Ready for Playtest") remove.add("Ready for Playtest");
+		if (state !== "Ready for Maintainer") remove.add("Ready for Maintainer");
+
+		if (hasLabel(labels, "Claimed")) add.add("Claimed");
+
+		return {
+			add: [...add],
+			remove: [...remove].filter((label) => hasLabel(labels, label)),
+			state,
+			approvalInvalidated: eventAction === "synchronize" && hasLabel(labels, "Ready for Maintainer"),
+		};
 	} else {
 		add.add("Failed");
 		add.add("Needs Author");
 		remove.add("Verified");
 		remove.add("Ready for Playtest");
 		remove.add("Ready for Maintainer");
+
+		if (hasLabel(labels, "Claimed")) add.add("Claimed");
+
+		return {
+			add: [...add],
+			remove: [...remove].filter((label) => hasLabel(labels, label)),
+			state: "Needs Author",
+			approvalInvalidated: false,
+		};
 	}
-
-	if (hasLabel(labels, "Claimed")) add.add("Claimed");
-
-	return {
-		add: [...add],
-		remove: [...remove].filter((label) => hasLabel(labels, label)),
-		state: validationOk ? "Ready for Playtest" : "Needs Author",
-		approvalInvalidated: eventAction === "synchronize" && hasLabel(labels, "Ready for Maintainer"),
-	};
 }
 
 export function duplicateSubmissionNumbers(pullRequests, authorLogin) {

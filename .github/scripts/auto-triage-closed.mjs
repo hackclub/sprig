@@ -37,7 +37,7 @@ for (const sibling of siblingPRs) {
 			ref: "main",
 			inputs: {
 				pr_number: String(sibling.number),
-				event_action: "synchronize",
+				event_action: "workflow_dispatch",
 			},
 		});
 	} catch (err) {

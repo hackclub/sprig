@@ -684,7 +684,9 @@ async function applyLabels(result) {
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: changes.state });
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Failed" });
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Needs Author" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Maintainer" });
+		if (changes.state !== "Ready for Maintainer") {
+			await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Maintainer" });
+		}
 	} else {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Failed"] });
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
