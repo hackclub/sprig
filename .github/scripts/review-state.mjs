@@ -1,6 +1,5 @@
 import { hasLabel } from "./review-utils.mjs";
 
-// reviewStatus: "approved" | "changes_requested" | "none" (reviews read, none active) | "unknown" (reviews unreadable).
 export function autoReviewLabelChanges({ labels, validationOk, eventAction, reviewStatus = "unknown" }) {
 	const add = new Set(["Submission"]);
 	const remove = new Set();
@@ -43,6 +42,25 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction, revi
 			approvalInvalidated: false,
 		};
 	}
+}
+
+export function reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha }) {
+	if (!reviewers || reviewers.size === 0) return "unknown";
+	const latestByReviewer = new Map();
+	for (const review of reviews) {
+		const login = review.user?.login;
+		if (!login || !reviewers.has(login) || login === authorLogin) continue;
+		if (!["APPROVED", "CHANGES_REQUESTED", "DISMISSED"].includes(review.state)) continue;
+		const previous = latestByReviewer.get(login);
+		if (!previous || new Date(review.submitted_at).getTime() >= new Date(previous.submitted_at).getTime()) {
+			latestByReviewer.set(login, review);
+		}
+	}
+
+	const active = [...latestByReviewer.values()];
+	if (active.some((r) => r.state === "CHANGES_REQUESTED")) return "changes_requested";
+	if (active.some((r) => r.state === "APPROVED" && Boolean(headSha) && r.commit_id === headSha)) return "approved";
+	return "none";
 }
 
 export function duplicateSubmissionNumbers(pullRequests, authorLogin) {

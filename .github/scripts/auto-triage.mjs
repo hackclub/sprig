@@ -15,7 +15,7 @@ import {
 	upsertBotComment,
 } from "./review-utils.mjs";
 import { buildSubmissionManifest } from "./submission-manifest.mjs";
-import { autoReviewLabelChanges } from "./review-state.mjs";
+import { autoReviewLabelChanges, reconcileReviewStatus } from "./review-state.mjs";
 
 const token = process.env.GITHUB_TOKEN;
 if (!token) throw new Error("GITHUB_TOKEN is required");
@@ -77,36 +77,28 @@ if (event.action === "unassigned") {
 	process.exit(0);
 }
 
-if (event.review && event.action === "submitted") {
-	const reviewState = event.review.state.toLowerCase();
+if (event.review) {
+	if (event.action !== "submitted" && event.action !== "dismissed") {
+		console.log(`Review action is ${event.action}, ignoring.`);
+		process.exit(0);
+	}
+
 	const reviewerLogin = event.review.user?.login;
 	const authorLogin = pullRequest.user?.login;
 
 	if (reviewerLogin && authorLogin && reviewerLogin === authorLogin) {
-		console.log(`Review submitted by PR author (${reviewerLogin}). Ignoring state change to prevent self-approval.`);
+		console.log(`Review ${event.action} by PR author (${reviewerLogin}). Ignoring state change to prevent self-approval.`);
 		process.exit(0);
 	}
 
 	if (!reviewerLogin || !reviewers.has(reviewerLogin)) {
-		console.log(`Review submitted by ${reviewerLogin ?? "unknown reviewer"}. Ignoring state change because reviewer is not listed.`);
+		console.log(`Review ${event.action} for ${reviewerLogin ?? "unknown reviewer"}. Ignoring because reviewer is not listed.`);
 		process.exit(0);
 	}
-	
-	if (reviewState === "changes_requested") {
-		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
-		console.log(`Review requested changes, set "Needs Author".`);
-	} else if (reviewState === "approved") {
-		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Maintainer" });
-		console.log(`Review approved, set "Ready for Maintainer".`);
-	} else {
+
+	const reviewState = event.review.state?.toLowerCase();
+	if (event.action === "submitted" && reviewState !== "approved" && reviewState !== "changes_requested") {
 		console.log(`Review state is ${reviewState}, ignoring.`);
-	}
-	process.exit(0);
-}
-if (event.review && event.action === "dismissed") {
-	const reviewerLogin = event.review.user?.login;
-	if (!reviewerLogin || !reviewers.has(reviewerLogin)) {
-		console.log(`Review dismissed for ${reviewerLogin ?? "unknown reviewer"}. Ignoring because reviewer is not listed.`);
 		process.exit(0);
 	}
 
@@ -120,11 +112,18 @@ if (event.review && event.action === "dismissed") {
 		headSha: pullRequest.head?.sha,
 	});
 	const currentLabels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
-	if (reviewStatus === "none" && hasLabel(currentLabels, "Ready for Maintainer")) {
+
+	if (reviewStatus === "changes_requested") {
+		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
+		console.log(`Review requested changes, set "Needs Author".`);
+	} else if (reviewStatus === "approved") {
+		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Maintainer" });
+		console.log(`Review approved, set "Ready for Maintainer".`);
+	} else if (reviewStatus === "none" && hasLabel(currentLabels, "Ready for Maintainer")) {
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Playtest" });
 		console.log(`Approval dismissed and no active review remains, set "Ready for Playtest".`);
 	} else {
-		console.log(`Review dismissed; review state is ${reviewStatus}, leaving labels unchanged.`);
+		console.log(`Review ${event.action}; review state is ${reviewStatus}, leaving labels unchanged.`);
 	}
 	process.exit(0);
 }
@@ -604,29 +603,11 @@ function readFileSafe(filePath) {
 	}
 }
 
-// Returns "approved" | "changes_requested" | "none" | "unknown".
-// "none" = reviews were read and no active qualifying review exists (e.g. the approval was dismissed).
-// "unknown" = reviews could not be read, so the caller must not infer anything from the result.
 async function getLatestReviewStatus({ owner, repo, token, prNumber, reviewers, authorLogin, headSha }) {
 	if (!reviewers || reviewers.size === 0) return "unknown";
 	try {
 		const reviews = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/reviews`);
-		const latestByReviewer = new Map();
-		for (const review of reviews) {
-			const login = review.user?.login;
-			if (!login || !reviewers.has(login) || login === authorLogin) continue;
-			// DISMISSED replaces the state of the review it dismissed, so it must still count as that reviewer's latest word.
-			if (!["APPROVED", "CHANGES_REQUESTED", "DISMISSED"].includes(review.state)) continue;
-			const previous = latestByReviewer.get(login);
-			if (!previous || new Date(review.submitted_at).getTime() > new Date(previous.submitted_at).getTime()) {
-				latestByReviewer.set(login, review);
-			}
-		}
-
-		const active = [...latestByReviewer.values()];
-		if (active.some((r) => r.state === "CHANGES_REQUESTED")) return "changes_requested";
-		if (active.some((r) => r.state === "APPROVED" && r.commit_id === headSha)) return "approved";
-		return "none";
+		return reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha });
 	} catch (e) {
 		console.warn("Unable to fetch reviews; skipping review reconciliation:", e.message);
 		return "unknown";
