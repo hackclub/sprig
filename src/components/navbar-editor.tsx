@@ -40,7 +40,7 @@ import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
-import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, findGamePullRequest, recordGamePullRequest, fetchCommitTreeSha, updatePullRequestTitle } from "../lib/game-saving/github";
+import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, findGamePullRequest, recordGamePullRequest, fetchCommitTreeSha, updatePullRequest, updatePullRequestTitle, EDITOR_BRANCH_PREFIX } from "../lib/game-saving/github";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -117,18 +117,18 @@ type StuckData = {
 	description: string;
 };
 
-const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any, githubState: any) => {
+const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any, githubState: any, forceReauth = false) => {
 	const startTime = Date.now();
 	try {
 		reportMetric('github_auth_popup.initiated');
 
-		if (isPublish) {
+		if (!forceReauth && isPublish) {
 			publishDropdown.value = true;
 			publishSuccess.value = true;
 			return;
 		}
 
-		if (githubState.value) {
+		if (!forceReauth && githubState.value) {
 			publishDropdown.value = true;
 			readyPublish.value = true;
 			return;
@@ -298,8 +298,13 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const isPublishing = useSignal(false);
     const publishSuccess = useSignal(false);
     const publishError = useSignal(false);
+	const publishErrorMessage = useSignal<string | null>(null);
 	const githubPRUrl = useSignal<string | null>(null);
 	const publishOutcome = useSignal<"new" | "updated" | "unchanged">("new");
+	const publishFormTitle = useSignal<string | null>(null);
+	const publishFormAuthor = useSignal<string | null>(null);
+	const publishFormDescription = useSignal("");
+	const publishFormControls = useSignal("");
 	
 	const githubState = useSignal<GithubState | undefined>(undefined)
 	
@@ -472,7 +477,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	
 
 
-	// also on the loaded game, so the next publish finds this pull request without searching
 	const rememberPullRequest = (url: string) => {
 		githubPRUrl.value = url;
 		const state = props.persistenceState.value;
@@ -483,6 +487,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 		if (isPublishing.value) return;
 		isPublishing.value = true;
 		const startTime = Date.now();
+		let reportedSpecificFailure = false;
+		const trackFailure = (metricName: string) => {
+			reportedSpecificFailure = true;
+			reportMetric(metricName);
+		};
 		try {
 
 			reportMetric("github_publish.initiated");
@@ -531,7 +540,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			}
  
 			if (!githubState.value?.session) {
-				reportMetric("github_publish.failure.token_missing");
+				trackFailure("github_publish.failure.token_missing");
 				throw new Error("GitHub access token not found.");
 			}
 
@@ -550,7 +559,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							readyPublish,
 							props.persistenceState.value.game.isPublished,
 							publishSuccess,
-							githubState
+							githubState,
+							true
 						);
 					}
 				}
@@ -558,13 +568,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				githubState.value = getGithubStateFromCookie()
 
 				if (!githubState.value?.session || !(await validateGitHubToken(githubState.value.session))) {
-					reportMetric("github_publish.failure.token_reauth_failed");
+					trackFailure("github_publish.failure.token_reauth_failed");
 					throw new Error("Failed to re-authenticate with GitHub.");
 				}
 			}
 
 			readyPublish.value = false;
 			publishError.value = false;
+			publishErrorMessage.value = null;
 			publishSuccess.value = false;
 			publishOutcome.value = "new";
 
@@ -581,12 +592,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				try {
 					openPR = await findGamePullRequest(accessToken, "hackclub", "sprig", yourGithubUsername, gamePath, githubPRUrl.value);
 				} catch (error) {
-					reportMetric("github_publish.failure.find_open_pr");
-					if (githubPRUrl.value) {
-						throw new Error("Failed to check this game's pull request: " + (error instanceof Error ? error.message : String(error)));
-					}
-					console.warn("Could not look for an open pull request for this game:", error);
+					trackFailure("github_publish.failure.find_open_pr");
+					throw new Error("Failed to check this game's pull request: " + (error instanceof Error ? error.message : String(error)));
 				}
+			} else {
+				throw new Error("GitHub username not found. Please re-authenticate.");
 			}
 
 			let repoOwner: string, repoName: string, branchName: string, baseSha: string;
@@ -599,11 +609,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				try {
 					baseSha = await fetchLatestCommitSha(accessToken, repoOwner, repoName, branchName);
 				} catch (error) {
-					reportMetric("github_publish.failure.commit_sha");
+					trackFailure("github_publish.failure.commit_sha");
 					throw new Error("Failed to fetch the pull request's latest commit: " + (error instanceof Error ? error.message : String(error)));
 				}
 
-				// the game's pull request has it under another name: rename it there, after asking
 				if (!openPR.files.some((file: any) => file.filename === gamePath && file.status !== "removed")) {
 					const addedGames = openPR.files.filter((file: any) => file.status === "added" && /^games\/[^/]+\.js$/.test(file.filename));
 					if (addedGames.length !== 1 || openPR.pullRequest.head.sha !== baseSha) {
@@ -611,6 +620,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					}
 					const oldName = addedGames[0].filename.slice("games/".length, -".js".length);
 					if (!window.confirm(`This renames your game in pull request #${pullNumber} from "${oldName}" to "${sanitizedGameTitle}". Continue?`)) {
+						reportMetric("github_publish.cancel_rename");
 						readyPublish.value = true;
 						return;
 					}
@@ -624,27 +634,27 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				try {
 					forkedRepo = await forkRepository(accessToken, "hackclub", "sprig");
 				} catch (error) {
-					reportMetric("github_publish.failure.fork");
+					trackFailure("github_publish.failure.fork");
 					console.warn("Fork might already exist. Fetching existing fork...");
 					try {
 						forkedRepo = await fetchForkedRepository(accessToken, "hackclub", "sprig", yourGithubUsername || "");
 					} catch (fetchError: any) {
-						reportMetric("github_publish.failure.fetch_fork");
+						trackFailure("github_publish.failure.fetch_fork");
 						throw new Error("Failed to fetch fork: " + fetchError.message);
 					}
 				}
 
 				const latestCommitSha = await fetchLatestCommitSha(accessToken, "hackclub", "sprig", forkedRepo.default_branch);
 				if (!latestCommitSha) {
-					reportMetric("github_publish.failure.commit_sha");
+					trackFailure("github_publish.failure.commit_sha");
 					throw new Error("Failed to fetch the latest commit SHA.");
 				}
 
-				const newBranchName = `Automated-PR-${Date.now()}`;
+				const newBranchName = `${EDITOR_BRANCH_PREFIX}${Date.now()}`;
 				try {
 					await createBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, latestCommitSha);
 				} catch (error) {
-					reportMetric("github_publish.failure.branch");
+					trackFailure("github_publish.failure.branch");
 					throw new Error("Failed to create branch: " + (error instanceof Error ? error.message : String(error)));
 				}
 
@@ -661,7 +671,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					imageBlobSha = await createBlobForImage(accessToken, repoOwner, repoName, imageBase64.split(',')[1]);
 				}
 			} catch (error) {
-				reportMetric("github_publish.failure.image_blob");
+				trackFailure("github_publish.failure.image_blob");
 				throw new Error("Failed to create image blob: " + (error instanceof Error ? error.message : String(error)));
 			}
 
@@ -682,50 +692,71 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					]
 				);
 			} catch (error) {
-				reportMetric("github_publish.failure.tree_commit");
+				trackFailure("github_publish.failure.tree_commit");
 				throw new Error("Failed to create tree and commit: " + (error instanceof Error ? error.message : String(error)));
 			}
 
-			const codeChanged = !openPR || treeSha !== await fetchCommitTreeSha(accessToken, repoOwner, repoName, baseSha);
+			let codeChanged = !openPR;
+			if (openPR) {
+				try {
+					const baseTreeSha = await fetchCommitTreeSha(accessToken, repoOwner, repoName, baseSha);
+					codeChanged = treeSha !== baseTreeSha;
+				} catch (error) {
+					trackFailure("github_publish.failure.fetch_tree_sha");
+					throw new Error("Failed to check commit tree: " + (error instanceof Error ? error.message : String(error)));
+				}
+			}
+
 			if (codeChanged) {
 				let newCommit;
 				try {
 					newCommit = await createCommit(accessToken, repoOwner, repoName, `Sprig App - ${gameTitle}`, treeSha, baseSha);
 				} catch (error) {
-					reportMetric("github_publish.failure.commit");
+					trackFailure("github_publish.failure.commit");
 					throw new Error("Failed to create commit: " + (error instanceof Error ? error.message : String(error)));
 				}
 
 				try {
 					await updateBranch(accessToken, repoOwner, repoName, branchName, newCommit.sha, !openPR);
-				} catch (error) {
-					reportMetric("github_publish.failure.branch_update");
+				} catch (error: any) {
+					trackFailure("github_publish.failure.branch_update");
+					if (error?.status === 422 || error?.message?.includes("422")) {
+						throw new Error("The pull request branch has new changes on GitHub that would be overwritten. Please merge or reconcile them on GitHub first.");
+					}
 					throw new Error("Failed to update branch: " + (error instanceof Error ? error.message : String(error)));
 				}
 			}
 
 			if (openPR) {
 				const pullRequest = openPR.pullRequest;
-				if (renamedFrom && pullRequest.title !== prTitle) {
+				const titleChanged = pullRequest.title !== prTitle;
+				const bodyChanged = Boolean(prBody && pullRequest.body !== prBody);
+				if (titleChanged || bodyChanged) {
 					try {
-						await updatePullRequestTitle(accessToken, "hackclub", "sprig", pullRequest.number, prTitle);
+						await updatePullRequest(accessToken, "hackclub", "sprig", pullRequest.number, {
+							title: prTitle,
+							body: prBody,
+						});
 					} catch (error) {
-						reportMetric("github_publish.failure.pr_update");
+						trackFailure("github_publish.failure.pr_update");
 						throw new Error("Failed to update the pull request: " + (error instanceof Error ? error.message : String(error)));
 					}
 				}
 
-				try {
-					await recordGamePullRequest(gameID ?? '', pullRequest.html_url);
-				} catch (error) {
-					reportMetric("github_publish.failure.record_pr");
-					console.warn("The pull request was updated, but saving it on the game failed:", error);
+				if (gameID) {
+					try {
+						await recordGamePullRequest(gameID, pullRequest.html_url);
+					} catch (error) {
+						trackFailure("github_publish.failure.record_pr");
+						console.warn("The pull request was updated, but saving it on the game failed:", error);
+					}
 				}
 
 				rememberPullRequest(pullRequest.html_url);
-				publishOutcome.value = codeChanged ? "updated" : "unchanged";
+				const prUpdated = codeChanged || titleChanged || bodyChanged;
+				publishOutcome.value = prUpdated ? "updated" : "unchanged";
 				reportMetric("github_publish.success");
-				reportMetric(codeChanged ? "github_publish.success.updated_pr" : "github_publish.success.unchanged_pr");
+				reportMetric(prUpdated ? "github_publish.success.updated_pr" : "github_publish.success.unchanged_pr");
 
 				const timeTaken = Date.now() - startTime;
 				reportMetric('github_publish.time_taken', timeTaken, 'timing');
@@ -744,7 +775,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					"main",
 					prBody,
 					repoOwner,
-					gameID ?? ''
+					gameID ?? '',
+					(err) => {
+						trackFailure("github_publish.failure.record_pr");
+						console.warn("The pull request was created, but saving it on the game failed:", err);
+					}
 				);
 
 				rememberPullRequest(pr.html_url);
@@ -755,13 +790,16 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 				publishSuccess.value = true;
 			} catch (error) {
-				reportMetric("github_publish.failure.pr_creation");
+				trackFailure("github_publish.failure.pr_creation");
 				throw new Error("Failed to create pull request: " + (error instanceof Error ? error.message : String(error)));
 			}
 		} catch (error) {
 			console.error("Publishing failed:", error);
+			publishErrorMessage.value = error instanceof Error ? error.message : String(error);
 			publishError.value = true;
-			reportMetric("github_publish.failure.general");
+			if (!reportedSpecificFailure) {
+				reportMetric("github_publish.failure.general");
+			}
 
 			const timeTaken = Date.now() - startTime;
 			reportMetric('github_publish.failure_time', timeTaken, 'timing');
@@ -948,6 +986,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									props.persistenceState.value.game !== 'LOADING'
 								) {
 									if (typeof props.persistenceState.value.game !== 'string') {
+										publishError.value = false;
+										publishErrorMessage.value = null;
 										await openGitHubAuthPopup(
 											props.persistenceState.value.session?.user.id ?? null,
 											publishDropdown,
@@ -985,7 +1025,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 												props.persistenceState.value.game !== "LOADING" ? (
 												<input
 													id="gameTitle"
-													defaultValue={props.persistenceState.value.game.name ?? ""}
+													value={publishFormTitle.value ?? props.persistenceState.value.game.name ?? ""}
+													onInput={(e) => {
+														publishFormTitle.value = (e.currentTarget as HTMLInputElement).value;
+													}}
 													type="text"
 													placeholder="Enter your game title"
 												/>
@@ -999,7 +1042,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											<label htmlFor="authorName">Author Name</label>
 											<input
 												id="authorName"
-												defaultValue={githubState.value?.username ?? ""}
+												value={publishFormAuthor.value ?? githubState.value?.username ?? ""}
+												onInput={(e) => {
+													publishFormAuthor.value = (e.currentTarget as HTMLInputElement).value;
+												}}
 												type="text"
 												placeholder="Enter author name"
 											/>
@@ -1010,7 +1056,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											<label htmlFor="gameDescription">About Your Game</label>
 											<textarea
 												id="gameDescription"
-												v-model="gameDescription"
+												value={publishFormDescription.value}
+												onInput={(e) => {
+													publishFormDescription.value = (e.currentTarget as HTMLTextAreaElement).value;
+												}}
 												placeholder="Describe the key objectives, gameplay mechanics, and what makes your game unique."
 												rows={4}
 											/>
@@ -1021,7 +1070,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											<label htmlFor="gameControlsDescription">How to Play Your Game</label>
 											<textarea
 												id="gameControlsDescription"
-												v-model="gameControlsDescription"
+												value={publishFormControls.value}
+												onInput={(e) => {
+													publishFormControls.value = (e.currentTarget as HTMLTextAreaElement).value;
+												}}
 												placeholder="Describe how to play your game here (e.g., controls)..."
 												rows={4}
 											/>
@@ -1117,13 +1169,18 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								</div>
 							)}
 
-							{publishError.value && (
+							{publishError.value && !readyPublish.value && !publishSuccess.value && (
 								<div className={styles.popupHeader}>
 									<h2>Error</h2>
 									<p className={styles.successMessage}>
-										Something went wrong while publishing your game. Please try again.
+										{publishErrorMessage.value || "Something went wrong while publishing your game. Please try again."}
 									</p>
-									<Button onClick={() => { publishError.value = false; publishDropdown.value = true; readyPublish.value = true; publishSuccess.value = false; }}>
+									{githubPRUrl.value && (
+										<Button onClick={() => window.open(githubPRUrl.value!, "_blank")}>
+											View on GitHub
+										</Button>
+									)}
+									<Button onClick={() => { publishError.value = false; publishErrorMessage.value = null; publishDropdown.value = true; readyPublish.value = true; publishSuccess.value = false; }}>
 										Try Again
 									</Button>
 								</div>
