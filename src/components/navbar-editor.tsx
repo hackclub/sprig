@@ -700,8 +700,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 				try {
 					await updateBranch(accessToken, repoOwner, repoName, branchName, newCommit.sha, !openPR);
-				} catch (error) {
+				} catch (error: any) {
 					reportMetric("github_publish.failure.branch_update");
+					if (error?.status === 422 || error?.message?.includes("422")) {
+						throw new Error("The pull request branch has new changes on GitHub that would be overwritten. Please merge or reconcile them on GitHub first.");
+					}
 					throw new Error("Failed to update branch: " + (error instanceof Error ? error.message : String(error)));
 				}
 			}

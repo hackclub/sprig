@@ -1,39 +1,78 @@
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+export class GitHubApiError extends Error {
+	status: number;
+	data: any;
+	constructor(status: number, statusText: string, data: any) {
+		const detail = data?.message || (typeof data === "string" ? data : JSON.stringify(data));
+		super(`GitHub API Error (${status}): ${statusText}${detail ? ` - ${detail}` : ""}`);
+		this.name = "GitHubApiError";
+		this.status = status;
+		this.data = data;
+	}
+}
+
 // Handles the response from GitHub API requests.
-// Throws an error with a detailed message if the response is not OK (status code 2xx).
+// Throws a GitHubApiError with detailed status and message if the response is not OK (status code 2xx).
 async function handleResponse(response: Response): Promise<any> {
 	if (!response.ok) {
 		const errorData = await response.json().catch(() => ({}));
-		const errorMessage = `GitHub API Error (${response.status}): ${
-			response.statusText
-		} - ${JSON.stringify(errorData)}`;
-		console.error(errorMessage);
-		throw new Error(errorMessage);
+		const error = new GitHubApiError(response.status, response.statusText, errorData);
+		console.error(error.message);
+		throw error;
 	}
 	return response.json().catch(() => ({}));
 }
 
 // Sends a GitHub API request and retries up to a specified number of times if it fails.
-// Includes an exponential backoff between retries (delay increases with each retry).
+// Only network errors, rate limits (429), and server errors (5xx) are retried.
+// Deterministic 4xx client errors are returned immediately without wasting retry cycles.
 async function fetchWithRetry(
 	url: string,
 	options: RequestInit,
 	retries: number = 3,
 	delayMs: number = 1000
 ): Promise<Response> {
-	let response: Response;
+	let lastResponse: Response | undefined;
+	let lastError: unknown;
+
 	for (let attempt = 0; attempt < retries; attempt++) {
-		response = await fetch(url, options);
-		if (response.ok) return response;
-		if (attempt < retries - 1) {
-			console.warn(
-				`Retrying GitHub API request (${attempt + 1}/${retries})`
-			); // Log a warning for each retry attempt
-			await delay(delayMs * (attempt + 1)); // Exponential backoff before retrying
+		try {
+			const response = await fetch(url, options);
+			if (response.ok) return response;
+
+			lastResponse = response;
+
+			const isRetryable = response.status === 429 || response.status >= 500;
+			if (!isRetryable) {
+				return response;
+			}
+
+			if (attempt < retries - 1) {
+				console.warn(
+					`Retrying GitHub API request (${attempt + 1}/${retries}) for status ${response.status}`
+				);
+				await delay(delayMs * (attempt + 1));
+			}
+		} catch (error) {
+			lastError = error;
+			if (attempt < retries - 1) {
+				console.warn(
+					`Retrying GitHub API request (${attempt + 1}/${retries}) after network error:`,
+					error
+				);
+				await delay(delayMs * (attempt + 1));
+			}
 		}
 	}
-	throw new Error("Max retries reached, request failed."); // Throw error if all retries fail
+
+	if (lastResponse) {
+		return lastResponse;
+	}
+
+	throw lastError instanceof Error
+		? lastError
+		: new Error("Max retries reached, request failed.");
 }
 
 // Generates authorization headers for GitHub API requests using the provided access token.
