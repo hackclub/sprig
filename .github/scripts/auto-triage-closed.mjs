@@ -27,8 +27,7 @@ console.log(`PR #${pullRequest.number} closed for user ${submitterLogin}. Checki
 const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
 const targetLogin = submitterLogin.toLowerCase();
 const siblingPRs = openPulls.filter((pr) => {
-	if (pr.user?.login?.toLowerCase() !== targetLogin) return false;
-	return pr.labels?.some((l) => (typeof l === "string" ? l : l.name)?.toLowerCase() === "submission");
+	return pr.number !== pullRequest.number && !pr.draft && pr.user?.login?.toLowerCase() === targetLogin;
 });
 
 for (const sibling of siblingPRs) {

@@ -71,11 +71,12 @@ async function handleOlderDuplicate(pullRequest, labels) {
 	const notice = comments.find((comment) => comment.body?.includes(DUPLICATE_NOTICE_MARKER));
 	const parsed = parseOlderNotice(notice?.body);
 	if (!parsed) {
+		const authorLogin = pullRequest.user?.login?.toLowerCase();
 		const hasOlderDuplicates = openPulls.some(
 			(pr) =>
 				pr.number !== pullRequest.number &&
 				!closedDuplicateNumbers.has(pr.number) &&
-				pr.user?.login === pullRequest.user?.login &&
+				pr.user?.login?.toLowerCase() === authorLogin &&
 				pr.labels?.some((label) => label.name === DUPLICATE_LABEL)
 		);
 		if (!hasOlderDuplicates) {
@@ -108,11 +109,12 @@ async function handleOlderDuplicate(pullRequest, labels) {
 	await githubRequest(token, "PATCH", `/repos/${owner}/${repo}/issues/${pullRequest.number}`, { state: "closed" });
 	closedDuplicateNumbers.add(pullRequest.number);
 
+	const authorLogin = pullRequest.user?.login?.toLowerCase();
 	const stillDuplicated = openPulls.some(
 		(pr) =>
 			pr.number !== latestNumber &&
 			!closedDuplicateNumbers.has(pr.number) &&
-			pr.user?.login === pullRequest.user?.login &&
+			pr.user?.login?.toLowerCase() === authorLogin &&
 			pr.labels?.some((label) => label.name === DUPLICATE_LABEL)
 	);
 	if (!stillDuplicated) {

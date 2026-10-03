@@ -237,8 +237,9 @@ async function detectDuplicateSubmissions(pullFiles) {
 	if (!login || reviewers.has(login) || !addsGame(pullFiles, pullRequest.body ?? "")) return { group: null };
 	try {
 		const openPulls = await getOpenPulls();
+		const targetLogin = login.toLowerCase();
 		const siblings = openPulls
-			.filter((pr) => pr.number !== prNumber && pr.user?.login === login && !pr.draft)
+			.filter((pr) => pr.number !== prNumber && pr.user?.login?.toLowerCase() === targetLogin && !pr.draft)
 			.slice(0, 20);
 
 		const siblingNumbers = [];
