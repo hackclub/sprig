@@ -3,7 +3,7 @@
 @description: Simple but satisying zen loop game. Mow the lawn, and it will come back.
 @author: Aarnav Verma
 @tags: ['zen', 'satifying']
-@addedOn: 2025-00-00
+@addedOn: 2026-10-03
 */
 
 const darkGrass = "g"
