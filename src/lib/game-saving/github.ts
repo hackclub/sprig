@@ -328,8 +328,16 @@ export async function findGamePullRequest(
 ): Promise<{ pullRequest: any; files: any[] } | null> {
 	const saved = savedPullRequestUrl?.match(new RegExp(`^https://github\\.com/${owner}/${repo}/pull/(\\d+)`));
 	if (saved) {
-		const found = await fetchPullRequestWithFiles(accessToken, owner, repo, Number(saved[1]));
-		if (isEditorPullRequest(found.pullRequest, author)) return found;
+		try {
+			const found = await fetchPullRequestWithFiles(accessToken, owner, repo, Number(saved[1]));
+			if (isEditorPullRequest(found.pullRequest, author)) return found;
+		} catch (error: any) {
+			if (error?.status === 404 || error?.message?.includes("404")) {
+				console.warn(`Saved pull request #${saved[1]} not found (404). Falling through to search.`);
+			} else {
+				throw error;
+			}
+		}
 	}
 
 	const query = encodeURIComponent(`repo:${owner}/${repo} is:pr is:open author:${author}`);

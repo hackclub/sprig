@@ -298,6 +298,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const isPublishing = useSignal(false);
     const publishSuccess = useSignal(false);
     const publishError = useSignal(false);
+	const publishErrorMessage = useSignal<string | null>(null);
 	const githubPRUrl = useSignal<string | null>(null);
 	const publishOutcome = useSignal<"new" | "updated" | "unchanged">("new");
 	
@@ -565,6 +566,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 			readyPublish.value = false;
 			publishError.value = false;
+			publishErrorMessage.value = null;
 			publishSuccess.value = false;
 			publishOutcome.value = "new";
 
@@ -760,6 +762,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			}
 		} catch (error) {
 			console.error("Publishing failed:", error);
+			publishErrorMessage.value = error instanceof Error ? error.message : String(error);
 			publishError.value = true;
 			reportMetric("github_publish.failure.general");
 
@@ -1121,8 +1124,13 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								<div className={styles.popupHeader}>
 									<h2>Error</h2>
 									<p className={styles.successMessage}>
-										Something went wrong while publishing your game. Please try again.
+										{publishErrorMessage.value || "Something went wrong while publishing your game. Please try again."}
 									</p>
+									{githubPRUrl.value && (
+										<Button onClick={() => window.open(githubPRUrl.value!, "_blank")}>
+											View on GitHub
+										</Button>
+									)}
 									<Button onClick={() => { publishError.value = false; publishDropdown.value = true; readyPublish.value = true; publishSuccess.value = false; }}>
 										Try Again
 									</Button>
