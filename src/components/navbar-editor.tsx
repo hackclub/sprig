@@ -1180,7 +1180,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											View on GitHub
 										</Button>
 									)}
-									<Button onClick={() => { publishError.value = false; publishDropdown.value = true; readyPublish.value = true; publishSuccess.value = false; }}>
+									<Button onClick={() => { publishError.value = false; publishErrorMessage.value = null; publishDropdown.value = true; readyPublish.value = true; publishSuccess.value = false; }}>
 										Try Again
 									</Button>
 								</div>
