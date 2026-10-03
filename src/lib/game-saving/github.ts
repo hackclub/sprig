@@ -4,8 +4,9 @@ export class GitHubApiError extends Error {
 	status: number;
 	data: any;
 	constructor(status: number, statusText: string, data: any) {
-		const detail = data?.message || (typeof data === "string" ? data : JSON.stringify(data));
-		super(`GitHub API Error (${status}): ${statusText}${detail ? ` - ${detail}` : ""}`);
+		const rawDetail = data?.message || (typeof data === "string" ? data : (data && Object.keys(data).length > 0 ? JSON.stringify(data) : ""));
+		const detail = rawDetail && rawDetail !== statusText ? ` - ${rawDetail}` : "";
+		super(`GitHub API Error (${status}): ${statusText}${detail}`);
 		this.name = "GitHubApiError";
 		this.status = status;
 		this.data = data;
