@@ -123,12 +123,14 @@ const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, 
 		reportMetric('github_auth_popup.initiated');
 
 		if (isPublish) {
+			publishError.value = false;
 			publishDropdown.value = true;
 			publishSuccess.value = true;
 			return;
 		}
 
 		if (githubState.value) {
+			publishError.value = false;
 			publishDropdown.value = true;
 			readyPublish.value = true;
 			return;
@@ -983,6 +985,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									props.persistenceState.value.game !== 'LOADING'
 								) {
 									if (typeof props.persistenceState.value.game !== 'string') {
+										publishError.value = false;
+										publishErrorMessage.value = null;
 										await openGitHubAuthPopup(
 											props.persistenceState.value.session?.user.id ?? null,
 											publishDropdown,
@@ -1164,7 +1168,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								</div>
 							)}
 
-							{publishError.value && (
+							{publishError.value && !readyPublish.value && !publishSuccess.value && (
 								<div className={styles.popupHeader}>
 									<h2>Error</h2>
 									<p className={styles.successMessage}>
