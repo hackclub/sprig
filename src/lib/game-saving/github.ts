@@ -13,8 +13,6 @@ export class GitHubApiError extends Error {
 	}
 }
 
-// Handles the response from GitHub API requests.
-// Throws a GitHubApiError with detailed status and message if the response is not OK (status code 2xx).
 async function handleResponse(response: Response): Promise<any> {
 	if (!response.ok) {
 		const errorData = await response.json().catch(() => ({}));
@@ -25,9 +23,6 @@ async function handleResponse(response: Response): Promise<any> {
 	return response.json().catch(() => ({}));
 }
 
-// Sends a GitHub API request and retries up to a specified number of times if it fails.
-// Only network errors, rate limits (429), and server errors (5xx) are retried.
-// Deterministic 4xx client errors are returned immediately without wasting retry cycles.
 async function fetchWithRetry(
 	url: string,
 	options: RequestInit,
@@ -294,7 +289,6 @@ export async function createPullRequest(
 	}
 }
 
-// Saves the pull request URL on the game and marks the game as published.
 export async function recordGamePullRequest(
 	gameId: string,
 	prUrl: string
@@ -331,11 +325,9 @@ export async function recordGamePullRequest(
 	}
 }
 
-// Prefix and regex for pull request branches created by the web editor
 export const EDITOR_BRANCH_PREFIX = "Automated-PR-";
 export const EDITOR_BRANCH_REGEX = /^Automated-PR-\d+$/;
 
-// True for an open pull request the editor made from the author's own fork (branch Automated-PR-<time>).
 function isEditorPullRequest(pullRequest: any, author: string): boolean {
 	return (
 		pullRequest?.state === "open" &&
@@ -367,10 +359,6 @@ async function fetchPullRequestWithFiles(
 	return { pullRequest, files };
 }
 
-// Finds the open pull request to update when a game is published again, avoiding duplicate PRs.
-// If a saved PR URL exists, it is checked first; a 404 falls through to search, while other errors throw.
-// When searching, open editor PRs by the author are examined for games matching gamePath.
-// If any candidate fails to load and no match was found, an error is thrown to avoid false negatives.
 export async function findGamePullRequest(
 	accessToken: string,
 	owner: string,
@@ -397,8 +385,6 @@ export async function findGamePullRequest(
 		}
 	}
 
-	// Search open PRs by this author. Authors normally have at most a few open PRs in Sprig,
-	// so per_page=100 and sort=created/order=asc easily covers all open PRs in one page.
 	const query = encodeURIComponent(`repo:${owner}/${repo} is:pr is:open author:${author}`);
 	const searchResponse = await fetchWithRetry(
 		`https://api.github.com/search/issues?q=${query}&sort=created&order=asc&per_page=100`,
@@ -455,7 +441,6 @@ export async function findGamePullRequest(
 	return null;
 }
 
-// Fetches the tree SHA of a commit, to tell whether a new tree changes anything.
 export async function fetchCommitTreeSha(
 	accessToken: string,
 	owner: string,

@@ -479,7 +479,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	
 
 
-	// also on the loaded game, so the next publish finds this pull request without searching
 	const rememberPullRequest = (url: string) => {
 		githubPRUrl.value = url;
 		const state = props.persistenceState.value;
@@ -487,7 +486,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	};
 
 	const publishToGithub = async (githubState: Signal<GithubState | undefined>, gameID: string | undefined) => {
-		// Prevent concurrent publish attempts while another publish or token check is in progress
 		if (isPublishing.value) return;
 		isPublishing.value = true;
 		const startTime = Date.now();
@@ -616,7 +614,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					throw new Error("Failed to fetch the pull request's latest commit: " + (error instanceof Error ? error.message : String(error)));
 				}
 
-				// the game's pull request has it under another name: rename it there, after asking
 				if (!openPR.files.some((file: any) => file.filename === gamePath && file.status !== "removed")) {
 					const addedGames = openPR.files.filter((file: any) => file.status === "added" && /^games\/[^/]+\.js$/.test(file.filename));
 					if (addedGames.length !== 1 || openPR.pullRequest.head.sha !== baseSha) {
@@ -700,7 +697,6 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				throw new Error("Failed to create tree and commit: " + (error instanceof Error ? error.message : String(error)));
 			}
 
-			// When updating an existing PR, skip pushing a commit if the file tree is identical
 			let codeChanged = !openPR;
 			if (openPR) {
 				try {
