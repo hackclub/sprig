@@ -56,6 +56,7 @@ async function fetchWithRetry(
 			}
 		} catch (error) {
 			lastError = error;
+			lastResponse = undefined;
 			if (attempt < retries - 1) {
 				console.warn(
 					`Retrying GitHub API request (${attempt + 1}/${retries}) after network error:`,
