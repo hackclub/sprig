@@ -117,18 +117,18 @@ type StuckData = {
 	description: string;
 };
 
-const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any, githubState: any) => {
+const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any, githubState: any, forceReauth = false) => {
 	const startTime = Date.now();
 	try {
 		reportMetric('github_auth_popup.initiated');
 
-		if (isPublish) {
+		if (!forceReauth && isPublish) {
 			publishDropdown.value = true;
 			publishSuccess.value = true;
 			return;
 		}
 
-		if (githubState.value) {
+		if (!forceReauth && githubState.value) {
 			publishDropdown.value = true;
 			readyPublish.value = true;
 			return;
@@ -559,7 +559,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 							readyPublish,
 							props.persistenceState.value.game.isPublished,
 							publishSuccess,
-							githubState
+							githubState,
+							true
 						);
 					}
 				}
