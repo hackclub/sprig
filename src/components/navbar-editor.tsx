@@ -123,14 +123,12 @@ const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, 
 		reportMetric('github_auth_popup.initiated');
 
 		if (isPublish) {
-			publishError.value = false;
 			publishDropdown.value = true;
 			publishSuccess.value = true;
 			return;
 		}
 
 		if (githubState.value) {
-			publishError.value = false;
 			publishDropdown.value = true;
 			readyPublish.value = true;
 			return;
