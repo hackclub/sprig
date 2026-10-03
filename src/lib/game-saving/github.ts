@@ -409,13 +409,37 @@ export async function findGamePullRequest(
 
 	let skippedCount = 0;
 	for (const item of results.items ?? []) {
+		let pullRequest;
 		try {
-			const found = await fetchPullRequestWithFiles(accessToken, owner, repo, item.number);
-			if (!isEditorPullRequest(found.pullRequest, author)) continue;
-			if (found.files.some((file: any) => file.filename === gamePath && file.status !== "removed")) return found;
+			const pullResponse = await fetchWithRetry(
+				`https://api.github.com/repos/${owner}/${repo}/pulls/${item.number}`,
+				{
+					headers: getAuthHeaders(accessToken),
+				}
+			);
+			pullRequest = await handleResponse(pullResponse);
 		} catch (error) {
 			skippedCount++;
 			console.warn(`Skipping pull request #${item.number} while looking for this game's pull request:`, error);
+			continue;
+		}
+
+		if (!isEditorPullRequest(pullRequest, author)) continue;
+
+		try {
+			const filesResponse = await fetchWithRetry(
+				`https://api.github.com/repos/${owner}/${repo}/pulls/${item.number}/files?per_page=100`,
+				{
+					headers: getAuthHeaders(accessToken),
+				}
+			);
+			const files = await handleResponse(filesResponse);
+			if (files.some((file: any) => file.filename === gamePath && file.status !== "removed")) {
+				return { pullRequest, files };
+			}
+		} catch (error) {
+			skippedCount++;
+			console.warn(`Skipping files for pull request #${item.number}:`, error);
 		}
 	}
 
