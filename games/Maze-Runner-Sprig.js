@@ -1,12 +1,11 @@
-/// 
-
+///
 /*
  * @title Maze Runner Ultra
  * @author John Carlos Caicedo
  * @description Un juego retro de laberintos de múltiples niveles progresivos con recolección de llaves y sistema de XP.
  * @tags ["maze", "puzzle", "retro"]
  * @addedOn 2026-10-01
-*/
+ */
 
 // ==========================================
 // GAME: Maze Runner Ultra - Hack Club Edition
