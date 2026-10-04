@@ -17,8 +17,8 @@ const melody2 = tune `
 500: C5/500,
 15500`
 
-p1_wins = 0
-p2_wins = 0
+let p1_wins = 0
+let p2_wins = 0
 setLegend(
   [ player_1, bitmap`
 ................

@@ -418,8 +418,8 @@ var updatePlayer = (player) => {
 	addSprite(
 		tail[0],
 		tail[1],
-		tileUnderTail.find((v) => v.type == grass || v.type == grassWithStraws)
-			?.type ?? ""
+		(tileUnderTail.find((v) => v.type == grass || v.type == grassWithStraws)
+			|| {}).type || ""
 	);
 	const nextTail = player.parts[player.parts.length - 2];
 	if (!tileUnderTail.find((v) => v.type == player.food)) {
@@ -432,9 +432,9 @@ var updatePlayer = (player) => {
 			addSprite(
 				nextTail[0],
 				nextTail[1],
-				tileUnderNextTail.find(
+				(tileUnderNextTail.find(
 					(v) => v.type == grass || v.type == grassWithStraws
-				)?.type ?? ""
+				) || {}).type || ""
 			);
 			game.points--;
 		}

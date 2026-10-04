@@ -804,10 +804,11 @@ function checkWinCondition() {
 }
 
 onInput("k", () => {
+  if (!getPlayerDirection()) return;
   getPlayerDirection().y -= 1
 
   setTimeout(() => {
-    getPlayerDirection().y += 1
+    if (getPlayerDirection()) getPlayerDirection().y += 1
   }, 500);
 
 });
@@ -833,6 +834,7 @@ onInput("i", () => {
 });
 
 onInput("s", () => {
+  if (!getPlayerDirection()) return;
   getPlayerDirection().y += 1;
 
 });
@@ -853,6 +855,7 @@ onInput("w", () => {
 
 onInput("a", () => {
   const currentPlayer = getPlayerDirection();
+  if (!currentPlayer) return;
   const playerx = getPlayerDirection().x;
   const playery = getPlayerDirection().y;
   currentPlayer.scale = -5
@@ -864,11 +867,13 @@ onInput("a", () => {
 
 onInput("d", () => {
   const currentPlayer = getPlayerDirection();
+  if (!currentPlayer) return;
   currentPlayer.x += 1;
 
 
 });
 
+const nextFrame = typeof requestAnimationFrame !== "undefined" ? requestAnimationFrame : fn => { if (!fn.looping) { fn.looping = true; setInterval(fn, 1000 / 60) } };
 function gameLoop() {
   // Check for collisions between player and barrels
   handlePlayerBarrelCollisions();
@@ -879,7 +884,7 @@ function gameLoop() {
   // Additional game logic can be added here
 
   // Request the next animation frame to continue the game loop
-  requestAnimationFrame(gameLoop);
+  nextFrame(gameLoop);
 }
 
 // Start the game loop
@@ -892,7 +897,7 @@ function winLoop() {
     checkWinCondition();
   }
 
-  requestAnimationFrame(winLoop);
+  nextFrame(winLoop);
 }
 
 winLoop();
@@ -903,7 +908,7 @@ afterInput(() => {
   const targetYCoordinate = 12; // Specify the target y coordinate
 
   // Check if the player is at the exact specified coordinates
-  if (currentPlayer.x === targetXCoordinate && currentPlayer.y === targetYCoordinate) {
+  if (currentPlayer && currentPlayer.x === targetXCoordinate && currentPlayer.y === targetYCoordinate) {
     currentPlayer.y += 1; // Adjust the y position by adding 1
   }
 });

@@ -671,15 +671,19 @@ setPushables({
 })
 
 onInput("w", () => {
+  if (!getFirst(player)) return
   getFirst(player).y -= 1
 })
 onInput("a", () => {
+  if (!getFirst(player)) return
   getFirst(player).x -= 1
 })
 onInput("s", () => {
+  if (!getFirst(player)) return
   getFirst(player).y += 1
 })
 onInput("d", () => {
+  if (!getFirst(player)) return
   getFirst(player).x += 1
 })
 
@@ -697,7 +701,9 @@ onInput("i", () => {
 })
 
 onInput("k", () => {
+  if (!getFirst(player)) return
   if ((getFirst(player).x == 2) & (getFirst(player).y == 1)){
+    if (!getFirst(card1)) return
     getFirst(card1).type = flip_1
     cards_1_14 += 1
     cards_flipped += 1
@@ -727,6 +733,7 @@ onInput("k", () => {
     }
   }
   if ((getFirst(player).x == 3) & (getFirst(player).y == 4)){
+    if (!getFirst(card14)) return
     getFirst(card14).type = flip_14
     cards_1_14 += 1
     cards_flipped += 1
@@ -756,6 +763,7 @@ onInput("k", () => {
     }
   }
   if ((getFirst(player).x == 3) & (getFirst(player).y == 1)){
+    if (!getFirst(card2)) return
     getFirst(card2).type = flip_2
     cards_2_8 += 1
     cards_flipped += 1
@@ -785,6 +793,7 @@ onInput("k", () => {
     }
   }
   if ((getFirst(player).x == 5) & (getFirst(player).y == 2)) {
+    if (!getFirst(card8)) return
     getFirst(card8).type = flip_8
     cards_2_8 += 1
     cards_flipped += 1
@@ -814,6 +823,7 @@ onInput("k", () => {
     }
   }
   if ((getFirst(player).x == 4) & (getFirst(player).y == 1)) {
+    if (!getFirst(card3)) return
     getFirst(card3).type = flip_3
     cards_3_9 += 1
     cards_flipped += 1
@@ -843,6 +853,7 @@ onInput("k", () => {
     }
   }
   if ((getFirst(player).x == 2) & (getFirst(player).y == 3)) {
+    if (!getFirst(card9)) return
     getFirst(card9).type = flip_9
     cards_3_9 += 1
     cards_flipped += 1
@@ -872,6 +883,7 @@ onInput("k", () => {
     }
   }
   if ((getFirst(player).x == 5) & (getFirst(player).y == 1)) {
+    if (!getFirst(card4)) return
     getFirst(card4).type = flip_4
     cards_4_12 += 1
     cards_flipped += 1
@@ -901,6 +913,7 @@ onInput("k", () => {
     }
   }
   if ((getFirst(player).x == 5) & (getFirst(player).y == 3)) {
+    if (!getFirst(card12)) return
     getFirst(card12).type = flip_12
     cards_4_12 += 1
     cards_flipped += 1
@@ -930,6 +943,7 @@ onInput("k", () => {
     }
   }
   if ((getFirst(player).x == 2) & (getFirst(player).y == 2)) {
+    if (!getFirst(card5)) return
     getFirst(card5).type = flip_5
     cards_5_6 += 1
     cards_flipped += 1
@@ -959,6 +973,7 @@ onInput("k", () => {
     }
   }
   if ((getFirst(player).x == 3) & (getFirst(player).y == 2)) {
+    if (!getFirst(card6)) return
     getFirst(card6).type = flip_6
     cards_5_6 += 1
     cards_flipped += 1
@@ -988,6 +1003,7 @@ onInput("k", () => {
     }
   }
   if ((getFirst(player).x == 4) & (getFirst(player).y == 2)) {
+    if (!getFirst(card7)) return
     getFirst(card7).type = flip_7
     cards_7_13 += 1
     cards_flipped += 1
@@ -1017,6 +1033,7 @@ onInput("k", () => {
     }
   }
   if ((getFirst(player).x == 2) & (getFirst(player).y == 4)) {
+    if (!getFirst(card13)) return
     getFirst(card13).type = flip_13
     cards_7_13 += 1
     cards_flipped += 1
@@ -1046,6 +1063,7 @@ onInput("k", () => {
     }
   }
   if ((getFirst(player).x == 3) & (getFirst(player).y == 3)) {
+    if (!getFirst(card10)) return
     getFirst(card10).type = flip_10
     cards_10_16 += 1
     cards_flipped += 1
@@ -1075,6 +1093,7 @@ onInput("k", () => {
     }
   }
   if ((getFirst(player).x == 5) & (getFirst(player).y == 4)) {
+    if (!getFirst(card16)) return
     getFirst(card16).type = flip_16
     cards_10_16 += 1
     cards_flipped += 1
@@ -1104,6 +1123,7 @@ onInput("k", () => {
     }
   }
   if ((getFirst(player).x == 4) & (getFirst(player).y == 3)) {
+    if (!getFirst(card11)) return
     getFirst(card11).type = flip_11
     cards_11_15 += 1
     cards_flipped += 1
@@ -1133,6 +1153,7 @@ onInput("k", () => {
     }
   }
   if ((getFirst(player).x == 4) & (getFirst(player).y == 4)) {
+    if (!getFirst(card15)) return
     getFirst(card15).type = flip_15
     cards_11_15 += 1
     cards_flipped += 1

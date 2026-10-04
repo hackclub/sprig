@@ -590,10 +590,10 @@ function gameStart() {
 
 gameStart()
 
-let lastMoveTime = performance.now(); // Initialize lastMoveTime
+let lastMoveTime = Date.now(); // Initialize lastMoveTime
 
 function moveEnemy() {
-  const currentTime = performance.now();
+  const currentTime = Date.now();
 
   if (currentTime - lastMoveTime >= moveInterval) {
     lastMoveTime = currentTime;

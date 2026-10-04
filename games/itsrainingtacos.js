@@ -153,6 +153,7 @@ let difficulty = 2000; // Initial obstacle spawn rate (milliseconds)
 // Variables to manage obstacle removal timing
 const removalDelay = 50; // milliseconds
 let removalTimers = {};
+let gameLoop, spawnInterval, scoreInterval;
 
 // Function to start the game
 function startGame() {

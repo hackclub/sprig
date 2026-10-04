@@ -38,6 +38,7 @@ var four = 0
 var levelStart = 0
 //Not the most important var but 
 //it allows pressure to make a sound when covered
+var lockHere, curNum, XLOCK, YLOCK
 lockHere = 1 //is the lock enabled?
 var skips = 0
 
