@@ -3,7 +3,7 @@
 @description: Generates a new maze each time.
 @author: Glitchtest(51)
 @tags: ['Maze', 'Procedurally Generated']
-@addedOn: 2025-00-00
+@addedOn: 2026-10-03
 */
 
 // init sprites
