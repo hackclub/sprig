@@ -417,24 +417,34 @@ let addSecretTextInGame = addText(`Secrets: ${secrets}`, {
   color: color`3`
 })
 
+let hasbeendead = false;
+
 
 onInput("s", () => {
-  getFirst(player).y += 1
+  if (hasbeendead == false) {
+    getFirst(player).y += 1
+  }
   playTune(footstep)
 })
 
 onInput("w", () => {
-  getFirst(player).y -= 1
+  if (hasbeendead == false) {
+    getFirst(player).y -= 1
+  }
   playTune(footstep)
 })
 
 onInput("d", () => {
-  getFirst(player).x += 1
+  if (hasbeendead == false) {
+    getFirst(player).x += 1
+  }
   playTune(footstep)
 })
 
 onInput("a", () => {
-  getFirst(player).x -= 1
+  if (hasbeendead == false) {
+    getFirst(player).x -= 1
+  }
   playTune(footstep)
 })
 
@@ -515,6 +525,7 @@ afterInput(() => {
   if (killtargetNumber > 0 && killnumberCovered === killtargetNumber) {
     level = 0;
     secrets = 0;
+    hasbeendead = true;
     clearText()
 
     const deadmessage = addText('Game Over.\nPress J to restart', { 
@@ -526,6 +537,7 @@ afterInput(() => {
     setMap(deadmap[0]);
 
     onInput("j", () => {
+      hasbeendead = false;
       clearText()
       setMap(levels[0])
       const message = addText(`${level}/16 `, { 
