@@ -236,11 +236,11 @@ async function hasTitleMetadata(file) {
 async function isMisplacedGameSubmission(files, body) {
 	const touchesNonGamePaths = files.some((f) =>
 		!f.filename.toLowerCase().startsWith("games/") &&
-		(f.status !== "added" || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
+		((f.status !== "added" && f.status !== "renamed") || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
 	);
 	if (touchesNonGamePaths) return false;
 
-	const addedJsFiles = files.filter((f) => f.status === "added" && f.filename.endsWith(".js"));
+	const addedJsFiles = files.filter((f) => (f.status === "added" || f.status === "renamed") && f.filename.endsWith(".js"));
 	if (addedJsFiles.length === 0) return false;
 
 	const bodyLooksLikeSubmission =
@@ -255,7 +255,7 @@ async function isMisplacedGameSubmission(files, body) {
 }
 
 async function addsGame(files, body) {
-	return files.some((f) => f.status === "added" && /^games\/.+\.js$/i.test(f.filename)) ||
+	return files.some((f) => (f.status === "added" || f.status === "renamed") && /^games\/.+\.js$/i.test(f.filename)) ||
 		(await isMisplacedGameSubmission(files, body));
 }
 
