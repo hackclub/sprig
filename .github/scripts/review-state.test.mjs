@@ -132,6 +132,15 @@ describe("reconcileReviewStatus", () => {
 		expect(status).toBe("dismissed");
 	});
 
+	it("returns none when a dismissal was on an older commit", () => {
+		const reviews = [
+			{ user: { login: "LucasHT22" }, state: "APPROVED", commit_id: "olderSha", submitted_at: "2026-10-04T09:00:00Z" },
+			{ user: { login: "LucasHT22" }, state: "DISMISSED", commit_id: "olderSha", submitted_at: "2026-10-04T09:10:00Z" },
+		];
+		const status = reconcileReviewStatus({ reviews, reviewers, authorLogin: "author1", headSha });
+		expect(status).toBe("none");
+	});
+
 	it("matches reviewer and author logins case-insensitively", () => {
 		const reviews = [
 			{ user: { login: "ssoggytacoman" }, state: "CHANGES_REQUESTED", commit_id: headSha, submitted_at: "2026-10-04T09:00:00Z" },

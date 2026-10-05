@@ -34,11 +34,10 @@ try {
 	process.exit(0);
 }
 
-await ensureReviewLabels({ owner, repo, token });
-
 if (event.comment && event.issue?.pull_request) {
 	const issueNumber = event.issue.number;
 	const commenter = event.comment.user?.login;
+	const authorLogin = event.issue.user?.login;
 	const body = event.comment.body?.trim() ?? "";
 	const labels = (event.issue.labels ?? []).map((l) => (typeof l === "string" ? l : l.name));
 
@@ -47,31 +46,43 @@ if (event.comment && event.issue?.pull_request) {
 		process.exit(0);
 	}
 
+	await ensureReviewLabels({ owner, repo, token });
+
 	if (commenter && reviewers.has(commenter.toLowerCase())) {
-		if (/^\/(?:needs-author|request-changes)\b/im.test(body)) {
-			await setStateLabel({ owner, repo, token, issueNumber, state: "Needs Author" });
-			console.log(`Reviewer ${commenter} commanded "Needs Author" on #${issueNumber}.`);
-			process.exit(0);
-		}
-		if (/^\/(?:approve|ready-maintainer)\b/im.test(body)) {
-			if (!hasLabel(labels, "Failed")) {
-				await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Maintainer" });
-				console.log(`Reviewer ${commenter} commanded "Ready for Maintainer" on #${issueNumber}.`);
-			} else {
-				console.log(`PR #${issueNumber} has failed checks; ignoring approve command.`);
+		if (authorLogin && commenter.toLowerCase() === authorLogin.toLowerCase()) {
+			console.log(`Comment by PR author (${commenter}); ignoring commands to prevent self-approval.`);
+		} else {
+			if (/^\/(?:needs-author|request-changes)\b/im.test(body)) {
+				await setStateLabel({ owner, repo, token, issueNumber, state: "Needs Author" });
+				console.log(`Reviewer ${commenter} commanded "Needs Author" on #${issueNumber}.`);
+				process.exit(0);
 			}
-			process.exit(0);
-		}
-		if (/^\/ready-playtest\b/im.test(body)) {
-			await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Playtest" });
-			console.log(`Reviewer ${commenter} commanded "Ready for Playtest" on #${issueNumber}.`);
-			process.exit(0);
+			if (/^\/(?:approve|ready-maintainer)\b/im.test(body)) {
+				if (!hasLabel(labels, "Failed")) {
+					await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Maintainer" });
+					console.log(`Reviewer ${commenter} commanded "Ready for Maintainer" on #${issueNumber}.`);
+				} else {
+					console.log(`PR #${issueNumber} has failed checks; ignoring approve command.`);
+				}
+				process.exit(0);
+			}
+			if (/^\/ready-playtest\b/im.test(body)) {
+				if (!hasLabel(labels, "Failed")) {
+					await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Playtest" });
+					console.log(`Reviewer ${commenter} commanded "Ready for Playtest" on #${issueNumber}.`);
+				} else {
+					console.log(`PR #${issueNumber} has failed checks; ignoring ready-playtest command.`);
+				}
+				process.exit(0);
+			}
 		}
 	}
 
 	await syncSinglePR(issueNumber);
 	process.exit(0);
 }
+
+await ensureReviewLabels({ owner, repo, token });
 
 const dispatchedPr = process.env.SYNC_PR_NUMBER;
 if (dispatchedPr) {
@@ -189,8 +200,10 @@ async function applyReviewStatus({ issueNumber, labels, status }) {
 	} else if (status === "approved" && !hasLabel(labels, "Failed") && !hasLabel(labels, "Ready for Maintainer")) {
 		await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Maintainer" });
 		console.log(`Reconciled #${issueNumber}: set "Ready for Maintainer".`);
-	} else if (status === "dismissed" && hasLabel(labels, "Ready for Maintainer")) {
-		await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Playtest" });
-		console.log(`Reconciled #${issueNumber}: approval dismissed, reset to "Ready for Playtest".`);
+	} else if (status === "dismissed") {
+		if (hasLabel(labels, "Ready for Maintainer") || (hasLabel(labels, "Needs Author") && !hasLabel(labels, "Failed"))) {
+			await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Playtest" });
+			console.log(`Reconciled #${issueNumber}: review dismissed, reset to "Ready for Playtest".`);
+		}
 	}
 }

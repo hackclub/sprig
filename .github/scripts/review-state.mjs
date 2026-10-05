@@ -70,7 +70,7 @@ export function reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha
 	if (active.some((r) => r.state === "APPROVED" && Boolean(headSha) && r.commit_id === headSha)) {
 		return "approved";
 	}
-	if (active.some((r) => r.state === "DISMISSED")) {
+	if (active.some((r) => r.state === "DISMISSED" && (!headSha || r.commit_id === headSha))) {
 		return "dismissed";
 	}
 	return "none";
