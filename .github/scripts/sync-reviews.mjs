@@ -28,7 +28,7 @@ const rolesPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..
 let reviewers = new Set();
 try {
 	const roles = JSON.parse(readFileSync(rolesPath, "utf8"));
-	reviewers = new Set([...(roles.maintainers ?? []), ...(roles.triagers ?? [])]);
+	reviewers = new Set([...(roles.maintainers ?? []), ...(roles.triagers ?? [])].map((u) => u.toLowerCase()));
 } catch {
 	console.warn("review-roles.json not found or invalid; review sync skipped.");
 	process.exit(0);
@@ -47,18 +47,22 @@ if (event.comment && event.issue?.pull_request) {
 		process.exit(0);
 	}
 
-	if (commenter && reviewers.has(commenter)) {
-		if (/^\/needs-author\b/i.test(body) || /^\/request-changes\b/i.test(body)) {
+	if (commenter && reviewers.has(commenter.toLowerCase())) {
+		if (/^\/(?:needs-author|request-changes)\b/im.test(body)) {
 			await setStateLabel({ owner, repo, token, issueNumber, state: "Needs Author" });
 			console.log(`Reviewer ${commenter} commanded "Needs Author" on #${issueNumber}.`);
 			process.exit(0);
 		}
-		if (/^\/approve\b/i.test(body) || /^\/ready-maintainer\b/i.test(body)) {
-			await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Maintainer" });
-			console.log(`Reviewer ${commenter} commanded "Ready for Maintainer" on #${issueNumber}.`);
+		if (/^\/(?:approve|ready-maintainer)\b/im.test(body)) {
+			if (!hasLabel(labels, "Failed")) {
+				await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Maintainer" });
+				console.log(`Reviewer ${commenter} commanded "Ready for Maintainer" on #${issueNumber}.`);
+			} else {
+				console.log(`PR #${issueNumber} has failed checks; ignoring approve command.`);
+			}
 			process.exit(0);
 		}
-		if (/^\/ready-playtest\b/i.test(body)) {
+		if (/^\/ready-playtest\b/im.test(body)) {
 			await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Playtest" });
 			console.log(`Reviewer ${commenter} commanded "Ready for Playtest" on #${issueNumber}.`);
 			process.exit(0);
@@ -114,7 +118,7 @@ async function syncAllOpenSubmissions() {
 							labels(first: 20) {
 								nodes { name }
 							}
-							latestReviews(first: 20) {
+							reviews(last: 20) {
 								nodes {
 									state
 									author { login }
@@ -155,7 +159,7 @@ async function syncAllOpenSubmissions() {
 		for (const node of nodes) {
 			const issueNumber = node.number;
 			const labels = (node.labels?.nodes ?? []).map((l) => l.name);
-			const reviews = (node.latestReviews?.nodes ?? []).map((r) => ({
+			const reviews = (node.reviews?.nodes ?? []).map((r) => ({
 				state: r.state,
 				user: { login: r.author?.login },
 				commit_id: r.commit?.oid,
@@ -169,20 +173,24 @@ async function syncAllOpenSubmissions() {
 				headSha: node.headRefOid,
 			});
 
-			await applyReviewStatus({ issueNumber, labels, status });
+			try {
+				await applyReviewStatus({ issueNumber, labels, status });
+			} catch (err) {
+				console.error(`Failed to reconcile #${issueNumber}:`, err.message);
+			}
 		}
 	}
 }
 
 async function applyReviewStatus({ issueNumber, labels, status }) {
-	if (status === "changes_requested" && !hasLabel(labels, "Needs Author")) {
+	if (status === "changes_requested" && !hasLabel(labels, "Needs Author") && !hasLabel(labels, "Stale")) {
 		await setStateLabel({ owner, repo, token, issueNumber, state: "Needs Author" });
 		console.log(`Reconciled #${issueNumber}: set "Needs Author".`);
-	} else if (status === "approved" && !hasLabel(labels, "Ready for Maintainer")) {
+	} else if (status === "approved" && !hasLabel(labels, "Failed") && !hasLabel(labels, "Ready for Maintainer")) {
 		await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Maintainer" });
 		console.log(`Reconciled #${issueNumber}: set "Ready for Maintainer".`);
-	} else if (status === "none" && hasLabel(labels, "Ready for Maintainer")) {
+	} else if (status === "dismissed" && hasLabel(labels, "Ready for Maintainer")) {
 		await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Playtest" });
-		console.log(`Reconciled #${issueNumber}: approval revoked/dismissed, reset to "Ready for Playtest".`);
+		console.log(`Reconciled #${issueNumber}: approval dismissed, reset to "Ready for Playtest".`);
 	}
 }

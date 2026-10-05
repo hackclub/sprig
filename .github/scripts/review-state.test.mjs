@@ -123,13 +123,21 @@ describe("reconcileReviewStatus", () => {
 		expect(status).toBe("none");
 	});
 
-	it("returns none when approval was dismissed", () => {
+	it("returns dismissed when approval was dismissed", () => {
 		const reviews = [
 			{ user: { login: "LucasHT22" }, state: "APPROVED", commit_id: headSha, submitted_at: "2026-10-04T09:00:00Z" },
 			{ user: { login: "LucasHT22" }, state: "DISMISSED", commit_id: headSha, submitted_at: "2026-10-04T09:10:00Z" },
 		];
 		const status = reconcileReviewStatus({ reviews, reviewers, authorLogin: "author1", headSha });
-		expect(status).toBe("none");
+		expect(status).toBe("dismissed");
+	});
+
+	it("matches reviewer and author logins case-insensitively", () => {
+		const reviews = [
+			{ user: { login: "ssoggytacoman" }, state: "CHANGES_REQUESTED", commit_id: headSha, submitted_at: "2026-10-04T09:00:00Z" },
+		];
+		const status = reconcileReviewStatus({ reviews, reviewers, authorLogin: "AUTHOR1", headSha });
+		expect(status).toBe("changes_requested");
 	});
 
 	it("returns unknown when reviewers set is empty or undefined", () => {
