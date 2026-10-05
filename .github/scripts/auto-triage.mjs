@@ -396,7 +396,8 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 		metadata = result.metadata;
 		similarity = result.similarity;
 
-		rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${gameFile.filename}`;
+		const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
+		rawUrl = `https://raw.githubusercontent.com/${headRepo}/${pullRequest.head.sha}/${gameFile.filename}`;
 		
 		const buildReviewUrl = (base) => {
 			const u = new URL(base);
@@ -987,8 +988,9 @@ function validateImages(imageFiles, gameBase, owner, repo, pullRequest, addCheck
 	addCheck("Optional image name", mismatchedImages.length === 0, imgNameDetail);
 
 	if (imageFiles.length > 0) {
+		const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
 		const image = imageFiles.find((file) => path.basename(file.filename, path.extname(file.filename)) === gameBase) ?? imageFiles[0];
-		return `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${image.filename}`;
+		return `https://raw.githubusercontent.com/${headRepo}/${pullRequest.head.sha}/${image.filename}`;
 	}
 	return null;
 }
