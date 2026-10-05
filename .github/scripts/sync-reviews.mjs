@@ -36,6 +36,11 @@ try {
 
 if (event.comment && event.issue?.pull_request) {
 	const issueNumber = event.issue.number;
+	if (event.issue.state !== "open") {
+		console.log(`PR #${issueNumber} is not open; skipping review command/sync.`);
+		process.exit(0);
+	}
+
 	const commenter = event.comment.user?.login;
 	const authorLogin = event.issue.user?.login;
 	const body = event.comment.body?.trim() ?? "";
@@ -84,9 +89,10 @@ if (event.comment && event.issue?.pull_request) {
 
 await ensureReviewLabels({ owner, repo, token });
 
-const dispatchedPr = process.env.SYNC_PR_NUMBER;
-if (dispatchedPr) {
-	await syncSinglePR(Number(dispatchedPr));
+const rawDispatched = process.env.SYNC_PR_NUMBER;
+const dispatchedPr = rawDispatched ? parseInt(String(rawDispatched).replace(/\D/g, ""), 10) : null;
+if (dispatchedPr && !Number.isNaN(dispatchedPr)) {
+	await syncSinglePR(dispatchedPr);
 	process.exit(0);
 }
 
@@ -129,7 +135,7 @@ async function syncAllOpenSubmissions() {
 							labels(first: 20) {
 								nodes { name }
 							}
-							reviews(last: 20) {
+							reviews(last: 50) {
 								nodes {
 									state
 									author { login }
@@ -193,7 +199,8 @@ async function syncAllOpenSubmissions() {
 	}
 }
 
-async function applyReviewStatus({ issueNumber, labels, status }) {
+async function applyReviewStatus({ issueNumber, labels: initialLabels, status }) {
+	const labels = initialLabels ?? (await getIssueLabels({ owner, repo, token, issueNumber }));
 	if (status === "changes_requested" && !hasLabel(labels, "Needs Author") && !hasLabel(labels, "Stale")) {
 		await setStateLabel({ owner, repo, token, issueNumber, state: "Needs Author" });
 		console.log(`Reconciled #${issueNumber}: set "Needs Author".`);

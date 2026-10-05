@@ -19,9 +19,10 @@ permissions:
 
 jobs:
     sync-reviews:
+        if: github.event_name != 'issue_comment' || github.event.issue.pull_request
         runs-on: ubuntu-latest
         concurrency:
-            group: review-sync-${{ github.event.issue.number || inputs.pr_number || 'scheduled' }}
+            group: auto-triage-validation-${{ github.event.issue.number || inputs.pr_number || 'scheduled' }}
             cancel-in-progress: false
         steps:
             - name: Checkout trusted automation
