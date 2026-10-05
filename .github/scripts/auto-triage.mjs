@@ -271,6 +271,7 @@ async function applyDuplicateActions({ group, failed }) {
 	}
 
 	await removeLabel({ owner, repo, token, issueNumber: prNumber, label: DUPLICATE_LABEL });
+	await removeOlderNotice(prNumber);
 
 	for (const olderNumber of group.older) {
 		try {

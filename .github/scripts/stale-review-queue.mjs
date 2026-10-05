@@ -89,6 +89,9 @@ async function handleOlderDuplicate(pullRequest, labels) {
 	const latest = await githubRequest(token, "GET", `/repos/${owner}/${repo}/pulls/${latestNumber}`).catch(() => null);
 	if (!latest || latest.state !== "open" || latest.draft) {
 		await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: DUPLICATE_LABEL });
+		if (notice?.id) {
+			await githubRequest(token, "DELETE", `/repos/${owner}/${repo}/issues/comments/${notice.id}`).catch(() => null);
+		}
 		return false;
 	}
 
