@@ -214,7 +214,7 @@ async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) 
 }
 
 async function hasTitleMetadata(file) {
-	if (file.patch) return /^\+\s*@title:/m.test(file.patch);
+	if (file.patch && /^\+\s*(?:\/\/|\*|\/\*)?\s*@title:/im.test(file.patch)) return true;
 	const targetUrl = file.raw_url || file.contents_url;
 	if (!targetUrl) return false;
 	try {
