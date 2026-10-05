@@ -20,17 +20,17 @@ jobs:
       - name: 'Install OpenOCD'
         run: |
           sudo apt-get install openocd
-      - name: 'Clone Spade repo'
-        run: |
-          cd ~/
-          git clone https://github.com/hackclub/sprig.git sprig/
-          
+      - name: 'Checkout repo'
+        uses: actions/checkout@v4
+        with:
+          path: sprig
+
       - name: 'Build Script'
-        run: cd ~/sprig/firmware/spade && python3 gardenshed.py build
+        run: cd sprig/firmware/spade && python3 gardenshed.py build
       
       - name: 'Upload artifact'
         uses: 'actions/upload-artifact@v7'
         with:
           name: 'firmware.uf2'
-          path: '~/sprig/firmware/spade/firmware.uf2'
+          path: 'sprig/firmware/spade/firmware.uf2'
           if-no-files-found: error
