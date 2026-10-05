@@ -213,6 +213,7 @@ let coinInterval;
 
 let trafficInterval;
 let movetrafficInterval;
+let moveTrafficInterval;
 //Lists
 let occupiedpos = [];
 let coins = [];
@@ -252,7 +253,7 @@ function movetrafficCars() {
     car.y += 1;
     if (car.y >= 11) {
       setTimeout( () => {
-        car.remove(); }, 100);
+        try { car.remove(); } catch (e) {} }, 100);
     }}}
 
 //Detection systems
@@ -400,16 +401,16 @@ lqmmmeg`);
 // Input controls
 if (gameRunning) {
 onInput("s", () => {
-  getFirst(playerCar).y += playerSpeed;
+  if (gameRunning) getFirst(playerCar).y += playerSpeed;
 });
 onInput("a", () => {
-  getFirst(playerCar).x -= playerSpeed;
+  if (gameRunning) getFirst(playerCar).x -= playerSpeed;
 });
 onInput("d", () => {
-  getFirst(playerCar).x += playerSpeed;
+  if (gameRunning) getFirst(playerCar).x += playerSpeed;
 });
 onInput("w", () => {
-  getFirst(playerCar).y -= playerSpeed;
+  if (gameRunning) getFirst(playerCar).y -= playerSpeed;
 });
 }
 

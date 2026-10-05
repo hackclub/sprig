@@ -8,6 +8,7 @@
 
 let blocky = 0
 let blockx = 0
+let block, buffer, OnButtonToDelete
 
 const background = "b"
 const cyanblock = "i"

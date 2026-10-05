@@ -98,7 +98,7 @@ CCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCC` ]
 );
 
-maps = [
+let maps = [
    map`
 ..........
 ..........
@@ -166,13 +166,13 @@ var enemy = new Character(3, 3, {
   "sprite": enemy_sprite
 });
 // Handle player movement
-noAction = {
+let noAction = {
   "action_type": "none",
   "action_data": {
 
   }
 };
-actionToTake = noAction
+let actionToTake = noAction
 
 // Right
 onInput("d", () => {
@@ -198,7 +198,7 @@ onInput("a", () => {
 
 // Dash
 onInput("s", () => {
-  if(actionToTake != noAction) {
+  if(actionToTake != noAction && actionToTake["action_data"]) {
     actionToTake["action_data"]["dash"] = "yes";
     actionToTake["action_data"]["move"] *= 2;
   }
@@ -212,7 +212,7 @@ onInput("w", () => {
 });
 
 // Map health & stamina values to colors
-colormap = {
+let colormap = {
   3: color`4`,
   2: color`6`,
   1: color`9`,
@@ -248,23 +248,23 @@ function drawStats() {
   });
 }
 // Set the interval - how many times has the loop run, 0-3, rolls over
-interval = 0
+let interval = 0
 // Set the cycle = 1-3, heals stamina and health on 3
-cycle = 1
+let cycle = 1
 // The main game loop
 function gameLoop() {
   clearText();
   drawStats();
-  time = 3 - interval;
+  let time = 3 - interval;
   
   if(interval >= 3) {
     interval = -1;
     time = "!";
     player.pushPos();
     enemy.pushPos();
-    guard = false;
+    let guard = false;
     if(actionToTake["action_type"] == "move") {
-      staminaCost = Math.abs(actionToTake["action_data"]["move"]);
+      let staminaCost = Math.abs(actionToTake["action_data"]["move"]);
       if(player.stamina >= staminaCost) {
         // TODO: CHECK FOR COLLISIONS
         player.info["pos"][0] += actionToTake["action_data"]["move"];

@@ -12,7 +12,7 @@ https://sprig.hackclub.com/gallery/getting_started
 const player = "p"
 const monster = "m"
 const border = "b"
-const escape = "e"
+var escape = "e"
 const bgmusic = tune`
 1500,
 500: D4/500,

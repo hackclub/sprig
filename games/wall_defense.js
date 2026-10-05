@@ -786,7 +786,7 @@ function control_lose(enemy) {
             playTune(lose_theme)
             repetition = true;
           }
-          enemy.remove();
+          if (!repetition) enemy.remove();
         }
     });
   });
@@ -843,7 +843,10 @@ function moveBullet(bullet) {
 }
 
 function control_hit(bullet) {
+  if (typeof bullet === "string") return;
   const spritesOnTile = getTile(bullet.x, bullet.y);
+  const shot = bullet; let removed = !spritesOnTile.includes(shot);
+  bullet = { type: shot.type, remove() { if (!removed) { removed = true; shot.remove(); } } };
   spritesOnTile.forEach(sprite => {
     let grave_chance = Math.floor(Math.random() * 6);
     switch (sprite.type) {

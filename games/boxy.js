@@ -201,7 +201,7 @@ setPushables({
 let time = 0;
 let timerInterval;
 let gameStarted = false;
-let bestTime = localStorage.getItem('bestTime') ? parseInt(localStorage.getItem('bestTime')) : Infinity;
+let bestTime = typeof localStorage !== 'undefined' && localStorage.getItem('bestTime') ? parseInt(localStorage.getItem('bestTime')) : Infinity;
 
 function formatTime(milliseconds) {
   let seconds = Math.floor(milliseconds / 1000);
@@ -237,7 +237,7 @@ function resetGame() {
 }
 
 function saveBestTime(milliseconds) {
-  localStorage.setItem('bestTime', milliseconds.toString());
+  if (typeof localStorage !== 'undefined') localStorage.setItem('bestTime', milliseconds.toString());
 }
 
 function checkCollision() {

@@ -590,6 +590,7 @@ ssss00000SSSS0099000s00S099ssssssss0900ssss`
 const totalCoins = levels.reduce((acc, lvl) => { return acc + lvl.toString().match(/c/g).length }, 0)
 let collectedCoins = 0
 let gameFinished = false
+let options
 
 let playerX = 0
 let playerY = 0
@@ -813,12 +814,12 @@ let clouds = []
 function spawnCloud(x, y) {
 
   if (clouds.map((cloud) => cloud.x + "." + cloud.y).includes(x + "." + y)) clouds.splice(0, 0, clouds.splice(clouds.map((cloud) => cloud.x + "." + cloud.y).indexOf(x + "." + y), 1)[0])
-  else if (isTileEmpty(x, y)) {
+  else if (x >= 0 && y >= 0 && x < width() && y < height() && isTileEmpty(x, y)) {
     setTimeout(() => {
       const tileWithCloud = clouds.shift()
       const [clX, clY] = [tileWithCloud.x, tileWithCloud.y]
 
-      tileWithCloud.remove()
+      try { tileWithCloud.remove() } catch (e) {}
 
       if (getTile(clX, clY - 1).filter((sprite) => sprite.type === player)[0] || (getTile(clX, clY - 2).filter((sprite) => sprite.type === player)[0] && isTileEmpty(clX, clY - 1))) {
         applyGravityToPlayer()
