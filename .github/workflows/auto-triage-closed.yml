@@ -6,6 +6,7 @@ on:
 permissions:
     pull-requests: read
     actions: write
+    contents: read
 
 jobs:
     revalidate-siblings:
