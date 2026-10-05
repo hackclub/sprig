@@ -275,7 +275,16 @@ async function applyDuplicateActions({ group, failed }) {
 	for (const olderNumber of group.older) {
 		try {
 			await addLabels({ owner, repo, token, issueNumber: olderNumber, labels: [DUPLICATE_LABEL] });
-			await syncOlderNotice({ issueNumber: olderNumber, latestNumber: prNumber, restart: false });
+			const noticeUpdated = await syncOlderNotice({ issueNumber: olderNumber, latestNumber: prNumber, restart: false });
+			if (noticeUpdated) {
+				await githubRequest(token, "POST", `/repos/${owner}/${repo}/actions/workflows/auto-triage.yml/dispatches`, {
+					ref: "main",
+					inputs: {
+						pr_number: String(olderNumber),
+						event_action: "workflow_dispatch",
+					},
+				});
+			}
 		} catch (error) {
 			console.warn(`Could not notify duplicate PR #${olderNumber}: ${error.message}`);
 		}
@@ -294,7 +303,7 @@ async function removeOlderNotice(issueNumber) {
 async function syncOlderNotice({ issueNumber, latestNumber, restart }) {
 	const comments = await githubPaginated(token, `/repos/${owner}/${repo}/issues/${issueNumber}/comments`);
 	const existing = comments.find((comment) => comment.body?.includes(DUPLICATE_NOTICE_MARKER));
-	if (!restart && parseOlderNotice(existing?.body)?.latestNumber === latestNumber) return;
+	if (!restart && parseOlderNotice(existing?.body)?.latestNumber === latestNumber) return false;
 
 	await upsertBotComment({
 		owner,
@@ -304,6 +313,7 @@ async function syncOlderNotice({ issueNumber, latestNumber, restart }) {
 		marker: DUPLICATE_NOTICE_MARKER,
 		body: buildOlderNotice({ number: issueNumber, latestNumber, since: new Date().toISOString() }),
 	});
+	return true;
 }
 
 async function getOpenPulls() {

@@ -21,6 +21,7 @@ permissions:
     pull-requests: write
     issues: write
     contents: read
+    actions: write
 
 jobs:
     validate-submission:
