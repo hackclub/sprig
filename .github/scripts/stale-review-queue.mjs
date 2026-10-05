@@ -43,10 +43,11 @@ const closedDuplicateNumbers = new Set();
 for (const pullRequest of openPulls) {
 	const issueNumber = pullRequest.number;
 	const labels = await getIssueLabels({ owner, repo, token, issueNumber });
-	if (!hasLabel(labels, "Submission")) continue;
 	if (hasLabel(labels, "Keep Open")) continue;
 
 	if (hasLabel(labels, DUPLICATE_LABEL) && (await handleOlderDuplicate(pullRequest, labels))) continue;
+
+	if (!hasLabel(labels, "Submission")) continue;
 
 	if (hasLabel(labels, "Needs Author") || hasLabel(labels, "Failed") || hasLabel(labels, "Stale")) {
 		await handleNeedsAuthor(pullRequest, labels);
