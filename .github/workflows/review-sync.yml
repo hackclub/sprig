@@ -1,0 +1,40 @@
+name: Sprig Review Sync
+
+on:
+    schedule:
+        - cron: "*/15 * * * *"
+    issue_comment:
+        types: [created]
+    workflow_dispatch:
+        inputs:
+            pr_number:
+                description: "PR number to sync (leave blank for all)"
+                required: false
+                type: string
+
+permissions:
+    pull-requests: write
+    issues: write
+    contents: read
+
+jobs:
+    sync-reviews:
+        runs-on: ubuntu-latest
+        concurrency:
+            group: review-sync-${{ github.event.issue.number || inputs.pr_number || 'scheduled' }}
+            cancel-in-progress: false
+        steps:
+            - name: Checkout trusted automation
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event.repository.default_branch || 'main' }}
+                  path: automation
+                  persist-credentials: false
+
+            - name: Sync review states
+              run: node automation/.github/scripts/sync-reviews.mjs
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+                  GITHUB_REPOSITORY: ${{ github.repository }}
+                  GITHUB_EVENT_PATH: ${{ github.event_path }}
+                  SYNC_PR_NUMBER: ${{ inputs.pr_number }}
