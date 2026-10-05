@@ -126,9 +126,16 @@ async function handleOlderDuplicate(pullRequest, labels) {
 		await removeLabel({ owner, repo, token, issueNumber: latestNumber, label: DUPLICATE_LABEL });
 	}
 
+	await dispatchSiblingRevalidation(authorLogin, pullRequest.number);
+
+	return true;
+}
+
+async function dispatchSiblingRevalidation(authorLogin, excludeNumber) {
+	if (!authorLogin) return;
 	const remainingSiblings = openPulls.filter(
 		(pr) =>
-			pr.number !== pullRequest.number &&
+			pr.number !== excludeNumber &&
 			!closedDuplicateNumbers.has(pr.number) &&
 			pr.user?.login?.toLowerCase() === authorLogin &&
 			!pr.draft
@@ -147,8 +154,6 @@ async function handleOlderDuplicate(pullRequest, labels) {
 			console.warn(`Could not dispatch auto-triage for sibling PR #${sibling.number}: ${error.message}`);
 		}
 	}
-
-	return true;
 }
 
 async function handleNeedsAuthor(pullRequest, labels) {
@@ -170,6 +175,9 @@ async function handleNeedsAuthor(pullRequest, labels) {
 		await githubRequest(token, "PATCH", `/repos/${owner}/${repo}/issues/${pullRequest.number}`, {
 			state: "closed",
 		});
+		closedDuplicateNumbers.add(pullRequest.number);
+		const authorLogin = pullRequest.user?.login?.toLowerCase();
+		await dispatchSiblingRevalidation(authorLogin, pullRequest.number);
 		return;
 	}
 
