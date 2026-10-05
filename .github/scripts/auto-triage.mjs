@@ -547,12 +547,13 @@ async function validateMetadata(content, filename, workspace) {
 			: "Game does not appear to be an unmodified tutorial."
 	);
 
+	const safeTitle = values.title ? values.title.replace(/`/g, "'") : "";
 	const titleConflict = values.title ? await findTitleConflict(values.title, filename, workspace) : null;
 	add(
 		"Unique game title",
 		!titleConflict,
 		titleConflict
-			? `Game title \`${values.title}\` already appears in \`${titleConflict}\`; choose a unique title.`
+			? `Game title \`${safeTitle}\` already appears in \`${titleConflict}\`; choose a unique title.`
 			: "Game title appears unique."
 	);
 
@@ -560,7 +561,7 @@ async function validateMetadata(content, filename, workspace) {
 }
 
 function getMetadataValue(content, key) {
-	const match = content.match(new RegExp(String.raw`@${key}:\s*([\s\S]*?)(?=\n\s*@|\n\s*\*\/)`));
+	const match = content.match(new RegExp(String.raw`@${key}:\s*([\s\S]*?)(?=\n\s*@|\n\s*\*\/)`, "i"));
 	return match?.[1]?.trim() ?? "";
 }
 
@@ -621,13 +622,16 @@ function normalize(value) {
 function findMostSimilarGame(content, submittedFilename, workspace) {
 	const gamesDir = path.join(workspace, "games");
 	const gameFiles = readdirSync(gamesDir).filter((file) => file.endsWith(".js"));
+	const c1 = chunks(analyze(content));
+	if (!c1.size) return { score: 0, match: null };
+
 	let best = { score: 0, match: null };
 	for (const gameFile of gameFiles) {
 		const relativePath = `games/${gameFile}`;
 		if (relativePath === submittedFilename) continue;
 		const other = readFileSafe(path.join(gamesDir, gameFile));
 		if (!other) continue;
-		const score = checkSimilarity(content, other);
+		const score = compareChunks(c1, other);
 		if (score > best.score) best = { score, match: relativePath };
 	}
 	return best;
@@ -648,22 +652,26 @@ function stripComments(code) {
 	return code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, "");
 }
 
-function checkSimilarity(a, b) {
-	const s1 = analyze(a);
-	const s2 = analyze(b);
-	const chunks = (value) => {
-		const set = new Set();
-		for (let i = 0; i <= value.length - 10; i += 1) set.add(value.slice(i, i + 10));
-		return set;
-	};
-	const c1 = chunks(s1);
-	const c2 = chunks(s2);
-	if (!c1.size || !c2.size) return 0;
+function chunks(value) {
+	const set = new Set();
+	for (let i = 0; i <= value.length - 10; i += 1) set.add(value.slice(i, i + 10));
+	return set;
+}
+
+function compareChunks(c1, code) {
+	if (!c1.size) return 0;
+	const c2 = chunks(analyze(code));
+	if (!c2.size) return 0;
 	let overlap = 0;
 	for (const chunk of c1) {
 		if (c2.has(chunk)) overlap += 1;
 	}
 	return (2 * overlap) / (c1.size + c2.size);
+}
+
+function checkSimilarity(a, b) {
+	const c1 = chunks(analyze(a));
+	return compareChunks(c1, b);
 }
 
 function readFileSafe(filePath) {
@@ -822,19 +830,25 @@ function formatPercent(value) {
 }
 
 function checkMetadataDate(addedOn, add) {
-	const validDate = /^\d{4}-\d{2}-\d{2}$/.test(addedOn);
-	const parsedDate = validDate ? new Date(`${addedOn}T00:00:00Z`) : null;
+	const validFormat = /^\d{4}-\d{2}-\d{2}$/.test(addedOn);
+	const parsedDate = validFormat ? new Date(`${addedOn}T00:00:00Z`) : null;
+	const isRealDate = Boolean(
+		validFormat &&
+		parsedDate &&
+		!Number.isNaN(parsedDate.getTime()) &&
+		parsedDate.toISOString().slice(0, 10) === addedOn
+	);
 	const now = new Date();
-	const tooOld = parsedDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
-	const ok = validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld;
+	const tooOld = isRealDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
+	const ok = isRealDate && !tooOld;
 	let detail = "Date looks current.";
 	if (!ok) {
-		if (validDate && tooOld) {
+		if (isRealDate && tooOld) {
 			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format (must be within the last 6 months).";
 		} else if (/\n/.test(addedOn) || /\b\d{4}-\d{2}-\d{2}\b/.test(addedOn)) {
 			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format. Close the metadata header with `*/` immediately after `@addedOn` before any instructions or other comments.";
 		} else {
-			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format.";
+			detail = "Set `@addedOn:` to a valid recent date in `YYYY-MM-DD` format.";
 		}
 	}
 	add("Metadata date", ok, detail);
