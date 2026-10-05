@@ -48,7 +48,7 @@ export const LABELS = {
 	},
 	"Potential Duplicate": {
 		color: "8250df",
-		description: "Author has more than one open submission",
+		description: "Author has more than one open submission PR",
 		aliases: ["potential-duplicate"],
 	},
 	"Keep Open": {
@@ -141,7 +141,7 @@ export async function ensureReviewLabels({ owner, repo, token }) {
 	for (const [name, config] of Object.entries(LABELS)) {
 		const exact = byLowerName.get(name.toLowerCase());
 		if (exact) {
-			await updateLabelIfNeeded({ owner, repo, token, currentName: exact.name, name, config });
+			await updateLabelIfNeeded({ owner, repo, token, currentLabel: exact, name, config });
 			continue;
 		}
 
@@ -150,7 +150,7 @@ export async function ensureReviewLabels({ owner, repo, token }) {
 			.find(Boolean);
 
 		if (alias) {
-			await updateLabelIfNeeded({ owner, repo, token, currentName: alias.name, name, config });
+			await updateLabelIfNeeded({ owner, repo, token, currentLabel: alias, name, config });
 			continue;
 		}
 
@@ -167,7 +167,12 @@ export async function ensureReviewLabels({ owner, repo, token }) {
 	}
 }
 
-async function updateLabelIfNeeded({ owner, repo, token, currentName, name, config }) {
+async function updateLabelIfNeeded({ owner, repo, token, currentLabel, name, config }) {
+	const currentName = currentLabel.name;
+	const colorMatches = (currentLabel.color ?? "").toLowerCase() === config.color.toLowerCase();
+	const descMatches = (currentLabel.description ?? "") === (config.description ?? "");
+	if (currentName === name && colorMatches && descMatches) return;
+
 	try {
 		await githubRequest(token, "PATCH", `/repos/${owner}/${repo}/labels/${encodeURIComponent(currentName)}`, {
 			new_name: name,
