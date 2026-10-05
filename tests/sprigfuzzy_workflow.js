@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { readdir } from "node:fs/promises";
 import { Worker } from "node:worker_threads";
 import { fileURLToPath } from "node:url";
@@ -57,7 +58,7 @@ async function main() {
   let gamesToRun = [];
 
   if (ONLY.length > 0) {
-    gamesToRun = ONLY.filter(name => name.endsWith('.js') && !SKIP.includes(name));
+    gamesToRun = ONLY.filter(name => name.endsWith('.js') && !SKIP.includes(name) && existsSync(join('./games', name)));
   } else {
     const entries = await readdir('./games');
     gamesToRun = entries.filter(name => name.endsWith('.js') && !SKIP.includes(name));
