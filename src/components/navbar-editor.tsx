@@ -117,89 +117,111 @@ type StuckData = {
 	description: string;
 };
 
-const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any, githubState: any, forceReauth = false) => {
+const openGitHubAuthPopup = (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any, githubState: any, forceReauth = false): Promise<boolean> => {
 	const startTime = Date.now();
-	try {
-		reportMetric('github_auth_popup.initiated');
+	return new Promise((resolve) => {
+		try {
+			reportMetric('github_auth_popup.initiated');
 
-		if (!forceReauth && isPublish) {
-			publishDropdown.value = true;
-			publishSuccess.value = true;
-			return;
-		}
-
-		if (!forceReauth && githubState.value) {
-			publishDropdown.value = true;
-			readyPublish.value = true;
-			return;
-		}
-
-		const githubAuthUrl = constructGithubAuthUrl(userId);
-
-		const width = 600,
-			height = 700;
-		const left = (screen.width - width) / 2;
-		const top = (screen.height - height) / 2;
-
-		const authWindow = window.open(
-			githubAuthUrl,
-			"GitHub Authorization",
-			`width=${width},height=${height},top=${top},left=${left}`
-		);
-
-		if (!authWindow || authWindow.closed || typeof authWindow.closed === "undefined") {
-			alert("Popup blocked. Please allow popups for this site.");
-			return;
-		}
-
-		authWindow.focus();
-
-		const authCheckInterval = setInterval(() => {
-			if (authWindow.closed) {
-				clearInterval(authCheckInterval);
-				alert("Authentication window was closed unexpectedly.");
-				reportMetric("github_auth_popup.closed_unexpectedly");
+			if (!forceReauth && isPublish) {
+				publishDropdown.value = true;
+				publishSuccess.value = true;
+				resolve(true);
+				return;
 			}
-		}, 1000);
 
-		const handleMessage = (event: MessageEvent) => {
-			if (event.origin !== window.location.origin) return;
-
-			const { status, message, accessToken, githubUsername } = event.data;
-
-			const timeTaken = Date.now() - startTime;
-
-			if (status === "success") {
-				const expires = new Date(Date.now() + 7 * 864e5).toUTCString(); // 7 days
-				document.cookie = `githubSession=${encodeURIComponent(accessToken)}; expires=${expires}; path=/; SameSite=None; Secure`;
-				document.cookie = `githubUsername=${encodeURIComponent(githubUsername)}; expires=${expires}; path=/; SameSite=None; Secure`;
-				githubState.value = {
-					username: githubUsername,
-					session: accessToken
-				}
+			if (!forceReauth && githubState.value) {
 				publishDropdown.value = true;
 				readyPublish.value = true;
-				reportMetric("github_auth_popup.success");
-				reportMetric('github_auth_popup.time_taken', timeTaken, 'timing');
+				resolve(true);
+				return;
+			}
 
+			const githubAuthUrl = constructGithubAuthUrl(userId);
+
+			const width = 600,
+				height = 700;
+			const left = (screen.width - width) / 2;
+			const top = (screen.height - height) / 2;
+
+			const authWindow = window.open(
+				githubAuthUrl,
+				"GitHub Authorization",
+				`width=${width},height=${height},top=${top},left=${left}`
+			);
+
+			if (!authWindow || authWindow.closed || typeof authWindow.closed === "undefined") {
+				alert("Popup blocked. Please allow popups for this site.");
+				resolve(false);
+				return;
+			}
+
+			authWindow.focus();
+
+			let settled = false;
+
+			const cleanup = () => {
 				clearInterval(authCheckInterval);
 				window.removeEventListener("message", handleMessage);
-			} else if (status === "error") {
-				console.error("Error during GitHub authorization:", message);
-				alert("An error occurred: " + message);
-				reportMetric("github_auth_popup.failure");
-				reportMetric('github_auth_popup.failure_time', timeTaken, 'timing');
-			}
-		};
+			};
 
-		window.addEventListener("message", handleMessage);
-	} catch (error) {
-		console.error("Error during GitHub authorization:", error);
-		alert("An error occurred: " + (error instanceof Error ? error.message : String(error)));
-		const timeTaken = Date.now() - startTime;
-		reportMetric("github_auth_popup.failure");
-		reportMetric('github_auth_popup.failure_time', timeTaken, 'timing');
-	}
+			const authCheckInterval = setInterval(() => {
+				if (authWindow.closed) {
+					clearInterval(authCheckInterval);
+					setTimeout(() => {
+						if (settled) return;
+						settled = true;
+						window.removeEventListener("message", handleMessage);
+						alert("Authentication window was closed unexpectedly.");
+						reportMetric("github_auth_popup.closed_unexpectedly");
+						resolve(false);
+					}, 300);
+				}
+			}, 500);
+
+			const handleMessage = (event: MessageEvent) => {
+				if (event.origin !== window.location.origin) return;
+
+				const { status, message, accessToken, githubUsername } = event.data ?? {};
+
+				const timeTaken = Date.now() - startTime;
+
+				if (status === "success") {
+					settled = true;
+					cleanup();
+					const expires = new Date(Date.now() + 7 * 864e5).toUTCString(); // 7 days
+					document.cookie = `githubSession=${encodeURIComponent(accessToken)}; expires=${expires}; path=/; SameSite=None; Secure`;
+					document.cookie = `githubUsername=${encodeURIComponent(githubUsername)}; expires=${expires}; path=/; SameSite=None; Secure`;
+					githubState.value = {
+						username: githubUsername,
+						session: accessToken
+					};
+					publishDropdown.value = true;
+					readyPublish.value = true;
+					reportMetric("github_auth_popup.success");
+					reportMetric('github_auth_popup.time_taken', timeTaken, 'timing');
+					resolve(true);
+				} else if (status === "error") {
+					settled = true;
+					cleanup();
+					console.error("Error during GitHub authorization:", message);
+					alert("An error occurred: " + message);
+					reportMetric("github_auth_popup.failure");
+					reportMetric('github_auth_popup.failure_time', timeTaken, 'timing');
+					resolve(false);
+				}
+			};
+
+			window.addEventListener("message", handleMessage);
+		} catch (error) {
+			console.error("Error during GitHub authorization:", error);
+			alert("An error occurred: " + (error instanceof Error ? error.message : String(error)));
+			const timeTaken = Date.now() - startTime;
+			reportMetric("github_auth_popup.failure");
+			reportMetric('github_auth_popup.failure_time', timeTaken, 'timing');
+			resolve(false);
+		}
+	});
 };
 
 const x = (): string => {
@@ -547,13 +569,14 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			let isValidToken = await validateGitHubToken(githubState.value.session);
 			if (!isValidToken) {
 				console.warn("Token invalid or expired. Attempting re-authentication...");
+				let reauthSuccess = false;
 				if (
 					(props.persistenceState.value.kind === 'PERSISTED' ||
 						props.persistenceState.value.kind === 'COLLAB') &&
 					props.persistenceState.value.game !== 'LOADING'
 				) {
 					if (typeof props.persistenceState.value.game !== 'string') {
-						await openGitHubAuthPopup(
+						reauthSuccess = await openGitHubAuthPopup(
 							props.persistenceState.value.session?.user.id ?? null,
 							publishDropdown,
 							readyPublish,
@@ -564,8 +587,13 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 						);
 					}
 				}
-				
-				githubState.value = getGithubStateFromCookie()
+
+				if (!reauthSuccess) {
+					trackFailure("github_publish.failure.token_reauth_failed");
+					throw new Error("Failed to re-authenticate with GitHub.");
+				}
+
+				githubState.value = getGithubStateFromCookie() ?? githubState.value;
 
 				if (!githubState.value?.session || !(await validateGitHubToken(githubState.value.session))) {
 					trackFailure("github_publish.failure.token_reauth_failed");
@@ -795,6 +823,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			}
 		} catch (error) {
 			console.error("Publishing failed:", error);
+			readyPublish.value = false;
 			publishErrorMessage.value = error instanceof Error ? error.message : String(error);
 			publishError.value = true;
 			if (!reportedSpecificFailure) {
