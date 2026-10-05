@@ -9,7 +9,7 @@
 		"start": "astro dev",
 		"build": "astro build",
 		"test": "bun run ./tests/sprigfuzzy_workflow.js",
-		"test:unit": "cross-env PUBLIC_MAX_ITERATIONS=2000 PUBLIC_MAX_LOOP_TIME_MS=1500 vitest run --exclude 'yjs-signaling-server/**'"
+		"test:unit": "cross-env PUBLIC_MAX_ITERATIONS=2000 PUBLIC_MAX_LOOP_TIME_MS=1500 vitest run --exclude '**/yjs-signaling-server/**'"
 	},
 	"dependencies": {
 		"@astrojs/preact": "5.1.2",
