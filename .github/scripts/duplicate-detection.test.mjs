@@ -6,6 +6,7 @@ import {
 	findDuplicateGroup,
 	parseOlderNotice,
 } from "./duplicate-detection.mjs";
+import { daysBetween } from "./review-utils.mjs";
 
 describe("findDuplicateGroup", () => {
 	it("keeps the newest PR and supersedes the older ones", () => {
@@ -60,5 +61,18 @@ describe("older notice", () => {
 
 	it("ignores notices without a marker", () => {
 		expect(parseOlderNotice("hello")).toBeNull();
+	});
+});
+
+describe("daysBetween", () => {
+	it("returns 0 for invalid date strings", () => {
+		expect(daysBetween("invalid-date")).toBe(0);
+		expect(daysBetween("")).toBe(0);
+		expect(daysBetween(null)).toBe(0);
+	});
+
+	it("calculates positive day difference correctly", () => {
+		const past = new Date(Date.now() - 3 * 86_400_000).toISOString();
+		expect(daysBetween(past)).toBe(3);
 	});
 });
