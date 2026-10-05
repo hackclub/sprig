@@ -39,7 +39,7 @@ let duplicateGroupNumbers = new Set();
 let reviewers = new Set();
 try {
 	const reviewRoles = JSON.parse(readFileSync(path.resolve(process.env.SUBMISSION_PATH ?? process.cwd(), ".github/review-roles.json"), "utf8"));
-	reviewers = new Set([...(reviewRoles.maintainers ?? []), ...(reviewRoles.triagers ?? [])]);
+	reviewers = new Set([...(reviewRoles.maintainers ?? []), ...(reviewRoles.triagers ?? [])].map((u) => u.toLowerCase()));
 } catch {
 	console.warn("review-roles.json not found or invalid; review state changes will be skipped.");
 }
@@ -92,12 +92,12 @@ if (event.review && event.action === "submitted") {
 	const reviewerLogin = event.review.user?.login;
 	const authorLogin = pullRequest.user?.login;
 
-	if (reviewerLogin && authorLogin && reviewerLogin === authorLogin) {
+	if (reviewerLogin && authorLogin && reviewerLogin.toLowerCase() === authorLogin.toLowerCase()) {
 		console.log(`Review submitted by PR author (${reviewerLogin}). Ignoring state change to prevent self-approval.`);
 		process.exit(0);
 	}
 
-	if (!reviewerLogin || !reviewers.has(reviewerLogin)) {
+	if (!reviewerLogin || !reviewers.has(reviewerLogin.toLowerCase())) {
 		console.log(`Review submitted by ${reviewerLogin ?? "unknown reviewer"}. Ignoring state change because reviewer is not listed.`);
 		process.exit(0);
 	}
@@ -261,7 +261,7 @@ async function addsGame(files, body) {
 
 async function detectDuplicateSubmissions(pullFiles) {
 	const login = pullRequest.user?.login;
-	if (!login || reviewers.has(login) || !(await addsGame(pullFiles, pullRequest.body ?? ""))) return { group: null };
+	if (!login || reviewers.has(login.toLowerCase()) || !(await addsGame(pullFiles, pullRequest.body ?? ""))) return { group: null };
 	try {
 		const openPulls = await getOpenPulls();
 		const targetLogin = login.toLowerCase();
