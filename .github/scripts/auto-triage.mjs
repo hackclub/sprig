@@ -640,9 +640,19 @@ async function findTitleConflict(title, filename, workspace) {
 	const submissionPRs = openPulls.filter((pr) => pr.labels?.some((l) => l.name === "Submission"));
 	for (const pr of submissionPRs) {
 		if (pr.number === prNumber || duplicateGroupNumbers.has(pr.number)) continue;
+		if (!mayHaveTitleConflict(pr, normalizedTitle)) continue;
+
 		const prFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pr.number}/files`);
 		for (const file of prFiles) {
 			if (file.filename.startsWith("games/") && file.filename.endsWith(".js")) {
+				if (file.patch) {
+					const patchTitleMatch = file.patch.match(/^\+\s*@title:\s*(.+)$/m);
+					if (patchTitleMatch) {
+						if (normalize(patchTitleMatch[1]) === normalizedTitle) return `PR #${pr.number} (${file.filename})`;
+						continue;
+					}
+				}
+
 				const headRepo = pr.head.repo?.full_name ?? `${owner}/${repo}`;
 				const res = await fetch(
 					`https://api.github.com/repos/${headRepo}/contents/${file.filename.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(pr.head.sha)}`,
@@ -663,6 +673,23 @@ async function findTitleConflict(title, filename, workspace) {
 		}
 	}
 	return null;
+}
+
+function mayHaveTitleConflict(pr, normalizedTitle) {
+	const lowerPrTitle = (pr.title ?? "").toLowerCase();
+	const cleanTitle = normalize(lowerPrTitle.replace(/^\[sprig app\]\s*/i, ""));
+	if (cleanTitle === normalizedTitle) return true;
+	if (
+		lowerPrTitle.includes(normalizedTitle) ||
+		lowerPrTitle.includes("upload") ||
+		lowerPrTitle.includes("add file") ||
+		lowerPrTitle.includes("create") ||
+		lowerPrTitle.includes("update") ||
+		lowerPrTitle.includes("game")
+	) {
+		return true;
+	}
+	return false;
 }
 
 function normalize(value) {
