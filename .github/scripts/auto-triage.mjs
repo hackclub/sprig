@@ -264,11 +264,13 @@ async function applyDuplicateActions({ group, failed }) {
 		return;
 	}
 
-	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: [DUPLICATE_LABEL] });
 	if (!group.isLatest) {
+		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: [DUPLICATE_LABEL] });
 		await syncOlderNotice({ issueNumber: prNumber, latestNumber: group.latestNumber, restart: event.action === "reopened" });
 		return;
 	}
+
+	await removeLabel({ owner, repo, token, issueNumber: prNumber, label: DUPLICATE_LABEL });
 
 	for (const olderNumber of group.older) {
 		try {
