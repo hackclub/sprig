@@ -165,8 +165,6 @@ async function handleNeedsAuthor(pullRequest, labels) {
 		const failedTime = await latestLabelTime(pullRequest.number, "Failed");
 		if (!needsAuthorTime && !failedTime) return;
 		dates.push(needsAuthorTime, failedTime);
-	} else if (hasLabel(labels, "Stale")) {
-		dates.push(await latestLabelTime(pullRequest.number, "Stale"));
 	}
 	const since = newestDate(dates.filter(Boolean));
 	if (!since) return;
