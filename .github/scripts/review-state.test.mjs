@@ -51,4 +51,20 @@ describe("autoReviewLabelChanges", () => {
 		expect(changes.add).toContain("Needs Author");
 		expect(changes.add).toContain("Failed");
 	});
+
+	it("does not preserve Claimed from label snapshot in either branch", () => {
+		const passing = autoReviewLabelChanges({
+			labels: ["Submission", "Claimed"],
+			validationOk: true,
+			eventAction: "workflow_dispatch",
+		});
+		expect(passing.add).not.toContain("Claimed");
+
+		const failing = autoReviewLabelChanges({
+			labels: ["Submission", "Claimed"],
+			validationOk: false,
+			eventAction: "workflow_dispatch",
+		});
+		expect(failing.add).not.toContain("Claimed");
+	});
 });

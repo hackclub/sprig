@@ -16,7 +16,8 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction }) {
 		if (state !== "Ready for Playtest") remove.add("Ready for Playtest");
 		if (state !== "Ready for Maintainer") remove.add("Ready for Maintainer");
 
-		if (hasLabel(labels, "Claimed")) add.add("Claimed");
+		// "Claimed" is owned by assignment handlers in a separate concurrency lane.
+		// Never copy it from this label snapshot.
 
 		return {
 			add: [...add],
@@ -30,8 +31,6 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction }) {
 		remove.add("Verified");
 		remove.add("Ready for Playtest");
 		remove.add("Ready for Maintainer");
-
-		if (hasLabel(labels, "Claimed")) add.add("Claimed");
 
 		return {
 			add: [...add],
