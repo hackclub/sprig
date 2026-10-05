@@ -120,6 +120,29 @@ async function handleOlderDuplicate(pullRequest, labels) {
 	if (!stillDuplicated) {
 		await removeLabel({ owner, repo, token, issueNumber: latestNumber, label: DUPLICATE_LABEL });
 	}
+
+	const remainingSiblings = openPulls.filter(
+		(pr) =>
+			pr.number !== pullRequest.number &&
+			!closedDuplicateNumbers.has(pr.number) &&
+			pr.user?.login?.toLowerCase() === authorLogin &&
+			!pr.draft
+	);
+
+	for (const sibling of remainingSiblings) {
+		try {
+			await githubRequest(token, "POST", `/repos/${owner}/${repo}/actions/workflows/auto-triage.yml/dispatches`, {
+				ref: "main",
+				inputs: {
+					pr_number: String(sibling.number),
+					event_action: "workflow_dispatch",
+				},
+			});
+		} catch (error) {
+			console.warn(`Could not dispatch auto-triage for sibling PR #${sibling.number}: ${error.message}`);
+		}
+	}
+
 	return true;
 }
 

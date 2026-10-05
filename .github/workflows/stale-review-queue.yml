@@ -9,6 +9,7 @@ permissions:
   contents: read
   issues: write
   pull-requests: write
+  actions: write
 
 jobs:
   stale-review-queue:
