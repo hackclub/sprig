@@ -124,7 +124,7 @@ const labels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber 
 const isLabeledSubmission = hasLabel(labels, "Submission");
 
 const body = pullRequest.body ?? "";
-const isSubmissionPR = modifiesGames || isLabeledSubmission || isMisplacedGameSubmission(pullFiles, body);
+const isSubmissionPR = modifiesGames || isLabeledSubmission || (await isMisplacedGameSubmission(pullFiles, body));
 
 if (!isSubmissionPR) {
 	console.log("Not a submission PR (no games/ files, no Submission label, and not a misplaced game submission); skipping.");
@@ -213,28 +213,55 @@ async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) 
 	}
 }
 
-function isMisplacedGameSubmission(files, body) {
+async function hasTitleMetadata(file) {
+	if (file.patch) return /^\+\s*@title:/m.test(file.patch);
+	const targetUrl = file.raw_url || file.contents_url;
+	if (!targetUrl) return false;
+	try {
+		const response = await fetch(targetUrl, {
+			headers: {
+				Accept: "application/vnd.github.raw",
+				Authorization: `Bearer ${token}`,
+				"X-GitHub-Api-Version": "2022-11-28",
+			},
+		});
+		if (!response.ok) return false;
+		const text = await response.text();
+		return /@title:/i.test(text);
+	} catch {
+		return false;
+	}
+}
+
+async function isMisplacedGameSubmission(files, body) {
 	const touchesNonGamePaths = files.some((f) =>
 		!f.filename.toLowerCase().startsWith("games/") &&
 		(f.status !== "added" || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
 	);
+	if (touchesNonGamePaths) return false;
+
 	const addedJsFiles = files.filter((f) => f.status === "added" && f.filename.endsWith(".js"));
+	if (addedJsFiles.length === 0) return false;
+
 	const bodyLooksLikeSubmission =
 		/what is your game about|how do you play your game/i.test(body) ||
 		/^#+\s*(about your game|pre apply checklist)\b/im.test(body);
-	return !touchesNonGamePaths &&
-		addedJsFiles.length > 0 &&
-		(bodyLooksLikeSubmission || addedJsFiles.some((f) => /^\+\s*@title:/m.test(f.patch ?? "")));
+	if (bodyLooksLikeSubmission) return true;
+
+	for (const file of addedJsFiles) {
+		if (await hasTitleMetadata(file)) return true;
+	}
+	return false;
 }
 
-function addsGame(files, body) {
+async function addsGame(files, body) {
 	return files.some((f) => f.status === "added" && /^games\/.+\.js$/i.test(f.filename)) ||
-		isMisplacedGameSubmission(files, body);
+		(await isMisplacedGameSubmission(files, body));
 }
 
 async function detectDuplicateSubmissions(pullFiles) {
 	const login = pullRequest.user?.login;
-	if (!login || reviewers.has(login) || !addsGame(pullFiles, pullRequest.body ?? "")) return { group: null };
+	if (!login || reviewers.has(login) || !(await addsGame(pullFiles, pullRequest.body ?? ""))) return { group: null };
 	try {
 		const openPulls = await getOpenPulls();
 		const targetLogin = login.toLowerCase();
@@ -245,7 +272,7 @@ async function detectDuplicateSubmissions(pullFiles) {
 		const siblingNumbers = [];
 		for (const pr of siblings) {
 			const prFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pr.number}/files`);
-			if (addsGame(prFiles, pr.body ?? "")) siblingNumbers.push(pr.number);
+			if (await addsGame(prFiles, pr.body ?? "")) siblingNumbers.push(pr.number);
 		}
 
 		const group = findDuplicateGroup(prNumber, siblingNumbers);
