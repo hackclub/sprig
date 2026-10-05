@@ -160,7 +160,14 @@ async function handleNeedsAuthor(pullRequest, labels) {
 	const dates = [];
 	if (hasLabel(labels, "Needs Author")) dates.push(await latestLabelTime(pullRequest.number, "Needs Author"));
 	if (hasLabel(labels, "Failed")) dates.push(await latestLabelTime(pullRequest.number, "Failed"));
-	if (hasLabel(labels, "Stale")) dates.push(await latestLabelTime(pullRequest.number, "Stale"));
+	if (dates.length === 0 && hasLabel(labels, "Stale")) {
+		const needsAuthorTime = await latestLabelTime(pullRequest.number, "Needs Author");
+		const failedTime = await latestLabelTime(pullRequest.number, "Failed");
+		if (!needsAuthorTime && !failedTime) return;
+		dates.push(needsAuthorTime, failedTime);
+	} else if (hasLabel(labels, "Stale")) {
+		dates.push(await latestLabelTime(pullRequest.number, "Stale"));
+	}
 	const since = newestDate(dates.filter(Boolean));
 	if (!since) return;
 
