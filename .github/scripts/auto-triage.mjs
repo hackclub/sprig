@@ -322,7 +322,7 @@ async function applyDuplicateActions({ group, failed }) {
 async function removeOlderNotice(issueNumber) {
 	const comments = await githubPaginated(token, `/repos/${owner}/${repo}/issues/${issueNumber}/comments`);
 	for (const comment of comments) {
-		if (comment.user?.type === "Bot" && comment.body?.includes(DUPLICATE_NOTICE_MARKER)) {
+		if (comment.body?.includes(DUPLICATE_NOTICE_MARKER)) {
 			await githubRequest(token, "DELETE", `/repos/${owner}/${repo}/issues/comments/${comment.id}`);
 		}
 	}

@@ -253,7 +253,7 @@ export function nextActionFromState(state, labels) {
 
 export async function upsertBotComment({ owner, repo, token, issueNumber, marker, body }) {
 	const comments = await githubPaginated(token, `/repos/${owner}/${repo}/issues/${issueNumber}/comments`);
-	const existing = comments.find((comment) => comment.user?.type === "Bot" && comment.body?.includes(marker));
+	const existing = comments.find((comment) => comment.body?.includes(marker));
 	const fullBody = body.includes(marker) ? body : `${marker}\n${body}`;
 	if (existing) {
 		await githubRequest(token, "PATCH", `/repos/${owner}/${repo}/issues/comments/${existing.id}`, { body: fullBody });
