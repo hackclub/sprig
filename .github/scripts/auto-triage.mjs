@@ -677,7 +677,7 @@ async function findTitleConflict(title, filename, workspace) {
 }
 
 function mayHaveTitleConflict(pr, normalizedTitle) {
-	const lowerPrTitle = (pr.title ?? "").toLowerCase();
+	const lowerPrTitle = (pr.title ?? "").toLowerCase().replace(/\.js$/i, "").replace(/[-_]+/g, " ");
 	const cleanTitle = normalize(lowerPrTitle.replace(/^\[sprig app\]\s*/i, ""));
 	if (cleanTitle === normalizedTitle) return true;
 	if (
