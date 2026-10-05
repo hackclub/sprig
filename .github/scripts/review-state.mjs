@@ -22,6 +22,8 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction, revi
 		if (targetState !== "Ready for Playtest") remove.add("Ready for Playtest");
 		if (targetState !== "Ready for Maintainer") remove.add("Ready for Maintainer");
 
+		if (hasLabel(labels, "Claimed")) add.add("Claimed");
+
 		return {
 			add: [...add],
 			remove: [...remove].filter((label) => hasLabel(labels, label)),
@@ -34,6 +36,8 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction, revi
 		remove.add("Verified");
 		remove.add("Ready for Playtest");
 		remove.add("Ready for Maintainer");
+
+		if (hasLabel(labels, "Claimed")) add.add("Claimed");
 
 		return {
 			add: [...add],
