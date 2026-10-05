@@ -643,7 +643,17 @@ async function findTitleConflict(title, filename, workspace) {
 		const prFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pr.number}/files`);
 		for (const file of prFiles) {
 			if (file.filename.startsWith("games/") && file.filename.endsWith(".js")) {
-				const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/${pr.head.sha}/${file.filename}`);
+				const headRepo = pr.head.repo?.full_name ?? `${owner}/${repo}`;
+				const res = await fetch(
+					`https://api.github.com/repos/${headRepo}/contents/${file.filename.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(pr.head.sha)}`,
+					{
+						headers: {
+							Accept: "application/vnd.github.raw",
+							Authorization: `Bearer ${token}`,
+							"X-GitHub-Api-Version": "2022-11-28",
+						},
+					}
+				);
 				if (res.ok) {
 					const content = await res.text();
 					const existingTitle = getMetadataValue(content, "title");
