@@ -297,7 +297,7 @@ for (const shape of ["T", "L", "|"]) {
         // sprites are 16x16 strings plus a newline every 16 characters, so 17 characters per line
         let sprite = SPRITE_TEMPLATES["maze_piece_" + shape].slice();
         for (let i = 0; i < rotation / 90; i++) {
-            new_sprite = "\n";
+            let new_sprite = "\n";
             for (let new_y = 0; new_y < 16; new_y++) {
                 for (let new_x = 0; new_x < 16; new_x++) {
                     new_sprite += sprite[1 + (15 - new_x) * 17 + new_y];
@@ -894,7 +894,7 @@ onInput("l", () => {
         board.clear_white_out();
         gameState = "INSERT_TILE";
         board.update_aux_info();
-        current_player = board.players[board.activePlayer];
+        let current_player = board.players[board.activePlayer];
         addSprite(BOARD_OFFSET_X + INSERT_POSITIONS[0][0], BOARD_OFFSET_Y + INSERT_POSITIONS[0][1], SPRITE_ABBRS["selector_" + current_player.color]);
         return;
     };

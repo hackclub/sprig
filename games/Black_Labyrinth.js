@@ -1552,6 +1552,7 @@ let solidSprites = defaultSolids; //  Stores which blocks are currently solid
 // Loops
 let pointerChangeInterval; // Loop used to change the pointer icon in the main menu
 let flickerLightsInterval; // Loop used to dynamically change the lantern range
+let errorPingInterval, pointerX, pointerY, menuMode, playerY;
 
 // Initialize the music player and start the main menu
 musicPlayer("startup");
@@ -2555,15 +2556,7 @@ function setSprites() {
 // Music Player
 function musicPlayer(mode) {
   if (mode == "startup") {
-    // Initialize stems and stop them
-    stemOne = playTune(stemDefault);
-    stemTwo = playTune(stemDefault);
-    stemThree = playTune(stemDefault);
-    stemFour = playTune(stemDefault);
-    stemOne.end();
-    stemTwo.end();
-    stemThree.end();
-    stemFour.end();
+    stemOne = stemTwo = stemThree = stemFour = { end() {}, isPlaying: () => false };
   } else if (mode == "menu" && !isMusicMuted) {
     // Plays the song
     let isPlaying;

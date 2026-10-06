@@ -1,9 +1,9 @@
 name: Sprig Auto Triage
 on:
     pull_request_target:
-        types: [opened, synchronize, assigned, unassigned, edited, reopened, ready_for_review]
+        types: [opened, synchronize, assigned, unassigned, edited, reopened, ready_for_review, labeled]
     pull_request_review:
-        types: [submitted]
+        types: [submitted, dismissed]
     workflow_dispatch:
         inputs:
             pr_number:
@@ -15,7 +15,7 @@ on:
                 required: true
                 default: synchronize
                 type: choice
-                options: [opened, synchronize, assigned, unassigned, reopened, ready_for_review, workflow_dispatch]
+                options: [opened, synchronize, assigned, unassigned, reopened, ready_for_review, labeled, workflow_dispatch]
 
 permissions:
     pull-requests: write
@@ -25,9 +25,11 @@ permissions:
 jobs:
     validate-submission:
         runs-on: ubuntu-latest
+        # Assignment events get their own lane so they never cancel (or are cancelled by) a validation run.
+        # Validation must therefore never read-modify-write the "Claimed" label, which belongs to the assignment lane.
         concurrency:
-            group: auto-triage-${{ github.event.pull_request.number || github.event.issue.number || github.run_id }}
-            cancel-in-progress: true
+            group: auto-triage-${{ (github.event.action == 'assigned' || github.event.action == 'unassigned') && 'assignment' || 'validation' }}-${{ github.event.pull_request.number || github.event.issue.number || inputs.pr_number || github.run_id }}
+            cancel-in-progress: ${{ github.event.action != 'assigned' && github.event.action != 'unassigned' }}
         steps:
             # SECURITY INVARIANT: because this privileged pull_request_target
             # job has write access to labels/comments, PR-head files are only

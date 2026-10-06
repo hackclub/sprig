@@ -479,25 +479,25 @@ const gameScreen = () => {
 startScreen()
 
 onInput("w", () => {
-  if (misses >= 2) return;
+  if (misses >= 2 || !getFirst(basket)) return;
   const basketInstance = getFirst(basket)
   if (basketInstance.y !== 2) basketInstance.y -= 2
 })
 
 onInput("a", () => {
-  if (misses >= 2) return;
+  if (misses >= 2 || !getFirst(basket)) return;
   const basketInstance = getFirst(basket)
   if (basketInstance.x !== 2) basketInstance.x -= 1
 })
 
 onInput("s", () => {
-  if (misses >= 2) return;
+  if (misses >= 2 || !getFirst(basket)) return;
   const basketInstance = getFirst(basket)
   if (basketInstance.y !== 4) basketInstance.y += 2
 })
 
 onInput("d", () => {
-  if (misses >= 2) return;
+  if (misses >= 2 || !getFirst(basket)) return;
   const basketInstance = getFirst(basket)
   if (basketInstance.x !== 3) basketInstance.x += 1
 })
