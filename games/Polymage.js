@@ -411,6 +411,8 @@ var targeted_x = 0
 var targeted_y = 0
 var pressed = false
 var attacking = false
+var Is_Selector_On_Screen
+if (!Array.prototype.findLast) Array.prototype.findLast = function(f) { for (let i = this.length - 1; i >= 0; i--) if (f(this[i], i, this)) return this[i] }
 var healing_rate = 1000
 var energy_rate = 8000
 // -----triangle-----
@@ -667,7 +669,7 @@ const playerHit = function() {
     const hits = getAll(hit)
     hits.findLast(Hit => {
       setTimeout(() => {
-        Hit.remove()
+        try { Hit.remove() } catch (e) {}
       }, 50)
       setTimeout(() => {
         attacking = false
@@ -911,14 +913,14 @@ var eHit = function(x, y, damage, facing, knockback) {
     setTimeout(() => {
       if ((Hit.x === player.x) && (Hit.y === player.y)) {
 
-        Hit.remove()
+        try { Hit.remove() } catch (e) {}
         changeHearts(-damage)
         updateHearts()
         if (knockback === true) {
           pushPlayer(facing)
         }
       } else {
-        Hit.remove()
+        try { Hit.remove() } catch (e) {}
       }
     }, dodge_speed)
   })

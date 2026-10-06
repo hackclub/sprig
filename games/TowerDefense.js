@@ -76,6 +76,7 @@ pathDirections[pathRightToDown] = { dx: 0, dy: 1, ex: 1, ey: 0 }
 
 const TICKMS = 50
 var gameTickCounter = 0
+var intervalCounter = 0
 
 var gameStart = false
 

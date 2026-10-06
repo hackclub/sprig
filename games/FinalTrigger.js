@@ -487,6 +487,7 @@ ssssssssssssssssssssssssssssssssssssssss`, // 12
 ]
 let flagLevels = [3, 8, 11]
 let edge = ""
+let boxes, walls, fboxes, spikes, x, y
 
 setMap(levels[level])
 setBackground(bg)

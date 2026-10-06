@@ -71,7 +71,7 @@ const blockMove = tune`
 500: D4^500,
 15500`
 
-present = true;
+let present = true;
 
 setLegend(
   [ doorDown, bitmap`
@@ -487,7 +487,7 @@ L11111111111111L
 
 setSolids([player, missingTexture, bricksDown, bricksUp, vineFuture, cube, doorDown, doorUp, wall])
 
-levelIndecator = 0
+let levelIndecator = 0
 let level = 0
 const levels = [
   map`
@@ -567,22 +567,22 @@ bbbXbbxbb`
 
 setMap(levels[level])
 
-playerX = 0
-playerY = 0
+let playerX = 0
+let playerY = 0
 
-isPulling = false;
+let isPulling = false;
 
-doorOpen = false
+let doorOpen = false
 
-doorX = 0
-doorY = 0
+let doorX = 0
+let doorY = 0
 
-doorState = 0
+let doorState = 0
 
-cubeX = 4
-cubeY = 1
+let cubeX = 4
+let cubeY = 1
 
-cubePos = ""
+let cubePos = ""
 addSprite(5, 6, player)
 
 setPushables({
