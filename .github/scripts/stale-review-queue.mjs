@@ -162,7 +162,7 @@ async function handleNeedsAuthor(pullRequest, labels) {
 	let since = newestDate([needsAuthorTime, failedTime].filter(Boolean));
 	if (!since) return;
 
-	const authorLogin = pullRequest.user?.login;
+	const authorLogin = pullRequest.user?.login?.toLowerCase();
 	const lastAuthorActivity = await latestAuthorCommentTime(pullRequest.number, authorLogin);
 	if (lastAuthorActivity && new Date(lastAuthorActivity).getTime() > new Date(since).getTime()) {
 		since = lastAuthorActivity;
@@ -182,7 +182,6 @@ async function handleNeedsAuthor(pullRequest, labels) {
 			state: "closed",
 		});
 		closedDuplicateNumbers.add(pullRequest.number);
-		const authorLogin = pullRequest.user?.login?.toLowerCase();
 		await dispatchSiblingRevalidation(authorLogin, pullRequest.number);
 		return;
 	}
