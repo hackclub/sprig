@@ -1213,9 +1213,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 										<Button
 											accent
 											onClick={async () => {
-												publishError.value = false;
-												publishErrorMessage.value = null;
-												await openGitHubAuthPopup(
+												const ok = await openGitHubAuthPopup(
 													props.persistenceState.value.session?.user.id ?? null,
 													publishDropdown,
 													readyPublish,
@@ -1224,6 +1222,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 													githubState,
 													true
 												);
+												if (ok) {
+													publishError.value = false;
+													publishErrorMessage.value = null;
+												}
 											}}
 										>
 											Reconnect GitHub
