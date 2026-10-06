@@ -1,6 +1,6 @@
 /*
   @title: Shadow Stealth
-  @author: shreyancat(github-@shreyancat09)
+  @author: shreyancat
   @description: A tile-based stealth puzzle game where you dodge patrolling guard sightlines, gather keys, and escape the museum.
   @tags: ['stealth', 'puzzle', 'action']
   @addedOn: 2026-10-06
