@@ -23,7 +23,7 @@ jobs:
         runs-on: ubuntu-latest
         concurrency:
             group: auto-triage-validation-${{ github.event.issue.number || inputs.pr_number || 'scheduled' }}
-            cancel-in-progress: false
+            cancel-in-progress: ${{ github.event_name == 'schedule' }}
         steps:
             - name: Checkout trusted automation
               uses: actions/checkout@v4

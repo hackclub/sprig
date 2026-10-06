@@ -116,7 +116,7 @@ async function syncSinglePR(prNumber) {
 		headSha: pull.head?.sha,
 	});
 
-	await applyReviewStatus({ issueNumber: prNumber, labels, status });
+	await applyReviewStatus({ issueNumber: prNumber, status });
 }
 
 async function syncAllOpenSubmissions() {
@@ -197,7 +197,7 @@ async function syncAllOpenSubmissions() {
 			});
 
 			try {
-				await applyReviewStatus({ issueNumber, labels, status });
+				await applyReviewStatus({ issueNumber, status });
 			} catch (err) {
 				console.error(`Failed to reconcile #${issueNumber}:`, err.message);
 			}
@@ -205,8 +205,8 @@ async function syncAllOpenSubmissions() {
 	}
 }
 
-async function applyReviewStatus({ issueNumber, labels: initialLabels, status }) {
-	const labels = initialLabels ?? (await getIssueLabels({ owner, repo, token, issueNumber }));
+async function applyReviewStatus({ issueNumber, status }) {
+	const labels = await getIssueLabels({ owner, repo, token, issueNumber });
 	if (status === "changes_requested" && !hasLabel(labels, "Needs Author") && !hasLabel(labels, "Stale")) {
 		await setStateLabel({ owner, repo, token, issueNumber, state: "Needs Author" });
 		console.log(`Reconciled #${issueNumber}: set "Needs Author".`);
