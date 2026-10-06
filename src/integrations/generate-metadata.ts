@@ -30,11 +30,11 @@ type BunRuntime = {
 const bun = (globalThis as typeof globalThis & { Bun?: BunRuntime }).Bun;
 
 const regexExpr = {
-	title: /@title: (.+)/,
-	author: /@author: (.+)/,
-	tags: /@tags: (.+)/,
-	addedOn: /@addedOn: (.+)/,
-	description: /@description: (.+)/,
+	title: /@title: (.+)/i,
+	author: /@author: (.+)/i,
+	tags: /@tags: (.+)/i,
+	addedOn: /@addedOn: (.+)/i,
+	description: /@description: (.+)/i,
 };
 
 type ParsedMetaEntry = {
