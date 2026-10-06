@@ -1,7 +1,9 @@
 /*
   @title: Shadow Stealth
   @author: shreyancat(github-@shreyancat09)
-  @tags: [stealth, puzzle, action]
+  @description: A tile-based stealth puzzle game where you dodge patrolling guard sightlines, gather keys, and escape the museum.
+  @tags: ['stealth', 'puzzle', 'action']
+  @addedOn: 2026-10-06
 */
 
 const player = "p";
@@ -132,13 +134,11 @@ wwwwwwwwwwwwwwww
 
 setSolids([ player, wall, guard, door ]);
 
-// Guard state structure: stores positions, directions, and patrol boundaries
 let guards = [
   { x: 3, y: 5, dir: 1, minX: 1, maxX: 5 },
   { x: 11, y: 5, dir: -1, minX: 9, maxX: 13 }
 ];
 
-// Clears and updates vision cone light tiles
 function updateVision() {
   const existingLights = tilesWith(light);
   existingLights.forEach(t => clearTile(t.x, t.y));
@@ -147,7 +147,6 @@ function updateVision() {
     let visionX = g.x + g.dir;
     let visionY = g.y;
     
-    // Cast vision 2 tiles forward unless blocked by a wall
     for (let i = 0; i < 2; i++) {
       const tileSprites = getTile(visionX, visionY);
       const isBlocked = tileSprites.some(s => s.type === wall);
@@ -161,16 +160,14 @@ function updateVision() {
   });
 }
 
-// Moves guards along their patrol path
 function moveGuards() {
   guards.forEach(g => {
     let nextX = g.x + g.dir;
     if (nextX > g.maxX || nextX < g.minX) {
-      g.dir *= -1; // Reverse direction
+      g.dir *= -1;
       nextX = g.x + g.dir;
     }
     
-    // Clear old guard sprite and add to new coordinate
     clearTile(g.x, g.y);
     g.x = nextX;
     addSprite(g.x, g.y, guard);
@@ -179,20 +176,17 @@ function moveGuards() {
   updateVision();
 }
 
-// Player controls
 onInput("w", () => { getFirst(player).y -= 1; });
 onInput("s", () => { getFirst(player).y += 1; });
 onInput("a", () => { getFirst(player).x -= 1; });
 onInput("d", () => { getFirst(player).x += 1; });
 
-// Post-turn check
 afterInput(() => {
   moveGuards();
   
   const p = getFirst(player);
   const pTile = getTile(p.x, p.y);
   
-  // Detection Check: Caught in a light tile or stepping directly on a guard
   const isDetected = pTile.some(s => s.type === light || s.type === guard);
   if (isDetected) {
     addText("SPOTTED! GAME OVER", { y: 5, color: color`3` });
@@ -201,20 +195,17 @@ afterInput(() => {
     return;
   }
   
-  // Key collection check
   const keysLeft = tilesWith(key).length;
   if (keysLeft === 0) {
     const doorTiles = tilesWith(door);
     if (doorTiles.length > 0) {
-      clearTile(doorTiles[0].x, doorTiles[0].y); // Unlock the door
+      clearTile(doorTiles[0].x, doorTiles[0].y);
     }
   }
 
-  // Win Condition Check
   if (keysLeft === 0 && pTile.some(s => s.type === door)) {
     addText("ESCAPED! YOU WIN", { y: 5, color: color`1` });
   }
 });
 
-// Initialize vision lights on startup
 updateVision();
