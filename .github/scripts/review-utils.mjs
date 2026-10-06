@@ -284,3 +284,63 @@ export function getMetadataValue(content, key) {
 	return value.trim();
 }
 
+export function parseTags(raw) {
+	const trimmed = raw?.trim() ?? "";
+	if (!trimmed) {
+		return { issue: "Tags cannot be empty. Wrap tags in quotes inside brackets, for example: `@tags: ['maze', 'puzzle']`." };
+	}
+
+	if (trimmed === "[]" || /^\[\s*\]$/.test(trimmed)) {
+		return {
+			tags: [],
+			issue: "Tags list cannot be empty. Please include at least one tag describing your game, for example: `@tags: ['maze']`.",
+		};
+	}
+
+	if (!trimmed.startsWith("[") || !trimmed.endsWith("]")) {
+		const hasQuotes = /["']/.test(trimmed);
+		return {
+			issue: hasQuotes
+				? "Tags must be enclosed in square brackets `[` and `]`, for example: `@tags: ['maze', 'puzzle']`."
+				: "Tags must be enclosed in square brackets and quotes, for example: `@tags: ['maze', 'puzzle']`.",
+		};
+	}
+
+	const inner = trimmed.slice(1, -1).trim();
+	const items = inner.split(",").map((s) => s.trim()).filter(Boolean);
+	const hasUnquoted = items.some(
+		(item) => !(item.startsWith("'") && item.endsWith("'") && item.length >= 2) &&
+		          !(item.startsWith('"') && item.endsWith('"') && item.length >= 2)
+	);
+	if (hasUnquoted) {
+		return {
+			issue: "Each tag inside the brackets must be surrounded by quotes, for example: `@tags: ['maze', 'puzzle']`.",
+		};
+	}
+
+	try {
+		const parsed = JSON.parse(trimmed.replaceAll("'", '"'));
+		if (!Array.isArray(parsed)) {
+			return { issue: "Tags must be a list in square brackets, for example: `@tags: ['maze', 'puzzle']`." };
+		}
+		if (parsed.length === 0) {
+			return {
+				tags: [],
+				issue: "Tags list cannot be empty. Please include at least one tag describing your game, for example: `@tags: ['maze']`.",
+			};
+		}
+		if (parsed.some((tag) => typeof tag !== "string")) {
+			return { issue: "Tags must be text surrounded by quotes, for example: `@tags: ['maze', 'puzzle']`." };
+		}
+		if (parsed.some((tag) => !tag.trim())) {
+			return { issue: "Tags cannot be blank, for example: `@tags: ['maze', 'puzzle']`." };
+		}
+		return { tags: parsed };
+	} catch {
+		return {
+			issue: "Tags are not formatted correctly. Use a list of quoted words in brackets, for example: `@tags: ['maze', 'puzzle']`.",
+		};
+	}
+}
+
+

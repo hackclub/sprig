@@ -10,6 +10,7 @@ import {
 	githubPaginated,
 	githubRequest,
 	hasLabel,
+	parseTags,
 	readGitHubEvent,
 	removeLabel,
 	setStateLabel,
@@ -531,12 +532,13 @@ async function validateMetadata(content, filename, workspace) {
 	}
 
 	const parsedTags = parseTags(values.tags);
+	const tagsValid = Boolean(parsedTags.tags && parsedTags.tags.length > 0);
 	add(
 		"Metadata tags parse",
-		parsedTags.tags !== undefined && parsedTags.tags.length > 0,
-		parsedTags.tags !== undefined && parsedTags.tags.length > 0
-			? "Tags are a non-empty array."
-			: `Set \`@tags:\` to a non-empty array, for example \`@tags: ['maze']\`.\nReason: ${parsedTags.issue}`
+		tagsValid,
+		tagsValid
+			? "Tags are formatted correctly."
+			: `Format \`@tags:\` as a list of tags in quotes and brackets, for example \`@tags: ['maze', 'puzzle']\`.\nReason: ${parsedTags.issue ?? "Tags list cannot be empty."}`
 	);
 
 	checkMetadataDate(values.addedOn, add);
@@ -583,26 +585,6 @@ async function validateMetadata(content, filename, workspace) {
 	);
 
 	return { checks, values: { ...values, tags: parsedTags.tags ?? values.tags } };
-}
-
-function parseTags(raw) {
-	if (!raw?.trim()) return { issue: "is empty (expected a JSON-ish array like ['maze','puzzle'])." };
-
-	try {
-		const parsed = JSON.parse(raw.replaceAll("'", '"'));
-		if (!Array.isArray(parsed)) return { issue: "must be an array (example: ['maze','puzzle'])." };
-		if (parsed.some((tag) => typeof tag !== "string")) {
-			return { issue: "must be an array of strings (example: ['maze','puzzle'])." };
-		}
-
-		return { tags: parsed };
-	} catch (error) {
-		if (error instanceof SyntaxError) {
-			return { issue: "is not valid JSON (example: ['maze','puzzle'])." };
-		}
-
-		return { issue: "could not be parsed." };
-	}
 }
 
 async function findTitleConflict(title, filename, workspace) {

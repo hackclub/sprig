@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getMetadataValue } from "./review-utils.mjs";
+import { getMetadataValue, parseTags } from "./review-utils.mjs";
 
 describe("getMetadataValue", () => {
 	it("parses fields from standard Sprig comment blocks", () => {
@@ -69,3 +69,44 @@ describe("getMetadataValue", () => {
 		expect(getMetadataValue(content, "nonexistent")).toBe("");
 	});
 });
+
+describe("parseTags", () => {
+	it("parses valid single and double quoted tags arrays", () => {
+		expect(parseTags("['maze', 'puzzle']")).toEqual({ tags: ["maze", "puzzle"] });
+		expect(parseTags('["arcade", "retro"]')).toEqual({ tags: ["arcade", "retro"] });
+		expect(parseTags("[ 'space' ]")).toEqual({ tags: ["space"] });
+	});
+
+	it("explains missing quotes for unquoted tags inside brackets", () => {
+		const res = parseTags("[platformer, penguin]");
+		expect(res.tags).toBeUndefined();
+		expect(res.issue).toContain("Each tag inside the brackets must be surrounded by quotes");
+	});
+
+	it("explains missing brackets when tags are not in square brackets", () => {
+		const unquoted = parseTags("game, space, shooter");
+		expect(unquoted.tags).toBeUndefined();
+		expect(unquoted.issue).toContain("Tags must be enclosed in square brackets and quotes");
+
+		const quoted = parseTags("'game', 'space'");
+		expect(quoted.tags).toBeUndefined();
+		expect(quoted.issue).toContain("Tags must be enclosed in square brackets");
+	});
+
+	it("explains empty tags list", () => {
+		const empty = parseTags("");
+		expect(empty.tags).toBeUndefined();
+		expect(empty.issue).toContain("Tags cannot be empty");
+
+		const emptyArr = parseTags("[]");
+		expect(emptyArr.tags).toEqual([]);
+		expect(emptyArr.issue).toContain("Tags list cannot be empty");
+	});
+
+	it("rejects blank string items inside array", () => {
+		const res = parseTags("['']");
+		expect(res.tags).toBeUndefined();
+		expect(res.issue).toContain("Tags cannot be blank");
+	});
+});
+
