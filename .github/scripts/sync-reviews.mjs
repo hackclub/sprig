@@ -40,6 +40,10 @@ if (event.comment && event.issue?.pull_request) {
 		console.log(`PR #${issueNumber} is not open; skipping review command/sync.`);
 		process.exit(0);
 	}
+	if (event.issue.draft) {
+		console.log(`PR #${issueNumber} is a draft; skipping review command/sync.`);
+		process.exit(0);
+	}
 
 	const commenter = event.comment.user?.login;
 	const authorLogin = event.issue.user?.login;
@@ -100,7 +104,7 @@ await syncAllOpenSubmissions();
 
 async function syncSinglePR(prNumber) {
 	const pull = await githubRequest(token, "GET", `/repos/${owner}/${repo}/pulls/${prNumber}`);
-	if (pull.state !== "open") return;
+	if (pull.state !== "open" || pull.draft) return;
 	const labels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
 	if (!hasLabel(labels, "Submission")) return;
 
@@ -131,6 +135,7 @@ async function syncAllOpenSubmissions() {
 						nodes {
 							number
 							headRefOid
+							isDraft
 							author { login }
 							labels(first: 20) {
 								nodes { name }
@@ -174,6 +179,7 @@ async function syncAllOpenSubmissions() {
 		cursor = prsData?.pageInfo?.endCursor ?? null;
 
 		for (const node of nodes) {
+			if (node.isDraft) continue;
 			const issueNumber = node.number;
 			const labels = (node.labels?.nodes ?? []).map((l) => l.name);
 			const reviews = (node.reviews?.nodes ?? []).map((r) => ({
