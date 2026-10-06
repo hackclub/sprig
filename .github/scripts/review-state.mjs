@@ -64,7 +64,7 @@ export function reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha
 	}
 
 	const active = [...latestByReviewer.values()];
-	if (active.some((r) => r.state === "CHANGES_REQUESTED" && (!headSha || r.commit_id === headSha))) {
+	if (active.some((r) => r.state === "CHANGES_REQUESTED")) {
 		return "changes_requested";
 	}
 	if (active.some((r) => r.state === "APPROVED" && Boolean(headSha) && r.commit_id === headSha)) {
