@@ -24,7 +24,7 @@ import {
 	findDuplicateGroup,
 	parseOlderNotice,
 } from "./duplicate-detection.mjs";
-import { autoReviewLabelChanges } from "./review-state.mjs";
+import { autoReviewLabelChanges, reconcileReviewStatus } from "./review-state.mjs";
 
 const token = process.env.GITHUB_TOKEN;
 if (!token) throw new Error("GITHUB_TOKEN is required");
@@ -87,29 +87,53 @@ if (event.action === "unassigned") {
 	process.exit(0);
 }
 
-if (event.review && event.action === "submitted") {
-	const reviewState = event.review.state.toLowerCase();
+if (event.review) {
+	if (event.action !== "submitted" && event.action !== "dismissed") {
+		console.log(`Review action is ${event.action}, ignoring.`);
+		process.exit(0);
+	}
+
 	const reviewerLogin = event.review.user?.login;
 	const authorLogin = pullRequest.user?.login;
 
 	if (reviewerLogin && authorLogin && reviewerLogin.toLowerCase() === authorLogin.toLowerCase()) {
-		console.log(`Review submitted by PR author (${reviewerLogin}). Ignoring state change to prevent self-approval.`);
+		console.log(`Review ${event.action} by PR author (${reviewerLogin}). Ignoring state change to prevent self-approval.`);
 		process.exit(0);
 	}
 
 	if (!reviewerLogin || !reviewers.has(reviewerLogin.toLowerCase())) {
-		console.log(`Review submitted by ${reviewerLogin ?? "unknown reviewer"}. Ignoring state change because reviewer is not listed.`);
+		console.log(`Review ${event.action} for ${reviewerLogin ?? "unknown reviewer"}. Ignoring because reviewer is not listed.`);
 		process.exit(0);
 	}
-	
-	if (reviewState === "changes_requested") {
+
+	const reviewState = event.review.state?.toLowerCase();
+	if (event.action === "submitted" && reviewState !== "approved" && reviewState !== "changes_requested") {
+		console.log(`Review state is ${reviewState}, ignoring.`);
+		process.exit(0);
+	}
+
+	const reviewStatus = await getLatestReviewStatus({
+		owner,
+		repo,
+		token,
+		prNumber,
+		reviewers,
+		authorLogin: pullRequest.user?.login,
+		headSha: pullRequest.head?.sha,
+	});
+	const currentLabels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
+
+	if (reviewStatus === "changes_requested") {
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
 		console.log(`Review requested changes, set "Needs Author".`);
-	} else if (reviewState === "approved") {
+	} else if (reviewStatus === "approved") {
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Maintainer" });
 		console.log(`Review approved, set "Ready for Maintainer".`);
+	} else if (reviewStatus === "none" && hasLabel(currentLabels, "Ready for Maintainer")) {
+		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Playtest" });
+		console.log(`Approval dismissed and no active review remains, set "Ready for Playtest".`);
 	} else {
-		console.log(`Review state is ${reviewState}, ignoring.`);
+		console.log(`Review ${event.action}; review state is ${reviewStatus}, leaving labels unchanged.`);
 	}
 	process.exit(0);
 }
@@ -760,10 +784,35 @@ function readFileSafe(filePath) {
 	}
 }
 
+async function getLatestReviewStatus({ owner, repo, token, prNumber, reviewers, authorLogin, headSha }) {
+	if (!reviewers || reviewers.size === 0) return "unknown";
+	try {
+		const reviews = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/reviews`);
+		return reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha });
+	} catch (e) {
+		console.warn("Unable to fetch reviews; skipping review reconciliation:", e.message);
+		return "unknown";
+	}
+}
+
 async function applyLabels(result) {
 	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Submission"] });
 	const currentLabels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
-	const changes = autoReviewLabelChanges({ labels: currentLabels, validationOk: result.ok, eventAction: event.action });
+	const reviewStatus = await getLatestReviewStatus({
+		owner,
+		repo,
+		token,
+		prNumber,
+		reviewers,
+		authorLogin: pullRequest.user?.login,
+		headSha: pullRequest.head?.sha,
+	});
+	const changes = autoReviewLabelChanges({
+		labels: currentLabels,
+		validationOk: result.ok,
+		eventAction: event.action,
+		reviewStatus,
+	});
 
 	if (result.ok) {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Verified"] });
@@ -777,8 +826,6 @@ async function applyLabels(result) {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Failed"] });
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Verified" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Playtest" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Maintainer" });
 	}
 
 	if (result.similarity.score >= 0.5) {

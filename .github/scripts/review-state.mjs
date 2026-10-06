@@ -1,20 +1,26 @@
 import { hasLabel } from "./review-utils.mjs";
 
-export function autoReviewLabelChanges({ labels, validationOk, eventAction }) {
+export function autoReviewLabelChanges({ labels, validationOk, eventAction, reviewStatus = "unknown" }) {
 	const add = new Set(["Submission"]);
 	const remove = new Set();
 
 	if (validationOk) {
 		add.add("Verified");
 		remove.add("Failed");
-		remove.add("Needs Author");
 
-		const keepApproval = hasLabel(labels, "Ready for Maintainer") && eventAction !== "synchronize";
-		const state = keepApproval ? "Ready for Maintainer" : "Ready for Playtest";
+		let targetState = "Ready for Playtest";
+		if (reviewStatus === "approved") {
+			targetState = "Ready for Maintainer";
+		} else if (reviewStatus === "changes_requested") {
+			targetState = "Needs Author";
+		} else if (reviewStatus === "unknown" && hasLabel(labels, "Ready for Maintainer") && eventAction !== "synchronize") {
+			targetState = "Ready for Maintainer";
+		}
 
-		add.add(state);
-		if (state !== "Ready for Playtest") remove.add("Ready for Playtest");
-		if (state !== "Ready for Maintainer") remove.add("Ready for Maintainer");
+		add.add(targetState);
+		if (targetState !== "Needs Author") remove.add("Needs Author");
+		if (targetState !== "Ready for Playtest") remove.add("Ready for Playtest");
+		if (targetState !== "Ready for Maintainer") remove.add("Ready for Maintainer");
 
 		// "Claimed" is owned by assignment handlers in a separate concurrency lane.
 		// Never copy it from this label snapshot.
@@ -22,8 +28,8 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction }) {
 		return {
 			add: [...add],
 			remove: [...remove].filter((label) => hasLabel(labels, label)),
-			state,
-			approvalInvalidated: eventAction === "synchronize" && hasLabel(labels, "Ready for Maintainer"),
+			state: targetState,
+			approvalInvalidated: eventAction === "synchronize" && hasLabel(labels, "Ready for Maintainer") && reviewStatus !== "approved",
 		};
 	} else {
 		add.add("Failed");
@@ -39,6 +45,25 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction }) {
 			approvalInvalidated: false,
 		};
 	}
+}
+
+export function reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha }) {
+	if (!reviewers || reviewers.size === 0) return "unknown";
+	const latestByReviewer = new Map();
+	for (const review of reviews) {
+		const login = review.user?.login;
+		if (!login || !reviewers.has(login) || login === authorLogin) continue;
+		if (!["APPROVED", "CHANGES_REQUESTED", "DISMISSED"].includes(review.state)) continue;
+		const previous = latestByReviewer.get(login);
+		if (!previous || new Date(review.submitted_at).getTime() >= new Date(previous.submitted_at).getTime()) {
+			latestByReviewer.set(login, review);
+		}
+	}
+
+	const active = [...latestByReviewer.values()];
+	if (active.some((r) => r.state === "CHANGES_REQUESTED")) return "changes_requested";
+	if (active.some((r) => r.state === "APPROVED" && Boolean(headSha) && r.commit_id === headSha)) return "approved";
+	return "none";
 }
 
 export function duplicateSubmissionNumbers(pullRequests, authorLogin) {
