@@ -13,7 +13,7 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction, revi
 			targetState = "Ready for Maintainer";
 		} else if (reviewStatus === "changes_requested") {
 			targetState = "Needs Author";
-		} else if ((reviewStatus === "unknown" || reviewStatus === "none") && hasLabel(labels, "Ready for Maintainer") && eventAction !== "synchronize") {
+		} else if (reviewStatus === "unknown" && hasLabel(labels, "Ready for Maintainer") && eventAction !== "synchronize") {
 			targetState = "Ready for Maintainer";
 		}
 
@@ -70,7 +70,7 @@ export function reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha
 	if (active.some((r) => r.state === "APPROVED" && Boolean(headSha) && r.commit_id === headSha)) {
 		return "approved";
 	}
-	if (active.some((r) => r.state === "DISMISSED" && (!headSha || r.commit_id === headSha))) {
+	if (active.some((r) => r.state === "DISMISSED")) {
 		return "dismissed";
 	}
 	return "none";

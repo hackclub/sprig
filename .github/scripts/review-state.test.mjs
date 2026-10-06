@@ -28,6 +28,28 @@ describe("autoReviewLabelChanges", () => {
 		expect(changes.approvalInvalidated).toBe(false);
 	});
 
+	it("resets Ready for Maintainer to Ready for Playtest when reviewStatus is none", () => {
+		const changes = autoReviewLabelChanges({
+			labels: ["Submission", "Verified", "Ready for Maintainer"],
+			validationOk: true,
+			eventAction: "edited",
+			reviewStatus: "none",
+		});
+		expect(changes.state).toBe("Ready for Playtest");
+		expect(changes.remove).toContain("Ready for Maintainer");
+	});
+
+	it("resets Ready for Maintainer to Ready for Playtest when reviewStatus is dismissed", () => {
+		const changes = autoReviewLabelChanges({
+			labels: ["Submission", "Verified", "Ready for Maintainer"],
+			validationOk: true,
+			eventAction: "edited",
+			reviewStatus: "dismissed",
+		});
+		expect(changes.state).toBe("Ready for Playtest");
+		expect(changes.remove).toContain("Ready for Maintainer");
+	});
+
 	it("sets Ready for Maintainer when reviewStatus is approved", () => {
 		const changes = autoReviewLabelChanges({
 			labels: ["Submission", "Verified"],
@@ -132,13 +154,13 @@ describe("reconcileReviewStatus", () => {
 		expect(status).toBe("dismissed");
 	});
 
-	it("returns none when a dismissal was on an older commit", () => {
+	it("returns dismissed even when a dismissal was on an older commit", () => {
 		const reviews = [
 			{ user: { login: "LucasHT22" }, state: "APPROVED", commit_id: "olderSha", submitted_at: "2026-10-04T09:00:00Z" },
 			{ user: { login: "LucasHT22" }, state: "DISMISSED", commit_id: "olderSha", submitted_at: "2026-10-04T09:10:00Z" },
 		];
 		const status = reconcileReviewStatus({ reviews, reviewers, authorLogin: "author1", headSha });
-		expect(status).toBe("none");
+		expect(status).toBe("dismissed");
 	});
 
 	it("matches reviewer and author logins case-insensitively", () => {
