@@ -10,6 +10,7 @@ import {
 import {
 	MAINTAINER_REMINDER_MARKER,
 	STALE_REMINDER_MARKER,
+	addLabels,
 	daysBetween,
 	ensureReviewLabels,
 	getIssueLabels,
@@ -17,6 +18,7 @@ import {
 	githubPaginated,
 	githubRequest,
 	hasLabel,
+	latestActiveLabelTime,
 	removeLabel,
 	setStateLabel,
 } from "./review-utils.mjs";
@@ -49,7 +51,7 @@ for (const pullRequest of openPulls) {
 
 	if (!hasLabel(labels, "Submission")) continue;
 
-	if (hasLabel(labels, "Needs Author") || hasLabel(labels, "Failed") || hasLabel(labels, "Stale")) {
+	if (hasLabel(labels, "Needs Author") || hasLabel(labels, "Failed")) {
 		await handleNeedsAuthor(pullRequest, labels);
 		continue;
 	}
@@ -187,7 +189,7 @@ async function handleNeedsAuthor(pullRequest, labels) {
 	}
 
 	if (age >= 7) {
-		await setStateLabel({ owner, repo, token, issueNumber: pullRequest.number, state: "Stale" });
+		await addLabels({ owner, repo, token, issueNumber: pullRequest.number, labels: ["Stale"] });
 		await commentOnce({
 			issueNumber: pullRequest.number,
 			marker: `<!-- sprig-stale-reminder-${cycle} -->`,
@@ -244,10 +246,7 @@ async function handleUntouchedSubmission(pullRequest) {
 
 async function latestLabelTime(issueNumber, labelName) {
 	const events = await githubPaginated(token, `/repos/${owner}/${repo}/issues/${issueNumber}/events`);
-	const matching = events
-		.filter((event) => event.event === "labeled" && event.label?.name?.toLowerCase() === labelName.toLowerCase())
-		.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-	return matching[0]?.created_at ?? null;
+	return latestActiveLabelTime(events, labelName);
 }
 
 async function latestAuthorCommentTime(issueNumber, authorLogin) {

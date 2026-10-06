@@ -212,6 +212,14 @@ export async function removeLabels({ owner, repo, token, issueNumber, labels }) 
 	}
 }
 
+export function latestActiveLabelTime(events, labelName) {
+	if (!Array.isArray(events) || !labelName) return null;
+	const matching = events
+		.filter((event) => (event.event === "labeled" || event.event === "unlabeled") && event.label?.name?.toLowerCase() === labelName.toLowerCase())
+		.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+	return matching[0]?.event === "labeled" ? matching[0].created_at : null;
+}
+
 export async function setStateLabel({ owner, repo, token, issueNumber, state }) {
 	const labels = await getIssueLabels({ owner, repo, token, issueNumber });
 	const labelsToRemove = STATE_LABELS.filter((label) => label !== state && hasLabel(labels, label));

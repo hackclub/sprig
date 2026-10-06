@@ -6,7 +6,7 @@ import {
 	findDuplicateGroup,
 	parseOlderNotice,
 } from "./duplicate-detection.mjs";
-import { daysBetween } from "./review-utils.mjs";
+import { daysBetween, latestActiveLabelTime } from "./review-utils.mjs";
 
 describe("findDuplicateGroup", () => {
 	it("keeps the newest PR and supersedes the older ones", () => {
@@ -74,5 +74,44 @@ describe("daysBetween", () => {
 	it("calculates positive day difference correctly", () => {
 		const past = new Date(Date.now() - 3 * 86_400_000).toISOString();
 		expect(daysBetween(past)).toBe(3);
+	});
+});
+
+describe("latestActiveLabelTime", () => {
+	it("returns timestamp when label is currently active", () => {
+		const events = [
+			{ event: "labeled", label: { name: "Needs Author" }, created_at: "2026-10-01T10:00:00Z" },
+		];
+		expect(latestActiveLabelTime(events, "Needs Author")).toBe("2026-10-01T10:00:00Z");
+	});
+
+	it("returns null when label was removed after being added", () => {
+		const events = [
+			{ event: "labeled", label: { name: "Needs Author" }, created_at: "2026-10-01T10:00:00Z" },
+			{ event: "unlabeled", label: { name: "Needs Author" }, created_at: "2026-10-02T10:00:00Z" },
+		];
+		expect(latestActiveLabelTime(events, "Needs Author")).toBeNull();
+	});
+
+	it("returns the latest labeled timestamp if re-added after removal", () => {
+		const events = [
+			{ event: "labeled", label: { name: "Needs Author" }, created_at: "2026-10-01T10:00:00Z" },
+			{ event: "unlabeled", label: { name: "Needs Author" }, created_at: "2026-10-02T10:00:00Z" },
+			{ event: "labeled", label: { name: "Needs Author" }, created_at: "2026-10-03T10:00:00Z" },
+		];
+		expect(latestActiveLabelTime(events, "Needs Author")).toBe("2026-10-03T10:00:00Z");
+	});
+
+	it("handles case-insensitive label names", () => {
+		const events = [
+			{ event: "labeled", label: { name: "needs author" }, created_at: "2026-10-01T10:00:00Z" },
+		];
+		expect(latestActiveLabelTime(events, "Needs Author")).toBe("2026-10-01T10:00:00Z");
+	});
+
+	it("returns null when label was never present or inputs invalid", () => {
+		expect(latestActiveLabelTime([], "Needs Author")).toBeNull();
+		expect(latestActiveLabelTime(null, "Needs Author")).toBeNull();
+		expect(latestActiveLabelTime([{ event: "labeled", label: { name: "Verified" } }], "Needs Author")).toBeNull();
 	});
 });
