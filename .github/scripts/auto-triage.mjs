@@ -5,6 +5,7 @@ import {
 	addLabels,
 	ensureReviewLabels,
 	getIssueLabels,
+	getMetadataValue,
 	getRepository,
 	githubPaginated,
 	githubRequest,
@@ -248,7 +249,7 @@ function isMisplacedGameSubmission(files, body) {
 		/^#+\s*(about your game|pre apply checklist)\b/im.test(body);
 	return !touchesNonGamePaths &&
 		addedJsFiles.length > 0 &&
-		(bodyLooksLikeSubmission || addedJsFiles.some((f) => /^\+\s*@title:/m.test(f.patch ?? "")));
+		(bodyLooksLikeSubmission || addedJsFiles.some((f) => /^\+\s*(?:\*\s*)?@title:/m.test(f.patch ?? "")));
 }
 
 function addsGame(files, body) {
@@ -582,11 +583,6 @@ async function validateMetadata(content, filename, workspace) {
 	);
 
 	return { checks, values: { ...values, tags: parsedTags.tags ?? values.tags } };
-}
-
-function getMetadataValue(content, key) {
-	const match = content.match(new RegExp(String.raw`@${key}:\s*([\s\S]*?)(?=\n\s*@|\n\s*\*\/)`, "i"));
-	return match?.[1]?.trim() ?? "";
 }
 
 function parseTags(raw) {

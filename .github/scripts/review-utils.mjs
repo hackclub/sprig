@@ -269,3 +269,18 @@ export async function upsertBotComment({ owner, repo, token, issueNumber, marker
 export function daysBetween(start, end = new Date()) {
 	return Math.floor((end.getTime() - new Date(start).getTime()) / 86_400_000);
 }
+
+export function getMetadataValue(content, key) {
+	const match = content.match(new RegExp(String.raw`@${key}:[^\S\r\n]*([\s\S]*?)(?=\r?\n\s*\*?\s*@|\r?\n\s*\*\/|\*\/)`, "i"));
+	if (!match?.[1]) return "";
+	const hasLeadingAsterisk = new RegExp(String.raw`(?:\r?\n|^)\s*\*\s*@${key}:`, "i").test(content);
+	let value = match[1];
+	if (hasLeadingAsterisk) {
+		value = value
+			.split(/\r?\n/)
+			.map((line) => line.replace(/^\s*\*\s?/, "").trimEnd())
+			.join("\n");
+	}
+	return value.trim();
+}
+
