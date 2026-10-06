@@ -1,7 +1,9 @@
 /*
-@title Fuse Runner
-@author FrostyDevLOL
-@tags puzzle, random, hard
+@title: Fuse Runner
+@author: FrostyDevLOL
+@description: This game is about a bomb racing thru a maze to a water bucket to defuse itself. The maze changes every level for infinite fun!
+@tags: ['puzzle', 'random']
+@addedOn: 2026-10-06
 */
 
 const p = "p"; // player (bomb)
