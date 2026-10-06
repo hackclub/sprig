@@ -57,12 +57,12 @@ if (event.comment && event.issue?.pull_request) {
 		if (authorLogin && commenter.toLowerCase() === authorLogin.toLowerCase()) {
 			console.log(`Comment by PR author (${commenter}); ignoring commands to prevent self-approval.`);
 		} else {
-			if (/^\/(?:needs-author|request-changes)\b/im.test(body)) {
+			if (/^\s*\/(?:needs-author|request-changes)\s*$/im.test(body)) {
 				await setStateLabel({ owner, repo, token, issueNumber, state: "Needs Author" });
 				console.log(`Reviewer ${commenter} commanded "Needs Author" on #${issueNumber}.`);
 				process.exit(0);
 			}
-			if (/^\/(?:approve|ready-maintainer)\b/im.test(body)) {
+			if (/^\s*\/(?:approve|ready-maintainer)\s*$/im.test(body)) {
 				if (!hasLabel(labels, "Failed")) {
 					await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Maintainer" });
 					console.log(`Reviewer ${commenter} commanded "Ready for Maintainer" on #${issueNumber}.`);
@@ -71,7 +71,7 @@ if (event.comment && event.issue?.pull_request) {
 				}
 				process.exit(0);
 			}
-			if (/^\/ready-playtest\b/im.test(body)) {
+			if (/^\s*\/ready-playtest\s*$/im.test(body)) {
 				if (!hasLabel(labels, "Failed")) {
 					await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Playtest" });
 					console.log(`Reviewer ${commenter} commanded "Ready for Playtest" on #${issueNumber}.`);
