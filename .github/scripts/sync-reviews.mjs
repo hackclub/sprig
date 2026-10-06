@@ -68,6 +68,7 @@ if (event.comment && event.issue?.pull_request) {
 			}
 			if (/^\s*\/(?:approve|ready-maintainer)\s*$/im.test(body)) {
 				if (!hasLabel(labels, "Failed")) {
+					await dismissActiveChangeRequests(issueNumber, commenter);
 					await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Maintainer" });
 					console.log(`Reviewer ${commenter} commanded "Ready for Maintainer" on #${issueNumber}.`);
 				} else {
@@ -77,6 +78,7 @@ if (event.comment && event.issue?.pull_request) {
 			}
 			if (/^\s*\/ready-playtest\s*$/im.test(body)) {
 				if (!hasLabel(labels, "Failed")) {
+					await dismissActiveChangeRequests(issueNumber, commenter);
 					await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Playtest" });
 					console.log(`Reviewer ${commenter} commanded "Ready for Playtest" on #${issueNumber}.`);
 				} else {
@@ -205,6 +207,23 @@ async function syncAllOpenSubmissions() {
 	}
 }
 
+async function dismissActiveChangeRequests(prNumber, reviewerLogin) {
+	try {
+		const reviews = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/reviews`);
+		const lowerReviewer = reviewerLogin.toLowerCase();
+		for (const review of reviews) {
+			if (review.user?.login?.toLowerCase() === lowerReviewer && review.state === "CHANGES_REQUESTED") {
+				await githubRequest(token, "PUT", `/repos/${owner}/${repo}/pulls/${prNumber}/reviews/${review.id}/dismissals`, {
+					message: "Superseded by reviewer command",
+				});
+				console.log(`Dismissed CHANGES_REQUESTED review #${review.id} for ${reviewerLogin} on #${prNumber}.`);
+			}
+		}
+	} catch (e) {
+		console.warn(`Could not dismiss change requests for ${reviewerLogin}:`, e.message);
+	}
+}
+
 async function applyReviewStatus({ issueNumber, status }) {
 	const labels = await getIssueLabels({ owner, repo, token, issueNumber });
 	if (status === "changes_requested" && !hasLabel(labels, "Needs Author") && !hasLabel(labels, "Stale")) {
@@ -213,10 +232,10 @@ async function applyReviewStatus({ issueNumber, status }) {
 	} else if (status === "approved" && !hasLabel(labels, "Failed") && !hasLabel(labels, "Ready for Maintainer")) {
 		await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Maintainer" });
 		console.log(`Reconciled #${issueNumber}: set "Ready for Maintainer".`);
-	} else if (status === "dismissed") {
+	} else if (status === "dismissed" || (status === "none" && hasLabel(labels, "Ready for Maintainer"))) {
 		if (hasLabel(labels, "Ready for Maintainer") || (hasLabel(labels, "Needs Author") && !hasLabel(labels, "Failed"))) {
 			await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Playtest" });
-			console.log(`Reconciled #${issueNumber}: review dismissed, reset to "Ready for Playtest".`);
+			console.log(`Reconciled #${issueNumber}: review dismissed or outdated, reset to "Ready for Playtest".`);
 		}
 	}
 }
