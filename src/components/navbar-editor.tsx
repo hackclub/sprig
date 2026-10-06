@@ -540,7 +540,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			clearError("thumbnail");
 			clearError("gameControlsDescription");
 			clearError("gameTitle");
-			clearError("authorName")
+			clearError("authorName");
 			hasError = false;
 
 			if (!gameTitle) {
@@ -563,12 +563,16 @@ export default function EditorNavbar(props: EditorNavbarProps) {
  
 			if (!githubState.value?.session) {
 				trackFailure("github_publish.failure.token_missing");
-				throw new Error("GitHub access token not found.");
+				throw new Error("GitHub access token not found. Please re-authenticate.");
 			}
 
 			let isValidToken = await validateGitHubToken(githubState.value.session);
 			if (!isValidToken) {
 				console.warn("Token invalid or expired. Attempting re-authentication...");
+				document.cookie = "githubSession=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None; Secure";
+				document.cookie = "githubUsername=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None; Secure";
+				githubState.value = undefined;
+
 				let reauthSuccess = false;
 				if (
 					(props.persistenceState.value.kind === 'PERSISTED' ||
@@ -590,7 +594,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 				if (!reauthSuccess) {
 					trackFailure("github_publish.failure.token_reauth_failed");
-					throw new Error("Failed to re-authenticate with GitHub.");
+					throw new Error("GitHub authorization expired or was blocked. Please reconnect your account.");
 				}
 
 				githubState.value = getGithubStateFromCookie() ?? githubState.value;
@@ -1204,6 +1208,26 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									<p className={styles.successMessage}>
 										{publishErrorMessage.value || "Something went wrong while publishing your game. Please try again."}
 									</p>
+									{(!githubState.value?.session || publishErrorMessage.value?.toLowerCase().includes("reconnect") || publishErrorMessage.value?.toLowerCase().includes("re-authenticate")) && (
+										<Button
+											accent
+											onClick={async () => {
+												publishError.value = false;
+												publishErrorMessage.value = null;
+												await openGitHubAuthPopup(
+													props.persistenceState.value.session?.user.id ?? null,
+													publishDropdown,
+													readyPublish,
+													false,
+													publishSuccess,
+													githubState,
+													true
+												);
+											}}
+										>
+											Reconnect GitHub
+										</Button>
+									)}
 									{githubPRUrl.value && (
 										<Button onClick={() => window.open(githubPRUrl.value!, "_blank")}>
 											View on GitHub

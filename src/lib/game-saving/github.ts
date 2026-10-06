@@ -409,8 +409,10 @@ export async function findGamePullRequest(
 				}
 			);
 			pullRequest = await handleResponse(pullResponse);
-		} catch (error) {
-			skippedCount++;
+		} catch (error: any) {
+			if (error?.status !== 404 && !error?.message?.includes("404")) {
+				skippedCount++;
+			}
 			console.warn(`Skipping pull request #${item.number} while looking for this game's pull request:`, error);
 			continue;
 		}
@@ -428,8 +430,10 @@ export async function findGamePullRequest(
 			if (files.some((file: any) => file.filename === gamePath && file.status !== "removed")) {
 				return { pullRequest, files };
 			}
-		} catch (error) {
-			skippedCount++;
+		} catch (error: any) {
+			if (error?.status !== 404 && !error?.message?.includes("404")) {
+				skippedCount++;
+			}
 			console.warn(`Skipping files for pull request #${item.number}:`, error);
 		}
 	}
