@@ -40,7 +40,7 @@ import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
-import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, findGamePullRequest, recordGamePullRequest, fetchCommitTreeSha, updatePullRequest, updatePullRequestTitle, EDITOR_BRANCH_PREFIX } from "../lib/game-saving/github";
+import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, findGamePullRequest, recordGamePullRequest, fetchCommitTreeSha, updatePullRequest, EDITOR_BRANCH_PREFIX } from "../lib/game-saving/github";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -762,7 +762,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			if (openPR) {
 				const pullRequest = openPR.pullRequest;
 				const titleChanged = pullRequest.title !== prTitle;
-				const bodyChanged = Boolean(prBody && pullRequest.body !== prBody);
+				const normalizeBody = (body?: string | null) => (body ?? "").replace(/\r\n/g, "\n").trim();
+				const bodyChanged = Boolean(prBody && normalizeBody(pullRequest.body) !== normalizeBody(prBody));
 				if (titleChanged || bodyChanged) {
 					try {
 						await updatePullRequest(accessToken, "hackclub", "sprig", pullRequest.number, {
