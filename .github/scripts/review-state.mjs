@@ -49,14 +49,18 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction, revi
 
 export function reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha }) {
 	if (!reviewers || reviewers.size === 0) return "unknown";
+	const authorLower = authorLogin?.toLowerCase();
 	const latestByReviewer = new Map();
 	for (const review of reviews) {
 		const login = review.user?.login;
-		if (!login || !reviewers.has(login) || login === authorLogin) continue;
+		if (!login) continue;
+		const loginLower = login.toLowerCase();
+		if (!reviewers.has(loginLower) && !reviewers.has(login)) continue;
+		if (authorLower && loginLower === authorLower) continue;
 		if (!["APPROVED", "CHANGES_REQUESTED", "DISMISSED"].includes(review.state)) continue;
-		const previous = latestByReviewer.get(login);
+		const previous = latestByReviewer.get(loginLower);
 		if (!previous || new Date(review.submitted_at).getTime() >= new Date(previous.submitted_at).getTime()) {
-			latestByReviewer.set(login, review);
+			latestByReviewer.set(loginLower, review);
 		}
 	}
 
