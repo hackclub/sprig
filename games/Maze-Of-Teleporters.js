@@ -60,20 +60,20 @@ setLegend(
   [ player, bitmap`
 ................
 ................
-.......000......
-.......0.0......
-......0..0......
-......0...0.0...
-....0003.30.0...
-....0.0...000...
-....0.05550.....
-......0...0.....
-.....0....0.....
-.....0...0......
-......000.......
-......0.0.......
-.....00.00......
-................`],
+......00000.....
+....00....0.....
+....0.....0.....
+...00.3.3.0.....
+...0......0.....
+...00.333.0.....
+....00....0.....
+......0000......
+.......0........
+.......0........
+...00000000.....
+......00........
+.....0000.......
+........0.......`],
   [ wall, bitmap`
 0000000000000000
 0000000000000000
@@ -201,19 +201,25 @@ let level = 0
 let larplevel = -1
 const levels = [
   map`
-pwwww
-.ww.w
-.....
-.w.w.
-awwt.`,
+wwp...www
+wwwww.www
+wwwww.www
+wwwww.www
+wwwww...w
+wwww..w.w
+wwww.ww.w
+wwww.ww.w
+wwwwawwtw`,
   map`
-p...w
-..w..
-.ww.w
-..w..
-w.ww.
-..w..
-wtw.a`,
+wwp...w
+wwwww.w
+ww....w
+ww.ww.w
+ww.ww.w
+ww..w..
+www.ww.
+ww..ww.
+wwwtw.a`,
   map`
 p.wt...w
 ..fwww.w
@@ -246,12 +252,12 @@ wwwwwwwww`,
   map`
 wwwwwwwww
 w......ww
-w..ww..ww
-w..ww..ww
-w.kww..ww
-w...w..ww
-wt..w..ww
-wwwww..fs
+w..ww..ws
+w..ww..wf
+w.kww..wf
+w...w..wf
+wt..w..wf
+wwwww..ff
 wwwwwp.ww`,
   map`
 wp.wwwwww
@@ -374,6 +380,141 @@ wwww.w.w.ww
 wwww.w.w.ww
 wwwwtwawkww`,
   map`
+wpwwwwwwwwwwwww
+w.............w
+w.wwwwwwww.wwww
+w.....wwww....w
+w.wwwwwwwwwww.w
+w.wkwa..wwwww.w
+w.w.www.wwwww.w
+w...www.wwwww.w
+www.w.........w
+www.w.wwwwwwwww
+www.wwwww.....w
+www.ww.ww.www.w
+www....ww...wtw
+www.wwww.ww.www
+www.........www
+wwwwwwwwwwwwwww`,
+  map`
+wp..wwwwwwwwww
+w.wwwwwwwwwwww
+w...........ww
+w.wwwwww.ww.ww
+w.wwwww..ww.ww
+w.wwwwww.ww.ww
+w......wwww.ww
+w.wwwww.www.ww
+w.wwwww...w.ww
+w.......w.w.ww
+w.wwwwwww.w.ww
+w.wwwwwww.w.ww
+wtwwwwwa..w.kw
+wwwwwwwwwwwwww`,
+  map`
+wp.wwwwwwwwwwwwww
+ww.ww...........w
+ww....wwwwwwwwwww
+ww..........wt..w
+ww.wwwwwwwwwwww.w
+ww..............w
+ww.wwwwwwwwwww.ww
+ww.wwwwwwwwwww.ww
+ww.w........ww.ww
+ww.wwwwwwww.ww.ww
+ww........w.ww.ww
+wwwwwwwwwww.ww.ww
+wwwwwwwwwww.aw.ww
+..........w.ww.ww
+.wwwwwwww......ww
+.kwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwww`,
+  map`
+wpwwwwwwwwwwwwwwwwww
+w.w..............w.w
+w...wwwwwwwwwwwwww.w
+w..wwww............w
+w.....w.w.wwwwwwww.w
+w.ww.ww.w.wwwwwwww.w
+w.ww.ww.w.w........w
+w.ww.ww.w.wwwwwwww.w
+w.ww.ww.w.wwwwwwww.w
+wwww.ww.w.ww.....w.w
+wwww....w.ww.w...w.w
+wwwwwwwww.ww.wwwww.w
+wwwwwwwww.ww.wwwww.w
+w.......wwww.wwwww.w
+wwwwwww............w
+wwtwwww.wwwwwwwww..w
+ww......wa.........w
+wwwwwww.wwwwwwwww..w
+wk.................w
+wwwwwwwwwwwwwwwwwwww`,
+  map`
+wwwwwwwwwwwwwwwwwwww
+wwt.wwwwawwwwwkwwwww
+www.wwww.www.w.w..ww
+w.w.w..w.....w.ww.ww
+w.w.w...w.wwww..w.ww
+w.w.w...........w.ww
+w.w.w.wwwww.......ww
+w.w.w.w...w.w.ww.www
+w.w.w.www.w.w..w.www
+w.w.w.....w.w..w.www
+w.w.wwwww.w.w..w.www
+w.w.......w.w..w.www
+w.wwwwwwwww.wwww.www
+w.w.........w....www
+w.wwwwwwwww.www.wwww
+w.............w....w
+w.wwwwwwwwwww.w.wwww
+w.wwwwwwwww.w...wwww
+w...........w.wwwwww
+wwwwwwwwwwwwwp.wwwww`,
+  map`
+wwwwwwwwwwwwwwwwwwww
+wk...........w....ww
+wwwwwwwwwwww.wwww.ww
+ww.......www....w.ww
+ww.wwwwwwwwwwww.w.ww
+ww.wwwwwwwwwwww.w.ww
+ww.www......www.w.ww
+ww.www.ww.......w.ww
+ww.wwwaww.wwwww....p
+ww.wwwwww.wwwwwwww.w
+ww..............ww.w
+ww.wwwwwwww.www.ww.w
+ww.www....w.www.ww.w
+ww.wtwwww.w.www.ww.w
+ww.w.wwww.w.www.ww.w
+ww.w......w..ww.ww.w
+ww.wwwwww.wwwww.ww.w
+ww..............ww.w
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww`,
+  map`
+wwwwwwwwwwwwwwwwwwwww
+wwwww..ww.ww........w
+www.w.www.ww.ww.www.w
+www.w.www.ww.ww...w.w
+www.w.www.ww.ww...w.w
+www.w.www.ww.ww..ww.w
+ww..w.w.w.ww.ww..ww.w
+ww.w....w.ww.ww..ww.w
+p....w.ww.ww.ww..ww.w
+w.w.ww....ww.ww..ww.w
+w.w.wwwww.ww.ww...w.w
+w.w.wwwww.ww.ww.w.w.w
+w.w...ww..wwtww.w.w.w
+w.wwwwww.wwwwww.w.w.w
+w.ww.www.www....w.w.w
+w.ww.www......w.w.w.w
+w.ww.www.ww...w.w.waw
+w.....w...wwwww.wwwww
+wwwww.wwww.........ww
+w........wkwwwwwwwwww
+wwwwwwwwwwwwwwwwwwwww`,
+  map`
 wp......w
 w.......w
 w.......w
@@ -406,7 +547,7 @@ setPushables({
   [ player ]: []
 })
 let secrets = 0
-let addTextInGame = addText(`${level}/16`, { 
+let addTextInGame = addText(`${level}/23`, { 
   x: 14,
   y: 1,
   color: color`3`
@@ -465,7 +606,7 @@ afterInput(() => {
 
     const currentLevel = levels[level];
 
-    const newaddTextInGame = addText(`${level}/16 `, { 
+    const newaddTextInGame = addText(`${level}/23`, { 
       x: 14,
       y: 1,
       color: color`3`
@@ -489,7 +630,7 @@ afterInput(() => {
       y: 5,
       color: color`3`
     })}
-    if (level == 16){
+    if (level == 23){
       clearText()
       addText("Congrats!", { y: 4, color: color`3` });
       addText(`Total Secrets ${secrets}`, { x: 5, y: 6, color: color`3` });
@@ -540,7 +681,7 @@ afterInput(() => {
       hasbeendead = false;
       clearText()
       setMap(levels[0])
-      const message = addText(`${level}/16 `, { 
+      const message = addText(`${level}/23`, { 
         x: 14,
         y: 1,
         color: color`3`
@@ -583,7 +724,7 @@ afterInput(() => {
     secrets = 0;
     level = 0;
 
-    const newaddTextInGame = addText(`${level}/16 `, { 
+    const newaddTextInGame = addText(`${level}/23 `, { 
       x: 14,
       y: 1,
       color: color`3`
