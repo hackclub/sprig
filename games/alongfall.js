@@ -1,5 +1,5 @@
 /*
-@title: Dropper
+@title: A Long Fall
 @description: A game where you fall and need to avoid obstacles !
 @author: skueee
 @tags: ['fall', 'levels', 'fast']
