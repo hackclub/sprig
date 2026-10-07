@@ -15,6 +15,7 @@ let health = 3
 let healthtext = health
 
 var loop = 1
+var gameRunning = true
 
 setLegend(
   [spike, bitmap`

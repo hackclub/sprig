@@ -811,6 +811,7 @@ let tutorialText = [
   ]
 ]
 
+let options, tutorialScreen, timerText, playerSprite, block, level;
 setMap(misc.welcome);
 tutorialText[2].forEach((text) => addText(text[0], options=text[1]));
 addText("Press 'L' to play!", options = { x: 1, y: 14, color: color`5` });

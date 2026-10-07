@@ -233,7 +233,7 @@ function checkHelipadLanding() {
 
 function addMissile() {
     let yval = 0;
-    xval = Math.floor(Math.random() * 5);
+    let xval = Math.floor(Math.random() * 5);
   if (!dead) {
       addSprite(xval, yval, missile);
   }
@@ -241,7 +241,7 @@ function addMissile() {
 
 function addHelipad() {
     let yval = 0;
-    xval = Math.floor(Math.random() * 5);
+    let xval = Math.floor(Math.random() * 5);
   if (!dead) {
     if (!difficult) addSprite(xval, yval, helipad);
   }
@@ -262,7 +262,7 @@ function deleteMissile() {
   if (!dead) {
     for(let xval = 0; xval < 5; xval++) {
       for(let yval = 0; yval < 6; yval++) {
-        addSprite(xval, yval, space);
+        if (!getTile(xval, yval).some(sprite => sprite.type === space)) addSprite(xval, yval, space);
       }
     }
   }

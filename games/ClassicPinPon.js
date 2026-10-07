@@ -138,19 +138,19 @@ setPushables({
 })
 
 onInput("w", () => {
-  getFirst(player1).y += -1
+  if (level == 1) getFirst(player1).y += -1
 })
 
 onInput("s", () => {
-  getFirst(player1).y += 1
+  if (level == 1) getFirst(player1).y += 1
 })
 
 onInput("i", () => {
-  getFirst(player2).y += -1
+  if (level == 1) getFirst(player2).y += -1
 })
 
 onInput("k", () => {
-  getFirst(player2).y += 1
+  if (level == 1) getFirst(player2).y += 1
 })
 
 onInput("a", () => {
@@ -167,8 +167,8 @@ const interval = setInterval(gameLoop, 200);
 let ball_vx = 1;
 let ball_vy = 1;
 
-score1 = 0;
-score2 = 0;
+let score1 = 0;
+let score2 = 0;
 
 function showScore() {
   clearText();
