@@ -18,6 +18,7 @@ const goal = "g"
 const spike = "s"
 
 var dir = 0;
+var oldDir;
 var pelletsEaten = 0;
 
 setLegend(

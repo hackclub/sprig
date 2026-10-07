@@ -120,7 +120,7 @@ const melody = tune`
 
 setBackground(background)
 
-gameMap = map`
+var gameMap = map`
 .......
 .......
 .......
@@ -150,7 +150,7 @@ onInput("w", ()=> {
     clearText();
     count = 0;
     setMap(gameMap)
-    fallTime = 300
+    var fallTime = 300
     gameRunning = true;
       var gameLoop = setInterval(() => {
       despawnBall();

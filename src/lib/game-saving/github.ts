@@ -229,28 +229,11 @@ export async function createPullRequest(
 		const pullRequest = await handleResponse(response);
 		const prUrl = pullRequest.html_url; // URL of the created pull request
 
-		const updateGamePRResponse = await fetch(
-			`/api/games/github-update-game`, // Endpoint to update game metadata with the pull request
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					gameId,
-					githubPR: prUrl,
-					isPublished: true,
-				}),
-			}
-		);
-
-		if (!updateGamePRResponse.ok) {
-			const errorData = await updateGamePRResponse
-				.json()
-				.catch(() => ({}));
-			throw new Error(
-				errorData.message || "Failed to update GitHub PR URL in game"
-			);
+		try {
+			await recordGamePullRequest(gameId, prUrl);
+		} catch (error) {
+			// the pull request exists: report success so the editor remembers it and a retry updates it
+			console.warn("The pull request was created, but saving it on the game failed:", error);
 		}
 
 		return pullRequest;
@@ -267,6 +250,145 @@ export async function createPullRequest(
 		}
 		throw error;
 	}
+}
+
+// Saves the pull request URL on the game and marks the game as published.
+export async function recordGamePullRequest(
+	gameId: string,
+	prUrl: string
+): Promise<void> {
+	const updateGamePRResponse = await fetch(
+		`/api/games/github-update-game`, // Endpoint to update game metadata with the pull request
+		{
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				gameId,
+				githubPR: prUrl,
+				isPublished: true,
+			}),
+		}
+	);
+
+	if (!updateGamePRResponse.ok) {
+		const errorData = await updateGamePRResponse
+			.json()
+			.catch(() => ({}));
+		throw new Error(
+			errorData.message || "Failed to update GitHub PR URL in game"
+		);
+	}
+}
+
+// True for an open pull request the editor made from the author's own fork (branch Automated-PR-<time>).
+function isEditorPullRequest(pullRequest: any, author: string): boolean {
+	return (
+		pullRequest?.state === "open" &&
+		pullRequest.head?.repo?.owner?.login?.toLowerCase() === author.toLowerCase() &&
+		/^Automated-PR-\d+$/.test(pullRequest.head?.ref ?? "")
+	);
+}
+
+async function fetchPullRequestWithFiles(
+	accessToken: string,
+	owner: string,
+	repo: string,
+	pullNumber: number
+): Promise<{ pullRequest: any; files: any[] }> {
+	const pullResponse = await fetchWithRetry(
+		`https://api.github.com/repos/${owner}/${repo}/pulls/${pullNumber}`,
+		{
+			headers: getAuthHeaders(accessToken),
+		}
+	);
+	const pullRequest = await handleResponse(pullResponse);
+	const filesResponse = await fetchWithRetry(
+		`https://api.github.com/repos/${owner}/${repo}/pulls/${pullNumber}/files?per_page=100`,
+		{
+			headers: getAuthHeaders(accessToken),
+		}
+	);
+	const files = await handleResponse(filesResponse);
+	return { pullRequest, files };
+}
+
+// Finds the open pull request to update when a game is published again, so it doesn't get a second one.
+// The game's own pull request (the URL saved on the game) comes first; errors there are thrown, since
+// opening a new pull request would then likely make a duplicate. Without one, it looks for the author's
+// open editor pull request that adds gamePath. Returns null when there is none.
+export async function findGamePullRequest(
+	accessToken: string,
+	owner: string,
+	repo: string,
+	author: string,
+	gamePath: string,
+	savedPullRequestUrl?: string | null
+): Promise<{ pullRequest: any; files: any[] } | null> {
+	const saved = savedPullRequestUrl?.match(new RegExp(`^https://github\\.com/${owner}/${repo}/pull/(\\d+)`));
+	if (saved) {
+		const found = await fetchPullRequestWithFiles(accessToken, owner, repo, Number(saved[1]));
+		if (isEditorPullRequest(found.pullRequest, author)) return found;
+	}
+
+	const query = encodeURIComponent(`repo:${owner}/${repo} is:pr is:open author:${author}`);
+	const searchResponse = await fetchWithRetry(
+		`https://api.github.com/search/issues?q=${query}&sort=created&order=asc&per_page=100`,
+		{
+			headers: getAuthHeaders(accessToken),
+		}
+	);
+	const results = await handleResponse(searchResponse);
+
+	for (const item of results.items ?? []) {
+		try {
+			const found = await fetchPullRequestWithFiles(accessToken, owner, repo, item.number);
+			if (!isEditorPullRequest(found.pullRequest, author)) continue;
+			if (found.files.some((file: any) => file.filename === gamePath && file.status !== "removed")) return found;
+		} catch (error) {
+			console.warn(`Skipping pull request #${item.number} while looking for this game's pull request:`, error);
+		}
+	}
+
+	return null;
+}
+
+// Fetches the tree SHA of a commit, to tell whether a new tree changes anything.
+export async function fetchCommitTreeSha(
+	accessToken: string,
+	owner: string,
+	repo: string,
+	commitSha: string
+): Promise<string> {
+	const response = await fetchWithRetry(
+		`https://api.github.com/repos/${owner}/${repo}/git/commits/${commitSha}`,
+		{
+			headers: getAuthHeaders(accessToken),
+		}
+	);
+	const data = await handleResponse(response);
+	return data.tree.sha;
+}
+
+// Updates the title of a pull request.
+export async function updatePullRequestTitle(
+	accessToken: string,
+	owner: string,
+	repo: string,
+	pullNumber: number,
+	title: string
+): Promise<any> {
+	const response = await fetchWithRetry(
+		`https://api.github.com/repos/${owner}/${repo}/pulls/${pullNumber}`,
+		{
+			method: "PATCH",
+			headers: getJsonHeaders(accessToken),
+			body: JSON.stringify({ title }),
+		}
+	);
+
+	return handleResponse(response);
 }
 
 // Fetches the latest commit SHA for the specified branch in a GitHub repository.
@@ -342,13 +464,13 @@ export async function createTreeAndCommit(
 	owner: string,
 	repo: string,
 	baseTreeSha: string,
-	files: { path: string; content?: string; sha?: string }[]
+	files: { path: string; content?: string; sha?: string | null }[]
 ): Promise<string> {
 	const tree = files.map((file) => ({
 		path: file.path,
 		mode: "100644", // File permissions (100644 represents a non-executable file)
 		type: "blob",
-		...(file.sha ? { sha: file.sha } : { content: file.content }),
+		...(file.sha !== undefined ? { sha: file.sha } : { content: file.content }), // sha: null deletes the file
 	}));
 
 	const response = await fetchWithRetry(
@@ -373,16 +495,17 @@ export async function updateBranch(
 	owner: string,
 	repo: string,
 	branchName: string,
-	commitSha: string
+	commitSha: string,
+	force: boolean = true
 ): Promise<any> {
 	const response = await fetchWithRetry(
-		`https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branchName}`, // GitHub API endpoint to update a branch
+		`https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branchName.split("/").map(encodeURIComponent).join("/")}`, // GitHub API endpoint to update a branch
 		{
 			method: "PATCH",
 			headers: getJsonHeaders(accessToken),
 			body: JSON.stringify({
 				sha: commitSha, // Update the branch to point to the new commit
-				force: true, // Force update in case of conflicts
+				force: force, // false: only fast-forward, so commits pushed in the meantime aren't dropped
 			}),
 		}
 	);

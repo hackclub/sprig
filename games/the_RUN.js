@@ -289,6 +289,7 @@ const dash = tune`
 setMap(levels[level]);
 
 setInterval(function(){
+  if (!getFirst(player)) return
   const found1 = tilesWith(enemy1)[0][0].x == tilesWith(player)[0][0].x && tilesWith(enemy1)[0][0].y == tilesWith(player)[0][0].y 
   const found2 = tilesWith(enemy2)[0][0].x == tilesWith(player)[0][0].x && tilesWith(enemy2)[0][0].y == tilesWith(player)[0][0].y 
   const found3 = tilesWith(enemy3)[0][0].x == tilesWith(player)[0][0].x && tilesWith(enemy3)[0][0].y == tilesWith(player)[0][0].y 
@@ -317,6 +318,7 @@ setInterval(function(){
   
 }, 5);
 setInterval(function(){
+  if (!getFirst(player)) return
   
     num = Math.floor(Math.random() * 2);
    step1 = Math.floor(Math.random() * 4);
@@ -348,11 +350,11 @@ setInterval(function(){
 
 onInput("s", () => {
   playTune(dash)
-  getFirst(player).y += 1
+  if (getFirst(player)) getFirst(player).y += 1
 
 });
 onInput("w", () => {
-    getFirst(player).y -= 1
+    if (getFirst(player)) getFirst(player).y -= 1
   playTune(dash)
 
 });
