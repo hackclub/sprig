@@ -159,6 +159,8 @@ async function handleNeedsAuthor(pullRequest, labels) {
 			marker: `<!-- sprig-stale-reminder-${cycle} -->`,
 			body: "This submission has been waiting on author changes for 7 days. Please push fixes soon, or it may be closed after 14 days of no response.",
 		});
+	} else if (hasLabel(labels, "Stale")) {
+		await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: "Stale" });
 	}
 }
 
