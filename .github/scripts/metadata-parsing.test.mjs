@@ -44,6 +44,13 @@ describe("getMetadataValue", () => {
 		expect(getMetadataValue(content, "description")).toBe(
 			"Line 1 of description\nLine 2 of description"
 		);
+
+		const mixedContent = `/* @description: Line 1
+ * Line 2
+ */`;
+		expect(getMetadataValue(mixedContent, "description")).toBe(
+			"Line 1\nLine 2"
+		);
 	});
 
 	it("handles CRLF line endings", () => {
@@ -75,6 +82,8 @@ describe("parseTags", () => {
 		expect(parseTags("['maze', 'puzzle']")).toEqual({ tags: ["maze", "puzzle"] });
 		expect(parseTags('["arcade", "retro"]')).toEqual({ tags: ["arcade", "retro"] });
 		expect(parseTags("[ 'space' ]")).toEqual({ tags: ["space"] });
+		expect(parseTags("['point, click', 'puzzle']")).toEqual({ tags: ["point, click", "puzzle"] });
+		expect(parseTags('["sprig\'s adventure", "retro"]')).toEqual({ tags: ["sprig's adventure", "retro"] });
 	});
 
 	it("explains missing quotes for unquoted tags inside brackets", () => {

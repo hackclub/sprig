@@ -274,13 +274,13 @@ export function getMetadataValue(content, key) {
 	const match = content.match(new RegExp(String.raw`@${key}:[^\S\r\n]*([\s\S]*?)(?=\r?\n\s*\*?\s*@|\r?\n\s*\*\/|\*\/)`, "i"));
 	if (!match?.[1]) return "";
 	const hasLeadingAsterisk = new RegExp(String.raw`(?:\r?\n|^)\s*\*\s*@${key}:`, "i").test(content);
-	let value = match[1];
-	if (hasLeadingAsterisk) {
-		value = value
-			.split(/\r?\n/)
-			.map((line) => line.replace(/^\s*\*\s?/, "").trimEnd())
-			.join("\n");
-	}
+	let value = match[1]
+		.split(/\r?\n/)
+		.map((line, index) => {
+			if (index === 0 && !hasLeadingAsterisk) return line.trimEnd();
+			return line.replace(/^\s*\*\s?/, "").trimEnd();
+		})
+		.join("\n");
 	return value.trim();
 }
 
@@ -306,41 +306,49 @@ export function parseTags(raw) {
 		};
 	}
 
+	try {
+		const parsed = JSON.parse(trimmed);
+		if (Array.isArray(parsed)) {
+			if (parsed.length === 0) {
+				return { tags: [], issue: "Tags list cannot be empty. Please include at least one tag describing your game, for example: `@tags: ['maze']`." };
+			}
+			if (parsed.some((tag) => typeof tag !== "string")) {
+				return { issue: "Tags must be text surrounded by quotes, for example: `@tags: ['maze', 'puzzle']`." };
+			}
+			if (parsed.some((tag) => !tag.trim())) {
+				return { issue: "Tags cannot be blank, for example: `@tags: ['maze', 'puzzle']`." };
+			}
+			return { tags: parsed };
+		}
+	} catch {}
+
 	const inner = trimmed.slice(1, -1).trim();
-	const items = inner.split(",").map((s) => s.trim()).filter(Boolean);
-	const hasUnquoted = items.some(
-		(item) => !(item.startsWith("'") && item.endsWith("'") && item.length >= 2) &&
-		          !(item.startsWith('"') && item.endsWith('"') && item.length >= 2)
-	);
-	if (hasUnquoted) {
+	const tags = [];
+	const itemRegex = /^\s*(?:'((?:[^'\\]|\\.)*)'|"((?:[^"\\]|\\.)*)")\s*(?:,\s*|$)/;
+	let rest = inner;
+	while (rest.length > 0) {
+		const match = rest.match(itemRegex);
+		if (!match) {
+			return {
+				issue: "Each tag inside the brackets must be surrounded by quotes, for example: `@tags: ['maze', 'puzzle']`.",
+			};
+		}
+		const val = (match[1] !== undefined ? match[1] : match[2]).replace(/\\(['"\\])/g, "$1").trim();
+		if (!val) {
+			return { issue: "Tags cannot be blank, for example: `@tags: ['maze', 'puzzle']`." };
+		}
+		tags.push(val);
+		rest = rest.slice(match[0].length);
+	}
+
+	if (tags.length === 0) {
 		return {
-			issue: "Each tag inside the brackets must be surrounded by quotes, for example: `@tags: ['maze', 'puzzle']`.",
+			tags: [],
+			issue: "Tags list cannot be empty. Please include at least one tag describing your game, for example: `@tags: ['maze']`.",
 		};
 	}
 
-	try {
-		const parsed = JSON.parse(trimmed.replaceAll("'", '"'));
-		if (!Array.isArray(parsed)) {
-			return { issue: "Tags must be a list in square brackets, for example: `@tags: ['maze', 'puzzle']`." };
-		}
-		if (parsed.length === 0) {
-			return {
-				tags: [],
-				issue: "Tags list cannot be empty. Please include at least one tag describing your game, for example: `@tags: ['maze']`.",
-			};
-		}
-		if (parsed.some((tag) => typeof tag !== "string")) {
-			return { issue: "Tags must be text surrounded by quotes, for example: `@tags: ['maze', 'puzzle']`." };
-		}
-		if (parsed.some((tag) => !tag.trim())) {
-			return { issue: "Tags cannot be blank, for example: `@tags: ['maze', 'puzzle']`." };
-		}
-		return { tags: parsed };
-	} catch {
-		return {
-			issue: "Tags are not formatted correctly. Use a list of quoted words in brackets, for example: `@tags: ['maze', 'puzzle']`.",
-		};
-	}
+	return { tags };
 }
 
 
