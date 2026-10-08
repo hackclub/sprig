@@ -1,6 +1,6 @@
 //Michael Qu, Period 5, 5/7/25
 
-const player = "p";
+const player = "p"; //declare variable sprites
 const obstacle = "o";
 const sky = "s";
 const ammo = "a";
@@ -15,6 +15,23 @@ const enemy2= "q";
 const laser2 = "z";
 
 setLegend(
+  [player, bitmap`
+0000000LL0000000
+0000000110000000
+0000001771000000
+000000L77L000000
+000000L55L000000
+0900L5LLLL5L0090
+0L00L5L11L5L00L0
+0L0LL5L11L5LL0L0
+010L75LLLL57L010
+L11L75L00L57L11L
+L1LL57L00L75LL1L
+0L1LL500005LL1L0
+L1LLL000000LLL1L
+L11L00000000L11L
+L01100000000110L
+0033000000003300`],
   [enemy,bitmap`
 ......HHHH......
 .....HHH88H.....
@@ -135,22 +152,22 @@ LLLLLLLLLLLLLLLL
 4466666666666644
 4444444444444444`],
   [obstacle, bitmap`
-......333.......
-.....339333.....
-....33999933....
-...339966993....
-...3966666993...
-...36LLLLL6933..
-..33LL1LLLLL93..
-..3LL11LLLLLL3..
-..LLL1LLLL11L3..
-..LLLLLLLLL1LL..
-..LLLLLLLLL1LL..
-..LL1LLLLLLLLL..
-...L11LLLLLLLL..
-...L11LLL1LLLL..
-...LLLLL1LLLL...
-....LLLLLLL.....`],
+0000003330000000
+0000033933300000
+0000339999330000
+0003399669930000
+0003966666993000
+00036LLLLL693300
+0033LL1LLLLL9300
+003LL11LLLLLL300
+00LLL1LLLL11L300
+00LLLLLLLLL1LL00
+00LLLLLLLLL1LL00
+00LL1LLLLLLLLL00
+000L11LLLLLLLL00
+000L11LLL1LLLL00
+000LLLLL1LLLL000
+0000LLLLLLL00000`],
   [bullet, bitmap`
 ......77........
 ......77........
@@ -185,23 +202,6 @@ LLLLLLLLLLLLLLLL
 ...3388888833...
 ....33388333....
 ......3333......`],
-  [player, bitmap`
-.......LL.......
-.......11.......
-......1771......
-......L77L......
-.....0L55L0.....
-.9..L0LLLL0L..9.
-.0..L0L11L0L..0.
-.L1LL0L11L0LL1L.
-.11L00LLLL00L11.
-L11L00L00L00L11L
-L1LL00L22L00LL1L
-.L1LL02..20LL1L.
-L1LLL2....2LLL1L
-L11L2......2L11L
-L2002......2002L
-..33........33..`],
   [sky, bitmap`
 0000000000000000
 0000000000000000
@@ -239,14 +239,13 @@ L2002......2002L
   
 );
 
-setSolids([player, trim]) //player cant go thru border
+setSolids([player, trim]) //player cant go thru trim
 
 let count = 0; //counter for speed up and score
 let ammoCount = 0;
 let heartCount = 0; //lives
-let level = 0;
 
-const levels = [
+const levels = [ //arr containing map
   map`
 stsssssssssssts
 stsssssssssssts
@@ -268,7 +267,7 @@ stsssssssssssts
 stsssssssssssts`
 ]
 
-setMap(levels[level])
+setMap(levels[0])
 
 setPushables({
   [ player ]: []
@@ -313,7 +312,7 @@ onInput("s", () => {
 });
 
 function spawnAmmo() {
-  //ten percetn chance to spawn
+  //ten percent chance to spawn
   if (Math.random() < 0.1) {
     let x = Math.floor(Math.random() * 11) + 2; //spawn from 2 12 inclusive
     let y = 0;
@@ -560,6 +559,7 @@ function checkHit() {
   for (let i = 0; i < obstacles.length; i++) {
     if (obstacles[i].x == p.x && obstacles[i].y == p.y) {
       obstacles[i].remove();
+      addSprite(p.x, p.y, dead);
       heartCount--;
       if (heartCount < 0){
         return true;
@@ -589,6 +589,7 @@ function checkHit() {
   for (let i = 0; i < lasers.length; i++) {
     if (lasers[i].x == p.x && lasers[i].y == p.y) {
       lasers[i].remove();
+      addSprite(p.x, p.y, dead);
       heartCount--;
       if (heartCount < 0){
         return true;
@@ -599,6 +600,7 @@ function checkHit() {
   for (let i = 0; i < lasers2.length; i++) {
     if (lasers2[i].x == p.x && lasers2[i].y == p.y) {
       lasers2[i].remove();
+      addSprite(p.x, p.y, dead);
       heartCount--;
       if (heartCount < 0){
         return true;
@@ -654,7 +656,7 @@ function updateDisplay(){
 }
 
 var gameRunning = true;
-function gameTick() { //replaced gameloop
+function gameTick() { //replaced setInterval
   despawnObstacles();
   moveObstacles();
   moveBullets();
@@ -666,24 +668,25 @@ function gameTick() { //replaced gameloop
   spawnEnemy2();
   updateDisplay();
   count++;
-
+  
   if (count == 20) {
     clearInterval(gameLoop);
     gameLoop = setInterval(gameTick, 300); //increase speed
   }
 
-  if (count == 60) {
+  if (count > 60) {
     clearInterval(gameLoop);
     gameLoop = setInterval(gameTick, 200); //increase speed
   }
-  if (count == 300) {
+  if (count > 300) {
     clearInterval(gameLoop);
     gameLoop = setInterval(gameTick, 150); //increase speed
   }
-  if (count == 600) {
+  if (count > 600) {
     clearInterval(gameLoop);
     gameLoop = setInterval(gameTick, 100); //increase speed
   }
+
   
   
 
