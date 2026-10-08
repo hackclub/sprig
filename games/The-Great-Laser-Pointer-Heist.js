@@ -1,8 +1,9 @@
 /*
-  @title: The Great Laser Pointer Heist (Director's Cut)
+  @title: The Great Laser Pointer Heist
   @author: thisisnaman
   @tags: ['puzzle', 'stealth', 'meme', 'gravity']
-  @description: Play as Garfield-X the meme cat! Flip gravity, dodge Dr. Stick's flashlight patrols, grab all fish energy drives, and steal the legendary red laser pointer across 5 security zones!
+  @addedOn: 2026-10-08
+  @description: Play as Garfield-X the meme cat! Flip gravity, dodge Dr. Stick's flashlight patrols, grab all fish energy drives, and steal the legendary red laser pointer across 7 security zones!
 */
 
 // ===================================================
