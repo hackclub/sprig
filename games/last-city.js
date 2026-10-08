@@ -1,3 +1,11 @@
+/*
+@title: Last City
+@author: Snetchy09
+@description: a top down view zombie survival game set in a city, explore buildings, search for supplies, and try to survive as long as possible. every district can hide something different.
+@tags: ['zombie', 'survival', 'city']
+@addedOn: 2026-10-08
+*/
+
 const player = "p"
 const walker = "z"
 const hunter = "h"
