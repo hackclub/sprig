@@ -5,8 +5,8 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: Ethical Dilemmas
 @description: A simple game about simple dilemmas
 @author: Arik-Charset
-@tags: []
-@addedOn: 2026-04-28
+@tags: ['quiz']
+@addedOn: 2026-10-08
 */
 
 // Game states
