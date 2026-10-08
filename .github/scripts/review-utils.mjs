@@ -270,5 +270,7 @@ export function daysBetween(start, end = new Date()) {
 	if (!start) return 0;
 	const startTime = new Date(start).getTime();
 	if (Number.isNaN(startTime)) return 0;
-	return Math.floor((end.getTime() - startTime) / 86_400_000);
+	const endTime = new Date(end).getTime();
+	if (Number.isNaN(endTime)) return 0;
+	return Math.floor((endTime - startTime) / 86_400_000);
 }

@@ -75,5 +75,6 @@ describe("daysBetween", () => {
 	it("calculates positive day difference correctly", () => {
 		const past = new Date(Date.now() - 3 * 86_400_000).toISOString();
 		expect(daysBetween(past)).toBe(3);
+		expect(daysBetween("2026-10-01T00:00:00Z", "2026-10-04T00:00:00Z")).toBe(3);
 	});
 });
