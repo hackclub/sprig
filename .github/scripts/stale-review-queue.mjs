@@ -99,7 +99,8 @@ async function handleOlderDuplicate(pullRequest, labels) {
 		hasLabel(labels, "Ready for Maintainer");
 	if (reviewerEngaged) return false;
 
-	if (daysBetween(since) < DUPLICATE_CLOSE_AFTER_DAYS) return true;
+	const age = daysBetween(since);
+	if (Number.isNaN(age) || age < DUPLICATE_CLOSE_AFTER_DAYS) return true;
 
 	await commentOnce({
 		issueNumber: pullRequest.number,
