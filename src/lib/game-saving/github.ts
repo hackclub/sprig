@@ -1,39 +1,75 @@
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Handles the response from GitHub API requests.
-// Throws an error with a detailed message if the response is not OK (status code 2xx).
+export class GitHubApiError extends Error {
+	status: number;
+	data: any;
+	constructor(status: number, statusText: string, data: any) {
+		const rawDetail = data?.message || (typeof data === "string" ? data : (data && Object.keys(data).length > 0 ? JSON.stringify(data) : ""));
+		const info = [statusText, rawDetail && rawDetail !== statusText ? rawDetail : ""].filter(Boolean).join(" - ");
+		super(`GitHub API Error (${status})${info ? `: ${info}` : ""}`);
+		this.name = "GitHubApiError";
+		this.status = status;
+		this.data = data;
+	}
+}
+
 async function handleResponse(response: Response): Promise<any> {
 	if (!response.ok) {
 		const errorData = await response.json().catch(() => ({}));
-		const errorMessage = `GitHub API Error (${response.status}): ${
-			response.statusText
-		} - ${JSON.stringify(errorData)}`;
-		console.error(errorMessage);
-		throw new Error(errorMessage);
+		const error = new GitHubApiError(response.status, response.statusText, errorData);
+		console.error(error.message);
+		throw error;
 	}
 	return response.json().catch(() => ({}));
 }
 
-// Sends a GitHub API request and retries up to a specified number of times if it fails.
-// Includes an exponential backoff between retries (delay increases with each retry).
 async function fetchWithRetry(
 	url: string,
 	options: RequestInit,
 	retries: number = 3,
 	delayMs: number = 1000
 ): Promise<Response> {
-	let response: Response;
+	let lastResponse: Response | undefined;
+	let lastError: unknown;
+
 	for (let attempt = 0; attempt < retries; attempt++) {
-		response = await fetch(url, options);
-		if (response.ok) return response;
-		if (attempt < retries - 1) {
-			console.warn(
-				`Retrying GitHub API request (${attempt + 1}/${retries})`
-			); // Log a warning for each retry attempt
-			await delay(delayMs * (attempt + 1)); // Exponential backoff before retrying
+		try {
+			const response = await fetch(url, options);
+			if (response.ok) return response;
+
+			lastResponse = response;
+
+			const isRetryable = response.status === 429 || response.status >= 500;
+			if (!isRetryable) {
+				return response;
+			}
+
+			if (attempt < retries - 1) {
+				console.warn(
+					`Retrying GitHub API request (${attempt + 1}/${retries}) for status ${response.status}`
+				);
+				await delay(delayMs * (attempt + 1));
+			}
+		} catch (error) {
+			lastError = error;
+			lastResponse = undefined;
+			if (attempt < retries - 1) {
+				console.warn(
+					`Retrying GitHub API request (${attempt + 1}/${retries}) after network error:`,
+					error
+				);
+				await delay(delayMs * (attempt + 1));
+			}
 		}
 	}
-	throw new Error("Max retries reached, request failed."); // Throw error if all retries fail
+
+	if (lastResponse) {
+		return lastResponse;
+	}
+
+	throw lastError instanceof Error
+		? lastError
+		: new Error("Max retries reached, request failed.");
 }
 
 // Generates authorization headers for GitHub API requests using the provided access token.
@@ -205,7 +241,8 @@ export async function createPullRequest(
 	base: string,
 	body: string,
 	forkOwner: string,
-	gameId: string
+	gameId: string,
+	onRecordError?: (error: unknown) => void
 ): Promise<any> {
 	await delay(5000); // Delay to ensure the forked repository is ready
 	const fullHead = `${forkOwner}:${head}`;
@@ -232,18 +269,18 @@ export async function createPullRequest(
 		try {
 			await recordGamePullRequest(gameId, prUrl);
 		} catch (error) {
-			// the pull request exists: report success so the editor remembers it and a retry updates it
-			console.warn("The pull request was created, but saving it on the game failed:", error);
+			if (onRecordError) {
+				onRecordError(error);
+			} else {
+				console.warn("The pull request was created, but saving it on the game failed:", error);
+			}
 		}
 
 		return pullRequest;
 	} catch (error: any) {
-		console.error(
-			"Error creating pull request or updating the game:",
-			error
-		);
+		console.error("Error creating pull request:", error);
 
-		if (error.message.includes("422")) {
+		if (error.message?.includes("422")) {
 			console.error(
 				"422 Unprocessable Content: This usually indicates an issue with the 'head' branch. Ensure the branch exists in the fork."
 			);
@@ -252,11 +289,14 @@ export async function createPullRequest(
 	}
 }
 
-// Saves the pull request URL on the game and marks the game as published.
 export async function recordGamePullRequest(
 	gameId: string,
 	prUrl: string
 ): Promise<void> {
+	if (!gameId) {
+		return;
+	}
+
 	const updateGamePRResponse = await fetch(
 		`/api/games/github-update-game`, // Endpoint to update game metadata with the pull request
 		{
@@ -273,21 +313,26 @@ export async function recordGamePullRequest(
 	);
 
 	if (!updateGamePRResponse.ok) {
-		const errorData = await updateGamePRResponse
-			.json()
-			.catch(() => ({}));
-		throw new Error(
-			errorData.message || "Failed to update GitHub PR URL in game"
-		);
+		const rawText = await updateGamePRResponse.text().catch(() => "");
+		let parsed: any;
+		try {
+			parsed = JSON.parse(rawText);
+		} catch {
+			parsed = null;
+		}
+		const message = parsed?.error || parsed?.message || rawText || "Failed to update GitHub PR URL in game";
+		throw new Error(message);
 	}
 }
 
-// True for an open pull request the editor made from the author's own fork (branch Automated-PR-<time>).
+export const EDITOR_BRANCH_PREFIX = "Automated-PR-";
+export const EDITOR_BRANCH_REGEX = /^Automated-PR-\d+$/;
+
 function isEditorPullRequest(pullRequest: any, author: string): boolean {
 	return (
 		pullRequest?.state === "open" &&
 		pullRequest.head?.repo?.owner?.login?.toLowerCase() === author.toLowerCase() &&
-		/^Automated-PR-\d+$/.test(pullRequest.head?.ref ?? "")
+		EDITOR_BRANCH_REGEX.test(pullRequest.head?.ref ?? "")
 	);
 }
 
@@ -314,10 +359,6 @@ async function fetchPullRequestWithFiles(
 	return { pullRequest, files };
 }
 
-// Finds the open pull request to update when a game is published again, so it doesn't get a second one.
-// The game's own pull request (the URL saved on the game) comes first; errors there are thrown, since
-// opening a new pull request would then likely make a duplicate. Without one, it looks for the author's
-// open editor pull request that adds gamePath. Returns null when there is none.
 export async function findGamePullRequest(
 	accessToken: string,
 	owner: string,
@@ -326,10 +367,22 @@ export async function findGamePullRequest(
 	gamePath: string,
 	savedPullRequestUrl?: string | null
 ): Promise<{ pullRequest: any; files: any[] } | null> {
+	if (!author) {
+		throw new Error("GitHub username is required to check for existing pull requests.");
+	}
+
 	const saved = savedPullRequestUrl?.match(new RegExp(`^https://github\\.com/${owner}/${repo}/pull/(\\d+)`));
 	if (saved) {
-		const found = await fetchPullRequestWithFiles(accessToken, owner, repo, Number(saved[1]));
-		if (isEditorPullRequest(found.pullRequest, author)) return found;
+		try {
+			const found = await fetchPullRequestWithFiles(accessToken, owner, repo, Number(saved[1]));
+			if (isEditorPullRequest(found.pullRequest, author)) return found;
+		} catch (error: any) {
+			if (error?.status === 404 || error?.message?.includes("404")) {
+				console.warn(`Saved pull request #${saved[1]} not found (404). Falling through to search.`);
+			} else {
+				throw error;
+			}
+		}
 	}
 
 	const query = encodeURIComponent(`repo:${owner}/${repo} is:pr is:open author:${author}`);
@@ -341,20 +394,57 @@ export async function findGamePullRequest(
 	);
 	const results = await handleResponse(searchResponse);
 
+	if (results.incomplete_results) {
+		throw new Error("GitHub PR search timed out or returned incomplete results. Please try again.");
+	}
+
+	let skippedCount = 0;
 	for (const item of results.items ?? []) {
+		let pullRequest;
 		try {
-			const found = await fetchPullRequestWithFiles(accessToken, owner, repo, item.number);
-			if (!isEditorPullRequest(found.pullRequest, author)) continue;
-			if (found.files.some((file: any) => file.filename === gamePath && file.status !== "removed")) return found;
-		} catch (error) {
+			const pullResponse = await fetchWithRetry(
+				`https://api.github.com/repos/${owner}/${repo}/pulls/${item.number}`,
+				{
+					headers: getAuthHeaders(accessToken),
+				}
+			);
+			pullRequest = await handleResponse(pullResponse);
+		} catch (error: any) {
+			if (error?.status !== 404 && !error?.message?.includes("404")) {
+				skippedCount++;
+			}
 			console.warn(`Skipping pull request #${item.number} while looking for this game's pull request:`, error);
+			continue;
 		}
+
+		if (!isEditorPullRequest(pullRequest, author)) continue;
+
+		try {
+			const filesResponse = await fetchWithRetry(
+				`https://api.github.com/repos/${owner}/${repo}/pulls/${item.number}/files?per_page=100`,
+				{
+					headers: getAuthHeaders(accessToken),
+				}
+			);
+			const files = await handleResponse(filesResponse);
+			if (files.some((file: any) => file.filename === gamePath && file.status !== "removed")) {
+				return { pullRequest, files };
+			}
+		} catch (error: any) {
+			if (error?.status !== 404 && !error?.message?.includes("404")) {
+				skippedCount++;
+			}
+			console.warn(`Skipping files for pull request #${item.number}:`, error);
+		}
+	}
+
+	if (skippedCount > 0) {
+		throw new Error(`Failed to check all open pull requests (${skippedCount} failed to load). Please try again.`);
 	}
 
 	return null;
 }
 
-// Fetches the tree SHA of a commit, to tell whether a new tree changes anything.
 export async function fetchCommitTreeSha(
 	accessToken: string,
 	owner: string,
@@ -368,28 +458,38 @@ export async function fetchCommitTreeSha(
 		}
 	);
 	const data = await handleResponse(response);
+	if (!data?.tree?.sha) {
+		throw new Error("Invalid commit data received from GitHub: missing tree SHA.");
+	}
 	return data.tree.sha;
 }
 
-// Updates the title of a pull request.
-export async function updatePullRequestTitle(
+export async function updatePullRequest(
 	accessToken: string,
 	owner: string,
 	repo: string,
 	pullNumber: number,
-	title: string
+	updates: { title?: string; body?: string }
 ): Promise<any> {
 	const response = await fetchWithRetry(
 		`https://api.github.com/repos/${owner}/${repo}/pulls/${pullNumber}`,
 		{
 			method: "PATCH",
 			headers: getJsonHeaders(accessToken),
-			body: JSON.stringify({ title }),
+			body: JSON.stringify(updates),
 		}
 	);
 
 	return handleResponse(response);
 }
+
+export const updatePullRequestTitle = (
+	accessToken: string,
+	owner: string,
+	repo: string,
+	pullNumber: number,
+	title: string
+) => updatePullRequest(accessToken, owner, repo, pullNumber, { title });
 
 // Fetches the latest commit SHA for the specified branch in a GitHub repository.
 export async function fetchLatestCommitSha(
