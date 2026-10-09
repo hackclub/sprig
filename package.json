@@ -7,7 +7,7 @@
 	"scripts": {
 		"dev": "astro dev",
 		"start": "astro dev",
-		"build": "astro build",
+		"build": "astro build && node scripts/patch-vercel-config.mjs",
 		"test": "bun run ./tests/sprigfuzzy.js",
 		"test:unit": "cross-env PUBLIC_MAX_ITERATIONS=2000 PUBLIC_MAX_LOOP_TIME_MS=1500 vitest"
 	},
