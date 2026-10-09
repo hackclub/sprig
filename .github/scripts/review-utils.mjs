@@ -267,7 +267,12 @@ export async function upsertBotComment({ owner, repo, token, issueNumber, marker
 }
 
 export function daysBetween(start, end = new Date()) {
-	return Math.floor((end.getTime() - new Date(start).getTime()) / 86_400_000);
+	if (!start) return 0;
+	const startTime = new Date(start).getTime();
+	if (Number.isNaN(startTime)) return 0;
+	const endTime = new Date(end).getTime();
+	if (Number.isNaN(endTime)) return 0;
+	return Math.floor((endTime - startTime) / 86_400_000);
 }
 
 export function getMetadataValue(content, key) {
