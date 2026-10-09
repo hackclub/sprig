@@ -21,13 +21,13 @@ Add the following comment.
 
 Select "dowload file". Your download should begin immediately.
 
-<img width="1219" alt="0download" src="https://cloud-j5z0vzmv4-hack-club-bot.vercel.app/0image.png">
+<img width="1219" alt="0download" src="https://cdn.hackclub.com/rescue?url=https://cloud-j5z0vzmv4-hack-club-bot.vercel.app/0image.png">
 
 ## Step 2: Fork the Sprig Repository
 
 Click "Fork" on this page.
 
-<img width="1414" alt="0screenshot_2022-07-07_at_11 40 19_pm" src="https://cloud-1ej4k5vyu-hack-club-bot.vercel.app/0image.png">
+<img width="1414" alt="0screenshot_2022-07-07_at_11 40 19_pm" src="https://cdn.hackclub.com/rescue?url=https://cloud-1ej4k5vyu-hack-club-bot.vercel.app/0image.png">
 
 ## Step 3: Upload your Game to the your Fork
 
@@ -36,7 +36,7 @@ Click "Fork" on this page.
 - Select "Upload File"
 - Add a file name and click "Commit File"
 
-<img width="1458" alt="0screenshot_2022-07-07_at_11 51 32_pm" src="https://cloud-1ej4k5vyu-hack-club-bot.vercel.app/0image.png">
+<img width="1458" alt="0screenshot_2022-07-07_at_11 51 32_pm" src="https://cdn.hackclub.com/rescue?url=https://cloud-1ej4k5vyu-hack-club-bot.vercel.app/0image.png">
 
 ## Step 4: Create Pull Request
 
@@ -48,7 +48,7 @@ Click "Fork" on this page.
 
 Once we approve it! Your game will appear in the gallery :)
 
-<img width="1458" alt="0screenshot_2022-07-07_at_11 52 55_pm" src="https://cloud-1ej4k5vyu-hack-club-bot.vercel.app/0image.png">
+<img width="1458" alt="0screenshot_2022-07-07_at_11 52 55_pm" src="https://cdn.hackclub.com/rescue?url=https://cloud-1ej4k5vyu-hack-club-bot.vercel.app/0image.png">
 
 ## Optional: Add Custom Thumbnail
 
@@ -62,5 +62,5 @@ By defauly the thumbnail will be the first map of your game. If you want to chan
 - Name your image file the file name for your game
 - Click "Commit File"
 
-<img width="1458" alt="0screenshot_2022-07-07_at_11 52 55_pm-1" src="https://cloud-9uttg6gyv-hack-club-bot.vercel.app/0image.png">
+<img width="1458" alt="0screenshot_2022-07-07_at_11 52 55_pm-1" src="https://cdn.hackclub.com/rescue?url=https://cloud-9uttg6gyv-hack-club-bot.vercel.app/0image.png">
 

@@ -1245,7 +1245,7 @@ function fun() {
     addSprite(1, yt, spriteMap[unit.name])
     isPlayerMove = true
     depth = 1
-    looper = false
+    var looper = false
     return
   } else {
     addText(`${unit.name} move.`, {y: 11, color: color`3`})

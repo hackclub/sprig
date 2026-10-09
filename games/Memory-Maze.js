@@ -517,7 +517,7 @@ function hideWallsAndEnableMovement() {
 function checkWin() {
   const player = getFirst(playerTile)
   const exit = getFirst(exitTile)
-  if (player.x === exit.x && player.y === exit.y) {
+  if (player && exit && player.x === exit.x && player.y === exit.y) {
     showWinScreen()
   }
 }

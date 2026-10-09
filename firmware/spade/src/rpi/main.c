@@ -24,6 +24,9 @@
 #define yell puts
 
 #include "HAL.h"
+#include "splash.h"
+#include "hardware/pwm.h"
+#include "hardware/adc.h"
 
 // More firmware stuiff
 #include "upload.h"
@@ -326,6 +329,72 @@ void render_game_menu_screen(char *buffer, Welcome_State welcome_state) {
             GAME_SLOTS(welcome_state.games[welcome_state.games_i].size_b), MAX_SLOTS, size_padding);
 }
 
+
+// ---------------- menu sound effects ----------------
+// One-buffer square-wave blips; buffer is zero-padded so underflow repeats silence.
+static void sfx_tone2(float f1, float f2, int ms, int vol) {
+  struct audio_buffer *buf = get_audio_buffer(true);
+  int16_t *s = (int16_t *)buf->buffer->bytes;
+  int len = ms * (SAMPLES_PER_SECOND / 1000);
+  if (len > (int)buf->max_sample_count) len = buf->max_sample_count;
+  float phase = 0.0f;
+  for (unsigned i = 0; i < buf->max_sample_count; i++) {
+    if ((int)i < len) {
+      float f = ((int)i < len / 2) ? f1 : f2;
+      float env = 1.0f - (float)i / (float)len;
+      phase += f / (float)SAMPLES_PER_SECOND;
+      if (phase >= 1.0f) phase -= 1.0f;
+      s[i] = (int16_t)((phase < 0.5f ? 1 : -1) * (int)(vol * env));
+    } else s[i] = 0;
+  }
+  buf->sample_count = buf->max_sample_count;
+  push_audio_buffer(buf);
+}
+static void sfx_blip(float f, int ms, int vol) { sfx_tone2(f, f, ms, vol); }
+
+// ---------------- brightness control (I/K in menu) ----------------
+static const uint8_t brightness_steps[8] = {8, 20, 40, 70, 110, 160, 210, 255};
+static int brightness_i = 7;               // default: full
+static int brightness_show_frames = 0;     // transient HUD indicator
+static void backlight_apply(void) { pwm_set_gpio_level(17, brightness_steps[brightness_i]); }
+
+// ---------------- battery indicator ----------------
+// VBUS presence on GP24; VSYS/3 on ADC3. 2xAAA: ~3.1V fresh, ~2.0V empty.
+static int battery_pct = -2;
+static int battery_poll_ctr = 0;
+static void hud_overlay(char *ebuf) {
+  if (battery_poll_ctr-- <= 0) {
+    battery_poll_ctr = 30;
+    if (gpio_get(24)) battery_pct = -1;    // USB powered
+    else {
+      adc_select_input(3);
+      adc_read();                          // throwaway after mux switch
+      uint32_t raw = 0;
+      for (int i = 0; i < 4; i++) raw += adc_read();
+      float vsys = (raw / 4) * 3.0f * 3.3f / 4095.0f;
+      int pct = (int)((vsys - 2.0f) * (100.0f / 1.1f));
+      if (pct < 0) pct = 0;
+      if (pct > 100) pct = 100;
+      battery_pct = pct;
+    }
+  }
+  char *nl = strchr(ebuf, '\n');
+  if (!nl || (nl - ebuf) < 20) return;     // need a full-width first line
+  if (battery_pct == -1) {
+    memcpy(&ebuf[16], " USB", 4);
+  } else if (battery_pct >= 0) {
+    char tag[8];
+    snprintf(tag, sizeof tag, "%3d%%", battery_pct);
+    memcpy(&ebuf[16], tag, 4);
+  }
+  if (brightness_show_frames > 0) {
+    brightness_show_frames--;
+    char meter[12];
+    snprintf(meter, sizeof meter, "BRT:%d/8", brightness_i + 1);
+    memcpy(&ebuf[1], meter, strlen(meter));
+  }
+}
+
 void update_welcome_state(Welcome_State* welcome_state) {
     welcome_state->games_len = get_games(&welcome_state->games);
 
@@ -344,19 +413,31 @@ void update_welcome_state(Welcome_State* welcome_state) {
 
     Sprig_Button button_pressed = get_button_press();
 
+    // I/K adjust screen brightness on any welcome screen
+    if (button_pressed == Button_I || button_pressed == Button_K) {
+        if (button_pressed == Button_I && brightness_i < 7) brightness_i++;
+        if (button_pressed == Button_K && brightness_i > 0) brightness_i--;
+        backlight_apply();
+        sfx_blip(700.0f + brightness_i * 90.0f, 22, 1600);
+        brightness_show_frames = 60;
+        button_pressed = Button_None;
+    }
+
     if (welcome_state->screen == GAME_MENU)
         switch (button_pressed) {
             case Button_A:
-                if (welcome_state->games_i > 0) welcome_state->games_i--;
+                if (welcome_state->games_i > 0) { welcome_state->games_i--; sfx_blip(880.0f, 35, 2000); }
                 break;
             case Button_D:
-                if (welcome_state->games_i < welcome_state->games_len - 1) welcome_state->games_i++;
+                if (welcome_state->games_i < welcome_state->games_len - 1) { welcome_state->games_i++; sfx_blip(880.0f, 35, 2000); }
                 break;
             case Button_S:
                 welcome_state->screen = DELETE_CONFIRM;
+                sfx_blip(330.0f, 50, 2000);
                 break;
             case Button_W:
                 welcome_state->screen = RUN_GAME;
+                sfx_tone2(659.25f, 987.77f, 90, 2400);  // confirm chirp up
                 break;
             default:
                 break;
@@ -365,9 +446,11 @@ void update_welcome_state(Welcome_State* welcome_state) {
         switch (button_pressed) {
             case Button_S:
                 welcome_state->screen = GAME_MENU;
+                sfx_blip(550.0f, 40, 1800);
                 break;
             case Button_W:
                 delete_game(welcome_state->games[welcome_state->games_i]);
+                sfx_tone2(987.77f, 440.0f, 110, 2400);  // descending: gone
                 welcome_state->screen = GAME_MENU;
                 update_welcome_state(welcome_state);
                 break;
@@ -387,6 +470,47 @@ void audio_try_push_samples(void) {
     push_audio_buffer( buffer);
 }
 
+
+// ---------------- retro boot jingle ----------------
+// Square-wave arpeggio streamed straight into the i2s buffer pool.
+typedef struct { float freq; int ms; } JingleNote;
+static void play_jingle(void) {
+  static const JingleNote notes[] = {
+    {523.25f, 100},   // C5
+    {659.25f, 100},   // E5
+    {783.99f, 100},   // G5
+    {1046.50f, 280},  // C6
+    {0.0f,     40},   // rest
+    {1318.51f, 420},  // E6, long decay
+  };
+  const int n_notes = sizeof(notes) / sizeof(notes[0]);
+  int n = 0, in_note = 0;
+  float phase = 0.0f;
+  while (n < n_notes) {
+    struct audio_buffer *buf = get_audio_buffer(true);
+    int16_t *s = (int16_t *)buf->buffer->bytes;
+    for (unsigned i = 0; i < buf->max_sample_count; i++) {
+      if (n < n_notes) {
+        int note_len = notes[n].ms * (SAMPLES_PER_SECOND / 1000);
+        float env = 1.0f - (float)in_note / (float)note_len;
+        if (notes[n].freq > 0.0f) {
+          phase += notes[n].freq / (float)SAMPLES_PER_SECOND;
+          if (phase >= 1.0f) phase -= 1.0f;
+          s[i] = (int16_t)((phase < 0.5f ? 1 : -1) * (int)(2800.0f * env));
+        } else s[i] = 0;
+        if (++in_note >= note_len) { n++; in_note = 0; phase = 0.0f; }
+      } else s[i] = 0;
+    }
+    buf->sample_count = buf->max_sample_count;
+    push_audio_buffer(buf);
+  }
+  // one buffer of silence for a clean tail
+  struct audio_buffer *buf = get_audio_buffer(true);
+  memset(buf->buffer->bytes, 0, buf->max_sample_count * 2);
+  buf->sample_count = buf->max_sample_count;
+  push_audio_buffer(buf);
+}
+
 int main() {
     timer_hw->dbgpause = 0;
 
@@ -394,6 +518,36 @@ int main() {
   set_sys_clock_khz(270000, true);
 
     hw_init(); // init HAL
+
+    // battery indicator inputs: VBUS detect + VSYS/3 sense
+    gpio_init(24); gpio_set_dir(24, GPIO_IN);
+    adc_gpio_init(29);
+
+    { // Sprig x Hack Club boot splash, with backlight fade-in
+      // draw the splash while the backlight is still dark
+      gpio_put(17, 0);
+      fill_start();
+      for (int i = 0; i < 160 * 128; i++) write_pixel(splash_img[i]);
+      fill_end();
+
+      // PWM fade-in on the backlight (GP17), ~600ms
+      gpio_set_function(17, GPIO_FUNC_PWM);
+      uint bl_slice = pwm_gpio_to_slice_num(17);
+      pwm_config bl_cfg = pwm_get_default_config();
+      pwm_config_set_wrap(&bl_cfg, 255);
+      pwm_init(bl_slice, &bl_cfg, true);
+      for (int lvl = 0; lvl <= 255; lvl += 3) {
+        pwm_set_gpio_level(17, (uint16_t)((lvl * lvl) >> 8)); // gamma-ish curve
+        sleep_ms(7);
+      }
+      pwm_set_gpio_level(17, 255);
+
+      play_jingle();   // ~1.1s of retro arpeggio
+      sleep_ms(1200);  // linger a moment after the last note
+
+      // GP17 stays in PWM mode: brightness control owns it from here on
+      backlight_apply();
+    }
     stdio_init_all(); // Init serial port
 
   errorbuf_color = color16(0, 255, 255); // cyan
@@ -409,9 +563,10 @@ int main() {
 
     multicore_launch_core1(core1_entry);
 
+    static Game welcome_games_static[METADATA_MAX_ENTRIES];
     Welcome_State welcome_state = {
             .screen = NEW_SLOT,
-            .games = malloc(METADATA_MAX_ENTRIES * sizeof(Game)), // leaks but it's fine since lifetime=program
+            .games = welcome_games_static, // DIAGNOSTIC FIX: was malloc; heap margin is razor thin at boot
             .games_len = 0,
             .games_i = 0
     };
@@ -428,6 +583,7 @@ int main() {
         else if (welcome_state.screen == DELETE_CONFIRM)
             strcpy(errorbuf, delete_confirm_screen);
 
+        hud_overlay(errorbuf);
         render_errorbuf();
         fill_start();
         render(write_pixel);

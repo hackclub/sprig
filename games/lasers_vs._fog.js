@@ -394,21 +394,21 @@ onInput("j", () => {
 
 onInput("w", () => {
   getFirst(laser).y -= 1
-  if(!(isOver(laser,fog,xs=1))){
+  if(!(isOver(laser,fog,1))){
   clearTile(0,getFirst(laser).y+1)}
 })
 
 onInput("s",() => {
   getFirst(laser).y += 1
-  if(!(isOver(laser,fog,xs=-1))){
+  if(!(isOver(laser,fog,-1))){
 clearTile(0,getFirst(laser).y-1)}
 })
 
 onInput("d",fire)
 
 onInput("a",() => {
-  num1 = Math.round(Math.random() * 18)
-  num2 = Math.round(Math.random() * 7)
+  let num1 = Math.round(Math.random() * 18)
+  let num2 = Math.round(Math.random() * 7)
   if(!(num1 <= 1)){
   addSprite(num1,num2,zaper)}
 })

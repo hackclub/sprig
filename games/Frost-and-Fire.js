@@ -1270,6 +1270,7 @@ mml7Uv3Uma
 ]
 
 let lives = 3
+var haswon, exit, jumping, climbing, collided, landed, getlava, getpool, lava_tile, geyser_tile, inventory, inventory_length, movedirs, tile, kill_check, lava_collision_index
 
 function level_setup(level) {
   if (level == 4) {

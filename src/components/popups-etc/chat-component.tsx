@@ -5,11 +5,13 @@ import styles from "./chat-component.module.css";
 import "./chat-syntax.css";
 import { type Signal, useSignal } from "@preact/signals";
 import { RiChatDeleteLine } from "react-icons/ri";
-import markdown from "@wcj/markdown-to-html";
+import MarkdownIt from "markdown-it";
 import { nanoid } from "nanoid";
 import { useState, useEffect } from "preact/hooks";
 import { sha256Hash } from "../../lib/codemirror/util";
 import { PersistenceStateKind } from "../../lib/state";
+
+const md = new MarkdownIt({ html: false, linkify: true, breaks: true });
 
 interface ChatProps {
 	persistenceState: Signal<PersistenceState>;
@@ -160,8 +162,7 @@ Answer the questions that follow based on this unless new code is provided.`;
 								: styles.messageBot
 								}`}
 							dangerouslySetInnerHTML={{
-								__html:
-									(markdown(message.content) as string) || "",
+								__html: md.render(message.content),
 							}}
 						></div>
 					))}

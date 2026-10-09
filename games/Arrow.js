@@ -216,6 +216,7 @@ function spawnMissile() {
   }, 4000);
 };
 
+let levelText;
 function gameWin() {
   levelText = addText("You won!", { x: 6, y: 7 });
   game.gameOver = true;

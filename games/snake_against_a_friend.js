@@ -295,7 +295,7 @@ const levels = [
 ...............`
 ]
 
-clamp = (value, min = 50, max = 400) => Math.max(min, Math.min(max, value))
+let clamp = (value, min = 50, max = 400) => Math.max(min, Math.min(max, value))
 
 onInput("w", () => {
   if (direction_green == Direction.Down && getAll(_body_green).length > 0) {
