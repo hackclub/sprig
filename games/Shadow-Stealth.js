@@ -6,31 +6,15 @@
   @addedOn: 2026-10-06
 */
 
-const player = "p";
 const wall = "w";
-const guard = "g";
-const light = "l";
-const key = "k";
 const door = "d";
+const openDoor = "o";
+const key = "k";
+const light = "l";
+const guard = "g";
+const player = "p";
 
 setLegend(
-  [ player, bitmap`
-................
-...000000000....
-..0.........0...
-..0..50005..0...
-..0..0...0..0...
-...000...000....
-......000.......
-....00...00.....
-...0..000..0....
-...0..000..0....
-...0..000..0....
-....00...00.....
-...0.......0....
-...0.......0....
-................
-................` ],
   [ wall, bitmap`
 0000000000000000
 0000000000000000
@@ -48,38 +32,38 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000` ],
-  [ guard, bitmap`
+  [ door, bitmap`
 ................
-...3333333333...
-..3..........3..
-..3..00..00..3..
-..3..00..00..3..
-..3..........3..
-...3333333333...
-......333.......
-....33...33.....
-...3..333..3....
-...3..333..3....
-...3..333..3....
-....33...33.....
-...3.......3....
-...3.......3....
+...8888888888...
+...8........8...
+...8.888888.8...
+...8.8....8.8...
+...8.8.00.8.8...
+...8.8.00.8.8...
+...8.8....8.8...
+...8.888888.8...
+...8........8...
+...8888888888...
+................
+................
+................
+................
 ................` ],
-  [ light, bitmap`
+  [ openDoor, bitmap`
 ................
-.33333333333333.
-.3............3.
-.3.3333333333.3.
-.3.3........3.3.
-.3.3.333333.3.3.
-.3.3.3....3.3.3.
-.3.3.3....3.3.3.
-.3.3.3....3.3.3.
-.3.3.333333.3.3.
-.3.3........3.3.
-.3.3333333333.3.
-.3............3.
-.33333333333333.
+...8888888888...
+...8........8...
+...8........8...
+...8........8...
+...8...55...8...
+...8...55...8...
+...8........8...
+...8........8...
+...8........8...
+...8888888888...
+................
+................
+................
 ................
 ................` ],
   [ key, bitmap`
@@ -99,113 +83,309 @@ setLegend(
 ................
 ................
 ................` ],
-  [ door, bitmap`
+  [ light, bitmap`
 ................
-...8888888888...
-...8........8...
-...8.888888.8...
-...8.8....8.8...
-...8.8.00.8.8...
-...8.8.00.8.8...
-...8.8....8.8...
-...8.888888.8...
-...8........8...
-...8888888888...
+.33333333333333.
+.3............3.
+.3............3.
+.3............3.
+.3............3.
+.3............3.
+.3............3.
+.3............3.
+.3............3.
+.3............3.
+.3............3.
+.3............3.
+.33333333333333.
 ................
+................` ],
+  [ guard, bitmap`
 ................
+...3333333333...
+..3..........3..
+..3..00..00..3..
+..3..00..00..3..
+..3..........3..
+...3333333333...
+......333.......
+....33...33.....
+...3..333..3....
+...3..333..3....
+...3..333..3....
+....33...33.....
+...3.......3....
+...3.......3....
+................` ],
+  [ player, bitmap`
 ................
+...000000000....
+..0.........0...
+..0..50005..0...
+..0..0...0..0...
+...000...000....
+......000.......
+....00...00.....
+...0..000..0....
+...0..000..0....
+...0..000..0....
+....00...00.....
+...0.......0....
+...0.......0....
 ................
 ................` ]
 );
 
-setMap(map`
+const level1 = map`
 wwwwwwwwwwwwwwww
-wp...w.....k...w
+wp.............w
+w.wwwwwwwwwwww.w
+w.w..........w.w
+w.w...k......w.w
+w.w..........w.w
+w.wwwwwwwwww.w.w
+w....g.......w.w
+w............d.w
+wwwwwwwwwwwwwwww
+`;
+
+const level2 = map`
+wwwwwwwwwwwwwwww
+wp...w.........w
 w.ww.w.wwwwwww.w
 w.ww...w.....w.w
-w.wwww.w.www.w.w
-w..g.w...w.g.w.w
-wwww.wwwww.www.w
-wk...w.......k.w
+w.wwww.w.w.w.w.w
+w....g...w.g.w.w
+wwww.wwwww.w.w.w
+wk...w...k...w.w
 w.wwwwww.wwwww.w
-w......w.....d.w
+w............d.w
 wwwwwwwwwwwwwwww
-`);
+`;
 
-setSolids([ player, wall, guard, door ]);
+const level3 = map`
+wwwwwwwwwwwwwwww
+wp.....w.k...w.w
+wwww.w.w.www.w.w
+w....w.......w.w
+w.ww.wwwwwww.w.w
+w..g.......g...w
+w.wwww.wwwww.w.w
+wk...w...k...w.w
+w.wwwwwwwwww.w.w
+w............d.w
+wwwwwwwwwwwwwwww
+`;
 
-let guards = [
-  { x: 3, y: 5, dir: 1, minX: 1, maxX: 5 },
-  { x: 11, y: 5, dir: -1, minX: 9, maxX: 13 }
+const levelData = [
+  {
+    map: level1,
+    exitX: 13,
+    exitY: 8,
+    guardConfigs: [
+      { minX: 2, maxX: 11, dir: 1 }
+    ]
+  },
+  {
+    map: level2,
+    exitX: 13,
+    exitY: 9,
+    guardConfigs: [
+      { minX: 1, maxX: 4, dir: 1 },
+      { minX: 9, maxX: 12, dir: -1 }
+    ]
+  },
+  {
+    map: level3,
+    exitX: 13,
+    exitY: 9,
+    guardConfigs: [
+      { minX: 2, maxX: 6, dir: 1 },
+      { minX: 8, maxX: 13, dir: -1 }
+    ]
+  }
 ];
 
-function updateVision() {
-  const existingLights = tilesWith(light);
-  existingLights.forEach(t => clearTile(t.x, t.y));
+// Audio
+const sfxKey = tune`300:d4-50 e4-50 g4-100`;
+const sfxSpotted = tune`400:f3-100 eb3-100 d3-200`;
+const sfxWin = tune`500:c4-80 e4-80 g4-80 c5-200`;
+const sfxStep = tune`200:c2-20`;
 
-  guards.forEach(g => {
-    let visionX = g.x + g.dir;
-    let visionY = g.y;
-    
-    for (let i = 0; i < 2; i++) {
-      const tileSprites = getTile(visionX, visionY);
-      const isBlocked = tileSprites.some(s => s.type === wall);
-      if (!isBlocked) {
-        addSprite(visionX, visionY, light);
-        visionX += g.dir;
-      } else {
-        break;
-      }
+let curLevelIndex = 0;
+let gameOver = false;
+let gameWon = false;
+let guardStates = [];
+
+function updateVisionBeams() {
+  const oldLights = getAll(light);
+  for (let i = 0; i < oldLights.length; i++) {
+    oldLights[i].remove();
+  }
+
+  const guards = getAll(guard);
+  for (let i = 0; i < guards.length; i++) {
+    const g = guards[i];
+    const state = guardStates[i];
+    if (!state) continue;
+
+    const bx = g.x + state.dir;
+    const by = g.y;
+
+    const spritesAtTarget = getTile(bx, by);
+    const isSolid = spritesAtTarget.some(s => s.type === wall || s.type === door);
+
+    if (!isSolid) {
+      addSprite(bx, by, light);
     }
-  });
+  }
 }
 
-function moveGuards() {
-  guards.forEach(g => {
-    let nextX = g.x + g.dir;
-    if (nextX > g.maxX || nextX < g.minX) {
-      g.dir *= -1;
-      nextX = g.x + g.dir;
-    }
-    
-    clearTile(g.x, g.y);
-    g.x = nextX;
-    addSprite(g.x, g.y, guard);
-  });
-  
-  updateVision();
+function checkCaught() {
+  const p = getFirst(player);
+  const guards = getAll(guard);
+  if (!p) return false;
+
+  for (let i = 0; i < guards.length; i++) {
+    const g = guards[i];
+    const state = guardStates[i];
+    if (!state) continue;
+
+    const sameTile = (p.x === g.x && p.y === g.y);
+    const inBeam = (p.x === g.x + state.dir && p.y === g.y);
+
+    if (sameTile || inBeam) return true;
+  }
+  return false;
 }
 
-onInput("w", () => { getFirst(player).y -= 1; });
-onInput("s", () => { getFirst(player).y += 1; });
-onInput("a", () => { getFirst(player).x -= 1; });
-onInput("d", () => { getFirst(player).x += 1; });
+function loadLevel(index) {
+  clearText();
+  curLevelIndex = index;
+  const lvl = levelData[curLevelIndex];
+
+  setMap(lvl.map);
+  setSolids([ player, wall, door ]);
+
+  gameOver = false;
+  gameWon = false;
+
+  guardStates = lvl.guardConfigs.map(c => ({
+    dir: c.dir,
+    minX: c.minX,
+    maxX: c.maxX
+  }));
+
+  updateVisionBeams();
+}
+
+onInput("w", () => {
+  if (gameOver) { loadLevel(curLevelIndex); return; }
+  if (gameWon) return;
+  getFirst(player).y -= 1;
+  playTune(sfxStep);
+});
+
+onInput("s", () => {
+  if (gameOver) { loadLevel(curLevelIndex); return; }
+  if (gameWon) return;
+  getFirst(player).y += 1;
+  playTune(sfxStep);
+});
+
+onInput("a", () => {
+  if (gameOver) { loadLevel(curLevelIndex); return; }
+  if (gameWon) return;
+  getFirst(player).x -= 1;
+  playTune(sfxStep);
+});
+
+onInput("d", () => {
+  if (gameOver) { loadLevel(curLevelIndex); return; }
+  if (gameWon) return;
+  getFirst(player).x += 1;
+  playTune(sfxStep);
+});
 
 afterInput(() => {
-  moveGuards();
-  
+  if (gameOver || gameWon) return;
+
   const p = getFirst(player);
-  const pTile = getTile(p.x, p.y);
-  
-  const isDetected = pTile.some(s => s.type === light || s.type === guard);
-  if (isDetected) {
-    addText("SPOTTED! GAME OVER", { y: 5, color: color`3` });
-    p.x = 1;
-    p.y = 1;
+  if (!p) return;
+
+  // 1. Did player walk into guard or beam?
+  if (checkCaught()) {
+    gameOver = true;
+    playTune(sfxSpotted);
+    addText("SPOTTED! PRESS ANY KEY", { y: 4, color: color`3` });
     return;
   }
-  
-  const keysLeft = tilesWith(key).length;
-  if (keysLeft === 0) {
-    const doorTiles = tilesWith(door);
-    if (doorTiles.length > 0) {
-      clearTile(doorTiles[0].x, doorTiles[0].y);
+
+  // 2. Pick up keys
+  const keys = getAll(key);
+  for (let i = 0; i < keys.length; i++) {
+    if (p.x === keys[i].x && p.y === keys[i].y) {
+      keys[i].remove();
+      playTune(sfxKey);
+      break;
     }
   }
 
-  if (keysLeft === 0 && pTile.some(s => s.type === door)) {
-    addText("ESCAPED! YOU WIN", { y: 5, color: color`1` });
+  // 3. Unlock door: Replace locked door with OPEN DOOR sprite
+  if (getAll(key).length === 0) {
+    const doors = getAll(door);
+    for (let i = 0; i < doors.length; i++) {
+      const dx = doors[i].x;
+      const dy = doors[i].y;
+      doors[i].remove();
+      addSprite(dx, dy, openDoor);
+    }
+    // Remove door from solids so player can step into openDoor
+    setSolids([ player, wall ]);
+  }
+
+  // 4. Move all guards according to their patrol range
+  const guards = getAll(guard);
+  for (let i = 0; i < guards.length; i++) {
+    const g = guards[i];
+    const state = guardStates[i];
+    if (!state) continue;
+
+    let nextX = g.x + state.dir;
+    if (nextX > state.maxX || nextX < state.minX) {
+      state.dir *= -1;
+      nextX = g.x + state.dir;
+    }
+    g.x = nextX;
+  }
+
+  // 5. Update vision beams for new guard positions
+  updateVisionBeams();
+
+  // 6. Did a guard shine beam on player
+  if (checkCaught()) {
+    gameOver = true;
+    playTune(sfxSpotted);
+    addText("SPOTTED! PRESS ANY KEY", { y: 4, color: color`3` });
+    return;
+  }
+
+  // 7. Check if player stepped into the exit (open door)
+  const currentLvl = levelData[curLevelIndex];
+  if (getAll(key).length === 0 && p.x === currentLvl.exitX && p.y === currentLvl.exitY) {
+    if (curLevelIndex < levelData.length - 1) {
+      playTune(sfxWin);
+      addText("FLOOR CLEARED!", { y: 4, color: color`1` });
+      setTimeout(() => {
+        loadLevel(curLevelIndex + 1);
+      }, 800);
+    } else {
+      gameWon = true;
+      playTune(sfxWin);
+      addText("ESCAPED THE MUSEUM!", { y: 4, color: color`1` });
+    }
   }
 });
 
-updateVision();
+// Boot level 1
+loadLevel(0);
