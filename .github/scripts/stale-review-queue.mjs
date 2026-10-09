@@ -19,7 +19,6 @@ import {
 	githubRequest,
 	hasLabel,
 	removeLabel,
-	setStateLabel,
 } from "./review-utils.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -64,7 +63,7 @@ for (const pullRequest of openPulls) {
 		continue;
 	}
 
-	await handleUntouchedSubmission(pullRequest);
+	await handleUntouchedSubmission(pullRequest, labels);
 }
 
 async function handleOlderDuplicate(pullRequest, labels) {
@@ -199,9 +198,22 @@ async function handleClaimed(pullRequest) {
 	});
 }
 
-async function handleUntouchedSubmission(pullRequest) {
+async function handleUntouchedSubmission(pullRequest, labels) {
+	if (hasLabel(labels, "Stale")) {
+		const authorLogin = pullRequest.user?.login;
+		const lastAuthorActivity = await latestAuthorCommentTime(pullRequest.number, authorLogin);
+		const staleTime = await latestLabelTime(pullRequest.number, "Stale");
+		if (lastAuthorActivity && staleTime && new Date(lastAuthorActivity).getTime() > new Date(staleTime).getTime()) {
+			await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: "Stale" });
+			if (!hasLabel(labels, "Ready for Playtest")) {
+				await addLabels({ owner, repo, token, issueNumber: pullRequest.number, labels: ["Ready for Playtest"] });
+			}
+		}
+		return;
+	}
+
 	if (daysBetween(pullRequest.updated_at) >= 30) {
-		await setStateLabel({ owner, repo, token, issueNumber: pullRequest.number, state: "Stale" });
+		await addLabels({ owner, repo, token, issueNumber: pullRequest.number, labels: ["Stale"] });
 		await commentOnce({
 			issueNumber: pullRequest.number,
 			marker: STALE_REMINDER_MARKER,
