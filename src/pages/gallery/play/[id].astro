@@ -9,7 +9,7 @@ import DesktopPlayer from '../../../components/big-interactive-pages/desktop-pla
 import fs from 'fs'
 import path from 'path'
 import Button from '../../../components/design-system/button'
-import { IoShuffle } from 'react-icons/io5'
+import { IoShuffle, IoCode } from 'react-icons/io5'
 
 interface Props {
   game: GameMetadata;
@@ -160,9 +160,9 @@ const props: Props = {
       display: flex;
       flex-direction: column;
       width: 100%;
-      height: 800px;
+      min-height: 0;
       position: relative;
-      overflow: hidden;
+      overflow: auto;
     }
 
     :global(.rootContainer) {
@@ -190,11 +190,16 @@ const props: Props = {
   </style>
 </head>
 <body>
-  <MainNavbar session={props.session}>
-    <a href={`/~/new-game?remix=${props.game.filename}`}>
-      <Button icon={IoShuffle}>Remix Game</Button>
+<MainNavbar session={props.session}>
+  {type !== 'document' && (
+    <a href={`/gallery/${props.game.filename}`}>
+      <Button icon={IoCode}>View Code</Button>
     </a>
-  </MainNavbar>
+  )}
+  <a href={`/~/new-game?remix=${props.game.filename}`}>
+    <Button icon={IoShuffle}>Remix Game</Button>
+  </a>
+</MainNavbar>
   <div class="game-view">
     <div class="game-header">
       <div class="game-info">
