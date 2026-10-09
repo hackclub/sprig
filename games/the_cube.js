@@ -2,7 +2,7 @@
 //@title: The Cube
 //@author: Timofey Sorokin
 //@description: A cube that speeds up when it collects Apples
-//@tags: cube, game,
+//@tags: ['cube', 'game',]
 //@addedOn: 2026-09-09
 */
 const player = "p"
