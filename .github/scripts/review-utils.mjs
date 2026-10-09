@@ -269,3 +269,86 @@ export async function upsertBotComment({ owner, repo, token, issueNumber, marker
 export function daysBetween(start, end = new Date()) {
 	return Math.floor((end.getTime() - new Date(start).getTime()) / 86_400_000);
 }
+
+export function getMetadataValue(content, key) {
+	const match = content.match(new RegExp(String.raw`@${key}:[^\S\r\n]*([\s\S]*?)(?=\r?\n\s*\*?\s*@|\r?\n\s*\*\/|\*\/)`, "i"));
+	if (!match?.[1]) return "";
+	const hasLeadingAsterisk = new RegExp(String.raw`(?:\r?\n|^)\s*\*\s*@${key}:`, "i").test(content);
+	let value = match[1]
+		.split(/\r?\n/)
+		.map((line, index) => {
+			if (index === 0 && !hasLeadingAsterisk) return line.trimEnd();
+			return line.replace(/^\s*\*\s?/, "").trimEnd();
+		})
+		.join("\n");
+	return value.trim();
+}
+
+export function parseTags(raw) {
+	const trimmed = raw?.trim() ?? "";
+	if (!trimmed) {
+		return { issue: "Tags cannot be empty. Wrap tags in quotes inside brackets, for example: `@tags: ['maze', 'puzzle']`." };
+	}
+
+	if (trimmed === "[]" || /^\[\s*\]$/.test(trimmed)) {
+		return {
+			tags: [],
+			issue: "Tags list cannot be empty. Please include at least one tag describing your game, for example: `@tags: ['maze']`.",
+		};
+	}
+
+	if (!trimmed.startsWith("[") || !trimmed.endsWith("]")) {
+		const hasQuotes = /["']/.test(trimmed);
+		return {
+			issue: hasQuotes
+				? "Tags must be enclosed in square brackets `[` and `]`, for example: `@tags: ['maze', 'puzzle']`."
+				: "Tags must be enclosed in square brackets and quotes, for example: `@tags: ['maze', 'puzzle']`.",
+		};
+	}
+
+	try {
+		const parsed = JSON.parse(trimmed);
+		if (Array.isArray(parsed)) {
+			if (parsed.length === 0) {
+				return { tags: [], issue: "Tags list cannot be empty. Please include at least one tag describing your game, for example: `@tags: ['maze']`." };
+			}
+			if (parsed.some((tag) => typeof tag !== "string")) {
+				return { issue: "Tags must be text surrounded by quotes, for example: `@tags: ['maze', 'puzzle']`." };
+			}
+			if (parsed.some((tag) => !tag.trim())) {
+				return { issue: "Tags cannot be blank, for example: `@tags: ['maze', 'puzzle']`." };
+			}
+			return { tags: parsed };
+		}
+	} catch {}
+
+	const inner = trimmed.slice(1, -1).trim();
+	const tags = [];
+	const itemRegex = /^\s*(?:'((?:[^'\\]|\\.)*)'|"((?:[^"\\]|\\.)*)")\s*(?:,\s*|$)/;
+	let rest = inner;
+	while (rest.length > 0) {
+		const match = rest.match(itemRegex);
+		if (!match) {
+			return {
+				issue: "Each tag inside the brackets must be surrounded by quotes, for example: `@tags: ['maze', 'puzzle']`.",
+			};
+		}
+		const val = (match[1] !== undefined ? match[1] : match[2]).replace(/\\(['"\\])/g, "$1").trim();
+		if (!val) {
+			return { issue: "Tags cannot be blank, for example: `@tags: ['maze', 'puzzle']`." };
+		}
+		tags.push(val);
+		rest = rest.slice(match[0].length);
+	}
+
+	if (tags.length === 0) {
+		return {
+			tags: [],
+			issue: "Tags list cannot be empty. Please include at least one tag describing your game, for example: `@tags: ['maze']`.",
+		};
+	}
+
+	return { tags };
+}
+
+
