@@ -362,7 +362,7 @@ afterInput(() => {
   // 5. Update vision beams for new guard positions
   updateVisionBeams();
 
-  // 6. Did a guard shine beam on player
+  // 6. Did a guard shine beam on player?
   if (checkCaught()) {
     gameOver = true;
     playTune(sfxSpotted);
