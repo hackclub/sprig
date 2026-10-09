@@ -37,58 +37,21 @@ try {
 if (event.comment && event.issue?.pull_request) {
 	const issueNumber = event.issue.number;
 	if (event.issue.state !== "open") {
-		console.log(`PR #${issueNumber} is not open; skipping review command/sync.`);
+		console.log(`PR #${issueNumber} is not open; skipping review sync.`);
 		process.exit(0);
 	}
 	if (event.issue.draft) {
-		console.log(`PR #${issueNumber} is a draft; skipping review command/sync.`);
+		console.log(`PR #${issueNumber} is a draft; skipping review sync.`);
 		process.exit(0);
 	}
 
-	const commenter = event.comment.user?.login;
-	const authorLogin = event.issue.user?.login;
-	const body = event.comment.body?.trim() ?? "";
 	const labels = (event.issue.labels ?? []).map((l) => (typeof l === "string" ? l : l.name));
-
 	if (!hasLabel(labels, "Submission")) {
 		console.log(`PR #${issueNumber} is not labeled "Submission"; skipping.`);
 		process.exit(0);
 	}
 
 	await ensureReviewLabels({ owner, repo, token });
-
-	if (commenter && reviewers.has(commenter.toLowerCase())) {
-		if (authorLogin && commenter.toLowerCase() === authorLogin.toLowerCase()) {
-			console.log(`Comment by PR author (${commenter}); ignoring commands to prevent self-approval.`);
-		} else {
-			if (/^\s*\/(?:needs-author|request-changes)\s*$/im.test(body)) {
-				await setStateLabel({ owner, repo, token, issueNumber, state: "Needs Author" });
-				console.log(`Reviewer ${commenter} commanded "Needs Author" on #${issueNumber}.`);
-				process.exit(0);
-			}
-			if (/^\s*\/(?:approve|ready-maintainer)\s*$/im.test(body)) {
-				if (!hasLabel(labels, "Failed")) {
-					await dismissActiveChangeRequests(issueNumber, commenter);
-					await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Maintainer" });
-					console.log(`Reviewer ${commenter} commanded "Ready for Maintainer" on #${issueNumber}.`);
-				} else {
-					console.log(`PR #${issueNumber} has failed checks; ignoring approve command.`);
-				}
-				process.exit(0);
-			}
-			if (/^\s*\/ready-playtest\s*$/im.test(body)) {
-				if (!hasLabel(labels, "Failed")) {
-					await dismissActiveChangeRequests(issueNumber, commenter);
-					await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Playtest" });
-					console.log(`Reviewer ${commenter} commanded "Ready for Playtest" on #${issueNumber}.`);
-				} else {
-					console.log(`PR #${issueNumber} has failed checks; ignoring ready-playtest command.`);
-				}
-				process.exit(0);
-			}
-		}
-	}
-
 	await syncSinglePR(issueNumber);
 	process.exit(0);
 }
@@ -204,23 +167,6 @@ async function syncAllOpenSubmissions() {
 				console.error(`Failed to reconcile #${issueNumber}:`, err.message);
 			}
 		}
-	}
-}
-
-async function dismissActiveChangeRequests(prNumber, reviewerLogin) {
-	try {
-		const reviews = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/reviews`);
-		const lowerReviewer = reviewerLogin.toLowerCase();
-		for (const review of reviews) {
-			if (review.user?.login?.toLowerCase() === lowerReviewer && review.state === "CHANGES_REQUESTED") {
-				await githubRequest(token, "PUT", `/repos/${owner}/${repo}/pulls/${prNumber}/reviews/${review.id}/dismissals`, {
-					message: "Superseded by reviewer command",
-				});
-				console.log(`Dismissed CHANGES_REQUESTED review #${review.id} for ${reviewerLogin} on #${prNumber}.`);
-			}
-		}
-	} catch (e) {
-		console.warn(`Could not dismiss change requests for ${reviewerLogin}:`, e.message);
 	}
 }
 
