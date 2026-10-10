@@ -41,7 +41,7 @@ let duplicateGroupNumbers = new Set();
 let reviewers = new Set();
 try {
 	const reviewRoles = JSON.parse(readFileSync(path.resolve(process.env.SUBMISSION_PATH ?? process.cwd(), ".github/review-roles.json"), "utf8"));
-	reviewers = new Set([...(reviewRoles.maintainers ?? []), ...(reviewRoles.triagers ?? [])]);
+	reviewers = new Set([...(reviewRoles.maintainers ?? []), ...(reviewRoles.triagers ?? [])].map((u) => u.toLowerCase()));
 } catch {
 	console.warn("review-roles.json not found or invalid; review state changes will be skipped.");
 }
@@ -89,56 +89,6 @@ if (event.action === "unassigned") {
 	process.exit(0);
 }
 
-if (event.review) {
-	if (event.action !== "submitted" && event.action !== "dismissed") {
-		console.log(`Review action is ${event.action}, ignoring.`);
-		process.exit(0);
-	}
-
-	const reviewerLogin = event.review.user?.login;
-	const authorLogin = pullRequest.user?.login;
-
-	if (reviewerLogin && authorLogin && reviewerLogin === authorLogin) {
-		console.log(`Review ${event.action} by PR author (${reviewerLogin}). Ignoring state change to prevent self-approval.`);
-		process.exit(0);
-	}
-
-	if (!reviewerLogin || !reviewers.has(reviewerLogin)) {
-		console.log(`Review ${event.action} for ${reviewerLogin ?? "unknown reviewer"}. Ignoring because reviewer is not listed.`);
-		process.exit(0);
-	}
-
-	const reviewState = event.review.state?.toLowerCase();
-	if (event.action === "submitted" && reviewState !== "approved" && reviewState !== "changes_requested") {
-		console.log(`Review state is ${reviewState}, ignoring.`);
-		process.exit(0);
-	}
-
-	const reviewStatus = await getLatestReviewStatus({
-		owner,
-		repo,
-		token,
-		prNumber,
-		reviewers,
-		authorLogin: pullRequest.user?.login,
-		headSha: pullRequest.head?.sha,
-	});
-	const currentLabels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
-
-	if (reviewStatus === "changes_requested") {
-		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
-		console.log(`Review requested changes, set "Needs Author".`);
-	} else if (reviewStatus === "approved") {
-		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Maintainer" });
-		console.log(`Review approved, set "Ready for Maintainer".`);
-	} else if (reviewStatus === "none" && hasLabel(currentLabels, "Ready for Maintainer")) {
-		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Playtest" });
-		console.log(`Approval dismissed and no active review remains, set "Ready for Playtest".`);
-	} else {
-		console.log(`Review ${event.action}; review state is ${reviewStatus}, leaving labels unchanged.`);
-	}
-	process.exit(0);
-}
 const workspace = path.resolve(process.env.SUBMISSION_PATH ?? process.cwd());
 const reviewBaseUrl = process.env.SPRIG_REVIEW_BASE_URL ?? "https://sprig.hackclub.com/editor";
 
@@ -718,10 +668,6 @@ async function applyLabels(result) {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Verified"] });
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: changes.state });
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Failed" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Needs Author" });
-		if (changes.state !== "Ready for Maintainer") {
-			await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Maintainer" });
-		}
 	} else {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Failed"] });
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });

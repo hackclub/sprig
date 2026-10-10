@@ -22,7 +22,8 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction, revi
 		if (targetState !== "Ready for Playtest") remove.add("Ready for Playtest");
 		if (targetState !== "Ready for Maintainer") remove.add("Ready for Maintainer");
 
-		if (hasLabel(labels, "Claimed")) add.add("Claimed");
+		// "Claimed" is owned by assignment handlers in a separate concurrency lane.
+		// Never copy it from this label snapshot.
 
 		return {
 			add: [...add],
@@ -37,8 +38,6 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction, revi
 		remove.add("Ready for Playtest");
 		remove.add("Ready for Maintainer");
 
-		if (hasLabel(labels, "Claimed")) add.add("Claimed");
-
 		return {
 			add: [...add],
 			remove: [...remove].filter((label) => hasLabel(labels, label)),
@@ -50,10 +49,13 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction, revi
 
 export function reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha }) {
 	if (!reviewers || reviewers.size === 0) return "unknown";
+	const lowerReviewers = new Set([...reviewers].map((u) => u.toLowerCase()));
+	const lowerAuthor = authorLogin?.toLowerCase();
+
 	const latestByReviewer = new Map();
 	for (const review of reviews) {
-		const login = review.user?.login;
-		if (!login || !reviewers.has(login) || login === authorLogin) continue;
+		const login = review.user?.login?.toLowerCase();
+		if (!login || !lowerReviewers.has(login) || login === lowerAuthor) continue;
 		if (!["APPROVED", "CHANGES_REQUESTED", "DISMISSED"].includes(review.state)) continue;
 		const previous = latestByReviewer.get(login);
 		if (!previous || new Date(review.submitted_at).getTime() >= new Date(previous.submitted_at).getTime()) {
@@ -62,8 +64,15 @@ export function reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha
 	}
 
 	const active = [...latestByReviewer.values()];
-	if (active.some((r) => r.state === "CHANGES_REQUESTED")) return "changes_requested";
-	if (active.some((r) => r.state === "APPROVED" && Boolean(headSha) && r.commit_id === headSha)) return "approved";
+	if (active.some((r) => r.state === "CHANGES_REQUESTED")) {
+		return "changes_requested";
+	}
+	if (active.some((r) => r.state === "APPROVED" && Boolean(headSha) && r.commit_id === headSha)) {
+		return "approved";
+	}
+	if (active.some((r) => r.state === "DISMISSED")) {
+		return "dismissed";
+	}
 	return "none";
 }
 
