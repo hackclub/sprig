@@ -1,6 +1,6 @@
 /*
 @title: Lawnmower
-@description: Simple but satisying zen loop game. Mow the lawn, and it will come back and don't hit the rocks!
+@description: Simple but satisying zen loop game. Mow the lawn, and it will grow back and don't hit the rocks!
 @author: Aarnav Verma
 @tags: ['zen', 'satifying']
 @addedOn: 2026-10-03
