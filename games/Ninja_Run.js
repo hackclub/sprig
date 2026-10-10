@@ -241,7 +241,7 @@ onInput("d", () => {
 afterInput(() => {
   if (alive) {
     const rand = getRandInt(0, 2)
-    text = "Score: " + String(score)
+    let text = "Score: " + String(score)
     if (rand === 0) {
       bombs[0].active = true
     }

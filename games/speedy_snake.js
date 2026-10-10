@@ -303,6 +303,6 @@ function pause(){
 
 function setI(){
   clearInterval(g);
-  g=window.setInterval(checkState, speed);
+  g=setInterval(checkState, speed);
 }
 resetGame();

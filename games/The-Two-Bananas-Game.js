@@ -865,6 +865,7 @@ let menuHelpColor = 0;
 let menuSelection = "Play on PC"
 let inMenu = true; // DEV TESTING SET TO TRUE WHEN DONE
 let inGame = false; // DEV TESTING SET TO FALSE WHEN DONE
+let isMenu, inHelpMenu;
 
 // help menu stuffs
 let backButtonColor = 9;

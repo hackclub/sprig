@@ -492,19 +492,19 @@ setPushables({
 })
 
 onInput("s", () => {
-  getFirst(player).y += 1
+  if (getFirst(player)) getFirst(player).y += 1
   
 })
 onInput("w",()=> {
-  getFirst(player).y -=1
+  if (getFirst(player)) getFirst(player).y -=1
    
 })
 onInput("a",()=>{
-  getFirst(player).x -=1
+  if (getFirst(player)) getFirst(player).x -=1
   
 })
 onInput ("d",()=>{
-  getFirst(player).x+=1
+  if (getFirst(player)) getFirst(player).x+=1
    
 })
 onInput("j",()=>{

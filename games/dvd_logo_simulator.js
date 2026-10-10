@@ -77,7 +77,7 @@ function update_legend() {
 update_legend()
 setSolids([]);
 
-var map = (".".repeat(map_width)+"\n").repeat(map_height).trim()
+var blank_map = (".".repeat(map_width)+"\n").repeat(map_height).trim()
 
 
 
@@ -164,7 +164,7 @@ function restart() {
   
   colour_index = 0
   update_legend()
-  setMap(map)
+  setMap(blank_map)
   var dvd_start_x = 2* Math.floor(Math.random() * (map_width / 2));
   var dvd_start_y = 2* Math.floor(Math.random() * (map_height / 2));
   
