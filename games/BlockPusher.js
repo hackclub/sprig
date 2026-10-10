@@ -347,24 +347,28 @@ const getPlayerSprite = () => getFirst(sprites.player.key)
 
 onInput("w", () => {
   const playerSprite = getPlayerSprite()
+  if (!playerSprite) return
   if (playerSprite.y > 0) {
     playerSprite.y -= 1
   }
 });
 onInput("s", () => {
   const playerSprite = getPlayerSprite()
+  if (!playerSprite) return
   if (playerSprite.y < height() - 1) {
     playerSprite.y += 1
   }
 });
 onInput("a", () => {
   const playerSprite = getPlayerSprite()
+  if (!playerSprite) return
   if (playerSprite.x > 0) {
     playerSprite.x -= 1
   }
 });
 onInput("d", () => {
   const playerSprite = getPlayerSprite()
+  if (!playerSprite) return
   if (playerSprite.x < width() - 1) {
     playerSprite.x += 1
   }
@@ -380,6 +384,7 @@ onInput("l", () => {
 afterInput(() => {
   const block = getFirst(sprites.block.key)
   const goal = getFirst(sprites.goal.key)
+  if (!block || !goal) return
 
   if (block.x === goal.x && block.y === goal.y) {
     nextLevel()

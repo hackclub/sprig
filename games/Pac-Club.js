@@ -813,8 +813,10 @@ setSolids([pacman, wallH1, wallH2, wallH3, wallH4, wallH5,
            wallMergeUp, wallMergeDown, blinky, pinky, inky,
            clyde, header
 ])
-setInterval(function(){blinkyMove()}, 300)
-setInterval(function(){ghostMove()}, 300)
+function safe(fn) { return function() { try { fn() } catch (e) {} } }
+function onSafeInput(key, fn) { onInput(key, safe(fn)) }
+setInterval(safe(blinkyMove), 300)
+setInterval(safe(ghostMove), 300)
 
 addText("SCORE: " + score.toString(), {
       x: 0,
@@ -822,49 +824,49 @@ addText("SCORE: " + score.toString(), {
       color: color`2`
   })
 
-onInput("w", () => {
+onSafeInput("w", () => {
   checkOverlap("pacman", getFirst(pacman).x, getFirst(pacman).y-1)
   getFirst(pacman).y -= 1
   update()
 })
 
-onInput("i", () => {
+onSafeInput("i", () => {
   checkOverlap("pacman", getFirst(pacman).x, getFirst(pacman).y-1)
   getFirst(pacman).y -= 1
   update()
 })
 
-onInput("a", () => {
+onSafeInput("a", () => {
   checkOverlap("pacman", getFirst(pacman).x-1, getFirst(pacman).y)
   getFirst(pacman).x -= 1
   update()
 })
 
-onInput("j", () => {
+onSafeInput("j", () => {
   checkOverlap("pacman", getFirst(pacman).x-1, getFirst(pacman).y)
   getFirst(pacman).x -= 1
   update()
 })
 
-onInput("s", () => {
+onSafeInput("s", () => {
   checkOverlap("pacman", getFirst(pacman).x, getFirst(pacman).y+1)
   getFirst(pacman).y += 1
   update()
 })
 
-onInput("k", () => {
+onSafeInput("k", () => {
   checkOverlap("pacman", getFirst(pacman).x, getFirst(pacman).y+1)
   getFirst(pacman).y += 1
   update()
 })
 
-onInput("d", () => {
+onSafeInput("d", () => {
   checkOverlap("pacman", getFirst(pacman).x+1, getFirst(pacman).y)
   getFirst(pacman).x += 1
   update()
 })
 
-onInput("l", () => {
+onSafeInput("l", () => {
   checkOverlap("pacman", getFirst(pacman).x+1, getFirst(pacman).y)
   getFirst(pacman).x += 1
   update()

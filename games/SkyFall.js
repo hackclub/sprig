@@ -103,7 +103,7 @@ function moveMeteors() {
     meteorSprite.y += 1;
     
     if (meteorSprite.y >= height() - 1) {
-      setTimeout(() => meteorSprite.remove(), 1000);
+      setTimeout(() => { try { meteorSprite.remove() } catch (e) {} }, 1000);
     }
 
     detectCollisions();
