@@ -1,9 +1,10 @@
-// @title: Retro Snake Chime
-// @author: Rajiv Kumar
-// @tags: ['classic', 'retro']
-// @addedOn: 2026-10-10
-// @description: A classic snake game built with optimized rendering functions and sound effects. Eat fruit to grow, avoid the walls and yourself!
-
+/*
+@title: Retro Snake Chime
+@author: Rajiv Kumar
+@tags: ['classic', 'retro']
+@addedOn: 2026-10-10
+@description: A classic snake game built with optimized rendering functions and sound effects. Eat fruit to grow, avoid the walls and yourself!
+*/
 
 let snake = [{x:8, y:8}, {x:7, y:8}, {x:6, y:8}];
 let dx = 1;
