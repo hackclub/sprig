@@ -710,23 +710,28 @@ onInput("l", () => { //next
   setBackground(space);
 });
 
+let noPlayer = false
 onInput("d", () => {
   // Move the player one tile to the right
+  if (!getFirst(player)) { noPlayer = true; return }
   getFirst(player).x += 1
 })
 
 onInput("s", () => {
   // Move the player one tile to the right
+  if (!getFirst(player)) { noPlayer = true; return }
   getFirst(player).y += 1
 })
 
 onInput("w", () => {
   // Move the player one tile to the right
+  if (!getFirst(player)) { noPlayer = true; return }
   getFirst(player).y -= 1
 })
 
 onInput("a", () => {
   // Move the player one tile to the right
+  if (!getFirst(player)) { noPlayer = true; return }
   getFirst(player).x -= 1
 })
 
@@ -927,6 +932,7 @@ afterInput(() => {
 });
 
 afterInput(() => {
+  if (noPlayer) { noPlayer = false; return }
   if (level == 27) {
     addText("Final challenge!", { y: 8, color: color`7` });
     addText("Pick the alien", { y: 9, color: color`7` });

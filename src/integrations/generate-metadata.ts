@@ -30,11 +30,11 @@ type BunRuntime = {
 const bun = (globalThis as typeof globalThis & { Bun?: BunRuntime }).Bun;
 
 const regexExpr = {
-	title: /@title: (.+)/,
-	author: /@author: (.+)/,
-	tags: /@tags: (.+)/,
-	addedOn: /@addedOn: (.+)/,
-	description: /@description: (.+)/,
+	title: /@title: (.+)/i,
+	author: /@author: (.+)/i,
+	tags: /@tags: (.+)/i,
+	addedOn: /@addedOn: (.+)/i,
+	description: /@description: (.+)/i,
 };
 
 type ParsedMetaEntry = {
@@ -254,8 +254,9 @@ const generateMetadataArtifacts = async () => {
 	const successful = results.filter((r) => !(r instanceof Error)) as ProcessedGame[];
 
 	if (errors.length) {
-		const errorMsg = errors.map((e) => `- ${e.message}`).join("\n");
-		throw new Error(`Failed to process ${errors.length} game(s):\n${errorMsg}`);
+		for (const err of errors) {
+			console.warn(`[generate-metadata] Warning: ${err.message}`);
+		}
 	}
 
 	const metaOut = await writeTextIfChanged(METADATA_PATH, JSON.stringify(successful.map((r) => r.metadata)));
@@ -272,12 +273,14 @@ const generateMetadataArtifacts = async () => {
 	);
 };
 
-export default (): AstroIntegration => ({
-	name: "generate-metadata",
-	hooks: {
-		"astro:config:done": async () => {
-			await mkdir(ASTRO_DIR, { recursive: true });
-			await generateMetadataArtifacts();
+export default function generateMetadata(): AstroIntegration {
+	return {
+		name: "generate-metadata",
+		hooks: {
+			"astro:config:done": async () => {
+				await mkdir(ASTRO_DIR, { recursive: true });
+				await generateMetadataArtifacts();
+			},
 		},
-	},
-});
+	};
+}

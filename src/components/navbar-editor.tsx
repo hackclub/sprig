@@ -40,7 +40,7 @@ import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
-import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage } from "../lib/game-saving/github";
+import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, findGamePullRequest, recordGamePullRequest, fetchCommitTreeSha, updatePullRequest, EDITOR_BRANCH_PREFIX } from "../lib/game-saving/github";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -117,89 +117,111 @@ type StuckData = {
 	description: string;
 };
 
-const openGitHubAuthPopup = async (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any, githubState: any) => {
+const openGitHubAuthPopup = (userId: string | null, publishDropdown: any, readyPublish: any, isPublish: any, publishSuccess: any, githubState: any, forceReauth = false): Promise<boolean> => {
 	const startTime = Date.now();
-	try {
-		reportMetric('github_auth_popup.initiated');
+	return new Promise((resolve) => {
+		try {
+			reportMetric('github_auth_popup.initiated');
 
-		if (isPublish) {
-			publishDropdown.value = true;
-			publishSuccess.value = true;
-			return;
-		}
-
-		if (githubState.value) {
-			publishDropdown.value = true;
-			readyPublish.value = true;
-			return;
-		}
-
-		const githubAuthUrl = constructGithubAuthUrl(userId);
-
-		const width = 600,
-			height = 700;
-		const left = (screen.width - width) / 2;
-		const top = (screen.height - height) / 2;
-
-		const authWindow = window.open(
-			githubAuthUrl,
-			"GitHub Authorization",
-			`width=${width},height=${height},top=${top},left=${left}`
-		);
-
-		if (!authWindow || authWindow.closed || typeof authWindow.closed === "undefined") {
-			alert("Popup blocked. Please allow popups for this site.");
-			return;
-		}
-
-		authWindow.focus();
-
-		const authCheckInterval = setInterval(() => {
-			if (authWindow.closed) {
-				clearInterval(authCheckInterval);
-				alert("Authentication window was closed unexpectedly.");
-				reportMetric("github_auth_popup.closed_unexpectedly");
+			if (!forceReauth && isPublish) {
+				publishDropdown.value = true;
+				publishSuccess.value = true;
+				resolve(true);
+				return;
 			}
-		}, 1000);
 
-		const handleMessage = (event: MessageEvent) => {
-			if (event.origin !== window.location.origin) return;
-
-			const { status, message, accessToken, githubUsername } = event.data;
-
-			const timeTaken = Date.now() - startTime;
-
-			if (status === "success") {
-				const expires = new Date(Date.now() + 7 * 864e5).toUTCString(); // 7 days
-				document.cookie = `githubSession=${encodeURIComponent(accessToken)}; expires=${expires}; path=/; SameSite=None; Secure`;
-				document.cookie = `githubUsername=${encodeURIComponent(githubUsername)}; expires=${expires}; path=/; SameSite=None; Secure`;
-				githubState.value = {
-					username: githubUsername,
-					session: accessToken
-				}
+			if (!forceReauth && githubState.value) {
 				publishDropdown.value = true;
 				readyPublish.value = true;
-				reportMetric("github_auth_popup.success");
-				reportMetric('github_auth_popup.time_taken', timeTaken, 'timing');
+				resolve(true);
+				return;
+			}
 
+			const githubAuthUrl = constructGithubAuthUrl(userId);
+
+			const width = 600,
+				height = 700;
+			const left = (screen.width - width) / 2;
+			const top = (screen.height - height) / 2;
+
+			const authWindow = window.open(
+				githubAuthUrl,
+				"GitHub Authorization",
+				`width=${width},height=${height},top=${top},left=${left}`
+			);
+
+			if (!authWindow || authWindow.closed || typeof authWindow.closed === "undefined") {
+				alert("Popup blocked. Please allow popups for this site.");
+				resolve(false);
+				return;
+			}
+
+			authWindow.focus();
+
+			let settled = false;
+
+			const cleanup = () => {
 				clearInterval(authCheckInterval);
 				window.removeEventListener("message", handleMessage);
-			} else if (status === "error") {
-				console.error("Error during GitHub authorization:", message);
-				alert("An error occurred: " + message);
-				reportMetric("github_auth_popup.failure");
-				reportMetric('github_auth_popup.failure_time', timeTaken, 'timing');
-			}
-		};
+			};
 
-		window.addEventListener("message", handleMessage);
-	} catch (error) {
-		console.error("Error during GitHub authorization:", error);
-		alert("An error occurred: " + (error instanceof Error ? error.message : String(error)));
-		const timeTaken = Date.now() - startTime;
-		reportMetric("github_auth_popup.failure");
-		reportMetric('github_auth_popup.failure_time', timeTaken, 'timing');
-	}
+			const authCheckInterval = setInterval(() => {
+				if (authWindow.closed) {
+					clearInterval(authCheckInterval);
+					setTimeout(() => {
+						if (settled) return;
+						settled = true;
+						window.removeEventListener("message", handleMessage);
+						alert("Authentication window was closed unexpectedly.");
+						reportMetric("github_auth_popup.closed_unexpectedly");
+						resolve(false);
+					}, 300);
+				}
+			}, 500);
+
+			const handleMessage = (event: MessageEvent) => {
+				if (event.origin !== window.location.origin) return;
+
+				const { status, message, accessToken, githubUsername } = event.data ?? {};
+
+				const timeTaken = Date.now() - startTime;
+
+				if (status === "success") {
+					settled = true;
+					cleanup();
+					const expires = new Date(Date.now() + 7 * 864e5).toUTCString(); // 7 days
+					document.cookie = `githubSession=${encodeURIComponent(accessToken)}; expires=${expires}; path=/; SameSite=None; Secure`;
+					document.cookie = `githubUsername=${encodeURIComponent(githubUsername)}; expires=${expires}; path=/; SameSite=None; Secure`;
+					githubState.value = {
+						username: githubUsername,
+						session: accessToken
+					};
+					publishDropdown.value = true;
+					readyPublish.value = true;
+					reportMetric("github_auth_popup.success");
+					reportMetric('github_auth_popup.time_taken', timeTaken, 'timing');
+					resolve(true);
+				} else if (status === "error") {
+					settled = true;
+					cleanup();
+					console.error("Error during GitHub authorization:", message);
+					alert("An error occurred: " + message);
+					reportMetric("github_auth_popup.failure");
+					reportMetric('github_auth_popup.failure_time', timeTaken, 'timing');
+					resolve(false);
+				}
+			};
+
+			window.addEventListener("message", handleMessage);
+		} catch (error) {
+			console.error("Error during GitHub authorization:", error);
+			alert("An error occurred: " + (error instanceof Error ? error.message : String(error)));
+			const timeTaken = Date.now() - startTime;
+			reportMetric("github_auth_popup.failure");
+			reportMetric('github_auth_popup.failure_time', timeTaken, 'timing');
+			resolve(false);
+		}
+	});
 };
 
 const x = (): string => {
@@ -298,7 +320,13 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	const isPublishing = useSignal(false);
     const publishSuccess = useSignal(false);
     const publishError = useSignal(false);
+	const publishErrorMessage = useSignal<string | null>(null);
 	const githubPRUrl = useSignal<string | null>(null);
+	const publishOutcome = useSignal<"new" | "updated" | "unchanged">("new");
+	const publishFormTitle = useSignal<string | null>(null);
+	const publishFormAuthor = useSignal<string | null>(null);
+	const publishFormDescription = useSignal("");
+	const publishFormControls = useSignal("");
 	
 	const githubState = useSignal<GithubState | undefined>(undefined)
 	
@@ -471,8 +499,21 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 	
 
 
+	const rememberPullRequest = (url: string) => {
+		githubPRUrl.value = url;
+		const state = props.persistenceState.value;
+		if (state.kind === "PERSISTED" && typeof state.game === "object") state.game.githubPR = url;
+	};
+
 	const publishToGithub = async (githubState: Signal<GithubState | undefined>, gameID: string | undefined) => {
+		if (isPublishing.value) return;
+		isPublishing.value = true;
 		const startTime = Date.now();
+		let reportedSpecificFailure = false;
+		const trackFailure = (metricName: string) => {
+			reportedSpecificFailure = true;
+			reportMetric(metricName);
+		};
 		try {
 
 			reportMetric("github_publish.initiated");
@@ -499,7 +540,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			clearError("thumbnail");
 			clearError("gameControlsDescription");
 			clearError("gameTitle");
-			clearError("authorName")
+			clearError("authorName");
 			hasError = false;
 
 			if (!gameTitle) {
@@ -521,117 +562,240 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 			}
  
 			if (!githubState.value?.session) {
-				reportMetric("github_publish.failure.token_missing");
-				throw new Error("GitHub access token not found.");
+				trackFailure("github_publish.failure.token_missing");
+				throw new Error("GitHub access token not found. Please re-authenticate.");
 			}
 
 			let isValidToken = await validateGitHubToken(githubState.value.session);
 			if (!isValidToken) {
 				console.warn("Token invalid or expired. Attempting re-authentication...");
+				document.cookie = "githubSession=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None; Secure";
+				document.cookie = "githubUsername=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None; Secure";
+				githubState.value = undefined;
+
+				let reauthSuccess = false;
 				if (
 					(props.persistenceState.value.kind === 'PERSISTED' ||
 						props.persistenceState.value.kind === 'COLLAB') &&
 					props.persistenceState.value.game !== 'LOADING'
 				) {
 					if (typeof props.persistenceState.value.game !== 'string') {
-						await openGitHubAuthPopup(
+						reauthSuccess = await openGitHubAuthPopup(
 							props.persistenceState.value.session?.user.id ?? null,
 							publishDropdown,
 							readyPublish,
 							props.persistenceState.value.game.isPublished,
 							publishSuccess,
-							githubState
+							githubState,
+							true
 						);
 					}
 				}
-				
-				githubState.value = getGithubStateFromCookie()
+
+				if (!reauthSuccess) {
+					trackFailure("github_publish.failure.token_reauth_failed");
+					throw new Error("GitHub authorization expired or was blocked. Please reconnect your account.");
+				}
+
+				githubState.value = getGithubStateFromCookie() ?? githubState.value;
 
 				if (!githubState.value?.session || !(await validateGitHubToken(githubState.value.session))) {
-					reportMetric("github_publish.failure.token_reauth_failed");
+					trackFailure("github_publish.failure.token_reauth_failed");
 					throw new Error("Failed to re-authenticate with GitHub.");
 				}
 			}
 
-			isPublishing.value = true;
 			readyPublish.value = false;
 			publishError.value = false;
+			publishErrorMessage.value = null;
 			publishSuccess.value = false;
-			
+			publishOutcome.value = "new";
+
 			const accessToken = githubState.value.session
 			const yourGithubUsername = githubState.value.username
+			const sanitizedGameTitle = gameTitle.replace(/\s+/g, '-');
+			const gamePath = `games/${sanitizedGameTitle}.js`;
+			const imagePath = `games/img/${sanitizedGameTitle}.png`;
+			const prTitle = `[Sprig App] ${gameTitle}`;
+			const prBody = `### Author name\nAuthor: ${authorName}\n\n### About your game\n\n**What is your game about?**\n${gameDescription}\n\n**How do you play your game?**\n${gameControlsDescription}`;
 
-			let forkedRepo;
-			try {
-				forkedRepo = await forkRepository(accessToken, "hackclub", "sprig");
-			} catch (error) {
-				reportMetric("github_publish.failure.fork");
-				console.warn("Fork might already exist. Fetching existing fork...");
+			let openPR: { pullRequest: any; files: any[] } | null = null;
+			if (yourGithubUsername) {
 				try {
-					forkedRepo = await fetchForkedRepository(accessToken, "hackclub", "sprig", yourGithubUsername || "");
-				} catch (fetchError: any) {
-					reportMetric("github_publish.failure.fetch_fork");
-					throw new Error("Failed to fetch fork: " + fetchError.message);
+					openPR = await findGamePullRequest(accessToken, "hackclub", "sprig", yourGithubUsername, gamePath, githubPRUrl.value);
+				} catch (error) {
+					trackFailure("github_publish.failure.find_open_pr");
+					throw new Error("Failed to check this game's pull request: " + (error instanceof Error ? error.message : String(error)));
 				}
+			} else {
+				throw new Error("GitHub username not found. Please re-authenticate.");
 			}
 
-			const latestCommitSha = await fetchLatestCommitSha(accessToken, "hackclub", "sprig", forkedRepo.default_branch);
-			if (!latestCommitSha) {
-				reportMetric("github_publish.failure.commit_sha");
-				throw new Error("Failed to fetch the latest commit SHA.");
-			}
+			let repoOwner: string, repoName: string, branchName: string, baseSha: string;
+			let renamedFrom: { game: any; image: any } | null = null;
+			if (openPR) {
+				const pullNumber = openPR.pullRequest.number;
+				repoOwner = openPR.pullRequest.head.repo.owner.login;
+				repoName = openPR.pullRequest.head.repo.name;
+				branchName = openPR.pullRequest.head.ref;
+				try {
+					baseSha = await fetchLatestCommitSha(accessToken, repoOwner, repoName, branchName);
+				} catch (error) {
+					trackFailure("github_publish.failure.commit_sha");
+					throw new Error("Failed to fetch the pull request's latest commit: " + (error instanceof Error ? error.message : String(error)));
+				}
 
-			const newBranchName = `Automated-PR-${Date.now()}`;
-			try {
-				await createBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, latestCommitSha);
-			} catch (error) {
-				reportMetric("github_publish.failure.branch");
-				throw new Error("Failed to create branch: " + (error instanceof Error ? error.message : String(error)));
+				if (!openPR.files.some((file: any) => file.filename === gamePath && file.status !== "removed")) {
+					const addedGames = openPR.files.filter((file: any) => file.status === "added" && /^games\/[^/]+\.js$/.test(file.filename));
+					if (addedGames.length !== 1 || openPR.pullRequest.head.sha !== baseSha) {
+						throw new Error(`Couldn't match this game to pull request #${pullNumber}. Try again in a moment, or update it on GitHub.`);
+					}
+					const oldName = addedGames[0].filename.slice("games/".length, -".js".length);
+					if (!window.confirm(`This renames your game in pull request #${pullNumber} from "${oldName}" to "${sanitizedGameTitle}". Continue?`)) {
+						reportMetric("github_publish.cancel_rename");
+						readyPublish.value = true;
+						return;
+					}
+					renamedFrom = {
+						game: addedGames[0],
+						image: openPR.files.find((file: any) => file.status === "added" && file.filename === `games/img/${oldName}.png`),
+					};
+				}
+			} else {
+				let forkedRepo;
+				try {
+					forkedRepo = await forkRepository(accessToken, "hackclub", "sprig");
+				} catch (error) {
+					trackFailure("github_publish.failure.fork");
+					console.warn("Fork might already exist. Fetching existing fork...");
+					try {
+						forkedRepo = await fetchForkedRepository(accessToken, "hackclub", "sprig", yourGithubUsername || "");
+					} catch (fetchError: any) {
+						trackFailure("github_publish.failure.fetch_fork");
+						throw new Error("Failed to fetch fork: " + fetchError.message);
+					}
+				}
+
+				const latestCommitSha = await fetchLatestCommitSha(accessToken, "hackclub", "sprig", forkedRepo.default_branch);
+				if (!latestCommitSha) {
+					trackFailure("github_publish.failure.commit_sha");
+					throw new Error("Failed to fetch the latest commit SHA.");
+				}
+
+				const newBranchName = `${EDITOR_BRANCH_PREFIX}${Date.now()}`;
+				try {
+					await createBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, latestCommitSha);
+				} catch (error) {
+					trackFailure("github_publish.failure.branch");
+					throw new Error("Failed to create branch: " + (error instanceof Error ? error.message : String(error)));
+				}
+
+				repoOwner = forkedRepo.owner.login;
+				repoName = forkedRepo.name;
+				branchName = newBranchName;
+				baseSha = latestCommitSha;
 			}
 
 			const imageBase64 = thumbnailPreview.value || null;
 			let imageBlobSha = null;
 			try {
 				if (imageBase64) {
-					imageBlobSha = await createBlobForImage(accessToken, forkedRepo.owner.login, forkedRepo.name, imageBase64.split(',')[1]);
+					imageBlobSha = await createBlobForImage(accessToken, repoOwner, repoName, imageBase64.split(',')[1]);
 				}
 			} catch (error) {
-				reportMetric("github_publish.failure.image_blob");
+				trackFailure("github_publish.failure.image_blob");
 				throw new Error("Failed to create image blob: " + (error instanceof Error ? error.message : String(error)));
 			}
 
-			const sanitizedGameTitle = gameTitle.replace(/\s+/g, '-');
+			const oldNameFiles = renamedFrom ? [renamedFrom.game, renamedFrom.image].filter(Boolean) : [];
+			const imageSha = imageBlobSha ?? renamedFrom?.image?.sha ?? null;
 
 			let treeSha;
 			try {
 				treeSha = await createTreeAndCommit(
 					accessToken,
-					forkedRepo.owner.login,
-					forkedRepo.name,
-					latestCommitSha,
+					repoOwner,
+					repoName,
+					baseSha,
 					[
-						{ path: `games/${sanitizedGameTitle}.js`, content: gameCode },
-						...(imageBlobSha ? [{ path: `games/img/${sanitizedGameTitle}.png`, sha: imageBlobSha }] : [])
+						{ path: gamePath, content: gameCode },
+						...(imageSha ? [{ path: imagePath, sha: imageSha }] : []),
+						...oldNameFiles.map((file: any) => ({ path: file.filename, sha: null }))
 					]
 				);
 			} catch (error) {
-				reportMetric("github_publish.failure.tree_commit");
+				trackFailure("github_publish.failure.tree_commit");
 				throw new Error("Failed to create tree and commit: " + (error instanceof Error ? error.message : String(error)));
 			}
 
-			let newCommit;
-			try {
-				newCommit = await createCommit(accessToken, forkedRepo.owner.login, forkedRepo.name, `Sprig App - ${gameTitle}`, treeSha, latestCommitSha);
-			} catch (error) {
-				reportMetric("github_publish.failure.commit");
-				throw new Error("Failed to create commit: " + (error instanceof Error ? error.message : String(error)));
+			let codeChanged = !openPR;
+			if (openPR) {
+				try {
+					const baseTreeSha = await fetchCommitTreeSha(accessToken, repoOwner, repoName, baseSha);
+					codeChanged = treeSha !== baseTreeSha;
+				} catch (error) {
+					trackFailure("github_publish.failure.fetch_tree_sha");
+					throw new Error("Failed to check commit tree: " + (error instanceof Error ? error.message : String(error)));
+				}
 			}
 
-			try {
-				await updateBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, newCommit.sha);
-			} catch (error) {
-				reportMetric("github_publish.failure.branch_update");
-				throw new Error("Failed to update branch: " + (error instanceof Error ? error.message : String(error)));
+			if (codeChanged) {
+				let newCommit;
+				try {
+					newCommit = await createCommit(accessToken, repoOwner, repoName, `Sprig App - ${gameTitle}`, treeSha, baseSha);
+				} catch (error) {
+					trackFailure("github_publish.failure.commit");
+					throw new Error("Failed to create commit: " + (error instanceof Error ? error.message : String(error)));
+				}
+
+				try {
+					await updateBranch(accessToken, repoOwner, repoName, branchName, newCommit.sha, !openPR);
+				} catch (error: any) {
+					trackFailure("github_publish.failure.branch_update");
+					if (error?.status === 422 || error?.message?.includes("422")) {
+						throw new Error("The pull request branch has new changes on GitHub that would be overwritten. Please merge or reconcile them on GitHub first.");
+					}
+					throw new Error("Failed to update branch: " + (error instanceof Error ? error.message : String(error)));
+				}
+			}
+
+			if (openPR) {
+				const pullRequest = openPR.pullRequest;
+				const titleChanged = pullRequest.title !== prTitle;
+				const normalizeBody = (body?: string | null) => (body ?? "").replace(/\r\n/g, "\n").trim();
+				const bodyChanged = Boolean(prBody && normalizeBody(pullRequest.body) !== normalizeBody(prBody));
+				if (titleChanged || bodyChanged) {
+					try {
+						await updatePullRequest(accessToken, "hackclub", "sprig", pullRequest.number, {
+							title: prTitle,
+							body: prBody,
+						});
+					} catch (error) {
+						trackFailure("github_publish.failure.pr_update");
+						throw new Error("Failed to update the pull request: " + (error instanceof Error ? error.message : String(error)));
+					}
+				}
+
+				if (gameID) {
+					try {
+						await recordGamePullRequest(gameID, pullRequest.html_url);
+					} catch (error) {
+						trackFailure("github_publish.failure.record_pr");
+						console.warn("The pull request was updated, but saving it on the game failed:", error);
+					}
+				}
+
+				rememberPullRequest(pullRequest.html_url);
+				const prUpdated = codeChanged || titleChanged || bodyChanged;
+				publishOutcome.value = prUpdated ? "updated" : "unchanged";
+				reportMetric("github_publish.success");
+				reportMetric(prUpdated ? "github_publish.success.updated_pr" : "github_publish.success.unchanged_pr");
+
+				const timeTaken = Date.now() - startTime;
+				reportMetric('github_publish.time_taken', timeTaken, 'timing');
+
+				publishSuccess.value = true;
+				return;
 			}
 
 			try {
@@ -639,15 +803,19 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					accessToken,
 					"hackclub",
 					"sprig",
-					`[Sprig App] ${gameTitle}`,
-					newBranchName,
+					prTitle,
+					branchName,
 					"main",
-					`### Author name\nAuthor: ${authorName}\n\n### About your game\n\n**What is your game about?**\n${gameDescription}\n\n**How do you play your game?**\n${gameControlsDescription}`,
-					forkedRepo.owner.login,
-					gameID ?? ''
+					prBody,
+					repoOwner,
+					gameID ?? '',
+					(err) => {
+						trackFailure("github_publish.failure.record_pr");
+						console.warn("The pull request was created, but saving it on the game failed:", err);
+					}
 				);
 
-				githubPRUrl.value = pr.html_url;
+				rememberPullRequest(pr.html_url);
 				reportMetric("github_publish.success");
 
 				const timeTaken = Date.now() - startTime;
@@ -655,13 +823,17 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 				publishSuccess.value = true;
 			} catch (error) {
-				reportMetric("github_publish.failure.pr_creation");
+				trackFailure("github_publish.failure.pr_creation");
 				throw new Error("Failed to create pull request: " + (error instanceof Error ? error.message : String(error)));
 			}
 		} catch (error) {
 			console.error("Publishing failed:", error);
+			readyPublish.value = false;
+			publishErrorMessage.value = error instanceof Error ? error.message : String(error);
 			publishError.value = true;
-			reportMetric("github_publish.failure.general");
+			if (!reportedSpecificFailure) {
+				reportMetric("github_publish.failure.general");
+			}
 
 			const timeTaken = Date.now() - startTime;
 			reportMetric('github_publish.failure_time', timeTaken, 'timing');
@@ -848,6 +1020,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									props.persistenceState.value.game !== 'LOADING'
 								) {
 									if (typeof props.persistenceState.value.game !== 'string') {
+										publishError.value = false;
+										publishErrorMessage.value = null;
 										await openGitHubAuthPopup(
 											props.persistenceState.value.session?.user.id ?? null,
 											publishDropdown,
@@ -885,7 +1059,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 												props.persistenceState.value.game !== "LOADING" ? (
 												<input
 													id="gameTitle"
-													value={props.persistenceState.value.game.name ?? ""}
+													value={publishFormTitle.value ?? props.persistenceState.value.game.name ?? ""}
+													onInput={(e) => {
+														publishFormTitle.value = (e.currentTarget as HTMLInputElement).value;
+													}}
 													type="text"
 													placeholder="Enter your game title"
 												/>
@@ -899,7 +1076,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											<label htmlFor="authorName">Author Name</label>
 											<input
 												id="authorName"
-												value={githubState.value?.username ?? ""}
+												value={publishFormAuthor.value ?? githubState.value?.username ?? ""}
+												onInput={(e) => {
+													publishFormAuthor.value = (e.currentTarget as HTMLInputElement).value;
+												}}
 												type="text"
 												placeholder="Enter author name"
 											/>
@@ -910,7 +1090,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											<label htmlFor="gameDescription">About Your Game</label>
 											<textarea
 												id="gameDescription"
-												v-model="gameDescription"
+												value={publishFormDescription.value}
+												onInput={(e) => {
+													publishFormDescription.value = (e.currentTarget as HTMLTextAreaElement).value;
+												}}
 												placeholder="Describe the key objectives, gameplay mechanics, and what makes your game unique."
 												rows={4}
 											/>
@@ -921,7 +1104,10 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											<label htmlFor="gameControlsDescription">How to Play Your Game</label>
 											<textarea
 												id="gameControlsDescription"
-												v-model="gameControlsDescription"
+												value={publishFormControls.value}
+												onInput={(e) => {
+													publishFormControls.value = (e.currentTarget as HTMLTextAreaElement).value;
+												}}
 												placeholder="Describe how to play your game here (e.g., controls)..."
 												rows={4}
 											/>
@@ -958,9 +1144,9 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 									<div className={styles.buttonGroup}>
 										<Button
 											accent
-											icon={uploadState.value === "LOADING" ? VscLoading : IoPlay}
-											spinnyIcon={uploadState.value === "LOADING"}
-											loading={uploadState.value === "LOADING"}
+											icon={isPublishing.value ? VscLoading : IoPlay}
+											spinnyIcon={isPublishing.value}
+											loading={isPublishing.value}
 											onClick={async () => {
 												try {
 													const game = props.persistenceState.value.kind === 'PERSISTED' && typeof props.persistenceState.value.game === 'object'
@@ -983,7 +1169,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								</>
 							)}
 
-							{isPublishing.value && (
+							{isPublishing.value && !readyPublish.value && (
 								<div className={styles.popupHeader}>
 									<h2>Publishing...</h2>
 									<p className={styles.successMessage}>
@@ -996,7 +1182,11 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 								<div className={styles.popupHeader}>
 									<h2>Success!</h2>
 									<p className={styles.successMessage}>
-										Your game has been successfully published to GitHub.
+										{{
+											new: "Your game has been successfully published to GitHub.",
+											updated: "Your open pull request for this game was updated with this version.",
+											unchanged: "Your pull request is already up to date with this version.",
+										}[publishOutcome.value]}
 									</p>
 									<Button onClick={() => { githubPRUrl.value && window.open(githubPRUrl.value, "_blank") }}>
 										View on GitHub
@@ -1008,18 +1198,45 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 										readyPublish.value = true
 									}
 									}>
-										Make a new PR
+										Publish again
 									</Button>
 								</div>
 							)}
 
-							{publishError.value && (
+							{publishError.value && !readyPublish.value && !publishSuccess.value && (
 								<div className={styles.popupHeader}>
 									<h2>Error</h2>
 									<p className={styles.successMessage}>
-										Something went wrong while publishing your game. Please try again.
+										{publishErrorMessage.value || "Something went wrong while publishing your game. Please try again."}
 									</p>
-									<Button onClick={() => { publishError.value = false; publishDropdown.value = true; readyPublish.value = true; publishSuccess.value = false; }}>
+									{(!githubState.value?.session || publishErrorMessage.value?.toLowerCase().includes("reconnect") || publishErrorMessage.value?.toLowerCase().includes("re-authenticate")) && (
+										<Button
+											accent
+											onClick={async () => {
+												const ok = await openGitHubAuthPopup(
+													props.persistenceState.value.session?.user.id ?? null,
+													publishDropdown,
+													readyPublish,
+													false,
+													publishSuccess,
+													githubState,
+													true
+												);
+												if (ok) {
+													publishError.value = false;
+													publishErrorMessage.value = null;
+												}
+											}}
+										>
+											Reconnect GitHub
+										</Button>
+									)}
+									{githubPRUrl.value && (
+										<Button onClick={() => window.open(githubPRUrl.value!, "_blank")}>
+											View on GitHub
+										</Button>
+									)}
+									<Button onClick={() => { publishError.value = false; publishErrorMessage.value = null; publishDropdown.value = true; readyPublish.value = true; publishSuccess.value = false; }}>
 										Try Again
 									</Button>
 								</div>

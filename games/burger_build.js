@@ -398,6 +398,7 @@ let collectedFood1 = [];
 let collectedFood2 = [];
 
 onInput("a", () => {
+  if (!getFirst(player)) return
   getFirst(player).x -= 1
   
   foodTypes2.forEach(type => {
@@ -408,6 +409,7 @@ onInput("a", () => {
 })
 
 onInput("d", () => {
+  if (!getFirst(player)) return
   getFirst(player).x += 1
 
   foodTypes2.forEach(type => {
