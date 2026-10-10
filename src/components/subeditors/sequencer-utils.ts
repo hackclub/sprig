@@ -90,6 +90,12 @@ export const cellsEq = (a: Cells, b: Cells) => {
 	return true
 }
 
+export const getBPM = (text: string): number => {
+	const count = text.match(/(.+):/)
+	const bpm = count ? Math.round(60 * 1000 / Number(count[1])) : 120
+	return Number.isFinite(bpm) && bpm > 0 ? bpm : 120
+}
+
 const audioCtx = lazy(() => new AudioContext())
 
 export const playNote = (symbol: string, duration: number, instrument: InstrumentType): void => {
@@ -98,6 +104,9 @@ export const playNote = (symbol: string, duration: number, instrument: Instrumen
 }
 
 const playBeat = (beat: number, cells: Cells, bpm: number) => {
+	const duration = (1000*60) / bpm
+	if (!Number.isFinite(duration) || duration <= 0) return
+
 	const notes: [number, InstrumentType][] = []
 
 	Object
@@ -109,7 +118,6 @@ const playBeat = (beat: number, cells: Cells, bpm: number) => {
 
 	notes.forEach(([ y, instrument ]) => {
 		const note = yNoteMap[y]!
-		const duration = (1000*60) / bpm
 		playNote(note, duration, instrument)
 	})
   }
@@ -126,11 +134,14 @@ export const play = (cells: Signal<Cells>, bpm: Signal<number>, beat: Signal<num
 
 			effect(() => {
 				if (_timeout) clearTimeout(_timeout as number)
-				_timeout = setTimeout(go, ((1000 * 60) / bpm.value) - (audioCtx.outputLatency * 1000))
+				const delay = ((1000 * 60) / bpm.value) - (audioCtx.outputLatency * 1000)
+				_timeout = setTimeout(go, Number.isFinite(delay) ? delay : 500)
 			})
 
 		}, audioCtx.outputLatency * 1000)
 	}
+
+	if (!Number.isFinite(bpm.value) || bpm.value <= 0) return () => {}
 	go()
 	console.log(`Latency compensation: ${Math.round(audioCtx.outputLatency * 1000)}ms`)
 	return () => { stop.current = true }
