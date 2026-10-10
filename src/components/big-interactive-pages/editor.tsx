@@ -274,7 +274,6 @@ export default function Editor({ persistenceState, cookies, roomState, review }:
 	const outputArea = useRef<HTMLDivElement>(null);
 	const screenContainer = useRef<HTMLDivElement>(null);
 	const screenControls = useRef<HTMLDivElement>(null);
-	const reviewAutoRun = useRef(false);
 
 	const [sessionId] = useState(nanoid());
 
@@ -588,10 +587,6 @@ export default function Editor({ persistenceState, cookies, roomState, review }:
 						onEditorView={(editor) => {
 							codeMirror.value = editor;
 							setTimeout(() => foldAllTemplateLiterals(), 100); // Fold after the document is parsed (gross)
-							if (review?.code && !reviewAutoRun.current) {
-								reviewAutoRun.current = true;
-								setTimeout(() => onRun(), 500);
-							}
 						}}
 						onRunShortcut={onRun}
 						onCodeChange={() => {

@@ -425,6 +425,7 @@ onInput("d", () => {
     });
     return;
   }
+  if (inMainMenu) return;
   getFirst(player).x += 1
   pickPowerUp()
 })

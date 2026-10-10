@@ -866,7 +866,7 @@ let deader = false
 let level = 1
 let coincount = 0
 setInterval(()=>{
-  
+  if(!getFirst(p_head2)) return;
   // console.log(getTile(coinPos[2][0], coinPos[2][1]))
   getFirst(p_head2).y = getFirst(p_stand).y -1
   getFirst(p_head2).x = getFirst(p_stand).x
@@ -981,7 +981,7 @@ setInterval(()=>{
 },2)
 setInterval(()=>{
   
-  if(deader) return;
+  if(deader || !getFirst(p_head2)) return;
   isDead()
   if(isJumping) return;
   if(deader) return;
@@ -996,7 +996,7 @@ function isDead(){
   if(getFirst(p_head2).y  > 7 && level == 1){
     dead()
   }
-  if(getFirst(p_head2).y  > 50 && level == 2){
+  else if(getFirst(p_head2).y  > 50 && level == 2){
     dead()
   }
 }

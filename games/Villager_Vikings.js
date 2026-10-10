@@ -37,6 +37,7 @@ Instructions and Story:
 	destroy Norgal!
    P.S: Look for 'Hack-Note:' in the comments to see how to add new levels and characters!
 */
+var idDic, Dino, Morgul, Knight, Box, Bolt, Blob, Pebble, Brick, Scorpion, defense, attack, gameLoop, music, read, vill, R, dir, np, p
 idDic = new Map()
 function take(list, index){
   return list.slice(0, index).concat(list.slice(index + 1));
@@ -1316,13 +1317,13 @@ qq........`);
 function update(stype){
   let stats = get_stats(stype)
   getAll(stype).forEach((chr)=>{
-    if (!Object.hasOwn(chr, "HP")){
+    if (!Object.prototype.hasOwnProperty.call(chr, "HP")){
       init_object(stats[0], stats[1], stats[2], stats[3], stats[4], chr)}
   })
 }
 function updateMove(stype){
   for (let chr of getAll(stype)){
-    if (Object.hasOwn(chr, "HP")){
+    if (Object.prototype.hasOwnProperty.call(chr, "HP")){
       chr.update()}
   }
 }

@@ -968,4 +968,3 @@ afterInput(() => {
 
 // Fire animation on interval
 let animationInterval = setInterval(animateTiles, 500);
-w

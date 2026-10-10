@@ -220,7 +220,7 @@ onInput("d", () => {
   nextMove = { x: 1, y: 0 };
 })
 
-let lastGameLoop = performance.now();
+let lastGameLoop = Date.now();
 
 function gameLoop() {
   if (gameOver) return;
@@ -228,10 +228,10 @@ function gameLoop() {
     return;
   }
   let requiredDiff = 700 - tailLength * 30;
-  if (performance.now() - lastGameLoop < requiredDiff) {
+  if (Date.now() - lastGameLoop < requiredDiff) {
     return;
   }
-  lastGameLoop = performance.now();
+  lastGameLoop = Date.now();
   afterMove({ x: getFirst(snakeHead).x + nextMove.x, y: getFirst(snakeHead).y + nextMove.y });
   if (gameOver) return;
   getFirst(snakeHead).x += nextMove.x;

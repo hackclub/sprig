@@ -438,7 +438,7 @@ if(level == 0) {
     y: 8
   })
 
-  colors = [red, orange, yellow, green, blue, purple, pink, black, grey]
+  let colors = [red, orange, yellow, green, blue, purple, pink, black, grey]
   
   getFirst(colore).x -= 3
   getFirst(colore).y += 9
