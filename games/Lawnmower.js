@@ -142,19 +142,47 @@ function spawnRock() {
 }
 
 onInput("s", () => {
-  getFirst(lawnmower).y += 1
+  if (!gameOver) {
+    getFirst(lawnmower).y += 1
+  }
 })
 
 onInput("w", () => {
-  getFirst(lawnmower).y -= 1
+  if (!gameOver) {
+    getFirst(lawnmower).y -= 1
+  }
 })
 
 onInput("a", () => {
-  getFirst(lawnmower).x -= 1
+  if (!gameOver) {
+    getFirst(lawnmower).x -= 1
+  }
 })
 
 onInput("d", () => {
-  getFirst(lawnmower).x += 1  
+  if (!gameOver) {
+    getFirst(lawnmower).x += 1
+  }
+})
+
+onInput("j", () => {
+  if (gameOver) {
+    gameOver = false
+    lawnLevel = 0
+
+    setMap(levels[level])
+
+    addSprite(3, 3, lawnmower)
+    spawnRock()
+
+    clearText()
+
+    addText("Lawns mowed: " + lawnLevel, {
+      x: 2,
+      y: 1,
+      color: color`0`
+    })
+  }
 })
 
 afterInput(() => {
@@ -172,7 +200,13 @@ if (hitRock) {
 
     addText("GAME OVER", {
       x: 5,
-      y: 7,
+      y: 6,
+      color: color`3`
+    })
+
+    addText("J = Restart", {
+      x: 5,
+      y: 8,
       color: color`3`
     })
 
